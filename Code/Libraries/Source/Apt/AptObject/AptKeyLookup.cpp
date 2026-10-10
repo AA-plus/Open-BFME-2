@@ -35,7 +35,11 @@ public:
 class BfmeC1062 {public:virtual void bfmeSlot1062C_0();virtual void bfmeSlot1062C_1();};
 extern BfmeC1062 *g_bfmeC1062,*g_bfmeD1062;
 extern unsigned int Rva008A5250LastKey;
-extern const int Rva008A5250KeyTable[20];
+// ?Rva008A5250KeyTable@@3QBHB @0x008EC538 (80B): 20-entry keycode map (first 20 dwords verified keycode-like; the name's digits are not its address).
+extern const int Rva008A5250KeyTable[20] = {
+	-1, 37, 39, 36, 35, 45, 46, -1, 8, -1,
+	-1, -1, -1, 13, 38, 40, 33, 34, 9, 27
+};
 extern "C" int __cdecl toupper(int);
 extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char *,const char *,int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
