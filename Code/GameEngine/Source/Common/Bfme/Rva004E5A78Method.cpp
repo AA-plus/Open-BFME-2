@@ -7,6 +7,21 @@
 // 0x004E5CB0 deleter both call here.
 #include <vector>
 
+// vector<void*> members otherwise instantiate per-TU COMDATs (one byte
+// shape per TU flags); explicit dllimport+forceinline specializations take
+// those calls inline so this TU emits no external copies.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void **vector<void*>::begin()
+{ return _M_start; }
+template <> __declspec(dllimport) __forceinline
+void **vector<void*>::end()
+{ return _M_finish; }
+template <> __declspec(dllimport) __forceinline
+size_t vector<void*>::size() const
+{ return size_t(this->_M_finish - this->_M_start); }
+}
+
 class Rva004E5821
 {
 public:
