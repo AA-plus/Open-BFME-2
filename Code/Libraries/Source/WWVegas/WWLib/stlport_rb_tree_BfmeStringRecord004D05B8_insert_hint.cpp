@@ -5,6 +5,19 @@
 // Evidence: chain packet calls 0x004D2050 now resolved; same 310B size as hint 0x004D1F1A; ret 0xc hidden iterator.
 #define _BFME_RETAIL_TREE_INSERT_LAYOUT
 #include <set>
+
+// __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
+// COMDATs (one byte shape per TU malloc/free wiring); explicit
+// dllimport+forceinline specializations take those calls inline so this
+// TU emits no external copies.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *__malloc_alloc<0>::allocate(size_t __n)
+{ void *__r = malloc(__n); if (!__r) __r = _S_oom_malloc(__n); return __r; }
+template <> __declspec(dllimport) __forceinline
+void __malloc_alloc<0>::deallocate(void *__p, size_t)
+{ free((char *)__p); }
+}
 struct BfmeStringRecord004D05B8 { unsigned short m_key; unsigned char m_pad[6]; };
 inline bool operator<(const BfmeStringRecord004D05B8 &x, const BfmeStringRecord004D05B8 &y) { return x.m_key < y.m_key; }
 typedef _STL::_Rb_tree<BfmeStringRecord004D05B8, BfmeStringRecord004D05B8, _STL::_Identity<BfmeStringRecord004D05B8>, _STL::less<BfmeStringRecord004D05B8>, _STL::allocator<BfmeStringRecord004D05B8> > UBfmeStringRecord004D05B8SetTree;
