@@ -4,6 +4,22 @@
 // Evidence: chain via 0x0055A91A Clear; vptr 0x00C3A08C own then 0x00BBB554 base; members +0x08 pool release via rowed 0x00360D26 and +0x18 list<int> via rowed List_base dtor 0x004EC395; callers 0x00414571 deleting dtor 0x00414D94 0x00414E13; layout like BfmeAssignRecord44 in Rva0055A91AClear.cpp.
 #include <list>
 
+// list<int> destruction otherwise instantiates the allocator<_List_node<int>>
+// deallocate COMDAT (one byte shape per TU flags); an explicit
+// dllimport+forceinline specialization takes those calls inline so this
+// TU emits no external copy. Body is verbatim primary (assert included).
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void allocator<_List_node<int> >::deallocate(_List_node<int>* __p, size_t __n) const {
+  _STLP_ASSERT( (__p == 0) == (__n == 0) )
+    if (__p != 0) __sgi_alloc::deallocate((void*)__p, __n * sizeof(value_type));
+}
+template <> __declspec(dllimport) __forceinline
+void _STLP_alloc_proxy<_List_node<int> *, _List_node<int>, allocator<_List_node<int> > >::deallocate(_List_node<int> *__p, size_t __n) {
+  allocator<_List_node<int> >().deallocate(__p, __n);
+}
+}
+
 struct Rva0039BCF8;
 
 #include "ScoredKillTrackerView.h"

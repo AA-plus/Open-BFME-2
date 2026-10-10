@@ -3,6 +3,22 @@
 // ?rva00599534@Rva00599534@@QAEXH@Z @0x00599534 48B: list<int> at +4 erase first match via rowed erase 0x00438539; callers 0x004EC911 and 0x004EC055
 #include <list>
 
+// list<int> destruction otherwise instantiates the allocator<_List_node<int>>
+// deallocate COMDAT (one byte shape per TU flags); an explicit
+// dllimport+forceinline specialization takes those calls inline so this
+// TU emits no external copy. Body is verbatim primary (assert included).
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void allocator<_List_node<int> >::deallocate(_List_node<int>* __p, size_t __n) const {
+  _STLP_ASSERT( (__p == 0) == (__n == 0) )
+    if (__p != 0) __sgi_alloc::deallocate((void*)__p, __n * sizeof(value_type));
+}
+template <> __declspec(dllimport) __forceinline
+void _STLP_alloc_proxy<_List_node<int> *, _List_node<int>, allocator<_List_node<int> > >::deallocate(_List_node<int> *__p, size_t __n) {
+  allocator<_List_node<int> >().deallocate(__p, __n);
+}
+}
+
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
 template <class T, class Traits>
