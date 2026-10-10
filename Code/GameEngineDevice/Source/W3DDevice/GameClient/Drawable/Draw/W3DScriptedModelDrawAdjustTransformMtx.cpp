@@ -119,7 +119,8 @@ private:
 
 extern GameClient *TheGameClient;
 extern GameEngine *TheGameEngine;
-extern int g_Va00DEAF14;
+// ?g_Va00DEAF14@@3HA @0x009EAF14 (4B): frame counter capped at 100; retail holds zeros.
+int g_Va00DEAF14 = 0;
 
 struct W3DScriptedModelDrawData
 {
