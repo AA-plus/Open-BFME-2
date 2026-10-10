@@ -1,4 +1,4 @@
-// cl: /Oy- /DNDEBUG /MD /GX- /Oi-
+// cl: /DNDEBUG /MD /GX- /Oi-
 // stlport
 //
 // ?rva00507877@Rva00507823@@UAEXXZ retail 0x00507877 163B
@@ -33,6 +33,7 @@ public:
 class AsciiString : public StringBase<char>
 {
 public:
+	~AsciiString();
 	const char *str() const
 	{
 		const char *data = *reinterpret_cast<const char *const *>(this);
