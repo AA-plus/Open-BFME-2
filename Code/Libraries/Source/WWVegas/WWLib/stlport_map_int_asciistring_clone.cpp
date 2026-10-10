@@ -3,6 +3,19 @@
 // ?_M_clone_node@?$_Rb_tree@HU?$pair@$$CBHVAsciiString@@@_STL@@U?$_Select1st@U?$pair@$$CBHVAsciiString@@@_STL@@@2@U?$less@H@2@V?$allocator@U?$pair@$$CBHVAsciiString@@@_STL@@@2@@_STL@@IAEPAU?$_Rb_tree_node@U?$pair@$$CBHVAsciiString@@@_STL@@@2@PAU32@@Z 0x005041D8 30B evidence: Rb_tree map int to AsciiString clone 30B via rowed Record create_node 0x005041B6 plus color copy plus null links; callers 0x0050428C 0x005042BC in rowed _M_copy 0x0050427F
 #include <map>
 
+// __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
+// COMDATs (one byte shape per TU malloc/free wiring); explicit
+// dllimport+forceinline specializations take those calls inline so this
+// TU emits no external copies.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *__malloc_alloc<0>::allocate(size_t __n)
+{ void *__r = malloc(__n); if (!__r) __r = _S_oom_malloc(__n); return __r; }
+template <> __declspec(dllimport) __forceinline
+void __malloc_alloc<0>::deallocate(void *__p, size_t)
+{ free((char *)__p); }
+}
+
 class AsciiString { public: void *m_data; };
 class Rva00064640Record { public: unsigned char m_data[28]; };
 
