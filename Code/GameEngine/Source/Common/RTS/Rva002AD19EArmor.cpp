@@ -6,6 +6,11 @@
 // Armor.cpp, +0x334 store with map at +4 size at +0x14, arg+0x34 key,
 // neighbours PlayerGetRelationship/PlayerO1Shard share Player RTS shard.
 #include <hash_map>
+// Suppress the TU's non-retail const-begin copy (row 47 family2-LK3): the
+// /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
+namespace _STL {
+template <> vector<void *>::const_iterator _STL::vector<void *>::begin() const;
+}
 
 enum NameKeyType
 {
