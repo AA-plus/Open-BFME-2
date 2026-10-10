@@ -4,6 +4,15 @@
 // Evidence: LINK BONUS via 0x0039C09C; inner Rva0039BCF8 at +0x10 via rowed rva0039BCF8 0x0039BCF8; flag +0x14 set -1; list<int> at +0x18 via rowed clear 0x0023DAA5; count +0x1C set 0; callers 0x0039C0CA 0x0041453E 0x0055A93F 0x0055AC2D 0x0055A993; layout like Rva0055AA06 list/count.
 #include <list>
 
+// vector<int> fill/insert otherwise instantiates the _Construct<int,int>
+// COMDAT (one byte shape per TU flags); a file-static overload takes those
+// calls instead so this TU emits no external copy.
+#include <new>
+namespace _STL {
+static inline void _Construct(int *__p, const int &__val)
+{ new (__p) int(__val); }
+}
+
 // list<int> destruction otherwise instantiates per-TU deallocate
 // COMDATs (one byte shape per TU flags); explicit dllimport+forceinline
 // specializations take those calls inline so this TU emits no external copy.
