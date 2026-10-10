@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii
+// cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /DBFME_ASCII_DTOR_DECL /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii
 // stlport
 // Full native BDE85..BDF17 constructor; caller C838F passes AsciiString ref and float.
 // Existing149B copy and68B destructor own the same64B record. Float stores
