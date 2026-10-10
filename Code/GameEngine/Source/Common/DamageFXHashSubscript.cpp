@@ -6,6 +6,11 @@
 // address-derived template views are opaque interfaces to folded helpers;
 // the native node stores the full 0x784-byte pair, not their small placeholders.
 #include <hash_map>
+// Suppress the TU's non-retail const-begin copy (row 47 family2-LK3): the
+// /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
+namespace _STL {
+template <> vector<void *>::const_iterator _STL::vector<void *>::begin() const;
+}
 class INI;
 class DamageFX { public:
  class DFX { public: DFX(); char bytes[0x10]; };
