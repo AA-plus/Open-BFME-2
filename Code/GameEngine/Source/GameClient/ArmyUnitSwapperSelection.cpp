@@ -16,6 +16,16 @@
 // its existing 5CC30B consumer is rebuilt with the same bool declaration.
 #include <set>
 #include <string.h>
+
+// _Rb_tree_iterator comparisons otherwise instantiate the base-class
+// operator!= COMDAT (one byte shape per TU flags); exact-match free
+// overloads take those calls instead so this TU emits no external copy.
+namespace _STL {
+template <class _RbVal, class _RbLeft, class _RbRight>
+static inline bool operator!=(const _Rb_tree_iterator<_RbVal, _RbLeft> &a,
+                              const _Rb_tree_iterator<_RbVal, _RbRight> &b)
+{ return a._M_node != b._M_node; }
+}
 typedef _STL::set<int> SelectedMemberSet;
 struct Rva005F56B0Selection {char prefix[0x10]; SelectedMemberSet members;};
 class ArmySummaryEntry {public: char prefix[0xb8]; int target; int fieldBC; char padC0[4]; bool fieldC4; __forceinline bool hasUpgrade()const{return fieldBC!=0;}};

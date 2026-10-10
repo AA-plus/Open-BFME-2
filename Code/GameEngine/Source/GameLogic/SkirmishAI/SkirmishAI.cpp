@@ -12,6 +12,16 @@
 #include <new>
 #include "ascii_string.h"
 #include "../../Common/GameLogicObjectLookupView.h"
+
+// _Rb_tree_iterator comparisons otherwise instantiate the base-class
+// operator!= COMDAT (one byte shape per TU flags); exact-match free
+// overloads take those calls instead so this TU emits no external copy.
+namespace _STL {
+template <class _RbVal, class _RbLeft, class _RbRight>
+static inline bool operator!=(const _Rb_tree_iterator<_RbVal, _RbLeft> &a,
+                              const _Rb_tree_iterator<_RbVal, _RbRight> &b)
+{ return a._M_node != b._M_node; }
+}
 extern GameLogic *TheGameLogic;
 
 typedef int Int;
