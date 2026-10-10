@@ -12,6 +12,15 @@
 // from both callees and the characteristic lg(distance)*2 wrapper.
 // ?Rva005810B6Sort@@YAXPAPAX0VRva000795C1Record@@@Z
 void __cdecl free(void *);
+namespace _STL {
+template <class T> class allocator { };
+template <class T, class A> class vector {
+public:
+    // Rowed 0x002CFAB9 in stlport_vector_scalar_copy.cpp; declared only here so this TU references it instead of emitting a duplicate.
+    vector(const vector &o);
+};
+}
+typedef _STL::vector<unsigned int, _STL::allocator<unsigned int> > Rva000795C1Vec;
 class Rva000795C1Record {
     unsigned int key;
     void *first, *last, *end;
@@ -20,6 +29,13 @@ public:
     bool compareRva005803C0(void *, void *) const;
     ~Rva000795C1Record() { if (first) free(first); }
 };
+// Twin of the rowed pair<const int, vector<unsigned>> copy 0x795C1 (identical
+// 16B layout: int key plus vector). Emitted under this TU's address-derived
+// name; verified by masked placement at 0x795C1, never rowed (address taken).
+Rva000795C1Record::Rva000795C1Record(const Rva000795C1Record &o) : key(o.key)
+{
+    ((Rva000795C1Vec *)&first)->Rva000795C1Vec::vector(*(const Rva000795C1Vec *)&o.first);
+}
 void __cdecl Rva00580FD1IntroSort(void **, void **, void **, int, Rva000795C1Record);
 void __cdecl Rva00580D38FinishSort(void **, void **, Rva000795C1Record);
 static int sort_depth(int count) {
