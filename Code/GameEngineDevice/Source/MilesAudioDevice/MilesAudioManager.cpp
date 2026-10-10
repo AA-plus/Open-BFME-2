@@ -13,6 +13,15 @@
 // Callees still under address-derived ledger names are reached through
 // alias pins in reverse/symbols.csv.
 #include <math.h>
+
+// vector<int> fill/insert otherwise instantiates the _Construct<int,int>
+// COMDAT (one byte shape per TU flags); a file-static overload takes those
+// calls instead so this TU emits no external copy.
+#include <new>
+namespace _STL {
+static inline void _Construct(int *__p, const int &__val)
+{ new (__p) int(__val); }
+}
 // STLport frees through the game's C++-linkage free at 0x00030830 (pinned as
 // ?free@_STL@@YAXPAX@Z): a callee that may throw is what keeps the unwind
 // state reset retail stores before a local hash_set's destructor.
