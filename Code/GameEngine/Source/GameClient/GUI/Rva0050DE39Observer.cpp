@@ -118,6 +118,11 @@ static GameWindow *ObserverPlayerListWindow = NULL;
 extern GameWindow *g_00E04654[8];
 extern GameWindow *g_00E04674[8];
 extern Int g_00E04694;
+// Owned here: observer button windows, cancel key and the trio above are all
+// written in this TU; retail .data starts them at 0.
+GameWindow *g_00E04654[8] = { 0 };
+GameWindow *g_00E04674[8] = { 0 };
+Int g_00E04694 = 0;
 extern GameWindow *g_00E04698;
 extern GameWindow *g_00E0469C;
 extern GameWindow *g_00E046A0;
