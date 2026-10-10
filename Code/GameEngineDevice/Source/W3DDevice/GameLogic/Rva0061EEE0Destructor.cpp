@@ -44,6 +44,9 @@ void **vector<void*>::end()
 template <> __declspec(dllimport) __forceinline
 size_t vector<void*>::size() const
 { return size_t(this->_M_finish - this->_M_start); }
+template <> __declspec(dllimport) __forceinline
+void *&vector<void*>::operator[](size_t __n)
+{ return *(begin() + __n); }
 }
 #define _BFME_RETAIL_TREE_INSERT_LAYOUT
 #include <set>

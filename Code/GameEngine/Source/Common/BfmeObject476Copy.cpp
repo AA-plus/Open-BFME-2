@@ -26,6 +26,9 @@ void **vector<void*>::end()
 template <> __declspec(dllimport) __forceinline
 unsigned vector<void*>::size() const
 { return (unsigned)(this->_M_finish - this->_M_start); }
+template <> __declspec(dllimport) __forceinline
+void *&vector<void*>::operator[](size_t __n)
+{ return *(begin() + __n); }
 }
 // Suppress the TU's non-retail const-begin copy (row 54 family-LK3): the
 // /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.

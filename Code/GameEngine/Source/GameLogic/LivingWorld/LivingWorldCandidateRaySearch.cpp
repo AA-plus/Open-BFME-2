@@ -13,6 +13,9 @@ void **vector<void*>::begin()
 template <> __declspec(dllimport) __forceinline
 void **vector<void*>::end()
 { return _M_finish; }
+template <> __declspec(dllimport) __forceinline
+void *&vector<void*>::operator[](size_t __n)
+{ return *(begin() + __n); }
 }
 // Target20F9F6..20FAB4,190B: if the inner pointer range and manager268
 // exist, test the preferred item first, then the remaining items; without a
