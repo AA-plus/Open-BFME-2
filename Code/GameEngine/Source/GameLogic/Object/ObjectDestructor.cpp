@@ -129,6 +129,9 @@ struct SearchArg0042638E;
 class Rva0042638E { public: bool rva0042638E(const SearchArg0042638E *arg); };
 class EmotionSystem;
 extern EmotionSystem *TheEmotionSystem;
+// Owned here: read by the destroy path below; retail .data starts it at 0
+// (VA 0x00A031DC).
+EmotionSystem *TheEmotionSystem = 0;
 
 // TheGameLogic's frame copy (Zero Hour updateObjectsChangedTriggerAreas).
 struct Rva00299CE4LogicFrames
