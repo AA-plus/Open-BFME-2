@@ -53,6 +53,14 @@
 #include "GameClient/Drawable.h"
 #include "Common/INI.h"
 
+// Bottom-loop overload: this TU's flags compile the generic range-destroy to
+// a non-retail form; the overload wins for (AsciiString*,AsciiString*) and
+// offers the link no competing template copy (row 32 family2-LK3).
+namespace _STL {
+inline void _Destroy(AsciiString * __first, AsciiString * __last)
+{ for (; __first != __last; ++__first) __first->~AsciiString(); }
+}
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
