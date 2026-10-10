@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /O1 /arch:SSE /G7
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /O1 /arch:SSE /G7
 // stlport
 // ??1TransportAIUpdateModuleData@@UAE@XZ @0x0026E1FC 107B.
 // Identity: the packet pins this address as the TransportAIUpdateModuleData
