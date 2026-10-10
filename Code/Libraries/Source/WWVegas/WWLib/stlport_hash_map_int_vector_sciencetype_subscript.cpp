@@ -12,6 +12,8 @@
 #include <hash_map>
 #include <vector>
 
+#include <cstddef>
+
 // vector<void*> begin/end otherwise instantiate per-TU COMDATs (one byte
 // shape per TU flags); explicit dllimport+forceinline specializations take
 // those calls inline so this TU emits no external copies.
@@ -22,6 +24,9 @@ void **vector<void*>::begin()
 template <> __declspec(dllimport) __forceinline
 void **vector<void*>::end()
 { return _M_finish; }
+template <> __declspec(dllimport) __forceinline
+size_t vector<void*>::size() const
+{ return size_t(this->_M_finish - this->_M_start); }
 }
 
 enum ScienceType

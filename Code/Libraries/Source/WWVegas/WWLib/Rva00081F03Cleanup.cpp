@@ -3,6 +3,8 @@
 // ?rva00081F03@Rva00081F03@@QAEXXZ 0x00081F03 218B: thread-locked release of refcounted handles in vectors +0x70/+0x88 then erase of 4 vectors; evidence callers 0x8297D/0x8305F, callees Thread_Lock 0x11F520 Thread_Assert 0x120F50 erase 0x31BD55 x4, EH prolog scope 0x75F5E9.
 #include <vector>
 
+#include <cstddef>
+
 // vector<void*> begin/end otherwise instantiate per-TU COMDATs (one byte
 // shape per TU flags); explicit dllimport+forceinline specializations take
 // those calls inline so this TU emits no external copies.
@@ -13,6 +15,9 @@ void **vector<void*>::begin()
 template <> __declspec(dllimport) __forceinline
 void **vector<void*>::end()
 { return _M_finish; }
+template <> __declspec(dllimport) __forceinline
+size_t vector<void*>::size() const
+{ return size_t(this->_M_finish - this->_M_start); }
 }
 
 void __cdecl BFME_DX8_Thread_Lock();
