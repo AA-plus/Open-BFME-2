@@ -4,6 +4,8 @@
 extern int g_00DEBFF8;
 extern int g_00DEBFFC;
 extern int g_00DEC000;
+// Owned here: incremented below; retail .data starts it at 0 (VA 0x009EC000).
+int g_00DEC000 = 0;
 extern float g_00DEBFF4;
 extern float g_Va00BBB8D8;
 

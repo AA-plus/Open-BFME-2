@@ -105,8 +105,10 @@ public:
 
 extern unsigned int g_Va00DEC4A8;
 #define G00DEC4A8 g_Va00DEC4A8
-extern int G00DEC4A4;
-extern int G00DEC4A0;
+extern unsigned int g_Va00DEC4A4;
+extern unsigned int g_Va00DEC4A0;
+#define G00DEC4A4 g_Va00DEC4A4
+#define G00DEC4A0 g_Va00DEC4A0
 extern int G00DB5FBC;
 extern int G00DB5FC0;
 extern int G00DB5FC4;

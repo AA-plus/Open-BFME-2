@@ -152,6 +152,11 @@ class HotKeyManager;
 // starts it at 0 (VA 0x00A01E28).
 HotKeyManager *TheHotKeyManager = 0;
 
+class SnowManager;
+// Owned here: created in init() below, deleted in shutdown(); retail .data
+// starts it at 0 (VA 0x009FE114).
+SnowManager *TheSnowManager = 0;
+
 //-------------------------------------------------------------------------------------------------
 // ?GameClient::GameClient present-unmatched
 GameClient::GameClient()
