@@ -283,9 +283,13 @@ extern IDirect3DVertexBuffer8 *shadowVertexBufferD3D;
 // it at 0 (VA 0x009EBCDC).
 IDirect3DVertexBuffer8 *shadowVertexBufferD3D = 0;
 extern IDirect3DIndexBuffer8 *shadowIndexBufferD3D;
+// Owned here: the dynamic shadow-volume index buffer and its fill count;
+// retail .data starts them at 0 (VA 0x009EBCE0/0x009EBCEC).
+IDirect3DIndexBuffer8 *shadowIndexBufferD3D = 0;
 extern Int nShadowVertsInBuf;
 extern Int nShadowStartBatchVertex;
 extern Int nShadowIndicesInBuf;
+Int nShadowIndicesInBuf = 0;
 extern Int nShadowStartBatchIndex;
 
 /** Debug function to draw bounding boxes around shadow volumes */
