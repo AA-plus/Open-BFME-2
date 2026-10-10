@@ -5,7 +5,9 @@
 // New observedElapsed name describes target role, not original spelling.
 void Rva000A8F98();
 class BfmeHub982;
-class W3DAptAux {friend void Rva000A8F98();private:static BfmeHub982 *s_renderer;static unsigned s_syncTime0,s_syncTime1;};
+class W3DAptAux {friend void Rva000A8F98();private:template<class T> friend struct DataRowPrivateProbe;static BfmeHub982 *s_renderer;static unsigned s_syncTime0,s_syncTime1;};
+// Owned here: lazily created above; retail .data starts it at 0 (VA 0x009E6170).
+BfmeHub982 *W3DAptAux::s_renderer = 0;
 class WW3D {friend void Rva000A8F98();public:static void Sync(unsigned);private:static unsigned SyncTime,PreviousSyncTime;};
 class Rva00785FD0Renderer {public:Rva00785FD0Renderer();private:char nativeStorage[0xe0];};
 class Rva00110FBF {public:void rva00110FBF();};
