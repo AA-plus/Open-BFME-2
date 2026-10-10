@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /arch:SSE
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /arch:SSE
 // stlport
 // ??0Rva002AABEE@@QAE@VAsciiString@@IABV?$vector@IV?$allocator@I@_STL@@@_STL@@ABV?$vector@VAsciiString@@V?$allocator@VAsciiString@@@_STL@@@3@@Z @0x002AF581 (110B): ctor builds level-value record.
 // Evidence: StringBase copy at +0 from by-value AsciiString then level +4 then vector<unsigned int> copy at +8 then vector<AsciiString> copy at +0x14 then float 0 at +0x20 then refresh call 0x002AABEE; ret 0x10; Rva002AABEELevelValue.cpp names the record layout.
