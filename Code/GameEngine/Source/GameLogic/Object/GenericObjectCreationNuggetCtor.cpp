@@ -1,6 +1,6 @@
 // ??0GenericObjectCreationNugget@@QAE@XZ
 // partial score=0.99 date=2026-09-26
-// cl: /Ireference/shims/bfme2_ascii /O1 /MD /EHsc /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /O1 /MD /EHsc /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // Native 0x001F0E32..0x001F1010; existing GenericObjectCreationNugget
