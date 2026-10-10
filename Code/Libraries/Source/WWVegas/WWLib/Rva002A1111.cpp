@@ -3,6 +3,15 @@
 // retail 0x002A1111 71B unlock: add-if-missing list at +0x9c4 via rowed find 0x0029B694 and rowed list<int> push_back 0x0005548F; caller 0x00489F7D
 #include <list>
 
+// vector<int> fill/insert otherwise instantiates the _Construct<int,int>
+// COMDAT (one byte shape per TU flags); a file-static overload takes those
+// calls instead so this TU emits no external copy.
+#include <new>
+namespace _STL {
+static inline void _Construct(int *__p, const int &__val)
+{ new (__p) int(__val); }
+}
+
 // __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
 // COMDATs (one byte shape per TU malloc/free wiring); explicit
 // dllimport+forceinline specializations take those calls inline so this
