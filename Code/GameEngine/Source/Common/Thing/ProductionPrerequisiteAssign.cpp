@@ -3,6 +3,18 @@
 // ?rva002D0C44@ProductionPrerequisite@@QAEAAV1@ABV1@@Z @0x002D0C44 45B: ProductionPrerequisite assign via rowed BfmeStringRecord assign 0x002D0927 plus int assign pin 0x0021C21B plus uint assign pin 0x0026F4F4. Evidence: caller vector ProductionPrerequisite copy loop 0x0033E9DE stride 0x24; 3x12B members at +0x00/+0x0C/+0x18 per copy ctor 0x002D08DA; middle ScienceVec folded to int per 4B POD ICF.
 #include <vector>
 
+// vector<int>/char destruction otherwise instantiates per-TU allocator
+// deallocate COMDATs (one byte shape per TU flags); explicit
+// dllimport+forceinline specializations take those calls inline so this
+// TU emits no external copies. Bodies are verbatim primary.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void allocator<int>::deallocate(int* __p, size_t __n) const {
+  _STLP_ASSERT( (__p == 0) == (__n == 0) )
+    if (__p != 0) __sgi_alloc::deallocate((void*)__p, __n * sizeof(value_type));
+}
+}
+
 #include "ascii_string.h"
 
 struct BfmeStringRecord002CF5B1
