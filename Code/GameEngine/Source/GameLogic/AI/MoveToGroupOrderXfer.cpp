@@ -26,6 +26,11 @@
 
 #include <hash_map>
 #include <cstddef>
+// Suppress the TU's non-retail const-begin copy (row 47 family2-LK3): the
+// /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
+namespace _STL {
+template <> vector<void *>::const_iterator _STL::vector<void *>::begin() const;
+}
 
 typedef unsigned char UnsignedByte;
 typedef unsigned int UnsignedInt;
