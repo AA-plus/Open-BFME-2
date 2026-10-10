@@ -8,6 +8,15 @@
 // Rva002E10BDFind.cpp; callees rowed/pinned per packet; neighbours /O1.
 #include <vector>
 
+// vector<void*> operator[] otherwise instantiates a per-TU COMDAT (one
+// byte shape per TU flags); an explicit dllimport+forceinline specialization
+// takes those calls inline so this TU emits no external copy.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *&vector<void*>::operator[](size_t __n)
+{ return *(begin() + __n); }
+}
+
 class GameLogic
 {
 public:

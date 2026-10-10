@@ -14,6 +14,15 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <hash_map>
 #include <vector>
 
+// vector<void*> operator[] otherwise instantiates a per-TU COMDAT (one
+// byte shape per TU flags); an explicit dllimport+forceinline specialization
+// takes those calls inline so this TU emits no external copy.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *&vector<void*>::operator[](size_t __n)
+{ return *(begin() + __n); }
+}
+
 struct Rva002BB686Element
 {
 	char m_data[1];

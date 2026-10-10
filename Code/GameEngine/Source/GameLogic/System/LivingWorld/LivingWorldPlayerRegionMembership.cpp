@@ -8,6 +8,15 @@
 // The home unit is held by another seat; this declaration-only layout view
 // adds no constructor, inline helper, vtable or by-value ABI.
 #include <vector>
+
+// vector<void*> operator[] otherwise instantiates a per-TU COMDAT (one
+// byte shape per TU flags); an explicit dllimport+forceinline specialization
+// takes those calls inline so this TU emits no external copy.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *&vector<void*>::operator[](size_t __n)
+{ return *(begin() + __n); }
+}
 class Rva00318C32Ret;
 class Rva00318C79Owner { public: Rva00318C32Ret *rva00318C32(); };
 class LivingWorldPlayer {
