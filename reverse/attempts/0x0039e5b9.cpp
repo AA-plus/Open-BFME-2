@@ -19,6 +19,38 @@ struct Coord3D
 
 class Object;
 
+class BfmeObjectVirtualTail { public: unsigned char m_vt[4]; };
+
+// Introduces the vbptr at its own +0; lands at +0x68 inside Object.
+class BfmeObjectVbptrCarrier : public virtual BfmeObjectVirtualTail
+{
+public:
+	unsigned char m_carrier[4];
+};
+
+class BfmeObjectVtbl { public: virtual void bfmeObjectSlot0(); };
+
+class BfmeObjectDlinkBase
+{
+public:
+	Object *dlink_next_TeamMemberList() const;
+};
+
+class BfmeObjectDlinkPad
+{
+public:
+	unsigned char m_pad04[0x38 - 0x04];
+	Coord3D m_pos;				// +0x38
+	unsigned char m_pad44[0x68 - 0x44];
+};
+
+class Object : public BfmeObjectVtbl, public BfmeObjectDlinkBase,
+	public BfmeObjectDlinkPad, public BfmeObjectVbptrCarrier
+{
+public:
+	unsigned char m_tail[0x40];
+};
+
 template<class OBJCLASS>
 class DLINK_ITERATOR
 {
