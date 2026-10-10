@@ -287,6 +287,8 @@ extern IDirect3DIndexBuffer8 *shadowIndexBufferD3D;
 // retail .data starts them at 0 (VA 0x009EBCE0/0x009EBCEC).
 IDirect3DIndexBuffer8 *shadowIndexBufferD3D = 0;
 extern Int nShadowVertsInBuf;
+// Owned here: written below; retail .data starts it at 0 (VA 0x009EBCE4).
+Int nShadowVertsInBuf = 0;
 extern Int nShadowStartBatchVertex;
 extern Int nShadowIndicesInBuf;
 Int nShadowIndicesInBuf = 0;
