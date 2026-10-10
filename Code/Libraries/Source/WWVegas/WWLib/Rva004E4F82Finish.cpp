@@ -10,6 +10,21 @@
 // plus /arch:SSE for movss/xmm; /Ow is required to reproduce retail's early
 // `or [esi+0x30],-1` scheduling (default aliasing pushes it after the stores).
 #include <list>
+
+// list<int> destruction otherwise instantiates per-TU deallocate
+// COMDATs (one byte shape per TU flags); explicit dllimport+forceinline
+// specializations take those calls inline so this TU emits no external copy.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void allocator<_List_node<int> >::deallocate(_List_node<int>* __p, size_t __n) const {
+  _STLP_ASSERT( (__p == 0) == (__n == 0) )
+    if (__p != 0) __sgi_alloc::deallocate((void*)__p, __n * sizeof(value_type));
+}
+template <> __declspec(dllimport) __forceinline
+void _STLP_alloc_proxy<_List_node<int> *, _List_node<int>, allocator<_List_node<int> > >::deallocate(_List_node<int> *__p, size_t __n) {
+  allocator<_List_node<int> >().deallocate(__p, __n);
+}
+}
 struct BfmePod8 { int a[2]; };
 inline bool operator==(const BfmePod8 &x, const BfmePod8 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod8 &x, const BfmePod8 &y) { return x.a[0] < y.a[0]; }
