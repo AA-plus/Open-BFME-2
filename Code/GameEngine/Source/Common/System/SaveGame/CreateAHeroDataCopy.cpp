@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ob2 /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /Ob2 /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // CreateAHeroData is identified by retail typeName0x409353 and vtable0xC38D88.
 // Its copy and destructor establish this0x140-byte Snapshot-derived layout.
