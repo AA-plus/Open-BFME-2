@@ -98,6 +98,21 @@
 // spilled the match flag, while retail keeps team, member and flag in
 // edi/esi/bl. The other rows of this TU are unchanged by it.
 #include <vector>
+
+// vector<void*> members otherwise instantiate per-TU COMDATs (one byte
+// shape per TU flags); explicit dllimport+forceinline specializations take
+// those calls inline so this TU emits no external copies.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void **vector<void*>::begin()
+{ return _M_start; }
+template <> __declspec(dllimport) __forceinline
+void **vector<void*>::end()
+{ return _M_finish; }
+template <> __declspec(dllimport) __forceinline
+unsigned vector<void*>::size() const
+{ return (unsigned)(this->_M_finish - this->_M_start); }
+}
 // Suppress the TU's non-retail const-begin copy (row 54 family-LK3): the
 // /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
 namespace _STL {
