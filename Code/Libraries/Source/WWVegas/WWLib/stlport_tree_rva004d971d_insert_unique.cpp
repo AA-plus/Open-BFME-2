@@ -2,6 +2,19 @@
 // stlport
 // ?insert_unique@?$_Rb_tree@IVRva004D971D@@URva004DA0B7OrderKey@@U?$less@I@_STL@@V?$allocator@VRva004D971D@@@4@@_STL@@QAE?AU?$pair@U?$_Rb_tree_iterator@VRva004D971D@@U?$_Nonconst_traits@VRva004D971D@@@_STL@@@_STL@@_N@2@ABVRva004D971D@@@Z @0x004DA264 134B: insert_unique for unsigned-key Rva004D971D tree via rowed _M_insert 0x004DA0B7 plus _M_decrement 0x000242C0. Evidence: same 134B leaf shape as PodMap insert_unique 0x00422918 same calls; unsigned first-dword compare; callers at 0x004DA34A and 0x004DBC6F.
 #include <map>
+
+// __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
+// COMDATs (one byte shape per TU malloc/free wiring); explicit
+// dllimport+forceinline specializations take those calls inline so this
+// TU emits no external copies.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *__malloc_alloc<0>::allocate(size_t __n)
+{ void *__r = malloc(__n); if (!__r) __r = _S_oom_malloc(__n); return __r; }
+template <> __declspec(dllimport) __forceinline
+void __malloc_alloc<0>::deallocate(void *__p, size_t)
+{ free((char *)__p); }
+}
 class Rva004D971D
 {
 	char m_opaque[40];
