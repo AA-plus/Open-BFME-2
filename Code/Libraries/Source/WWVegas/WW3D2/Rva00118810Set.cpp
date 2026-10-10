@@ -5,7 +5,8 @@ class DX8Wrapper
 public:
 	static void Set_DX8_Render_State(unsigned long state, unsigned int value);
 };
-extern int g_00DEC4A8;
+extern unsigned int g_Va00DEC4A8;
+#define g_00DEC4A8 g_Va00DEC4A8
 // Native RVA 0x009B5FB0 is a mutable four-byte render-state value initially
 // equal to 1. Rva00118BA0 and Rva00118C20 write it; this setup reads it for
 // state 0x39. Retain the established symbol as their single storage owner.

@@ -103,7 +103,8 @@ public:
 	void *Pointer;
 };
 
-extern int G00DEC4A8;
+extern unsigned int g_Va00DEC4A8;
+#define G00DEC4A8 g_Va00DEC4A8
 extern int G00DEC4A4;
 extern int G00DEC4A0;
 extern int G00DB5FBC;
