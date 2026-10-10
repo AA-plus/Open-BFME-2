@@ -1,4 +1,4 @@
-// cl: /O1 /Oy- /G7 /MD /EHsc /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_CRTIMP= /Ireference/shims/bfmealloc
+// cl: /O1 /G7 /MD /EHsc /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
 // Native215AF1..215B14 resize and215B14..215C38 append-or-replace parser.
 // Existing parser callback215C38 and find215479 bind the PlayerAITypeSet.

@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /EHsc /MD
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /EHsc /MD
 // stlport
 //
 // ??1Rva000C2980@@QAE@XZ, retail 0x000C2980 292B.
