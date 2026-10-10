@@ -3,6 +3,16 @@
 // cl: /O1 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
 #include <set>
+
+// _Rb_tree_iterator comparisons otherwise instantiate the base-class
+// operator!= COMDAT (one byte shape per TU flags); exact-match free
+// overloads take those calls instead so this TU emits no external copy.
+namespace _STL {
+template <class _RbVal, class _RbLeft, class _RbRight>
+static inline bool operator!=(const _Rb_tree_iterator<_RbVal, _RbLeft> &a,
+                              const _Rb_tree_iterator<_RbVal, _RbRight> &b)
+{ return a._M_node != b._M_node; }
+}
 struct Rva00448FF2Record {
  Rva00448FF2Record(); Rva00448FF2Record(const Rva00448FF2Record&);
  ~Rva00448FF2Record(); Rva00448FF2Record&operator=(const Rva00448FF2Record&);
