@@ -12,6 +12,19 @@
 // literal double promotion otherwise emits FMUL qword. No new alias pins.
 #define _STLP_NO_EXCEPTIONS 1
 #include <vector>
+
+// __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
+// COMDATs (one byte shape per TU malloc/free wiring); explicit
+// dllimport+forceinline specializations take those calls inline so this
+// TU emits no external copies.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *__malloc_alloc<0>::allocate(size_t __n)
+{ void *__r = malloc(__n); if (!__r) __r = _S_oom_malloc(__n); return __r; }
+template <> __declspec(dllimport) __forceinline
+void __malloc_alloc<0>::deallocate(void *__p, size_t)
+{ free((char *)__p); }
+}
 #define _OPERATOR_NEW_DEFINED_
 #include "matrix3d.h"
 #include "Coord3D.h"
