@@ -13,6 +13,16 @@
 // The second payload word holds the prototype; the first remains opaque.
 #include <map>
 #include <string.h>
+
+// _Rb_tree_iterator comparisons otherwise instantiate the base-class
+// operator!= COMDAT (one byte shape per TU flags); exact-match free
+// overloads take those calls instead so this TU emits no external copy.
+namespace _STL {
+template <class _RbVal, class _RbLeft, class _RbRight>
+static inline bool operator!=(const _Rb_tree_iterator<_RbVal, _RbLeft> &a,
+                              const _Rb_tree_iterator<_RbVal, _RbRight> &b)
+{ return a._M_node != b._M_node; }
+}
 struct BfmePod8 { int words[2]; };
 typedef _STL::_Rb_tree<int,_STL::pair<const int,BfmePod8>,_STL::_Select1st<_STL::pair<const int,BfmePod8> >,_STL::less<int>,_STL::allocator<_STL::pair<const int,BfmePod8> > > CopyTree;
 class Rva0039F56E:public CopyTree{public:void rva0039F56E();~Rva0039F56E();};
