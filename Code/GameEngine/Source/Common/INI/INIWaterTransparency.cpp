@@ -104,6 +104,9 @@ private:
 };
 
 extern OVERRIDE<WaterTransparencySetting> TheWaterTransparency;
+// Owned here: allocated on first parse above; retail .data starts it at 0
+// (VA 0x009FF488).
+OVERRIDE<WaterTransparencySetting> TheWaterTransparency;
 extern unsigned char g_00E01EA8;
 
 void INI::parseWaterTransparencyDefinition(INI *ini)
