@@ -42,6 +42,7 @@ public:
  void InitializeFactionVariables();
  void rva005DD48C();void rva005DD22B();void rva005DD0EB(int);
  void rva005DD14D(const char*,int,GameWindow*);void rva005DD1D0(const char*);
+ virtual void rva005DD06D();
  void*owner;
  int m_word1c;
  std::vector<ScienceType> m_factionToTemplate;
@@ -226,3 +227,17 @@ void AptStats::rva005DD1D0(const char*text) {rva005DD0EB(atoi(text));}
 // Native65B dtor and28B deleting dtor formerly lived under Rva005DD1EA.
 // The verified44B constructor and registrations establish AptStats identity.
 AptStats::~AptStats() {}
+
+// Native [5DD06D,5DD0EB), slot 4 of the AptStats table: closes the
+// "AptStats::InitGadgets" screen (rowed _bfme_closeAptScreen), clears the
+// list widths with an empty vector and no window (rowed 0x005DD7C3), then
+// refreshes the inherited table (rowed 0x005DE96B). WB 0x015D8D90 is
+// labelled by the same string; the method's own name is not established.
+void _bfme_closeAptScreen(const AsciiString &name);
+class Rva005DE96B {public:void rva005DE96B();};
+void AptStats::rva005DD06D() {
+ _bfme_closeAptScreen(AsciiString("AptStats::InitGadgets"));
+ std::vector<unsigned int> widths;
+ reinterpret_cast<Rva005DD7C3*>(this)->rva005DD7C3(0,reinterpret_cast<const Widths*>(&widths));
+ reinterpret_cast<Rva005DE96B*>(this)->rva005DE96B();
+}
