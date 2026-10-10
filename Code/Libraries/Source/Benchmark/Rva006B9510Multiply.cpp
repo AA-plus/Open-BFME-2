@@ -1,4 +1,7 @@
 // cl: /GS /MD /GR- /EHsc- -Ireference/shims/nbench -ICode/Libraries/Source/Benchmark
+// The three emfloat helpers in this TU are renamed Multiply* : the canonical
+// definitions in emfloat.cpp are byte-proven retail rows (same ABI); keeping both
+// spellings global broke the link (D). All callers bind identically (E8 rel32).
 // ?MultiplyInternalFPF@@YAXPAUInternalFPF@@00@Z @0x006B9510 725B (BYTEmark emfloat.c static).
 // Whole emfloat.c as in Rva006B9190Finish.cpp: Multiply inlines Add16Bits/Round helpers that must be
 // present. The extra_bits zero test goes through IsMantissaZeroOrdered (index table 0,2,1,3), which
@@ -63,7 +66,7 @@
 ** NOTE: We really don't need the pointer to cbase...cbase
 ** is overwritten in the benchmark.
 */
-void SetupCPUEmFloatArrays(InternalFPF *abase,
+void MultiplySetupCPUEmFloatArrays(InternalFPF *abase,
                 InternalFPF *bbase,
                 InternalFPF *cbase,
                 ulong arraysize)
@@ -96,7 +99,7 @@ return;
 ** benchmark.  Note that "an iteration" can involve multiple
 ** loops through the benchmark.
 */
-ulong DoEmFloatIteration(InternalFPF *abase,
+ulong MultiplyDoEmFloatIteration(InternalFPF *abase,
                 InternalFPF *bbase,
                 InternalFPF *cbase,
                 ulong arraysize, ulong loops)
@@ -496,7 +499,7 @@ return;
 ** The kind of rounding we do here is simplest...referred to as
 ** "chop".  "Extraneous" rightmost bits are simply hacked off.
 */
-void RoundInternalFPF(InternalFPF *ptr)
+void MultiplyRoundInternalFPF(InternalFPF *ptr)
 {
 if (ptr->type == IFPF_IS_NORMAL ||
         ptr->type == IFPF_IS_SUBNORMAL)
@@ -771,7 +774,7 @@ case NAN_NAN:
 /*
 ** All the math is done; time to round.
 */
-RoundInternalFPF(z);
+MultiplyRoundInternalFPF(z);
 return;
 }
 
@@ -934,7 +937,7 @@ case NAN_NAN:
 /*
 ** All math done...do rounding.
 */
-RoundInternalFPF(z);
+MultiplyRoundInternalFPF(z);
 return;
 }
 
@@ -1093,7 +1096,7 @@ case NAN_NAN:
 /*
 ** Math complete...do rounding
 */
-RoundInternalFPF(z);
+MultiplyRoundInternalFPF(z);
 }
 
 /**********************
