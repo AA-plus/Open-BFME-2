@@ -51,6 +51,11 @@
 namespace _STL {
 template <> vector<AsciiString, allocator<AsciiString> > &
 vector<AsciiString, allocator<AsciiString> >::operator=(const vector<AsciiString, allocator<AsciiString> > &);
+// Bottom-loop overload: this TU's flags compile the generic range-destroy to
+// an early-out form, but retail's out-of-line copy is the bottom-tested loop
+// (row 32 family-LK3). The overload wins for (AsciiString*,AsciiString*).
+inline void _Destroy(AsciiString * __first, AsciiString * __last)
+{ for (; __first != __last; ++__first) __first->~AsciiString(); }
 }
 
 #include "Common/CRCDebug.h"
