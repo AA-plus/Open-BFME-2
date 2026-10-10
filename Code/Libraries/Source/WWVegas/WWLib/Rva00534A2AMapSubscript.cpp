@@ -45,7 +45,8 @@ struct TreeStorage534 {
 struct Rva005344C0 {
  int first;TreeStorage534 second;
  Rva005344C0(const int *,const IntTree &);
-};
+}; // implicit dtor (add 4, tail-call storage dtor) is the single definition of
+   // ??1Rva005344C0@@QAE@XZ @0x005344C0 (8B); RvaTreeValueEraseFamily.cpp only declares it
 typedef _STL::map<unsigned int,void*,_STL::less<unsigned int>,_STL::allocator<_STL::pair<const unsigned int,void*> > > InsertMap;
 namespace _STL {template<> InsertMap::iterator InsertMap::insert(InsertMap::iterator,const InsertMap::value_type&);}
 typedef _STL::_Rb_tree<unsigned int,_STL::pair<const unsigned int,void*>,_STL::_Select1st<_STL::pair<const unsigned int,void*> >,_STL::less<unsigned int>,_STL::allocator<_STL::pair<const unsigned int,void*> > > BoundTree;

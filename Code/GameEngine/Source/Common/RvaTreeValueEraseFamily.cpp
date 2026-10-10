@@ -801,17 +801,16 @@ void Rva005007CF::rva00500AA6()
 
 class Rva00053DC5 { public: ~Rva00053DC5(); };
 
-// ??1Rva005344C0@@QAE@XZ @0x005344C0 8B: pair value, second member Rva00053DC5 at +4
+// ??1Rva005344C0@@QAE@XZ @0x005344C0 8B: pair value, second member Rva00053DC5 at +4.
+// Defined once by Rva00534A2AMapSubscript.cpp's identical-layout pair (which
+// must keep emitting it: its rowed subscript inlines nothing but links the
+// external copy). Declared here for the erase below; the row lives there.
 struct Rva005344C0
 {
 	int m_first;
 	Rva00053DC5 m_second;
 	~Rva005344C0();
 };
-
-Rva005344C0::~Rva005344C0()
-{
-}
 
 // owner Rva00534641: erase 0x00534641, clear 0x00534693
 class Image;

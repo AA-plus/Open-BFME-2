@@ -45786,7 +45786,6 @@ _bfmeVp6ThresholdSelect,,0x001B5AC0,404,Code/GameEngine/Source/Common/Rva009A500
 ??1Rva004FFE39@@QAE@XZ,,0x004FFE39,8,Code/GameEngine/Source/Common/RvaTreeValueEraseFamily.cpp,matched,pair value destructor thunk: add ecx 4 then tail-call the rowed ??1Rva004FF582
 ?rva005007CF@Rva005007CF@@QAEXPAX@Z,,0x005007CF,53,Code/GameEngine/Source/Common/RvaTreeValueEraseFamily.cpp,matched,value-destroying tree node erase (53-byte bfmeEraseSubtree shape) over the Rva004FFE39 pair
 ?rva00500AA6@Rva005007CF@@QAEXXZ,,0x00500AA6,41,Code/GameEngine/Source/Common/RvaTreeValueEraseFamily.cpp,matched,tree clear (41-byte shape) calling the Rva005007CF erase
-??1Rva005344C0@@QAE@XZ,,0x005344C0,8,Code/GameEngine/Source/Common/RvaTreeValueEraseFamily.cpp,matched,pair value destructor thunk: add ecx 4 then tail-call the rowed ??1Rva00053DC5
 ?rva00534641@Rva00534641@@QAEXPAX@Z,,0x00534641,53,Code/GameEngine/Source/Common/RvaTreeValueEraseFamily.cpp,matched,value-destroying tree node erase (53-byte bfmeEraseSubtree shape) over the Rva005344C0 pair
 ?rva00534693@Rva00534641@@QAEXXZ,,0x00534693,41,Code/GameEngine/Source/Common/RvaTreeValueEraseFamily.cpp,matched,tree clear (41-byte shape) calling the Rva00534641 erase
 ??1Rva00600BBE@@QAE@XZ,,0x00600BBE,8,Code/GameEngine/Source/Common/RvaTreeValueEraseFamily.cpp,matched,pair value destructor thunk: add ecx 4 then tail-call the rowed ??1Rva006007A5
@@ -76389,3 +76388,4 @@ uw_0077909c,,0x0077909C,13,Code/GameEngine/Source/GameLogic/AI/AIObjectTargetPre
 ?set@Rva0045515CStringField@@QAEXABVAsciiString@@@Z,,0x0045515C,11,Code/GameEngine/Source/Common/AsciiStringFieldSetters.cpp,matched,add ecx 0x424 then tail jump to rowed StringBase<char>::set 0x000366F0 (AsciiString field setter); receiver unknown; per-address name
 ?set@Rva0059804AStringField@@QAEXABVAsciiString@@@Z,,0x0059804A,8,Code/GameEngine/Source/Common/AsciiStringFieldSetters.cpp,matched,add ecx 0x3C then tail jump to rowed StringBase<char>::set 0x000366F0 (AsciiString field setter); receiver unknown; per-address name
 ?set@Rva0059EF95StringField@@QAEXABVAsciiString@@@Z,,0x0059EF95,11,Code/GameEngine/Source/Common/AsciiStringFieldSetters.cpp,matched,add ecx 0xFDC then tail jump to rowed StringBase<char>::set 0x000366F0 (AsciiString field setter); receiver unknown; per-address name
+??1Rva005344C0@@QAE@XZ,,0x005344C0,8,Code/Libraries/Source/WWVegas/WWLib/Rva00534A2AMapSubscript.cpp,matched,pair value destructor thunk: add ecx 4 then tail-call the rowed Rva00053DC5 dtor; single definition (EraseFamily only declares); resolves D
