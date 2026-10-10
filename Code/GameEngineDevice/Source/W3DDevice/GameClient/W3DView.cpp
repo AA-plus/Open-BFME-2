@@ -285,6 +285,8 @@ public:
 
 // 30 fps
 extern Int TheW3DFrameLengthInMsec; // default is 33msec/frame == 30fps. but we may change it depending on sys config.
+// Owned here: retail .data starts it at 0 (VA 0x009E204C); configured later.
+Int TheW3DFrameLengthInMsec = 0;
 static const Int MAX_REQUEST_CACHE_SIZE = 40;	// Any size larger than 10, or examine code below for changes. jkmcd.
 static const Real DRAWABLE_OVERSCAN = 75.0f;
 
