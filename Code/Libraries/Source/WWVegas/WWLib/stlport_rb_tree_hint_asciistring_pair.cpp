@@ -9,6 +9,19 @@
 #undef _STLP_DEFAULT_CONSTRUCTED
 #define _STLP_DEFAULT_CONSTRUCTED(T) T()
 #include <map>
+
+// __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
+// COMDATs (one byte shape per TU malloc/free wiring); explicit
+// dllimport+forceinline specializations take those calls inline so this
+// TU emits no external copies.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *__malloc_alloc<0>::allocate(size_t __n)
+{ void *__r = malloc(__n); if (!__r) __r = _S_oom_malloc(__n); return __r; }
+template <> __declspec(dllimport) __forceinline
+void __malloc_alloc<0>::deallocate(void *__p, size_t)
+{ free((char *)__p); }
+}
 template<class T> class StringBase { void *m_data; void releaseBuffer(); StringBase(const StringBase<T> &); friend class AsciiString; protected: __forceinline StringBase() : m_data(0) {} __forceinline ~StringBase() { releaseBuffer(); } };
 class AsciiString : private StringBase<char> { public: __forceinline AsciiString() {} __forceinline AsciiString(const AsciiString &that) : StringBase<char>(*(const StringBase<char> *)&that) {} __forceinline ~AsciiString() {} };
 bool operator<(const AsciiString &, const AsciiString &);

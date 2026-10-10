@@ -4,6 +4,19 @@
 // BFME2 uses the established external AsciiString comparator.
 #include <map>
 #include <set>
+
+// __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
+// COMDATs (one byte shape per TU malloc/free wiring); explicit
+// dllimport+forceinline specializations take those calls inline so this
+// TU emits no external copies.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+void *__malloc_alloc<0>::allocate(size_t __n)
+{ void *__r = malloc(__n); if (!__r) __r = _S_oom_malloc(__n); return __r; }
+template <> __declspec(dllimport) __forceinline
+void __malloc_alloc<0>::deallocate(void *__p, size_t)
+{ free((char *)__p); }
+}
 // class-gate: allow AsciiString Retail tree erase at 0x00056CC3 calls the dtor thunk at 0x0048BA39.
 class AsciiString { public: AsciiString(const AsciiString &); ~AsciiString(); private: char *m_text; };
 bool operator<(const AsciiString &, const AsciiString &);
