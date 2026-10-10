@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // stlport
 // ??0Rva0009D55BProduct@@QAE@XZ retail 0x0009D55B..0x0009D6E8 (397 bytes EH).
 // Product of the W3D game client factory 0x0004C8DD (vtable 0x00BC4738;
@@ -24,6 +24,7 @@
 // the +0x1D0 texture reference (Release_Ref 0x0021ED10) and the +0x1C0
 // vector before the LivingWorld destructor 0x002BFB2D.
 #include <vector>
+#include "ascii_string.h"
 // The +0x1C0 vector's storage is freed inline through the game free
 // (0x00030830), as in the sibling water-object units.
 void Rva00030830FreeAllocation(void *);
@@ -104,6 +105,7 @@ class Rva0009D55BProduct : public LivingWorld
 public:
 	Rva0009D55BProduct();
 	virtual ~Rva0009D55BProduct();
+	virtual void rva0009C784(unsigned int phase, unsigned int previous);
 
 private:
 	Rva0009D6FARef *m_C0;
@@ -166,4 +168,42 @@ Rva0009D55BProduct::~Rva0009D55BProduct()
 	D55B_REF_PTR_RELEASE(m_C8);
 	D55B_REF_PTR_RELEASE(m_CC);
 	D55B_REF_PTR_RELEASE(m_D0);
+}
+
+// ?rva0009C784@Rva0009D55BProduct@@UAEXII@Z retail 0x0009C784 (144 bytes,
+// ret 8; slot 19 of the product table 0x00BC89C8): after the rowed
+// LivingWorld handler 0x002BE7FA, phase 2 clears the +0x198 fade, starts
+// the "FadeInGameMovie" transition group (rowed setGroup / enable) and hides
+// the engine mouse; phase 3 sets the fade to 1, clears +0x134/+0x138 and
+// calls the table's slot 10 with true.
+class Rva002BE7FA { public: void rva002BE7FA(unsigned int a, unsigned int b); };
+class GameWindowTransitionsHandler { public: void setGroup(AsciiString name, bool immediate); };
+extern GameWindowTransitionsHandler *TheTransitionHandler;
+class Rva001DBB82OneSetter { public: void enable(); };
+class Mouse { public: void _bfme_setEngineVisibility(bool visible); };
+extern Mouse *TheMouse;
+class Rva0009C784Slots
+{
+public:
+	D55B_SLOTS4(v0) D55B_SLOTS4(v1) virtual void v20(); virtual void v21();
+	virtual void slot10(bool flag);
+};
+
+void Rva0009D55BProduct::rva0009C784(unsigned int phase, unsigned int previous)
+{
+	((Rva002BE7FA *)this)->rva002BE7FA(phase, previous);
+	if (phase == 2)
+	{
+		m_198 = 0.0f;
+		TheTransitionHandler->setGroup(AsciiString("FadeInGameMovie"), false);
+		((Rva001DBB82OneSetter *)TheTransitionHandler)->enable();
+		TheMouse->_bfme_setEngineVisibility(false);
+	}
+	else if (phase == 3)
+	{
+		m_198 = 1.0f;
+		m_134 = 0.0f;
+		m_138 = 0.0f;
+		((Rva0009C784Slots *)this)->slot10(true);
+	}
 }
