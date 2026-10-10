@@ -1,6 +1,6 @@
 // ?rva005376D2@UserPreferences@@QAE?AVAsciiString@@XZ
-// partial score=0.8 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB
+// partial score=0.95 date=2026-10-11
+// cl: /Ireference/shims/bfme2_ascii /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB
 //
 // UserPreferences WinsVs/LossesVs helpers (retail 0x0053740C/82, 0x0053745E/85,
 // 0x005374B3/82, 0x00537505/85, plus max-finders 0x0053755A/188 and
@@ -130,30 +130,48 @@ AsciiString UserPreferences::rva00537616(AsciiString a)
 
 AsciiString UserPreferences::rva005376D2()
 {
-	AsciiString best, outer, inner;
+	AsciiString best;
+	AsciiString outer;
+	AsciiString inner;
 	Int max = 0;
-	for (const char **a = kFactions; (Int)a < (Int)(kFactions + 6); ++a) {
+	const char **a = kFactions;
+	do {
 		((StringBase<char> *)&outer)->set(*a);
-		for (const char **b = kFactions; (Int)b < (Int)(kFactions + 6); ++b) {
+		const char **b = kFactions;
+		do {
 			((StringBase<char> *)&inner)->set(*b);
 			Int v = rva0053745E(outer, inner);
-			if (v > max) { best = inner; max = v; }
-		}
-	}
+			if (v > max) {
+				best = inner;
+				max = v;
+			}
+			++b;
+		} while ((Int)b < (Int)(kFactions + 6));
+		++a;
+	} while ((Int)a < (Int)(kFactions + 6));
 	return best;
 }
 
 AsciiString UserPreferences::rva005377B6()
 {
-	AsciiString best, outer, inner;
+	AsciiString best;
+	AsciiString outer;
+	AsciiString inner;
 	Int max = 0;
-	for (const char **a = kFactions; (Int)a < (Int)(kFactions + 6); ++a) {
+	const char **a = kFactions;
+	do {
 		((StringBase<char> *)&outer)->set(*a);
-		for (const char **b = kFactions; (Int)b < (Int)(kFactions + 6); ++b) {
+		const char **b = kFactions;
+		do {
 			((StringBase<char> *)&inner)->set(*b);
 			Int v = rva00537505(outer, inner);
-			if (v > max) { best = inner; max = v; }
-		}
-	}
+			if (v > max) {
+				best = inner;
+				max = v;
+			}
+			++b;
+		} while ((Int)b < (Int)(kFactions + 6));
+		++a;
+	} while ((Int)a < (Int)(kFactions + 6));
 	return best;
 }
