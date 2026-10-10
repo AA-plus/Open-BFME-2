@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // Native5A2E6..5A3FA is the complete276-byte constructor of the existing
 // neutral1C4-byte owner Rva006ABC60 (array callback in Miles ctor5CF5F).
 // Dtor5925E independently establishes six12-byte vectors at4C, AsciiString
