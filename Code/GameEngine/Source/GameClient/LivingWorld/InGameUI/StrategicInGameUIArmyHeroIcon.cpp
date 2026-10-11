@@ -170,3 +170,17 @@ HeroClipReference StrategicInGameUI::ArmyHeroIcon::CreateMovieClip(AptMovieClipF
  ((Rva005FC9F0 *)m_clip)->rva005FC9F0(m_hero->m_level);
  return HeroClipReference(m_clip);
 }
+
+// Native005F43AC..005F43B4 is the eight-byte C79468 slot4 vtordisp
+// adapter to the exact165B DoUpdate above. The stored displacement at
+// virtual receiver-4 removes the actual/nominal virtual-base difference;
+// primary icon is then14 bytes earlier. The qualified override call passes
+// its nominal virtual-base receiver and compiles to the native tail jump.
+// This address-derived view names only the adapter's no-argument ABI.
+class Rva005F43AC { public: void update(); };
+void Rva005F43AC::update()
+{
+    StrategicInGameUI::ArmyHeroIcon *icon = (StrategicInGameUI::ArmyHeroIcon *)
+        ((char *)this - *(int *)((char *)this - 4) - 0x14);
+    icon->StrategicInGameUI::ArmyHeroIcon::DoUpdate();
+}
