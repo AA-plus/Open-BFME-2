@@ -89,6 +89,11 @@ public:
 	Object *getOwner() const { return m_owner; }
 	Object *getGoalObject();
 	const Coord3D *getGoalPosition() const { return &m_goalPosition; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's copy loses (first-copy); the call below inlines it
+	// but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. No flags touched.
+	const Coord3D *bfme_goal_position() const { return &m_goalPosition; }
 protected:
 	unsigned char m_pad00[0x14];
 	Object *m_owner; // +0x14
@@ -163,7 +168,7 @@ StateReturnType AIMoveToState::onEnter()
 		}
 	}
 	else
-		m_goalPosition = *getMachine()->getGoalPosition();
+		m_goalPosition = *getMachine()->bfme_goal_position();
 
 	return AIInternalMoveToState::onEnter();
 }
