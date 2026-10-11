@@ -54,6 +54,12 @@ class Object
 public:
 	Bool isLocallyControlled() const;
 	const Team *getTeam() const { return m_team; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getTeam copy loses to the first-in-order copy (no
+	// retail address); both call sites below inline it but still emit the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	const Team *bfme_get_team() const { return m_team; }
 	// The kind-of test reads the template's flag word and tests the bit in
 	// place (test ah,1 / test byte [..],0x80), never materializing a Bool.
 	__forceinline UnsignedInt isKindOf(Int bit) const
@@ -215,7 +221,7 @@ Bool contextCommandForNewSelection(const DrawableList *currentlySelectedDrawable
 				++outSelectionInfo->currentCountMineBuildings;
 			}
 		} else {
-			Relationship rel = localPlayer->getRelationship(obj->getTeam());
+			Relationship rel = localPlayer->getRelationship(obj->bfme_get_team());
 			if (rel == ALLIES) {
 				++outSelectionInfo->currentCountFriends;
 			} else if (rel == ENEMIES) {
@@ -255,7 +261,7 @@ Bool contextCommandForNewSelection(const DrawableList *currentlySelectedDrawable
 				++outSelectionInfo->newCountMineBuildings;
 			}
 		} else {
-			Relationship rel = localPlayer->getRelationship(obj->getTeam());
+			Relationship rel = localPlayer->getRelationship(obj->bfme_get_team());
 			if (rel == ALLIES) {
 				newFriendly = *it;
 				++outSelectionInfo->newCountFriends;
