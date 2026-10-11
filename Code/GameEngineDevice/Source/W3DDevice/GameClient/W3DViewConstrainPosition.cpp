@@ -25,8 +25,14 @@ class W3DView {private:void rva000860AF(Coord3D*);private:
 void W3DView::rva000860AF(Coord3D* p){
  if(!constrain)return;
  Vector3 offset=camera->Get_Position();
- offset-=Vector3(position.x,position.y,position.z);
- offset.Z=0;offset*=0.25f;
+ // LINK: temp via default-plus-assign (not the MMM ctor) plus header-verbatim
+ // component ops. This TU's MMM, -= and *= copies are unproven/first-copy
+ // losers; the calls inline but still emit loser COMDATs, while the default
+ // ctor's copy is kept. Keeping the temp's load/store/sub shape is
+ // load-bearing for the SSE schedule. No flags touched.
+ Vector3 tmp;tmp.X=position.x;tmp.Y=position.y;tmp.Z=position.z;
+ offset.X-=tmp.X;offset.Y-=tmp.Y;offset.Z-=tmp.Z;
+ offset.Z=0;offset.X=offset.X*0.25f;offset.Y=offset.Y*0.25f;offset.Z=offset.Z*0.25f;
  p->x+=offset.X;p->y+=offset.Y;
  settings.constrainPosition(p);
  p->x-=offset.X;p->y-=offset.Y;
