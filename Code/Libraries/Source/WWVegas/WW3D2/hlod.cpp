@@ -188,6 +188,11 @@ void __cdecl operator delete[](void *block);
 
 #include <htree.h>
 #include "hlod.h"
+// Access the donor protected type without changing any member access or ABI.
+struct BfmeHLodModelNodeAccess : HLodClass { typedef ModelNodeClass Node; };
+// Use the independently rowed native 19E700 owner instead of a local copy.
+template <> bool VectorClass<BfmeHLodModelNodeAccess::Node>::Resize(
+    int newsize, const BfmeHLodModelNodeAccess::Node *array);
 #include "assetmgr.h"
 #include "hmdldef.h"
 #include "w3derr.h"
