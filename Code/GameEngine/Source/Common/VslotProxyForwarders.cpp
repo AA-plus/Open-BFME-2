@@ -349,16 +349,7 @@ public:
 	void *rva003F80C3();
 };
 
-Rva003F7D86Inner *Rva003F81FDProxy::rva003F81B0()
-{
-	Rva003F816EItem *entry = rva003F816E();
-	if (!entry)
-		return 0;
-	void *found = ((Rva003F8101 *)entry)->rva003F8101();
-	if (!found)
-		return 0;
-	return (Rva003F7D86Inner *)((Rva003F8090 *)found)->rva003F80C3();
-}
+// Rva003F81FDProxy::rva003F81B0 (0x003F81B0) is rowed in Rva003F81B0Chain.cpp; a second definition here would not link.
 
 // 0x00C3731C#3 slot 3
 Bool Rva003F81FDProxy::rva003F81FD(Int a0, Int a1)
