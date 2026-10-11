@@ -78,4 +78,10 @@ __declspec(noinline) void istreambuf_iterator<char, char_traits<char> >::_M_getc
     _M_have_c = true;
 }
 }
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> char *_STLP_alloc_proxy<char*, char, allocator<char> >::allocate(size_t);
+}
 template class _STL::money_get<char, _STL::istreambuf_iterator<char, _STL::char_traits<char> > >;
