@@ -97,10 +97,19 @@ GameWindow *GameWindow::winGetParent(void)
 	return m_parent;
 }
 
-GameWindow *GameWindow::winGetChild(void)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline GameWindow *GameWindow::winGetChild(void)
 {
 	return m_child;
 }
+
+// ?bfmeAnchorGameWindowWinGetChild absent-from-retail
+GameWindow *bfmeAnchorGameWindowWinGetChild(GameWindow *p)
+{
+	return p->winGetChild();
+}
+
 
 // The window id (+0x34), the six text colours (+0x18C..+0x1A0) and the font
 // (+0x1B4): each pinned by its GUI callers at a one-load getter that retail
@@ -112,7 +121,15 @@ Color GameWindow::winGetDisabledTextColor(void) { return m_textColor[2]; }
 Color GameWindow::winGetDisabledTextBorderColor(void) { return m_textColor[3]; }
 Color GameWindow::winGetHiliteTextColor(void) { return m_textColor[4]; }
 Color GameWindow::winGetHiliteTextBorderColor(void) { return m_textColor[5]; }
-GameFont *GameWindow::winGetFont(void) { return m_font; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline GameFont *GameWindow::winGetFont(void) { return m_font; }
+
+// ?bfmeAnchorGameWindowWinGetFont absent-from-retail
+GameFont *bfmeAnchorGameWindowWinGetFont(GameWindow *p)
+{
+	return p->winGetFont();
+}
 
 // The IME composite text colour and border (+0x1A4, +0x1A8), right after the
 // six text colours as Zero Hour's m_imeCompositeText follows the hilite text:

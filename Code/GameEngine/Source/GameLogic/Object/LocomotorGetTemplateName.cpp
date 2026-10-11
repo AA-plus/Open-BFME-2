@@ -17,7 +17,16 @@ public:
 	AsciiString getTemplateName() const;
 };
 
-AsciiString Locomotor::getTemplateName() const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AsciiString Locomotor::getTemplateName() const
 {
 	return m_template->m_name;
 }
+
+// ?bfmeAnchorLocomotorGetTemplateName absent-from-retail
+AsciiString bfmeAnchorLocomotorGetTemplateName(const Locomotor *p)
+{
+	return p->getTemplateName();
+}
+

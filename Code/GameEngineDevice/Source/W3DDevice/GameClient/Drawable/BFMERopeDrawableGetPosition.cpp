@@ -146,7 +146,9 @@ public:
 // interpolation state getTransformMatrix (0x0027628E) reads; its callers pass
 // Drawable pointers (LaserUpdate::initFromDrawables 0x00363853
 // GameClient::iterateDrawablesInRegion).
-const Coord3D *Drawable::getPosition() const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline const Coord3D *Drawable::getPosition() const
 {
 	if (!m_object)
 		return &m_basePosition;
@@ -170,6 +172,13 @@ const Coord3D *Drawable::getPosition() const
 	m_interpolatedPosition = interpolated;
 	return &m_interpolatedPosition;
 }
+
+// ?bfmeAnchorDrawableGetPosition absent-from-retail
+const Coord3D *bfmeAnchorDrawableGetPosition(const Drawable *p)
+{
+	return p->getPosition();
+}
+
 
 const Matrix3D *Drawable::getTransformMatrix() const
 {
