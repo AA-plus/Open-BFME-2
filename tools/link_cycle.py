@@ -719,6 +719,11 @@ def funcinfo(m, a, base):
 def eh_verdict(I, lt, R, rt, lbase, rbase, translate=None):
     """None when the linked __ehhandler$ thunk at lt and retail's at rt (mov eax,
     FuncInfo; jmp handler) carry equal EH data; else the first difference."""
+    # Both 10-byte thunks must lie in their image: a retail target past its bytes
+    # raised IndexError and lost the whole Open-BFME-1 bf7709aa22 run, and a
+    # negative offset would silently read from the image's end.
+    if not (0 <= lt <= len(I) - 10 and 0 <= rt <= len(R) - 10):
+        return "thunk outside the image"
     if I[lt] != 0xB8 or R[rt] != 0xB8 or I[lt + 5] != 0xE9 or R[rt + 5] != 0xE9:
         return "thunk shape differs"
     try:

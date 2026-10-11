@@ -1368,3 +1368,16 @@ def test_const_data_reads_pointer_constness_from_the_outer_code():
         assert not lc.const_data(name), name
     for name in ("?p@@3QADA", "?arr@@3QBHB", "?q@@3SBDB"):
         assert lc.const_data(name), name
+
+
+def test_eh_verdict_is_a_verdict_for_a_thunk_outside_the_image():
+    """A retail target past the image's bytes (or before them) is no thunk: a
+    verdict, never IndexError (Open-BFME-1 bf7709aa22 lost its run to one)."""
+    thunk = b"\xb8" + struct.pack("<I", 0) + b"\xe9" + struct.pack("<i", 0)
+    image = bytes(16) + thunk
+    for rt in (len(image) - 9, len(image) - 5, len(image), len(image) + 100, -10, -1):
+        assert lc.eh_verdict(image, 16, image, rt, B, B) == "thunk outside the image", rt
+    assert lc.eh_verdict(image, len(image), image, 16, B, B) == "thunk outside the image"
+    # the same thunk inside both images reaches the shape and FuncInfo checks
+    assert lc.eh_verdict(image, 16, image, 16, B, B) != "thunk outside the image"
+    assert lc.eh_verdict(image, 0, image, 16, B, B) == "thunk shape differs"
