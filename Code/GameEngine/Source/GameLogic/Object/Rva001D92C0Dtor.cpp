@@ -53,16 +53,24 @@ namespace _STL {
 template <> void ArmorTemplateTable::clear();
 }
 
-// The map's table: a byte twin of the rowed ArmorTemplateTable destructor
-// with its own EH handler, so retail keeps a separate copy at 0x001D904A.
+// Native 0x001D904A..0x001D9083 clears the table, then frees bucket storage
+// at +4 through the member vector's lifetime. The other table words remain
+// opaque. Its parent calls this complete destructor out of line.
 class Rva001D904A
 {
 public:
-	~Rva001D904A();
+	__declspec(noinline) ~Rva001D904A();
 	ArmorTemplateTable &table() { return *reinterpret_cast<ArmorTemplateTable *>(this); }
 private:
-	unsigned char m_data[sizeof(ArmorTemplateTable)];
+	unsigned char m_unknown00[4];
+	_STL::vector<void *> m_buckets;
+	unsigned int m_unknown10;
 };
+
+Rva001D904A::~Rva001D904A()
+{
+	table().clear();
+}
 
 class GameWindow; class WindowVideo;
 class WindowVideoManager { public: struct hashConstGameWindowPtr { size_t operator()(const GameWindow *) const; }; };
