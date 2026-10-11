@@ -76776,3 +76776,4 @@ uw_0078274a,,0x0078274A,11,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptL
 ?rva005F4254@Rva005F4254@@QAE?AUTreeHintRef00217D4C@@XZ,,0x005F4254,171,Code/GameEngine/Source/GameClient/LivingWorld/InGameUI/StrategicInGameUIArmyUnitIcon.cpp,matched,Complete native171B counted-help factory RET4; measured secondary receiver unit-C owner-10 vbptr-14; known18B empty-help fallback1524CA; name accessor and retained template/title exact; original method identity stays address-derived
 uw_00771451,,0x00771451,11,Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp,matched,gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6387
 uw_0077143b,,0x0077143B,11,Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp,matched,gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6385
+uw_00771446,,0x00771446,11,Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp,matched,gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6386
