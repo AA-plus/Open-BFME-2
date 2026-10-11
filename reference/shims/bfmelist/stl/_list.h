@@ -574,7 +574,7 @@ inline __declspec(noinline) list<int, allocator<int> >::_Node*
 list<int, allocator<int> >::_M_create_node(const int& __x)
 {
   _Node* __p = this->_M_node.allocate(1);
-  _Construct(&__p->_M_data, __x);
+  new (&__p->_M_data) int(__x);
   return __p;
 }
 

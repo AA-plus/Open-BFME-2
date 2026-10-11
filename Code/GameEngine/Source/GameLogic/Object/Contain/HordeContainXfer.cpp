@@ -38,6 +38,14 @@
 #include <vector>
 #include "ascii_string.h"
 #include "Lib/Coord3D.h"
+// vector<int> fill/insert otherwise instantiates the _Construct<int,int>
+// COMDAT (one byte shape per TU flags); a file-static overload takes those
+// calls instead so this TU emits no external copy.
+#include <new>
+namespace _STL {
+static inline void _Construct(int *__p, const int &__val)
+{ new (__p) int(__val); }
+}
 
 class UnicodeString;
 class PooledString;

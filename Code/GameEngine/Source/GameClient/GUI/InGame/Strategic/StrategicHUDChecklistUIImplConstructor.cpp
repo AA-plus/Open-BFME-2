@@ -31,6 +31,14 @@ template <> _List_base<int, allocator<int> >::~_List_base();
 #include <vector>
 #include "ascii_string.h"
 #include "unicode_string.h"
+// vector<int> fill/insert otherwise instantiates the _Construct<int,int>
+// COMDAT (one byte shape per TU flags); a file-static overload takes those
+// calls instead so this TU emits no external copy.
+#include <new>
+namespace _STL {
+static inline void _Construct(int *__p, const int &__val)
+{ new (__p) int(__val); }
+}
 struct AsciiStringRef {const AsciiString *m_string;};
 struct AsciiStringPlusString : AsciiStringRef {AsciiStringRef m_second;};
 class Rva000B3F84Pair {public:Rva000B3F84Pair(){} Rva000B3F84Pair *init(const char*);const char *text;int length;};

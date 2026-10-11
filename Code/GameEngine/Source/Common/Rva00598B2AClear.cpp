@@ -4,20 +4,6 @@
 // Evidence: thiscall ret0; tree clear 0x00598120 at +8; list walk with virtual slot0 int0 plus rowed delete 0x0002FD60; rowed List_base<int> clear 0x0023DAA5 at +0x14; rowed vector<AsciiString> erase 0x0002CCFC at +0x4C; caller unclaimed 0x00598CFD
 #include <list>
 
-// list<int> destruction otherwise instantiates per-TU deallocate
-// COMDATs (one byte shape per TU flags); explicit dllimport+forceinline
-// specializations take those calls inline so this TU emits no external copy.
-namespace _STL {
-template <> __declspec(dllimport) __forceinline
-void allocator<_List_node<int> >::deallocate(_List_node<int>* __p, size_t __n) const {
-  _STLP_ASSERT( (__p == 0) == (__n == 0) )
-    if (__p != 0) __sgi_alloc::deallocate((void*)__p, __n * sizeof(value_type));
-}
-template <> __declspec(dllimport) __forceinline
-void _STLP_alloc_proxy<_List_node<int> *, _List_node<int>, allocator<_List_node<int> > >::deallocate(_List_node<int> *__p, size_t __n) {
-  allocator<_List_node<int> >().deallocate(__p, __n);
-}
-}
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
