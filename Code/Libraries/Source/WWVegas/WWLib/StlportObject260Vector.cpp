@@ -12,6 +12,12 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 
 #include <vector>
 #include "Object260.h"
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _Construct<BfmeFixedObject260, BfmeFixedObject260>(BfmeFixedObject260 *, const BfmeFixedObject260 &);
+}
 typedef _STL::vector<BfmeFixedObject260, _STL::allocator<BfmeFixedObject260> > BfmeFixedObject260Vector;
 template BfmeFixedObject260* BfmeFixedObject260Vector::_M_allocate_and_copy<const BfmeFixedObject260*>(unsigned int, const BfmeFixedObject260*, const BfmeFixedObject260*);
 
