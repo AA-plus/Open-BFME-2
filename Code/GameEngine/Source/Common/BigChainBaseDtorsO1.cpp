@@ -22,12 +22,12 @@ inline BigChainO1Hold::~BigChainO1Hold()
 {
     ((Rva001F4206 *)this)->rva001F4206();
 }
-class Rva005C67C0
+class H1F8167
 {
 public:
-    ~Rva005C67C0();
+    ~H1F8167();
 };
-class Rva005C9D30 : public BigChainO1Hold, public Rva005C67C0
+class Rva005C9D30 : public BigChainO1Hold, public H1F8167
 {
 public:
     ~Rva005C9D30();
