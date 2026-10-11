@@ -18,6 +18,11 @@
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
 #include <vector>
 
+// Declaration-only: the rowed vector<Coord3D> members are bound, this TU emits no per-flag copy.
+namespace _STL {
+template <> Coord3D *vector<Coord3D, allocator<Coord3D> >::erase(Coord3D*, Coord3D*);
+}
+
 typedef bool Bool;
 typedef float Real;
 typedef int Int;

@@ -158,6 +158,11 @@ class Player;
 class Team;
 
 #include "../../Common/GameLogicObjectLookupView.h"
+
+// Declaration-only: the rowed vector<Coord3D> members are bound, this TU emits no per-flag copy.
+namespace _STL {
+template <> void vector<Coord3D, allocator<Coord3D> >::_M_insert_overflow(Coord3D*, const Coord3D&, const __false_type&, size_t, bool);
+}
 extern GameLogic *TheGameLogic;
 
 enum ObjectStatusTypes
