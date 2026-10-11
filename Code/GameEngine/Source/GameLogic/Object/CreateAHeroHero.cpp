@@ -19,6 +19,27 @@ Real GetGameClientRandomValueReal(Real lo, Real hi, char *file, Int line);	// 0x
 #define CREATEAHEROHERO_FILE "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\CreateAHeroHero.cpp"
 
 #include "ascii_string.h"
+#include "unicode_string.h"
+
+class GameState;
+extern GameState *TheGameState;
+class Rva002DC267 { public: UnicodeString rva002DC267() const; };
+extern "C" __declspec(dllimport) int __stdcall CreateDirectoryW(const unsigned short *, void *);
+class HeroFile { public: virtual ~HeroFile(); virtual bool open(const char *, int); virtual void close(); };
+int Rva00409892(int, int);
+class Xfer;
+class XferSave {
+public:
+    XferSave();
+    virtual ~XferSave();
+    unsigned char Open(Xfer *, int, bool);
+private:
+    unsigned char opaque04[0x40-4];
+};
+typedef char WriterSizeCheck[sizeof(XferSave)==0x40?1:-1];
+class Gen009D6DD0 { public: void bfmeClose(); };
+class Rva00406EBF { public: void rva00406EBF(Xfer *); };
+
 
 class CreateAHeroHero;
 class CreateAHeroManager
@@ -91,7 +112,12 @@ extern Rva0040AAD5 *g_00E02F74;
 class InGameUI
 {
 public:
-	void notifyHeroEarnedAward(CreateAHeroHero *, int);
+    void notifyHeroEarnedAward(CreateAHeroHero *, int);
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void __cdecl message(AsciiString text, ...);
 };
 extern InGameUI *TheInGameUI;
 // Retain the timeline provider's existing scalar ABI spelling. Its ScienceType
@@ -302,6 +328,7 @@ public:
 	Bool UpdateCommandSet(UnsignedInt rank);
 	Bool RegisterExperienceLevels();
 	Bool Update(Int flags);
+	Bool rva004098BE(const AsciiString &name, Bool isSystem);
 	AsciiString rva004073DC(const Rva002B224BDwordField *drawable);
 	Bool GetAnimationFameCount(const Rva002B224BDwordField *drawable, void *animation, void *frameCount);
 
@@ -315,7 +342,9 @@ private:
 	_STL::map<Int, Int> m_priorBling;		// +0x20
 	UnsignedInt m_red, m_green, m_blue;		// +0x2C
 	UnsignedInt m_state38;
-	unsigned char m_pad3C[0x4C - 0x3C];
+	unsigned char m_pad3C[0x48 - 0x3C];
+	Bool m_systemHero; // +0x48, witnessed by retail4098BE/4099CA
+	unsigned char m_pad49[3];
 	AsciiString m_className;				// +0x4C
 	_STL::map<AsciiString, TreeHintPayload001F8ACB> m_awardCounts;	// +0x50
 	_STL::vector<bool> m_awardEarnedFlags; // +0x5C
@@ -701,4 +730,36 @@ Bool CreateAHeroHero::Update(Int flags)
 	}
 	if (drawable) { m_animationState = drawable->rva00272709(); m_animationState2 = drawable->rva0027272B(); }
 	return true;
+}
+
+// Retail4098BE..4099CA includes the inline catch at40997E and shared tail.
+// FuncInfo931BE0 -> TryBlockMap931BCC -> HandlerType931BBC names catch80997E;
+// the state-one interval contains Open only. WB1080780 places this method
+// in CreateAHeroHero.cpp; matched manager21A428 pins its current signature.
+// Target facts: system flag48, save-directory getter2DC267, wrapper409892,
+// transfer406EBF, writer ctor60D1F7/dtor60D0B3 and close60C8CD. XferSave's
+// spelling remains donor-derived, as in the audited existing providers.
+bool CreateAHeroHero::rva004098BE(const AsciiString &name, bool isSystem)
+{
+    m_systemHero=isSystem;
+    CreateDirectoryW(((const Rva002DC267 *)TheGameState)->rva002DC267().str(),0);
+    // The existing wrapper retains its historical int signature; this view
+    // supplies the witnessed reference/bool ABI without a new symbol pin.
+    HeroFile *file=((HeroFile *(__cdecl *)(const AsciiString &, bool))Rva00409892)(name,m_systemHero);
+    if(!file) {
+        TheInGameUI->message(AsciiString("GUI:Error"));
+        return false;
+    }
+    XferSave writer;
+    try {
+        writer.Open((Xfer *)file,1,false);
+    } catch(...) {
+        file->close();
+        TheInGameUI->message(AsciiString("GUI:Error"));
+        return false;
+    }
+    ((Rva00406EBF *)this)->rva00406EBF((Xfer *)&writer);
+    ((Gen009D6DD0 *)&writer)->bfmeClose();
+    file->close();
+    return true;
 }
