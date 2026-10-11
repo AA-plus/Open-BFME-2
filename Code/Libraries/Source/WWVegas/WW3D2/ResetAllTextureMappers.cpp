@@ -99,10 +99,17 @@ virtual void slot83();
 virtual void slot84();
 virtual MaterialInfoClass *Get_Material_Info();
 void Release_Ref() { if(--m_refCount==0) Delete_This(); }
+ // LINK: same-body helper under a TU-unique name (identical inlined bytes).
+ // This TU's RenderObjClass::Release_Ref copy loses (first-copy); the call
+ // below inlines it but still emits the loser COMDAT. Rebinding there emits
+ // only this unique (trivially kept) copy. No flags touched.
+ void bfme_release() { if(--m_refCount==0) Delete_This(); }
 protected: int m_refCount; };
 class MeshClass : public RenderObjClass { public: void Make_Unique(bool); };
 class MaterialInfoClass { public: virtual void Delete_This();
  void Release_Ref() { if(--m_refCount==0) Delete_This(); }
+ // LINK: same reason as above, for MaterialInfoClass::Release_Ref.
+ void bfme_release() { if(--m_refCount==0) Delete_This(); }
  bool Has_Time_Variant_Texture_Mappers(); void Reset_Texture_Mappers();
 private: int m_refCount; };
 class Rva0010E4D4 { public: void rva0010E4D4(); };
@@ -117,7 +124,7 @@ void Reset_All_Texture_Mappers(RenderObjClass *robj, bool make_unique)
     reinterpret_cast<Rva0010E4D4*>(minfo)->rva0010E4D4();
    }
    minfo->Reset_Texture_Mappers();
-   minfo->Release_Ref();
+   minfo->bfme_release();
   }
  } else {
   int num_obj=robj->Sub_Object_Count();
@@ -125,7 +132,7 @@ void Reset_All_Texture_Mappers(RenderObjClass *robj, bool make_unique)
    RenderObjClass *sub_obj=robj->Get_Sub_Object(i);
    if(sub_obj) {
     Reset_All_Texture_Mappers(sub_obj,make_unique);
-    sub_obj->Release_Ref();
+    sub_obj->bfme_release();
    }
   }
  }
