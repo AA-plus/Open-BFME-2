@@ -32,7 +32,7 @@ struct BfmeGridZJ;
 struct Rva009AF200Context;
 struct Rva009AF320Context;
 struct Rva009B3800Context;
-void __cdecl bfmeFillZJ(BfmeGridZJ *);
+extern "C" void __cdecl UpdateFragQIndex(BfmeGridZJ *);
 void __cdecl Rva009AF200CopyPlanes(Rva009AF200Context *, int, int);
 void __cdecl Rva009AF320CopyPlanes(Rva009AF320Context *, int, int);
 void __cdecl Rva009B3800PlaneCopy(Rva009B3800Context *, int, int);
@@ -84,7 +84,7 @@ struct Rva009A6130Context
 };
 
 // The landed helpers each declare their own view of this context.
-#define FILL(c) bfmeFillZJ((BfmeGridZJ *)(c))
+#define FILL(c) UpdateFragQIndex((BfmeGridZJ *)(c))
 #define AF200(c, a, b) Rva009AF200CopyPlanes((Rva009AF200Context *)(c), (int)(a), (int)(b))
 #define AF320(c, a, b) Rva009AF320CopyPlanes((Rva009AF320Context *)(c), (int)(a), (int)(b))
 #define B3800(c, a, b) Rva009B3800PlaneCopy((Rva009B3800Context *)(c), (int)(a), (int)(b))

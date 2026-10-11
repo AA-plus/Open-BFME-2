@@ -22,7 +22,7 @@ struct Vp6MvEntropyInstance {
 	unsigned char MvSizeProbs[2][8];
 };
 int Rva009B4600DecodeBool(void *, int);
-int bfmeGoUSC(void *, int);
+extern "C" int __cdecl VP6_bitread(void *, int);
 extern const unsigned char g_00BD94A8[2][17];
 extern "C" void VP6_ConfigureMvEntropyDecoder(Vp6MvEntropyInstance *pbi, unsigned char frameType)
 {
@@ -30,12 +30,12 @@ extern "C" void VP6_ConfigureMvEntropyDecoder(Vp6MvEntropyInstance *pbi, unsigne
 	unsigned j;
 	for (i = 0; i < 2; i++) {
 		if (Rva009B4600DecodeBool(pbi->br, g_00BD94A8[i][0])) {
-			pbi->IsMvShortProb[i] = bfmeGoUSC(pbi->br, 7) << 1;
+			pbi->IsMvShortProb[i] = VP6_bitread(pbi->br, 7) << 1;
 			if (!pbi->IsMvShortProb[i])
 				pbi->IsMvShortProb[i] = 1;
 		}
 		if (Rva009B4600DecodeBool(pbi->br, g_00BD94A8[i][1])) {
-			pbi->MvSignProbs[i] = bfmeGoUSC(pbi->br, 7) << 1;
+			pbi->MvSignProbs[i] = VP6_bitread(pbi->br, 7) << 1;
 			if (!pbi->MvSignProbs[i])
 				pbi->MvSignProbs[i] = 1;
 		}
@@ -44,7 +44,7 @@ extern "C" void VP6_ConfigureMvEntropyDecoder(Vp6MvEntropyInstance *pbi, unsigne
 		int k = 2;
 		for (j = 0; j < 7; j++, k++) {
 			if (Rva009B4600DecodeBool(pbi->br, g_00BD94A8[i][k])) {
-				pbi->MvShortProbs[i][j] = bfmeGoUSC(pbi->br, 7) << 1;
+				pbi->MvShortProbs[i][j] = VP6_bitread(pbi->br, 7) << 1;
 				if (!pbi->MvShortProbs[i][j])
 					pbi->MvShortProbs[i][j] = 1;
 			}
@@ -54,7 +54,7 @@ extern "C" void VP6_ConfigureMvEntropyDecoder(Vp6MvEntropyInstance *pbi, unsigne
 		int k = 9;
 		for (j = 0; j < 8; j++, k++) {
 			if (Rva009B4600DecodeBool(pbi->br, g_00BD94A8[i][k])) {
-				pbi->MvSizeProbs[i][j] = bfmeGoUSC(pbi->br, 7) << 1;
+				pbi->MvSizeProbs[i][j] = VP6_bitread(pbi->br, 7) << 1;
 				if (!pbi->MvSizeProbs[i][j])
 					pbi->MvSizeProbs[i][j] = 1;
 			}

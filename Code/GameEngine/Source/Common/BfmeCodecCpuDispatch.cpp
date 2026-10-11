@@ -24,7 +24,7 @@ extern "C" void __cdecl LastVerticalBand_1_2_Scale_MMX(unsigned char *, unsigned
 // matches their existing row.
 extern void __cdecl bfmeFilterPairMmx(void *, void *, int, const void *);
 extern void __cdecl bfmeExpandMmx(const void *, int, void *);
-extern void __cdecl Rva009A98E0(const void *, int, void *);
+extern "C" void __cdecl HorizontalLine_1_2_Scale_C(const void *, int, void *, int);
 extern void __cdecl bfmeExpand3to5Mmx(const void *, int, void *);
 extern void __cdecl bfmeExpand4to5Mmx(const void *, int, void *);
 extern void __cdecl bfmeAverageMmx(void *, int, int);
@@ -81,7 +81,7 @@ extern void __cdecl Rva009B10E0(void);
 extern void __cdecl Rva009ACF90(void);
 extern void __cdecl Rva009ADD80(void);
 extern void __cdecl Rva009AE6A0(void);
-extern void __cdecl Rva009A9920(unsigned char *, int, unsigned int);
+extern "C" void __cdecl VerticalBand_1_2_Scale_C(unsigned char *, int, unsigned int);
 extern "C" void __cdecl LastVerticalBand_1_2_Scale_C(unsigned char *, int, unsigned int);
 extern void __cdecl Rva009A9550(const void *, int, void *);
 extern void __cdecl Rva009A9660(unsigned char *, int, unsigned int);
@@ -100,38 +100,6 @@ struct Rva009B6BB0Context
 };
 
 extern void __cdecl Rva009B6BB0(Rva009B6BB0Context *, int, int, int, int);
-
-// Generic scalar counterpart of bfmeExpandMmx in dispatch slot 8.  The
-// caller's slot assignment and the MMX sibling establish the ABI: source,
-// positive source-byte count, destination. Retail emits the last source byte twice
-// so the pairwise interpolation loop never reads past the source extent.
-//
-// ?Rva009A98E0@@YAXPBXHPAX@Z
-void __cdecl Rva009A98E0(const void *source, int bytes, void *destination)
-{
-	unsigned char *dst = (unsigned char *)destination;
-	const unsigned char *src = (const unsigned char *)source;
-	int remaining = bytes - 1;
-
-	if (remaining != 0)
-	{
-		do
-		{
-			unsigned int first = src[0];
-			unsigned int second = src[1];
-			dst[0] = (unsigned char)first;
-			dst[1] = (unsigned char)((first + second + 1) >> 1);
-			++src;
-			dst += 2;
-			--remaining;
-		}
-		while (remaining != 0);
-	}
-
-	unsigned int last = src[0];
-	dst[0] = (unsigned char)last;
-	dst[1] = (unsigned char)last;
-}
 
 void __cdecl Rva009B6BB0(Rva009B6BB0Context *context,
 	int lowerLimit, int upperLimit, int destinationOffset, int sourceOffset)
@@ -251,8 +219,8 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	g_bfmeCodecDispatch.slot[21] = (BfmeDispatchFn)&Rva009AE6A0;
 	g_bfmeCodecDispatch.slot[9] = (BfmeDispatchFn)&Rva009B3650FilterVert;
 	g_bfmeCodecDispatch.slot[25] = (BfmeDispatchFn)&Rva009B3710FilterHoriz;
-	g_bfmeCodecDispatch.slot[8] = (BfmeDispatchFn)&Rva009A98E0;
-	g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&Rva009A9920;
+	g_bfmeCodecDispatch.slot[8] = (BfmeDispatchFn)&HorizontalLine_1_2_Scale_C;
+	g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&VerticalBand_1_2_Scale_C;
 	g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_C;
 	g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&Rva009A9550;
 	g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&Rva009A9660;

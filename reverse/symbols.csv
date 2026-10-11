@@ -7727,7 +7727,6 @@ name,address,notes
 ?bfmeAfterFCB@BfmeOwnFCB@@QAEXXZ,0x004C0C52,callee of ?bfmeGoFCB@BfmeThingFCB@@QAEXPAX@Z at retail 0x004C121B read from its REL32 displacement; body unrowed
 ?bfmeAlloc1039@@YAPAXH@Z,0x0002FDA0
 ?bfmeAlloc1053@@YAPAXH@Z,0x006724D0
-?bfmeAllocBlock@@YAPAXI@Z,0x001B63C0
 ?bfmeAllocDGD@@YAPAXI@Z,0x0065D010
 ?bfmeAllocDGF@@YAPAXI@Z,0x0065D010
 ?bfmeAllocDGG@@YAPAXI@Z,0x0065D010
@@ -8149,7 +8148,6 @@ name,address,notes
 ?bfmeGoTFB@BfmeThingTFB@@QAEXH@Z,0x0029766B,second name for the body rowed as ?rva0029766B@Rva0029766B@@QAEXPBUCoord3D@@@Z; both landed independently and this TU was dropped when the solo fork was squashed onto upstream
 ?bfmeGoUPB@BfmeThingUPB@@QAEDPAXPAD0@Z,0x00655B10
 ?bfmeGoUPC@@YAXPAUlua_State@@H@Z,0x007478E0
-?bfmeGoUSC@@YAHPAXH@Z,0x001BCF40
 ?bfmeGoVGP@BfmeThingVGP@@QAEHXZ,0x00176E90
 ?bfmeGoVJH@BfmeOwner803BF0@@QAEXH@Z,0x0066F9B0
 ?bfmeGoVJJ@BfmeThingVJJ@@QAEXPAVBfmeMsgVJJ@@@Z,0x006766E0
@@ -8256,7 +8254,6 @@ name,address,notes
 ?bfmeMake926B@@YAPAUBfmeNodeLC@@XZ,0x0032843E
 ?bfmeMakeBCE@@YAPAXXZ,0x006617F0
 ?bfmeMakeBMD@BfmeSinkBMD@@QAEPAXPAX@Z,0x0026F26D,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
-?bfmeMakeBZB@@YAPAXPAX@Z,0x001B6890
 ?bfmeMakeCGE@@YAHPAVBfmeSubCGE@@@Z,0x001A22F0,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?bfmeMakeDFC@BfmeOtherDFC@@QAEPAXPAXH@Z,0x00655990
 ?bfmeMakeDFI@BfmeOtherDFI@@QAEPAXPAXH@Z,0x00655990
@@ -10543,7 +10540,6 @@ name,address,notes
 ?releaseBuffer@UnicodeString@@IAEXXZ,0x00036E70,aliases the matched ?releaseBuffer@UnicodeString@@QAEXXZ body at 0x36E70; both are zero-argument thiscall release operations and the TU-private spelling is emitted by the static-text donor
 ?releaseBuffer@UnicodeString@@QAEXXZ,0x00036E70,Dict TU spelling of rowed StringBase wide releaseBuffer; same body
 ?releaseCodecBuffer@@YAXPAPAX@Z,0x001B7930
-?releaseCodecCallback@@YAXPAPAX@Z,0x001B68D0
 ?releaseCodecMembers@@YAXPAUCodecState@@@Z,0x001B5530
 ?releaseCodecState@@YAXPAPAUCodecState@@@Z,0x001B56A0
 ?releaseDependentResources@BfmeShaderShutdown@@SAXXZ,0x00076790,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1

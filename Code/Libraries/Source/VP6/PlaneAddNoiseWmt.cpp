@@ -10,7 +10,7 @@
 #include <emmintrin.h>
 
 // Normal density, matched at 0x001B6970.
-double bfmeGaussPdf(double sigma, double mu, double x);
+extern "C" double __cdecl gaussian(double, double, double);
 
 extern "C" void __cdecl PlaneAddNoise_wmt(unsigned char *start, unsigned width, unsigned height, int pitch, int q)
 {
@@ -30,7 +30,7 @@ extern "C" void __cdecl PlaneAddNoise_wmt(unsigned char *start, unsigned width, 
 	sigma = 1 + 0.012698412698412698 * (63 - q);
 	next = 0;
 	for (x = -32; x < 32; x++) {
-		int count = (int)(256 * bfmeGaussPdf(sigma, 0, x) + 0.5);
+		int count = (int)(256 * gaussian(sigma, 0, x) + 0.5);
 		if (count) {
 			int k;
 			for (k = 0; k < count; k++)

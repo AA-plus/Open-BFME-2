@@ -71,7 +71,7 @@ void Rva009AAFE0BuildTable(Rva009AAFE0Context *,const unsigned char *);
 void Rva009AB7F0Reset(Rva009AB7F0Context *);
 void Rva009AB760Initialize(Rva009AB760Context *);
 void Rva009B5DB0Vp6DecodeBlock(unsigned char *,int,unsigned);
-int bfmeGoUSC(void *,int);
+extern "C" int __cdecl VP6_bitread(void *, int);
 extern "C" void VP6_ConfigureMvEntropyDecoder(FramePB *,unsigned char);
 extern "C" void VP6_ConfigureEntropyDecoder(FramePB *,unsigned char);
 extern "C" void ConvertBoolTrees(FramePB *);
@@ -101,7 +101,7 @@ extern "C" void VP6_DecodeFrameMbs(FramePB *pbi)
     for(unsigned i=0;i<64;++i)
         pbi->MergedScanOrder[i]=(unsigned char)pbi->quantizer->scan[pbi->ModifiedScanOrder[i]];
     if(pbi->UseHuffman) ConvertBoolTrees(pbi);
-    if(pbi->Interlaced==1) pbi->probInterlaced=(unsigned char)bfmeGoUSC(pbi->br,8);
+    if(pbi->Interlaced==1) pbi->probInterlaced=(unsigned char)VP6_bitread(pbi->br,8);
     Rva009AB7F0Reset((Rva009AB7F0Context *)pbi);
     memset(pbi->coefficients,0,768);
     pbi->CurrentDcRunLen[0]=0; pbi->CurrentDcRunLen[1]=0;

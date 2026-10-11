@@ -5,7 +5,7 @@
 //
 // Retail 0x009A5D70, 176 bytes.
 // Identity: ?bfmeInitD70@@YAXPAX0@Z is established by the matched
-// bfmeMakeBZB caller at 0x009A5E20, which allocates the 0xC8 holder, zeroes it
+// CreatePostProcInstance caller at 0x009A5E20, which allocates the 0xC8 holder, zeroes it
 // and passes (holder, source) here; bfmeCheckJX at 0x009A89C0 makes the same
 // two-argument call.  The body copies fourteen source words into the record at
 // +0x40 and then derives the packed plane sizes the codec indexes with.

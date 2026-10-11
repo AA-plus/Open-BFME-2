@@ -1,7 +1,7 @@
-// Target 0x001B6400 forwards bytes to bfmeAllocBlock at 0x001B63C0.
+// Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
 // Its allocator and native14B body differ from NameKeyGenerator::Bucket's
 // donor operator new. Address-derived identity; original class is unknown.
-void *bfmeAllocBlock(unsigned int bytes);
+extern "C" void *__cdecl duck_malloc(unsigned int bytes);
 
 class Rva001B6400Allocation
 {
@@ -13,7 +13,7 @@ public:
 
 inline void *Rva001B6400Allocation::operator new(unsigned int size, AllocationTag)
 {
-	return bfmeAllocBlock(size);
+	return duck_malloc(size);
 }
 
 #pragma inline_depth(0)

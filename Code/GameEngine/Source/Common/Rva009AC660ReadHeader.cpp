@@ -11,7 +11,7 @@ void bfmeInit1186(BfmeBits1186*, unsigned char*);
 // Post-processing setters at 0x001B6900 and 0x001B6910 (VP6 clean room).
 extern "C" void __cdecl SetPPInterlacedMode(void*,int);
 extern "C" void __cdecl SetDeInterlaceMode(void*,int);
-int bfmeGoUSC(void*,int);
+extern "C" int __cdecl VP6_bitread(void *, int);
 int bfmeCheckJX(CodecState*);
 int Rva009B4600DecodeBool(void*,int);
 extern "C" void __cdecl VP6_UpdateQ(BfmeS1040*,int);
@@ -45,10 +45,10 @@ static int Rva009AC660ReadHeader(unsigned char* s)
         }
         SetPPInterlacedMode(P(0x298),U(0x1dc));
         if (U(0x1dc)) SetDeInterlaceMode(P(0x298),U(0x4944));
-        unsigned a=(unsigned char)bfmeGoUSC(decoder,8)*2u;
-        unsigned b=(unsigned char)bfmeGoUSC(decoder,8)*2u;
-        unsigned c=(unsigned char)bfmeGoUSC(decoder,8)*2u;
-        unsigned d=(unsigned char)bfmeGoUSC(decoder,8)*2u;
+        unsigned a=(unsigned char)VP6_bitread(decoder,8)*2u;
+        unsigned b=(unsigned char)VP6_bitread(decoder,8)*2u;
+        unsigned c=(unsigned char)VP6_bitread(decoder,8)*2u;
+        unsigned d=(unsigned char)VP6_bitread(decoder,8)*2u;
         if (!U(0x1cc)) U(0x1cc)=1;
         if (!U(0x1d4)) U(0x1d4)=1;
         unsigned oldB=U(0x1f8)*U(0x1c8)*8/U(0x1cc);
@@ -67,7 +67,7 @@ static int Rva009AC660ReadHeader(unsigned char* s)
         unsigned newA=U(0x1d0)*a*8/U(0x1d4);
         U(0x234)=newB;
         U(0x238)=newA;
-        U(0x1d8)=bfmeGoUSC(decoder,2);
+        U(0x1d8)=VP6_bitread(decoder,2);
         if (a!=U(0x1f4) || b!=U(0x1f8)) {
             U(0x1b0)=b*8;
             U(0x1b4)=a*8;
@@ -81,8 +81,8 @@ static int Rva009AC660ReadHeader(unsigned char* s)
         if (B(0x19d)) {
             if (Rva009B4600DecodeBool(decoder,128)) {
                 B(0x692)=2;
-                U(0x694)=bfmeGoUSC(decoder,5)<<5;
-                B(0x693)=(unsigned char)bfmeGoUSC(decoder,3);
+                U(0x694)=VP6_bitread(decoder,5)<<5;
+                B(0x693)=(unsigned char)VP6_bitread(decoder,3);
             } else B(0x692)=Rva009B4600DecodeBool(decoder,128)!=0;
         }
     } else {

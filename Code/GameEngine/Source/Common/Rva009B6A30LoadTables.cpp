@@ -3,7 +3,7 @@
 // proves the clean source and identity evidence.
 
 int Rva009B4600DecodeBool(void *state, int probability);
-int bfmeGoUSC(void *state, int count);
+extern "C" int __cdecl VP6_bitread(void *, int);
 int Rva009B6950DecodeScale(unsigned char *ctx);
 void Rva009B6740BuildTable(unsigned char *ctx);
 
@@ -145,7 +145,7 @@ void Rva009B6A30LoadTables(unsigned char *ctx)
 
     do {
         if (Rva009B4600DecodeBool(state, 0xAE)) {
-            int index = bfmeGoUSC(state, 4) + plane;
+            int index = VP6_bitread(state, 4) + plane;
             ((unsigned char *)rows)[-1] = g_bfmeQuantRow[((index + index * 4) << 2) + 0];
             ((unsigned char *)rows)[-11] = g_bfmeQuantRow[((index + index * 4) << 2) + 1];
             ((unsigned char *)rows)[0] = g_bfmeQuantRow[((index + index * 4) << 2) + 2];

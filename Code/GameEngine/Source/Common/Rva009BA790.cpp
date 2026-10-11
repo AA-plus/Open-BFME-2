@@ -4,7 +4,7 @@
 // targets/game/reverse/identity_evidence/009ba790.md
 #include <mmintrin.h>
 #include <stdlib.h>
-extern double __cdecl bfmeGaussPdf(double, double, double);
+extern "C" double __cdecl gaussian(double, double, double);
 
 extern "C" void __cdecl Rva009BA790(unsigned char *pixels, int width,
     unsigned int height, int stride, int parameter18)
@@ -92,7 +92,7 @@ extern "C" void __cdecl Rva009BA790(unsigned char *pixels, int width,
     int next = 0;
     for (double value = -32.0; value < 32.0; value += 1.0)
     {
-        int count = (int)(bfmeGaussPdf(sigma, 0.0, value) * 256.0 + 0.5);
+        int count = (int)(gaussian(sigma, 0.0, value) * 256.0 + 0.5);
         if (count)
         {
             int n = 0;

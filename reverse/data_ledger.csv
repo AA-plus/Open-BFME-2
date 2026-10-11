@@ -21855,8 +21855,8 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A22F74,4,.data,global,?g_bfmeHook1040@@3P6AXPAUBfmeS1040@@@ZA,,unowned,?g_bfmeHook1040@@3P6AXPAUBfmeS1040@@@ZA;?g_rva01356DA0@@3R6AXPAX@ZA,0,4
 0x00A22F78,4,.data,global,?g_horizontalScale45Slot@@3P6AXPBEIPAEI@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,provisional,?g_horizontalScale45Slot@@3P6AXPBEIPAEI@ZA;_g_bfmeCodecDispatchOutlier@Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp,2,8
 0x00A22F7C,4,.data,global,?g_bfmeCodecDispatch@@3UBfmeCodecDispatchTable@@A,Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp,owned,,1,88
-0x00A22F80,4,.data,global,?g_rva01356E64@@3P6AHPAURva009ACC40State@@H@ZA,Code/GameEngine/Source/Common/Rva009ACC40SetupFilter.cpp,provisional,?g_rva01356E64@@3P6AHPAURva009ACC40State@@H@ZA;?g_rva01356E64@@3P6APAHPAURva009ACBA0Context@@H@ZA;?g_rva01356E64@@3P6APAHPAURva009B3800Context@@H@ZA,1,3
-0x00A22F84,8,.data,global,?g_rva01356e68SetupBounding@@3P6APAHPAURva009AF530Context@@H@ZA,Code/GameEngine/Source/Common/Rva009AF530SetupDispatch.cpp,owned,,1,1
+0x00A22F80,4,.data,global,?g_rva01356E64@@3P6AHPAURva009ACC40State@@H@ZA,Code/Libraries/Source/VP6/PostProcInstance.cpp,provisional,?g_rva01356E64@@3P6AHPAURva009ACC40State@@H@ZA;?g_rva01356E64@@3P6APAHPAURva009ACBA0Context@@H@ZA;?g_rva01356E64@@3P6APAHPAURva009B3800Context@@H@ZA,1,3
+0x00A22F84,8,.data,global,?g_rva01356e68SetupBounding@@3P6APAHPAURva009AF530Context@@H@ZA,Code/Libraries/Source/VP6/PostProcInstance.cpp,owned,,1,1
 0x00A22F8C,8,.data,global,?g_verticalScale21Slot@@3P6AXPAEII@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,1
 0x00A22F94,4,.data,global,?g_lastVerticalScale45Slot@@3P6AXPAEII@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,2
 0x00A22F98,4,.data,global,?g_verticalScale45Slot@@3P6AXPAEII@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,2

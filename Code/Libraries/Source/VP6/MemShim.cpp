@@ -4,7 +4,7 @@
 extern "C" void *__cdecl memset(void *block, int value, unsigned int bytes);
 #pragma intrinsic(memset)
 
-void *__cdecl bfmeAllocBlock(unsigned int bytes); // 0x001B63C0 duck_malloc core
+extern "C" void *__cdecl duck_malloc(unsigned int bytes); // 0x001B63C0
 
 // RVA 0x001B6420
 extern "C" void *__cdecl duck_memset(void *destination, int value, unsigned int bytes)
@@ -16,7 +16,7 @@ extern "C" void *__cdecl duck_memset(void *destination, int value, unsigned int 
 extern "C" void *__cdecl duck_calloc(unsigned int count, unsigned int size)
 {
 	unsigned int bytes = count * size;
-	void *block = bfmeAllocBlock(bytes);
+	void *block = duck_malloc(bytes);
 	if (block)
 		memset(block, 0, bytes);
 	return block;

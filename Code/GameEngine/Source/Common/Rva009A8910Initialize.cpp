@@ -1,4 +1,4 @@
-// Target 0x001B6400 forwards bytes to bfmeAllocBlock at 0x001B63C0.
+// Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
 // Its allocator and native14B body differ from NameKeyGenerator::Bucket's
 // donor operator new. Address-derived identity; original class is unknown.
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/NameKeyGenerator.h

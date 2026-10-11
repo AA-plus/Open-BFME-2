@@ -4,7 +4,7 @@ struct Rva009B4680State;
 
 int Rva009B4600DecodeBool(void *state, int probability);
 int Rva009B4680Normalize(Rva009B4680State *state);
-int bfmeGoUSC(void *state, int count);
+extern "C" int __cdecl VP6_bitread(void *, int);
 
 // ?Rva009B6950DecodeScale@@YAHPAE@Z
 int Rva009B6950DecodeScale(unsigned char *ctx)
@@ -30,5 +30,5 @@ int Rva009B6950DecodeScale(unsigned char *ctx)
 		return (sign * 3) << 3;
 	}
 
-	return (bfmeGoUSC(state, 7) * sign) << 2;
+	return (VP6_bitread(state, 7) * sign) << 2;
 }

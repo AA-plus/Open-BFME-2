@@ -8,7 +8,7 @@ struct CodecState
 
 void releaseCodecMembers( CodecState *state );
 void releaseCodecBuffer( void **buffer );
-void releaseCodecCallback( void **callback );
+extern "C" void __cdecl DeletePostProcInstance( void **callback );
 // The BFME1 donor's local extern freeCodecMemory resolves to the rowed helper.
 void bfmeFreeOneJT( void *what );
 
@@ -19,7 +19,7 @@ void releaseCodecState( CodecState **state )
 	{
 		releaseCodecMembers( *state );
 		releaseCodecBuffer( &(*state)->m_buffer );
-		releaseCodecCallback( &(*state)->m_callback );
+		DeletePostProcInstance( &(*state)->m_callback );
 	}
 	bfmeFreeOneJT( *state );
 	*state = 0;

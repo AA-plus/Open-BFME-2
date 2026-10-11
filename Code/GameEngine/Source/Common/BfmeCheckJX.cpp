@@ -1,4 +1,4 @@
-// Target 0x001B6400 forwards bytes to bfmeAllocBlock at 0x001B63C0.
+// Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
 // Its allocator and native14B body differ from NameKeyGenerator::Bucket's
 // donor operator new. Address-derived identity; original class is unknown.
 // Retail 009A89C0. Existing bfmeInitCodecJX caller establishes this name.

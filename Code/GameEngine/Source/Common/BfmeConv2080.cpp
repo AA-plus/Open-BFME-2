@@ -1,4 +1,4 @@
-// Target 0x001B6400 forwards bytes to bfmeAllocBlock at 0x001B63C0.
+// Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
 // Its allocator and native14B body differ from NameKeyGenerator::Bucket's
 // donor operator new. Address-derived identity; original class is unknown.
 struct BfmeSubJX
@@ -54,7 +54,7 @@ public:
 
 	static void *operator new(unsigned int n, AllocationTag m);
 };
-void *bfmeMakeBZB(void *q);
+extern "C" void *__cdecl CreatePostProcInstance(void *q);
 BfmeSubJX *bfmeMakeSubJX();
 int bfmeCheckJX(CodecState *s);
 struct PB_INSTANCE;
@@ -63,7 +63,7 @@ extern "C" void __cdecl VP6_InitialiseConfiguration(PB_INSTANCE *pbi);
 struct BfmeHolderBZB;
 
 void Rva009A6EC0Release(void **q);
-void bfmeGoBZB(BfmeHolderBZB *h);
+extern "C" void __cdecl DeletePostProcInstance(BfmeHolderBZB *h);
 void bfmeStepJW(void *q);
 void Rva009A8880Release(void *q);
 void releaseCodecState(CodecState **q);
@@ -73,7 +73,7 @@ int bfmeFreeCodecJW(CodecState **p)
 	if (*p != 0)
 	{
 		Rva009A6EC0Release((void **)((char *)*p + 0x13c));
-		bfmeGoBZB((BfmeHolderBZB *)((char *)*p + 0x298));
+		DeletePostProcInstance((BfmeHolderBZB *)((char *)*p + 0x298));
 		bfmeStepJW(*p);
 		Rva009A8880Release(*p);
 		releaseCodecState(p);
@@ -92,7 +92,7 @@ int bfmeInitCodecJX(CodecState **p, int a, int b)
 	(*p)->m_bfme240JX = b;
 	(*p)->m_bfme1b0JX = a;
 	(*p)->m_bfme1b4JX = b;
-	(*p)->m_bfme298JX = bfmeMakeBZB((char *)*p + 0x1b0);
+	(*p)->m_bfme298JX = CreatePostProcInstance((char *)*p + 0x1b0);
 	(*p)->m_bfme13cJX = bfmeMakeSubJX();
 	(*p)->m_bfme1a4JX = g_bfmeSharedJX;
 

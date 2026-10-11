@@ -17,7 +17,7 @@ extern "C" void __cdecl VP6_readTSC(unsigned int *result);
 // VP6 clean-room VP6_LoadFrame (spec 001bd550): typed state argument and int
 // Boolean result; defined in Rva009AC660ReadHeader.cpp.
 extern "C" int __cdecl VP6_LoadFrame(unsigned char *);
-void bfmeReadWordXF(BfmeCursorXF *out, const unsigned char *data);
+extern "C" void __cdecl InitHeaderBuffer(BfmeCursorXF *out, const unsigned char *data);
 void bfmeInit1186(BfmeBits1186 *s, unsigned char *p);
 struct FramePB;
 extern "C" void VP6_DecodeFrameMbs(FramePB *pbi);
@@ -38,7 +38,7 @@ static int Rva009A5620DecodeFrame(unsigned char *s, unsigned char *data, unsigne
 	unsigned int start;
 	VP6_readTSC(&start);
 	U(0x1e8) = size;
-	bfmeReadWordXF((BfmeCursorXF *)(s + 0x450c), data);
+	InitHeaderBuffer((BfmeCursorXF *)(s + 0x450c), data);
 	if (!VP6_LoadFrame(s))
 		return -1;
 	if (U(0x944) || !B(0x19d))

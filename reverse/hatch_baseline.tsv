@@ -2184,7 +2184,6 @@ alternatename	Code/GameEngine/Source/Common/Bfme5NinetyOne.cpp	?randwc@@YAJJ@Z	1
 alternatename	Code/GameEngine/Source/Common/Bfme5ThirtyFour.cpp	?unlink@PartitionData@@QAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/Bfme5ThirtyTwo.cpp	?rva007F76D0@Rva00801670Host@@QAEPAHPAVBfmeVecCZ@@H@Z	1
 alternatename	Code/GameEngine/Source/Common/Bfme5ThirtyTwo.cpp	?rva007F76D0@Rva00802550Host@@QAEPAHPAVBfmeVecCZ@@H@Z	1
-alternatename	Code/GameEngine/Source/Common/BfmeAllocBlock.cpp	?g_bfmeAllocGlobal@@3PAVBfmeAllocGlobal@@A	1
 alternatename	Code/GameEngine/Source/Common/BfmeAllocRva.cpp	?bfmeSmallAllocPS@@YAPAXI@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeBigNewDeleteForwarders.cpp	_bfmeMalloc1149	1
 alternatename	Code/GameEngine/Source/Common/BfmeBigNewDeleteForwarders.cpp	_bfmeMalloc1150	1
@@ -2271,7 +2270,6 @@ alternatename	Code/GameEngine/Source/Common/BfmeConv443.cpp	?bfmeCbVJM@@YGXXZ	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv485.cpp	?g_bfmeSinkBLD@@3PAVBfmeSinkBLD@@A	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv487.cpp	?bfmeDoBLF@@YAXPAUBfmeSubBLF@@PAXH@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv487.cpp	?bfmeNoteVJI@BfmeSubVJI@@QAEXPBD@Z	1
-alternatename	Code/GameEngine/Source/Common/BfmeConv557.cpp	?releaseCodecCallback@@YAXPAPAX@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv559.cpp	?bfmeCopyBZD@@YAXPADPBDI@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv585.cpp	?bfmeCopyCEB@@YAXPADPBDI@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv606.cpp	?addInt@BfmeMsg1052@@QAEXPBDH@Z	1

@@ -12,7 +12,7 @@ extern void __cdecl Rva009A9980( const Byte *, int, unsigned int, unsigned int,
 	Byte *, int, unsigned int, unsigned int );
 extern void __cdecl Rva009A9A20( const Byte *, int, unsigned int, unsigned int,
 	Byte *, int, unsigned int, unsigned int );
-extern void __cdecl bfmeCopyColAA90( Byte *, int, int, int,
+extern "C" void __cdecl Scale1D_2t1_ps( Byte *, int, int, int,
 	Byte *, int, int, int );
 
 void Rva009A9AD0Scale2D(
@@ -38,7 +38,7 @@ void Rva009A9AD0Scale2D(
 	unsigned int sourceBandHeight;
 	Scale1D scaleVertical = Rva009A9980;
 	Scale1D scaleHorizontal = Rva009A9980;
-	Scale1D scaleTwoToOne = (Scale1D)bfmeCopyColAA90;
+	Scale1D scaleTwoToOne = (Scale1D)Scale1D_2t1_ps;
 	if( hscale == 2 && hratio == 1 )
 		scaleHorizontal = scaleTwoToOne;
 	if( vscale == 2 && vratio == 1 )
