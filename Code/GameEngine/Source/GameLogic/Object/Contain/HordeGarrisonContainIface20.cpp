@@ -114,12 +114,15 @@ struct Iface00 { virtual void f00();
  const void *m_moduleData;Object *m_object; };
 struct Iface0C { virtual void f0C(); };
 struct Iface10 { virtual void f10(); unsigned char m_pad[12]; };
-struct Iface20
+struct DamageInfoInput00462516;
+class SlaughterHordeContain { public: virtual void g00(); void rva00462516(void *a, void *b, DamageInfoInput00462516 *info); };
+struct Iface20 : public SlaughterHordeContain
 {
-	SLOT08(g00,g01,g02,g03,g04,g05,g06,g07)
+	virtual void g01(); virtual void g02(); virtual void g03(); virtual void g04(); virtual void g05(); virtual void g06(); virtual void g07();
 	SLOT08(g08,g09,g10,g11,g12,g13,g14,g15)
 	SLOT08(g16,g17,g18,g19,g20,g21,g22,g23)
-	virtual void g24(); virtual void g25(); virtual void g26();
+	virtual void g24(); virtual void g25();
+	virtual void rva00479C0C(Object *obj, void *b, DamageInfoInput00462516 *info) = 0;
 	virtual void rva0050B238(Object *obj, bool flag) = 0;
 	virtual int rvaIface70(); virtual void g29(); virtual void g30(); virtual void g31();
 	virtual void rva00465011(Object *obj) = 0;
@@ -202,6 +205,7 @@ public:
 class HordeGarrisonContain : public GarrisonContain, public Rva0047A040Base9E0
 {
 public:
+	virtual void rva00479C0C(Object *obj, void *b, DamageInfoInput00462516 *info);
 	virtual void rva0050B238(Object *obj, bool flag);
 	virtual void rva00465011(Object *obj);
 	virtual void rva004632E0(Object *obj);
@@ -210,6 +214,13 @@ public:
 private:
 	int m_9E0;
 };
+
+// ?rva00479C0C@HordeGarrisonContain@@UAEXPAVObject@@PAXPAUDamageInfoInput00462516@@@Z @0x00479C0C
+void HordeGarrisonContain::rva00479C0C(Object *obj, void *b, DamageInfoInput00462516 *info)
+{
+	if (!obj->ai)
+		rva00462516(obj, b, info);
+}
 
 // ?rva004632E0@HordeGarrisonContain@@UAEXPAVObject@@@Z @0x00479BDD
 void HordeGarrisonContain::rva004632E0(Object *obj)

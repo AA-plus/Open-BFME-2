@@ -62,6 +62,16 @@ class TransportContain : public Iface00, public Iface0C, public Iface10, public 
 {
 };
 
+class SiegeEngineContain : public TransportContain
+{
+public:
+	virtual float rva0047CADB();
+	virtual void rva004624EB(Rva0046247DPair &p);
+private:
+	void *m_11C; // +0x11C (list head)
+	int m_120; // +0x120
+};
+
 class HordeTransportContain : public TransportContain
 {
 protected:
@@ -77,6 +87,19 @@ private:
 	void *m_128; // +0x128 (list head)
 	int m_12C; // +0x12C
 };
+
+// ?rva0047CADB@SiegeEngineContain@@UAEMXZ @0x0047BAE7
+float SiegeEngineContain::rva0047CADB()
+{
+	return m_120 * ((const HordeSiegeEngineContainModuleData *)m_moduleData)->m_19C;
+}
+
+// ?rva004624EB@SiegeEngineContain@@UAEXAAURva0046247DPair@@@Z @0x0047C018
+void SiegeEngineContain::rva004624EB(Rva0046247DPair &p)
+{
+	p.m00 = this;
+	p.m04 = &m_11C;
+}
 
 // ?rva0047CADB@HordeSiegeEngineContain@@UAEMXZ @0x0047CADB
 float HordeSiegeEngineContain::rva0047CADB()

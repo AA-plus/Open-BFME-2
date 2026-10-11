@@ -94,6 +94,14 @@ public:
 };
 
 
+class BfmeTab1026;
+
+class Rva004F5436
+{
+public:
+	int rva004F5436(BfmeTab1026 *tab);
+};
+
 class Rva00466398
 {
 public:
@@ -107,6 +115,9 @@ public:
 	void removeFromContain(ObjectID value, int exposeStealthUnits);
 	Bool rva004F571B(Object *object);
 	void iterateContained(void (*callback)(Object*,void*), void *data, Bool reverse);
+	void addToContainList(Object *obj);
+	Bool rva004F5473(Object *obj, Bool checkCapacity);
+	int getContainMax() const;
 };
 
 class CaveSystem
@@ -220,6 +231,11 @@ public:
 	virtual void tryToSetCaveIndex(int newIndex);
 	// Implemented for the one-entry die interface at complete-object +0x28.
 	virtual void onDie(const DamageInfo *damageInfo);
+	virtual void addToContainList(Object *obj);
+	virtual Bool isValidContainerFor(Object *obj, Bool checkCapacity, Bool testPath);
+	virtual int rva00466504(BfmeTab1026 *tab);
+	virtual int getContainMax() const;
+	virtual Rva0036AE51ListView rva00466534();
 
 	Object *getObject() const
 	{
@@ -359,3 +375,33 @@ void CaveContain::iterateContained(void (*callback)(Object*,void*), void *data, 
   tracker->iterateContained(callback,data,(flags >> 3)&1);
  }
 }
+
+void CaveContain::addToContainList(Object *obj)
+{
+	TunnelTracker *myTracker = TheCaveSystem->getTunnelTrackerForCaveIndex(m_caveIndex);
+	myTracker->addToContainList(obj);
+}
+
+Bool CaveContain::isValidContainerFor(Object *obj, Bool checkCapacity, Bool)
+{
+	TunnelTracker *myTracker = TheCaveSystem->getTunnelTrackerForCaveIndex(m_caveIndex);
+	return myTracker->rva004F5473(obj, checkCapacity);
+}
+
+int CaveContain::rva00466504(BfmeTab1026 *tab)
+{
+	TunnelTracker *myTracker = TheCaveSystem->getTunnelTrackerForCaveIndex(m_caveIndex);
+	return ((Rva004F5436 *)myTracker)->rva004F5436(tab);
+}
+
+int CaveContain::getContainMax() const
+{
+	TunnelTracker *myTracker = TheCaveSystem->getTunnelTrackerForCaveIndex(m_caveIndex);
+	return myTracker->getContainMax();
+}
+
+Rva0036AE51ListView CaveContain::rva00466534()
+{
+	return TheCaveSystem->getTunnelTrackerForCaveIndex(m_caveIndex)->rva00466398();
+}
+

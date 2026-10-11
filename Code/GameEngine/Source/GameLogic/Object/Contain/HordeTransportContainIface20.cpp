@@ -54,11 +54,19 @@ public:
 	void rva00477305(Object *obj);
 };
 
+class Rva00468657
+{
+public:
+	virtual void g00();
+	void rva00468657(Object *obj, bool flag);
+};
+
 class Rva0047A040Base9E0
 {
 public:
 	// Rows 0x00588C4E / 0x00588F61 spellings.
 	void *rva00588B8A(void *key);
+	void rva00588BA8(Object *obj, bool flag);
 	Object *rva00588C4E(void *contain, const struct Coord3D *obj);
 	void rva00588F61(void *contain, Object *owner, enum CommandSourceType obj);
 	void rva00588D99(Object *obj);
@@ -93,12 +101,13 @@ struct Iface00
 };
 struct Iface0C { virtual void f0C(); };
 struct Iface10 { virtual void f10(); unsigned char m_pad[12]; };
-struct Iface20
+struct Iface20 : public Rva00468657
 {
-	SLOT08(g00,g01,g02,g03,g04,g05,g06,g07)
+	virtual void g01(); virtual void g02(); virtual void g03(); virtual void g04(); virtual void g05(); virtual void g06(); virtual void g07();
 	SLOT08(g08,g09,g10,g11,g12,g13,g14,g15)
 	SLOT08(g16,g17,g18,g19,g20,g21,g22,g23)
-	virtual void g24(); virtual void g25(); virtual void g26(); virtual void g27();
+	virtual void g24(); virtual void g25(); virtual void g26();
+	virtual void rva0050B238(Object *obj, bool flag) = 0;
 	virtual void g28(); virtual void g29(); virtual void g30(); virtual void g31();
 	virtual void rva00465011(Object *obj) = 0;
 	virtual void g33(); virtual void g34(); virtual void g35();
@@ -165,6 +174,7 @@ public:
 class HordeTransportContain : public TransportContain
 {
 public:
+	virtual void rva0050B238(Object *obj, bool flag);
 	virtual void rva00465011(Object *obj);
 	virtual void rva004632E0(Object *obj);
 	virtual void rva004770A6(Object *obj);
@@ -173,6 +183,13 @@ private:
 	unsigned char m_11C;
 	Rva0047A040Base9E0 m_helper; // +0x11D
 };
+
+// ?rva0050B238@HordeTransportContain@@UAEXPAVObject@@_N@Z @0x00477121
+void HordeTransportContain::rva0050B238(Object *obj, bool flag)
+{
+	m_helper.rva00588BA8(obj, flag);
+	rva00468657(obj, flag);
+}
 
 // ?rva004632E0@HordeTransportContain@@UAEXPAVObject@@@Z @0x0047710B
 void HordeTransportContain::rva004632E0(Object *obj)
