@@ -22,7 +22,15 @@ private:
     AsciiString m_string1240;
 };
 extern GlobalData *TheWritableGlobalData;
-extern const WideChar g_00C18798[];
+// Retail's own 20-byte wide string at RVA 0x00818798 (.rdata, file offset
+// 0x00817BD8): "Replays\" in UTF-16 followed by the terminating NUL and the
+// NUL that keeps the array's ten words on retail's own alignment - 20 bytes is
+// the ledger's bound, and the ASCII bytes that follow ("GUI") belong to retail's
+// next literal. The rowed body below concatenates it onto the save-game
+// directory the global data supplies, which is why the suffix is a string and
+// not a code view.
+// Symbol ?g_00C18798@@3QBGB, transcribed below.
+extern const WideChar g_00C18798[] = { 'R', 'e', 'p', 'l', 'a', 'y', 's', '\\', 0, 0 };
 UnicodeString Rva0037B9D4Get()
 {
     UnicodeString wtmp(TheWritableGlobalData->rva002360DE());
