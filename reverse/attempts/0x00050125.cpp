@@ -1,4 +1,6 @@
 // ?rva00050125@W3DRadar@@QAEXPBVRadarObject@@PBVCursorTextureSlot@@H@Z
+// partial score=0.99 date=2026-10-11
+// ?rva00050125@W3DRadar@@QAEXPBVRadarObject@@PBVCursorTextureSlot@@H@Z
 // partial score=0.99 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 // stlport

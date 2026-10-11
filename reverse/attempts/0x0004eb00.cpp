@@ -1,4 +1,6 @@
 // ?setShroudLevel@W3DRadar@@UAEXHHW4CellShroudStatus@@@Z
+// partial score=0.99 date=2026-10-11
+// ?setShroudLevel@W3DRadar@@UAEXHHW4CellShroudStatus@@@Z
 // partial score=0.97 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include
 // Native [0004EB00,0004ED3D),573B, RET12. BFME 2 W3DRadar::setShroudLevel;
