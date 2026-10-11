@@ -211,7 +211,6 @@ private:
 	unsigned char m_unreconstructed[8];
 };
 
-extern UnicodeString g_emptyProfilePath;
 
 class ProfilePreferences : public UserPreferences
 {
@@ -461,19 +460,17 @@ void SkirmishPreferences::rva0043C612(const UnicodeString &user)
 	m_userNames.push_back(user);
 	rebuildUserNamesEntry();
 	write();
-	RealTimeStatsPreferences realTime(g_emptyProfilePath);
+	RealTimeStatsPreferences realTime(UnicodeString::TheEmptyString);
 	realTime.loadProfileStats(user);
 	realTime.clear();
 	realTime.rva00535781();
 	realTime.write();
-	StrategicStatsPreferences strategic(g_emptyProfilePath);
+	StrategicStatsPreferences strategic(UnicodeString::TheEmptyString);
 	strategic.loadProfileStats(user);
 	strategic.clear();
 	strategic.rva00535781();
 	strategic.write();
 }
-// ?g_emptyProfilePath@@3VUnicodeString@@A: the global at VA 0xe0c898 is ?TheEmptyString@UnicodeString@@2V1@A.
-#pragma comment(linker, "/alternatename:?g_emptyProfilePath@@3VUnicodeString@@A=?TheEmptyString@UnicodeString@@2V1@A")
 
 // Retail 0x0043BE7C, 77 bytes. Name unknown: with a skirmish game set up,
 // keeps its map and then its slots (0x0043BD36) in the preferences.
