@@ -72,7 +72,6 @@ struct Rva00538E43Result : Snapshot
 	Rva00538E43Result(const Rva00538E43Result &that) : Snapshot(that), position(that.position), tag(that.tag) {}
 	virtual ~Rva00538E43Result() {}
 	virtual void loadPostProcess() {}
-	// ?Rva00538E43Result::GetSnapshotName present-unmatched
 	virtual const char *GetSnapshotName() const { return "ArmyMoveCommand"; }
 	virtual void xfer(Xfer *xfer);
 };
