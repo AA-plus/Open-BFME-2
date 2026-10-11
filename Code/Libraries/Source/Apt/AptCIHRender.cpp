@@ -234,14 +234,14 @@ class BfmeAptValue006DCD20
 {
 public:
     bool isUndefined() const;  // 0x006DC010
-    bool rva006E0260() const;  // 0x006E0260 isShapeInst
-    bool rva006E02B0() const;  // 0x006E02B0 isTextInst
+    int rva006E0260() const;  // 0x006E0260 isShapeInst
+    int rva006E02B0() const;  // 0x006E02B0 isTextInst
     int rva006E0300() const;   // 0x006E0300
     int rva006E0350() const;   // 0x006E0350
     void *rva006E0F40() const; // 0x006E0F40
 };
 
-class AptActionInterpreter
+struct AptActionInterpreter
 {
 public:
     AptValue *getVariable(AptValue *, AptValue *, const EAStringC *, int = 1, int = 1, int = 0);
@@ -277,7 +277,7 @@ void Rva006E15C0::call(void *ctx, void *arg1, int arg2)
             APT_ASSERT(pRectObject, "pRectObject", APT_CIH_CPP, 0x382)
             if (!pRectObject)
                 return;
-            APT_ASSERT(((BfmeAptValue006DCD20 *)pRectObject)->rva006E0260(), "pRectObject->isShapeInst()", APT_CIH_CPP, 0x385)
+            APT_ASSERT(static_cast<unsigned char>(((BfmeAptValue006DCD20 *)pRectObject)->rva006E0260()), "pRectObject->isShapeInst()", APT_CIH_CPP, 0x385)
             AptValue *pValue = g_aptDateInterpreter.getVariable(this, 0, Rva0070B4F0GetString(0x10), 1, 1, 0);
             pValue->AddRef();
             EAStringC text;
@@ -302,7 +302,7 @@ void Rva006E15C0::call(void *ctx, void *arg1, int arg2)
         pButton->list.rva006F7720Sub(ctx, arg2);
         return;
     }
-    if (self->rva006E02B0()) {
+    if (static_cast<unsigned char>(self->rva006E02B0())) {
         void *pText = ((AptEditText *)self->rva006E0F40())->pText;
         if (pText && pText != &g_00DDC2E0)
             ((void (__cdecl *)(void *, int))g_aptDrawStringSlot)(pText, arg2);
@@ -357,7 +357,7 @@ void Rva006E15C0::call(void *ctx, void *arg1, int arg2)
         context->popColourTransform();
         return;
     }
-    if (self->rva006E0260()) {
+    if (static_cast<unsigned char>(self->rva006E0260())) {
         AptRenderShape *pShape = (AptRenderShape *)rva006E1100();
         ((Rva006EBD30 *)pShape->m_C)->render((AptRenderingContext *)ctx, (void *)arg2, 0);
         return;

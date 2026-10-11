@@ -43,17 +43,19 @@ extern void (__cdecl *g_00E17774)(void *p, int v);
 extern char g_00DDC2E0;
 #pragma intrinsic(__debugbreak)
 
-class Rva006F76B0
+class AptDisplayList
 {
 public:
 	void rva006F76B0();
 };
 
+class Rva006CFCD0 {public: bool isSpriteInstBase() const;};
+
 class BfmeAptValue006DCD20
 {
 public:
-	bool rva006cfcd0();
-	bool rva006E02B0() const;
+
+	int rva006E02B0() const;
 	void *rva006E0F40() const;
 	void rva006E1540();
 
@@ -66,15 +68,15 @@ struct Rva006E0F40Target
 {
 	char m_pad00[0x20];
 	void *m_20;		// +0x20
-	Rva006F76B0 m_24;	// +0x24
+	AptDisplayList m_24;	// +0x24
 	char m_pad28[0x6C - 0x28];
 	int m_6C;		// +0x6C
 };
 
 void BfmeAptValue006DCD20::rva006E1540()
 {
-	if (rva006cfcd0()) {
-		if (!rva006cfcd0()) {
+	if (reinterpret_cast<const Rva006CFCD0 *>(this)->isSpriteInstBase()) {
+		if (!reinterpret_cast<const Rva006CFCD0 *>(this)->isSpriteInstBase()) {
 			g_bfmeAptAssertAtE17734("isSpriteInstBase()",
 				"c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h", 0x7D);
 			if (g_bfmeAptBreakOnAssertAtDDC01C)
@@ -83,7 +85,7 @@ void BfmeAptValue006DCD20::rva006E1540()
 		((Rva006E0F40Target *)m_p)->m_24.rva006F76B0();
 		return;
 	}
-	if (rva006E02B0()) {
+	if (static_cast<unsigned char>(rva006E02B0())) {
 		Rva006E0F40Target *target = (Rva006E0F40Target *)rva006E0F40();
 		void *p20 = target->m_20;
 		if (p20 != 0 && p20 != (void *)&g_00DDC2E0) {
