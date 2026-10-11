@@ -8,7 +8,19 @@
 // supports native x87 conversion alongside SSE (/QIfist is incompatible).
 // Reuse the owned TheTerrainRenderObject global atDE1EAC; only its observed
 // vtable slot136 and three stack arguments are described by the notifier.
+// LINK: hide math.h's inline float ceil/floor wrappers (r3 LK4 recipe; they
+// arrive transitively via basetype.h below). The wrappers
+// ?ceil@@YAMM@Z/?floor@@YAMM@Z (+ _ceilf/_floorf) inline at the four calls
+// below but this TU's copies lose (first-copy); with them hidden the floats
+// promote to the CRT double imports directly. dllimport externs keep math.h's
+// indirect-call shape. No flags touched.
+#define ceil bfme_hidden_ceil
+#define floor bfme_hidden_floor
 #include "basetype.h"
+#undef ceil
+#undef floor
+extern "C" __declspec(dllimport) double __cdecl ceil(double x);
+extern "C" __declspec(dllimport) double __cdecl floor(double x);
 
 struct MaskCirclePoint {
     float x, y;
