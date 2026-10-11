@@ -4,6 +4,8 @@
 // 53CF65..53D3551008 establish the target deltas and ten-case jump table.
 // WB's 11188D0 template-overlay helper always returns null, and retail
 // retains the template-query side effect before resetting the overlay to0.
+// stlport
+#include <vector>
 typedef unsigned int UnsignedInt;
 class ThingTemplate;
 class Object;
@@ -434,3 +436,7 @@ void __cdecl ControlBar::populateInvDataCallback(Object *obj, void *infoParam)
 		i++;
 	} while (i < count);
 }
+
+// Native53D9DC's local window-pointer vector is constructed through211E58.
+// Explicitly instantiate only its empty base-header constructor from STLport.
+template _STL::_Vector_base<GameWindow *, _STL::allocator<GameWindow *> >::_Vector_base(const _STL::allocator<GameWindow *> &);
