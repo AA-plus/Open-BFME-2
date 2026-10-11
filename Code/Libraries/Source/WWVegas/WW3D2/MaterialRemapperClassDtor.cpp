@@ -44,6 +44,18 @@ public:
 			Delete_This();
 		}
 	}
+	// LINK: same-body helper under a TU-unique name (thiscall shape identical
+	// to Release_Ref, so the inlined bytes match). This TU's Release_Ref copy
+	// loses to the first-in-order copy (no retail address); the two named
+	// calls below inline this helper instead, which emits only its own unique
+	// (trivially kept) copy and no loser. No flags touched.
+	void bfme_release_inline(void)
+	{
+		NumRefs--;
+		if (NumRefs == 0) {
+			Delete_This();
+		}
+	}
 	virtual void Delete_This();
 
 private:
@@ -101,8 +113,8 @@ private:
 
 MaterialRemapperClass::~MaterialRemapperClass(void)
 {
-	SrcMatInfo->Release_Ref();
-	DestMatInfo->Release_Ref();
+	SrcMatInfo->bfme_release_inline();
+	DestMatInfo->bfme_release_inline();
 
 	if (TextureRemaps) {
 		delete[] TextureRemaps;
