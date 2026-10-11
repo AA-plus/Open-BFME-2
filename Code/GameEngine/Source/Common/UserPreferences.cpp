@@ -276,7 +276,7 @@ Int UserPreferences::getEnumIndex(const char *key, const char **names, Int count
 	{
 		for (Int i = 0; i < count; ++i)
 		{
-			if (val.compareNoCase(names[i]) == 0)
+			if (((const StringBase<char> &)(val)).compareNoCase(names[i]) == 0)
 				return i;
 		}
 	}

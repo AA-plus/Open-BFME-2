@@ -464,7 +464,7 @@ bool GameState::getSaveGameInfoFromFile(UnicodeString filename, SaveGameInfo *sa
 			{
 				AsciiString token;
 				((Xfer *)&xferLoad)->xferAsciiString(&token);
-				if (token.compareNoCase(SAVE_FILE_EOF) == 0)
+				if (((const StringBase<char> &)(token)).compareNoCase(SAVE_FILE_EOF) == 0)
 					done = true;
 				else
 				{

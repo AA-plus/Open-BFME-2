@@ -149,7 +149,7 @@ void AudioEventInfo::parseSubsoundsList(
         i != end; ++i)
     {
         Rva0036CA00Str sound = TheAudio->rvaSlot12C(i->m_key);
-        if (!sound.m_item && i->m_key.compareNoCase("NoSound"))
+        if (!sound.m_item && ((const StringBase<char> &)(i->m_key)).compareNoCase("NoSound"))
             throw INIException(3, "Unknown subsound '%s' in multisound", i->m_key.str());
         if (sound.m_item == instance)
             throw INIException(3, "Multisound '%s' cannot use itself as a subsound", eventName.str());

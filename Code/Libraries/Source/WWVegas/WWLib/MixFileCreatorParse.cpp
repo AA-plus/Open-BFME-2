@@ -58,11 +58,11 @@ void Rva00218E96Parse(INI *ini, int unused, _STL::vector<FileInfoStruct> *out)
 	{
 		if (cur.getLength() == 0)
 			break;
-		if (cur.compareNoCase("+bold") == 0)
+		if (((const StringBase<char> &)(cur)).compareNoCase("+bold") == 0)
 			info.Size = 1;
-		else if (cur.compareNoCase("-bold") == 0)
+		else if (((const StringBase<char> &)(cur)).compareNoCase("-bold") == 0)
 			info.Size = 2;
-		else if (cur.compareNoCase("normal") == 0)
+		else if (((const StringBase<char> &)(cur)).compareNoCase("normal") == 0)
 			info.Size = 0;
 		else
 			info.Filename.set(cur);

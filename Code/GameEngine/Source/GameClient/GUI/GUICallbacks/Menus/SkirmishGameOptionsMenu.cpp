@@ -333,7 +333,7 @@ Bool SkirmishPreferences::getSuperweaponRestricted(void) const
     return false;
   }
   
-  return ( it->second.compareNoCase( "yes" ) == 0 );
+  return ( ((const StringBase<char> &)(it->second)).compareNoCase( "yes" ) == 0 );
 }
 
 // ?setSuperweaponRestricted@SkirmishPreferences@@ present-unmatched

@@ -124,7 +124,7 @@ void GameState::xferSaveData(Xfer *xfer, SnapshotType which)
         while (done == false)
         {
             xfer->xferAsciiString(&token);
-            if (token.compareNoCase(SAVE_FILE_EOF) == 0)
+            if (((const StringBase<char> &)(token)).compareNoCase(SAVE_FILE_EOF) == 0)
             {
                 done = true;
             }
