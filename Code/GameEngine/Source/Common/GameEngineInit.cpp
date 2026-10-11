@@ -982,7 +982,7 @@ extern const CommandLineParam g_commandLineParams[];
 extern unsigned int BFME2CommandFlags;
 
 class ArchiveFile;
-class ArchiveFileSystem
+class LocalFileSystem
 {
 public:
 	virtual void slot0();
@@ -992,7 +992,7 @@ public:
 	virtual void slot4();
 	virtual int loadBigFile(const char *path, int mode);
 };
-extern ArchiveFileSystem *TheArchiveFileSystem;
+extern LocalFileSystem *TheLocalFileSystem;
 
 static __declspec(noinline) void rva003B9D78(unsigned int count, int argc, char **argv, const CommandLineParam *table)
 {
@@ -1026,7 +1026,7 @@ void parseCommandLine(Int argc, char *argv[])
 	AsciiString &modBig = *reinterpret_cast<AsciiString *>(reinterpret_cast<char *>(TheWritableGlobalData) + 0xd3c);
 	if (!modBig.isEmpty())
 	{
-		TheArchiveFileSystem->loadBigFile(modBig.str(), 1);
+		TheLocalFileSystem->loadBigFile(modBig.str(), 1);
 	}
 	AsciiString &modDir = *reinterpret_cast<AsciiString *>(reinterpret_cast<char *>(TheWritableGlobalData) + 0xd38);
 	if (!modDir.isEmpty())
