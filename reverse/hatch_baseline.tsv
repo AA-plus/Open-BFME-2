@@ -1592,7 +1592,6 @@ address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptMesseng
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptMessengerCallbacks.cpp	g_Va00E06394	3
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptMpChatCallbacks.cpp	g_Va00E06394	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineCustomMatchCallbacks.cpp	g_Va00E046B8	2
-address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineCustomMatchCallbacks.cpp	g_Va00E063F8	3
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineHomeCallbacks.cpp	g_Va00E06480	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineHomeStatistics.cpp	g_Va00E06480	3
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineHomeStatistics.cpp	g_Va00E06484	2

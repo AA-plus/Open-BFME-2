@@ -84,7 +84,7 @@ struct GameSlotConnectInfo
 	unsigned int nat;
 	unsigned short port;
 };
-class NAT { public: void processPlayerLeave(int); };
+struct NAT { void processPlayerLeave(int); };
 
 class GameSlot
 {
@@ -466,7 +466,7 @@ public:
 };
 
 // The NAT the custom match creates in state 12 (0x974 bytes, rowed ctor
-// 0x005A721C); it is stored into g_Va00E063F8.
+// 0x005A721C); it is stored into TheNAT.
 class Rva005A734B
 {
 public:
@@ -474,7 +474,8 @@ public:
 	unsigned char m_data[0x974];
 };
 
-extern Rva005A6D47 *g_Va00E063F8;
+// TheNAT 0x00A063F8, read through the Rva005A6D47 view.
+extern NAT *TheNAT;
 
 class AptConnectionScreen
 {
@@ -1082,7 +1083,7 @@ void AptOnlineCustomMatch::rva0059EBFE()
 // WorldBuilder): whether the NAT negotiator 0x00A063F8 exists and is idle.
 bool AptOnlineCustomMatch::rva0059EC50()
 {
-	if (g_Va00E063F8 && g_Va00E063F8->m_10 == 0)
+	if (TheNAT && ((Rva005A6D47 *)TheNAT)->m_10 == 0)
 		return true;
 	return false;
 }
@@ -1157,11 +1158,11 @@ bool AptOnlineCustomMatch::MpOwnerSelectPlayer(GameSlot *slot, int state, int)
 		req.id = "KICK/";
 		req.options = "true";
 		TheGameSpyPeerMessageQueue->addRequest(req);
-		if (g_Va00E063F8)
+		if (TheNAT)
 		{
 			int index = room->getSlotNum(name);
 			if (index >= 0)
-				((NAT *)g_Va00E063F8)->processPlayerLeave(index);
+				TheNAT->processPlayerLeave(index);
 		}
 		slot->setState((SlotState)state, UnicodeString::TheEmptyString,
 			&GameSlotConnectInfo());
@@ -1301,8 +1302,8 @@ void AptOnlineCustomMatch::rva005A61C6()
 		rva005A2899();
 		break;
 	case 6:
-		if (g_Va00E063F8)
-			g_Va00E063F8->rva005A8F57();
+		if (TheNAT)
+			((Rva005A6D47 *)TheNAT)->rva005A8F57();
 		UpdateHostStartGameButton();
 		break;
 	case 7:
@@ -1342,17 +1343,17 @@ void AptOnlineCustomMatch::rva005A61C6()
 		}
 		break;
 	case 12:
-		if (!g_Va00E063F8 && TheGameSpyGame->getLocalSlotNum() >= 0)
+		if (!TheNAT && TheGameSpyGame->getLocalSlotNum() >= 0)
 		{
-			g_Va00E063F8 = (Rva005A6D47 *)new Rva005A734B;
+			TheNAT = (NAT *)new Rva005A734B;
 			GameInfo::Address38 address;
 			address.ip = TheGameSpyInfo->v85();
 			address.port = TheGameSpyInfo->v86();
 			TheGameSpyGame->m_38 = address;
-			g_Va00E063F8->m_observers.append(&m_observer);
+			((Rva005A6D47 *)TheNAT)->m_observers.append(&m_observer);
 		}
-		if (g_Va00E063F8)
-			g_Va00E063F8->rva005A8F57();
+		if (TheNAT)
+			((Rva005A6D47 *)TheNAT)->rva005A8F57();
 		if (m_owner->m_2b0)
 			((Rva005170CD *)m_owner)->rva005170CD();
 		break;
