@@ -136,6 +136,8 @@ class AICommandInterface
 public:
  void aiIdle(CommandSourceType);
  void aiAttackPosition(const Coord3D *, int, CommandSourceType);
+ void rva0026C2D9(Object *, int, CommandSourceType);
+ void rva0026C347(Object *, CommandSourceType);
 };
 class Rva00295A0FCommands
 {
@@ -462,9 +464,11 @@ public:
 	bool setWeaponLock(WeaponSlotType, WeaponLockType);
 	void doSpecialPowerAtLocation(const SpecialPowerTemplate *, const Coord3D *, unsigned int, bool);
 	void rva00297149(const CommandButton *, const Coord3D *, int, int);
+	void rva00297000(const CommandButton *, Object *, int, int);
 	void doCommandButton(const CommandButton *commandButton, int cmdSource, bool flags);
 	Object *adjustVictim(Object *source, bool useWeaponRange, int index);
 	void doSpecialPower(const SpecialPowerTemplate *power, unsigned int options, bool fromScript);
+	void doSpecialPowerAtObject(const SpecialPowerTemplate *, Object *, unsigned int, bool);
 	const Weapon *getCurrentWeapon(WeaponSlotType *slot) const;
 	void releaseWeaponLock(WeaponLockType lock);
 	void rva0028C20F(int value);
@@ -1196,6 +1200,69 @@ void Object::rva00297149(const CommandButton *button, const Coord3D *position, i
    ai->m_commands20.aiAttackPosition(position, 1, (CommandSourceType)source);
   break;
  }
+}
+
+// ?rva00297000@Object@@QAEXPBVCommandButton@@PAV1@HH@Z retail 0x00297000
+// 329 bytes. Object-target twin of rva00297149 above: the fourth byte flag
+// gates an AutoAbilityBehavior disabled-mask check through the module's
+// slot-1 virtual, then dispatches 14 idle / 23 weapon-fire (the visible
+// rva0028C24C keeps ECX, as in the siblings above) / 24+38 special-power
+// at object / 29 attack. Cases, byte-flag and goto structure follow the
+// banked shape; views are this TU's (m_disabled1C8, m_commandAI258).
+struct Rva00297000Ref
+{
+	virtual void *slot00();
+	virtual const BitFlags<11> *slot04(void *out);
+};
+
+void Object::rva00297000(const CommandButton *commandButton, Object *target, int cmdSource, int flags)
+{
+	int m_out;
+	if (*(char *)&flags != 0) {
+		static NameKeyType s_autoAbilityKey = TheNameKeyGenerator->nameToKey("AutoAbilityBehavior");
+		Module *module = findModule(s_autoAbilityKey);
+		if (m_disabled1C8.any()) {
+			Rva00297000Ref *ref = (Rva00297000Ref *)((char *)module + 0x10);
+			const BitFlags<11> *mask = ref->slot04(&m_out);
+			if (!mask->test(&m_disabled1C8))
+				goto doReturn;
+			goto skip1;
+		}
+	} else {
+		if (m_disabled1C8.any())
+			return;
+	}
+skip1:
+	Rva00297149AI *ai = m_commandAI258;
+	if (commandButton == 0)
+		return;
+	switch (commandButton->m_command14) {
+	case 14:
+		if (ai != 0)
+			ai->m_commands20.aiIdle((CommandSourceType)cmdSource);
+		break;
+	case 23:
+		rva0028C24C();
+		setWeaponLock(commandButton->m_weaponSlot80, (WeaponLockType)1);
+		ai->m_commands20.rva0026C2D9(target, 1, (CommandSourceType)cmdSource);
+		break;
+	case 24:
+	case 38: {
+		if (commandButton->m_power44 == 0)
+			break;
+		unsigned int options = commandButton->m_options1C | 0x40000;
+		if (*(char *)&flags != 0)
+			options |= 0x20000000;
+		doSpecialPowerAtObject(commandButton->m_power44, target, options, cmdSource == 1);
+		break;
+	}
+	case 29:
+		if (ai != 0)
+			ai->m_commands20.rva0026C347(target, (CommandSourceType)cmdSource);
+		break;
+	}
+doReturn:
+	return;
 }
 
 // Native28CCB9..28CDB6 RET12; WB-adjustVictim identifies the parent walk
