@@ -1,7 +1,11 @@
 // cl: /MD
 //
-// ?Rva0006E5A0Get@@YGXPAVVector3@@@Z @0x0006E5A0 (40B).
+// ?rva0006E5A0@RTS3DScene@@QAEXPAVVector3@@@Z @0x0006E5A0 (40B).
 // Copies shadow-manager light 0 into dest via the landed getLightPosWorld.
+// A thiscall member of the 3D scene: the retail caller loads ecx from
+// W3DDisplay::m_3DScene (VA 0x00DE1B34) before the call (0x95658 in
+// 0x953B3); the body never reads this, so the earlier __stdcall spelling
+// compiled to the same 40 bytes.
 // Evidence: shadow global 0x00DE5DFC with null guard; callee row @0x9A497;
 // caller 0x95665 passes [ebx+0xE0]; member-wise Vector3 copy.
 
@@ -22,7 +26,13 @@ public:
 
 extern class Gen0003AC38 *g_shadowManager;
 
-void __stdcall Rva0006E5A0Get(Vector3 *dest)
+class RTS3DScene
+{
+public:
+	void rva0006E5A0(Vector3 *dest);
+};
+
+void RTS3DScene::rva0006E5A0(Vector3 *dest)
 {
 	W3DShadowManager *shadow = (W3DShadowManager *)(*(void **)&g_shadowManager);
 	if (!shadow)
