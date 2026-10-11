@@ -70,7 +70,7 @@ public:
 		int m_count;
 
 	public:
-		RepeatChar(char ch, int count) : m_char(ch), m_count(count) {}
+		__declspec(dllimport) __forceinline RepeatChar(char ch, int count) : m_char(ch), m_count(count) {}
 	};
 
 	enum FrameStatus

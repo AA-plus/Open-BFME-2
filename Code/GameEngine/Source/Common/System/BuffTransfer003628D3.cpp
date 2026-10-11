@@ -84,7 +84,7 @@ protected:
 class Xfer::Version
 {
 public:
-	Version() {}
+	__declspec(dllimport) __forceinline Version() {}
 	Version(unsigned char current, unsigned char minimum)
 		: m_current(current), m_minimum(minimum) {}
 

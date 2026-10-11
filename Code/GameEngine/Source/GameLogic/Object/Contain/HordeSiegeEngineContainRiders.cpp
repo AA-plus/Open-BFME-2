@@ -89,7 +89,7 @@ private:
 class ThingTemplate
 {
 public:
-	__forceinline unsigned int isKindOf(KindOfType t) const { return m_kindOf.test(t); }
+	__declspec(dllimport) __forceinline unsigned int isKindOf(KindOfType t) const { return m_kindOf.test(t); }
 private:
 	unsigned char m_pad[0x10C];
 	Rva0010CBits m_kindOf; // +0x10C

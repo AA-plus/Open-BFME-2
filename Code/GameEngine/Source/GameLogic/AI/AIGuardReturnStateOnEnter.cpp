@@ -240,7 +240,7 @@ public:
 	virtual Bool isDoingGroundMovement(void) const = 0;
 	Real getLocomotorDistanceToGoal();
 	ObjectID getCrateID() const { return m_crateCreated; }
-	const LocomotorSet &getLocomotorSet(void) const { return *(const LocomotorSet *)m_locomotorSet; }
+	__declspec(dllimport) __forceinline const LocomotorSet &getLocomotorSet(void) const { return *(const LocomotorSet *)m_locomotorSet; }
 	void destroyPath(void);
 private:
 	unsigned char m_pad004[0x1CC - 0x04];

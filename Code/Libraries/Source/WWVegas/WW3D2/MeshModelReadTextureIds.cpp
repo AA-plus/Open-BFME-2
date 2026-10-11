@@ -9,7 +9,7 @@
 // alternate descriptor124. Texture slots78 and arraysC8 select the descriptor.
 class TextureClass {
 public:
-    void Add_Ref() { ++RefCount; }
+    __declspec(dllimport) __forceinline void Add_Ref() { ++RefCount; }
     void Release_Ref();
 private:
     unsigned char Prefix[4];

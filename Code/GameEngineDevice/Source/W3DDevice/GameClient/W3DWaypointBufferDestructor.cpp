@@ -24,7 +24,7 @@ public:
 
 class RenderObjClass : public RefCountClass {};
 class Vector3 { public: Vector3(float a,float b,float c):X(a),Y(b),Z(c){} float X,Y,Z; };
-class ShaderClass {public: ShaderClass(){} ShaderClass(const ShaderClass &s):m_bits(s.m_bits){} void Set_Depth_Compare(int x){m_bits=(m_bits&~7)|x;} static ShaderClass _PresetAdditiveShader; unsigned int m_bits;};
+class ShaderClass {public: ShaderClass(){} __declspec(dllimport) __forceinline ShaderClass(const ShaderClass &s):m_bits(s.m_bits){} void Set_Depth_Compare(int x){m_bits=(m_bits&~7)|x;} static ShaderClass _PresetAdditiveShader; unsigned int m_bits;};
 class SegLineRendererClass {public: enum TextureMapMode {UNIFORM_WIDTH_TEXTURE_MAP, UNIFORM_LENGTH_TEXTURE_MAP, TILED_TEXTURE_MAP};};
 class TextureClass;
 class SegmentedLineClass : public RefCountClass {public: virtual void Delete_This(void); SegmentedLineClass(); void Set_Texture(TextureClass*); void Set_Shader(ShaderClass); void Set_Width(float); void Set_Color(const Vector3&); void Set_Texture_Mapping_Mode(SegLineRendererClass::TextureMapMode); char m_rest[0x12c-8];};
