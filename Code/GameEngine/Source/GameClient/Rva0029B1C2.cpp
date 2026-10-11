@@ -61,7 +61,7 @@ struct FormationVectorView
 };
 
 class ThingTemplate;
-struct ICoord2D { int x, y; };
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 struct RGBColor { float red, green, blue; };
 
 class Rva0029B63A

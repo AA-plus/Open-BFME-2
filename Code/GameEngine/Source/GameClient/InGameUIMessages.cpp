@@ -198,10 +198,7 @@ __forceinline float fast_float_floor( float f )
 
 #define REAL_TO_INT_FLOOR(x) (fast_float2long_round(fast_float_floor(x)))
 
-struct ICoord2D
-{
-	int x, y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 class View
 {

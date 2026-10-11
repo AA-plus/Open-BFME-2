@@ -9,11 +9,7 @@
 // at 0x7BE3C8/0x7BE3C4). Name proven by the InGameUI FieldParse table
 // (MessagePosition/MilitaryCaptionPosition).
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class INI
 {

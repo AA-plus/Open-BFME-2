@@ -28,11 +28,7 @@ typedef int Color;
 
 class GameFont;
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../../../Libraries/Include/Lib/ICoord2D.h"
 
 // Only the image size is read here, at +0x24 and +0x28.
 class Image

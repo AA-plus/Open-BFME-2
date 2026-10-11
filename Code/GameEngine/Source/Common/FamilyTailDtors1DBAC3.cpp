@@ -192,11 +192,7 @@ void famgenDelete(Rva0035E378 *p) { delete p; }
 // winGetSize/Position into +0x18/+0x1C/+0x10/+0x14, update(0) via slot 2,
 // isFinished/isForward at +8/+9, Gradient image to +0x24 via rowed
 // StringBase ctor 0x37BA0, findImage 0x2D92F6 and pinned dtor 0x36410.
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 #include "ascii_string.h"
 

@@ -35,11 +35,7 @@ typedef int Int;
 typedef bool Bool;
 typedef float Real;
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class Vector3
 {

@@ -7,11 +7,7 @@
 // Message types read from retail: 0x434 guard object, 0x433 guard position.
 // Evidence: retail bytes; callers 0x00431797/0x0043178F/0x00431787 (modes 0,1,2);
 // validUnderCursor = rowed 0x00431012; rowed appendObjectID/Integer/Location.
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
 

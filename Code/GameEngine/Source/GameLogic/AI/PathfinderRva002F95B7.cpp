@@ -7,11 +7,7 @@
 // private walk (same Pathfinder), 4 stack args (ret 0x10), no EH. Caller
 // 0x002FC95E. Flags copy PathfinderCellLineWalks neighbours (/O1 /G7).
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

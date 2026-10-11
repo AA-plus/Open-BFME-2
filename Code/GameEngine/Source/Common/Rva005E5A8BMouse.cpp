@@ -8,7 +8,7 @@
 // Owned selector ctor5E5A38 and reset7B5CB9F3 plus existing checked picker
 // pin5CBB4A establish the lifetime and calls. Original UI owner/method names
 // remain unresolved; callback and field labels are structural descriptions.
-struct ICoord2D { int x,y; };
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D { ICoord2D lo,hi; };
 union GameMessageArgumentType { int integer;ICoord2D point;IRegion2D region; };
 class GameMessage { public: const GameMessageArgumentType*getArgument(int)const;char prefix[0x10];int type; };

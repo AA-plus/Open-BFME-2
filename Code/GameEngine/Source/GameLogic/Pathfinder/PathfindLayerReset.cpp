@@ -15,11 +15,7 @@ extern "C" void _ReadWriteBarrier(void);
 void __cdecl operator delete(void *pointer);
 void __cdecl operator delete[](void *pointer);
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 // The primitive virtual order is measured by the rowed Common/System/Xfer.cpp
 // providers: ICoord2D slot 19, int slot 31, bool slot 36. Version1 is the

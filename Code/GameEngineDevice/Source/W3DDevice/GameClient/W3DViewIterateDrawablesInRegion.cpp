@@ -23,11 +23,7 @@ typedef float Real;
 typedef bool Bool;
 typedef unsigned int UnsignedInt;
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct IRegion2D
 {

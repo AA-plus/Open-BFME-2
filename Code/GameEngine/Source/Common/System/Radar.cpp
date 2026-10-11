@@ -15,11 +15,7 @@ typedef float Real;
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 #include "../../../../Libraries/Include/Lib/Coord2D.h"
 

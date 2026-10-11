@@ -9,7 +9,7 @@
 #define width width_RV
 #define height height_RV
 #include "../../Common/GameLogicObjectLookupView.h"
-struct ICoord2D {int x,y;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D {ICoord2D lo,hi;int width()const{return hi.x-lo.x;}int height()const{return hi.y-lo.y;}};
 union GameMessageArgumentType {int integer;IRegion2D pixelRegion;};
 class GameMessage {public:const GameMessageArgumentType*getArgument(int)const;};

@@ -5,11 +5,7 @@
 // with rowed iterateCellsAlongLine. Identity unproven.
 typedef int Int;
 typedef float Real;
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct Coord3D
 {
 	Real x;

@@ -33,7 +33,7 @@
 #include "Lib/Coord3D.h"
 #include "GameLogicObjectLookupView.h"
 struct RGBColor { float red,green,blue; };
-struct ICoord2D { int x,y; };
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 class Player { public: AsciiString getBaseSide() const; };
 class GameState; extern GameState *TheGameState;
 class FileSystem { public: bool doesFileExist(const char*) const; }; extern FileSystem *TheFileSystem;

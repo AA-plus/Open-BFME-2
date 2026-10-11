@@ -18,11 +18,7 @@ typedef float Real;
 typedef int Int;
 typedef unsigned int Color;
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Rva0087DC00Vec
 {

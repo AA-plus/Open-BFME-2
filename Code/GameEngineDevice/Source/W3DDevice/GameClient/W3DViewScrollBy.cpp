@@ -13,7 +13,7 @@
 #include "vector3.h"
 #include "vector2.h"
 #include "Coord2D.h"
-struct ICoord2D{int x,y;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 #include "W3DViewScrollMath.h"
 struct BfmeScrollCoordinates : public Coord3D {
  BfmeScrollCoordinates(){}

@@ -16,7 +16,7 @@ typedef int Int;
 typedef int Color;
 #define NULL 0
 #define INT_TO_REAL(x) ((float)(x))
-struct ICoord2D { int x,y; };
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 #include "../../../../../Libraries/Include/Lib/Coord2D.h"
 #include "ascii_string.h"
 class Image;

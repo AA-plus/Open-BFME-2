@@ -128,12 +128,7 @@ typedef unsigned short UnsignedShort;
 typedef unsigned int UnsignedInt;
 typedef float Real;
 
-class ICoord2D
-{
-public:
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class Anim2D
 {

@@ -67,11 +67,7 @@ enum { GWS_MOUSE_TRACK = 0x00000400 };
 #define BitSet(x, i) ((x) |= (i))
 #define BitClear(x, i) ((x) &= ~(i))
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class WinInstanceData
 {

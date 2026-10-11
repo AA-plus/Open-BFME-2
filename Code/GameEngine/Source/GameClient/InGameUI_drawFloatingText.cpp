@@ -15,11 +15,7 @@
 // the PartitionManager pin from handleRadiusCursor, and the color
 // unpacking is the reference GameGetColorComponents.
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

@@ -17,10 +17,7 @@ typedef unsigned int UnsignedInt;
 
 extern "C" int __cdecl abs(int);
 
-struct ICoord2D
-{
-	Int x, y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D
 {
 	ICoord2D lo, hi;

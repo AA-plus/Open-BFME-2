@@ -71,11 +71,7 @@ struct GlobalLanguage
 };
 extern GlobalLanguage *TheGlobalLanguageData;
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct IRegion2D
 {

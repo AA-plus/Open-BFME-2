@@ -12,7 +12,8 @@
 #include "Coord2D.h"
 #include "Coord3D.h"
 typedef float Real;typedef int Int;typedef bool Bool;
-struct ICoord2D{int x,y;};struct Region2D{Coord2D lo,hi;};struct Region3D{Coord3D lo,hi;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
+struct Region2D{Coord2D lo,hi;};struct Region3D{Coord3D lo,hi;};
 #include "vector3.h"
 
 #include <math.h>

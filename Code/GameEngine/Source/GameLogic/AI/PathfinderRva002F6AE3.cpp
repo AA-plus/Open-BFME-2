@@ -7,11 +7,7 @@
 // PathfindShimWorldToCell.cpp twice plus rowed walk PathfinderCellLineWalks.cpp;
 // caller 0x002F714B in 91B unclaimed; sits between 0x002F69E3 and 0x002F6B22 gap.
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

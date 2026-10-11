@@ -7,7 +7,7 @@
 // rather than inventing copy traits for the canonical Coord2D class.
 struct Coord2D;
 struct RvaTopVelocity { float x,y; };
-struct ICoord2D { int x,y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 class GameWindow { public: int winSetPosition(int,int); };
 class AnimateWindow {
 public:

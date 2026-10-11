@@ -3,7 +3,7 @@
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 #include "Common/BfmeAudioEventPrefix136.h"
-struct ICoord2D {int x,y;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 class RadarEventRef {public:void release();};
 class RadarEventRefSlot {public:RadarEventRefSlot():ptr(0){}RadarEventRefSlot(const RadarEventRefSlot&s):ptr(s.ptr){}~RadarEventRefSlot(){if(ptr)ptr->release();}RadarEventRefSlot&operator=(const RadarEventRefSlot&);RadarEventRef*ptr;};
 class RadarWindowOverrideSource {public:RadarEventRefSlot rva002D508B(const char*);};

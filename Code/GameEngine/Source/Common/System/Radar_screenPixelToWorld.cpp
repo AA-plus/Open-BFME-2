@@ -11,11 +11,7 @@
 // helpers. BFME2 keeps the radar window at Radar+0x1430 (proven by the
 // landed Radar::newMap); the 20-byte delta is under investigation.
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 #define NULL 0
 

@@ -65,9 +65,7 @@ struct ICoord2DBase
     int y;
 };
 
-struct ICoord2D : public ICoord2DBase
-{
-};
+#include "../../../Include/Lib/ICoord2D.h"
 
 // Both integer expandBy members widen one axis at a time through this shared
 // three-argument worker rather than inlining the comparison pair. It is only

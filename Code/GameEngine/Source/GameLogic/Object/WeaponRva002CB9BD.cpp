@@ -1,7 +1,7 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX-
 typedef int Int;
 typedef float Real;
-struct ICoord2D { Int x; Int y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct Coord3D { Real x; Real y; Real z; };
 enum PathfindLayerEnum { LAYER_INVALID = 0 };
 class Object {

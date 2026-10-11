@@ -63,11 +63,7 @@ private:
 	unsigned int m_high : 8;
 };
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct IRegion2D
 {

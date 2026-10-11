@@ -15,11 +15,7 @@
 // RadiusDecal::clear), the mouse position at TheMouse+0x4F0C, radar flags
 // at +0x10/+0x11, local player at PlayerList+0x10 with the index at +0x54.
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

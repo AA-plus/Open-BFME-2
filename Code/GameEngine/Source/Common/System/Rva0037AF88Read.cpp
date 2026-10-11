@@ -11,11 +11,7 @@ struct Coord3D
 	float y;
 	float z;
 };
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D
 {
 	int loX;

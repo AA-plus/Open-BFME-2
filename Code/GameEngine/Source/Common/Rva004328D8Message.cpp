@@ -13,11 +13,7 @@ public:
 	void appendIntegerArgument(int v);
 };
 
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 class MessageStream
 {

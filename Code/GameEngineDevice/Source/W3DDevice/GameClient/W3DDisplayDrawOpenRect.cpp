@@ -18,7 +18,7 @@ typedef unsigned int UnsignedInt;
 typedef float Real;
 typedef int Int;
 
-struct ICoord2D { Int x, y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D { ICoord2D lo, hi; };
 bool ClipLine2D(ICoord2D *start, ICoord2D *end, ICoord2D *returnStart, ICoord2D *returnEnd, IRegion2D *region);
 

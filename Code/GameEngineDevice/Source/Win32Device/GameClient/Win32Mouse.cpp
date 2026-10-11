@@ -54,11 +54,7 @@ public:
 };
 typedef StringBase<char> AsciiString;
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct RGBAColorInt
 {

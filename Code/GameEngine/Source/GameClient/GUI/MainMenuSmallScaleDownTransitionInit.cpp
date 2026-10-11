@@ -31,11 +31,7 @@ typedef unsigned char Bool;
 #define TRUE 1
 #endif
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class Image;
 

@@ -14,11 +14,7 @@ typedef bool Bool;
 #define NULL 0
 #endif
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class GameWindow;
 class BfmeKeyLC;

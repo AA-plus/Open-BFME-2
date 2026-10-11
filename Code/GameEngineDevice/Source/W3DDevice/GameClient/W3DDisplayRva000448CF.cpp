@@ -10,7 +10,7 @@
 // target facts, Render2D +0x48 flag label descriptive. No header edits.
 typedef unsigned long uint32;
 
-struct ICoord2D { int x,y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D { ICoord2D lo,hi; };
 bool ClipLine2D(ICoord2D *start,ICoord2D *end,ICoord2D *returnStart,ICoord2D *returnEnd,IRegion2D *region);
 

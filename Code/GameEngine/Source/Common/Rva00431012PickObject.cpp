@@ -5,11 +5,7 @@
 // the relationship-mask predicate 0x0035B010 (local player, object) accepts it.
 // Evidence: retail bytes; TheTacticalView 0xDFEA3C and ThePlayerList 0xDFEEE8 +0x10 local
 // per ledger neighbours; rowed predicate 0x0035B010 (caller 0x00431048).
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 class Player;
 class Object;

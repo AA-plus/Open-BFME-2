@@ -3,7 +3,7 @@
 // Uses the published private helper at2F4AC1; its nine stack slots
 // are independently corroborated by this complete caller.
 #include "Coord3D.h"
-struct ICoord2D {int x,y;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct QuickStructureCoord:Coord3D {QuickStructureCoord(const Coord3D&r){x=r.x;y=r.y;z=r.z;}};
 struct TargetQuickTemplate {char pad[0x56C];int priority;char pad570[0x634-0x570];bool flag;};
 class Object {public:bool rva0028AFBB()const;void *vptr;TargetQuickTemplate *definition;char pad8[0x38-8];Coord3D position;char pad44[0xB8-0x44];float observedSize;char padBC[0x258-0xBC];char *ai;};

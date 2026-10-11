@@ -86,11 +86,7 @@ public:
 };
 extern MessageStream *TheMessageStream;
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 
 // WB calls IRegion2D::width/height here; retail inlines both (the region.cpp
 // rows 0x00004D4B/0x00004D51 are the out-of-line copies), so the extents are

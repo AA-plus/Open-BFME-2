@@ -7,11 +7,7 @@
 // Body (target): true when the given cell region, grown by 10 on every
 // side, overlaps the bounds of any trigger in the layer's list (+0x38,
 // linked through +0x3C).
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct IRegion2D
 {

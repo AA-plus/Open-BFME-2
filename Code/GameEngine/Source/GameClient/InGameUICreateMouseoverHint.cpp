@@ -49,7 +49,7 @@ enum NameKeyType { NAMEKEY_INVALID = 0 };
 enum KindOfType { KINDOF_DISGUISER = 300 };
 enum Relationship { NEUTRAL = 0, ALLIES = 2 };
 enum CellShroudStatus { CELLSHROUD_CLEAR = 0 };
-struct ICoord2D { int x, y; };
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 struct RGBColor { float red, green, blue; void setFromInt(int); };
 class Object; class ThingTemplate; class Player; class Team; class Drawable;
 class GameWindow; class ContainModuleInterface; class SpecialDisguiseUpdate; class SupplyWarehouseDockUpdate;

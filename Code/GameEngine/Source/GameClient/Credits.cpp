@@ -74,7 +74,7 @@ extern GlobalLanguage *TheGlobalLanguageData;
 extern FontLibrary *TheFontLibrary;
 class BfmeSinkBOE;
 extern BfmeSinkBOE *g_bfmeSinkBOE;
-struct ICoord2D { int x,y; };
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 class DisplayString {
 public:
  virtual ~DisplayString();

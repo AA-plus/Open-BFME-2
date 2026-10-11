@@ -4,7 +4,7 @@
 // class remain address-neutral; a Pathfinder ownership is not established.
 // The center argument is the existing pinned one-byte ABI carrier. Preserve
 // that carrier across the bool callee ABI rather than normalizing it here.
-struct ICoord2D {int x,y;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 #include "Coord3D.h"
 struct IRegion2D {ICoord2D lo,hi;};
 ICoord2D *Rva002E7875WorldToCell(ICoord2D*,bool,const Coord3D*);

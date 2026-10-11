@@ -17,11 +17,7 @@ struct Coord3D
 	float z;
 };
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class Vector3
 {

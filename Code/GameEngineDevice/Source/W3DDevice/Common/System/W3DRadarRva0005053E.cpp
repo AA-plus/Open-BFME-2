@@ -20,7 +20,7 @@
 // stlport
 typedef bool Bool;
 #include "subsystem_interface.h"
-struct ICoord2D{int x,y;};
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
 struct Region3D{Coord3D lo,hi;float width()const{return hi.x-lo.x;}float height()const{return hi.y-lo.y;}};
 class Image;class RadarObject;

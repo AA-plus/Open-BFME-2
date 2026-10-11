@@ -26,11 +26,7 @@ struct ICoord3D
 
 #include "../../../../Libraries/Include/Lib/Coord2D.h"
 
-struct ICoord2D
-{
-    int x;
-    int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Region3D
 {

@@ -1,11 +1,7 @@
 // cl: /MD
 // ?doAttackMoveCommand@@YAHPAXPAUICoord2D@@@Z @0x004311A7 154B: free Emit building GameMessage 0x430 via InGameUI slot75 TacticalView screenToTerrain MessageStream createMessage plus voice response.
 // Evidence: unlock lane; globals TheInGameUI TheTacticalView TheMessageStream; rowed appendLocationArgument 0x0030F9BB ctor Rva004D92FE 0x004D92FE and pinned pickAndPlayUnitVoiceResponse 0x004DAAFD; caller 0x004317AF.
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

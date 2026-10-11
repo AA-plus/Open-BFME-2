@@ -33,7 +33,7 @@ private:
 
 class View;
 class Drawable;
-struct ICoord2D { int x, y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 // The five-slot interface at +0x10 (InGameUICtor.cpp).
 class InGameUIInterface10

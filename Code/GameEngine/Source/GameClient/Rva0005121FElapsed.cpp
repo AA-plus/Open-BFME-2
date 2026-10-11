@@ -43,10 +43,7 @@ struct Coord3D
 {
 	float x, y, z;
 };
-struct ICoord2D
-{
-	int x, y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 class TacticalView
 {
 public:

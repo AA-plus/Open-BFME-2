@@ -26,11 +26,7 @@ enum GameMessageDisposition
 	DESTROY_MESSAGE
 };
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 union GameMessageArgumentType
 {

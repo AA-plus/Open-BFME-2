@@ -19,11 +19,7 @@ typedef int Int;
 
 #define MAP_XY_FACTOR 10.0f
 
-struct ICoord2D
-{
-    Int x;
-    Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 #include "Lib/Coord3D.h"
 

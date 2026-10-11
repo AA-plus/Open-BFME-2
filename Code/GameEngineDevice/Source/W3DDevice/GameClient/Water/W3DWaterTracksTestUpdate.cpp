@@ -50,7 +50,7 @@ struct EditorCoord3D : Coord3D {
  // ?EditorCoord3D::~EditorCoord3D present-unmatched
  ~EditorCoord3D() {}
 };
-struct ICoord2D { int x,y; };
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 enum waveType
 {
 	WaveTypeFirst,

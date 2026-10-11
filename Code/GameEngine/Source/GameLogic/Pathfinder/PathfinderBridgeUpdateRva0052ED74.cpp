@@ -25,7 +25,7 @@ class Rva0027C36A {public:Rva0027C36A();Rva0027C36A &operator=(const Rva0027C36A
 class Bridge {public:virtual ~Bridge();Bridge *next;int word8;Rva0027C36A info;BridgeBounds bounds;};
 struct CellOwnerInfo{char pad[0x28];int owner;};
 class PathfindCell {public:int getOwner()const{return info?info->owner:0;}bool SetType_Dirty(int);CellOwnerInfo *info;char pad[8];unsigned int type:4,layer:6,rest:22;};
-struct ICoord2D{int x,y;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 ICoord2D *Rva002E7875WorldToCell(ICoord2D *,bool,const Coord3D *);
 bool Rva001E3679(int);
 class PathfindLayer {public:PathfindCell *getCell(int,int);void AddWallConnectCell(const ICoord2D *);char pad[0x3C];int height;};

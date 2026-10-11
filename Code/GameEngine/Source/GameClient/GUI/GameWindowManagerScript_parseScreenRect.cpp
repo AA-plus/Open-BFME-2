@@ -38,11 +38,7 @@ typedef bool Bool;
 #define TRUE true
 #endif
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct IRegion2D
 {

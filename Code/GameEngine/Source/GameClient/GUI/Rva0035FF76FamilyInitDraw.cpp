@@ -36,11 +36,7 @@ inline Color GameMakeColor(UnsignedByte red, UnsignedByte green, UnsignedByte bl
 	return (alpha << 24) | (red << 16) | (green << 8) | (blue);
 }
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class GameWindow;
 class Image;

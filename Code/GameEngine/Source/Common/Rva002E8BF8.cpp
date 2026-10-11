@@ -1,10 +1,6 @@
 // cl: /MD
 // ?rva002E8BF8@Pathfinder@@QAEPAVPathfindCell@@W4PathfindLayerEnum@@PBUCoord3D@@@Z @0x002E8BF8 43B: world-pos to cell lookup via clamp wrapper then getCell; callees 0x002E7917 and 0x002E6D62 both rowed; callers 23 unclaimed wrappers
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

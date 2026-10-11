@@ -317,11 +317,7 @@ private:
 	IDirect3DSurface8 *m_surface;
 };
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct CursorInfo
 {

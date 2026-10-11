@@ -772,11 +772,7 @@ class ICoord3D;
 class Region3D;
 class IRegion3D;
 class Coord2D;
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 class IRegion2D;
 class RealRange;
 class RGBColor;

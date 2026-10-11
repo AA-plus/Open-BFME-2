@@ -9,10 +9,7 @@
 // 0 / 1 / 2. Any other type answers 0. Each case copies into its own
 // function-scope local, as retail's four frame slots show.
 
-struct ICoord2D
-{
-	int x, y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 union GameMessageArgumentType
 {

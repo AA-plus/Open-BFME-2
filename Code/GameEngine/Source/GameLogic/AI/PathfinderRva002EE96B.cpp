@@ -2,11 +2,7 @@
 // ?rva002EE96B@Pathfinder@@QAEHPAUCoord3D@@PBU2@@Z 0x002EE96B 53B Pathfinder helper calling rva002EB675 then copying back x y on success. Evidence: rowed rva002EB675 0x002EB675 plus SSE movss copy callers 0x00261A47 0x002CBA3A unblocks 0x002619C1 0x002CB9BD.
 typedef int Int;
 typedef float Real;
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct Coord3D
 {
 	Real x;

@@ -95,7 +95,7 @@ extern float g_Va00BC28F4;
 // g_Va00BC28F4: matched references place it at VA 0xbc28f4 (retail .rdata value 2.0f).
 float g_Va00BC28F4 = 2.0f;
 
-struct ICoord2D { int x,y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 class FeedbackDisplayString {
 public:
  virtual void s00(); virtual void setText(UnicodeString text);

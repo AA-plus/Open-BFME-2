@@ -133,12 +133,7 @@ public:
 	float z;
 };
 
-class ICoord2D
-{
-public:
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 // The state base: only its virtual table matters to these bodies.
 class State

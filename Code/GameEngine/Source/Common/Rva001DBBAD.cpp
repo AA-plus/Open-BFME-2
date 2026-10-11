@@ -2,11 +2,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 #pragma optimize("t", on)
 class CriticalSectionLock

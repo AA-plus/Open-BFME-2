@@ -8,11 +8,7 @@
 // from RadarRva002D78A4.cpp comment; prev Radar_screenPixelToWorld.cpp gives
 // TU and flags.
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class Object;
 class RadarObject;

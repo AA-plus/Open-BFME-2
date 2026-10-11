@@ -22,11 +22,7 @@
 // argument temporaries made before the pushes (WorldBuilder copies the
 // second pixel first too); their parameter type here is a view.
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct IRegion2D
 {

@@ -28,11 +28,7 @@ typedef bool Bool;
 typedef unsigned int UnsignedInt;
 typedef unsigned int Color;
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 class GameFont;
 

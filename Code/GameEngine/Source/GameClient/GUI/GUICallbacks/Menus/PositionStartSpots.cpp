@@ -78,10 +78,7 @@ public:
 };
 extern MapCache *TheMapCache;
 
-struct ICoord2D
-{
-	int x, y;
-};
+#include "../../../../../../Libraries/Include/Lib/ICoord2D.h"
 typedef _STL::list<ICoord2D> ICoord2DList;
 class TechAndSupplyImages
 {

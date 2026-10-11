@@ -4,7 +4,7 @@
 // target event records are 80B at +2C, animation table +14A8 and client-frame
 // query is slot31. Original method name remains unknown. Keep duration as
 // a float local: native retains it on the x87 stack across the size conversion.
-struct ICoord2D { int x,y; };
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 extern int g_009BA4E8;
 class Anim2D
 {

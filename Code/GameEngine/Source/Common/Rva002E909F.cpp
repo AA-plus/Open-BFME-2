@@ -4,11 +4,7 @@
 // Evidence: 11 unclaimed callers; callees rowed getCell 0x002E6D62 Rva002E6E8AGet 0x002E6E8A Object 0x0028AC62 0x0028AFBB 0x002E6DC4; LINK chain from 0x002E9042; flags from next 0x002E9B31.
 extern "C" float INV;
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

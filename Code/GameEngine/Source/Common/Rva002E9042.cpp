@@ -3,11 +3,7 @@
 // Converts arg+0xC via WorldToCell 0x002E7875, gets Pathfinder cell 0x002E6D62 layer 1,
 // clears via 0x0052DA63 and updates grid 0x0053155E when cell+4 matches arg, then clears byte at +0x48.
 // Evidence: 6 unclaimed callers; callees all rowed; LINK BONUS 2 files 103B via 0x0046094C; layout from neighbours 0x002E8BCF and 0x002E9B31.
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

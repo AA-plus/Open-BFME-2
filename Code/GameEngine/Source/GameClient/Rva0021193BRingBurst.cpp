@@ -28,10 +28,7 @@ typedef unsigned int UnsignedInt;
 typedef bool Bool;
 typedef float Real;
 
-struct ICoord2D
-{
-	Int x, y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 class WWMath
 {

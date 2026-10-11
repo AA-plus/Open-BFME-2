@@ -12,7 +12,7 @@
 // The original helper and view-owner spelling remain unknown.
 #include "vector3.h"
 #include "vector2.h"
-struct ICoord2D {int x,y;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 class RenderObjClass {public: Vector3 Get_Position() const;};
 class CameraClass:public RenderObjClass {
 public:

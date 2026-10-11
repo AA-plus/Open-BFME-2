@@ -21,11 +21,7 @@ public:
 
 void __cdecl GadgetStaticTextSetText(GameWindow *win, UnicodeString text);
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class CountUpTransition
 {

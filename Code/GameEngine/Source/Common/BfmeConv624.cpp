@@ -7,11 +7,7 @@
 // Callee addresses are read off retail call sites (reverse/symbols.csv).
 #include "Coord3D.h"
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D
 {
 	ICoord2D lo;

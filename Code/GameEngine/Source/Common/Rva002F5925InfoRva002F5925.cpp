@@ -118,7 +118,7 @@ private:
 extern Rva002872BA *TheTriggerManager;
 
 
-struct ICoord2D {int x,y;};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 enum PathfindLayerEnum {OBSERVED_LAYER_1=1};
 struct CallbackTemplate {char pad[0x108];unsigned kind[8];unsigned kindOf(unsigned n)const{return kind[n>>5]&(1U<<(n&31));}};
 class Object {public:void *vptr;CallbackTemplate *definition;char pad8[0x250-8];void *observed250;};

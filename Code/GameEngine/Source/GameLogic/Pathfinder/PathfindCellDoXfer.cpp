@@ -3,7 +3,7 @@
 // WB12D6610 names purpose and transfer order. Native offsets independently
 // corroborated by PathfindCell constructor/reset and bitfield setters.
 enum ObjectID{INVALID_OBJECT_ID=0};
-struct ICoord2D{int x,y;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 class Xfer{public:
 virtual void slot0();
 virtual void slot1();

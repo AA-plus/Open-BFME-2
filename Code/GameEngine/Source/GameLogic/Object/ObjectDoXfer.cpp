@@ -50,11 +50,7 @@ struct ICoord3D
 };
 class Region3D;
 class IRegion3D;
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 class Region2D;
 class IRegion2D;
 class RealRange;

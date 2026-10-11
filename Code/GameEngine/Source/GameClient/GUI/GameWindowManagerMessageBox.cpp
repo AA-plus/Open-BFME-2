@@ -31,7 +31,7 @@ enum {
 	MSG_BOX_OK = 0x08
 };
 
-struct ICoord2D { Int x, y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 typedef void (*GameWinMsgBoxFunc)(void);
 struct WindowMessageBoxData
 {

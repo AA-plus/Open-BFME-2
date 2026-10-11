@@ -77,11 +77,7 @@ enum { WIN_STATUS_ENABLED = 0x08 };
 #define NULL 0
 #endif
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 
 class GameFont;
 class GameWindow;

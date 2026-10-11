@@ -1,10 +1,6 @@
 // cl: /MD
 // ?Rva004312E5Emit@@YAHPAXPAUICoord2D@@@Z @0x004312E5 72B: screen-point to world then MSG 0x444 with location. Evidence: unlock lane; TacticalView slot 0x168 screenToTerrain per InGameUI_handleRadiusCursor; MessageStream slot 0x48 createMessage per Rva005FA91C; rowed appendLocationArgument 0x0030F9BB; globals TheTacticalView MessageStreamSubsystem.
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Coord3D
 {

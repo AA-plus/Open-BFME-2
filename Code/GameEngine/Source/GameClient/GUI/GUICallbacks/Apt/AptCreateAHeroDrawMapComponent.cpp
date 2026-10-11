@@ -18,10 +18,7 @@ void free(void *);
 #include "ascii_string.h"
 #include "../../../../../../Libraries/Include/Lib/Coord2D.h"
 
-struct ICoord2D
-{
-	int x, y;
-};
+#include "../../../../../../Libraries/Include/Lib/ICoord2D.h"
 
 // The shell's +0x5D flag is cleared while the map component draws.
 class Shell

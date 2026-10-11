@@ -44,11 +44,7 @@ public:
 	Int get() const;
 };
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
+#include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct Rva00104DB0ListData
 {

@@ -20,7 +20,7 @@
 
 #define NULL 0
 
-struct ICoord2D { int x, y; };
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class ThingTemplate

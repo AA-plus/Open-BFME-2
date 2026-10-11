@@ -545,7 +545,7 @@ extern "C" int __cdecl fprintf(PathfinderLogFile *,const char *,...);
 extern unsigned char g_00E03745;
 extern void *g_00DFEFF0;
 
-struct ICoord2D { Int x,y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 class Rva002F6F90Context { public: Bool rva002F6F90(unsigned int,Int); };
 class Rva002F70E5Context { public: Bool rva002F70E5(unsigned int,Int); };
 class Rva002E7440 { public: Bool rva002E7440(Int,Int); };

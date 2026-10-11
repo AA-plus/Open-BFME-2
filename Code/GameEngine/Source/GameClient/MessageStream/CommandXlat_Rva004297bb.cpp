@@ -20,7 +20,7 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 #include "Common/UnicodeString.h"
 inline UnicodeString::~UnicodeString() { ((StringBase<wchar_t>*)this)->releaseBuffer(); }
 #include "Lib/Coord3D.h"
-struct ICoord2D { int x,y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D { ICoord2D lo,hi; int width() const { return hi.x-lo.x; } int height() const { return hi.y-lo.y; } };
 class Drawable; class Object; class Player; class ThingTemplate; class CommandButton;
 class PickAndPlayInfo;
