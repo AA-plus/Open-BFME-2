@@ -8,10 +8,15 @@
 // vtable). Floats via FLT_MAX link (never extern per linking rule).
 #include <float.h>
 
-class BFME2NativeNetwork
+// LINK: the pin ?baseConstruct@BFME2NativeNetwork was retired when its address 0x1B4E63 was
+// rowed as SubsystemInterface::SubsystemInterface; the base is a non-polymorphic 0xC-byte view
+// whose extern ctor is that rowed symbol (first call, ecx = this, as before).
+class SubsystemInterface
 {
 public:
-	void baseConstruct();
+	SubsystemInterface();
+private:
+	int m_pad00[3];
 };
 
 extern const void *const g_00C3CA30[];
@@ -20,9 +25,8 @@ class Rva00432FA7;
 extern class Rva00432F23 *g_004C9DC9Container;
 #pragma comment(linker, "/alternatename:?g_00E032D0@@3PAVRva00432FA7@@A=?g_004C9DC9Container@@3PAVRva00432F23@@A")
 
-class Rva00432FA7
+class Rva00432FA7 : public SubsystemInterface
 {
-	int m_pad00[3];
 	int m_0C;
 	int m_10;
 	int m_14;
@@ -37,7 +41,6 @@ public:
 
 Rva00432FA7::Rva00432FA7()
 {
-	((BFME2NativeNetwork *)this)->baseConstruct();
 	*(const void **)this = g_00C3CA30;
 	m_0C = 0;
 	m_10 = 0;
