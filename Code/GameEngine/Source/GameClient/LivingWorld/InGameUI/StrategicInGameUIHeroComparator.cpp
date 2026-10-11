@@ -169,7 +169,6 @@ class Rva005E4087 {public:void rva005E4087(int);
  char pad0[0x10];Rva005E4087Context *context;int unknown14;Rva005F2A32 *clip;
  char pad1[0x28-0x1C];int selected;
 };
-// ?Rva005E4087::rva005E4087 present-unmatched
 void Rva005E4087::rva005E4087(int key) {
  if(key!=selected) {
   const Rva005E4300Entry *entry=(const Rva005E4300Entry*)context->index->get(key);
