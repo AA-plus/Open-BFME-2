@@ -151,6 +151,8 @@ typedef float Real;
 // helper (0x002CA82C) instead of inlining the element copy (row 35 family-LK3).
 namespace _STL {
 template <> void _Construct<Coord3D, Coord3D>(Coord3D *, const Coord3D &);
+// Retail's push_back is one shared copy (0x002CE7DC); this unit's own copy led link order.
+template <> void vector<Coord3D, allocator<Coord3D> >::push_back(const Coord3D &);
 }
 #include <math.h>
 class ThingTemplate;
