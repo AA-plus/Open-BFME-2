@@ -408,11 +408,7 @@ void SpecialPowerModule::triggerSpecialPower( const Coord3D *location )
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-// ?markSpecialPowerTriggered@SpecialPowerModule@@UAEXPBUCoord3D@@@Z present-unmatched
-void SpecialPowerModule::markSpecialPowerTriggered( const Coord3D *location )
-{
-	triggerSpecialPower( location );
-}
+// SpecialPowerModule::markSpecialPowerTriggered (0x00494591) is rowed in SpecialPowerModuleDo.cpp; a second definition here would not link.
 
 
 //-------------------------------------------------------------------------------------------------

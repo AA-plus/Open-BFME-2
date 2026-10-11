@@ -89,11 +89,7 @@ enum {
 
 //-------------------------------------------------------------------------------------------------
 // byte-exact reconstruction: Code/GameEngine/Source/GameLogic/Object/Update/AIUpdate/SupplyTruckAIUpdateMakeStateMachineThunk.cpp
-// ?makeStateMachine@SupplyTruckAIUpdate@@ present-unmatched
-AIStateMachine* SupplyTruckAIUpdate::makeStateMachine()
-{
-	return newInstance(AIStateMachine)( getObject(), "SupplyTruckAIUpdateMachine");
-}
+// SupplyTruckAIUpdate::makeStateMachine (0x004A6E33) is rowed in AIMachineFactories.cpp; a second definition here would not link.
 
 //-------------------------------------------------------------------------------------------------
 // ??0SupplyTruckAIUpdate@@ owned by SupplyTruckAIUpdateCtor.cpp: declared in header, not defined here.
