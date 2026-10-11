@@ -1,6 +1,8 @@
 // ?Rva0030F14CSelect@@YAHPAVDrawable@@PAX@Z
+// partial score=0.9114 date=2026-10-11
+// ?Rva0030F14CSelect@@YAHPAVDrawable@@PAX@Z
 // partial score=0.97 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/GameEngine/Source
 // NEAR (helper draft, not under Code/): identical apart from the first load
 // of the drawable: retail `push ebx; mov ebx,[ebp+8]; mov eax,[ebx+4]`, cl
 // `mov eax,[ebp+8]; push ebx; mov ebx,eax; mov eax,[eax+4]` (+2 bytes, all
@@ -23,7 +25,7 @@
 // (+0x40) clears the list (rowed 0x00239380) and returns 1 after the push
 // (rowed list push_back 0x00239E0B). WorldBuilder twin 0x00EB6700 (unnamed)
 // has the same tests behind a debug-only shortcut.
-#include "../Common/GameLogicObjectLookupView.h"
+#include "Common/GameLogicObjectLookupView.h"
 
 typedef int Int;
 
