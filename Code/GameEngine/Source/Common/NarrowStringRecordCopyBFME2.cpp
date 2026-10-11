@@ -108,6 +108,11 @@ template void _STL::_Construct<BfmeNarrowRecord0054FEF1,BfmeNarrowRecord0054FEF1
 #pragma comment(linker, "/alternatename:??0VersionBlockEntry@@QAE@ABU0@@Z=??0BfmeNarrowRecord00427F75@@QAE@ABU0@@Z")
 
 #include <deque>
+// Retail keeps one deque<BfmeNarrowRecord0041A5D2> dtor (0x0041A51F); this unit calls it.
+namespace _STL {
+template <> deque<BfmeNarrowRecord0041A5D2, allocator<BfmeNarrowRecord0041A5D2> >::~deque();
+template <> deque<BfmeNarrowRecord0041A617, allocator<BfmeNarrowRecord0041A617> >::~deque();  // 0x0041A57B
+}
 
 struct BfmePod16
 {
