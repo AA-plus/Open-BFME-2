@@ -196,6 +196,12 @@ public:
 protected:
 	StateMachine *getMachine() const { return m_machine; }
 	Object *getMachineGoalObject() const { return ((TurretStateMachine *)m_machine)->getGoalObject(); }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getMachineGoalObject copy loses to the first-in-order
+	// copy (no retail address); the updateInternal call below inlines it but
+	// still emits the loser COMDAT. Rebinding there emits only this unique
+	// (trivially kept) copy. No flags touched.
+	Object *bfme_machine_goal() const { return ((TurretStateMachine *)m_machine)->getGoalObject(); }
 	unsigned char m_pad04[0x18 - 0x04];
 	StateMachine *m_machine; // +0x18
 };
@@ -241,7 +247,7 @@ StateReturnType AIAttackFireDuringApproachState::updateInternal()
 		m_victimID = victim->getID();
 	}
 
-	Object *goal = getMachineGoalObject();
+	Object *goal = bfme_machine_goal();
 	WeaponSlotType slot;
 	Weapon *weapon = source->getCurrentWeapon(&slot);
 	if (weapon == 0)
