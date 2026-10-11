@@ -11,13 +11,24 @@
 #include "ascii_string.h"
 #include "unicode_string.h"
 
-struct FieldParse;
+class INI;
+
+struct FieldParse
+{
+	const char *token;
+	void (__cdecl *parse)(INI *ini, void *instance, void *store, const void *userData);
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
 public:
 	const char *getNextToken(const char *seps);
 	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
+	static void parseInt(INI *ini, void *instance, void *store, const void *userData);
+	static void parseBool(INI *ini, void *instance, void *store, const void *userData);
 };
 
 struct INIException
@@ -31,7 +42,29 @@ extern "C" void __stdcall _CxxThrowException(void *pExceptionObject, const _s__T
 struct Rva002E1D22ThrowInfoAnchor { int a; int b; int c; int d; };
 static const Rva002E1D22ThrowInfoAnchor rva002E1D22ThrowInfoAnchor = { 0, 0, 0, 0 };
 
-extern const FieldParse g_00C049D8;
+// The parsers retail's LivingWorldPlayer table reaches, each an already-rowed
+// body: INI::parseAsciiString (0x0002F11E), INI::parseInt (0x0002EF56) and
+// INI::parseBool (0x0002E850). Declared with the real INI* first argument so the
+// records below bind to those rowed symbols.
+
+// Retail VA 0x00C049D8 (.rdata, file offset 0x00800E18): the seven field records
+// of the 0x28-byte LivingWorldPlayer and the zero terminator, 128 bytes - the
+// ledger's own bound. Four names through INI::parseAsciiString at +0xC/+0x10/
+// +0x14 (the three template/region strings of the rowed record's +0x8 AsciiString
+// pair) and three ints/bools at +0x18..+0x24. Every parse target is a rowed,
+// byte-matched body.
+// Symbol ?g_00C049D8@@3UFieldParse@@B, transcribed below.
+extern const struct FieldParse g_00C049D8[] =
+{
+	{ "PlayerTemplate",    &INI::parseAsciiString, 0, 0x0C },
+	{ "AITemplate",        &INI::parseAsciiString, 0, 0x10 },
+	{ "BaseRegion",        &INI::parseAsciiString, 0, 0x14 },
+	{ "MP_SlotColorIndex", &INI::parseInt,         0, 0x18 },
+	{ "IsDumb",             &INI::parseBool,        0, 0x24 },
+	{ "TeamNumber",         &INI::parseInt,         0, 0x1C },
+	{ "LWHandicap",         &INI::parseInt,         0, 0x20 },
+	{ 0, 0, 0, 0 }
+};
 
 class Rva002E18C3Lookup
 {
@@ -89,7 +122,7 @@ void Rva002E1D22Parse(INI *ini, void *instance)
 		INIException e(3, "ParseLivingWorldPlayer::No name specified.");
 		_CxxThrowException(&e, (const _s__ThrowInfo *)&rva002E1D22ThrowInfoAnchor); __assume(0);
 	}
-	ini->initFromINI(&record, &g_00C049D8);
+	ini->initFromINI(&record, g_00C049D8);
 	AsciiString *found = Va00DFF0B0Lookup->find(record.m_0c);
 	if (found == 0)
 		goto done;
