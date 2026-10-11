@@ -73,13 +73,21 @@ public:
 class U4Made005EA530
 {
 public:
-	U4Made005EA530( U4Maker005EA530 *owner );
+	char m_body[ 0xB0 ];
+};
+
+// LINK: the made object's constructor is rowed as the Rva003ADD0B copy ctor
+// (0x003ADD0B); it takes the maker word the same way.
+class Rva003ADD0B
+{
+public:
+	Rva003ADD0B( const Rva003ADD0B &that );
 	char m_body[ 0xB0 ];
 };
 
 U4Made005EA530 *U4Maker005EA530::make( void )
 {
-	return new U4Made005EA530( this );
+	return reinterpret_cast<U4Made005EA530 *>( new Rva003ADD0B( *reinterpret_cast<const Rva003ADD0B *>( this ) ) );
 }
 
 struct FieldParse;
