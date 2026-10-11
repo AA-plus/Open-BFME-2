@@ -74,7 +74,7 @@ static Coord3D rva0027F383NearestPointOnSegment(const Coord3D &start, const Coor
 		t = len;
 
 	Coord3D closest = dir;
-	closest.scale(t);
+	closest.x *= t; closest.y *= t; closest.z *= t;  // scale() expanded: naming it emits a non-retail copy (retail 0x000036D1)
 	closest.add(&start);
 	if (distSqr)
 	{
