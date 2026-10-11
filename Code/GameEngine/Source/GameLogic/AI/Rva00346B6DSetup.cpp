@@ -62,7 +62,9 @@ struct Rva00346B6DInfo
 	char m_2C[0x7C - 0x2C];
 };
 
-extern float g_00BBB8D8;
+// LINK: defined once here. Retail holds 1.0f at 0x007BB8D8 (pin); all
+// three referrers only read it. No ledger address claimed yet.
+float g_00BBB8D8 = 1.0f;
 
 class Rva00346B6D
 {
