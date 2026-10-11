@@ -74,3 +74,19 @@ void Holder00529E19::Rva00529DA9(int value)
 	for (int i = 0; i < 6; ++i)
 		((Rva0052936C *)this)->rva005294FC(i);
 }
+
+// ?rva00529FB0@Rva00529FB0Owner@@QAEXH@Z @0x00529FB0 7B: forwards to Holder00529E19::Rva00529DA9 above through the pointer held at +0
+// (load ecx; tail jump). Owner and name are address-derived; no referencing
+// site was found in this pass.
+class Rva00529FB0Owner
+{
+public:
+	void rva00529FB0(int value);
+private:
+	Holder00529E19 *m_target00;
+};
+
+void Rva00529FB0Owner::rva00529FB0(int value)
+{
+	m_target00->Rva00529DA9(value);
+}

@@ -265,3 +265,19 @@ const Coord3D *Rva00276470Drawable::rva00276470() const
 		oneMinusFactor * m_position0.z + factor * m_position1.z;
 	return &m_interpolatedPosition;
 }
+
+// ?rva0030675A@Rva0030675AOwner@@QAEPBUCoord3D@@XZ @0x0030675A 7B: forwards to Drawable::getPosition above through the pointer held at +0
+// (load ecx; tail jump). Owner and name are address-derived; no referencing
+// site was found in this pass.
+class Rva0030675AOwner
+{
+public:
+    const Coord3D *rva0030675A();
+private:
+    Drawable *m_drawable00;
+};
+
+const Coord3D *Rva0030675AOwner::rva0030675A()
+{
+    return m_drawable00->getPosition();
+}

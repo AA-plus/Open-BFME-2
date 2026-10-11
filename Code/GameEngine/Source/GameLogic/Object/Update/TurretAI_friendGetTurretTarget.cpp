@@ -103,3 +103,20 @@ Object *TurretStateMachine::getGoalObject()
 // Other units call this body (pinned at its address) under the spelling(s)
 // below, with the same calling convention and stack arguments; bind them.
 #pragma comment(linker, "/alternatename:?getGoalObject@StateMachine@@QAEPAVObject@@XZ=?getGoalObject@TurretStateMachine@@QAEPAVObject@@XZ")
+
+// ?rva0026232D@Rva0026232DOwner@@QAEPAVObject@@XZ @0x0026232D 8B: forwards to TurretStateMachine::getGoalObject through the pointer held at +0x30
+// (load ecx; tail jump). Owner and name are address-derived; no referencing
+// site was found in this pass.
+class Rva0026232DOwner
+{
+public:
+	Object *rva0026232D();
+private:
+	char m_pad00[0x30];
+	TurretStateMachine *m_machine30;
+};
+
+Object *Rva0026232DOwner::rva0026232D()
+{
+	return m_machine30->getGoalObject();
+}

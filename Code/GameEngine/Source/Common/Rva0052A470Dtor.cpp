@@ -109,3 +109,19 @@ void Rva0052A470::rva0052A4B5(){
  first28=0;second2C=0;
  if(g_00DFE32C)for(unsigned i=0;i<2;++i)g_00DFE32C->SetBannerSlotXOffset(i,0.0f);
 }
+
+// ?rva0052A5E0@Rva0052A5E0Owner@@QAEXXZ @0x0052A5E0 7B: forwards to Rva0052A470::rva0052A4B5 above through the pointer held at +0
+// (load ecx; tail jump). Owner and name are address-derived; no referencing
+// site was found in this pass.
+class Rva0052A5E0Owner
+{
+public:
+    void rva0052A5E0();
+private:
+    Rva0052A470 *m_target00;
+};
+
+void Rva0052A5E0Owner::rva0052A5E0()
+{
+    m_target00->rva0052A4B5();
+}

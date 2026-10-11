@@ -15,3 +15,19 @@ void Rva00528264::rva00528264(int v)
 	if (v != m_1C)
 		m_1C = v;
 }
+
+// ?rva0052827A@Rva0052827AOwner@@QAEXH@Z @0x0052827A 7B: forwards to rva00528264 above through the pointer held at +0
+// (load ecx; tail jump). Owner and name are address-derived; no referencing
+// site was found in this pass.
+class Rva0052827AOwner
+{
+public:
+	void rva0052827A(int v);
+private:
+	Rva00528264 *m_target00;
+};
+
+void Rva0052827AOwner::rva0052827A(int v)
+{
+	m_target00->rva00528264(v);
+}
