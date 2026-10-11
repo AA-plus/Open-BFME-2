@@ -12,11 +12,19 @@
 
 typedef unsigned int UnsignedInt;
 
-class Rva00288B89
+// LINK: the node value is rowed as pair<const int, list<BfmePod264>>, whose
+// destructor is the folded 0x00288B89.
+struct BfmePod264;
+namespace _STL
 {
-public:
-	~Rva00288B89() throw();
+template <class T> class allocator;
+template <class T, class A> class list;
+template <class A, class B> struct pair
+{
+	~pair() throw();
 };
+}
+typedef _STL::pair<const int, _STL::list<BfmePod264, _STL::allocator<BfmePod264> > > Rva00288B89;
 
 extern "C" void __cdecl free(void *);
 
@@ -56,7 +64,7 @@ void Rva00289371HashTable::clear()
 
 void Rva00289371HashTable::deleteNode(Node *node)
 {
-	node->m_value04.~Rva00288B89();
+	node->m_value04.~pair();
 	if (node)
 		free(node);
 }
