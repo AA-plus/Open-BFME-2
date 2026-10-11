@@ -159,7 +159,9 @@ extern GameLogic *TheGameLogic;
 struct Bfme939Helper { int get()const; }; extern Bfme939Helper *g_bfme939Helper;
 class RecorderClass { public:void stopRecording(); };
 class Rva00210C66CmpBoolField { public: bool get() const; };
-struct LANGameInfo; extern LANGameInfo *g_Rva00E02EEC;
+struct LANGameInfo; extern class GameInfo *TheGameInfo;
+#define g_Rva00E02EEC (*(LANGameInfo * *)&TheGameInfo)
+// ^ g_Rva00E02EEC is only an alias of the owned global TheGameInfo (ledger names column).
 class GameInfo { public: void setMap(AsciiString); }; extern GameInfo *TheSkirmishGameInfo;
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
