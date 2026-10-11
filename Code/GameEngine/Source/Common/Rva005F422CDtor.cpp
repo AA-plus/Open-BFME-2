@@ -23,3 +23,27 @@ void Rva005F422C::rva005F422C()
 	if (p)
 		ReleaseTreeHintRef00217D4C(p);
 }
+
+// Native 005F445D..005F4488 is the complete 43B RET4 deleting wrapper.
+// Ghidra groups it with the preceding eight-byte CreateMovieClip thunk at
+// 005F4455. WB01626880 independently shows this wrapper's three calls:
+// the icon destructor above, the shared virtual-base destructor005F4179,
+// then operator delete when flags bit0 is set. Its receiver is the virtual
+// base at icon+14; return and deallocation use the complete icon pointer.
+// Vtable C79468 slot0 reaches this body through vtordisp thunk005F4224.
+// The original wrapper/type spelling remains unknown; this view declares
+// only the verified secondary-receiver ABI and emits no synthetic vtable.
+class Rva005F4179 { public: virtual ~Rva005F4179(); };
+void __cdecl operator delete(void *);
+class Rva005F445D { public: void *destroy(unsigned int flags); };
+
+void *Rva005F445D::destroy(unsigned int flags)
+{
+    char *object = (char *)this - 0x14;
+    Rva005F4179 *base = (Rva005F4179 *)(object + 0x14);
+    ((Rva005F422C *)base)->rva005F422C();
+    base->Rva005F4179::~Rva005F4179();
+    if (flags & 1)
+        operator delete(object);
+    return object;
+}
