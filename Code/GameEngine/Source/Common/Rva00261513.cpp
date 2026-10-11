@@ -1,34 +1,30 @@
 // cl: /O1 /EHsc /MD /arch:SSE
-// Target evidence: Ghidra boundary 0x00261513, 34 bytes. Its address occurs
-// at 0x008071A0, the third slot in one of several repeated three-entry tables
-// (shared entries at 0x0036CC7A and 0x00395A19). It uses ECX as this, reads a
-// helper pointer at +8, a byte at +0xC and a float at +0x10, then compares the
-// low byte returned by address-derived helper 0x0028F326 with the stored byte.
-// The method owner, argument type and operation names remain unresolved.
-
+// Target constructor 2FD6F6 installs the table at VA C0719C and fixes the
+// filter's next/object/flag/scalar fields at +4/+8/+C/+10. The table's
+// slot 1 names this 34B predicate at 261513; its destructor and player-mask
+// slots are 395A19 and 36CC7A. Existing filter-chain consumers pass Object*.
+// The helper's original operation name remains unknown; keep its admitted
+// address-derived spelling and four-byte argument representation.
+class Object;
 class Rva0028F326Owner
 {
 public:
-	unsigned char rva0028F326(unsigned int value, float scalar);
+ unsigned char rva0028F326(unsigned int value,float scalar);
 };
-
-class Rva00261513Owner
+class Rva00261513Filter
 {
 public:
-	virtual void slot00();
-	virtual void slot01();
-	virtual bool rva00261513(unsigned int value);
-
+ virtual ~Rva00261513Filter();
+ virtual bool allow(Object *value);
+ virtual int getPlayerMask();
 private:
-	unsigned char m_pad04[4];
-	Rva0028F326Owner *m_helper08;
-	unsigned char m_expected0C;
-	unsigned char m_pad0D[3];
-	float m_scalar10;
+ unsigned char m_next04[4];
+ Rva0028F326Owner *m_helper08;
+ unsigned char m_expected0C;
+ unsigned char m_pad0D[3];
+ float m_scalar10;
 };
-
-// ?rva00261513@Rva00261513Owner@@UAE_NI@Z
-bool Rva00261513Owner::rva00261513(unsigned int value)
+bool Rva00261513Filter::allow(Object *value)
 {
-	return m_helper08->rva0028F326(value, m_scalar10) == m_expected0C;
+ return m_helper08->rva0028F326(reinterpret_cast<unsigned int>(value),m_scalar10)==m_expected0C;
 }
