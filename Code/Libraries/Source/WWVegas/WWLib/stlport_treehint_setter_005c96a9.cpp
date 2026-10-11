@@ -49,11 +49,18 @@ void Rva005C96A9::rva005C96A9(TreeHintRef00217D4C hint, int value)
 // Native calls expose its vptr at +0 and state byte +0x24 while the
 // already verified setter establishes +0x34/+0x38. Original names remain
 // unknown; the layout here is limited to these measured members.
+// The +0x258 setting record (rowed copy 0x005C962C).
+struct Rva005C962C
+{
+    Rva005C962C &rva005C962C(const Rva005C962C &other);
+};
+
 class Rva005C976F
 {
 public:
     void rva005C976F();
     int rva005C9823();
+    int rva005C97BE(int msg, int id, const Rva005C962C *setting);
 private:
     char m_pad00[8];
     unsigned int m_flags08;
@@ -99,5 +106,37 @@ int Rva005C976F::rva005C9823()
     m_previous254 = m_flags08;
     if (m_helper218.stateFlags() & 1)
         m_helper218.slot28();
+    return 1;
+}
+
+// ?rva005C97BE@Rva005C976F@@QAEHHHPBURva005C962C@@@Z
+// Native 0x005C97BE..0x005C9823, RET 0xC: the window's message handler
+// (vtable 0x0086DAC4 slot 2). Messages 1 and 2 reach the +0x218 helper's
+// slots 1 and 9; message 0x1D with id 1000 copies a supplied setting into
+// +0x258 (rowed 0x005C962C), marks it pending and applies it (0x005C976F
+// above). Those answer handled; anything else is not.
+int Rva005C976F::rva005C97BE(int msg, int id, const Rva005C962C *setting)
+{
+    switch (msg)
+    {
+    case 1:
+        m_helper218.slot04();
+        break;
+    case 2:
+        m_helper218.slot24();
+        break;
+    case 0x1D:
+        if (id != 1000)
+            return 0;
+        if (setting)
+        {
+            ((Rva005C962C *)&m_name258)->rva005C962C(*setting);
+            m_pending268 = true;
+            rva005C976F();
+        }
+        break;
+    default:
+        return 0;
+    }
     return 1;
 }

@@ -19,6 +19,7 @@ class Rva0007DF07 : public RvaSmallVtableZeroBase
 public:
     Rva0007DF07() { m_04 = 0; }
     virtual ~Rva0007DF07() {}
+    void addRef() { ++*reinterpret_cast<int *>(&m_04); }
 };
 class Rva005CC5E5 : public virtual Rva0007DF07
 {
@@ -119,4 +120,34 @@ Rva005E54F7::Rva005E54F7(int level, const AsciiString &name, void *owner)
     : Rva005E54AE(level, name, *reinterpret_cast<bool *>(static_cast<char *>(owner) + 0xC)),
       Rva005E4F6D(static_cast<_Rva005E4AE2In *>(owner), reinterpret_cast<int>(this))
 {
+}
+
+// Native 5FABC1..5FAC2B (106B, RET C): a factory slot (the vtable after
+// clone@Rva005FAB9E) building a 0x24-byte Rva005E54F7 (level, name, owner
+// +8, most-derived) and returning a counted handle to its shared E4F6D base
+// at +8 (null-checked conversion) whose virtual counted base takes the
+// reference. Receiver and handle names are address-derived.
+struct Rva005FABC1Handle
+{
+    Rva005E4F6D *m_p;
+    __forceinline Rva005FABC1Handle(Rva005E4F6D *p) : m_p(p)
+    {
+        if (p)
+            p->addRef();
+    }
+    ~Rva005FABC1Handle();
+};
+
+class Rva005FABC1
+{
+public:
+    Rva005FABC1Handle rva005FABC1(int level, const AsciiString &name);
+private:
+    char m_prefix[8];
+    char m_owner[4];
+};
+
+Rva005FABC1Handle Rva005FABC1::rva005FABC1(int level, const AsciiString &name)
+{
+    return Rva005FABC1Handle(new Rva005E54F7(level, name, m_owner));
 }

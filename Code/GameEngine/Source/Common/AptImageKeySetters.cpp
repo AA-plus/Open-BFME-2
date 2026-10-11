@@ -223,6 +223,7 @@ APT_IMAGE_KEY_SET( Rva005FF2AC, rva005FF2AC, "_level%u.%s_Portrait", m_portrait 
 // StrategicHUD::ArmyMemberIconMovieClip::Impl::SetTypeImage  @0x005FC7DE 124B  _TypeImage
 // ?rva005EF181@Rva005EF181@@QAEXPBVImage@@@Z  @0x005EF181 129B  _IconSlotPortrait%d
 // ?rva005EF202@Rva005EF181@@QAEXPBVImage@@@Z  @0x005EF202 129B  _IconSlotTypeImage%d
+// ?rva005F0728@Rva005F07AD@@QAEXPBVImage@@@Z  @0x005F0728 133B  _IconSlotPortrait%d
 // ?rva005F07AD@Rva005F07AD@@QAEXPBVImage@@@Z  @0x005F07AD 133B  _IconSlotTypeImage%d
 // ?rva005F6CA8@InProgressIconSlot@Impl@BuildQueueDetailsMovieClip@StrategicHUD@@QAEXPBVImage@@@Z  @0x005F6CA8 132B  _InProgressIconSlotPortrait
 // ?rva005F6D2C@InProgressIconSlot@Impl@BuildQueueDetailsMovieClip@StrategicHUD@@QAEXPBVImage@@@Z  @0x005F6D2C 132B  _InProgressIconSlotTypeImage
@@ -360,15 +361,18 @@ struct Rva005F07ADOwner
 class Rva005F07AD
 {
 public:
+	void rva005F0728(const Image *image);
 	void rva005F07AD(const Image *image);
 private:
 	char m_pad00[0x0C];
 	Rva005F07ADOwner *m_owner;	// +0x0C
 	int m_index;				// +0x10
-	char m_pad14[0x0C];
+	char m_pad14[0x08];
+	const Image *m_portrait;	// +0x1C
 	const Image *m_image;		// +0x20
 };
 
+APT_SLOT_IMAGE_KEY_SET( Rva005F07AD, rva005F0728, "_level%u.%s_IconSlotPortrait%d", m_portrait, m_owner->m_images )
 APT_SLOT_IMAGE_KEY_SET( Rva005F07AD, rva005F07AD, "_level%u.%s_IconSlotTypeImage%d", m_image, m_owner->m_images )
 
 struct Rva005F6CA8Owner
