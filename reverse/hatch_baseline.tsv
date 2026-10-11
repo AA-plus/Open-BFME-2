@@ -781,7 +781,6 @@ address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp	g_Va00E
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp	g_Va00E065B0	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp	g_Va00E065DC	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp	g_Va00E065E8	3
-address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp	g_Va00E06774	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp	g_Va00E068CC	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp	g_Va00E068D8	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp	g_Va00E068E0	3
