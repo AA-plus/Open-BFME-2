@@ -51,7 +51,11 @@ typedef float Real;
 
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 
-struct GeometryShape
+// This function consumes the same 36-byte shape through a local layout view.
+// Its inlined initializer has a different compiler body from the other
+// GeometryShape units; retain their name for the external writer API.
+struct GeometryShape;
+struct BfmeCDEGeometryView
 {
 	int m_type;
 	Real m_height;
@@ -63,7 +67,7 @@ struct GeometryShape
 	AsciiString m_name;
 	bool m_enabled;
 	bool m_21;
-	GeometryShape() : m_type(0), m_height(1), m_majorRadius(1), m_minorRadius(1), m_offsetX(0), m_offsetY(0), m_offsetZ(0), m_enabled(true), m_21(true) {}
+	BfmeCDEGeometryView() : m_type(0), m_height(1), m_majorRadius(1), m_minorRadius(1), m_offsetX(0), m_offsetY(0), m_offsetZ(0), m_enabled(true), m_21(true) {}
 };
 
 class GeometryInfo
@@ -130,8 +134,8 @@ int BfmeOwnerCDE::getCDECount(void *what)
 {
 	CountProvider008FA4B0 *object = (CountProvider008FA4B0 *)what;
 	const GeometryInfo &geometry = object->geometry();
-	GeometryShape shape;
-	geometry.rva006BD9C0(shape);
+	BfmeCDEGeometryView shape;
+	geometry.rva006BD9C0(reinterpret_cast<GeometryShape &>(shape));
 	if (geometry.m_isSmall) {
 		unsigned int count = ((BfmeHostEU *)this)->bfmeStepsEU((const BfmeShapeEU *)&shape);
 		if (count >= 10000) {
