@@ -181,6 +181,15 @@ void ArmySummaryEntry::CancelUpgrades()
 // ModuleInfo accessor, template lookup and eight-byte experience handle ABI.
 // A local pointer to the carrier level preserves the native field reads and
 // in-memory update without imposing volatile semantics on the class.
+// codegen otherwise instantiates the min<int> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy.
+namespace _STL {
+static inline const int &min(const int &a, const int &b)
+{
+    return b < a ? b : a;
+}
+}
 #include <bitset>
 #include <algorithm>
 class Rva0037DCA5 { public: void *rva0037DC52(); };
