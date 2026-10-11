@@ -37,14 +37,16 @@ Rva001709F8::~Rva001709F8()
 // ?Rva001709F8Delete@@YAXPAVRva001709F8@@@Z present-unmatched
 void Rva001709F8Delete(Rva001709F8 *p) { delete p; }
 
-class CountedAsset;
+// Match the counted member view used by its lookup consumer: native cleanup
+// 0x00767ABE reaches the release-if-non-null body at 0x0017098D. Keeping
+// the destructor inline also prevents a competing five-byte forwarding copy.
 class AssetReference
 {
 public:
 	AssetReference(const AssetReference &that);
-	~AssetReference();
+	~AssetReference() { if (m_object) m_object->Release_Ref(); }
 private:
-	CountedAsset *m_object;
+	TextureClass *m_object;
 };
 
 struct Rva00170999Data
