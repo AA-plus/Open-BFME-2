@@ -48,13 +48,7 @@ public:
 extern NameKeyGenerator *TheNameKeyGenerator;
 #define NAMEKEY(x) (TheNameKeyGenerator->nameToKey(x))
 
-class Vector2
-{
-public:
-	Vector2( float x, float y ) { X = x; Y = y; }
-	float X;
-	float Y;
-};
+#include "../../../../../../../reference/shims/wwmath/Vector2.h"
 
 class Vector3
 {

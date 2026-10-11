@@ -144,14 +144,7 @@ public:
 	Real Z;
 };
 
-class Vector2
-{
-public:
-	Vector2(Real x, Real y) : X(x), Y(y) { }
-
-	Real X;
-	Real Y;
-};
+#include "../../../../../../../reference/shims/wwmath/Vector2.h"
 
 class SegmentedLineClass
 {

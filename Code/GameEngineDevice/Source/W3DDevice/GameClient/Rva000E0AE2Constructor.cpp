@@ -17,7 +17,7 @@ class BFME2ParticleTextureHandle { public:
 extern BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *,int,int);
 
 class Vector3 { public:float x,y,z; };
-class Vector2 { public:float x,y;Vector2(float a,float b):x(a),y(b){} };
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 class ShaderClass { public:ShaderClass(const ShaderClass &s):bits(s.bits){} ShaderClass(unsigned x):bits(x){} unsigned bits;static ShaderClass _PresetAlphaShader;};
 class SegLineRendererClass { public:enum TextureMapMode { Tile=2 }; };
 class RenderObjClass { public: virtual void Delete_This(); int refs; };

@@ -24,12 +24,7 @@
 #define NULL 0
 #endif
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 unsigned long CRC_Memory(const unsigned char *data, unsigned long length, unsigned long crc);
 

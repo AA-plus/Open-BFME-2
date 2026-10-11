@@ -17,14 +17,7 @@ typedef int Int;
 typedef int Color;
 typedef unsigned char UnsignedByte;
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-
-	Vector2(float x, float y) : X(x), Y(y) {}
-};
+#include "../../../../../../reference/shims/wwmath/Vector2.h"
 
 class Render2DSentenceClass
 {

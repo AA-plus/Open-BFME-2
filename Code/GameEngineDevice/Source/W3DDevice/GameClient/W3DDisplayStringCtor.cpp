@@ -24,12 +24,7 @@ protected:
 	DisplayString *m_prev;
 };
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Render2DSentenceClass
 {

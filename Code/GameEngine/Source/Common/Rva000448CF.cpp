@@ -6,13 +6,7 @@
 // ret 0x18 six stack args, float/int annotation (movss/fld/push), callee
 // ?Add_Line@Render2DClass@@QAEXABVVector2@@0MK@Z pin at 0x00042A4D taking
 // (Vector2,Vector2,float,width ulong color), byte flag at target+0x48.
-class Vector2
-{
-public:
-	Vector2(float x, float y) : X(x), Y(y) {}
-	float X;
-	float Y;
-};
+#include "../../../../reference/shims/wwmath/Vector2.h"
 
 class Render2DClass
 {

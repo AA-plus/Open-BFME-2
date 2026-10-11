@@ -12,15 +12,7 @@ typedef float Real;
 typedef int Int;
 typedef bool Bool;
 
-class Vector2
-{
-public:
-	Vector2() {}
-	Vector2(Real x, Real y) { X = x; Y = y; }
-	Vector2 &operator=(const Vector2 &v) { X = v.X; Y = v.Y; return *this; }
-	Real X;
-	Real Y;
-};
+#include "../../../../../../../reference/shims/wwmath/Vector2.h"
 
 class TextureMapperClass
 {

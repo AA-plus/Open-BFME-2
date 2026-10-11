@@ -15,11 +15,7 @@ extern "C" __declspec(dllimport) struct _iobuf *__cdecl fopen(const char *path, 
 extern "C" __declspec(dllimport) unsigned int __cdecl fwrite(const void *ptr, unsigned int size, unsigned int count, struct _iobuf *file);
 extern "C" __declspec(dllimport) int __cdecl fclose(struct _iobuf *file);
 
-struct Vector2
-{
-	float x;
-	float y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class WaterTracksObj
 {

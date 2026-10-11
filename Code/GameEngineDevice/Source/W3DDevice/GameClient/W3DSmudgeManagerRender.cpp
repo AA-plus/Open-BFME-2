@@ -42,13 +42,7 @@ typedef long HRESULT;
 
 #define SMUDGE_DRAW_SIZE 500
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-	void Set(float x, float y) { X = x; Y = y; }
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Vector3
 {

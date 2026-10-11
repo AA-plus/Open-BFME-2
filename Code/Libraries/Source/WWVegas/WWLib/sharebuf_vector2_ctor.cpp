@@ -15,15 +15,7 @@ void *operator new[](unsigned int size) throw();
 void operator delete[](void *place) throw();
 inline void *operator new(unsigned int, void *place) { return place; }
 
-class Vector2
-{
-public:
-	Vector2();
-
-private:
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib/refcount.h
 #pragma optimize("s", on)

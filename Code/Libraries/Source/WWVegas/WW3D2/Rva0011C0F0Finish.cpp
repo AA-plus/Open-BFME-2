@@ -50,13 +50,7 @@ public:
 	int Value;
 };
 
-class Vector2
-{
-public:
-	Vector2(float x, float y) : X(x), Y(y) {}
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Render2DRawArray
 {

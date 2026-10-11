@@ -13,21 +13,7 @@
 void *operator new[](unsigned int size);
 inline void *operator new(unsigned int, void *place) { return place; }
 
-class Vector2
-{
-public:
-	Vector2();
-	Vector2 &operator=(const Vector2 &that)
-	{
-		X = that.X;
-		Y = that.Y;
-		return *this;
-	}
-
-private:
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib/refcount.h
 class RefCountClass

@@ -19,13 +19,7 @@
 #define NULL 0
 #endif
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-	void __forceinline Set(float x, float y) { X = x; Y = y; }
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 struct W3dTexCoordStruct
 {

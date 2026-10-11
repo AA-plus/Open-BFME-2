@@ -8,14 +8,7 @@
 
 typedef unsigned long uint32;
 
-class Vector2
-{
-public:
-	Vector2(float x, float y) : X(x), Y(y) {}
-
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath/rect.h
 class RectClass

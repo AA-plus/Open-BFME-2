@@ -7,12 +7,7 @@
 // from g_BfmeRender2DZ, the same global Add_Quad stores into each vertex.
 // Layout: CoordinateScale at +0x04, CoordinateOffset at +0x0C.
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Vector3
 {

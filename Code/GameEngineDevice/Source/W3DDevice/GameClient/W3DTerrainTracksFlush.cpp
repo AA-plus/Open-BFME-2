@@ -31,10 +31,7 @@ typedef float Real;
 typedef bool Bool;
 typedef unsigned int UnsignedInt;
 
-struct Vector2
-{
-	Real X, Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 struct Vector3
 {

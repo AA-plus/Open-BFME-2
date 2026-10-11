@@ -136,13 +136,7 @@ protected:
 
 class Gen_00942BC0 { public: void process( void *text, void *hkX, void *hkY ); };
 class Rva00155AD0 { public: void rva00155AD0( void ); };
-class Vector2
-{
-public:
-	Vector2( float x, float y ) : X( x ), Y( y ) {}
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Render2DSentenceClass
 {

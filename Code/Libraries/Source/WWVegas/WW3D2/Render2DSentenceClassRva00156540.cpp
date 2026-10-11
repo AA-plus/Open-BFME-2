@@ -69,12 +69,7 @@ struct TextureStatisticsStructWide
 	float f20;
 };
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Vector2i
 {

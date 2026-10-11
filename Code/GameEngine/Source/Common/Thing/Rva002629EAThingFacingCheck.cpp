@@ -17,13 +17,7 @@
 // dot product test against 0.0f.
 #include "Coord3D.h"
 
-class Vector2
-{
-public:
-	Vector2(float x, float y) : X(x), Y(y) {}
-	static float Dot_Product(const Vector2 &a, const Vector2 &b) { return a.X * b.X + a.Y * b.Y; }
-	float X, Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Thing
 {

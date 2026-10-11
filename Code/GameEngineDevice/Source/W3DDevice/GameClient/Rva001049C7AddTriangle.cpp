@@ -1,13 +1,7 @@
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 #include "Coord2D.h"
 
-class Vector2
-{
-public:
-	Vector2(float x, float y) : X(x), Y(y) { }
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Render2DClass
 {

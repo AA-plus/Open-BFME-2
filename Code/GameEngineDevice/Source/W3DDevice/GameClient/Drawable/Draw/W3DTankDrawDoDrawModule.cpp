@@ -131,12 +131,7 @@ struct W3DTankDrawModuleData
 	Real m_treadDriveSpeedFraction;
 };
 
-struct Vector2
-{
-	Real X;
-	Real Y;
-	void Set(Real x, Real y) { X = x; Y = y; }
-};
+#include "../../../../../../../reference/shims/wwmath/Vector2.h"
 
 struct TreadObjectInfo
 {

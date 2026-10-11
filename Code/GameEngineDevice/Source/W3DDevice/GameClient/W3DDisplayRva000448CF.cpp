@@ -14,13 +14,7 @@ struct ICoord2D { int x,y; };
 struct IRegion2D { ICoord2D lo,hi; };
 bool ClipLine2D(ICoord2D *start,ICoord2D *end,ICoord2D *returnStart,ICoord2D *returnEnd,IRegion2D *region);
 
-class Vector2
-{
-public:
-	Vector2(float x, float y) : X(x), Y(y) {}
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Render2DClass
 {

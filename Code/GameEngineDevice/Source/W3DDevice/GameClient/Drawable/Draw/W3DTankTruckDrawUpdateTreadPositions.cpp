@@ -7,13 +7,7 @@
 typedef float Real;
 typedef int Int;
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-	void Set(float x, float y) { X = x; Y = y; }
-};
+#include "../../../../../../../reference/shims/wwmath/Vector2.h"
 
 struct Material_Override
 {

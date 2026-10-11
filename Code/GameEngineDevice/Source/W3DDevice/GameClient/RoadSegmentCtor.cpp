@@ -15,11 +15,7 @@
 typedef float Real;
 typedef int Int;
 
-struct Vector2
-{
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 struct Vector3
 {

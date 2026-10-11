@@ -7,12 +7,7 @@
 // Get_Text_Extents (0x00158BA0), returning Vector2 through the hidden pointer.
 extern unsigned short g_Va007BB5C4;
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Render2DSentenceClass
 {
