@@ -40,3 +40,18 @@ bool Object::rva0028D900(float *out1, float *out2)
     *out2 = max(20.0f, s * 2.0f);
     return true;
 }
+
+// --- LK8 r4 appendix (member-vs-local null-check + coupling data) ---
+// Transplant into DrawableDrawLevelNumber.cpp (TU-merged views) reaches the
+// documented 151-vs-154B XMM wall identically. Two new findings: (1) a
+// LOCAL Sub028D900* (single load, 3 uses) folds the `if (sub)` null test
+// away (compiler proves non-null from the earlier deref); MEMBER accesses
+// (m_sub4, as in this stash) keep it: structure alone decides, not flags.
+// (2) Defining Object::rva0028D900 beside DrawableDrawIconUI's drawIconUI
+// breaks drawIconUI (frame 0x30->0x2C, obj EDI->EBX) although renames, view
+// edits, macros and structs in isolation verify clean; order-swapping the
+// definition does not help. Same unexplained-MSVC-coupling family as the
+// CursorEqual case. The body therefore wants a home TU without a sensitive
+// sibling (LevelNumber was tried: views merge clean, existing 237B body
+// unaffected by the views, only the new function triggers nothing there --
+// but the XMM wall itself remains). m_multB8 sits at +0xB8 (not +0xB0).
