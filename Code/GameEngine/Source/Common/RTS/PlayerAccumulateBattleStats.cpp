@@ -57,8 +57,24 @@ public:
 	Rva002E2903Player *find(int id, unsigned int *index);
 };
 
+// Native39C3AC returns the indexed, twelve-byte map from ScoreKeeper.
+// Use the provider's typed declaration while retaining this unit's erased
+// merge view; key/value application identity comes from the named provider.
+class ThingTemplate;
+namespace _STL {
+template<class T> struct less;
+template<class A, class B> struct pair;
+template<class T> class allocator;
+template<class K, class V, class C, class A> class map;
+}
+typedef _STL::map<const ThingTemplate *, int, _STL::less<const ThingTemplate *>,
+ _STL::allocator<_STL::pair<const ThingTemplate *const, int> > > ScoreCountMap;
+
 class ScoreKeeper
 {
+public:
+	ScoreCountMap *getObjectsDestroyedMap(int index);
+private:
 	unsigned char m_bytes[4];
 };
 
@@ -66,12 +82,6 @@ class Rva0039B709
 {
 public:
 	unsigned int rva0039B718();
-};
-
-class Rva0039C3AC
-{
-public:
-	ObjectCountMap *rva0039C3AC(int index);
 };
 
 extern void __cdecl rva004EE8B8(ObjectCountMap *destination, ObjectCountMap *source);
@@ -111,9 +121,8 @@ void LivingWorldScoreKeeper::rva004EE950(ScoreKeeper *rtsScoreKeeper)
 	m_scoreTotal += ((Rva0039B709 *)rtsScoreKeeper)->rva0039B718();
 	rva004EE8B8(&m_primaryMap, (ObjectCountMap *)((char *)rtsScoreKeeper + 0x1F0));
 	rva004EE8B8(&m_secondaryMap, (ObjectCountMap *)((char *)rtsScoreKeeper + 0x2EC));
-	Rva0039C3AC *scoreMaps = (Rva0039C3AC *)rtsScoreKeeper;
 	for (int i = 0; i < 20; ++i)
-		rva004EE8B8(&m_indexedMap, scoreMaps->rva0039C3AC(i));
+		rva004EE8B8(&m_indexedMap, reinterpret_cast<ObjectCountMap *>(rtsScoreKeeper->getObjectsDestroyedMap(i)));
 }
 
 class ThingTemplate;
