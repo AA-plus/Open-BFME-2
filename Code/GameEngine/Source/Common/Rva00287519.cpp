@@ -1,8 +1,8 @@
 // cl: /O1 /MD
-class Rva00286926Host
+class FireLogicSystem
 {
 public:
-	void rva00286926(int a, int b, int c, int d, int e);
+	void ChangeBurnRate(int a, int b, int c, int d, bool e);
 };
 class Rva00287519Host
 {
@@ -27,7 +27,7 @@ void Rva00287519Host::rva00287519(int v)
 			goto next_outer;
 		do
 		{
-			((Rva00286926Host *)this)->rva00286926(i, i, j, v, 0);
+			((FireLogicSystem *)this)->ChangeBurnRate(i, i, j, v, false);
 			n = m_7C;
 			j++;
 		} while (j < n);

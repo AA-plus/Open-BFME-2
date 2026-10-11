@@ -3,10 +3,10 @@
 // 0x004FDA42 (32B): call 0x1F34BA, then free the +0x101C pointer via
 // rowed FreeGame when non-null and clear it. Identities unproven.
 
-class Rva001F34BA
+class GameInfo
 {
 public:
-	void rva001F34BA();
+	void init();
 };
 
 extern "C" void __cdecl FreeGame(void *p);
@@ -23,7 +23,7 @@ private:
 
 void Rva004FDA42Owner::rva004FDA42()
 {
-	((Rva001F34BA *)this)->rva001F34BA();
+	((GameInfo *)this)->init();
 	void *p = m_101C;
 	if (p)
 		FreeGame(p);

@@ -9,10 +9,10 @@
 
 extern "C" void __cdecl free(void *block) throw(...);
 
-class Rva001DBCDCTarget
+class Rva004DFC20
 {
 public:
-    void rva001DBCDC();
+    void clear();
 };
 
 struct Rva0041F4A7Buckets
@@ -42,7 +42,7 @@ inline Rva0041F4A7Buckets::~Rva0041F4A7Buckets()
 
 Rva0041F4A7::~Rva0041F4A7()
 {
-    reinterpret_cast<Rva001DBCDCTarget *>(this)->rva001DBCDC();
+    reinterpret_cast<Rva004DFC20 *>(this)->clear();
 }
 
 // Native0x0041F4E0..0x0041F4E5 tail JMP to the sole owned destructor

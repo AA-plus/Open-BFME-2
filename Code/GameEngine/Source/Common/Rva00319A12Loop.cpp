@@ -30,9 +30,9 @@ public:
     int m_44;
 };
 
-class Rva0031979COwner {
+class LivingWorldArmy {
 public:
-    void rva00319517(int value);
+    void KillSummaryEntry(int value);
 };
 
 class Rva00319A12Owner {
@@ -54,6 +54,6 @@ void Rva00319A12Owner::rva00319A12()
     for (int i = last; i >= 0; --i) {
         int p = ((Rva0040CB2CIndexedField*)m_78)->get(i);
         if (((StringBase<char>*)(p + 4))->compare(*(const StringBase<char>*)&m_18) != 0)
-            ((Rva0031979COwner*)this)->rva00319517(i);
+            ((LivingWorldArmy*)this)->KillSummaryEntry(i);
     }
 }

@@ -3,10 +3,18 @@
 // If +0x2C != -1 calls pinned 0x005E31AA (this+int void) with it then sets -1.
 // Then loops 3x over +0x1C members: if non-null calls virtual +0x0C (no args).
 // Ret void, this only. Address-derived.
-class Rva005E31AA
+class StrategicHUD
 {
 public:
-	void rva005E31AA(int a);
+	class RegionDetailsMovieClip
+	{
+	public:
+		class Impl
+		{
+		public:
+			void SetCurrentPage(int a);
+		};
+	};
 };
 
 class Rva005E31EELoop
@@ -34,7 +42,7 @@ void Rva005E31EE::rva005E31EE()
 	int v = m_2C;
 	if (v != -1)
 	{
-		((Rva005E31AA *)this)->rva005E31AA(v);
+		((StrategicHUD::RegionDetailsMovieClip::Impl *)this)->SetCurrentPage(v);
 		m_2C = -1;
 	}
 	for (int i = 0; i < 3; i++)
