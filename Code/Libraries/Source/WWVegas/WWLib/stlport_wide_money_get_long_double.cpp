@@ -84,4 +84,7 @@ template <>
 wchar_t *allocator<wchar_t>::allocate(size_t, const void*) const;
 }
 
+// Suppress this TU's non-retail _String_base<char> dtor copy (family2-LK3 rows
+// 22/26): the rowed 63B copy in stlport_narrow_string_base_dtor.cpp serves the link.
+template <> _STL::_String_base<char, _STL::allocator<char> >::~_String_base();
 template class _STL::money_get<wchar_t, _STL::istreambuf_iterator<wchar_t, _STL::char_traits<wchar_t> > >;

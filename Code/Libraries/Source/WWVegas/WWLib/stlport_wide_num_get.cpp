@@ -5,7 +5,7 @@
 // basic_string<char>::reserve is retail's 116-byte body at 0x0000C390, owned by
 // stlport_narrow_string_reserve.cpp; this unit's header copy is not retail's and
 // came before it in link order, so only declare its instantiation here.
-namespace _STL { extern template void basic_string<char, char_traits<char>, allocator<char> >::reserve(size_t); }
+namespace _STL { template <> void basic_string<char, char_traits<char>, allocator<char> >::reserve(unsigned int); }
 // The wide __get_integer<unsigned short/long/unsigned long> instances are rowed at
 // 0x0000AFA0 and its siblings and emitted by stlport_wide_get_integer_{uint16,long,
 // ulong}.cpp; declaring their instantiations keeps this unit's own copies, which
@@ -24,4 +24,7 @@ template <> int _M_get_base_or_zero<istreambuf_iterator<wchar_t, char_traits<wch
     istreambuf_iterator<wchar_t, char_traits<wchar_t> > &, ios_base &, wchar_t *);
 }
 
+// Suppress this TU's non-retail _String_base<char> dtor copy (family2-LK3 rows
+// 22/26): the rowed 63B copy in stlport_narrow_string_base_dtor.cpp serves the link.
+template <> _STL::_String_base<char, _STL::allocator<char> >::~_String_base();
 template class _STL::num_get<wchar_t, _STL::istreambuf_iterator<wchar_t, _STL::char_traits<wchar_t> > >;
