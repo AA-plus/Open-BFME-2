@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /D_STLP_USE_STATIC_LIB
+// cl: /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // Bodies ported from Open-BFME-1's

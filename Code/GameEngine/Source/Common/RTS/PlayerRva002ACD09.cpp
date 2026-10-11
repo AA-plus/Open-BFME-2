@@ -1,4 +1,4 @@
-// cl: /MD /GX- /Ireference/shims/bfmelist
+// cl: /MD /GX- /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB
 // stlport
 // ?rva002ACD09@Player@@QAEXPAXH@Z @0x002ACD09 98B: Player factory creating
 // Rva002AC3BE entry (new 0x18) from source +0x118 via rowed ctor 0x002AC3BE
