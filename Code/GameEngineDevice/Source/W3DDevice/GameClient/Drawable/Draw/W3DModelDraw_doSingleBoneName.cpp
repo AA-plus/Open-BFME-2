@@ -1,4 +1,4 @@
-// cl: /O1 /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /DBFME_STLP_NODE_ALLOC /MD /EHsc /Ireference/open-bfme-1/inputs/reference/shims/stlp_nodealloc /Ireference/open-bfme-1/inputs/reference/shims/w3dmodeldraw /Ireference/open-bfme-1/inputs/reference/shims/asciistring8 /Ireference/open-bfme-1/inputs/reference/shims/sweep /Ireference/open-bfme-1/game/Libraries/Source/WWVegas /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad
+// cl: /O1 /I. /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /DBFME_STLP_NODE_ALLOC /MD /EHsc /Ireference/open-bfme-1/inputs/reference/shims/stlp_nodealloc /Ireference/open-bfme-1/inputs/reference/shims/w3dmodeldraw /Ireference/open-bfme-1/inputs/reference/shims/asciistring8 /Ireference/open-bfme-1/inputs/reference/shims/sweep /Ireference/open-bfme-1/game/Libraries/Source/WWVegas /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad
 //
 // ?doSingleBoneName@@YA_NPAVRenderObjClass@@ABVAsciiString@@AAV?$map@W4NameKeyType@@UPristineBoneInfo@@U?$less@W4NameKeyType@@@_STL@@V?$allocator@U?$pair@$$CBW4NameKeyType@@UPristineBoneInfo@@@_STL@@@4@@_STL@@@Z
 // retail 0x000BD2BF, 488 bytes. Dedicated TU ported from the Open-BFME-1
@@ -8,6 +8,7 @@
 // unclaimed .text). Only the placed body is defined here; the donor's
 // other definitions are omitted.
 // stlport
+#include "reference/shims/bfme2_ascii/string_base.h"
 #define Matrix4x4 Matrix4  // BFME renamed it
 /*
 **	Command & Conquer Generals Zero Hour(tm)
@@ -228,15 +229,74 @@ inline Bool testFlagBit(Int flags, Int bit)
 }
 
 //-------------------------------------------------------------------------------------------------
+// Target-only dispatch prefix: native B6B4F calls vslots C8 and CC.
+// CC returns Matrix3D by value through a hidden 48-byte result buffer;
+// these slots and ABI differ from the BFME 1 donor declaration. Unused
+// slots stay opaque and no complete RenderObjClass layout is asserted.
+// WB921920 supplies the helper identity; retail supplies every byte.
+class RetailBoneRenderView {public:
+virtual void slot00();
+virtual void slot01();
+virtual void slot02();
+virtual void slot03();
+virtual void slot04();
+virtual void slot05();
+virtual void slot06();
+virtual void slot07();
+virtual void slot08();
+virtual void slot09();
+virtual void slot10();
+virtual void slot11();
+virtual void slot12();
+virtual void slot13();
+virtual void slot14();
+virtual void slot15();
+virtual void slot16();
+virtual void slot17();
+virtual void slot18();
+virtual void slot19();
+virtual void slot20();
+virtual void slot21();
+virtual void slot22();
+virtual void slot23();
+virtual void slot24();
+virtual void slot25();
+virtual void slot26();
+virtual void slot27();
+virtual void slot28();
+virtual void slot29();
+virtual void slot30();
+virtual void slot31();
+virtual void slot32();
+virtual void slot33();
+virtual void slot34();
+virtual void slot35();
+virtual void slot36();
+virtual void slot37();
+virtual void slot38();
+virtual void slot39();
+virtual void slot40();
+virtual void slot41();
+virtual void slot42();
+virtual void slot43();
+virtual void slot44();
+virtual void slot45();
+virtual void slot46();
+virtual void slot47();
+virtual void slot48();
+virtual void slot49();
+virtual int Get_Bone_Index(const char*);
+virtual Matrix3D Get_Bone_Transform(int);
+};
 static Bool findSingleBone(RenderObjClass* robj, const AsciiString& boneName, Matrix3D& mtx, Int& boneIndex)
 {
-	if (boneName.isNone() || boneName.isEmpty())
+	if (((const StringBase<char>*)&boneName)->isNone() || boneName.isEmpty())
 		return false;
 
-	boneIndex = robj->Get_Bone_Index(boneName.str());
+	boneIndex = ((RetailBoneRenderView*)robj)->Get_Bone_Index(boneName.str());
 	if (boneIndex != 0)
 	{
-		mtx = robj->Get_Bone_Transform(boneIndex);
+		mtx = ((RetailBoneRenderView*)robj)->Get_Bone_Transform(boneIndex);
 		return true;
 	}
 	else
@@ -248,7 +308,7 @@ static Bool findSingleBone(RenderObjClass* robj, const AsciiString& boneName, Ma
 //-------------------------------------------------------------------------------------------------
 static Bool findSingleSubObj(RenderObjClass* robj, const AsciiString& boneName, Matrix3D& mtx, Int& boneIndex)
 {
-	if (boneName.isNone() || boneName.isEmpty())
+	if (((const StringBase<char>*)&boneName)->isNone() || boneName.isEmpty())
 		return false;
 
 	RenderObjClass* childObject = robj->Get_Sub_Object_By_Name(boneName.str());
