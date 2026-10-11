@@ -67,7 +67,8 @@ StringNode0070D9F0 ** g_00E18368 = 0;
 extern int g_00E18374;
 // g_00E18374: matched references place it at VA 0xe18374 (zero-filled .bss).
 int g_00E18374;
-extern EAStringC saConstantAtE18388[];
+// Use the existing sole owner of the 178 constant-string slots.
+extern "C" EAStringC bfmeObjDAE[178];
 // g_00E18650: matched references place it at VA 0xe18650 (zero-filled; a plain-data view).
 EAStringC g_00E18650;
 
@@ -109,7 +110,7 @@ void Rva0070D9F0Shutdown()
 	}
 	g_pChainBlockAllocator->freeBlock(g_00E18368, g_00E1836C * 4);
 	g_00E1836C = 0;
-	EAStringC *p = saConstantAtE18388;
+	EAStringC *p = bfmeObjDAE;
 	do {
 		if (p->GetInternalRefCount() != 1) {
 			g_bfmeAptAssertAtE17734("saConstant[i].GetInternalRefCount() == 1", "C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\string\\StringPool.cpp", 0x14C);
@@ -121,7 +122,3 @@ void Rva0070D9F0Shutdown()
 		++p;
 	} while ((int)p < (int)&g_00E18650);
 }
-
-// Retail's data references in this unit's matched rows land on globals defined
-// under other spellings at the same addresses (addend-corrected DIR32). Bind them.
-#pragma comment(linker, "/alternatename:?saConstantAtE18388@@3PAVEAStringC@@A=_bfmeObjDAE")
