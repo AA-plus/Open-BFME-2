@@ -54,12 +54,25 @@ public:
 class Object
 {
 public:
+	bool rva0028C149(int, float *, int);
+	bool rva0028C15E(int, float *, int, int);
 	ExperienceTracker *getExperienceTracker() const { return m_experienceTracker; }
 
 private:
 	unsigned char m_pad00[0x264];
 	ExperienceTracker *m_experienceTracker;
 };
+
+extern "C" __declspec(dllimport) double __cdecl floor(double);
+class ThingTemplate
+{
+public:
+	unsigned char prefix[0x5bc];
+	int meleeDamage;
+	int rangedDamage;
+};
+
+static __declspec(noinline) void rva004E72CB(const ThingTemplate *, int &, int &, Object *);
 
 Int ComputeObjectRank(const Object *obj)
 {
@@ -97,5 +110,38 @@ Int ComputeObjectMaxRankCaller(const Object *obj)
 	Int rank = ComputeObjectRank(obj);
 	if (rank > 0)
 		return ComputeObjectMaxRank(obj);
-	return 0;
+	int melee, ranged;
+	const ThingTemplate *tpl = *reinterpret_cast<const ThingTemplate *const *>(reinterpret_cast<const char *>(obj) + 4);
+	rva004E72CB(tpl, melee, ranged, const_cast<Object *>(obj));
+	return melee + ranged;
+}
+
+// Native4E72CB..4E7392 (199B) takes template in EDI, melee-out in ESI,
+// ranged-out in EBX and Object on stack; the4E7506 tooltip caller establishes
+// these roles. Fields5BC/5C0 are target damage integers with negative sentinel.
+// The byte-owned Object modifier wrappers supply additive2 and multiplicative3
+// values; native rounds with floor(value+0.5f), then CRT ftol2. Original helper
+// spelling is unproved. File-static visibility preserves the private convention.
+
+static __declspec(noinline) void rva004E72CB(const ThingTemplate *tpl,
+	int &melee, int &ranged, Object *obj)
+{
+	float bonus;
+	if (!obj->rva0028C149(2, &bonus, 0))
+		bonus = 0.0f;
+	int add = (int)floor(bonus + 0.5f);
+	melee = tpl->meleeDamage;
+	if (melee >= 0)
+		melee += add;
+	ranged = tpl->rangedDamage;
+	if (ranged >= 0)
+		ranged += add;
+	float multiplier;
+	if (obj->rva0028C15E(3, &multiplier, 0, 1))
+	{
+		if (melee > 0)
+			melee = (int)floor(melee * multiplier + 0.5f);
+		if (ranged > 0)
+			ranged = (int)floor(ranged * multiplier + 0.5f);
+	}
 }
