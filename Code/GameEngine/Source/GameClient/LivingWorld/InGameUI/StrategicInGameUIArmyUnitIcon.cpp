@@ -9,6 +9,7 @@
 // its already pinned pointer spelling; this does not assert science semantics
 // or introduce another typed fold. Views describe accessed fields only.
 #include "ascii_string.h"
+#include "unicode_string.h"
 namespace _STL {
 template<unsigned int N> struct _Base_bitset {
  unsigned int words[N];
@@ -102,4 +103,45 @@ TreeHintRef00217D4C Rva005F49F0::rva005F49F0(AptMovieClipFrame *frame) {
  quantity->rva005FC9F0((*(Rva0037E07C **)((char *)this-0x18))->rva0037E07C());
  ((StrategicInGameUI::ArmyUnitIcon *)((char *)this-0x20))->AddUpgradeIcons();
  return TreeHintRef00217D4C(*(TargetRef00217D4C **)holder);
+}
+
+class Rva001524CA { public: TreeHintRef00217D4C rva001524CA(); };
+class Rva0037DCA5 {
+public:
+    void *rva0040C65D(int index);
+};
+class InGameSimpleHelp {
+public:
+    InGameSimpleHelp(const UnicodeString &title, const UnicodeString &text);
+private:
+    char m_opaque[12];
+};
+// Complete171-byte help factory5F4254..5F42FF RET4. The secondary
+// receiver accesses unit-C and owner-10; fallback consults vbptr-14 and
+// calls the independently rowed18-byte empty-help provider1524CA. Original
+// virtual method spelling is still unknown. A name accessor reproduces the
+// retail retained field pointer; title comes from40C65D for owner playerID54,
+// description from template40. Allocates the measured12-byte InGameSimpleHelp
+// and returns the same counted-reference ABI used by the clip factory.
+class Rva005F4254 {
+public:
+    TreeHintRef00217D4C rva005F4254();
+    __forceinline const AsciiString &getName() const { return (*(UnitView **)((char *)this-0xc))->name; }
+};
+TreeHintRef00217D4C Rva005F4254::rva005F4254()
+{
+    const AsciiString *key = &getName();
+    if (!((const StringBase<char> *)key)->isEmpty()) {
+        const ThingTemplate *found = TheThingFactory->findTemplate(*key);
+        if (found) {
+            void *owner = *(void **)((char *)this - 0x10);
+            UnicodeString *title = (UnicodeString *)(*(Rva0037DCA5 **)((char *)this - 0xc))->rva0040C65D(*(int *)((char *)owner + 0x54));
+            if (!title->isEmpty()) {
+                const UnicodeString &text = *(const UnicodeString *)((char *)found + 0x40);
+                return TreeHintRef00217D4C((TargetRef00217D4C *)new InGameSimpleHelp(*title, text));
+            }
+        }
+    }
+    int offset = (*(int **)((char *)this - 0x14))[1];
+    return ((Rva001524CA *)((char *)this + offset - 0x14))->rva001524CA();
 }
