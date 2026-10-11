@@ -120,11 +120,23 @@ struct Rva00373EC6Data
 	unsigned m_0C;		// +0x0C
 };
 
+// LINK: the stealth calls bind the rowed owners at the same addresses: 0x00373D28 is
+// StealthUpdate::rva00373D28 (StealthUpdateLogic.cpp); 0x002B2210 is the shared one-store
+// setter rowed as GameWindow::winSetUserData (GameWindowStatusUserData.cpp, ICF-shared body).
+class StealthUpdate
+{
+public:
+	StealthUpdate *rva00373D28(Object *obj);
+};
+class GameWindow
+{
+public:
+	void winSetUserData(void *data);
+};
+
 class Rva00373EC6
 {
 public:
-	Rva00373EC6 *rva00373D28(Object *obj);	// 0x00373D28
-	void rva002B2210(unsigned flags);	// 0x002B2210
 	void *m_vtable;
 	const Rva00373EC6Data *m_04;	// +0x04
 };
@@ -155,10 +167,15 @@ struct Rva004A35C9Node
 	Rva004A35C9Node *m_prev;
 	ObjectID m_id;
 };
+// LINK: 0x002A1B6F is rowed as Rva002A1B6FNativeList::append (Rva002A1316.cpp; pointer-sized element by reference).
+class Rva002A1B6FNativeList
+{
+public:
+	void append(void *const &value);
+};
 class BridgeBehaviorObjectIDList
 {
 public:
-	void push_back(const ObjectID &id);	// 0x002A1B6F
 	Rva004A35C9Node *m_head;
 };
 
@@ -226,7 +243,10 @@ UpdateSleepTime BroadcastStealthUpdate::update()
 			->link(&Rva0004584D(data->m_08, *(BfmeFixedStorage0004543D *)g_00DFEFA4StoragePrototype)), 0);
 	Object *other;
 	while ((other = hits.next()) != 0)
-		m_28.push_back(other->getID());
+	{
+		ObjectID id = other->getID();
+		((Rva002A1B6FNativeList *)&m_28)->append(*(void *const *)&id);
+	}
 	for (Rva004A35C9Node *n = m_28.m_head->m_next; n != m_28.m_head; n = n->m_next) {
 		Object *member = TheGameLogic->findObjectByID(n->m_id);
 		if (!member)
@@ -236,11 +256,11 @@ UpdateSleepTime BroadcastStealthUpdate::update()
 			continue;
 		unsigned flags = stealth->m_04->m_0C;
 		if (flags & 0x400) {
-			stealth = stealth->rva00373D28(member);
+			stealth = (Rva00373EC6 *)((StealthUpdate *)stealth)->rva00373D28(member);
 			flags = stealth->m_04->m_0C;
 		}
 		flags -= flags & ~getBroadcastStealthUpdateModuleData()->m_140;
-		stealth->rva002B2210(flags);
+		((GameWindow *)stealth)->winSetUserData((void *)flags);
 	}
 	return getBroadcastStealthUpdateModuleData()->m_28;
 }
