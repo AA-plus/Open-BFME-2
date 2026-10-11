@@ -20653,7 +20653,6 @@ uw_00771de3,,0x00771DE3,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;obje
 uw_00771deb,,0x00771DEB,11,Code/gen_small/uw_gen_010.cpp,matched,gen-funclet;object-symbol=$L5657
 uw_00771df6,,0x00771DF6,11,Code/gen_small/uw_gen_010.cpp,matched,gen-funclet;object-symbol=$L5658
 uw_00771e01,,0x00771E01,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L553
-uw_00771e16,,0x00771E16,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L3946
 uw_00771e1e,,0x00771E1E,14,Code/gen_small/uw_gen_010.cpp,matched,gen-funclet;object-symbol=$L7433
 uw_00771e2c,,0x00771E2C,14,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L655
 uw_00771e44,,0x00771E44,8,Code/gen_small/uw_gen_010.cpp,matched,gen-funclet;object-symbol=$L6743
@@ -76787,3 +76786,4 @@ uw_00771cc8,,0x00771CC8,8,Code/GameEngine/Source/GameLogic/Object/Update/Invisib
 uw_00771cd0,,0x00771CD0,14,Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateModuleDataCtor.cpp,matched,gen-funclet;object-symbol=$L1283;parent=??0InvisibilityUpdateModuleData@@QAE@XZ;native FuncInfo9185E4 state1 proves filter member at1C8 cleanup; real named constructor emits whole14B and complete EH graph exact
 uw_00771cde,,0x00771CDE,14,Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateModuleDataCtor.cpp,matched,gen-funclet;object-symbol=$L1284;parent=??0InvisibilityUpdateModuleData@@QAE@XZ;native FuncInfo9185E4 state2 proves first AsciiString at1D4 cleanup; real named constructor emits whole14B and complete EH graph exact
 uw_00771cec,,0x00771CEC,14,Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateModuleDataCtor.cpp,matched,gen-funclet;object-symbol=$L1285;parent=??0InvisibilityUpdateModuleData@@QAE@XZ;native FuncInfo9185E4 state3 proves second AsciiString at1D8 cleanup; real named constructor emits whole14B and complete EH graph exact
+uw_00771e16,,0x00771E16,8,Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateModuleDataDtor.cpp,matched,gen-funclet;object-symbol=$L1270;parent=??1InvisibilityUpdateModuleData@@UAE@XZ;native FuncInfo918790 state0 proves Snapshot base cleanup; named destructor emits whole8B and complete EH graph exact
