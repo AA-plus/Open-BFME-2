@@ -99,7 +99,7 @@ struct Rva00781660Locomotor { char head[0x44]; unsigned field40; bool isMovingBa
 struct AIUpdateInterface { char head[0x140]; BfmeHostFC *path; char gap[0x1f0-0x144]; Rva00781660Locomotor *loco; BfmeHostFC *getPath() const { return path; } Rva00781660Locomotor *getCurLocomotor() const { return loco; } };
 class Object : public Thing { public: bool isKindOf(KindOfType)const; float rva0028AC7D() const; float GetRelativeAngle(const Coord3D*)const; bool isSignificantlyAboveTerrain()const; char head[0x258]; AIUpdateInterface *ai; AIUpdateInterface *getAI() const { return ai; } };
 struct TWheelInfo { float m_frontLeftHeightOffset, m_frontRightHeightOffset, m_rearLeftHeightOffset, m_rearRightHeightOffset, m_wheelAngle; };
-class Drawable { public: const TWheelInfo *getWheelInfo() const; char head[0xfc]; Object *object; char before138[0x3c]; void *m_locoInfo; Object *getObject() const { return object; } };
+class Drawable { public: const TWheelInfo *getWheelInfoRV() const { return m_locoInfo ? reinterpret_cast<const TWheelInfo *>(reinterpret_cast<const unsigned char *>(m_locoInfo)+0x3c) : 0; } char head[0xfc]; Object *object; char before138[0x3c]; void *m_locoInfo; Object *getObject() const { return object; } };
 class ParticleSystem { public: void stop(); };
 ParticleSystem *Make00001B18();
 struct Rva00781660Handle { ParticleSystem *system; void *previous, *next; operator bool() const { return system != 0; } ParticleSystem *operator->() const { if (!system) return Make00001B18(); return system; } };
@@ -316,7 +316,7 @@ void W3DTruckDraw::doDrawModule(const Matrix3D* transformMtx)
     float speed=obj->rva0028AC7D();
     if(!obj->isKindOf(NATIVE_KIND_61)) speed=0;
 
-	const TWheelInfo *wheelInfo = getDrawable()->getWheelInfo();	// note, can return null!
+	const TWheelInfo *wheelInfo = getDrawable()->getWheelInfoRV();	// note, can return null!
 	AIUpdateInterface *ai = obj->getAI();
 	if (m_cabBone && wheelInfo) {
 		Matrix3D cabXfrm(1);
@@ -499,4 +499,3 @@ void W3DTruckDraw::doDrawModule(const Matrix3D* transformMtx)
     m_wasAirborne=(unsigned char)obj->isSignificantlyAboveTerrain();
 }
 
-inline const TWheelInfo *Drawable::getWheelInfo() const { return m_locoInfo ? reinterpret_cast<const TWheelInfo *>(reinterpret_cast<const unsigned char *>(m_locoInfo)+0x3c) : 0; }
