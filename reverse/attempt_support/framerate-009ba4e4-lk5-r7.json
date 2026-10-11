@@ -752,5 +752,16 @@
     "eh_exact": 152,
     "baseline_count": 0,
     "object_basis": "same isolated renamed objects, official verifier routines, original compiler flags"
-  }
+  },
+  "unrelated_master_regression": {
+    "source": "Code/GameEngine/Source/Common/GameEngineInit.cpp",
+    "rva": "0x003B9FD3",
+    "native_data_va": "0x00E06E54",
+    "correct_global": "TheLocalFileSystem",
+    "current_wrong_global": "TheArchiveFileSystem at0x00E06E5C",
+    "body_claim": "diogo-main, claim refused before any Code edit",
+    "prepared_repair": "writer-021/build/lk2-r6-gameengineinit-local-datum.patch",
+    "limitation": "665 isolated byte rows and228 frame-rate data relocations pass, but that does not certify other global references; full gate publication needs this separate master regression repaired."
+  },
+  "scope_reservations": "Released at session close; reacquire all139 files after the3 overlapping file owners finish."
 }
