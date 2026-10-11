@@ -27,16 +27,25 @@ class Rva001022F5
 {
 public:
 	unsigned char rva001022F5(const AsciiString &arg);
-	LookupTablePostEffect *rva00101FD8Create(const StringBase<char> &name);
 private:
 	Rva00116482 *m_00;
 	char m_pad[12];
 };
 
+// Native factory101FD8 ignores ambientECX and consumes one stack reference.
+// The single established provider is stdcall; keep this caller's receiver.
+LookupTablePostEffect *__stdcall Rva00101FD8Create(const StringBase<char> &);
+union NativePostEffectFactoryCall {
+ LookupTablePostEffect *(__stdcall *target)(const StringBase<char> &);
+ LookupTablePostEffect *(Rva001022F5::*member)(const StringBase<char> &);
+};
+typedef char PostEffectFactoryPointerWidth[sizeof(NativePostEffectFactoryCall)==4 ? 1 : -1];
+
 unsigned char Rva001022F5::rva001022F5(const AsciiString &arg)
 {
 	((Rva0010223B *)this)->rva0010223B();
-	m_00 = (Rva00116482 *)rva00101FD8Create((const StringBase<char> &)arg);
+	NativePostEffectFactoryCall factory={&Rva00101FD8Create};
+	m_00 = (Rva00116482 *)(this->*factory.member)((const StringBase<char> &)arg);
 	if (m_00)
 		m_00->rva00116482();
 	return m_00 != 0;
