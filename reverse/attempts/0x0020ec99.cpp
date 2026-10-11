@@ -1,6 +1,9 @@
+// ?ValidateArmyRegionEntry@LivingWorldRegionManager@@QAEHPAULivingWorldArmy@@PAVRva00318C32Ret@@1H_N@Z
+// partial score=0.85326 date=2026-10-11
 // ?ValidateArmyRegionEntry@LivingWorldRegionManager@@QAEHPAULivingWorldArmy@@PAVRva00318C32Ret@@1HH@Z
-// partial score=0.82 date=2026-10-09
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /EHsc /MD /arch:SSE
+// 184-byte trial; conditional register saves and separate -1 exits differ.
+// Pathfinder call now uses its verified receiver/callback/boolean flag ABI.
+// cl: /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /O1 /G7 /EHsc /MD /arch:SSE
 // LivingWorldRegionManager.cpp -- region-manager members recovered from
 // WorldBuilder leads (reverse/wb_name_leads.csv): WB's debug build names the
 // function and the region overload it calls (0x0020EA58); retail supplies
@@ -12,7 +15,7 @@ typedef int Int;
 typedef bool Bool;
 
 // The center point is 2D: the region overload writes only x and y.
-#include "../../Code/Libraries/Include/Lib/Coord2D.h"
+#include "Coord2D.h"
 
 // LivingWorldRegion: a region with its own UI popup point (+0xAB) returns
 // it through the accessor 0x0020E493, rowed under a placeholder name with an
@@ -57,11 +60,12 @@ public:
 };
 enum ObjectID;
 namespace _STL { template<class T> class allocator; template<class T,class A> class vector; }
-class LivingWorldPathFinder {
+class LivingWorldSearchCallback;
+class Rva003EF8E1 {
 public:
- int FindShortestPath(Rva003F71D4Metric *,int,ObjectID,ObjectID,_STL::vector<ObjectID,_STL::allocator<ObjectID> > *,int);
+ int FindShortestPath(LivingWorldSearchCallback *,int,int,int,_STL::vector<ObjectID,_STL::allocator<ObjectID> > *,bool);
 };
-struct RegionArmySetPathView {char pad[0x4c];LivingWorldPathFinder *pathFinder;};
+struct RegionArmySetPathView {char pad[0x4c];Rva003EF8E1 *pathFinder;};
 struct LivingWorldArmy;
 class Rva00318C32Ret;
 struct RegionArmyEntryView {char pad[0x18];AsciiString name;char pad1C[0x38];int player;};
@@ -76,7 +80,7 @@ class Rva002E071E {public:int rva002E0BC0(int);};
 class LivingWorldRegionManager
 {
 public:
-	int ValidateArmyRegionEntry(LivingWorldArmy *,Rva00318C32Ret *,Rva00318C32Ret *,int,int);
+	int ValidateArmyRegionEntry(LivingWorldArmy *,Rva00318C32Ret *,Rva00318C32Ret *,int,bool);
 	void EnumeratePendingBattles(PendingBattleVisitor &visitor) const;
 	Bool GetRegionCenterPoint(Int regionID, Coord2D *out);
 	Bool GetRegionCenterPoint(Rva0020E89C *region, Coord2D *out);	// 0x0020EA58
@@ -144,7 +148,7 @@ void LivingWorldRegionManager::SetRegionReinforcements(Int regionID, const Ascii
 		region->rva003F1AB9(name, a, b, c, d, e);
 }
 
-int LivingWorldRegionManager::ValidateArmyRegionEntry(LivingWorldArmy *army,Rva00318C32Ret *from,Rva00318C32Ret *to,int result,int allow) {
+int LivingWorldRegionManager::ValidateArmyRegionEntry(LivingWorldArmy *army,Rva00318C32Ret *from,Rva00318C32Ret *to,int result,bool allow) {
  RegionEntryView *target=reinterpret_cast<RegionEntryView *>(to);
  if(target && target->enabled) {
  RegionArmyEntryView *entry=reinterpret_cast<RegionArmyEntryView *>(army);
@@ -160,8 +164,8 @@ int LivingWorldRegionManager::ValidateArmyRegionEntry(LivingWorldArmy *army,Rva0
  int toID=target->id;
  int fromID=reinterpret_cast<RegionEntryView *>(from)->id;
  int playerID=entry->player;
- LivingWorldPathFinder *finder=m_armySet->pathFinder;
- return finder->FindShortestPath(&metric,playerID,(ObjectID)fromID,(ObjectID)toID,reinterpret_cast<_STL::vector<ObjectID,_STL::allocator<ObjectID> > *>(result),allow);
+ Rva003EF8E1 *finder=m_armySet->pathFinder;
+ return finder->FindShortestPath(reinterpret_cast<LivingWorldSearchCallback *>(&metric),playerID,fromID,toID,reinterpret_cast<_STL::vector<ObjectID,_STL::allocator<ObjectID> > *>(result),allow);
  }
  return -1;
 }
