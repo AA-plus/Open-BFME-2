@@ -33,10 +33,12 @@ extern struct GlobalA01E48 *g_Va00A01E48;
 int g_00E04914;
 extern "C" void __cdecl free(void *ptr);
 
-struct FreeBuf
+// This member owns CRT storage. The terrain TU's similarly named helper
+// owns GameFree storage; they do not represent one native class.
+struct AptScoreScreenBuffer
 {
 	void *p;
-	~FreeBuf() { if (p) free(p); }
+	~AptScoreScreenBuffer() { if (p) free(p); }
 };
 
 class __multiple_inheritance Rva0051CBC6
@@ -49,7 +51,7 @@ private:
 	char m_pad21C[100];
 	int m_280;
 	char m_pad284[8];
-	FreeBuf m_28c;
+	AptScoreScreenBuffer m_28c;
 	char m_pad290[32];
 	AsciiString m_2b0;
 	char m_pad2b4[12];
