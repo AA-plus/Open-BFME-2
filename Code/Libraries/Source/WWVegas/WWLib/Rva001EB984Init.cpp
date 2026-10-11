@@ -34,7 +34,7 @@ public:
 extern FreelistPool g_freelistPool00DB8FEC;
 
 // ?init@Rva001EB984Member@@QAEPAXPAX@Z @0x001EB984
-void *Rva001EB984Member::init(void *context)
+__declspec(noinline) inline void *Rva001EB984Member::init(void *context)
 {
 	(void)context;
 	char dummyAlloc;
@@ -44,4 +44,12 @@ void *Rva001EB984Member::init(void *context)
 	((void **)node)[1] = node;
 	m_head = node;
 	return this;
+}
+
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+// ?bfmeAnchorRva001EB984Init absent-from-retail
+void *bfmeAnchorRva001EB984Init(Rva001EB984Member *p)
+{
+	return p->init(0);
 }

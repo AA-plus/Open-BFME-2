@@ -19,10 +19,18 @@ public:
 private:
 	char m_pad[20];
 };
-Rva0036AE51ListView Rva00466398::rva00466398()
+__declspec(noinline) inline Rva0036AE51ListView Rva00466398::rva00466398()
 {
 	Rva0036AE51ListView out;
 	out.a = this ? (void *)((char *)this + 4) : (void *)0;
 	out.b = (ContainmentList *)((char *)this + 16);
 	return out;
+}
+
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+// ?bfmeAnchorRva00466398 absent-from-retail
+void bfmeAnchorRva00466398(Rva00466398 *p, Rva0036AE51ListView *out)
+{
+	*out = p->rva00466398();
 }

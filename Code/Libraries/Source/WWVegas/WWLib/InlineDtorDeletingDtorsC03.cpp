@@ -18,6 +18,8 @@
 
 struct EmitVtableTag;
 
+inline void *operator new(unsigned int, void *p) { return p; }
+
 class DebugCmdInterface
 {
 public:
@@ -28,8 +30,16 @@ public:
 
 // ??0DebugCmdInterface@@QAE@XZ @0x000382E0 9B: the default constructor, storing the
 // class's own vtable (VA 0x00BBE7EC) and returning this.
-DebugCmdInterface::DebugCmdInterface()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline DebugCmdInterface::DebugCmdInterface()
 {
+}
+
+// ?bfmeAnchorDebugCmdInterface absent-from-retail
+void *bfmeAnchorDebugCmdInterface(void *where)
+{
+	return new (where) DebugCmdInterface();
 }
 
 // ?<DebugCmdInterface::DebugCmdInterface> absent-from-retail
@@ -90,8 +100,16 @@ public:
 
 // ??0StaticSortListClass@@QAE@XZ @0x00176920 9B: the default constructor, storing the
 // class's own vtable (VA 0x00BD4E24) and returning this.
-StaticSortListClass::StaticSortListClass()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline StaticSortListClass::StaticSortListClass()
 {
+}
+
+// ?bfmeAnchorStaticSortListClass absent-from-retail
+void *bfmeAnchorStaticSortListClass(void *where)
+{
+	return new (where) StaticSortListClass();
 }
 
 // ?<StaticSortListClass::StaticSortListClass> absent-from-retail

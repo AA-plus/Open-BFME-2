@@ -18,12 +18,20 @@ class Rva0046247D
 public:
 	void rva0046247D(Rva0046247DPair &result);
 };
-void Rva0046247D::rva0046247D(Rva0046247DPair &result)
+__declspec(noinline) inline void Rva0046247D::rva0046247D(Rva0046247DPair &result)
 {
 	void *base = this;
 	char *field = (char *)base + 0x20;
 	result.first = base ? field : 0;
 	result.second = (char *)base + 0x54;
+}
+
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+// ?bfmeAnchorRva0046247D absent-from-retail
+void bfmeAnchorRva0046247D(Rva0046247D *p, Rva0046247DPair &out)
+{
+	p->rva0046247D(out);
 }
 
 #include "../../Include/GameLogic/ContainmentListView.h"
