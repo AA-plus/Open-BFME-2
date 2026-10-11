@@ -92,7 +92,13 @@ public:
 extern TerrainLogic *TheTerrainLogic;
 
 float GetGameLogicRandomValueReal(float lo, float hi, char *file, int line);
-extern char g_00C477C8[];
+// The source-file tag the randomised scatter logs, retail RVA 0x008477C8 (.rdata,
+// 108 bytes including the NUL) holding the LFN
+// "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Contain\\TunnelContain.cpp".
+// The rowed body passes it as the file argument of GetGameLogicRandomValueReal's
+// two calls (retail 0x0047E182 `mov $0xc477c8,%ebx`). Transcribed verbatim.
+extern char g_00C477C8[] =
+	"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Contain\\TunnelContain.cpp";
 float cos(float v);
 float sin(float v);
 
