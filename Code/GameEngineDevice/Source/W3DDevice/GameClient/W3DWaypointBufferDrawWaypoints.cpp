@@ -199,6 +199,11 @@ class Object
 public:
 	const ThingTemplate *getTemplate() const { return m_template; }
 	__forceinline Bool isKindOf(KindOfType t) const { return (m_template->m_kindof[t >> 3] & (1 << (t & 7))) != 0; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's isKindOf copy is not retail's; the call below inlines
+	// it but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. No flags touched, no layout claim.
+	__forceinline Bool bfme_is_kind_of(KindOfType t) const { return (m_template->m_kindof[t >> 3] & (1 << (t & 7))) != 0; }
 	const Coord3D *getPosition() const { return &m_cachedPos; }
 	AIUpdateInterface *getAI() { return m_ai; }
 
@@ -214,6 +219,12 @@ class Drawable
 {
 public:
 	Object *getObject() { return m_object; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getObject copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	Object *bfme_object() { return m_object; }
 
 	unsigned char m_unreconstructed_000[0xFC];
 	Object *m_object;
@@ -282,9 +293,9 @@ void W3DWaypointBuffer::drawWaypoints(RenderInfoClass &rinfo)
 		for( DrawableListCIt it = selected->begin(); it != selected->end(); ++it )
 		{
 			draw = *it;
-			Object *obj = draw->getObject();
+			Object *obj = draw->bfme_object();
 			Int numPoints = 1;
-			if( obj && ! obj->isKindOf( KINDOF_IGNORED_IN_GUI ))
+			if( obj && ! obj->bfme_is_kind_of( KINDOF_IGNORED_IN_GUI ))
 			{
 				AIUpdateInterface *ai = obj->getAI();
 				Int goalSize = ai ? ai->friend_getWaypointGoalPathSize() : 0;
