@@ -6,6 +6,11 @@
 // 0x001B4E63; dtor 0x002E1F42 frees +0xC then base; prev/next share /O1.
 #include <vector>
 struct BfmeE16 { float x, y, z, w; };
+// Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<BfmeE16*, BfmeE16, allocator<BfmeE16> >::deallocate(BfmeE16*, size_t);
+}
 
 class BFME2NativeNetwork
 {
