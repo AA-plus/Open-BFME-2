@@ -12,6 +12,15 @@
 // event +0x1C. Field names other than WB-asserted ones are descriptive.
 // Callees still under address-derived ledger names are reached through
 // alias pins in reverse/symbols.csv.
+// codegen otherwise instantiates the min<int> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy.
+namespace _STL {
+static inline const int &min(const int &a, const int &b)
+{
+    return b < a ? b : a;
+}
+}
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
 // overload takes the call instead, so this TU emits no external max COMDAT.
 namespace _STL {
