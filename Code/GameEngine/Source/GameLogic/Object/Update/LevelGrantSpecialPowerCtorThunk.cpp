@@ -38,16 +38,16 @@ public:
 	virtual void moduleInterfaceAnchor();
 };
 
-class LevelGrantSpecialPowerBase : public BehaviorModule,
+class Rva0044EF5E : public BehaviorModule,
 	public SpecialPowerModuleInterface,
 	public SpecialPowerModuleExtra,
 	public ModuleInterface
 {
 public:
-	LevelGrantSpecialPowerBase( Thing *thing, const ModuleData *moduleData );
+	Rva0044EF5E( Thing *thing, const ModuleData *moduleData );
 };
 
-class LevelGrantSpecialPower : public LevelGrantSpecialPowerBase
+class LevelGrantSpecialPower : public Rva0044EF5E
 {
 public:
 	LevelGrantSpecialPower( Thing *thing, const ModuleData *moduleData );
@@ -55,7 +55,7 @@ public:
 
 // ??0LevelGrantSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z
 LevelGrantSpecialPower::LevelGrantSpecialPower( Thing *thing, const ModuleData *moduleData )
-	: LevelGrantSpecialPowerBase( thing, moduleData )
+	: Rva0044EF5E( thing, moduleData )
 {
 }
 
