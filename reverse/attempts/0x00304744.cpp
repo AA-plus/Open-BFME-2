@@ -1,8 +1,12 @@
 // ?Rva00304744Populate@@YAHPAVGameWindow@@IABVAsciiString@@@Z
-// partial score=0.9792062414818727 date=2026-10-10
-// ?Rva00304744Populate@@YAHPAVGameWindow@@IABVAsciiString@@@Z
-// partial score=0.994 date=2026-10-10
+// partial score=0.994 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
+// 2026-10-11 claude-opus-5-5: callee 0x325388 renamed GadgetListBoxSetItemData(GameWindow*,void*,int,int)
+// (ledger name) so every call resolves. Still 1124 vs 1125: retail pushes 1 for SetSelected and builds
+// the max(1,..) one in ECX; cl here CSEs one 1 into ESI across GetTop/GetBottom (top goes to EDI).
+// Probe: passing 2 to SetSelected gives retail ESI=top/ECX=1 but then enregisters listbox in EDI,
+// which retail never does -- so retail splits both webs. Unchanged: bool/Int casts, half/newTop/reuse
+// locals, sel copy, selectionIndex declared at top, loop locals hoisted, forceinline tail helpers.
 // stlport
 // Primary ZH/BF1 MapUtil::populateMapListboxNoReset. BF2 combines filters into flags,
 // sorts borrowed metadata pointers and uses current-profile RealTimeStats preferences.
@@ -28,7 +32,7 @@ void GadgetListBoxSetListLength(GameWindow*,int);
 void GadgetListBoxReset(GameWindow*);
 int GadgetListBoxAddEntryImage(GameWindow*,const Image*,int,int,int,int,bool,int);
 int GadgetListBoxAddEntryText(GameWindow*,UnicodeString,int,int,int,bool);
-void Rva00325388Send(GameWindow*,int,int,int);
+void GadgetListBoxSetItemData(GameWindow*,void*,int,int);
 void GadgetListBoxSetSelected(GameWindow*,const int*,int);
 int GadgetListBoxGetTopVisibleEntry(GameWindow*);
 int Rva00324807(GameWindow*);
@@ -81,8 +85,8 @@ int Rva00304744Populate(GameWindow *listbox,unsigned flags,const AsciiString &ma
   }
   index=GadgetListBoxAddEntryText(listbox,md->rva00300D0E(),-1,index,numColumns-1,true);
   if(((const StringBase<char>*)&md->fileName)->compare(*(const StringBase<char>*)&mapToSelect)==0)selectionIndex=index;
-  Rva00325388Send(listbox,(int)md->fileName.str(),index,0);
-  if(numColumns>1)Rva00325388Send(listbox,imageData,index,1);
+  GadgetListBoxSetItemData(listbox,(void*)md->fileName.str(),index,0);
+  if(numColumns>1)GadgetListBoxSetItemData(listbox,(void*)imageData,index,1);
  ++it; }while(it!=maps.end());}
  GadgetListBoxSetSelected(listbox,&selectionIndex,1);
  if(selectionIndex>=0){

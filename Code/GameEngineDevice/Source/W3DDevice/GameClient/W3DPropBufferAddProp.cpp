@@ -17,7 +17,7 @@
 **	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// W3DPropBuffer::addPropType, ported from Zero Hour's
+// W3DPropBuffer::addPropType and addProp, ported from Zero Hour's
 // GameEngineDevice/Source/W3DDevice/GameClient/W3DPropBuffer.cpp (GeneralsMD
 // tree vendored under reference/open-bfme-1/inputs/reference) onto the BFME 2
 // layout. The ZH layout holds: TProp is 0x30 bytes at +0x04 (m_robj, id,
@@ -26,12 +26,17 @@
 // m_robjName, m_bounds), m_numPropTypes +0x2F718, MAX_PROPS 4000 and
 // MAX_TYPES 96.
 //
-// BFME 2 takes one more flag (cleared, it zeroes byte +0xBD of the new type's
-// render object). The bounding-sphere copy inlines the WWMath Vector3 copy.
+// BFME 2 takes one more flag in both (cleared, it zeroes byte +0xBD of the
+// new type's render object); addProp first checks a TheWritableGlobalData
+// flag at +0x1C, and new props start visible. The bounding-sphere copy
+// inlines the WWMath Vector3 copy; addProp inlines the WWMath Matrix3D
+// identity, Rotate_Z, Scale and Set_Translation.
 
 typedef int Int;
 typedef bool Bool;
 typedef float Real;
+
+#include <math.h>
 
 #include "ascii_string.h"
 
@@ -51,6 +56,71 @@ public:
 	float Z;
 };
 
+class Vector4
+{
+public:
+	__forceinline void Set( float x, float y, float z, float w ) { X = x; Y = y; Z = z; W = w; }
+	float &operator [] ( int i ) { return (&X)[i]; }
+	float X;
+	float Y;
+	float Z;
+	float W;
+};
+
+class Matrix3D
+{
+public:
+	__forceinline explicit Matrix3D( bool init ) { if (init) Make_Identity(); }
+	__forceinline void Make_Identity( void )
+	{
+		Row[0].Set(1.0f,0.0f,0.0f,0.0f);
+		Row[1].Set(0.0f,1.0f,0.0f,0.0f);
+		Row[2].Set(0.0f,0.0f,1.0f,0.0f);
+	}
+	__forceinline void Rotate_Z( float theta )
+	{
+		float tmp1,tmp2;
+		float c; float s;
+
+		c = cosf(theta);
+		s = sinf(theta);
+		// Codegen nudge, no effect on the result: without an early second use
+		// of s, MSVC 7.1 sinks the float conversion of the sine into its first
+		// product and commutes row 0's s*tmp2 against retail's operand order.
+		float sCopy = s;
+
+		tmp1 = Row[0][0]; tmp2 = Row[0][1];
+		Row[0][0] = (float)( c*tmp1 + s*tmp2);
+		Row[0][1] = (float)(-s*tmp1 + c*tmp2);
+
+		tmp1 = Row[1][0]; tmp2 = Row[1][1];
+		Row[1][0] = (float)( c*tmp1 + s*tmp2);
+		Row[1][1] = (float)(-s*tmp1 + c*tmp2);
+
+		tmp1 = Row[2][0]; tmp2 = Row[2][1];
+		Row[2][0] = (float)( c*tmp1 + s*tmp2);
+		Row[2][1] = (float)(-s*tmp1 + c*tmp2);
+	}
+	__forceinline void Scale( float scale )
+	{	// uniform scale all 3 axis
+		// X
+		Row[0][0] *= scale;
+		Row[1][0] *= scale;
+		Row[2][0] *= scale;
+		// Y
+		Row[0][1] *= scale;
+		Row[1][1] *= scale;
+		Row[2][1] *= scale;
+		// Z
+		Row[0][2] *= scale;
+		Row[1][2] *= scale;
+		Row[2][2] *= scale;
+	}
+	__forceinline void Set_Translation( const Vector3 &t ) { Row[0][3] = t[0]; Row[1][3] = t[1];Row[2][3] = t[2]; }
+private:
+	Vector4 Row[3];
+};
+
 class SphereClass
 {
 public:
@@ -64,7 +134,7 @@ class RenderObjClass
 public:
 	virtual void v00();
 	virtual void v01();
-	virtual void v02();
+	virtual RenderObjClass *Clone( void ) const;															///< slot 2
 	virtual void v03();
 	virtual void v04();
 	virtual void v05();
@@ -83,7 +153,7 @@ public:
 	virtual void v18();
 	virtual void v19();
 	virtual void v20();
-	virtual void v21();
+	virtual void Set_Transform( const Matrix3D &m );													///< slot 21
 	virtual void v22();
 	virtual void v23();
 	virtual void v24();
@@ -154,6 +224,8 @@ public:
 	virtual void v89();
 	virtual void v90();
 	virtual void v91();
+	virtual void v92();
+	virtual void Set_ObjectScale( float scale );															///< slot 93
 
 	char m_unrecovered04[ 0xBD - 0x04 ];
 	Bool m_bfmePropFlagBD;																										///< 0xBD
@@ -164,6 +236,16 @@ RenderObjClass *Create_Render_Obj( const char *name );
 enum ObjectShroudStatus
 {
 	OBJECTSHROUD_INVALID
+};
+
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+
+// The one GlobalData byte addProp reads (BFME 2 prop gate at +0x1C).
+struct PropBufferGlobalDataView
+{
+	char m_unrecovered00[ 0x1C ];
+	Bool m_bfmeGlobal1C;																											///< 0x1C
 };
 
 struct TProp
@@ -188,6 +270,7 @@ class W3DPropBuffer
 {
 public:
 	virtual ~W3DPropBuffer( void );
+	void addProp( Int id, Coord3D location, Real angle, Real scale, const AsciiString &modelName, Bool bfmeFlag );
 	Int addPropType( const AsciiString &modelName, Bool bfmeFlag );
 
 protected:
@@ -228,4 +311,56 @@ Int W3DPropBuffer::addPropType(const AsciiString &modelName, Bool bfmeFlag)
 	m_propTypes[m_numPropTypes].m_bounds = bounds;
 	m_numPropTypes++;
 	return m_numPropTypes-1;
+}
+
+//=============================================================================
+// W3DPropBuffer::addProp
+//=============================================================================
+/** Adds a prop.  Name is the W3D model name, supposed to be unique. */
+//=============================================================================
+void W3DPropBuffer::addProp(Int id, Coord3D location, Real angle,Real scale, const AsciiString &modelName, Bool bfmeFlag)
+{
+	if (!((const PropBufferGlobalDataView *)TheWritableGlobalData)->m_bfmeGlobal1C) {
+		return;
+	}
+	if (m_numProps >= MAX_PROPS) {
+		return;
+	}
+	if (!m_initialized) {
+		return;
+	}
+	Int propType = -1;
+	Int i;
+	for (i=0; i<m_numPropTypes; i++) {
+		if (m_propTypes[i].m_robjName.compareNoCase(modelName)==0) {
+			propType = i;
+			break;
+		}
+	}
+	if (propType<0) {
+		propType = addPropType(modelName, bfmeFlag);
+		if (propType<0) {
+			return;
+		}
+	}
+
+	Matrix3D mtx(true);
+	mtx.Rotate_Z(angle);
+	mtx.Scale(scale);
+	mtx.Set_Translation(Vector3(location.x, location.y, location.z));
+
+	m_props[m_numProps].location = location;
+	m_props[m_numProps].id = id;
+	m_props[m_numProps].ss = OBJECTSHROUD_INVALID;
+	m_props[m_numProps].m_robj = m_propTypes[propType].m_robj->Clone();
+	m_props[m_numProps].m_robj->Set_Transform(mtx);
+	m_props[m_numProps].m_robj->Set_ObjectScale(scale);
+	m_props[m_numProps].propType = propType;
+	// Translate the bounding sphere of the model.
+	m_props[m_numProps].bounds = m_propTypes[propType].m_bounds;
+	m_props[m_numProps].bounds.Center += Vector3(location.x, location.y, location.z);
+	// BFME 2: new props start visible.
+	m_props[m_numProps].visible = true;
+
+	m_numProps++;
 }

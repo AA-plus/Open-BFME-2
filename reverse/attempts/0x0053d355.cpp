@@ -1,6 +1,10 @@
 // ?rva0053D355@ControlBar@@QAEXPAVObject@@_N@Z
-// partial score=0.9 date=2026-10-08
+// partial score=0.9 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_STLP_USE_MALLOC /D_CRTIMP= /D_STLP_NO_CSTD_FUNCTION_IMPORTS /D_BFME_RETAIL_TREE_INSERT_LAYOUT /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
+// 2026-10-11 claude-opus-5-5: callees renamed to ledger names setControlCommand (0x31B641) and
+// protected updateContextCommand (0x53CF65, rowed in ControlBarCommand.cpp = the home TU, defined just
+// before this body). Only unresolved call left: _Vector_base<GameWindow*> ctor = shared 0x211E58 (needs an
+// ICF row like the other _Vector_base ctors there). Still 1789 vs 1790 with stack-slot/regalloc drift.
 // stlport
 #include "ascii_string.h"
 #include "Lib/Coord3D.h"
@@ -271,10 +275,10 @@ class ControlBar;
 extern ControlBar *TheControlBar;
 class ControlBar {
 public:
-    void rva0053CF65();
+    protected: void updateContextCommand(); public:
     void rva0053D355(Object *,bool);
     void rva0053BB16(Object *,CommandSet *);
-    void rva0031B641(GameWindow *,const CommandButton *);
+    void setControlCommand(GameWindow *,const CommandButton *);
     const CommandButton *findCommandButton(const AsciiString &);
     void showRallyPoint(const Coord3D *);
     void rva0031D230();
@@ -289,7 +293,7 @@ private:
     char unknown2A4[4]; _STL::vector<BfmeE8> ranges;
 };
 // ?rva0053CF65@ControlBar@@QAEXXZ
-void ControlBar::rva0053CF65()
+void ControlBar::updateContextCommand()
 {
     Object *obj = 0;
     if (selected) obj = selected->object;
@@ -385,7 +389,6 @@ void ControlBar::rva0053CF65()
 // Complete named WB1117000/ControlBarCommand.cpp391..579 and clean BFME1
 // ba7ddda7 populateCommand guide the workflow. Native53D355..53DA531790
 // independently establishes the target ranges, two revival passes and offsets.
-// ?rva0053D355@ControlBar@@QAEXPAVObject@@_N@Z
 void ControlBar::rva0053D355(Object *obj,bool refresh)
 {
     Player *player=obj->getControllingPlayer();
@@ -415,7 +418,7 @@ void ControlBar::rva0053D355(Object *obj,bool refresh)
                 }
                 ((CommandButton *)button)->rva0035B5C2(obj,false);
             }
-            rva0031B641(windows[i],button);
+            setControlCommand(windows[i],button);
         }
     }
     CommandContainView *contain=((CommandObjectView *)obj)->contain;
@@ -451,7 +454,7 @@ void ControlBar::rva0053D355(Object *obj,bool refresh)
                 ((Rva0035B750 *)button)->rva0035B750((const ModuleData *)image);
                 AsciiString text;
                 if(textTemplate->rva0033ACC5(text))*(AsciiString *)(b+0x7C)=text;
-                if(windows[i])rva0031B641(windows[i],button);
+                if(windows[i])setControlCommand(windows[i],button);
                 ((AsciiString *)(b+0x7C))->clear();
                 *(int *)(b+0xC0)=index;
             }else *(int *)(b+0xC0)=-1;
@@ -500,7 +503,7 @@ void ControlBar::rva0053D355(Object *obj,bool refresh)
                 ((Rva0035B750 *)button)->rva0035B750((const ModuleData *)image);
                 AsciiString text;
                 if(textTemplate->rva0033ACC5(text))*(AsciiString *)(b+0x7C)=text;
-                if(windows[i])rva0031B641(windows[i],button);
+                if(windows[i])setControlCommand(windows[i],button);
                 ((AsciiString *)(b+0x7C))->clear();
                 *(int *)(b+0xC0)=revivalIndex;
             }else *(int *)(b+0xC0)=-1;
@@ -510,7 +513,7 @@ void ControlBar::rva0053D355(Object *obj,bool refresh)
         ExitInterface *exit=obj->getObjectExitInterface();
         if(exit)showRallyPoint(((CommandExitView *)exit)->getRallyPoint());
     }
-    rva0053CF65();
+    updateContextCommand();
     ((Rva002D363EOwner *)theRadarWindowOverrideSource)->rva002D363E((int)obj);
     if(overlaySink){
         if(!obj->isLocallyControlled()&&((CommandPlayerListView *)ThePlayerList)->localPlayer->bfmeAskRV()){

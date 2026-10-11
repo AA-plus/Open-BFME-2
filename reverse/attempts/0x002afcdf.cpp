@@ -1,14 +1,5 @@
 // ?initFromDict@Player@@QAEXPBVDict@@@Z
-// partial score=0.9222326801696995 date=2026-10-10
-// ?initFromDict@Player@@QAEXPBVDict@@@Z
-// partial score=0.9045478972894136 date=2026-10-10
-template<class T> static __forceinline T p4Operand(const T &v) { return *(const volatile T*)&v; }
-// partial score=0.9044606061031877 date=2026-10-10
-// ?initFromDict@Player@@QAEXPBVDict@@@Z
-// partial score=0.8977090997624326 date=2026-10-10
-// ?initFromDict@Player@@QAEXPBVDict@@@Z
-// ?initFromDict@Player@@QAEXPBVDict@@@Z
-// partial score=0.6108683812511932 date=2026-10-10
+// partial score=0.95 date=2026-10-11
 // Reference: Open-BFME-1 9cbfb551fe20dae985f91f2319d8997287b6a705,
 // inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source/Common/RTS/Player.cpp:360-541.
 // Identity: game.dat 2AF729..2AFCDF and WB C10C00 Player::init; target
@@ -23,7 +14,17 @@ template<class T> static __forceinline T p4Operand(const T &v) { return *(const 
 // FF404040 and the null-template branch copies it into both color fields.
 // WB debug labels on reset include an inlined BitFlags::SetBit; its scoring
 // masks, map resets, player-index store and native call site identify reset.
+// initFromDict status (2026-10-11): 2778/2762, 9 structural regions, all one
+// cause: cl keeps edi=&TheKey_playerName live into the skirmish team-copy
+// section (the `original` lookup), so the human/skirmish team loops spill the
+// scaled team id / record base instead of using edi. Replacing only that one
+// key use (diagnostic, wrong semantics) gives 2762 with 0 structural regions;
+// then only the attackedBy reset SIB order remains ([esi+ecx+340] retail vs
+// [ecx+esi+340]). Team records are an STLport vector (WB getTeamInfo/
+// getNextTeamID index m_teams[id]); getPlayerIndex() is an inline getter;
+// the human-side search uses WB's found flag.
 // cl: /I. /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /D_STLP_USE_MALLOC /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+template<class T> static __forceinline T p4Operand(const T &v) { return *(const volatile T*)&v; }
 // stlport
 #include "ascii_string.h"
 #include "unicode_string.h"
@@ -97,7 +98,7 @@ void init(const PlayerTemplate*);void initFromDict(const class Dict*);
 void setPlayerType(PlayerType,bool);void rva002AD25B(const AsciiString&);bool rva002AC4D4(int*);
 void addToBuildList(Object*);
 void addToPriorityBuildList(const AsciiString&,Coord3D*,float);
-void deleteUpgradeList();void rva002A99FA();void initPlayerUpgrades();
+int getPlayerIndex()const{return index;}void deleteUpgradeList();void rva002A99FA();void initPlayerUpgrades();
 char gap00[0xC];const unsigned char*property;
 char gap10[0x34-0x10];const PlayerTemplate*tmplate;UnicodeString displayName;Handicap handicap;
 AsciiString name;NameKeyType nameKey;int index;AsciiString side;int type;
@@ -135,8 +136,8 @@ class Dict {public:
 class ScriptList {public:ScriptList(const ScriptList&);virtual ~ScriptList();private:char opaque[0x48];};
 class SidesInfo {public:void*build;Dict dict;ScriptList scripts;char tail[12];Dict*getDict(){return &dict;}ScriptList*getScriptList(){return &scripts;}void setScriptList(ScriptList*);};
 struct TeamRec {short next,prev,reserved,flags;int gen;Dict dict;};
-class TeamsInfoRec {public:char index[12];TeamRec*records;char rest[12];
- int first()const{return records[0].next;}int next(int n)const{return records[n].next;}Dict*get(int n){return &records[n].dict;}
+class TeamsInfoRec {public:char index[12];_STL::vector<TeamRec> teams;char rest[4];
+ int first(){return teams[0].next;}int next(int n){return teams[n].next;}Dict*get(int n){return &teams[n].dict;}
  int addTeam(const Dict*);void removeTeam(int);
 };
 class SidesList {public:char pad[0x7c0];int skirmishCount;SidesInfo skirmishSides[20];TeamsInfoRec teams,skirmishTeams;
@@ -188,14 +189,16 @@ void Player::initFromDict(const Dict*d){
   if(TheSidesList->skirmishCount>0 && ((const StringBase<char>&)d->getAsciiString(TheKey_playerName.get())).compare("ReplayObserver")!=0 && ((const StringBase<char>&)tmplname).compare("FactionObserver")!=0){
    if(d->getType(TheKey_playerAIType.get())!=3){
     AsciiString humanSide("SkirmishHuman");
-    for(int i=0;(this?p4Operand(i):p4Operand(i))<TheSidesList->skirmishCount;++i){
-     if(TheSidesList->getSkirmishSideInfo(i)->getDict()->getAsciiString(TheKey_playerName.get())==humanSide){{
- ScriptList scripts(*TheSidesList->getSkirmishSideInfo(i)->getScriptList());TheSidesList->getSideInfo(index)->setScriptList(&scripts);
+    bool found=false;int i;
+    for(i=0;i<TheSidesList->skirmishCount;++i){
+     if(TheSidesList->getSkirmishSideInfo(i)->getDict()->getAsciiString(TheKey_playerName.get())==humanSide){found=true;break;}
+    }
+    if(found){
+ ScriptList scripts(*TheSidesList->getSkirmishSideInfo(i)->getScriptList());TheSidesList->getSideInfo(getPlayerIndex())->setScriptList(&scripts);
  AsciiString original=TheSidesList->getSkirmishSideInfo(i)->getDict()->getAsciiString(TheKey_playerName.get());
  for(int id=TheSidesList->skirmishTeams.first();id;id=TheSidesList->skirmishTeams.next(id)){
   if(TheSidesList->skirmishTeams.get(id)->getAsciiString(TheKey_teamOwner.get())==original){Dict team(*TheSidesList->skirmishTeams.get(id));AsciiString tname=team.getAsciiString(TheKey_teamName.get());if(Rva002ACFC1Equal((int)&tname,(int)&("team"+original)))team.setAsciiString(TheKey_teamName.get(),"team"+pname);team.setAsciiString(TheKey_teamOwner.get(),pname);TheSidesList->teams.addTeam(&team);}
  }
-}break;}
     }
    }
    skirmish=false;rva002AD25B(pname);
@@ -206,7 +209,7 @@ void Player::initFromDict(const Dict*d){
   int diff=d->getInt(TheKey_skirmishDifficulty.get(),&exists);int difficulty=((DifficultyView*)TheScriptEngine)->value;if(exists)difficulty=diff;
   if(ai)*(int*)((char*)ai+0x2c)=difficulty;
   if(d->getType(TheKey_playerAIType.get())!=3){
-   ScriptList scripts(*TheSidesList->getSkirmishSideInfo(skirmishNdx)->getScriptList());TheSidesList->getSideInfo(index)->setScriptList(&scripts);
+   ScriptList scripts(*TheSidesList->getSkirmishSideInfo(skirmishNdx)->getScriptList());TheSidesList->getSideInfo(getPlayerIndex())->setScriptList(&scripts);
    for(int id=TheSidesList->teams.first();id;){int next=TheSidesList->teams.next(id);if(TheSidesList->teams.get(id)->getAsciiString(TheKey_teamOwner.get())==pname)TheSidesList->teams.removeTeam(id);id=next;}
    // Keep copyTeams' team semantics inline without recopying the script list.
    AsciiString original=TheSidesList->getSkirmishSideInfo(skirmishNdx)->getDict()->getAsciiString(TheKey_playerName.get());
