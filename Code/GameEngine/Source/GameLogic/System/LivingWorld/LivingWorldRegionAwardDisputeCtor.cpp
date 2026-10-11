@@ -19,6 +19,9 @@ template <class T, class A = allocator<T> > class vector
 public:
 	vector(const vector &other);
 	~vector();
+	void push_back(const T &value);	// the folded push_back 0x004DFCB0
+	unsigned int size() const { return m_finish - m_start; }
+	const T &operator[](unsigned int i) const { return m_start[i]; }
 private:
 	T *m_start;
 	T *m_finish;
@@ -44,6 +47,8 @@ public:
 	virtual ~RegionAwardDispute();
 	RegionAwardDispute(int region, const _STL::vector<unsigned int> &players, int flags);
 	void rva004FBF8E();
+	int GetResolvableBy();			// 0x004FBED6
+	void rva004FC0ED(const _STL::vector<int> &players);
 private:
 	int m_region;				// +0x04
 	_STL::vector<unsigned int> m_players;	// +0x08
@@ -59,4 +64,24 @@ RegionAwardDispute::RegionAwardDispute(int region, const _STL::vector<unsigned i
 	m_resolved = false;
 	m_flags.set(0x20);
 	rva004FBF8E();
+}
+
+class Rva002B2B66 { public: int rva002B2B66(); };	// rowed 0x002B2B66, the local player's id
+class Rva004FBDB0 { public: void rva004FBDB0(bool local); };	// rowed 0x004FBDB0
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
+
+// Retail 0x004FC0ED, 94 bytes (RET 4; its caller is LivingWorldLogic's
+// dispute opening 0x002B9A90 when the region already has one): appends the
+// nonzero player ids to the dispute and tells the dispute (0x004FBDB0)
+// whether the local player is the one that can settle it.
+void RegionAwardDispute::rva004FC0ED(const _STL::vector<int> &players)
+{
+	for (unsigned int i = 0; i < players.size(); ++i)
+	{
+		if (players[i])
+			m_players.push_back(*(const unsigned int *)&players[i]);
+	}
+	int local = ((Rva002B2B66 *)TheLivingWorldLogic)->rva002B2B66();
+	((Rva004FBDB0 *)this)->rva004FBDB0(local == GetResolvableBy());
 }
