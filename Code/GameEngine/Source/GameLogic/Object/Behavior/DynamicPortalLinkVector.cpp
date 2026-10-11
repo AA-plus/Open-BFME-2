@@ -71,15 +71,21 @@ private:
 	void *m_04;
 };
 
+// Native1FFD2C has a distinct EH handler from the vector copy at4613EB.
+// Its complete63B body destroys [start,finish) then frees storage through
+// the same STLport base cleanup, including cleanup when element teardown throws.
+// The application type remains unknown; this is the existing member ABI view.
 class DynamicPortalLinkVectorCopy1FFD2C
+ : public _STL::_Vector_base<DynamicPortalLink, _STL::allocator<DynamicPortalLink> >
 {
 public:
-	~DynamicPortalLinkVectorCopy1FFD2C();	// 0x001FFD2C
-private:
-	DynamicPortalLink *m_start;
-	DynamicPortalLink *m_finish;
-	DynamicPortalLink *m_endOfStorage;
+ ~DynamicPortalLinkVectorCopy1FFD2C();
 };
+typedef char DynamicPortalLinkVectorCopyWidth[sizeof(DynamicPortalLinkVectorCopy1FFD2C)==12 ? 1 : -1];
+DynamicPortalLinkVectorCopy1FFD2C::~DynamicPortalLinkVectorCopy1FFD2C()
+{
+ _STL::_Destroy(this->_M_start, this->_M_finish);
+}
 
 class Rva001FFE93 : public Rva001E3624
 {
