@@ -82,6 +82,8 @@ class Rva0009D6FAScene : public Rva0009D6FARef
 public:
 	virtual void s1(); virtual void s2();
 	virtual void removeRenderObject(Rva0009D6FARenderObj *obj);	// slot 3
+	virtual void s4(); virtual void s5();
+	virtual void slot6(const Rva0009D55BVec3 &color);	// slot 6
 };
 struct Rva0009D6FATexture
 {
@@ -110,6 +112,7 @@ public:
 	virtual void rva0009C784(unsigned int phase, unsigned int previous);
 	virtual void rva0009D862();
 	virtual void rva0009DB5A(bool active);
+	virtual void rva0009BC17();
 
 private:
 	Rva0009D6FARef *m_C0;
@@ -223,7 +226,7 @@ void Rva0009D55BProduct::rva0009C784(unsigned int phase, unsigned int previous)
 class CameraClass { public: CameraClass(); char m_data[0x3FC]; };
 class Rva0009AA0F { public: Rva0009AA0F(int owner); char m_data[0x10C]; };
 class LightClass { public: enum LightType { POINT = 0, DIRECTIONAL = 1 }; LightClass(LightType type); char m_data[0x120]; };
-class Rva0009C134Host { public: void rva0009BAA4(); void rva0009CD9B(); };
+class Rva0009C134Host { public: void rva0009BAA4(); void rva0009CD9B(); void rva0009AACF(int obj, float opacity); };
 
 void Rva0009D55BProduct::rva0009D862()
 {
@@ -286,4 +289,56 @@ void Rva0009D55BProduct::rva0009DB5A(bool active)
 		((Rva002141D1 *)TheLivingWorldManager)->rva002141D1();
 		((Rva0009D9BD *)this)->rva0009DA28();
 	}
+}
+
+// ?rva0009BC17@Rva0009D55BProduct@@UAEXXZ retail 0x0009BC17 (385 bytes;
+// slot 8 of the product table): with the camera (+0xC0), the scene (+0xC4)
+// and the +0x18 active state it raises the byte at 0x00DB5F84, clears colour,
+// depth and stencil to black (DX8Wrapper::Clear 0x0011D330), blends +0x13C
+// and +0xD8 from the float triples at 0x00DE5E38 and 0x00DE5E2C by the +0x198
+// fade (row 1 when the global data's +0xD2E byte is set), sets the opacity of
+// the three render words +0x18C/+0x190/+0x194 from +0x134 through 0x0009AACF
+// (a member that ignores this, ret 8), passes +0xE0 to scene slot 6, runs the
+// pinned refresh 0x0009BAA4 and renders the scene through 0x00118660.
+class Vector3
+{
+public:
+	float X;
+	float Y;
+	float Z;
+};
+class DX8Wrapper
+{
+public:
+	static void Clear(bool clear_color, bool clear_z_stencil, bool clear_stencil, const Vector3 &color, float dest_alpha, float z, unsigned int stencil);
+};
+bool Rva00118660Call(void *scene, void *camera);
+extern bool g_Va00DB5F84;
+extern float g_Va00DE5E2C[3];
+extern float g_Va00DE5E38[3];
+extern float g_Va00DB4AB4;
+static inline float Rva0009BC17Lerp(float a, float b, float t) { return (b - a) * t + a; }
+struct Rva0009BC17GlobalView { unsigned char m_pad[0xD2E]; bool m_D2E; };
+
+void Rva0009D55BProduct::rva0009BC17()
+{
+	if (m_C4 == 0 || m_C0 == 0 || !((Rva0009DB5ALivingWorldView *)this)->m_active)
+		return;
+	g_Va00DB5F84 = true;
+	Vector3 black = { 0.0f, 0.0f, 0.0f };
+	DX8Wrapper::Clear(true, true, true, black, 0.0f, 1.0f, 0);
+	int row = 0;
+	if (TheWritableGlobalData && ((Rva0009BC17GlobalView *)TheWritableGlobalData)->m_D2E)
+		++row;
+	m_13C = Rva0009BC17Lerp(g_Va00DE5E38[row], g_Va00DE5E38[2], m_198);
+	m_D8 = Rva0009BC17Lerp(g_Va00DE5E2C[row], g_Va00DE5E2C[2], m_198);
+	if (m_18C)
+		((Rva0009C134Host *)this)->rva0009AACF(m_18C, 1.0f - m_134);
+	if (m_190)
+		((Rva0009C134Host *)this)->rva0009AACF(m_190, (m_134 - 0.5f) * 2.0);
+	if (m_194)
+		((Rva0009C134Host *)this)->rva0009AACF(m_194, (1.0f - g_Va00DB4AB4) * m_134 + g_Va00DB4AB4);
+	m_C4->slot6(m_E0);
+	((Rva0009C134Host *)this)->rva0009BAA4();
+	Rva00118660Call(m_C4, m_C0);
 }
