@@ -133,3 +133,20 @@ void Rva005F2577Holder::rva005F2773(Rva005F2577Inner *p)
 			++p->m_ref;
 	}
 }
+
+// ?rva005E39A6@Rva005E39A6Owner@@QBE_NH@Z @0x005E39A6 8B: loads the map pointer held at +0x14, then tail-jumps Rva005F2278::rva005F2278 above.
+// Owner and name are address-derived; no referencing site was found in this
+// pass.
+class Rva005E39A6Owner
+{
+public:
+	bool rva005E39A6(int key) const;
+private:
+	char m_pad00[0x14];
+	Rva005F2278 *m_map14;
+};
+
+bool Rva005E39A6Owner::rva005E39A6(int key) const
+{
+	return m_map14->rva005F2278(key);
+}

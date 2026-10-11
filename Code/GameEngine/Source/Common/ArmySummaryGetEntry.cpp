@@ -89,3 +89,20 @@ void ArmySummary::rva0040CC8F()
 			entry->ApplyWorldMapUpgrades();
 	}
 }
+
+// ?rva003191DA@Rva003191DAOwner@@QAEXXZ @0x003191DA 8B: loads the ArmySummary pointer held at +0x78, then tail-jumps ArmySummary::rva0040CC8F above.
+// Owner and name are address-derived; no referencing site was found in this
+// pass.
+class Rva003191DAOwner
+{
+public:
+	void rva003191DA();
+private:
+	char m_pad00[0x78];
+	ArmySummary *m_summary78;
+};
+
+void Rva003191DAOwner::rva003191DA()
+{
+	m_summary78->rva0040CC8F();
+}

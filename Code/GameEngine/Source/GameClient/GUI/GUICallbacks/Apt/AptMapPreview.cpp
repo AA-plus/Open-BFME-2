@@ -1438,3 +1438,17 @@ Bool AptMapPreview::IsValidStartPosition(Int index)
 	}
 	return false;
 }
+
+// ?rva0044400E@Rva0044400EOwner@@QAEPAVMapMetaData@@ABVAsciiString@@@Z @0x0044400E 8B: offsets this to the AptMapPreview embedded at +0x60, then tail-jumps AptMapPreview::rva0057D922 above.
+// Owner and name are address-derived; no referencing site was found in this
+// pass.
+class Rva0044400EOwner
+{
+public:
+	MapMetaData *rva0044400E(const AsciiString &map);
+};
+
+MapMetaData *Rva0044400EOwner::rva0044400E(const AsciiString &map)
+{
+	return ((AptMapPreview *)((char *)this + 0x60))->rva0057D922(map);
+}

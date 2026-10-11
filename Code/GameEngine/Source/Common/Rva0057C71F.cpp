@@ -146,3 +146,17 @@ int AptMapPreview::GetMaxNumPlayers()
 		return 0;
 	return md->m_20;
 }
+
+// ?rva0043DC07@Rva0043DC07Owner@@QAEPAXH@Z @0x0043DC07 8B: offsets this to the AptMapPreview embedded at +0x60, then tail-jumps AptMapPreview::GetStartPositionInfoForSlot above.
+// Owner and name are address-derived; no referencing site was found in this
+// pass.
+class Rva0043DC07Owner
+{
+public:
+	void *rva0043DC07(int slot);
+};
+
+void *Rva0043DC07Owner::rva0043DC07(int slot)
+{
+	return ((AptMapPreview *)((char *)this + 0x60))->GetStartPositionInfoForSlot(slot);
+}
