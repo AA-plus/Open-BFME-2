@@ -184,7 +184,8 @@ struct Rva0008AD96Node {Rva0008AD96Node *next;AsciiString name;};
 void W3DView::rva0008AD96(const AsciiString&name){
  Rva0008AD96Node *node=*(Rva0008AD96Node**)((char*)TheTacticalView+0x80);
  for(;node;node=node->next)
-  if(node->name.compare(name)==0)break;
+  if(reinterpret_cast<const StringBase<char> &>(node->name).compare(
+            reinterpret_cast<const StringBase<char> &>(name))==0)break;
  if(node){
   *((bool*)this+0x44)=false;
   s24(0,(Rva0008A234*)node,300,false,0.0f,0.0f);
