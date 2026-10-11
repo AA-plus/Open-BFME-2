@@ -12314,7 +12314,6 @@ name,address,notes
 ?setbuf@?$basic_streambuf@DV?$char_traits@D@_STL@@@_STL@@MAEPAV12@PADH@Z,0x00013570,STLport 4.5.3 narrow streambuf base default - slot 1 - folded onto the wide setbuf; both are mov eax ecx / ret 8. Read from the narrow streambuf vtable where the slot holds an address already claimed for the wide facet
 ?setup@FreelistProxyHead@@QAEXPBXPAX@Z,0x0014F3C4,TU spelling of the STL alloc proxy constructor folded at this address; resolves the Rva0029FB3BMember init TU call
 ?setup@Rva004152BCHost@@QAEXH@Z,0x004151C4,thiscall 1-arg setup allocating +0x0 via new 0x1E0; callee of Rva004152BCHost::init 0x004152BC read from REL32
-?sharedInit@Rva005CDMorph@@QAEXHHHHH@Z,0x005CD1D3,REL32 shared-init callee decoded from target call bytes of morph family; identity unproven
 ?showmanyc@?$basic_streambuf@DV?$char_traits@D@_STL@@@_STL@@MAEHXZ,0x0065CE90,STLport 4.5.3 narrow streambuf base default - slot 5 - folded onto the same body as slot 4. Read from the narrow streambuf vtable where the slot holds an address already claimed for the wide facet
 ?showmanyc@?$basic_streambuf@GV?$char_traits@G@_STL@@@_STL@@MAEHXZ,0x0065CE90,STLport 4.5.3 wide streambuf base default - folded onto sync by identical COMDAT folding - both are the three-byte xor eax eax / ret and the wide streambuf vtable holds this address in slots 4 and 5
 ?shroud@Object@@IAEXXZ,0x0029D200,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
