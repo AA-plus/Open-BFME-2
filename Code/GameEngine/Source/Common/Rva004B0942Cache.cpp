@@ -4,7 +4,7 @@
 // The slot at +0x20 is created from the dword at +8 by the cdecl helper
 // 0x00498725 the first time it is read, then returned.
 
-void *__cdecl rva00498725(void *arg);
+void *__cdecl Rva00498725Find(void *arg);
 
 class Rva004B0942
 {
@@ -21,6 +21,6 @@ private:
 void *Rva004B0942::rva004B0942()
 {
 	if (m_slot20 == 0)
-		m_slot20 = rva00498725(m_arg8);
+		m_slot20 = Rva00498725Find(m_arg8);
 	return m_slot20;
 }

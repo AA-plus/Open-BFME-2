@@ -1,5 +1,5 @@
 // cl: /O1 /MD
-void __cdecl rva00030830(void *p);
+void __cdecl Rva00030830GameFree(void *p);
 namespace _STL
 {
 struct _Rb_tree_node_base;
@@ -59,6 +59,6 @@ void Rva002860CFHost::rva002860CF(Rva002860CFIterator it)
 	Rva002860CFVirt *pm = &((Rva002860CFS *)s)->m_10;
 	pm->v2C(0);
 	if (s != 0)
-		rva00030830(s);
+		Rva00030830GameFree(s);
 	m_4--;
 }

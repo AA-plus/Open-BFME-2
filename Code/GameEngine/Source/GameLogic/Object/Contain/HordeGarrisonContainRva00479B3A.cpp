@@ -17,7 +17,7 @@ public:
 class GarrisonContain
 {
 public:
-	virtual void rva00464D02(Object *obj);
+	virtual void onRemoving(Object *obj);
 };
 
 class Rva00270260
@@ -51,7 +51,7 @@ private:
 
 void Rva00479B3A::rva00479B3A(Object *obj)
 {
-	((GarrisonContain *)((char *)this + 0x20))->GarrisonContain::rva00464D02(obj);
+	((GarrisonContain *)((char *)this + 0x20))->GarrisonContain::onRemoving(obj);
 	Drawable *d = ((Thing *)obj)->getDrawable();
 	if (d && ((Rva00270260 *)d)->rva00270260() == 1)
 		d->setDrawableHidden(false);

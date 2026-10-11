@@ -20,12 +20,12 @@ class Object
 {
 public:
 	void restoreObjectToWorldInternal();
-	void setTransformMatrix(const Matrix3D *mtx);
+	void rva0028D412(const Matrix3D *mtx);
 	void rva00291C84(const Matrix3D *mtx);
 };
 
 void Object::rva00291C84(const Matrix3D *mtx)
 {
 	restoreObjectToWorldInternal();
-	setTransformMatrix(mtx);
+	rva0028D412(mtx);
 }

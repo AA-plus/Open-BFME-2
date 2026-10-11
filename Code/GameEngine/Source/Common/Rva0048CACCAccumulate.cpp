@@ -16,10 +16,10 @@ public:
 	bool testStatus(ObjectStatusTypes status) const;
 };
 
-class FlameCleanup00293E50
+class FlammableUpdate
 {
 public:
-	void apply();
+	void rva0048C8F9();
 };
 
 struct Rva0048CACCArg
@@ -55,7 +55,7 @@ void Rva0048CACC::rva0048CACC(Rva0048CACCArg *arg)
 		m_acc += arg->m_add;
 		if (m_acc >= thing->m_limit)
 		{
-			((FlameCleanup00293E50 *)((char *)this - 0x20))->apply();
+			((FlammableUpdate *)((char *)this - 0x20))->rva0048C8F9();
 			*(unsigned int *)&m_acc = *(unsigned int *)&thing->m_limit;
 		}
 	}

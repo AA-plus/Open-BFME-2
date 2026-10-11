@@ -39,7 +39,7 @@ private:
 
 extern ScriptEngine *TheScriptEngine;
 
-void rva0043CB48();
+void finishShowPurchaseScience();
 
 class ControlBar
 {
@@ -59,5 +59,5 @@ void ControlBar::showPurchaseScience()
 	if (!player || !player->isPlayerActive())
 		return;
 	m_flag278 = false;
-	rva0043CB48();
+	finishShowPurchaseScience();
 }
