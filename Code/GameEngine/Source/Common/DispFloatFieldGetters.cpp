@@ -95,3 +95,46 @@ BFME_DISP_FLOAT_GETTER(Rva0055F4B5FloatField, 0x180)
 // adjustment thunk ends at 0x00094AF6 and the next begins at 0x00094AFD.
 // Original receiver class and field purpose remain unknown.
 BFME_DISP_FLOAT_GETTER(Rva00094AF6FloatField, 0x80)
+
+// Two getters that read a GameClientRandomVariable field through its rowed
+// getValue (0x002341A1): add ecx, <field>; tail jump. They bracket the 0x80
+// float getter above: 0x00094AEE (8B, field +0x74) ends where it begins and
+// 0x00094AFD (11B, field +0x84) starts where it ends. Receiver classes are
+// unknown; names follow this file's per-address convention.
+class GameClientRandomVariable
+{
+public:
+	float getValue() const;
+private:
+	int m_type;
+	float m_low;
+	float m_high;
+};
+
+class Rva00094AEERandomField
+{
+public:
+	float get() const;
+private:
+	char m_pad00[0x74];
+	GameClientRandomVariable m_value;
+};
+
+float Rva00094AEERandomField::get() const
+{
+	return m_value.getValue();
+}
+
+class Rva00094AFDRandomField
+{
+public:
+	float get() const;
+private:
+	char m_pad00[0x84];
+	GameClientRandomVariable m_value;
+};
+
+float Rva00094AFDRandomField::get() const
+{
+	return m_value.getValue();
+}
