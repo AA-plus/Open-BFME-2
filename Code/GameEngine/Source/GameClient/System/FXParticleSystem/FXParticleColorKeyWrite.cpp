@@ -12,6 +12,12 @@
 #include <stl/_algobase.h>
 namespace _STL {template<> const unsigned int& max<unsigned int>(const unsigned int&,const unsigned int&);}
 #include <sstream>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> char *_STLP_alloc_proxy<char*, char, allocator<char> >::allocate(size_t);
+}
 class File {public: virtual ~File(); virtual bool open(const char*,int=0); virtual void close(); virtual int read(void*,int); virtual int write(const void*,int);};
 struct RGBColor {float red,green,blue;};
 struct ColorKey {RGBColor color;unsigned long frame;};
