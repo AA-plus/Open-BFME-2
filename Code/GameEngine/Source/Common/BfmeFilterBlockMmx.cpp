@@ -3,7 +3,7 @@
 // Open-BFME5: two-pass MMX interpolation filter over a 2x4 pixel block --
 // vertical differences for four source rows are staged into a scratch
 // buffer, then combined per-column and written back as words.  Sibling of
-// bfmeFilterPairMmx (same clamp/limit shape, applied across a block rather
+// FilterVert_MMX (same clamp/limit shape, applied across a block rather
 // than a single row pair).  Retail 0x009C2970, 551 bytes.
 
 void __cdecl bfmeFilterBlockMmx(void *, void *row, int stride, void *work)

@@ -12,7 +12,7 @@ extern const unsigned int *g_rva01356AA0;
 extern const unsigned int *g_rva01356A98;
 
 struct Rva009AF320Context;
-void copyPlane009AF0D0(Rva009AF320Context *, unsigned, int, unsigned, unsigned, unsigned char *, unsigned char *, const unsigned int *);
+extern "C" void __cdecl DeblockPlaneNew(Rva009AF320Context *, unsigned, int, unsigned, unsigned, unsigned char *, unsigned char *, const unsigned int *);
 
 struct Rva009AF320Context
 {
@@ -54,7 +54,7 @@ void Rva009AF320CopyPlanes(Rva009AF320Context *ctx, int a, int b)
 	ctx->m_bounding = bound;
 	memset(saved, 0, ctx->m_scratchCount * 4);
 
-	copyPlane009AF0D0(
+	DeblockPlaneNew(
 		ctx,
 		ctx->m_strideY << 1,
 		0,
@@ -73,7 +73,7 @@ void Rva009AF320CopyPlanes(Rva009AF320Context *ctx, int a, int b)
 		ctx->m_scratch += bytes;
 	}
 
-	copyPlane009AF0D0(
+	DeblockPlaneNew(
 		ctx,
 		ctx->m_strideY << 1,
 		0,
@@ -85,7 +85,7 @@ void Rva009AF320CopyPlanes(Rva009AF320Context *ctx, int a, int b)
 
 	ctx->m_scratch = saved;
 
-	copyPlane009AF0D0(
+	DeblockPlaneNew(
 		ctx,
 		ctx->m_strideUV,
 		ctx->m_extra84,
@@ -95,7 +95,7 @@ void Rva009AF320CopyPlanes(Rva009AF320Context *ctx, int a, int b)
 		ctx->m_planeU + b,
 		g_rva01356A98);
 
-	copyPlane009AF0D0(
+	DeblockPlaneNew(
 		ctx,
 		ctx->m_strideUV,
 		ctx->m_extra84 + ctx->m_extra88,

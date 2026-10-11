@@ -4,7 +4,7 @@
 // ?copyPlane009AEEE0@@YAXPAURva009AF200Context@@HHH@Z retail
 // 0x001BF8D0..0x001BFAB8 (488 bytes) cdecl (post-processor instance /
 // source offset / destination offset / channel); the pinned name its
-// matched caller Rva009AF200CopyPlanes (0x001BFBF0) uses is kept.
+// matched caller DeblockFrame (0x001BFBF0) uses is kept.
 // DeblockPlane: version (field 0) 2 and up takes the non-filtered band
 // routine from the slot at 0x00E22FB0 with DeblockVerticalEdgesInNonFilteredBand
 // (0x001BE140) and older versions the loop-filtered slot at 0x00E22FA4 with

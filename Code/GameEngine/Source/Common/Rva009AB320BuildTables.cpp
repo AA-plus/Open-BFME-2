@@ -1,8 +1,8 @@
 // Retail 009AB320: construct groups of prefix lookup tables.
 // All offsets are witnessed in this body; no semantic context identity is asserted.
 struct Rva009B6320Node;
-void Rva009AB0B0ExpandWeights(const unsigned char*, unsigned*);
-void Rva009AB200BuildWeights(unsigned char*, int*);
+extern "C" void __cdecl BoolTreeToHuffCodes(const unsigned char*, unsigned*);
+extern "C" void __cdecl ZerosBoolTreeToHuffCodes(unsigned char*, int*);
 void Rva009B60E0BuildTree(unsigned*, unsigned*, int);
 extern "C" void __cdecl VP6_BuildHuffLookupTable(const unsigned*, unsigned short*);
 extern "C" void __cdecl VP6_CreateCodeArray(Rva009B6320Node*, int, int*, unsigned char*, int, int);
@@ -34,13 +34,13 @@ void Rva009AB320BuildTables(Rva009AB320Tables* s)
 {
     int plane,group,band;
     for(plane=0;plane<2;++plane) {
-        Rva009AB0B0ExpandWeights(s->at03a0[plane],s->at09c0[plane]);
+        BoolTreeToHuffCodes(s->at03a0[plane],s->at09c0[plane]);
         Rva009B60E0BuildTree(s->at0a20[plane],s->at09c0[plane],12);
         VP6_BuildHuffLookupTable(s->at0a20[plane],s->at30fc[plane]);
         VP6_CreateCodeArray((Rva009B6320Node*)s->at0a20[plane],0,s->at0948[plane],s->at09a8[plane],0,0);
     }
     for(plane=0;plane<2;++plane) {
-        Rva009AB200BuildWeights(s->at0560[plane],s->at2f3c[plane]);
+        ZerosBoolTreeToHuffCodes(s->at0560[plane],s->at2f3c[plane]);
         Rva009B60E0BuildTree(s->at2fac[plane],(unsigned*)s->at2f3c[plane],9);
         VP6_BuildHuffLookupTable(s->at2fac[plane],s->at43fc[plane]);
         VP6_CreateCodeArray((Rva009B6320Node*)s->at2fac[plane],0,s->at2eb0[plane],s->at2f20[plane],0,0);
@@ -48,7 +48,7 @@ void Rva009AB320BuildTables(Rva009AB320Tables* s)
     for(group=0;group<3;++group) {
         for(plane=0;plane<2;++plane) {
             for(band=0;band<6;++band) {
-                Rva009AB0B0ExpandWeights(s->at03b6[plane][group][band],s->at13b0[group][plane][band]);
+                BoolTreeToHuffCodes(s->at03b6[plane][group][band],s->at13b0[group][plane][band]);
                 Rva009B60E0BuildTree(s->at1a70[group][plane][band],s->at13b0[group][plane][band],12);
                 VP6_BuildHuffLookupTable(s->at1a70[group][plane][band],s->at31fc[group][plane][band]);
                 VP6_CreateCodeArray((Rva009B6320Node*)s->at1a70[group][plane][band],0,s->at0b40[group][plane][band],s->at1200[group][plane][band],0,0);

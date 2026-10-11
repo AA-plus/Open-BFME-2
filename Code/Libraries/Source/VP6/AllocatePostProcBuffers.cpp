@@ -1,9 +1,18 @@
-// Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
-// Its allocator and native14B body differ from NameKeyGenerator::Bucket's
-// donor operator new. Address-derived identity; original class is unknown.
-// Open-BFME5 conversion of the codec buffer initializer.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b66b0.md plus retail only.
+// No decoder source was consulted.
+//
+// AllocatePostProcBuffers (retail 0x001B66B0, 292 bytes): frees any earlier
+// buffers, then allocates six 32-byte-aligned working buffers of the
+// post-processor instance through the duck-memory allocator (0x001B6400), in
+// order: intermediate frame (0xB8/0xBC), filter bounding array (0xA0/0x34),
+// deblock bounding array (0xA4/0x3C), fragment Q index array (0xA8/0x24),
+// fragment variance array (0xAC/0x28), fragment deblocking flags (0xB0/0x2C).
+// Each buffer is kept as its raw pointer and the rounded-up aligned pointer.
+// Any failure frees everything and returns 0.
 
-// upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/NameKeyGenerator.h
+// Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0; its ledger
+// identity is this placement-new shaped allocator.
 class Rva001B6400Allocation
 {
 public:
@@ -13,7 +22,8 @@ public:
 
 extern "C" void __cdecl DeletePostProcBuffers(void *what);
 
-struct Rva009A5C40Context
+// Instance field view; the layout is owned by the post-processor instance.
+struct PostProcBufferState
 {
 	unsigned char m_pad0[0x24];
 	void *m_at24;
@@ -40,8 +50,8 @@ struct Rva009A5C40Context
 	void *m_atBC;
 };
 
-// ?Rva009A5C40Initialize@@YAHPAURva009A5C40Context@@@Z
-int __cdecl Rva009A5C40Initialize(Rva009A5C40Context *self)
+// RVA 0x001B66B0
+extern "C" int __cdecl AllocatePostProcBuffers(PostProcBufferState *self)
 {
 	DeletePostProcBuffers(self);
 

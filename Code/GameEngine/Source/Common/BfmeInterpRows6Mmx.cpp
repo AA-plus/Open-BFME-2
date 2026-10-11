@@ -1,4 +1,4 @@
-// 5-row sibling of bfmeInterpRows2Mmx with a trailing row-4 interpolator.
+// 5-row sibling of LastVerticalBand_3_5_Scale_MMX with a trailing row-4 interpolator.
 
 namespace
 {

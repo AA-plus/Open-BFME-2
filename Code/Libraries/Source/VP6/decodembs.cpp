@@ -68,7 +68,7 @@ struct Rva009AB7F0Context;
 struct Rva009AB760Context;
 extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *);
 extern "C" void __cdecl BuildScanOrder(Rva009AAFE0Context *,const unsigned char *);
-void Rva009AB7F0Reset(Rva009AB7F0Context *);
+extern "C" void __cdecl VP6_ResetAboveContext(Rva009AB7F0Context *);
 extern "C" void __cdecl VP6_ResetLeftContext(Rva009AB760Context *);
 void Rva009B5DB0Vp6DecodeBlock(unsigned char *,int,unsigned);
 extern "C" int __cdecl VP6_bitread(void *, int);
@@ -102,7 +102,7 @@ extern "C" void VP6_DecodeFrameMbs(FramePB *pbi)
         pbi->MergedScanOrder[i]=(unsigned char)pbi->quantizer->scan[pbi->ModifiedScanOrder[i]];
     if(pbi->UseHuffman) ConvertBoolTrees(pbi);
     if(pbi->Interlaced==1) pbi->probInterlaced=(unsigned char)VP6_bitread(pbi->br,8);
-    Rva009AB7F0Reset((Rva009AB7F0Context *)pbi);
+    VP6_ResetAboveContext((Rva009AB7F0Context *)pbi);
     memset(pbi->coefficients,0,768);
     pbi->CurrentDcRunLen[0]=0; pbi->CurrentDcRunLen[1]=0;
     pbi->CurrentAc1RunLen[0]=0; pbi->CurrentAc1RunLen[1]=0;

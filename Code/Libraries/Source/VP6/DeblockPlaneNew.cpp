@@ -1,7 +1,15 @@
-// BFME VP6 row/plane helper called by the two matched copy-plane drivers.
-// Retail uses a cdecl eight-argument ABI: the first four rows are copied
-// directly, intermediate rows go through the codec's selected row callback,
-// and the trailing four rows go through the adjacent edge helper.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001bfac0.md plus retail only.
+// No decoder source was consulted.
+//
+// DeblockPlaneNew (retail 0x001BFAC0, 303 bytes): deblocks one plane with the
+// new filter. The first four lines are copied from source to destination;
+// for each further band the plane pointers advance eight lines and the band
+// routine (pointer at image 0x00E22FD0) runs with (instance, source,
+// destination, line step, across, start, scale), start gaining the fragments
+// across. The final four lines are copied and the vertical-edge routine
+// (0x001BE490, DeblockVerticalEdgesInNonFilteredBandNewFilter) finishes with
+// the same seven arguments.
 
 extern "C" void * __cdecl memcpy(void *destination, const void *source,
 	unsigned int bytes);
@@ -9,24 +17,26 @@ extern "C" void * __cdecl memcpy(void *destination, const void *source,
 
 struct Rva009AF200Context;
 
-typedef void (__cdecl *Rva009AF0D0Callback)(
+typedef void (__cdecl *DeblockBandCallback)(
     Rva009AF200Context *, unsigned char *, unsigned char *,
     unsigned int, unsigned int, int, const unsigned int *);
 
-struct Rva009AF0D0Locals
+struct DeblockPlaneLocals
 {
     int distance;
     unsigned char *directDestination;
     unsigned int directRows;
-    Rva009AF0D0Callback rowFunction;
+    DeblockBandCallback rowFunction;
 };
 
-static Rva009AF0D0Callback g_rva01356EB4;
+static DeblockBandCallback g_rva01356EB4;
+// Retail 0x001BE490; pinned under this address-derived name.
 extern void __cdecl Rva009ADAA0(
 	Rva009AF200Context *, unsigned char *, unsigned char *,
 	unsigned int, unsigned int, int, const unsigned int *);
 
-void copyPlane009AF0D0(
+// RVA 0x001BFAC0
+extern "C" void __cdecl DeblockPlaneNew(
     Rva009AF200Context *context,
 	unsigned int stride,
 	int index,
@@ -36,7 +46,7 @@ void copyPlane009AF0D0(
     unsigned char *destination,
     const unsigned int *table)
 {
-    Rva009AF0D0Locals locals;
+    DeblockPlaneLocals locals;
     locals.rowFunction = g_rva01356EB4;
     locals.directDestination = destination;
     locals.distance = (int)(source - destination);
@@ -81,7 +91,3 @@ void copyPlane009AF0D0(
     Rva009ADAA0(
         context, source, destination, stride, width, index, table);
 }
-
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?copyPlane009AF0D0@@YAXPAURva009AF320Context@@IHIIPAE1PBI@Z=?copyPlane009AF0D0@@YAXPAURva009AF200Context@@IHIIPAE1PBI@Z")

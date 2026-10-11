@@ -14,7 +14,7 @@ struct BfmeVp6Context;
 
 extern "C" void __cdecl VP6_readTSC(unsigned int *result);
 extern "C" int __cdecl bfmeVp6ThresholdSelect(BfmeVp6Context *ctx);
-int Rva009A5C40Initialize(Rva009A5C40Context *post);
+extern "C" int __cdecl AllocatePostProcBuffers(Rva009A5C40Context *post);
 void Rva009A6130PostFilterDispatch(Rva009A6130Context *post, int version, int frameType, int level,
 	int frameQ, unsigned char *source, unsigned char *dest, unsigned char *fragInfo, int elementSize, int codedMask);
 extern "C" void __cdecl vp6_showinfo(Rva009AAC80Context *instance);
@@ -121,7 +121,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 				instance->reconYPlaneSize + 2 * instance->reconUVPlaneSize + 32 + instance->yStride,
 				Rva001B6400Allocation::TAG_NONE);
 			instance->postBuffer = (unsigned char *)(((unsigned int)instance->postBufferRaw + 31) & ~31);
-			Rva009A5C40Initialize((Rva009A5C40Context *)instance->postProcessor);
+			AllocatePostProcBuffers((Rva009A5C40Context *)instance->postProcessor);
 		}
 
 		if (instance->level > 200)

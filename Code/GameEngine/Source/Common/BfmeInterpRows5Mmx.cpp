@@ -1,4 +1,4 @@
-// 5-row sibling of bfmeInterpRowsMmx: the fourth output is interpolated from
+// 5-row sibling of LastVerticalBand_4_5_Scale_MMX: the fourth output is interpolated from
 // row 3 and row 5 instead of a straight copy.
 
 namespace

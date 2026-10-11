@@ -1,14 +1,14 @@
-// Generic scalar codec helper for dispatch-table slot 20.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b9f90.md plus retail only.
+// No decoder source was consulted.
 //
-// Retail boundary: 0x009A9550..0x009A9658 (265 bytes); INT3 padding starts
-// at 0x009A9659 before the next generic slot helper at 0x009A9660.  The
-// matched installer and HorizontalLine_3_5_Scale_MMX sibling establish the three-argument
-// cdecl source/count/destination ABI.  A three-byte source group expands to
-// five bytes with the same 2/5 and 4/5 weights as the MMX path; the final group
-// repeats its last source byte at the right edge.
+// HorizontalLine_3_5_Scale_C (retail 0x001B9F90, 265 bytes): upsamples a line
+// by 5/3. Each group of three source pixels yields five outputs with the
+// 3-to-5 weights; the final group repeats its last source pixel at the right
+// edge instead of blending with a following group.
 
-// ?Rva009A9550@@YAXPBXHPAX@Z
-void __cdecl Rva009A9550(const void *source, int bytes, void *destination)
+// RVA 0x001B9F90
+extern "C" void __cdecl HorizontalLine_3_5_Scale_C(const void *source, int bytes, void *destination)
 {
 	const unsigned char *src = (const unsigned char *)source;
 	unsigned char *dst = (unsigned char *)destination;

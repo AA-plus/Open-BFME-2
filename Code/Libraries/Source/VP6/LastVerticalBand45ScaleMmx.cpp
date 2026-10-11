@@ -1,5 +1,10 @@
-// In-place 4-row vertical interpolator, 8 bytes at a time. Row stride is the
-// second argument; the third is the byte width.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d22c0.md plus retail only.
+// No decoder source was consulted.
+//
+// LastVerticalBand_4_5_Scale_MMX (retail 0x001D22C0, 288 bytes): in-place 4-to-5 vertical scaling of the last band of an image, four rows from the band at 8 columns per step; row 4 is a copy of the original row 3 because no row 5 exists.
+// The 16-bit weight tables are the retail constants at image 0x00BD9910 (51),
+// 0x00BD9920 (102), 0x00BD9930 (154), 0x00BD9940 (205) and 0x00BD9950 (128).
 
 namespace
 {
@@ -10,17 +15,17 @@ namespace
 	__declspec(align(8)) const unsigned short g_bfmeW128[4] = { 128, 128, 128, 128 };
 }
 
-// ?bfmeInterpRowsMmx@@YAXPAXHH@Z
-void __cdecl bfmeInterpRowsMmx(void *source, int stride, int bytes)
+// RVA 0x001D22C0
+extern "C" void __cdecl LastVerticalBand_4_5_Scale_MMX(void *band, int pitch, int width)
 {
 	__asm
 	{
-		mov esi, source
-		mov ecx, stride
+		mov esi, band
+		mov ecx, pitch
 		lea edi, [esi+ecx*2]
 		add edi, ecx
 		pxor mm7, mm7
-		mov edx, bytes
+		mov edx, width
 	bfmeNext:
 		movq mm0, qword ptr [esi]
 		movq mm1, qword ptr [esi+ecx]

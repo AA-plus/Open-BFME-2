@@ -7,7 +7,7 @@
 // full SIMD set; the MMX tier (basic flag set) does the same expansion and
 // installs the MMX-only set (mostly shared with the SSE tier); otherwise the
 // generic scalar/table-driven set installs directly with no expansion.
-// Sibling of bfmeFilterPairMmx, HorizontalLine_1_2_Scale_MMX, the *FastDeInterlace family and
+// Sibling of FilterVert_MMX, HorizontalLine_1_2_Scale_MMX, the *FastDeInterlace family and
 // BfmeLimitedEdgeFilters.cpp.
 
 extern "C" void __cdecl GetProcessorFlags(int *pTierA, int *pTierB, int *pTierC);
@@ -22,21 +22,21 @@ extern "C" void __cdecl LastVerticalBand_1_2_Scale_MMX(unsigned char *, unsigned
 
 // Landed siblings, declared with their real signatures so the mangled name
 // matches their existing row.
-extern void __cdecl bfmeFilterPairMmx(void *, void *, int, const void *);
+extern "C" void __cdecl FilterVert_MMX(void *, void *, int, const void *);
 extern "C" void __cdecl HorizontalLine_1_2_Scale_MMX(const void *, int, void *);
 extern "C" void __cdecl HorizontalLine_1_2_Scale_C(const void *, int, void *, int);
 extern "C" void __cdecl HorizontalLine_3_5_Scale_MMX(const void *, int, void *);
 extern "C" void __cdecl HorizontalLine_4_5_Scale_MMX(const void *, int, void *);
 extern "C" void __cdecl VerticalBand_1_2_Scale_MMX(void *, int, int);
 extern void __cdecl bfmeInterpRows6Mmx(void *, int, int);
-extern void __cdecl bfmeInterpRows2Mmx(void *, int, int);
+extern "C" void __cdecl LastVerticalBand_3_5_Scale_MMX(void *, int, int);
 extern void __cdecl bfmeInterpRows5Mmx(void *, int, int);
-extern void __cdecl bfmeInterpRowsMmx(void *, int, int);
+extern "C" void __cdecl LastVerticalBand_4_5_Scale_MMX(void *, int, int);
 extern "C" void __cdecl WmtFastDeInterlace(void *, void *, unsigned int, int, int);
 extern "C" void __cdecl MmxFastDeInterlace(void *, void *, unsigned int, int, int);
 extern "C" void __cdecl CFastDeInterlace(void *, void *, unsigned int, int, int);
-extern void __cdecl Rva009AF570FilterVert(void *, unsigned char *, int, const int *);
-extern void __cdecl Rva009AF6A0FilterHoriz(void *, unsigned char *, int, const int *);
+extern "C" void __cdecl FilterHoriz_Generic(void *, unsigned char *, int, const int *);
+extern "C" void __cdecl FilterVert_Generic(void *, unsigned char *, int, const int *);
 extern "C" int * __cdecl SetupBoundingValueArray_Generic(POSTPROC_INSTANCE *, int);
 extern "C" int * __cdecl SetupDeblockValueArray_Generic(POSTPROC_INSTANCE *, int);
 extern "C" void __cdecl FilterHoriz_Simple_C(void *, unsigned char *, int, const int *);
@@ -81,7 +81,7 @@ extern void __cdecl Rva009ADD80(void);
 extern void __cdecl Rva009AE6A0(void);
 extern "C" void __cdecl VerticalBand_1_2_Scale_C(unsigned char *, int, unsigned int);
 extern "C" void __cdecl LastVerticalBand_1_2_Scale_C(unsigned char *, int, unsigned int);
-extern void __cdecl Rva009A9550(const void *, int, void *);
+extern "C" void __cdecl HorizontalLine_3_5_Scale_C(const void *, int, void *);
 extern "C" void __cdecl VerticalBand_3_5_Scale_C(unsigned char *, int, unsigned int);
 extern "C" void __cdecl LastVerticalBand_3_5_Scale_C(unsigned char *, int, unsigned int);
 extern void __cdecl Rva009A91D0(void);
@@ -108,7 +108,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	{
 		FillLoopFilterLimitValues_MMX();
 		g_bfmeCodecDispatch.slot[15] = (BfmeDispatchFn)&bfmeFilterBlockMmx;
-		g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&bfmeFilterPairMmx;
+		g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&FilterVert_MMX;
 		g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&SetupBoundingValueArray_ForMMX;
 		g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&SetupDeblockValueArray_ForMMX;
 		g_bfmeCodecDispatch.slot[16] = (BfmeDispatchFn)&Rva009C2620Vp6FilterDiag4;
@@ -124,9 +124,9 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&VerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&bfmeInterpRows6Mmx;
-		g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&bfmeInterpRows2Mmx;
+		g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&LastVerticalBand_3_5_Scale_MMX;
 		g_bfmeCodecDispatch.slot[7] = (BfmeDispatchFn)&bfmeInterpRows5Mmx;
-		g_bfmeCodecDispatch.slot[6] = (BfmeDispatchFn)&bfmeInterpRowsMmx;
+		g_bfmeCodecDispatch.slot[6] = (BfmeDispatchFn)&LastVerticalBand_4_5_Scale_MMX;
 		g_bfmeCodecDispatch.slot[22] = (BfmeDispatchFn)&bfmeFilterBlockByIndexMmx;
 		g_bfmeCodecDispatch.slot[5] = (BfmeDispatchFn)&bfmeFilterRowByIndex8Mmx;
 		g_bfmeCodecDispatch.slot[11] = (BfmeDispatchFn)&bfmeFilterBlockPairByIndexMmx;
@@ -140,7 +140,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	{
 		FillLoopFilterLimitValues_MMX();
 		g_bfmeCodecDispatch.slot[15] = (BfmeDispatchFn)&bfmeFilterBlockMmx;
-		g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&bfmeFilterPairMmx;
+		g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&FilterVert_MMX;
 		g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&SetupBoundingValueArray_ForMMX;
 		g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&SetupDeblockValueArray_ForMMX;
 		g_bfmeCodecDispatch.slot[16] = (BfmeDispatchFn)&Rva009BE180Vp6FilterWideV2;
@@ -156,9 +156,9 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&VerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&bfmeInterpRows6Mmx;
-		g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&bfmeInterpRows2Mmx;
+		g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&LastVerticalBand_3_5_Scale_MMX;
 		g_bfmeCodecDispatch.slot[7] = (BfmeDispatchFn)&bfmeInterpRows5Mmx;
-		g_bfmeCodecDispatch.slot[6] = (BfmeDispatchFn)&bfmeInterpRowsMmx;
+		g_bfmeCodecDispatch.slot[6] = (BfmeDispatchFn)&LastVerticalBand_4_5_Scale_MMX;
 		g_bfmeCodecDispatch.slot[22] = (BfmeDispatchFn)&bfmeFilterBlockByIndexMmx;
 		g_bfmeCodecDispatch.slot[5] = (BfmeDispatchFn)&bfmeFilterRowByIndex8Mmx;
 		g_bfmeCodecDispatch.slot[11] = (BfmeDispatchFn)&bfmeFilterBlockPairByIndexMmx;
@@ -168,8 +168,8 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[0] = (BfmeDispatchFn)&Rva009BA790;
 		return;
 	}
-	g_bfmeCodecDispatch.slot[15] = (BfmeDispatchFn)&Rva009AF570FilterVert;
-	g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&Rva009AF6A0FilterHoriz;
+	g_bfmeCodecDispatch.slot[15] = (BfmeDispatchFn)&FilterHoriz_Generic;
+	g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&FilterVert_Generic;
 	g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&SetupBoundingValueArray_Generic;
 	g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&SetupDeblockValueArray_Generic;
 	g_bfmeCodecDispatch.slot[16] = (BfmeDispatchFn)&Rva009B18D0;
@@ -182,7 +182,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	g_bfmeCodecDispatch.slot[8] = (BfmeDispatchFn)&HorizontalLine_1_2_Scale_C;
 	g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&VerticalBand_1_2_Scale_C;
 	g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_C;
-	g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&Rva009A9550;
+	g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&HorizontalLine_3_5_Scale_C;
 	g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&VerticalBand_3_5_Scale_C;
 	g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&LastVerticalBand_3_5_Scale_C;
 	g_bfmeCodecDispatchOutlier = (BfmeDispatchFn)&Rva009A91D0;

@@ -1,5 +1,16 @@
-// MSVC 7.1 cannot reproduce this packed-word filter from scalar C++.
-void __cdecl bfmeFilterPairMmx(void *, void *row, int stride, const void *filter)
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d34a0.md plus retail only.
+// No decoder source was consulted.
+//
+// FilterVert_MMX (retail 0x001D34A0, 317 bytes): loop filter across a
+// horizontal block edge, eight lines, four per MMX step, parameterised by a
+// prepared constant block (replicated 16-bit limit at offset 0, ones at 8,
+// fours at 16). The first argument is unused; the row pointer is at the first
+// pixel below the edge and stride is the line length. MSVC cannot reproduce
+// this packed-word filter from scalar C++, so the vector body is inline assembly.
+
+// RVA 0x001D34A0
+extern "C" void __cdecl FilterVert_MMX(void *, void *row, int stride, const void *filter)
 {
 	int backward = -stride;
 

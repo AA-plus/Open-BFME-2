@@ -20,7 +20,7 @@ typedef void (__cdecl *Rva009B58F0Fn)(unsigned char *, int, unsigned int, int);
 extern "C" void VP6_FindNearestandNextNearest(void);
 typedef void (__cdecl *Rva009B5420Vp6FindPredictorFn)(void *, int, int, int, int *);
 
-extern int Rva009B50F0DecodeToken(unsigned char *, int, int);
+extern "C" int __cdecl VP6_DecodeMode(unsigned char *, int, int);
 extern "C" int __cdecl VP6_DecodeBlockMode(unsigned char *);
 extern void Rva009B5200DecodeMotionVector(void *, short *, int);
 
@@ -56,7 +56,7 @@ void Rva009B5AF0Vp6DecodeBlock(unsigned char *ctx, int row, int column)
 	int scratch; // predictor context, later a decoded motion vector
 	((Rva009B5420Vp6FindPredictorFn)VP6_FindNearestandNextNearest)(state, row, column, 1, &scratch);
 
-	int mode = Rva009B50F0DecodeToken((unsigned char *)state, state->lastMode, scratch);
+	int mode = VP6_DecodeMode((unsigned char *)state, state->lastMode, scratch);
 	state->lastMode = mode;
 	state->mbModes[state->mbCols * row + column] = (unsigned char)mode;
 	state->mode = mode;

@@ -21,7 +21,7 @@ extern const int g_012D7818[8][2] =
 extern "C" void __cdecl FilterBlock1d(const unsigned char *, unsigned short *,
 	unsigned int, unsigned int, unsigned int, unsigned int, const int *);
 extern "C" void __cdecl FilterBlock2d(void *, void *, void *, void *, void *);
-extern void __cdecl Rva009A79D0Vp6Filter(
+extern "C" void __cdecl FilterBlock2dBil(
 	const unsigned char *, unsigned short *, int, const int *, const int *);
 
 // Two-tap 8-bit to 16-bit filter; retail inlines it (standalone copy at 0x009A7870).
@@ -87,7 +87,7 @@ void __cdecl Rva009A7B00Vp6Filter(
 			FilterBlock2d((void *)(source1 - 1), destination, (void *)sourcePitch,
 				(void *)g_012D7798[modeX], (void *)g_012D7798[modeY]);
 		else
-			Rva009A79D0Vp6Filter(source1 - 1, destination, sourcePitch, g_012D7818[modeX], g_012D7818[modeY]);
+			FilterBlock2dBil(source1 - 1, destination, sourcePitch, g_012D7818[modeX], g_012D7818[modeY]);
 	}
 	else if (diff == (int)(sourcePitch + 1))
 	{
@@ -95,7 +95,7 @@ void __cdecl Rva009A7B00Vp6Filter(
 			FilterBlock2d((void *)source1, destination, (void *)sourcePitch,
 				(void *)g_012D7798[modeX], (void *)g_012D7798[modeY]);
 		else
-			Rva009A79D0Vp6Filter(source1, destination, sourcePitch, g_012D7818[modeX], g_012D7818[modeY]);
+			FilterBlock2dBil(source1, destination, sourcePitch, g_012D7818[modeX], g_012D7818[modeY]);
 	}
 }
 

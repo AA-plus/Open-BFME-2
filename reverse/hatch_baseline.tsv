@@ -3161,7 +3161,6 @@ alternatename	Code/GameEngine/Source/Common/Rva0098477Ctor.cpp	_vtbl_00BC8298	1
 alternatename	Code/GameEngine/Source/Common/Rva009A5800Forward.cpp	?g_bfmeToneReady@@3P6AXXZA	1
 alternatename	Code/GameEngine/Source/Common/Rva009A7B00Vp6Filter.cpp	?Rva009A7B00@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009AB320BuildTables.cpp	_ConvertBoolTrees	1
-alternatename	Code/GameEngine/Source/Common/Rva009AF0D0CopyPlane.cpp	?copyPlane009AF0D0@@YAXPAURva009AF320Context@@IHIIPAE1PBI@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva009AF320CopyPlanes.cpp	?g_rva01356E64@@3P6APAHPAURva009ACBA0Context@@H@ZA	1
 alternatename	Code/GameEngine/Source/Common/Rva009B3800PlaneCopy.cpp	?g_rva01356E64@@3P6APAHPAURva009B3800Context@@H@ZA	1
 alternatename	Code/GameEngine/Source/Common/Rva009C5890.cpp	?Rva009C5890@@YAXXZ	1

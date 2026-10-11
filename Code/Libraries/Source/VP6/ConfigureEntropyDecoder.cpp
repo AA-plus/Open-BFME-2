@@ -33,7 +33,7 @@ struct Vp6EntropyInstance {
 extern "C" int __cdecl nDecodeBool(Rva009B4800State *, int);
 extern "C" int __cdecl VP6_bitread(void *, int);
 extern "C" void __cdecl BuildScanOrder(Rva009AAFE0Context *, const unsigned char *);
-void Rva009B64A0BuildTone(unsigned char *);
+extern "C" void __cdecl VP6_ConfigureContexts(unsigned char *);
 struct Vp6ProbUpdate {
 	static unsigned char Read(void *br)
 	{
@@ -99,5 +99,5 @@ extern "C" void VP6_ConfigureEntropyDecoder(Vp6EntropyInstance *pbi, unsigned ch
 			}
 		}
 	}
-	Rva009B64A0BuildTone((unsigned char *)pbi);
+	VP6_ConfigureContexts((unsigned char *)pbi);
 }

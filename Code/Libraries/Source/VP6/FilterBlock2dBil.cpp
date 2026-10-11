@@ -1,4 +1,15 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b8430.md 001b8a40.md plus retail
+// only. No decoder source was consulted.
+//
+// Separable bilinear 8x8 two-pass filters (retail 0x001B8430 FilterBlock2dBil
+// with 16-bit output, 0x001B8A40 FilterBlock2dBil_8 with byte output, 295
+// bytes each). The horizontal pass is inlined: nine source rows (advancing by
+// the pixels per line), each of eight positions is first weight times the
+// pixel plus second weight times its right neighbour, plus 64, shifted right
+// 7, stored as a dword in the shared scratch buffer (image 0x00DFDA58, eight
+// dwords per row). The matching second pass then runs on the scratch buffer
+// with (scratch, output, 8, 8, 8, 8, vertical weights).
 
 extern int g_bfmeTableC7E0;
 
@@ -7,14 +18,8 @@ extern "C" void __cdecl FilterBlock2dBil_SecondPass(
 extern "C" void __cdecl FilterBlock2dBil_SecondPass_8(
 	int *, unsigned char *, int, int, int, int, const int *);
 
-// Scalar VP6 8x8 interpolation helper at retail RVA 0x009A79D0 (BFME1) and
-// 0x001B8430 (BFME2). The table global lives at a different address per game
-// (DIR32 auto-patches from retail, no source change); the trailing worker
-// resolves via pin. B1 0x009A79D0 295B -> B2 0x001B8430 295B,
-// immediate-only drift (table address). The duplicate at B1 0x009A7FE0 is
-// carried below (its B2 twin is 0x001B8A40, resolved by the BFME1->BFME2
-// address map at prediction error 0).
-void __cdecl Rva009A79D0Vp6Filter(
+// RVA 0x001B8430
+extern "C" void __cdecl FilterBlock2dBil(
     const unsigned char *source,
 	unsigned short *destination,
 	int sourcePitch,
@@ -46,11 +51,8 @@ void __cdecl Rva009A79D0Vp6Filter(
 	FilterBlock2dBil_SecondPass(&g_bfmeTableC7E0, destination, 8, 8, 8, 8, verticalWeights);
 }
 
-// Byte-identical duplicate at B1 0x009A7FE0 -> B2 0x001B8A40 (address-map
-// resolved, prediction error 0); its trailing call is the sibling worker
-// FilterBlock2dBil_SecondPass_8 at the equivalent relative offset (0x80 back, same as
-// 0x001B8430 -> 0x001B83B0).
-void __cdecl Rva009A7FE0Vp6Filter(
+// RVA 0x001B8A40
+extern "C" void __cdecl FilterBlock2dBil_8(
     const unsigned char *source,
 	unsigned short *destination,
 	int sourcePitch,

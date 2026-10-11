@@ -1,4 +1,12 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001bfbf0.md plus retail only.
+// No decoder source was consulted.
+//
+// DeblockFrame (retail 0x001BFBF0, 278 bytes): zeroes the fragment variance
+// array, builds the deblock bounding array (version >= 2) from the limit for
+// the frame Q index, then deblocks the frame: with version >= 5 through
+// DeblockPlaneNew for Y, U and V, otherwise through DeblockPlane for channels
+// 0, 1 and 2. The two offsets are the source and destination frame offsets.
 
 extern "C" void * __cdecl memset(void *, int, unsigned int);
 #pragma intrinsic(memset)
@@ -11,7 +19,8 @@ extern const unsigned int *g_rva01356AA0;
 extern const unsigned int *g_rva01356A98;
 
 struct Rva009AF200Context;
-void copyPlane009AF0D0(Rva009AF200Context *, unsigned, int, unsigned, unsigned, unsigned char *, unsigned char *, const unsigned int *);
+extern "C" void __cdecl DeblockPlaneNew(Rva009AF200Context *, unsigned, int, unsigned, unsigned, unsigned char *, unsigned char *, const unsigned int *);
+// Retail 0x001BF8D0 DeblockPlane (ledger name from its owning unit).
 void copyPlane009AEEE0(Rva009AF200Context *, int, int, int);
 
 struct Rva009AF200Context
@@ -35,7 +44,8 @@ struct Rva009AF200Context
 	unsigned m_strideUV;
 };
 
-void Rva009AF200CopyPlanes(Rva009AF200Context *ctx, int x, int y)
+// RVA 0x001BFBF0
+extern "C" void __cdecl DeblockFrame(Rva009AF200Context *ctx, int x, int y)
 {
 	memset(ctx->m_scratch, 0, ctx->m_scratchCount * 4);
 
@@ -46,7 +56,7 @@ void Rva009AF200CopyPlanes(Rva009AF200Context *ctx, int x, int y)
 	}
 
 	if (ctx->m_mode >= 5) {
-		copyPlane009AF0D0(
+		DeblockPlaneNew(
 			ctx,
 			ctx->m_strideY,
 			0,
@@ -55,7 +65,7 @@ void Rva009AF200CopyPlanes(Rva009AF200Context *ctx, int x, int y)
 			ctx->m_planeY + x,
 			ctx->m_planeY + y,
 			g_rva01356AA0);
-		copyPlane009AF0D0(
+		DeblockPlaneNew(
 			ctx,
 			ctx->m_strideUV,
 			0,
@@ -64,7 +74,7 @@ void Rva009AF200CopyPlanes(Rva009AF200Context *ctx, int x, int y)
 			ctx->m_planeU + x,
 			ctx->m_planeU + y,
 			g_rva01356A98);
-		copyPlane009AF0D0(
+		DeblockPlaneNew(
 			ctx,
 			ctx->m_strideUV,
 			0,

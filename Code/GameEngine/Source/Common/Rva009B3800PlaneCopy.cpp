@@ -5,7 +5,7 @@
 // Identity is not recovered beyond the codec role, so the function and the
 // context keep the retail address token rather than claiming a class name.
 // The context offsets are the plane layout already witnessed by the landed
-// siblings Rva009AF200CopyPlanes.cpp and Rva009AF320CopyPlanes.cpp
+// siblings DeblockFrame.cpp and Rva009AF320CopyPlanes.cpp
 // (m_mode 0x00, m_tableIndex 0x0C, m_planeY/U/V 0x78/0x7C/0x80,
 // m_width 0x90, m_height 0x94, m_strideY 0x98, m_strideUV 0x9C).
 //

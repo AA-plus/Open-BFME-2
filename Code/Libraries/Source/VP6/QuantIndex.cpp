@@ -2,7 +2,7 @@
 // Clean room: reverse/vp6_cleanroom/specs/001b7070.md 001b71c0.md plus retail
 // only. No decoder source was consulted.
 struct BfmeS1040;
-void __cdecl bfmeApply1040(BfmeS1040 *s, int version); // 0x001B70A0 VP6_init_dequantizer
+extern "C" void __cdecl VP6_init_dequantizer(BfmeS1040 *s, int version); // 0x001B70A0
 extern void (__cdecl *g_bfmeHook1040)(BfmeS1040 *s);   // 0x00E22F74
 
 // 0x007D8560 identity index (ledger g_rva01142408), 0x007D8460 zig-zag order.
@@ -35,6 +35,6 @@ extern "C" void __cdecl VP6_UpdateQ(Quantizer *q, int version)
 	{
 		q->cached = q->quality;
 		((void (__cdecl *)(Quantizer *))g_bfmeHook1040)(q);
-		bfmeApply1040((BfmeS1040 *)q, version);
+		VP6_init_dequantizer((BfmeS1040 *)q, version);
 	}
 }
