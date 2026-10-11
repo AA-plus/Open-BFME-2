@@ -153,7 +153,7 @@ Rva005202C8::Rva005202C8(void *context)
 // table 0x00C675DC slot 0; pinned there as ??1Rva005204EF). It empties the
 // static list at 0x00E04920 through its rowed range erase, hides the shell
 // for modes 1 and 8, deletes the stats object (rowed destructor 0x005BEA22),
-// runs the unrowed mode-1 reset 0x00521260, clears s_instance, then the
+// opens the campaign menu in mode 1 through 0x00521260, clears s_instance, then the
 // members and the base die: +0x2C4, the focus vector, the player vector
 // (rowed 0x0052012B) and _bfme_AptGameWindow.
 void __cdecl Rva00030830GameFree(void *);
@@ -183,7 +183,7 @@ public:
 	~Rva005BEA22();
 };
 
-void Rva00521260Reset();
+class AptCampaignMenu { public: static bool OpenScreen(); };
 
 Rva005202C8::~Rva005202C8()
 {
@@ -196,6 +196,6 @@ Rva005202C8::~Rva005202C8()
 	delete reinterpret_cast<Rva005BEA22 *>(m_stats);
 	m_stats = 0;
 	if (m_284 == 1)
-		Rva00521260Reset();
+		AptCampaignMenu::OpenScreen();
 	s_instance = 0;
 }

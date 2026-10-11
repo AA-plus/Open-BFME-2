@@ -1,9 +1,11 @@
-// cl: /DNDEBUG /MD
+// cl: /DNDEBUG /MD /O1 /Ireference/shims/bfme2_ascii
 //
 // BFME2's campaign menu screen Apt callbacks, 0x00521172 onward, bound by
 // these names ("AptCampaignMenu::OnBttnMainMenu" ...) as member pointers by
 // the screen's registration; that binding is their only reference. The
 // class is named for the strings' prefix.
+
+#include "ascii_string.h"
 
 extern "C" char *__cdecl strcpy(char *destination, const char *source);
 
@@ -44,6 +46,7 @@ public:
 class AptCampaignMenu
 {
 public:
+	static bool OpenScreen();
 	void OnBttnMainMenu(const char *unused);
 	void OnBttnSaveGame(const char *unused);
 	void OnBttnLoadGame(const char *unused);
@@ -123,4 +126,30 @@ int AptCampaignMenu::rva00521116(int message, unsigned data1, unsigned data2)
   switch(static_cast<unsigned char>(data1)) {case 1:return 1;default:return 0;}
  default:return 0;
  }
+}
+
+// Retail521260..5212E0: campaign menu opener with the same complete
+// control flow and CampaignMenu.apt literal as WorldBuilder OpenScreen.
+// The existing singleton and real converged globals retain their owners.
+extern int g_Va00E0492C;
+class Rva001EB73C { public: bool rva001EB73C(); };
+class Rva001EB0CAHolder { public: unsigned char rva001EB0D9(); };
+class GameState { public: int rva002DD7E6AutoSave(); };
+extern GameState *TheGameState;
+class Shell { public: void rva0035C7CF(bool); void push(AsciiString, bool); };
+extern Shell *TheShell;
+bool AptCampaignMenu::OpenScreen()
+{
+ if (!g_Va00E0492C) {
+  if (((Rva001EB73C*)TheLinearCampaignManager)->rva001EB73C() &&
+      ((Rva001EB0CAHolder*)TheLinearCampaignManager)->rva001EB0D9()) {
+   TheShell->rva0035C7CF(true);
+   return false;
+  }
+  if (((Rva001EB0CAHolder*)TheLinearCampaignManager)->rva001EB0D9())
+   TheGameState->rva002DD7E6AutoSave();
+  TheShell->push(AsciiString("CampaignMenu.apt"), false);
+  if (!g_Va00E0492C) return false;
+ }
+ return true;
 }
