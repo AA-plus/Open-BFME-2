@@ -202,3 +202,42 @@ Rva005F4C8ERef<Rva005CDE89Iface> Rva005CDF6C::rva005CDF8B(int a, int b)
 {
 	return Rva005F4C8ERef<Rva005CDE89Iface>(new Rva005CDE89(a, b, &m_08));
 }
+
+// ?rva005CDBAE@Rva005CDB8F@@UAE?AV?$Rva005F4C8ERef@VRva005CD9C0Iface@@@@HH@Z,
+// retail 0x005CDBAE..0x005CDC18 (106 bytes, EH, RET 12): slot 4 of
+// Rva005CDB8F's vtable (after its clone 0x005CDC4A), the same factory over
+// the garrison-selection details panel: a new 0x28-byte Rva005CD9C0 (rowed
+// constructor 0x005CDA63, int / AsciiString / owner), interface at +0x08.
+class Rva005CD9C0First : public virtual Rva005E6ED6Counted
+{
+public:
+	virtual void first0();
+};
+
+class Rva005CD9C0Iface : public virtual Rva005E6ED6Counted
+{
+public:
+	virtual void iface0();
+};
+
+class Rva005CD9C0 : public Rva005CD9C0First, public Rva005CD9C0Iface
+{
+public:
+	Rva005CD9C0(int a, const AsciiString &name, void *owner);
+private:
+	int m_10[4];
+};
+
+class Rva005CDB8F
+{
+public:
+	virtual Rva005F4C8ERef<Rva005CD9C0Iface> rva005CDBAE(int a, int b);
+private:
+	unsigned char m_pad04[0x08 - 4];
+	int m_08;
+};
+
+Rva005F4C8ERef<Rva005CD9C0Iface> Rva005CDB8F::rva005CDBAE(int a, int b)
+{
+	return Rva005F4C8ERef<Rva005CD9C0Iface>(new Rva005CD9C0(a, *reinterpret_cast<const AsciiString *>(b), &m_08));
+}
