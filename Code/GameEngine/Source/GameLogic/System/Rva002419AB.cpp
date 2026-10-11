@@ -2,16 +2,22 @@
 
 #include "ascii_string.h"
 
+struct NoCaseTreeValue4;
+namespace _STL { template<class First,class Second> struct pair; }
+typedef _STL::pair<const AsciiString,NoCaseTreeValue4> NativeCountedStringPair;
+
 // This 16-byte object is allocated by the target at 0x00240D8C. Its helper
 // initializes a vtable-like word at +0 and an AsciiString at +8; the object
 // identity is unresolved, so the type and constructor name use the helper RVA.
+// The complete 23FC98 provider copies the eight-byte key/value pair at +8;
+// the source pointer is passed through in the same single native stack slot.
 class Rva0023FC98
 {
 private:
 	void *m_vtable;
 
 public:
-	Rva0023FC98(const AsciiString *value);
+	Rva0023FC98(const NativeCountedStringPair &value);
 	int m_referenceCount;
 
 private:
@@ -35,7 +41,7 @@ public:
 // and operation remain address-derived.
 void *Rva002419ABOwner::rva00240D8C(const AsciiString *value)
 {
-	m_value = new Rva0023FC98(value);
+	m_value = new Rva0023FC98(*reinterpret_cast<const NativeCountedStringPair *>(value));
 	if (m_value != 0)
 		++m_value->m_referenceCount;
 	return this;
