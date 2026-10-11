@@ -55,6 +55,13 @@ static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
 }
 #include <vector>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+typedef _Rb_tree<int, int, _Identity<int>, less<int>, allocator<int> > Lk11RbIntSet;
+template <> pair<Lk11RbIntSet::iterator, bool> Lk11RbIntSet::insert_unique(const int &);
+}
+
 class AsciiString;
 class UnicodeString;
 class PooledString;

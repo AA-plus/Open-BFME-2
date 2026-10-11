@@ -2860,6 +2860,13 @@ void LivingWorldLogic::rva002B9DC7(){
 }
 
 #include "../../../../../../reference/shims/bfme2_ascii/unicode_string.h"
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+typedef _Rb_tree<int, int, _Identity<int>, less<int>, allocator<int> > Lk11RbIntSet;
+template <> pair<Lk11RbIntSet::iterator, bool> Lk11RbIntSet::insert_unique(const int &);
+}
 class GameTextInterface {public:
  virtual ~GameTextInterface(){}
  virtual void slot00()=0;virtual void slot04()=0;virtual void slot08()=0;

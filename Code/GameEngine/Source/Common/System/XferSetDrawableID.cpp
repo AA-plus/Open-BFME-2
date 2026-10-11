@@ -11,6 +11,13 @@
 // COMDAT (one byte shape per TU flags); a file-static overload takes those
 // calls instead so this TU emits no external copy.
 #include <new>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+typedef _Rb_tree<int, int, _Identity<int>, less<int>, allocator<int> > Lk11RbIntSet;
+template <> pair<Lk11RbIntSet::iterator, bool> Lk11RbIntSet::insert_unique(const int &);
+}
 namespace _STL {
 static inline void _Construct(int *__p, const int &__val)
 { new (__p) int(__val); }
