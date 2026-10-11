@@ -9,8 +9,8 @@
 // bytes at E17714 and E17710) through destructor plus chain-block
 // freeBlock(ptr size) calls and clears bInitialized at E17700 last.
 // The single int argument is forwarded to AptValueShutdown (0x006DC7C0).
-// Callee names come from their ledger rows or symbol pins; the two pinned
-// virtual-destructor spellings are called qualified (retail calls them
+// Callee names come from their ledger rows or symbol pins; the destructor
+// spellings are called qualified (retail calls them
 // directly) through views of the stored objects.
 
 class Rva006DB270 {public:void freeBlock(void *,int);};
@@ -36,7 +36,17 @@ AptLinker *g_bfmeAptLinkerAtE176F8 = 0;
 class Rva006D1090 {public:~Rva006D1090();POOL_DELETE int head;};
 class Rva00893030Manager;
 extern Rva00893030Manager *g_rva00893030Manager;
-class Rva006CEA60 {public:virtual ~Rva006CEA60();};
+// The initializer6CF230 allocates28B and constructs count/capacity/items
+// plus two inline entries at +12 (Apt.cpp's checkpoint view). No vptr is
+// present. Native6CE7E0..6CE7E5 is the complete destructor forwarding to
+// the independently rowed97B container destructor6CE570 at the same address.
+// Class identities remain address-derived; this is an operation-only view.
+class Gen_uw_00893e70 { public: ~Gen_uw_00893e70(); };
+class Rva006CEA60 {public:__declspec(noinline) ~Rva006CEA60();};
+Rva006CEA60::~Rva006CEA60()
+{
+ ((Gen_uw_00893e70 *)this)->~Gen_uw_00893e70();
+}
 // Deletion views: their inline destructors forward to the pinned complete
 // destructors so the delete expressions keep retail's operand copy.
 class Rva006CEA60Delete {public:~Rva006CEA60Delete(){((Rva006CEA60 *)this)->Rva006CEA60::~Rva006CEA60();}POOL_DELETE char pad[0x1c];};

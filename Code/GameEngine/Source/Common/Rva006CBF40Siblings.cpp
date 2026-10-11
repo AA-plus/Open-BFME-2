@@ -106,26 +106,17 @@ void deleteRva006CD620(Rva006CD620 *p)
 	delete p;
 }
 
-class Rva006CEA60 : public Rva006DE350
+// Native6CEA60 is the sized deleting helper for the 28B checkpoint
+// container. Its constructor in Apt.cpp has no vptr; the complete destructor
+// in AptShutdownRva006CFAB0.cpp forwards to the container destructor6CE570.
+class Rva006CEA60
 {
 public:
-	virtual ~Rva006CEA60();
-	static void operator delete(void *p, unsigned int size)
-	{
-		g_pChainBlockAllocator->freeBlock(p, size);
-	}
-	char m_pad[0x18]; // sizeof 0x1C
+ ~Rva006CEA60();
+ static void operator delete(void *p,unsigned size) { g_pChainBlockAllocator->freeBlock(p,size); }
+ char m_storage[0x1c];
 };
-
-// ?Rva006CEA60::~Rva006CEA60 present-unmatched
-Rva006CEA60::~Rva006CEA60()
-{
-}
-
-void deleteRva006CEA60(Rva006CEA60 *p)
-{
-	delete p;
-}
+void deleteRva006CEA60(Rva006CEA60 *p) { delete p; }
 
 class Rva006D71B0 : public Rva006DE350
 {

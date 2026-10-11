@@ -4735,7 +4735,6 @@ name,address,notes
 ??1Rva006CC2F0@@UAE@XZ,0x006D1090,"complete dtor call target of scalar deleting dtor 0x006CC2F0; body unrowed"
 ??1Rva006CD620@@UAE@XZ,0x006D6340,"complete dtor call target of scalar deleting dtor 0x006CD620; body unrowed"
 ??1Rva006CE380@@QAE@XZ,0x006CE380,scalar destructor spelling of the rowed list clear 0x6CE380 reached as the base sub-object dtor of Rva006D1090
-??1Rva006CEA60@@UAE@XZ,0x006CE7E0,"complete dtor call target of scalar deleting dtor 0x006CEA60; body unrowed"
 ??1Rva006CEAD0@@QAE@XZ,0x006CEAD0,destructor spelling of the matched Rva006CEAD0::drainChain body: the byte-true Rva006CFA30::Members::~Members call at 0x006CFA30 destroys its +0 member through it
 ??1Rva006D0D7@@UAE@XZ,0x006D0D7,opaque SEH dtor (mov-eax-cookie prologue); called by scalar-deleting-dtor at 0x6D58B; identity unproven, address-derived name
 ??1Rva006D6360@@UAE@XZ,0x006D6470,TU-private view (Rva006FC1D0Ctor.cpp) of the opaque SEH base whose destructor is rowed as ??1Rva006D6470Owner; the constructor's unwind funclet destroys that base by jumping here; original class name unknown
