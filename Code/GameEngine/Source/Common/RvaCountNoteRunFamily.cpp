@@ -218,6 +218,12 @@ Rva0052B894Registration::Rva0052B894Registration(const AsciiString &name)
 
 // stlport
 #include <hash_map>
+// Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
+// the retail copies serve the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 // The native getter at 0x0052B84F..0x0052B894 constructs one 20B local
 // static registry through the existing hash_map constructor at 0x0052B81C.
 // Its atexit thunk at 0x007B9298 destroys the registry through 0x0052B7B3.
