@@ -617,7 +617,7 @@ def verify_row(row, img, resolve, compile=True, sizer=compiled_size):
 
 def verify(rows=None, sources=None, compile=True, log=print):
     """Verify data rows (all, or those of `sources`); SystemExit(1) on any failure."""
-    _, rl = _tools()
+    build, rl = _tools()
     every = load()
     rows = every if rows is None else rows
     if sources is not None:
@@ -626,9 +626,29 @@ def verify(rows=None, sources=None, compile=True, log=print):
     if not rows:
         return 0
     img, resolve = rl.Image(), Resolver(every)
+    # Probe paths are keyed by source and symbol. Keep every source's rows
+    # sequential so repeated symbols cannot overwrite each other's probes.
+    # Only the census's read-only-provider path fans out; ordinary callers
+    # retain their existing compilation and cache semantics.
+    groups = {}
+    for index, row in enumerate(rows):
+        groups.setdefault(row["source"], []).append((index, row))
+    workers = min(build._pool_size(), len(groups)) if not compile else 1
+    if workers > 1:
+        from concurrent.futures import ThreadPoolExecutor
+
+        def check_group(group):
+            return [(index, verify_row(row, img, resolve, compile)) for index, row in group]
+
+        results = [None] * len(rows)
+        with ThreadPoolExecutor(workers) as pool:
+            for checked in pool.map(check_group, sorted(groups.values(), key=len, reverse=True)):
+                for index, result in checked:
+                    results[index] = result
+    else:
+        results = (verify_row(row, img, resolve, compile) for row in rows)
     failed = 0
-    for row in rows:
-        ok, message = verify_row(row, img, resolve, compile)
+    for row, (ok, message) in zip(rows, results):
         if not ok:
             failed += 1
             log(f"    {row['name']} ({row['source']}): {message}")
