@@ -16,6 +16,7 @@ enum DamageType { DAMAGE_UNKNOWN = 0 };
 enum DeathType { DEATH_UNKNOWN = 0 };
 class ModuleData;
 class Player;
+class BfmeThingE63 { public: bool isValid(); };	// 0x00453124, rowed under this name
 class Rva0039B795;
 class Rva0039B7AD;
 class Rva003B0D7C
@@ -70,7 +71,7 @@ class ThingTemplate
 public:
 	bool isEquivalentTo(const ThingTemplate *other) const;
 	void GetAssetList(int a2, int a3);
-	int rva0033A69A(Object *obj, int a2, int a3) const;
+	int rva0033A69A(const Player *player, int a2, int a3) const;
 };
 
 // Object +0x254: slot 5 a fraction, slot 8 a state.
@@ -182,7 +183,7 @@ template <class T> inline const T &rva00454430Max(const T &a, const T &b)
 	return a < b ? b : a;
 }
 
-__forceinline float fast_float_ceil(float f)
+static __forceinline float fast_float_ceil(float f)
 {
 	return (float)ceil((double)f);
 }
@@ -272,7 +273,6 @@ public:
 	void rva0045318B();
 private:
 	bool rva004541AB();
-	bool rva00453124();
 	static GettingBuiltBehaviorInterface *interfaceOf(Object *obj)
 	{
 		return (GettingBuiltBehaviorInterface *)obj->rva0028BD17();
@@ -445,7 +445,7 @@ void GettingBuiltBehavior::rva00453F31(int a1)
 // +0x254 slot 8 state.
 float GettingBuiltBehavior::rva0045342F(Object *obj)
 {
-	float value = (float)m_object->m_template->rva0033A69A(obj, 0, -1);
+	float value = (float)m_object->m_template->rva0033A69A((Player *)obj, 0, -1);
 	Rva0045342FBody *body = m_object->m_254;
 	return value * data()->m_30[body->rva0045342FSlot8()];
 }
@@ -524,7 +524,7 @@ bool GettingBuiltBehavior::rva004533B2()
 		}
 		else
 			ready = body->rva0045342FSlot8() == 3;
-		return ready && !rva00453124();
+		return ready && !((BfmeThingE63 *)this)->isValid();
 	}
 	return false;
 }
@@ -560,7 +560,7 @@ void GettingBuiltBehavior::rva0045318B()
 bool GettingBuiltBehavior::rva004541AB()
 {
  Object *object = m_object;
- if (!m_30 && !rva00453124())
+ if (!m_30 && !((BfmeThingE63 *)this)->isValid())
  {
   Object *builder = TheGameLogic->findObjectByID((ObjectID)object->m_7c);
   if (!builder || builder->getRelationship(object) == 2) return false;
