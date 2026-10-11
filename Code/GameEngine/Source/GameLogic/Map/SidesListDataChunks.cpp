@@ -975,7 +975,7 @@ private:
 SidesList *LibraryMapCache::getSides(const AsciiString &name)
 {
 	for (_STL::vector<Entry>::iterator it = m_list.begin(), end = m_list.end(); it != end; ++it) {
-		if ((*it).first.compareNoCase(name) == 0)
+		if (((StringBase<char> &)((*it).first)).compareNoCase((const StringBase<char> &)(name)) == 0)
 			return (*it).second;
 	}
 

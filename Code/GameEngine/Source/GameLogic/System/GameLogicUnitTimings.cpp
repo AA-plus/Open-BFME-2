@@ -570,7 +570,7 @@ void Rva002431CB::rva002431CB()
 			const ThingTemplate *btt = m_curThing;
 			if (!single && !((StringBase<char> *)&m_side)->isEmpty())
 			{
-				if (btt->m_side.compareNoCase(m_side) != 0)
+				if (((StringBase<char> &)(btt->m_side)).compareNoCase((const StringBase<char> &)(m_side)) != 0)
 					continue;
 				if (m_unitTypes == 0)
 				{
@@ -630,7 +630,7 @@ void Rva002431CB::rva002431CB()
 				continue;
 			if (((const unsigned char *)btt)[0x120] & 1)
 				continue;
-			if (!((StringBase<char> *)&m_singleUnit)->isEmpty() && btt->getName().compareNoCase(m_singleUnit) != 0)
+			if (!((StringBase<char> *)&m_singleUnit)->isEmpty() && ((StringBase<char> &)(btt->getName())).compareNoCase((const StringBase<char> &)(m_singleUnit)) != 0)
 				continue;
 
 			Coord3D pos;

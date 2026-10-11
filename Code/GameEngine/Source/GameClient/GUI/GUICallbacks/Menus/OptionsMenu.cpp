@@ -271,7 +271,7 @@ UnsignedInt OptionPreferences::getOnlineIPAddress(void)
 	EnumeratedIP *IPlist = IPs.getAddresses();
 	while (IPlist)
 	{
-		if (selectedIP.compareNoCase(IPlist->getIPstring()) == 0)
+		if (((StringBase<char> &)(selectedIP)).compareNoCase((const StringBase<char> &)(IPlist->getIPstring())) == 0)
 		{
 			return IPlist->getIP();
 		}
