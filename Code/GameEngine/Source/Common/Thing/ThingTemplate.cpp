@@ -104,6 +104,12 @@ static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
 
 #include "Common/UnitTimings.h" //Contains the DO_UNIT_TIMINGS define jba.	
 
+// Retail keeps one vector<ProductionPrerequisite>::push_back (0x0033EA10); this
+// unit calls it rather than leading link order with its own copy.
+namespace _STL {
+template <> void vector<ProductionPrerequisite, allocator<ProductionPrerequisite> >::push_back(const ProductionPrerequisite &);
+}
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
