@@ -33,4 +33,9 @@ template <> _STL::_String_base<char, _STL::allocator<char> >::~_String_base();
 namespace _STL {
 template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
 }
+// Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> char *_STLP_alloc_proxy<char*, char, allocator<char> >::allocate(size_t);
+}
 template class _STL::num_get<wchar_t, _STL::istreambuf_iterator<wchar_t, _STL::char_traits<wchar_t> > >;
