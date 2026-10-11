@@ -14,6 +14,7 @@
 // Zero Hour's inline DrawModule ctor to these same 28 bytes. Formerly rowed as
 // the address-named Rva000B19A1.
 
+inline void *operator new(unsigned int, void *p) { return p; }
 class Thing;
 class ModuleData;
 
@@ -32,7 +33,15 @@ public:
 };
 
 // ??0DrawModule@@QAE@PAVThing@@PBVModuleData@@@Z
-DrawModule::DrawModule(Thing *thing, const ModuleData *moduleData)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline DrawModule::DrawModule(Thing *thing, const ModuleData *moduleData)
 	: DrawableModule(thing, moduleData)
 {
+}
+
+// ?bfmeAnchorDrawModuleCtor absent-from-retail
+void *bfmeAnchorDrawModuleCtor(void *where, Thing *thing, const ModuleData *moduleData)
+{
+	return ::new (where) DrawModule(thing, moduleData);
 }

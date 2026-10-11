@@ -8,6 +8,7 @@
 // full layout (RefCountClass NumRefs plus raw/aligned buffer, count, alignment);
 // only the members this ctor touches are declared here.
 
+inline void *operator new(unsigned int, void *p) { return p; }
 #include <string.h>
 
 class ShareBufferClassBase
@@ -31,11 +32,19 @@ public:
 };
 
 // ??0TexBufferClass@@QAE@HPBD@Z
-TexBufferClass::TexBufferClass(int count, const char *name)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline TexBufferClass::TexBufferClass(int count, const char *name)
 	: ShareBufferClassBase(count, name, 0)
 {
 	int bytes = m_count;
 	bytes += bytes;
 	bytes += bytes;
 	memset(m_array, 0, bytes);
+}
+
+// ?bfmeAnchorTexBufferClassCtor absent-from-retail
+void *bfmeAnchorTexBufferClassCtor(void *where, int count, const char *name)
+{
+	return ::new (where) TexBufferClass(count, name);
 }

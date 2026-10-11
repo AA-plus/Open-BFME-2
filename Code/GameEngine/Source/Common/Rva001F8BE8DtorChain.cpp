@@ -109,5 +109,13 @@ class ParticleSystemTemplateTail : public Rva001F8BE8Hold, public Rva001FBB64
 public:
     ~ParticleSystemTemplateTail();
 };
-ParticleSystemTemplateTail::~ParticleSystemTemplateTail() {}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline ParticleSystemTemplateTail::~ParticleSystemTemplateTail() {}
+
+// ?bfmeAnchorParticleSystemTemplateTailDtor absent-from-retail
+void bfmeAnchorParticleSystemTemplateTailDtor(ParticleSystemTemplateTail *p)
+{
+	p->ParticleSystemTemplateTail::~ParticleSystemTemplateTail();
+}
 } // namespace FXParticleSystem

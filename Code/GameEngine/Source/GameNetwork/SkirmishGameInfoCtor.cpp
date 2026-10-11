@@ -10,6 +10,7 @@
 // the matched destructor 0x0022C516 tears down. Unlike that destructor (which
 // stores no vftable), the constructor installs one, so the class is not
 // novtable here.
+inline void *operator new(unsigned int, void *p) { return p; }
 typedef int Int;
 
 enum { MAX_SLOTS = 8 };
@@ -42,8 +43,16 @@ private:
 	GameSlot m_skirmishSlot[MAX_SLOTS]; // +0xDC
 };
 
-SkirmishGameInfo::SkirmishGameInfo()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline SkirmishGameInfo::SkirmishGameInfo()
 {
 	for (Int i = 0; i < MAX_SLOTS; ++i)
 		setSlotPointer(i, &m_skirmishSlot[i]);
+}
+
+// ?bfmeAnchorSkirmishGameInfoCtor absent-from-retail
+void *bfmeAnchorSkirmishGameInfoCtor(void *where)
+{
+	return ::new (where) SkirmishGameInfo();
 }

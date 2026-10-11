@@ -59,8 +59,16 @@ struct Rva00501E3FElement
 	Rva00501E3FElement& operator=(const Rva00501E3FElement&);
 };
 
-Rva00501E3FElement::~Rva00501E3FElement()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00501E3FElement::~Rva00501E3FElement()
 {
+}
+
+// ?bfmeAnchorRva00501E3FElementDtor absent-from-retail
+void bfmeAnchorRva00501E3FElementDtor(Rva00501E3FElement *p)
+{
+	p->Rva00501E3FElement::~Rva00501E3FElement();
 }
 
 struct Rva004FFE89

@@ -28,7 +28,15 @@ private:
 	Vector3 OutputAmbient;
 };
 
-void LightEnvironmentClass::Set_Output_Ambient( Vector3 &oa )
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void LightEnvironmentClass::Set_Output_Ambient( Vector3 &oa )
 {
 	OutputAmbient = oa;
+}
+
+// ?bfmeAnchorLightEnvironmentClassSet_Output_Ambient absent-from-retail
+void bfmeAnchorLightEnvironmentClassSet_Output_Ambient(LightEnvironmentClass *p, Vector3 &oa)
+{
+	p->Set_Output_Ambient(oa);
 }

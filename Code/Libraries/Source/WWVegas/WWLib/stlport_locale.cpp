@@ -91,9 +91,17 @@ inline locale::locale(const locale &that)
     _M_impl = impl;
 }
 
-locale::~locale()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline locale::~locale()
 {
     _M_impl->_M_decr();
+}
+
+// ?bfmeAnchorlocaleDtor absent-from-retail
+void bfmeAnchorlocaleDtor(locale *p)
+{
+	p->locale::~locale();
 }
 
 locale &locale::operator=(const locale &that)

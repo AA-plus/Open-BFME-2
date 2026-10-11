@@ -18,6 +18,14 @@ public:
 	virtual ~StructureBodyModuleData();
 };
 
-StructureBodyModuleData::~StructureBodyModuleData()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline StructureBodyModuleData::~StructureBodyModuleData()
 {
+}
+
+// ?bfmeAnchorStructureBodyModuleDataDtor absent-from-retail
+void bfmeAnchorStructureBodyModuleDataDtor(StructureBodyModuleData *p)
+{
+	p->StructureBodyModuleData::~StructureBodyModuleData();
 }

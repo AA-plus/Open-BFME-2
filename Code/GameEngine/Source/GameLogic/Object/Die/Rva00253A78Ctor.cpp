@@ -6,6 +6,7 @@
 // 0x0084ED70, sets +0x3C to 1. Evidence: leaf lane; vtable store;
 // base size 0x38 from DestroyDieModuleDataCtor TU; flags from neighbours;
 // explicit-vtable pattern from ToggleHiddenSpecialAbilityUpdateCtor TU.
+inline void *operator new(unsigned int, void *p) { return p; }
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
@@ -29,11 +30,19 @@ private:
 	bool m_3C;
 };
 
-FXListDieModuleData::FXListDieModuleData()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline FXListDieModuleData::FXListDieModuleData()
 	: DestroyDieModuleData()
 {
 	m_38 = 0;
 	_ReadWriteBarrier();
 	m_vtable = &s_vtable;
 	m_3C = true;
+}
+
+// ?bfmeAnchorFXListDieModuleDataCtor absent-from-retail
+void *bfmeAnchorFXListDieModuleDataCtor(void *where)
+{
+	return ::new (where) FXListDieModuleData();
 }

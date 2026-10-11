@@ -73,7 +73,9 @@ public:
 };
 
 // ?parseInitialRoster@GarrisonContainModuleData@@SAXPAVINI@@PAX1PBX@Z
-void GarrisonContainModuleData::parseInitialRoster(INI *ini, void *instance, void * /*store*/, const void *)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void GarrisonContainModuleData::parseInitialRoster(INI *ini, void *instance, void * /*store*/, const void *)
 {
 	GarrisonContainModuleData *self = (GarrisonContainModuleData *)instance;
 	const char *name = ini->getNextToken();
@@ -82,6 +84,12 @@ void GarrisonContainModuleData::parseInitialRoster(INI *ini, void *instance, voi
 
 	self->m_initialRoster.templateName.set(name);
 	self->m_initialRoster.count = count;
+}
+
+// ?bfmeAnchorGarrisonContainModuleDataparseInitialRoster absent-from-retail
+void bfmeAnchorGarrisonContainModuleDataparseInitialRoster(GarrisonContainModuleData *p, INI *ini, void *instance, void * /*store*/ a2, const void * a3)
+{
+	p->parseInitialRoster(ini, instance, a2, a3);
 }
 
 // ?rva0047B9AD@SiegeEngineContainModuleData@@SAXPAVINI@@PAX1PBX@Z

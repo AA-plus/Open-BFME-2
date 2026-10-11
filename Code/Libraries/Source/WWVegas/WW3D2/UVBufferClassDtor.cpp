@@ -21,6 +21,14 @@ public:
 	virtual ~UVBufferClass();
 };
 
-UVBufferClass::~UVBufferClass()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline UVBufferClass::~UVBufferClass()
 {
+}
+
+// ?bfmeAnchorUVBufferClassDtor absent-from-retail
+void bfmeAnchorUVBufferClassDtor(UVBufferClass *p)
+{
+	p->UVBufferClass::~UVBufferClass();
 }

@@ -8,6 +8,7 @@
 // six floats at +0x08..+0x1C via movss, ints/bytes at +0x20..+0x32, byte +0x32=1.
 // Caller at 0x0025425E. Finish from banked 0.97 stash: xor ecx early vs late
 // only diff; try literals for ints so xor lands late like retail.
+inline void *operator new(unsigned int, void *p) { return p; }
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
@@ -34,7 +35,9 @@ private:
 	unsigned char m_32;
 };
 extern const void *const g_00BF1D58[];
-QueueProductionExitUpdateModuleData::QueueProductionExitUpdateModuleData()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline QueueProductionExitUpdateModuleData::QueueProductionExitUpdateModuleData()
 {
 	float fzero = 0.0f;
 	m_vtable = (const void *)g_00BF1D58;
@@ -52,4 +55,10 @@ QueueProductionExitUpdateModuleData::QueueProductionExitUpdateModuleData()
 	m_30 = 0;
 	m_31 = 0;
 	m_32 = 1;
+}
+
+// ?bfmeAnchorQueueProductionExitUpdateModuleDataCtor absent-from-retail
+void *bfmeAnchorQueueProductionExitUpdateModuleDataCtor(void *where)
+{
+	return ::new (where) QueueProductionExitUpdateModuleData();
 }

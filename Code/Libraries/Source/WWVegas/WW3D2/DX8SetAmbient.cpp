@@ -81,8 +81,16 @@ not_changed:
 // vector's original data symbol is not pinned; retain its measured address.
 extern Vector3 g_Va00DEDC70;
 
-void DX8Wrapper::Set_Ambient(const Vector3 &color)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void DX8Wrapper::Set_Ambient(const Vector3 &color)
 {
     g_Va00DEDC70 = color;
     Set_DX8_Render_State(139, Convert_Color(color, 0.0f));
+}
+
+// ?bfmeAnchorDX8WrapperSet_Ambient absent-from-retail
+void bfmeAnchorDX8WrapperSet_Ambient(DX8Wrapper *p, const Vector3 &color)
+{
+	p->Set_Ambient(color);
 }

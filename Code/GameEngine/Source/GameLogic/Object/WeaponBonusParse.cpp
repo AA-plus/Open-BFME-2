@@ -45,9 +45,17 @@ public:
 	void parseWeaponBonusSet(INI *ini);
 	WeaponBonus m_bonus[22];
 };
-void WeaponBonusSet::parseWeaponBonusSet(INI *ini)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void WeaponBonusSet::parseWeaponBonusSet(INI *ini)
 {
 	int wb = ini->scanIndexList(ini->getNextToken(0), reinterpret_cast<ConstCharPtrArray>(0x00DBC6C0));
 	int wf = ini->scanIndexList(ini->getNextToken(0), reinterpret_cast<ConstCharPtrArray>(0x00DBC71C));
 	m_bonus[wb].m_field[wf] = ini->dup_002EE10(ini->getNextToken(0));
+}
+
+// ?bfmeAnchorWeaponBonusSetparseWeaponBonusSet absent-from-retail
+void bfmeAnchorWeaponBonusSetparseWeaponBonusSet(WeaponBonusSet *p, INI *ini)
+{
+	p->parseWeaponBonusSet(ini);
 }

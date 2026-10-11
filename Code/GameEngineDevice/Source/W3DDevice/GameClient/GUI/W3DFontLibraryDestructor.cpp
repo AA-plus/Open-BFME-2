@@ -48,7 +48,9 @@ public:
 	virtual ~W3DFontLibrary();
 };
 
-W3DFontLibrary::~W3DFontLibrary()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline W3DFontLibrary::~W3DFontLibrary()
 {
 	SimpleDynVecClass<BfmePod4> *fonts = (SimpleDynVecClass<BfmePod4> *)&g_Va00DE2084;
 	for (int i = 0; i < fonts->ActiveCount; ++i)
@@ -59,4 +61,10 @@ W3DFontLibrary::~W3DFontLibrary()
 	}
 	fonts->ActiveCount = 0;
 	fonts->Shrink();
+}
+
+// ?bfmeAnchorW3DFontLibraryDtor absent-from-retail
+void bfmeAnchorW3DFontLibraryDtor(W3DFontLibrary *p)
+{
+	p->W3DFontLibrary::~W3DFontLibrary();
 }
