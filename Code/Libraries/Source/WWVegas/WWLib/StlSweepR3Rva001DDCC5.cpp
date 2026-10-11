@@ -17,6 +17,14 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 
 #include <hash_map>
 
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+
 
 
 struct Rva001DDCC5Record {Rva001DDCC5Record();Rva001DDCC5Record(const Rva001DDCC5Record&);~Rva001DDCC5Record();Rva001DDCC5Record&operator=(const Rva001DDCC5Record&);char bytes[1];bool operator<(const Rva001DDCC5Record&)const;bool operator==(const Rva001DDCC5Record&)const;};

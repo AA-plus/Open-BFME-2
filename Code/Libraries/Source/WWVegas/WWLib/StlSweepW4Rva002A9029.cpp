@@ -4,6 +4,14 @@
 // stlport
 #include <hash_map>
 
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+
 struct Rva002A9029Element { char bytes[1]; bool operator<(const Rva002A9029Element&)const; bool operator==(const Rva002A9029Element&)const; };
 namespace _STL {template<> struct hash<Rva002A9029Element> { unsigned operator()(const Rva002A9029Element&) const; };}
 
