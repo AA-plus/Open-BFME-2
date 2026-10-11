@@ -11838,7 +11838,6 @@ name,address,notes
 ?rva005A0D61@CustomMatch@AptOnline@@QAEX_N@Z,0x005A0D61,unrowed 97B thiscall (Ghidra FUN_009a0d61; ret 4; byte flag) on the online custom match screen; REL32 read at AptOnline::CustomMatch::Refresh 0x005A0F17 with ECX=this and 1; address name
 ?rva005A6D47@Rva005A6D47@@QAEXXZ,0x005A6D47,unrowed 101B thiscall (Ghidra FUN_009a6d47) on the global at 0x00E063F8; REL32 read at the Connection::OnRetryConnections callback 0x005DB36A with ECX=that global; address name
 ?rva005A910E@Rva005A9562@@QAEPAURva0050542BTarget@@XZ,0x005A910E,current target of the +0x04 Rva005A9562 (rowed under the Player* spelling); REL32 at 0x00505653
-?rva005A91BE@Rva005A9562@@QAEXPAVXfer@@@Z,0x005A91BE,xfer of the +0x04 Rva005A9562; REL32 at 0x005058CA in Rva0050542B::xfer
 ?rva005A9693@Rva005A9562@@QAEXXZ,0x005A9693,reset of the +0x04 Rva005A9562; REL32 at 0x005058FD
 ?rva005AA2D9@Rva0015334F@@QAEXPAURva005AA55DRecord@@PBUCoord3D@@1@Z,0x005AA2D9,FlankAttack route planner from a start to an end point; REL32 at 0x005AA5FB in the FlankAttack slot 6
 ?rva005AA663@Rva005AA860@@QAEXXZ,0x005AA663,SimpleExpansion stage 1 step: head for the +0x20 record point (0x004ED342); folded with the byte-identical SimpleAttack slot 6 at this address; REL32 at 0x005AAB74 in the SimpleExpansion slot 7

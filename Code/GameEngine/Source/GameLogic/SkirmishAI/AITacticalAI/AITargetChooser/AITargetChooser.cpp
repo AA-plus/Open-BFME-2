@@ -114,7 +114,7 @@ public:
 // 0x004EDF03 then 0x004ECE1C from the 0x00505924 pass (both in the
 // AITactic.cpp range).
 
-class AIEnemyManager { public: void update(); };
+class AIEnemyManager { public: void update(); void DoXfer(Xfer *); };
 
 class Rva005A9562
 {
@@ -122,7 +122,6 @@ public:
 	Rva005A9562(void *owner);
 	~Rva005A9562();
 	void rva005A9693();
-	void rva005A91BE(Xfer *xfer);
 	struct Rva0050542BTarget *rva005A910E();
 private:
 	unsigned char m_data[0x18];
@@ -434,7 +433,7 @@ void AITargetChooser::xfer(Xfer *xfer)
 			m_08.insert(m_08.begin(), entry);
 		}
 	}
-	m_04->rva005A91BE(xfer);
+	((AIEnemyManager *)m_04)->DoXfer(xfer);
 	unsigned int others = m_14.size();
 	*xfer == others;
 }
