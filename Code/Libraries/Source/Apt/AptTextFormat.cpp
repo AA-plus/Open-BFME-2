@@ -1,7 +1,17 @@
 // cl: /O2 /arch:SSE /G6 /DNDEBUG /MD /EHsc
-// AptTextFormat.cpp: the retail assertion inside the property setter below
-// names this file (bfme2patch103 Code/Libraries/Source/Apt/AptTextFormat.cpp,
-// line 393); WorldBuilder 0x1760610 carries the same lead.
+// AptTextFormat.cpp: the retail assertions inside the property getter and
+// setter below name this file (bfme2patch103
+// Code/Libraries/Source/Apt/AptTextFormat.cpp, lines 196 and 393);
+// WorldBuilder 0x1760610 carries the same lead.
+//
+// Native 00710580..0071080C (652 bytes, RET 8) is slot 7 of the same
+// vtable: the property getter. It uses the same gperf lookup, dispatches
+// through a 15-entry jump table (plus a 4-entry alignment table) and returns
+// a fresh AptString, AptInteger, AptBoolean or float value, or
+// gpUndefinedValue when the state holds no explicit setting (-1 / unset
+// flag bit). Each alignment case assigns its own pool string and breaks;
+// writing the pool lookup once through a shared pointer schedules the
+// operator= receiver after its argument push instead of before it.
 //
 // Native 00710810..00710C64 (1108 bytes, RET 0xC) is slot 8 of the
 // Rva006ECFC0Owner vtable at 0x00CECB54. It looks the property name up in
@@ -58,6 +68,8 @@ class EAStringC {
 public:
   EAStringC();
   ~EAStringC();
+  EAStringC &operator=(const EAStringC &);
+  bool IsEmpty() const;
   const char *rva00620090() const;
   unsigned int rva006D3750() const;
   bool rva006D3510(const char *) const;
@@ -65,7 +77,10 @@ public:
 class Rva006EB4B0 {
 public:
   EAStringC font;
-  float size;
+  union {
+    float size;
+    unsigned int sizeBits;
+  };
   int color, align;
   unsigned flags;
   int indent, left, right;
@@ -74,13 +89,33 @@ class Rva006ECFC0Owner : public Rva006D6470Owner, public Rva006EB4B0 {
 public:
   Rva006ECFC0Owner(const Rva006EB4B0 &);
   virtual ~Rva006ECFC0Owner();
+  AptValue *rva00710580(AptValue *, const EAStringC *) const;
   bool rva00710810(AptValue *, const EAStringC *, AptValue *);
 };
 
 class AptValue {
 public:
   void toString(EAStringC &) const;
+  void SetString(const char *);
 };
+class AptString {
+  unsigned char unknown00[8];
+
+public:
+  EAStringC string;
+  static AptString *Create();
+};
+class AptInteger {
+public:
+  static AptValue *Create(int);
+};
+class AptBoolean {
+public:
+  static AptValue *Create(bool);
+};
+AptValue *Rva008A4EA0MakeFloat(float);
+EAStringC *Rva0070B4F0GetString(int);
+extern AptValue *gpUndefinedValue;
 struct Rva008A4570Owner {
   void *data;
   bool nameEquals(const char *);
@@ -95,6 +130,99 @@ extern void(__cdecl *g_bfmeAptAssertAtE17734)(const char *, const char *, int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
 void __debugbreak();
 #pragma intrinsic(__debugbreak)
+
+AptValue *Rva006ECFC0Owner::rva00710580(AptValue *context,
+                                        const EAStringC *name) const {
+  const R4Word *word =
+      context ? Rva008D4F80(name->rva00620090(), name->rva006D3750()) : 0;
+  if (word) {
+    switch (word->value) {
+    case 1: {
+      AptString *value = AptString::Create();
+      switch (align) {
+      case 0:
+        value->string = *Rva0070B4F0GetString(0x56);
+        break;
+      case 1:
+        value->string = *Rva0070B4F0GetString(0x7e);
+        break;
+      case 2:
+        value->string = *Rva0070B4F0GetString(0x29);
+        break;
+      case 3:
+        return gpUndefinedValue;
+      default:
+        return gpUndefinedValue;
+      }
+      return (AptValue *)value;
+    }
+    case 3: {
+      if (!(Rva006EB4B0::flags & 0x10000))
+        return gpUndefinedValue;
+      bool value = false;
+      if (Rva006EB4B0::flags & 1)
+        value = true;
+      return AptBoolean::Create(value);
+    }
+    case 5:
+      if (color == -1)
+        return gpUndefinedValue;
+      return AptInteger::Create(color & 0xffffff);
+    case 6: {
+      if (font.IsEmpty())
+        return gpUndefinedValue;
+      AptString *value = AptString::Create();
+      ((AptValue *)value)->SetString(font.rva00620090());
+      return (AptValue *)value;
+    }
+    case 7:
+      if (indent == -1)
+        return gpUndefinedValue;
+      return AptInteger::Create(indent);
+    case 8: {
+      if (!(Rva006EB4B0::flags & 0x100000))
+        return gpUndefinedValue;
+      bool value = false;
+      if (Rva006EB4B0::flags & 0x10)
+        value = true;
+      return AptBoolean::Create(value);
+    }
+    case 10:
+      if (left == -1)
+        return gpUndefinedValue;
+      return AptInteger::Create(left);
+    case 11:
+      if (right == -1)
+        return gpUndefinedValue;
+      return AptInteger::Create(right);
+    case 14:
+      if (sizeBits == 0xbf800000u)
+        return gpUndefinedValue;
+      return Rva008A4EA0MakeFloat(size);
+    case 15: {
+      if (!(Rva006EB4B0::flags & 0x1000000))
+        return gpUndefinedValue;
+      bool value = false;
+      if (Rva006EB4B0::flags & 0x100)
+        value = true;
+      return AptBoolean::Create(value);
+    }
+    }
+  }
+  if (name->rva006D3510("blockIndent") || name->rva006D3510("bullet") ||
+      name->rva006D3510("leading") || name->rva006D3510("tabStops") ||
+      name->rva006D3510("target") || name->rva006D3510("url")) {
+    Rva006CC110Log(3, "AptDate: Incorrect case for '%s'.\n",
+                   name->rva00620090());
+    g_bfmeAptAssertAtE17734(
+        "0",
+        "C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptTextFormat.cpp",
+        196);
+    if (g_bfmeAptBreakOnAssertAtDDC01C)
+      __debugbreak();
+  }
+  return 0;
+}
 
 bool Rva006ECFC0Owner::rva00710810(AptValue *context, const EAStringC *name,
                                    AptValue *value) {
