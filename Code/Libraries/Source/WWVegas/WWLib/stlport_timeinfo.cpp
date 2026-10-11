@@ -40,6 +40,12 @@ template <> __forceinline void __malloc_alloc<0>::deallocate(void *p, size_t) { 
 }
 
 #include <locale>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 namespace _STL {
 typedef back_insert_iterator<string> _TimeOut;
 typedef char _TimeInfoStorage[(sizeof(_Time_Info) == 540) ? 1 : -1];

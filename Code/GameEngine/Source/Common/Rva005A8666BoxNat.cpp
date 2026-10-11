@@ -18,6 +18,12 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <string>
 #include <vector>
 #include "../../Include/GameNetwork/Transport.h"
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 
 
 __forceinline const char *GetStr005A7974(const AsciiString &s)

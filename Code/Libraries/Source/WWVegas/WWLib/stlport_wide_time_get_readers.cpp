@@ -34,6 +34,12 @@ template <> __forceinline void __malloc_alloc<0>::deallocate(void *p, size_t) { 
 }
 
 #include <locale>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 namespace _STL {
 template<> __declspec(noinline) void istreambuf_iterator<wchar_t,char_traits<wchar_t> >::_M_getc() const {
  if (_M_have_c) return;

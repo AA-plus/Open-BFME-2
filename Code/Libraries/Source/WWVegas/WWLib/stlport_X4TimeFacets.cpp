@@ -55,6 +55,12 @@
  *
  */
 #include <locale>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 
 // index-and-load accessors over a pointer table in the owner object; defined
 // in Code/GameEngine/Source/Common/T2IndexedArrayAccessors.cpp.
