@@ -105,8 +105,11 @@ EAStringC *Rva0070B4F0GetString(int id);
 
 extern AptValue *gpGlobalGlobalObject;
 extern AptPrototype *gpObjectPrototype;
-extern AptValue *g_00E180B0;
-extern AptPrototype *g_00E1807C;
+// LINK: defined once here (loader-zeroed; both are assigned during builtin
+// construction before any read: g_00E1807C below, g_00E180B0 from
+// gpObjectPrototype). No ledger address is claimed for either yet.
+AptValue *g_00E180B0 = 0;
+AptPrototype *g_00E1807C = 0;
 extern int g_00E18064;
 
 int Rva006F5100Get();
