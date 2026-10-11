@@ -195,6 +195,12 @@ public:
 	WhichTurretType friend_getTurretSync() const { return m_turretSyncFlag; }
 	void friend_setTurretSync(WhichTurretType t) { m_turretSyncFlag = t; }
 	Object *getGoalObject() { return m_stateMachine->getGoalObject(); }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getGoalObject copy loses to the first-in-order copy
+	// (no retail address); the two calls below inline it but still emit the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	Object *bfme_goal_object() { return m_stateMachine->getGoalObject(); }
 private:
 	unsigned char m_pad04[0x30 - 0x04];
 	StateMachine *m_stateMachine; // +0x30
@@ -329,6 +335,14 @@ public:
 	Real getTurretAngle() const { return m_angle; }
 	Real getTurretFireAngleSweepForWeaponSlot(WeaponSlotType slot) const { return m_data->m_turretFireAngleSweep[slot]; }
 	Real getTurretSweepSpeedModifierForWeaponSlot(WeaponSlotType slot) const { return m_data->m_turretSweepSpeedModifier[slot]; }
+	// LINK: same-body helpers under TU-unique names (identical inlined
+	// bytes). This TU's copies duplicate TurretAI.obj's rowed strong copies
+	// (0x4D81B6/C4); the two calls below inline them but the live calls still
+	// emit select-any COMDATs that LNK2005 against home. Rebinding there emits
+	// only unique (trivially kept) copies. The rowed homes stay canonical. No
+	// flags touched.
+	Real bfme_sweep_for_slot(WeaponSlotType slot) const { return m_data->m_turretFireAngleSweep[slot]; }
+	Real bfme_sweep_speed_for_slot(WeaponSlotType slot) const { return m_data->m_turretSweepSpeedModifier[slot]; }
 	Bool isAllowsPitch() const { return m_data->m_isAllowsPitch; }
 	Real getFirePitch() const { return m_data->m_firePitch; }
 	Real getMinPitch() const { return m_data->m_minPitch; }
@@ -594,7 +608,7 @@ StateReturnType TurretAIAimTurretState::update()
 
 		case TARGET_OBJECT:
 		{
-			Bool isPrimaryEnemy = (enemy && enemy == ai->getGoalObject());
+			Bool isPrimaryEnemy = (enemy && enemy == ai->bfme_goal_object());
 			Bool ableToAttackTarget = obj->isAbleToAttack();
 			if (ableToAttackTarget)
 			{
@@ -668,7 +682,7 @@ StateReturnType TurretAIAimTurretState::update()
 	SetModelAngle(obj, relAngle);
 
 	Real aimAngle = relAngle;
-	Real sweep = turret->getTurretFireAngleSweepForWeaponSlot( slot );
+	Real sweep = turret->bfme_sweep_for_slot( slot );
 	if (sweep > 0.0f && turret->friend_isSweepEnabled())
 	{
 		if (turret->friend_getPositiveSweep())
@@ -676,7 +690,7 @@ StateReturnType TurretAIAimTurretState::update()
 		else
 			aimAngle -= sweep;
 
-		turnSpeedModifier = turret->getTurretSweepSpeedModifierForWeaponSlot( slot );
+		turnSpeedModifier = turret->bfme_sweep_speed_for_slot( slot );
 	}
 
 	const Real REL_THRESH = 0.035f;
