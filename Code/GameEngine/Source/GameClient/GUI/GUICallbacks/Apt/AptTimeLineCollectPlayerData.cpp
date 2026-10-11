@@ -138,12 +138,14 @@ class StatsReporter
 {
 public:
 	static void ProcessStrategicSinglePlayerGame(LivingWorldPlayer *player);
+	static void ProcessOnlineGameResults(class Player *player);
 };
 
 class AptTimeLineStats
 {
 public:
 	void CollectPlayerData(int index, LivingWorldPlayer *player);
+	void CollectPlayerData(int index, class Player *player);
 };
 
 // The caller's second argument: its display name is at +0x30.
@@ -214,6 +216,7 @@ class AptTimeLine
 {
 public:
 	void CollectPlayerData(LivingWorldPlayer *player, Rva00520923Source *source);
+	void CollectPlayerData(class Player *player, const class GameSlot *slot);
 private:
 	unsigned char m_pad000[0x258];
 	Rva00524306 m_images; // +0x258
@@ -290,4 +293,69 @@ void AptTimeLine::CollectPlayerData(LivingWorldPlayer *player, Rva00520923Source
 	}
 	if (m_stats)
 		m_stats->CollectPlayerData(index, player);
+}
+
+// RTS CollectPlayerData: native 0x00520792..0x00520923 is a complete
+// 401B RET8 body. WB 0x013DE9F0 names the overload (AptTimeLine.cpp:1312,
+// 1321), and independently shows the local-player row and results reporting.
+// Target fields: Player name38/side58/color280, graph vectors6D8/6E4;
+// timeline stats280/mode284/80B rows288. The existing strategic overload
+// supplies the row ABI only; its LivingWorldPlayer layout is kept separate.
+// All direct calls use their admitted provider names. The flag reader and
+// victory interface retain consuming views; their original types are unknown.
+class Player { public: bool isLocalPlayer() const; };
+class GameSlot { public: bool disconnected() const; };
+class Rva00520703Vector { public: void resize(unsigned); };
+class Rva0051F6DF { public: Rva0051F6DF &operator=(const Rva0051F6DF &); };
+class Rva001EB0CAHolder { public: unsigned char rva001EB0D9(); };
+class LinearCampaignManager;
+extern LinearCampaignManager *TheLinearCampaignManager;
+extern struct UnknownE03138 *g_00E03138;
+class TimelineVictoryView {
+public:
+#define TIMELINE_VS(N) virtual void v##N();
+ TIMELINE_VS(0) TIMELINE_VS(1) TIMELINE_VS(2) TIMELINE_VS(3)
+ TIMELINE_VS(4) TIMELINE_VS(5) TIMELINE_VS(6) TIMELINE_VS(7)
+ TIMELINE_VS(8) TIMELINE_VS(9) TIMELINE_VS(10) TIMELINE_VS(11)
+ TIMELINE_VS(12) TIMELINE_VS(13)
+ virtual bool hasWon(Player*); TIMELINE_VS(15) virtual bool hasLost(Player*);
+#undef TIMELINE_VS
+};
+struct TimelineRTSPlayerView {
+ unsigned char pad000[0x38]; UnicodeString name;
+ unsigned char pad03C[0x58-0x3C]; AsciiString side;
+ unsigned char pad05C[0x280-0x5C]; int color;
+ unsigned char pad284[0x6D8-0x284];
+ unsigned char graph[12]; _STL::vector<Rva0026F4F4Element> values;
+};
+void __cdecl Rva005BF4BCProcess(Player*);
+void AptTimeLine::CollectPlayerData(Player *player, const GameSlot *slot)
+{
+ if (!player) return;
+ Bool isLocal=player->isLocalPlayer();
+ int index=m_players.size();
+ if(isLocal) index=0;
+ else reinterpret_cast<Rva00520703Vector*>(&m_players)->resize(index+1);
+ _STL::vector<AptTimeLinePlayer>::iterator row=isLocal?m_players.begin():m_players.end()-1;
+ TimelineRTSPlayerView *rts=reinterpret_cast<TimelineRTSPlayerView*>(player);
+ if(m_284!=1)row->m_name=rts->name;
+ else row->m_name=TheGameText->fetch("GUI:Player");
+ row->m_color=rts->color;
+ row->m_faction=rts->side;
+ if(m_284!=1) {
+  row->m_status=3;
+  if(slot && slot->disconnected()) row->m_status=2;
+  else if(reinterpret_cast<TimelineVictoryView*>(g_00E03138)->hasLost(player))row->m_status=1;
+  else if(reinterpret_cast<TimelineVictoryView*>(g_00E03138)->hasWon(player))row->m_status=0;
+ } else {
+  row->m_status=1;
+  if(TheLinearCampaignManager && reinterpret_cast<Rva001EB0CAHolder*>(TheLinearCampaignManager)->rva001EB0D9())row->m_status=0;
+ }
+ *reinterpret_cast<Rva0051F6DF*>(reinterpret_cast<char*>(&*row)+0x14)=*reinterpret_cast<const Rva0051F6DF*>(rts->graph);
+ row->m_2C=rts->values;
+ if(isLocal) {
+  if(m_284==2)Rva005BF4BCProcess(player);
+  if(m_284==4)StatsReporter::ProcessOnlineGameResults(player);
+ }
+ if(m_stats)m_stats->CollectPlayerData(index,player);
 }
