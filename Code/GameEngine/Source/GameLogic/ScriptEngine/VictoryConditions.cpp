@@ -80,30 +80,38 @@ static Bool areAllies(const Player *p1, const Player *p2)
 }
 #pragma auto_inline(on)
 
+// A player that may win: present and not flagged by 0x002AA223.
+static __forceinline Bool isEligiblePlayer(Player *player)
+{
+	return player && !((const ParticleSystem *)player)->isSaveable();
+}
+
 // VictoryConditions::hasAchievedVictory, retail 0x0041FEEB (131 bytes),
 // vtable slot 14: Zero Hour's body, which BFME2 also refuses for the player
 // flagged by 0x002AA223, gates on a positive +0x88 count and reports the
 // winning slot to TheGameLogic (0x0023D24C). Retail saves EBX/EDI only after
-// the early return (126 of 131 bytes here); banked at 0.93.
-// ?hasAchievedVictory@VictoryConditions@@UAE_NPAVPlayer@@@Z present-unmatched
+// the early return: the opening test is an inlined helper and the rest its
+// else scope (a plain early return saves them at entry).
 Bool VictoryConditions::hasAchievedVictory(Player *player)
 {
-	if (!player || ((const ParticleSystem *)player)->isSaveable())
+	if (!isEligiblePlayer(player))
 		return false;
-
-	if (m_singleAllianceRemaining && m_field88 > 0)
+	else
 	{
-		for (Int i=0; i<MAX_PLAYER_COUNT; ++i)
+		if (m_singleAllianceRemaining && m_field88 > 0)
 		{
-			if (m_players[i] && !hasSinglePlayerBeenDefeated(m_players[i]) && (player == m_players[i] || areAllies(m_players[i], player)))
+			for (Int i=0; i<MAX_PLAYER_COUNT; ++i)
 			{
-				((Rva0023D229 *)TheGameLogic)->rva0023D24C(i);
-				return true;
+				if (m_players[i] && !hasSinglePlayerBeenDefeated(m_players[i]) && (player == m_players[i] || areAllies(m_players[i], player)))
+				{
+					((Rva0023D229 *)TheGameLogic)->rva0023D24C(i);
+					return true;
+				}
 			}
 		}
-	}
 
-	return false;
+		return false;
+	}
 }
 
 // VictoryConditions::isLocalAlliedDefeat, retail 0x004200CB.
