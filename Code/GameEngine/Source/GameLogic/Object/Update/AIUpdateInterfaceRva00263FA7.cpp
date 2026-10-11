@@ -129,6 +129,13 @@ public:
 	char m_pad[0x10]; // +0x00..0x10
 	Pathfinder *m_pathfinder; // +0x10
 	Pathfinder *pathfinder() { return m_pathfinder; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes; byte-identical to three sibling TUs' copies, verified). This
+	// TU's copy loses (first-copy, no retail truth); the call below inlines it
+	// but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. (Unit stays U-pending on
+	// ChooseBestLocomotorForPosition, M-lane.) No flags touched.
+	Pathfinder *bfme_pathfinder() { return m_pathfinder; }
 };
 
 extern AI *TheAI;
@@ -150,7 +157,7 @@ void AIUpdateInterface::chooseGoodLocomotorFromCurrentSet()
 {
 	Locomotor *prevLoco = m_curLocomotor;
 	Object *obj = m_object;
-	Pathfinder *pf = TheAI->pathfinder();
+	Pathfinder *pf = TheAI->bfme_pathfinder();
 	Locomotor *newLoco = pf->ChooseBestLocomotorForPosition((PathfindLayerEnum)obj->rva0028B511(), &m_locomotorSet, obj->getPosition());
 	if (newLoco == NULL)
 	{
