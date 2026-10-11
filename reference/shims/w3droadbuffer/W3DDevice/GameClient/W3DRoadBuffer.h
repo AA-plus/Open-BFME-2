@@ -92,6 +92,8 @@ struct TRoadPt
 
 struct TRoadSegInfo 
 {
+	// Defined once in TRoadSegInfoCtor.cpp (rowed 0x000D4ED0); declared here so consumers bind that copy instead of emitting the implicit inline (whose bytes differ from retail's).
+	TRoadSegInfo();
 	Vector2 loc;
 	Vector2 roadNormal;
 	Vector2 roadVector;
