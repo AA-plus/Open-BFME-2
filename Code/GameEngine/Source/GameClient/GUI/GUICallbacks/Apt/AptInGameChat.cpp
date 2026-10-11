@@ -492,7 +492,7 @@ bool AptInGameChat::rva004E8670(UnicodeString text)
 	AsciiString remainder = message.str() + 1;
 	AsciiString token;
 	remainder.nextToken(&token);
-	token.toLower();
+	((StringBase<char> &)token).toLower();
 	if (token.compare("tribute") == 0)
 	{
 		UnicodeString unused;
