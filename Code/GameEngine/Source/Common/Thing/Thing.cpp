@@ -158,6 +158,17 @@ void Thing::getUnitDirectionVector3D(Coord3D& dir) const
 	dir.z = vdir.Z;
 }
 
+// File-static matrix copy (LK3-style): the TU's copy-ctor COMDAT loses
+// the link (first in link order), and the unrowed body below inlines the
+// construction, so the def cannot just go away. The helper keeps a call in
+// the source while the copy-ctor goes unused.
+static void CopyThingMatrix3D(Matrix3D &dst, const Matrix3D &src)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+}
+
 //=============================================================================
 // the nice thing about this is that we don't have to recalc out cached terrain stuff.
 // ?setPositionZ@Thing@@QAEXM@Z present-unmatched
@@ -168,7 +179,8 @@ void Thing::setPositionZ( Real z )
 	{
 		Real oldAngle = m_cachedAngle;
 		Coord3D oldPos = m_cachedPos;
-		Matrix3D oldMtx = m_transform;
+		Matrix3D oldMtx;
+		CopyThingMatrix3D(oldMtx, m_transform);
 
 		m_transform.Set_Z_Translation( z );
 		m_cachedPos.z = z;
