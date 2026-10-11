@@ -17,6 +17,15 @@
 #include "ascii_string.h"
 #include <vector>
 #include <list>
+
+// Compare nodes locally so this TU does not emit a conflicting iterator-base
+// wrapper (_List_iterator_base::operator!=, retail's copy is 0x006CFE40).
+namespace _STL {
+template <class T, class Traits>
+static inline bool operator!=(const _List_iterator<T, Traits>& a,
+                              const _List_iterator<T, Traits>& b)
+{ return a._M_node != b._M_node; }
+}
 struct Rva002AAC9ERange {float const *begin,*end;};
 struct AsciiRange002ADD75 {AsciiString const *begin,*end;};
 int Rva002AAC9EEqual(const Rva002AAC9ERange *,const Rva002AAC9ERange *);

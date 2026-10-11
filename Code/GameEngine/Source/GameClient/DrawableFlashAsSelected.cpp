@@ -20,6 +20,15 @@
 // half-factor reuses `factor` in place (factor *= 0.5f) as retail's mulss does.
 // stlport
 #include <list>
+
+// Compare nodes locally so this TU does not emit a conflicting iterator-base
+// wrapper (_List_iterator_base::operator!=, retail's copy is 0x006CFE40).
+namespace _STL {
+template <class T, class Traits>
+static inline bool operator!=(const _List_iterator<T, Traits>& a,
+                              const _List_iterator<T, Traits>& b)
+{ return a._M_node != b._M_node; }
+}
 class Object;
 class Drawable;
 class Thing { public: Drawable *getDrawable() const; };

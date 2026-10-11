@@ -38,6 +38,15 @@
 //   _List_base dtor resolves to 0x004EC395 by its own body.
 #include <list>
 
+// Compare nodes locally so this TU does not emit a conflicting iterator-base
+// wrapper (_List_iterator_base::operator!=, retail's copy is 0x006CFE40).
+namespace _STL {
+template <class T, class Traits>
+static inline bool operator!=(const _List_iterator<T, Traits>& a,
+                              const _List_iterator<T, Traits>& b)
+{ return a._M_node != b._M_node; }
+}
+
 typedef unsigned int UnsignedInt;
 typedef int Int;
 typedef float Real;

@@ -9,6 +9,15 @@
 // Generic map subscript retains its existing opaque provider spelling.
 #include <map>
 #include <list>
+
+// Compare nodes locally so this TU does not emit a conflicting iterator-base
+// wrapper (_List_iterator_base::operator!=, retail's copy is 0x006CFE40).
+namespace _STL {
+template <class T, class Traits>
+static inline bool operator!=(const _List_iterator<T, Traits>& a,
+                              const _List_iterator<T, Traits>& b)
+{ return a._M_node != b._M_node; }
+}
 #include <set>
 #include <string.h>
 #include "ascii_string.h"
