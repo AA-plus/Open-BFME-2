@@ -14,7 +14,7 @@ extern "C" void __cdecl SetDeInterlaceMode(void*,int);
 int bfmeGoUSC(void*,int);
 int bfmeCheckJX(CodecState*);
 int Rva009B4600DecodeBool(void*,int);
-void bfmeGo1040B(BfmeS1040*,int);
+extern "C" void __cdecl VP6_UpdateQ(BfmeS1040*,int);
 extern "C" void* __cdecl memset(void*,int,unsigned);
 #pragma intrinsic(memset)
 #define U(o) (*(unsigned*)(s+(o)))
@@ -106,7 +106,7 @@ static int Rva009AC660ReadHeader(unsigned char* s)
     *(unsigned*)(table+4)=((unsigned*)(table+0x3c))[index];
     // Retail zero-extends this byte into the outgoing four-byte stack slot.
     // Preserve the existing callee identity while expressing the narrow call-site ABI.
-    ((void (__cdecl *)(BfmeS1040*,unsigned char))bfmeGo1040B)((BfmeS1040*)P(0x13c),B(0x19c));
+    ((void (__cdecl *)(BfmeS1040*,unsigned char))VP6_UpdateQ)((BfmeS1040*)P(0x13c),B(0x19c));
     return 1;
 }
 

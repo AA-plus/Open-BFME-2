@@ -13,7 +13,7 @@
 class BfmeCursorXF;
 struct BfmeBits1186;
 struct Rva009A6130Context;
-void __cdecl Rva001B8E70(unsigned int *result);
+extern "C" void __cdecl VP6_readTSC(unsigned int *result);
 // VP6 clean-room VP6_LoadFrame (spec 001bd550): typed state argument and int
 // Boolean result; defined in Rva009AC660ReadHeader.cpp.
 extern "C" int __cdecl VP6_LoadFrame(unsigned char *);
@@ -36,7 +36,7 @@ extern "C" void *__cdecl memcpy(void *, const void *, unsigned int);
 static int Rva009A5620DecodeFrame(unsigned char *s, unsigned char *data, unsigned int size)
 {
 	unsigned int start;
-	Rva001B8E70(&start);
+	VP6_readTSC(&start);
 	U(0x1e8) = size;
 	bfmeReadWordXF((BfmeCursorXF *)(s + 0x450c), data);
 	if (!VP6_LoadFrame(s))
@@ -65,7 +65,7 @@ static int Rva009A5620DecodeFrame(unsigned char *s, unsigned char *data, unsigne
 	else
 		U(0x6a0) = (*(unsigned int *)P(0x13c) + 2 + U(0x6a0) * 3) >> 2;
 	unsigned int end;
-	Rva001B8E70(&end);
+	VP6_readTSC(&end);
 	unsigned int elapsed = (end - start) / U(0x1a4);
 	U(0x910) = elapsed;
 	if (!U(0x914))

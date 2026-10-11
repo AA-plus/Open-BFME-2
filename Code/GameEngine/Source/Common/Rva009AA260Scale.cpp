@@ -2,7 +2,7 @@
 // Retail RVA 009AA260: caller 009AA4F0 pushes nine arguments and cleans 24h.
 // Code ends with ret at +253; two 24-byte tables at +254/+26c follow it.
 // Callback slots are witnessed by dispatch initialization at RVA009B0FBF.
-// The direct-copy callback is the matched 009A91A0 bfmeCopy body; retail
+// The direct-copy callback is the matched 009A91A0 HorizontalLine_Copy body; retail
 // deliberately invokes it with an ignored fourth cdecl argument. This cast
 // preserves that MSVC x86 ABI contract, rather than introducing a wrapper.
 // The empty vertical callback address is independently verified as 009A91C0.
@@ -24,7 +24,7 @@ typedef void (__cdecl *Rva009AA260HorizontalScale)(
 typedef void (__cdecl *Rva009AA260VerticalScale)(
 	unsigned char *, unsigned int, unsigned int);
 
-extern void __cdecl bfmeCopy(const void *, unsigned int, void *);
+extern "C" void __cdecl HorizontalLine_Copy(const void *, unsigned int, void *, unsigned int);
 
 // BFME2 image-scale callback slots (.data). DIR32-masked so the gate does not
 // read their addresses. Names describe ratio family and pass direction.
@@ -149,7 +149,7 @@ int __cdecl Rva009AA260Scale(
 		horizontal_scale = rva009AA260Horizontal21();
 		break;
 	case 10:
-		horizontal_scale = (Rva009AA260HorizontalScale)bfmeCopy;
+		horizontal_scale = (Rva009AA260HorizontalScale)HorizontalLine_Copy;
 		break;
 	default:
 		ratio_scalable = 0;

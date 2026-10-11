@@ -59,12 +59,3 @@ void bfmeApply1040(BfmeS1040 *s, int)
 	s->m_bfmeDestB[0] = g_bfmeApplyTableD[s->m_bfmeIdx] << 2;
 }
 
-void bfmeGo1040B(BfmeS1040 *s, int a)
-{
-	if (s->m_bfmeTab[s->m_bfmeIdx] == s->m_bfmeCur)
-		return;
-
-	s->m_bfmeCur = s->m_bfmeNext;
-	g_bfmeHook1040(s);
-	bfmeApply1040(s, a);
-}

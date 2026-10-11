@@ -9352,7 +9352,7 @@ _MmxReconInter,,0x001D7560,75,Code/Libraries/Source/VP6/ReconMmx.cpp,matched,Cle
 ?releaseNode@Rva009A2C30Table@@QAEXPAURva009A2C30Node@@@Z,,0x00758BD0,71,Code/GameEngine/Source/Common/SmallGaps/Rva009A2C30ReleaseNode.cpp,matched,BFME1 byte-identical donor; b1 0x009A2C30
 ?bfmeRegisterZC@BfmeOwnerZC@@QAEXXZ,,0x006611A0,67,Code/GameEngine/Source/Common/BfmeConv1871.cpp,matched,BFME1 byte-identical donor; b1 0x007F46F0
 ?assertFailed@Rva008013F0Browser@@QAEXH@Z,,0x0066D740,30,Code/GameEngine/Source/Common/U2FeslGameBrowserAsserts.cpp,matched,BFME1 byte-identical donor; b1 0x008013F0; 2 DIR32 string literal(s) agree
-?Rva009A6600InitBlocks@@YAXPAX@Z,,0x001B7070,37,Code/GameEngine/Source/Common/Rva009A4D00TableInit.cpp,matched,BFME1 byte-identical donor; b1 0x009A6600
+_VP6_BuildQuantIndex_Generic,,0x001B7070,37,Code/Libraries/Source/VP6/QuantIndex.cpp,matched,Clean-room spec 001b7070; VP6_BuildQuantIndex_Generic: cdecl generic quantizer index builder; same retail extent as the replaced placeholder; implemented from reverse/vp6_cleanroom/specs/001b7070.md and retail only
 ?appendTestRaw@@YAXPAVBfmeRawBuffer@@@Z,,0x001BB670,67,Code/GameEngine/Source/Common/TestRawAppend.cpp,matched,BFME1 byte-identical donor; b1 0x009AAC30; 1 DIR32 string literal(s) agree
 ?bfmeGaussPdf@@YANNNN@Z,,0x001B6970,65,Code/GameEngine/Source/Common/BfmeGaussPdf.cpp,matched,BFME1 byte-identical donor; b1 0x009A5F00
 ?assignFrom@Rva0082BD80Slot@@QAEPAV1@PBH@Z,,0x000247C0,26,Code/GameEngine/Source/Common/Rva0082B290Slot.cpp,matched,BFME1 byte-identical donor; b1 0x0082BD80
@@ -9384,7 +9384,7 @@ _BTREE_size@4,,0x0068EB20,61,Code/Libraries/Source/Compression/EAC/btreedecode.c
 ??0Rva00802680Owner@@QAE@XZ,,0x0066E880,51,Code/GameEngine/Source/GameNetwork/Rva00802640FeslCtor.cpp,matched,BFME1 byte-identical donor; b1 0x00802640
 ?set@Rva007F4980@@QAEXPAXH@Z,,0x00661430,51,Code/GameEngine/Source/GameNetwork/Rva007F4980Slot.cpp,matched,BFME1 byte-identical donor; b1 0x007F4980
 ??0Rva00161220@@QAE@XZ,,0x004EF5CE,50,Code/GameEngine/Source/Common/Rva00161220Ctor.cpp,matched,BFME1 donor with vtable-literal repair; b1 0x00161220
-?fillBytes@@YAPAXPAXHI@Z,,0x001B6420,49,Code/GameEngine/Source/Common/SmallGaps/fillBytes.cpp,matched,BFME1 byte-identical donor; b1 0x009A5990
+_duck_memset,,0x001B6420,49,Code/Libraries/Source/VP6/MemShim.cpp,matched,Clean-room spec 001b6420; duck_memset: cdecl EA shim returning memset of the block (intrinsic); same retail extent as the replaced placeholder; implemented from reverse/vp6_cleanroom/specs/001b6420.md and retail only
 ?apply@Rva007F91A0Host@@QAEXH@Z,,0x00665740,48,Code/GameEngine/Source/GameNetwork/Rva007F91A0Log.cpp,matched,BFME1 byte-identical donor; b1 0x007F91A0
 ?Rva0005D6D0DisableImmTextFrameService@@YAXXZ,,0x00001CF0,47,Code/GameEngine/Source/Common/Rva0005D6D0DisableImmTextFrameService.cpp,matched,BFME1 byte-identical donor; b1 0x0005D6D0
 ??0BfmeThingTTD@@QAE@XZ,,0x005B6ED1,45,Code/GameEngine/Source/Common/BfmeConv1323.cpp,matched,BFME1 donor with CoInitializeEx import repair; b1 0x00690940
@@ -9401,7 +9401,7 @@ _BTREE_size@4,,0x0068EB20,61,Code/Libraries/Source/Compression/EAC/btreedecode.c
 ??1CDCCache@@QAE@XZ,,0x00628BC5,29,Code/GameEngine/Source/Common/CDCCacheDestructor.cpp,matched,BFME1 byte-identical donor; b1 0x009F6855
 ?forward@Rva007FACB0Owner@@QAEHPAX0@Z,,0x006671E0,22,Code/GameEngineDevice/Source/W3DDevice/GameClient/Rva007FACB0VirtualForward.cpp,matched,BFME1 byte-identical donor; b1 0x007FACB0
 ??0GhostObjectManagerEnergyDup@@QAE@XZ,,0x006558A0,29,Code/GameEngine/Source/GameLogic/Object/GhostObjectManagerEnergyDupCtor.cpp,matched,BFME1 byte-identical donor; b1 0x007E87F0
-?Rva009A9960@@YAXPAXHI@Z,,0x001BA3A0,28,Code/GameEngine/Source/Common/Rva009A9960CopyBytes.cpp,matched,BFME1 byte-identical donor; b1 0x009A9960
+_LastVerticalBand_1_2_Scale_C,,0x001BA3A0,28,Code/Libraries/Source/VP6/CopyHelpers.cpp,matched,Clean-room spec 001ba3a0; LastVerticalBand_1_2_Scale_C: cdecl C fallback copying each column of the last band row one pitch down; same retail extent as the replaced placeholder; implemented from reverse/vp6_cleanroom/specs/001ba3a0.md and retail only
 ?call@Rva007EFF60@@QAEXPAX0@Z,,0x0065CE50,28,Code/GameEngine/Source/Common/Rva007EFF60CallbackDispatch.cpp,matched,BFME1 byte-identical donor; b1 0x007EFF60
 ?rva0034f9d0Insert@@YGXPAURva0034F9D0Head@@PAURva0034F9D0Node@@1@Z,,0x003B23DE,25,Code/GameEngine/Source/Common/Rva0034F9D0ListInsert.cpp,matched,BFME1 byte-identical donor; b1 0x0034F9D0
 ?peerParseQuery@@YAHPAXPADHPAUsockaddr@@@Z,,0x00698B30,34,Code/GameEngine/Source/GameNetwork/GameSpy/Thread/PeerParseQueryThunk.cpp,matched,BFME1 byte-identical donor; b1 0x00857570
@@ -9878,7 +9878,7 @@ __Locale_numeric_create,,0x00022890,354,Code/Libraries/Source/WWVegas/WWLib/stlp
 ?bfmeStep1_009A75E0@@YAXXZ,,0x001C4300,140,Code/GameEngine/Source/Common/S3GuardedDelegates3.cpp,matched,BFME1 near-miss donor b1 0x009B3A00 immediate-only drift
 ?give@Rva00809500Owner@@QAEXPAURva00809500Entry@@@Z,,0x00675400,27,Code/GameEngine/Source/Common/U2HandleLeaves.cpp,matched,BFME1 byte-identical donor b1 0x00809500; single ICF pick
 ?handle@Gen009F5040@@QAEXXZ,,0x00627770,148,Code/GameEngine/Source/Common/Gen009F5040Handle.cpp,matched,BFME1 near-miss donor; b1 0x009F5040; member-offset drift +0x30 (m_node +0x120); calculate pin
-?bfmeCopy@@YAXPBXIPAX@Z,,0x001B9BF0,31,Code/GameEngine/Source/Common/Bfme5ThirtySix.cpp,matched,BFME1 byte-identical donor; b1 0x009A91A0
+_HorizontalLine_Copy,,0x001B9BF0,31,Code/Libraries/Source/VP6/CopyHelpers.cpp,matched,Clean-room spec 001b9bf0; HorizontalLine_Copy: cdecl horizontal scaler callback copying the source line unchanged (intrinsic memcpy); same retail extent as the replaced placeholder; implemented from reverse/vp6_cleanroom/specs/001b9bf0.md and retail only
 ??0Rva0052163E@@QAE@H@Z,,0x00521623,27,Code/GameEngine/Source/Common/BfmeThreeHundredFortyTwo.cpp,matched,BFME1 byte-identical donor b1 0x00511190; single ICF pick over bare thunk
 _LastVerticalBand_1_2_Scale_MMX,,0x001D26E0,31,Code/Libraries/Source/VP6/LastVerticalBand12ScaleMmx.cpp,matched,Clean-room spec 001d26e0; LastVerticalBand_1_2_Scale_MMX: cdecl last band of the 1:2 vertical scaler copying row 0 onto row 1 eight bytes per MMX step (inline MMX asm in a C function: no C form under cl 13.10); codec dispatch slot 17 of the SIMD tiers; implemented from the spec plus retail only (no VP6 source read); full 31B exact; replaces placeholder bfmeCopyMmx
 ?bfmeAverageMmx@@YAXPAXHH@Z,,0x001D2680,86,Code/GameEngine/Source/Common/Bfme5ThirtySix.cpp,matched,BFME1 byte-identical donor; b1 0x009C1D80
@@ -9888,7 +9888,7 @@ _LastVerticalBand_1_2_Scale_MMX,,0x001D26E0,31,Code/Libraries/Source/VP6/LastVer
 ?rva_192000_swap_unsigned_short@@YAXPAG0@Z,,0x00531F25,23,Code/GameEngine/Source/Common/Rva192000SwapUnsignedShort.cpp,matched,BFME1 byte-identical donor b1 0x00192000; single pick over bare thunks
 ?rva002E27F0@@YAXPAX00@Z,,0x000383D0,30,Code/GameEngine/Source/Common/Rva002E27F0Forward.cpp,matched,BFME1 near-miss donor; b1 0x002E27F0; ICF pick (3-arg arity refutes void twin); vtable slot 0x80 here not 0x94
 ?bfmeApply1040@@YAXPAUBfmeS1040@@H@Z,,0x001B70A0,277,Code/GameEngine/Source/Common/BfmeConv1040.cpp,matched,BFME1 donor with extern-array table repair; b1 0x009A6630
-?bfmeGo1040B@@YAXPAUBfmeS1040@@H@Z,,0x001B71C0,45,Code/GameEngine/Source/Common/BfmeConv1040.cpp,matched,BFME1 byte-identical donor; b1 0x009A6750
+_VP6_UpdateQ,,0x001B71C0,45,Code/Libraries/Source/VP6/QuantIndex.cpp,matched,Clean-room spec 001b71c0; VP6_UpdateQ: cdecl quantizer update that reruns the dequantizer setup and hook when the quality changes; same retail extent as the replaced placeholder; implemented from reverse/vp6_cleanroom/specs/001b71c0.md and retail only
 ?rva00523630@@YGHFF@Z,,0x003EFEA0,18,Code/GameEngine/Source/Common/Rva00523630Cmp.cpp,matched,BFME1 byte-identical donor b1 0x00523630 single ICF pick
 ??0Rva0006B3F3ScorchTexture@@QAE@H@Z,,0x000EF966,27,Code/GameEngine/Source/Common/BfmeConv499.cpp,matched,Native217B caller6B3F3 and BFME1 f989 BaseHeightMapRva006CB080 establish owning one-pointer temporary constructor role; literal exscorch01.tga and loader132D89 unchanged; argument ignored original name unknown; replace old ordinary-method owner no new alias
 ?bfmeGoVIV@@YGXPAVBfmeMsgVIT@@PAD11111@Z,,0x00656750,173,Code/GameEngine/Source/Common/BfmeConv1378.cpp,matched,BFME1 byte-identical donor; b1 0x007E9760; 7 DIR32 string literals agree
@@ -11695,7 +11695,7 @@ _getbinopr,,0x007542C0,414,Code/Libraries/Source/Lua/lparser.c,matched,BFME1 byt
 ?Rva007F3B50@@YGXPAVRva007E8810Message@@_J1PBURva007F3B50Attribute@@I@Z,,0x00660620,248,Code/GameEngine/Source/GameNetwork/V2FeslTxnRequests.cpp,matched,BFME1 donor ambiguous by bytes; resolved by the BFME1->BFME2 address map; b1 0x007F3B50; 2 candidate placements; prediction error 0B
 ?Rva007F3E50@@YGXPAVRva007E8810Message@@_J@Z,,0x00660920,66,Code/GameEngine/Source/GameNetwork/V2FeslTxnRequests.cpp,matched,BFME1 donor ambiguous by bytes; resolved by the BFME1->BFME2 address map; b1 0x007F3E50; 2 candidate placements; prediction error 0B
 ?Rva007F3F40@@YGXPAVRva007E8810Message@@_J@Z,,0x00660A10,66,Code/GameEngine/Source/GameNetwork/V2FeslTxnRequests.cpp,matched,BFME1 donor ambiguous by bytes; resolved by the BFME1->BFME2 address map; b1 0x007F3F40; 2 candidate placements; prediction error 0B
-?bfmeCallocBlock@@YAPAXII@Z,,0x001B6460,49,Code/GameEngine/Source/Common/BfmeCallocBlock.cpp,matched,BFME1 byte-identical donor; b1 0x009A59D0
+_duck_calloc,,0x001B6460,49,Code/Libraries/Source/VP6/MemShim.cpp,matched,Clean-room spec 001b6460; duck_calloc: cdecl EA shim allocating count times size through the duck_malloc core and zeroing it; same retail extent as the replaced placeholder; implemented from reverse/vp6_cleanroom/specs/001b6460.md and retail only
 ?bfmeGo1053A@BfmeA1053@@QAEPAV1@XZ,,0x00666BC0,40,Code/GameEngine/Source/Common/BfmeGo1053A.cpp,matched,BFME1 byte-identical donor; b1 0x007FA680
 ??1Rva005F7750@@UAE@XZ,,0x005F7750,14,Code/GameEngine/Source/Common/Rva005F7750Dtor.cpp,matched,opaque dtor explicit clear call on member at plus 4 (Rva000AD6F4Members family pattern)
 ??1Rva005FA393@@UAE@XZ,,0x005FA393,14,Code/GameEngine/Source/Common/Rva005FA393Dtor.cpp,matched,opaque dtor explicit clear call on member at plus 4 (Rva000AD6F4Members family pattern)
@@ -36210,7 +36210,7 @@ _Rva00814520,,0x00680420,17,Code/Libraries/Source/DirtySock/Y4CommTickIdle.c,mat
 ?Rva009A9370@@YAXPAEHI@Z,,0x001B9DB0,130,Code/Libraries/Source/WWVegas/WW3D2/Rva009A9370InterpRows.cpp,matched,BFME1 byte-identical donor; b1 0x009A9370
 ?resetTables@Rva00826840Owner@@QAEXXZ,,0x00692360,67,Code/GameEngine/Source/Common/SmallGaps/Rva00826840ResetTables.cpp,matched,BFME1 byte-identical donor; b1 0x00826840
 ?Rva009AF530Setup@@YAXPAURva009AF530Context@@@Z,,0x001BFF20,51,Code/GameEngine/Source/Common/Rva009AF530SetupDispatch.cpp,matched,BFME1 byte-identical donor; b1 0x009AF530
-?Rva009AC240Init@@YAXPAURva009AC240State@@PAX@Z,,0x001BCC40,36,Code/GameEngine/Source/Common/Rva009AC240StateInit.cpp,matched,BFME1 byte-identical donor; b1 0x009AC240
+_VP6_StartEncode,,0x001BCC40,36,Code/Libraries/Source/VP6/BoolCoderEnc.cpp,matched,Clean-room spec 001bcc40; VP6_StartEncode: cdecl boolean coder reset storing range 255 count -24 and the output buffer; same retail extent as the replaced placeholder; implemented from reverse/vp6_cleanroom/specs/001bcc40.md and retail only
 ?aptPackedKeyFieldAt008A5360@@YAPAVAptInteger@@XZ,,0x006E8C60,26,Code/Libraries/Source/EA/Apt/Rva008A5360PackedKeyField.cpp,matched,BFME1 byte-identical donor; b1 0x008A5360
 ?forward@Rva0081D3E0Object@@QAEXHH@Z,,0x006882B0,19,Code/GameEngine/Source/Common/Rva0081D3E0CallbackForward.cpp,matched,BFME1 byte-identical donor; b1 0x0081D3E0
 ?clearFields@Rva00801430Owner@@QAEXXZ,,0x0066D780,18,Code/GameEngine/Source/Common/Rva00801430ClearFields.cpp,matched,BFME1 byte-identical donor; b1 0x00801430
@@ -47465,7 +47465,7 @@ _rva0075B4C6D3DXQuaternionSlerp@16,,0x0075B4C6,6,Code/Libraries/Source/WWVegas/W
 ?Rva00085553Get@@YAXHH@Z,,0x00085553,44,Code/GameEngine/Source/Common/Rva00085553Init.cpp,matched,free function sets five globals from second arg unlocks 0x00085EE6
 ??1Rva003371B1@@QAE@XZ,,0x003372B7,53,Code/GameEngine/Source/Common/Rva003371B1Dtor.cpp,matched,leaf pin prev-copy layout Destroy-caller
 ?Rva001530E9Parse@@YAXPBDRAX@Z,,0x001530E9,224,Code/Libraries/Source/WWVegas/WWLib/Rva001530E9PropertyPath.cpp,matched,Close banked property-path parser; Ghidra224B boundary and target callers establish cdecl name/selector parse; original names/types unknown; local volatile pointer parameter reproduces suffix spill; /O1 /MD /Oi-; full224B and CRT/string references verified
-?Rva001B8E70@@YAXPAI@Z,,0x001B8E70,29,Code/GameEngine/Source/Common/Rva001B8E70ReadCounter.cpp,matched,BFME1 donor6d943 Rva009A8410; target Ghidra29B and six output-pointer callers; unknown original identity; ordinary C++ frame/local/output with required CPUID/RDTSC register-preservation hardware asm; same established pattern as sibling Get_RDTSC_CPU_Speed; O2 MD DNDEBUG verified full29B with0 refs
+_VP6_readTSC,,0x001B8E70,29,Code/Libraries/Source/VP6/CopyHelpers.cpp,matched,Clean-room spec 001b8e70; VP6_readTSC: cdecl timestamp read: pushad cpuid rdtsc popad then stores the low counter word; same retail extent as the replaced placeholder; implemented from reverse/vp6_cleanroom/specs/001b8e70.md and retail only
 ?rva006BD830@GeometryInfo@@QBEMXZ,,0x006BD830,108,Code/GameEngine/Source/Common/GeometryInfo_getMaxHeightAbovePosition.cpp,matched,GeometryInfo max via 0x14C plus BfmeZeroRange plus dual flag
 ?Rva00216517Fire@@YAHPAVRva00222A8BTarget@@PAXPBDPBIPBM@Z,,0x00216517,153,Code/GameEngine/Source/GameClient/Rva00216517Fire.cpp,matched,int-return firer via rowed gets and invoke row 0x00222A8B with empty fallback
 ??1?$vector@UBfmeStringRecord005ED5F3@@V?$allocator@UBfmeStringRecord005ED5F3@@@_STL@@@_STL@@QAE@XZ,,0x005EDA4B,63,Code/Libraries/Source/WWVegas/WWLib/stlport_vector_stringrecord_5ed5f3_allocate_copy.cpp,matched,vector dtor via whole-class emits Destroy plus free

@@ -12,12 +12,6 @@ extern "C" void * __cdecl memcpy(void *destination, const void *source, unsigned
 
 #pragma intrinsic(memcpy)
 
-// ?bfmeCopy@@YAXPBXIPAX@Z
-void __cdecl bfmeCopy(const void *source, unsigned int bytes, void *destination)
-{
-	memcpy(destination, source, bytes);
-}
-
 namespace
 {
 	__declspec(align(8)) const unsigned short g_bfmeRoundMmx[4] = { 1, 1, 1, 1 };

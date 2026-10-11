@@ -36,6 +36,7 @@ static const short *const g_00BD7EE0 = (const short *)0x00BD7EE0;
 
 typedef void (__cdecl *Rva009A8550Fn)(void *);
 extern Rva009A8550Fn volatile g_rva01356DA0;
+extern "C" void __cdecl VP6_BuildQuantIndex_Generic(void *quantizer);
 
 // g_rva01142408: matched references place it at VA 0xbd8560; retail contents, sized to the
 // 0x200-byte gap before the next known global there.
@@ -59,13 +60,6 @@ int g_rva01142408[128] = {
 };
 extern int g_rva01142308[];
 struct Rva009A6600Context { unsigned char prefix[0x13c]; int *table; unsigned char cells[64]; };
-void Rva009A6600InitBlocks(void *self)
-{
- Rva009A6600Context *ctx=(Rva009A6600Context *)self;
- ctx->table=g_rva01142408;
- for(int i=0;i<64;++i) ctx->cells[g_rva01142308[i]]=(unsigned char)i;
-}
-
 
 // Retail [0x009A8550, 0x009A859F): choose the codec block initializer for
 // the detected CPU tier.  The generic body is the direct retail target at
@@ -91,7 +85,7 @@ void Rva009A8550Init(void)
 	else
 	{
 		g_rva01356DA0 = (Rva009A8550Fn)&initBlocksRva009B3E40;
-		g_rva01356DA0 = &Rva009A6600InitBlocks;
+		g_rva01356DA0 = (Rva009A8550Fn)&VP6_BuildQuantIndex_Generic;
 	}
 }
 

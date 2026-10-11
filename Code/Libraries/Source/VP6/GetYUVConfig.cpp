@@ -12,7 +12,7 @@ struct Rva009AA8F0Context;
 struct Rva009AA8F0Block;
 struct BfmeVp6Context;
 
-void __cdecl Rva001B8E70(unsigned int *result);
+extern "C" void __cdecl VP6_readTSC(unsigned int *result);
 extern "C" int __cdecl bfmeVp6ThresholdSelect(BfmeVp6Context *ctx);
 int Rva009A5C40Initialize(Rva009A5C40Context *post);
 void Rva009A6130PostFilterDispatch(Rva009A6130Context *post, int version, int frameType, int level,
@@ -110,7 +110,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 	unsigned int end;
 	unsigned int start;
 
-	Rva001B8E70(&start);
+	VP6_readTSC(&start);
 	instance->level = bfmeVp6ThresholdSelect((BfmeVp6Context *)instance);
 
 	if (instance->level || (instance->interlaced && instance->deinterlaceMode))
@@ -129,7 +129,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 			Rva009A6130PostFilterDispatch((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
 				instance->level - 200, instance->averageFrameQ, instance->lastRecon, instance->postBuffer,
 				instance->fragInfo, 4, 1);
-			Rva001B8E70(&end);
+			VP6_readTSC(&end);
 			Rva009AAC80CodecGrid((Rva009AAC80Context *)instance);
 		}
 		else if (instance->level > 100)
@@ -137,7 +137,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 			Rva009A6130PostFilterDispatch((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
 				instance->level - 100, instance->averageFrameQ, instance->lastRecon, instance->postBuffer,
 				instance->fragInfo, 4, 1);
-			Rva001B8E70(&end);
+			VP6_readTSC(&end);
 			Rva009AABB0CodecDispatch((Rva009AABB0Context *)instance);
 		}
 		else
@@ -145,7 +145,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 			Rva009A6130PostFilterDispatch((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
 				instance->level, instance->averageFrameQ, instance->lastRecon, instance->postBuffer,
 				instance->fragInfo, 4, 1);
-			Rva001B8E70(&end);
+			VP6_readTSC(&end);
 		}
 
 		if (instance->blackClamp)

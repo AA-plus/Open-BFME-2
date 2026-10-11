@@ -11260,8 +11260,8 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B63C0,62,code,,,-,,Code/GameEngine/Source/Common/BfmeAllocBlock.cpp
 0x001B6400,14,code,,,-,,Code/GameEngine/Source/Common/BfmeConv2079BucketNew.cpp
 0x001B6410,5,code,,,-,,Code/GameEngine/Source/Common/BfmeFreeOneJT.cpp
-0x001B6420,49,code,,,-,,Code/GameEngine/Source/Common/SmallGaps/fillBytes.cpp
-0x001B6460,49,code,,,-,,Code/GameEngine/Source/Common/BfmeCallocBlock.cpp
+0x001B6420,49,code,,,-,,Code/Libraries/Source/VP6/MemShim.cpp
+0x001B6460,49,code,,,-,,Code/Libraries/Source/VP6/MemShim.cpp
 0x001B64A0,35,code,,,-,,Code/GameEngine/Source/Common/Rva009A2030OwnedRecordDeletingDestructor.cpp
 0x001B64D0,65,code,,,-,,Code/GameEngine/Source/Common/SmallGaps/compareStrings.cpp
 0x001B6520,193,code,,,-,,Code/GameEngine/Source/Common/Rva009A5AA0InstallFilter.cpp
@@ -11277,9 +11277,9 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B6970,65,code,,,-,,Code/GameEngine/Source/Common/BfmeGaussPdf.cpp
 0x001B6BA0,1192,code,,,-,,Code/GameEngine/Source/Common/Rva009A6130PostFilterDispatch.cpp
 0x001B7050,24,code,,,-,,Code/Libraries/Source/VP6/InitQTables.cpp
-0x001B7070,37,code,,,-,,Code/GameEngine/Source/Common/Rva009A4D00TableInit.cpp
+0x001B7070,37,code,,,-,,Code/Libraries/Source/VP6/QuantIndex.cpp
 0x001B70A0,277,code,,,-,,Code/GameEngine/Source/Common/BfmeConv1040.cpp
-0x001B71C0,45,code,,,-,,Code/GameEngine/Source/Common/BfmeConv1040.cpp
+0x001B71C0,45,code,,,-,,Code/Libraries/Source/VP6/QuantIndex.cpp
 0x001B71F0,945,code,,,-,,Code/GameEngine/Source/Common/Rva009A6780BuildQuantizers.cpp
 0x001B75B0,93,code,,,-,,Code/GameEngine/Source/Common/Rva001B75B0RefreshQuantizers.cpp
 0x001B7610,500,code,,,-,,Code/GameEngine/Source/Common/Rva009A6780BuildQuantizers.cpp
@@ -11307,7 +11307,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B89C0,123,code,,,-,,Code/GameEngine/Source/Common/Rva009A7F60.cpp
 0x001B8A40,295,code,,,-,,Code/GameEngine/Source/Common/BfmeGo79D0.cpp
 0x001B8B70,766,code,,,-,,Code/Libraries/Source/VP6/FilterBlockBil8.cpp
-0x001B8E70,29,code,,,-,,Code/GameEngine/Source/Common/Rva001B8E70ReadCounter.cpp
+0x001B8E70,29,code,,,-,,Code/Libraries/Source/VP6/CopyHelpers.cpp
 0x001B8E90,284,code,,,-,,Code/Libraries/Source/WWVegas/WWLib/Get_RDTSC_CPU_Speed.cpp
 0x001B8FB0,79,code,,,-,,Code/GameEngine/Source/Common/Rva009A4D00TableInit.cpp
 0x001B9000,21,code,,,-,,Code/Libraries/Source/VP6/system.cpp
@@ -11321,7 +11321,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B9680,22,code,,,-,,Code/Libraries/Source/VP6/PbAccessors.cpp
 0x001B96A0,1047,code-unledgered,,,-,,
 0x001B9AC0,299,code,,,-,,Code/GameEngine/Source/Common/Rva009A9070CopyStreams.cpp
-0x001B9BF0,31,code,,,-,,Code/GameEngine/Source/Common/Bfme5ThirtySix.cpp
+0x001B9BF0,31,code,,,-,,Code/Libraries/Source/VP6/CopyHelpers.cpp
 0x001B9C10,247,code,,,-,,Code/GameEngine/Source/Common/Rva001B9C10Interpolate.cpp
 0x001B9D10,157,code,,,-,,Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp
 0x001B9DB0,130,code,,,-,,Code/Libraries/Source/WWVegas/WW3D2/Rva009A9370InterpRows.cpp
@@ -11332,7 +11332,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001BA1F0,300,code,,,-,,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp
 0x001BA320,53,code,,,-,,Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp
 0x001BA360,56,code,,,-,,Code/GameEngine/Source/Common/Rva009A9920Average.cpp
-0x001BA3A0,28,code,,,-,,Code/GameEngine/Source/Common/Rva009A9960CopyBytes.cpp
+0x001BA3A0,28,code,,,-,,Code/Libraries/Source/VP6/CopyHelpers.cpp
 0x001BA460,98,code-unledgered,,,-,,
 0x001BA4D0,53,code,,,-,,Code/GameEngine/Source/Common/BfmeCopyColAA90.cpp
 0x001BA510,697,code,,,-,,Code/GameEngine/Source/Common/Rva009A9AD0Scale2D.cpp
@@ -11364,7 +11364,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001BC390,51,code,,,-,,Code/GameEngine/Source/Common/Rva001BC390Select.cpp
 0x001BC3D0,1503,code-unledgered,,,-,,
 0x001BC9C0,625,code,,,-,,Code/Libraries/Source/VP6/decodembs.cpp
-0x001BCC40,36,code,,,-,,Code/GameEngine/Source/Common/Rva009AC240StateInit.cpp
+0x001BCC40,36,code,,,-,,Code/Libraries/Source/VP6/BoolCoderEnc.cpp
 0x001BCC70,114,code,,,-,,Code/GameEngine/Source/Common/Rva009AC240StateInit.cpp
 0x001BCCF0,145,code,,,-,,Code/Libraries/Source/VP6/boolhuff.cpp
 0x001BCD90,133,code,,,-,,Code/Libraries/Source/VP6/boolhuff.cpp

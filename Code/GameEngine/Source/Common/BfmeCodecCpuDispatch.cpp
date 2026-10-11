@@ -82,7 +82,7 @@ extern void __cdecl Rva009ACF90(void);
 extern void __cdecl Rva009ADD80(void);
 extern void __cdecl Rva009AE6A0(void);
 extern void __cdecl Rva009A9920(unsigned char *, int, unsigned int);
-extern void __cdecl Rva009A9960(void *, int, unsigned int);
+extern "C" void __cdecl LastVerticalBand_1_2_Scale_C(unsigned char *, int, unsigned int);
 extern void __cdecl Rva009A9550(const void *, int, void *);
 extern void __cdecl Rva009A9660(unsigned char *, int, unsigned int);
 extern void __cdecl Rva009A9720(unsigned char *, int, unsigned int);
@@ -253,7 +253,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	g_bfmeCodecDispatch.slot[25] = (BfmeDispatchFn)&Rva009B3710FilterHoriz;
 	g_bfmeCodecDispatch.slot[8] = (BfmeDispatchFn)&Rva009A98E0;
 	g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&Rva009A9920;
-	g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&Rva009A9960;
+	g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_C;
 	g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&Rva009A9550;
 	g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&Rva009A9660;
 	g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&Rva009A9720;
