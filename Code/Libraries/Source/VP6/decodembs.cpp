@@ -70,7 +70,7 @@ extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *);
 extern "C" void __cdecl BuildScanOrder(Rva009AAFE0Context *,const unsigned char *);
 extern "C" void __cdecl VP6_ResetAboveContext(Rva009AB7F0Context *);
 extern "C" void __cdecl VP6_ResetLeftContext(Rva009AB760Context *);
-void Rva009B5DB0Vp6DecodeBlock(unsigned char *,int,unsigned);
+extern "C" void __cdecl VP6_DecodeMacroBlock(unsigned char *,int,unsigned);
 extern "C" int __cdecl VP6_bitread(void *, int);
 extern "C" void VP6_ConfigureMvEntropyDecoder(FramePB *,unsigned char);
 extern "C" void VP6_ConfigureEntropyDecoder(FramePB *,unsigned char);
@@ -109,6 +109,6 @@ extern "C" void VP6_DecodeFrameMbs(FramePB *pbi)
     for(unsigned row=3;row<rows-3;++row) {
         VP6_ResetLeftContext((Rva009AB760Context *)pbi);
         for(unsigned col=3;col<cols-3;++col)
-            Rva009B5DB0Vp6DecodeBlock((unsigned char *)pbi,row,col);
+            VP6_DecodeMacroBlock((unsigned char *)pbi,row,col);
     }
 }

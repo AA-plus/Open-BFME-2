@@ -6432,11 +6432,8 @@ name,address,notes
 ?Rva009A6DA0ReleaseBuffers@@YAXPAURva009A6DA0Buffer@@@Z,0x001B7810,called 5x from InitializeBuffers at 0x1B7860 in the same TU; ghidra FUN_005b7810 67B
 ?Rva009A86F0Allocate@@YAHPAX@Z,0x001B9140,BFME1-donor declaration Rva009A86F0Allocate(void*) in BfmeCheckJX.cpp; its call site at body+0x1D6 pushes the state pointer only; address is the retail call target
 ?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z,0x001BE490
-?Rva009B2530@@YAXPAURva009A6130Context@@PAE1@Z,0x001C2F20,native dispatcher calls 0x001B6D13 and 0x001B7016; three cdecl arguments; helper plain ret 0x001C343C; donor 10af19f44a89 label 0x009B2530 is address-derived not original symbol
 ?Rva009B4390CodecCall@@YAXPAXH0HHHHHHHHHHHH@Z,0x001C4C90
 ?Rva009B5530Prepare@@YAXPAURva009B5830State@@PAXH@Z,0x001C5E30
-?Rva009B60E0BuildTree@@YAXPAI0H@Z,0x001C69E0,BFME1-donor declaration Rva009B60E0BuildTree(unsigned* unsigned* int) in Rva009AB320BuildTables.cpp; the three retail call sites +0x4F +0xD8 +0x17F all land here and only the call displacement differed
-?Rva009B6740BuildTable@@YAXPAE@Z,0x001C7040
 ?Rva009EBAC0@@YAXH@Z,0x0061F010,callee of ??0T1Base_005F3750@@QAE@PAX0@Z at retail 0x0055C903 read from its REL32 displacement; donor ABI view of the rowed ?bfmeMergeReceiverKeys@@YAXH@Z body at this address
 ?Rva009EEC60_FindAsset@Rva009EEC60Registry@@QAE?AVRva009EBCE0AssetReference@@PBD@Z,0x00621220
 ?Rva009F3F80@@YAXPAUQ3SortElem8@@0UQ3SortCompare@@@Z,0x00626940

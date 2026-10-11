@@ -1,9 +1,19 @@
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001c4440.md plus retail only.
+// No decoder source was consulted.
+//
+// UtilMachineSpecificConfig (retail 0x001C4440, 766 bytes): cdecl and
+// argument free. Probes the CPU tier with GetProcessorFlags and fills the
+// two 65-entry IDCT dispatch tables plus twelve block-function globals for
+// the WMT, MMX or generic tier. Every slot target and its order follow the
+// spec.
+//
 // Installs the per-CPU-tier "spread table" function-pointer blob for the
 // BFME video/image codec: two 65-slot arrays (offsets 0xA4 and 0x1C4 from
 // this blob, indexed by byte offset 0..0x100 in steps of 4, split 2/9/54
 // between a low-, mid- and tail-range filler) plus twelve individually
 // named slots scattered through the same blob.  Sibling of the plain
-// (non-looping) installer in BfmeCodecCpuDispatch.cpp (0x009B0D60): same
+// (non-looping) installer in PostProcMachineSpecificConfig.cpp: same
 // GetProcessorFlags probe and same tier-C / tier-A / generic order,
 // but this one only ever loads its filler set into two big arrays and a
 // dozen named cells, never into the small dispatch table there.
@@ -75,7 +85,7 @@ extern "C" void __cdecl MmxReconInterHalfPixel2(void *, void *, const void *, co
 extern "C" void __cdecl CopyBlockMMX(const void *, void *, int);
 extern void __cdecl d_009c74f0(void);
 extern "C" void __cdecl WmtReconInterHalfPixel2(void *, void *, const void *, const void *, const void *, int);
-extern void __cdecl rva009C7CC0(const void *, const void *, void *);
+extern "C" void __cdecl Wmt_IDct10_Dx(const void *, const void *, void *);
 
 // Slot fillers with neither a real identity nor a ghidra-boundary row yet;
 // address-derived names, pinned in reverse/symbols.csv.
@@ -87,13 +97,13 @@ extern void __cdecl Rva009C6D20(void);
 extern void __cdecl Rva009A7030(void);
 extern "C" void __cdecl AverageBlock_C(void);
 extern "C" void __cdecl FilterBlock_mmx(void *, void *, void *, int, int, int, int);
-extern void __cdecl Rva009A7B00(void);
+extern "C" void __cdecl FilterBlock_C(const unsigned char *, const unsigned char *, unsigned short *, unsigned int, int, int, int);
 extern "C" void __cdecl SubtractBlock_C(void);
 extern "C" void __cdecl ScalarReconInter(void);
 extern "C" void __cdecl ReconBlock_C(void);
 extern "C" void __cdecl ScalarReconIntra(short *, unsigned char *, const short *, int);
 extern void __cdecl Rva009C80C0(void);
-extern void __cdecl Rva009C77C0(void);
+extern "C" void __cdecl Wmt_IDct_Dx(const void *, const void *, void *);
 extern void __cdecl Rva009C3630(void);
 extern void __cdecl Rva009C2CE0(void);
 extern "C" void __cdecl MMX_idct1(void);
@@ -105,7 +115,7 @@ extern void __cdecl Rva009C5890(void);
 
 typedef void (__cdecl *BfmeSpreadFn)();
 
-void __cdecl bfmeInstallSpreadTable(void)
+extern "C" void __cdecl UtilMachineSpecificConfig(void)
 {
 	int tierA, tierB, tierC;
 	unsigned int i;
@@ -115,8 +125,8 @@ void __cdecl bfmeInstallSpreadTable(void)
 	if (tierC)
 	{
 		BfmeSpreadFn low = (BfmeSpreadFn)&Rva009C80C0;
-		BfmeSpreadFn mid = (BfmeSpreadFn)&rva009C7CC0;
-		BfmeSpreadFn tail = (BfmeSpreadFn)&Rva009C77C0;
+		BfmeSpreadFn mid = (BfmeSpreadFn)&Wmt_IDct10_Dx;
+		BfmeSpreadFn tail = (BfmeSpreadFn)&Wmt_IDct_Dx;
 
 		for (i = 0; i <= 0x100; i += 4) {
 			if (i <= 4)
@@ -234,7 +244,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 		g_bfmeSlotB5C = (void *)&SubtractBlock_C;
 		g_bfmeSlotB44 = (void *)&Rva009A74D0;
 		g_bfmeSlotABC = (void *)&Rva009A8110;
-		g_bfmeSlotB54 = (void *)&Rva009A7B00;
+		g_bfmeSlotB54 = (void *)&FilterBlock_C;
 		g_bfmeSlotB40 = (void *)&Copy12x12_MMX;
 	}
 }

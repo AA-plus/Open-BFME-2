@@ -6,10 +6,10 @@
 // utility dispatch-table installer at 0x001C4440. Both callees are rowed
 // today under the names declared below.
 extern "C" void __cdecl fillidctconstants();
-void bfmeInstallSpreadTable();
+extern "C" void __cdecl UtilMachineSpecificConfig();
 
 extern "C" void __cdecl InitVPUtil()
 {
 	fillidctconstants();
-	bfmeInstallSpreadTable();
+	UtilMachineSpecificConfig();
 }

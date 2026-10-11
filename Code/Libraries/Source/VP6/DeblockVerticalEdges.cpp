@@ -15,7 +15,7 @@
 // 1 1 2 2 4 2 2 1 1 sum over sixteen with the guards one beyond the run
 // (kept only when within the step); otherwise the two edge samples move by
 // the bounding entry (centre pointer 0x38) through g_bfmeClampTable. The
-// loop-filtered sibling at 0x001BD670 (Rva009ACC80Filter.cpp) is the same
+// loop-filtered sibling at 0x001BD670 (DeblockVerticalEdgesLoopFiltered.cpp) is the same
 // walk without the second branch and supplies the shape.
 
 struct Rva009AD750Context

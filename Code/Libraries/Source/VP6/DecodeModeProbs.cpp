@@ -9,7 +9,7 @@
 extern "C" int __cdecl VP6_DecodeBool(void *state, int probability);   // 0x001C4F00 VP6_DecodeBool
 extern "C" int __cdecl VP6_bitread(void *, int);           // 0x001BCF40
 extern "C" int __cdecl VP6_decodeModeDiff(unsigned char *ctx);            // 0x001C7250 VP6_decodeModeDiff
-void Rva009B6740BuildTable(unsigned char *ctx);            // 0x001C7040 VP6_BuildModeTree
+extern "C" void __cdecl VP6_BuildModeTree(unsigned char *ctx);            // 0x001C7040
 
 // g_bfmeQuantRow: the mode-probability codebook at retail VA 0x00BD94F8
 // (3 groups x 16 vectors x 20 bytes, 960 bytes).
@@ -192,5 +192,5 @@ extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *ctx)
         ++rows;
     } while (plane < 48);
 
-    Rva009B6740BuildTable(ctx);
+    VP6_BuildModeTree(ctx);
 }

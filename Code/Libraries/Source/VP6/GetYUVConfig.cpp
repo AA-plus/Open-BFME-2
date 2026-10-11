@@ -15,7 +15,7 @@ struct BfmeVp6Context;
 extern "C" void __cdecl VP6_readTSC(unsigned int *result);
 extern "C" int __cdecl bfmeVp6ThresholdSelect(BfmeVp6Context *ctx);
 extern "C" int __cdecl AllocatePostProcBuffers(Rva009A5C40Context *post);
-void Rva009A6130PostFilterDispatch(Rva009A6130Context *post, int version, int frameType, int level,
+extern "C" void __cdecl PostProcess(Rva009A6130Context *post, int version, int frameType, int level,
 	int frameQ, unsigned char *source, unsigned char *dest, unsigned char *fragInfo, int elementSize, int codedMask);
 extern "C" void __cdecl vp6_showinfo(Rva009AAC80Context *instance);
 extern "C" void __cdecl vp6_showinfo2(Rva009AABB0Context *instance);
@@ -32,7 +32,7 @@ public:
 };
 
 // The clamp routine is slot 19 of the codec dispatch table at VA 0x00E22F7C
-// (0x00E22FC8), installed by bfmeInstallCpuDispatchTable.
+// (0x00E22FC8), installed by PostProcMachineSpecificConfig.
 typedef void (__cdecl *BfmeDispatchFn)();
 struct BfmeCodecDispatchTable
 {
@@ -126,7 +126,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 
 		if (instance->level > 200)
 		{
-			Rva009A6130PostFilterDispatch((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
+			PostProcess((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
 				instance->level - 200, instance->averageFrameQ, instance->lastRecon, instance->postBuffer,
 				instance->fragInfo, 4, 1);
 			VP6_readTSC(&end);
@@ -134,7 +134,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 		}
 		else if (instance->level > 100)
 		{
-			Rva009A6130PostFilterDispatch((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
+			PostProcess((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
 				instance->level - 100, instance->averageFrameQ, instance->lastRecon, instance->postBuffer,
 				instance->fragInfo, 4, 1);
 			VP6_readTSC(&end);
@@ -142,7 +142,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 		}
 		else
 		{
-			Rva009A6130PostFilterDispatch((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
+			PostProcess((Rva009A6130Context *)instance->postProcessor, instance->version, instance->frameType,
 				instance->level, instance->averageFrameQ, instance->lastRecon, instance->postBuffer,
 				instance->fragInfo, 4, 1);
 			VP6_readTSC(&end);

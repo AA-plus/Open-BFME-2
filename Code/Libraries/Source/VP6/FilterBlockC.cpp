@@ -1,11 +1,12 @@
 // cl: /DNDEBUG /MD
-// Scalar VP6 fractional-pixel block predictor at retail 0x009A7B00 (spread-table slot B54).
-// Tables: four-tap weights at 0x012D7798 and two-tap weights at 0x012D7818, eight modes each.
+// Clean room: reverse/vp6_cleanroom/specs/001b8560.md plus retail only.
+// No decoder source was consulted.
 //
-// BFME 2: Open-BFME-1's body (submodule 10af19f44a), byte-identical in game.dat at
-// 0x001B8560; the addresses above are BFME 1's. The weight tables are defined
-// here from game.dat .data 0x00DB7068 and 0x00DB70E8, which no other unit reads,
-// and the four-tap callee is the rowed FilterBlock1d (0x001B8050).
+// FilterBlock_C (retail 0x001B8560, 993 bytes): cdecl scalar sub-pixel block
+// predictor into a 16-bit block. Orders the two reference pointers then
+// picks the one-dimensional bicubic or two-tap pass for a difference of one
+// or a pitch and the two-dimensional pass for pitch -1 or pitch +1. The
+// weight tables are defined here.
 
 extern const int g_012D7798[8][4] =
 {
@@ -25,7 +26,7 @@ extern "C" void __cdecl FilterBlock2dBil(
 	const unsigned char *, unsigned short *, int, const int *, const int *);
 
 // Two-tap 8-bit to 16-bit filter; retail inlines it (standalone copy at 0x009A7870).
-static void Rva009A7B00TwoTapFilter(
+static void TwoTapFilter(
 	const unsigned char *source,
 	unsigned short *destination,
 	unsigned int sourcePitch,
@@ -49,7 +50,7 @@ static void Rva009A7B00TwoTapFilter(
 	}
 }
 
-void __cdecl Rva009A7B00Vp6Filter(
+extern "C" void __cdecl FilterBlock_C(
 	const unsigned char *source1,
 	const unsigned char *source2,
 	unsigned short *destination,
@@ -72,14 +73,14 @@ void __cdecl Rva009A7B00Vp6Filter(
 		if (useBicubic)
 			FilterBlock1d(source1, destination, sourcePitch, 1, 8, 8, g_012D7798[modeX]);
 		else
-			Rva009A7B00TwoTapFilter(source1, destination, sourcePitch, 1, 8, 8, g_012D7818[modeX]);
+			TwoTapFilter(source1, destination, sourcePitch, 1, 8, 8, g_012D7818[modeX]);
 	}
 	else if (diff == (int)sourcePitch)
 	{
 		if (useBicubic)
 			FilterBlock1d(source1, destination, sourcePitch, sourcePitch, 8, 8, g_012D7798[modeY]);
 		else
-			Rva009A7B00TwoTapFilter(source1, destination, sourcePitch, sourcePitch, 8, 8, g_012D7818[modeY]);
+			TwoTapFilter(source1, destination, sourcePitch, sourcePitch, 8, 8, g_012D7818[modeY]);
 	}
 	else if (diff == (int)(sourcePitch - 1))
 	{
@@ -98,7 +99,3 @@ void __cdecl Rva009A7B00Vp6Filter(
 			FilterBlock2dBil(source1, destination, sourcePitch, g_012D7818[modeX], g_012D7818[modeY]);
 	}
 }
-
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?Rva009A7B00@@YAXXZ=?Rva009A7B00Vp6Filter@@YAXPBE0PAGIHHH@Z")

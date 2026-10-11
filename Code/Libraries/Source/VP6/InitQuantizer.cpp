@@ -1,4 +1,12 @@
-// Retail 009A6780: derive fixed-point reciprocal and scaled quantizer tables.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b71f0.md plus retail only.
+// No decoder source was consulted.
+//
+// VP6_init_quantizer (retail 0x001B71F0, 945 bytes): cdecl builder of the
+// fixed-point reciprocal quantizer multipliers, rounding values, zero-bin
+// sizes and zero-run corrections for both planes from the frame Q index.
+// The second (version) argument is unused.
+
 #include <string.h>
 extern short g_Rva01141D08[],g_Rva01141D88[];
 extern unsigned g_Rva01141708[],g_Rva01141808[];
@@ -41,7 +49,7 @@ struct Rva009A6780State {
     unsigned char pad0038[0x158];
     int at0190[2][64],at0390[2][64],at0590[2][64],at0790[2][64];
 };
-void Rva009A6780BuildQuantizers(Rva009A6780State* s)
+extern "C" void __cdecl VP6_init_quantizer(Rva009A6780State* s,int version)
 {
     int index=s->index;
     double reciprocal=1.0/(g_Rva01141D08[index]*4);

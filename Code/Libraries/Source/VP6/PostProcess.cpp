@@ -1,29 +1,17 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
-// ?Rva009A6130PostFilterDispatch@@YAXPAURva009A6130Context@@HHHHPAE11HH@Z
-// BFME 2 RVA 0x001B6BA0: 1155 code bytes, followed by a nine-entry switch table.
-// Clean C++ donor: Open-BFME-1 10af19f44a89ab7ecc23195bb9a842ceafbc02c9,
-// game/GameEngine/Source/Common/Rva009A6130PostFilterDispatch.cpp (B1 0x009A6130).
-// The VP6 post-filter interpretation and field labels come from that donor;
-// the original symbol is unknown, so retain its address-derived name.
+// Clean room: reverse/vp6_cleanroom/specs/001b6ba0.md plus retail only.
+// No decoder source was consulted.
 //
-// Native evidence: Ghidra starts FUN_005b6ba0 here; the body reads ten cdecl
-// arguments, stores nine at context +0x00..+0x20, then dispatches levels 0..8.
-// Its loads independently establish the offsets declared below. The pointer
-// and dimension interpretations follow the donor and the native copy calls;
-// these are a scoped view, not a claim about the codec's original class name.
-// Native call 0x001B6D08 reaches 0x001B96A0 with (context, frame). Reuse the
-// existing d_009a8c50 pin via its witnessed two-argument ABI, as the matched
-// Rva009A5800Forward.cpp caller does. Calls at 0x001B6D13 and 0x001B7016
-// reach 0x001C2F20 with (context, source, destination), caller stack cleanup.
-// That helper reads those three stack arguments and ends in a plain ret at
-// 0x001C343C; Ghidra's 1299-byte span omits the final loop branch and epilogue.
-// The Rva009B2530 label comes from the corresponding donor call, not symbols.
-//
-// Native indirect calls use VA 0x00E22F88 (five-argument Y copy) and
-// 0x00E22F7C (five-argument noise). The matched CPU table installer establishes
-// its table base at 0x00E22F7C at every slot assignment. Share its definition:
-// Y copy is slot 3 and noise is slot 0. Neither callback gets a private global.
-// Field reloads after calls and the separate m_c0 tails preserve retail codegen.
+// PostProcess (retail 0x001B6BA0, 1192 bytes): cdecl post-process dispatcher.
+// Stores its nine control arguments in the post-processor context (+0x00 to
+// +0x20) and dispatches on the level (0..8) to the deblock and dering
+// passes (UpdateFragQIndex, DeblockFrame, DeblockFrameInterlaced,
+// SimpleDeblockFrame, DeringFrame, DeringFrameInterlaced) and the Y copy and
+// noise slots of the codec dispatch table at 0x00E22F7C (Y copy is slot 3 and
+// noise is slot 0). Field reloads after calls and the separate m_c0 tails
+// preserve retail codegen. The body is carried unchanged from the
+// byte-identical Open-BFME-1 project donor; the context view is a scoped view
+// of the offsets the retail body reads.
 
 extern "C" void *__cdecl memcpy(void *, const void *, unsigned int);
 #pragma intrinsic(memcpy)
@@ -40,8 +28,8 @@ extern "C" void __cdecl SimpleDeblockFrame(Rva009B3800Context *, int, int);
 struct Rva009A6130Context;
 void __cdecl d_009a8c50(void);
 #define Rva009A8C50(c, f) ((void (__cdecl *)(Rva009A6130Context *, unsigned char *))d_009a8c50)((c), (f))
-void __cdecl Rva009B2530(Rva009A6130Context *, unsigned char *, unsigned char *);
-void __cdecl Rva009B2A50(Rva009A6130Context *, unsigned char *, unsigned char *);
+extern "C" void __cdecl DeringFrame(Rva009A6130Context *, unsigned char *, unsigned char *);
+extern "C" void __cdecl DeringFrameInterlaced(Rva009A6130Context *, unsigned char *, unsigned char *);
 
 typedef void (__cdecl *Rva009A6130CopyY)(unsigned char *, unsigned char *,
 	unsigned int, unsigned int, unsigned int);
@@ -89,7 +77,7 @@ struct Rva009A6130Context
 #define AF320(c, a, b) DeblockFrameInterlaced((Rva009AF320Context *)(c), (int)(a), (int)(b))
 #define B3800(c, a, b) SimpleDeblockFrame((Rva009B3800Context *)(c), (int)(a), (int)(b))
 
-void __cdecl Rva009A6130PostFilterDispatch(Rva009A6130Context *ctx, int mode, int a3,
+extern "C" void __cdecl PostProcess(Rva009A6130Context *ctx, int mode, int a3,
 	int level, int tableIndex, unsigned char *source, unsigned char *destination,
 	unsigned char *a8, int a9, int a10)
 {
@@ -136,13 +124,13 @@ void __cdecl Rva009A6130PostFilterDispatch(Rva009A6130Context *ctx, int mode, in
 			{
 				AF320(ctx, ctx->m_source, ctx->m_destination);
 				Rva009A8C50(ctx, ctx->m_destination);
-				Rva009B2A50(ctx, ctx->m_destination, ctx->m_destination);
+				DeringFrameInterlaced(ctx, ctx->m_destination, ctx->m_destination);
 			}
 			else
 			{
 				AF320(ctx, ctx->m_source, ctx->m_bc);
 				Rva009A8C50(ctx, ctx->m_bc);
-				Rva009B2A50(ctx, ctx->m_bc, ctx->m_bc);
+				DeringFrameInterlaced(ctx, ctx->m_bc, ctx->m_bc);
 				unsigned int bytes = ctx->m_height * ctx->m_strideY * 2;
 				memcpy(ctx->m_destination + ctx->m_planeU, ctx->m_bc + ctx->m_planeU, bytes);
 				memcpy(ctx->m_destination + ctx->m_planeV, ctx->m_bc + ctx->m_planeV, bytes);
@@ -153,7 +141,7 @@ void __cdecl Rva009A6130PostFilterDispatch(Rva009A6130Context *ctx, int mode, in
 		}
 		AF200(ctx, ctx->m_source, ctx->m_destination);
 		Rva009A8C50(ctx, ctx->m_destination);
-		Rva009B2530(ctx, ctx->m_destination, ctx->m_destination);
+		DeringFrame(ctx, ctx->m_destination, ctx->m_destination);
 		if (ctx->m_c4)
 			NOISE(ctx->m_destination + ctx->m_planeY, ctx->m_width << 3,
 				ctx->m_height << 3, ctx->m_strideY, tableIndex);
@@ -184,7 +172,7 @@ void __cdecl Rva009A6130PostFilterDispatch(Rva009A6130Context *ctx, int mode, in
 			FILL(ctx);
 		AF200(ctx, ctx->m_source, ctx->m_destination);
 		Rva009A8C50(ctx, ctx->m_destination);
-		Rva009B2530(ctx, ctx->m_destination, ctx->m_destination);
+		DeringFrame(ctx, ctx->m_destination, ctx->m_destination);
 		break;
 
 	case 4:
@@ -233,7 +221,7 @@ void __cdecl Rva009A6130PostFilterDispatch(Rva009A6130Context *ctx, int mode, in
 	default:
 		AF200(ctx, ctx->m_source, ctx->m_destination);
 		Rva009A8C50(ctx, ctx->m_destination);
-		Rva009B2530(ctx, ctx->m_destination, ctx->m_destination);
+		DeringFrame(ctx, ctx->m_destination, ctx->m_destination);
 		break;
 	}
 }

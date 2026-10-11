@@ -1,14 +1,14 @@
-// ?Rva009AA260Scale@@YAHPAURva009AA260Context@@PBEHIIPAEIII@Z
-// Retail RVA 009AA260: caller 009AA4F0 pushes nine arguments and cleans 24h.
-// Code ends with ret at +253; two 24-byte tables at +254/+26c follow it.
-// Callback slots are witnessed by dispatch initialization at RVA009B0FBF.
-// The direct-copy callback is the matched 009A91A0 HorizontalLine_Copy body; retail
-// deliberately invokes it with an ignored fourth cdecl argument. This cast
-// preserves that MSVC x86 ABI contract, rather than introducing a wrapper.
-// The empty vertical callback address is independently verified as 009A91C0.
-// Table destinations (offsets): 52/46/68/3b/68/5e; c7/a5/102/87/102/e6.
-// The address-qualified name is intentional: the caller/layout evidence proves
-// the scaler family and ABI, but not an original class or public owner.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001baca0.md plus retail only.
+// No decoder source was consulted.
+//
+// AnyRatio_2D_Scale (retail 0x001BACA0, 644 bytes): cdecl 2-D scaler for the
+// 4/5 and 3/5 and 2/1 ratios selected from the context scale and ratio
+// fields (returns zero for any other pair). Horizontal and vertical pass
+// callbacks come from the codec scale slots (defined here; the direct copy
+// callback is HorizontalLine_Copy and the empty vertical callback is the
+// plain ret at VA 0x009A91C0). The body is carried from the byte-identical
+// Open-BFME-1 project donor.
 
 struct Rva009AA260Context
 {
@@ -109,7 +109,7 @@ static Rva009AA260VerticalScale rva009AA260LastVertical21(void)
 	return g_lastVerticalScale21Slot;
 }
 
-int __cdecl Rva009AA260Scale(
+extern "C" int __cdecl AnyRatio_2D_Scale(
 	Rva009AA260Context *context,
 	const unsigned char *source,
 	int source_pitch,

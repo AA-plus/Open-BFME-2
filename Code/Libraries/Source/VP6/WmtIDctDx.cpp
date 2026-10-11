@@ -1,25 +1,14 @@
 // cl: /DNDEBUG /MD
-// ?rva009C77C0@@YAXPBX0PAX@Z
-// Transferred unchanged from Open-BFME-1 5cae4bdff game/GameEngine/Source/Common/
-// Rva009C77C0.cpp (BFME1 0x009C77C0). bfme1_sweep places the same masked body at
-// BFME2 0x001D80C0, directly before the already-landed sibling
-// Rva009C7CC0ButterflySse.cpp (BFME2 0x001D85C0). The retail addresses below are BFME1.
-// Retail RVA 0x009C77C0..0x009C7CB8 (1272 bytes).
-// Entry: int3 at 0x009C77BF; address loaded at 0x009B3B73 and stored in
-// the dispatch table at 0x009B3B92. End: ret at 0x009C7CB7, then eight int3.
-// Address-derived identity: the dispatcher proves a callable transform,
-// but not its original source-level name.
+// Clean room: reverse/vp6_cleanroom/specs/001d80c0.md plus retail only.
+// No decoder source was consulted.
 //
-// Multiply two 8x8 signed-word planes, apply an eight-lane fixed-point
-// butterfly, transpose, and apply the butterfly again with rounding and
-// a four-bit arithmetic shift. Intermediate paddw wraps; paddsw/psubsw
-// saturate. This is the full-plane sibling of Rva009C7CC0ButterflySse.cpp.
-//
-// Codegen blocker: the equivalent SSE2-intrinsic implementation tested
-// with VC7.1 /O2 /arch:SSE2 emitted 1646 bytes, a 16-byte realignment
-// frame and 64 bytes of spills (retail has no SIMD stack frame). Explicit
-// SIMD scheduling is required, as for the adjacent SSE transform. The
-// compiler owns the outer EBX save/restore and return; no naked/emit body.
+// Wmt_IDct_Dx (retail 0x001D80C0, 1272 bytes): cdecl SSE2 full-plane inverse
+// DCT of one 8x8 block of 16-bit coefficients. Multiplies the input by the
+// quantiser plane (low words) then runs the eight-lane fixed-point butterfly,
+// transposes in place and runs the butterfly again with rounding and a
+// four-bit arithmetic shift. The cosine and rounding tables are defined here.
+// The body is carried unchanged from the byte-identical Open-BFME-1 donor.
+
 extern const unsigned short kRva012D8F40[56];
 extern const unsigned short kRva012D8F20[8];
 
@@ -38,7 +27,7 @@ const unsigned short kRva012D8F40[56] = {
 	0x31F1, 0x31F1, 0x31F1, 0x31F1, 0x31F1, 0x31F1, 0x31F1, 0x31F1,
 };
 
-void __cdecl rva009C77C0(const void *coefficients, const void *multipliers,
+extern "C" void __cdecl Wmt_IDct_Dx(const void *coefficients, const void *multipliers,
                        void *output)
 {
     __asm {
@@ -340,7 +329,3 @@ void __cdecl rva009C77C0(const void *coefficients, const void *multipliers,
         pop ebx
     }
 }
-
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?Rva009C77C0@@YAXXZ=?rva009C77C0@@YAXPBX0PAX@Z")

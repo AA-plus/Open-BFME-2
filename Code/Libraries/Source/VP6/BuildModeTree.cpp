@@ -1,7 +1,7 @@
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001c7040.md plus retail only.
 // No decoder source was consulted.
-// ?Rva009B6740BuildTable@@YAXPAE@Z retail 0x001C7040..0x001C7241 (514 bytes)
+// VP6_BuildModeTree retail 0x001C7040..0x001C7241 (514 bytes)
 // (spec name VP6_BuildModeTree; the name is the existing pin that the
 // matched caller DecodeModeProbs.cpp already calls). cdecl taking the
 // decoder instance. For each previous mode (outer) and context type (inner)
@@ -21,7 +21,7 @@ struct Vp6ModeTreeInstance {
 	unsigned char probMode[3][10][9];
 };
 #define pbi ((Vp6ModeTreeInstance *)instance)
-void Rva009B6740BuildTable(unsigned char *instance)
+extern "C" void __cdecl VP6_BuildModeTree(unsigned char *instance)
 {
 	unsigned count[10];
 	int prev, type, mode;

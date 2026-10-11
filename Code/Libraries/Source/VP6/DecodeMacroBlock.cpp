@@ -1,10 +1,13 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
-// VP6 macroblock decode: 0x009B5AF0 reads the mode and motion vectors; 0x009B5DB0 decodes the
-// block flag at +0xc8 and points the six 8x8 block decodes (0x009B58F0) at their plane offsets.
+// Clean room: reverse/vp6_cleanroom/specs/001c63f0.md 001c66b0.md plus retail only.
+// No decoder source was consulted.
 //
-// BFME 2: this is Open-BFME-1's file (submodule 10af19f44a); game.dat holds both
-// bodies byte-for-byte, 0x009B5AF0 at 0x001C63F0 and 0x009B5DB0 at 0x001C66B0. The
-// addresses in names and comments are BFME 1's.
+// VP6_decodeModeAndMotionVector (retail 0x001C63F0, 700 bytes) reads the
+// macroblock mode and motion vectors; VP6_DecodeMacroBlock (retail 0x001C66B0,
+// 705 bytes) decodes the block flag at +0xc8 and points the six 8x8 block
+// decodes at their plane offsets. Both are cdecl. The bodies are carried
+// unchanged from the byte-identical Open-BFME-1 project donor.
+
 struct Rva009B4800State;
 extern "C" int __cdecl nDecodeBool(Rva009B4800State *, int);
 
@@ -50,7 +53,7 @@ struct Rva009B5AF0State {
 
 // VP6 macroblock mode and motion-vector decode at retail RVA 0x009B5AF0; mode 7 reads
 // four block modes and averages their vectors for the chroma blocks.
-void Rva009B5AF0Vp6DecodeBlock(unsigned char *ctx, int row, int column)
+extern "C" void __cdecl VP6_decodeModeAndMotionVector(unsigned char *ctx, int row, int column)
 {
 	Rva009B5AF0State *state = (Rva009B5AF0State *)ctx;
 	int scratch; // predictor context, later a decoded motion vector
@@ -155,7 +158,7 @@ void Rva009B5AF0Vp6DecodeBlock(unsigned char *ctx, int row, int column)
 	}
 }
 
-void Rva009B5DB0Vp6DecodeBlock(unsigned char *ctx, int outer, unsigned int column)
+extern "C" void __cdecl VP6_DecodeMacroBlock(unsigned char *ctx, int outer, unsigned int column)
 {
 	if (*(int *)(ctx + 0x1dc) != 0) {
 		unsigned char probability = ctx[0x6e8];
@@ -177,7 +180,7 @@ void Rva009B5DB0Vp6DecodeBlock(unsigned char *ctx, int outer, unsigned int colum
 	if (ctx[0x1ac] == 0) {
 		*(int *)(ctx + 0x8) = 1;
 	} else {
-		Rva009B5AF0Vp6DecodeBlock(ctx, outer, column);
+		VP6_decodeModeAndMotionVector(ctx, outer, column);
 	}
 
 	int width = *(int *)(ctx + 0x1b8);

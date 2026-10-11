@@ -1,32 +1,18 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
-// ?Rva009B2A50@@YAXPAURva009A6130Context@@PAE1@Z
-// Retail 0x009B2A50, 1835 bytes (single ret at +0x72A, int3 padding to
-// 0x009B3180; the generated scaffold's 1832 stopped three bytes short).
+// Clean room: reverse/vp6_cleanroom/specs/001c3440.md plus retail only.
+// No decoder source was consulted.
 //
-// VP6 interlaced dering pass: the same algorithm as On2 VP3's postproc
-// DeringFrame, run over two Y fields (doubled stride, the second field one
-// line down, the fragment-variance index carrying on), then the U and V
-// planes at half width and a quarter of that stride.  A index whose variance
-// exceeds the third threshold (fourth for chroma) is strongly derung, and
-// derung twice more when a neighbour exceeds the fourth; otherwise strong,
-// weak or a plain copy by the second and first thresholds.  The kernels are
-// the codec's dispatch slots 0x01356EC0 (strong), 0x01356EA0 (weak) and
-// 0x01356B44 (copy); the quantiser table is picked by m_mode.
-//
-// Identity: the only caller is the landed Rva009A6130PostFilterDispatch,
-// which declares this exact (context, source, destination) signature; no
-// vtable, string or symbol names it, so it keeps the address token.  The
-// context view reuses that caller's field names; +0x28 (m_metric) is the per-fragment
-// variance array.
-//
-// Shape notes: the first field spells the destination index as
-// dstPtr + 8*col and the later passes as the source index plus the row
-// delta, which is how retail forms them (lea base/index and the lea-vs-add
-// choice at each kernel call); LineLength is unsigned (shr, not sar).
-//
-// BFME 2: copied unchanged from Open-BFME-1 (submodule 10af19f44a), whose
-// body game.dat holds byte-identically at 0x001C3440. The addresses above
-// are BFME 1's; the data definitions below carry BFME 2's.
+// DeringFrameInterlaced (retail 0x001C3440, 1835 bytes): cdecl (post-processor
+// instance / source frame / destination frame) interlaced dering pass. Two Y
+// fields at doubled stride (the second one line down, the fragment-variance
+// index carrying on), then U and V at half width. A variance above the third
+// threshold (fourth for chroma) is strongly derung (twice more when a
+// neighbour exceeds the fourth); otherwise strong, weak or a plain copy by
+// the second and first thresholds. The kernels are the codec dispatch slots
+// 0x01356EC0 (strong), 0x01356EA0 (weak) and 0x01356B44 (copy); the
+// quantiser table is picked by m_mode. The body is carried unchanged from the
+// byte-identical Open-BFME-1 project donor; it owns the two quantiser tables
+// and the two kernel slot pointers.
 
 struct Rva009A6130Context
 {
@@ -82,7 +68,7 @@ int g_rva012D8058[64] =
 #define BLOCK_DST (srcPtr + 8 * col + (dstPtr - srcPtr))
 #define BLOCK_DST_FIRST (dstPtr + 8 * col)
 
-void __cdecl Rva009B2A50(Rva009A6130Context *ctx, unsigned char *src, unsigned char *dst)
+extern "C" void __cdecl DeringFrameInterlaced(Rva009A6130Context *ctx, unsigned char *src, unsigned char *dst)
 {
 	int thresh1, thresh2, thresh3, thresh4;
 	const int *table;

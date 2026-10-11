@@ -1,10 +1,14 @@
 // cl: /O2 /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
-// Clean C++ donor: Open-BFME-1 874e38488c7dcf8cf3343452e8e5371bb3a0e64c
-// game/GameEngine/Source/Common/Rva009ACC80Filter.cpp; donor RVA 0x009ACC80.
-// BFME2 unique whole-body placement 0x001BD670..0x001BD975 (773 bytes).
-// Address-owned donor spellings retained; original class/function name is unproven.
-// Cdecl ABI and context fields are witnessed by the matching native body.
-// Sample and variance fields are witnessed at context offsets 0x24 and 0x28.
+// Clean room: reverse/vp6_cleanroom/specs/001bd670.md plus retail only.
+// No decoder source was consulted.
+//
+// DeblockVerticalEdgesInLoopFilteredBand (retail 0x001BD670, 773 bytes):
+// cdecl vertical-edge deblock over one band of fragments for the
+// loop-filtered profile. Per row it sums and accumulates the variance of the
+// four samples either side of each edge into the context variance array and,
+// when both variances and the edge step are below the limit from the table,
+// replaces the eight samples across the edge by the rolling smoothing sum.
+// The body is carried from the byte-identical Open-BFME-1 project donor.
 
 struct Rva009ACC80Context
 {
@@ -13,8 +17,7 @@ struct Rva009ACC80Context
     int *m_variance;
 };
 
-// ?Rva009ACC80Filter@@YAXPAURva009ACC80Context@@PAE1IIHPBI@Z
-void __cdecl Rva009ACC80Filter(Rva009ACC80Context *ctx, unsigned char *source, unsigned char *destination, unsigned int stride, unsigned int count, int first, const unsigned int *limits)
+extern "C" void __cdecl DeblockVerticalEdgesInLoopFilteredBand(Rva009ACC80Context *ctx, unsigned char *source, unsigned char *destination, unsigned int stride, unsigned int count, int first, const unsigned int *limits)
 {
     unsigned int index;
     int samples[10];

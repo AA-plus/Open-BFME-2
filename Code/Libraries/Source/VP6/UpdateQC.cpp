@@ -11,7 +11,7 @@
 
 struct Rva009A6780State;
 struct BfmeS1040;
-void Rva009A6780BuildQuantizers(Rva009A6780State *); // 0x001B71F0 VP6_init_quantizer
+extern "C" void __cdecl VP6_init_quantizer(Rva009A6780State *, int); // 0x001B71F0
 extern "C" void __cdecl VP6_init_dequantizer(BfmeS1040 *, int);  // 0x001B70A0
 
 extern unsigned int vp6DequantIndex[64]; // retail 0x00BD8460 zig-zag order
@@ -44,8 +44,6 @@ extern "C" void __cdecl VP6_UpdateQC(void *quantizer, int version)
 	memcpy(bytes + 0x38, bytes + 4, 4);
 	resetInverseMap(bytes);
 
-	typedef void (__cdecl *QuantizerCaller)(Rva009A6780State *, int);
-	reinterpret_cast<QuantizerCaller>(Rva009A6780BuildQuantizers)(
-		static_cast<Rva009A6780State *>(quantizer), version);
+	VP6_init_quantizer(static_cast<Rva009A6780State *>(quantizer), version);
 	VP6_init_dequantizer(static_cast<BfmeS1040 *>(quantizer), version);
 }

@@ -28,8 +28,6 @@ Code/GameEngine/Source/Common/Bfme5TinyNineteen.cpp	wrong-name	?g_timedOperation
 Code/GameEngine/Source/Common/BfmeApplierBHRva003C4070.cpp	wrong-name	?g_00E02D4C@@3PAVSpecialPowerStore@@A	0x00A02D4C
 Code/GameEngine/Source/Common/BfmeApplierBHRva003C4145.cpp	wrong-name	?g_00E02D4C@@3PAVSpecialPowerStore@@A	0x00A02D4C
 Code/GameEngine/Source/Common/BfmeApplierBHRva003C41BA.cpp	wrong-name	?g_00E02D4C@@3PAVSpecialPowerStore@@A	0x00A02D4C
-Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp	duplicate-def	_g_bfmeCodecDispatchOutlier	0x00A22F78
-Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp	wrong-name	_g_bfmeCodecDispatchOutlier	0x00A22F78
 Code/GameEngine/Source/Common/BfmeConv1019.cpp	wrong-name	?g_bfmeS1019@@3PAVBfmeS1019@@A	0x00A09FCC
 Code/GameEngine/Source/Common/BfmeConv1020.cpp	wrong-name	?g_bfmeN1020@@3PAVBfmeN1020@@A	0x009FEF1C
 Code/GameEngine/Source/Common/BfmeConv1024.cpp	wrong-name	?g_bfmeP1024@@3PAVBfmeP1024@@A	0x00A09C0C

@@ -37,7 +37,7 @@ typedef void (__cdecl *DeblockPlaneBand)(Rva009AF200Context *, unsigned char *,
 	unsigned char *, unsigned int, unsigned int, int, const unsigned int *);
 
 struct Rva009ACC80Context;
-void __cdecl Rva009ACC80Filter(Rva009ACC80Context *, unsigned char *, unsigned char *,
+extern "C" void __cdecl DeblockVerticalEdgesInLoopFilteredBand(Rva009ACC80Context *, unsigned char *, unsigned char *,
 	unsigned int, unsigned int, int, const unsigned int *);
 struct Rva009AD750Context;
 extern "C" void __cdecl DeblockVerticalEdgesInNonFilteredBand(Rva009AD750Context *,
@@ -68,7 +68,7 @@ extern "C" void __cdecl DeblockPlane(Rva009AF200Context *ctx, int sourceOffset, 
 		edges = (DeblockPlaneBand)DeblockVerticalEdgesInNonFilteredBand;
 	} else {
 		band = g_00E22FA4;
-		edges = (DeblockPlaneBand)Rva009ACC80Filter;
+		edges = (DeblockPlaneBand)DeblockVerticalEdgesInLoopFilteredBand;
 	}
 
 	switch (channel) {

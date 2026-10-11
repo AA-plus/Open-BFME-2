@@ -1,6 +1,11 @@
-// VPx Scale2D conversion recovered from the retail codec body at RVA 0x009A9AD0.
-// Callback bodies at 0x009A9980 and 0x009A9A20 use the witnessed Scale1D ABI.
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001ba510.md plus retail only.
+// No decoder source was consulted.
+//
+// Scale2D (retail 0x001BA510, 697 bytes): cdecl scaler of one plane. Same-height
+// planes scale row by row through the horizontal one-dimensional scaler;
+// otherwise a band at a time through the temporary area, horizontal first
+// then vertical per column. Callees are the one-dimensional scalers.
 
 #include <string.h>
 
@@ -15,7 +20,7 @@ extern void __cdecl Rva009A9A20( const Byte *, int, unsigned int, unsigned int,
 extern "C" void __cdecl Scale1D_2t1_ps( Byte *, int, int, int,
 	Byte *, int, int, int );
 
-void Rva009A9AD0Scale2D(
+extern "C" void __cdecl Scale2D(
 	Byte *source,
 	int sourcePitch,
 	unsigned int sourceWidth,

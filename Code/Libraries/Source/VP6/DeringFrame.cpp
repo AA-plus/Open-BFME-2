@@ -1,7 +1,7 @@
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001c2f20.md plus retail only.
 // No decoder source was consulted.
-// ?Rva009B2530@@YAXPAURva009A6130Context@@PAE1@Z retail 0x001C2F20..0x001C343D
+// DeringFrame retail 0x001C2F20..0x001C343D
 // (1309 bytes) cdecl (post-processor instance / source frame / destination
 // frame); the pinned address-derived name is kept. Progressive DeringFrame:
 // the Y plane (line length = Y stride at 0x98) then U and V at half the
@@ -16,7 +16,7 @@
 // a block above the fourth threshold at level above 5 is filtered three
 // times. Kernels are the dispatch slots 0x00E22FDC (strong) 0x00E22FBC
 // (weak) and 0x00E22D0C (copy). The interlaced sibling at 0x001C3440 is
-// Rva009B2A50DeringFrame.cpp and supplies the context view names.
+// DeringFrameInterlaced.cpp and supplies the context view names.
 
 struct Rva009A6130Context
 {
@@ -51,7 +51,7 @@ extern int g_rva012D8058[64];
 #define BLOCK_SRC (srcPtr + 8 * col)
 #define BLOCK_DST (srcPtr + 8 * col + (dstPtr - srcPtr))
 
-void __cdecl Rva009B2530(Rva009A6130Context *ctx, unsigned char *src, unsigned char *dst)
+extern "C" void __cdecl DeringFrame(Rva009A6130Context *ctx, unsigned char *src, unsigned char *dst)
 {
 	int thresh1, thresh2, thresh3, thresh4;
 	const int *table;

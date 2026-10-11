@@ -1,18 +1,17 @@
-// ?rva009C7CC0@@YAXPBX0PAX@Z
 // cl: /DNDEBUG /MD
-
-// Straight-line SSE2 leaf, no calls, no branches.  Elementwise-multiplies
-// two 4-row (8-word) coefficient planes, runs an 8-point butterfly against
-// a 7-entry constant table to produce an 8x8 output block, transposes the
-// block in place, then runs the identical butterfly a second time over the
-// transposed rows (a separable two-pass transform).  Retail 0x009C7CC0,
-// 1024 bytes.
+// Clean room: reverse/vp6_cleanroom/specs/001d85c0.md plus retail only.
+// No decoder source was consulted.
+//
+// Wmt_IDct10_Dx (retail 0x001D85C0, 1024 bytes): cdecl SSE2 inverse DCT of one
+// 8x8 block (the IDct10 variant). Multiplies the four coefficient rows by the
+// quantiser plane, runs the 8-point butterfly against the seven-entry
+// cosine table, transposes in place and runs the butterfly again. The tables
+// are those defined by Wmt_IDct_Dx (WmtIDctDx.cpp).
 
 extern const unsigned short kRva012D8F40[56];	// retail 0x012D8F40, 7 rows x 8 words
 extern const unsigned short kRva012D8F20[8];	// retail 0x012D8F20, round constant
 
-// ?rva009C7CC0@@YAXPBX00@Z
-void __cdecl rva009C7CC0(const void *p1, const void *p2, void *p3)
+extern "C" void __cdecl Wmt_IDct10_Dx(const void *p1, const void *p2, void *p3)
 {
 	__asm
 	{

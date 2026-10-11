@@ -1,7 +1,7 @@
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001c69e0.md plus retail only.
 // No decoder source was consulted.
-// ?Rva009B60E0BuildTree@@YAXPAI0H@Z retail 0x001C69E0..0x001C6B98 (441 bytes)
+// VP6_BuildHuffTree retail 0x001C69E0..0x001C6B98 (441 bytes)
 // (spec name VP6_BuildHuffTree; the name is the existing pin that the
 // matched caller ConvertBoolTrees.cpp already calls at its three
 // sites). cdecl: 12-byte node array / symbol weights (a 0 weight becomes 1
@@ -37,7 +37,7 @@ struct Vp6HuffSort {
 		}
 	}
 };
-void Rva009B60E0BuildTree(unsigned *nodeArray, unsigned *weights, int count)
+extern "C" void __cdecl VP6_BuildHuffTree(unsigned *nodeArray, unsigned *weights, int count)
 {
 	Vp6HuffRecord list[64];
 	Vp6HuffNode *nodes = (Vp6HuffNode *)nodeArray;

@@ -1,14 +1,15 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d1650.md plus retail only.
+// No decoder source was consulted.
 //
-// Open-BFME5: same MMX block filter as bfmeFilterBlockByIndexMmx, run twice
-// back to back on two adjacent four-column strips -- retail re-derives the
-// coefficient pointer and advances the row pointer by stride*4 partway
-// through, then repeats the identical filter body.  Retail 0x009C1120, 882
-// bytes.
+// FilteringHoriz_8_MMX (retail 0x001D1650, 622 bytes): MMX loop filter across one
+// vertical block edge, eight lines in two batches of four. The bound is read
+// from the replicated limit table by q index; the pixels pass through a
+// stack staging buffer. Leaves MMX state in use.
 
 extern unsigned short Rva009C0D10Table[];		// retail 0x013566C0
 
-void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
+extern "C" void __cdecl FilteringHoriz_8_MMX(int index, void *row, int stride)
 {
 	const unsigned short *coef = Rva009C0D10Table + index * 4;
 	__declspec(align(16)) unsigned short four[4] = { 4, 4, 4, 4 };
@@ -30,10 +31,10 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		movd mm4, dword ptr [esi + ecx]
 		psrld mm1, 10h
 		punpcklwd mm1, mm4
-		lea edx, [edx + edx*2]
-		movd mm2, dword ptr [esi + ecx*2 - 4]
+		lea edx, [edx + edx * 2]
+		movd mm2, dword ptr [esi + ecx * 2 - 4]
 		punpcklbw mm0, mm1
-		movd mm4, dword ptr [esi + ecx*2]
+		movd mm4, dword ptr [esi + ecx * 2]
 		psrld mm2, 10h
 		movd mm1, dword ptr [esi + edx - 4]
 		punpcklwd mm2, mm4
@@ -44,7 +45,7 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		punpcklbw mm2, mm1
 		movq mm1, mm0
 		punpcklwd mm0, mm2
-		lea esi, [esi + ecx*4]
+		lea esi, [esi + ecx * 4]
 		punpckhwd mm1, mm2
 		movq mm6, mm0
 		movq qword ptr [edi], mm0
@@ -72,9 +73,9 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		paddw mm1, mm3
 		paddw mm1, qword ptr four
 		psubw mm6, mm2
-		movd mm2, dword ptr [esi + ecx*2 - 4]
+		movd mm2, dword ptr [esi + ecx * 2 - 4]
 		paddw mm6, mm1
-		movd mm4, dword ptr [esi + ecx*2]
+		movd mm4, dword ptr [esi + ecx * 2]
 		psrld mm2, 10h
 		movd mm5, dword ptr [esi + edx - 4]
 		punpcklwd mm2, mm4
@@ -91,7 +92,7 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		movq qword ptr [edi + 18h], mm5
 		punpcklwd mm7, mm2
 		movq qword ptr [edi + 10h], mm7
-		psraw mm6, 0Fh
+		psraw mm6, 0fh
 		movq mm2, qword ptr [eax]
 		movq mm0, mm7
 		psrlq mm7, 20h
@@ -103,12 +104,12 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		punpcklbw mm7, mm4
 		psubw mm3, mm1
 		movq mm4, mm3
-		psraw mm3, 0Fh
+		psraw mm3, 0fh
 		psubw mm5, mm7
 		pxor mm4, mm3
 		psubsw mm4, mm3
 		pxor mm3, mm3
-		movd mm1, dword ptr [edi + 1Ch]
+		movd mm1, dword ptr [edi + 1ch]
 		psubusw mm2, mm4
 		punpcklbw mm0, mm3
 		movq mm7, mm5
@@ -131,7 +132,7 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		packuswb mm3, mm3
 		movq mm1, mm0
 		movq mm2, qword ptr [eax]
-		psraw mm0, 0Fh
+		psraw mm0, 0fh
 		punpcklbw mm3, mm7
 		movq mm7, mm0
 		movd eax, mm3
@@ -146,8 +147,8 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		psubw mm5, mm1
 		movd eax, mm3
 		movq mm4, mm5
-		mov word ptr [esi + ecx*2 - 1], ax
-		psraw mm5, 0Fh
+		mov word ptr [esi + ecx * 2 - 1], ax
+		psraw mm5, 0fh
 		shr eax, 10h
 		pxor mm4, mm5
 		mov word ptr [esi + edx - 1], ax
@@ -158,7 +159,7 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		pxor mm6, mm6
 		movd mm3, dword ptr [edi + 14h]
 		punpcklbw mm5, mm6
-		lea esi, [esi + ecx*4]
+		lea esi, [esi + ecx * 4]
 		punpcklbw mm3, mm6
 		paddw mm3, mm2
 		psubw mm5, mm2
@@ -171,82 +172,7 @@ void __cdecl bfmeFilterBlockPairByIndexMmx(int index, void *row, int stride)
 		shr eax, 10h
 		mov word ptr [esi + ecx - 1], ax
 		movd eax, mm3
-		mov word ptr [esi + ecx*2 - 1], ax
-		shr eax, 10h
-		mov word ptr [esi + edx - 1], ax
-		mov eax, coef
-		lea esi, [esi + ecx*4]
-		movd mm0, dword ptr [esi - 4]
-		movd mm4, dword ptr [esi]
-		psrld mm0, 10h
-		movd mm1, dword ptr [esi + ecx - 4]
-		punpcklwd mm0, mm4
-		movd mm4, dword ptr [esi + ecx]
-		psrld mm1, 10h
-		punpcklwd mm1, mm4
-		movd mm2, dword ptr [esi + ecx*2 - 4]
-		punpcklbw mm0, mm1
-		movd mm4, dword ptr [esi + ecx*2]
-		psrld mm2, 10h
-		movd mm1, dword ptr [esi + edx - 4]
-		punpcklwd mm2, mm4
-		movd mm4, dword ptr [esi + edx]
-		psrld mm1, 10h
-		punpcklwd mm1, mm4
-		pxor mm4, mm4
-		punpcklbw mm2, mm1
-		movq mm1, mm0
-		punpcklwd mm0, mm2
-		punpckhwd mm1, mm2
-		movq mm6, mm0
-		movq qword ptr [edi], mm0
-		movq mm2, mm1
-		movq qword ptr [edi + 8], mm1
-		psrlq mm0, 20h
-		punpcklbw mm1, mm4
-		punpcklbw mm0, mm4
-		psrlq mm2, 20h
-		psubw mm1, mm0
-		movq mm3, mm1
-		punpcklbw mm6, mm4
-		paddw mm3, mm1
-		punpcklbw mm2, mm4
-		paddw mm1, mm3
-		paddw mm1, qword ptr four
-		psubw mm6, mm2
-		paddw mm6, mm1
-		psraw mm6, 3
-		movq mm1, mm6
-		psraw mm6, 0Fh
-		pxor mm1, mm6
-		psubsw mm1, mm6
-		por mm6, qword ptr one
-		movq mm2, qword ptr [eax]
-		movq mm3, mm2
-		psubw mm3, mm1
-		movq mm4, mm3
-		psraw mm3, 0Fh
-		pxor mm4, mm3
-		psubsw mm4, mm3
-		psubusw mm2, mm4
-		pmullw mm2, mm6
-		pxor mm5, mm5
-		movd mm7, dword ptr [edi + 8]
-		punpcklbw mm7, mm5
-		movd mm3, dword ptr [edi + 4]
-		psubw mm7, mm2
-		punpcklbw mm3, mm5
-		paddw mm3, mm2
-		packuswb mm7, mm7
-		packuswb mm3, mm3
-		punpcklbw mm3, mm7
-		movd eax, mm3
-		psrlq mm3, 20h
-		mov word ptr [esi - 1], ax
-		shr eax, 10h
-		mov word ptr [esi + ecx - 1], ax
-		movd eax, mm3
-		mov word ptr [esi + ecx*2 - 1], ax
+		mov word ptr [esi + ecx * 2 - 1], ax
 		shr eax, 10h
 		mov word ptr [esi + edx - 1], ax
 	}

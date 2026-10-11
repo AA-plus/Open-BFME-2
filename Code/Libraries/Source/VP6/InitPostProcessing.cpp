@@ -8,11 +8,8 @@
 // the 64-entry source table, picks the tier's pair of tables and runs the CPU
 // dispatch installer.
 
-// Retail passes the tier on the stack although the installer's landed body
-// (0x009B0D60) never reads an argument, so the call goes through a typed cast
-// of its ledger name.
-extern void __cdecl bfmeInstallCpuDispatchTable(void);
-typedef void (__cdecl *Rva009A5AA0TierInstaller)(int);
+// Retail passes the tier on the stack; the installer never reads it.
+extern "C" void __cdecl PostProcMachineSpecificConfig(int version);
 
 extern const unsigned char g_bfmeClampTable[];	// retail 0x01356FE0 (zero point)
 extern const unsigned int *g_rva01356AA0;
@@ -159,6 +156,6 @@ extern "C" void __cdecl InitPostProcessing(void *firstTable, void *secondTable, 
 		Rva009C0D10Src = g_rva012D7C58;
 		g_rva01356A9C = g_rva012D7858;
 	}
-	((Rva009A5AA0TierInstaller)bfmeInstallCpuDispatchTable)(tier);
+	PostProcMachineSpecificConfig(tier);
 }
 
