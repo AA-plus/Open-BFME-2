@@ -90,6 +90,7 @@ public:
     void rva006E3740(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE);
     void rva006E4B80(void *pArg1, AptCIH *pCIH, int iArg3, int iArg4);
     void rva006E4C70(void *pArg1, AptCIH *pCIH, int iArg3, int iArg4);
+    void rva006E3810(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE);
 };
 void AptActionQueueC::rva006E3230(Rva006E3230Action *pCur)
 {
@@ -280,3 +281,25 @@ void AptActionQueueC::rva006E4C70(void *pArg1, AptCIH *pCIH, int iArg3, int iArg
     }
     Rva006CC110Log(4, "!!!!!!!!!!!!! AptAnimationPoolData:  Dequeue is full !!!!!!!!");
 }
+
+// Four 11-byte forwarders at 0x006E0F00/10/20/30 (int3-padded to 16): each loads
+// the AptActionQueueC held at +0xA0 of its object and tail-jumps one of the
+// queue's rowed members (0x006E4B80, 0x006E4C70, 0x006E3740, and 0x006E3810 in
+// Rva006E3810FrontEnqueue.cpp). The owning class is unknown; names are
+// address-derived and no referencing site was found in this pass.
+class Rva006E0F00Owner
+{
+public:
+    void rva006E0F00(void *pArg1, AptCIH *pCIH, int iArg3, int iArg4);
+    void rva006E0F10(void *pArg1, AptCIH *pCIH, int iArg3, int iArg4);
+    void rva006E0F20(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE);
+    void rva006E0F30(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE);
+private:
+    char m_pad00[0xA0];
+    AptActionQueueC *m_queueA0;
+};
+
+void Rva006E0F00Owner::rva006E0F00(void *pArg1, AptCIH *pCIH, int iArg3, int iArg4) { m_queueA0->rva006E4B80(pArg1, pCIH, iArg3, iArg4); }
+void Rva006E0F00Owner::rva006E0F10(void *pArg1, AptCIH *pCIH, int iArg3, int iArg4) { m_queueA0->rva006E4C70(pArg1, pCIH, iArg3, iArg4); }
+void Rva006E0F00Owner::rva006E0F20(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE) { m_queueA0->rva006E3740(pContext, pA, pB, iD, iE); }
+void Rva006E0F00Owner::rva006E0F30(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE) { m_queueA0->rva006E3810(pContext, pA, pB, iD, iE); }
