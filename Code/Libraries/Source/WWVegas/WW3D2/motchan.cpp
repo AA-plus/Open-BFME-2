@@ -746,37 +746,7 @@ int TimeCodedBitChannelClass::Get_Bit(int frame)
  * HISTORY:                                                                                    * 
  *   02/18/2000 JGA : Created.                                                                 * 
  *=============================================================================================*/
-// ?AdaptiveDeltaMotionChannelClass::AdaptiveDeltaMotionChannelClass present-unmatched
-AdaptiveDeltaMotionChannelClass::AdaptiveDeltaMotionChannelClass(void) :
-	PivotIdx(0),
-	Type(0),
-	VectorLen(0),
-	_bfme_adm_scale2(0.0f),
-	Data(NULL),
-	NumFrames(0),
-	CacheFrame(0),
-	CacheData(NULL),
-	Scale(0.0f)	
-{
-
-	if (false == table_valid) {
-		// Create Filter Table, used in delta compression
-
-		for (int i=0; i<FILTER_TABLE_GEN_SIZE; i++)
-		{
-			float ratio = i;
-
-			//ratio = ((ratio + 1.0f) / 128.0f); 
-			ratio/=((float) FILTER_TABLE_GEN_SIZE);
-
-			filtertable[i + FILTER_TABLE_GEN_START] = 1.0f - WWMath::Sin( DEG_TO_RAD(90.0f * ratio));
-		}
-
-		table_valid = true;
-
-	}
-
-}
+// AdaptiveDeltaMotionChannelClass::AdaptiveDeltaMotionChannelClass (?) is rowed in AdaptiveDeltaMotionChannelFinish.cpp; a second definition here would not link.
 
 /*********************************************************************************************** 
  * MotionChannelClass::~MotionChannelClass -- destructor                                       * 
