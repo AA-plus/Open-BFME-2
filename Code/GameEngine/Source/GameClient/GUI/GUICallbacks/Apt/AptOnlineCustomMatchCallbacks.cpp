@@ -175,7 +175,9 @@ public:
 	void launchWOTRMPGame(); // rowed 0x004FE126
 	void launchGame();		 // rowed 0x004FED35
 	// RequestJoinGame copies this WORD between complete staging-room objects.
-	unsigned char m_pad88[0x1008 - 0x88];
+	unsigned char m_pad88[0xFED - 0x88];
+	bool m_fed; // +0xFED, set when the host creates the room
+	unsigned char m_padfee[0x1008 - 0xFEE];
 	unsigned short m_1008; // purpose remains unknown
 };
 
@@ -188,7 +190,9 @@ extern GameSpyStagingRoom *TheGameSpyGame;
 class MapMetaData
 {
 public:
-	unsigned char m_pad00[0x28];
+	unsigned char m_pad00[0x20];
+	int m_20;				// +0x20, sent with a created room
+	unsigned char m_pad24[0x28 - 0x24];
 	unsigned int m_filesize; // +0x28
 	unsigned int m_CRC;	  // +0x2C
 };
@@ -229,7 +233,9 @@ public:
 	// Slot 65 (+0x104): text alone (PrintMessage kind 2).
 	virtual void v65(UnicodeString text) = 0;
 	V(66) V(67) V(68) V(69)
-	V(70) V(71) V(72) V(73) V(74) V(75) V(76) V(77) V(78) V(79)
+	V(70)
+	virtual const AsciiString &v71() = 0; // +0x11C, the host ping string
+	V(72) V(73) V(74) V(75) V(76) V(77) V(78) V(79)
 	V(80) V(81) V(82) V(83) V(84)
 	// Slots 85/86 (+0x154/+0x158) seed the room's +0x38/+0x3C when state 12
 	// creates the NAT; 88 (+0x160), 89 (+0x164) and 93 (+0x174) serve
@@ -256,6 +262,15 @@ extern unsigned int g_00DB91B4;
 void Rva0044C0A8(UnicodeString title, UnicodeString text, void *callback);
 extern int g_Va00E046B8;
 
+// TheWritableGlobalData's version block at +0xB08 copies itself into a
+// creation request (rowed 0x00237E28).
+class Rva00237E28
+{
+public:
+	void rva00237E28(Rva00237E28 *out);
+	unsigned char m_data[0x10];
+};
+
 // The peer thread request (layout of Rva005A8666BoxNat.cpp): type +0x00,
 // nick +0x04, id +0x34, options +0x40, the staging-room flag +0x118.
 struct PeerRequest
@@ -277,8 +292,29 @@ struct PeerRequest
 	std::string unknown_f8;
 	std::vector<bool> unknown_104;
 	// Request type 11 uses the DWORD; kick and option requests use its flag.
-	union { bool isStagingRoom; int gameID; }; // +0x118
-	unsigned char m_tail[0x1EC - 0x11C];
+	union
+	{
+		bool isStagingRoom;
+		int gameID;
+		// Type 9, staging-room creation (Zero Hour's stagingRoomCreation
+		// plus BFME fields; names after the donor where it has them).
+		struct
+		{
+			Rva00237E28 version;		  // +0x118, TheWritableGlobalData +0xB08
+			unsigned int exeCRC;		  // +0x128
+			unsigned int iniCRC;		  // +0x12C
+			unsigned char ladderKey[16];  // +0x130
+			int gameVersion;			  // +0x140, TheGameSpyInfo vslot 85
+			bool allowObservers;		  // +0x144
+			unsigned short ladPort;	   // +0x146
+			unsigned char m_148[4];
+			bool restrictGameList;		// +0x14C
+			int mapValue;				 // +0x150, the map cache entry's +0x20
+			unsigned char m_154[0x1E4 - 0x154];
+			int localSlot;				// +0x1E4
+		} creation;
+		unsigned char m_raw[0x1EC - 0x118];
+	};
 };
 
 // The peer thread response (PeerThreadRetail.h layout): type +0x00, the
@@ -338,6 +374,9 @@ public:
 
 	AsciiString rva0044DAA8(const AsciiString &);
 	AsciiString rva0044DBA5();
+	void rva0044DE5A(const AsciiString &name);	// rowed 0x0044DE5A
+	void rva0044DEC1(const AsciiString &password); // rowed 0x0044DEC1
+	AsciiString rva0044D986();					  // rowed 0x0044D986, the map
 	void rva0044DDFB(int *rules); // rowed 0x0044DDFB, "Rules"
 
 private:
@@ -413,8 +452,12 @@ class Rva0043DB47DoubleSetter
 public:
 	void enable();
 
-	char m_lead[0x2B0];
-	int m_2b0; // +0x2B0 (+0x320 of the screen), required for state 0's start
+	char m_lead[0x7C];
+	int m_7c; // +0x7C (+0xEC of the screen), the local slot a created room records
+	char m_lead80[0x2B0 - 0x80];
+	// +0x2B0 (+0x320 of the screen): the selected ladder, whose 16-byte key
+	// at +0xDAC a created room carries; state 0 waits for it.
+	struct Ladder { unsigned char m_pad[0xDAC]; unsigned char m_key[16]; } *m_ladder;
 	char m_lead2b4[0x2B9 - 0x2B4];
 	unsigned char m_a;
 	unsigned char m_b;
@@ -1285,7 +1328,7 @@ void AptOnlineCustomMatch::rva005A61C6()
 	switch (m_state)
 	{
 	case 0:
-		if (g_Va00E063F0 == 1 && rva005A1EEE() && m_70.m_2b0 != 0)
+		if (g_Va00E063F0 == 1 && rva005A1EEE() && m_70.m_ladder != 0)
 			m_state = 4;
 		break;
 	case 1:
@@ -1395,4 +1438,102 @@ void AptOnlineCustomMatch::rva005A61C6()
 	}
 	if (((AptMpGameSetup *)&m_70)->OnUpdate())
 		UpdatePings();
+}
+
+class LanguageFilter { public: void filterLine(UnicodeString &line); }; // rowed 0x00388102
+extern LanguageFilter *TheLanguageFilter;
+class GameSpyConfigInterface
+{
+public:
+#define G(n) virtual void g##n();
+	G(0) G(1) G(2) G(3) G(4) G(5) G(6) G(7) G(8) G(9) G(10) G(11) G(12)
+#undef G
+	virtual bool v13(); // +0x34, Zero Hour's restrictGamesToLobby slot
+};
+extern GameSpyConfigInterface *TheGameSpyConfig;
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+struct Rva005A2899GlobalView
+{
+	unsigned char m_pad000[0xB04];
+	unsigned int m_exeCRC;	 // +0xB04
+	Rva00237E28 m_version;	 // +0xB08
+	unsigned char m_padb18[0xB38 - 0xB18];
+	unsigned int m_iniCRC;	 // +0xB38
+};
+
+// Retail 0x005A2899, 990 bytes: state 4 of the per-frame step, the host's
+// staging-room creation (Zero Hour's PopupHostGame createGame, adapted):
+// with a ladder (+0x70 panel +0x2B0) it first refills the name and password
+// entries from the saved game-mode preferences, then sends a type-9 peer
+// request carrying the filtered game name, the password, TheWritableGlobalData's
+// version block and CRCs, TheGameSpyInfo's vslot-85 value, TheGameSpyConfig's
+// vslot-13 flag, the "localhost" ladder address, the ping string, the ladder's
+// 16-byte key (else zeros) and the map's +0x34 cache value, and moves to
+// state 5.
+void AptOnlineCustomMatch::rva005A2899()
+{
+	PeerRequest req;
+	if (m_70.m_ladder)
+	{
+		if (m_textentryGameName)
+		{
+			UnicodeString name;
+			name.translate(m_prefs.rva0044DAA8(TheGameSpyInfo->getLocalName()));
+			GadgetTextEntrySetText(m_textentryGameName, name);
+		}
+		if (m_createDialog)
+		{
+			UnicodeString password;
+			password.translate(m_prefs.rva0044DBA5());
+			GadgetTextEntrySetText(m_createDialog, password);
+		}
+	}
+	UnicodeString gameName = GadgetTextEntryGetText(m_textentryGameName);
+	if (TheLanguageFilter)
+		TheLanguageFilter->filterLine(gameName);
+	AsciiString asciiName(gameName);
+	m_prefs.rva0044DE5A(asciiName);
+	req.peerRequestType = 9;
+	req.unknown_10 = gameName.str();
+	((Rva003821E2 *)TheGameSpyGame)->assign(gameName);
+	AsciiString passwd;
+	passwd.translate(GadgetTextEntryGetText(m_createDialog));
+	req.unknown_1c = passwd.str();
+	m_prefs.rva0044DEC1(passwd);
+	req.creation.allowObservers = true;
+	TheGameSpyGame->m_fed = true;
+	((Rva005A2899GlobalView *)TheWritableGlobalData)->m_version.rva00237E28(&req.creation.version);
+	req.creation.exeCRC = ((Rva005A2899GlobalView *)TheWritableGlobalData)->m_exeCRC;
+	req.creation.iniCRC = ((Rva005A2899GlobalView *)TheWritableGlobalData)->m_iniCRC;
+	req.creation.gameVersion = TheGameSpyInfo->v85();
+	req.creation.restrictGameList = TheGameSpyConfig->v13();
+	req.unknown_4c = "localhost";
+	req.creation.ladPort = 0;
+	((Rva0059F2EB *)TheGameSpyGame)->rva0059F2EB(AsciiString(req.unknown_4c.c_str()));
+	TheGameSpyGame->m_1008 = req.creation.ladPort;
+	req.unknown_58 = TheGameSpyInfo->v71().str();
+	int slot = m_70.m_7c;
+	TheGameSpyGame->rva003FF1A7(slot);
+	req.creation.localSlot = slot;
+	if (m_70.m_ladder)
+	{
+		memcpy(req.creation.ladderKey, m_70.m_ladder->m_key, sizeof(req.creation.ladderKey));
+		req.unknown_1c = "";
+	}
+	else
+	{
+		memset(req.creation.ladderKey, 0, sizeof(req.creation.ladderKey));
+	}
+	req.creation.mapValue = 2;
+	if (TheMapCache)
+	{
+		AsciiString map = m_prefs.rva0044D986();
+		map.toLower();
+		MapCache::iterator it = TheMapCache->find(map);
+		if (it != TheMapCache->end())
+			req.creation.mapValue = it->second.m_20;
+	}
+	TheGameSpyPeerMessageQueue->addRequest(req);
+	m_state = 5;
 }
