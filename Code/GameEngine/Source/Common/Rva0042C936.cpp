@@ -113,10 +113,13 @@ namespace StrategicInGameUI
 	}
 }
 
+// The bool query at 0x0004253A is the rowed BfmeSelectionState::isSelectionLocked,
+// called on TheLivingWorldLogic as in MilesAudioSubtitleConsumer.cpp.
+class BfmeSelectionState { public: bool isSelectionLocked() const; };
+
 class LivingWorldLogic
 {
 public:
-	bool rva0004253A() const;
 	unsigned char m_pad00[0xf4];
 	int m_f4;	// +0xF4
 };
@@ -142,7 +145,7 @@ private:
 
 void Rva0042CA4B::rva0042CA4B()
 {
-	if (TheLivingWorldLogic && TheLivingWorldLogic->rva0004253A())
+	if (TheLivingWorldLogic && reinterpret_cast<BfmeSelectionState *>(TheLivingWorldLogic)->isSelectionLocked())
 	{
 		m_08->m_94 = false;
 		int value = TheLivingWorldLogic->m_f4;
