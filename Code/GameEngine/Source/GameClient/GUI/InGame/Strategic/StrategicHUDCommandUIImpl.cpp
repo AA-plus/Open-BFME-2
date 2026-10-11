@@ -145,8 +145,14 @@ public:
 	Rva005C3932(int level, const AsciiString &name);
 
 private:
-	char m_data[8];
+	int m_level; // Native constructor writes +0 before copy construction at +4.
+	AsciiString m_name;
 };
+
+// Both rowed callers allocate8 bytes and construct this two-field object.
+Rva005C3932::Rva005C3932(int level, const AsciiString &name)
+	: m_level(level), m_name(name)
+{}
 
 void StrategicHUD::CommandUIImpl::OnSubMenuLoaded(const char *path)
 {
