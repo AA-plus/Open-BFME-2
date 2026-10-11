@@ -1,4 +1,4 @@
-// ?rva00574A98@Rva00574A98@@QAEIXZ
+// ?rva00574A98@Rva00574A98@@QAEPAXXZ
 // cl: /DNDEBUG /MD
 //
 // Rva00574A98::rva00574A98() at retail 0x00574A98 (13B): returns the
@@ -12,14 +12,14 @@
 class Rva00574A98
 {
 public:
-	unsigned int rva00574A98();
+	void *rva00574A98();
 private:
 	char m_pad00[4];
 	unsigned int m_04;
 };
 
-unsigned int Rva00574A98::rva00574A98()
+void *Rva00574A98::rva00574A98()
 {
 	unsigned int v = m_04;
-	return v ? v + 0x14 : 0;
+	return (void *)(v ? v + 0x14 : 0);
 }
