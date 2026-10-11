@@ -240,7 +240,8 @@ PolygonTrigger *W3DScriptedModelDraw::getPolygon(RenderObjClass *robj, float *he
 
 	if (robj && robj->Class_ID() == RenderObjClass::CLASSID_MESH)
 	{
-		Matrix3D tm = robj->Get_Transform();
+		Matrix3D tm;
+		tm = robj->Get_Transform();
 		MeshModelClass *model = ((MeshClass *)robj)->Peek_Model();
 		int numVerts = model->Get_Vertex_Count();
 		const Vector3 *verts = model->Get_Vertex_Array();
@@ -388,7 +389,8 @@ int Rva000B8F5AOuter::rva000B89E9(int robjArg, float *height)
 
 	if (robj && robj->Class_ID() == RenderObjClass::CLASSID_MESH)
 	{
-		Matrix3D tm = robj->Get_Transform();
+		Matrix3D tm;
+		tm = robj->Get_Transform();
 		MeshModelClass *model = ((MeshClass *)robj)->Peek_Model();
 		int numVerts = model->Get_Vertex_Count();
 		const Vector3 *verts = model->Get_Vertex_Array();

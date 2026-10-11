@@ -143,20 +143,15 @@ public:
 	Drawable *m_drawable;
 };
 
-// File-static matrix helpers (LK3-style): the TU's bool-ctor and copy-ctor
-// COMDATs both lose the link, and the rowed body below inlines both
-// constructions, so neither def can just go away. The helpers keep calls in
-// the source (regalloc preserved) while both ctors go unused.
+// File-static matrix helper (LK3-style): the TU's bool-ctor COMDAT loses
+// the link, and the rowed body below inlines the construction, so the def
+// cannot just go away. The helper keeps a call in the source (regalloc
+// preserved) while the ctor goes unused. The copy-ctor half uses plain
+// default-construct plus assignment (same Row stores as the ctor).
 static void InitRampMatrix3D(Matrix3D &m, bool init)
 {
     if (init)
         m.Make_Identity();
-}
-static void CopyRampMatrix3D(Matrix3D &dst, const Matrix3D &src)
-{
-    dst[0] = src[0];
-    dst[1] = src[1];
-    dst[2] = src[2];
 }
 
 bool W3DScriptedModelDraw::getRamp(BridgeInfo *info, AsciiString boneName, PolygonTrigger **polygon, RenderObjClass **mesh, bool useObjectTransform)
@@ -208,7 +203,8 @@ bool W3DScriptedModelDraw::getRamp(BridgeInfo *info, AsciiString boneName, Polyg
 		}
 		if (info)
 		{
-			Matrix3D tm(meshObj->Get_Transform());
+			Matrix3D tm;
+			tm = meshObj->Get_Transform();
 			int numVerts = meshObj->Peek_Model()->Get_Vertex_Count();
 			Vector3 *verts = meshObj->Peek_Model()->Get_Vertex_Array();
 			float maxZ = verts[0].Z;
