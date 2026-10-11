@@ -59,6 +59,11 @@ int Rva0050E776Send(GameWindow *slider, int position);
 // The 0x14-byte UserPreferences layout (vftable then the map at +4 and the
 // file name at +0x10) as OptionPreferences_ctor.cpp has it; the temporaries'
 // frame slot depends on that size.
+// Declaration-only: the rowed map<AsciiString,AsciiString>::operator[] is bound,
+// this TU emits no per-flag copy of it or of the tree internals it pulls in.
+namespace _STL {
+template <> AsciiString &map<AsciiString, AsciiString, less<AsciiString>, allocator<pair<const AsciiString, AsciiString> > >::operator[](const AsciiString &);
+}
 class OptionPreferences : public _STL::map<AsciiString, AsciiString>
 {
 public:
