@@ -11,7 +11,14 @@ class AsciiString;
 class ThingTemplate;
 class ThingFactory;
 extern ThingFactory *TheThingFactory;
-extern unsigned short g_00DBFDC8; // native template-ID cutoff; original name unknown
+// The template-ID cutoff the command-button view compares against, retail VA
+// 0x00DBFDC8 (RVA 0x009BFDC8, raw .data). The rowed body compares a template's
+// own ID against it (retail 0x0035B58F `cmp 0xdbfdc8,%ax`), and the two bytes
+// there are ff ff, so the definition is that value.
+// A separate `extern` declaration plus a plain definition would let MSVC learn
+// the value and fold the comparison into an immediate, which breaks the rowed
+// body; the single tentative-style definition below keeps the memory operand.
+unsigned short g_00DBFDC8 = 0xFFFF;
 class ThingFactory { public: const ThingTemplate *findTemplate(const AsciiString &name); };
 class LocomotorTemplate;
 template<class T> class OVERRIDE { public: const T *operator->() const; };
