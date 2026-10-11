@@ -29,7 +29,7 @@ public:
 class SpecialPowerStore
 {
 public:
-	bool rva003B1244(Object *obj, const SpecialPowerTemplate *tmpl);
+	bool canUseSpecialPower(Object *obj, const SpecialPowerTemplate *tmpl);
 };
 
 extern SpecialPowerStore *TheSpecialPowerStore;
@@ -51,7 +51,7 @@ bool Rva004B2F7B::rva004B2F7B(const SpecialPowerTemplate *tmpl)
 	Object *obj = m_obj;
 	if (obj->testStatus(OBJECT_STATUS_5A))
 		goto fail;
-	if (!TheSpecialPowerStore->rva003B1244(obj, tmpl))
+	if (!TheSpecialPowerStore->canUseSpecialPower(obj, tmpl))
 		goto fail;
 	SpecialPowerModuleInterface *mod = m_obj->getSpecialPowerModule(tmpl);
 	if (mod != 0)

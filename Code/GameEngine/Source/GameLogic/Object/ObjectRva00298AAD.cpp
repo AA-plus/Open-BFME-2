@@ -25,7 +25,7 @@ class Object
 public:
 	bool testStatus(ObjectStatusTypes s) const;
 	void setStatus(ObjectStatusTypes s, bool set);
-	void rva00298480(Team *team);
+	void setTemporaryTeam(Team *team);
 	void rva00298AAD(Team *team);
 private:
 	unsigned char m_pad00[0x304];
@@ -42,5 +42,5 @@ void Object::rva00298AAD(Team *team)
 	if (team == m_team)
 		return;
 	setStatus(OBJECT_STATUS_3E, true);
-	rva00298480(team);
+	setTemporaryTeam(team);
 }

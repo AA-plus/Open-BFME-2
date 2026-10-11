@@ -12,7 +12,7 @@ typedef bool Bool;
 class Team
 {
 public:
-	void rva003A1D1A();
+	void killTeam();
 };
 
 class ScriptEngine
@@ -26,5 +26,5 @@ void __stdcall Rva003BFD5ASet(const AsciiString &team)
 {
 	Team *t = TheScriptEngine->getTeamNamed(team, false);
 	if (t != 0)
-		t->rva003A1D1A();
+		t->killTeam();
 }
