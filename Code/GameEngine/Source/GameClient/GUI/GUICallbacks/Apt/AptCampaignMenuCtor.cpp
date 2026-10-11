@@ -178,8 +178,9 @@ extern GameTextInterface *TheGameText;
 // The open campaign menu (VA 0x00E0492C).
 extern int g_Va00E0492C;
 
-// .data name table 0x00DD1728: { "CampaignMenu:Victorious", 0 }.
-extern const char *g_00DD1728[];
+// Native sole query-name table at DD1728, terminated before the next table.
+extern const char BfmeCampaignMenuVictoriousName[] = "CampaignMenu:Victorious";
+const char *BfmeCampaignMenuQueryNames[2] = { BfmeCampaignMenuVictoriousName, 0 };
 
 class AptCampaignMenu
 {
@@ -237,7 +238,7 @@ Rva005212FC::Rva005212FC(void *context)
 	{
 		FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptCampaignMenu::Victorious);
 		FunctorBinding binding = MakeBinding(method, reinterpret_cast<FunctorTarget *>(this));
-		AsciiString name(g_00DD1728[0]);
+		AsciiString name(BfmeCampaignMenuQueryNames[0]);
 		m_externHandlers.AddExternHandler(name, 0, AptRef<AptExternHandler>(binding));
 	}
 	((Rva001EB74B *)TheLinearCampaignManager)->rva001EB74B((Rva001EB6A5Out *)&m_content);
