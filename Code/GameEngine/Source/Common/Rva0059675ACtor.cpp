@@ -10,8 +10,9 @@
 extern "C" void *memset(void *,int,unsigned);
 extern int g_009BA4E8;
 class Rva0059675ABase {public:
-// ?Rva0059675ABase::~Rva0059675ABase present-unmatched
-virtual ~Rva0059675ABase() {}};
+// ??1Rva0059675ABase@@UAE@XZ is rowed (its deleting dtor 0x005966C0) in
+// Rva0059675ADtor.cpp; the in-class body here was a duplicate COMDAT copy.
+virtual ~Rva0059675ABase();};
 class Anim2D;
 struct FadeInTextRender:Rva0059675ABase {
  FadeInTextRender();virtual ~FadeInTextRender();virtual void LoadAssets();
