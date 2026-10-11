@@ -127,7 +127,87 @@ public:
 };
 
 #include "../../../Common/PartitionRangeQueryCallView.h"
+class Rva000421C8
+{
+public:
+	Rva000421C8() : m_next(0) {}
+	virtual ~Rva000421C8() {}
+	virtual bool allow(Object *obj) = 0;
+	virtual int getPlayerMask();
+	Rva000421C8 *link(Rva000421C8 *next);	// 0x00625790
+	Rva000421C8 *m_next;
+};
+
+// A KindOfMaskType as the mask filters copy it (0x0004543D).
+class BfmeFixedStorage0004543D
+{
+public:
+	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other) throw();
+private:
+	unsigned char m_bytes[28];
+};
+
+// vftable 0x00BC2908, allow 0x002610DE: accept what has every kind of the
+// first mask and none of the second.
+class Rva0004584D : public Rva000421C8
+{
+public:
+	Rva0004584D(const BfmeFixedStorage0004543D &a, const BfmeFixedStorage0004543D &b) throw();
+	virtual bool allow(Object *obj);
+	BfmeFixedStorage0004543D m_08;
+	BfmeFixedStorage0004543D m_24;
+};
+
+struct Rva00045411BitSet
+{
+	Rva00045411BitSet(int unused, int bit) throw();	// 0x00045411
+	unsigned int m_bits[7];
+};
+extern const BfmeFixedStorage0004543D g_009FEFA4;
+
+// vftable 0x00BFBC90, allow 0x00260EB1, getPlayerMask 0x00260E6A: the object,
+// relationship flags and whether a hit allows.
+class Rva00260EB1Filter : public Rva000421C8
+{
+public:
+	Rva00260EB1Filter(const Object *obj, int flags, bool match)
+		: m_obj(obj), m_flags(flags), m_match(match) {}
+	virtual bool allow(Object *obj);
+	virtual int getPlayerMask();
+	const Object *m_obj;
+	int m_flags;
+	bool m_match;
+};
+
+
+// Existing whole-map query provider returns this one-word handle. Native
+// 4C78AF calls 6256F0 and the canonical next/dtor at 45623/4AA28;
+// these established provider names are neutral, not original type claims.
+struct BfmeResultA { void *m_value; BfmeResultA(); BfmeResultA(const BfmeResultA &); ~BfmeResultA(); };
+class BfmeResultForwardB { public: BfmeResultA bfmeForwardResultB(int); };
+extern PartitionManager *ThePartitionManager;
+
+
+
+// An object and a vector (ctor 0x004BA1B2).
+class Rva004BA1B2
+{
+public:
+	Rva004BA1B2();
+private:
+	Object *m_owner;
+	_STL::vector<Object *> m_members;
+};
+
+// Existing provider's opaque sixteen-byte record call view; target4C78AF
+// passes the exact sixteen-byte Object/member-vector entry at this call.
+struct Rva004C7878Record { Rva004C7878Record(); Rva004C7878Record(const Rva004C7878Record&); ~Rva004C7878Record(); Rva004C7878Record &operator=(const Rva004C7878Record&); private: char bytes[16]; };
+typedef _STL::vector<Rva004C7878Record> Rva004C78AFList;
+namespace _STL { template<> void vector<Rva004C7878Record,allocator<Rva004C7878Record> >::push_back(const Rva004C7878Record &); }
+
 namespace _STL {
+template<> inline __declspec(noinline) _Vector_base<Object *,allocator<Object *> >::_Vector_base(const allocator<Object *> &a) : _M_start(0),_M_finish(0),_M_end_of_storage(a,0) {}
+template<> inline void allocator<Object *>::deallocate(Object **p,unsigned int) const { if(p) Rva00030830FreeAllocation(p); }
 template<> void vector<Object *,allocator<Object *> >::push_back(Object * const &);
 }
 class ManTheWallsSpecialPower : public SpecialPowerModule
@@ -139,6 +219,7 @@ public:
 	void rva004C7621(Rva004C7621Range *, const Rva004C7621Pos *, _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > *);
 	BfmeVecAV *rva004C76AC(Rva004C7621Range *, const Rva004C7621Pos *);
 	void rva004C7734(Rva004C7621Range *, BfmeWideResult *);
+	bool rva004C78AF(Rva004C78AFList *);
 };
 
 ManTheWallsSpecialPower::ManTheWallsSpecialPower( Thing *thing, const ModuleData *moduleData )
@@ -246,4 +327,28 @@ void ManTheWallsSpecialPower::rva004C7734(Rva004C7621Range *range,BfmeWideResult
   _STL::vector<Object *> *members=(_STL::vector<Object *> *)rva004C76AC(range,(const Rva004C7621Pos *)other);
   members->push_back(other);
  }
+}
+
+// Native entry constructor22 and Object-vector base29 are visible but
+// out of line; the whole bodies match their existing providers. This keeps
+// the allocator temporary from escaping and retains native EH transitions.
+inline __declspec(noinline) Rva004BA1B2::Rva004BA1B2() {}
+
+// Native4C78AF..4C799B (236B RET4); called by4C799B and WB1268A50.
+// Query every Object matching kind115 and owner relationship4, then append
+// its sixteen-byte Object/vector entry. The Object-vector member is proven
+// by the exact same-file assignment and group helpers; opaque record and
+// query facade names belong to existing providers. Original names are open.
+// size()>0 preserves native SAR/SETNE; !=0 folds into a longer TEST mask.
+bool ManTheWallsSpecialPower::rva004C78AF(Rva004C78AFList *out)
+{
+	BfmeResultA legacyHits = ((BfmeResultForwardB *)ThePartitionManager)->bfmeForwardResultB((int)
+		Rva00260EB1Filter(*(Object **)((char *)this+8), 4, false).link(&Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 115),
+			g_009FEFA4)));
+	for (Object *other = ((BfmeWideResult *)&legacyHits)->next(); other; other = ((BfmeWideResult *)&legacyHits)->next()) {
+		Rva004BA1B2 entry;
+		((Rva004C734DElement *)&entry)->owner = other;
+		out->push_back(*(const Rva004C7878Record *)&entry);
+	}
+	return out->size() > 0;
 }
