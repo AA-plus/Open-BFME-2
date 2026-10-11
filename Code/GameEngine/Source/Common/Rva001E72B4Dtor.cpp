@@ -79,7 +79,9 @@ private:
 	_STL::vector<void *> m_owned;		// +0x18
 };
 
-Rva001E72B4::~Rva001E72B4()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva001E72B4::~Rva001E72B4()
 {
 	for (Rva001E72B4Node *node = m_map.header()->m_left; node != m_map.header();
 	     node = reinterpret_cast<Rva001E72B4Node *>(
@@ -89,4 +91,10 @@ Rva001E72B4::~Rva001E72B4()
 	for (unsigned int i = 0; i < m_owned.size(); ++i)
 		::delete static_cast<Rva001E72B4Owned *>(m_owned[i]);
 	m_owned.clear();
+}
+
+// ?bfmeAnchorRva001E72B4Dtor absent-from-retail
+void bfmeAnchorRva001E72B4Dtor(Rva001E72B4 *p)
+{
+	p->Rva001E72B4::~Rva001E72B4();
 }

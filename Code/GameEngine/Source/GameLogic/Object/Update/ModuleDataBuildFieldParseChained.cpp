@@ -212,9 +212,17 @@ public:
 };
 
 // ?buildFieldParse@SpecialAbilityUpdateModuleData@@SAXAAVMultiIniFieldParse@@@Z
-void SpecialAbilityUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void SpecialAbilityUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(0x00C3F7F8), 0);
+}
+
+// ?bfmeAnchorSpecialAbilityUpdateModuleDatabuildFieldParse absent-from-retail
+void bfmeAnchorSpecialAbilityUpdateModuleDatabuildFieldParse(SpecialAbilityUpdateModuleData *p, MultiIniFieldParse &parse)
+{
+	p->buildFieldParse(parse);
 }
 
 void DockUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)

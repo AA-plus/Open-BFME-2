@@ -36,8 +36,16 @@ private:
 	void *m_outer;
 	char m_set[25];
 };
-Rva0059A85C::~Rva0059A85C()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0059A85C::~Rva0059A85C()
 {
 	m_vec.clear();
 	((Rva002EE9B7 *)m_set)->~Rva002EE9B7();
+}
+
+// ?bfmeAnchorRva0059A85CDtor absent-from-retail
+void bfmeAnchorRva0059A85CDtor(Rva0059A85C *p)
+{
+	p->Rva0059A85C::~Rva0059A85C();
 }

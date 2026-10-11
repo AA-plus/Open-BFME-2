@@ -54,7 +54,15 @@ void HordeTransportContain_Delete(HordeTransportContain *p) { delete p; }
 // Owner evidence (audited 2026-09-26): retail registration HordeTransportContain -> data factory RVA 0x0024BA07 -> ctor RVA 0x00477D61; primary vptr store RVA 0x00477D69.
 class HordeTransportContainModuleData { public: __declspec(noinline) virtual ~HordeTransportContainModuleData(); };
 // ??1HordeTransportContainModuleData@@UAE@XZ present-unmatched
-HordeTransportContainModuleData::~HordeTransportContainModuleData() {}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline HordeTransportContainModuleData::~HordeTransportContainModuleData() {}
+
+// ?bfmeAnchorHordeTransportContainModuleDataDtor absent-from-retail
+void bfmeAnchorHordeTransportContainModuleDataDtor(HordeTransportContainModuleData *p)
+{
+	p->HordeTransportContainModuleData::~HordeTransportContainModuleData();
+}
 void HordeTransportContainModuleData_Delete(HordeTransportContainModuleData *p) { delete p; }
 
 // ??_GHordeGarrisonContain@@UAEPAXI@Z @0x0047A12B 28B: slot 0 of vtable 0x00C46570; calls ??1 at 0x0047A147.

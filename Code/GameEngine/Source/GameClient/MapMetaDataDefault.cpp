@@ -30,9 +30,17 @@ class MapMetaData {public:MapMetaData();~MapMetaData();
 typedef char VerifyMapMetadata256[(sizeof(MapMetaData)==256)?1:-1];
 // Volatile extent and the final scoped reference retain six scalar stores
 // ahead of the timestamp stores, as independently required by native3031D3.
-MapMetaData::MapMetaData():numPlayers(0),isMultiplayer(0),isScenarioMP(0),isOfficial(0),filesize(0),crc(0),wordF4(0)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline MapMetaData::MapMetaData():numPlayers(0),isMultiplayer(0),isScenarioMP(0),isOfficial(0),filesize(0),crc(0),wordF4(0)
 {
  extent.lo.x=0.0f;extent.lo.y=0.0f;extent.lo.z=0.0f;
  extent.hi.x=0.0f;extent.hi.y=0.0f;{volatile Coord3D &hi=extent.hi;hi.z=0.0f;}
  timestampHi=0;timestampLo=0;
+}
+
+// ?bfmeAnchorMapMetaDataCtor absent-from-retail
+void *bfmeAnchorMapMetaDataCtor(void *where)
+{
+	return ::new (where) MapMetaData();
 }

@@ -98,7 +98,15 @@ void SidesListNotifier::post(void (Rva00281A15Listener::*callback)(void *), void
     Post p; p.callback=callback; p.owner=owner; dispatch(&p);
 }
 // ?SidesList::~SidesList present-unmatched
-SidesList::~SidesList()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline SidesList::~SidesList()
 {
     reinterpret_cast<SidesListNotifier *>(static_cast<Rva00330757Member *>(this))->post(&Rva00281A15Listener::notify, this);
+}
+
+// ?bfmeAnchorSidesListDtor absent-from-retail
+void bfmeAnchorSidesListDtor(SidesList *p)
+{
+	p->SidesList::~SidesList();
 }

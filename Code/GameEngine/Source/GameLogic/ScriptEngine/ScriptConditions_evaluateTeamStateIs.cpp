@@ -733,9 +733,17 @@ public:
 // callers keep types.m_types in a register across the parse and isInSet
 // calls (and into the destructor), which VC7.1 only does when the ctor's
 // body is compiled in the same unit and so is known not to keep `this`.
-ObjectTypesTemp::ObjectTypesTemp() : m_types(0)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline ObjectTypesTemp::ObjectTypesTemp() : m_types(0)
 {
 	m_types = new ObjectTypes;
+}
+
+// ?bfmeAnchorObjectTypesTempCtor absent-from-retail
+void *bfmeAnchorObjectTypesTempCtor(void *where)
+{
+	return ::new (where) ObjectTypesTemp();
 }
 
 void Script_objectTypesFromParam(Parameter *pTypeParm, ObjectTypes *outObjectTypes);

@@ -70,7 +70,9 @@ public:
     Rva0028881C m_map28;
 };
 
-Rva00289ABD::~Rva00289ABD()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00289ABD::~Rva00289ABD()
 {
     Rva00288BF9Record *p = m_rva20;
     if (p != 0) {
@@ -100,4 +102,10 @@ Rva00289ABD::~Rva00289ABD()
         ::operator delete(h1);
     }
     m_hash10 = 0;
+}
+
+// ?bfmeAnchorRva00289ABDDtor absent-from-retail
+void bfmeAnchorRva00289ABDDtor(Rva00289ABD *p)
+{
+	p->Rva00289ABD::~Rva00289ABD();
 }

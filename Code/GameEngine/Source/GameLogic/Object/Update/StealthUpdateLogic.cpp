@@ -957,9 +957,17 @@ private:
 // ?getStealthLevel@StealthUpdate@@QBEIXZ @0x00373D15
 // The +0x2C override when set (non-negative), else the module data's
 // StealthForbiddenConditions.
-UnsignedInt StealthUpdate::getStealthLevel() const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline UnsignedInt StealthUpdate::getStealthLevel() const
 {
 	return m_2c >= 0 ? m_2c : getStealthUpdateModuleData()->m_stealthLevel;
+}
+
+// ?bfmeAnchorStealthUpdategetStealthLevel absent-from-retail
+UnsignedInt bfmeAnchorStealthUpdategetStealthLevel(const StealthUpdate *p)
+{
+	return p->getStealthLevel();
 }
 
 // ?rva00373D23@StealthUpdate@@QAEXXZ @0x00373D23

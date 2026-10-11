@@ -28,6 +28,14 @@ private:
 	int m_unused04;
 	_STL::vector<BfmeStringHeadRecord160, _STL::allocator<BfmeStringHeadRecord160> > m_vec08;
 };
-StructureToppleUpdateModuleData::~StructureToppleUpdateModuleData()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline StructureToppleUpdateModuleData::~StructureToppleUpdateModuleData()
 {
+}
+
+// ?bfmeAnchorStructureToppleUpdateModuleDataDtor absent-from-retail
+void bfmeAnchorStructureToppleUpdateModuleDataDtor(StructureToppleUpdateModuleData *p)
+{
+	p->StructureToppleUpdateModuleData::~StructureToppleUpdateModuleData();
 }

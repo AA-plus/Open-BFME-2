@@ -38,7 +38,15 @@ Rva0035D53C::~Rva0035D53C() { m_field = 0; }
 void famgenDelete(Rva0035D53C *p) { delete p; }
 
 class Rva0035DA01 : public Rva001DBAC3Base { public: virtual ~Rva0035DA01(); int m_pad[2]; int m_field; };
-Rva0035DA01::~Rva0035DA01() { m_field = 0; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0035DA01::~Rva0035DA01() { m_field = 0; }
+
+// ?bfmeAnchorRva0035DA01Dtor absent-from-retail
+void bfmeAnchorRva0035DA01Dtor(Rva0035DA01 *p)
+{
+	p->Rva0035DA01::~Rva0035DA01();
+}
 void famgenDelete(Rva0035DA01 *p) { delete p; }
 
 class Rva0035D74A : public Rva001DBAC3Base { public: virtual ~Rva0035D74A(); int m_pad[2]; int m_field0C; int m_pad10[9]; int m_field34; };

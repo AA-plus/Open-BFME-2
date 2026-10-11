@@ -548,13 +548,21 @@ private:
 	unsigned int m_nextRun;	// +0x7C
 };
 
-AIStructureCreepTactic::~AIStructureCreepTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIStructureCreepTactic::~AIStructureCreepTactic()
 {
 	if (m_order) {
 		((Rva00506FE9Hit *)m_order)->rva0055ADBA(m_owner);
 		::delete m_order;
 		m_order = 0;
 	}
+}
+
+// ?bfmeAnchorAIStructureCreepTacticDtor absent-from-retail
+void bfmeAnchorAIStructureCreepTacticDtor(AIStructureCreepTactic *p)
+{
+	p->AIStructureCreepTactic::~AIStructureCreepTactic();
 }
 
 void AIStructureCreepTactic::xfer(Xfer *xfer)

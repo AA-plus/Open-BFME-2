@@ -75,7 +75,9 @@ template<> ShareBufferClass<ShaderClass>::~ShareBufferClass(void);
 **
 **
 **************************************************************************************************/
-MatBufferClass::MatBufferClass(const MatBufferClass & that) :
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline MatBufferClass::MatBufferClass(const MatBufferClass & that) :
 	ShareBufferClass<VertexMaterialClass *>(that)
 {
 	// add a reference for each pointer that was copied...
@@ -88,6 +90,12 @@ MatBufferClass::MatBufferClass(const MatBufferClass & that) :
 			RawBuffer[i]->Add_Ref();
 		}
 	}
+}
+
+// ?bfmeAnchorMatBufferClassCtor absent-from-retail
+void *bfmeAnchorMatBufferClassCtor(void *where, const MatBufferClass & that)
+{
+	return ::new (where) MatBufferClass(that);
 }
 
 // MatBufferClass::~MatBufferClass: defined in MatBufferCleanup.cpp (its row's unit).

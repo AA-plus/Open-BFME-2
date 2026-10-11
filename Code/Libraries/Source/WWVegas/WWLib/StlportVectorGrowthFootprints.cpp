@@ -54,9 +54,17 @@ struct BfmeAssignRecord36
     char m_pad[36];
     BfmeAssignRecord36 &operator=(const BfmeAssignRecord36 &);
 };
-Rva0007BB16Record::Rva0007BB16Record(const Rva0007BB16Record &that)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0007BB16Record::Rva0007BB16Record(const Rva0007BB16Record &that)
 {
     ((BfmeAssignRecord36 *)this)->operator=(*(const BfmeAssignRecord36 *)&that);
+}
+
+// ?bfmeAnchorRva0007BB16RecordCtor absent-from-retail
+void *bfmeAnchorRva0007BB16RecordCtor(void *where, const Rva0007BB16Record &that)
+{
+	return ::new (where) Rva0007BB16Record(that);
 }
 // 36-byte element; layout owner StringContainerRecordCopyBFME2.cpp.
 struct BfmeRecord001ECAF9 { char m_pad[36]; public: BfmeRecord001ECAF9(const BfmeRecord001ECAF9 &); ~BfmeRecord001ECAF9(); };

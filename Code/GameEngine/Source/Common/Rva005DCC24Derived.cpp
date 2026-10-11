@@ -20,8 +20,16 @@ public:
 	virtual ~AIRoamingDefenseTactic();
 };
 
-AIRoamingDefenseTactic::~AIRoamingDefenseTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIRoamingDefenseTactic::~AIRoamingDefenseTactic()
 {
+}
+
+// ?bfmeAnchorAIRoamingDefenseTacticDtor absent-from-retail
+void bfmeAnchorAIRoamingDefenseTacticDtor(AIRoamingDefenseTactic *p)
+{
+	p->AIRoamingDefenseTactic::~AIRoamingDefenseTactic();
 }
 
 class AIStartWoTRBattleTactic : public Rva005DCC24
@@ -30,8 +38,16 @@ public:
 	virtual ~AIStartWoTRBattleTactic();
 };
 
-AIStartWoTRBattleTactic::~AIStartWoTRBattleTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIStartWoTRBattleTactic::~AIStartWoTRBattleTactic()
 {
+}
+
+// ?bfmeAnchorAIStartWoTRBattleTacticDtor absent-from-retail
+void bfmeAnchorAIStartWoTRBattleTacticDtor(AIStartWoTRBattleTactic *p)
+{
+	p->AIStartWoTRBattleTactic::~AIStartWoTRBattleTactic();
 }
 
 class AIReturnTheRingTactic : public Rva005DCC24
@@ -40,8 +56,16 @@ public:
 	virtual ~AIReturnTheRingTactic();
 };
 
-AIReturnTheRingTactic::~AIReturnTheRingTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIReturnTheRingTactic::~AIReturnTheRingTactic()
 {
+}
+
+// ?bfmeAnchorAIReturnTheRingTacticDtor absent-from-retail
+void bfmeAnchorAIReturnTheRingTacticDtor(AIReturnTheRingTactic *p)
+{
+	p->AIReturnTheRingTactic::~AIReturnTheRingTactic();
 }
 
 class AIRingHeroTactic : public Rva005DCC24
@@ -50,8 +74,16 @@ public:
 	virtual ~AIRingHeroTactic();
 };
 
-AIRingHeroTactic::~AIRingHeroTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIRingHeroTactic::~AIRingHeroTactic()
 {
+}
+
+// ?bfmeAnchorAIRingHeroTacticDtor absent-from-retail
+void bfmeAnchorAIRingHeroTacticDtor(AIRingHeroTactic *p)
+{
+	p->AIRingHeroTactic::~AIRingHeroTactic();
 }
 
 class AIFarmKillSquad : public Rva005DCC24
@@ -60,6 +92,14 @@ public:
 	virtual ~AIFarmKillSquad();
 };
 
-AIFarmKillSquad::~AIFarmKillSquad()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIFarmKillSquad::~AIFarmKillSquad()
 {
+}
+
+// ?bfmeAnchorAIFarmKillSquadDtor absent-from-retail
+void bfmeAnchorAIFarmKillSquadDtor(AIFarmKillSquad *p)
+{
+	p->AIFarmKillSquad::~AIFarmKillSquad();
 }

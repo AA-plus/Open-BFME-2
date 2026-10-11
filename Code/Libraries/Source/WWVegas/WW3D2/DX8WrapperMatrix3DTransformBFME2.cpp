@@ -38,7 +38,9 @@ protected:
  static float ZNear,ZFar;
  static Matrix4 ProjectionMatrix,DeviceProjectionMatrix;
 };
-void DX8Wrapper::Set_Transform(D3DTRANSFORMSTATETYPE transform,const Matrix3D& m) {
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void DX8Wrapper::Set_Transform(D3DTRANSFORMSTATETYPE transform,const Matrix3D& m) {
  Matrix4 m2(m);
  switch((int)transform) {
  case D3DTS_WORLD:
@@ -65,4 +67,10 @@ void DX8Wrapper::Set_Transform(D3DTRANSFORMSTATETYPE transform,const Matrix3D& m
   number_of_DX8_calls++;
   break;
  }
+}
+
+// ?bfmeAnchorDX8WrapperSet_Transform absent-from-retail
+void bfmeAnchorDX8WrapperSet_Transform(DX8Wrapper *p, D3DTRANSFORMSTATETYPE transform, const Matrix3D& m)
+{
+	p->Set_Transform(transform, m);
 }

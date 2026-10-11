@@ -72,6 +72,14 @@ private:
     SegLineRendererClass LineRenderer;
     StreakRendererClass StreakRenderer;
 };
-StreakLineClass::~StreakLineClass() {}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline StreakLineClass::~StreakLineClass() {}
+
+// ?bfmeAnchorStreakLineClassDtor absent-from-retail
+void bfmeAnchorStreakLineClassDtor(StreakLineClass *p)
+{
+	p->StreakLineClass::~StreakLineClass();
+}
 
 template class SimpleDynVecClass<Vector4>;

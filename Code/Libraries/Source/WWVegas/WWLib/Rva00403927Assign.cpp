@@ -20,9 +20,17 @@ private:
 	_STL::vector<AsciiString> m_names;
 };
 
-Rva00403927::Rva00403927(const Rva00403927 &other)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00403927::Rva00403927(const Rva00403927 &other)
 	: m_00(other.m_00), m_04(other.m_04), m_names(other.m_names)
 {
+}
+
+// ?bfmeAnchorRva00403927Ctor absent-from-retail
+void *bfmeAnchorRva00403927Ctor(void *where, const Rva00403927 &other)
+{
+	return ::new (where) Rva00403927(other);
 }
 
 // ??4Rva00403927@@QAEAAV0@ABV0@@Z @0x00403927

@@ -147,7 +147,15 @@ struct Rva0010F149Handle {
  ~Rva0010F149Handle() {if(referent)referent->Release_Ref();}
  OpaqueRefCounted *referent;
 };
-Rva0010F149Handle::Rva0010F149Handle(const Rva0010F149Handle &r):referent(r.referent) {if(referent)InterlockedIncrement(&referent->refs);}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0010F149Handle::Rva0010F149Handle(const Rva0010F149Handle &r):referent(r.referent) {if(referent)InterlockedIncrement(&referent->refs);}
+
+// ?bfmeAnchorRva0010F149HandleCtor absent-from-retail
+void *bfmeAnchorRva0010F149HandleCtor(void *where, const Rva0010F149Handle &r)
+{
+	return ::new (where) Rva0010F149Handle(r);
+}
 // ?Rva001FD42B::Rva001FD42B present-unmatched
 struct Rva001FD42B { __forceinline Rva001FD42B(){typedef _STL::map<int,void*> T;((T*)this)->T::map();} __forceinline Rva001FD42B(const Rva001FD42B &r) {typedef _STL::map<int,void*> T;((T*)this)->T::map(*reinterpret_cast<const T*>(&r));} ~Rva001FD42B(); void *data[3];};
 // ?Rva001FD458::Rva001FD458 present-unmatched

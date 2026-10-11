@@ -57,6 +57,14 @@ private:
 	unsigned char m_pad2C[0x174 - 0x2C]; // +0x2C tail to 0x174 (DieMux plus slave block plus fade tail)
 };
 
-SpawnBehaviorModuleData::~SpawnBehaviorModuleData()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline SpawnBehaviorModuleData::~SpawnBehaviorModuleData()
 {
+}
+
+// ?bfmeAnchorSpawnBehaviorModuleDataDtor absent-from-retail
+void bfmeAnchorSpawnBehaviorModuleDataDtor(SpawnBehaviorModuleData *p)
+{
+	p->SpawnBehaviorModuleData::~SpawnBehaviorModuleData();
 }

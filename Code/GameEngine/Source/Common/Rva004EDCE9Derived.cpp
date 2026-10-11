@@ -21,8 +21,16 @@ public:
 	virtual ~AITacticOffensive();
 };
 
-AITacticOffensive::~AITacticOffensive()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AITacticOffensive::~AITacticOffensive()
 {
+}
+
+// ?bfmeAnchorAITacticOffensiveDtor absent-from-retail
+void bfmeAnchorAITacticOffensiveDtor(AITacticOffensive *p)
+{
+	p->AITacticOffensive::~AITacticOffensive();
 }
 
 class AITacticDefensive : public Rva004EDCE9
@@ -31,8 +39,16 @@ public:
 	virtual ~AITacticDefensive();
 };
 
-AITacticDefensive::~AITacticDefensive()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AITacticDefensive::~AITacticDefensive()
 {
+}
+
+// ?bfmeAnchorAITacticDefensiveDtor absent-from-retail
+void bfmeAnchorAITacticDefensiveDtor(AITacticDefensive *p)
+{
+	p->AITacticDefensive::~AITacticDefensive();
 }
 
 class Rva005DCBE3 : public Rva004EDCE9
@@ -41,8 +57,16 @@ public:
 	virtual ~Rva005DCBE3();
 };
 
-Rva005DCBE3::~Rva005DCBE3()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005DCBE3::~Rva005DCBE3()
 {
+}
+
+// ?bfmeAnchorRva005DCBE3Dtor absent-from-retail
+void bfmeAnchorRva005DCBE3Dtor(Rva005DCBE3 *p)
+{
+	p->Rva005DCBE3::~Rva005DCBE3();
 }
 
 class Rva005DCC24 : public Rva004EDCE9
@@ -51,6 +75,14 @@ public:
 	virtual ~Rva005DCC24();
 };
 
-Rva005DCC24::~Rva005DCC24()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005DCC24::~Rva005DCC24()
 {
+}
+
+// ?bfmeAnchorRva005DCC24Dtor absent-from-retail
+void bfmeAnchorRva005DCC24Dtor(Rva005DCC24 *p)
+{
+	p->Rva005DCC24::~Rva005DCC24();
 }

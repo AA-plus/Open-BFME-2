@@ -165,7 +165,9 @@ UpdateSleepTime HijackerUpdate::update( void )
 
 
 
-void HijackerUpdate::setTargetObject( const Object *object )
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void HijackerUpdate::setTargetObject( const Object *object )
 {
   if( object )
   {
@@ -189,6 +191,12 @@ void HijackerUpdate::setTargetObject( const Object *object )
 //		m_ejectPilotDMI = NULL;
 	}
 
+}
+
+// ?bfmeAnchorHijackerUpdatesetTargetObject absent-from-retail
+void bfmeAnchorHijackerUpdatesetTargetObject(HijackerUpdate *p, const Object *object)
+{
+	p->setTargetObject(object);
 }
 
 Object* HijackerUpdate::getTargetObject() const

@@ -246,11 +246,19 @@ LightEnvironmentClass::~LightEnvironmentClass(void)
 
 
 // ?Reset@LightEnvironmentClass@@QAEXABVVector3@@0@Z present-unmatched
-void LightEnvironmentClass::Reset(const Vector3 & object_center,const Vector3 & ambient)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void LightEnvironmentClass::Reset(const Vector3 & object_center,const Vector3 & ambient)
 {
 	LightCount = 0;
 	ObjectCenter = object_center;
 	OutputAmbient = ambient;
+}
+
+// ?bfmeAnchorLightEnvironmentClassReset absent-from-retail
+void bfmeAnchorLightEnvironmentClassReset(LightEnvironmentClass *p, const Vector3 & object_center, const Vector3 & ambient)
+{
+	p->Reset(object_center, ambient);
 }
 
 

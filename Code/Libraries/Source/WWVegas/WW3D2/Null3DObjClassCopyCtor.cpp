@@ -18,6 +18,7 @@
 // It can also change how later array constructions here compile; checked to
 // change nothing else in this unit, but if a function added later that builds
 // an array will not match, try it without this block.
+inline void *operator new(unsigned int, void *p) { return p; }
 struct BfmeVciAnchorElem { BfmeVciAnchorElem(); };
 #pragma optimize("gsy", on)
 static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
@@ -34,9 +35,17 @@ inline Null3DObjClass::Null3DObjClass(const char * name)
 	strcpy(Name, name);
 }
 
-Null3DObjClass::Null3DObjClass(const Null3DObjClass & src)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Null3DObjClass::Null3DObjClass(const Null3DObjClass & src)
 {
 	strcpy(Name, src.Name);
+}
+
+// ?bfmeAnchorNull3DObjClassCtor absent-from-retail
+void *bfmeAnchorNull3DObjClassCtor(void *where, const Null3DObjClass & src)
+{
+	return ::new (where) Null3DObjClass(src);
 }
 
 Null3DObjClass & Null3DObjClass::operator = (const Null3DObjClass & that)

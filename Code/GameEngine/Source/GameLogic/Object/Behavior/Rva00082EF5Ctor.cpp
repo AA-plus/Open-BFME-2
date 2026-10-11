@@ -139,7 +139,9 @@ private:
 	_STL::vector<BfmeE16> m_94;
 };
 
-Rva008291D::~Rva008291D()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva008291D::~Rva008291D()
 {
 	reinterpret_cast<Rva002B7250 *>(reinterpret_cast<char *>(m_owner40) + 0x68)->rva002B7250(reinterpret_cast<CreateAHeroData *>(static_cast<Rva008291DSecond *>(this)));
 	for (Rva0007E971::iterator it = m_58.begin(); it != m_58.end(); ++it)
@@ -148,6 +150,12 @@ Rva008291D::~Rva008291D()
 			(*it)->m_18 = 0;
 	}
 	reinterpret_cast<Rva00081F03 *>(this)->rva00081F03();
+}
+
+// ?bfmeAnchorRva008291DDtor absent-from-retail
+void bfmeAnchorRva008291DDtor(Rva008291D *p)
+{
+	p->Rva008291D::~Rva008291D();
 }
 
 // ??1Rva0081FDD@@UAE@XZ, native 0x00081FDD..0x00082061 (132 bytes), the
@@ -182,7 +190,15 @@ private:
 	Rva0081FDDHandle m_54;
 };
 
-Rva0081FDD::~Rva0081FDD()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0081FDD::~Rva0081FDD()
 {
 	reinterpret_cast<Rva002B7250 *>(reinterpret_cast<char *>(m_owner40) + 0x30)->rva002B7250(reinterpret_cast<CreateAHeroData *>(static_cast<Rva0081FDDSecond *>(this)));
+}
+
+// ?bfmeAnchorRva0081FDDDtor absent-from-retail
+void bfmeAnchorRva0081FDDDtor(Rva0081FDD *p)
+{
+	p->Rva0081FDD::~Rva0081FDD();
 }

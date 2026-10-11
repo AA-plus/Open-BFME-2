@@ -34,7 +34,15 @@ struct BfmeNarrowRecord00079C23 {
     _STL::basic_string<char> text0, text1, text2; unsigned int word0, word1;
     BfmeNarrowRecord00079C23(const BfmeNarrowRecord00079C23 &o);
 };
-BfmeNarrowRecord00079C23::BfmeNarrowRecord00079C23(const BfmeNarrowRecord00079C23 &o) : text0(o.text0), text1(o.text1), text2(o.text2), word0(o.word0), word1(o.word1) {}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmeNarrowRecord00079C23::BfmeNarrowRecord00079C23(const BfmeNarrowRecord00079C23 &o) : text0(o.text0), text1(o.text1), text2(o.text2), word0(o.word0), word1(o.word1) {}
+
+// ?bfmeAnchorBfmeNarrowRecord00079C23Ctor absent-from-retail
+void *bfmeAnchorBfmeNarrowRecord00079C23Ctor(void *where, const BfmeNarrowRecord00079C23 &o)
+{
+	return ::new (where) BfmeNarrowRecord00079C23(o);
+}
 template void _STL::_Construct<BfmeNarrowRecord00079C23,BfmeNarrowRecord00079C23>(BfmeNarrowRecord00079C23*,const BfmeNarrowRecord00079C23&);
 
 // Complete retail record copy at 0x000BFDC7.
