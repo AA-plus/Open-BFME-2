@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /ICode/GameEngine/Include
+// cl: /O1 /G7 /arch:SSE /MD /EHsc /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /ICode/GameEngine/Include
 // NativeA7CF3..A7DCE complete219B destructor; WB8E4B30 and ZH
 // AudioFileCache teardown provide identity and semantic source lead.
 // BFME2 closes its worker, releases sentinel44 under guard of mutex50,
