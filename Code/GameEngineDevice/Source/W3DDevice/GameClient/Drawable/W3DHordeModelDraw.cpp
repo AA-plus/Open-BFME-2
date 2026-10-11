@@ -98,13 +98,17 @@ class W3DHordeModelDrawManager {public:
  void ProcessGroup(W3DHordeModelDrawHandle **begin,W3DHordeModelDrawHandle **end);
  HordeGroupNode *header;int count;
 };
-// ?W3DHordeModelDrawHandle::PartOfSameGroup present-unmatched
+// Native78E78..78F95 RET8: the same compatibility predicate also emitted
+// out of line. The LOD query outputs die before the animation loop; retail
+// reuses their stack storage for its counter, giving an 8-byte frame.
 __forceinline bool W3DHordeModelDrawHandle::PartOfSameGroup(const W3DHordeModelDrawHandle& first,float delta) const {
  if((*(Rva00DFE144Globals **)&TheGameLODManager)->m_1788==4) return false;
  if(nameKey!=first.nameKey) return false;
  if(model->object->scale!=first.model->object->scale) return false;
- int a,b;
- if(model && first.model && ((Rva00078C10*)model)->rva00078C10((Rva00078C10*)first.model,&a,&b) && a!=b) return false;
+ if(model && first.model) {
+  int a,b;
+  if(((Rva00078C10*)model)->rva00078C10((Rva00078C10*)first.model,&a,&b) && a!=b) return false;
+ }
  for(int i=0;i<=1;++i) {
   const HordeAnimation& mine=model->animations[i];const HordeAnimation& theirs=first.model->animations[i];
   if(mine.animation!=theirs.animation) return false;
@@ -116,6 +120,9 @@ __forceinline bool W3DHordeModelDrawHandle::PartOfSameGroup(const W3DHordeModelD
  if(model->animations[1].animation && fabs(model->animations[1].frame-first.model->animations[1].frame)>delta) return false;
  return true;
 }
+// Taking the member address retains the standalone body while the manager
+// below continues to use the same predicate inline.
+bool (W3DHordeModelDrawHandle::*g_HordePartOfSameGroupBody)(const W3DHordeModelDrawHandle&,float) const = &W3DHordeModelDrawHandle::PartOfSameGroup;
 int W3DHordeModelDrawManager::rva0007A54B() {
  int groups=0;
  ((Rva00079911*)this)->rva00079911();
