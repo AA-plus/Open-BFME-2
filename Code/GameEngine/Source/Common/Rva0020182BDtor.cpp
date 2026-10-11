@@ -12,6 +12,13 @@ class Rva001E3624
 {
 public:
 	virtual ~Rva001E3624();
+	// LINK: declaration-only default ctor (no body in this TU). The derived
+	// Rva0020182B(int) anchor ctor below base-inits through it; the base-init
+	// E8 binds the kept copy instead of emitting this TU's loser copy. The
+	// anchor ctor itself is unclaimed (not a row), so its extra E8 is
+	// harmless; the rowed 79B dtor is untouched. Same recipe as the
+	// Rva00200E95Dtor sibling. No flags touched.
+	Rva001E3624();
 
 private:
 	unsigned char m_pad04[0x10 - 4];
