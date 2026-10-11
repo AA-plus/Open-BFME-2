@@ -1,8 +1,17 @@
 // ?update@StrafeAreaUpdate@@UAE?AW4UpdateSleepTime@@XZ
+// partial score=0.997 date=2026-10-11
+// ?update@StrafeAreaUpdate@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.9054787782177982 date=2026-10-10
 // ?update@StrafeAreaUpdate@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.88 date=2026-10-09
 // cl: /I. /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii
+// Round 4: 948/948 bytes; only diff is the operand order of the case-0
+// second compare (retail movss [slope]; addss [radius], ours radius first;
+// source order, accessors, locals, >= forms all canonicalize the same).
+// Firing offset must be an implicitly converted float local and perp is
+// scaled before dir (WB order); onward scale needs the explicit local factor.
+// The TU-visible inline noinline Coord3D::length/normalize bodies are
+// required (without them 994B): retail's TU saw them as header inlines.
 // Target3A4FDA..3A538E and WB StrafeAreaUpdate.cpp:171/173 prove update.
 // Constructor3A4D23/initializer3A4F21 establish primary layout; update
 // operates on the secondary interface at10 (vtableC1B158 slot0).
@@ -142,9 +151,11 @@ UpdateSleepTime StrafeAreaUpdate::update() {
    StrafeDirection direction(*obj->getUnitDirectionVector2D());direction.coord()->normalize();
    StrafeDirection perpendicular(direction.y,-direction.x,0.0f);
    phase+=d->frequency;
-   float offset=(float)(sin(phase)*d->amplitude);
-   firingPosition.add(direction.scaled(d->slope));
-   perpendicular.scale(offset);firingPosition.add(perpendicular);
+   float offset=sin(phase)*d->amplitude;
+   perpendicular.scale(offset);
+   direction.scale(d->slope);
+   firingPosition.add(direction);
+   firingPosition.add(perpendicular);
    firingPosition.z=TheTerrainLogic->getGroundHeight(firingPosition.x,firingPosition.y);
    TheWeaponStore->createAndFireTempWeapon(weapon,obj,firingPosition.coord());
   }
@@ -153,7 +164,8 @@ UpdateSleepTime StrafeAreaUpdate::update() {
    state=2;aircraft->chooseLocomotorSet(6);obj->clearFiring();break;
   }
   if(distance<d->radius/12.0f && aircraft->rvaSlot110()) {
-   StrafeDirection onward(target);onward.sub(start);onward.coord()->normalize();onward.scale(500.0f);onward.add(target);
+   StrafeDirection onward(target);onward.sub(start);onward.coord()->normalize();{float s=500.0f;onward.x*=s;onward.y*=s;onward.z*=s;}
+   onward.add(target);
    Coord3D adjusted;TheTerrainLogic->rvaSlot13(&adjusted,onward.coord());
    aircraft->commands.aiMoveToPosition(&adjusted,CMD_FROM_AI);started=true;
   }

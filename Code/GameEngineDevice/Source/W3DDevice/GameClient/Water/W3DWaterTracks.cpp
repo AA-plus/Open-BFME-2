@@ -1,13 +1,18 @@
-// ?init@WaterTracksObj@@QAEXMMAAVVector2@@0PADHPAX@Z
-// partial score=0.9954188440899994 date=2026-10-10
-// ?init@WaterTracksObj@@QAEXMMAAVVector2@@0PADHPAX@Z
-// partial score=0.985 date=2026-10-09
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /DWIN32 /MD /EHsc /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
-// Clean BFME1 9cbfb551fe20 W3DWaterTracks.cpp initializer, guided by ZH.
-// Native FE379..FE8FC RET28 and editor calls establish seven arguments.
-// Bounds8..2C, type30, start40, init58/60, offset68 and timing6C..AC
-// are target access facts. Map settings identity is unknown; its optional
-// values are read through existing address-derived getter providers.
+// WaterTracksObj::init, ported from Open-BFME-1 9cbfb551fe20
+// GameEngineDevice/Source/W3DDevice/GameClient/Water/W3DWaterTracks.cpp and
+// guided by Zero Hour's W3DWaterTracks.cpp.
+//
+// Target facts (native FE379..FE8FC, RET 0x1C, seven arguments from the
+// editor callers): bounds +0x08..+0x2C, wave type +0x30, start +0x40,
+// initial start/end +0x58/+0x60, time offset +0x68 and the timing block
+// +0x6C..+0xAC. BFME 2 adds an optional map-settings object whose values
+// override the per-type wave table; its class is unknown, so its getters
+// are reached through the providers already rowed at their addresses
+// (0x30C934/0x30C8CC/0x30C8E6/0x30C900 address-named float-to-int getters,
+// 0x30C8A7 and 0x5508E2 ICF-folded int getters at +0x80/+0x84).
+// BFME 2 also computes timeToStop before timeToReachBeach (retail's x87
+// load order of the total-time sum needs that statement order).
 #include "vector2.h"
 #include "vector3.h"
 #include <math.h>
@@ -69,14 +74,14 @@ void WaterTracksObj::init(float width,float length,Vector2 &start,Vector2 &end,c
  initialHeight*=GetGameClientRandomValueReal(0.5f,1.0f,randomFile,233)*width;
  finalWidth=length*GetGameClientRandomValueReal(0.5f,1.1f,randomFile,234);
  finalHeight=width*GetGameClientRandomValueReal(0.5f,1.1f,randomFile,235);
- timeToBeach=(distance-finalHeight)/velocity;
  frontAcc=-(velocity*velocity)/(2*finalHeight);
  timeToStop=-velocity/frontAcc;
+ timeToBeach=(distance-finalHeight)/velocity;
  timeToRetreat=sqrt(fabs(2.0f*finalHeight/frontAcc));
- totalMs=timeToBeach+(timeToStop+timeToRetreat);
+ totalMs=timeToBeach+timeToStop+timeToRetreat;
  backAcc=(2.0f*initialHeight)/(timeToStop*timeToStop);
  timeToCompress=settings?reinterpret_cast<Rva0030C900IntGetter*>(settings)->get():waveTypeInfo[type].compressMs;
  timeToCompress*=GetGameClientRandomValueReal(0.5f,1.1f,randomFile,245);
- if(type==5) {timeToRetreat=1000;totalMs=((float(fadeMs)+timeToStop)+timeToBeach)+timeToRetreat;startPos=start;fadeMs=1000;}
+ if(type==5) {timeToRetreat=1000;totalMs=timeToBeach+timeToStop+fadeMs+timeToRetreat;startPos=start;fadeMs=1000;}
  texture=BFME2LoadParticleTexture(textureName,0,0);
 }

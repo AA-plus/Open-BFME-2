@@ -1,8 +1,11 @@
 // ?rva0070E900@Rva0070E900@@QAEXPAX00@Z
-// partial score=0.841837 date=2026-10-09
-// ?rva0070E900@Rva0070E900@@QAEXPAX00@Z
-// partial score=0.9 date=2026-10-09
+// partial score=0.8836 date=2026-10-11
 // cl: /O2 /MD /EHsc
+// Case order 1,8,3,2 follows WB179D270 (assert lines 0x2a,0x30,0x36,0x46);
+// with it the frame-label case lands out of line after the epilogue as in
+// retail (1192B vs 1176B). Remaining: retail keeps lea &aFrames[i].apControls
+// in ecx at dispatch for case 2's reload, rebase shape in cases 1/2 and the
+// label/k frame-slot order.
 // Target70E900..70ED98 is1176B, including the out-of-line frame-label
 // switch case. The queue1169B boundary truncates the final destructor call
 // and jump. AptMovie.cpp assertions prove frames/control/event-action fields;
@@ -65,13 +68,10 @@ void Rva0070E900::rva0070E900(void *pBase,void *pConstantFile,void *pCount) {
     MOVIE_OFFSET(aFrames[i].apControls[j]->action.aActionStream,void *);
     Rva006FD060Forward(aFrames[i].apControls[j]->action.aActionStream,pBase,pConstantFile,pCount);
     break;
-   case 2:
-    MOVIE_ASSERT((unsigned)aFrames[i].apControls[j]->frameLabel.szLabel<0xfffff,"(unsigned)aFrames[i].apControls[j]->frameLabel.szLabel < 0xfffff",0x46);
-    MOVIE_OFFSET(aFrames[i].apControls[j]->frameLabel.szLabel,char *);
-    {
-     EAStringC label(aFrames[i].apControls[j]->frameLabel.szLabel);
-     phLabels->Set(&label,AptInteger::Create(i));
-    }
+   case 8:
+    MOVIE_ASSERT((unsigned)aFrames[i].apControls[j]->initAction.aActionStream<0xfffff,"(unsigned)aFrames[i].apControls[j]->initAction.actions.aActionStream < 0xfffff",0x30);
+    MOVIE_OFFSET(aFrames[i].apControls[j]->initAction.aActionStream,void *);
+    Rva006FD060Forward(aFrames[i].apControls[j]->initAction.aActionStream,pBase,pConstantFile,pCount);
     break;
    case 3:
     MOVIE_ASSERT((unsigned)aFrames[i].apControls[j]->placeObject2.szName<0xfffff,"(unsigned)aFrames[i].apControls[j]->placeObject2.szName < 0xfffff",0x36);
@@ -91,10 +91,13 @@ void Rva0070E900::rva0070E900(void *pBase,void *pConstantFile,void *pCount) {
      }
     }
     break;
-   case 8:
-    MOVIE_ASSERT((unsigned)aFrames[i].apControls[j]->initAction.aActionStream<0xfffff,"(unsigned)aFrames[i].apControls[j]->initAction.actions.aActionStream < 0xfffff",0x30);
-    MOVIE_OFFSET(aFrames[i].apControls[j]->initAction.aActionStream,void *);
-    Rva006FD060Forward(aFrames[i].apControls[j]->initAction.aActionStream,pBase,pConstantFile,pCount);
+   case 2:
+    MOVIE_ASSERT((unsigned)aFrames[i].apControls[j]->frameLabel.szLabel<0xfffff,"(unsigned)aFrames[i].apControls[j]->frameLabel.szLabel < 0xfffff",0x46);
+    MOVIE_OFFSET(aFrames[i].apControls[j]->frameLabel.szLabel,char *);
+    {
+     EAStringC label(aFrames[i].apControls[j]->frameLabel.szLabel);
+     phLabels->Set(&label,AptInteger::Create(i));
+    }
     break;
    case 4:case 5:case 6:case 7:default:break;
    }
