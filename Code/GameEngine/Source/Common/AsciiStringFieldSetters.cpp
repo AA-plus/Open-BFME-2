@@ -33,3 +33,15 @@ BFME_ASCII_FIELD_SETTER(Rva0041E70FStringField, 0x2C)
 BFME_ASCII_FIELD_SETTER(Rva0045515CStringField, 0x424)
 BFME_ASCII_FIELD_SETTER(Rva0059804AStringField, 0x3C)
 BFME_ASCII_FIELD_SETTER(Rva0059EF95StringField, 0xFDC)
+
+// Eight more of the same shape, found by a whole-.text byte scan for
+// add ecx, <field>; jmp 0x000366F0 outside the ledger (each starts right after
+// a ret or another setter).
+BFME_ASCII_FIELD_SETTER(Rva002223DDStringField, 0x270)
+BFME_ASCII_FIELD_SETTER(Rva0023D389StringField, 0x88)
+BFME_ASCII_FIELD_SETTER(Rva002B3078StringField, 0x64)
+BFME_ASCII_FIELD_SETTER(Rva002E389FStringField, 0x40)
+BFME_ASCII_FIELD_SETTER(Rva002E38A7StringField, 0x4C)
+BFME_ASCII_FIELD_SETTER(Rva003BA65FStringField, 0x84)
+BFME_ASCII_FIELD_SETTER(Rva003BD527StringField, 0x44)
+BFME_ASCII_FIELD_SETTER(Rva0053B8E9StringField, 0x7C)
