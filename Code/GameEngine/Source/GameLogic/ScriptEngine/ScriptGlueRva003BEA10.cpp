@@ -89,7 +89,9 @@ public:
 };
 extern TerrainLogic *TheTerrainLogic;
 
-extern BitFlags<116> g_00DFEFA4;
+extern BitFlags<116> KINDOFMASK_NONE;
+#define g_00DFEFA4 KINDOFMASK_NONE
+// ^ g_00DFEFA4 is only an alias of the owned global KINDOFMASK_NONE (ledger names column).
 
 void __stdcall Rva003BEA10Do(const AsciiString *teamName, void *posSrc)
 {

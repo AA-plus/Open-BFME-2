@@ -22,7 +22,9 @@ struct Outer
 };
 
 extern Outer *g_00E00940;
-extern Dict g_00E00944;
+extern Dict g_Va00E00944;
+#define g_00E00944 g_Va00E00944
+// ^ g_00E00944 is only an alias of the owned global g_Va00E00944 (ledger names column).
 
 void Rva000ABD70Clear()
 {

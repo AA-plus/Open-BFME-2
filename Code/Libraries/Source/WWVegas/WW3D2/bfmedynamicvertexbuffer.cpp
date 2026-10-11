@@ -25,7 +25,9 @@ struct BfmeFVFDescriptor {
  BfmeFVFDescriptor(unsigned fvf,unsigned fvf_size,bool additional_basis,unsigned extension_count);
  unsigned char record[0x60];
 };
-extern BfmeFVFDescriptor bfmeDynamicFVFDescriptors[15];
+extern BfmeFVFDescriptor bfmeDynamicFVFDescs[15];
+#define bfmeDynamicFVFDescriptors bfmeDynamicFVFDescs
+// ^ bfmeDynamicFVFDescriptors is only an alias of the owned global bfmeDynamicFVFDescs (ledger names column).
 struct BfmeDynamicFVFPrefix {
  unsigned fvf;bool additionalBasis;unsigned extensionCount,stride;
  unsigned Get_FVF() const { return fvf; }
