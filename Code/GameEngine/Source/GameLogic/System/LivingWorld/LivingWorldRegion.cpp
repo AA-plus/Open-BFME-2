@@ -137,6 +137,7 @@ struct PlacementRange {PlacementSlot *first,*finish,*end;};
 struct PlacementArmyPrefix {char unknown00[0x18];AsciiString name18;};
 class LivingWorldRegion
 {
+	friend class Rva003F2A8C;
 public:
 	void CreateBuildPlots();
     void rva003F0F48(PlacementRange *,void *);
@@ -589,3 +590,52 @@ void LivingWorldRegion::rva003F0F48(PlacementRange *slots,void *army){
 // Native3F0FA3/46 and WB103E560 select receiver180 for a nonempty
 // army name18 or18C for an empty name before calling the owned eraser.
 void LivingWorldRegion::rva003F0FA3(void *army){if(!((PlacementArmyPrefix*)army)->name18.isEmpty())rva003F0F48((PlacementRange*)&m_heroSlots,army);else rva003F0F48((PlacementRange*)m_unknown18C,army);}
+
+// The region's ownership listeners, told (region, old owner, new owner)
+// through their slot 1 (vcall thunk 0x005CB260) by the rowed walk
+// 0x003F1A03; a plot's rowed owner setter 0x004FC176 and the region's
+// rowed 0x003F1AFF take the new owner. Address-derived names.
+class Rva003F119CListener
+{
+public:
+	virtual void slot00();
+	virtual void onOwnerChanged(void *region, Int oldOwner, Int newOwner);	// +0x04
+};
+class Rva003F1A03 { public: void rva003F1A03(void (Rva003F119CListener::*notify)(void *, Int, Int), void *region, Int oldOwner, Int newOwner); };
+class Rva003F1AFF { public: void rva003F1AFF(Int owner); };
+class Rva004FC176 { public: void rva004FC176(Int owner); };
+
+// Retail 0x003F2A8C, 127 bytes (RET 4; callers RemovePlayer, spawnBuilding,
+// 0x0020F832 and 0x003F300A): the region's owner change. Unless the owner
+// is unchanged it notifies the listeners, hands each build plot the new
+// owner, clears the region (0x003F2106), its +0x17C plot index and +0x1A3
+// flag, applies the owner (0x003F1AFF), then rebuilds the plots for a real
+// owner or clears again for none (-1).
+class Rva003F2A8C
+{
+public:
+	void rva003F2A8C(Int newOwner);
+};
+
+void Rva003F2A8C::rva003F2A8C(Int newOwner)
+{
+	LivingWorldRegion *region = reinterpret_cast<LivingWorldRegion *>(this);
+	if (region->m_ownerPlayerID == newOwner)
+		return;
+	reinterpret_cast<Rva003F1A03 *>(this)->rva003F1A03(&Rva003F119CListener::onOwnerChanged, this, region->m_ownerPlayerID, newOwner);
+	BuildPlotVector::iterator it = region->m_buildPlots.begin();
+	BuildPlotVector::iterator end = region->m_buildPlots.end();
+	for (; it != end; ++it)
+	{
+		if (*it)
+			reinterpret_cast<Rva004FC176 *>(*it)->rva004FC176(newOwner);
+	}
+	reinterpret_cast<Rva003F3F27 *>(this)->rva003F2106();
+	region->m_plotIndex = 0;
+	region->m_plotFlag = false;
+	reinterpret_cast<Rva003F1AFF *>(this)->rva003F1AFF(newOwner);
+	if (newOwner != -1)
+		region->CreateBuildPlots();
+	else
+		reinterpret_cast<Rva003F3F27 *>(this)->rva003F2106();
+}
