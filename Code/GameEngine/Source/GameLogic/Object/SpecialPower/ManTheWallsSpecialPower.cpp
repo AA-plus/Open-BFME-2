@@ -1,6 +1,54 @@
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 #include "Coord3D.h"
 
+struct BfmeE8
+{
+	float m_distSq;
+	void *m_item;
+};
+
+struct Rva004C7621Pos
+{
+	char m_pad[0x38];
+	float m_x;
+	float m_y;
+};
+
+struct Rva004C734DElement;
+struct Rva004C7621Range
+{
+ Rva004C734DElement *m_first;
+ Rva004C734DElement *m_last;
+};
+
+namespace _STL {
+
+template <class _Tp> class allocator
+{
+};
+
+template <class _Tp, class _Alloc> class vector
+{
+public:
+	void push_back(const _Tp &v);
+	_Tp *_M_start;
+	_Tp *_M_finish;
+	_Tp *_M_end;
+};
+
+template <class _Tp, class _Pred> void sort(_Tp, _Tp, _Pred);
+
+}
+
+typedef bool (*BfmeE8Less)(const BfmeE8 &, const BfmeE8 &);
+
+namespace _STL {
+template <> void sort<BfmeE8 *, BfmeE8Less>(BfmeE8 *, BfmeE8 *, BfmeE8Less);
+}
+
+bool Rva0007B701Cmp(const BfmeE8 &, const BfmeE8 &);
+
+
 class Object;
 class Player;
 struct Rva00372571Params
@@ -92,6 +140,7 @@ public:
 	ManTheWallsSpecialPower( Thing *thing, const ModuleData *moduleData );
 	void rva004C70AD(BfmeVecAV *range, AIGroup *group);
 	void rva004C7167(Rva004C734DElement *entry);
+	void rva004C7621(Rva004C7621Range *, const Rva004C7621Pos *, _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > *);
 };
 
 ManTheWallsSpecialPower::ManTheWallsSpecialPower( Thing *thing, const ModuleData *moduleData )
@@ -143,4 +192,30 @@ void ManTheWallsSpecialPower::rva004C7167(Rva004C734DElement *entry)
 		group->rva00372571(&params, 0);
 		TheAI->destroyGroup(group);
 	}
+}
+
+// Native 4C7621..4C76AC (139B, RET12). The 4C76AC caller restores
+// ManTheWalls this; WB 1268940 and its 1268800 callee witness the member
+// ABI independently. The native loop reads each 16-byte entry's Object
+// position at +38/+3C and stores the address of its vector member at +4.
+// BfmeE8 and range names remain neutral; the established distance-sort
+// semantics are retained from the prior byte-exact C++ reconstruction.
+void ManTheWallsSpecialPower::rva004C7621(Rva004C7621Range *range, const Rva004C7621Pos *ref, _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > *out)
+{
+	float refs[3];
+	refs[0] = ref->m_x;
+	refs[1] = ref->m_y;
+	Rva004C734DElement *rec = range->m_first;
+	for (; rec != range->m_last; ++rec) {
+		float *p = (float *)((char *)rec->owner + 0x38);
+		float dx = p[0];
+		float dy = p[1];
+		dx -= refs[0];
+		dy -= refs[1];
+		BfmeE8 e;
+		e.m_item = &rec->members;
+		e.m_distSq = dy * dy + dx * dx;
+		out->push_back(e);
+	}
+	_STL::sort(out->_M_start, out->_M_finish, &Rva0007B701Cmp);
 }
