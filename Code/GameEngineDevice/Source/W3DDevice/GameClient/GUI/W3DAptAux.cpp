@@ -262,3 +262,10 @@ void *Rva000A91D3AptAlloc(unsigned int bytes)
 {
  return ::operator new[](bytes);
 }
+
+// The adjacent Apt free callback A91D8..A91DD is installed at E1772C
+// and E17750. It tail-jumps to array delete without adding a null guard.
+void Rva000A91D8AptFree(void *memory)
+{
+ ::operator delete[](memory);
+}
