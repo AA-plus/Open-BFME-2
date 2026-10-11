@@ -1,4 +1,4 @@
-// cl: /O2 /Ireference/shims/bfme2_ascii /EHsc /MD
+// cl: /O2 /ICode/Libraries/Include /Ireference/shims/bfme2_ascii /EHsc /MD
 // ShroudManager::Data::DoSmallFill, native 0x0073AAE0..0x0073AD8D (685B, RET 0xC).
 // Identity: WB 0x17E0670 names the body and its exact warning text; native
 // UpdateCellsTouched 0x0073AD90 calls it for small geometry.
@@ -83,6 +83,7 @@ class Gen_008F7CD0
 {
 public:
 	void rva0073A2A0(BfmeCellFD **first, BfmeCellFD **last, int x1, int x2, int y);
+    void rva0073CE90(int,int,int,int,int,int);
 	char opaque00[4];
 	float originX, originY;
 	char opaque0C[0x1C - 0xC];
@@ -95,6 +96,7 @@ public:
 	virtual AsciiString name();
 };
 
+class UpdateOwner;
 class ShroudManager
 {
 public:
@@ -102,10 +104,23 @@ public:
 	{
 	public:
 		bool DoSmallFill(float x, float y, float radius);
+        void UpdateCellsTouched();
 		Gen_008F7CD0 *grid;
 		SmallFillNamedObject *object;
-		char opaque08[0x1C - 8];
+		SmallFillNamedObject *ghost;
+        char opaque0C[0x1C - 0xC];
 		SmallFillCOI *coi;
+        int coiCount;
+        int shroudedness[20];
+        int otherStates[20];
+        unsigned char playerFlags[20];
+        int cellX,cellY;
+        int revealRadii[3];
+        unsigned revealMask;
+        float rotation;
+        int changeRadii[3];
+        unsigned changeMasks[3],changeAmounts[3];
+        bool forceUpdate;
 	};
 };
 
@@ -160,4 +175,112 @@ bool ShroudManager::Data::DoSmallFill(float x, float y, float radius)
 			first = smallFillRow(out, first, last);
 	}
 	return true;
+}
+
+// ShroudManager::Data::UpdateCellsTouched, native 0x0073AD90..0x0073B216,
+// complete 1158B instance entry. WB 0x017E0C10 independently names the
+// method and m_ghostObj+8 assertion. The native call graph, geometry query,
+// COI fill dispatch and three-radius reveal/change operations agree.
+// Semantic/structural guide: Open-BFME-1 9e3be919b10ae956e3c8a13995e0d62f2be1d016,
+// game/GameEngine/Source/GameLogic/Object/PartitionData_updateCellsTouched.cpp.
+// Target evidence supplies 20 player slots, three reveal radii at+E0,
+// mask+EC, rotation+F0, three change radii/masks/amounts at+F4/+100/+10C,
+// cached cell coordinates+D8/+DC and rotation invalidation flag+118.
+// The donor's PartitionData spelling is not claimed for this target.
+// The owner views below retain neutral names: native proves their virtual
+// base conversion and slots, but does not establish their original types.
+// GeometryShape is 36B with the existing GeometryInfo query and AsciiString
+// lifetime; the extra byte at+21 is initialized to one, purpose unknown.
+// Existing CDEArraySlot destructor pin proves the empty element callback.
+// Existing address-derived rva0073CAF0 declaration is the independently
+// proven thiscall(x,y,radii[3],rotation,mask) contract from the rowed739A30
+// caller. No callee implementation or original method name is inferred here.
+// Native x87 rounding uses the existing FISTP conversion helper.
+// The TU-local distance utility takes grid before distance so MSVC evaluates
+// the float argument before loading the receiver, as in the donor guide.
+// It has internal linkage; no public grid method or target name is added.
+#include "Lib/Coord3D.h"
+extern "C" __declspec(dllimport) double __cdecl ceil(double);
+struct UpdateOffset { UpdateOffset():x(0),y(0),z(0){} float x,y,z; };
+struct GeometryShape {
+ GeometryShape():type(0),height(1),major(1),minor(1),enabled(true),unmodelled21(true){}
+ int type;float height,major,minor;UpdateOffset offset;AsciiString name;
+ bool enabled,unmodelled21;
+};
+class GeometryInfo {public:void rva006BD9C0(GeometryShape&)const;void*vt;bool small;};
+class UpdateThing {
+public:virtual const GeometryInfo* geometry()const;
+ virtual const Coord3D*position()const;virtual float angle()const;
+};
+class UpdateOwner:public virtual UpdateThing {
+public:virtual void slot00();virtual void cellChanged();virtual void slot08();
+ virtual void reveal(unsigned*,float*,float*,float*);
+ virtual float change(int,unsigned*,unsigned*);
+};
+void __cdecl operator delete[](void*);
+struct CDEArraySlot {~CDEArraySlot();char storage[16];};
+class BfmeThingCDE {public:void d_008f7ec0();void initializeArray(int);
+ bool DoRectFill(float,float,float,float,float);
+private:friend class ShroudManager::Data;bool rva0073A9B0(float,float,float);};
+class BfmeShapeEU;
+class BfmeHostEU {public:int bfmeStepsEU(const BfmeShapeEU*);};
+class ShroudManagerImpl {public:
+ void QueueUndoShroudReveal(int,int,int*,float,unsigned);
+private:friend class ShroudManager::Data;
+ void rva0073CAF0(int,int,void*,float,int);
+};
+
+// Calls retain the existing provider owner spellings; no alias or new pin.
+__forceinline int updateFloor(float x){return smallFillInteger((float)floor((double)x));}
+__forceinline int updateCeil(float x){return smallFillInteger((float)ceil((double)x));}
+static __forceinline int updateDistance(Gen_008F7CD0 *grid,float w){return updateCeil(w*grid->scale);}
+void ShroudManager::Data::UpdateCellsTouched()
+{
+ if(!object && !ghost)return;
+ SmallFillNamedObject*chosen=object?object:ghost;
+ UpdateOwner*obj=(UpdateOwner*)chosen;
+ UpdateThing*thing=obj;
+ const GeometryInfo*geom=thing->geometry();
+ const Coord3D*pos=thing->position();
+ ((BfmeThingCDE*)this)->d_008f7ec0();
+ GeometryShape shape;
+ geom->rva006BD9C0(shape);
+ if(!geom->small){
+  int count=((BfmeHostEU*)grid)->bfmeStepsEU((const BfmeShapeEU*)&shape);
+  if(count!=coiCount){delete[](CDEArraySlot*)coi;coi=0;((BfmeThingCDE*)this)->initializeArray(count);}
+ }
+ if(geom->small)DoSmallFill(pos->x,pos->y,shape.major);
+ else switch(shape.type){
+ case 0:case 1:((BfmeThingCDE*)this)->rva0073A9B0(pos->x,pos->y,shape.major);break;
+ case 2:{float minor=shape.minor;float major=shape.major;
+  ((BfmeThingCDE*)this)->DoRectFill(pos->x,pos->y,major,minor,thing->angle());break;}
+ }
+ if(object){
+  int x=updateFloor((pos->x-grid->originX)*grid->scale);
+  int y=updateFloor((pos->y-grid->originY)*grid->scale);
+  if(x==cellX && y==cellY && revealRadii[0]>=0 &&
+    (revealRadii[0]!=revealRadii[1] || revealRadii[0]!=revealRadii[2]) &&
+    ((UpdateOwner*)object)->angle()!=rotation)forceUpdate=true;
+  if(x!=cellX || y!=cellY || forceUpdate){
+   if(revealRadii[0]>=0)((ShroudManagerImpl*)grid)->QueueUndoShroudReveal(cellX,cellY,revealRadii,rotation,revealMask);
+   int i;
+   for(i=0;i<3;++i)if(changeRadii[i]>=0 && changeAmounts[i]>0)
+    grid->rva0073CE90(cellX,cellY,changeRadii[i],i,-(int)changeAmounts[i],changeMasks[i]);
+   float ranges[3];
+   ((UpdateOwner*)object)->reveal(&revealMask,&ranges[0],&ranges[1],&ranges[2]);
+   rotation=((UpdateOwner*)object)->angle();
+   for(i=0;i<3;++i)revealRadii[i]=ranges[i]<0?-1:updateDistance(grid,ranges[i]);
+   if(revealRadii[0]>=0)((ShroudManagerImpl*)grid)->rva0073CAF0(x,y,revealRadii,rotation,revealMask);
+   for(i=0;i<3;++i){
+    float range=((UpdateOwner*)object)->change(i,&changeAmounts[i],&changeMasks[i]);
+    changeRadii[i]=range<0?-1:updateDistance(grid,range);
+    if(changeRadii[i]>=0 && changeAmounts[i]>0){
+     if(changeMasks[i]==0)changeMasks[i]=revealMask;
+     grid->rva0073CE90(x,y,changeRadii[i],i,changeAmounts[i],changeMasks[i]);
+    }
+   }
+   cellX=x;cellY=y;((UpdateOwner*)object)->cellChanged();
+  }
+ }
+ for(int p=0;p<20;++p)shroudedness[p]=0;
 }
