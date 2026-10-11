@@ -13,7 +13,7 @@ struct Vp6HuffmanNode {
     Vp6HuffmanEdge right;
     unsigned char probability;
 };
-int Rva009B4600DecodeBool(void *,int);
+extern "C" int __cdecl VP6_DecodeBool(void *,int);
 
 extern "C" int VP6_DecodeValue(void *coder,Vp6HuffmanNode *tree)
 {
@@ -21,7 +21,7 @@ extern "C" int VP6_DecodeValue(void *coder,Vp6HuffmanNode *tree)
     edge.bytes.low=0;
     do {
         Vp6HuffmanNode *node=&tree[edge.fields.index];
-        if(Rva009B4600DecodeBool(coder,node->probability)) edge=node->right;
+        if(VP6_DecodeBool(coder,node->probability)) edge=node->right;
         else edge=node->left;
     } while(!edge.fields.leaf);
     return edge.fields.index;

@@ -7,7 +7,7 @@
 // Tables are observed native data; descriptive names are not original identifiers.
 
 struct Rva009B4800State;
-int Rva009B4800DecodeBool(Rva009B4800State *, int);
+extern "C" int __cdecl nDecodeBool(Rva009B4800State *, int);
 
 struct Rva009AAF80State
 {
@@ -101,7 +101,7 @@ struct Vp6TokenSign
 	}
 };
 
-#define VP6_BOOL(p) Rva009B4800DecodeBool((Rva009B4800State *)br, (p))
+#define VP6_BOOL(p) nDecodeBool((Rva009B4800State *)br, (p))
 
 extern "C" unsigned char VP6_ReadTokens(Vp6TokenInstance *pbi, short *coeffs, int plane,
 	unsigned char *above, unsigned char *left)

@@ -5,7 +5,7 @@
 // Codec subobject allocation family. Retail helpers use private ESI (cleanup)
 // and EAX (initializer) arguments; static C++ preserves those conventions.
 // Full bodies: 009A6DA0/67, 009A6DF0/206, 009A6F20/73.
-// The factory is called by matched bfmeInitCodecJX; free routes through
+// The factory is called by matched VP6_StartDecoder; free routes through
 // 009A5980 to matched 009A58E0. Integration entries below are not claimed.
 // Every release here calls the 5-byte forwarder at 0x001B6410 (rowed as
 // bfmeFreeOneJT), which tail-jumps to bfmeTwoBZB at 0x001B63A0.

@@ -10,7 +10,7 @@
 // the two assignments into retail's one add and one short store.
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
 
-extern int Rva009B4600DecodeBool(void *coder, int prob);
+extern "C" int __cdecl VP6_DecodeBool(void *coder, int prob);
 
 void Rva009B5200DecodeMotionVector(void *ctxRaw, short *outMv, int mode)
 {
@@ -41,47 +41,47 @@ void Rva009B5200DecodeMotionVector(void *ctxRaw, short *outMv, int mode)
 	{
 		int delta;
 
-		if (!Rva009B4600DecodeBool(coder, ctx[0x706 + comp]))
+		if (!VP6_DecodeBool(coder, ctx[0x706 + comp]))
 		{
-			if (Rva009B4600DecodeBool(coder, ctx[comp * 7 + 0x708]))
+			if (VP6_DecodeBool(coder, ctx[comp * 7 + 0x708]))
 			{
 				unsigned char *base = ctx + comp * 7;
-				if (Rva009B4600DecodeBool(coder, base[0x70c]))
+				if (VP6_DecodeBool(coder, base[0x70c]))
 				{
-					delta = Rva009B4600DecodeBool(coder,
+					delta = VP6_DecodeBool(coder,
 						ctx[(comp + 0x102) * 7]) + 6;
 				}
 				else
 				{
-					delta = Rva009B4600DecodeBool(coder, base[0x70d]) + 4;
+					delta = VP6_DecodeBool(coder, base[0x70d]) + 4;
 				}
 			}
 			else
 			{
-				if (Rva009B4600DecodeBool(coder, (ctx + comp * 7)[0x709]))
+				if (VP6_DecodeBool(coder, (ctx + comp * 7)[0x709]))
 				{
-					delta = Rva009B4600DecodeBool(coder,
+					delta = VP6_DecodeBool(coder,
 						(ctx + comp * 7)[0x70b]) + 2;
 				}
 				else
 				{
-					delta = Rva009B4600DecodeBool(coder, (ctx + comp * 7)[0x70a]);
+					delta = VP6_DecodeBool(coder, (ctx + comp * 7)[0x70a]);
 				}
 			}
 		}
 		else
 		{
-			delta = Rva009B4600DecodeBool(coder, ctx[comp * 8 + 0x71c]);
-			delta += Rva009B4600DecodeBool(coder, ctx[comp * 8 + 0x71d]) * 2;
+			delta = VP6_DecodeBool(coder, ctx[comp * 8 + 0x71c]);
+			delta += VP6_DecodeBool(coder, ctx[comp * 8 + 0x71d]) * 2;
 			unsigned char prob2 = ctx[comp * 8 + 0x71e];
-			delta += Rva009B4600DecodeBool(coder, prob2) * 4;
-			delta += Rva009B4600DecodeBool(coder, ctx[comp * 8 + 0x723]) << 7;
-			delta += Rva009B4600DecodeBool(coder, ctx[comp * 8 + 0x722]) << 6;
-			delta += Rva009B4600DecodeBool(coder, ctx[comp * 8 + 0x721]) << 5;
-			delta += Rva009B4600DecodeBool(coder, ctx[comp * 8 + 0x720]) << 4;
+			delta += VP6_DecodeBool(coder, prob2) * 4;
+			delta += VP6_DecodeBool(coder, ctx[comp * 8 + 0x723]) << 7;
+			delta += VP6_DecodeBool(coder, ctx[comp * 8 + 0x722]) << 6;
+			delta += VP6_DecodeBool(coder, ctx[comp * 8 + 0x721]) << 5;
+			delta += VP6_DecodeBool(coder, ctx[comp * 8 + 0x720]) << 4;
 			if (delta & 0xf0)
 			{
-				delta += Rva009B4600DecodeBool(coder, ctx[comp * 8 + 0x71f]) << 3;
+				delta += VP6_DecodeBool(coder, ctx[comp * 8 + 0x71f]) << 3;
 			}
 			else
 			{
@@ -89,7 +89,7 @@ void Rva009B5200DecodeMotionVector(void *ctxRaw, short *outMv, int mode)
 			}
 		}
 
-		if (delta && Rva009B4600DecodeBool(coder, ctx[0x704 + comp]))
+		if (delta && VP6_DecodeBool(coder, ctx[0x704 + comp]))
 		{
 			delta = -delta;
 		}

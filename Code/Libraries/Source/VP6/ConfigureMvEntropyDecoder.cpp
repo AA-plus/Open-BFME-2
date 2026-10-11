@@ -21,7 +21,7 @@ struct Vp6MvEntropyInstance {
 	unsigned char unknown716[6];
 	unsigned char MvSizeProbs[2][8];
 };
-int Rva009B4600DecodeBool(void *, int);
+extern "C" int __cdecl VP6_DecodeBool(void *, int);
 extern "C" int __cdecl VP6_bitread(void *, int);
 extern const unsigned char g_00BD94A8[2][17];
 // Retail's own 2 x 17 MV entropy update weights, transcribed from .rdata at
@@ -46,12 +46,12 @@ extern "C" void VP6_ConfigureMvEntropyDecoder(Vp6MvEntropyInstance *pbi, unsigne
 	int i;
 	unsigned j;
 	for (i = 0; i < 2; i++) {
-		if (Rva009B4600DecodeBool(pbi->br, g_00BD94A8[i][0])) {
+		if (VP6_DecodeBool(pbi->br, g_00BD94A8[i][0])) {
 			pbi->IsMvShortProb[i] = VP6_bitread(pbi->br, 7) << 1;
 			if (!pbi->IsMvShortProb[i])
 				pbi->IsMvShortProb[i] = 1;
 		}
-		if (Rva009B4600DecodeBool(pbi->br, g_00BD94A8[i][1])) {
+		if (VP6_DecodeBool(pbi->br, g_00BD94A8[i][1])) {
 			pbi->MvSignProbs[i] = VP6_bitread(pbi->br, 7) << 1;
 			if (!pbi->MvSignProbs[i])
 				pbi->MvSignProbs[i] = 1;
@@ -60,7 +60,7 @@ extern "C" void VP6_ConfigureMvEntropyDecoder(Vp6MvEntropyInstance *pbi, unsigne
 	for (i = 0; i < 2; i++) {
 		int k = 2;
 		for (j = 0; j < 7; j++, k++) {
-			if (Rva009B4600DecodeBool(pbi->br, g_00BD94A8[i][k])) {
+			if (VP6_DecodeBool(pbi->br, g_00BD94A8[i][k])) {
 				pbi->MvShortProbs[i][j] = VP6_bitread(pbi->br, 7) << 1;
 				if (!pbi->MvShortProbs[i][j])
 					pbi->MvShortProbs[i][j] = 1;
@@ -70,7 +70,7 @@ extern "C" void VP6_ConfigureMvEntropyDecoder(Vp6MvEntropyInstance *pbi, unsigne
 	for (i = 0; i < 2; i++) {
 		int k = 9;
 		for (j = 0; j < 8; j++, k++) {
-			if (Rva009B4600DecodeBool(pbi->br, g_00BD94A8[i][k])) {
+			if (VP6_DecodeBool(pbi->br, g_00BD94A8[i][k])) {
 				pbi->MvSizeProbs[i][j] = VP6_bitread(pbi->br, 7) << 1;
 				if (!pbi->MvSizeProbs[i][j])
 					pbi->MvSizeProbs[i][j] = 1;

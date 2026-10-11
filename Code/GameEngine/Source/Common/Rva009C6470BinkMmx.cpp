@@ -1,6 +1,6 @@
 // cl: /DNDEBUG /MD
 //
-// MMX sibling of rva009C6FC0BinkSse: same four-tap vertical fixed-point
+// MMX sibling of FilterBlock1d_v_wmt: same four-tap vertical fixed-point
 // filter (taps at -stride, 0, +stride, +stride*2), but each MMX register
 // only holds four pixels, so the eight-pixel-wide strip is done as two
 // four-pixel passes with their own qword store, and the rounding table is

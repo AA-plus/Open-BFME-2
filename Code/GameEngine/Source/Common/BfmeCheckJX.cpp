@@ -1,13 +1,13 @@
 // Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
 // Its allocator and native14B body differ from NameKeyGenerator::Bucket's
 // donor operator new. Address-derived identity; original class is unknown.
-// Retail 009A89C0. Existing bfmeInitCodecJX caller establishes this name.
+// Retail 009A89C0. Existing VP6_StartDecoder caller establishes this name.
 // Fields are offset-derived; sizes and helper ABIs were checked against retail.
 struct CodecState;
 struct Rva009A8910Context;
 class Rva001B6400Allocation { public: enum AllocationTag { Zero = 0 }; static void* operator new(unsigned, AllocationTag); };
 void Rva009A4E50Configure(void*,unsigned,int);
-void bfmeInitD70(void*,void*);
+extern "C" void __cdecl ChangePostProcConfiguration(void*,void*);
 // 0x001B9140 is the row _VP6_AllocateFragmentInfo (Code/Libraries/Source/VP6/AllocateFragmentInfo.cpp, cdecl).
 extern "C" int VP6_AllocateFragmentInfo(void*);
 extern "C" int __cdecl VP6_AllocateFrameInfo(Rva009A8910Context*,int);
@@ -90,7 +90,7 @@ int bfmeCheckJX(CodecState* s)
         offset+=48; out+=6;
     }while(offset<96);
     void* cfg=(unsigned char*)s+0x1b0;
-    bfmeInitD70((void*)s->at0298,cfg);
+    ChangePostProcConfiguration((void*)s->at0298,cfg);
     if(!VP6_AllocateFragmentInfo(s)) return 0;
     if(!VP6_AllocateFrameInfo((Rva009A8910Context*)s,allocation)) {VP6_DeleteFragmentInfo(s); return 0;}
     if(s->at0264==0 && (int)s->at023c!=0 && (*(int*)cfg!=(int)s->at023c || (int)s->at01b4!=(int)s->at0240)) {

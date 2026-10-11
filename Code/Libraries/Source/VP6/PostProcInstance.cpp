@@ -29,7 +29,7 @@ struct POSTPROC_VERSIONED
 
 extern "C" void __cdecl DeletePostProcBuffers(void *instance); // 0x001B65F0
 void __cdecl bfmeFreeOneJT(void *block);                // 0x001B6410 duck_free
-void __cdecl bfmeInitD70(void *instance, void *config); // 0x001B67E0 ChangePostProcConfiguration
+extern "C" void __cdecl ChangePostProcConfiguration(void *instance, void *config); // 0x001B67E0
 
 class Rva001B6400Allocation
 {
@@ -68,7 +68,7 @@ extern "C" POSTPROC_INSTANCE *__cdecl CreatePostProcInstance(void *config)
 	if (instance)
 	{
 		memset(instance, 0, 0xC8);
-		bfmeInitD70(instance, config);
+		ChangePostProcConfiguration(instance, config);
 		instance->addNoiseMode = 1;
 		result = (POSTPROC_INSTANCE *)instance;
 	}

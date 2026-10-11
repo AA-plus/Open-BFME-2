@@ -5394,7 +5394,6 @@ alternatename	Code/Libraries/Source/WWVegas/WW3D2/Rva00743060Siblings.cpp	?g_bfm
 alternatename	Code/Libraries/Source/WWVegas/WW3D2/Rva0093D050CopySurfaceRects.cpp	?g_w3dMouseD3DDevice@@3PAVD3DDeviceInterface@@A	1
 alternatename	Code/Libraries/Source/WWVegas/WW3D2/Rva00958200BfmeThingTXACtor.cpp	?bfmeReleaseATXA@@YGXPAX@Z	1
 alternatename	Code/Libraries/Source/WWVegas/WW3D2/Rva00958200BfmeThingTXACtor.cpp	?bfmeReleaseBTXA@@YGXPAX@Z	1
-alternatename	Code/Libraries/Source/WWVegas/WW3D2/Rva009A9370InterpRows.cpp	?Rva009A9370@@YAXXZ	1
 alternatename	Code/Libraries/Source/WWVegas/WW3D2/SceneOwnership.cpp	?link@Gen_00943CF0@@AAEXPAXHHH@Z	1
 alternatename	Code/Libraries/Source/WWVegas/WW3D2/SceneOwnership.cpp	?second@Gen_00943CF0@@AAEXPAX000@Z	1
 alternatename	Code/Libraries/Source/WWVegas/WW3D2/SceneOwnership.cpp	?unlink@Gen_00943CF0@@AAEXPAX@Z	1
@@ -25252,9 +25251,8 @@ pin	reverse/symbols.csv	0x001B5910	1
 pin	reverse/symbols.csv	0x001B60E0	1
 pin	reverse/symbols.csv	0x001B6410	1
 pin	reverse/symbols.csv	0x001B6520	1
-pin	reverse/symbols.csv	0x001B67E0	2
+pin	reverse/symbols.csv	0x001B67E0	1
 pin	reverse/symbols.csv	0x001B7810	1
-pin	reverse/symbols.csv	0x001B8100	1
 pin	reverse/symbols.csv	0x001B81C0	1
 pin	reverse/symbols.csv	0x001B8E90	1
 pin	reverse/symbols.csv	0x001B9040	1

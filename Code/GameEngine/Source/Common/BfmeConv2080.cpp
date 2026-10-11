@@ -67,34 +67,6 @@ extern "C" void __cdecl DeletePostProcInstance(BfmeHolderBZB *h);
 extern "C" void __cdecl VP6_DeleteFrameInfo(void *q);
 extern "C" void __cdecl VP6_DeletePBInstance(PB_INSTANCE **instance);
 
-int bfmeInitCodecJX(CodecState **p, int a, int b)
-{
-	*p = bfmeAllocJX();
-
-	(*p)->m_bfme234JX = a;
-	(*p)->m_bfme238JX = b;
-	(*p)->m_bfme23cJX = a;
-	(*p)->m_bfme240JX = b;
-	(*p)->m_bfme1b0JX = a;
-	(*p)->m_bfme1b4JX = b;
-	(*p)->m_bfme298JX = CreatePostProcInstance((char *)*p + 0x1b0);
-	(*p)->m_bfme13cJX = VP6_CreateQuantizer();
-	(*p)->m_bfme1a4JX = g_bfmeSharedJX;
-
-	if (bfmeCheckJX(*p) == 0)
-	{
-		VP6_DeletePBInstance((PB_INSTANCE **)p);
-
-		return 0;
-	}
-
-	(*p)->m_bfme13cJX->m_bfme38JX = 0;
-
-	VP6_InitialiseConfiguration((PB_INSTANCE *)*p);
-
-	return 1;
-}
-
 CodecState *bfmeAllocJX()
 {
 	int cfg[14];

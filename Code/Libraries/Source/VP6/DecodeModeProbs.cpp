@@ -6,7 +6,7 @@
 // probability update for the three mode-context groups, loading a codebook
 // vector and/or adding clamped differences, then rebuilds the mode trees.
 
-int Rva009B4600DecodeBool(void *state, int probability);   // 0x001C4F00 VP6_DecodeBool
+extern "C" int __cdecl VP6_DecodeBool(void *state, int probability);   // 0x001C4F00 VP6_DecodeBool
 extern "C" int __cdecl VP6_bitread(void *, int);           // 0x001BCF40
 int Rva009B6950DecodeScale(unsigned char *ctx);            // 0x001C7250 VP6_decodeModeDiff
 void Rva009B6740BuildTable(unsigned char *ctx);            // 0x001C7040 VP6_BuildModeTree
@@ -147,7 +147,7 @@ extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *ctx)
     Rows *rows = (Rows *)(ctx + 0x737);
 
     do {
-        if (Rva009B4600DecodeBool(state, 0xAE)) {
+        if (VP6_DecodeBool(state, 0xAE)) {
             int index = VP6_bitread(state, 4) + plane;
             ((unsigned char *)rows)[-1] = g_bfmeQuantRow[((index + index * 4) << 2) + 0];
             ((unsigned char *)rows)[-11] = g_bfmeQuantRow[((index + index * 4) << 2) + 1];
@@ -170,7 +170,7 @@ extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *ctx)
             ((unsigned char *)rows)[8] = g_bfmeQuantRow[((index + index * 4) << 2) + 18];
             ((unsigned char *)rows)[-2] = g_bfmeQuantRow[((index + index * 4) << 2) + 19];
         }
-        if (Rva009B4600DecodeBool(state, 0xFE)) {
+        if (VP6_DecodeBool(state, 0xFE)) {
             for (int i = 0; i < 10; ++i) {
                 unsigned char *dst = (unsigned char *)rows + 11;
                 int v = Rva009B6950DecodeScale(ctx) + dst[i - 12];

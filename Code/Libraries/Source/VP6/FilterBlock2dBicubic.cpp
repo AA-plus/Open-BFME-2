@@ -9,9 +9,9 @@
 
 void __cdecl rva009C6390BinkMmx(const void *, void *, int, int, int, int, const void *); // 0x001D6C90
 void __cdecl rva009C6470BinkMmx(const void *, void *, int, int, int, int, const void *); // 0x001D6D70
-void __cdecl rva009C6F20BinkSse(const void *, void *, int, int, int, int, const void *); // 0x001D7820
-void __cdecl rva009C6FC0BinkSse(const void *, void *, int, int, int, int, const void *); // 0x001D78C0
-void __cdecl bfmeGo76A0(int, int *, void *, int, int, int, void *); // 0x001B8100 FilterBlock2dFirstPass
+extern "C" void __cdecl FilterBlock1d_h_wmt(const void *, void *, int, int, int, int, const void *); // 0x001D7820
+extern "C" void __cdecl FilterBlock1d_v_wmt(const void *, void *, int, int, int, int, const void *); // 0x001D78C0
+extern "C" void __cdecl FilterBlock2dFirstPass(int, int *, void *, int, int, int, void *); // 0x001B8100
 void __cdecl bfmeGo7760(int *, void *, int, int, int, int, void *); // 0x001B81C0 FilterBlock2dSecondPass
 
 // Retail 0x00DFDA58: the generic filter's scratch rows (8 dwords per row).
@@ -36,15 +36,15 @@ extern "C" void __cdecl FilterBlock2d_wmt(const unsigned char *source, unsigned 
 {
 	unsigned char scratch[256];
 
-	rva009C6F20BinkSse(source - pixelsPerLine, scratch, pixelsPerLine, 1, 11, 8, horizontalTaps);
-	rva009C6FC0BinkSse(scratch + 8, output, 8, 8, 8, 8, verticalTaps);
+	FilterBlock1d_h_wmt(source - pixelsPerLine, scratch, pixelsPerLine, 1, 11, 8, horizontalTaps);
+	FilterBlock1d_v_wmt(scratch + 8, output, 8, 8, 8, 8, verticalTaps);
 }
 
 // RVA 0x001B8280
 extern "C" void __cdecl FilterBlock2d(void *source, void *output,
 	void *pixelsPerLine, void *horizontalTaps, void *verticalTaps)
 {
-	bfmeGo76A0((char *)source - (char *)pixelsPerLine, &g_bfmeTableC7E0, pixelsPerLine,
+	FilterBlock2dFirstPass((char *)source - (char *)pixelsPerLine, &g_bfmeTableC7E0, pixelsPerLine,
 		1, 11, 8, horizontalTaps);
 	bfmeGo7760(&g_bfmeTableC800, output, 8, 8, 8, 8, verticalTaps);
 }

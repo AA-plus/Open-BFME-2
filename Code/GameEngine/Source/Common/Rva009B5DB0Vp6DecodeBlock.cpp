@@ -6,7 +6,7 @@
 // bodies byte-for-byte, 0x009B5AF0 at 0x001C63F0 and 0x009B5DB0 at 0x001C66B0. The
 // addresses in names and comments are BFME 1's.
 struct Rva009B4800State;
-extern int Rva009B4800DecodeBool(Rva009B4800State *, int);
+extern "C" int __cdecl nDecodeBool(Rva009B4800State *, int);
 
 // Rowed as _VP6_DecodeBlock (511B at 0x001C61F0, DecodeBlock.cpp); referenced
 // here opaquely through the established cast so the six direct calls below
@@ -168,7 +168,7 @@ void Rva009B5DB0Vp6DecodeBlock(unsigned char *ctx, int outer, unsigned int colum
 			}
 		}
 
-		*(int *)(ctx + 0xc8) = Rva009B4800DecodeBool(
+		*(int *)(ctx + 0xc8) = nDecodeBool(
 			(Rva009B4800State *)(ctx + 0x150), probability);
 	} else {
 		*(int *)(ctx + 0xc8) = 0;

@@ -2917,7 +2917,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x007D8A48,568,.rdata,global,?g_rva011428E8@@3PAHA,Code/GameEngine/Source/Common/Rva009B3800PlaneCopy.cpp,owned,,1,1
 0x007D8C80,64,.rdata,global,?DefaultNonInterlacedScanBands@@3PAEA,,unowned,,0,1
 0x007D8CC0,64,.rdata,global,?DefaultInterlacedScanBands@@3PAEA,,unowned,,0,1
-0x007D8D00,64,.rdata,global,?g_bfmeVp6SelectorMap@@3PAEA,Code/GameEngine/Source/Common/BfmeVp6PredictValue.cpp,owned,,1,2
+0x007D8D00,64,.rdata,global,?g_bfmeVp6SelectorMap@@3PAEA,Code/Libraries/Source/VP6/PredictDc.cpp,owned,,1,2
 0x007D8D40,136,.rdata,global,?g_00BD8D40@@3QBIB,,unowned,,0,1
 0x007D8DC8,1020,.rdata,global,?g_rva01142c68@@3PAHA,Code/Libraries/Source/VP6/BoolCoderEnc.cpp,owned,,1,1
 0x007D91C4,620,.rdata,global,?g_rva01143064@@3PAHA,Code/Libraries/Source/VP6/BoolCoderEnc.cpp,owned,,1,1
@@ -16938,7 +16938,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009B81A0,16,.data,global,?g_bfmeBinkRoundMmx@@3QBGB,Code/GameEngine/Source/Common/Rva009C6390BinkMmx.cpp,owned,,1,30
 0x009B81B0,784,.data,global,?g_rva00DB81B0Weights@@3QAY0BA@$$CBGA,Code/Libraries/Source/VP6/FilterBlockBil8Mmx.cpp,owned,,1,6
 0x009B84C0,16,.data,global,_g_bfmeXor80Mmx,Code/Libraries/Source/VP6/ReconMmx.cpp,owned,,1,1
-0x009B84D0,16,.data,global,?g_bfmeBinkRound@@3QBGB,Code/GameEngine/Source/Common/Rva009C6F20BinkSse.cpp,owned,,1,12
+0x009B84D0,16,.data,global,?g_bfmeBinkRound@@3QBGB,Code/Libraries/Source/VP6/FilterBlock1dHvWmt.cpp,owned,,1,12
 0x009B84E0,768,.data,global,_g_00DB84E0,Code/Libraries/Source/VP6/FilterBlockBil8Wmt.cpp,owned,,1,6
 0x009B87E0,32,.data,global,_g_bfmeXor80Sse,Code/Libraries/Source/VP6/ReconWmt.cpp,owned,,1,1
 0x009B8800,32,.data,global,?kRva012D8F20@@3QBGB,Code/GameEngine/Source/Common/Rva009C77C0.cpp,owned,,1,8

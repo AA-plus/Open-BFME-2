@@ -4,38 +4,38 @@
 // establishes the arithmetic-decoder state at context offset 0x150.
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
 
-int Rva009B4600DecodeBool(void *state, int probability);
+extern "C" int __cdecl VP6_DecodeBool(void *state, int probability);
 
 int Rva009B50F0DecodeToken(unsigned char *ctx, int prev, int plane)
 {
 	void *state = ctx + 0x150;
 	int result;
 
-	if (Rva009B4600DecodeBool(state, ctx[0x77C + 10 * plane + prev])) {
+	if (VP6_DecodeBool(state, ctx[0x77C + 10 * plane + prev])) {
 		result = prev;
 		goto done;
 	}
 
 	unsigned char *node = ctx + 0x7A4 + 9 * (10 * plane + prev);
-	if (Rva009B4600DecodeBool(state, node[0])) {
-		if (Rva009B4600DecodeBool(state, node[2])) {
-			if (Rva009B4600DecodeBool(state, node[6]))
-				result = Rva009B4600DecodeBool(state, node[8]) + 8;
+	if (VP6_DecodeBool(state, node[0])) {
+		if (VP6_DecodeBool(state, node[2])) {
+			if (VP6_DecodeBool(state, node[6]))
+				result = VP6_DecodeBool(state, node[8]) + 8;
 			else
-				result = Rva009B4600DecodeBool(state, node[7]) + 5;
+				result = VP6_DecodeBool(state, node[7]) + 5;
 			goto done;
 		}
 
 		result = 1;
-		if (Rva009B4600DecodeBool(state, node[5]))
+		if (VP6_DecodeBool(state, node[5]))
 			result = 7;
 		goto done;
 	}
 
-	if (Rva009B4600DecodeBool(state, node[1]))
-		result = Rva009B4600DecodeBool(state, node[4]) + 3;
+	if (VP6_DecodeBool(state, node[1]))
+		result = VP6_DecodeBool(state, node[4]) + 3;
 	else
-		result = Rva009B4600DecodeBool(state, node[3]) * 2;
+		result = VP6_DecodeBool(state, node[3]) * 2;
 
 done:
 	return result;

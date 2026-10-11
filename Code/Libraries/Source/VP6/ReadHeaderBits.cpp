@@ -1,6 +1,13 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001bcfc0.md plus retail only. No
+// decoder source was consulted.
+//
+// ReadHeaderBits (retail 0x001BCFC0): reads 1..31 bits MSB first from the
+// frame header reader. The 32-bit window keeps its unread bits at the top;
+// when the request exceeds the bits available the next four buffer bytes are
+// loaded big-endian as a fresh window.
 
-struct Rva009AC5D0State
+struct Vp6HeaderReader
 {
 	const unsigned char *m_data;
 	unsigned int m_value;
@@ -8,8 +15,8 @@ struct Rva009AC5D0State
 	unsigned int m_bytes;
 };
 
-unsigned int Rva009AC5D0ReadBits(
-	Rva009AC5D0State *state, unsigned int count)
+// RVA 0x001BCFC0
+extern "C" unsigned int __cdecl ReadHeaderBits(Vp6HeaderReader *state, unsigned int count)
 {
 	unsigned int bytes = state->m_bytes;
 	const unsigned char *input = state->m_data;

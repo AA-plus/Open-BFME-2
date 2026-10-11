@@ -1,18 +1,16 @@
-// Carried from the Open-BFME-1 donor at submodule revision 5cae4bdf
-// (game/GameEngine/Source/Common/BfmeInitD70.cpp). Target evidence: the 176B
-// body is byte-identical at BFME2 0x001B67E0 (donor b1 0x009A5D70). The
-// ?bfmeInitD70@@YAXPAX0@Z identity is the donor's assertion.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b67e0.md plus retail only. No
+// decoder source was consulted.
 //
-// Retail 0x009A5D70, 176 bytes.
-// Identity: ?bfmeInitD70@@YAXPAX0@Z is established by the matched
-// CreatePostProcInstance caller at 0x009A5E20, which allocates the 0xC8 holder, zeroes it
-// and passes (holder, source) here; bfmeCheckJX at 0x009A89C0 makes the same
-// two-argument call.  The body copies fourteen source words into the record at
-// +0x40 and then derives the packed plane sizes the codec indexes with.
+// ChangePostProcConfiguration (retail 0x001B67E0): copies the 14-dword frame
+// configuration into the post-processor instance at +0x40 and derives the
+// fragment counts (width and height shifted right 3), plane and unit fragment
+// totals, the motion-vector border and the reconstruction Y, U and V data
+// offsets. All divisions are unsigned shifts.
 extern "C" void *__cdecl memcpy(void *destination, const void *source,
 	unsigned int bytes);
 
-struct BfmeCodecPlaneRecord
+struct PostProcPlaneRecord
 {
 	unsigned char m_pad00[0x40];
 	unsigned int m_width;
@@ -34,10 +32,10 @@ struct BfmeCodecPlaneRecord
 	unsigned int m_atB4;
 };
 
-// ?bfmeInitD70@@YAXPAX0@Z
-void __cdecl bfmeInitD70(void *selfRaw, void *sourceRaw)
+// RVA 0x001B67E0
+extern "C" void __cdecl ChangePostProcConfiguration(void *selfRaw, void *sourceRaw)
 {
-	BfmeCodecPlaneRecord *self = (BfmeCodecPlaneRecord *)selfRaw;
+	PostProcPlaneRecord *self = (PostProcPlaneRecord *)selfRaw;
 	unsigned int *source = (unsigned int *)sourceRaw;
 
 	memcpy(&self->m_width, source, 14 * 4);

@@ -5,7 +5,7 @@ struct Rva009AC5D0State;
 struct BfmeBits1186;
 struct BfmeS1040;
 struct CodecState;
-unsigned Rva009AC5D0ReadBits(Rva009AC5D0State*, unsigned);
+extern "C" unsigned __cdecl ReadHeaderBits(Rva009AC5D0State*, unsigned);
 extern "C" void __cdecl VP6_InitQTables(unsigned char*);
 extern "C" void __cdecl VP6_StartDecode(BfmeBits1186*, unsigned char*);
 // Post-processing setters at 0x001B6900 and 0x001B6910 (VP6 clean room).
@@ -13,7 +13,7 @@ extern "C" void __cdecl SetPPInterlacedMode(void*,int);
 extern "C" void __cdecl SetDeInterlaceMode(void*,int);
 extern "C" int __cdecl VP6_bitread(void *, int);
 int bfmeCheckJX(CodecState*);
-int Rva009B4600DecodeBool(void*,int);
+extern "C" int __cdecl VP6_DecodeBool(void*,int);
 extern "C" void __cdecl VP6_UpdateQ(BfmeS1040*,int);
 extern "C" void* __cdecl memset(void*,int,unsigned);
 #pragma intrinsic(memset)
@@ -24,24 +24,24 @@ extern "C" void* __cdecl memset(void*,int,unsigned);
 static int Rva009AC660ReadHeader(unsigned char* s)
 {
     Rva009AC5D0State* bits=(Rva009AC5D0State*)(s+0x450c);
-    B(0x1ac)=(unsigned char)Rva009AC5D0ReadBits(bits,1);
-    unsigned char index=(unsigned char)Rva009AC5D0ReadBits(bits,6);
-    U(0x944)=(unsigned char)Rva009AC5D0ReadBits(bits,1);
+    B(0x1ac)=(unsigned char)ReadHeaderBits(bits,1);
+    unsigned char index=(unsigned char)ReadHeaderBits(bits,6);
+    U(0x944)=(unsigned char)ReadHeaderBits(bits,1);
     BfmeBits1186* decoder;
     if (!B(0x1ac)) {
-        B(0x19c)=(unsigned char)Rva009AC5D0ReadBits(bits,5);
-        B(0x19d)=(unsigned char)Rva009AC5D0ReadBits(bits,2);
+        B(0x19c)=(unsigned char)ReadHeaderBits(bits,5);
+        B(0x19d)=(unsigned char)ReadHeaderBits(bits,2);
         if (B(0x19c)>7) return 0;
         // Retail passes a second unused slot to the existing one-argument callee.
         ((void (__cdecl *)(unsigned char*,unsigned char))VP6_InitQTables)(P(0x13c),B(0x19c));
-        U(0x1dc)=(unsigned char)Rva009AC5D0ReadBits(bits,1);
+        U(0x1dc)=(unsigned char)ReadHeaderBits(bits,1);
         if (!U(0x944) && B(0x19d)) {
             decoder=(BfmeBits1186*)(s+0x150);
             VP6_StartDecode(decoder,P(0x450c)+2);
         } else {
             decoder=(BfmeBits1186*)(s+0x150);
             VP6_StartDecode(decoder,P(0x450c)+4);
-            U(0x451c)=Rva009AC5D0ReadBits(bits,16);
+            U(0x451c)=ReadHeaderBits(bits,16);
         }
         SetPPInterlacedMode(P(0x298),U(0x1dc));
         if (U(0x1dc)) SetDeInterlaceMode(P(0x298),U(0x4944));
@@ -79,11 +79,11 @@ static int Rva009AC660ReadHeader(unsigned char* s)
             memset(P(0x264)+n,128,n/2);
         }
         if (B(0x19d)) {
-            if (Rva009B4600DecodeBool(decoder,128)) {
+            if (VP6_DecodeBool(decoder,128)) {
                 B(0x692)=2;
                 U(0x694)=VP6_bitread(decoder,5)<<5;
                 B(0x693)=(unsigned char)VP6_bitread(decoder,3);
-            } else B(0x692)=Rva009B4600DecodeBool(decoder,128)!=0;
+            } else B(0x692)=VP6_DecodeBool(decoder,128)!=0;
         }
     } else {
         if (!U(0x944) && B(0x19d)) {
@@ -92,15 +92,15 @@ static int Rva009AC660ReadHeader(unsigned char* s)
         } else {
             decoder=(BfmeBits1186*)(s+0x150);
             VP6_StartDecode(decoder,P(0x450c)+3);
-            U(0x451c)=Rva009AC5D0ReadBits(bits,16);
+            U(0x451c)=ReadHeaderBits(bits,16);
         }
-        U(0x698)=Rva009B4600DecodeBool(decoder,128);
+        U(0x698)=VP6_DecodeBool(decoder,128);
         if (B(0x19d)) {
-            B(0x4534)=(unsigned char)Rva009B4600DecodeBool(decoder,128);
-            if (B(0x4534)) B(0x4534)=(unsigned char)Rva009B4600DecodeBool(decoder,128) | (B(0x4534)<<1);
+            B(0x4534)=(unsigned char)VP6_DecodeBool(decoder,128);
+            if (B(0x4534)) B(0x4534)=(unsigned char)VP6_DecodeBool(decoder,128) | (B(0x4534)<<1);
         }
     }
-    U(0x4520)=Rva009B4600DecodeBool(decoder,128);
+    U(0x4520)=VP6_DecodeBool(decoder,128);
     *(unsigned*)P(0x13c)=index;
     unsigned char* table=P(0x13c);
     *(unsigned*)(table+4)=((unsigned*)(table+0x3c))[index];

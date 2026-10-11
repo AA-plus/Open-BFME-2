@@ -30,7 +30,7 @@ struct Vp6EntropyInstance {
 	unsigned char unknown57c[0x63c - 0x57c];
 	unsigned char ScanBands[64];
 };
-int Rva009B4800DecodeBool(Rva009B4800State *, int);
+extern "C" int __cdecl nDecodeBool(Rva009B4800State *, int);
 extern "C" int __cdecl VP6_bitread(void *, int);
 void Rva009AAFE0BuildTable(Rva009AAFE0Context *, const unsigned char *);
 void Rva009B64A0BuildTone(unsigned char *);
@@ -58,7 +58,7 @@ extern "C" void VP6_ConfigureEntropyDecoder(Vp6EntropyInstance *pbi, unsigned ch
 	memset(lastProb, 128, sizeof lastProb);
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 11; j++) {
-			if (Rva009B4800DecodeBool((Rva009B4800State *)pbi->br, g_00BD9210[i][j])) {
+			if (nDecodeBool((Rva009B4800State *)pbi->br, g_00BD9210[i][j])) {
 				unsigned char v = Vp6ProbUpdate::Read(pbi->br);
 				lastProb[j] = v;
 				pbi->DcProbs[i][j] = v;
@@ -69,16 +69,16 @@ extern "C" void VP6_ConfigureEntropyDecoder(Vp6EntropyInstance *pbi, unsigned ch
 	}
 	if (frameType == 0)
 		memcpy(pbi->ZeroRunProbs, g_00BD9284, sizeof pbi->ZeroRunProbs);
-	if (Rva009B4800DecodeBool((Rva009B4800State *)pbi->br, 128)) {
+	if (nDecodeBool((Rva009B4800State *)pbi->br, 128)) {
 		for (i = 1; i < 64; i++) {
-			if (Rva009B4800DecodeBool((Rva009B4800State *)pbi->br, g_00BD9228[i]))
+			if (nDecodeBool((Rva009B4800State *)pbi->br, g_00BD9228[i]))
 				pbi->ScanBands[i] = (unsigned char)VP6_bitread(pbi->br, 4);
 		}
 		Rva009AAFE0BuildTable((Rva009AAFE0Context *)pbi, pbi->ScanBands);
 	}
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 14; j++) {
-			if (Rva009B4800DecodeBool((Rva009B4800State *)pbi->br, g_00BD9268[i][j])) {
+			if (nDecodeBool((Rva009B4800State *)pbi->br, g_00BD9268[i][j])) {
 				unsigned char v = Vp6ProbUpdate::Read(pbi->br);
 				pbi->ZeroRunProbs[i][j] = v;
 			}
@@ -88,7 +88,7 @@ extern "C" void VP6_ConfigureEntropyDecoder(Vp6EntropyInstance *pbi, unsigned ch
 		for (plane = 0; plane < 2; plane++) {
 			for (j = 0; j < 6; j++) {
 				for (k = 0; k < 11; k++) {
-					if (Rva009B4800DecodeBool((Rva009B4800State *)pbi->br, g_00BD92A0[prec][plane][j][k])) {
+					if (nDecodeBool((Rva009B4800State *)pbi->br, g_00BD92A0[prec][plane][j][k])) {
 						unsigned char v = Vp6ProbUpdate::Read(pbi->br);
 						lastProb[k] = v;
 						pbi->AcProbs[plane][prec][j][k] = v;

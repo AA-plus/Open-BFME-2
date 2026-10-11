@@ -47,14 +47,14 @@ extern "C" unsigned char __cdecl VP6_ReadTokens(PB_INSTANCE *, unsigned char *, 
 struct Rva009B4880State;
 struct Rva009B4880Neighbor;
 struct Rva009B5830State;
-void Rva009B4880PredictValue(Rva009B4880State *, int, short *, const Rva009B4880Neighbor *, const Rva009B4880Neighbor *);
+extern "C" void __cdecl VP6_PredictDC(Rva009B4880State *, int, short *, const Rva009B4880Neighbor *, const Rva009B4880Neighbor *);
 void Rva009B5830ReconstructBlock(Rva009B5830State *, int);
 
 #define VP6_COEFS (pbi->coefficients + position * 128)
 extern "C" void __cdecl VP6_DecodeBlock(PB_INSTANCE *pbi, int row, int column, int position)
 {
 	int count = pbi->useHuffman ? VP6_ReadHuffTokens(pbi, VP6_COEFS, pbi->plane != 0) : VP6_ReadTokens(pbi, VP6_COEFS, pbi->plane != 0, pbi->above, pbi->left);
-	Rva009B4880PredictValue((Rva009B4880State *)pbi, position, pbi->lastDC, (const Rva009B4880Neighbor *)pbi->above, (const Rva009B4880Neighbor *)pbi->left);
+	VP6_PredictDC((Rva009B4880State *)pbi, position, pbi->lastDC, (const Rva009B4880Neighbor *)pbi->above, (const Rva009B4880Neighbor *)pbi->left);
 	pbi->left->mode = pbi->blockModes[position];
 	pbi->above->mode = pbi->left->mode;
 	pbi->left->dc = *(short *)VP6_COEFS;

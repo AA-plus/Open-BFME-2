@@ -15,8 +15,8 @@ extern "C" const unsigned char g_00DB84E0[];
 #define BILINEAR_BANK(phase) (g_00DB84E0 + (phase) * 32)
 #define BICUBIC_BANK(phase) (g_00DB84E0 + 0x100 + (phase) * 64)
 
-void __cdecl rva009C6F20BinkSse(const void *, void *, int, int, int, int, const void *);
-void __cdecl rva009C6FC0BinkSse(const void *, void *, int, int, int, int, const void *);
+extern "C" void __cdecl FilterBlock1d_h_wmt(const void *, void *, int, int, int, int, const void *);
+extern "C" void __cdecl FilterBlock1d_v_wmt(const void *, void *, int, int, int, int, const void *);
 extern "C" void __cdecl FilterBlock2d_wmt(const unsigned char *, unsigned char *, int, const void *, const void *);
 extern "C" void __cdecl FilterUnpackBlock1d_hb8_wmt(const void *, void *, int, int, int, int, const void *);
 extern "C" void __cdecl FilterUnpackBlock1d_vb8_wmt(const void *, void *, int, int, int, int, const void *);
@@ -36,9 +36,9 @@ extern "C" void __cdecl FilterBlock_wmt(const unsigned char *a, const unsigned c
 		return;
 	if (bicubic) {
 		if (diff == 1)
-			rva009C6F20BinkSse(a, block, pixelsPerLine, 1, 8, 8, BICUBIC_BANK(horizontalPhase));
+			FilterBlock1d_h_wmt(a, block, pixelsPerLine, 1, 8, 8, BICUBIC_BANK(horizontalPhase));
 		else if (diff == pixelsPerLine)
-			rva009C6FC0BinkSse(a, block, pixelsPerLine, pixelsPerLine, 8, 8, BICUBIC_BANK(verticalPhase));
+			FilterBlock1d_v_wmt(a, block, pixelsPerLine, pixelsPerLine, 8, 8, BICUBIC_BANK(verticalPhase));
 		else if (diff == pixelsPerLine - 1)
 			FilterBlock2d_wmt(a - 1, block, pixelsPerLine, BICUBIC_BANK(horizontalPhase), BICUBIC_BANK(verticalPhase));
 		else if (diff == pixelsPerLine + 1)

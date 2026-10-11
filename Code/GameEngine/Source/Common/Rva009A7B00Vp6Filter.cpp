@@ -5,7 +5,7 @@
 // BFME 2: Open-BFME-1's body (submodule 10af19f44a), byte-identical in game.dat at
 // 0x001B8560; the addresses above are BFME 1's. The weight tables are defined
 // here from game.dat .data 0x00DB7068 and 0x00DB70E8, which no other unit reads,
-// and the four-tap callee is the rowed Rva009A75F0Vp6FourTapFilter (0x001B8050).
+// and the four-tap callee is the rowed FilterBlock1d (0x001B8050).
 
 extern const int g_012D7798[8][4] =
 {
@@ -18,7 +18,7 @@ extern const int g_012D7818[8][2] =
 	{ 64, 64 }, { 48, 80 }, { 32, 96 }, { 16, 112 }
 };
 
-extern void __cdecl Rva009A75F0Vp6FourTapFilter(const unsigned char *, unsigned short *,
+extern "C" void __cdecl FilterBlock1d(const unsigned char *, unsigned short *,
 	unsigned int, unsigned int, unsigned int, unsigned int, const int *);
 extern "C" void __cdecl FilterBlock2d(void *, void *, void *, void *, void *);
 extern void __cdecl Rva009A79D0Vp6Filter(
@@ -70,14 +70,14 @@ void __cdecl Rva009A7B00Vp6Filter(
 	if (diff == 1)
 	{
 		if (useBicubic)
-			Rva009A75F0Vp6FourTapFilter(source1, destination, sourcePitch, 1, 8, 8, g_012D7798[modeX]);
+			FilterBlock1d(source1, destination, sourcePitch, 1, 8, 8, g_012D7798[modeX]);
 		else
 			Rva009A7B00TwoTapFilter(source1, destination, sourcePitch, 1, 8, 8, g_012D7818[modeX]);
 	}
 	else if (diff == (int)sourcePitch)
 	{
 		if (useBicubic)
-			Rva009A75F0Vp6FourTapFilter(source1, destination, sourcePitch, sourcePitch, 8, 8, g_012D7798[modeY]);
+			FilterBlock1d(source1, destination, sourcePitch, sourcePitch, 8, 8, g_012D7798[modeY]);
 		else
 			Rva009A7B00TwoTapFilter(source1, destination, sourcePitch, sourcePitch, 8, 8, g_012D7818[modeY]);
 	}

@@ -1,13 +1,15 @@
 // cl: /DNDEBUG /MD
-// VP6 four-tap fractional-pixel filter, 8-bit source to 16-bit destination,
-// retail 0x001B8050 (174 bytes; BFME 1 0x009A75F0, a dump there). The scalar
-// predictor Rva009A7B00Vp6Filter calls it for the bicubic one-dimensional
-// cases with the weight row for the fractional position; the two-tap sibling
-// is inlined there. Each output is the weighted sum of the pixels one step
-// before, at, one and two steps after, rounded, shifted by 7 and clamped to
-// 0..255. The sum is written in retail's evaluation order.
+// Clean room: reverse/vp6_cleanroom/specs/001b8050.md plus retail only. No
+// decoder source was consulted.
+//
+// FilterBlock1d (retail 0x001B8050): four-tap one-dimensional filter from an
+// 8-bit source into 16-bit samples. Each output is the weighted sum of the
+// pixels one step before, at, one and two steps after, plus 64, shifted
+// right 7 and clamped to 0..255. The sum is written in retail's evaluation
+// order.
 
-void __cdecl Rva009A75F0Vp6FourTapFilter(
+// RVA 0x001B8050
+extern "C" void __cdecl FilterBlock1d(
 	const unsigned char *source,
 	unsigned short *destination,
 	unsigned int sourcePitch,

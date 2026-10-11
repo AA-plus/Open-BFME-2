@@ -39,7 +39,7 @@ extern void __cdecl Rva009AF570FilterVert(void *, unsigned char *, int, const in
 extern void __cdecl Rva009AF6A0FilterHoriz(void *, unsigned char *, int, const int *);
 extern "C" int * __cdecl SetupBoundingValueArray_Generic(POSTPROC_INSTANCE *, int);
 extern "C" int * __cdecl SetupDeblockValueArray_Generic(POSTPROC_INSTANCE *, int);
-extern void __cdecl Rva009B3650FilterVert(void *, unsigned char *, int, const int *);
+extern "C" void __cdecl FilterHoriz_Simple_C(void *, unsigned char *, int, const int *);
 extern void __cdecl Rva009B3710FilterHoriz(void *, unsigned char *, int, const int *);
 extern void __cdecl Rva009AF840FilterVert(int, unsigned char *, int);
 extern void __cdecl Rva009AFA60FilterHoriz(int, unsigned char *, int);
@@ -82,11 +82,11 @@ extern void __cdecl Rva009AE6A0(void);
 extern "C" void __cdecl VerticalBand_1_2_Scale_C(unsigned char *, int, unsigned int);
 extern "C" void __cdecl LastVerticalBand_1_2_Scale_C(unsigned char *, int, unsigned int);
 extern void __cdecl Rva009A9550(const void *, int, void *);
-extern void __cdecl Rva009A9660(unsigned char *, int, unsigned int);
-extern void __cdecl Rva009A9720(unsigned char *, int, unsigned int);
+extern "C" void __cdecl VerticalBand_3_5_Scale_C(unsigned char *, int, unsigned int);
+extern "C" void __cdecl LastVerticalBand_3_5_Scale_C(unsigned char *, int, unsigned int);
 extern void __cdecl Rva009A91D0(void);
-extern void __cdecl Rva009A92D0(unsigned char *, int, unsigned int);
-extern void __cdecl Rva009A9370(void);
+extern "C" void __cdecl VerticalBand_4_5_Scale_C(unsigned char *, int, unsigned int);
+extern "C" void __cdecl LastVerticalBand_4_5_Scale_C(unsigned char *, int, unsigned int);
 extern "C" void __cdecl ClampLevels_C(void *, int, int, int, int);
 
 typedef void (__cdecl *BfmeDispatchFn)();
@@ -177,17 +177,17 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	g_bfmeCodecDispatch.slot[10] = (BfmeDispatchFn)&Rva009ACF90;
 	g_bfmeCodecDispatch.slot[13] = (BfmeDispatchFn)&Rva009ADD80;
 	g_bfmeCodecDispatch.slot[21] = (BfmeDispatchFn)&Rva009AE6A0;
-	g_bfmeCodecDispatch.slot[9] = (BfmeDispatchFn)&Rva009B3650FilterVert;
+	g_bfmeCodecDispatch.slot[9] = (BfmeDispatchFn)&FilterHoriz_Simple_C;
 	g_bfmeCodecDispatch.slot[25] = (BfmeDispatchFn)&Rva009B3710FilterHoriz;
 	g_bfmeCodecDispatch.slot[8] = (BfmeDispatchFn)&HorizontalLine_1_2_Scale_C;
 	g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&VerticalBand_1_2_Scale_C;
 	g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_C;
 	g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&Rva009A9550;
-	g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&Rva009A9660;
-	g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&Rva009A9720;
+	g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&VerticalBand_3_5_Scale_C;
+	g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&LastVerticalBand_3_5_Scale_C;
 	g_bfmeCodecDispatchOutlier = (BfmeDispatchFn)&Rva009A91D0;
-	g_bfmeCodecDispatch.slot[7] = (BfmeDispatchFn)&Rva009A92D0;
-	g_bfmeCodecDispatch.slot[6] = (BfmeDispatchFn)&Rva009A9370;
+	g_bfmeCodecDispatch.slot[7] = (BfmeDispatchFn)&VerticalBand_4_5_Scale_C;
+	g_bfmeCodecDispatch.slot[6] = (BfmeDispatchFn)&LastVerticalBand_4_5_Scale_C;
 	g_bfmeCodecDispatch.slot[22] = (BfmeDispatchFn)&Rva009AF840FilterVert;
 	g_bfmeCodecDispatch.slot[5] = (BfmeDispatchFn)&Rva009AFA60FilterHoriz;
 	g_bfmeCodecDispatch.slot[11] = (BfmeDispatchFn)&Rva009AFCA0FilterVert;
@@ -195,33 +195,4 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	g_bfmeCodecDispatch.slot[3] = (BfmeDispatchFn)&CFastDeInterlace;
 	g_bfmeCodecDispatch.slot[19] = (BfmeDispatchFn)&ClampLevels_C;
 	g_bfmeCodecDispatch.slot[0] = (BfmeDispatchFn)&d_009a5f50;
-}
-
-// Retail 0x001B9D10, 157 bytes. Demo relocation mapping recovers the
-// missing start; dispatch slot 7 supplies the callback identity. Layout and
-// weights follow retail loads and stores; the already-matched slot 6 scalar
-// interpolator is the source-shape guide. This five-row variant interpolates
-// between rows 0 and 5 rather than copying its final output row. The old
-// address-derived donor spelling does not assert an original source name.
-void __cdecl Rva009A92D0(unsigned char *source, int stride, unsigned int bytes)
-{
-    unsigned char *cursor = source;
-    while (bytes > 0)
-    {
-        unsigned int second = cursor[stride];
-        unsigned int first = cursor[0];
-        unsigned int firstWeight = first * 51;
-        unsigned int secondWeight = second * 205;
-        cursor[stride] = (unsigned char)((firstWeight + secondWeight + 128) >> 8);
-        unsigned int fourth;
-        unsigned int third;
-        third = cursor[stride * 2];
-        unsigned int thirdWeight = third * 154;
-        fourth = cursor[stride * 3];
-        cursor[stride * 2] = (unsigned char)((second * 102 + thirdWeight + 128) >> 8);
-        cursor[stride * 3] = (unsigned char)((fourth * 102 + thirdWeight + 128) >> 8);
-        cursor[stride * 4] = (unsigned char)((cursor[stride * 5] * 51 + fourth * 205 + 128) >> 8);
-        ++cursor;
-        --bytes;
-    }
 }

@@ -2,7 +2,7 @@
 //
 // MMX four-tap horizontal Bink filter: pulls all four taps (source-1,
 // source, source+1, source+2) out of a single unaligned qword load via
-// repeated one-byte right shifts, matching rva009C6F20BinkSse's shift
+// repeated one-byte right shifts, matching FilterBlock1d_h_wmt's shift
 // technique but four pixels at a time, so the eight-pixel strip needs two
 // passes like the family's other MMX siblings; shares the 0x00DB81A0
 // round table with rva009C6470BinkMmx and rva009C6620BinkMmx.  Retail

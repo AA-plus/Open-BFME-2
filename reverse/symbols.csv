@@ -8129,7 +8129,6 @@ name,address,notes
 ?bfmeGo1029E@BfmeE1029@@QAEXPADH@Z,0x006557F0,BFME1 alias of rowed set at Rva006557F0Holder (same 33B body) for Rva007F7DA0GameBrowserTicket donor call
 ?bfmeGo1036E@BfmeE1036@@QAEXXZ,0x00664FC0
 ?bfmeGo1055E@@YAXPAUBfmeR1055@@H@Z,0x006A4970
-?bfmeGo76A0@@YAXHPAHPAXHHH1@Z,0x001B8100
 ?bfmeGo7760@@YAXPAHPAXHHHH1@Z,0x001B81C0
 ?bfmeGo929C@@YAPAXXZ,0x0065CEA0
 ?bfmeGo996B@BfmeB996@@QAEDHHPAD@Z,0x001068D1,callee read from the retail REL32 in placed BFME1-donor body ?update@Rva007E4AD0Vp6Stream@@QAEXXZ (0x00091189)
@@ -8197,7 +8196,6 @@ name,address,notes
 ?bfmeInitAEVK@BfmeHostEVK@@QAEXPAV1@@Z,0x003AE13C,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?bfmeInitBEVJ@BfmeSubEVJ@@QAEXPAV1@@Z,0x003AE11B,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?bfmeInitBEVK@BfmeSubEVK@@QAEXPAV1@@Z,0x003AE315,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
-?bfmeInitD70@@YAXPAX0@Z,0x001B67E0
 ?bfmeInitDGD@BfmeThingDGD@@QAEPAV1@PAX@Z,0x00664620
 ?bfmeInitDGF@BfmeThingDGF@@QAEPAV1@PAX@Z,0x00664DB0
 ?bfmeInitDGG@BfmeThingDGG@@QAEPAV1@PAX@Z,0x00666EC0
