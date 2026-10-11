@@ -1,5 +1,5 @@
 // ?rva00479C35@HordeGarrisonContain@@QAEXPAUCoord3D@@0@Z
-// cl: /O1 /G7 /DNDEBUG /MD /arch:SSE /ICode/Libraries/Include/Lib
+// cl: /O1 /G7 /GX- /DNDEBUG /MD /arch:SSE /ICode/Libraries/Include/Lib
 // ?rva00479C35@HordeGarrisonContain@@QAEXPAUCoord3D@@0@Z @0x00479C35 164B
 // Target479C35..479CD9 RET8, matrix owner8 and alias-safe three-coordinate transform.
 // BF1 donor575ba2b04 WWMath Vector3 constructors/copy and Matrix3D transform guide;
@@ -47,6 +47,16 @@ struct Iface20
 	virtual void g32(); virtual void g33(); virtual void g34(); virtual void g35();
 	virtual void g36(); virtual void g37(); virtual void g38();
 	virtual void rva00464830(Object *obj) = 0;
+	SLOT08(g40,g41,g42,g43,g44,g45,g46,g47)
+	SLOT08(g48,g49,g50,g51,g52,g53,g54,g55)
+	SLOT08(g56,g57,g58,g59,g60,g61,g62,g63)
+	SLOT08(g64,g65,g66,g67,g68,g69,g70,g71)
+	SLOT08(g72,g73,g74,g75,g76,g77,g78,g79)
+	virtual void g80(); virtual void g81(); virtual void g82();
+	virtual void g83(); virtual void g84(); virtual void g85();
+	virtual const Coord3D *rva004626CA();
+	virtual const Coord3D *rva004626AF();
+	virtual const Coord3D *rva00464829();
 };
 struct Iface24 { virtual void f24(); };
 struct Iface28 { virtual void f28(); };
@@ -86,6 +96,9 @@ public:
 	virtual void rva00479B7F(Object *obj);
 	virtual void rva00479ADA(Object *obj);
 	void rva00479C35(Coord3D *in, Coord3D *out);
+	virtual const Coord3D *rva004626CA();
+	virtual const Coord3D *rva004626AF();
+	virtual const Coord3D *rva00464829();
 };
 
 class Object
@@ -96,7 +109,7 @@ public:
 };
 
 struct Vector3 {float X,Y,Z;__forceinline Vector3(){} __forceinline Vector3(float x,float y,float z):X(x),Y(y),Z(z){} __forceinline Vector3(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;} __forceinline Vector3&operator=(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;return *this;}};
-void HordeGarrisonContain::rva00479C35(Coord3D *in, Coord3D *out){
+__declspec(noinline) void HordeGarrisonContain::rva00479C35(Coord3D *in, Coord3D *out){
  Vector3 input(in->x,in->y,in->z);
  Transform*t=&m_object->m_t;
  Vector3 result;
@@ -104,4 +117,41 @@ void HordeGarrisonContain::rva00479C35(Coord3D *in, Coord3D *out){
  result.Y=t->m10*input.X+t->m11*input.Y+t->m12*input.Z+t->ty;
  result.Z=t->m20*input.X+t->m21*input.Y+t->m22*input.Z+t->tz;
  out->x=result.X;out->y=result.Y;out->z=result.Z;
+}
+
+struct HordeGarrisonContainModuleDataView
+{
+	unsigned char m_pad00[0xB0];
+	Coord3D m_b0;
+	Coord3D m_bc;
+	Coord3D m_c8;
+};
+
+struct StaticCoord3D : public Coord3D
+{
+	~StaticCoord3D() {}
+};
+
+// ?rva004626CA@HordeGarrisonContain@@UAEPBUCoord3D@@XZ @0x00479F29
+const Coord3D *HordeGarrisonContain::rva004626CA()
+{
+	static StaticCoord3D s_pos;
+	rva00479C35(&((HordeGarrisonContainModuleDataView *)m_moduleData)->m_bc, &s_pos);
+	return &s_pos;
+}
+
+// ?rva004626AF@HordeGarrisonContain@@UAEPBUCoord3D@@XZ @0x00479F62
+const Coord3D *HordeGarrisonContain::rva004626AF()
+{
+	static StaticCoord3D s_pos;
+	rva00479C35(&((HordeGarrisonContainModuleDataView *)m_moduleData)->m_b0, &s_pos);
+	return &s_pos;
+}
+
+// ?rva00464829@HordeGarrisonContain@@UAEPBUCoord3D@@XZ @0x00479F9B
+const Coord3D *HordeGarrisonContain::rva00464829()
+{
+	static StaticCoord3D s_pos;
+	rva00479C35(&((HordeGarrisonContainModuleDataView *)m_moduleData)->m_c8, &s_pos);
+	return &s_pos;
 }

@@ -44,12 +44,14 @@ public:
 	virtual void gap(char (*)[1]) = 0;
 };
 
-class UpgradeMux : public UpgradeMuxSlots<11>
+class UpgradeMux : public UpgradeMuxSlots<10>
 {
 protected:
+	virtual void upgradeImplementation() = 0;
 	virtual void getUpgradeActivationMasks(UpgradeMaskType &activation, UpgradeMaskType &conflicting) const = 0;
 	virtual void performUpgradeFX() = 0;
 	virtual bool rva004B7E19() const = 0;
+	unsigned int m_upgradeMuxFlags; // +0x04
 };
 
 class UpdateModuleView
@@ -186,29 +188,74 @@ void AudioLoopUpgrade::performUpgradeFX()
 }
 
 
-// ObjectCreationUpgrade (vtable entries 0x00857690/0x0085769C): the same
-// UpgradeMux performUpgradeFX body for slots 12 and 15, compiled with a this
-// whose ModuleData is at +0x0C and Object at +0x10 (ObjectCreationUpgrade.cpp:
-// ModuleData at +0x0C). The UpgradeMuxData block sits at module data +0x10.
+// ObjectCreationUpgrade (vtable entries 0x00857688/0x0085768C/0x00857690/0x0085769C):
+// slots 10, 11, 12 and 15 of the primary UpgradeMux vtable 0x00857660, compiled with
+// a this whose UpdateModule subobject sits at +0x08 (ModuleData at +0x0C, Object at
+// +0x10). The UpgradeMuxData block sits at module data +0x10.
+enum UpdateSleepTime
+{
+	UPDATE_SLEEP_NONE = 1
+};
+
+class GameLogic;
+extern GameLogic *TheGameLogic;
+struct GameLogicFrameView
+{
+	unsigned char m_pad00[0x40];
+	unsigned int m_frame;
+};
+
+class UpdateModule
+{
+public:
+	virtual ~UpdateModule();
+protected:
+	void setWakeFrame(Object *obj, UpdateSleepTime wakeDelay);
+	const ModuleData *m_moduleData; // +0x04 (+0x0C in ObjectCreationUpgrade)
+	Object *m_object; // +0x08 (+0x10 in ObjectCreationUpgrade)
+	unsigned char m_pad0C[0x20 - 0x0C];
+};
+
 struct ObjectCreationUpgradeModuleData
 {
-	unsigned char m_pad000[0x10];
+	unsigned char m_pad000[0x0C];
+	unsigned int m_0C; // +0x0C
 	UpgradeMuxData m_upgradeMuxData; // +0x10
 };
 
-class ObjectCreationUpgrade : public UpgradeMux
+class ObjectCreationUpgrade : public UpgradeMux, public UpdateModule
 {
 protected:
+	virtual void upgradeImplementation();
+	virtual void getUpgradeActivationMasks(UpgradeMaskType &activation, UpgradeMaskType &conflicting) const;
 	virtual void performUpgradeFX();
 private:
-	unsigned char m_pad04[0x0C - 0x04];
-	const ModuleData *m_moduleData; // +0x0C
-	Object *m_object; // +0x10
+	unsigned int m_28; // +0x28
+	bool m_2C; // +0x2C
 	const ObjectCreationUpgradeModuleData *data() const { return (const ObjectCreationUpgradeModuleData *)m_moduleData; }
 };
+
+// ?getUpgradeActivationMasks@ObjectCreationUpgrade@@MBEXAAUUpgradeMaskType@@0@Z @0x004B403A
+void ObjectCreationUpgrade::getUpgradeActivationMasks(UpgradeMaskType &activation, UpgradeMaskType &conflicting) const
+{
+	const UpgradeMuxData &mux = data()->m_upgradeMuxData;
+	activation = mux.m_activation;
+	conflicting = mux.m_conflicting;
+}
 
 // ?performUpgradeFX@ObjectCreationUpgrade@@MAEXXZ @0x004B4075
 void ObjectCreationUpgrade::performUpgradeFX()
 {
 	data()->m_upgradeMuxData.performUpgradeFX(m_object);
+}
+
+// ?upgradeImplementation@ObjectCreationUpgrade@@MAEXXZ @0x004B4106
+void ObjectCreationUpgrade::upgradeImplementation()
+{
+	if (!m_2C)
+	{
+		m_28 = data()->m_0C + ((const GameLogicFrameView *)TheGameLogic)->m_frame;
+		m_2C = true;
+		setWakeFrame(m_object, UPDATE_SLEEP_NONE);
+	}
 }

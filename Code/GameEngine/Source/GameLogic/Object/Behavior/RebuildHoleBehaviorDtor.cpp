@@ -22,7 +22,12 @@ enum ObjectID
 	INVALID_ID = 0
 };
 
-class Object;
+class Object
+{
+public:
+	unsigned char m_pad000[0x324];
+	int m_324;
+};
 
 class GameLogic
 {
@@ -79,7 +84,7 @@ public:
 class RebuildHoleBehaviorInterface
 {
 public:
-	virtual void startRebuildProcess(const ThingTemplate *rebuild, ObjectID spawnerID);
+	virtual void startRebuildProcess(const ThingTemplate *rebuild, ObjectID spawnerID) = 0;
 	virtual ObjectID getSpawnerID();
 	virtual ObjectID getReconstructedBuildingID();
 	virtual const ThingTemplate *getRebuildTemplate() const;
@@ -91,6 +96,8 @@ class RebuildHoleBehavior : public UpdateModule,
 {
 public:
 	virtual ~RebuildHoleBehavior();
+	virtual void startRebuildProcess(const ThingTemplate *rebuild, ObjectID spawnerID);
+	void newWorkerRespawnProcess(Object *existingWorker);
 
 private:
 	ObjectID m_workerID;
@@ -99,7 +106,7 @@ private:
 	unsigned int m_workerWaitCounter;
 	const ThingTemplate *m_workerTemplate;
 	const ThingTemplate *m_rebuildTemplate;
-	float m_40;
+	int m_40;
 	bool m_44;
 };
 
@@ -115,6 +122,18 @@ RebuildHoleBehavior::~RebuildHoleBehavior()
 			m_workerID = INVALID_ID;
 		}
 	}
+}
+
+// ?startRebuildProcess@RebuildHoleBehavior@@UAEXPBVThingTemplate@@W4ObjectID@@@Z @0x004835B4
+void RebuildHoleBehavior::startRebuildProcess(const ThingTemplate *rebuild, ObjectID spawnerID)
+{
+	Object *spawner = TheGameLogic->findObjectByID(spawnerID);
+	if (spawner)
+		m_40 = spawner->m_324;
+	m_rebuildTemplate = rebuild;
+	m_spawnerObjectID = spawnerID;
+	Object *worker = TheGameLogic->findObjectByID(m_workerID);
+	newWorkerRespawnProcess(worker);
 }
 
 // Placeholder virtuals in this unit's vftables: in retail, every vftable that holds

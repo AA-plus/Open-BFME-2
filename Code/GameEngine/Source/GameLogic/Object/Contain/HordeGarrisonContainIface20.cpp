@@ -157,14 +157,23 @@ struct Iface20 : public SlaughterHordeContain
  virtual void g83();
  virtual void g84();
  virtual void g85();
- virtual void g86();
- virtual const Coord3D *rvaExitPosition();
+ virtual const Coord3D *rva004626CA();
+ virtual const Coord3D *rva004626AF();
+ virtual const Coord3D *rva00464829();
 };
 struct Iface24 { virtual void f24(); };
 struct Iface28 { virtual void f28(); };
 struct Iface2C { virtual void f2C(); };
-struct Iface30 { virtual void f30(); };
+struct Iface30 { virtual bool isExitBusy() const = 0; };
 struct Iface34 { virtual void f34(); unsigned char m_pad[0x9E0 - 0x38]; };
+
+class GameLogic;
+extern GameLogic *TheGameLogic;
+struct GameLogicFrameView
+{
+	unsigned char m_pad00[0x40];
+	unsigned int m_frame;
+};
 
 class GarrisonContain
 	: public Iface00
@@ -208,15 +217,26 @@ public:
 class HordeGarrisonContain : public GarrisonContain, public Rva0047A040Base9E0
 {
 public:
+	void rva00479C35(Coord3D *in, Coord3D *out);
+	virtual bool isExitBusy() const;
 	virtual void rva00479C0C(Object *obj, void *b, DamageInfoInput00462516 *info);
 	virtual void rva0050B238(Object *obj, bool flag);
 	virtual void rva00465011(Object *obj);
 	virtual void rva004632E0(Object *obj);
  virtual bool isValidContainerFor(Object*,bool,bool);
 	virtual void rva00464830(Object *obj);
+	virtual const Coord3D *rva004626CA();
+	virtual const Coord3D *rva004626AF();
+	virtual const Coord3D *rva00464829();
 private:
-	int m_9E0;
+	unsigned int m_9E0;
 };
+
+// ?isExitBusy@HordeGarrisonContain@@UBE_NXZ @0x00479BCA
+bool HordeGarrisonContain::isExitBusy() const
+{
+	return ((const GameLogicFrameView *)TheGameLogic)->m_frame < m_9E0;
+}
 
 // ?rva00479C0C@HordeGarrisonContain@@UAEXPAVObject@@PAXPAUDamageInfoInput00462516@@@Z @0x00479C0C
 void HordeGarrisonContain::rva00479C0C(Object *obj, void *b, DamageInfoInput00462516 *info)
@@ -269,7 +289,7 @@ bool HordeGarrisonContain::isValidContainerFor(Object *obj,bool checkCapacity,bo
  Object *container=m_object;
  if(container){
   Pathfinder *finder=TheAI->pathfinder;
-  if(!finder->QuickDoesPathExist(obj,&obj->position,rvaExitPosition(),0) &&
+  if(!finder->QuickDoesPathExist(obj,&obj->position,rva004626AF(),0) &&
      !TheAI->pathfinder->QuickDoesPathExistToStructure(obj,&obj->position,container,0))return false;
  }}
  AdmissionAIView *ai=obj->ai;

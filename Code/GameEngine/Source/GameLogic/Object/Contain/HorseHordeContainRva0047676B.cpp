@@ -4,7 +4,7 @@
 #include <math.h>
 float normalizeAngle(float);
 class Object;
-struct Rva0028AC4EEntry;
+struct Rva0028AC4EEntry {unsigned char m_pad[0x40];mutable float m_40;};
 class Locomotor {public:float getMaxTurnRate(Object*)const;};
 class Object {public:const Rva0028AC4EEntry*rva0028AC4E()const;char pad[0x44];float angle;float getOrientation()const{return angle;}};
 struct Rva0046247DPair {void*a;void*b;};
@@ -79,7 +79,11 @@ virtual void d67();
 virtual void d68();
 virtual void d69(); virtual void items(Rva0046247DPair&);};
 struct Node {Node*next;Node*prev;Object*object;};
-class HorseHordeContain {public:virtual bool rva0047676B(float);};
+class HorseHordeContain {public:virtual bool rva0047676B(float);virtual void rva00476749();};
+void HorseHordeContain::rva00476749(){
+ const Rva0028AC4EEntry*e=(*reinterpret_cast<Object*const*>(reinterpret_cast<const char*>(this)-0x114))->rva0028AC4E();
+ if(e && e->m_40>0.0f)e->m_40=0.0f;
+}
 bool HorseHordeContain::rva0047676B(float angle){
  Rva0046247DPair pair;
  reinterpret_cast<ContainView*>(reinterpret_cast<char*>(this)-0xFC)->items(pair);

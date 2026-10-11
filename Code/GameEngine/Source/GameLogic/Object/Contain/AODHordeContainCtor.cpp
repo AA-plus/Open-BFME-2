@@ -28,7 +28,21 @@ struct Iface2C { virtual void f2C(); };
 struct Iface30 { virtual void f30(); };
 struct Iface34 { virtual void f34(); unsigned char m_pad[0xFC - 0x38]; };
 struct IfaceFC { virtual void fFC(); unsigned char m_pad[0x11C - 0x100]; };
-struct Iface11C { virtual void f11C(); unsigned char m_pad[0x30C - 0x11C - 4]; };
+struct Rva0047A6EDElem28 { int m_w[7]; };
+struct Rva0047A6EDVec28
+{
+	Rva0047A6EDElem28 *m_start;
+	Rva0047A6EDElem28 *m_finish;
+	Rva0047A6EDElem28 *m_end;
+	int size() const { return m_finish - m_start; }
+};
+struct Iface11C
+{
+	virtual void f11C();
+	unsigned char m_pad120[0x188 - 0x120];
+	Rva0047A6EDVec28 m_vec188;
+	unsigned char m_pad194[0x30C - 0x194];
+};
 
 class HordeContain
 	: public Iface00
@@ -130,6 +144,7 @@ class AODHordeContain : public HordeContain
 {
 public:
 	AODHordeContain(Thing *thing, const ModuleData *moduleData);
+	int rva0047A6ED() const;
 	void rva0047A729(const Float3 *position);
 	void rva0047A77E();
 	void rva0047A413();
@@ -157,6 +172,12 @@ void AODHordeContain::f00() {}
 void AODHordeContain::f20() {}
 // ?f11C@AODHordeContain@@UAEXXZ present-unmatched
 void AODHordeContain::f11C() {}
+
+// ?rva0047A6ED@AODHordeContain@@QBEHXZ @0x0047A6ED
+int AODHordeContain::rva0047A6ED() const
+{
+	return m_vec188.size();
+}
 
 // ??0AODHordeContain@@QAE@PAVThing@@PBVModuleData@@@Z
 AODHordeContain::AODHordeContain(Thing *thing, const ModuleData *moduleData)

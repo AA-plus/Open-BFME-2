@@ -67,6 +67,8 @@ public:
 
 class TransportContain : public SlaughterHordeContain
 {
+protected:
+	virtual bool isSpecificRiderFreeToExit(Object *obj);
 };
 
 class SiegeEngineContain : public TransportContain
@@ -91,9 +93,12 @@ class HordeSiegeEngineContain : public HordeTransportContain
 public:
 	virtual float rva0047CADB();
 	virtual void rva004624EB(Rva0046247DPair &p);
+protected:
+	virtual bool isSpecificRiderFreeToExit(Object *obj);
 private:
 	void *m_128; // +0x128 (list head)
 	int m_12C; // +0x12C
+	bool m_130; // +0x130
 };
 
 // ?rva0047CADB@SiegeEngineContain@@UAEMXZ @0x0047BAE7
@@ -122,6 +127,14 @@ bool SiegeEngineContain::rva004631FA(int arg)
 			return true;
 	}
 	return SlaughterHordeContain::rva004631FA(arg);
+}
+
+// ?isSpecificRiderFreeToExit@HordeSiegeEngineContain@@MAE_NPAVObject@@@Z @0x0047CA1A
+bool HordeSiegeEngineContain::isSpecificRiderFreeToExit(Object *obj)
+{
+	if (m_130)
+		return false;
+	return TransportContain::isSpecificRiderFreeToExit(obj);
 }
 
 // ?rva0047CADB@HordeSiegeEngineContain@@UAEMXZ @0x0047CADB

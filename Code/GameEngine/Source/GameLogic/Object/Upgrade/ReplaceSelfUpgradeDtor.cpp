@@ -12,6 +12,31 @@
 class Thing;
 class ModuleData;
 
+class Player;
+class Object
+{
+public:
+	Player *getControllingPlayer() const;
+};
+
+class PlayerList
+{
+public:
+	Player *getLocalPlayer() const { return m_localPlayer; }
+private:
+	unsigned char m_pad00[0x10];
+	Player *m_localPlayer;
+};
+extern PlayerList *ThePlayerList;
+
+class ControlBar;
+extern ControlBar *TheControlBar;
+struct ControlBarView
+{
+	unsigned char m_pad00[0x28];
+	bool m_uiDirty;
+};
+
 class UpgradeModule
 {
 public:
@@ -19,12 +44,23 @@ public:
 
 protected:
 	virtual ~UpgradeModule();
+	const ModuleData *m_moduleData; // +0x04
+	Object *m_object; // +0x08
+	unsigned char m_pad0C[0x1C - 0x0C];
 };
 
-class __declspec(novtable) ReplaceSelfUpgrade : public UpgradeModule
+class Rva004B70F0Iface1C
+{
+public:
+	virtual void i1C_0();
+	virtual void rva004B70F0();
+};
+
+class __declspec(novtable) ReplaceSelfUpgrade : public UpgradeModule, public Rva004B70F0Iface1C
 {
 public:
 	ReplaceSelfUpgrade(Thing *thing, const ModuleData *moduleData);
+	virtual void rva004B70F0();
 
 protected:
 	virtual ~ReplaceSelfUpgrade();
@@ -32,4 +68,12 @@ protected:
 
 ReplaceSelfUpgrade::~ReplaceSelfUpgrade()
 {
+}
+
+// ?rva004B70F0@ReplaceSelfUpgrade@@UAEXXZ @0x004B70F0
+void ReplaceSelfUpgrade::rva004B70F0()
+{
+	Player *localPlayer = ThePlayerList->getLocalPlayer();
+	if (localPlayer == m_object->getControllingPlayer())
+		((ControlBarView *)TheControlBar)->m_uiDirty = true;
 }

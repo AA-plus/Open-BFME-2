@@ -103,6 +103,7 @@ public:
 	void rva0044DDFB(int *vals);
 	Int rva0044D836(void);
 	Int rva0044D88C(void);
+	Bool rva0044D940(void);
 	AsciiString rva0044DAA8(const AsciiString &def);
 	AsciiString rva0044DBA5(void);
 	AsciiString rva0044D986(void);
@@ -387,6 +388,19 @@ Int GameModePreferences::rva0044D88C(void)
 	if (v == -1 && (TheWritableGlobalData->m_flag9D4 & 3) != 0)
 		return ThePlayerTemplateStore->m_map.begin()->first;
 	return v;
+}
+
+extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *s1, const char *s2);
+
+// ?rva0044D940@GameModePreferences@@QAE_NXZ @0x0044D940 70B
+Bool GameModePreferences::rva0044D940(void)
+{
+	PreferenceMap::const_iterator it = find(makeKey("UseSystemMapDir"));
+	if (it == end())
+		return true;
+	if (_strcmpi(it->second.str(), "yes") == 0)
+		return true;
+	return false;
 }
 
 // ?rva0044D986@GameModePreferences@@QAE?AVAsciiString@@XZ @0x0044D986 290B.
