@@ -150,6 +150,9 @@ public:
 	Real getOrientation() const { return m_orientation; }
 	ObjectID getID() const { return m_id; }
 	const AsciiString &getName() const { return m_name; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the
+	// getName copy loses to the first-in-order copy. No flags touched.
+	const AsciiString &bfme_name_rhed() const { return m_name; }
 	Object *getNextObject() const { return m_next; }
 	Bool testStatusUnderConstruction() const { return (m_status >> 2) & 1; }
 	BfmeCopyElementA *getGeometryInfo() { return (BfmeCopyElementA *)m_geometryInfo; }
@@ -197,6 +200,7 @@ class AI
 {
 public:
 	Pathfinder *pathfinder() { return m_pathfinder; }
+	Pathfinder *bfme_pathfinder_rhed() { return m_pathfinder; }
 
 private:
 	unsigned char m_pad00[0x10];
@@ -292,10 +296,10 @@ void RebuildHoleExposeDie::onDie(const DamageInfo *damageInfo)
 		hole->rva0029895A(us->getGeometryInfo());
 
 		// transfer the building's name to the hole
-		TheScriptEngine->rva00357960(us->getName(), hole);
+		TheScriptEngine->rva00357960(us->bfme_name_rhed(), hole);
 
-		TheAI->pathfinder()->RemoveObjectFromPathfindMap(us);
-		TheAI->pathfinder()->AddObjectToPathfindMap(hole);
+		TheAI->bfme_pathfinder_rhed()->RemoveObjectFromPathfindMap(us);
+		TheAI->bfme_pathfinder_rhed()->AddObjectToPathfindMap(hole);
 
 		// set the health of the hole to that defined by our data
 		BodyModuleInterface *body = hole->getBodyModule();
