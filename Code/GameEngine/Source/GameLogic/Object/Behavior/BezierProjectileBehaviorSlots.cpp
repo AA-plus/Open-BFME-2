@@ -100,6 +100,8 @@ public:
 	void rva0028AE6D();
 	ObjectID getID() const { return m_id; }
 	unsigned int getWeaponBonusCondition() const { return m_380; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getWeaponBonusCondition copy loses to the first-in-order copy. No flags touched.
+	unsigned int bfme_getWeaponBonusCondition_a1a45() const { return m_380; }
 	const Coord3D *getPosition() const { return &m_position; }
 	__forceinline void setModelConditionBit(int bit)
 	{
@@ -110,6 +112,11 @@ public:
 		}
 	}
 	__forceinline unsigned int isKindOf(int kind) const
+	{
+		return m_template->m_kindOf[kind >> 5] & (1U << (kind & 0x1f));
+	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the isKindOf copy loses to the first-in-order copy. No flags touched.
+	__forceinline unsigned int bfme_isKindOf_68ffe(int kind) const
 	{
 		return m_template->m_kindOf[kind >> 5] & (1U << (kind & 0x1f));
 	}
@@ -136,13 +143,21 @@ public:
 };
 extern GameLogic *TheGameLogic;
 
-class Rva002CBA7C
+// LINK: 0x002CBA7C is rowed as WeaponTemplate::shouldProjectileCollideWith (WeaponTemplateShouldProjectileCollideWith.cpp)
+// and 0x002CA753 as Weapon::positionProjectileForLaunch (Weapon_positionProjectileForLaunch_Rva002CA753.cpp).
+enum WeaponSlotType { BFME_WEAPON_SLOT_0 };
+class Rva002CBA7C;
+class WeaponTemplate
 {
 public:
-	bool rva002CBA7C(Object *launcher, Object *owner, Object *victim, ObjectID victimID);
+	bool shouldProjectileCollideWith(const Object *launcher, const Object *owner, const Object *victim, ObjectID victimID) const;
 };
 
-void positionProjectileForLaunch(Object *projectile, const Object *launcher, int wslot, int specificBarrelToUse);
+class Weapon
+{
+public:
+	static void positionProjectileForLaunch(Object *projectile, const Object *launcher, WeaponSlotType wslot, int specificBarrelToUse);
+};
 
 struct Rva0045B936Arg
 {
@@ -236,7 +251,7 @@ bool BezierProjectileBehavior::rva0045BF06(Object *victim)
 		return false;
 	if (victim)
 	{
-		if (victim->isKindOf(13) != 0)
+		if (victim->bfme_isKindOf_68ffe(13) != 0)
 			return false;
 		if (victim->isEffectivelyDead())
 			return false;
@@ -244,7 +259,7 @@ bool BezierProjectileBehavior::rva0045BF06(Object *victim)
 	Object *launcher = TheGameLogic->findObjectByID(getLauncherID());
 	Object *owner = m_object;
 	ObjectID extra = m_38;
-	return m_helper->rva002CBA7C(launcher, owner, victim, extra);
+	return ((const WeaponTemplate *)m_helper)->shouldProjectileCollideWith(launcher, owner, victim, extra);
 }
 
 // ?rva0045B4C0@BezierProjectileBehavior@@UAEXPAVObject@@HH@Z @0x0045B4C0
@@ -265,7 +280,7 @@ void BezierProjectileBehavior::projectileLaunchAtObjectOrPosition(Object *victim
 	int specificBarrel, const Rva0045B936Arg *arg6, Rva002CBA7C *helper, const Matrix3D *mtx)
 {
 	m_28 = launcher ? launcher->getID() : INVALID_ID;
-	m_74 = launcher ? launcher->getWeaponBonusCondition() : 0;
+	m_74 = launcher ? launcher->bfme_getWeaponBonusCondition_a1a45() : 0;
 	m_38 = victim ? victim->getID() : INVALID_ID;
 	m_3C = arg6->m_04;
 	m_78 = 0;
@@ -274,7 +289,7 @@ void BezierProjectileBehavior::projectileLaunchAtObjectOrPosition(Object *victim
 	if (mtx)
 		obj->setTransformMatrix(mtx);
 	else
-		positionProjectileForLaunch(obj, launcher, wslot, specificBarrel);
+		Weapon::positionProjectileForLaunch(obj, launcher, (WeaponSlotType)wslot, specificBarrel);
 	m_2C = launcher ? *launcher->getPosition() : *obj->getPosition();
 	rva0045BB8A(victim, victimPos);
 	obj->setModelConditionBit(4 * 32 + 26);
