@@ -1,4 +1,8 @@
 /// \defgroup grp_rts_model RTS model
-/// \brief Players, teams, things, templates and the module factory.
+/// \brief Players, teams, thing templates and the module factory.
 ///
-/// \ref sub_rts_model is the subsystem's page.
+/// `Player`, `PlayerList` and `PlayerTemplate`; `Team`, `TeamPrototype` and
+/// `TeamFactory`; `ThingTemplate` and `ThingFactory`; and the `ModuleFactory`
+/// registry that maps module names in INI data to C++ classes.
+/// \ref sub_rts_model describes the subsystem, how a definition becomes an
+/// object, and its differences from Zero Hour.
