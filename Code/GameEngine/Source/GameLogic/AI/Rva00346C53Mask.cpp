@@ -12,10 +12,16 @@ enum ObjectStatusTypes
 	OBJECT_STATUS_00 = 0
 };
 
+// LINK: 0x0023DA79 is rowed as Rva0023DA79::rva0023DA79(int, int) (Rva0023DA79Bitset.cpp); the mask is that object.
+class Rva0023DA79
+{
+public:
+	Rva0023DA79 *rva0023DA79(int a, int b);
+};
+
 struct ObjectStatusMask
 {
 public:
-	ObjectStatusMask *Rva0023DA79(int a, ObjectStatusTypes b);
 
 private:
 	char m_data[16];
@@ -32,5 +38,5 @@ public:
 void Object::rva00346C53(ObjectStatusTypes a, bool b)
 {
 	ObjectStatusMask mask;
-	rva00293D3B(*reinterpret_cast<Rva00346BC0 *>(mask.Rva0023DA79(0, a)), b);
+	rva00293D3B(*reinterpret_cast<Rva00346BC0 *>(((Rva0023DA79 *)&mask)->rva0023DA79(0, a)), b);
 }

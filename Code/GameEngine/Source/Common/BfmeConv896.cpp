@@ -47,7 +47,8 @@ class Parameter;
 class Object
 {
 public:
-	void setStatus(ObjectStatusTypes status, int value);
+	// LINK: rowed Object::setStatus(ObjectStatusTypes, bool) (0x0023DB0E); the old int argument stays through a member-pointer cast.
+	void setStatus(ObjectStatusTypes status, bool value);
 };
 
 class ScriptEngine
@@ -63,5 +64,5 @@ void __stdcall bfmeGoFGE(void *a, void *b, void *c)
 	Object *r = TheScriptEngine->getUnitNamed((Parameter *)a);
 
 	if (r)
-		r->setStatus((ObjectStatusTypes)(int)b, (int)c);
+		(r->*reinterpret_cast<void (Object::*)(ObjectStatusTypes, int)>(&Object::setStatus))((ObjectStatusTypes)(int)b, (int)c);
 }

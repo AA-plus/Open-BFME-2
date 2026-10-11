@@ -15,11 +15,15 @@
 // position in ECX -- so the callee carries a second name for the one address:
 // the donor's own. The body is otherwise unchanged from the donor, and the
 // receiver is the member at +0x08 as retail loads it.
-class BfmeObjFBC
+// LINK: the check 0x0035B2C3 is rowed as bool Rva0035B2C3::rva0035B2C3(void*, int, Coord3D const*, int) (Rva0035B2C3Audio.cpp);
+// the old char-returning call shape stays through a member-pointer cast.
+struct Coord3D;
+class Rva0035B2C3
 {
 public:
-	char bfmeCallFBC(void *x, void *a, int z, void *y);
+	bool rva0035B2C3(void *x, int a, const Coord3D *z, int y);
 };
+typedef char (Rva0035B2C3::*Rva0035B2C3CharShape)(void *, void *, int, void *);
 
 // The partition filter base (ctor 0x000421C8, vftable 0x00BC26E0).
 class Object;
@@ -39,7 +43,7 @@ class Rva002614BCFilter : public Rva000421C8
 public:
 	virtual bool allow(Object *a);
 	void *m_bfme8;
-	BfmeObjFBC *m_bfmeObj;
+	Rva0035B2C3 *m_bfmeObj;
 	char m_bfme10;
 	unsigned char m_bfmePad[3];
 	void *m_bfme14;
@@ -47,5 +51,5 @@ public:
 
 bool Rva002614BCFilter::allow(Object *a)
 {
-	return m_bfmeObj->bfmeCallFBC(m_bfme8, a, 0, m_bfme14) == m_bfme10;
+	return (m_bfmeObj->*reinterpret_cast<Rva0035B2C3CharShape>(&Rva0035B2C3::rva0035B2C3))(m_bfme8, a, 0, m_bfme14) == m_bfme10;
 }

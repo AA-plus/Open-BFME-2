@@ -26,10 +26,22 @@ public:
 	virtual void d11();
 	virtual void rva005C4B96(unsigned char val);
 
-	unsigned char rva003FBF38();
 	void rva003FB65C(int a);
-	void rva003FCCC9(unsigned char a);
 };
+
+// LINK: 0x003FBF38 / 0x003FCCC9 are rowed as Rva003FBF38::rva003FBF38 and LivingWorldVisual::rva003FCCC9(bool); the old
+// unsigned-char argument stays through a member-pointer cast.
+class Rva003FBF38
+{
+public:
+	unsigned char rva003FBF38();
+};
+class LivingWorldVisual
+{
+public:
+	void rva003FCCC9(bool a);
+};
+typedef void (LivingWorldVisual::*LivingWorldVisualUcharShape)(unsigned char);
 
 class Rva005C4B56 : public Rva003FB65C
 {
@@ -43,9 +55,9 @@ private:
 
 void Rva005C4B56::rva005C4B96(unsigned char val)
 {
-	if (val == rva003FBF38())
+	if (val == ((Rva003FBF38 *)this)->rva003FBF38())
 		return;
 	if (val)
 		rva003FB65C(m_subAC->m_val2C);
-	rva003FCCC9(val);
+	(((LivingWorldVisual *)this)->*reinterpret_cast<LivingWorldVisualUcharShape>(&LivingWorldVisual::rva003FCCC9))(val);
 }

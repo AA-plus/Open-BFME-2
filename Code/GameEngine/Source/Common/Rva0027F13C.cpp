@@ -5,15 +5,15 @@ struct Rva0027F13CBuf
 	int m_14;
 	unsigned char m_tail[4];
 };
-class Rva0027D244Host
+// LINK: 0x0027D244 is rowed as Rva0027D244 *Rva0027D244::rva0027D244(int) (Rva0027D244.cpp); the buffer is that object.
+class Rva0027D244
 {
 public:
-	void rva0027D244(int v);
+	Rva0027D244 *rva0027D244(int v);
 };
 // The grid query 0x0027DF9D (Coord3D point, radius, result, flag, mode);
 // its body tests the flag as a byte.
 struct Coord3D;
-class Rva0027D244;
 class Rva0027DF9D
 {
 public:
@@ -28,7 +28,7 @@ public:
 int Rva0027F13CHost::rva0027F13C(int a, int b, float c)
 {
 	Rva0027F13CBuf buf;
-	((Rva0027D244Host *)&buf)->rva0027D244(a);
+	((Rva0027D244 *)&buf)->rva0027D244(a);
 	((Rva0027DF9D *)this)->rva0027DF9D((Coord3D *)b, c, (Rva0027D244 *)&buf, false, 2);
 	return buf.m_14;
 }

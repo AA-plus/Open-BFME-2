@@ -21,8 +21,9 @@ public:
 class Rva003F7F4B
 {
 public:
-	void *rva003F7F4B();
+	void rva003F7F4B();
 };
+typedef void *(Rva003F7F4B::*Rva003F7F4BResultShape)();
 
 class Rva003F8052
 {
@@ -59,7 +60,7 @@ void *Rva003F8090::rva003F8509()
 	void *it = rva003F80C3();
 	if (it == 0)
 		return 0;
-	return ((Rva003F7F4B *)it)->rva003F7F4B();
+	return (((Rva003F7F4B *)it)->*reinterpret_cast<Rva003F7F4BResultShape>(&Rva003F7F4B::rva003F7F4B))();
 }
 
 unsigned char Rva003F8090::rva003F8536()

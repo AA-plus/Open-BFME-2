@@ -19,8 +19,16 @@ public:
 	virtual void slot09();
 	virtual void slot10();
 	virtual void slot11();
-	void rva003FCCC9(unsigned char value);
 };
+
+// LINK: 0x003FCCC9 is rowed as LivingWorldVisual::rva003FCCC9(bool) (Rva003FCD58 sibling rows); the unsigned-char argument stays
+// through a member-pointer cast.
+class LivingWorldVisual
+{
+public:
+	void rva003FCCC9(bool value);
+};
+typedef void (LivingWorldVisual::*LivingWorldVisualUcharShape)(unsigned char);
 
 class Rva003FCD58 : public Rva003FB65C
 {
@@ -34,6 +42,6 @@ private:
 
 void Rva003FCD58::rva003FCD58(unsigned char value)
 {
-	rva003FCCC9(value);
+	(((LivingWorldVisual *)this)->*reinterpret_cast<LivingWorldVisualUcharShape>(&LivingWorldVisual::rva003FCCC9))(value);
 	m_stateAC = value;
 }
