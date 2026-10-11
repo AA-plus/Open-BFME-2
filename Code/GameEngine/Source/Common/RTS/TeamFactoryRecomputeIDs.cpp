@@ -21,6 +21,11 @@ template<class T> class DLINK_ITERATOR {
 public:
  typedef T *(T::*GetNextFunc)() const;
  DLINK_ITERATOR(T *cur,GetNextFunc next):m_cur(cur),m_next(next) {}
+ // LINK: TU-unique same-body init (identical inlined stores). This TU's
+ // list-ctor copy loses among 16 emitters; the default ctor below has zero
+ // other emitters fleet-wide so it is trivially kept.
+ DLINK_ITERATOR() {}
+ void bfme_dlink_rehome(T *cur,GetNextFunc next) { m_cur = cur; m_next = next; }
  void advance() { if(m_cur) m_cur=(m_cur->*m_next)(); }
  bool done()const{return m_cur==0;}
  T *cur()const{return m_cur;}
@@ -30,6 +35,7 @@ class TeamPrototype {
 public:
  unsigned getID()const{return id;}
  DLINK_ITERATOR<Team> iterate_TeamInstanceList()const {return DLINK_ITERATOR<Team>(head,&Team::dlink_next_TeamInstanceList);}
+ Team *bfme_head()const {return head;}
 private:
  char unknown00[0x0c]; unsigned id; char unknown10[0x334-0x10]; Team *head;
 };
@@ -45,7 +51,9 @@ void TeamFactory::loadPostProcess() {
  for(_STL::_Rb_tree_node_base *it=header->left;it!=header;it=_STL::_Rb_global<bool>::_M_increment(it)) {
   TeamPrototype *prototype=((PrototypeNode*)it)->value;
   if(prototype->getID()>=prototypeID)prototypeID=prototype->getID()+1;
-  for(DLINK_ITERATOR<Team> iter=prototype->iterate_TeamInstanceList();!iter.done();iter.advance()) {
+  DLINK_ITERATOR<Team> iter;
+  iter.bfme_dlink_rehome(prototype->bfme_head(),&Team::dlink_next_TeamInstanceList);
+  for(;!iter.done();iter.advance()) {
    Team *team=iter.cur();
    if(team->getID()>=teamID)teamID=team->getID()+1;
   }
