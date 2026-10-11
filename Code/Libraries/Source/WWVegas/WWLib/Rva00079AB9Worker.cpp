@@ -11,7 +11,6 @@
 // call redirected to 0x0007989C. The target worker compares the value's first
 // dword and links the new node; the owning class and value identity remain
 // unknown, so these names describe the address and observed ABI only.
-class Rva00079AB9Value;
 class Rva00079D14Value;
 
 struct Rva00079D14Node
@@ -33,11 +32,26 @@ public:
 };
 }
 
-class Rva00079AB9Tree
-{
-public:
-	void *rva0007989C(const Rva00079AB9Value &value);
+// The rowed 34-byte allocator uses STLport's actual _M_create_node name.
+// Its 0x20 allocation and 0x10 value offset establish a 16-byte pair payload;
+// the record's application meaning and original owning tree remain unresolved.
+class Rva00079D14Tree;
+struct Rva0007989CRecord { int word0, word1, word2; };
+namespace _STL {
+template<class A, class B> struct pair;
+template<class T> struct _Select1st;
+template<class T> struct less;
+template<class T> class allocator;
+template<class T> struct _Rb_tree_node;
+template<class K, class V, class S, class C, class A> class _Rb_tree {
+protected:
+ _Rb_tree_node<V> *_M_create_node(const V &);
+ friend class ::Rva00079D14Tree;
 };
+}
+typedef _STL::pair<const int, Rva0007989CRecord> Rva0007989CValue;
+typedef _STL::_Rb_tree<int, Rva0007989CValue, _STL::_Select1st<Rva0007989CValue>,
+ _STL::less<int>, _STL::allocator<Rva0007989CValue> > Rva0007989CTree;
 
 struct Rva00079D14Iter
 {
@@ -62,7 +76,7 @@ Rva00079D14Iter Rva00079D14Tree::rva00079AB9(Rva00079D14Node *x,
 {
 	Rva00079D14Node *z;
 	if (y == m_header || (w == 0 && (x != 0 || *(const unsigned int *)&value < y->_key))) {
-		z = (Rva00079D14Node *)reinterpret_cast<Rva00079AB9Tree *>(this)->rva0007989C(reinterpret_cast<const Rva00079AB9Value &>(value));
+		z = (Rva00079D14Node *)reinterpret_cast<Rva0007989CTree *>(this)->_M_create_node(reinterpret_cast<const Rva0007989CValue &>(value));
 		y->_left = z;
 		if (y == m_header) {
 			m_header->_parent = z;
@@ -71,7 +85,7 @@ Rva00079D14Iter Rva00079D14Tree::rva00079AB9(Rva00079D14Node *x,
 			m_header->_left = z;
 		}
 	} else {
-		z = (Rva00079D14Node *)reinterpret_cast<Rva00079AB9Tree *>(this)->rva0007989C(reinterpret_cast<const Rva00079AB9Value &>(value));
+		z = (Rva00079D14Node *)reinterpret_cast<Rva0007989CTree *>(this)->_M_create_node(reinterpret_cast<const Rva0007989CValue &>(value));
 		y->_right = z;
 		if (y == m_header->_right) {
 			m_header->_right = z;
