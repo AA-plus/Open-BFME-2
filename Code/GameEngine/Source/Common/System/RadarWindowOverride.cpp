@@ -290,6 +290,8 @@ public:
  virtual void v5();virtual void v6();virtual void v7();virtual void v8();virtual void stop();
  void rva00524D01(const AsciiString &,int);
 };
+// LINK: the open call binds the rowed owner at 0x00524D01 (MovieWindowPlayback::OpenMovie, Rva00524B7ACtor.cpp).
+class MovieWindowPlayback { public: void OpenMovie(const AsciiString &,int); };
 struct AlertInner {
  char unknown00[0x60]; unsigned char flags;
  char unknown61[0x17]; Rva005C96A9 *playback;
@@ -308,5 +310,5 @@ void BfmeSinkBLD::bfmeDoBLD(void *name,int value) {
  inner->value14C=value;
  if(!owner->hasOverrideWindow())owner->rva002D4240(false);
  inner->playback->stop();
- inner->playback->rva00524D01(*reinterpret_cast<const AsciiString *>(name),64);
+ reinterpret_cast<MovieWindowPlayback *>(inner->playback)->OpenMovie(*reinterpret_cast<const AsciiString *>(name),64);
 }
