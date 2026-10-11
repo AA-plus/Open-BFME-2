@@ -33,10 +33,40 @@ public:
 class MapCache;
 extern MapCache *TheMapCache;
 
+// Retail's own four path-prefix pointers at RVA 0x009BD054 / 58 / 5C / 60 (.data,
+// file offset 0x0096CC54): each a pointer into retail's .rdata string pool. The
+// save-game path remap both directions (this unit and its inverse) and the
+// three-unit startsWithNoCase walk in SaveGame/Rva002DCB9CPath.cpp read them, so
+// one definition serves all three. Each definition keeps `extern` in front of it
+// so the objects take external linkage.
+// Symbols ?g_00DBD054@@3PBDB, ?g_00DBD058@@3PBDB, ?g_00DBD05C@@3PBDB and
+// ?g_00DBD060@@3PBDB, transcribed below.
 extern const char *g_00DBD054;
+const char *g_00DBD054 = "Save\\";
 extern const char *g_00DBD058;
+const char *g_00DBD058 = "Maps\\";
 extern const char *g_00DBD05C;
+const char *g_00DBD05C = "UserData\\Maps\\";
 extern const char *g_00DBD060;
+const char *g_00DBD060 = "LivingWorldScripts\\";
+// The matching single-letter replacements at RVA 0x009BD064 / 68 / 6C / 70 / 74
+// (.data, file offset 0x0096CC64), each a pointer into retail's .rdata string
+// pool: the packed form starts with the letter for whichever prefix matched, so
+// the packer in SaveGame/Rva002DCB9CPath.cpp writes S, M, U, L or X in place of
+// "Save\\", "Maps\\", "UserData\\Maps\\", "LivingWorldScripts\\" or the
+// mixed form. Same ownership and the same `extern` spelling as above.
+// Symbols ?g_00DBD064@@3PBDB, ?g_00DBD068@@3PBDB, ?g_00DBD06C@@3PBDB,
+// ?g_00DBD070@@3PBDB and ?g_00DBD074@@3PBDB, transcribed below.
+extern const char *g_00DBD064;
+const char *g_00DBD064 = "S";
+extern const char *g_00DBD068;
+const char *g_00DBD068 = "M";
+extern const char *g_00DBD06C;
+const char *g_00DBD06C = "U";
+extern const char *g_00DBD070;
+const char *g_00DBD070 = "L";
+extern const char *g_00DBD074;
+const char *g_00DBD074 = "X";
 extern const char g_00BBE09C[];
 
 AsciiString *Rva0030062CGet();
