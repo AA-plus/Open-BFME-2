@@ -3356,9 +3356,10 @@ void Player::setUnitsVisionSpied( Bool setting, KindOfMaskType whichUnits, Playe
 
 // ------------------------------------------------------------------------------------------------
 // ?Player::isPlayerObserver present-unmatched
+// Retail 0x2AA223 (7B, LK5 row 58): m_observer at +0x33A, not +0x296.
 Bool Player::isPlayerObserver(void) const
 {
-	return *reinterpret_cast<const Bool *>(reinterpret_cast<const char *>(this) + 0x296);
+	return *reinterpret_cast<const Bool *>(reinterpret_cast<const char *>(this) + 0x33A);
 }
 
 // ------------------------------------------------------------------------------------------------
