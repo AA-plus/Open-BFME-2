@@ -50,9 +50,10 @@ public:
 	void groupDoCommandButtonAtObject(const CommandButton *b, Object *o, CommandSourceType src);
 };
 
-class BfmeObjFBC {
+// LINK: the button check 0x0035B2C3 is rowed as Rva0035B2C3::rva0035B2C3 (Rva0035B2C3Audio.cpp); same four-slot ABI.
+class Rva0035B2C3 {
 public:
-	char bfmeCallFBC(void *a, void *b, int c, void *d);
+	bool rva0035B2C3(void *a, int b, const Coord3D *c, int d);
 };
 
 extern class ScriptEngine *TheScriptEngine;
@@ -82,7 +83,7 @@ void __stdcall Rva003C1020Do(const AsciiString &teamName, const AsciiString &cmd
 	Object *target = TheScriptEngine->getUnitNamed(unitParm);
 	if (target == 0)
 		return;
-	if (!((BfmeObjFBC *)button)->bfmeCallFBC(src, target, 0, (void *)1))
+	if (!((Rva0035B2C3 *)button)->rva0035B2C3(src, (int)target, (const Coord3D *)0, 1))
 		return;
 	group->groupDoCommandButtonAtObject(button, target, CMD_FROM_SCRIPT);
 }
