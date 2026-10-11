@@ -24,3 +24,13 @@ void Rva003598D3::slot00(int x,int y)
     reinterpret_cast<TerrainResourceManager*>(m_04)->tryToClaimCell(
         x,y,m_08,(ObjectID)m_0C,m_18,&m_10,&m_14);
 }
+
+// Base visitor slot: declared virtual in the shared view header but defined
+// nowhere, so every TU whose vtable falls back to it carries
+// U ?slot00@Rva0035A97EVisitor. Defined once here (empty: retail inlines or
+// dead-strips it; no retail bytes are claimed,
+// hence present-unmatched rather than a row).
+// ?slot00@Rva0035A97EVisitor@@UAEXHH@Z present-unmatched
+void Rva0035A97EVisitor::slot00(int,int)
+{
+}
