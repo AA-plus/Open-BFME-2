@@ -1,11 +1,32 @@
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
+#include "Coord3D.h"
 
 class Object;
+class Player;
+struct Rva00372571Params
+{
+	const Coord3D *m_pos;
+	bool m_addWaypoint;
+	Object *m_ignoreObstacle;
+	Object *m_target;
+	const float *m_facing;
+	int m_formationType;
+	Player *m_player;
+	bool m_attackMove;
+};
 class AIGroup
 {
 public:
 	void add(Object *member);
+	void rva00372571(Rva00372571Params *params, int commandSource);
 };
+class AI
+{
+public:
+	AIGroup *createGroup();
+	void destroyGroup(AIGroup *group);
+};
+extern AI *TheAI;
 
 // Two-pointer range view; the caller passes the vector member at entry +4.
 // The capacity word is not read by this helper.
@@ -14,6 +35,20 @@ class BfmeVecAV
 public:
 	Object **m_begin;
 	Object **m_end;
+};
+
+// Native 16-byte record: one Object* followed by a three-word vector.
+// Only the first two vector words are used by the group-copy helper.
+struct Rva004C734DElement
+{
+	Object *owner;
+	BfmeVecAV members;
+	void *storageEnd;
+};
+struct ManTheWallsObjectPositionView
+{
+	unsigned char m_beforePosition[0x38];
+	Coord3D m_position;
 };
 
 class Thing;
@@ -56,6 +91,7 @@ class ManTheWallsSpecialPower : public SpecialPowerModule
 public:
 	ManTheWallsSpecialPower( Thing *thing, const ModuleData *moduleData );
 	void rva004C70AD(BfmeVecAV *range, AIGroup *group);
+	void rva004C7167(Rva004C734DElement *entry);
 };
 
 ManTheWallsSpecialPower::ManTheWallsSpecialPower( Thing *thing, const ModuleData *moduleData )
@@ -80,4 +116,31 @@ void ManTheWallsSpecialPower::rva004C70AD(BfmeVecAV *range, AIGroup *group)
 {
 	for (Object **it = range->m_begin; it != range->m_end; ++it)
 		group->add(*it);
+}
+
+// Native 4C7167..4C71D3 (108B, RET4); WB 1268D00. Creates an AI group,
+// adds the entry's Object* range and issues the existing group command
+// using its owner's +38 position, then destroys the group. All eight
+// command-block fields, their write order and the zero source are native
+// observations. Command semantics and the method's original name are open.
+// The member helper ABI above accounts for the formerly unexplained ECX
+// save/restore; the old free-function declaration omitted six native bytes.
+void ManTheWallsSpecialPower::rva004C7167(Rva004C734DElement *entry)
+{
+	AIGroup *group = TheAI->createGroup();
+	if (group)
+	{
+		rva004C70AD(&entry->members, group);
+		Rva00372571Params params;
+		params.m_formationType = -1;
+		params.m_pos = &((ManTheWallsObjectPositionView *)entry->owner)->m_position;
+		params.m_addWaypoint = false;
+		params.m_ignoreObstacle = 0;
+		params.m_target = 0;
+		params.m_facing = 0;
+		params.m_player = 0;
+		params.m_attackMove = false;
+		group->rva00372571(&params, 0);
+		TheAI->destroyGroup(group);
+	}
 }
