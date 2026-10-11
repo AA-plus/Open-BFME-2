@@ -42,6 +42,14 @@ Rva00224CDC *rva00224D80() {
 #include <hash_map>
 #include <set>
 #include <vector>
+
+// vector<int> destruction otherwise instantiates the proxy<int>
+// deallocate COMDAT (one byte shape per TU flags); a declaration-only
+// member specialization suppresses this TU's copy so callers bind the
+// kept copy. Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> void _STLP_alloc_proxy<int*, int, allocator<int> >::deallocate(int*, size_t);
+}
 typedef int Bool;
 #include "subsystem_interface.h"
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
