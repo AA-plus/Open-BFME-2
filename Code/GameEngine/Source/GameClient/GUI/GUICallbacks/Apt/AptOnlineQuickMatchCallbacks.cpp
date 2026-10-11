@@ -30,24 +30,19 @@ class Rva003236A0 {public:void rva003236A0(int,int);};
 class BfmeThing925D {public:void bfmeGo925D(void*);};
 void GadgetComboBoxReset(GameWindow *comboBox);
 
-// The window kept at +0x80: rebound through the one-pointer store
-// returning this at 0x0007B719 (an ICF-folded body, as MpGameSetupSlots.cpp's
-// MpGameSetupComboRef), pinned by address.
-class OnlineQuickMatchWindowRef
-{
-public:
-	OnlineQuickMatchWindowRef &operator=(GameWindow *window);
+// Native 7B719 stores the non-owning window pointer and returns this.
+// Use the existing window-wrapper constructor owner for that exact operation;
+// the quick-match member's original spelling remains its named callback view.
+class OnlineQuickMatchWindowRef { public: GameWindow *m_window; };
+class Rva00323674 { public: Rva00323674(GameWindow *); };
 
-	GameWindow *m_window;
-};
-
-// TheWindowManager; its rowed 0x002C5761 (rowed as a stdcall
-// Rva002C5761Sort) is called with the manager in ECX, so it is declared as
-// a member and pinned under that name.
-class GameWindowManager
-{
-public:
-	void rva002C5761(GameWindow *window);
+// Native 2C5761 ignores ECX and returns with RET4. Keep the caller's observed
+// manager load while invoking the existing stdcall provider, as in save/load.
+class GameWindowManager {};
+void __stdcall Rva002C5761Sort(void *);
+union QuickMatchSortCall {
+ void (__stdcall *provider)(void *);
+ void (GameWindowManager::*receiver)(GameWindow *);
 };
 
 extern GameWindowManager *TheWindowManager;
@@ -119,7 +114,7 @@ void AptOnline::OnlineQuickMatch::InitGadgets(const char *name, void *argument, 
 		return;
 	if (strcmp(name, "OnlineQuickMatch::Color") == 0)
 	{
-		m_color = window;
+		((Rva00323674 *)&m_color)->Rva00323674::Rva00323674(window);
 		rva005BA803();
 		m_gadgets |= 0x01;
 	}
@@ -147,7 +142,9 @@ void AptOnline::OnlineQuickMatch::InitGadgets(const char *name, void *argument, 
 		m_gadgets |= 0x80;
 		m_ladder = window;
 	}
-	TheWindowManager->rva002C5761(m_window);
+	QuickMatchSortCall sort;
+	sort.provider = &Rva002C5761Sort;
+	(TheWindowManager->*sort.receiver)(m_window);
 }
 
 // Retail 0x0056DCB7, 8 bytes: "AptOnline::Login::CancelLogin".

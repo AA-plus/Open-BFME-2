@@ -59,3 +59,9 @@ Rva00323674::Rva00323674(GameWindow *window) : m_0(window)
 Rva00323674::~Rva00323674()
 {
 }
+
+// ?bfmeAnchorWindowWrapperSelected absent-from-retail
+int bfmeAnchorWindowWrapperSelected(const Rva00323674 *wrapper)
+{
+    return wrapper->rva00323674();
+}
