@@ -40,16 +40,20 @@
 //   0x003F7BCC  0x00C37298  Rva003F7BCC
 
 struct EmitVtableTag;
+// This synthetic overload only emits this view's table. Its tag must not
+// collide with another view's synthetic constructor of the same class.
+struct C01VtableEmissionTag;
+inline void *operator new(unsigned int, void *p) { return p; }
 
 class Rva00051E4D
 {
 public:
-	Rva00051E4D(EmitVtableTag *);
+	Rva00051E4D(C01VtableEmissionTag *);
 	virtual ~Rva00051E4D() {}
 };
 
 // ?<Rva00051E4D::Rva00051E4D> absent-from-retail
-Rva00051E4D::Rva00051E4D(EmitVtableTag *)
+Rva00051E4D::Rva00051E4D(C01VtableEmissionTag *)
 {
 }
 
@@ -89,9 +93,14 @@ Rva00074626::Rva00074626(EmitVtableTag *)
 {
 }
 
+// Keep the qualified call before the inline definition so MSVC emits the
+// standalone seven-byte destructor while still inlining it in the deleting dtor.
+// ?bfmeAnchorC01Rva00074626 absent-from-retail
+void bfmeAnchorC01Rva00074626(Rva00074626 *p) { p->Rva00074626::~Rva00074626(); }
+
 // ??1Rva00074626@@UAE@XZ @0x0007461F 7B: the empty dtor, restoring the vtable;
 // the deleting dtor still expands it inline.
-Rva00074626::~Rva00074626()
+inline Rva00074626::~Rva00074626()
 {
 }
 
@@ -105,7 +114,7 @@ public:
 
 // ??0FileFactoryClass@@QAE@XZ @0x0007838A 9B: the default constructor, storing the
 // class's own vtable and returning this.
-FileFactoryClass::FileFactoryClass()
+__declspec(noinline) inline FileFactoryClass::FileFactoryClass()
 {
 }
 
@@ -425,7 +434,7 @@ public:
 
 // ??0InputChunk@@QAE@XZ @0x00306DE0 9B: the default constructor, storing the
 // class's own vtable (VA 0x00C07E84) and returning this.
-InputChunk::InputChunk()
+__declspec(noinline) inline InputChunk::InputChunk()
 {
 }
 
@@ -503,7 +512,7 @@ public:
 
 // ??0Rva003EE711@@QAE@XZ @0x003EE708 9B: the default constructor, storing the
 // class's own vtable (VA 0x00C363B8) and returning this.
-Rva003EE711::Rva003EE711()
+__declspec(noinline) inline Rva003EE711::Rva003EE711()
 {
 }
 
@@ -523,3 +532,19 @@ public:
 Rva003F7BCC::Rva003F7BCC(EmitVtableTag *)
 {
 }
+
+// Native constructors have byte-identical inline copies in their users.
+// Keep these providers select-any so those copies can merge.
+// ?bfmeAnchorC01FileFactoryClass absent-from-retail
+void *bfmeAnchorC01FileFactoryClass(void *where) { return new (where) FileFactoryClass(); }
+
+// ?bfmeAnchorC01InputChunk absent-from-retail
+void *bfmeAnchorC01InputChunk(void *where) { return new (where) InputChunk(); }
+
+// ?bfmeAnchorC01Rva003EE711 absent-from-retail
+void *bfmeAnchorC01Rva003EE711(void *where)
+{
+    ((Rva003EE711 *)where)->Rva003EE711::Rva003EE711();
+    return where;
+}
+
