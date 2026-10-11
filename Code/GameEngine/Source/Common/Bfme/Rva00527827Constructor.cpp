@@ -123,6 +123,7 @@ class Rva00527827 : public Rva00527827Base
 {
 public:
 	Rva00527827(int arg, const AsciiString &name);
+	virtual ~Rva00527827();
 	void rva00527827(int a, const float *b, int c, int d);
 	__declspec(noinline) AsciiString rva00527B03();
 private:

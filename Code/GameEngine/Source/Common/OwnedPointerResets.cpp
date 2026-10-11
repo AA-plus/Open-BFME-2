@@ -69,10 +69,28 @@
 
 void __cdecl operator delete(void *p);
 
+// Rowed twins of the pointee destructors below: same address, retail spelling. The reset signatures keep the
+// address-derived pointee names, so the calls cast to these declaration-only views.
+class Rva0023A128 { public: ~Rva0023A128(); };
+class Rva005D0C87 { public: ~Rva005D0C87(); };
+class Rva005E4AE2 { public: virtual ~Rva005E4AE2(); };
+class Rva00527827 { public: virtual ~Rva00527827(); };
+namespace StrategicHUD { class Palantir { public: ~Palantir(); }; class SelectionDetailsUIImpl { public: ~SelectionDetailsUIImpl(); }; }
+class AptInGameSideCommandBar
+{
+public:
+	class Impl
+	{
+	public:
+		~Impl();
+		void Update();
+	};
+};
+
 class Rva000AD71D
 {
 public:
-	~Rva000AD71D();
+	virtual ~Rva000AD71D();
 };
 
 class Rva000AF146
@@ -112,7 +130,7 @@ void Rva0023A039::clear()
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva00239D7A::~Rva00239D7A();
+		((Rva0023A128 *)p)->Rva0023A128::~Rva0023A128();
 		::operator delete(p);
 	}
 }
@@ -270,7 +288,7 @@ void Rva002D38D1::clear()
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva00527CCE::~Rva00527CCE();
+		((Rva00527827 *)p)->Rva00527827::~Rva00527827();
 		::operator delete(p);
 	}
 }
@@ -342,7 +360,7 @@ void Rva0042D789::clear()
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva00578C43::~Rva00578C43();
+		((StrategicHUD::Palantir *)p)->StrategicHUD::Palantir::~Palantir();
 		::operator delete(p);
 	}
 }
@@ -366,7 +384,7 @@ void Rva0042D87D::clear()
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva0057BD01::~Rva0057BD01();
+		((StrategicHUD::SelectionDetailsUIImpl *)p)->StrategicHUD::SelectionDetailsUIImpl::~SelectionDetailsUIImpl();
 		::operator delete(p);
 	}
 }
@@ -520,7 +538,7 @@ void Rva005287D0::clear()
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva005282BA::~Rva005282BA();
+		((AptInGameSideCommandBar::Impl *)p)->AptInGameSideCommandBar::Impl::~Impl();
 		::operator delete(p);
 	}
 }
@@ -577,7 +595,7 @@ void Rva005786CD::clear()
 class Rva005D3C2B
 {
 public:
-	~Rva005D3C2B();
+	virtual ~Rva005D3C2B();
 };
 
 class Rva00578724
@@ -649,7 +667,7 @@ void Rva005CE21C::clear()
 class Rva005CEFD3
 {
 public:
-	~Rva005CEFD3();
+	virtual ~Rva005CEFD3();
 };
 
 class Rva005CF363
@@ -689,7 +707,7 @@ void Rva005D0ABB::clear()
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva005D07E1::~Rva005D07E1();
+		((Rva005D0C87 *)p)->Rva005D0C87::~Rva005D0C87();
 		::operator delete(p);
 	}
 }
@@ -809,7 +827,7 @@ void Rva005E4B9D::clear()
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva005E4925::~Rva005E4925();
+		((Rva005E4AE2 *)p)->Rva005E4AE2::~Rva005E4AE2();
 		::operator delete(p);
 	}
 }
@@ -865,7 +883,7 @@ void Rva005E6D90::clear()
 class Rva005E7D72
 {
 public:
-	~Rva005E7D72();
+	virtual ~Rva005E7D72();
 };
 
 class Rva005E7FC8
@@ -937,7 +955,7 @@ void Rva005E9E27::clear()
 class Rva005EB2E7
 {
 public:
-	~Rva005EB2E7();
+	virtual ~Rva005EB2E7();
 };
 
 class Rva005EB430
@@ -1033,7 +1051,7 @@ void Rva005EDFF5::clear()
 class Rva005F3FFC
 {
 public:
-	~Rva005F3FFC();
+	virtual ~Rva005F3FFC();
 };
 
 class Rva005F4096
@@ -1295,7 +1313,7 @@ void Rva0023A053::reset(Rva00239D7A *p)
 		m_ptr = p;
 		if (old)
 		{
-			old->Rva00239D7A::~Rva00239D7A();
+			((Rva0023A128 *)old)->Rva0023A128::~Rva0023A128();
 			::operator delete(old);
 		}
 	}
@@ -1465,7 +1483,7 @@ void Rva0042D85A::reset(Rva0057BD01 *p)
 		m_ptr = p;
 		if (old)
 		{
-			old->Rva0057BD01::~Rva0057BD01();
+			((StrategicHUD::SelectionDetailsUIImpl *)old)->StrategicHUD::SelectionDetailsUIImpl::~SelectionDetailsUIImpl();
 			::operator delete(old);
 		}
 	}
@@ -1531,7 +1549,7 @@ void Rva0042D766::reset(Rva00578C43 *p)
 		m_ptr = p;
 		if (old)
 		{
-			old->Rva00578C43::~Rva00578C43();
+			((StrategicHUD::Palantir *)old)->StrategicHUD::Palantir::~Palantir();
 			::operator delete(old);
 		}
 	}
@@ -1554,7 +1572,7 @@ Rva002D38EB::~Rva002D38EB()
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva00527CCE::~Rva00527CCE();
+		((Rva00527827 *)p)->Rva00527827::~Rva00527827();
 		::operator delete(p);
 	}
 }
@@ -1567,7 +1585,7 @@ void Rva002D38EB::reset(Rva00527CCE *p)
 		m_ptr = p;
 		if (old)
 		{
-			old->Rva00527CCE::~Rva00527CCE();
+			((Rva00527827 *)old)->Rva00527827::~Rva00527827();
 			::operator delete(old);
 		}
 	}
@@ -1715,16 +1733,6 @@ Rva005E893E::~Rva005E893E()
 {
 	((Rva005E88EE *)this)->clear();
 }
-
-class AptInGameSideCommandBar
-{
-public:
-	class Impl
-	{
-	public:
-		void Update();
-	};
-};
 
 class Rva002D363E90
 {
