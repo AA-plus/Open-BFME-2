@@ -16,9 +16,24 @@ struct Rva005A6903Obj
 
 struct Rva005A6903Sub
 {
-	void DoX(int idx);
-	void rva005DC070(int idx);
 };
+
+// LINK: the sub-object calls are rowed as PortNegotiationSchema::playerJoin / playerLeave(unsigned short) and the readiness
+// test as int Rva005A6709::rva005A6709() const; the old int-index / bool call shapes stay through member-pointer casts.
+class PortNegotiationSchema
+{
+public:
+	void playerJoin(unsigned short idx);
+	void playerLeave(unsigned short idx);
+};
+typedef void (PortNegotiationSchema::*PortNegotiationIntShape)(int);
+
+class Rva005A6709
+{
+public:
+	int rva005A6709() const;
+};
+typedef bool (Rva005A6709::*Rva005A6709BoolShape)() const;
 
 // Retail resets an eight-byte value with a dword and a ushort member;
 // the last two bytes are padding, copied with the member representation.
@@ -47,7 +62,6 @@ struct NAT
 	int m_94C;
 	int m_950;
 
-	bool rva005A6709();
 	void processPlayerJoin(int idx);
 	void processPlayerLeave(int idx);
 };
@@ -60,12 +74,12 @@ void NAT::processPlayerJoin(int idx)
 {
 	if ((unsigned short)idx >= 8)
 		return;
-	m_28.DoX(idx);
+	(((PortNegotiationSchema *)&m_28)->*reinterpret_cast<PortNegotiationIntShape>(&PortNegotiationSchema::playerJoin))(idx);
 	idx = (unsigned short)idx;
 	Rva005A6903Obj *o = m_8[idx];
 	Rva005A695FValue *p = m_90C[idx];
 	p->value00 = o->m_38;
-	if (!rva005A6709())
+	if (!(((Rva005A6709 *)this)->*reinterpret_cast<Rva005A6709BoolShape>(&Rva005A6709::rva005A6709))())
 		return;
 	if (idx == m_14) {
 		m_10 = 1;
@@ -90,7 +104,7 @@ void NAT::processPlayerLeave(int idx)
 		m_94C = 0;
 		m_950 = 0;
 	}
-	m_28.rva005DC070(idx);
+	(((PortNegotiationSchema *)&m_28)->*reinterpret_cast<PortNegotiationIntShape>(&PortNegotiationSchema::playerLeave))(idx);
 	m_8E4[slot] = 0;
 	m_8EC[slot] = 0;
 	*m_90C[slot] = Rva005A695FValue();
