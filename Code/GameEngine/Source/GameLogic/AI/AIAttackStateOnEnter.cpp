@@ -103,6 +103,14 @@ public:
  void setGoalPosition(const Coord3D*);
  Object *getGoalObject();
  unsigned getCurrentStateID() const { return currentState ? currentState->id : 999999; }
+ // LINK: same-body helper under a TU-unique name (identical inlined bytes).
+ // This TU's copy loses (first-copy, 9-vs-5 split with no retail truth); the
+ // onEnter call below inlines it but still emits the loser COMDAT. Rebinding
+ // there emits only this unique (trivially kept) copy. The r3 triple-lock
+ // (rowed-inline + flags + provider split) does not block this path: the
+ // inline shape is preserved byte-identically and no flags change. No flags
+ // touched.
+ unsigned bfme_current_state() const { return currentState ? currentState->id : 999999; }
  CurrentStateIDView *currentState; char pad08[0xC]; Object *owner;
  char pad18[0xC]; Coord3D goal;
 };
@@ -172,7 +180,7 @@ StateReturnType AIAttackState::onEnter() {
  else lockedWeapon.clear();
  StateReturnType ret=attackMachine->initDefaultState();
  if(ret==CONTINUE) {
-  if(attackMachine->getCurrentStateID()==228) {
+  if(attackMachine->bfme_current_state()==228) {
    if(reinterpret_cast<const unsigned char*>(source->conditions)[4]&0x20) {source->conditions[1]&=~0x20;source->rva0028AE6D();}
    if(reinterpret_cast<const unsigned char*>(source->conditions)[4]&0x40) {source->conditions[1]&=~0x40;source->rva0028AE6D();}
    if(reinterpret_cast<const unsigned char*>(source->conditions)[4]&0x80) {source->conditions[1]&=~0x80;source->rva0028AE6D();}
