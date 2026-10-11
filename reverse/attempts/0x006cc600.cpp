@@ -31,3 +31,18 @@ void Rva006CC600(const char *path,char *suffix)
  g_bfmeAptImportAtE176FC = 0;
  g_bfmeAptLinkerAtE176F8->Load(EAStringC(target),EAStringC(suffix));
 }
+
+// --- 2026-10-11 LK8r4 appendix (independent convergence; yielding to LK7) ---
+// LK8 rebuilt a V1 shape from retail bytes and confirms LK7's residues (1)
+// and (3): the [esp0-20] dword (writes 0, 1, esp; never read) is real and is
+// the only frame delta vs a natural /O2 lowering. Firm additions: (a) all
+// four small callees are callee-cleanup (ctor/copy/!= ret4, proven from
+// their epilogs), so frame math must model ret4 (else slots drift); with it,
+// ctor1 reads [esp0+8] = the SECOND C arg (suffix) and ctor3 reads [esp0+4]
+// = the FIRST (path), resolving LK7 residue (2): sTarget is the suffix, the
+// path temp reuses sImport's dead slot; (b) Load@0x6D1F80 ends ret8 (two
+// pointer args); the copy sources &sTarget and the pushed Load arg is
+// &pathTemp, i.e. the by-value Load param is FIRST despite the (ref,val)
+// header guess. LK8 banked a 0.45->0.7 partial under these findings, reverted
+// its Code/ shape, and leaves the last 15B to LK7's lane (no competing
+// claim). Honest open item stays the [esp0-20] dword idiom.
