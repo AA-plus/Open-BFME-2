@@ -17,6 +17,11 @@
 
 struct crateCreationEntry
 {
+	// LINK: the implicit default ctor's COMDAT loses to the first-in-order copy; the one
+	// local uses a TU-unique no-init ctor with the same member init. No flags touched.
+	struct BfmeNoInitCrate {};
+	crateCreationEntry(BfmeNoInitCrate) : crateName() {}
+	crateCreationEntry() {}
 	AsciiString crateName;
 	float crateChance;
 };
@@ -73,7 +78,7 @@ void CrateTemplate::parseCrateCreationEntry(INI *ini, void *instance, void *, co
 		throw INIException(3, "Floating point value expected instead of '%s'", token);
 	}
 
-	crateCreationEntry newEntry;
+	crateCreationEntry newEntry((crateCreationEntry::BfmeNoInitCrate()));
 	newEntry.crateName = crateName;
 	newEntry.crateChance = crateValue;
 
