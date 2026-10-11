@@ -92,7 +92,6 @@ class Rva00577914
 {
 public:
 	void rva00577914();
-	void rva0057792E(void *unused);
 private:
 	int m_00;
 	int m_04;
@@ -126,10 +125,25 @@ Rva000AD71D::Rva000AD71D(EmitVtableTag *)
 {
 }
 
-// ?rva0057792E@Rva00577914@@QAEXPAX@Z @0x0057792E 8B, directly after
-// rva00577914: a one-argument callback (its address is stored as data) that
-// ignores the argument and runs rva00577914 (call, ret 4). Address-named.
-void Rva00577914::rva0057792E(void *)
+// ?rva0057792E@ButtonShell@Impl@AptRadialMenu@@QAEXPBD@Z @0x0057792E 8B,
+// directly after rva00577914: the frame-unloaded Apt callback the ButtonShell
+// ctor 0x00577FE2 binds on itself by address. It ignores the argument and runs
+// rva00577914 on the same object (call, ret 4).
+class AptRadialMenu
 {
-	rva00577914();
+public:
+	class Impl
+	{
+	public:
+		class ButtonShell
+		{
+		public:
+			void rva0057792E(const char *unused);
+		};
+	};
+};
+
+void AptRadialMenu::Impl::ButtonShell::rva0057792E(const char *)
+{
+	((Rva00577914 *)this)->rva00577914();
 }
