@@ -45,12 +45,7 @@ enum KindOfType
 {
 	KINDOF_FIRST = 0
 };
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 class Player;
 class Object
 {
@@ -183,6 +178,26 @@ public:
 	float m_radius;
 	const Coord3D *m_centre;
 };
+// Complete native4ACDAC..4ACE11/101B, range-filter vtable C54EB4 slot1.
+// Target independently proves Object position38, radius8 and centreC.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+bool Rva004ACDACFilter::allow(Object *obj)
+{
+    const Coord3D *p = obj->getPosition();
+    float x = p->x, y = p->y, z = p->z;
+    _ReadWriteBarrier();
+    const Coord3D *c = m_centre;
+    float cx = c->x, cy = c->y, cz = c->z;
+    _ReadWriteBarrier();
+    Coord3D delta;
+    delta.x = x - cx;
+    delta.y = y - cy;
+    delta.z = z - cz;
+    if (delta.GetLength2D() > m_radius) return true;
+    return false;
+}
+
 #pragma comment(linker, "/alternatename:?getPlayerMask@Rva000421C8@@UAEHXZ=?Get_File_Handle@FileClass@@UAEPAXXZ")
 struct BfmeWideResult
 {
