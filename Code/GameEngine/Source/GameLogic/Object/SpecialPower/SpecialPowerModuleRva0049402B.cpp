@@ -85,6 +85,12 @@ public:
 	{
 		return (m_kindOf[t >> 3] & (1 << (t & 7))) != 0;
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the isKindOf copy loses to the
+	// kept copy. No flags touched.
+	__forceinline bool bfme_isKindOf_spm(KindOfType t) const
+	{
+		return (m_kindOf[t >> 3] & (1 << (t & 7))) != 0;
+	}
 	char m_pad[0x108];
 	unsigned char m_kindOf[0x20];
 };
@@ -224,7 +230,7 @@ void SpecialPowerModule::rva0049402B(BfmeWideResult *iter)
 	Object *obj;
 	while ((obj = iter->next()) != 0)
 	{
-		if (obj->getTemplate()->isKindOf(KINDOF_47))
+		if (obj->getTemplate()->bfme_isKindOf_spm(KINDOF_47))
 			continue;
 		if (!modData->m_includeSelf && obj == source)
 			continue;
@@ -282,6 +288,6 @@ void SpecialPowerModule::rva00493EA7(Object *obj, int frame, const BitFlags<11> 
 			FXList::doFXObj(modData->m_fx4C, obj, 0);
 	}
 
-	if (modData->m_fx28 && !obj->getTemplate()->isKindOf(KINDOF_109))
+	if (modData->m_fx28 && !obj->getTemplate()->bfme_isKindOf_spm(KINDOF_109))
 		FXList::doFXObj(modData->m_fx28, obj, 0);
 }
