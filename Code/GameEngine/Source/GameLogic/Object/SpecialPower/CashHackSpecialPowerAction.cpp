@@ -210,6 +210,4 @@ void CashHackSpecialPower::doSpecialPowerAtObject(Object *victim,unsigned option
  }
 }
 
-// ZH GameClient/Color.h ARGB helper; this TU now owns its existing31B row.
-int GameMakeColor(unsigned char red,unsigned char green,unsigned char blue,unsigned char alpha)
-{ return (((alpha << 8) | red) << 8 | green) << 8 | blue; }
+// The existing ARGB helper row is owned by the retail inline copy in GameState.
