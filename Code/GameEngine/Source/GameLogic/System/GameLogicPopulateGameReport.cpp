@@ -119,16 +119,42 @@ extern Bool TheXPartitionCRC;
 extern Bool TheXCollisionCRC;
 extern Bool TheXShroudCRC;
 extern Bool TheXTaintCRC;
-extern Bool TheXTerrainLogicCRC;
+// The five flags and two intervals this unit still did not own, all now bound to
+// the objects retail's own bytes name (the rowed body below loads each of them;
+// see the references at 0x2477E0, 0x247834, 0x247887/8AE and 0x2478AE in
+// retail's image):
+//
+//   TheXTerrainLogicCRC  VA 0x00E02D82, RVA 0x00A02D82 - one of the run of -x*CRC
+//     flag bytes the report prints. Past .data's raw end (file offset
+//     0x009DCC08), so retail's image loads it zero: a tentative definition, for
+//     the same reason as g_Va00DB6218 (an explicit "= 0" would let MSVC fold
+//     this guard).
+//   TheVerifyClientCRC   VA 0x00E02D85 - the same byte native_desync_report.cpp
+//     already owns and rowed as `unsigned char BfmeClientCRCCheckEnabled`
+//     (zero-filled .bss). Spelled that way here so the report's guard reads the
+//     one object retail has, rather than a second copy of it.
+//   TheDeepCRC           VA 0x00E02D86 - the byte Rva0023E7D9Clear.cpp defines
+//     and rows under retail's own address-derived name g_Rva00A02D86 (zero-
+//     filled .bss) and BfmeSetupAPB.cpp reaches as g_bfmeOnAPB. Read through
+//     that name here too: two distinct symbols cannot share an address, and
+//     the existing definition keeps its name while another unit still aliases
+//     it, so this borrows a name rather than inventing one.
+//   TheDebugCRCFromFrame / UntilFrame  VA 0x00DC1164 / 0x00DC1168 - retail's own
+//     two words, both -1, inside .data's raw file bytes; the rowed body compares
+//     each against -1 and skips the argument when they match, which is the
+//     default -1/-1 (off) pair.
 extern Bool TheXPlayerCRC;
 extern Bool TheXAICRC;
 extern Bool TheXLWCRC;
-extern Bool TheVerifyClientCRC;
-extern Bool TheDeepCRC;
+extern Bool TheXTerrainLogicCRC;
+Bool TheXTerrainLogicCRC;
+extern unsigned char BfmeClientCRCCheckEnabled;
+#define TheVerifyClientCRC BfmeClientCRCCheckEnabled
+extern unsigned char g_Rva00A02D86;
 extern Bool TheLiteCRC;
 extern Bool TheBinaryDeepCRC;
-extern Int TheDebugCRCFromFrame;
-extern Int TheDebugCRCUntilFrame;
+Int TheDebugCRCFromFrame = -1;
+Int TheDebugCRCUntilFrame = -1;
 // Native RVA 0x009BC800: mutable four-byte interval initially 100.
 // The command-line parser writes it and replay/game-info consumers read it.
 Int NET_CRC_INTERVAL = 100;
@@ -235,7 +261,7 @@ void GameLogic::bfmePopulateGameReport(GameInfo *game, Int *localSlot)
 	if (TheXAICRC) m_commandLineArguments.concat(" -xAICRC");
 	if (TheXLWCRC) m_commandLineArguments.concat(" -xLWCRC");
 	if (TheVerifyClientCRC) m_commandLineArguments.concat(" -verifyClientCRC");
-	if (TheDeepCRC) m_commandLineArguments.concat(" -deepCRC");
+	if (g_Rva00A02D86) m_commandLineArguments.concat(" -deepCRC");
 	if (TheLiteCRC) m_commandLineArguments.concat(" -liteCRC");
 	if (TheBinaryDeepCRC) m_commandLineArguments.concat(" -binaryDeepCRC");
 	if (TheDebugCRCFromFrame != -1)
