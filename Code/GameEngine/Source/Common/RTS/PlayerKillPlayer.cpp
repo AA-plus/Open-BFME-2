@@ -49,11 +49,13 @@ class MemoryPoolObject {
   public:
     virtual ~MemoryPoolObject();
 };
+template<class T> class DLINK_ITERATOR;
 class Team : public MemoryPoolObject, public Snapshot {
   public:
     Team *dlink_next_TeamInstanceList() const;
     void rva003A1C3A(bool);
     void killTeam();
+    DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
 };
 template <class T> class DLINK_ITERATOR {
     T *p;
@@ -67,6 +69,15 @@ template <class T> class DLINK_ITERATOR {
         if (p)
             p = (p->*next)();
     }
+};
+class Object;
+template<> class DLINK_ITERATOR<Object> {
+ Object *p;
+ unsigned char state[20];
+ public:
+ void advance();
+ bool done()const {return p==0;}
+ Object *cur()const {return p;}
 };
 class TeamPrototype {
   public:
@@ -136,6 +147,7 @@ class Rva002AB5C7Player {
     char pad6E4[0x734 - 0x6E4];
     bool dead;
     void rva002AB44A();
+    void rva002AB5C7();
 };
 void Rva002AB5C7Player::rva002AB44A() {
     SkirmishAI *brain = (SkirmishAI *)g_00DFEEF8->rva002A8AB1(this);
@@ -179,4 +191,57 @@ void Rva002AB5C7Player::rva002AB44A() {
                 other->score.rva0039B6A8(begin[count - 1].value * TheWritableGlobalData->factor);
         }
     }
+}
+
+class Rva00A027B8
+{
+public:
+	virtual void slot00();
+	virtual void slot01();
+	virtual void slot02();
+	virtual void slot03();
+	virtual void slot04();
+	virtual void slot05();
+	virtual void slot06();
+	virtual void slot07();
+	virtual void slot08();
+	virtual void slot09();
+	virtual void slot10();
+	virtual void slot11();
+	virtual void slot12();
+	virtual void slot13();
+	virtual void slot14();
+	virtual void slot15();
+	virtual void slot16();
+	virtual void slot17();
+	virtual void slot18();
+	virtual void slot19();
+	virtual void slot20();
+	virtual void slot21();
+	virtual void slot22();
+	virtual void slot23();
+	virtual void slot24();
+	virtual void slot25();
+	virtual void slot26(void *arg);
+};
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
+
+// Complete native2AB5C7..2AB63D (118B, RET0), WB C1A2C0 independently
+// walks the Player prototype list and each Team's member list, dispatching
+// TheBuildAssistant at VA E027B8 slot26 for each current Object. The
+// original player method name and virtual-slot role remain unknown. The already rowed preceding player-kill body
+// proves prototype32C/head334; providers263864/263526 establish the 24-byte
+// Object iterator. Team's owned5C4AF5 callback uses the existing eight-byte
+// multiple-inheritance member pointer. Retaining the donor's explicit team
+// guard closes the native top-tested loop; no assembly or new pins.
+void Rva002AB5C7Player::rva002AB5C7() {
+ for(PlayerTeamNode *node=teams->next;node!=teams;node=node->next) {
+  for(DLINK_ITERATOR<Team> iter=node->value->iterate_TeamInstanceList();!iter.done();iter.advance()) {
+   Team *team=iter.cur();
+   if(!team)continue;
+   for(DLINK_ITERATOR<Object> objects=team->iterate_TeamMemberList();!objects.done();objects.advance())
+    ((Rva00A027B8 *)TheBuildAssistant)->slot26(objects.cur());
+  }
+ }
 }
