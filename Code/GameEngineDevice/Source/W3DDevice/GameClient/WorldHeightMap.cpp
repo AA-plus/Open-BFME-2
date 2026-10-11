@@ -2213,30 +2213,7 @@ void WorldHeightMap::getTerrainColorAt(Real x, Real y, RGBColor *pColor)
 	}
 }	
 
-// ?getTerrainNameAt@WorldHeightMap@@ present-unmatched
-AsciiString WorldHeightMap::getTerrainNameAt(Real x, Real y)
-{
-	Int xIndex = REAL_TO_INT_FLOOR(x/MAP_XY_FACTOR);
-	Int yIndex = REAL_TO_INT_FLOOR(y/MAP_XY_FACTOR);
-	xIndex += m_borderSize;
-	yIndex += m_borderSize;
-	if (xIndex<0) xIndex = 0;
-	if (yIndex<0) yIndex = 0;
-	if (xIndex >= m_width) xIndex = m_width-1;
-	if (yIndex >= m_height) yIndex = m_height-1;
-	Int ndx = (yIndex*m_width)+xIndex;
-	if (ndx<0 || ndx >= this->m_dataSize) return AsciiString::TheEmptyString;
-	Int tileNdx = m_tileNdxes[ndx];
-	tileNdx = tileNdx>>2;	 // We pack 4 grids into a tile.
-
-	Int i;
-	for (i=0; i<this->m_numTextureClasses; i++) {
-		if (tileNdx >= m_textureClasses[i].firstTile && tileNdx < m_textureClasses[i].firstTile + m_textureClasses[i].numTiles) {
-			return(m_textureClasses[i].name);
-		}
-	}
-	return AsciiString::TheEmptyString;
-}	
+// WorldHeightMap::getTerrainNameAt (0x000AEC4E) is rowed in WorldHeightMapGetTerrainNameAt.cpp; a second definition here would not link.	
 
 
 // The ledger names this buffer _s_buffer (0x009E81C8); the six-argument
