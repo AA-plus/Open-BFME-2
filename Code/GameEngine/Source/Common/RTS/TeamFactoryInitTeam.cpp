@@ -39,6 +39,8 @@ class PlayerList
 public:
 	Player *findPlayerWithNameKey(NameKeyType key);
 	Player *getNeutralPlayer() { return m_players[0]; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getNeutralPlayer copy loses to the first-in-order copy. No flags touched.
+	Player *bfme_getNeutralPlayer_3c6a8() { return m_players[0]; }
 
 private:
 	unsigned char m_pad00[0x18];
@@ -63,11 +65,17 @@ private:
 	unsigned char m_pad18[0x338 - 0x18];
 };
 
+// LINK: 0x39FE6C is rowed as Rva0039FE6COwner::findPrototype (TeamFactoryFindPrototype.cpp).
+class Rva0039FE6COwner
+{
+public:
+	TeamPrototype *findPrototype(const AsciiString &owner, const AsciiString &name);
+};
+
 class TeamFactory
 {
 public:
 	void initTeam(const AsciiString &name, const AsciiString &owner, bool isSingleton, Dict *d);
-	TeamPrototype *findTeamPrototype(const AsciiString &owner, const AsciiString &name);
 	Team *createInactiveTeam(const AsciiString &owner, const AsciiString &name);
 
 private:
@@ -77,11 +85,11 @@ private:
 
 void TeamFactory::initTeam(const AsciiString &name, const AsciiString &owner, bool isSingleton, Dict *d)
 {
-	if (findTeamPrototype(owner, name) != 0)
+	if (((Rva0039FE6COwner *)this)->findPrototype(owner, name) != 0)
 		return;
 	Player *pOwner = ThePlayerList->findPlayerWithNameKey(TheNameKeyGenerator->nameToKey(owner));
 	if (!pOwner)
-		pOwner = ThePlayerList->getNeutralPlayer();
+		pOwner = ThePlayerList->bfme_getNeutralPlayer_3c6a8();
 	TeamPrototype *tp = new TeamPrototype(this, owner, name, pOwner, isSingleton, d, ++m_uniqueTeamPrototypeID);
 	if (isSingleton)
 		createInactiveTeam(tp->getOwnerName(), tp->getName());
