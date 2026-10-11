@@ -159,11 +159,16 @@ struct HordeBannerCarrierUpdate
 	BannerCarrierUpdateModuleData *m_moduleData;	// +0x04
 };
 
-class HordeContain
-{
-public:
-	HordeBannerCarrierUpdate *rva00468E26(Object *obj);
+class HordeContain {};
+class Module;
+Module *__stdcall Rva00468E26Get(Object *);
+// The native BannerCarrierUpdate getter ignores ambientECX and returns the
+// Module* from Object::findModule. Retain the witnessed caller receiver.
+union NativeBannerUpdateCall {
+ Module *(__stdcall *target)(Object *);
+ Module *(HordeContain::*member)(Object *);
 };
+typedef char BannerUpdatePointerWidth[sizeof(NativeBannerUpdateCall)==4 ? 1 : -1];
 
 class Rva00469B73
 {
@@ -288,7 +293,8 @@ void Rva0046E740::rva0046CF21()
 
 	m_iface11C.vf74(newObj, obj, true);
 	((Rva00469B73 *)this)->rva00469B73(newObj);
-	HordeBannerCarrierUpdate *update = ((HordeContain *)this)->rva00468E26(newObj);
+	NativeBannerUpdateCall getter={&Rva00468E26Get};
+	HordeBannerCarrierUpdate *update = (HordeBannerCarrierUpdate *)(((HordeContain *)this)->*getter.member)(newObj);
 	if (update)
 		m_countdown = update->m_moduleData->m_countdown;
 }
