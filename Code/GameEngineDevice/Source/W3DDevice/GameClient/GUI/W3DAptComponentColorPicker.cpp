@@ -15,7 +15,18 @@ extern "C" __declspec(dllimport) int __cdecl sscanf(const char*,const char*,...)
 extern "C" __declspec(dllimport) int __cdecl _snprintf(char*,unsigned int,const char*,...);
 class Image {public:char p24[0x24];int width,height;};
 class ImageCollection {public:const Image *findImageByName(const AsciiString&);};
-extern ImageCollection *TheImageCollection;
+// Retail's image-collection singleton, VA 0x00DFF078 (RVA 0x009FF078): the rowed
+// Init body loads that address and calls findImageByName on it (retail
+// 0x007415DA `mov 0xdff078,%ecx; call ImageCollection::findImageByName`). RVA
+// 0x009FF078 is past .data's raw end (0x009DE008) but inside its virtual size,
+// so retail's image holds null -- the loader installs the collection the game
+// creates, which no rowed body does. That address is already owned under the
+// name ?TheMappedImageCollection@@3PAVImageCollection@@A (data_ledger
+// 0x009FF078, 158 references) and FamilyTailDtors1DBAC3.cpp defines it, so this
+// unit reads the same object instead of defining a second one: the
+// address-derived spelling ?TheImageCollection@@3PAVImageCollection@@A is a
+// duplicate strong definition of one retail object, not a missing global.
+extern ImageCollection *TheMappedImageCollection;
 bool Rva004128F0GetParam(const char*,const char*,AsciiString&);
 int Rva000A8F58Get();int Rva000A8F5EGet();
 struct ColorFloatPoint {float x,y;};
@@ -43,7 +54,7 @@ void W3DAptComponentColorPicker::Init(const AsciiString&name,const char*params) 
  Rva004128F0GetParam(params,"_path",owner);
  AsciiString imageName;
  Rva004128F0GetParam(params,"_imageName",imageName);
- image=TheImageCollection->findImageByName(imageName);
+ image=TheMappedImageCollection->findImageByName(imageName);
  if(!image)return;
  cursorX=image->width;cursorY=image->height;
  AsciiString callbackName(name);callbackName.concat("Cursor");

@@ -16,7 +16,13 @@ typedef int Int;
 typedef bool Bool;
 
 class ShaderClass { public: unsigned int ShaderBits; };
-extern ShaderClass g_00DB4248;
+// Retail's player-colour shader, the W3DScene.cpp file static at VA 0x00DB4248
+// (RVA 0x009B4248, raw .data) holding the bit set 0x00105817: the rowed body
+// pushes that address straight into DX8Wrapper::Set_Shader (retail 0x0006EB7F,
+// `push $0xdb4248; call DX8Wrapper::Set_Shader`) and the callee reads only the
+// first dword (`mov (%esi),%eax`), so the object is this one word. Only this
+// split-out unit reads it, so the definition lives here.
+ShaderClass g_00DB4248 = { 0x00105817u };
 
 class VertexMaterialClass
 {
