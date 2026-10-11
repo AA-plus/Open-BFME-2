@@ -143,7 +143,13 @@ class AptAnimationPoolData {public:void tickIntervalTimers(int);void rva006E6540
 class Rva006F7A30 {public:void rva006F7A30();};
 class Rva006FB860 {public:void rva006FB910();};
 class AptLinker {public:void rva006D17F0();};
-extern AptLinker *g_bfmeAptLinkerAtE176F8;
+// VA 0x00E176F8 (RVA 0x00A176F8): the Apt linker this unit creates in its
+// first tick (g_bfmeAptLinkerAtE176F8 = new Rva008947A0Owner below), so the
+// definition lives here, in the assigning unit, and is zero-initialised: four
+// units read the object through the name and retail only ever holds the
+// pointer the tick stores. Until now nothing defined it, which was the sole
+// unresolved name family-2's largest row carried.
+AptLinker *g_bfmeAptLinkerAtE176F8;
 inline void tickAssert(int good,const char *test,const char *file,int line) {
  if(!good){g_bfmeAptAssertAtE17734(test,file,line);if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();}
 }
