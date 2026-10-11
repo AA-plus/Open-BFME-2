@@ -30,6 +30,12 @@ public:
 	{
 		if (--m_refs == 0) Delete_This();
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the
+	// original copy loses to the first-in-order copy. No flags touched.
+	void bfme_release_ref_hda(void)
+	{
+		if (--m_refs == 0) Delete_This();
+	}
 };
 
 // Opaque inherited virtuals retain target primary-table indices. Names are
@@ -139,7 +145,7 @@ void HLodClass::Removed_Added_Sub_Objects_From_Bones(void)
 			model->Notify_Removed(Scene);
 		}
 
-		model->Release_Ref();
+		model->bfme_release_ref_hda();
 	}
 
 	AdditionalModels.Delete_All();

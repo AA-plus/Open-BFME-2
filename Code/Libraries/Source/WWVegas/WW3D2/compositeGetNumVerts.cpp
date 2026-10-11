@@ -27,6 +27,13 @@ public:
 		if (--NumRefs == 0)
 			Delete_This();
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the
+	// original copy loses to the first-in-order copy. No flags touched.
+	void bfme_release_ref_cgn()
+	{
+		if (--NumRefs == 0)
+			Delete_This();
+	}
 
 protected:
 	int NumRefs;							// +0x04
@@ -46,7 +53,7 @@ int CompositeRenderObjClass::Get_Num_Verts() const
 	{
 		RenderObjClass *robj = Get_Sub_Object(ni);
 		count += robj->Get_Num_Verts();
-		robj->Release_Ref();
+		robj->bfme_release_ref_cgn();
 	}
 	return count;
 }
