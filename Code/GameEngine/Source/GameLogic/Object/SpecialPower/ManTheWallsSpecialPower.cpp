@@ -82,8 +82,8 @@ public:
 struct Rva004C734DElement
 {
 	Object *owner;
-	BfmeVecAV members;
-	void *storageEnd;
+	_STL::vector<Object *> members;
+ Rva004C734DElement(const Rva004C734DElement &);
 };
 struct ManTheWallsObjectPositionView
 {
@@ -149,6 +149,8 @@ private:
 
 // vftable 0x00BC2908, allow 0x002610DE: accept what has every kind of the
 // first mask and none of the second.
+class Rva0026119DFilter : public Rva000421C8 { public: virtual bool allow(Object *); };
+class Rva002611BFFilter : public Rva000421C8 { public: Rva002611BFFilter(const Object *o):m_obj(o) {} virtual bool allow(Object *); const Object *m_obj; };
 class Rva0004584D : public Rva000421C8
 {
 public:
@@ -213,14 +215,12 @@ template<> inline __declspec(noinline) _Vector_base<Object *,allocator<Object *>
 template<> inline void allocator<Object *>::deallocate(Object **p,unsigned int) const { if(p) Rva00030830FreeAllocation(p); }
 template<> void vector<Object *,allocator<Object *> >::push_back(Object * const &);
 }
-// Native entries own the Object-vector buffer at +4. Their complete15B
-// teardown and the25B stride16 loop reproduce the existing retail folds.
-// Original record name remains unknown; this is the push_back provider's view.
 namespace _STL {
+template<> inline __declspec(noinline) _Vector_base<Rva004C7878Record,allocator<Rva004C7878Record> >::_Vector_base(const allocator<Rva004C7878Record> &a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0) {}
 template<> inline void allocator<Rva004C7878Record>::deallocate(Rva004C7878Record *p,unsigned int) const { if(p) Rva00030830FreeAllocation(p); }
 template<> inline __declspec(noinline) void _Destroy<Rva004C7878Record *>(Rva004C7878Record *first,Rva004C7878Record *last) { for(;first!=last;++first) first->~Rva004C7878Record(); }
+template<> inline __declspec(noinline) vector<Rva004C7878Record,allocator<Rva004C7878Record> >::~vector() { _Destroy(_M_start,_M_finish); }
 }
-template _STL::vector<Rva004C7878Record>::~vector();
 class ManTheWallsSpecialPower : public SpecialPowerModule
 {
 public:
@@ -269,7 +269,7 @@ void ManTheWallsSpecialPower::rva004C7167(Rva004C734DElement *entry)
 	AIGroup *group = TheAI->createGroup();
 	if (group)
 	{
-		rva004C70AD(&entry->members, group);
+		rva004C70AD((BfmeVecAV *)&entry->members, group);
 		Rva00372571Params params;
 		params.m_formationType = -1;
 		params.m_pos = &((ManTheWallsObjectPositionView *)entry->owner)->m_position;
@@ -362,4 +362,36 @@ bool ManTheWallsSpecialPower::rva004C78AF(Rva004C78AFList *out)
 		out->push_back(*(const Rva004C7878Record *)&entry);
 	}
 	return out->size() > 0;
+}
+
+// Native4C799B..4C7AEB (336B RET4), WB1268A50. The saved receiver is
+// secondary+10; subtract10 for primary helpers and read its owner at-8.
+// No original virtual-slot or argument identity is inferred. This call view
+// avoids claiming the earlier base-view order describes the full class.
+// Gather kind115 entries, assign live kind109 hits (relationship4; reject
+// the owner), and issue each nonempty entry's group command. Native copy29,
+// sixteen-byte iteration, vector buffers and every cleanup are independent
+// target observations; the three cleanup folds have whole-body/relocation/EH
+// pin_admission proof. The argument is unused in both native and this body.
+class ManTheWallsSpecialPowerSlotView {
+public:
+ void rva004C799B(int unused);
+};
+void ManTheWallsSpecialPowerSlotView::rva004C799B(int unused)
+{
+ Rva004C78AFList entries;
+ ManTheWallsSpecialPower *primary=(ManTheWallsSpecialPower *)((char *)this-0x10);
+ if(primary->rva004C78AF(&entries)) {
+  Object *owner=*(Object **)((char *)this-8);
+  BfmeResultA hits=((BfmeResultForwardB *)ThePartitionManager)->bfmeForwardResultB((int)
+   Rva00260EB1Filter(owner,4,false).link(&Rva0026119DFilter())->link(
+    Rva002611BFFilter(owner).link(&Rva0004584D(
+     *(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0,109),
+     *(const BfmeFixedStorage0004543D *)&KINDOFMASK_NONE))));
+  primary->rva004C7734((Rva004C7621Range *)&entries,(BfmeWideResult *)&hits);
+  for(Rva004C734DElement *i=(Rva004C734DElement *)entries.begin();i!=(Rva004C734DElement *)entries.end();++i) {
+   Rva004C734DElement entry(*i);
+   if(entry.members.size()>0) primary->rva004C7167(&entry);
+  }
+ }
 }
