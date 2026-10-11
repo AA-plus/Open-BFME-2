@@ -29,6 +29,7 @@ namespace _STL { void __cdecl free(void *block); }
 #define free _STL::free
 #include <map>
 #include <list>
+#include <vector>
 #include <string>
 
 // _List_iterator comparisons otherwise instantiate the base-class
@@ -66,8 +67,9 @@ public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-    virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v12(); virtual void v13();
     virtual UnicodeString fetch(const char *,bool *exists=0);
+    virtual UnicodeString fetch(const AsciiString &,bool *exists=0);
 };
 extern GameTextInterface *TheGameText;
 class UserPreferences { public: virtual ~UserPreferences();
@@ -76,6 +78,7 @@ class UserPreferences { public: virtual ~UserPreferences();
 class GameSpyMiscPreferences: public UserPreferences {
 public: GameSpyMiscPreferences(); virtual ~GameSpyMiscPreferences();
     int rva00559782();
+    int rva005599C8(); void rva005597CB(int);
     unsigned char rest[0x10];
 };
 class Rva00222A8BTarget { public:
@@ -87,7 +90,7 @@ class Rva0056DCBF { public: void rva0056DCBF(bool); };
 struct AptOnlineLoginOwner { unsigned char pad[0x274]; void *movie; };
 class GameWindow { public: void *winGetUserData(); };
 // The country callback reads only this ledger-owned first word.
-extern int g_00DB9198;
+extern int GameSpyColor[];
 AsciiString GetRegistryLanguage();
 int GadgetListBoxAddEntryText(GameWindow *,UnicodeString,int,int,int,bool);
 void GadgetListBoxSetItemData(GameWindow *listbox, void *data, int row, int column);
@@ -158,7 +161,7 @@ class PingerInterface { public:
     virtual void endThreads()=0;
     virtual bool areThreadsRunning()=0;
     virtual void addRequest(const PingRequest &)=0;
-    virtual void slot14();virtual void slot18();virtual void slot1C();
+    virtual void slot14();virtual void slot18();virtual bool getResponse(struct LoginPingResponse &);
     virtual bool arePingsInProgress();virtual void slot24();virtual void slot28();
     virtual AsciiString getPingString(int);
 };
@@ -192,11 +195,13 @@ class OptionPreferences { public:
     LoginPreferenceMap settings;AsciiString filename;
 };
 class PSPlayerAllStats { public:
-    PSPlayerAllStats(const PSPlayerAllStats &);~PSPlayerAllStats();
+    PSPlayerAllStats(int=0); PSPlayerAllStats(const PSPlayerAllStats &);~PSPlayerAllStats();
+    PSPlayerAllStats &operator=(const PSPlayerAllStats &);
+    void rva00552E9E(int);
     void setID(int);
-    // 0x548 native extent independently corroborated by the recovered
-    // PersistentStorageThread provider. No fields reconstructed here.
-    unsigned opaque[0x548/4];
+    // Native PersistentStorageThread providers establish the 0x548 extent;
+    // the response pump reads the id/locale prefix at +0/+4 only.
+    int id,locale; unsigned opaque[(0x548-8)/4];
 };
 // The stats queue interface, viewed only for its static cached-stats reader
 // (PersistentStorageThread.cpp, retail 0x00556DFF).
@@ -242,17 +247,17 @@ class GameSpyInfoInterface { public:
  virtual void slot64();
  virtual void slot68();
  virtual void slot6C();
- virtual void slot70();
+ virtual void setLocalName(AsciiString);
  virtual void slot74();
- virtual void slot78();
+ virtual void setLocalProfileID(int);
  virtual int getLocalProfileID();
- virtual void slot80();
+ virtual AsciiString getLocalEmail();
 
  virtual void setLocalEmail(AsciiString);
- virtual void slot88();
+ virtual AsciiString getLocalPassword();
  virtual void setLocalPassword(AsciiString);
  virtual void setLocalBaseName(AsciiString);
- virtual void slot94();virtual void setCachedLocalPlayerStats(PSPlayerAllStats);
+ virtual AsciiString getLocalBaseName();virtual void setCachedLocalPlayerStats(PSPlayerAllStats);
  virtual void slot9C();
  virtual void slotA0();
  virtual void slotA4();
@@ -281,10 +286,37 @@ class GameSpyInfoInterface { public:
  virtual void slot100();
  virtual void slot104();
  virtual void slot108();
- virtual void slot10C();
+ virtual const AsciiString &getMOTD();
  virtual void slot110();
- virtual void slot114();
+ virtual const AsciiString &getConfig();
  virtual void setPingString(const AsciiString &);
+ virtual void slot11c();
+ virtual void slot120();
+ virtual void slot124();
+ virtual void slot128();
+ virtual void slot12c();
+ virtual void slot130();
+ virtual void slot134();
+ virtual void slot138();
+ virtual void loadSavedIgnoreList();
+ virtual void slot140();
+ virtual void slot144();
+ virtual void slot148();
+ virtual void slot14c();
+ virtual void setLocalIPs(unsigned,unsigned);
+ virtual void slot154();
+ virtual void slot158();
+ virtual void slot15c();
+ virtual void slot160();
+ virtual void slot164();
+ virtual void slot168();
+ virtual void slot16c();
+ virtual void setMaxMessagesPerUpdate(int);
+ virtual void slot174();
+ virtual void slot178();
+ virtual void slot17c();
+ virtual void readAdditionalDisconnects();
+
 };
 extern GameSpyInfoInterface *TheGameSpyInfo;
 
@@ -292,6 +324,7 @@ class AptOnlineLogin {
 public:
     void OnBttnRegisterFESL(const char *);
     void OnAccountDeleted(bool);
+    void rva00571C9D();
     void rva00572632(const char *);
     void rva00572768(const char *);
     void rva00571B75();
@@ -319,8 +352,8 @@ private:
     int m_pendingButtonState; int m_fieldMask; bool loggedIn; bool needsRefresh;
     unsigned char padC6[2]; unsigned long loginStartTime;
     bool m_tabListRegistered; unsigned char padCD[3]; bool closeLocale;
-    unsigned char padD1[3]; int locale;
-    AsciiString m_deleteNickname;
+    bool responseFailed; unsigned char padD2[2]; int locale;
+    AsciiString m_deleteNickname; bool accountDeleted;
 };
 void AptOnlineLogin::OnBttnRegisterFESL(const char *)
 {
@@ -391,7 +424,7 @@ void AptOnlineLogin::rva0056FEA8()
 	AsciiString label;
 	label.format( "WOL:Locale%2.2d", 1 );
 	int row = GadgetListBoxAddEntryText( m_countryList,
-		TheGameText->fetch( label.str() ), g_00DB9198, -1, -1, true );
+		TheGameText->fetch( label.str() ), GameSpyColor[0], -1, -1, true );
 	GadgetListBoxSetItemData( m_countryList, (void *)1, row, 0 );
 
 	CountryLocaleMap locales;
@@ -411,7 +444,7 @@ void AptOnlineLogin::rva0056FEA8()
 	for( CountryLocaleMap::iterator it = locales.begin(); it != locales.end(); ++it )
 	{
 		row = GadgetListBoxAddEntryText( m_countryList, it->first,
-			g_00DB9198, -1, -1, true );
+			GameSpyColor[0], -1, -1, true );
 		GadgetListBoxSetItemData( m_countryList, (void *)(it->second), row, 0 );
 		if( language.compareNoCase( it->first ) == 0 )
 			selectedRow = row;
@@ -482,7 +515,7 @@ void AptOnlineLogin::rva005709D1(AsciiString &lastEmail,AsciiString &lastName)
     for(_STL::list<AsciiString>::iterator it=cachedEmails.begin();it!=cachedEmails.end();++it) {
         UnicodeString translated;
         translated.translate(*it);
-        int position=GadgetComboBoxAddEntry(email,translated,g_00DB9198);
+        int position=GadgetComboBoxAddEntry(email,translated,GameSpyColor[0]);
         if(((const StringBase<char> *)&*it)->compare(*(const StringBase<char> *)&lastEmail)==0)
             selectedPosition=position;
     }
@@ -502,7 +535,7 @@ void AptOnlineLogin::rva005709D1(AsciiString &lastEmail,AsciiString &lastName)
     for(_STL::list<AsciiString>::iterator it=cachedNames.begin();it!=cachedNames.end();++it) {
         UnicodeString translated;
         translated.translate(*it);
-        int position=GadgetComboBoxAddEntry(nickname,translated,g_00DB9198);
+        int position=GadgetComboBoxAddEntry(nickname,translated,GameSpyColor[0]);
         if(((const StringBase<char> *)&*it)->compare(*(const StringBase<char> *)&lastName)==0 || selectedPosition<0)
             selectedPosition=position;
     }
@@ -878,4 +911,154 @@ void AptOnlineLogin::InitGadgets(const char *name,void *,GameWindow *window)
         ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,
             "EnableButtonDeleteNickname",0,0,0,0);
     }
+}
+
+// Native 00571C9D..00572571: the AptOnlineLogin response pump. The BFME1
+// OnlineLoginUpdate.cpp at 9e3be919b10ae956e3c8a13995e0d62f2be1d016 supplies
+// the semantic spine; the target adds the nickname list and cached-locale
+// repair. WB15090F0 identifies the home file without naming this method.
+// Layout/slot evidence: reverse/identity_evidence/
+// apt-online-login-response-pump.md. Unaccessed record fields remain opaque.
+struct LoginPingResponse { _STL::string hostname; int avgPing,repetitions; };
+class PeerResponse {
+public:
+ PeerResponse(); ~PeerResponse();
+ int type; unsigned char pad4[12]; _STL::string nick;
+ unsigned char pad1c[0x100-0x1c]; _STL::vector<AsciiString> nicknames;
+ int profileOrReason; unsigned char pad110[0x130-0x110];
+ unsigned internalIP,externalIP; unsigned char tail[0x348-0x138];
+};
+class GameSpyPeerMessageQueueInterface {
+public:
+ virtual void s0();virtual void s1();virtual void s2();virtual void s3();
+ virtual void s4();virtual void s5();virtual void s6();virtual void s7();virtual void s8();
+ virtual bool getResponse(PeerResponse &);
+};
+extern GameSpyPeerMessageQueueInterface *TheGameSpyPeerMessageQueue;
+struct BfmeOpaqueOwnedRecord1432 {
+ BfmeOpaqueOwnedRecord1432(); ~BfmeOpaqueOwnedRecord1432();
+ int type,unknown4; PSPlayerAllStats player;
+ _STL::string string550,nick,password,email; bool flag580,flag581;
+ unsigned char pad582[10]; _STL::string string58c;
+};
+// The existing stats-response provider witnesses the 0x580-byte record;
+// its only owning member is the PSPlayerAllStats at +8.
+struct LoginPSResponse { int type,unused; PSPlayerAllStats player; unsigned char tail[0x30]; };
+typedef char LoginPeerResponseSize[sizeof(PeerResponse)==0x348 ? 1 : -1];
+typedef char LoginPSRequestSize[sizeof(BfmeOpaqueOwnedRecord1432)==0x598 ? 1 : -1];
+typedef char LoginPSResponseSize[sizeof(LoginPSResponse)==0x580 ? 1 : -1];
+class LoginPSQueueView {
+public:
+ virtual void s0();virtual void s1();virtual void s2();virtual void s3();
+ virtual void addRequest(const BfmeOpaqueOwnedRecord1432 &);
+ virtual void s5(); virtual void addResponse(const LoginPSResponse &); virtual void s7();
+ virtual void trackPlayerStats(PSPlayerAllStats); virtual void s9();virtual void s10();virtual void s11();
+ virtual PSPlayerAllStats findPlayerStatsByID(int);
+};
+class GameSpyPSMessageQueueInterface;
+extern GameSpyPSMessageQueueInterface *TheGameSpyPSMessageQueue;
+class Rva00595D95 { public: bool rva00595D95(); };
+FirewallHelperClass *Rva00595143Get();
+void HandleBuddyResponses();void HandlePersistentStorageResponses();
+void rva005AF12F(void *);
+void TearDownGameSpy();void SetUpGameSpy(const char *,const char *);
+void AptOnlineLogin::rva00571C9D()
+{
+ if(TheGameSpyPeerMessageQueue) {
+  LoginPingResponse ping;
+  if(ThePinger && ThePinger->getResponse(ping)) rva005700A0();
+  responseFailed=false; accountDeleted=false;
+  HandleBuddyResponses();HandlePersistentStorageResponses();
+  if(accountDeleted) OnAccountDeleted(true);
+  if(responseFailed) {
+   ((Rva0056DCBF *)this)->rva0056DCBF(true);
+   { void *movie=owner->movie; ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,"EnableButtonDeleteNickname",0,0,0,0); }
+   { void *movie=owner->movie; ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,"EnableButtonCreate",0,0,0,0); }
+   { void *movie=owner->movie; ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,"EnableButtonLogin",0,0,0,0); }
+   { void *movie=owner->movie; ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,"EnableButtonServiceTerms",0,0,0,0); }
+  }
+  PeerResponse resp;
+  if(!loggedIn && TheGameSpyPeerMessageQueue->getResponse(resp)) {
+   rva005AF12F(&resp);
+   switch(resp.type) {
+   case 0: {
+    loggedIn=true;
+    TheGameSpyInfo->setLocalName(resp.nick.c_str());
+    TheGameSpyInfo->setLocalProfileID(resp.profileOrReason);
+    TheGameSpyInfo->loadSavedIgnoreList();
+    TheGameSpyInfo->setLocalIPs(resp.internalIP,resp.externalIP);
+    TheGameSpyInfo->readAdditionalDisconnects();
+    GameSpyMiscPreferences preferences;
+    TheGameSpyInfo->setMaxMessagesPerUpdate(preferences.rva005599C8());
+    if(preferences.rva00559782()<1 || preferences.rva00559782()>37) {
+     preferences.rva005597CB(locale); preferences.UserPreferences::write();
+     BfmeOpaqueOwnedRecord1432 req;
+     req.type=2;req.player.rva00552E9E(locale);
+     req.email=TheGameSpyInfo->getLocalEmail().str();
+     req.nick=TheGameSpyInfo->getLocalBaseName().str();
+     req.password=TheGameSpyInfo->getLocalPassword().str();
+     req.player.setID(TheGameSpyInfo->getLocalProfileID());
+     if(TheGameSpyPSMessageQueue) ((LoginPSQueueView *)TheGameSpyPSMessageQueue)->addRequest(req);
+     PSPlayerAllStats oldStats=((LoginPSQueueView *)TheGameSpyPSMessageQueue)->findPlayerStatsByID(TheGameSpyInfo->getLocalProfileID());
+     if(oldStats.id) {
+      // Retail snapshots the returned locale before querying preferences.
+      int previousLocale=oldStats.locale;
+      if(preferences.rva00559782()!=previousLocale) {
+      BfmeOpaqueOwnedRecord1432 req2;
+      req2.type=1;
+      req2.email=TheGameSpyInfo->getLocalEmail().str();
+      req2.nick=TheGameSpyInfo->getLocalBaseName().str();
+      req2.password=TheGameSpyInfo->getLocalPassword().str();
+      req2.unknown4=1;req2.flag581=false;req2.flag580=false;
+      req2.player=oldStats;req2.player.rva00552E9E(preferences.rva00559782());
+      ((LoginPSQueueView *)TheGameSpyPSMessageQueue)->addRequest(req2);
+      }
+     }
+     PSPlayerAllStats stats=GameSpyPSMessageQueueInterface::readLocalCachedStats();
+     stats.setID(TheGameSpyInfo->getLocalProfileID());
+     stats.rva00552E9E(req.player.locale);
+     ((LoginPSQueueView *)TheGameSpyPSMessageQueue)->trackPlayerStats(stats);
+     TheGameSpyInfo->setCachedLocalPlayerStats(stats);
+     LoginPSResponse newResp;newResp.type=0;
+     newResp.player=((LoginPSQueueView *)TheGameSpyPSMessageQueue)->findPlayerStatsByID(TheGameSpyInfo->getLocalProfileID());
+     ((LoginPSQueueView *)TheGameSpyPSMessageQueue)->addResponse(newResp);
+    }
+    if(!g_a063b0) g_a063b0=(Rva00A063B0Obj *)Rva00595143Get();
+    if(((Rva00595D95 *)g_a063b0)->rva00595D95()==true) {
+     void *allocation=g_a063b0?g_a063b0->Unknown00(0):0;
+     operator delete(allocation);g_a063b0=0;
+    }
+    break;
+   }
+   case 1: {
+    if(!responseFailed) {
+     AsciiString label;loginStartTime=0;
+     label.format("GUI:GSDisconReason%d",resp.profileOrReason);
+     GSMessageBoxOk(TheGameText->fetch("GUI:GSErrorTitle"),TheGameText->fetch(label),0);
+     ((Rva0056DCBF *)this)->rva0056DCBF(true);
+    }
+    AsciiString motd=TheGameSpyInfo->getMOTD(),config=TheGameSpyInfo->getConfig();
+    TearDownGameSpy();SetUpGameSpy(motd.str(),config.str());
+    padCD[0]=false;rva005706D4();
+    break;
+   }
+   case 23: {
+    AsciiString email;
+    email.translate(((Rva0056EBA1 *)this)->rva0056EB15());
+    AsciiString password;
+    if(remember && GadgetCheckBoxIsChecked(remember)) password.translate(((Rva0056EBD0 *)this)->rva0056EBD0());
+    else password.clear();
+    AsciiString date("01/01/1970");
+    int count=resp.nicknames.size();
+    for(int i=0;i<count;++i) ((GameSpyLoginPreferences *)((char *)this+0x60))->rva005CACDE(email,resp.nicknames.begin()[i],password,date);
+    ((GameSpyLoginPreferences *)((char *)this+0x60))->write();
+    AsciiString nickname;
+    nickname.translate(((Rva0056EA91 *)this)->rva0056EA91());
+    rva005709D1(email,nickname);
+    break;
+   }
+   }
+  }
+  rva005700A0();
+ }
 }
