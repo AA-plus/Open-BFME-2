@@ -19,7 +19,7 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 }
 
 template <class T> class StringBase { StringBase(const StringBase<T> &); void releaseBuffer(); friend class AsciiString; };
-class AsciiString { public: AsciiString(const AsciiString &that) { ((StringBase<char> *)this)->StringBase<char>::StringBase(*(const StringBase<char> *)&that); } ~AsciiString() { ((StringBase<char> *)this)->releaseBuffer(); } private: char *m_text; };
+class AsciiString { public: ~AsciiString(); AsciiString(const AsciiString &that) { ((StringBase<char> *)this)->StringBase<char>::StringBase(*(const StringBase<char> *)&that); } private: char *m_text; };
 bool operator<(const AsciiString &, const AsciiString &);
 // The list's base constructor is provided by the verified shared list family.
 extern template _STL::_List_base<AsciiString,_STL::allocator<AsciiString> >::_List_base(const _STL::allocator<AsciiString> &);
