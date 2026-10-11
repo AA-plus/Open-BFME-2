@@ -1,8 +1,9 @@
-// cl: /O1 /G7 /GX /MD /arch:SSE /DNDEBUG /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// cl: /Ireference/shims/bfmealloc /O1 /G7 /GX /MD /arch:SSE /DNDEBUG /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB /D_CRTIMP=
 // stlport
 #define strchr _stlport_hides_strchr
 #define sprintf _stlport_hides_sprintf
 #include <utility>
+#include <new>
 #include "ascii_string.h"
 #undef strchr
 #undef sprintf
@@ -85,6 +86,7 @@ typedef bool Bool;
 class AptFocusTarget;
 class GameWindow;
 class Image;
+struct AptLayoutInfoView;
 
 // STLport vector<AptFocusTarget *> view.
 class AptFocusStack
@@ -143,6 +145,7 @@ class AptPlayer
 {
 public:
  static int GetLevelIndex(GameWindow *window);
+ GameWindow *WinCreate(const AsciiString *name,AptLayoutInfoView *layout);
  bool ShowLevel(int index);
  bool UnloadLevel(int index);
  bool HideLevel(int index);
@@ -294,10 +297,15 @@ enum WindowMsgHandledType
 	MSG_HANDLED
 };
 
-class GameWindow
-{
+class UnicodeString;
+class GameWindow {
 public:
-	GameWindow *winGetParent();
+ GameWindow *winGetParent();
+ virtual int winSetText(UnicodeString);
+ unsigned char m_pad04[0x1f4-4];
+ void *m_field1f4;
+ unsigned char m_pad1f8[0x270-0x1f8];
+ AsciiString m_name;
 };
 
 class GameWindowManager
@@ -475,4 +483,79 @@ bool AptPlayer::RemoveLevel(int index)
  reinterpret_cast<Rva000427195 *>(m_pad05c)->rva00223429(&entry->m_s0);
  reinterpret_cast<Rva0022494F *>(entry)->rva0022494F();
  return true;
+}
+
+#include "unicode_string.h"
+#include "GameWindowManagerRecordView.h"
+#include <list>
+enum NameKeyType {NAMEKEY_INVALID=0};
+class NameKeyGenerator {public: NameKeyType nameToKey(const AsciiString &);};
+extern NameKeyGenerator *TheNameKeyGenerator;
+class Rva00DFF024Registry {public: void *lookup56(int,int);};
+class FunctionLexicon {
+public: enum TableIndex {TABLE_ANY=-1,TABLE_MAIN_WINDOW=11};
+protected: void *findFunction(NameKeyType,TableIndex);
+friend class AptPlayer;
+};
+extern Rva00DFF024Registry *TheRva00DFF024Registry;
+
+class AptWindowSendView {
+public:
+#define V(n) virtual void slot##n();
+ V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9)
+ V(10) V(11) V(12) V(13) V(14) V(15) V(16) V(17) V(18) V(19)
+ V(20) V(21) V(22) V(23) V(24) V(25) V(26) V(27) V(28) V(29)
+ V(30) V(31) V(32) V(33) V(34) V(35) V(36) V(37) V(38) V(39)
+ V(40) V(41) V(42) V(43) V(44) V(45) V(46) V(47) V(48) V(49)
+ V(50) V(51) V(52) V(53) V(54) V(55) V(56) V(57)
+#undef V
+ virtual void findWindow(GameWindow *,int,int,GameWindow **);
+};
+class GameWindowManager;
+extern GameWindowManager *TheWindowManager;
+struct AptLayoutInfoView {
+ unsigned int version;
+ void *init,*update,*shutdown,*callback;
+ AsciiString initName,updateName,shutdownName,unknown20,unknown24;
+ _STL::list<GameWindow *> windows;
+};
+// Owned factory2223FE forwards the layout-info word to constructor40FDD1.
+class AptWindowLayout;
+AptWindowLayout * __stdcall Rva002223FECreateLayout(void *);
+class ObjectSellInfo;
+typedef _STL::list<ObjectSellInfo *> NativePointerList;
+
+// Primary semantic guide: BFME1 9cbfb551fe20dae985f91f2319d8997287b6a705,
+// game/.../GUI/Rva0046A870CreateMainWindow.cpp. WB B93760 names WinCreate.
+// Native 223263..2233A6 proves name-by-reference, descriptor size0x34,
+// slots88/E8, GameWindow name270 and layout callback10/list28.
+GameWindow *AptPlayer::WinCreate(const AsciiString *name,AptLayoutInfoView *layout)
+{
+ GadgetCreateView view;
+ const AsciiString *originalName=name;
+ view.status=0x08000001;
+ view.unknown24=TheRva00DFF024Registry->lookup56(TheNameKeyGenerator->nameToKey(*originalName),-1);
+ if(!view.unknown24) return 0;
+ GameWindow *window=reinterpret_cast<TabWindowManagerView *>(TheWindowManager)->createFromView(&view);
+ window->m_field1f4=0;
+ // Native reuses the dead incoming pointer word for the found-window slot.
+ // Start a new pointer lifetime there after retaining the key in originalName.
+ GameWindow *&found=*new (static_cast<void *>(&name)) GameWindow *(0);
+ reinterpret_cast<AptWindowSendView *>(TheWindowManager)->findWindow(window,29,2000,&found);
+ if(found!=window) return 0;
+ found->m_name.setCopyInline(*originalName);
+ AsciiString mainName(*originalName);
+ mainName.concat(":MainWindow");
+ UnicodeString title;
+ title.translate(mainName);
+ window->GameWindow::winSetText(title);
+ if(layout) {
+  // Existing rowed pointer-list provider: node payload and argument are
+  // the same four-byte pointer word. No application type is reclassified.
+  reinterpret_cast<NativePointerList *>(&layout->windows)->push_back(reinterpret_cast<ObjectSellInfo *const &>(window));
+  NameKeyType key=TheNameKeyGenerator->nameToKey(*originalName);
+  layout->callback=reinterpret_cast<FunctionLexicon *>(TheRva00DFF024Registry)->findFunction(key,FunctionLexicon::TABLE_MAIN_WINDOW);
+  if(!layout->callback) layout->callback=reinterpret_cast<void *>(&Rva002223FECreateLayout);
+ }
+ return found;
 }
