@@ -1775,18 +1775,7 @@ void ConnectionManager::sendChat(UnicodeString text, Int playerMask, UnsignedInt
 	msg->detach();
 }
 
-// ?sendDisconnectChat@ConnectionManager@@ present-unmatched
-void ConnectionManager::sendDisconnectChat(UnicodeString text) {
-	NetDisconnectChatCommandMsg *msg = newInstance(NetDisconnectChatCommandMsg);
-	msg->setPlayerID(m_localSlot);
-	if (DoesCommandRequireACommandID(msg->getNetCommandType())) {
-		msg->setID(GenerateNextCommandID());
-	}
-	msg->setText(text);
-
-	sendLocalCommandDirect(msg, 0xff ^ (1 << m_localSlot));
-	processDisconnectChat(msg);
-}
+// ConnectionManager::sendDisconnectChat is defined with its retail-matched body in Code/GameEngine/Source/GameNetwork/ConnectionManager_sendChat.cpp (0x004D187B).
 
 // ConnectionManager::sendFileAnnounce is defined with its retail-matched body in Code/GameEngine/Source/GameNetwork/ConnectionManager_sendFileAnnounce.cpp (0x004D2D6A).
 
