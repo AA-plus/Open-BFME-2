@@ -11,6 +11,12 @@
 
 #include <hash_map>
 #include <list>
+// Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
+// the retail copies serve the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {

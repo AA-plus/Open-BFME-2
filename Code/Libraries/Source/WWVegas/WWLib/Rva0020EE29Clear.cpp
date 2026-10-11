@@ -2,6 +2,12 @@
 // stlport
 #include <new>
 #include <hash_map>
+// Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
+// the retail copies serve the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 // Suppress the TU's non-retail const-begin copy (row 54 family-LK3): the
 // /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
 namespace _STL {

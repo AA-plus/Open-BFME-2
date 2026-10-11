@@ -26,6 +26,12 @@
 
 #include <hash_map>
 #include <cstddef>
+// Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
+// the retail copies serve the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 // map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
 // COMDAT (one byte shape per TU flags); a declaration-only specialization

@@ -9,6 +9,12 @@
 #include <hash_map>
 #include <list>
 #include <cstddef>
+// Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
+// the retail copies serve the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 // Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
 // the retail copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {
