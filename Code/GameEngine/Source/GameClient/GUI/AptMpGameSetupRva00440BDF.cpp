@@ -221,6 +221,7 @@ class MultiplayerColorDefinition
 public:
 	unsigned char m_pad[0x10];
 	int m_color; // +0x10
+ __forceinline int getColor() const {return m_color;}
 	unsigned char m_pad14[0x3C - 0x14];
 	bool m_3c; // +0x3C (offered in mode 1)
 };
@@ -319,6 +320,8 @@ public:
 	int m_10; // +0x10
 	unsigned char m_pad14[0x48 - 0x14];
 	bool m_48; // +0x48
+ __forceinline int getClassKey() const {return m_0c;}
+ __forceinline int getSubclassKey() const {return m_10;}
 };
 
 // The display name at +0x08 of a CreateAHeroData (0x0043F8B3 shows it).
@@ -1088,4 +1091,64 @@ bool AptMpGameSetup::rva00440BDF(bool countdown)
   return true;
  }
  text.format(TheGameText->slot44("LAN:NoMapSelected",0));rva0043E49C(text);return false;
+}
+struct SavedHeroSlotView {
+ char beforeHero[0x60]; bool hasHero; char padding[3]; CreateAHeroName hero;
+};
+struct HeroPointerVectorView { CreateAHeroData **begin, **end, **capacity; };
+// Descriptive name: native .data VA DC8D4C contains the disabled tint FF808080.
+int AptLobbyDisabledHeroColor=(int)0xff808080;
+void Rva00322714(BfmeKeyLC *,int,unsigned char);
+void AptMpGameSetup::rva004406BA(int index)
+{
+ if(!TheCreateAHeroManager) return;
+ GameWindow *combo=m_hero[index];
+ if(!combo) return;
+ GadgetComboBoxReset(combo);
+ MultiplayerColorDefinition *def=TheMultiplayerSettings->getColor(-1);
+ if(m_saved) {
+  SavedHeroSlotView *saved=(SavedHeroSlotView*)&m_saved->m_slots[index];
+  UnicodeString name((const unsigned short*)L"-");
+  CreateAHeroName *hero=saved->hasHero ? &saved->hero : 0;
+  if(hero) name.set(hero->m_name);
+  int row=GadgetComboBoxAddEntry(combo,name,def->getColor());
+  GadgetComboBoxSetSelectedPos(combo,row,false);
+  return;
+ }
+ GameInfo *info=(GameInfo*)m_game->rva0043DA65();
+ if(!info) return;
+ GameSlot *slot=info->getSlot(index);
+ if(!slot) return;
+ int selectedHero=slot->m_hero;
+ int selectPos=0;
+ int row=GadgetComboBoxAddEntry(combo,UnicodeString((const unsigned short*)L"-"),def->getColor());
+ GadgetComboBoxSetItemData(combo,row,(void*)-1);
+ row=GadgetComboBoxAddEntry(combo,TheGameText->fetch("GUI:Random"),def->getColor());
+ GadgetComboBoxSetItemData(combo,row,(void*)-2);
+ if(selectedHero==-2) selectPos=row;
+ bool local=index==info->v13();
+ if(local || m_owner->v01()) {
+  const PlayerTemplate *pt=ThePlayerTemplateStore->getNthPlayerTemplate(slot->m_playerTemplate);
+  int side=pt ? pt->rva001FD234() : -1;
+  Rva0040A3F9 *heroes=TheCreateAHeroManager->rva0021F797();
+  HeroPointerVectorView *vector=(HeroPointerVectorView*)heroes;
+  int count=vector->end-vector->begin;
+  for(int i=count-1;i>=0;--i) {
+   CreateAHeroData *cur=heroes->rva0040A32F(i);
+   if(!cur) continue;
+   Rva00219F8EMask *mask=(Rva00219F8EMask*)TheCreateAHeroManager->GetFactionMaskType(cur->getClassKey(),cur->getSubclassKey());
+   bool enabled=side==-1 || mask->test(side);
+   int tint=enabled ? def->getColor() : AptLobbyDisabledHeroColor;
+   UnicodeString name(((CreateAHeroName*)cur)->m_name);
+   if(cur->m_48) name.concat(TheGameText->fetch("VALUE:Default"));
+   row=GadgetComboBoxAddEntry(combo,name,tint);
+   GadgetComboBoxSetItemData(combo,row,(void*)i);
+   if(enabled) { if(selectedHero==i) selectPos=row; }
+   else Rva00322714((BfmeKeyLC*)combo,row,1);
+  }
+  if(!slot->isAI() && !local) selectPos=0;
+ }
+ GadgetComboBoxSetSelectedPos(combo,selectPos,false);
+ UpdateHeroDisplay(index);
+ GadgetComboBoxSetMaxDisplay(combo,Rva0043DDF8(index));
 }
