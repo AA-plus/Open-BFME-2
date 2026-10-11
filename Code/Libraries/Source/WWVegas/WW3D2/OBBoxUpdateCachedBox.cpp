@@ -18,10 +18,32 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "rendobj.h"
 #include "boxrobj.h"
 
+// LINK: this TU's header-inline Transform_Vector copy is not retail's. The
+// call below inlines it (SSE, no E8) but the live call still emits the loser
+// COMDAT. Manual inline of the identical BFME1 body (matrix3d.h:1739) via a
+// file-static helper keeps the bytes and drops the emission (no flags touched).
+static __forceinline void bfme_obbox_xform(const Matrix3D &A, const Vector3 &in, Vector3 *out)
+{
+	Vector3 tmp;
+	Vector3 *v;
+
+	// check for aliased parameters
+	if (out == &in) {
+		tmp = in;
+		v = &tmp;
+	} else {
+		v = (Vector3 *)&in;		// whats the right way to do this...
+	}
+
+	out->X = (A[0][0] * v->X + A[0][1] * v->Y + A[0][2] * v->Z + A[0][3]);
+	out->Y = (A[1][0] * v->X + A[1][1] * v->Y + A[1][2] * v->Z + A[1][3]);
+	out->Z = (A[2][0] * v->X + A[2][1] * v->Y + A[2][2] * v->Z + A[2][3]);
+}
+
 // ?update_cached_box@OBBoxRenderObjClass@@MAEXXZ
 void OBBoxRenderObjClass::update_cached_box(void)
 {
-	Matrix3D::Transform_Vector(Transform, ObjSpaceCenter, &CachedBox.Center);
+	bfme_obbox_xform(Transform, ObjSpaceCenter, &CachedBox.Center);
 	CachedBox.Extent.Set(ObjSpaceExtent);
 	CachedBox.Basis.Set(Transform);
 }
