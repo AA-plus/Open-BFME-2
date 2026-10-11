@@ -5,6 +5,14 @@
 // guide stream/header/footer use. Fields, defaults, strings and helper calls are retail facts.
 // The three enum-name table labels below remain descriptive structural labels.
 // /Ob2 and _CRTIMP= reproduce retail inline free cleanup without changing shared headers.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <sstream>
 #include "ascii_string.h"
 class File { public: virtual ~File(); virtual bool open(const char*,int=0); virtual void close(); virtual int read(void*,int); virtual int write(const void*,int); };
