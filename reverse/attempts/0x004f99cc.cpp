@@ -1,5 +1,5 @@
 // ?rva004F99CC@LivingWorldAutoResolveBattle@@QAEXPA_N@Z
-// partial score=0.80852 date=2026-10-10
+// partial score=0.905099 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // Target identity: WB12EB4A0 names LivingWorldAutoResolveBattle's
@@ -14,6 +14,14 @@
 // Native198B helper4F9658 independently proves this receiver, vector inputs,
 // ArmySummary input, unsigned player index, and unused final flag/RET20;
 // its original method name stays unknown. No clean BFME1/ZH donor exists.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include <map>
 struct Rva0040DC56Element {int a[1];};
@@ -43,13 +51,96 @@ template void UnitVector::insert<Rva004F87BCElement *>(Rva004F87BCElement *,Rva0
 
 class Rva004F7DF9Vector {public: void reserve(unsigned);};
 struct Rva005F8FCC {void *rva005F8FCC(unsigned);};
+// Entry lifetime: native 4F9C8E binds factory4F6A1A and ctor4F6318
+// to the existing destructor4F69C3. Keep its one type name in all three.
+// Visible outlined copy/entry constructors preserve the counted pointer
+// across the factory call; their bodies are already independently rowed.
+class LivingWorldAutoResolveUnit;
+enum ObjectID { INVALID_ID = 0 };
+
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *ref);
+
+struct Rva004F9C8EKindTemplate
+{
+	char m_pad[0x110];
+	unsigned m_kindWord2;
+};
+
+class Rva0037DCA5
+{
+public:
+	void *rva0037DC52();
+	char m_pad[0xAC];
+	TargetRef00217D4C m_ref;
+	ObjectID m_id;
+	ObjectID getID() const { return m_id; }
+};
+
+struct Rva004F9C8ERecord
+{
+	char m_pad[0x1C];
+	int m_word;
+};
+
+struct TreeHintRef00217D4C
+{
+	LivingWorldAutoResolveUnit *m_unit;
+	LivingWorldAutoResolveUnit *operator->() const { return m_unit; }
+};
+
+class Rva004F6093Holder
+{
+public:
+	__declspec(noinline) Rva004F6093Holder(const Rva004F6093Holder &p):referent(p.referent){if(referent)++referent->m_ref.references;}
+	Rva004F6093Holder(Rva0037DCA5 *p) : referent(p)
+	{
+		if (p)
+			++p->m_ref.references;
+	}
+	~Rva004F6093Holder()
+	{
+		if (referent)
+			ReleaseTreeHintRef00217D4C(&referent->m_ref);
+	}
+	Rva0037DCA5 *referent;
+};
+
+struct Rva004F69C3
+{
+public:
+	__declspec(noinline) Rva004F69C3(const int *k,const Rva004F6093Holder &v):key(*k),holder(v) {}
+	int key;
+	Rva004F6093Holder holder;
+};
+
+inline __declspec(noinline) Rva004F69C3 Rva004F6A1A(const int *key, const Rva004F6093Holder &holder) { return Rva004F69C3(key,holder); }
+
+class Rva0040CB11Entry;
+
+namespace _STL {
+template<> void vector<ObjectID>::push_back(const ObjectID &);
+template<> void vector<Rva0040CB11Entry>::push_back(const Rva0040CB11Entry &);
+}
+
+class Rva004F70D1
+{
+public:
+	TreeHintRef00217D4C *rva004F70D1(TreeHintRef00217D4C *pos);
+	TreeHintRef00217D4C *m_begin, *m_finish, *m_end;
+};
+
+
 struct Rva004F9635Rec;
 class LivingWorldAutoResolveUnit {
 public:
  LivingWorldAutoResolveUnit(const Rva0040DC56Element &,unsigned,ArmySummary *);
  virtual void *rvaDestroy(unsigned);
  int references;
- char unknown08[0x24];
+ Rva0037DCA5 *m_object;
+ char unknown0C[0x1C];
+ Rva004F9C8ERecord *m_record;
+ Rva0037DCA5 *getObject() const {return m_object;}
+ Rva004F9C8ERecord *getRecord() const {return m_record;}
  void *thing;
  unsigned unknown30;
 };
@@ -88,20 +179,25 @@ private: unsigned header,count,unknown8;
 };
 struct Rva004FA1F3Player {
  _STL::map<int,ArmySummary*> reinforcements;
- char unknown0C[0x20];
+ char unknown0C[0xC];
+ float attack,defense,experience;
+ char unknown24[8];
  int side,unknown30;
 };
 class LivingWorldAutoResolveBattle {
 public:
- void buildReinforcementMaps();
+ void rva004F9C8E(TreeHintRef00217D4C *,int);
  void rva004F99CC(bool *);
+ void buildReinforcementMaps();
  void addUnitsForCurrentRound(int);
  void rva004F9635(Rva004F9635Rec *);
  void rva004F9658(Rva004FA168Storage &,EntryVector &,ArmySummary *,unsigned,bool);
  _STL::vector<Rva004FA1F3Player> players;
  Rva004FA168Storage currentUnits[2];
  Rva004FA168Map maps[2];
- char unknown3C[0x3C];
+ char unknown3C[0x24];
+ _STL::vector<ObjectID> m_deadIDs;
+ _STL::vector<Rva0040CB11Entry> m_entries;
  int winner,roundNumber;
 };
 void LivingWorldAutoResolveBattle::buildReinforcementMaps()
@@ -172,6 +268,29 @@ void LivingWorldAutoResolveBattle::addUnitsForCurrentRound(int quiet)
   ++map;
  }while(--left);
 }
+
+// Native4F9C8E..4F9D6A220B RET8; WB12EF610 confirms dead-unit removal.
+// Vectors0C/18 are side units; ObjectID output60 and retained-entry output6C
+// use the existing providers. Pointee08/B4 and record28/1C are target fields;
+// the original method and wrapper identities remain unknown.
+void LivingWorldAutoResolveBattle::rva004F9C8E(TreeHintRef00217D4C *pos, int side)
+{
+	if ((*pos)->getObject()->getID() != INVALID_ID)
+		m_deadIDs.push_back((*pos)->getObject()->getID());
+	if (((Rva004F9C8EKindTemplate *)(*pos)->getObject()->rva0037DC52())->m_kindWord2 & (1u << 26))
+	{
+		Rva0037DCA5 *object = (*pos)->getObject();
+		Rva004F9C8ERecord *record = (*pos)->getRecord();
+		if (record)
+		{
+			int word = record->m_word;
+			Rva004F6093Holder holder(object);
+			m_entries.push_back((const Rva0040CB11Entry &)Rva004F6A1A(&word, holder));
+		}
+	}
+	reinterpret_cast<Rva004F70D1 *>(&currentUnits[side])->rva004F70D1(pos);
+}
+
 class Rva0059AE94 {public:bool rva0059AE94();};
 class Rva0059AEFF {public:int rva0059AEFF();};
 class Rva0059ADF4 {public:void rva0059ADF4(int);};
@@ -186,13 +305,15 @@ class Rva0033A65E {public:void *rva0033A65E();};
 class LivingWorldAutoResolveBodyTemplate {public:float getHitpointsForLevel(int);};
 int GetGameLogicRandomValue(int,int,char*,int);
 struct Rva004F99CCEntry {char opaque00[0xC];int level;int mask[4];char opaque20[0x78];int kills,combatKills;};
-struct Rva004F99CCThing {char opaque00[0x5C4];int targetType;};
+struct Rva004F99CCThing {char opaque00[0x5C4];int targetType; int getTargetType() const {return targetType;} };
 struct Rva004F99CCBonus {char opaque00[0xC];float attack,experience,defense;};
 struct Rva004F99CCUnit;
 struct Rva004F99CCUnitRef {Rva004F99CCUnit *value; Rva004F99CCUnit *operator->() const {return value;} operator bool()const{return value!=0;} };
 struct Rva004F99CCUnit {
  void *vptr;int references;Rva004F99CCEntry *entry;float health,totalHealth;int opaque14;bool acted;char opaque19[3];Rva004F99CCBonus *bonus;
  Rva004F99CCUnitRef target;void *opaque24,*opaque28;Rva004F99CCThing *thing;unsigned player;
+ int getLevel() const {return entry->level;}
+ float getTotalHealth() const {return totalHealth;}
 };
 struct Rva004F99CCPlayer {char opaque00[0x18];float attack,defense,experience;char opaque24[0x10];};
 struct Rva004F99CCSideBonus {char opaque00[4];float attack,defense;};
@@ -221,10 +342,7 @@ void LivingWorldAutoResolveBattle::rva004F99CC(bool *allActed)
    }
    {
     const Rva00427157 *armor=reinterpret_cast<Rva0033A9A5 *>((*target)->thing)->rva0033A9A5((*target)->entry->mask);
-    float totalHealth=unit->totalHealth;
-    int targetType=(*target)->thing->targetType;
-    int level=unit->entry->level;
-    float baseDamage=weapon->rva00419561(level,totalHealth,reinterpret_cast<LivingWorldAutoResolveBodyTemplate *>(reinterpret_cast<Rva0033A65E *>(unit->thing)->rva0033A65E())->getHitpointsForLevel(level),targetType);
+    float baseDamage=weapon->rva00419561(unit->getLevel(),unit->getTotalHealth(),reinterpret_cast<LivingWorldAutoResolveBodyTemplate *>(reinterpret_cast<Rva0033A65E *>(unit->thing)->rva0033A65E())->getHitpointsForLevel(unit->getLevel()),(*target)->thing->getTargetType());
     unsigned attacker=unit->player;
     unsigned defender=(*target)->player;
     float attack=1.0f;
@@ -232,16 +350,17 @@ void LivingWorldAutoResolveBattle::rva004F99CC(bool *allActed)
     float armorFactor=const_cast<Rva00427157 *>(armor)->rva004270FA(unit->thing->targetType);
     float defense=1.0f;
     if((*target)->bonus)defense=(*target)->bonus->defense;
-    Rva004F99CCSideBonus **sideBonus=*reinterpret_cast<Rva004F99CCSideBonus ***>(reinterpret_cast<char*>(this)+0x54);
+    _STL::vector<Rva004F99CCSideBonus *> &sideBonus=*reinterpret_cast<_STL::vector<Rva004F99CCSideBonus *> *>(reinterpret_cast<char*>(this)+0x54);
     float attackerBonus=1.0f;
     if(sideBonus[attacker])attackerBonus=sideBonus[attacker]->attack;
     float defenderBonus=1.0f;
     if(sideBonus[defender])defenderBonus=sideBonus[defender]->defense;
-    const Rva004F99CCPlayer *playerData=reinterpret_cast<const Rva004F99CCPlayer *>(players.begin());
-    (*target)->health-=playerData[defender].defense*playerData[attacker].attack*defenderBonus*attackerBonus*defense*armorFactor*attack*baseDamage;
+    float damage=baseDamage*players[attacker].attack*attack*attackerBonus*players[defender].defense*armorFactor*defense*defenderBonus;
+    (*target)->health-=damage;
     if((*target)->health<=0.0f) {
-     float experience=playerData[attacker].experience*reinterpret_cast<Rva0059AEFF *>(target->value)->rva0059AEFF();
-     Rva00380200 **skills=*reinterpret_cast<Rva00380200 ***>(reinterpret_cast<char*>(this)+0x48);
+     float experience=(float)reinterpret_cast<Rva0059AEFF *>(target->value)->rva0059AEFF();
+     experience*=players[attacker].experience;
+     _STL::vector<Rva00380200 *> &skills=*reinterpret_cast<_STL::vector<Rva00380200 *> *>(reinterpret_cast<char*>(this)+0x48);
      if(skills[attacker])skills[attacker]->rva003805BB(experience,true);
      if(unit->bonus)experience*=unit->bonus->experience;
      reinterpret_cast<Rva0059ADF4 *>(unit)->rva0059ADF4(static_cast<int>(experience));
