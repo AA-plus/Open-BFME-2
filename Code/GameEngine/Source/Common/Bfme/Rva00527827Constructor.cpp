@@ -93,6 +93,7 @@ public:
 };
 struct AsciiStringRef
 {
+	int write(char *dst);
 	const AsciiString *m_string;
 };
 struct AsciiStringPlusText : AsciiStringRef
@@ -171,4 +172,27 @@ AsciiString Rva00527827::rva00527B03()
     text.format("_level%d",m_04);
     Rva00527B03Append(text,Rva00527B03Arguments('.',m_name));
     return text;
+}
+
+struct Rva00527B81Node
+{
+	char m_char;
+	AsciiStringRef m_ref;
+};
+
+class Rva00527B81
+{
+public:
+	int rva00527B81(char *dst);
+private:
+	void *m_vtable;
+	Rva00527B81Node *m_node;
+};
+
+// ?rva00527B81@Rva00527B81@@QAEHPAD@Z @0x00527B81 (25B)
+int Rva00527B81::rva00527B81(char *dst)
+{
+	Rva00527B81Node *node = m_node;
+	*dst = node->m_char;
+	return node->m_ref.write(dst + 1) + 1;
 }

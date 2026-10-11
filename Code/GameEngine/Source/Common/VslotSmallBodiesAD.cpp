@@ -15,11 +15,16 @@ enum ObjectStatusTypes
 {
 	OBJECT_STATUS_1C = 0x1C
 };
+enum KindOfType
+{
+	KINDOF_INVALID = -1
+};
 class Object
 {
 public:
 	void setStatus(ObjectStatusTypes status, bool set);
 	bool rva0029493F(Object *victim, int mode);
+	bool isKindOf(KindOfType t) const;
 };
 struct Rva00349D02Machine
 {
@@ -349,4 +354,72 @@ public:
 bool Rva00508925::rva00508925(Int a, Int b)
 {
 	return (bool)rva005075D6(a, b);
+}
+
+class Rva00507823
+{
+public:
+	unsigned char rva005075D6(const void *arg, Object *target);
+};
+
+class Rva00508F1E : public Rva00507823
+{
+public:
+	bool rva00508F1E(const void *arg, Object *target);
+};
+
+// ?rva00508F1E@Rva00508F1E@@QAE_NPBXPAVObject@@@Z @0x00508F1E (51B)
+bool Rva00508F1E::rva00508F1E(const void *arg, Object *target)
+{
+	if (!rva005075D6(arg, target))
+		return false;
+	if (target && target->isKindOf((KindOfType)0x220))
+		return false;
+	return true;
+}
+
+class Rva002CA9CA
+{
+public:
+	bool rva002CAA59(int target, const void *arg);
+};
+
+class Rva005092D4 : public Rva00507823
+{
+public:
+	bool rva005092D4(const void *arg, Object *target);
+private:
+	char m_pad00[0x128];
+	Rva002CA9CA *m_128;
+};
+
+// ?rva005092D4@Rva005092D4@@QAE_NPBXPAVObject@@@Z @0x005092D4 (51B)
+bool Rva005092D4::rva005092D4(const void *arg, Object *target)
+{
+	if (rva005075D6(arg, target) && m_128)
+		return m_128->rva002CAA59(reinterpret_cast<int>(target), arg);
+	return false;
+}
+
+class Player;
+struct Rva2225E0Filter
+{
+	bool accepts(Object *, Player *);
+};
+
+class Rva0050B92D : public Rva00507823
+{
+public:
+	unsigned char rva0050B92D(const void *arg, Object *target);
+private:
+	char m_pad00[0x128];
+	Rva2225E0Filter m_filter128;
+};
+
+// ?rva0050B92D@Rva0050B92D@@QAEEPBXPAVObject@@@Z @0x0050B92D (46B)
+unsigned char Rva0050B92D::rva0050B92D(const void *arg, Object *target)
+{
+	if (!rva005075D6(arg, target))
+		return 0;
+	return m_filter128.accepts(target, 0) != 0;
 }

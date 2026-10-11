@@ -43,3 +43,63 @@ void Rva0056AABF::rva0056AABF(Rva00318FA1MainOwner *arg){
  void *target=((Manager268View*)TheLivingWorldManager)->word268;
  if(target){int bits=bits08;if(arg->rva00318FA1()==bits) ((Rva003EE966*)target)->rva003EE966(bits);else ((Rva003EE91A*)target)->rva003EE91A(bits);}
 }
+
+struct Rva0056A9F4Arg
+{
+	char m_pad[0x2C];
+	int m_2C;
+};
+
+class Rva0056A9F4
+{
+public:
+	void rva0056A9F4(int a, const Rva0056A9F4Arg *b);
+private:
+	int m_00;
+	int m_04;
+	int m_08;
+	unsigned char m_0C;
+};
+
+// ?rva0056A9F4@Rva0056A9F4@@QAEXHPBURva0056A9F4Arg@@@Z @0x0056A9F4 (28B)
+void Rva0056A9F4::rva0056A9F4(int a, const Rva0056A9F4Arg *b)
+{
+	if (m_04 == a && m_08 == b->m_2C)
+		m_0C = 1;
+}
+
+class Rva0056AA22
+{
+public:
+	void rva0056AA22(int a, int b);
+private:
+	int m_00;
+	int m_04;
+	int m_08;
+	unsigned char m_0C;
+};
+
+// ?rva0056AA22@Rva0056AA22@@QAEXHH@Z @0x0056AA22 (16B)
+void Rva0056AA22::rva0056AA22(int a, int)
+{
+	if (m_04 == a)
+		m_0C = 1;
+}
+
+class Rva0056AAA6
+{
+public:
+	void rva0056AAA6(int a, int b);
+private:
+	int m_00;
+	int m_04;
+	int m_08;
+	unsigned char m_0C;
+};
+
+// ?rva0056AAA6@Rva0056AAA6@@QAEXHH@Z @0x0056AAA6 (25B)
+void Rva0056AAA6::rva0056AAA6(int a, int b)
+{
+	if (m_04 == b && m_08 == a)
+		m_0C = 1;
+}

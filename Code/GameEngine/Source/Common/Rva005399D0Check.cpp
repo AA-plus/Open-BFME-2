@@ -122,7 +122,34 @@ public:
 
 extern InGameUI *TheInGameUI;
 
-class ControlBar {public:int rva005399D0Check(Object*);};
+struct Rva00539997Sub
+{
+	char m_pad[0xFC];
+	int m_FC;
+};
+
+class ControlBar
+{
+public:
+	void switchToContext(int ctx, void *data);
+	int rva00539997(int a, int b);
+	int rva005399D0Check(Object *);
+private:
+	char m_pad00[0x6C];
+	Rva00539997Sub *m_6C;
+	int m_70;
+};
+
+// ?rva00539997@ControlBar@@QAEHHH@Z @0x00539997 (57B)
+int ControlBar::rva00539997(int, int)
+{
+	int ctx = m_70;
+	if (ctx == 7 || (m_6C && m_6C->m_FC != 0))
+		return 1;
+	if (ctx != 0 && ctx != 8 && ctx != 9)
+		switchToContext(0, 0);
+	return 0;
+}
 
 int ControlBar::rva005399D0Check(Object *obj)
 {

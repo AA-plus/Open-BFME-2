@@ -34,3 +34,52 @@ void *Rva004FCA5A::rva004FCA5A(const Rva00376A62 &val)
 	}
 	return 0;
 }
+
+struct Rva0059E647Arg;
+class Rva002E2903Player;
+class Rva0059E2FD
+{
+public:
+	bool rva0059E31F(const Rva0059E2FD &other);
+};
+
+class LivingWorldScenario
+{
+public:
+	class OwnershipSet
+	{
+	public:
+		void spawnBuildingsInRegionsForPlayer(Rva0059E647Arg *player);
+		void spawnArmiesInRegionsForPlayer(Rva0059E647Arg *player);
+	};
+};
+
+class Rva002B7582Sets
+{
+public:
+	void rva004FCA11(void *key, Rva002E2903Player *player);
+private:
+	char m_pad00[0x98];
+	LivingWorldScenario::OwnershipSet **m_begin; // +0x98
+	LivingWorldScenario::OwnershipSet **m_end;   // +0x9C
+};
+
+// ?rva004FCA11@Rva002B7582Sets@@QAEXPAXPAVRva002E2903Player@@@Z @0x004FCA11 (73B)
+void Rva002B7582Sets::rva004FCA11(void *key, Rva002E2903Player *player)
+{
+	LivingWorldScenario::OwnershipSet **last = m_end;
+	LivingWorldScenario::OwnershipSet **it = m_begin;
+	if (it != last)
+	{
+		for (; it != last; ++it)
+		{
+			LivingWorldScenario::OwnershipSet *set = *it;
+			if (((Rva0059E2FD *)set)->rva0059E31F(*(const Rva0059E2FD *)key))
+			{
+				set->spawnBuildingsInRegionsForPlayer((Rva0059E647Arg *)player);
+				set->spawnArmiesInRegionsForPlayer((Rva0059E647Arg *)player);
+				break;
+			}
+		}
+	}
+}

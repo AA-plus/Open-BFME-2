@@ -217,3 +217,75 @@ void Rva004EED02::xfer(Xfer *xfer)
 	else
 		m_F8 = false;
 }
+
+class Rva004EF2FAPrimary
+{
+public:
+	void rva004EEE38(Int turn);
+};
+
+class Rva004EE5D2
+{
+public:
+	void rva004EE78A();
+};
+
+struct Rva004EF2ABArg
+{
+	unsigned char m_pad[0x14];
+	Int m_14;
+};
+
+class Rva004EF2AB
+{
+public:
+	void rva004EF2AB(Rva004EF2ABArg *arg);
+private:
+	unsigned char m_pad00[0x54];
+	UnsignedInt m_timeStamp; // +0x54 (+0x6C on Rva004EED02)
+	UnsignedInt m_timeBase;  // +0x58 (+0x70 on Rva004EED02)
+	UnsignedInt m_5C;
+	Int m_60;                // +0x60 (+0x78 on Rva004EED02)
+	unsigned char m_pad64[0xDC - 0x64];
+	Int m_playerID;          // +0xDC (+0xF4 on Rva004EED02)
+};
+
+// ?rva004EF2AB@Rva004EF2AB@@QAEXPAURva004EF2ABArg@@@Z @0x004EF2AB (79B)
+void Rva004EF2AB::rva004EF2AB(Rva004EF2ABArg *arg)
+{
+	if (arg->m_14 == m_playerID)
+	{
+		if (m_timeBase != 0)
+		{
+			m_timeStamp += time(0) - m_timeBase;
+			m_timeBase = 0;
+		}
+		Int turn = reinterpret_cast<Int>(TheLivingWorldLogic->m_FC);
+		m_60 = turn;
+		unsigned char *base = reinterpret_cast<unsigned char *>(this) - 0x18;
+		reinterpret_cast<Rva004EF2FAPrimary *>(base)->rva004EEE38(turn);
+		reinterpret_cast<Rva004EE5D2 *>(base)->rva004EE78A();
+	}
+}
+
+class Rva004EF309
+{
+public:
+	void rva004EF309(LivingWorldLogic *logic);
+private:
+	unsigned char m_pad00[0x50];
+	UnsignedInt m_timeStamp; // +0x50 (+0x6C on Rva004EED02)
+	UnsignedInt m_timeBase;  // +0x54 (+0x70 on Rva004EED02)
+};
+
+// ?rva004EF309@Rva004EF309@@QAEXPAVLivingWorldLogic@@@Z @0x004EF309 (50B)
+void Rva004EF309::rva004EF309(LivingWorldLogic *logic)
+{
+	reinterpret_cast<Rva004EF2FAPrimary *>(reinterpret_cast<unsigned char *>(this) - 0x1C)->rva004EEE38(
+		reinterpret_cast<Int>(logic->m_FC));
+	if (m_timeBase != 0)
+	{
+		m_timeStamp += time(0) - m_timeBase;
+		m_timeBase = 0;
+	}
+}

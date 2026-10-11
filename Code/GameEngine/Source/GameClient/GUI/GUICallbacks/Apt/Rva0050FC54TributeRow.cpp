@@ -138,7 +138,7 @@ private:
 class Rva0050FC54 : public Rva0050FAEC
 {
 public:
-	Rva0050FC54(int level, const AsciiString &name, Player *player);
+	__declspec(noinline) Rva0050FC54(int level, const AsciiString &name, Player *player);
 	virtual ~Rva0050FC54();
 
 private:
@@ -170,4 +170,21 @@ Rva0050FC54::Rva0050FC54(int level, const AsciiString &name, Player *player)
 		FunctorMethod method = reinterpret_cast<FunctorMethod>(&Rva0050F0AB::InitTextEntry);
 		_bfme_setAptScreenRef(key + "_InitTextEntry", AptRef<AptScreenInitGadgets>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
+}
+
+class Rva0050F5A6;
+class Rva0050FF55 : public Rva0050FC54
+{
+public:
+	Rva0050FF55(Rva0050F5A6 *owner, int level, const AsciiString &name, Player *player);
+	virtual ~Rva0050FF55();
+
+private:
+	Rva0050F5A6 *m_80;
+};
+
+// ??0Rva0050FF55@@QAE@PAVRva0050F5A6@@HABVAsciiString@@PAVPlayer@@@Z @0x0050FF55 (42B)
+Rva0050FF55::Rva0050FF55(Rva0050F5A6 *owner, int level, const AsciiString &name, Player *player)
+	: Rva0050FC54(level, name, player), m_80(owner)
+{
 }

@@ -71,3 +71,38 @@ void Rva005975D7::rva005975D7(unsigned char value) {byte=value;}
 // Installed-vtable scalar clears: word88 and byteD0, no stack arguments.
 class Rva0043A0B2 {public: void rva0043A0B2(); private: char prefix[0x88]; int word; char gap[0xD0-0x8C]; unsigned char byte;};
 void Rva0043A0B2::rva0043A0B2() {word=0; byte=0;}
+
+// ?rva004E14A5@Rva004E14A5@@QAEXE@Z @0x004E14A5 (23B)
+class Rva004E14A5
+{
+public:
+	virtual void v0();
+	virtual void v1();
+	virtual void v2();
+	virtual void v3();
+	virtual void v4();
+	virtual void v5();
+	void rva004E14A5(unsigned char value);
+private:
+	char m_pad04[0x10 - 0x04];
+	int m_10;
+	char m_pad14[0x20 - 0x14];
+	unsigned char m_20;
+	unsigned char m_21;
+};
+void Rva004E14A5::rva004E14A5(unsigned char value)
+{
+	m_10 = 0;
+	m_21 = value;
+	m_20 = 1;
+	v5();
+}
+
+// ?rva005216DB@Rva005216DB@@QAE_NPAVGameSlot@@H@Z @0x005216DB (18B)
+class GameSlot { public: void setPlayerTemplate(int value); };
+class Rva005216DB { public: bool rva005216DB(GameSlot *target, int value); };
+bool Rva005216DB::rva005216DB(GameSlot *target, int value)
+{
+	target->setPlayerTemplate(value);
+	return true;
+}

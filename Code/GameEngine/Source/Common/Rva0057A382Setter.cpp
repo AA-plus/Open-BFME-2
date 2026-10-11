@@ -17,6 +17,12 @@ private:
 	int m_cached2C;
 };
 
+class Rva005D3FBD
+{
+public:
+	void rva005D3FBD(bool v);
+};
+
 class Rva0057A4A3Target
 {
 public:
@@ -27,7 +33,8 @@ public:
 class Rva0057A382
 {
 public:
-	void rva0057A382();
+	__declspec(noinline) void rva0057A382();
+	void rva0057A471(int val);
 	void rva0057A4A3();
 private:
 	char m_pad00[8];
@@ -47,6 +54,18 @@ void Rva0057A382::rva0057A382()
 	else if (m_5C != 0)
 		v = g_00E0637C;
 	m_08.rva005D3F6D(v);
+}
+
+// ?rva0057A471@Rva0057A382@@QAEXH@Z @0x0057A471 (50B)
+void Rva0057A382::rva0057A471(int val)
+{
+	if (val != m_58) {
+		((Rva005D3FBD *)&m_08)->rva005D3FBD(val == 1);
+		Rva0057A4A3Target *target = m_48;
+		m_58 = val;
+		target->m_38 = true;
+		rva0057A382();
+	}
 }
 
 // ?rva0057A4A3@Rva0057A382@@QAEXXZ
