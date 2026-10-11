@@ -10,7 +10,7 @@ public:
 	virtual void bfmeReservedV3();
 	virtual bool isAiModuleData() const;
 	virtual bool rva0033B3D7Predicate() const;
-	virtual void bfmeReservedV6();
+	virtual bool rva0033B427Predicate() const;	// +0x18
 	virtual void bfmeReservedV7();
 	virtual void bfmeReservedV8();
 	virtual bool rva0033B479Predicate() const;
@@ -55,6 +55,7 @@ public:
 	AIUpdateModuleData *friend_getAIModuleInfo();
 	int rva0033B479() const;
 	const ModuleData *rva0033B3D7() const;
+	const ModuleData *rva0033B427(int unused) const;
 };
 
 inline const ModuleData *ModuleInfo::getNthData(int i) const
@@ -91,6 +92,20 @@ const ModuleData *ThingTemplate::rva0033B3D7() const
 	for (int j = 0; j < numModInfos; ++j)
 	{
 		if (m_behaviorModuleInfo.getNthData(j) && m_behaviorModuleInfo.getNthData(j)->rva0033B3D7Predicate())
+			return m_behaviorModuleInfo.getNthData(j);
+	}
+	return 0;
+}
+
+// Native 33B427..33B479 RET4, between rva0033B3D7 and rva0033B479 (callers
+// InGameUI::handleBuildPlacements and BuildAssistant::isLocationLegalToBuild):
+// the same scan testing virtual slot +18; its int argument is never read.
+const ModuleData *ThingTemplate::rva0033B427(int unused) const
+{
+	int numModInfos = moduleRecordCount(&m_behaviorModuleInfo);
+	for (int j = 0; j < numModInfos; ++j)
+	{
+		if (m_behaviorModuleInfo.getNthData(j) && m_behaviorModuleInfo.getNthData(j)->rva0033B427Predicate())
 			return m_behaviorModuleInfo.getNthData(j);
 	}
 	return 0;
