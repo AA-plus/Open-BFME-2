@@ -115,6 +115,8 @@ public:
 struct ThingTemplate
 {
 	bool isKindOf(int bit) const { return (m_kindOf[bit >> 3] >> (bit & 7)) & 1; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the isKindOf copy loses to the first-in-order copy. No flags touched.
+	bool bfme_isKindOf_72c56(int bit) const { return (m_kindOf[bit >> 3] >> (bit & 7)) & 1; }
 	char m_pad000[0x100];
 	unsigned char m_kindOf[28];	// +0x100
 };
@@ -123,7 +125,11 @@ class Object
 {
 public:
 	bool isKindOf(int bit) const { return m_template->isKindOf(bit); }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the Object::isKindOf copy loses to the first-in-order copy. No flags touched.
+	bool bfme_isKindOfObj_5d2a1(int bit) const { return m_template->bfme_isKindOf_72c56(bit); }
 	AIUpdateInterface *getAIUpdateInterface() { return m_ai; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getAIUpdateInterface copy loses to the first-in-order copy. No flags touched.
+	AIUpdateInterface *bfme_getAIUpdateInterface_de3c5() { return m_ai; }
 	BodyModuleInterface *getBodyModule() const { return m_body; }
 	char m_pad000[4];
 	const ThingTemplate *m_template;	// +0x04
@@ -148,7 +154,7 @@ class Team
 public:
 	Player *getControllingPlayer() const;			// 0x0039D7CF
 	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;	// 0x00263864
-	Coord3D rva0039DA2A() const;				// 0x0039DA2A
+	void rva0039DA2A(Coord3D *out) const;			// 0x0039DA2A (rowed with the hidden result pointer as an explicit argument)
 };
 
 struct BfmeWideResult
@@ -161,7 +167,7 @@ struct BfmeWideResult
 class PartitionManager
 {
 public:
-	BfmeWideResult iterateObjectsInRange(const Coord3D &pos, float radius, int distCalc,
+	BfmeWideResult iterateObjectsInRange(const Coord3D *pos, float radius, int distCalc,
 		Rva000421C8 *filters, int order);	// 0x00625610
 };
 extern PartitionManager *ThePartitionManager;
@@ -185,7 +191,7 @@ void ScriptActions::rva003C9D0D(const AsciiString &teamName, float range)
 	if (!team)
 		return;
 
-	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(team->rva0039DA2A(), range, 0,
+	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(&(const Coord3D &)(team->*reinterpret_cast<Coord3D (Team::*)() const>(&Team::rva0039DA2A))(), range, 0,
 		Rva00261409Filter(team->getControllingPlayer(), true, 2)
 			.link(&Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 7),
 				*(BfmeFixedStorage0004543D *)g_00DFEFA4StoragePrototype)), 1);
@@ -196,8 +202,8 @@ void ScriptActions::rva003C9D0D(const AsciiString &teamName, float range)
 		if (body && body->getHealthRatio() < 1.0f) {
 			for (DLINK_ITERATOR<Object> it = team->iterate_TeamMemberList(); !it.done(); it.advance()) {
 				Object *member = it.cur();
-				if (member->isKindOf(78) && member->getAIUpdateInterface())
-					member->getAIUpdateInterface()->m_commands.rva0036F19B(building, CMD_FROM_SCRIPT);
+				if (member->bfme_isKindOfObj_5d2a1(78) && member->bfme_getAIUpdateInterface_de3c5())
+					member->bfme_getAIUpdateInterface_de3c5()->m_commands.rva0036F19B(building, CMD_FROM_SCRIPT);
 			}
 			break;
 		}
