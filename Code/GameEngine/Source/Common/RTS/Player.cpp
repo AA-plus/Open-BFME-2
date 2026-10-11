@@ -51,6 +51,14 @@
 
 // _List_iterator comparisons otherwise instantiate the base-class
 // operator!= COMDAT (one byte shape per TU flags); exact-match free
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <list>
 // overloads take those calls instead so this TU emits no external copy.
 namespace _STL {
@@ -187,6 +195,17 @@ EMPTY_DTOR(Squad)
 #include "GameLogic/VictoryConditions.h"
 
 #include "GameNetwork/GameInfo.h"
+
+// _Rb_tree_iterator comparisons otherwise instantiate the base-class
+// operator!= COMDAT (one byte shape per TU flags); exact-match free
+// overloads take those calls instead so this TU emits no external copy.
+// TRANSITIVE anchor (no <map>/<set> include in this TU).
+namespace _STL {
+template <class _RbVal, class _RbLeft, class _RbRight>
+static inline bool operator!=(const _Rb_tree_iterator<_RbVal, _RbLeft> &a,
+                              const _Rb_tree_iterator<_RbVal, _RbRight> &b)
+{ return a._M_node != b._M_node; }
+}
 
 // Retail's DLINK_ITERATOR<Object>::advance is the virtual-inheritance body at
 // 0x00263526 (rowed from Rva001705A0LazyObject.cpp): BFME2's Object has a vbptr
