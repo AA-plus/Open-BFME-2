@@ -7,7 +7,15 @@
 
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
-extern StringBase<char> g_00DFE7B0;
+// VA 0x00DFE7B0 (RVA 0x009DFE7B0): the 144-byte string base this body writes
+// the timing-log key into. Retail's storage lies in .data's zero-filled tail
+// (the section's raw data ends at RVA 0x009DE008), so the definition is
+// zero-initialised, matching the empty string retail holds. The shim's
+// StringBase default constructor is private (AsciiString alone is its
+// friend), so the object is defined with the AsciiString spelling -- the
+// one-pointer layout twin -- and reached through the no-op twin cast, the
+// same idiom the other g_ string keys in this family use.
+AsciiString g_00DFE7B0;
 // VA 0x00DFE7A8 (RVA 0x009FE7A8): the timing-log enable byte this body sets.
 // Retail's storage sits in .data's zero-filled tail (the section's raw data ends
 // at RVA 0x009DE008, so the address loads as zero), so the definition that owns
@@ -22,7 +30,7 @@ int __cdecl rva003B9EC4(Rva003B9EC4Arg *arg, int argc)
 	{
 		{
 			AsciiString text(arg->m_04);
-			g_00DFE7B0.set(reinterpret_cast<const StringBase<char> &>(text));
+			((StringBase<char> *)&g_00DFE7B0)->set(reinterpret_cast<const StringBase<char> &>(text));
 		}
 		g_00DFE7A8 = 1;
 		((unsigned char *)TheWritableGlobalData)[0x2C] = 1;
