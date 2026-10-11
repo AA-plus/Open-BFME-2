@@ -37243,8 +37243,6 @@ pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3d_inverse.cpp	"",on	
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3d_inverse.cpp	"gsy",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3d_multiply.cpp	"",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3d_multiply.cpp	"gsy",on	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix4.cpp	"",on	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix4.cpp	"gsy",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix4_notequal.cpp	"",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix4_notequal.cpp	"gsy",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix4x4.cpp	"",on	1
