@@ -97,15 +97,20 @@ void W3DView::calcCameraConstraints()
 			screen.y = 0.5f * getHeight() + m_originY;
 			getPickRay(&screen, &rayStart, &rayEnd);
 
-			center.x = Vector3::Find_X_At_Z(maxEdgeZ, rayStart, rayEnd);
-			center.y = Vector3::Find_Y_At_Z(maxEdgeZ, rayStart, rayEnd);
+			// LINK: file-static manual inlines of Vector3::Find_X/Y_At_Z
+			// (header-verbatim bodies). This TU's copies are not retail's;
+			// the calls inline but still emit loser COMDATs. Rebinding here
+			// emits nothing (internal linkage, fully inlined). No flags
+			// touched.
+			center.x = (rayStart.X + ((maxEdgeZ - rayStart.Z) * ((rayEnd.X - rayStart.X) / (rayEnd.Z - rayStart.Z))));
+			center.y = (rayStart.Y + ((maxEdgeZ - rayStart.Z) * ((rayEnd.Y - rayStart.Y) / (rayEnd.Z - rayStart.Z))));
 			
 
 			screen.y = m_originY + 0.95f * getHeight();
 			getPickRay(&screen, &rayStart, &rayEnd);
 		}
-		bottom.x = Vector3::Find_X_At_Z(maxEdgeZ, rayStart, rayEnd);
-		bottom.y = Vector3::Find_Y_At_Z(maxEdgeZ, rayStart, rayEnd);
+		bottom.x = (rayStart.X + ((maxEdgeZ - rayStart.Z) * ((rayEnd.X - rayStart.X) / (rayEnd.Z - rayStart.Z))));
+		bottom.y = (rayStart.Y + ((maxEdgeZ - rayStart.Z) * ((rayEnd.Y - rayStart.Y) / (rayEnd.Z - rayStart.Z))));
 		
 		center.x -= bottom.x;
 		center.y -= bottom.y;
