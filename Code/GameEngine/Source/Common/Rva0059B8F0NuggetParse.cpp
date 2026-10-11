@@ -4,7 +4,7 @@
 //       game/GameEngine/Source/Common/AttackNugget_parse_Thunk.cpp
 // Same INI-parse boilerplate (SEH frame, allocate, init from a static
 // FieldParse table, add to the owning ObjectCreationList) as AttackNugget's
-// parse(), but the new'd object is BfmeA1140 (56 bytes, ctor landed at
+// parse(), but the new'd object is Rva0035D74A (56 bytes, ctor landed at
 // 0x0059B860, BfmeConv1140.cpp) instead of AttackNugget/RadiusDecalTemplate.
 // Class identity of the nugget itself is not recovered -- address-derived
 // naming per IDENTITY POLICY.
@@ -47,7 +47,7 @@ struct Gen_00489270
 	void m(int a);
 };
 
-// same layout as BfmeConv1140.cpp's BfmeA1140 -- duplicated here (TU-scoped
+// same layout as BfmeConv1140.cpp's Rva0035D74A -- duplicated here (TU-scoped
 // shim) rather than shared, per repo convention for these small state objects.
 class BfmeBase1140A
 {
@@ -57,10 +57,10 @@ public:
 	volatile int m_bfme04;
 };
 
-class BfmeA1140 : public BfmeBase1140A
+class Rva0035D74A : public BfmeBase1140A
 {
 public:
-	BfmeA1140(void);
+	Rva0035D74A(void);
 	char m_bfme08;
 	volatile char m_bfme09;
 	char m_bfmePad[2];
@@ -86,7 +86,7 @@ public:
 	static void parse(INI *, void *instance, void *store, const void *userData);
 
 private:
-	BfmeA1140 m_bfme;
+	Rva0035D74A m_bfme;
 };
 
 // ?parse@Rva0059B8F0Nugget@@SAXPAVINI@@PAX1PBX@Z
@@ -99,7 +99,7 @@ void Rva0059B8F0Nugget::parse(INI *ini, void *instance, void *store, const void 
 		{ 0, 0, 0, 0 }
 	};
 
-	BfmeA1140 *nugget = new BfmeA1140;
+	Rva0035D74A *nugget = new Rva0035D74A;
 	ini->initFromINI(nugget, myFieldParse);
 	((Gen_00489270 *)instance)->m((int)nugget);
 }
