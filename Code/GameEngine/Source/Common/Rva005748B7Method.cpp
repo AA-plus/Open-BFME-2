@@ -29,6 +29,56 @@ private:
 	char m_pad[0x20];
 	Rva0042D6B4PtrChaseField *m_field;
 };
+class Rva000AD6F4
+{
+public:
+	~Rva000AD6F4();
+};
+class Rva005747CC
+{
+public:
+	void rva005747CC(int unused);
+};
+void Rva005747CC::rva005747CC(int)
+{
+	((Rva000AD6F4 *)(*(char **)((char *)this - 0x0C) + 0x54))->~Rva000AD6F4();
+}
+class Rva005756F2
+{
+public:
+	void rva005756F2(int unused);
+};
+void Rva005756F2::rva005756F2(int)
+{
+	((Rva000AD6F4 *)(*(char **)((char *)this - 4) + 0x2C))->~Rva000AD6F4();
+}
+class Rva005CE9E9
+{
+public:
+	void rva005CE9E9(int unused);
+};
+void Rva005CE9E9::rva005CE9E9(int)
+{
+	((Rva000AD6F4 *)(*(char **)((char *)this - 4) + 0x1C))->~Rva000AD6F4();
+}
+class Rva005749A8
+{
+public:
+	void rva005749A8(int unused);
+};
+void Rva005749A8::rva005749A8(int)
+{
+	((Rva005748B7 *)((char *)this - 8))->rva005748B7((Rva002BED91 *)((char *)this + 0x68));
+}
+class Rva00574A7B
+{
+public:
+	void rva00574A7B(int unused);
+};
+void Rva00574A7B::rva00574A7B(int)
+{
+	((Rva005748B7 *)((char *)this - 0x0C))->rva005748B7((Rva002BED91 *)((char *)this + 0x6C));
+}
 void Rva005748B7::rva005748B7(Rva002BED91 *arg)
 {
 	if (!arg->m_ptr)
@@ -50,3 +100,4 @@ void Rva005748B7::rva005748B7(Rva002BED91 *arg)
 	((Rva005CB260 *)q)->rva005CB260();
 	arg->clear();
 }
+

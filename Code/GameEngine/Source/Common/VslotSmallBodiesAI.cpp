@@ -857,3 +857,65 @@ void Rva00578616::rva00578626(Int a, Int b)
 {
 	((Rva005D3280 *)m_48)->rva005D3280(a, b);
 }
+
+class Rva0056B9F2 : public Rva004888F8Slots<14>
+{
+public:
+	virtual void vslot14(bool inv, Int arg);
+	void rva0056B9F2(bool a, Int b);
+};
+void Rva0056B9F2::rva0056B9F2(bool a, Int b)
+{
+	vslot14(!a, b);
+}
+
+struct Rva005778B6Ret
+{
+	void *m_ptr;
+	Rva005778B6Ret(const Rva005778B6Ret &other);
+};
+class Rva005778B6Target
+{
+public:
+	virtual void slot00();
+	virtual Rva005778B6Ret slot04();
+};
+class Rva005778B6
+{
+public:
+	Rva005778B6Ret rva005778B6();
+private:
+	char m_pad00[0x3C];
+	Rva005778B6Target *m_3C;
+};
+Rva005778B6Ret Rva005778B6::rva005778B6()
+{
+	return m_3C->slot04();
+}
+
+class Rva005F6037ByteChaseField
+{
+public:
+	unsigned char get() const;
+};
+class Rva005F62FE
+{
+public:
+	void rva005F62FE(bool b);
+};
+class Rva005E6863
+{
+public:
+	void rva005E6863(Int a, Int b);
+private:
+	Int m_00;
+	void *m_04;
+};
+void Rva005E6863::rva005E6863(Int, Int)
+{
+	void *p = m_04;
+	if (((const Rva005F6037ByteChaseField *)p)->get())
+		((Rva005F62FE *)p)->rva005F62FE(false);
+}
+
+

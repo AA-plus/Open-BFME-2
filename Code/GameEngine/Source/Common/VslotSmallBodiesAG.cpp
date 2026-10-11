@@ -325,3 +325,56 @@ void Rva004BC51B::forward()
 {
 	target();
 }
+
+class AsciiString;
+class Rva003F7B59
+{
+public:
+	void *rva003F7B59(const AsciiString *a, Int b);
+	Int m_00;
+};
+struct Rva005C456FSub04
+{
+	char m_pad00[0x24];
+	Int m_24;
+};
+struct Rva005C456FSub08
+{
+	Int m_00;
+	Int m_04;
+	Int m_08;
+	Int m_0C;
+	Int m_10;
+};
+class Rva005C456F
+{
+public:
+	void rva005C456F(Rva003F7B59 *arg);
+private:
+	Int m_00;
+	Rva005C456FSub04 *m_04;
+	Rva005C456FSub08 *m_08;
+};
+void Rva005C456F::rva005C456F(Rva003F7B59 *arg)
+{
+	Rva005C456FSub08 *s = m_08;
+	if (s->m_08 != 0 || m_04->m_24 == arg->m_00)
+		arg->rva003F7B59((const AsciiString *)&s->m_0C, (Int)&s->m_10);
+}
+
+class Rva005C47DC
+{
+public:
+	void rva005C47DC(Int unused);
+private:
+	char m_pad00[0x14];
+	Int m_14;
+};
+void Rva005C47DC::rva005C47DC(Int)
+{
+	Int v = m_14;
+	if (v > 0)
+		m_14 = v - 1;
+}
+
+

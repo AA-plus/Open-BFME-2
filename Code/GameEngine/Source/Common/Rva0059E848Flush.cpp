@@ -12,9 +12,16 @@ public:
 	int m_val04;
 };
 
+namespace _STL
+{
+template <class InputIter, class T>
+InputIter find(InputIter first, InputIter last, const T &val);
+}
+
 class Rva0059E848
 {
 public:
+	bool rva0059E826(int val);
 	void rva0059E848();
 private:
 	char m_pad00[4];
@@ -25,6 +32,12 @@ private:
 	void *m_eos1C;
 };
 
+bool Rva0059E848::rva0059E826(int val)
+{
+	int *end = (int *)m_end18;
+	return _STL::find((int *)m_begin14, end, val) != end;
+}
+
 void Rva0059E848::rva0059E848()
 {
 	if (((m_end18 - m_begin14) & ~3) == 4) {
@@ -34,3 +47,4 @@ void Rva0059E848::rva0059E848()
 		h->m_val04 = *b;
 	}
 }
+

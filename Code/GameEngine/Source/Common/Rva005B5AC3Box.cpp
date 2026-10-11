@@ -15,9 +15,11 @@ struct Rva005B5AC3Box
 	int m_24;
 
 	void Run();
+	int rva005B5AE3(int msg, unsigned int key, unsigned int state);
 };
 
 void Rva005B23D7Wrap(int a, int b, int c);
+void __cdecl Rva00513866();
 
 void Rva005B5AC3Box::Run()
 {
@@ -26,3 +28,69 @@ void Rva005B5AC3Box::Run()
 		m_24 |= -1;
 	}
 }
+
+int Rva005B5AC3Box::rva005B5AE3(int msg, unsigned int key, unsigned int state)
+{
+	if (msg == 0x15 && (unsigned char)key == 1 && (state & 1) != 0) {
+		Rva00513866();
+		return 1;
+	}
+	return 0;
+}
+
+struct Rva005B5C70Box
+{
+	char pad[8];
+	void *m_8;
+	char pad2[0x15 - 0x0C];
+	unsigned char m_15;
+
+	void Run(int a);
+	int rva005B5E03(int msg, void *win, int param);
+};
+
+int Rva005B5C70Box::rva005B5E03(int msg, void *win, int param)
+{
+	if (m_15 != 0)
+		return 1;
+	if (msg == 0x4014 && win == m_8) {
+		Run(1);
+		return 1;
+	}
+	return 0;
+}
+
+struct Rva005B6182Screen
+{
+	char pad[0x3c8];
+	int m_3c8;
+};
+
+class AptCreateAHero
+{
+public:
+	class Manager;
+};
+
+class AptCreateAHero::Manager
+{
+public:
+	void PopulateAwards();
+	void rva005B5F2E();
+	void rva005B6182(bool flag);
+private:
+	char pad0[4];
+	Rva005B6182Screen *m_4;
+	char pad8[0x14 - 8];
+	bool m_14;
+};
+
+void AptCreateAHero::Manager::rva005B6182(bool flag)
+{
+	if (flag && m_14 && m_4->m_3c8 != 1) {
+		m_14 = false;
+		PopulateAwards();
+		rva005B5F2E();
+	}
+}
+

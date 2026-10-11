@@ -1,9 +1,34 @@
 // cl: /O1 /MD /G7
 // ?rva005328E2@PathfindZoneManager@@QAEXPAURva005312BERect@@@Z @ 0x005328E2 (230B): __thiscall grid alloc outer/inner from rect, new Item[outer*inner] + new Item*[outer], fill row pointers, set flag at +0x1BA31.
 // Evidence: offsets 0x1BA34/0x1BA38/0x1BA3C/0x1BA40 shared with Rva005312BEClear.cpp siblings; rect 16B copy to +0x1BA44 matches Rva005312BERect x0/y0/x1/y1; (x1-x0+16)/16 + (y1-y0+16)/16 via idiv 16; 0x44 elt with eh-vector ctor; caller at 0x002E8E8E.
+class GameWindow;
+namespace _STL
+{
+template <class T>
+class allocator
+{
+public:
+	allocator() {}
+};
+template <class T, class Alloc>
+class _Vector_base
+{
+public:
+	_Vector_base(const Alloc &a);
+	T *_M_start;
+	T *_M_finish;
+	T *_M_end_of_storage;
+};
+}
+struct Rva005328B2Vec : _STL::_Vector_base<GameWindow *, _STL::allocator<GameWindow *> >
+{
+	Rva005328B2Vec(const _STL::allocator<GameWindow *> &a = _STL::allocator<GameWindow *>())
+		: _STL::_Vector_base<GameWindow *, _STL::allocator<GameWindow *> >(a) {}
+};
 class Rva00531132
 {
 public:
+	Rva00531132() : m_count(0) {}
 	void rva00531132(bool add, int value);
 	int rva0053117F(int index);
 	int m_count;
@@ -21,20 +46,16 @@ public:
 	unsigned char m_cleared;
 	unsigned char m_35;
 	char m_pad36[2];
-	void *m_p38;
-	char m_pad3C[0x44 - 0x3C];
+	Rva005328B2Vec m_p38;
 };
-// ??0Rva005312BEItem@@QAE@XZ present-unmatched
 Rva005312BEItem::Rva005312BEItem()
+	: m_cleared(1), m_35(1)
 {
-	m_set.m_count = 0;
-	m_cleared = 0;
-	m_35 = 0;
 }
 Rva005312BEItem::~Rva005312BEItem()
 {
-	if (m_p38 != 0)
-		free(m_p38);
+	if (m_p38._M_start != 0)
+		free(m_p38._M_start);
 }
 struct Rva005312BERect
 {

@@ -182,3 +182,25 @@ void Rva005E4087::rva005E4087(int key) {
   selected=key;
  }
 }
+
+class GameWindow;
+bool __cdecl Rva00381458(int channel, const UnicodeString &msg, GameWindow *window);
+struct Rva005D57EBInner {
+ __forceinline bool send(const UnicodeString &msg, GameWindow *window) {
+  return Rva00381458((int)this, msg, window);
+ }
+};
+class Rva005D57EB {
+public:
+ bool rva005D57EB(const UnicodeString &msg, GameWindow *window);
+private:
+ int m_00;
+ Rva005D57EBInner *m_04;
+};
+bool Rva005D57EB::rva005D57EB(const UnicodeString &msg, GameWindow *window) {
+ return m_04->send(msg, window);
+}
+
+
+
+

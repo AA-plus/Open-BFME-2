@@ -13,10 +13,18 @@ public:
 	void rva005C674A();
 };
 
+struct Rva00577958Inner
+{
+	int m_00;
+	int m_04;
+	int m_08;
+};
+
 class Rva005F83B9
 {
 public:
 	void rva00577944();
+	bool rva00577958() const;
 private:
 	char m_pad0[4];
 	void *m_p4;
@@ -27,3 +35,9 @@ void Rva005F83B9::rva00577944()
 	((Rva005C6D4D *)m_p4)->rva005C6D9C();
 	((Rva005C674A *)m_p4)->rva005C674A();
 }
+
+bool Rva005F83B9::rva00577958() const
+{
+	return ((const Rva00577958Inner *)m_p4)->m_08 > 0;
+}
+

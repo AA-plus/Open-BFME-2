@@ -31,6 +31,7 @@ class Rva0059A85C : public Rva00506B1B
 {
 public:
 	virtual ~Rva0059A85C();
+	virtual void v1();
 private:
 	_STL::vector<void *> m_vec;
 	void *m_outer;
@@ -44,8 +45,14 @@ __declspec(noinline) inline Rva0059A85C::~Rva0059A85C()
 	((Rva002EE9B7 *)m_set)->~Rva002EE9B7();
 }
 
+void Rva0059A85C::v1()
+{
+	m_vec.clear();
+}
+
 // ?bfmeAnchorRva0059A85CDtor absent-from-retail
 void bfmeAnchorRva0059A85CDtor(Rva0059A85C *p)
 {
 	p->Rva0059A85C::~Rva0059A85C();
 }
+

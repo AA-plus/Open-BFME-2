@@ -70,6 +70,7 @@ class Rva00522A91
 public:
 	void rva00522A91();
 	void rva00521841();
+	int rva00523178(int msg, unsigned int key, unsigned int state);
 private:
 	char m_pad000[0x274];
 	void *m_owner;				// +0x274
@@ -78,6 +79,26 @@ private:
 	char m_pad6BC[6];
 	bool m_busy;				// +0x6C2
 };
+
+int Rva00522A91::rva00523178(int msg, unsigned int key, unsigned int state)
+{
+	if (msg != 0x15)
+		return 0;
+	switch ((unsigned char)key)
+	{
+	case 1:
+		if (state & 1)
+			rva00521841();
+		break;
+	case 0x1C:
+		if (state & 2)
+			rva00522A91();
+		break;
+	default:
+		return 0;
+	}
+	return 1;
+}
 
 // Row owners for the follow-up calls (same panel object, rowed in
 // AptSkirmishCallbacks.cpp): 0x00521770, 0x00521B56, 0x005229D3.

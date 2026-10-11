@@ -36,11 +36,17 @@ struct Rva005765D1Outer
 	char m_pad[0x10];
 	const Rva005765D1Mid *m_10;
 };
+class Rva005CB265
+{
+public:
+	virtual int rva005CB265();
+};
 class Rva005765D1 : public Rva005D19F8
 {
 public:
 	Rva005765D1(void *p, int a, int b);
 	virtual ~Rva005765D1();
+	void rva0057662B();
 private:
 	void *m_08;
 };
@@ -56,3 +62,15 @@ Rva005765D1::Rva005765D1(void *p, int a, int b)
 		p3->Rva005CC208::rva005CC208();
 	}
 }
+void Rva005765D1::rva0057662B()
+{
+	const Rva005765D1Outer *o = (const Rva005765D1Outer *)m_08;
+	int v1 = o->m_10->m_04->get();
+	const Rva0042D697PtrChaseField *p2 = (const Rva0042D697PtrChaseField *)v1;
+	int v2 = p2->get();
+	if (v2) {
+		Rva005CB265 *p3 = (Rva005CB265 *)v2;
+		p3->Rva005CB265::rva005CB265();
+	}
+}
+
