@@ -12,6 +12,14 @@
 // Native198B helper4F9658 independently proves this receiver, vector inputs,
 // ArmySummary input, unsigned player index, and unused final flag/RET20;
 // its original method name stays unknown. No clean BFME1/ZH donor exists.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include <map>
 struct Rva0040DC56Element {int a[1];};
