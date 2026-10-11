@@ -27,10 +27,18 @@ public:
 	void setStatus(ObjectStatusTypes status, bool set);
 };
 
-class Rva004500A3
+class SpecialPowerTemplate;
+class Object;
+struct Coord3D;
+class Waypoint;
+
+// 0x004500A3 is rowed as SpecialAbilityUpdate::initiateIntentToDoSpecialPower
+// (555B; slot 0); same five-word shape, so this resolves to the rowed body
+// instead of the unrowed Rva004500A3 spelling (sole U on this unit).
+class SpecialAbilityUpdate
 {
 public:
-	void rva004500A3(int a, int b, int c, int d, int e);
+	virtual void initiateIntentToDoSpecialPower(const SpecialPowerTemplate *a, const Object *b, const Coord3D *c, unsigned int d, const Waypoint *e);
 };
 
 class Rva004ADC38
@@ -45,7 +53,7 @@ void Rva004ADC38::rva004ADC38(int a, int b, int c, int d, int e)
 	const Rva0028AC4EEntry *entry = owner->rva0028AC4E();
 	if (entry == 0 || ((Rva001E46E1 *)entry)->rva001E46E1(owner) != 0.0f)
 	{
-		((Rva004500A3 *)this)->rva004500A3(a, b, c, d, e);
+		((SpecialAbilityUpdate *)this)->SpecialAbilityUpdate::initiateIntentToDoSpecialPower((const SpecialPowerTemplate *)a, (const Object *)b, (const Coord3D *)c, d, (const Waypoint *)e);
 		owner->setStatus((ObjectStatusTypes)0x4A, true);
 	}
 }

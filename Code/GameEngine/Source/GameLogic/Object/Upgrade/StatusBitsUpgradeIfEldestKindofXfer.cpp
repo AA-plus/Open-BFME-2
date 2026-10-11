@@ -120,10 +120,21 @@ private:
 	Rva00485BB8 m_1C;
 };
 
+// 0x004B8710 is rowed as ArmorUpgrade::xfer (27B; ICF-shared with the
+// StatusBitsUpgrade spelling per the header note); the qualified call goes
+// through a TU-local view so it resolves to the rowed body instead of the
+// unrowed spelling (sole U on this unit).
+class ArmorUpgrade
+{
+protected:
+	virtual void xfer(Xfer *xfer);
+	friend class StatusBitsUpgradeIfEldestKindof;
+};
+
 // ?xfer@StatusBitsUpgradeIfEldestKindof@@MAEXPAVXfer@@@Z @0x004B4B7C
 void StatusBitsUpgradeIfEldestKindof::xfer(Xfer *xfer)
 {
 	xfer->Version1();
-	StatusBitsUpgrade::xfer(xfer);
+	((ArmorUpgrade *)this)->ArmorUpgrade::xfer(xfer);
 	m_1C.xfer(xfer);
 }
