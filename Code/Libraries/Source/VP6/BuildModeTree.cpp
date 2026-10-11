@@ -3,7 +3,7 @@
 // No decoder source was consulted.
 // ?Rva009B6740BuildTable@@YAXPAE@Z retail 0x001C7040..0x001C7241 (514 bytes)
 // (spec name VP6_BuildModeTree; the name is the existing pin that the
-// matched caller Rva009B6A30LoadTables.cpp already calls). cdecl taking the
+// matched caller DecodeModeProbs.cpp already calls). cdecl taking the
 // decoder instance. For each previous mode (outer) and context type (inner)
 // it weights every mode by 100 times the type's first transmitted row at
 // 0x72C (the previous mode itself counts 0) then stores the same-mode

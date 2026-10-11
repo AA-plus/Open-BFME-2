@@ -5,7 +5,7 @@ struct Rva009A9070Context;
 struct Rva009A9070Source;
 // SetAddNoiseMode at 0x001B6920 (VP6 clean room).
 extern "C" void __cdecl SetAddNoiseMode(void *, int);
-void Rva009A9070CopyStreams(Rva009A9070Context *, Rva009A9070Source *, int);
+extern "C" void __cdecl CopyFrame(Rva009A9070Context *, Rva009A9070Source *, int);
 void Rva009A4E50Configure(void *context, unsigned selector, int value)
 {
     if (selector > 9) return;
@@ -27,8 +27,8 @@ again:
         SetAddNoiseMode(*(void **)((char *)context + 0x298), value);
         return;
     case 7:
-        Rva009A9070CopyStreams(*(Rva009A9070Context **)((char *)context + 0x298), (Rva009A9070Source *)value, *(int *)((char *)context + 0x254));
-        Rva009A9070CopyStreams(*(Rva009A9070Context **)((char *)context + 0x298), (Rva009A9070Source *)value, *(int *)((char *)context + 0x24c));
+        CopyFrame(*(Rva009A9070Context **)((char *)context + 0x298), (Rva009A9070Source *)value, *(int *)((char *)context + 0x254));
+        CopyFrame(*(Rva009A9070Context **)((char *)context + 0x298), (Rva009A9070Source *)value, *(int *)((char *)context + 0x24c));
         return;
     case 0:
         if (value == 9) { value = 70; selector = 1; goto again; }

@@ -2926,7 +2926,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x007D94DC,16,.rdata,global,?defaultMvSize@@3PAEA,,unowned,,0,4
 0x007D94EC,4,.rdata,global,?defaultIsMvShort@@3PAEA,,unowned,,0,1
 0x007D94F0,8,.rdata,global,?defaultMvSign@@3PAEA,,unowned,,0,1
-0x007D94F8,960,.rdata,global,?g_bfmeQuantRow@@3PAEA,Code/GameEngine/Source/Common/Rva009B6A30LoadTables.cpp,owned,,1,20
+0x007D94F8,960,.rdata,global,?g_bfmeQuantRow@@3PAEA,Code/Libraries/Source/VP6/DecodeModeProbs.cpp,owned,,1,20
 0x007D98B8,88,.rdata,global,?defaultModeProbs@@3PAEA,Code/Libraries/Source/VP6/decodembs.cpp,owned,,1,1
 0x007D9910,16,.rdata,global,_g_bfmeW51b,Code/GameEngine/Source/Common/BfmeInterpRows2Mmx.cpp,provisional,_g_bfmeW51@Code/GameEngine/Source/Common/BfmeInterpRowsMmx.cpp;_g_bfmeW51b@Code/GameEngine/Source/Common/BfmeInterpRows2Mmx.cpp;_g_bfmeW51c@Code/GameEngine/Source/Common/BfmeInterpRows5Mmx.cpp;_g_bfmeW51d@Code/GameEngine/Source/Common/BfmeInterpRows6Mmx.cpp,4,11
 0x007D9920,16,.rdata,global,_g_bfmeW102,Code/GameEngine/Source/Common/BfmeInterpRowsMmx.cpp,provisional,_g_bfmeW102@Code/GameEngine/Source/Common/BfmeInterpRowsMmx.cpp;_g_bfmeW102b@Code/GameEngine/Source/Common/BfmeInterpRows2Mmx.cpp;_g_bfmeW102c@Code/GameEngine/Source/Common/BfmeInterpRows5Mmx.cpp;_g_bfmeW102d@Code/GameEngine/Source/Common/BfmeInterpRows6Mmx.cpp,4,7
@@ -16916,7 +16916,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009B7FA0,16,.data,global,_Vp6WideAccumConst86D0,Code/GameEngine/Source/Common/Rva001CA000Vp6WideAccum.cpp,owned,,1,8
 0x009B7FB0,16,.data,global,_Vp6WideAccumConst86E0,Code/GameEngine/Source/Common/Rva001CA000Vp6WideAccum.cpp,owned,,1,4
 0x009B7FC0,16,.data,global,_Vp6WideAccumConst86F0,Code/GameEngine/Source/Common/Rva001CA000Vp6WideAccum.cpp,owned,,1,10
-0x009B7FD0,32,.data,global,_g_bfmeBlurBiasMmx,Code/GameEngine/Source/Common/BfmeBlurRowsMmx.cpp,owned,,1,2
+0x009B7FD0,32,.data,global,_g_bfmeBlurBiasMmx,Code/Libraries/Source/VP6/FastDeInterlace.cpp,owned,,1,2
 0x009B7FF0,16,.data,global,_Vp6FilterConst8720,Code/GameEngine/Source/Common/BfmeConv9BE180.cpp,owned,,1,32
 0x009B8000,16,.data,global,_Vp6FilterConst8730,Code/GameEngine/Source/Common/BfmeConv9BE180.cpp,owned,,1,16
 0x009B8010,16,.data,global,_Vp6FilterConst8740,Code/GameEngine/Source/Common/BfmeConv9BE180.cpp,owned,,1,8
@@ -16925,7 +16925,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009B8040,16,.data,global,_Vp6FilterConst8770,Code/GameEngine/Source/Common/BfmeConv9BE180.cpp,owned,,1,8
 0x009B8050,16,.data,global,_Vp6FilterConst8780,Code/GameEngine/Source/Common/BfmeConv9BD750.cpp,owned,,1,2
 0x009B8060,160,.data,global,_Vp6FilterConst8790,Code/GameEngine/Source/Common/BfmeConv9BE180.cpp,owned,,1,2
-0x009B8100,16,.data,global,_g_bfmeBlurBias,Code/GameEngine/Source/Common/Bfme5ThirtySix.cpp,owned,,1,1
+0x009B8100,16,.data,global,_g_bfmeBlurBias,Code/Libraries/Source/VP6/FastDeInterlace.cpp,owned,,1,1
 0x009B8110,16,.data,global,_Vp6FilterConst8840,Code/GameEngine/Source/Common/BfmeConv9C2320.cpp,owned,,1,2
 0x009B8120,16,.data,global,_Vp6FilterConst8850,Code/GameEngine/Source/Common/BfmeConv9C2620.cpp,owned,,1,2
 0x009B8130,16,.data,global,_Vp6FilterConst8860,Code/GameEngine/Source/Common/BfmeConv9C2620.cpp,owned,,1,8
@@ -16936,10 +16936,10 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009B8180,8,.data,global,_Vp6FilterConst88B0,Code/GameEngine/Source/Common/BfmeConv9C2620.cpp,owned,,1,2
 0x009B8188,24,.data,global,?Rva009B3A00Source@@3PAGA,Code/Libraries/Source/VP6/FillIdctConstants.cpp,owned,,1,1
 0x009B81A0,16,.data,global,?g_bfmeBinkRoundMmx@@3QBGB,Code/GameEngine/Source/Common/Rva009C6390BinkMmx.cpp,owned,,1,30
-0x009B81B0,784,.data,global,?g_rva00DB81B0Weights@@3QAY0BA@$$CBGA,Code/GameEngine/Source/Common/Rva001D7200CodecDispatch.cpp,owned,,1,6
+0x009B81B0,784,.data,global,?g_rva00DB81B0Weights@@3QAY0BA@$$CBGA,Code/Libraries/Source/VP6/FilterBlockBil8Mmx.cpp,owned,,1,6
 0x009B84C0,16,.data,global,_g_bfmeXor80Mmx,Code/Libraries/Source/VP6/ReconMmx.cpp,owned,,1,1
 0x009B84D0,16,.data,global,?g_bfmeBinkRound@@3QBGB,Code/GameEngine/Source/Common/Rva009C6F20BinkSse.cpp,owned,,1,12
-0x009B84E0,768,.data,global,_g_00DB84E0,Code/GameEngine/Source/Common/Rva009C7380BinkSse.cpp,owned,,1,6
+0x009B84E0,768,.data,global,_g_00DB84E0,Code/Libraries/Source/VP6/FilterBlockBil8Wmt.cpp,owned,,1,6
 0x009B87E0,32,.data,global,_g_bfmeXor80Sse,Code/Libraries/Source/VP6/ReconWmt.cpp,owned,,1,1
 0x009B8800,32,.data,global,?kRva012D8F20@@3QBGB,Code/GameEngine/Source/Common/Rva009C77C0.cpp,owned,,1,8
 0x009B8820,276,.data,global,?kRva012D8F40@@3QBGB,Code/GameEngine/Source/Common/Rva009C77C0.cpp,owned,,1,2

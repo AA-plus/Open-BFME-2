@@ -1,14 +1,20 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d5da0.md 001d65a0.md plus retail
+// only. No decoder source was consulted.
+//
+// Block dequantisation (retail 0x001D5DA0 and 0x001D65A0): the quantised
+// value and dequantiser coefficient at each transmission position are
+// multiplied as 32-bit signed integers and stored at the raster position the
+// zig-zag scan assigns. dequant_slow does all 64 positions; dequant_slow10
+// zero-fills the first 32 outputs and then does the first eleven. Both are
+// written out unrolled, as retail has them.
 
-// Zigzag-order coefficient multiply: reads two 8x8 arrays of 16-bit
-// coefficients in JPEG/MPEG zigzag scan order and writes their per-index
-// products into a 64-entry int array in natural (raster) order. Loop-free;
-// retail left it as 64 unrolled multiply-store statements (no branches),
-// which is what MSVC /O2 reproduces from a hand-unrolled source in this era
-// of codec code -- address-derived name, no ghidra boundary/identity beyond
-// the byte-proven extent.
+extern "C" void * __cdecl memset(void *destination, int value, unsigned int bytes);
 
-void Rva009C54A0DequantZigzag(const short *a, const short *b, int *dst)
+#pragma intrinsic(memset)
+
+// dequant_slow retail 0x001D5DA0 (1006 bytes).
+extern "C" void __cdecl dequant_slow(const short *a, const short *b, int *dst)
 {
 	dst[0] = (int)a[0] * (int)b[0];
 	dst[1] = (int)a[1] * (int)b[1];
@@ -74,4 +80,21 @@ void Rva009C54A0DequantZigzag(const short *a, const short *b, int *dst)
 	dst[55] = (int)a[61] * (int)b[61];
 	dst[62] = (int)a[62] * (int)b[62];
 	dst[63] = (int)a[63] * (int)b[63];
+}
+
+// dequant_slow10 retail 0x001D65A0 (182 bytes).
+extern "C" void __cdecl dequant_slow10(short *first, short *second, int *result)
+{
+	memset(result, 0, 0x80);
+	result[0] = first[0] * second[0];
+	result[1] = first[1] * second[1];
+	result[8] = first[2] * second[2];
+	result[16] = first[3] * second[3];
+	result[9] = first[4] * second[4];
+	result[2] = first[5] * second[5];
+	result[3] = first[6] * second[6];
+	result[10] = first[7] * second[7];
+	result[17] = first[8] * second[8];
+	result[24] = first[9] * second[9];
+	result[32] = first[10] * second[10];
 }

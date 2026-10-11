@@ -1,7 +1,16 @@
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b9ac0.md plus retail only. No
+// decoder source was consulted.
+//
+// CopyFrame retail 0x001B9AC0 (299 bytes): copies an external picture into a
+// reconstruction frame. Y height rows of Y width bytes go to the destination
+// plus the Y recon offset, then the U and V planes likewise, and the frame
+// border is updated last.
+
 extern "C" void * __cdecl memcpy(void *destination, const void *source, unsigned int bytes);
 #pragma intrinsic(memcpy)
 
-struct Rva009A9070Source
+struct CopyFrameConfig
 {
 	unsigned int m_size0;
 	int m_rows0;
@@ -14,7 +23,7 @@ struct Rva009A9070Source
 	unsigned char *m_source2;
 };
 
-struct Rva009A9070Context
+struct CopyFrameInstance
 {
 	unsigned char m_pad0[0x78];
 	unsigned char *m_destination0;
@@ -25,11 +34,12 @@ struct Rva009A9070Context
 	unsigned int m_destinationStep1;
 };
 
-	void __cdecl d_009a8c50(void);
+// 0x001B96A0 UpdateUMVBorder, still carried under its pinned ledger name.
+extern void __cdecl d_009a8c50(void);
 
-void __cdecl Rva009A9070CopyStreams(
-	Rva009A9070Context *self,
-	Rva009A9070Source *source,
+extern "C" void __cdecl CopyFrame(
+	CopyFrameInstance *self,
+	CopyFrameConfig *source,
 	int offset)
 {
 	unsigned char *input = source->m_source0;
@@ -73,5 +83,5 @@ void __cdecl Rva009A9070CopyStreams(
 		}
 	}
 
-	((void (__cdecl *)(Rva009A9070Context *, int))d_009a8c50)(self, offset);
+	((void (__cdecl *)(CopyFrameInstance *, int))d_009a8c50)(self, offset);
 }

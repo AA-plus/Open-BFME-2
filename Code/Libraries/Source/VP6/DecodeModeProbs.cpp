@@ -1,14 +1,18 @@
-// Lane 01 scratch: VP6 probability-table loader.
-// This file is intentionally outside Code/; root integrates only after probe
-// proves the clean source and identity evidence.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001c7330.md plus retail only. No
+// decoder source was consulted.
+//
+// VP6_DecodeModeProbs retail 0x001C7330 (373 bytes): reads the per-frame mode
+// probability update for the three mode-context groups, loading a codebook
+// vector and/or adding clamped differences, then rebuilds the mode trees.
 
-int Rva009B4600DecodeBool(void *state, int probability);
-extern "C" int __cdecl VP6_bitread(void *, int);
-int Rva009B6950DecodeScale(unsigned char *ctx);
-void Rva009B6740BuildTable(unsigned char *ctx);
+int Rva009B4600DecodeBool(void *state, int probability);   // 0x001C4F00 VP6_DecodeBool
+extern "C" int __cdecl VP6_bitread(void *, int);           // 0x001BCF40
+int Rva009B6950DecodeScale(unsigned char *ctx);            // 0x001C7250 VP6_decodeModeDiff
+void Rva009B6740BuildTable(unsigned char *ctx);            // 0x001C7040 VP6_BuildModeTree
 
-// g_bfmeQuantRow: matched references place it at VA 0xbd94f8; retail contents, sized to the
-// 0x3c0-byte gap before the next known global there.
+// g_bfmeQuantRow: the mode-probability codebook at retail VA 0x00BD94F8
+// (3 groups x 16 vectors x 20 bytes, 960 bytes).
 unsigned char g_bfmeQuantRow[960] = {
 	9, 15, 32, 25, 7, 19, 9, 21,
 	1, 12, 14, 12, 3, 18, 14, 23,
@@ -132,8 +136,7 @@ unsigned char g_bfmeQuantRow[960] = {
 	0, 1, 0, 1, 0, 0, 0, 0,
 };
 
-// ?Rva009B6A30LoadTables@@YAXPAE@Z
-void Rva009B6A30LoadTables(unsigned char *ctx)
+extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *ctx)
 {
     void *state = ctx + 0x150;
     int plane = 0;

@@ -52,7 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 typedef short ogg_int16_t;
 typedef short Q_LIST_ENTRY;
 typedef int ogg_int32_t;
-void Rva009C54A0DequantZigzag(const short *, const short *, int *);
+extern "C" void __cdecl dequant_slow(const short *, const short *, int *);
 #define IdctAdjustBeforeShift 8
 #define xC1S7 64277
 #define xC2S6 60547
@@ -75,7 +75,7 @@ void Rva009C5890(  Q_LIST_ENTRY * InputData,
 
   int loop;
 
-  Rva009C54A0DequantZigzag( QuantMatrix, InputData, IntermediateData);
+  dequant_slow( QuantMatrix, InputData, IntermediateData);
 
   /* Inverse DCT on the rows now */
   for ( loop = 0; loop < 8; loop++){

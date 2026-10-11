@@ -1,18 +1,18 @@
 // cl: /MD
-// Lane A callback table and matched BfmeInstallSpreadTable's tier-A slot
-// identify the same function at1D7200. The installer only takes the pointer;
-// its void() placeholder declaration does not establish the callable ABI.
-// Native204B body independently reads six stack arguments and calls the
-// three already-rowed typed MMX filters. Source addresses are byte pointers,
-// destination is writable, stride is signed, and coefficient indices scale32.
-// No original codec function name is claimed: retain the installer's inherited
-// address-qualified spelling and supply its typed callable definition.
+// Clean room: reverse/vp6_cleanroom/specs/001d7200.md plus retail only. No
+// decoder source was consulted.
+//
+// FilterBlockBil_8_mmx retail 0x001D7200 (204 bytes): picks the horizontal,
+// vertical or two-dimensional bilinear MMX filter from the distance between
+// the two reference pointers (1, one line, one line minus 1 or plus 1). The
+// weight table (retail VA 0x00DB81B0) is nine 32-byte rows, the last being
+// zero padding after phase 8; its 16-byte alignment is witnessed.
 
 extern const unsigned short g_rva00DB81B0Weights[9][16];
 extern "C" void __cdecl FilterBlock1d_hb8_mmx(const void *,void *,int,int,int,int,const void *);
 extern "C" void __cdecl FilterBlock1d_vb8_mmx(const void *,void *,int,int,int,int,const void *);
 void __cdecl Rva009C6800(const unsigned char *,unsigned char *,int,const void *,const void *);
-void Rva009C6900(const unsigned char *a,const unsigned char *b,unsigned char *destination,int stride,int x,int y)
+extern "C" void __cdecl FilterBlockBil_8_mmx(const unsigned char *a,const unsigned char *b,unsigned char *destination,int stride,int x,int y)
 {
  int distance=b-a;
  if(distance<0) {const unsigned char *old=a;a=b;distance=old-a;}
@@ -35,4 +35,3 @@ __declspec(align(16)) extern const unsigned short g_rva00DB81B0Weights[9][16] = 
     {16,16,16,16,16,16,16,16,112,112,112,112,112,112,112,112},
     {0,0,0,0,0,0,0,0,128,128,128,128,128,128,128,128},
 };
-#pragma comment(linker, "/alternatename:?Rva009C6900@@YAXXZ=?Rva009C6900@@YAXPBE0PAEHHH@Z")

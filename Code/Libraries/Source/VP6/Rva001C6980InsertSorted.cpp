@@ -1,6 +1,6 @@
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001c6980.md plus retail only.
-// ?Rva001C6980InsertSorted@@YAXPAUVp6SortRecord@@HPAH@Z retail
+// ?InsertSorted@@YAXPAUVp6SortRecord@@HPAH@Z retail
 // 0x001C6980..0x001C69D8 (88 bytes) (spec name InsertSorted). MSVC gives
 // the static helper its private convention: ESI = 12-byte sort record array
 // (successor index / weight / edge) and EDX = index of the record to insert
@@ -11,7 +11,7 @@
 // makes the record the new head written back through the pointer.
 // Retail holds no direct caller.
 struct Vp6SortRecord { int next; int weight; int edge; };
-static void Rva001C6980InsertSorted(Vp6SortRecord *list, int index, int *head)
+static void InsertSorted(Vp6SortRecord *list, int index, int *head)
 {
 	int prev = *head;
 	int cur = *head;
@@ -31,4 +31,4 @@ static void Rva001C6980InsertSorted(Vp6SortRecord *list, int index, int *head)
 }
 // C++ integration entry absent from retail. Keeping the helper static gives
 // MSVC its private ESI/EDX convention; only the 88-byte helper is claimed.
-void InsertVp6SortRecord(Vp6SortRecord *list, int index, int *head) { Rva001C6980InsertSorted(list, index, head); }
+void InsertVp6SortRecord(Vp6SortRecord *list, int index, int *head) { InsertSorted(list, index, head); }

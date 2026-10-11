@@ -1,9 +1,11 @@
 // cl: /DNDEBUG /MD
-// Open-BFME-1 donor at cd32c8ef06dfb0d995b2f47e93e41622e4447092:
-// Rva009C7380BinkSse.cpp, BFME 1 RVA 0x009C7380.
-// BFME2 target RVA 0x001D7C80 is selected by the address map and independently
-// agrees with the donor's distance dispatch and matched Bink SSE callees.
-// The target's weight table address is 0x00DB84E0 (retail VA).
+// Clean room: reverse/vp6_cleanroom/specs/001d7c80.md plus retail only. No
+// decoder source was consulted.
+//
+// FilterBlockBil_8_wmt retail 0x001D7C80 (204 bytes): picks the horizontal,
+// vertical or two-dimensional bilinear SSE2 filter from the distance between
+// the two reference pointers. The 768-byte weight table at retail VA
+// 0x00DB84E0 (bilinear banks, then bicubic banks) is defined here.
 
 extern "C" void __cdecl FilterBlock1d_hb8_wmt(const void *, void *, int, int, int, int, const void *);
 extern "C" void __cdecl FilterBlock1d_vb8_wmt(const void *, void *, int, int, int, int, const void *);
@@ -75,7 +77,7 @@ static const void *rva009C7380Weights(int index)
 	return g_00DB84E0 + index * 32;
 }
 
-void __cdecl rva009C7380BinkSse(const unsigned char *rowA, const unsigned char *rowB,
+extern "C" void __cdecl FilterBlockBil_8_wmt(const unsigned char *rowA, const unsigned char *rowB,
 	void *destination, int stride, int horizontalIndex, int verticalIndex)
 {
 	int distance = rowB - rowA;
@@ -110,6 +112,3 @@ void __cdecl rva009C7380BinkSse(const unsigned char *rowA, const unsigned char *
 			rva009C7380Weights(verticalIndex));
 }
 
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?Rva009C7380@@YAXXZ=?rva009C7380BinkSse@@YAXPBE0PAXHHH@Z")

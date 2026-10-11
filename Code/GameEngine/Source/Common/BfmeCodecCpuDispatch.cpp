@@ -7,7 +7,7 @@
 // full SIMD set; the MMX tier (basic flag set) does the same expansion and
 // installs the MMX-only set (mostly shared with the SSE tier); otherwise the
 // generic scalar/table-driven set installs directly with no expansion.
-// Sibling of bfmeFilterPairMmx, bfmeExpandMmx, bfmeBlurRows* and
+// Sibling of bfmeFilterPairMmx, bfmeExpandMmx, the *FastDeInterlace family and
 // BfmeLimitedEdgeFilters.cpp.
 
 extern "C" void __cdecl GetProcessorFlags(int *pTierA, int *pTierB, int *pTierC);
@@ -32,9 +32,9 @@ extern void __cdecl bfmeInterpRows6Mmx(void *, int, int);
 extern void __cdecl bfmeInterpRows2Mmx(void *, int, int);
 extern void __cdecl bfmeInterpRows5Mmx(void *, int, int);
 extern void __cdecl bfmeInterpRowsMmx(void *, int, int);
-extern void __cdecl bfmeBlurRowsSse(void *, void *, unsigned int, int, int);
-extern void __cdecl bfmeBlurRowsMmx(void *, void *, unsigned int, int, int);
-extern void __cdecl bfmeBlurRows(void *, void *, unsigned int, int, int);
+extern "C" void __cdecl WmtFastDeInterlace(void *, void *, unsigned int, int, int);
+extern "C" void __cdecl MmxFastDeInterlace(void *, void *, unsigned int, int, int);
+extern "C" void __cdecl CFastDeInterlace(void *, void *, unsigned int, int, int);
 extern void __cdecl Rva009AF570FilterVert(void *, unsigned char *, int, const int *);
 extern void __cdecl Rva009AF6A0FilterHoriz(void *, unsigned char *, int, const int *);
 extern "C" int * __cdecl SetupBoundingValueArray_Generic(POSTPROC_INSTANCE *, int);
@@ -87,45 +87,7 @@ extern void __cdecl Rva009A9720(unsigned char *, int, unsigned int);
 extern void __cdecl Rva009A91D0(void);
 extern void __cdecl Rva009A92D0(unsigned char *, int, unsigned int);
 extern void __cdecl Rva009A9370(void);
-struct Rva009B6BB0Context
-{
-	unsigned char m_pad00[0x78];
-	unsigned char *m_plane;
-	unsigned char m_pad7C[0x14];
-	int m_width;
-	int m_height;
-	int m_stride;
-};
-
-extern void __cdecl Rva009B6BB0(Rva009B6BB0Context *, int, int, int, int);
-
-void __cdecl Rva009B6BB0(Rva009B6BB0Context *context,
-	int lowerLimit, int upperLimit, int destinationOffset, int sourceOffset)
-{
-	register unsigned char *destination = context->m_plane + destinationOffset;
-	register int width = context->m_width << 3;
-	register const unsigned char *source = context->m_plane + sourceOffset;
-	int height = context->m_height << 3;
-	int stride = context->m_stride;
-	unsigned char table[256];
-
-	for (int i = 0; i < 256; ++i)
-	{
-		table[i] = (unsigned char)i;
-		if (i < lowerLimit)
-			table[i] = (unsigned char)lowerLimit;
-		if (i > 255 - upperLimit)
-			table[i] = (unsigned char)(255 - upperLimit);
-	}
-
-	for (int row = 0; row < height; ++row)
-	{
-		for (int column = 0; column < width; ++column)
-			destination[column] = table[source[column]];
-		destination += stride;
-		source += stride;
-	}
-}
+extern "C" void __cdecl ClampLevels_C(void *, int, int, int, int);
 
 typedef void (__cdecl *BfmeDispatchFn)();
 
@@ -169,7 +131,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[5] = (BfmeDispatchFn)&bfmeFilterRowByIndex8Mmx;
 		g_bfmeCodecDispatch.slot[11] = (BfmeDispatchFn)&bfmeFilterBlockPairByIndexMmx;
 		g_bfmeCodecDispatch.slot[14] = (BfmeDispatchFn)&bfmeFilterRowByIndex12Mmx;
-		g_bfmeCodecDispatch.slot[3] = (BfmeDispatchFn)&bfmeBlurRowsSse;
+		g_bfmeCodecDispatch.slot[3] = (BfmeDispatchFn)&WmtFastDeInterlace;
 		g_bfmeCodecDispatch.slot[19] = (BfmeDispatchFn)&Rva009BD470Vp6FilterSse;
 		g_bfmeCodecDispatch.slot[0] = (BfmeDispatchFn)&d_009c0a30;
 		return;
@@ -201,7 +163,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[5] = (BfmeDispatchFn)&bfmeFilterRowByIndex8Mmx;
 		g_bfmeCodecDispatch.slot[11] = (BfmeDispatchFn)&bfmeFilterBlockPairByIndexMmx;
 		g_bfmeCodecDispatch.slot[14] = (BfmeDispatchFn)&bfmeFilterRowByIndex12Mmx;
-		g_bfmeCodecDispatch.slot[3] = (BfmeDispatchFn)&bfmeBlurRowsMmx;
+		g_bfmeCodecDispatch.slot[3] = (BfmeDispatchFn)&MmxFastDeInterlace;
 		g_bfmeCodecDispatch.slot[19] = (BfmeDispatchFn)&Rva009BD570;
 		g_bfmeCodecDispatch.slot[0] = (BfmeDispatchFn)&Rva009BA790;
 		return;
@@ -230,8 +192,8 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	g_bfmeCodecDispatch.slot[5] = (BfmeDispatchFn)&Rva009AFA60FilterHoriz;
 	g_bfmeCodecDispatch.slot[11] = (BfmeDispatchFn)&Rva009AFCA0FilterVert;
 	g_bfmeCodecDispatch.slot[14] = (BfmeDispatchFn)&Rva009AFEC0FilterHoriz;
-	g_bfmeCodecDispatch.slot[3] = (BfmeDispatchFn)&bfmeBlurRows;
-	g_bfmeCodecDispatch.slot[19] = (BfmeDispatchFn)&Rva009B6BB0;
+	g_bfmeCodecDispatch.slot[3] = (BfmeDispatchFn)&CFastDeInterlace;
+	g_bfmeCodecDispatch.slot[19] = (BfmeDispatchFn)&ClampLevels_C;
 	g_bfmeCodecDispatch.slot[0] = (BfmeDispatchFn)&d_009a5f50;
 }
 

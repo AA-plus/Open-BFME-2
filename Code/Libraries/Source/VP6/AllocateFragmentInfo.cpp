@@ -17,7 +17,7 @@ public:
 	};
 	static void *operator new(unsigned int size, AllocationTag tag);
 };
-void bfmeStepJW(void *instance);
+extern "C" void __cdecl VP6_DeleteFragmentInfo(void *instance);
 struct Vp6FragmentInstance {
 	unsigned char *coeffRaw;
 	unsigned char *coeff;
@@ -39,7 +39,7 @@ struct Vp6FragmentInstance {
 #define VP6_ALIGN32(p) ((unsigned char *)(((unsigned)(p) + 31) & ~31))
 extern "C" int VP6_AllocateFragmentInfo(Vp6FragmentInstance *pbi)
 {
-	bfmeStepJW(pbi);
+	VP6_DeleteFragmentInfo(pbi);
 	pbi->coeffRaw = (unsigned char *)Rva001B6400Allocation::operator new(0x320, Rva001B6400Allocation::TAG_NONE);
 	if (!pbi->coeffRaw)
 		goto fail;
@@ -74,6 +74,6 @@ extern "C" int VP6_AllocateFragmentInfo(Vp6FragmentInstance *pbi)
 	pbi->fragInfo = VP6_ALIGN32(pbi->fragInfoRaw);
 	return 1;
 fail:
-	bfmeStepJW(pbi);
+	VP6_DeleteFragmentInfo(pbi);
 	return 0;
 }

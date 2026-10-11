@@ -8,12 +8,12 @@
 // 1) and writes the MMX, XMM and WMT flags that the index selects. The
 // selector cases are spelled out so the compiler regenerates both tables.
 
-extern int __cdecl Rva001D5470_CpuFeatureProbe(void);
+extern "C" int __cdecl CpuProbe_VendorSse2(void);
 
 extern "C" void __cdecl GetProcessorFlags(int *mmxFlag, int *xmmFlag, int *wmtFlag)
 {
 	unsigned int processorType = 1;
-	if (Rva001D5470_CpuFeatureProbe())
+	if (CpuProbe_VendorSse2())
 		processorType = 0xc;
 	switch (processorType)
 	{

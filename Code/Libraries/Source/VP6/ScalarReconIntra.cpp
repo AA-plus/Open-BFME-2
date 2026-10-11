@@ -5,7 +5,7 @@
 // SIMD. Each of the 64 residual values plus 128 goes into the scratch block,
 // which is then written to the output through the unsigned 8-bit saturating
 // block store (retail 0x001D55C0).
-void __cdecl bfmeClampBlock(unsigned char *dst, short *src, int dstStride, int srcStride);
+extern "C" void __cdecl SatUnsigned8(unsigned char *dst, short *src, int dstStride, int srcStride);
 
 extern "C" void __cdecl ScalarReconIntra(short *scratch, unsigned char *output,
 	const short *residual, int lineStep)
@@ -25,5 +25,5 @@ extern "C" void __cdecl ScalarReconIntra(short *scratch, unsigned char *output,
 		residual += 8;
 	} while (--rows);
 
-	bfmeClampBlock(output, scratch, lineStep, 8);
+	SatUnsigned8(output, scratch, lineStep, 8);
 }

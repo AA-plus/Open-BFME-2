@@ -66,7 +66,7 @@ extern "C" void *memcpy(void *,const void *,unsigned);
 struct Rva009AAFE0Context;
 struct Rva009AB7F0Context;
 struct Rva009AB760Context;
-void Rva009B6A30LoadTables(unsigned char *);
+extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *);
 void Rva009AAFE0BuildTable(Rva009AAFE0Context *,const unsigned char *);
 void Rva009AB7F0Reset(Rva009AB7F0Context *);
 extern "C" void __cdecl VP6_ResetLeftContext(Rva009AB760Context *);
@@ -81,7 +81,7 @@ extern "C" void VP6_DecodeFrameMbs(FramePB *pbi)
     unsigned rows=pbi->MBRows;
     unsigned cols=pbi->MBCols;
     if(pbi->FrameType) {
-        Rva009B6A30LoadTables((unsigned char *)pbi);
+        VP6_DecodeModeProbs((unsigned char *)pbi);
         VP6_ConfigureMvEntropyDecoder(pbi,pbi->FrameType);
         pbi->LastMode=0;
     } else {

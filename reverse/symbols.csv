@@ -8445,7 +8445,6 @@ name,address,notes
 ?bfmeStepBQC@BfmeSubBQC@@QAEXXZ,0x002934A8,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?bfmeStepBVA@BfmeThingBVA@@QAEXPAV1@@Z,0x002CF742
 ?bfmeStepCN@BfmeTargetCN@@QAEDH@Z,0x00307AC0,callee of ?bfmeGuardedCN@BfmeOwnCN@@QAEDPAVBfmeTargetCN@@PAX@Z at retail 0x0030D946 read from its REL32 displacement; donor-reconstruction name; body unrowed
-?bfmeStepJW@@YAXPAX@Z,0x001B9040
 ?bfmeStepTKD@@YAXNH@Z,0x000664BE,step helper called by the placed ?bfmeGoTKD 0x00069130; REL32 read off retail at 0x0006913D
 ?bfmeStepTWA@BfmeThingTWA@@QAEXXZ,0x00664FC0
 ?bfmeStop1013@BfmeUnit1013@@QAEXD@Z,0x00313BEC,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1

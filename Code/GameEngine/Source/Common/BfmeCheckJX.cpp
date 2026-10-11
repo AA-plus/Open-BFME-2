@@ -11,7 +11,7 @@ void bfmeInitD70(void*,void*);
 // 0x001B9140 is the row _VP6_AllocateFragmentInfo (Code/Libraries/Source/VP6/AllocateFragmentInfo.cpp, cdecl).
 extern "C" int VP6_AllocateFragmentInfo(void*);
 extern "C" int __cdecl VP6_AllocateFrameInfo(Rva009A8910Context*,int);
-void bfmeStepJW(void*);
+extern "C" void __cdecl VP6_DeleteFragmentInfo(void*);
 // g_Rva01142620: matched references place it at VA 0xbd8778 (retail .rdata contents).
 int g_Rva01142620[24] = {
 	-1, 0, 0, -1, -1, -1, -1, 1, -2, 0, 0, -2, -1, -2, -2, -1, -2, 1, -1, 2, -2, -2, -2, 2
@@ -92,7 +92,7 @@ int bfmeCheckJX(CodecState* s)
     void* cfg=(unsigned char*)s+0x1b0;
     bfmeInitD70((void*)s->at0298,cfg);
     if(!VP6_AllocateFragmentInfo(s)) return 0;
-    if(!VP6_AllocateFrameInfo((Rva009A8910Context*)s,allocation)) {bfmeStepJW(s); return 0;}
+    if(!VP6_AllocateFrameInfo((Rva009A8910Context*)s,allocation)) {VP6_DeleteFragmentInfo(s); return 0;}
     if(s->at0264==0 && (int)s->at023c!=0 && (*(int*)cfg!=(int)s->at023c || (int)s->at01b4!=(int)s->at0240)) {
         void* p=Rva001B6400Allocation::operator new(((unsigned)(((int)s->at0240+32)*((int)s->at023c+32)*3)>>1)+32,Rva001B6400Allocation::Zero);
         s->at0268=(unsigned)p;s->at0264=((unsigned)p+31)&~31;

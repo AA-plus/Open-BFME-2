@@ -17,7 +17,7 @@ struct PB_INSTANCE
 class BfmeThingJT;
 extern "C" void __cdecl VP6_DeleteTmpBuffers(BfmeThingJT *instance); // 0x001B5530
 extern "C" void __cdecl VP6_DeleteQuantizer(void **quantizer); // 0x001B7930
-void bfmeStepJW(void *instance);                       // 0x001B9040 VP6_DeleteFragmentInfo
+extern "C" void __cdecl VP6_DeleteFragmentInfo(void *instance); // 0x001B9040
 extern "C" void __cdecl VP6_DeleteFrameInfo(void *instance); // 0x001B92D0
 void bfmeFreeOneJT(void *block);                       // 0x001B6410 duck_free
 extern "C" void __cdecl DeletePostProcInstance(void **postProc); // 0x001B68D0
