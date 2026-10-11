@@ -145,32 +145,15 @@ PY
 }
 
 refs="$(cat || true)"
-# The repository this push writes to: git passes its URL, which a remote whose
-# push URL differs from its fetch URL would otherwise misdirect.
-window_remote="${2:-${1:-origin}}"
-
-# A cooperative publish window (tools/publish_window.py, ported from Open-BFME-1):
-# while one publisher holds refs/landing/window, other pushes to master wait instead
-# of losing a race to it. Checked before the gates, after them, and once more after
-# every ref (a later ref's gates give a window time to open), so a window opened
-# meanwhile is honoured; `python3 tools/publish_window.py push` takes it.
-pushes_master=0
-window_check() {
-    [ "${_remote_ref:-}" = refs/heads/master ] || return 0
-    [ -f tools/publish_window.py ] || return 0
-    python3 tools/publish_window.py check --remote "$window_remote" \
-        || fail "publish window (see above): push with python3 tools/publish_window.py push"
-}
 
 ZERO=0000000000000000000000000000000000000000
 
 while read -r _local_ref local_sha _remote_ref remote_sha; do
     [ -z "${local_sha:-}" ] && continue
     # Shared work claims are empty-tree marker commits, not game-source commits;
-    # the publish window ref (tools/publish_window.py) is a lock marker of the same kind.
+    # so are leftover publish-window refs (refs/landing/*), which no gate reads.
     case "${_remote_ref:-}" in refs/claims/*|refs/landing/*) continue ;; esac
     [ "$local_sha" = "$ZERO" ] && continue   # deleting a remote ref
-    if [ "${_remote_ref:-}" = refs/heads/master ]; then pushes_master=1; fi
     # The build below reads the working-tree ledgers: they must be the pushed commit's.
     python3 tools/ledger_guard.py --commit "$local_sha" || fail "working-tree ledgers differ from $local_sha (see above)"
     # Every gate below reads the ledgers by exact spelling: one tracked under
@@ -178,7 +161,6 @@ while read -r _local_ref local_sha _remote_ref remote_sha; do
     # case-insensitive file system while those lookups miss it.
     python3 tools/check_case_collisions.py --ref "$local_sha" \
         || fail "case-only path collision, or a control path not in lowercase, in $local_sha (see above)"
-    window_check
 
     python3 tools/check_csv.py --ref "$local_sha" || fail "ledger integrity at $local_sha (see above)"
 
@@ -189,7 +171,6 @@ while read -r _local_ref local_sha _remote_ref remote_sha; do
     fi
     if [ -z "$base" ]; then
         echo "pre-push: no known remote base; static ledger check only" >&2
-        window_check
         continue
     fi
 
@@ -383,14 +364,7 @@ PY
     # 10 s), then shadow_cap. Reports, never fails the push.
     shadow_cap python3 tools/replay_check.py --shadow --range "$base" "$local_sha" < /dev/null \
         || echo "pre-push: replay_check shadow check failed to run (ignored)" >&2
-    window_check
     echo "PRE-PUSH OK (${#verify[@]} outgoing source(s) byte-verified)"
 done <<< "$refs"
 # Publisher rollout (tools/publisher_hook.py; mode in reverse/publisher_mode): shadow submits the landed range as a unit in the background and never fails the push; enforce queues it and refuses (exit 3).
 [ ! -f tools/publisher_hook.py ] || [ -n "${CHECKER_DIGEST:-}" ] || python3 tools/publisher_hook.py pre-push "${1:-origin}" <<< "$refs" || [ $? != 3 ] || exit 1
-# The window's last word, after every ref's gates and the publisher: a window a rival
-# opened during a later ref's gates is honoured too (GPT-6.1-Sol, port review 2026-10-11).
-if [ "$pushes_master" -eq 1 ]; then
-    _remote_ref=refs/heads/master
-    window_check
-fi

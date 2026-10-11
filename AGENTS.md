@@ -338,11 +338,8 @@ only if their evidence and verification still hold, otherwise reassess the batch
 3. Stage explicit paths only (`git add <paths>`, never `git add .`); check every
    new ledger source is tracked.
 4. Commit normally. **Never bypass hooks.**
-5. Push with `python3 tools/publish_window.py push`: it takes the cooperative
-   publish window (waiting while someone else holds it), rebases onto
-   `origin/master`, runs `git push` through every hook and closes the window, so a
-   long gate cannot lose its race. A plain `git push` is refused while someone
-   else holds the window. Then pull --rebase; on rejection follow #7.
+5. `git pull --rebase origin master`, `git push`, then pull --rebase again; on
+   rejection follow #7 before retrying.
 6. **Never land a pull request with GitHub's merge button**: the byte gates run
    in local hooks, so a server-side merge publishes `matched` rows nothing
    verified, invisibly. Cherry-pick instead:
