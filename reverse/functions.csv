@@ -73926,7 +73926,6 @@ _vp6_xprintf,,0x001C4C90,610,Code/Libraries/Source/VP6/vp6_xprintf.cpp,matched,v
 ?rva00574AD9@Rva00574AD9@@QAE?AURvaF1Handle@@PAX@Z,,0x00574AD9,84,Code/GameEngine/Source/Common/Rva005E5CF9Factory.cpp,matched,
 ?rva00567F3D@Rva00567F3D@@QAE?AURvaF1Handle@@H@Z,,0x00567F3D,84,Code/GameEngine/Source/Common/Rva005E5CF9Factory.cpp,matched,
 ?rva005E9761@Rva005E9761@@QAE?AURvaF1Handle@@II@Z,,0x005E9761,87,Code/GameEngine/Source/Common/Rva005E5CF9Factory.cpp,matched,
-?rva005E97D5@Rva005E97D5@@QAE?AURvaF1Handle@@II@Z,,0x005E97D5,87,Code/GameEngine/Source/Common/Rva005E5CF9Factory.cpp,matched,
 ?rva005E9849@Rva005E9849@@QAE?AURvaF1Handle@@II@Z,,0x005E9849,87,Code/GameEngine/Source/Common/Rva005E5CF9Factory.cpp,matched,
 ?rva00448DCB@Rva00448DCB@@QAEPAURva00448DCBNode@@ABUBfmeStringRecord00448113@@@Z,,0x00448DCB,78,Code/GameEngine/Source/Common/Rva00448DCBFind.cpp,matched,
 ?rva00421292@Rva00421292@@QAEXPAVGen_0039BE00@@PBV?$StringBase@D@@@Z,,0x00421292,82,Code/GameEngine/Source/Common/Rva00421520Find.cpp,matched,
@@ -77172,3 +77171,4 @@ __ehhandler$??0NameKeyGenerator@@QAE@XZ,,0x0076669F,10,Code/GameEngine/Source/Co
 ?rva005E3049@Rva005E3049@@QAEXH_N@Z,,0x005E3049,8,Code/GameEngine/Source/Common/VslotSmallBodiesW5SN4.cpp,matched,Native8B member+4 forwarding method now binds directly to verified SetPageEnabled87 at005E2E3A. Correct original provisional two-int ABI to int/bool supported by target87 and constructor005CC543 false flag. Same RVA/body; sole known constructor caller reverified133B. Remove obsolete unrowed address pin; no new pins.
 ??0Rva005F8C48@@QAE@HHPAVRva00319CED@@@Z,,0x005F8C48,104,Code/GameEngine/Source/GameClient/LivingWorld/InGameUI/StrategicInGameUIQueueUnitButton.cpp,matched,army spawn button record ctor: player id unit button image via GetButtonImage unit words and title/description getters; caller 0x005E8B66
 ??0Rva006003FC@@QAE@PAX00@Z,,0x00600432,115,Code/GameEngine/Source/Common/Rva00600352.cpp,matched,player-page child ctor: counted base Rva0007DF07 then +8 member via thiscall 0x00600352 (pinned) with owner inputs and player colour then input words at +0x14
+?rva005E97D5@Rva005E97D5@@QAE?AURvaF1Handle@@II@Z,,0x005E97D5,87,Code/GameEngine/Source/Common/Rva005E5CF9Factory.cpp,matched,87B factory now calls the existing matched207B constructor owner Rva005FB204 at5FB30A; retires obsolete Rva005FB30A binding; allocation32 and unsigned argument words plus receiver8 context unchanged; no new identity or layout claim

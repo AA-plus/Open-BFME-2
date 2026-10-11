@@ -244,11 +244,13 @@ class Rva005FB14E
 public:
 	Rva005FB14E(unsigned int first, unsigned int second, void *context);
 };
-class Rva005FB30A
+// Constructor-only storage view of the owner whose 207-byte constructor is
+// verified in Rva005FB204Ctor.cpp; allocation and three arguments are unchanged.
+class Rva005FB204
 {
 	char m_pad[0x20];
 public:
-	Rva005FB30A(unsigned int first, unsigned int second, void *context);
+	Rva005FB204(unsigned int first, unsigned int second, void *context);
 };
 class Rva005FB4DF
 {
@@ -281,7 +283,7 @@ RvaF1Handle Rva005E9761::rva005E9761(unsigned int first, unsigned int second)
 }
 RvaF1Handle Rva005E97D5::rva005E97D5(unsigned int first, unsigned int second)
 {
-	return RvaF1Handle(new Rva005FB30A(first, second, &m_context));
+	return RvaF1Handle(new Rva005FB204(first, second, &m_context));
 }
 RvaF1Handle Rva005E9849::rva005E9849(unsigned int first, unsigned int second)
 {
