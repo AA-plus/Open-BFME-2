@@ -30,8 +30,10 @@ extern "C" void _ReadWriteBarrier(void);
 class ModuleData
 {
 public:
-	ModuleData() : m_vtable( reinterpret_cast<const void *>(((unsigned int)vtbl_00C5EDF8)) ) {}
-
+	// LINK: no user-provided default ctor (implicit trivial emits nothing and
+	// generates no call). The derived ctor below stores the vtable manually,
+	// so the previous inline base copy - which loses to the first-in-order
+	// copy (no retail address) - is unreferenced and gone. No flags touched.
 protected:
 	const void *m_vtable;			// +0x00
 	unsigned int m_moduleTagNameKey;	// +0x04
