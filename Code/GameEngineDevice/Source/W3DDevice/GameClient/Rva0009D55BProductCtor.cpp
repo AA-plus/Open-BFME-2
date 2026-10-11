@@ -96,6 +96,7 @@ class LivingWorld
 public:
 	LivingWorld();
 	virtual ~LivingWorld();
+	virtual void rva002BF391(bool active);	// the state handler 0x002BF391
 
 private:
 	char m_body[0xC0 - 4];
@@ -108,6 +109,7 @@ public:
 	virtual ~Rva0009D55BProduct();
 	virtual void rva0009C784(unsigned int phase, unsigned int previous);
 	virtual void rva0009D862();
+	virtual void rva0009DB5A(bool active);
 
 private:
 	Rva0009D6FARef *m_C0;
@@ -137,7 +139,9 @@ private:
 	int m_194;
 	float m_198;
 	int m_19C;
-	char m_pad1A0[0x1AC - 0x1A0];
+	float m_1A0;
+	float m_1A4;
+	float m_1A8;
 	float m_1AC;
 	Rva0009D55BPair m_1B0;
 	Rva0009D55BPair m_1B8;
@@ -233,4 +237,53 @@ void Rva0009D55BProduct::rva0009D862()
 	m_F8 = m_104;
 	((Rva0009C134Host *)this)->rva0009BAA4();
 	((Rva0009C134Host *)this)->rva0009CD9B();
+}
+
+// ?rva0009DB5A@Rva0009D55BProduct@@UAEX_N@Z retail 0x0009DB5A (154 bytes,
+// ret 4): deactivation first resets the view (rowed 0x0009DA28); the
+// LivingWorld handler 0x002BF391 (unrowed, pinned) always runs, but only a
+// change of the +0x18 state continues: activation runs the manager's
+// rowed cleanup and, with the global data's +0x60 shadow flag, copies the
+// manager's +0x1E4 word into the shadow manager, places its light at
+// +0x1A0..+0x1A8 and adds the shadows (rowed 0x0009DB47); deactivation runs
+// the manager's 0x002141D1 and resets the view again.
+class Rva0009D9BD { public: void rva0009DA28(); void rva0009DB47(); };
+class LivingWorldManager { public: void rva002142EA(); };
+extern LivingWorldManager *TheLivingWorldManager;
+class Rva002141D1 { public: void rva002141D1(); };
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+class W3DShadowManager;
+extern W3DShadowManager *TheW3DShadowManager;
+class W3DGameClientShadowShim { public: void setLightPosition(int index, float x, float y, float z); };
+struct Rva0009DB5AShadowView { void *m_vtbl; int m_04; };
+struct Rva0009DB5AGlobalView { unsigned char m_pad[0x60]; bool m_shadows; };
+struct Rva0009DB5AManagerView { unsigned char m_pad[0x1E4]; int m_1E4; };
+struct Rva0009DB5ALivingWorldView { unsigned char m_pad[0x18]; bool m_active; };
+
+void Rva0009D55BProduct::rva0009DB5A(bool active)
+{
+	if (!active)
+		((Rva0009D9BD *)this)->rva0009DA28();
+	if (((Rva0009DB5ALivingWorldView *)this)->m_active == active)
+	{
+		LivingWorld::rva002BF391(active);
+		return;
+	}
+	LivingWorld::rva002BF391(active);
+	if (active)
+	{
+		TheLivingWorldManager->rva002142EA();
+		if (((Rva0009DB5AGlobalView *)TheWritableGlobalData)->m_shadows)
+		{
+			((Rva0009DB5AShadowView *)TheW3DShadowManager)->m_04 = ((Rva0009DB5AManagerView *)TheLivingWorldManager)->m_1E4;
+			((W3DGameClientShadowShim *)TheW3DShadowManager)->setLightPosition(0, m_1A0, m_1A4, m_1A8);
+			((Rva0009D9BD *)this)->rva0009DB47();
+		}
+	}
+	else
+	{
+		((Rva002141D1 *)TheLivingWorldManager)->rva002141D1();
+		((Rva0009D9BD *)this)->rva0009DA28();
+	}
 }
