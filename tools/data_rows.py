@@ -33,7 +33,10 @@ Verification (build.py, per source and in the full gate), per row:
             the ledgers (functions.csv object symbols, data_rows, dir32 names,
             symbols.csv pins; an ILT stub counts for its body). A function
             target takes only a code address and a data target only a data
-            address. A pin is read for the target's kind (pin_readings): for
+            address. A compiler string literal (??_C@...) has no ledger name:
+            it is placed by content, as build.verify_string_refs places one
+            for code -- retail's pointer must land outside code on the
+            literal's own bytes from the addend through its terminator. A pin is read for the target's kind (pin_readings): for
             a function, only as an RVA that lands in code (pin_admission's
             form); for data, as whichever reading lands in data, and a pin
             with two such readings places nothing. DIR32 holds the target's
@@ -546,6 +549,44 @@ class Resolver:
         return homes
 
 
+def string_literal_problem(build, sections, target, addend, actual, img):
+    """None when retail's pointer `actual` lands on the compiled string literal
+    `target` (+addend), else why not. The ledgers name no string literal, so its
+    address is proven by content: the object's own literal bytes, whose length
+    the mangled name encodes, must be retail's bytes there through the
+    terminator (a prefix or a longer string is refused), outside code."""
+    name = target["name"]
+    sec = sections[target["section"] - 1] if 0 < target["section"] <= len(sections) else None
+    if sec is None or sec["body"] is None:
+        return f"string literal {name} is not defined with bytes in this object"
+    try:
+        literal = build.string_literal_bytes(name, sec["body"][target["value"]:])
+    except ValueError as exc:
+        return f"string literal {name}: {exc}"
+    if not 0 <= addend < len(literal):
+        return f"string literal {name}: addend {addend:#x} is outside its {len(literal)} bytes"
+    where = img.section(actual)
+    if where in (None, "header") or section_kind(
+            [(s["name"], s["va"], s["end"], c) for s, c in zip(img.sections, _characteristics(img))],
+            actual) != "data":
+        return f"retail points at 0x{actual:08X}, which is not data, for string literal {name}"
+    content = literal[addend:]
+    retail = img.read(actual, len(content))
+    if retail != content:
+        return (f"retail holds {retail!r} at 0x{actual:08X}, string literal {name}"
+                f"+{addend:#x} is {content!r}")
+    return None
+
+
+def _characteristics(img):
+    """Each of `img`'s sections' characteristics, read from its own PE header."""
+    data = img.data
+    pe = struct.unpack_from("<I", data, 0x3C)[0]
+    optional = struct.unpack_from("<H", data, pe + 20)[0]
+    return [struct.unpack_from("<I", data, pe + 24 + optional + 40 * k + 36)[0]
+            for k in range(len(img.sections))]
+
+
 def verify_row(row, img, resolve, compile=True, sizer=compiled_size):
     """(ok, message) for one data row against its source's current object."""
     build, rl = _tools()
@@ -600,6 +641,12 @@ def verify_row(row, img, resolve, compile=True, sizer=compiled_size):
             return False, f"+{w - lo:#x}: relocation to TU-local {target['name']} cannot be placed"
         addend = struct.unpack_from("<i", sec["body"], w)[0]
         function = (target["type"] >> 4) & 3 == DTYPE_FUNCTION
+        if target["name"].startswith("??_C@") and not function:
+            pointed = value if kind == DIR32 else (value + IMAGE_BASE) & 0xFFFFFFFF
+            problem = string_literal_problem(build, sections, target, addend, pointed, img)
+            if problem:
+                return False, f"+{w - lo:#x} (0x{site:08X}): {problem}"
+            continue
         want = {(home + addend) & 0xFFFFFFFF for home in resolve(target["name"], function)}  # VAs
         if not want:
             ambiguity = "; ".join(getattr(resolve, "ambiguous", {}).get(target["name"], ()))

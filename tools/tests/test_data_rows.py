@@ -38,7 +38,8 @@ def make_pe(sections):
         raw = bytes(raw)
         rsize = (len(raw) + 0x1FF) & ~0x1FF
         table += name.encode().ljust(8, b"\0") + struct.pack("<IIIIIIHHI", vsize, rva, rsize,
-                                                              raw_at + len(body), 0, 0, 0, 0, 0x40000040)
+                                                              raw_at + len(body), 0, 0, 0, 0,
+                                                              CODE if name == ".text" else RDATA)
         body += raw.ljust(rsize, b"\0")
     image_size = max(rva + vsize for _, rva, vsize, _ in sections)
     opt = bytearray(optional)
@@ -214,6 +215,61 @@ def test_a_relocation_to_a_tu_local_cannot_be_placed(tmp_path, monkeypatch):
              [("?p@@3PBDB", 0, 1), ("$SG1", 0, 2)], 'const char *p = "x";\n')
     ok, message = verify(img, row("?p@@3PBDB"), {})
     assert not ok and "TU-local" in message
+
+
+LITERAL = "??_C@_05MGDGCKO@Unini?$AA@"  # a 6-byte literal: five characters and the terminator
+
+
+def literal_row(tmp_path, monkeypatch, pointer, rdata=b"Unini\0", addend=0, name=LITERAL, body=b"Unini\0",
+                text=b"\xc3" * 16):
+    """const char *const p = "Unini"; retail's p (.data 0x403000) holds `pointer`."""
+    img = image_with(rdata=rdata, data=struct.pack("<I", pointer), text=text)
+    compiled(tmp_path, monkeypatch,
+             [(".data", 0xC0300040, struct.pack("<i", addend), 4, [(0, 1)]), (".rdata", 0x40301040, body, len(body), [])],
+             [("?p@@3PBDB", 0, 1), (name, 0, 2)], 'const char *p = "Unini";\n')
+    return verify(img, row("?p@@3PBDB"), {})
+
+
+def test_a_string_literal_target_is_placed_by_its_content(tmp_path, monkeypatch):
+    # no ledger names a ??_C@ literal: retail's pointer must land on its bytes
+    ok, message = literal_row(tmp_path, monkeypatch, BASE + 0x2000)
+    assert ok, message
+    # pooled reuse: literal+2 is "ini", which retail holds two bytes further on
+    assert literal_row(tmp_path, monkeypatch, BASE + 0x2002, addend=2)[0]
+
+
+def test_a_string_literal_target_must_be_retails_string_to_the_terminator(tmp_path, monkeypatch):
+    for rdata in (b"Unixi\0", b"Uninitialized\0", b"Unin\0\0"):  # another string, a longer one, a shorter one
+        ok, message = literal_row(tmp_path, monkeypatch, BASE + 0x2000, rdata=rdata)
+        assert not ok and "retail holds" in message, rdata
+    ok, message = literal_row(tmp_path, monkeypatch, BASE + 0x2001)  # one byte off
+    assert not ok and "retail holds" in message
+    # an addend past the literal, or before it, addresses none of it
+    assert "addend" in literal_row(tmp_path, monkeypatch, BASE + 0x2006, addend=6)[1]
+    assert "addend" in literal_row(tmp_path, monkeypatch, BASE + 0x1FFF, addend=-1)[1]
+
+
+def test_a_string_literal_target_is_never_code_or_outside_the_image(tmp_path, monkeypatch):
+    ok, message = literal_row(tmp_path, monkeypatch, BASE + 0x1000, text=b"Unini\0" + b"\xc3" * 10)
+    assert not ok and "not data" in message  # the same bytes in .text are no string
+    assert "not data" in literal_row(tmp_path, monkeypatch, BASE + 0x100)[1]       # header
+    assert "not data" in literal_row(tmp_path, monkeypatch, 0x10)[1]               # outside the image
+
+
+def test_a_string_literal_name_proves_nothing_without_its_bytes(tmp_path, monkeypatch):
+    # the name encodes six bytes; an object holding fewer, or no terminator, is refused
+    assert "string literal" in literal_row(tmp_path, monkeypatch, BASE + 0x2000, body=b"Uni\0")[1]
+    assert "terminator" in literal_row(tmp_path, monkeypatch, BASE + 0x2000, body=b"Uninit\0")[1]
+    # an undefined ??_C@ external has no bytes to compare
+    img = image_with(rdata=b"Unini\0", data=struct.pack("<I", BASE + 0x2000))
+    compiled(tmp_path, monkeypatch, [(".data", 0xC0300040, bytes(4), 4, [(0, 1)])],
+             [("?p@@3PBDB", 0, 1), (LITERAL, 0, 0)])
+    ok, message = verify(img, row("?p@@3PBDB"), {})
+    assert not ok and "not defined with bytes" in message
+    # any other unnamed target still needs a ledger address
+    compiled(tmp_path, monkeypatch, [(".data", 0xC0300040, bytes(4), 4, [(0, 1)])],
+             [("?p@@3PBDB", 0, 1), ("?q@@3PBDB", 0, 0)])
+    assert "no retail address" in verify(img, row("?p@@3PBDB"), {})[1]
 
 
 def test_allocation_padding_is_not_a_size(tmp_path, monkeypatch):
