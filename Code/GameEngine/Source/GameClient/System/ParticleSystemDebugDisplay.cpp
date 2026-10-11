@@ -82,6 +82,13 @@ typedef _STL::list<RvaSmartPtr12> ParticleDebugList;
 // handle-list instantiations. Their full bodies and every call target are
 // byte-and-relocation twins of the existing owners; zero unique-byte gain.
 // The calling diagnostic body remains banked while its print register differs.
+// This TU's class instantiation below would otherwise emit a second
+// map<AsciiString,float>::operator[] COMDAT differing from the rowed
+// 0x5B67C provider in AsciiStringTableSubscripts.cpp; a declaration-only
+// member specialization keeps this TU's copy out so callers bind retail's.
+namespace _STL {
+template <> float &map<AsciiString, float, less<AsciiString>, allocator<pair<const AsciiString, float> > >::operator[](const AsciiString &);
+}
 template class _STL::map<AsciiString,int>;
 template class _STL::map<AsciiString,float>;
 template class _STL::_List_base<RvaSmartPtr12,_STL::allocator<RvaSmartPtr12> >;
