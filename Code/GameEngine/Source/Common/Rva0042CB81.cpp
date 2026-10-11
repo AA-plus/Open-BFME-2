@@ -1,4 +1,4 @@
-// cl: /O1 /Oi /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// cl: /O1 /Oi- /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /I.
 // stlport
 #include <algorithm>
 // ?rva0042CB81@Rva0042CBB6@@QAEXH@Z @0x0042CB81 53B via conditional counter decrement plus zero-guard clear
@@ -26,6 +26,7 @@ public:
 	void rva0042CB57(int x);
 	void rva002B230F(int impl);
 	void rva0042CAFB();
+	void rva0042D068();
 private:
 	const void *m_vtable;
 	int m_04;
@@ -160,5 +161,100 @@ void Rva0042CBB6::rva0042CAFB()
   reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s29(&point);
   reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s39(
    &point,0.0f,reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s25(g_009BA4E8 / 4));
+ }
+}
+
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "Code/Libraries/Include/Lib/Coord2D.h"
+#include <math.h>
+extern GameLogic *TheGameLogic;
+class GlobalData; extern GlobalData *TheWritableGlobalData;
+class Display; extern Display *TheDisplay;
+class InGameUI; extern InGameUI *TheInGameUI;
+class LivingWorldLogic; extern LivingWorldLogic *TheLivingWorldLogic;
+class BfmeSelectionState {public: bool isSelectionLocked() const;};
+struct CameraData42 {
+ char gap[0xA9C]; float horizontal,vertical,edge;
+ char gapAA8[0xAF8-0xAA8]; float keyboard;
+ char gapAFC[0xC2C-0xAFC]; float rotate;
+};
+#define CAMERA_DATA42 (reinterpret_cast<CameraData42 *>(TheWritableGlobalData))
+class CameraDisplay42 {
+public:
+ virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+ virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+ virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+ virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+ virtual unsigned width(); virtual unsigned height();
+};
+class CameraMotion42 {
+public:
+ virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+ virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+ virtual void s08(); virtual void s09(); virtual void s10();
+ virtual void s11(Coord2D *,float);
+ virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+ virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+ virtual void s20(); virtual void s21(int);
+};
+// Complete native 82D068..82D468, 1024B, ending in RET at 82D467.
+// The receiver agrees with the rowed 42CBB6 constructor and the same home's
+// input flags, anchors and counter helpers. Original method name is unknown.
+// Target establishes every access and virtual slot. Camera meanings and
+// GlobalData field roles are inferences supported by the independently
+// matched BfmeOwnVVDScrollUpdate.cpp sibling; see identity evidence.
+void Rva0042CBB6::rva0042D068()
+{
+ unsigned char moved=m_42;
+ m_42=0;
+ if(!TheLivingWorldLogic || !reinterpret_cast<BfmeSelectionState *>(TheLivingWorldLogic)->isSelectionLocked() || TheGameLogic->isGamePaused()) return;
+ Coord2D offset;
+ offset.x=0.0f; offset.y=0.0f;
+ float extra=0.0f;
+ if(m_39) {
+  if(!moved) rva0042CB81(8);
+  if(reinterpret_cast<Rva002BE8D4 *>(g_00DFEF18)->rva002BE8D4()) rva0042CB81(1);
+ }
+ if(m_39) {
+  if(m_08 & 1) {
+   if(*(reinterpret_cast<unsigned char *>(TheInGameUI)+0x8C4)) {
+    int maxX=reinterpret_cast<CameraDisplay42 *>(TheDisplay)->width()/2;
+    int maxY=reinterpret_cast<CameraDisplay42 *>(TheDisplay)->height()/2;
+    if(m_18+maxX < m_10) m_10=m_18+maxX;
+    else if(m_18-maxX > m_10) m_10=m_18-maxX;
+    if(m_1C+maxY < m_14) m_14=m_1C+maxY;
+    else if(m_1C-maxY > m_14) m_14=m_1C-maxY;
+   }
+   offset.x=(m_18-m_10)*CAMERA_DATA42->horizontal;
+   offset.y=(m_1C-m_14)*CAMERA_DATA42->vertical;
+   Coord2D direction;
+   direction.x=offset.x; direction.y=offset.y;
+   direction.normalize();
+   offset.x+=CAMERA_DATA42->horizontal*CAMERA_DATA42->keyboard*CAMERA_DATA42->keyboard*direction.x;
+   offset.y+=CAMERA_DATA42->vertical*CAMERA_DATA42->keyboard*CAMERA_DATA42->keyboard*direction.y;
+  }
+  if(m_08 & 2) extra=(m_28-m_20)*0.005f;
+  if(m_08 & 4) {
+   if(m_3A[0]) offset.y-=CAMERA_DATA42->keyboard*CAMERA_DATA42->vertical*350.0f;
+   if(m_3A[1]) offset.y+=CAMERA_DATA42->keyboard*CAMERA_DATA42->vertical*350.0f;
+   if(m_3A[2]) offset.x-=CAMERA_DATA42->keyboard*CAMERA_DATA42->horizontal*350.0f;
+   if(m_3A[3]) offset.x+=CAMERA_DATA42->keyboard*CAMERA_DATA42->horizontal*350.0f;
+  }
+  if(m_08 & 8) {
+   unsigned height=reinterpret_cast<CameraDisplay42 *>(TheDisplay)->height();
+   unsigned width=reinterpret_cast<CameraDisplay42 *>(TheDisplay)->width();
+   if(m_1C<3) offset.y-=CAMERA_DATA42->keyboard*CAMERA_DATA42->edge*CAMERA_DATA42->vertical*350.0f;
+   if((unsigned)m_1C>=height-3) offset.y+=CAMERA_DATA42->keyboard*CAMERA_DATA42->edge*CAMERA_DATA42->vertical*350.0f;
+   if(m_18<3) offset.x-=CAMERA_DATA42->keyboard*CAMERA_DATA42->edge*CAMERA_DATA42->horizontal*350.0f;
+   if((unsigned)m_18>=width-3) offset.x+=CAMERA_DATA42->keyboard*CAMERA_DATA42->edge*CAMERA_DATA42->horizontal*350.0f;
+  }
+  reinterpret_cast<CameraMotion42 *>(g_00DFEF18)->s11(&offset,extra);
+  m_30+=fabs(offset.x);
+  m_34+=fabs(offset.y);
+ } else {
+  if(m_3E) reinterpret_cast<CameraMotion42 *>(g_00DFEF18)->s11(&offset,CAMERA_DATA42->rotate*-15.0f);
+  else if(m_3F) reinterpret_cast<CameraMotion42 *>(g_00DFEF18)->s11(&offset,CAMERA_DATA42->rotate*15.0f);
+  else if(m_40) reinterpret_cast<CameraMotion42 *>(g_00DFEF18)->s21(1);
+  else if(m_41) reinterpret_cast<CameraMotion42 *>(g_00DFEF18)->s21(-1);
  }
 }
