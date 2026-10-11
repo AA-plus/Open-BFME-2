@@ -30,12 +30,25 @@ private:
 	BfmeRangedWeaponTemplate *m_m04; // +0x04
 };
 
+// 0x002C9A6F is rowed as Weapon::computeBonus (86B, WeaponComputeBonus.cpp;
+// BFME1 donor); same (Object*, int, WeaponBonus&) shape on the same
+// receiver, so this resolves to the rowed body instead of the unrowed
+// spelling (sole U on this unit).
+class Object;
+class WeaponBonus;
+class Weapon
+{
+protected:
+	void computeBonus(const Object *source, unsigned int extra, WeaponBonus &bonus) const;
+	friend class Rva002C9B80Owner;
+};
+
 // ?rva002C9B80@Rva002C9B80Owner@@QAEMPAXM@Z
 float Rva002C9B80Owner::rva002C9B80(void *a, float b)
 {
 	float arr[6];
 	for (int i = 0; i < 6; ++i)
 		arr[i] = 1.0f;
-	rva002C9A6F(a, 0, arr);
+	((Weapon *)this)->computeBonus((const Object *)a, 0, (WeaponBonus &)arr);
 	return m_m04->rva002C995D(a, arr, b);
 }

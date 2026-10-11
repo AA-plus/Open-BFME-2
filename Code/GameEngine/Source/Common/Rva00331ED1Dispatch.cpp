@@ -19,7 +19,10 @@ extern GameLogic *TheGameLogic;
 class LuaScriptEngine
 {
 public:
-    void rva00334860(void *event, Object *object, void *argument2,
+    // 0x00334860 is rowed as LuaScriptEngine::DispatchSpyEvent (472B;
+    // sibling of DispatchEvent); same (int, ptr, ptr, ptr) shape, so this
+    // resolves to the rowed body instead of the unrowed spelling (sole U).
+    void DispatchSpyEvent(int event, void *object, void *argument2,
         void *argument3);
 };
 extern LuaScriptEngine *TheLuaScriptEngine;
@@ -60,7 +63,7 @@ void Rva00331ED1::rva00331ED1(int key, void *argument2, void *argument3)
         {
             Object *object = TheGameLogic->findObjectByID(node->id);
             if (object)
-                TheLuaScriptEngine->rva00334860(record->event, object,
+                TheLuaScriptEngine->DispatchSpyEvent((int)record->event, object,
                     argument2, argument3);
             node = node->next;
         }
