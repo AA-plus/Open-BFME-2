@@ -23,6 +23,7 @@ public:
 };
 class AptValue {
 public:
+ void rva006DE870(char *) const;
  virtual void AddRef();
  virtual void Release();
  void SetString(const char *);
@@ -52,12 +53,11 @@ void AptSetInternalVariable(const char *name, const char *text) {
 // Native6CCAF0..6CCB7B; WB174F2E0's AptGetInternalVariable label.
 // The two caller arguments are the source key and a mutable output buffer.
 // Native6DE870 converts the AptValue to EAStringC and copies into that buffer.
-class Rva006DCD20 {public:void rva006DE870(char *);};
 void AptGetInternalVariable(const char *name,char *out) {
  EAStringC key(name);
  AptValue *value=g_aptDateInterpreter.getVariable(_AptGetAnimationAtLevel(0),0,&key,1,1,0);
  value->AddRef();
- ((Rva006DCD20 *)value)->rva006DE870(out);
+ value->rva006DE870(out);
  value->Release();
 }
 
