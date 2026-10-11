@@ -278,7 +278,8 @@ public:
 	Team *getTeam() const { return m_team; }
 	Int get45C() const { return m_45C; }
 
-	void rva0029660C(const Coord3D *pos, Int flag);
+	void teleportTo(const Coord3D *pos, bool flag);  // rowed 0x0029660C
+	__declspec(dllimport) __forceinline void rva0029660C(const Coord3D *pos, int flag) { (this->*reinterpret_cast<void (Object::*)(const Coord3D *, int)>(&Object::teleportTo))(pos, flag); }
 	Real rva0028AC7D() const;
 	void setProducer(Object *obj);
 	void setTeam(Team *team);

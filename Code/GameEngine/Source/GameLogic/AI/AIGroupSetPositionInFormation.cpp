@@ -28,7 +28,8 @@ class Object : public Thing
 {
 public:
 	// WB names this Object::teleportTo; held here under its existing pin.
-	void rva0029660C(const Coord3D *pos, int flags);
+	void teleportTo(const Coord3D *pos, bool flags);  // rowed 0x0029660C
+	__declspec(dllimport) __forceinline void rva0029660C(const Coord3D *pos, int flags) { (this->*reinterpret_cast<void (Object::*)(const Coord3D *, int)>(&Object::teleportTo))(pos, flags); }
 	float GetRelativeAngle(const Coord3D *target) const;
 	const Coord2D *getFormationOffset() const { return &m_formationOffset; }
 

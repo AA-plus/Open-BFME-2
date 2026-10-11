@@ -65,7 +65,8 @@ public:
 class Object : public Thing
 {
 public:
-	void rva0029660C(const Coord3D *pos, int flag);	// 0x0029660C
+	void teleportTo(const Coord3D *pos, bool flag);  // rowed 0x0029660C
+	__declspec(dllimport) __forceinline void rva0029660C(const Coord3D *pos, int flag) { (this->*reinterpret_cast<void (Object::*)(const Coord3D *, int)>(&Object::teleportTo))(pos, flag); }
 	void kill(DamageType damageType, DeathType deathType);	// 0x002984D4
 	const Coord3D *getPosition() const { return &m_pos; }
 	char m_pad000[0x38];

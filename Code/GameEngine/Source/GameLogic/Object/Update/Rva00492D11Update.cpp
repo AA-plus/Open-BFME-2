@@ -26,7 +26,8 @@ class Object
 {
 public:
 	float GetRelativeAngle(const Coord3D *pos) const;
-	void rva0029660C(const Coord3D *pos, int v);
+	void teleportTo(const Coord3D *pos, bool v);  // rowed 0x0029660C
+	__declspec(dllimport) __forceinline void rva0029660C(const Coord3D *pos, int v) { (this->*reinterpret_cast<void (Object::*)(const Coord3D *, int)>(&Object::teleportTo))(pos, v); }
 
 	unsigned char m_pad00[0x44];
 	float m_44;

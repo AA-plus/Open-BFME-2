@@ -206,7 +206,8 @@ class Object
 public:
 	void rva0028C2DD(Coord3D *center) const;	// 0x0028C2DD
 	int rva0028B511() const;			// 0x0028B511
-	void rva0029660C(const Coord3D *pos, int flag);	// 0x0029660C
+	void teleportTo(const Coord3D *pos, bool flag);  // rowed 0x0029660C
+	__declspec(dllimport) __forceinline void rva0029660C(const Coord3D *pos, int flag) { (this->*reinterpret_cast<void (Object::*)(const Coord3D *, int)>(&Object::teleportTo))(pos, flag); }
 	Drawable *getDrawable() const;			// 0x005508E2
 	char m_pad000[0x38];
 	Coord3D m_pos;			// +0x38
