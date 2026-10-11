@@ -1,7 +1,16 @@
-// ?rva0029CC19@InGameUI@@QAE_NPBVObject@@@Z
-// partial score=0.91 date=2026-10-10
 // cl: /O1 /G7 /MD /EHsc /Ireference/shims/bfme2_ascii /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/Libraries/Include/Lib
 // stlport
+// InGameUI 0x0029CC19 (441 bytes): whether the selection can siege-deploy
+// onto the target. For a target of template kind bit 0x10000000 (+0x10C) with
+// a selection, each selected uncontained object whose template carries bit
+// 0x20000000 (+0x110) and is ready for its siege deploy command (the ladder
+// variant for template bit 0x800 at +0x118), lacking status 59, answers yes
+// when it has no AI, or when the target's SiegeDockingBehavior gives it no
+// dock position or its AI has a quick path to that position. Strings,
+// callees and offsets are retail's; the name stays address-derived.
+// Retail saves EBX/ESI/EDI only after the opening test: that test is an
+// inlined helper and the walk its else scope. Object::findModule is rowed
+// protected (0x0028B6D6), so this view keeps it protected for InGameUI.
 #include "unicode_string.h"
 #include "ascii_string.h"
 #include <list>
@@ -103,20 +112,20 @@ public:
  bool rva00292FAC() const;
  Drawable *getDrawable() const;
  bool rva002922D9(const CommandButton*);
- Module *findModule(NameKeyType) const;
  void *vptr;
  ThingTemplate *m_template;
  char unknown008[0x74-8]; ObjectID id; ObjectID guardID;
  char unknown07c[0x250-0x7c]; SelectionContain *contain;
  char unknown254[4]; AIUpdateInterface *ai; char unknown25c[0x274-0x25c]; Object *containedBy;
+protected:
+ friend class InGameUI;
+ Module *findModule(NameKeyType) const;	// rowed 0x0028B6D6 (protected)
 };
 class Drawable {
 public:
  char unknown000[0xfc]; Object *object;
  char unknown100[0x43c-0x100]; bool selected;
 };
-class GameLogic { public: Object *findObjectByID(ObjectID); };
-extern GameLogic *TheGameLogic;
 class GameTextInterface {
 public:
  virtual void slot0();
@@ -256,8 +265,12 @@ extern NameKeyGenerator *TheNameKeyGenerator;
 class AIUpdateInterface { public: bool isQuickPathAvailable(const Coord3D*) const; };
 class SiegeDockInterface { public: virtual void slot0(); virtual bool slot1(ObjectID,Coord3D*); };
 class Module { public: char prefix[0x20]; SiegeDockInterface dock; };
+static __forceinline bool rva0029CC19Applies(const Object *target) {
+ return target && (target->m_template->kind10c&0x10000000) && TheInGameUI->getSelectCount();
+}
 bool InGameUI::rva0029CC19(const Object *target) {
- if(target && (target->m_template->kind10c&0x10000000) && TheInGameUI->getSelectCount()) {
+ if(!rva0029CC19Applies(target)) return false;
+ else {
  const _STL::list<Drawable*> *selected=TheInGameUI->getAllSelectedDrawables();
  for(_STL::list<Drawable*>::const_iterator it=selected->begin();it!=selected->end();++it) {
   Object *object=(*it)->object;
@@ -278,5 +291,4 @@ bool InGameUI::rva0029CC19(const Object *target) {
  }
  return false;
  }
- return false;
 }
