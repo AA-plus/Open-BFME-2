@@ -66,6 +66,19 @@ public:
 	{
 		return m_playerNightColor;
 	}
+	// LINK: same-body helpers under TU-unique names (identical inlined
+	// bytes). This TU's copies lose (first-copy); both calls below inline
+	// them but still emit loser COMDATs. Rebinding there emits only unique
+	// (trivially kept) copies. No flags touched, no layout claim.
+	Color bfme_player_color() const
+	{
+		return m_playerColor;
+	}
+
+	Color bfme_player_night_color() const
+	{
+		return m_playerNightColor;
+	}
 
 	Team *getDefaultTeam() const
 	{
@@ -345,12 +358,12 @@ void CaveContain::recalcApparentControllingPlayer()
 	{
 		if (caveContainGlobalData()->m_timeOfDay == TIME_OF_DAY_NIGHT)
 		{
-			Color indicatorColor = controller->getPlayerNightColor();
+			Color indicatorColor = controller->bfme_player_night_color();
 			getObject()->getDrawable()->setIndicatorColor(indicatorColor);
 		}
 		else
 		{
-			Color indicatorColor = controller->getPlayerColor();
+			Color indicatorColor = controller->bfme_player_color();
 			getObject()->getDrawable()->setIndicatorColor(indicatorColor);
 		}
 	}

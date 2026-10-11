@@ -103,8 +103,18 @@ class Drawable
 public:
 	const Matrix3D *getTransformMatrix() const;
 	const Matrix3D *getInstanceMatrix() const { return &m_instance; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's copy loses (first-copy); the call below inlines it
+	// but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. No flags touched.
+	const Matrix3D *bfme_instance_matrix() const { return &m_instance; }
 	void setInstanceMatrix(const Matrix3D *instance, Bool preservePrevious);
 	Object *getObject() { return m_object; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getObject copy loses (first-copy); the call below
+	// inlines it but still emits the loser COMDAT. Rebinding there emits only
+	// this unique (trivially kept) copy. No flags touched.
+	Object *bfme_object() { return m_object; }
 	Bool isVisible() const { return m_isVisible; }
 
 private:
@@ -218,7 +228,7 @@ void SwayClientUpdate::clientUpdate()
 	Real targetAngle = cosine * m_curAngleLimit + m_leanAngle;
 	Real deltaAngle = targetAngle - m_curAngle;
 
-	Matrix3D xfrm = *draw->getInstanceMatrix();
+	Matrix3D xfrm = *draw->bfme_instance_matrix();
 	xfrm.In_Place_Pre_Rotate_X(-deltaAngle * m_directionSin);
 	xfrm.In_Place_Pre_Rotate_Y(deltaAngle * m_directionCos);
 	draw->setInstanceMatrix(&xfrm, false);
@@ -226,7 +236,7 @@ void SwayClientUpdate::clientUpdate()
 	m_curAngle = targetAngle;
 
 	// burned things don't sway.
-	Object *obj = draw->getObject();
+	Object *obj = draw->bfme_object();
 	if (obj && (obj->testStatus(OBJECT_STATUS_BURNED) || obj->isEffectivelyDead()))
 		stopSway();
 }

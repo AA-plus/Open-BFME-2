@@ -142,6 +142,11 @@ public:
 	Bool rva002AB87D(const UpgradeTemplate *upgrade) const; // 0x002AB87D
 	Bool rva002AB2D9(BfmeTab1026 *mustBePresent, Bool flag) const; // 0x002AB2D9
 	Color getPlayerColor() const { return m_color; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's copy loses (first-copy); both calls below inline it
+	// but still emit the loser COMDAT. Rebinding there emits only this unique
+	// (trivially kept) copy. No flags touched, no layout claim.
+	Color bfme_player_color() const { return m_color; }
 
 	char m_pad000[0x90];
 	Rva003B0D7C m_money; // +0x90
@@ -176,6 +181,11 @@ public:
 	Bool testKindOfBit(Int bit) const { return (m_kindOf[bit >> 5] >> (bit & 31)) & 1; }
 	Bool isNeutralControlled() const;
 	Real getConstructionPercent() const { return m_constructionPercent; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's copy loses (first-copy); the call below inlines it
+	// but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. No flags touched.
+	Real bfme_construction_percent() const { return m_constructionPercent; }
 	Player *getControllingPlayer() const;
 	Bool rva0028C15E(Int type, Real *value, Int a, Int b); // 0x0028C15E
 	ExperienceTracker *getExperienceTracker() const { return m_experienceTracker; }
@@ -283,7 +293,7 @@ void AutoDepositUpdate::awardInitialCaptureBonus( Player *player )
 		pos.z = getObject()->getPosition()->z;
 		pos.z += 10.0f; //add a little z to make it show up above the unit.
 
-		Color color = player->getPlayerColor() | GameMakeColor( 0, 0, 0, 230 );
+		Color color = player->bfme_player_color() | GameMakeColor( 0, 0, 0, 230 );
 		TheInGameUI->addFloatingText( moneyString, &pos, color );
 	}
 	m_awardInitialCaptureBonus = FALSE;
@@ -309,7 +319,7 @@ UpdateSleepTime AutoDepositUpdate::update( void )
 			return UPDATE_SLEEP_NONE;
 
 		// makes sure that buildings under construction do not get a bonus CCB
-		if( getObject()->getConstructionPercent() != CONSTRUCTION_COMPLETE )
+		if( getObject()->bfme_construction_percent() != CONSTRUCTION_COMPLETE )
 			return UPDATE_SLEEP_NONE;
 
 		Bool kind05 = getObject()->testKindOfBit( 5 );
@@ -350,7 +360,7 @@ UpdateSleepTime AutoDepositUpdate::update( void )
 			pos.z = getObject()->getPosition()->z;
 			pos.z += 10.0f; //add a little z to make it show up above the unit.
 
-			Color color = getObject()->getControllingPlayer()->getPlayerColor() | GameMakeColor( 0, 0, 0, 230 );
+			Color color = getObject()->getControllingPlayer()->bfme_player_color() | GameMakeColor( 0, 0, 0, 230 );
 			TheInGameUI->addFloatingText( moneyString, &pos, color );
 		}
 	}
