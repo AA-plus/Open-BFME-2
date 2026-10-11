@@ -22,11 +22,26 @@ class Squad
 {
 public:
 	Squad() throw();
-	void squadFromTeam(const Team *fromTeam, Bool clearSquadFirst);
-	void squadFromAIGroup(const AIGroup *fromAIGroup, Bool clearSquadFirst);
-	Squad &operator=(const Squad &that);
 private:
 	unsigned char m_data[0x1C];
+};
+
+// LINK: the three Squad operations are rowed under their retail names
+// (0x004D6D95, 0x0018B8B0, 0x00351761); the views keep the call shapes.
+class Rva004D6C9C
+{
+public:
+	void rva004D6D95(Team *fromTeam, Bool clearSquadFirst);
+};
+class Rva0018B8B0Arg;
+class Rva0018B8B0Holder
+{
+public:
+	void apply(Rva0018B8B0Arg *arg, Bool clearSquadFirst);
+};
+struct BfmeThingCDF
+{
+	BfmeThingCDF *bfmeGoCDF(BfmeThingCDF *that);
 };
 
 class AIStateMachine
@@ -47,7 +62,7 @@ void AIStateMachine::setGoalTeam( const Team *team )
 		m_goalSquad = new Squad;
 	}
 
-	m_goalSquad->squadFromTeam(team, true);
+	((Rva004D6C9C *)m_goalSquad)->rva004D6D95((Team *)team, true);
 }
 
 //----------------------------------------------------------------------------------------------------------
@@ -57,7 +72,7 @@ void AIStateMachine::setGoalAIGroup( const AIGroup *group )
 		m_goalSquad = new Squad;
 	}
 
-	m_goalSquad->squadFromAIGroup(group, true);
+	((Rva0018B8B0Holder *)m_goalSquad)->apply((Rva0018B8B0Arg *)group, true);
 }
 
 //----------------------------------------------------------------------------------------------------------
@@ -67,5 +82,5 @@ void AIStateMachine::setGoalSquad( const Squad *squad )
 		m_goalSquad = new Squad;
 	}
 
-	(*m_goalSquad) = (*squad);
+	((BfmeThingCDF *)m_goalSquad)->bfmeGoCDF((BfmeThingCDF *)squad);
 }
