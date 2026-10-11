@@ -29,10 +29,22 @@ struct ICoord2D
 
 class ControlBarScheme
 {
-public:
-	void drawForeground(Coord2D multi, ICoord2D offset);
-	void drawBackground(Coord2D multi, ICoord2D offset);
 };
+
+// LINK: the scheme draws are rowed as Rva0031F89E::rva0031F89E and Rva0031F96F::rva0031F96F(float, float, int, int) (the multiplier and offset
+// are four stack words); the by-value Coord2D/ICoord2D call shape is kept through a member-pointer cast.
+class Rva0031F89E
+{
+public:
+	void rva0031F89E(float mx, float my, int ox, int oy);
+};
+class Rva0031F96F
+{
+public:
+	void rva0031F96F(float mx, float my, int ox, int oy);
+};
+typedef void (Rva0031F89E::*SchemeForegroundShape)(Coord2D, ICoord2D);
+typedef void (Rva0031F96F::*SchemeBackgroundShape)(Coord2D, ICoord2D);
 
 class ControlBarSchemeManager
 {
@@ -48,11 +60,11 @@ private:
 void ControlBarSchemeManager::drawForeground(ICoord2D offset)
 {
 	if (m_currentScheme)
-		m_currentScheme->drawForeground(m_multiplyer, offset);
+		(((Rva0031F89E *)m_currentScheme)->*reinterpret_cast<SchemeForegroundShape>(&Rva0031F89E::rva0031F89E))(m_multiplyer, offset);
 }
 
 void ControlBarSchemeManager::drawBackground(ICoord2D offset)
 {
 	if (m_currentScheme)
-		m_currentScheme->drawBackground(m_multiplyer, offset);
+		(((Rva0031F96F *)m_currentScheme)->*reinterpret_cast<SchemeBackgroundShape>(&Rva0031F96F::rva0031F96F))(m_multiplyer, offset);
 }
