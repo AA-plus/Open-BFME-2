@@ -1,3 +1,6 @@
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001bba20.md plus retail only. No decoder source was consulted.
+// BuildScanOrder, retail RVA 0x001BBA20 (200 bytes).
 // Open-BFME5 conversion of the 16-value codec table builder.
 
 struct Rva009AAFE0Context
@@ -8,7 +11,7 @@ struct Rva009AAFE0Context
 	unsigned char m_table[0x400];
 };
 
-void __cdecl Rva009AAFE0BuildTable(register Rva009AAFE0Context *self,
+extern "C" void __cdecl BuildScanOrder(register Rva009AAFE0Context *self,
 	register const unsigned char *source)
 {
 	int next = 1;

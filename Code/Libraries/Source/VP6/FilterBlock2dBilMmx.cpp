@@ -1,10 +1,11 @@
 // cl: /DNDEBUG /MD
-
+// Clean room: reverse/vp6_cleanroom/specs/001d7100.md plus retail only. No decoder source was consulted.
+// FilterBlock2dBil_mmx, retail RVA 0x001D7100 (254 bytes).
 extern const unsigned short g_bfmeBinkRoundMmx[4];
 
 // Address-derived identity. The optimized MMX schedule does not reproduce
 // from MSVC 7.1 intrinsics, so the filter core stays as typed inline assembly.
-void __cdecl Rva009C6800(const unsigned char *source, unsigned char *destination,
+extern "C" void __cdecl FilterBlock2dBil_mmx(const unsigned char *source, unsigned char *destination,
 	int stride, const void *horizontalWeights, const void *verticalWeights)
 {
 	__asm

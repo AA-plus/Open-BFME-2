@@ -1,13 +1,13 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
-
+// Clean room: reverse/vp6_cleanroom/specs/001c7250.md plus retail only. No decoder source was consulted.
+// VP6_decodeModeDiff, retail RVA 0x001C7250 (211 bytes).
 struct Vp6BoolCoder;
 
 extern "C" int __cdecl VP6_DecodeBool(void *state, int probability);
 extern "C" int __cdecl VP6_DecodeBool128(Vp6BoolCoder *state);
 extern "C" int __cdecl VP6_bitread(void *, int);
 
-// ?Rva009B6950DecodeScale@@YAHPAE@Z
-int Rva009B6950DecodeScale(unsigned char *ctx)
+extern "C" int __cdecl VP6_decodeModeDiff(unsigned char *ctx)
 {
 	void *state = ctx + 0x150;
 	int sign;

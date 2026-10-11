@@ -1,3 +1,6 @@
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d2060.md plus retail only. No decoder source was consulted.
+// HorizontalLine_4_5_Scale_MMX, retail RVA 0x001D2060 (232 bytes).
 // 8 source bytes to 10 destination bytes (4:5) with complementary 1/5..4/5
 // weights. Tail replicates the last source byte via a psrlq/pand/psllq rotate,
 // same trick as bfmeExpandMmx.
@@ -10,8 +13,7 @@ namespace
 	__declspec(align(8)) const unsigned char g_bfmeTailMask[8] = { 0, 0, 0, 0, 0, 0, 255, 0 };
 }
 
-// ?bfmeExpand4to5Mmx@@YAXPBXHPAX@Z
-void __cdecl bfmeExpand4to5Mmx(const void *source, int bytes, void *destination)
+extern "C" void __cdecl HorizontalLine_4_5_Scale_MMX(const void *source, int bytes, void *destination)
 {
 	__asm
 	{

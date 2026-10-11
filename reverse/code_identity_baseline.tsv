@@ -974,11 +974,9 @@ Code/GameEngine/Source/Common/Rva009A6130PostFilterDispatch.cpp	?Rva009A6130Post
 Code/GameEngine/Source/Common/Rva009A6130PostFilterDispatch.cpp	?Rva009A6130PostFilterDispatch@@YAXPAURva009A6130Context@@HHHHPAE11HH@Z	?d_009a8c50@@YAXXZ	0x001B96A0	unowned
 Code/GameEngine/Source/Common/Rva009A9AD0Scale2D.cpp	?Rva009A9AD0Scale2D@@YAXPAEHII0HII0EIIIII@Z	?Rva009A9980@@YAXPBEHIIPAEHII@Z	0x001BA3C0	unowned
 Code/GameEngine/Source/Common/Rva009A9AD0Scale2D.cpp	?Rva009A9AD0Scale2D@@YAXPAEHII0HII0EIIIII@Z	?Rva009A9A20@@YAXPBEHIIPAEHII@Z	0x001BA460	unowned
-Code/GameEngine/Source/Common/Rva009AAD20.cpp	?Rva009AAD20@@YAXPAURva009AAD20State@@H@Z	?Rva009B5530Prepare@@YAXPAURva009B5830State@@PAXH@Z	0x001C5E30	unowned
 Code/GameEngine/Source/Common/Rva009AB320BuildTables.cpp	?Rva009AB320BuildTables@@YAXPAURva009AB320Tables@@@Z	?Rva009B60E0BuildTree@@YAXPAI0H@Z	0x001C69E0	unowned
 Code/GameEngine/Source/Common/Rva009AF0D0CopyPlane.cpp	?copyPlane009AF0D0@@YAXPAURva009AF200Context@@IHIIPAE1PBI@Z	?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z	0x001BE490	unowned
 Code/GameEngine/Source/Common/Rva009AF200CopyPlanes.cpp	?Rva009AF200CopyPlanes@@YAXPAURva009AF200Context@@HH@Z	?copyPlane009AEEE0@@YAXPAURva009AF200Context@@HHH@Z	0x001BF8D0	unowned
-Code/GameEngine/Source/Common/Rva009B5830ReconstructBlock.cpp	?Rva009B5830ReconstructBlock@@YAXPAURva009B5830State@@H@Z	?Rva009B5530Prepare@@YAXPAURva009B5830State@@PAXH@Z	0x001C5E30	unowned
 Code/GameEngine/Source/Common/Rva009B5DB0Vp6DecodeBlock.cpp	?Rva009B5AF0Vp6DecodeBlock@@YAXPAEHH@Z	?d_009b5420@@YAXXZ	0x001C5D20	unowned
 Code/GameEngine/Source/Common/Rva009B5DB0Vp6DecodeBlock.cpp	?Rva009B5DB0Vp6DecodeBlock@@YAXPAEHI@Z	?d_009b58f0@@YAXXZ	0x001C61F0	unowned
 Code/GameEngine/Source/Common/Rva009F5970StateCtor.cpp	??0Rva009F5970State@@QAE@XZ	??1?$vector@UGen_p8cd@@V?$allocator@UGen_p8cd@@@_STL@@@_STL@@QAE@XZ	0x00142D70	wrong

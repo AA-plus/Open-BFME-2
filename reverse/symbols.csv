@@ -6438,7 +6438,6 @@ name,address,notes
 ?Rva009B5530Prepare@@YAXPAURva009B5830State@@PAXH@Z,0x001C5E30
 ?Rva009B60E0BuildTree@@YAXPAI0H@Z,0x001C69E0,BFME1-donor declaration Rva009B60E0BuildTree(unsigned* unsigned* int) in Rva009AB320BuildTables.cpp; the three retail call sites +0x4F +0xD8 +0x17F all land here and only the call displacement differed
 ?Rva009B6740BuildTable@@YAXPAE@Z,0x001C7040
-?Rva009C6800@@YAXPBEPAEHPBX2@Z,0x001D7100,call site +0x1BF of Rva009C6A30 agrees with the sweep's own verified placement of this 254B body at 0x001D7100
 ?Rva009EBAC0@@YAXH@Z,0x0061F010,callee of ??0T1Base_005F3750@@QAE@PAX0@Z at retail 0x0055C903 read from its REL32 displacement; donor ABI view of the rowed ?bfmeMergeReceiverKeys@@YAXH@Z body at this address
 ?Rva009EEC60_FindAsset@Rva009EEC60Registry@@QAE?AVRva009EBCE0AssetReference@@PBD@Z,0x00621220
 ?Rva009F3F80@@YAXPAUQ3SortElem8@@0UQ3SortCompare@@@Z,0x00626940
@@ -8129,7 +8128,6 @@ name,address,notes
 ?bfmeGo1029E@BfmeE1029@@QAEXPADH@Z,0x006557F0,BFME1 alias of rowed set at Rva006557F0Holder (same 33B body) for Rva007F7DA0GameBrowserTicket donor call
 ?bfmeGo1036E@BfmeE1036@@QAEXXZ,0x00664FC0
 ?bfmeGo1055E@@YAXPAUBfmeR1055@@H@Z,0x006A4970
-?bfmeGo7760@@YAXPAHPAXHHHH1@Z,0x001B81C0
 ?bfmeGo929C@@YAPAXXZ,0x0065CEA0
 ?bfmeGo996B@BfmeB996@@QAEDHHPAD@Z,0x001068D1,callee read from the retail REL32 in placed BFME1-donor body ?update@Rva007E4AD0Vp6Stream@@QAEXXZ (0x00091189)
 ?bfmeGoCIB@BfmeThingCIB@@QAEXPAX0@Z,0x00655960
@@ -8938,7 +8936,6 @@ name,address,notes
 ?d_00943430@@YAXXZ,0x00141640
 ?d_0094d450@@YAXXZ,0x001711A6,callee read from the retail REL32 in placed BFME1-donor body ?reset@Rva0094D8B0@@QAE_NXZ (0x00171522)
 ?d_009a5620@@YAXXZ,0x001B60E0
-?d_009a5aa0@@YAXXZ,0x001B6520
 ?d_009a5d70@@YAXXZ,0x001B67E0
 ?d_009a8430@@YAXXZ,0x001B8E90
 ?d_009a89c0@@YAXXZ,0x001B9410
@@ -12120,8 +12117,6 @@ name,address,notes
 ?rva009148C0@PointGroupClass@@QAEXPAVVector3@@PAMPAEH@Z,0x0017A890,PointGroupClass vertex-location fill; address read from the REL32 site of the BFME1-donor rva00917B10 body at 0x0017F3A0 (bfme1_sweep T2 transfer b1 0x00917B10)
 ?rva00916CD0@PointGroupClass@@QAEXPAEHH@Z,0x0017D770,PointGroupClass UV fill; address read from the REL32 site of the BFME1-donor rva00917B10 body at 0x0017F3A0 (bfme1_sweep T2 transfer b1 0x00917B10)
 ?rva00977C23@@YAXPAH0HPAXHH@Z,0x00577C23,cdecl-6 called from 0x005FFF17 (and 0x005FBAFE family); identity unproven
-?rva009C6390BinkMmx@@YAXPBXPAXHHHH0@Z,0x001D6C90
-?rva009C6470BinkMmx@@YAXPBXPAXHHHH0@Z,0x001D6D70
 ?rva009CB265@@YGXXZ,0x005CB265,stdcall-0 global view (ignores ambient ecx) for 0x005F96D4 null-guarded sites; identity unproven
 ?rva009CC208@@YIXPAURva009CC208Sub@@HH@Z,0x005CC208,fastcall sub method called from 0x005F963A with fwd untouched in edx; identity unproven
 ?rva009CC208Push0@@YGXH@Z,0x005CC208,stdcall-1 global view (ignores ambient ecx) for 0x005F96D4 zero-push sites; same address as fastcall pin; identity unproven

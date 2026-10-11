@@ -1,4 +1,6 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001bb760.md plus retail only. No decoder source was consulted.
+// VP6_PredictBlockToPostProcessBuffer, retail RVA 0x001BB760 (208 bytes).
 // Address-derived body at retail RVA 0x009AAD20, 208 bytes.
 // Four INT3 bytes precede entry; every branch stays inside the body and the
 // last complete RET is at +0xCF, immediately before the next entry at 0x009AADF0.
@@ -33,7 +35,7 @@ typedef void (__cdecl *Rva009AAD20CallD8C)(
 // with the cdecl ABI instead of casting the generated no-argument row.
 extern void __cdecl Rva009B5530Prepare(Rva009B5830State *, void *, int);
 
-void Rva009AAD20(Rva009AAD20State *state, int block)
+extern "C" void __cdecl VP6_PredictBlockToPostProcessBuffer(Rva009AAD20State *state, int block)
 {
 	memset(state->m_270,0,128);
 	if (state->m_08 == 0) {

@@ -1,4 +1,6 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d6d70.md plus retail only. No decoder source was consulted.
+// FilterBlock1d_v_mmx, retail RVA 0x001D6D70 (196 bytes).
 //
 // MMX sibling of FilterBlock1d_v_wmt: same four-tap vertical fixed-point
 // filter (taps at -stride, 0, +stride, +stride*2), but each MMX register
@@ -8,8 +10,7 @@
 
 extern const unsigned short g_bfmeBinkRoundMmx[8];	// retail 0x00DB81A0
 
-// ?rva009C6470BinkMmx@@YAXPBXPAXHHHH0@Z
-void __cdecl rva009C6470BinkMmx(const void *source, void *destination,
+extern "C" void __cdecl FilterBlock1d_v_mmx(const void *source, void *destination,
 	int sourceStride, int unused, int count, int destinationStride,
 	const void *weights)
 {

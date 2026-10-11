@@ -9,7 +9,7 @@
 
 extern "C" void __cdecl FilterBlock1d_hb8_wmt(const void *, void *, int, int, int, int, const void *);
 extern "C" void __cdecl FilterBlock1d_vb8_wmt(const void *, void *, int, int, int, int, const void *);
-extern void __cdecl rva009C7140BinkSse(const void *, void *, int, const void *, const void *);
+extern "C" void __cdecl FilterBlock2dBil_wmt(const void *, void *, int, const void *, const void *);
 
 struct Rva009C7380WeightPair
 {
@@ -101,13 +101,13 @@ extern "C" void __cdecl FilterBlockBil_8_wmt(const unsigned char *rowA, const un
 	}
 	if (distance == stride - 1)
 	{
-		rva009C7140BinkSse(rowA - 1, destination,
+		FilterBlock2dBil_wmt(rowA - 1, destination,
 			stride, rva009C7380Weights(horizontalIndex),
 			rva009C7380Weights(verticalIndex));
 		return;
 	}
 	if (distance == stride + 1)
-		rva009C7140BinkSse(rowA, destination,
+		FilterBlock2dBil_wmt(rowA, destination,
 			stride, rva009C7380Weights(horizontalIndex),
 			rva009C7380Weights(verticalIndex));
 }

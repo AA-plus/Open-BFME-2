@@ -1,4 +1,7 @@
-void __cdecl bfmeGo7760(
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b81c0.md plus retail only. No decoder source was consulted.
+// FilterBlock2dSecondPass, retail RVA 0x001B81C0 (189 bytes).
+extern "C" void __cdecl FilterBlock2dSecondPass(
 	int *table, void *destinationAddress, int sourcePitch, int sourceDelta,
 	int rows, int columns, void *weights)
 {

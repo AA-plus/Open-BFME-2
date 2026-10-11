@@ -1,3 +1,6 @@
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d1f90.md plus retail only. No decoder source was consulted.
+// HorizontalLine_3_5_Scale_MMX, retail RVA 0x001D1F90 (202 bytes).
 // 3-byte source groups expanded to 5-byte destination groups with a 4-lane
 // linear interpolator. Tail shuffles the last over-read so the final store
 // stays in-lane without a second loop.
@@ -9,8 +12,7 @@ namespace
 	__declspec(align(8)) const unsigned short g_bfmeRound8[4] = { 128, 128, 128, 128 };
 }
 
-// ?bfmeExpand3to5Mmx@@YAXPBXHPAX@Z
-void __cdecl bfmeExpand3to5Mmx(const void *source, int bytes, void *destination)
+extern "C" void __cdecl HorizontalLine_3_5_Scale_MMX(const void *source, int bytes, void *destination)
 {
 	__asm
 	{

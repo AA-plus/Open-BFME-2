@@ -1,4 +1,6 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d6c90.md plus retail only. No decoder source was consulted.
+// FilterBlock1d_h_mmx, retail RVA 0x001D6C90 (211 bytes).
 //
 // MMX two-row Bink pixel filter.  Retail 0x009C6390, 211 bytes.
 // MSVC 7.1 does not form this packed-word loop from scalar C++, so the
@@ -12,8 +14,7 @@ extern __declspec(align(8)) const unsigned short g_bfmeBinkRoundMmx[8] = {
     64, 64, 64, 64, 64, 64, 64, 64
 };
 
-// ?rva009C6390BinkMmx@@YAXPBXPAXHHHH0@Z
-void __cdecl rva009C6390BinkMmx(const void *source, void *destination,
+extern "C" void __cdecl FilterBlock1d_h_mmx(const void *source, void *destination,
 	int sourceStride, int unused, int count, int destinationStride,
 	const void *weights)
 {

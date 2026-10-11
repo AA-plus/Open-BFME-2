@@ -1,9 +1,6 @@
-// BFME1 byte-identical donor: reference/open-bfme-1/Code/GameEngine/Source/Common/Bfme5ThirtySix.cpp
-// Trimmed to the bodies that reproduce game.dat bytes. The file's counted-handle
-// and bounded-read members (BfmeHandleCX/bfmeGet, Gen_009CBC90/bfmeAt) are BFME1-only
-// shapes with no matching body here; they stay out so every defined function
-// has a ledger row.
-
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d2700.md plus retail only. No decoder source was consulted.
+// HorizontalLine_1_2_Scale_MMX, retail RVA 0x001D2700 (193 bytes).
 // The copy is the compiler's own memcpy, not hand-written assembly: only the
 // intrinsic puts the register saves between the argument loads.
 extern "C" void * __cdecl memcpy(void *destination, const void *source, unsigned int bytes);
@@ -12,12 +9,11 @@ extern "C" void * __cdecl memcpy(void *destination, const void *source, unsigned
 
 extern "C" const unsigned short g_bfmeRoundMmx[4]; // defined in VerticalBandScaleMmx.cpp
 
-// ?bfmeExpandMmx@@YAXPBXHPAX@Z
 // Doubles "bytes" source pixels into 2*bytes destination pixels: each output
 // pair is (original byte, round((byte + next byte) / 2)). The tail copy
 // replicates the last source byte past the end so the final "next byte" read
 // stays in range without an extra branch.
-void __cdecl bfmeExpandMmx(const void *source, int bytes, void *destination)
+extern "C" void __cdecl HorizontalLine_1_2_Scale_MMX(const void *source, int bytes, void *destination)
 {
 	__asm
 	{

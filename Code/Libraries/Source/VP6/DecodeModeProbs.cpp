@@ -8,7 +8,7 @@
 
 extern "C" int __cdecl VP6_DecodeBool(void *state, int probability);   // 0x001C4F00 VP6_DecodeBool
 extern "C" int __cdecl VP6_bitread(void *, int);           // 0x001BCF40
-int Rva009B6950DecodeScale(unsigned char *ctx);            // 0x001C7250 VP6_decodeModeDiff
+extern "C" int __cdecl VP6_decodeModeDiff(unsigned char *ctx);            // 0x001C7250 VP6_decodeModeDiff
 void Rva009B6740BuildTable(unsigned char *ctx);            // 0x001C7040 VP6_BuildModeTree
 
 // g_bfmeQuantRow: the mode-probability codebook at retail VA 0x00BD94F8
@@ -173,14 +173,14 @@ extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *ctx)
         if (VP6_DecodeBool(state, 0xFE)) {
             for (int i = 0; i < 10; ++i) {
                 unsigned char *dst = (unsigned char *)rows + 11;
-                int v = Rva009B6950DecodeScale(ctx) + dst[i - 12];
+                int v = VP6_decodeModeDiff(ctx) + dst[i - 12];
                 if (v < 0)
                     v = 0;
                 else if (v > 255)
                     v = 255;
                 dst[i - 12] = (unsigned char)v;
 
-                v = Rva009B6950DecodeScale(ctx) + dst[i - 22];
+                v = VP6_decodeModeDiff(ctx) + dst[i - 22];
                 if (v < 0)
                     v = 0;
                 else if (v > 255)

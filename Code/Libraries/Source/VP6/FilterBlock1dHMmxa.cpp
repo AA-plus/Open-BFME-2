@@ -1,4 +1,6 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d6e40.md plus retail only. No decoder source was consulted.
+// FilterBlock1d_h_mmxa, retail RVA 0x001D6E40 (211 bytes).
 //
 // MMX four-tap horizontal Bink filter: pulls all four taps (source-1,
 // source, source+1, source+2) out of a single unaligned qword load via
@@ -10,8 +12,7 @@
 
 extern const unsigned short g_bfmeBinkRoundMmx[8];	// retail 0x00DB81A0
 
-// ?rva009C6540BinkMmx@@YAXPBXPAXHHHH0@Z
-void __cdecl rva009C6540BinkMmx(const void *source, void *destination,
+extern "C" void __cdecl FilterBlock1d_h_mmxa(const void *source, void *destination,
 	int sourceStride, int unused, int count, int destinationStride,
 	const void *weights)
 {

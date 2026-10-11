@@ -20,7 +20,7 @@ extern "C" void __cdecl FilterBlock1d_v_wmt(const void *, void *, int, int, int,
 extern "C" void __cdecl FilterBlock2d_wmt(const unsigned char *, unsigned char *, int, const void *, const void *);
 extern "C" void __cdecl FilterUnpackBlock1d_hb8_wmt(const void *, void *, int, int, int, int, const void *);
 extern "C" void __cdecl FilterUnpackBlock1d_vb8_wmt(const void *, void *, int, int, int, int, const void *);
-void __cdecl rva009C7200BinkSse(const void *, void *, int, const void *, const void *);
+extern "C" void __cdecl FilterUnpackBlock2dBil_wmt(const void *, void *, int, const void *, const void *);
 
 extern "C" void __cdecl FilterBlock_wmt(const unsigned char *a, const unsigned char *b, short *out, int pixelsPerLine, int horizontalPhase, int verticalPhase, int bicubic)
 {
@@ -69,7 +69,7 @@ extern "C" void __cdecl FilterBlock_wmt(const unsigned char *a, const unsigned c
 	else if (diff == pixelsPerLine)
 		FilterUnpackBlock1d_vb8_wmt(a, out, pixelsPerLine, pixelsPerLine, 8, 16, BILINEAR_BANK(verticalPhase));
 	else if (diff == pixelsPerLine - 1)
-		rva009C7200BinkSse(a - 1, out, pixelsPerLine, BILINEAR_BANK(horizontalPhase), BILINEAR_BANK(verticalPhase));
+		FilterUnpackBlock2dBil_wmt(a - 1, out, pixelsPerLine, BILINEAR_BANK(horizontalPhase), BILINEAR_BANK(verticalPhase));
 	else if (diff == pixelsPerLine + 1)
-		rva009C7200BinkSse(a, out, pixelsPerLine, BILINEAR_BANK(horizontalPhase), BILINEAR_BANK(verticalPhase));
+		FilterUnpackBlock2dBil_wmt(a, out, pixelsPerLine, BILINEAR_BANK(horizontalPhase), BILINEAR_BANK(verticalPhase));
 }

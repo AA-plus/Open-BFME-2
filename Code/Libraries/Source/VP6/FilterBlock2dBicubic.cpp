@@ -7,12 +7,12 @@
 // starting one line above the source into a pitch-8 buffer, then a vertical
 // pass from buffer row 1 into the output.
 
-void __cdecl rva009C6390BinkMmx(const void *, void *, int, int, int, int, const void *); // 0x001D6C90
-void __cdecl rva009C6470BinkMmx(const void *, void *, int, int, int, int, const void *); // 0x001D6D70
+extern "C" void __cdecl FilterBlock1d_h_mmx(const void *, void *, int, int, int, int, const void *); // 0x001D6C90
+extern "C" void __cdecl FilterBlock1d_v_mmx(const void *, void *, int, int, int, int, const void *); // 0x001D6D70
 extern "C" void __cdecl FilterBlock1d_h_wmt(const void *, void *, int, int, int, int, const void *); // 0x001D7820
 extern "C" void __cdecl FilterBlock1d_v_wmt(const void *, void *, int, int, int, int, const void *); // 0x001D78C0
 extern "C" void __cdecl FilterBlock2dFirstPass(int, int *, void *, int, int, int, void *); // 0x001B8100
-void __cdecl bfmeGo7760(int *, void *, int, int, int, int, void *); // 0x001B81C0 FilterBlock2dSecondPass
+extern "C" void __cdecl FilterBlock2dSecondPass(int *, void *, int, int, int, int, void *); // 0x001B81C0 FilterBlock2dSecondPass
 
 // Retail 0x00DFDA58: the generic filter's scratch rows (8 dwords per row).
 int g_bfmeTableC7E0;
@@ -25,9 +25,9 @@ extern "C" void __cdecl FilterBlock2d_mmx(const void *source, void *output,
 {
 	unsigned char scratch[256];
 
-	rva009C6390BinkMmx((const unsigned char *)source - pixelsPerLine, scratch,
+	FilterBlock1d_h_mmx((const unsigned char *)source - pixelsPerLine, scratch,
 		pixelsPerLine, 1, 11, 8, horizontalTaps);
-	rva009C6470BinkMmx(scratch + 8, output, 8, 8, 8, 8, verticalTaps);
+	FilterBlock1d_v_mmx(scratch + 8, output, 8, 8, 8, 8, verticalTaps);
 }
 
 // RVA 0x001D7D90
@@ -46,5 +46,5 @@ extern "C" void __cdecl FilterBlock2d(void *source, void *output,
 {
 	FilterBlock2dFirstPass((char *)source - (char *)pixelsPerLine, &g_bfmeTableC7E0, pixelsPerLine,
 		1, 11, 8, horizontalTaps);
-	bfmeGo7760(&g_bfmeTableC800, output, 8, 8, 8, 8, verticalTaps);
+	FilterBlock2dSecondPass(&g_bfmeTableC800, output, 8, 8, 8, 8, verticalTaps);
 }

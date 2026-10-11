@@ -1,7 +1,6 @@
 // cl: /DNDEBUG /MD /EHs-c-
-// Source lead: Open-BFME-1 at 7c4d488c5bc928bb8eaf37171ae5700b4e33937f,
-// game/GameEngine/Source/Common/Rva009A91D0.cpp. This self-contained snapshot
-// preserves the verified 6583b3c1 header and compiler inputs.
+// Clean room: reverse/vp6_cleanroom/specs/001b9c10.md plus retail only. No decoder source was consulted.
+// HorizontalLine_4_5_Scale_C, retail RVA 0x001B9C10 (247 bytes).
 // Native RVA 0x001B9C10 is a complete 247-byte scalar interpolation operation:
 // advance source by 4 and output by 5; round weighted unsigned-byte samples;
 // leave the final fourth sample unchanged. The native dispatch installer at
@@ -11,7 +10,7 @@
 // stack words. Unsigned count arithmetic preserves the native 32-bit
 // subtraction and shift without claiming original signedness or valid inputs.
 
-void __cdecl rva001B9C10Interpolate4To5(const void *source, unsigned int countWord, void *destination)
+extern "C" void __cdecl HorizontalLine_4_5_Scale_C(const void *source, unsigned int countWord, void *destination)
 {
 	unsigned char *dst = (unsigned char *)destination;
 	const unsigned char *src = (const unsigned char *)source;

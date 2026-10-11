@@ -1,4 +1,6 @@
-// ?Rva009A5AA0InstallFilter@@YAXPAX00H@Z
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b6520.md plus retail only. No decoder source was consulted.
+// InitPostProcessing, retail RVA 0x001B6520 (193 bytes).
 // Retail RVA 0x009A5AA0, 193 bytes.  Rva009A4D00Init (0x009A4D00) calls it
 // directly as cdecl with three table pointers (all its 64-entry int table
 // 0x0134C6D8) and the tier constant 7.  The body builds the saturating clamp
@@ -118,7 +120,7 @@ int g_rva012D7A58[64] = {
 	2, 2, 1, 1, 1, 0, 0, 0,
 };
 
-void __cdecl Rva009A5AA0InstallFilter(void *firstTable, void *secondTable, void *sourceTable, int tier)
+extern "C" void __cdecl InitPostProcessing(void *firstTable, void *secondTable, void *sourceTable, int tier)
 {
 	unsigned char *clamp = (unsigned char *)g_bfmeClampTable;
 	int i;
@@ -160,6 +162,3 @@ void __cdecl Rva009A5AA0InstallFilter(void *firstTable, void *secondTable, void 
 	((Rva009A5AA0TierInstaller)bfmeInstallCpuDispatchTable)(tier);
 }
 
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?d_009a5aa0@@YAXXZ=?Rva009A5AA0InstallFilter@@YAXPAX00H@Z")

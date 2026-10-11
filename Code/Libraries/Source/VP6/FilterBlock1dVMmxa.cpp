@@ -1,4 +1,6 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d6f20.md plus retail only. No decoder source was consulted.
+// FilterBlock1d_v_mmxa, retail RVA 0x001D6F20 (198 bytes).
 //
 // Second MMX four-tap vertical Bink filter sharing the 0x00DB81A0 round
 // table with rva009C6470BinkMmx: same four rows (-stride, 0, +stride,
@@ -9,8 +11,7 @@
 
 extern const unsigned short g_bfmeBinkRoundMmx[8];	// retail 0x00DB81A0
 
-// ?rva009C6620BinkMmx@@YAXPBXPAXHHHH0@Z
-void __cdecl rva009C6620BinkMmx(const void *source, void *destination,
+extern "C" void __cdecl FilterBlock1d_v_mmxa(const void *source, void *destination,
 	int sourceStride, int unused, int count, int destinationStride,
 	const void *weights)
 {

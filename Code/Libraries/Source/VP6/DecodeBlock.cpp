@@ -48,7 +48,7 @@ struct Rva009B4880State;
 struct Rva009B4880Neighbor;
 struct Rva009B5830State;
 extern "C" void __cdecl VP6_PredictDC(Rva009B4880State *, int, short *, const Rva009B4880Neighbor *, const Rva009B4880Neighbor *);
-void Rva009B5830ReconstructBlock(Rva009B5830State *, int);
+extern "C" void __cdecl VP6_ReconstructBlock(Rva009B5830State *, int);
 
 #define VP6_COEFS (pbi->coefficients + position * 128)
 extern "C" void __cdecl VP6_DecodeBlock(PB_INSTANCE *pbi, int row, int column, int position)
@@ -75,5 +75,5 @@ extern "C" void __cdecl VP6_DecodeBlock(PB_INSTANCE *pbi, int row, int column, i
 		g_Vp6IdctTable[63](VP6_COEFS, pbi->quantizer->dequant[g_Rva01142608[position]], pbi->reconstruction);
 		memset(VP6_COEFS, 0, 128);
 	}
-	Rva009B5830ReconstructBlock((Rva009B5830State *)pbi, position);
+	VP6_ReconstructBlock((Rva009B5830State *)pbi, position);
 }

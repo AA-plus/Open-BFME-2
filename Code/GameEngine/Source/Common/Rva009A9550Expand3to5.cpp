@@ -2,7 +2,7 @@
 //
 // Retail boundary: 0x009A9550..0x009A9658 (265 bytes); INT3 padding starts
 // at 0x009A9659 before the next generic slot helper at 0x009A9660.  The
-// matched installer and bfmeExpand3to5Mmx sibling establish the three-argument
+// matched installer and HorizontalLine_3_5_Scale_MMX sibling establish the three-argument
 // cdecl source/count/destination ABI.  A three-byte source group expands to
 // five bytes with the same 2/5 and 4/5 weights as the MMX path; the final group
 // repeats its last source byte at the right edge.

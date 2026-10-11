@@ -38,7 +38,7 @@ struct PB_INSTANCE;
 
 extern int g_bfmeSharedJX; // retail 0x00E23300: CPU frequency
 
-CodecState *bfmeAllocJX();
+extern "C" CodecState * __cdecl VP6_CreatePBInstance();
 int bfmeCheckJX(CodecState *state);
 extern "C" void *__cdecl CreatePostProcInstance(void *config);
 extern "C" Vp6QuantizerHead *__cdecl VP6_CreateQuantizer();
@@ -48,7 +48,7 @@ extern "C" void __cdecl VP6_DeletePBInstance(PB_INSTANCE **instance);
 // RVA 0x001B5840
 extern "C" int __cdecl VP6_StartDecoder(CodecState **p, int width, int height)
 {
-	*p = bfmeAllocJX();
+	*p = VP6_CreatePBInstance();
 
 	(*p)->m_scaleWidth = width;
 	(*p)->m_scaleHeight = height;

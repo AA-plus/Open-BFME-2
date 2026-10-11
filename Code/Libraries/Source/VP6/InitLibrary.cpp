@@ -8,7 +8,7 @@
 
 int __cdecl Get_RDTSC_CPU_Speed(void);                       // 0x001B8E90 VP6_GetProcessorFrequency
 extern "C" void __cdecl GetProcessorFlags(int *mmx, int *xmm, int *wmt); // 0x001C4390
-void __cdecl Rva009A5AA0InstallFilter(void *, void *, void *, int); // 0x001B6520 InitPostProcessing
+extern "C" void __cdecl InitPostProcessing(void *, void *, void *, int); // 0x001B6520 InitPostProcessing
 void __cdecl initBlocksRva009B3EC0(void *);                  // 0x001C47C0 quant index builder, WMT
 void __cdecl initBlocksRva009B3E40(void *);                  // 0x001C4740 quant index builder, MMX
 extern "C" void __cdecl VP6_BuildQuantIndex_Generic(void *quantizer); // 0x001B7070
@@ -85,6 +85,6 @@ extern "C" void __cdecl VP6_VPInitLibrary(void)
 	for (const short *src = g_dcQuant; (int)src < (int)g_dcQuantEnd; ++src, ++dst)
 		*dst = *src / 2 + 2;
 
-	Rva009A5AA0InstallFilter(g_dcScale, g_dcScale, g_dcScale, 7);
+	InitPostProcessing(g_dcScale, g_dcScale, g_dcScale, 7);
 	InitVPUtil();
 }

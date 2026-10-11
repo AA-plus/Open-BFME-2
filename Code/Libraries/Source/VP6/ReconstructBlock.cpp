@@ -1,3 +1,6 @@
+// cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001c6130.md plus retail only. No decoder source was consulted.
+// VP6_ReconstructBlock, retail RVA 0x001C6130 (184 bytes).
 // VP6 block reconstruction helper reached from the decoder's block walker.
 // Retail boundary: [0x009B5830, 0x009B58E8).  The generated row at this
 // address is replaced here with the actual BFME dispatch logic.
@@ -5,7 +8,6 @@
 // The three spread-table cells are one shared void* blob declared by the
 // codec installer.  Their callback signatures are recovered from the retail
 // push order at 0x009B5830, not inferred from a Zero Hour wrapper.
-// cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
 
 struct Rva009B5830State
 {
@@ -54,7 +56,7 @@ typedef void (__cdecl *Rva009B5830ReconD8C)(
 // with the cdecl ABI instead of casting the generated no-argument row.
 extern void __cdecl Rva009B5530Prepare(Rva009B5830State *, void *, int);
 
-void Rva009B5830ReconstructBlock(Rva009B5830State *state, int block)
+extern "C" void __cdecl VP6_ReconstructBlock(Rva009B5830State *state, int block)
 {
 	if (state->mode == 0) {
 		((Rva009B5830ReconD84)g_bfmeSlotD84)(state->coefficients,

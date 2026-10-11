@@ -1,3 +1,6 @@
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b56f0.md plus retail only. No decoder source was consulted.
+// VP6_CreatePBInstance, retail RVA 0x001B56F0 (216 bytes).
 // Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
 // Its allocator and native14B body differ from NameKeyGenerator::Bucket's
 // donor operator new. Address-derived identity; original class is unknown.
@@ -38,7 +41,7 @@ extern "C" void *__cdecl memset(void *d, int c, unsigned int n);
 
 struct CodecState;
 
-CodecState *bfmeAllocJX();
+extern "C" CodecState * __cdecl VP6_CreatePBInstance();
 
 extern int g_bfmeTableJX;
 // g_bfmeTableJX: matched references place it at VA 0xe22d40 (zero-filled .bss).
@@ -67,7 +70,7 @@ extern "C" void __cdecl DeletePostProcInstance(BfmeHolderBZB *h);
 extern "C" void __cdecl VP6_DeleteFrameInfo(void *q);
 extern "C" void __cdecl VP6_DeletePBInstance(PB_INSTANCE **instance);
 
-CodecState *bfmeAllocJX()
+extern "C" CodecState * __cdecl VP6_CreatePBInstance()
 {
 	int cfg[14];
 

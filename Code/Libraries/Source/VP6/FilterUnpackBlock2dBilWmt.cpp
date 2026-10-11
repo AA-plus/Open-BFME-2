@@ -1,22 +1,17 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d7b00.md plus retail only. No decoder source was consulted.
+// FilterUnpackBlock2dBil_wmt, retail RVA 0x001D7B00 (188 bytes).
 //
-// Fuzzy-twin (r0.937) of ?rva009C7200BinkSse@@YAXPBXPAXH00@Z in
-// Code/GameEngine/Source/Common/Rva009C7200BinkSse.cpp: identical two-row
-// horizontal/vertical fixed-point resampler setup, but this variant packs
-// the final signed-16-bit row down to unsigned bytes (packuswb) and stores
-// eight destination bytes per iteration via the MMX register (movdq2q +
-// movq), instead of the twin's direct 16-byte movdqu store of the raw
-// 16-bit pixels. 192B vs the twin's 188B; loop trip count differs (0x40
-// vs 0x80 total run) because each iteration now advances the destination
-// pointer by 8 bytes instead of 16.
-// MSVC 7.1 does not form this SSE2/MMX loop from C++ or its intrinsic
-// headers, so the register-level implementation is retained here (same
-// anti-lift exception as the twin).
+// Two-row horizontal/vertical fixed-point resampler used by the Bink pixel
+// filter.  Each iteration consumes eight source bytes from two adjacent rows,
+// applies the caller's eight-tap horizontal coefficients, then combines the
+// rows with the two vertical coefficients into eight signed 16-bit pixels.
+// MSVC 7.1 does not form this SSE2 loop from C++ or its intrinsic headers, so
+// the register-level implementation is retained here.
 
 extern const unsigned short g_bfmeBinkRound[8];
 
-// ?d_009c7140@@YAXXZ
-void __cdecl rva009C7140BinkSse(const void *source, void *destination,
+extern "C" void __cdecl FilterUnpackBlock2dBil_wmt(const void *source, void *destination,
 	int stride, const void *horizontalWeights, const void *verticalWeights)
 {
 	__asm
@@ -24,7 +19,7 @@ void __cdecl rva009C7140BinkSse(const void *source, void *destination,
 		mov eax, horizontalWeights
 		mov edi, destination
 		mov esi, source
-		lea ecx, [edi + 40h]
+		lea ecx, [edi + 80h]
 		mov edx, stride
 		movdqa xmm1, [eax]
 		movdqa xmm2, [eax + 10h]
@@ -60,11 +55,9 @@ void __cdecl rva009C7140BinkSse(const void *source, void *destination,
 		paddw xmm6, xmm3
 		paddw xmm6, g_bfmeBinkRound
 		psraw xmm6, 7
-		packuswb xmm6, xmm0
-		movdq2q mm0, xmm6
-		movq qword ptr [edi], mm0
+		movdqu [edi], xmm6
 		add esi, edx
-		add edi, 8
+		add edi, 10h
 		cmp edi, ecx
 		jne short rvaNext
 	}

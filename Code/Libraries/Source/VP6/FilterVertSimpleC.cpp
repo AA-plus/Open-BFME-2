@@ -1,5 +1,6 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
-
+// Clean room: reverse/vp6_cleanroom/specs/001c4010.md plus retail only. No decoder source was consulted.
+// FilterVert_Simple_C, retail RVA 0x001C4010 (232 bytes).
 // Deblocking loop filter run across a horizontal block edge, eight columns
 // wide.  The four taps live at -2*stride .. +1*stride; the filter strength is
 // looked up in a caller-supplied bounding-value table indexed by (f + 4) >> 3
@@ -10,7 +11,7 @@
 
 extern const unsigned char g_bfmeClampTable[];			// retail 0x01356FE0 (zero point)
 
-void Rva009B3560FilterHoriz(void *, unsigned char *ptr, int stride, const int *bounding)
+extern "C" void __cdecl FilterVert_Simple_C(void *, unsigned char *ptr, int stride, const int *bounding)
 {
 	int count, value, flag, diff, delta;
 

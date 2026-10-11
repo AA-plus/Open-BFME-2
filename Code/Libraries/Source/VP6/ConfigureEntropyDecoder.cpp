@@ -32,7 +32,7 @@ struct Vp6EntropyInstance {
 };
 extern "C" int __cdecl nDecodeBool(Rva009B4800State *, int);
 extern "C" int __cdecl VP6_bitread(void *, int);
-void Rva009AAFE0BuildTable(Rva009AAFE0Context *, const unsigned char *);
+extern "C" void __cdecl BuildScanOrder(Rva009AAFE0Context *, const unsigned char *);
 void Rva009B64A0BuildTone(unsigned char *);
 struct Vp6ProbUpdate {
 	static unsigned char Read(void *br)
@@ -74,7 +74,7 @@ extern "C" void VP6_ConfigureEntropyDecoder(Vp6EntropyInstance *pbi, unsigned ch
 			if (nDecodeBool((Rva009B4800State *)pbi->br, g_00BD9228[i]))
 				pbi->ScanBands[i] = (unsigned char)VP6_bitread(pbi->br, 4);
 		}
-		Rva009AAFE0BuildTable((Rva009AAFE0Context *)pbi, pbi->ScanBands);
+		BuildScanOrder((Rva009AAFE0Context *)pbi, pbi->ScanBands);
 	}
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 14; j++) {

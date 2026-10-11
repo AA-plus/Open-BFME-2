@@ -67,7 +67,7 @@ struct Rva009AAFE0Context;
 struct Rva009AB7F0Context;
 struct Rva009AB760Context;
 extern "C" void __cdecl VP6_DecodeModeProbs(unsigned char *);
-void Rva009AAFE0BuildTable(Rva009AAFE0Context *,const unsigned char *);
+extern "C" void __cdecl BuildScanOrder(Rva009AAFE0Context *,const unsigned char *);
 void Rva009AB7F0Reset(Rva009AB7F0Context *);
 extern "C" void __cdecl VP6_ResetLeftContext(Rva009AB760Context *);
 void Rva009B5DB0Vp6DecodeBlock(unsigned char *,int,unsigned);
@@ -95,7 +95,7 @@ extern "C" void VP6_DecodeFrameMbs(FramePB *pbi)
         memset(pbi->predictionMode,1,pbi->MacroBlocks);
         if(pbi->Interlaced==1) memcpy(pbi->ScanBands,DefaultInterlacedScanBands,64);
         else memcpy(pbi->ScanBands,DefaultNonInterlacedScanBands,64);
-        Rva009AAFE0BuildTable((Rva009AAFE0Context *)pbi,pbi->ScanBands);
+        BuildScanOrder((Rva009AAFE0Context *)pbi,pbi->ScanBands);
     }
     VP6_ConfigureEntropyDecoder(pbi,pbi->FrameType);
     for(unsigned i=0;i<64;++i)
