@@ -176,6 +176,9 @@ public:
 		const Image *m_portrait;    // +0x60
 		Slot m_slots[6];            // +0x64
 	};
+	void rva00529FBE();
+private:
+	Impl *m_impl;	// +0
 };
 
 // Native 0x00529023 (34B): the first selected drawable the GUI does not ignore.
@@ -281,4 +284,13 @@ void PalantirCommandInterface::Impl::rva00529E3B()
 			m_slots[i].m_state = 0;
 		}
 	}
+}
+
+// ?rva00529FBE@PalantirCommandInterface@@QAEXXZ @0x00529FBE 7B: the outer
+// class forwards to its Impl (mov ecx, [ecx]; tail jump to
+// Impl::rva00529E3B above). Called at 0x002D3679 and 0x002D66C1.
+// Address-named.
+void PalantirCommandInterface::rva00529FBE()
+{
+	m_impl->rva00529E3B();
 }

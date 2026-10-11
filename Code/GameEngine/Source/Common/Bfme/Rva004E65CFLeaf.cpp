@@ -131,6 +131,9 @@ class PlaceTerrainResourceClaimantFeedback
 {
 public:
 	class Impl;
+	void rva004E6693(ICoord2D *position);
+private:
+	Impl *m_impl;	// +0
 };
 
 class PlaceTerrainResourceClaimantFeedback::Impl
@@ -281,3 +284,13 @@ void PlaceTerrainResourceClaimantFeedback::Impl::update(ICoord2D *position)
  }
 }
 
+
+// ?rva004E6693@PlaceTerrainResourceClaimantFeedback@@QAEXPAUICoord2D@@@Z
+// @0x004E6693 7B: the outer class forwards to its Impl (mov ecx, [ecx]; tail
+// jump to Impl::update above, argument unchanged). Called at 0x002A301E.
+// Address-named: a pimpl outer usually shares the Impl method's name
+// (update), which is not proven here.
+void PlaceTerrainResourceClaimantFeedback::rva004E6693(ICoord2D *position)
+{
+	m_impl->update(position);
+}
