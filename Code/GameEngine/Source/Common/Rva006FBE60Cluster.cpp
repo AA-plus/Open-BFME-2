@@ -18,6 +18,15 @@ public:
 
 extern Rva8D0D80Result *g_rva00A1835C;
 
+// LINK: the list call is rowed as Rva006FBC90Owner::rva006FBBA0 (0x006FBBA0).
+class EAStringC;
+class AptValue;
+class Rva006FBC90Owner
+{
+public:
+	bool rva006FBBA0(const EAStringC *name, AptValue *value);
+};
+
 class Rva006FBE60
 {
 public:
@@ -33,7 +42,7 @@ bool Rva006FBE60::rva006FBE60(Rva8D0D80String *name, Rva8D0D80Value *value)
 	Rva8D0D80Result *list = g_rva00A1835C ? g_rva00A1835C : m_list;
 	if (list == 0)
 		return false;
-	return list->rva006FBBA0(name, value);
+	return ((Rva006FBC90Owner *)list)->rva006FBBA0((const EAStringC *)name, (AptValue *)value);
 }
 
 // Native E1835C is the script-function current frame root. Bind its shared provider.
