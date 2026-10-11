@@ -24,8 +24,12 @@ public:
  int m_00,m_04,m_08,m_0C,m_10,m_14,m_18;
  char m_1C,m_1D,m_1E,m_1F;
 };
-struct BfmePod32:public Rva00704980 {
- ~BfmePod32(){((StringBase<char>*)&m_00)->clear();}
+struct BfmePod32;
+// Keep the temporary's nontrivial lifetime separate from the generic STL
+// carrier name: other units use that name for trivial 32-byte elements.
+// Native accesses and the existing constructor establish this record layout.
+struct ScriptedParticleBoneRecord:public Rva00704980 {
+ ~ScriptedParticleBoneRecord(){((StringBase<char>*)&m_00)->clear();}
 };
 namespace _STL {
  template<class T>class allocator;
@@ -35,7 +39,7 @@ extern "C" const char *BfmeParticleBonePersistenceNames[];
 extern "C" const char *BfmeParticleBoneTriggerNames[];
 static __declspec(noinline) void parseParticleSysBone(INI *ini,void *instance,void *list)
 {
- BfmePod32 info;
+ ScriptedParticleBoneRecord info;
  info.m_14=0;
  AsciiString &bone=*(AsciiString *)&info.m_00;
  bone=ini->getNextAsciiString();
@@ -67,7 +71,7 @@ static __declspec(noinline) void parseParticleSysBone(INI *ini,void *instance,vo
    info.m_1E=ini->scanBool(ini->getNextToken(ini->separators()));
   token=ini->getNextTokenOrNull(ini->separators());
  }
- ((_STL::list<BfmePod32>*)list)->push_back(info);
+ ((_STL::list<BfmePod32>*)list)->push_back((const BfmePod32&)info);
 }
 void ParseScriptedModelParticleSysBone(INI *ini,void *instance,void *,const void *)
 {
