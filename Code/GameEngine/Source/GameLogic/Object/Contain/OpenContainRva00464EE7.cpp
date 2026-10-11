@@ -18,6 +18,7 @@
 
 #include <list>
 #include "Code/Libraries/Include/Lib/Coord3D.h"
+#include "../../../../Include/GameLogic/ContainmentListView.h"
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
@@ -87,10 +88,15 @@ public:
 	unsigned char m_byte11F;
 };
 
+class Object;
+class StealthUpdate
+{
+public:
+	void markAsDetected(unsigned int, int, Object *, bool);	// 0x0037446E (rowed)
+};
 class Rva00373EC6
 {
 public:
-	void rva0037446E(int, int, int, int);
 };
 
 class Rva00439E0C;
@@ -231,7 +237,7 @@ public:
 class Rva00439E0C
 {
 public:
-	void rva00439E0C(Object *, int, int, int);
+	bool rva00439E0C(Object *, Object *, int, int);
 };
 
 class GameLogic
@@ -244,19 +250,12 @@ public:
 
 extern GameLogic *TheGameLogic;
 
-typedef _STL::list<int, _STL::allocator<int> > IntList;
+typedef ContainmentList IntList;
 
-class Rva0036ADF9ListCopy
-{
-public:
-	Rva0036ADF9ListCopy(const IntList &source);
-	~Rva0036ADF9ListCopy() {}
-	IntList m_list;
-};
 
 namespace _STL
 {
-template<> _List_base<int, allocator<int> >::~_List_base();
+template<> _List_base<Rva0036ADF9Element, allocator<Rva0036ADF9Element> >::~_List_base();
 }
 
 class OpenContain
@@ -354,9 +353,9 @@ Object *OpenContainActionIface::rva00463291(Rva2225E0Filter *filter)
 	OpenContain *contain = (OpenContain *)((char *)this - 0x20);
 	for (IntList::iterator it = contain->m_containList.begin(); it != contain->m_containList.end(); ++it)
 	{
-		if (filter == 0 || filter->accepts((Object *)*it, contain->m_object->getControllingPlayer()))
+		if (filter == 0 || filter->accepts((Object *)containmentFirstWord(*it), contain->m_object->getControllingPlayer()))
 		{
-			Object *rider = (Object *)*it;
+			Object *rider = (Object *)containmentFirstWord(*it);
 			rva00464EE7Action(rider, 0);
 			return rider;
 		}
@@ -370,7 +369,7 @@ void OpenContainActionIface::rva00465078(CommandSourceType source)
 	IntList::iterator it = contain->m_containList.begin();
 	if (it != contain->m_containList.end())
 	{
-		Object *rider = (Object *)*it;
+		Object *rider = (Object *)containmentFirstWord(*it);
 		if (rider->m_ai != 0)
 			((AIUpdateInterfaceView *)rider->m_ai)->m_command.aiExit(contain->m_object, source);
 	}
@@ -389,10 +388,10 @@ void OpenContainActionIface::rva00465078(CommandSourceType source)
 void OpenContainActionIface::rva00465011(Object *object)
 {
 	OpenContain *contain = (OpenContain *)((char *)this - 0x20);
-	Rva0036ADF9ListCopy riders(contain->m_containList);
-	for (IntList::iterator it = riders.m_list.begin(); it != riders.m_list.end(); ++it)
+	ContainmentList riders(contain->m_containList);
+	for (IntList::iterator it = riders.begin(); it != riders.end(); ++it)
 	{
-		Object *rider = (Object *)*it;
+		Object *rider = (Object *)containmentFirstWord(*it);
 		if (rider->m_ai != 0)
 		{
 			AIUpdateInterfaceView *currentAI = (AIUpdateInterfaceView *)rider->m_ai;
@@ -420,14 +419,14 @@ void OpenContainActionIface::rva00463138()
 	IntList::iterator it = contain->m_containList.begin();
 	while (it != contain->m_containList.end())
 	{
-		Object *rider = (Object *)*it;
+		Object *rider = (Object *)containmentFirstWord(*it);
 		const bool flagged = (rider->m_template->m_kindFlags & 2) != 0;
 		++it;
 		if (flagged)
 		{
 			Rva00373EC6 *helper = rider->rva0028F4BC();
 			if (helper != 0)
-				helper->rva0037446E(0, 1, 0, 1);
+				((StealthUpdate *)helper)->markAsDetected(0, 1, 0, 1);
 			TheGameLogic->m_178->rva00439E0C(rider, 0, 0, 1);
 		}
 	}
@@ -435,10 +434,10 @@ void OpenContainActionIface::rva00463138()
 
 bool OpenContain::rva00464EE7(Object *object)
 {
-	Rva0036ADF9ListCopy riders(m_containList);
-	for (IntList::iterator it = riders.m_list.begin(); it != riders.m_list.end(); ++it)
+	ContainmentList riders(m_containList);
+	for (IntList::iterator it = riders.begin(); it != riders.end(); ++it)
 	{
-		Object *rider = (Object *)*it;
+		Object *rider = (Object *)containmentFirstWord(*it);
 		if (rider->getControllingPlayer() == object->getControllingPlayer())
 			continue;
 
@@ -448,7 +447,7 @@ bool OpenContain::rva00464EE7(Object *object)
 			{
 				Rva00373EC6 *helper = rider->rva0028F4BC();
 				if (helper != 0)
-					helper->rva0037446E(0, 1, 0, 1);
+					((StealthUpdate *)helper)->markAsDetected(0, 1, 0, 1);
 				TheGameLogic->m_178->rva00439E0C(rider, 0, 0, 1);
 				Object *owner = m_object;
 				AIUpdateInterfaceView *currentAI = (AIUpdateInterfaceView *)rider->m_ai;
@@ -481,10 +480,10 @@ bool OpenContain::rva00464EE7(Object *object)
 void OpenContain::onDelete()
 {
 	m_byteDF = 1;
-	Rva0036ADF9ListCopy riders(m_containList);
-	for (IntList::iterator it = riders.m_list.begin(); it != riders.m_list.end(); ++it)
+	ContainmentList riders(m_containList);
+	for (IntList::iterator it = riders.begin(); it != riders.end(); ++it)
 	{
-		Object *rider = (Object *)*it;
+		Object *rider = (Object *)containmentFirstWord(*it);
 		m_iface20.rva00464EE7Action(rider, 1);
 		rider->m_word274 &= 0;
 		if ((((unsigned char *)rider->m_template)[0x113] & 4) != 0)

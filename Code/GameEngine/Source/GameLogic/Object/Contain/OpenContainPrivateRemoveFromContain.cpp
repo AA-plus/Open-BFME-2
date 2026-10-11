@@ -20,7 +20,7 @@ public:
     void rva0028FB6F(void *);
 };
 class StealthUpdate { public: void markAsDetected(unsigned,int,Object *,bool); };
-class Rva00439E0C { public: void rva00439E0C(Object *,int,int,int); };
+class Rva00439E0C { public: bool rva00439E0C(Object *,Object *,int,int); };
 template<int N> class Rva00462FB3Slots:public Rva00462FB3Slots<N-1> { public: virtual void gap(char (*)[N]); };
 template<> class Rva00462FB3Slots<0> {};
 struct Rva00462FB3Flags {

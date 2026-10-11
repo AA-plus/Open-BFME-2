@@ -135,16 +135,20 @@ public:
 	virtual void chooseLocomotorSet(int set);
 };
 
+class StealthUpdate
+{
+public:
+	void markAsDetected(unsigned int, int, Object *, bool);	// 0x0037446E (rowed)
+};
 class Rva00373EC6
 {
 public:
-	void rva0037446E(int, int, int, int);	// 0x0037446E StealthUpdate::markAsDetected
 };
 
 class Rva00439E0C
 {
 public:
-	void rva00439E0C(Object *obj, int, int, int);	// 0x00439E0C
+	bool rva00439E0C(Object *obj, Object *, int, int);	// 0x00439E0C
 };
 
 // Experience tracker views at Object+0x264 (rowed and pinned spellings).
@@ -297,7 +301,7 @@ void RiderChangeContain::onContaining(Object *rider, bool wasSelected)
 			{
 				Rva00373EC6 *stealth = obj->rva0028F4BC();
 				if (stealth)
-					stealth->rva0037446E(0, 1, 0, 1);
+					((StealthUpdate *)stealth)->markAsDetected(0, 1, 0, 1);
 			}
 			TheGameLogic->getManager178()->rva00439E0C(obj, 0, 0, 1);
 
