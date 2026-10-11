@@ -110,9 +110,18 @@ public:
 	virtual void s22(); virtual void s23();
 	virtual const Video *getVideo(AsciiString movieTitle); // slot 24
 
-	// 0x00689230: links a stream into the player's stream list.
-	void rva00689230(VideoStreamInterface *stream);
+
 };
+
+// Native 689230 ignores ECX, consumes one stack pointer and returns RET4.
+// Bind its established 38-byte owner while retaining the witnessed caller ECX.
+struct BfmeNodeEQB;
+BfmeNodeEQB *__stdcall bfmeLinkEQB(BfmeNodeEQB *);
+union NativeVideoStreamLinkCall {
+ BfmeNodeEQB *(__stdcall *target)(BfmeNodeEQB *);
+ BfmeNodeEQB *(VideoPlayer::*member)(BfmeNodeEQB *);
+};
+typedef char NativeVideoStreamLinkWidth[sizeof(NativeVideoStreamLinkCall)==4 ? 1 : -1];
 
 class Rva009111B : public VideoPlayer
 {
@@ -158,7 +167,9 @@ VideoStreamInterface *Rva009111B::open(AsciiString movieTitle, int flags)
 		bool preload = (flags | 0x40) != 0;
 		if (vp6->open(filePath, pVideo, preload))
 		{
-			rva00689230(vp6);
+			NativeVideoStreamLinkCall link;
+			link.target = bfmeLinkEQB;
+			(this->*link.member)((BfmeNodeEQB *)vp6);
 			stream = vp6;
 		}
 		else
