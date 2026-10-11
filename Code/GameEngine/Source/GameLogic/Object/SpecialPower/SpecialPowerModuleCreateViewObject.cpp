@@ -141,6 +141,13 @@ class ObjectModule
 protected:
 	const ModuleData *getModuleData() const { return m_moduleData; }
 	Object *getObject() const { return m_object; }
+	// LINK: same-body helpers under TU-unique names (identical inlined
+	// bytes). This TU's copies lose to the first-in-order copies (no retail
+	// address); the three call sites below inline them but still emit loser
+	// COMDATs. Rebinding there emits only unique (trivially kept) copies. No
+	// flags touched.
+	const ModuleData *bfme_module_data() const { return m_moduleData; }
+	Object *bfme_object() const { return m_object; }
 private:
 	const ModuleData *m_moduleData;
 	Object *m_object;
@@ -160,7 +167,7 @@ class SpecialPowerModule : public BehaviorModule
 {
 protected:
 	void createViewObject(const Coord3D *location);
-	const SpecialPowerModuleData *getSpecialPowerModuleData() const { return (const SpecialPowerModuleData *)getModuleData(); }
+	const SpecialPowerModuleData *getSpecialPowerModuleData() const { return (const SpecialPowerModuleData *)bfme_module_data(); }
 };
 
 void SpecialPowerModule::createViewObject(const Coord3D *location)
@@ -192,7 +199,7 @@ void SpecialPowerModule::createViewObject(const Coord3D *location)
 	memset(&mask, 0, sizeof(mask));
 
 	Object *viewObject = TheThingFactory->newObject(viewObjectTemplate,
-		getObject()->getControllingPlayer()->getDefaultTeam(), &mask, false);
+		bfme_object()->getControllingPlayer()->getDefaultTeam(), &mask, false);
 
 	if (viewObject == NULL)
 		return;
