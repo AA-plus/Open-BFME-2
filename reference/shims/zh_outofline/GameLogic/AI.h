@@ -299,6 +299,9 @@ public:
 	inline UnsignedInt getNextGroupID( void ) { return ++m_nextGroupID; }
 
 protected:
+	// Retail's SubsystemInterface base is 0xC bytes (m_flag at +4, m_name at +8) against
+	// this shim's 8, so retail's Snapshot vptr is at +0xC and m_pathfinder at +0x10.
+	Bool m_retailSubsystemFlag;
 	Pathfinder *m_pathfinder;							///< the pathfinding system
 	std::list<AIGroup *> m_groupList;			///< the list of AIGroups
 	TAiData *m_aiData;
