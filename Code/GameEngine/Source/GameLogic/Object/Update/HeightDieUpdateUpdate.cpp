@@ -62,7 +62,7 @@ enum DeathType
 class GeometryInfo
 {
 public:
-	Real getBoundingCircleRadius() const { return m_boundingCircleRadius; }
+	Real getBoundingCircleRadiusRV() const { return m_boundingCircleRadius; }
 	Real getMaxHeightAbovePosition() const;
 
 private:
@@ -119,11 +119,13 @@ public:
 
 extern TerrainLogic *TheTerrainLogic;
 
-class ParticleSystemManager
+struct Rva001F5BBEArg;
+class Rva001F58D4
 {
 public:
-	void rva001F5BBE(Object *obj); // destroyAttachedSystems
+	void rva001F5BBE(Rva001F5BBEArg *obj); // destroyAttachedSystems (rowed 0x001F5BBE)
 };
+class ParticleSystemManager;
 
 extern ParticleSystemManager *TheParticleSystemManager;
 
@@ -142,10 +144,15 @@ public:
 class BfmeFixedStorage0004543D
 {
 public:
-	BfmeFixedStorage0004543D(int unused, int bit) throw(); // 0x00045411
 	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other) throw();
 private:
 	unsigned char m_bytes[28];
+};
+// Rowed 44-byte single-bit constructor at 0x00045411; same 28-byte mask.
+struct Rva00045411BitSet
+{
+	unsigned int bits[7];
+	Rva00045411BitSet(int unused, int bit) throw();
 };
 
 extern unsigned char g_00DFEFA4StoragePrototype[28]; // KINDOFMASK_NONE
@@ -315,10 +322,10 @@ UpdateSleepTime HeightDieUpdate::update( void )
 			Real tallestHeight = 0.0f;
 
 			// scan all objects in the radius of our extent and find the tallest height among them
-			Real range = getObject()->getGeometryInfo().getBoundingCircleRadius();
+			Real range = getObject()->getGeometryInfo().getBoundingCircleRadiusRV();
 			BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange( getObject()->getPosition(),
 				range, FROM_BOUNDINGSPHERE_3D,
-				&Rva0004584D( BfmeFixedStorage0004543D( 0, 7 ), *(const BfmeFixedStorage0004543D *)g_00DFEFA4StoragePrototype ),
+				&Rva0004584D( reinterpret_cast<const BfmeFixedStorage0004543D &>(Rva00045411BitSet(0, 7 )), *(const BfmeFixedStorage0004543D *)g_00DFEFA4StoragePrototype ),
 				0 );
 			Object *obj;
 
@@ -383,7 +390,7 @@ UpdateSleepTime HeightDieUpdate::update( void )
 	{
 
 		// destroy them
-		TheParticleSystemManager->rva001F5BBE( getObject() );
+		((Rva001F58D4 *)TheParticleSystemManager)->rva001F5BBE( (Rva001F5BBEArg *)getObject() );
 
 		// don't do this again
 		m_particlesDestroyed = TRUE;

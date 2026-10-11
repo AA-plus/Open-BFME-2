@@ -21,10 +21,15 @@ public:
 class BfmeFixedStorage0004543D
 {
 public:
-	BfmeFixedStorage0004543D(int unused, int bit) throw();	// 0x00045411
 	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other) throw();
 private:
 	unsigned char m_bytes[28];
+};
+// Rowed 44-byte single-bit constructor at 0x00045411; same 28-byte mask.
+struct Rva00045411BitSet
+{
+	unsigned int bits[7];
+	Rva00045411BitSet(int unused, int bit) throw();
 };
 
 class Rva00261409Filter : public Rva000421C8
@@ -90,11 +95,12 @@ public:
 #include "Code/GameEngine/Source/Common/PartitionRangeQueryCallView.h"
 extern PartitionManager *ThePartitionManager;
 
-class TerrainLogic
+class BfmeThingCME
 {
 public:
-	void *rva0027F108(const Coord3D *pos, float radius, bool flag, int unused);
+	int rva0027F108(void *pos, float radius, int flag, int unused);	// rowed 0x0027F108
 };
+class TerrainLogic;
 extern TerrainLogic *TheTerrainLogic;
 
 template<int N>class BitFlags;
@@ -296,7 +302,7 @@ UpdateSleepTime AutoPickUpUpdate::update()
 	if (object->getContainedBy() && object->getContain()->getRemainingAmmo(0) == 0)
 	{
 		Coord3D position = *object->getPosition();
-		unsigned maskStorage[7];const BfmeFixedStorage0004543D &mask=*new(maskStorage) BfmeFixedStorage0004543D(0,0x6C);
+		unsigned maskStorage[7];const BfmeFixedStorage0004543D &mask=*reinterpret_cast<const BfmeFixedStorage0004543D *>(new(maskStorage) Rva00045411BitSet(0,0x6C));
 		Object *found = ThePartitionManager->getClosestObject(&position,
 			getAutoPickUpUpdateModuleData()->m_scanDistance, 0,
 			Rva002614ECFilter(&data->m_pickUpFilter, object->getControllingPlayer(), true).link(
@@ -351,10 +357,10 @@ UpdateSleepTime AutoPickUpUpdate::update()
 
 	{
 		Coord3D position = *object->getPosition();
-		if (const_cast<ObjectFilter&>(data->m_pickUpFilter).testKindOf((const BitFlags<218>*)&BfmeFixedStorage0004543D(0, 0x5E),0,0))
+		if (const_cast<ObjectFilter&>(data->m_pickUpFilter).testKindOf((const BitFlags<218>*)&reinterpret_cast<const BfmeFixedStorage0004543D &>(Rva00045411BitSet(0, 0x5E)),0,0))
 		{
-			const Coord3D *point = (const Coord3D *)TheTerrainLogic->rva0027F108(&position,
-				getAutoPickUpUpdateModuleData()->m_scanDistance, true, 1);
+			const Coord3D *point = (const Coord3D *)((BfmeThingCME *)TheTerrainLogic)->rva0027F108(&position,
+				getAutoPickUpUpdateModuleData()->m_scanDistance, 1, 1);
 			SpecialPowerModuleInterface *power = (m_object?m_object:m_object)->findSpecialPowerModuleInterface(SPECIAL_POWER_39);
 			if (power && point)
 			{

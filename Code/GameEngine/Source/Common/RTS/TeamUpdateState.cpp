@@ -83,10 +83,15 @@ public:
 class BfmeFixedStorage0004543D
 {
 public:
-	BfmeFixedStorage0004543D(int unused, int bit1, int bit2) throw();	// 0x0006EE7A
 	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other) throw();
 private:
 	unsigned char m_bytes[28];
+};
+// Rowed 66-byte two-bit constructor at 0x0006EE7A; same 28-byte mask.
+struct Rva0006EE7A
+{
+	unsigned int bits[7];
+	Rva0006EE7A(int unused, int bit1, int bit2) throw();
 };
 
 // vftable 0x00BC2908, allow 0x002610DE.
@@ -408,7 +413,7 @@ void Team::updateState()
 			Object *pObj = ThePartitionManager->getClosestObject(obj->getPosition(), obj->getVisionRange(), 0,
 				Rva00260EB1Filter(obj, 1, false).link(Rva0026119DFilter().link(Rva002611BFFilter(obj).link(
 				Rva0004584D(*(const BfmeFixedStorage0004543D *)&KINDOFMASK_NONE,
-				BfmeFixedStorage0004543D(0, 0x59, 0x86)).link(&Rva00261513Filter(obj, true, -1.0f))))));
+				reinterpret_cast<const BfmeFixedStorage0004543D &>(Rva0006EE7A(0, 0x59, 0x86))).link(&Rva00261513Filter(obj, true, -1.0f))))));
 			if (pObj)
 			{
 				m_seeEnemy = true;
