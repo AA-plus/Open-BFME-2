@@ -14,6 +14,11 @@
 #include <vector>
 
 struct BfmeE16 { float x, y, z, w; };
+// Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<BfmeE16*, BfmeE16, allocator<BfmeE16> >::deallocate(BfmeE16*, size_t);
+}
 
 class __declspec(novtable) Rva00253487Base
 {
