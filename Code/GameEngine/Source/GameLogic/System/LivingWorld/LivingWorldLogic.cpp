@@ -13,10 +13,47 @@ typedef unsigned int UnsignedInt;
 typedef bool Bool;
 
 #include "../../../Common/GameLogicObjectLookupView.h"
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include <map>
 #include <list>
 #include <set>
+
+// _List_iterator comparisons otherwise instantiate the base-class
+// operator!= COMDAT (one byte shape per TU flags); exact-match free
+// overloads take those calls instead so this TU emits no external copy.
+namespace _STL {
+template <class _IterTp, class _LeftTraits, class _RightTraits>
+static inline bool operator!=(const _List_iterator<_IterTp, _LeftTraits> &a,
+                              const _List_iterator<_IterTp, _RightTraits> &b)
+{ return a._M_node != b._M_node; }
+}
+
+// _Rb_tree_iterator comparisons otherwise instantiate the base-class
+// operator!= COMDAT (one byte shape per TU flags); exact-match free
+// overloads take those calls instead so this TU emits no external copy.
+namespace _STL {
+template <class _RbVal, class _RbLeft, class _RbRight>
+static inline bool operator!=(const _Rb_tree_iterator<_RbVal, _RbLeft> &a,
+                              const _Rb_tree_iterator<_RbVal, _RbRight> &b)
+{ return a._M_node != b._M_node; }
+}
+
+// vector<int> fill/insert otherwise instantiates the _Construct<int,int>
+// COMDAT (one byte shape per TU flags); a file-static overload takes those
+// calls instead so this TU emits no external copy.
+#include <new>
+namespace _STL {
+static inline void _Construct(int *__p, const int &__val)
+{ new (__p) int(__val); }
+}
 
 class UnicodeString;
 namespace _STL {
