@@ -171,7 +171,7 @@ template <class T> class AptRef : public Rva00579E47
 {
 public:
 	// ?AptRef::AptRef present-unmatched
-	AptRef(const DelegateDesc *desc) : Rva00579E47(*desc) {}
+	__declspec(dllimport) __forceinline AptRef(const DelegateDesc *desc) : Rva00579E47(*desc) {}
 	// ?AptRef::AptRef present-unmatched
 	AptRef(const AptRef &that) : m_ptr(that.m_ptr)
 	{
