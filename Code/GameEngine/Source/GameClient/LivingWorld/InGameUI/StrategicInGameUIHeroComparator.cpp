@@ -15,11 +15,12 @@ struct Rva005E4300Entry {
  int key;
  AsciiString name;
  float metric;
- char pad[0xb8-0xc];
+ int rank;
+ char pad[0xb8-0x10];
  int group;
 };
 struct Rva005E3967Template {
- char pad[0x110]; unsigned int mask; char toArchetype[0x5C4-0x114];int archetype;
+ char pad[0x110]; unsigned int mask; char toArchetype[0x5C4-0x114];int archetype;char beforeCost[0x618-0x5C8];int cost;
 };
 class Rva0040CB3AIndexedField { public: int get(int) const; };
 struct Rva005E4300Context {
@@ -122,4 +123,63 @@ HeroDetailsPair Rva005E6CA1(Rva005E4300Context *context) {
  if(i>=count)return HeroDetailsPair(0,0);
  found:return HeroDetailsPair(((Rva0040CC0EIndexedField *)summary)->get(i),entry);
 }
+}
+
+
+// Native5E3F0A..5E3FE6: ESI entry / XMM0 result, kept by the real update below.
+// All experience-store calls resolve to existing providers. Original helper
+// and update class names remain unknown; the layouts describe target accesses.
+struct ExperienceLevelHandle {
+ ExperienceLevelHandle() {}
+ ExperienceLevelHandle(const ExperienceLevelHandle &r):list(r.list),node(r.node){}
+ void *list,*node;
+};
+class ExperienceLevelStore {public:
+ ExperienceLevelHandle rva00288D88(int,int);
+ bool IsValid(ExperienceLevelHandle) const;
+ ExperienceLevelHandle GetNextLevel(ExperienceLevelHandle) const;
+ int GetRequiredExperience(ExperienceLevelHandle) const;
+};
+class ExperienceLevelSystem;
+extern ExperienceLevelSystem *TheExperienceLevelSystem;
+namespace StrategicInGameUI {
+static __forceinline float RankExperience(const Rva005E4300Entry *entry){return entry->metric;}
+static float Rva005E3F0A(const Rva005E4300Entry *entry) {
+ ExperienceLevelHandle current=((ExperienceLevelStore*)TheExperienceLevelSystem)->rva00288D88((int)Rva005E3967(entry),(int)RankExperience(entry));
+ if(!((ExperienceLevelStore*)TheExperienceLevelSystem)->IsValid(current))return -1.0f;
+ ExperienceLevelHandle next=((ExperienceLevelStore*)TheExperienceLevelSystem)->GetNextLevel(current);
+ if(!((ExperienceLevelStore*)TheExperienceLevelSystem)->IsValid(next))return -1.0f;
+ int low=((ExperienceLevelStore*)TheExperienceLevelSystem)->GetRequiredExperience(current);
+ int high=((ExperienceLevelStore*)TheExperienceLevelSystem)->GetRequiredExperience(next);
+ return (entry->metric-low)/(high-low);
+}
+}
+class Rva0037DCA5 {public:void *rva0040C65D(int);};
+class Rva005F2A32 {public:
+ void rva005F3272(const UnicodeString &);
+ void rva005F2F41(int);
+ void rva005F2F49(float);
+ void rva005F2A42();
+ void rva005F2F5C(int);
+};
+struct Rva005E4087Context {
+ char pad0[0x54];int playerID;char pad1[0x78-0x58];Rva0040CB3AIndexedField *index;
+};
+class Rva005E4087 {public:void rva005E4087(int);
+ char pad0[0x10];Rva005E4087Context *context;int unknown14;Rva005F2A32 *clip;
+ char pad1[0x28-0x1C];int selected;
+};
+// ?Rva005E4087::rva005E4087 present-unmatched
+void Rva005E4087::rva005E4087(int key) {
+ if(key!=selected) {
+  const Rva005E4300Entry *entry=(const Rva005E4300Entry*)context->index->get(key);
+  Rva005E3967Template *type=StrategicInGameUI::Rva005E3967(entry);
+  clip->rva005F3272(*(const UnicodeString*)((Rva0037DCA5*)entry)->rva0040C65D(context->playerID));
+  clip->rva005F2F41(entry->rank);
+  float progress=StrategicInGameUI::Rva005E3F0A(entry);
+  if(progress>=0.0f)clip->rva005F2F49(progress);
+  else clip->rva005F2A42();
+  clip->rva005F2F5C(type->cost);
+  selected=key;
+ }
 }
