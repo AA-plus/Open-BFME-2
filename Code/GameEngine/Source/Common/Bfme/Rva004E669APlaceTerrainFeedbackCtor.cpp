@@ -18,10 +18,14 @@ struct FeedbackParams {AsciiString sound,font;int size;bool bold;char padD[3];in
 class BFMERopeDrawable;
 struct FeedbackData;
 void GameGetColorComponents(int,unsigned char*,unsigned char*,unsigned char*,unsigned char*);
-struct ICoord2D {int x,y; ICoord2D(int xx,int yy):x(xx),y(yy){} };
+// LINK: TU-local 2-int point under a unique name. The generic ICoord2D(int,int)
+// belongs to retail 0x0007E523 (rowed from icoord.cpp); defining another one
+// here emitted a duplicate COMDAT that lost the link. Same layout and same
+// inline bytes, unique symbol, no flags touched.
+struct Rva004E669APoint {int x,y; Rva004E669APoint(int xx,int yy):x(xx),y(yy){} };
 class PlaceTerrainResourceClaimantFeedback {public: class Impl;};
 class PlaceTerrainResourceClaimantFeedback::Impl {
- void *m00; FeedbackParams *m04; BFMERopeDrawable *m08; FeedbackData *m0C; FeedbackDisplayString *m10; ICoord2D position;void *decal;
+ void *m00; FeedbackParams *m04; BFMERopeDrawable *m08; FeedbackData *m0C; FeedbackDisplayString *m10; Rva004E669APoint position;void *decal;
  public: Impl(void*,FeedbackParams*,BFMERopeDrawable*,FeedbackData*);void createPotentialClaimDecal();
 };
 PlaceTerrainResourceClaimantFeedback::Impl::Impl(void *owner,FeedbackParams *params,BFMERopeDrawable *drawable,FeedbackData *data):m00(owner),m04(params),m08(drawable),m0C(data),m10(0),position(-1,-1),decal(0) {
