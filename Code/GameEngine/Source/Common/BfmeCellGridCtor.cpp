@@ -25,7 +25,7 @@ public:
 };
 
 // ??0Rva00404781@@QAE@XZ present-unmatched
-Rva00404781::Rva00404781()
+inline Rva00404781::Rva00404781()
 {
 	rva0040475C();
 }

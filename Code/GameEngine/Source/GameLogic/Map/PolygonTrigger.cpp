@@ -37,7 +37,8 @@ public:
 	Region2D rva0030B6E3();
 };
 
-class Rva002E373CHolder
+// Match the existing holder global's struct pointer declaration.
+struct Rva002E373CHolder
 {
 public:
 	PolygonTrigger *m_head;
