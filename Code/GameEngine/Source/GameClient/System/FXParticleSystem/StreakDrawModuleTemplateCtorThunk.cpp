@@ -29,7 +29,7 @@ class CategoryModuleTemplateBase : public ModuleTemplate,
 {
 public:
     __declspec(dllimport) __forceinline CategoryModuleTemplateBase() {}
-    virtual ~CategoryModuleTemplateBase() {}
+    __declspec(dllimport) __forceinline virtual ~CategoryModuleTemplateBase() {}
 };
 
 template <int Category>
