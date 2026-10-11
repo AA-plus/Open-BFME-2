@@ -114,7 +114,7 @@ class UpgradeMuxData
 {
 public:
 	void performUpgradeFX(Object *obj) const;
-	__forceinline void getUpgradeActivationMasks(UpgradeMaskType &activation, UpgradeMaskType &conflicting) const
+	__forceinline void getUpgradeActivationMasksRV(UpgradeMaskType &activation, UpgradeMaskType &conflicting) const
 	{
 		activation = m_activationUpgradeNames;
 		conflicting = m_conflictingUpgradeNames;
@@ -146,7 +146,7 @@ public:
 };
 void Rva00452460::getUpgradeActivationMasks(UpgradeMaskType &activation, UpgradeMaskType &conflicting) const
 {
-	((const Rva00452460Data *)m_moduleData)->m_upgradeMuxData.getUpgradeActivationMasks(activation, conflicting);
+	((const Rva00452460Data *)m_moduleData)->m_upgradeMuxData.getUpgradeActivationMasksRV(activation, conflicting);
 }
 class Rva00460AAC : public Rva00452EDDPrimary<0x10>, public Rva00452460Iface
 {
@@ -156,7 +156,7 @@ public:
 };
 void Rva00460AAC::getUpgradeActivationMasks(UpgradeMaskType &activation, UpgradeMaskType &conflicting) const
 {
-	((const Rva00452460Data *)m_moduleData)->m_upgradeMuxData.getUpgradeActivationMasks(activation, conflicting);
+	((const Rva00452460Data *)m_moduleData)->m_upgradeMuxData.getUpgradeActivationMasksRV(activation, conflicting);
 }
 void Rva00460AAC::performUpgradeFX()
 {
