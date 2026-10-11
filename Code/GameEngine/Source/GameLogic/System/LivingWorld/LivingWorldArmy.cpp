@@ -1,4 +1,4 @@
-// cl: /O1 /MD /EHsc /arch:SSE /G7 /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata
+// cl: /O1 /MD /EHsc /arch:SSE /G7 /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
 // Target: 0031942B..00319517; WB names UseArmySummary, assertions 691..705.
 // This is a target field view, not a claim about the complete army/summary layout.
@@ -6,7 +6,11 @@
 #include <vector>
 #include "ascii_string.h"
 #include "unicode_string.h"
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+#define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"
+#include "../../../../../Libraries/Include/Lib/Coord2D.h"
 
 // vector<void*> begin/end otherwise instantiate per-TU COMDATs (one byte
 // shape per TU flags); explicit dllimport+forceinline specializations take
@@ -186,12 +190,49 @@ template<> vector<BfmeVectorRecord00319C84>::~vector();
 class Rva00318BEB { public: void rva00318BEB(); };
 struct ArmyDestructorLogicView { unsigned char pad00[0x1C]; Rva002B7250 registry1C; unsigned char pad20[0xB0-0x20]; Rva00319D01RegionHolder *regionsB0; };
 
+class Rva00318C32Ret;
+struct TWheelInfo;
+struct Rva00318F42Record {char bytes[16];};
+struct Rva00318F42View {Rva00318F42Record *first,*finish,*end;};
+struct Rva00318F42Holder {char pad00[0x3C];Rva00318F42View view;};
+struct MoveRecordStorage { char bytes[16]; };
+struct MoveCoordView {
+    float x,y;
+    MoveCoordView() {}
+    MoveCoordView(const Coord2D &pos) : x(pos.x),y(pos.y) {}
+};
+class Rva00318B5C;
+struct Rva00538E43Result : public Snapshot {
+public:
+    Rva00538E43Result(const Coord2D &pos,int id) : position(pos),region(id) {}
+    Rva00538E43Result(int id) : region(id) {}
+    virtual ~Rva00538E43Result() {}
+    virtual void loadPostProcess() {}
+    virtual const char*GetSnapshotName()const{return "ArmyMoveCommand";}
+    virtual void xfer(Xfer *);
+    MoveCoordView position; int region;
+};
+struct Rva00319F5A { void rva0031A129(const Rva00318B5C &); };
+struct BfmeE16 { char bytes[16]; };
+class Rva00538E22 { public: void rva00538F10(const _STL::vector<BfmeE16> &,int); };
+class Rva003195C9Owner { public: void rva003195C9(); };
+class Rva0020E89C;
+class Rva00538CEF { public: Rva0020E89C *rva00538CEF(); };
+struct RegionMoveGroup { int word0,word4,region; Coord2D *start,*finish,*end; };
+struct RegionMoveView { char pad00[0x12C]; int region; char pad130[0x1A8-0x130]; _STL::vector<RegionMoveGroup> groups; };
+struct QueueCollectionView { _STL::vector<MoveRecordStorage> entries; };
+struct MoveArmyView { char pad00[0x3C]; Coord2D destination; };
+
 class LivingWorldArmy : public Snapshot, public Rva003197EEList, public Rva00319D01ObserverBase {
 public:
     virtual ~LivingWorldArmy();
     virtual void BeginTurn(int,int); virtual void EndTurn(int,int);
-    virtual void crc(Xfer *); virtual void xfer(Xfer *); virtual void loadPostProcess();
+    // Native primary table C0C82C has four slots: deleting dtor,
+    // presentation/load phase, const name getter319E76, xfer31A6DB.
+    virtual const char *GetSnapshotName() const; virtual void xfer(Xfer *); virtual void loadPostProcess();
     void UseArmySummary(Rva00319CED *source);
+    void initiateMove(const Coord2D &,Rva00318C32Ret *,int);
+    __declspec(noinline) Rva00318F42View *rva00318B83() const;
     void KillSummaryEntry(int index);
     void rva00319EF9(LivingWorldArmy *source,int key);
     void rva00319EA3(LivingWorldArmy *source,ArmySummaryEntry *entry);
@@ -367,4 +408,52 @@ LivingWorldArmy::~LivingWorldArmy()
 		KillSummaryEntry(i);
 	reinterpret_cast<ArmyDestructorLogicView *>(TheLivingWorldLogic)->registry1C.rva002B7250(
 		reinterpret_cast<CreateAHeroData *>(static_cast<Rva00319D01ObserverBase *>(this)));
+}
+
+// Native17B318B83: nullable +88 presentation holder exposes its +3C queue.
+// The original getter name is unknown; the army receiver is witnessed by
+// WB102ABC0 and this file's native movement entry. Same physical contract as
+// the existing Rva00318F42 view; the body stays visible to preserve ECX.
+Rva00318F42View *LivingWorldArmy::rva00318B83() const {
+    return status88 ? &reinterpret_cast<Rva00318F42Holder *>(status88)->view : 0;
+}
+
+// WB102ABC0 initiateMove; complete native31A591..31A6DB RET12.
+// Record vtable targets use the existing Rva00538E43Result provider.
+void LivingWorldArmy::initiateMove(const Coord2D &position,Rva00318C32Ret *target,int flags)
+{
+    if (!target) return;
+    const TWheelInfo *queue = reinterpret_cast<const TWheelInfo *>(rva00318B83());
+    if (!queue) return;
+    RegionMoveView *targetView=reinterpret_cast<RegionMoveView *>(target);
+    int region=targetView->region;
+    Rva00538E43Result destination(position,region);
+    RegionMoveView *current;
+    if (!(reinterpret_cast<const QueueCollectionView *>(queue)->entries.size()>0))
+        current=reinterpret_cast<RegionMoveView *>(reinterpret_cast<Rva00318C32Owner *>(this)->rva00318C32());
+    else
+        current=reinterpret_cast<RegionMoveView *>(const_cast<Rva00538CEF *>(reinterpret_cast<const Rva00538CEF *>(queue))->rva00538CEF());
+    _STL::vector<BfmeVectorRecord00319C84> moves;
+    if(current) {
+        int targetRegion=targetView->region;
+        _STL::vector<RegionMoveGroup> *groups=&current->groups;
+        _ReadWriteBarrier();
+        RegionMoveGroup *first=groups->begin(),*last=groups->end();
+        for(;first!=last;++first) {
+            if(first->region==targetRegion) {
+                const Coord2D *point=first->start,*end=first->finish;
+                for(;point!=end;++point) {
+                    Rva00538E43Result intermediate(region);
+                    *reinterpret_cast<Coord2D *>(&intermediate.position)=*point;
+                    reinterpret_cast<Rva00319F5A *>(&moves)->rva0031A129(reinterpret_cast<const Rva00318B5C&>(intermediate));
+                }
+                break;
+            }
+        }
+    }
+    reinterpret_cast<Rva00319F5A *>(&moves)->rva0031A129(reinterpret_cast<const Rva00318B5C&>(destination));
+    const_cast<Rva00538E22 *>(reinterpret_cast<const Rva00538E22 *>(queue))->rva00538F10(*reinterpret_cast<_STL::vector<BfmeE16> *>(&moves),flags);
+    reinterpret_cast<MoveArmyView *>(this)->destination=position;
+    reinterpret_cast<Rva003195C9Owner *>(this)->rva003195C9();
+    reinterpret_cast<Rva003197EEList *>(reinterpret_cast<char *>(this)+8)->forEach(&Rva003197EEListener::slot4,this);
 }
