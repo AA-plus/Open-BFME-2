@@ -14,9 +14,12 @@ extern int g_Va00DBA4E4;
 extern int g_009BA4E8;
 
 extern int g_00DE1B50;
+int g_00DE1B50 = 0;	// owned here; retail .data starts it at 0
 extern int g_00DFEB98;
 extern int g_00DFEBB0;
+int g_00DFEBB0 = 0;	// owned here; retail .data starts it at 0
 extern int g_00DFEFCC;
+int g_00DFEFCC = 0;	// owned here; retail .data starts it at 0
 extern int g_00E01E04;
 // Retail's half-the-frame-rate divisor, VA 0x00E02D9C (RVA 0x00A02D9C): the rowed
 // ScriptActions bodies divide by it (`idivl 0xe02d9c`, retail 0x003BB5F14), and
@@ -30,18 +33,25 @@ extern int g_00E033D0;
 // Owned here: written by rva007B07F5 below; retail .data starts it at 0.
 int g_00E033D0 = 0;
 extern int g_00E035C8;
+int g_00E035C8 = 0;	// owned here; retail .data starts it at 0
 extern int g_00E03994;
+int g_00E03994 = 0;	// owned here; retail .data starts it at 0
 extern int g_00E05F24;
+int g_00E05F24 = 0;	// owned here; retail .data starts it at 0
 extern int g_00E062F4;
 // Owned here: written by rva007B3FCA below; retail .data starts it at 0.
 int g_00E062F4 = 0;
 extern int g_00E063E0;
+int g_00E063E0 = 0;	// owned here; retail .data starts it at 0
 extern int g_00E063E8;
+int g_00E063E8 = 0;	// owned here; retail .data starts it at 0
 extern int TheW3DFrameLengthInMsec;
 extern int g_Va00DFE18C;
 extern int g_Va00E03BBC;
 extern unsigned g_00E063CC;
+unsigned g_00E063CC = 0;	// owned here; retail .data starts it at 0
 extern unsigned int g_00DFEE08;
+unsigned int g_00DFEE08 = 0;	// owned here; retail .data starts it at 0
 extern unsigned int g_00E06648;
 
 static int s_rva007ADD08;
