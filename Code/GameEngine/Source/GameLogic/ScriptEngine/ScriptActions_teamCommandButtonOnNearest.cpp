@@ -215,6 +215,11 @@ public:
 	{
 		return ((const SpecialPowerTemplate *)friend_getFinalOverride())->m_id;
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getID copy loses to the first-in-order copy. No flags touched.
+	unsigned int bfme_getID_4c1e7() const
+	{
+		return ((const SpecialPowerTemplate *)friend_getFinalOverride())->m_id;
+	}
 	char m_pad00[0x14];
 	unsigned int m_id;	// +0x14
 };
@@ -313,7 +318,7 @@ void ScriptActions::doTeamUseCommandButtonOnNearestEnemy(const AsciiString &team
 
 	Object *srcObj;
 	if (commandButton->getSpecialPowerTemplate())
-		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->getID());
+		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->bfme_getID_4c1e7());
 	else
 		srcObj = theGroup->getCommandButtonSourceObject(commandButton->getCommandType());
 	if (!srcObj)
@@ -363,7 +368,7 @@ void ScriptActions::doTeamUseCommandButtonOnNearestGarrisonedBuilding(const Asci
 
 	Object *srcObj;
 	if (commandButton->getSpecialPowerTemplate())
-		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->getID());
+		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->bfme_getID_4c1e7());
 	else
 		srcObj = theGroup->getCommandButtonSourceObject(commandButton->getCommandType());
 	if (!srcObj)
@@ -413,7 +418,7 @@ void ScriptActions::doTeamUseCommandButtonOnNearestKindof(const AsciiString &tea
 
 	Object *srcObj;
 	if (commandButton->getSpecialPowerTemplate())
-		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->getID());
+		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->bfme_getID_4c1e7());
 	else
 		srcObj = theGroup->getCommandButtonSourceObject(commandButton->getCommandType());
 	if (!srcObj)
@@ -463,7 +468,7 @@ void ScriptActions::doTeamUseCommandButtonOnNearestBuilding(const AsciiString &t
 
 	Object *srcObj;
 	if (commandButton->getSpecialPowerTemplate())
-		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->getID());
+		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->bfme_getID_4c1e7());
 	else
 		srcObj = theGroup->getCommandButtonSourceObject(commandButton->getCommandType());
 	if (!srcObj)
@@ -513,7 +518,7 @@ void ScriptActions::doTeamUseCommandButtonOnNearestBuildingClass(const AsciiStri
 
 	Object *srcObj;
 	if (commandButton->getSpecialPowerTemplate())
-		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->getID());
+		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->bfme_getID_4c1e7());
 	else
 		srcObj = theGroup->getCommandButtonSourceObject(commandButton->getCommandType());
 	if (!srcObj)
@@ -572,7 +577,7 @@ void ScriptActions::rva003C7018(const AsciiString &teamName, const AsciiString &
 
 	Object *srcObj;
 	if (commandButton->getSpecialPowerTemplate())
-		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->getID());
+		srcObj = theGroup->getSpecialPowerSourceObject(commandButton->getSpecialPowerTemplate()->bfme_getID_4c1e7());
 	else
 		srcObj = theGroup->getCommandButtonSourceObject(commandButton->getCommandType());
 	if (!srcObj)
