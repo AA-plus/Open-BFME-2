@@ -4,16 +4,14 @@
 
 class ThingTemplate;
 
-// upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/ThingFactory.h
-// The lookup itself is the BfmeThingFactory facade (const return, proven by
-// the retail body at 0x00137E80).
-class BfmeThingFactory
+// 0x002D06CA is rowed as ThingFactory::findTemplate (ThingFactory.cpp);
+// the facade view is replaced so the call resolves to the rowed body
+// instead of the unrowed BfmeThingFactory spelling (sole U on this unit).
+class ThingFactory
 {
 public:
 	const ThingTemplate *findTemplate( const AsciiString &name );
 };
-
-class ThingFactory;
 extern ThingFactory *TheThingFactory;
 
 class Player
@@ -41,7 +39,7 @@ bool ObjectTypes::canBuildAny( Player *player )
 {
 	for ( AsciiString *i = m_begin; i != m_end; ++i )
 	{
-		const ThingTemplate *thingTemplate = ((BfmeThingFactory *)TheThingFactory)->findTemplate( *i );
+		const ThingTemplate *thingTemplate = TheThingFactory->findTemplate( *i );
 		if ( thingTemplate && player->canBuild( thingTemplate ) )
 			return true;
 	}

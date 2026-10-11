@@ -22,8 +22,10 @@ class FXShaderParameterBinder
 public:
 	FXShaderParameterBinder(void *surface);
 
-	// 0x00153F08: set-surface worker, declared only.
-	void Init(void *surface);
+	// 0x00153F08 is rowed as FXShaderParameterBinder::Init(ID3DXEffect*)
+	// (336B); same shape, so this resolves to the rowed body instead of
+	// the unrowed void* spelling (sole U on this unit).
+	void Init(struct ID3DXEffect *surface);
 
 private:
 	void *m_ptr;                 // +0
@@ -35,5 +37,5 @@ FXShaderParameterBinder::FXShaderParameterBinder(void *surface)
 	: m_ptr(0), m_vec(_STL::allocator<BfmeE16>()), m_extra(0)
 {
 	if (surface)
-		Init(surface);
+		Init((struct ID3DXEffect *)surface);
 }

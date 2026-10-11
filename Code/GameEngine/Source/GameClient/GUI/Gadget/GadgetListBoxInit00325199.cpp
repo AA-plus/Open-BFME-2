@@ -35,7 +35,7 @@ void __cdecl operator delete[](void *memory);
 void *__cdecl ji_006291ae(void *dest, int val, unsigned int count);
 #pragma comment(linker, "/alternatename:?ji_006291ae@@YAPAXPAXHI@Z=?ji_006291ae@@YAXXZ")
 
-WindowMsgHandledType Rva00324E92Input(GameWindow *, UnsignedInt, WindowMsgData, WindowMsgData);
+WindowMsgHandledType GadgetListBoxMultiInput(GameWindow *, UnsignedInt, WindowMsgData, WindowMsgData);
 
 struct Rva00325199Data
 {
@@ -64,5 +64,5 @@ void GadgetListBoxAddMultiSelect(GameWindow *window)
 	}
 	ji_006291ae(buf, -1, (unsigned int)(data->m_count * 4));
 	data->m_flag = 1;
-	window->winSetInputFunc(Rva00324E92Input);
+	window->winSetInputFunc(GadgetListBoxMultiInput);
 }
