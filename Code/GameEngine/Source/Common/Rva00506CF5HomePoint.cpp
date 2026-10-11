@@ -35,7 +35,7 @@ struct Coord3D : public Coord3DBase
  Coord3D(){}
  Coord3D(const Coord3D &p){x=p.x;y=p.y;z=p.z;}
 	bool equals(const Coord3DBase &that) const;
-	void set(const Coord3DBase *that) { x = that->x; y = that->y; z = that->z; }
+	__declspec(dllimport) __forceinline void set(const Coord3DBase *that) { x = that->x; y = that->y; z = that->z; }
 };
 
 extern Coord3DBase Gen00DD0870;

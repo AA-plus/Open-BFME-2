@@ -98,7 +98,7 @@ class Rva001ED338 { public: void rva001ED338(void *ini); };
 enum INILoadType { INI_LOAD_INVALID, INI_LOAD_OVERWRITE };
 class INI {
 public: const char *getNextToken(const char *seps = 0);
- INILoadType getLoadType() const { return loadType; }
+ __declspec(dllimport) __forceinline INILoadType getLoadType() const { return loadType; }
  unsigned char pad00[8]; INILoadType loadType; // +0x08, overwrite for the startup files
 };
 class INIException {

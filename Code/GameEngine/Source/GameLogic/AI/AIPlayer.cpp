@@ -231,7 +231,7 @@ private:
 class SupplyWarehouseDockUpdate : public Module
 {
 public:
-	Int getBoxesStored() const { return m_boxesStored; }
+	__declspec(dllimport) __forceinline Int getBoxesStored() const { return m_boxesStored; }
 private:
 	unsigned char m_pad[0x88];
 	Int m_boxesStored;			// +0x88

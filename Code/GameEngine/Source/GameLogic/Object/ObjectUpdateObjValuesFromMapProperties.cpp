@@ -143,7 +143,7 @@ public:
 	void rva00274176(Bool b);
 	// Retail stores the new +0x200 instance scale, then refreshes through
 	// 0x00274176(true); the old scale is read into its own temporary first.
-	void setInstanceScale(Real f) { m_scale = f; rva00274176(true); }
+	__declspec(dllimport) __forceinline void setInstanceScale(Real f) { m_scale = f; rva00274176(true); }
 	void rva002785FB(Bool b);
 	void rva0027974B();
 	void rva002781DA(Rva0010F149Handle info);

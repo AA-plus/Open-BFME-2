@@ -345,7 +345,7 @@ public:
 	const Coord3D *getGoalPosition() const { return &m_goalPosition; }
 	void setGoalPosition(const Coord3D *pos);
 	void lock() { m_locked = true; }
-	void unlock() { m_locked = false; }
+	__declspec(dllimport) __forceinline void unlock() { m_locked = false; }
 private:
 	unsigned char m_pad04[0x14 - 0x04];
 	Object *m_owner; // +0x14

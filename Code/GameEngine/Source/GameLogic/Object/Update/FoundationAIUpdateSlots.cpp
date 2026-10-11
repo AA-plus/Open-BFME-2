@@ -78,7 +78,7 @@ class ThingTemplate
 public:
  const GeometryInfo &getGeometryInfo() const { return *reinterpret_cast<const GeometryInfo *>(m_pad000 + 0xA0); }
  unsigned int constructionWord118() const { return m_kindOf[1]; }
- float getBoundingCircleRadius() const { return getGeometryInfo().m_radius; }
+ __declspec(dllimport) __forceinline float getBoundingCircleRadius() const { return getGeometryInfo().m_radius; }
  __forceinline bool constructionKind(unsigned int bit) const { return (m_pad000[0x108 + (bit >> 3)] & (1U << (bit & 7))) != 0; }
 	unsigned char m_pad000[0x114];
 	unsigned int m_kindOf[4]; // +0x114

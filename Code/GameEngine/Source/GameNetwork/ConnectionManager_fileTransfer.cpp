@@ -165,9 +165,9 @@ class NetFileProgressCommandMsg : public NetCommandMsg
 {
 public:
 	UnsignedShort getFileID() const { return ((const Rva004D5767WordField *)this)->get(); }
-	void setFileID(UnsignedShort fileID) { ((Rva004D59ACWordSlot *)this)->set(fileID); }
+	__declspec(dllimport) __forceinline void setFileID(UnsignedShort fileID) { ((Rva004D59ACWordSlot *)this)->set(fileID); }
 	Int getProgress() { return ((NetWrapperCommandMsg *)this)->getDataLength(); }
-	void setProgress(Int progress) { ((BFMENetInformPlayerLeaveFrameCommandMsg *)this)->setLeavingPlayerID(progress); }
+	__declspec(dllimport) __forceinline void setProgress(Int progress) { ((BFMENetInformPlayerLeaveFrameCommandMsg *)this)->setLeavingPlayerID(progress); }
 
 private:
 	char m_pad1C[0x24 - 0x1c];

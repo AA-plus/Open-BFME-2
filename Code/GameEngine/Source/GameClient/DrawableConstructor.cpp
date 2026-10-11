@@ -63,7 +63,7 @@ struct ModuleInfoEntry { unsigned char m_data[0x14]; };
 class ModuleInfo
 {
 public:
-	int getCount() const { return m_end - m_begin; }
+	__declspec(dllimport) __forceinline int getCount() const { return m_end - m_begin; }
 	AsciiString getNthName(int i) const;
 	const ModuleData *getNthData(int i) const;
 	ModuleInfoEntry *m_begin;
@@ -81,7 +81,7 @@ public:
 	ModuleInfo m_moduleInfo308;			// +0x308
 	unsigned char m_pad314[0x4E0 - 0x314];
 	float m_assetScale;				// +0x4E0
-	float getAssetScale() const { return m_assetScale; }
+	__declspec(dllimport) __forceinline float getAssetScale() const { return m_assetScale; }
 	unsigned char m_pad4E4[0x594 - 0x4E4];
 	int m_594;					// +0x594
 	int getX594() const { return m_594; }

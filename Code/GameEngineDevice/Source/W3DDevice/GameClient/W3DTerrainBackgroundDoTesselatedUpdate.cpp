@@ -272,8 +272,8 @@ public:
 class WorldHeightMap : public RefCountClass
 {
 public:
-	Int getXExtent() { return m_width; }
-	Int getYExtent() { return m_height; }
+	__declspec(dllimport) __forceinline Int getXExtent() { return m_width; }
+	__declspec(dllimport) __forceinline Int getYExtent() { return m_height; }
 	Int getBorderSize() { return m_borderSize; }
 	UnsignedShort getHeight(Int x, Int y) { return ((BoundedShortGrid *)this)->rva00062A58(x, y); }
 	bool isInMesh(Int x, Int y) { return ((const Rva00729300BitPlane *)this)->test(x, y); }

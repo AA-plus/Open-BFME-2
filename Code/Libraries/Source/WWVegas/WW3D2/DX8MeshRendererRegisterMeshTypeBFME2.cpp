@@ -33,7 +33,7 @@ private:
 };
 class DX8SkinFVFCategoryContainer:public DX8FVFCategoryContainer {
 public:
- __forceinline DX8SkinFVFCategoryContainer(bool sorting):DX8FVFCategoryContainer(0x112,sorting),VisibleVertexCount(0),rva_ec(0),VisibleSkinHead(0),VisibleSkinTail(0),rva_f8(false){}
+ __declspec(dllimport) __forceinline DX8SkinFVFCategoryContainer(bool sorting):DX8FVFCategoryContainer(0x112,sorting),VisibleVertexCount(0),rva_ec(0),VisibleSkinHead(0),VisibleSkinTail(0),rva_f8(false){}
  virtual ~DX8SkinFVFCategoryContainer();
  virtual void Render();
  virtual void Add_Mesh(MeshModelClass*);

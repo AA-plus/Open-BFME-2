@@ -189,7 +189,7 @@ class GameMessage { public:
  unsigned char pad[0x10]; Type m_type;
 };
 class ThingTemplate { public:
- const UnicodeString& getDisplayName() const { return displayName; }
+ __declspec(dllimport) __forceinline const UnicodeString& getDisplayName() const { return displayName; }
  const AsciiString& getName() const { return name; }
  bool testByte(int index,unsigned char mask) const { return (kindFlags[index]&mask)!=0; }
  unsigned char pad0[0x30]; UnicodeString displayName;
@@ -209,9 +209,9 @@ class Player { public:
  bool rva002AA245() const;
  bool isLocalPlayer() const;
  const UnicodeString& getPlayerDisplayName() const { return name; }
- const Team* getDefaultTeam() const { return team; }
+ __declspec(dllimport) __forceinline const Team* getDefaultTeam() const { return team; }
  int getPlayerIndex() const { return index; }
- int getPlayerColor() const { return color; }
+ __declspec(dllimport) __forceinline int getPlayerColor() const { return color; }
  unsigned char pad0[0x38]; UnicodeString name;
  unsigned char pad1[0x54-0x3c]; int index;
  unsigned char pad2[0x280-0x58]; int color;
@@ -258,7 +258,7 @@ class SupplyWarehouseDockUpdate : public Module { public: unsigned char pad[0x88
 class Object { public:
  const ThingTemplate* getTemplate() const { return thingTemplate; }
  const Coord3D* getPosition() const { return &position; }
- const Team* getTeam() const { return team; }
+ __declspec(dllimport) __forceinline const Team* getTeam() const { return team; }
  ContainModuleInterface* getContain() const { return contain; }
  UnsignedInt getID() const { return id; }
  bool isKindOf(KindOfType) const;

@@ -195,7 +195,7 @@ public:
 	void setMapAvailability(bool hasMap) { if (isHuman()) m_hasMap = hasMap; }
 	void setColor(Int color) { m_color = color; }
 	void setStartPos(Int startPos) { m_startPos = startPos; }
-	void setTeamNumber(Int teamNumber) { m_teamNumber = teamNumber; }
+	__declspec(dllimport) __forceinline void setTeamNumber(Int teamNumber) { m_teamNumber = teamNumber; }
 	void rva20Set(Int v) { m_20 = v; }
 	void rva40Set(Int v) { m_40 = v; }
 	bool isOpen() const { return m_state == SLOT_OPEN; }
@@ -286,10 +286,10 @@ public:
 	bool rva003FF457() const;
 	bool isHeroDataReadyForSlot(unsigned short slotNum) const;
 	AsciiString getMap() const;
-	unsigned int getMapCRC() const { return m_mapCRC; }
-	unsigned int getMapSize() const { return m_mapSize; }
+	__declspec(dllimport) __forceinline unsigned int getMapCRC() const { return m_mapCRC; }
+	__declspec(dllimport) __forceinline unsigned int getMapSize() const { return m_mapSize; }
 	Int getMapContentsMask() const { return m_mapMask; }
-	Int getSeed() const { return m_seed; }
+	__declspec(dllimport) __forceinline Int getSeed() const { return m_seed; }
 	Int rva58() const { return m_58; }
 	Int rva5C() const { return m_5c; }
 	Int rva88() const { return m_88; }

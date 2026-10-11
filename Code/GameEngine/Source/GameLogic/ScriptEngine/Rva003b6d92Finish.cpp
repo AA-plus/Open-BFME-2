@@ -91,7 +91,7 @@ private:
 class Template
 {
 public:
-	Int getNumParameters() const { return m_numParameters; }
+	__declspec(dllimport) __forceinline Int getNumParameters() const { return m_numParameters; }
 	__declspec(noinline) Parameter::ParameterType getParameterType(Int index) const;
 	char m_prefix[0x10];
 	NameKeyType m_internalNameKey;

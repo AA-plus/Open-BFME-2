@@ -116,7 +116,7 @@ class Rva0029FB3BMember
 {
 public:
 	Rva0029FB3BMember(const Rva0029FB3BAlloc &alloc);
-	~Rva0029FB3BMember() { ((PoolMember *)this)->Rva00268902(); }
+	__declspec(dllimport) __forceinline ~Rva0029FB3BMember() { ((PoolMember *)this)->Rva00268902(); }
 private:
 	void *m_node;
 };

@@ -137,7 +137,7 @@ class GameLogic
 public:
 	unsigned char m_pad00[0x40];
 	UnsignedInt m_frame; // +0x40
-	UnsignedInt getFrame() { return m_frame; }
+	__declspec(dllimport) __forceinline UnsignedInt getFrame() { return m_frame; }
 };
 
 extern GameLogic *TheGameLogic;

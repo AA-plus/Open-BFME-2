@@ -217,7 +217,7 @@ public:
 	Int getCurrentStateID() const;
 	Bool isMoving() const;
 	Object *getGoalObject() const { return m_stateMachine->getGoalObject(); }
-	void setAllowedToChase(Bool allow) { m_isAllowedToChase = allow; }
+	__declspec(dllimport) __forceinline void setAllowedToChase(Bool allow) { m_isAllowedToChase = allow; }
 
 private:
 	char m_unknown24[0x30 - 0x24];

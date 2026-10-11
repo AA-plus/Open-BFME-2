@@ -288,7 +288,7 @@ enum ModelConditionFlagType
 class ModelConditionFlags
 {
 public:
-	ModelConditionFlags() {}
+	__declspec(dllimport) __forceinline ModelConditionFlags() {}
 	void set(ModelConditionFlagType bit) { m_bits._Unchecked_set(bit); }
 
 private:
@@ -324,7 +324,7 @@ public:
 		rva0028CFB2((const int *)&clr, (const int *)&set);
 	}
 
-	Bool testWeaponBonusCondition(WeaponBonusConditionType wst) const { return ((m_weaponBonusCondition >> wst) & 1) != 0; }
+	__declspec(dllimport) __forceinline Bool testWeaponBonusCondition(WeaponBonusConditionType wst) const { return ((m_weaponBonusCondition >> wst) & 1) != 0; }
 	void setWeaponBonusCondition(WeaponBonusConditionType wst) { m_weaponBonusCondition |= (1 << wst); }
 	void clearWeaponBonusCondition(WeaponBonusConditionType wst) { m_weaponBonusCondition &= ~(1 << wst); }
 

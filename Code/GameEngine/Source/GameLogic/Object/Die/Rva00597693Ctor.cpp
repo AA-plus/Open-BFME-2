@@ -17,7 +17,7 @@ public:
 	virtual void v0();
 	int m_04;
 	int m_08;
-	BaseA() : m_04(1), m_08(2) {}
+	__declspec(dllimport) __forceinline BaseA() : m_04(1), m_08(2) {}
 };
 
 class Rva00506B1B

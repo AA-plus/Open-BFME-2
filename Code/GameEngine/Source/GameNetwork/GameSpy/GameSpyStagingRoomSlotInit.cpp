@@ -176,7 +176,7 @@ public:
 class GameSpyGameSlot : public GameSlot
 {
 public:
-	Int getProfileID(void) const { return m_profileID; }
+	__declspec(dllimport) __forceinline Int getProfileID(void) const { return m_profileID; }
 	void setProfileID(Int id) { m_profileID = id; }
 	void setSlotRankPoints(Int val) { m_rankPoints = val; }
 	void setFavoriteSide(Int val) { m_favoriteSide = val; }

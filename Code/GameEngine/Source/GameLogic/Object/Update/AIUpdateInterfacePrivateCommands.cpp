@@ -279,8 +279,8 @@ class Weapon
 public:
 	const WeaponTemplate *getTemplate() const { return m_template; }
 	float getContinueAttackRange() const { return getTemplate()->getContinueAttackRange(); }
-	Bool isContactWeapon() const { return getTemplate()->isContactWeapon(); }
-	void setMaxShotCount(Int maxShots) { m_maxShotCount = maxShots; m_shotsFired = 0; }
+	__declspec(dllimport) __forceinline Bool isContactWeapon() const { return getTemplate()->isContactWeapon(); }
+	__declspec(dllimport) __forceinline void setMaxShotCount(Int maxShots) { m_maxShotCount = maxShots; m_shotsFired = 0; }
 	Int getAntiMask() const { return getTemplate()->getAntiMask(); }
 
 	void *m_vtable;
@@ -604,7 +604,7 @@ public:
 	UnsignedInt isDisabledByType(Int type) const { return m_disabledMask & (1U << type); }
 	ObjectID getID() const { return m_id; }
 	Bool isEffectivelyDead() const { return (m_privateStatus & 0x01) != 0; }
-	Bool isOffMap() const { return (m_privateStatus & 0x08) != 0; }
+	__declspec(dllimport) __forceinline Bool isOffMap() const { return (m_privateStatus & 0x08) != 0; }
 	Team *getTeam() const { return m_team; }
 	// 0x0006F039 (ledger name Object::isKindOf) tests a bit of the word run
 	// at +0x10C; privateMoveAwayFromUnit asks it for bit 0x84. Reached under
@@ -894,7 +894,7 @@ extern GameLogic *TheGameLogic;
 class PartitionFilter
 {
 public:
-	PartitionFilter() : m_next(0) {}
+	__declspec(dllimport) __forceinline PartitionFilter() : m_next(0) {}
 	virtual ~PartitionFilter() {}
 	virtual Bool allow(Object *objOther) = 0;
 	PartitionFilter *link(PartitionFilter *next);
@@ -924,7 +924,7 @@ private:
 class PartitionFilterSameMapStatus : public PartitionFilter
 {
 public:
-	PartitionFilterSameMapStatus(const Object *obj) : m_obj(obj) {}
+	__declspec(dllimport) __forceinline PartitionFilterSameMapStatus(const Object *obj) : m_obj(obj) {}
 	virtual Bool allow(Object *objOther);
 
 private:

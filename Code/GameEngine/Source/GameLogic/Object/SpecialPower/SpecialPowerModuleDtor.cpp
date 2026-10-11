@@ -42,8 +42,8 @@ class SpecialPowerTemplate : public Overridable
 {
 public:
 	const AsciiString &getName() const { return getFO()->m_name; }
-	bool hasPublicTimer() const { return getFO()->m_publicTimer; }
-	bool isSharedNSync() const { return getFO()->m_sharedNSync; }
+	__declspec(dllimport) __forceinline bool hasPublicTimer() const { return getFO()->m_publicTimer; }
+	__declspec(dllimport) __forceinline bool isSharedNSync() const { return getFO()->m_sharedNSync; }
 private:
 	const SpecialPowerTemplate *getFO() const { return (const SpecialPowerTemplate *)friend_getFinalOverride(); }
 	AsciiString m_name;

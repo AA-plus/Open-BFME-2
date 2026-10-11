@@ -106,7 +106,7 @@ public:
 	Bool isEmpty() const { return m_data == 0 || m_data->length == 0; }
 	void format(const char *fmt, ...);
 	void toLower();
-	Bool operator==(const char *other) const { return compare(other) == 0; }
+	__declspec(dllimport) __forceinline Bool operator==(const char *other) const { return compare(other) == 0; }
 };
 
 class UnicodeString : public StringBase<unsigned short>
@@ -123,7 +123,7 @@ public:
 		return StringBase<unsigned short>::compare(other);
 	}
 	void translate(const char *text);
-	void trim(void) { StringBase<unsigned short>::trim(); }
+	__declspec(dllimport) __forceinline void trim(void) { StringBase<unsigned short>::trim(); }
 	Bool nextToken(UnicodeString *token, const unsigned short *seps)
 	{
 		return StringBase<unsigned short>::nextToken(token, seps);

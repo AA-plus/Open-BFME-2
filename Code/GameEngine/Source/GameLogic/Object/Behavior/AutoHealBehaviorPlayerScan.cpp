@@ -131,7 +131,7 @@ class Object : public Thing
 {
 public:
 	Bool isEffectivelyDead() const { return (m_privateStatus & 1) != 0; }
-	Bool isOffMap() const { return (m_privateStatus & 8) != 0; }
+	__declspec(dllimport) __forceinline Bool isOffMap() const { return (m_privateStatus & 8) != 0; }
 	ContainModuleInterface *getContain() const { return m_contain; }
 	BodyModuleInterface *getBodyModule() const { return m_body; }
 	AIUpdateInterface *getAIUpdateInterface() const { return m_ai; }

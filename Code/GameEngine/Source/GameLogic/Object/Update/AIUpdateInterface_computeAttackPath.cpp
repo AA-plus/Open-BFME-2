@@ -120,7 +120,7 @@ class Locomotor
 {
 public:
 	Bool isUltraAccurate() const { return (m_flags >> 6) & 1; }
- void setNoSlowDownAsApproachingDest(Bool x) { if(x)m_flags|=16;else m_flags&=~16; }
+ __declspec(dllimport) __forceinline void setNoSlowDownAsApproachingDest(Bool x) { if(x)m_flags|=16;else m_flags&=~16; }
 private:
 	unsigned char m_pad00[0x44];
 	UnsignedInt m_flags; // +0x44
@@ -235,7 +235,7 @@ private:
 class StateMachine
 {
 public:
-	UnsignedInt getCurrentStateID() const { return m_currentState ? m_currentState->getID() : 999999; }
+	__declspec(dllimport) __forceinline UnsignedInt getCurrentStateID() const { return m_currentState ? m_currentState->getID() : 999999; }
 private:
 	unsigned char m_pad00[4];
 	State *m_currentState; // +0x04

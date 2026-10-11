@@ -167,7 +167,7 @@ public:
 	GenericMultiListIterator(GenericMultiListClass *list) { First(list); }
 	void First(GenericMultiListClass *list) { List = list; CurNode = List->Head.Next; }
 	void First(void) { CurNode = List->Head.Next; }
-	void Next(void) { CurNode = CurNode->Next; }
+	__declspec(dllimport) __forceinline void Next(void) { CurNode = CurNode->Next; }
 	bool Is_Done(void) { return (CurNode == &(List->Head)); }
 protected:
 	MultiListObjectClass *Current_Object(void) { return CurNode->Object; }
@@ -203,7 +203,7 @@ class LightClass : public RenderObjClass
 class RefRenderObjListIterator : public GenericMultiListIterator
 {
 public:
-	RefRenderObjListIterator(GenericMultiListClass *list) : GenericMultiListIterator(list) {}
+	__declspec(dllimport) __forceinline RefRenderObjListIterator(GenericMultiListClass *list) : GenericMultiListIterator(list) {}
 	RenderObjClass *Peek_Obj(void) { return ((RenderObjClass *)Current_Object()); }
 };
 

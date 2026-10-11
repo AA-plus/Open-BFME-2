@@ -27,7 +27,7 @@ class BfmeSentenceDeviceLock { public: BfmeSentenceDeviceLock(){W3DRadarResetLoc
 class RefCountClass
 {
 public:
-	void Release_Ref() { m_refs--; if (m_refs == 0) { Delete_This(); } }
+	__declspec(dllimport) __forceinline void Release_Ref() { m_refs--; if (m_refs == 0) { Delete_This(); } }
 	virtual void Delete_This();
 
 protected:

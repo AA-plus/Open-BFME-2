@@ -63,8 +63,8 @@ private:
 class Player
 {
 public:
-    int getPlayerColor() const { return m_color; }
-    int getPlayerNightColor() const { return m_nightColor; }
+    __declspec(dllimport) __forceinline int getPlayerColor() const { return m_color; }
+    __declspec(dllimport) __forceinline int getPlayerNightColor() const { return m_nightColor; }
     Team *getDefaultTeam() const { return m_defaultTeam; }
 private:
     unsigned char m_pad00[0x280];

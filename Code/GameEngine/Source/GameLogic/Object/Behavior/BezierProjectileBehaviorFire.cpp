@@ -148,10 +148,10 @@ public:
 	Coord3D *getAimPosition(Coord3D *out, const Object *proj, const Object *victim, Int flag);	// 0x002CAB3A
 	Real getMinimumAttackRange() const;	// 0x002C92FA
 	Real rva0049CB57() const;		// 0x0049CB57, getUnmodifiedAttackRange
-	Real getWeaponSpeed() const { return m_weaponSpeed; }
-	Real getMinWeaponSpeed() const { return m_minWeaponSpeed; }
+	__declspec(dllimport) __forceinline Real getWeaponSpeed() const { return m_weaponSpeed; }
+	__declspec(dllimport) __forceinline Real getMinWeaponSpeed() const { return m_minWeaponSpeed; }
 	Real getMaxWeaponSpeed() const { return m_maxWeaponSpeed; }
-	Bool isScaleWeaponSpeed() const { return m_scaleWeaponSpeed; }
+	__declspec(dllimport) __forceinline Bool isScaleWeaponSpeed() const { return m_scaleWeaponSpeed; }
 	unsigned char m_pad00[0x68];
 	Real m_weaponSpeed;			// +0x68
 	Real m_minWeaponSpeed;			// +0x6C

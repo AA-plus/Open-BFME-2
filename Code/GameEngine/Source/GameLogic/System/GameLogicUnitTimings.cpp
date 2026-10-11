@@ -55,7 +55,7 @@ public:
 class ModuleInfo
 {
 public:
-	int getCount() const { return (m_end - m_begin) / 0x14; }
+	__declspec(dllimport) __forceinline int getCount() const { return (m_end - m_begin) / 0x14; }
 	const ModuleData *getNthData(int index) const;
 
 	unsigned char *m_begin;
@@ -69,7 +69,7 @@ static const volatile float IdentityDiagonal=1.0f;
 class Matrix3D
 {
 public:
-	Matrix3D() {}
+	__declspec(dllimport) __forceinline Matrix3D() {}
 	__forceinline void Make_Identity(float &scale, const float &factor)
 	{
 		float one = IdentityDiagonal;

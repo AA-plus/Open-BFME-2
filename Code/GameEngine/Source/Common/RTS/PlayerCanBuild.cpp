@@ -85,7 +85,7 @@ class Player
 public:
 	Bool allowedToBuild(const ThingTemplate *tmplate) const;
 	Bool canBuild(const ThingTemplate *tmplate) const;
-	PlayerType getPlayerType() const { return m_playerType; }
+	__declspec(dllimport) __forceinline PlayerType getPlayerType() const { return m_playerType; }
 private:
 	char m_before_type[0x5c];
 	PlayerType m_playerType;				// +0x5C

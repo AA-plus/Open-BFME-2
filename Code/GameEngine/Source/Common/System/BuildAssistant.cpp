@@ -253,7 +253,7 @@ public:
 	GeometryInfo(const GeometryInfo &that);
 	virtual ~GeometryInfo();
 	Real getMajorRadius() const { return m_majorRadius; }
-	Real getBoundingCircleRadius() const { return m_boundingCircleRadius; }
+	__declspec(dllimport) __forceinline Real getBoundingCircleRadius() const { return m_boundingCircleRadius; }
 	Real getBoxMajorRadius() const { return m_boxMajorRadius; }
 	Real getBoxMinorRadius() const { return m_boxMinorRadius; }
 	__forceinline Bool isSingleBox() const { return ((const BfmeThingTemplateShadowSelector *)this)->usePluralShadowName(); }
@@ -292,7 +292,7 @@ public:
 	Bool isEquivalentTo(const ThingTemplate *tt) const;
 	const GeometryInfo &getTemplateGeometryInfo() const { return m_geometryInfo; }
 	__forceinline UnsignedInt isKindOf(KindOfType t) const { return m_kindOf[t >> 5] & (1U << (t & 31)); }
-	UnsignedInt getMaxSimultaneousOfType() const { return m_maxSimultaneousOfType; }
+	__declspec(dllimport) __forceinline UnsignedInt getMaxSimultaneousOfType() const { return m_maxSimultaneousOfType; }
 	Real friend_calcVisionRange() const { return m_visionRange; }
 	UnsignedShort getRefundValue() const { return m_refundValue; }
 	Int rva0033A69A(const Player *player, Int a, Int b) const;
@@ -637,7 +637,7 @@ class Object : public Thing
 public:
 	__forceinline UnsignedInt isKindOf(KindOfType t) const { return m_template->isKindOf(t); }
 	Bool isEffectivelyDead() const { return (m_privateStatus & 1) != 0; }
-	Bool testScriptStatusBit(ObjectScriptStatusBit b) const { return (m_scriptStatus & b) != 0; }
+	__declspec(dllimport) __forceinline Bool testScriptStatusBit(ObjectScriptStatusBit b) const { return (m_scriptStatus & b) != 0; }
 	AIUpdateInterface *getAI() const { return m_ai; }
 	void *rva0028BD17() const;
 	void *rva0028BC58(Int which);
@@ -653,7 +653,7 @@ public:
 	ObjectID get7C() const { return m_7C; }
 	Bool testStatus(ObjectStatusTypes bit) const;
 	void rva0028CDEB(const Rva00346BC0 &mask, Bool set);		// setStatus
-	void setConstructionPercent(Real percent) { m_constructionPercent = percent; }
+	__declspec(dllimport) __forceinline void setConstructionPercent(Real percent) { m_constructionPercent = percent; }
 	ContainModuleInterface *getContain() const { return m_contain; }
 	BehaviorModule **getBehaviorModules() const { return m_behaviors; }
 	const AsciiString *rva00290E67() const;		// the command set name
@@ -753,7 +753,7 @@ public:
 	void onUnitCreated(Object *factory, Object *unit);
 	Bool canBuild(const ThingTemplate *tmplate) const;
 	Bool rva002AB87D(const UpgradeTemplate *upgrade) const;
-	Color getPlayerColor() const { return m_color; }
+	__declspec(dllimport) __forceinline Color getPlayerColor() const { return m_color; }
 	Int getPlayerIndex() const { return m_playerIndex; }
 	void rva002AF614(void *points);
 	ScoreKeeper *getScoreKeeper() { return &m_scoreKeeper; }

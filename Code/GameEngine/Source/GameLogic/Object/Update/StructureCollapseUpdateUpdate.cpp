@@ -189,7 +189,7 @@ public:
 	void teleportTo(const Coord3D *pos, Bool preserve);
 
 	Bool testModelConditionFlag(ModelConditionFlagType mc) const { return rva0006F039(mc); }
-	Real getConstructionPercent() const { return m_constructionPercent; }
+	__declspec(dllimport) __forceinline Real getConstructionPercent() const { return m_constructionPercent; }
 
 	__forceinline void setModelConditionState(ModelConditionFlagType mc)
 	{
@@ -309,7 +309,7 @@ protected:
 	void beginStructureCollapse(const DamageInfo *damageInfo);
 	Real getCollapseHeight() const;
 	void doPhaseStuff(StructureCollapsePhaseType scphase, const Coord3D *target);
-	void doCollapseDoneStuff() { ((Rva004A44B1 *)this)->rva004A44B1(); }
+	__declspec(dllimport) __forceinline void doCollapseDoneStuff() { ((Rva004A44B1 *)this)->rva004A44B1(); }
 
 	const StructureCollapseUpdateModuleData *getStructureCollapseUpdateModuleData() const
 	{

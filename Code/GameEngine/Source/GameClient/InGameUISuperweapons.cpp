@@ -254,7 +254,7 @@ class Player
 {
 public:
 	bool hasAnyRequiredSciences( const ScienceVec &sciences ) const;
-	int getPlayerColor() const { return m_color; }
+	__declspec(dllimport) __forceinline int getPlayerColor() const { return m_color; }
 private:
 	char m_opaque000[0x280];
 	int m_color;							// +0x280

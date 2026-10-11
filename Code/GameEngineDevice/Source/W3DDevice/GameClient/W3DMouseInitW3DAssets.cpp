@@ -128,7 +128,7 @@ inline float __cdecl sinf( float _X ) { return ((float)sin((double)_X)); }
 class Matrix3D
 {
 public:
-	__forceinline explicit Matrix3D( bool init ) { if (init) Make_Identity(); }
+	__declspec(dllimport) __forceinline explicit Matrix3D( bool init ) { if (init) Make_Identity(); }
 
 	__forceinline void Make_Identity( void )
 	{

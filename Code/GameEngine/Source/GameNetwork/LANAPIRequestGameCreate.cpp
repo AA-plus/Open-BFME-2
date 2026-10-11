@@ -113,7 +113,7 @@ public:
 	virtual void reset( void );
 	void enterGame( void );
 	void setMapForwarder( AsciiString mapName );
-	Int getSeed( void ) const { return m_seed; }
+	__declspec(dllimport) __forceinline Int getSeed( void ) const { return m_seed; }
 
 protected:
 	unsigned char m_pre50[0x50 - 4];

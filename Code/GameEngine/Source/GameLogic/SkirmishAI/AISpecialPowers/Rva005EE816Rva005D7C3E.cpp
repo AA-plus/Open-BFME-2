@@ -74,7 +74,7 @@ struct Coord3D
 struct Rva005D75BEMask
 {
 	Rva005D75BEMask() { memset(this, 0, sizeof(*this)); }
-	void set(int bit) { m_bits[bit >> 5] |= 1u << (bit & 31); }
+	__declspec(dllimport) __forceinline void set(int bit) { m_bits[bit >> 5] |= 1u << (bit & 31); }
 	unsigned int m_bits[7];
 };
 

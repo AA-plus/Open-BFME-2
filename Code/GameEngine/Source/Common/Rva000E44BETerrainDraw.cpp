@@ -7,7 +7,7 @@ class TextureBaseClass {public:void Release_Ref();};
 template<class T> class RefCountPtr {
 public:
  RefCountPtr(const RefCountPtr&);
- RefCountPtr(T*p):pointer(p){if(p)++*reinterpret_cast<unsigned short*>(reinterpret_cast<char*>(p)+4);}
+ __declspec(dllimport) __forceinline RefCountPtr(T*p):pointer(p){if(p)++*reinterpret_cast<unsigned short*>(reinterpret_cast<char*>(p)+4);}
  ~RefCountPtr(){if(pointer)reinterpret_cast<TextureBaseClass*>(pointer)->Release_Ref();}
  T *Peek()const{return pointer;}
 private:T *pointer;

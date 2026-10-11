@@ -347,7 +347,7 @@ namespace _STL {
 template <class T, class A> class _Vector_base {
 public:
 	_Vector_base(const A &a);	// 0x00211E58
-	~_Vector_base() { if (_M_start) free(_M_start); }
+	__declspec(dllimport) __forceinline ~_Vector_base() { if (_M_start) free(_M_start); }
 	T *_M_start;
 	T *_M_finish;
 	T *_M_end_of_storage;

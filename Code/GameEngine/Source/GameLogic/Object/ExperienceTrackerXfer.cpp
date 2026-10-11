@@ -185,7 +185,7 @@ public:
 	virtual void v2() = 0;
 	// ?isTrainable@ExperienceTracker@@QBE_NXZ, the rowed byte getter 0x0039ADAF
 	// (pinned), inlined by its callers here: the template's byte at +0x5E7.
-	bool isTrainable() const { return *((const unsigned char *)m_04 + 0x5E7) != 0; }
+	__declspec(dllimport) __forceinline bool isTrainable() const { return *((const unsigned char *)m_04 + 0x5E7) != 0; }
 protected:
 	virtual void xfer(Xfer *xfer);
 	virtual void rvaSlot4( const Overridable *level, bool notify );	// slot 4 (+0x10)

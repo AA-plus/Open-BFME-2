@@ -26,7 +26,7 @@ struct ModuleNugget { char unknown00[8]; const ModuleData *data; char unknown0C[
 class ModuleInfo {
 public: const ModuleData *getNthData(int)const;
  ModuleNugget *begin,*end,*capacity;
- int getCount()const {return end-begin;}
+ __declspec(dllimport) __forceinline int getCount()const {return end-begin;}
 };
 struct RevivalThingView {char unknown00[0x2E4]; ModuleInfo modules;};
 class ThingTemplate;

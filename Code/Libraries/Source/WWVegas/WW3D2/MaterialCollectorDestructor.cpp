@@ -65,13 +65,13 @@ private:
 class VertexMaterialClass {
 public:
     virtual void Delete_This();
-    void Release_Ref() { --m_refs; if (m_refs == 0) Delete_This(); }
+    __declspec(dllimport) __forceinline void Release_Ref() { --m_refs; if (m_refs == 0) Delete_This(); }
 private:
     unsigned int m_refs;
 };
 class TextureClass {
 public:
-    void Add_Ref() {
+    __declspec(dllimport) __forceinline void Add_Ref() {
         ++*reinterpret_cast<unsigned short *>(reinterpret_cast<char *>(this) + 4);
     }
     void Release_Ref();

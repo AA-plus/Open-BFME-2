@@ -273,7 +273,7 @@ private:
 class Object : public Thing
 {
 public:
-	PathfindLayerEnum getLayer() const { return (PathfindLayerEnum)rva0028B511(); }
+	__declspec(dllimport) __forceinline PathfindLayerEnum getLayer() const { return (PathfindLayerEnum)rva0028B511(); }
 	void setLayer(PathfindLayerEnum layer) { rva0028B4CE(layer); }
 	AIUpdateInterface *getAIUpdateInterface() { return m_ai; }
 

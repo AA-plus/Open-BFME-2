@@ -27,7 +27,7 @@ extern "C" const void *const vtbl_00C3FF98[];  // ??_7WallHubBehaviorModuleData@
 class UpdateModuleData
 {
 public:
-	UpdateModuleData() {}
+	__declspec(dllimport) __forceinline UpdateModuleData() {}
 	~UpdateModuleData();
 
 private:

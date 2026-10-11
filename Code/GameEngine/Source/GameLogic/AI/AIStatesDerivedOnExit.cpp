@@ -117,8 +117,8 @@ public:
 		ALLOW_INVALID_POSITION = 1,
 		PRECISE_Z_POS = 3
 	};
-	void setUsePreciseZPos(bool u) { setFlag(PRECISE_Z_POS, u); }
-	void setAllowInvalidPosition(bool allow) { setFlag(ALLOW_INVALID_POSITION, allow); }
+	__declspec(dllimport) __forceinline void setUsePreciseZPos(bool u) { setFlag(PRECISE_Z_POS, u); }
+	__declspec(dllimport) __forceinline void setAllowInvalidPosition(bool allow) { setFlag(ALLOW_INVALID_POSITION, allow); }
 	float getCloseEnoughDist() const { return m_closeEnoughDist; }
 	// Zero Hour's startMove; empty in BFME 2 and folded onto the shared RET.
 	void rva000B3FD0();
@@ -228,7 +228,7 @@ public:
 	enum { MAX_LINKS = 12 };
 	UnsignedInt getID() const { return m_id; }
 	const Coord3D *getLocation() const { return &m_location; }
-	Int getNumLinks() const { return m_numLinks; }
+	__declspec(dllimport) __forceinline Int getNumLinks() const { return m_numLinks; }
 	Waypoint *getLink(Int ndx) const { return m_links[ndx]; }
 private:
 	unsigned char m_pad00[4];

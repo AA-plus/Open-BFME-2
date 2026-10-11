@@ -83,8 +83,8 @@ public:
 	Bool hasAnyObjects(Bool includeReserved) const;
 	Bool rva002AB312() const;		// ZH hasAnyUnits
 	Bool rva002AB3FA() const;		// ZH hasAnyBuildFacility
-	Bool hasAnyUnits() const { return rva002AB312(); }
-	Bool hasAnyBuildFacility() const { return rva002AB3FA(); }
+	__declspec(dllimport) __forceinline Bool hasAnyUnits() const { return rva002AB312(); }
+	__declspec(dllimport) __forceinline Bool hasAnyBuildFacility() const { return rva002AB3FA(); }
 	Bool isSkirmishAIPlayer();
 	void onStructureUndone(Object *structure);	// 0x0047A69C, empty in BFME 2
 	Int getMpStartIndex() const { return m_mpStartIndex; }
@@ -202,8 +202,8 @@ public:
 	// registers and block-copies a filled temporary into place.
 	void setLocation(Real x, Real y, Real z) { Coord3D loc; loc.x = x; loc.y = y; loc.z = z; m_location = loc; }
 	void setInitiallyBuilt(Bool b) { m_isInitiallyBuilt = b; }
-	Real getAngle() const { return m_angle; }
-	void setAngle(Real angle) { m_angle = angle; }
+	__declspec(dllimport) __forceinline Real getAngle() const { return m_angle; }
+	__declspec(dllimport) __forceinline void setAngle(Real angle) { m_angle = angle; }
 	BuildListInfo *getNext() const { return m_next; }
 private:
 	unsigned char m_pad00[0x0C];
@@ -248,7 +248,7 @@ public:
 	Bool QuickDoesPathExist(Object *obj, const Coord3D *from, const Coord3D *to, Int flags);
 	Int FindBrokenBridge(Rva002E99F9Arg1 *locoSet, const Coord3D * volatile from, const Coord3D *to);
 	void RemoveObjectFromPathfindMap(Object *obj);	// 0x002E718A
-	void removeObjectFromPathfindMap(Object *obj) { RemoveObjectFromPathfindMap(obj); }
+	__declspec(dllimport) __forceinline void removeObjectFromPathfindMap(Object *obj) { RemoveObjectFromPathfindMap(obj); }
 };
 
 class AIData

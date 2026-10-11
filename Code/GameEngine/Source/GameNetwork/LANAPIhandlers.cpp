@@ -174,8 +174,8 @@ UnsignedInt ComputeCRC( const UnsignedByte *buf, UnsignedInt len, UnsignedInt cr
 class CRC
 {
 public:
-	CRC( void ) { crc = 0; }
-	__forceinline void computeCRC( const void *buf, Int len ) { crc = ComputeCRC( (const UnsignedByte *)buf, len, crc ); }
+	__declspec(dllimport) __forceinline CRC( void ) { crc = 0; }
+	__declspec(dllimport) __forceinline void computeCRC( const void *buf, Int len ) { crc = ComputeCRC( (const UnsignedByte *)buf, len, crc ); }
 	UnsignedInt get( void ) { return crc; }
 
 private:
@@ -271,7 +271,7 @@ public:
 	AsciiString getMap( void ) const;
 	GameSlot *getSlot( Int slotNum );
 	void enterGame( void );
-	Bool isGameInProgress( void ) const { return m_inProgress; }
+	__declspec(dllimport) __forceinline Bool isGameInProgress( void ) const { return m_inProgress; }
 	void setGameInProgress( Bool inProgress ) { m_inProgress = inProgress; }
 
 private:

@@ -155,7 +155,7 @@ public:
 class ModuleInfo
 {
 public:
-	Int getCount() const { return (Int)(m_info.end - m_info.begin); }
+	__declspec(dllimport) __forceinline Int getCount() const { return (Int)(m_info.end - m_info.begin); }
 	const ModuleData *getNthData(Int i) const;
 private:
 	struct Nugget

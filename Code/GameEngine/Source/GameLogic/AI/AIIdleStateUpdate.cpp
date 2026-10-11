@@ -193,7 +193,7 @@ public:
 	const Coord3D *getPosition() const { return &m_position; }
 	AIUpdateInterface *getAI() { return m_ai; }
 	Object *getContainedBy() { return m_containedBy; }
-	Bool isDisabledByType(DisabledType type) const { return (m_disabledMask & (1U << type)) != 0; }
+	__declspec(dllimport) __forceinline Bool isDisabledByType(DisabledType type) const { return (m_disabledMask & (1U << type)) != 0; }
 	Weapon *getCurrentWeapon(WeaponSlotType *wslot = 0);
 	Bool testStatus(ObjectStatusTypes bit) const;
 protected:
@@ -235,7 +235,7 @@ public:
 	virtual void slot07();
 	virtual StateReturnType setState(int newStateID); // slot 8
 	Object *getOwner() const { return m_owner; }
-	Bool isLocked() const { return m_locked; }
+	__declspec(dllimport) __forceinline Bool isLocked() const { return m_locked; }
 	Bool hasState(int id);
 private:
 	unsigned char m_pad04[0x14 - 0x04];

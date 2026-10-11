@@ -30,7 +30,7 @@ public:T*first,*last,*end;
 vector(unsigned int,const T&,const A&);
 A get_allocator()const;
 void swap(vector&);
-~vector(){if(first)free(first);}
+__declspec(dllimport) __forceinline ~vector(){if(first)free(first);}
 unsigned int size()const{return last-first;}
 T&operator[](unsigned int i){return first[i];}
 };

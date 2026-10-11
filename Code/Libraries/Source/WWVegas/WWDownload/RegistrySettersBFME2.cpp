@@ -15,7 +15,7 @@ public:
 };
 template<class CharT,class Alloc> class _String_base {
 public:
-    _String_base(const Alloc &a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0) {}
+    __declspec(dllimport) __forceinline _String_base(const Alloc &a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0) {}
     ~_String_base() { if(_M_start) free(_M_start); }
     CharT *_M_start,*_M_finish;
     _STLP_alloc_proxy<CharT *,CharT,Alloc> _M_end_of_storage;

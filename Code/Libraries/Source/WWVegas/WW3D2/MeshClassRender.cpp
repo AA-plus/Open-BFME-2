@@ -52,7 +52,7 @@ public:
 		return ptr;
 	}
 
-	RefCountPtr(DummyPtrType *) : Referent(0) {}
+	__declspec(dllimport) __forceinline RefCountPtr(DummyPtrType *) : Referent(0) {}
 	RefCountPtr(const RefCountPtr &rhs) : Referent(rhs.Referent)
 	{
 		if (Referent) {
@@ -85,8 +85,8 @@ class RefCountClass
 {
 public:
 	virtual void Delete_This(void);
-	void Add_Ref(void) { NumRefs++; }
-	void Release_Ref(void) { NumRefs--; if (NumRefs == 0) Delete_This(); }
+	__declspec(dllimport) __forceinline void Add_Ref(void) { NumRefs++; }
+	__declspec(dllimport) __forceinline void Release_Ref(void) { NumRefs--; if (NumRefs == 0) Delete_This(); }
 
 protected:
 	int NumRefs;

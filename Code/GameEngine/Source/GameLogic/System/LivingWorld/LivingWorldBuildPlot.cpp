@@ -14,7 +14,7 @@ class Xfer;
 class __declspec(novtable) Snapshot
 {
 public:
-    Snapshot() {}
+    __declspec(dllimport) __forceinline Snapshot() {}
     virtual ~Snapshot();
 protected:
     virtual void loadPostProcess() = 0;

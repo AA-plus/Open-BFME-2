@@ -37,8 +37,8 @@ class Upgrade
 public:
 	Upgrade *friend_getNext() const { return m_next; }
 	Upgrade *friend_getPrev() const { return m_prev; }
-	void friend_setNext(Upgrade *next) { m_next = next; }
-	void friend_setPrev(Upgrade *prev) { m_prev = prev; }
+	__declspec(dllimport) __forceinline void friend_setNext(Upgrade *next) { m_next = next; }
+	__declspec(dllimport) __forceinline void friend_setPrev(Upgrade *prev) { m_prev = prev; }
 	Int getStatus() const { return m_status; }
 
 private:

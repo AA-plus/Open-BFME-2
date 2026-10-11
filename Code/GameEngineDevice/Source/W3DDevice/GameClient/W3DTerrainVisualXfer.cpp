@@ -148,8 +148,8 @@ public:
 class WorldHeightMap
 {
 public:
-	Int getXExtent( void ) { return m_width; }
-	Int getYExtent( void ) { return m_height; }
+	__declspec(dllimport) __forceinline Int getXExtent( void ) { return m_width; }
+	__declspec(dllimport) __forceinline Int getYExtent( void ) { return m_height; }
 	UnsignedByte *getDataPtr( void ) { return m_data; }
 private:
 	char m_unrecovered00[ 0x08 ];

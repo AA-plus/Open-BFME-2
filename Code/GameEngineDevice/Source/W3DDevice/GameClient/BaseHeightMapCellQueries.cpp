@@ -39,7 +39,7 @@ public:
 	bool rva000AE1DC(int xIndex, int yIndex) const;
 	int getXExtent() const { return m_width; }
 	int getYExtent() const { return m_height; }
-	int getBorderSizeInline() const { return m_borderSize; }
+	__declspec(dllimport) __forceinline int getBorderSizeInline() const { return m_borderSize; }
 	unsigned short *getDataPtr() const { return m_data; }
 private:
 	char m_unknown00[8];

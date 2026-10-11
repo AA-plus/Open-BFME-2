@@ -382,8 +382,8 @@ public:
 	virtual Bool isDoingGroundMovement() const; // slot 137 (+0x224)
 	Object *getObject() const { return m_object; }
 	Path *getPath() { return m_path; }
-	Real getPathExtraDistance() const { return m_pathExtraDistance; }
-	Bool isAiInDeadState() const { return m_isAiDead; }
+	__declspec(dllimport) __forceinline Real getPathExtraDistance() const { return m_pathExtraDistance; }
+	__declspec(dllimport) __forceinline Bool isAiInDeadState() const { return m_isAiDead; }
 	void chooseGoodLocomotorFromCurrentSet();
 	void rva00262D2D();
 	void rva0026717B();

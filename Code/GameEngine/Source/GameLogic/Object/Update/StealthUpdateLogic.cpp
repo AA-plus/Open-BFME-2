@@ -77,14 +77,14 @@ class Object;
 class Player
 {
 public:
-	Bool isPlayerActive() const { return ((BfmeMemberRV *)this)->bfmeAskRV(); }
+	__declspec(dllimport) __forceinline Bool isPlayerActive() const { return ((BfmeMemberRV *)this)->bfmeAskRV(); }
 	Int getPlayerIndex() const { return m_playerIndex; }
 	Team *getDefaultTeam() const { return m_defaultTeam; }
 	Relationship getRelationship(const Team *that) const;
 	Relationship getRelationship(const Object *that) const;
 	Int iterateObjects(Int (*func)(Object *, void *), void *userData) const;
-	Int getPlayerColor() const { return m_color; }
-	Int getPlayerNightColor() const { return m_nightColor; }
+	__declspec(dllimport) __forceinline Int getPlayerColor() const { return m_color; }
+	__declspec(dllimport) __forceinline Int getPlayerNightColor() const { return m_nightColor; }
 private:
 	char m_pad00[0x54];
 	Int m_playerIndex; // +0x54
@@ -131,7 +131,7 @@ public:
 class Drawable : public Thing
 {
 public:
-	Bool isSelected() const { return m_selected != 0; }
+	__declspec(dllimport) __forceinline Bool isSelected() const { return m_selected != 0; }
 	void setPosition(const Coord3D *pos);
 	void updateDrawable();
 	void setIndicatorColor(Int color);
@@ -226,7 +226,7 @@ public:
 class Weapon
 {
 public:
-	UnsignedInt getLastShotFrame() const { return m_lastFireFrame; }
+	__declspec(dllimport) __forceinline UnsignedInt getLastShotFrame() const { return m_lastFireFrame; }
 private:
 	char m_pad00[0x2C];
 	UnsignedInt m_lastFireFrame; // +0x2C
@@ -258,7 +258,7 @@ enum KindOfType
 class ThingTemplate
 {
 public:
-	__forceinline Bool isKindOf(KindOfType t) const { return (m_kindof[t >> 3] & (1 << (t & 7))) != 0; }
+	__declspec(dllimport) __forceinline Bool isKindOf(KindOfType t) const { return (m_kindof[t >> 3] & (1 << (t & 7))) != 0; }
 private:
 	char m_pad00[0x108];
 	unsigned char m_kindof[32]; // +0x108
@@ -765,7 +765,7 @@ public:
 	Bool rva00290D2B(const UpgradeTemplate *upgrade) const;
 	BodyModuleInterface *getBodyModule() const { return m_body; }
 	Weapon *getWeaponInWeaponSlot(WeaponSlotType wslot) const { return m_weaponSet.getWeaponInWeaponSlot(wslot); }
-	Bool testScriptStatusBit(ObjectScriptStatusBit bit) const { return (m_scriptStatus & bit) != 0; }
+	__declspec(dllimport) __forceinline Bool testScriptStatusBit(ObjectScriptStatusBit bit) const { return (m_scriptStatus & bit) != 0; }
 	ObjectID getID() const { return m_id; }
 	AIUpdateInterface *getAI() const { return m_ai; }
 	const ModelConditionFlags &getModelConditionFlags() const { return m_modelConditionFlags; }
@@ -924,7 +924,7 @@ public:
 	UpdateSleepTime rva00374FD5();
 	Bool canDisguise() const { return getStealthUpdateModuleData()->m_teamDisguised; }
 	Bool isDisguised() const { return m_disguiseAsTemplate != NULL; }
-	Int getDisguisedPlayerIndex() const { return m_disguiseAsPlayerIndex; }
+	__declspec(dllimport) __forceinline Int getDisguisedPlayerIndex() const { return m_disguiseAsPlayerIndex; }
 	const ThingTemplate *getDisguisedTemplate() { return m_disguiseAsTemplate; }
 protected:
 	UpdateSleepTime calcSleepTime() const;

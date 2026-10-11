@@ -112,7 +112,7 @@ public:
 	AIStateMachine *getStateMachine() const { return m_stateMachine; }
 	const Coord3D *friend_getGoalPathPosition(Int index) const { return m_stateMachine->getGoalPathPosition(index); }
 	void friend_setCurrentGoalPathIndex(Int index) { m_currentGoalPathIndex = index; }
-	void setCanPathThroughUnits(Bool b) { m_canPathThroughUnits = b; }
+	__declspec(dllimport) __forceinline void setCanPathThroughUnits(Bool b) { m_canPathThroughUnits = b; }
 	Locomotor *getCurLocomotor() { return m_curLocomotor; }
 	void setPathExtraDistance(Real dist);
 private:
@@ -182,7 +182,7 @@ public:
 	virtual StateReturnType onEnter();
 	virtual void onExit(StateExitType status);
 	virtual StateReturnType update();
-	StateID getID() const { return m_ID; }
+	__declspec(dllimport) __forceinline StateID getID() const { return m_ID; }
 protected:
 	StateMachine *getMachine() const { return m_machine; }
 	Object *getMachineOwner() const { return m_machine->getOwner(); }

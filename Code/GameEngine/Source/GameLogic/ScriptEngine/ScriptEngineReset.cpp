@@ -355,7 +355,7 @@ public:
 class SidesList
 {
 public:
-	Int getNumSides() { return m_numSides; }
+	__declspec(dllimport) __forceinline Int getNumSides() { return m_numSides; }
 	SidesInfo *getSideInfo(Int side);
 
 private:

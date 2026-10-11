@@ -5,8 +5,8 @@ class RefCountClass
 public:
 	virtual void Delete();
 	int m_refCount;
-	void Add_Ref() { ++m_refCount; }
-	void Release_Ref() { if (--m_refCount == 0) Delete(); }
+	__declspec(dllimport) __forceinline void Add_Ref() { ++m_refCount; }
+	__declspec(dllimport) __forceinline void Release_Ref() { if (--m_refCount == 0) Delete(); }
 	int Num_Refs() { return m_refCount; }
 };
 

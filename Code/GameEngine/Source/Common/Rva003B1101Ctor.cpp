@@ -69,7 +69,7 @@ template <unsigned _Bits>
 class bitset
 {
 public:
-	bitset() { reset(); }
+	__declspec(dllimport) __forceinline bitset() { reset(); }
 	bitset<_Bits> &reset();
 private:
 	unsigned long m_words[(_Bits + 31) / 32];

@@ -214,10 +214,10 @@ public:
 	Object *getGoalObject();
 	ObjectID getGoalObjectID() const { return m_goalObjectID; }
 	StateID getCurrentStateID() const { return m_currentState ? m_currentState->getID() : INVALID_STATE_ID; }
-	Bool isInIdleState() const { return m_currentState ? m_currentState->slot08() : true; }
+	__declspec(dllimport) __forceinline Bool isInIdleState() const { return m_currentState ? m_currentState->slot08() : true; }
 	Bool getCurrentFlag1C() const { return m_currentState ? m_currentState->getFlag1C() : true; }
 	void lock() { m_locked = true; }
-	void unlock() { m_locked = false; }
+	__declspec(dllimport) __forceinline void unlock() { m_locked = false; }
 private:
 	State *m_currentState; // +0x04
 	unsigned char m_pad08[0x14 - 0x08];

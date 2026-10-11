@@ -51,7 +51,7 @@ template <> void _STLP_alloc_proxy<BfmeE16*, BfmeE16, allocator<BfmeE16> >::deal
 class UpdateModuleData
 {
 public:
-	UpdateModuleData() {}
+	__declspec(dllimport) __forceinline UpdateModuleData() {}
 	~UpdateModuleData();
 
 private:

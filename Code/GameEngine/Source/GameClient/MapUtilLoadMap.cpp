@@ -102,7 +102,7 @@ private:
 class WaypointMap : public Rva0029B63A
 {
 public:
-	WaypointMap() : m_0C(0) {}
+	__declspec(dllimport) __forceinline WaypointMap() : m_0C(0) {}
 private:
 	Int m_0C;					// +0x0C
 };

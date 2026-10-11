@@ -34,9 +34,9 @@ class Upgrade
 public:
 	Upgrade(const UpgradeTemplate *upgradeTemplate);
 	Upgrade *friend_getNext() const { return m_next; }
-	void friend_setNext(Upgrade *next) { m_next = next; }
-	void friend_setPrev(Upgrade *prev) { m_prev = prev; }
-	void setStatus(UpgradeStatusType status) { m_status = status; }
+	__declspec(dllimport) __forceinline void friend_setNext(Upgrade *next) { m_next = next; }
+	__declspec(dllimport) __forceinline void friend_setPrev(Upgrade *prev) { m_prev = prev; }
+	__declspec(dllimport) __forceinline void setStatus(UpgradeStatusType status) { m_status = status; }
 
 private:
 	void *m_vtbl;

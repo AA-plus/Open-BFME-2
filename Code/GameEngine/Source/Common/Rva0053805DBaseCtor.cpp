@@ -59,7 +59,7 @@ private:
 class __declspec(novtable) Rva0007DF07
 {
 public:
-	Rva0007DF07() : count(0) {}
+	__declspec(dllimport) __forceinline Rva0007DF07() : count(0) {}
 	virtual ~Rva0007DF07();
 private:
 	unsigned int count;		// +0x04

@@ -38,7 +38,7 @@ private:
 class Parameter
 {
 public:
-    Int getInt(void) const { return m_integer; }
+    __declspec(dllimport) __forceinline Int getInt(void) const { return m_integer; }
     const AsciiString &getString(void) const { return m_string; }
 
 private:

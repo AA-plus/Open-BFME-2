@@ -78,7 +78,7 @@ public:
 class __declspec(novtable) RefCountClass
 {
 public:
-	RefCountClass() : NumRefs(1) {}
+	__declspec(dllimport) __forceinline RefCountClass() : NumRefs(1) {}
 	virtual void Delete_This(void);
 	void Add_Ref(void) { NumRefs++; }
 	void Release_Ref(void) { NumRefs--; if (NumRefs == 0) Delete_This(); }

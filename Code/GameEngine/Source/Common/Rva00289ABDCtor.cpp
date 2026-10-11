@@ -110,7 +110,7 @@ extern const float g_Va00BBB8D8;
 class __declspec(novtable) BFME2NativeNetwork
 {
 public:
-	__forceinline BFME2NativeNetwork() { baseConstruct(); }
+	__declspec(dllimport) __forceinline BFME2NativeNetwork() { baseConstruct(); }
 	virtual ~BFME2NativeNetwork() { _ReadWriteBarrier(); }
 	void baseConstruct();
 private:

@@ -211,7 +211,7 @@ public:
 	void setBfme14( Int startPos ) { m_bfme14 = startPos; }
 	Int getPlayerTemplate( void ) const { return m_playerTemplate; }
 	Int getTeamNumber( void ) const { return m_teamNumber; }
-	void setTeamNumber( Int teamNumber ) { m_teamNumber = teamNumber; }
+	__declspec(dllimport) __forceinline void setTeamNumber( Int teamNumber ) { m_teamNumber = teamNumber; }
 	void setHandicap( Int handicap ) { m_handicap = handicap; }
 	void setNATBehavior( Int behavior ) { m_NATBehavior = behavior; }
 	const UnicodeString &getName( void ) const { return m_name; }
@@ -305,7 +305,7 @@ public:
 	AsciiString getMap( void ) const;
 	void setMapForwarder( AsciiString mapName );
 
-	Bool isGameInProgress( void ) const { return m_inProgress; }
+	__declspec(dllimport) __forceinline Bool isGameInProgress( void ) const { return m_inProgress; }
 	UnsignedInt getSeed( void ) const { return m_seed; }
 
 protected:

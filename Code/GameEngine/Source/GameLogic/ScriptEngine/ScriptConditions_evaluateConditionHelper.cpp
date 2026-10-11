@@ -14,7 +14,7 @@
 class Parameter
 {
 public:
-	int getInt() const { return m_int; }
+	__declspec(dllimport) __forceinline int getInt() const { return m_int; }
 	float getReal() const { return m_real; }
 	const AsciiString *getString() const { return &m_string; }
 

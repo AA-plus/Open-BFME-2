@@ -222,7 +222,7 @@ public:
 class ThingTemplate
 {
 public:
-	__forceinline UnsignedInt isKindOf(int k) const { return m_kindOf[k >> 5] & (1U << (k & 31)); }
+	__declspec(dllimport) __forceinline UnsignedInt isKindOf(int k) const { return m_kindOf[k >> 5] & (1U << (k & 31)); }
 
 private:
 	char m_unknown000[0x10C];
@@ -274,7 +274,7 @@ public:
 	bool addAttributeModifierToPool(const AsciiString &name, int duration);
 	const Coord3D *getPosition() const { return &m_pos; }
 	ObjectID getID() const { return m_id; }
-	Real getBoundingRadius() const { return m_boundingRadius; }
+	__declspec(dllimport) __forceinline Real getBoundingRadius() const { return m_boundingRadius; }
 	Bool testStatus(int bit) const { return (m_status >> bit) & 1; }
 	Bool isEffectivelyDead() const { return (m_438 & 1) != 0; }
 	ContainModuleInterface *getContain() const { return m_contain; }

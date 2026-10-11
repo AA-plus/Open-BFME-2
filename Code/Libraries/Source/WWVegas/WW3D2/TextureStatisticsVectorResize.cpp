@@ -33,7 +33,7 @@ template<class T>
 class RefCountPtr
 {
 public:
-	RefCountPtr() : Referent(0) {}
+	__declspec(dllimport) __forceinline RefCountPtr() : Referent(0) {}
 	RefCountPtr(RefCountPtr const &other) : Referent(other.Referent)
 	{
 		if (Referent != 0)

@@ -124,8 +124,8 @@ typedef unsigned int UnsignedInt;
 class Script
 {
 public:
-	Bool isActive( void ) const { return m_isActive; }
-	void setActive( Bool active ) { m_isActive = active; }
+	__declspec(dllimport) __forceinline Bool isActive( void ) const { return m_isActive; }
+	__declspec(dllimport) __forceinline void setActive( Bool active ) { m_isActive = active; }
 protected:
 	virtual void v00();
 	virtual void v01();

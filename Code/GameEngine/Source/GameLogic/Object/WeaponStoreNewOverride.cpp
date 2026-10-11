@@ -39,7 +39,7 @@ class INI
 public:
     const char *getNextToken(const char *seps = 0);
     void initFromINI(void *object, const FieldParse *fields);
-    INILoadType getLoadType() const { return m_loadType; }
+    __declspec(dllimport) __forceinline INILoadType getLoadType() const { return m_loadType; }
 private:
     unsigned char m_pad00[8];
     INILoadType m_loadType;

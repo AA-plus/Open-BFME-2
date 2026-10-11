@@ -332,7 +332,7 @@ public:
 	void setTurretTargetPosition(WhichTurretType tur, const Coord3D *pos);
 	Bool isQuickPathAvailable(const Coord3D *destination) const;
 	Real getTurretTurnRate(WhichTurretType tur) const;
-	Real getCurLocomotorSpeed() const { return ((const Rva002627E8 *)this)->rva002627E8(); }
+	__declspec(dllimport) __forceinline Real getCurLocomotorSpeed() const { return ((const Rva002627E8 *)this)->rva002627E8(); }
 	void setCurrentVictim(const Object *victim);
 	Bool computeQuickPath(const Coord3D *destination);
 	Object *checkForCrateToPickup();

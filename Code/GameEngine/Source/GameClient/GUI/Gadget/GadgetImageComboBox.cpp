@@ -220,7 +220,7 @@ extern AudioManager *TheAudio;
 class Keyboard
 {
 public:
-	Int getModifierFlags() { return m_modifiers; }
+	__declspec(dllimport) __forceinline Int getModifierFlags() { return m_modifiers; }
 
 	unsigned char m_pad00[0xC];
 	Int m_modifiers;

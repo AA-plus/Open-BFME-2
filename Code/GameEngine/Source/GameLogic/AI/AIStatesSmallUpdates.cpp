@@ -194,7 +194,7 @@ public:
 	virtual void rva0033FF05Slot136() = 0;
 	void setCompletedWaypoint(const Waypoint *wp);
 	Locomotor *getCurLocomotor() { return m_curLocomotor; }
-	void setCanPathThroughUnits(Bool b) { m_canPathThroughUnits = b; }
+	__declspec(dllimport) __forceinline void setCanPathThroughUnits(Bool b) { m_canPathThroughUnits = b; }
 	RadarObject *rva002630F5();
 	void setPathFromWaypoint(const Waypoint *wp, const Coord2D *offset);
 	void setDesiredSpeed(Real speed);

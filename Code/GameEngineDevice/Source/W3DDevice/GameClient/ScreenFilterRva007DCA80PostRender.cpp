@@ -169,7 +169,7 @@ extern bool g_Va00DB5B08;
 class WWMath
 {
 public:
-	static __forceinline float Floor(float val) { return (float)floor(val); }
+	static __declspec(dllimport) __forceinline __forceinline float Floor(float val) { return (float)floor(val); }
 	static __forceinline long Float_To_Long(float f)
 	{
 		long retval;

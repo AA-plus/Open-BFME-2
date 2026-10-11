@@ -27,7 +27,7 @@ enum KindOfType
 class ThingTemplate
 {
 public:
-	__forceinline bool isKindOf(KindOfType t) const { return (m_kindOf[t >> 3] & (1 << (t & 7))) != 0; }
+	__declspec(dllimport) __forceinline bool isKindOf(KindOfType t) const { return (m_kindOf[t >> 3] & (1 << (t & 7))) != 0; }
 
 private:
 	unsigned char m_pad000[0x108];

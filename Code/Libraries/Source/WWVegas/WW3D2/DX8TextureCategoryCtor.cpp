@@ -43,7 +43,7 @@ public:
 class MultiListObjectClass
 {
 public:
-	MultiListObjectClass() : ListNode(0) {}
+	__declspec(dllimport) __forceinline MultiListObjectClass() : ListNode(0) {}
 	virtual ~MultiListObjectClass();
 private:
 	MultiListNodeClass *ListNode;

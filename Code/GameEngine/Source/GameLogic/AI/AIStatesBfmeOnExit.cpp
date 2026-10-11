@@ -462,7 +462,7 @@ public:
 	void ignoreObstacle(const Object *obj);
 	Object *getCurrentVictim() const;
 	unsigned int getMoodMatrixActionAdjustment(MoodMatrixAction action) const;
-	void setCanPathThroughUnits(Bool b) { m_canPathThroughUnits = b; }
+	__declspec(dllimport) __forceinline void setCanPathThroughUnits(Bool b) { m_canPathThroughUnits = b; }
 	Locomotor *getCurLocomotor() { return m_curLocomotor; }
 	void friend_setCurrentGoalPathIndex(int index) { m_currentGoalPathIndex = index; }
 	void setDesiredSpeed(Real speed);
@@ -535,7 +535,7 @@ struct Coord3D
 {
 	Real x, y, z;
 	Real Normalize();
-	void scale(Real scale) { x *= scale; y *= scale; z *= scale; }
+	__declspec(dllimport) __forceinline void scale(Real scale) { x *= scale; y *= scale; z *= scale; }
 	void sub(const Coord3D *a) { x -= a->x; y -= a->y; z -= a->z; }
 	void add(const Coord3D *a) { x += a->x; y += a->y; z += a->z; }
 	Real length() const;

@@ -197,7 +197,7 @@ public:
 	virtual StateReturnType initDefaultState();
 	virtual StateReturnType setState(StateID newStateID); // vslot 8
 	void defineState(StateID id, struct State *state, StateID successID, StateID failureID, const StateConditionInfo *conditions = 0);
-	StateID getCurrentStateID() const { return m_currentState ? m_currentState->m_ID : INVALID_STATE_ID; }
+	__declspec(dllimport) __forceinline StateID getCurrentStateID() const { return m_currentState ? m_currentState->m_ID : INVALID_STATE_ID; }
 	Object *getOwner() const { return m_owner; }
 protected:
 	State *m_currentState; // +0x04
@@ -467,7 +467,7 @@ public:
 	void setStatus(ObjectStatusTypes bit, Bool set);
 	void rva0028CFB2(const int *clear, const int *set);
 	void rva00290758(Int a1, Int a2);
-	void setConstructionPercent(Real percent) { m_constructionPercent = percent; }
+	__declspec(dllimport) __forceinline void setConstructionPercent(Real percent) { m_constructionPercent = percent; }
 	void rva0028AE6D();
 	__forceinline void clearModelConditionState(ModelConditionFlagType mc)
 	{
@@ -525,7 +525,7 @@ enum PlayerType
 class Player
 {
 public:
-	PlayerType getPlayerType() const { return m_playerType; }
+	__declspec(dllimport) __forceinline PlayerType getPlayerType() const { return m_playerType; }
 	Rva003B0D7C *getMoney() { return &m_money; }
 	Team *getDefaultTeam() const { return m_defaultTeam; }
 	Rva0039B795 *getStats() { return &m_stats; }

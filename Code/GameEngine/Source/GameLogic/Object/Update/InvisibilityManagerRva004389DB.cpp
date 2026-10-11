@@ -139,7 +139,7 @@ extern InGameUI *TheInGameUI;
 class Drawable
 {
 public:
-	void setSecondMaterialPassOpacity(Real op) { m_secondMaterialPassOpacity = op; }
+	__declspec(dllimport) __forceinline void setSecondMaterialPassOpacity(Real op) { m_secondMaterialPassOpacity = op; }
 	bool rva004389DBFlag440() const { return m_440 != 0; }
 private:
 	char m_pad000[0x358];

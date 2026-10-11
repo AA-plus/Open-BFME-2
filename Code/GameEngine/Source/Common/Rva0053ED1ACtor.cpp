@@ -39,7 +39,7 @@ class Rva005C6D4D
 {
 public:
 	Rva005C6D4D();
-	virtual ~Rva005C6D4D() {}
+	__declspec(dllimport) __forceinline virtual ~Rva005C6D4D() {}
 private:
 	char m_pad04[0x38];
 };

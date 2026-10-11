@@ -282,7 +282,7 @@ public:
 	Team *getTeam() const { return m_team; }
 	AIUpdateInterface *getAIUpdateInterface() const { return m_ai; }
 	Bool isDisabledByType_HELD() const { return (m_disabledMask & 8) != 0; }
-	Bool isDestroyed() const { return (m_status & 1) != 0; }
+	__declspec(dllimport) __forceinline Bool isDestroyed() const { return (m_status & 1) != 0; }
 	Object *getNextObject() { return m_next; }
 	void *getContain() const { return m_contain; }
 	void *rva0028C197() const;

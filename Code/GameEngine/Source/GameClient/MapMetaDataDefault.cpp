@@ -13,7 +13,7 @@
 struct Region3D {Coord3D lo,hi;};
 class Rva0029B63A {public:Rva0029B63A();private:char header[12];};
 class WaypointMap:private Rva0029B63A {public:
- __forceinline WaypointMap():numStartSpots(0){}
+ __declspec(dllimport) __forceinline WaypointMap():numStartSpots(0){}
  ~WaypointMap();int numStartSpots;
 };
 struct PlayerPosition {unsigned char human,computer,loadAIScripts;int forceTeam;_STL::set<AsciiString> factions;PlayerPosition();~PlayerPosition();};

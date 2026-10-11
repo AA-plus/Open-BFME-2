@@ -27,7 +27,7 @@ extern const void *const g_00BBB554[];
 class __declspec(novtable) BFME2NativeNetwork
 {
 public:
-	__forceinline BFME2NativeNetwork() { baseConstruct(); }
+	__declspec(dllimport) __forceinline BFME2NativeNetwork() { baseConstruct(); }
 	virtual ~BFME2NativeNetwork() { _ReadWriteBarrier(); }
 	void baseConstruct();
 private:
@@ -39,7 +39,7 @@ private:
 class __declspec(novtable) Snapshot
 {
 public:
-	__forceinline Snapshot() { *(const void **)this = g_00BBB554; }
+	__declspec(dllimport) __forceinline Snapshot() { *(const void **)this = g_00BBB554; }
 	virtual ~Snapshot();
 	virtual void crc();
 	virtual void loadPostProcess();

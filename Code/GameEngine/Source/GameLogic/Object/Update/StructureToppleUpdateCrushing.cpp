@@ -269,8 +269,8 @@ public:
 class GeometryInfo
 {
 public:
-	Real getMajorRadius() const { return m_majorRadius; }
-	Real getMinorRadius() const { return m_minorRadius; }
+	__declspec(dllimport) __forceinline Real getMajorRadius() const { return m_majorRadius; }
+	__declspec(dllimport) __forceinline Real getMinorRadius() const { return m_minorRadius; }
 
 private:
 	Real m_majorRadius; // Object+0xCC
@@ -452,7 +452,7 @@ class GameLogic
 {
 public:
 	void deselectObject(Object *obj, PlayerMaskType playerMask, Bool affectClient);
-	UnsignedInt getFrame() { return m_frame; }
+	__declspec(dllimport) __forceinline UnsignedInt getFrame() { return m_frame; }
 	Object *findObjectByID(ObjectID id);
 
 private:

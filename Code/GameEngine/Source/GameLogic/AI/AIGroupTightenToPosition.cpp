@@ -76,7 +76,7 @@ public:
 	const ThingTemplate *getTemplate() const { return m_template; }
 	const Coord3D *getPosition() const { return &m_position; }
 	__forceinline bool isKindOf(KindOfType t) const { return getTemplate()->isKindOf(t); }
-	__forceinline bool isDisabledByType(DisabledType t) const { return (m_disabledMask[t >> 3] & (1 << (t & 7))) != 0; }
+	__declspec(dllimport) __forceinline bool isDisabledByType(DisabledType t) const { return (m_disabledMask[t >> 3] & (1 << (t & 7))) != 0; }
 	AIUpdateInterface *getAI() const { return m_ai; }
 
 private:

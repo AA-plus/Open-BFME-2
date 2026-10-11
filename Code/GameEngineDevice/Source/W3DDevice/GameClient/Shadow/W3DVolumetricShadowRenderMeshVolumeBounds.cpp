@@ -208,7 +208,7 @@ public:
 class Matrix4
 {
 public:
-	__forceinline Matrix4(bool identity) { if (identity) Make_Identity(); }
+	__declspec(dllimport) __forceinline Matrix4(bool identity) { if (identity) Make_Identity(); }
 	__forceinline void Make_Identity(void)
 	{
 		Row[0].Set(1.0f,0.0f,0.0f,0.0f);

@@ -181,7 +181,7 @@ class Object : public BfmeObjectVtbl, public BfmeObjectDlinkBase,
 public:
 	const ThingTemplate *getTemplate() const { return m_template; }
 	__forceinline bool isKindOf(KindOfType t) const { return m_template->isKindOf(t); }
-	bool isDestroyed() const { return (m_flag94 & 1) != 0; }
+	__declspec(dllimport) __forceinline bool isDestroyed() const { return (m_flag94 & 1) != 0; }
 	bool isEffectivelyDead() const { return (m_flag438 & 1) != 0; }
 	Team *getTeam() const { return m_team; }
 	Object *getContainedBy() const { return m_containedBy; }

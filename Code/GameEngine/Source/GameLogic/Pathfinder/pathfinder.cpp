@@ -189,7 +189,7 @@ public:
 	// 0x0052DD75 (unrowed): an angle for the cell from a facing, a count and
 	// a weight (unnamed).
 	float rva0052DD75(float facing, Int count, float weight);
-	CellType getType() const { return (CellType)(m_info & 0xf); }
+	__declspec(dllimport) __forceinline CellType getType() const { return (CellType)(m_info & 0xf); }
 	Int getLayer() const { return (m_info & 0x3f0) >> 4; }
  PathfindCell *getParentCell(){return (PathfindCell *)((Rva002E6C79 *)this)->rva002E6C79();}
  Waypoint *getParentWaypoint()const {return m_pathInfo?m_pathInfo->parentWaypoint:0;}
@@ -210,7 +210,7 @@ struct LocomotorTemplate
 class Locomotor
 {
 public:
-	LocomotorSurfaceTypeMask getLegalSurfaces() const { return m_template->m_surfaces; }
+	__declspec(dllimport) __forceinline LocomotorSurfaceTypeMask getLegalSurfaces() const { return m_template->m_surfaces; }
 
 private:
 	void *m_vtbl;

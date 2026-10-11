@@ -55,7 +55,7 @@ private:
 class RefCountClass {
 public:
     void Add_Ref() { ++NumRefs; }
-    void Release_Ref() { --NumRefs; if (NumRefs == 0) Delete_This(); }
+    __declspec(dllimport) __forceinline void Release_Ref() { --NumRefs; if (NumRefs == 0) Delete_This(); }
     virtual void Delete_This();
 protected:
     int NumRefs;

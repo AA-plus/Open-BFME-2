@@ -196,7 +196,7 @@ public:
 class Matrix3D
 {
 public:
-	Matrix3D( void ) {}
+	__declspec(dllimport) __forceinline Matrix3D( void ) {}
 	__forceinline Matrix3D &operator=(const Matrix3D &m) { Row[0] = m.Row[0]; Row[1] = m.Row[1]; Row[2] = m.Row[2]; return *this; }
 
 	Vector4 Row[3];
@@ -739,7 +739,7 @@ class W3DRenderObjectSnapshot : public Snapshot
 	W3DRenderObjectSnapshot(RenderObjClass *m_parentRobj, DrawableInfo *drawInfo, Bool cloneParentRobj = true);
 	~W3DRenderObjectSnapshot();
 	void update(RenderObjClass *robj, DrawableInfo *drawInfo, Bool cloneParentRobj=true);	///<refresh the current snapshot with latest state
-	void addToScene(void) { W3DDisplay::m_3DScene->Add_Render_Object(m_robj); }
+	__declspec(dllimport) __forceinline void addToScene(void) { W3DDisplay::m_3DScene->Add_Render_Object(m_robj); }
 
 protected:
 	virtual void crc( Xfer *xfer );

@@ -28,7 +28,7 @@ class CategoryModuleTemplateBase : public ModuleTemplate,
     public CategoryModuleInfo<Category>
 {
 public:
-    CategoryModuleTemplateBase() {}
+    __declspec(dllimport) __forceinline CategoryModuleTemplateBase() {}
     virtual ~CategoryModuleTemplateBase() {}
 };
 
@@ -36,7 +36,7 @@ template <int Category>
 class CategoryModuleTemplate : public CategoryModuleTemplateBase<Category>
 {
 public:
-    CategoryModuleTemplate() {}
+    __declspec(dllimport) __forceinline CategoryModuleTemplate() {}
     virtual ~CategoryModuleTemplate() {}
 };
 

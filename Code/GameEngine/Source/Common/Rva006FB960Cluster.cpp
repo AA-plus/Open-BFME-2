@@ -108,7 +108,7 @@ class Rva006D6360Base : public BfmeAptValue006DCD20
 public:
 	AptNativeHash m_hash;	// 0x14 bytes, so the bits base lands at +0x1C
 
-	Rva006D6360Base(int type, int size) : BfmeAptValue006DCD20(type), m_hash(size) {}
+	__declspec(dllimport) __forceinline Rva006D6360Base(int type, int size) : BfmeAptValue006DCD20(type), m_hash(size) {}
 	virtual ~Rva006D6360Base();
 };
 

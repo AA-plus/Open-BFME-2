@@ -243,7 +243,7 @@ public:
 class RoadType
 {
 public:
-	void applyTexture() { reinterpret_cast<Rva000D4435Buffers *>(this)->rva000D4435(); }
+	__declspec(dllimport) __forceinline void applyTexture() { reinterpret_cast<Rva000D4435Buffers *>(this)->rva000D4435(); }
 	Int getStacking(void) { return m_stackingOrder; }
 	Int getUniqueID(void) { return m_uniqueID; }
 	Int getNumVertices(void) { return m_numRoadVertices; }

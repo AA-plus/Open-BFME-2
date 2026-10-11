@@ -120,7 +120,7 @@ public:
 	static ShaderClass _PresetAdditiveShader;
 	Int m_bits;
 
-	ShaderClass(const ShaderClass &other) { m_bits = other.m_bits; }
+	__declspec(dllimport) __forceinline ShaderClass(const ShaderClass &other) { m_bits = other.m_bits; }
 };
 
 

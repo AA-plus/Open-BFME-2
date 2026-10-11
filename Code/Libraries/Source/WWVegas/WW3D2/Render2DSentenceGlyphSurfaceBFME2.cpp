@@ -26,7 +26,7 @@ public:
 class W3DRadarResetSurface
 {
 public:
-	W3DRadarResetSurface() : m_surface(0) {}
+	__declspec(dllimport) __forceinline W3DRadarResetSurface() : m_surface(0) {}
 	~W3DRadarResetSurface();
 
 	W3DRadarResetSurface &operator=(const W3DRadarResetSurface &that)

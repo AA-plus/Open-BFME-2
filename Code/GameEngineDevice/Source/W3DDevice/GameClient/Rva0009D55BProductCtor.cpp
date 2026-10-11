@@ -357,7 +357,7 @@ void Rva0009D55BProduct::rva0009BC17()
 class Matrix3D
 {
 public:
-	__forceinline explicit Matrix3D(bool identity) { if (identity) Make_Identity(); }
+	__declspec(dllimport) __forceinline explicit Matrix3D(bool identity) { if (identity) Make_Identity(); }
 	__forceinline void Make_Identity()
 	{
 		Row[0].Set(1.0f, 0.0f, 0.0f, 0.0f);

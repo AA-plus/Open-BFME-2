@@ -74,7 +74,7 @@ public:
 	// KindOf words: 0x80 STRUCTURE, 0x40 SHRUBBERY, 0x2000000 PROJECTILE, 0x400 (BFME 2) in
 	// word 0; 0x100000 SMALL_MISSILE, 0x10000000 (BFME 2) in word 1; 0x800 BALLISTIC_MISSILE in word 2.
 	UnsignedInt testKindOf(Int word, UnsignedInt mask) const { return m_kindOf[word] & mask; }
-	Real getFenceWidth() const { return m_fenceWidth; }
+	__declspec(dllimport) __forceinline Real getFenceWidth() const { return m_fenceWidth; }
 private:
 	char m_pad000[0x108];
 	UnsignedInt m_kindOf[4]; // +0x108
@@ -158,7 +158,7 @@ public:
 	{
 		return ((Rva002CA9CA *)this)->rva002CA9CA(damageType, weapon);
 	}
-	Int getProjectileCollideMask() const { return m_projectileCollideMask; }
+	__declspec(dllimport) __forceinline Int getProjectileCollideMask() const { return m_projectileCollideMask; }
 
 	Bool shouldProjectileCollideWith(const Object *projectileLauncher, const Object *projectile, const Object *thingWeCollidedWith, ObjectID intendedVictimID) const;
 private:

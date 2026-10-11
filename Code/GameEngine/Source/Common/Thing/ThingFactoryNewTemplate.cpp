@@ -24,8 +24,8 @@ public:
 	ThingTemplate();
 	ThingTemplate &operator=(const ThingTemplate &that);
 	void setCopiedFromDefault();
-	void friend_setTemplateName(const AsciiString &name) { m_name = name; }
-	void friend_setTemplateID(unsigned short id) { m_templateID = id; }
+	__declspec(dllimport) __forceinline void friend_setTemplateName(const AsciiString &name) { m_name = name; }
+	__declspec(dllimport) __forceinline void friend_setTemplateID(unsigned short id) { m_templateID = id; }
 
 private:
 	unsigned char m_pad000[0x64];

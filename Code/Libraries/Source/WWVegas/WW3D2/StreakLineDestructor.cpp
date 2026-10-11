@@ -15,7 +15,7 @@ class Vector4 { public: Vector4() {} float X, Y, Z, W; };
 
 template<class T> class SimpleVecClass {
 public:
-    __forceinline virtual ~SimpleVecClass() {
+    __declspec(dllimport) __forceinline virtual ~SimpleVecClass() {
         if (Vector) {
             delete[] Vector;
             Vector = NULL;

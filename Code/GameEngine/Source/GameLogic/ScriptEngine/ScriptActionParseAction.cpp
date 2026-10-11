@@ -114,9 +114,9 @@ public:
 	}
 	static Parameter *ReadParameter(DataChunkInput &file);
 
-	ParameterType getParameterType() const { return m_paramType; }
-	Int getInt() const { return m_int; }
-	void friend_setParameterType(ParameterType type) { m_paramType = type; }
+	__declspec(dllimport) __forceinline ParameterType getParameterType() const { return m_paramType; }
+	__declspec(dllimport) __forceinline Int getInt() const { return m_int; }
+	__declspec(dllimport) __forceinline void friend_setParameterType(ParameterType type) { m_paramType = type; }
 
 private:
 	ParameterType m_paramType;

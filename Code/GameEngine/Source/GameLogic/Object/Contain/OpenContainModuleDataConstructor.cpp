@@ -35,7 +35,7 @@ template<> vector<AsciiString, allocator<AsciiString> >::iterator vector<AsciiSt
 class DieMuxData
 {
 public:
-	DieMuxData() { init(); }
+	__declspec(dllimport) __forceinline DieMuxData() { init(); }
 	DieMuxData *init();
 private:
 	unsigned char m_data[0x30];

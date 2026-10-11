@@ -31,7 +31,7 @@ class Rva002129A1 { public: void rva002129A1(const ModuleData *); };
 class LivingWorldManager;
 extern LivingWorldManager *TheLivingWorldManager;
 class RvaSmartPtr12 { public:
- RvaSmartPtr12() { ptr=0;next=0;prev=0; }
+ __declspec(dllimport) __forceinline RvaSmartPtr12() { ptr=0;next=0;prev=0; }
  void rva0004CBC0() throw();
  ~RvaSmartPtr12() throw() {if(ptr)rva0004CBC0();}
  void *ptr,*prev,*next;

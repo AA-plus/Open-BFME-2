@@ -317,7 +317,7 @@ static inline bool operator!=(const _List_iterator<_IterTp, _LeftTraits> &a,
 class Parameter
 {
 public:
-	int getInt() const { return m_int; }
+	__declspec(dllimport) __forceinline int getInt() const { return m_int; }
 	float getReal() const { return m_real; }
 	const AsciiString &getString() const { return m_string; }
 	unsigned char m_beforeInt[8]; int m_int; float m_real; AsciiString m_string;
@@ -773,7 +773,7 @@ template <int N>
 class BitFlags
 {
 public:
-	BitFlags() { clear(); }
+	__declspec(dllimport) __forceinline BitFlags() { clear(); }
 	BitFlags(const BitFlags &other);
 	void clear() { memset(m_bits, 0, sizeof(m_bits)); }
 	void set(unsigned int bit) { m_bits[bit >> 5] |= 1u << (bit & 31); }

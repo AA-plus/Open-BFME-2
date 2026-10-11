@@ -68,9 +68,9 @@ public:
  virtual void slot11();
  virtual void slot12();
  virtual Int getLocalSlotNum() const;
- Bool isInGame() const { return m_inGame; }
+ __declspec(dllimport) __forceinline Bool isInGame() const { return m_inGame; }
  AsciiString getMap() const;
- UnsignedInt getMapCRC() const { return m_mapCRC; }
+ __declspec(dllimport) __forceinline UnsignedInt getMapCRC() const { return m_mapCRC; }
 private:
  unsigned char before[0x10-4]; Bool m_inGame;
  unsigned char beforeMap[0x40-0x11]; AsciiString m_mapName; UnsignedInt m_mapCRC;

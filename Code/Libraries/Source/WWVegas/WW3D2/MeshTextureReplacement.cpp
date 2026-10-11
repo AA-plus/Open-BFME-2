@@ -31,7 +31,7 @@ public:
     virtual void Delete_This();
     int RefCount;
     void Add_Ref() { ++RefCount; }
-    void Release_Ref() { if(--RefCount==0) Delete_This(); }
+    __declspec(dllimport) __forceinline void Release_Ref() { if(--RefCount==0) Delete_This(); }
 };
 class MeshModelClass : public RefCountClass {
 public: void Replace_Texture(const RefCountPtr<TextureClass>&, const RefCountPtr<TextureClass>&);
@@ -44,7 +44,7 @@ class MaterialInfoClass : public RefCountClass {
 public:
     int Texture_Count() const { return TextureCount; }
     RefCountPtr<TextureClass> Peek_Texture(int);
-    void Replace_Texture(int index,const RefCountPtr<TextureClass> &texture) { Textures[index]=texture; }
+    __declspec(dllimport) __forceinline void Replace_Texture(int index,const RefCountPtr<TextureClass> &texture) { Textures[index]=texture; }
 };
 class MeshClass {
 public:

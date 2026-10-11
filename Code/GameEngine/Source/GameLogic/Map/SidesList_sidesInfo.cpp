@@ -16,7 +16,7 @@ public:
 	BuildListInfo(const BuildListInfo &that);
 	virtual void *deleteInstance(int pool);
 	BuildListInfo *getNext() const { return m_nextBuildList; }
-	void setNextBuildList(BuildListInfo *next) { m_nextBuildList = next; }
+	__declspec(dllimport) __forceinline void setNextBuildList(BuildListInfo *next) { m_nextBuildList = next; }
 
 private:
 	char m_body[0x28];

@@ -51,7 +51,7 @@ private:
 class Snapshot
 {
 public:
-	Snapshot() {}
+	__declspec(dllimport) __forceinline Snapshot() {}
 	~Snapshot()
 	{
 		*(const void **)this = g_00BBB554;

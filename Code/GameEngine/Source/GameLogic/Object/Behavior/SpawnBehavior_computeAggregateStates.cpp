@@ -72,7 +72,7 @@ extern MessageStream *MessageStreamSubsystem;
 class Drawable
 {
 public:
-	Bool isSelected() const { return m_selected; }
+	__declspec(dllimport) __forceinline Bool isSelected() const { return m_selected; }
 
 private:
 	unsigned char m_pad000[0x43c];

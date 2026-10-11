@@ -14,7 +14,7 @@ public:
 };
 class Rva00808CB0LanGameEntry : public PrototypeClass {
 public:
-  Rva00808CB0LanGameEntry() { field08=0; field0c=0; field04=0; }
+  __declspec(dllimport) __forceinline Rva00808CB0LanGameEntry() { field08=0; field0c=0; field04=0; }
   ~Rva00808CB0LanGameEntry();
   int field08, field0c;
 };

@@ -168,7 +168,7 @@ public:
 class GameSpyGameSlot : public GameSlot
 {
 public:
-	Int getProfileID(void) const { return m_profileID; }
+	__declspec(dllimport) __forceinline Int getProfileID(void) const { return m_profileID; }
 
 	Int m_profileID;					// +0x1AC
 };

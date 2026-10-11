@@ -60,7 +60,7 @@ private:
 class TextureClass
 {
 public:
-	__forceinline void Add_Ref() { ++m_refCount; }
+	__declspec(dllimport) __forceinline void Add_Ref() { ++m_refCount; }
 	void Release_Ref();
 
 private:
@@ -71,7 +71,7 @@ private:
 template <class T> class RefCountPtr
 {
 public:
-	RefCountPtr() : m_ptr(0) {}
+	__declspec(dllimport) __forceinline RefCountPtr() : m_ptr(0) {}
 	__forceinline RefCountPtr(const RefCountPtr &that) : m_ptr(that.m_ptr)
 	{
 		if (m_ptr)

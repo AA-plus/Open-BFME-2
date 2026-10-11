@@ -327,7 +327,7 @@ public:
 	void setTurretTargetPosition(WhichTurretType tur, const Coord3D *pos);
 	Bool isQuickPathAvailable(const Coord3D *destination) const;
 	Real getTurretTurnRate(WhichTurretType tur) const;
-	Real getCurLocomotorSpeed() const { return ((const Rva002627E8 *)this)->rva002627E8(); }
+	__declspec(dllimport) __forceinline Real getCurLocomotorSpeed() const { return ((const Rva002627E8 *)this)->rva002627E8(); }
 	void setCurrentVictim(const Object *victim);
 	Bool computeQuickPath(const Coord3D *destination);
 	Object *checkForCrateToPickup();
@@ -623,7 +623,7 @@ public:
 	virtual void slot12();
 	virtual void slot13();
 	virtual void setGoalObject(const Object *obj);
-	UnsignedInt getCurrentStateID() const { return m_currentState ? m_currentState->m_id : INVALID_STATE_ID; }
+	__declspec(dllimport) __forceinline UnsignedInt getCurrentStateID() const { return m_currentState ? m_currentState->m_id : INVALID_STATE_ID; }
 	inline Bool isInAttackState() const;
 	void setGoalPosition(const Coord3D *pos);
 	Object *getOwner() const { return m_owner; }
@@ -2117,7 +2117,7 @@ private:
 class PartitionFilterSameMapStatus : public Rva000421C8
 {
 public:
-	PartitionFilterSameMapStatus(const Object *obj) : m_obj(obj) {}
+	__declspec(dllimport) __forceinline PartitionFilterSameMapStatus(const Object *obj) : m_obj(obj) {}
 	virtual Bool allow(Object *objOther);
 private:
 	const Object *m_obj; // +0x08

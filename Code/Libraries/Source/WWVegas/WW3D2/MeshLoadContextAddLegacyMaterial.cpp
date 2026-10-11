@@ -63,7 +63,7 @@ public:
     VertexMaterialClass();
     virtual void Delete_This();
     void Add_Ref() { ++RefCount; }
-    void Release_Ref() { RefCount--; if (RefCount == 0) Delete_This(); }
+    __declspec(dllimport) __forceinline void Release_Ref() { RefCount--; if (RefCount == 0) Delete_This(); }
     void Init_From_Material3(const W3dMaterial3Struct &mat3);
     void Set_Name(const char *name) { Name = name; }
     void Set_Ambient(const Vector3 &color);
@@ -201,7 +201,7 @@ private:
     void Add_Legacy_Material(ShaderClass, VertexMaterialClass *, const BfmeHandleCX &);
     BfmeHandleCX Peek_Texture(int index);
     int Vertex_Material_Count() { return VertexMaterials.Count(); }
-    int Texture_Count() { return Textures.Count(); }
+    __declspec(dllimport) __forceinline int Texture_Count() { return Textures.Count(); }
     int Shader_Count() { return Shaders.Count(); }
     VertexMaterialClass *Peek_Vertex_Material(int index) { return VertexMaterials[index]; }
     ShaderClass Peek_Shader(int index) { return Shaders[index]; }

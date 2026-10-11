@@ -33,7 +33,7 @@ class Script
 public:
 	ScriptAction *getAction(void) const { return m_action; }
     ScriptAction *getActionFalse(void) const { return m_actionFalse; }
-	void setAction(ScriptAction *pAct) { m_action = pAct; }
+	__declspec(dllimport) __forceinline void setAction(ScriptAction *pAct) { m_action = pAct; }
     void setActionFalse(ScriptAction *pAct) { m_actionFalse = pAct; }
 
 private:

@@ -239,7 +239,7 @@ class DX8Wrapper
 {
 public:
 	static IDirect3DDevice8 *_Get_D3D_Device8(void) { return D3DDevice; }
-	static bool _Is_Triangle_Draw_Enabled(void) { return _EnableTriangleDraw; }
+	static __declspec(dllimport) __forceinline bool _Is_Triangle_Draw_Enabled(void) { return _EnableTriangleDraw; }
 	static void Set_DX8_Render_State(DWORD state, unsigned value);
 private:
 	static IDirect3DDevice8 *D3DDevice;
@@ -260,7 +260,7 @@ extern W3DShadowManager *TheW3DShadowManager;
 class FVFInfoClass
 {
 public:
-	unsigned Get_FVF_Size(void) const { return fvf_size; }
+	__declspec(dllimport) __forceinline unsigned Get_FVF_Size(void) const { return fvf_size; }
 private:
 	char m_pad[0xc];
 	unsigned fvf_size;

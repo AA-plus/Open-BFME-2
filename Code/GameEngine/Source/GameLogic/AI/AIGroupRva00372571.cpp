@@ -112,7 +112,7 @@ public:
 	void rva0026304D(Int frame);
 	void ignoreObstacle(const Object *obj);
 	Bool canAutoAcquire() const { return m_data->m_autoAcquireEnemiesWhenIdle != 0; }
-	Bool canAutoAcquireWhileStealthed() const { return (m_data->m_autoAcquireEnemiesWhenIdle & 2) != 0; }
+	__declspec(dllimport) __forceinline Bool canAutoAcquireWhileStealthed() const { return (m_data->m_autoAcquireEnemiesWhenIdle & 2) != 0; }
 	AICommandInterface *getCommands() { return &m_commands; }
 
 	const AIModuleData *m_data; // +0x04

@@ -57,7 +57,7 @@ class RefCountClass
 public:
 	virtual void Delete_This() = 0;
 	int m_refs;
- void Release_Ref() { --m_refs; if (*(volatile int *)&m_refs == 0) Delete_This(); }
+ __declspec(dllimport) __forceinline void Release_Ref() { --m_refs; if (*(volatile int *)&m_refs == 0) Delete_This(); }
 };
 class VertexMaterialClass : public RefCountClass
 {

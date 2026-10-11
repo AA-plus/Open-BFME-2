@@ -123,8 +123,8 @@ public:
 	void setUsePreciseZPos(bool u) { setFlag(PRECISE_Z_POS, u); }
 	const LocomotorTemplate *getTemplate() const { return m_template; }
 	Real getCloseEnoughDist() const { return m_closeEnoughDist; }
-	Real getPreferredHeight() const { return ((const Rva0008BB38FloatField *)this)->get(); }
-	bool isMovingBackwards() const { return ((m_flags >> MOVING_BACKWARDS) & 1) != 0; }
+	__declspec(dllimport) __forceinline Real getPreferredHeight() const { return ((const Rva0008BB38FloatField *)this)->get(); }
+	__declspec(dllimport) __forceinline bool isMovingBackwards() const { return ((m_flags >> MOVING_BACKWARDS) & 1) != 0; }
 private:
 	void setFlag(LocoFlag f, bool b)
 	{
@@ -256,7 +256,7 @@ class PathNode
 {
 public:
 	const Coord3D *getPosition() const { return &m_pos; }
-	PathfindLayerEnum getLayer() const { return m_layer; }
+	__declspec(dllimport) __forceinline PathfindLayerEnum getLayer() const { return m_layer; }
 private:
 	unsigned char m_pad00[0x0C];
 	Coord3D m_pos; // +0x0C
@@ -339,8 +339,8 @@ public:
 	Real getLocomotorDistanceToGoal();
 	Int rva00260DED() const;
 	Bool getRetryPath() const { return m_retryPath; }
-	Int getNumFramesBlocked() const { return m_numFramesBlocked; }
-	Real getPathExtraDistance() const { return m_pathExtraDistance; }
+	__declspec(dllimport) __forceinline Int getNumFramesBlocked() const { return m_numFramesBlocked; }
+	__declspec(dllimport) __forceinline Real getPathExtraDistance() const { return m_pathExtraDistance; }
 	void clearBfme160() { m_bfme160 = 0; }
 	UnsignedInt getMoodMatrixActionAdjustment(MoodMatrixAction action) const;
 	void aiAttackMoveToPosition(const Coord3D *pos, Int maxShotsToFire, CommandSourceType cmdSource)

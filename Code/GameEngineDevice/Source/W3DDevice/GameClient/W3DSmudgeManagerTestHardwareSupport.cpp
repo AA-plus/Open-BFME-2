@@ -46,7 +46,7 @@ public:
 	float Z;
 	float W;
 
-	Vector4(void) {}
+	__declspec(dllimport) __forceinline Vector4(void) {}
 	Vector4(float x, float y, float z, float w)
 		: X(x), Y(y), Z(z), W(w) {}
 	Vector4(const Vector4 &other)

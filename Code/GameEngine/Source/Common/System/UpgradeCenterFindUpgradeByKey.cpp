@@ -40,8 +40,8 @@ public:
 	UpgradeTemplate *friend_getNext() { return m_next; }
 	const UpgradeTemplate *friend_getPrev() const { return m_prev; }
 	UpgradeTemplate *friend_getPrev() { return m_prev; }
-	void friend_setNext(UpgradeTemplate *n) { m_next = n; }
-	void friend_setPrev(UpgradeTemplate *p) { m_prev = p; }
+	__declspec(dllimport) __forceinline void friend_setNext(UpgradeTemplate *n) { m_next = n; }
+	__declspec(dllimport) __forceinline void friend_setPrev(UpgradeTemplate *p) { m_prev = p; }
 
 private:
 	unsigned char m_unreconstructed_000[0x0C];
@@ -189,7 +189,7 @@ class INI
 public:
 	const char *getNextToken(const char *seps);
 	void initFromINI(void *what, const FieldParse *parseTable);
-	INILoadType getLoadType() const { return m_loadType; }
+	__declspec(dllimport) __forceinline INILoadType getLoadType() const { return m_loadType; }
 
 private:
 	char m_pad00[0x08];

@@ -80,7 +80,7 @@ struct ModuleInfoEntry { unsigned char m_data[20]; };
 class ModuleInfo
 {
 public:
-	int getCount() const { return m_end - m_begin; }
+	__declspec(dllimport) __forceinline int getCount() const { return m_end - m_begin; }
 	AsciiString getNthName(int i) const;
 	const ModuleData *getNthData(int i) const;
 	ModuleInfoEntry *m_begin;
@@ -290,7 +290,7 @@ namespace _STL {
 template <unsigned _Bits> class bitset
 {
 public:
-	bitset() { reset(); }
+	__declspec(dllimport) __forceinline bitset() { reset(); }
 	bitset<_Bits> &reset();
 	unsigned long m_words[(_Bits + 31) / 32];
 };

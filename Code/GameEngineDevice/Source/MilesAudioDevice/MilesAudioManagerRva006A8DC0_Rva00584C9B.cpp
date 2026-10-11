@@ -59,7 +59,7 @@ class PlayingAudio;
 class PlayingAudioRef
 {
 public:
-	PlayingAudioRef(PlayingAudio *p = 0) : m_ptr(p) {}
+	__declspec(dllimport) __forceinline PlayingAudioRef(PlayingAudio *p = 0) : m_ptr(p) {}
 	PlayingAudio *operator->() const { return m_ptr; }
 
 private:

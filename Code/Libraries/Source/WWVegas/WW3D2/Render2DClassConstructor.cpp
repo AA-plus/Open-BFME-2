@@ -96,7 +96,7 @@ DynamicVectorClass<T>::DynamicVectorClass(int size, T const *array) :
 class TextureRef
 {
 public:
-	TextureRef() : Pointer(0) {}
+	__declspec(dllimport) __forceinline TextureRef() : Pointer(0) {}
 	~TextureRef();
 
 	void *Pointer;

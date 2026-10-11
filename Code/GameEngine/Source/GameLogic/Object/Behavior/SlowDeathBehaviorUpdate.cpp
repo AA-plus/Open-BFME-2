@@ -238,7 +238,7 @@ private:
 class AIUpdateInterface
 {
 public:
-	Bool isAiInDeadState() const { return m_isAiDead; }
+	__declspec(dllimport) __forceinline Bool isAiInDeadState() const { return m_isAiDead; }
 	void markAsDead();
 
 private:
@@ -338,7 +338,7 @@ public:
 	const Coord3D *getPosition() const { return &m_position; }
 	ObjectID getID() const { return m_id; }
 	PhysicsBehavior *getPhysics() const { return m_physics; }
-	unsigned int isKindOf(KindOfType t) const { return m_template->isKindOf(t); }
+	__declspec(dllimport) __forceinline unsigned int isKindOf(KindOfType t) const { return m_template->isKindOf(t); }
 	const ThingTemplate *getTemplate() const { return m_template; }
 	AIUpdateInterface *getAIUpdateInterface() const { return m_ai; }
 	BodyModuleInterface *getBodyModule() const { return m_body; }
@@ -400,7 +400,7 @@ public:
 	void destroyObject(Object *obj);
 	void deselectObject(Object *obj, UnsignedInt playerMask, Bool affectClient);
 	UnsignedInt getFrame() const { return m_frame; }
-	Int getHulkMaxLifetimeOverride() const { return m_hulkMaxLifetimeOverride; }
+	__declspec(dllimport) __forceinline Int getHulkMaxLifetimeOverride() const { return m_hulkMaxLifetimeOverride; }
 
 private:
 	unsigned char m_pad00[0x40];
@@ -449,7 +449,7 @@ extern TerrainLogic *TheTerrainLogic;
 class SlowDeathBehaviorModuleData
 {
 public:
-	Bool hasNonLodEffects() const { return (m_maskOfLoadedEffects & 6) != 0; }
+	__declspec(dllimport) __forceinline Bool hasNonLodEffects() const { return (m_maskOfLoadedEffects & 6) != 0; }
 
 	unsigned char m_pad00[0x38];
 	Real m_sinkRate; // +0x38

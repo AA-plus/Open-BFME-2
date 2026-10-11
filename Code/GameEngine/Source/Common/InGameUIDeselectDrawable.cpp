@@ -37,7 +37,7 @@ extern ControlBar *TheControlBar;
 class GameLogic
 {
 public:
-	unsigned int getFrame() { return m_frame; }
+	__declspec(dllimport) __forceinline unsigned int getFrame() { return m_frame; }
 
 private:
 	unsigned char m_unmodelled000[0x40];

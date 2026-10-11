@@ -60,8 +60,8 @@ private:
 class WeaponTemplate
 {
 public:
-	int getClipSize() const { return m_clipSize; }
-	WeaponPrefireType getPrefireType() const { return m_prefireType; }
+	__declspec(dllimport) __forceinline int getClipSize() const { return m_clipSize; }
+	__declspec(dllimport) __forceinline WeaponPrefireType getPrefireType() const { return m_prefireType; }
 	int getPreAttackDelay(const WeaponBonus &bonus) const
 	{
 		return (int)(m_preAttackDelay * bonus.getField(PRE_ATTACK));

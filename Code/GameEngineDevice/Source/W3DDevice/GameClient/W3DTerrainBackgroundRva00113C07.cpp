@@ -65,14 +65,14 @@ public:
 class WorldHeightMap
 {
 public:
-	Int getXExtent() { return m_width; }
-	Int getYExtent() { return m_height; }
+	__declspec(dllimport) __forceinline Int getXExtent() { return m_width; }
+	__declspec(dllimport) __forceinline Int getYExtent() { return m_height; }
 	Int getBorderSize() { return m_borderSize; }
 	UnsignedShort getHeight(Int x, Int y) { return ((BoundedShortGrid *)this)->rva00062A58(x, y); }
 	bool isInMesh(Int x, Int y) { return ((const Rva00729300BitPlane *)this)->test(x, y); }
 	bool isCellPresent(Int x, Int y) { return ((const Rva0006AB49BitPlane *)this)->test(x, y); }
 	bool getFlipState(Int x, Int y) { return ((Rva000ABD19 *)this)->rva000AF841(x, y); }
-	void setFlipState(Int x, Int y, bool value) { ((Rva007497A0 *)this)->setBit(x, y, value); }
+	__declspec(dllimport) __forceinline void setFlipState(Int x, Int y, bool value) { ((Rva007497A0 *)this)->setBit(x, y, value); }
 
 private:
 	Int m_pad00[2];
