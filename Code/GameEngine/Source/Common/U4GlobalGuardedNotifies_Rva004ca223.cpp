@@ -58,10 +58,16 @@ class U4Assign006057C0;
 class U4Notify
 {
 public:
-	void noteAssign( U4Assign006057C0 *a );
 	void noteOwner( U4Owner00604C00 *o );
 };
 
+// LINK: the assign notification is rowed as Rva00432F23::rva00432E5D (0x00432E5D).
+class Rva00432F23Node;
+class Rva00432F23
+{
+public:
+	void rva00432E5D( Rva00432F23Node *node );
+};
 extern class Rva00432F23 *g_004C9DC9Container;
 
 // ---------------------------------------------------------------- 0x006057C0
@@ -85,7 +91,7 @@ U4Assign006057C0 &U4Assign006057C0::operator=( const U4Assign006057C0 &other )
 		m_f08 = other.m_f08;
 		m_f10 = other.m_f10;
 		if ( (*(U4Notify **)&g_004C9DC9Container) != 0 )
-			(*(U4Notify **)&g_004C9DC9Container)->noteAssign( this );
+			(*(Rva00432F23 **)&g_004C9DC9Container)->rva00432E5D( (Rva00432F23Node *)this );
 	}
 	return *this;
 }
