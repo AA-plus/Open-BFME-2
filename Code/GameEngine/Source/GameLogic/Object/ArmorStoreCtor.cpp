@@ -27,6 +27,8 @@ template <> vector<void *>::const_iterator _STL::vector<void *>::begin() const;
 // Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
 // the retail copy serves the link. Plain declaration-only form (no __imp_).
 template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
 }
 
 enum NameKeyType
