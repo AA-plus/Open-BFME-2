@@ -86,6 +86,12 @@ class TeamPrototype
 public:
 	const AsciiString &getName() const { return m_name; }
 	const TeamTemplateInfo *getTemplateInfo() const { return &m_teamTemplate; }
+	// LINK: TU-unique same-body helpers (identical inlined bytes). This TU's
+	// getName/getTemplateInfo copies lose to the first copies in link order;
+	// rebinding our only call sites emits just these uniques (trivially kept).
+	// Names are TU-unique; no cross-TU collision.
+	const AsciiString &bfme_proto_name() const { return m_name; }
+	const TeamTemplateInfo *bfme_proto_template_info() const { return &m_teamTemplate; }
 
 private:
 	char m_pad[0x10];
@@ -100,7 +106,7 @@ public:
 	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
 	const AsciiString &getPrototypeName() const
 	{
-		return m_proto == 0 ? AsciiString::TheEmptyString : m_proto->getName();
+		return m_proto == 0 ? AsciiString::TheEmptyString : m_proto->bfme_proto_name();
 	}
 	void notifyTeamOfObjectDeath(Object *obj);
 
@@ -113,7 +119,7 @@ void Team::notifyTeamOfObjectDeath(Object *obj)
 {
 	if (!m_proto)
 		return;
-	const TeamTemplateInfo *pInfo = m_proto->getTemplateInfo();
+	const TeamTemplateInfo *pInfo = m_proto->bfme_proto_template_info();
 	if (!pInfo)
 		return;
 
