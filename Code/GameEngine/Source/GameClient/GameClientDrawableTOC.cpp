@@ -79,7 +79,15 @@ struct Region3D
 };
 class IRegion3D;
 class Coord2D;
-class ICoord2D;
+// BFME 2's ICoord2D has an out-of-line default constructor (0x0047A6A9, a
+// folded return-this body): MetaEventTranslator's array of three is built
+// through the vector constructor iterator.
+class ICoord2D
+{
+public:
+	ICoord2D();
+	int x, y;
+};
 class Region2D;
 class IRegion2D;
 class RealRange;
@@ -1010,8 +1018,25 @@ public:
 	virtual GameMessageDisposition translateGameMessage(const GameMessage *msg);
 
 private:
-	unsigned char m_pad[0x28 - 4];
+	int m_lastKeyDown;						// +0x04
+	int m_lastModState;						// +0x08
+	ICoord2D m_mouseDownPosition[3];		// +0x0C
+	bool m_nextUpShouldCreateDoubleClick[3];	// +0x24
 };
+
+// Zero Hour's MetaEventTranslator constructor (MetaEvent.cpp), retail
+// 0x001DB432, 92 bytes, after MetaMap::findGameMessageMetaType 0x001DB3FE;
+// GameClient::init news it. It lives in this unit because MetaEvent.cpp's
+// ICoord2D is a plain struct inside the message-argument union.
+MetaEventTranslator::MetaEventTranslator() : m_lastKeyDown(0), m_lastModState(0)
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		m_nextUpShouldCreateDoubleClick[i] = false;
+		m_mouseDownPosition[i].x = 0;
+		m_mouseDownPosition[i].y = 0;
+	}
+}
 
 // vftable 0x00BED660, translate 0x00359729.
 class HotKeyTranslator : public GameMessageTranslator
