@@ -5,11 +5,28 @@
 // and its unsigned ordering word at meshC4 are read here. The names below
 // describe an address-derived ABI view; the original record and method
 // spelling are unknown. Native EAX is the complete zero/one result.
-struct Rva0017368AMesh { char unknown[0xc4]; unsigned key; };
+struct Rva0017368AMesh {
+    char unknown[0xc4]; unsigned key;
+    char unknownC8[0x310-0xc8]; unsigned *state310;
+};
 struct Rva0017368ATask { Rva0017368AMesh *mesh; char unknown[28]; };
 
 unsigned Rva0017368ACompare(const Rva0017368ATask &a, const Rva0017368ATask &b)
 {
+    return a.mesh->key < b.mesh->key;
+}
+
+// Native001736A7..001736D6 follows the comparator above and returns the
+// same full EAX zero/one value. Software-skinning flush001748E8 passes
+// this address to the same sort. Equal meshC4 words select mesh310;
+// both comparisons use unsigned carry. These are target offset facts,
+// rather than recovered names for either mesh field. Owned cleanup174350
+// also dereferences the word at310, establishing that it is a state pointer.
+// This comparator orders its32-bit address rather than the pointed-to value.
+unsigned Rva001736A7Compare(const Rva0017368ATask &a, const Rva0017368ATask &b)
+{
+    if(a.mesh->key==b.mesh->key)
+        return (unsigned)a.mesh->state310 < (unsigned)b.mesh->state310;
     return a.mesh->key < b.mesh->key;
 }
 
