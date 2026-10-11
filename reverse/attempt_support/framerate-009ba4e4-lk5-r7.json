@@ -493,7 +493,7 @@
     },
     {
       "path": "Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITargetChooser/AITargetChooser.cpp",
-      "sha256": "6f2e1703869bb491b7d380a2ac814581562ae5265005310868c0ebc9039db60b",
+      "sha256": "1249795c4b1ab996eed1e2bd8e473526fa44173eb4b396045de4f932c8c05e07",
       "replacements": 2
     },
     {
@@ -763,5 +763,6 @@
     "prepared_repair": "writer-021/build/lk2-r6-gameengineinit-local-datum.patch",
     "limitation": "665 isolated byte rows and228 frame-rate data relocations pass, but that does not certify other global references; full gate publication needs this separate master regression repaired."
   },
-  "scope_reservations": "Released at session close; reacquire all139 files after the3 overlapping file owners finish."
+  "scope_reservations": "Released at session close; reacquire all139 files after the3 overlapping file owners finish.",
+  "final_refresh": "16:04 CEST: AITargetChooser changed upstream; recompiled its8-source batch with original profiles. All139 inputs now agree with hashes."
 }
