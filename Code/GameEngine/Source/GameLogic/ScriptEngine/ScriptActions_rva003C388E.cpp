@@ -33,14 +33,16 @@ struct Rva003C388EObject
 class Rva003BD306Target
 {
 public:
-	void rva0039B28F(bool on);
+	// LINK: rowed as rva0039B28F(int) (Rva003BD306 sibling row); the old bool call shape is kept through a member-pointer cast.
+	void rva0039B28F(int on);
 };
+typedef void (Rva003BD306Target::*Rva0039B28FBoolShape)(bool);
 
 // Team iterate callback 0x0028870A (28B): pass the action's flag, carried in
 // the userdata, to each member's +0x264 object, then continue.
 int __cdecl Rva0028870A(Object *obj, void *userData)
 {
-	((Rva003BD306Target *)((Rva003C388EObject *)obj)->m_264)->rva0039B28F(userData != 0);
+	(((Rva003BD306Target *)((Rva003C388EObject *)obj)->m_264)->*reinterpret_cast<Rva0039B28FBoolShape>(&Rva003BD306Target::rva0039B28F))(userData != 0);
 	return 1;
 }
 

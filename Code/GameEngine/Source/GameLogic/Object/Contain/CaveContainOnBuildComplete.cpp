@@ -35,11 +35,13 @@ public:
 	void rva004F56FC(Object *obj);
 };
 
+// LINK: rowed as TunnelTracker *CaveSystem::getTunnelTrackerForCaveIndex(unsigned int) (CaveSystem rows); the opaque helper view is cast.
+class TunnelTracker;
 class CaveSystem
 {
 public:
 	void registerNewCave(int index);
-	Rva004F56FC *getTunnelTrackerForCaveIndex(int index);
+	TunnelTracker *getTunnelTrackerForCaveIndex(unsigned int index);
 };
 
 // Target data_xrefs.tsv records a read at RVA 0x00A031F4. TheCaveSystem is the
@@ -79,7 +81,7 @@ void CaveContain::onBuildComplete()
 
 	m_needToRunOnBuildComplete = 0;
 	TheCaveSystem->registerNewCave(m_caveIndex);
-	Rva004F56FC *myTracker = TheCaveSystem->getTunnelTrackerForCaveIndex(m_caveIndex);
+	Rva004F56FC *myTracker = (Rva004F56FC *)TheCaveSystem->getTunnelTrackerForCaveIndex((unsigned int)m_caveIndex);
 	myTracker->rva004F56FC(*reinterpret_cast<Object **>((char *)this - 0x2C));
 }
 

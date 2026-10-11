@@ -6,6 +6,7 @@
 // The named global's decorated type is read from the verified GameEngine
 // init relocation at +4502. Its 00311974 member is RET 12 with AL result.
 struct Rva00375A73Coord { float x, y, z; };
+struct SplineState;
 class Rva00375A73Context
 {
 public:
@@ -23,7 +24,8 @@ public:
 class Rva0022B3F6Subsystem
 {
 public:
-    bool rva00311974(Rva00375A73Context *context, unsigned int a, unsigned int b);
+    // LINK: rowed as bool rva00311974(SplineState*, bool, float*) (Rva00311974SplineGet.cpp); the context is that state.
+    bool rva00311974(SplineState *context, bool a, float *b);
 };
 extern Rva0022B3F6Subsystem *TheSplineService;
 
@@ -46,7 +48,7 @@ bool AerialPathfinder::rva00375A73(Rva00375A73Context *context, float value,
     if (!context->valid24)
         return false;
     context->value18 = value;
-    if (!TheSplineService->rva00311974(context, 0, 0))
+    if (!TheSplineService->rva00311974((SplineState *)context, false, (float *)0))
         return false;
     *output = context->position48;
     return true;

@@ -12,10 +12,10 @@ public:
 	int rva005748AD(int a, int b, int c);
 };
 
-class Rva0051274F
+class _bfme_AptGameWindow
 {
 public:
-	int rva0051274F(int a, int b, int c);
+	int rva0051274F(int a, unsigned int b, unsigned int c);
 };
 
 class Rva00513888Slot
@@ -64,7 +64,7 @@ void Rva00513888Owner::rva00513888(int a, int b, int c)
 
 void Rva00513888Owner::rva005138B8(int a, int b, int c)
 {
-	int r = ((Rva0051274F *)this)->rva0051274F(a, b, c);
+	int r = ((_bfme_AptGameWindow *)this)->rva0051274F(a, b, c);
 	if (!m_410)
 		return;
 	if (r)

@@ -66,7 +66,9 @@ public:
 class Pathfinder
 {
 public:
-	Locomotor *ChooseBestLocomotorForPosition(PathfindLayerEnum layer, Rva001E48E8 *set, const Coord3D *pos);
+	// LINK: rowed as void Pathfinder::ChooseBestLocomotorForPosition (pathfinder.cpp); the eax result this caller reads is kept
+	// through a member-pointer cast to the old pointer-returning shape.
+	void ChooseBestLocomotorForPosition(PathfindLayerEnum layer, Rva001E48E8 *set, const Coord3D *pos);
 };
 
 class ThingTemplate
@@ -158,7 +160,7 @@ void AIUpdateInterface::chooseGoodLocomotorFromCurrentSet()
 	Locomotor *prevLoco = m_curLocomotor;
 	Object *obj = m_object;
 	Pathfinder *pf = TheAI->bfme_pathfinder();
-	Locomotor *newLoco = pf->ChooseBestLocomotorForPosition((PathfindLayerEnum)obj->rva0028B511(), &m_locomotorSet, obj->getPosition());
+	Locomotor *newLoco = (pf->*reinterpret_cast<Locomotor *(Pathfinder::*)(PathfindLayerEnum, Rva001E48E8 *, const Coord3D *)>(&Pathfinder::ChooseBestLocomotorForPosition))((PathfindLayerEnum)obj->rva0028B511(), &m_locomotorSet, obj->getPosition());
 	if (newLoco == NULL)
 	{
 		if (prevLoco != NULL)
