@@ -667,7 +667,17 @@ void AptCreateAHero::Powers::rva005B314B(const char *path)
 }
 
 // Native C72CAC is the existing power-level-to-column table.
-extern const int g_00C72CAC[];
+// Retail's own ten words transcribed from .rdata at RVA 0x00872CAC (file
+// offset 0x008720AC): the level 0..9 entries are 0,0,1,1,1,1,2,2,2,3, so two
+// powers fit in column 0, four in column 1 and three in column 2, which is the
+// 4-wide row grid Rva005B4653 walks backwards from maxSlot. `extern` on the
+// definition keeps the array external; a plain const array at namespace scope
+// would take internal linkage and leave AptCreateAHeroPowersRva005B4653.cpp
+// referencing an unresolved symbol.
+extern const int g_00C72CAC[10];
+const int g_00C72CAC[10] = {
+	0, 0, 1, 1, 1, 1, 2, 2, 2, 3,
+};
 void Rva0044C0A8(UnicodeString,UnicodeString,void*);
 void AptCreateAHero::Powers::rva005B335E()
 {

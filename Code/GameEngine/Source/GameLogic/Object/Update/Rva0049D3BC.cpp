@@ -40,7 +40,16 @@ unsigned int g_00C51304[4] = {
 unsigned int g_00C51314[4] = {
 	22, 26, 30, 34,
 };
+// g_00C51324: the third of the three consecutive 16-byte bit-index tables at
+// VA 0xc51304 / 0xc51314 / 0xc51324 (RVA 0x00851324, .rdata, file offset
+// 0x00850724): 17 1b 1f 23. The two siblings hold 20..32 in steps of five; this
+// one continues the run, and the strings that follow it (HeroRevive,
+// HeroPurchase, TimeMultiplier, CostMultiplier, ModifierFilter) are a separate
+// record block, so the object the rowed body indexes is these four words.
 extern unsigned int g_00C51324[];
+unsigned int g_00C51324[4] = {
+	0x17, 0x1b, 0x1f, 0x23,
+};
 
 class Rva0049D3BC
 {
