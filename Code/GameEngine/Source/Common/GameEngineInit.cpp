@@ -969,3 +969,70 @@ void GameEngine::init(Int argc, char *argv[])
 // Native global DFDC8C is registered as TheLinearCampaignManager by22F3A1.
 // Existing helper facades carry their historical names; those names do not
 // establish a terrain identity for this campaign-manager data access.
+
+unsigned int ComputeCRC(const unsigned char *buf, unsigned int len, unsigned int crc);
+void Rva00600777Set(char *dir);
+
+struct CommandLineParam
+{
+	const char *name;
+	int (__cdecl *func)(char **args, int remainingArgc);
+};
+extern const CommandLineParam g_commandLineParams[];
+extern unsigned int BFME2CommandFlags;
+
+class ArchiveFile;
+class ArchiveFileSystem
+{
+public:
+	virtual void slot0();
+	virtual void slot1();
+	virtual void slot2();
+	virtual void slot3();
+	virtual void slot4();
+	virtual int loadBigFile(const char *path, int mode);
+};
+extern ArchiveFileSystem *TheArchiveFileSystem;
+
+static __declspec(noinline) void rva003B9D78(unsigned int count, int argc, char **argv, const CommandLineParam *table)
+{
+	int arg = 1;
+	unsigned int param;
+	bool found;
+
+	while (arg < argc)
+	{
+		found = false;
+		for (param = 0; !found && param < count; ++param)
+		{
+			int len = strlen(table[param].name);
+			int len2 = strlen(argv[arg]);
+			if (argv[arg][0] == (char)0x96)
+				argv[arg][0] = '-';
+			if (len2 == len && !_strnicmp(argv[arg], table[param].name, len))
+			{
+				arg += table[param].func(argv + arg, argc - arg);
+				found = true;
+			}
+		}
+		if (!found)
+			arg++;
+	}
+}
+
+void parseCommandLine(Int argc, char *argv[])
+{
+	rva003B9D78(16, argc, argv, g_commandLineParams);
+	AsciiString &modBig = *reinterpret_cast<AsciiString *>(reinterpret_cast<char *>(TheWritableGlobalData) + 0xd3c);
+	if (!modBig.isEmpty())
+	{
+		TheArchiveFileSystem->loadBigFile(modBig.str(), 1);
+	}
+	AsciiString &modDir = *reinterpret_cast<AsciiString *>(reinterpret_cast<char *>(TheWritableGlobalData) + 0xd38);
+	if (!modDir.isEmpty())
+	{
+		Rva00600777Set(const_cast<char *>(modDir.str()));
+	}
+	unsigned int crc = ComputeCRC(reinterpret_cast<const unsigned char *>(&BFME2CommandFlags), 0x18, 0);
+	*reinterpret_cast<unsigned int *>(reinterpret_cast<char *>(TheWritableGlobalData) + 0xb38) = crc;
+}
