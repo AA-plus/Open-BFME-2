@@ -117,7 +117,13 @@ public:
 };
 
 extern int g_Va00E032E0;
-extern UnicodeString g_Va00E032E8;
+// VA 0x00E02EAC is a typo in the symbol name: the object is at VA
+// 0x00E032E8 (RVA 0x00A032E8), in .data's zero-filled tail past the raw end
+// at RVA 0x009DE008, so retail loads it an empty UnicodeString. Rva007ABBB3CtorInits.cpp
+// constructs it and Rva007B6A00AtexitThunks.cpp destroys it, so the storage is
+// a plain uninitialised definition (StringBase's default ctor only zeroes
+// m_data, which is already what .bss gives it).
+UnicodeString g_Va00E032E8;
 void __cdecl Rva004341D8(int button);
 void __cdecl Rva00435CCC(void);
 

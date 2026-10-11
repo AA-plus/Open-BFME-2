@@ -1,7 +1,15 @@
 // cl: /MD
-// ?Rva0023D30FCall@@YGXHHH@Z, retail 0x0023D30F, 30 bytes.
+// ?rva0023D30F@GameLogic@@QAEXHHPAVUnicodeString@@@Z, retail 0x0023D30F, 30
+// bytes. Every caller spells it as the GameLogic member - the shared
+// GameLogicObjectLookupView.h view and AptSaveLoadCallbacks.cpp's own view -
+// and retail's caller at 0x0024098B loads ECX with the handler object before
+// the call, which only the thiscall spelling emits. The body never reads
+// `this` (it reaches the target through TheNetwork) and cleans the same
+// twelve stack bytes, so only the symbol changed.
 // cmp [flag],0 je; mov ecx,[target] test ecx je; mov eax,[ecx] jmp [eax+0x108]; ret 0xc.
 // Evidence: unlock lane; ret 0xc means 3-arg stdcall forwarding to slot 0x108.
+// The shared GameLogic view already spells the callee as this member.
+#include "GameLogicObjectLookupView.h"
 extern int g_Rva0023D30FFlag;
 class Rva0023D30FTarget
 {
@@ -75,14 +83,14 @@ public:
 	virtual void slot108(int a1, int a2, int a3);
 };
 extern class NetworkInterface *TheNetwork;
-void __stdcall Rva0023D30FCall(int a1, int a2, int a3)
+void GameLogic::rva0023D30F(int a1, int a2, UnicodeString *name)
 {
 	if (g_Rva0023D30FFlag == 0)
 		return;
 	Rva0023D30FTarget *t = (*(Rva0023D30FTarget **)&TheNetwork);
 	if (t == 0)
 		return;
-	t->slot108(a1, a2, a3);
+	t->slot108(a1, a2, (int)name);
 }
 // ?g_Rva0023D30FFlag@@3HA: the global at VA 0xe02eec is ?TheGameInfo@@3PAVGameInfo@@A.
 #pragma comment(linker, "/alternatename:?g_Rva0023D30FFlag@@3HA=?TheGameInfo@@3PAVGameInfo@@A")
