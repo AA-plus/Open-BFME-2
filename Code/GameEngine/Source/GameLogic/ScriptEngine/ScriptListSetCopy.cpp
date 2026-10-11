@@ -41,6 +41,7 @@ class Rva003B872ASet
 {
 public:
     Rva003B872ASet(const Rva003B872ASet &other);
+    ~Rva003B872ASet();
 private:
     _STL::vector<unsigned int> sorted;
     _STL::vector<BfmeStringRecord003B3F78> records;
@@ -73,6 +74,7 @@ class Rva003B8802Set
 {
 public:
     Rva003B8802Set(const Rva003B8802Set &other);
+    ~Rva003B8802Set();
 private:
     _STL::vector<unsigned int> sorted;
     _STL::vector<BfmeStringRecord003B3F78> records;
