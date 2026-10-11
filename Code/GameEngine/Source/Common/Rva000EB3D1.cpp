@@ -12,10 +12,16 @@ struct Rva000EB3D1Elem
 	char m_tail[0x5C];
 };
 
-class Rva000EB3D1
+// LINK: 0xEB2EF is rowed as W3DTreeBuffer::rva000EB2EF; bind it through a view of this object.
+class W3DTreeBuffer
 {
 public:
 	void rva000EB2EF(int index);
+};
+
+class Rva000EB3D1
+{
+public:
 	void rva000EB3D1();
 
 	char m_pad[0x600];
@@ -29,6 +35,6 @@ void Rva000EB3D1::rva000EB3D1()
 	for (int index = 0; index < m_count; ++index)
 	{
 		if (m_elem[index].m_key >= 0 && m_elem[index].m_slot != 0)
-			rva000EB2EF(index);
+			((W3DTreeBuffer *)this)->rva000EB2EF(index);
 	}
 }

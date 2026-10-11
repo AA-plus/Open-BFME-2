@@ -12,10 +12,16 @@ struct Rva000E7B04Elem
 	char m_tail[0x58];
 };
 
-class Rva000E7B04
+// LINK: 0xE7A40 is rowed as W3DShrubBuffer::rva000E7A40; bind it through a view of this object.
+class W3DShrubBuffer
 {
 public:
 	void rva000E7A40(int index);
+};
+
+class Rva000E7B04
+{
+public:
 	void rva000E7B04();
 
 	char m_pad[0x1998];
@@ -29,6 +35,6 @@ void Rva000E7B04::rva000E7B04()
 	for (int index = 0; index < m_count; ++index)
 	{
 		if (m_elem[index].m_key >= 0 && m_elem[index].m_slot != 0)
-			rva000E7A40(index);
+			((W3DShrubBuffer *)this)->rva000E7A40(index);
 	}
 }
