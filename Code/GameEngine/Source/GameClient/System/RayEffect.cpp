@@ -35,6 +35,15 @@
 #include "ray_effect.h"
 #include "drawable.h"
 
+// LINK: findEntry is rowed as Rva002CEE1B::rva002CED59 (0x002CED59); the entry
+// record and the drawable word are the same, so the calls keep their shape.
+struct Elem002CED84;
+class Rva002CEE1B
+{
+public:
+	Elem002CED84 *rva002CED59( void *draw );
+};
+
 // PUBLIC DATA ////////////////////////////////////////////////////////////////////////////////////
 class RayEffectSystem *TheRayEffects = NULL;
 
@@ -54,7 +63,7 @@ void RayEffectSystem::deleteRayEffect( const Drawable *draw )
 		return;
 
 	// find the effect entry
-	effectData = findEntry( draw );
+	effectData = (RayEffectData *)((Rva002CEE1B *)this)->rva002CED59( (void *)draw );
 	if( effectData )
 	{
 
@@ -79,7 +88,7 @@ void RayEffectSystem::getRayEffectData( const Drawable *draw,
 		return;
 
 	// find the effect data entry
-	entry = findEntry( draw );
+	entry = (RayEffectData *)((Rva002CEE1B *)this)->rva002CED59( (void *)draw );
 	if( entry )
 	{
 
