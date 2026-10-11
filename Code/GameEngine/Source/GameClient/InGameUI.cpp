@@ -3384,41 +3384,11 @@ WorldAnimationData::WorldAnimationData( void )
 
 }  // end WorldAnimationData
 
-// ------------------------------------------------------------------------------------------------
-/** Add a 2D animation at a spot in the world */
-// ------------------------------------------------------------------------------------------------
-// ?InGameUI::addWorldAnimation present-unmatched
-void InGameUI::addWorldAnimation( Anim2DTemplate *animTemplate,
-																	const Coord3D *pos,
-																	WorldAnimationOptions options,
-																	Real durationInSeconds,
-																	Real zRisePerSecond )
-{
-
-	// sanity
-	if( animTemplate == NULL || pos == NULL || durationInSeconds <= 0.0f )
-		return;
-
-	// allocate a new world animation data struct
-	// (huh huh, he said "wad")
-	WorldAnimationData *wad = NEW WorldAnimationData;
-	if( wad == NULL )
-		return;		
-
-	// allocate a new animation instance
-	Anim2D *anim = newInstance(Anim2D)( animTemplate, TheAnim2DCollection );
-
-	// assign all data
-	wad->m_anim = anim;
-	wad->m_expireFrame = TheGameLogic->getFrame() + (durationInSeconds * LOGICFRAMES_PER_SECOND);
-	wad->m_options = options;
-	wad->m_worldPos = *pos;
-	wad->m_zRisePerSecond = zRisePerSecond;
-
-	// add to list
-	m_worldAnimationList.push_front( wad );
-
-}  // end addWorldAnimation
+// NOTE (link lane): InGameUI::addWorldAnimation was defined here as a
+// second out-of-line copy, but the rowed home is InGameUIAddWorldAnimation.cpp
+// (259B @0x002A0E16, verified). This TU never calls it, so the definition
+// is dropped and all references bind the rowed copy. The
+// present-unmatched marker went with the definition.
 
 // ------------------------------------------------------------------------------------------------
 /** Delete all world animations */
