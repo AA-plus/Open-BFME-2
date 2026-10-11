@@ -5301,7 +5301,6 @@ alternatename	Code/Libraries/Source/EA/Apt/AptString/EAStringCGlobalCleanup.cpp	
 alternatename	Code/Libraries/Source/EA/Apt/AptString/EAStringCRefCount.cpp	??1S4Mem005864A0@@QAE@XZ	1
 alternatename	Code/Libraries/Source/EA/Apt/AptString/EAStringCRefCount.cpp	??1S4Mem005879C0@@QAE@XZ	1
 alternatename	Code/Libraries/Source/EA/Apt/Rva006EE1B0Cluster.cpp	?g_rva00e18078@@3PAVAptValue@@A	1
-alternatename	Code/Libraries/Source/EA/Apt/Rva0070B4F0GetString.cpp	?saConstantAtE18388@@3PAVEAStringC@@A	1
 alternatename	Code/Libraries/Source/EA/Apt/StringPoolInitialize.cpp	?rva006CD4A0@EAStringC@@QBE_NXZ	1
 alternatename	Code/Libraries/Source/STLport/Rva008312E0StringReplace.cpp	?bfmeImplVMI@BfmeStrVMI@@QAEXHHHHPAD@Z	1
 alternatename	Code/Libraries/Source/STLport/Rva008312E0StringReplace.cpp	?bfmeInsertV54@BfmeStrV54@@QAEXPAD0000@Z	1

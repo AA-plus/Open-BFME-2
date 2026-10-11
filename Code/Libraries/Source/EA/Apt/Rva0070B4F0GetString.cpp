@@ -17,11 +17,11 @@ public:
 	bool IsEmpty() const;
 };
 
-extern EAStringC saConstantAtE18388[]; // 0x00E18388
+extern "C" EAStringC bfmeObjDAE[178]; // existing owner at 0x00E18388
 
 EAStringC *Rva0070B4F0GetString(int eSC)
 {
-	EAStringC *entry = &saConstantAtE18388[eSC];
+	EAStringC *entry = &bfmeObjDAE[eSC];
 	if (entry->IsEmpty()) {
 		g_bfmeAptAssertAtE17734("saConstant[eSC].IsEmpty() == false", ".\\string\\StringPool.inl", 0x2A);
 		if (g_bfmeAptBreakOnAssertAtDDC01C) {
@@ -30,7 +30,3 @@ EAStringC *Rva0070B4F0GetString(int eSC)
 	}
 	return entry;
 }
-
-// Retail's data references in this unit's matched rows land on globals defined
-// under other spellings at the same addresses (addend-corrected DIR32). Bind them.
-#pragma comment(linker, "/alternatename:?saConstantAtE18388@@3PAVEAStringC@@A=_bfmeObjDAE")
