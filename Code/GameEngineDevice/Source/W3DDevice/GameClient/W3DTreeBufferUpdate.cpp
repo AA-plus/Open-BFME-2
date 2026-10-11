@@ -144,6 +144,14 @@ public:
 class W3DShrubBuffer
 {
 public:
+	// NOTE (link lane): rva000E6406 is rowed under Rva000E6406SwayView at
+	// 0x000E6406 (398B, verified; the row cites shrub callers as subsystem
+	// evidence). The call below binds the rowed name (identical ABI).
+};
+
+class Rva000E6406SwayView
+{
+public:
 	void rva000E6406(const BreezeInfo &info);	// 0x000E6406
 };
 
@@ -261,7 +269,7 @@ void Rva000EDB47::rva000EDB47()
 	if (TheGameLogic && TheGameLogic->isGamePaused())
 		return;
 
-	reinterpret_cast<W3DShrubBuffer *>(this)->rva000E6406(TheScriptEngine->getBreezeInfo());
+	reinterpret_cast<Rva000E6406SwayView *>(this)->rva000E6406(TheScriptEngine->getBreezeInfo());
 
 	static Rva002614ECFilter filter(&TheWritableGlobalData->m_EB0, 0, true);
 
