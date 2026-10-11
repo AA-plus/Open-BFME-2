@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii_common /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/open-bfme-1/inputs/reference/shims/stringbaseascii /Ireference/open-bfme-1/inputs/reference/shims/buildlistinfo /Ireference/open-bfme-1/inputs/reference/shims/moduledata /Ireference/open-bfme-1/inputs/reference/shims/sweep /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/GameEngine/Source/GameLogic/Map /Ireference/shims/bfmealloc /D_CRTIMP=
+// cl: /Ireference/shims/bfme2_ascii_common /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/open-bfme-1/inputs/reference/shims/stringbaseascii /Ireference/open-bfme-1/inputs/reference/shims/buildlistinfo /Ireference/open-bfme-1/inputs/reference/shims/moduledata /Ireference/open-bfme-1/inputs/reference/shims/sweep /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/GameEngine/Source/GameLogic/Map /Ireference/shims/bfmealloc /D_CRTIMP= /O1 /arch:SSE /G7 /D_BFME_RETAIL_TREE_INSERT_LAYOUT
 //
 // ?addToIndex@TeamsInfoRec@@QAEXH@Z
 // retail 0x0032D103, 288 bytes. Dedicated TU ported from the Open-BFME-1
@@ -8,6 +8,9 @@
 // unclaimed .text). Only the placed body is defined here; the donor's
 // other definitions are omitted.
 // stlport
+// Native caller closure selects the standard less comparator and the
+// retail tree insertion setting; generic _M_find folds at 32C07C.
+// TeamLess helpers belong to ScriptEngine named/integer maps instead.
 // BFME 1 retail 0x0019B850, 396 bytes (the donor called it updateTeam; WorldBuilder names it TeamsInfoRec::addToIndex):
 // 0x0019BA40 and 0x0019BC00 call this one-index thiscall through ILT 0x26EE.
 // The map key is (teamOwner, teamName). The vector at +0x0C contains
@@ -30,11 +33,8 @@ typedef _STL::_Rb_tree<TeamKey0019B850,TeamValue0019B850,_STL::_Select1st<TeamVa
 namespace _STL {
 template<> pair<TeamKey0019B850,int>::~pair();
 template<> pair<const TeamKey0019B850,int>::~pair();
-template<> __declspec(noinline) TeamPair0019B850 make_pair(const TeamKey0019B850& key, const int& index) { return TeamPair0019B850(key,index); }
+template<> inline __declspec(noinline) TeamPair0019B850 make_pair(const TeamKey0019B850& key, const int& index) { return TeamPair0019B850(key,index); }
 }
-// This key ordering has its own retail tree body; keep its address in the
-// comparator type instead of borrowing a different physical instantiation.
-struct TeamLess0019B850 : _STL::less<TeamKey0019B850> {};
 struct TeamRecord0019B850 {
     short field00, field02, field04, field06;
     _STL::_Rb_tree_node_base* field08;
@@ -42,7 +42,7 @@ struct TeamRecord0019B850 {
 };
 class TeamsInfoRec
 {
-    _STL::map<TeamKey0019B850,int,TeamLess0019B850> field00;
+    _STL::map<TeamKey0019B850,int> field00;
     _STL::vector<TeamRecord0019B850> field0c;
 public:
     void addToIndex(int index);

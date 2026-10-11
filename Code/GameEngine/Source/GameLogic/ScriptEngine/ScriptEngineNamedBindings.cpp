@@ -11,6 +11,18 @@ typedef _STL::pair<AsciiString, AsciiString> NameKey;
 typedef _STL::pair<const NameKey, int> NameValue;
 struct TeamLess0019B850 : _STL::less<NameKey> {};
 typedef _STL::map<NameKey, int, TeamLess0019B850> NameMap;
+
+typedef _STL::_Rb_tree<NameKey,NameValue,_STL::_Select1st<NameValue>,
+ TeamLess0019B850,_STL::allocator<NameValue> > NameTree;
+void __cdecl scriptMapConstruct00205910(NameValue *,const NameValue &);
+// ?_M_create_node@?$_Rb_tree@U?$pair@VAsciiString@@V1@@_STL@@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@H@2@U?$_Select1st@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@H@_STL@@@2@UTeamLess0019B850@@V?$allocator@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@H@_STL@@@2@@_STL@@IAEPAU?$_Rb_tree_node@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@H@_STL@@@2@ABU?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@H@2@@Z
+template <>
+NameTree::_Link_type NameTree::_M_create_node(const NameTree::value_type &value) {
+ _Link_type node=(_Link_type)_STL::allocator<char>::allocate(sizeof(_STL::_Rb_tree_node<NameTree::value_type>),0);
+ scriptMapConstruct00205910(&node->_M_value_field,value);
+ return node;
+}
+
 class Object
 {
 public:
