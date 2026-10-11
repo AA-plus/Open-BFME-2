@@ -1,5 +1,5 @@
 // ?rva002CCED3@Weapon@@QAE_NPBVObject@@0@Z
-// partial score=0.9 date=2026-10-11
+// partial score=0.95 date=2026-10-11
 // cl: /O1 /Oy /G7 /arch:SSE /DNDEBUG /MD
 //
 // WeaponSet::setWeaponLock, retail 0x002C8AAE (237 bytes).
@@ -873,7 +873,7 @@ bool Weapon::rva002CCED3(const Object *source, const Object *victim)
 			return ((Rva002CA9CA *)m_template)->rva002CAA59((int)victim, this);
 		if (!holder->rva00396722((void *)victim->m_id))
 			return ((Rva002CA9CA *)m_template)->rva002CAA59((int)victim, this);
-		if (((const CastleBehavior *)holder)->m_44 != 0)
+		if ((holder ? *(volatile unsigned char *)&((const CastleBehavior *)holder)->m_44 : *(volatile unsigned char *)&((const CastleBehavior *)holder)->m_44) != 0)
 			return false;
 	}
 	return ((Rva002CA9CA *)m_template)->rva002CAA59((int)victim, this);
