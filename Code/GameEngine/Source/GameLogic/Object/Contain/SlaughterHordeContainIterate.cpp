@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
 //
 // ?rva004635EC@SlaughterHordeContain@@UAEXP6AXPAVObject@@PAX@Z1H@Z, retail 0x004635EC, 83 bytes.
@@ -9,7 +9,9 @@
 // bit3 selects reverse (prev links) vs forward (next links), data at node+8.
 // No direct callees (callback via param); honest address name since method
 // identity is unproven beyond class plus slot.
+#include "ascii_string.h"
 #include <list>
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
@@ -20,7 +22,16 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 }
 
 
-class Object;
+class Matrix3D;
+class Object
+{
+public:
+	bool getSingleLogicalBonePosition(const char *boneName, Coord3D *position, Matrix3D *transform) const;
+	const Coord3D *getPosition() const
+	{
+		return (const Coord3D *)((const char *)this + 0x38);
+	}
+};
 typedef void (__cdecl *ContainIterateFunc)(Object *obj, void *userData);
 
 #define SLOT08(a,b,c,d,e,f,g,h) virtual void a(); virtual void b(); virtual void c(); virtual void d(); virtual void e(); virtual void f(); virtual void g(); virtual void h();
@@ -56,3 +67,48 @@ void SlaughterHordeContain::rva004635EC(ContainIterateFunc func, void *userData,
 		}
 	}
 }
+
+class OpenContainModuleData
+{
+public:
+	unsigned char m_pad[0x74];
+	int m_numberOfExitPaths;
+};
+
+class OpenContain
+{
+public:
+	virtual bool getNaturalRallyPoint(Coord3D &rallyPoint, bool offset) const;
+
+private:
+	const OpenContainModuleData *moduleData() const
+	{
+		return *reinterpret_cast<const OpenContainModuleData *const *>(
+			reinterpret_cast<const char *>(this) - 0x2C);
+	}
+
+	Object *getObject() const
+	{
+		return *reinterpret_cast<Object *const *>(
+			reinterpret_cast<const char *>(this) - 0x28);
+	}
+};
+
+// ?getNaturalRallyPoint@OpenContain@@UBE_NAAUCoord3D@@_N@Z @0x0046363F
+bool OpenContain::getNaturalRallyPoint(Coord3D &rallyPoint, bool offset) const
+{
+	int numberExits = moduleData()->m_numberOfExitPaths;
+	if (numberExits > 0)
+	{
+		AsciiString endBone("ExitEnd");
+		if (numberExits > 1)
+			endBone.concat("01");
+		getObject()->getSingleLogicalBonePosition(endBone.str(), &rallyPoint, 0);
+	}
+	else
+	{
+		rallyPoint = *getObject()->getPosition();
+	}
+	return true;
+}
+

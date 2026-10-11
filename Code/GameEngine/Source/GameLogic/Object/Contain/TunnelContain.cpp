@@ -46,6 +46,7 @@ public:
 	void iterateContained(ContainIterateFunc cb, void *user, bool reverse);
 	void addToContainList(Object *obj);
 	int getContainMax() const;
+	bool rva004F5473(Object *obj, bool checkCapacity);
 };
 class Rva004F5436 { public: int rva004F5436(class BfmeTab1026 *tab); };
 class Rva00466398 { public: Rva0036AE51ListView rva00466398(); };
@@ -94,13 +95,14 @@ extern GameLogic *TheGameLogic;
 class Player
 {
 public:
+	TunnelTracker *getTunnelSystem() const { return m_2E8; }
 	unsigned char m_pad000[0x2E8];
 	TunnelTracker *m_2E8; // WB names the list visitor; the sibling manager is the same tracker.
 };
 struct B00 { virtual void f00(); virtual void p01(); virtual void p02(); virtual void p03(); virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07(); virtual void p08(); virtual void p09(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21(); virtual void rvaPrimary58(); const ModuleData *m_moduleData; Object *m_object; };
 struct B0C { virtual void f0C(); };
 struct B10 { virtual UpdateSleepTime update(); int m_14; int m_18; Object *m_1C; };
-struct B20 { virtual void f20(); virtual void c01(); virtual void c02(); virtual void c03(); virtual void c04(); virtual void c05(); virtual void c06(); virtual void c07(); virtual void c08(); virtual void c09(); virtual void c10(); virtual void c11(); virtual void c12(); virtual void c13(); virtual void c14(); virtual void c15(); virtual void c16(); virtual void c17(); virtual void c18(); virtual void c19(); virtual void c20(); virtual void c21(); virtual void c22(); virtual void onRemoving(Object *object); };
+struct B20 { virtual void f20(); virtual void c01(); virtual void c02(); virtual void c03(); virtual void c04(); virtual void c05(); virtual void c06(); virtual void c07(); virtual void c08(); virtual void c09(); virtual void c10(); virtual void c11(); virtual void c12(); virtual void c13(); virtual void c14(); virtual void c15(); virtual void c16(); virtual void c17(); virtual void c18(); virtual void c19(); virtual void c20(); virtual void c21(); virtual void c22(); virtual void onRemoving(Object *object); virtual void c24(); virtual void onSelling(); };
 struct B24 { virtual void f24(); };
 class DamageInfo;
 class DieMuxData { public: bool isDieApplicable(const Object *obj, const DamageInfo *damageInfo) const; };
@@ -149,7 +151,7 @@ public:
 	virtual void s35();
 	virtual void s36();
 	virtual void s37();
-	virtual void s38();
+	virtual bool isValidContainerFor(Object *obj, bool checkCapacity, bool a3);
 	virtual void s39();
 	virtual void s40();
 	virtual void s41();
@@ -194,11 +196,18 @@ public:
 	virtual void onRemoving(Object *object);
 	virtual UpdateSleepTime update();
 };
-class TunnelContain : public GarrisonContain
+class HordeGarrisonContain : public GarrisonContain
+{
+public:
+	virtual bool isValidContainerFor(Object *obj, bool checkCapacity, bool a3);
+};
+class TunnelContain : public HordeGarrisonContain
 {
 public:
 	virtual void onRemoving(Object *object);
+	virtual void onSelling();
 	virtual UpdateSleepTime update();
+	virtual bool isValidContainerFor(Object *obj, bool checkCapacity, bool a3);
 	virtual void rva0047DCDF(Rva004F553FCb cb, void *user, unsigned int flags);
 	virtual void rva0047DE30();
 	virtual void addToContainList(Object *obj);
@@ -357,3 +366,21 @@ UpdateSleepTime TunnelContain::update()
 	}
 	return UPDATE_SLEEP_NONE;
 }
+
+// ?isValidContainerFor@TunnelContain@@UAE_NPAVObject@@_N1@Z, retail 0x0047DDA2, 55 bytes:
+// slot 38 of the contain interface at +0x34 (vtable 0x008475B8).
+bool TunnelContain::isValidContainerFor(Object *obj, bool checkCapacity, bool a3)
+{
+	if (!HordeGarrisonContain::isValidContainerFor(obj, false, a3))
+		return false;
+	Player *owningPlayer = m_1C->getControllingPlayer();
+	return owningPlayer->getTunnelSystem()->rva004F5473(obj, checkCapacity);
+}
+
+// ?onSelling@TunnelContain@@UAEXXZ, retail 0x0047E00F, 8 bytes:
+// slot 25 of the contain interface at +0x20 (vtable 0x008475B8).
+void TunnelContain::onSelling()
+{
+	rva0047DF81();
+}
+

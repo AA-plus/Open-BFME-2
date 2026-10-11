@@ -40,7 +40,8 @@ class ContainModuleInterface : public Rva0047CADBSlots<53>
 public:
 	virtual float rva0047CADB() = 0;
 	virtual void gap54() = 0; virtual void gap55() = 0; virtual void gap56() = 0; virtual void gap57() = 0;
-	virtual void gap58() = 0; virtual void gap59() = 0; virtual void gap60() = 0; virtual void gap61() = 0;
+	virtual bool rva004631FA(int arg) = 0;
+	virtual void gap59() = 0; virtual void gap60() = 0; virtual void gap61() = 0;
 	virtual void gap62() = 0; virtual void gap63() = 0; virtual void gap64() = 0; virtual void gap65() = 0;
 	virtual void gap66() = 0; virtual void gap67() = 0; virtual void gap68() = 0; virtual void gap69() = 0;
 	virtual void gap70() = 0;
@@ -58,7 +59,13 @@ struct Iface0C { virtual void f0C(); };
 struct Iface10 { virtual void f10(); unsigned char m_pad[12]; };
 struct Iface24 { virtual void f24(); unsigned char m_pad[0x11C - 0x28]; };
 
-class TransportContain : public Iface00, public Iface0C, public Iface10, public ContainModuleInterface, public Iface24
+class SlaughterHordeContain : public Iface00, public Iface0C, public Iface10, public ContainModuleInterface, public Iface24
+{
+public:
+	virtual bool rva004631FA(int arg);
+};
+
+class TransportContain : public SlaughterHordeContain
 {
 };
 
@@ -66,6 +73,7 @@ class SiegeEngineContain : public TransportContain
 {
 public:
 	virtual float rva0047CADB();
+	virtual bool rva004631FA(int arg);
 	virtual void rva004624EB(Rva0046247DPair &p);
 private:
 	void *m_11C; // +0x11C (list head)
@@ -101,6 +109,21 @@ void SiegeEngineContain::rva004624EB(Rva0046247DPair &p)
 	p.m04 = &m_11C;
 }
 
+// ?rva004631FA@SiegeEngineContain@@UAE_NH@Z @0x0047CDCE
+bool SiegeEngineContain::rva004631FA(int arg)
+{
+	Rva0046247DPair p;
+	rva004624EB(p);
+	void *end = *(void **)p.m04;
+	void *cur = *(void **)end;
+	for (; cur != end; cur = *(void **)cur)
+	{
+		if (*(int *)((char *)cur + 8) == arg)
+			return true;
+	}
+	return SlaughterHordeContain::rva004631FA(arg);
+}
+
 // ?rva0047CADB@HordeSiegeEngineContain@@UAEMXZ @0x0047CADB
 float HordeSiegeEngineContain::rva0047CADB()
 {
@@ -113,3 +136,4 @@ void HordeSiegeEngineContain::rva004624EB(Rva0046247DPair &p)
 	p.m00 = this;
 	p.m04 = &m_128;
 }
+

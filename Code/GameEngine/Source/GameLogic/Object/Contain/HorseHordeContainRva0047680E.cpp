@@ -44,7 +44,13 @@ private:
 
 #define SLOT08(a,b,c,d,e,f,g,h) virtual void a(); virtual void b(); virtual void c(); virtual void d(); virtual void e(); virtual void f(); virtual void g(); virtual void h();
 
-class HordeContain
+class HordeContainIface11C
+{
+public:
+	virtual void attackTargetNow(Object *target, int select);
+};
+
+class HordeContainPrimary
 {
 public:
 	SLOT08(s00,s01,s02,s03,s04,s05,s06,s07)
@@ -58,19 +64,33 @@ protected:
 private:
 	void *m_moduleData;
 	Object *m_object;
+	char m_pad0C[0x11C - 0x0C];
+};
+
+class HordeContain : public HordeContainPrimary, public HordeContainIface11C
+{
+public:
+	virtual void attackTargetNow(Object *target, int select);
 };
 
 class HorseHordeContain : public HordeContain
 {
 public:
 	virtual void s27();
-	virtual void s28();
+	virtual void rva004766AA(Object *target);
 	virtual void s29();
 	virtual void rva0047680E(const Coord3D *pos, int cmdSource);
 };
+
+// ?rva004766AA@HorseHordeContain@@UAEXPAVObject@@@Z @0x004766AA
+void HorseHordeContain::rva004766AA(Object *target)
+{
+	HordeContain::attackTargetNow(target, 0);
+}
 
 // ?rva0047680E@HorseHordeContain@@UAEXPBUCoord3D@@H@Z @0x0047680E
 void HorseHordeContain::rva0047680E(const Coord3D *pos, int cmdSource)
 {
 	getObject()->getAI()->aiMoveToPosition(pos, (CommandSourceType)cmdSource);
 }
+

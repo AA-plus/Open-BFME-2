@@ -484,6 +484,7 @@ public:
 class Weapon
 {
 public:
+	bool isWithinAttackRange(const Object *source, const Object *victim, float rangeBonus = 0.0f, int useAimPos = 1) const;	// pinned 0x002CB933
 	float getAttackRange(const Object *source) const;	// rowed 0x002C9BF8
 	unsigned char m_pad00[0x04];
 	const Rva002C9400ByteField *m_04; // +0x04
@@ -996,6 +997,8 @@ public:
 	virtual void iterateContained(ContainIterateFunc func, void *userData, int a3);	// slot 68; the base body is 0x004635EC
 	virtual int slot69(int a1) = 0;
 	virtual void rva0046D27ASlot70(Rva0046247DPair &p) = 0;
+	virtual void cgap71() = 0; virtual void cgap72() = 0; virtual void cgap73() = 0; virtual void cgap74() = 0; virtual void cgap75() = 0; virtual void cgap76() = 0; virtual void cgap77() = 0;
+	virtual bool attemptBestFirePointPosition(Object *source, Weapon *weapon, Object *victim) = 0;
 };
 class TransportContain : public UpdateModule, public BehaviorModuleInterface, public UpdateModuleInterface, public ContainModuleInterface
 {
@@ -1119,6 +1122,7 @@ public:
 	int getBannerCarrierIndexToUse(const Object *obj, const ThingTemplate **outTemplate);
 	HordeBannerCarrierUpdate *rva00468E26(Object *obj);	// 0x00468E26, banner carrier update lookup
 	virtual void iterateContained(ContainIterateFunc func, void *userData, int a3);
+	virtual bool attemptBestFirePointPosition(Object *source, Weapon *weapon, Object *victim);
 	virtual bool rva0046BB38(Object *other);
 	virtual void rva0046FE99(_STL::list<Object *> &out);
 	virtual void ClassifyBeforeOnAfterInvalidPortal(_STL::vector<ObjectID> &before, _STL::vector<ObjectID> &on, _STL::vector<ObjectID> &after);
@@ -3975,3 +3979,16 @@ void HorseHordeContain::rva00472790(bool reposition)
 {
 	HordeContain::rva00472790(reposition);
 }
+
+// ?attemptBestFirePointPosition@HordeContain@@UAE_NPAVObject@@PAVWeapon@@0@Z @0x00468D47 54B:
+// slot 78 of the +0x20 ContainModuleInterface vftable.
+bool HordeContain::attemptBestFirePointPosition(Object *source, Weapon *weapon, Object *victim)
+{
+	if (!source || !victim || !weapon)
+		return false;
+	if (weapon->isWithinAttackRange(source, victim, 0.0f, 1))
+		return true;
+	return false;
+}
+
+
