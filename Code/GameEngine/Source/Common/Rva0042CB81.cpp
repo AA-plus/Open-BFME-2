@@ -1,4 +1,4 @@
-// cl: /O1 /Oi /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// cl: /O1 /Oi /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
 // stlport
 #include <algorithm>
 // ?rva0042CB81@Rva0042CBB6@@QAEXH@Z @0x0042CB81 53B via conditional counter decrement plus zero-guard clear
@@ -25,6 +25,7 @@ public:
 	void rva0042CAEB(int y);
 	void rva0042CB57(int x);
 	void rva002B230F(int impl);
+	void rva0042CAFB();
 private:
 	const void *m_vtable;
 	int m_04;
@@ -123,4 +124,41 @@ void Rva0042CBB6::rva0042CC1B()
 	m_41 = 0;
 	m_42 = 0;
 	_STL::fill(m_3A, m_3A + 4, false);
+}
+
+// Reuse the data ledger owner at 0x009FEF18; original class identity is unknown.
+class Rva002D3627Host; extern Rva002D3627Host *g_00DFEF18;
+extern int g_009BA4E8;
+class Rva002BE8D4 { public: bool rva002BE8D4(); };
+struct CameraPoint42 { float x,y,z; };
+class CameraOperations42 {
+public:
+ virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+ virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+ virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+ virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+ virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+ virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
+ virtual void s24(); virtual float s25(int);
+ virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29(CameraPoint42 *);
+ virtual void s30(); virtual void s31(); virtual void s32(); virtual void s33();
+ virtual void s34(); virtual void s35(); virtual void s36(); virtual void s37();
+ virtual void s38(); virtual void s39(CameraPoint42 *,float,float);
+};
+
+// Complete native 82CAFB..82CB57, 92B; WB12C1010 saves ECX as this.
+// Two calls from the receiver's 1005B handler at 42CC7B and its layout
+// siblings establish the owner. Original method and virtual slot names
+// remain unknown. Native slots 0x74, 0x64, 0x9C respectively fill a
+// three-float point, return a float for FPS/4 and accept that point plus
+// zero and the returned float. Camera roles are structural inferences.
+// Keep the height query nested: its vtable stays in ESI across both calls.
+void Rva0042CBB6::rva0042CAFB()
+{
+ if(!reinterpret_cast<Rva002BE8D4 *>(g_00DFEF18)->rva002BE8D4()) {
+  CameraPoint42 point;
+  reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s29(&point);
+  reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s39(
+   &point,0.0f,reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s25(g_009BA4E8 / 4));
+ }
 }
