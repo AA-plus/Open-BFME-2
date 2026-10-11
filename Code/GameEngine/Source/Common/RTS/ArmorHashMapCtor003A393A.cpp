@@ -32,6 +32,14 @@ template <> void **vector<void*>::begin();
 template <> void **vector<void*>::end();
 }
 
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+
 enum NameKeyType
 {
 	NAMEKEY_INVALID = 0,
