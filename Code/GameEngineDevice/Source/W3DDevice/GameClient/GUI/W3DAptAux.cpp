@@ -269,3 +269,17 @@ void Rva000A91D8AptFree(void *memory)
 {
  ::operator delete[](memory);
 }
+
+class AptPlayer
+{
+public:
+ void OnCommand(const char *name, int value);
+};
+
+// Apt command slot E17758: native A91DD..A91F1 forwards both cdecl
+// arguments to the owned OnCommand member through the established global.
+// WB 8A6730 calls the same named member; callback identity remains unknown.
+void Rva000A91DDOnCommand(const char *name, int value)
+{
+ reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->OnCommand(name, value);
+}
