@@ -46,3 +46,29 @@ int Rva0020EEF4Outer::rva0020EEF4(int v)
 	}
 	return 0;
 }
+
+// Native20EF3E..20EFA0 RET4: search the same region vector as20EEF4,
+// ignoring unowned regions, and act on the first found plot with a building.
+// Lookup3F083A is independently rowed in LivingWorldRegion.cpp. The second
+// call3F1CA2 consumes the region in ECX and two stack arguments; reload it
+// from the vector after the lookup, since the vector may have changed.
+// Former bank's stdcall declaration omitted this receiver and six bytes.
+// Names are measured ABI views; the original search method is unproven.
+class CreateAHeroData { public: char prefix[0x20]; int field20; };
+class Rva003F1093 { public:
+ CreateAHeroData *rva003F083A(void *);
+ void rva003F1CA2(CreateAHeroData *,int);
+};
+class Rva0060EF3E { public: bool rva0060EF3E(int v); private: char prefix[8]; Rva0020EEF4Inner *inner; };
+bool Rva0060EF3E::rva0060EF3E(int v) {
+ if(inner) {
+  Rva0020EEF4Inner *p=inner;
+  for(unsigned i=0;i<(unsigned)(((char*)p->m_end-(char*)p->m_begin)>>2);++i) {
+   Rva0020EEF4Elem *e=(Rva0020EEF4Elem*)p->m_begin[i];
+   if(e->m_13C==-1)continue;
+   CreateAHeroData *r=((Rva003F1093*)e)->rva003F083A(reinterpret_cast<void *>(v));
+   if(r && r->field20) {((Rva003F1093*)p->m_begin[i])->rva003F1CA2(r,0); return 1;}
+  }
+ }
+ return 0;
+}
