@@ -6,10 +6,43 @@
 // BFME2 uses three stack arguments at Debug slot 0x6C. The sound fields and
 // flag-test order are witnessed by both bodies; CreateSound keeps its existing
 // opaque return type. This view describes only the fields the parser accesses.
-#include "Common/INI/INI.h"
+#include "ascii_string.h"
 #include "region.h"
 #include "Common/Snapshot.h"
 #include <string.h>
+
+// A local INI view in place of the ini_bfme2 header: this unit's own field table
+// below is reached through INI::parseCoord3D (rowed 0x0002F507) and
+// INI::parseCoord2D (rowed 0x0002F558), which that shared INI view does not
+// declare, and every declaration kept here is one the already-verified body
+// needs with the same spelling.
+typedef void (*INIFieldParseProc)(class INI *ini, void *instance, void *store, const void *userData);
+class INI
+{
+public:
+	const char *getNextToken(const char *seps = 0);
+	void initFromINI(void *what, const struct FieldParse *parseTable);
+	static void parseCoord2D(INI *ini, void *instance, void *store, const void *userData);
+	static void parseCoord3D(INI *ini, void *instance, void *store, const void *userData);
+};
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
+
+// Retail's audio-event token parser, rowed and matched at RVA 0x00339900.
+void Rva00339900Parse(INI *ini, void *instance, void *store, const void *userData);
+
+// The forwarder class the ledger rows at RVA 0x003FB5F2 (BitFlags-style parse
+// driver over the rowed single-token worker 0x003FB3B8).
+class Rva003FB508
+{
+public:
+	static void parseFromINI(INI *ini, void *instance, void *store, const void *userData);
+};
 
 class BfmeAwakenLog
 {
@@ -45,8 +78,45 @@ public:
 	Rva003FAE68Base *CreateSound(const AsciiString &name);
 };
 extern LivingWorldManager *TheLivingWorldManager;
+
+// Retail's LivingWorldSound parse table, VA 0x00C37938 (.rdata, file offset
+// 0x00837338): five sixteen-byte FieldParse records and one zero sentinel,
+// ending exactly where retail's own "ZoomRegionHigh" string begins at
+// 0x00837998.  The user-data column is null in all five records, and each parse
+// target is an already-rowed body, so the definition resolves rather than
+// trading one unresolved name for another.
+//
+//   Position       INI::parseCoord3D        +0x08  -> LivingWorldSoundPosition
+//   Sound          Rva00339900Parse         +0x14  -> LivingWorldSoundEvent
+//   Flags          Rva003FB508::parseFromINI +0x18 -> the flag word
+//   ZoomRegionLow  INI::parseCoord2D        +0x1C  -> x_min, y_min
+//   ZoomRegionHigh INI::parseCoord2D        +0x24  -> x_max, y_max
+//
+// The two parseCoord2D records are what make the checker's "ZoomRegionLow X:
+// should be less than ZoomRegionHigh X:" branch reachable - parseCoord2D writes
+// X to (char *)store and Y to +4 - and `extern` on the definition keeps the
+// table external, without which a const array at namespace scope takes MSVC
+// internal linkage and leaves this unit's own reference to it unresolved.
 extern Region2D g_00E02EAC;
-extern FieldParse g_00C37938[];
+extern const FieldParse g_00C37938[];
+const FieldParse g_00C37938[] =
+{
+	{ "Position",       &INI::parseCoord3D,          0, 0x08 },
+	{ "Sound",          &Rva00339900Parse,           0, 0x14 },
+	{ "Flags",          &Rva003FB508::parseFromINI,  0, 0x18 },
+	{ "ZoomRegionLow",  &INI::parseCoord2D,          0, 0x1C },
+	{ "ZoomRegionHigh", &INI::parseCoord2D,          0, 0x24 },
+	{ 0, 0, 0, 0 }
+};
+
+// Retail's all-zero default zoom region, VA 0x00E02EAC / RVA 0x00A02EAC: past
+// .data's raw end (file offset 0x009DCC08), so the file carries no initializer
+// and retail loads it zero.  The rowed constructor at 0x003FAE68 reads the four
+// words with four separate movss instructions and the rowed checker below
+// compares the parsed zoom against it, so it is a real memory object here.  A
+// tentative definition, for the same reason as g_Va00DB6218: an explicit "= 0"
+// would let MSVC learn the value and fold a load into a literal.
+Region2D g_00E02EAC;
 
 struct LivingWorldSoundParseView
 {
