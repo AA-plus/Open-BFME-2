@@ -20634,7 +20634,6 @@ uw_00771c42,,0x00771C42,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;obje
 uw_00771c82,,0x00771C82,8,Code/gen_small/uw_gen_010.cpp,matched,gen-funclet;object-symbol=$L6874
 uw_00771cab,,0x00771CAB,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L3946
 uw_00771cb3,,0x00771CB3,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L547
-uw_00771cde,,0x00771CDE,14,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L655
 uw_00771cec,,0x00771CEC,14,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L656
 uw_00771d04,,0x00771D04,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L3946
 uw_00771d0c,,0x00771D0C,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L544
@@ -76787,3 +76786,4 @@ uw_007714fc,,0x007714FC,14,Code/GameEngine/Source/GameLogic/System/GameLogicDest
 ??0InvisibilityUpdateModuleData@@QAE@XZ,,0x00255474,198,Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateModuleDataCtor.cpp,matched,Named factory25553A allocates1DC and calls native255474..25553A; corrected B8 nugget and trivial upgrade masks; Snapshot filter1C8 and two AsciiStrings1D4/1D8 are proven by FuncInfo9185E4 four-state map; all198B and complete EH exact; no new pins
 uw_00771cc8,,0x00771CC8,8,Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateModuleDataCtor.cpp,matched,gen-funclet;object-symbol=$L1282;parent=??0InvisibilityUpdateModuleData@@QAE@XZ;native FuncInfo9185E4 state0 proves Snapshot base cleanup at771CC8; real named constructor emits complete8B and EH graph exact
 uw_00771cd0,,0x00771CD0,14,Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateModuleDataCtor.cpp,matched,gen-funclet;object-symbol=$L1283;parent=??0InvisibilityUpdateModuleData@@QAE@XZ;native FuncInfo9185E4 state1 proves filter member at1C8 cleanup; real named constructor emits whole14B and complete EH graph exact
+uw_00771cde,,0x00771CDE,14,Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateModuleDataCtor.cpp,matched,gen-funclet;object-symbol=$L1284;parent=??0InvisibilityUpdateModuleData@@QAE@XZ;native FuncInfo9185E4 state2 proves first AsciiString at1D4 cleanup; real named constructor emits whole14B and complete EH graph exact
