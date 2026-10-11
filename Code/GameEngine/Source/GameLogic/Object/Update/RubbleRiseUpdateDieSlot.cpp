@@ -39,11 +39,13 @@ public:
 	virtual void rva004A4D98(const DamageInfo *damageInfo) = 0;
 };
 
+// LINK: the rise step binds the rowed owner at 0x004A4D70 (Rva004A4D70::rva004A4D70, Rva004A4D70.cpp).
+class Rva004A4D70 { public: void rva004A4D70(); };
+
 class RubbleRiseUpdate : public UpdateModule, public DieModuleInterface
 {
 public:
 	virtual void rva004A4D98(const DamageInfo *damageInfo);
-	void rva004A4D70();
 };
 
 void RubbleRiseUpdate::rva004A4D98(const DamageInfo *damageInfo)
@@ -52,5 +54,5 @@ void RubbleRiseUpdate::rva004A4D98(const DamageInfo *damageInfo)
 	const RubbleRiseUpdateModuleData *d = m_moduleData;
 	if (!d->m_dieMuxData.isDieApplicable(obj, damageInfo))
 		return;
-	rva004A4D70();
+	((Rva004A4D70 *)this)->rva004A4D70();
 }

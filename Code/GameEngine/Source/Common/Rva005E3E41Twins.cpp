@@ -16,7 +16,7 @@ public:
 	void rva005F3FF4();
 };
 
-class Rva005E3AAA
+class Rva005E39AE
 {
 public:
 	void rva005E3AAA(int a);
@@ -52,7 +52,7 @@ void Rva005E3E41::rva005E3E41()
 	Rva005F3F6B *pFirst = (Rva005F3F6B *)(inner4 + (int)th - 0x14);
 	pFirst->rva005F3F6B();
 	int arg = *(int *)(th - 0x0C);
-	Rva005E3AAA *pSecond = *(Rva005E3AAA **)(th - 0x10);
+	Rva005E39AE *pSecond = *(Rva005E39AE **)(th - 0x10);
 	pSecond->rva005E3AAA(arg);
 }
 

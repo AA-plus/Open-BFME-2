@@ -60,11 +60,13 @@ class UpdateModule : public ModuleBase, public BehaviorModuleInterface, public U
 protected:
 	unsigned char m_pad14[0x20 - 0x14];
 };
+// LINK: the pickup step binds the rowed owner at 0x00491EE6 (Rva00491DD3::rva00491EE6, Rva00491DD3Method.cpp).
+class Rva00491DD3 { public: void rva00491EE6(); };
+
 class PickupStuffUpdate : public UpdateModule
 {
 public:
 	virtual UpdateSleepTime update();
-	void rva00491EE6();
 	void updateInactive();
 private:
 	bool m_20;			// +0x20
@@ -78,7 +80,7 @@ UpdateSleepTime PickupStuffUpdate::update()
 		if (!data->m_08 || g_00DFEEF8->rva002A8AB1(obj->getControllingPlayer()))
 		{
 			if (m_20)
-				rva00491EE6();
+				((Rva00491DD3 *)this)->rva00491EE6();
 			else
 				updateInactive();
 			return UPDATE_SLEEP_NONE;
