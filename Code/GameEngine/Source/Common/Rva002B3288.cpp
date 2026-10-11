@@ -8,8 +8,13 @@
 #include <vector>
 class Mbr002E0B30
 {
+};
+
+// LINK: the predicate at 0x00318F42 is rowed as ?rva00318F42@Rva00318F42@@QAE_NXZ (bool).
+class Rva00318F42
+{
 public:
-	unsigned char pred();
+	bool rva00318F42();
 };
 
 class Rva002B3288
@@ -25,7 +30,7 @@ bool Rva002B3288::rva002B3288()
 {
 	for (unsigned int i = 0; i < m_items.size(); ++i)
 	{
-		if (!m_items[i]->pred())
+		if (!((Rva00318F42 *)m_items[i])->rva00318F42())
 			return false;
 	}
 	return true;
