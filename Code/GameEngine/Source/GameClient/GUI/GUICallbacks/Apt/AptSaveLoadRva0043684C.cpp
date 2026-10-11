@@ -246,11 +246,15 @@ class Rva0021DA13 : public Rva0021C459
 {
 };
 
-class Rva006007DAFileSystem
-{
-public:
-	void rva006007DA(const UnicodeString *directory, const UnicodeString *pattern, Rva0021C459 *list, bool recurse);
+class Rva006007DAFileSystem {};
+void __stdcall Rva006007DAOpen(void *,void *,void *,void *);
+// The whole 81B provider ignores incoming ECX and consumes four stack words.
+// Keep the native caller's unused receiver and name the existing owner.
+union NativeSaveEnumerationCall {
+ void (__stdcall *target)(void *,void *,void *,void *);
+ void (Rva006007DAFileSystem::*member)(const UnicodeString *,const UnicodeString *,Rva0021C459 *,bool);
 };
+typedef char SaveEnumerationPointerWidth[sizeof(NativeSaveEnumerationCall)==4 ? 1 : -1];
 extern class FileSystem *TheFileSystem;
 
 class AptSaveLoad
@@ -288,7 +292,8 @@ void AptSaveLoad::rva0043684C()
 	search += Rva0037BA48Get();
 
 	Rva0021DA13 files;
-	reinterpret_cast<Rva006007DAFileSystem *>(TheFileSystem)->rva006007DA(&Rva0037B9D4Get(), &search, &files, true);
+	NativeSaveEnumerationCall enumeration={&Rva006007DAOpen};
+	(reinterpret_cast<Rva006007DAFileSystem *>(TheFileSystem)->*enumeration.member)(&Rva0037B9D4Get(), &search, &files, true);
 
 	TheMapCache->updateCache();
 

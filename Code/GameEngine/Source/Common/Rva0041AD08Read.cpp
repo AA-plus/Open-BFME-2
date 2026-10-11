@@ -377,12 +377,21 @@ class Rva0021C459:public _STL::set<AsciiString,_STL::less<AsciiString>,_STL::all
 public:~Rva0021C459();
  _STL::_Rb_tree_node_base *header()const{return *reinterpret_cast<_STL::_Rb_tree_node_base *const*>(this);}
 };
-class Rva006007DAFileSystem {public:void rva006007DA(const UnicodeString*,const UnicodeString*,Rva0021C459*,bool);};
+class Rva006007DAFileSystem {};
+void __stdcall Rva006007DAOpen(void *,void *,void *,void *);
+// The whole 81B provider ignores incoming ECX and consumes four stack words.
+// Keep the native caller's unused receiver and name the existing owner.
+union NativeSaveEnumerationCall {
+ void (__stdcall *target)(void *,void *,void *,void *);
+ void (Rva006007DAFileSystem::*member)(const UnicodeString *,const UnicodeString *,Rva0021C459 *,bool);
+};
+typedef char SaveEnumerationPointerWidth[sizeof(NativeSaveEnumerationCall)==4 ? 1 : -1];
 class Rva002DC267 {public:UnicodeString rva002DC267()const;};
 AsciiString *Rva00300678Get();
 class BFME2WideConcatPair {
 public:
- BFME2WideConcatPair(const UnicodeString&a,const UnicodeString&b):left(&a),right(&b){}
+ struct ReferencePairTag {};
+ __forceinline BFME2WideConcatPair(ReferencePairTag,const UnicodeString&a,const UnicodeString&b):left(&a),right(&b){}
  operator UnicodeString();
  const UnicodeString *left,*right;
 };
@@ -397,11 +406,12 @@ extern "C" __declspec(dllimport) int __stdcall DeleteFileW(const unsigned short*
 void GameStateMap::clearScratchPadMaps() {
  Rva0021C459 files;
  {UnicodeString pattern(L"*");
- reinterpret_cast<Rva006007DAFileSystem*>(TheFileSystem)->rva006007DA(
+ NativeSaveEnumerationCall enumeration={&Rva006007DAOpen};
+ (reinterpret_cast<Rva006007DAFileSystem *>(TheFileSystem)->*enumeration.member)(
  &reinterpret_cast<const Rva002DC267*>(TheGameState)->rva002DC267(),&pattern,&files,false);}
  for(_STL::_Rb_tree_node_base *node=files.header()->left;node!=files.header();
  node=_STL::_Rb_global<bool>::_M_increment(node)) {
-  static UnicodeString suffix((const UnicodeString&)BFME2WideConcatPair(UnicodeString(L"."),UnicodeString(*Rva00300678Get())));
+  static UnicodeString suffix((const UnicodeString&)BFME2WideConcatPair(BFME2WideConcatPair::ReferencePairTag(),UnicodeString(L"."),UnicodeString(*Rva00300678Get())));
   // Witness the iterator cell after static initialization: the native loop
   // reloads its node from the frame, rather than retaining it in EBX.
   UnicodeString &name=static_cast<S6SaveFileNode*>(reinterpret_cast<_STL::_Rb_tree_node_base *const volatile &>(node))->name;

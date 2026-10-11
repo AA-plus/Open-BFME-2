@@ -4,10 +4,11 @@
 // 0x002DF1F1..0x002DF2DA (233 bytes, EH, RET 12). Zero Hour's and BFME 1's
 // GameState::iterateSaveFiles in its BFME 2 form, which adds the save type:
 // the search pattern is "*" plus that type's wide extension (0x002DBC97, the
-// extension table getter; its body never reads ECX, so it is reached through
-// a thiscall pin), TheFileSystem lists the save directory (rowed 0x002DC267)
-// into a filename set (0x006007DA, likewise pinned as the FileSystem method it
-// is), and every name is handed to the callback by value with the user data.
+// extension table getter; now named by its rowed GameState member), then
+// the receiver-preserving view calls the existing 0x006007DA stdcall provider
+// with the save directory (rowed 0x002DC267) and filename set. That provider
+// ignores ECX and dispatches through the archive global's slot 7. Every name
+// is handed to the callback by value with the user data.
 // The set's constructor and destructor are rowed under their fold names
 // (set<AsciiString> 0x000D3A71 and Rva0021C459 0x0021D5D5) and the walk uses
 // the rowed _Rb_global<bool>::_M_increment. WorldBuilder's twin (0x00E6FB90)
@@ -59,11 +60,15 @@ public:
 	_STL::_Rb_tree_node_base *header() const { return *reinterpret_cast<_STL::_Rb_tree_node_base *const *>(this); }
 };
 
-class Rva006007DAFileSystem
-{
-public:
-	void rva006007DA(const UnicodeString *directory, const UnicodeString *pattern, Rva0021C459 *list, bool recurse);
+class Rva006007DAFileSystem {};
+void __stdcall Rva006007DAOpen(void *,void *,void *,void *);
+// The whole 81B provider ignores incoming ECX and consumes four stack words.
+// Keep the native caller's unused receiver and name the existing owner.
+union NativeSaveEnumerationCall {
+ void (__stdcall *target)(void *,void *,void *,void *);
+ void (Rva006007DAFileSystem::*member)(const UnicodeString *,const UnicodeString *,Rva0021C459 *,bool);
 };
+typedef char SaveEnumerationPointerWidth[sizeof(NativeSaveEnumerationCall)==4 ? 1 : -1];
 extern class FileSystem *TheFileSystem;
 
 class Rva002DC267
@@ -77,7 +82,7 @@ typedef void (*IterateSaveFileCallback)(UnicodeString filename, void *userData);
 class GameState
 {
 public:
-	const unsigned short *rva002DBC97(int saveType);
+	void *rva002DBC97Get(int saveType);
 	void iterateSaveFiles(IterateSaveFileCallback callback, void *userData, int saveType);
 };
 
@@ -87,10 +92,11 @@ void GameState::iterateSaveFiles(IterateSaveFileCallback callback, void *userDat
 		return;
 
 	UnicodeString pattern(AsciiString("*"));
-	pattern += rva002DBC97(saveType);
+	pattern += reinterpret_cast<const unsigned short *>(rva002DBC97Get(saveType));
 
 	Rva0021C459 filenameList;
-	reinterpret_cast<Rva006007DAFileSystem *>(TheFileSystem)->rva006007DA(
+	NativeSaveEnumerationCall enumeration={&Rva006007DAOpen};
+	(reinterpret_cast<Rva006007DAFileSystem *>(TheFileSystem)->*enumeration.member)(
 		&reinterpret_cast<const Rva002DC267 *>(this)->rva002DC267(), &pattern, &filenameList, true);
 
 	for (_STL::_Rb_tree_node_base *node = filenameList.header()->_M_left; node != filenameList.header();
