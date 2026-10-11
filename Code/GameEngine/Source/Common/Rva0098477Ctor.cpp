@@ -13,15 +13,19 @@ extern "C" const void *const vtbl_00BC8298[];  // ??_7Rva0098477@@6B@
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
-class BFME2NativeNetwork
+// LINK: the pin ?baseConstruct@BFME2NativeNetwork was retired when its address 0x1B4E63 was
+// rowed as SubsystemInterface::SubsystemInterface. The base is modelled by a non-polymorphic
+// 0xC-byte view whose ctor is the rowed one (called first, ecx = this, as before).
+class SubsystemInterface
 {
 public:
-	void baseConstruct();
+	SubsystemInterface();
+private:
+	int m_pad00[3];
 };
 
-class Rva0098477
+class Rva0098477 : public SubsystemInterface
 {
-	int m_pad00[3];
 	int m_0C;
 public:
 	Rva0098477();
@@ -29,7 +33,6 @@ public:
 
 Rva0098477::Rva0098477()
 {
-	((BFME2NativeNetwork *)this)->baseConstruct();
 	*(void **)this = (void *)((unsigned int)vtbl_00BC8298);
 	_ReadWriteBarrier();
 	m_0C = 0;
