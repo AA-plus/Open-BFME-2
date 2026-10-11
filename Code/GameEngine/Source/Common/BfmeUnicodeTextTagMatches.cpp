@@ -24,5 +24,8 @@ private:
 
 bool BfmeUnicodeTextTag::matches(const BfmeUnicodeTextTag *other) const
 {
-	return m_text.compare(other->m_text) == 0 && m_tag == other->m_tag;
+	// Retail folds UnicodeString::compare into the single StringBase worker
+	// at 0x00006A7A (rowed from string_base.cpp): calling the wrapper emits
+	// a non-retail copy, so call the base directly.
+	return ((const StringBase<unsigned short> &)m_text).compare((const StringBase<unsigned short> &)other->m_text) == 0 && m_tag == other->m_tag;
 }
