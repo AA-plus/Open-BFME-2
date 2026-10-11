@@ -14,6 +14,14 @@
 // 0x2FBC0/0x2FBB0, Line3DClass ctor 0x001673D0 (0x144 bytes), scene Add_Render_Object at +8 and
 // push_back through BfmeE16 0x0059D2A3. Vector3 takes its components by reference: by value the
 // compiler loads them into other xmm registers than retail does.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 

@@ -5,6 +5,14 @@
 // stride 12; destructor 5F9217 tail-releases that string.
 // This view preserves the already rowed BfmeStringRecord005F93E3 push-back type.
 // Tabs and helper views below assert only witnessed receiver/stack arguments.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include "ascii_string.h"
 #include "unicode_string.h"

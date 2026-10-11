@@ -23,6 +23,14 @@
 // 0x004F76EA, next 0x004F7B42). Those callees keep their address-derived
 // ledger spellings, so the battle is cast to each one's receiver view.
 #include "ascii_string.h"
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include <map>
 
