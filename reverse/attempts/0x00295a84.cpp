@@ -1,4 +1,6 @@
 // ?rva00295A84@Object@@QAEXPAV1@@Z
+// partial score=0.99 date=2026-10-11
+// ?rva00295A84@Object@@QAEXPAV1@@Z
 // partial score=0.9933078158 date=2026-10-10
 // cl: /I. /O1 /G7 /MD /EHsc
 // Native295A84..295CA6 RET4 and WB CC1CB0, caller295CA6 melee-victim
@@ -29,8 +31,8 @@ class Object{public:
  char pad00[4];ThingTemplateView*m_template;char pad08[0x258-8];AIUpdateInterface*m_ai;char pad25c[0x456-0x25c];bool m_recursing;
 };
 void Object::rva00295A84(Object*victim){
- AIUpdateInterface *ai=m_ai;
  if(victim){
+  AIUpdateInterface *ai=m_ai;
   if(ai && !m_recursing && !rva00344EB2Gate(this,(Thing*)victim)){
    Object *related=rva0028ACA0();
    if(!ai->m_flag3c7 && related){
