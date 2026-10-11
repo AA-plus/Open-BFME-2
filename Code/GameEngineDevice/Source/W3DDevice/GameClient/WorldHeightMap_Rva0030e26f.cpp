@@ -29,7 +29,7 @@
 // Class to encapsulate height map.
 // Author: John Ahlquist, April 2001
 
-#define INSTANTIATE_WELL_KNOWN_KEYS
+// The TheKey_* instances are defined once, by WorldHeightMap.cpp (INSTANTIATE_WELL_KNOWN_KEYS).
 
 #include "windows.h"
 #include "stdlib.h"

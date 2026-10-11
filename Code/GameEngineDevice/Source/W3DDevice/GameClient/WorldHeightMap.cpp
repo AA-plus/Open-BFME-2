@@ -260,16 +260,7 @@ void MapObject::setWaypointID(Int i) { getProperties()->setInt(TheKey_waypointID
 // ?setWaypointName@MapObject@@ present-unmatched
 void MapObject::setWaypointName(AsciiString n) { getProperties()->setAsciiString(TheKey_waypointName, n); }
 
-/*static */ Int MapObject::countMapObjectsWithOwner(const AsciiString& n)
-{
-	Int count = 0;
-	for (MapObject *pMapObj = MapObject::getFirstMapObject(); pMapObj; pMapObj = pMapObj->getNext()) 
-	{
-		if (pMapObj->getProperties()->getAsciiString(TheKey_originalOwner) == n)
-			++count;
-	}
-	return count;
-}
+// MapObject::countMapObjectsWithOwner is recovered in WorldHeightMap_Rva0030e26f.cpp.
 
 //-------------------------------------------------------------------------------------------------
 // ?getThingTemplate@MapObject@@ present-unmatched
