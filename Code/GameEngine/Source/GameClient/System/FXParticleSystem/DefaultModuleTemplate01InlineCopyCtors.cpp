@@ -44,6 +44,17 @@ public:
 		*(struct AlphaKeys *)((char *)this + 4) =
 			*(const struct AlphaKeys *)((const char *)&that + 4);
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes: vtable store plus 128B member copy). The Rva003AEA42 copy ctor
+	// below calls the qualified copy ctor, inlining it but still emitting the
+	// loser COMDAT (copy unproven, differs from kept). Rebinding there emits
+	// only this unique (trivially kept) copy. No flags touched.
+	__forceinline void bfme_copy_from(const DefaultAlphaModuleInfo &that)
+	{
+		*(void **)this = &DefaultAlphaModuleInfo_vtbl;
+		*(struct AlphaKeys *)((char *)this + 4) =
+			*(const struct AlphaKeys *)((const char *)&that + 4);
+	}
 	virtual ~DefaultAlphaModuleInfo();
 
 private:
@@ -87,7 +98,7 @@ Rva003AEA42::Rva003AEA42(const Rva003AEA42 &that)
 	*(void **)this = &Rva003AEA42_v0a;
 	*(void **)((char *)this + 0x14) = &Rva003AEA42_v14a;
 	*(void **)((char *)this + 0x18) = &Rva003AEA42_v18a;
-	sub->DefaultAlphaModuleInfo::DefaultAlphaModuleInfo(
+	sub->bfme_copy_from(
 		*(const FXParticleSystem::DefaultAlphaModuleInfo *)sub_src);
 	*(void **)this = &Rva003AEA42_v0b;
 	*(void **)((char *)this + 0x14) = &Rva003AEA42_v14b;

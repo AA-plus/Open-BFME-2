@@ -41,6 +41,12 @@ class CategoryModuleTemplate<8> : public ModuleTemplate, public SecondaryModuleB
 {
 public:
     CategoryModuleTemplate();
+    // LINK: declaration-only dtor (no body in this TU). The derived
+    // LifeEventModuleTemplate ctor's EH references it; with no local body the
+    // reference binds the kept copy instead of instantiating this TU's loser
+    // copy, and all references are unchanged (same mangled name). The
+    // rowed derived ctor is untouched. No flags touched.
+    ~CategoryModuleTemplate();
 };
 
 class LifeEventModuleInfo
