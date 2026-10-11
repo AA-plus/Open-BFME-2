@@ -42,6 +42,12 @@ Rva0073EEE0ListValue::Rva0073EEE0ListValue(const Rva0073EEE0ListValue &other)
         ++handle_08.item->RefCount;
 }
 typedef std::list<Rva0073EEE0ListValue> TargetListAt0073EEE0;
+
+// Declaration-only: retail has one insert copy, rowed in stlport_target_list_73eee0_insert.cpp (node creation out of line);
+// push_back below reaches it through a call.
+template<>
+TargetListAt0073EEE0::iterator TargetListAt0073EEE0::insert(TargetListAt0073EEE0::iterator, const Rva0073EEE0ListValue &);
+template TargetListAt0073EEE0::_Node *TargetListAt0073EEE0::_M_create_node(const Rva0073EEE0ListValue &);
 __declspec(noinline) void ForceTargetListAt0073EEE0(
     TargetListAt0073EEE0 &list, const Rva0073EEE0ListValue &item) {
     list.push_back(item);
