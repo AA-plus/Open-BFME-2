@@ -11938,7 +11938,6 @@ name,address,notes
 ?rva005E3AAA@Rva005E3AAA@@QAEXH@Z,0x005E3AAA,pin for 0x005E3E41 second; address-derived
 ?rva005E4BB7@Rva005E4BB7@@QAEPAXPAX@Z,0x005E4BB7,thiscall on +0x1C member taking out-ptr returning pointer chain for 0x9F3F41; void ptrs assumed; read from REL32 at 0x005E4DBD in rva005E4DAF 0x005E4DAF; Ghidra 120B
 ?rva005E509F@Rva005E509FCallView@@QAEXXZ,0x005E509F,"auto-pin (permute --pins): REL32 call target read from retail in 0x005e6894, whose banked body is byte-exact once this call resolves"
-?rva005E50E1@Rva005E50E1@@QAEXH@Z,0x005E50E1,pin for 0x005E51D3 second; address-derived
 ?rva005E589E@Rva005E589E@@QAEXXZ,0x005E589E,jump target of 17B forwarder 0x005E590F; original name unknown
 ?rva005E58ED@Rva005E58EDNullTarget@@QAEXXZ,0x005E58ED,null-checked tail jmp target of forwarder 0x005CD9F2; original name unknown
 ?rva005E5B82@Rva005E5B82@@QAEHH@Z,0x005E5B82,pin for 0x005E5BF7 tail; address-derived

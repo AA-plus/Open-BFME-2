@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
+// cl: /O1 /G7 /arch:SSE /MD /D_CRTIMP= /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
 // Native5E4B6F..5E4B9D is the complete46B RET8 callback. WB15F9D40
 // independently names ArmyDetailsPanel::Impl::OnRemovingEntryFromArmySummary:
@@ -44,6 +44,7 @@ public:
  class Impl {
  public:
   virtual void OnRemovingEntryFromArmySummary(const ArmySummary &,int);
+  void OnIconLeftClicked(int);
  private:
   char prefix[0x14-4]; Rva005F22D2 *selected; char gap[4];
   _STL::map<int,SBServer> icons; int selectedID;
@@ -55,3 +56,36 @@ void StrategicInGameUI::ArmyDetailsPanel::Impl::OnRemovingEntryFromArmySummary(c
  icons.erase(entryID);
  selected->rva005F2295(entryID);
 }
+
+class Keyboard { public: bool isCtrl(); };
+extern Keyboard *TheKeyboard;
+class Rva005F2278 { public: bool rva005F2278(int) const; };
+class Rva005E4DAF { public: void rva005E4DAF(int); void rva005E4DE5(int); };
+struct ArmySelectionCountView { char unknown[0x14]; unsigned count; };
+void StrategicInGameUI::ArmyDetailsPanel::Impl::OnIconLeftClicked(int entryID) {
+ Rva005E4DAF *actions=(Rva005E4DAF *)this;
+ if(TheKeyboard->isCtrl()) {
+  if(((Rva005F2278 *)selected)->rva005F2278(entryID)) actions->rva005E4DAF(entryID);
+  else actions->rva005E4DE5(entryID);
+ } else if(((Rva005F2278 *)selected)->rva005F2278(entryID) && ((ArmySelectionCountView *)selected)->count==1) {
+  actions->rva005E4DAF(entryID);
+ } else {
+  _STL::map<int,SBServer>::iterator end=icons.end();
+  for(_STL::map<int,SBServer>::iterator it=icons.begin(); it!=end; ++it) {
+   int key=it->first;
+   if(((Rva005F2278 *)selected)->rva005F2278(key)) actions->rva005E4DAF(key);
+  }
+  actions->rva005E4DE5(entryID);
+ }
+}
+
+// OnIconLeftClicked: native005E50E1..005E5177 is the complete150B RET4
+// callback; WB015F86B0 names the method and this file (lines540..541).
+// Native begins PUSH EBP/MOV EBP, not the aggregate-copy instruction named
+// in the old false-boundary record. Ctrl toggles the clicked ID. Without
+// Ctrl, clicking the sole selected ID deselects it; otherwise walk the
+// complete icon map and deselect selected IDs before selecting the click.
+// The map header is captured before callbacks; the selected collection at
+// +14 carries its native count at+14. Existing setters and contains-test
+// retain their provider ABI names; the four-byte icon handle stays provisional.
+// Every byte including the loop and all direct call sites is exact.

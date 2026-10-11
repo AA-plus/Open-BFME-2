@@ -15,11 +15,11 @@ public:
 	void rva000B3FD0Empty();
 };
 
-class Rva005E50E1
-{
-public:
-	void rva005E50E1(int a);
-};
+// API-only declaration: the +4 owner pointer is passed unchanged to the
+// now-owned ArmyDetailsPanel callback. No owner layout is asserted here.
+namespace StrategicInGameUI {
+class ArmyDetailsPanel { public: class Impl { public: void OnIconLeftClicked(int); }; };
+}
 
 class Rva005E51D3
 {
@@ -36,6 +36,6 @@ void Rva005E51D3::rva005E51D3()
 	Rva000B3FD0Empty *pFirst = (Rva000B3FD0Empty *)(inner4 + (int)th - 0x14);
 	pFirst->rva000B3FD0Empty();
 	int arg = *(int *)(th - 0x0C);
-	Rva005E50E1 *pSecond = *(Rva005E50E1 **)(th - 0x10);
-	pSecond->rva005E50E1(arg);
+	StrategicInGameUI::ArmyDetailsPanel::Impl *pSecond = *(StrategicInGameUI::ArmyDetailsPanel::Impl **)(th - 0x10);
+	pSecond->OnIconLeftClicked(arg);
 }
