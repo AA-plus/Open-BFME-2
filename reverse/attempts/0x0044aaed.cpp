@@ -1,15 +1,20 @@
 // ?update@LANAPI@@UAEXXZ
-// partial score=0.98968 date=2026-10-11
+// partial score=0.998 date=2026-10-11
+// ?update@LANAPI@@UAEXXZ
+// partial score=0.998 date=2026-10-11 (all 1938 bytes agree masked; only the
+// unresolved REL32 to handleRequestJoin 0x0058277C differs)
 // Banked partial for ?update@LANAPI@@UAEXXZ @ 0x0044AAED 1938B
-// partial score=0.98 date=2026-10-09
 // cl: /O1 /G7 /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
 //
 // Bank: canonical string definitions are embedded for standalone serving.
 // StringBase adds only a LANAPI friend grant for its already-rowed by-value
-// return cleanup; no production/shared header is edited. Landing would require
-// adopting that access contract in the canonical header, not a private Code copy.
+// return cleanup; no production/shared header is edited. Landing form without
+// the snapshots: build/r5/0x0044aaed.canon.cpp.
 // Provenance BF1 f98983a7d lanapi.cpp plus native BF2 dispatch/layout.
-// Full1938 includes80B switch table; only cases13/14 shared-branch shape differs.
+// Cases 13/14: retail keeps case 13's copy of the shared handleGameOptions
+// call and branches back to it from case 14; MSVC 7.1 cross-jumps that way
+// only when the statement after the switch is a labelled jump target (without
+// the label it keeps case 14's copy and case 13 jumps forward), hence markRead.
 // LANAPI message handlers, Zero Hour's GameNetwork/LANAPIhandlers.cpp, as
 // LANAPI::update (slot 10, 0x0044AAED) dispatches them by message type
 // through its jump table at 0x0084B22F. The sender arrives as a pointer to
@@ -1068,7 +1073,9 @@ void LANAPI::update() {
     case 16:rva00582138(msg,&sender);break;
     case 17:handleInActive(msg,&sender);break;
     case 19:rva005816E3(msg,&sender);break;
+    default:goto markRead;
    }
+   markRead:
    ((LANTransportRings*)m_transport)->in[i].length=0;
   }
  }
