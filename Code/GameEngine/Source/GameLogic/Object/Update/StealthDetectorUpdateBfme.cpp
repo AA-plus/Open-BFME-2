@@ -151,7 +151,7 @@ class ContainModuleInterface:public Slots<4>{public:virtual bool isGarrisonable(
 class ContainListInterface:public Slots<70>{public:virtual Rva0036AE51ListView rva70();virtual void gap71();virtual void gap72();virtual int getStealthUnitsContained();};
 class UpgradeTemplate;class UpgradeCenter{public:const UpgradeTemplate *findUpgrade(const AsciiString&)const;};extern UpgradeCenter *TheUpgradeCenter;
 class Player{public:char pad[0x54];int m_index;};class PlayerList{public:char pad[0x10];Player *m_local;};extern PlayerList *ThePlayerList;
-class Rva00439E0C{public:void rva00439E0C(Object*,int,int,int);};extern GameLogic *TheGameLogic;
+class Rva00439E0C{public:bool rva00439E0C(Object*,Object*,int,int);};extern GameLogic *TheGameLogic;
 class Object{public:bool testStatus(ObjectStatusTypes) const;bool isKindOf(KindOfType) const;bool rva00290D2B(const UpgradeTemplate*) const;float getVisionRange()const;
  int rva0028F4EF();int rva002933CD();Rva00373EC6 *rva0028F4BC();protected:Module *findModule(NameKeyType)const;friend class StealthDetectorUpdate;public:
  Player *getControllingPlayer()const;Relationship getRelationship(const Object*)const;CellShroudStatus getShroudStatusForPlayer(int) const;
@@ -182,7 +182,7 @@ UpdateSleepTime StealthDetectorUpdate::update(){
   if(them->rva0028F4EF()==2&&!them->isKindOf((KindOfType)0x12c))forceUnstealth=false;else forceUnstealth=true;
   if(them->isKindOf((KindOfType)0x12c)){static NameKeyType key_SpecialDisguiseUpdate=TheNameKeyGenerator->nameToKey("SpecialDisguiseUpdate");SpecialDisguiseUpdate *disguise=(SpecialDisguiseUpdate*)them->findModule(key_SpecialDisguiseUpdate);if(disguise)disguise->rva004B05F5(false);}
   if(forceUnstealth&&!(unsigned char)them->rva002933CD()&&!them->testStatus((ObjectStatusTypes)0x11))forceUnstealth=false;else forceUnstealth=true;
-  TheGameLogic->getManager178()->rva00439E0C(them,(int)self,data->m_rate+1,2);
+  TheGameLogic->getManager178()->rva00439E0C(them,(Object*)self,data->m_rate+1,2);
   StealthUpdate *stealth=(StealthUpdate*)them->rva0028F4BC();
   if(stealth&&them->testStatus((ObjectStatusTypes)0x12)){
    foundSomeone=true;stealth->markAsDetected(data->m_rate+1,2,self,true);
@@ -191,7 +191,7 @@ UpdateSleepTime StealthDetectorUpdate::update(){
     if(sys){Coord3D gridPosition;gridPosition.x=them->m_pos.x;gridPosition.y=them->m_pos.y;gridPosition.z=them->m_pos.z;gridPosition.z=self->m_pos.z+17.0f;gridPosition.x-=((int)gridPosition.x)%12;gridPosition.y-=((int)gridPosition.y)%12;((Rva001F3899Slot*)sys.m_system)->set(*(const Rva001F3899Arg*)&gridPosition);}}
   }else{ContainModuleInterface *contain=them->m_contain;if(contain&&contain->isGarrisonable()&&((ContainListInterface*)contain)->getStealthUnitsContained()){
    Rva0036AE51ListView view=((ContainListInterface*)contain)->rva70();
-   for(ContainmentList::const_iterator item=view.b->begin();item!=view.b->end();++item){Object *rider=(Object*)containmentFirstWord(*item);StealthUpdate *riderStealth=(StealthUpdate*)rider->rva0028F4BC();if(riderStealth){foundSomeone=true;if(self->getControllingPlayer()!=rider->getControllingPlayer()&&self->getRelationship(rider)!=ALLIES){riderStealth->markAsDetected(data->m_rate+2,2,self,true);TheGameLogic->getManager178()->rva00439E0C(rider,(int)self,data->m_rate+2,2);}}}
+   for(ContainmentList::const_iterator item=view.b->begin();item!=view.b->end();++item){Object *rider=(Object*)containmentFirstWord(*item);StealthUpdate *riderStealth=(StealthUpdate*)rider->rva0028F4BC();if(riderStealth){foundSomeone=true;if(self->getControllingPlayer()!=rider->getControllingPlayer()&&self->getRelationship(rider)!=ALLIES){riderStealth->markAsDetected(data->m_rate+2,2,self,true);TheGameLogic->getManager178()->rva00439E0C(rider,(Object*)self,data->m_rate+2,2);}}}
   }}
   if(!forceUnstealth){Drawable *draw=((Thing*)them)->getDrawable();if(draw)draw->opacity=1.0f;}
  }
