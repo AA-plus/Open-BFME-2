@@ -8,10 +8,16 @@
 // address-derived names; member identities unproven beyond the store/call
 // shapes.
 
-class Rva0028CECFOwner
+// LINK: 0x28CECF is rowed as Object::rva0028CECF; the p2 parameter keeps its own view type
+// (it is part of this row's mangled name) and the call goes through an Object view.
+class Object
 {
 public:
 	bool rva0028CECF();
+};
+
+class Rva0028CECFOwner
+{
 };
 
 struct Rva002E7388Pair
@@ -53,6 +59,6 @@ Rva002E7388Owner *Rva002E7388Owner::rva002E7388(int p1, Rva0028CECFOwner *p2,
 	m_20 = p7;
 	m_24 = p8;
 	m_28 = p2;
-	m_2C = p2->rva0028CECF();
+	m_2C = ((Object *)p2)->rva0028CECF();
 	return this;
 }
