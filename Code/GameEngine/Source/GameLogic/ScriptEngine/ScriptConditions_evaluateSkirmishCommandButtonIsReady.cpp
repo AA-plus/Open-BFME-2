@@ -23,6 +23,8 @@ class SpecialPowerTemplate : public Overridable
 {
 public:
     SpecialPowerType getSpecialPowerType() const { return m_type; }
+    // LINK: same-body helper under a TU-unique name (identical inlined bytes); the getSpecialPowerType copy loses to the first-in-order copy. No flags touched.
+    SpecialPowerType bfme_getSpecialPowerType_9f9a6() const { return m_type; }
 private:
     unsigned char m_pad[0x1C];
     SpecialPowerType m_type; // +0x1C
@@ -95,7 +97,7 @@ bool ScriptConditions::evaluateSkirmishCommandButtonIsReady(Parameter *, Paramet
         {
             const SpecialPowerTemplate *sp = commandButton->getSpecialPowerTemplate();
             const Overridable *finalOverride = sp->friend_getFinalOverride();
-            if (!iter.cur()->hasSpecialPower(((const SpecialPowerTemplate *)finalOverride)->getSpecialPowerType()))
+            if (!iter.cur()->hasSpecialPower(((const SpecialPowerTemplate *)finalOverride)->bfme_getSpecialPowerType_9f9a6()))
                 continue;
         }
         else if (!commandButton->getUpgradeTemplate())
