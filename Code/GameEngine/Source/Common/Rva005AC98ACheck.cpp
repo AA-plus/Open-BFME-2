@@ -42,6 +42,7 @@ class AIRingHeroTactic
 {
 public:
 	bool enemyHasRingHeroUpgrade();
+	bool rva005ACA28();
 private:
 	char m_pad[0x24];
 	Player *m_player;
@@ -70,4 +71,11 @@ bool AIRingHeroTactic::enemyHasRingHeroUpgrade()
 	}
 	m_cur = 0;
 	return false;
+}
+
+// 0x005ACA28 5B, directly after the body it enters (tail jump into enemyHasRingHeroUpgrade); no referencing site found in
+// this pass; address-named.
+bool AIRingHeroTactic::rva005ACA28()
+{
+	return enemyHasRingHeroUpgrade();
 }

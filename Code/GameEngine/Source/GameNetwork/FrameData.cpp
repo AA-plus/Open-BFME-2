@@ -136,3 +136,10 @@ FrameDataReturnType FrameData::allCommandsReady(Bool debugSpewage) {
 	}
 	return FRAMEDATA_NOTREADY;
 }
+
+// ?reset@FrameData@@QAEXXZ @0x005DA55E 5B, directly after init: Zero Hour's
+// FrameData::reset is init(), here a tail jump (the shim header declares it).
+void FrameData::reset()
+{
+	init();
+}

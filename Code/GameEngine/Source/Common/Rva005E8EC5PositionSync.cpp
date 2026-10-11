@@ -91,3 +91,19 @@ void Rva005E8EC5::rva005E8EC5()
 	reinterpret_cast<Rva005F83F4 *>(m_member08)->rva005F83F4(*reinterpret_cast<const Rva005F83F4Data *>(&lifted));
 	reinterpret_cast<Rva005F8427 *>(m_member08)->rva005F8427();
 }
+
+// ?rva005E8F49@Rva005E8F49Owner@@QAEXXZ @0x005E8F49 7B, directly after
+// rva005E8EC5: forwards to the object held at +0 (mov ecx, [ecx]; tail jump).
+// Owner and name are address-derived; no referencing site found in this pass.
+class Rva005E8F49Owner
+{
+public:
+	void rva005E8F49();
+private:
+	Rva005E8EC5 *m_target00;
+};
+
+void Rva005E8F49Owner::rva005E8F49()
+{
+	m_target00->rva005E8EC5();
+}

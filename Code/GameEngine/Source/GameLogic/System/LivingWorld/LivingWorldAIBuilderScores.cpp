@@ -96,6 +96,7 @@ class Rva0059CEE4
 	int m_0c;
 public:
 	float rva0059CEE4(int a1, void *a2, void **a3);
+	float rva0059CF2F(int a1, void *a2, void **a3);
 };
 
 class LivingWorldAIBuilder
@@ -430,4 +431,11 @@ void LivingWorldAIBuilder::FillBuildingOrders(_STL::vector<BfmeE16> *orders, int
 			}
 		}
 	}
+}
+
+// 0x0059CF2F 5B, directly after the body it enters (tail jump into rva0059CEE4); no referencing site found in
+// this pass; address-named.
+float Rva0059CEE4::rva0059CF2F(int a1, void *a2, void **a3)
+{
+	return rva0059CEE4(a1, a2, a3);
 }

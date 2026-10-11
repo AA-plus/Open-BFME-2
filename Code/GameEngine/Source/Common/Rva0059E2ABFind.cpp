@@ -22,6 +22,7 @@ class Rva0059E2AB
 {
 public:
 	void *rva0059E2AB(void *def);
+	void *rva0059E2D7(void *def);
 private:
 	unsigned char m_pad[0x28];
 	StringBase<char> m_28;
@@ -35,4 +36,11 @@ void *Rva0059E2AB::rva0059E2AB(void *def)
 		return def;
 	void *found = (*(Rva002BA8F1Logic **)&TheLivingWorldLogic)->m_b0->rva002104B6(&m_28);
 	return found != 0 ? found : def;
+}
+
+// 0x0059E2D7 5B, directly after the body it enters (tail jump into rva0059E2AB); no referencing site found in
+// this pass; address-named.
+void *Rva0059E2AB::rva0059E2D7(void *def)
+{
+	return rva0059E2AB(def);
 }

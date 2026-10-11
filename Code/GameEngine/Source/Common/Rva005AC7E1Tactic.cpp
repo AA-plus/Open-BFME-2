@@ -289,6 +289,7 @@ public:
 	virtual bool initializeTeamTemplate(void *unit, int count);
 	virtual void run();
 	bool weHaveGollum();
+	bool rva005ACA92();
 	bool enemyHasRingHeroUpgrade();
 private:
 	ObjectID m_hero;	// +0x58
@@ -351,4 +352,11 @@ void AIRingHeroTactic::run()
 	m_escorting = false;
 	weHaveGollum();
 	enemyHasRingHeroUpgrade();
+}
+
+// 0x005ACA92 5B, directly after the body it enters (tail jump into weHaveGollum); no referencing site found in
+// this pass; address-named.
+bool AIRingHeroTactic::rva005ACA92()
+{
+	return weHaveGollum();
 }

@@ -56,3 +56,20 @@ void Rva005E9687::rva005E9687()
         prompt->rva005E9601();
     }
 }
+
+// ?rva005E96D4@Rva005E96D4Owner@@QAEXXZ @0x005E96D4 8B, directly after
+// rva005E9687: forwards to the object held at +4 (mov ecx, [ecx+4]; tail
+// jump). Owner and name are address-derived; no referencing site found.
+class Rva005E96D4Owner
+{
+public:
+    void rva005E96D4();
+private:
+    void *m_00;
+    Rva005E9687 *m_target04;
+};
+
+void Rva005E96D4Owner::rva005E96D4()
+{
+    m_target04->rva005E9687();
+}
