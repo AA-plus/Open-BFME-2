@@ -14,7 +14,9 @@ class EAStringC {
  void *data;
 public:
  EAStringC();
+ EAStringC(const EAStringC &other);
  bool rva006CD4A0() const;
+ bool rva006D30D0(const EAStringC *other) const;
  void rva006D3C60();
  EAStringC(const char *);
  ~EAStringC();
@@ -142,7 +144,7 @@ extern Rva006E34D0 *g_bfmeAptPtrAtE176D0;
 class AptAnimationPoolData {public:void tickIntervalTimers(int);void rva006E6540();};
 class Rva006F7A30 {public:void rva006F7A30();};
 class Rva006FB860 {public:void rva006FB910();};
-class AptLinker {public:void rva006D17F0();};
+class AptLinker {public:void rva006D17F0();void Load(const EAStringC &a,EAStringC b);};
 // VA 0x00E176F8 (RVA 0x00A176F8): the Apt linker this unit creates in its
 // first tick (g_bfmeAptLinkerAtE176F8 = new Rva008947A0Owner below), so the
 // definition lives here, in the assigning unit, and is zero-initialised: four
@@ -469,4 +471,24 @@ void rva006cc940()
 bool _AptValidate()
 {
  return true;
+}
+
+// ?Rva006CC600@@YAXPBDPAD@Z @0x006CC600: Apt.cpp's import-target guard
+// (assert file/lines 802/805 name it): refuse a target suffix of "#import",
+// then forward (path,target) to the linker Load at 0x006D1F80.
+// The temporary inequality and literal conjunction retain native EH tracking. The byte at
+// 0x00E176FC is the ledger-owned g_aptBackgroundSet (AptMovieFrameControls),
+// cleared here.
+extern bool g_aptBackgroundSet;
+void Rva006CC600(const char *path,char *suffix)
+{
+ tickAssert(g_bfmeAptInitAtE17700,"bInitialized","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\Apt.cpp",0x322);
+ EAStringC target(suffix);
+ bool isImport = !(target.rva006D30D0(&EAStringC("#import")) && "Please use AptPreloadFile instead of a target of '#import' now.");
+ if (isImport) {
+  g_bfmeAptAssertAtE17734("sTarget != AptNativeString(\"#import\") && \"Please use AptPreloadFile instead of a target of \x27#import\x27 now.\"","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\Apt.cpp",0x325);
+  if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+ }
+ g_aptBackgroundSet = false;
+ g_bfmeAptLinkerAtE176F8->Load(EAStringC(path),target);
 }
