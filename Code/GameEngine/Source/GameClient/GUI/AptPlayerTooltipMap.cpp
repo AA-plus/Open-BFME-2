@@ -39,6 +39,14 @@ Rva00224CDC *rva00224D80() {
 // start time and the flag/word block to +0x329. The first player becomes the
 // global at 0x009FE4CC and builds the tooltip map. Member element types are
 // the existing rows' spellings; their original types are unproven.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <hash_map>
 // map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
 // COMDAT (one byte shape per TU flags); an explicit specialization declaration

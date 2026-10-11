@@ -3,6 +3,14 @@
 // AudioFileCacheThreadEntry @0x000A8525 12B: the Windows thread callback the AudioFileCache constructor (0x000A8531)
 // hands to CreateThread. It loads the cache argument into ECX, runs the rowed worker 0x000A8437 (AudioFileCacheLoader.cpp)
 // and returns its code with RET 4 (stdcall).
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <hash_map>
 // map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
 // COMDAT (one byte shape per TU flags); an explicit specialization declaration

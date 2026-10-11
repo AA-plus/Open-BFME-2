@@ -10,6 +10,14 @@
 // and the shader unless the default 8 (keyword table 0x00C1B610), then
 // SinkOnTerrainCollision (+0x0C) and SinkRate (+0x10) unless zero. Built /O1
 // like the wind writer; field names are the keys retail writes.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <sstream>
 #include "ascii_string.h"
 
