@@ -17220,3 +17220,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva0009A254@W3DShadowManager@@QAEXXZ,0x0009A254,thiscall on the freshly constructed TheW3DShadowManager in W3DTerrainVisual::init 0x00091AEA (REL32 at 0x00091BA5; result unused); address-derived name
 ??1Rva002CFF2D@@QAE@XZ,0x002CFF2D,callee of ??1ThingFactory@@UAE@XZ
 ?rva001B51C0@SubsystemInterfaceList@@QAEXXZ,0x001B51C0,callee of ??1SubsystemInterfaceList@@QAE@XZ
+??1Rva00256641@@QAE@XZ,0x00256641,placeholder: the +0x4C set member destructor of OpenContainModuleData that the constructor 0x00465124 unwind funclet 0x0078AC44 reaches; same body as the rowed ?rva00256641
