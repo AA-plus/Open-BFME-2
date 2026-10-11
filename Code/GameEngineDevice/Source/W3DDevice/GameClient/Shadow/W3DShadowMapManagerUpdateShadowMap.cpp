@@ -1,4 +1,6 @@
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// stlport
+#include <vector>
 //
 // ?UpdateShadowMap@W3DShadowMapManager@@QAEXPAVRTS3DScene@@@Z
 // retail 0x0007DC01..0x0007DE26 (549 bytes EH RET 4).
@@ -55,6 +57,8 @@ template <class T>
 class RefCountPtr
 {
 public:
+	RefCountPtr() : Referent(0) {}
+	const RefCountPtr &operator=(const RefCountPtr &that);
 	RefCountPtr(T *referent) : Referent(referent) {}
 	RefCountPtr(const RefCountPtr &rhs) : Referent(rhs.Referent)
 	{
@@ -67,7 +71,7 @@ public:
 			Referent->Release_Ref();
 	}
 
-private:
+public:
 	T *Referent;
 };
 
@@ -139,11 +143,90 @@ private:
 
 bool Rva001182A0(void *scene, RenderInfoClass &rinfo);
 
+// Both texture and FX handles own one pointer. Texture references use the
+// rowed release worker; FX references use count +4 and Delete_This slot 0.
+class TextureClass
+{
+public:
+    void Add_Ref() { ++refs; }
+    void Release_Ref();
+    void *vtable;
+    unsigned short refs;
+};
+class FXShaderSetup : public RefCountClass {};
+
+// The existing ctor and dtor have different ledger view names. Their whole
+// bodies establish the same 36-byte parameter storage. Delegate cleanup to
+// the rowed dtor; no base relationship or new symbol alias is asserted.
+struct Rva0007BB16Record
+{
+    ~Rva0007BB16Record();
+    void *name;
+    int type;
+    void *texture;
+    float vector[4];
+    int integer;
+    bool boolean;
+};
+struct BfmeAssignRecord36
+{
+    BfmeAssignRecord36(const char *name, int type);
+    void *name;
+    int type;
+    void *texture;
+    float vector[4];
+    int integer;
+    bool boolean;
+};
+namespace
+{
+struct ShadowColorParameter
+{
+    __forceinline ShadowColorParameter(const char *name, int type) : storage(name, type) {}
+    __forceinline ~ShadowColorParameter()
+    {
+        ((Rva0007BB16Record *)&storage)->~Rva0007BB16Record();
+    }
+    BfmeAssignRecord36 storage;
+};
+}
+typedef char ShadowParameterStorageSize[
+    sizeof(BfmeAssignRecord36) == 36 && sizeof(Rva0007BB16Record) == 36 ? 1 : -1];
+namespace _STL
+{
+    template <> void vector<Rva0007BB16Record>::push_back(const Rva0007BB16Record &);
+    template <> vector<Rva0007BB16Record>::~vector();
+}
+RefCountPtr<FXShaderSetup> Rva00152C47_CreateFXShaderSetup(const char *shader,
+    const char *technique, const _STL::vector<Rva0007BB16Record> *parameters, int lod);
+class Rva00072A94
+{
+public:
+    Rva00072A94 &operator=(const Rva00072A94 &);
+    void *ptr;
+};
+enum WW3DFormat { WW3D_FORMAT_UNKNOWN = 0 };
+struct IDirect3DDevice8;
+// Preserve DX8Wrapper's existing device spelling. Retail uses the D3D9
+// depth-surface signature at slot 29, including quality and shared handle.
+struct ShadowDepthDeviceTable
+{
+    void *pad[29];
+    long (__stdcall *createDepth)(IDirect3DDevice8 *, unsigned width,
+        unsigned height, unsigned format, unsigned multisample, unsigned quality,
+        int discard, IDirect3DSurface8 **surface, void *sharedHandle);
+};
+struct IDirect3DDevice8 { ShadowDepthDeviceTable *vtable; };
+
 class DX8Wrapper
 {
 public:
+	static RefCountPtr<TextureClass> Create_Render_Target(int width, int height, WW3DFormat format);
 	static void Set_Render_Target(IDirect3DSurface8 *render_target, IDirect3DSurface8 *depth_buffer);
 	static void Set_Render_Target(IDirect3DSurface8 *render_target, bool use_default_depth_buffer);
+protected:
+	static IDirect3DDevice8 *D3DDevice;
+	friend class Rva0007DA23ResourceManager;
 };
 
 void bfmeReleaseQueuedDeviceInterfaces();
@@ -180,7 +263,13 @@ public:
 class Rva0007DA23ResourceManager
 {
 public:
-	bool ReAcquireResources();
+    bool ReAcquireResources();
+    char pad[0x14];
+    RefCountPtr<TextureClass> target; // +0x14
+    RefCountPtr<TextureClass> post;   // +0x18
+    IDirect3DSurface8 *depth;         // +0x1C
+    Rva00072A94 writeShader;          // +0x20
+    Rva00072A94 postShader;           // +0x24
 };
 
 class W3DShadowMapManager
@@ -248,3 +337,41 @@ void W3DShadowMapManager::UpdateShadowMap(RTS3DScene *scene)
 // WW3D shadow-map gate read by the render units and written only through
 // Set_Rendering_Shadow_Map above. Retail .data starts it at 0.
 bool WW3D::IsCurrentlyRenderingShadowMap = false;
+
+// Full native7DA23..7DC01 RET0; WB7EDC60 independently names
+// W3DShadowMapManager::ReAcquireResources. Keep the existing neutral
+// receiver spelling while using measured owning texture and shader handles.
+bool Rva0007DA23ResourceManager::ReAcquireResources()
+{
+    if (!TheWritableGlobalData->m_useShadowMap)
+        return true;
+    if (!target.Referent)
+    {
+        target = DX8Wrapper::Create_Render_Target(g_00DB447C.v0,
+            g_00DB447C.v0, (WW3DFormat)0x72);
+        g_00DB447C.v0 = ShadowMin<unsigned int>(
+            ((TextureBaseClass *)&target)->rva0013275A(),
+            ((TextureBaseClass *)&target)->rva00132784());
+    }
+    if (!post.Referent && g_009E1FFC)
+        post = DX8Wrapper::Create_Render_Target(g_00DB447C.v0,
+            g_00DB447C.v0, (WW3DFormat)0x72);
+    if (!depth)
+    {
+        IDirect3DDevice8 *device = DX8Wrapper::D3DDevice;
+        device->vtable->createDepth(device, g_00DB447C.v0, g_00DB447C.v0,
+            0x4b, 0, 0, 1, &depth, 0);
+    }
+    _STL::vector<Rva0007BB16Record> parameters;
+    ShadowColorParameter color("ColorToWrite", 5);
+    color.storage.vector[0] = 1000000.0f;
+    color.storage.vector[1] = 0.0f;
+    color.storage.vector[2] = 0.0f;
+    color.storage.vector[3] = 0.0f;
+    parameters.push_back((const Rva0007BB16Record &)color.storage);
+    writeShader = (const Rva00072A94 &)Rva00152C47_CreateFXShaderSetup(
+        "Shadow.fx", "_WriteColor", &parameters, 4);
+    postShader = (const Rva00072A94 &)Rva00152C47_CreateFXShaderSetup(
+        "Shadow.fx", "_ShadowMapPostProcess", 0, 4);
+    return true;
+}
