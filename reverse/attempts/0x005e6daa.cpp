@@ -1,12 +1,6 @@
 // ??0Rva005E6D0D@@QAE@PAXPAUHeroDetailsInput@@@Z
 // partial score=0.98 date=2026-10-11
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc /I.
-// Bank 2026-10-11 (claude-opus-5-5): m_slot moved from the base into the derived
-// class (base keeps only vptr C79544 + inline dtor) puts the slot load after
-// the this-spill as native does; 13 -> 7 diff lines. Remaining: native schedules
-// xor ecx,ecx before the +0xC store and lea ebx,[edi+1C] before the +0x10 store
-// (one slot earlier each); plus the two REL32s that resolve once 5E6CA1 uses the
-// comparator TU's Rva005E4300Context and ComputeRankProgress shares the TU.
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc
 // Native005E4300..005E4389 low-byte comparator of selected hero keys;
 // groupB8 signed order with zero priority then the native118B fallback.
 // Its three private bodies are reconstructed from target; original template
@@ -35,7 +29,8 @@ struct Rva005E3967Template {
 class Rva0040CB3AIndexedField { public: int get(int) const; };
 struct Rva005E4300Context {
  char pad0[0x18]; AsciiString selectedName;
- char pad1[0x78-0x1c]; Rva0040CB3AIndexedField *index;
+ char pad1[0x54-0x1c]; int playerID;
+ char pad2[0x78-0x58]; Rva0040CB3AIndexedField *index;
 };
 namespace StrategicInGameUI {
 static __declspec(noinline) Rva005E3967Template *Rva005E3967(const Rva005E4300Entry *entry)
@@ -60,19 +55,6 @@ public:
  char operator()(int,int) const;
 private: Rva005E4300Context *m_context;
 };
-char Rva005E4300Cmp::operator()(int keyA,int keyB) const
-{
- const Rva005E4300Entry *a=(const Rva005E4300Entry *)m_context->index->get(keyA);
- if(a->name.compare(m_context->selectedName)==0)return true;
- int rawB=m_context->index->get(keyB);
- const AsciiString *selected=&m_context->selectedName;
- const Rva005E4300Entry *b=(const Rva005E4300Entry *)rawB;
- if(b->name.compare(*selected)==0)goto no;
- {int ga=a->group,gb=b->group;
- if(ga!=gb) {if(ga==0)return true; if(gb==0)goto no; return ga<gb;}
- return StrategicInGameUI::Rva005E3FE6(a,b,keyA,keyB);}
- no:return false;
-}
 
 struct TargetRef00217D4C { void *vtable; int count; };
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
@@ -125,11 +107,10 @@ class Rva0040CB2CIndexedField {public:int get(int) const;};
 class Rva0040CC0EIndexedField {public:int get(int) const;};
 struct HeroDetailsArmyEntry {int count;Rva005E4300Entry *entry;};
 struct HeroDetailsArmySummary {char pad[0x40];HeroDetailsArmyEntry *begin,*end;};
-struct HeroDetailsContext {char pad0[0x18];AsciiString selectedName;char pad1[0x54-0x1C];int playerID;char pad2[0x78-0x58];HeroDetailsArmySummary *summary;};
 struct HeroDetailsPair {HeroDetailsPair(){} HeroDetailsPair(const HeroDetailsPair &p):count(p.count),entry(p.entry){} HeroDetailsPair(const int &c,Rva005E4300Entry *const &e):count(c),entry(e){} int count;Rva005E4300Entry *entry;};
 namespace StrategicInGameUI {
-HeroDetailsPair Rva005E6CA1(HeroDetailsContext *context) {
- HeroDetailsArmySummary *summary=context->summary;
+HeroDetailsPair Rva005E6CA1(Rva005E4300Context *context) {
+ HeroDetailsArmySummary *summary=(HeroDetailsArmySummary*)context->index;
  int count=summary->end-summary->begin;
  int i=0;
  Rva005E4300Entry *entry;
@@ -137,7 +118,7 @@ HeroDetailsPair Rva005E6CA1(HeroDetailsContext *context) {
   entry=(Rva005E4300Entry *)((Rva0040CB2CIndexedField *)summary)->get(i);
   if(entry->name==context->selectedName)goto found;
  }
- return HeroDetailsPair(0,0);
+ if(i>=count)return HeroDetailsPair(0,0);
  found:return HeroDetailsPair(((Rva0040CC0EIndexedField *)summary)->get(i),entry);
 
 }
@@ -180,6 +161,7 @@ class Rva005E6D0DBase
 public:
 	~Rva005E6D0DBase() {}
 	virtual void Rva005E6D0DSlot0();
+
 };
 
 class Rva005E6D0D : public Rva005E6D0DBase
@@ -189,23 +171,20 @@ public:
 	~Rva005E6D0D();
 
 private:
-	void *m_slot;
+    void *m_slot;
 	Rva005CB265 *m_owner; // +0x08
-	HeroDetailsContext *m_details;
+	Rva005E4300Context *m_details;
 	Rva002B7250 *m_container; // +0x10
 	HeroDetailsPair m_pair;
     TreeHintRef00217D4C m_held; // +0x1C
 };
 
-Rva005E6D0D::~Rva005E6D0D()
-{
-	m_container->rva002B7250(reinterpret_cast<CreateAHeroData *>(this));
-	int held = (int)m_held.m_ptr;
-	if (held != 0 && m_owner->Rva005CB265::rva005CB265() == held)
-		((Rva005CB260 *)m_owner)->rva005CB260();
-}
 
-struct HeroDetailsInput {Rva005CB265 *owner;HeroDetailsContext *details;Rva002B7250 *container;};
+struct HeroDetailsInput {Rva005CB265 *owner;Rva005E4300Context *details;Rva002B7250 *container;};
+
+// The holder constructor (not yet matched) is the only caller of the static
+// ComputeRankProgress, whose register-argument convention needs a local caller.
+// ?Rva005E6D0D::Rva005E6D0D present-unmatched
 Rva005E6D0D::Rva005E6D0D(void *slot,HeroDetailsInput *input):m_slot(slot),m_owner(input->owner),m_details(input->details),m_container(input->container),m_pair(0,0) {
  HeroDetailsPair &dst=m_pair; dst=StrategicInGameUI::Rva005E6CA1(m_details);
  void *button=m_slot;
