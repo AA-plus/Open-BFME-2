@@ -7,6 +7,12 @@
 // 0x0046262D, and the adjacent hinted-insert wrapper at 0x00464431. The map
 // owner name is not established; the address-derived method preserves that.
 #include <map>
+// map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); an explicit specialization declaration
+// suppresses this TU's copy so callers bind retail's instead.
+namespace _STL {
+template <> bool less<unsigned int>::operator()(const unsigned int &a, const unsigned int &b) const;
+}
 #include <string.h>
 
 class WeaponTemplateSetHead
