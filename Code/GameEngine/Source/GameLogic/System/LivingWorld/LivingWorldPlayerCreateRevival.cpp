@@ -146,6 +146,14 @@ void Rva002E34A9::rva002E34A9(const Rva0040DD3ARef &source,int kind) {
 // counted entry handle. Store, nugget, record and summary views are placeholder
 // spellings of the rowed providers; original types are unresolved.
 enum ScienceType { SCIENCE_INVALID=-1 };
+// Native scalar-vector cleanup uses the rowed game-memory free wrapper.
+// Keep the first compatible ScienceType destructor's allocator identity.
+void __cdecl Rva00030830GameFree(void *);
+namespace _STL {
+template <> inline _Vector_base<ScienceType, allocator<ScienceType> >::~_Vector_base()
+{ if (_M_start) Rva00030830GameFree(_M_start); }
+}
+
 enum NameKeyType { NAMEKEY_INVALID=0 };
 class ArmorTemplate;
 class Rva0022C0CDSubsystem;

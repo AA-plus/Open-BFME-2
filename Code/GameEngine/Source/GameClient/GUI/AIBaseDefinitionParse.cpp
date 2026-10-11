@@ -26,6 +26,14 @@ static const FieldParse fields[]={
 class Rva0041E732 {public:Rva0041E732() throw();AsciiString side,map;char rest[32];};
 class Rva0041E875 {public:~Rva0041E875();};
 enum ScienceType {SCIENCE_NONE=0};
+// Native scalar-vector cleanup uses the rowed game-memory free wrapper.
+// Keep the first compatible ScienceType destructor's allocator identity.
+void __cdecl Rva00030830GameFree(void *);
+namespace _STL {
+template <> inline _Vector_base<ScienceType, allocator<ScienceType> >::~_Vector_base()
+{ if (_M_start) Rva00030830GameFree(_M_start); }
+}
+
 struct Rva0021C21BElement {char bytes[4];};
 void Rva0041EC73Load(INI*);
 class ModuleData;

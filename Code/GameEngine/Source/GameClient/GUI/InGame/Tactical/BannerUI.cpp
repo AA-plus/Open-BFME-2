@@ -342,6 +342,8 @@ int BannerUI::CreateBanner(int bannerID)
 // storage goes back through the game free 0x00030830, as STLport's
 // _Vector_base dtor does under the BFME allocator.
 enum ScienceType {};
+// Use the owned game allocator provider for native30830 cleanup.
+void __cdecl Rva00030830GameFree(void *);
 extern "C" void __cdecl free(void *memory);	// 0x00030830, the game free
 namespace _STL {
 template <class T, class A> class _Vector_base {

@@ -8,5 +8,12 @@
 #include <memory>
 #include <vector>
 enum ScienceType {SCIENCE_INVALID=-1};
+// Native scalar-vector cleanup uses the rowed game-memory free wrapper.
+// Keep the first compatible ScienceType destructor's allocator identity.
+void __cdecl Rva00030830GameFree(void *);
+namespace _STL {
+template <> inline _Vector_base<ScienceType, allocator<ScienceType> >::~_Vector_base()
+{ if (_M_start) Rva00030830GameFree(_M_start); }
+}
 typedef _STL::vector<ScienceType,_STL::allocator<ScienceType> > SciVec;
 template SciVec *_STL::uninitialized_fill_n(SciVec*,unsigned int,const SciVec&);

@@ -27,6 +27,14 @@ template <> __forceinline void allocator<::ScienceType >::deallocate(::ScienceTy
 
 #include "Common/Snapshot.h"
 
+// Native scalar-vector cleanup uses the rowed game-memory free wrapper.
+// Keep the first compatible ScienceType destructor's allocator identity.
+void __cdecl Rva00030830GameFree(void *);
+namespace _STL {
+template <> inline _Vector_base<ScienceType, allocator<ScienceType> >::~_Vector_base()
+{ if (_M_start) Rva00030830GameFree(_M_start); }
+}
+
 class GroupOrder : public Snapshot
 {
 public:
