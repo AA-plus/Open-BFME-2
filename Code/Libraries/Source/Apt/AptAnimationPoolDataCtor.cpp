@@ -14,10 +14,9 @@ extern void *(__cdecl *g_bfmeAptAllocAtE17728)(unsigned int);
 class BfmeAptValue006DCD20;extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
 class Rva006DB160 {public:void*allocBlock(int);};class Rva006DB270 {public:void freeBlock(void*,int);};extern Rva006DB270*g_pChainBlockAllocator;
 inline void Rva006D8680Free(void*p,int size){((Rva006DB270*)g_pChainBlockAllocator)->freeBlock(p,size);}void*Rva006CD440Alloc(int);void Rva006CD460Free(void*);static __forceinline void Rva006E31F0Free(void*p){Rva006CD460Free(p);}
-class Rva006E3BF0{public:void rva006E3BF0();};
 class Rva006E4F10 {unsigned short count,capacity;void**array;
 public:Rva006E4F10(int n){capacity=(unsigned short)n;array=(void**)((Rva006DB160*)g_pChainBlockAllocator)->allocBlock(capacity*4);count=0;memset(array,0,capacity*4);}
- ~Rva006E4F10(){((Rva006E3BF0*)this)->rva006E3BF0();}
+ ~Rva006E4F10();
 };
 class AptDisplayList{void*state;public:AptDisplayList();~AptDisplayList();};
 class AptActionQueueC{void *pool;char data[16];public:AptActionQueueC(int);~AptActionQueueC(){void*p=pool;Rva006CD460Free(p);}static void*operator new(unsigned size){return ((Rva006DB160*)g_pChainBlockAllocator)->allocBlock(size);}static void operator delete(void*p,unsigned size){Rva006D8680Free(p,size);}};
@@ -54,4 +53,27 @@ Rva006E6060Root::~Rva006E6060Root(){
  if(records28)Rva006CD460Free(records28);
  ((Rva006DB270*)g_pChainBlockAllocator)->freeBlock(newInsts,maxNew*4);
  delete queue;
+}
+
+// Native6E3BF0..6E3C3A is the74B nonvirtual destructor of the same eight-byte
+// counted table constructed at6E4F10: word count+0 and capacity+2; array+4.
+// Constructor6E6060 and destructor6E6430 exact EH graphs independently place
+// eight member cleanups calling6E3BF0 on their matching table subobjects.
+// Rehome the verified old provider here and retire its separate receiver view;
+// no second callable name is assigned to6E3BF0. Original type name is unknown.
+// Element Release uses native vtable slot1; retain the prior opaque view.
+class Rva006E3BF0Elem {public:virtual void AddRef();virtual void Release();};
+Rva006E4F10::~Rva006E4F10() {
+ int left=count;
+ int i=0;
+ if(i<capacity) {
+  do {
+   if(array[i]!=0) {
+    static_cast<Rva006E3BF0Elem*>(array[i])->Release();
+    if(--left==0)break;
+   }
+   ++i;
+  } while(i<capacity);
+ }
+ g_pChainBlockAllocator->freeBlock(array,capacity*4);
 }
