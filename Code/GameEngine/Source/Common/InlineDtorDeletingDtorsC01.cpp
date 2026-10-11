@@ -104,12 +104,18 @@ inline Rva00074626::~Rva00074626()
 {
 }
 
+// Native BC6778 has scalar7827B followed by two purecall43B810 slots.
+// BFME1 ffactory.h at9e3be919b supplies Get_File/Return_File names and
+// signatures; native slot count and constructor/destructor bytes agree.
+class FileClass;
 class FileFactoryClass
 {
 public:
 	FileFactoryClass();
 	FileFactoryClass(EmitVtableTag *);
 	virtual ~FileFactoryClass() {}
+	virtual FileClass *Get_File(const char *filename) = 0;
+	virtual void Return_File(FileClass *file) = 0;
 };
 
 // ??0FileFactoryClass@@QAE@XZ @0x0007838A 9B: the default constructor, storing the
@@ -536,7 +542,11 @@ Rva003F7BCC::Rva003F7BCC(EmitVtableTag *)
 // Native constructors have byte-identical inline copies in their users.
 // Keep these providers select-any so those copies can merge.
 // ?bfmeAnchorC01FileFactoryClass absent-from-retail
-void *bfmeAnchorC01FileFactoryClass(void *where) { return new (where) FileFactoryClass(); }
+void *bfmeAnchorC01FileFactoryClass(void *where)
+{
+    ((FileFactoryClass *)where)->FileFactoryClass::FileFactoryClass();
+    return where;
+}
 
 // ?bfmeAnchorC01InputChunk absent-from-retail
 void *bfmeAnchorC01InputChunk(void *where) { return new (where) InputChunk(); }
