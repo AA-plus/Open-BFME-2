@@ -38,25 +38,32 @@ public:
 	void Release_Ref();
 };
 
+// The established owning-handle copy at424BB is a 21-byte twin of the
+// Native=AssetReference constructor emitted by MaterialInfoTextureHandles.
+class AssetReference { public: void *m_object; };
 template <class T> class RefCountPtr
 {
 public:
-	RefCountPtr(const RefCountPtr<T> &rhs);
-	~RefCountPtr()
-	{
-		if (m_ref)
-		{
-			m_ref->Release_Ref();
-		}
-	}
-	const RefCountPtr<T> &operator=(const RefCountPtr<T> &rhs);
-
-private:
-	T *m_ref;
+    AssetReference m_native;
+    RefCountPtr(const RefCountPtr<T> &rhs);
+    template<class Native> __declspec(noinline) RefCountPtr(const Native &other)
+    {
+        m_native.m_object = other.m_object;
+        if (m_native.m_object)
+            ++*(unsigned short *)((char *)m_native.m_object + 4);
+    }
+    ~RefCountPtr()
+    {
+        T *p = (T *)m_native.m_object;
+        if (p) p->Release_Ref();
+    }
+    const RefCountPtr<T> &operator=(const RefCountPtr<T> &rhs);
 };
-
 class RvaTextureHandleView : public RefCountPtr<TextureClass>
 {
+public:
+    __forceinline RvaTextureHandleView(const AssetReference &rhs)
+        : RefCountPtr<TextureClass>(rhs) {}
 };
 
 // Surface lock/unlock under their ledger names (0x00116680 returns the bits
@@ -87,7 +94,7 @@ private:
 
 RvaTextureHandleView Rva00072B3A::rva00072B3A() const
 {
-	return m_texture;
+	return RvaTextureHandleView(m_texture.m_native);
 }
 
 class BaseHeightMapRenderObjClass
@@ -106,15 +113,22 @@ class Rva00075655
 {
 public:
 	static int setShader(int shader, int pass);
-	static RefCountPtr<TextureClass> m_Textures[];
+
 };
+
+// Native DE1F8C..DE1FAB holds eight four-byte nullable texture slots.
+// The indexed F5D1B getter and the 76790 eight-slot reset prove the layout.
+// This raw pointer array has no startup constructor or exit destructor;
+// assignment and release are performed through the established handle view.
+void *g_shaderTextureSlots[8];
+typedef char ShaderTextureHandleWidth[sizeof(RefCountPtr<TextureClass>) == sizeof(void *) ? 1 : -1];
 
 // ?Install_Materials@W3DShroudMaterialPassClass@@UBEXXZ @0x00072EEB
 void W3DShroudMaterialPassClass::Install_Materials() const
 {
 	if (TheTerrainRenderObject->getShroud())
 	{
-		Rva00075655::m_Textures[0] = TheTerrainRenderObject->getShroud()->rva00072B3A();
+		reinterpret_cast<RefCountPtr<TextureClass> *>(g_shaderTextureSlots)[0] = TheTerrainRenderObject->getShroud()->rva00072B3A();
 		// W3DShaderManager::ST_SHROUD_TEXTURE, pass 0
 		Rva00075655::setShader(1, 0);
 	}
@@ -137,7 +151,7 @@ public:
 
 void W3DShaderManager::setTexture(int stage, const TextureHandle &texture)
 {
-	Rva00075655::m_Textures[stage] = texture;
+	reinterpret_cast<RefCountPtr<TextureClass> *>(g_shaderTextureSlots)[stage] = texture;
 }
 
 // TheGlobalData view: the shroud colour as red/green/blue floats at

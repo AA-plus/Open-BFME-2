@@ -19,9 +19,10 @@ private:
 	CountedAsset *m_object;
 };
 
-extern AssetReference g_Va00DE1F8C[];
+// Same eight native texture slots owned by W3DShroudMaterialPass.cpp.
+extern void *g_shaderTextureSlots[8];
 
 AssetReference Rva000F5D1BGet(int index)
 {
-	return g_Va00DE1F8C[index];
+	return reinterpret_cast<const AssetReference *>(g_shaderTextureSlots)[index];
 }

@@ -38,11 +38,12 @@ public:
 template <class T> class RefCountPtr
 {
 public:
-	__forceinline RefCountPtr(const RefCountPtr &that) : m_ptr(that.m_ptr)
-	{
-		if (m_ptr)
-			m_ptr->Add_Ref();
-	}
+    RefCountPtr(const RefCountPtr &that);
+    struct InlineCopyTag {};
+    __forceinline RefCountPtr(const RefCountPtr &that, InlineCopyTag) : m_ptr(that.m_ptr)
+    {
+        if (m_ptr) m_ptr->Add_Ref();
+    }
 	~RefCountPtr()
 	{
 		if (m_ptr)
@@ -90,22 +91,22 @@ public:
 
 RefCountPtr<TextureClass> BaseHeightMapRenderObjClass::rva000E234E()
 {
-	return m_3828;
+	return RefCountPtr<TextureClass>(m_3828, RefCountPtr<TextureClass>::InlineCopyTag());
 }
 
 RefCountPtr<TextureClass> BaseHeightMapRenderObjClass::rva000E2983()
 {
-	return m_3838;
+	return RefCountPtr<TextureClass>(m_3838, RefCountPtr<TextureClass>::InlineCopyTag());
 }
 
 RefCountPtr<TextureClass> BaseHeightMapRenderObjClass::rva000E2A62()
 {
-	return m_3844;
+	return RefCountPtr<TextureClass>(m_3844, RefCountPtr<TextureClass>::InlineCopyTag());
 }
 
 RefCountPtr<TextureClass> BaseHeightMapRenderObjClass::rva000E2BCF()
 {
-	return m_381c;
+	return RefCountPtr<TextureClass>(m_381c, RefCountPtr<TextureClass>::InlineCopyTag());
 }
 
 class Rva000E28A7
@@ -120,7 +121,7 @@ private:
 
 RefCountPtr<TextureClass> Rva000E28A7::rva000E28A7()
 {
-	return m_1c;
+	return RefCountPtr<TextureClass>(m_1c, RefCountPtr<TextureClass>::InlineCopyTag());
 }
 
 // Effect-parameter texture callbacks of the BFME 2 terrain FX binding (the
@@ -159,10 +160,14 @@ struct ID3DXEffect
 RefCountPtr<TextureClass> Rva00132E76WhiteTexture();
 RefCountPtr<TextureClass> Rva00132F30BlackTexture();
 
+// The native 72B3A getter returns the existing four-byte handle view,
+// whose only base is this same nullable texture reference.
+class RvaTextureHandleView : public RefCountPtr<TextureClass> {};
+
 class Rva00072B3A
 {
 public:
-	RefCountPtr<TextureClass> rva00072B3A() const;
+	RvaTextureHandleView rva00072B3A() const;
 };
 
 class GlobalData
@@ -305,7 +310,8 @@ void Rva000E249DObjectShroudStatus(ID3DXEffect *effect, const char *name);
 
 typedef void (*Rva000E236DCallback)(ID3DXEffect *effect, D3DXHANDLE handle);
 
-extern int (__cdecl *g_TerrainBinderCompare)(const char *, const char *);
+// Retail 7BA518 is the existing _strcmpi IAT slot, not a second global.
+extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *, const char *);
 
 void Rva000E236D::rva000E236D(const char *name, const char *handle, FXShaderParameterBinder *registry)
 {
@@ -314,7 +320,7 @@ void Rva000E236D::rva000E236D(const char *name, const char *handle, FXShaderPara
 	{
 		Rva001530E9Path path;
 		Rva001530E9Parse(name, &path);
-		int (__cdecl *compare)(const char *, const char *) = g_TerrainBinderCompare;
+		int (__cdecl *compare)(const char *, const char *) = _strcmpi;
 		if (compare(path.m_name, "Texture") == 0)
 			registry->AddBinding(Rva000E24C5ShroudTexture, handle);
 		else if (compare(path.m_name, "ScaleUV_OffsetUV") == 0)
