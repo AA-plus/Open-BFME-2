@@ -24,6 +24,12 @@
 #include <list>
 #include "BfmeSpecialPowerTimer8.h"
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<BfmeSpecialPowerTimer8, allocator<BfmeSpecialPowerTimer8> >::iterator list<BfmeSpecialPowerTimer8, allocator<BfmeSpecialPowerTimer8> >::insert(list<BfmeSpecialPowerTimer8, allocator<BfmeSpecialPowerTimer8> >::iterator, const BfmeSpecialPowerTimer8 &);
+}
+
 // _List_iterator comparisons otherwise instantiate the base-class
 // operator!= COMDAT (one byte shape per TU flags); exact-match free
 // overloads take those calls instead so this TU emits no external copy.

@@ -14,6 +14,12 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 }
 
 #include "BfmeSpecialPowerTimer8.h"
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<BfmeSpecialPowerTimer8, allocator<BfmeSpecialPowerTimer8> >::iterator list<BfmeSpecialPowerTimer8, allocator<BfmeSpecialPowerTimer8> >::insert(list<BfmeSpecialPowerTimer8, allocator<BfmeSpecialPowerTimer8> >::iterator, const BfmeSpecialPowerTimer8 &);
+}
 typedef unsigned char UnsignedByte;
 typedef unsigned int UnsignedInt;
 typedef bool Bool;
