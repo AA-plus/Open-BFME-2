@@ -15,10 +15,15 @@ public:
 };
 class TunnelTracker
 {
-public:
- bool rva004F571B(Object *object);
 };
-void __cdecl rva0047DE6C(Object *object, Object *container);
+// LINK: 0x4F571B is rowed as Rva004F56FC::rva004F571B (const Object *) and 0x47DE6C as the
+// callback Rva0047DE6CVisit(Object *, void *); both are bound under those names.
+class Rva004F56FC
+{
+public:
+ bool rva004F571B(const Object *object);
+};
+void __cdecl Rva0047DE6CVisit(Object *object, void *userData);
 struct Rva0047DF81PlayerView
 {
  char unknown00[0x2E8];
@@ -119,10 +124,10 @@ void TunnelContain::rva0047DF81()
   TunnelTracker *tracker = reinterpret_cast<Rva0047DF81PlayerView *>(player)->tracker;
   if (tracker != 0)
   {
-   if (tracker->rva004F571B(object))
+   if (((Rva004F56FC *)tracker)->rva004F571B(object))
     contain.dispatch42(false);
    else
-    contain.dispatch68(rva0047DE6C, object, true);
+    contain.dispatch68((void (__cdecl *)(Object *, Object *))Rva0047DE6CVisit, object, true);
   }
   pending = false;
  }
