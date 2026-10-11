@@ -1,333 +1,349 @@
-// ?rva0009C422@Rva0009C134Host@@QAEX_N@Z
-// partial score=0.95 date=2026-10-07
-// cl: /DNDEBUG /MD
+// ?rva0009C422@Rva0009D55BProduct@@UAEX_N@Z
+// partial score=0.94 date=2026-10-11
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
+// stlport
+// ??0Rva0009D55BProduct@@QAE@XZ retail 0x0009D55B..0x0009D6E8 (397 bytes EH).
+// Product of the W3D game client factory 0x0004C8DD (vtable 0x00BC4738;
+// new 0x1D4). Runs the LivingWorld constructor 0x002C0120 (its unwind
+// funclet 0x00760638 calls the base dtor 0x002BFB2D) then stores vtable
+// 0x00BC89C8 and initialises its own members: six zeroed words (+0xC0)
+// two 1.0 floats (+0xD8) five float triples (+0xE0 zero / +0xEC 0.9 /
+// +0xF8 +0x104 +0x110 zero) then 0 / 10.0 at +0x11C/+0x120 and 1.0 / 0 /
+// pi/6 at +0x134..+0x13C; four 12-byte elements at +0x140 built through
+// the vector constructor iterator 0x00001423 with the folded trivial ctor
+// 0x0047A6A9; zeroed words and floats at +0x188..+0x1AC; two zeroed int
+// pairs (+0x1B0 +0x1B8); an STLport vector at +0x1C0 (folded _Vector_base
+// ctor 0x00211E58) and two zeroed words. The deleting dtor 0x0009D9A1 and
+// dtor 0x0009D6FA are rowed under the opaque name Rva009D6FA. Member
+// meanings element types and the class name are unresolved.
 //
-// Small vtable-slot bodies with no ledger owner, grouped by shape. Every
-// class, method and callee is address-derived unless the ledger already
-// names the callee; the bytes prove only the shapes described per group.
+// ??1Rva0009D55BProduct@@UAE@XZ retail 0x0009D6FA..0x0009D862 (360 bytes EH),
+// the destructor the deleting dtor 0x0009D9A1 calls (pin ??1Rva009D6FA).
+// After the rowed 0x0009AB85 shutdown it takes the three render objects at
+// +0xC8/+0xCC/+0xD0 out of the +0xC4 scene (scene slot 3) when they report
+// being in it (slot 123), releases the five ref-counted words +0xC0..+0xD0
+// (inline Release_Ref, Delete_This slot 0) and clears each, then unwinds
+// the +0x1D0 texture reference (Release_Ref 0x0021ED10) and the +0x1C0
+// vector before the LivingWorld destructor 0x002BFB2D.
+#include <vector>
+#include "ascii_string.h"
+// The +0x1C0 vector's storage is freed inline through the game free
+// (0x00030830), as in the sibling water-object units.
+void Rva00030830FreeAllocation(void *);
+namespace _STL {
+ template<> inline void allocator<int>::deallocate(int *p, size_type) const { if (p) Rva00030830FreeAllocation(p); }
+}
 
-typedef int Int;
-typedef bool Bool;
-
-// --- Two-field setters: store both stack arguments at two adjacent fields.
-#define BFME_PAIR_SETTER(NAME, DISP) \
-	class NAME \
-	{ \
-	public: \
-		void set(Int a, Int b); \
-		char m_lead[DISP]; \
-		Int m_a; \
-		Int m_b; \
-	}; \
-	void NAME::set(Int a, Int b) \
-	{ \
-		m_a = a; \
-		m_b = b; \
-	}
-
-BFME_PAIR_SETTER(Rva0008BBA1PairSlot, 0x8C)	// vtable 0x00BC7568 slot 120
-BFME_PAIR_SETTER(Rva0029A85BPairSlot, 0x808)	// vtable 0x00BC7A88 slot 45
-BFME_PAIR_SETTER(Rva000851A6PairSlot, 0x20)	// vtable 0x00BF6178 slot 18
-
-// --- A one-shot flag: answers whether the global byte at VA 0x00DFF005
-// (ledger g_flag2) was set, clearing it (vtable 0x00BC4858 slot 5).
-extern Bool g_flag2;
-
-class Rva002CEF14FlagTest
+// 12-byte element whose out-of-line default constructor is the ICF-folded
+// trivial ctor 0x0047A6A9 (rowed as ??0ICoord3D@@QAE@XZ among others).
+struct ICoord3D
 {
-public:
-	Bool rva002CEF14();
+	ICoord3D();
+	int x;
+	int y;
+	int z;
 };
 
-Bool Rva002CEF14FlagTest::rva002CEF14()
+struct Rva0009D55BVec3
 {
-	if (g_flag2)
+	float x, y, z;
+	Rva0009D55BVec3(float v) : x(v), y(v), z(v) {}
+	Rva0009D55BVec3 &operator=(const Rva0009D55BVec3 &v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+
+struct Rva0009D55BPair
+{
+	int a, b;
+	Rva0009D55BPair() : a(0), b(0) {}
+};
+
+class Rva0009AB6B { public: void rva0009AB85(); };
+class TextureBaseClass { public: void Release_Ref(); };
+
+#define D55B_SLOTS4(p) virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3();
+#define D55B_SLOTS16(p) D55B_SLOTS4(p##0) D55B_SLOTS4(p##1) D55B_SLOTS4(p##2) D55B_SLOTS4(p##3)
+
+// The ref-counted words: slot 0 deletes, the count is at +4.
+class Rva0009D6FARef
+{
+public:
+	virtual void Delete_This();
+	void Release_Ref() { if (--m_numRefs == 0) Delete_This(); }
+	int m_numRefs;
+};
+class Rva0009D6FARenderObj : public Rva0009D6FARef
+{
+public:
+	D55B_SLOTS16(r0) D55B_SLOTS16(r1) D55B_SLOTS16(r2) D55B_SLOTS16(r3)
+	D55B_SLOTS16(r4) D55B_SLOTS16(r5) D55B_SLOTS16(r6)
+	D55B_SLOTS4(r70) D55B_SLOTS4(r71) virtual void r720(); virtual void r721();
+	virtual bool isInScene();	// slot 123
+};
+class Rva0009D6FAScene : public Rva0009D6FARef
+{
+public:
+	virtual void s1(); virtual void s2();
+	virtual void removeRenderObject(Rva0009D6FARenderObj *obj);	// slot 3
+};
+struct Rva0009D6FATexture
+{
+	Rva0009D6FATexture() : m_ptr(0) {}
+	~Rva0009D6FATexture() { if (m_ptr) m_ptr->Release_Ref(); }
+	TextureBaseClass *m_ptr;
+};
+#define D55B_REF_PTR_RELEASE(x) { if (x) { x->Release_Ref(); x = 0; } }
+
+class LivingWorld
+{
+public:
+	LivingWorld();
+	virtual ~LivingWorld();
+	virtual void rva002BF391(bool active);	// the state handler 0x002BF391
+
+private:
+	char m_body[0xC0 - 4];
+};
+
+class Rva0009D55BProduct : public LivingWorld
+{
+public:
+	Rva0009D55BProduct();
+	virtual ~Rva0009D55BProduct();
+	virtual void rva0009C784(unsigned int phase, unsigned int previous);
+	virtual void rva0009D862();
+	virtual void rva0009DB5A(bool active);
+	virtual void rva0009C422(bool active);
+
+private:
+	Rva0009D6FARef *m_C0;
+	Rva0009D6FAScene *m_C4;
+	Rva0009D6FARenderObj *m_C8;
+	Rva0009D6FARenderObj *m_CC;
+	Rva0009D6FARenderObj *m_D0;
+	int m_D4;
+	float m_D8;
+	float m_DC;
+	Rva0009D55BVec3 m_E0;
+	Rva0009D55BVec3 m_EC;
+	Rva0009D55BVec3 m_F8;
+	Rva0009D55BVec3 m_104;
+	Rva0009D55BVec3 m_110;
+	float m_11C;
+	float m_120;
+	char m_pad124[0x134 - 0x124];
+	float m_134;
+	float m_138;
+	float m_13C;
+	ICoord3D m_140[4];
+	char m_pad170[0x188 - 0x170];
+	int m_188;
+	int m_18C;
+	int m_190;
+	int m_194;
+	float m_198;
+	int m_19C;
+	float m_1A0;
+	float m_1A4;
+	float m_1A8;
+	float m_1AC;
+	Rva0009D55BPair m_1B0;
+	Rva0009D55BPair m_1B8;
+	std::vector<int> m_1C0;
+	int m_1CC;
+	Rva0009D6FATexture m_1D0;
+};
+
+Rva0009D55BProduct::Rva0009D55BProduct()
+	: m_C0(0), m_C4(0), m_C8(0), m_CC(0), m_D0(0), m_D4(0),
+	  m_D8(1.0f), m_DC(1.0f),
+	  m_E0(0.0f), m_EC(0.9f), m_F8(0.0f), m_104(0.0f), m_110(0.0f),
+	  m_11C(0.0f), m_120(10.0f), m_134(1.0f), m_138(0.0f), m_13C(0.52359879f),
+	  m_188(0), m_18C(0), m_190(0), m_194(0), m_198(0.0f), m_19C(0), m_1AC(0.0f),
+	  m_1CC(0)
+{
+}
+
+Rva0009D55BProduct::~Rva0009D55BProduct()
+{
+	((Rva0009AB6B *)this)->rva0009AB85();
+	if (m_C8 && m_C4 && m_C8->isInScene())
+		m_C4->removeRenderObject(m_C8);
+	if (m_CC && m_C4 && m_CC->isInScene())
+		m_C4->removeRenderObject(m_CC);
+	if (m_D0 && m_C4 && m_D0->isInScene())
+		m_C4->removeRenderObject(m_D0);
+	D55B_REF_PTR_RELEASE(m_C0);
+	D55B_REF_PTR_RELEASE(m_C4);
+	D55B_REF_PTR_RELEASE(m_C8);
+	D55B_REF_PTR_RELEASE(m_CC);
+	D55B_REF_PTR_RELEASE(m_D0);
+}
+
+// ?rva0009C784@Rva0009D55BProduct@@UAEXII@Z retail 0x0009C784 (144 bytes,
+// ret 8; slot 19 of the product table 0x00BC89C8): after the rowed
+// LivingWorld handler 0x002BE7FA, phase 2 clears the +0x198 fade, starts
+// the "FadeInGameMovie" transition group (rowed setGroup / enable) and hides
+// the engine mouse; phase 3 sets the fade to 1, clears +0x134/+0x138 and
+// calls the table's slot 10 with true.
+class Rva002BE7FA { public: void rva002BE7FA(unsigned int a, unsigned int b); };
+class GameWindowTransitionsHandler { public: void setGroup(AsciiString name, bool immediate); };
+extern GameWindowTransitionsHandler *TheTransitionHandler;
+class Rva001DBB82OneSetter { public: void enable(); };
+class Mouse { public: void _bfme_setEngineVisibility(bool visible); };
+extern Mouse *TheMouse;
+class Rva0009C784Slots
+{
+public:
+	D55B_SLOTS4(v0) D55B_SLOTS4(v1) virtual void v20(); virtual void v21();
+	virtual void slot10(bool flag);
+};
+
+void Rva0009D55BProduct::rva0009C784(unsigned int phase, unsigned int previous)
+{
+	((Rva002BE7FA *)this)->rva002BE7FA(phase, previous);
+	if (phase == 2)
 	{
-		g_flag2 = false;
-		return true;
+		m_198 = 0.0f;
+		TheTransitionHandler->setGroup(AsciiString("FadeInGameMovie"), false);
+		((Rva001DBB82OneSetter *)TheTransitionHandler)->enable();
+		TheMouse->_bfme_setEngineVisibility(false);
 	}
-	return false;
-}
-
-// --- Calls of one member of `this` with a constant argument.
-#define BFME_CONST_ARG_CALL(HOST, SLOT, CALLEE, VALUE) \
-	class HOST \
-	{ \
-	public: \
-		void SLOT(); \
-		void CALLEE(Int value); \
-	}; \
-	void HOST::SLOT() \
-	{ \
-		CALLEE(VALUE); \
-	}
-
-BFME_CONST_ARG_CALL(Rva0005BD20Host, rva0005BD20, rva0005BBE2, 0)	// vtable 0x00BC55B0 slot 43
-BFME_CONST_ARG_CALL(Rva0005BD28Host, rva0005BD28, rva0005BBE2, 1)	// vtable 0x00BC55B0 slot 44
-BFME_CONST_ARG_CALL(Rva000F42F7Host, rva000F42F7, rva000F4017, 1)	// vtable 0x00BCEFC8 slot 1
-BFME_CONST_ARG_CALL(Rva0034A871Host, rva0034A871, rva0034A570, 0)	// vtable 0x00C11068 slot 6
-BFME_CONST_ARG_CALL(Rva00351949Host, rva00351949, rva003508C5, 0)	// vtable 0x00C11008 slot 6
-
-// --- Hand `this` to a manager singleton's member.
-// Callee evidence (retail bytes): 0x000F0A75 walks the manager head at
-// +0x0 with node next at +0x68, unlinks the matching owner, then deletes
-// owner->slot0(0) via rowed operator delete; 0x0010713A null-checks its
-// owner and performs the same virtual-then-delete tail with `this` unused.
-// ZH/BFME1 removeShadow (plain `delete shadow`, projected type checks)
-// does not match either tail, so the virtual-then-delete shape below is
-// modeled on the byte-proven neighbor 0x00107152 (`delete p->rvaFoo(0)`)
-// with honest address-derived node names; manager/owner identities beyond
-// the caller ABI (thiscall void*(owner), ret 4) remain unclaimed.
-void __cdecl operator delete(void *p);
-class Rva000F0A75Node
-{
-public:
-	virtual void *rvaFoo(int x);
-private:
-	char m_pad[0x64];
-public:
-	Rva000F0A75Node *m_next;
-};
-class Rva0010713ANode
-{
-public:
-	virtual void *rvaFoo(int x);
-};
-class W3DVolumetricShadowManager
-{
-public:
-	void rva000F0A75(void *owner);
-private:
-	Rva000F0A75Node *m_head;
-};
-class W3DProjectedShadowManager
-{
-public:
-	void rva0010713A(void *owner);
-};
-class Rva00108660ResourceManager
-{
-public:
-	void rva001091A8(void *owner);
-	void rva0010B9E5(void *owner);
-};
-extern W3DVolumetricShadowManager *TheW3DVolumetricShadowManager;
-extern W3DProjectedShadowManager *TheW3DProjectedShadowManager;
-extern Rva00108660ResourceManager *Rva00DEC2D8Manager;
-
-class Rva000F168BHost { public: void rva000F168B(); };		// vtable 0x00BCEFC8 slot 2
-class Rva001074C8Host { public: void rva001074C8(); };		// vtable 0x00BCF964 slot 2
-class Rva00109DA6Host { public: void rva00109DA6(); };		// vtable 0x00BCF9E0 slot 2
-class Rva0010BB04Host { public: void rva0010BB04(); };		// vtable 0x00BCF9F4 slot 2
-
-void Rva000F168BHost::rva000F168B() { TheW3DVolumetricShadowManager->rva000F0A75(this); }
-void Rva001074C8Host::rva001074C8() { TheW3DProjectedShadowManager->rva0010713A(this); }
-void Rva00109DA6Host::rva00109DA6() { Rva00DEC2D8Manager->rva001091A8(this); }
-void Rva0010BB04Host::rva0010BB04() { Rva00DEC2D8Manager->rva0010B9E5(this); }
-
-void W3DProjectedShadowManager::rva0010713A(void *owner)
-{
-	if (owner)
-		delete ((Rva0010713ANode *)owner)->rvaFoo(0);
-}
-
-void W3DVolumetricShadowManager::rva000F0A75(void *owner_)
-{
-	Rva000F0A75Node *owner = (Rva000F0A75Node *)owner_;
-	Rva000F0A75Node *prev = 0;
-	for (Rva000F0A75Node *cur = m_head; cur != 0; prev = cur, cur = cur->m_next) {
-		if (cur == owner) {
-			if (prev != 0)
-				prev->m_next = owner->m_next;
-			else
-				m_head = owner->m_next;
-			delete owner->rvaFoo(0);
-			break;
-		}
+	else if (phase == 3)
+	{
+		m_198 = 1.0f;
+		m_134 = 0.0f;
+		m_138 = 0.0f;
+		((Rva0009C784Slots *)this)->slot10(true);
 	}
 }
 
-// --- Call this object's own vtable slot 2 with a constant.
-class Rva0035D781Self
-{
-public:
-	virtual void slot0();
-	virtual void slot1();
-	virtual void slot2(Int value);
-	void rva0035D781();
-	void rva0035E603();
-	void rva0035F49E();
-};
-
-void Rva0035D781Self::rva0035D781() { slot2(0x16); }	// vtable 0x00C16530 slot 6
-void Rva0035D781Self::rva0035E603() { slot2(0x11); }	// vtable 0x00C165F0 slot 6
-void Rva0035D781Self::rva0035F49E() { slot2(0x0A); }	// vtable 0x00C1665C slot 6
-
-// --- Float functions of the slot's one float argument (cdecl callees,
-// ledger-named by address; 0x004D6B6E is also rowed as _atan).
-float Rva004D6B9D(float v);
-float Rva004D6B3A(float v);
-float Rva004D6BB8(float v);
-float Rva004D6B6E(float v);
-
-class Rva0025ED90Math
-{
-public:
-	float rva0025ED90(float v);		// vtable 0x00BC7568 slot 133
-	float rva0025EDA1(float v);		// slot 134
-	float rva0025EDB2(float v);		// slot 135
-	float rva0025EDC3(float v);		// slot 136
-};
-
-float Rva0025ED90Math::rva0025ED90(float v) { return Rva004D6B9D(v); }
-float Rva0025ED90Math::rva0025EDA1(float v) { return Rva004D6B3A(v); }
-float Rva0025ED90Math::rva0025EDB2(float v) { return Rva004D6BB8(v); }
-float Rva0025ED90Math::rva0025EDC3(float v) { return Rva004D6B6E(v); }
-
-// --- Two members of `this` in a row, the second as a tail jump.
-#define BFME_TWO_CALLS(HOST, SLOT, FIRST, SECOND) \
-	class HOST \
-	{ \
-	public: \
-		void SLOT(); \
-		void FIRST(); \
-		void SECOND(); \
-	}; \
-	void HOST::SLOT() \
-	{ \
-		FIRST(); \
-		SECOND(); \
-	}
-
-BFME_TWO_CALLS(Rva003FDD05Host, rva003FDD05, rva003FDAEB, rva000B3FD0)	// vtable 0x00C37DA0 slot 9
-BFME_TWO_CALLS(Rva00062908Host, rva00062908, rva000A98BA, rva0022274A)	// vtable 0x00BC57E0 slot 14
-BFME_TWO_CALLS(Rva00062918Host, rva00062918, rva000ABA2F, rva00224296)	// vtable 0x00BC57E0 slot 1
-BFME_TWO_CALLS(Rva0008FF12Host, rva0008FF12, rva00118A90, rva002C108F)	// vtable 0x00BC7C90 slot 41
-struct Vector2
-{
-	float x, y;
-};
-
+// ?rva0009D862@Rva0009D55BProduct@@UAEXXZ retail 0x0009D862 (319 bytes, EH;
+// slot 4 of the product table): after the rowed shutdown 0x0009AB85 it
+// creates the camera (+0xC0, CameraClass), the scene built on this (+0xC4,
+// rowed 0x0009AA0F) and three lights (+0xC8/+0xCC/+0xD0, LightClass type 1),
+// sets +0x134 to 1, copies the +0x104 vector to +0xF8 and runs the pinned
+// refreshes 0x0009BAA4 and 0x0009CD9B.
+class Vector2 { public: float x, y; };
 class CameraClass
 {
 public:
+	CameraClass();
 	float Get_Aspect_Ratio() const;
 	void Set_Viewport(const Vector2 &lo, const Vector2 &hi);
 	void Set_Aspect_Ratio(float ratio);
+	char m_data[0x3FC];
 };
+class Rva0009AA0F { public: Rva0009AA0F(int owner); char m_data[0x10C]; };
+class LightClass { public: enum LightType { POINT = 0, DIRECTIONAL = 1 }; LightClass(LightType type); char m_data[0x120]; };
+class Rva0009C134Host { public: void rva0009BAA4(); void rva0009CD9B(); };
 
-class LivingWorldManager
+void Rva0009D55BProduct::rva0009D862()
 {
-public:
-	class Subobject
-	{
-	public:
-		char m_pad00[0x18];
-		int m_value18;
-		int m_value1C;
-	};
-	char m_pad00[0x14];
-	Subobject m_subobject;
-	int m_value34;
-};
+	((Rva0009AB6B *)this)->rva0009AB85();
+	m_C0 = (Rva0009D6FARef *)new CameraClass;
+	m_C4 = (Rva0009D6FAScene *)new Rva0009AA0F((int)this);
+	m_C8 = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_CC = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_D0 = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_134 = 1.0f;
+	m_F8 = m_104;
+	((Rva0009C134Host *)this)->rva0009BAA4();
+	((Rva0009C134Host *)this)->rva0009CD9B();
+}
+
+// ?rva0009DB5A@Rva0009D55BProduct@@UAEX_N@Z retail 0x0009DB5A (154 bytes,
+// ret 4): deactivation first resets the view (rowed 0x0009DA28); the
+// LivingWorld handler 0x002BF391 (unrowed, pinned) always runs, but only a
+// change of the +0x18 state continues: activation runs the manager's
+// rowed cleanup and, with the global data's +0x60 shadow flag, copies the
+// manager's +0x1E4 word into the shadow manager, places its light at
+// +0x1A0..+0x1A8 and adds the shadows (rowed 0x0009DB47); deactivation runs
+// the manager's 0x002141D1 and resets the view again.
+class Rva0009D9BD { public: void rva0009DA28(); void rva0009DB47(); };
+class LivingWorldManager { public: void rva002142EA(); };
 extern LivingWorldManager *TheLivingWorldManager;
+class Rva002141D1 { public: void rva002141D1(); };
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+class W3DShadowManager;
+extern W3DShadowManager *TheW3DShadowManager;
+class W3DGameClientShadowShim { public: void setLightPosition(int index, float x, float y, float z); };
+struct Rva0009DB5AShadowView { void *m_vtbl; int m_04; };
+struct Rva0009DB5AGlobalView { unsigned char m_pad[0x60]; bool m_shadows; };
+struct Rva0009DB5AManagerView { unsigned char m_pad[0x1E4]; int m_1E4; };
+struct Rva0009DB5ALivingWorldView { unsigned char m_pad[0x18]; bool m_active; bool m_viewMode; };
 
-class Rva0009C134Host
+void Rva0009D55BProduct::rva0009DB5A(bool active)
+{
+	if (!active)
+		((Rva0009D9BD *)this)->rva0009DA28();
+	if (((Rva0009DB5ALivingWorldView *)this)->m_active == active)
+	{
+		LivingWorld::rva002BF391(active);
+		return;
+	}
+	LivingWorld::rva002BF391(active);
+	if (active)
+	{
+		TheLivingWorldManager->rva002142EA();
+		if (((Rva0009DB5AGlobalView *)TheWritableGlobalData)->m_shadows)
+		{
+			((Rva0009DB5AShadowView *)TheW3DShadowManager)->m_04 = ((Rva0009DB5AManagerView *)TheLivingWorldManager)->m_1E4;
+			((W3DGameClientShadowShim *)TheW3DShadowManager)->setLightPosition(0, m_1A0, m_1A4, m_1A8);
+			((Rva0009D9BD *)this)->rva0009DB47();
+		}
+	}
+	else
+	{
+		((Rva002141D1 *)TheLivingWorldManager)->rva002141D1();
+		((Rva0009D9BD *)this)->rva0009DA28();
+	}
+}
+
+// ?rva0009C422@Rva0009D55BProduct@@UAEX_N@Z retail 0x0009C422 (218 bytes,
+// ret 4; slot 20 of the product table): remembers the camera's aspect ratio
+// once (+0x1AC) unless the +0x19 view mode is already on, stores the mode,
+// and either copies the living-world manager's +0x34 and +0x2C/+0x30 words
+// into +0x134/+0xF8/+0xFC and refreshes (0x0009BAA4), or restores the full
+// viewport and saved aspect ratio and calls the table's slot 7.
+struct Rva0009C422ManagerHead { unsigned char m_pad[0x14]; };
+struct Rva0009C422ManagerPart { unsigned char m_pad[0x18]; float m_18; float m_1C; };
+struct Rva0009C422ManagerView : public Rva0009C422ManagerHead, public Rva0009C422ManagerPart { Rva0009C422ManagerPart &part() { return *this; } float m_34; };
+class Rva0009C422Slots
 {
 public:
-	void rva0009C134();
-	void rva000B3FD0();
-	void rva0009BAA4();
-	virtual ~Rva0009C134Host();
-	virtual void unknown1();
-	virtual void unknown2();
-	virtual void unknown3();
-	virtual void unknown4();
-	virtual void unknown5();
-	virtual void unknown6();
-	virtual void unknown7();
-	void rva0009C422(bool updateCamera);
-
-private:
-	char m_pad04[0x15];
-	bool m_viewMode;
-	char m_pad1A[0xC0 - 0x1A];
-	CameraClass *m_camera;
-	char m_padC4[0xF8 - 0xC4];
-	int m_renderState;
-	int m_lightState;
-	char m_pad100[0x134 - 0x100];
-	int m_livingWorldState;
-	char m_pad138[0x1AC - 0x138];
-	float m_aspectRatio;
+	D55B_SLOTS4(v0) virtual void v4(); virtual void v5(); virtual void v6();
+	virtual void slot7();
 };
 
-// The address is stored in slot 20 of vtable 0x00BC89C8. Slot 1 of that same
-// table is already represented by Rva0009C134Host::rva0009C134; the host class
-// identity is an address-derived structural inference. Retail evidence gives
-// this method's bool argument, camera at +0xC0, mode at +0x19, aspect at +0x1AC,
-// and manager copies at +0x134/+0xF8/+0xFC.
-void Rva0009C134Host::rva0009C422(bool updateCamera)
+void Rva0009D55BProduct::rva0009C422(bool active)
 {
-	if (m_aspectRatio == 0.0f)
+	Rva0009DB5ALivingWorldView *state = (Rva0009DB5ALivingWorldView *)this;
+	if (m_1AC == 0.0f && m_C0)
 	{
-		if (m_camera != 0 && !m_viewMode)
-			m_aspectRatio = m_camera->Get_Aspect_Ratio();
+		if (state->m_viewMode)
+			return;
+		m_1AC = ((CameraClass *)m_C0)->Get_Aspect_Ratio();
 	}
-	m_viewMode = updateCamera;
-	if (!updateCamera)
+	state->m_viewMode = active;
+	if (!active)
 	{
-		if (m_camera != 0)
+		if (m_C0)
 		{
 			Vector2 lo = { 0.0f, 0.0f };
 			Vector2 hi = { 1.0f, 1.0f };
-			m_camera->Set_Viewport(lo, hi);
-			if (m_aspectRatio != 0.0f)
-				m_camera->Set_Aspect_Ratio(m_aspectRatio);
+			((CameraClass *)m_C0)->Set_Viewport(lo, hi);
+			if (m_1AC == 0.0f)
+				return;
+			((CameraClass *)m_C0)->Set_Aspect_Ratio(m_1AC);
 		}
-		unknown7();
+		((Rva0009C422Slots *)this)->slot7();
 		return;
 	}
-	LivingWorldManager *manager = TheLivingWorldManager;
-	LivingWorldManager::Subobject *subobject = &manager->m_subobject;
-	m_livingWorldState = manager->m_value34;
-	m_renderState = subobject->m_value18;
-	m_lightState = subobject->m_value1C;
-	rva0009BAA4();
-}	// vtable 0x00BC89C8 slot 20
-
-void Rva0009C134Host::rva0009C134()
-{
-	rva000B3FD0();
-	rva0009BAA4();
-}
-
-BFME_TWO_CALLS(Rva003FE402Host, rva003FE402, rva003FE342, rva005392EC)	// vtable 0x00C37E48 slot 7
-
-// ?rva003FDD15@Rva003FDD15Host@@QAEXXZ @0x003FDD15 16B: chain after 0x003FDC46;
-// calls rowed 0x003FDC46 then tail-jmps to rowed 0x003FBA58. Callees carry
-// their own row names so they are declared only here. Evidence: lane=chain,
-// prev 0x003FDD05 in this file, same 16B two-call tail-jmp shape.
-class Rva003FDC46
-{
-public:
-	void rva003FDC46();
-};
-
-class Rva003FBA58
-{
-public:
-	void rva003FBA58();
-};
-
-class Rva003FDD15Host
-{
-public:
-	void rva003FDD15();
-};
-
-void Rva003FDD15Host::rva003FDD15()
-{
-	((Rva003FDC46 *)this)->rva003FDC46();
-	((Rva003FBA58 *)this)->rva003FBA58();
+	Rva0009C422ManagerView *manager = (Rva0009C422ManagerView *)TheLivingWorldManager;
+	Rva0009C422ManagerPart &part = manager->part();
+	m_134 = manager->m_34;
+	m_F8.x = part.m_18;
+	m_F8.y = part.m_1C;
+	((Rva0009C134Host *)this)->rva0009BAA4();
 }
