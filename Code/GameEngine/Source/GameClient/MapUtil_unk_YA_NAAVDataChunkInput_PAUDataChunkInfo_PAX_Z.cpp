@@ -131,7 +131,18 @@ static char *mapExtension = ".map";
 static Int m_width = 0;						///< Height map width.
 static Int m_height = 0;					///< Height map height (y size of array).
 static Int m_borderSize = 0;			///< Non-playable border area.
-static std::vector<ICoord2D> m_boundaries;	///< All the boundaries we use for the map
+struct BfmePod8 { int a[2]; };
+class BfmePod8Vector : public _STL::vector<BfmePod8, _STL::allocator<BfmePod8> >
+{
+public:
+	void resize(unsigned int n, BfmePod8 x);
+	__forceinline void resize(unsigned int n)
+	{
+		BfmePod8 x;
+		resize(n, x);
+	}
+};
+static BfmePod8Vector m_boundaries;	///< All the boundaries we use for the map
 static Int m_dataSize = 0;				///< size of m_data.
 static UnsignedByte *m_data = 0;	///< array of z(height) values in the height map.
 static Dict worldDict = 0;
@@ -150,7 +161,7 @@ static Int m_mapDY = 0;
 UnsignedInt calcCRC( AsciiString dirName, AsciiString fname );
 
 
-static Bool ParseSizeOnly(DataChunkInput &file, DataChunkInfo *info, void *userData)
+static __declspec(noinline) Bool ParseSizeOnly(DataChunkInput &file, DataChunkInfo *info)
 {
 	m_width = file.readInt();
 	m_height = file.readInt();
@@ -164,8 +175,8 @@ static Bool ParseSizeOnly(DataChunkInput &file, DataChunkInfo *info, void *userD
 		Int numBorders = file.readInt();
 		m_boundaries.resize(numBorders);
 		for (int i = 0; i < numBorders; ++i) {
-			m_boundaries[i].x = file.readInt();
-			m_boundaries[i].y = file.readInt();
+			m_boundaries[i].a[0] = file.readInt();
+			m_boundaries[i].a[1] = file.readInt();
 		}
 	}
 	return true;
@@ -194,7 +205,7 @@ static Bool ParseSizeOnly(DataChunkInput &file, DataChunkInfo *info, void *userD
 
 static Bool ParseSizeOnlyInChunk(DataChunkInput &file, DataChunkInfo *info, void *userData)
 {
-	return ParseSizeOnly(file, info, userData);
+	return ParseSizeOnly(file, info);
 }
 
 static Bool (*s_bfmeKeepParseSizeOnlyInChunk)(DataChunkInput &, DataChunkInfo *, void *) = ParseSizeOnlyInChunk;
