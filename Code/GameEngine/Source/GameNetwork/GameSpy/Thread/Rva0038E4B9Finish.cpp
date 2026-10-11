@@ -13,6 +13,12 @@
 #include "GameNetwork/GameSpy/ThreadUtils.h"
 #include "PeerThreadRetail.h"
 #include <map>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 // Partial class view: only the independently witnessed stats maps are modeled.
 class PeerThreadClass { public: void pushStatsToRoom(PEER); void getStatsFromRoom(PEER, RoomType); void clearPlayerStats(RoomType); std::wstring getLocalStagingServerName(void); private: unsigned char unknown[0x98]; std::map<std::string, int> group, staging; };
 void PeerThreadClass::clearPlayerStats(RoomType type) { switch (type) { case GroupRoom: group.clear(); break; case StagingRoom: staging.clear(); break; } }
