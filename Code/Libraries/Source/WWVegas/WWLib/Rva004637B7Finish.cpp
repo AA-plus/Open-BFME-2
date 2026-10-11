@@ -8,10 +8,9 @@
 // (node +0x10); retail branches with jb, so the comparator is less<unsigned>.
 // Evidence: 136B shape identical to the landed map<int,int> _M_insert 0x38341E
 // except the 0x4637DA jl->jb; callees 0x4634BA and 0x25490 both rowed; caller
-// 0x4638A1. The 0x4634BA body is byte-identical to a thiscall member with an
-// unused receiver, so this source calls it as a member. 0x4634BA is currently
-// rowed only under the free __stdcall spelling, so this member spelling must
-// be added to reverse/symbols.csv at 0x004634BA for the call to resolve.
+// 0x4638A1. Native create ignores ECX and pops its value argument (RET 4).
+// A four-byte member-call view retains the native receiver reload while naming
+// the existing __stdcall provider, without introducing another function name.
 #include <map>
 
 class Rva0046267A;
@@ -29,18 +28,27 @@ class Rva00463782
 	_STL::_Rb_tree_node_base *m_header;
 	unsigned int m_count;
 public:
-	struct Rva004634BANode *rva004634BA(const class Rva0046267A &x);
 	Rva00463782Iter rva004637B7(_STL::_Rb_tree_node_base *x, _STL::_Rb_tree_node_base *pos, const class Rva0046267A *val, int flag);
 	_STL::_Rb_tree_node_base *rva0046383F(struct Rva0046383FOut *out, const class Rva0046267A *val);
 	Rva00463782Iter rva00463E4D(Rva00463782Iter position, const class Rva0046267A &value);
 };
 
+Rva004634BANode *__stdcall Rva004634BACreate(const Rva0046267A &);
+union Rva004637B7CreateCall
+{
+ Rva004634BANode *(__stdcall *target)(const Rva0046267A &);
+ Rva004634BANode *(Rva00463782::*member)(const Rva0046267A &);
+};
+typedef char Rva004637B7CreateCallWidth[sizeof(Rva004637B7CreateCall)==4 ? 1 : -1];
+
 Rva00463782Iter Rva00463782::rva004637B7(_STL::_Rb_tree_node_base *x, _STL::_Rb_tree_node_base *pos, const class Rva0046267A *val, int flag)
 {
+	Rva004637B7CreateCall create;
+	create.target = Rva004634BACreate;
 	_STL::_Rb_tree_node_base *node;
 	if (pos == m_header || (flag == 0 && (x != 0 || *(const unsigned *)val < *(const unsigned *)((const char *)pos + 0x10))))
 	{
-		node = (_STL::_Rb_tree_node_base *)rva004634BA(*val);
+		node = (_STL::_Rb_tree_node_base *)(this->*create.member)(*val);
 		pos->_M_left = node;
 		if (pos == m_header)
 		{
@@ -52,7 +60,7 @@ Rva00463782Iter Rva00463782::rva004637B7(_STL::_Rb_tree_node_base *x, _STL::_Rb_
 	}
 	else
 	{
-		node = (_STL::_Rb_tree_node_base *)rva004634BA(*val);
+		node = (_STL::_Rb_tree_node_base *)(this->*create.member)(*val);
 		pos->_M_right = node;
 		if (pos == m_header->_M_right)
 			m_header->_M_right = node;

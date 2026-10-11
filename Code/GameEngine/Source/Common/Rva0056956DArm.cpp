@@ -2,7 +2,7 @@
 //
 // ?setupAllDuckingTargets@LargeGroupAudioSoundKeyPair@@QAEXXZ @0x0056956D 133B.
 // Per-element resolve-and-arm: for each [m_begin,m_end) element stride 0x14,
-// if its +0xC is null and the thiscall-view lookup (alias-pinned 0x005686F5,
+// if its +0xC is null and the measured lookup call view (rowed 0x005686F5,
 // free __stdcall body ignores ecx) finds a Rva00569543 record, dedup-push
 // this (as ModuleData) via rowed 0x00569543, store the record at +0xC and
 // clear +0x10. If +0x10 is clear, +0xC non-null, and both the record and this
@@ -47,7 +47,6 @@ struct Rva0056956DElem
 class LargeGroupAudioSoundKeyPair
 {
 public:
-	void *rva005686F5(const Rva0056956DElem *e);
 	void setupAllDuckingTargets();
 private:
 	char m_pad[0x14];
@@ -57,12 +56,26 @@ private:
 	HostClass005C815B *m_slots[4];	// +0x2C
 };
 
+// The rowed lookup reads only the two string words at element +0/+4, passes
+// no receiver to its callees, and returns with RET 4. Retain the native ECX
+// setup while binding its actual free-function name and element-prefix type.
+struct Rva005686F5Elem;
+void *__stdcall rva005686F5(const Rva005686F5Elem *);
+union Rva0056956DLookupCall
+{
+ void *(__stdcall *target)(const Rva005686F5Elem *);
+ void *(LargeGroupAudioSoundKeyPair::*member)(const Rva005686F5Elem *);
+};
+typedef char Rva0056956DLookupCallWidth[sizeof(Rva0056956DLookupCall)==4 ? 1 : -1];
+
 void LargeGroupAudioSoundKeyPair::setupAllDuckingTargets()
 {
+	Rva0056956DLookupCall lookup;
+	lookup.target = rva005686F5;
 	for (Rva0056956DElem *e = m_begin; e != m_end; ++e) {
 		if (e->m_key != 0)
 			goto check_active;
-		Rva00569543 *found = (Rva00569543 *)rva005686F5(e);
+		Rva00569543 *found = (Rva00569543 *)(this->*lookup.member)(reinterpret_cast<const Rva005686F5Elem *>(e));
 		if (found == 0)
 			goto next_elem;
 		found->rva00569543((const ModuleData *)this);

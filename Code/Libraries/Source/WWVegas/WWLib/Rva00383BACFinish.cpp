@@ -26,26 +26,22 @@ typedef _STL::_Rb_tree_node<IntIntValue> IntIntNode;
 typedef _STL::_Rb_tree<int, IntIntValue, _STL::_Select1st<IntIntValue>, _STL::less<int>, _STL::allocator<IntIntValue> > MapIntIntTree;
 
 IntIntNode * __stdcall Rva003834CDCreate(const IntIntValue &value);
-#pragma warning(push)
-#pragma warning(disable : 4234)
-typedef MapIntIntTree::_Link_type (__thiscall *CreateNodeFn)(void *, const MapIntIntTree::value_type &);
-#pragma warning(pop)
-
-// TU-scoped shim: the second retail map<int,int> _M_insert build calls its
-// node-create as a thiscall (mov ecx,edi before the call) rather than the
-// push-this/pop-pop the __stdcall free spelling degrades to; naming the create
-// through a same-layout member preserves the ABI. Body folds with
-// Rva003834CDCreate at 0x003834CD.
-class Rva003834CDHelper
+// Retail passes the otherwise unused receiver in ECX and the provider pops
+// its value argument (RET 4). This four-byte view names that existing provider.
+class Rva003834CDHelper {};
+union Rva00383BACCreateCall
 {
-public:
-	IntIntNode *_M_create_node_00383BAC(const IntIntValue &value);
+ IntIntNode *(__stdcall *target)(const IntIntValue &);
+ IntIntNode *(Rva003834CDHelper::*member)(const IntIntValue &);
 };
+typedef char Rva00383BACCreateCallWidth[sizeof(Rva00383BACCreateCall)==4 ? 1 : -1];
 
 // ?_M_insert@?$_Rb_tree@HU?$pair@$$CBHH@_STL@@U?$_Select1st@U?$pair@$$CBHH@_STL@@@2@U?$less@H@2@V?$allocator@U?$pair@$$CBHH@_STL@@@2@@_STL@@AAE?AU?$_Rb_tree_iterator@U?$pair@$$CBHH@_STL@@U?$_Nonconst_traits@U?$pair@$$CBHH@_STL@@@_STL@@@2@PAU_Rb_tree_node_base@2@0ABU?$pair@$$CBHH@2@0@Z present-unmatched
 template <>
 MapIntIntTree::iterator MapIntIntTree::_M_insert(MapIntIntTree::_Base_ptr __x_, MapIntIntTree::_Base_ptr __y_, const MapIntIntTree::value_type &__v, MapIntIntTree::_Base_ptr __w_)
 {
+	Rva00383BACCreateCall create;
+	create.target = Rva003834CDCreate;
 	MapIntIntTree::_Link_type __w = (MapIntIntTree::_Link_type)__w_;
 	MapIntIntTree::_Link_type __x = (MapIntIntTree::_Link_type)__x_;
 	MapIntIntTree::_Link_type __y = (MapIntIntTree::_Link_type)__y_;
@@ -56,7 +52,7 @@ MapIntIntTree::iterator MapIntIntTree::_M_insert(MapIntIntTree::_Base_ptr __x_, 
 			(__x != 0 ||
 				_M_key_compare(_STL::_Select1st<IntIntValue>()(__v), _S_key(__y)))))
 	{
-		__z = ((Rva003834CDHelper *)this)->_M_create_node_00383BAC(__v);
+		__z = (((Rva003834CDHelper *)this)->*create.member)(__v);
 		_S_left(__y) = __z;
 		if (__y == this->_M_header._M_data) {
 			_M_root() = __z;
@@ -66,7 +62,7 @@ MapIntIntTree::iterator MapIntIntTree::_M_insert(MapIntIntTree::_Base_ptr __x_, 
 			_M_leftmost() = __z;
 	}
 	else {
-		__z = ((Rva003834CDHelper *)this)->_M_create_node_00383BAC(__v);
+		__z = (((Rva003834CDHelper *)this)->*create.member)(__v);
 		_S_right(__y) = __z;
 		if (__y == _M_rightmost())
 			_M_rightmost() = __z;
