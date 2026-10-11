@@ -70,3 +70,23 @@ public:
  int storage[3];
 };
 Rva005045DBTree&Rva005045DBTree::self(){return *this;}
+
+// Native5045DB complete5B tail-calls the actual rowed tree assignment504496.
+// WB12CAB70 independently witnesses the same one-reference RET4 wrapper.
+// These forward declarations name the actual provider exactly; the borrowed
+// tree storage has no asserted original mapped-value identity.
+class AsciiString;
+namespace _STL {
+template<class A,class B>struct pair;
+template<class T>struct less;
+template<class T>class allocator;
+template<class T>struct _Select1st;
+template<class K,class V,class Extract,class Compare,class Alloc>class _Rb_tree{
+public:_Rb_tree&operator=(const _Rb_tree&);
+};
+}
+typedef _STL::pair<const int,AsciiString> TreePair;
+typedef _STL::_Rb_tree<int,TreePair,_STL::_Select1st<TreePair>,_STL::less<int>,_STL::allocator<TreePair> > ExistingTreeAssignment;
+Rva005045DBTree&Rva005045DBTree::assign(const Rva005045DBTree&other){
+ return reinterpret_cast<Rva005045DBTree&>(reinterpret_cast<ExistingTreeAssignment&>(*this).operator=(reinterpret_cast<const ExistingTreeAssignment&>(other)));
+}
