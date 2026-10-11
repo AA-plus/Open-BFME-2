@@ -1,3 +1,5 @@
+// ?update@LANAPI@@UAEXXZ
+// partial score=0.98968 date=2026-10-11
 // Banked partial for ?update@LANAPI@@UAEXXZ @ 0x0044AAED 1938B
 // partial score=0.98 date=2026-10-09
 // cl: /O1 /G7 /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include

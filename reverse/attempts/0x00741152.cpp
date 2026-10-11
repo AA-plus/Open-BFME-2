@@ -1,6 +1,6 @@
 // ?Render@W3DAptComponentColorPicker@@UAEXHHHH@Z
-// partial score=0.9759220779220779 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii
+// partial score=0.9759 date=2026-10-11
+// cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
 // Target evidence: WorldBuilder identifies Init (17EF830) and ExternFunc
 // (17F08B0) in W3DAptComponentColorPicker.cpp. Retail's 80-byte factory,
 // ctor and two vftables establish the +8 secondary component base; Init
@@ -15,7 +15,7 @@
 #include "ascii_string.h"
 extern "C" __declspec(dllimport) int __cdecl sscanf(const char*,const char*,...);
 extern "C" __declspec(dllimport) int __cdecl _snprintf(char*,unsigned int,const char*,...);
-extern "C" __declspec(dllimport) double __cdecl floor(double);
+#include "wwmath.h"
 struct ColorFloatPoint {float x,y;ColorFloatPoint(float a=0,float b=0):x(a),y(b){}};
 struct ColorIntPoint {int x,y; ColorIntPoint(int a,int b):x(a),y(b){} };
 class Image {public:char pad[8];AsciiString filename;ColorIntPoint size;ColorFloatPoint uv;const ColorIntPoint *Get_Size() const{return &size;}const ColorFloatPoint *Get_UV() const{return &uv;}char pad1C[8];int width,height;};
@@ -64,10 +64,6 @@ int Rva007410ECInvoke(Rva00222A8BTarget *,void *,const char *,const char *,const
 int Rva00525235Fire(void *,void *,const char *,const char *,int *,int *);
 int Rva00740EA1DistanceSquared(const unsigned char *,const unsigned char *);
 static __forceinline const char *colorName(const AsciiString &s) {char *p=*(char * const *)&s;return p?p+8:"";}
-static __forceinline int colorRound(float f) {int i;__asm {
- fld f
- fistp i
- }return i;}
 
 void W3DAptComponentColorPicker::Init(const AsciiString&name,const char*params) {
  Rva004128F0GetParam(params,"_path",owner);
@@ -129,8 +125,8 @@ void W3DAptComponentColorPicker::Render(int x,int y,int width,int height) {
   if(!uv)return;
   const ColorIntPoint *size=image->Get_Size();
   if(!size)return;
-  int left=colorRound((float)floor((float)size->x*uv->x+0.5f));
-  int top=colorRound((float)floor((float)size->y*uv->y+0.5f));
+  int left=WWMath::Float_To_Long(WWMath::Floor((float)size->x*uv->x+0.5f));
+  int top=WWMath::Float_To_Long(WWMath::Floor((float)size->y*uv->y+0.5f));
   int pitch;
   void *pixels;
   ColorSurfaceLock lock(surface,&pitch,left,top,left+cursorX,top+cursorY,pixels);
@@ -149,7 +145,7 @@ void W3DAptComponentColorPicker::Render(int x,int y,int width,int height) {
   float ox=cursorX?((float)nearest.x*(float)width)/(float)cursorX:0.0f;
   float oy=cursorY?((float)nearest.y*(float)height)/(float)cursorY:0.0f;
   const ColorFloatPoint *screenScale=(const ColorFloatPoint*)Rva000A8F5EGet();
-  ColorIntPoint cursor(colorRound((float)floor(ox*screenScale->x+0.5f)),colorRound((float)floor(oy*screenScale->y+0.5f)));
+  ColorIntPoint cursor(WWMath::Float_To_Long(WWMath::Floor(ox*screenScale->x+0.5f)),WWMath::Float_To_Long(WWMath::Floor(oy*screenScale->y+0.5f)));
   Rva00525235Fire(TheRva00222A8BTarget,(void*)14,colorName(owner),"SetCursor",&cursor.x,&cursor.y);
   seek=false;
  }

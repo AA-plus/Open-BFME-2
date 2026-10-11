@@ -1,4 +1,6 @@
 // ?rva005706D4@AptOnlineLogin@@QAE_NXZ
+// partial score=0.975 date=2026-10-11
+// ?rva005706D4@AptOnlineLogin@@QAE_NXZ
 // partial score=0.975 date=2026-10-08
 #define _WCTYPE_INLINE_DEFINED
 #define iswgraph iswgraph_unimported
