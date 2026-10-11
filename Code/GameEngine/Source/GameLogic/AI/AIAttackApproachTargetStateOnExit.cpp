@@ -143,7 +143,8 @@ class Object : public Thing
 public:
 	AIUpdateInterface *getAI() { return m_ai; }
 	Bool isKindOfProjectile() const { return getTemplate()->isKindOfProjectile(); }
-	Bool isMobile() const;
+	Bool rva002907A1();  // rowed isMobile (0x002907A1)
+	__declspec(dllimport) __forceinline Bool isMobile() const { return const_cast<Object *>(this)->rva002907A1(); }
 	const Weapon *getCurrentWeapon(WeaponSlotType *slot) const;
 	unsigned char m_pad044[0x258 - 0x44];
 	AIUpdateInterface *m_ai; // +0x258

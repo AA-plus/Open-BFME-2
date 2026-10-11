@@ -69,7 +69,8 @@ public:
 class Object : public Thing
 {
 public:
-	Bool isMobile() const;
+	Bool rva002907A1();  // rowed isMobile (0x002907A1)
+	__declspec(dllimport) __forceinline Bool isMobile() const { return const_cast<Object *>(this)->rva002907A1(); }
 	Weapon *getCurrentWeapon(WeaponSlotType *wslot = 0);
 	Player *getControllingPlayer() const;
 	Bool crushPolicy(Object *other, CrushSquishTestType test) const;
