@@ -1,10 +1,11 @@
-// cl: /Ireference/shims/bfme2_ascii /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /ICode/Libraries/Include /Ireference/shims/bfme2_ascii /MD /EHsc
 //
 // ?xfer@BezierProjectileBehavior@@MAEXPAVXfer@@@Z @0x0045CA8E 483B
 // BezierProjectileBehavior::xfer snapshot slot 3 of vtable 0x00841E04 calling rowed UpdateModule::xfer 0x0044DF9F
 // Evidence: named pin; vtable slot 3; donor BFME1 BezierProjectileBehavior_xfer.cpp; member offsets from retail loads; callers MissileUpdate::xfer 0x004A798C
 #include "ascii_string.h"
 #include <vector>
+#include "Lib/Coord3D.h"
 
 class AsciiString;
 class UnicodeString;
@@ -148,6 +149,8 @@ public:
 	virtual ~UpdateModule();
 	void xfer(Xfer *xfer);
 protected:
+ friend class BezierProjectileBehavior;
+ void setWakeFrame(Object *,unsigned);
 	unsigned m_nextCallFrameAndPhase;
 	int m_indexInLogic;
 	int m_bfmeReserved;
@@ -168,11 +171,13 @@ public:
 	float z;
 };
 
+struct BezierPathRecord {float x,y,z;};
 struct AICommandCoordVector
 {
 	void *m_start;
 	void *m_finish;
 	void *m_end;
+ int size() const {return (BezierPathRecord *)m_finish-(BezierPathRecord *)m_start;}
 };
 
 Xfer *Rva00390911XferCoordVector(Xfer *xfer, AICommandCoordVector *vec);
@@ -212,6 +217,9 @@ struct BezierError
 
 class BezierProjectileBehavior : public Rva0024A797, public BezierProjectileBehaviorSecondaryBase0, public BezierProjectileBehaviorSecondaryBase1
 {
+public:
+ void rva0045CC72(int);
+ void rva0045C975(int);
 protected:
 	virtual void xfer(Xfer *xfer);
 	virtual void v00();
@@ -294,4 +302,50 @@ void BezierProjectileBehavior::xfer(Xfer *xfer)
 	*xfer == m_int78;
 	*xfer == m_int70;
 	*xfer == m_uint74;
+}
+
+// Reference: BFME1 9e3be919b10a BezierProjectileBehavior_rva001F1B90.cpp.
+// Native45CC72..45CD6E is the complete252B RET4 primary update; the old
+// no-boundary log was contradicted by its actual push-ebp entry. Target
+// data19 / scale20, Object position38, path44/48 stride12, counter78,
+// terrain vslot18 and primary vslot34 reconcile the donor's layout and ABI.
+// The original method spelling remains unknown; retain its existing pin.
+struct BezierPathDataView {char unknown[0x19];unsigned char flag;char gap[6];float scale;};
+struct BezierPositionView {char unknown[0x38];Coord3D position;};
+class TerrainLogic;
+extern TerrainLogic *TheTerrainLogic;
+class BezierTerrainView {public:
+ virtual void slot0();virtual void slot4();virtual void slot8();virtual void slotC();virtual void slot10();virtual void slot14();
+ virtual float height(float,float,Coord3D *);
+};
+class BezierFlightView {public:
+#define S(N) virtual void slot##N();
+ S(0) S(1) S(2) S(3) S(4) S(5) S(6) S(7) S(8) S(9) S(10) S(11) S(12)
+#undef S
+ virtual void fire(Object *,const Coord3D *);
+};
+class WWMath {public:static float __fastcall Inv_Sqrt(float);};
+void BezierProjectileBehavior::rva0045CC72(int flag) {
+ Object *object=m_object;
+ const BezierPathDataView *data=(const BezierPathDataView *)m_moduleData;
+ if(!data->flag && !(unsigned char)flag)((UpdateModule *)this)->setWakeFrame(object,1);
+ ++m_int78;
+ int count=m_vec44.size();
+ if(count<2){rva0045C975(flag);return;}
+ BezierPathRecord *path=(BezierPathRecord *)m_vec44.m_start;
+ Coord3D delta;
+ delta.x=path[count-1].x-path[count-2].x;
+ delta.y=path[count-1].y-path[count-2].y;
+ delta.z=0;
+ float lengthSquared=delta.x*delta.x+delta.y*delta.y;
+ if(lengthSquared!=0.0f) {
+  float inverseLength=WWMath::Inv_Sqrt(lengthSquared);
+  delta.x*=inverseLength;
+  delta.y*=inverseLength;
+ }
+ Coord3D position;
+ position.x=((BezierPositionView *)object)->position.x+delta.x*data->scale;
+ position.y=((BezierPositionView *)object)->position.y+delta.y*data->scale;
+ position.z=((BezierTerrainView *)TheTerrainLogic)->height(position.x,position.y,0);
+ ((BezierFlightView *)this)->fire(0,&position);
 }
