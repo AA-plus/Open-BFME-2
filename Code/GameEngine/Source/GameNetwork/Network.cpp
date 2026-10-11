@@ -28,6 +28,7 @@ public:
 	void sendChat(UnicodeString text, Int playerMask);
 	void sendDisconnectChat(UnicodeString text);
 	void sendFile(AsciiString path, UnsignedByte playerMask, UnsignedShort commandID);
+	UnsignedShort sendFileAnnounce(AsciiString path, UnsignedByte playerMask);
 	void rva004D0E8B(void);
 
 	void SetLocalAddr(const NetLocalAddress &addr)
@@ -100,6 +101,7 @@ public:
 	virtual void sendChat(UnicodeString text, Int playerMask);	// slot 26
 	virtual void sendDisconnectChat(UnicodeString text);
 	virtual void sendFile(AsciiString path, UnsignedByte playerMask, UnsignedShort commandID);
+	virtual UnsignedShort sendFileAnnounce(AsciiString path, UnsignedByte playerMask);	// slot 29
 	virtual void quitGame(void);
 
 private:
@@ -219,6 +221,14 @@ void Network::sendDisconnectChat(UnicodeString text)
 void Network::sendFile(AsciiString path, UnsignedByte playerMask, UnsignedShort commandID)
 {
 	m_pConMgr->sendFile(path, playerMask, commandID);
+}
+
+// Retail 0x0025E370, slot 29 of 0x00BF6040 (after sendFile): Zero Hour's
+// Network::sendFileAnnounce, returning the announce command ID from the
+// rowed ConnectionManager::sendFileAnnounce 0x004D2D6A.
+UnsignedShort Network::sendFileAnnounce(AsciiString path, UnsignedByte playerMask)
+{
+	return m_pConMgr->sendFileAnnounce(path, playerMask);
 }
 
 // Target evidence at 0x0025E233: if Network+0x0C is set it calls the
