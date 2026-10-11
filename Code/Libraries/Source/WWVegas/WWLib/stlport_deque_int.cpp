@@ -9,6 +9,8 @@ namespace _STL {
 template <> void deque<int>::_M_reallocate_map(unsigned int, bool);
 template <> void deque<int>::_M_push_back_aux_v(const int &);
 template <> void deque<int>::_M_push_front_aux_v(const int &);
+// Retail has one copy of the map initializer (rowed in stlport_deque_sighting_initmap.cpp).
+template <> void _Deque_base<int, allocator<int> >::_M_initialize_map(size_t);
 // Retail uses the shared four-byte allocator at 0x00068E15.
 template <> int *allocator<int>::allocate(size_t, const void *) const;
 }
