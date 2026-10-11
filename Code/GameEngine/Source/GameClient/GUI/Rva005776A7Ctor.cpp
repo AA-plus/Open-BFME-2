@@ -10,18 +10,22 @@
 // +4 base, and the +0x28 member (rowed 0x005CD651) from that object again,
 // then clears +0x38 and creates the checklist. Own tables 0x00C6E8F8 and
 // 0x00C6E8EC (+4). Identities are not established.
-class Rva00429191Root
-{
-public:
-	virtual void r0();
-	~Rva00429191Root() {}
-};
-
-class Gen_uwm_00429191 : public Rva00429191Root
+// The 0x429191 cleanup is a shared teardown carrier. Its final table is
+// 0xBDBA74, as independently verified in Rva004296EESlot.cpp. The phase
+// interface has its own two-slot table at 0xC6E430; do not give both tables
+// the carrier's COFF name. The implicit interface destructor keeps the
+// existing carrier cleanup call and the complete retail exception data.
+class Gen_uwm_00429191
 {
 public:
 	virtual void s0();
 	~Gen_uwm_00429191() {}
+};
+
+class Rva005776A7Interface : public Gen_uwm_00429191
+{
+public:
+	virtual void r0();
 };
 
 class Rva005CD1A9
@@ -104,7 +108,7 @@ public:
 	};
 };
 
-class Rva005776A7 : public Gen_uwm_00429191, public Rva005CD1A9
+class Rva005776A7 : public Rva005776A7Interface, public Rva005CD1A9
 {
 public:
 	Rva005776A7(Rva005772BF *owner, int value);
