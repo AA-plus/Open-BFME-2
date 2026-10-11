@@ -104,7 +104,7 @@ bool MapCache::addMap(AsciiString dirName,AsciiString fname,FileInfo *info,bool 
     AsciiString name=worldDict.getAsciiString(key(TheKey_mapName),&exists);
     if (exists && !name.isEmpty()) md.displayName.translate(name);
     else {
-        AsciiString leaf=fname.reverseFind('\\')+1;
+        AsciiString leaf=((const StringBase<char> &)(fname)).reverseFind('\\')+1;
         const char *p=leaf.str();
         AsciiString tag("$Map:");
         for (; *p; ++p) {
@@ -119,7 +119,7 @@ bool MapCache::addMap(AsciiString dirName,AsciiString fname,FileInfo *info,bool 
     AsciiString description=worldDict.getAsciiString(key(TheKey_mapDescription),&exists);
     if (exists && !description.isEmpty()) md.description.translate(description);
     else {
-        AsciiString leaf=fname.reverseFind('\\')+1;
+        AsciiString leaf=((const StringBase<char> &)(fname)).reverseFind('\\')+1;
         const char *p=leaf.str();
         AsciiString tag("Map:");
         for (; *p; ++p) {

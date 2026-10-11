@@ -144,7 +144,7 @@ bool INI::loadDirectory(AsciiString dirName, bool subdirs, INILoadType loadType,
 		while (it != filenameList.end())
 		{
 			tempname = (*it).str() + dirName.getLength();
-			if (!tempname.find('\\') && !tempname.find('/'))
+			if (!((const StringBase<char> &)(tempname)).find('\\') && !((const StringBase<char> &)(tempname)).find('/'))
 			{
 				if (loadFile(*it, loadType, pXfer))
 					didLoad = true;
@@ -158,7 +158,7 @@ bool INI::loadDirectory(AsciiString dirName, bool subdirs, INILoadType loadType,
 			while (it != filenameList.end())
 			{
 				tempname = (*it).str() + dirName.getLength();
-				if (tempname.find('\\') || tempname.find('/'))
+				if (((const StringBase<char> &)(tempname)).find('\\') || ((const StringBase<char> &)(tempname)).find('/'))
 				{
 					if (!Rva0002C5E6(*(const StringBase<char>*)&*it,(const Rva0002C5E6Range*)fileFilter)
 						&& loadFile(*it, loadType, pXfer))

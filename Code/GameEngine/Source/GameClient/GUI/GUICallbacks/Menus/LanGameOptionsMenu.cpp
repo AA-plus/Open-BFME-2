@@ -1008,9 +1008,9 @@ void updateGameOptions( void )
 		else
 		{
 			AsciiString s = TheLAN->GetMyGame()->getMap();
-			if (s.reverseFind('\\'))
+			if (((const StringBase<char> &)(s)).reverseFind('\\'))
 			{
-				s = s.reverseFind('\\') + 1;
+				s = ((const StringBase<char> &)(s)).reverseFind('\\') + 1;
 			}
 			mapDisplayName.format(L"%hs", s.str());
 		}

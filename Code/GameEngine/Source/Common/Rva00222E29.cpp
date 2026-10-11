@@ -39,7 +39,7 @@ bool AptPlayer::LoadLevel(unsigned int index)
 		return false;
 
 	AsciiString path(record->m_path);
-	const char *extension = path.find('.');
+	const char *extension = ((const StringBase<char> &)(path)).find('.');
 	if (extension)
 	{
 		for (int count = (int)strlen(extension); count; --count)

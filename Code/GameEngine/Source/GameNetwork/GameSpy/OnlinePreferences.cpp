@@ -375,7 +375,7 @@ Bool LadderPreferences::loadProfile(Int profileID)
 		AsciiString ladName = it->first;
 		AsciiString ladData = it->second;
 
-		const char *ptr = ladName.reverseFind(':');
+		const char *ptr = ((const StringBase<char> &)(ladName)).reverseFind(':');
 		if (!ptr)
 			continue;
 
@@ -387,7 +387,7 @@ Bool LadderPreferences::loadProfile(Int profileID)
 		}
 		p.address = QuotedPrintableToAsciiString(ladName);
 
-		ptr = ladData.reverseFind(':');
+		ptr = ((const StringBase<char> &)(ladData)).reverseFind(':');
 		if (!ptr)
 			continue;
 

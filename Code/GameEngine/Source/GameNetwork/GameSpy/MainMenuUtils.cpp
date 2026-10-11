@@ -239,7 +239,7 @@ static void queuePatch(bool mandatory,AsciiString downloadURL){
  AsciiString pass;success &= downloadURL.nextToken(&pass,"@/");
  AsciiString filePath;success &= downloadURL.nextToken(&filePath,"");
  if(!success && !user.isEmpty()){filePath=user;user="anonymous";pass="ccgenerals";success=true;}
- AsciiString fileStr=filePath;const char *slash=filePath.reverseFind('/');if(slash)fileStr=slash+1;
+ AsciiString fileStr=filePath;const char *slash=((const StringBase<char> &)(filePath)).reverseFind('/');if(slash)fileStr=slash+1;
  AsciiString fileName="patches\\";fileName.concat(fileStr);
  if(!success)return;
  q.file=filePath;q.localFile=fileName;q.password=pass;q.regKey="";q.server=server;q.tryResume=true;q.userName=user;

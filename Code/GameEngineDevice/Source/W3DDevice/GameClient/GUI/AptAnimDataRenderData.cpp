@@ -47,8 +47,8 @@ static File *openFile(const AsciiString *fname)throw()
 }
 static inline const char *getNameAndIndex(const AsciiString &path,int *index,bool fullPath)
 {
- const char *fname=path.reverseFind('\\');if(!fname)return 0;
- const char *digits=path.reverseFind('.');if(!digits)return 0;
+ const char *fname=((const StringBase<char> &)(path)).reverseFind('\\');if(!fname)return 0;
+ const char *digits=((const StringBase<char> &)(path)).reverseFind('.');if(!digits)return 0;
  while(AptGeometryCrt::isdigit(digits[-1]))--digits;
  AptGeometryCrt::sscanf(digits,"%d.",index);
  return fullPath?path.str():fname+1;

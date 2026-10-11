@@ -145,7 +145,7 @@ void MapObject::verifyValidUniqueID()
 
 		Bool iterateExists;
 		AsciiString tempStr = obj->getProperties()->getAsciiString(TheKey_uniqueID.key(), &iterateExists);
-		const char *lastSpace = tempStr.reverseFind(' ');
+		const char *lastSpace = ((const StringBase<char> &)(tempStr)).reverseFind(' ');
 
 		int testIndex = -1;
 		if (lastSpace) {

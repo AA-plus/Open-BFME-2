@@ -121,7 +121,7 @@ Rva0021F19B::Rva0021F19B()
 		for (FilenameList::iterator it = filenameList.begin(); it != filenameList.end(); ++it)
 		{
 			AsciiString path = *it;
-			const char *slash = path.reverseFind('\\');
+			const char *slash = ((const StringBase<char> &)(path)).reverseFind('\\');
 			HeroFileEntry entry(AsciiString(slash ? slash + 1 : path.str()), false);
 			entry.second = true;
 			files.push_back(entry);
@@ -137,7 +137,7 @@ Rva0021F19B::Rva0021F19B()
 		for (FilenameList::iterator it = filenameList.begin(); it != filenameList.end(); ++it)
 		{
 			AsciiString path(*(const UnicodeString *)&*it);
-			const char *slash = path.reverseFind('\\');
+			const char *slash = ((const StringBase<char> &)(path)).reverseFind('\\');
 			HeroFileEntry entry(AsciiString(slash ? slash + 1 : path.str()), false);
 			files.push_back(entry);
 		}
