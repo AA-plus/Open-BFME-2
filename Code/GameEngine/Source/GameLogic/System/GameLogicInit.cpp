@@ -1666,7 +1666,10 @@ extern PlayerList *ThePlayerList;
 class Matrix3D
 {
 public:
-	explicit Matrix3D(bool init)
+	// dllimport+forceinline: expanded at its one use and never emitted, so this
+	// view no longer leaves a non-retail Matrix3D(bool) copy (retail 0x0004C91A)
+	// ahead of the real one in link order.
+	__declspec(dllimport) __forceinline explicit Matrix3D(bool init)
 	{
 		if (init) {
 			m_row[0][0] = 1.0f; m_row[0][1] = 0.0f; m_row[0][2] = 0.0f; m_row[0][3] = 0.0f;
