@@ -21,7 +21,9 @@ struct TemplateView { char prefix[0x120]; unsigned char flag120; };
 class Object { public: char prefix[4]; TemplateView *type; char pad8[0x38-8]; Coord3D pos; };
 // Template spelling follows the existing KINDOFMASK_NONE owner. Retail
 // measures seven words; WorldBuilder uses its different BitFlags<218> layout.
-template<int N> class BitFlags { public: unsigned int bits[7]; BitFlags() { memset(bits,0,sizeof(bits)); } void set(unsigned i) { bits[i/32]|=1UL<<(i%32); } };
+// LINK: the default ctor's COMDAT loses to the first-in-order copy, so the one
+// local mask uses a TU-unique no-init ctor plus the same zeroing stores. No flags touched.
+template<int N> class BitFlags { public: unsigned int bits[7]; struct BfmeNoInitFortress {}; BitFlags() { memset(bits,0,sizeof(bits)); } BitFlags(BfmeNoInitFortress) {} void bfmeZeroFortress() { memset(bits,0,sizeof(bits)); } void set(unsigned i) { bits[i/32]|=1UL<<(i%32); } };
 extern BitFlags<116> KINDOFMASK_NONE;
 class BfmeFixedStorage0004543D { char bytes[28]; public: BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &) throw(); };
 class Rva00045411BitSet { char bytes[28]; public: Rva00045411BitSet(int,int); };
@@ -84,7 +86,7 @@ int AIUpgradeHeuristicFortress::getUpgradeHeuristicResult(Player *player)
    for(;it!=end;++it) {
     Object *obj=TheGameLogic->findObjectByID(*it);
     if(obj && (obj->type->flag120&4)) {
-     BitFlags<116> mask;mask.set(3);mask.set(90);
+     BitFlags<116> mask((BitFlags<116>::BfmeNoInitFortress()));mask.bfmeZeroFortress();mask.set(3);mask.set(90);
      // All four filters are full-expression temporaries. Retail resets their
      // base vptrs before querying the returned handle.
      BfmeWideResult near=ThePartitionManager->iterateObjectsInRange(&obj->pos,300.0f,0,
