@@ -36,10 +36,19 @@ public:
 	void initFromINIMulti(void *what, const MultiIniFieldParse &parseTableList);
 	static void Rva003F341E_ParseConnections(INI *ini, void *instance, void *store, const void *userData);
 	static void Rva004B2B64_ParseReplaceObject(INI *ini, void *instance, void *store, const void *userData);
+	static void parseAsciiStringVectorAppend(INI *ini, void *instance, void *store, const void *userData);
 	const char *separators() const { return m_separators; }
 private:
 	unsigned char m_unreconstructed_000[0x420];
 	const char *m_separators;		// +0x420
+};
+
+struct FieldParse
+{
+	const char *token;
+	void (*parse)(INI *, void *, void *, const void *);
+	const void *userData;
+	int offset;
 };
 
 class LivingWorldRegionConnection
@@ -65,7 +74,21 @@ private:
 	unsigned char m_unreconstructed_00[0x10];
 };
 
+void iniParseObjectFilter(INI *ini, void *instance, void *store, const void *userData);
+
+// Retail's own two-record ReplaceObject table, transcribed from .rdata at RVA
+// 0x00856D20 (VA 0x00C56D20, file offset 0x00857A20): TargetObjectFilter through
+// the rowed free iniParseObjectFilter at +0 and ReplacementObjectName through
+// INI::parseAsciiStringVectorAppend at +4, a null user-data column in both
+// records, then the zero terminator. `extern` on the definition keeps the table
+// external, which a plain const array at namespace scope would not be.
 extern const FieldParse g_00C56D20[];
+const FieldParse g_00C56D20[] =
+{
+	{ "TargetObjectFilter", &iniParseObjectFilter, 0, 0 },
+	{ "ReplacementObjectName", &INI::parseAsciiStringVectorAppend, 0, 4 },
+	{ 0, 0, 0, 0 }
+};
 
 namespace _STL
 {

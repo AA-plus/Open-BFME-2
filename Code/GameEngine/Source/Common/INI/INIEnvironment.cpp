@@ -21,6 +21,34 @@ class INI
 public:
     const char *getNextToken(const char *separators = 0);
     void initFromINI(void *what, const FieldParse *fields);
+    static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
+};
+
+struct FieldParse
+{
+    const char *token;
+    void (*parse)(INI *, void *, void *, const void *);
+    const void *userData;
+    int offset;
+};
+
+// Retail's own five-record SkyboxTextureSet table, transcribed from .rdata at RVA
+// 0x008082F0 (VA 0x00C082F0, file offset 0x008077F0): SkyboxTexture{N,E,S,W,T},
+// each parsed with INI::parseAsciiString (rowed 0x0002F11E) into the five
+// StringBase members of the 24-byte set at +4/+8/+0xC/+0x10/+0x14, a null
+// user-data column throughout, then the zero terminator. `extern` on the
+// definition keeps the table external, without which a const array at namespace
+// scope takes MSVC internal linkage and leaves this unit's own reference to it
+// unresolved.
+extern const FieldParse g_00C082F0[];
+const FieldParse g_00C082F0[] =
+{
+    { "SkyboxTextureN", &INI::parseAsciiString, 0, 4 },
+    { "SkyboxTextureE", &INI::parseAsciiString, 0, 8 },
+    { "SkyboxTextureS", &INI::parseAsciiString, 0, 12 },
+    { "SkyboxTextureW", &INI::parseAsciiString, 0, 16 },
+    { "SkyboxTextureT", &INI::parseAsciiString, 0, 20 },
+    { 0, 0, 0, 0 }
 };
 
 // Same 24-byte view as the verified constructor at 0x0020D4E3.
@@ -63,7 +91,6 @@ public:
 
 // Reuse the existing global's symbol from Rva007B6880Thunks.cpp.
 extern unsigned int g_Va00DFF494;
-extern const FieldParse g_00C082F0[];
 
 void iniParseEnvironmentSkyboxTextureDefinition(INI *ini)
 {

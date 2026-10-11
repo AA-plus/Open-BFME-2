@@ -7,7 +7,17 @@ class INI
 {
 public:
 	void initFromINI(void *vals, const struct FieldParse *table);
+	static void parseReal(INI *ini, void *instance, void *store, const void *userData);
 };
+
+struct FieldParse
+{
+	const char *token;
+	void (*parse)(INI *, void *, void *, const void *);
+	const void *userData;
+	int offset;
+};
+
 
 extern "C" __declspec(dllimport) double __cdecl floor(double v);
 
@@ -27,7 +37,17 @@ static __forceinline long fast_round(float f)
 }
 
 extern float g_00BBB9AC;
+// Retail's own two-record table, transcribed from .rdata at RVA 0x00875344 (VA
+// 0x00C75344, file offset 0x00874744): two parseReal columns into the two longs
+// at +0/+4 of the TwoFloats the body above builds, followed by the zero
+// terminator. `extern` on the definition keeps the array external.
 extern const struct FieldParse g_00C75344[];
+const struct FieldParse g_00C75344[] =
+{
+	{ "StartingAutoResolveBattleMessageDuration", &INI::parseReal, 0, 0 },
+	{ "AllEnemiesRetreatedMessageDuration", &INI::parseReal, 0, 4 },
+	{ 0, 0, 0, 0 }
+};
 
 class Rva005D00A6
 {
