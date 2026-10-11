@@ -103,6 +103,51 @@ public:
 	~Rva00603C57();
 };
 
+class LocomotorStore
+{
+public:
+	~LocomotorStore();
+};
+class Rva00229487
+{
+public:
+	~Rva00229487();
+};
+struct VersionBlockEntry
+{
+public:
+	~VersionBlockEntry();
+};
+class Rva002B923F
+{
+public:
+	~Rva002B923F();
+};
+class Rva00360F55
+{
+public:
+	~Rva00360F55();
+};
+class BfmeNodeValueEBD
+{
+public:
+	~BfmeNodeValueEBD();
+};
+class BuddyMessage
+{
+public:
+	~BuddyMessage();
+};
+class Rva0041579E
+{
+public:
+	~Rva0041579E();
+};
+struct Rva0073EEE0ListValue
+{
+public:
+	~Rva0073EEE0ListValue();
+};
 template void _STL::_Destroy<Rva000C2980>(Rva000C2980 *);
 template void _STL::_Destroy<Rva00216108>(Rva00216108 *);
 template void _STL::_Destroy<Rva0022304A>(Rva0022304A *);
@@ -121,3 +166,12 @@ template void _STL::_Destroy<Rva005011B4>(Rva005011B4 *);
 template void _STL::_Destroy<Rva005F8447>(Rva005F8447 *);
 template void _STL::_Destroy<Rva00600BBE>(Rva00600BBE *);
 template void _STL::_Destroy<Rva00603C57>(Rva00603C57 *);
+template void _STL::_Destroy<LocomotorStore>(LocomotorStore *);
+template void _STL::_Destroy<Rva00229487>(Rva00229487 *);
+template void _STL::_Destroy<VersionBlockEntry>(VersionBlockEntry *);
+template void _STL::_Destroy<Rva002B923F>(Rva002B923F *);
+template void _STL::_Destroy<Rva00360F55>(Rva00360F55 *);
+template void _STL::_Destroy<BfmeNodeValueEBD>(BfmeNodeValueEBD *);
+template void _STL::_Destroy<BuddyMessage>(BuddyMessage *);
+template void _STL::_Destroy<Rva0041579E>(Rva0041579E *);
+template void _STL::_Destroy<Rva0073EEE0ListValue>(Rva0073EEE0ListValue *);
