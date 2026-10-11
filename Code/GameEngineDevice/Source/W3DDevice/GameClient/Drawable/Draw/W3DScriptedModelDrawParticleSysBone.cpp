@@ -73,7 +73,6 @@ void ParseScriptedModelParticleSysBone(INI *ini,void *instance,void *,const void
 {
  parseParticleSysBone(ini,instance,(char *)instance+0xB4);
 }
-// ?ParseScriptedAnimationParticleSysBone@@YAXPAVINI@@PAX1PBX@Z present-unmatched
 void ParseScriptedAnimationParticleSysBone(INI *ini,void *instance,void *,const void *)
 {
  parseParticleSysBone(ini,instance,(char *)instance+0x74);
