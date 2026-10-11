@@ -23,3 +23,62 @@ Rva000851F3::Rva000851F3()
 	m_18 = 0.0f;
 	m_1C = 0.0f;
 }
+
+// ??0Rva00312C95@@QAE@XZ, retail 0x00312C95, 93 bytes: the derived 0x60-byte
+// object (vtable 0x00BC7514) GiantBirdAIUpdate keeps at +0x4C8 and the
+// 0x0008B7CF product holds twice. After the base it builds a 12-byte vector
+// header at +0x2C through the folded _Vector_base constructor 0x00211E58
+// (the call cannot throw: retail keeps no unwind state), then zeroes its
+// floats, int and flags and re-clears the base's +0x24 flag.
+class GameWindow;
+namespace _STL
+{
+template <class T> class allocator
+{
+public:
+	allocator() {}
+};
+template <class T, class A> class _Vector_base
+{
+public:
+	_Vector_base(const A &a) throw();
+	T *_M_start;
+	T *_M_finish;
+	T *_M_end_of_storage;
+};
+}
+
+struct Rva00312C95Triple
+{
+	float x, y, z;
+	void zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
+};
+
+class Rva00312C95 : public Rva000851F3
+{
+public:
+	Rva00312C95();
+private:
+	_STL::_Vector_base<GameWindow *, _STL::allocator<GameWindow *> > m_2C;	// +0x2C
+	float m_38;
+	float m_3C;
+	int m_40;
+	bool m_44;
+	bool m_45;
+	bool m_46;
+	Rva00312C95Triple m_48;
+	Rva00312C95Triple m_54;
+};
+
+Rva00312C95::Rva00312C95() : m_2C(_STL::allocator<GameWindow *>())
+{
+	m_40 = 0;
+	m_38 = 0.0f;
+	m_3C = 0.0f;
+	m_48.zero();
+	m_24 = false;
+	m_44 = false;
+	m_45 = false;
+	m_46 = false;
+	m_54.zero();
+}
