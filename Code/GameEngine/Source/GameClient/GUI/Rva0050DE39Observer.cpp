@@ -203,10 +203,10 @@ enum
 	KINDOF_SCORE_CREATE = 40,
 	KINDOF_SCORE_DESTROY = 41
 };
+class ParticleSystem { public: bool isSaveable() const; };	// 0x002AA223 (rowed under this name)
 class Player
 {
 public:
-	bool rva002AA223() const;			// ZH isPlayerObserver
 	unsigned char m_00[0x34];
 	PlayerTemplate *m_playerTemplate;	// +0x34
 	UnicodeString m_playerDisplayName;	// +0x38
@@ -289,7 +289,7 @@ void ControlBar::populateObserverList(void)
 			Player *p = ThePlayerList->findPlayerWithNameKey(TheNameKeyGenerator->nameToKey(name));
 			if (p && p->m_playerTemplate)
 			{
-				if (p->rva002AA223())
+				if (((const ParticleSystem *)p)->isSaveable())
 					continue;
 				Rva00328518(g_00E04654[currentButton], (Int)p);
 				GadgetButtonSetEnabledImage_Rva002C0433(g_00E04654[currentButton], p->m_playerTemplate->rva001FD221());
@@ -325,7 +325,7 @@ void ControlBar::populateObserverList(void)
 		for (i = 0; i < 20; ++i)
 		{
 			Player *p = ThePlayerList->getNthPlayer(i);
-			if (p && !p->rva002AA223() && p->m_playerType == 0)
+			if (p && !((const ParticleSystem *)p)->isSaveable() && p->m_playerType == 0)
 			{
 				Rva00328518(g_00E04654[currentButton], (Int)p);
 				GadgetButtonSetEnabledImage_Rva002C0433(g_00E04654[currentButton], p->m_playerTemplate->rva001FD221());

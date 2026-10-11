@@ -378,11 +378,11 @@ public:
 
 extern NameKeyGenerator *TheNameKeyGenerator;
 
+class ParticleSystem { public: bool isSaveable() const; };	// 0x002AA223 (rowed under this name)
 class Player
 {
 public:
 	// The pinned 7-byte flag getter (BFME 1's isPlayerObserver).
-	bool rva002AA223() const;
 };
 
 class PlayerList
@@ -505,7 +505,7 @@ void AptPlayerStatus::rva004E476C()
 		if (slot->isAI())
 			connected = true;
 		bool alive = !g_00E03138->hasBeenDefeated(player);
-		bool observer = player->rva002AA223();
+		bool observer = ((const ParticleSystem *)player)->isSaveable();
 		rva004E44FB(row, 0, slot->getName());
 		rva004E44FB(row, 1, slot->getApparentPlayerTemplateDisplayName());
 		AsciiString team;

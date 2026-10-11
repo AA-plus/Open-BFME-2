@@ -16,9 +16,9 @@ typedef int Int;
 class PlayerTemplate;
 class Team;
 enum Relationship { ENEMIES = 0, NEUTRAL = 1, ALLIES = 2 };
+class ParticleSystem { public: bool isSaveable() const; };	// 0x002AA223 (rowed under this name)
 class Player {
 public:
- Bool rva002AA223() const;
  Bool isLocalPlayer() const;
  Relationship getRelationship(const Team *that) const;
  Team *getDefaultTeam() const { return defaultTeam; }
@@ -88,7 +88,7 @@ static Bool areAllies(const Player *p1, const Player *p2)
 // ?hasAchievedVictory@VictoryConditions@@UAE_NPAVPlayer@@@Z present-unmatched
 Bool VictoryConditions::hasAchievedVictory(Player *player)
 {
-	if (!player || player->rva002AA223())
+	if (!player || ((const ParticleSystem *)player)->isSaveable())
 		return false;
 
 	if (m_singleAllianceRemaining && m_field88 > 0)
@@ -126,7 +126,7 @@ Bool VictoryConditions::isLocalAlliedDefeat()
 Bool VictoryConditions::rva00420017(Player *player)
 {
  const PlayerTemplate *civilian = ThePlayerTemplateStore->findPlayerTemplate(TheNameKeyGenerator->nameToKey("FactionCivilian"));
- if (player && player != ThePlayerList->neutralPlayer && player->playerTemplate && player->playerTemplate != civilian && !player->rva002AA223()) {
+ if (player && player != ThePlayerList->neutralPlayer && player->playerTemplate && player->playerTemplate != civilian && !((const ParticleSystem *)player)->isSaveable()) {
   m_players[m_cachedPlayerCount] = player;
   if (m_players[m_cachedPlayerCount]->isLocalPlayer()) m_localSlotNum=m_cachedPlayerCount;
   ++m_cachedPlayerCount;
