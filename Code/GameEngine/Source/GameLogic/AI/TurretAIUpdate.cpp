@@ -76,6 +76,8 @@ public:
 	virtual void slot03();
 	virtual StateReturnType updateStateMachine();
 	StateID getCurrentStateID() const { return m_currentState ? m_currentState->m_ID : (StateID)INVALID_STATE_ID; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getCurrentStateID copy loses to the first-in-order copy. No flags touched.
+	StateID bfme_getCurrentStateID_7ba51() const { return m_currentState ? m_currentState->m_ID : (StateID)INVALID_STATE_ID; }
 private:
 	State *m_currentState; // +0x04
 };
@@ -121,7 +123,7 @@ UpdateSleepTime TurretAI::updateTurretAI()
 		m_playPitchSound = false;
 	}
 
-	if (m_enabled || m_turretStateMachine->getCurrentStateID() == TURRETAI_RECENTER)
+	if (m_enabled || m_turretStateMachine->bfme_getCurrentStateID_7ba51() == TURRETAI_RECENTER)
 	{
 		m_didFire = false;
 

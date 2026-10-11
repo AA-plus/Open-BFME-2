@@ -92,7 +92,8 @@ class Object
 {
 public:
 	Bool isKindOf(KindOfType t) const;
-	Drawable *getDrawable() const { return ((const Thing *)this)->getDrawable(); }
+	// LINK: TU-unique name (identical inlined bytes); the Object::getDrawable copy loses to the first-in-order copy. No flags touched.
+	Drawable *bfme_getDrawable_b3f60() const { return ((const Thing *)this)->getDrawable(); }
 	unsigned char m_pad000[0x04];
 	const Rva004B89C4Template *m_template;	// +0x04
 	unsigned char m_pad008[0x78 - 0x08];
@@ -173,7 +174,7 @@ UpdateSleepTime Rva004B89C4::update()
 		}
 		else
 		{
-			Drawable *draw = obj->getDrawable();
+			Drawable *draw = obj->bfme_getDrawable_b3f60();
 			if (draw)
 				draw->m_B0 = m_fraction;
 		}
