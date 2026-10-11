@@ -42,12 +42,60 @@ Rva00540D94::Rva00540D94(const Rva00540D94 &other)
 
 Rva00540D94 Rva00540DCAGet(float t, Rva00540D94 *a, int ta, Rva00540D94 *b, int tb, Rva00540D94 *c, int tc, Rva00540D94 *d, int td);
 
-// The banked sorted-key locator, pinned under its address name.
+// The look-at channel's 16-byte frame data, whose out-of-line copy
+// constructor is ICF-folded with the rowed Region2D copy constructor
+// 0x0004254E (four dword copies, ret 4).
+class Rva00540E9D
+{
+public:
+	__declspec(noinline) Rva00540E9D(const Rva00540E9D &other);
+	int m_00;
+	Rva00540E9DSrc m_04;
+};
+
+Rva00540E9D::Rva00540E9D(const Rva00540E9D &other)
+{
+	m_00 = other.m_00;
+	m_04.a = other.m_04.a;
+	m_04.b = other.m_04.b;
+	m_04.c = other.m_04.c;
+}
+
+class Rva005C71ADView;
+Rva00540E9D rva00540EBD(float value, void *arg10, void *arg14, Rva005C71ADView *view,
+	void *arg1C, void *arg20, void *arg24, void *arg28, void *arg2C);
+
+// The banked sorted-key locators, pinned under their address names.
 class Rva00541579
 {
 public:
 	bool rva00541579(int frame);
 };
+class Rva005418CB
+{
+public:
+	bool rva00541641(int frame);
+};
+
+// Per-channel locator and interpolator.
+static inline void cameraTrackSeek(void *track, int frame, const Rva00540D94 *)
+{
+	((Rva00541579 *)track)->rva00541579(frame);
+}
+static inline void cameraTrackSeek(void *track, int frame, const Rva00540E9D *)
+{
+	((Rva005418CB *)track)->rva00541641(frame);
+}
+static inline Rva00540D94 cameraTrackInterpolate(float t, Rva00540D94 *a, int ta, Rva00540D94 *b, int tb,
+	Rva00540D94 *c, int tc, Rva00540D94 *d, int td)
+{
+	return Rva00540DCAGet(t, a, ta, b, tb, c, tc, d, td);
+}
+static inline Rva00540E9D cameraTrackInterpolate(float t, Rva00540E9D *a, int ta, Rva00540E9D *b, int tb,
+	Rva00540E9D *c, int tc, Rva00540E9D *d, int td)
+{
+	return rva00540EBD(t, a, (void *)ta, (Rva005C71ADView *)b, (void *)tb, c, (void *)tc, d, (void *)td);
+}
 
 template <class T>
 struct CameraAnimationKeyFrame
@@ -73,7 +121,7 @@ T CameraAnimationTrack<T>::getFrameData(float frameNum)
 {
 	if (frameNum < 0.0f)
 		return m_keyFrames[0].m_data;
-	((Rva00541579 *)this)->rva00541579((int)floor(frameNum));
+	cameraTrackSeek(this, (int)floor(frameNum), (const T *)0);
 	if ((unsigned int)m_lastUsedKeyFrame >= m_keyFrames.size() - 1)
 		return m_keyFrames[m_lastUsedKeyFrame].m_data;
 	const KeyFrame &k0 = m_keyFrames[m_lastUsedKeyFrame];
@@ -83,8 +131,9 @@ T CameraAnimationTrack<T>::getFrameData(float frameNum)
 	frameNum = (frameNum - k0.m_frame) / (k1.m_frame - k0.m_frame);
 	const KeyFrame &kPrev = m_lastUsedKeyFrame > 0 ? m_keyFrames[m_lastUsedKeyFrame - 1] : k0;
 	const KeyFrame &kNext = m_lastUsedKeyFrame + 2 < m_keyFrames.size() ? m_keyFrames[m_lastUsedKeyFrame + 2] : k1;
-	return Rva00540DCAGet(frameNum, (T *)&kPrev.m_data, kPrev.m_frame, (T *)&k0.m_data, k0.m_frame,
+	return cameraTrackInterpolate(frameNum, (T *)&kPrev.m_data, kPrev.m_frame, (T *)&k0.m_data, k0.m_frame,
 		(T *)&k1.m_data, k1.m_frame, (T *)&kNext.m_data, kNext.m_frame);
 }
 
 template Rva00540D94 CameraAnimationTrack<Rva00540D94>::getFrameData(float frameNum);
+template Rva00540E9D CameraAnimationTrack<Rva00540E9D>::getFrameData(float frameNum);
