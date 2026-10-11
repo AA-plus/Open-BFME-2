@@ -37,6 +37,7 @@ template <> int &_STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair
 template <> template <> IntMapTree::iterator IntMapTree::find<int>(const int &);
 // Plain-member suppression for _Rb_tree::lower_bound (row 40).
 template <> IntMapTree::iterator IntMapTree::lower_bound(const int &);
+template <> IntMapTree::const_iterator IntMapTree::lower_bound(const int &) const;
 }
 
 // The historical int-map spelling of erase at 0x61F8A0 reaches the existing
