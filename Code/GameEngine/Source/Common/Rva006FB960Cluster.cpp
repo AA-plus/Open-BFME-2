@@ -139,7 +139,9 @@ Rva006FC130::Rva006FC130() : Rva006D6360Base(0x1e, 8), Rva006DBits()
 // WB175E910 calls the same scope lookup on a global first, then this+28.
 // PC inlines only the global path. Donor+2C is not the native member layout.
 class AptFrameStack;
-extern AptFrameStack *g_bfmeFrameStackAtE1835C;
+// LINK: defined once here, loader-zeroed. Every reader null-checks first
+// (see below), so zero is behavior-preserving. No ledger address claimed.
+AptFrameStack *g_bfmeFrameStackAtE1835C = 0;
 struct Rva006FBE80 {
  BfmeN1034 *find2(int);
  char padding[0x28];
