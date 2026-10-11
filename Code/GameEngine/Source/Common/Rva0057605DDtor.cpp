@@ -40,8 +40,17 @@ protected:
 };
 // ??0Rva0057605DSecond@@QAE@XZ @0x002B251A 9B: the default constructor, storing the
 // class's own vtable (VA 0x00C77F44) and returning this.
-Rva0057605DSecond::Rva0057605DSecond()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0057605DSecond::Rva0057605DSecond()
 {
+}
+
+inline void *operator new(unsigned int, void *p) { return p; }
+// ?bfmeAnchorRva0057605DSecond absent-from-retail
+void *bfmeAnchorRva0057605DSecond(void *where)
+{
+	return new (where) Rva0057605DSecond();
 }
 
 class Rva0057605D : public Rva0057605DBase, public Rva0057605DSecond

@@ -79,8 +79,16 @@ public:
     virtual ~Rva000411BC();
     virtual bool unlock();
 };
-Rva000411BC::~Rva000411BC()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva000411BC::~Rva000411BC()
 {
+}
+
+// ?bfmeAnchorRva000411BCDtor absent-from-retail
+void bfmeAnchorRva000411BCDtor(Rva000411BC *p)
+{
+	p->Rva000411BC::~Rva000411BC();
 }
 bool Rva000411BC::unlock()
 {

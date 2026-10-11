@@ -61,7 +61,15 @@ public:
 	~Rva001EB940();
 };
 
-Rva001EB940::~Rva001EB940()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva001EB940::~Rva001EB940()
 {
 	reinterpret_cast<Rva001EB769 *>(this)->rva001EB769();
+}
+
+// ?bfmeAnchorRva001EB940Dtor absent-from-retail
+void bfmeAnchorRva001EB940Dtor(Rva001EB940 *p)
+{
+	p->~Rva001EB940();
 }
