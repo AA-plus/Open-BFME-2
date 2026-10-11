@@ -219,7 +219,14 @@ public:
 	void rva003591F4(Rva003591F4Arg arg);
 };
 
-extern Rva00E01E28Owner *g_00E01E28;
+// VA 0x00E01E28 (RVA 0x00A01E28) is TheHotKeyManager, the object GameClient.cpp
+// creates and stores there (ledger spelling ?TheHotKeyManager@@3PAVHotKeyManager@@A,
+// 4 bytes, .data). This unit keeps its own record view for the rowed member at
+// 0x003591F4 (?rva003591F4@Rva00E01E28Owner@@QAEXURva003591F4Arg@@@Z, rowed in
+// Common/Thing/IntFloatMapSubscript.cpp) and reaches the object through that
+// view, so both references bind definitions the ledger already carries.
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 
 class Rva00525783
 {
@@ -243,8 +250,8 @@ void Rva00525783::rva00525783()
 		return;
 	if (m_hasPending)
 	{
-		if (g_00E01E28)
-			g_00E01E28->rva003591F4(m_pending);
+		if (TheHotKeyManager)
+			((Rva00E01E28Owner *)TheHotKeyManager)->rva003591F4(m_pending);
 		m_hasPending = false;
 	}
 	Rva005FB5E6AptCall(TheRva00222A8BTarget, (void *)m_level, m_name.str(), "SetSelectAllHeroesButtonState", "_unused");
