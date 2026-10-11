@@ -33,7 +33,7 @@ class Rva003ECA4BElement
 {
 public:
  Rva003ECA4BElement();
- void rva003ECA81(const Rva003ECA4BElement *other);
+ Rva003ECA4BElement *rva003ECA81(const Rva003ECA4BElement *other);
 private:
  float m_values[17];
 };
