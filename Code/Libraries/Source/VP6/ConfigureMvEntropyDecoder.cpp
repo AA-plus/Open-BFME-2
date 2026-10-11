@@ -24,6 +24,23 @@ struct Vp6MvEntropyInstance {
 int Rva009B4600DecodeBool(void *, int);
 extern "C" int __cdecl VP6_bitread(void *, int);
 extern const unsigned char g_00BD94A8[2][17];
+// Retail's own 2 x 17 MV entropy update weights, transcribed from .rdata at
+// RVA 0x007D94A8 (file offset 0x007D88A8). The rowed body proves the base and
+// the stride: `mov ebx, 0xbd94a9` then `movzx eax, byte ptr [ebx-1]` / `movzx
+// ecx, byte ptr [ebx]` / `add ebx, 0x11` with the loop bound 0xbd94cb for the
+// first two columns, and 0xbd94aa / 0xbd94b1 with the same 0x11 stride and
+// bounds 0xbd94cc / 0xbd94d3 for the seven short and eight long columns, i.e.
+// two components of 17 bytes. The decoding follows the component's row: entry
+// 0 updates IsMvShortProb, entry 1 MvSignProbs, entries 2..8 the seven
+// MvShortProbs and entries 9..16 the eight MvSizeProbs (the identity of these
+// as FFmpeg's vp6_mv_context table is a correspondence, not the evidence - the
+// bytes above are).
+const unsigned char g_00BD94A8[2][17] = {
+	{ 0xed, 0xf6, 0xfd, 0xfd, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe,
+	  0xfe, 0xfe, 0xfe, 0xfe, 0xfa, 0xfa, 0xfa, 0xfc },
+	{ 0xe7, 0xf3, 0xf5, 0xfd, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe,
+	  0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfb, 0xfe },
+};
 extern "C" void VP6_ConfigureMvEntropyDecoder(Vp6MvEntropyInstance *pbi, unsigned char frameType)
 {
 	int i;

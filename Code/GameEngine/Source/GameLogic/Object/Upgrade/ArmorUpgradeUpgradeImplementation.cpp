@@ -88,6 +88,24 @@ private:
 	BodyModuleInterface *m_body; // +0x254
 };
 extern const unsigned int g_00DCC7C8[];
+// Retail's own armor-set to model-condition mapping, transcribed from .data at
+// RVA 0x009CC7C8 (file offset 0x009CB3C8): 21 words. The first ten are the
+// named armor sets of RiderChangeContainParseRiderInfo.cpp's
+// ModelConditionNames table - VETERAN 316, ELITE 317, HERO 318,
+// PLAYER_UPGRADE 322, WEAK_VERSUS_BASEDEFENSES 319, ALTERNATE_FORMATION 320,
+// MOUNTED 321, PLAYER_UPGRADE_2 323, PLAYER_UPGRADE_3 324, UNBESIEGEABLE
+// 325 - and the tail is what retail actually holds: index 10 is 322 again and
+// 11..20 are 316. The extent is bounded by the pointer table that begins 84
+// bytes later, and retail's indexing operand is `[eax*4 + 0xdcc7c8]` in the
+// rowed 0x004B34B5, which pins the base at VA 0x00DCC7C8.
+extern const unsigned int g_00DCC7C8[21];
+const unsigned int g_00DCC7C8[21] = {
+	316u, 317u, 318u, 322u, 319u,
+	320u, 321u, 323u, 324u, 325u,
+	322u, 316u, 316u, 316u, 316u,
+	316u, 316u, 316u, 316u, 316u,
+	316u,
+};
 class ArmorUpgradeModuleData
 {
 public:
