@@ -17,7 +17,7 @@ public:
 class AiOrdersManager
 {
 public:
-	void rva00355183(int a, int b);
+	void clearOrders(int a, int b);
 };
 
 extern AiOrdersManager *TheAiOrdersManager;
@@ -31,7 +31,7 @@ struct Rva002AA27AObject
 
 int __cdecl Rva002AA27A(Object *obj, void *userData)
 {
-	TheAiOrdersManager->rva00355183(2, ((Rva002AA27AObject *)obj)->m_74);
+	TheAiOrdersManager->clearOrders(2, ((Rva002AA27AObject *)obj)->m_74);
 	return 1;
 }
 
