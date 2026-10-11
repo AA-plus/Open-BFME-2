@@ -14,6 +14,10 @@ class __declspec(novtable) Rva00539926Base
 {
 public:
 	Rva00539926Base() : m_04(0) {}
+	// LINK: the default ctor's COMDAT loses to the first-in-order copy; the derived ctor
+	// calls a TU-unique no-init ctor with the same init instead. No flags touched.
+	struct BfmeNoInitHelp {};
+	Rva00539926Base(BfmeNoInitHelp) : m_04(0) {}
 	virtual ~Rva00539926Base();
 private:
 	int m_04; // Refcount belongs to the base, as in the matched help sibling.
@@ -65,6 +69,6 @@ Rva0056D3FD::~Rva0056D3FD()
 // the proper wide types. The opaque outer owner name is retained.
 Rva0056D3FD::Rva0056D3FD(const UnicodeString &a, const UnicodeString &b,
 	const UnicodeString &c, const UnicodeString &d, const AsciiString &e)
-	: m_08(new InGameCommandButtonHelp::Impl(this, a, b, c, d, e))
+	: Rva00539926Base((Rva00539926Base::BfmeNoInitHelp())), m_08(new InGameCommandButtonHelp::Impl(this, a, b, c, d, e))
 {
 }
