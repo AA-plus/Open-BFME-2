@@ -1,4 +1,6 @@
 // ?rva003C4751@ScriptActions@@IAEXPAVParameter@@@Z
+// partial score=0.982 date=2026-10-11
+// ?rva003C4751@ScriptActions@@IAEXPAVParameter@@@Z
 // partial score=0.97 date=2026-10-10
 // ?rva003C4751@ScriptActions@@IAEXPAVParameter@@@Z
 // partial score=0.97 date=2026-10-06
@@ -6,6 +8,8 @@
 // WB ScriptActions::doFlashSpellStoreButton; target is the guarded index-0
 // forwarding sibling of matched index-1 and index-2 wrappers at 0x003BD444
 // and 0x003BD459.
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 #include "Common/Snapshot.h"
 #include "Common/BfmeAudioEventPrefix136.h"
@@ -977,10 +981,12 @@ void ScriptActions::rva003C4751(Parameter *teamParam)
 				continue;
 			if (!team->rva0039E8FF(upgrade))
 				continue;
-			for (DLINK_ITERATOR<Object> members = team->iterate_TeamMemberList(); !members.done();
+			Object *obj;
+			for (DLINK_ITERATOR<Object> members = team->iterate_TeamMemberList(); (obj = members.cur()) != 0;
 				members.advance()) {
-				Object *obj = members.cur();
+				_ReadWriteBarrier();
 				if (!obj->isKindOf(0x6D))
+
 					continue;
 				ScriptActionsHordeModuleView *module = (ScriptActionsHordeModuleView *)obj->rva0028C197();
 				if (!module || module->hasUpgrade(upgrade))
@@ -992,11 +998,11 @@ void ScriptActions::rva003C4751(Parameter *teamParam)
 				Object *target = module->getTarget();
 				if (target) {
 					if (!best) {
-						bestDist = dist;
 						best = target;
+						bestDist = dist;
 					} else if (dist < bestDist) {
-						bestDist = dist;
 						best = target;
+						bestDist = dist;
 					}
 				}
 			}
