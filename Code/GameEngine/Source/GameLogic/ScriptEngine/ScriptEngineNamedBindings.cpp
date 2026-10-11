@@ -34,6 +34,7 @@ public:
     void rva00208968(const AsciiString &name, Object *object);
     void rva00208A09(const AsciiString &newName, AsciiString oldName);
     void rva00208B2C(const AsciiString &name, Team *team);
+    void rva00208BCD(const AsciiString &newName, AsciiString oldName);
 private:
     char m_beforeMaps[0x190B8];
     NameMap m_objects;
@@ -68,4 +69,24 @@ void ScriptEngine::rva00208B2C(const AsciiString &name, Team *team)
     NameKey key(m_scope, name);
     NameMap::iterator it = m_teams.insert(_STL::make_pair(key, 0)).first;
     it->second = team->getID();
+}
+
+// Native208BCD..208CF0 RET8 is the team-map counterpart of208A09.
+// Every native callee and EH lifetime agrees; only the map receiver changes
+// from190B8 to190C4, independently used by the team-ID binder208B2C.
+// The original method name is unproven; this preserves its target address.
+void ScriptEngine::rva00208BCD(const AsciiString &newName, AsciiString oldName)
+{
+    if (oldName.isEmpty())
+        return;
+
+    AsciiString scope = rva002046C0(oldName);
+    NameKey oldKey(scope, oldName);
+    NameMap::iterator it = m_teams.find(oldKey);
+    if (it != m_teams.end())
+    {
+        NameKey newKey(m_scope, newName);
+        NameMap::iterator newIt = m_teams.insert(_STL::make_pair(newKey, 0)).first;
+        newIt->second = it->second;
+    }
 }
