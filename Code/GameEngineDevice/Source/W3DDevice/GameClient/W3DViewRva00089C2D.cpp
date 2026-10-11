@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /ICode /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /ICode /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /arch:SSE /DNDEBUG /MD /EHsc
 //
 // ?rva00089C2D@W3DView@@QAEXH_NMM@Z, retail 0x00089c2d, 509 bytes. Banked partial (score 1.0) closed by tools/permute.py;
 // the body is the banked one up to statement/operand order and local types.
