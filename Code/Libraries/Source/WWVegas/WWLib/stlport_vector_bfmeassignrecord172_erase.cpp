@@ -52,7 +52,9 @@ void _Destroy(ForwardIter first, ForwardIter last);
 
 }
 
-_STL::vector<BfmeAssignRecord172, _STL::allocator<BfmeAssignRecord172> >::iterator
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline _STL::vector<BfmeAssignRecord172, _STL::allocator<BfmeAssignRecord172> >::iterator
 _STL::vector<BfmeAssignRecord172, _STL::allocator<BfmeAssignRecord172> >::erase(iterator first, iterator last)
 {
 	iterator result = _STL::__copy_ptrs(last, m_finish, first, _STL::__false_type());
@@ -60,3 +62,10 @@ _STL::vector<BfmeAssignRecord172, _STL::allocator<BfmeAssignRecord172> >::erase(
 	m_finish = result;
 	return first;
 }
+
+// ?bfmeAnchorVectorBfmeAssignRecord172Erase absent-from-retail
+_STL::vector<BfmeAssignRecord172, _STL::allocator<BfmeAssignRecord172> >::iterator bfmeAnchorVectorBfmeAssignRecord172Erase(_STL::vector<BfmeAssignRecord172, _STL::allocator<BfmeAssignRecord172> > *v, _STL::vector<BfmeAssignRecord172, _STL::allocator<BfmeAssignRecord172> >::iterator a, _STL::vector<BfmeAssignRecord172, _STL::allocator<BfmeAssignRecord172> >::iterator b)
+{
+	return v->erase(a, b);
+}
+

@@ -23,8 +23,9 @@ template <class InputIter, class OutputIter>
 OutputIter __copy_ptrs(InputIter first, InputIter last, OutputIter result, const __false_type &tag);
 }
 
+// Select-any like every other TU's copy (a strong specialization would duplicate theirs at link time).
 template <>
-__declspec(noinline) TreeHintRef00217D4C *_STL::__copy_ptrs<TreeHintRef00217D4C *, TreeHintRef00217D4C *>(TreeHintRef00217D4C *first, TreeHintRef00217D4C *last, TreeHintRef00217D4C *result, const _STL::__false_type &tag)
+__declspec(noinline) inline TreeHintRef00217D4C *_STL::__copy_ptrs<TreeHintRef00217D4C *, TreeHintRef00217D4C *>(TreeHintRef00217D4C *first, TreeHintRef00217D4C *last, TreeHintRef00217D4C *result, const _STL::__false_type &tag)
 {
 	_STL::random_access_iterator_tag tmp;
 	return _STL::__copy(first, last, result, tmp, (int *)0);

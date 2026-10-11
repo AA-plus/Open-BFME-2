@@ -44,7 +44,8 @@ typedef pair<const PeerStatKey, int> PeerStatValue;
 typedef _Rb_tree<PeerStatKey, PeerStatValue, _Select1st<PeerStatValue>,
     less<PeerStatKey>, allocator<PeerStatValue> > PeerStatTree;
 
-template<> PeerStatTree::~_Rb_tree() {
+// Select-any like every other TU's copy (a strong specialization would duplicate theirs at link time).
+template<> __declspec(noinline) inline PeerStatTree::~_Rb_tree() {
     clear();
 }
 }

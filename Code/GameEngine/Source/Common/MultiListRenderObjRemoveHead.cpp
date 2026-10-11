@@ -11,6 +11,14 @@ protected: MultiListObjectClass *Internal_Remove_List_Head();
 template<class T> class MultiListClass : public GenericMultiListClass {
 public: T *Remove_Head();
 };
-RenderObjClass *MultiListClass<RenderObjClass>::Remove_Head() {
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline RenderObjClass *MultiListClass<RenderObjClass>::Remove_Head() {
     return static_cast<RenderObjClass *>(Internal_Remove_List_Head());
+}
+
+// ?bfmeAnchorMultiListRenderObjRemoveHead absent-from-retail
+RenderObjClass *bfmeAnchorMultiListRenderObjRemoveHead(MultiListClass<RenderObjClass> *p)
+{
+	return p->Remove_Head();
 }
