@@ -11,16 +11,24 @@ class CreateAHeroCRC
 {
 public:
 	unsigned int getCRC();
-	void rva0021F47E();
 
 private:
 	char m_unknown000[0x1F0];
 	unsigned int m_crc;
 };
 
+// 0x0021F47E is rowed as CreateAHeroManager::LoadMyHeroList (357B; WB
+// B7EE40) - same-this no-arg call, so this resolves to the rowed body
+// instead of the unrowed spelling (sole U on this unit).
+class CreateAHeroManager
+{
+public:
+	void LoadMyHeroList();
+};
+
 unsigned int CreateAHeroCRC::getCRC()
 {
 	if (m_crc == 0)
-		rva0021F47E();
+		((CreateAHeroManager *)this)->LoadMyHeroList();
 	return m_crc;
 }

@@ -8,6 +8,17 @@ public:
 	void rva00213171(int a, void *p, int b);
 };
 
+// 0x00213171 is rowed as LivingWorldManager::CreateBeaconObject (623B; WB
+// twin B602E0) - same (int, Coord2D*, int) shape with the 8-byte m_28 as
+// the coord, so this resolves to the rowed body instead of the unrowed
+// spelling (sole U on this unit).
+class Coord2D;
+class LivingWorldManager
+{
+public:
+	void CreateBeaconObject(int a, const Coord2D *p, int b);
+};
+
 class Rva003F409F {
 public:
 	void rva003F409F(bool b);
@@ -38,6 +49,6 @@ void Rva003F43D3::rva003F43D3()
 	Rva003F43D3Holder *holder = logic->m_holder;
 	int value = ++holder->m_2c;
 	m_30 = value;
-	((Rva00DFE1C8Host *)TheLivingWorldManager)->rva00213171(value, m_28, 0);
+	((LivingWorldManager *)TheLivingWorldManager)->CreateBeaconObject(value, (const Coord2D *)m_28, 0);
 	((Rva003F409F *)this)->rva003F409F(true);
 }
