@@ -78,7 +78,12 @@ enum KindOfType
 	KINDOF_NO_COLLIDE = 0x1E,
 	// Bit 5 of byte template+0x117; it lets privateMoveAwayFromUnit push
 	// allies aside. Unnamed.
-	BFME_KINDOF_7D = 0x7D
+	BFME_KINDOF_7D = 0x7D,
+	// Bits 2 and 7 of byte template+0x108; slot 152 (0x002697FC) skips an
+	// owner of the first kind and retargets from a victim of the second
+	// kind. Unnamed.
+	BFME_KINDOF_02 = 0x02,
+	BFME_KINDOF_07 = 0x07
 };
 
 // The two model conditions privateIdle clears, as bits of Object+0x10C:
@@ -796,7 +801,9 @@ public:
 	Path *GetHordeUnitPath(Object *obj, const Coord3D *destination);
 	// Asked by AIUpdate slot 141 (0x00263404) whether a point down the path
 	// will do for the owner; unnamed.
-	Bool rva002ECC0D(Object *obj, const Coord3D *pos);
+	Bool rva002ECC0D(Object *obj, const Coord3D *pos);	// Whether the object can approach the position with the weapon (rowed
+	// 0x002FA2DC); slot 152 asks it about a mood target.
+	Bool CanApproachToTarget(Object *obj, const Coord3D *pos, class Rva002C9B80Owner *weapon, Bool flag);
 };
 
 // The node AIUpdate slot 141 gets back from the path; only its +0x08 word is
@@ -1069,6 +1076,14 @@ public:
 	virtual Bool chooseLocomotorSet(Int wst) = 0;
 };
 
+// Slot 152 asks the owner's slot 143 (+0x23C) where its last command came
+// from.
+class AIUpdateSlot143 : public BfmeVirtualSlots<143>
+{
+public:
+	virtual CommandSourceType getLastCommandSource() const = 0;
+};
+
 // AIUpdate slot 134 first hands its point to slot 133 (+0x214, 0x00262C53).
 class AIUpdateSlot133 : public BfmeVirtualSlots<133>
 {
@@ -1201,6 +1216,10 @@ public:
 	// [ebp+0x1C]) whose type and name are not evidenced.
 	virtual Object *construct(const ThingTemplate *what, const Coord3D *pos, float angle,
 		Player *owningPlayer, Bool isRebuild, Int bfmeArg6);
+	// Declared after every other virtual so no slot moves (vtable slot 152).
+	virtual Bool rva002697FC();
+	Object *getNextMoodTarget(Bool calledByAI, Bool calledDuringIdle);	///< pinned 0x00268EB8 (ZH name)
+	void friend_setGoalObject(Object *obj);			///< pinned 0x00262B0F (ZH name)
 	void rva00262989(UnsignedInt frame);			///< matched 0x00262989
 protected:
 
@@ -2835,4 +2854,59 @@ void AIUpdateInterface::privateGuardAreaFromPosition(const PolygonTrigger *area,
 	StateMachine *sm = m_stateMachine;
 	m_lastCommandSource = commandSource;
 	sm->setState(BFME_AI_GUARD);
+}
+
+// The owner may look for a better mood target: it lacks status 0x26 and
+// BFME_KINDOF_02.
+static __forceinline Bool rva002697FCOwnerEligible(Object *obj)
+{
+	return !obj->testStatus(BFME_OBJECT_STATUS_26) && !obj->isKindOf(BFME_KINDOF_02);
+}
+
+// AIUpdate vtable 0x00BFA480 slot 152, retail 0x002697FC (234 bytes). On the
+// owner's turn of a 2 * g_Va00DBA4E4 frame cycle (its ID modulo the period),
+// outside state 0x11, when the last command came from the AI or the state is
+// 0x21: a victim of BFME_KINDOF_07 is traded for the next mood target
+// (pinned getNextMoodTarget) if that one is another object, not of that
+// kind, and the pathfinder lets the owner approach it with its current
+// weapon; the target becomes the goal object (pinned friend_setGoalObject)
+// and the path is dropped. Retail saves EBX/EDI at entry, ESI after the
+// eligibility test and EBP after the state test, each level with its own
+// false exit: the opening test is an inlined helper and each later level the
+// else scope of the one before.
+Bool AIUpdateInterface::rva002697FC()
+{
+	Object *obj = getObject();
+	if (!rva002697FCOwnerEligible(obj))
+		return false;
+	else
+	{
+		Int period = 2 * g_Va00DBA4E4;
+		Int slot = obj->getID() % period;
+		if (TheGameLogic->getFrame() % period != slot)
+			return false;
+		Int state = rva00260DED();
+		if (state == 0x11)
+			return false;
+		else
+		{
+			if (reinterpret_cast<AIUpdateSlot143 *>(this)->getLastCommandSource() == CMD_FROM_AI || state == 0x21)
+			{
+				Object *victim = getCurrentVictim();
+				if (victim && victim->isKindOf(BFME_KINDOF_07))
+				{
+					Object *other = getNextMoodTarget(true, false);
+					if (other && other != victim && !other->isKindOf(BFME_KINDOF_07) &&
+						TheAI->pathfinder()->CanApproachToTarget(obj, other->getPosition(),
+							(Rva002C9B80Owner *)obj->getCurrentWeapon(0), false))
+					{
+						friend_setGoalObject(other);
+						destroyPath();
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	}
 }
