@@ -95,8 +95,13 @@ public:
 
 extern Display *TheDisplay;
 extern View *TheTacticalView;
-extern const Image *const g_00DFEB88;
-extern const Image *const g_00DFEB90;
+// The two veterancy icon slots the report draws, both owned and rowed by
+// Code/GameEngine/Source/Common/System/Rva00274E7DInit.cpp - which fills them
+// from the mapped-image collection - so they are spelled the way that unit
+// defines them. The extra `const` on the pointer would make these a second
+// symbol for addresses retail has one object each at.
+extern const Image *g_00DFEB88;
+extern const Image *g_00DFEB90;
 
 class Drawable
 {
@@ -125,7 +130,7 @@ void Drawable::drawVeterancy(Bool flag, Int level)
 	anchor.x = (Real)screen.x;
 	anchor.y = (Real)screen.y;
 	anchor.y -= 7.0f;
-	const Image *const *params = flag ? &g_00DFEB90 : &g_00DFEB88;
+	const Image **params = flag ? &g_00DFEB90 : &g_00DFEB88;
 	Int numIcons = level / 5;
 	Int numDots = level % 5;
 	Real dotHeight = params[1]->getImageHeight() * scaleY;
