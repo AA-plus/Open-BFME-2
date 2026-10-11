@@ -12,6 +12,9 @@ class Parameter
 public:
     const AsciiString &getString() const { return m_string; }
     int getInt() const { return m_int; }
+    // LINK: same-body helper under a TU-unique name (identical inlined bytes); the
+    // getInt copy loses to the first-in-order copy. No flags touched.
+    int bfme_int_ena() const { return m_int; }
     unsigned char m_beforeInt[8]; int m_int; float m_real; AsciiString m_string;
     unsigned char m_afterString[8];
 };
@@ -33,6 +36,6 @@ bool ScriptConditions::evaluateTeamEnteredAreaEntirely(Parameter *teamParm, Para
         return false;
     PolygonTrigger *trigger = TheScriptEngine->getQualifiedTriggerAreaByName(triggerParm->getString());
     if (trigger)
-        return team->didAllEnter(trigger, (unsigned int)typeParm->getInt());
+        return team->didAllEnter(trigger, (unsigned int)typeParm->bfme_int_ena());
     return false;
 }
