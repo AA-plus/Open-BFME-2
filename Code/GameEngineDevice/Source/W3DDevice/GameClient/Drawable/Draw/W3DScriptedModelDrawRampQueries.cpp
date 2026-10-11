@@ -95,6 +95,7 @@ public:
  virtual void SetRampMeshOverload(const char *name, int index);
  virtual int rva000B5FD5();
  bool getRamp(BridgeInfo *, AsciiString, PolygonTrigger **, RenderObjClass **, bool);
+ PolygonTrigger *getPolygon(RenderObjClass *mesh, float *out);
 private:
  char unknown04[4];
  Rva000B9B4ADrawablePrefix *drawable8;
@@ -183,6 +184,159 @@ bool Rva000BBF55DrawInterface::rva000BBF55(BridgeInfo *info,
  return reinterpret_cast<W3DScriptedModelDraw *>(reinterpret_cast<char *>(this) - 0xC)
   ->getRamp(info, name, polygon, mesh, useObjectTransform);
 }
+
+// NativeBAC53/BAD2B/BADE7/BAEBF (216/188/216/188 B, RET 4): four more slots
+// of the same secondary table (complete-object+0C), the polygon twins of the
+// ramp queries above. Each zeroes the output value, asks the render object
+// (primary slot +0xC4) for the sub-object named by the override string at
+// complete-object260 (falling back to the module-data string at10C) or
+// directly by the module-data string at110, keeps that sub-object's mesh
+// (its slot +0x14; a sub-object without one is released) and hands it to
+// getPolygon (rowed B8440) or to the rowed B89E9 query.
+class Rva000BAC53SubObject
+{
+public:
+ virtual void Delete_This();
+ virtual void s01(); virtual void s02(); virtual void s03(); virtual void s04();
+ virtual RenderObjClass *rva000BAC53Mesh();	// +0x14
+ void Release_Ref() { if (--refs == 0) Delete_This(); }
+ int refs;
+};
+template<int N> class Rva000BAC53Slots : public Rva000BAC53Slots<N-1> {
+public: virtual void gap(char (*)[N]) = 0;
+};
+template<> class Rva000BAC53Slots<0> {};
+class Rva000BAC53RenderView : public Rva000BAC53Slots<32> {
+public: virtual Rva000BAC53SubObject *getSubObjectByName(const char *name, int flags) = 0;	// +0x80
+};
+class Rva000BAC53DrawView : public Rva000BAC53Slots<49> {
+public: virtual Rva000BAC53RenderView *rva000BAC53Render() = 0;	// +0xC4
+};
+class PolygonTrigger;
+class Rva000B8F5AOuter { public: int rva000B89E9(int mesh, float *out); };
+struct Rva000BAC53ModuleDataView
+{
+ char unknown00[0x10C];
+ AsciiString string10C;
+ AsciiString string110;
+};
+
+class Rva000BAC53DrawInterface
+{
+public:
+ PolygonTrigger *rva000BAC53(float *out);
+ PolygonTrigger *rva000BAD2B(float *out);
+ int rva000BADE7(float *out);
+ int rva000BAEBF(float *out);
+private:
+ char unknown00[0x254];
+ AsciiString string254;
+};
+
+#define BAC53_DRAW() reinterpret_cast<W3DScriptedModelDraw *>(reinterpret_cast<char *>(this) - 0xC)
+#define BAC53_DATA() (*reinterpret_cast<const Rva000BAC53ModuleDataView *const *>(reinterpret_cast<const char *>(this) - 8))
+
+PolygonTrigger *Rva000BAC53DrawInterface::rva000BAC53(float *out)
+{
+ W3DScriptedModelDraw *draw = BAC53_DRAW();
+ Rva000BAC53RenderView *render = reinterpret_cast<Rva000BAC53DrawView *>(draw)->rva000BAC53Render();
+ RenderObjClass *mesh = 0;
+ *out = 0.0f;
+ if (!render)
+  return 0;
+ {
+  AsciiString name;
+  if (!string254.isEmpty())
+   name = string254;
+  else
+   name = BAC53_DATA()->string10C;
+  Rva000BAC53SubObject *sub = render->getSubObjectByName(name.str(), 0);
+  if (sub) {
+   mesh = sub->rva000BAC53Mesh();
+   if (!mesh)
+    sub->Release_Ref();
+  }
+ }
+ if (mesh)
+  return draw->getPolygon(mesh, out);
+ return 0;
+}
+
+PolygonTrigger *Rva000BAC53DrawInterface::rva000BAD2B(float *out)
+{
+ W3DScriptedModelDraw *draw = BAC53_DRAW();
+ Rva000BAC53RenderView *render = reinterpret_cast<Rva000BAC53DrawView *>(draw)->rva000BAC53Render();
+ RenderObjClass *mesh = 0;
+ *out = 0.0f;
+ if (!render)
+  return 0;
+ {
+  AsciiString name;
+  const Rva000BAC53ModuleDataView *data = BAC53_DATA();
+  name = data->string110;
+  Rva000BAC53SubObject *sub = render->getSubObjectByName(name.str(), 0);
+  if (sub) {
+   mesh = sub->rva000BAC53Mesh();
+   if (!mesh)
+    sub->Release_Ref();
+  }
+ }
+ if (mesh)
+  return draw->getPolygon(mesh, out);
+ return 0;
+}
+
+int Rva000BAC53DrawInterface::rva000BADE7(float *out)
+{
+ W3DScriptedModelDraw *draw = BAC53_DRAW();
+ Rva000BAC53RenderView *render = reinterpret_cast<Rva000BAC53DrawView *>(draw)->rva000BAC53Render();
+ RenderObjClass *mesh = 0;
+ *out = 0.0f;
+ if (!render)
+  return 0;
+ {
+  AsciiString name;
+  if (!string254.isEmpty())
+   name = string254;
+  else
+   name = BAC53_DATA()->string10C;
+  Rva000BAC53SubObject *sub = render->getSubObjectByName(name.str(), 0);
+  if (sub) {
+   mesh = sub->rva000BAC53Mesh();
+   if (!mesh)
+    sub->Release_Ref();
+  }
+ }
+ if (mesh)
+  return reinterpret_cast<Rva000B8F5AOuter *>(draw)->rva000B89E9((int)mesh, out);
+ return 0;
+}
+
+int Rva000BAC53DrawInterface::rva000BAEBF(float *out)
+{
+ W3DScriptedModelDraw *draw = BAC53_DRAW();
+ Rva000BAC53RenderView *render = reinterpret_cast<Rva000BAC53DrawView *>(draw)->rva000BAC53Render();
+ RenderObjClass *mesh = 0;
+ *out = 0.0f;
+ if (!render)
+  return 0;
+ {
+  AsciiString name;
+  const Rva000BAC53ModuleDataView *data = BAC53_DATA();
+  name = data->string110;
+  Rva000BAC53SubObject *sub = render->getSubObjectByName(name.str(), 0);
+  if (sub) {
+   mesh = sub->rva000BAC53Mesh();
+   if (!mesh)
+    sub->Release_Ref();
+  }
+ }
+ if (mesh)
+  return reinterpret_cast<Rva000B8F5AOuter *>(draw)->rva000B89E9((int)mesh, out);
+ return 0;
+}
+#undef BAC53_DRAW
+#undef BAC53_DATA
 
 void W3DScriptedModelDraw::allocateShadows()
 {

@@ -68,6 +68,7 @@ public: void DoXfer(Xfer *); float rva004E98B4(AIWall *);
     unsigned char canBuildAnyWall();
     void tryToStartWallProduction();
     void loadWallLibrary();
+    void update();
 private: unsigned char m_prefix[8]; void *m_owner;
     _STL::vector<AIWallIDView*> m_walls;
 };
@@ -126,7 +127,7 @@ float AIWallBuilder::rva004E98B4(AIWall *unused)
 // describe its three-word storage without asserting the original typedef.
 struct RvaVector { void **begin, **end, **capacity; };
 extern RvaVector g_00E04484;
-class Rva004EABB9 { public: bool rva004EABB9(); };
+class Rva004EABB9 { public: bool rva004EABB9(); int rva004EABC7(); };
 // Full native 4EB7CC/310 and WB137BE20 prove bool result and ret4 owner
 // argument, on the wall selected here. Its original method name is unknown.
 // Full native 4EAF18/165 and named WB137BB30 prove activate's three argument
@@ -134,6 +135,7 @@ class Rva004EABB9 { public: bool rva004EABB9(); };
 // its original type spelling is retained as an opaque caller ABI here.
 class AIWall {
 public:
+    void update();
     bool init();
     bool rva004EB7CC(void *owner);
     void activate(void *owner, float delay, const void *name);
@@ -279,4 +281,26 @@ void AIWallBuilder::loadWallLibrary()
             it=reinterpret_cast<_STL::vector<void *> &>(g_00E04484).erase(it);
         else ++it;
     }
+}
+
+// Native 4E9FB2..4E9FFD (75B; vtable 0x00862870 slot 2, after the deleting
+// destructor ??_GRva004E9B46): unless the builder is paused (+4), every wall
+// updates (rowed AIWall::update) and walls the rowed 0x004EABC7 reports done
+// are dropped from the list; then a new wall may start
+// (tryToStartWallProduction, tail call).
+void AIWallBuilder::update()
+{
+    if (m_prefix[4])
+        return;
+    _STL::vector<AIWallIDView*>::iterator it = m_walls.begin();
+    while (it != m_walls.end()) {
+        AIWall *wall = reinterpret_cast<AIWall *>(*it);
+        wall->update();
+        if ((char)reinterpret_cast<Rva004EABB9 *>(wall)->rva004EABC7())
+            it = reinterpret_cast<_STL::vector<AIWallIDView*>::iterator>(
+                reinterpret_cast<_STL::vector<void *> &>(m_walls).erase(reinterpret_cast<void **>(it)));
+        else
+            ++it;
+    }
+    tryToStartWallProduction();
 }

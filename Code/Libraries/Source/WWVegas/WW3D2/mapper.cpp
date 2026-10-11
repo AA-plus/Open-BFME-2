@@ -525,6 +525,12 @@ GridWSEnvMapperClass::GridWSEnvMapperClass(const INIClass &ini, const char *sect
 	}
 }
 
+// ??0GridWSClassicEnvironmentMapperClass@@QAE@MIIIW4AxisType@GridWSEnvMapperClass@@I@Z
+GridWSClassicEnvironmentMapperClass::GridWSClassicEnvironmentMapperClass(float fps, unsigned int gridwidth_log2, unsigned int last_frame, unsigned int offset, AxisType axis, unsigned int stage):
+	GridWSEnvMapperClass(fps, gridwidth_log2, last_frame, offset, axis, stage)
+{
+}
+
 // ??0GridWSClassicEnvironmentMapperClass@@QAE@ABVINIClass@@PBDI@Z
 GridWSClassicEnvironmentMapperClass::GridWSClassicEnvironmentMapperClass(const INIClass &ini, const char *section, unsigned int stage):
 	GridWSEnvMapperClass(ini,section,stage)

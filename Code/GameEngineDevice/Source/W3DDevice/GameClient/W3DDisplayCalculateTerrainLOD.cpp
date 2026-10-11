@@ -71,7 +71,8 @@ class GlobalData
 public:
 	unsigned char m_pad00[0x50];
 	Int m_terrainLOD;			// +0x50
-	unsigned char m_pad54[0x58 - 0x54];
+	bool m_54;				// +0x54
+	unsigned char m_pad55[0x58 - 0x55];
 	Int m_terrainLODTargetTimeMS;		// +0x58
 };
 
@@ -115,8 +116,14 @@ public:
 
 	static RTS3DScene *m_3DScene;
 
+	void rva00043FB9();
+
 protected:
 	void calculateTerrainLOD(void);
+
+private:
+	unsigned char m_pad004[0x180 - 0x04];
+	Real m_180;				// +0x180
 };
 
 void W3DDisplay::calculateTerrainLOD(void)
@@ -179,4 +186,34 @@ void W3DDisplay::calculateTerrainLOD(void)
 	TheWritableGlobalData->m_terrainLOD = goodLOD;
 	m_3DScene->drawTerrainOnly(false);
 	TheTerrainRenderObject->adjustTerrainLOD(0);
+}
+
+// ?rva00043FB9@W3DDisplay@@QAEXXZ, retail 0x00043FB9 (95 bytes): the only
+// caller of calculateTerrainLOD. It sets the game LOD manager's static level
+// (rowed 0x0020276C) to the level the manager picks for the +0x180 value
+// (rowed 0x00202613) when TheGlobalData's +0x54 flag and TheGameLogic's +0x9B
+// byte are both set, else to level 4; an automatic terrain LOD with a terrain
+// render object present is then measured.
+class Rva00202613 { public: Int rva00202613(Real value); };
+class Rva0020276C { public: bool rva0020276C(Int level); };
+class GameLODManager;
+extern GameLODManager *TheGameLODManager;
+
+class GameLogic;
+extern GameLogic *TheGameLogic;
+
+struct Rva00043FB9GameLogicView
+{
+	unsigned char m_pad00[0x9B];
+	bool m_9B;				// +0x9B
+};
+
+void W3DDisplay::rva00043FB9()
+{
+	if (TheWritableGlobalData->m_54 && ((Rva00043FB9GameLogicView *)TheGameLogic)->m_9B)
+		((Rva0020276C *)TheGameLODManager)->rva0020276C(((Rva00202613 *)TheGameLODManager)->rva00202613(m_180));
+	else
+		((Rva0020276C *)TheGameLODManager)->rva0020276C(4);
+	if (TheWritableGlobalData->m_terrainLOD == TERRAIN_LOD_AUTOMATIC && TheTerrainRenderObject)
+		calculateTerrainLOD();
 }

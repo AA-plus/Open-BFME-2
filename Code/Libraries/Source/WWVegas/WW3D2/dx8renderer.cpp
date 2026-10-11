@@ -798,25 +798,8 @@ void DX8RigidFVFCategoryContainer::Render(void)
 
 // ----------------------------------------------------------------------------
 
-// ?Check_If_Mesh_Fits@DX8RigidFVFCategoryContainer@@ present-unmatched
-bool DX8RigidFVFCategoryContainer::Check_If_Mesh_Fits(MeshModelClass* mmc)
-{
-	if (!vertex_buffer) return true;	// No VB created - mesh will fit as a new vb will be created when inserting
-	unsigned required_vertices=mmc->Get_Vertex_Count();
-	unsigned available_vertices=vertex_buffer->Get_Vertex_Count()-used_vertices;
-	unsigned required_polygons=mmc->Get_Polygon_Count();
-	if (mmc->Get_Gap_Filler()) {
-		required_polygons+=mmc->Get_Gap_Filler()->Get_Polygon_Count();
-	} 
-	unsigned required_indices=required_polygons*3*mmc->Get_Pass_Count();
-	unsigned available_indices=index_buffer->Get_Index_Count()-used_indices;
-	if (
-		required_vertices<=available_vertices &&
-		(required_indices)<=available_indices) {
-		return true;
-	}
-	return false;
-}
+// DX8RigidFVFCategoryContainer::Check_If_Mesh_Fits: BFME 2's body is the row 0x00143A20 in DX8RigidCheckIfMeshFits.cpp;
+// Zero Hour's copy here duplicated it.
 
 // ----------------------------------------------------------------------------
 
