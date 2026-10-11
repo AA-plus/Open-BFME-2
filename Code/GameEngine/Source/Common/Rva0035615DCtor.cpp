@@ -1,12 +1,12 @@
 // cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /O1 /MD /EHsc
-// ??0Rva0035615D@@QAE@ABVAsciiString@@ABVRva0036CA00Str@@1_N@Z @0x0035615D 97B. Unlock lane: ctor storing vtable 0x00814EBC, base Rva00490470 then StringBase at +0x10 plus two Rva0036CA00Str at +0x14/+0x18 plus ints 1/1 and bool at +0x24; callers at 0x0023DE2C etc; unblocks 0x0023DD48.
+// ??0Rva0035615D@@QAE@ABVAsciiString@@ABVRva0036CA00Str@@1_N@Z @0x0035615D 97B. Unlock lane: ctor storing vtable 0x00814EBC, base Rva00355D66 then StringBase at +0x10 plus two Rva0036CA00Str at +0x14/+0x18 plus ints 1/1 and bool at +0x24; callers at 0x0023DE2C etc; unblocks 0x0023DD48.
 #include "ascii_string.h"
 
-class Rva00490470
+class Rva00355D66
 {
 public:
-	Rva00490470();
-	virtual ~Rva00490470();
+	Rva00355D66();
+	virtual ~Rva00355D66();
 private:
 	char m_pad[0x0C];
 };
@@ -19,7 +19,7 @@ public:
 	~Rva0036CA00Str();
 };
 
-class Rva0035615D : public Rva00490470
+class Rva0035615D : public Rva00355D66
 {
 public:
 	Rva0035615D(const AsciiString &a, const Rva0036CA00Str &b, const Rva0036CA00Str &c, bool d);
