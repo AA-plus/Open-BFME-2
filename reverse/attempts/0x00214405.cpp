@@ -1,5 +1,7 @@
 // ??1LivingWorldManager@@UAE@XZ
 // partial score=0.99 date=2026-10-11
+// ??1LivingWorldManager@@UAE@XZ
+// partial score=0.99 date=2026-10-11
 // Remaining: retail packs the second hash-loop cursor (+0x204 table) into the
 // first cursor's slot (frame 0xC); this compiles it to its own slot (frame
 // 0x14). Bracing, renaming, while forms, a shared variable, the tree loop's

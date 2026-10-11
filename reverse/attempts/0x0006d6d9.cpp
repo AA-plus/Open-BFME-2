@@ -1,5 +1,7 @@
 // ?initHeightData@BaseHeightMapRenderObjClass@@QAEHHHPAVWorldHeightMap@@PAX@Z
 // partial score=0.98 date=2026-10-11
+// ?initHeightData@BaseHeightMapRenderObjClass@@QAEHHHPAVWorldHeightMap@@PAX@Z
+// partial score=0.98 date=2026-10-11
 // cl: /O1 /Oy- /G7 /arch:SSE /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /DNDEBUG /MD /EHsc
 // stlport
 // BaseHeightMapRenderObjClass::initHeightData, retail 0x0006D6D9..0x0006DB1C (1091 B, RET 0x10).
