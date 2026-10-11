@@ -17,6 +17,15 @@ public:
 };
 extern Rva002872BA *TheTriggerManager;
 
+// LINK: 0x002872BA is rowed as FireLogicSystem::rva002872BA(PolygonTrigger const*, int, bool) (FireLogicSystem rows); the old
+// (void*, int, int) call shape is kept through a member-pointer cast.
+class FireLogicSystem
+{
+public:
+	void rva002872BA(const PolygonTrigger *p, int a, bool b);
+};
+typedef void (FireLogicSystem::*FireLogicSystemWordShape)(void *, int, int);
+
 class ScriptEngine
 {
 public:
@@ -32,5 +41,5 @@ void __stdcall Rva003C3A3FSet(const AsciiString &name, int v)
 	Rva002872BA *m = TheTriggerManager;
 	if (m == 0)
 		return;
-	m->rva002872BA(trig, v, 0);
+	(((FireLogicSystem *)m)->*reinterpret_cast<FireLogicSystemWordShape>(&FireLogicSystem::rva002872BA))(trig, v, 0);
 }

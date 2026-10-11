@@ -12,8 +12,10 @@ typedef bool Bool;
 class Team
 {
 public:
-	void rva003A10FE(int v);
+	// LINK: 0x003A10FE is rowed as Team::deleteTeam(bool) (Team rows); the old int-flag call stays through a member-pointer cast.
+	void deleteTeam(bool v);
 };
+typedef void (Team::*TeamDeleteIntShape)(int);
 
 class ScriptEngine
 {
@@ -26,5 +28,5 @@ void __stdcall Rva003BFAC3Set(const AsciiString &team, int v)
 {
 	Team *t = TheScriptEngine->getTeamNamed(team, false);
 	if (t != 0)
-		t->rva003A10FE(v);
+		(t->*reinterpret_cast<TeamDeleteIntShape>(&Team::deleteTeam))(v);
 }

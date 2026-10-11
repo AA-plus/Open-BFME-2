@@ -5,14 +5,16 @@
 // 0x005DB3B3 (this+int void) as (b). Ret 0xC. Address-derived.
 class Rva005DB512
 {
-public:
-	void rva005DB512(int a, int b, int c);
 };
+
+class PortNegotiationSchema;
 
 class AptConnectionScreen
 {
 public:
 	void UpdateSlotName(int b);
+	// LINK: 0x005DB512 is rowed as AptConnectionScreen::UpdateGrid(PortNegotiationSchema*, int, int) (AptConnectionScreen rows).
+	void UpdateGrid(PortNegotiationSchema *schema, int a, int b);
 };
 
 class Rva005DB5F2
@@ -30,7 +32,7 @@ struct Rva005DB5F2Container : public Rva005DB512
 void Rva005DB5F2::rva005DB5F2(int a, int b, int c)
 {
 	Rva005DB5F2Container *o = (Rva005DB5F2Container *)((char *)this - 0x58);
-	o->rva005DB512(a, b, c);
-	o->rva005DB512(a, c, b);
+	((AptConnectionScreen *)o)->UpdateGrid((PortNegotiationSchema *)a, b, c);
+	((AptConnectionScreen *)o)->UpdateGrid((PortNegotiationSchema *)a, c, b);
 	((AptConnectionScreen *)o)->UpdateSlotName(b);
 }
