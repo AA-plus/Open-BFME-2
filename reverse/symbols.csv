@@ -17231,3 +17231,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva0005F2BB@MilesAudioManager@@QAEXPAVRva00052B3D@@@Z,0x0005F2BB,callee of ?rva00062690@MilesAudioManager@@UAEXXZ
 ?rva000521F4@GlobalVolumeData@MilesAudioManager@@QAEXM@Z,0x000521F4,callee of ?rva00062690@MilesAudioManager@@UAEXXZ
 ?rva0005E0A4@MilesAudioManager@@QAEXXZ,0x0005E0A4,callee of ?rva00062690@MilesAudioManager@@UAEXXZ
+?Rva0073BFE0Raster@@YADPAH0HVRva0073BAA0Base@@@Z,0x0073BFE0,callee of ?rva0073CAF0@ShroudManagerImpl@@AAEXHHPAXMH@Z
