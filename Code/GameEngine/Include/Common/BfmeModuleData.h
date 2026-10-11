@@ -36,7 +36,7 @@ class Xfer;
 class __declspec(novtable) ModuleData
 {
 public:
-	ModuleData() {}
+	__declspec(dllimport) __forceinline ModuleData() {}  // expanded in place; never emitted as a private copy
 	virtual ~ModuleData();
 
 	virtual void slot01() {}

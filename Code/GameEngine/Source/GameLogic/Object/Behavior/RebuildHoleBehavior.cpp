@@ -44,7 +44,7 @@ class Object
 {
 public:
 	BehaviorModule **getBehaviorModules() { return m_behaviorModules; }
-	Team *getTeam();
+	__declspec(dllimport) __forceinline Team *getTeam();
 	void *rva0028BD17() const;
 	Player *getControllingPlayer() const;
 	void setProducer(Object*);
@@ -344,7 +344,7 @@ extern GameLogic *TheGameLogic;
 extern int g_Va00DBA4E4;
 
 template<class T> inline T& fld(void*p,int offset) {return *(T*)((char*)p+offset);}
-inline Team *Object::getTeam(){ return fld<Team*>(this,0x304); }
+__forceinline Team *Object::getTeam(){ return fld<Team*>(this,0x304); }
 struct RebuildData {char pad[8];float wait,heal;AsciiString workerName;};
 class Rva00483645 {public:int update();};
 int Rva00483645::update() {
