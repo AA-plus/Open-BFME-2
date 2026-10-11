@@ -1,4 +1,6 @@
 // ?rva00086F56@Rva00086761CameraMove@@QAEXH@Z
+// partial score=0.91 date=2026-10-11
+// ?rva00086F56@Rva00086761CameraMove@@QAEXH@Z
 // partial score=0.9127187610288775 date=2026-10-10
 // BANK ONLY: proposed expansion of canonical Rva0008990CArrayOwner.h below.
 // Merge these target-proven fields into that header before any Code admission;
@@ -91,7 +93,7 @@ private:
  Rva00089894ArrayElement m_arr255[255];
  Rva00089894ArrayElement m_arr4[4];
  float m_cameraAngles[255];
- int m_values[257];
+ float m_values[257];
  float m_totalDistance,m_groundStart,m_groundEnd;
  int m_filled[255];
  int m_numValues;

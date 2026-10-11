@@ -1,13 +1,10 @@
 // ?update@W3DView@@UAEXXZ
-// partial score=0.9784136707374416 date=2026-10-10
+// partial score=0.994 date=2026-10-11
 // ?update@W3DView@@UAEXXZ
-// partial score=0.9784136707374416 date=2026-10-10
-// ?update@W3DView@@UAEXXZ
-// partial score=0.8900301634 date=2026-10-09
-// ?update@W3DView@@UAE_NXZ
-// partial score=0.8854845531 date=2026-10-09
-// ?update@W3DView@@UAEXXZ
-// partial score=0.8209180045876036 date=2026-10-09
+// Round-6 rework (claude-opus-5-5): lock-follow block rewritten in the WB 98A880 debug order
+// (followFactor<0 test, ZH sqr() distances, dx*ratio*GlobalData factor, inner dx/dy
+// recompute), all fences dropped; ratio2 negate-before-sign. Residual: two commutative
+// load orders (shake y sin*intensity; cameraOffset.x *= zoom).
 // cl: /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC
 // BFME W3DView::update, retail 0x007446A0.
 // Constructor 0x00745B10 installs SubsystemInterface table 0x01121764 at +0xFC. Slot 5 reaches this body through ILT 0x00007F31.
@@ -551,10 +548,7 @@ public:
  CameraSettings007446A0 field24b8; // +0x24b8
 };
 
-extern "C" void _ReadWriteBarrier();
-#pragma intrinsic(_ReadWriteBarrier)
-static __forceinline void CameraMemoryBarrier(){_ReadWriteBarrier();}
-inline float square(float x) { return x*x; }
+inline float sqr(float x) { return x*x; }
 inline const float &minimum(const float &a,const float &b) { return a<b?a:b; }
 void W3DView::update()
 {
@@ -581,30 +575,30 @@ void W3DView::update()
             slot19c();
             W3DViewFollowFactor=-1.0f;
         } else {
-            if(0.0f>W3DViewFollowFactor) W3DViewFollowFactor=0.05f;
+            if(W3DViewFollowFactor<0.0f) W3DViewFollowFactor=0.05f;
             else {
-_ReadWriteBarrier();
                 W3DViewFollowFactor+=0.05f;
-                if(1.0f<W3DViewFollowFactor) W3DViewFollowFactor=1.0f;
+                if(W3DViewFollowFactor>1.0f) W3DViewFollowFactor=1.0f;
             }
             Coord3D objpos; objpos.x=cameraLockObj->m_position.x; objpos.y=cameraLockObj->m_position.y; objpos.z=cameraLockObj->m_position.z;
             if(drawable) objpos=*drawable->getPosition();
             CameraCoordinates curpos(m_pos);
-            float snapThreshSqr=square((cameraLockObj?TheWritableGlobalData:TheWritableGlobalData)->m_partitionCellSize);
-            float distx=curpos.x-objpos.x;
-            float disty=curpos.y-objpos.y;
-            float curDistSqr=disty*disty+distx*distx;
+            float snapThreshSqr=sqr(TheWritableGlobalData->m_partitionCellSize);
+            float curDistSqr=sqr(curpos.x-objpos.x)+sqr(curpos.y-objpos.y);
             if(m_snapImmediate) { curpos.x=objpos.x; curpos.y=objpos.y; }
             else {
                 float dx=objpos.x-curpos.x;
                 float dy=objpos.y-curpos.y;
                 if(m_lockType==1) {
                     if(curDistSqr>=snapThreshSqr) {
-                        float ratio=(1.0f-snapThreshSqr/curDistSqr)*TheWritableGlobalData->field0e64;
-                        curpos.x+=dx*ratio; curpos.y+=dy*ratio;CameraMemoryBarrier();
+                        float ratio=1.0f-snapThreshSqr/curDistSqr;
+                        curpos.x+=dx*ratio*TheWritableGlobalData->field0e64;
+                        curpos.y+=dy*ratio*TheWritableGlobalData->field0e64;
                     } else {
                         float ratio=0.01f*m_lockDist;
-                        curpos.x+=ratio*(objpos.x-curpos.x); curpos.y+=ratio*(objpos.y-curpos.y);
+                        float dx=objpos.x-curpos.x;
+                        float dy=objpos.y-curpos.y;
+                        curpos.x+=dx*ratio; curpos.y+=dy*ratio;
                     }
                 } else { curpos.x+=dx*W3DViewFollowFactor; curpos.y+=dy*W3DViewFollowFactor; }
             }
@@ -626,7 +620,7 @@ _ReadWriteBarrier();
     }
     if(m_shakeIntensity>0.01f) {
         m_shakeOffset.x=m_shakeIntensity*m_shakeAngleCos;
-        m_shakeOffset.y=m_shakeAngleSin*m_shakeIntensity;
+        m_shakeOffset.y=m_shakeIntensity*m_shakeAngleSin;
         if(!TheWritableGlobalData->field0ed0 || TheWritableGlobalData->field0ed1) {
             m_shakeIntensity*=0.75f;
             m_shakeAngleCos=-m_shakeAngleCos;
@@ -673,7 +667,7 @@ _ReadWriteBarrier();
             if(drawable) pos=drawable->getPosition();
             else {
                 Object *obj=TheGameLogic->findObjectByID((ObjectID)getCameraLock());
-                if(obj){pos=&obj->m_position;_ReadWriteBarrier();}else{pos=0;_ReadWriteBarrier();}
+                if(obj)pos=&obj->m_position;else pos=0;
             }
             if(pos) {
                 float height=field0068>0.0f?field0068:TheWritableGlobalData->field0e58;
@@ -711,7 +705,7 @@ heightDone:
         recalcCamera=true;
     }
     float sign2=1.0f;
-    if(ratio2<0.0f) { sign2=-1.0f; ratio2=-ratio2; }
+    if(ratio2<0.0f) { ratio2=-ratio2; sign2=-1.0f; }
     float sign1=1.0f;
     if(ratio1<0.0f) { ratio1=-ratio1; sign1=-1.0f; }
     float ratio=minimum(ratio2,ratio1);
@@ -719,7 +713,7 @@ heightDone:
     field00a0+=sign1*ratio*delta1;
     }
     field24b8.slot048(&m_cameraOffset,0);
-    m_cameraOffset.x=m_cameraOffset.x*field00a0;
+    m_cameraOffset.x*=field00a0;
     m_cameraOffset.y*=field00a0;
     if(recalcCamera || m_isCameraSlaved) {
         setCameraTransform();

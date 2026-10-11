@@ -1,10 +1,6 @@
 // ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z
-// partial score=0.9525182512612397 date=2026-10-10
-extern "C" void _ReadWriteBarrier();
-#pragma intrinsic(_ReadWriteBarrier)
-// ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z
-// partial score=0.9364737527575153 date=2026-10-09
-// cl: /I. /O1 /arch:SSE /G7 /MD /EHsc /ICode/Libraries/Include /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
+// partial score=0.9736 date=2026-10-11
+// cl: /O1 /arch:SSE /G7 /MD /EHsc /ICode/Libraries/Include /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
 // Reference semantic lead: GeneralsMD W3DTerrainTracks.cpp computeTrackSpacing
 // at BFME1 checkout dae380faa5f6fa536eec8d6ebbe877321d4cb51d.
 // Retail 0x84B18..0x84C05 supplies the boundary and target-specific ABI:
@@ -459,8 +455,24 @@ void Rva00084206Track::addCapEdgeToTrack(float x, float y)
 }
 
 
-// ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z present-unmatched
+// ?rva00092014@Rva00091A80@@QAEXXZ @0x00092014 16B (with its ret): slot 9 of
+// the SnapBase table 0x007C80A0 of Rva00091A80 (the W3D client product its
+// factory 0x0004C5C6 returns). It ignores this: when the terrain-tracks system
+// exists, it re-applies the track detail through setDetail above.
+class Rva00091A80
+{
+public:
+	void rva00092014();
+};
+
+void Rva00091A80::rva00092014()
+{
+	if (TheTerrainTracksRenderObjClassSystem)
+		((Rva00084C05System *)TheTerrainTracksRenderObjClassSystem)->setDetail();
+}
+
 inline Vector3 TransformTrackPoint(const Matrix3D&A,const Vector3&v){return Vector3(A[0][0]*v.X+A[0][1]*v.Y+A[0][2]*v.Z+A[0][3],A[1][0]*v.X+A[1][1]*v.Y+A[1][2]*v.Z+A[1][3],A[2][0]*v.X+A[2][1]*v.Y+A[2][2]*v.Z+A[2][3]);}
+// ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z present-unmatched
 void Rva00084206Track::addEdgeToTrack(float x, float y)
 {
 	if (owner && !owner->m_object) return;
@@ -489,10 +501,10 @@ void Rva00084206Track::addEdgeToTrack(float x, float y)
 	if (owner && (objectLayer = owner->m_object->rva0028B511()) != 1)
 		return;
 
+	const Matrix3D *tm = &owner->m_object->transform;
 	Vector3 transformed[2];
-	_ReadWriteBarrier();
-	transformed[0]=TransformTrackPoint(owner->m_object->transform,*(Vector3 *)&endpoints[0]);
-	transformed[1]=TransformTrackPoint(owner->m_object->transform,*(Vector3 *)&endpoints[1]);
+	transformed[0]=TransformTrackPoint(*tm,*(Vector3 *)&endpoints[0]);
+	transformed[1]=TransformTrackPoint(*tm,*(Vector3 *)&endpoints[1]);
 	vPos=(transformed[0]+transformed[1])*0.5f;
 	eHeight = TheTerrainLogic->getGroundHeight(vPos.X, vPos.Y, &vZTmp);
 	vZ=Vector3(vZTmp.x,vZTmp.y,vZTmp.z);

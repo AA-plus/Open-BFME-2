@@ -1,5 +1,14 @@
 // ?rva006C26F0@GeneralAllocatorDebug@@QAEXTGeneralAllocatorMetricBlockArg@@_N@Z
-// partial score=0.93 date=2026-10-09
+// partial score=0.684 date=2026-10-11
+// 2026-10-11 bank: home TU Code/GameEngine/Source/Common/Rva006C1F60Finish.cpp (no // cl:
+// line; region default is plain /O2) plus the candidate at the end. Needs a pin
+// ?rva006C2510@GeneralAllocatorDebug@@QAEIPADHPAPAD@Z -> 0x006C2510 (unrowed, unpinned)
+// for the call to resolve. Using a plain local for the usable size (no write to the
+// union arg) makes the prologue exact through 0x6C2744 (block in edx, flags eax,
+// prev ebx, reloaded m_size ecx). Remaining wall: retail keeps footprint=edi,
+// overhead=ebx, debugSize=ebp and spills size into the dead arg slot; ours keeps
+// size in ebp, debugSize in ebx and spills overhead. userSize split, usable-size
+// inline helper, const locals, declaration order and pre-read union variants worse.
 // ?rva006C1F60@Rva006C1F60@@QAEHI@Z @ 0x006C1F60 113B chain of 0x00030DF0
 // Release. AddRef at +0x4e4 Release guarded float clamp via __ftol2 returning
 // clamped int. Evidence: calls AddRef 0x00030DD0 Release 0x00030DF0 __ftol2
@@ -335,11 +344,11 @@ void GeneralAllocatorDebug::rva006C26F0(GeneralAllocatorMetricBlockArg arg, bool
   unsigned int flags=block->m_size;
   unsigned int prev=(flags&2)?block->m_prevSize:0;
   unsigned int footprint=(block->m_size&0x7FFFFFF8)+prev;
-  arg.size=flags&0x7FFFFFF8;
-  if(!(block->m_size&2))arg.size+=4;
+  unsigned int size=flags&0x7FFFFFF8;
+  if(!(block->m_size&2))size+=4;
   unsigned int overhead=prev+8;
   unsigned int debugSize=rva006C2510((char *)block+8,0,0);
-  arg.size-=debugSize+8;
+  size=size-debugSize-8;
   if(allocation) {
    m_lastAllocation=GetTickCount()/1000;
    ++m_metrics[0].currentCount;
@@ -352,8 +361,8 @@ void GeneralAllocatorDebug::rva006C26F0(GeneralAllocatorMetricBlockArg arg, bool
    m_metrics[1].totalAllocBytes+=overhead;
    m_metrics[2].currentBytes+=debugSize;
    m_metrics[2].totalAllocBytes+=debugSize;
-   m_metrics[3].currentBytes+=arg.size;
-   m_metrics[3].totalAllocBytes+=arg.size;
+   m_metrics[3].currentBytes+=size;
+   m_metrics[3].totalAllocBytes+=size;
    if(m_metrics[3].peakBytes<m_metrics[3].currentBytes)m_metrics[3].peakBytes=m_metrics[3].currentBytes;
   } else {
    m_lastFree=GetTickCount()/1000;
@@ -365,8 +374,8 @@ void GeneralAllocatorDebug::rva006C26F0(GeneralAllocatorMetricBlockArg arg, bool
    m_metrics[1].totalFreeBytes+=overhead;
    m_metrics[2].currentBytes-=debugSize;
    m_metrics[2].totalFreeBytes+=debugSize;
-   m_metrics[3].currentBytes-=arg.size;
-   m_metrics[3].totalFreeBytes+=arg.size;
+   m_metrics[3].currentBytes-=size;
+   m_metrics[3].totalFreeBytes+=size;
   }
  }
 }
