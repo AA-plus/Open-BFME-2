@@ -1283,7 +1283,7 @@ void AptMapPreview::UpdateStrategicStartSpots()
 MapMetaData *AptMapPreview::rva0057D922(const AsciiString &map)
 {
 	AsciiString lowerMap = map;
-	lowerMap.toLower();
+	((StringBase<char> &)(lowerMap)).toLower();
 	MapCache::iterator it = TheMapCache->find(lowerMap);
 	if (it != TheMapCache->end())
 		return &(*it).second;

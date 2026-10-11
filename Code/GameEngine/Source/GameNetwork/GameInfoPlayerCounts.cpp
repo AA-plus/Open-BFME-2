@@ -820,7 +820,7 @@ const Image *GameInfo::rva00401015(Int kind)
 		case 0:
 		{
 			AsciiString map = getMap();
-			map.toLower();
+			((StringBase<char> &)(map)).toLower();
 			MapCache::iterator it = TheMapCache->find(map);
 			if (it == TheMapCache->end() || !(*it).second.m_isOfficial)
 				image = TheMappedImageCollection->findImageByName(AsciiString("AptUserMapNotConquered"));

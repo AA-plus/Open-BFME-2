@@ -264,7 +264,7 @@ ShellMenuScheme *ShellMenuSchemeManager::newShellMenuScheme(AsciiString name)
 {
 	ShellMenuSchemeListIt it;
 	it = m_schemeList.begin();
-	name.toLower();
+	((StringBase<char> &)(name)).toLower();
 	while(it != m_schemeList.end())
 	{
 		ShellMenuScheme *scheme = *it;

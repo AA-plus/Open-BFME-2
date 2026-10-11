@@ -159,7 +159,7 @@ void W3DModelDrawModuleData::parseEmbedPortal(INI *ini, void *, void *store,
             _STL::allocator<Rva007719C0Element> > *)store)->m_finish;
     {
         AsciiString mode = ini->getNextAsciiString();
-        mode.toLower();
+        ((StringBase<char> &)(mode)).toLower();
         finish[-1].m_name =
             *(const StringBase<char> *)&ini->getNextAsciiString();
 

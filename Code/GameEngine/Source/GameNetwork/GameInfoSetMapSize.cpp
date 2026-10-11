@@ -109,7 +109,7 @@ Int GameInfo::rva0040203C()
 	if (!TheMapCache)
 		return -1;
 	AsciiString lowerMap = m_mapName;
-	lowerMap.toLower();
+	((StringBase<char> &)(lowerMap)).toLower();
 	_STL::map<AsciiString, MapMetaData>::iterator it = TheMapCache->find(lowerMap);
 	if (it != TheMapCache->end()) {
 		MapMetaData tmp(it->second);
@@ -126,7 +126,7 @@ void GameInfo::setMapSize(UnsignedInt mapSize)
 		return;
 	if (m_inGame && getLocalSlotNum() >= 0) {
 		AsciiString lowerMap = m_mapName;
-		lowerMap.toLower();
+		((StringBase<char> &)(lowerMap)).toLower();
 		_STL::map<AsciiString, MapMetaData>::iterator it = TheMapCache->find(lowerMap);
 		if (it == TheMapCache->end()) {
 			GameSlot *slot = getSlot(getLocalSlotNum());

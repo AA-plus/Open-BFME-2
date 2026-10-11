@@ -823,7 +823,7 @@ void GameEngine::init(Int argc, char *argv[])
 		if (TheGlobalData->m_initialFile.isEmpty() == false)
 		{
 			AsciiString fname = TheGlobalData->m_initialFile;
-			fname.toLower();
+			((StringBase<char> &)(fname)).toLower();
 			if (fname.endsWithNoCase(".map"))
 			{
 				TheGlobalData->m_shellMapOn = false;
@@ -882,7 +882,7 @@ void GameEngine::init(Int argc, char *argv[])
 		if (TheMapCache && TheGlobalData->m_shellMapOn)
 		{
 			AsciiString lowerName = TheGlobalData->m_shellMapName;
-			lowerName.toLower();
+			((StringBase<char> &)(lowerName)).toLower();
 			MapCache::iterator it = TheMapCache->find(lowerName);
 			if (it == TheMapCache->end())
 				TheGlobalData->m_shellMapOn = false;

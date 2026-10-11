@@ -920,7 +920,7 @@ void LanGameOptionsMenuInit( WindowLayout *layout, void *userData )
     game->setStartingCash( pref.getStartingCash() );
     game->setSuperweaponRestriction( pref.getSuperweaponRestricted() ? 1 : 0 );
 		AsciiString lowerMap = pref.getPreferredMap();
-		lowerMap.toLower();
+		((StringBase<char> &)(lowerMap)).toLower();
 		std::map<AsciiString, MapMetaData>::iterator it = TheMapCache->find(lowerMap);
 		if (it != TheMapCache->end())
 		{

@@ -101,7 +101,7 @@ static void CreateMangledName(AsciiString &out,const char *name,float scale,cons
  if(excluded.empty())out+="@NO_SUBOBJ&";
  else for(Strings::const_iterator it=excluded.begin();it!=excluded.end();++it){out+=*it;out+="&";}
  out+="#";
- out.toLower();
+ ((StringBase<char> &)(out)).toLower();
 }
 class TextureClass {public:void Release_Ref();};
 class HierarchyPrototype;
@@ -148,7 +148,7 @@ RenderObjClass *Rva0013682BCreateRenderObj(const char *name,float scale,const Rv
 {
  if(!name)return 0;
  if(name[0]=='#')return 0;
- AsciiString key(name);key.toLower();
+ AsciiString key(name);((StringBase<char> &)(key)).toLower();
  Rva00136001 prototype(Rva0061F230_GetPrototype(key.str()));
  if(!prototype.pointer)return 0;
  bool scaled=renderAssetAbs(scale-1.0f)>0.01f;

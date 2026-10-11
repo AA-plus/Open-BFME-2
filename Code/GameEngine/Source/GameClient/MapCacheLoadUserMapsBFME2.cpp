@@ -62,7 +62,7 @@ bool MapCache::loadUserMaps(){
  filenamepattern.format("*.%s",((const Rva003004A5*)this)->Rva003004A5::rva003004A5().str());
  TheFileSystem->getFileListInDirectory(toplevelPattern,filenamepattern,filenameList,true);
  iter=filenameList.begin();while(iter!=filenameList.end()){
-  FileInfo fileInfo;AsciiString tempfilename;tempfilename=*iter;tempfilename.toLower();
+  FileInfo fileInfo;AsciiString tempfilename;tempfilename=*iter;((StringBase<char> &)(tempfilename)).toLower();
   const char*s=tempfilename.reverseFind('\\');
   if(s){
    AsciiString endingStr;AsciiString fname=s+1;

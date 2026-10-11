@@ -333,7 +333,7 @@ m_qmChannel(0)
 		}
 		else if (inVIP)
 		{
-			line.toLower();
+			((StringBase<char> &)(line)).toLower();
 			if (line.getLength())
 			{
 				Int val = atoi(line.str());
@@ -343,12 +343,12 @@ m_qmChannel(0)
 		}
 		else if (inPingServers)
 		{
-			line.toLower();
+			((StringBase<char> &)(line)).toLower();
 			m_pingServers.push_back(line);
 		}
 		else if (inPingDuration)
 		{
-			line.toLower();
+			((StringBase<char> &)(line)).toLower();
 			AsciiString key, val;
 			if (line.nextToken(&key, " ="))
 			{
@@ -385,7 +385,7 @@ m_qmChannel(0)
 		else if (inManglers)
 		{
 			line.trim();
-			line.toLower();
+			((StringBase<char> &)(line)).toLower();
 			AsciiString hostStr;
 			AsciiString portStr;
 			line.nextToken(&hostStr, ":");
@@ -398,11 +398,11 @@ m_qmChannel(0)
 		}
 		else if (inQMMaps)
 		{
-			line.toLower();
+			((StringBase<char> &)(line)).toLower();
 			AsciiString mapName;
 			mapName.format("%s\\%s\\%s.map", ((const Rva00300489 *)TheMapCache)->Rva00300489::rva00300489().str(), line.str(), line.str());
 			mapName = TheGameState->portableMapPathToRealMapPath(TheGameState->realMapPathToPortableMapPath(mapName));
-			mapName.toLower();
+			((StringBase<char> &)(mapName)).toLower();
 
 			const MapMetaData *md = TheMapCache->findMap(mapName);
 			if (md)
@@ -412,7 +412,7 @@ m_qmChannel(0)
 		}
 		else if (inQMBot)
 		{
-			line.toLower();
+			((StringBase<char> &)(line)).toLower();
 			AsciiString key, val;
 			if (line.nextToken(&key, " ="))
 			{
@@ -427,7 +427,7 @@ m_qmChannel(0)
 		}
 		else if (inNAT)
 		{
-			line.toLower();
+			((StringBase<char> &)(line)).toLower();
 			AsciiString key, val;
 			if (line.nextToken(&key, " ="))
 			{
@@ -485,7 +485,7 @@ m_qmChannel(0)
 		}
 		else if (inCustom)
 		{
-			line.toLower();
+			((StringBase<char> &)(line)).toLower();
 			AsciiString key, val;
 			if (line.nextToken(&key, " =") && line.nextToken(&val, " ="))
 			{

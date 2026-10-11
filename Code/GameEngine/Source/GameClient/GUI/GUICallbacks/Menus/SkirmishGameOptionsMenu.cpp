@@ -512,7 +512,7 @@ static void startPressed(void)
 	BOOL isReady = FALSE;
 	Int playerCount = TheSkirmishGameInfo->getNumPlayers();
 	AsciiString lowerMap = TheSkirmishGameInfo->getMap();
-	lowerMap.toLower();
+	((StringBase<char> &)(lowerMap)).toLower();
 	std::map<AsciiString, MapMetaData>::iterator it = TheMapCache->find(lowerMap);
 	if (it == TheMapCache->end())
 	{
@@ -613,7 +613,7 @@ void positionAdditionalImages(MapMetaData *mmd, GameWindow *mapWindow, Bool forc
 void positionStartSpots( AsciiString mapName, GameWindow *buttonMapStartPositions[], GameWindow *mapWindow)
 {
 	AsciiString lowerMap = mapName;
-	lowerMap.toLower();
+	((StringBase<char> &)(lowerMap)).toLower();
 	std::map<AsciiString, MapMetaData>::iterator it = TheMapCache->find(lowerMap);
 	if (it == TheMapCache->end())
 	{
@@ -1030,7 +1030,7 @@ void skirmishUpdateSlotList( void )
     doUpdateSlotList = FALSE;
 
 	  AsciiString lowerMap = TheSkirmishGameInfo->getMap();
-	  lowerMap.toLower();
+	  ((StringBase<char> &)(lowerMap)).toLower();
 	  std::map<AsciiString, MapMetaData>::iterator it = TheMapCache->find(lowerMap);
 	  if (it != TheMapCache->end())
 	  {
@@ -1210,7 +1210,7 @@ void SkirmishGameOptionsMenuInit( WindowLayout *layout, void *userData )
 	}
 
 	AsciiString lowerMap = prefs.getPreferredMap();
-	lowerMap.toLower();
+	((StringBase<char> &)(lowerMap)).toLower();
 	std::map<AsciiString, MapMetaData>::iterator it = TheMapCache->find(lowerMap);
 	if (it != TheMapCache->end())
 	{

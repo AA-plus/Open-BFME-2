@@ -105,7 +105,7 @@ RenderObjClass *Create_Render_Obj(const char *name)
 		return 0;
 
 	AsciiString lowered(name);
-	lowered.toLower();
+	((StringBase<char> &)(lowered)).toLower();
 
 	Rva00136001 owner(Rva0061F230_GetPrototype(lowered.str()));
 

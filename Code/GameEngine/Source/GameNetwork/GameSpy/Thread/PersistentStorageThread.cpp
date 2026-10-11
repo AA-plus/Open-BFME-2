@@ -1561,7 +1561,7 @@ int Rva005573FA::rva005573FA(int request, int result, int buffer, int, int)
 	while (text.nextToken(&line, "\n"))
 	{
 		line.trim();
-		line.toLower();
+		((StringBase<char> &)(line)).toLower();
 		if (strstr(line.str(), "today"))
 			period = 0;
 		else if (strstr(line.str(), "yesterday"))

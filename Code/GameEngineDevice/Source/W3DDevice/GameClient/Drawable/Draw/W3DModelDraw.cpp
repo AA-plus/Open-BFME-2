@@ -194,7 +194,7 @@ void LogClass::log(const char *fmt, ...)
 // ?dumpMatrix3D@LogClass@@ present-unmatched
 void LogClass::dumpMatrix3D(const Matrix3D *m, AsciiString name, AsciiString fname, Int line)
 {
-	fname.toLower();
+	((StringBase<char> &)(fname)).toLower();
 	fname = fname.reverseFind('\\') + 1;
 	const Real *matrix = (const Real *)m;
 	log("dumpMatrix3D() %s:%d %s\n",
@@ -209,7 +209,7 @@ void LogClass::dumpReal(Real r, AsciiString name, AsciiString fname, Int line)
 {
 	if (!m_fp || !isValidTimeToCalcLogicStuff())
 		return;
-	fname.toLower();
+	((StringBase<char> &)(fname)).toLower();
 	fname = fname.reverseFind('\\') + 1;
 	log("dumpReal() %s:%d %s %8.8X (%f)\n",
 		fname.str(), line, name.str(), AS_INT(r), r);
@@ -446,7 +446,7 @@ void ModelConditionInfo::addPublicBone(const AsciiString& boneName) const
 		return;
 
 	AsciiString tmp = boneName;
-	tmp.toLower();
+	((StringBase<char> &)(tmp)).toLower();
 	if (std::find(m_publicBones.begin(), m_publicBones.end(), tmp) == m_publicBones.end())
 	{
 		m_publicBones.push_back(tmp);
@@ -545,7 +545,7 @@ static Bool doSingleBoneName(RenderObjClass* robj, const AsciiString& boneName, 
 	AsciiString tmp;
 
 	AsciiString boneNameTmp = boneName;
-	boneNameTmp.toLower();	// convert to all-lowercase to avoid case sens issues later
+	((StringBase<char> &)(boneNameTmp)).toLower();	// convert to all-lowercase to avoid case sens issues later
 
 	setFPMode();
 
@@ -1264,7 +1264,7 @@ static void parseAnimation(INI* ini, void *instance, void * /*store*/, const voi
 	AnimParseType animType = (AnimParseType)(UnsignedInt)userData;
 
 	AsciiString animName = ini->getNextAsciiString();
-	animName.toLower();
+	((StringBase<char> &)(animName)).toLower();
 
 	const char* distanceCoveredToken = ini->getNextTokenOrNull();
 	Real distanceCovered = distanceCoveredToken ? INI::scanReal(distanceCoveredToken) : 0;
@@ -1300,7 +1300,7 @@ static void parseShowHideSubObject(INI* ini, void *instance, void *store, const 
 {
 	std::vector<ModelConditionInfo::HideShowSubObjInfo>* vec = (std::vector<ModelConditionInfo::HideShowSubObjInfo>*)store;
 	AsciiString subObjName = ini->getNextAsciiString();
-	subObjName.toLower();
+	((StringBase<char> &)(subObjName)).toLower();
 
 	// handle "None"
 	if (subObjName.isNone())
@@ -1329,7 +1329,7 @@ static void parseShowHideSubObject(INI* ini, void *instance, void *store, const 
 			vec->push_back(info);
 		}
 		subObjName = ini->getNextAsciiString();
-		subObjName.toLower();
+		((StringBase<char> &)(subObjName)).toLower();
 	}
 }	
 
@@ -1369,7 +1369,7 @@ static void parseWeaponBoneName(INI* ini, void *instance, void * store, const vo
 	
 	WeaponSlotType wslot = (WeaponSlotType)INI::scanIndexList(ini->getNextToken(), TheWeaponSlotTypeNames);
 	arr[wslot] = ini->getNextAsciiString();
-	arr[wslot].toLower();
+	((StringBase<char> &)(arr[wslot])).toLower();
 	if (arr[wslot].isNone())
 		arr[wslot].clear();
 
@@ -1382,7 +1382,7 @@ static void parseParticleSysBone(INI* ini, void *instance, void * store, const v
 {
 	ParticleSysBoneInfo info;
 	info.boneName = ini->getNextAsciiString();
-	info.boneName.toLower();
+	((StringBase<char> &)(info.boneName)).toLower();
 	ini->parseParticleSystemTemplate(ini, instance, &(info.particleSystemTemplate), NULL);
 	ModelConditionInfo *self = (ModelConditionInfo *)instance;
 	self->m_particleSysBones.push_back(info);
@@ -1405,7 +1405,7 @@ static void parseLowercaseNameKey(INI* ini, void *instance, void * store, const 
 	NameKeyType* key = (NameKeyType*)store;
 
 	AsciiString tmp = ini->getNextToken();
-	tmp.toLower();
+	((StringBase<char> &)(tmp)).toLower();
 
 	*key = NAMEKEY(tmp.str());
 }
@@ -1417,7 +1417,7 @@ static void parseBoneNameKey(INI* ini, void *instance, void * store, const void 
 	NameKeyType* key = (NameKeyType*)store;
 
 	AsciiString tmp = ini->getNextToken();
-	tmp.toLower();
+	((StringBase<char> &)(tmp)).toLower();
 
 	if (self)
 		self->addPublicBone(tmp);
@@ -1520,8 +1520,8 @@ void W3DModelDrawModuleData::parseConditionState(INI* ini, void *instance, void 
 
 		case PARSE_TRANSITION:
 		{
-		  AsciiString firstNm = ini->getNextToken(); firstNm.toLower();
-		  AsciiString secondNm = ini->getNextToken(); secondNm.toLower();
+		  AsciiString firstNm = ini->getNextToken(); ((StringBase<char> &)(firstNm)).toLower();
+		  AsciiString secondNm = ini->getNextToken(); ((StringBase<char> &)(secondNm)).toLower();
 			NameKeyType firstKey = NAMEKEY(firstNm.str());
 			NameKeyType secondKey = NAMEKEY(secondNm.str());
 

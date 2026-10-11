@@ -52,7 +52,7 @@ public:
 // ?findMap@MapCache@@QAEPBVMapMetaData@@VAsciiString@@@Z
 const MapMetaData *MapCache::findMap(AsciiString mapName)
 {
-	mapName.toLower();
+	((StringBase<char> &)(mapName)).toLower();
 	MapCache::iterator it = find(mapName);
 	if (it == end())
 		return 0;

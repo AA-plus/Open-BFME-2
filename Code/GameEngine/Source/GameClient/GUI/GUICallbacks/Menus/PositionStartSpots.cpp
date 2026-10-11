@@ -111,7 +111,7 @@ void positionStartSpots(AsciiString mapName, GameWindow **buttonMapStartPosition
 	if (listBox)
 		GadgetListBoxReset(listBox);
 	AsciiString lowerMap = mapName;
-	lowerMap.toLower();
+	((StringBase<char> &)(lowerMap)).toLower();
 	MapCache::iterator it = TheMapCache->find(lowerMap);
 	if (it == TheMapCache->end())
 	{

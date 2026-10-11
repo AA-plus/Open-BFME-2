@@ -328,7 +328,7 @@ static LadderInfo *parseLadder(AsciiString raw)
 			{
 				mapName.format("%s\\%s\\%s.map", ((Rva00300489 *)TheMapCache)->Rva00300489::rva00300489().str(), mapName.str(), mapName.str());
 				mapName = TheGameState->portableMapPathToRealMapPath(TheGameState->realMapPathToPortableMapPath(mapName));
-				mapName.toLower();
+				((StringBase<char> &)(mapName)).toLower();
 				std::list<AsciiString> qmMaps = TheGameSpyConfig->getQMMaps();
 				if (std::find(qmMaps.begin(), qmMaps.end(), mapName) != qmMaps.end())
 				{
@@ -460,7 +460,7 @@ void LadderList::loadLocalLadders( void )
 	while (it != filenameList.end())
 	{
 		AsciiString filename = *it;
-		filename.toLower();
+		((StringBase<char> &)(filename)).toLower();
 		checkLadder( filename, index-- );
 		++it;
 	}

@@ -77,7 +77,7 @@ bool MapCache::addMap(AsciiString dirName,AsciiString fname,FileInfo *info,bool 
     if (!info) return false;
     AsciiString lowerFname;
     lowerFname=fname;
-    lowerFname.toLower();
+    ((StringBase<char> &)(lowerFname)).toLower();
     iterator it=find(lowerFname);
     MapMetaData md;
     unsigned filesize=info->sizeLow;

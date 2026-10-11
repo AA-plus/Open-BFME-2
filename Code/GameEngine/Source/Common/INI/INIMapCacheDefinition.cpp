@@ -129,7 +129,7 @@ void INI::parseMapCacheDefinition(INI *ini)
  md.players=mdr.players;
  const StringDataView *display=*reinterpret_cast<const StringDataView*const*>(&md.displayName);
  if(TheMapCache && display && display->length) {
-  AsciiString lowerName=name;lowerName.toLower();md.fileName=lowerName;
+  AsciiString lowerName=name;((StringBase<char> &)(lowerName)).toLower();md.fileName=lowerName;
   if(!md.isOfficial || TheFileSystem->doesFileExist(md.fileName.str()))
    reinterpret_cast<MapMetaData&>((*reinterpret_cast<Rva00304DC7Map*>(TheMapCache))[lowerName])=md;
  }

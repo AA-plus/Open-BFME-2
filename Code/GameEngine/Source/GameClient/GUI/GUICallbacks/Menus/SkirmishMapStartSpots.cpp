@@ -50,7 +50,7 @@ public:
 };
 extern GameTextInterface *TheGameText;
 void updateMapStartSpots(GameInfo *myGame,GameWindow *buttons[],bool onLoadScreen) {
- AsciiString lowerMap=myGame->getMap(); lowerMap.toLower();
+ AsciiString lowerMap=myGame->getMap(); ((StringBase<char> &)(lowerMap)).toLower();
  MapCache::iterator it=TheMapCache->find(lowerMap);
  if(it==TheMapCache->end()) {
   for(int i=0;i<8;++i) {

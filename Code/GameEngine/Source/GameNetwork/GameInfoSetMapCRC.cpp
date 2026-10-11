@@ -100,7 +100,7 @@ void GameInfo::setMapCRC(UnsignedInt mapCRC)
 		return;
 	if (m_inGame && getLocalSlotNum() >= 0) {
 		AsciiString lowerMap = m_mapName;
-		lowerMap.toLower();
+		((StringBase<char> &)(lowerMap)).toLower();
 		_STL::map<AsciiString, MapMetaData>::iterator it = TheMapCache->find(lowerMap);
 		if (it == TheMapCache->end()) {
 			GameSlot *slot = getSlot(getLocalSlotNum());

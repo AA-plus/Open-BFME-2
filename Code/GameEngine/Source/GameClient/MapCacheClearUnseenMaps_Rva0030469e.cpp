@@ -54,7 +54,7 @@ private:
 // ?clearUnseenMaps@MapCache@@AAE_NVAsciiString@@@Z
 Bool MapCache::clearUnseenMaps(AsciiString dirName)
 {
-	dirName.toLower();
+	((StringBase<char> &)(dirName)).toLower();
 	Bool erasedSomething = false;
 	std::map<AsciiString, Bool>::iterator it = m_seen.begin();
 	while (it != m_seen.end())

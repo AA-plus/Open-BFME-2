@@ -238,7 +238,7 @@ Bool UserPreferences::getBool(const AsciiString &key, Bool defaultValue) const
 		return defaultValue;
 	}
 
-	val.toLower();
+	((StringBase<char> &)(val)).toLower();
 	return (val.compare("1") == 0 || val.compare("t") == 0 || val.compare("true") == 0 || val.compare("y") == 0 || val.compare("yes") == 0 || val.compare("ok") == 0);
 }
 

@@ -428,7 +428,7 @@ static __declspec(noinline) void parseBoneNameKey(INI *ini, void *instance, void
  Rva000C2AA4 *self = static_cast<Rva000C2AA4 *>(instance);
  NameKeyType *key = static_cast<NameKeyType *>(store);
  AsciiString tmp(ini->getNextToken());
- tmp.toLower();
+ ((StringBase<char> &)(tmp)).toLower();
  if (self) self->rva000C2AA4(tmp);
  if (tmp.isEmpty() || tmp.isNone()) *key = NAMEKEY_INVALID;
  else *key = TheNameKeyGenerator->nameToKey(((const StringBase<char> *)&tmp)->str());

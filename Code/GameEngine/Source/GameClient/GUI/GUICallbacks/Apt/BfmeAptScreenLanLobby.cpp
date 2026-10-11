@@ -660,7 +660,7 @@ bool AptLanLobby::bfmeMapChanged(const AsciiString *mapName)
 		return false;
 
 	AsciiString lowerMap = *mapName;
-	lowerMap.toLower();
+	((StringBase<char> &)(lowerMap)).toLower();
 	game->setMapForwarder(lowerMap);
 	const MapMetaData *map = TheMapCache->findMap(lowerMap);
 	if (map)
