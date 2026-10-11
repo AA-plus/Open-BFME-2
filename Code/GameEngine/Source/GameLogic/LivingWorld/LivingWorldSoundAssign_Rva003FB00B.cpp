@@ -5,15 +5,20 @@
 class Xfer;
 
 // The two nop-arm thunk calls retail makes read their targets from the REL32
-// displacements: ?bfmeTwoNA@BfmeThingNA@@QAEXXZ at 0x003FAC3F (call 0x003FB019)
-// and ?bfmeOneNA@BfmeThingNA@@QAEXXZ at 0x003FAB93 (call 0x003FB071), both
+// displacements: ?rva003FAC3F@Rva003FAC3F@@QAEXXZ at 0x003FAC3F (call 0x003FB019)
+// and ?rva003FAB93@Rva003FAB93@@QAEXXZ at 0x003FAB93 (call 0x003FB071), both
 // already pinned at those addresses in reverse/symbols.csv. The donor's own
 // stubs predate the BFME 2 addresses.
-class BfmeThingNA
+// LINK: the two helpers are rowed under their retail names.
+class Rva003FAB93
 {
 public:
-	void bfmeOneNA();
-	void bfmeTwoNA();
+	void rva003FAB93();
+};
+class Rva003FAC3F
+{
+public:
+	void rva003FAC3F();
 };
 
 class LivingWorldSoundThunkCall
@@ -34,10 +39,10 @@ __forceinline Function livingWorldSoundThunk(Raw raw)
 class Rva00087750Counted;
 
 // Retail ILT0x0002C6D8 reaches the verified ref-count assignment at0x00087750.
-class Rva00087750Ref
+struct OpaqueRefElement4
 {
 public:
-	Rva00087750Ref &operator=(const Rva00087750Ref &other);
+	OpaqueRefElement4 &operator=(const OpaqueRefElement4 &other);
 
 	Rva00087750Counted *m_ptr;
 };
@@ -77,7 +82,7 @@ public:
 private:
 	AsciiString m_name;
 	Coord3DBase m_position;
-	Rva00087750Ref m_sound;
+	OpaqueRefElement4 m_sound;
 	unsigned int m_flags;
 	Region2DBase m_zoomRegion;
 	int m_playState;
@@ -91,7 +96,7 @@ LivingWorldSound &LivingWorldSound::operator=( const LivingWorldSound &that )
 	if ( this != &that )
 	{
 		typedef void (LivingWorldSoundThunkCall::*BfmeTwoNA)(void);
-		LIVING_WORLD_SOUND_THUNK_CALL(this, BfmeTwoNA, &BfmeThingNA::bfmeTwoNA)();
+		LIVING_WORLD_SOUND_THUNK_CALL(this, BfmeTwoNA, &Rva003FAC3F::rva003FAC3F)();
 
 		m_name = that.m_name;
 
@@ -109,7 +114,7 @@ LivingWorldSound &LivingWorldSound::operator=( const LivingWorldSound &that )
 		if ( static_cast<unsigned int>( that.m_playState ) >= 5 && m_sound.m_ptr != 0 )
 		{
 			typedef void (LivingWorldSoundThunkCall::*BfmeOneNA)(void);
-			LIVING_WORLD_SOUND_THUNK_CALL(this, BfmeOneNA, &BfmeThingNA::bfmeOneNA)();
+			LIVING_WORLD_SOUND_THUNK_CALL(this, BfmeOneNA, &Rva003FAB93::rva003FAB93)();
 		}
 	}
 
