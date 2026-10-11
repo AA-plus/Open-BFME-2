@@ -78,6 +78,8 @@ class TeamPrototype
 {
 public:
 	const TeamTemplateInfo *getTemplateInfo(void) const { return &m_teamTemplate; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getTemplateInfo copy loses to the first-in-order copy. No flags touched.
+	const TeamTemplateInfo *bfme_getTemplateInfo_a8b17(void) const { return &m_teamTemplate; }
 private:
 	unsigned char m_pad00[0x200];
 	TeamTemplateInfo m_teamTemplate; // +0x200
@@ -86,6 +88,8 @@ class Team
 {
 public:
 	const TeamPrototype *getPrototype(void) { return m_proto; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getPrototype copy loses to the first-in-order copy. No flags touched.
+	const TeamPrototype *bfme_getPrototype_9492a(void) { return m_proto; }
 	void rva0039D84A(Object *target);
 	void setTeamTargetObject(Object *target) { rva0039D84A(target); }
 	Object *getTeamTargetObject();
@@ -136,6 +140,8 @@ public:
 	BodyModuleInterface *getBodyModule() const { return m_body; }
 	ObjectID getID() const { return m_id; }
 	Team *getTeam() { return m_team; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getTeam copy loses to the first-in-order copy. No flags touched.
+	Team *bfme_getTeam_30539() { return m_team; }
 	Player *getControllingPlayer() const;
 private:
 	unsigned char m_pad00[0x74];
@@ -197,6 +203,12 @@ public:
 	Object *getOwner() const { return m_owner; }
 	Object *getGoalObject();
 	inline StateID getCurrentStateID() const;
+	// LINK: same-body spelling under a TU-unique template name (State is still incomplete here); identical inlined bytes.
+	template <class S> StateID bfme_getCurrentStateID_c52d1(S *) const
+	{
+		S *cur = (S *)m_currentState;
+		return cur ? cur->m_ID : (StateID)INVALID_STATE_ID;
+	}
 private:
 	State *m_currentState; // +0x04
 	unsigned char m_pad08[0x14 - 0x08];
@@ -355,8 +367,8 @@ void AITNGuardOuterState::onExit( StateExitType status )
 StateReturnType AITNGuardReturnState::update( void )
 {
 	Player *ownerPlayer = getMachineOwner()->getControllingPlayer();
-	if (getMachineOwner()->getTeam()) {
-		Object *teamVictim = getMachineOwner()->getTeam()->getTeamTargetObject();
+	if (getMachineOwner()->bfme_getTeam_30539()) {
+		Object *teamVictim = getMachineOwner()->bfme_getTeam_30539()->getTeamTargetObject();
 		if (teamVictim)	{
 			getGuardMachine()->setNemesisID(teamVictim->getID());
 			return STATE_FAILURE; // Fail to return goes to inner attack state.
@@ -392,15 +404,15 @@ void AITNGuardAttackAggressorState::onExit( StateExitType status )
 		m_attackState = NULL;
 	}
 
-	if (obj->getTeam())
+	if (obj->bfme_getTeam_30539())
 	{
-		obj->getTeam()->setTeamTargetObject(NULL); // clear the target.
+		obj->bfme_getTeam_30539()->setTeamTargetObject(NULL); // clear the target.
 	}
 }
 
 StateReturnType AITNGuardAttackAggressorState::update( void )
 {	
-	if (m_attackState->getMachine()->getCurrentStateID() == AttackStateMachine::FIRE_WEAPON) {
+	if (m_attackState->getMachine()->bfme_getCurrentStateID_c52d1((State *)0) == AttackStateMachine::FIRE_WEAPON) {
 		AITNGuardMachine *machine = getGuardMachine();
 		Object *nemesis = TheGameLogic->findObjectByID(machine->getNemesisID());
 		Player *ownerPlayer = machine->getOwner()->getControllingPlayer();
@@ -479,7 +491,7 @@ StateReturnType AITNGuardInnerState::update( void )
 
 	Object* owner = getMachineOwner();
 	// killed him.
-	Object *teamVictim = owner->getTeam()->getTeamTargetObject();
+	Object *teamVictim = owner->bfme_getTeam_30539()->getTeamTargetObject();
 	if (nemesis == NULL)
 	{
 		if (teamVictim)
@@ -534,9 +546,9 @@ StateReturnType AITNGuardOuterState::update( void )
 		}
 		// Check if team auto targets same victim.
 		Object *teamVictim = NULL;
-		if (goalObj == NULL && owner->getTeam()->getPrototype()->getTemplateInfo()->m_attackCommonTarget) 
+		if (goalObj == NULL && owner->bfme_getTeam_30539()->bfme_getPrototype_9492a()->bfme_getTemplateInfo_a8b17()->m_attackCommonTarget) 
 		{
-			teamVictim = owner->getTeam()->getTeamTargetObject();
+			teamVictim = owner->bfme_getTeam_30539()->getTeamTargetObject();
 			if (teamVictim) 
 			{	
 				goalObj = teamVictim;	
