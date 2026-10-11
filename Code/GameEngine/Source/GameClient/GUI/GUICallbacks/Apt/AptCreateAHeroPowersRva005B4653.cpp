@@ -120,7 +120,8 @@ public:
 };
 }
 
-extern const int g_00C72CAC[];
+// Native power-level columns: ten DWORDs, then the next rdata string.
+extern const int g_00C72CAC[10] = { 0, 0, 1, 1, 1, 1, 2, 2, 2, 3 };
 
 class Rva005B486DOwner
 {
