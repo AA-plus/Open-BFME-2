@@ -9,6 +9,7 @@
 #include "dx8wrapper.h"	// first, so the bfmestages copy (sixteen texture stages) wins
 				// DX8_WRAPPER_H before a vendored header's quoted include does
 #include "rendobj.h"	// the bfmerendobj shim has to win the include guard
+#include "../../../../../reference/shims/meshmatdesclayout/meshmatdesc.h"	// BFME2 MeshMatDescClass layout wins the include guard (TextureArray +0xC8)
 /*
 **	Command & Conquer Generals Zero Hour(tm)
 **	Copyright 2025 Electronic Arts Inc.
