@@ -110,6 +110,12 @@ class PlayerList
 {
 public:
 	Player *getNeutralPlayer() { return m_neutralPlayer; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getNeutralPlayer copy loses to the first-in-order
+	// copy (no retail address); the call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	Player *bfme_neutral_player() { return m_neutralPlayer; }
 
 private:
 	char m_pad[0x18];
@@ -172,7 +178,7 @@ void Player::becomingTeamMember(Object *obj, Bool yes)
 		obj->friend_adjustPowerForPlayer(yes);
 	}
 
-	if (this != ThePlayerList->getNeutralPlayer() && yes)
+	if (this != ThePlayerList->bfme_neutral_player() && yes)
 	{
 		NameKeyType key_AutoDepositUpdate = NAMEKEY("AutoDepositUpdate");
 		AutoDepositUpdate *adu = (AutoDepositUpdate *)obj->findUpdateModule(key_AutoDepositUpdate);
