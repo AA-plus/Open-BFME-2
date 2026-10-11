@@ -633,6 +633,7 @@ Code/Libraries/Source/WWVegas/WW3D2/pot.cpp,-G7,2,2,region default loses rows
 Code/Libraries/Source/WWVegas/WW3D2/ringobj.cpp,,9,1,region default loses rows
 Code/Libraries/Source/WWVegas/WW3D2/streak.cpp,-arch:SSE -G7,60,19,region default loses rows
 Code/Libraries/Source/WWVegas/WW3D2/streakRender.cpp,-arch:SSE -G7,20,8,region default loses rows
+Code/Libraries/Source/WWVegas/WW3D2/texturepacker_area.cpp,-O1 -G7 -arch:SSE,1,1,region default loses rows
 Code/Libraries/Source/WWVegas/WW3D2/w3d_util.cpp,-arch:SSE,24,1,region default loses rows
 Code/Libraries/Source/WWVegas/WWLib/BadAllocDestructor.cpp,-Od,2,2,region default loses rows
 Code/Libraries/Source/WWVegas/WWLib/Rva00025B00Cluster.cpp,-Od,2,2,region default loses rows
