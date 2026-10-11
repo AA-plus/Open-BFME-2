@@ -1,13 +1,18 @@
 // cl: /DNDEBUG /MD
-// ?rva005E49FD@@YAXHHHH@Z @0x005E49FD 30B cdecl forwarder.
-// Takes (a, b, c, d), allocates a bool tmp, calls pinned 0x005E4817
-// (cdecl, 5 args: bool* + 4 ints), cleans 0x14, returns void.
-// Address-derived; callee identity unproven (partition bank is 4-arg,
-// this site passes 5 with a bool* head).
-void __cdecl Rva005E4817Forward(int a, int b, int c, int d, bool *tmp);
+// Native5E49FD..5E4A1B is the complete30B cdecl partition forwarder.
+// Caller5E4E55 uses the returned EAX as an iterator into its int vector.
+// The four-byte comparator carries the caller's army context. The fifth
+// bool* is passed last and is unused by the owned75B partition provider.
+// Original function names remain unknown; remove the former void alias pin.
+struct Rva005E4300Context;
+class Rva005E4300Cmp {
+public: char operator()(int,int) const;
+private: Rva005E4300Context *m_context;
+};
+int *__cdecl Rva005E4817Partition(int *,int *,Rva005E4300Cmp,int,bool *);
 
-void __cdecl rva005E49FD(int a, int b, int c, int d)
+int *__cdecl rva005E49FD(int *first,int *last,Rva005E4300Cmp comp,int pivot)
 {
 	bool tmp;
-	Rva005E4817Forward(a, b, c, d, &tmp);
+	return Rva005E4817Partition(first,last,comp,pivot,&tmp);
 }
