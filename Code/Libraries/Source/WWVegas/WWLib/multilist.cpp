@@ -10,6 +10,9 @@
 #include "multilist.h"
 #include "wwmemlog.h"
 
+// Retail keeps one MultiListNodeClass pool allocator (0x00610680); this unit calls it.
+template <> MultiListNodeClass *ObjectPoolClass<MultiListNodeClass, 256>::Allocate_Object_Memory(void);
+
 /*
 ** Delcare the pool for ListNodes
 */

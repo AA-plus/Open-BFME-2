@@ -60,6 +60,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include <string.h>
 #include "nstrdup.h"
 
+// Retail keeps one HAnimComboDataClass pool allocator (0x001963A0); this unit calls it.
+template <> HAnimComboDataClass *ObjectPoolClass<HAnimComboDataClass, 256>::Allocate_Object_Memory(void);
+
 // BFME1's hanim.h inserts _bfme_hanim_fade before Get_Num_Pivots, while the
 // BFME2 retail calls in this TU use Get_Num_Pivots at vtable +0x34 and
 // Is_Node_Motion_Present at +0x3C. HRawLoadW3D.cpp uses the same target-side
