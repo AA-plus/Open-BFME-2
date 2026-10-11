@@ -1,12 +1,12 @@
-// ?v7@Rva005AC7E1@@UAEXXZ
-// partial score=0.97 date=2026-10-04
-// cl: /O1 /G7 /MD /GX /DNDEBUG /Ireference/shims/bfme2_ascii
+// ?update@AIRingHeroTactic@@UAEXXZ
+// partial score=0.98 date=2026-10-11
+// cl: /MD /GX /DNDEBUG /Ireference/shims/bfme2_ascii
 //
 // The "AIRingHeroTactic" skirmish-AI tactic (vtable 0x008723E8; ctor
 // 0x005AC7EC in Rva004ECECDTacticCtors.cpp, dtor 0x005AC7E1 and ??_G, slot 9
 // 0x005AC8F2 in Rva004ECECDTacticCreate.cpp). Base chain, all
-// address-derived: Rva005DCC24 over Rva005DC73C over the AITactic.cpp object
-// Rva004ECECD. Layout: +0x58 the ring hero's id, +0x5C, +0x60 "escorting",
+// address-derived: Rva005DCC24 over AITacticOffensive over the AITactic.cpp object
+// AITactic. Layout: +0x58 the ring hero's id, +0x5C, +0x60 "escorting",
 // +0x64 the escort. The owner's TheSkirmishAIManager record keeps
 // AIRingHeroTactic_IsRunning and AIRingHeroTactic_NextLogicFrameRun.
 //
@@ -17,6 +17,7 @@
 //   0x005AC866  slot 2: forget the hero and clear both keys
 //   0x005AC924  slot 3: set the running key, then the AITactic's slot 3
 //   0x005ACBE3  slot 6: start: find the hero, then 0x005AC98A
+//   0x005ACBFF  slot 7: escort the hero
 //   0x005ACA2D  find the owner's ring hero (template +0x121 bit 5) into +0x58
 #include "ascii_string.h"
 
@@ -254,26 +255,26 @@ public:
 };
 extern Rva002A8F24 *g_00DFEEF8;
 
-class Rva004ECECD
+class AITactic
 {
 public:
-	virtual ~Rva004ECECD();
-	virtual bool appliesTo(void *request);
-	virtual void v2();
-	virtual bool v3(void *unit, int count);
+	virtual ~AITactic();
+	virtual bool canRun(void *request);
+	virtual void cleanUp();
+	virtual bool initializeTeamTemplate(void *unit, int count);
 	virtual void v4();
 	virtual void v5();
-	virtual void v6();
-	virtual void v7();
+	virtual void run();
+	virtual void update();
 	virtual void v8();
-	virtual Rva004ECECD *create();
-	void rva004ED748(int a, int b);
+	virtual AITactic *create();
+	void end(bool a, bool b);
 };
 
-class Rva005DC73C : public Rva004ECECD
+class AITacticOffensive : public AITactic
 {
 public:
-	virtual ~Rva005DC73C();
+	virtual ~AITacticOffensive();
 	char m_pad04[0x10 - 4];
 	bool m_running;			// +0x10
 	char m_pad11[0x24 - 0x11];
@@ -281,17 +282,18 @@ public:
 	char m_pad28[0x58 - 0x28];
 };
 
-class Rva005AC7E1 : public Rva005DC73C
+class AIRingHeroTactic : public AITacticOffensive
 {
 public:
-	virtual ~Rva005AC7E1();
-	virtual bool appliesTo(void *request);
-	virtual void v2();
-	virtual bool v3(void *unit, int count);
-	virtual void v6();
-	virtual void v7();
-	bool rva005AC98A();
-	bool rva005ACA2D();
+	virtual ~AIRingHeroTactic();
+	virtual bool canRun(void *request);
+	virtual void cleanUp();
+	virtual bool initializeTeamTemplate(void *unit, int count);
+	virtual void run();
+	virtual void update();
+	bool weHaveGollum();
+	bool rva005ACA92();
+	bool enemyHasRingHeroUpgrade();
 private:
 	ObjectID m_hero;	// +0x58
 	int m_5C;		// +0x5C
@@ -300,7 +302,7 @@ private:
 	Object *m_escort;	// +0x64
 };
 
-void Rva005AC7E1::v2()
+void AIRingHeroTactic::cleanUp()
 {
 	m_hero = INVALID_ID;
 	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(m_owner);
@@ -309,14 +311,14 @@ void Rva005AC7E1::v2()
 	m_5C = 0;
 }
 
-bool Rva005AC7E1::v3(void *unit, int count)
+bool AIRingHeroTactic::initializeTeamTemplate(void *unit, int count)
 {
 	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(m_owner);
 	record->rva002C717E(AsciiString("AIRingHeroTactic_IsRunning"), 1);
-	return Rva004ECECD::v3(unit, count);
+	return AITactic::initializeTeamTemplate(unit, count);
 }
 
-bool Rva005AC7E1::rva005ACA2D()
+bool AIRingHeroTactic::weHaveGollum()
 {
 	IntMap *objects = *(IntMap **)g_00DFEEF8->rva002A8F24(m_owner);
 	for (unsigned int i = 0; i < objects->bucket_count(); ++i) {
@@ -330,7 +332,7 @@ bool Rva005AC7E1::rva005ACA2D()
 	return false;
 }
 
-bool Rva005AC7E1::appliesTo(void *)
+bool AIRingHeroTactic::canRun(void *)
 {
 	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(m_owner);
 	int running = record->rva002C7196(AsciiString("AIRingHeroTactic_IsRunning"));
@@ -338,7 +340,7 @@ bool Rva005AC7E1::appliesTo(void *)
 	if (!next) {
 		record->rva002C717E(AsciiString("AIRingHeroTactic_NextLogicFrameRun"), g_Va00DBA4E4 * 5);
 	} else if (!running && TheGameLogic->getFrame() >= next) {
-		if (rva005ACA2D() && rva005AC98A())
+		if (weHaveGollum() && enemyHasRingHeroUpgrade())
 			return true;
 		int later = record->rva002C7196(AsciiString("AIRingHeroTactic_NextLogicFrameRun"));
 		record->rva002C717E(AsciiString("AIRingHeroTactic_NextLogicFrameRun"), g_Va00DBA4E4 * 5 + later);
@@ -346,41 +348,58 @@ bool Rva005AC7E1::appliesTo(void *)
 	return false;
 }
 
-void Rva005AC7E1::v6()
+void AIRingHeroTactic::run()
 {
 	m_escort = 0;
 	m_running = true;
 	m_escorting = false;
-	rva005ACA2D();
-	rva005AC98A();
+	weHaveGollum();
+	enemyHasRingHeroUpgrade();
 }
 
-void Rva005AC7E1::v7()
+// 0x005ACA92 5B, directly after the body it enters (tail jump into weHaveGollum); no referencing site found in
+// this pass; address-named.
+bool AIRingHeroTactic::rva005ACA92()
+{
+	return weHaveGollum();
+}
+
+// 0x005ACBFF 229B, slot 7: while running, until the hero escorts, hand it a
+// command (rowed 0x00352ECA) toward the owner's first suitable object
+// (template +0x120 bit 2, not +0x94 bit 0, not +0x438 bit 0) and remember it;
+// once escorting, when the hero's AI (+0x258) idles, send it to the escort
+// again (rowed 0x0026C347) and end the tactic (rowed AITactic::end). A
+// missing hero also ends it.
+// NEAR MISS (2026-10-11): 229B, identical but for save placement: retail
+// pushes EDI before the m_running branch and only EBX after it; cl stages
+// both after it. Inlined test helper, else/if scopes, a running local and
+// an assignment-in-condition hero lookup all leave it unchanged.
+void AIRingHeroTactic::update()
 {
 	if (!m_running)
 		return;
-	Object *hero = TheGameLogic->findObjectByID(m_hero);
-	if (hero) {
-		if (!m_escorting) {
-			if (!m_escort) {
-				Rva005AC7E1Holder *holder = (Rva005AC7E1Holder *)g_00DFEEF8->rva002A8F24(m_owner);
-				Rva005AC7E1IDs *ids = (Rva005AC7E1IDs *)holder->m_08->get();
-				for (ObjectID *it = ids->m_begin; it != ids->m_end; ++it) {
-					Object *obj = TheGameLogic->findObjectByID(*it);
-					if (obj && (obj->m_04->m_120 & 4) && !(obj->m_94 & 1) && !(obj->m_438 & 1)) {
-						((Rva00352ECA *)&hero->m_ai->m_commands)->rva00352ECA(obj, CMD_FROM_PLAYER);
-						m_escort = obj;
-						m_escorting = true;
+		Object *hero = TheGameLogic->findObjectByID(m_hero);
+		if (hero) {
+			if (!m_escorting) {
+				if (!m_escort) {
+					Rva005AC7E1Holder *holder = (Rva005AC7E1Holder *)g_00DFEEF8->rva002A8F24(m_owner);
+					Rva005AC7E1IDs *ids = (Rva005AC7E1IDs *)holder->m_08->get();
+					for (ObjectID *it = ids->m_begin; it != ids->m_end; ++it) {
+						Object *obj = TheGameLogic->findObjectByID(*it);
+						if (obj && (obj->m_04->m_120 & 4) && !(obj->m_94 & 1) && !(obj->m_438 & 1)) {
+							((Rva00352ECA *)&hero->m_ai->m_commands)->rva00352ECA(obj, CMD_FROM_PLAYER);
+							m_escort = obj;
+							m_escorting = true;
+						}
 					}
 				}
+				return;
 			}
-			return;
+			if (!m_escort)
+				return;
+			if (!hero->m_ai->isIdle())
+				return;
+			hero->m_ai->m_commands.rva0026C347(m_escort, CMD_FROM_PLAYER);
 		}
-		if (!m_escort)
-			return;
-		if (!hero->m_ai->isIdle())
-			return;
-		hero->m_ai->m_commands.rva0026C347(m_escort, CMD_FROM_PLAYER);
-	}
-	rva004ED748(0, 0);
+		end(false, false);
 }
