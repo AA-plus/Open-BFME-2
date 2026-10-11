@@ -1,4 +1,4 @@
-// ?Rva004F6A1A@@YA?AVRva004F6318Entry@@PBHABVRva004F6093Holder@@@Z
+// ?Rva004F6A1A@@YA?AVRva004F69C3@@PBHABVRva004F6093Holder@@@Z
 // cl: /O1 /G7 /arch:SSE /MD /EHsc
 // Retail 0x004F6A1A..0x004F6A35: hidden result at [ebp+8], key at
 // [ebp+0xc], holder at [ebp+0x10]. Calls the rowed entry constructor
@@ -8,10 +8,13 @@
 // holder is one pointer, as in the rowed 0x004F6093 copy-constructor view.
 // The factory and opaque class names are structural labels, not retail names.
 class Rva004F6093Holder {public:Rva004F6093Holder(const Rva004F6093Holder&);~Rva004F6093Holder();void *referent;};
-class Rva004F6318Entry {
-public:Rva004F6318Entry(const int*,const Rva004F6093Holder&);
+struct Rva004F69C3 {
+public:Rva004F69C3(const int*,const Rva004F6093Holder&);
 private:int key;Rva004F6093Holder holder;
 };
-Rva004F6318Entry Rva004F6A1A(const int*key,const Rva004F6093Holder &holder) {
- return Rva004F6318Entry(key,holder);
+Rva004F69C3 Rva004F6A1A(const int*key,const Rva004F6093Holder &holder) {
+ return Rva004F69C3(key,holder);
 }
+
+// The entry constructor/factory and the existing 4F69C3 destructor own
+// one eight-byte pair. Native 4F9C8E EH cleanup proves the same lifetime.
