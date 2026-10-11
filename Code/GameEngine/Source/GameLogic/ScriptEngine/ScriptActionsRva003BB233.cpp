@@ -29,8 +29,20 @@ class Rva002A9BF2
 {
 public:
 	void rva002A9CCA(int val);
+};
+
+// LINK: 0x2A9DEC and 0x2A9F35 are rowed on their own owner classes (Rva002A9DEC; Rva002A9F17 takes the
+// argument as a pointer); bind them through casts of the same player pointer.
+class Rva002A9DEC
+{
+public:
 	void rva002A9DEC(int val);
-	void rva002A9F35(int val);
+};
+
+class Rva002A9F17
+{
+public:
+	void rva002A9F35(const void *val);
 };
 
 void __stdcall Rva003BB233Set(const AsciiString &name, int val)
@@ -53,7 +65,7 @@ void __stdcall Rva003BB163Set(const AsciiString &name, int val)
 	do {
 		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
 		if (player)
-			((Rva002A9BF2 *)player)->rva002A9DEC(val);
+			((Rva002A9DEC *)player)->rva002A9DEC(val);
 	} while (mask != 0);
 }
 
@@ -65,6 +77,6 @@ void __stdcall Rva003BC8AFSet(const AsciiString &name, int val)
 	do {
 		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
 		if (player)
-			((Rva002A9BF2 *)player)->rva002A9F35(val);
+			((Rva002A9F17 *)player)->rva002A9F35((const void *)val);
 	} while (mask != 0);
 }
