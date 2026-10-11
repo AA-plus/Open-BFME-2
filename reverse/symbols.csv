@@ -11840,7 +11840,6 @@ name,address,notes
 ?rva005A910E@Rva005A9562@@QAEPAURva0050542BTarget@@XZ,0x005A910E,current target of the +0x04 Rva005A9562 (rowed under the Player* spelling); REL32 at 0x00505653
 ?rva005A91BE@Rva005A9562@@QAEXPAVXfer@@@Z,0x005A91BE,xfer of the +0x04 Rva005A9562; REL32 at 0x005058CA in Rva0050542B::xfer
 ?rva005A9693@Rva005A9562@@QAEXXZ,0x005A9693,reset of the +0x04 Rva005A9562; REL32 at 0x005058FD
-?rva005A9824@Rva005A9562@@QAEXXZ,0x005A9824,update of the +0x04 Rva005A9562; REL32 at 0x00505917
 ?rva005AA2D9@Rva0015334F@@QAEXPAURva005AA55DRecord@@PBUCoord3D@@1@Z,0x005AA2D9,FlankAttack route planner from a start to an end point; REL32 at 0x005AA5FB in the FlankAttack slot 6
 ?rva005AA663@Rva005AA860@@QAEXXZ,0x005AA663,SimpleExpansion stage 1 step: head for the +0x20 record point (0x004ED342); folded with the byte-identical SimpleAttack slot 6 at this address; REL32 at 0x005AAB74 in the SimpleExpansion slot 7
 ?rva005AC294@Rva005AB7E5@@QAE_NXZ,0x005AC294,"StructureCreep: pick a creep structure name and start its build order at a free spot; REL32 in StructureCreep slot 7 0x005AC549 (body banked 0.85)"
@@ -17214,3 +17213,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?_M_create_node@?$list@PAVGameWindow@@V?$allocator@PAVGameWindow@@@_STL@@@_STL@@IAEPAU?$_List_node@PAVGameWindow@@@2@ABQAVGameWindow@@@Z,0x000B6447,native window-pointer insertion; fold-proof=Code/GameEngine/Source/GameClient/GUI/GameWindowManagerScript.cpp; STLport 4.5.3 whole-body and every-owner relocation proof
 ?insert@?$list@PAVGameWindow@@V?$allocator@PAVGameWindow@@@_STL@@@_STL@@QAE?AU?$_List_iterator@PAVGameWindow@@U?$_Nonconst_traits@PAVGameWindow@@@_STL@@@2@U32@ABQAVGameWindow@@@Z,0x005925E2,native window-pointer insertion; fold-proof=Code/GameEngine/Source/GameClient/GUI/GameWindowManagerScript.cpp; STLport 4.5.3 whole-body and every-owner relocation proof
 ?parseWindow@@YAPAVGameWindow@@PAVFile@@PAD@Z,0x00316E8F,Window script parser entry 316E8F..31721D; WB same-file parseWindow lead and native WINDOW caller 317AB9 pushes File and buffer; recursive child parser agrees; body remains unrowed
+?rva005A92DE@Rva005A9562@@QAEMPAX@Z,0x005A92DE,Native231B update5A9824 calls5A92DE at5A98A3 with the PlayerList-returned player; complete350B target and existing bank prove thiscall float return RET4 with owner pointer0. WB1525F70 gives AIEnemyManager priority-distance lead; neutral existing bank name and void-pointer ABI retained; original identity not asserted.

@@ -114,13 +114,14 @@ public:
 // 0x004EDF03 then 0x004ECE1C from the 0x00505924 pass (both in the
 // AITactic.cpp range).
 
+class AIEnemyManager { public: void update(); };
+
 class Rva005A9562
 {
 public:
 	Rva005A9562(void *owner);
 	~Rva005A9562();
 	void rva005A9693();
-	void rva005A9824();
 	void rva005A91BE(Xfer *xfer);
 	struct Rva0050542BTarget *rva005A910E();
 private:
@@ -356,7 +357,7 @@ void AITargetChooser::rva005058F7()
 
 void AITargetChooser::rva00505911()
 {
-	m_04->rva005A9824();
+	((AIEnemyManager *)m_04)->update();
 	updateTargets();
 }
 
