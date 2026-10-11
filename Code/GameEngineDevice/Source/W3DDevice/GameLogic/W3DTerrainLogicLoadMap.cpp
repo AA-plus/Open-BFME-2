@@ -89,8 +89,8 @@ public:
 		if (--m_numRefs == 0)
 			Delete_This();
 	}
-	Int getXExtent() { return m_width; }
-	Int getYExtent() { return m_height; }
+	__declspec(dllimport) __forceinline Int getXExtent() { return m_width; }
+	__declspec(dllimport) __forceinline Int getYExtent() { return m_height; }
 	UnsignedShort getHeight(Int x, Int y) { return ((BoundedShortGrid *)this)->rva00062A58(x, y); }
 
 	Int m_numRefs;

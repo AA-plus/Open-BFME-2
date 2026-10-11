@@ -27,7 +27,7 @@ public:
 class ModuleDataBase
 {
 public:
-	ModuleDataBase() {}
+	__declspec(dllimport) __forceinline ModuleDataBase() {}
 	~ModuleDataBase();
 };
 

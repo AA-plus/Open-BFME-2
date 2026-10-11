@@ -13,7 +13,7 @@ class INI
 {
 public:
 	void initFromINI(void *what, const FieldParse *table);
-	INILoadType getLoadType() const { return m_loadType; }
+	__declspec(dllimport) __forceinline INILoadType getLoadType() const { return m_loadType; }
 	static void parseMiscEvaData(INI *ini);
 
 private:

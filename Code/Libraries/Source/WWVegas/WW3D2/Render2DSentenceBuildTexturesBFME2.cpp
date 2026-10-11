@@ -34,7 +34,7 @@ class TextureBaseClass { public: void Release_Ref(); };
 class TextureClass : public TextureBaseClass { };
 template<class T> class RefCountPtr {
 public:
- RefCountPtr():texture(0) {}
+ __declspec(dllimport) __forceinline RefCountPtr():texture(0) {}
  ~RefCountPtr(){if(texture)texture->Release_Ref();}
  RefCountPtr &operator=(const RefCountPtr &p){
   if(p.texture)++*reinterpret_cast<unsigned short *>(reinterpret_cast<char *>(p.texture)+4);

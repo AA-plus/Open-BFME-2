@@ -18,7 +18,7 @@ struct Rva006D0280 {
 };
 class Rva006D07E0Key {
 public:
- Rva006D07E0Key(const Rva006D07E0Key &other) {
+ __declspec(dllimport) __forceinline Rva006D07E0Key(const Rva006D07E0Key &other) {
   Rva006D0280 *p=other.m_object;
   m_object=p;
   if(p) ++p->m_useCount;

@@ -78,7 +78,7 @@ extern ShareBufferClass<unsigned char> *g_00E065D4;
 class ShaderClass
 {
 public:
-	ShaderClass(const ShaderClass &s) { ShaderBits = s.ShaderBits; }
+	__declspec(dllimport) __forceinline ShaderClass(const ShaderClass &s) { ShaderBits = s.ShaderBits; }
 	ShaderClass &operator=(const ShaderClass &s) { ShaderBits = s.ShaderBits; return *this; }
 	void Enable_Fog(const char *source);
 

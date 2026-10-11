@@ -21,7 +21,7 @@ private:
 class FunctorNotSet : public exception
 {
 public:
-	FunctorNotSet() {}
+	__declspec(dllimport) __forceinline FunctorNotSet() {}
 };
 struct Rva005D388BValue
 {

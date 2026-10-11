@@ -97,7 +97,7 @@ enum ObjectID
 class GameLogic
 {
 public:
-	unsigned int getFrame() { return m_frame; }
+	__declspec(dllimport) __forceinline unsigned int getFrame() { return m_frame; }
 	Object *findObjectByID(ObjectID id);
 
 private:

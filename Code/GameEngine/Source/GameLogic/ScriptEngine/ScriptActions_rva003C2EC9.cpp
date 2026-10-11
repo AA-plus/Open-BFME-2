@@ -23,7 +23,7 @@ template <int N>
 class BitFlags
 {
 public:
-	BitFlags() {}
+	__declspec(dllimport) __forceinline BitFlags() {}
 	BitFlags(const BitFlags &other);
 	unsigned m_words[7];
 };

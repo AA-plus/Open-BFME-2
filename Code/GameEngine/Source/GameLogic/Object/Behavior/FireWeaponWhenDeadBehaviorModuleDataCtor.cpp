@@ -33,7 +33,7 @@ private:
 class BehaviorModuleData
 {
 public:
-	BehaviorModuleData() {}
+	__declspec(dllimport) __forceinline BehaviorModuleData() {}
 	~BehaviorModuleData();
 };
 

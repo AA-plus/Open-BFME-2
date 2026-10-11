@@ -12,7 +12,7 @@ struct BfmeE16 { float x, y, z, w; };
 class __declspec(novtable) BFME2NativeNetwork
 {
 public:
-	__forceinline BFME2NativeNetwork() { baseConstruct(); }
+	__declspec(dllimport) __forceinline BFME2NativeNetwork() { baseConstruct(); }
 	virtual ~BFME2NativeNetwork() { _ReadWriteBarrier(); }
 	void baseConstruct();
 private:

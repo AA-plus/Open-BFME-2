@@ -143,7 +143,7 @@ class Parameter
 {
 public:
 	const AsciiString &getString() const { return m_string; }
-	int getInt() const { return m_int; }
+	__declspec(dllimport) __forceinline int getInt() const { return m_int; }
 	unsigned char m_beforeInt[8];
 	int m_int;		// +0x08
 	float m_real;

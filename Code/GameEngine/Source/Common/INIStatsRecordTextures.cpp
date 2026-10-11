@@ -61,7 +61,7 @@ template<class T> class VectorClass
 {
 public:
 	VectorClass(int size = 0, const T *array = 0);
-	virtual ~VectorClass() { VectorClass<T>::Clear(); }
+	__declspec(dllimport) __forceinline virtual ~VectorClass() { VectorClass<T>::Clear(); }
 	virtual bool operator==(const VectorClass<T> &) const;
 	virtual bool Resize(int size, const T *array = 0);
 	virtual void Clear();

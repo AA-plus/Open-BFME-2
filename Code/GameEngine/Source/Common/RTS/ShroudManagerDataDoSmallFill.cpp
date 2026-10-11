@@ -203,7 +203,7 @@ bool ShroudManager::Data::DoSmallFill(float x, float y, float radius)
 extern "C" __declspec(dllimport) double __cdecl ceil(double);
 struct UpdateOffset { UpdateOffset():x(0),y(0),z(0){} float x,y,z; };
 struct GeometryShape {
- GeometryShape():type(0),height(1),major(1),minor(1),enabled(true),unmodelled21(true){}
+ __declspec(dllimport) __forceinline GeometryShape():type(0),height(1),major(1),minor(1),enabled(true),unmodelled21(true){}
  int type;float height,major,minor;UpdateOffset offset;AsciiString name;
  bool enabled,unmodelled21;
 };

@@ -24,7 +24,7 @@ extern Rva005E16DA g_rva00E0675C;
 class Rva005E91A9Base
 {
 public:
-    Rva005E91A9Base() : m_04(0) {}
+    __declspec(dllimport) __forceinline Rva005E91A9Base() : m_04(0) {}
     virtual ~Rva005E91A9Base() {}
 protected:
     int m_04;

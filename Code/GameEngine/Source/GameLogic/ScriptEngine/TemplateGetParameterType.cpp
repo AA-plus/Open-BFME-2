@@ -67,7 +67,7 @@ private:
 class Template
 {
 public:
-	int getNumParameters() const throw() { return m_numParameters; }
+	__declspec(dllimport) __forceinline int getNumParameters() const throw() { return m_numParameters; }
 	Parameter::ParameterType getParameterType(int ndx) const;
 
 private:

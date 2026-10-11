@@ -52,7 +52,7 @@ public:
 	{
 		ALLOW_INVALID_POSITION = 1
 	};
-	void setAllowInvalidPosition(Bool allow) { setFlag(ALLOW_INVALID_POSITION, allow); }
+	__declspec(dllimport) __forceinline void setAllowInvalidPosition(Bool allow) { setFlag(ALLOW_INVALID_POSITION, allow); }
 private:
 	void setFlag(LocoFlag f, Bool b)
 	{

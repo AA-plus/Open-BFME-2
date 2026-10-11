@@ -288,7 +288,7 @@ public:
 	AsciiString getMap( void ) const;
 	GameSlot *getSlot( Int slotNum );
 	void enterGame( void );
-	Bool isGameInProgress( void ) const { return m_inProgress; }
+	__declspec(dllimport) __forceinline Bool isGameInProgress( void ) const { return m_inProgress; }
 	void setGameInProgress( Bool inProgress ) { m_inProgress = inProgress; }
 
 private:

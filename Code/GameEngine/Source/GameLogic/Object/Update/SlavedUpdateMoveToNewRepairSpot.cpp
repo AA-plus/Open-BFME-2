@@ -82,8 +82,8 @@ public:
 		PRECISE_Z_POS = 3,
 		ULTRA_ACCURATE = 6
 	};
-	void setUsePreciseZPos(bool u) { setFlag(PRECISE_Z_POS, u); }
-	void setUltraAccurate(bool u) { setFlag(ULTRA_ACCURATE, u); }
+	__declspec(dllimport) __forceinline void setUsePreciseZPos(bool u) { setFlag(PRECISE_Z_POS, u); }
+	__declspec(dllimport) __forceinline void setUltraAccurate(bool u) { setFlag(ULTRA_ACCURATE, u); }
 private:
 	void setFlag(LocoFlag f, bool b)
 	{

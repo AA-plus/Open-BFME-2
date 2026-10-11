@@ -86,7 +86,7 @@ public:
 class Matrix3D
 {
 public:
-	Matrix3D() {}
+	__declspec(dllimport) __forceinline Matrix3D() {}
 	void buildTransformMatrix(const Vector3 &pos, const Vector3 &dir);
 private:
 	float m_row[3][4];

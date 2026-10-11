@@ -67,7 +67,7 @@ public:
 class Matrix3D
 {
 public:
-	__forceinline explicit Matrix3D( bool init ) { if (init) Make_Identity(); }
+	__declspec(dllimport) __forceinline explicit Matrix3D( bool init ) { if (init) Make_Identity(); }
 	__forceinline void Make_Identity( void )
 	{
 		Row[0].Set(1.0f,0.0f,0.0f,0.0f);

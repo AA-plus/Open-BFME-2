@@ -22,8 +22,8 @@ public:
 	unsigned char pad1[0x94 - 0x2C];
 	MeshPolygonCount *PolygonCount;		// +0x94
 	int Get_Vertex_Count() const { return VertexCount; }
-	int Get_Pass_Count() const { return PassCount; }
-	int Get_Polygon_Count() const { return PolygonCount->Count; }
+	__declspec(dllimport) __forceinline int Get_Pass_Count() const { return PassCount; }
+	__declspec(dllimport) __forceinline int Get_Polygon_Count() const { return PolygonCount->Count; }
 };
 
 class VertexBufferClass

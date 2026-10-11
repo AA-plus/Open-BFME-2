@@ -193,7 +193,7 @@ public:
     void clearPrivateStatus(unsigned int bits) { m_privateStatus &= ~bits; }
     BodyModuleInterface *getBodyModule() const { return m_body; }
     PhysicsBehavior *getPhysics() const { return m_physics; }
-    void setSafeOcclusionFrame(unsigned int frame) { m_safeOcclusionFrame = frame; }
+    __declspec(dllimport) __forceinline void setSafeOcclusionFrame(unsigned int frame) { m_safeOcclusionFrame = frame; }
     unsigned char m_pad48[0x10C - 0x44];
     ConditionBits m_conditionBits; // +0x10C
     unsigned char m_pad11C[0x254 - 0x11C];

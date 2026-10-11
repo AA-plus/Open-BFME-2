@@ -105,7 +105,7 @@ class MeshLoadContextClass {
     unsigned char targetContextGapBeforeTextures[0x18];
     DynamicVectorClass<BfmeHandleCX> Textures;
     int Vertex_Material_Count() { return VertexMaterials.Count(); }
-    int Texture_Count() { return Textures.Count(); }
+    __declspec(dllimport) __forceinline int Texture_Count() { return Textures.Count(); }
     int Shader_Count() { return Shaders.Count(); }
     BfmeHandleCX Peek_Legacy_Texture(int index);
     ShaderClass Peek_Legacy_Shader(int legacy_material_index) {

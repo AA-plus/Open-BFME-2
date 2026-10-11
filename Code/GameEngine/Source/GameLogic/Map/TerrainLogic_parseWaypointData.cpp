@@ -47,7 +47,7 @@ public:
 	// out-of-line via pins; the rest fold to direct reads.
 	UnsignedInt getID(void) const { return (UnsignedInt)m_id; }
 	Waypoint *getNext(void) const { return m_next; }
-	Int getNumLinks(void) const { return m_numLinks; }
+	__declspec(dllimport) __forceinline Int getNumLinks(void) const { return m_numLinks; }
 	Waypoint *getLink(Int ndx) const;
 	void addLink(Waypoint *other);
 	Bool getBiDirectional(void) const { return m_biDirectional; }

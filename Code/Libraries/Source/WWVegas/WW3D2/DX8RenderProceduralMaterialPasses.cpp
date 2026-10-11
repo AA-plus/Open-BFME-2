@@ -30,7 +30,7 @@ class RefCountClass
 {
 public:
     void Add_Ref() { ++references; }
-    void Release_Ref() { if (--references == 0) Delete_This(); }
+    __declspec(dllimport) __forceinline void Release_Ref() { if (--references == 0) Delete_This(); }
     virtual void Delete_This();
 protected:
     virtual ~RefCountClass();

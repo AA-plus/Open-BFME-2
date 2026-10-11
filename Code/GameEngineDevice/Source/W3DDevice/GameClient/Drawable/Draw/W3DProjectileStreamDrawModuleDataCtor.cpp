@@ -26,7 +26,7 @@ extern "C" const void *const vtbl_00BCDF18[];  // ??_7W3DProjectileStreamDrawMod
 class UpdateModuleData
 {
 public:
-	UpdateModuleData() {}
+	__declspec(dllimport) __forceinline UpdateModuleData() {}
 	~UpdateModuleData();
 };
 

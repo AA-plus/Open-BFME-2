@@ -64,7 +64,7 @@ class ModuleInfo
 		unsigned char m_bytes[0x14];
 	};
 public:
-	Int getCount() const { return m_end - m_begin; }
+	__declspec(dllimport) __forceinline Int getCount() const { return m_end - m_begin; }
 	const ModuleData *getNthData(Int i) const;
 private:
 	Nugget *m_begin;

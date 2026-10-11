@@ -30,7 +30,7 @@
 class EmptyBase
 {
 public:
-	EmptyBase() {}
+	__declspec(dllimport) __forceinline EmptyBase() {}
 	virtual void *deleteInstance(int pool);
 protected:
 	~EmptyBase();

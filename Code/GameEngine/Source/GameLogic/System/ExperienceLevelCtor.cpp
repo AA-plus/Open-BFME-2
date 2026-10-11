@@ -57,7 +57,7 @@ struct LevelUpFXInfo { const FXList *fx; AsciiString boneName; };
 class __declspec(novtable) Rva001E3624
 {
 public:
-    Rva001E3624() : m_next(0), m_override(false), m_index(-1) {}
+    __declspec(dllimport) __forceinline Rva001E3624() : m_next(0), m_override(false), m_index(-1) {}
     virtual ~Rva001E3624();
     Rva001E3624 *m_next;
     bool m_override;

@@ -139,7 +139,7 @@ public:
 	void reverse() { ((Rva001DBDA4 *)this)->rva001DBDC6(); }
 	void skip() { ((Rva001DBDA4 *)this)->rva001DBE34(); }
 	void bfmeAfterSkip() { ((Rva001DBDA4 *)this)->rva001DBE17(); }
-	int getTotalFrames() { return ((Rva001DBDA4 *)this)->rva001DBDA4(); }
+	__declspec(dllimport) __forceinline int getTotalFrames() { return ((Rva001DBDA4 *)this)->rva001DBDA4(); }
 	Bool isReversed() { return m_directionMultiplier < 0; }
 	Bool isFireOnce() { return m_fireOnce; }
 	char m_pad[4];

@@ -37,7 +37,7 @@ struct BfmeResetAnyRef
 struct BfmeResetShaderRef
 {
 	TextureBaseClass *pointer;
-	BfmeResetShaderRef() : pointer(0) {}
+	__declspec(dllimport) __forceinline BfmeResetShaderRef() : pointer(0) {}
 	~BfmeResetShaderRef() { if (pointer) pointer->Release_Ref(); }
 	BfmeResetShaderRef &operator=(const BfmeResetAnyRef &rhs);
 };

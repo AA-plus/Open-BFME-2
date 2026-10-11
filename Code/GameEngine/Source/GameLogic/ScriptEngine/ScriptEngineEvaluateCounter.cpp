@@ -22,7 +22,7 @@ public:
 	{
 		LESS_THAN, LESS_EQUAL, EQUAL, GREATER_EQUAL, GREATER, NOT_EQUAL
 	};
-	int getInt() const { return m_int; }
+	__declspec(dllimport) __forceinline int getInt() const { return m_int; }
 	const AsciiString &getString() const { return m_string; }
 
 private:

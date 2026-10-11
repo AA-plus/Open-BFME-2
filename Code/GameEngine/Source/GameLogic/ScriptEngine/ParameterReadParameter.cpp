@@ -62,7 +62,7 @@ public:
 	Parameter(ParameterType type, Int val = 0);
 	static Parameter *ReadParameter(DataChunkInput &file);
 
-	ParameterType getParameterType() const { return m_paramType; }
+	__declspec(dllimport) __forceinline ParameterType getParameterType() const { return m_paramType; }
 
 protected:
 	void setCoord3D(const Coord3D *pLoc);

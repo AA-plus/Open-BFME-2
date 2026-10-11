@@ -66,7 +66,7 @@ public:
 class WeaponTemplate
 {
 public:
-	Int getClipSize() const { return m_clipSize; }
+	__declspec(dllimport) __forceinline Int getClipSize() const { return m_clipSize; }
 	Int getClipReloadTime(const WeaponBonus &bonus) const;
 	bool getFlag80() const { return m_flag80; }
 private:

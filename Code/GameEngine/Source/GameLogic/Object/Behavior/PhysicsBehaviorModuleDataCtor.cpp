@@ -23,7 +23,7 @@ extern "C" const void *const vtbl_0084ED70[];  // ??_7PhysicsBehaviorModuleData@
 class UpdateModuleData
 {
 public:
-	UpdateModuleData() {}
+	__declspec(dllimport) __forceinline UpdateModuleData() {}
 	~UpdateModuleData();
 };
 

@@ -222,7 +222,7 @@ template <int Bits>
 class BitFlags
 {
 public:
-	BitFlags() { memset(m_words, 0, sizeof(m_words)); }
+	__declspec(dllimport) __forceinline BitFlags() { memset(m_words, 0, sizeof(m_words)); }
 	void set(unsigned int i) { m_words[i >> 5] |= 1u << (i & 0x1F); }
 private:
 	unsigned int m_words[4];

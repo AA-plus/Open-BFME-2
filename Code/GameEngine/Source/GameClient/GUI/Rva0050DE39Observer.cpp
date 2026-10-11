@@ -189,7 +189,7 @@ template <int N>
 class BitFlags
 {
 public:
-	BitFlags() { memset(m_words, 0, sizeof(m_words)); }
+	__declspec(dllimport) __forceinline BitFlags() { memset(m_words, 0, sizeof(m_words)); }
 	BitFlags(const BitFlags &other);
 	void clear() { memset(m_words, 0, sizeof(m_words)); }
 	void set(int idx) { m_words[idx >> 5] |= 1u << (idx & 31); }

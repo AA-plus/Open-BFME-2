@@ -19,7 +19,7 @@ protected:
 class TextureClass : public TextureBaseClass
 {
 public:
-    void Add_Ref() { ++NumRefs; }
+    __declspec(dllimport) __forceinline void Add_Ref() { ++NumRefs; }
 };
 
 template <class T> class RefCountPtr

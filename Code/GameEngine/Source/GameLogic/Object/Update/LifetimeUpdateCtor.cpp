@@ -26,7 +26,7 @@ class GameLogic
 {
 public:
 	UnsignedInt getFrame() const { return m_frame; }
-	Int getHulkMaxLifetimeOverride() const { return m_hulkMaxLifetimeOverride; }
+	__declspec(dllimport) __forceinline Int getHulkMaxLifetimeOverride() const { return m_hulkMaxLifetimeOverride; }
 
 private:
 	unsigned char m_pad00[0x40];

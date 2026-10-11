@@ -241,7 +241,7 @@ Bool LineInRegion( const Coord2D *p1, const Coord2D *p2, const Region2D *clipReg
 class GeometryInfo
 {
 public:
-	Real getMinorRadius() const { return m_minorRadius; }
+	__declspec(dllimport) __forceinline Real getMinorRadius() const { return m_minorRadius; }
 private:
 	char m_pad00[0x10];
 	Real m_minorRadius; // +0x10

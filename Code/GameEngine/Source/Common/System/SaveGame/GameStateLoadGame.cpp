@@ -30,7 +30,7 @@ typedef char RecordExtent[(sizeof(TreeHintOpaque0043671B)==0xDF4)?1:-1];
 class Rva0004224C {
 public:
  Rva0004224C *rva0004224C();
- Rva0004224C() { rva0004224C(); }
+ __declspec(dllimport) __forceinline Rva0004224C() { rva0004224C(); }
  ~Rva0004224C() {
   if(TheGameLogic) --((LogicFPScopeView*)TheGameLogic)->nesting;
  }

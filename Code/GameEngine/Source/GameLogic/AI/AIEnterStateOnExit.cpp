@@ -60,7 +60,7 @@ public:
 		ALLOW_INVALID_POSITION = 1,
 		PRECISE_Z_POS = 3
 	};
-	void setAllowInvalidPosition(bool allow) { setFlag(ALLOW_INVALID_POSITION, allow); }
+	__declspec(dllimport) __forceinline void setAllowInvalidPosition(bool allow) { setFlag(ALLOW_INVALID_POSITION, allow); }
 	void setUsePreciseZPos(bool u) { setFlag(PRECISE_Z_POS, u); }
 private:
 	void setFlag(LocoFlag f, bool b)

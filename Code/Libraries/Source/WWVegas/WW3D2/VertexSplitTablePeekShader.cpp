@@ -36,7 +36,7 @@ public:
 };
 class MeshModelClass {
 public:
-    ShaderClass Get_Shader(int index, int pass) const {
+    __declspec(dllimport) __forceinline ShaderClass Get_Shader(int index, int pass) const {
         return (*reinterpret_cast<MeshMatDescClass *const *>(reinterpret_cast<const char *>(this) + 0x94))->Get_Shader(index, pass);
     }
 
