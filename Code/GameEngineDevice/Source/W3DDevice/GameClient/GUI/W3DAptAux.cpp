@@ -334,3 +334,17 @@ void Rva000A994CSetColor(const float *value)
  g_aptHostColorBlock0.set(value[0], value[1], value[2], value[3]);
  g_aptHostColorBlock1.set(value[4], value[5], value[6], value[7]);
 }
+
+class Rva00786BD0Owner
+{
+public:
+ void *find(unsigned int key);
+};
+
+// Native AA8C3..AA8D1 is installed at the Apt LoadRenderingUnit slot
+// E17798. Unlike the texture callback AA8AE, it does not guard the owner.
+// Reuse that callback's existing lookup spelling and provider binding.
+void *Rva000AA8C3LoadRenderingUnit(Rva00786BD0Owner *owner, unsigned int key)
+{
+ return owner->find(key);
+}
