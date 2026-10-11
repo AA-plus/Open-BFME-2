@@ -57,6 +57,9 @@
 #include <vertmaterial.h>
 #pragma pop_macro("W3DMPO_GLUE")
 
+#include "sharebuf.h"
+// Retail keeps one ShareBufferClass<VertexMaterialClass *> dtor (0x0015AC90); this unit calls it.
+template <> ShareBufferClass<VertexMaterialClass *>::~ShareBufferClass(void);
 #include "meshmatdesc.h"
 #include "texture.h"
 #include "vertmaterial.h"
