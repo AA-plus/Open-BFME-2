@@ -161,7 +161,8 @@ struct Rva002A8F24Record
 class Rva002A8F24
 {
 public:
-	Rva002A8F24Record *rva002A8F24Record(void *owner);	// 0x002A8F24
+	// LINK: 0x002A8F24 is rowed as void *Rva002A8F24::rva002A8F24(Player *) (Rva002A8F24.cpp); the result is the record.
+	void *rva002A8F24(Player *owner);	// 0x002A8F24
 };
 extern Rva002A8F24 *g_00DFEEF8;
 
@@ -189,7 +190,7 @@ struct AITargetHeuristicBaseDefense : Rva005CB22A
 
 void AITargetHeuristicBaseDefense::findBestTarget(AITarget *choice, Player *player, int unused)
 {
-	Rva002A8F24Record *record = g_00DFEEF8->rva002A8F24Record(player);
+	Rva002A8F24Record *record = (Rva002A8F24Record *)g_00DFEEF8->rva002A8F24(player);
 	_STL::vector<_STL::pair<Object *, int> > found;
 	Rva00049D20 *list = record->m_10;
 	unsigned count = list->m_end - list->m_begin;
