@@ -3,15 +3,28 @@
 #include <vector>
 struct Rva00152BDBEntry { Rva00152BDBEntry(); Rva00152BDBEntry(const Rva00152BDBEntry&); ~Rva00152BDBEntry(); private: unsigned char storage[36]; };
 class Rva00152BDBVector { Rva00152BDBEntry*start,*finish,*end; public: void resize(unsigned,Rva00152BDBEntry); void resize(unsigned); };
+// Native1524F9 owns the fill helper for the same36-byte element frame.
+// Keep this caller's opaque value type and bind only that operation.
+struct Rva001524F9Element;
 namespace _STL {
+template<> void vector<Rva001524F9Element>::_M_fill_insert(Rva001524F9Element*,unsigned,const Rva001524F9Element&);
 template<> Rva00152BDBEntry*vector<Rva00152BDBEntry>::erase(Rva00152BDBEntry*,Rva00152BDBEntry*);
 template<> void vector<Rva00152BDBEntry>::_M_fill_insert(Rva00152BDBEntry*,unsigned,const Rva00152BDBEntry&);
 }
+// Inline ABI adapter, with the caller's original argument evaluation types.
+class Native36ByteFillView {
+public:
+ __forceinline void fill(Rva00152BDBEntry *position,unsigned count,const Rva00152BDBEntry &value) {
+  reinterpret_cast<_STL::vector<Rva001524F9Element>*>(this)->_M_fill_insert(
+   reinterpret_cast<Rva001524F9Element*>(position),count,
+   reinterpret_cast<const Rva001524F9Element&>(value));
+ }
+};
 void Rva00152BDBVector::resize(unsigned n) {resize(n,Rva00152BDBEntry());}
 void Rva00152BDBVector::resize(unsigned n,Rva00152BDBEntry value) {
  _STL::vector<Rva00152BDBEntry>*v=reinterpret_cast<_STL::vector<Rva00152BDBEntry>*>(this);
  if(n<v->size())v->erase(v->begin()+n,v->end());
- else v->insert(v->end(),n-v->size(),value);
+ else reinterpret_cast<Native36ByteFillView*>(this)->fill(v->end(),n-v->size(),value);
 }
 
 // Reference: STLport4.5.3 resize semantics. Native ret40 body has
