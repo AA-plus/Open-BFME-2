@@ -1,4 +1,6 @@
 // ?Rva0044C3D4@@YA_NXZ
+// partial score=0.91 date=2026-10-11
+// ?Rva0044C3D4@@YA_NXZ
 // partial score=0.9 date=2026-10-11
 // cl: /O1 /G6 /arch:SSE /MD /DNDEBUG /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -83,9 +85,11 @@ void rva0044C2C6() {
  }
 }
 
+static __forceinline bool heroTransferReady() { return TheGameInfo && TheCreateAHeroManager; }
 bool Rva0044C3D4() {
  int i=0;
- if(!TheGameInfo || !TheCreateAHeroManager)return false;
+ if(!heroTransferReady())return false;
+ else {
  HeroTransferSavedSlot *saved=TheGameInfo->saved;
  if(saved) {
   for(int i=0;i<8;++i,++saved) {
@@ -145,4 +149,5 @@ bool Rva0044C3D4() {
   }
  }
  return ready;
+ }
 }
