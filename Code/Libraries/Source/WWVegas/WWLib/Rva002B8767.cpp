@@ -49,14 +49,14 @@ public:
 
 class ModuleData;
 
-class LivingWorldManager;
-extern LivingWorldManager *TheLivingWorldManager;
-
-class Rva00DFE1C8Host
+// LINK: 0x00213171 is rowed as LivingWorldManager::CreateBeaconObject(int, Coord2D const*, int) (LivingWorldManagerCreateBeaconObject.cpp).
+class Coord2D;
+class LivingWorldManager
 {
 public:
-	void rva00213171(int a, void *b, int c);
+	void CreateBeaconObject(int a, const Coord2D *b, int c);
 };
+extern LivingWorldManager *TheLivingWorldManager;
 
 struct Rva002B8767Counter
 {
@@ -79,6 +79,6 @@ void Rva002B8767::rva002B8767(BfmePairWI pair, const AsciiStringWI &a, bool b, c
 {
 	Gen_003BEA30 *obj = new Gen_003BEA30(pair, ++m_00B0->m_count, a, b, c);
 	const ModuleData *tmp = (const ModuleData *)obj;
-	((Rva00DFE1C8Host *)TheLivingWorldManager)->rva00213171(obj->m_bfmeKind, obj, 2);
+	TheLivingWorldManager->CreateBeaconObject(obj->m_bfmeKind, (const Coord2D *)obj, 2);
 	m_00BC.push_back(tmp);
 }

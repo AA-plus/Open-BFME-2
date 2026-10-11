@@ -24,6 +24,15 @@ struct TreeHintRef00217D4C {
 class Rva0054D2DDTarget { public:
  void method(int,const UnicodeString &,const UnicodeString &,
   TreeHintRef00217D4C,TreeHintRef00217D4C);
+ void method(int,const UnicodeString &,const UnicodeString &);
+};
+
+// LINK: the two forwarded calls are rowed as Rva0054D2DDTarget::method(int, UnicodeString const&, UnicodeString const&) and
+// bool Rva0054D3E1Prompt::configure(int, UnicodeString const&, UnicodeString const&) on the same instance.
+class Rva0054D3E1Prompt
+{
+public:
+	bool configure(int a, const UnicodeString &b, const UnicodeString &c);
 };
 
 class AptMessageBox
@@ -33,8 +42,6 @@ public:
  static void Show(int,const UnicodeString &,const UnicodeString &,TreeHintRef00217D4C,TreeHintRef00217D4C);
 	static void Change(void *a, void *b, void *c);
 
-	void rva0054D2DD(void *a, void *b, void *c);
-	void rva0054D3D9(void *a, void *b, void *c);
 
 private:
 	static AptMessageBox *Instance() { return (AptMessageBox *)g_Va00E032FC; }
@@ -42,12 +49,12 @@ private:
 
 void AptMessageBox::Show(void *a, void *b, void *c)
 {
-	Instance()->rva0054D2DD(a, b, c);
+	((Rva0054D2DDTarget *)Instance())->method((int)a, *(const UnicodeString *)b, *(const UnicodeString *)c);
 }
 
 void AptMessageBox::Change(void *a, void *b, void *c)
 {
-	Instance()->rva0054D3D9(a, b, c);
+	((Rva0054D3E1Prompt *)Instance())->configure((int)a, *(const UnicodeString *)b, *(const UnicodeString *)c);
 }
 
 // WB12B4240 names this five-argument static Show overload. Retail
