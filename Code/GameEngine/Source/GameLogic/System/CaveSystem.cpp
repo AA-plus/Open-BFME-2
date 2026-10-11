@@ -91,6 +91,7 @@ class CaveSystem : public SubsystemInterface, public Snapshot
 public:
 	virtual ~CaveSystem();
 	TunnelTracker *getTunnelTrackerForCaveIndex(UnsignedInt index);
+	void registerNewCave(Int theIndex);
 	virtual void crc(Xfer *xfer) {}
 	virtual void DoXfer(Xfer *xfer);
 	virtual void loadPostProcess() {}
@@ -106,6 +107,31 @@ TunnelTracker *CaveSystem::getTunnelTrackerForCaveIndex(UnsignedInt index)
 	if (index < m_tunnelTrackerVector.size())
 		retVal = m_tunnelTrackerVector[index];
 	return retVal;
+}
+
+// CaveSystem::registerNewCave, retail 0x004276B6 (130 bytes), Zero Hour's
+// body: a new index grows the tracker vector with null slots (the folded
+// pointer-vector push_back, reached as in DoXfer), and a new or empty slot
+// gets a fresh TunnelTracker.
+void CaveSystem::registerNewCave(Int theIndex)
+{
+	bool needToCreate = false;
+	if (theIndex >= m_tunnelTrackerVector.size())
+	{
+		needToCreate = true;
+		while (theIndex >= m_tunnelTrackerVector.size())
+		{
+			unsigned int empty = 0;
+			reinterpret_cast<_STL::vector<unsigned int> *>(&m_tunnelTrackerVector)->push_back(empty);
+		}
+	}
+	else
+	{
+		if (m_tunnelTrackerVector[theIndex] == 0)
+			needToCreate = true;
+	}
+	if (needToCreate)
+		m_tunnelTrackerVector[theIndex] = new TunnelTracker;
 }
 
 // ?DoXfer@CaveSystem@@UAEXPAVXfer@@@Z
