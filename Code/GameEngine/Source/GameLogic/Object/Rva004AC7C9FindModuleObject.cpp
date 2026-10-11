@@ -117,6 +117,14 @@ Object *Rva004AC7C9()
 
 extern GameLogic *TheGameLogic;
 
+int Rva004AC707(ObjectID id)
+{
+	Object *obj = TheGameLogic->findObjectByID(id);
+	if (obj != 0)
+		return Rva004AC5F5(obj);
+	return 0;
+}
+
 class Actor
 {
 public:
@@ -148,3 +156,4 @@ void DestroyEnvironmentUpdate::rva004AC722()
 	}
 	m_objectID = 0;
 }
+

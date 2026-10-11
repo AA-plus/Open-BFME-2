@@ -63,10 +63,21 @@ State::State(StateMachine *machine, unsigned int hash)
 	m_transitionsLast = 0;
 }
 
+// Rva004D7476_vftable: matched references place it at VA 0xc60620 (retail .rdata value -3).
+extern "C" char Rva004D7476_vftable = -3;
 // Rva004D7491_vftable: matched references place it at VA 0xc60668 (retail .rdata value -3).
 extern "C" char Rva004D7491_vftable = -3;
 // Rva004D74AC_vftable: matched references place it at VA 0xc606b0 (retail .rdata value -3).
 extern "C" char Rva004D74AC_vftable = -3;
+// Rva004D74C7_vftable: matched references place it at VA 0xc606f8 (retail .rdata value -3).
+extern "C" char Rva004D74C7_vftable = -3;
+
+class __declspec(novtable) Rva004D7476 : public State
+{
+public:
+	Rva004D7476(StateMachine *machine);
+	virtual ~Rva004D7476();
+};
 
 class __declspec(novtable) Rva004D7491 : public State
 {
@@ -82,6 +93,19 @@ public:
 	virtual ~Rva004D74AC();
 };
 
+class __declspec(novtable) Rva004D74C7 : public State
+{
+public:
+	Rva004D74C7(StateMachine *machine);
+	virtual ~Rva004D74C7();
+};
+
+// ??0Rva004D7476@@QAE@PAVStateMachine@@@Z
+Rva004D7476::Rva004D7476(StateMachine *machine) : State(machine, 0x8C36A3D4u)
+{
+	*reinterpret_cast<char **>(this) = &Rva004D7476_vftable;
+}
+
 // ??0Rva004D7491@@QAE@PAVStateMachine@@@Z
 Rva004D7491::Rva004D7491(StateMachine *machine) : State(machine, 0xC17A0A70u)
 {
@@ -93,3 +117,10 @@ Rva004D74AC::Rva004D74AC(StateMachine *machine) : State(machine, 0xDF4D3EB3u)
 {
 	*reinterpret_cast<char **>(this) = &Rva004D74AC_vftable;
 }
+
+// ??0Rva004D74C7@@QAE@PAVStateMachine@@@Z
+Rva004D74C7::Rva004D74C7(StateMachine *machine) : State(machine, 0xE529ED33u)
+{
+	*reinterpret_cast<char **>(this) = &Rva004D74C7_vftable;
+}
+

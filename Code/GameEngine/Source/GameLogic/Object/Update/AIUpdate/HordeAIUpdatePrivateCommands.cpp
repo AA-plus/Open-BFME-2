@@ -68,7 +68,9 @@ public:
 	virtual void h000(); virtual void h001(); virtual void h002(); virtual void h003();
 	virtual void refreshFormation(bool value); // slot 4 (+0x10)
 	virtual void slot5(Object *target); // slot 5 (+0x14)
-	virtual void h006(); virtual void h007(); virtual void h008(); virtual void h009();
+	virtual void h006(); virtual void h007();
+	virtual void slot8(Object *obj); // slot 8 (+0x20)
+	virtual void h009();
 	SLOT_GAP10(h, 1)
 	virtual void h020(); virtual void h021(); virtual void h022();
 	virtual bool slot23(); // slot 23 (+0x5C)
@@ -229,13 +231,22 @@ protected:
 	virtual void a140(); virtual void a141(); virtual void a142(); virtual void a143(); virtual void a144();
 	virtual void a145(); virtual void a146(); virtual void a147();
 	virtual bool isAllowedToRespondToAiCommands(const AICommandParms *parms) const; // slot 148 (+0x250)
+private:
+	char m_unrecovered24[0x3E4 - 0x24];
 };
 
-class HordeAIUpdate : public AIUpdateInterface
+class HordeAIInterface3E4
+{
+public:
+	virtual bool rva0049A973(Object *obj, int arg2) = 0;
+};
+
+class HordeAIUpdate : public AIUpdateInterface, public HordeAIInterface3E4
 {
 protected:
 	virtual void bfmePrivateCommand42(Object *obj, CommandSourceType cmdSource);
 public:
+	virtual bool rva0049A973(Object *obj, int arg2);
 	virtual UpdateSleepTime update();
 	virtual void aiDoCommand(const AICommandParms *parms);
 	bool commandCancelsPorcupineFormation(const AICommandParms *parms);
@@ -283,7 +294,6 @@ public:
 protected:
 	virtual void bfmePrivateCommand42(Object *obj, CommandSourceType cmdSource);
 private:
-	char m_unrecovered24[0x3E8 - 0x24];
 	ObjectID m_3E8;
 	ObjectID m_3EC;
 	ObjectID m_3F0;
@@ -294,6 +304,18 @@ void HordeAIUpdate::privateMoveToPosition(const Coord3D *pos, float speed, Comma
 {
 	if (getObject()->providedEntry())
 		AIUpdateInterface::privateMoveToPosition(pos, speed, cmdSource);
+}
+
+// ?rva0049A973@HordeAIUpdate@@UAE_NPAVObject@@H@Z @0x0049A973 (54B)
+bool HordeAIUpdate::rva0049A973(Object *obj, int)
+{
+	HordeContainInterface *horde = getObject()->provider()->s31();
+	if (horde)
+	{
+		obj->setStatus((ObjectStatusTypes)0x26, true);
+		horde->slot8(obj);
+	}
+	return false;
 }
 
 // ?commandCancelsPorcupineFormation@HordeAIUpdate@@QAE_NPBUAICommandParms@@@Z @0x0049A6DC

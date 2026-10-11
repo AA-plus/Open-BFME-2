@@ -70,16 +70,34 @@ UnsignedShort GenerateNextCommandID();
 
 extern "C" __declspec(dllimport) UnsignedInt __stdcall timeGetTime(void);
 
+struct NetCommandListNode
+{
+	NetCommandMsg *m_msg;
+	NetCommandListNode *m_next;
+	UnsignedInt m_pad08;
+	UnsignedByte m_relay;
+};
+
+struct NetCommandList
+{
+	void *m_vptr;
+	NetCommandListNode *m_head;
+};
+
 class ConnectionManager
 {
 public:
 	void rva004D00BB(Int arg);
+	void rva004D016E();
+	void sendLocalCommand(NetCommandMsg *msg, UnsignedByte relay);
 	void sendLocalCommandDirect(NetCommandMsg *msg, UnsignedByte relay);
 private:
 	void *m_vptr;
 	char m_pad04[0x12028 - 4];
 	UnsignedInt m_localPlayerID;
-	char m_pad1202C[0x12130 - 0x12028 - 4];
+	char m_pad1202C[0x12124 - 0x1202C];
+	NetCommandList *m_list12124;
+	char m_pad12128[0x12130 - 0x12128];
 	UnsignedInt m_lastTime;
 };
 
@@ -99,3 +117,14 @@ void ConnectionManager::rva004D00BB(Int arg)
 	if (m_lastTime == 0)
 		m_lastTime = timeGetTime();
 }
+
+// ?rva004D016E@ConnectionManager@@QAEXXZ @0x004D016E (42B)
+void ConnectionManager::rva004D016E()
+{
+	if (m_list12124 != 0)
+	{
+		for (NetCommandListNode *node = m_list12124->m_head; node != 0; node = node->m_next)
+			sendLocalCommand(node->m_msg, node->m_relay);
+	}
+}
+

@@ -23,6 +23,7 @@ struct Rva004DF207Inner
 {
 	char m_pad[0x548];
 	int m_val;
+	int m_54C;
 };
 
 struct Rva004DF207Outer
@@ -82,3 +83,25 @@ void Rva004DF231::rva004DF231(void *arg)
 	else if (v > 0)
 		((Rva004DF18D *)this)->rva004DF18D(-v);
 }
+
+class Energy
+{
+public:
+	void rva004DF25B(Rva004DF207Outer *arg);
+	void rva004DF274(Rva004DF207Outer *arg);
+};
+
+// ?rva004DF25B@Energy@@QAEXPAURva004DF207Outer@@@Z @ 0x004DF25B (25B)
+void Energy::rva004DF25B(Rva004DF207Outer *arg)
+{
+	if (arg)
+		((Rva004DF18D *)this)->rva004DF18D(arg->m_ptr->m_54C);
+}
+
+// ?rva004DF274@Energy@@QAEXPAURva004DF207Outer@@@Z @ 0x004DF274 (28B)
+void Energy::rva004DF274(Rva004DF207Outer *arg)
+{
+	if (arg)
+		((Rva004DF18D *)this)->rva004DF18D(-arg->m_ptr->m_54C);
+}
+

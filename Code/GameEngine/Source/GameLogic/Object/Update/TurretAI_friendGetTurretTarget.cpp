@@ -59,8 +59,11 @@ struct TurretStateMachine
 	char m_pad[0x20 - 4];
 	ObjectID m_goalObjectID;
 	Coord3D m_goalPosition;
+	char m_pad30[0x34 - 0x30];
+	ObjectID m_34;
 
 	Object *getGoalObject();
+	Object *rva004D7735();
 	virtual void _rsvd00();
 	virtual void _rsvd01();
 	virtual void _rsvd02();
@@ -98,6 +101,13 @@ public:
 Object *TurretStateMachine::getGoalObject()
 {
 	return TheGameLogic->findObjectByID(m_goalObjectID);
+}
+
+// ?rva004D7735@TurretStateMachine@@QAEPAVObject@@XZ
+// retail 0x004D7735, 15 bytes. TheGameLogic ID lookup of the ID at +0x34.
+Object *TurretStateMachine::rva004D7735()
+{
+	return TheGameLogic->findObjectByID(m_34);
 }
 
 // Other units call this body (pinned at its address) under the spelling(s)

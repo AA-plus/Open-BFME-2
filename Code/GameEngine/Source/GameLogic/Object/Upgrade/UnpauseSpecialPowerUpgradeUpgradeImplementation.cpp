@@ -41,9 +41,12 @@ private:
 	unsigned char m_pad04[0x0C - 0x04];
 	BehaviorModuleInterface m_interface; // +0x0C
 };
+class Rva004B555F;
 class Object
 {
 friend class UnpauseSpecialPowerUpgrade;
+public:
+	void AddCreateAHeroSpecialPowerUpgrade(Rva004B555F *u);
 private:
 	unsigned char m_pad000[0x244];
 	BehaviorModule **m_behaviors; // +0x244
@@ -62,7 +65,12 @@ class ObjectModuleBase
 {
 public:
 	virtual ~ObjectModuleBase();
+	virtual void s01();
+	virtual void s02();
+	virtual void s03();
+	virtual void s04();
 protected:
+	virtual void onCreate();
 	Object *getObject() const { return m_object; }
 	const ModuleData *m_moduleData; // +0x04
 	Object *m_object; // +0x08
@@ -106,11 +114,17 @@ public:
 class UnpauseSpecialPowerUpgrade : public UpgradeModule
 {
 protected:
+	virtual void onCreate();
 	virtual void upgradeRemovalImplementation();
 	virtual void upgradeImplementation();
 private:
 	const UnpauseSpecialPowerUpgradeModuleData *getUnpauseSpecialPowerUpgradeModuleData() const { return (const UnpauseSpecialPowerUpgradeModuleData *)m_moduleData; }
 };
+void UnpauseSpecialPowerUpgrade::onCreate()
+{
+	if (m_object)
+		m_object->AddCreateAHeroSpecialPowerUpgrade((Rva004B555F *)this);
+}
 void UnpauseSpecialPowerUpgrade::upgradeImplementation()
 {
 	for (BehaviorModule **m = getObject()->m_behaviors; *m; ++m)

@@ -35,3 +35,26 @@ NameKeyType AllowBannerSpawnUpgrade::rva004B8520()
 		TheNameKeyGenerator->nameToKey("AllowBannerSpawnUpgrade");
 	return TheAllowBannerSpawnUpgradePoolKey;
 }
+
+struct FieldParse;
+extern const int g_emptyFieldParseTable[4];
+class MultiIniFieldParse
+{
+public:
+	void add(const FieldParse *f, unsigned int extraOffset);
+};
+int Rva004CE29DGet(void);
+
+class AllowBannerSpawnUpgradeModuleData
+{
+public:
+	static void buildFieldParse(MultiIniFieldParse &p);
+};
+
+// ?buildFieldParse@AllowBannerSpawnUpgradeModuleData@@SAXAAVMultiIniFieldParse@@@Z @0x004B8565 (34B)
+void AllowBannerSpawnUpgradeModuleData::buildFieldParse(MultiIniFieldParse &p)
+{
+	p.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 8);
+	p.add(reinterpret_cast<const FieldParse *>(g_emptyFieldParseTable), 0);
+}
+

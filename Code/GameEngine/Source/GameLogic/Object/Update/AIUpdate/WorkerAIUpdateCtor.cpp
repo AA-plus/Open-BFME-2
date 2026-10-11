@@ -263,6 +263,7 @@ class ObjectModule
 public:
 	virtual ~ObjectModule();
 protected:
+	const ModuleData *getModuleData() const { return m_moduleData; }
 	Object *getObject() const { return m_object; }
 private:
 	const ModuleData *m_moduleData; // +0x04
@@ -465,6 +466,7 @@ public:
 	void rva0028AFE7(Object *builder);
 	void setStatus(ObjectStatusTypes bit, Bool set);
 	void rva0028CFB2(const int *clear, const int *set);
+	void rva00290758(Int a1, Int a2);
 	void setConstructionPercent(Real percent) { m_constructionPercent = percent; }
 	void rva0028AE6D();
 	__forceinline void clearModelConditionState(ModelConditionFlagType mc)
@@ -726,11 +728,19 @@ public:
 	virtual void finishBuildingSound() = 0; // vslot 24
 };
 
+struct WorkerAIUpdateModuleData
+{
+	unsigned char m_pad00[0x64];
+	Int m_64; // +0x64
+};
+
 class SupplyTruckAIInterface
 {
 public:
 	virtual void supplyTruckSlot0() = 0;
-	virtual void st01() = 0; virtual void st02() = 0; virtual void st03() = 0; virtual void st04() = 0;
+	virtual void st01() = 0; virtual void st02() = 0;
+	virtual Bool rva004A98AC() = 0; // vslot 3 (+0x0C)
+	virtual void st04() = 0;
 	virtual void st05() = 0; virtual void st06() = 0; virtual void st07() = 0; virtual void st08() = 0;
 	virtual void st09() = 0; virtual void st10() = 0; virtual void st11() = 0;
 	virtual Bool isForcedIntoWantingState() const = 0; // vslot 12 (+0x30)
@@ -765,6 +775,7 @@ public:
 	WorkerAIUpdate(Thing *thing, const ModuleData *moduleData);
 	virtual void onDelete();
 	virtual void supplyTruckSlot0();
+	virtual Bool rva004A98AC();
 	virtual void exitingSupplyTruckState();
 	virtual Bool isForcedIntoWantingState() const;
 	virtual void newTask(DozerTask task, Object *target);
@@ -774,6 +785,7 @@ public:
 	Bool isSupplyTruckBrainActiveAndBusy();
 protected:
 	virtual ~WorkerAIUpdate();
+	const WorkerAIUpdateModuleData *getWorkerAIUpdateModuleData() const { return (const WorkerAIUpdateModuleData *)getModuleData(); }
 	Bool findGoodBuildOrRepairPosition(const Object *me, const Object *target, Coord3D &positionOut);
 	Object *findGoodBuildOrRepairPositionAndTarget(Object *me, Object *target, Coord3D &positionOut);
 private:
@@ -955,6 +967,15 @@ Bool WorkerStateMachine::supplyTruckSubMachineReadyToLeave(State *thisState, voi
 	// It isn't ready to leave if it is on its way in. Active and Busy means
 	// it isn't doing anything Supply related.
 	return !supplyTruckSubMachineWantsToEnter(thisState, 0) && update->isSupplyTruckBrainActiveAndBusy();
+}
+
+Bool WorkerAIUpdate::rva004A98AC()
+{
+	if (m_4A0 == 0)
+		return FALSE;
+	--m_4A0;
+	getObject()->rva00290758(getWorkerAIUpdateModuleData()->m_64, m_4A0);
+	return TRUE;
 }
 
 Bool WorkerAIUpdate::isSupplyTruckBrainActiveAndBusy()
