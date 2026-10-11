@@ -1,51 +1,21 @@
 // cl: -EHsc -Ireference/open-bfme-1/game/GameEngine/Source/Common
+// BFME1 donor V3NewInlineCtorFactories.cpp at 6d943426. Its opaque class
+// labels are retained for the already pinned factory callees; real particle
+// module identities remain open. Retail establishes constructor forwarding,
+// vptr locations and allocation sizes independently of those donor labels.
 //
-// Seven members that allocate one object with `new` and construct it with a
-// constructor the compiler INLINED, so the vptr stamping that constructor does
-// is visible in the caller.  Retail, for the two-argument form:
+// BFME2 factories 3AD7CF / 3AD84A / 3ADA36 allocate 5C / 2C / 44 bytes and
+// call the two-argument constructors at 3ACE2D / 3ACE8B / 3AD136. The first
+// two constructors install vptrs at 0, 14, 18; the third also installs one at
+// 20. Native base-constructor targets are 3ABB53 / 3ABBCB / 3ABE8D, which
+// forward to the independently rowed particle constructors 5634F7 / 563CAF /
+// 5648FE respectively. Storage follows measured full base sizes; member
+// purposes remain open. Explicit noinline preserves retail's separate stages.
 //
-//     push <SIZE> / call operator new / add esp,4 / mov esi,eax
-//     test esi,esi / je null
-//     push this / push <ARG> / mov ecx,esi / call <BASE CTOR>
-//     mov [esi],   <VFTABLE 0>
-//     mov [esi+8], <VFTABLE 8>
-//     mov [esi+0xC],<VFTABLE 0xC>
-//     mov eax,esi
-//   null: return eax
-//
-// WHY THE CONSTRUCTOR IS INLINE HERE AND OUT OF LINE IN Q4NewOwnerFactories.cpp
-// and V3CloneFactories.cpp: those bodies end at the `call` because the class
-// they construct has its constructor in another translation unit, so nothing of
-// it is visible.  These bodies continue with vptr stores, and a caller cannot
-// stamp a callee's vptrs -- only the constructor itself can.  So the constructed
-// class's constructor is defined where the factory is, it forwards to a base
-// constructor that is NOT (that is the surviving `call`), and the stores after
-// the call are the derived class's own vptr initialisation.
-//
-// THE CONSTRUCTED CLASSES ARE ALREADY IN THE TREE, by their vftables.  The five
-// two-argument rows stamp {0, 8, 0xC}; 0x005E7420's triple 0x011124FC /
-// 0x011124F8 / 0x011124E4 is the same triple 0x005EA2E0 stamps, and the other
-// four match 0x005EAA80, 0x005EB1C0, 0x005EA820 and 0x005EACE0 the same way --
-// all landed in V3CopyCtorForwarders.cpp.  So each of those classes has TWO
-// constructors: a copy constructor that stayed out of line, and this
-// two-argument one that did not.  The 0x005ECA20 row is the same story for
-// 0x005ECAB0's four-slot triple-plus-one, with the copy constructor at
-// 0x005ECAB0 itself as the callee.
-//
-// THE SIZE IS `sizeof`, exactly, because a plain `new` takes it as its operand.
-// The slot offsets account for the first 0x10, 0x1C or 0x20 bytes of each
-// class; the rest is carried as a size-only member, as Q4NewOwnerFactories.cpp
-// does.
-//
-// The fs:[0] frame comes from `-EHsc`.  The pushed handler address and funcinfo
-// are DIR32 operands copied from retail and claim nothing.
-//
-// IDENTITY IS NOT RECOVERED.  Every name is an address.
-
-// ---- layout pieces; none of them emits a byte of any body here -------------
+// ---- measured layout views; unrecovered members are size carriers ----------
 
 class V3Slot0	{ public: virtual void s0(); virtual ~V3Slot0() {} int m_a, m_b, m_c, m_d; };
-class V3Slot0N	{ public: virtual void s0(); virtual ~V3Slot0N() {} int m_a; };
+class V3Slot0N	{ public: virtual void s0(); virtual ~V3Slot0N() {} int m_a, m_b, m_c, m_d; };
 class V3Slot1	{ public: virtual void s0(); virtual ~V3Slot1() {} };
 class V3Slot2	{ public: virtual void s0(); virtual ~V3Slot2() {} };
 class V3Slot3	{ public: virtual void s0(); virtual ~V3Slot3() {} };
@@ -54,20 +24,20 @@ class V3Slot3	{ public: virtual void s0(); virtual ~V3Slot3() {} };
 //
 // NAME is the factory's own address; BASE is the out-of-line constructor's.
 
-#define V3_NEW_TWO_ARG_FACTORY( NAME, BASE, SIZE )                         \
+#define V3_NEW_TWO_ARG_FACTORY( NAME, BASE, SIZE, LEAF, ARGS )                         \
 	class V3Host##NAME;                                                    \
-	class BASE : public V3Slot0N, public V3Slot1, public V3Slot2           \
+	class BASE : public LEAF \
 	{                                                                      \
 	public:                                                                \
-		BASE( void *arg, V3Host##NAME *owner );                            \
+		__declspec(noinline) BASE( void *arg, V3Host##NAME *owner ) : LEAF ARGS {} \
 	};                                                                     \
 	class NAME##Object : public BASE                                       \
 	{                                                                      \
 	public:                                                                \
 		NAME##Object( void *arg, V3Host##NAME *owner )                     \
 			: BASE( arg, owner ) {}                                        \
-		char m_storage[ SIZE - 0x10 ];                                     \
 	};                                                                     \
+	typedef char NAME##Size[(sizeof(NAME##Object) == SIZE) ? 1 : -1]; \
 	class V3Host##NAME                                                     \
 	{                                                                      \
 	public:                                                                \
@@ -78,6 +48,22 @@ class V3Slot3	{ public: virtual void s0(); virtual ~V3Slot3() {} };
 		return new NAME##Object( arg, this );                              \
 	}
 
+class V3Slot2Wide { public: virtual void s0(); virtual ~V3Slot2Wide() {} int m_a; };
+struct DrawInfo2;
+class RvaSmartPtr12;
+struct Rva005648FEInput;
+class Rva005634F7 : public V3Slot0N, public V3Slot1, public V3Slot2 {
+public: Rva005634F7(void *, DrawInfo2 *);
+private: char unknown1C[0x5c-0x1c];
+};
+class Rva003AE94E : public V3Slot0N, public V3Slot1, public V3Slot2 {
+public: Rva003AE94E(void *, void *);
+private: char unknown1C[0x2c-0x1c];
+};
+class Rva003AF076 : public V3Slot0N, public V3Slot1, public V3Slot2Wide, public V3Slot3 {
+public: Rva003AF076(const RvaSmartPtr12&, const Rva005648FEInput&);
+private: char unknown24[0x44-0x24];
+};
 //
 // retail 0x003AD7CF, 0x003AD84A and 0x003ADA36, 60 bytes each. Dedicated TU
 // ported from the Open-BFME-1 donor
@@ -91,11 +77,11 @@ class V3Slot3	{ public: virtual void s0(); virtual ~V3Slot3() {} };
 // each callee is a constructor forwarding two arguments to a base constructor
 // before installing its own vtable, which is the shape this macro declares. The
 // real types, the base-class identities and the meaning of the `void *arg`
-// parameter remain unrecovered; the `char m_storage[]` member is a size carrier
-// so that the allocation size matches, not a claim about layout.
-V3_NEW_TWO_ARG_FACTORY( Rva005E7420, Rva005EE8A0, 0x5c )
-V3_NEW_TWO_ARG_FACTORY( Rva005E76E0, Rva005FFAC0, 0x2c )
-V3_NEW_TWO_ARG_FACTORY( Rva005E7AD0, Rva006008D0, 0x44 )
+// parameter remain unrecovered; the leaf storage arrays carry measured full sizes
+// without assigning names or meanings to unrecovered fields.
+V3_NEW_TWO_ARG_FACTORY( Rva005E7420, Rva005EE8A0, 0x5c, Rva005634F7, (arg, (DrawInfo2 *)owner) )
+V3_NEW_TWO_ARG_FACTORY( Rva005E76E0, Rva005FFAC0, 0x2c, Rva003AE94E, (arg, (void *)owner) )
+V3_NEW_TWO_ARG_FACTORY( Rva005E7AD0, Rva006008D0, 0x44, Rva003AF076, (*(const RvaSmartPtr12 *)arg, *(const Rva005648FEInput *)owner) )
 
 // ---- the clone form: one argument, and it is the receiver ------------------
 //
