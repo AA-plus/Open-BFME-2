@@ -43,6 +43,11 @@ public:
 class DamageInfo
 {
 public:
+	// LINK: the implicit default ctor's COMDAT loses to the first-in-order copy; the one local uses a
+	// TU-unique no-init ctor with the same member init (m_head's rowed ctor). No flags touched.
+	struct BfmeNoInitPoison {};
+	DamageInfo(BfmeNoInitPoison) : m_head() {}
+	DamageInfo() {}
 	Rva00263895Member m_head;
 	unsigned m_08;
 	unsigned m_0C;
@@ -69,6 +74,8 @@ class GameLogic
 {
 public:
 	unsigned getFrame() { return m_frame; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getFrame copy loses to the first-in-order copy. No flags touched.
+	unsigned bfme_getFrame_9b0c3() { return m_frame; }
 private:
 	unsigned char m_pad[0x40];
 	unsigned m_frame;
@@ -164,7 +171,7 @@ private:
 UpdateSleepTime PoisonedBehavior::update()
 {
 	const PoisonedBehaviorModuleData* d = getPoisonedBehaviorModuleData();
-	unsigned now = TheGameLogic->getFrame();
+	unsigned now = TheGameLogic->bfme_getFrame_9b0c3();
 
 	if( m_poisonOverallStopFrame == 0 )
 	{
@@ -175,7 +182,7 @@ UpdateSleepTime PoisonedBehavior::update()
 	if (m_poisonDamageFrame != 0 && now >= m_poisonDamageFrame)
 	{
 		// If it is time to do damage, then do it and reset the damage timer
-		DamageInfo damage;
+		DamageInfo damage((DamageInfo::BfmeNoInitPoison()));
 		damage.m_08 = 0;		// in.m_sourceID = INVALID_ID
 		damage.m_1C = (unsigned)m_deathType;	// in.m_deathType
 		damage.m_20 = m_poisonDamageAmount;	// in.m_amount
@@ -213,7 +220,7 @@ void PoisonedBehavior::onHealing( DamageInfo *damageInfo )
 void PoisonedBehavior::startPoisonedEffects( const DamageInfo *damageInfo )
 {
 	const PoisonedBehaviorModuleData* d = getPoisonedBehaviorModuleData();
-	unsigned now = TheGameLogic->getFrame();
+	unsigned now = TheGameLogic->bfme_getFrame_9b0c3();
 
 	// We are going to take the damage dealt by the original poisoner every so often for a while.
 	m_poisonDamageAmount = damageInfo->m_70;
