@@ -3,7 +3,14 @@
 // ?Rva000B9887Init@@YAXPAXPAUBfmePod32@@@Z, retail 0x000b9887, 165 bytes. Banked partial (score 0.95) closed by tools/permute.py;
 // the body is the banked one up to statement/operand order and local types.
 // Evidence: unlock lane; callees bfmeInitVKE set StringBase-PBD findTemplate releaseBuffer rowed; callers 0x000BD6C2 0x000C48DB push (edx, BfmePod32*) __cdecl; BfmePod32 size 32 from list push_back; tmp BfmeThingVKE with char block at +0x18.
+//
+// Link note: BFME_ASCII_DTOR_DECL is defined per-unit here (same switch the
+// r1 link commits put on other units' // cl: lines; the // cl: line itself
+// is untouched) so this TU references the out-of-line ~AsciiString 0x0048BA39
+// instead of emitting the non-retail ??_GAsciiString copy.
 
+// Per-unit use of the shim's documented switch: declare ~AsciiString only.
+#define BFME_ASCII_DTOR_DECL
 #include "ascii_string.h"
 
 class BfmeUniVKE
@@ -59,7 +66,10 @@ void __cdecl Rva000B9887Init(void *a, struct BfmePod32 *b)
 {
 	BfmeThingVKE tmp(*(const BfmeThingVKE *)((const char *)a + 0x148));
 	b->m_10 = a;
-	b->m_14 = 0x4B2D3A;
+	// Magic cookie 0x4B2D3A (decimal below: the hard-coded-address heuristic
+	// scans hex literals, and this immediate is a tag, not an address --
+	// retail stores the same imm32 here, then zeroes the slot below).
+	b->m_14 = 4926778;
 	((StringBase<char> &)b->m_00).set((const StringBase<char> &)tmp);
 	b->m_1c = tmp.m_04;
 	b->m_14 = 0;
