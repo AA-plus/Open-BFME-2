@@ -47,6 +47,12 @@ public:
 		return reinterpret_cast<Rva00270260 *>(this)->rva00270260();
 	}
 	Object *getObject() { return m_object; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getObject copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	Object *bfme_object() { return m_object; }
 
 private:
 	unsigned char m_pad00[0xFC];
@@ -67,6 +73,12 @@ class PlayerList
 {
 public:
 	Player *getLocalPlayer() { return m_local; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getLocalPlayer copy loses to the first-in-order copy
+	// (no retail address); the call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	Player *bfme_local_player() { return m_local; }
 
 private:
 	unsigned char m_pad00[0x10];
@@ -184,8 +196,8 @@ void drawablePostDraw(Drawable *draw, void *userData)
 	if (draw->isDrawableEffectivelyHidden() || FXPitch < 0.0f)
 		return;
 
-	Object *obj = draw->getObject();
-	Int localPlayerIndex = ThePlayerList ? ThePlayerList->getLocalPlayer()->getPlayerIndex() : 0;
+	Object *obj = draw->bfme_object();
+	Int localPlayerIndex = ThePlayerList ? ThePlayerList->bfme_local_player()->getPlayerIndex() : 0;
 	CellShroudStatus ss = (!obj) ? OBJECTSHROUD_CLEAR : obj->getShroudStatusForPlayer(localPlayerIndex);
 	if (ss > OBJECTSHROUD_PARTIAL_CLEAR)
 		return;
