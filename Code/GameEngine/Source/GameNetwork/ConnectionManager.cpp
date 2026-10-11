@@ -497,50 +497,16 @@ void ConnectionManager::processFrameResendRequest(NetFrameResendRequestCommandMs
 /**
  * We have received a wrapper for a command too big to fit in a packet.
  */
-// ?processWrapper@ConnectionManager@@ present-unmatched
-void ConnectionManager::processWrapper(NetCommandRef *ref) 
-{
-	NetWrapperCommandMsg *wrapperMsg = (NetWrapperCommandMsg *)(ref->getCommand());
-	UnsignedShort commandID = wrapperMsg->getWrappedCommandID();
-	DEBUG_LOG(("ConnectionManager::processWrapper() - wrapped commandID is %d, commandID is %d\n",
-		commandID, wrapperMsg->getID()));
-	Int origProgress = 0;
-	FileCommandMap::iterator fcIt = s_fileCommandMap.find(commandID);
-	if (fcIt != s_fileCommandMap.end())
-	{
-		origProgress = s_fileProgressMap[m_localSlot][commandID];
-	}
-	DEBUG_LOG(("ConnectionManager::processWrapper() - origProgress[%d] == %d for command %d\n",
-		m_localSlot, origProgress, commandID));
-
-	m_netCommandWrapperList->processWrapper(ref);
-
-	if (fcIt != s_fileCommandMap.end())
-	{
-		Int newProgress = m_netCommandWrapperList->getPercentComplete(commandID);
-		DEBUG_LOG(("ConnectionManager::processWrapper() - newProgress[%d] == %d for command %d\n",
-			m_localSlot, newProgress, commandID));
-		if (newProgress > origProgress && newProgress < 100)
-		{
-			DEBUG_LOG(("ConnectionManager::processWrapper() - sending a NetFileProgressCommandMsg\n"));
-			s_fileProgressMap[m_localSlot][commandID] = newProgress;
-
-			Int progressMask = 0xff ^ (1 << m_localSlot);
-			NetFileProgressCommandMsg *msg = newInstance(NetFileProgressCommandMsg);
-			msg->setPlayerID(m_localSlot);
-			msg->setID(0);
-			if (DoesCommandRequireACommandID(msg->getNetCommandType()))
-			{
-				msg->setID(GenerateNextCommandID());
-			}
-			msg->setFileID(commandID);
-			msg->setProgress(newProgress);
-			sendLocalCommand(msg, progressMask);
-			processFileProgress(msg);
-			msg->detach();
-		}
-	}
+// processWrapper is owned by ConnectionManager_fileTransfer.cpp.
+// The unrowed donor definition here did not reproduce its native body.
+// Keep the existing rowed map operations and their instantiated tree helpers
+// as library providers after removing their old donor-only caller.
+namespace _STL {
+template int &map<unsigned short, int>::operator[](const unsigned short &);
+template map<unsigned short, AsciiString>::iterator
+map<unsigned short, AsciiString>::find(const unsigned short &);
 }
+
 
 /**
  * A client has sent us their run ahead metrics, lets store them away for future calculations.
