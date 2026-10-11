@@ -87,9 +87,10 @@ class Rva00079911 {public: void rva00079911();};
 class Rva007A41E {public: void rva007A41E();};
 class Rva00078C10 {public: bool rva00078C10(const Rva00078C10*,int*,int*);};
 struct HordeModelObject {char p[0x200]; float scale;};
-struct HordeAnimation {void *animation;float frame;char p[8];int mode;int direction;int tail;};
-struct HordeModelDraw {char p[8];HordeModelObject *object;char q[0x110-12];HordeAnimation animations[2];};
+struct HordeAnimation {void *animation;float frame;char p[8];int mode;int direction;unsigned char flag;char tail[3];};
+struct HordeModelDraw {char p[8];HordeModelObject *object;char q[0x18-12];void *sortKey;char r[0x110-0x1c];HordeAnimation animations[2];};
 struct W3DHordeModelDrawHandle {HordeModelDraw *model; int nameKey;
+ bool rva00078CE0(const W3DHordeModelDrawHandle*) const;
  __forceinline bool PartOfSameGroup(const W3DHordeModelDrawHandle& first,float delta) const;
 };
 struct HordeGroupNode: _STL::_Rb_tree_node_base {W3DHordeModelDrawModuleData *data;W3DHordeModelDrawHandle **begin;W3DHordeModelDrawHandle **end;W3DHordeModelDrawHandle **capacity;};
@@ -184,3 +185,65 @@ BfmeHelperYS::BfmeHelperYS():handles(),groups(),refs(),models() {}
 // independently supported by rowed teardown7A4E6 and ProcessGroup79FBC.
 // bfme helper name is retained from its existing verified caller pin;
 // original constructor class name is not newly asserted by this recovery.
+
+// Native78CE0..78E78 RET4 orders the same 8-byte handles. The independently
+// rowed 78F95 sort functor corroborates the key, scale, LOD, animation and
+// summed-frame comparisons. Retail proves model+18 and record+18 reads;
+// their field names here describe this view, not an asserted original API.
+// The original spelling of this standalone ordering method is unresolved.
+bool W3DHordeModelDrawHandle::rva00078CE0(const W3DHordeModelDrawHandle *rhs) const
+{
+	if (nameKey != rhs->nameKey)
+		return nameKey > rhs->nameKey;
+	if (nameKey == 0)
+		return model < rhs->model;
+	{
+		HordeModelObject *ld = model->object;
+		if (!ld)
+			return true;
+		HordeModelObject *rd = rhs->model->object;
+		if (!rd)
+			return true;
+		if (ld->scale != rd->scale)
+			return ld->scale < rd->scale;
+	}
+	if (rhs->model->sortKey != model->sortKey)
+		return model->sortKey < rhs->model->sortKey;
+	{
+		int lv, rv;
+		if (((Rva00078C10*)model)->rva00078C10((Rva00078C10*)rhs->model, &lv, &rv))
+		{
+			if (lv != rv)
+				return lv < rv;
+			return model < rhs->model;
+		}
+	}
+	{
+		for (int i = 0; i <= 1; ++i)
+		{
+			const HordeAnimation &l = model->animations[i];
+			const HordeAnimation &r = rhs->model->animations[i];
+			if (l.animation != r.animation)
+				return l.animation < r.animation;
+			if (l.animation == 0)
+				continue;
+			if (l.direction != r.direction)
+				return l.direction < r.direction;
+			if (l.mode != r.mode)
+				return l.mode < r.mode;
+			if (l.flag != r.flag)
+				return l.flag;
+		}
+	}
+	{
+		const HordeAnimation &l0 = model->animations[0];
+		const HordeAnimation &l1 = model->animations[1];
+		const HordeAnimation &r0 = rhs->model->animations[0];
+		const HordeAnimation &r1 = rhs->model->animations[1];
+		float lsum = (l1.animation ? l1.frame : 0.0f) + l0.frame;
+		float rsum = (r1.animation ? r1.frame : 0.0f) + r0.frame;
+		if (lsum != rsum)
+			return lsum < rsum;
+		return model < rhs->model;
+	}
+}
