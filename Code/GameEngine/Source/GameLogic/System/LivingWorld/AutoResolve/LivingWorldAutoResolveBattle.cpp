@@ -175,14 +175,19 @@ public: Rva004FA168Storage &subscript(const int &);
  void erase(const Rva004F88BBIterator &p){rva004F88BB(p);}
 private: unsigned header,count,unknown8;
 };
+class LivingWorldAutoResolveResourceBonusSchedule {public:int *getBonusForResourceAmount(int);};
+struct Rva004F68B8Entry {char pad[0x1C];int amount;};
 struct Rva004FA1F3Player {
  _STL::map<int,ArmySummary*> reinforcements;
- char unknown0C[0x20];
+ char unknown0C[0x18];
+ LivingWorldAutoResolveResourceBonusSchedule *schedule;
+ int unknown28;
  int side,unknown30;
 };
 class LivingWorldAutoResolveBattle {
 public:
  void rva004F9C8E(TreeHintRef00217D4C *,int);
+ void rva004F68B8(unsigned,bool);
  void buildReinforcementMaps();
  void addUnitsForCurrentRound(int);
  void rva004F9635(Rva004F9635Rec *);
@@ -284,4 +289,19 @@ void LivingWorldAutoResolveBattle::rva004F9C8E(TreeHintRef00217D4C *pos, int sid
 		}
 	}
 	reinterpret_cast<Rva004F70D1 *>(&currentUnits[side])->rva004F70D1(pos);
+}
+
+// Native4F68B8..4F68FC68B RET8; battle ctor4FA3C9 and completeRound4F9D6A
+// establish this receiver. Player stride34/schedule24 and vectors48/54 are
+// target accesses; the original helper name and unused flag meaning stay unknown.
+// Capture the resource amount before assigning the destination vector element.
+void LivingWorldAutoResolveBattle::rva004F68B8(unsigned index,bool quiet) {
+ _STL::vector<Rva004F68B8Entry *> &skills=*reinterpret_cast<_STL::vector<Rva004F68B8Entry *> *>((char*)this+0x48);
+ _STL::vector<int *> &bonuses=*reinterpret_cast<_STL::vector<int *> *>((char*)this+0x54);
+ Rva004F68B8Entry *entry=skills[index];
+ if(entry && players[index].schedule) {
+  int amount=entry->amount;
+  bonuses[index]=players[index].schedule->getBonusForResourceAmount(amount);
+ }
+ else bonuses[index]=0;
 }
