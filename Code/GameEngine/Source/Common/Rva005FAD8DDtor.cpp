@@ -74,6 +74,23 @@ public:
 	~Rva005F23B2();
 };
 
+// The native constructor 005FAFE8 passes 005FA892 to the owned plain
+// vector constructor iterator (00001423) with count 3 and stride 8 at +34.
+// This 10-byte callback ends at RET 005FA89B, immediately before the owned
+// panel constructor 005FA89C. It initializes both integer slots to -1.
+// Later accesses in 005FAFE8 put an army index in slot 0 and its panel index
+// in slot 1. The original element identity is unknown.
+struct Rva005FA892Pair
+{
+	Rva005FA892Pair();
+	int m_armyIndex;
+	int m_panelIndex;
+};
+
+Rva005FA892Pair::Rva005FA892Pair() : m_armyIndex(-1), m_panelIndex(-1)
+{
+}
+
 class Rva005FAD8D : public Rva00875284Base
 {
 public:
