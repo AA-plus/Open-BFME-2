@@ -1,12 +1,14 @@
 // ?parseBlendTileData@WorldHeightMap@@QAE_NAAVDataChunkInput@@PAUDataChunkInfo@@@Z
-// partial score=0.8 date=2026-10-08
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /MD /EHsc /D_CRTIMP= /DNDEBUG /DWIN32 /D_WINDOWS
+// partial score=0.96923828125 date=2026-10-11
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /DNDEBUG /DWIN32 /D_WINDOWS
 // BFME2 retail B1173..B1973; WB76E660 names WorldHeightMap::parseBlendTileData.
 // Semantic guide: ZH WorldHeightMap.cpp ParseBlendTileData. Native adds
 // byte vectors, wider indexes, dynamic blend/cliff tables and versions12..17.
 // Field extents follow the native reader and existing texture/vector providers.
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 #include <windows.h>
 #include "ascii_string.h"
 enum ErrorCode { ERROR_CORRUPT_FILE_FORMAT=0xDEAD0005 };
@@ -15,14 +17,14 @@ class DataChunkInput { public: int readInt(); unsigned char readByte(); float re
 struct DataChunkInfo { AsciiString label,parent; unsigned short version; };
 class GlobalData { public: char opaque[0x44]; int use3WayTerrainBlends; };
 extern GlobalData *TheWritableGlobalData;
-class Rva000B0565 { public: unsigned char *first,*last,*limit; void rva000B0565(unsigned,unsigned); };
+class Rva000B0565 : public _STL::vector<unsigned char> { public: void rva000B0565(unsigned,unsigned char); };
 class Rva000AFAFB { public: short *first,*last,*limit; Rva000AFAFB(unsigned); ~Rva000AFAFB() { if(first)free(first); } };
 void rva000AF1C2(int,int,int);
 class BfmeGridWM { public: void walk(); };
 struct BlendTileRecord { int blendIndex; unsigned char horiz,vert,rightDiagonal,leftDiagonal,inverted,longDiagonal; unsigned short pad; int customBlendEdgeClass; };
-class BfmeE16Vector { public: BlendTileRecord *first,*last,*limit; void resize(unsigned); unsigned size() const { return last-first; } BlendTileRecord &operator[](unsigned i) { return first[i]; } };
+class BfmeE16Vector : public _STL::vector<BlendTileRecord> { public: void resize(unsigned); };
 struct BfmePod36 { float f[8]; unsigned char b0,b1; unsigned short w; };
-class BfmePod36Vector { public: BfmePod36 *first,*last,*limit; void resize(unsigned); unsigned size() const { return last-first; } BfmePod36 &operator[](unsigned i) { return first[i]; } };
+class BfmePod36Vector : public _STL::vector<BfmePod36> { public: void resize(unsigned); };
 struct TXTextureClass { int globalTextureClass,firstTile,numTiles,width,isBlendEdgeTile; AsciiString name; char unknown18[16]; };
 class TileData;
 class WorldHeightMap {
@@ -83,16 +85,16 @@ bool WorldHeightMap::parseBlendTileData(DataChunkInput &file,DataChunkInfo *info
     if(info->version>=7) {
         if(info->version==7) {
             int byteWidth=(m_width+1)/8;
-            file.readArrayOfBytes((char*)m_cellCliffState.first,m_height*byteWidth);
-        } else file.readArrayOfBytes((char*)m_cellCliffState.first,m_height*m_flipStateWidth);
+            file.readArrayOfBytes((char*)m_cellCliffState.begin(),m_height*byteWidth);
+        } else file.readArrayOfBytes((char*)m_cellCliffState.begin(),m_height*m_flipStateWidth);
     }
     if(info->version<9)((BfmeGridWM*)this)->walk();
-    if(info->version>=11)file.readArrayOfBytes((char*)m_byte68.first,m_height*m_flipStateWidth);
-    if(info->version>=10)file.readArrayOfBytes((char*)m_byte5C.first,m_height*m_flipStateWidth);
-    if(info->version>=13)file.readArrayOfBytes((char*)m_byte74.first,m_height*m_flipStateWidth);
-    if(info->version>=15)file.readArrayOfBytes((char*)m_byte80.first,m_height*m_flipStateWidth);
-    if(info->version>=16)file.readArrayOfBytes((char*)m_byte8C.first,m_height*m_width);
-    if(info->version>=17)file.readArrayOfBytes((char*)m_byte50.first,m_height*m_flipStateWidth);
+    if(info->version>=11)file.readArrayOfBytes((char*)m_byte68.begin(),m_height*m_flipStateWidth);
+    if(info->version>=10)file.readArrayOfBytes((char*)m_byte5C.begin(),m_height*m_flipStateWidth);
+    if(info->version>=13)file.readArrayOfBytes((char*)m_byte74.begin(),m_height*m_flipStateWidth);
+    if(info->version>=15)file.readArrayOfBytes((char*)m_byte80.begin(),m_height*m_flipStateWidth);
+    if(info->version>=16)file.readArrayOfBytes((char*)m_byte8C.begin(),m_height*m_width);
+    if(info->version>=17)file.readArrayOfBytes((char*)m_byte50.begin(),m_height*m_flipStateWidth);
     m_numBitmapTiles=file.readInt();
     int numBlendedTiles=file.readInt();
     int numCliffInfo=1;
