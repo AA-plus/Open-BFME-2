@@ -17206,3 +17206,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva005A2899@AptOnlineCustomMatch@@QAEXXZ,0x005A2899,callee of ?rva005A61C6@AptOnlineCustomMatch@@UAEXXZ
 ?UpdatePings@AptOnlineCustomMatch@@QAEXXZ,0x0059ED8B,callee of ?rva005A61C6@AptOnlineCustomMatch@@UAEXXZ
 ?push_back@?$vector@PAVRva004DC920@@V?$allocator@PAVRva004DC920@@@_STL@@@_STL@@QAEXABQAVRva004DC920@@@Z,0x004DFCB0,ICF pointer-vector push_back; fold-proof=Code/GameEngine/Source/GameLogic/Object/Update/EmotionTrackerUpdateModuleDataParseAddEmotion.cpp
+??1VBase00C6EE28@@QAE@XZ,0x0057A243,destructor of the all-__purecall interface (vtable 0x00C6EE28): retail unwind funclet 0x00797832 of ctor 0x005380A8 jumps here with ECX=this+0x30 (the virtual-base subobject) and the body only stores 0x00C6EE28 at [ECX]
