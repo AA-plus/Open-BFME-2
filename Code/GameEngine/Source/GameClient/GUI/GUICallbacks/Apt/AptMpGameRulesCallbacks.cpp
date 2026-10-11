@@ -22,6 +22,7 @@ class GameWindow
 public:
 	unsigned int winGetStyle();
     int winHide(bool);
+    int winEnable(bool);
 };
 
 void GadgetComboBoxGetSelectedPos(GameWindow *window, int *selection);
@@ -183,6 +184,7 @@ public:
 	// Retail 0x0057E5B5: refreshes one rule widget; WB names UpdateRuleGadget.
 	void UpdateRuleGadget(int rule);
     void PopulateComboBoxes();
+    void PopulateCheckBoxes();
 	// Unrowed 0x0057EF46 (files a widget under its index), 0x0057EF18 and
 	// 0x0057ED2B, pinned by address.
 	void rva0057EF46(AptMpGameRulesWidgets *widgets, const char *index, GameWindow *window);
@@ -478,6 +480,52 @@ void AptMpGameRules::PopulateComboBoxes() {
         window->winHide(true);
         AsciiString key;
         key.format("APT:RuleComboBox_%d", widgetIndex++);
+        g_bfmeAptWindowManager->bfmeSetText(key, UnicodeString(L" "), false);
+    }
+    m_88 = true;
+}
+
+// Complete native57E7A1..57E97A RET0; WB159F020 names PopulateCheckBoxes.
+// +9D4 low flag bits come from native accesses to the canonical global.
+struct RuleCheck {int id; bool value;};
+const RuleCheck * const *Rva00559F63Get(int);
+UnicodeString Rva0055A04C(int);
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+struct RulesOverrideView {char padding[0x9D4]; unsigned char bits;};
+void AptMpGameRules::PopulateCheckBoxes() {
+    int count = Rva00559F95Get(m_mode);
+    const RuleCheck * const *checks = Rva00559F63Get(m_mode);
+    m_88 = false;
+    int widgetIndex = 0;
+    for (int i = 0; i < count; ++i) {
+        const RuleCheck *cur = checks[i];
+        if (!cur) continue;
+        int rule = cur->id;
+        if (((RuleVectorView<int>&)m_ruleStates)[rule] == 3) continue;
+        GameWindow *window = ((RuleVectorView<GameWindow*>&)m_checkBoxes)[widgetIndex];
+        if (!window) continue;
+        if (((RuleVectorView<GameWindow*>&)m_ruleWindows)[rule]) return;
+        ((RuleVectorView<GameWindow*>&)m_ruleWindows)[cur->id] = window;
+        AsciiString key;
+        key.format("APT:RuleCheckBox_%d", widgetIndex++);
+        g_bfmeAptWindowManager->bfmeSetText(key, Rva0055A04C(cur->id), false);
+        UpdateRuleGadget(rule);
+        ((RuleVectorView<int>&)m_ruleStates)[rule] = 1;
+        window->winHide(false);
+        if (((RulesOverrideView *)TheWritableGlobalData)->bits & 3) {
+            if (rule >= 0 && rule <= 1) {
+                ((RuleVectorView<int>&)m_ruleStates)[rule] = 2;
+                window->winEnable(false);
+            }
+        }
+    }
+    while (widgetIndex < count) {
+        GameWindow *window = ((RuleVectorView<GameWindow*>&)m_checkBoxes)[widgetIndex];
+        if (!window) break;
+        window->winHide(true);
+        AsciiString key;
+        key.format("APT:RuleCheckBox_%d", widgetIndex++);
         g_bfmeAptWindowManager->bfmeSetText(key, UnicodeString(L" "), false);
     }
     m_88 = true;
