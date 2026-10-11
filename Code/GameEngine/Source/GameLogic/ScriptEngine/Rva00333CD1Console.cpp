@@ -74,7 +74,16 @@ public:
 	virtual int readLine(char *buffer, int maxChars, bool *more);
 };
 extern Debug *theDebug;
-extern void *g_activeObj12F0610;
+// The Lua debugger's active object, retail VA 0x00E01DC0 (RVA 0x00A01DC0): the
+// rowed console body clears it and stores the state into it (retail 0x00333E27
+// `andl $0x0,0xe01dc0` and 0x00333E3A `mov %edi,0xe01dc0`), and BfmeConv's
+// deactivation hook clears it the same way. RVA 0x00A01DC0 is past .data's raw
+// end (0x009DE008) but inside its virtual size, so retail's image holds null
+// until the debugger parks a state object there -- which no rowed body does at
+// static-init time -- so the definition is zero-initialised. This unit and
+// BfmeConv824.cpp are its only writers, and this is the sole one whose rows are
+// otherwise ready to link.
+void *g_activeObj12F0610 = 0;
 
 int __cdecl Rva00333CD1Console(void *L, LuaAr *ar)
 {

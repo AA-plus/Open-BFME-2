@@ -16,6 +16,17 @@
 // four readers keep passing the same address to the same rowed compare at RVA
 // 0x000069D6. Retail's storage is zero-filled and is filled at static-init
 // time, exactly like the zero slots defined elsewhere in .data.
+// The prior `extern` declaration is what makes the definition external: without
+// it MSVC gives a const namespace-scope object INTERNAL linkage and emits the
+// TU-local symbol instead, so the readers' reference to
+// ?g_00DEC3B8@@3VAsciiString@@B is unresolved. `AsciiString` is used because
+// StringBase<char>'s default constructor is private in the shim (only its
+// friend AsciiString opens it); AsciiString's own default ctor is public and
+// zeroes the buffer pointer, which is retail's content for this four-byte
+// slot. Nothing else defines the object, and the rowed compare at 0x000069D6
+// takes it by address so a default-constructed empty key keeps every reader's
+// bytes.
+extern const AsciiString g_00DEC3B8;
 const AsciiString g_00DEC3B8;
 
 class LookupTablePostEffect

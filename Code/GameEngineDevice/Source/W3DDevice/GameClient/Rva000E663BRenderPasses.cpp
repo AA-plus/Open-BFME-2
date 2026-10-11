@@ -134,7 +134,15 @@ protected:
 };
 
 class Rva000E6AC0;
-extern Rva000E6AC0 *g_009EBC90;
+// The render buffer the shading pass registers as the current one, retail VA
+// 0x00DEBC90 (RVA 0x009EBC90): the rowed 0x000E663B body stores `this` into it
+// (retail 0x000E66B8 `mov %esi,0xdebc90`) and clears it at the end
+// (0x000E6766 `andl $0x0,0xdebc90`), which is exactly what every rowed reader
+// guards on. RVA 0x009EBC90 is past .data's raw end (0x009DE008) but inside its
+// virtual size, so retail's image holds null between passes and the
+// zero-initialised pointer is the image's own content. This unit is the one
+// whose rowed bodies assign it, so it owns the definition.
+Rva000E6AC0 *g_009EBC90 = 0;
 
 class Rva000EC9C6
 {

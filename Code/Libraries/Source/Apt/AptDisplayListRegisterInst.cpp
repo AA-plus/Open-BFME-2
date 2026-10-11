@@ -25,7 +25,17 @@ class AptCIH{char pad[0x4C];public:Payload*payload;bool queueClipEvents(int,int,
 class Rva006E9A40List{public:unsigned short count,capacity;AptCIH**items;void add(AptCIH*);inline bool has(AptCIH*p)const{const int n=capacity;int i=0;if(n>0){AptCIH**item=items;do{if(*item==p)return true;++i;++item;}while(i<n);}return false;}};
 class Rva006E34D0{public:char pad[8];Rva006E9A40List a;char pad10[16];Rva006E9A40List c,d;};
 extern Rva006E34D0*g_bfmeAptPtrAtE176D0;
-extern int g_00E17704;extern unsigned char g_00E1771C;
+// Apt's clip-event channel id, retail VA 0x00E17704 (RVA 0x00A17704): the rowed
+// 0x006F7E00 body loads it twice as queueClipEvents' channel argument (retail
+// 0x006F7F70 `mov 0xe17704,%edx` and 0x006F7F85 `mov 0xe17704,%eax`). RVA
+// 0x00A17704 is past .data's raw end (0x009DE008) but inside .data's virtual
+// size, so retail's image holds zero, which is what the definition carries.
+// Five Apt units read it with this same `extern int` spelling; the natural home
+// (Apt.cpp, owner of the neighbouring g_00E1771C) is claimed by another seat,
+// and this is the sole reader otherwise ready to link, so the definition lives
+// here.
+int g_00E17704 = 0;
+extern unsigned char g_00E1771C;
 class Rva006F7E00{public:void rva006F7E00(AptCIH*,int);};
 #define CHECK(c,s,l) if(!(c)){g_bfmeAptAssertAtE17734(s,"c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h",l);if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();}
 void Rva006F7E00::rva006F7E00(AptCIH*item,int fire){

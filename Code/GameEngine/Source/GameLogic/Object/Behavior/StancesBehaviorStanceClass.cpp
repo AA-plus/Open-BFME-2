@@ -17,7 +17,19 @@
 // listener-list20 and stance30; neutral rider slots retain target behavior.
 class AsciiString;
 enum NameKeyType{KEY0=0};class NameKeyGenerator{public:const AsciiString&keyToName(NameKeyType);};extern NameKeyGenerator*TheNameKeyGenerator;
-class Rva004260DE{public:int*rva004260DE(int);};class Rva00425F10;extern Rva00425F10*TheStancesStore;
+class Rva004260DE{public:int*rva004260DE(int);};
+// The stances store, retail VA 0x00E031D4 (RVA 0x00A031D4, 8 bytes): the rowed
+// 0x0045F084 body loads that address and calls through it (retail 0x0045F12D
+// `mov 0xe031d4,%ecx`). RVA 0x00A031D4 is past .data's raw end (0x009DE008) but
+// inside .data's virtual size, so retail's image holds null; the store is the
+// subsystem Rva0022AC9B registers under the name "TheStancesStore"
+// (SubsystemInterface.cpp records site 0x0022F04C for global 0x00A031D4) and no
+// rowed body creates it, so the zero-initialised pointer is what the image
+// holds. Four units read it (FontLibraryInit, GameEngineInit, this one and the
+// ledger's alias spelling ?g_00E031D4@@3PAVRva004260DE@@A) and only this unit is
+// otherwise ready to link, so the definition lives here.
+class Rva00425F10;
+Rva00425F10 *TheStancesStore = 0;
 template<int N>class VGap:public VGap<N-1>{public:virtual void gap(char(*)[N])=0;};template<>class VGap<0>{};
 class StanceRider:public VGap<23>{public:virtual bool slot23()=0;
  virtual void slot24()=0;

@@ -15,7 +15,17 @@ class Object { public:
  const ThingTemplate*getTemplate()const{return m_template;} unsigned getID()const{return id;}
  Bool getWorldspaceBestContactPoint(Coord3D*,const Coord3D*,const char*,Int,Int,Bool)const;
 };
-extern bool g_bfmeDockingTraceActive;
+// The docking-diagnostic trace flag, retail VA 0x00E03CA8 (RVA 0x00A03CA8).
+// The rowed body tests it twice and writes it once (retail 0x0026872F
+// `cmpb $0x0,0xe03ca8`, 0x002687F4 the same test, 0x00268854 `cmp
+// %al,0xe03ca8`). RVA 0x00A03CA8 is past .data's raw end (0x009DE008) but
+// inside its virtual size, so retail's image holds false -- the flag is turned
+// on only by the docking diagnostics, which also read it. Five units spell it
+// this way (?g_bfmeDockingTraceActive@@3_NA; the ledger binds the same object to
+// the byte spelling ?g_00E03CA8@@3EA, so the two are one object, not two), and
+// exactly one strong definition is needed -- this unit is the sole reader the
+// fix unblocks.
+bool g_bfmeDockingTraceActive = false;
 extern "C" void *theLogicRandomLogFile;
 extern "C" int __cdecl fprintf(void*,const char*,...);
 struct ContactPointModuleData { char pad[0x58]; AsciiString *begin,*end; };
