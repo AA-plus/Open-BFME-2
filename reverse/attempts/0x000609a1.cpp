@@ -1,35 +1,31 @@
 // ?removePlayingAudio@MilesAudioManager@@UAEXABVAsciiString@@H@Z
-// partial score=0.98 date=2026-10-10
+// partial score=0.99 date=2026-10-11
 // ?removePlayingAudio@MilesAudioManager@@UAEXABVAsciiString@@H@Z
-// banked 2026-10-10: 889B vs 876B; loops 1-3 (audio-local), queued,
-// request-set/list and epilogue all exact (tail reconverges at +13,
-// all non-reloc bytes match). Sole residue: music-stack loop emits
-// in ecx (mov ecx,eax) + a peeled first-compare in the outer body
-// vs retail eax (imul eax) + plain jmp to inner-top. Tried ptr+do-while
-// +countdown (correct control: add-stack/dec/jne-near match), ref+for,
-// per-iter end, named end, barrier, const/const_iterator, volatile.
-// Needs: slot26 rename + BfmeStringTailRecord144::m_info from
-// MilesAudioManager.cpp. Requires MilesAudioManager receiver.
-// AudioEventInfo's slot-1 event-name getter (0x000609A1's compares go
-// through it); the view keeps the vtable use out of AudioEventInfo itself.
-class BfmeAudioEventInfoNameView {
-public:
-    virtual void slot0();
-    virtual const AsciiString &getEventName(void) const;
-};
+// partial score=0.99 date=2026-10-11 (round 5)
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// stlport
+// Append to Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp
+// at master e08dd83e34 (BfmeAudioEventInfoNameView, Rva000554A9 and
+// BfmeStringTailRecord144::m_info are already declared there). Measured:
+// 876B == retail 876B; all bytes equal except 3 instructions in the music
+// stack loop's viewType test (retail: mov eax,[esi+0x1c]; mov ecx,[ebp+0xc];
+// cmp [eax+0x30],ecx -- ours reuses the dying audio register esi:
+// mov esi,[esi+0x1c]; mov eax,[ebp+0xc]; cmp [esi+0x30],eax).
+// Closed this round: queued sweep through m_queuedEvents[viewType] directly
+// (no reference; cl then folds &_M_finish to (viewType+0x13)*0xC and parks
+// &queued in the dead viewType slot, as retail) which also fixed the music
+// loop's peeled first compare and ecx/eax; `pending` initialised at its
+// declaration (begin() writes it in place).
+// Tried without effect on the residue: a separate `track` local, playing.get()
+// everywhere, inline bfmeSameEvent helper, inverted/nested conditions, a
+// remove flag, viewType == ... order, stack pointer / row pointer forms,
+// reinterpret_cast reference copy of *music.
+
 static __forceinline const AsciiString &bfmeEventName(const AudioEventInfo *info)
 {
     return reinterpret_cast<const BfmeAudioEventInfoNameView *>(info)->getEventName();
 }
 
-// The queued-event vector's single erase, rowed under an address name.
-class Rva000554A9 { public: void *rva000554A9(void *position); };
-
-// Retail 0x000609A1 (876 bytes, vftable slot 26): Zero Hour's
-// removePlayingAudio by event name, limited to one view type. BFME 2 also
-// drops the name from that view's two music stacks and queued events
-// (unmapping their handles), from the pending request set (deleting those
-// requests) and from the request list's pending plays.
 void MilesAudioManager::removePlayingAudio(const AsciiString &eventName, int viewType)
 {
     MilesMutexGuard guard(&m_mutex, 0);
@@ -89,19 +85,19 @@ void MilesAudioManager::removePlayingAudio(const AsciiString &eventName, int vie
         }
     }
 
-    QueuedAudioEvents &queued = m_queuedEvents[viewType];
-    QueuedAudioEvents::iterator event = queued.begin();
-    while (event != queued.end()) {
+    QueuedAudioEvents::iterator event = m_queuedEvents[viewType].begin();
+    while (event != m_queuedEvents[viewType].end()) {
         if (bfmeEventName(event->m_info) == eventName) {
             unmapPhysicalHandle(event->m_playingHandle);
-            event = (QueuedAudioEvents::iterator)reinterpret_cast<Rva000554A9 &>(queued).rva000554A9(event);
+            event = (QueuedAudioEvents::iterator)reinterpret_cast<Rva000554A9 &>(m_queuedEvents[viewType]).rva000554A9(event);
+
         } else {
             ++event;
         }
     }
 
-    Rva00051107AudioRequestSet::iterator pending;
-    pending = m_requestSet.begin();
+    Rva00051107AudioRequestSet::iterator pending = m_requestSet.begin();
+
     while (pending != m_requestSet.end()) {
         if ((*pending)->m_pendingEvent.get()
             && bfmeEventName((*pending)->m_pendingEvent->m_info) == eventName) {

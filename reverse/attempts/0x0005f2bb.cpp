@@ -1,3 +1,5 @@
+// ?processAmbientStreams@MilesAudioManager@@QAEXPAU?$_List_iterator
+// partial score=0.99 date=2026-10-11
 // ?processAmbientStreams@MilesAudioManager@@QAEXPAU?$_List_iterator@VPlayingAudioRef@@U?$_Nonconst_traits@VPlayingAudioRef@@@_STL@@@_STL@@@Z
 // partial score=0.99 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
@@ -39,6 +41,17 @@
 //    `char at6A8[2]` -> `bool m_at6A8; char at6A9;`
 //  m_at90 (+0x90) is the frame duration (ms) the fades step by.
 // Then append everything below at the end of the TU.
+
+// Round 5 (2026-10-11): re-measured on master e08dd83e34 with the layout
+// edits below applied (m_atB8 already present): still 1922B vs 1921B, the
+// sole residue the hasExpired cleanup preheader (retail mov edi,eax; ours
+// mov edi,[ebp-0x34] after the eventEnd load). Tried ~20 more shapes:
+// forceinline helper taking (vector&/vector*, end by value/by ref) -- by
+// value gives retail's copy (mov edi,ecx) but loads end first and swaps the
+// eventEnd/used frame slots (1920B); a block-local `end` copy declared after
+// `it` gives 1921B but the same slot swap; precheck + do-while with end copy,
+// for(;;)/continue/inverted if, eventEnd != it, function-scope `it`,
+// pointer `events`, q alias in the erase branch: all unchanged.
 
 // Native 5F2BB..5FA3C RET4; WorldBuilder callgraph names processAmbientStreams.
 // The event's volume product getter, rowed at 0x002D94E4 under an
