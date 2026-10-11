@@ -1,4 +1,4 @@
-// cl: /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
 // AIStates.cpp bodies of BFME 2's attack state machine that are not yet rowed
 // in the per-state units (declarations carried from
@@ -15,6 +15,7 @@
 #include "GameLogicObjectLookupView.h"
 #include "Coord3D.h"
 #include "Coord2D.h"
+#include "Common/Snapshot.h"
 #include "RTS/XYDistanceCallView.h"
 
 typedef bool Bool;
@@ -90,8 +91,8 @@ Real normalizeAngle(Real angle);
 
 #define PATHFIND_CELL_SIZE_F 10.0f
 
-extern const int g_009BA4E4;
-#define LOGICFRAMES_PER_SECOND g_009BA4E4
+extern int g_Va00DBA4E4;
+#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
 
 extern GameLogic *TheGameLogic;
 
@@ -103,6 +104,8 @@ public:
 	Real m_aggressiveRangeModifier; // +0x50
 	unsigned char m_pad54[0x8C - 0x54];
 	Bool m_aiCrushesInfantry; // +0x8C
+	unsigned char m_pad8D[0xB8 - 0x8D];
+	Bool m_teamPathWait; // +0xB8
 };
 
 class Rva002C9B80Owner;
@@ -120,7 +123,7 @@ class AI
 public:
 	static Bool rva002FE193(Object *owner, Object *nemesis);
 	Pathfinder *pathfinder() { return m_pathfinder; }
-	const TAiData *getAiData() { return m_aiData; }
+	const TAiData *getObservedAiData() { return m_aiData; }
 	unsigned char m_pad00[0x10];
 	Pathfinder *m_pathfinder; // +0x10
 	unsigned char m_pad14[0x18 - 0x14];
@@ -139,6 +142,7 @@ public:
 		PRECISE_Z_POS
 	};
 	Real getMaxTurnRate(Object *obj) const;
+	const struct LocomotorTemplateView *getTemplate() const { return m_template; }
 	void setUsePreciseZPos(Bool b)
 	{
 		if (b)
@@ -147,10 +151,13 @@ public:
 			m_flags &= ~(1 << PRECISE_Z_POS);
 	}
 private:
-	unsigned char m_pad00[0x44];
+	unsigned char m_pad00[4];
+	const struct LocomotorTemplateView *m_template; // +0x04
+	unsigned char m_pad08[0x44 - 8];
 	unsigned int m_flags; // +0x44
 };
 
+struct LocomotorTemplateView { char prefix[0x10B]; Bool m_10b; };
 // Locomotor speed for an object (0x001E46E1), rowed under this name.
 class Rva001E46E1
 {
@@ -304,20 +311,83 @@ private:
 	Coord3D m_position; // +0x38
 };
 
+class Team;
+template<class OBJCLASS>
+class DLINK_ITERATOR
+{
+public:
+	typedef OBJCLASS* (OBJCLASS::*GetNextFunc)() const;
+private:
+	OBJCLASS* m_cur;
+	GetNextFunc m_getNextFunc;
+public:
+	DLINK_ITERATOR(OBJCLASS* cur, GetNextFunc getNextFunc) : m_cur(cur), m_getNextFunc(getNextFunc)
+	{
+	}
+	void advance()
+	{
+		if (m_cur)
+			m_cur = ((*m_cur).*(m_getNextFunc))();
+	}
+	Bool done() const
+	{
+		return m_cur == 0;
+	}
+	OBJCLASS* cur() const
+	{
+		return m_cur;
+	}
+};
+// The member walk (rowed iterate_TeamMemberList 0x00263864 and advance
+// 0x00263526), as ScriptActions_doPlayerForceEmotion.cpp declares it.
+template <>
+class DLINK_ITERATOR<Object>
+{
+private:
+	Object *m_cur;
+	unsigned char m_targetAbiState[20];
+public:
+	void advance();
+	bool done() const { return m_cur == 0; }
+	Object *cur() const { return m_cur; }
+};
+
+class MemoryPoolObject
+{
+public:
+	virtual ~MemoryPoolObject();
+};
+
 class TeamPrototype
 {
 public:
 	unsigned char m_pad00[0x216];
 	Bool m_216; // +0x216
+	unsigned char m_pad217[0x334 - 0x217];
+	Team *m_dlinkhead_TeamInstanceList; // +0x334
 };
 
-class Team
+class Team : public MemoryPoolObject, public Snapshot
 {
 public:
 	Object *getTeamTargetObject();
 	void rva0039D84A(Object *target);
-	unsigned char m_pad00[0x30];
+	Team *dlink_next_TeamInstanceList() const;
+	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
+	unsigned char m_pad08[0x30 - 8];
 	TeamPrototype *m_proto; // +0x30
+};
+
+inline DLINK_ITERATOR<Team> iterate_TeamInstanceList(const TeamPrototype *proto)
+{
+	return DLINK_ITERATOR<Team>(proto->m_dlinkhead_TeamInstanceList, &Team::dlink_next_TeamInstanceList);
+}
+
+struct PlayerTeamNode
+{
+	PlayerTeamNode *m_next;
+	PlayerTeamNode *m_prev;
+	TeamPrototype *m_value;
 };
 
 class Player
@@ -325,6 +395,9 @@ class Player
 public:
 	unsigned char m_pad00[0x5C];
 	Int m_playerType; // +0x5C
+	unsigned char m_pad60[0x32C - 0x60];
+	PlayerTeamNode *m_playerTeamPrototypes; // +0x32C
+	PlayerTeamNode *getPlayerTeams() const { return m_playerTeamPrototypes; }
 };
 
 // Object +0xA8 geometry-shape list (index accessor 0x006BD980, rowed under
@@ -345,7 +418,7 @@ public:
 class Object : public Thing
 {
 public:
-	AIUpdateInterface *getAI() { return m_ai; }
+	AIUpdateInterface *getObservedAI() { return m_ai; }
 	Object *getContainedBy() { return m_containedBy; }
 	Object *getOutermostContainer()
 	{
@@ -372,6 +445,7 @@ public:
 	Bool rva0028ADE0() const;
 	const Rva0028AC4EEntry *rva0028AC4E() const;
 	void rva0028CDB6();
+	Bool rva0028C264(Int *out, Int kind);
 	Real GetRelativeAngle(const Coord3D *pos) const;
 	Real getOrientation() const { return m_orientation; }
 	Bool rva002943B2(const Player *player);
@@ -408,7 +482,9 @@ public:
 	Object *m_containedBy; // +0x274
 	unsigned char m_pad278[0x304 - 0x278];
 	Team *m_team; // +0x304
-	unsigned char m_pad308[0x438 - 0x308];
+	unsigned char m_pad308[0x410 - 0x308];
+	Int m_410; // +0x410
+	unsigned char m_pad414[0x438 - 0x414];
 	UnsignedInt m_438; // +0x438
 };
 
@@ -533,7 +609,7 @@ public:
 protected:
 	StateMachine *getMachine() const { return m_machine; }
 	Object *getMachineOwner() const { return m_machine->getOwner(); }
-	Object *getMachineGoalObject() const { return m_machine->getGoalObject(); }
+	Object *getObservedMachineGoalObject() const { return m_machine->getGoalObject(); }
 	const Coord3D *getMachineGoalPosition() const { return m_machine->getGoalPosition(); }
 	unsigned char m_pad04[0x18 - 0x04];
 	StateMachine *m_machine; // +0x18
@@ -728,6 +804,7 @@ class AIFollowPathAsTeamState : public AIInternalMoveToState
 public:
 	virtual StateReturnType onEnter();
 private:
+	Bool canMoveToNextFormationPathPoint();
 	Int m_index; // +0x4C
 	unsigned char m_pad50[0x54 - 0x50];
 	Bool m_adjustFinal; // +0x54
@@ -843,8 +920,8 @@ Bool Rva0034311ECheck(Object *obj);
 StateReturnType AIAttackMeleeEngageState::updateInternal()
 {
 	Object *source = getMachineOwner();
-	AIUpdateInterface *ai = source->getAI();
-	Object *victim = getMachineGoalObject();
+	AIUpdateInterface *ai = source->getObservedAI();
+	Object *victim = getObservedMachineGoalObject();
 	if (!victim)
 		return STATE_FAILURE;
 	if (victim->testStatus(OBJECT_STATUS_33))
@@ -1011,7 +1088,7 @@ StateReturnType AIAttackMeleeEngageState::updateInternal()
 StateReturnType AIAttackPositionAimAtTargetState::rva0034A570(Bool firstFrame)
 {
 	Object *source = getMachineOwner();
-	AIUpdateInterface *sourceAI = source->getAI();
+	AIUpdateInterface *sourceAI = source->getObservedAI();
 	if (!sourceAI)
 		return STATE_FAILURE;
 	if (!source->rva0028ADE0())
@@ -1091,3 +1168,66 @@ StateReturnType AIAttackPositionAimAtTargetState::rva0034A570(Bool firstFrame)
 	}
 	return STATE_CONTINUE;
 }
+
+// Retail 0x00349E74, 348 bytes (after AIFollowPathAsTeamState::onExit; the
+// team path update asks it before leaving a path point). With TAiData +0xB8
+// set, an owner still on its first two path points with a walking locomotor
+// (template byte +0x10B) waits until every other member of its controlling
+// player's teams in the same path group (+0x410) that is following the path
+// (AI state 0x36, walking) has reached the same point; the 0x0028C264 kind-4
+// query on the owner or on any member ends the wait.
+Bool AIFollowPathAsTeamState::canMoveToNextFormationPathPoint()
+{
+	if (!TheAI->getObservedAiData()->m_teamPathWait)
+		return true;
+	Object *owner = getMachineOwner();
+	Object *volatile savedOwner = owner;
+	AIUpdateInterface *ai = owner->getObservedAI();
+	if (!ai)
+		return true;
+	Int group = owner->m_410;
+	Int index = ai->m_currentGoalPathIndex;
+	if (index > 1)
+		return true;
+	if (ai->getCurLocomotor() && !ai->getCurLocomotor()->getTemplate()->m_10b)
+		return true;
+	Int unused;
+	if (owner->rva0028C264(&unused, 4))
+		return true;
+
+	Bool ready = true;
+	Player *player = owner->getControllingPlayer();
+	for (PlayerTeamNode *it = player->getPlayerTeams()->m_next; it != player->getPlayerTeams(); it = it->m_next)
+	{
+		for (DLINK_ITERATOR<Team> iter = iterate_TeamInstanceList(it->m_value); !iter.done(); iter.advance())
+		{
+			Team *team = iter.cur();
+			if (!team)
+				continue;
+			for (DLINK_ITERATOR<Object> objIter = team->iterate_TeamMemberList(); !objIter.done(); objIter.advance())
+			{
+				Object *member = objIter.cur();
+				if (member->m_410 != group)
+					continue;
+				AIUpdateInterface *memberAI = member->getObservedAI();
+				if (member == savedOwner)
+					continue;
+				if (member->rva0028C264(&unused, 4))
+					return true;
+				if (memberAI && memberAI->rva00260DED() == 0x36 &&
+					(!memberAI->getCurLocomotor() || memberAI->getCurLocomotor()->getTemplate()->m_10b) &&
+					memberAI->m_currentGoalPathIndex != index)
+					ready = false;
+			}
+		}
+	}
+	return ready;
+}
+
+// WB E19730 names canMoveToNextFormationPathPoint at AIStates.cpp9353.
+// Native00349E74..00349FD0 RET0 proves the complete348B boundary.
+// The local savedOwner snapshot retains the native frame home while the
+// register is reused for the player and member AI; its address never escapes.
+// Load member AI before excluding the owner as witnessed by native349F48.
+// PMF adjustment uses real MemoryPoolObject/Snapshot inheritance and the
+// rowed Team next-member provider; iterator output keeps its witnessed24B ABI.
