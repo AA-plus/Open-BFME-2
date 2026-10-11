@@ -62,6 +62,11 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 //			  moves.
 //-----------------------------------------------------------------------------
 
+// The legacy Zero Hour edge element has a trivial three-byte constructor.
+// Keep its private spelling separate from the retail edgeInfo constructor
+// at 0x00083C8A, whose forty-byte body constructs both coordinate arrays.
+// The unrowed donor track constructor keeps its existing behavior.
+#define edgeInfo BfmeZhTrackEdgeInfo
 #include "W3DDevice/GameClient/W3DTerrainTracks.h"
 #include "W3DDevice/GameClient/heightmap.h"
 #include "Common/PerfTimer.h"
