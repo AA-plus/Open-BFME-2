@@ -148,6 +148,12 @@ public:
 	void rva001EDFF7(float *region) const;
 	bool rva001EDD80(const Rva001EDD80Pair *anchor, const Rva001EDD80Pair *pos);
 	const MouseIO *getMouseStatus() { return &m_currMouse; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getMouseStatus copy loses to the first-in-order copy
+	// (no retail address); the call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	const MouseIO *bfme_mouse_status() { return &m_currMouse; }
 
 	char m_pad00[0x4F0C];
 	MouseIO m_currMouse; // +0x4F0C
@@ -382,7 +388,7 @@ GameMessageDisposition BfmeOwnVVD::translateGameMessage(const GameMessage *msg)
 			bool isSelecting = TheInGameUI->isSelecting();
 			if (isSelecting)
 			{
-				const MouseIO *io = TheMouse->getMouseStatus();
+				const MouseIO *io = TheMouse->bfme_mouse_status();
 				if (io && io->leftState != 1)
 					isSelecting = false;
 			}
