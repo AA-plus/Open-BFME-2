@@ -36,6 +36,14 @@
 // allocator temporaries take the dead template slot [ebp+0xB] as retail does.
 // Member names past the cited offsets are placeholders.
 
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include "ascii_string.h"
 #define BFME_SNAPSHOT_CAPITALIZED_SLOTS
