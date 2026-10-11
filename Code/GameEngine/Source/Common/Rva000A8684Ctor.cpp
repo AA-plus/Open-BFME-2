@@ -12,6 +12,10 @@ class AsciiString
 {
 public:
 	AsciiString() { m_data = 0; }
+	// LINK: the default ctor's COMDAT loses to the first-in-order copy; the one member
+	// init uses a TU-unique no-init ctor (same store). No flags touched.
+	struct BfmeNoInitA8684 {};
+	AsciiString(BfmeNoInitA8684) { m_data = 0; }
 	~AsciiString();
 private:
 	char * volatile m_data;
@@ -44,7 +48,7 @@ private:
 };
 
 Rva000A8684::Rva000A8684()
-	: m_0()
+	: m_0((AsciiString::BfmeNoInitA8684()))
 	, m_4(0)
 	, m_8(1)
 	, m_str()
