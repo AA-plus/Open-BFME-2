@@ -26,6 +26,7 @@ public:
     void *rva006E1100() const;
     void *rva006E1170() const;
     void *rva006E1090() const;
+    void rva006E1F00(int mask);
     const AptCIH *rva006E0CB0() const;
     bool rva006E0C50(const AptCIH *other) const;
     bool rva006E0BF0() const;
@@ -256,4 +257,60 @@ void *AptCIH::rva006E1090() const
     }
     _ReadWriteBarrier();
     return m_4C;
+}
+
+// ?rva006E1F00@AptCIH@@QAEXH@Z, retail 0x006E1F00, 132 bytes (RET 4;
+// callers AptAnimationPoolData::_tickNewInsts, the display-list
+// instantiation 0x006F85E0 and three Rva006FB860 updates): sets the
+// instance data's (0x006E1090) +0x18 mask; when it changes, clears the
+// +0x1C display list (AptDisplayList::clear(false)) and re-submits every
+// 0x44-byte record of the character (+0x0C: count +0x2C, records +0x30)
+// whose +0x00 bits meet the mask through the pinned submit 0x006F8B70,
+// with the record's +0x04 id, this instance, its +0x24 transform and +0x0C
+// colour. Address-derived names for the instance and record views.
+struct Rva006E1F00Record
+{
+	unsigned int m_mask;			// +0x00
+	int m_id;						// +0x04
+	unsigned char m_pad08[0x0c - 0x08];
+	unsigned char m_color[0x24 - 0x0c];	// +0x0C
+	float m_transform[(0x44 - 0x24) / 4];	// +0x24
+};
+struct Rva006E1F00Character
+{
+	unsigned char m_pad00[0x2c];
+	int m_count;					// +0x2C
+	Rva006E1F00Record *m_records;	// +0x30
+};
+class BfmeSubmitter1283
+{
+public:
+	void bfmeSubmit1283(int a1, int a2, int a3, int a4, int a5, int a6, int a7, float *a8, int a9, int a10, int a11, int a12);	// 0x006F8B70
+};
+class AptDisplayList { public: void clear(bool deep); };	// 0x006F80C0
+struct Rva006E1F00Instance
+{
+	unsigned char m_pad00[0x0c];
+	Rva006E1F00Character *m_character;	// +0x0C
+	unsigned char m_pad10[0x18 - 0x10];
+	unsigned int m_mask;			// +0x18
+	AptDisplayList m_displayList;	// +0x1C
+};
+
+void AptCIH::rva006E1F00(int mask)
+{
+    Rva006E1F00Instance *instance = (Rva006E1F00Instance *)rva006E1090();
+    if (mask == (int)instance->m_mask)
+        return;
+    instance->m_mask = mask;
+    instance->m_displayList.clear(false);
+    for (int i = 0; i < instance->m_character->m_count; ++i)
+    {
+        if (instance->m_mask & instance->m_character->m_records[i].m_mask)
+        {
+            Rva006E1F00Record &record = instance->m_character->m_records[i];
+            ((BfmeSubmitter1283 *)&instance->m_displayList)->bfmeSubmit1283(0, i, record.m_id, 0, (int)this, 0, -1,
+                record.m_transform, (int)record.m_color, 0, 0, 0);
+        }
+    }
 }
