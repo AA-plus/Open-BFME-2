@@ -15710,7 +15710,7 @@ ___CxxFrameHandler,0x00629182,callee of __ehhandler$??1Rva005813E@@UAE@XZ
 ??0LivingWorldBuildPlotIcon@@QAE@PAVLivingWorldBuildPlotIconTemplate@@PAVLivingWorldBuildPlot@@ABVCoord2D@@@Z,0x0059E10F,callee of ?CreateIcon@LivingWorldBuildPlot@@QAEXABVAsciiString@@@Z
 ??0LivingWorldBuilding@@QAE@PAVLivingWorldRegion@@ABVCoord2D@@PBURva003F1BD3TemplateView@@H@Z,0x004E119C,callee of ?rva004FC33E@Rva003F1C56Plot@@QAEXPBURva003F1BD3TemplateView@@@Z
 ?rva0021386C@Rva00056F61@@QAEPAXPBVAsciiString@@@Z,0x0021386C,callee of ?CreateSound@LivingWorldManager@@QAEPAVRva003FAE68Base@@ABVAsciiString@@@Z
-??0Rva005E93FF@@QAE@IPAX@Z,0x005E93FF,callee of ?rva005CEB03@Rva005CEB03@@QAE?AURvaF1Handle@@I@Z
+??0Rva005E92F7@@QAE@IPAX@Z,0x005E93FF,rename former address-only constructor view Rva005E93FF to the already rowed destructor and vtable owner Rva005E92F7; whole140B constructor and60B destructor exact; consumer005CEB03 reconciled in the same change
 ?rva00466848@CaveContain@@QAEXPAVTeam@@_N@Z,0x00466848,Direct REL32 callee of target recalc body 0x00466977 at 0x00466A04; Ghidra boundary 0x00466848 size 148. Address-derived label; BFME1 helper source is a semantic lead only.
 ?newBridge@TerrainRoadCollection@@QAEPAVTerrainRoadType@@VAsciiString@@@Z,0x002DB64E,callee of ?parseTerrainBridgeDefinition@INI@@SAXPAV1@@Z
 ?Rva00220E30@@YA?AVUnicodeString@@PAX_N@Z,0x00220E30,callee of ?rva00406BF3@Rva00406BB0@@QAE?AUTreeHintRef00217D4C@@XZ
@@ -17203,3 +17203,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??0?$list@PAVNetPacket@@V?$allocator@PAVNetPacket@@@_STL@@@_STL@@QAE@ABV01@@Z,0x00594689,Native ConstructBigCommandPacketList REL32; whole emitted helper; all owner relocations; and associative EH graph verified; fold-proof=Code/GameEngine/Source/GameNetwork/NetPacket.cpp
 ?rva004FBF8E@RegionAwardDispute@@QAEXXZ,0x004FBF8E,callee of ??0RegionAwardDispute@@QAE@HABV?$vector@IV?$allocator@I@_STL@@@_STL@@H@Z
 ?rva001076EE@Rva001076EE@@QAE_NXZ,0x001076EE,callee of ?rva0009A254@W3DShadowManager@@QAE_NXZ
+?Rva005E936AGet@@YAPBVImage@@PBX@Z,0x005E936A,Address-derived cdecl image lookup view; native5E946A caller pushes record word24 and pops ECX; whole149B callee5E936A..5E93FF reads pointer arg+14 AsciiString and calls rowed ImageCollection::findImageByName with BuildingNoArt default; no original application identity inferred

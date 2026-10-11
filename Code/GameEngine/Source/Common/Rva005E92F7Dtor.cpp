@@ -1,29 +1,63 @@
-// cl: /Ob2 /EHsc /MD
-// ??1Rva005E92F7@@UAE@XZ retail 0x005E92F7 60B
-// MI dtor second base at +8 via pin 0x005E12D1 plus base vtable restore to g_00BC6F20.
-// Layout from twin 0x005E91A9 60B and 0x005CC37C 60B plus deleting wrapper 0x005E948B.
-// Evidence: EH_prolog plus two vptr stores C78030/C78010 then member-base call then BC6F20.
-// Pin QAE refuted: MI with virtual second base forces virtual dtor UAE same bytes.
+// cl: /Ireference/shims/bfme2_ascii /Ob2 /EHsc /MD
+// Native destructor 005E92F7 (60B) and constructor 005E93FF (140B).
+// Measured prefixes: primary 8B; holder 20B at +8; copied record 12B at +1C.
+// Record base construction precedes final derived vtable stores.
+// Record-base inheritance is a codegen model; original class identity is unknown.
+// Evidence: reverse/identity_evidence/button-record-base-constructor.md
+#include "ascii_string.h"
+
+class Image;
+const Image *Rva005E936AGet(const void *input);
 
 class Rva005E12D1
 {
 public:
+	Rva005E12D1(void *owner, const AsciiString &kind, void *id);
 	virtual ~Rva005E12D1();
+private:
+	char holderStorage[0x10];
+};
+class Rva005E1158
+{
+public:
+	void rva005E1158(const Image *image);
 };
 
 class Rva005E92F7Base
 {
 public:
+	Rva005E92F7Base() : m_04(0) {}
 	virtual ~Rva005E92F7Base() {}
 protected:
 	int m_04;
 };
 
-class Rva005E92F7 : public Rva005E92F7Base, public Rva005E12D1
+class Rva005F5C77Base0 : public Rva005E92F7Base
 {
 public:
+	virtual ~Rva005F5C77Base0() {}
+};
+
+struct Rva005E92F7Record
+{
+	int m_id;
+	int m_04;
+	const void *m_image;
+};
+
+class Rva005E92F7 : public Rva005F5C77Base0, public Rva005E12D1, public Rva005E92F7Record
+{
+public:
+	Rva005E92F7(unsigned int owner, void *record);
 	virtual ~Rva005E92F7();
 };
+
+Rva005E92F7::Rva005E92F7(unsigned int owner, void *record)
+	: Rva005E12D1((void *)owner, AsciiString("button"), *(void **)record),
+	  Rva005E92F7Record(*(Rva005E92F7Record *)record)
+{
+	reinterpret_cast<Rva005E1158 *>(static_cast<Rva005E12D1 *>(this))->rva005E1158(Rva005E936AGet(m_image));
+}
 
 Rva005E92F7::~Rva005E92F7()
 {

@@ -150,11 +150,11 @@ RvaF1Handle Rva005E5DA1::rva005E5DA1(void *argument)
 {
 	return RvaF1Handle(new Rva005F5F2B(argument, &m_context));
 }
-class Rva005E93FF
+class Rva005E92F7
 {
 	char m_storage[0x28];
 public:
-	Rva005E93FF(unsigned int argument, void *context);
+	Rva005E92F7(unsigned int argument, void *context);
 };
 struct Rva005CEB03
 {
@@ -165,7 +165,7 @@ struct Rva005CEB03
 
 RvaF1Handle Rva005CEB03::rva005CEB03(unsigned int argument)
 {
-	return RvaF1Handle(new Rva005E93FF(argument, &m_context));
+	return RvaF1Handle(new Rva005E92F7(argument, &m_context));
 }
 
 // ?rva005FB243@Rva005FB243@@QAE?AURvaF1Handle@@HH@Z, retail 0x005FB243 (87B): the same factory shape with two
