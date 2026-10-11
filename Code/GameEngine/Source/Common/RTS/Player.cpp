@@ -364,96 +364,11 @@ void dumpBattlePlanBonuses(const BattlePlanBonuses *b, AsciiString name, const P
 #endif // DEBUG_CRC
 
 // ------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------
-// ??0PlayerRelationMap@@QAE@XZ present-unmatched
-PlayerRelationMap::PlayerRelationMap( void )
-{
-
-}  // end PlayerRelationMap
-
-// ------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------
-// ??1PlayerRelationMap@@MAE@XZ present-unmatched
-PlayerRelationMap::~PlayerRelationMap( void )
-{
-
-	// make sure the data is cleared
-	m_map.clear();
-
-}  // end ~PlayerRelationmap
-
-// ------------------------------------------------------------------------------------------------
-/** CRC */
-// ------------------------------------------------------------------------------------------------
 // ?crc@PlayerRelationMap@@MAEXPAVXfer@@@Z present-unmatched
 void PlayerRelationMap::crc( Xfer *xfer )
 {
 
 }  // end crc
-
-// ------------------------------------------------------------------------------------------------
-/** Xfer method
-	* Version Info:
-	* 1: Initial version 
-	*/
-// ------------------------------------------------------------------------------------------------
-// Matched body: RelationMapXfer.cpp @ 0x2ADEBE (BFME 2 order). This ZH copy stays
-// because it emits the rowed hash_map iterator ++ and _M_skip_to_next bodies.
-// ?xfer@PlayerRelationMap@@MAEXPAVXfer@@@Z present-unmatched
-void PlayerRelationMap::xfer( Xfer *xfer )
-{
-
-	// version
-	XferVersion currentVersion = 1;
-	XferVersion version = currentVersion;
-	xfer->xferVersion( &version, currentVersion );
-
-	// player relation count
-	PlayerRelationMapType::iterator playerRelationIt;
-	UnsignedShort playerRelationCount = m_map.size();
-	xfer->xferUnsignedShort( &playerRelationCount );
-
-	// player relations
-	Int playerIndex;
-	Relationship r;
-	if( xfer->getXferMode() == XFER_SAVE )
-	{
-
-		// go through all player relations
-		for( playerRelationIt = m_map.begin(); playerRelationIt != m_map.end(); ++playerRelationIt )
-		{
-		
-			// write player index
-			playerIndex = (*playerRelationIt).first;
-			xfer->xferInt( &playerIndex );
-
-			// write relationship
-			r = (*playerRelationIt).second;
-			xfer->xferUser( &r, sizeof( Relationship ) );
-
-		}  // end for, playerRelationIt
-					
-	}  // end if, save
-	else
-	{
-			
-		for( UnsignedShort i = 0; i < playerRelationCount; ++i )
-		{
-
-			// read player index
-			xfer->xferInt( &playerIndex );
-
-			// read relationship
-			xfer->xferUser( &r, sizeof( Relationship ) );
-
-			// assign relationship
-			m_map[ playerIndex ] = r;
-				
-		}  // end for, i
-
-	}  // end else, load
-
-}  // end xfer
 
 // ------------------------------------------------------------------------------------------------
 /** Load post process */
@@ -520,184 +435,6 @@ Player::Player( Int playerIndex )
 	m_unitsShouldHunt = FALSE;
 	init( NULL );
 
-}
-
-//=============================================================================
-// ?init@Player@@QAEXPBVPlayerTemplate@@@Z present-unmatched
-void Player::init(const PlayerTemplate* pt)
-{
-
-	DEBUG_ASSERTCRASH(m_playerTeamPrototypes.size() == 0, ("Player::m_playerTeamPrototypes is not empty at game start!\n"));
-	m_skillPointsModifier = 1.0f;
-	m_attackedFrame = 0;
-
-	m_isPreorder = FALSE;
-	m_isPlayerDead = FALSE;
-
-	m_radarCount = 0;
-	m_disableProofRadarCount = 0;
-	m_radarDisabled = FALSE;
-
-	m_bombardBattlePlans = 0;
-	m_holdTheLineBattlePlans = 0;
-	m_searchAndDestroyBattlePlans = 0;
-	if( m_battlePlanBonuses )
-	{
-		m_battlePlanBonuses->deleteInstance();
-		m_battlePlanBonuses = NULL;
-	}
-
-	deleteUpgradeList();
-
-	m_energy.init(this);
-	m_stats.init();
-	if (m_pBuildList != NULL) 
-	{
-		m_pBuildList->deleteInstance();
-		m_pBuildList = NULL;
-	}
-	m_defaultTeam = NULL;
-
-	if (m_ai)
-	{
-		m_ai->deleteInstance();
-	}
-	m_ai = NULL;
-
-	if( m_resourceGatheringManager )
-	{
-		m_resourceGatheringManager->deleteInstance();
-		m_resourceGatheringManager = NULL;
-	}
-
-	for (Int i = 0; i < NUM_HOTKEY_SQUADS; ++i) {
-		if (m_squads[i] != NULL) {
-			m_squads[i]->deleteInstance();
-			m_squads[i] = NULL;
-		}
-		m_squads[i] = newInstance(Squad);	
-	}
-
-	if (m_currentSelection != NULL) {
-		m_currentSelection->deleteInstance() ;
-		m_currentSelection = NULL;
-	}
-	m_currentSelection = newInstance(Squad);
-	
-	if( m_tunnelSystem )
-	{
-		m_tunnelSystem->deleteInstance();
-		m_tunnelSystem = NULL;
-	}
-	
-	m_canBuildBase = true;
-	m_canBuildUnits = true;
-	m_observer = false;
-	m_cashBountyPercent = 0.0f;
-	m_listInScoreScreen = TRUE;
-
-	m_unitsShouldHunt = FALSE;
-
-#if defined(_DEBUG) || defined(_INTERNAL)
-	m_DEMO_ignorePrereqs = FALSE;
-	m_DEMO_freeBuild = FALSE;
-#endif
-
-#if defined(_DEBUG) || defined(_INTERNAL) || defined(_ALLOW_DEBUG_CHEATS_IN_RELEASE)
-	m_DEMO_instantBuild = FALSE;
-#endif
-
-	if (pt)
-	{
-		m_side = pt->getSide();
-		m_baseSide = pt->getBaseSide();
-		m_productionCostChanges = pt->getProductionCostChanges();
-		m_productionTimeChanges = pt->getProductionTimeChanges();
-		m_productionVeterancyLevels = pt->getProductionVeterancyLevels();
-		m_color = pt->getPreferredColor()->getAsInt() | 0xff000000;
-		m_nightColor = m_color;
-
-		m_money = *pt->getMoney();
-		m_money.setPlayerIndex(m_playerIndex);
-
-		m_handicap = *pt->getHandicap();
-
-		if( m_money.countMoney() == 0 )
-		{
-      if ( TheGameInfo )
-      {
-        m_money = TheGameInfo->getStartingCash();
-      }
-      else
-      {
-  			m_money = TheGlobalData->m_defaultStartingCash;
-      }
-		}
-
-		m_playerDisplayName.clear();
-		m_playerName.clear();
-		m_playerNameKey = NAMEKEY_INVALID;
-		m_playerType = PLAYER_COMPUTER;
-		m_observer = pt->isObserver();
-		m_isPlayerDead = m_observer; // observers are dead
-
-	}
-	else
-	{
-		// no player template? must be the neutral player!
-		m_side = "";
-		m_baseSide = "";
-		m_productionCostChanges.clear();
-		m_productionTimeChanges.clear();
-		m_productionVeterancyLevels.clear();
-		m_color = NEUTRAL_PLAYER_COLOR;
-		m_nightColor = NEUTRAL_PLAYER_COLOR;
-		m_money.init();
-		m_handicap.init();
-
-		m_playerDisplayName = UnicodeString::TheEmptyString;
-		m_playerName = AsciiString::TheEmptyString;
-		m_playerNameKey = NAMEKEY(AsciiString::TheEmptyString.str());
-		m_playerType = PLAYER_COMPUTER;
-
-		// neutral is always "allied" with self -- this is the only thing ever allied with neutral!
-		setPlayerRelationship(this, ALLIES);
-
-	}
-	// reset each player
-	m_scoreKeeper.reset(m_playerIndex);
-	m_playerTemplate = pt;
-
-	// reset rank info
-	resetRank();
-	m_sciencesDisabled.clear();
-	m_sciencesHidden.clear();
-
-	{
-		SpecialPowerReadyTimerListIterator it = m_specialPowerReadyTimerList.begin();
-		while(it != m_specialPowerReadyTimerList.end())
-		{
-			SpecialPowerReadyTimerType *sprt = &(*it);
-			it = m_specialPowerReadyTimerList.erase( it );
-			if(sprt)
-				sprt->clear();
-		}
-	}
-
-	KindOfPercentProductionChangeListIt it = m_kindOfPercentProductionChangeList.begin();
-	while(it != m_kindOfPercentProductionChangeList.end())
-	{
-		KindOfPercentProductionChange *tof = *it;
-		it = m_kindOfPercentProductionChangeList.erase( it );
-		if(tof)
-			tof->deleteInstance();
-	}
-
-	getAcademyStats()->init( this );
-
-	//Always off at the beginning of a game! Only GameLogic::update has
-	//the power to turn it on. Don't want to cause desyncs!
-	m_logicalRetaliationModeEnabled = FALSE;
 }
 
 //=============================================================================
@@ -876,20 +613,6 @@ void Player::setBuildList(BuildListInfo *pBuildList)
 } 
 
 //=============================================================================
-// ?addToBuildList@Player@@QAEXPAVObject@@@Z present-unmatched
-void Player::addToBuildList(Object *obj)
-{
-	BuildListInfo *newInfo = newInstance( BuildListInfo );
-	newInfo->setObjectID(obj->getID());	
-	newInfo->setTemplateName(obj->getTemplate()->getName());
-	newInfo->setLocation(*obj->getPosition());
-	newInfo->setAngle(obj->getOrientation());
-	newInfo->setNumRebuilds(0);	 // Can't rebuild. 
-	newInfo->setNextBuildList(m_pBuildList);
-	m_pBuildList = newInfo;
-} 
-
-//=============================================================================
 // ?addToPriorityBuildList@Player@@QAEXVAsciiString@@PAUCoord3D@@M@Z present-unmatched
 void Player::addToPriorityBuildList(AsciiString templateName, Coord3D *pos, Real angle)
 {
@@ -957,30 +680,6 @@ void Player::update()
 // Player::newMap is recovered in PlayerNewMapBFME2.cpp from the native
 // slot-15 callee at 0x002B0D00. The previous unpinned BFME1-shaped body
 // here did not implement that target and duplicated the recovered name.
-
-//=============================================================================
-// ?setPlayerType@Player@@QAEXW4PlayerType@@_N@Z present-unmatched
-void Player::setPlayerType(PlayerType t, Bool skirmish)
-{
-	m_playerType = t;
-
-	if (m_ai)
-	{
-		m_ai->deleteInstance();
-	}
-	m_ai = NULL;
-
-	if (t == PLAYER_COMPUTER)
-	{
-		if (skirmish || TheAI->getAiData()->m_forceSkirmishAI) {
-			// create AIPlayer and attach to this Player
-			m_ai = newInstance(AISkirmishPlayer)( this );
-		} else {
-			// create AIPlayer and attach to this Player
-			m_ai = newInstance(AIPlayer)( this );
-		}
-	}
-}
 
 //=============================================================================
 // This is called from PlayerList->newGame()
@@ -1243,8 +942,6 @@ void Player::initFromDict(const Dict* d)
 }
 
 //=============================================================================
-// byte-exact reconstruction: Code/GameEngine/Source/GameLogic/Player_becomingTeamMember_Thunk.cpp
-// ?becomingTeamMember@Player@@QAEXPAVObject@@_N@Z present-unmatched
 //
 // Blocked the same way addUpgrade is: a SECOND row depends on an expression this
 // body would stop emitting. The call to areModulesReady below is the only one in
@@ -2253,86 +1950,6 @@ void Player::garrisonAllUnits(CommandSourceType source)
 	}
 }
 
-//=============================================================================
-// ?ungarrisonAllUnits@Player@@QAEXW4CommandSourceType@@@Z present-unmatched
-void Player::ungarrisonAllUnits(CommandSourceType source)
-{
-	for (PlayerTeamList::iterator it = m_playerTeamPrototypes.begin(); 
-			 it != m_playerTeamPrototypes.end(); ++it) {
-		for (BfmeTeamIter iter = bfmeTeamInstances(*it); !iter.done(); iter.advance()) {
-			Team *team = iter.cur();
-			if (!team) {
-				continue;
-			}
-			
-			for (BfmePlayerIter iterObj = bfmePlayerMembers(team); !iterObj.done(); iterObj.advance()) {
-				Object *obj = iterObj.cur();
-				if (!obj) {
-					continue;
-				}
-
-				AIUpdateInterface *ai = obj->getAIUpdateInterface();
-				if (!ai) {
-					continue;
-				}
-
-				// Tell everything that has stuff in it to kick them all out.  You can't tell the people to get
-				// out of what they are in, because they may not know, or they may be two transports deep, and their
-				// transport may not know where they are.
-				// And check for building so you don't unload transports in the ungarrison command
-				if( obj->isKindOf( KINDOF_STRUCTURE ) )
-					ai->aiEvacuate( FALSE, source);
-			}
-		}
-	}
-}
-
-
-//=============================================================================
-// ?setUnitsShouldIdleOrResume@Player@@QAEX_N@Z present-unmatched
-void Player::setUnitsShouldIdleOrResume(Bool idle)
-{
-	for (PlayerTeamList::iterator it = m_playerTeamPrototypes.begin(); 
-			 it != m_playerTeamPrototypes.end(); ++it) 
-	{
-		for (BfmeTeamIter iter = bfmeTeamInstances(*it); !iter.done(); iter.advance()) 
-		{
-			Team *team = iter.cur();
-			if (!team)
-				continue;
-			
-			for (BfmePlayerIter iterObj = bfmePlayerMembers(team); !iterObj.done(); iterObj.advance())
-			{
-				Object *obj = iterObj.cur();
-				if (!obj)
-					continue;
-
-				if (obj->isKindOf(KINDOF_STRUCTURE))
-					continue;
-
-				AIUpdateInterface *ai = obj->getAIUpdateInterface();
-				if (!ai)
-					continue;
-
-				if (idle)
-				{
-					// force it to move to its position to make it stop.
- 					ai->aiMoveToPosition(obj->getPosition(), CMD_FROM_SCRIPT);
-				}
-				else
-				{
-					// Here is the special bit for this exit style, force wanting on SupplyTruck types
-					if (ai->isIdle())
-					{
-						SupplyTruckAIInterface* supplyTruckAI = ai->getSupplyTruckAIInterface();
-						if( supplyTruckAI )
-							supplyTruckAI->setForceWantingState(true);
-					}
-				}
-			}
-		}
-	}
-}
 
 //-------------------------------------------------------------------------------
 void sellBuildings( Object *obj, void *userData )
@@ -2452,38 +2069,6 @@ Bool Player::calcClosestConstructionZoneLocation( const ThingTemplate *construct
 	}
 
   return FALSE;
-}
-
-//=============================================================================
-// byte-exact reconstruction: Code/GameEngine/Source/Common/RTS/Player_doBountyForKill_Thunk.cpp
-// ?doBountyForKill@Player@@QAEXPBVObject@@0@Z present-unmatched
-void Player::doBountyForKill(const Object* killer, const Object* victim)
-{
-	if (!killer || !victim)
-		return;
-
-	// srj sez: per dustin, no experience (et al) for killing things under construction.
-	if (victim->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
-		return;
-
-	Int costToBuild = victim->getTemplate()->calcCostToBuild(victim->getControllingPlayer());
-	Int bounty = REAL_TO_INT_CEIL(costToBuild * m_cashBountyPercent);
-	
-	if( bounty )
-	{
-
-		getMoney()->deposit( bounty );
-		m_scoreKeeper.addMoneyEarned( bounty );
-
-		//Display cash income floating over the recipient.
-		UnicodeString moneyString;
-		moneyString.format( TheGameText->fetch( "GUI:AddCash" ), bounty );
-		Coord3D pos;
-		pos.zero();
-		pos.add( killer->getPosition() );
-		pos.z += 10.0f; //add a little z to make it show up above the unit.
-		TheInGameUI->addFloatingText( moneyString, &pos, GameMakeColor( 255, 255, 0, 255 ) );
-	}
 }
 
 //=============================================================================
