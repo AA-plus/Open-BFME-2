@@ -11,6 +11,14 @@
 // unlock these calls without speculative callee pins.
 #include "../../Common/GameLogicObjectLookupView.h"
 #include "ascii_string.h"
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <new>
 #include <vector>
 class UpgradeTemplate;

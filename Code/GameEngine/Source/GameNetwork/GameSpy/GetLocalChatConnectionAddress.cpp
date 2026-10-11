@@ -26,6 +26,14 @@
 // free of the vector, which /EHsc drops because extern "C" free is then
 // assumed not to throw. /D_CRTIMP= gives the direct call to _free (0x00430830).
 
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <string.h>
 #include <vector>
 #include "ascii_string.h"

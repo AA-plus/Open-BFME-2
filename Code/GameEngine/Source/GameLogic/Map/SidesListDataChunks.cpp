@@ -10,6 +10,14 @@
 // BuildListInfo layout (target): BuildListInfoCtor.cpp, 0x80 bytes, built by
 // the ctor 0x0032A0CE and destroyed by 0x0032A186 on the parser's stack.
 
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <stdlib.h>
 namespace _STL { void __cdecl free(void *block) throw(...); }
 #define free _STL::free

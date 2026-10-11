@@ -8,6 +8,14 @@
 // AptScreenFactories.cpp (0x0052C660), AptObjectivesMenu.cpp (0x0052C220)
 // and Rva0052B2A0Step.cpp are the donors.
 
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include "ascii_string.h"
 #include "unicode_string.h"

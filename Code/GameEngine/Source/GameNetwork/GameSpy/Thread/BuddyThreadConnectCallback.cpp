@@ -32,6 +32,14 @@ private:
 };
 
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <cstddef>
 // Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).

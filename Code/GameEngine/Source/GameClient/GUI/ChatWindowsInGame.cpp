@@ -9,6 +9,14 @@
 // no EH state belongs to this caller. Use the shared Unicode ABI and the
 // existing StringBase<unsigned short>::isEmpty provider at35740.
 // All122 bytes, both temporary stack homes and three call targets verified.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include "ascii_string.h"
 #include "unicode_string.h"

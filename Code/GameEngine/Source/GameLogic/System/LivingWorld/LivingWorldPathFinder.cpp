@@ -31,6 +31,14 @@ bool Rva003F71D4Metric::v03(int a,int b) {return a==b ? true : false;}
 // Native003EF5FB complete57B RET4 checks node+2C then owner+18.
 // Native003EF8E1 calls it with the child in ECX; nested Logic::find RET8
 // leaves the outer relation argument on the stack. Returned AL is preserved.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 class LivingWorldLogic;extern LivingWorldLogic *TheLivingWorldLogic;
 class Rva002E2903Player;

@@ -5,6 +5,14 @@
 // function and the region overload it calls (0x0020EA58); retail supplies
 // the bytes. The region id lookup is the rowed 0x0020EAF6 accessor.
 
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <stdlib.h>
 namespace _STL { void __cdecl free(void *block) throw(...); }
 #define free _STL::free
