@@ -143,6 +143,22 @@ public:
 	Drawable *m_drawable;
 };
 
+// File-static matrix helpers (LK3-style): the TU's bool-ctor and copy-ctor
+// COMDATs both lose the link, and the rowed body below inlines both
+// constructions, so neither def can just go away. The helpers keep calls in
+// the source (regalloc preserved) while both ctors go unused.
+static void InitRampMatrix3D(Matrix3D &m, bool init)
+{
+    if (init)
+        m.Make_Identity();
+}
+static void CopyRampMatrix3D(Matrix3D &dst, const Matrix3D &src)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+}
+
 bool W3DScriptedModelDraw::getRamp(BridgeInfo *info, AsciiString boneName, PolygonTrigger **polygon, RenderObjClass **mesh, bool useObjectTransform)
 {
 	RenderObjClass *robj = getRenderObject();
@@ -167,7 +183,8 @@ bool W3DScriptedModelDraw::getRamp(BridgeInfo *info, AsciiString boneName, Polyg
 		REF_PTR_RELEASE(meshObj);
 		return false;
 	}
-	Matrix3D mtx(true);
+	Matrix3D mtx;
+	InitRampMatrix3D(mtx, true);
 	if (getW3DModelDrawModuleData()->m_attachAtDrawablePosition && !useObjectTransform)
 		mtx.Set_Translation(getDrawable()->getTransformMatrix()->Get_Translation());
 	else
