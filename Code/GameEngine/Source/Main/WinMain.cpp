@@ -364,7 +364,9 @@ public:
 
 extern Mouse *TheMouse;  // defined in Mouse.cpp
 
-class AudioManager
+// Existing five-byte focus forwarder at1DBC0B; this native call encodes
+// the forwarder, not the separate AudioManager body at35D2F7.
+class Rva001DBAA4
 {
 public:
 	void regainFocus();
@@ -377,9 +379,9 @@ class GameWindowTransitionsHandler;
 // FlammableUpdate/AudioLoopUpgrade sound calls). INI::parseWindowTransitions
 // (0x001DC66F) reads this same global and calls getNewGroup on it, and the
 // object behind it (ctor 0x001DCBC3, vftable 0x00BDBC30) is the transitions
-// handler. The focus method 0x0035D2F7 does not read its this; it restores
-// channel volumes through 0x00DFE6E8's vtable and carries its pinned
-// AudioManager::regainFocus spelling, so the call keeps that ABI label.
+// handler. The full native focus forwarder at1DBC0B ignores the supplied
+// receiver and jumps to the channel-volume restore helper; name the
+// actual encoded forwarder rather than giving its address to AudioManager.
 GameWindowTransitionsHandler *TheTransitionHandler;
 
 class GameEngine
@@ -467,7 +469,9 @@ public:
 	static void shutdown();
 };
 
-extern "C" void bfmeRva0042CF86(WPARAM wParam);
+// Native2CF86 is the existing cdecl no-argument mixer hook. The retail
+// message arm still passes its unused WPARAM on the caller-owned stack.
+void Rva0002CF86MixerFieldEdit();
 
 void Reset_D3D_Device(bool active);
 
@@ -632,7 +636,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 					TheMouse->setMouseLimits();
 
 				if( TheTransitionHandler )
-					((AudioManager *)TheTransitionHandler)->regainFocus();
+					((Rva001DBAA4 *)TheTransitionHandler)->regainFocus();
 			}
 			break;
 		}
@@ -748,7 +752,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 
 		//-------------------------------------------------------------------------
 		case 0x2707:
-			bfmeRva0042CF86( wParam );
+			reinterpret_cast<void (__cdecl *)(WPARAM)>(&Rva0002CF86MixerFieldEdit)( wParam );
 			break;
 	}
 
