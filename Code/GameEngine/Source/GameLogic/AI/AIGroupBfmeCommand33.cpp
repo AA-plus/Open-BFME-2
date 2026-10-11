@@ -55,6 +55,8 @@ public:
 	void rva0026304D(int frame); // ZH setNextMoodCheckTime
 	bool canAutoAcquire() const { return m_moduleData->m_autoAcquireEnemiesWhenIdle != 0; }
 	bool canAutoAcquireWhileStealthed() const { return (m_moduleData->m_autoAcquireEnemiesWhenIdle & 2) != 0; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the canAutoAcquireWhileStealthed copy loses to the first-in-order copy. No flags touched.
+	bool bfme_canAutoAcquireWhileStealthed_66a39() const { return (m_moduleData->m_autoAcquireEnemiesWhenIdle & 2) != 0; }
 	char m_pad00[4];
 	AIUpdateModuleData *m_moduleData; // +0x04
 	char m_pad08[0x20 - 0x08];
@@ -130,6 +132,8 @@ public:
 	SpawnBehaviorInterface *getSpawnBehaviorInterface() const;
 	ContainModuleInterface *getContain() const { return m_contain; }
 	AIUpdateInterface *getAIUpdateInterface() { return m_ai; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getAIUpdateInterface copy loses to the first-in-order copy. No flags touched.
+	AIUpdateInterface *bfme_getAIUpdateInterface_2dac3() { return m_ai; }
 
 	char m_pad00[0x250];
 	ContainModuleInterface *m_contain; // +0x250
@@ -171,7 +175,7 @@ void rva0036FC02(Object *obj, void *userData)
 {
 	if (obj)
 	{
-		AIUpdateInterface *ai = obj->getAIUpdateInterface();
+		AIUpdateInterface *ai = obj->bfme_getAIUpdateInterface_2dac3();
 		if (ai)
 			ai->m_commands.aiIdle(*(CommandSourceType *)userData);
 	}
@@ -187,7 +191,7 @@ void AIGroup::groupIdle(CommandSourceType cmdSource)
 		if (obj == 0)
 			continue;
 
-		AIUpdateInterface *ai = obj->getAIUpdateInterface();
+		AIUpdateInterface *ai = obj->bfme_getAIUpdateInterface_2dac3();
 		if (ai)
 		{
 			ai->m_commands.aiIdle(cmdSource);
@@ -202,7 +206,7 @@ void AIGroup::groupIdle(CommandSourceType cmdSource)
 				if (!obj->rva0028F518() &&
 					!obj->testStatus(OBJECT_STATUS_STEALTHED) &&
 					!obj->testStatus(OBJECT_STATUS_DETECTED) &&
-					!ai->canAutoAcquireWhileStealthed())
+					!ai->bfme_canAutoAcquireWhileStealthed_66a39())
 				{
 					Rva00373EC6 *stealth = obj->rva0028F4BC();
 					if (stealth)
