@@ -149,21 +149,39 @@ public:
 extern "C" void *theLogicRandomLogFile;
 extern unsigned char g_Rva00A02D87;
 extern bool g_bfmeDoneAPB;
-extern unsigned char g_00E02D7C;
-extern unsigned char g_00E02D7D;
-extern unsigned char g_00E02D7E;
-extern unsigned char g_00E02D7F;
-extern unsigned char g_00E02D80;
+// g_00E02D7C is only an alias of the owned global TheXObjectCRC (ledger names column); this unit reads the owner through its own view type.
+extern bool TheXObjectCRC;
+#define g_00E02D7C (*(unsigned char *)&TheXObjectCRC)
+// g_00E02D7D is only an alias of the owned global TheXPartitionCRC (ledger names column); this unit reads the owner through its own view type.
+extern bool TheXPartitionCRC;
+#define g_00E02D7D (*(unsigned char *)&TheXPartitionCRC)
+// g_00E02D7E is only an alias of the owned global TheXCollisionCRC (ledger names column); this unit reads the owner through its own view type.
+extern bool TheXCollisionCRC;
+#define g_00E02D7E (*(unsigned char *)&TheXCollisionCRC)
+// g_00E02D7F is only an alias of the owned global TheXShroudCRC (ledger names column); this unit reads the owner through its own view type.
+extern bool TheXShroudCRC;
+#define g_00E02D7F (*(unsigned char *)&TheXShroudCRC)
+// g_00E02D80 is only an alias of the owned global TheXTaintCRC (ledger names column); this unit reads the owner through its own view type.
+extern bool TheXTaintCRC;
+#define g_00E02D80 (*(unsigned char *)&TheXTaintCRC)
 extern unsigned char g_00E02D81;
-extern unsigned char g_00E02D83;
-extern unsigned char g_00E02D84;
-extern unsigned char g_00E02D88;
+// g_00E02D83 is only an alias of the owned global TheXPlayerCRC (ledger names column); this unit reads the owner through its own view type.
+extern bool TheXPlayerCRC;
+#define g_00E02D83 (*(unsigned char *)&TheXPlayerCRC)
+// g_00E02D84 is only an alias of the owned global TheXAICRC (ledger names column); this unit reads the owner through its own view type.
+extern bool TheXAICRC;
+#define g_00E02D84 (*(unsigned char *)&TheXAICRC)
+// g_00E02D88 is only an alias of the owned global TheXLWCRC (ledger names column); this unit reads the owner through its own view type.
+extern bool TheXLWCRC;
+#define g_00E02D88 (*(unsigned char *)&TheXLWCRC)
 extern PartitionManager *ThePartitionManager;
 extern PartitionManager *TheShroudManager;
 extern PlayerList *ThePlayerList;
 extern CollisionManager *g_00DFE754;
 extern TaintManager *g_00DFE750;
-extern SkirmishAIManager *g_00DFEEF8;
+// g_00DFEEF8 is only an alias of the owned global g_00DFEEF8 (ledger names column); this unit reads the owner through its own view type.
+extern class Rva002A8F24 *g_00DFEEF8;
+#define g_00DFEEF8 (*(SkirmishAIManager * *)&g_00DFEEF8)
 extern class AI *TheAI;
 
 class GameLogic

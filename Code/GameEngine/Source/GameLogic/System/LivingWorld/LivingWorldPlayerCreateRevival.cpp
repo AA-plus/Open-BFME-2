@@ -61,7 +61,9 @@ class ExperienceLevelStore {public:
  bool IsValid(ExperienceLevelHandle)const;
  int GetRequiredExperience(ExperienceLevelHandle)const;
 };
-extern ExperienceLevelStore *TheExperienceLevelStore;
+// TheExperienceLevelStore is only an alias of the owned global TheExperienceLevelSystem (ledger names column); this unit reads the owner through its own view type.
+extern class ExperienceLevelSystem *TheExperienceLevelSystem;
+#define TheExperienceLevelStore (*(ExperienceLevelStore * *)&TheExperienceLevelSystem)
 class Rva002E06B8 {public: void *rva002E06EF();};
 class CreateAHeroHero;
 class CreateAHeroManager {public: const AsciiString &GetButtonImageName(const CreateAHeroHero*);};

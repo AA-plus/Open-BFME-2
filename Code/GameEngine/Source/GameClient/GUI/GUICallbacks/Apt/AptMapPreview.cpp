@@ -142,7 +142,9 @@ struct Rva00DFE1C8Host
 	Rva003EF008 *m_field268;		// +0x268
 };
 
-extern Rva00DFE1C8Host *g_00DFE1C8;
+// g_00DFE1C8 is only an alias of the owned global TheLivingWorldManager (ledger names column); this unit reads the owner through its own view type.
+extern class LivingWorldManager *TheLivingWorldManager;
+#define g_00DFE1C8 (*(Rva00DFE1C8Host * *)&TheLivingWorldManager)
 
 // The same object marks a region list (0x003EEF38) and unmarks it
 // (0x003EEFA0); both are rowed under address-named views taking the

@@ -25,7 +25,9 @@ struct FontScreenDCGlobals
 	unsigned char reserved[0x10];
 	HDC screen_dc;
 };
-extern FontScreenDCGlobals *FontScreenDCGlobalsPtr;
+// FontScreenDCGlobalsPtr is only an alias of the owned global g_fontCharsGdiState (ledger names column); this unit reads the owner through its own view type.
+extern class FontCharsClassGdiState *g_fontCharsGdiState;
+#define FontScreenDCGlobalsPtr (*(FontScreenDCGlobals * *)&g_fontCharsGdiState)
 
 struct Rva00154630SelectFont
 {

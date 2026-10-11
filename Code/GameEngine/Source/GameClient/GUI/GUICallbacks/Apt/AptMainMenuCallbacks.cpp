@@ -202,7 +202,9 @@ public:
 	virtual void v09();
 };
 
-extern AptMainMenuCredits *g_Va00E06474;
+// g_Va00E06474 is only an alias of the owned global g_bfmeSinkBOE (ledger names column); this unit reads the owner through its own view type.
+extern class BfmeSinkBOE *g_bfmeSinkBOE;
+#define g_Va00E06474 (*(AptMainMenuCredits * *)&g_bfmeSinkBOE)
 
 // The credits roll's class (0x48 bytes; Rva005B77F1Dtor.cpp's rowed
 // constructor 0x005B776E).

@@ -41,7 +41,9 @@ public:
 };
 
 extern int g_bfmeAptInitAtE17700;
-extern AptAnimationPoolData *g_bfmeAptPtrAtE176D0;
+// g_bfmeAptPtrAtE176D0 is only an alias of the owned global g_bfmeAptPtrAtE176D0 (ledger names column); this unit reads the owner through its own view type.
+extern class Rva006E34D0 *g_bfmeAptPtrAtE176D0;
+#define g_bfmeAptPtrAtE176D0 (*(AptAnimationPoolData * *)&g_bfmeAptPtrAtE176D0)
 extern class AptRenderingContext *g_aptRenderingContextAtE180C0;
 
 void rva006cc880()

@@ -76,7 +76,9 @@ struct PeerRequestQueue6
 	virtual void addRequest(PeerRequest *rec);
 };
 
-extern PeerRequestQueue6 *TheGameSpyPeerMessageQueue;
+// TheGameSpyPeerMessageQueue is only an alias of the owned global TheGameSpyPeerMessageQueue (ledger names column); this unit reads the owner through its own view type.
+extern class GameSpyPeerMessageQueueInterface *TheGameSpyPeerMessageQueue;
+#define TheGameSpyPeerMessageQueue (*(PeerRequestQueue6 * *)&TheGameSpyPeerMessageQueue)
 
 
 bool __stdcall Rva001EFCF7(UnicodeString str)

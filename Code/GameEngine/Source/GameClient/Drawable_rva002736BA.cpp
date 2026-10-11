@@ -9,7 +9,9 @@ public:
 	Rva002D752DNode *rva002D752D(const StringBase<char> &name);
 };
 
-extern Rva002D752D *g_00DFF068;
+// g_00DFF068 is only an alias of the owned global TheAnim2DCollection (ledger names column); this unit reads the owner through its own view type.
+extern class Anim2DCollection *TheAnim2DCollection;
+#define g_00DFF068 (*(Rva002D752D * *)&TheAnim2DCollection)
 
 class Rva00270025
 {

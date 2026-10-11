@@ -9,7 +9,9 @@
 
 class BfmeParserRegistryVE;
 
-extern int g_00DFF0B8;
+// g_00DFF0B8 is only an alias of the owned global g_00DFF0B8 (ledger names column); this unit reads the owner through its own view type.
+extern struct Rva002E36D5Node *g_00DFF0B8;
+#define g_00DFF0B8 (*(int *)&g_00DFF0B8)
 
 void Rva002E373CClear();
 

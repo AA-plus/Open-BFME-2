@@ -908,7 +908,9 @@ class Rva00E03138 : public VPad<Rva00E03138Slot16, 5>
 public:
 	virtual UnsignedInt getEndFrame(void) = 0;			// slot 22 (+0x58)
 };
-extern Rva00E03138 *g_00E03138;
+// g_00E03138 is only an alias of the owned global g_00E03138 (ledger names column); this unit reads the owner through its own view type.
+extern struct UnknownE03138 *g_00E03138;
+#define g_00E03138 (*(Rva00E03138 * *)&g_00E03138)
 
 // The donor's StringBase<char>::concat(char) form (as GameInfoSetMap.cpp): the
 // character goes through its own one-byte slot into concat(text, 1).

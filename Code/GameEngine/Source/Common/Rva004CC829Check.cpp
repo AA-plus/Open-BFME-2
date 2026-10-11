@@ -66,7 +66,7 @@ protected:
 	char m_pad18[8];
 	void setWakeFrame(Object *object, UpdateSleepTime wakeDelay);
 };
-extern int g_00DBA4E4;
+extern int g_Va00DBA4E4;
 
 class Rva004CC829 : public UpdateModule
 {
@@ -116,7 +116,7 @@ void Rva004CC829::rva004CC795(Object *other, unsigned int wakeFrame)
 		m_20 = wakeFrame;
 	else
 		m_20 = moduleData->m_08 + frame;
-	setWakeFrame(m_object, (UpdateSleepTime)(g_00DBA4E4 * 2));
+	setWakeFrame(m_object, (UpdateSleepTime)(g_Va00DBA4E4 * 2));
 	m_2c = 0;
 }
 

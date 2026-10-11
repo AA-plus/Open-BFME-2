@@ -23,7 +23,9 @@ public:
 	void unregister(Rva006DABB0 *obj);
 };
 
-extern Manager012EF4F0 *g_012EF4F0;
+// g_012EF4F0 is only an alias of the owned global TheBuffLogic (ledger names column); this unit reads the owner through its own view type.
+extern class BuffLogic *TheBuffLogic;
+#define g_012EF4F0 (*(Manager012EF4F0 * *)&TheBuffLogic)
 
 class Rva006DABB0Base
 {

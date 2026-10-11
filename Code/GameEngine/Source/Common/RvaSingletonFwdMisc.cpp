@@ -25,7 +25,9 @@ public:
 
 // Preserve the existing global pointee spelling; its storage identity is unchanged.
 class Rva00224B7DTarget;
-extern Rva00224B7DTarget *g_pRva00224BC9;
+// g_pRva00224BC9 is only an alias of the owned global g_bfmeAptWindowManager (ledger names column); this unit reads the owner through its own view type.
+extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
+#define g_pRva00224BC9 (*(Rva00224B7DTarget * *)&g_bfmeAptWindowManager)
 
 class Rva00224BC9Owner
 {
@@ -65,7 +67,9 @@ public:
 	void method(int value);
 };
 
-extern Rva0054CBEFTarget *g_pRva00437E9C;
+// g_pRva00437E9C is only an alias of the owned global g_Va00E032FC (ledger names column); this unit reads the owner through its own view type.
+extern int g_Va00E032FC;
+#define g_pRva00437E9C (*(Rva0054CBEFTarget * *)&g_Va00E032FC)
 
 bool Rva00224BC9Owner::check()
 {

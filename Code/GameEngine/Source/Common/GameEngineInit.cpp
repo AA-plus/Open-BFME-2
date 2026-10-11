@@ -270,12 +270,16 @@ extern class Rva002E18C3Lookup *Va00E03140Lookup;
 extern class Rva003EF328 *TheLivingWorldRegionEffectsManagerStore;
 extern class LivingWorldManager *TheLivingWorldManager;
 extern class LivingWorldLogic *TheLivingWorldLogic;
-extern class ClientFrameSubsystem *TheGameClient;
+// TheGameClient is only an alias of the owned global TheGameClient (ledger names column); this unit reads the owner through its own view type.
+extern class GameClient *TheGameClient;
+#define TheGameClient (*(class ClientFrameSubsystem * *)&TheGameClient)
 extern class LinearCampaignManager *TheLinearCampaignManager;
 extern AI *TheAI;
 extern AerialPathfinder *TheAerialPathfinder;
 Rva0022B3F6Subsystem *TheSplineService = 0;
-extern Rva0022B46BSubsystem *TheAttributeModifierStore;
+// TheAttributeModifierStore is only an alias of the owned global TheAttributeModifierStore (ledger names column); this unit reads the owner through its own view type.
+extern class AttributeModifierStore *TheAttributeModifierStore;
+#define TheAttributeModifierStore (*(Rva0022B46BSubsystem * *)&TheAttributeModifierStore)
 extern void *g_Va00DFE750;
 extern ScriptEngine *TheScriptEngine;
 extern LuaScriptEngine *TheLuaScriptEngine;
@@ -303,9 +307,13 @@ extern ActionManager *TheActionManager;
 extern void *g_Va00E030D8;
 extern GameState *TheGameState;
 extern GameResultsInterface *TheGameResultsQueue;
-extern int g_00DFF09C;
+// g_00DFF09C is only an alias of the owned global TheLivingWorldBuildingTemplateStore (ledger names column); this unit reads the owner through its own view type.
+extern class Rva0022C0CDSubsystem *TheLivingWorldBuildingTemplateStore;
+#define g_00DFF09C (*(int *)&TheLivingWorldBuildingTemplateStore)
 extern class Rva0040AAD5 *g_00E02F74;
-extern class Rva0021A54A *TheHeroManager;
+// TheHeroManager is only an alias of the owned global TheCreateAHeroManager (ledger names column); this unit reads the owner through its own view type.
+extern class CreateAHeroManager *TheCreateAHeroManager;
+#define TheHeroManager (*(class Rva0021A54A * *)&TheCreateAHeroManager)
 extern Rva0022C22CSubsystem *TheScoredKillEvaAnnouncerController;
 extern void *g_00E03064;
 extern Rva0022C316Subsystem *TheLivingWorldAutoResolveResourceBonusScheduleStore;

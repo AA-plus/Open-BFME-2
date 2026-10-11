@@ -74,7 +74,9 @@ public:
 	virtual void s22();
 	virtual void slot23(const AsciiString &a, unsigned char b, const AsciiString &c, const AsciiString &d);
 };
-extern Rva00E03138 *g_00E03138;
+// g_00E03138 is only an alias of the owned global g_00E03138 (ledger names column); this unit reads the owner through its own view type.
+extern struct UnknownE03138 *g_00E03138;
+#define g_00E03138 (*(Rva00E03138 * *)&g_00E03138)
 
 class Rva003BE5C9
 {

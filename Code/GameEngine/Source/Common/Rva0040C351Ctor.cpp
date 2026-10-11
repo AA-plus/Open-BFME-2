@@ -245,7 +245,9 @@ public:
  bool IsValid(ExperienceLevelHandle) const;
  int GetRequiredExperience(ExperienceLevelHandle) const;
 };
-extern ExperienceLevelStore *TheExperienceLevelStore;
+// TheExperienceLevelStore is only an alias of the owned global TheExperienceLevelSystem (ledger names column); this unit reads the owner through its own view type.
+extern class ExperienceLevelSystem *TheExperienceLevelSystem;
+#define TheExperienceLevelStore (*(ExperienceLevelStore * *)&TheExperienceLevelSystem)
 void ArmySummaryEntry::ApplyWorldMapUpgrades() {
  if (!m_bc) return;
  const ThingTemplate *thing = (const ThingTemplate *)((Rva0037DCA5 *)this)->rva0037DC52();

@@ -10,7 +10,9 @@ struct Rva00DFE1A8
 	unsigned char m_pad[0x3C];
 	int m_3C;
 };
-extern Rva0020D8F1Host *g_00DFE1A8;
+// g_00DFE1A8 is only an alias of the owned global TheLargeGroupAudio (ledger names column); this unit reads the owner through its own view type.
+extern class LargeGroupAudio *TheLargeGroupAudio;
+#define g_00DFE1A8 (*(Rva0020D8F1Host * *)&TheLargeGroupAudio)
 struct Rva002DFE78C
 {
 	unsigned char m_pad[0x40];

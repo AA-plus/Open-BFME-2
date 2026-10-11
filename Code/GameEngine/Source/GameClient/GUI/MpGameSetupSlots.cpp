@@ -597,7 +597,9 @@ UnicodeString Rva0055A04C(int kind);
 
 // The game being set up, spelled as LANAPIRemoveGame.cpp's pin does.
 struct LANGameInfo;
-extern LANGameInfo *g_Rva00E02EEC;
+// g_Rva00E02EEC is only an alias of the owned global TheGameInfo (ledger names column); this unit reads the owner through its own view type.
+extern class GameInfo *TheGameInfo;
+#define g_Rva00E02EEC (*(LANGameInfo * *)&TheGameInfo)
 
 class MapCache
 {

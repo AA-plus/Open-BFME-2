@@ -26,7 +26,9 @@ public:
 	virtual void slot28(void);
 };
 
-extern Rva00DFE1C8Host *g_00DFE1C8;
+// g_00DFE1C8 is only an alias of the owned global TheLivingWorldManager (ledger names column); this unit reads the owner through its own view type.
+extern class LivingWorldManager *TheLivingWorldManager;
+#define g_00DFE1C8 (*(Rva00DFE1C8Host * *)&TheLivingWorldManager)
 
 class Rva002C021A
 {

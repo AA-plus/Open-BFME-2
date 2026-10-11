@@ -102,7 +102,9 @@ const char *EmissiveTemplateNames[] = {
  "ARMY", "BATTLE_MARKER", "REGION_AWARD_DISPUTE", "CLOUD", "BUILDING", "DEFAULT"
 };
 class Rva00DFE1C8Host { public: int rva002122FD(const AsciiString &); };
-extern Rva00DFE1C8Host *g_00DFE1C8;
+// g_00DFE1C8 is only an alias of the owned global TheLivingWorldManager (ledger names column); this unit reads the owner through its own view type.
+extern class LivingWorldManager *TheLivingWorldManager;
+#define g_00DFE1C8 (*(Rva00DFE1C8Host * *)&TheLivingWorldManager)
 Rva003FA835::Rva003FA835(int kind, void *target, unsigned word)
  : m_unknown0C(word), m_target(target), m_enabled(false), m_elapsed(0.0f), m_20(0.0f)
 {

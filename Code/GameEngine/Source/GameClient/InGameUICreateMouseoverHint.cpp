@@ -158,7 +158,9 @@ class WindowManager { public:
 
 
 };
-extern WindowManager* TheWindowManager;
+// TheWindowManager is only an alias of the owned global TheWindowManager (ledger names column); this unit reads the owner through its own view type.
+extern class GameWindowManager *TheWindowManager;
+#define TheWindowManager (*(WindowManager* *)&TheWindowManager)
 class GameClient { public:
  virtual void slot00();
  virtual void slot01();
@@ -408,7 +410,9 @@ class RecorderClass { public: bool isMultiplayer(); RecorderModeType getMode(); 
 extern RecorderClass* TheRecorder;
 class LookAtTranslator;
 class BfmeOwnVVD { public: unsigned char Rva0042E8C1(); };
-extern LookAtTranslator* TheLookAtTranslator;
+// TheLookAtTranslator is only an alias of the owned global g_bfmeSingletonVVD (ledger names column); this unit reads the owner through its own view type.
+extern class BfmeOwnVVD *g_bfmeSingletonVVD;
+#define TheLookAtTranslator (*(LookAtTranslator* *)&g_bfmeSingletonVVD)
 class GlobalData { public:
  unsigned char pad0[0x9b8]; int tooltipFlag;
  unsigned char pad1[0xa5c-0x9bc]; int baseValuePerSupplyBox;

@@ -122,7 +122,9 @@ class Rva002E373CHolder
 public:
 	PolygonTrigger *m_head;
 };
-extern Rva002E373CHolder *g_Va00DBD0F4;	// ThePolygonTriggerListPtr holder
+// g_Va00DBD0F4 is only an alias of the owned global g_Va00DBD0F4 (ledger names column); this unit reads the owner through its own view type.
+extern struct Rva002E373CHolder *g_Va00DBD0F4;
+#define g_Va00DBD0F4 (*(Rva002E373CHolder * *)&g_Va00DBD0F4)
 
 class Team
 {

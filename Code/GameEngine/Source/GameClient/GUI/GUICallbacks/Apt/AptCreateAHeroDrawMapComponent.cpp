@@ -96,7 +96,9 @@ public:
 
 	void setCoords(const ICoord2D *c1, const ICoord2D *c2);
 };
-extern Rva001DBAA4 *theBfmeDfdc14;
+// theBfmeDfdc14 is only an alias of the owned global TheTransitionHandler (ledger names column); this unit reads the owner through its own view type.
+extern class GameWindowTransitionsHandler *TheTransitionHandler;
+#define theBfmeDfdc14 (*(Rva001DBAA4 * *)&TheTransitionHandler)
 
 class GameTextInterface
 {

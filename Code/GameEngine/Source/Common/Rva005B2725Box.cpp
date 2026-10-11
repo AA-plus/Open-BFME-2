@@ -19,7 +19,9 @@ struct Rva005B5C02Mgr
 	Rva005B5C02List *List();
 };
 
-extern Rva005B5C02Mgr *TheHeroManager;
+// TheHeroManager is only an alias of the owned global TheCreateAHeroManager (ledger names column); this unit reads the owner through its own view type.
+extern class CreateAHeroManager *TheCreateAHeroManager;
+#define TheHeroManager (*(Rva005B5C02Mgr * *)&TheCreateAHeroManager)
 class UnicodeString;
 extern UnicodeString TheEmptyString;
 class CreateAHeroData;

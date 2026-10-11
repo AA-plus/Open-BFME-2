@@ -17,7 +17,9 @@
 
 typedef int Int;
 
-extern int g_00DBC800;
+// g_00DBC800 is only an alias of the owned global NET_CRC_INTERVAL (ledger names column); this unit reads the owner through its own view type.
+extern int NET_CRC_INTERVAL;
+#define g_00DBC800 (*(int *)&NET_CRC_INTERVAL)
 extern "C" __declspec(dllimport) unsigned int __stdcall GetTickCount(void);
 extern "C" __declspec(dllimport) int __cdecl rand(void);
 void __cdecl Rva00559FAC(int mode, void *rules);

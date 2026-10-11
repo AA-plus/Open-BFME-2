@@ -75,7 +75,9 @@ public:
 	virtual void s16();
 	virtual void slot23(const AsciiString &a, unsigned char b, const AsciiString &c, const AsciiString &d);
 };
-extern Rva00E03138 *g_00E03138;
+// g_00E03138 is only an alias of the owned global g_00E03138 (ledger names column); this unit reads the owner through its own view type.
+extern struct UnknownE03138 *g_00E03138;
+#define g_00E03138 (*(Rva00E03138 * *)&g_00E03138)
 
 class CreateAHeroData;
 
@@ -118,14 +120,18 @@ struct Rva00E02D6CDefeatView
 	unsigned char m_pad[0x2D];
 	unsigned char m_flag2D;
 };
-extern Rva00E02D6CDefeatView *g_00E02D6C;
+// g_00E02D6C is only an alias of the owned global TheCampaignManager (ledger names column); this unit reads the owner through its own view type.
+extern class Rva00E02D6C *TheCampaignManager;
+#define g_00E02D6C (*(Rva00E02D6CDefeatView * *)&TheCampaignManager)
 
 class Rva001EB0CAHolder
 {
 public:
 	void rva001EB0CA();
 };
-extern Rva001EB0CAHolder *g_00DFDC8C;
+// g_00DFDC8C is only an alias of the owned global TheLinearCampaignManager (ledger names column); this unit reads the owner through its own view type.
+extern class LinearCampaignManager *TheLinearCampaignManager;
+#define g_00DFDC8C (*(Rva001EB0CAHolder * *)&TheLinearCampaignManager)
 
 
 class Rva003BE7ED

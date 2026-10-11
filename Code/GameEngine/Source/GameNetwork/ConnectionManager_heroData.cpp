@@ -127,7 +127,9 @@ public:
 };
 
 extern GameInfo *TheGameInfo;
-extern Rva00219251 *TheHeroManager;
+// TheHeroManager is only an alias of the owned global TheCreateAHeroManager (ledger names column); this unit reads the owner through its own view type.
+extern class CreateAHeroManager *TheCreateAHeroManager;
+#define TheHeroManager (*(Rva00219251 * *)&TheCreateAHeroManager)
 
 enum NetCommandType
 {

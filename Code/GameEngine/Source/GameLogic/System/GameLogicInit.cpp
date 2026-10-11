@@ -1931,7 +1931,9 @@ void bfmeClearReceiverFlag(int value);
 
 extern AudioManager *TheAudio;
 extern BfmeDfe6e4 *theBfmeDfe6e4;
-extern Rva0021A54A *TheHeroManager;
+// TheHeroManager is only an alias of the owned global TheCreateAHeroManager (ledger names column); this unit reads the owner through its own view type.
+extern class CreateAHeroManager *TheCreateAHeroManager;
+#define TheHeroManager (*(Rva0021A54A * *)&TheCreateAHeroManager)
 extern GameLODManager *TheGameLODManager;
 extern int SavedClientFrame;
 extern unsigned char g_00DFF004;
@@ -2724,7 +2726,9 @@ extern Radar *TheRadar;
 extern unsigned int g_Va00DFE7A8;
 extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 extern GameSpyStagingRoom *TheGameSpyGame;
-extern ClientFrameSubsystem *TheGameClient;
+// TheGameClient is only an alias of the owned global TheGameClient (ledger names column); this unit reads the owner through its own view type.
+extern class GameClient *TheGameClient;
+#define TheGameClient (*(ClientFrameSubsystem * *)&TheGameClient)
 
 void HideControlBar(bool immediate);
 void ShowControlBar(bool immediate);
@@ -3010,7 +3014,9 @@ extern int g_00DFE158;
 extern GameInfo *TheSkirmishGameInfo;
 extern LuaScriptEngine *TheLuaScriptEngine;
 extern GameEngine *TheGameEngine;
-extern Rva00E03138 *g_00E03138;
+// g_00E03138 is only an alias of the owned global g_00E03138 (ledger names column); this unit reads the owner through its own view type.
+extern struct UnknownE03138 *g_00E03138;
+#define g_00E03138 (*(Rva00E03138 * *)&g_00E03138)
 extern InGameUI *TheInGameUI;
 extern Display *TheDisplay;
 extern Rva002872BA *TheTriggerManager;
@@ -4351,7 +4357,9 @@ BfmeMade_009CB5F0 *bfmeMake_009CB5F0(void *text);
 void Rva00225A0C(int msec);
 
 extern CommandList *TheCommandList;
-extern Rva00DFE1C8Host *g_00DFE1C8;
+// g_00DFE1C8 is only an alias of the owned global TheLivingWorldManager (ledger names column); this unit reads the owner through its own view type.
+extern class LivingWorldManager *TheLivingWorldManager;
+#define g_00DFE1C8 (*(Rva00DFE1C8Host * *)&TheLivingWorldManager)
 extern bool TheDeepCRC;
 extern bool TheLiteCRC;
 // Owned here: toggled around the lite-CRC computation below; retail .data

@@ -52,7 +52,9 @@ class Rva002871A4
 public:
 	void rva002871A4(void *p, float f, int a, int b);
 };
-extern Rva002871A4 *TheRva002871A4Host;
+// TheRva002871A4Host is only an alias of the owned global TheTriggerManager (ledger names column); this unit reads the owner through its own view type.
+extern class Rva002872BA *TheTriggerManager;
+#define TheRva002871A4Host (*(Rva002871A4 * *)&TheTriggerManager)
 
 void __stdcall rva003BD3CB(void *p, float f, int c)
 {

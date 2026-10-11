@@ -72,7 +72,9 @@ class ExperienceLevelStore {public:
  ExperienceLevelHandle GetNextLevel(ExperienceLevelHandle) const;
  int GetRequiredExperience(ExperienceLevelHandle) const;
 };
-extern ExperienceLevelStore *TheExperienceLevelStore;
+// TheExperienceLevelStore is only an alias of the owned global TheExperienceLevelSystem (ledger names column); this unit reads the owner through its own view type.
+extern class ExperienceLevelSystem *TheExperienceLevelSystem;
+#define TheExperienceLevelStore (*(ExperienceLevelStore * *)&TheExperienceLevelSystem)
 namespace StrategicInGameUI {
 static __forceinline float GetExperience(const Rva005E4300Entry *entry){return entry->metric;}
 static float ComputeRankProgress(const Rva005E4300Entry *entry) {

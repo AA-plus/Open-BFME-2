@@ -19,7 +19,9 @@ class FireLogicSystem {public:void RegisterObject(Rva00287C21Other*);};
 class LuaDrawableState {public:void rva00333E5B(Object*);};
 class Rva002A8F24 {public:void rva002A9365(Object*);};
 class ShroudManager;
-extern ShroudManager *TheShroudManager;
+// TheShroudManager is only an alias of the owned global TheShroudManager (ledger names column); this unit reads the owner through its own view type.
+extern class PartitionManager *TheShroudManager;
+#define TheShroudManager (*(ShroudManager * *)&TheShroudManager)
 extern PartitionManager *ThePartitionManager;
 class CollisionManager;
 extern CollisionManager *TheCollisionManager;

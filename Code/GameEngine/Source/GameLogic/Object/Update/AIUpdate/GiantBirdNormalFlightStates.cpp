@@ -81,7 +81,9 @@ class Rva00375AF7HeightQuery
 public:
 	Real rva00375B7A(Real x, Real y);
 };
-extern Rva00375AF7HeightQuery *g_00E01F10;
+// g_00E01F10 is only an alias of the owned global TheAerialPathfinder (ledger names column); this unit reads the owner through its own view type.
+extern class AerialPathfinder *TheAerialPathfinder;
+#define g_00E01F10 (*(Rva00375AF7HeightQuery * *)&TheAerialPathfinder)
 extern unsigned char g_00E01EC0[4];
 
 #include "../../../../Common/GameLogicObjectLookupView.h"

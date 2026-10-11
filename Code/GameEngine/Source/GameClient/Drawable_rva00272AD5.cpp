@@ -121,7 +121,9 @@ struct Rva00DFDC30
 	char m_pad00[0x80];
 	float m_80;		// +0x80
 };
-extern Rva00DFDC30 *g_Va00DFDC30;
+// g_Va00DFDC30 is only an alias of the owned global TheEva (ledger names column); this unit reads the owner through its own view type.
+extern class Eva *TheEva;
+#define g_Va00DFDC30 (*(Rva00DFDC30 * *)&TheEva)
 
 class Drawable
 {

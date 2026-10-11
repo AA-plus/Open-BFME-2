@@ -442,7 +442,9 @@ class W3DVolumetricShadowManagerV2
 public:
 	void renderShadows(RenderInfoClass &rinfo);
 };
-extern W3DVolumetricShadowManagerV2 *TheW3DShadowHelperManager;
+// TheW3DShadowHelperManager is only an alias of the owned global TheW3DProjectedShadowManager (ledger names column); this unit reads the owner through its own view type.
+extern class W3DProjectedShadowManager *TheW3DProjectedShadowManager;
+#define TheW3DShadowHelperManager (*(W3DVolumetricShadowManagerV2 * *)&TheW3DProjectedShadowManager)
 
 class W3DVolumetricShadowManager
 {

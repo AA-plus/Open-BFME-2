@@ -23,7 +23,9 @@ struct Rva005BA1FDM6C
 };
 
 class Rva005BA1FDBox;
-extern Rva005BA1FDBox *g_rva005BA1FDInst;
+// g_rva005BA1FDInst is only an alias of the owned global g_Va00E06544 (ledger names column); this unit reads the owner through its own view type.
+extern int g_Va00E06544;
+#define g_rva005BA1FDInst (*(Rva005BA1FDBox * *)&g_Va00E06544)
 
 class Rva005BA1FDBox : public Rva005BA1FDBase
 {

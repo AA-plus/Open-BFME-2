@@ -78,7 +78,9 @@ public:
 class Rva000728E2 { public: void rva000728E2(); };
 class Rva007397D0 { public: void rva007397D0(); };
 class ShroudManager;
-extern ShroudManager *TheShroudManager;
+// TheShroudManager is only an alias of the owned global TheShroudManager (ledger names column); this unit reads the owner through its own view type.
+extern class PartitionManager *TheShroudManager;
+#define TheShroudManager (*(ShroudManager * *)&TheShroudManager)
 
 #include "../../../../../reference/shims/d3d8_shim_validated.h"
 class CameraClass;

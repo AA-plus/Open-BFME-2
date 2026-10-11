@@ -326,7 +326,9 @@ struct Rva0023D607Holder
 	void rva001ECEF6();
 };
 
-extern Rva0023D607Holder *g_Rva0023D607Holder;
+// g_Rva0023D607Holder is only an alias of the owned global TheLinearCampaignManager (ledger names column); this unit reads the owner through its own view type.
+extern class LinearCampaignManager *TheLinearCampaignManager;
+#define g_Rva0023D607Holder (*(Rva0023D607Holder * *)&TheLinearCampaignManager)
 
 // TheWritableGlobalData (0x009FE758): the map name and the pending file.
 class GlobalData

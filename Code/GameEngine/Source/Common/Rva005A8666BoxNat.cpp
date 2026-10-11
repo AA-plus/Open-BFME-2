@@ -78,7 +78,9 @@ struct Global003EF728V6
 	virtual void f6(PeerRequest *rec);
 };
 
-extern Global003EF728V6 *g_00A02340;
+// g_00A02340 is only an alias of the owned global TheGameSpyPeerMessageQueue (ledger names column); this unit reads the owner through its own view type.
+extern class GameSpyPeerMessageQueueInterface *TheGameSpyPeerMessageQueue;
+#define g_00A02340 (*(Global003EF728V6 * *)&TheGameSpyPeerMessageQueue)
 
 struct Rva005A8666Obj
 {

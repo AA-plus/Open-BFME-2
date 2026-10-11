@@ -54,7 +54,9 @@ public:
 	void bfmeEnd982C();				// 0x00110611
 };
 
-extern int g_Va00DB5FB0;
+// g_Va00DB5FB0 is only an alias of the owned global g_00DB5FB0 (ledger names column); this unit reads the owner through its own view type.
+extern int g_00DB5FB0;
+#define g_Va00DB5FB0 (*(int *)&g_00DB5FB0)
 extern float g_Va00DEC49C;
 
 class W3DAptAux
@@ -236,7 +238,9 @@ template list<AptShapeContainer*>::_Node *list<AptShapeContainer*>::_M_create_no
 }
 class Rva00785FD0Item { public:void cleanup(); };
 struct Rva00785FD0Node;
-extern Rva00785FD0Node *g_rva00785FD0Queue;
+// g_rva00785FD0Queue is only an alias of the owned global g_Va00DE6194 (ledger names column); this unit reads the owner through its own view type.
+extern unsigned int g_Va00DE6194;
+#define g_rva00785FD0Queue (*(Rva00785FD0Node * *)&g_Va00DE6194)
 extern char g_rva00785FD0Dirty;
 void w3dDrawRenderingUnit(AptRenderingUnit *renderingUnit,Int mode)
 {

@@ -13,7 +13,9 @@ struct Rva0023D339B
 	unsigned int m_40;
 };
 extern class GlobalData *TheWritableGlobalData;
-extern unsigned int g_bfmeRva42E8C1Add;
+// g_bfmeRva42E8C1Add is only an alias of the owned global g_Va00DBA4E4 (ledger names column); this unit reads the owner through its own view type.
+extern int g_Va00DBA4E4;
+#define g_bfmeRva42E8C1Add (*(unsigned int *)&g_Va00DBA4E4)
 extern class GameLogic *TheGameLogic;
 bool Rva0023D339Get()
 {

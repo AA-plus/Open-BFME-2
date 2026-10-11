@@ -91,7 +91,9 @@ struct Rva0026F0F0
 {
 	void *rva0026F0F0(const void *mask);	// 0x0026F0F0
 };
-extern Rva0026F0F0 *TheUpgradeCenter;
+// TheUpgradeCenter is only an alias of the owned global TheUpgradeCenter (ledger names column); this unit reads the owner through its own view type.
+extern class UpgradeCenter *TheUpgradeCenter;
+#define TheUpgradeCenter (*(Rva0026F0F0 * *)&TheUpgradeCenter)
 
 enum ObjectID
 {

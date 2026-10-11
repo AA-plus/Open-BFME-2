@@ -90,7 +90,9 @@ struct AptOnlineSubScreen {
 };
 
 struct LANGameInfo;
-extern LANGameInfo *g_Rva00E02EEC;
+// g_Rva00E02EEC is only an alias of the owned global TheGameInfo (ledger names column); this unit reads the owner through its own view type.
+extern class GameInfo *TheGameInfo;
+#define g_Rva00E02EEC (*(LANGameInfo * *)&TheGameInfo)
 extern int g_Va00E04904;
 void __cdecl TearDownGameSpy();
 void __cdecl Rva00511F73Run();

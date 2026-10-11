@@ -37,7 +37,9 @@ public:
 	bool rva0037609C(void *object, const Coord3D *position, Rva00312C95 *member,
 		const unsigned char *mask, const Coord3D *lookAhead, bool b);
 };
-extern Rva0037609C *g_00E01F10;
+// g_00E01F10 is only an alias of the owned global TheAerialPathfinder (ledger names column); this unit reads the owner through its own view type.
+extern class AerialPathfinder *TheAerialPathfinder;
+#define g_00E01F10 (*(Rva0037609C * *)&TheAerialPathfinder)
 class Rva00368C7A
 {
 public:

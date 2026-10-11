@@ -29,8 +29,12 @@ class ShaderTextureHandle { public:
  ~ShaderTextureHandle() { if(ptr) ptr->Release_Ref(); }
  ShaderTextureHandle &operator=(const ShaderTextureHandle &o) { if(o.ptr) o.ptr->Add_Ref(); if(ptr) ptr->Release_Ref(); ptr=o.ptr; return *this; }
 };
-extern ShaderVertexBufferRef *rva012F9D1C;
-extern unsigned rva012F9D20;
+// rva012F9D1C is only an alias of the owned global g_vb (ledger names column); this unit reads the owner through its own view type.
+extern class VertexBufferClass *g_vb;
+#define rva012F9D1C (*(ShaderVertexBufferRef * *)&g_vb)
+// rva012F9D20 is only an alias of the owned global g_quadIndex (ledger names column); this unit reads the owner through its own view type.
+extern int g_quadIndex;
+#define rva012F9D20 (*(unsigned *)&g_quadIndex)
 extern ShaderComResourceRef *rva012F9D0C, *rva012F9D04, *rva012F9D08, *rva012F9D10;
 // The native eight-slot table is owned by W3DShroudMaterialPass.cpp.
 extern void *g_shaderTextureSlots[8];

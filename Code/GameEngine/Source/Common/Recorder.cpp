@@ -67,7 +67,9 @@ class Xfer { public: virtual ~Xfer();};
 class XferSave { public:XferSave();virtual ~XferSave(); unsigned char Open(Xfer*,int,bool);void close();char tail[0x3c];};
 class CreateAHeroData {public:virtual void s0();virtual void s1();virtual void s2();virtual void xfer(Xfer*);CreateAHeroData&operator=(const CreateAHeroData&);};
 class Rva00219251 {public:CreateAHeroData *rva00219251(int,int,int,const UnicodeString&,int,int,int);void rva0021929D(CreateAHeroData**);};
-extern Rva00219251 *TheCreateAHeroManager;
+// TheCreateAHeroManager is only an alias of the owned global TheCreateAHeroManager (ledger names column); this unit reads the owner through its own view type.
+extern class CreateAHeroManager *TheCreateAHeroManager;
+#define TheCreateAHeroManager (*(Rva00219251 * *)&TheCreateAHeroManager)
 class BfmeMade_009CB5F0;
 BfmeMade_009CB5F0*bfmeMake_009CB5F0(void*);
 class BfmeThingEC {public:int bfmeTakeEC(int*);};

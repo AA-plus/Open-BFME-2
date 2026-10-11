@@ -134,7 +134,9 @@ public:
 #undef SLOT
 	virtual void destroyDrawable( Drawable *draw );		// slot 29
 };
-extern ClientFrameSubsystem *TheGameClient;
+// TheGameClient is only an alias of the owned global TheGameClient (ledger names column); this unit reads the owner through its own view type.
+extern class GameClient *TheGameClient;
+#define TheGameClient (*(ClientFrameSubsystem * *)&TheGameClient)
 
 class View
 {

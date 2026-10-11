@@ -40,7 +40,9 @@ private:
 	unsigned char m_pad0C[0x640 - 0x0C];
 };
 
-extern bool g_00E01EA8;
+// g_00E01EA8 is only an alias of the owned global g_00E01EA8 (ledger names column); this unit reads the owner through its own view type.
+extern unsigned char g_00E01EA8;
+#define g_00E01EA8 (*(bool *)&g_00E01EA8)
 
 class ThingFactory
 {

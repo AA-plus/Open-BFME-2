@@ -27,7 +27,9 @@ struct Rva004266A1Holder
 	Rva004266A1 *m_slot10;
 };
 
-extern Rva004266A1Holder *g_00E031E8;
+// g_00E031E8 is only an alias of the owned global g_00E031E8 (ledger names column); this unit reads the owner through its own view type.
+extern struct Rva0039B95FHolder *g_00E031E8;
+#define g_00E031E8 (*(Rva004266A1Holder * *)&g_00E031E8)
 
 void __stdcall rva003BD32B(int index)
 {

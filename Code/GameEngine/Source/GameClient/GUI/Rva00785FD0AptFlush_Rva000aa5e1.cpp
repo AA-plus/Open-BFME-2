@@ -35,7 +35,9 @@ struct Rva00785FD0Node
 
 extern char g_rva00785FD0Dirty;
 extern Rva00785FD0Renderer *g_rva00785FD0Renderer;
-extern Rva00785FD0Node *g_rva00785FD0Queue;
+// g_rva00785FD0Queue is only an alias of the owned global g_Va00DE6194 (ledger names column); this unit reads the owner through its own view type.
+extern unsigned int g_Va00DE6194;
+#define g_rva00785FD0Queue (*(Rva00785FD0Node * *)&g_Va00DE6194)
 
 void rebuildMask()
 {
