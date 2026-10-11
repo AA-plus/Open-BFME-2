@@ -17,7 +17,7 @@ describe the matching work itself.
 
 - **Modding:** start with \ref page_modding and the
   \ref page_mainpage_modding "modding notes" below.
-- **Remastering or porting:** start with the
+- **Remastering or porting:** start with \ref page_remastering and the
   \ref page_mainpage_remastering "remastering notes" below.
 
 Every written guide and subsystem page has its own modding and remastering
@@ -103,6 +103,9 @@ Start with the first two; the rest can be read in any order.
   buttons.
 - \subpage page_modding says what game data controls and which rules a mod
   must respect.
+- \subpage page_remastering shows where the engine touches Windows and its
+  libraries, the assumptions built into the code, and what must stay
+  identical to remain compatible with the original game.
 - \subpage page_glossary defines the terms the other pages use.
 
 Each subsystem page has a matching group under *Topics* that holds its class
