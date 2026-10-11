@@ -775,21 +775,7 @@ void HTreeClass::Combo_Update
 
 
 
-// ?Capture_Bone@HTreeClass@@ present-unmatched
-void HTreeClass::Capture_Bone(int boneindex)
-{
-	assert(boneindex >= 0);
-	assert(boneindex < NumPivots);
-#ifdef LAZY_CAP_MTX_ALLOC
-	if (Pivot[boneindex].CapTransformPtr == NULL) 
-	{
-		Pivot[boneindex].CapTransformPtr = MSGW3DNEW("PivotClassCaptureBoneMtx") DynamicMatrix3D;
-		Pivot[boneindex].CapTransformPtr->Mat.Make_Identity();
-	}
-#else
-	Pivot[boneindex].IsCaptured = true;
-#endif
-}
+// HTreeClass::Capture_Bone (0x00166980) is rowed in HTreeClassCaptureBone.cpp; a second definition here would not link.
 
 // HTreeClass::Release_Bone: defined in HTreeClassReleaseBone.cpp (its row's unit).
 
