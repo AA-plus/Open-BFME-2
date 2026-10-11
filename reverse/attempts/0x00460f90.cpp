@@ -1,6 +1,8 @@
 // ?rva00460F90@Rva00460F90@@QAEXXZ
+// partial score=0.9218171367574 date=2026-10-11
+// ?rva00460F90@Rva00460F90@@QAEXXZ
 // partial score=0.85 date=2026-10-09
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /EHsc /MD /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /ICode /Ireference/shims/bfme2_ascii /O1 /G7 /EHsc /MD /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // ?rva00460F90@Rva00460F90@@QAEXXZ retail 0x00460F90..0x00461257 711B.
@@ -29,7 +31,7 @@
 // reloads it from the frame and keeps the STLport null test).
 #include "ascii_string.h"
 #include <vector>
-#include "../../../Common/GameLogicObjectLookupView.h"
+#include "GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
 // class-gate: allow Coord3D the bone-position array is built and torn down through BFME 2's out-of-line Coord3D constructor and destructor (the eh vector iterators push 0x0047A6A9 and 0x000B3FD0); the canonical data-only header cannot declare them; same three floats
 struct Coord3D
@@ -39,6 +41,9 @@ struct Coord3D
 	Coord3D(const Coord3D &that) { x = that.x; y = that.y; z = that.z; }
 	~Coord3D() {}
 };
+
+void Rva00030830GameFree(void *);
+template<> inline _STL::_Vector_base<unsigned int, _STL::allocator<unsigned int> >::~_Vector_base() { Rva00030830GameFree(this->_M_start); }
 
 class Matrix3D;
 
@@ -159,19 +164,20 @@ void Rva00460F90::rva00460F90()
 	for (const DynamicPortalLinkList *lit = data->m_link.begin(); lit != data->m_link.end(); ++lit)
 	{
 		DynamicPortalLinkList link = *lit;
+		const unsigned int *start = link.begin();
 		int count = link.size();
-		unsigned int first = link[0];
-		unsigned int last = link[count - 1];
+		unsigned int first = start[0];
+		unsigned int last = start[count - 1];
 		if (!alreadyCreated)
 			m_waypoints[first]->addLink(m_waypoints[last]);
 		TheAI->m_pathfinder->rva002E8FE5(m_waypoints[first]);
 		if (!alreadyCreated)
 		{
-			count = link.size() - 2;
-			for (int i = 0; i < count; ++i)
+			const int limit = count - 2;
+			for (int i = 0; i < limit; ++i)
 			{
-				unsigned int a = link[i];
-				unsigned int b = link[i + 1];
+				unsigned int a = start[i];
+				unsigned int b = start[i + 1];
 				m_waypoints[b]->m_48 = false;
 				m_waypoints[a]->setNext(m_waypoints[b]);
 			}
