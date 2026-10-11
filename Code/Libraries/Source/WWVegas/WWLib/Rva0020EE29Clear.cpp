@@ -576,7 +576,11 @@ void Rva0020EE29::rva0020F795()
 }
 
 class Rva003FD14D;
-class Rva002D3627Host { public: void rva002C004F(const char*); };
+// LINK: rva002C004F's rowed home is Rva002BFF5A (Rva002C004FErase.cpp, 0x2C004F);
+// the old Rva002D3627Host spelling named an unresolved symbol. The global keeps
+// its pointer type, the call binds the rowed member through a cast.
+class Rva002D3627Host;
+class Rva002BFF5A { public: void rva002C004F(const char *name); };
 extern Rva002D3627Host *g_00DFEF18;
 class Rva00212655Virt { public: virtual void *v00(int); };
 
@@ -591,7 +595,7 @@ void Rva00DFE1C8Host::rva00212655(int arg)
     _STL::hash_map<int,Rva003FD14D*>::iterator it = beacons.find(arg);
     if (it != beacons.end()) {
         Rva003FD14D *beacon = it->second;
-        g_00DFEF18->rva002C004F(((AsciiString*)((char*)beacon+4))->str());
+        ((Rva002BFF5A *)g_00DFEF18)->rva002C004F(((AsciiString*)((char*)beacon+4))->str());
         Rva00212655Virt *view = (Rva00212655Virt*)beacon;
         void *allocation = view ? view->v00(0) : 0;
         ::operator delete(allocation);
