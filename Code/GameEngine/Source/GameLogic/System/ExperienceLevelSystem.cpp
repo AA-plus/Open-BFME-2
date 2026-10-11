@@ -150,6 +150,18 @@ public:
 // KeyToBucketMap view (ObjectLookupMapFindSlot.cpp): it fills an out-pair
 // {node, map}; a hit's value sits at node +0x08.
 enum NameKeyType { NAMEKEY_UNKNOWN = 0 };
+struct FXListMapNode
+{
+	void *m_next;
+	NameKeyType m_key;
+};
+
+class FXListMap
+{
+public:
+	FXListMapNode *find(const NameKeyType &key) const;
+};
+
 class NameKeyGenerator
 {
 public:
@@ -160,10 +172,15 @@ public:
 		struct Slot
 		{
 			void *node;
-			KeyToBucketMap *map;
+			KeyToBucketMap * volatile map;
 		};
 
 		Slot *find( Slot &out, const int *key );
+		void find(Slot &out, const NameKeyType &key)
+		{
+			out.node = ((const FXListMap *)this)->find(key);
+			out.map = this;
+		}
 	};
 };
 
@@ -221,6 +238,7 @@ public:
 	ExperienceLevelList *FindExperienceLevelList(const ExperienceTracker *tracker) const;	// 0x00288C34
 	ExperienceLevelHandle FindCurrentLevel(const ExperienceTracker *tracker) const;
 	Int rva00288CA6(const ExperienceTracker *tracker, Int rank, Int *pastEnd) const;
+	ExperienceLevelList *rva00288C68(int object);
 
 private:
 	unsigned char m_pad00[0xc];
@@ -464,11 +482,15 @@ ExperienceLevelList *ExperienceLevelStore::FindExperienceLevelList(const Experie
 	return 0;
 }
 
-// WB 0x00BE9C10 names CreateNewExpLevel and ExperienceLevelSystem.cpp.
-// Retail 0x0028A473..0x0028A5D5 copies a named source when the new name
-// is absent, installs its target/attribute/upgrade lists, then invalidates
-// the cache at store+0x28. An existing destination only updates those lists.
-// Full 354-byte body, established callees and one-state EH graph verified.
+ExperienceLevelList *ExperienceLevelStore::rva00288C68(int object)
+{
+	NameKeyType key = TheNameKeyGenerator->nameToKey(*(const AsciiString *)(object + 0x64));
+	NameKeyGenerator::KeyToBucketMap::Slot it;
+	m_levelLists->find(it, key);
+	if (it.node)
+		return (ExperienceLevelList *)((char *)it.node + 8);
+	return 0;
+}
 bool ExperienceLevelStore::CreateNewExpLevel(const AsciiString &sourceName, const AsciiString &newName, const AsciiString &target, const AsciiString &upgrades, const AsciiString &attributes)
 {
     Rva002894A2 *existing = (Rva002894A2 *)((Rva0028951F *)this)->rva0028951F(TheNameKeyGenerator->nameToKey(newName));

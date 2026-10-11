@@ -2869,7 +2869,34 @@ public:
 
 // The map file stream: 0x00240000 builds it, 0x00308050 opens a path and
 // 0x0023F4F0 tears it down.
-class Rva00240000
+extern const void *const g_00C4EF80[];
+
+class Rva0084EF80Base
+{
+public:
+	virtual void rva0084EF80_slot0() {}
+	virtual void rva0084EF80_slot1() {}
+	virtual void rva0084EF80_slot2() {}
+	virtual void rva0084EF80_slot3() {}
+	~Rva0084EF80Base()
+	{
+		*(const void **)this = g_00C4EF80;
+	}
+};
+
+struct Rva00240000Vector
+{
+	void *m_start;
+	void *m_finish;
+	void *m_end;
+	~Rva00240000Vector()
+	{
+		if (m_start)
+			free(m_start);
+	}
+};
+
+class __declspec(novtable) Rva00240000 : public Rva0084EF80Base
 {
 public:
 	Rva00240000(void);
@@ -2877,8 +2904,16 @@ public:
 	bool rva00308050(AsciiString path);
 
 private:
-	char m_body[0x20];
+	Rva00240000Vector m_04;
+	Rva0084EF80Base m_10;
+	int m_14;
+	int m_18;
+	int m_1c;
 };
+
+Rva00240000::~Rva00240000(void)
+{
+}
 
 // Progress range (BFME 1 donor Rva00490350ProgressRange): 0x00355C8E builds it
 // over the two endpoints, 0x00355CD8 ends it.

@@ -30,7 +30,9 @@ private:
 class ScriptEngine
 {
 public:
+    AsciiString rva002046C0(const AsciiString &name);
     void rva00208968(const AsciiString &name, Object *object);
+    void rva00208A09(const AsciiString &newName, AsciiString oldName);
     void rva00208B2C(const AsciiString &name, Team *team);
 private:
     char m_beforeMaps[0x190B8];
@@ -44,6 +46,22 @@ void ScriptEngine::rva00208968(const AsciiString &name, Object *object)
     NameKey key(m_scope, name);
     NameMap::iterator it = m_objects.insert(_STL::make_pair(key, 0)).first;
     it->second = object->getID();
+}
+
+void ScriptEngine::rva00208A09(const AsciiString &newName, AsciiString oldName)
+{
+    if (oldName.isEmpty())
+        return;
+
+    AsciiString scope = rva002046C0(oldName);
+    NameKey oldKey(scope, oldName);
+    NameMap::iterator it = m_objects.find(oldKey);
+    if (it != m_objects.end())
+    {
+        NameKey newKey(m_scope, newName);
+        NameMap::iterator newIt = m_objects.insert(_STL::make_pair(newKey, 0)).first;
+        newIt->second = it->second;
+    }
 }
 void ScriptEngine::rva00208B2C(const AsciiString &name, Team *team)
 {
