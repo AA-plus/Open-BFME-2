@@ -12,6 +12,14 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 #include <hash_map>
 #include <memory>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 struct Rva005DFBB8Element { unsigned words[4];Rva005DFBB8Element();Rva005DFBB8Element(const Rva005DFBB8Element&b){words[0]=b.words[0];words[1]=b.words[1];words[2]=b.words[2];words[3]=b.words[3];}bool operator<(const Rva005DFBB8Element&)const;bool operator==(const Rva005DFBB8Element&)const; };
 template class _STL::hash_map<int,Rva005DFBB8Element>;
