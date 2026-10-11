@@ -61,6 +61,12 @@ class State
 {
 public:
 	StateID getID() const { return m_ID; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getID copy loses to the first-in-order copy (no
+	// retail address); the getCurrentStateID body below inlines it but still
+	// emits the loser COMDAT. Rebinding there emits only this unique
+	// (trivially kept) copy. No flags touched.
+	StateID bfme_id() const { return m_ID; }
 private:
 	void *m_vtbl;
 	StateID m_ID; // +0x04
@@ -75,6 +81,13 @@ public:
 	virtual void slot03();
 	virtual StateReturnType updateStateMachine();
 	StateID getCurrentStateID() const { return m_currentState ? m_currentState->getID() : (StateID)INVALID_STATE_ID; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes, rebound to the unique getID helper above). This TU's
+	// getCurrentStateID copy loses to the first-in-order copy (no retail
+	// address); the update call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	StateID bfme_current_state() const { return m_currentState ? m_currentState->bfme_id() : (StateID)INVALID_STATE_ID; }
 private:
 	State *m_currentState; // +0x04
 };
@@ -120,7 +133,7 @@ UpdateSleepTime TurretAI::updateTurretAI()
 		m_playPitchSound = false;
 	}
 
-	if (m_enabled || m_turretStateMachine->getCurrentStateID() == TURRETAI_RECENTER)
+	if (m_enabled || m_turretStateMachine->bfme_current_state() == TURRETAI_RECENTER)
 	{
 		m_didFire = false;
 

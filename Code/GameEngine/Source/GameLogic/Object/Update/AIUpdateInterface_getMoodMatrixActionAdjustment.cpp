@@ -118,6 +118,12 @@ class LocomotorSet
 {
 public:
 	int getValidSurfaces() const { return m_validLocomotorSurfaces; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getValidSurfaces copy loses to the first-in-order
+	// copy (no retail address); the chained call below inlines it but still
+	// emits the loser COMDAT. Rebinding there emits only this unique
+	// (trivially kept) copy. No flags touched.
+	int bfme_valid_surfaces() const { return m_validLocomotorSurfaces; }
 private:
 	int m_validLocomotorSurfaces;
 };
@@ -128,6 +134,12 @@ public:
 	Object *getObject() const { return m_object; }
 	StateMachine *getStateMachine() const { return m_stateMachine; }
 	const LocomotorSet &getLocomotorSet() const { return m_locomotorSet; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getLocomotorSet copy loses to the first-in-order copy
+	// (no retail address); the chained call below inlines it but still emits
+	// the loser COMDAT. Rebinding there emits only this unique (trivially
+	// kept) copy. No flags touched.
+	const LocomotorSet &bfme_locomotor_set() const { return m_locomotorSet; }
 	AttitudeType getAttitude() const;
 	UnsignedInt getMoodMatrixValue() const;
 	UnsignedInt getMoodMatrixActionAdjustment(MoodMatrixAction action) const;
@@ -199,7 +211,7 @@ UnsignedInt AIUpdateInterface::getMoodMatrixValue() const
 		}
 	}
 
-	if (getLocomotorSet().getValidSurfaces() & LOCOMOTORSURFACE_AIR)
+	if (bfme_locomotor_set().bfme_valid_surfaces() & LOCOMOTORSURFACE_AIR)
 	{
 		returnVal |= MM_UnitType_Air;
 	}

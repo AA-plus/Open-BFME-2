@@ -92,6 +92,12 @@ class Drawable
 {
 public:
 	bool isSelected() const { return m_selected; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's isSelected copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	bool bfme_is_selected() const { return m_selected; }
 private:
 	char m_pad000[0x43C];
 	bool m_selected;	// +0x43C
@@ -136,6 +142,12 @@ class PlayerList
 {
 public:
 	Player *getLocalPlayer() { return m_local; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getLocalPlayer copy loses to the first-in-order copy
+	// (no retail address); the call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	Player *bfme_local_player() { return m_local; }
 private:
 	char m_pad00[0x10];
 	Player *m_local;	// +0x10
@@ -319,7 +331,7 @@ void RiderChangeContain::onRemoving(Object *rider)
 		Drawable *riderDraw = rider->getDrawable();
 		if (containDraw && riderDraw)
 		{
-			if (bike->getControllingPlayer() == ThePlayerList->getLocalPlayer() && containDraw->isSelected())
+			if (bike->getControllingPlayer() == ThePlayerList->bfme_local_player() && containDraw->bfme_is_selected())
 			{
 				GameMessage *teamMsg = TheMessageStream->appendMessage(0x3E9);
 				teamMsg->appendBooleanArgument(false);
