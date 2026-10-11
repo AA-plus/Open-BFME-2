@@ -284,6 +284,53 @@ private:
 	Rva004E0513 m_bfmeMember94;																								///< 0x94
 };
 
+// The vectors Rva001EBAEA::xfer clears on old versions: STLport's erase is
+// all it calls (rowed 0x001EBDFA for the 172-byte carryover records, the
+// folded 4-byte element erase 0x00532803 for the science list).
+namespace _STL
+{
+template <class T> class allocator;
+template <class T, class A = allocator<T> > class vector
+{
+public:
+	T *erase( T *first, T *last );
+	void clear() { erase( _M_start, _M_finish ); }
+	T *_M_start;
+	T *_M_finish;
+	T *_M_end_of_storage;
+};
+}
+struct BfmeAssignRecord172;
+struct Rva005334A4Element;
+class Rva0037DF2C;
+Xfer *Rva001EC0A0Xfer( Xfer *xfer, _STL::vector<Rva0037DF2C> *units );
+Xfer *Rva001ECA2DXfer( Xfer *xfer, void *sciences );
+extern "C" void *__cdecl memset( void *dst, int value, unsigned int size );
+
+// The LinearCampaign snapshot (vftable 0x00BDF168, slot-2 name getter
+// 0x001EAE63 "LinearCampaign"); its rowed constructor 0x001EBAEA sets out this
+// layout. Field meanings are not established.
+class Rva001EBAEA : public SnapshotBase
+{
+protected:
+	virtual void xfer( Xfer *xfer );
+private:
+	Int m_bfmeValue04;																												///< 0x04
+	Int m_bfmeValue08;																												///< 0x08
+	Int m_bfmeValue0C;																												///< 0x0C
+	Real m_bfmeReal10;																												///< 0x10
+	_STL::vector<Rva005334A4Element> m_bfmeSciences14;																				///< 0x14
+	Rva00291440 m_bfmeBits20;																									///< 0x20, 1024-bit set
+	Real m_bfmeRealA0;																												///< 0xA0
+	_STL::vector<BfmeAssignRecord172> m_bfmeUnitsA4;																				///< 0xA4
+	Int m_bfmeValueB0;																												///< 0xB0
+	_STL::vector<BfmeAssignRecord172> m_bfmeUnitsB4;																				///< 0xB4
+	Bool m_bfmeFlagC0;																												///< 0xC0
+	Bool m_bfmeFlagC1;																												///< 0xC1
+	Bool m_bfmeFlagC2;																												///< 0xC2
+	Bool m_bfmeFlagC3;																												///< 0xC3
+};
+
 class RegionBonusInfo : public SnapshotBase
 {
 protected:
@@ -427,6 +474,53 @@ void CarryoverUnit::xfer( Xfer *xfer )
 	m_bfmeMember94.rva004E0513( xfer );
 	rva003064CB( xfer, &m_bfmeBits10 );
 	*xfer == m_bfmeValue0C;
+}  // end xfer
+
+// ------------------------------------------------------------------------------------------------
+/** Xfer method: retail 0x001ECBAD (326 bytes), version 6. Older saves leave the
+ *  later fields cleared. */
+// ------------------------------------------------------------------------------------------------
+void Rva001EBAEA::xfer( Xfer *xfer )
+{
+	Xfer::Version version( 1, 6 );
+	*xfer == version;
+	*xfer == m_bfmeValue0C;
+	if( version.m_minimum >= 6 )
+		*xfer == m_bfmeFlagC3;
+	else
+		m_bfmeFlagC3 = false;
+	Rva001EC0A0Xfer( xfer, (_STL::vector<Rva0037DF2C> *)&m_bfmeUnitsA4 );
+	*xfer == m_bfmeFlagC0;
+	*xfer == m_bfmeFlagC1;
+	*xfer == m_bfmeFlagC2;
+	if( version.m_minimum >= 2 )
+	{
+		*xfer == m_bfmeValueB0;
+		Rva001EC0A0Xfer( xfer, (_STL::vector<Rva0037DF2C> *)&m_bfmeUnitsB4 );
+	}
+	else
+	{
+		m_bfmeUnitsB4.clear();
+		m_bfmeValueB0 = 0;
+	}
+	if( version.m_minimum >= 3 )
+	{
+		*xfer == m_bfmeReal10;
+		Rva001ECA2DXfer( xfer, &m_bfmeSciences14 );
+	}
+	else
+	{
+		m_bfmeReal10 = 0.0f;
+		m_bfmeSciences14.clear();
+	}
+	if( version.m_minimum >= 4 )
+		rva003064CB( xfer, &m_bfmeBits20 );
+	else
+		memset( &m_bfmeBits20, 0, sizeof( m_bfmeBits20 ) );
+	if( version.m_minimum >= 5 )
+		*xfer == m_bfmeRealA0;
+	else
+		m_bfmeRealA0 = 0.0f;
 }  // end xfer
 
 // ------------------------------------------------------------------------------------------------
