@@ -6,10 +6,16 @@
 // address-derived template views are opaque interfaces to folded helpers;
 // the native node stores the full 0x784-byte pair, not their small placeholders.
 #include <hash_map>
+
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
 // Suppress the TU's non-retail const-begin copy (row 47 family2-LK3): the
 // /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
 namespace _STL {
 template <> vector<void *>::const_iterator _STL::vector<void *>::begin() const;
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
 }
 class INI;
 class DamageFX { public:

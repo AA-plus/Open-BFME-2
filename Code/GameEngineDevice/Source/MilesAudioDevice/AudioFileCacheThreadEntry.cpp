@@ -23,6 +23,14 @@ template <> bool less<unsigned int>::operator()(const unsigned int &a, const uns
 #include <set>
 #include "ascii_string.h"
 
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+
 // Base hash of open files; the key/value names of the rowed 0x000A7E7A
 // constructor are address-derived (StlSweepW4Rva000A7E7A.cpp).
 struct Rva000A7E7AElement { char bytes[1]; bool operator<(const Rva000A7E7AElement&)const; bool operator==(const Rva000A7E7AElement&)const; };
