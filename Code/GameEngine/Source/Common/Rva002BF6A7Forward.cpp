@@ -22,10 +22,16 @@ struct Rva005F83A9Element
 	int m_b;
 };
 
-class Rva005F83A9
+// LINK: 0x00578513 is rowed as Rva00578513::rva00578513; bind it through a view of this object.
+class Rva00578513
 {
 public:
 	void rva00578513(int count);
+};
+
+class Rva005F83A9
+{
+public:
 	void rva005F83A9();
 
 private:
@@ -36,7 +42,7 @@ private:
 
 void Rva005F83A9::rva005F83A9()
 {
-	rva00578513(m_end - m_begin);
+	((Rva00578513 *)this)->rva00578513(m_end - m_begin);
 }
 
 // Native2BF652..2BF687 RET4: output pair on the stack; value+12C region ID.
@@ -56,12 +62,12 @@ void Rva002BF652::rva002BF652(void*value){
 // Native5CD284..5CD2A3 RET0, WB15C5010: empty folded hook, owned
 // 8B child-forwarder then region placement(value20->18, receiver10).
 // Existing neutral noop owner names only the proven shared empty RET.
-class Rva000B3FD0Nop {public:void noop();};
+class PathfindLayer {public:void rva000B3FD0();};
 class Rva005CCB5B {public:void rva005CCB5B();};
 struct Rva005CD284Value {char pad[0x18];void*value;};
 class Rva005CD284 {public:void rva005CD284();private:char pad[0x10];Rva002BF652*placer;char pad14[0xC];Rva005CD284Value*holder;};
 void Rva005CD284::rva005CD284(){
- ((Rva000B3FD0Nop*)this)->noop();
+ ((PathfindLayer*)this)->rva000B3FD0();
  ((Rva005CCB5B*)this)->rva005CCB5B();
  placer->rva002BF652(holder->value);
 }
