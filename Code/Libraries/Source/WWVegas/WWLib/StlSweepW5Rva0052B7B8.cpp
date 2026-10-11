@@ -16,6 +16,8 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 // the retail copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {
 template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
 }
 
 struct Rva0052B7B8Element {Rva0052B7B8Element();Rva0052B7B8Element(const Rva0052B7B8Element&);Rva0052B7B8Element&operator=(const Rva0052B7B8Element&);~Rva0052B7B8Element(){}char bytes[8]; bool operator==(const Rva0052B7B8Element&)const;};
