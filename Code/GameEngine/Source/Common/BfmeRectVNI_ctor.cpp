@@ -57,3 +57,16 @@ BfmeRectVNI::BfmeRectVNI(unsigned w, char f)
 	, m_at18(0)
 {
 }
+
+// Native clone565344 borrows the record's tree receiver through47A6A9.
+// WB12CAB90 independently returns its receiver without stores or calls;
+// its caller143ADFF passes that pointer to assignment12CAB70. The retail
+// three-byte body is folded with the existing empty coordinate constructor.
+// This neutral storage view asserts neither an original map name nor values.
+class Rva005045DBTree {
+public:
+ Rva005045DBTree&assign(const Rva005045DBTree&);
+ Rva005045DBTree&self();
+ int storage[3];
+};
+Rva005045DBTree&Rva005045DBTree::self(){return *this;}
