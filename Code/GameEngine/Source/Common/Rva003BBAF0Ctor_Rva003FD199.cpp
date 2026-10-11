@@ -1,6 +1,10 @@
 // cl: -DNDEBUG -MD /Ob1 -Ireference/open-bfme-1/game/GameEngine/Source/Common
 // Open-BFME5: base unsigned*0.03f clamp shared by BfmeRectVNE / VNF / VNG.
-// Retail 0x003BBAF0, 66 bytes. Return-this is materialised before the <1 clamp.
+// Native 0x003FD199, 44 bytes: a base constructor called by the derived
+// constructors at 0x003FD348 and 0x003FD498. The vtable store and twelve-byte
+// prefix are target evidence; the established BfmeBaseVNH spelling is neutral.
+// This declaration view represents its vptr explicitly. Return-this precedes
+// the <1 clamp, just as in the former donor-guided initializer.
 
 extern "C" void *__identifier("??_7BfmeBaseVNH@@6B@");
 #define g_bfmeVtaVNE __identifier("??_7BfmeBaseVNH@@6B@")
@@ -12,24 +16,22 @@ static unsigned rva003BB860Scale(unsigned w)
 	return (int)((float)w * 0.03f);
 }
 
-class BfmeBaseVN
+class BfmeBaseVNH
 {
 public:
-	BfmeBaseVN *bfmeInitVN(unsigned w, char f);
+	BfmeBaseVNH(unsigned w, char f);
 
 	void *volatile m_bfme00;
 	unsigned m_bfme04;
 	char m_bfme08;
 };
 
-// ?bfmeInitVN@BfmeBaseVN@@QAEPAV1@ID@Z
-BfmeBaseVN *BfmeBaseVN::bfmeInitVN(unsigned w, char f)
+// ??0BfmeBaseVNH@@QAE@ID@Z
+BfmeBaseVNH::BfmeBaseVNH(unsigned w, char f)
 {
 	m_bfme00 = &g_bfmeVtaVNE;
 	m_bfme08 = f;
 	m_bfme04 = rva003BB860Scale(w);
-	BfmeBaseVN *self = this;
 	if (m_bfme04 < 1)
 		m_bfme04 = 1;
-	return self;
 }

@@ -11,7 +11,8 @@
 // Open-BFME5: VNE-family ctor with AsciiString at +0xC. Retail 0x003BC090, 133B.
 // Base unsigned*0.03f clamp inlines; derived vftable then StringBase copy at +0xC.
 
-#include "StringInline.h"
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
+#include "../../../../reference/shims/bfme2_ascii/unicode_string.h"
 
 class BfmeBaseVNH
 {
