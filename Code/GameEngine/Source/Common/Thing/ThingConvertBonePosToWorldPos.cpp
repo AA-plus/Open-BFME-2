@@ -12,10 +12,15 @@
 #include "Lib/Coord3D.h"
 #include "vector3.h"
 #include "vector4.h"
+// LINK: file-static helpers and direct Row fields replace Vector3's MMM ctor and
+// operator=, Vector4/Matrix3D operator[] and Matrix3D::mul: identical inlined
+// bytes, but this TU no longer emits their loser COMDAT copies. No flags touched.
+static __forceinline void bfmeCopyV3(Vector3 &d,const Vector3 &s) {d.X=s.X;d.Y=s.Y;d.Z=s.Z;}
+static __forceinline void bfmeSetV3(Vector3 &v,float x,float y,float z) {v.X=x;v.Y=y;v.Z=z;}
 static __forceinline float boneSubmul(const Vector4 &row,float x,float y,float z) {return row.Z*z+row.Y*y+row.X*x;}
 class Matrix3D {public:
  Vector4 Row[3];
- __forceinline void mul(const Matrix3D &a,const Matrix3D &b) {
+ __forceinline void bfme_mul_bp(const Matrix3D &a,const Matrix3D &b) {
   float x,y,z;
   x=b.Row[0].X;y=b.Row[1].X;z=b.Row[2].X;
   Row[0].X=boneSubmul(a.Row[0],x,y,z);
@@ -34,14 +39,13 @@ class Matrix3D {public:
   Row[1].W=boneSubmul(a.Row[1],x,y,z)+a.Row[1].W;
   Row[2].W=boneSubmul(a.Row[2],x,y,z)+a.Row[2].W;
   }
- const Vector4 &operator[](int i) const {return Row[i];}
  static __forceinline void Transform_Vector(const Matrix3D &a,const Vector3 &in,Vector3 *out) {
   Vector3 tmp;
   Vector3 *v;
-  if(out==&in) {tmp=in;v=&tmp;} else v=(Vector3 *)&in;
-  out->X=a[0][0]*v->X+a[0][1]*v->Y+a[0][2]*v->Z+a[0][3];
-  out->Y=a[1][0]*v->X+a[1][1]*v->Y+a[1][2]*v->Z+a[1][3];
-  out->Z=a[2][0]*v->X+a[2][1]*v->Y+a[2][2]*v->Z+a[2][3];
+  if(out==&in) {bfmeCopyV3(tmp,in);v=&tmp;} else v=(Vector3 *)&in;
+  out->X=a.Row[0].X*v->X+a.Row[0].Y*v->Y+a.Row[0].Z*v->Z+a.Row[0].W;
+  out->Y=a.Row[1].X*v->X+a.Row[1].Y*v->Y+a.Row[1].Z*v->Z+a.Row[1].W;
+  out->Z=a.Row[2].X*v->X+a.Row[2].Y*v->Y+a.Row[2].Z*v->Z+a.Row[2].W;
  }
 };
 class Thing {public:
@@ -49,9 +53,9 @@ class Thing {public:
  char prefix[8];Matrix3D transform;
 };
 void Thing::convertBonePosToWorldPos(const Coord3D *bonePos,const Matrix3D *boneTransform,Coord3D *worldPos,Matrix3D *worldTransform) const {
- if(worldTransform) worldTransform->mul(transform,*boneTransform);
+ if(worldTransform) worldTransform->bfme_mul_bp(transform,*boneTransform);
  if(worldPos) {
-  Vector3 vector(bonePos->x,bonePos->y,bonePos->z);
+  Vector3 vector;bfmeSetV3(vector,bonePos->x,bonePos->y,bonePos->z);
   Matrix3D::Transform_Vector(transform,vector,&vector);
   *worldPos=*reinterpret_cast<const Coord3D *>(&vector);
  }
