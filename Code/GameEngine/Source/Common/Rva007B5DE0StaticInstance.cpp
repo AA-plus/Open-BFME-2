@@ -14,8 +14,8 @@
 class Rva006655B0
 {
 public:
-	Rva006655B0() {}
-	virtual ~Rva006655B0() {}
+	__declspec(dllimport) __forceinline Rva006655B0() {}
+	__declspec(dllimport) __forceinline virtual ~Rva006655B0() {}
 };
 
 static Rva006655B0 s_rva006655B0;
