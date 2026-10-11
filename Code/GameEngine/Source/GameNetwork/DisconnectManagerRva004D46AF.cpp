@@ -8,9 +8,13 @@ class DisconnectManager
 public:
 	void rva004D3CA8(void *msg, ConnectionManager *conMgr);
 	void processDisconnectPlayer(NetCommandMsg *msg, ConnectionManager *conMgr);
-	void rva004D3F74(NetCommandMsg *msg, ConnectionManager *conMgr);
-	void rva004D3FCB(NetCommandMsg *msg, ConnectionManager *conMgr);
 	void processDisconnectCommand(void *ref, ConnectionManager *conMgr);
+
+	// LINK: 0x4D3F74 and 0x4D3FCB are rowed as the protected processDisconnectVote /
+	// processDisconnectFrame (DisconnectManager*.cpp); bind them under those names.
+protected:
+	void processDisconnectVote(NetCommandMsg *msg, ConnectionManager *conMgr);
+	void processDisconnectFrame(NetCommandMsg *msg, ConnectionManager *conMgr);
 };
 
 // Target evidence: Ghidra boundary 0x004D46AF..0x004D46FC (77 bytes); the
@@ -27,8 +31,8 @@ void DisconnectManager::processDisconnectCommand(void *ref, ConnectionManager *c
 	} else if (commandType == 0x1A) {
 		processDisconnectPlayer((NetCommandMsg *)msg, conMgr);
 	} else if (commandType == 0x1B) {
-		rva004D3F74((NetCommandMsg *)msg, conMgr);
+		processDisconnectVote((NetCommandMsg *)msg, conMgr);
 	} else if (commandType == 0x1C) {
-		rva004D3FCB((NetCommandMsg *)msg, conMgr);
+		processDisconnectFrame((NetCommandMsg *)msg, conMgr);
 	}
 }
