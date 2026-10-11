@@ -67,6 +67,23 @@ public:
 	bool m_isActive;					// +0x40
 };
 
+class Rva0020479E
+{
+public:
+	Rva0020479E() throw();	// 0x0020479E (SequentialScript ctor, rowed under this name)
+	unsigned char opaque[0x2C];
+};
+class Rva00358752Opaque
+{
+public:
+	Object *lookupUnitByValue(AsciiString name);	// 0x00358752 (rowed)
+};
+class Rva002046C0Owner
+{
+public:
+	AsciiString resolveName(const AsciiString &name);	// 0x002046C0 (rowed)
+};
+
 class SequentialScript
 {
 public:
@@ -110,9 +127,7 @@ public:
 	bool evaluateConditions(Script *pScript, Team *thisTeam, Player *player);
 	Player *getCurrentPlayer();
 	Team *getTeamNamed(AsciiString name, bool exact);
-	Object *rva00358752(AsciiString name);	// 0x00358752, unit by name
-	AsciiString rva002046C0(const AsciiString &name);	// 0x002046C0, resolveName
-	void appendSequentialScript(const SequentialScript *scriptToSequence);
+	void appendSequentialScript(const Rva0020479E *scriptToSequence);
 	void executeSequentialScript(Script *pScript, const AsciiString &scriptName);
 };
 
@@ -120,7 +135,7 @@ void ScriptEngine::executeSequentialScript(Script *pScript, const AsciiString &s
 {
 	if (evaluateConditions(pScript, 0, 0)) {
 		if (getCurrentPlayer()) {
-			SequentialScript *seqScript = new SequentialScript;
+			SequentialScript *seqScript = (SequentialScript *)new Rva0020479E;
 			Rva003B3536 target(pScript->m_sequentialTarget);
 			if (!target.m_d) {
 				Team *team = getTeamNamed(target.m_e, false);
@@ -135,7 +150,7 @@ void ScriptEngine::executeSequentialScript(Script *pScript, const AsciiString &s
 				theGroup->groupIdle(CMD_FROM_SCRIPT);
 				seqScript->m_teamToExecOn = team;
 			} else if (target.m_d) {
-				Object *obj = rva00358752(target.m_e);
+				Object *obj = ((Rva00358752Opaque *)this)->lookupUnitByValue(target.m_e);
 				if (!obj) {
 					pScript->m_isActive = false;
 					return;
@@ -143,10 +158,10 @@ void ScriptEngine::executeSequentialScript(Script *pScript, const AsciiString &s
 				seqScript->m_objectID = obj->getID();
 			}
 			seqScript->m_bfmeScriptName = scriptName;
-			seqScript->m_bfmeScriptScope = rva002046C0(seqScript->m_bfmeScriptName);
+			seqScript->m_bfmeScriptScope = ((Rva002046C0Owner *)this)->resolveName(seqScript->m_bfmeScriptName);
 			seqScript->m_scriptToExecuteSequentially = pScript;
 			seqScript->m_timesToLoop = target.m_c;
-			appendSequentialScript(seqScript);
+			appendSequentialScript((const Rva0020479E *)seqScript);
 			::delete seqScript;
 		}
 		if (pScript->m_isOneShot)
