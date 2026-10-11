@@ -34,7 +34,7 @@ extern Rva006E34D0*g_bfmeAptPtrAtE176D0;
 // (Apt.cpp, owner of the neighbouring g_00E1771C) is claimed by another seat,
 // and this is the sole reader otherwise ready to link, so the definition lives
 // here.
-int g_00E17704 = 0;
+extern int g_00E17704;  // defined in Rva0070F680.cpp
 extern unsigned char g_00E1771C;
 class Rva006F7E00{public:void rva006F7E00(AptCIH*,int);};
 #define CHECK(c,s,l) if(!(c)){g_bfmeAptAssertAtE17734(s,"c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h",l);if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();}

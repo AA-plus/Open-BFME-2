@@ -58,7 +58,7 @@ void Rva00086761CameraMove::rva0008690A(int value)
 // but we may change it depending on sys config". Rva007ABC6FFrameRateInits
 // writes 1000/frameRate into it at startup and VtableSlotBodiesR3F writes the
 // walk animation period, so the definition is the plain zero-initialised int.
-int TheW3DFrameLengthInMsec;
+extern int TheW3DFrameLengthInMsec;  // defined in W3DView.cpp (data row 0x009E204C)
 
 void Rva00086761CameraMove::rva00088EB4(float finalValue, int milliseconds, float easeIn, float easeOut)
 {
