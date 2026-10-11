@@ -13,6 +13,14 @@
 // WB labels the initializer; the resize adapter name is descriptive.
 // Signed sample conversion preserves its 0..65535 range and native SSE shape;
 // shared output indices and direct destination indexing reproduce all homes.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 typedef unsigned short R3HeightSample;
 enum NameKeyType {NAMEKEY_INVALID=0};
