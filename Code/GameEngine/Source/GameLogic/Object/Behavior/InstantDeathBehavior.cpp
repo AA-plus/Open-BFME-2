@@ -125,62 +125,6 @@ InstantDeathBehavior::~InstantDeathBehavior( void )
 {
 }
 
-//-------------------------------------------------------------------------------------------------
-// ?onDie@InstantDeathBehavior@@ present-unmatched
-void InstantDeathBehavior::onDie( const DamageInfo *damageInfo )
-{
-	if (!isDieApplicable(damageInfo))
-		return;
-
-	AIUpdateInterface* ai = getObject()->getAIUpdateInterface();
-	if (ai)
-	{
-		// has another AI already handled us. (hopefully another InstantDeathBehavior)
-		if (ai->isAiInDeadState())
-			return;
-		ai->markAsDead();
-	}
-
-	const InstantDeathBehaviorModuleData* d = getInstantDeathBehaviorModuleData();
-
-	Int idx, listSize;
-
-	listSize = d->m_fx.size();
-	if (listSize > 0)
-	{
-		idx = GameLogicRandomValue(0, listSize-1);
-		const FXListVec& v = d->m_fx;
-		DEBUG_ASSERTCRASH(idx>=0&&idx<v.size(),("bad idx"));
-		const FXList* fxl = v[idx];
-		FXList::doFXObj(fxl, getObject(), NULL);
-	}
-
-	listSize = d->m_ocls.size();
-	if (listSize > 0)
-	{
-		idx = GameLogicRandomValue(0, listSize-1);
-		const OCLVec& v = d->m_ocls;
-		DEBUG_ASSERTCRASH(idx>=0&&idx<v.size(),("bad idx"));
-		const ObjectCreationList* ocl = v[idx];
-		ObjectCreationList::create(ocl, getObject(), NULL);
-	}
-
-	listSize = d->m_weapons.size();
-	if (listSize > 0)
-	{
-		idx = GameLogicRandomValue(0, listSize-1);
-		const WeaponTemplateVec& v = d->m_weapons;
-		DEBUG_ASSERTCRASH(idx>=0&&idx<v.size(),("bad idx"));
-		const WeaponTemplate* wt = v[idx];
-		if (wt)
-		{
-			TheWeaponStore->createAndFireTempWeapon(wt, getObject(), getObject()->getPosition());
-		}
-	}
-
-	TheGameLogic->destroyObject(getObject());
-}
-
 // ------------------------------------------------------------------------------------------------
 /** CRC */
 // ------------------------------------------------------------------------------------------------
