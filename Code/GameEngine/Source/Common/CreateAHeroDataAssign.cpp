@@ -17,6 +17,16 @@
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include "Common/Snapshot.h"
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> COMDAT copies, so the calls bind the kept rowed copies.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();
+template <> void _STLP_alloc_proxy<AsciiString*, AsciiString, allocator<AsciiString> >::deallocate(AsciiString*, size_t);
+template <> void allocator<AsciiString>::deallocate(AsciiString*, size_t) const;
+template <> vector<AsciiString, allocator<AsciiString> > &vector<AsciiString, allocator<AsciiString> >::operator=(const vector<AsciiString, allocator<AsciiString> >&);
+}
 struct TreeHintPayload001F8ACB { unsigned int value; };
 bool operator<(const AsciiString &, const AsciiString &);
 struct Rva0021C33FElement { int words[1]; bool operator<(const Rva0021C33FElement&b)const { return words[0]<b.words[0]; } bool operator==(const Rva0021C33FElement&b)const {return words[0]==b.words[0];} };
