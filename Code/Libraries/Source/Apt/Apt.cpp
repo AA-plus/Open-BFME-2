@@ -107,7 +107,7 @@ public:
  static void *operator new(unsigned size) {return g_bfmeAptAllocAtE17728(size);}
  static void operator delete(void *ptr,unsigned size) {rva00ACBC50((Rva006CC4A0 *)ptr,size);}
 };
-class Rva006DB270;class Rva006D2A60;
+class Rva006DB270;class Rva006D2A60 {public:void *allocBlock(int);};
 extern Rva006DB270 *g_pChainBlockAllocator;
 extern Rva006D2A60 *g_pChainBlockAllocatorF4;
 void Rva006CC380Initialize(unsigned valueSize,int valueCount,unsigned chainSize,int chainCount) {
@@ -134,7 +134,7 @@ extern int g_bfmeAptFlagAtE176D4,g_rva00891FA0Value,g_rva00891FA0Ready;
 extern unsigned char g_Va00E1770C;
 extern AptActionInterpreter g_aptDateInterpreter;
 class Rva006DBB30SarDwordField {public:int get() const;};
-class BfmeAptValue006DCD20 {public:bool isUndefined() const;};
+class BfmeAptValue006DCD20 {public:bool isUndefined() const;void setGCRootCount(unsigned);};
 class Rva006CD650 {public:void *rva006CD650();};
 struct TickMovie {char pad[0x24];unsigned interval;};
 struct TickState {char pad[0xc];TickMovie *movie;char pad10[0x20];unsigned remainder;};
@@ -491,4 +491,39 @@ void Rva006CC600(const char *path,char *suffix)
  }
  g_aptBackgroundSet = false;
  g_bfmeAptLinkerAtE176F8->Load(EAStringC(path),target);
+}
+
+// Native6CC530..6CC5F0: level lookup walks the existing pool's +30 list;
+// on a miss it constructs a96B type19 CIH, roots it, and inserts by level.
+// Original one-int ABI is independently named by retail callers and the pin.
+// Throwing-new cleanup7A8080 calls the native value-pool free twin6F12F0:
+// both normal allocation and exceptional release use the existingF4 owner.
+// Reuse the same sized-delete forwarder spelling as Rva006F6A50Cluster,
+// so every emitted Rva006CBDE0 delete copy has one behavior and body.
+void Rva006F12F0Free(void*,int);
+class Rva006CBDE0 {
+public:
+ void *vptr;unsigned flags;EAStringC name;
+ int fields0c[15];AptValue *value;void *displayList;
+ Rva006CBDE0 *prev,*next;unsigned level,extra;
+ Rva006CBDE0(int,void*,AptValue*);
+ static void *operator new(unsigned n){return g_pChainBlockAllocatorF4->allocBlock(n);}
+ static void operator delete(void *p,unsigned n){Rva006F12F0Free(p,n);}
+};
+class BfmeQuery1279 {public:Rva006CBDE0 *root;void rva006F6FB0(int,AptCIH*);};
+AptCIH *_AptGetAnimationAtLevel(int key) {
+ Rva006E34D0 *apt=g_bfmeAptPtrAtE176D0;
+ if(apt && apt->nodes) {
+  BfmeQuery1279 *query=(BfmeQuery1279*)apt->nodes;
+  Rva006CBDE0 *cur=query->root;
+  if(cur) do {
+   if((int)(cur->level<<15)>>15==key) return (AptCIH*)cur;
+   cur=cur->next;
+  } while(cur);
+  Rva006CBDE0 *p=new Rva006CBDE0(0x13,0,0);
+  ((BfmeAptValue006DCD20*)p)->setGCRootCount(1);
+  ((BfmeQuery1279*)g_bfmeAptPtrAtE176D0->nodes)->rva006F6FB0(key,(AptCIH*)p);
+  return (AptCIH*)p;
+ }
+ return 0;
 }

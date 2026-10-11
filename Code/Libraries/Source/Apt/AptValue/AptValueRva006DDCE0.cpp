@@ -1,7 +1,7 @@
 // Native callback 0x006DDCE0..0x006DDDDF (255 bytes), registered by
 // _constructBuiltInObjects. Target calls establish a two-argument native
 // callback using the shared interpreter stack and a lazily allocated hash.
-// The key string is checked through the existing predicates; undefined
+// The key string is checked through the existing predicates; type-3
 // values erase a key, others assign it. The callback purpose/name is unknown.
 class AptValue;
 class EAStringC;
