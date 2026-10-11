@@ -262,7 +262,7 @@ Rva005CFFB8::Rva005CFFB8(EmitVtableTag *)
 // +0xC, whose slot 0 is a this-adjusting (sub ecx, 0xC) deleting-destructor
 // thunk -- target evidence for that base and offset.
 class Rva005D06CBB1 { public: virtual ~Rva005D06CBB1(); private: char m_unmodelled04[4]; };
-class Rva005D06CBB2 { public: virtual void slot0(); };
+class Rva005D06CBB2 { public: __declspec(dllimport) __forceinline Rva005D06CBB2() {} virtual void slot0(); };
 class Rva005EB753 { public: virtual ~Rva005EB753(); };
 class Rva005D06CB : public Rva005D06CBB1, public Rva005D06CBB2, public Rva005EB753
 {

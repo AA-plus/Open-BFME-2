@@ -66,6 +66,7 @@ public:
 class Rva005D06CBB2
 {
 public:
+	__declspec(dllimport) __forceinline Rva005D06CBB2() {}
 	~Rva005D06CBB2() {}
 	virtual void s0();
 	virtual void s1();
