@@ -11237,8 +11237,8 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B5207,95,code-unledgered,Code/GameEngine/Source/Common/System/SubsystemInterface.cpp,approved,C,C=0x001B5018..0x001B5266,
 0x001B5266,261,code,Code/GameEngine/Source/Common/System/SubsystemInterface.cpp,approved,Z,Z=Code/GameEngine/Source/Common/System/SubsystemInterface.cpp S=Code/GameEngine/Source/Common/System/SubsystemInterface.cpp N=Code/Libraries/Source/subsystem/SubsystemInterfaceList.cpp,Code/Libraries/Source/subsystem/SubsystemInterface.cpp
 0x001B5384,426,code-unledgered,,,-,,
-0x001B5530,166,code,,,-,,Code/GameEngine/Source/Common/BfmeConv2079.cpp
-0x001B55E0,179,code,,,-,,Code/GameEngine/Source/Common/BfmeConv2079.cpp
+0x001B5530,166,code,,,-,,Code/Libraries/Source/VP6/TmpBuffers.cpp
+0x001B55E0,179,code,,,-,,Code/Libraries/Source/VP6/TmpBuffers.cpp
 0x001B56A0,66,code,,,-,,Code/Libraries/Source/VP6/PbInstanceTeardown.cpp
 0x001B56F0,216,code,,,-,,Code/GameEngine/Source/Common/BfmeConv2080.cpp
 0x001B57D0,90,code,,,-,,Code/Libraries/Source/VP6/InitLibrary.cpp
@@ -11265,7 +11265,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B64A0,35,code,,,-,,Code/GameEngine/Source/Common/Rva009A2030OwnedRecordDeletingDestructor.cpp
 0x001B64D0,65,code,,,-,,Code/Libraries/Source/VP6/DuckMemAlloc.cpp
 0x001B6520,193,code,,,-,,Code/GameEngine/Source/Common/Rva009A5AA0InstallFilter.cpp
-0x001B65F0,182,code,,,-,,Code/GameEngine/Source/Common/BfmeReleaseSetBZB.cpp
+0x001B65F0,182,code,,,-,,Code/Libraries/Source/VP6/DeletePostProcBuffers.cpp
 0x001B66B0,292,code,,,-,,Code/GameEngine/Source/Common/Rva009A5C40Initialize.cpp
 0x001B67E0,176,code,,,-,,Code/GameEngine/Source/Common/BfmeInitD70.cpp
 0x001B6890,63,code,,,-,,Code/Libraries/Source/VP6/PostProcInstance.cpp
@@ -11292,7 +11292,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B7CF0,100,code,,,-,,Code/Libraries/Source/VP6/UnpackBlock.cpp
 0x001B7D60,450,code,,,-,,Code/GameEngine/Source/Common/SmallGaps/Rva009A7300Subtract8x8.cpp
 0x001B7F30,142,code,,,-,,Code/Libraries/Source/Theora/CopyBlock.c
-0x001B7FC0,113,code,,,-,,Code/GameEngine/Source/Common/SmallGaps/Rva009A74D0BlockCopies.cpp
+0x001B7FC0,113,code,,,-,,Code/Libraries/Source/VP6/Copy12x12C.cpp
 0x001B8040,10,code,,,-,,Code/Libraries/Source/VP6/InitVPUtil.cpp
 0x001B8050,174,code,,,-,,Code/GameEngine/Source/Common/Rva009A75F0Vp6FourTapFilter.cpp
 0x001B8100,177,code,,,-,,Code/GameEngine/Source/Common/BfmeGo7760.cpp
@@ -11300,7 +11300,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B8280,65,code,,,-,,Code/Libraries/Source/VP6/FilterBlock2dBicubic.cpp
 0x001B82D0,107,code,,,-,,Code/Libraries/Source/VP6/FilterBlockBilWide.cpp
 0x001B8340,110,code,,,-,,Code/Libraries/Source/VP6/FilterBlockBilWide.cpp
-0x001B83B0,127,code,,,-,,Code/GameEngine/Source/Common/Rva009A7950.cpp
+0x001B83B0,127,code,,,-,,Code/Libraries/Source/VP6/FilterBlock2dBilSecondPass.cpp
 0x001B8430,295,code,,,-,,Code/GameEngine/Source/Common/BfmeGo79D0.cpp
 0x001B8560,993,code,,,-,,Code/GameEngine/Source/Common/Rva009A7B00Vp6Filter.cpp
 0x001B8950,108,code,,,-,,Code/Libraries/Source/VP6/FilterBlockBilByte.cpp
@@ -11315,8 +11315,8 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001B9030,12,code,,,-,,Code/Libraries/Source/VP6/system.cpp
 0x001B9040,248,code,,,-,,Code/GameEngine/Source/Common/BfmeConv2080.cpp
 0x001B9140,396,code-unledgered,,,-,,
-0x001B92D0,129,code,,,-,,Code/GameEngine/Source/Common/Rva009A8880Release.cpp
-0x001B9360,167,code,,,-,,Code/GameEngine/Source/Common/Rva009A8910Initialize.cpp
+0x001B92D0,129,code,,,-,,Code/Libraries/Source/VP6/DeleteFrameInfo.cpp
+0x001B9360,167,code,,,-,,Code/Libraries/Source/VP6/DeleteFrameInfo.cpp
 0x001B9410,616,code,,,-,,Code/GameEngine/Source/Common/BfmeCheckJX.cpp
 0x001B9680,22,code,,,-,,Code/Libraries/Source/VP6/PbAccessors.cpp
 0x001B96A0,1047,code-unledgered,,,-,,
@@ -11342,15 +11342,15 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001BACA0,644,code,,,-,,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp
 0x001BAF30,600,code-unledgered,,,-,,
 0x001BB190,406,code,,,-,,Code/GameEngine/Source/Common/Rva009AA750CopyPlanes.cpp
-0x001BB330,126,code,,,-,,Code/GameEngine/Source/Common/Rva009AA8F0Dispatch.cpp
+0x001BB330,126,code,,,-,,Code/Libraries/Source/VP6/ScaleOrCenter.cpp
 0x001BB3B0,104,code,,,-,,Code/Libraries/Source/VP6/WriteFrame.cpp
 0x001BB420,95,code,,,-,,Code/Libraries/Source/VP6/WriteFrame.cpp
 0x001BB480,94,code,,,-,,Code/Libraries/Source/VP6/debug.cpp
 0x001BB4E0,160,code,,,-,,Code/Libraries/Source/VP6/debug.cpp
 0x001BB580,109,code,,,-,,Code/Libraries/Source/VP6/debug.cpp
-0x001BB5F0,121,code,,,-,,Code/GameEngine/Source/Common/Rva009AABB0CodecDispatch.cpp
+0x001BB5F0,121,code,,,-,,Code/Libraries/Source/VP6/ShowInfo.cpp
 0x001BB670,67,code,,,-,,Code/Libraries/Source/VP6/AppendFrame.cpp
-0x001BB6C0,156,code,,,-,,Code/GameEngine/Source/Common/Rva009AAC80CodecGrid.cpp
+0x001BB6C0,156,code,,,-,,Code/Libraries/Source/VP6/ShowInfo.cpp
 0x001BB760,208,code,,,-,,Code/GameEngine/Source/Common/Rva009AAD20.cpp
 0x001BB830,398,code,,,-,,Code/Libraries/Source/VP6/debug.cpp
 0x001BB9C0,81,code,,,-,,Code/GameEngine/Source/Common/Rva009AAF80ArithmeticStep.cpp
@@ -11359,7 +11359,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001BBC40,274,code,,,-,,Code/GameEngine/Source/Common/Rva009AB200BuildWeights.cpp
 0x001BBD60,521,code,,,-,,Code/GameEngine/Source/Common/Rva009AB320BuildTables.cpp
 0x001BBF70,550,code-unledgered,,,-,,
-0x001BC1A0,135,code,,,-,,Code/GameEngine/Source/Common/Rva009AB760Initialize.cpp
+0x001BC1A0,135,code,,,-,,Code/Libraries/Source/VP6/ResetLeftContext.cpp
 0x001BC230,338,code,,,-,,Code/GameEngine/Source/Common/Rva009AB7F0Reset.cpp
 0x001BC390,51,code,,,-,,Code/Libraries/Source/VP6/FilterMath.cpp
 0x001BC3D0,1503,code-unledgered,,,-,,
@@ -11379,7 +11379,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001BD550,28,code,,,-,,Code/GameEngine/Source/Common/Rva009AC660ReadHeader.cpp
 0x001BD570,15,code,,,-,,Code/Libraries/Source/VP6/FrameType.cpp
 0x001BD580,11,code,,,-,,Code/Libraries/Source/VP6/FrameType.cpp
-0x001BD590,145,code,,,-,,Code/GameEngine/Source/Common/Rva009ACBA0SetupBounding.cpp
+0x001BD590,145,code,,,-,,Code/Libraries/Source/VP6/SetupBoundingValueArrays.cpp
 0x001BD630,64,code,,,-,,Code/Libraries/Source/VP6/PostProcInstance.cpp
 0x001BD670,773,code,,,-,,Code/GameEngine/Source/Common/Rva009ACC80Filter.cpp
 0x001BE140,841,code-unledgered,,,-,,
@@ -11388,7 +11388,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001BFAC0,303,code,,,-,,Code/GameEngine/Source/Common/Rva009AF0D0CopyPlane.cpp
 0x001BFBF0,278,code,,,-,,Code/GameEngine/Source/Common/Rva009AF200CopyPlanes.cpp
 0x001BFD10,368,code,,,-,,Code/GameEngine/Source/Common/Rva009AF320CopyPlanes.cpp
-0x001BFE80,145,code,,,-,,Code/GameEngine/Source/Common/Rva009AF490SetupBounding.cpp
+0x001BFE80,145,code,,,-,,Code/Libraries/Source/VP6/SetupBoundingValueArrays.cpp
 0x001BFF20,51,code,,,-,,Code/Libraries/Source/VP6/PostProcInstance.cpp
 0x001BFF60,290,code,,,-,,Code/GameEngine/Source/Common/Rva009AF570FilterVert.cpp
 0x001C0090,341,code,,,-,,Code/GameEngine/Source/Common/Rva009AF6A0FilterHoriz.cpp
@@ -11407,8 +11407,8 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001C3F50,180,code,,,-,,Code/GameEngine/Source/Common/BfmeLoopFilterVert.cpp
 0x001C4010,232,code,,,-,,Code/GameEngine/Source/Common/BfmeLoopFilterHoriz.cpp
 0x001C4100,503,code,,,-,,Code/GameEngine/Source/Common/Rva009B3800PlaneCopy.cpp
-0x001C4300,140,code,,,-,,Code/GameEngine/Source/Common/S3GuardedDelegates3.cpp
-0x001C4390,169,code,,,-,,Code/GameEngine/Source/Common/CpuTierFlags.cpp
+0x001C4300,140,code,,,-,,Code/Libraries/Source/VP6/FillIdctConstants.cpp
+0x001C4390,169,code,,,-,,Code/Libraries/Source/VP6/GetProcessorFlags.cpp
 0x001C4440,766,code,,,-,,Code/GameEngine/Source/Common/BfmeInstallSpreadTable.cpp
 0x001C4740,125,code,,,-,,Code/GameEngine/Source/Common/SmallGaps/Rva009B3E40Init.cpp
 0x001C47C0,125,code,,,-,,Code/GameEngine/Source/Common/SmallGaps/Rva009B3EC0Init.cpp
@@ -11474,9 +11474,9 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001D34A0,317,code,,,-,,Code/GameEngine/Source/Common/BfmeFilterPairMmx.cpp
 0x001D45F0,88,code,,,-,,Code/Libraries/Source/VP6/AverageBlockMmx.cpp
 0x001D5470,208,code,,,-,,Code/GameEngine/Source/Common/CpuFeatureProbe.cpp
-0x001D5540,126,code,,,-,,Code/GameEngine/Source/Common/BfmeImageFilter.cpp
+0x001D5540,126,code,,,-,,Code/Libraries/Source/VP6/CpuProbeSse2.cpp
 0x001D55C0,301,code,,,-,,Code/GameEngine/Source/Common/BfmeClampBlock.cpp
-0x001D56F0,153,code,,,-,,Code/GameEngine/Source/Common/Rva009C4DF0.cpp
+0x001D56F0,153,code,,,-,,Code/Libraries/Source/VP6/ScalarReconIntra.cpp
 0x001D5790,485,code,,,-,,Code/GameEngine/Source/Common/Rva009C4E90.cpp
 0x001D5980,733,code,,,-,,Code/GameEngine/Source/Common/Rva009C5080.cpp
 0x001D5C60,308,code,,,-,,Code/GameEngine/Source/Common/Rva009C5360.cpp
@@ -11488,7 +11488,7 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001D6D70,196,code,,,-,,Code/GameEngine/Source/Common/Rva009C6470BinkMmx.cpp
 0x001D6E40,211,code,,,-,,Code/GameEngine/Source/Common/Rva009C6540BinkMmx.cpp
 0x001D6F20,198,code,,,-,,Code/GameEngine/Source/Common/Rva009C6620BinkMmx.cpp
-0x001D6FF0,134,code,,,-,,Code/GameEngine/Source/Common/Rva009C66F0BinkMmx.cpp
+0x001D6FF0,134,code,,,-,,Code/Libraries/Source/VP6/FilterBlock1dHb8Mmx.cpp
 0x001D7080,125,code,,,-,,Code/Libraries/Source/VP6/FilterBlock1dMmx.cpp
 0x001D7100,254,code,,,-,,Code/GameEngine/Source/Common/Rva009C6800.cpp
 0x001D7200,204,code,,,-,,Code/GameEngine/Source/Common/Rva001D7200CodecDispatch.cpp
@@ -11521,10 +11521,10 @@ rva,size,kind,tu,confidence,by,evidence,source
 0x001D8060,95,code,,,-,,Code/Libraries/Source/VP6/ReconInterHalfPixel2Wmt.cpp
 0x001D80C0,1272,code,,,-,,Code/GameEngine/Source/Common/Rva009C77C0.cpp
 0x001D85C0,1024,code,,,-,,Code/GameEngine/Source/Common/Rva009C7CC0ButterflySse.cpp
-0x001D8A30,130,code,,,-,,Code/GameEngine/Source/Common/Rva009C8130ByteDispersion.cpp
+0x001D8A30,130,code,,,-,,Code/Libraries/Source/VP6/Var16Point.cpp
 0x001D8AC0,113,code,,,-,,Code/Libraries/Source/VP6/InitLoopDeringThresholds.cpp
 0x001D8B40,655,code-unledgered,,,-,,
-0x001D8DD0,170,code,,,-,,Code/GameEngine/Source/Common/Rva009C84D0Vp6Filter.cpp
+0x001D8DD0,170,code,,,-,,Code/Libraries/Source/VP6/PredictFiltered.cpp
 0x001D8E99,105,code,Code/GameEngine/Source/GameLogic/Object/Armor.cpp,approved,Z,Z=Code/GameEngine/Source/GameLogic/Object/Armor.cpp S=Code/GameEngine/Source/GameLogic/Object/Armor.cpp N=Code/GameEngine/Source/GameLogic/Object/ArmorTemplate.cpp,Code/GameEngine/Source/GameLogic/Object/ArmorTemplateParse.cpp
 0x001D8F02,29,code,Code/GameEngine/Source/GameLogic/Object/Armor.cpp,approved,S,S=Code/GameEngine/Source/GameLogic/Object/Armor.cpp N=Code/GameEngine/Source/GameLogic/Object/ArmorTemplate.cpp,Code/GameEngine/Source/GameLogic/Object/ArmorTemplateParse.cpp
 0x001D8F1F,55,code,Code/GameEngine/Source/GameLogic/Object/Armor.cpp,approved,Z,Z=Code/GameEngine/Source/GameLogic/Object/Armor.cpp S=Code/GameEngine/Source/GameLogic/Object/Armor.cpp N=Code/GameEngine/Source/GameLogic/Object/ArmorTemplate.cpp,Code/GameEngine/Source/GameLogic/Object/ArmorTemplateParse.cpp

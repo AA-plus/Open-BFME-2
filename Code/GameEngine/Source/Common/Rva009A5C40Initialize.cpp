@@ -11,7 +11,7 @@ public:
 	static void *__cdecl operator new(unsigned int bytes, AllocationTag tag);
 };
 
-void __cdecl bfmeOneBZB(void *what);
+extern "C" void __cdecl DeletePostProcBuffers(void *what);
 
 struct Rva009A5C40Context
 {
@@ -43,7 +43,7 @@ struct Rva009A5C40Context
 // ?Rva009A5C40Initialize@@YAHPAURva009A5C40Context@@@Z
 int __cdecl Rva009A5C40Initialize(Rva009A5C40Context *self)
 {
-	bfmeOneBZB(self);
+	DeletePostProcBuffers(self);
 
 	self->m_atB8 = Rva001B6400Allocation::operator new(
 		((((self->m_factorB4 * 2 + self->m_rows) * self->m_stride) * 3 >> 1) + 0x20),
@@ -85,6 +85,6 @@ int __cdecl Rva009A5C40Initialize(Rva009A5C40Context *self)
 	return 1;
 
 failure:
-	bfmeOneBZB(self);
+	DeletePostProcBuffers(self);
 	return 0;
 }

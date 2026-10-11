@@ -1,7 +1,7 @@
 // cl: /DNDEBUG /MD
 extern const unsigned short g_bfmeBinkRoundMmx[4];
 extern void __cdecl rva009C6390BinkMmx(const void *, void *, int, int, int, int, const void *);
-extern void __cdecl rva009C66F0BinkMmx(const void *, void *, int, int, int, int, const void *);
+extern "C" void __cdecl FilterBlock1d_hb8_mmx(const void *, void *, int, int, int, int, const void *);
 extern void __cdecl rva009C6470BinkMmx(const void *, void *, int, int, int, int, const void *);
 extern "C" void __cdecl FilterBlock1d_vb8_mmx(const void *, void *, int, int, int, int, const void *);
 extern "C" void __cdecl FilterBlock2d_mmx(const void *, void *, int, const void *, const void *);
@@ -29,7 +29,7 @@ void __cdecl Rva009C6A30(void *arg1, void *arg2, void *arg3,
             rva009C6390BinkMmx(arg1, scratch, stride, distance, 8, 8,
                 (const void *)((const unsigned char *)g_bfmeBinkRoundMmx + 0x110 + (weightsA << 6)));
         else
-            rva009C66F0BinkMmx(arg1, scratch, stride, 1, 8, 8,
+            FilterBlock1d_hb8_mmx(arg1, scratch, stride, 1, 8, 8,
                 (const void *)((const unsigned char *)g_bfmeBinkRoundMmx + 0x10 + (weightsA << 5)));
     }
     else if (distance == stride)

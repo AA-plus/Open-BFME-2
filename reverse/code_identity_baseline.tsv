@@ -109,7 +109,6 @@ Code/GameEngine/Source/Common/BfmeConv986.cpp	?rva00372C22@BfmeC986@@QAEXHHHH@Z	
 Code/GameEngine/Source/Common/BfmeConv991.cpp	?bfmeGo991B@@YAXH@Z	?bfmeSet991@BfmeB991@@QAEXH@Z	0x000A6E08	unowned
 Code/GameEngine/Source/Common/BfmeDropVGO.cpp	?bfmeDropVGO@@YAXPAX@Z	?teardown@Rva006D0280@@QAEXXZ	0x006D0280	unowned
 Code/GameEngine/Source/Common/BfmeGrokGrid.cpp	?walk@BfmeGridWM@@QAEXXZ	?cell@BfmeGridWM@@QAEXHH@Z	0x000ADCE3	unowned
-Code/GameEngine/Source/Common/BfmeImageFilter.cpp	?bfmeProbeSse2@@YAHXZ	__except_handler3	0x00628FF0	unowned
 Code/GameEngine/Source/Common/BfmeInstallSpreadTable.cpp	?bfmeInstallSpreadTable@@YAXXZ	?Rva009A8110@@YAXXZ	0x001B8B70	unowned
 Code/GameEngine/Source/Common/BfmeInstallSpreadTable.cpp	?bfmeInstallSpreadTable@@YAXXZ	?Rva009C2CE0@@YAXXZ	0x001D35E0	unowned
 Code/GameEngine/Source/Common/BfmeInstallSpreadTable.cpp	?bfmeInstallSpreadTable@@YAXXZ	?Rva009C3630@@YAXXZ	0x001D3F30	unowned
@@ -977,10 +976,6 @@ Code/GameEngine/Source/Common/Rva009A6130PostFilterDispatch.cpp	?Rva009A6130Post
 Code/GameEngine/Source/Common/Rva009A9070CopyStreams.cpp	?Rva009A9070CopyStreams@@YAXPAURva009A9070Context@@PAURva009A9070Source@@H@Z	?d_009a8c50@@YAXXZ	0x001B96A0	unowned
 Code/GameEngine/Source/Common/Rva009A9AD0Scale2D.cpp	?Rva009A9AD0Scale2D@@YAXPAEHII0HII0EIIIII@Z	?Rva009A9980@@YAXPBEHIIPAEHII@Z	0x001BA3C0	unowned
 Code/GameEngine/Source/Common/Rva009A9AD0Scale2D.cpp	?Rva009A9AD0Scale2D@@YAXPAEHII0HII0EIIIII@Z	?Rva009A9A20@@YAXPBEHIIPAEHII@Z	0x001BA460	unowned
-Code/GameEngine/Source/Common/Rva009AA8F0Dispatch.cpp	?Rva009AA8F0Dispatch@@YAXPAURva009AA8F0Context@@HPAURva009AA8F0Block@@@Z	?d_009a8c50@@YAXXZ	0x001B96A0	unowned
-Code/GameEngine/Source/Common/Rva009AA8F0Dispatch.cpp	?Rva009AA8F0Dispatch@@YAXPAURva009AA8F0Context@@HPAURva009AA8F0Block@@@Z	?d_009aa4f0@@YAXXZ	0x001BAF30	unowned
-Code/GameEngine/Source/Common/Rva009AABB0CodecDispatch.cpp	?Rva009AABB0CodecDispatch@@YAXPAURva009AABB0Context@@@Z	?Rva009B4390CodecCall@@YAXPAXH0HHHHHHHHHHHH@Z	0x001C4C90	unowned
-Code/GameEngine/Source/Common/Rva009AAC80CodecGrid.cpp	?Rva009AAC80CodecGrid@@YAXPAURva009AAC80Context@@@Z	?Rva009B4390CodecCall@@YAXPAXH0HHHHHHHHHHHH@Z	0x001C4C90	unowned
 Code/GameEngine/Source/Common/Rva009AAD20.cpp	?Rva009AAD20@@YAXPAURva009AAD20State@@H@Z	?Rva009B5530Prepare@@YAXPAURva009B5830State@@PAXH@Z	0x001C5E30	unowned
 Code/GameEngine/Source/Common/Rva009AB320BuildTables.cpp	?Rva009AB320BuildTables@@YAXPAURva009AB320Tables@@@Z	?Rva009B60E0BuildTree@@YAXPAI0H@Z	0x001C69E0	unowned
 Code/GameEngine/Source/Common/Rva009AF0D0CopyPlane.cpp	?copyPlane009AF0D0@@YAXPAURva009AF200Context@@IHIIPAE1PBI@Z	?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z	0x001BE490	unowned

@@ -44,7 +44,7 @@ extern int g_bfmeTableJX;
 // g_bfmeTableJX: matched references place it at VA 0xe22d40 (zero-filled .bss).
 int g_bfmeTableJX;
 
-int bfmeAllocJT(BfmeThingJT *q);
+extern "C" int __cdecl VP6_AllocateTmpBuffers(BfmeThingJT *q);
 void bfmeFreeOneJT(void *q);
 
 class Rva001B6400Allocation
@@ -65,7 +65,7 @@ struct BfmeHolderBZB;
 extern "C" void __cdecl VP6_DeleteQuantizer(void **q);
 extern "C" void __cdecl DeletePostProcInstance(BfmeHolderBZB *h);
 void bfmeStepJW(void *q);
-void Rva009A8880Release(void *q);
+extern "C" void __cdecl VP6_DeleteFrameInfo(void *q);
 extern "C" void __cdecl VP6_DeletePBInstance(PB_INSTANCE **instance);
 
 int bfmeInitCodecJX(CodecState **p, int a, int b)
@@ -123,7 +123,7 @@ CodecState *bfmeAllocJX()
 	memset(p, 0, 0x1255 * 4);
 	memcpy((char *)p + 0x1b0, cfg, 14 * 4);
 
-	if (bfmeAllocJT((BfmeThingJT *)p) == 0)
+	if (VP6_AllocateTmpBuffers((BfmeThingJT *)p) == 0)
 	{
 		bfmeFreeOneJT(p);
 

@@ -2,7 +2,7 @@
 
 extern int g_bfmeTableC7E0;
 
-extern void __cdecl Rva009A7950(
+extern "C" void __cdecl FilterBlock2dBil_SecondPass(
 	int *, unsigned short *, int, int, int, int, const int *);
 extern "C" void __cdecl FilterBlock2dBil_SecondPass_8(
 	int *, unsigned char *, int, int, int, int, const int *);
@@ -43,7 +43,7 @@ void __cdecl Rva009A79D0Vp6Filter(
 	}
 	while (rows != 0);
 
-	Rva009A7950(&g_bfmeTableC7E0, destination, 8, 8, 8, 8, verticalWeights);
+	FilterBlock2dBil_SecondPass(&g_bfmeTableC7E0, destination, 8, 8, 8, 8, verticalWeights);
 }
 
 // Byte-identical duplicate at B1 0x009A7FE0 -> B2 0x001B8A40 (address-map

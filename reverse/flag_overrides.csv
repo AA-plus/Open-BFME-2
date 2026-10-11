@@ -103,7 +103,6 @@ Code/GameEngine/Source/Common/BfmeConv1503.cpp,,1,1,region default loses rows
 Code/GameEngine/Source/Common/BfmeConv1559.cpp,,1,1,region default loses rows
 Code/GameEngine/Source/Common/BfmeConv1720.cpp,,1,1,region default loses rows
 Code/GameEngine/Source/Common/BfmeConv1972.cpp,,1,1,region default loses rows
-Code/GameEngine/Source/Common/BfmeConv2079.cpp,,2,2,region default loses rows
 Code/GameEngine/Source/Common/BfmeConv2109.cpp,,1,1,region default loses rows
 Code/GameEngine/Source/Common/BfmeConv556.cpp,,1,1,region default loses rows
 Code/GameEngine/Source/Common/BfmeConv803.cpp,,4,2,region default loses rows
@@ -599,6 +598,7 @@ Code/Libraries/Source/Lua/lzio.c,,5,1,region default loses rows
 Code/Libraries/Source/STLport/NamedException.cpp,-Od,2,2,region default loses rows
 Code/Libraries/Source/STLport/Rva008312E0StringReplace.cpp,-Od,1,1,region default loses rows
 Code/Libraries/Source/STLport/Rva008314E0StringReplace.cpp,-Od,1,1,region default loses rows
+Code/Libraries/Source/VP6/TmpBuffers.cpp,-O2 -G6,2,2,region default loses rows
 Code/Libraries/Source/WWVegas/WW3D2/BFME2MotionChannelCtor.cpp,-O1,1,1,region default loses rows
 Code/Libraries/Source/WWVegas/WW3D2/DebugStatisticsRecordPolys.cpp,-O2 -G7,1,1,region default loses rows
 Code/Libraries/Source/WWVegas/WW3D2/DebugStatisticsSkin.cpp,-O2 -G7,1,1,region default loses rows

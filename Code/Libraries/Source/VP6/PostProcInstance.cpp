@@ -27,7 +27,7 @@ struct POSTPROC_VERSIONED
 	int addNoiseMode;             // 0xC4
 };
 
-void __cdecl bfmeOneBZB(void *instance);                // 0x001B65F0 DeletePostProcBuffers
+extern "C" void __cdecl DeletePostProcBuffers(void *instance); // 0x001B65F0
 void __cdecl bfmeFreeOneJT(void *block);                // 0x001B6410 duck_free
 void __cdecl bfmeInitD70(void *instance, void *config); // 0x001B67E0 ChangePostProcConfiguration
 
@@ -42,8 +42,8 @@ struct Rva009AF490Context;
 struct Rva009ACBA0Context;
 struct Rva009AF530Context;
 struct Rva009ACC40State;
-int *Rva009AF490SetupBounding(Rva009AF490Context *, int); // 0x001BFE80 SetupBoundingValueArray_Generic
-int *Rva009ACBA0SetupBounding(Rva009ACBA0Context *, int); // 0x001BD590 SetupDeblockValueArray_Generic
+extern "C" int *__cdecl SetupBoundingValueArray_Generic(Rva009AF490Context *, int); // 0x001BFE80
+extern "C" int *__cdecl SetupDeblockValueArray_Generic(Rva009ACBA0Context *, int); // 0x001BD590
 extern int *g_bfmeFilterLimit;   // 0x00E22CE0 loop-filter limit table pointer
 extern int *g_rva01356A9C;       // 0x00E22CEC deblock limit table pointer
 int *(__cdecl *g_rva01356e68SetupBounding)(Rva009AF530Context *, int) = 0; // 0x00E22F84, zero-filled
@@ -54,7 +54,7 @@ extern "C" void __cdecl DeletePostProcInstance(POSTPROC_INSTANCE **instance)
 {
 	if (*instance != 0)
 	{
-		bfmeOneBZB(*instance);
+		DeletePostProcBuffers(*instance);
 		bfmeFreeOneJT(*instance);
 		*instance = 0;
 	}
@@ -96,7 +96,7 @@ extern "C" void __cdecl SetupLoopFilter(POSTPROC_INSTANCE *ppi)
 	POSTPROC_VERSIONED *p = (POSTPROC_VERSIONED *)ppi;
 	int limit = g_bfmeFilterLimit[p->frameQIndex];
 	if (p->version >= 2)
-		p->boundingValues = Rva009AF490SetupBounding((Rva009AF490Context *)p, limit);
+		p->boundingValues = SetupBoundingValueArray_Generic((Rva009AF490Context *)p, limit);
 	else
 		p->boundingValues = g_rva01356e68SetupBounding((Rva009AF530Context *)p, limit);
 }
@@ -108,7 +108,7 @@ extern "C" void __cdecl SetupDeblocker(POSTPROC_INSTANCE *ppi)
 	if (p->version >= 2)
 	{
 		int limit = g_rva01356A9C[p->frameQIndex];
-		p->deblockValues = Rva009ACBA0SetupBounding((Rva009ACBA0Context *)p, limit);
+		p->deblockValues = SetupDeblockValueArray_Generic((Rva009ACBA0Context *)p, limit);
 	}
 	else
 	{

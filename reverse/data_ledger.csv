@@ -867,7 +867,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x007BE0A0,60,.rdata,string,??_C@_0DJ@MICDJCHF@INTERNAL?5ERROR?$CB?5parseBitString32@,,literal,,0,1
 0x007BE0DC,60,.rdata,string,??_C@_0DF@BDNEIFDF@you?5may?5not?5mix?5normal?5and?5?$CL?9?5op@,,literal,,0,12
 0x007BE118,76,.rdata,string,??_C@_0EM@LJHNOI@Expected?5signed?5integer?5value?0?5m@,,literal,,0,1
-0x007BE164,4,.rdata,string,??_C@_02DPKJAMEF@?$CFd?$AA@,,literal,??_C@_02DPKJAMEF@?$CFd?$AA@;_codecGridLookupTable@Code/GameEngine/Source/Common/Rva009AAC80CodecGrid.cpp,1,125
+0x007BE164,4,.rdata,string,??_C@_02DPKJAMEF@?$CFd?$AA@,,literal,??_C@_02DPKJAMEF@?$CFd?$AA@,1,125
 0x007BE168,80,.rdata,string,??_C@_0EO@LHIMPAAA@Expected?5unsigned?5integer?5value?0@,,literal,,0,1
 0x007BE1B8,8,.rdata,string,??_C@_02GMHACPFF@?$CFu?$AA@,,literal,,0,5
 0x007BE1C0,76,.rdata,string,??_C@_0EM@JFAIDIEH@Expected?5floating?5point?5value?0?5m@,,literal,,0,1
@@ -16934,7 +16934,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009B8160,16,.data,global,_Vp6FilterConst8890,Code/GameEngine/Source/Common/BfmeConv9C2620.cpp,owned,,1,8
 0x009B8170,16,.data,global,_Vp6FilterConst88A0,Code/GameEngine/Source/Common/BfmeConv9C2320.cpp,owned,,1,2
 0x009B8180,8,.data,global,_Vp6FilterConst88B0,Code/GameEngine/Source/Common/BfmeConv9C2620.cpp,owned,,1,2
-0x009B8188,24,.data,global,?Rva009B3A00Source@@3PAGA,Code/GameEngine/Source/Common/S3GuardedDelegates3.cpp,owned,,1,1
+0x009B8188,24,.data,global,?Rva009B3A00Source@@3PAGA,Code/Libraries/Source/VP6/FillIdctConstants.cpp,owned,,1,1
 0x009B81A0,16,.data,global,?g_bfmeBinkRoundMmx@@3QBGB,Code/GameEngine/Source/Common/Rva009C6390BinkMmx.cpp,owned,,1,30
 0x009B81B0,784,.data,global,?g_rva00DB81B0Weights@@3QAY0BA@$$CBGA,Code/GameEngine/Source/Common/Rva001D7200CodecDispatch.cpp,owned,,1,6
 0x009B84C0,16,.data,global,_g_bfmeXor80Mmx,Code/Libraries/Source/VP6/ReconMmx.cpp,owned,,1,1
@@ -21831,7 +21831,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A22964,4,.data,global,?global_allstats@@3HA,Code/Libraries/Source/Benchmark/nbench0.cpp,owned,,1,1
 0x00A22968,4,.data,global,_ghiProxyPort,,unowned,,0,3
 0x00A2296C,20,.data,global,_ghiProxyAddress,,unowned,,0,8
-0x00A22980,96,.data,global,?Rva009B3A00Table@@3PAGA,Code/GameEngine/Source/Common/S3GuardedDelegates3.cpp,owned,,1,12
+0x00A22980,96,.data,global,?Rva009B3A00Table@@3PAGA,Code/Libraries/Source/VP6/FillIdctConstants.cpp,owned,,1,12
 0x00A229E0,512,.data,global,?Rva009C0D10Table@@3PAGA,Code/Libraries/Source/VP6/FillLoopFilterLimitValuesMmx.cpp,owned,,1,6
 0x00A22BE0,256,.data,global,?g_rva01356940@@3PAHA,Code/GameEngine/Source/Common/Rva009A5AA0InstallFilter.cpp,owned,,1,3
 0x00A22CE0,4,.data,global,?g_bfmeFilterLimit@@3PAHA,,unowned,?Rva009C0D10Src@@3PAGA;?g_bfmeFilterLimit@@3PAHA,1,9
@@ -21861,9 +21861,9 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A22F94,4,.data,global,?g_lastVerticalScale45Slot@@3P6AXPAEII@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,2
 0x00A22F98,4,.data,global,?g_verticalScale45Slot@@3P6AXPAEII@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,2
 0x00A22F9C,12,.data,global,?g_horizontalScale21Slot@@3P6AXPBEIPAEI@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,1
-0x00A22FA8,4,.data,global,?g_rva01356E8C@@3P6AXPAXHH@ZA,Code/GameEngine/Source/Common/Rva009C84D0Vp6Filter.cpp,owned,,1,1
+0x00A22FA8,4,.data,global,?g_rva01356E8C@@3P6AXPAXHH@ZA,Code/Libraries/Source/VP6/PredictFiltered.cpp,owned,,1,1
 0x00A22FAC,8,.data,global,?g_lastVerticalScale35Slot@@3P6AXPAEII@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,2
-0x00A22FB4,8,.data,global,?g_rva01356E98@@3P6AXPAXHH@ZA,Code/GameEngine/Source/Common/Rva009C84D0Vp6Filter.cpp,owned,,1,1
+0x00A22FB4,8,.data,global,?g_rva01356E98@@3P6AXPAXHH@ZA,Code/Libraries/Source/VP6/PredictFiltered.cpp,owned,,1,1
 0x00A22FBC,4,.data,global,?g_rva01356EA0@@3P6AXPAURva009A6130Context@@PAE1HHPBH@ZA,Code/GameEngine/Source/Common/Rva009B2A50DeringFrame.cpp,owned,,1,4
 0x00A22FC0,4,.data,global,?g_lastVerticalScale21Slot@@3P6AXPAEII@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,1
 0x00A22FC4,8,.data,global,?g_verticalScale35Slot@@3P6AXPAEII@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,2

@@ -4,7 +4,7 @@ extern "C" void * __cdecl memset(void *, int, unsigned int);
 #pragma intrinsic(memset)
 
 struct Rva009ACBA0Context;
-int *Rva009ACBA0SetupBounding(Rva009ACBA0Context *ctx, int flimit);
+extern "C" int *__cdecl SetupDeblockValueArray_Generic(Rva009ACBA0Context *ctx, int flimit);
 
 extern int *g_rva01356A9C;
 extern int *(__cdecl *g_rva01356E64)(Rva009ACBA0Context *, int);
@@ -41,7 +41,7 @@ void Rva009AF320CopyPlanes(Rva009AF320Context *ctx, int a, int b)
 	int *bound;
 	if (ctx->m_mode >= 2) {
 		int value = g_rva01356A9C[ctx->m_tableIndex];
-		bound = Rva009ACBA0SetupBounding(
+		bound = SetupDeblockValueArray_Generic(
 			(Rva009ACBA0Context *)ctx, value);
 	} else {
 		int value = g_rva01356A9C[ctx->m_tableIndex];

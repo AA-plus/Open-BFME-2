@@ -17,9 +17,9 @@ extern "C" int __cdecl bfmeVp6ThresholdSelect(BfmeVp6Context *ctx);
 int Rva009A5C40Initialize(Rva009A5C40Context *post);
 void Rva009A6130PostFilterDispatch(Rva009A6130Context *post, int version, int frameType, int level,
 	int frameQ, unsigned char *source, unsigned char *dest, unsigned char *fragInfo, int elementSize, int codedMask);
-void Rva009AAC80CodecGrid(Rva009AAC80Context *instance);
-void Rva009AABB0CodecDispatch(Rva009AABB0Context *instance);
-void Rva009AA8F0Dispatch(Rva009AA8F0Context *post, int source, Rva009AA8F0Block *config);
+extern "C" void __cdecl vp6_showinfo(Rva009AAC80Context *instance);
+extern "C" void __cdecl vp6_showinfo2(Rva009AABB0Context *instance);
+extern "C" void __cdecl ScaleOrCenter(Rva009AA8F0Context *post, int source, Rva009AA8F0Block *config);
 
 class Rva001B6400Allocation
 {
@@ -130,7 +130,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 				instance->level - 200, instance->averageFrameQ, instance->lastRecon, instance->postBuffer,
 				instance->fragInfo, 4, 1);
 			VP6_readTSC(&end);
-			Rva009AAC80CodecGrid((Rva009AAC80Context *)instance);
+			vp6_showinfo((Rva009AAC80Context *)instance);
 		}
 		else if (instance->level > 100)
 		{
@@ -138,7 +138,7 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 				instance->level - 100, instance->averageFrameQ, instance->lastRecon, instance->postBuffer,
 				instance->fragInfo, 4, 1);
 			VP6_readTSC(&end);
-			Rva009AABB0CodecDispatch((Rva009AABB0Context *)instance);
+			vp6_showinfo2((Rva009AABB0Context *)instance);
 		}
 		else
 		{
@@ -190,9 +190,9 @@ extern "C" void __cdecl VP6_GetYUVConfig(VP6Instance *instance, VP6YUVConfig *co
 		config->yOrigin = instance->scaleBuffer;
 
 		if (instance->level)
-			Rva009AA8F0Dispatch((Rva009AA8F0Context *)instance->postProcessor, (int)instance->postBuffer, (Rva009AA8F0Block *)config);
+			ScaleOrCenter((Rva009AA8F0Context *)instance->postProcessor, (int)instance->postBuffer, (Rva009AA8F0Block *)config);
 		else
-			Rva009AA8F0Dispatch((Rva009AA8F0Context *)instance->postProcessor, (int)instance->lastRecon, (Rva009AA8F0Block *)config);
+			ScaleOrCenter((Rva009AA8F0Context *)instance->postProcessor, (int)instance->lastRecon, (Rva009AA8F0Block *)config);
 
 		config->y += ((config->yHeight - instance->outputHeight) >> 1) * config->yStride
 			+ ((config->yWidth - instance->outputWidth) >> 1);

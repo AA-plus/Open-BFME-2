@@ -1,6 +1,6 @@
 // Installs per-CPU-tier function pointers into the BFME video/image codec
 // dispatch table: 26 contiguous slots plus one standalone outlier slot.
-// Probes the tier via bfmeQueryCpuTierFlags (0x009B3A90, parked partial --
+// Probes the tier via GetProcessorFlags (0x009B3A90, parked partial --
 // declared extern and pinned since a pin does not require the callee to be
 // converted): the SSE tier (top flag set) expands the loop-filter limit
 // table for the SIMD filters (FillLoopFilterLimitValues_MMX) and installs the
@@ -10,7 +10,7 @@
 // Sibling of bfmeFilterPairMmx, bfmeExpandMmx, bfmeBlurRows* and
 // BfmeLimitedEdgeFilters.cpp.
 
-extern void __cdecl bfmeQueryCpuTierFlags(int *pTierA, int *pTierB, int *pTierC);
+extern "C" void __cdecl GetProcessorFlags(int *pTierA, int *pTierB, int *pTierC);
 
 // VP6 clean-room bodies (Code/Libraries/Source/VP6/), declared with the
 // extern "C" signatures those units define.
@@ -35,12 +35,10 @@ extern void __cdecl bfmeInterpRowsMmx(void *, int, int);
 extern void __cdecl bfmeBlurRowsSse(void *, void *, unsigned int, int, int);
 extern void __cdecl bfmeBlurRowsMmx(void *, void *, unsigned int, int, int);
 extern void __cdecl bfmeBlurRows(void *, void *, unsigned int, int, int);
-struct Rva009AF490Context;
-struct Rva009ACBA0Context;
 extern void __cdecl Rva009AF570FilterVert(void *, unsigned char *, int, const int *);
 extern void __cdecl Rva009AF6A0FilterHoriz(void *, unsigned char *, int, const int *);
-extern int * __cdecl Rva009AF490SetupBounding(Rva009AF490Context *, int);
-extern int * __cdecl Rva009ACBA0SetupBounding(Rva009ACBA0Context *, int);
+extern "C" int * __cdecl SetupBoundingValueArray_Generic(POSTPROC_INSTANCE *, int);
+extern "C" int * __cdecl SetupDeblockValueArray_Generic(POSTPROC_INSTANCE *, int);
 extern void __cdecl Rva009B3650FilterVert(void *, unsigned char *, int, const int *);
 extern void __cdecl Rva009B3710FilterHoriz(void *, unsigned char *, int, const int *);
 extern void __cdecl Rva009AF840FilterVert(int, unsigned char *, int);
@@ -143,7 +141,7 @@ static BfmeDispatchFn g_bfmeCodecDispatchOutlier;
 void __cdecl bfmeInstallCpuDispatchTable(void)
 {
 	int tierA, tierB, tierC;
-	bfmeQueryCpuTierFlags(&tierA, &tierB, &tierC);
+	GetProcessorFlags(&tierA, &tierB, &tierC);
 	if (tierC)
 	{
 		FillLoopFilterLimitValues_MMX();
@@ -210,8 +208,8 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	}
 	g_bfmeCodecDispatch.slot[15] = (BfmeDispatchFn)&Rva009AF570FilterVert;
 	g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&Rva009AF6A0FilterHoriz;
-	g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&Rva009AF490SetupBounding;
-	g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&Rva009ACBA0SetupBounding;
+	g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&SetupBoundingValueArray_Generic;
+	g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&SetupDeblockValueArray_Generic;
 	g_bfmeCodecDispatch.slot[16] = (BfmeDispatchFn)&Rva009B18D0;
 	g_bfmeCodecDispatch.slot[24] = (BfmeDispatchFn)&Rva009B10E0;
 	g_bfmeCodecDispatch.slot[10] = (BfmeDispatchFn)&Rva009ACF90;

@@ -4,12 +4,12 @@
 // InitVPUtil retail 0x001B8040..0x001B8049 (10 bytes): cdecl and argument
 // free. Calls the IDCT constant filler at 0x001C4300 then tail-jumps to the
 // utility dispatch-table installer at 0x001C4440. Both callees are rowed
-// today under the placeholder names declared below.
-void bfmeStep1_009A75E0();
+// today under the names declared below.
+extern "C" void __cdecl fillidctconstants();
 void bfmeInstallSpreadTable();
 
 extern "C" void __cdecl InitVPUtil()
 {
-	bfmeStep1_009A75E0();
+	fillidctconstants();
 	bfmeInstallSpreadTable();
 }

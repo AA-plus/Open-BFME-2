@@ -6431,9 +6431,7 @@ name,address,notes
 ?Rva00990030Lookup@@YAIPAUlua_State@@H@Z,0x00747190,address read from the REL32 displacement at a placed body
 ?Rva009A4E50Configure@@YAXPAXIH@Z,0x001B5910,BFME1-donor declaration Rva009A4E50Configure(void* unsigned int) in BfmeCheckJX.cpp; its call site at body+0x015 pushes count/1/state and the retail displacement lands here; address is the retail call target
 ?Rva009A6DA0ReleaseBuffers@@YAXPAURva009A6DA0Buffer@@@Z,0x001B7810,called 5x from InitializeBuffers at 0x1B7860 in the same TU; ghidra FUN_005b7810 67B
-?Rva009A7950@@YAXPAHPAGHHHHPBH@Z,0x001B83B0
 ?Rva009A86F0Allocate@@YAHPAX@Z,0x001B9140,BFME1-donor declaration Rva009A86F0Allocate(void*) in BfmeCheckJX.cpp; its call site at body+0x1D6 pushes the state pointer only; address is the retail call target
-?Rva009ACBA0SetupBounding@@YAPAHPAURva009ACC40State@@H@Z,0x001BD590
 ?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z,0x001BE490
 ?Rva009B2530@@YAXPAURva009A6130Context@@PAE1@Z,0x001C2F20,native dispatcher calls 0x001B6D13 and 0x001B7016; three cdecl arguments; helper plain ret 0x001C343C; donor 10af19f44a89 label 0x009B2530 is address-derived not original symbol
 ?Rva009B4390CodecCall@@YAXPAXH0HHHHHHHHHHHH@Z,0x001C4C90
@@ -8280,7 +8278,6 @@ name,address,notes
 ?bfmeNotifyVLN@BfmeCtlVLN@@QAEXXZ,0x0001BC50
 ?bfmeNullSystemZA@@YAPAVParticleSystemZA@@XZ,0x001FCBD7,callee of ??0T1Base_005F3750@@QAE@PAX0@Z at retail 0x0055C903 read from its REL32 displacement; donor ABI view of the rowed ?Make001FCBD7@@YAPAVParticleSystem@@XZ body at this address
 ?bfmeOne928F@BfmeThing928F@@QAEXXZ,0x0010C6C4
-?bfmeOneBZB@@YAXPAX@Z,0x001B65F0
 ?bfmeOneCDE@BfmeOwnerCDE@@QAEXPAX@Z,0x0073B350,BFME1 BfmeConv583 donor call site; same body as rowed bfmeReleaseABI
 ?bfmeOneCGD@BfmeThingCGD@@QAEXXZ,0x00758D10
 ?bfmeOneCNG@BfmeSubCNG@@QAEXM@Z,0x006BEB00,twin of rowed voidptr 0x006BEB00 retail passes float via fld fstp per caller 0x0028ABFC donor float probe exact
@@ -10535,7 +10532,6 @@ name,address,notes
 ?releaseBuffer@BfmeTailCD@@QAEXXZ,0x00036410,retail 6BF6F0 verified call graph; alias to existing native copy/fill/string body; dispatch tag unused
 ?releaseBuffer@UnicodeString@@IAEXXZ,0x00036E70,aliases the matched ?releaseBuffer@UnicodeString@@QAEXXZ body at 0x36E70; both are zero-argument thiscall release operations and the TU-private spelling is emitted by the static-text donor
 ?releaseBuffer@UnicodeString@@QAEXXZ,0x00036E70,Dict TU spelling of rowed StringBase wide releaseBuffer; same body
-?releaseCodecMembers@@YAXPAUCodecState@@@Z,0x001B5530
 ?releaseDependentResources@BfmeShaderShutdown@@SAXXZ,0x00076790,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?releaseNative@Rva004DD206TreeView@@QAEXXZ,0x004636FE,Native ctor EH943814 unwind7916E1 destroys first tree at+14 through thunk4638EC then this full56B rowed destructor; observed three-word tree ABI; original names stay unknown; narrow provider repair removes obsolete wrong keeper
 ?releasePrefix@BfmeStringTailRecord144@@AAEXXZ,0x002D9A43,ABI-only private helper alias to rowed ??1BfmeStringTailRecord144@@UAE@XZ; native50FC4 E9 target and9-byte Destroy53E2B call chain prove endpoint; no original target name asserted

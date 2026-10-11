@@ -4,7 +4,7 @@
 // between a low-, mid- and tail-range filler) plus twelve individually
 // named slots scattered through the same blob.  Sibling of the plain
 // (non-looping) installer in BfmeCodecCpuDispatch.cpp (0x009B0D60): same
-// bfmeQueryCpuTierFlags probe and same tier-C / tier-A / generic order,
+// GetProcessorFlags probe and same tier-C / tier-A / generic order,
 // but this one only ever loads its filler set into two big arrays and a
 // dozen named cells, never into the small dispatch table there.
 //
@@ -13,7 +13,7 @@
 // constant byte offset from its address, since nothing else in the blob
 // carries a name yet.
 
-extern void __cdecl bfmeQueryCpuTierFlags(int *pTierA, int *pTierB, int *pTierC);
+extern "C" void __cdecl GetProcessorFlags(int *pTierA, int *pTierB, int *pTierC);
 extern int g_bfmeTableJX;
 
 // Individually named blob cells (not part of either 65-slot array); no real
@@ -91,7 +91,7 @@ extern void __cdecl Rva009A7B00(void);
 extern void __cdecl Rva009A7300(void);
 extern void __cdecl Rva009C4E90(void);
 extern void __cdecl Rva009C5360(void);
-extern void __cdecl Rva009C4DF0(void);
+extern "C" void __cdecl ScalarReconIntra(short *, unsigned char *, const short *, int);
 extern void __cdecl Rva009C80C0(void);
 extern void __cdecl Rva009C77C0(void);
 extern void __cdecl Rva009C3630(void);
@@ -110,7 +110,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 	int tierA, tierB, tierC;
 	unsigned int i;
 
-	bfmeQueryCpuTierFlags(&tierA, &tierB, &tierC);
+	GetProcessorFlags(&tierA, &tierB, &tierC);
 
 	if (tierC)
 	{
@@ -225,7 +225,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 		}
 
 		g_bfmeSlotB48 = (void *)&Rva009A7030;
-		g_bfmeSlotD8C = (void *)&Rva009C4DF0;
+		g_bfmeSlotD8C = (void *)&ScalarReconIntra;
 		g_bfmeSlotD84 = (void *)&Rva009C4E90;
 		g_bfmeSlotB58 = (void *)&d_009c5080;
 		g_bfmeSlotB4C = (void *)&Rva009A7040;

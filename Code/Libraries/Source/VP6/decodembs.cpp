@@ -69,7 +69,7 @@ struct Rva009AB760Context;
 void Rva009B6A30LoadTables(unsigned char *);
 void Rva009AAFE0BuildTable(Rva009AAFE0Context *,const unsigned char *);
 void Rva009AB7F0Reset(Rva009AB7F0Context *);
-void Rva009AB760Initialize(Rva009AB760Context *);
+extern "C" void __cdecl VP6_ResetLeftContext(Rva009AB760Context *);
 void Rva009B5DB0Vp6DecodeBlock(unsigned char *,int,unsigned);
 extern "C" int __cdecl VP6_bitread(void *, int);
 extern "C" void VP6_ConfigureMvEntropyDecoder(FramePB *,unsigned char);
@@ -107,7 +107,7 @@ extern "C" void VP6_DecodeFrameMbs(FramePB *pbi)
     pbi->CurrentDcRunLen[0]=0; pbi->CurrentDcRunLen[1]=0;
     pbi->CurrentAc1RunLen[0]=0; pbi->CurrentAc1RunLen[1]=0;
     for(unsigned row=3;row<rows-3;++row) {
-        Rva009AB760Initialize((Rva009AB760Context *)pbi);
+        VP6_ResetLeftContext((Rva009AB760Context *)pbi);
         for(unsigned col=3;col<cols-3;++col)
             Rva009B5DB0Vp6DecodeBlock((unsigned char *)pbi,row,col);
     }

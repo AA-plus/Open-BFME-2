@@ -15,7 +15,7 @@ struct PB_INSTANCE
 
 extern "C" void __cdecl VP6_DeleteQuantizer(void **quantizer); // 0x001B7930
 void bfmeStepJW(void *instance);                       // 0x001B9040 VP6_DeleteFragmentInfo
-void Rva009A8880Release(void *instance);               // 0x001B92D0 VP6_DeleteFrameInfo
+extern "C" void __cdecl VP6_DeleteFrameInfo(void *instance); // 0x001B92D0
 extern "C" void __cdecl DeletePostProcInstance(void **postProc); // 0x001B68D0
 extern "C" void __cdecl VP6_DeletePBInstance(PB_INSTANCE **instance); // 0x001B56A0
 
@@ -27,7 +27,7 @@ extern "C" int __cdecl VP6_StopDecoder(PB_INSTANCE **instance)
 		VP6_DeleteQuantizer(&(*instance)->quantizer);
 		DeletePostProcInstance(&(*instance)->postProc);
 		bfmeStepJW(*instance);
-		Rva009A8880Release(*instance);
+		VP6_DeleteFrameInfo(*instance);
 		VP6_DeletePBInstance(instance);
 	}
 	return 1;
