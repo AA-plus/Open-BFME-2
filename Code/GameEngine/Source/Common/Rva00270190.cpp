@@ -7,7 +7,12 @@
 // Catch@00630412 62B. Flags copied from next Rva002701F4Ctor.cpp (/O1).
 
 // g_00DFEB78: matched references place it at VA 0xdfeb78 (retail .data initial value 0).
-void * g_00DFEB78 = 0;
+// The object is the 0x38-byte Anim2D node array that Rva00274E7DInit.cpp fills
+// in, so it is defined here under the array spelling that unit reads it through
+// (mangled ?g_00DFEB78@@3PAPAURva002D752DNode@@A): one object, one name. A
+// `void *` spelling here would leave the array unit's references unresolved.
+struct Rva002D752DNode;
+Rva002D752DNode ** g_00DFEB78 = 0;
 extern void __cdecl operator delete[](void *p);
 
 void __cdecl Rva00270190Free()

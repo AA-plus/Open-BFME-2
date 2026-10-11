@@ -32,8 +32,38 @@ extern const Image *g_00DFEB88;
 extern const Image *g_00DFEB8C;
 extern const Image *g_00DFEB90;
 extern const Image *g_00DFEB94;
-extern Rva002D752DNode **g_00DFEB78;
 extern unsigned char g_00DFEB6C;
+// The 0x38-byte Anim2D node array's object is defined under this same spelling in
+// Rva00270190.cpp (the unit that frees it), so it is only declared here.
+extern Rva002D752DNode **g_00DFEB78;
+// The image slots and the Anim2D node array are written by this very function,
+// so they are only declared above and defined here as tentative (uninitialised)
+// objects: their addresses sit past .data's raw end (file offset 0x009DCC08), so
+// retail loads them zero, and an explicit `= 0` would let MSVC fold the flag test
+// into a literal and drop the early return. The twelve Anim2D template names are
+// retail's own pointers at RVA 0x009BB660..0x009BB694 into .rdata; each one is
+// transcribed as the string it points at.
+unsigned char g_00DFEB6C;
+const Image *g_00DFEB70;
+const Image *g_00DFEB74;
+const Image *g_00DFEB80;
+const Image *g_00DFEB84;
+const Image *g_00DFEB88;
+const Image *g_00DFEB8C;
+const Image *g_00DFEB90;
+const Image *g_00DFEB94;
+const char *g_00DBB660 = "DefaultHeal";
+const char *g_00DBB664 = "StructureHeal";
+const char *g_00DBB668 = "VehicleHeal";
+const char *g_00DBB670 = "BombTimed";
+const char *g_00DBB674 = "BombRemote";
+const char *g_00DBB678 = "Disabled";
+const char *g_00DBB67C = "BattlePlanIcon_Bombard";
+const char *g_00DBB680 = "BattlePlanIcon_HoldTheLine";
+const char *g_00DBB684 = "BattlePlanIcon_SeekAndDestroy";
+const char *g_00DBB68C = "Enthusiastic";
+const char *g_00DBB690 = "Subliminal";
+const char *g_00DBB694 = "CarBomb";
 extern const char *g_00DBB660;
 extern const char *g_00DBB664;
 extern const char *g_00DBB668;
