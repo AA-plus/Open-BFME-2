@@ -28,3 +28,9 @@ void BattlePromptPlayerPageMovieClip::Impl::rva005FFF17(int index,bool visible)
 }
 }
 
+// 2026-10-11 claude-opus-5-5 trials (same residue): direct use of the
+// parameter gives an EBP frame and re-reads it; copies passed by address
+// (&index,&copy) or an inlined by-value helper put the value in BL but store
+// the copies into the slots with an EBP frame; an out-of-line helper gives the
+// exact prologue (MOV BL,[ESP+0C]) but is not retail's call; const parameter,
+// /Oa and /Ow change nothing.
