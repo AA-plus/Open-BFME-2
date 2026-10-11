@@ -3,4 +3,10 @@
 
 #include <locale>
 
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 template class _STL::money_put<wchar_t, _STL::ostreambuf_iterator<wchar_t, _STL::char_traits<wchar_t> > >;

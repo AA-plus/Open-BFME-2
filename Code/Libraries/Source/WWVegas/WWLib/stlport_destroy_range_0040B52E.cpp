@@ -6,6 +6,12 @@
 // string at +0 via rowed BasicStringCharDtor_dup 0x0007FAB3. Unblocks
 // 0x0040B560, 0x0040B5DE, 0x0040B61A.
 #include <string>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 
 struct DestroyElem0040B52E
 {
