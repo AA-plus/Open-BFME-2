@@ -284,3 +284,54 @@ def test_malformed_quoted_include_paths_are_refused():
     for flags in ('/I"unfinished path', '/I""', '/I"path"suffix', '/Ipath"bad'):
         with pytest.raises(SystemExit, match='quoted /I include path'):
             build._source_flag_tokens(flags)
+
+
+@pytest.mark.parametrize("layout", ["game", "Code"])
+def test_explicit_submodule_flags_do_not_classify_source(tmp_path, monkeypatch, layout):
+    donor = tmp_path / "reference/open-bfme-1"
+    (donor / layout / "Libraries/Include").mkdir(parents=True)
+    monkeypatch.setattr(build, "BFME1_ROOT", donor)
+    source = tmp_path / "sample.cpp"
+    source.write_text("// cl: /Ireference/open-bfme-1/Code/Libraries/Include /MD\n")
+
+    def unnecessary(_source):
+        pytest.fail("an explicit submodule operand does not depend on source ownership")
+
+    monkeypatch.setattr(build, "_is_bfme1_donor", unnecessary)
+    assert build.source_extra_flags(source) == [
+        "-Ireference/open-bfme-1/" + layout + "/Libraries/Include", "-MD"]
+
+
+def test_source_ownership_is_checked_once_per_directive_and_again_next_call(tmp_path, monkeypatch):
+    donor = tmp_path / "reference/open-bfme-1"
+    (donor / "game").mkdir(parents=True)
+    source = tmp_path / "sample.cpp"
+    source.write_text("// cl: /Igame/One /Igame/Two /Igame/Three /MD\n")
+    monkeypatch.setattr(build, "BFME1_ROOT", donor)
+    calls = []
+    answers = iter((False, True))
+
+    def classify(path):
+        calls.append(path)
+        return next(answers)
+
+    monkeypatch.setattr(build, "_is_bfme1_donor", classify)
+    assert build.source_extra_flags(source) == ["-Igame/One", "-Igame/Two", "-Igame/Three", "-MD"]
+    assert build.source_extra_flags(source) == [
+        "-Ireference/open-bfme-1/game/One", "-Ireference/open-bfme-1/game/Two",
+        "-Ireference/open-bfme-1/game/Three", "-MD"]
+    assert calls == [source, source]
+
+
+def test_include_directory_choice_is_not_cached_between_command_checks(tmp_path, monkeypatch):
+    repo = tmp_path / "bfme2"
+    donor = repo / "reference/open-bfme-1"
+    (donor / "game/Libraries/Include").mkdir(parents=True)
+    source = repo / "Code/sample.cpp"
+    source.parent.mkdir(parents=True)
+    source.write_text("// cl: /ICode/Libraries/Include /MD\n")
+    monkeypatch.setattr(build, "ROOT", repo)
+    monkeypatch.setattr(build, "BFME1_ROOT", donor)
+    assert build.source_extra_flags(source) == ["-Ireference/open-bfme-1/game/Libraries/Include", "-MD"]
+    (repo / "Code/Libraries/Include").mkdir(parents=True)
+    assert build.source_extra_flags(source) == ["-ICode/Libraries/Include", "-MD"]

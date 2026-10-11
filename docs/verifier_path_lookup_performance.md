@@ -52,3 +52,35 @@ provider ledgers. Together with the existing coverage and failure controls, the
 isolated push-scope suite passed 33 cases.
 The live push-scope, fail-closed hook and gate-exploit suites passed 84 tests,
 with one existing skip.
+
+## Keep full reference checks independent and run them concurrently
+
+Large ordinary full gates now run the existing string, float, import and DIR32
+checks in at most BUILD_POOL independent processes. Every process receives the
+entire matched row scope, so cross-source DIR32 disagreements remain visible.
+Their functions and input/path rechecks are unchanged. Output is reported in
+the previous order, every SystemExit refusal remains a full-gate failure, later
+checks still run, and worker or transport errors abort loudly. Workers compile
+and write nothing. Small gates and BUILD_POOL=1 keep the serial path.
+
+Parsed COFF layouts now also carry the first positive-section definition index
+for each name. This replaces two linear scans for each body read while keeping
+the original records and relocation indices. Sectionless/aux entries, repeated
+locals, code-only refusals, ambiguous anonymous namespaces and initializer-size
+fallbacks retain their previous decisions. The index shares the parsed layout's
+existing path/mtime/size key and lifetime; it stores no byte-match verdict.
+
+The include-ownership improvement from ae09418d1868e8a0f844fea2fda419db3252d5fe
+is reconciled into the current driver. A freshly read flag directive classifies
+its source once; explicit submodule paths do not need that classification.
+Every directory decision and the next command's classification remain fresh.
+All 22,096 current command/environment pairs were identical in a read-only
+comparison (interleaved command construction: 24.0 versus 17.4 seconds).
+
+Paired read-only checks of 13,379 rows in 320 sources returned identical complete
+outputs for all four reference gates. Serial execution took 9.2/8.3 seconds;
+indexed concurrent execution took 2.4/2.3 seconds. These are bounded samples,
+not a full-push timing claim. The isolated affected suite passed 180 tests with
+one existing skip, including every gate-exploit case. New cases cover definition
+and relocation identity, fresh ownership/directory choices, complete scopes,
+each propagated reference refusal and fatal worker errors.

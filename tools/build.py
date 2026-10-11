@@ -419,6 +419,22 @@ def read_object_symbols(data):
     return symbols
 
 
+def defined_coff_indices(symbols):
+    indices = {}
+    for index, symbol in enumerate(symbols):
+        if symbol["section"] > 0:
+            indices.setdefault(symbol["name"], index)
+    return indices
+
+
+class IndexedCoffSymbols(list):
+    """COFF records and their first definitions, owned by one parsed layout."""
+
+    def __init__(self, symbols):
+        super().__init__(symbols)
+        self.defined_indices = defined_coff_indices(self)
+
+
 @functools.lru_cache(maxsize=256)
 def _object_layout(path_str, mtime_ns, size):
     """Parsed COFF layout, keyed by (path, mtime, size) so a recompile misses.
@@ -445,7 +461,7 @@ def _object_layout(path_str, mtime_ns, size):
             }
         )
 
-    return data, sections, read_object_symbols(data)
+    return data, sections, IndexedCoffSymbols(read_object_symbols(data))
 
 
 def defined_code_symbols(path):
@@ -466,8 +482,10 @@ def read_object_symbol_bytes(path, symbol_name, expected_size=None, *, code_only
     targets: both repeat across sections of one object."""
     stat = path.stat()
     data, sections, symbols = _object_layout(str(path), stat.st_mtime_ns, stat.st_size)
+    indices = (symbols.defined_indices if isinstance(symbols, IndexedCoffSymbols)
+               else defined_coff_indices(symbols))
     resolved_name = symbol_name
-    if not any(s["name"] == symbol_name and s["section"] > 0 for s in symbols):
+    if symbol_name not in indices:
         # MSVC hashes the absolute source path into anonymous-namespace names,
         # so the same function gets a different ?A0x........ token in each
         # clone/worktree. Accept only one otherwise-identical defined symbol.
@@ -491,41 +509,38 @@ def read_object_symbol_bytes(path, symbol_name, expected_size=None, *, code_only
                     candidates.append(candidate["name"])
             if len(candidates) == 1:
                 resolved_name = candidates[0]
-    index = 0
-    while index < len(symbols):
+    # Preserve the first positive-section definition, including repeated locals.
+    index = indices.get(resolved_name)
+    if index is not None:
         symbol = symbols[index]
-        # the same name can appear as a sectionless entry (e.g. weak external)
-        # before its real definition; keep scanning for the defined one
-        if symbol["name"] == resolved_name and symbol["section"] > 0:
-            section = sections[symbol["section"] - 1]
-            if code_only and not section["characteristics"] & 0x20:
-                raise SystemExit(
-                    f"{symbol_name}: function claim names non-code COFF section "
-                    f"{section['name']} in {path.name}. Static data is not a function "
-                    "even when relocation masking makes its bytes match .text.")
-            value = symbol["value"]
-            start = section["raw_pointer"] + value
-            end = section["raw_pointer"] + section["raw_size"]
-            bytes_data = data[start:end]
+        section = sections[symbol["section"] - 1]
+        if code_only and not section["characteristics"] & 0x20:
+            raise SystemExit(
+                f"{symbol_name}: function claim names non-code COFF section "
+                f"{section['name']} in {path.name}. Static data is not a function "
+                "even when relocation masking makes its bytes match .text.")
+        value = symbol["value"]
+        start = section["raw_pointer"] + value
+        end = section["raw_pointer"] + section["raw_size"]
+        bytes_data = data[start:end]
 
-            relocs = []
-            reloc_symbols = []
-            for r in range(section["reloc_count"]):
-                ro = section["reloc_pointer"] + r * 10
-                rva = u32(data, ro)
-                sym_idx = u32(data, ro + 4)
-                rtype = u16(data, ro + 8)
-                if value <= rva < value + len(bytes_data):
-                    relocs.append((rva - value, rtype, symbols[sym_idx]["name"]))
-                    reloc_symbols.append(sym_idx)
+        relocs = []
+        reloc_symbols = []
+        for r in range(section["reloc_count"]):
+            ro = section["reloc_pointer"] + r * 10
+            rva = u32(data, ro)
+            sym_idx = u32(data, ro + 4)
+            rtype = u16(data, ro + 8)
+            if value <= rva < value + len(bytes_data):
+                relocs.append((rva - value, rtype, symbols[sym_idx]["name"]))
+                reloc_symbols.append(sym_idx)
 
-            if detail:
-                return bytes_data, relocs, {
-                    "section": symbol["section"], "value": value, "symbols": symbols,
-                    "section_size": section["raw_size"], "reloc_symbols": reloc_symbols}
-            return bytes_data, relocs
+        if detail:
+            return bytes_data, relocs, {
+                "section": symbol["section"], "value": value, "symbols": symbols,
+                "section_size": section["raw_size"], "reloc_symbols": reloc_symbols}
+        return bytes_data, relocs
 
-        index += 1
 
     if len(sections) > COFF_SECTION_CEILING:
         raise ValueError(
@@ -865,7 +880,7 @@ def _bfme1_layout_relative(relative):
     return relative
 
 
-def _current_bfme1_include_flag(flag, source=None, cnc_variant=None):
+def _current_bfme1_include_flag(flag, source=None, cnc_variant=None, *, _in_donor=None):
     """Resolve Open-BFME-1 ``// cl: /I...`` paths from either checkout layout.
 
     BFME2-local paths remain local. Explicit submodule paths are migrated from
@@ -880,7 +895,6 @@ def _current_bfme1_include_flag(flag, source=None, cnc_variant=None):
         return flag
     include = flag[len(prefix):]
     root = "reference/open-bfme-1/"
-    in_donor = source is not None and _is_bfme1_donor(source)
 
     if include.startswith(root):
         relative = _bfme1_layout_relative(include[len(root):])
@@ -888,6 +902,12 @@ def _current_bfme1_include_flag(flag, source=None, cnc_variant=None):
         if physical is not None:
             relative = physical
         return prefix + root + relative
+
+    # Explicit submodule operands above are independent of source ownership.
+    # A // cl: list supplies one fresh classification for its other operands;
+    # direct callers still classify here. No directory choice is cached.
+    in_donor = (source is not None and _is_bfme1_donor(source)
+                if _in_donor is None else _in_donor)
 
     # BF2 TUs retain donor-era include flags using this rootless CnC spelling.
     # Other BF2 ``reference/`` flags name local shims and must remain untouched.
@@ -1029,9 +1049,16 @@ def source_extra_flags(source):
                 flags = [f.replace("/", "-", 1) if f.startswith("/") else f
                          for f in _source_flag_tokens(line[len("// cl:") :])]
                 cnc_variant = _bfme1_cnc_variant_from_flags(flags)
+                # Source ownership is the same for every operand in this one
+                # freshly read directive. Resolve every include directory as
+                # before, and classify again on the next command/currency check.
+                needs_owner = any(flag.startswith(("-I", "/I")) and
+                                  not flag[2:].startswith("reference/open-bfme-1/")
+                                  for flag in flags)
+                in_donor = _is_bfme1_donor(source) if needs_owner else False
                 return flag_defaults.apply(
-                    source, [_current_bfme1_include_flag(flag, source, cnc_variant)
-                             for flag in flags])
+                    source, [_current_bfme1_include_flag(
+                        flag, source, cnc_variant, _in_donor=in_donor) for flag in flags])
     # The region decides /O, /arch and /G for Code/ sources (tools/flag_defaults.py).
     return flag_defaults.apply(source, [])
 
@@ -3395,6 +3422,44 @@ def verify_source_claims(only=None):
     print(f"Source claims: OK ({len(sources)} sources, {scope} byte-verified)")
 
 
+_REFERENCE_GATES = ("string-refs", "float-refs", "import-refs", "dir32 consistency")
+
+
+def _reference_check_worker(label, rows):
+    """Run one complete existing reference gate; preserve its output and exit."""
+    import contextlib
+    import io
+
+    check = {"string-refs": verify_string_refs, "float-refs": verify_float_refs,
+             "import-refs": verify_import_refs,
+             "dir32 consistency": verify_dir32_consistency}[label]
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        try:
+            check(rows)
+        except SystemExit as exc:
+            return output.getvalue(), True, exc.code
+    return output.getvalue(), False, None
+
+
+def _parallel_reference_checks(rows, workers):
+    # Each process receives the WHOLE scope. In particular, DIR32 consistency
+    # must judge globals across every source, never within a partition only.
+    # No process compiles or writes objects, and every existing input/path check
+    # remains in its gate. Worker/transport errors fail loudly, never fall back.
+    with concurrent.futures.ProcessPoolExecutor(workers) as pool:
+        futures = [pool.submit(_reference_check_worker, label, rows)
+                   for label in _REFERENCE_GATES]
+        return [future.result() for future in futures]
+
+
+def _report_reference_result(result):
+    output, exited, code = result
+    print(output, end="")
+    if exited:
+        raise SystemExit(code)
+
+
 def main(only=None):
     # Sources include some sweep headers under two case spellings; only the
     # canonical one is committed (case-only-colliding paths break Windows/macOS
@@ -3471,10 +3536,16 @@ def main(only=None):
     run("baseline", verify_baseline)
     patches = run("functions", verify_functions)
     rows = load_function_rows()
-    run("string-refs", lambda: verify_string_refs(rows))
-    run("float-refs", lambda: verify_float_refs(rows))
-    run("import-refs", lambda: verify_import_refs(rows))
-    run("dir32 consistency", lambda: verify_dir32_consistency(rows))
+    workers = min(_pool_size(), len(_REFERENCE_GATES))
+    if workers > 1 and len(rows) >= 1024:
+        results = _parallel_reference_checks(rows, workers)
+        for label, result in zip(_REFERENCE_GATES, results):
+            run(label, lambda result=result: _report_reference_result(result))
+    else:
+        run("string-refs", lambda: verify_string_refs(rows))
+        run("float-refs", lambda: verify_float_refs(rows))
+        run("import-refs", lambda: verify_import_refs(rows))
+        run("dir32 consistency", lambda: verify_dir32_consistency(rows))
     run("pin consistency", pin_consistency.verify)
     run("module registry", check_module_registry.verify)
     run("source claims", verify_source_claims)
