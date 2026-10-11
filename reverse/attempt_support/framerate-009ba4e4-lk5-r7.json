@@ -733,5 +733,24 @@
     "recovered_bytes": 0,
     "linked_bytes": 0,
     "exact_bank_bytes_excluded": 608
+  },
+  "metadata_verification": {
+    "sources": 139,
+    "rows": 665,
+    "eh_rows": 152,
+    "verdicts": {
+      "EXACT": 152
+    },
+    "eh_problems": [],
+    "strings": "PASS",
+    "float_literals": "PASS",
+    "imports": "PASS",
+    "string_literals": 447,
+    "empty_string_refs": 45,
+    "compiler_float_literals": 311,
+    "named_imports": 54,
+    "eh_exact": 152,
+    "baseline_count": 0,
+    "object_basis": "same isolated renamed objects, official verifier routines, original compiler flags"
   }
 }
