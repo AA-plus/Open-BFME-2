@@ -146,15 +146,15 @@ struct TTriggerInfo
 
 enum CrushSquishTestType
 {
-	TEST_CRUSH_ONLY, 
-	TEST_SQUISH_ONLY, 
+	TEST_CRUSH_ONLY,
+	TEST_SQUISH_ONLY,
 	TEST_CRUSH_OR_SQUISH
 };
 
 class Object : public Thing, public Snapshot
 {
 
-	MEMORY_POOL_GLUE_WITH_USERLOOKUP_CREATE(Object, "ObjectPool" )		
+	MEMORY_POOL_GLUE_WITH_USERLOOKUP_CREATE(Object, "ObjectPool" )
 	MEMORY_POOL_DELETEINSTANCE_VISIBILITY(protected)
 
 public:
@@ -204,7 +204,7 @@ public:
 	void doStatusDamage( ObjectStatusTypes status, Real duration );///< At this level, we just pass this on to our helper
 	void doTempWeaponBonus( WeaponBonusConditionType status, UnsignedInt duration );///< At this level, we just pass this on to our helper
 
-	void scoreTheKill( const Object *victim );						///< I just killed this object.  
+	void scoreTheKill( const Object *victim );						///< I just killed this object.
 	void onVeterancyLevelChanged( VeterancyLevel oldLevel, VeterancyLevel newLevel, Bool provideFeedback = TRUE );	///< I just achieved this level right this moment
 	ExperienceTracker* getExperienceTracker() {return m_experienceTracker;}
 	const ExperienceTracker* getExperienceTracker() const {return m_experienceTracker;}
@@ -232,7 +232,7 @@ public:
 
 	Bool isLocallyControlled() const;
 	Bool isNeutralControlled() const;
-	
+
 	Bool getIsUndetectedDefector(void) const { return BitTest(m_privateStatus, UNDETECTED_DEFECTOR); }
 	void friend_setUndetectedDefector(Bool status);
 
@@ -246,7 +246,7 @@ public:
 	void setGeometryInfoZ( Real newZ );
 
 	void onCollide( Object *other, const Coord3D *loc, const Coord3D *normal );
-	
+
 	Real getCarrierDeckHeight() const;
 	Bool areModulesReady() const { return m_modulesReady; }
 
@@ -295,7 +295,7 @@ public:
 	inline void clearScriptStatus( ObjectScriptStatusBit bit ) { setScriptStatus(bit, false); }
 	void setSelectable(Bool selectable);
 	Bool isSelectable() const;
-	
+
 	Bool isMassSelectable() const;
 	void setFormationID(enum FormationID id) {m_formationID = id;}
 	enum FormationID getFormationID(void) const {return m_formationID;}
@@ -376,7 +376,7 @@ public:
 
 	const AsciiString& getCommandSetString() const;
 	void setCommandSetStringOverride( AsciiString newCommandSetString ) { m_commandSetStringOverride = newCommandSetString; }
-	Bool Object::canProduceUpgrade( const UpgradeTemplate *upgrade ); 
+	Bool Object::canProduceUpgrade( const UpgradeTemplate *upgrade );
 	void reloadAllAmmo(Bool now);
 	Bool isOutOfAmmo() const;
 	Bool hasAnyWeapon() const;
@@ -392,7 +392,7 @@ public:
 	Weapon* getCurrentWeapon(WeaponSlotType* wslot = NULL);
 	const Weapon* getCurrentWeapon(WeaponSlotType* wslot = NULL) const;
 	void setFiringConditionForCurrentWeapon() const;
-	void adjustModelConditionForWeaponStatus();	///< Check to see if I should change my model condition. 
+	void adjustModelConditionForWeaponStatus();	///< Check to see if I should change my model condition.
 	void fireCurrentWeapon(Object *target);
 	void fireCurrentWeapon(const Coord3D* pos);
 	void preFireCurrentWeapon( const Object *victim );
@@ -456,10 +456,10 @@ public:
 
 	UnsignedInt getDisabledUntil( DisabledType type = DISABLED_ANY ) const;
 
-	void pauseAllSpecialPowers( const Bool disabling ) const;	
+	void pauseAllSpecialPowers( const Bool disabling ) const;
 	void checkDisabledStatus();
 	void clearLeechRangeModeForAllWeapons();
-	
+
 	Int getNumConsecutiveShotsFiredAtTarget( const Object *victim) const;
 
 	void setHealthBoxOffset( const Coord3D& offset ) { m_healthBoxOffset = offset; } ///< for special amorphous like angry mob
@@ -477,7 +477,7 @@ public:
 	void setReceivingDifficultyBonus(Bool receive);
 
 	inline UnsignedInt getSafeOcclusionFrame(void) { return m_safeOcclusionFrame; }	//< this is an object specific frame at which it's safe to enable building occlusion.
-	inline void	setSafeOcclusionFrame(UnsignedInt frame) { m_safeOcclusionFrame = frame;} 
+	inline void	setSafeOcclusionFrame(UnsignedInt frame) { m_safeOcclusionFrame = frame;}
 	void friend_adjustPowerForPlayer( Bool incoming );
 
 protected:
@@ -577,7 +577,7 @@ private:
 	RadarObject*									m_radarData;				///< radar data
 	ExperienceTracker*						m_experienceTracker;	///< Manages experience, gaining levels, and value when killed
 
-	Object*												m_containedBy;					
+	Object*												m_containedBy;
 	ObjectID											m_xferContainedByID;	///< xfer uses IDs to store pointers and looks them up after
 	UnsignedInt										m_containedByFrame;	///< frame we were contained by m_containedBy
 
@@ -602,14 +602,14 @@ private:
 	TTriggerInfo									m_triggerInfo[MAX_TRIGGER_AREA_INFOS];
 	UnsignedInt										m_enteredOrExitedFrame;
 	ICoord3D											m_iPos;
-	
+
 	PathfindLayerEnum							m_layer;							// Layer object is pathing on.
 	PathfindLayerEnum							m_destinationLayer;		// Layer of current path goal.
 	FormationID										m_formationID;
 	Coord2D												m_formationOffset;
 
 	AsciiString										m_commandSetStringOverride;///< To allow specific object to switch command sets
-	
+
 	UnsignedInt										m_safeOcclusionFrame;	///<flag used by occlusion renderer so it knows when objects have exited their production building.
 	Bool													m_isSelectable;
 	Bool													m_modulesReady;
@@ -734,14 +734,14 @@ Bool CanSelectDrawableZeroHourReference( const Drawable *draw, Bool dragSelectin
 		return FALSE;  // can't select
 	}
 	const Object *obj = draw->getObject();
-	
+
 	if( obj->isEffectivelyDead() && !obj->isKindOf(KINDOF_ALWAYS_SELECTABLE))
 	{
 		return FALSE;
 	}
 	if( !obj->isKindOf( KINDOF_SELECTABLE ) && obj->isKindOf( KINDOF_FORCEATTACKABLE ) )
 	{
-		return FALSE;		
+		return FALSE;
 	}
 	if( draw->isDrawableEffectivelyHidden() )
 	{
@@ -838,7 +838,7 @@ SelectionTranslator::SelectionTranslator()
 SelectionTranslator::~SelectionTranslator()
 {
 }
-Bool SelectionTranslator::selectFriends( Drawable *draw, GameMessage *createTeamMsg, 
+Bool SelectionTranslator::selectFriends( Drawable *draw, GameMessage *createTeamMsg,
 																				 Bool dragSelecting )
 {
 	if (CanSelectDrawable( draw, dragSelecting ))
@@ -900,7 +900,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 {
 	GameMessageDisposition disp = KEEP_MESSAGE;
 
-	if(	!TheInGameUI->getInputEnabled() ) 
+	if(	!TheInGameUI->getInputEnabled() )
 	{
 		if( m_dragSelecting )
 		{
@@ -954,7 +954,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 			{
 				GameMessage *mouseoverMessage;
 				UnsignedInt pickType = getPickTypesForContext( true  );
-				
+
 				Drawable *underCursor = TheTacticalView->pickDrawable( &pixel, TheInGameUI->isInForceAttackMode(), (PickType) pickType );
 				Object *objUnderCursor = underCursor ? underCursor->getObject() : NULL;
 
@@ -982,7 +982,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 				break;
 
 			const IRegion2D& region = msg->getArgument(0)->pixelRegion;
-			if (region.height() == 0 && region.width() == 0) 
+			if (region.height() == 0 && region.width() == 0)
 			{
 				Bool selectAcrossMap = (BitTest(modifiers, KEY_STATE_ALT) ? TRUE : FALSE);
 				Drawable *picked = TheTacticalView->pickDrawable( &region.lo, FALSE, PICK_TYPE_SELECTABLE);
@@ -1002,7 +1002,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 				selectSingleDrawableWithoutSound(picked);
 				if (selectAcrossMap)
 					TheInGameUI->selectMatchingAcrossMap();
-				else 
+				else
 					TheInGameUI->selectMatchingAcrossScreen();
 				GameMessage *pickMsg = TheMessageStream->appendMessage( GameMessage::MSG_AREA_SELECTION );
 				pickMsg->appendDrawableIDArgument( picked->getID() );  /// note we are putting in a drawable id
@@ -1070,25 +1070,25 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 		}
 		case GameMessage::MSG_MOUSE_LEFT_CLICK:
 		{
-			if (TheInGameUI->isQuitMenuVisible()) 
+			if (TheInGameUI->isQuitMenuVisible())
 			{
 				disp = DESTROY_MESSAGE;
 				break;
 			}
 			IRegion2D selectionRegion = msg->getArgument(0)->pixelRegion;
 			Bool isPoint = (selectionRegion.height() == 0 && selectionRegion.width() == 0);
-			
+
 			DrawableList drawablesThatWillSelect;
 			PickDrawableStruct pds;
 			pds.drawableListToFill = &drawablesThatWillSelect;
 			TheTacticalView->iterateDrawablesInRegion(&selectionRegion, addDrawableToList, &pds);
 
-			if (drawablesThatWillSelect.empty()) 
+			if (drawablesThatWillSelect.empty())
 			{
 				break;
 			}
 			const DrawableList *currentList = TheInGameUI->getAllSelectedDrawables();
-			if (!currentlyLookingForSelection()) 
+			if (!currentlyLookingForSelection())
 			{
 				break;
 			}
@@ -1098,36 +1098,36 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 			{
 				break;
 			}
-			
+
 			Bool addToGroup = TheInGameUI->isInPreferSelectionMode();
 
-			if (si.currentCountEnemies > 0 || 
-					si.currentCountCivilians > 0 || 
+			if (si.currentCountEnemies > 0 ||
+					si.currentCountCivilians > 0 ||
 					si.currentCountFriends > 0 ||
-					si.currentCountMineBuildings > 0) 
+					si.currentCountMineBuildings > 0)
 			{
 				addToGroup = FALSE;
 			}
-			if (si.newCountMine > 0) 
+			if (si.newCountMine > 0)
 			{
 				si.selectMine = TRUE;
-				if ( si.newCountMineBuildings == 1 && si.newCountMine == 1 ) 
+				if ( si.newCountMineBuildings == 1 && si.newCountMine == 1 )
 				{
 					addToGroup = FALSE;
 					si.selectMineBuildings = TRUE;
         }
         else if ( si.newCountMineBuildings > 0 )////////////// SO SORRY, I KNOW THIS IS MICKEY MOUSE ///////////////////
-        { // What we are after here is to allow the drag select to get the building, 
+        { // What we are after here is to allow the drag select to get the building,
           Bool onlyTheOneBuildingIsSelectableAnyway = TRUE;
           DrawableID buildingID = INVALID_DRAWABLE_ID;
-          for (DrawableListIt it = drawablesThatWillSelect.begin(); it != drawablesThatWillSelect.end(); ++it) 
+          for (DrawableListIt it = drawablesThatWillSelect.begin(); it != drawablesThatWillSelect.end(); ++it)
 				  {
             const Drawable *d = *it;
-            if ( d->isKindOf( KINDOF_STRUCTURE ) ) 
+            if ( d->isKindOf( KINDOF_STRUCTURE ) )
             {// make sure there is really only the one building in the list, as it may be multiply listed
-              
+
               if ( buildingID == INVALID_DRAWABLE_ID ) // this is the first building
-                buildingID = d->getID();  
+                buildingID = d->getID();
               else if ( buildingID != d->getID() )//oops, more than one building!
                 onlyTheOneBuildingIsSelectableAnyway = FALSE;
             }
@@ -1145,47 +1145,47 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 				}
 
 			}
-			else if (si.newCountEnemies > 0 && si.newCountCivilians > 0 && si.newCountFriends > 0) 
+			else if (si.newCountEnemies > 0 && si.newCountCivilians > 0 && si.newCountFriends > 0)
 			{
 				break;
-			} 
-			else if (si.newCountEnemies == 1) 
+			}
+			else if (si.newCountEnemies == 1)
 			{
 				addToGroup = FALSE;
 				si.selectEnemies = TRUE;
-			} 
-			else if (si.newCountCivilians == 1) 
+			}
+			else if (si.newCountCivilians == 1)
 			{
 				addToGroup = FALSE;
 				si.selectCivilians = TRUE;
-			} 
-			else if (si.newCountFriends == 1) 
+			}
+			else if (si.newCountFriends == 1)
 			{
 				addToGroup = FALSE;
 				si.selectFriends = TRUE;
 			}
-			if (!(si.selectMine || si.selectEnemies || si.selectCivilians || si.selectFriends)) 
+			if (!(si.selectMine || si.selectEnemies || si.selectCivilians || si.selectFriends))
 			{
 				break;
 			}
 			disp = DESTROY_MESSAGE;
 			m_lastGroupSelGroup = -1;
-			
-			if (TheInGameUI->isInPreferSelectionMode() && isPoint && areAllSelected(drawablesThatWillSelect)) 
+
+			if (TheInGameUI->isInPreferSelectionMode() && isPoint && areAllSelected(drawablesThatWillSelect))
 			{
 				GameMessage *newMsg = TheMessageStream->appendMessage(GameMessage::MSG_REMOVE_FROM_SELECTED_GROUP);
 				Drawable *draw = NULL;
 				DrawableListIt it;
-				for (it = drawablesThatWillSelect.begin(); it != drawablesThatWillSelect.end(); ++it) 
+				for (it = drawablesThatWillSelect.begin(); it != drawablesThatWillSelect.end(); ++it)
 				{
 					draw = *it;
-					if (!draw) 
+					if (!draw)
 					{
 						continue;
 					}
 
 					Object *objToDeselect = draw->getObject();
-					if (!objToDeselect) 
+					if (!objToDeselect)
 					{
 						continue;
 					}
@@ -1193,72 +1193,72 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 					newMsg->appendObjectIDArgument(objToDeselect->getID());
 					TheInGameUI->deselectDrawable(draw);
 				}
-			} 
-			else 
+			}
+			else
 			{
-				if (!addToGroup) 
+				if (!addToGroup)
 				{
 					deselectAll();
 				}
 
 				GameMessage *newMsg = TheMessageStream->appendMessage(GameMessage::MSG_CREATE_SELECTED_GROUP);
 				newMsg->appendBooleanArgument(!addToGroup);
-				
+
 				Player *localPlayer = ThePlayerList->getLocalPlayer();
 
 				Int newDrawablesSelected = 0;
 				Drawable *draw = NULL;
 				DrawableListIt it;
-				for (it = drawablesThatWillSelect.begin(); it != drawablesThatWillSelect.end(); ++it) 
+				for (it = drawablesThatWillSelect.begin(); it != drawablesThatWillSelect.end(); ++it)
 				{
 					draw = *it;
-					if (!draw) 
+					if (!draw)
 					{
 						continue;
 					}
 
 					Object *obj = draw->getObject();
-					if (!obj) 
+					if (!obj)
 					{
 						continue;
 					}
-					
-					if (obj && obj->getContainedBy() != NULL) 
+
+					if (obj && obj->getContainedBy() != NULL)
 					{
 						continue;
 					}
 
 					Drawable *drawToSelect = NULL;
 					ObjectID objToAppend = INVALID_ID;
-					if (si.selectMine && obj->isLocallyControlled()) 
+					if (si.selectMine && obj->isLocallyControlled())
 					{
-						if (!obj->isKindOf(KINDOF_STRUCTURE) || si.selectMineBuildings) 
+						if (!obj->isKindOf(KINDOF_STRUCTURE) || si.selectMineBuildings)
 						{
 							drawToSelect = draw;
 							objToAppend = obj->getID();
 						}
-					} 
-					else 
+					}
+					else
 					{
 						Relationship rel = localPlayer->getRelationship(obj->getTeam());
-						if (si.selectEnemies && rel == ENEMIES) 
+						if (si.selectEnemies && rel == ENEMIES)
 						{
 							drawToSelect = draw;
 							objToAppend = obj->getID();
-						} 
-						else if (si.selectCivilians && rel == NEUTRAL) 
+						}
+						else if (si.selectCivilians && rel == NEUTRAL)
 						{
 							drawToSelect = draw;
 							objToAppend = obj->getID();
-						} 
-						else if (si.selectFriends && rel == ALLIES) 
+						}
+						else if (si.selectFriends && rel == ALLIES)
 						{
 							drawToSelect = draw;
 							objToAppend = obj->getID();
 						}
 					}
 
-					if (drawToSelect && objToAppend != INVALID_ID) 
+					if (drawToSelect && objToAppend != INVALID_ID)
 					{
 						newMsg->appendObjectIDArgument(objToAppend);
 						TheInGameUI->selectDrawable(drawToSelect);
@@ -1271,10 +1271,10 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 					localPlayer->getAcademyStats()->recordDragSelection();
 				}
 
-				if (newDrawablesSelected == 1 && draw) 
+				if (newDrawablesSelected == 1 && draw)
 				{
 
-#if defined(_DEBUG) || defined(_INTERNAL) 
+#if defined(_DEBUG) || defined(_INTERNAL)
 
           if (m_HandOfGodSelectionMode && draw)
 					{
@@ -1335,14 +1335,14 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 						disp = DESTROY_MESSAGE;
 						break;
 					}
-#endif    
+#endif
 
         }
 			}
 
 			if (disp == DESTROY_MESSAGE)
 				TheInGameUI->clearAttackMoveToMode();
-			
+
 			break;
 		}
 		case GameMessage::MSG_RAW_MOUSE_LEFT_BUTTON_DOWN:
@@ -1354,7 +1354,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 		case GameMessage::MSG_RAW_MOUSE_LEFT_BUTTON_UP:
 		{
 			m_leftMouseButtonIsDown = FALSE;
-			
+
 			if (m_dragSelecting) {
 				m_dragSelecting = FALSE;
 
@@ -1367,7 +1367,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 				buildRegion( &m_selectFeedbackAnchor, &msg->getArgument(0)->pixel, &selectionRegion );
 				dragMsg->appendPixelRegionArgument( selectionRegion );
 			}
-			else 
+			else
 			{
 				if( !TheInGameUI->getGUICommand() && !TheKeyboard->isShift() && !TheKeyboard->isCtrl() && !TheKeyboard->isAlt() )
 				{
@@ -1403,7 +1403,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 
 			TheTacticalView->getPosition(&cameraPos);
 			cameraPos.sub(&m_deselectDownCameraPosition);
-			
+
 			pixel = msg->getArgument( 0 )->pixel;
 			currentTime = (UnsignedInt) msg->getArgument( 2 )->integer;
 
@@ -1411,14 +1411,14 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 			delta.y = m_deselectFeedbackAnchor.y - pixel.y;
 
 			Bool isClick = TRUE;
-			if (isClick && 
-					abs(delta.x) > TheMouse->m_dragTolerance || 
+			if (isClick &&
+					abs(delta.x) > TheMouse->m_dragTolerance ||
 					abs(delta.y) > TheMouse->m_dragTolerance)
 			{
 				isClick = FALSE;
 			}
 
-			if (isClick && 
+			if (isClick &&
 					currentTime - m_lastClick > TheMouse->m_dragToleranceMS)
 			{
 				isClick = FALSE;
@@ -1515,8 +1515,8 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 							}
 						}
 					}
-				} 
-				else 
+				}
+				else
 				{
 					TheInGameUI->deselectAllDrawables( false ); //No need to post message because we're just creating a new group!
 					TheMessageStream->appendMessage((GameMessage::Type)(GameMessage::MSG_SELECT_TEAM0 + group));
@@ -1632,14 +1632,14 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 			{
 				DEBUG_LOG(("META: view team %d\n",group));
 				Player *player = ThePlayerList->getLocalPlayer();
-				if (player) 
+				if (player)
 				{
 					Squad *selectedSquad = player->getHotkeySquad(group);
-					if (selectedSquad != NULL) 
+					if (selectedSquad != NULL)
 					{
 						VecObjectPtr objlist = selectedSquad->getLiveObjects();
 						Int numObjs = objlist.size();
-						if (numObjs > 0) 
+						if (numObjs > 0)
 						{
 							TheTacticalView->lookAt( objlist[ numObjs-1 ]->getDrawable()->getPosition() );
 						}
@@ -1655,7 +1655,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 			break;
 		}
 
-#if defined(_DEBUG) || defined(_INTERNAL) 
+#if defined(_DEBUG) || defined(_INTERNAL)
 		case GameMessage::MSG_META_DEMO_TOGGLE_HAND_OF_GOD_MODE:
 		{
 			if ( !TheGameLogic->isInMultiplayerGame() )
@@ -1712,7 +1712,7 @@ GameMessageDisposition SelectionTranslator::translateGameMessage(const GameMessa
 }
 void SelectionTranslator::setDragSelecting(Bool dragSelect)
 {
-	m_dragSelecting = dragSelect; 
+	m_dragSelecting = dragSelect;
 }
 void SelectionTranslator::setLeftMouseButton(Bool state)
 {
