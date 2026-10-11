@@ -143,6 +143,7 @@ public:
 };
 
 class GameWindow;
+void __stdcall bfmeGoELB(int);
 
 class AptOnline
 {
@@ -164,7 +165,6 @@ public:
 	AptOnlineLogin(AptOnline *shell);
 	virtual ~AptOnlineLogin();
 	void rva00572632(const char *unused); // "AptOnline::Login::Login"
-	void DeleteNickname(const char *unused);
 	void OnBttnRegisterFESL(const char *unused);
 	void InitGadgets(const char *name, void *argument, GameWindow *window);
 private:
@@ -223,7 +223,11 @@ AptOnlineLogin::AptOnlineLogin(AptOnline *shell)
 		m_commandMaps.AddCommandMap(name, AptRef<AptCommandMap>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
 	{
-		FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptOnlineLogin::DeleteNickname);
+		// Retail572871 ignores ECX and performs stdcall RET4.
+		union { struct { void (__stdcall *callback)(int); int adjustment; } direct; FunctorMethod member; } binding;
+		binding.direct.callback = &bfmeGoELB;
+		binding.direct.adjustment = 0;
+		FunctorMethod method = binding.member;
 		AsciiString name("AptOnline::Login::DeleteNickname");
 		m_commandMaps.AddCommandMap(name, AptRef<AptCommandMap>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
