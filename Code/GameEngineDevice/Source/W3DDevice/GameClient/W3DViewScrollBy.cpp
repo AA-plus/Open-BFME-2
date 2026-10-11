@@ -200,14 +200,14 @@ unsigned W3DView::rva0008CE2E(Coord2D *delta){
   scrollAmount=*delta;
   Vector2 start;start.X=(float)(getWidth()/2);start.Y=(float)(getHeight()/2);
   float aspect=(float)(getWidth()/getHeight());
-  Vector2 end(start.X+delta->x*250.0f,start.Y+delta->y*aspect*250.0f);
+  Vector2 end;end.X=start.X+delta->x*250.0f;end.Y=start.Y+delta->y*aspect*250.0f;
   Vector3 world;
   {ICoord2D screen;Vector3 rayStart;screen.x=(int)start.X;screen.y=(int)start.Y;
-   getPickRay(&screen,&rayStart,&world);world=world-rayStart;}
+   getPickRay(&screen,&rayStart,&world);world.X=world.X-rayStart.X;world.Y=world.Y-rayStart.Y;world.Z=world.Z-rayStart.Z;}
   world.Z=0;world.Normalize();
   Vector3 unusedStart,unusedEnd;camera->Device_To_World_Space(start,&unusedStart);camera->Device_To_World_Space(end,&unusedEnd);
   BfmeScrollCoordinates pos=position;
-  Vector2 side(-world.X,-world.Y),forward(world.Y,-world.X);
+  Vector2 side,forward;side.X=-world.X;side.Y=-world.Y;forward.X=world.Y;forward.Y=-world.X;
   float scale=settings.scrollScale()*(zoom*0.25f);
   BfmeScrollCoordinates displacement((delta->x*forward.X+delta->y*side.X)*scale,(delta->x*forward.Y*aspect+delta->y*side.Y)*scale,0);
   travelled+=displacement.length();pos+=displacement;
