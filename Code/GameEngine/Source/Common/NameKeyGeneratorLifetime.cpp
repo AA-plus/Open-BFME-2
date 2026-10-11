@@ -11,7 +11,7 @@
 // Donor semantics: ZH NameKeyGenerator.cpp; scope Lock/Unlock are existing
 // native helpers and the target demonstrates that they do not throw.
 #include <hash_map>
-typedef int Bool;
+typedef bool Bool;
 #include "subsystem_interface.h"
 #include "Code/GameEngine/Include/Common/Rva00041004Lock.h"
 extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(CRITICAL_SECTION*) throw();
