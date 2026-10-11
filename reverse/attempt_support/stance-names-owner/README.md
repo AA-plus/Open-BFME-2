@@ -71,3 +71,13 @@ these read-only declarations even though the new data row supplies the sole
 actual definition. No second data owner existed, no baseline is expanded and
 the enforced converged-data check passes. The FontLibrary allocator identity
 shadow finding is disclosed as unrelated to this unchanged-byte table repair.
+
+Step-3 pilot (2026-10-11): the Uninitialized label is no longer a named object.
+Retail C3C260 is also the "Uninitialized" literal that the vendored dxerr9.lib
+(DXGetErrorDescription9A, 64E91A) references; a separately named array linked as
+a second datum at that address and failed that row's data-back. The table's
+first initializer is now the string literal, the BfmeStanceNameUninitialized
+array and its 14-byte data row are removed, and the table row verifies its first
+pointer against the literal's content at C3C260. The proofs above establish the
+string and the table; they never showed that retail used a separate array. Six
+data rows (84 bytes) remain; the other five labels are unchanged.

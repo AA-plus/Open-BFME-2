@@ -7,8 +7,9 @@
 
 // Native stance table: six complete NUL-terminated labels and a null.
 // Label object names are descriptive; original names are unknown.
-extern const char BfmeStanceNameUninitialized[];
-const char BfmeStanceNameUninitialized[] = "Uninitialized";
+// The first label is the pooled string literal: retail 0x0083C260 is the one
+// "Uninitialized" that dxerr9 (DXGetErrorDescription9A) also references, so it
+// is no separately named object.
 extern const char BfmeStanceNameBattle[];
 const char BfmeStanceNameBattle[] = "Battle";
 extern const char BfmeStanceNameAggressive[];
@@ -21,7 +22,7 @@ extern const char BfmeStanceNameHoldGroundMoving[];
 const char BfmeStanceNameHoldGroundMoving[] = "HoldGroundMoving";
 extern const char *const TheStanceNames[];
 const char *const TheStanceNames[] = {
-    BfmeStanceNameUninitialized,
+    "Uninitialized",
     BfmeStanceNameBattle,
     BfmeStanceNameAggressive,
     BfmeStanceNameHoldGround,
