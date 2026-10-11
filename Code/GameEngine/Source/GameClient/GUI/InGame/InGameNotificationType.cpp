@@ -44,8 +44,14 @@ public:
 class Gen_00489270
 {
 public:
-	void m(int val);
+	__declspec(noinline) void m(int val);
+private:
+	char m_unknown00[0x10];
+	int m_word10;
 };
+// Target 5F69CE stores the argument word at +10. Notification builder
+// 2219D1 uses it for color; the inherited receiver spelling remains provisional.
+void Gen_00489270::m(int val) { m_word10 = val; }
 
 struct Rva0040FB15WideStringCopyForward
 {
@@ -79,7 +85,7 @@ public:
 	Rva0040FB1A();
 	int m_00;
 	int m_04;
-	int m_08;
+	const Image *m_08;
 	int m_0C;
 	int m_10;
 };
@@ -90,8 +96,12 @@ public:
 	Rva002217EA() {}
 	Rva002217EA(const Rva002217EA &other);
 	~Rva002217EA();
-	void rva0010670B(const Image *image);
+	__declspec(noinline) void rva0010670B(const Image *image);
 };
+
+// Target 10670B and the independently recovered builder establish the
+// image pointer at +8. This retires the anonymous GameMessage alias row.
+void Rva002217EA::rva0010670B(const Image *image) { m_08 = image; }
 
 class InGameNotificationType
 {
