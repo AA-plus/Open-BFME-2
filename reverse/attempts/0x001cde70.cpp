@@ -1,61 +1,58 @@
 // _ClampLevels_mmx
-// partial score=0.9 date=2026-10-10
-// _ClampLevels_mmx
-// partial score=0.9
-// 232B (size exact) with the /Z7 realigned frame, C vector splats and an inline MMX row loop; 25 lines differ only in register choice/scheduling:
-// retail delays the dst row store and loads white into EAX where cl loads it into ECX. ~70 declaration-order and parameter-type variants unchanged.
+// partial score=0.9 date=2026-10-11
 // cl: /O2 /G6 /Z7 /MD
-struct Vp6PostProc
+// Clean room: reverse/vp6_cleanroom/specs/001cde70.md plus retail only.
+// No decoder source was consulted.
+extern "C" void *__cdecl memset(void *block, int value, unsigned int bytes);
+#pragma intrinsic(memset)
+
+struct POSTPROC_LEVELS_MMX
 {
-	unsigned char pad0[0x78];
-	int lumaOffset;
-	unsigned char pad7C[0x90 - 0x7C];
-	int blocksAcross;
-	int blocksDown;
-	int stride;
+	unsigned char m_pad00[0x78];
+	unsigned char *m_plane;   // 0x78
+	unsigned char m_pad7C[0x14];
+	int m_width;              // 0x90
+	int m_height;             // 0x94
+	int m_stride;             // 0x98
 };
 
-extern "C" void __cdecl ClampLevels_mmx(Vp6PostProc *pp, int black, int white, unsigned char *src, unsigned char *dst)
+extern "C" void __cdecl ClampLevels_mmx(POSTPROC_LEVELS_MMX *context,
+	int black, int white, int sourceOffset, int destinationOffset)
 {
-	__declspec(align(8)) unsigned char blackVec[16];
-	__declspec(align(8)) unsigned char whiteVec[16];
-	__declspec(align(8)) unsigned char bothVec[16];
-	int width = pp->blocksAcross * 8;
-	unsigned char *srcRow = src + pp->lumaOffset;
-	unsigned char *dstRow = dst + pp->lumaOffset;
-	int height = pp->blocksDown * 8;
-	int stride = pp->stride;
-	int rows;
-	int i;
+	__declspec(align(8)) double blackVec[2];
+	__declspec(align(8)) double sumVec[2];
+	__declspec(align(8)) double whiteVec[2];
+	int width = context->m_width << 3;
+	unsigned char *src = context->m_plane + sourceOffset;
+	unsigned char *dst = context->m_plane + destinationOffset;
+	int height;
+	int stride;
 
-	unsigned char blackByte = (unsigned char)black;
-	unsigned char whiteByte = (unsigned char)white;
-	unsigned char sumByte = whiteByte + blackByte;
-	for (i = 0; i < 8; i++)
-		bothVec[i] = sumByte;
-	for (i = 0; i < 8; i++)
-		whiteVec[i] = whiteByte;
-	for (i = 0; i < 8; i++)
-		blackVec[i] = blackByte;
-	if (height > 0) {
-		for (rows = height; rows; rows--) {
-			__asm {
-				mov ecx, width
-				mov esi, srcRow
-				mov edi, dstRow
-				xor eax, eax
-			again:
-				movq mm1, [esi+eax]
-				psubusb mm1, qword ptr blackVec
-				paddusb mm1, qword ptr bothVec
-				psubusb mm1, qword ptr whiteVec
-				movq [edi+eax], mm1
-				add eax, 8
-				cmp eax, ecx
-				jl again
-			}
-			srcRow += stride;
-			dstRow += stride;
+	height = context->m_height << 3;
+	stride = context->m_stride;
+	memset(sumVec, (unsigned char)(black + white), 8);
+
+	memset(whiteVec, white, 8);
+	memset(blackVec, black, 8);
+	for (; height > 0; height--) {
+		int x;
+		__asm
+		{
+			mov esi, src
+			mov edi, dst
+			xor eax, eax
+			mov ecx, width
+		L:
+			movq mm1, qword ptr [esi + eax]
+			psubusb mm1, qword ptr blackVec
+			paddusb mm1, qword ptr sumVec
+			psubusb mm1, qword ptr whiteVec
+			movq qword ptr [edi + eax], mm1
+			add eax, 8
+			cmp eax, ecx
+			jl L
 		}
+		src += stride;
+		dst += stride;
 	}
 }

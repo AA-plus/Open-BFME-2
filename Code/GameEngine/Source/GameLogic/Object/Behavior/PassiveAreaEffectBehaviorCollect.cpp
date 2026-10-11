@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /ICode/Libraries/Include /ICode/GameEngine/Source
+// cl: /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/Libraries/Include /ICode/GameEngine/Source
 // stlport
 // Retail484C8B..484DF4 RET0; primary PassiveAreaEffectBehavior vtable slot13
 // and ctor484A67 establish owner/data+4/object+8/list+24. BF1 clean donor
