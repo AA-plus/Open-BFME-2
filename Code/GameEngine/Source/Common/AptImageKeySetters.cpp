@@ -226,6 +226,7 @@ APT_IMAGE_KEY_SET( Rva005FF2AC, rva005FF2AC, "_level%u.%s_Portrait", m_portrait 
 // ?rva005F07AD@Rva005F07AD@@QAEXPBVImage@@@Z  @0x005F07AD 133B  _IconSlotTypeImage%d
 // ?rva005F6CA8@InProgressIconSlot@Impl@BuildQueueDetailsMovieClip@StrategicHUD@@QAEXPBVImage@@@Z  @0x005F6CA8 132B  _InProgressIconSlotPortrait
 // ?rva005F6D2C@InProgressIconSlot@Impl@BuildQueueDetailsMovieClip@StrategicHUD@@QAEXPBVImage@@@Z  @0x005F6D2C 132B  _InProgressIconSlotTypeImage
+// ?rva005F6F45@QueuedIconSlot@Impl@BuildQueueDetailsMovieClip@StrategicHUD@@QAEXPBVImage@@@Z  @0x005F6F45 135B  _QueuedIconSlotPortrait%d
 // ?rva005F6FCC@QueuedIconSlot@Impl@BuildQueueDetailsMovieClip@StrategicHUD@@QAEXPBVImage@@@Z  @0x005F6FCC 135B  _QueuedIconSlotTypeImage%d
 
 class Rva005D3776
@@ -428,13 +429,15 @@ APT_OWNER_IMAGE_KEY_SET( StrategicHUD::BuildQueueDetailsMovieClip::Impl::InProgr
 class StrategicHUD::BuildQueueDetailsMovieClip::Impl::QueuedIconSlot
 {
 public:
+	void rva005F6F45(const Image *image);
 	void rva005F6FCC(const Image *image);
 	void SetQuantityString(int quantity);
 	void SetNumTurnsString(int turns);
 	void rva005F753E(int quantity);
 	void rva005F75AE(int turns);
 private:
-	char m_pad00[0x0C];
+	char m_pad00[0x08];
+	const Image *m_portrait;	// +0x08
 	const Image *m_image;		// +0x0C
 	int m_quantity;				// +0x10
 	char m_pad14[0x08];
@@ -442,6 +445,20 @@ private:
 	int m_index;				// +0x20
 	int m_numTurns;				// +0x24
 };
+
+void StrategicHUD::BuildQueueDetailsMovieClip::Impl::QueuedIconSlot::rva005F6F45(const Image *image)
+{
+	const Image *current = m_portrait;
+	if (image == current)
+		return;
+	AsciiString key;
+	key.format("_level%u.%s_QueuedIconSlotPortrait%d", m_owner->m_level, m_owner->m_name.str(), m_index);
+	if (image)
+		m_owner->m_images.rva00524725(key, image);
+	else
+		m_owner->m_images.rva00524306(*(const StringBase<char> *)&key);
+	m_portrait = image;
+}
 
 void StrategicHUD::BuildQueueDetailsMovieClip::Impl::QueuedIconSlot::rva005F6FCC(const Image *image)
 {

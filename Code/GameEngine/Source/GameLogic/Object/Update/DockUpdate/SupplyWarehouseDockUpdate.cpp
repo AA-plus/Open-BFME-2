@@ -311,8 +311,38 @@ Bool SupplyWarehouseDockUpdate::action( Object* docker, Object *drone )
 	return FALSE;
 }
 
-// byte-exact reconstruction: Code/GameEngine/Source/Common/SupplyWarehouseDockUpdate_setDockCrippledMethodThunk.cpp
-// ?setDockCrippled@SupplyWarehouseDockUpdate@@UAEX_N@Z present-unmatched
+// BFME 2 views for setDockCrippled: the Object's AI pointer sits at +0x258,
+// AIUpdateInterface hands out its supply truck interface from slot +0x17C,
+// and setForceWantingState is that interface's slot +0x2C. Only the slot
+// positions matter (the interfaces gained entries rather than reordering).
+template <Int N>
+class BfmeWarehouseSlots : public BfmeWarehouseSlots<N - 1>
+{
+public:
+	virtual void unused(char (*)[N]) = 0;
+};
+template <>
+class BfmeWarehouseSlots<0>
+{
+};
+class BfmeWarehouseSupplyTruckSlots : public BfmeWarehouseSlots<11>
+{
+public:
+	virtual void setForceWantingState( Bool want ) = 0;		///< +0x2C
+};
+class BfmeWarehouseAISlots : public BfmeWarehouseSlots<95>
+{
+public:
+	virtual BfmeWarehouseSupplyTruckSlots *getSupplyTruckAIInterface( void ) = 0;	///< +0x17C
+};
+struct BfmeWarehouseVictimFields
+{
+	unsigned char m_unreconstructed_000[ 0x258 ];
+	AIUpdateInterface *m_ai;				///< +0x258
+};
+#define WAREHOUSE_VICTIM_AI(obj) (((BfmeWarehouseVictimFields *)(obj))->m_ai)
+// Retail 0x004A800D (127B): Zero Hour's body with BFME 2's offsets; the
+// kill uses BFME 2's unresistable damage type 8.
 void SupplyWarehouseDockUpdate::setDockCrippled( Bool setting )
 {
 	// At this level, Crippling means I kill any activeDocker between enter and exit.
@@ -326,16 +356,16 @@ void SupplyWarehouseDockUpdate::setDockCrippled( Bool setting )
 				if( m_dockerInside )
 				{
 					if( !victim->isUsingAirborneLocomotor() )
-						victim->kill();
+						victim->kill( (DamageType)8, (DeathType)0 );
 				}
 				else
 				{
 					// Else, he was between Approach and Enter.  Lucky guy.  Tell him to stop, but then
 					// remind him that he wants to try again later
-					SupplyTruckAIInterface* supplyTruckAI = victim->getAI()->getSupplyTruckAIInterface();
+					BfmeWarehouseSupplyTruckSlots* supplyTruckAI = ((BfmeWarehouseAISlots *)WAREHOUSE_VICTIM_AI(victim))->getSupplyTruckAIInterface();
 					if( supplyTruckAI )
 					{
-						victim->getAI()->aiIdle( CMD_FROM_AI );
+						WAREHOUSE_VICTIM_AI(victim)->aiIdle( CMD_FROM_AI );
 						supplyTruckAI->setForceWantingState( TRUE );
 					}
 				}
@@ -345,6 +375,7 @@ void SupplyWarehouseDockUpdate::setDockCrippled( Bool setting )
 
 	DockUpdate::setDockCrippled( setting );
 }
+#undef WAREHOUSE_VICTIM_AI
 
 // byte-exact reconstruction: Code/GameEngine/Source/Common/promoted__setCashValue_SupplyWarehouseDockUpdate_QAEXH_Z_002CFA50.cpp
 // ?setCashValue@SupplyWarehouseDockUpdate@@QAEXH@Z present-unmatched
