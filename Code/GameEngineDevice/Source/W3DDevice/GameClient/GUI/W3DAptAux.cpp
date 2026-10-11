@@ -160,7 +160,7 @@ struct AptRenderTransform
 	int m_data[6];
 };
 
-AptRenderTransform g_Va00DE6148; // native zero-filled DE6148..DE6160
+AptRenderTransform g_aptRenderTransform; // native zero-filled DE6148..DE6160
 
 class AptShapeContainer
 {
@@ -212,7 +212,7 @@ void w3dCustomControlRender(const char *name, Int arg1, AptRenderingUnit *render
 	int savedCallback = g_Va00DB5FC8;
 	g_Va00DB5FC8 = (int)&Rva000A90B0;
 	W3DAptAux::s_renderer->bfmeBegin982C();
-	shapes->m_transform = g_Va00DE6148;
+	shapes->m_transform = g_aptRenderTransform;
 	Coord2D topLeft, bottomRight;
 	shapes->getRenderRegion(topLeft, bottomRight);
 	topLeft.x = roundToPixel(topLeft.x);
@@ -244,7 +244,7 @@ void w3dDrawRenderingUnit(AptRenderingUnit *renderingUnit,Int mode)
  AptShapeContainer *const renderShape=renderingUnit->getShapes();
  AptShapeContainer *shapes=renderShape;
  if(!renderShape) return;
- renderShape->m_transform=g_Va00DE6148;
+ renderShape->m_transform=g_aptRenderTransform;
  // The existing flush names the sentinel pointer; the list header is that
  // one pointer, and the native queue stores AptShapeContainer pointers.
  _STL::list<AptShapeContainer*> &queue=*(_STL::list<AptShapeContainer*>*)&g_rva00785FD0Queue;
@@ -350,7 +350,7 @@ void *Rva000AA8C3LoadRenderingUnit(Rva00786BD0Owner *owner, unsigned int key)
  return owner->find(key);
 }
 
-extern unsigned char g_00DB4CE0[32];
+extern unsigned char g_aptHostStateStorage[32];
 // Pair comparison follows the Vector2i operation visible in WB 8A6D50.
 // Keep a local neutral type: its use here proves two integers, not a class name.
 struct AptSizePair {
@@ -360,18 +360,18 @@ struct AptSizePair {
  }
 };
 AptSizePair g_aptLastStageSize,g_aptLastDeviceSize; // DE61B8 and DE61C0, zero-filled
-AptRenderTransform g_aptUnscaledTransform; // DE6130, before the linear scale
+AptRenderTransform g_aptTransformBeforeLinearScale; // DE6130, before the linear scale
 void Rva006CD6F0Get(void **,void **);
 extern "C" double __cdecl fabs(double);
 static __forceinline bool aptFar(float value) {
  float magnitude=fabs(value);
  return magnitude>0.0001f;
 }
-#define aptScaleX (*reinterpret_cast<float*>(g_00DB4CE0+0x10))
-#define aptScaleY (*reinterpret_cast<float*>(g_00DB4CE0+0x14))
-#define aptInvScaleX (*reinterpret_cast<float*>(g_00DB4CE0+0x18))
-#define aptInvScaleY (*reinterpret_cast<float*>(g_00DB4CE0+0x1c))
-#define aptMatrixMode (*reinterpret_cast<int*>(g_00DB4CE0+4))
+#define aptScaleX (*reinterpret_cast<float*>(g_aptHostStateStorage+0x10))
+#define aptScaleY (*reinterpret_cast<float*>(g_aptHostStateStorage+0x14))
+#define aptInvScaleX (*reinterpret_cast<float*>(g_aptHostStateStorage+0x18))
+#define aptInvScaleY (*reinterpret_cast<float*>(g_aptHostStateStorage+0x1c))
+#define aptMatrixMode (*reinterpret_cast<int*>(g_aptHostStateStorage+4))
 // Apt SetMatrix callback at A92B0..A94F9 (585 bytes, cdecl pointer).
 // Retail establishes the six-word transform, dimension-cache comparisons,
 // zero-size/zero-scale fallbacks and 0.0001f identity tolerance. WB 8A6D50
@@ -379,7 +379,7 @@ static __forceinline bool aptFar(float value) {
 // Its float temporaries are significant to the native mixed SSE/x87 shape.
 // Original callback/global names remain unknown; no donor layout is asserted.
 void Rva000A92B0SetMatrix(const AptRenderTransform *input) {
- g_Va00DE6148=*input;
+ g_aptRenderTransform=*input;
  AptSizePair stage,device;
  int bits;bool windowed;
  Rva006CD6F0Get(reinterpret_cast<void**>(&stage.x),reinterpret_cast<void**>(&stage.y));
@@ -391,9 +391,9 @@ void Rva000A92B0SetMatrix(const AptRenderTransform *input) {
   aptInvScaleY=aptScaleY ? 1.0f/aptScaleY : 1.0f;
   g_aptLastStageSize=stage;g_aptLastDeviceSize=device;
  }
- float *m=reinterpret_cast<float*>(&g_Va00DE6148);
+ float *m=reinterpret_cast<float*>(&g_aptRenderTransform);
  m[4]*=aptScaleX;m[5]*=aptScaleY;
- g_aptUnscaledTransform=g_Va00DE6148;
+ g_aptTransformBeforeLinearScale=g_aptRenderTransform;
  m[0]*=aptScaleX;m[2]*=aptScaleX;m[1]*=aptScaleY;m[3]*=aptScaleY;
  if(aptFar(m[0]-1.0f) || aptFar(m[1]) || aptFar(m[2]) || aptFar(m[3]-1.0f)) aptMatrixMode=1;
  else aptMatrixMode=3;

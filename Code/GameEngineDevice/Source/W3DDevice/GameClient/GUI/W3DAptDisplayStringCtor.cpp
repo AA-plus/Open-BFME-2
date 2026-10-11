@@ -149,12 +149,12 @@ struct Rva000AAD88Arg
 	const char *m_text;		// +0x54
 };
 
-// The Apt resolution scaling block inside g_00DB4CE0: the enable byte at
+// The Apt resolution scaling block inside g_aptHostStateStorage: the enable byte at
 // 0x00DB4CE8 and the x/y factors at 0x00DB4CF0/0x00DB4CF4.
-extern unsigned char g_00DB4CE0[32];
-#define s_aptScaleEnabled (*(const Bool *)(g_00DB4CE0 + 8))
-#define s_aptScaleX (*(const Real *)(g_00DB4CE0 + 0x10))
-#define s_aptScaleY (*(const Real *)(g_00DB4CE0 + 0x14))
+extern unsigned char g_aptHostStateStorage[32];
+#define s_aptScaleEnabled (*(const Bool *)(g_aptHostStateStorage + 8))
+#define s_aptScaleX (*(const Real *)(g_aptHostStateStorage + 0x10))
+#define s_aptScaleY (*(const Real *)(g_aptHostStateStorage + 0x14))
 
 static __forceinline char rawCharAt(const AsciiString &s, Int index)
 {
