@@ -22,6 +22,16 @@
 // returns the 12-byte particle-system handle (see SlavedUpdateRepair.cpp).
 #include <vector>
 #include "Lib/Coord3D.h"
+// LINK: file-static unsigned max overload takes vector-internal max(size,n)
+// calls instead (identical inlined bytes), so this TU emits no external
+// ??$max@I COMDAT (retail-wrong here). Same proven pattern as
+// SmoothCameraHeightField; mirrors stlport's `b < a ? b : a` exactly.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 
 typedef bool Bool;
 typedef int Int;
@@ -104,6 +114,10 @@ class Drawable
 {
 public:
 	Bool isDrawableEffectivelyHidden() const { return ((Rva00270260 *)this)->rva00270260(); }
+	// LINK: TU-unique same-body helper (identical inlined bytes). This TU's
+	// isDrawableEffectivelyHidden copy loses to the first copy in link order;
+	// rebinding our only call site emits just this unique (trivially kept).
+	Bool bfme_drawable_hidden() const { return ((Rva00270260 *)this)->rva00270260(); }
 };
 
 class Thing
@@ -438,7 +452,7 @@ void BoneFXUpdate::doParticleSystemAtBone(const ParticleSystemTemplate *particle
 		psys->setPosition(bonePosition);
 		psys->attachToObject(building);
 		Drawable *drawable = building->getDrawable();
-		if (drawable && drawable->isDrawableEffectivelyHidden())
+		if (drawable && drawable->bfme_drawable_hidden())
 		{
 			psys->stop();
 		}
