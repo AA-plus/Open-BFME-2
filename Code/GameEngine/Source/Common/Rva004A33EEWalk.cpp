@@ -14,6 +14,12 @@ class Object;
 
 class Rva00373EC6
 {
+};
+
+// LINK: 0x373D23 is rowed as StealthUpdate::rva00373D23; the Object accessor keeps returning
+// Rva00373EC6* (its row name), and the call goes through a StealthUpdate view.
+class StealthUpdate
+{
 public:
 	void rva00373D23();
 };
@@ -69,7 +75,7 @@ void BroadcastStealthUpdate::rva004A33EE()
 			{
 				Rva00373EC6 *stealth = obj->rva0028F4BC();
 				if (stealth != 0)
-					stealth->rva00373D23();
+					((StealthUpdate *)stealth)->rva00373D23();
 			}
 			node = node->m_next;
 		} while (node != (Rva004A33EENode *)m_member.m_head);
