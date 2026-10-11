@@ -19,7 +19,8 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 
 
 
-struct Rva002B3049Record { Rva002B3049Record(); Rva002B3049Record(const Rva002B3049Record&); ~Rva002B3049Record(); Rva002B3049Record&operator=(const Rva002B3049Record&); private: char bytes[4]; };
-namespace _STL {template<> void _Construct<Rva002B3049Record,Rva002B3049Record>(Rva002B3049Record*,const Rva002B3049Record&);}
-template Rva002B3049Record *_STL::__copy_backward(Rva002B3049Record*,Rva002B3049Record*,Rva002B3049Record*,const _STL::random_access_iterator_tag&,int*);
-template Rva002B3049Record *_STL::__copy_backward_ptrs(Rva002B3049Record*,Rva002B3049Record*,Rva002B3049Record*,const _STL::__false_type&);
+// Native2B3049 uses four-byte elements and calls the complete2B2F97 holder assignment.
+class Rva002B2F97 { public: Rva002B2F97&operator=(const Rva002B2F97&); private: char bytes[4]; };
+namespace _STL {template<> void _Construct<Rva002B2F97,Rva002B2F97>(Rva002B2F97*,const Rva002B2F97&);}
+template Rva002B2F97 *_STL::__copy_backward(Rva002B2F97*,Rva002B2F97*,Rva002B2F97*,const _STL::random_access_iterator_tag&,int*);
+template Rva002B2F97 *_STL::__copy_backward_ptrs(Rva002B2F97*,Rva002B2F97*,Rva002B2F97*,const _STL::__false_type&);

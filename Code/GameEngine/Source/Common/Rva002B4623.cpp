@@ -10,8 +10,8 @@
 // local is a dead out-slot; only its address ([ebp-1]) matters.
 // Boundary: range-table 29B; successor 0x2B4650 opens with push esi.
 // Names are address-derived.
-// The worker is the rowed STLport __copy_backward<Rva002B3049Record *, ..., int>.
-struct Rva002B3049Record;
+// The worker is the rowed STLport __copy_backward<Rva002B2F97 *, ..., int>.
+class Rva002B2F97;
 namespace _STL
 {
 struct random_access_iterator_tag;
@@ -21,5 +21,5 @@ template <class I1, class I2, class D> I2 __copy_backward(I1 first, I1 last, I2 
 void rva002B4623(int a, int b, int c)
 {
 	unsigned char touched;
-	_STL::__copy_backward<Rva002B3049Record *, Rva002B3049Record *, int>((Rva002B3049Record *)a, (Rva002B3049Record *)b, (Rva002B3049Record *)c, *(const _STL::random_access_iterator_tag *)&touched, (int *)0);
+	_STL::__copy_backward<Rva002B2F97 *, Rva002B2F97 *, int>((Rva002B2F97 *)a, (Rva002B2F97 *)b, (Rva002B2F97 *)c, *(const _STL::random_access_iterator_tag *)&touched, (int *)0);
 }

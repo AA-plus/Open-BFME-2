@@ -10,15 +10,16 @@
 // after the ledger spelling of the loop each pair reaches:
 //
 //   wrapper     _ptrs        loop         element
-//   0x002B5944  0x002B4623   0x002B3049   Rva002B3049Record (copy_backward)
+//   0x002B5944  0x002B4623   0x002B3049   Rva002B2F97 (copy_backward)
 //   0x0032E8F9  0x0032E51B   0x0032DD81   SidesInfo         (copy)
 //   0x001EBACF  0x001EBA13   0x001EB86E   BfmeAssignRecord172 (copy)
 //   0x001D9BD3  0x00255CFA   0x00254D65   FXBoneInfo        (copy)
 #include <algorithm>
 
-struct Rva002B3049Record {
+class Rva002B2F97 {
+public:
 	int m_value;
-	Rva002B3049Record &operator=(const Rva002B3049Record &);
+	Rva002B2F97 &operator=(const Rva002B2F97 &);
 };
 
 struct BfmeAssignRecord172 {
@@ -38,7 +39,7 @@ private:
 	char m_opaque[0x60];
 };
 
-template Rva002B3049Record *_STL::copy_backward<Rva002B3049Record *, Rva002B3049Record *>(Rva002B3049Record *, Rva002B3049Record *, Rva002B3049Record *);
+template Rva002B2F97 *_STL::copy_backward<Rva002B2F97 *, Rva002B2F97 *>(Rva002B2F97 *, Rva002B2F97 *, Rva002B2F97 *);
 template SidesInfo *_STL::copy<SidesInfo *, SidesInfo *>(SidesInfo *, SidesInfo *, SidesInfo *);
 template BfmeAssignRecord172 *_STL::copy<BfmeAssignRecord172 *, BfmeAssignRecord172 *>(BfmeAssignRecord172 *, BfmeAssignRecord172 *, BfmeAssignRecord172 *);
 template FXBoneInfo *_STL::copy<FXBoneInfo *, FXBoneInfo *>(FXBoneInfo *, FXBoneInfo *, FXBoneInfo *);
