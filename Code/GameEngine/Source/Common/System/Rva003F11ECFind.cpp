@@ -54,3 +54,17 @@ int Rva003F11EC::rva003F11EC(CreateAHeroData *val)
 	Rva003F11ECVec8 *v = &m_vecE8;
 	return v->end - v->begin;
 }
+
+// ?rva003F1AB1@Rva003F1AB1Owner@@QAEHPAVCreateAHeroData@@@Z @0x003F1AB1 8B: offsets this to the Rva003F11EC embedded at +0x14 and
+// tail-jumps Rva003F11EC::rva003F11EC. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva003F1AB1Owner
+{
+public:
+	int rva003F1AB1(CreateAHeroData *val);
+};
+
+int Rva003F1AB1Owner::rva003F1AB1(CreateAHeroData *val)
+{
+	return ((Rva003F11EC *)((char *)this + 0x14))->rva003F11EC(val);
+}

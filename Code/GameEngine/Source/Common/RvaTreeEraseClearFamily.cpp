@@ -1551,3 +1551,31 @@ unsigned int *__stdcall Rva0006F309ClearWord( unsigned int *output )
 	*output = 0;
 	return output;
 }
+
+// ?rva00281D87@Rva00281D87Owner@@QAEXXZ @0x00281D87 11B: offsets this to the Rva0027F4CB embedded at +0x56C and
+// tail-jumps Rva0027F4CB::rva00280AB6. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva00281D87Owner
+{
+public:
+	void rva00281D87();
+};
+
+void Rva00281D87Owner::rva00281D87()
+{
+	((Rva0027F4CB *)((char *)this + 0x56C))->rva00280AB6();
+}
+
+// ?rva003896B2@Rva003896B2Owner@@QAEXXZ @0x003896B2 11B: offsets this to the Rva00388EAE embedded at +0x278 and
+// tail-jumps Rva00388EAE::rva00389129. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva003896B2Owner
+{
+public:
+	void rva003896B2();
+};
+
+void Rva003896B2Owner::rva003896B2()
+{
+	((Rva00388EAE *)((char *)this + 0x278))->rva00389129();
+}

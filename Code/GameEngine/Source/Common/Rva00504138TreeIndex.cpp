@@ -48,3 +48,17 @@ void *Rva00504138::rva00504138(int n)
     }
     return 0;
 }
+
+// ?rva002BE7F2@Rva002BE7F2Owner@@QAEPAXH@Z @0x002BE7F2 8B: offsets this to the Rva00504138 embedded at +0xC and
+// tail-jumps Rva00504138::rva00504138. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva002BE7F2Owner
+{
+public:
+	void * rva002BE7F2(int n);
+};
+
+void * Rva002BE7F2Owner::rva002BE7F2(int n)
+{
+	return ((Rva00504138 *)((char *)this + 0xC))->rva00504138(n);
+}

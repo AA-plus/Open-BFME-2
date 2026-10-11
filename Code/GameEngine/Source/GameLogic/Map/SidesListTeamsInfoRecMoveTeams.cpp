@@ -136,3 +136,17 @@ void TeamsInfoRec::moveTeamsToNewOwner(const AsciiString &oldOwner, const AsciiS
 		it = next;
 	}
 }
+
+// ?rva0032D4B5@Rva0032D4B5Owner@@QAEXHABVAsciiString@@0@Z @0x0032D4B5 11B: offsets this to the TeamsInfoRec embedded at +0xF44 and
+// tail-jumps TeamsInfoRec::renameTeam. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva0032D4B5Owner
+{
+public:
+	void rva0032D4B5(int id, const AsciiString &owner, const AsciiString &name);
+};
+
+void Rva0032D4B5Owner::rva0032D4B5(int id, const AsciiString &owner, const AsciiString &name)
+{
+	((TeamsInfoRec *)((char *)this + 0xF44))->renameTeam(id, owner, name);
+}

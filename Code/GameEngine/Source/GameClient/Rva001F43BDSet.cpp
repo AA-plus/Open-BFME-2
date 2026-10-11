@@ -27,3 +27,17 @@ void Rva001F43BD::rva001F43BD(void *p)
     ::operator delete(doomed);
     m_ptr = (Ifc *)p;
 }
+
+// ?rva001F609F@Rva001F609FOwner@@QAEXPAX@Z @0x001F609F 11B: offsets this to the Rva001F43BD embedded at +0xA4 and
+// tail-jumps Rva001F43BD::rva001F43BD. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva001F609FOwner
+{
+public:
+	void rva001F609F(void *p);
+};
+
+void Rva001F609FOwner::rva001F609F(void *p)
+{
+	((Rva001F43BD *)((char *)this + 0xA4))->rva001F43BD(p);
+}
