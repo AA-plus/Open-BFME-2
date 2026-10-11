@@ -1003,16 +1003,10 @@ private:
     \param line line number
     \return the entry just added (or the already existing entry)
   */
+  // Declared only: retail 0x0003A1B0 is the rowed Debug_GetFrameEntry.cpp copy; an inline
+  // body here made debug_debug.cpp emit its own differing COMDAT of the same symbol.
   FrameHashEntry *GetFrameEntry(unsigned addr, unsigned type,
-                                const char *fileOrGroup, int line)
-  {
-    FrameHashEntry *e=LookupFrame(addr);
-    if (!e)
-      e=AddFrameEntry(addr,type,fileOrGroup,line);
-    if (e->status==Unknown)
-      UpdateFrameStatus(*e);
-    return e;
-  }
+                                const char *fileOrGroup, int line);
 
   /** \internal
 

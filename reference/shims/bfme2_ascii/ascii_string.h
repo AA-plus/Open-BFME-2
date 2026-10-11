@@ -129,7 +129,7 @@ public:
 	bool isNotEmpty() const { return ((const StringBase<char> *)this)->isNotEmpty(); }
 	bool isNone() const { return ((const StringBase<char> *)this)->isNone(); }
 	bool isNotNone() const { return ((const StringBase<char> *)this)->isNotNone(); }
-	const char *reverseFind(char c) const { return ((const StringBase<char> *)this)->reverseFind(c); }
+	__declspec(dllimport) __forceinline const char *reverseFind(char c) const { return ((const StringBase<char> *)this)->reverseFind(c); }
 	bool nextToken(AsciiString *tok, const char *delims = 0)
 	{
 		return ((StringBase<char> *)this)->nextToken((StringBase<char> *)tok, delims);
@@ -155,7 +155,7 @@ public:
 	void concat(const char *s);
 	void concat(char c) { ((StringBase<char> *)this)->concat(c); }
 	void concat(const AsciiString &s);
-	void toLower() { ((StringBase<char> *)this)->toLower(); }
+	__declspec(dllimport) __forceinline void toLower() { ((StringBase<char> *)this)->toLower(); }
 	void toUpper() { ((StringBase<char> *)this)->toUpper(); }
 	void trim();
 	void removeLastChar() { ((StringBase<char> *)this)->removeLastChar(); }
@@ -170,9 +170,9 @@ public:
 	bool endsWithNoCase(const char *p) const { return ((const StringBase<char> *)this)->endsWithNoCase(p); }
 	bool endsWithNoCase(const AsciiString &s) const { return endsWithNoCase(s.str()); }
 	int compare(const char *p) const;
-	int compareNoCase(const char *p) const { return ((const StringBase<char> *)this)->compareNoCase(p); }
+	__declspec(dllimport) __forceinline int compareNoCase(const char *p) const { return ((const StringBase<char> *)this)->compareNoCase(p); }
 	int compare(const AsciiString &s) const throw();
-	int compareNoCase(const AsciiString &s) const { return ((const StringBase<char> *)this)->compareNoCase(*(const StringBase<char> *)&s); }
+	__declspec(dllimport) __forceinline int compareNoCase(const AsciiString &s) const { return ((const StringBase<char> *)this)->compareNoCase(*(const StringBase<char> *)&s); }
 
 	static const AsciiString TheEmptyString;
 
