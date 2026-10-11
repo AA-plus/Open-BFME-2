@@ -52,7 +52,7 @@ extern PlayerList *ThePlayerList;
 class GameLogic
 {
 public:
-	void rva0023C924(void *obj, int a, int bit, int b);
+	void selectObject(Object *obj, bool createNewGroup, unsigned int playerMask, bool affectClient);	// 0x0023C924 (rowed)
 };
 extern GameLogic *TheGameLogic;
 
@@ -183,7 +183,7 @@ void __stdcall Rva003BD19CSet(void *p, Parameter *param)
 				msg->appendObjectIDArgument(obj->m_id);
 				TheInGameUI->w66(obj->getDrawable());
 			}
-			TheGameLogic->rva0023C924(obj, 1, 1 << pl->m_playerIndex, 0);
+			TheGameLogic->selectObject((Object *)obj, true, 1 << pl->m_playerIndex, false);
 		}
 	} while (mask != 0);
 }
