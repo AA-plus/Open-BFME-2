@@ -1,5 +1,5 @@
 // ?rva00365E98@Path@@QAEXPAVObject@@PBUCoord3D@@H_N@Z
-// partial score=0.9709515446 date=2026-10-09
+// partial score=0.9703 date=2026-10-11
 // cl: /ICode/Libraries/Include /O1 /DNDEBUG /MD /arch:SSE /G7 /EHsc
 // Native365E98..36617B RET16 complete739. Existing Path/Object/Coord3D
 // consumer pin retained. ZH Path::optimize supplies the node/optimized-link
@@ -36,7 +36,7 @@ void Path::rva00365E98(Object *obj,const Coord3D *input,Int surfaces,Bool blocke
 {
  PathNode *original=first;first=0;last=0;optimized=true;
  Coord3D direction;direction.x=input->x;direction.y=input->y;direction.z=input->z;
- float turn,segmentSpeed,fast;turn=0.0f;segmentSpeed=5.0f;
+ float turn,segmentSpeed;turn=0.0f;segmentSpeed=5.0f;
  const Rva0028AC4EEntry *entry=obj->rva0028AC4E();
  Bool reversed=false,longSegment=false;float longSpeed=5.0f;
  if(entry) {
@@ -48,9 +48,9 @@ void Path::rva00365E98(Object *obj,const Coord3D *input,Int surfaces,Bool blocke
    PathNode *next=(PathNode *)((Rva00363BC7 *)original)->rva00363BC7(&delta,&length);
    if(next && controller->rva001E4015(obj,&next->pos)) {
     direction.x*=-1.0f;direction.y*=-1.0f;reversed=true;direction.z*=-1.0f;
-    segmentSpeed=((Rva00373CAAFloatChaseField *)entry)->get();
-    fast=((Rva001E3F27FloatChaseField *)entry)->get();
-    longSpeed=directionMax(fast,segmentSpeed);
+    float slow=((Rva00373CAAFloatChaseField *)entry)->get();
+    float fast=((Rva001E3F27FloatChaseField *)entry)->get();
+    longSpeed=directionMax(fast,slow);
     if(length>longSpeed*3.0f)longSegment=true;
    }
   }

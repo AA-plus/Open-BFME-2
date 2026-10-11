@@ -1,16 +1,12 @@
-// ?Render@LineGroupClass@@QAEXAAVRenderInfoClass@@@Z
-// partial score=0.9940517044154656 date=2026-10-10
-// ?Render@LineGroupClass@@QAEXAAVRenderInfoClass@@@Z
-// partial score=0.888839749 date=2026-10-09
-// ?Render@LineGroupClass@@QAEXAAVRenderInfoClass@@@Z
-// partial score=0.8 date=2026-10-07
 // cl: /O2 /arch:SSE -DBFME_WWSTRING_NATIVE_CSTR_ASSIGN -Ireference/shims/wwstring_teardown/bfme -G7 -Ireference/shims/bfmerendobj -DNDEBUG -MD -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWSaveLoad -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/Wwutil -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDownload -Ireference/open-bfme-1/game/Libraries/Source/Compression -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug -Ireference/shims/sweep -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWSaveLoad -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/Wwutil -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDownload -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug -Ireference/open-bfme-1/game/Libraries/Source/Compression -Ireference/shims/sweep
-// Banked render: 4371B retail boundary ends at 0x001B49B3.
-// Required deltas: 24B vertex access/four arguments, both locks12B, gradient6,
-// no index catch, owning texture reference and four DWORD draw/center ranges.
-// Remaining: frame0x118 vs0x10C, SSE register/stack allocation; not a recovery.
-// Ported verbatim from the Generals Zero Hour reference
-// (Libraries/Source/WWVegas/WW3D2/linegrp.cpp); this unit had no counterpart under Code/.
+// LineGroupClass::Render, retail 0x001B38A0..0x001B49B3 (4371 bytes, RET 4).
+// Dedicated /arch:SSE TU so linegrp.cpp keeps its x87 accessor bodies.
+// Source follows the Generals Zero Hour linegrp.cpp (Libraries/Source/WWVegas/WW3D2);
+// WorldBuilder linegrp.cpp debug body (WB 0xA73590) confirms the statement order.
+// BFME2 deltas carried by the TU-local views below: 24-byte vertex access and the
+// four-argument dynamic VB ctor, 12-byte buffer locks, gradient value 6, no index
+// catch, owning texture reference bind and the center-taking sorting insert.
+// The prism caps use block-local loc temporaries (target frame and register homes).
 /*
 **	Command & Conquer Generals Zero Hour(tm)
 **	Copyright 2025 Electronic Arts Inc.
@@ -155,15 +151,10 @@ public:
 	public:
 		WriteLock(DynamicVBAccessClass* vb_access);
 		~WriteLock();
-		VertexFormatXYZNDUV2 * Get_Formatted_Vertex_Array();
+		VertexFormatXYZNDUV2 * Get_Formatted_Vertex_Array() { return Vertices; }
 	};
 	friend WriteLock;
 };
-inline VertexFormatXYZNDUV2 * DynamicVBAccessClass::WriteLock::Get_Formatted_Vertex_Array()
-{
-	WWASSERT(DynamicVBAccess->VertexBuffer->FVF_Info().Get_FVF() == (D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX2|D3DFVF_DIFFUSE));
-	return Vertices;
-}
 class DX8VertexBufferClass : public VertexBufferClass
 {
 protected:
@@ -432,11 +423,6 @@ public:
 	int  m_debugLinesToShow;
 	int	 m_sleepTime;
 public:
-	DX8_Stats::DX8_Stats(void) {
-		m_disableConsole = m_showingStats = m_disableTerrain = m_disableWater = m_disableOverhead = m_disableObjects = false;
-		m_sleepTime = 0;
-		m_debugLinesToShow = -1;  
-	}
 };
 #endif
 class DX8_CleanupHook
@@ -808,20 +794,6 @@ protected:
 	friend class DX8IndexBufferClass;
 	friend class DX8VertexBufferClass;
 };
-WWINLINE void DX8Wrapper::Set_Vertex_Shader(DWORD vertex_shader)
-{
-#if 0  
-	if (Vertex_Shader==vertex_shader) return;
-#endif
-	Vertex_Shader=vertex_shader;
-	DX8CALL(SetVertexShader(Vertex_Shader));
-}
-WWINLINE void DX8Wrapper::Set_Pixel_Shader(DWORD pixel_shader)
-{
-	if (Pixel_Shader==pixel_shader) return;
-	Pixel_Shader=pixel_shader;
-	DX8CALL(SetPixelShader(Pixel_Shader));
-}
 WWINLINE void DX8Wrapper::Set_Vertex_Shader_Constant(int reg, const void* data, int count)
 {
 	int memsize=sizeof(Vector4)*count;
@@ -836,50 +808,11 @@ WWINLINE void DX8Wrapper::Set_Pixel_Shader_Constant(int reg, const void* data, i
 	memcpy(&Pixel_Shader_Constants[reg],data,memsize);
 	DX8CALL(SetPixelShaderConstant(reg,data,count));
 }
-WWINLINE void DX8Wrapper::_Set_DX8_Transform(D3DTRANSFORMSTATETYPE transform,const Matrix4x4& m)
-{
-	WWASSERT(transform<=D3DTS_WORLD);
-#if 0  
-	if (m!=DX8Transforms[transform]) 
-#endif
-	{
-		DX8Transforms[transform]=m;
-		SNAPSHOT_SAY(("DX8 - SetTransform %d [%f,%f,%f,%f][%f,%f,%f,%f][%f,%f,%f,%f][%f,%f,%f,%f]\n",transform,m[0][0],m[0][1],m[0][2],m[0][3],m[1][0],m[1][1],m[1][2],m[1][3],m[2][0],m[2][1],m[2][2],m[2][3],m[3][0],m[3][1],m[3][2],m[3][3]));
-		DX8_RECORD_MATRIX_CHANGE();
-		DX8CALL(SetTransform(transform,(D3DMATRIX*)&m));
-	}
-}
-WWINLINE void DX8Wrapper::_Set_DX8_Transform(D3DTRANSFORMSTATETYPE transform,const Matrix3D& m)
-{
-	WWASSERT(transform<=D3DTS_WORLD);
-	Matrix4x4 mtx(m);
-#if 0  
-	if (mtx!=DX8Transforms[transform]) 
-#endif
-	{
-		DX8Transforms[transform]=mtx;
-		SNAPSHOT_SAY(("DX8 - SetTransform %d [%f,%f,%f,%f][%f,%f,%f,%f][%f,%f,%f,%f]\n",transform,m[0][0],m[0][1],m[0][2],m[0][3],m[1][0],m[1][1],m[1][2],m[1][3],m[2][0],m[2][1],m[2][2],m[2][3]));
-		DX8_RECORD_MATRIX_CHANGE();
-		DX8CALL(SetTransform(transform,(D3DMATRIX*)&m));
-	}
-}
-WWINLINE void DX8Wrapper::_Get_DX8_Transform(D3DTRANSFORMSTATETYPE transform, Matrix4x4& m)
-{
-	DX8CALL(GetTransform(transform,(D3DMATRIX*)&m));
-}
 WWINLINE void DX8Wrapper::Set_Index_Buffer_Index_Offset(unsigned offset)
 {
 	if (render_state.index_base_offset==offset) return;
 	render_state.index_base_offset=offset;
 	render_state_changed|=INDEX_BUFFER_CHANGED;
-}
-WWINLINE void DX8Wrapper::Set_Fog(bool enable, const Vector3 &color, float start, float end)
-{
-	FogEnable = enable;
-	FogColor = Convert_Color(color,0.0f);
-	ShaderClass::Invalidate();
-	Set_DX8_Render_State(D3DRS_FOGSTART, *(DWORD *)(&start));
-	Set_DX8_Render_State(D3DRS_FOGEND,   *(DWORD *)(&end));
 }
 WWINLINE void DX8Wrapper::Set_Ambient(const Vector3& color)
 {
@@ -925,10 +858,6 @@ WWINLINE void DX8Wrapper::Set_DX8_Render_State(D3DRENDERSTATETYPE state, unsigne
 	DX8CALL(SetRenderState( state, value ));
 	DX8_RECORD_RENDER_STATE_CHANGE();
 }
-WWINLINE void DX8Wrapper::Set_DX8_Clip_Plane(DWORD Index, CONST float* pPlane)
-{
-	DX8CALL(SetClipPlane( Index, pPlane ));
-}
 WWINLINE void DX8Wrapper::Set_DX8_Texture_Stage_State(unsigned stage, D3DTEXTURESTAGESTATETYPE state, unsigned value)
 {
   	if (stage >= MAX_TEXTURE_STAGES)
@@ -969,21 +898,6 @@ WWINLINE void DX8Wrapper::Set_DX8_Texture(unsigned int stage, IDirect3DBaseTextu
 	(*(BFMESetTexture **)device)[65](device, stage, texture);
 	number_of_DX8_calls++;
 	DX8_RECORD_TEXTURE_CHANGE();
-}
-WWINLINE void DX8Wrapper::_Copy_DX8_Rects(
-  IDirect3DSurface8* pSourceSurface,
-  CONST RECT* pSourceRectsArray,
-  UINT cRects,
-  IDirect3DSurface8* pDestinationSurface,
-  CONST POINT* pDestPointsArray
-)
-{
-	DX8CALL(CopyRects(
-  pSourceSurface,
-  pSourceRectsArray,
-  cRects,
-  pDestinationSurface,
-  pDestPointsArray));
 }
 WWINLINE Vector4 DX8Wrapper::Convert_Color(unsigned color)
 {
@@ -1085,25 +999,9 @@ WWINLINE unsigned int DX8Wrapper::Convert_Color_Clamp(const Vector4& color)
 	return Convert_Color(reinterpret_cast<const Vector3&>(clamped_color),clamped_color[3]);
 }
 #endif
-WWINLINE void DX8Wrapper::Set_Alpha (const float alpha, unsigned int &color)
-{
-	unsigned char *component = (unsigned char*) &color;
-	component [3] = 255.0f * alpha;
-}
 WWINLINE void DX8Wrapper::Get_Render_State(RenderStateStruct& state)
 {
 	state=render_state;
-}
-WWINLINE void DX8Wrapper::Get_Shader(ShaderClass& shader)
-{
-	shader=render_state.shader;
-}
-WWINLINE void DX8Wrapper::Set_Texture(unsigned stage,TextureBaseClass* texture)
-{
-	WWASSERT(stage<(unsigned int)CurrentCaps->Get_Max_Textures_Per_Pass());
-	if (texture==render_state.Textures[stage]) return;
-	REF_PTR_SET(render_state.Textures[stage],texture);
-	render_state_changed|=(TEXTURE0_CHANGED<<stage);
 }
 WWINLINE void DX8Wrapper::Set_Material(const VertexMaterialClass* material)
 {
@@ -1184,14 +1082,6 @@ WWINLINE void DX8Wrapper::Set_View_Identity()
 	render_state.view.Make_Identity();
 	render_state_changed|=(unsigned)VIEW_CHANGED|(unsigned)VIEW_IDENTITY;
 }
-WWINLINE bool DX8Wrapper::Is_World_Identity()
-{
-	return !!(render_state_changed&(unsigned)WORLD_IDENTITY);
-}
-WWINLINE bool DX8Wrapper::Is_View_Identity()
-{
-	return !!(render_state_changed&(unsigned)VIEW_IDENTITY);
-}
 WWINLINE void DX8Wrapper::Get_Transform(D3DTRANSFORMSTATETYPE transform, Matrix4x4& m)
 {
 	D3DMATRIX mat;
@@ -1210,14 +1100,6 @@ WWINLINE void DX8Wrapper::Get_Transform(D3DTRANSFORMSTATETYPE transform, Matrix4
 		m=m.Transpose();
 		break;
 	}
-}
-WWINLINE const D3DLIGHT8& DX8Wrapper::Peek_Light(unsigned index)
-{
-	return render_state.Lights[index];;
-}
-WWINLINE bool DX8Wrapper::Is_Light_Enabled(unsigned index)
-{
-	return render_state.LightEnable[index];
 }
 WWINLINE void DX8Wrapper::Set_Render_State(const RenderStateStruct& state)
 {
@@ -1264,28 +1146,6 @@ WWINLINE void DX8Wrapper::Release_Render_State()
 	for (i=0;i<MAX_TEXTURE_STAGES;++i) 
 	{
 		REF_PTR_RELEASE(render_state.Textures[i]);
-	}
-}
-WWINLINE RenderStateStruct::RenderStateStruct()
-	:
-	material(0),
-	index_buffer(0)
-{
-	unsigned i;
-	for (i=0;i<MAX_VERTEX_STREAMS;++i) vertex_buffers[i]=0;
-	for (i=0;i<MAX_TEXTURE_STAGES;++i) Textures[i]=0;
-}
-WWINLINE RenderStateStruct::~RenderStateStruct()
-{
-	unsigned i;
-	REF_PTR_RELEASE(material);
-	for (i=0;i<MAX_VERTEX_STREAMS;++i) {
-		REF_PTR_RELEASE(vertex_buffers[i]);
-	}
-	REF_PTR_RELEASE(index_buffer);
-	for (i=0;i<MAX_TEXTURE_STAGES;++i) 
-	{
-		REF_PTR_RELEASE(Textures[i]);
 	}
 }
 WWINLINE unsigned flimby( char* name, unsigned crib )
@@ -1583,12 +1443,12 @@ void	LineGroupClass::Render(RenderInfoClass &rinfo)
 
 		VertexFormatXYZNDUV2 *vb = lock.Get_Formatted_Vertex_Array();
 
-		Vector3 start,end;
+		Vector3 loc, start, end;
 		int point, j;
 		float size = DefaultLineSize;
 		Vector4 diffuse(DefaultLineColor.X, DefaultLineColor.Y, DefaultLineColor.Z, DefaultLineAlpha);		
 		float ucoord = DefaultLineUCoord;
-		Vector4 taildiffuse = (this?DefaultTailDiffuse:DefaultTailDiffuse);
+		Vector4 taildiffuse = DefaultTailDiffuse;
 
 		for (i = 0; i < LineCount; i++)
 		{
@@ -1613,7 +1473,7 @@ void	LineGroupClass::Render(RenderInfoClass &rinfo)
 					vb++;
 
 					for (j=0; j<3; j++) {
-						Vector3 loc=start+size*offset[j];
+						loc.Set(start + size * offset[j]);
 						vb->x			= loc.X;
 						vb->y			= loc.Y;
 						vb->z			= loc.Z;
@@ -1626,7 +1486,7 @@ void	LineGroupClass::Render(RenderInfoClass &rinfo)
 			case PRISM:
 					// start cap
 					for (j = 0; j < 3; j++) {
-						Vector3 loc=(i?start:start)+size*offset[j];
+						Vector3 loc = start + size * offset[j];
 						vb->x			= loc.X;
 						vb->y			= loc.Y;
 						vb->z			= loc.Z;
@@ -1640,7 +1500,7 @@ void	LineGroupClass::Render(RenderInfoClass &rinfo)
 
 					// end cap 
 					for (j=0; j<3; j++) {
-						Vector3 loc(end); loc+=size*offset[j];
+						Vector3 loc = end + size * offset[j];
 						vb->x			= loc.X;
 						vb->y			= loc.Y;
 						vb->z			= loc.Z;

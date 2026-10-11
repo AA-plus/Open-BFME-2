@@ -1,7 +1,5 @@
 // ?rva00364551@Path@@QAEXPAVObject@@HHPBUCoord3D@@@Z
-// partial score=0.9602990033222591 date=2026-10-10
-// ?rva00364551@Path@@QAEXPAVObject@@HHPBUCoord3D@@@Z
-// partial score=0.9579316494039477 date=2026-10-09
+// partial score=0.9603 date=2026-10-11
 // cl: /I. /ICode/Libraries/Include /O1 /DNDEBUG /MD /arch:SSE /G7 /EHsc
 // Target 364551..3649B1 RET16. ZH Path::optimize node/LOS semantic guide.
 // WB F1DC10 confirms backwards/forwards scans. Retail supplies step counts,

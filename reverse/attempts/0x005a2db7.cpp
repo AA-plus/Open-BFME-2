@@ -1,6 +1,6 @@
 // ?ProcessGameSpyResponses@AptOnlineCustomMatch@@QAEXXZ
-// partial score=0.88 date=2026-10-11
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /EHsc /MD /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// partial score=0.91 date=2026-10-11
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // ?ProcessGameSpyResponses@AptOnlineCustomMatch@@QAEXXZ
@@ -17,22 +17,32 @@
 // offsets and virtual slots are read from retail (they differ from the
 // WorldBuilder build).
 //
-// BANK STATUS (claude-opus-5-5, 2026-10-11): compiles with every callee
-// resolved (existing rows/pins only); 9312 B against 9218; same frame
-// (0x17D0 + EH), same case block order and the same [ebp-0x3C] conditional
-// temporary flags. Instruction diff 2300/2603 equal (0.883). Remaining:
-//  1. `this` is held in ESI at the loop head (mov esi,ecx; reload at the
-//     back edge) and the loop entry duplicates the allowedMessages test;
-//     retail spills `this` to [ebp-0x20] from ECX, enters with jmp to the
-//     bottom test and uses ESI for `push 0xd; pop esi` (reused for the
-//     KICK GameStarted request type). Bisect: deleting EITHER the ROOMUTM or
-//     the PLAYERUTM case body makes `this` spill like retail, so the source
-//     carries a few `this` references too many (or too hot) somewhere.
-//     Most of the other ~140 diff blocks are register/slot renames that
-//     cascade from this.
-//  2. PLAYERLEFT host-left message box should tail-merge into the
-//     CREATESTAGINGROOM failure box at its second fetch (retail 0x5A3853).
-//  3. JOINSTAGINGROOM: retail loads names[i].c_str() before zeroing name[].
+// BANK STATUS (claude-opus-5-5, 2026-10-11, round 5): compiles with every
+// callee resolved (existing rows/pins only; compareText reuses the existing
+// 0x69B1 pin); 9246 B against 9218; 2365/2603 instructions equal (0.909).
+// Fixed this round: c_str hoisted before name[] zeroing; PN senderName
+// constructed before the find; PN name.isEmpty(); GameSlot getName()
+// accessor folds [slot+0x30] loads; stored room before the rva005A20A7 test
+// (cmp vs test); /D_CRTIMP= + CrtIAT imports so ~wstring frees through _free
+// 0x30830; nonthrowing clanID compare drops two EH state stores.
+// Remaining:
+//  1. MAIN WALL: `this` held in ESI from entry through the dispatch (reload
+//     on the back edge, duplicated entry test); retail spills it to
+//     [ebp-0x20] and gives ESI the CSE'd constant 13 (push 0xd; pop esi; cmp
+//     eax,esi; reused by the KICK GameStarted request type). Source sits on a
+//     tipping point: deleting ANY of the PLAYERLEFT body, its `if (m_state !=
+//     8)` block, its host-left block, the ROOMUTM body or the PLAYERUTM body
+//     flips to retail's exact loop head (jmp to bottom test, push 0xd/pop
+//     esi); deleting single ROOMUTM sub-branches (SL/PN/HWS/PIDS/Pings),
+//     PLAYERJOIN, or dead locals does not. Look for a PLAYERLEFT shape with
+//     fewer `this`/register candidates (e.g. host-left inside the idx>=0
+//     path, or game re-fetched) before anything else.
+//  2. PLAYERLEFT host-left box should tail-merge into the CREATESTAGINGROOM
+//     failure box at its second fetch (retail 0x5A3853); retail also places
+//     the second fetch's `mov eax,[ecx]` after the label push there.
+//  3. Slot swaps that likely cascade from 1: esp-save2 [ebp-0x38] vs
+//     REQ options [ebp-0x34]; PLAYERUTM senderName/KICK locals; SL tail
+//     layout at 0x5A46ED.
 
 #include "ascii_string.h"
 #include "unicode_string.h"
@@ -55,6 +65,18 @@ enum { MAX_SLOTS = 8 };
 enum { PLAYERTEMPLATE_OBSERVER = -2 };
 enum SlotState { SLOT_OPEN = 0, SLOT_PLAYER = 6 };
 enum GameSpyColors { GSCOLOR_DEFAULT = 0 };
+
+// strncpy, sscanf, atoi and _stricmp go through msvcr71's import table while
+// the inlined STLport string destructors free through the game's direct
+// _free; /D_CRTIMP= gives the direct forms and the IAT forms live in their own
+// scope (as GameInfoPlayerCounts.cpp).
+namespace CrtIAT
+{
+extern "C" __declspec(dllimport) char *__cdecl strncpy(char *dest, const char *src, size_t count);
+extern "C" __declspec(dllimport) int __cdecl sscanf(const char *s, const char *fmt, ...);
+extern "C" __declspec(dllimport) int __cdecl atoi(const char *s);
+extern "C" __declspec(dllimport) int __cdecl _stricmp(const char *a, const char *b);
+}
 
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
 extern "C" __declspec(dllimport) unsigned long __stdcall ntohl(unsigned long netlong);
@@ -193,6 +215,8 @@ public:
 	bool decodeHero(UnsignedByte hero);
 	void rva003FF5F2(const AsciiString &clanID);
 
+	const UnicodeString &getName() const { return m_name; }
+
 	void setIP(UnsignedInt ip)
 	{
 		IPPort ipPort = m_ipPort;
@@ -225,6 +249,16 @@ class Rva003FF0E7DwordSlot
 {
 public:
 	void set(int value);
+};
+
+// AsciiString view whose text compare is declared nonthrowing, so a
+// temporary compared through it needs no unwind state (retail registers none
+// for the clan id); the spelling resolves to the rowed
+// StringBase<char>::compare(const char *) at 0x000069B1 (as INIAsciiIndexParse.cpp).
+class Rva004DBFF1Name : public AsciiString
+{
+public:
+	int compareText(const char *text) const throw();
 };
 
 // Rowed getter of the slot's clan id.
@@ -763,8 +797,9 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 						{
 							AsciiString hostName;
 							hostName.translate(room->getConstSlot(0)->m_name);
+							const char *playerName = resp.stagingRoomPlayerNames[i].c_str();
 							char name[256] = "";
-							strncpy(name, resp.stagingRoomPlayerNames[i].c_str(), 255);
+							CrtIAT::strncpy(name, playerName, 255);
 							if (strcmp(hostName.str(), name) == 0)
 							{
 								isHostPresent = TRUE;
@@ -774,7 +809,8 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 				}
 				if (resp.joinStagingRoom.ok == TRUE && isHostPresent)
 				{
-					if (TheGameSpyInfo->getCurrentStagingRoom())
+					GameSpyStagingRoom *joined = TheGameSpyInfo->getCurrentStagingRoom();
+					if (joined)
 					{
 						rva005A20A7();
 					}
@@ -1095,7 +1131,7 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 						Int i;
 						for (i = 0; i < MAX_SLOTS; ++i)
 						{
-							if (game->getConstSlot(i) && game->getConstSlot(i)->isHuman() && game->getConstSlot(i)->m_name.getLength() > 0)
+							if (game->getConstSlot(i) && game->getConstSlot(i)->isHuman() && game->getConstSlot(i)->getName().getLength() > 0)
 							{
 								ips[i] = game->getConstSlot(i)->m_ipPort.m_ip;
 								ports[i] = game->getConstSlot(i)->m_ipPort.m_port;
@@ -1207,8 +1243,8 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 				{
 					// player names
 					GameSpyStagingRoom *game = TheGameSpyInfo->getCurrentStagingRoom();
-					PlayerInfoMap::iterator it = TheGameSpyInfo->getPlayerInfoMap()->find(AsciiString(resp.nick.c_str()));
 					AsciiString senderName;
+					PlayerInfoMap::iterator it = TheGameSpyInfo->getPlayerInfoMap()->find(AsciiString(resp.nick.c_str()));
 					if (it != TheGameSpyInfo->getPlayerInfoMap()->end())
 						senderName = it->second.m_name;
 					else
@@ -1223,12 +1259,12 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 						{
 							if (!options.nextToken(&name, ",="))
 								break;
-							if (sscanf(token.str(), "%d", &slotNum) != 1)
+							if (CrtIAT::sscanf(token.str(), "%d", &slotNum) != 1)
 								break;
 							if (slotNum >= 0 && slotNum < MAX_SLOTS)
 							{
 								GameSlot *slot = game->getSlot(slotNum);
-								if (slot && name.getLength())
+								if (slot && !name.isEmpty())
 								{
 									UnicodeString uName(MultiByteToWideCharSingleLine(name.str()).c_str());
 									slot->m_name = uName;
@@ -1267,14 +1303,14 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 						m_setup.rva0043DC0F();
 					}
 				}
-				else if (!_stricmp(resp.command.c_str(), "NAT"))
+				else if (!CrtIAT::_stricmp(resp.command.c_str(), "NAT"))
 				{
 					if (TheNAT != NULL)
 					{
 						TheNAT->processGlobalMessage(-1, resp.commandOptions.c_str());
 					}
 				}
-				else if (!_stricmp(resp.command.c_str(), "Pings"))
+				else if (!CrtIAT::_stricmp(resp.command.c_str(), "Pings"))
 				{
 					GameSpyStagingRoom *game = TheGameSpyInfo->getCurrentStagingRoom();
 					if (game && !TheGameSpyInfo->amIHost())
@@ -1296,7 +1332,7 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 						}
 					}
 				}
-				else if (!_stricmp(resp.command.c_str(), "PIDS"))
+				else if (!CrtIAT::_stricmp(resp.command.c_str(), "PIDS"))
 				{
 					GameSpyStagingRoom *game = TheGameSpyInfo->getCurrentStagingRoom();
 					if (game)
@@ -1314,7 +1350,7 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 									char buf[32] = "0x";
 									strcat(buf, token.str());
 									Int profileID = 0;
-									sscanf(buf, "%x", &profileID);
+									CrtIAT::sscanf(buf, "%x", &profileID);
 									slot->m_profileID = profileID;
 								}
 								else
@@ -1358,7 +1394,7 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 					else
 						senderName.set(resp.nick.c_str());
 					Int slotNum = game->getSlotNum(senderName);
-					if ((slotNum >= 0) && (slotNum < MAX_SLOTS) && (!_stricmp(resp.command.c_str(), "NAT")))
+					if ((slotNum >= 0) && (slotNum < MAX_SLOTS) && (!CrtIAT::_stricmp(resp.command.c_str(), "NAT")))
 					{
 						// this is a command for NAT negotiations, pass if off to TheNAT
 						if (TheNAT != NULL)
@@ -1407,7 +1443,7 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 						}
 						else if (!strcmp(resp.command.c_str(), "MAP"))
 						{
-							Bool hasMap = atoi(resp.commandOptions.c_str()) != 0;
+							Bool hasMap = CrtIAT::atoi(resp.commandOptions.c_str()) != 0;
 							game->getSlot(slotNum)->setMapAvailability(hasMap);
 							if (!hasMap)
 							{
@@ -1425,9 +1461,9 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 								}
 								UnicodeString text;
 								if (willTransfer)
-									text.format(TheGameText->fetchPtr("GUI:PlayerNoMapWillTransfer"), game->getSlot(slotNum)->m_name.str(), mapDisplayName.str());
+									text.format(TheGameText->fetchPtr("GUI:PlayerNoMapWillTransfer"), game->getSlot(slotNum)->getName().str(), mapDisplayName.str());
 								else
-									text.format(TheGameText->fetchPtr("GUI:PlayerNoMap"), game->getSlot(slotNum)->m_name.str(), mapDisplayName.str());
+									text.format(TheGameText->fetchPtr("GUI:PlayerNoMap"), game->getSlot(slotNum)->getName().str(), mapDisplayName.str());
 								TheGameSpyInfo->addText(text, GameSpyColor[GSCOLOR_DEFAULT]);
 							}
 							m_setup.enable();
@@ -1441,8 +1477,8 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 							Bool shouldUnaccept = false;
 							AsciiString key;
 							options.nextToken(&key, "=");
-							Int val = atoi(options.str() + 1);
-							UnsignedInt uVal = atoi(options.str() + 1);
+							Int val = CrtIAT::atoi(options.str() + 1);
+							UnsignedInt uVal = CrtIAT::atoi(options.str() + 1);
 
 							GameSpyGameSlot *slot = game->getGameSpySlot(slotNum);
 							if (!slot)
@@ -1512,7 +1548,7 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 							}
 							else if (key.compare("clanID") == 0)
 							{
-								if (((const Rva003821B9AsciiField *)slot)->get().compare(options.str() + 1) != 0 && slot->m_playerTemplate != PLAYERTEMPLATE_OBSERVER)
+								if (static_cast<const Rva004DBFF1Name &>(((const Rva003821B9AsciiField *)slot)->get()).compareText(options.str() + 1) != 0 && slot->m_playerTemplate != PLAYERTEMPLATE_OBSERVER)
 								{
 									slot->rva003FF5F2(AsciiString(options.str() + 1));
 									m_setup.enableByte();
@@ -1568,12 +1604,12 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 							}
 							else if (key.compare("LadderRank_1v1") == 0)
 							{
-								slot->m_ladderRank1v1 = atoi(options.str());
+								slot->m_ladderRank1v1 = CrtIAT::atoi(options.str());
 								TheGameSpyInfo->setGameOptions();
 							}
 							else if (key.compare("LadderRank_2v2") == 0)
 							{
-								slot->m_ladderRank2v2 = atoi(options.str());
+								slot->m_ladderRank2v2 = CrtIAT::atoi(options.str());
 								TheGameSpyInfo->setGameOptions();
 							}
 

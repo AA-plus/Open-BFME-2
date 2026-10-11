@@ -1,5 +1,5 @@
 // ?adjustToMeleeDestination@Pathfinder@@QAE_NPAVObject@@ABVLocomotorSet@@PAUCoord3D@@@Z
-// partial score=0.924811862244898 date=2026-10-10
+// partial score=0.9248 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /I.
 typedef bool Bool;
 // Native2ED7F7..2EDCF7 RETC. WB D45C80 independently names AdjustToMeleeDestination;

@@ -1,5 +1,5 @@
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
-// partial score=0.9407676332 date=2026-10-10
+// partial score=0.965 date=2026-10-11
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
 // cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -55,9 +55,10 @@ void LinearCampaign::onCurrentMissionWon(){
   Player*player=0;int mask=ThePlayerList->rva002A7D30();
   while(!player&&mask){Player*p=ThePlayerList->getEachPlayerFromMask(mask);if(p&&p->value5C==0)player=p;}
   if(player){
-   value10=player->value14;sciences.clear();sciences.reserve(player->sciences.size());
-   _STL::vector<ScienceType>&ps=player->sciences;ScienceType*end=ps.end();
-   for(ScienceType*it=ps.begin();end!=it;++it){ScienceType s=*it;if(TheScienceStore->isScienceGrantable(s))sciences.push_back(s);}
+   value10=player->value14;sciences.clear();
+   const _STL::vector<ScienceType>&ps=player->sciences;
+   sciences.reserve(ps.size());
+   for(_STL::vector<ScienceType>::const_iterator it=ps.begin(),end=ps.end();it!=end;++it){ScienceType s=*it;if(TheScienceStore->isScienceGrantable(s))sciences.push_back(s);}
    memset(&upgrades,0,sizeof(upgrades));
    for(int i=0;i<1024;++i){unsigned int mask=1U<<(i&31);unsigned int index=((unsigned)i>>5)*4;if(*(unsigned int*)((char*)player+0x13c+index)&mask){const UpgradeTemplate*t=TheUpgradeCenter->rva0026EEA0(i);if(t&&t->carryover)*(unsigned int*)((char*)this+0x20+index)|=mask;}}
    valueA0=player->value314;
