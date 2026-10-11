@@ -127,6 +127,10 @@ public:
 };
 struct BfmeResetTextureRef : Rva00180649Base
 {
+ // LINK: the default ctor's COMDAT loses to the first-in-order copy; the one local
+ // uses a TU-unique no-init ctor (same empty body). No flags touched.
+ struct BfmeNoInitFactory {};
+ BfmeResetTextureRef(BfmeNoInitFactory) {}
  BfmeResetTextureRef() {}
  BfmeResetTextureRef(const BfmeResetAnyRef &rhs);
 };
@@ -134,6 +138,6 @@ static __forceinline const BfmeResetAnyRef &AsResetRef(const HierarchyPrototypeR
 { return reinterpret_cast<const BfmeResetAnyRef &>(source); }
 BfmeResetTextureRef Rva0018067A_MakeOwner(const char *name)
 {
- if (!name) { BfmeResetTextureRef empty; return empty; }
+ if (!name) { BfmeResetTextureRef empty((BfmeResetTextureRef::BfmeNoInitFactory())); return empty; }
  return BfmeResetTextureRef(AsResetRef(Rva0061F230_GetPrototype(name)));
 }
