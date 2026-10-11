@@ -1,19 +1,23 @@
 // ?rva00278C7C@Drawable@@QAEXH@Z
-// partial score=0.9302 date=2026-10-05
-// cl: /O1 /arch:SSE  /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /EHs /EHc-
-// Target 0x00278C7C has inventory extent381B and is called recursively plus
-// by matched Drawable selected-flag helper0x2796B8. Primary reference:
-// BFME1 6583b3c1 game/GameEngine/Source/GameClient/Drawable.cpp flashAsSelected,
-// extended from native evidence with skip-kind and recursive group list paths.
-// The known getter/pool/ctor/play calls and member offsets are target-derived;
-// opaque virtual owners are structural views, not asserted authentic names.
-// Best trial396B: all instructions align except redundant3x5B white-color
-// stores just before the saturation global load. /EHs /EHc- is necessary for
-// the list destructor state reset; ctor throw() removes the new-expression EH.
-// The inline RGBColor setter is fully exact76B at0x4EDF. No new pins landed
-// for this attempted body; list<Object*> base dtor and indicator color need
-// independently checked aliases before landing. Parent's int parameter is
-// address-named and interpreted here as the donor RGBColor pointer.
+// cl: /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /EHs /EHc-
+//
+// Drawable::flashAsSelected(const RGBColor *) at retail 0x00278C7C (381B; the
+// ledger keeps the pinned address name, whose parameter is the donor's colour
+// pointer passed as an int). Reference: BFME1 game/GameEngine/Source/GameClient/
+// Drawable.cpp flashAsSelected, extended with the skip-kind early out and the
+// recursive group-list path that the retail body adds. Target-derived facts:
+// Drawable+0x64 envelope (lazily built by the rowed 0x271826 ctor), Drawable+0xFC
+// object, Object+0x1A4 module with getGroup() in slot 31, GlobalData+0xB54
+// saturation factor and +0xB58 house-colour flag, the rowed RGBColor::setFromInt
+// (0x4EDF), Object::getIndicatorColor (0x28B026) and TintEnvelope::play
+// (0x2744F2). The group/module owners are structural views; their names are not
+// established. /EHs /EHc- keeps the list destructor's state reset and the throw()
+// ctor removes the new-expression EH, as in retail.
+//
+// Codegen: the colour is computed in two sibling blocks (the call-written
+// RGBColor, then a fresh one for the result) so the white fallback stays in
+// registers and both objects share retail's single stack slot; the saturation
+// half-factor reuses `factor` in place (factor *= 0.5f) as retail's mulss does.
 // stlport
 #include <list>
 class Object;
@@ -147,12 +151,15 @@ public:
  char pad008[0x248];
  BfmeFlashModule *module;
 };
-class GlobalData
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;	// 0x009FE758
+struct GlobalDataFlashView
 {
-public:
- char pad[0xb54]; float saturation; bool houseColor;
+ char pad[0xb54];
+ float saturation;	// +0xB54
+ bool houseColor;	// +0xB58
 };
-extern const GlobalData *TheGlobalData;
+#define FLASH_GD ((const GlobalDataFlashView *)TheWritableGlobalData)
 class Drawable
 {
 public:
@@ -194,13 +201,20 @@ void Drawable::rva00278C7C(int colorArg)
   envelope->play(color,0,4,1);
  else if (obj)
  {
-  RGBColor temp;
-  if (TheGlobalData->houseColor) temp.setFromInt(obj->getIndicatorColor());
-  else temp.setFromInt(-1);
-  float factor=TheGlobalData->saturation;
-  temp.red*=factor; temp.green*=factor;temp.blue*=factor;
-  float half=factor*0.5f;
-  temp.red-=half;temp.green-=half;temp.blue-=half;
-  envelope->play(&temp,0,4,1);
+  float r,g,b;
+  {
+   RGBColor c1;
+   if (FLASH_GD->houseColor) c1.setFromInt(obj->getIndicatorColor());
+   else c1.setFromInt(-1);
+   float factor=FLASH_GD->saturation;
+   r=c1.red*factor; g=c1.green*factor; b=c1.blue*factor;
+   factor*=0.5f;
+   r-=factor; g-=factor; b-=factor;
+  }
+  {
+   RGBColor out;
+   out.red=r; out.green=g; out.blue=b;
+   envelope->play(&out,0,4,1);
+  }
  }
 }
