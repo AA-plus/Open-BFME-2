@@ -46,6 +46,7 @@
 
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
+
 BridgeTowerBehavior::BridgeTowerBehavior( Thing *thing, const ModuleData *moduleData )
 									 : BehaviorModule( thing, moduleData )
 {
@@ -95,155 +96,9 @@ void BridgeTowerBehavior::setTowerType( BridgeTowerType type )
 
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
-// ?onDamage@BridgeTowerBehavior@@ present-unmatched
-void BridgeTowerBehavior::onDamage( DamageInfo *damageInfo )
-{
-	Object *bridge = TheGameLogic->findObjectByID( getBridgeID() );
-
-	// sanity
-	if( bridge == NULL )
-		return;
-
-	//
-	// get our body info so we now how much damage percent is being done to us ... we need this
-	// so that we can propagate the same damage percentage amont the towers and the bridge
-	//
-	BodyModuleInterface *body = getObject()->getBodyModule();
-	Real damagePercentage = damageInfo->in.m_amount / body->getMaxHealth();
-
-	// get the bridge behavior module for our bridge
-	BehaviorModule **bmi;
-	BridgeBehaviorInterface *bridgeInterface = NULL;
-	for( bmi = bridge->getBehaviorModules(); *bmi; ++bmi )
-	{
-
-		bridgeInterface = (*bmi)->getBridgeBehaviorInterface();
-		if( bridgeInterface )
-			break;
-
-	}  // end for bmi
-	DEBUG_ASSERTCRASH( bridgeInterface != NULL, ("BridgeTowerBehavior::onDamage - no 'BridgeBehaviorInterface' found\n") );
-	if( bridgeInterface )
-	{
-
-		//
-		// damage each of the other towers if the source of this damage isn't from the bridge
-		// or other towers
-		//
-		Object *source = TheGameLogic->findObjectByID( damageInfo->in.m_sourceID );
-		if( source == NULL || 
-			  (source->isKindOf( KINDOF_BRIDGE ) == FALSE &&
-				 source->isKindOf( KINDOF_BRIDGE_TOWER ) == FALSE) )
-		{
-
-			for( Int i = 0; i < BRIDGE_MAX_TOWERS; ++i )
-			{
-				Object *tower;
-
-				tower = TheGameLogic->findObjectByID( bridgeInterface->getTowerID( (BridgeTowerType)i ) );
-				if( tower && tower != getObject() )
-				{
-					BodyModuleInterface *towerBody = tower->getBodyModule();
-					DamageInfo towerDamage;
-
-					towerDamage.in.m_amount = damagePercentage * towerBody->getMaxHealth();
-					towerDamage.in.m_sourceID = getObject()->getID();  // we're now the source
-					towerDamage.in.m_damageType = damageInfo->in.m_damageType;
-					towerDamage.in.m_deathType = damageInfo->in.m_deathType;
-					tower->attemptDamage( &towerDamage );
-
-				}  // end if
-
-			}  // end for i
-
-			//
-			// damage bridge object, but make sure it's done through the bridge interface
-			// so that it doesn't automatically propagate that damage to the towers
-			//
-			BodyModuleInterface *bridgeBody = bridge->getBodyModule();
-			DamageInfo bridgeDamage;
-
-			bridgeDamage.in.m_amount = damagePercentage * bridgeBody->getMaxHealth();
-			bridgeDamage.in.m_sourceID = getObject()->getID();  // we're now the source
-			bridgeDamage.in.m_damageType = damageInfo->in.m_damageType;
-			bridgeDamage.in.m_deathType = damageInfo->in.m_deathType;
-			bridge->attemptDamage( &bridgeDamage );
-
-		}  // end if
-
-	}  // end if
-
-}  // end onDamage
 
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
-// ?onHealing@BridgeTowerBehavior@@ present-unmatched
-void BridgeTowerBehavior::onHealing( DamageInfo *damageInfo )
-{
-	Object *bridge = TheGameLogic->findObjectByID( getBridgeID() );
-
-	// sanity
-	if( bridge == NULL )
-		return;
-
-	//
-	// get our body info so we now how much healing percent is being done to us ... we need this
-	// so that we can propagate the same healing percentage amont the towers and the bridge
-	//
-	BodyModuleInterface *body = getObject()->getBodyModule();
-	Real healingPercentage = damageInfo->in.m_amount / body->getMaxHealth();
-
-	// get the bridge behavior module for our bridge
-	BehaviorModule **bmi;
-	BridgeBehaviorInterface *bridgeInterface = NULL;
-	for( bmi = bridge->getBehaviorModules(); *bmi; ++bmi )
-	{
-
-		bridgeInterface = (*bmi)->getBridgeBehaviorInterface();
-		if( bridgeInterface )
-			break;
-
-	}  // end for bmi
-	DEBUG_ASSERTCRASH( bridgeInterface != NULL, ("BridgeTowerBehavior::onHealing - no 'BridgeBehaviorInterface' found\n") );
-	if( bridgeInterface )
-	{
-
-		//
-		// heal each of the other towers if the source of this healing isn't from the bridge
-		// or other towers
-		//
-		Object *source = TheGameLogic->findObjectByID( damageInfo->in.m_sourceID );
-		if( source == NULL || 
-			  (source->isKindOf( KINDOF_BRIDGE ) == FALSE &&
-				 source->isKindOf( KINDOF_BRIDGE_TOWER ) == FALSE) )
-		{
-
-			for( Int i = 0; i < BRIDGE_MAX_TOWERS; ++i )
-			{
-				Object *tower;
-
-				tower = TheGameLogic->findObjectByID( bridgeInterface->getTowerID( (BridgeTowerType)i ) );
-				if( tower && tower != getObject() )
-				{
-					BodyModuleInterface *towerBody = tower->getBodyModule();
-					tower->attemptHealing(healingPercentage * towerBody->getMaxHealth(), getObject());
-
-				}  // end if
-
-			}  // end for i
-
-			//
-			// heal bridge object, but make sure it's done through the bridge interface
-			// so that it doesn't automatically propagate that healing to the towers.
-			//
-			BodyModuleInterface *bridgeBody = bridge->getBodyModule();
-			bridge->attemptHealing(healingPercentage * bridgeBody->getMaxHealth(), getObject());
-
-		}  // end if
-
-	}  // end if
-
-}  // end onHealing
 
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
