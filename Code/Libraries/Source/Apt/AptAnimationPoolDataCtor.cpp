@@ -13,14 +13,14 @@ extern int g_bfmeAptBreakOnAssertAtDDC01C;
 extern void *(__cdecl *g_bfmeAptAllocAtE17728)(unsigned int);
 class AptValue;extern AptValue *gpUndefinedValue;
 class Rva006DB160 {public:void*allocBlock(int);};class Rva006DB270 {public:void freeBlock(void*,int);};extern Rva006DB270*g_pChainBlockAllocator;
-inline void Rva006D8680Free(void*p,int size){((Rva006DB270*)g_pChainBlockAllocator)->freeBlock(p,size);}void*Rva006CD440Alloc(int);void Rva006CD460Free(void*);static __forceinline void Rva006E31F0Free(void*p){Rva006CD460Free(p);}
+inline void Rva006D8680Free(void*p,int size){((Rva006DB270*)g_pChainBlockAllocator)->freeBlock(p,size);}void*Rva006CD440Alloc(int);void Rva006CD460Free(void*);
 class Rva006E4F10 {unsigned short count,capacity;void**array;
 public:Rva006E4F10(int n){capacity=(unsigned short)n;array=(void**)((Rva006DB160*)g_pChainBlockAllocator)->allocBlock(capacity*4);count=0;memset(array,0,capacity*4);}
  ~Rva006E4F10();
 };
 class AptDisplayList{void*state;public:AptDisplayList();~AptDisplayList();};
 class AptActionQueueC{void *pool;char data[16];public:AptActionQueueC(int);~AptActionQueueC(){void*p=pool;Rva006CD460Free(p);}static void*operator new(unsigned size){return ((Rva006DB160*)g_pChainBlockAllocator)->allocBlock(size);}static void operator delete(void*p,unsigned size){Rva006D8680Free(p,size);}};
-class AptIntervalTimer{char data[32];public:AptIntervalTimer();~AptIntervalTimer();static void*operator new[](unsigned size){return Rva006CD440Alloc(size);}static void operator delete[](void*p){Rva006E31F0Free(p);}};
+class AptIntervalTimer{char data[32];public:AptIntervalTimer();~AptIntervalTimer();static void*operator new[](unsigned size){return Rva006CD440Alloc(size);}static void operator delete[](void*p){Rva006CD460Free(p);}};
 struct Rva00222343 {int fields[14];bool flag38,flag39;};
 class Rva006E6060Root{
  void**newInsts;int numNew;Rva006E4F10 a;int numIntervals;void*records28;Rva006E4F10 b,c,d;AptDisplayList display;AptIntervalTimer*timers;
@@ -77,3 +77,8 @@ Rva006E4F10::~Rva006E4F10() {
  }
  g_pChainBlockAllocator->freeBlock(array,capacity*4);
 }
+
+// Native6E31F0..6E31F5 is the5B array-release forwarding provider. Both
+// exact root EH graphs and the32B timer ctor/dtor array callbacks establish
+// the one-pointer delete[] operation. Its original wrapper identifier is
+// unresolved; use the compiler-emitted timer delete[] as the single owner.

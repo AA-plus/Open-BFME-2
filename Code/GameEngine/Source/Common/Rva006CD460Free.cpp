@@ -13,7 +13,3 @@ __declspec(noinline) void __cdecl Rva006CD460Free(void *p)
     void *base = (char *)p - 4;
     g_pChainBlockAllocator->freeBlock(base, stored + 4);
 }
-
-// Native6E31F0..6E31F5, INT3 boundaries; unchanged cdecl pointer argument
-// and caller cleanup from the owned27B array-free provider6CD460.
-void Rva006E31F0Free(void *p) { Rva006CD460Free(p); }
