@@ -37,3 +37,14 @@ names directly needed by the new recovered body's calls are pinned.
 Prospective proof files document the isolated checks. The normal live source,
 exception, identity, dependency, ledger and commit hooks are mandatory before
 publication; no verification runner or publisher is started for this recovery.
+
+The live placement rescan also finds the natural byte-map insertion wrapper
+0x00207ECC..0x00207EE0/20. It returns the hidden pair result and ends RET8;
+its sole REL32 reaches the proved insert_unique0x00207A04. It is claimed,
+verified and banked separately, bringing the home to39 exact ledger rows.
+The normal132-byte commit gate checked46 rows across4 affected units,16 EH
+graphs and converged data with no new identity findings. The link preview
+with the explicitly refreshed Map, NamedBindings, SidesList and integer-tree
+providers reports the home LINKS with3,159 bytes before the additional wrapper.
+Other listed providers retain their pre-existing census blockers; this preview
+does not claim an all-current census or a full link-cycle result.
