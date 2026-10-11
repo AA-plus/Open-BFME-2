@@ -12,7 +12,7 @@ typedef unsigned int UnsignedInt;
 typedef float Real;
 
 // Zero Hour BaseType.h conversions; BFME2's ceil goes through the CRT.
-__forceinline float fast_float_ceil(float f)
+static __forceinline float fast_float_ceil(float f)
 {
 	return (float)ceil((double)f);
 }
@@ -36,11 +36,12 @@ extern Int g_Va00DBA4E4;	// logic frames per second
 
 extern GameLogic *TheGameLogic;
 
+enum EvaEventID { EVA_EVENT_ID_RV = 0 };
 class Eva
 {
 public:
 	Int rva001DE78E(const AsciiString *name);	// 0x001DE78E, event index or -1
-	Bool getLastReallyPlayedFrameForEvaEvent(Int index, UnsignedInt *frame);	// 0x001DD604
+	Bool getLastReallyPlayedFrameForEvaEvent(EvaEventID index, UnsignedInt *frame) const;	// 0x001DD604 (rowed: const, enum arg)
 };
 
 extern Eva *TheEva;
@@ -72,7 +73,7 @@ public:
 	// Zero Hour's comparison codes.
 	enum { LESS_THAN = 0, LESS_EQUAL, EQUAL, GREATER_EQUAL, GREATER, NOT_EQUAL };
 
-	Int getInt() const { return m_int; }
+	Int getIntRV() const { return m_int; }
 	Real getReal() const { return m_real; }
 	const AsciiString &getString() const { return m_string; }
 
@@ -193,7 +194,7 @@ Bool ScriptConditions::evaluateHasEvaEventPlayedInLastNSeconds(const AsciiString
 	UnsignedInt lastFrame;
 	if (index == -1)
 		return false;
-	if (!TheEva->getLastReallyPlayedFrameForEvaEvent(index, &lastFrame))
+	if (!TheEva->getLastReallyPlayedFrameForEvaEvent((EvaEventID)index, &lastFrame))
 		return false;
 	return TheGameLogic->getFrame() - lastFrame <= (UnsignedInt)frames;
 }
@@ -213,7 +214,7 @@ Bool ScriptConditions::evaluatePlayerHasNumberUnitsDistanceFromObject(Parameter 
 	Parameter *pComparisonParm, Parameter *pCountParm, Parameter *pDistanceParm, Parameter *pObjectParm)
 {
 	Int mask = TheScriptEngine->rva00357B82(pPlayerParm);
-	Int count = pCountParm->getInt();
+	Int count = pCountParm->getIntRV();
 	Rva003E5563 data;
 	Real dist = pDistanceParm->getReal();
 	if (dist < 0.0f)
@@ -239,7 +240,7 @@ Bool ScriptConditions::evaluatePlayerHasNumberUnitsDistanceFromObject(Parameter 
 			player->iterateObjects((Int (*)(Object *, void *))Rva003E6032, &data);
 	}
 	Bool result;
-	switch (pComparisonParm->getInt())
+	switch (pComparisonParm->getIntRV())
 	{
 	case Parameter::LESS_THAN:	result = data.m_count < count; break;
 	case Parameter::LESS_EQUAL:	result = data.m_count <= count; break;
