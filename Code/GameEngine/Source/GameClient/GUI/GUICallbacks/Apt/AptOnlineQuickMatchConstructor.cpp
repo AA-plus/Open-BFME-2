@@ -146,7 +146,8 @@ class Rva005A6D47
 public:
 	virtual ~Rva005A6D47();
 };
-extern Rva005A6D47 *g_Va00E063F8;
+struct NAT;
+extern NAT *TheNAT;	// 0x00E063F8, data row in NATProcessGlobalMessage.cpp
 
 class AptOnline
 {
@@ -254,9 +255,9 @@ AptOnline::OnlineQuickMatch::OnlineQuickMatch(AptOnline *owner)
 		}
 		TheMapCache->updateCache();
 		TheGameSpyGame->reset();
-		if (g_Va00E063F8) {
-			::delete g_Va00E063F8;
-			g_Va00E063F8 = 0;
+		if (TheNAT) {
+			::delete (Rva005A6D47 *)TheNAT;
+			TheNAT = 0;
 		}
 		if (TheGameSpyInfo)
 			TheGameSpyInfo->slot47();
