@@ -33,6 +33,12 @@ namespace _STL { void __cdecl free(void *block); }
 #include <string>
 #undef free
 #include <algorithm>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> char *_STLP_alloc_proxy<char*, char, allocator<char> >::allocate(size_t);
+}
 
 bool GetStringFromRegistry(std::string path, std::string key, std::string& val);
 bool GetUnsignedIntFromRegistry(std::string path, std::string key, unsigned int& val);
