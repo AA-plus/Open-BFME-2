@@ -68,6 +68,9 @@ class ThingTemplate
 {
 public:
 	__forceinline Bool isKindOf(KindOfType t) const { return (m_kindof[(UnsignedInt)t >> 5] & (1u << ((UnsignedInt)t & 31))) != 0; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the isKindOf
+	// copies lose to the first-in-order copies. No flags touched.
+	__forceinline Bool bfme_isKindOf_wpx(KindOfType t) const { return (m_kindof[(UnsignedInt)t >> 5] & (1u << ((UnsignedInt)t & 31))) != 0; }
 private:
 	char m_pad[0x108];
 	UnsignedInt m_kindof[4]; // +0x108
@@ -105,6 +108,8 @@ class Object
 public:
 	__forceinline Bool isKindOf(KindOfType t) const { return m_template->isKindOf(t); }
 	Bool isAirborneTarget() const { return ((m_status >> 6) & 1) != 0; }
+	__forceinline Bool bfme_isKindOf_wpx(KindOfType t) const { return m_template->bfme_isKindOf_wpx(t); }
+	Bool bfme_isAirborneTarget_wpx() const { return ((m_status >> 6) & 1) != 0; }
 	const Coord3D *getPosition() const { return &m_pos; }
 	AIUpdateInterface *getAI() { return m_ai; }
 	ContainModuleInterface *getContain() const { return m_contain; }
@@ -287,7 +292,7 @@ void AIGroup::groupEvacuate(CommandSourceType cmdSource)
 		AIUpdateInterface *ai = obj->getAI();
 		if (ai)
 		{
-			if (obj->isKindOf(KINDOF_AIRCRAFT) && obj->isAirborneTarget())
+			if (obj->bfme_isKindOf_wpx(KINDOF_AIRCRAFT) && obj->bfme_isAirborneTarget_wpx())
 			{
 				pos.x = obj->getPosition()->x;
 				pos.y = obj->getPosition()->y;
@@ -301,7 +306,7 @@ void AIGroup::groupEvacuate(CommandSourceType cmdSource)
 				ai->m_commands.aiEvacuate(false, cmdSource);
 			}
 		}
-		else if (obj->isKindOf(KINDOF_STRUCTURE))
+		else if (obj->bfme_isKindOf_wpx(KINDOF_STRUCTURE))
 		{
 			ContainModuleInterface *contain = obj->getContain();
 			if (contain)
