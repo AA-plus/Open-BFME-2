@@ -1,6 +1,11 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHs /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC
+// stlport
+#define _STLP_NO_EXCEPTIONS 1
+#define __PLACEMENT_VEC_NEW_INLINE
+#include <list>
 // NetPacket.cpp: the NetPacket bodies retail links from this TU (tu_map approved),
-// folded from 24 one-function split units that shared these exact flags.
+// folded from 24 one-function split units. EHs plus explicit C-runtime
+// throw() contracts preserve those 99 bodies while recovering the list factory.
 // One NetPacket view replaces the per-unit ones; every field offset below is the
 // one each folded body was byte-verified against:
 //   +0x004 packet[0x1DC], +0x1E0 len, +0x1E4/+0x1E8 dest, +0x1EC count,
@@ -33,8 +38,8 @@ static inline char npCharAt(const AsciiString &s, int i)
 }
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 
-extern "C" void *__cdecl memcpy(void *dest, const void *src, unsigned int count);
-extern "C" unsigned char *__cdecl _mbscpy(unsigned char *dest, const unsigned char *src);
+extern "C" void *__cdecl memcpy(void *dest, const void *src, unsigned int count) throw();
+extern "C" unsigned char *__cdecl _mbscpy(unsigned char *dest, const unsigned char *src) throw();
 void *__cdecl operator new(unsigned int size);
 void *__cdecl operator new[](unsigned int size);
 
@@ -263,6 +268,13 @@ public:
 class NetWrapperCommandMsg : public NetCommandMsg
 {
 public:
+	NetWrapperCommandMsg();
+	void setChunkNumber(UnsignedInt n);
+	void setNumChunks(UnsignedInt n);
+	void setDataOffset(UnsignedInt n);
+	void setData(UnsignedByte *data, UnsignedInt len);
+	void setTotalDataLength(UnsignedInt n);
+	void setWrappedCommandID(UnsignedShort id);
 	UnsignedShort getWrappedCommandID();
 	UnsignedInt getChunkNumber();
 	UnsignedInt getNumChunks();
@@ -270,6 +282,13 @@ public:
 	UnsignedInt getDataLength();
 	UnsignedInt getDataOffset();
 	UnsignedByte *getData();
+	UnsignedByte *m_data;
+	UnsignedInt m_dataLength;
+	UnsignedInt m_dataOffset;
+	UnsignedInt m_totalDataLength;
+	UnsignedInt m_chunkNumber;
+	UnsignedInt m_numChunks;
+	UnsignedShort m_wrappedCommandID;
 };
 
 // +0x1C byte getter.
@@ -379,6 +398,7 @@ Rva004D62A9 *Rva005923C5Read(Int data, UnsignedInt *readOffset);
 class NetPacket
 {
 public:
+	static _STL::list<NetPacket *> ConstructBigCommandPacketList(NetCommandRef *ref);
 	virtual ~NetPacket();
 	NetPacket();
 	NetPacket(TransportMessage *msg);
@@ -5078,4 +5098,95 @@ Bool NetPacket::addCommand(NetCommandRef *msg)
 	}
 
 	return true;
+}
+
+// BFME 1 clean donor 9e3be919b10ae956e3c8a13995e0d62f2be1d016,
+// NetPacket_ConstructBigCommandPacketList.cpp; BFME 2 adds timestamp timing.
+enum NetCommandType { NETCOMMANDTYPE_ZERO = 0 };
+extern Bool DoesCommandRequireACommandID(NetCommandType type);
+extern UnsignedShort GenerateNextCommandID();
+typedef _STL::list<NetPacket *> NetPacketList;
+
+// ?ConstructBigCommandPacketList@NetPacket@@SA?AV?$list@PAVNetPacket@@V?$allocator@PAVNetPacket@@@_STL@@@_STL@@PAVNetCommandRef@@@Z
+// Native 0x005946E1 (532B); WorldBuilder VA 0x0153BC00 supplies the name
+// and NetPacket.cpp source identity. Native calls/accesses establish the
+// BFME2 packet/wrapper offsets and added timestamp argument. Scalar buffer
+// delete and the relay self-assignment follow the donor and retail bytes.
+NetPacketList NetPacket::ConstructBigCommandPacketList(NetCommandRef *ref)
+{
+	NetCommandMsg *msg = ncrCommand(ref);
+
+	if (!(UnsignedByte)DoesCommandRequireACommandID((NetCommandType)msg->getNetCommandType()))
+	{
+		return NetPacketList();
+	}
+
+	UnsignedInt bufferSize = GetBufferSizeNeededForCommand(msg);
+	UnsignedByte *bigPacketData = 0;
+
+	NetPacketList packetList;
+
+	UnsignedInt bigPacketCurrentOffset = 0;
+	bigPacketData = new UnsignedByte[bufferSize];
+	FillBufferWithCommand(bigPacketData, ref);
+
+	NetWrapperCommandMsg *wrapperMsg = new NetWrapperCommandMsg;
+	UnsignedInt wrapperSize = GetBufferSizeNeededForCommand(wrapperMsg);
+	UnsignedInt commandSizePerPacket = MAX_PACKET_SIZE - wrapperSize;
+
+	UnsignedInt numChunks = bufferSize / commandSizePerPacket;
+	if ((bufferSize % commandSizePerPacket) > 0)
+	{
+		++numChunks;
+	}
+	UnsignedInt currentChunk = 0;
+
+	while (currentChunk < numChunks)
+	{
+		NetPacket *packet = new NetPacket;
+
+		UnsignedShort dataSizeThisPacket = (UnsignedShort)commandSizePerPacket;
+		if ((bufferSize - bigPacketCurrentOffset) < dataSizeThisPacket)
+		{
+			dataSizeThisPacket = (UnsignedShort)(bufferSize - bigPacketCurrentOffset);
+		}
+
+		if ((UnsignedByte)DoesCommandRequireACommandID((NetCommandType)wrapperMsg->getNetCommandType()))
+		{
+			wrapperMsg->setID(GenerateNextCommandID());
+		}
+		wrapperMsg->setPlayerID(msg->getPlayerID());
+		wrapperMsg->setTiming(msg->getTimestamp(), msg->getExecutionFrame());
+
+		wrapperMsg->setChunkNumber(currentChunk);
+		wrapperMsg->setNumChunks(numChunks);
+		wrapperMsg->setDataOffset(bigPacketCurrentOffset);
+		wrapperMsg->setData(bigPacketData + bigPacketCurrentOffset, dataSizeThisPacket);
+		wrapperMsg->setTotalDataLength(bufferSize);
+		wrapperMsg->setWrappedCommandID(msg->getID());
+
+		bigPacketCurrentOffset += dataSizeThisPacket;
+
+		NetCommandRef *newref = new NetCommandRef(wrapperMsg);
+		ncrSetRelay(newref, ncrRelay(newref));
+
+		if (packet->addCommand(newref) == false)
+		{
+		}
+
+		packetList.push_back(packet);
+
+		delete newref;
+		newref = 0;
+
+		++currentChunk;
+	}
+
+	wrapperMsg->detach();
+	wrapperMsg = 0;
+
+	delete bigPacketData;
+	bigPacketData = 0;
+
+	return packetList;
 }
