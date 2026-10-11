@@ -1,7 +1,5 @@
 // ?parseHordeContainRankInfo@@YAXPAVINI@@PAX1PBX@Z
-// partial score=0.99 date=2026-10-10
-// ?parseHordeContainRankInfo@@YAXPAVINI@@PAX1PBX@Z
-// partial score=0.82 date=2026-10-07
+// partial score=0.991031439602868 date=2026-10-11
 // cl: /O1 /arch:SSE /G7 /Oy- /DNDEBUG /MD /GX- /Oi- /D_STLP_USE_STATIC_LIB
 // stlport
 #undef _CRTIMP
@@ -72,24 +70,22 @@ public:
 	unsigned char m_hasWeaponConditions;
 };
 
-struct Rva004DFCB0Element
-{
-	HordeContainRankInfo *info;
-};
-
+// Pointer-vector ABI view: retail stores rank-info pointers. The existing
+// ModuleData-pointer push provider is used for its exact four-byte ABI; this
+// does not establish HordeContainRankInfo inheritance or the original vector type.
+class ModuleData;
 namespace _STL
 {
 template <> void vector<HordeContainRankPosition>::push_back(const HordeContainRankPosition &);
-template <> void vector<Rva004DFCB0Element>::push_back(const Rva004DFCB0Element &);
+template <> void vector<const ModuleData*>::push_back(const ModuleData *const&);
 }
 
-typedef _STL::vector<Rva004DFCB0Element> HordeContainRankInfoVector;
+typedef _STL::vector<const ModuleData*> HordeContainRankInfoVector;
 
 void parseHordeContainRankInfo(INI *ini, void *instance, void *store, const void *userData)
 {
 	HordeContainRankInfo *info = new HordeContainRankInfo;
-	Rva004DFCB0Element entry;
-	entry.info = info;
+	const ModuleData *entry=(const ModuleData*)info;
 	HordeContainRankInfoVector &rankInfos = *(HordeContainRankInfoVector *)store;
 
 	const char *token = ini->getNextTokenOrNull(ini->getSepsColon());
@@ -151,7 +147,7 @@ void parseHordeContainRankInfo(INI *ini, void *instance, void *store, const void
 					HordeContainRankInfoVector::iterator it;
 					for (it = rankInfos.begin(); it != rankInfos.end(); ++it)
 					{
-						if (it->info->m_rankNumber == rank)
+						if (((HordeContainRankInfo*)*it)->m_rankNumber == rank)
 							break;
 					}
 					if (it == rankInfos.end())
@@ -162,9 +158,9 @@ void parseHordeContainRankInfo(INI *ini, void *instance, void *store, const void
 						throw INIException(3, "Leader index expected");
 					int index = atoi(token);
 					position.leaderIndex = index;
-					if (index < 0 || index >= it->info->m_positions.size())
+					if (index < 0 || index >= ((HordeContainRankInfo*)*it)->m_positions.size())
 						throw INIException(3, "Invalid leader index '%s' specified, only 0..%i allowed",
-							token, it->info->m_positions.size() - 1);
+							token, ((HordeContainRankInfo*)*it)->m_positions.size() - 1);
 				}
 				else
 				{
