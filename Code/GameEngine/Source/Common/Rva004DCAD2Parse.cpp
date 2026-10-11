@@ -11,6 +11,72 @@ public:
  unsigned char m_beforeLoadType[8];
  int getLoadType() const { return m_loadType; }
  int m_loadType;
+ static void parseBool(INI *ini, void *instance, void *store, const void *userData);
+ static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
+ static void parseDurationUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
+ static void parseFXList(INI *ini, void *instance, void *store, const void *userData);
+ static void Rva004DC702_ParseEmotionType(INI *ini, void *instance, void *store, const void *userData);
+ static void Rva004DC64F_ParseThreatAbove(INI *ini, void *instance, void *store, const void *userData);
+ static void Rva004DC625_ParseThreatBelow(INI *ini, void *instance, void *store, const void *userData);
+ static void Rva004DC745_ParseAIState(INI *ini, void *instance, void *store, const void *userData);
+};
+// Free-function field parsers the table calls; each is rowed in its own unit.
+void parseEmotionNuggetCopyFrom(INI *ini, void *instance, void *store, const void *userData);
+void Rva004DC674Parse(INI *ini, void *instance, void *store, const void *userData);
+void Rva000B9468Parse(INI *ini, void *instance, void *store, const void *userData);
+
+struct FieldParse
+{
+	const char *token;
+	void (*parse)(INI *, void *, void *, const void *);
+	const void *userData;
+	int offset;
+};
+
+// Retail's own 29-record EmotionNugget field table, transcribed from .rdata at
+// RVA 0x00861310 (VA 0x00C61310, file offset 0x00860710): the record words are
+// the field name, the rowed field parser's address, a null user-data column for
+// all 29 records, and the field's offset inside the 0x190-byte nugget. Offsets
+// 0x18C..0x190 are the four tail bytes Rva004DC920 keeps after Rva004DC9EDEntry's
+// record, and 0x0EC / 0x0A0 / 0x138 are the two 0x5C-byte model-condition blocks
+// the table works with - ModelConditions and ModelConditionsClear at 0x54/0xEC
+// are two blocks of the same 23-state array parsed by Rva004DC674Parse, and the
+// exit pair at 0x138/0xA0 is Rva000B9468Parse's. `extern` on the definition
+// keeps the table external, which a plain const array at namespace scope would
+// not be. Every parse target is a rowed body, so all 29 names resolve.
+extern const FieldParse g_00C61310[];
+const FieldParse g_00C61310[] =
+{
+	{ "CopyFrom", &parseEmotionNuggetCopyFrom, 0, 0x00 },
+	{ "Type", &INI::Rva004DC702_ParseEmotionType, 0, 0x04 },
+	{ "IgnoreIfUnitIdle", &INI::parseBool, 0, 0x08 },
+	{ "IgnoreIfUnitBusy", &INI::parseBool, 0, 0x09 },
+	{ "Duration", &INI::parseDurationUnsignedInt, 0, 0x0C },
+	{ "InactiveDuration", &INI::parseDurationUnsignedInt, 0, 0x10 },
+	{ "InactiveDurationSameObject", &INI::parseDurationUnsignedInt, 0, 0x14 },
+	{ "InactiveDurationSameType", &INI::parseDurationUnsignedInt, 0, 0x18 },
+	{ "OnlyIfEnemyThreatAbove", &INI::Rva004DC64F_ParseThreatAbove, 0, 0x1C },
+	{ "OnlyIfEnemyThreatBelow", &INI::Rva004DC625_ParseThreatBelow, 0, 0x1C },
+	{ "OnlyIfFriendThreatAbove", &INI::Rva004DC64F_ParseThreatAbove, 0, 0x24 },
+	{ "OnlyIfFriendThreatBelow", &INI::Rva004DC625_ParseThreatBelow, 0, 0x24 },
+	{ "IgnoreIfAI", &INI::parseBool, 0, 0x2C },
+	{ "IgnoreIfHuman", &INI::parseBool, 0, 0x2D },
+	{ "StartFXList", &INI::parseFXList, 0, 0x30 },
+	{ "UpdateFXList", &INI::parseFXList, 0, 0x34 },
+	{ "EndFXList", &INI::parseFXList, 0, 0x38 },
+	{ "AttributeModifier", &INI::parseAsciiString, 0, 0x3C },
+	{ "AttributeStartDelay", &INI::parseDurationUnsignedInt, 0, 0x40 },
+	{ "AttributeModifierWhileEmotionActive", &INI::parseBool, 0, 0x44 },
+	{ "AttributeDuration", &INI::parseDurationUnsignedInt, 0, 0x48 },
+	{ "AIState", &INI::Rva004DC745_ParseAIState, 0, 0x4C },
+	{ "AILockDuration", &INI::parseDurationUnsignedInt, 0, 0x50 },
+	{ "ModelConditions", &Rva004DC674Parse, 0, 0x54 },
+	{ "ModelConditionsClear", &Rva004DC674Parse, 0, 0xEC },
+	{ "ModelConditionsSetOnExit", &Rva000B9468Parse, 0, 0x138 },
+	{ "ModelConditionsClearOnExit", &Rva000B9468Parse, 0, 0xA0 },
+	{ "PreventPlayerCommands", &INI::parseBool, 0, 0x184 },
+	{ "LuaEvent", &INI::parseAsciiString, 0, 0x188 },
+	{ 0, 0, 0, 0 }
 };
 class Rva004DC9EDEntry {
 public:
@@ -74,7 +140,6 @@ void EmotionNuggetTemplate::friend_parseEmotionNugget(INI *ini)
 }
 
 // Existing template parse wrapper at 0x004DCAD2 (18 bytes).
-extern const FieldParse g_00C61310[];
 void Rva004DCAD2::rva004DCAD2(INI *ini)
 {
 	ini->initFromINI(this, g_00C61310);
