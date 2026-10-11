@@ -300,6 +300,37 @@ def test_pre_push_builds_the_pushed_commit_not_head(repo):
     assert built(repo) == {SOURCE}
 
 
+# tools/publish_window.py check, counted: refuses from the call numbered in deny-from.
+WINDOW_COUNTER = """import sys
+from pathlib import Path
+calls = Path("window-calls.txt")
+seen = calls.read_text(encoding="utf-8") if calls.exists() else ""
+calls.write_text(seen + " ".join(sys.argv[1:]) + "\\n", encoding="utf-8")
+sys.exit(1 if len(seen.splitlines()) + 1 >= int(Path("deny-from").read_text()) else 0)
+"""
+
+
+def test_pre_push_rechecks_the_window_after_every_ref(repo):
+    """Port review (2026-10-11): master's last window check ran before a later
+    ref's gates, so a window a rival opened during them was ignored."""
+    write(repo, "tools/publish_window.py", WINDOW_COUNTER)
+    base = git(repo, "rev-parse", "HEAD")
+    write(repo, SOURCE, "struct Unit { void f(); };\nvoid Unit::f() { int two_refs = 1; }\n")
+    git(repo, "commit", "-qam", "two refs")
+    head = git(repo, "rev-parse", "HEAD")
+    refs = (f"refs/heads/main {head} refs/heads/master {base}\n"
+            f"refs/heads/topic {head} refs/heads/topic {base}\n")
+    (repo / "deny-from").write_text("99")
+    result = run(repo, "pre-push", refs)
+    assert result.returncode == 0, result.stderr
+    calls = (repo / "window-calls.txt").read_text(encoding="utf-8").splitlines()
+    assert len(calls) == 3 and all(c.startswith("check --remote") for c in calls)   # start, end, after every ref
+    (repo / "window-calls.txt").unlink()
+    (repo / "deny-from").write_text("3")                              # a rival opens it during topic's gates
+    result = run(repo, "pre-push", refs)
+    assert result.returncode == 1 and "publish window" in result.stderr
+
+
 def test_pre_push_refuses_a_header_on_disk_unlike_the_pushed_commit(repo):
     base = header_push(repo)
     write(repo, "Code/GameEngine/Include/Shared.h", "struct Shared {};\n")    # restored on disk only
