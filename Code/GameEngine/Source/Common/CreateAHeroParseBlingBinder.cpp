@@ -23,19 +23,30 @@ enum NameKeyType
 	NAMEKEY_INVALID = 0
 };
 
+class INI;
+
 class NameKeyGenerator
 {
 public:
 	NameKeyType nameToKey(const char *name);
+	static void parseStringAsNameKeyType(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x0148FBE
 };
 extern NameKeyGenerator *TheNameKeyGenerator;
 
-struct FieldParse;
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
 public:
 	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002F11E
 };
 
 class INIException
@@ -66,7 +77,22 @@ public:
 	void *rva0021DE75(void *binder);	// 0x0021DE75
 };
 
-extern const FieldParse g_00DB9EC8[];	// the binder's field-parse table
+// Retail's table at RVA 0x009B9EC8 (raw .data, 80 bytes = four 16-byte records
+// and one zero sentinel), transcribed from retail's own bytes: the record's
+// group key is written through NameKeyGenerator::parseStringAsNameKeyType (rove
+// 0x0148FBE) at offset 0 and its three upgrade names through
+// INI::parseAsciiString (rowed 0x002F11E) at offsets 4, 8 and 0xC -- the same
+// record layout BfmeStringRecord00219B0B declares. The `extern` on the
+// definition keeps the object external; nothing else defines it and the shape
+// matches the g_00C3BC20 / WeatherData tables elsewhere in Code/.
+extern const FieldParse g_00DB9EC8[] =
+{
+	{"GroupName",            &NameKeyGenerator::parseStringAsNameKeyType, 0, 0},
+	{"MinValueUpgrade",      &INI::parseAsciiString, 0, 4},
+	{"MaxValueUpgrade",      &INI::parseAsciiString, 0, 8},
+	{"DefaultValueUpgrade",  &INI::parseAsciiString, 0, 0xC},
+	{0, 0, 0, 0}
+};
 
 // Retail calls StringBase's out-of-line isEmpty (0x00001E2F); the shared
 // header's AsciiString::isEmpty inlines it.

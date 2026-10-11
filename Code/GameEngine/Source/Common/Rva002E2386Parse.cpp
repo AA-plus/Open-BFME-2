@@ -20,7 +20,8 @@ class INI
 public:
 	const char *getNextToken(const char *seps);
 	void initFromINI(void *what, const FieldParse *parseTable);
-	static void parseInt(INI *ini, void *instance, void *store, const void *userData);
+	static void parseInt(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002EF56
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002F11E
 };
 
 struct FieldParse
@@ -32,6 +33,13 @@ struct FieldParse
 };
 
 // Retail 0x00C3BC20: seventeen integer fields followed by a zero terminator.
+// RVA 0x00339900's field parser: the audio-token routine GlobalWeatherSystem.cpp
+// names directly for "WeatherSound" (mangled
+// ?Rva00339900Parse@@YAXPAVINI@@PAX1PBX@Z), aliased because this TU spells its
+// INI view locally and a redeclaration of the same free function is fine.
+void Rva00339900Parse(INI *ini, void *instance, void *store, const void *userData);
+#define Rva00333900ParseAlias Rva00339900Parse
+
 extern const FieldParse g_00C3BC20[] =
 {
 	{"DesiredSoldierRatio", INI::parseInt, 0, 4},
@@ -67,7 +75,35 @@ struct _s__ThrowInfo;
 extern "C" void __stdcall _CxxThrowException(void *pExceptionObject, const _s__ThrowInfo *pThrowInfo);
 extern "C" const struct _s__ThrowInfo __identifier("_TI1?AVINIException@@");
 
-extern const FieldParse g_00C04820;
+// Retail's LivingWorldPlayerTemplate table at RVA 0x00804820 (.rdata, 256 bytes
+// = fifteen 16-byte records plus the zero sentinel), transcribed from retail's
+// own bytes. The parse procedures are targets of retail's own pointers and are
+// all rowed: 0x0042F11E -> ?parseAsciiString@INI@@SAXPAV1@PAX1PBX@Z (row 0x2F11E,
+// INI_parseAsciiString.cpp), 0x0042EF56 -> ?parseInt@INI@@SAXPAV1@PAX1PBX@Z (row
+// 0x2EF56, INI_parseInt.cpp) and 0x0042EF56's siblings 0x00739900 ->
+// ?Rva00339900Parse@@YAXPAVINI@@PAX1PBX@Z (row 0x339900, the audio-token parser
+// GlobalWeatherSystem.cpp already uses for "WeatherSound"). Offsets are the
+// record's own field offsets. The `extern` on the definition keeps the object
+// external, exactly as the g_00C3BC20 table above.
+extern const FieldParse g_00C04820[] =
+{
+	{"Faction", &INI::parseAsciiString, 0, 4},
+	{"StartingWorldCP", &INI::parseInt, 0, 8},
+	{"StartingTacticalCP", &INI::parseInt, 0, 0x10},
+	{"StartingHeroCP", &INI::parseInt, 0, 0x18},
+	{"MaxWorldCP", &INI::parseInt, 0, 0xC},
+	{"MaxTacticalCP", &INI::parseInt, 0, 0x14},
+	{"MaxHeroCP", &INI::parseInt, 0, 0x1C},
+	{"FactionIcon", &INI::parseAsciiString, 0, 0x20},
+	{"DefaultArmyIconName", &INI::parseAsciiString, 0, 0x24},
+	{"BuildPlotIconName", &INI::parseAsciiString, 0, 0x28},
+	{"BuildPlotSelectionPortraitName", &INI::parseAsciiString, 0, 0x2C},
+	{"GarrisonSelectionPortraitName", &INI::parseAsciiString, 0, 0x30},
+	{"GarrisonDisplayNameTag", &INI::parseAsciiString, 0, 0x34},
+	{"Music", &Rva00333900ParseAlias, 0, 0x38},
+	{"AutoResolveLoop", &Rva00333900ParseAlias, 0, 0x3C},
+	{0, 0, 0, 0}
+};
 
 class ModuleData
 {
@@ -123,7 +159,7 @@ void Rva002E2386Parse(INI *ini)
 	}
 	const ModuleData *obj = new Rva002E0906;
 	((Rva002E0906 *)obj)->m_name.setCopyInline(token);
-	ini->initFromINI((void *)obj, &g_00C04820);
+	ini->initFromINI((void *)obj, g_00C04820);
 	Va00DFF0B0Lookup->m_vec.push_back(obj);
 }
 
