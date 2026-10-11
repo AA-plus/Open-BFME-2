@@ -83,13 +83,7 @@ struct Coord3D : public Coord3DBase
 };
 
 // class-gate: allow Coord2D the canonical data-only header cannot declare BFME 2's out-of-line normalize (rowed 0x0000378A) that the constructor calls; same two floats
-class Coord2D
-{
-public:
-	Real x;
-	Real y;
-	void normalize();
-};
+#include "../../../../Libraries/Include/Lib/Coord2D.h"
 
 struct Region2D
 {

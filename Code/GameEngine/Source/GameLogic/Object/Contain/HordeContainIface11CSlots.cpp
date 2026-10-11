@@ -79,13 +79,7 @@ public:
 	float length() const;
 };
 // class-gate: allow Coord2D the canonical data-only header cannot declare BFME 2's out-of-line toAngle (rowed 0x00005923) that slot 130 calls; same two floats
-class Coord2D
-{
-public:
-	float x;
-	float y;
-	float toAngle() const;
-};
+#include "../../../../../Libraries/Include/Lib/Coord2D.h"
 enum CommandSourceType
 {
 	CMD_FROM_PLAYER = 0,

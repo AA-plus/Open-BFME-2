@@ -108,14 +108,7 @@ struct Coord3D
 };
 
 // class-gate: allow Coord2D the canonical data-only header cannot declare BFME 2's out-of-line toAngle (rowed 0x00005923) that applyCrushingDamage calls; same two floats
-class Coord2D
-{
-public:
-	Real x;
-	Real y;
-
-	Real toAngle() const;
-};
+#include "../../../../../Libraries/Include/Lib/Coord2D.h"
 
 enum NameKeyType
 {

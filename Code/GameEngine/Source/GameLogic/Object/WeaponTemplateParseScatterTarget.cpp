@@ -13,11 +13,7 @@
 
 typedef float Real;
 
-struct Coord2D
-{
-	Real x;
-	Real y;
-};
+#include "../../../../Libraries/Include/Lib/Coord2D.h"
 
 class INI
 {

@@ -52,11 +52,7 @@ struct Coord3D
 {
 	Real x, y, z;
 };
-struct Coord2D
-{
-	Real x, y;
-	Real length() const;
-};
+#include "../../../../Libraries/Include/Lib/Coord2D.h"
 struct FprintfTarget
 {
 	char m_pad[4];

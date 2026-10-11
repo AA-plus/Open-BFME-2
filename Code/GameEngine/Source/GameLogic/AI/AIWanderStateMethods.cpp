@@ -244,11 +244,7 @@ protected:
 	unsigned char m_pad1C[0x20 - 0x1C];
 	Coord3D m_goalPosition; // +0x20
 };
-struct Coord2D
-{
-	Real x, y;
-	Real length() const;
-};
+#include "../../../../Libraries/Include/Lib/Coord2D.h"
 // Waypoint (target evidence): location +0x0C, link count +0x4C; getLink is
 // the rowed out-of-line 0x00085404.
 class Waypoint
