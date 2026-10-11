@@ -76472,3 +76472,9 @@ uw_0077909c,,0x0077909C,13,Code/GameEngine/Source/GameLogic/AI/AIObjectTargetPre
 ?rva0009A328@@YAXXZ,,0x0009A328,16,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,null-guarded mov ecx [Rva00DEC2D8Manager] then tail jump to rowed rva00109236; address-named
 ?rva0009A487@@YAXXZ,,0x0009A487,16,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,null-guarded mov ecx [Rva00DEC2D8Manager] then tail jump to rowed rva00108E28; address-named
 ?rva0061F190@@YAXXZ,,0x0061F190,16,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,null-guarded mov ecx [TheQ1Receiver] then tail jump to rowed Q1Receiver0134FAAC::Rva00624790; address-named
+?rva00038370@@YAXXZ,,0x00038370,11,Code/Libraries/Source/WWVegas/WWDebug/DebugSingletonForwarders.cpp,matched,mov ecx [theDebug] then jmp vtable slot 22 of the Debug object (vtable 0x007BE810); address-named
+?rva00038380@@YA_NXZ,,0x00038380,11,Code/Libraries/Source/WWVegas/WWDebug/DebugSingletonForwarders.cpp,matched,mov ecx [theDebug] then jmp vtable slot 24 of the Debug object (vtable 0x007BE810); address-named
+?rva0003BC60@@YAPAXXZ,,0x0003BC60,14,Code/Libraries/Source/WWVegas/WWDebug/DebugSingletonForwarders.cpp,matched,mov ecx [theDebug] then jmp vtable slot 40 of the Debug object (vtable 0x007BE810); address-named
+?rva0003BC70@@YAPAXXZ,,0x0003BC70,14,Code/Libraries/Source/WWVegas/WWDebug/DebugSingletonForwarders.cpp,matched,mov ecx [theDebug] then jmp vtable slot 41 of the Debug object (vtable 0x007BE810); address-named
+?rva0003D370@@YAPAXXZ,,0x0003D370,14,Code/Libraries/Source/WWVegas/WWDebug/DebugSingletonForwarders.cpp,matched,mov ecx [theDebug] then jmp vtable slot 42 of the Debug object (vtable 0x007BE810); address-named
+?rva00225A1F@@YAXXZ,,0x00225A1F,14,Code/Libraries/Source/WWVegas/WWDebug/DebugSingletonForwarders.cpp,matched,mov ecx [theDebug] then jmp vtable slot 37 of the Debug object (vtable 0x007BE810); address-named
