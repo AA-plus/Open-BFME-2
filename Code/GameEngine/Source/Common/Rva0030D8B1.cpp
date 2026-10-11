@@ -3,10 +3,15 @@
 #include "ascii_string.h"
 
 class BfmeParserRegistryVE;
-class BfmeParserBindingBaseVE
+class DataChunkInput;
+class DataChunkParser { public: DataChunkParser(DataChunkInput *input, const AsciiString *label, const AsciiString *parentLabel); };
+
+class __declspec(novtable) BfmeParserBindingBaseVE
 {
 public:
-	BfmeParserBindingBaseVE(BfmeParserRegistryVE *registry, void *a, void *b);
+	// The base is the rowed DataChunkParser ctor (0x000ABB87), called by that name.
+	__declspec(dllimport) __forceinline BfmeParserBindingBaseVE(BfmeParserRegistryVE *registry, void *a, void *b)
+	{ reinterpret_cast<DataChunkParser *>(this)->DataChunkParser::DataChunkParser((DataChunkInput *)registry, (const AsciiString *)a, (const AsciiString *)b); }
 	virtual ~BfmeParserBindingBaseVE();
 	char m_pad[0x8];
 };

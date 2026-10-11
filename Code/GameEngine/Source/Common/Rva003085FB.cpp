@@ -10,10 +10,15 @@ public:
 	void *bfmeRegister(void *a, void *b, void *c, void *d);
 };
 
-class BfmeParserBindingBaseVE
+class DataChunkInput;
+class DataChunkParser { public: DataChunkParser(DataChunkInput *input, const AsciiString *label, const AsciiString *parentLabel); };
+
+class __declspec(novtable) BfmeParserBindingBaseVE
 {
 public:
-	BfmeParserBindingBaseVE(BfmeParserRegistryVE *registry, void *label, void *parentLabel);
+	// The base is the rowed DataChunkParser ctor (0x000ABB87), called by that name.
+	__declspec(dllimport) __forceinline BfmeParserBindingBaseVE(BfmeParserRegistryVE *registry, void *label, void *parentLabel)
+	{ reinterpret_cast<DataChunkParser *>(this)->DataChunkParser::DataChunkParser((DataChunkInput *)registry, (const AsciiString *)label, (const AsciiString *)parentLabel); }
 	virtual ~BfmeParserBindingBaseVE();
 	virtual void bfmeSlot0();
 	virtual void bfmeSlot1();
