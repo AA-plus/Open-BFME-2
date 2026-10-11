@@ -108,8 +108,11 @@ public:
 
 extern GameWindowManager *TheWindowManager;
 
-extern Int g_00E0460C[8];
-extern Int g_00E0462C[8];
+// Owned here: the two name-key tables are filled in this TU's init loop
+// (ButtonPlayer / StaticTextPlayer keys) and read back by input handling;
+// retail .data starts them at 0.
+Int g_00E0460C[8] = { 0 };
+Int g_00E0462C[8] = { 0 };
 // Zero Hour's file statics (VA 0x00E0464C/0x00E04650): only this unit's
 // observer functions touch them, and retail schedules around them as
 // non-aliased statics (0x0050E6E6).
@@ -123,13 +126,19 @@ extern Int g_00E04694;
 GameWindow *g_00E04654[8] = { 0 };
 GameWindow *g_00E04674[8] = { 0 };
 Int g_00E04694 = 0;
-extern GameWindow *g_00E04698;
-extern GameWindow *g_00E0469C;
-extern GameWindow *g_00E046A0;
-extern GameWindow *g_00E046A4;
-extern GameWindow *g_00E046A8;
-extern GameWindow *g_00E046AC;
-extern GameWindow *g_00E046B0;
+// Owned here: WinFlag, general portrait and the two count windows are
+// written in this TU's init (winGetWindowFromId) and read back by the
+// observer-panel refresh; retail .data starts them at 0.
+GameWindow *g_00E04698 = 0;
+GameWindow *g_00E0469C = 0;
+GameWindow *g_00E046A0 = 0;
+GameWindow *g_00E046A4 = 0;
+// Owned here: the three observer static-text windows below are written in
+// this TU's init (winGetWindowFromId) and read back on every observer-panel
+// refresh; retail .data starts them at 0.
+GameWindow *g_00E046A8 = 0;
+GameWindow *g_00E046AC = 0;
+GameWindow *g_00E046B0 = 0;
 
 void __cdecl Rva0050DE39Init()
 {
