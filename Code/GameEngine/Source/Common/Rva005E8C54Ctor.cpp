@@ -9,7 +9,7 @@
 //
 // The 12-byte object keeps the source's +0x18 at +0x00 and builds its +0x04
 // member through the rowed Rva005F86FE constructor (0x005F86FE). It then runs
-// its own 0x005E8B66 (238 bytes, not yet rowed; pinned) with the second
+// its own rowed 0x005E8B66 (238 bytes) with the second
 // argument and, when the member reports entries (rowed 0x005F8408), its
 // rowed forwarder 0x005F841F. The holder allocates it with operator new and
 // keeps the pointer at +0x00. The earlier verdicts were blocked on
@@ -94,6 +94,59 @@ private:
 	void *m_source18;				// +0x00
 	Rva005F86FE m_member04;			// +0x04
 };
+
+// 0x005E8B66 (238 bytes, EH, RET 4) fills the member list: the source's
+// +0x18 id resolves (rowed 0x005F88D6, then 0x004E0625) to an object that
+// lists its unit ids (slot 3) and describes each into a scratch unit
+// (slot 4, the rowed Rva004E3184 at 0x004E30D5 / 0x004E3184); every
+// described unit becomes a button record (rowed 0x005F8C48, destructor
+// 0x005E8908) that the rowed helper 0x005E8ADF adds to the list. The
+// record view binds the record's two rowed spellings.
+class Rva004E3184
+{
+public:
+	Rva004E3184(int playerID);
+	virtual ~Rva004E3184();
+private:
+	unsigned char m_data[0x58 - 4];
+};
+class Rva004E0625 { public: int rva004E0625() const; };
+int Rva005F88D6Get(int id);
+class Rva005E8B66Source
+{
+public:
+	virtual void v0(); virtual void v1(); virtual void v2();
+	virtual void listUnits(_STL::vector<int> *ids);					// +0x0C
+	virtual bool describe(int id, Rva004E3184 *unit);					// +0x10
+};
+class Rva00319CED;
+class Rva005E8908
+{
+public:
+	Rva005E8908(int value, int playerID, Rva00319CED *unit);
+	~Rva005E8908();
+private:
+	unsigned char m_data[0x1C];
+};
+void rva005E8ADF(Rva005F86FE *list, const Rva005E8908 &record);
+
+void Rva005E8C54::rva005E8B66(int b)
+{
+	int found = Rva005F88D6Get((int)m_source18);
+	Rva005E8B66Source *source = found ? (Rva005E8B66Source *)((Rva004E0625 *)found)->rva004E0625() : 0;
+	if (!source)
+		return;
+	Rva004E3184 unit(0);
+	_STL::vector<int> ids;
+	source->listUnits(&ids);
+	for (int *it = ids.begin(), *end = ids.end(); it != end; ++it)
+	{
+		if (source->describe(*it, &unit))
+		{
+			rva005E8ADF(&m_member04, Rva005E8908(b, (int)m_source18, (Rva00319CED *)&unit));
+		}
+	}
+}
 
 Rva005E8C54::Rva005E8C54(void *a, int b, void *c, const Rva005E8C54Source *source)
 	: m_source18(source->m_18),
