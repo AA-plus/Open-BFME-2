@@ -125,6 +125,48 @@ const Image *GetButtonImage(int playerID, Rva004E3184 *army)
 	const Image *image = army->GetButtonImage(playerID);
 	return image ? image : noArtImage;
 }
+}
+
+// The spawnable unit's rowed title and description getters (0x004E25AF,
+// pinned 0x004E265F) and its +0x48/+0x4C words.
+class Rva00319CED
+{
+public:
+	UnicodeString rva004E25AF(int playerID);
+	UnicodeString rva004E265F(int playerID);
+	unsigned char m_pad00[0x48];
+	int m_48;
+	int m_4c;
+};
+
+// ??0Rva005F8C48@@QAE@HHPAVRva00319CED@@@Z, native 5F8C48..5F8CAE (104B,
+// RET 0xC; caller 0x005E8B66, the army spawn button list): a button record
+// holding its first argument and player id, the unit's button image
+// (GetButtonImage above), the unit's +0x4C and +0x48 words and its title
+// and description for that player. Address-derived names.
+struct Rva005F8C48
+{
+	Rva005F8C48(int value, int playerID, Rva00319CED *unit);
+
+	int m_value;					// +0x00
+	int m_playerID;					// +0x04
+	const Image *m_image;			// +0x08
+	int m_0c;						// +0x0C
+	int m_10;						// +0x10
+	UnicodeString m_title;			// +0x14
+	UnicodeString m_description;	// +0x18
+};
+
+Rva005F8C48::Rva005F8C48(int value, int playerID, Rva00319CED *unit)
+	: m_value(value), m_playerID(playerID),
+	  m_image(StrategicInGameUI::GetButtonImage(playerID, (Rva004E3184 *)unit)),
+	  m_0c(unit->m_4c), m_10(unit->m_48),
+	  m_title(unit->rva004E25AF(playerID)), m_description(unit->rva004E265F(playerID))
+{
+}
+
+namespace StrategicInGameUI
+{
 
 class QueueUnitButton
 {
