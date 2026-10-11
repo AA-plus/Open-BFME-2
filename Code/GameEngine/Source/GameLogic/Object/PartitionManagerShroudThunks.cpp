@@ -47,6 +47,8 @@ public:
 	void bfmeFwd1050(int a, int b, int c, int d, int e);
 };
 
+class ShroudManagerImpl;
+
 class ShroudManager
 {
 public:
@@ -61,6 +63,13 @@ public:
 	void Rva006276E0(const Region3D *region);
 	void Rva00627E40(int value);
 	void Rva00627810(void *ptr);
+	// Retail 0x00739820: mov ecx,[ecx+0x10]; jmp 0x0073E5A0 (WB ShroudManagerImpl::GetNearestGroupWithValue lead, unproven;
+	// the forwarded signature is read from the call site in doSkirmishAttackNearestGroupWithValue).
+	void rva00739820(const Coord3D *sourceLocation, int playerMask, int unknown, int valueRequired, Coord3D *outLocation);
+
+private:
+	char m_pad[0x10];
+	ShroudManagerImpl *m_impl; // +0x10
 };
 
 class CDEProvider;
@@ -78,6 +87,7 @@ public:
 	void setEnabled_Rva0073B460(bool value);
 	void rva008F8C70(CDEProvider *first, CDEProvider *second);
 	void RevealMapForPlayer(int value);
+	void rva0073E5A0(const Coord3D *sourceLocation, int playerMask, int unknown, int valueRequired, Coord3D *outLocation);
 	void notify();
 	int GetLookerCount(int playerIndex, const Coord3D *pos) const;
 	ObjectShroudStatus GetPropShroudStatusForPlayer(int playerIndex, const Coord3D *pos) const;
@@ -387,4 +397,14 @@ private:
 void Rva007397C0::rva007397C0(int playerIndex)
 {
 	m_cell->updatePlayerCells450_Rva0073D860(playerIndex);
+}
+
+//
+// ?rva00739820@ShroudManager@@QAEXPBUCoord3D@@HHHPAU2@@Z retail 0x00739820 8B.
+// Thunk via the +0x10 implementation pointer tail-jumping to 0x0073E5A0 (1,174 B, unrecovered; pinned as the opaque
+// ShroudManagerImpl::rva0073E5A0). Evidence: retail mov ecx,[ecx+0x10] jmp; REL32 caller 0x003C0FCD passes the source
+// location, player mask, two ints and the out location.
+void ShroudManager::rva00739820(const Coord3D *sourceLocation, int playerMask, int unknown, int valueRequired, Coord3D *outLocation)
+{
+	m_impl->rva0073E5A0(sourceLocation, playerMask, unknown, valueRequired, outLocation);
 }
