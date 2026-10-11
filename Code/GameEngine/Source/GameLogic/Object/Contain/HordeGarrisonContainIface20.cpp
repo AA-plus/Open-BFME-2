@@ -192,14 +192,17 @@ class Rva00588B8AMember { public:
  virtual void slot124();	// +0x124
 };
 
+struct Coord3D;
+class Rva00588E44Contain;
+enum CommandSourceType { CMD_SRC_DUMMY };
 class Rva0047A040Base9E0
 {
 public:
  void *rva00588B8A(void *obj);
 	void rva00588BA8(Object *obj, bool flag);
-	void rva00588C4E(void *contain, Object *obj);
-	void rva00588F61(void *contain, Object *owner, Object *obj);
- void *rva00588BF3(void*,Object*);
+	Object *rva00588C4E(void *contain, const Coord3D *pos);
+	void rva00588F61(void *contain, Object *owner, CommandSourceType source);
+ Rva00588E44Contain *rva00588BF3(void*,Object*);
 };
 
 class HordeGarrisonContain : public GarrisonContain, public Rva0047A040Base9E0
@@ -225,13 +228,13 @@ void HordeGarrisonContain::rva00479C0C(Object *obj, void *b, DamageInfoInput0046
 // ?rva004632E0@HordeGarrisonContain@@UAEXPAVObject@@@Z @0x00479BDD
 void HordeGarrisonContain::rva004632E0(Object *obj)
 {
-	rva00588C4E(this, obj);
+	rva00588C4E(this, (const Coord3D *)obj);
 }
 
 // ?rva00465011@HordeGarrisonContain@@UAEXPAVObject@@@Z @0x00479BF3
 void HordeGarrisonContain::rva00465011(Object *obj)
 {
-	rva00588F61(this, m_object, obj);
+	rva00588F61(this, m_object, (CommandSourceType)(unsigned int)obj);
 }
 
 // ?rva0050B238@HordeGarrisonContain@@UAEXPAVObject@@_N@Z @0x00479C2A
