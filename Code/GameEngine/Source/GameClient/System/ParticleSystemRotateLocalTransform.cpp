@@ -9,6 +9,11 @@
 // while the other float is passed by reference and read only after all call
 // arguments finish. This keeps the C++ evaluation defined and schedules the
 // second x87 float spill after the first row's SSE loads, as retail does.
+// Matrix3D::Rotate_X/Y/Z are inlined into the helpers below; the copies this unit still emits are not
+// the ones retail keeps, so they get TU-local names instead of competing with the rowed bodies.
+#define Rotate_X Rotate_X_RV
+#define Rotate_Y Rotate_Y_RV
+#define Rotate_Z Rotate_Z_RV
 #include "matrix3d.h"
 static __forceinline void particleRotateX(Matrix3D&matrix,const float& s,float c){matrix.Rotate_X(s,c);}
 static __forceinline void particleRotateY(Matrix3D&matrix,const float&s,float c){matrix.Rotate_Y(s,c);}
