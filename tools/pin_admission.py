@@ -39,7 +39,10 @@ symbols.csv, per ADDED line (an edited line counts as added):
         the byte compare copies each DIR32 slot from retail and so cannot tell
         money_put's constructor from money_get's. A jump table into the body
         itself must hold retail's address of its label; any other relocation
-        type is refused;
+        type is refused. Compiler-local EH pointers may instead bind the same
+        fully proven associative EH graph: exact sections and placements,
+        every cleanup call resolved or recursively proven, and every other
+        data binding identical across every owner;
       - each callee with no address yet (a same-type instantiation) is a
         function the object defines, called directly with a zero addend, and
         is proven the same way at the address retail calls before it resolves
@@ -440,7 +443,7 @@ def _prove_body(name, rva, proof, depth):
         first = next((i for i, (a, b) in enumerate(zip(patch["bytes"], target)) if a != b),
                      min(len(patch["bytes"]), len(target)))
         return [f"{source}'s {name} differs from retail 0x{rva:08X} at +0x{first:x}"]
-    return _binding_problems(name, rva, target, (compiled, relocs, info), proof)
+    return _binding_problems(name, rva, target, (compiled, relocs, info), proof, depth)
 
 
 def _bindings(body, relocs, info, size, output):
@@ -484,7 +487,107 @@ def _describe(binding):
     return f"TU-local symbol #{binding[2]} of {Path(binding[1]).name}{suffix}"
 
 
-def _binding_problems(name, rva, target, read, proof):
+def _eh_binding(name, rva, offset, output, source, proof, depth):
+    """A local EH pointer may fold only with its complete associative graph.
+
+    EH byte verification masks relocations. Here each internal edge must name
+    its graph's proven retail location, each external call must resolve there
+    (or pass the ordinary recursive body proof), and every other binding stays
+    object-local or external-by-name. The returned graph is compared with EVERY
+    owner's graph; merely emitting similar FuncInfo bytes proves nothing.
+    """
+    import eh_verify
+
+    obj = eh_verify.Obj(output)
+    symbol = obj.by_name.get(name)
+    if symbol is None or symbol["section"] <= 0:
+        raise ValueError("no defined EH parent")
+    eh = obj.eh_sections(symbol["section"])
+    indices = {s["index"] for s in eh}
+    function = obj.sections[symbol["section"] - 1]
+    root = [(at, index, kind) for at, index, kind in function["relocs"]
+            if at == symbol["value"] + offset]
+    if len(root) != 1 or root[0][2] != build.DIR32:
+        raise ValueError("not one DIR32 EH pointer")
+    root_symbol = obj.symbols.get(root[0][1])
+    if root_symbol is None or root_symbol["section"] not in indices:
+        raise ValueError("pointer is not into the parent's associative EH sections")
+    if "eh_image" not in proof:
+        proof["eh_image"] = eh_verify.Image()
+    image = proof["eh_image"]
+    if eh_verify.verify_row(image, obj, name, rva) != ("EXACT", ""):
+        raise ValueError("associated EH bytes or placements are not exact")
+    bases, conflicts = eh_verify.section_placements(
+        image, obj, dict(symbol, retail_rva=rva), eh)
+    if conflicts:
+        raise ValueError("conflicting EH placements")
+    local_proof = proof
+    if str(output) != str(proof["output"]):
+        # An owner's code must be proven in its own object, not by a receipt
+        # for another object's instantiation with the same spelling.
+        local_proof = dict(proof, source=source, output=output,
+                           proven={}, overlay=dict(proof["base"]))
+    graph = []
+    for section in eh:
+        at, data = bases[section["index"]], section["data"]
+        if at < 0 or at + len(data) > image.size:
+            raise ValueError("EH section extends beyond retail")
+        masked, bindings = bytearray(data), []
+        occupied = set()
+        for site, index, kind in section["relocs"]:
+            if kind not in (build.DIR32, build.REL32) or not 0 <= site <= len(data) - 4:
+                raise ValueError("invalid EH relocation type or extent")
+            slots = set(range(site, site + 4))
+            if slots & occupied:
+                raise ValueError("overlapping EH relocations")
+            occupied |= slots
+            target = obj.symbols.get(index)
+            if target is None:
+                raise ValueError("EH relocation has no symbol")
+            addend = struct.unpack_from("<i", data, site)[0]
+            native = image.dword(at + site)
+            address = ((at + site + 4 + eh_verify._signed(native)) & 0xFFFFFFFF
+                       if kind == build.REL32 else (native - image.base) & 0xFFFFFFFF)
+            if target["section"] in bases:
+                extent = len(obj.sections[target["section"] - 1]["data"])
+                if not 0 <= target["value"] + addend < extent:
+                    raise ValueError("EH edge points beyond its associated section")
+                expected = bases[target["section"]] + target["value"] + addend
+                if address != expected:
+                    raise ValueError("EH edge does not name its proven graph location")
+                binding = ("graph", bases[target["section"]] + target["value"], addend)
+            elif kind == build.REL32:
+                if (site < 1 or data[site - 1] not in (0xE8, 0xE9) or addend
+                        or target["storage"] != SYM_CLASS_EXTERNAL):
+                    raise ValueError("EH callee is not a direct external zero-addend call")
+                callee = target["name"]
+                known = resolved_addresses(callee, proof["rows"], proof["pins"], proof["base"])
+                if known:
+                    if not any(_enters(address, known_rva) for known_rva in known):
+                        raise ValueError("EH callee does not resolve to retail's target")
+                else:
+                    defined = [s for s in obj.symbols.values()
+                               if s["name"] == callee and s["section"] > 0]
+                    if target["section"] <= 0 or len(defined) != 1:
+                        raise ValueError("EH callee has neither an address nor one definition")
+                    problems = _prove_body(callee, address, local_proof, depth + 1)
+                    if problems:
+                        raise ValueError("EH callee: " + problems[0])
+                    local_proof["overlay"][callee] = [address]
+                binding = ("call", address, addend)
+            elif target["storage"] == SYM_CLASS_EXTERNAL:
+                binding = ("extern", target["name"], addend)
+            else:
+                binding = ("local", str(output), index, addend)
+            bindings.append((site, kind, binding))
+            masked[site:site + 4] = b"\0" * 4
+        graph.append((at, section["name"], bytes(masked), tuple(sorted(bindings))))
+    addend = struct.unpack_from("<i", function["data"], root[0][0])[0]
+    return (bases[root_symbol["section"]] + root_symbol["value"], addend,
+            tuple(sorted(graph)))
+
+
+def _binding_problems(name, rva, target, read, proof, depth=0):
     """[] when every relocation of `name`'s body is the one a matched ledger body
     at rva carries (see fold_proof_problems). `read` is the body as
     read_object_symbol_bytes(detail=True) returned it."""
@@ -527,6 +630,16 @@ def _binding_problems(name, rva, target, read, proof):
                     f"{_layout(theirs)}" + why]
         for (offset, _, a), (_, _, b) in zip(mine, theirs):
             if a != b:
+                if a[0] == b[0] == "local":
+                    try:
+                        mine_eh = _eh_binding(name, rva, offset, proof["output"],
+                                              proof["source"], proof, depth)
+                        owner_eh = _eh_binding(build.ledger_object_symbol(owner), rva, offset,
+                                               obj, owner["source"], proof, depth)
+                        if mine_eh == owner_eh:
+                            continue
+                    except (OSError, ValueError, SystemExit, struct.error, IndexError, KeyError):
+                        pass  # Ordinary local data remains subject to the strict binding rule.
                 return [f"{name}'s relocations are not those of the ledger body at "
                         f"0x{rva:08X}: +0x{offset:x} binds {_describe(a)} where "
                         f"{owner['name']} binds {_describe(b)}" + why]

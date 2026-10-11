@@ -105,6 +105,135 @@ def test_proven_template_fold_is_admitted(fold):
     assert judge(fold, "vector<A*> push_back fold; " + PROOF) == []
 
 
+def eh_fold_fixture(fold, *, mutation=None, mutate_owner=False, typed_cleanup=False):
+    """Two genuinely associated graphs with different local symbol indices.
+
+    The parent matches even when its masked EH cleanup/data bindings are wrong.
+    Use separate objects too: local symbol identity cannot establish this fold.
+    """
+    import eh_verify
+
+    thunk, fi, handler = 0x3000, 0x5000, 0x4500
+    parent = b"\xb8" + b"\0" * 4 + b"\x90" * 15 + b"\xc3"
+    textx = b"\xb8" + b"\0" * 4 + b"\xe9" + b"\0" * 4 + b"\xe8" + b"\0" * 4 + b"\xc3"
+    xdata = struct.pack("<IIIIIiI", 0x19930520, 1, 20, 0, 0, -1, 10)
+    symbols = []
+    sections = []
+    for number, name in enumerate((NEW_PB, OLD_PB)):
+        first, index = number * 3 + 1, number * 7
+        sections.extend([
+            (".text", TEXT, parent, [(1, index + 2, 6)]),
+            (".text$x", TEXT, textx, [(1, index + 4, 6), (6, 14, 0x14),
+                                     (11, 16 if typed_cleanup and not number else 15, 0x14)]),
+            (".xdata$x", RDATA, xdata, [(8, index + 4, 6), (24, index + 2, 6)])])
+        symbols.extend([(label, 0, first + k, 0, 3, 1)
+                        for k, label in enumerate((".text", ".text$x", ".xdata$x"))])
+        symbols.append((name, 0, first, 0x20, 2, 0))
+    symbols.extend([("___CxxFrameHandler", 0, 0, 0x20, 2, 0),
+                    (OLD_OV, 0, 7, 0x20, 2, 0), (NEW_OV, 0, 7, 0x20, 2, 0),
+                    ("_wrong_cleanup", 0, 0, 0x20, 2, 0),
+                    ("_wrong_global", 0, 0, 0, 2, 0),
+                    ("_local_data", 0, 7, 0, 3, 0)])
+    sections.append((".text", TEXT, OV, []))
+    # A separate known address keeps the negative control from failing merely
+    # because the wrong name happens to be unresolved.
+    write_pins(fold, [("___CxxFrameHandler", hex(handler), "fixture"),
+                      ("_wrong_cleanup", hex(handler), "fixture")])
+    fold.rows = []
+    fold.row(OLD_PB, OWNER, len(parent), source="Code/owner.cpp")
+    fold.row(OLD_OV, HELPER, len(OV))
+    owner_obj = fold.tmp / "owner.obj"
+    fold.monkeypatch.setattr(fold.build, "row_object",
+                            lambda row: owner_obj if row["source"] == "Code/owner.cpp" else fold.obj)
+
+    def object_bytes(changed):
+        parts = [(n, c, bytearray(d), list(r)) for n, c, d, r in sections]
+        base = 3 if mutate_owner else 0
+        if changed == "cleanup":
+            parts[base + 1][3][2] = (11, 17, 0x14)
+        elif changed == "undefined_cleanup":
+            parts[base + 1][3][2] = (11, 18, 0x14)
+        elif changed == "cleanup_bytes":
+            parts[6][2][5] = 0x48
+        elif changed == "global":
+            parts[base + 2][3][0] = (8, 18, 6)
+        elif changed == "local_data":
+            parts[base + 2][3][0] = (8, 19, 6)
+        elif changed == "max_state":
+            parts[base + 2][2][4] = 2
+        elif changed == "relocation_type":
+            parts[base + 1][3][2] = (11, 15, 0x07)
+        elif changed == "overlap":
+            parts[base + 1][3].append((12, 15, 0x14))
+        elif changed == "addend":
+            parts[base + 1][2][11] = 1
+        elif changed == "graph_edge":
+            parts[base + 2][2][24] = 11
+        raw = bytearray(coff(parts, symbols))
+        table = struct.unpack_from("<I", raw, 8)[0]
+        for section_symbol, parent_section in ((2, 1), (4, 1), (9, 4), (11, 4)):
+            aux = table + (section_symbol + 1) * 18
+            struct.pack_into("<H", raw, aux + 12, parent_section)
+            raw[aux + 14] = 5
+        if changed == "association":
+            struct.pack_into("<H", raw, table + (10 if mutate_owner else 3) * 18 + 12,
+                             1 if mutate_owner else 4)
+        return bytes(raw)
+
+    fold.obj.write_bytes(object_bytes(None if mutate_owner else mutation))
+    owner_obj.write_bytes(object_bytes(mutation if mutate_owner else None))
+    image = eh_verify.Image.__new__(eh_verify.Image)
+    data = bytearray(0x6000)
+    native_parent = parent[:1] + struct.pack("<I", 0x400000 + thunk) + parent[5:]
+    native_text = (b"\xb8" + struct.pack("<I", 0x400000 + fi) + b"\xe9"
+                   + struct.pack("<i", handler - (thunk + 10)) + b"\xe8"
+                   + struct.pack("<i", HELPER - (thunk + 15)) + b"\xc3")
+    native_data = struct.pack("<IIIIIiI", 0x19930520, 1, 0x400000 + fi + 20,
+                              0, 0, -1, 0x400000 + thunk + 10)
+    for at, body in ((OWNER, native_parent), (thunk, native_text), (fi, native_data), (HELPER, OV)):
+        data[at:at + len(body)] = body
+        fold.memory[at] = body
+    image.base, image.size, image.bytes = 0x400000, len(data), bytes(data)
+    fold.monkeypatch.setattr(eh_verify, "Image", lambda: image)
+
+
+def test_associative_eh_fold_with_distinct_objects_is_admitted(fold):
+    eh_fold_fixture(fold)
+    assert judge(fold, PROOF) == []
+
+
+def test_associative_eh_fixture_reproduces_the_previous_false_reject(fold):
+    eh_fold_fixture(fold)
+    def previous_rule(*args):
+        raise ValueError("no associative EH proof in the previous rule")
+    fold.monkeypatch.setattr(fold.admission, "_eh_binding", previous_rule)
+    problems = judge(fold, PROOF)
+    assert problems and "TU-local symbol" in problems[0]
+
+
+def test_associative_eh_cleanup_instantiation_is_recursively_proven(fold):
+    eh_fold_fixture(fold, typed_cleanup=True)
+    assert judge(fold, PROOF) == []
+    receipt = {}
+    pin = {"name": NEW_PB, "address": hex(OWNER), "notes": PROOF}
+    assert fold.admission.fold_proof_problems(pin, OWNER, fold.rows,
+                                              fold.build.load_symbol_map, receipt=receipt) == []
+    assert receipt["bindings"][NEW_OV] == HELPER
+
+
+@pytest.mark.parametrize("mutation", ["cleanup", "undefined_cleanup", "cleanup_bytes",
+                                     "global", "local_data", "max_state", "relocation_type", "overlap",
+                                     "addend", "graph_edge", "association"])
+def test_associative_eh_fold_refuses_wrong_graph(fold, mutation):
+    eh_fold_fixture(fold, mutation=mutation, typed_cleanup=mutation == "cleanup_bytes")
+    assert judge(fold, PROOF)
+
+
+def test_associative_eh_fold_checks_every_owner_graph(fold):
+    eh_fold_fixture(fold, mutation="cleanup", mutate_owner=True)
+    assert judge(fold, PROOF)
+
+
 def shadow_identity(fold, monkeypatch, *, helper_kept=None):
     """Actual RetailTruth plus admission proof over the synthetic COFF graph."""
     import collections
