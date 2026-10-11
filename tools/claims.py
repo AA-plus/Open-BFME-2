@@ -781,6 +781,29 @@ def _blob_id(data):
     return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()
 
 
+def _text_blob_variants(blob, root=None):
+    """Hashes of the same immutable text with LF or CRLF line endings.
+
+    Compile receipts bind the raw worktree bytes, which can be CRLF even
+    when the published Git blob is LF (including after core.autocrlf changes).
+    Read the named blob as bytes: text-mode subprocess output would silently
+    normalize it. Binary and non-UTF-8 inputs get no equivalence claim.
+    """
+    try:
+        base = Path(root or ROOT)
+        env = dict(os.environ, GIT_CEILING_DIRECTORIES=str(base.resolve().parent))
+        got = subprocess.run(["git", "cat-file", "blob", blob], cwd=root or ROOT,
+                             capture_output=True, timeout=60, env=env)
+        data = got.stdout
+        if got.returncode or _blob_id(data) != blob or b"\0" in data:
+            return set()
+        data.decode("utf-8")
+        lf = data.replace(b"\r\n", b"\n")
+        return {_blob_id(lf), _blob_id(lf.replace(b"\n", b"\r\n"))}
+    except (OSError, subprocess.TimeoutExpired, UnicodeDecodeError):
+        return set()
+
+
 def _stored_blobs(cwd, buffers):
     """({path: blob}, None) for `buffers` ({path: bytes read once}), or (None,
     path) for the first one that cannot be bound. Each blob is derived from
@@ -1120,8 +1143,9 @@ def release_landed(sha=None, root=None, who=None, keep_days=1.0, hold=()):
     """Release claims for bodies that have landed on origin/master.
 
     Every queued landing (queue_landed) with EVIDENCE whose row (_row_key),
-    every recorded input blob and every recorded pin line origin/master's tip
-    now holds is released under the owner that queued it and dropped from the
+    every recorded input (same blob, or only LF/CRLF differences in compiler
+    text) and every recorded pin line origin/master's tip now holds is
+    released under the owner that queued it and dropped from the
     queue (an entry in an older evidence format never releases: its claim
     expires); with `sha`, the matched rows that commit adds
     whose lease the commit names in a `Claim-Lease: 0xRVA=<lease>` trailer
@@ -1163,6 +1187,21 @@ def release_landed(sha=None, root=None, who=None, keep_days=1.0, hold=()):
         shown = _git("show", f"{tip}:{SYMBOLS}", cwd=root, timeout=120)
         pinned = {line.strip() for line in shown.stdout.splitlines()} if shown.returncode == 0 else set()
 
+    text_variants = {}
+
+    def input_matches(path, recorded, source):
+        blob = published.get(path, "")
+        if blob == recorded:
+            return True
+        # A .lib is compared verbatim, never as compiler text. Likewise no
+        # equivalence applies to a submodule commit or other binary file.
+        if not blob or source.lower().endswith(".lib") or Path(path).suffix.lower() in (
+                ".lib", ".obj", ".dll", ".exe", ".dat"):
+            return False
+        if blob not in text_variants:
+            text_variants[blob] = _text_blob_variants(blob, root)
+        return recorded in text_variants[blob]
+
     def landed(entry):
         # an older snapshot (no receipt binding, blobs read twice, no pins) is
         # never trusted: its claim simply expires (review 2026-10-09, round 2)
@@ -1176,7 +1215,8 @@ def release_landed(sha=None, root=None, who=None, keep_days=1.0, hold=()):
             return False
         if any(pin not in pinned for pin in entry.get("pins") or ()):
             return False
-        return all(published.get(path, "") == blob for path, blob in deps.items())
+        return all(input_matches(path, blob, entry["row"].split(",")[4])
+                   for path, blob in deps.items())
     if sha:
         landed_rvas(sha, root, tip)        # raises unless the commit is on origin/master
     # The trailer IS the landing evidence: a ledger conversion names the body

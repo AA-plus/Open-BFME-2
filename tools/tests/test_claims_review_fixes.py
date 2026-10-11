@@ -561,3 +561,39 @@ def test_r2_an_unpublished_symbols_pin_keeps_the_claim(hosts):
     _git(a, "commit", "-q", "-am", "pin")
     _git(a, "push", "-q", "origin", "HEAD:refs/heads/master")
     assert claims.release_landed() == ([0x100], [])
+
+
+@pytest.mark.parametrize("changed", [False, True])
+def test_crlf_compile_inputs_settle_only_when_origin_has_the_same_text(hosts, changed):
+    a = hosts("a")
+    _git(a, "config", "core.autocrlf", "true")
+    source = b'#include "x.h"\nvoid f() {}\n'
+    header = b"#define VERSION 1\n"
+    _commit_ledger(a, [ROW], "LF inputs", {"Code/x.cpp": source.decode(),
+                                          "Code/x.h": header.decode()})
+    _git(a, "push", "-q", "origin", "HEAD:refs/heads/master")
+    _git(a, "config", "core.autocrlf", "false")
+    claims.claim([0x100])
+    (a / "Code/x.cpp").write_bytes(source.replace(b"\n", b"\r\n"))
+    (a / "Code/x.h").write_bytes(header.replace(b"\n", b"\r\n"))
+    _verified(a, "Code/x.cpp", ["Code/x.h"])
+    claims.queue_landed(0x100, ROW)
+    assert not claims.pending()[0]["deps_truncated"]
+    if changed:
+        _commit_ledger(a, [ROW], "changed header", {"Code/x.h": "#define VERSION 2\n"})
+        _git(a, "push", "-q", "origin", "HEAD:refs/heads/master")
+    expected = ([], [0x100]) if changed else ([0x100], [])
+    assert claims.release_landed() == expected
+
+
+def test_crlf_library_bytes_are_not_text_normalized_during_settlement(hosts):
+    a = hosts("a")
+    _git(a, "config", "core.autocrlf", "true")
+    row = ROW.replace("Code/x.cpp", "Code/x.lib")
+    _commit_ledger(a, [row], "library", {"Code/x.lib": "archive\n"})
+    _git(a, "push", "-q", "origin", "HEAD:refs/heads/master")
+    _git(a, "config", "core.autocrlf", "false")
+    claims.claim([0x100])
+    (a / "Code/x.lib").write_bytes(b"archive\r\n")
+    claims.queue_landed(0x100, row)
+    assert claims.release_landed() == ([], [0x100])
