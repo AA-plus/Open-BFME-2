@@ -27,10 +27,13 @@ public:
     bool rva006F9FC0(Rva006E1E30 *object, int unused); // rowed, 0x006F9FC0
 };
 
-class Rva006E2010Dispatcher
+// 0x006E2010 is rowed as AptCIH::queueClipEvents (1090B; WB twin);
+// same (int,int,int) shape, so these resolve to the rowed body instead of
+// the unrowed dispatcher spelling (sole U on this unit).
+class AptCIH
 {
 public:
-    void dispatch(int eventMask, int value, int enabled); // pinned, 0x006E2010
+    bool queueClipEvents(int eventMask, int value, int enabled);
 };
 
 class AptValue;
@@ -55,20 +58,20 @@ void Rva006FB860::rva006FA7E0(bool first, bool enabled, int value)
             return;
         if (!mValue->isUndefined()) {
             if (mValue == m60) {
-                ((Rva006E2010Dispatcher *)m60->rva006DCF60(false))
-                    ->dispatch(0x800, value, 1);
+                ((AptCIH *)m60->rva006DCF60(false))
+                    ->queueClipEvents(0x800, value, 1);
             } else {
-                ((Rva006E2010Dispatcher *)m60->rva006DCF60(false))
-                    ->dispatch(0x1000, value, 1);
+                ((AptCIH *)m60->rva006DCF60(false))
+                    ->queueClipEvents(0x1000, value, 1);
             }
         } else {
             if (((Rva006F9FC0 *)this)->rva006F9FC0(
                     (Rva006E1E30 *)m60->rva006DCF60(false), value) && m68 == m60) {
-                ((Rva006E2010Dispatcher *)m60->rva006DCF60(false))
-                    ->dispatch(0x800, value, 1);
+                ((AptCIH *)m60->rva006DCF60(false))
+                    ->queueClipEvents(0x800, value, 1);
             } else {
-                ((Rva006E2010Dispatcher *)m60->rva006DCF60(false))
-                    ->dispatch(0x1000, value, 1);
+                ((AptCIH *)m60->rva006DCF60(false))
+                    ->queueClipEvents(0x1000, value, 1);
             }
         }
         m60 = (BfmeAptValue006DCD20 *)gpUndefinedValue;
@@ -78,8 +81,8 @@ void Rva006FB860::rva006FA7E0(bool first, bool enabled, int value)
     if (first) {
         if (m68->isUndefined())
             return;
-        ((Rva006E2010Dispatcher *)m68->rva006DCF60(false))
-            ->dispatch(0x400, value, 1);
+        ((AptCIH *)m68->rva006DCF60(false))
+            ->queueClipEvents(0x400, value, 1);
         m60 = m68;
         return;
     }
@@ -88,33 +91,33 @@ void Rva006FB860::rva006FA7E0(bool first, bool enabled, int value)
         bool inside = ((Rva006F9FC0 *)this)->rva006F9FC0(
             (Rva006E1E30 *)m60->rva006DCF60(false), value);
         if (!m64->isUndefined() && !inside) {
-            ((Rva006E2010Dispatcher *)m60->rva006DCF60(false))
-                ->dispatch(0x10000, value, 1);
+            ((AptCIH *)m60->rva006DCF60(false))
+                ->queueClipEvents(0x10000, value, 1);
             m64 = (BfmeAptValue006DCD20 *)gpUndefinedValue;
             return;
         }
         if (m64->isUndefined() && inside) {
-            ((Rva006E2010Dispatcher *)m60->rva006DCF60(false))
-                ->dispatch(0x8000, value, 1);
+            ((AptCIH *)m60->rva006DCF60(false))
+                ->queueClipEvents(0x8000, value, 1);
             m64 = m60;
         }
     } else {
         if (!m68->isUndefined() && m68 != m64) {
             if (!m64->isUndefined() && m64 != m60) {
-                ((Rva006E2010Dispatcher *)m64->rva006DCF60(false))
-                    ->dispatch(0x4000, value, 1);
+                ((AptCIH *)m64->rva006DCF60(false))
+                    ->queueClipEvents(0x4000, value, 1);
             }
             m64 = m68;
-            ((Rva006E2010Dispatcher *)m68->rva006DCF60(false))
-                ->dispatch(0x2000, value, 1);
+            ((AptCIH *)m68->rva006DCF60(false))
+                ->queueClipEvents(0x2000, value, 1);
         } else {
             if (m64->isUndefined() || m68 == m64 || !m60->isUndefined())
                 return;
             if (((Rva006F9FC0 *)this)->rva006F9FC0(
                     (Rva006E1E30 *)m64->rva006DCF60(false), value))
                 return;
-            ((Rva006E2010Dispatcher *)m64->rva006DCF60(false))
-                ->dispatch(0x4000, value, 1);
+            ((AptCIH *)m64->rva006DCF60(false))
+                ->queueClipEvents(0x4000, value, 1);
             m64 = (BfmeAptValue006DCD20 *)gpUndefinedValue;
             return;
         }
