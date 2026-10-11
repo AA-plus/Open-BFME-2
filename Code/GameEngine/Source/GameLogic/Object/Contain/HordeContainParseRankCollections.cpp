@@ -10,6 +10,12 @@
 #undef _CRTIMP
 #define _CRTIMP __declspec(dllimport)
 #include <list>
+
+// Declaration-only: retail has one list<int>::insert (rowed in stlport_list_int_insert.cpp, node creation out of line);
+// this unit calls it rather than emitting a copy with the node creation inlined.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::insert(list<int, allocator<int> >::iterator, const int &);
+}
 #include <set>
 
 // vector<int> fill/insert otherwise instantiates the _Construct<int,int>

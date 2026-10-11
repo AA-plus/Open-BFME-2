@@ -7,6 +7,12 @@
 // these containers different bodies survive the link from different units.
 #include <list>
 
+// Declaration-only: retail has one list<int>::insert (rowed in stlport_list_int_insert.cpp, node creation out of line);
+// this unit calls it rather than emitting a copy with the node creation inlined.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::insert(list<int, allocator<int> >::iterator, const int &);
+}
+
 // vector<int> fill/insert otherwise instantiates the _Construct<int,int>
 // COMDAT (one byte shape per TU flags); a file-static overload takes those
 // calls instead so this TU emits no external copy.
