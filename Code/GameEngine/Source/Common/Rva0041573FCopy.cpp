@@ -73,6 +73,12 @@ Rva0041579E::~Rva0041579E()
 // Gap between ??1Rva0041579E 0x004156FC and ??0Rva0041573F 0x0041573F; called by matched GameEngine::init 0x0022ED66;
 // calls rowed BFME2NativeNetwork::baseConstruct 0x001B4E63 and rowed hash_map ctor 0x00415643; vtable 0x0083A288; byte at +0x20.
 #include <hash_map>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+}
 struct Rva00415643Element { char bytes[1]; };
 class BFME2NativeNetwork
 {

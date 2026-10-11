@@ -2,6 +2,12 @@
 // stlport
 // ??0Rva00427157@@QAE@ABVAsciiString@@PBV0@@Z @0x00427157 62B ctor copies AsciiString at +0 via rowed StringBase copy 0x000365F0 fills 8 floats at +4 with 1.0f if src null else copies 8 floats from src+4 caller 0x004273FF
 #include <hash_map>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+}
 
 // map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
 // COMDAT (one byte shape per TU flags); a declaration-only specialization
