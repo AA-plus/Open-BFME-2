@@ -17212,3 +17212,10 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??0Rva006003FCMember@@QAE@PAX00I@Z,0x00600352,callee of ??0Rva006003FC@@QAE@PAX00@Z
 ?rva003F1CA2@Rva003F1093@@QAEXPAVCreateAHeroData@@H@Z,0x003F1CA2,Correct owner of former stdcall pin; native92B entry3F1CA2 reads ECX into EDI and pops8; search20EF3E explicitly reloads region receiver; same-unit lookup3F083A proves preserved ECX for wrapper3F1CFE; neutral ABI owner original names unproven
 ??0Rva005E8908@@QAE@HHPAVRva00319CED@@@Z,0x005F8C48,callee of ?rva005E8B66@Rva005E8C54@@QAEXH@Z
+??0Rva00212ED3@@QAE@XZ,0x00212AEF,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
+??0Rva002130CA@@QAE@XZ,0x00213E11,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
+??0Rva00212379@@QAE@XZ,0x00213E11,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
+??0Rva00211FA3@@QAE@XZ,0x0033C432,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
+??1Rva00210CC5@@QAE@XZ,0x00210CC5,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
+??1Rva0021397C@@QAE@XZ,0x0021397C,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
+??1Rva00211FA3@@QAE@XZ,0x00211FA3,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
