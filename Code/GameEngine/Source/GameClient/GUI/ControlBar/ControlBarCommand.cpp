@@ -221,6 +221,7 @@ protected:
     void updateContextCommand();
     static void populateInvDataCallback(Object *,void *);
 public:
+    int rva0053BA87(const CommandButton *,Object *) const;
     void rva0053BB16(Object *,CommandSet *);
     void setControlCommand(GameWindow *,const CommandButton *);
     void rva0031D230();
@@ -522,4 +523,39 @@ void __cdecl Rva0053BA4D(Object *object,void *userData)
                 *((bool *)((char *)userData+4))=true;
         }
     }
+}
+
+class ModelConditionFlags
+{
+public:
+	bool rva000B3EB3() const;
+};
+
+class Rva00263546
+{
+public:
+	bool rva00263546(const Rva00263546 *other) const;
+};
+
+// ?rva0053BA87@ControlBar@@QBEHPBVCommandButton@@PAVObject@@@Z @0x0053BA87 90B
+// Target evidence: checks ModelConditionFlags at first+0x1E0 and first+0x194 through
+// rowed 0x000B3EB3; tests each against second+0x10C through rowed 0x00263546; returns 3
+// for the first overlap or the second non-overlap and 2 otherwise.
+// Native callers53BE4B/53CBA9/53CBC2 load ControlBar in ECX then push Object and
+// CommandButton. WB1118910 stores its ECX receiver and returns with RET8.
+// Target member ABI and argument roles are proven by these callers; const qualification
+// follows the const parent call context. The method name remains address-derived.
+int ControlBar::rva0053BA87(const CommandButton *firstOwner, Object *secondOwner) const
+{
+	ModelConditionFlags *firstFlags = (ModelConditionFlags *)((char *)firstOwner + 0x1E0);
+	if (firstFlags->rva000B3EB3()
+		&& ((Rva00263546 *)((char *)secondOwner + 0x10C))->rva00263546((const Rva00263546 *)firstFlags))
+		return 3;
+
+	ModelConditionFlags *secondFlags = (ModelConditionFlags *)((char *)firstOwner + 0x194);
+	if (secondFlags->rva000B3EB3()
+		&& !((Rva00263546 *)((char *)secondOwner + 0x10C))->rva00263546((const Rva00263546 *)secondFlags))
+		return 3;
+
+	return 2;
 }
