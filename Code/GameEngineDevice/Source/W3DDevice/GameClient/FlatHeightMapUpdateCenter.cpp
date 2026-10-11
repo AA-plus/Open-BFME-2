@@ -32,6 +32,7 @@
 // ?rva00115DA7@Rva00115DA7@@QAEXHHHH_N@Z. Both need pins at those addresses.
 
 #include <vector>
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 typedef int Int;
 typedef bool Bool;
@@ -425,5 +426,52 @@ void Rva000E3B41::rva000E3CE1(const Rva000E3A8D &cameras, Int arg)
 	}
 
 	m_updateState = 3;
+	}
+}
+
+// Rowed-var linkage for the resize callee: the erase/fillInsert the Clamp
+// twin (Rva00082C98Clamp.cpp, rowed IHHH 73B at this same address) calls.
+// vector<Coord3D> is layout-identical to this TU's vector<Vector3> (three
+// pointers over 12-byte trivial elements), so the calls bind the rowed
+// 0x00081A24/0x00082719 bodies. Both callees are declared-only (no
+// definition visible, so nothing instantiates and no __copy is emitted).
+class Rva00082719Vector
+{
+public:
+	void fillInsert(Coord3D *, unsigned int, const Coord3D &);
+};
+
+// Declare-only explicit specialization: the erase call below binds the
+// rowed 0x00081A24 primary-template instantiation without emitting a local
+// copy (and without its __copy) in this TU. Same effect as the Clamp twin's
+// fake template, but coexists with the real <vector> this TU also uses.
+namespace _STL
+{
+	template <>
+	class vector<Coord3D, allocator<Coord3D> >
+	{
+	public:
+		Coord3D *erase(Coord3D *first, Coord3D *last);
+	};
+}
+
+struct VecBase
+{
+	void *m_begin;
+	void *m_end;
+	void *m_cap;
+};
+
+void Rva00082C98Host::rva00082C98(unsigned int n, Vector3 value)
+{
+	unsigned int count = (unsigned int)(((char *)((VecBase *)this)->m_end - (char *)((VecBase *)this)->m_begin) / 12);
+	if (n < count)
+	{
+		char *e = (char *)((VecBase *)this)->m_begin + n * 12;
+		((_STL::vector<Coord3D, _STL::allocator<Coord3D> > *)this)->erase((Coord3D *)e, (Coord3D *)((VecBase *)this)->m_end);
+	}
+	else
+	{
+		((Rva00082719Vector *)this)->fillInsert((Coord3D *)((VecBase *)this)->m_end, n - (unsigned int)(((char *)((VecBase *)this)->m_end - (char *)((VecBase *)this)->m_begin) / 12), *(const Coord3D *)&value);
 	}
 }
