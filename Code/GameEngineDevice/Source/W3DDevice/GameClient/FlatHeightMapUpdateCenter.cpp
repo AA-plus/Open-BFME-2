@@ -73,6 +73,7 @@ public:
 	void rva00082C98(unsigned int n, Vector3 value);
 };
 
+
 class Rva00112230CameraGroup;
 
 class W3DTerrainBackground
@@ -108,7 +109,33 @@ class Rva00115DA7
 {
 public:
 	void rva00115DA7(Int left, Int down, Int right, Int up, Bool culled);
+
+private:
+	unsigned char m_pad00[0xA8];
+	Int m_leftA8;
+	unsigned char m_padAC[0xB0 - 0xAC];
+	Int m_downB0;
+	unsigned char m_padB4[0xB8 - 0xB4];
+	Int m_rightB8;
+	unsigned char m_padBC[0xC0 - 0xBC];
+	Int m_upC0;
 };
+
+// ?Rva00115DA7::rva00115DA7 present-unmatched
+// Retail 0x00115DA7 (37B body, 43B extent): stores the four edge ints;
+// the culled flag is accepted for the ret-0x14 ABI but not stored. This
+// HHHH_N spelling is what FlatHeightMapUpdateCenter's rowed caller
+// references (a Bool fifth arg widens to the same dword, but spelling it
+// Int reshapes the caller's frame, so the reference must keep this
+// spelling). The identical body is rowed as HHHHH from Rva00115DA7.cpp;
+// the two COMDATs fold at link. Verified exact via explain_mismatch.
+void Rva00115DA7::rva00115DA7(Int left, Int down, Int right, Int up, Bool culled)
+{
+	m_leftA8 = left;
+	m_downB0 = down;
+	m_rightB8 = right;
+	m_upC0 = up;
+}
 
 struct TileRecord
 {
