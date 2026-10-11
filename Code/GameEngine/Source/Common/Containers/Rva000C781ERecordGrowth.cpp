@@ -130,3 +130,26 @@ template void _STL::vector<BfmeVectorRecord000C0BEC>::push_back(const BfmeVector
 // application types are not inferred from the alternate C++ symbol spellings.
 #pragma comment(linker, "/alternatename:??1BfmeVectorRecord000C0BEC@@QAE@XZ=??1Rva000BEDF0Record@@QAE@XZ")
 #pragma comment(linker, "/alternatename:?_M_clear@?$vector@UBfmeVectorRecord000C0BEC@@V?$allocator@UBfmeVectorRecord000C0BEC@@@_STL@@@_STL@@IAEXXZ=?_M_clear@?$vector@URva000BEDF0Record@@V?$allocator@URva000BEDF0Record@@@_STL@@@_STL@@IAEXXZ")
+
+// Native C855C..C8617 supplies the complete187B parser and two observed
+// cdecl arguments. WB926C40 corroborates three tokens, the empty/null
+// defaults and record append/scalar assignment. Application owner and field
+// names remain unknown; the queued FlightDeck name is not asserted.
+// The existing BFME1-derived record view supplies structure only; target
+// C8492, C0BEC and this body independently establish its offsets and calls.
+// Explicit assignment branches preserve retail's argument-push layout.
+class INI { public: const char *getNextTokenOrNull(const char *); int scanInt(const char *); };
+namespace _STL { template <> void vector<AsciiString>::push_back(const AsciiString &); }
+void Rva000C855CParseRecord(INI *ini,Rva000C8492RecordOwner *owner) {
+ if(!owner)return;
+ AsciiString group,name;
+ const char *token=ini->getNextTokenOrNull(0);
+ if(token)name=token;else name="";
+ token=ini->getNextTokenOrNull(0);
+ int value=token ? ini->scanInt(token):0;
+ token=ini->getNextTokenOrNull(0);
+ if(token)group=token;else group=(const char*)0;
+ BfmeVectorRecord000C0BEC *record=owner->findOrCreateRecord(group);
+ record->names.push_back(name);
+ record->word10=value;
+}
