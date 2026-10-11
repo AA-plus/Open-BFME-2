@@ -1,4 +1,4 @@
-// cl: /EHsc /MD
+// cl: /O1 /EHsc /MD
 // ??1Rva0042C833@@UAE@XZ retail 0x0042C833 70B
 // Own vptr C3C6EC; under EH state 1 the body unregisters this through the
 // rowed ?rva0042CAEB@Rva0042CBB6 0x0042CAEB on the +0xC pointer; the member
@@ -7,15 +7,20 @@
 // Caller: rowed ??_GRva0042C833 0x0042C977. Supersedes Peppy's 0.94 stash
 // reverse/attempts/0x0042c833.cpp (the member dtor was the missing piece).
 
+class Rva0042C1B7Item;
+class Rva002D3627Host;
+
 class Rva0042CBB6
 {
 public:
 	void rva0042CAEB(int who);
+	void rva002B230F(int impl);
 };
 
 class Rva000AD6F4
 {
 public:
+	Rva000AD6F4() : m_ptr(0) {}
 	~Rva000AD6F4();
 	void clear();
 	__forceinline int getPointer() const { return m_ptr; }
@@ -28,10 +33,6 @@ class Rva0042C833Base
 {
 public:
 	virtual ~Rva0042C833Base() {}
-
-private:
-	int m_04;
-	int m_08;
 };
 
 class GameMessage;
@@ -39,10 +40,13 @@ class GameMessage;
 class Rva0042C833 : public Rva0042C833Base
 {
 public:
+	Rva0042C833(Rva0042C1B7Item *owner, Rva002D3627Host *holder, Rva0042CBB6 *source);
 	virtual ~Rva0042C833();
 	int rva0042C879(GameMessage *message);
 
 private:
+	Rva0042C1B7Item *m_04;
+	Rva002D3627Host *m_08;
 	Rva0042CBB6 *m_0C;
 	int m_10;
 	Rva000AD6F4 m_14;
@@ -101,4 +105,15 @@ int Rva0042C833::rva0042C879(GameMessage *message)
     const int y=argument->pixel.y;
     Rva0042C083Param point={x,y};
     return reinterpret_cast<Rva0042C7B1 *>(this)->rva0042C7B1(&point,message->getArgument(1)->integer);
+}
+
+// Native42C7E0..42C833 RET12; the rowed allocating wrapper42C8D1
+// forwards owner, holder and source into this 18-byte payload. The rowed
+// destructor proves the +14 owned cell and base unwind. Names remain opaque.
+// The constructor's state0 boundary supports this complete-object view of
+// the +4/+8 fields; their former inherited padding was a structural guess.
+Rva0042C833::Rva0042C833(Rva0042C1B7Item *owner, Rva002D3627Host *holder, Rva0042CBB6 *source)
+    : m_04(owner), m_08(holder), m_0C(source), m_10(-1)
+{
+    m_0C->rva002B230F((int)this);
 }
