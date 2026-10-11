@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: /ICode/Libraries/Include /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 // String-slot cluster around 0x000B82F9. Members carry a flag byte, a raw
 // name pointer and AsciiString slots; destruction of by-value AsciiString
 // parameters emits the shared releaseBuffer worker (0x00036410) through the
@@ -12,6 +12,7 @@
 // unresolved. No original identity is inferred from a matching instruction shape.
 
 #include "ascii_string.h"
+#include "Lib/Coord3D.h"
 #include <string.h>
 template<> bool StringBase<char>::isEmpty() const;
 
@@ -181,6 +182,44 @@ struct Rva000B8F5AOuter:public Rva000BF9FCHeader,public Rva000BF9FCModelInterfac
 
 };
 
+
+struct MatrixView367 {float row[3][4];};
+struct ObjectView367 {char pad00[8];MatrixView367 transform08;Coord3D position38;};
+struct BarrelView367 {int recoil00,fx04,muzzle08;char pad0C[0x3C-0x0C];};
+struct BarrelVector367 {BarrelView367*begin,*end,*capacity;};
+struct StateView367 {char pad00[0xAC];BarrelVector367 barrels[3];char padD0[0xF4-0xD0];unsigned char validF4;};
+struct RecoilView367 {int state;float value04,value08;};
+struct RecoilVector367 {RecoilView367*begin,*end,*capacity;};
+struct DataView367 {char pad00[0x54];float initial54;};
+class Rva000B304B {public:void rva000B304B(void*,bool);};
+class RenderView367 {public:virtual void v000();virtual void v001();virtual void v002();virtual void v003();
+virtual void v004();virtual void v005();virtual void v006();virtual void v007();
+virtual void v008();virtual void v009();virtual void v010();virtual void v011();
+virtual void v012();virtual void v013();virtual void v014();virtual void v015();
+virtual void v016();virtual void v017();virtual void v018();virtual void v019();
+virtual void v020();virtual void v021();virtual void v022();virtual void v023();
+virtual void v024();virtual void v025();virtual void v026();virtual void v027();
+virtual void v028();virtual void v029();virtual void v030();virtual void v031();
+virtual void v032();virtual void v033();virtual void v034();virtual void v035();
+virtual void v036();virtual void v037();virtual void v038();virtual void v039();
+virtual void v040();virtual void v041();virtual void v042();virtual void v043();
+virtual void v044();virtual void v045();virtual void v046();virtual void v047();
+virtual void v048();virtual void v049();virtual void v050();virtual MatrixView367 bone(int);
+virtual void v052();virtual void v053();virtual void v054();virtual void v055();
+virtual void v056();virtual void v057();virtual void v058();virtual void v059();
+virtual void v060();virtual void v061();virtual void v062();virtual void v063();
+virtual void v064();virtual void v065();virtual void v066();virtual void v067();
+virtual void v068();virtual void v069();virtual void v070();virtual void v071();
+virtual void v072();virtual void v073();virtual void v074();virtual void v075();
+virtual void v076();virtual void v077();virtual void v078();virtual void v079();
+virtual void v080();virtual void v081();virtual void v082();virtual void v083();
+virtual void v084();virtual void v085();virtual void v086();virtual void v087();
+virtual void v088();virtual void v089();virtual void v090();virtual void v091();
+virtual void v092();virtual void v093();virtual void v094();virtual void v095();
+virtual void v096();virtual void v097();virtual void v098();virtual void v099();
+virtual int hidden();
+};
+
 struct Rva000C144AEntry
 {
 	void *m_ptr00;
@@ -200,6 +239,7 @@ struct Rva000C14BDTarget
 class Rva000B8F5A
 {
 public:
+	bool rva000B57A7(int,int,const FXList*,float,const Coord3D*);
 	void rva000C15F1(int i,float *first,float *second);
 	AsciiString rva000C146D(int i);
 	void rva000B8F5A(char *a, AsciiString b);
@@ -213,13 +253,13 @@ public:
 private:
 	char m_pad00[0x0C];
 	void *m_ptr0C;
-	char m_pad10[0x94 - 0x10];
+	char m_pad10[0x44-0x10];RenderView367*render44;char m_pad48[0x94-0x48];
 	bool m_94;
 	char m_pad95[0x98 - 0x95];
 	char *m_98;
 	char m_pad9C[0xA8 - 0x9C];
 	AsciiString m_A8;
-	char m_padAC[0x104 - 0xAC];
+	char m_padAC[0xBC-0xAC];RecoilVector367 recoilBC[3];char m_padE0[0x104-0xE0];
 	Rva000C144AEntry m_entries104[3];
 	char m_pad158[0x254 - 0x158];
 	AsciiString m_name254;
@@ -583,4 +623,44 @@ void Rva000B8F5A::rva000C15F1(int i,float*first,float*second){
  }
  first[0]=slot->m_entries104[0].f08;first[1]=slot->m_entries104[0].f04;
  second[0]=0.0f;second[1]=0.0f;
+}
+
+// Target B57A7..B5916 full367 RET14 and WB9416C0 named weapon FX;
+// ZH handleWeaponFireFX provides bone/hidden-object/recoil semantics.
+// Target five arguments, secondary+C receiver, record3C and validF4,
+// Native accesses establish offsets, the five-argument ABI and latched state.
+// Record roles and subsystem identity are supported by WB and the donor;
+// local view names retain uncertainty about original target types.
+// Slot51 passes a return buffer and bone index in retail; the donor returns
+// a matrix reference, so its return convention is not copied here.
+bool Rva000B8F5A::rva000B57A7(int slot,int barrel,const FXList*fx,float speed,const Coord3D*victim){
+ StateView367*state=(StateView367*)m_ptr0C;
+ if(!state || !(state->validF4&8))return false;
+ const BarrelVector367&vec=state->barrels[slot];
+ if(vec.begin==vec.end)return false;
+ bool handled=false;
+ if(barrel<0 || (unsigned)barrel>(unsigned)(vec.end-vec.begin))barrel=0;
+ const BarrelView367&info=vec.begin[barrel];
+ if(fx && info.fx04 && render44){
+  ObjectView367*object=(ObjectView367*)(*(Drawable**)((char*)this-4))->object;
+  if(render44->hidden() && object){
+   Coord3D position=object->position38;
+   FXList::doFXPos(fx,&position,(const Matrix3D*)&object->transform08,speed,victim);
+  }else{
+   MatrixView367 matrix=render44->bone(info.fx04);
+   Coord3D position;
+   position.x=matrix.row[0][3];position.y=matrix.row[1][3];position.z=matrix.row[2][3];
+   FXList::doFXPos(fx,&position,(const Matrix3D*)&matrix,speed,victim);
+  }
+  handled=true;
+ }
+ if(info.recoil00 || info.muzzle08){
+  RecoilView367&recoil=recoilBC[slot].begin[barrel];
+  if(!recoil.state){
+   recoil.state=1;
+   recoil.value08=(*(DataView367**)((char*)this-8))->initial54;
+   if(info.muzzle08)((Rva000B304B*)&info)->rva000B304B(render44,false);
+  }
+ }
+ return handled;
 }
