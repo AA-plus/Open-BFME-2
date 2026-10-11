@@ -15,7 +15,16 @@
 // +0x1B0 parameters (ctor default 10000 at +0x1B0), and the two "true" forms.
 // Field names other than m_damageArc are inferred; the source argument's type
 // is a view (only its +8 object id is read).
+// LINK: hide math.h's inline float-cos wrapper (r3 LK4 atan2f recipe). The
+// wrapper ?cos@@YAMM@Z inlines at the single call below but this TU's copy
+// is unproven and differs from the kept copy, emitting a loser COMDAT. With
+// the wrapper hidden, the float promotes to the CRT double cos directly with
+// identical codegen (cvtss2sd + E8 + narrow); the extern decl keeps the E8
+// byte-identical. No flags touched.
+#define cos bfme_hidden_cos
 #include <math.h>
+#undef cos
+extern "C" double __cdecl cos(double x);
 #include "Coord3D.h"
 #include "GameLogicObjectLookupView.h"
 
