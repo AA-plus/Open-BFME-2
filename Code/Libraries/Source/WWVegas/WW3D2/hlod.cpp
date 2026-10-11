@@ -56,6 +56,7 @@ void __cdecl operator delete[](void *block);
 #pragma optimize("s", on)
 #include "refcount.h"
 #pragma optimize("", on)
+#include "../../../../../reference/shims/bfme_hlod_aabox/aabox.h"
 #include "rendobj.h"	// the scoped BFME2 RenderObj layout and slots must win the include guard
 #include "winbase_shim.h"
 /*
