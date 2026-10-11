@@ -11,14 +11,22 @@ struct Rva002F600CMetadata
     unsigned char prefix0C[12];
     unsigned int packed;
 };
-class Rva002F52A7Query
+class Rva002F52A7Query;
+
+// LINK: 0x002F52A7 is rowed as Pathfinder::CheckForAdjust (pathfinder.cpp); the query object is the pathfinder and the old
+// all-integer call shape stays through a member-pointer cast.
+class Object;
+class LocomotorSet;
+struct Coord3D;
+enum PathfindLayerEnum { BFME_LAYER_GROUND };
+class Pathfinder
 {
 public:
-    bool rva002F52A7(unsigned int a, unsigned int b, unsigned char mode,
-        unsigned int c, unsigned int d, unsigned int kind, unsigned int e,
-        unsigned char option, Rva002F600CCoord *position, unsigned int zero,
-        float value, unsigned int *word, unsigned int finalZero);
+    bool CheckForAdjust(Object *obj, const LocomotorSet &locoSet, bool a, int b, int c, PathfindLayerEnum layer, int d,
+        bool e, Coord3D *position, const Coord3D *zero, float value, int *word, int finalZero);
 };
+typedef bool (Pathfinder::*Rva002F52A7Shape)(unsigned int, unsigned int, unsigned char, unsigned int, unsigned int, unsigned int,
+    unsigned int, unsigned char, Rva002F600CCoord *, unsigned int, float, unsigned int *, unsigned int);
 class Rva002F600CContext
 {
 public:
@@ -43,7 +51,7 @@ int Rva002F600CContext::rva002F600C(unsigned int word,
     {
         unsigned int kind = (metadata->packed >> 4) & 63;
         if (kind14 == kind &&
-            query->rva002F52A7(word04, word08, 1, c, d, kind, word0C,
+            (((Pathfinder *)query)->*reinterpret_cast<Rva002F52A7Shape>(&Pathfinder::CheckForAdjust))(word04, word08, 1, c, d, kind, word0C,
                 option10, &position1C, 0, 0.0f, &word, 0) && !word)
         {
             success18 = true;

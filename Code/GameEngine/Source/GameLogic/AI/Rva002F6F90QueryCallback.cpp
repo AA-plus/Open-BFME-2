@@ -17,6 +17,8 @@ enum PathfindLayerEnum { PATHFIND_LAYER_UNKNOWN = 0, PATHFIND_LAYER_GROUND = 1 }
 class Pathfinder { public:
  bool CheckForAdjust(Object *, const LocomotorSet &, bool, int, int, PathfindLayerEnum, int, bool, Coord3D *, const Coord3D *, float, int *, int);
 };
+typedef bool (Pathfinder::*Rva002F52A7Shape)(unsigned int, unsigned int, unsigned char, unsigned int, unsigned int, unsigned int,
+    unsigned int, unsigned char, Rva002F600CCoord *, unsigned int, float, unsigned int *, unsigned int);
 
 struct PathfinderLogFile;
 extern "C" int __cdecl fprintf(PathfinderLogFile *,const char *,...);
