@@ -5,7 +5,17 @@
 
 extern "C" __declspec(dllimport) unsigned long __stdcall GetCurrentDirectoryA(unsigned long nBufferLength, char *lpBuffer);
 
-extern const char g_00BBDC80[];
+// Retail's own 92-byte literal at RVA 0x007BDC80 (.rdata, file offset
+// 0x007BD8C0): the INI error banner the rowed body below formats into the
+// destination with the current directory, the block name and the line number.
+// The three conversion specifications are %s (directory), %s (block) and %d
+// (line), and the 92-byte extent including the terminating NUL is the ledger's
+// own bound, ending exactly where retail's next literal begins.
+// Symbol ?g_00BBDC80@@3QBDB, transcribed below.
+extern const char g_00BBDC80[] =
+	"\nINI ERROR:\n"
+	"===================================================================\n"
+	"\n%s\\%s(%d):\n";
 
 class INI
 {

@@ -6,12 +6,37 @@
 // 0x004E1A04 plus vector push_back 0x00566575 via 0x005666BA. Record is 0x10 bytes: pointer plus three
 // floats zeroed inline matching retail xor eax plus xorps zeroing. Honest address-derived free-function name.
 
-struct FieldParse;
+class INI;
+
+struct FieldParse
+{
+	const char *token;
+	void (__cdecl *parse)(INI *ini, void *instance, void *store, const void *userData);
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
 public:
 	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
+	static void parseCoord3D(INI *ini, void *instance, void *store, const void *userData);
+};
+
+// Retail VA 0x00C61D84 (.rdata, file offset 0x0085DD84): the AnimObjectUpdate
+// block's two field records plus the zero sentinel - AnimObjectName through the
+// rowed INI::parseAsciiString (0x0002F11E) at +0 and WorldPos through the rowed
+// INI::parseCoord3D (0x0002F507) at +4, both with a null user-data column. Those
+// are exactly the pointer and the three floats of the 0x10-byte record the rowed
+// parser below builds inline and zeroes with xorps, and the 48-byte extent is
+// the ledger's own bound.
+// Symbol ?g_00C61D84@@3UFieldParse@@B, transcribed below.
+extern const struct FieldParse g_00C61D84[] =
+{
+	{ "AnimObjectName", &INI::parseAsciiString, 0, 0x0 },
+	{ "WorldPos",        &INI::parseCoord3D,      0, 0x4 },
+	{ 0, 0, 0, 0 }
 };
 
 struct INIException
@@ -26,7 +51,6 @@ struct _s__ThrowInfo;
 extern "C" void __stdcall _CxxThrowException(void *pExceptionObject, const _s__ThrowInfo *pThrowInfo);
 extern "C" const struct _s__ThrowInfo __identifier("_TI1?AVINIException@@");
 
-extern const FieldParse g_00C61D84;
 
 class Rva004E1A04
 {
@@ -57,7 +81,7 @@ void Rva004E1A33Parse(INI *ini, void *instance, void *, const void *)
 	if (ini && instance)
 	{
 		Rva004E1A04 record;
-		ini->initFromINI(&record, &g_00C61D84);
+		ini->initFromINI(&record, g_00C61D84);
 		((Rva005666BA *)instance)->rva005666BA(*(const Rva00566575Element *)&record);
 	}
 	else
