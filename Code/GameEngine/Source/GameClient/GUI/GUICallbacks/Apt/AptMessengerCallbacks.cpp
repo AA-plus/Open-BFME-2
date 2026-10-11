@@ -26,10 +26,12 @@ extern UnicodeString g_Va00E048C0;
 extern int g_Va00E046BC;
 
 // The messenger's kept position (Apt's "MessengerX" and "MessengerY"
-// strings) and maximized state.
-extern char g_Va00E046C0[256];
-extern char g_Va00E047C0[256];
-extern bool g_Va00DD13D8;
+// strings) and maximized state. Defined once here, loader-zeroed: the
+// set/get query paths above write before any meaningful read, and no
+// ledger address is claimed for any of them yet.
+char g_Va00E046C0[256] = {};
+char g_Va00E047C0[256] = {};
+bool g_Va00DD13D8 = false;
 
 void __cdecl Rva005118F3Show(int index, bool clear);
 
