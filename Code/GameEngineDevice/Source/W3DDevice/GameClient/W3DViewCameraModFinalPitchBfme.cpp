@@ -11,8 +11,8 @@ typedef int Int;
 typedef bool Bool;
 
 // Rva00086761CameraMove.cpp owns this proven runtime frame period.
-extern Int g_Va00DE204C;
-#define TheAnimationMsPerStep (g_Va00DE204C)
+extern Int TheW3DFrameLengthInMsec;
+#define TheAnimationMsPerStep (TheW3DFrameLengthInMsec)
 
 struct ParabolicEase
 {

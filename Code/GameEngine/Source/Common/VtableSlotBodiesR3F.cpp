@@ -11,7 +11,7 @@
 
 class BaseHeightMapRenderObjClass;
 extern BaseHeightMapRenderObjClass *TheTerrainRenderObject;	// VA 0x00DE1EAC
-extern int g_Va00DE204C;										// VA 0x00DE204C
+extern int TheW3DFrameLengthInMsec;										// VA 0x00DE204C
 
 // Value types the by-value returns construct; which constructor each body
 // uses is read off its load/store shape (x87 for the first member, movss
@@ -186,7 +186,7 @@ public:
 
 void Rva0004C6C6::rva0004C6C6(float value)
 {
-	g_Va00DE204C = (int)value;
+	TheW3DFrameLengthInMsec = (int)value;
 }
 
 // 0x00062E4F: ten times the +0x10 integer of the terrain render object's

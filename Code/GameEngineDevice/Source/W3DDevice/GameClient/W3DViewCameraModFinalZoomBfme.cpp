@@ -18,8 +18,8 @@ typedef int Int;
 typedef bool Bool;
 
 // Rva00086761CameraMove.cpp owns this proven runtime frame period.
-extern Int g_Va00DE204C;
-#define TheAnimationMsPerStep (g_Va00DE204C)
+extern Int TheW3DFrameLengthInMsec;
+#define TheAnimationMsPerStep (TheW3DFrameLengthInMsec)
 
 struct Coord3D;
 class TerrainLogic
@@ -508,7 +508,7 @@ void W3DView::rva0008D925(const Coord3D *location,Int milliseconds,Real easeIn,R
  buildCameraTransform((Matrix3D *)(bytes+0x16c));
  if(milliseconds>1){
   m_cameraMovementMode=3;
-  m_resetFrames=milliseconds/g_Va00DE204C;
+  m_resetFrames=milliseconds/TheW3DFrameLengthInMsec;
   m_resetFrames=m_resetFrames<1?1:m_resetFrames;
   m_resetCurrent=0;
   ((ParabolicEase *)(bytes+0x1a4))->rva0030E51F(easeIn,easeOut,(Real)milliseconds);

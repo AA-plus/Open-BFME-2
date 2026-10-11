@@ -28,7 +28,7 @@ extern int g_00E05F24;
 extern int g_00E062F4;
 extern int g_00E063E0;
 extern int g_00E063E8;
-extern int g_Va00DE204C;
+extern int TheW3DFrameLengthInMsec;
 extern int g_Va00DFE18C;
 extern int g_Va00E03BBC;
 extern unsigned g_00E063CC;
@@ -92,7 +92,7 @@ void Rva007ABC6FFrameRateInits::rva007ABC6F()
 // ?rva007AC08C@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AC08C (18B): global at VA 0x00DE204C, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007AC08C()
 {
-	g_Va00DE204C = 1000 / g_009BA4E8;
+	TheW3DFrameLengthInMsec = 1000 / g_009BA4E8;
 }
 
 // ?rva007AD7F3@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AD7F3 (14B): global at VA 0x00DFE18C, named as the TU that reads it names it

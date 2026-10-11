@@ -53,7 +53,12 @@ void Rva00086761CameraMove::rva0008690A(int value)
 // Runtime period VA DE204C has genuine zero PE storage; writer4C6C6 and
 // startup7AC08C configure it. Their code is not recovered by this unit.
 // Original method/global names and complete receiver size remain unknown.
-int g_Va00DE204C;
+// Retail VA 0x00DE204C (RVA 0x009E204C, .data, four bytes): the frame period the
+// animation maths divides by -- W3DView.cpp calls it "33msec/frame == 30fps,
+// but we may change it depending on sys config". Rva007ABC6FFrameRateInits
+// writes 1000/frameRate into it at startup and VtableSlotBodiesR3F writes the
+// walk animation period, so the definition is the plain zero-initialised int.
+int TheW3DFrameLengthInMsec;
 
 void Rva00086761CameraMove::rva00088EB4(float finalValue, int milliseconds, float easeIn, float easeOut)
 {
@@ -61,7 +66,7 @@ void Rva00086761CameraMove::rva00088EB4(float finalValue, int milliseconds, floa
  register Rva00086761CameraMove *view = this;
  view->m_228 = true;
  if (duration < 1) duration = 1;
- int frames = duration / g_Va00DE204C;
+ int frames = duration / TheW3DFrameLengthInMsec;
  if (frames < 1) frames = 1;
  view->m_208 = frames;
  view->m_210 = view->m_3C;
@@ -277,7 +282,7 @@ void Rva00086761CameraMove::rva00088F38(float finalPitch,int milliseconds,float 
  int&duration=milliseconds;
  view->pitchCamera.active=true;
  if(duration<1)duration=1;
- int frames=duration/g_Va00DE204C;
+ int frames=duration/TheW3DFrameLengthInMsec;
  if(frames<1)frames=1;
  view->pitchCamera.numFrames=frames;
  view->pitchCamera.curFrame=0;
