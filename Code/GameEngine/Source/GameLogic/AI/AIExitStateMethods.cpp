@@ -130,14 +130,20 @@ protected:
 	StateMachine *getMachine() const { return m_machine; }
 	Object *getMachineOwner() const { return m_machine->getOwner(); }
 	Object *getMachineGoalObject() const { return m_machine->getGoalObject(); }
+// StateMachine::getCurrentStateID reads m_ID directly (retail inlines the
+// one-instruction getID here); m_ID is public in this TU-local view.
+public:
 	StateID m_ID; // +0x04
 	unsigned char m_pad08[0x18 - 0x08];
 	StateMachine *m_machine; // +0x18
 };
-// ?StateMachine::getCurrentStateID absent-from-retail
+// ?StateMachine::getCurrentStateID present-unmatched
+// Retail carries the direct-load shape (mov [ecx+4] / test / mov [eax+4] /
+// mov 999999) once at 0x00260DDC; the getID call is inlined there, so this
+// TU spells the direct form.
 inline StateID StateMachine::getCurrentStateID() const
 {
-	return m_currentState ? m_currentState->getID() : INVALID_STATE_ID;
+	return m_currentState ? m_currentState->m_ID : INVALID_STATE_ID;
 }
 extern Bool g_00E03624;
 class GameLogic

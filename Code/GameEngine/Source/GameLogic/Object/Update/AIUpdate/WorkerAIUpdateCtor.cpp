@@ -170,7 +170,9 @@ public:
 	virtual ~State();
 	StateID getID() const { return m_ID; }
 	StateMachine *getMachine() const { return m_machine; }
-protected:
+// StateMachine::getCurrentStateID reads m_ID directly (retail inlines the
+// one-instruction getID here); m_ID is public in this TU-local view.
+public:
 	StateID m_ID; // +0x04
 	unsigned char m_pad08[0x18 - 0x08];
 	StateMachine *m_machine; // +0x18
@@ -195,7 +197,7 @@ public:
 	virtual StateReturnType initDefaultState();
 	virtual StateReturnType setState(StateID newStateID); // vslot 8
 	void defineState(StateID id, struct State *state, StateID successID, StateID failureID, const StateConditionInfo *conditions = 0);
-	StateID getCurrentStateID() const { return m_currentState ? m_currentState->getID() : INVALID_STATE_ID; }
+	StateID getCurrentStateID() const { return m_currentState ? m_currentState->m_ID : INVALID_STATE_ID; }
 	Object *getOwner() const { return m_owner; }
 protected:
 	State *m_currentState; // +0x04
