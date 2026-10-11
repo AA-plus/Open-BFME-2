@@ -48,7 +48,7 @@ struct BlockParse
 	BlockParse *next;
 	const char *token;
 	INIBlockParse callback;
-	__forceinline BlockParse(const char *name, INIBlockParse function) : next(theBlockParseList), token(name), callback(function) { theBlockParseList=this; }
+	__declspec(dllimport) __forceinline BlockParse(const char *name, INIBlockParse function) : next(theBlockParseList), token(name), callback(function) { theBlockParseList=this; }
 };
 extern BlockParse *theBlockParseList;
 
