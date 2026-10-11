@@ -63,6 +63,17 @@ public:
 	bool rva00489039(Object *query, Object *other, Coord3D *out);
 };
 
+// 0x00489039 is rowed as DozerAIUpdate::findGoodBuildOrRepairPosition
+// (421B; ZH/BFME1 donor); the rowed 0x00489913 caller in DozerAIUpdateCtor
+// is the same bridge scan calling it, so these resolve to the rowed body
+// instead of the unrowed spelling (sole U on this unit).
+class DozerAIUpdate
+{
+protected:
+	bool findGoodBuildOrRepairPosition(const Object *query, const Object *other, Coord3D &out);
+	friend class Rva00489913;
+};
+
 Object *Rva00489913::rva00489913(Object *query, Object *bridgeObj, Coord3D *out)
 {
 	Object *result = bridgeObj;
@@ -81,7 +92,7 @@ Object *Rva00489913::rva00489913(Object *query, Object *bridgeObj, Coord3D *out)
 				if (found == 0)
 					continue;
 				Coord3D pos;
-				if (!rva00489039(query, found, &pos))
+				if (!((DozerAIUpdate *)this)->findGoodBuildOrRepairPosition(query, found, pos))
 					continue;
 				if (!checker->isPathAvailable(&pos))
 					continue;
@@ -98,6 +109,6 @@ Object *Rva00489913::rva00489913(Object *query, Object *bridgeObj, Coord3D *out)
 			return result;
 		}
 	}
-	rva00489039(query, bridgeObj, out);
+	((DozerAIUpdate *)this)->findGoodBuildOrRepairPosition(query, bridgeObj, *out);
 	return result;
 }
