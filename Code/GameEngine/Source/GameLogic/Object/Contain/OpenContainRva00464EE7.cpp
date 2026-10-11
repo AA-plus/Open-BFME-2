@@ -1,4 +1,4 @@
-// cl: /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
 // stlport
 //
 // Target facts: retail body 0x00464EE7..0x00464FC7 is 224 bytes. VA 0x00C435E8
@@ -17,6 +17,7 @@
 // used as target identity evidence.
 
 #include <list>
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
@@ -34,11 +35,56 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 // claimed for this 88-byte EH-operand variant.
 
 class Player;
+class Object;
+
+static inline void coordSet(Coord3D &dst, const Coord3D *a)
+{
+	dst.x = a->x;
+	dst.y = a->y;
+	dst.z = a->z;
+}
+
+static inline void coordSub(Coord3D &dst, const Coord3D *a)
+{
+	dst.x -= a->x;
+	dst.y -= a->y;
+	dst.z -= a->z;
+}
+
+class Vector3
+{
+public:
+	float X, Y, Z;
+	__forceinline Vector3(void) {}
+	__forceinline Vector3(const Vector3 &v) { X = v.X; Y = v.Y; Z = v.Z; }
+	__forceinline Vector3(float x, float y, float z) { X = x; Y = y; Z = z; }
+	static __forceinline float Dot_Product(const Vector3 &a, const Vector3 &b)
+	{
+		return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+	}
+};
+
+class Rva2225E0Filter
+{
+public:
+	bool accepts(Object *, Player *);
+};
+
+struct OpenContainModuleDataView
+{
+	char m_pad00[0x44];
+	Rva2225E0Filter m_filter44;
+	char m_pad48[0x68 - 0x48];
+	float m_threshold68;
+};
+
 class ThingTemplate
 {
 public:
 	char m_pad00[0x10C];
 	unsigned char m_kindFlags;
+	char m_pad10D[0x11F - 0x10D];
+	unsigned char m_byte11F;
 };
 
 class Rva00373EC6
@@ -48,6 +94,7 @@ public:
 };
 
 class Rva00439E0C;
+class OpenContainActionIface;
 enum DamageType { DAMAGE_UNRESISTABLE = 8 };
 enum DeathType { DEATH_NORMAL = 0 };
 class Object
@@ -55,7 +102,11 @@ class Object
 public:
 	void *m_vtable;
 	ThingTemplate *m_template;
-	char m_pad08[0x258 - 0x08];
+	char m_pad08[0x38 - 0x08];
+	Coord3D m_pos38;
+	char m_pad44[0x250 - 0x44];
+	OpenContainActionIface *m_contain250;
+	void *m_word254;
 	void *m_ai;
 	char m_pad25c[0x274 - 0x25c];
 	// Target body 0x00464120 clears this dword with `and [object+0x274],0`.
@@ -113,7 +164,7 @@ public:
 	virtual void slot30() {}
 	virtual void slot31() {}
 	virtual void rva00465011(Object *object);
-	virtual void slot33() {}
+	virtual void rva00465078(CommandSourceType source);
 	virtual void slot34() {}
 	virtual void slot35() {}
 	virtual void rva00463138();
@@ -122,6 +173,52 @@ public:
 	virtual void slot39() {}
 	virtual void slot40() {}
 	virtual void rva00464EE7Action(Object *, int);
+	virtual void slot42() {}
+	virtual void slot43() {}
+	virtual void slot44() {}
+	virtual void slot45() {}
+	virtual void slot46() {}
+	virtual void slot47() {}
+	virtual char rva00462BFF(const Object *a, const Object *b) const;
+	virtual void slot49() {}
+	virtual void slot50() {}
+	virtual void slot51() {}
+	virtual void slot52() {}
+	virtual void slot53() {}
+	virtual void slot54() {}
+	virtual bool rva004628AB(int a, int b);
+	virtual void slot56() {}
+	virtual void slot57() {}
+	virtual void slot58() {}
+	virtual void slot59() {}
+	virtual void slot60() {}
+	virtual void slot61() {}
+	virtual void slot62() {}
+	virtual void slot63() {}
+	virtual void slot64() {}
+	virtual void slot65() {}
+	virtual void slot66() {}
+	virtual void slot67() {}
+	virtual void slot68() {}
+	virtual void slot69() {}
+	virtual void slot70() {}
+	virtual void slot71() {}
+	virtual void slot72() {}
+	virtual void slot73() {}
+	virtual void slot74() {}
+	virtual void slot75() {}
+	virtual void slot76() {}
+	virtual void slot77() {}
+	virtual void slot78() {}
+	virtual Object *rva00463291(Rva2225E0Filter *filter);
+	virtual void slot80() {}
+	virtual void slot81() {}
+	virtual void slot82() {}
+	virtual void slot83() {}
+	virtual void slot84() {}
+	virtual void slot85() {}
+	virtual const Coord3D *rva004626CA();
+	virtual const Coord3D *rva004626AF();
 };
 
 class AIUpdateInterfaceView
@@ -198,6 +295,86 @@ private:
 	// Retail sets this target-proven byte before constructing its list snapshot.
 	unsigned char m_byteDF;
 };
+
+const Coord3D *OpenContainActionIface::rva004626AF()
+{
+	OpenContain *contain = (OpenContain *)((char *)this - 0x20);
+	Object *owner = contain->m_object;
+	if ((owner->m_template->m_byte11F & 0x80) != 0)
+		return rva004626CA();
+	return &owner->m_pos38;
+}
+
+bool OpenContainActionIface::rva004628AB(int a, int b)
+{
+	OpenContain *contain = (OpenContain *)((char *)this - 0x20);
+	Object *container = (Object *)contain->m_object->m_word274;
+	if (container != 0)
+	{
+		OpenContainActionIface *parentContain = container->m_contain250;
+		if (parentContain != 0)
+			return parentContain->rva004628AB(a, b);
+	}
+	return false;
+}
+
+char OpenContainActionIface::rva00462BFF(const Object *a, const Object *b) const
+{
+	if (a && b)
+	{
+		const OpenContain *contain = (const OpenContain *)((const char *)this - 0x20);
+		const OpenContainModuleDataView *md = (const OpenContainModuleDataView *)contain->m_moduleData;
+		if (md->m_threshold68 < 0.0f)
+			return 0;
+
+		const Object *owner = contain->m_object;
+		if (a->m_pos38.z - owner->m_pos38.z > md->m_threshold68)
+			return 0;
+
+		Coord3D ab;
+		coordSet(ab, &b->m_pos38);
+		coordSub(ab, &a->m_pos38);
+		ab.z = 0.0f;
+
+		Coord3D ao;
+		coordSet(ao, &owner->m_pos38);
+		coordSub(ao, &a->m_pos38);
+		ao.z = 0.0f;
+
+		if (Vector3::Dot_Product(Vector3(ao.x, ao.y, ao.z), Vector3(ab.x, ab.y, ab.z)) < 0.0f)
+			return 0;
+
+		return 1;
+	}
+	return 0;
+}
+
+Object *OpenContainActionIface::rva00463291(Rva2225E0Filter *filter)
+{
+	OpenContain *contain = (OpenContain *)((char *)this - 0x20);
+	for (IntList::iterator it = contain->m_containList.begin(); it != contain->m_containList.end(); ++it)
+	{
+		if (filter == 0 || filter->accepts((Object *)*it, contain->m_object->getControllingPlayer()))
+		{
+			Object *rider = (Object *)*it;
+			rva00464EE7Action(rider, 0);
+			return rider;
+		}
+	}
+	return 0;
+}
+
+void OpenContainActionIface::rva00465078(CommandSourceType source)
+{
+	OpenContain *contain = (OpenContain *)((char *)this - 0x20);
+	IntList::iterator it = contain->m_containList.begin();
+	if (it != contain->m_containList.end())
+	{
+		Object *rider = (Object *)*it;
+		if (rider->m_ai != 0)
+			((AIUpdateInterfaceView *)rider->m_ai)->m_command.aiExit(contain->m_object, source);
+	}
+}
 
 // Target facts: 0x00465011 is slot 32 of the OpenContain +0x20 interface
 // vtable at 0x00C433B0. The body snapshots the list at parent+0x54, checks
