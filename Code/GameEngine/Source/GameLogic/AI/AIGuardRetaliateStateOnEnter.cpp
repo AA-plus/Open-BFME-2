@@ -55,6 +55,11 @@ public:
 	Object *getOwner() const { return m_owner; }
 	Object *getGoalObject();
 	const Coord3D *getGoalPosition() const { return &m_goalPosition; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's copy loses (first-copy); the wrapper below inlines it
+	// but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. No flags touched.
+	const Coord3D *bfme_goal_position() const { return &m_goalPosition; }
 protected:
 	unsigned char m_pad04[0x14 - 0x04];
 	Object *m_owner; // +0x14
@@ -66,6 +71,13 @@ class AIUpdateInterface
 public:
 	const Coord3D *getGoalPosition() const { return m_stateMachine->getGoalPosition(); }
 	Object *getGoalObject() { return m_stateMachine->getGoalObject(); }
+	// LINK: same-body helpers under TU-unique names (identical inlined
+	// bytes, chained to the unique StateMachine helper above). This TU's
+	// copies lose (first-copy); the two calls below inline them but still emit
+	// loser COMDATs. Rebinding there emits only unique (trivially kept)
+	// copies. No flags touched.
+	const Coord3D *bfme_ai_goal_position() const { return m_stateMachine->bfme_goal_position(); }
+	Object *bfme_ai_goal_object() { return m_stateMachine->getGoalObject(); }
 private:
 	unsigned char m_pad00[0x30];
 	StateMachine *m_stateMachine; // +0x30
@@ -112,9 +124,9 @@ StateReturnType AIGuardRetaliateState::onEnter()
 
 	m_guardRetaliateMachine = new AIGuardRetaliateMachine( getMachineOwner());
 	// tell the guarding machine what it is guarding with
-	m_guardRetaliateMachine->setTargetPositionToGuard( ai->getGoalPosition() );
+	m_guardRetaliateMachine->setTargetPositionToGuard( ai->bfme_ai_goal_position() );
 
-	Object *goalObject = ai->getGoalObject();
+	Object *goalObject = ai->bfme_ai_goal_object();
 	if( goalObject )
 	{
 		if (goalObject->testStatus(OBJECT_STATUS_BFME_26) && goalObject->rva002931F5(false))

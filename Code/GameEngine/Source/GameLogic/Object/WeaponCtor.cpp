@@ -20,6 +20,13 @@ public:
 	float getMinTargetPitch() const { return m_minPitch; }
 	float getMaxTargetPitch() const { return m_maxPitch; }
 	int getShotsPerBarrel() const { return m_shotsPerBarrel; }
+	// LINK: same-body helpers under TU-unique names (identical inlined
+	// bytes). This TU's copies lose (first-copy); the six call sites below
+	// inline them but still emit loser COMDATs. Rebinding there emits only
+	// unique (trivially kept) copies. No flags touched.
+	float bfme_min_pitch() const { return m_minPitch; }
+	float bfme_max_pitch() const { return m_maxPitch; }
+	int bfme_shots_per_barrel() const { return m_shotsPerBarrel; }
 	unsigned int getSuspendFXDelay() const { return m_suspendFXDelay; }
 
 private:
@@ -92,10 +99,10 @@ Weapon::Weapon(const Weapon &that)
 	m_whenWeCanFireAgain = 0;
 	m_leechWeaponRangeActive = 0;
 	m_unknown54 = 0;
-	m_pitchLimited = m_template->getMinTargetPitch() > -3.14159265f || m_template->getMaxTargetPitch() < 3.14159265f;
+	m_pitchLimited = m_template->bfme_min_pitch() > -3.14159265f || m_template->bfme_max_pitch() < 3.14159265f;
 	m_curBarrel = 0;
 	m_maxShotCount = 0x7fffffff;
-	m_numShotsForCurBarrel = m_template->getShotsPerBarrel();
+	m_numShotsForCurBarrel = m_template->bfme_shots_per_barrel();
 	m_unknown2C = 0;
 	unsigned int suspend = that.m_suspendFXFrame;
 	m_extra5C = 0;
@@ -126,10 +133,10 @@ Weapon::Weapon(const WeaponTemplate *tmpl, WeaponSlotType wslot)
 	m_projectileStreamID = 0;
 	m_leechWeaponRangeActive = 0;
 	m_unknown54 = 0;
-	m_pitchLimited = tmpl && (tmpl->getMinTargetPitch() > -3.14159265f || tmpl->getMaxTargetPitch() < 3.14159265f);
+	m_pitchLimited = tmpl && (tmpl->bfme_min_pitch() > -3.14159265f || tmpl->bfme_max_pitch() < 3.14159265f);
 	m_maxShotCount = 0x7fffffff;
 	m_curBarrel = 0;
-	m_numShotsForCurBarrel = tmpl ? tmpl->getShotsPerBarrel() : 1;
+	m_numShotsForCurBarrel = tmpl ? tmpl->bfme_shots_per_barrel() : 1;
 	m_unknown2C = 0;
 	unsigned int suspend = tmpl ? TheGameLogic->getFrame() + tmpl->getSuspendFXDelay() : 0;
 	m_extra5C = 0;
