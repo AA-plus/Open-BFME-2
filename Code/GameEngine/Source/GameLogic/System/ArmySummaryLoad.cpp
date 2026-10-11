@@ -109,6 +109,9 @@ extern ThingFactory*TheThingFactory;
 // vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
 namespace _STL {
 template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();
+template <> void _STLP_alloc_proxy<AsciiString*, AsciiString, allocator<AsciiString> >::deallocate(AsciiString*, size_t);
+template <> void allocator<AsciiString>::deallocate(AsciiString*, size_t) const;
 }
 extern GameLogic*TheGameLogic;
 class Rva0040D8D6List {public:~Rva0040D8D6List();void*begin,*end,*limit;unsigned index;};

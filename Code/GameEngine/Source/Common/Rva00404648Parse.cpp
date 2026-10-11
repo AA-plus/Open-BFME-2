@@ -19,6 +19,9 @@
 // rather than emitting its own.
 namespace _STL {
 template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();
+template <> void _STLP_alloc_proxy<AsciiString*, AsciiString, allocator<AsciiString> >::deallocate(AsciiString*, size_t);
+template <> void allocator<AsciiString>::deallocate(AsciiString*, size_t) const;
 }
 class Rva0040394A {public:Rva0040394A();int m_id;float m_val;_STL::vector<AsciiString>m_strs;};
 class Rva004045B4 {public:void rva004045B4(int,float,const _STL::vector<AsciiString>*);};

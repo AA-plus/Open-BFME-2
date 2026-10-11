@@ -21,6 +21,9 @@
 // vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
 namespace _STL {
 template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();
+template <> void _STLP_alloc_proxy<AsciiString*, AsciiString, allocator<AsciiString> >::deallocate(AsciiString*, size_t);
+template <> void allocator<AsciiString>::deallocate(AsciiString*, size_t) const;
 }
 class Rva0015334F { public: __declspec(nothrow) Rva0015334F(); public: __declspec(noinline) ~Rva0015334F(); private: AsciiString name; _STL::vector<AsciiString> libraries; };
 struct BfmeItemERE : Rva0015334F { __declspec(nothrow) __forceinline BfmeItemERE():Rva0015334F(){} BfmeItemERE(const BfmeItemERE&); ~BfmeItemERE(); };

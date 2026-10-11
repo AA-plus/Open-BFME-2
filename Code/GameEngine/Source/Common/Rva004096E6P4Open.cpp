@@ -20,6 +20,9 @@ extern "C" unsigned char *__cdecl _mbscpy(unsigned char *,const unsigned char *)
 // vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
 namespace _STL {
 template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();
+template <> void _STLP_alloc_proxy<AsciiString*, AsciiString, allocator<AsciiString> >::deallocate(AsciiString*, size_t);
+template <> void allocator<AsciiString>::deallocate(AsciiString*, size_t) const;
 }
 
 // WorldBuilder10802C0 names SplitString/CreateAHeroHero.cpp1243;
