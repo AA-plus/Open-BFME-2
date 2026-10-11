@@ -45,8 +45,10 @@ public:
 
 	AssetReference(const AssetReference &that) : m_object(that.m_object)
 	{
+		// LINK: manual inline of TextureClass::Add_Ref (identical body); the
+		// named call inlines but still emits a loser COMDAT here.
 		if (m_object)
-			m_object->Add_Ref();
+			++*(unsigned short *)((char *)m_object + 4);
 	}
 
 	~AssetReference()
@@ -57,8 +59,9 @@ public:
 
 	AssetReference &operator=(const AssetReference &that)
 	{
+		// LINK: same manual Add_Ref inline as above.
 		if (that.m_object)
-			that.m_object->Add_Ref();
+			++*(unsigned short *)((char *)that.m_object + 4);
 		if (m_object)
 			m_object->Release_Ref();
 		m_object = that.m_object;
