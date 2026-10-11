@@ -166,8 +166,16 @@ void __cdecl bfmePopulateMapListFlags( void *listbox, char useSystemMaps, char i
 // as its alias AsciiStringYH, hence the second pinned spelling.
 extern void __cdecl bfmeCommitYH( AsciiString label );
 
-// Retail 0x012F3E70: filled from the HeadlessCount combo box selection.
-static Int mapSelectHeadlessCount = 0;
+// Retail VA 0x00E045C8 (RVA 0x00A045C8, 4 bytes, .data's zero tail): filled from
+// the HeadlessCount combo box selection by GadgetComboBoxGetSelectedPos and
+// read by startHeadlessClients. RVA 0x00A045C8 is past .data's raw end
+// (0x009DE008) but inside its virtual size, so retail's image holds zero until
+// the combo box writes it. The object is not file-private: the split-out
+// MapSelectMenu_Rva0050CF3C.cpp rowed body reads the same one, so the
+// definition is external and that unit declares it rather than inventing a
+// second, always-zero copy (the data ledger binds this address to the
+// address-derived spelling ?g_Va00E045C8@@3IA and to this name alike).
+Int mapSelectHeadlessCount = 0;
   // end MapSelectMenuSystem
 
 // Zero Hour setupGameStart semantics, BFME1 6c1e0b51 donor menu.

@@ -124,8 +124,13 @@ public:
 
 extern GameEngine *TheGameEngine;
 
-// MapSelectMenu's headless client count (zero-filled .bss at 0x00E045C8).
-extern Int g_Va00E045C8;
+// MapSelectMenu's headless client count, VA 0x00E045C8 (RVA 0x00A045C8, .data's
+// zero tail past raw end 0x009DE008). MapSelectMenu.cpp owns that object under
+// this name -- the combo-box write and the startHeadlessClients read are two
+// different split-out units of the original TU, so it cannot be file-private
+// there -- and the address-derived spelling this unit carried was its private
+// view of the same object.
+extern Int mapSelectHeadlessCount;
 
 void Rva0050CF3CStartHeadlessLanGame(void)
 {
@@ -148,5 +153,5 @@ void Rva0050CF3CStartHeadlessLanGame(void)
 	TheLAN->RequestSetName(userName);
 	TheLAN->RequestLocations();
 	TheLAN->RequestGameCreate(UnicodeString(L""), false);
-	TheGameEngine->startHeadlessClients(g_Va00E045C8);
+	TheGameEngine->startHeadlessClients(mapSelectHeadlessCount);
 }
