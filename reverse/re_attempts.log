@@ -37784,3 +37784,4 @@ _Rva00817B30	0x00683A30	2207	attempted	r3 independent re-derivation (commudp.cpp
 ?clear@?$vector@URva005F8620Element@@V?$allocator@URva005F8620Element@@@_STL@@@_STL@@QAEXXZ	0x005F8747	11	landed	add_match verified Code/GameEngine/Source/Common/VectorClearInstances.cpp 11B; STLport vector clear: push _M_finish push _M_start then call the matched erase of the same vector; ret
 ?rva007B4874@@YAXXZ	0x007B4874	87	landed	add_match verified Code/GameEngine/Source/GameClient/GUI/Rva007B4874Registrations.cpp 87B; trial
 ?rva007B48CB@@YAXXZ	0x007B48CB	87	landed	add_match verified Code/GameEngine/Source/GameClient/GUI/Rva007B4874Registrations.cpp 87B; trial
+??0Rva005FB1AD@@QAE@PAX00@Z	0x005FB14E	95	landed	add_match verified Code/GameEngine/Source/Common/Rva005FB1ADCtor.cpp 95B; trial
