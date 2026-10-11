@@ -660,95 +660,13 @@ void BridgeBehavior::onDie( const DamageInfo *damageInfo )
 			
 }  // end onDie
 
-// ------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------
-// byte-exact reconstruction: Code/GameEngine/Source/Common/BridgeBehavior_handleObjectsOnBridgeOnDieMethodThunk.cpp
-// ?handleObjectsOnBridgeOnDie@BridgeBehavior@@IAEXXZ present-unmatched
-void BridgeBehavior::handleObjectsOnBridgeOnDie( void )
-{
-	const Object *bridge = getObject();
-	const Coord3D *bridgePos = bridge->getPosition();
+//-----------------------------------------------------------------------------
+// Note: a ZH-derived BridgeBehavior::handleObjectsOnBridgeOnDie body stood
+// here. The census proves our copy is not retail's (kept definition differs)
+// while 0x00457577 is rowed from
+// BridgeBehaviorHandleObjectsOnBridgeOnDie.cpp, so this unit no longer
+// defines it and the link keeps the rowed copy.
 
-	Bridge *terrainBridge = TheTerrainLogic->findBridgeAt( getObject()->getPosition() );
-	if( terrainBridge )
-	{
-		PathfindLayerEnum bridgeLayer = terrainBridge->getLayer();
-
-		BridgeInfo bridgeInfo;
-
-		// get the bridge info
-		terrainBridge->getBridgeInfo( &bridgeInfo );
-
-		// setup a polygon area using the bridge extents
-		Coord3D bridgePolygon[ 4 ];
-		bridgePolygon[ 0 ] = bridgeInfo.fromLeft;
-		bridgePolygon[ 1 ] = bridgeInfo.fromRight;
-		bridgePolygon[ 2 ] = bridgeInfo.toRight;
-		bridgePolygon[ 3 ] = bridgeInfo.toLeft;
-
-		//
-		// find the lowest Z point of the bridge area ... we will use this to figure out of
-		// objects in the bridge area are "on top" of the bridge
-		//
-		Real lowBridgeZ = bridgePolygon[ 0 ].z;
-		for( Int i = 0; i < 4; ++i )
-			if( bridgePolygon[ i ].z < lowBridgeZ )
-				lowBridgeZ = bridgePolygon[ i ].z;
-		
-		//
-		// given the polygon area, how big is the radius that we need to scan in the world
-		// to cover from the center of the bridge (the bridge object position) to the edge
-		// of the bridge
-		//
-		Coord2D v;
-		v.x = bridgeInfo.toLeft.x - bridgePos->x;
-		v.y = bridgeInfo.toLeft.y - bridgePos->y;
-		Real radius = v.length();
-
-		// scan the objects in the radius
-		ObjectIterator *iter = ThePartitionManager->iterateObjectsInRange( bridgePos, 
-																																			 radius, 
-																																			 FROM_CENTER_2D );
-		MemoryPoolObjectHolder hold( iter );
-		Object *other;
-		for( other = iter->first(); other; other = iter->next() )
-		{
-
-			// ingnore some kind of objects
-			if( other->isKindOf( KINDOF_BRIDGE ) || other->isKindOf( KINDOF_BRIDGE_TOWER ) )
-				continue;
-
-			// ignore airborne objects
-			if( other->isAboveTerrain() )
-				continue;
-
-			// ignore objects that were not actually on the bridge
-			if( other->getPosition()->z < lowBridgeZ )
-				continue;
-
-			// ignore objects that are not inside the bridge polygon
-			if( PointInsideArea2D( other->getPosition(), bridgePolygon, 4 ) == FALSE )
-				continue;
-
-			// if object not on same layer as bridge do nothing
-			if( bridgeLayer != other->getLayer() )
-				continue;
-
-			if (other->getLayer() == bridgeLayer)
-				other->setLayer(LAYER_GROUND);
-
-			// if they have physics, let 'em fall, otherwise just kill 'em
-			PhysicsBehavior* physics = other->getPhysics();
-			if (physics)
-				physics->setAllowToFall(true);
-			else
-				other->kill();
-
-		}  // end for, other	
-
-	}  // end if, terrainBridge
-
-}  // end handleObjectsOnBridgeDie
 
 // ------------------------------------------------------------------------------------------------
 /** Set all the position, angle, and speed data we need to for a single scaffold object */
