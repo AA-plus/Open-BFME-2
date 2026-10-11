@@ -64,7 +64,7 @@ public:
 	char m_pad[0x2EC];
 };
 #define ThePlayerList004381C4 ThePlayerList
-void Rva00373DBEIterateCallback(Object *obj, void *userData);
+int setWakeupIfInRange(Object *obj, void *userData);
 void __stdcall Rva004381C4Iterate(const Object *obj);
 
 void __stdcall Rva004381C4Iterate(const Object *obj)
@@ -79,6 +79,6 @@ void __stdcall Rva004381C4Iterate(const Object *obj)
 		const Team *team = *(const Team *const *)((const char *)ctrl + 0x2EC);
 		if (player->getRelationship(team) != Rel_Zero)
 			continue;
-		player->iterateObjects((int (*)(Object *, void *))Rva00373DBEIterateCallback, (void *)obj);
+		player->iterateObjects(setWakeupIfInRange, (void *)obj);
 	}
 }
