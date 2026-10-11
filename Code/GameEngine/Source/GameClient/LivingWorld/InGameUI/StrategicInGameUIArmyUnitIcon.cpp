@@ -27,7 +27,8 @@ class UpgradeCenter { public: const UpgradeTemplate *rva0026EEA0(int) const; };
 extern UpgradeCenter *TheUpgradeCenter;
 class Image;
 struct UpgradeView { char unknown00[0x90]; const Image *image; };
-namespace StrategicHUD { class ArmyUnitIconMovieClip { public: void SetUpgradeIconImage(int,const Image *); }; }
+class AptMovieClipFrame;
+namespace StrategicHUD { class ArmyUnitIconMovieClip { public: ArmyUnitIconMovieClip(AptMovieClipFrame *); void SetUpgradeIconImage(int,const Image *); private: char opaque[0x50]; }; class ArmyMemberIconMovieClip { public: void rva005FC9E0(const Image *); }; }
 class Rva0040E6D6Sub { public: void forward(int *); };
 struct UnitUpgradeList {
  int *begin,*end,*capacity;
@@ -63,4 +64,42 @@ void StrategicInGameUI::ArmyUnitIcon::AddUpgradeIcons() {
    if (upgrades.size() >= 4) break;
   }
  }
+}
+
+struct TargetRef00217D4C { void *vtable; int references; };
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
+struct TreeHintRef00217D4C {
+ __forceinline TreeHintRef00217D4C(TargetRef00217D4C *p):m_ptr(p) { if(m_ptr) ++m_ptr->references; }
+ __forceinline TreeHintRef00217D4C(const TreeHintRef00217D4C &other):m_ptr(other.m_ptr) { if(m_ptr) ++m_ptr->references; }
+ ~TreeHintRef00217D4C() { if(m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
+ TargetRef00217D4C *m_ptr;
+};
+class Rva002BED91 { public: void set(TargetRef00217D4C *); };
+class Rva005FC9F0 { public: void rva005FC9E8(const Image *); void rva005FC9F0(int); };
+class Rva0037E07C { public: int rva0037E07C(); };
+struct StrategicButtonImageView; struct Rva005F01D6In;
+namespace StrategicInGameUI { const Image *GetButtonImage(const StrategicButtonImageView *,int); }
+const Image *Rva005F01D6Get(Rva005F01D6In *);
+// WB1626A60 names CreateMovieClip (this file, line103). Retail5F49F0
+// is the complete171-byte counted-return factory, with a secondary receiver:
+// owner-1C, unit-18, clip-14, primary receiver-20. The ABI projection keeps
+// its address-derived spelling until the enclosing virtual-base contract is
+// reconciled. Allocates50 bytes via the established414-byte clip constructor,
+// sets portrait/type/count through owned providers, then calls AddUpgradeIcons.
+// Capturing each clip before its argument calls preserves retail evaluation
+// order; the counted return inlines the reference increment and hidden result.
+class Rva005F49F0 { public: TreeHintRef00217D4C rva005F49F0(AptMovieClipFrame *); };
+TreeHintRef00217D4C Rva005F49F0::rva005F49F0(AptMovieClipFrame *frame) {
+ TargetRef00217D4C *made = (TargetRef00217D4C *)new StrategicHUD::ArmyUnitIconMovieClip(frame);
+ Rva002BED91 *holder = (Rva002BED91 *)((char *)this - 0x14);
+ holder->set(made);
+ int player = *(int *)((char *)*(void **)((char *)this-0x1c)+0x54);
+ StrategicHUD::ArmyMemberIconMovieClip *portrait = (StrategicHUD::ArmyMemberIconMovieClip *)*(void **)holder;
+ portrait->rva005FC9E0(StrategicInGameUI::GetButtonImage(*(const StrategicButtonImageView **)((char *)this-0x18),player));
+ Rva005FC9F0 *type = (Rva005FC9F0 *)*(void **)holder;
+ type->rva005FC9E8(Rva005F01D6Get(*(Rva005F01D6In **)((char *)this-0x18)));
+ Rva005FC9F0 *quantity = (Rva005FC9F0 *)*(void **)holder;
+ quantity->rva005FC9F0((*(Rva0037E07C **)((char *)this-0x18))->rva0037E07C());
+ ((StrategicInGameUI::ArmyUnitIcon *)((char *)this-0x20))->AddUpgradeIcons();
+ return TreeHintRef00217D4C(*(TargetRef00217D4C **)holder);
 }
