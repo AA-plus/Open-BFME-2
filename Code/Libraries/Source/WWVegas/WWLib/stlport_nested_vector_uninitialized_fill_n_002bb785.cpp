@@ -22,8 +22,10 @@ namespace _STL
 template<> void _Construct<Rva002BC339InnerVector, Rva002BC339InnerVector>(
 	Rva002BC339InnerVector *, const Rva002BC339InnerVector &);
 
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
 template<>
-Rva002BC339InnerVector *__uninitialized_fill_n<
+__declspec(noinline) inline Rva002BC339InnerVector *__uninitialized_fill_n<
 	Rva002BC339InnerVector *, unsigned int, Rva002BC339InnerVector>(
 	Rva002BC339InnerVector *first, unsigned int n,
 	const Rva002BC339InnerVector &value, const __false_type &)
@@ -32,5 +34,11 @@ Rva002BC339InnerVector *__uninitialized_fill_n<
 	for (; n > 0; --n, ++cur)
 		_Construct(&*cur, value);
 	return cur;
+}
+
+// ?bfmeAnchorNestedVectorFillN absent-from-retail
+Rva002BC339InnerVector *bfmeAnchorNestedVectorFillN(Rva002BC339InnerVector *first, unsigned int n, const Rva002BC339InnerVector &value)
+{
+	return __uninitialized_fill_n(first, n, value, __false_type());
 }
 }

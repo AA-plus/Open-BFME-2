@@ -15,9 +15,17 @@
 
 namespace _STL
 {
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
 template <>
-void _Construct<Rva005EFD53Element, Rva005EFD53Element>(Rva005EFD53Element *__p, const Rva005EFD53Element &__val)
+__declspec(noinline) inline void _Construct<Rva005EFD53Element, Rva005EFD53Element>(Rva005EFD53Element *__p, const Rva005EFD53Element &__val)
 {
 	_STLP_PLACEMENT_NEW (__p) Rva005EFD53Element(__val);
+}
+
+// ?bfmeAnchorRva005EFD53ElementConstruct absent-from-retail
+void bfmeAnchorRva005EFD53ElementConstruct(Rva005EFD53Element *p, const Rva005EFD53Element &v)
+{
+	_Construct(p, v);
 }
 }

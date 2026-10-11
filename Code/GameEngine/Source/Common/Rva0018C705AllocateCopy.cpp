@@ -32,7 +32,7 @@ namespace _STL {
 struct Rva005E59FCKeyIterator { _STL::_Rb_tree_node_base *node; };
 namespace _STL {
 template<class T> struct _Rb_global {static _Rb_tree_node_base *_M_increment(_Rb_tree_node_base *);};
-template<> __declspec(noinline) int __distance(const Rva005E59FCKeyIterator &first,const Rva005E59FCKeyIterator &last,const input_iterator_tag &) {
+template<> __declspec(noinline) inline int __distance(const Rva005E59FCKeyIterator &first,const Rva005E59FCKeyIterator &last,const input_iterator_tag &) {
  int result=0;
  _Rb_tree_node_base *node=first.node;
  while(node!=last.node){node=_Rb_global<bool>::_M_increment(node);++result;}
