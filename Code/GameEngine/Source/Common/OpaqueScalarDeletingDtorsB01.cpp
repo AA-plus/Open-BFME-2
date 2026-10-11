@@ -69,12 +69,6 @@ void Rva000E585A::rva000E585A(Rva000E488F *arg)
 }
 
 
-// ??_GRva000E59D3@@UAEPAXI@Z @0x000E5A2B 28B; calls pinned ??1 at 0x000E59D3
-class Rva000E59D3 { public: __declspec(noinline) virtual ~Rva000E59D3(); };
-// ??1Rva000E59D3@@UAE@XZ present-unmatched
-Rva000E59D3::~Rva000E59D3() {}
-void Rva000E59D3_Delete(Rva000E59D3 *p) { delete p; }
-
 // ??_GRva000E6387@@UAEPAXI@Z @0x000E63C0 28B; calls pinned ??1 at 0x000E6387
 class Rva000E6387 { public: __declspec(noinline) virtual ~Rva000E6387(); };
 // ??1Rva000E6387@@UAE@XZ present-unmatched
@@ -92,18 +86,6 @@ class Rva000E9BAC { public: __declspec(noinline) virtual ~Rva000E9BAC(); };
 // ??1Rva000E9BAC@@UAE@XZ present-unmatched
 Rva000E9BAC::~Rva000E9BAC() {}
 void Rva000E9BAC_Delete(Rva000E9BAC *p) { delete p; }
-
-// ??_GRva000EDA94@@UAEPAXI@Z @0x000EDF07 28B; calls pinned ??1 at 0x000EDA94
-class Rva000EDA94 { public: __declspec(noinline) virtual ~Rva000EDA94(); };
-// ??1Rva000EDA94@@UAE@XZ present-unmatched
-Rva000EDA94::~Rva000EDA94() {}
-void Rva000EDA94_Delete(Rva000EDA94 *p) { delete p; }
-
-// ??_GRva000EEEF4@@UAEPAXI@Z @0x000EEFEC 28B; calls pinned ??1 at 0x000EEEF4
-class Rva000EEEF4 { public: __declspec(noinline) virtual ~Rva000EEEF4(); };
-// ??1Rva000EEEF4@@UAE@XZ present-unmatched
-Rva000EEEF4::~Rva000EEEF4() {}
-void Rva000EEEF4_Delete(Rva000EEEF4 *p) { delete p; }
 
 
 // ??_GRva000EFC45@@UAEPAXI@Z @0x000F1698 28B; calls pinned ??1 at 0x000EFC45
@@ -129,16 +111,6 @@ class Rva00102188 { public: __declspec(noinline) virtual ~Rva00102188(); };
 // ??1Rva00102188@@UAE@XZ present-unmatched
 Rva00102188::~Rva00102188() {}
 void Rva00102188_Delete(Rva00102188 *p) { delete p; }
-
-// ??_GRva001041D8@@UAEPAXI@Z @0x00104723 28B; calls pinned ??1 at 0x001041D8
-class Rva001041D8Base0 { public: virtual ~Rva001041D8Base0(); private: char m_unmodelled[0x8]; };
-// Secondary base at +0xC: the this-adjusting deleting-destructor thunk
-// (sub ecx, 0xC) at 0x001042C7 in its vtable is target evidence for it.
-class Rva001041D8BaseC { public: virtual ~Rva001041D8BaseC(); };
-class Rva001041D8 : public Rva001041D8Base0, public Rva001041D8BaseC { public: __declspec(noinline) virtual ~Rva001041D8(); };
-// ??1Rva001041D8@@UAE@XZ present-unmatched
-Rva001041D8::~Rva001041D8() {}
-void Rva001041D8_Delete(Rva001041D8 *p) { delete p; }
 
 // ??_GRva00104DB0@@UAEPAXI@Z @0x00104F16 28B; calls pinned ??1 at 0x00104DB0
 class Rva00104DB0 { public: __declspec(noinline) virtual ~Rva00104DB0(); };
