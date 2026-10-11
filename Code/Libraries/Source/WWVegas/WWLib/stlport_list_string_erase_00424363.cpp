@@ -11,6 +11,15 @@
 // caller 0x00424982 in 0x0042481E; unblocks 0x0042481E.
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
 // overload takes the call instead, so this TU emits no external max COMDAT.
+// codegen otherwise instantiates the min<int> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy.
+namespace _STL {
+static inline const int &min(const int &a, const int &b)
+{
+    return b < a ? b : a;
+}
+}
 #include <stl/_algobase.h>
 namespace _STL {
 static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)

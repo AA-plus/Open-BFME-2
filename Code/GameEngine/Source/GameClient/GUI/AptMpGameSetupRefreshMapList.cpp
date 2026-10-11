@@ -5,6 +5,15 @@
 // WB149CF20 independently supplies all twelve image labels and the profile,
 // map-rating, sorting and row-insertion semantics. Native443538..443BF3 RET4
 // proves the target fields/calls below; their providers are already rowed.
+// codegen otherwise instantiates the min<int> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy.
+namespace _STL {
+static inline const int &min(const int &a, const int &b)
+{
+    return b < a ? b : a;
+}
+}
 #include <stdlib.h>
 namespace _STL {void __cdecl free(void *);}
 #define free _STL::free
