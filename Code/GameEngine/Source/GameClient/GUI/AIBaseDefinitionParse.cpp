@@ -28,12 +28,15 @@ class Rva0041E875 {public:~Rva0041E875();};
 enum ScienceType {SCIENCE_NONE=0};
 struct Rva0021C21BElement {char bytes[4];};
 void Rva0041EC73Load(INI*);
+class ModuleData;
+bool __stdcall Rva0041E912Fill(const AsciiString &name,_STL::vector<const ModuleData*> *out);
 namespace _STL {
 template<class T>struct hash {};template<class T>struct equal_to {};
 template<class K,class V,class H=hash<K>,class E=equal_to<K>,class A=allocator<pair<const K,V> > >class hash_map {public:V&operator[](const K&);char body[20];};
 template<class V>struct _Select1st {};template<class V>struct _Hashtable_node {};
-template<class V,class K,class H,class S,class E,class A>class hashtable {friend void ::Rva0041EC73Load(INI*);public:__forceinline bool contains(const K &key) const {return _M_find(key)!=0;} private:template<class KT>_Hashtable_node<V>*_M_find(const KT&)const;};
+template<class V,class K,class H,class S,class E,class A>class hashtable {friend void ::Rva0041EC73Load(INI*);friend bool __stdcall ::Rva0041E912Fill(const AsciiString &,_STL::vector<const ModuleData*> *);public:__forceinline bool contains(const K &key) const {return _M_find(key)!=0;} private:template<class KT>_Hashtable_node<V>*_M_find(const KT&)const;};
 template<>void vector<ScienceType>::push_back(const ScienceType&);
+template<>void vector<const ModuleData*>::push_back(const ModuleData*const&);
 template<>vector<Rva0021C21BElement>&vector<Rva0021C21BElement>::operator=(const vector<Rva0021C21BElement>&);
 template<>vector<ScienceType>&hash_map<int,vector<ScienceType> >::operator[](const int&);
 }
@@ -60,4 +63,19 @@ void Rva0041EC73Load(INI*ini){
  else delete reinterpret_cast<Rva0041E875*>(value);
 
  reinterpret_cast<Rva0041EC73View*>(g_00E03124)->map20[sideKey].push_back(reinterpret_cast<const ScienceType&>(mapKey));
+}
+
+// Native [41E912,41E96F) RET8: the side's base definitions. The side name's
+// key selects the +0x20 entry (its vector of definition keys); each key's
+// definition slot in the +0x0C map is appended to the output through the
+// rowed ModuleData-pointer push_back 0x004DFCB0. False when the side has no
+// entry. Original name unknown; the output element view is the push owner's.
+struct Rva0041E912Entry {void*next;int key;int*begin;int*end;};
+bool __stdcall Rva0041E912Fill(const AsciiString &name,_STL::vector<const ModuleData*> *out){
+ NameKeyType key=TheNameKeyGenerator->nameToKey(name);
+ Rva0041E912Entry*entry=reinterpret_cast<Rva0041E912Entry*>(reinterpret_cast<ArmorHashtable*>(&reinterpret_cast<Rva0041EC73View*>(g_00E03124)->map20)->_M_find(key));
+ if(!entry) return false;
+ for(int*it=entry->begin;it!=entry->end;++it)
+  out->push_back(*(const ModuleData**)(reinterpret_cast<ObjectLookupMap*>(&reinterpret_cast<Rva0041EC73View*>(g_00E03124)->map0C)->findSlot(it)));
+ return true;
 }

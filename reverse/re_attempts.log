@@ -38148,3 +38148,4 @@ uw_00771e2c	0x00771E2C	14	landed	add_match verified Code/GameEngine/Source/GameL
 ?Rva004EE9E9XferVector@@YAPAVXfer@@PAV1@PAVRva004EE6D0@@@Z	0x004EE9E9	245	landed	add_match verified Code/GameEngine/Source/Common/Rva004EE9E9XferVector.cpp 245B; trial
 ?Rva0031A160Xfer@@YAPAVXfer@@PAV1@PAV?$vector@UBfmeVectorRecord00319C84@@V?$allocator@UBfmeVectorRecord00319C84@@@_STL@@@_STL@@@Z	0x0031A160	247	landed	add_match verified Code/GameEngine/Source/Common/Rva00538E22Ctor.cpp 247B; trial
 ?Rva001EC0A0Xfer@@YAPAVXfer@@PAV1@PAV?$vector@VRva0037DF2C@@V?$allocator@VRva0037DF2C@@@_STL@@@_STL@@@Z	0x001EC0A0	276	landed	add_match verified Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldBattle.cpp 276B; trial
+?Rva0041E912Fill@@YG_NABVAsciiString@@PAV?$vector@PBVModuleData@@V?$allocator@PBVModuleData@@@_STL@@@_STL@@@Z	0x0041E912	95	landed	add_match verified Code/GameEngine/Source/GameClient/GUI/AIBaseDefinitionParse.cpp 95B; trial
