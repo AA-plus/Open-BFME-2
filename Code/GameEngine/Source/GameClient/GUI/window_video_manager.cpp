@@ -10,6 +10,14 @@ template <> const unsigned int &max<unsigned int>(const unsigned int &, const un
 #include <map>
 #include <hash_map>
 
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+
 #include <cstddef>
 
 // vector<void*> begin/end otherwise instantiate per-TU COMDATs (one byte
