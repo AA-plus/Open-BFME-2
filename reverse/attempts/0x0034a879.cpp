@@ -1,90 +1,24 @@
 // ?onEnter@AIAttackFireWeaponState@@UAE?AW4StateReturnType@@XZ
-// partial score=0.9 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// partial score=0.96 date=2026-10-11
+// cl: /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
-// AIAttackApproachTargetState::onEnter, retail 0x0034CD3A (783 bytes): slot 4
-// of vtable 0x00C12610 (slot-2 name getter "AIAttackApproachTargetState";
-// slots 5/6 are the rowed onExit 0x0034894C and update 0x003488AF), with the
-// AIStates.cpp helpers it calls:
+// AIStates.cpp bodies of BFME 2's attack state machine that are not yet rowed
+// in the per-state units (declarations carried from
+// AIAttackApproachTargetStateOnEnter.cpp, the same unit's views).
 //
-//  - rva003430A3 0x003430A3 (123 bytes): the attack line-of-sight test. True
-//    unless the owner's template has kind byte +0x10F mask 8 or byte +0x122
-//    mask 0x40, the weapon's template is neither the +0x2C9400 byte-field
-//    kind nor a contact weapon (pinned WeaponTemplate::isContactWeapon), and
-//    the stack line-of-sight partition filter (vtable 0x00C07150, rowed
-//    Rva002619C1Filter::allow) refuses the victim. Also called outside this
-//    unit (0x0046C7A4), so it is external cdecl.
-//  - rva00343FB0 0x00343FB0 (173 bytes): static, owner in ESI. False for an
-//    immobile owner (kind byte +0x108 mask 4) or one whose outermost
-//    container is; otherwise BFME1's rva0016B010 (contact/field weapon,
-//    non-human player, no AI, state 0x3E, AI slot 143 != 2, AI byte +0x3C1,
-//    owner byte +0x249). Not yet exact (forward pin in symbols.csv): retail
-//    walks the containers with a retested loop (while (c && c->next)) yet
-//    keeps the owner in ESI; every retested-loop shape tried here makes cl
-//    choose EDI, which also moves onEnter's registers. The break-loop shape
-//    below keeps the retail ESI convention (onEnter exact) but drops the
-//    retest; bank reverse/attempts/0x00343fb0.cpp has the retail-shaped body.
-//  - canPursue 0x00344635 (276 bytes): static, owner in ESI, victim in EDI,
-//    weapon on the stack; Zero Hour's canPursue as BFME1 shaped it (status
-//    0x26 with a container, crush test, weapon too-close test 0x002C9AFE,
-//    locomotor speed 0x002627E8 against the victim's 0x0028AC7D).
-//
-// onEnter is Zero Hour's with BFME 2 target facts: the owner position is
-// saved at +0x58; a destroyed goal fails; status 0x44 or AI byte +0x3CC
-// takes a direct fire/fail exit through AI::rva002FE193 and the
-// line-of-sight test (else the machine's slot 14 clears the goal); a victim
-// rowed Rva0034311ECheck fails; the view-blocked test is rva003430A3;
-// the guard-retaliate block is rva00343FB0; an AI module flag +0x24 with
-// layer >= 17 and no quick path, or a non-moving owner (Object::rva002907A1,
-// locomotor 0x001E46E1 speed < 0.1), waits two seconds (+0x68, flag +0x71).
-// Donors: Zero Hour AIStates.cpp, BFME1 AIAttackApproachTargetState_onEnter.cpp.
-//
-// AIAttackApproachTargetState00C12678::onEnter 0x0034D049 (383 bytes, slot 4
-// of vtable 0x00C12678): the same body for the BFME 2 position-approach
-// variant -- no victim branch, the weapon range test against the machine's
-// goal position, owner position at +0x4C, timestamp +0x58, wait frame +0x5C
-// and wait flag +0x62; its computePath 0x00340546 (221 bytes, slot 17,
-// ComputePath10/20) is the goal-position half of Zero Hour's with the waiting
-// byte refreshed from the AI after requestAttackPath. The goal pointer is read
-// before the timestamp store
-// (retail keeps the negated frame rate in ECX across the argument pushes).
-//
-// AIAttackPursueTargetState (vtable 0x00C12730): onEnter 0x0034D345 (349
-// bytes, slot 4) and computePath 0x00345246 (333 bytes, slot 17), Zero Hour's
-// bodies with BFME 2's status 0x44 / AI byte +0x3CC direct exit (as in the
-// approach onEnter), the AI slot 143 == 2 command-source test with owner byte
-// +0x249, CritterDesync 27/13 and 12/26, the AI blocked-frames count +0x16C,
-// path +0x140 and waiting byte +0x3B1, and the static isSamePosition and
-// canPursue register helpers of this unit.
-//
-// AIAttackFireDuringApproachState (vtable 0x00C12798, BFME only; layout from
-// the rowed xfer 0x0034081A): onEnter 0x0034D4A2 (277 bytes, CritterDesync
-// 28/16/29) remembers the victim ID +0x64 and its position +0x50 and fails on
-// the victim physics flag pair (pinned 0x00390533); computePath 0x00350497
-// (468 bytes, ComputePath15) refinds the victim by ID, then asks the
-// pathfinder's engagement-spot search (pinned 0x002F23A6) and
-// requestApproachPath, with the 'masiwar' debug traces gated on TheGameLogic
-// +0x1B4. The machine pointer is a local there (retail reuses it after
-// findObjectByID).
-//
-// AIAttackMeleeSquishState (vtable 0x00C12868): onEnter 0x0034D886 (261
-// bytes, CritterDesync 33/22) needs template byte +0x5FD, no status 0x44 or
-// AI +0x3CC, a live goal without the physics flag pair and the owner's crush
-// test (Object::rva0029493F, 2) before it paths, then sets status 0x1C. Its
-// FAILURE and SUCCESS returns trail the body in that order, which only the
-// nested form below reproduces.
-//
-// AIAttackMeleeEngageState::onEnter 0x0034DC05 (540 bytes, slot 4 of vtable
-// 0x00C12150, CritterDesync 35/27/36): BFME1's AIAttackMeleeEngageState_onEnter
-// donor with BFME 2's fields -- the private fire state (new, constructor
-// 0x0033F483) at +0x4C, timestamp +0x54, victim position +0x58, retry frame
-// +0x6C and flag +0x70, weapon slot +0x74; the victim fails on the physics
-// flag pair, Object +0x438 bit 0 or status 0x32; in range, the owner's
-// pathfinder goal (Object::rva0028ACEE, GetGoalPosition) is written to the AI
-// final position +0x180 with byte +0x3B0 cleared and status 0x1C set.
+// AIAttackMeleeEngageState::updateInternal, retail 0x003497E6 (1308 bytes):
+// the update helper of vtable 0x00C12150 (its CRC trace literal names it;
+// matched slot 0x00349D02 calls it and sets status 0x1C on -1). Ported from
+// Open-BFME-1's AIAttackMeleeEngageState_updateInternal.cpp (retail 0x00178470
+// there). The victim test is two statements in retail: a combined
+// "!victim || status 0x33" return lets cl lay the merged FAILURE return block
+// at the retry site, while retail keeps it at the computePath failure.
 
-#include "../../Common/GameLogicObjectLookupView.h"
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "GameLogicObjectLookupView.h"
+#include "Coord3D.h"
+#include "Coord2D.h"
+#include "Common/Snapshot.h"
+#include "RTS/XYDistanceCallView.h"
 
 typedef bool Bool;
 typedef float Real;
@@ -116,17 +50,22 @@ enum MoodMatrixAction
 };
 enum WeaponStatus
 {
-	READY_TO_FIRE = 0
+	READY_TO_FIRE = 0,
+	PRE_ATTACK = 4
 };
 enum ObjectStatusTypes
 {
 	OBJECT_STATUS_0D = 0x0D,
+	OBJECT_STATUS_19 = 0x19,
+	OBJECT_STATUS_1B = 0x1B,
 	OBJECT_STATUS_1C = 0x1C,
+	OBJECT_STATUS_25 = 0x25,
 	OBJECT_STATUS_26 = 0x26,
 	OBJECT_STATUS_32 = 0x32,
 	OBJECT_STATUS_33 = 0x33,
 	OBJECT_STATUS_41 = 0x41,
 	OBJECT_STATUS_44 = 0x44,
+	OBJECT_STATUS_4B = 0x4B,
 	OBJECT_STATUS_52 = 0x52
 };
 
@@ -147,8 +86,15 @@ static __forceinline void critterDesyncLog(const char *text)
 	}
 }
 
-extern const int g_009BA4E4;
-#define LOGICFRAMES_PER_SECOND g_009BA4E4
+// math.h: its sqrt declaration keeps the x87 result store after the argument
+// pops, and its float fabs overload is the CRT fabs compared as float.
+#include <math.h>
+Real normalizeAngle(Real angle);
+
+#define PATHFIND_CELL_SIZE_F 10.0f
+
+extern int g_Va00DBA4E4;
+#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
 
 extern GameLogic *TheGameLogic;
 
@@ -160,6 +106,8 @@ public:
 	Real m_aggressiveRangeModifier; // +0x50
 	unsigned char m_pad54[0x8C - 0x54];
 	Bool m_aiCrushesInfantry; // +0x8C
+	unsigned char m_pad8D[0xB8 - 0x8D];
+	Bool m_teamPathWait; // +0xB8
 };
 
 class Rva002C9B80Owner;
@@ -169,6 +117,7 @@ class Pathfinder
 public:
 	Bool isAttackViewBlockedByObstacle(const Object *obj, const Coord3D *objPos, const Object *target, const Coord3D *targetPos);
 	Bool CanApproachToTarget(Object *obj, const Coord3D *targetPos, Rva002C9B80Owner *weapon, Bool flag);
+	Bool rva002ED313(Object *obj);
 };
 
 class AI
@@ -176,7 +125,7 @@ class AI
 public:
 	static Bool rva002FE193(Object *owner, Object *nemesis);
 	Pathfinder *pathfinder() { return m_pathfinder; }
-	const TAiData *getAiData() { return m_aiData; }
+	const TAiData *getObservedAiData() { return m_aiData; }
 	unsigned char m_pad00[0x10];
 	Pathfinder *m_pathfinder; // +0x10
 	unsigned char m_pad14[0x18 - 0x14];
@@ -194,6 +143,8 @@ public:
 		MAINTAIN_POS_IS_VALID,
 		PRECISE_Z_POS
 	};
+	Real getMaxTurnRate(Object *obj) const;
+	const struct LocomotorTemplateView *getTemplate() const { return m_template; }
 	void setUsePreciseZPos(Bool b)
 	{
 		if (b)
@@ -202,16 +153,29 @@ public:
 			m_flags &= ~(1 << PRECISE_Z_POS);
 	}
 private:
-	unsigned char m_pad00[0x44];
+	unsigned char m_pad00[4];
+	const struct LocomotorTemplateView *m_template; // +0x04
+	unsigned char m_pad08[0x44 - 8];
 	unsigned int m_flags; // +0x44
 };
 
+struct LocomotorTemplateView { char prefix[0x10B]; Bool m_10b; };
 // Locomotor speed for an object (0x001E46E1), rowed under this name.
 class Rva001E46E1
 {
 public:
 	Real rva001E46E1(Object *obj);
 };
+
+// Locomotor min speed (0x001E3F08), rowed under this name.
+struct Rva001E3F08Arg;
+class Rva001E3F08
+{
+public:
+	Real rva001E3F08(Rva001E3F08Arg *obj);
+};
+
+struct Rva0028AC4EEntry;
 
 // AI current-locomotor speed (0x002627E8), rowed under this name.
 class Rva002627E8
@@ -257,7 +221,7 @@ public:
 	virtual void slot139() = 0;
 	virtual void slot140() = 0;
 	virtual void slot141() = 0;
-	virtual void slot142() = 0;
+	virtual void slot142(Int mode) = 0;
 	virtual Int slot143() = 0;
 	virtual void notifyVictimIsDead() = 0;
 	Locomotor *getCurLocomotor() { return m_curLocomotor; }
@@ -267,8 +231,10 @@ public:
 	void setTurretTargetObject(WhichTurretType tur, Object *o, Bool isForceAttacking);
 	void setTurretTargetPosition(WhichTurretType tur, const Coord3D *pos);
 	Bool isQuickPathAvailable(const Coord3D *destination) const;
+	Real getTurretTurnRate(WhichTurretType tur) const;
 	Real getCurLocomotorSpeed() const { return ((const Rva002627E8 *)this)->rva002627E8(); }
 	void setCurrentVictim(const Object *victim);
+	void setDesiredSpeed(Real speed);
 	void requestPath(Coord3D *destination, Bool isFinalGoal);
 	void requestAttackPath(ObjectID victimID, const Coord3D *victimPos);
 	void destroyPath();
@@ -281,16 +247,25 @@ public:
 	Bool isBlockedAndStuck() const { return m_blockedFrames > 0; }
 	UnsignedInt getMoodMatrixValue() const;
 	Bool isAttackPath() const { return m_3b2; }
+	void setPathExtraDistance(Real dist);
 private:
 	const AIUpdateModuleData *m_moduleData; // +0x04
-	unsigned char m_pad008[0x140 - 0x08];
+	unsigned char m_pad008[0x30 - 0x08];
+public:
+	class Rva00346FA5 *m_goalPath; // +0x30
+private:
+	unsigned char m_pad034[0x140 - 0x34];
 	void *m_path; // +0x140
 	unsigned char m_pad144[0x16C - 0x144];
 public:
 	Int m_blockedFrames; // +0x16C
 	unsigned char m_pad170[0x180 - 0x170];
 	Coord3D m_finalPosition; // +0x180
-	unsigned char m_pad18C[0x1CC - 0x18C];
+	unsigned char m_pad18C[0x194 - 0x18C];
+	Int m_currentGoalPathIndex; // +0x194
+	unsigned char m_pad198[0x1A0 - 0x198];
+	Int m_1a0; // +0x1A0
+	unsigned char m_pad1A4[0x1CC - 0x1A4];
 	unsigned char m_locomotorSet[0x1F0 - 0x1CC]; // +0x1CC
 private:
 	Locomotor *m_curLocomotor; // +0x1F0
@@ -319,7 +294,9 @@ public:
 	unsigned char m_kindOf[0x14]; // +0x108
 	unsigned char m_pad11C[0x122 - 0x11C];
 	unsigned char m_122; // +0x122
-	unsigned char m_pad123[0x5FD - 0x123];
+	unsigned char m_pad123[0x53C - 0x123];
+	Real m_53c; // +0x53C
+	unsigned char m_pad540[0x5FD - 0x540];
 	Bool m_5fd; // +0x5FD
 };
 
@@ -336,20 +313,83 @@ private:
 	Coord3D m_position; // +0x38
 };
 
+class Team;
+template<class OBJCLASS>
+class DLINK_ITERATOR
+{
+public:
+	typedef OBJCLASS* (OBJCLASS::*GetNextFunc)() const;
+private:
+	OBJCLASS* m_cur;
+	GetNextFunc m_getNextFunc;
+public:
+	DLINK_ITERATOR(OBJCLASS* cur, GetNextFunc getNextFunc) : m_cur(cur), m_getNextFunc(getNextFunc)
+	{
+	}
+	void advance()
+	{
+		if (m_cur)
+			m_cur = ((*m_cur).*(m_getNextFunc))();
+	}
+	Bool done() const
+	{
+		return m_cur == 0;
+	}
+	OBJCLASS* cur() const
+	{
+		return m_cur;
+	}
+};
+// The member walk (rowed iterate_TeamMemberList 0x00263864 and advance
+// 0x00263526), as ScriptActions_doPlayerForceEmotion.cpp declares it.
+template <>
+class DLINK_ITERATOR<Object>
+{
+private:
+	Object *m_cur;
+	unsigned char m_targetAbiState[20];
+public:
+	void advance();
+	bool done() const { return m_cur == 0; }
+	Object *cur() const { return m_cur; }
+};
+
+class MemoryPoolObject
+{
+public:
+	virtual ~MemoryPoolObject();
+};
+
 class TeamPrototype
 {
 public:
 	unsigned char m_pad00[0x216];
 	Bool m_216; // +0x216
+	unsigned char m_pad217[0x334 - 0x217];
+	Team *m_dlinkhead_TeamInstanceList; // +0x334
 };
 
-class Team
+class Team : public MemoryPoolObject, public Snapshot
 {
 public:
 	Object *getTeamTargetObject();
 	void rva0039D84A(Object *target);
-	unsigned char m_pad00[0x30];
+	Team *dlink_next_TeamInstanceList() const;
+	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
+	unsigned char m_pad08[0x30 - 8];
 	TeamPrototype *m_proto; // +0x30
+};
+
+inline DLINK_ITERATOR<Team> iterate_TeamInstanceList(const TeamPrototype *proto)
+{
+	return DLINK_ITERATOR<Team>(proto->m_dlinkhead_TeamInstanceList, &Team::dlink_next_TeamInstanceList);
+}
+
+struct PlayerTeamNode
+{
+	PlayerTeamNode *m_next;
+	PlayerTeamNode *m_prev;
+	TeamPrototype *m_value;
 };
 
 class Player
@@ -357,12 +397,30 @@ class Player
 public:
 	unsigned char m_pad00[0x5C];
 	Int m_playerType; // +0x5C
+	unsigned char m_pad60[0x32C - 0x60];
+	PlayerTeamNode *m_playerTeamPrototypes; // +0x32C
+	PlayerTeamNode *getPlayerTeams() const { return m_playerTeamPrototypes; }
+};
+
+// Object +0xA8 geometry-shape list (index accessor 0x006BD980, rowed under
+// this name); each shape carries its bounding radius at +0x08.
+struct BfmeShapeE15
+{
+	unsigned char m_pad00[0x08];
+	Real m_boundingRadius; // +0x08
+};
+
+class BfmeObjE15
+{
+public:
+	BfmeShapeE15 *bfmeAtE15(Int index);
+	unsigned char m_pad00[0x10];
 };
 
 class Object : public Thing
 {
 public:
-	AIUpdateInterface *getAI() { return m_ai; }
+	AIUpdateInterface *getObservedAI() { return m_ai; }
 	Object *getContainedBy() { return m_containedBy; }
 	Object *getOutermostContainer()
 	{
@@ -386,29 +444,49 @@ public:
 	Bool isSignificantlyAboveTerrain() const;
 	Bool rva0029493F(Object *other, Int test);
 	Real rva0028AC7D() const;
+	Bool rva0028ADE0() const;
+	const Rva0028AC4EEntry *rva0028AC4E() const;
+	void rva0028CDB6();
+	Bool rva0028C264(Int *out, Int kind);
+	Real GetRelativeAngle(const Coord3D *pos) const;
+	Real getOrientation() const { return m_orientation; }
 	Bool rva002943B2(const Player *player);
+	Object *rva002931F5(Bool flag);
+	void rva00346C53(ObjectStatusTypes bit, Bool set);
 	void rva0028ACDC(const Coord3D *pos);
 	void setStatus(ObjectStatusTypes bit, Bool set);
 	Bool isKindOf(KindOfType t) const;
 	void preFireCurrentWeapon(const Object *victim, const Coord3D *pos);
+	void rva0028FC8F();
+	void fireCurrentWeapon(const Coord3D *pos);
 	void rva0028ACEE(const Coord3D *pos, Int layer);
 	Bool GetGoalPosition(Coord3D *pos) const;
 	void *rva0029439D();
 	ObjectID getID() const { return (ObjectID)m_id; }
-	unsigned char m_pad044[0x74 - 0x44];
+	Real m_orientation; // +0x44
+	unsigned char m_pad048[0x74 - 0x48];
 	Int m_id; // +0x74
-	unsigned char m_pad078[0xB8 - 0x78];
+	unsigned char m_pad078[0xA8 - 0x78];
+	BfmeObjE15 m_geometryShapes; // +0xA8
 	Real m_geometryRadiusB8; // +0xB8
-	unsigned char m_pad0BC[0x249 - 0xBC];
+	unsigned char m_pad0BC[0x1C0 - 0xBC];
+	Real m_1c0; // +0x1C0
+	unsigned char m_pad1C4[0x1C8 - 0x1C4];
+	UnsignedInt m_1c8; // +0x1C8
+	unsigned char m_pad1CC[0x249 - 0x1CC];
 	Bool m_249; // +0x249
-	unsigned char m_pad24A[0x258 - 0x24A];
+	unsigned char m_pad24A[0x250 - 0x24A];
+	void *m_contain; // +0x250
+	unsigned char m_pad254[0x258 - 0x254];
 	AIUpdateInterface *m_ai; // +0x258
 	void *m_physics; // +0x25C
 	unsigned char m_pad260[0x274 - 0x260];
 	Object *m_containedBy; // +0x274
 	unsigned char m_pad278[0x304 - 0x278];
 	Team *m_team; // +0x304
-	unsigned char m_pad308[0x438 - 0x308];
+	unsigned char m_pad308[0x410 - 0x308];
+	Int m_410; // +0x410
+	unsigned char m_pad414[0x438 - 0x414];
 	UnsignedInt m_438; // +0x438
 };
 
@@ -434,7 +512,10 @@ class WeaponTemplate
 {
 public:
 	Bool isContactWeapon() const;
-	unsigned char m_pad00[0x16B];
+	unsigned char m_pad00[0x2C];
+	Real m_aimDelta; // +0x2C
+	Real m_aimOffset; // +0x30
+	unsigned char m_pad34[0x16B - 0x34];
 	Bool m_16b; // +0x16B
 };
 
@@ -530,7 +611,7 @@ public:
 protected:
 	StateMachine *getMachine() const { return m_machine; }
 	Object *getMachineOwner() const { return m_machine->getOwner(); }
-	Object *getMachineGoalObject() const { return m_machine->getGoalObject(); }
+	Object *getObservedMachineGoalObject() const { return m_machine->getGoalObject(); }
 	const Coord3D *getMachineGoalPosition() const { return m_machine->getGoalPosition(); }
 	unsigned char m_pad04[0x18 - 0x04];
 	StateMachine *m_machine; // +0x18
@@ -686,12 +767,120 @@ private:
 	Bool m_waitOddFrame; // +0x24
 };
 
+// An enclosing container's contain module (Object +0x250), slot 77.
+class ContainFirePointView : public VirtualSlots<77>
+{
+public:
+	virtual Bool attemptBestFirePointPosition(Object *source, Weapon *weapon, const Coord3D *targetPos);
+};
+
+// The AI's locomotor-goal slots (132 and 135), as AIFaceStateUpdate.cpp views them.
+class AITurnView : public VirtualSlots<132>
+{
+public:
+	virtual void setLocomotorGoalPositionExplicit(const Coord3D &newPos);
+	virtual void slot133();
+	virtual void slot134();
+	virtual void setLocomotorGoalOrientation(Real angle);
+};
+
+// The AI's goal path (+0x30): position by index (0x00346FA5).
+class Rva00346FA5
+{
+public:
+	void *rva00346FA5(Int index) const;
+};
+
+class Rva0034E3A5Helper
+{
+public:
+	virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03(); virtual void s04();
+	virtual void rva0034E3CESlot5();
+	virtual void s06(); virtual void s07();
+	virtual void rva0034E3D8Slot8(Int value);
+};
+
+// AIFollowPathAsTeamState, vtable 0x00C121E8.
+class AIFollowPathAsTeamState : public AIInternalMoveToState
+{
+public:
+	virtual StateReturnType onEnter();
+private:
+	Bool canMoveToNextFormationPathPoint();
+	Int m_index; // +0x4C
+	unsigned char m_pad50[0x54 - 0x50];
+	Bool m_adjustFinal; // +0x54
+	unsigned char m_pad55[0x57 - 0x55];
+	Bool m_57; // +0x57
+	Int m_lastCommandSource; // +0x58
+	Rva0034E3A5Helper *m_5c; // +0x5C
+	Int m_60; // +0x60
+	Bool m_64; // +0x64
+};
+
+// AIAttackPositionAimAtTargetState, vtable 0x00C11068.
+class AIAttackPositionAimAtTargetState : public State
+{
+public:
+	virtual StateReturnType onEnter();
+	StateReturnType rva0034A570(Bool firstFrame);
+private:
+	unsigned char m_pad1C[0x20 - 0x1C];
+	Bool m_canTurnInPlace; // +0x20
+	Bool m_setLocomotor; // +0x21
+};
+
+// The attack state a fire state reports to (AIAttackState's machine).
+class AttackStateHost
+{
+public:
+	virtual void notifyFired();
+	virtual void slot01();
+	virtual Bool isWeaponSlotOkToFire(WeaponSlotType wslot);
+};
+
+// AIAttackPositionFireWeaponState, vtable 0x00C11258.
+class AIAttackPositionFireWeaponState : public State
+{
+public:
+	virtual StateReturnType onEnter();
+	virtual StateReturnType update();
+private:
+	Int m_1c; // +0x1C
+	AttackStateHost *m_att; // +0x20
+	Bool m_waitOddFrame; // +0x24
+};
+
 // The melee engage state's private fire state (constructor 0x0033F483).
-class Rva0033F483
+class Rva0033F483 : public VirtualSlots<4>
 {
 public:
 	Rva0033F483(StateMachine *machine, Int weaponSlot);
-	unsigned char m_pad00[0x28];
+	virtual StateReturnType onEnter();
+	virtual void onExit(Int status);
+	virtual StateReturnType update();
+	unsigned char m_pad04[0x28 - 0x04];
+};
+
+// A resolved target's contain module (Object +0x250), slot 31, and the rider
+// it returns (slot 18), as AIAttackMeleeEngageState::updateInternal calls them.
+class Rva003497E6Rider : public VirtualSlots<18>
+{
+public:
+	virtual Object *slot18(Int, const Coord3D *pos, Real, Int, Int);
+};
+
+class Rva003497E6Contain : public VirtualSlots<31>
+{
+public:
+	virtual Rva003497E6Rider *slot31();
+};
+
+// Thing-template gate 0x0028CECF, pinned under this name.
+class Rva0028CECFOwner
+{
+public:
+	Bool rva0028CECF();
 };
 
 // AIAttackMeleeEngageState, vtable 0x00C12150 (computePath 0x003457AC rowed in
@@ -701,6 +890,7 @@ class AIAttackMeleeEngageState : public AIInternalMoveToState
 public:
 	virtual StateReturnType onEnter();
 private:
+	StateReturnType updateInternal();
 	Rva0033F483 *m_fireState; // +0x4C
 	Int m_50; // +0x50
 	UnsignedInt m_approachTimestamp; // +0x54
@@ -722,529 +912,113 @@ public:
 
 Bool Rva0034311ECheck(Object *obj);
 
-Bool rva003430A3(Object *source, Object *victim, Weapon *weapon)
-{
-	if (weapon && victim && !((const Rva002C9400ByteField *)weapon->getTemplate())->get() &&
-		!weapon->getTemplate()->isContactWeapon() &&
-		((source->getTemplate()->m_kindOf[7] & 8) || (source->getTemplate()->m_122 & 0x40)))
-	{
-		Rva002619C1Filter filter(source);
-		if (!filter.allow(victim))
-			return false;
-	}
-	return true;
-}
-
-// ?rva00343FB0@@YA_NPAVObject@@@Z present-unmatched
-static Bool rva00343FB0(Object *obj)
-{
-	if (obj->isKindOfImmobile())
-		return false;
-	Object *container = obj->getContainedBy();
-	while (container)
-	{
-		Object *outer = container->getContainedBy();
-		if (!outer)
-			break;
-		container = outer;
-	}
-	if (container && container->isKindOfImmobile())
-		return false;
-
-	Weapon *weapon = obj->getCurrentWeapon();
-	if (weapon && (((const Rva002C9400ByteField *)weapon->getTemplate())->get() ||
-			((const Rva002C9407ByteField *)weapon->getTemplate())->get()))
-		return true;
-	if (obj->getControllingPlayer()->m_playerType)
-		return true;
-	AIUpdateInterface *ai = obj->m_ai;
-	if (!ai)
-		return true;
-	if (ai->rva00260DED() == 0x3e || ai->slot143() != 2 || ai->m_3c1 || obj->m_249)
-		return true;
-	return false;
-}
-
-// Rowed at 0x0033FA8E from AIAttackApproachTargetState_computePath_Bfme.cpp;
-// VC7.1 passes its three pointers in registers, so callers only match with a
-// definition in the same unit.
-static __declspec(noinline) Bool isSamePosition(const Coord3D *ourPos,
-	const Coord3D *prevTargetPos, const Coord3D *curTargetPos)
-{
-	Coord3D diff;
-	diff.x = curTargetPos->x - prevTargetPos->x;
-	diff.y = curTargetPos->y - prevTargetPos->y;
-	Coord3D toTarget;
-	toTarget.x = curTargetPos->x - ourPos->x;
-	toTarget.y = curTargetPos->y - ourPos->y;
-	const float TOLERANCE_FACTOR = 1.0f / (10.0f * 10.0f);
-	float toleranceSqr = (toTarget.x*toTarget.x+toTarget.y*toTarget.y) * TOLERANCE_FACTOR;
-	if (diff.x * diff.x + diff.y * diff.y > toleranceSqr)
-		return false;
-	return true;
-}
-
-static Bool canPursue(Object *source, Weapon *weapon, Object *victim)
-{
-	if (!victim->m_physics)
-		return false;
-	if (source->testStatus(OBJECT_STATUS_26) && source->m_containedBy)
-		return false;
-	AIUpdateInterface *ai = source->getAI();
-	if (!ai)
-		return false;
-
-	WhichTurretType tur = ai->getWhichTurretForCurWeapon();
-	if (tur == TURRET_INVALID)
-		return false;
-
-	if (TheAI->m_aiData->m_aiCrushesInfantry)
-	{
-		if (source->getControllingPlayer() &&
-			source->getControllingPlayer()->m_playerType == 1 &&
-			source->rva0029493F(victim, 2))
-		{
-			return true;
-		}
-	}
-
-	if (weapon->rva002C9AFE(source, victim))
-		return false;
-
-	Real ourMaxSpeed = source->getAI()->getCurLocomotorSpeed();
-	Real victimSpeed = victim->rva0028AC7D();
-	if (victimSpeed >= ourMaxSpeed)
-		return false;
-	if (victimSpeed < ourMaxSpeed * 0.1f)
-		return false;
-	Real dx = victim->getPosition()->x - source->getPosition()->x;
-	Real dy = victim->getPosition()->y - source->getPosition()->y;
-	const Coord3D *victimDirection = victim->getUnitDirectionVector2D();
-	Coord3D victimDirectionVector;
-	victimDirectionVector.x = victimDirection->x;
-	victimDirectionVector.y = victimDirection->y;
-	if (dx * victimDirectionVector.x + dy * victimDirectionVector.y < 0)
-		return false;
-	return true;
-}
-
-StateReturnType AIAttackApproachTargetState::onEnter()
+// Retail 0x003497E6, 1308 bytes (vtable 0x00C12150's update helper; its CRC
+// literal names it). Ported from Open-BFME-1's
+// AIAttackMeleeEngageState_updateInternal.cpp (retail 0x00178470 there): the
+// fire state, retry frame and flags sit four bytes lower in BFME 2, the
+// status bits are 0x33/0x4B/0x25, the goal update is the 0x0028ACEE
+// /GetGoalPosition pair the onEnter above uses, and the retry delays are five
+// and two LOGICFRAMES_PER_SECOND.
+StateReturnType AIAttackMeleeEngageState::updateInternal()
 {
 	Object *source = getMachineOwner();
-	AIUpdateInterface *ai = source->getAI();
-	if (source->isKindOfProjectile())
-	{
-		if (ai->getCurLocomotor())
-			ai->getCurLocomotor()->setUsePreciseZPos(true);
-	}
-
-	m_ownerPosition = *source->getPosition();
-
-	if (((TurretStateMachine *)getMachine())->rva004D7ADD())
+	AIUpdateInterface *ai = source->getObservedAI();
+	Object *victim = getObservedMachineGoalObject();
+	if (!victim)
+		return STATE_FAILURE;
+	if (victim->testStatus(OBJECT_STATUS_33))
+		return STATE_FAILURE;
+	if (victim->rva002943B2(source->getControllingPlayer()))
+		return STATE_FAILURE;
+	if (victim->m_438 & 1)
 		return STATE_FAILURE;
 
-	m_waiting = false;
-	Weapon *weapon = source->getCurrentWeapon();
-	Object *victim = getMachineGoalObject();
+	ai->setCurrentVictim(victim);
+	if (source->rva0029493F(victim, 2) && source->getTemplate()->m_5fd &&
+		((Rva0028CECFOwner *)source)->rva0028CECF())
+		return STATE_SUCCESS;
 
-	if (source->testStatus(OBJECT_STATUS_44) || ai->m_3cc)
+	if (m_retryPending)
 	{
-		if (weapon && victim && AI::rva002FE193(source, victim) &&
-			rva003430A3(source, victim, weapon))
-			return STATE_SUCCESS;
-		getMachine()->setGoalObject(0);
-		return STATE_FAILURE;
-	}
-
-	m_prevVictimPos.x = 0.0f;
-	m_prevVictimPos.y = 0.0f;
-	m_prevVictimPos.z = 0.0f;
-	m_approachTimestamp = -LOGICFRAMES_PER_SECOND;
-
-	if (victim)
-	{
-		if (!weapon)
-			return STATE_FAILURE;
-		if (Rva0034311ECheck(victim))
-			return STATE_FAILURE;
-		if (weapon->isWithinAttackRange((const Object *)source, victim, 0.0f, 1))
-		{
-			Bool viewBlocked = false;
-			if (ai->isDoingGroundMovement() && !victim->isSignificantlyAboveTerrain())
-				viewBlocked = !rva003430A3(source, victim, weapon);
-			if (!viewBlocked)
-				return STATE_SUCCESS;
-		}
-		if (!rva00343FB0(source))
-			return STATE_FAILURE;
-		if (canPursue(source, weapon, victim))
-			return STATE_SUCCESS;
-		if (ai->getAIUpdateModuleData()->m_24 && source->rva0028B511() >= 17 &&
-			!ai->isQuickPathAvailable(victim->getPosition()))
-		{
-			m_waiting = true;
-			m_waitFrame = TheGameLogic->getFrame() + 2 * LOGICFRAMES_PER_SECOND;
+		if (m_retryFrame >= TheGameLogic->getFrame())
 			return STATE_CONTINUE;
+		m_retryPending = false;
+		return STATE_FAILURE;
+	}
+
+	Bool inRange = false;
+	if (rva00344EB2Gate(source, victim))
+	{
+		inRange = true;
+		Real dist = (Real)sqrt(((Rva000CBA20 *)source)->distSq((const Rva000CBA20Point *)victim->getPosition()));
+		Real sourceRadius = source->m_geometryShapes.bfmeAtE15(0)->m_boundingRadius;
+		BfmeShapeE15 *victimShape = victim->m_geometryShapes.bfmeAtE15(0);
+		Real surfaceGap = dist - (victimShape->m_boundingRadius + (sourceRadius + 10.0f));
+		Real gap = surfaceGap + victim->rva0028AC7D();
+		if (gap < 0.0f)
+			gap = 0.0f;
+
+		Real maxSpeed = 999999.0f;
+		if (source->rva0028AC4E())
+			maxSpeed = ((Rva001E46E1 *)source->rva0028AC4E())->rva001E46E1(source);
+		ai->setDesiredSpeed(gap);
+		Bool closing = gap < maxSpeed;
+		source->setStatus(OBJECT_STATUS_4B, closing);
+		source->rva00346C53(OBJECT_STATUS_4B, closing);
+
+		if (closing && m_50)
+			m_50 = m_fireState->onEnter();
+
+		Object *resolved = victim->rva002931F5(false);
+		if (!m_50)
+		{
+			m_50 = m_fireState->update();
+			if (m_50)
+				m_fireState->onExit(0);
+
+			if ((victim->m_438 & 1) && resolved)
+			{
+				Rva003497E6Contain *contain = (Rva003497E6Contain *)resolved->m_contain;
+				if (contain)
+				{
+					Rva003497E6Rider *rider = contain->slot31();
+					if (rider)
+					{
+						victim = rider->slot18(0, source->getPosition(), 0.0f, 0, 0);
+						if (!victim)
+							return STATE_CONTINUE;
+						ai->rva00262B0F((Int)victim);
+						getMachine()->setGoalObject(victim);
+					}
+				}
+			}
 		}
 	}
 	else
 	{
-		if (!weapon || !weapon->getTemplate()->m_16b)
-			return STATE_FAILURE;
-		if (weapon->isWithinAttackRange(source, (void *)getMachineGoalPosition(), 0.0f, 1))
-			return STATE_SUCCESS;
-		if (!rva00343FB0(source))
-			return STATE_FAILURE;
-	}
-
-	if (source->testStatus(OBJECT_STATUS_26) && source->m_containedBy)
-		return STATE_FAILURE;
-
-	Bool mobile = true;
-	if (!source->rva002907A1())
-		mobile = false;
-	if (((Rva001E46E1 *)ai->getCurLocomotor())->rva001E46E1(source) < 0.1f)
-		mobile = false;
-	if (!mobile)
-	{
-		m_waiting = true;
-		m_waitFrame = TheGameLogic->getFrame() + 2 * LOGICFRAMES_PER_SECOND;
-		return STATE_CONTINUE;
-	}
-
-	WhichTurretType tur = ai->getWhichTurretForCurWeapon();
-	if (tur != TURRET_INVALID)
-	{
-		if (m_isAttackingObject)
-			ai->setTurretTargetObject(tur, victim, m_isForceAttacking);
-		else
-			ai->setTurretTargetPosition(tur, getMachineGoalPosition());
-	}
-
-	if (computePath() == false)
-		return STATE_FAILURE;
-	if (m_waiting)
-		return STATE_CONTINUE;
-
-	critterDesyncLog("CritterDesync: setAdjustDestination(FALSE) 21");
-	setAdjustsDestination(false);
-	StateReturnType ret = AIInternalMoveToState::onEnter();
-	critterDesyncLog("CritterDesync: setAdjustDestination(TRUE) 22");
-	setAdjustsDestination(true);
-	return ret;
-}
-
-StateReturnType AIAttackApproachTargetState00C12678::onEnter()
-{
-	Object *source = getMachineOwner();
-	AIUpdateInterface *ai = source->getAI();
-	if (source->isKindOfProjectile())
-	{
-		if (ai->getCurLocomotor())
-			ai->getCurLocomotor()->setUsePreciseZPos(true);
-	}
-
-	m_ownerPosition = *source->getPosition();
-	m_waiting = false;
-	Weapon *weapon = source->getCurrentWeapon();
-	const Coord3D *goalPos = getMachineGoalPosition();
-	m_approachTimestamp = -LOGICFRAMES_PER_SECOND;
-	if (weapon->isWithinAttackRange(source, (void *)goalPos, 0.0f, 1))
-		return STATE_SUCCESS;
-	if (!rva00343FB0(source))
-		return STATE_FAILURE;
-
-	if (source->testStatus(OBJECT_STATUS_26) && source->m_containedBy)
-		return STATE_FAILURE;
-
-	Bool mobile = true;
-	if (!source->rva002907A1())
-		mobile = false;
-	if (((Rva001E46E1 *)ai->getCurLocomotor())->rva001E46E1(source) < 0.1f)
-		mobile = false;
-	if (!mobile)
-	{
-		m_waiting = true;
-		m_waitFrame = TheGameLogic->getFrame() + 2 * LOGICFRAMES_PER_SECOND;
-		return STATE_CONTINUE;
-	}
-
-	WhichTurretType tur = ai->getWhichTurretForCurWeapon();
-	if (tur != TURRET_INVALID)
-		ai->setTurretTargetPosition(tur, getMachineGoalPosition());
-
-	if (computePath() == false)
-		return STATE_FAILURE;
-	if (m_waiting)
-		return STATE_CONTINUE;
-
-	critterDesyncLog("CritterDesync: setAdjustDestination(FALSE) 21");
-	setAdjustsDestination(false);
-	StateReturnType ret = AIInternalMoveToState::onEnter();
-	critterDesyncLog("CritterDesync: setAdjustDestination(TRUE) 22");
-	setAdjustsDestination(true);
-	return ret;
-}
-
-StateReturnType AIAttackPursueTargetState::onEnter()
-{
-	Object *source = getMachineOwner();
-	AIUpdateInterface *ai = source->getAI();
-	if (source->isKindOfProjectile())
-		return STATE_SUCCESS;
-	if (((TurretStateMachine *)getMachine())->rva004D7ADD())
-		return STATE_SUCCESS;
-	if (!m_isAttackingObject)
-		return STATE_SUCCESS;
-
-	if (source->testStatus(OBJECT_STATUS_44) || ai->m_3cc)
-	{
-		if (AI::rva002FE193(source, getMachineGoalObject()))
-			return STATE_SUCCESS;
-		getMachine()->setGoalObject(0);
-		return STATE_FAILURE;
-	}
-
-	critterDesyncLog("CritterDesync: setAdjustDestination(FALSE) 27");
-	setAdjustsDestination(false);
-	if (source->getControllingPlayer()->m_playerType == 0)
-	{
-		if (ai->slot143() == 2 && !source->m_249)
-			return STATE_SUCCESS;
-	}
-
-	m_prevVictimPos.x = 0.0f;
-	m_prevVictimPos.y = 0.0f;
-	m_prevVictimPos.z = 0.0f;
-	m_approachTimestamp = -LOGICFRAMES_PER_SECOND;
-
-	Object *victim = getMachineGoalObject();
-	if (!victim)
-		return STATE_SUCCESS;
-	Weapon *weapon = source->getCurrentWeapon();
-	if (!weapon)
-		return STATE_FAILURE;
-	if (!canPursue(source, weapon, victim))
-		return STATE_SUCCESS;
-
-	WhichTurretType tur = ai->getWhichTurretForCurWeapon();
-	if (tur == TURRET_INVALID)
-		return STATE_SUCCESS;
-	ai->setTurretTargetObject(tur, victim, m_isForceAttacking);
-
-	critterDesyncLog("CritterDesync: ComputePath13");
-	if (computePath() == false)
-		return STATE_SUCCESS;
-	return AIInternalMoveToState::onEnter();
-}
-
-Bool AIAttackPursueTargetState::computePath()
-{
-	critterDesyncLog("CritterDesync: ComputePath12");
-	Bool forceRepath = false;
-	if (getMachineOwner()->rva002907A1() == false)
-		return false;
-	AIUpdateInterface *ai = getMachineOwner()->getAI();
-	if (ai->isBlockedAndStuck())
-		return false;
-	if (m_waitingForPath)
-		return true;
-	if (!forceRepath && ai->getPath() == 0 && !ai->isWaitingForPath())
-		forceRepath = true;
-	if (!forceRepath && TheGameLogic->getFrame() - m_approachTimestamp < (UnsignedInt)LOGICFRAMES_PER_SECOND)
-		return true;
-	m_approachTimestamp = TheGameLogic->getFrame();
-
-	if (getMachineGoalObject())
-	{
-		Object *source = getMachineOwner();
-		if (!forceRepath && isSamePosition(source->getPosition(), &m_prevVictimPos,
-				getMachineGoalObject()->getPosition()))
-			return true;
-		Weapon *weapon = source->getCurrentWeapon();
-		if (!weapon)
-			return false;
-		if (!canPursue(source, weapon, getMachineGoalObject()))
-			return false;
-		Object *victim = getMachineGoalObject();
-		m_prevVictimPos = *victim->getPosition();
-		critterDesyncLog("CritterDesync: setAdjustDestination(TRUE) 26");
-		setAdjustsDestination(true);
-		m_goalPosition = m_prevVictimPos;
-		ai->requestPath(&m_goalPosition, false);
-		m_waitingForPath = ai->isWaitingForPath();
-		m_stopIfInRange = false;
-		return true;
-	}
-	return false;
-}
-
-Bool AIAttackApproachTargetState00C12678::computePath()
-{
-	critterDesyncLog("CritterDesync: ComputePath10");
-	Bool forceRepath = false;
-	if (getMachineOwner()->rva002907A1() == false)
-		return false;
-	AIUpdateInterface *ai = getMachineOwner()->getAI();
-	if (m_waitingForPath)
-		return true;
-	if (!forceRepath && ai->getPath() == 0 && !ai->isWaitingForPath())
-		forceRepath = true;
-	if (!forceRepath && TheGameLogic->getFrame() - m_approachTimestamp < (UnsignedInt)LOGICFRAMES_PER_SECOND)
-		return true;
-	m_approachTimestamp = TheGameLogic->getFrame();
-
-	critterDesyncLog("CritterDesync: setAdjustDestination(TRUE) 20");
-	setAdjustsDestination(true);
-	m_stopIfInRange = false;
-	m_goalPosition = *getMachineGoalPosition();
-	if (!forceRepath)
-		return true;
-	ai->requestAttackPath(INVALID_OBJECT_ID, &m_goalPosition);
-	m_waitingForPath = ai->isWaitingForPath();
-	return true;
-}
-
-StateReturnType AIAttackFireDuringApproachState::onEnter()
-{
-	Object *source = getMachineOwner();
-	if (((TurretStateMachine *)getMachine())->rva004D7ADD())
-		return STATE_FAILURE;
-
-	critterDesyncLog("CritterDesync: setAdjustDestination(FALSE) 28");
-	setAdjustsDestination(false);
-	m_approachTimestamp = 0;
-	Object *victim = getMachineGoalObject();
-	if (victim)
-	{
-		m_victimID = victim->getID();
-		if (victim->m_physics && ((Rva00390533 *)victim->m_physics)->rva00390533())
-			return STATE_FAILURE;
-		Weapon *weapon = source->getCurrentWeapon();
-		if (!weapon)
-			return STATE_FAILURE;
-		if (weapon->isWithinAttackRange((const Object *)source, victim, 0.0f, 1))
-			return STATE_SUCCESS;
-
-		m_prevVictimPos = *victim->getPosition();
-		source->m_ai->destroyPath();
-		critterDesyncLog("CritterDesync: ComputePath16");
-		if (computePath() == false)
-			return STATE_SUCCESS;
-		StateReturnType ret = AIInternalMoveToState::onEnter();
-		critterDesyncLog("CritterDesync: setAdjustDestination(TRUE) 29");
-		setAdjustsDestination(true);
-		return ret;
-	}
-	return STATE_FAILURE;
-}
-
-Bool AIAttackFireDuringApproachState::computePath()
-{
-	critterDesyncLog("CritterDesync: ComputePath15");
-	Bool forceRepath = false;
-	StateMachine *machine = getMachine();
-	AIUpdateInterface *ai = machine->getOwner()->getAI();
-	if (ai->isBlockedAndStuck())
-		return false;
-	if (m_waitingForPath && ai->isWaitingForPath())
-		return true;
-	if (!forceRepath && ai->getPath() == 0 && !ai->isWaitingForPath())
-		forceRepath = true;
-	if (!forceRepath && TheGameLogic->getFrame() - m_approachTimestamp < (UnsignedInt)LOGICFRAMES_PER_SECOND)
-		return true;
-	m_approachTimestamp = TheGameLogic->getFrame();
-
-	Object *victim = TheGameLogic->findObjectByID(m_victimID);
-	if (victim)
-	{
-		Object *source = machine->getOwner();
-		if (!forceRepath && isSamePosition(source->getPosition(), &m_prevVictimPos, victim->getPosition()))
-			return true;
-		Weapon *weapon = source->getCurrentWeapon();
-		if (!weapon)
-			return false;
-		m_prevVictimPos = *victim->getPosition();
-		if (gameLogicDebugLevel() > 0 && !forceRepath)
-			debugTrace("masiwar called by AIAttackFireDuringApproachState::computePath [1]");
-		if (!forceRepath && ((Rva002C9B80Owner *)weapon)->isWithinAttackRange(source, &m_goalPosition,
-				victim, &m_prevVictimPos, 0.0f, true))
-			return true;
-		m_goalPosition = m_prevVictimPos;
-		if (gameLogicDebugLevel() > 0)
+		ai->setDesiredSpeed(999999.0f);
+		if (!m_50)
 		{
-			void *log = theLogicRandomLogFile;
-			if (log != 0)
-				fprintf(log, "AIAttackFireDuringApproachState::computePath will call FindMeleeEngagmentLocation with m_goalPosition=%f,%f",
-					(double)m_goalPosition.x, (double)m_goalPosition.y);
+			m_fireState->onExit(0);
+			m_50 = -1;
 		}
-		((Rva002F23A6 *)TheAI->pathfinder())->rva002F23A6(source, (int)weapon,
-			(int)&ai->m_locomotorSet, &m_goalPosition, victim);
-		source->rva0028ACDC(&m_goalPosition);
-		ai->requestApproachPath(&m_goalPosition);
-		m_waitingForPath = ai->isWaitingForPath();
-		return true;
-	}
-	return false;
-}
-
-StateReturnType AIAttackMeleeSquishState::onEnter()
-{
-	StateMachine *machine = getMachine();
-	Object *source = machine->getOwner();
-	if (!source->testStatus(OBJECT_STATUS_44) && !source->m_ai->m_3cc && source->getTemplate()->m_5fd)
-	{
-		if (!((TurretStateMachine *)machine)->rva004D7ADD())
+		if (source->testStatus(OBJECT_STATUS_4B))
 		{
-			critterDesyncLog("CritterDesync: setAdjustDestination(FALSE) 33");
-			setAdjustsDestination(false);
-			m_approachTimestamp = 0;
-			Object *victim = getMachineGoalObject();
-			if (victim && !(victim->m_physics && ((Rva00390533 *)victim->m_physics)->rva00390533()))
-			{
-				if (!source->rva0029493F(victim, 2))
-					return STATE_SUCCESS;
-				m_prevVictimPos = *victim->getPosition();
-				source->m_ai->destroyPath();
-				critterDesyncLog("CritterDesync: ComputePath22");
-				if (computePath() == false)
-					return STATE_SUCCESS;
-				source->setStatus(OBJECT_STATUS_1C, true);
-				return AIInternalMoveToState::onEnter();
-			}
+			source->rva00346C53(OBJECT_STATUS_4B, false);
+			source->setStatus(OBJECT_STATUS_4B, false);
 		}
-		return STATE_FAILURE;
 	}
-	return STATE_SUCCESS;
-}
 
-StateReturnType AIAttackMeleeEngageState::onEnter()
-{
-	Object *source = getMachineOwner();
-	if (((TurretStateMachine *)getMachine())->rva004D7ADD())
-		return STATE_SUCCESS;
-
-	if (!m_fireState)
-		m_fireState = new Rva0033F483(getMachine(), m_weaponSlot);
-	m_50 = -1;
-
-	critterDesyncLog("CritterDesync: setAdjustDestination(FALSE) 35");
-	setAdjustsDestination(false);
-	m_approachTimestamp = 0;
-	m_retryPending = false;
-	m_retryFrame = 0;
-
-	AIUpdateInterface *ai = source->m_ai;
-	Object *victim = getMachineGoalObject();
-	if (!victim || (victim->m_physics && ((Rva00390533 *)victim->m_physics)->rva00390533()) ||
-		(victim->m_438 & 1) || victim->testStatus(OBJECT_STATUS_32))
-		return STATE_FAILURE;
+	if (source->testStatus(OBJECT_STATUS_1C) && !inRange)
+		ai->destroyPath();
 
 	Weapon *weapon = source->getCurrentWeapon();
-	if (!weapon)
-		return STATE_FAILURE;
-
-	if (weapon->isWithinAttackRange((const Object *)source, victim, 0.0f, 1))
+	if ((gameLogicDebugLevel() > 0 && source->testStatus(OBJECT_STATUS_25) && victim->testStatus(OBJECT_STATUS_25)) ||
+		(!ai->getPath() && weapon))
+		debugTrace("masiwar called by AIAttackMeleeEngageState::updateInternal [1]");
+	if ((source->testStatus(OBJECT_STATUS_25) && victim->testStatus(OBJECT_STATUS_25)) ||
+		(!ai->getPath() && weapon && weapon->isWithinAttackRange((const Object *)source, victim, 0.0f, 1) &&
+			TheAI->pathfinder()->rva002ED313(source)))
 	{
 		Coord3D pos;
 		pos.x = source->getPosition()->x;
@@ -1260,36 +1034,219 @@ StateReturnType AIAttackMeleeEngageState::onEnter()
 		return STATE_SUCCESS;
 	}
 
-	m_prevVictimPos = *victim->getPosition();
-	if (source->testStatus(OBJECT_STATUS_26) && source->m_containedBy)
-	{
-		source->setStatus(OBJECT_STATUS_1C, false);
-		return STATE_FAILURE;
-	}
-
-	ai->destroyPath();
-	critterDesyncLog("CritterDesync: ComputePath27");
+	critterDesyncLog("CritterDesync: ComputePath28");
 	if (computePath() == false)
 		return STATE_FAILURE;
 	if (m_retryPending)
 		return STATE_CONTINUE;
 
-	StateReturnType ret = AIInternalMoveToState::onEnter();
-	critterDesyncLog("CritterDesync: setAdjustDestination(TRUE) 36");
-	setAdjustsDestination(true);
-	return ret;
+	StateReturnType code = AIInternalMoveToState::update();
+	if (inRange)
+	{
+		if (code == STATE_CONTINUE)
+			return STATE_CONTINUE;
+	}
+	else if (code == STATE_CONTINUE)
+	{
+		if (ai->getPath() || m_waitingForPath)
+			return STATE_CONTINUE;
+	}
+
+	Bool canRepath = TheAI->pathfinder()->rva002ED313(source);
+	if (!ai->getPath())
+		canRepath = true;
+	if (weapon && weapon->isWithinAttackRange((const Object *)source, victim, 0.0f, 1) && canRepath)
+	{
+		Coord3D pos;
+		pos.x = source->getPosition()->x;
+		pos.y = source->getPosition()->y;
+		pos.z = source->getPosition()->z;
+		source->rva0028ACEE(&pos, source->rva0028B511());
+		if (source->GetGoalPosition(&pos))
+		{
+			ai->m_finalPosition = pos;
+			ai->m_3b0 = false;
+		}
+		return STATE_SUCCESS;
+	}
+
+	m_retryPending = true;
+	if (m_noEngagementSpot)
+		m_retryFrame = TheGameLogic->getFrame() + LOGICFRAMES_PER_SECOND * 5;
+	else
+		m_retryFrame = TheGameLogic->getFrame() + LOGICFRAMES_PER_SECOND * 2;
+	return STATE_CONTINUE;
 }
+
+// AIAttackPositionAimAtTargetState's aim body, retail 0x0034A570 (665 bytes):
+// vtable 0x00C11068's update (0x0034A871) calls it with false and its onEnter
+// tail with true. Zero Hour's AIAttackAimAtTargetState::update position path
+// with BFME 2's hasAnyWeapon test, turret turn rate, weapon aimDelta +0x2C
+// (at least 0.035, 0.3 with Object +0x1C8 bit 3), locomotor max turn rate,
+// the template +0x53C half-angle gate driving AI slot 142 (0/15) and Object
+// +0x1C0, and the weapon aim offset +0x30 through normalizeAngle. math.h's
+// float fabs overload (the CRT fabs, compared as float) gives retail's x87
+// argument-pop schedule; a bare extern "C" float fabs(double) moves two pops.
+StateReturnType AIAttackPositionAimAtTargetState::rva0034A570(Bool firstFrame)
+{
+	Object *source = getMachineOwner();
+	AIUpdateInterface *sourceAI = source->getObservedAI();
+	if (!sourceAI)
+		return STATE_FAILURE;
+	if (!source->rva0028ADE0())
+		return STATE_FAILURE;
+
+	Weapon *weapon = source->getCurrentWeapon();
+	WhichTurretType tur = sourceAI->getWhichTurretForCurWeapon();
+	if (tur != TURRET_INVALID)
+	{
+		sourceAI->setTurretTargetPosition(tur, getMachineGoalPosition());
+		if (sourceAI->getTurretTurnRate(tur) != 0.0f)
+			return STATE_CONTINUE;
+	}
+
+	Real aimDelta = weapon ? weapon->getTemplate()->m_aimDelta : 0.0f;
+	const Real REL_THRESH = 0.035f;
+	if (aimDelta < REL_THRESH)
+		aimDelta = REL_THRESH;
+	Real turnRate = 0.0f;
+	if (source->rva0028AC4E())
+		turnRate = ((const Locomotor *)source->rva0028AC4E())->getMaxTurnRate(source);
+	if ((source->m_1c8 & 8) && aimDelta < 0.3f)
+		aimDelta = 0.3f;
+	if (source->testStatus(OBJECT_STATUS_4B))
+		return STATE_SUCCESS;
+
+	const Coord3D *goalPos = getMachineGoalPosition();
+	Coord3D goal;
+	goal.x = goalPos->x;
+	goal.y = goalPos->y;
+	goal.z = goalPos->z;
+	Real relAngle = source->GetRelativeAngle(&goal);
+	const Real *threshold = &source->getTemplate()->m_53c;
+	if (*threshold < 360.0f)
+	{
+		Bool beyond = false;
+		Real thresholdValue = *threshold;
+		if (fabs(relAngle) > thresholdValue * 0.0087250005f)
+			beyond = true;
+		sourceAI->slot142(beyond ? 0xF : 0);
+		if (beyond)
+			source->m_1c0 = source->getOrientation();
+	}
+	if (weapon)
+	{
+		Real aimOffset = weapon->getTemplate()->m_aimOffset;
+		if (aimOffset > 0.0f)
+			relAngle = normalizeAngle(relAngle - aimOffset);
+	}
+
+	if (m_canTurnInPlace)
+	{
+		if (aimDelta < 3.1415927f)
+		{
+			if (fabs(relAngle) > aimDelta || firstFrame)
+			{
+				((AITurnView *)sourceAI)->setLocomotorGoalOrientation(source->getOrientation() + relAngle);
+				m_setLocomotor = true;
+			}
+		}
+	}
+	else
+	{
+		((AITurnView *)sourceAI)->setLocomotorGoalPositionExplicit(goal);
+	}
+	if (firstFrame)
+		return STATE_CONTINUE;
+	if (fabs(relAngle) < aimDelta || fabs(relAngle) < turnRate * 0.5f)
+		return STATE_SUCCESS;
+
+	if (source->m_1c8 & 8)
+	{
+		Weapon *current = source->getCurrentWeapon();
+		const Coord3D *targetPos = getMachineGoalPosition();
+		if (!current || !current->isWithinAttackRange(source, (void *)targetPos, 0.0f, 1))
+			return STATE_FAILURE;
+	}
+	return STATE_CONTINUE;
+}
+
+// Retail 0x00349E74, 348 bytes (after AIFollowPathAsTeamState::onExit; the
+// team path update asks it before leaving a path point). With TAiData +0xB8
+// set, an owner still on its first two path points with a walking locomotor
+// (template byte +0x10B) waits until every other member of its controlling
+// player's teams in the same path group (+0x410) that is following the path
+// (AI state 0x36, walking) has reached the same point; the 0x0028C264 kind-4
+// query on the owner or on any member ends the wait.
+Bool AIFollowPathAsTeamState::canMoveToNextFormationPathPoint()
+{
+	if (!TheAI->getObservedAiData()->m_teamPathWait)
+		return true;
+	Object *owner = getMachineOwner();
+	Object *volatile savedOwner = owner;
+	AIUpdateInterface *ai = owner->getObservedAI();
+	if (!ai)
+		return true;
+	Int group = owner->m_410;
+	Int index = ai->m_currentGoalPathIndex;
+	if (index > 1)
+		return true;
+	if (ai->getCurLocomotor() && !ai->getCurLocomotor()->getTemplate()->m_10b)
+		return true;
+	Int unused;
+	if (owner->rva0028C264(&unused, 4))
+		return true;
+
+	Bool ready = true;
+	Player *player = owner->getControllingPlayer();
+	for (PlayerTeamNode *it = player->getPlayerTeams()->m_next; it != player->getPlayerTeams(); it = it->m_next)
+	{
+		for (DLINK_ITERATOR<Team> iter = iterate_TeamInstanceList(it->m_value); !iter.done(); iter.advance())
+		{
+			Team *team = iter.cur();
+			if (!team)
+				continue;
+			for (DLINK_ITERATOR<Object> objIter = team->iterate_TeamMemberList(); !objIter.done(); objIter.advance())
+			{
+				Object *member = objIter.cur();
+				if (member->m_410 != group)
+					continue;
+				AIUpdateInterface *memberAI = member->getObservedAI();
+				if (member == savedOwner)
+					continue;
+				if (member->rva0028C264(&unused, 4))
+					return true;
+				if (memberAI && memberAI->rva00260DED() == 0x36 &&
+					(!memberAI->getCurLocomotor() || memberAI->getCurLocomotor()->getTemplate()->m_10b) &&
+					memberAI->m_currentGoalPathIndex != index)
+					ready = false;
+			}
+		}
+	}
+	return ready;
+}
+
+// WB E19730 names canMoveToNextFormationPathPoint at AIStates.cpp9353.
+// Native00349E74..00349FD0 RET0 proves the complete348B boundary.
+// The local savedOwner snapshot retains the native frame home while the
+// register is reused for the player and member AI; its address never escapes.
+// Load member AI before excluding the owner as witnessed by native349F48.
+// PMF adjustment uses real MemoryPoolObject/Snapshot inheritance and the
+// rowed Team next-member provider; iterator output keeps its witnessed24B ABI.
+
+Bool Rva0034311ECheck(Object *obj);
+Bool rva003430A3(Object *source,Object *victim,Weapon *weapon);
 
 StateReturnType AIAttackFireWeaponState::onEnter()
 {
 	Object *obj = getMachineOwner();
-	AIUpdateInterface *ai = obj->getAI();
+	AIUpdateInterface *ai = obj->getObservedAI();
 	m_waitOddFrame = false;
 	obj->setStatus(OBJECT_STATUS_52, false);
 	if ((ai->getMoodMatrixActionAdjustment(MM_Action_Attack) & 1) == 0)
 		return STATE_FAILURE;
 
-	Object *victim = getMachineGoalObject();
+	Object *victim = getObservedMachineGoalObject();
 	if (victim)
 	{
 		if (!obj->testStatus(OBJECT_STATUS_41) && !obj->isKindOf(KINDOF_CE) &&
@@ -1310,23 +1267,25 @@ StateReturnType AIAttackFireWeaponState::onEnter()
 	}
 
 	Weapon *weapon = obj->getCurrentWeapon();
+ Weapon *volatile savedWeapon=weapon;
 	if (!weapon)
 		return STATE_FAILURE;
 	if (!obj->isKindOfImmobile() && !((const Rva002C940EByteField *)weapon->getTemplate())->get() &&
 		!((const Rva002C9400ByteField *)weapon->getTemplate())->get() && ai->isMoving())
 		return STATE_FAILURE;
 
-	Bool inRange;
+	char inRange;
 	if (victim)
 	{
-		Team *team = obj->m_team;
+		Team *&team = obj->m_team;
 		if (team->m_proto->m_216 && !team->getTeamTargetObject())
 			team->rva0039D84A(victim);
-		inRange = weapon->isWithinAttackRange((const Object *)obj, victim, 0.0f, 1);
+		inRange = savedWeapon->isWithinAttackRange((const Object *)obj, victim, 0.0f, 1);
+ weapon=savedWeapon;
 	}
 	else
 	{
-		inRange = weapon->isWithinAttackRange(obj, (void *)getMachineGoalPosition(), 0.0f, 1) != 0;
+		inRange = weapon->isWithinAttackRange(obj, (void *)getMachineGoalPosition(), 0.0f, 1);
 	}
 	if (!inRange)
 		return STATE_FAILURE;
@@ -1347,7 +1306,7 @@ StateReturnType AIAttackFireWeaponState::onEnter()
 		return STATE_CONTINUE;
 	}
 	obj->setStatus(OBJECT_STATUS_0D, true);
-	obj->preFireCurrentWeapon(getMachineGoalObject(), getMachineGoalPosition());
+	obj->preFireCurrentWeapon(getObservedMachineGoalObject(), getMachineGoalPosition());
 	if (weapon->getTemplate()->m_16b && victim)
 		getMachine()->setGoalPosition(victim->getPosition());
 	return STATE_CONTINUE;
