@@ -23,6 +23,8 @@ template <class T, class LeftTraits, class RightTraits>
 static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
                               const _List_iterator<T, RightTraits>& b)
 { return a._M_node != b._M_node; }
+// Suppress this TU's non-retail const-begin copy (row 47 family2-LK3).
+template <> vector<void *>::const_iterator _STL::vector<void *>::begin() const;
 }
 #include "GameClient/FXList.h"
 #include "Common/DrawModule.h"
