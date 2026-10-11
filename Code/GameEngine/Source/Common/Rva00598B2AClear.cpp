@@ -15,6 +15,12 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 
 #include <vector>
 #include "ascii_string.h"
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> AsciiString *vector<AsciiString, allocator<AsciiString> >::erase(AsciiString *, AsciiString *);
+}
 void __cdecl operator delete(void *p);
 class Rva005980F3
 {

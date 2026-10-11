@@ -34,6 +34,12 @@ struct StringData
 
 #include "ascii_string.h"
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> AsciiString *vector<AsciiString, allocator<AsciiString> >::erase(AsciiString *, AsciiString *);
+}
+
 
 class ModuleData
 {
