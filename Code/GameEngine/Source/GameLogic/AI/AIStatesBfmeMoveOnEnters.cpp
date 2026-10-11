@@ -95,6 +95,12 @@ public:
 	virtual Bool chooseLocomotorSet(LocomotorSetType wst);
 
 	Path *getPath() { return m_path; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getPath copy loses to the first-in-order copy (no
+	// retail address); the four calls below inline it but still emit the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	Path *bfme_get_path() { return m_path; }
 	Bool isWaitingForPath() const { return m_waitingForPath; }
 	void requestApproachPath(Coord3D *destination);
 	void requestSafePath(ObjectID repulsor);
@@ -170,6 +176,12 @@ public:
 	Object *getOwner() const { return m_owner; }
 	Object *getGoalObject();
 	const Coord3D *getGoalPosition() const { return &m_goalPosition; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getGoalPosition copy loses to the first-in-order copy
+	// (no retail address); the wrapper below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	const Coord3D *bfme_goal_position() const { return &m_goalPosition; }
 protected:
 	unsigned char m_pad00[0x14];
 	Object *m_owner; // +0x14
@@ -191,7 +203,7 @@ protected:
 	StateMachine *getMachine() const { return m_machine; }
 	Object *getMachineOwner() const { return m_machine->getOwner(); }
 	Object *getMachineGoalObject() const { return m_machine->getGoalObject(); }
-	const Coord3D *getMachineGoalPosition() const { return m_machine->getGoalPosition(); }
+	const Coord3D *getMachineGoalPosition() const { return m_machine->bfme_goal_position(); }
 	unsigned char m_pad04[0x18 - 0x04];
 	StateMachine *m_machine; // +0x18
 };
@@ -255,12 +267,12 @@ StateReturnType AIMoveOutOfTheWayState::onEnter()
 	Object *obj = getMachineOwner();
 	AIUpdateInterface *ai = obj->getAI();
 
-	if (ai->getPath() == 0)
+	if (ai->bfme_get_path() == 0)
 	{
 		// Must have existing path.
 		return STATE_FAILURE;
 	}
-	m_goalPosition = *ai->getPath()->getLastNode()->getPosition();
+	m_goalPosition = *ai->bfme_get_path()->getLastNode()->getPosition();
 	return AIInternalMoveToState::onEnter();
 }
 
@@ -322,7 +334,7 @@ StateReturnType AIMoveAwayPanicState::update()
 	{
 		Object *obj = getMachineOwner();
 		AIUpdateInterface *ai = obj->getAI();
-		Path *thePath = ai->getPath();
+		Path *thePath = ai->bfme_get_path();
 		if (thePath && !ai->isWaitingForPath())
 		{
 			m_goalPosition = *thePath->getLastNode()->getPosition();
@@ -348,7 +360,7 @@ StateReturnType AIMoveAwayFromRepulsorsState::update()
 	{
 		Object *obj = getMachineOwner();
 		AIUpdateInterface *ai = obj->getAI();
-		Path *thePath = ai->getPath();
+		Path *thePath = ai->bfme_get_path();
 		if (thePath && !ai->isWaitingForPath())
 		{
 			m_goalPosition = *thePath->getLastNode()->getPosition();

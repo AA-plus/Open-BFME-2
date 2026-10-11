@@ -66,6 +66,15 @@ class StateMachine
 	{
 		return &goal;
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's StateMachine::getGoalPosition copy loses to the
+	// first-in-order copy (no retail address); the AIUpdateInterface wrapper
+	// below inlines it but still emits the loser COMDAT. Rebinding there
+	// emits only this unique (trivially kept) copy. No flags touched.
+	const Coord3D *bfme_goal_position() const
+	{
+		return &goal;
+	}
 
   private:
 	unsigned char pad[0x24];
@@ -79,6 +88,15 @@ class AIUpdateInterface
 	const Coord3D *getGoalPosition() const
 	{
 		return machine->getGoalPosition();
+	}
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's AIUpdateInterface::getGoalPosition copy loses to the
+	// first-in-order copy (no retail address); the call below inlines it but
+	// still emits the loser COMDAT. Rebinding there emits only this unique
+	// (trivially kept) copy. No flags touched.
+	const Coord3D *bfme_ai_goal_position() const
+	{
+		return machine->bfme_goal_position();
 	}
 
   private:
@@ -188,7 +206,7 @@ int Rva002F3F7DInfo::cellCallback(PathfindCell *previous, PathfindCell *current,
 			{
 				if (!ai->rva00262DD3(m_obj))
 				{
-					const Coord3D *goal = ai->getGoalPosition();
+					const Coord3D *goal = ai->bfme_ai_goal_position();
 					float dx = goal->x - m_destination.x;
 					float dy = goal->y - m_destination.y;
 					float dz = goal->z - m_destination.z;
