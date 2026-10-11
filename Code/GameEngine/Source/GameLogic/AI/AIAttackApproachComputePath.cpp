@@ -1,6 +1,4 @@
 // ?computePath@AIAttackApproachTargetState@@MAE_NXZ
-// partial score=0.9977690721649484 date=2026-10-10
-// ?computePath@AIAttackApproachTargetState@@MAE_NXZ
 // cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
 // AIAttackApproachTargetState::onEnter, retail 0x0034CD3A (783 bytes): slot 4
