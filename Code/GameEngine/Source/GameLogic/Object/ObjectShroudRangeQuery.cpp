@@ -33,6 +33,8 @@ class ThingTemplate
 {
 public:
 	__forceinline bool isKindOf(KindOfType t) const { return (m_kindOf[t >> 3] & (1 << (t & 7))) != 0; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the isKindOf copy loses to the first-in-order copy. No flags touched.
+	__forceinline bool bfme_isKindOf_769ee(KindOfType t) const { return (m_kindOf[t >> 3] & (1 << (t & 7))) != 0; }
 
 	unsigned char m_pad000[0x108];
 	unsigned char m_kindOf[0x20]; // +0x108
@@ -166,7 +168,7 @@ void Object::rva002941EA(int *playerMask, Real *rangeA, Real *rangeB, Real *rang
 }
 float fallback;
 if(!valid)fallback=-1.0f;else{
-	if (getTemplate()->isKindOf(KINDOF_87))
+	if (getTemplate()->bfme_isKindOf_769ee(KINDOF_87))
 		*playerMask = 0xFFFFF;
 	else { int allies = ThePlayerList->getPlayersWithRelationship(player->getPlayerIndex(), 3, false); int own = ((const Rva002AA21CDwordField *)player)->get();
 		// Keep the relation mask in its stack home across the owner-bit call.
