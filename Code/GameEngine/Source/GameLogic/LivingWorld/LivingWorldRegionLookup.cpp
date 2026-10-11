@@ -23,7 +23,8 @@ public:
 	Rva0020EE29 *m_b0;
 };
 
-extern Rva002BA8F1Logic *g_009FEF10;
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
 
 
 class Rva005C98C0
@@ -35,4 +36,4 @@ private:
 	int m_1c;
 };
 
-void *Rva005C98C0::rva005C98C0(int id){Rva0020FAB4Ret*p=0;if(g_009FEF10&&g_009FEF10->m_b0){p=(Rva0020FAB4Ret*)g_009FEF10->m_b0->rva0020FAB4(id,m_1c);if(p&&!p->m_1a2)p=0;}return p;}
+void *Rva005C98C0::rva005C98C0(int id){Rva0020FAB4Ret*p=0;if(TheLivingWorldLogic&&((Rva002BA8F1Logic *)TheLivingWorldLogic)->m_b0){p=(Rva0020FAB4Ret*)((Rva002BA8F1Logic *)TheLivingWorldLogic)->m_b0->rva0020FAB4(id,m_1c);if(p&&!p->m_1a2)p=0;}return p;}

@@ -7,12 +7,13 @@ class GameMessage {public:const GameMessageArgumentType*getArgument(int)const;};
 class Rva0020E89C;
 class Rva0020EAF6View {public:Rva0020E89C*rva0020EAF6(int);};
 class Rva002BA8F1Logic {public:char pad[0xb0];Rva0020EAF6View*manager;};
-extern Rva002BA8F1Logic*g_009FEF10;
+class LivingWorldLogic;
+extern LivingWorldLogic*TheLivingWorldLogic;
 static __declspec(noinline) bool rva002B2CE7(GameMessage*message,Rva0020E89C**out,int index){
  const GameMessageArgumentType *arg=message->getArgument(index);
  int key=((const volatile GameMessageArgumentType*)arg)->integer;
  _ReadWriteBarrier();
- Rva0020E89C*result=(g_009FEF10->manager?g_009FEF10->manager:g_009FEF10->manager)->rva0020EAF6(key);
+ Rva0020E89C*result=(((Rva002BA8F1Logic*)TheLivingWorldLogic)->manager?((Rva002BA8F1Logic*)TheLivingWorldLogic)->manager:((Rva002BA8F1Logic*)TheLivingWorldLogic)->manager)->rva0020EAF6(key);
  *out=result;return result!=0;
 }
 // ?rva002B2CE7Caller absent-from-retail

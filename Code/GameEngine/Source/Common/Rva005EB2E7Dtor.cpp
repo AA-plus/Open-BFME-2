@@ -35,7 +35,8 @@ struct LivingWorldLogic005EB2E7
 	char m_pad[0x2C];
 	Rva002B7250 m_holder;
 };
-extern LivingWorldLogic005EB2E7 *TheLivingWorldLogic;
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
 
 struct Rva0057C2CC
 {
@@ -77,6 +78,6 @@ private:
 
 Rva005EB2E7::~Rva005EB2E7()
 {
-	TheLivingWorldLogic->m_holder.rva002B7250((CreateAHeroData *)this);
+	((LivingWorldLogic005EB2E7 *)TheLivingWorldLogic)->m_holder.rva002B7250((CreateAHeroData *)this);
 	m_08->rva0057C2CC();
 }

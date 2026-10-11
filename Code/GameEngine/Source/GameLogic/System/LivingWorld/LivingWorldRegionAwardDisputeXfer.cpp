@@ -50,7 +50,8 @@ class Rva002BA8F1Logic
 public:
 	void rva002B8DFC(Xfer *xfer, _STL::vector<const ModuleData *> *vec);
 };
-extern Rva002BA8F1Logic *TheLivingWorldLogic;
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
 
 class RegionAwardDispute
 {
@@ -82,5 +83,5 @@ void RegionAwardDispute::rva004FBDF7(Xfer *xfer)
 		Rva002B24F0Get((Rva002B24F0Obj *)xfer, &m_disputeType);
 	}
 	xfer->xferMember(&m_1C);
-	TheLivingWorldLogic->rva002B8DFC(xfer, &m_disputants);
+	((Rva002BA8F1Logic *)TheLivingWorldLogic)->rva002B8DFC(xfer, &m_disputants);
 }

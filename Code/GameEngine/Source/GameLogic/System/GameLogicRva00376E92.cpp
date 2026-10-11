@@ -46,7 +46,8 @@ public:
 };
 extern ScriptActions *TheScriptActions;
 class BfmeSelectionState { public: bool isSelectionLocked() const; };
-extern BfmeSelectionState *g_009FEF10;
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
 class Shell { public: void rva0035C7CF(bool); };
 extern Shell *TheShell;
 class Rva0035C194 { public: bool rva0035C194(bool,bool); };
@@ -99,7 +100,7 @@ void GameLogic::rva00376E92(bool showScoreScreen, bool arg2)
     if (TheScriptActions) TheScriptActions->slot15(false);
     if (TheAudio && !TheAudio->slot21()) TheAudio->slot20(2);
     rva00376D49();
-    if (rva0042219() || (g_009FEF10 && g_009FEF10->isSelectionLocked())) {
+    if (rva0042219() || (TheLivingWorldLogic && ((BfmeSelectionState *)TheLivingWorldLogic)->isSelectionLocked())) {
         if (arg2 || showScoreScreen) {
             if (showScoreScreen) {
                 TheShell->rva0035C7CF(false);

@@ -39,7 +39,9 @@
 #include "GameLogicObjectLookupView.h"
 
 class LivingWorldLogic;
-LivingWorldLogic *TheLivingWorldLogic;
+// Defined once, in LivingWorldLogic.cpp (data row 0x009FEF10); this unit reads
+// it through its private Rva002BA8F1Logic view at the use sites.
+extern LivingWorldLogic *TheLivingWorldLogic;
 // Retail initializer in GameEngine::init (0x0022E2E4) names this singleton.
 // Matched DIR32 references bind it to RVA 0x009FEF10; the retail slot is zero.
 // BFME 1 donor ba7ddda7 defines the same named singleton, without proving its target layout.
