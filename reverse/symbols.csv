@@ -17205,3 +17205,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva001076EE@Rva001076EE@@QAE_NXZ,0x001076EE,callee of ?rva0009A254@W3DShadowManager@@QAE_NXZ
 ?rva005A2899@AptOnlineCustomMatch@@QAEXXZ,0x005A2899,callee of ?rva005A61C6@AptOnlineCustomMatch@@UAEXXZ
 ?UpdatePings@AptOnlineCustomMatch@@QAEXXZ,0x0059ED8B,callee of ?rva005A61C6@AptOnlineCustomMatch@@UAEXXZ
+?push_back@?$vector@PAVRva004DC920@@V?$allocator@PAVRva004DC920@@@_STL@@@_STL@@QAEXABQAVRva004DC920@@@Z,0x004DFCB0,ICF pointer-vector push_back; fold-proof=Code/GameEngine/Source/GameLogic/Object/Update/EmotionTrackerUpdateModuleDataParseAddEmotion.cpp
