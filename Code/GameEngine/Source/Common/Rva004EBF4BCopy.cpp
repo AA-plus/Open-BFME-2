@@ -18,6 +18,10 @@ struct Coord3D : public Coord3DBase
 {
 	Coord3D(){}
 	Coord3D(float X,float Y,float Z){x=X;y=Y;z=Z;}
+	// LINK: TU-unique tagged copy of the 3-float ctor (identical stores): the MMM ctor's COMDAT loses to
+	// the kept copy; the return temporary uses this one. No flags touched.
+	struct BfmeTagBldr {};
+	Coord3D(BfmeTagBldr,float X,float Y,float Z){x=X;y=Y;z=Z;}
 };
 
 class AIBaseBuilder
@@ -44,5 +48,5 @@ Coord3D Rva004EBF4B::rva004EBF4B()
 	tmp.y = 0.0f;
 	tmp.z = 0.0f;
 	m_04.rva00506B74(&tmp);
-	return Coord3D(tmp.x,tmp.y,tmp.z);
+	return Coord3D(Coord3D::BfmeTagBldr(),tmp.x,tmp.y,tmp.z);
 }
