@@ -8,7 +8,6 @@ typedef unsigned int UnsignedInt;
 class ThingTemplate;
 class Object;
 class GameWindow;
-void __cdecl Rva0053B98CUpdate(Object *,void *);
 class CommandSet { public: const class CommandButton *getCommandButton(int) const; };
 struct CommandInventoryData { int current,last; GameWindow **windows; Object *transport; };
 
@@ -188,6 +187,7 @@ public:
 };
 class Object {
 public:
+    int rva0028FBBE();
     void *rva0028BC58(int);
     bool isLocallyControlled() const;
 };
@@ -216,6 +216,7 @@ void Rva003284B9(GameWindow *, int, int);
 class ControlBar {
 protected:
     void updateContextCommand();
+    static void populateInvDataCallback(Object *,void *);
 public:
     void rva0053BB16(Object *,CommandSet *);
     void setControlCommand(GameWindow *,const CommandButton *);
@@ -357,7 +358,7 @@ void ControlBar::rva0053BB16(Object *transport,CommandSet *set)
     if(last>=0){
         CommandInventoryData data;
         data.windows=windows;data.current=first;data.last=last;data.transport=transport;
-        contain->iterateContained(Rva0053B98CUpdate,&data,true);
+        contain->iterateContained(populateInvDataCallback,&data,true);
     }
     lastInventoryCount=contain->getContainCount(0);
 }
@@ -376,4 +377,60 @@ int __cdecl Rva0053B946(Object *object,CommandCastleKindFilter *filter)
         return 0;
     }
     return 1;
+}
+
+// Target WB1116A60 and native53B98C..53BA4D identify this static callback.
+// ZH establishes its purpose; BFME2 repeats slots for the native object count,
+// stores ObjectID at74 and enables only the first slot.
+class Image;
+const Image *__cdecl getButtonImage(ThingTemplate *, Object *);
+void __cdecl GadgetButtonSetEnabledImage_Rva002C0433(GameWindow *, const Image *);
+struct Rva0053E754Entry
+{
+	GameWindow *win;
+	int unk;
+};
+// Retail's own 32-entry window/id array at RVA 0x00A05E20: past .data's raw end
+// (file offset 0x009DCC08), so the image loads it zero and the two rowed bodies
+// below fill it as buttons are registered (this unit's writer and the rowed
+// ControlBar reader that scans it). A tentative definition: the slots are store
+// targets, so zero is the initial value both bodies are written against. MSVC
+// mangles a namespace-scope array through its decayed pointer, so this is the
+// symbol the reader's `g_00E05E20[i].m_window == window` scan already names.
+// Symbol ?g_00E05E20@@3PAURva0053E754Entry@@A, defined below.
+extern Rva0053E754Entry g_00E05E20[];
+Rva0053E754Entry g_00E05E20[32];
+
+
+// ?populateInvDataCallback@ControlBar@@KAXPAVObject@@PAX@Z
+void __cdecl ControlBar::populateInvDataCallback(Object *obj, void *infoParam)
+{
+	CommandInventoryData *info = (CommandInventoryData *)infoParam;
+	if (info->current > info->last)
+		return;
+	ThingTemplate *tmpl = *(ThingTemplate **)((char *)obj + 4);
+	const Image *img = getButtonImage(tmpl, obj);
+	int count = obj->rva0028FBBE();
+	int i = 0;
+	if (count <= 0)
+		return;
+	do {
+		GameWindow *w = info->windows[info->current];
+		g_00E05E20[info->current].win = w;
+		g_00E05E20[info->current].unk = *(int *)((char *)obj + 0x74);
+		info->current++;
+		GadgetButtonSetEnabledImage_Rva002C0433(w, img);
+		Rva003284ED(w, 0);
+		if (i == 0) {
+			w->winEnable(true);
+			w->winSetStatus(8);
+			w->winClearStatus(0x200);
+		}
+		else {
+			w->winEnable(false);
+			w->winClearStatus(8);
+			w->winSetStatus(0x200);
+		}
+		i++;
+	} while (i < count);
 }
