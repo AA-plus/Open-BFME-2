@@ -8,11 +8,12 @@
 #include "ascii_string.h"
 class INI;
 struct FieldParse {const char *name;void (*parse)(INI*,void*,void*,const void*);const void *data;int offset;};
-void Rva00417EF9Parse(INI*,void*,void*,const void*);
+// LINK: 0x00417EF9 is rowed as the static ?parseFromINI@Rva00417DFB (INIParseFromINIForwarders.cpp).
+struct Rva00417DFB { static void parseFromINI(INI*,void*,void*,const void*); };
 void Rva00417FF0Parse(INI*,void*,void*,const void*);
 
 class INI {public: const char *getNextToken(const char *seps=0);void initFromINI(void*,const FieldParse*);static void parseBool(INI*,void*,void*,const void*);};
-static const FieldParse leadershipFields[]={ {"Affects",Rva00417EF9Parse,0,4},{"AffectsHigherLevelFirst",INI::parseBool,0,20},{"BonusForLevel",Rva00417FF0Parse,0,8},{0,0,0,0} };
+static const FieldParse leadershipFields[]={ {"Affects",Rva00417DFB::parseFromINI,0,4},{"AffectsHigherLevelFirst",INI::parseBool,0,20},{"BonusForLevel",Rva00417FF0Parse,0,8},{0,0,0,0} };
 class INIException {public:char *message;int code;INIException(int,const char*,...);INIException(const INIException&);~INIException();};
 class Rva0022CCB0 {public:~Rva0022CCB0();};
 class Rva0022CFE6 {public:~Rva0022CFE6();};
