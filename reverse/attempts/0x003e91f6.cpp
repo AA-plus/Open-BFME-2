@@ -1,6 +1,6 @@
 // ?evaluateSkirmishCanFireSpecialPowerOnTeam@ScriptConditions@@IAE_NPAVParameter@@00@Z
-// partial score=0.53 date=2026-10-06
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE
+// partial score=1.0 date=2026-10-11
+// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE /G7 /ICode/GameEngine/Source/Common /ICode/Libraries/Include
 // ScriptConditions.cpp -- condition evaluators recovered from WorldBuilder
 // leads (reverse/wb_name_leads.csv): WB's debug build names each function and
 // its source file; retail supplies the bytes. The evaluators are thiscall
@@ -33,18 +33,8 @@ __forceinline long fast_float2long_round(float f)
 
 extern Int g_Va00DBA4E4;	// logic frames per second
 #define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
-extern Real g_Va00DBA4EC;	// logic frames per millisecond (0.005)
-#define LOGICFRAMES_PER_MSEC_REAL g_Va00DBA4EC
 
-class GameLogic
-{
-public:
-	UnsignedInt getFrame() const { return m_frame; }
-
-private:
-	unsigned char m_pad[0x40];
-	UnsignedInt m_frame;			// +0x40
-};
+#include "GameLogicObjectLookupView.h"
 
 extern GameLogic *TheGameLogic;
 
@@ -55,24 +45,26 @@ public:
 	Bool getLastReallyPlayedFrameForEvaEvent(Int index, UnsignedInt *frame);	// 0x001DD604
 };
 
-extern Eva *g_00DFDC30;	// TheEva
-#define TheEva g_00DFDC30
+extern Eva *TheEva;
 
-struct Coord3D
+#include "Lib/Coord3D.h"
+
+class Rva00261C89
 {
-	Real length() const;			// 0x00003571
-	void set(Real ax, Real ay, Real az) { x = ax; y = ay; z = az; }
-
-	Real x, y, z;
+public:
+	Bool rva00261C89();			// 0x00261C89
 };
 
 class Object
 {
 public:
 	const Coord3D *getPosition() const { return &m_pos; }
+	Rva00261C89 *getField04() const { return m_field04; }
 
 private:
-	unsigned char m_pad00[0x38];
+	unsigned char m_pad00[4];
+	Rva00261C89 *m_field04;			// +0x04
+	unsigned char m_pad08[0x38 - 8];
 	Coord3D m_pos;				// +0x38
 };
 
@@ -91,18 +83,22 @@ public:
 	Real m_real;				// +0x0C
 	AsciiString m_string;			// +0x10
 	unsigned char m_pad14[0x20 - 0x14];
+	void setField20(Int value) { m_field20 = value; }
 	Int m_field20;				// +0x20, set to -1 when the special power name is unknown
 };
 
 class Condition
 {
 public:
-	Parameter *getParameter(Int ndx) const { if (ndx >= 0 && ndx < m_numParms) return m_parms[ndx]; return 0; }
+	Bool isInverted() const { return m_inverted; }
+    Parameter *getParameter(Int ndx) const { if (ndx >= 0 && ndx < m_numParms) return m_parms[ndx]; return 0; }
 
 private:
 	unsigned char m_pad00[8];
 	Int m_numParms;				// +0x08
-	Parameter *m_parms[12];			// +0x0C
+	Parameter *m_parms[13];			// +0x0C
+	char m_unknown40[0x0d];
+	bool m_inverted;				// +0x4D
 };
 
 class Team
@@ -116,12 +112,27 @@ class Player
 {
 public:
 	Object *rva002AC629();				// 0x002AC629
+	Int iterateObjects(Int (*func)(Object *obj, void *userData), void *userData) const;	// 0x002AB08B
 };
 
 class PlayerList
 {
 public:
 	Player *getPlayerFromMask(Int mask);		// 0x002A7B91
+	Player *getEachPlayerFromMask(Int &mask);	// 0x002A7BC9
+};
+
+// Distance-count callback data; its constructor (0x003E5563) zeroes the
+// position, threshold and count and sets the cap to 0x7ffffffe.
+class Rva003E5563
+{
+public:
+	Rva003E5563();
+
+	Coord3D m_pos;				// +0x00
+	Real m_distSqr;				// +0x0C
+	Int m_count;				// +0x10
+	Int m_max;				// +0x14
 };
 
 extern PlayerList *ThePlayerList;
@@ -149,28 +160,30 @@ public:
 
 extern ActionManager *TheActionManager;
 
-struct TCounter
-{
-	Int value;
-};
-
 class ScriptEngine
 {
 public:
 	Object *getUnitNamed(Parameter *pUnitParm);	// 0x003588E7
 	Int rva00357B82(Parameter *pPlayerParm);		// 0x00357B82, player mask from a parameter
 	Team *getTeamNamed(AsciiString teamName, Bool flag);	// 0x003584E9
-	void *rva002086C5(AsciiString counterName);	// 0x002086C5, Zero Hour getCounter (returns TCounter *)
 };
 
 extern ScriptEngine *TheScriptEngine;
 
 class ScriptConditions
 {
+public:
+	virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
+	virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
+	virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+	virtual void slot12(); virtual void slot13();
+	virtual Bool evaluateCondition(Condition *condition);
 protected:
+	Bool evaluateConditionHelper(Condition *condition);
+	Bool evaluateSkirmishCanFireSpecialPowerOnTeam(Parameter *, Parameter *, Parameter *);
 	Bool evaluateHasEvaEventPlayedInLastNSeconds(const AsciiString &eventName, Real seconds);
-	Bool evaluateCounterSeconds(Condition *pCondition);
-	Bool evaluateSkirmishCanFireSpecialPowerOnTeam(Parameter *pSkirmishPlayerParm, Parameter *pSpecialPowerParm, Parameter *pTeamParm);
+	Bool evaluatePlayerHasNumberUnitsDistanceFromObject(Parameter *pPlayerParm, Parameter *pComparisonParm,
+		Parameter *pCountParm, Parameter *pDistanceParm, Parameter *pObjectParm);
 };
 
 // ScriptConditions::evaluateHasEvaEventPlayedInLastNSeconds, retail 0x003E543A
@@ -188,29 +201,71 @@ Bool ScriptConditions::evaluateHasEvaEventPlayedInLastNSeconds(const AsciiString
 }
 
 
-// ScriptConditions::evaluateCounterSeconds, retail 0x003E7D83 (WorldBuilder
-// name): Zero Hour's evaluateCounter with the threshold given in seconds.
-Bool ScriptConditions::evaluateCounterSeconds(Condition *pCondition)
+
+// Player::iterateObjects callback, retail 0x003E6032 (rowed under its
+// address name in ScriptConditions_evaluateNamedInsideArea.cpp): counts
+// qualifying objects farther than the threshold from the position and stops
+// once the count passes the cap.
+struct Rva003E6032Context;
+int Rva003E6032(Object *object, Rva003E6032Context *context);
+
+// ScriptConditions::evaluatePlayerHasNumberUnitsDistanceFromObject, retail
+// 0x003E609F (WorldBuilder name; BFME2-only condition).
+Bool ScriptConditions::evaluatePlayerHasNumberUnitsDistanceFromObject(Parameter *pPlayerParm,
+	Parameter *pComparisonParm, Parameter *pCountParm, Parameter *pDistanceParm, Parameter *pObjectParm)
 {
-	Int value = 0;
-	TCounter *pCounter = (TCounter *)TheScriptEngine->rva002086C5(pCondition->getParameter(0)->getString());
-	if (pCounter)
-		value = pCounter->value;
-	Int frames = REAL_TO_INT_CEIL(LOGICFRAMES_PER_MSEC_REAL * pCondition->getParameter(2)->getReal() * 1000.0f);
-	switch (pCondition->getParameter(1)->getInt())
+	Int mask = TheScriptEngine->rva00357B82(pPlayerParm);
+	Int count = pCountParm->getInt();
+	Rva003E5563 data;
+	Real dist = pDistanceParm->getReal();
+	if (dist < 0.0f)
+		dist = 0.0f;
+	data.m_distSqr = dist * dist;
+	data.m_max = count;
+	Object *obj = TheScriptEngine->getUnitNamed(pObjectParm);
+	if (obj)
 	{
-	case Parameter::LESS_THAN:	return value < frames;
-	case Parameter::LESS_EQUAL:	return value <= frames;
-	case Parameter::EQUAL:		return value == frames;
-	case Parameter::GREATER_EQUAL:	return value >= frames;
-	case Parameter::GREATER:	return value > frames;
-	case Parameter::NOT_EQUAL:	return value != frames;
+		data.m_pos = *obj->getPosition();
 	}
-	return false;
+	else
+	{
+		data.m_pos.x = 0.0f;
+		data.m_pos.y = 0.0f;
+		data.m_pos.z = 0.0f;
+		data.m_distSqr = -1.0f;
+	}
+	while (mask && data.m_count <= count)
+	{
+		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
+		if (player)
+			player->iterateObjects((Int (*)(Object *, void *))Rva003E6032, &data);
+	}
+	Bool result;
+	switch (pComparisonParm->getInt())
+	{
+	case Parameter::LESS_THAN:	result = data.m_count < count; break;
+	case Parameter::LESS_EQUAL:	result = data.m_count <= count; break;
+	case Parameter::EQUAL:		result = data.m_count == count; break;
+	case Parameter::GREATER_EQUAL:	result = data.m_count >= count; break;
+	case Parameter::GREATER:	result = data.m_count > count; break;
+	case Parameter::NOT_EQUAL:	result = data.m_count != count; break;
+	default:			result = false; break;
+	}
+	return result;
 }
 
-// ScriptConditions::evaluateSkirmishCanFireSpecialPowerOnTeam, retail
-// 0x003E91F6 (WorldBuilder name; BFME2-only condition).
+// Native 3EC8D4..3EC8F7 (35B), WB FF4530; native vtable and the
+// rowed ScriptEngine caller establish evaluateCondition at slot14 (+38).
+// The private helper is rowed at3EA9AF; bool locals preserve native CL.
+// Condition has13 parameter slots per that dispatcher and inversion at4D.
+Bool ScriptConditions::evaluateCondition(Condition *condition) {
+ Bool result=evaluateConditionHelper(condition);
+ Bool inverted=condition->isInverted();
+ return inverted ? !result : result;
+}
+
+// Native 3E91F6..3E92B2 RET12, WB callgraph name lead.
+// Split team-null and hasAnyObjects guards preserve native shared false block.
 Bool ScriptConditions::evaluateSkirmishCanFireSpecialPowerOnTeam(Parameter *pSkirmishPlayerParm,
 	Parameter *pSpecialPowerParm, Parameter *pTeamParm)
 {
@@ -223,12 +278,12 @@ Bool ScriptConditions::evaluateSkirmishCanFireSpecialPowerOnTeam(Parameter *pSki
 	const SpecialPowerTemplate *power = TheSpecialPowerStore->findSpecialPowerTemplate(pSpecialPowerParm->getString());
 	if (power == 0)
 	{
-		pSpecialPowerParm->m_field20 = -1;
+		pSpecialPowerParm->setField20(-1);
 		return false;
 	}
 	Team *team = TheScriptEngine->getTeamNamed(pTeamParm->getString(), false);
-	if (team == 0 || !team->hasAnyObjects(false))
-		return false;
+	if (team == 0) return false;
+	if (!team->hasAnyObjects(false)) return false;
 	Coord3D pos;
 	return TheActionManager->canDoSpecialPowerAtLocation(obj, team->rva0039DA2A(&pos), CMD_FROM_AI, power, 0, 0, true);
 }
