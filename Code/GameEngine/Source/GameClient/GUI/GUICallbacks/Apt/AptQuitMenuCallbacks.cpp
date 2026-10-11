@@ -605,8 +605,13 @@ private:
 	int m_280;
 };
 
-// The open quit menu (0x00E04910), set by its constructor.
-extern AptQuitMenu *TheAptQuitMenu;
+// The open quit menu (0x00E04910), set by its constructor. Defined here, in the
+// unit whose rowed constructor assigns it (AptQuitMenu::AptQuitMenu below), so
+// every reader binds one definition instead of an unresolved external. Retail
+// creates the menu at runtime, so the object is zero-initialised, the state
+// every reader tests: the stale pointer retail's image holds in the 4-byte
+// .data slot at RVA 0x009A4910 is overwritten before any code reads it.
+AptQuitMenu *TheAptQuitMenu;
 
 // Retail 0x0051AFB9, 10 bytes: "AptQuitMenu::RestartMission".
 void AptQuitMenu::RestartMission(const char *unused)
