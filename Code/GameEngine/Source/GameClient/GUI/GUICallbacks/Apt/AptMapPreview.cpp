@@ -457,10 +457,20 @@ public:
 	virtual void v48() = 0;
 	virtual void v4C() = 0;
 	virtual void v50(int value) = 0;
-	void rva002BED10();
 
 	unsigned char m_pad04[0x19 - 0x4];
 	bool m_19;		// +0x19
+};
+
+// Link: g_00DFEF18->rva002BED10() below is E8-to-0x002BED10 in the rowed
+// rva0057E45C body, whose owner is rowed as Rva002BED10::rva002BED10 in
+// Rva002BED10.cpp (89B member-free body: virtuals + globals only, so the
+// static this-type is byte-irrelevant). Bind that name directly; the old
+// Rva002D3627Host::rva002BED10 declaration had no definition (U).
+class Rva002BED10
+{
+public:
+	void rva002BED10();
 };
 
 extern Rva002D3627Host *g_00DFEF18;
@@ -817,7 +827,7 @@ void AptMapPreview::rva0057D5E5()
 		m_livingWorldWindow = 0;
 		if (g_00DFEF18->m_19)
 		{
-			g_00DFEF18->rva002BED10();
+			((Rva002BED10 *)g_00DFEF18)->rva002BED10();
 			g_00DFEF18->v50(0);
 			g_00DFEF18->v28(0);
 		}
