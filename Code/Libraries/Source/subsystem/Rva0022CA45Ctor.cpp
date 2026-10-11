@@ -39,22 +39,26 @@ namespace _STL
 	};
 }
 
-class BFME2NativeNetwork
+// LINK: the pin ?baseConstruct@BFME2NativeNetwork was retired when its address 0x1B4E63 was
+// rowed as SubsystemInterface::SubsystemInterface; the 0xC-byte base (vptr, flag, value) is a
+// novtable view whose extern ctor is that rowed symbol.
+class __declspec(novtable) SubsystemInterface
 {
 public:
-	void baseConstruct();
+	SubsystemInterface();
+	virtual ~SubsystemInterface();
+private:
+	char m_flag;
+	int m_value;
 };
 
 // Precedent Rva00221088Ctor: novtable head whose inlined ctor runs
 // baseConstruct() over this, so the call precedes the own vtable store.
-class __declspec(novtable) Rva0022CA45Base
+class __declspec(novtable) Rva0022CA45Base : public SubsystemInterface
 {
 public:
-	__forceinline Rva0022CA45Base() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
+	__forceinline Rva0022CA45Base() {}
 	virtual ~Rva0022CA45Base() {}
-private:
-	char m_flag;
-	int m_value;
 };
 
 class Rva0022CA45 : public Rva0022CA45Base
