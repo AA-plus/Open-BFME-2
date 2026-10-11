@@ -20,7 +20,14 @@ class ThingTemplate
 {
 public:
 	const ThingTemplate *getBuildFacilityTemplate(const Player *player) const;
-	Int getPrereqCount() const { return m_prereqInfo.size(); }
+	// Native getter and facility body read start/end at +324/+328 and
+ // divide by 36. The old vector::size owner divides by 24; read this
+ // target-supported range without emitting that conflicting copy.
+ Int getPrereqCount() const {
+  const ProductionPrerequisite *const *p =
+   reinterpret_cast<const ProductionPrerequisite *const *>(&m_prereqInfo);
+  return p[1] - p[0];
+ }
 private:
 	char m_before_prereqs[0x324];
 	_STL::vector<ProductionPrerequisite> m_prereqInfo;
