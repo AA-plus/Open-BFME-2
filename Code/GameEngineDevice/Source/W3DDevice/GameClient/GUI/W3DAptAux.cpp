@@ -316,3 +316,21 @@ void Rva000A923EReleaseString(Rva000A923EString *value, unsigned int flags)
  if ((flags & 0x406) && value)
   ::delete value;
 }
+
+// Native A994C..A99B8 copies eight floats in two four-component groups.
+// WB 8A7370 independently preserves the same argument and assignment order.
+// The Apt slot is SetColourTransform; component meanings and the original
+// global names are not established, so the two destination blocks stay neutral.
+struct Rva000A994CColors
+{
+ float x, y, z, w;
+ void set(float a, float b, float c, float d) { x=a; y=b; z=c; w=d; }
+};
+Rva000A994CColors g_aptHostColorBlock0; // native DE6198..DE61A8
+Rva000A994CColors g_aptHostColorBlock1; // native DE61A8..DE61B8
+
+void Rva000A994CSetColor(const float *value)
+{
+ g_aptHostColorBlock0.set(value[0], value[1], value[2], value[3]);
+ g_aptHostColorBlock1.set(value[4], value[5], value[6], value[7]);
+}
