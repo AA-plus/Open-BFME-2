@@ -32,6 +32,12 @@ public:
 	Relationship getRelationship(const Object *that) const;	// 0x0028D156
 	Bool isEffectivelyDead() const { return (m_privateStatus & EFFECTIVELY_DEAD) != 0; }
 	Bool isOffMap() const { return (m_privateStatus & OFF_MAP) != 0; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's isOffMap copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	Bool bfme_is_off_map() const { return (m_privateStatus & OFF_MAP) != 0; }
 
 private:
 	unsigned char m_unmodelled_00[0x304];
@@ -107,7 +113,7 @@ public:
 
 Bool Rva002611DDFilter::allow(Object *objOther)
 {
-	return !objOther->isOffMap();
+	return !objOther->bfme_is_off_map();
 }
 
 // vftable 0x00C004D8 (getPlayerMask 0x002613E1): the player's relationship

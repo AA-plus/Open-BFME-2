@@ -79,6 +79,12 @@ public:
 	Object *getOwner() const { return m_owner; }
 	Object *getGoalObject();
 	const Coord3D *getGoalPosition() const { return &m_goalPosition; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getGoalPosition copy loses to the first-in-order copy
+	// (no retail address); the getMachineGoalPosition call below inlines it
+	// but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. No flags touched.
+	const Coord3D *bfme_goal_position() const { return &m_goalPosition; }
 private:
 	unsigned char m_pad00[0x14];
 	Object *m_owner; // +0x14
@@ -98,7 +104,7 @@ public:
 protected:
 	Object *getMachineOwner() const { return m_machine->getOwner(); }
 	Object *getMachineGoalObject() const { return m_machine->getGoalObject(); }
-	const Coord3D *getMachineGoalPosition() const { return m_machine->getGoalPosition(); }
+	const Coord3D *getMachineGoalPosition() const { return m_machine->bfme_goal_position(); }
 	unsigned char m_pad04[0x18 - 0x04];
 	StateMachine *m_machine; // +0x18
 };

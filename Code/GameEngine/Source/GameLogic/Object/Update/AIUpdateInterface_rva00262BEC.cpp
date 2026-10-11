@@ -35,6 +35,14 @@ public:
 	{
 		return m_currentState ? m_currentState->isBusy() : false;
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's isInBusyState copy is not retail's; the isBusy call
+	// below inlines it but still emits the loser COMDAT. Rebinding there
+	// emits only this unique (trivially kept) copy. No flags touched.
+	bool bfme_is_in_busy_state() const
+	{
+		return m_currentState ? m_currentState->isBusy() : false;
+	}
 };
 
 class Rva001E3591
@@ -69,7 +77,7 @@ public:
 bool AIUpdateInterface::isBusy() const
 {
 	if (m_machine)
-		return m_machine->isInBusyState();
+		return m_machine->bfme_is_in_busy_state();
 	return false;
 }
 

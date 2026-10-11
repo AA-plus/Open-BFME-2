@@ -37,6 +37,11 @@ class Player
 {
 public:
 	Team *getDefaultTeam() { return m_defaultTeam; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getDefaultTeam copy is not retail's; the call below
+	// inlines it but still emits the loser COMDAT. Rebinding there emits only
+	// this unique (trivially kept) copy. No flags touched.
+	Team *bfme_default_team() { return m_defaultTeam; }
 
 private:
 	unsigned char m_pad000[0x2EC];
@@ -107,7 +112,7 @@ void GarrisonContain::onObjectCreated()
 		// We are creating a garrison that comes with an initial roster, so add it now!
 		CreateMask mask;
 		memset(&mask, 0, sizeof(mask));
-		Object *payload = TheThingFactory->newObject(rosterTemplate, object->getControllingPlayer()->getDefaultTeam(), &mask, false);
+		Object *payload = TheThingFactory->newObject(rosterTemplate, object->getControllingPlayer()->bfme_default_team(), &mask, false);
 		if (object->getContain() && object->getContain()->isValidContainerFor(payload, true, 0))
 			object->getContain()->addToContain(payload);
 	}

@@ -54,6 +54,11 @@ public:
 	};
 	AIUpdateInterface *getAI() { return m_ai; }
 	Team *getTeam() { return m_team; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getTeam copy is not retail's; the call below inlines
+	// it but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. No flags touched.
+	Team *bfme_get_team() { return m_team; }
 	Bool isEffectivelyDead() const { return (m_privateStatus & EFFECTIVELY_DEAD) != 0; }
 private:
 	unsigned char m_pad000[0x258];
@@ -117,7 +122,7 @@ StateReturnType AIMoveAndEvacuateState::update()
 
 		AIUpdateInterface *ai = obj->getAI();
 		ai->m_commands.aiEvacuate(FALSE, CMD_FROM_AI);
-		obj->getTeam()->setActive();
+		obj->bfme_get_team()->setActive();
 	}
 
 	return status;

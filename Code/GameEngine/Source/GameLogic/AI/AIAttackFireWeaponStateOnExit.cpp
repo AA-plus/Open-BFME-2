@@ -37,6 +37,12 @@ class Weapon
 public:
 	WeaponStatus getStatus() const;
 	void setPreAttackFinishedFrame(UnsignedInt frame) { m_whenPreAttackFinished = frame; getStatus(); }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes, including the getStatus tail call). This TU's setter copy loses
+	// to the first-in-order copy (no retail address); the call below inlines
+	// it but still emits the loser COMDAT. Rebinding there emits only this
+	// unique (trivially kept) copy. No flags touched.
+	void bfme_pre_attack_frame(UnsignedInt frame) { m_whenPreAttackFinished = frame; getStatus(); }
 private:
 	unsigned char m_pad00[0x1C];
 	UnsignedInt m_whenPreAttackFinished; // +0x1C
@@ -91,7 +97,7 @@ void AIAttackFireWeaponState::onExit( StateExitType status )
 	Weapon* weapon = obj->getCurrentWeapon();
 	if (weapon && weapon->getStatus() == PRE_ATTACK)
 	{
-		weapon->setPreAttackFinishedFrame(0);
+		weapon->bfme_pre_attack_frame(0);
 	}
 	obj->clearStatus( OBJECT_STATUS_BFME_52 );
 }
