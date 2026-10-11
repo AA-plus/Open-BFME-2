@@ -26,7 +26,7 @@ public:
 };
 class Rva00575E4EBase2 {
 public:
-    Rva00575E4EBase2() {}
+    __declspec(dllimport) __forceinline Rva00575E4EBase2() {}
     virtual ~Rva00575E4EBase2() {}
 };
 class Rva00575E4E : public Rva00575E4EBase1, public Rva00575E4EBase2 {

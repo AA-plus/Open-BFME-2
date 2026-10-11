@@ -41,7 +41,7 @@ class BfmeAptValue006DCD20
 protected:
 	unsigned int m_flags;
 public:
-	BfmeAptValue006DCD20(int type)
+	__declspec(dllimport) __forceinline BfmeAptValue006DCD20(int type)
 	{
 		setTypeAt006DBBC0(type);
 		m_flags = (m_flags & 0xFE000035u) | 0x30u;

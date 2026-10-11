@@ -22,7 +22,7 @@ protected:
 	virtual ~DebugCmdInterface() {}
 
 public:
-	DebugCmdInterface() {}
+	__declspec(dllimport) __forceinline DebugCmdInterface() {}
 
 	enum CommandMode
 	{
