@@ -378,7 +378,8 @@ public:
 class PlayerTemplate
 {
 public:
-	int rva001FD234() const;
+	char beforeSide[0x18]; AsciiString side; char beforeObserver[0x150-0x1c]; bool observer,playable;
+ int rva001FD234() const;
 	UnicodeString getDisplayName() const;
 };
 
@@ -386,6 +387,7 @@ class PlayerTemplateStore
 {
 public:
 	const PlayerTemplate *getNthPlayerTemplate(int index) const;
+ char beforeIndices[0x18]; _STL::set<int> indices;
 };
 
 extern PlayerTemplateStore *ThePlayerTemplateStore;
@@ -656,7 +658,7 @@ public:
 	int rva0057C57B(int window);
 	// Rowed 0x0057CD66: reselects the strategic scenario campaign.
 	void rva0057CD66();
-	int GetMaxNumPlayers();
+	int GetMaxNumPlayers(); void *GetStartPositionInfoForSlot(int);
 };
 
 // The +0x60 member's next selectable slot from a start (rowed 0x0057CA78
@@ -1007,7 +1009,8 @@ private:
 // template, or -1 without a combo box.
 
 class MapMetaData { public: UnicodeString bfme_getDisplayName(bool); };
-class GlobalData { public: unsigned char pad[0xa44]; int minPlayers; };
+struct StartPositionFactionView { char beforeReady[12]; int ready; };
+class GlobalData { public: unsigned char pad[0x9d4]; int factionRestrictions; char rest[0xa44-0x9d8]; int minPlayers; };
 extern GlobalData* TheWritableGlobalData;
 namespace _STL {
 template<> set<int>::set();
@@ -1091,6 +1094,64 @@ bool AptMpGameSetup::rva00440BDF(bool countdown)
   return true;
  }
  text.format(TheGameText->slot44("LAN:NoMapSelected",0));rva0043E49C(text);return false;
+}
+bool Rva00441E4DFaction(void *, const AsciiString &);
+void AptMpGameSetup::rva004424E7(int index)
+{
+ GameInfo *info=(GameInfo*)m_game->rva0043DA65();
+ if(!info) return;
+ GameSlot *slot=info->getSlot(index);
+ if(!slot) return;
+ GameWindow *combo=m_playerTemplate[index];
+ if(!combo) return;
+ MultiplayerColorDefinition *def=TheMultiplayerSettings->getColor(-1);
+ int selectedData=-1;
+ int newIndex=0;
+ GadgetComboBoxGetSelectedPos(combo,&newIndex);
+ if(newIndex>=0) selectedData=(int)GadgetComboBoxGetItemData(combo,newIndex);
+ GadgetComboBoxReset(combo);
+ int mode=m_60.m_mode; bool mode1=mode==1;
+ bool allowObservers=!slot->isAI() && !(m_flags&4) && !mode1;
+ bool local=index==info->v13();
+ bool hostAI=m_owner->v01() && slot->isAI();
+ if(!local && !hostAI) {
+  int value=slot->m_playerTemplate;
+  newIndex=GadgetComboBoxAddEntry(combo,UnicodeString((const unsigned short*)L"-"),def->getColor());
+  GadgetComboBoxSetItemData(combo,newIndex,(void*)value);
+  GadgetComboBoxSetSelectedPos(combo,0,false);
+  return;
+ }
+ bool allowRandom=true;
+ StartPositionFactionView *start=(StartPositionFactionView*)((AptMapPreview*)&m_60)->GetStartPositionInfoForSlot(index);
+ if(start) {
+  if(mode1) allowRandom=false;
+  else allowRandom=start->ready!=1;
+ }
+ if(TheWritableGlobalData->factionRestrictions&3) allowRandom=false;
+ if(allowRandom) {
+  newIndex=GadgetComboBoxAddEntry(combo,TheGameText->fetch("GUI:Random"),def->getColor());
+  GadgetComboBoxSetItemData(combo,newIndex,(void*)-1);
+ }
+ int selectPos=0;
+ const _STL::set<int> &indices=ThePlayerTemplateStore->indices;
+ for(_STL::set<int>::const_iterator it=indices.begin();it!=indices.end();++it) {
+  int c=*it;
+  const PlayerTemplate *fac=ThePlayerTemplateStore->getNthPlayerTemplate(c);
+  if(!fac || !fac->playable || fac->observer) continue;
+  if(start && !Rva00441E4DFaction(start,fac->side)) continue;
+  UnicodeString display=fac->getDisplayName();
+  newIndex=GadgetComboBoxAddEntry(combo,display,def->getColor());
+  GadgetComboBoxSetItemData(combo,newIndex,(void*)c);
+  if(selectedData==c) selectPos=newIndex;
+ }
+ if(!start && allowObservers) {
+  def=TheMultiplayerSettings->getColor(-2);
+  newIndex=GadgetComboBoxAddEntry(combo,TheGameText->fetch("GUI:Observer"),def->getColor());
+  GadgetComboBoxSetItemData(combo,newIndex,(void*)-2);
+  if(selectedData==-2) selectPos=newIndex;
+ }
+ GadgetComboBoxSetSelectedPos(combo,selectPos,false);
+ GadgetComboBoxSetMaxDisplay(combo,Rva0043DDF8(index));
 }
 struct SavedHeroSlotView {
  char beforeHero[0x60]; bool hasHero; char padding[3]; CreateAHeroName hero;
