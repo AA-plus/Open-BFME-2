@@ -10,10 +10,18 @@
 extern "C" __declspec(dllimport) double __cdecl ceil(double);
 float Sin(float);float normalizeAngle(float);
 extern float g_00DBA500;
-// Retail VA 0x00DBA508 holds 0.033333335f (0x3D088889); the donor name is
-// retained for this scalar. Defined once here, loader-initialized: the only
-// reader scales by it, and no ledger address is claimed yet.
-float g_bfmeSecondCF = 0.033333335f;
+// Retail's one-frame-in-seconds at 30 fps, VA 0x00DBA508 (RVA 0x009BA508): the
+// rowed update reads it with `flds 0xdba508` (retail 0x00331FDF) before
+// multiplying the decal's rotationSpeed by the degrees-to-radians constant at
+// RVA 0x0080DB6C. That address is already owned -- the ledger binds 0x009BA508
+// to ?opacityLogicStepSeconds@@3MA and Drawable_rva00275598.cpp:105 defines it
+// as 0.03333333507180214f, which is exactly 1/30 -- so the donor spelling
+// ?g_bfmeSecondCF@@3MA was this unit's private name for an existing object and
+// a second definition of it here would be a duplicate. This unit therefore
+// reads the same object under the ledger's name, which is the spelling
+// Bfme5TinyFifteenO1.cpp, Rva002BEDCAMovementDuration.cpp and
+// Rva002BF09EPlacePoint.cpp already use.
+extern float opacityLogicStepSeconds;
 class GameClient { public:
  virtual void slot0()=0;
  virtual void slot1()=0;
@@ -110,7 +118,7 @@ void RadiusDecal::update() {
   decal->setOpacity(opacity);
   decal->rva00330995(opacity*0x10101-0x1000000);
  } else if(data->rotationSpeed!=0.0f) {
-  float scale=g_bfmeSecondCF;
+  float scale=opacityLogicStepSeconds;
   scale*=0.0174532924f;
   scale*=data->rotationSpeed;
   scale*=60.0f;
