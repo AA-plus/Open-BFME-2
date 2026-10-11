@@ -25,7 +25,7 @@ public:
 
 private:
 	char m_pad[0x10];
-	_STL::pair<const unsigned short, int> m_value;
+	_STL::pair<const Rva00469D1AElement, int> m_value;
 };
 
 void *Rva004DCC62::rva004DCC62(const void *src)
