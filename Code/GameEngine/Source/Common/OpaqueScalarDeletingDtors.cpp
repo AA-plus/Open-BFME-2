@@ -596,27 +596,6 @@ private:
 	int m_pad04;
 };
 
-class Rva005FC1E4
-{
-public:
-	virtual ~Rva005FC1E4();
-
-private:
-	Rva005FC1CA m_member04;
-};
-
-Rva005FC1E4::~Rva005FC1E4()
-{
-	m_member04.clear();
-}
-
-// Anchor: forces out-of-line emission of the in-class destructor COMDAT,
-// including the scalar deleting destructor.
-void Rva005FC1E4_Anchor(Rva005FC1E4 *p)
-{
-	p->Rva005FC1E4::~Rva005FC1E4();
-}
-
 class Rva0060006A
 {
 public:

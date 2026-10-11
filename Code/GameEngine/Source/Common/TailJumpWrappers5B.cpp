@@ -78,13 +78,17 @@ Rva005747DA::~Rva005747DA()
 {
 }
 
-class Rva005FC1E4
+// Native5EA85A tail-jumps to5FC1E4, whose C7A064 constructor/destructor
+// establishes the StrategicHUD dialog base identity.
+namespace StrategicHUD {
+class DynamicAutoResolveMovieClip
 {
 public:
-	virtual ~Rva005FC1E4();
+	virtual ~DynamicAutoResolveMovieClip();
 };
+}
 
-class __declspec(novtable) Rva005EA85A : public Rva005FC1E4
+class __declspec(novtable) Rva005EA85A : public StrategicHUD::DynamicAutoResolveMovieClip
 {
 public:
 	virtual ~Rva005EA85A();

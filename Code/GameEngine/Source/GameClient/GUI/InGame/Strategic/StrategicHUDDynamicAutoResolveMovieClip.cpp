@@ -141,7 +141,7 @@ inline AsciiStringPlusStringText operator+(const AsciiStringPlusString &left, co
 // 0x002226E5 (System/RegistryAsciiPath.cpp); the two widening concats are
 // emitted out of line here and ICF-folded at 0x005F17C6 and 0x005D2F96
 // (pinned, these definitions are the fold proofs); the materializer is the
-// pinned 0x005F1D47 (WorldBuilder StringCompose::Concat<...>, three levels).
+// rowed 0x005F1D47 (WorldBuilder StringCompose::Concat<...>, three levels).
 struct Rva002226E5TextPlusString
 {
 	Rva002226E5TextPlusString() {}
@@ -156,12 +156,14 @@ struct AptTextPlusStringPlusString : Rva002226E5TextPlusString
 	AsciiStringRef m_third;
 };
 
-struct AptTextPlusStringPlusStringText : AptTextPlusStringPlusString
+// Native four-part node: 8B text pair, two string references, 8B text pair.
+struct Rva005F1D06 : AptTextPlusStringPlusString
 {
-	operator AsciiString(); // 0x005F1D47
-
+	operator AsciiString(); // rowed105B at5F1D47
 	Rva000B3F84Pair m_text;
 };
+struct AptTextPlusStringPlusStringText : Rva005F1D06 {};
+typedef char NativeFourPartConcatSize[sizeof(AptTextPlusStringPlusStringText) == 24 ? 1 : -1];
 
 // ?operator+(Rva002226E5TextPlusString, AsciiString) present-unmatched (inline, emitted out of line; ICF-folded at 0x005F17C6; pinned)
 inline AptTextPlusStringPlusString operator+(const Rva002226E5TextPlusString &left, const AsciiString &right)
@@ -259,6 +261,9 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 extern "C" __declspec(dllimport) int __cdecl isdigit(int c);
 extern "C" __declspec(dllimport) int __cdecl atoi(const char *s);
 
+class Rva005FBEBA { public: void rva005FBEBA(); };
+class Rva005FC1CA { public: void clear(); };
+
 namespace StrategicHUD {
 class DynamicAutoResolveMovieClip
 {
@@ -288,7 +293,6 @@ public:
 
 	Impl(DynamicAutoResolveMovieClip *owner, int level, const AsciiString &name, const UnicodeString &regionName, int numAllies, int numEnemies);
 	void OnOpen(const char *path);
-	void StopAudio(); // 0x005FBEBA (pinned)
 	void OnClosed(const char *path);
 	void OnSkipButtonClicked(const char *path);
 	void OnAllyPanelLoaded(const char *path);
@@ -398,7 +402,7 @@ void StrategicHUD::DynamicAutoResolveMovieClip::Impl::OnOpen(const char *path)
 	{
 		m_state = 1;
 		m_owner->notifyOpen();
-		StopAudio();
+		reinterpret_cast<Rva005FBEBA *>(this)->rva005FBEBA();
 		if (TheAudio != 0 && TheLivingWorldLogic != 0)
 		{
 			Rva005FBED8Sound *sound = reinterpret_cast<Rva005FBED8LivingWorld *>(TheLivingWorldLogic)->m_sound;
@@ -415,4 +419,11 @@ void StrategicHUD::DynamicAutoResolveMovieClip::Impl::OnOpen(const char *path)
 StrategicHUD::DynamicAutoResolveMovieClip::DynamicAutoResolveMovieClip(int level, const AsciiString &name, const UnicodeString &regionName, int numAllies, int numEnemies)
 	: m_impl(new Impl(this, level, name, regionName, numAllies, numEnemies))
 {
+}
+
+// Native5FC1E4 and constructor5FC5F7 both install C7A064; its slot0
+// is scalar deleting destructor5FC1F2. Owning Impl pointer is at+4.
+StrategicHUD::DynamicAutoResolveMovieClip::~DynamicAutoResolveMovieClip()
+{
+	reinterpret_cast<Rva005FC1CA *>(&m_impl)->clear();
 }
