@@ -17199,3 +17199,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva001014A9@WaterRenderObjClass@@IAEXAAVRenderInfoClass@@_N@Z,0x001014A9,callee of ?Render@WaterRenderObjClass@@UAEXAAVRenderInfoClass@@@Z
 ?rva00115DD2@W3DTerrainBackground@@QAEXXZ,0x00115DD2,callee of ?rva000E1185@Rva000E3B41@@QAEXXZ
 ??1Rva005E186A@@QAE@XZ,0x005E186A,placeholder: second interface base view of 0x00574CC1 restoring table 0x00C6E330 (its +0xC subobject; the +8 one uses the generated pin at the same body); unwind funclet 0x0079B066 reaches this shared 7-byte destructor
+?rva0009B510@Rva0009C134Host@@QAEXAAVMatrix3D@@MM@Z,0x0009B510,callee of ?rva0009BAA4@Rva0009D55BProduct@@QAEXXZ

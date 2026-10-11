@@ -113,6 +113,7 @@ public:
 	virtual void rva0009D862();
 	virtual void rva0009DB5A(bool active);
 	virtual void rva0009BC17();
+	void rva0009BAA4();
 
 private:
 	Rva0009D6FARef *m_C0;
@@ -223,10 +224,11 @@ void Rva0009D55BProduct::rva0009C784(unsigned int phase, unsigned int previous)
 // rowed 0x0009AA0F) and three lights (+0xC8/+0xCC/+0xD0, LightClass type 1),
 // sets +0x134 to 1, copies the +0x104 vector to +0xF8 and runs the pinned
 // refreshes 0x0009BAA4 and 0x0009CD9B.
-class CameraClass { public: CameraClass(); char m_data[0x3FC]; };
+class CameraClass { public: CameraClass(); void Set_Clip_Planes(float znear, float zfar); void Set_View_Plane(float hfov, float vfov); char m_data[0x3FC]; };
 class Rva0009AA0F { public: Rva0009AA0F(int owner); char m_data[0x10C]; };
 class LightClass { public: enum LightType { POINT = 0, DIRECTIONAL = 1 }; LightClass(LightType type); char m_data[0x120]; };
-class Rva0009C134Host { public: void rva0009BAA4(); void rva0009CD9B(); void rva0009AACF(int obj, float opacity); };
+class Matrix3D;
+class Rva0009C134Host { public: void rva0009BAA4(); void rva0009CD9B(); void rva0009AACF(int obj, float opacity); void rva0009B510(Matrix3D &tm, float distance, float pitch); };
 
 void Rva0009D55BProduct::rva0009D862()
 {
@@ -341,4 +343,69 @@ void Rva0009D55BProduct::rva0009BC17()
 	m_C4->slot6(m_E0);
 	((Rva0009C134Host *)this)->rva0009BAA4();
 	Rva00118660Call(m_C4, m_C0);
+}
+
+// ?rva0009BAA4@Rva0009D55BProduct@@QAEXXZ retail 0x0009BAA4 (371 bytes; the
+// refresh slots 8 and 9 and the setup 0x0009D862 run, pinned there as
+// Rva0009C134Host::rva0009BAA4): eases the +0x134 zoom through the rowed
+// 0x0009AAA8 into a distance between +0xD8 and +0xDC and a pitch from +0x13C
+// towards 0 (the 0x00DFE1C8 singleton's +0x38 float under +0x19); with a
+// camera it sets the clip planes (10, 1.5 * distance + 2000) and a 50-degree
+// view plane, builds the camera transform from an identity matrix through
+// 0x0009B510, hands it to camera slot 21 and pokes TheAudio's slot 22.
+class Matrix3D
+{
+public:
+	__forceinline explicit Matrix3D(bool identity) { if (identity) Make_Identity(); }
+	__forceinline void Make_Identity()
+	{
+		Row[0].Set(1.0f, 0.0f, 0.0f, 0.0f);
+		Row[1].Set(0.0f, 1.0f, 0.0f, 0.0f);
+		Row[2].Set(0.0f, 0.0f, 1.0f, 0.0f);
+	}
+private:
+	struct RowType
+	{
+		float X, Y, Z, W;
+		__forceinline void Set(float x, float y, float z, float w) { X = x; Y = y; Z = z; W = w; }
+	};
+	RowType Row[3];
+};
+class Rva0009BAA4CameraSlots
+{
+public:
+	D55B_SLOTS16(c0) D55B_SLOTS4(c1) virtual void c20();
+	virtual void Set_Transform(const Matrix3D &m);	// slot 21
+};
+class AudioManager;
+extern AudioManager *TheAudio;
+class Rva0009BAA4AudioSlots
+{
+public:
+	D55B_SLOTS16(a0) D55B_SLOTS4(a1) virtual void a20(); virtual void a21();
+	virtual void slot22();
+};
+float __cdecl Rva0009AAA8Get(float x);
+struct Rva0009BAA4HostView { unsigned char m_pad[0x38]; float m_38; };
+extern Rva0009BAA4HostView *g_Va00DFE1C8;
+struct Rva0009BAA4LivingWorldView { unsigned char m_pad[0x19]; bool m_19; };
+
+void Rva0009D55BProduct::rva0009BAA4()
+{
+	Matrix3D tm(true);
+	float zoom = m_134;
+	float square = zoom * zoom;
+	float distance = Rva0009BC17Lerp(m_D8, m_DC, Rva0009AAA8Get((square + zoom) * 0.5f));
+	float pitch = Rva0009BC17Lerp(m_13C, 0.0f, Rva0009AAA8Get(m_134));
+	if (((Rva0009BAA4LivingWorldView *)this)->m_19)
+		pitch = g_Va00DFE1C8->m_38;
+	if (m_C0)
+	{
+		((CameraClass *)m_C0)->Set_Clip_Planes(10.0f, distance * 1.5f + 2000.0f);
+		((CameraClass *)m_C0)->Set_View_Plane(0.87266463f, -1.0f);
+		((Rva0009C134Host *)this)->rva0009B510(tm, distance, pitch);
+		((Rva0009BAA4CameraSlots *)m_C0)->Set_Transform(tm);
+		if (TheAudio)
+			((Rva0009BAA4AudioSlots *)TheAudio)->slot22();
+	}
 }
