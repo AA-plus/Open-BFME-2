@@ -171,6 +171,7 @@ public:
 	Bool GetRegionCenterPoint(class Rva0020E89C *region, Coord2D *out);
 	class Rva00318C32Ret *rva0020FAEA(const Coord2D *pos, class Rva00318C32Ret *hint);
 	void rva0020FB8B(class LivingWorldBattle *battle);	// 0x0020FB8B, ends the battle (pinned)
+	Bool rva0020E4C8();
 	void UpdateBattleMarkers();				// 0x0020EBA0 (WorldBuilder name, pinned)
 	// The check of an army's move between two regions (WorldBuilder name,
 	// 0x0020EC99, pinned): 0 or 1 when the move is allowed.
@@ -281,7 +282,7 @@ struct LivingWorldArmy
 class Rva002B616FListener
 {
 public:
-	virtual void slot00();
+	virtual void onTurnPhaseChanged(void *previous, int current);
 	virtual void onTurnChanged(void *oldTurn, int newTurn);	// +0x04
 };
 
@@ -606,6 +607,7 @@ public:
 	void rva002B47C3(); // native thiscall; WB preserves the receiver
 	void rva002B83E5();
 	void rva002B49A8();
+	void rva002BCE24();
 	void AutoResolveBattle(Int battle);
 	void AutoMarkUnitsForUpgrades();
 	void CalcAttackingDirection(const _STL::vector<Int> &path, Coord2D *direction);
@@ -3084,4 +3086,45 @@ void LivingWorldLogic::HandleSwapArmyMembersMessage(const GameMessage *msg){
  if(!ExtractArmyDataFromSwapArmyMembersMessage(msg,&argIndex,&armyB,(ArmyMemberIDVector*)&idsB))return;
  if(((Rva002B6D18*)this)->rva002B6D18(armyA,&idsA,armyB,&idsB))
   ((Rva002B6D85*)this)->rva002B6D85(armyA,(Rva002B3E50Range*)&idsA,armyB,(Rva002B3E50Range*)&idsB);
+}
+
+// Native002BD23E..002BD36D complete303 RET0; WB D8ED80 names phase
+// transitions and its assertions7273..7395. All fields use this existing
+// primary owner; the phase callback uses the witnessed slot0 thunk.
+struct Rva002B2BECArg;
+class Rva002B2BEC {public:void rva002B2BEC(Rva002B2BECArg*);};
+class Rva002B3B66 {public:void rva002B3B66();};
+class Rva002B3D0E {public:void rva002B3D0E();};
+class Rva002B6900 {public:void rva002B6900();};
+
+void LivingWorldLogic::CheckTurnPhaseTransitions(){
+ if(m_fieldF8!=m_turnPhase){
+  switch(m_fieldF8){
+  case -1:((Rva002B2BEC*)this)->rva002B2BEC((Rva002B2BECArg*)m_localPlayer);break;
+  case 1:
+   ((Rva002B3B66*)this)->rva002B3B66();
+   rva002B49A8();
+   ((Rva002B3D0E*)this)->rva002B3D0E();
+   m_field0B0->UpdateBattleMarkers();break;
+  case 2:rva002BB15F();((Rva002B6900*)this)->rva002B6900();break;
+  case 5:((Rva002B3B66*)this)->rva002B3B66();break;
+  }
+  if(m_turnPhase==0)rva002B9DC7();
+  m_turnListeners.forEach(&Rva002B616FListener::onTurnPhaseChanged,(void*)m_fieldF8,m_turnPhase);
+  switch(m_turnPhase){
+  case 0:rva002B49A8();AutoMarkUnitsForUpgrades();break;
+  case 5:AdjustArmyTargetLocations();break;
+  case 1:rva002BCE24();AdjustArmyTargetLocations();break;
+  case 2:{
+   LivingWorldRegionManager*&manager=m_field0B0;
+   manager->rva0020E4C8();manager->UpdateBattleMarkers();
+   LivingWorldPlayer*&player=m_localPlayer;
+   if(((Rva0020E72A*)manager)->rva0020E72A(player))m_field108=true;
+   if(rva002B5CBB((Rva002B4C35Player*)player))m_field109=true;
+   break;
+  }
+  case 4:PrepareRetreats();break;
+  }
+ }
+ m_fieldF8=m_turnPhase;
 }
