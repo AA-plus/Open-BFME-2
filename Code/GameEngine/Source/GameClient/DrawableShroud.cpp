@@ -75,3 +75,24 @@ int rva00272A6A(Object *object, void *userData)
 reject:
     return 1;
 }
+
+// Native2706F0..27070C: complete28B cdecl callback; its address is passed
+// by the native onComingOutOfShroud body at278B90 to the member iterator.
+// Existing72B owner2706A8 ends immediately before it; rowed74B27070C
+// begins immediately after it. The callback sets the drawable status bit40
+// and returns1. Its original name and the unused second argument are unknown.
+struct BfmeDrawableStatus114View
+{
+    char pad000[0x114];
+    unsigned int status;
+};
+int rva002706F0(Object *object, int unused)
+{
+    if (object)
+    {
+        Drawable *drawable = object->getDrawable();
+        if (drawable)
+            ((BfmeDrawableStatus114View *)drawable)->status |= 0x40;
+    }
+    return 1;
+}
