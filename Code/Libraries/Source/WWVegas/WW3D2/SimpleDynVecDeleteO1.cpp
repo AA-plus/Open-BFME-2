@@ -18,9 +18,30 @@
 #include "vector3i.h"
 #include "sortingrenderer.h"
 
-// This TU is a client of the Vector3 Shrink specialization: the kept /O2 copy
-// lives in decalmsh.cpp, so do not emit the /O1 copy here.
-template <> bool SimpleDynVecClass<Vector3>::Shrink(void);
+// Retail Delete calls the 31-byte Shrink worker at 0x00100210. That worker is
+// already rowed under the opaque BfmePod4 instantiation; its whole body reads
+// only VectorMax (+8) and ActiveCount (+12), then dispatches virtual Resize.
+// It never touches elements. Project the common container prefix to that owner
+// while keeping this Vector3 object's vtable, hence its Vector3 Resize callback.
+// BfmePod4 does not describe the Vector3 payload or establish a retail type name.
+struct BfmePod4 { int a[1]; };
+template <> bool SimpleDynVecClass<BfmePod4>::Shrink(void);
+struct BfmeNativeShrinkAccess : SimpleDynVecClass<BfmePod4> {
+    using SimpleDynVecClass<BfmePod4>::Shrink;
+};
+
+template <> inline bool SimpleDynVecClass<Vector3>::Delete(int index, bool allow_shrink)
+{
+    if (index < ActiveCount - 1) {
+        memmove(&Vector[index], &Vector[index + 1],
+            (ActiveCount - index - 1) * sizeof(Vector3));
+    }
+    --ActiveCount;
+    if (allow_shrink) {
+        reinterpret_cast<BfmeNativeShrinkAccess *>(this)->Shrink();
+    }
+    return true;
+}
 
 extern bool (SimpleDynVecClass<Vector3>::*const g_bfmeDynVecV3DeleteAnchor)(int, bool);
 bool (SimpleDynVecClass<Vector3>::*const g_bfmeDynVecV3DeleteAnchor)(int, bool) = &SimpleDynVecClass<Vector3>::Delete;
