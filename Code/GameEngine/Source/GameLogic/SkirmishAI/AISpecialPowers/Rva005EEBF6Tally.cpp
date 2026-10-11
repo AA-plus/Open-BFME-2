@@ -1,8 +1,10 @@
-// ?rva005EEBF6@Rva005EEA20@@QAEXPAURva005EE9CE@@PAVObject@@M@Z
+// ?getStatsInCombatRange@Rva005EEA20@@QAEXPAVRva005EE9CE@@PAVObject@@M@Z
 // Native5EEBF6..5EED92412B; AoE partition tally and normalization.
 // Object template04 flags108/113 and value providers are established by native
 // accesses and rowed callers. Field and helper views retain their existing
-// spellings; original target function name and full layouts remain unknown.
+// spellings; full layouts remain unknown. The method name is WorldBuilder's
+// AISpellBookBase::getStatsInCombatRange (pinned); the tally is a class, as
+// its clear 0x005EE9CE is rowed.
 // A const template accessor prevents sharing the flag-test address calculation.
 // cl: /O1 /G7 /MD /GX /arch:SSE /ICode/Libraries/Include/Lib
 // ?Rva005EE317@@YGXPAVCoord3D@@@Z @ 0x005EE317 125B
@@ -285,8 +287,9 @@ public:
 };
 
 // The 16-byte tally 0x005EE9CE clears: per side a count and a value sum.
-struct Rva005EE9CE
+class Rva005EE9CE
 {
+public:
 	unsigned int m_00;	// +0x00 enemies counted
 	float m_04;		// +0x04 their summed value, then the mean
 	unsigned int m_08;	// +0x08 the rest
@@ -296,10 +299,10 @@ struct Rva005EE9CE
 class Rva005EEA20
 {
 public:
-	void rva005EEBF6(Rva005EE9CE *tally, Object *source, float radius);
+	void getStatsInCombatRange(Rva005EE9CE *tally, Object *source, float radius);
 };
 
-void Rva005EEA20::rva005EEBF6(Rva005EE9CE *tally, Object *source, float radius)
+void Rva005EEA20::getStatsInCombatRange(Rva005EE9CE *tally, Object *source, float radius)
 {
 	BfmeWideResult hits = ThePartitionManager->iterateObjectsInRange(source->getPosition(), radius, 0,
 		Rva0026119DFilter().link(&Rva00261409Filter(source->getControllingPlayer(), true, 6)), 0);
