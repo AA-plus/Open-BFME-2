@@ -174,8 +174,8 @@ struct CloneTreeRecord24 {
 int at00;unsigned value04;char flag08;Rva005045DBTree tree0C; unsigned value()const{return value04;}char flag()const{return flag08;}
 };
 class Glo012F1024Item {
-public:void j_0002a969();
-private:char pad00[0x54];_STL::vector<ClonePointRecord32>points54;_STL::vector<CloneTreeRecord24>trees60;
+public:void j_0002a969();bool j_0000ca59();
+private:char pad00[0x54];_STL::vector<ClonePointRecord32>points54;_STL::vector<CloneTreeRecord24>trees60;_STL::vector<TextRecord20>text6C;_STL::vector<StrRecord16>str78;
 };
 void Glo012F1024Item::j_0002a969(){
 for(unsigned i=0;i<points54.size();++i){
@@ -188,4 +188,17 @@ for(CloneTreeRecord24*r=trees60.begin();r!=trees60.end();++r){
  event->tree0C.assign(r->tree0C.self());
  ((Rva002B8AC0*)TheLivingWorldLogic)->rva002B8AC0((const ModuleData*)event);
 }
+}
+
+// Native565436..5654FF is the complete201B flag scan used by the verified
+// act run caller. All four typed record views and flag offsets are already
+// established by this home's event transfers. STLport size/index access
+// emits retail's repeated bounds and unsigned rails without raw-storage
+// reinterpretation, volatile accesses or codegen escape hatches.
+bool Glo012F1024Item::j_0000ca59(){
+for(unsigned i=0;i<str78.size();++i){if(str78[i].flag())return true;}
+for(unsigned i=0;i<text6C.size();++i){if(text6C[i].flag())return true;}
+for(unsigned i=0;i<points54.size();++i){if(points54[i].flag())return true;}
+for(unsigned i=0;i<trees60.size();++i){if(trees60[i].flag())return true;}
+return false;
 }
