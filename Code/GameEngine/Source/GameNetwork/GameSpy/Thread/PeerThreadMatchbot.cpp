@@ -23,10 +23,6 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 namespace _STL {
 template <> char *_STLP_alloc_proxy<char*, char, allocator<char> >::allocate(size_t);
 }
-// Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
-// the kept copy serves the link. Plain declaration-only form (no __imp_).
-namespace _STL {
-}
 struct BfmePeerEnumState { unsigned char unknown[0x48c]; bool sawEnd; bool sawMatchbot; unsigned char alignment[2]; std::string name; };
 class PeerThreadClass { public: void sawMatchbot(std::string bot); };
 void PeerThreadClass::sawMatchbot(std::string bot) { BfmePeerEnumState *state = reinterpret_cast<BfmePeerEnumState *>(this); state->sawMatchbot = true; state->name = bot; }

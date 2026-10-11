@@ -15,10 +15,6 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 namespace _STL {
 template <> char *_STLP_alloc_proxy<char*, char, allocator<char> >::allocate(size_t);
 }
-// Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
-// the kept copy serves the link. Plain declaration-only form (no __imp_).
-namespace _STL {
-}
 
 // Retail boundary 001F9524 160B; caller 001FB46F appends the template name.
 // STLport string concatenation lead; copied/reserved narrow storage and forward-iterator append
