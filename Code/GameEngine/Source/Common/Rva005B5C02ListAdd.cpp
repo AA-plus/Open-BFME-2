@@ -7,11 +7,11 @@
 #include <vector>
 #include <algorithm>
 
-class CreateAHeroData;
+class CreateAHeroData { public: CreateAHeroData &operator=(const CreateAHeroData &); };
 
 struct Rva005B5C02Entry
 {
-    void Use(void *s);
+
 };
 
 struct Rva005B5C02List
@@ -29,6 +29,6 @@ bool Rva005B5C02List::Add(Rva005B5C02Entry *e)
     CreateAHeroData **found = _STL::find(begin, end, val);
     if (found == end)
         return false;
-    ((Rva005B5C02Entry *)*found)->Use(e);
+    **found = *reinterpret_cast<const CreateAHeroData *>(e);
     return true;
 }
