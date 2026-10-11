@@ -34,7 +34,7 @@ struct Rva0046247DPair
 class Rva0046247D
 {
 public:
-	void *rva0046247D(Rva0046247DPair &p);
+	void rva0046247D(Rva0046247DPair &p);	// rowed void; retail callers read eax
 };
 
 
@@ -176,7 +176,7 @@ void HordeContain::rva0046E8EE()
 	if (hordeInfo)
 	{
 		Rva0046247DPair p;
-		IntList members = ((Rva0036AE51ListView *)((Rva0046247D *)this)->rva0046247D(p))->rva0036AE51();
+		IntList members = ((Rva0036AE51ListView *)(((Rva0046247D *)this)->*reinterpret_cast<void *(Rva0046247D::*)(Rva0046247DPair &)>(&Rva0046247D::rva0046247D))(p))->rva0036AE51();
 		unsigned int count = members.size();
 		int toDestroy = (int)(((double)(100 - m_2A8) * 0.01) * count);
 		if (toDestroy < members.size() && toDestroy > 0)

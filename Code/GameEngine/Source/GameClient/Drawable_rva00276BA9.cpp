@@ -49,7 +49,7 @@ public:
 class Rva002747B8
 {
 public:
-	void rva002747B8(RGBColor color);
+	void rva002747B8(float red, float green, float blue);
 };
 
 class Rva0027070CGlobal
@@ -74,7 +74,7 @@ extern Rva0027070CGlobal *g_00DFE1E4;
 class Rva0026FFF7
 {
 public:
-	bool rva0026FFF7();
+	int get() const;	// rowed ?get@Rva0026FFF7@@QBEHXZ
 };
 
 class Rva0027000E
@@ -112,7 +112,7 @@ void Drawable::rva00276BA9(bool apply)
 	const Coord3D *pos = ((Rva00276470Drawable *)this)->rva00276470();
 	float value;
 	Rva0027070CGlobal *setting = g_00DFE1E4;
-	if (((Rva0026FFF7 *)setting)->rva0026FFF7())
+	if ((unsigned char)((Rva0026FFF7 *)setting)->get())
 		value = g_00DFE1E4->slot54(*pos);
 	else if (((Rva0027000E *)setting)->rva0027000E())
 		value = g_00DFE1E4->slot58(*pos);
@@ -130,7 +130,7 @@ void Drawable::rva00276BA9(bool apply)
 		if (apply)
 		{
 			RGBColor color = g_00DFE1E4->m_color30;
-			((Rva002747B8 *)m_envelope8C)->rva002747B8(color);
+			(((Rva002747B8 *)m_envelope8C)->*reinterpret_cast<void (Rva002747B8::*)(RGBColor)>(&Rva002747B8::rva002747B8))(color);
 		}
 		return;
 	}
@@ -155,6 +155,6 @@ void Drawable::rva00276BA9(bool apply)
 	if (apply)
 	{
 		RGBColor color = g_00DFE1E4->m_color30;
-		((Rva002747B8 *)m_envelope8C)->rva002747B8(color);
+		(((Rva002747B8 *)m_envelope8C)->*reinterpret_cast<void (Rva002747B8::*)(RGBColor)>(&Rva002747B8::rva002747B8))(color);
 	}
 }

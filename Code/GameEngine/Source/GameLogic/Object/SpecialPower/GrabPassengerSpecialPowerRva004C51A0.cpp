@@ -75,8 +75,13 @@ enum ObjectStatusTypes
 // 0x0023DA79 clears the mask and sets one bit (its first argument unused).
 struct ObjectStatusMask
 {
-	ObjectStatusMask *Rva0023DA79(int reserved, ObjectStatusTypes bit);	// 0x0023DA79
 	int m_bits[4];
+};
+
+class Rva0023DA79
+{
+public:
+	Rva0023DA79 *rva0023DA79(int reserved, int bit);	// 0x0023DA79 (rowed)
 };
 
 struct ObjectStatusMaskNone : public ObjectStatusMask
@@ -89,11 +94,21 @@ struct ObjectStatusMaskNone : public ObjectStatusMask
 class BfmeFixedStorage0004543D
 {
 public:
-	BfmeFixedStorage0004543D(int reserved, int bit) throw();
-	BfmeFixedStorage0004543D(int reserved, int bit1, int bit2) throw();
 	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other) throw();
 private:
 	unsigned char m_bytes[28];
+};
+
+// Rowed constructors, same 28-byte mask: 0x00045411 (one bit), 0x0006EE7A (two).
+struct Rva00045411BitSet
+{
+	unsigned int bits[7];
+	Rva00045411BitSet(int reserved, int bit) throw();
+};
+struct Rva0006EE7A
+{
+	unsigned int bits[7];
+	Rva0006EE7A(int reserved, int bit1, int bit2) throw();
 };
 
 // vftable 0x00C1A25C: any of the mask's kinds.
@@ -107,11 +122,12 @@ public:
 
 extern PartitionManager *ThePartitionManager;
 
-class TerrainLogic
+class BfmeThingCME
 {
 public:
-	void *rva0027F108(const Coord3D *pos, float radius, bool flag, int mode);	// 0x0027F108
+	int rva0027F108(void *pos, float radius, int flag, int mode);	// 0x0027F108 (rowed)
 };
+class TerrainLogic;
 extern TerrainLogic *TheTerrainLogic;
 
 enum SpecialPowerType
@@ -201,8 +217,8 @@ void GrabPassengerSpecialPower::rva004C51A0(unsigned int options)
 	{
 		const Coord3D *terrainPoint = 0;
 		if (data->m_80)
-			terrainPoint = (const Coord3D *)TheTerrainLogic->rva0027F108(&pos, data->m_7C, true, 1);
-		target = ThePartitionManager->getClosestObject(&pos, data->m_7C, 0, &Rva003959FA(BfmeFixedStorage0004543D(0, 0x61, 0x88)));
+			terrainPoint = (const Coord3D *)((BfmeThingCME *)TheTerrainLogic)->rva0027F108(&pos, data->m_7C, 1, 1);
+		target = ThePartitionManager->getClosestObject(&pos, data->m_7C, 0, &Rva003959FA(reinterpret_cast<const BfmeFixedStorage0004543D &>(Rva0006EE7A(0, 0x61, 0x88))));
 		if (terrainPoint)
 		{
 			if (target)
@@ -237,14 +253,14 @@ void GrabPassengerSpecialPower::rva004C51A0(unsigned int options)
 	{
 		ObjectStatusMask status;
 		target = ThePartitionManager->getClosestObject(&pos, getGrabPassengerSpecialPowerModuleData()->m_7C, 0,
-			Rva003959FA(BfmeFixedStorage0004543D(0, 8))
-				.link(&Rva002FDF1C(*(BfmeObject872Header *)status.Rva0023DA79(0, OBJECT_STATUS_RVA004C51A0_3),
+			Rva003959FA(reinterpret_cast<const BfmeFixedStorage0004543D &>(Rva00045411BitSet(0, 8)))
+				.link(&Rva002FDF1C(*(BfmeObject872Header *)((Rva0023DA79 *)&status)->rva0023DA79(0, (int)OBJECT_STATUS_RVA004C51A0_3),
 					*(BfmeObject872Header *)&ObjectStatusMaskNone()))
 				->link(&Rva00260EB1Filter(m_object, 1, false)));
 	}
 	else
 	{
-		target = ThePartitionManager->getClosestObject(&pos, getGrabPassengerSpecialPowerModuleData()->m_7C, 0, &Rva003959FA(BfmeFixedStorage0004543D(0, 0x88)));
+		target = ThePartitionManager->getClosestObject(&pos, getGrabPassengerSpecialPowerModuleData()->m_7C, 0, &Rva003959FA(reinterpret_cast<const BfmeFixedStorage0004543D &>(Rva00045411BitSet(0, 0x88))));
 	}
 
 	Object *owner = m_object;
