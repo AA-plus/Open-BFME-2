@@ -151,7 +151,7 @@ void Thing::getUnitDirectionVector2D(Coord3D& dir) const
 // ?getUnitDirectionVector3D@Thing@@ present-unmatched
 void Thing::getUnitDirectionVector3D(Coord3D& dir) const
 {
-	Vector3 vdir = m_transform.Get_X_Vector();
+	Vector3 vdir(m_transform[0][0], m_transform[1][0], m_transform[2][0]);  // the X column; naming Get_X_Vector left a non-retail copy first in link order
 	vdir.Normalize();
 	dir.x = vdir.X;
 	dir.y = vdir.Y;
