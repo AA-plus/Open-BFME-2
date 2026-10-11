@@ -271,6 +271,7 @@ public:
 	virtual void rva00454501();
 	virtual bool rva004533B2();
 	virtual bool rva004540F5();
+	virtual float rva00453FE7(Object *obj);
 	void rva0045318B();
 private:
 	bool rva004541AB();
@@ -482,6 +483,46 @@ bool GettingBuiltBehavior::rva004540F5()
 		}
 		return false;
 	}
+}
+
+// ?rva00453FE7@GettingBuiltBehavior@@UAEMPAVObject@@@Z, retail 0x00453FE7, 270
+// bytes: slot 20 of the +0x20 vtable; with the flag, the sum of slot 12 for
+// the argument over the owner (when its slot 8 answers) and the neighbours
+// whose slot 8 answers; 0 without it. The downward walk steps a copy of the
+// owner's ID: with it retail keeps the ID in EDI and the upward ID in EBX,
+// saved only around the upward walk.
+float GettingBuiltBehavior::rva00453FE7(Object *obj)
+{
+	float total = 0.0f;
+	Object *me = m_object;
+	int id = me->m_74;
+	if (!rva00453F31Flag(me))
+		return 0.0f;
+	const ThingTemplate *tmpl = me->m_template;
+	if (rva004533B2())
+		total = rva0045342F(obj);
+
+	Object *other;
+	int upId = id + 1;
+	while ((other = TheGameLogic->findObjectByID((ObjectID)upId)) != 0)
+	{
+		if (!other->m_template->isEquivalentTo(tmpl) || !rva00453F31Flag(other))
+			break;
+		GettingBuiltBehaviorInterface *gbi = interfaceOf(other);
+		if (gbi && gbi->rva004533B2())
+			total += gbi->rva0045342F(obj);
+		++upId;
+	}
+	int downId = id;
+	while ((other = TheGameLogic->findObjectByID((ObjectID)--downId)) != 0)
+	{
+		if (!other->m_template->isEquivalentTo(tmpl) || !rva00453F31Flag(other))
+			break;
+		GettingBuiltBehaviorInterface *gbi = interfaceOf(other);
+		if (gbi && gbi->rva004533B2())
+			total += gbi->rva0045342F(obj);
+	}
+	return total;
 }
 
 // ?rva0045342F@GettingBuiltBehavior@@UAEMPAVObject@@@Z, retail 0x0045342F, 62
