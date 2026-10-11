@@ -139,6 +139,12 @@ class WeaponTemplate
 {
 public:
 	Real getWeaponSpeed() const { return m_speed68; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getWeaponSpeed copy loses to the first-in-order copy
+	// (no retail address); the call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	Real bfme_weapon_speed() const { return m_speed68; }
 	const FXList *getFireFX() const { return m_fireFX[0]; }
 	Bool getFlag157() const { return m_flag157; }
 private:
@@ -495,7 +501,7 @@ StateReturnType AIGiantBirdAttackState::onEnter()
 				Drawable *draw = owner->getDrawable();
 				if (fx != 0 && draw != 0)
 				{
-					Real speed = weapon->getTemplate()->getWeaponSpeed();
+					Real speed = weapon->getTemplate()->bfme_weapon_speed();
 					const Matrix3D *mtx = draw->getTransformMatrix();
 					giantBirdDoFXPos(fx, victim->getPosition(), mtx, speed, victim->getPosition());
 				}
