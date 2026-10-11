@@ -5,6 +5,14 @@
 // Target adds mithril verification, exclusion and conditional cinematic paths,
 // byte load results and type1/5 selection. Record offsets are independently
 // established by the target LoadSubsystem schema and72B ctor/copy/dtor owners.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include "PreRTS.h"
 #include "subsystem_interface.h"

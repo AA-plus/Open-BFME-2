@@ -11,6 +11,14 @@
 // the object orientation) and finally passes each row position, last first, to
 // the rowed history push 0x0047A729. Layout from the rowed AOD ctor 0x0047B3DB;
 // WB offsets run four (rows) / eight (module data) lower than retail's.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 
 struct BfmePod24 { int a[6]; };
