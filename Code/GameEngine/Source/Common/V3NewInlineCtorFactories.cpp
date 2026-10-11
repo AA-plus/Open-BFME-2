@@ -62,6 +62,7 @@ private: char unknown1C[0x2c-0x1c];
 };
 class Rva003AF076 : public V3Slot0N, public V3Slot1, public V3Slot2Wide, public V3Slot3 {
 public: Rva003AF076(const RvaSmartPtr12&, const Rva005648FEInput&);
+    virtual ~Rva003AF076();
 private: char unknown24[0x44-0x24];
 };
 //
