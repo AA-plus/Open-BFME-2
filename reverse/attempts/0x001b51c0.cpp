@@ -1,85 +1,64 @@
-// ?shutdownAll@SubsystemInterfaceList@@QAEXXZ
-// partial score=0.9715090543 date=2026-10-10
-// ?shutdownAll@SubsystemInterfaceList@@QAEXXZ
-// partial score=0.98 date=2026-10-10
-// cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// ?rva001B51C0@SubsystemInterfaceList@@QAEXXZ
+// partial score=0.99 date=2026-10-11
+// cl: /GX /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /DNDEBUG
 // stlport
-// ?rva001B4FE9@SubsystemInterfaceList@@QAEXXZ RVA 0x001B4FE9 47B
-// Evidence: leaf lane pin SubsystemInterfaceList::rva001B4FE9; caller
-//   GameEngine::rva00225AFF in GameEngineSlots.cpp; notifies each entry via
-//   virtual slot 0x20 then clears the vector at +0x18 via rowed 0x31BD55 erase.
-#include <stdlib.h>
-void __cdecl Rva00030830GameFree(void*);
-#define free Rva00030830GameFree
+//
+// ??1SubsystemInterfaceList@@QAE@XZ, retail 0x001B5207, 95 bytes (EH).
+// WorldBuilder 0x00A75980 names it (SubsystemInterface.cpp, assert at line
+// 326). After the unrowed member 0x001B51C0 (pinned under an address name;
+// WB calls it from the same spot) the three POD vectors at +0x00, +0x0C and
+// +0x18 free their buffers (0x00030830) in reverse member order, the same
+// tail as the rowed record destructor 0x00079554 (Rva00079554RecordDtor.cpp).
+// Element types are unrecovered.
 #include <vector>
-#include <utility>
 
-struct BfmePod8{int a[2];};
-template <> _STL::vector<BfmePod8>::iterator _STL::vector<BfmePod8>::erase(iterator,iterator);
-class SubsystemInterface
+// The registered entries: the subsystem and the owned object that is
+// destroyed through its slot 0 (flag 0) and operator delete.
+struct Rva001B51C0Object
 {
-public:
-	virtual void vf0();
-	virtual void vf1();
-	virtual void vf2();
-	virtual void vf3();
-	virtual void vf4();
-	virtual void vf5();
-	virtual void vf6();
-	virtual void vf7();
-	virtual void vf8();
- virtual void vf9();
+	virtual void *destroy(unsigned flags);
 };
-
-class SubsystemSlotBase {public:virtual ~SubsystemSlotBase();};
-typedef std::pair<SubsystemInterface*,void*> SubsystemEntry8;
+struct BfmePod8
+{
+	void *m_first;
+	Rva001B51C0Object *m_second;
+};
 
 class SubsystemInterfaceList
 {
 public:
-	void rva001B4FE9();
- void resetAll();
- void shutdownAll();
- ~SubsystemInterfaceList();
-
+	~SubsystemInterfaceList();
+	void rva001B51C0();
 private:
-	_STL::vector<SubsystemEntry8> m_primary;
- _STL::vector<void*> m_pending;
-	_STL::vector<void *> m_vec; // +0x18
- int m_state24;
+	_STL::vector<BfmePod8> m_00;
+	_STL::vector<int> m_0C;
+	_STL::vector<int> m_18;
+	int m_24;
 };
 
-void SubsystemInterfaceList::rva001B4FE9()
+SubsystemInterfaceList::~SubsystemInterfaceList()
 {
-	for (void **it = m_vec.begin(); it != m_vec.end(); ++it) {
-		void *obj = *it;
-		if (obj != 0)
-			((SubsystemInterface *)obj)->vf8();
+	rva001B51C0();
+}
+
+// ?rva001B51C0@SubsystemInterfaceList@@QAEXXZ, retail 0x001B51C0 (71 bytes):
+// the member the destructor runs first (WorldBuilder 0x00A758D0, unnamed).
+// It walks the +0x00 entries from the back, destroys each owned object and
+// clears the entry, then erases the whole vector (rowed BfmePod8 erase
+// 0x003FA4DB) and clears the +0x24 word. The name is a placeholder.
+void SubsystemInterfaceList::rva001B51C0()
+{
+	int step = -1;
+	for (BfmePod8 *it = m_00.end(); it != m_00.begin(); )
+	{
+		Rva001B51C0Object *object = it[-1].m_second;
+		::operator delete(object ? object->destroy(0) : 0);
+		BfmePod8 cleared;
+		cleared.m_first = 0;
+		cleared.m_second = 0;
+		it += step;
+		*it = cleared;
 	}
-	_STL::vector<void *> &v = m_vec;
-	v.erase(v.begin(), v.end());
+	m_00.erase(m_00.begin(), m_00.end());
+	m_24 = 0;
 }
-
-// ?resetAll@SubsystemInterfaceList@@QAEXXZ RVA 0x001B4F6D 30B (was rva001B4F6D).
-// Zero Hour SubsystemInterfaceList::resetAll walks the subsystem list in
-// reverse calling reset; GameEngine::init and GameEngine.cpp call it here.
-void SubsystemInterfaceList::resetAll()
-{
- for(_STL::vector<SubsystemEntry8>::reverse_iterator i=m_primary.rbegin();i!=m_primary.rend();++i)
-  i->first->vf9();
-}
-
-void SubsystemInterfaceList::shutdownAll(){
- SubsystemEntry8 *p=m_primary.end();
- if(p!=m_primary.begin()){
-  const SubsystemEntry8 empty(0,0);
-  do {
-   ::delete (SubsystemSlotBase*)(p-1)->second;
-   p += -1;
-   *p=empty;
-  }while(p!=m_primary.begin());
- }
- _STL::vector<BfmePod8> &raw=(_STL::vector<BfmePod8>&)m_primary; raw.erase(raw.begin(),raw.end());
- m_state24=0;
-}
-SubsystemInterfaceList::~SubsystemInterfaceList(){shutdownAll();}
