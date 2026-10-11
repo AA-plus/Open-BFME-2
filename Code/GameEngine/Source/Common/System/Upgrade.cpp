@@ -219,16 +219,7 @@ AsciiString getVetUpgradeName(VeterancyLevel v)
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-// ?cacheButtonImage@UpgradeTemplate@@ present-unmatched
-void UpgradeTemplate::cacheButtonImage()
-{
-	if( m_buttonImageName.isNotEmpty() )
-	{
-		m_buttonImage = TheMappedImageCollection->findImageByName( m_buttonImageName );
-		DEBUG_ASSERTCRASH( m_buttonImage, ("UpgradeTemplate: %s is looking for button image %s but can't find it. Skipping...", m_name.str(), m_buttonImageName.str() ) );
-		m_buttonImageName.clear();	// we're done with this, so nuke it
-	}
-}
+// UpgradeTemplate::cacheButtonImage (0x0026F216) is rowed in Rva0026F216ImageResolve.cpp; a second definition here would not link.
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -274,27 +265,7 @@ UpgradeCenter::~UpgradeCenter( void )
 //-------------------------------------------------------------------------------------------------
 /** Upgrade center initialization */
 //-------------------------------------------------------------------------------------------------
-// ?init@UpgradeCenter@@ present-unmatched
-void UpgradeCenter::init( void )
-{
-	UpgradeTemplate* up;
-	
-	// name will be overridden by friend_makeVeterancyUpgrade
-
-// no, there ISN'T an upgrade for this one...
-//up = newUpgrade("");
-//up->friend_makeVeterancyUpgrade(LEVEL_REGULAR);
-
-	up = newUpgrade("");
-	up->friend_makeVeterancyUpgrade(LEVEL_VETERAN);
-
-	up = newUpgrade("");
-	up->friend_makeVeterancyUpgrade(LEVEL_ELITE);
-
-	up = newUpgrade("");
-	up->friend_makeVeterancyUpgrade(LEVEL_HEROIC);
-
-}
+// UpgradeCenter::init (0x0026FAFE) is rowed in UpgradeCenterInit.cpp; a second definition here would not link.
 
 //-------------------------------------------------------------------------------------------------
 /** Upgrade center system reset */
