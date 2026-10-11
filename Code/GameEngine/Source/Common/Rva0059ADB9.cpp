@@ -234,6 +234,7 @@ class LivingWorldAutoResolveBodyTemplate
 {
 public:
 	float getHitpointsForLevel(int level);
+	float getRegenRateForLevel(int level);
 };
 
 class Rva0059AEBC
@@ -350,4 +351,37 @@ void Rva0059AC4D::rva0059ABC9(void *object)
         else
             rva0059A8D7(team, &count);
     }
+}
+
+// Native 59AF30..59AFC2 is146B RET4. WB14D6190 corroborates rescaling
+// current HP at0C after level-dependent maximum14 changes, optional mode1
+// regeneration through the rowed body query and getRegenRateForLevel,
+// clamping to the new maximum, and clearing word1C. Context08
+// supplies level0C; body template query owner2C agrees with adjacent rows.
+// The concrete owner and original method name remain address-derived.
+
+class Rva0059AF30 {
+public:
+ void rva0059AF30(int mode);
+ char prefix[8];
+ Rva0059AEBCCtx *context;
+ float current,previous,maximum;
+ unsigned char flag;
+ char gap19[3];
+ unsigned cleared1C;
+ char gap20[12];
+ Rva0033A65E *body;
+};
+void Rva0059AF30::rva0059AF30(int mode) {
+ float limit = reinterpret_cast<Rva0059AEBC *>(this)->rva0059AEBC();
+ if (limit != maximum) {
+  float scaled = current;
+  if (maximum != 0.0f) scaled = (limit / maximum) * scaled;
+  current = scaled;
+ }
+ if (mode == 1 && !(current <= 0.0f)) {
+  current += reinterpret_cast<LivingWorldAutoResolveBodyTemplate *>(body->rva0033A65E())->getRegenRateForLevel(context->m_level);
+  if (current > limit) current = limit;
+ }
+ cleared1C = 0;
 }
