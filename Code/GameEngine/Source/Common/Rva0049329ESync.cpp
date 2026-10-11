@@ -5,7 +5,7 @@
 // answer and the byte at +0x20 disagree, store the new byte and call
 // virtual slot 9 with it.
 
-class Rva00493251
+class SpecialPowerModule
 {
 public:
 	bool rva00493251();
@@ -33,7 +33,7 @@ private:
 
 void Rva0049329E::rva0049329E()
 {
-	bool now = ((Rva00493251 *)((char *)this - 0x10))->rva00493251();
+	bool now = ((SpecialPowerModule *)((char *)this - 0x10))->rva00493251();
 	if (!now)
 	{
 		if (m_flag == 0)

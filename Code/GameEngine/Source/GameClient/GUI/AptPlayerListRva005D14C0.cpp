@@ -39,7 +39,7 @@ public:
 };
 extern class MessageStream *TheMessageStream;
 
-class Rva000B3FD0NullTarget
+class PathfindLayer
 {
 public:
 	void rva000B3FD0();
@@ -99,7 +99,7 @@ private:
 
 void Rva005D14C0::rva005D14C0()
 {
-	reinterpret_cast<Rva000B3FD0NullTarget *>(this)->rva000B3FD0();
+	reinterpret_cast<PathfindLayer *>(this)->rva000B3FD0();
 	m_data->rva005D13C2();
 
 	int index = reinterpret_cast<Rva00005C792CPtrChaseField *>(m_data->m_view)->get();

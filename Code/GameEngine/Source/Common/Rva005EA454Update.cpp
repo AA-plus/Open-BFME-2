@@ -14,7 +14,7 @@ struct Rva00574192
 	void rva00574192();
 };
 
-struct Rva005EA125
+struct Rva005EA183
 {
 	void rva005EA125();
 };
@@ -38,5 +38,5 @@ void Rva005EA454::update()
 	reinterpret_cast<Rva00574192 *>(reinterpret_cast<char *>(this) + 0x08)->rva00574192();
 	if (m_context->m_flag != 0)
 		return;
-	reinterpret_cast<Rva005EA125 *>(m_context)->rva005EA125();
+	reinterpret_cast<Rva005EA183 *>(m_context)->rva005EA125();
 }

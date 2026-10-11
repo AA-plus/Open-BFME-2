@@ -12,7 +12,7 @@ public:
 };
 extern class ScriptEngine *TheScriptEngine;
 
-class Rva003805BB
+class Rva00380200
 {
 public:
 	bool rva003805BB(float val, bool flag);
@@ -22,7 +22,7 @@ class Player
 {
 public:
 	unsigned char m_pad[8]; // +0x00..0x07
-	Rva003805BB m_sub; // +0x08
+	Rva00380200 m_sub; // +0x08
 };
 
 class PlayerList

@@ -13,7 +13,7 @@ public:
 	Player *getControllingPlayer() const;
 };
 
-class Rva0037E915
+class Rva0037E421
 {
 public:
 	void *rva0037E915(int index);
@@ -23,7 +23,7 @@ class Player
 {
 public:
 	char m_pad[0x738];
-	Rva0037E915 m_table;
+	Rva0037E421 m_table;
 };
 
 class Rva0049CCF0

@@ -9,7 +9,7 @@ public:
 	int rva00462785();
 };
 
-class Rva00588E44 {
+class Rva0047A040Base9E0 {
 public:
 	void rva00588E44(void *argument);
 };
@@ -62,7 +62,7 @@ void Rva00479CF6::rva00479CF6(int unused)
 {
 	Rva00462785 *predicate = (Rva00462785 *)((char *)this - 0x28);
 	if ((unsigned char)predicate->rva00462785() != 0) {
-		((Rva00588E44 *)((char *)this + 0x9B8))->rva00588E44(predicate);
+		((Rva0047A040Base9E0 *)((char *)this + 0x9B8))->rva00588E44(predicate);
 	} else {
 		((Rva00479CF6Dispatch *)((char *)this - 8))->slot32(2);
 	}

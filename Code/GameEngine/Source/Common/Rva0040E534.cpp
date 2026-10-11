@@ -11,11 +11,11 @@ public:
     void push_back(const T &);
 };
 }
-class Rva0040C495 {
+class ArmySummaryEntry {
 public:
     Object *rva0040C495(Player *, int);
 };
-struct Rva0040E534Input { Rva0040C495 *value; };
+struct Rva0040E534Input { ArmySummaryEntry *value; };
 class ArmySummary {
 public:
     void LoadArmyEntry(Rva0040E534Input *, int,
