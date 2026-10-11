@@ -9,6 +9,12 @@
 // the rowed tree clear 0x389A4C in PeerThread.cpp.
 #include <map>
 #include <string>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 
 typedef _STL::pair<const _STL::basic_string<char, _STL::char_traits<char>, _STL::allocator<char> >, int> StringIntValue;
 typedef _STL::_Rb_tree<_STL::basic_string<char, _STL::char_traits<char>, _STL::allocator<char> >, StringIntValue, _STL::_Select1st<StringIntValue>, _STL::less<_STL::basic_string<char, _STL::char_traits<char>, _STL::allocator<char> > >, _STL::allocator<StringIntValue> > StringIntTree;

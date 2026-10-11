@@ -9,6 +9,12 @@
 // by this explicit instantiation to that rowed implementation.
 #pragma comment(linker, "/alternatename:??4locale@_STL@@QAEABV01@ABV01@@Z=??4locale@_STL@@QAEAAV01@ABV01@@Z")
 
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 template class _STL::basic_fstream<wchar_t, _STL::char_traits<wchar_t> >;
 
 // Reference transfer: Open-BFME-1 b63e008232e82a4450673f219fc985541c2207d0,
