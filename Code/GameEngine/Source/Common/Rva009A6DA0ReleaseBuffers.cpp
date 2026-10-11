@@ -48,12 +48,12 @@ int InitializeCodecBufferPair(Rva009A6DA0Buffer *self) { return Rva009A6DF0Initi
 
 struct BfmeSubJX : Rva009A6DA0Buffer { unsigned char rest[0x990-sizeof(Rva009A6DA0Buffer)]; };
 extern "C" void *__cdecl memset(void *p,int value,unsigned int n);
-void Rva009A6EC0Release(void **what);
+extern "C" void __cdecl VP6_DeleteQuantizer(void **what);
 extern "C" BfmeSubJX *__cdecl VP6_CreateQuantizer() {
  BfmeSubJX *result=(BfmeSubJX*)Rva001B6400Allocation::operator new(0x990,Rva001B6400Allocation::Zero);
  BfmeSubJX *self=result;
  if(!result) return 0;
  memset(result,0,0x990);
- if(!Rva009A6DF0InitializeBuffers(result)) { Rva009A6EC0Release((void**)&self); result=self; }
+ if(!Rva009A6DF0InitializeBuffers(result)) { VP6_DeleteQuantizer((void**)&self); result=self; }
  return result;
 }

@@ -110,9 +110,9 @@ extern "C" void VP6_EncodeBoolOne(Vp6BoolEncoder *coder,int bit,int probability)
 
 // Clean-room spec001bcf70 and complete native5B tail jump to1C4F80.
 // Preserve the genuine existing provider ABI; this introduces no alias.
-struct Rva009B4680State;
-int Rva009B4680Normalize(Rva009B4680State *);
-extern "C" int VP6_bitread1(Rva009B4680State *coder)
+struct Vp6BoolCoder;
+extern "C" int __cdecl VP6_DecodeBool128(Vp6BoolCoder *);
+extern "C" int VP6_bitread1(Vp6BoolCoder *coder)
 {
-    return Rva009B4680Normalize(coder);
+    return VP6_DecodeBool128(coder);
 }

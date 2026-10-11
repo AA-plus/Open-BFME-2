@@ -1,9 +1,9 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
 
-struct Rva009B4680State;
+struct Vp6BoolCoder;
 
 int Rva009B4600DecodeBool(void *state, int probability);
-int Rva009B4680Normalize(Rva009B4680State *state);
+extern "C" int __cdecl VP6_DecodeBool128(Vp6BoolCoder *state);
 extern "C" int __cdecl VP6_bitread(void *, int);
 
 // ?Rva009B6950DecodeScale@@YAHPAE@Z
@@ -15,7 +15,7 @@ int Rva009B6950DecodeScale(unsigned char *ctx)
 	if (!Rva009B4600DecodeBool(state, 0xCD))
 		return 0;
 
-	sign = 1 - (Rva009B4680Normalize((Rva009B4680State *)state) << 1);
+	sign = 1 - (VP6_DecodeBool128((Vp6BoolCoder *)state) << 1);
 
 	if (!Rva009B4600DecodeBool(state, 0xAB))
 		return sign << (3 - Rva009B4600DecodeBool(state, 0x53));

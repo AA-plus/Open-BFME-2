@@ -4,8 +4,8 @@ extern int g_bfmeTableC7E0;
 
 extern void __cdecl Rva009A7950(
 	int *, unsigned short *, int, int, int, int, const int *);
-extern void __cdecl Rva009A7F60(
-	int *, unsigned short *, int, int, int, int, const int *);
+extern "C" void __cdecl FilterBlock2dBil_SecondPass_8(
+	int *, unsigned char *, int, int, int, int, const int *);
 
 // Scalar VP6 8x8 interpolation helper at retail RVA 0x009A79D0 (BFME1) and
 // 0x001B8430 (BFME2). The table global lives at a different address per game
@@ -48,7 +48,7 @@ void __cdecl Rva009A79D0Vp6Filter(
 
 // Byte-identical duplicate at B1 0x009A7FE0 -> B2 0x001B8A40 (address-map
 // resolved, prediction error 0); its trailing call is the sibling worker
-// Rva009A7F60 at the equivalent relative offset (0x80 back, same as
+// FilterBlock2dBil_SecondPass_8 at the equivalent relative offset (0x80 back, same as
 // 0x001B8430 -> 0x001B83B0).
 void __cdecl Rva009A7FE0Vp6Filter(
     const unsigned char *source,
@@ -79,5 +79,5 @@ void __cdecl Rva009A7FE0Vp6Filter(
 	}
 	while (rows != 0);
 
-	Rva009A7F60(&g_bfmeTableC7E0, destination, 8, 8, 8, 8, verticalWeights);
+	FilterBlock2dBil_SecondPass_8(&g_bfmeTableC7E0, (unsigned char *)destination, 8, 8, 8, 8, verticalWeights);
 }

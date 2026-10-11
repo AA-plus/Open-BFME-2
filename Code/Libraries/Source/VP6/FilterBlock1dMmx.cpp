@@ -1,13 +1,16 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d7080.md plus retail only. No decoder
+// source was consulted.
 //
-// MMX two-row Bink pixel filter.  Retail 0x009C6780, 125 bytes.
-// MSVC 7.1 does not form this packed-word loop from scalar C++, so the
-// register-level implementation stays in inline assembly.
+// MMX vertical two-tap filter (retail 0x001D7080): eight outputs per row, weight
+// group 0 times the sample plus weight group 1 times the sample one row below,
+// plus 64, shifted right 7 and packed to bytes with unsigned saturation. The MMX
+// state is left in use for the caller to clear.
 
-extern const unsigned short g_bfmeBinkRoundMmx[8];
+extern const unsigned short g_bfmeBinkRoundMmx[8]; // 0x009B81A0 eight 16-bit 64 (rounding)
 
-// ?rva009C6780BinkMmx@@YAXPBXPAXHHHH0@Z
-void __cdecl rva009C6780BinkMmx(const void *source, void *destination,
+// RVA 0x001D7080
+extern "C" void __cdecl FilterBlock1d_vb8_mmx(const void *source, void *destination,
 	int sourceStride, int unused, int count, int destinationStride,
 	const void *weights)
 {

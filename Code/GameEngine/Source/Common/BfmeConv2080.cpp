@@ -62,7 +62,7 @@ struct PB_INSTANCE;
 extern "C" void __cdecl VP6_InitialiseConfiguration(PB_INSTANCE *pbi);
 struct BfmeHolderBZB;
 
-void Rva009A6EC0Release(void **q);
+extern "C" void __cdecl VP6_DeleteQuantizer(void **q);
 extern "C" void __cdecl DeletePostProcInstance(BfmeHolderBZB *h);
 void bfmeStepJW(void *q);
 void Rva009A8880Release(void *q);

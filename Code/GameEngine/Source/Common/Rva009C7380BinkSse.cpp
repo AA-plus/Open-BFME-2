@@ -5,8 +5,8 @@
 // agrees with the donor's distance dispatch and matched Bink SSE callees.
 // The target's weight table address is 0x00DB84E0 (retail VA).
 
-extern void __cdecl rva009C7060BinkSse(const void *, void *, int, int, int, int, const void *);
-extern void __cdecl rva009C70D0BinkSse(const void *, void *, int, int, int, int, const void *);
+extern "C" void __cdecl FilterBlock1d_hb8_wmt(const void *, void *, int, int, int, int, const void *);
+extern "C" void __cdecl FilterBlock1d_vb8_wmt(const void *, void *, int, int, int, int, const void *);
 extern void __cdecl rva009C7140BinkSse(const void *, void *, int, const void *, const void *);
 
 struct Rva009C7380WeightPair
@@ -17,11 +17,10 @@ struct Rva009C7380WeightPair
 // The 768-byte weight table retail places at VA 0x00DB84E0 (RVA 0x009B84E0):
 // eight 32-byte bilinear banks (one per sub-pixel phase) followed by eight
 // 64-byte bicubic banks at +0x100, which is the layout FilterBlock_wmt
-// indexes through BILINEAR_BANK/BICUBIC_BANK. `extern` makes the object
-// external rather than a TU-local symbol: without it MSVC gives a const
-// namespace-scope array internal linkage and emits _g_00DB84E0, so the
-// FilterBlock_wmt reference to ?g_00DB84E0@@3QBEB is unresolved.
-extern __declspec(align(16)) const unsigned char g_00DB84E0[768] = {
+// indexes through BILINEAR_BANK/BICUBIC_BANK. `extern "C"` gives the const
+// array external linkage under the ledger name _g_00DB84E0, which
+// FilterBlock_wmt also declares extern "C".
+extern "C" __declspec(align(16)) const unsigned char g_00DB84E0[768] = {
 	0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x70, 0x00, 0x70, 0x00, 0x70, 0x00, 0x70, 0x00, 0x70, 0x00, 0x70, 0x00, 0x70, 0x00, 0x70, 0x00,
@@ -88,13 +87,13 @@ void __cdecl rva009C7380BinkSse(const unsigned char *rowA, const unsigned char *
 	}
 	if (distance == 1)
 	{
-		rva009C7060BinkSse(rowA, destination,
+		FilterBlock1d_hb8_wmt(rowA, destination,
 			stride, 1, 8, 8, rva009C7380Weights(horizontalIndex));
 		return;
 	}
 	if (distance == stride)
 	{
-		rva009C70D0BinkSse(rowA, destination,
+		FilterBlock1d_vb8_wmt(rowA, destination,
 			stride, stride, 8, 8, rva009C7380Weights(verticalIndex));
 		return;
 	}

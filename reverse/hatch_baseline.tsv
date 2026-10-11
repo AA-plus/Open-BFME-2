@@ -3162,9 +3162,7 @@ alternatename	Code/GameEngine/Source/Common/Rva0090C280Ctor.cpp	_vtbl_00BD25C8	1
 alternatename	Code/GameEngine/Source/Common/Rva0098477Ctor.cpp	_vtbl_00BC8298	1
 alternatename	Code/GameEngine/Source/Common/Rva009A5800Forward.cpp	?g_bfmeToneReady@@3P6AXXZA	1
 alternatename	Code/GameEngine/Source/Common/Rva009A5AA0InstallFilter.cpp	?d_009a5aa0@@YAXXZ	1
-alternatename	Code/GameEngine/Source/Common/Rva009A6EC0Release.cpp	?releaseCodecBuffer@@YAXPAPAX@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva009A7B00Vp6Filter.cpp	?Rva009A7B00@@YAXXZ	1
-alternatename	Code/GameEngine/Source/Common/Rva009A7F60.cpp	?Rva009A7F60@@YAXPAHPAGHHHHPBH@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva009AB320BuildTables.cpp	_ConvertBoolTrees	1
 alternatename	Code/GameEngine/Source/Common/Rva009ACBA0SetupBounding.cpp	?Rva009ACBA0SetupBounding@@YAPAHPAURva009ACC40State@@H@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva009AF0D0CopyPlane.cpp	?copyPlane009AF0D0@@YAXPAURva009AF320Context@@IHIIPAE1PBI@Z	1
@@ -3176,10 +3174,7 @@ alternatename	Code/GameEngine/Source/Common/Rva009C5080.cpp	?d_009c5080@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009C5360.cpp	?Rva009C5360@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009C5890.cpp	?Rva009C5890@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009C6A30.cpp	?Rva009C6A30@@YAXXZ	1
-alternatename	Code/GameEngine/Source/Common/Rva009C6CB0BinkMmx.cpp	?d_009c6cb0@@YAXXZ	1
-alternatename	Code/GameEngine/Source/Common/Rva009C6D30BinkCopy.cpp	?d_009c6d30@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009C7380BinkSse.cpp	?Rva009C7380@@YAXXZ	1
-alternatename	Code/GameEngine/Source/Common/Rva009C7760BinkSse.cpp	?d_009c7760@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009C77C0.cpp	?Rva009C77C0@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009C84D0Vp6Filter.cpp	?g_rva01356B40@@3P6AXPAX0HH@ZA	1
 alternatename	Code/GameEngine/Source/Common/Rva009F68C6PointerArray.cpp	?bfmeCallDXB@BfmeSubDXB@@QAEXXZ	1

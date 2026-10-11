@@ -1,12 +1,13 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d8060.md plus retail only. No decoder
+// source was consulted.
 //
-// SSE2 sibling of rva009C6CB0BinkMmx: same two-row byte average with a
-// per-column round-bias table, but the whole 8-word lane fits in one xmm
-// register so there is no high/low split.  First parameter is unused.
-// Retail 0x009C7760, 95 bytes.
+// SSE2 twin of MmxReconInterHalfPixel2 (retail 0x001D8060): destination is the
+// truncated average of the two references plus the residual, clamped to 0..255,
+// 8 rows of 8.
 
-// ?rva009C7760BinkSse@@YAXPAX0PBX11H@Z
-void __cdecl rva009C7760BinkSse(void *unusedParam, void *destination,
+// RVA 0x001D8060
+extern "C" void __cdecl WmtReconInterHalfPixel2(void *unusedParam, void *destination,
 	const void *row0, const void *row1, const void *table, int stride)
 {
 	__asm
@@ -41,7 +42,3 @@ void __cdecl rva009C7760BinkSse(void *unusedParam, void *destination,
 		pop esi
 	}
 }
-
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?d_009c7760@@YAXXZ=?rva009C7760BinkSse@@YAXPAX0PBX11H@Z")

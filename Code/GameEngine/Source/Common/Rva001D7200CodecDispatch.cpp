@@ -10,14 +10,14 @@
 
 extern const unsigned short g_rva00DB81B0Weights[9][16];
 void __cdecl rva009C66F0BinkMmx(const void *,void *,int,int,int,int,const void *);
-void __cdecl rva009C6780BinkMmx(const void *,void *,int,int,int,int,const void *);
+extern "C" void __cdecl FilterBlock1d_vb8_mmx(const void *,void *,int,int,int,int,const void *);
 void __cdecl Rva009C6800(const unsigned char *,unsigned char *,int,const void *,const void *);
 void Rva009C6900(const unsigned char *a,const unsigned char *b,unsigned char *destination,int stride,int x,int y)
 {
  int distance=b-a;
  if(distance<0) {const unsigned char *old=a;a=b;distance=old-a;}
  if(distance==1)rva009C66F0BinkMmx(a,destination,stride,1,8,8,g_rva00DB81B0Weights[x]);
- else if(distance==stride)rva009C6780BinkMmx(a,destination,stride,stride,8,8,g_rva00DB81B0Weights[y]);
+ else if(distance==stride)FilterBlock1d_vb8_mmx(a,destination,stride,stride,8,8,g_rva00DB81B0Weights[y]);
  else if(distance==stride-1)Rva009C6800(a-1,destination,stride,g_rva00DB81B0Weights[x],g_rva00DB81B0Weights[y]);
  else if(distance==stride+1)Rva009C6800(a,destination,stride,g_rva00DB81B0Weights[x],g_rva00DB81B0Weights[y]);
 }

@@ -2,15 +2,15 @@
 // Clean room: reverse/vp6_cleanroom/specs/001bcf40.md 001bcf80.md plus retail
 // only. No decoder source was consulted.
 struct BoolCoder;
-struct Rva009B4680State;
-int Rva009B4680Normalize(Rva009B4680State *state); // 0x001C4F80 VP6_DecodeBool128
+struct Vp6BoolCoder;
+extern "C" int __cdecl VP6_DecodeBool128(Vp6BoolCoder *state); // 0x001C4F80
 
 // RVA 0x001BCF40: read equiprobable bools, most significant first.
 extern "C" unsigned int __cdecl VP6_bitread(BoolCoder *coder, int bits)
 {
 	unsigned int r = 0;
 	for (int i = bits - 1; i >= 0; --i)
-		r |= Rva009B4680Normalize((Rva009B4680State *)coder) << i;
+		r |= VP6_DecodeBool128((Vp6BoolCoder *)coder) << i;
 	return r;
 }
 

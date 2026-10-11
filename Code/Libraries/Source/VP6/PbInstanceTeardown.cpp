@@ -16,7 +16,7 @@ struct PB_INSTANCE
 
 class BfmeThingJT;
 void bfmeFreeJT(BfmeThingJT *instance);                // 0x001B5530 VP6_DeleteTmpBuffers
-void Rva009A6EC0Release(void **quantizer);             // 0x001B7930 VP6_DeleteQuantizer
+extern "C" void __cdecl VP6_DeleteQuantizer(void **quantizer); // 0x001B7930
 void bfmeStepJW(void *instance);                       // 0x001B9040 VP6_DeleteFragmentInfo
 void Rva009A8880Release(void *instance);               // 0x001B92D0 VP6_DeleteFrameInfo
 void bfmeFreeOneJT(void *block);                       // 0x001B6410 duck_free
@@ -28,7 +28,7 @@ extern "C" void __cdecl VP6_DeletePBInstance(PB_INSTANCE **instance)
 	if (*instance)
 	{
 		bfmeFreeJT((BfmeThingJT *)*instance);
-		Rva009A6EC0Release(&(*instance)->quantizer);
+		VP6_DeleteQuantizer(&(*instance)->quantizer);
 		DeletePostProcInstance(&(*instance)->postProc);
 	}
 	bfmeFreeOneJT(*instance);

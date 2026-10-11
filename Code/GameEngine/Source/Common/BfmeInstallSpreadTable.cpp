@@ -53,7 +53,7 @@ void * g_bfmeSlotD8C;
 
 // Landed callees, declared with their real signatures so the mangled name
 // matches their existing row.
-extern void __cdecl widen8x8(const unsigned char *, unsigned short *, int);
+extern "C" void __cdecl UnpackBlock_C(const unsigned char *, unsigned short *, int);
 extern "C" void __cdecl AverageBlock_MMX(const void *, const void *, void *, int);
 
 // VP6 block reconstruction helpers recovered from the clean-room specs
@@ -71,10 +71,10 @@ extern "C" void __cdecl WmtReconInter(void *, unsigned char *, const unsigned ch
 // Unconverted gen-dump callees that already carry a functions.csv row (the
 // row is the candidate; no new pin needed).
 extern void __cdecl d_009c5080(void);
-extern void __cdecl d_009c6cb0(void);
-extern void __cdecl d_009c6d30(void);
+extern "C" void __cdecl MmxReconInterHalfPixel2(void *, void *, const void *, const void *, const void *, int);
+extern "C" void __cdecl CopyBlockMMX(const void *, void *, int);
 extern void __cdecl d_009c74f0(void);
-extern void __cdecl d_009c7760(void);
+extern "C" void __cdecl WmtReconInterHalfPixel2(void *, void *, const void *, const void *, const void *, int);
 extern void __cdecl rva009C7CC0(const void *, const void *, void *);
 
 // Slot fillers with neither a real identity nor a ghidra-boundary row yet;
@@ -141,13 +141,13 @@ void __cdecl bfmeInstallSpreadTable(void)
 
 		g_bfmeSlotD8C = (void *)&WmtReconIntra;
 		g_bfmeSlotD84 = (void *)&WmtReconInter;
-		g_bfmeSlotB58 = (void *)&d_009c7760;
+		g_bfmeSlotB58 = (void *)&WmtReconInterHalfPixel2;
 		g_bfmeSlotB48 = (void *)&Rva009C6D20;
 		g_bfmeSlotB4C = (void *)&AverageBlock_MMX;
 		g_bfmeSlotB50 = (void *)&UnpackBlock_MMX;
 		g_bfmeSlotD88 = (void *)&ReconBlock_MMX;
 		g_bfmeSlotB5C = (void *)&SubtractBlock_MMX;
-		g_bfmeSlotB44 = (void *)&d_009c6d30;
+		g_bfmeSlotB44 = (void *)&CopyBlockMMX;
 		g_bfmeSlotABC = (void *)&Rva009C7380;
 		g_bfmeSlotB54 = (void *)&d_009c74f0;
 		g_bfmeSlotB40 = (void *)&Copy12x12_MMX;
@@ -183,13 +183,13 @@ void __cdecl bfmeInstallSpreadTable(void)
 
 		g_bfmeSlotD8C = (void *)&MMXReconIntra;
 		g_bfmeSlotD84 = (void *)&MmxReconInter;
-		g_bfmeSlotB58 = (void *)&d_009c6cb0;
+		g_bfmeSlotB58 = (void *)&MmxReconInterHalfPixel2;
 		g_bfmeSlotB48 = (void *)&Rva009C6D20;
 		g_bfmeSlotB4C = (void *)&AverageBlock_MMX;
 		g_bfmeSlotB50 = (void *)&UnpackBlock_MMX;
 		g_bfmeSlotD88 = (void *)&ReconBlock_MMX;
 		g_bfmeSlotB5C = (void *)&SubtractBlock_MMX;
-		g_bfmeSlotB44 = (void *)&d_009c6d30;
+		g_bfmeSlotB44 = (void *)&CopyBlockMMX;
 		g_bfmeSlotABC = (void *)&Rva009C6900;
 		g_bfmeSlotB54 = (void *)&Rva009C6A30;
 		g_bfmeSlotB40 = (void *)&Copy12x12_MMX;
@@ -229,7 +229,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 		g_bfmeSlotD84 = (void *)&Rva009C4E90;
 		g_bfmeSlotB58 = (void *)&d_009c5080;
 		g_bfmeSlotB4C = (void *)&Rva009A7040;
-		g_bfmeSlotB50 = (void *)&widen8x8;
+		g_bfmeSlotB50 = (void *)&UnpackBlock_C;
 		g_bfmeSlotD88 = (void *)&Rva009C5360;
 		g_bfmeSlotB5C = (void *)&Rva009A7300;
 		g_bfmeSlotB44 = (void *)&Rva009A74D0;

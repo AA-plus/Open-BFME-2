@@ -1,12 +1,14 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d8ac0.md plus retail only. No
+// decoder source was consulted.
 //
-// Address-derived nonvirtual leaf at retail 0x009C81C0.  The object carries a
-// 0x40-entry coefficient area ending at +0x4938 and a fill/count word at
-// +0x4538.  The initializer writes the descending coefficient ramp, then
-// fills the remaining lower table entries with one.
+// Dering threshold table initialiser (retail 0x001D8AC0). Sets the cut-off
+// field (+0x4538) to 64 and fills the 256-entry table at +0x453C from the top
+// downwards: a linear ramp (6 * cutoff - 5 * written) / cutoff for the first
+// cut-off entries, then one for the rest down to index 1. Index 0 is not written.
 
-// ?rva009C81C0TableInit@@YAXPAX@Z
-void __cdecl rva009C81C0TableInit(void *context)
+// RVA 0x001D8AC0
+extern "C" void __cdecl InitLoopDeringThresholds(void *context)
 {
 	unsigned char *base = (unsigned char *)context;
 	unsigned int index = 0;

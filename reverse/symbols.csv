@@ -6431,9 +6431,7 @@ name,address,notes
 ?Rva00990030Lookup@@YAIPAUlua_State@@H@Z,0x00747190,address read from the REL32 displacement at a placed body
 ?Rva009A4E50Configure@@YAXPAXIH@Z,0x001B5910,BFME1-donor declaration Rva009A4E50Configure(void* unsigned int) in BfmeCheckJX.cpp; its call site at body+0x015 pushes count/1/state and the retail displacement lands here; address is the retail call target
 ?Rva009A6DA0ReleaseBuffers@@YAXPAURva009A6DA0Buffer@@@Z,0x001B7810,called 5x from InitializeBuffers at 0x1B7860 in the same TU; ghidra FUN_005b7810 67B
-?Rva009A6EC0Release@@YAXPAPAX@Z,0x001B7930
 ?Rva009A7950@@YAXPAHPAGHHHHPBH@Z,0x001B83B0
-?Rva009A7F60@@YAXPAHPAGHHHHPBH@Z,0x001B89C0
 ?Rva009A86F0Allocate@@YAHPAX@Z,0x001B9140,BFME1-donor declaration Rva009A86F0Allocate(void*) in BfmeCheckJX.cpp; its call site at body+0x1D6 pushes the state pointer only; address is the retail call target
 ?Rva009ACBA0SetupBounding@@YAPAHPAURva009ACC40State@@H@Z,0x001BD590
 ?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z,0x001BE490
@@ -10537,7 +10535,6 @@ name,address,notes
 ?releaseBuffer@BfmeTailCD@@QAEXXZ,0x00036410,retail 6BF6F0 verified call graph; alias to existing native copy/fill/string body; dispatch tag unused
 ?releaseBuffer@UnicodeString@@IAEXXZ,0x00036E70,aliases the matched ?releaseBuffer@UnicodeString@@QAEXXZ body at 0x36E70; both are zero-argument thiscall release operations and the TU-private spelling is emitted by the static-text donor
 ?releaseBuffer@UnicodeString@@QAEXXZ,0x00036E70,Dict TU spelling of rowed StringBase wide releaseBuffer; same body
-?releaseCodecBuffer@@YAXPAPAX@Z,0x001B7930
 ?releaseCodecMembers@@YAXPAUCodecState@@@Z,0x001B5530
 ?releaseDependentResources@BfmeShaderShutdown@@SAXXZ,0x00076790,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?releaseNative@Rva004DD206TreeView@@QAEXXZ,0x004636FE,Native ctor EH943814 unwind7916E1 destroys first tree at+14 through thunk4638EC then this full56B rowed destructor; observed three-word tree ABI; original names stay unknown; narrow provider repair removes obsolete wrong keeper

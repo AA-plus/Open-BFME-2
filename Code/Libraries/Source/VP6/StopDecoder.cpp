@@ -13,7 +13,7 @@ struct PB_INSTANCE
 	void *postProc;               // 0x298
 };
 
-void Rva009A6EC0Release(void **quantizer);             // 0x001B7930 VP6_DeleteQuantizer
+extern "C" void __cdecl VP6_DeleteQuantizer(void **quantizer); // 0x001B7930
 void bfmeStepJW(void *instance);                       // 0x001B9040 VP6_DeleteFragmentInfo
 void Rva009A8880Release(void *instance);               // 0x001B92D0 VP6_DeleteFrameInfo
 extern "C" void __cdecl DeletePostProcInstance(void **postProc); // 0x001B68D0
@@ -24,7 +24,7 @@ extern "C" int __cdecl VP6_StopDecoder(PB_INSTANCE **instance)
 {
 	if (*instance)
 	{
-		Rva009A6EC0Release(&(*instance)->quantizer);
+		VP6_DeleteQuantizer(&(*instance)->quantizer);
 		DeletePostProcInstance(&(*instance)->postProc);
 		bfmeStepJW(*instance);
 		Rva009A8880Release(*instance);

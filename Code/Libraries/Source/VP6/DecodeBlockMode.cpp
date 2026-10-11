@@ -6,15 +6,15 @@
 // the high bit, select inter (0), inter with vector (2), nearest (3) or
 // near (4).
 
-struct Rva009B4680State;
-int __cdecl Rva009B4680Normalize(Rva009B4680State *coder); // 0x001C4F80 VP6_DecodeBool128
+struct Vp6BoolCoder;
+extern "C" int __cdecl VP6_DecodeBool128(Vp6BoolCoder *coder); // 0x001C4F80
 
 // RVA 0x001C5990
 extern "C" int __cdecl VP6_DecodeBlockMode(unsigned char *pbi)
 {
-	Rva009B4680State *coder = (Rva009B4680State *)(pbi + 0x150);
-	int value = Rva009B4680Normalize(coder) * 2;
-	value += Rva009B4680Normalize(coder);
+	Vp6BoolCoder *coder = (Vp6BoolCoder *)(pbi + 0x150);
+	int value = VP6_DecodeBool128(coder) * 2;
+	value += VP6_DecodeBool128(coder);
 
 	switch (value) {
 	case 0:

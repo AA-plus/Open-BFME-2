@@ -1,6 +1,13 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001c4f80.md plus retail only. No
+// decoder source was consulted.
+//
+// Equiprobable bool-coder symbol decode (retail 0x001C4F80, stack-argument
+// form): the boundary is half of (range + 1), the window and range are reduced
+// when the symbol is 1, both are doubled exactly once, and one bit is consumed
+// from the refill count with a byte refill from the buffer when it expires.
 
-struct Rva009B4680State
+struct Vp6BoolCoder
 {
 	unsigned char m_pad0[4];
 	unsigned m_range;
@@ -10,7 +17,8 @@ struct Rva009B4680State
 	const unsigned char *m_inputBase;
 };
 
-int Rva009B4680Normalize(Rva009B4680State *state)
+// RVA 0x001C4F80
+extern "C" int __cdecl VP6_DecodeBool128(Vp6BoolCoder *state)
 {
 	unsigned range = state->m_range;
 	unsigned code = state->m_code;

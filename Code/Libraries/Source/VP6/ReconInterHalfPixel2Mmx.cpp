@@ -1,14 +1,13 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d75b0.md plus retail only. No decoder
+// source was consulted.
 //
-// Two-row byte average with a per-column round-bias table: blends row0
-// and row1 (>>1 after adding), adds the caller's 8-entry qword-pair
-// rounding table, packs to bytes and stores one output row, advancing the
-// table pointer by 16 and the three row pointers by stride each of eight
-// iterations (0x80/0x10).  First parameter is unused.  Retail 0x009C6CB0,
-// 110 bytes.
+// Half-pixel inter reconstruction (retail 0x001D75B0), 8 rows of 8: truncated
+// average of two references plus the 16-bit residual row (wrapping), packed with
+// unsigned saturation. The MMX state is left in use for the caller to clear.
 
-// ?rva009C6CB0BinkMmx@@YAXPAX0PBX11H@Z
-void __cdecl rva009C6CB0BinkMmx(void *unusedParam, void *destination,
+// RVA 0x001D75B0
+extern "C" void __cdecl MmxReconInterHalfPixel2(void *unusedParam, void *destination,
 	const void *row0, const void *row1, const void *table, int stride)
 {
 	__asm
@@ -51,7 +50,3 @@ void __cdecl rva009C6CB0BinkMmx(void *unusedParam, void *destination,
 		pop esi
 	}
 }
-
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?d_009c6cb0@@YAXXZ=?rva009C6CB0BinkMmx@@YAXPAX0PBX11H@Z")

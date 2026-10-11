@@ -3,7 +3,7 @@
 // Four-tap vertical fixed-point Bink pixel filter: blends source rows at
 // -stride, 0, +stride and +stride*2 through the caller's four-entry
 // coefficient table, rounds through the shared g_bfmeBinkRound table and
-// packs the result through an MMX register like rva009C70D0BinkSse.
+// packs the result through an MMX register like FilterBlock1d_vb8_wmt.
 // Retail 0x009C6FC0, 146 bytes.
 
 extern const unsigned short g_bfmeBinkRound[8];
