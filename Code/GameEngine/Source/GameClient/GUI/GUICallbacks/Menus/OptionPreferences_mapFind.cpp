@@ -64,6 +64,12 @@ class ScriptEngine
 
 public:
 	GameDifficulty getGlobalDifficulty() const { return m_gameDifficulty; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getGlobalDifficulty copy loses to the first-in-order
+	// copy (no retail address); the call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	GameDifficulty bfme_global_difficulty() const { return m_gameDifficulty; }
 };
 
 extern ScriptEngine *TheScriptEngine;
@@ -82,7 +88,7 @@ Int OptionPreferences::getCampaignDifficulty(void)
 {
 	OptionPreferences::const_iterator it = find("CampaignDifficulty");
 	if (it == end())
-		return TheScriptEngine->getGlobalDifficulty();
+		return TheScriptEngine->bfme_global_difficulty();
 
 	Int factor = atoi(it->second.str());
 	if (factor < DIFFICULTY_EASY)

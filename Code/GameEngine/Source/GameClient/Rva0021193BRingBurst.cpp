@@ -48,6 +48,11 @@ public:
 	Real &operator[](int i) { return (&X)[i]; }
 	const Real &operator[](int i) const { return (&X)[i]; }
 	Vector2 &operator*=(Real k) { X *= k; Y *= k; return *this; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's operator*= copy is not retail's; the call below
+	// inlines it but still emits the loser COMDAT. Rebinding there emits only
+	// this unique (trivially kept) copy. No flags touched.
+	Vector2 &bfme_scale(Real k) { X *= k; Y *= k; return *this; }
 	Real Length2() const { return X * X + Y * Y; }
 	__forceinline void Normalize()
 	{
@@ -196,7 +201,7 @@ void Rva0021193B::rva0021193B(ICoord2D pos)
 					dir[0] = WWMath::Random_Float(-1.0f, 1.0f);
 					dir[1] = WWMath::Random_Float(-1.0f, 1.0f);
 					dir.Normalize();
-					dir *= (Real)radius;
+					dir.bfme_scale((Real)radius);
 					screen.x += (Int)dir[0];
 					screen.y += (Int)dir[1];
 					startFrame = (Int)(WWMath::Random_Float(0.8f, 1.0f) * delay);

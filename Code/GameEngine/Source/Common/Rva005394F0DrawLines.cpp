@@ -36,8 +36,17 @@ __forceinline float fast_float_floor(float f)
 {
 	return (float)floor((double)f);
 }
+// LINK: same-body helper under a TU-unique file-static name (identical
+// inlined bytes: cvtss2sd + E8 floor + narrow). This TU's fast_float_floor
+// copy loses to the first-in-order copy (no retail address); the four macro
+// uses below inline it but still emit the loser COMDAT. Rebinding the macro
+// emits only this unique (trivially kept) copy. No flags touched.
+static __forceinline float bfme_fast_floor(float f)
+{
+	return (float)floor((double)f);
+}
 
-#define REAL_TO_INT_FLOOR(x) (fast_float2long_round(fast_float_floor(x)))
+#define REAL_TO_INT_FLOOR(x) (fast_float2long_round(bfme_fast_floor(x)))
 
 class Rva005394F0Text
 {
