@@ -231,6 +231,10 @@ public:
 	RefCountPtr<TextureClass> m_texture;	// +4
 };
 
+// Reuse the verified nullable placement-copy provider at 170A97.
+// Its 18B body calls the existing 1709BA binding copy constructor.
+namespace _STL { template<> void _Construct<Rva00151DAB,Rva00151DAB>(Rva00151DAB *,const Rva00151DAB &); }
+
 class FXShaderAsset
 {
 public:
