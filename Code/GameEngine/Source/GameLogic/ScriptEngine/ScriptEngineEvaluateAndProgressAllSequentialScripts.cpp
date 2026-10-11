@@ -39,14 +39,27 @@ class Parameter;
 class ScriptAction;
 class SequentialScript;
 
+// LINK: appendSequentialScript takes the rowed Rva0020479E record view (0x00207557); 0x00203693 / 0x003B2832 are rowed as
+// Rva00203693Host::rva00203693 and Rva003B2832::rva003B2832 (same this-call int-returning ABI), called through views of the same objects.
+class Rva0020479E;
+class Rva00203693Host
+{
+public:
+	int rva00203693();
+};
+class Rva003B2832
+{
+public:
+	int rva003B2832();
+};
+
 // Declared ahead of the other classes: declared last, cl 13.10 evaluates the
 // mode-mask test's engine operand before the action's, retail's reverse.
 class ScriptEngine
 {
 public:
 	void AppendDebugMessage(const AsciiString &strToAdd, Bool forcePause);
-	int rva00203693();	// 0x00203693, current mode mask
-	void appendSequentialScript(const SequentialScript *scriptToSequence);
+	void appendSequentialScript(const Rva0020479E *scriptToSequence);
 	void evaluateAndProgressAllSequentialScripts();
 
 protected:
@@ -100,10 +113,16 @@ public:
 			return m_parms[ndx];
 		return 0;
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getParameter copy loses to the first-in-order copy. No flags touched.
+	Parameter *bfme_getParameter_c38e6(Int ndx) const
+	{
+		if (ndx >= 0 && ndx < m_numParms)
+			return m_parms[ndx];
+		return 0;
+	}
 	ScriptAction *getNext() const { return m_nextAction; }
 	void setNextAction(ScriptAction *pAct) { m_nextAction = pAct; }
 	AsciiString getUiText();
-	int rva003B2832();	// 0x003B2832, action template's mode mask
 
 private:
 	char m_unknown0[4];
@@ -117,6 +136,8 @@ class Script
 {
 public:
 	ScriptAction *getAction() const { return m_action; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getAction copy loses to the first-in-order copy. No flags touched.
+	ScriptAction *bfme_getAction_6f132() const { return m_action; }
 
 private:
 	char m_unknown0[0x34];
@@ -167,7 +188,11 @@ class Object
 public:
 	Player *getControllingPlayer() const;
 	AIUpdateInterface *getAIUpdateInterface() { return m_ai; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getAIUpdateInterface copy loses to the first-in-order copy. No flags touched.
+	AIUpdateInterface *bfme_getAIUpdateInterface_d1cbb() { return m_ai; }
 	const AsciiString &getName() const { return m_name; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the Object::getName copy loses to the first-in-order copy. No flags touched.
+	const AsciiString &bfme_getName_b94f2() const { return m_name; }
 	Bool isEffectivelyDead() const { return (m_privateStatus & 1) != 0; }
 
 private:
@@ -308,7 +333,7 @@ void ScriptEngine::evaluateAndProgressAllSequentialScripts()
 			m_currentPlayer = team->getControllingPlayer();
 		}
 
-		AIUpdateInterface *ai = obj ? obj->getAIUpdateInterface() : 0;
+		AIUpdateInterface *ai = obj ? obj->bfme_getAIUpdateInterface_d1cbb() : 0;
 		AIGroup *aigroup = (team ? TheAI->createGroup() : 0);
 		if (aigroup) {
 			team->getTeamAsAIGroup(aigroup);
@@ -350,12 +375,12 @@ void ScriptEngine::evaluateAndProgressAllSequentialScripts()
 				msg.concat("' on ");
 				AsciiString name;
 				if (team) name = team->getName();
-				if (obj) name = obj->getName();
+				if (obj) name = obj->bfme_getName_b94f2();
 				msg.concat(name);
 				msg.concat(" -- ");
 
 				int instruction = seqScript->m_currentInstruction;
-				ScriptAction *action = seqScript->m_scriptToExecuteSequentially->getAction();
+				ScriptAction *action = seqScript->m_scriptToExecuteSequentially->bfme_getAction_6f132();
 				while (action && instruction) {
 					--instruction;
 					action = action->getNext();
@@ -369,26 +394,26 @@ void ScriptEngine::evaluateAndProgressAllSequentialScripts()
 
 					ScriptAction *nextAction = action->getNext();
 					action->setNextAction(0);
-					if ((action->rva003B2832() & rva00203693()) == 0) {
+					if ((((Rva003B2832 *)action)->rva003B2832() & ((Rva00203693Host *)this)->rva00203693()) == 0) {
 						// WB reports the action as unusable in this mode (debug only).
 					} else if (action->getActionType() == 0x107) {
-						if (!TheScriptConditions->evaluateSkirmishCommandButtonIsReady(0, action->getParameter(1), action->getParameter(2), true)) {
+						if (!TheScriptConditions->evaluateSkirmishCommandButtonIsReady(0, action->bfme_getParameter_c38e6(1), action->bfme_getParameter_c38e6(2), true)) {
 							seqScript->m_dontAdvanceInstruction = true;
 						}
 					} else if (action->getActionType() == 0x108) {
-						if (!TheScriptConditions->evaluateSkirmishCommandButtonIsReady(0, action->getParameter(1), action->getParameter(2), false)) {
+						if (!TheScriptConditions->evaluateSkirmishCommandButtonIsReady(0, action->bfme_getParameter_c38e6(1), action->bfme_getParameter_c38e6(2), false)) {
 							seqScript->m_dontAdvanceInstruction = true;
 						}
 					} else if (action->getActionType() == 0x11B) {
-						if (TheScriptConditions->evaluateTeamIsContained(action->getParameter(0), true)) {
+						if (TheScriptConditions->evaluateTeamIsContained(action->bfme_getParameter_c38e6(0), true)) {
 							seqScript->m_dontAdvanceInstruction = true;
 						}
 					} else if (action->getActionType() == 0x11C) {
-						if (TheScriptConditions->evaluateTeamIsContained(action->getParameter(0), false)) {
+						if (TheScriptConditions->evaluateTeamIsContained(action->bfme_getParameter_c38e6(0), false)) {
 							seqScript->m_dontAdvanceInstruction = true;
 						}
 					} else if (action->getActionType() == 0x1F1) {
-						if (!TheScriptConditions->slot17(action->getParameter(0))) {
+						if (!TheScriptConditions->slot17(action->bfme_getParameter_c38e6(0))) {
 							seqScript->m_dontAdvanceInstruction = true;
 						}
 					} else {
@@ -445,7 +470,7 @@ void ScriptEngine::evaluateAndProgressAllSequentialScripts()
 						seqScript->m_framesToWait = -1;
 						Int ndx = it - m_sequentialScripts.begin();
 						--m_bfme1C;
-						appendSequentialScript(seqScript);
+						appendSequentialScript((const Rva0020479E *)seqScript);
 						lastIt = m_sequentialScripts.end();
 						++m_bfme1C;
 						it = m_sequentialScripts.begin() + ndx;
