@@ -1,4 +1,6 @@
 // ?rva006CDE50@Rva00893030Manager@@QAEXPAVRva004A9DF3Element@@H@Z
+// partial score=0.9731800766 date=2026-10-12
+// ?rva006CDE50@Rva00893030Manager@@QAEXPAVRva004A9DF3Element@@H@Z
 // partial score=0.9602 date=2026-10-11
 // ?rva006CDE50@Rva00893030Manager@@QAEXPAVRva004A9DF3Element@@H@Z
 // partial score=0.931951286261631 date=2026-10-10
@@ -34,7 +36,7 @@ struct Rva006CDE50Cursor {
 };
 struct Rva006CDE50Node {unsigned *value;Rva006CDE50Node *next;};
 class Rva00893030Manager {Rva006CDE50Node *head;public:void rva006CDE50(Rva004A9DF3Element *,int);};
-void Rva00893030Manager::rva006CDE50(Rva004A9DF3Element *output,int nMaxSize){
+void Rva00893030Manager::rva006CDE50(Rva004A9DF3Element *output,volatile int nMaxSize){
  volatile int j=0;
  Rva006CDE50Node *node=head;
  if(!node)return;
