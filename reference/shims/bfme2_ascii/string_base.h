@@ -28,7 +28,12 @@ class StringBase {
 
 public:
     void debugIgnoreLeaks();
-    bool isEmpty() const;
+    // Retail compiles calls to this body (0x00001E2F, wide 0x00035740) as
+    // non-throwing, like getCharAt below: the emotion step 0x004DCEC4 keeps
+    // a getter temporary live across the call with no EH state of its own
+    // (only its zeroed destroy flag is left), and HotKeyManager::searchHotKey
+    // 0x00358B9E is 194 bytes only with this declaration (195 without).
+    bool isEmpty() const throw();
     bool isNotEmpty() const;
     bool isNone() const;
     bool isNotNone() const;
