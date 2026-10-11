@@ -30,6 +30,7 @@ void allocator<int>::deallocate(int* __p, size_t __n) const {
   _STLP_ASSERT( (__p == 0) == (__n == 0) )
     if (__p != 0) __sgi_alloc::deallocate((void*)__p, __n * sizeof(value_type));
 }
+template <> void _STLP_alloc_proxy<int*, int, allocator<int> >::deallocate(int*, size_t);
 }
 
 class SpecialAbilityUpdateModuleData
