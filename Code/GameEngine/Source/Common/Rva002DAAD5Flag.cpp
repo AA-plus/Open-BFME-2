@@ -5,11 +5,17 @@
 // sets the +0x50 byte, calls the pinned siblings at 0x002DA8AF and
 // 0x002D9ADC on this, then restores +0x74. Honest address-derived names.
 
+// LINK: 0x2DA8AF / 0x2D9ADC are rowed as AudioEventRTS::generatePlayInfo / AudioEventRTS::rva002D9ADC.
+class AudioEventRTS
+{
+public:
+	void generatePlayInfo();
+	void rva002D9ADC();
+};
+
 class Rva002DAAD5Owner
 {
 public:
-	void rva002DA8AF();
-	void rva002D9ADC();
 	void rva002DAAD5();
 private:
 	char m_pad00[0x50]; // +0x00..+0x50 unclaimed
@@ -23,7 +29,7 @@ void Rva002DAAD5Owner::rva002DAAD5()
 {
 	void *tmp = m_p74;
 	m_b50 = 1;
-	rva002DA8AF();
-	rva002D9ADC();
+	((AudioEventRTS *)this)->generatePlayInfo();
+	((AudioEventRTS *)this)->rva002D9ADC();
 	m_p74 = tmp;
 }

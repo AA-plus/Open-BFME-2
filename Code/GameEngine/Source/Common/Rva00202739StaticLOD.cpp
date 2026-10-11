@@ -16,14 +16,21 @@
 // field offset, call target and call-before-store order come from BFME2.
 // Level names are donor semantics only: no native GameLODManager spelling is
 // asserted for this receiver.
+// LINK: 0x002022E9 is rowed as Rva00DFE144Globals::rva002022E9 (called on the same receiver).
+class Rva00DFE144Globals
+{
+public:
+	void rva002022E9(int level);
+};
+
 class Rva00202739
 {
 public:
 	bool rva00202739(int level);
 	// Native apply body 0x002022E9 (Ghidra extent 707B) takes ECX as receiver and
-	// one stack int. Declared only: with the definition visible in this unit
-	// keep the call opaque, consistent with retail saving esi/edi.
-	void rva002022E9(int level);
+	// one stack int. Declared only (on Rva00DFE144Globals above): with the
+	// definition visible in this unit keep the call opaque, consistent with
+	// retail saving esi/edi.
 	char m_pad[0x1768];
 	int m_1768;
 };
@@ -32,7 +39,7 @@ bool Rva00202739::rva00202739(int level)
 {
 	if (level != -1) {
 		if (level == 5 || m_1768 != level) {
-			this->rva002022E9(level);
+			((Rva00DFE144Globals *)this)->rva002022E9(level);
 			m_1768 = level;
 			return true;
 		}
