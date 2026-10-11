@@ -15,8 +15,16 @@
 #include "vector3.h"
 class Rva0013101E{public:unsigned flags,color;};
 class VertexMaterialClass{public:void Make_Unique();void Set_Ambient(const Vector3&);void Set_Diffuse(const Vector3&);__forceinline void Set_Ambient(float r,float g,float b){Set_Ambient(Vector3(r,g,b));}__forceinline void Set_Diffuse(float r,float g,float b){Set_Diffuse(Vector3(r,g,b));}};
-class MeshModelClass{public:virtual void Delete_This();int refs;void Add_Ref(){++refs;}void Release_Ref(){--refs;if(refs==0)Delete_This();}};
-class MaterialInfoClass{public:virtual void Delete_This();int refs;char gap08[4];VertexMaterialClass **materials;char gap10[8];int count;VertexMaterialClass *Peek_Vertex_Material(int i){return i<count?materials[i]:0;}void Release_Ref(){--refs;if(refs==0)Delete_This();}};
+class MeshModelClass{public:virtual void Delete_This();int refs;void Add_Ref(){++refs;}void Release_Ref(){--refs;if(refs==0)Delete_This();}
+ // LINK: same-body helper under a TU-unique name (identical inlined bytes;
+ // ADD-flags branch shape is load-bearing, so no manual respell). This TU's
+ // copy loses (first-copy); the call below inlines it but still emits the
+ // loser COMDAT. Rebinding there emits only this unique (trivially kept)
+ // copy. No flags touched.
+ void bfme_release(){--refs;if(refs==0)Delete_This();}};
+class MaterialInfoClass{public:virtual void Delete_This();int refs;char gap08[4];VertexMaterialClass **materials;char gap10[8];int count;VertexMaterialClass *Peek_Vertex_Material(int i){return i<count?materials[i]:0;}void Release_Ref(){--refs;if(refs==0)Delete_This();}
+ // LINK: same reason as above, for both Peek_Vertex_Material and Release_Ref.
+ VertexMaterialClass *bfme_peek(int i){return i<count?materials[i]:0;}void bfme_release(){--refs;if(refs==0)Delete_This();}};
 class MeshClass{public:
 virtual void slot0();
 virtual void slot1();
@@ -156,7 +164,7 @@ void MeshClass::Recolor_Prototype(const Rva0013101E &options)
  const char *part=strchr(name,'.');if(!(part&&*part++))part=name;
  if(_strnicmp(part,"HOUSECOLOR",10)==0){
   for(int i=0;i<materials->count;++i){
-   VertexMaterialClass *material=materials->Peek_Vertex_Material(i);material->Make_Unique();
+   VertexMaterialClass *material=materials->bfme_peek(i);material->Make_Unique();
    Vector3 rgb,rgb2;
    rgb.X=(float)*reinterpret_cast<const unsigned short*>(reinterpret_cast<const char*>(&options)+6)*(1.0f/255.0f);
    rgb.Y=(float)(options.color>>8)*(1.0f/255.0f);
@@ -168,5 +176,5 @@ void MeshClass::Recolor_Prototype(const Rva0013101E &options)
   }
  }
  RecolorHouseColor(options,0);
- if(materials)materials->Release_Ref();if(mesh)mesh->Release_Ref();
+ if(materials)materials->bfme_release();if(mesh)mesh->bfme_release();
 }
