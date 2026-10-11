@@ -29,18 +29,3 @@ Rva00204ABF Rva002056A6Make(const _STL::pair<AsciiString, AsciiString> &p, const
 {
     return Rva00204ABF(p, v);
 }
-
-// ?Rva002056C1Make@@YA?AURva003004C1@@ABVAsciiString@@ABE@Z @0x002056C1 27B
-// Hidden-dest forwarder over rowed Rva003004C1 AsciiString-plus-byte ctor 0x003004C1.
-// Same 27B shape as sibling 0x002056A6 above; unblocks 0x00209811.
-struct Rva003004C1
-{
-	AsciiString m_key;
-	unsigned char m_flag;
-	Rva003004C1(const AsciiString &key, const unsigned char &flag);
-};
-Rva003004C1 Rva002056C1Make(const AsciiString &key, const unsigned char &flag);
-Rva003004C1 Rva002056C1Make(const AsciiString &key, const unsigned char &flag)
-{
-	return Rva003004C1(key, flag);
-}

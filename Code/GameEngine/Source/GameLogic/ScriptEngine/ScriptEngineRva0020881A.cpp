@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /EHs /D_BFME_RETAIL_TREE_INSERT_LAYOUT /arch:SSE /G7
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /EHs /D_BFME_RETAIL_TREE_INSERT_LAYOUT /D_STLP_NO_EXCEPTIONS /arch:SSE /G7
 // stlport
 // Native ScriptEngine lookup family: counters, flags, integers and strings.
 // Retail 208CF0/208E99 use maps +190DC/+190E8 and defaults -1/0.
@@ -84,12 +84,17 @@ ScriptDefaultIntTree::_Link_type ScriptDefaultIntTree::_M_create_node(const Scri
  return node;
 }
 
+// Retail byte-tree node allocation has no allocator cleanup catch path.
+// Its existing complete 34-byte node body supports _STLP_NO_EXCEPTIONS here.
+typedef _STL::map<AsciiString,unsigned char> ScriptByteMap;
+
 class ScriptEngine {
 public:
  void *rva0020881A(AsciiString name);
  void *rva00208DB8(AsciiString name);
  void *rva00208CF0(AsciiString name);
  void *rva00208E99(AsciiString name);
+ void rva00209811(const AsciiString &key,unsigned char flag);
 protected:
  ScriptCounter *bfmeCounter(AsciiString name);
  bool *bfmeFlagForWrite(AsciiString name);
@@ -97,7 +102,8 @@ private:
  char m_unreconstructed[0x190A0];
  _STL::map<ScriptKey,ScriptCounter> m_counters;
  _STL::map<ScriptKey,bool> m_flags;
- char m_beforeDefaults[0x190DC - 0x190B8];
+ char m_beforeByteMap[0x190D0 - 0x190B8];
+ ScriptByteMap m_byteFlags;
  ScriptDefaultIntMap m_defaults;
  ScriptDefaultIntMap m_otherDefaults;
  ScriptStringMap m_strings;
@@ -150,4 +156,16 @@ void *ScriptEngine::rva00208E99(AsciiString name) {
  ScriptKey key(resolved,name);
  _STL::pair<ScriptDefaultIntMap::iterator,bool> result=m_otherDefaults.insert(_STL::make_pair(key,0));
  return &result.first->second;
+}
+
+// Native209811/132: update or insert the byte at node+0x14 in the tree at
+// receiver+0x190D0. Its original method name and mapped typedef remain unknown.
+// unsigned char expresses the raw one-byte transfer proved by the retail body.
+void ScriptEngine::rva00209811(const AsciiString &key,unsigned char flag) {
+ ScriptByteMap::iterator found=m_byteFlags.find(key);
+ if (found!=m_byteFlags.end()) {
+  found->second=flag;
+  return;
+ }
+ m_byteFlags.insert(_STL::make_pair(key,flag));
 }
