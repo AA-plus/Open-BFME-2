@@ -7,37 +7,178 @@
 // ahead of the argument push where a direct set call does not).
 // Class and member names are address-derived. Probe 0xB82F9 is verified;
 // sibling 0xB83A7 follows the record110 string through the same counted probe.
+// The adjacent transition BF9FC and condition replacement BFB76 share this
+// existing owner view and compiler settings; their target method names remain
+// unresolved. No original identity is inferred from a matching instruction shape.
 
 #include "ascii_string.h"
+#include <string.h>
 template<> bool StringBase<char>::isEmpty() const;
 
 class Rva000B4BED
 {
 public:
+	void *rva000B4BED(const void *entry);
 	void *rva000B4C9D(const void *entry);
 	void *rva000B4CBE(const void *entry);
 };
 
 class Matrix3D;struct Coord3D;class Object;
-class Drawable {public:const Matrix3D*getTransformMatrix()const;const Coord3D*getPosition()const;char pad00[0xFC];Object*object;char pad100[0x14];unsigned char flags114;};
+class ModelConditionFlags;
+class Drawable {public:void rva002761F3(const int*,const int*);
+ const Matrix3D*getTransformMatrix()const;
+ const Coord3D*getPosition()const;
+ char pad00[0xFC];Object*object;
+ char pad100[0x14];
+ unsigned char flags114;};
 class FXList {public:static void doFXObj(const FXList*,const Object*,const Object*);static void doFXPos(const FXList*,const Coord3D*,const Matrix3D*,float,const Coord3D*);};
 struct AnimationStateBF9FC {char pad00[0x68];const FXList*fx68;char pad6C[0x9C-0x6C];bool repeat9C;};
-class Rva000BF9FCHeader {public:virtual void slot0();void*data;Drawable*drawable;};
+class ModelConditionFlags {public:bool rva000B3EB3()const;bool test(unsigned bit)const{return ((bits[bit>>5]>>(bit&31))&1)!=0;}unsigned bits[19];};
+class WeaponTemplateSetHead {public:WeaponTemplateSetHead(const WeaponTemplateSetHead&);void rva000B3ED3(const WeaponTemplateSetHead&);unsigned bits[19];};
+class Rva000B6253 {public:Rva000B6253*rva000B6253(int,unsigned,unsigned,unsigned,unsigned,unsigned);unsigned bits[19];};
+class Rva000B4B23 {public:void*rva000B4B23(const ModelConditionFlags&);};
+class ParticleSystem {public:void destroy();};
+ParticleSystem*Make001FCBD7();
+class RvaSmartPtr12 {public:void rva0004CBC0();ParticleSystem*system;void*previous,*next;};
+namespace _STL {struct _Rb_tree_node_base {int color;
+ _Rb_tree_node_base*parent,*left,*right;};
+ template<class T>struct _Rb_global {static _Rb_tree_node_base*_M_increment(_Rb_tree_node_base*);};}
+struct ModelChildNode { _STL::_Rb_tree_node_base links;unsigned id;};
+class GameClient;extern GameClient*TheGameClient;
+class GameClientBFB76View {public:virtual void s00();
+ virtual void s01();
+ virtual void s02();
+ virtual void s03();
+ virtual void s04();
+ virtual void s05();
+ virtual void s06();
+ virtual void s07();
+ virtual void s08();
+ virtual void s09();
+ virtual void s10();
+ virtual void s11();
+ virtual void s12();
+ virtual void s13();
+ virtual void s14();
+ virtual void s15(); virtual Drawable*getDrawable(unsigned);};
+// Secondary condition interface begins at primary +10. Field suffixes below
+// retain primary offsets used by the already verified BF9FC view; actual
+// secondary accesses are those offsets minus10. Only accessed fields are modeled.
+class Rva000BFB76Interface {public:virtual void rva000BFB76(const ModelConditionFlags&,bool,int);
+ char pad04[4];AnimationStateBF9FC*m_18;
+ RvaSmartPtr12 particle1C;char pad28[0x48-0x28];bool flag48;char pad49[0x68-0x49];
+ void *begin68,*end6C,*cap70,*begin74,*end78,*cap7C;
+ bool hide80;char pad81[0xA8-0x81];_STL::_Rb_tree_node_base*childrenA8;void*enabledAC;char padB0[0xB8-0xB0];unsigned syncB8;
+ void*frozenBC;char padC0[0x17C-0xC0];ModelConditionFlags conditions17C;bool flag1C8,flag1C9;
+ char pad1CA;bool transition1CB;void*next1CC;char pad1D0[0x25C-0x1D0];bool flag25C;
+ char pad25D[0x28C-0x25D];bool m_flag28C;
+};
+struct Rva000BFB76Data {char pad00[0xBC];ModelConditionFlags ignored;char pad108[0x137-0x108];bool compare137;char pad138[0x15F-0x138];bool frozen15F;};
+
+class Rva000BF9FCHeader {public:virtual void h00();
+ virtual void h01();
+ virtual void h02();
+ virtual void h03();
+ virtual void h04();
+ virtual void h05();
+ virtual void h06();
+ virtual void h07();
+ virtual void h08();
+ virtual void h09();
+ virtual void h10();
+ virtual void h11();
+ virtual void h12();
+ virtual void h13();
+ virtual void h14();
+ virtual void h15();
+ virtual void h16();
+ virtual void h17();
+ virtual void h18();
+ virtual void h19();
+ virtual void h20();
+ virtual void h21();
+ virtual void h22();
+ virtual void h23();
+ virtual void h24();
+ virtual void h25();
+ virtual void h26();
+ virtual void h27();
+ virtual void h28();
+ virtual void h29();
+ virtual void h30();
+ virtual void h31();
+ virtual void h32();
+ virtual void h33();
+ virtual void h34();
+ virtual void h35();
+ virtual void h36();
+ virtual void h37();
+ virtual void h38();
+ virtual void h39();
+ virtual void h40();
+ virtual void h41();
+ virtual void h42();
+ virtual void h43();
+ virtual void h44();
+ virtual void h45();
+ virtual void h46();
+ virtual void h47();
+ virtual void h48();
+ virtual void h49();
+ virtual void h50();
+ virtual void h51();
+ virtual void h52();
+ virtual void h53();
+ virtual void h54();
+ virtual void h55();
+ virtual void h56();
+ virtual void h57();
+ virtual void h58();
+ virtual void h59();
+ virtual void h60();
+ virtual void h61();
+ virtual void h62();
+ virtual void h63();
+ virtual void applyInfo(void*,bool,void*);
+ void*data;
+ Drawable*drawable;};
 class Rva000BF9FCModelInterface {public:
-virtual void v00();virtual void v01();virtual void v02();virtual void v03();virtual void v04();virtual void v05();virtual void v06();virtual void v07();virtual void v08();virtual void v09();virtual void v10();virtual void v11();virtual void v12();virtual void v13();virtual void v14();virtual void v15();virtual void v16();virtual void v17();virtual void v18();virtual void v19();virtual void v20();virtual void v21();virtual void v22();virtual void v23();virtual void v24();virtual void v25();virtual void v26();virtual void v27();virtual void v28();virtual void refresh();};
-struct Rva000B8F5AOuter:public Rva000BF9FCHeader,public Rva000BF9FCModelInterface
+virtual void v00();
+ virtual void v01();
+ virtual void v02();
+ virtual void v03();
+ virtual void v04();
+ virtual void v05();
+ virtual void v06();
+ virtual void v07();
+ virtual void v08();
+ virtual void v09();
+ virtual void v10();
+ virtual void v11();
+ virtual void v12();
+ virtual void v13();
+ virtual void v14();
+ virtual void v15();
+ virtual void v16();
+ virtual void v17();
+ virtual void v18();
+ virtual void v19();
+ virtual void v20();
+ virtual void v21();
+ virtual void v22();
+ virtual void v23();
+ virtual void v24();
+ virtual void v25();
+ virtual void v26();
+ virtual void v27();
+ virtual void v28();
+ virtual void refresh();};
+struct Rva000B8F5AOuter:public Rva000BF9FCHeader,public Rva000BF9FCModelInterface,public Rva000BFB76Interface
 {
  bool rva000BF9FC(void *entry,bool force,int options);
  void rva000BEE25(void*,float,int,int,int);
  void rva000BFB51(float);void rva000C0386();
-private:
- char pad10[8];AnimationStateBF9FC*m_18;
- char pad1C[0x48-0x1C];bool flag48;char pad49[0x68-0x49];
- void *begin68,*end6C,*cap70,*begin74,*end78,*cap7C;
- char pad80[0xB8-0x80];unsigned syncB8;
- char padBC[0x1C8-0xBC];bool flag1C8,flag1C9;
- char pad1CA[0x25C-0x1CA];bool flag25C;
- char pad25D[0x28C-0x25D];bool m_flag28C;
+
 };
 
 struct Rva000C144AEntry
@@ -355,4 +496,46 @@ bool Rva000B8F5AOuter::rva000BF9FC(void*entry,bool force,int options){
  }
  if((begin74!=end78 && flag1C9)||(begin68!=end6C && flag1C8))refresh();
  return true;
+}
+
+// Retail BFB76..BFD77: complete 513-byte RET12 body. Secondary interface receiver +10;
+// WB935790 supplies native child propagation, condition comparison, particle
+// teardown and transition arguments. BF1 W3DModelDraw replacement is semantic
+// context; this target method's original name is unresolved.
+void Rva000BFB76Interface::rva000BFB76(const ModelConditionFlags&conditions,bool force,int options){
+ Rva000BFB76Data*data=*(Rva000BFB76Data**)((char*)this-0xC);
+ if(data->frozen15F && frozenBC)return;
+ const ModelConditionFlags&ignored=data->ignored;
+ if(ignored.rva000B3EB3() && enabledAC){
+  WeaponTemplateSetHead set=*(const WeaponTemplateSetHead*)&conditions;
+  set.rva000B3ED3(*(const WeaponTemplateSetHead*)&ignored);
+  WeaponTemplateSetHead clear=*(const WeaponTemplateSetHead*)&conditions;
+  for(unsigned i=0;i<19;++i)clear.bits[i]=~clear.bits[i];
+  clear.rva000B3ED3(*(const WeaponTemplateSetHead*)&ignored);
+  for(_STL::_Rb_tree_node_base*node=childrenA8->left;node!=childrenA8;node=_STL::_Rb_global<bool>::_M_increment(node)){
+   Drawable*child=((GameClientBFB76View*)TheGameClient)->getDrawable(((ModelChildNode*)node)->id);
+   if(child)child->rva002761F3((const int*)&clear,(const int*)&set);
+  }
+ }
+ void*info=((Rva000B4B23*)*(void**)((char*)this-0xC))->rva000B4B23(conditions);
+ bool change=force;
+ if(!change && data->compare137){
+  Rva000B6253 mask;mask.rva000B6253(0,3,4,5,7,8);
+  WeaponTemplateSetHead old=*(const WeaponTemplateSetHead*)&conditions17C;
+  for(unsigned i=0;i<76;i+=4)*(unsigned*)((char*)&old+i)&=*(unsigned*)((char*)&mask+i);
+  WeaponTemplateSetHead next=*(const WeaponTemplateSetHead*)&conditions;
+  for(unsigned i=0;i<76;i+=4)*(unsigned*)((char*)&next+i)&=*(unsigned*)((char*)&mask+i);
+  if(memcmp(&next,&old,sizeof(next)))change=true;
+ }
+ conditions17C=conditions;
+ hide80=!(conditions.bits[0]&(1u<<7));
+ void*state=((Rva000B4BED*)*(void**)((char*)this-0xC))->rva000B4BED(&conditions);
+ if(transition1CB && m_18 && state==next1CC)state=m_18;
+ else {transition1CB=false;next1CC=0;}
+ if(!conditions.test(239) && *(ParticleSystem*volatile*)&particle1C.system){
+  (particle1C.system?particle1C.system:Make001FCBD7())->destroy();
+  if(particle1C.system){particle1C.rva0004CBC0();particle1C.system=0;}
+ }
+ if(info)((Rva000B8F5AOuter*)((char*)this-0x10))->applyInfo(info,change,state);
+ if(state){m_flag28C=false;((Rva000B8F5AOuter*)((char*)this-0x10))->rva000BF9FC(state,force,options);}
 }
