@@ -81,12 +81,21 @@ class Rva0052413E
 public:
 	Rva0052413E();
 	~Rva0052413E();
-	void rva0052458E(const AsciiString &name, Rva00579E47Delegate delegate);
+
 
 private:
 	unsigned char m_pad[0xC];
 };
 
+
+// The native binding target is the rowed AptCommandMapAdder provider at
+// 0x52458E. Its by-value AptRef and the observed delegate are one pointer;
+// preserve this caller's established temporary-copy/destructor ABI.
+class AptCommandMap;
+template<class T> class AptRef;
+class AptCommandMapAdder {
+public: void AddCommandMap(const AsciiString &, AptRef<AptCommandMap>);
+};
 
 #include "unicode_string.h"
 // Existing names supply the independently proven ABI of the two setters.
@@ -127,8 +136,13 @@ Rva005FBC20::Rva005FBC20(Rva005FBBEE *p,unsigned l,const AsciiString &n)
  StrategicHUD::DynamicAutoResolvePlayerPanelMovieClip::Impl *view=reinterpret_cast<StrategicHUD::DynamicAutoResolvePlayerPanelMovieClip::Impl*>(this);
  view->SetPlayerNameString(UnicodeString::TheEmptyString);
  view->SetPlayerUnitCountString(UnicodeString::TheEmptyString);
+ union {
+  void (AptCommandMapAdder::*provider)(const AsciiString &, AptRef<AptCommandMap>);
+  void (Rva0052413E::*caller)(const AsciiString &, Rva00579E47Delegate);
+ } bind;
+ bind.provider=&AptCommandMapAdder::AddCommandMap;
  AsciiString prefix;prefix.format("_level%u.",level);
- bindings.rva0052458E(prefix+name+"_OnChainHitAnim",Rva00579E47Delegate(DelegateDesc(this,&Rva005FBC20::rva005FB5AE)));
- bindings.rva0052458E(prefix+name+"_OnHitAnimDone",Rva00579E47Delegate(DelegateDesc(this,&Rva005FBC20::rva005FB5BE)));
- bindings.rva0052458E(prefix+name+"_OnReinforceAnimDone",Rva00579E47Delegate(DelegateDesc(this,&Rva005FBC20::rva005FB5D2)));
+ (bindings.*bind.caller)(prefix+name+"_OnChainHitAnim",Rva00579E47Delegate(DelegateDesc(this,&Rva005FBC20::rva005FB5AE)));
+ (bindings.*bind.caller)(prefix+name+"_OnHitAnimDone",Rva00579E47Delegate(DelegateDesc(this,&Rva005FBC20::rva005FB5BE)));
+ (bindings.*bind.caller)(prefix+name+"_OnReinforceAnimDone",Rva00579E47Delegate(DelegateDesc(this,&Rva005FBC20::rva005FB5D2)));
 }
