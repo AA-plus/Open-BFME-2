@@ -37689,3 +37689,4 @@ _Rva00817B30	0x00683A30	2207	attempted	r3 independent re-derivation (commudp.cpp
 ?getFrameData@?$CameraAnimationTrack@VRva00540D94@@@@QAE?AVRva00540D94@@M@Z	0x00541955	281	landed	add_match verified Code/GameEngine/Source/GameClient/CameraAnimation/CameraAnimationTrackLookAtCamera.cpp 281B; trial
 ??0Rva00540E9D@@QAE@ABV0@@Z	0x0004254E	31	landed	add_match verified Code/GameEngine/Source/GameClient/CameraAnimation/CameraAnimationTrackLookAtCamera.cpp 31B; trial
 ?getFrameData@?$CameraAnimationTrack@VRva00540E9D@@@@QAE?AVRva00540E9D@@M@Z	0x00541AB0	281	landed	add_match verified Code/GameEngine/Source/GameClient/CameraAnimation/CameraAnimationTrackLookAtCamera.cpp 281B; trial
+?rva00541F72@Rva00541F72@@QAEXABMPAURva00540888Transform@@@Z	0x00541F72	90	landed	add_match verified Code/GameEngine/Source/GameClient/CameraAnimation/CameraAnimationTrackLookAtCamera.cpp 90B; trial

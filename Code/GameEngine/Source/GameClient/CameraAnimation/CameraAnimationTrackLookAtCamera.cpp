@@ -137,3 +137,40 @@ T CameraAnimationTrack<T>::getFrameData(float frameNum)
 
 template Rva00540D94 CameraAnimationTrack<Rva00540D94>::getFrameData(float frameNum);
 template Rva00540E9D CameraAnimationTrack<Rva00540E9D>::getFrameData(float frameNum);
+
+// ?rva00541F72@Rva00541F72@@QAEXABMPAURva00540888Transform@@@Z retail
+// 0x00541F72 (90 bytes, ret 8): the look-at camera animation's transform
+// slot (table 0x00C69510, beside the free-camera sibling 0x00540888 of the
+// same signature). It samples the camera track (+0x24) and the target track
+// (+0x44) at the time, aims the output matrix from the camera position at
+// the target with the camera frame's roll (rowed Matrix3D::Look_At) and
+// copies its field of view. Owner and output names are address-derived.
+class Vector3;
+class Matrix3D
+{
+public:
+	void Look_At(const Vector3 &p, const Vector3 &t, float roll);
+	float m_rows[12];
+};
+struct Rva00540888Transform
+{
+	Matrix3D m_transform;	// +0x00
+	float m_fov;	// +0x30
+};
+class Rva00541F72
+{
+public:
+	void rva00541F72(const float &time, Rva00540888Transform *out);
+private:
+	char m_pad00[0x24];
+	CameraAnimationTrack<Rva00540D94> m_cameraTrack;	// +0x24
+	CameraAnimationTrack<Rva00540E9D> m_targetTrack;	// +0x44
+};
+
+void Rva00541F72::rva00541F72(const float &time, Rva00540888Transform *out)
+{
+	Rva00540D94 camera = m_cameraTrack.getFrameData(time);
+	Rva00540E9D target = m_targetTrack.getFrameData(time);
+	out->m_transform.Look_At((const Vector3 &)camera.position, (const Vector3 &)target.m_04, camera.scalar10);
+	out->m_fov = camera.scalar14;
+}
