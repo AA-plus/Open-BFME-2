@@ -204,6 +204,8 @@ struct AttributeBlingBounds {
     AsciiString minimum, maximum, defaultBling;
 };
 
+class Rva0021F804;
+
 class CreateAHeroManager
 {
 public:
@@ -259,6 +261,8 @@ public:
 	virtual void init();
 
 	static void iniParseCreateAHeroSystem(INI *ini);
+	static void rva002202BF(INI *ini);
+	void rva0022020C(const Rva0021F804 &heroClass);	// 0x0022020C, adds a parsed class
 
 	Int GetBlingCount(Int blingKey, const CreateAHeroHero *hero) const;
 	Int rva0021BEE0(Int blingKey, UnsignedInt classIndex, UnsignedInt subClassIndex) const;
@@ -488,9 +492,53 @@ public:
 
 extern UpgradeCenter *TheUpgradeCenter;
 
+// The CreateAHeroClass block parser, retail 0x002202BF (396 bytes), beside
+// iniParseCreateAHeroSystem; its name is unknown (address-derived). It
+// parses a class record (the 0x20-byte CreateAHeroClass: five strings and
+// the subclass vector; constructor 0x0021F804, destructor 0x0021F8F3)
+// through field table 0x00DBA0D8, requires an upgrade name that
+// TheUpgradeCenter knows and that no class already uses (rowed
+// 0x0021B31C), and hands the record to the manager (0x0022020C).
+// The out-of-line StringBase<char>::isEmpty 0x00001E2F under an existing
+// pin spelling (this unit's inline specialization would expand it here).
+class BfmeStringPresenceValue
+{
+public:
+	bool isEmpty() const;
+};
+
+class Rva0021F804
+{
+public:
+	Rva0021F804(const AsciiString &a, const AsciiString &b, const AsciiString &c, const AsciiString &d, const AsciiString &e);
+	~Rva0021F804();
+	AsciiString m_nameTag;					// +0x00
+	AsciiString m_descriptionTag;				// +0x04
+	AsciiString m_powersDescTag;				// +0x08
+	AsciiString m_iconImage;				// +0x0C
+	AsciiString m_upgradeName;				// +0x10
+	unsigned char m_subClasses[0xc];			// +0x14
+};
+
+extern "C" const FieldParse CreateAHeroClassFieldParse[];
+
+
 // isEmpty was header-defined: MSVC keeps the call out of line (0x00001E2F) but,
 // knowing the body, does not reload TheCreateAHeroManager across it.
 template <> inline bool StringBase<char>::isEmpty() const { return m_data == 0 || m_data->length == 0; }
+
+void CreateAHeroManager::rva002202BF(INI *ini)
+{
+	Rva0021F804 heroClass(AsciiString("None"), AsciiString("None"), AsciiString("None"), AsciiString("None"), AsciiString("None"));
+	ini->initFromINI(&heroClass, CreateAHeroClassFieldParse);
+	if (heroClass.m_upgradeName.isNone() || ((const BfmeStringPresenceValue *)&heroClass.m_upgradeName)->isEmpty())
+		throw INIException(3, "No upgrade name specified while parsing CreateAHeroClass.");
+	if (TheUpgradeCenter->findUpgrade(heroClass.m_upgradeName) == 0)
+		throw INIException(3, "Upgrade %s not found while parsing CreateAHeroClass.", heroClass.m_upgradeName.str());
+	if (TheCreateAHeroManager->rva0021B31C(heroClass.m_upgradeName))
+		throw INIException(3, "A Create-a-Hero Class with the upgrade %s already exists.", heroClass.m_upgradeName.str());
+	TheCreateAHeroManager->rva0022020C(heroClass);
+}
 
 // CreateAHeroManager::iniParseCreateAHeroSystem, retail 0x0022044C (684
 // bytes), the CreateAHeroSystem block parser (BlockParse node VA 0x00DB9D38).

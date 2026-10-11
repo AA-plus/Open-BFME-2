@@ -17218,3 +17218,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??0Rva006003FC@@QAE@PAX00@Z,0x00600432,callee of ??0Rva005FB1AD@@QAE@PAX00@Z
 ??0Rva005FAD8D@@QAE@PAX0@Z,0x005FAFE8,callee of ??0Rva005FB1AD@@QAE@PAX00@Z
 ??0Rva0059E920@@QAE@XZ,0x0059E920,callee of ?ParseINI@StartingRestriction@@SAXPAVINI@@PAX@Z
+??1Rva0021F804@@QAE@XZ,0x0021F8F3,placeholder: CreateAHeroClass record destructor under its constructor 0x0021F804 view (same body as the rowed ??1Rva0021F876); REL32 at 0x0022041A in the class parser 0x002202BF
+?rva0022020C@CreateAHeroManager@@QAEXABVRva0021F804@@@Z,0x0022020C,thiscall on TheCreateAHeroManager taking the parsed CreateAHeroClass record by reference (REL32 at 0x0022040E in the class parser 0x002202BF; reads the +0x14C class vector); address-derived name
