@@ -245,6 +245,12 @@ class ThingTemplate
 {
 public:
 	const AsciiString &getName() const { return m_name; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getName copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	const AsciiString &bfme_get_name() const { return m_name; }
 	const class WeaponTemplateSet *findWeaponTemplateSet(const BitFlags<117> &t) const;
 
 private:
@@ -350,7 +356,7 @@ void WeaponSet::xfer(Xfer *xfer)
 			if (tt == 0)
 				throw XferException(5, 0);
 
-			ttName = tt->getName();
+			ttName = tt->bfme_get_name();
 			wsFlags = m_curWeaponTemplateSet->friend_getWeaponSetFlags();
 		}
 		*xfer == ttName;
