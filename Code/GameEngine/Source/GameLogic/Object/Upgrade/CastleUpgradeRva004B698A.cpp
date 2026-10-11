@@ -136,11 +136,6 @@ private:
 	void rva004B68B6(const UpgradeTemplate *upgrade); // unrowed: nearby-object pass at 0x004B68B6
 };
 
-CastleUpgrade::CastleUpgrade( Thing *thing, const ModuleData *moduleData )
-	: UpgradeModule( thing, moduleData )
-{
-}
-
 // CastleUpgrade::upgradeImplementation, retail 0x004B698A (178 bytes).
 // Identity (target): WorldBuilder debug CastleUpgrade.cpp lines 64..77
 // (wb-lead 2/callgraph); entered through the UpgradeMux subobject (+0x10).
