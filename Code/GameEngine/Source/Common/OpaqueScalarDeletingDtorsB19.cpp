@@ -14,6 +14,11 @@ extern "C" const void *const vtbl_00C3962C[];
 class __declspec(novtable) Rva0074104CBase {
 public:
  // ?Rva0074104CBase::~Rva0074104CBase present-unmatched
+ // LINK: the implicit default ctor's COMDAT loses to the first-in-order copy; the vtable
+ // emitter ctor below calls a TU-unique no-init ctor instead. No flags touched.
+ struct BfmeNoInitB19 {};
+ Rva0074104CBase(BfmeNoInitB19) {}
+ Rva0074104CBase() {}
  virtual __forceinline ~Rva0074104CBase() {*(const void**)this=vtbl_00C3962C;}
 private: unsigned int unknown04;
 };
@@ -43,6 +48,6 @@ Rva0074104C *makeRva0074104C()
 }
 
 // ?<Rva0074104C::Rva0074104C> absent-from-retail
-Rva0074104C::Rva0074104C(EmitVtableTag *)
+Rva0074104C::Rva0074104C(EmitVtableTag *) : Rva0074104CBase((Rva0074104CBase::BfmeNoInitB19()))
 {
 }
