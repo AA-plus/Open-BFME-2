@@ -2,6 +2,7 @@
 // stlport
 #define _STLP_NO_EXCEPTIONS 1
 #define __PLACEMENT_VEC_NEW_INLINE
+#define _STLP_BFME_LIST_NE_EXTERN  // call retail's one _List_iterator_base::operator!= (vendor/stlport/stl/_list.h)
 #include <list>
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base

@@ -7,6 +7,7 @@
 // extension into "$Map:" and "Map:" + "/Desc" keys. Metadata's 256-byte layout
 // comes from the already verified target constructor/copy/assignment/GUI users.
 // Generic map subscript retains its existing opaque provider spelling.
+#define _STLP_BFME_LIST_NE_EXTERN  // call retail's one _List_iterator_base::operator!= (vendor/stlport/stl/_list.h)
 #include <map>
 #include <list>
 

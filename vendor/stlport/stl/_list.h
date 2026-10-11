@@ -97,9 +97,16 @@ struct _List_iterator_base {
   bool operator==(const _List_iterator_base& __y ) const { 
     return _M_node == __y._M_node; 
   }
+  // Retail keeps one out-of-line copy (0x006CFE40, built without -G7); a
+  // -G7 unit that calls it emits a different copy the link rejects. Such a
+  // unit defines _STLP_BFME_LIST_NE_EXTERN to call retail's copy instead.
+#ifdef _STLP_BFME_LIST_NE_EXTERN
+  bool operator!=(const _List_iterator_base& __y ) const;
+#else
   bool operator!=(const _List_iterator_base& __y ) const { 
     return _M_node != __y._M_node; 
   }
+#endif
 };  
 
 
