@@ -1,4 +1,5 @@
-// cl: /O1 /EHsc /MD
+// cl: /O1 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// stlport
 // ?rva0042C936@Rva0042C936@@QAEPAV1@UHolder0042C936@@@Z, retail 0x0042C936, 65 bytes.
 // Setter with ownership-transfer holder: takes old at +0, stores released holder ptr,
 // calls old virtual slot0 with 0, deletes returned pointer via rowed operator delete,
@@ -11,16 +12,7 @@ struct Rva0042C936Helper
 	virtual void *virt0(int x);
 };
 
-namespace _STL
-{
-	template <class _Tp>
-	struct auto_ptr
-	{
-		~auto_ptr() { delete _M_p; }
-		_Tp *release() { _Tp *p = _M_p; _M_p = 0; return p; }
-		_Tp *_M_p;
-	};
-}
+#include <memory>
 
 class Rva0042C993Pointee
 {
@@ -77,9 +69,48 @@ Rva0042C936 *Rva0042C936::rva0042C936(Holder0042C936 h)
 // factory's auto_ptr straight into the setter's by-value argument, as an
 // auto_ptr conversion does -- and caches the value. The emptied auto_ptr's
 // destructor (a virtual delete) runs after the call.
+class Rva000AD6F4
+{
+public:
+	void clear();
+};
+
+// The factory's owner: a pointer released into the returned auto_ptr
+// (rowed 0x0042C993 in StrategicInGameUITurnPhaseFactory.cpp), filled
+// through the rowed 0x00575674 and cleared by 0x000AD6F4.
+class Object;
+class Rva00575674 { public: void rva00575674(Object *object); };
+class Rva00577838 : public Rva0042C993Pointee { public: Rva00577838(int argument); char m_data[4]; };
+class Rva0042C993Holder
+{
+public:
+	Rva0042C993Holder() : ptr(0) {}
+	~Rva0042C993Holder() { ((Rva000AD6F4 *)this)->clear(); }
+	void reset(Rva0042C993Pointee *p) { ((Rva00575674 *)this)->rva00575674((Object *)p); }
+	_STL::auto_ptr<Rva0042C993Pointee> release();
+	Rva0042C993Pointee *ptr;
+};
+
+// ?Rva0042C9BAFactory@StrategicInGameUI@@YA?AU?$auto_ptr@VRva0042C993Pointee@@@_STL@@HH@Z,
+// retail 0x0042C9BA, 145 bytes: kind 2 builds an eight-byte Rva00577838 for
+// the argument; the owner's contents return as an auto_ptr. As with
+// CreateTurnPhaseBehavior and its Update caller, the file-static noinline
+// definition beside its only caller (0x0042CA4B below) is what keeps the
+// hidden result in ESI from entry. The genuine STLport transfer type is
+// required; a private one-word auto_ptr_ref instead makes cl choose EDI.
 namespace StrategicInGameUI
 {
-	_STL::auto_ptr<Rva0042C993Pointee> Rva0042C9BAFactory(int kind, int argument);
+	static __declspec(noinline) _STL::auto_ptr<Rva0042C993Pointee> Rva0042C9BAFactory(int kind, int argument)
+	{
+		Rva0042C993Holder behavior;
+		switch (kind)
+		{
+		case 2:
+			behavior.reset(new Rva00577838(argument));
+			break;
+		}
+		return behavior.release();
+	}
 }
 
 class LivingWorldLogic
@@ -90,12 +121,6 @@ public:
 	int m_f4;	// +0xF4
 };
 extern LivingWorldLogic *TheLivingWorldLogic;
-
-class Rva000AD6F4
-{
-public:
-	void clear();
-};
 
 struct Rva0042CA4BTarget
 {
