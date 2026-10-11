@@ -2653,7 +2653,6 @@ extern "C" __declspec(dllimport) int __cdecl sprintf(char *, const char *, ...);
 }
 
 // STLport 4.5.3 node creation, kept out of line as in retail.
-// ?_M_create_node@?$list@PAVGameWindow@@V?$allocator@PAVGameWindow@@@_STL@@@_STL@@IAEPAU?$_List_node@PAVGameWindow@@@2@ABQAVGameWindow@@@Z present-unmatched
 namespace _STL {
 template<> __declspec(noinline)
 _List_node<GameWindow*> *list<GameWindow*>::_M_create_node(GameWindow *const &value)
