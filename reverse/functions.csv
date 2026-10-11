@@ -76339,3 +76339,4 @@ uw_0077909c,,0x0077909C,13,Code/GameEngine/Source/GameLogic/AI/AIObjectTargetPre
 ?reset@FrameData@@QAEXXZ,,0x005DA55E,5,Code/GameEngine/Source/GameNetwork/FrameData.cpp,matched,ZH FrameData::reset is init(); tail jump into rowed init 0x005DA4F9 directly before it
 ?rva005E8F49@Rva005E8F49Owner@@QAEXXZ,,0x005E8F49,7,Code/GameEngine/Source/Common/Rva005E8EC5PositionSync.cpp,matched,directly after rowed rva005E8EC5: mov ecx [ecx] then tail jump into it; owner address-named
 ?rva005E96D4@Rva005E96D4Owner@@QAEXXZ,,0x005E96D4,8,Code/GameEngine/Source/GameClient/GUI/BattlePromptFlagsRva005E9687.cpp,matched,directly after rowed rva005E9687: mov ecx [ecx+4] then tail jump into it; owner address-named
+?rva00418398@Rva00418374@@QAEPAUOutIter004182F8@@PAU2@PBVRva004181F5@@@Z,,0x00418398,20,Code/GameEngine/Source/GameClient/Rva00418374.cpp,matched,directly after rowed rva00418374: calls it with both args and returns the first; address-named

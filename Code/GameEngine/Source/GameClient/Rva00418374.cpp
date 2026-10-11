@@ -23,7 +23,8 @@ public:
 class Rva00418374
 {
 public:
-	OutIter004182F8 *rva00418374(OutIter004182F8 *it, const Rva004181F5 *p);
+	__declspec(noinline) OutIter004182F8 *rva00418374(OutIter004182F8 *it, const Rva004181F5 *p);
+	OutIter004182F8 *rva00418398(OutIter004182F8 *it, const Rva004181F5 *p);
 private:
 	char m_pad00[0x10];
 	int m_count10;
@@ -33,5 +34,14 @@ OutIter004182F8 *Rva00418374::rva00418374(OutIter004182F8 *it, const Rva004181F5
 {
 	((Rva000427195 *)this)->rva00212858((unsigned int)m_count10 + 1u);
 	((Rva004182F8 *)this)->rva004182F8(it, p);
+	return it;
+}
+
+// ?rva00418398@Rva00418374@@QAEPAUOutIter004182F8@@PAU2@PBVRva004181F5@@@Z
+// @0x00418398 20B, directly after rva00418374: calls it with both arguments
+// and returns the first. Address-named; no referencing site found in this pass.
+OutIter004182F8 *Rva00418374::rva00418398(OutIter004182F8 *it, const Rva004181F5 *p)
+{
+	rva00418374(it, p);
 	return it;
 }
