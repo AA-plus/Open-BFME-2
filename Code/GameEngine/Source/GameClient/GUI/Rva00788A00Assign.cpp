@@ -6,17 +6,21 @@
 //   ?Rva00788A00Assign@@YAXPAVRva007882F0PointerMap@@II@Z 0x000AB469 (28B)
 // Callee addresses are read off retail call sites (reverse/symbols.csv).
 struct Rva007882F0Value { unsigned value; };
-class Rva007882F0PointerMap
+class Rva007882F0PointerMap;
+// LINK: the lookup is rowed as Rva000AB0F5::rva000AB0F5(int) returning void *;
+// the key and result words are the same, so the call keeps its shape through a cast.
+class Rva000AB0F5
 {
 public:
-	Rva007882F0Value *lookup(unsigned key);
+	void *rva000AB0F5(int key);
 };
+typedef Rva007882F0Value *(Rva000AB0F5::*Rva007882F0LookupShape)(unsigned);
 
 // ?Rva00788A00Assign@@YAXPAVRva007882F0PointerMap@@II@Z
 void Rva00788A00Assign(Rva007882F0PointerMap *owner, unsigned key, unsigned value)
 {
 	if (owner) {
-		Rva007882F0Value *entry = owner->lookup(key);
+		Rva007882F0Value *entry = (((Rva000AB0F5 *)owner)->*reinterpret_cast<Rva007882F0LookupShape>(&Rva000AB0F5::rva000AB0F5))(key);
 		if (entry) entry->value = value;
 	}
 }
