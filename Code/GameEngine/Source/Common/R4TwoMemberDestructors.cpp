@@ -17,23 +17,15 @@
 // donor. The element and container types are the donor's local views, not
 // recovered target identities.
 
-struct Gen00196F30;
-
-namespace _STL
+// LINK: the 12-byte member's destructor is rowed as Rva0032BE80 (0x0032BE80),
+// the folded twin of the vector<Gen00196F30> destructor.
+struct Rva0032BE80
 {
-template <class T> class allocator;
-
-template <class T, class Allocator>
-class vector
-{
-public:
-	~vector();
+	~Rva0032BE80();
 private:
 	char m_body[0xC];
 };
-}
-
-typedef _STL::vector<Gen00196F30, _STL::allocator<Gen00196F30> > Rva00196F30Vector;
+typedef Rva0032BE80 Rva00196F30Vector;
 
 #define R4_TWO_MEMBER_DTOR( NAME, LEAD, M1, M2 )                              \
 	struct NAME                                                               \
