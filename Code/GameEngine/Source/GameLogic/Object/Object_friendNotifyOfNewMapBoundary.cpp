@@ -55,6 +55,12 @@ class AI
 {
 public:
 	Pathfinder *pathfinder() { return m_pathfinder; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's pathfinder copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	Pathfinder *bfme_pathfinder() { return m_pathfinder; }
 
 private:
 	unsigned char m_pad[0x10];
@@ -101,7 +107,7 @@ enum ObjectPrivateStatus
 void Object::friend_notifyOfNewMapBoundary()
 {
 	TheRadar->addObject(this);
-	TheAI->pathfinder()->AddObjectToPathfindMap(this);
+	TheAI->bfme_pathfinder()->AddObjectToPathfindMap(this);
 
 	Region3D mapExtent;
 	TheTerrainLogic->getExtent(&mapExtent);

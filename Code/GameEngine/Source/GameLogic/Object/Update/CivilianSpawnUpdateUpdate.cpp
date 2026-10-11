@@ -157,6 +157,12 @@ class AI
 {
 public:
 	Pathfinder *pathfinder() { return m_pathfinder; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's pathfinder copy loses to the first-in-order copy (no
+	// retail address); the calls below inline it but still emit the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	Pathfinder *bfme_pathfinder() { return m_pathfinder; }
 	char m_pad00[0x10];
 	Pathfinder *m_pathfinder;					// +0x10
 };
@@ -318,11 +324,11 @@ UpdateSleepTime CivilianSpawnUpdate::update()
 	pos.y += runToObject->getPosition()->y;
 	pos.z = runToObject->getPosition()->z;
 	ai->ignoreObstacle(runToObject);
-	TheAI->pathfinder()->rva003E3BFB(runToObject->getID());
-	if (TheAI->pathfinder()->QuickDoesPathExist(newObj, newObj->getPosition(), &pos, 0))
+	TheAI->bfme_pathfinder()->rva003E3BFB(runToObject->getID());
+	if (TheAI->bfme_pathfinder()->QuickDoesPathExist(newObj, newObj->getPosition(), &pos, 0))
 		ai->m_commandInterface.aiMoveToPosition(&pos, CMD_FROM_AI);
 	else
 		TheGameLogic->destroyObject(newObj);
-	TheAI->pathfinder()->rva003E3BFB(INVALID_OBJECT_ID);
+	TheAI->bfme_pathfinder()->rva003E3BFB(INVALID_OBJECT_ID);
 	return m_spawnFrame;
 }

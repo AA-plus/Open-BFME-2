@@ -60,6 +60,12 @@ class AI
 {
 public:
 	Pathfinder *pathfinder() { return m_pathfinder; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's pathfinder copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	Pathfinder *bfme_pathfinder() { return m_pathfinder; }
 
 private:
 	char m_pad00[0x10];
@@ -108,7 +114,7 @@ bool GateOpenBehaviorList::rva004E923E(Object *obj)
 		target.x += off.x;
 		target.y += off.y;
 		target.z += off.z;
-		if (!TheAI->pathfinder()->QuickDoesPathExist(obj, obj->getPosition(), &target, 0))
+		if (!TheAI->bfme_pathfinder()->QuickDoesPathExist(obj, obj->getPosition(), &target, 0))
 			return true;
 	}
 	return false;
