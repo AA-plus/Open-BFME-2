@@ -2,15 +2,22 @@
 
 class BfmeMade_009CB5F0
 {
+private:
+	int m_bfmeFields[0xA];
+};
+
+// LINK: the made object's constructor (retail 0x009CB4E0) is rowed as
+// MemoryWriteFile::MemoryWriteFile(const char *); the owner word is passed the same way.
+class MemoryWriteFile
+{
 public:
-	BfmeMade_009CB5F0(void *owner);			// retail 0x009CB4E0
+	MemoryWriteFile(const char *name);
 
 private:
 	int m_bfmeFields[0xA];
 };
 
-// ?bfmeMake_009CB5F0@@YAPAVBfmeMade_009CB5F0@@PAX@Z
 BfmeMade_009CB5F0 * __cdecl bfmeMake_009CB5F0(void *owner)
 {
-	return new BfmeMade_009CB5F0(owner);
+	return reinterpret_cast<BfmeMade_009CB5F0 *>(new MemoryWriteFile(reinterpret_cast<const char *>(owner)));
 }
