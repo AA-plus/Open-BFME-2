@@ -3580,7 +3580,6 @@ alternatename	Code/GameEngine/Source/GameClient/Snow.cpp	?targetSlot6@SnowManage
 alternatename	Code/GameEngine/Source/GameClient/Snow.cpp	?targetSlot7@SnowManager@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameClient/Snow.cpp	?targetSlot8@SnowManager@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameClient/SubtitleEntryCtor.cpp	_vtbl_00CE451C	1
-alternatename	Code/GameEngine/Source/GameClient/System/Anim2D.cpp	_g_anim2DGameClient	1
 alternatename	Code/GameEngine/Source/GameClient/System/Anim2DTemplate.cpp	?parseUnsignedInt@INI@@SAXPAV1@PAX1PBX@Z	1
 alternatename	Code/GameEngine/Source/GameClient/System/FXParticleSystem/BoxEmissionVolumeModuleTemplateCopyCtorThunk.cpp	_BoxEmissionVolumeModuleTemplate_cvtbl4	1
 alternatename	Code/GameEngine/Source/GameClient/System/FXParticleSystem/ButterflyDrawModuleTemplateCopyCtorThunk.cpp	_ButterflyDrawModuleTemplate_cvtbl0	1
