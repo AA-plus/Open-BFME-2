@@ -74,6 +74,13 @@ template <> void _STLP_alloc_proxy<int*, int, allocator<int> >::deallocate(int*,
 }
 typedef int Bool;
 #include "subsystem_interface.h"
+
+// Declaration-only: the rowed set<AsciiString> tree members are bound,
+// this TU emits no per-flag copy of them or of their allocator leaves.
+namespace _STL {
+typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
+template <> Lk6AsciiSetTree::~_Rb_tree();
+}
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
 struct Rva00224C76Element {Rva00224C76Element();Rva00224C76Element(const Rva00224C76Element&);Rva00224C76Element&operator=(const Rva00224C76Element&);~Rva00224C76Element(){}char bytes[8]; bool operator==(const Rva00224C76Element&)const;};
 typedef _STL::hash_map<int, Rva00224C76Element> AptPlayerTable;

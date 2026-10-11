@@ -23,6 +23,13 @@ public:
 };
 struct BfmeE16 { float x, y, z, w; };
 #include "ascii_string.h"
+
+// Declaration-only: the rowed set<AsciiString> tree members are bound,
+// this TU emits no per-flag copy of them or of their allocator leaves.
+namespace _STL {
+typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
+template <> Lk6AsciiSetTree::~_Rb_tree();
+}
 struct Arg;
 class Rva0059A71C
 {

@@ -16,6 +16,13 @@ template <> struct less<AsciiString> {
 };
 }
 
+// Declaration-only: the rowed set<AsciiString> tree members are bound,
+// this TU emits no per-flag copy of them or of their allocator leaves.
+namespace _STL {
+typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
+template <> Lk6AsciiSetTree::~_Rb_tree();
+}
+
 class Rva00330757Member
 {
 public:

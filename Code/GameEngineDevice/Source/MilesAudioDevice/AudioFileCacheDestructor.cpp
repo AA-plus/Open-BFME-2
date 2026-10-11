@@ -10,6 +10,13 @@
 #include <vector>
 #include "ascii_string.h"
 #include "Common/Rva0010EDC2Resource.h"
+
+// Declaration-only: the rowed set<AsciiString> tree members are bound,
+// this TU emits no per-flag copy of them or of their allocator leaves.
+namespace _STL {
+typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
+template <> Lk6AsciiSetTree::~_Rb_tree();
+}
 struct VideoNode {VideoNode *next;AsciiString name;Rva0010EDC2 *entry;};
 struct AudioCacheCursor {
  struct{void *first,*second;}s;

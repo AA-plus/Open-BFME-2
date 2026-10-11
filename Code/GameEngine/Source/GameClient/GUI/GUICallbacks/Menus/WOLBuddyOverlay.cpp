@@ -86,6 +86,13 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 #include "GameNetwork/GameSpy/PersistentStorageThread.h"
 #include "GameNetwork/GameSpy/ThreadUtils.h"
 
+// Declaration-only: the rowed set<AsciiString> tree members are bound,
+// this TU emits no per-flag copy of them or of their allocator leaves.
+namespace _STL {
+typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
+template <> Lk6AsciiSetTree::~_Rb_tree();
+}
+
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 
 #ifdef _INTERNAL

@@ -12,6 +12,10 @@ static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
 }
 #include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
+namespace _STL {
+// The rowed ~_Rb_tree (MapMetaDataCopy.cpp, 0x589BE) is the kept copy; do not emit another.
+template <> _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> >::~_Rb_tree();
+}
 template class _STL::set<AsciiString, _STL::less<AsciiString>, _STL::allocator<AsciiString> >;
 
 // ?rva00057DA0@Rva00056CF8@@QAEXU?$_Rb_tree_iterator@VAsciiString@@U?$_Nonconst_traits@VAsciiString@@@_STL@@@_STL@@0@Z @0x00057DA0 68B.

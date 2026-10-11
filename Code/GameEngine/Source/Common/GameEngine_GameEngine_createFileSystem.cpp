@@ -44,6 +44,12 @@
 // Author: Michael S. Booth, April 2001
 
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
+#include <set>
+// Declaration-only: the rowed set<AsciiString> ~_Rb_tree (0x589BE) is bound, this TU emits no copy.
+namespace _STL {
+typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
+template <> Lk6AsciiSetTree::~_Rb_tree();
+}
 
 #include "Common/ActionManager.h"
 #include "Common/AudioAffect.h"
