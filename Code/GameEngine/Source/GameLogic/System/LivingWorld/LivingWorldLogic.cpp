@@ -626,6 +626,7 @@ class Rva004FC275 {public:void rva004FC275(unsigned char);};
 struct LocalRegionPlots170 {char pad13c[0x13c];Int owner;char pad140[0x170-0x140];_STL::vector<Parent00575EEA*>plots;};
 struct TurnPhasePairView {void *begin,*end;bool empty()const{return begin==end;}};
 struct Parent00575E4E;
+class Rva002B59FF {public:bool rva002B59FF();};	// 0x002B59FF
 class GameMessage;
 class LivingWorldLogic : public Rva002BA82BBase00, public Rva002BA82BObserver10, public Rva002BA82BRegionObserver
 {
@@ -651,6 +652,8 @@ public:
  Bool rva002B3484(Parent0057605D*);
  Bool rva002B3416(Parent00575EEA*);
  __forceinline Bool isLocalPlayerTurnStart() const { return m_localPlayer != 0 && m_turnPhase == 0; }
+ // A local player and the rowed 0x002B59FF gate (see rva002B5A5F).
+ __forceinline Bool hasActiveLocalPlayer() { return m_localPlayer != 0 && ((Rva002B59FF *)this)->rva002B59FF(); }
  void rva002B676D();
  void rva002B88EC();
 	Bool rva002B5A5F(Parent00575E4E*);
@@ -2798,6 +2801,46 @@ void LivingWorldLogic::rva002B5AF7(){
    reinterpret_cast<Rva00318C05*>(entry)->rva00318C05(show);
   }
  }
+}
+
+// Native2B5A5F..2B5AF7 complete152, RET4; WB D7F940 (unnamed, callgraph
+// lead) runs the same tests in the same order. A local player and the rowed
+// 0x002B59FF gate are required; while 0x002B254F holds, the campaign
+// manager's object must accept the entry through its slot +4. The entry
+// needs its +0x58 flag and the local player's id (+0x14) as owner (rowed
+// 0x00318D05, +0x54); turn phase 0 then accepts it, phase 4 only a named
+// (+0x18) entry the rowed 0x002B4BC9 accepts. Name stays address-derived.
+// Retail saves ESI, EDI and EBX only as each test level needs them: the
+// opening test is an inlined helper and the rest its else scope;
+// the turn phase is read once (EBX) across the isEmpty call.
+class Rva00318D05 {public:bool rva00318D05(int value);};
+struct Rva002B4BC9Arg;
+class Rva002B4BC9 {public:bool rva002B4BC9(Rva002B4BC9Arg *arg);};
+class LWEntryAcceptDispatch {public:virtual void f00();virtual Bool accepts(Parent00575E4E *entry);};
+Bool LivingWorldLogic::rva002B5A5F(Parent00575E4E *entry)
+{
+	if (!hasActiveLocalPlayer())
+		return false;
+	else
+	{
+		if ((unsigned char)((Rva002B254F *)this)->rva002B254F() != 0)
+		{
+			if (!((LWEntryAcceptDispatch *)((Rva003B8BAA *)TheCampaignManager)->rva003B8BAA())->accepts(entry))
+				return false;
+		}
+		if (!*((Bool *)entry + 0x58))
+			return false;
+		if (((Rva00318D05 *)entry)->rva00318D05(((Rva002B4C35Player *)m_localPlayer)->m_id) && *((Bool *)entry + 0x58))
+		{
+			Int phase = m_turnPhase;
+			if (phase == 0)
+				return true;
+			if (!((StringBase<char> *)((char *)entry + 0x18))->isEmpty() && phase == 4 &&
+				((Rva002B4BC9 *)this)->rva002B4BC9((Rva002B4BC9Arg *)entry))
+				return true;
+		}
+		return false;
+	}
 }
 
 // WB LivingWorldLogic::update; native retail field/call sequence is independent evidence.
