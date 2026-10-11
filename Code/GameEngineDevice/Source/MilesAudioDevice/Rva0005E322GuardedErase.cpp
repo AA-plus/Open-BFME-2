@@ -20,11 +20,26 @@ private:
 	bool m_flag; // +0x04
 };
 
-struct Rva0005E322TreeView
+// LINK: the 12-byte tree is rowed as the STLport red-black tree over
+// Rva0005B5EAElement keys (0x0005B5EA); the key is the AsciiString words.
+struct Rva0005B5EAElement;
+namespace _STL
 {
+template <class T> struct less;
+template <class T> class allocator;
+template <class A, class B> struct pair;
+template <class T> struct _Select1st;
+template <class K, class V, class S, class C, class A> class _Rb_tree
+{
+public:
+	unsigned erase(const K &key);
+private:
 	char m_space[0x0C];
-	unsigned erase(const AsciiString &key);
 };
+}
+typedef _STL::_Rb_tree<Rva0005B5EAElement, _STL::pair<const Rva0005B5EAElement, int>,
+	_STL::_Select1st<_STL::pair<const Rva0005B5EAElement, int> >, _STL::less<Rva0005B5EAElement>,
+	_STL::allocator<_STL::pair<const Rva0005B5EAElement, int> > > Rva0005E322TreeView;
 
 class Rva0005E322Host
 {
@@ -39,5 +54,5 @@ private:
 void Rva0005E322Host::rva0005E322(const AsciiString *key, int idx)
 {
 	MilesMutexGuard guard(m_mutexzone, 0);
-	m_trees[idx + 0xD7].erase(*key);
+	m_trees[idx + 0xD7].erase(*reinterpret_cast<const Rva0005B5EAElement *>(key));
 }
