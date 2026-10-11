@@ -39,7 +39,10 @@ extern const StaticNameKey TheKey_teamName; // 0x009BD9F4
 class Dict
 {
 public:
-	AsciiString getAsciiString(NameKeyType key, Bool *exists = 0) const; // 0x0031359F
+	// 0x0031359F is rowed as Dict::getAsciiString(int, bool*) (the int
+	// spelling); same shape, so this resolves to the rowed body instead
+	// of the unrowed NameKeyType spelling (sole U on this unit).
+	AsciiString getAsciiString(int key, Bool *exists = 0) const; // 0x0031359F
 };
 
 AsciiString Rva0032B3EBTeamPath(const Dict *dict, Bool *exists)
