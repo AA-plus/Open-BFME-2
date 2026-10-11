@@ -76830,3 +76830,4 @@ uw_00771e2c,,0x00771E2C,14,Code/GameEngine/Source/GameLogic/Object/Update/Invisi
 ?rva005D0034@Rva005D0C31@@UAEXHHH@Z,,0x005D0034,77,Code/GameEngine/Source/Common/System/Rva005D0034Handler.cpp,matched,listener vtable 0x00C75570 slot 0; holder callback replacement
 ?Check_If_Mesh_Fits@DX8RigidFVFCategoryContainer@@UAE_NPAVMeshModelClass@@@Z,,0x00143A20,75,Code/Libraries/Source/WWVegas/WW3D2/DX8RigidCheckIfMeshFits.cpp,matched,Zero Hour donor without gap filler; byte-exact /O2
 ?rva004E8620@AptInGameChat@@UAEHXZ,,0x004E8620,80,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptInGameChatRva004E8620.cpp,matched,AptInGameChat GameWindow slot 5; receiver-type close
+?rva001E3E5C@Rva001E3E5C@@QBE_NXZ,,0x001E3E5C,17,Code/GameEngine/Source/GameLogic/Object/Rva001E3E5CGetter.cpp,matched,pinned 16B bool getter: this+4 pointer then int +0x0C >= 1; result held in an int local (xor eax;eax / setge al); called by Object::rva0028C428 via Rva0028AC4EEntry
