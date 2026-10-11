@@ -154,6 +154,12 @@ class ModuleInfo
 {
 public:
 	int getCount() const { return m_end - m_begin; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getCount copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// m_begin/m_end stay private. No flags touched.
+	int bfme_get_count() const { return m_end - m_begin; }
 	const ModuleData *getNthData( int i ) const;
 private:
 	struct Nugget { char m_unrecovered00[ 0x14 ]; };
@@ -166,6 +172,8 @@ class ThingTemplate
 {
 public:
 	const ModuleInfo &getDrawModuleInfo() const { return m_drawModuleInfo; }
+	// LINK: same reason as above; the call below inlines but emits the loser.
+	const ModuleInfo &bfme_draw_info() const { return m_drawModuleInfo; }
 private:
 	char m_unrecovered0000[ 0x2F0 ];
 	ModuleInfo m_drawModuleInfo;	///< 0x2F0
@@ -208,8 +216,8 @@ void W3DTerrainVisual::addProp( const ThingTemplate *tTemplate, const Coord3D *p
 	}
 	AsciiString modelName;
 	bool bfmeFlag = true;
-	const ModuleInfo &mi = tTemplate->getDrawModuleInfo();
-	if (mi.getCount() > 0)
+	const ModuleInfo &mi = tTemplate->bfme_draw_info();
+	if (mi.bfme_get_count() > 0)
 	{
 		const ModuleData *mdd = mi.getNthData(0);
 		const W3DPropDrawModuleData *md;

@@ -40,7 +40,10 @@ static __declspec(noinline) void CalcRevivalCostsForEntry(UnitRevivalEntry &entr
  RevivalThingView *thing=(RevivalThingView*)entry.getThingTemplate();
  if(!thing) return;
  const ModuleInfo &info=thing->modules;
- for(int i=0;i<info.getCount();++i) {
+ // LINK: manual inline of ModuleInfo::getCount (identical body: end-begin).
+ // This TU's copy loses to the first-in-order copy (no retail address); the
+ // loop call inlines it but still emits the loser COMDAT. No flags touched.
+ for(int i=0;i<(info.end-info.begin);++i) {
   const ModuleData *data=info.getNthData(i);
   if(!data) continue;
   if(data->isRevival()) {
