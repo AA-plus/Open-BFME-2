@@ -12,23 +12,23 @@
 // addresses.
 //
 //   slot body   vtable      draw function
-//   0x000A1CFB  0x00BC8D5C#3  Rva000A166ADraw
+//   0x000A1CFB  0x00BC8D5C#3  W3DGadgetHorizontalSliderDraw
 //   0x000A3131  0x00BC904C#3  W3DGadgetListBoxDraw
 //   0x000A6097  0x00BC7DC8#3  W3DGadgetPushButtonImageDraw
 //   0x000A086D  0x00BC8C54#3  W3DGadgetTextEntryDraw
 //   0x000A087F  0x00BC8C80#3  W3DGadgetTextEntryImageDraw
 //   0x000A0C42  0x00BC8CAC#3  W3DGadgetStaticTextDraw
-//   0x000A12E6  0x00BC8D04#3  Rva000A0D5EDraw
-//   0x000A15EC  0x00BC8D88#3  Rva000A136ADraw
-//   0x000A1D0D  0x00BC8DE0#3  Rva000A1747Draw
+//   0x000A12E6  0x00BC8D04#3  W3DGadgetProgressBarDraw
+//   0x000A15EC  0x00BC8D88#3  W3DGadgetVerticalSliderImageDraw
+//   0x000A1D0D  0x00BC8DE0#3  W3DGadgetHorizontalSliderImageDraw
 //   0x000A260A  0x00BC8FF4#3  W3DGadgetComboBoxDraw
 //   0x000A3DA8  0x00BC90FC#3  W3DGadgetTabControlDraw
 //   0x000A3DBA  0x00BC9128#3  W3DGadgetTabControlImageDraw
-//   0x000A4328  0x00BC9154#3  Rva000A3F61Draw
-//   0x000A433A  0x00BC9180#3  Rva000A4139Draw
-//   0x000A4783  0x00BC91AC#3  Rva000A44D2Draw
-//   0x000A4795  0x00BC91D8#3  Rva000A46B7Draw
-//   0x000A6007  0x00BC9204#3  Rva000A53DEDraw
+//   0x000A4328  0x00BC9154#3  W3DGadgetRadioButtonDraw
+//   0x000A433A  0x00BC9180#3  W3DGadgetRadioButtonImageDraw
+//   0x000A4783  0x00BC91AC#3  W3DGadgetCheckBoxDraw
+//   0x000A4795  0x00BC91D8#3  W3DGadgetCheckBoxImageDraw
+//   0x000A6007  0x00BC9204#3  W3DGadgetPushButtonDraw
 
 typedef int Int;
 typedef unsigned int UnsignedInt;
@@ -121,24 +121,24 @@ WindowMsgHandledType GadgetStaticTextInput(GameWindow *window, UnsignedInt msg, 
 WindowMsgHandledType GadgetStaticTextSystem(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
 WindowMsgHandledType GadgetTabControlInput(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
 WindowMsgHandledType GadgetTabControlSystem(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-WindowMsgHandledType Rva003207F5System(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-WindowMsgHandledType Rva00320DA9Input(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-WindowMsgHandledType Rva00321620Input(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-WindowMsgHandledType Rva003218B0System(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-WindowMsgHandledType Rva00321B50Input(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-WindowMsgHandledType Rva00321E5CSystem(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-WindowMsgHandledType Rva00322C25Input(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-WindowMsgHandledType Rva00324E92Input(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
+WindowMsgHandledType GadgetTextEntrySystem(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
+WindowMsgHandledType GadgetTextEntryInput(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
+WindowMsgHandledType GadgetVerticalSliderInput(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
+WindowMsgHandledType GadgetVerticalSliderSystem(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
+WindowMsgHandledType GadgetHorizontalSliderInput(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
+WindowMsgHandledType GadgetHorizontalSliderSystem(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
+WindowMsgHandledType GadgetComboBoxInput(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
+WindowMsgHandledType GadgetListBoxMultiInput(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
 WindowMsgHandledType Rva003285D4Input(GameWindow *window, UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2);
-void Rva000A0D5EDraw(GameWindow *window, WinInstanceData *instData);
-void Rva000A136ADraw(GameWindow *window, WinInstanceData *instData);
-void Rva000A166ADraw(GameWindow *window, WinInstanceData *instData);
-void Rva000A1747Draw(GameWindow *window, WinInstanceData *instData);
-void Rva000A3F61Draw(GameWindow *window, WinInstanceData *instData);
-void Rva000A4139Draw(GameWindow *window, WinInstanceData *instData);
-void Rva000A44D2Draw(GameWindow *window, WinInstanceData *instData);
-void Rva000A46B7Draw(GameWindow *window, WinInstanceData *instData);
-void Rva000A53DEDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetProgressBarDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetVerticalSliderImageDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetHorizontalSliderDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetHorizontalSliderImageDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetRadioButtonDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetRadioButtonImageDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetCheckBoxDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetCheckBoxImageDraw(GameWindow *window, WinInstanceData *instData);
+void W3DGadgetPushButtonDraw(GameWindow *window, WinInstanceData *instData);
 void W3DGadgetComboBoxDraw(GameWindow *window, WinInstanceData *instData);
 void W3DGadgetListBoxDraw(GameWindow *window, WinInstanceData *instData);
 void W3DGadgetPushButtonImageDraw(GameWindow *window, WinInstanceData *instData);
@@ -158,18 +158,18 @@ public:
 
 Int Rva000A1CFBWindow::draw(WinInstanceData *instData)
 {
-	Rva000A166ADraw(this, instData);
+	W3DGadgetHorizontalSliderDraw(this, instData);
 	return 1;
 }
 
 WindowMsgHandledType Rva000A1CFBWindow::input(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
 {
-	return Rva00321620Input(this, msg, mData1, mData2);
+	return GadgetVerticalSliderInput(this, msg, mData1, mData2);
 }
 
 WindowMsgHandledType Rva000A1CFBWindow::system(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
 {
-	return Rva003218B0System(this, msg, mData1, mData2);
+	return GadgetVerticalSliderSystem(this, msg, mData1, mData2);
 }
 
 class Rva000A3131Window : public GameWindow
@@ -230,12 +230,12 @@ Int Rva000A086DWindow::draw(WinInstanceData *instData)
 
 WindowMsgHandledType Rva000A086DWindow::input(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
 {
-	return Rva00320DA9Input(this, msg, mData1, mData2);
+	return GadgetTextEntryInput(this, msg, mData1, mData2);
 }
 
 WindowMsgHandledType Rva000A086DWindow::system(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
 {
-	return Rva003207F5System(this, msg, mData1, mData2);
+	return GadgetTextEntrySystem(this, msg, mData1, mData2);
 }
 
 class Rva000A087FWindow : public GameWindow
@@ -283,7 +283,7 @@ public:
 
 Int Rva000A12E6Window::draw(WinInstanceData *instData)
 {
-	Rva000A0D5EDraw(this, instData);
+	W3DGadgetProgressBarDraw(this, instData);
 	return 1;
 }
 
@@ -300,7 +300,7 @@ public:
 
 Int Rva000A15ECWindow::draw(WinInstanceData *instData)
 {
-	Rva000A136ADraw(this, instData);
+	W3DGadgetVerticalSliderImageDraw(this, instData);
 	return 1;
 }
 
@@ -312,7 +312,7 @@ public:
 
 Int Rva000A1D0DWindow::draw(WinInstanceData *instData)
 {
-	Rva000A1747Draw(this, instData);
+	W3DGadgetHorizontalSliderImageDraw(this, instData);
 	return 1;
 }
 
@@ -332,7 +332,7 @@ Int Rva000A260AWindow::draw(WinInstanceData *instData)
 
 WindowMsgHandledType Rva000A260AWindow::input(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
 {
-	return Rva00322C25Input(this, msg, mData1, mData2);
+	return GadgetComboBoxInput(this, msg, mData1, mData2);
 }
 
 WindowMsgHandledType Rva000A260AWindow::system(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
@@ -386,7 +386,7 @@ public:
 
 Int Rva000A4328Window::draw(WinInstanceData *instData)
 {
-	Rva000A3F61Draw(this, instData);
+	W3DGadgetRadioButtonDraw(this, instData);
 	return 1;
 }
 
@@ -408,7 +408,7 @@ public:
 
 Int Rva000A433AWindow::draw(WinInstanceData *instData)
 {
-	Rva000A4139Draw(this, instData);
+	W3DGadgetRadioButtonImageDraw(this, instData);
 	return 1;
 }
 
@@ -422,7 +422,7 @@ public:
 
 Int Rva000A4783Window::draw(WinInstanceData *instData)
 {
-	Rva000A44D2Draw(this, instData);
+	W3DGadgetCheckBoxDraw(this, instData);
 	return 1;
 }
 
@@ -444,7 +444,7 @@ public:
 
 Int Rva000A4795Window::draw(WinInstanceData *instData)
 {
-	Rva000A46B7Draw(this, instData);
+	W3DGadgetCheckBoxImageDraw(this, instData);
 	return 1;
 }
 
@@ -457,7 +457,7 @@ public:
 
 Int Rva000A6007Window::draw(WinInstanceData *instData)
 {
-	Rva000A53DEDraw(this, instData);
+	W3DGadgetPushButtonDraw(this, instData);
 	return 1;
 }
 
@@ -475,12 +475,12 @@ public:
 
 WindowMsgHandledType Rva000A1616Window::input(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
 {
-	return Rva00321B50Input(this, msg, mData1, mData2);
+	return GadgetHorizontalSliderInput(this, msg, mData1, mData2);
 }
 
 WindowMsgHandledType Rva000A1616Window::system(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
 {
-	return Rva00321E5CSystem(this, msg, mData1, mData2);
+	return GadgetHorizontalSliderSystem(this, msg, mData1, mData2);
 }
 
 class Rva000A26DFWindow : public GameWindow
@@ -491,7 +491,7 @@ public:
 
 WindowMsgHandledType Rva000A26DFWindow::input(UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2)
 {
-	return Rva00324E92Input(this, msg, mData1, mData2);
+	return GadgetListBoxMultiInput(this, msg, mData1, mData2);
 }
 
 // Image variants that keep their text sibling's input and system slots and
