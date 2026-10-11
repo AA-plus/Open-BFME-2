@@ -619,11 +619,6 @@ struct Rva0056B218B1
 	virtual void b1Anchor();
 };
 
-// ?b1Anchor@Rva0056B218B1@@UAEXXZ present-unmatched
-void Rva0056B218B1::b1Anchor()
-{
-}
-
 struct SiegeAIUpdateIface1
 {
 	virtual void siegeAIUpdateIface1Anchor();
