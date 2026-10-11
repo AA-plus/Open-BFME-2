@@ -1,5 +1,7 @@
 // ?rva0039E5B9@Team@@QAEXPAUCoord3D@@@Z
 // partial score=0.99 date=2026-10-11
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 // cl: /DNDEBUG /MD
 // ?rva0039DA2A@Team@@QBEXPAUCoord3D@@@Z @ 0x0039DA2A 202B (ours 202B exact size/count, 0 structural, 0 register)
 // Team centroid: averages live member positions. Walks via rowed iterate_TeamMemberList 0x263864 + DLINK advance pin 0x263526 (pin 5911),
@@ -101,6 +103,7 @@ void Team::rva0039E5B9(Coord3D *pos)
         ++count;
     }
     float inv = 1.0f / (float)count;
+    _ReadWriteBarrier();
     sum.x *= inv;
     sum.y *= inv;
     sum.z *= inv;
