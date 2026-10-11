@@ -30,8 +30,6 @@ private:
     AsciiString m_18, m_1c;
     float m_20;
 };
-Rva001E7087::Rva001E7087()
-    : m_vec04(_STL::allocator<void *>()), m_10(0), m_14(0), m_15(0), m_20(0.0f) {}
 Rva001E7087::~Rva001E7087() { rvaClear(); }
 
 // Banked byte proof: [1E86D0,1E8730)96B, original53B ctor1E7087,
