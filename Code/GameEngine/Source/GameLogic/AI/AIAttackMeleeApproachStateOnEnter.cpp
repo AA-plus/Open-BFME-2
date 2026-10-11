@@ -73,7 +73,7 @@ class AI
 {
 public:
 	static Bool rva002FE193(Object *owner, Object *nemesis);
-	const TAiData *getAiData() { return m_aiData; }
+	const TAiData *getAiDataRV() { return m_aiData; }
 	unsigned char m_pad00[0x18];
 	TAiData *m_aiData; // +0x18
 };
@@ -105,6 +105,8 @@ public:
 class Object : public Thing
 {
 public:
+	Bool rva0028CECF();	// 0x0028CECF owner test (rowed ?rva0028CECF@Object@@QAE_NXZ)
+public:
 	Bool testStatus(ObjectStatusTypes bit) const;
 	Weapon *getCurrentWeapon(WeaponSlotType *slot = 0);
 	Player *getControllingPlayer() const;
@@ -117,12 +119,6 @@ public:
 	Object *m_containedBy; // +0x274
 };
 
-// Owner test rva0028CECF (0x0028CECF), pinned under this name.
-class Rva0028CECFOwner
-{
-public:
-	Bool rva0028CECF();
-};
 
 // Physics flag-pair check (0x00390533), pinned under this name.
 class Rva00390533
@@ -204,7 +200,7 @@ public:
 protected:
 	StateMachine *getMachine() const { return m_machine; }
 	Object *getMachineOwner() const { return m_machine->getOwner(); }
-	Object *getMachineGoalObject() const { return ((TurretStateMachine *)m_machine)->getGoalObject(); }
+	Object *getMachineGoalObjectRV() const { return ((TurretStateMachine *)m_machine)->getGoalObject(); }
 	unsigned char m_pad04[0x18 - 0x04];
 	StateMachine *m_machine; // +0x18
 };
@@ -226,7 +222,7 @@ class AIAttackMeleeApproachState : public AIInternalMoveToState
 public:
 	virtual StateReturnType onEnter();
 private:
-	__forceinline Bool isCloseToVictim(const Object*source)const{MeleeCoordCopy raw(*source->getPosition());raw.sub(&m_50);float dx=raw.x,dy=raw.y;const TAiData*data=TheAI->getAiData();MeleeCoordCopy delta(dx,dy,0.0f);return delta.length()<data->m_90+data->m_94;}
+	__forceinline Bool isCloseToVictim(const Object*source)const{MeleeCoordCopy raw(*source->getPosition());raw.sub(&m_50);float dx=raw.x,dy=raw.y;const TAiData*data=TheAI->getAiDataRV();MeleeCoordCopy delta(dx,dy,0.0f);return delta.length()<data->m_90+data->m_94;}
 	Int m_4C; // +0x4C
 	Coord3D m_50; // +0x50
 	Int m_5C; // +0x5C
@@ -240,7 +236,7 @@ StateReturnType AIAttackMeleeApproachState::onEnter()
 	if (((TurretStateMachine *)getMachine())->rva004D7ADD())
 		return STATE_FAILURE;
 
-	Object *victim = getMachineGoalObject();
+	Object *victim = getMachineGoalObjectRV();
 	if (victim && victim->rva002943B2(source->getControllingPlayer()))
 	{
 		getMachine()->setGoalObject(0);
@@ -272,7 +268,7 @@ StateReturnType AIAttackMeleeApproachState::onEnter()
 	if (!victim)
 		return STATE_FAILURE;
 
-	if (source->rva0029493F(victim, 2) && ((Rva0028CECFOwner *)source)->rva0028CECF())
+	if (source->rva0029493F(victim, 2) && source->rva0028CECF())
 	{
 		getMachine()->setState(0xE9);
 		return STATE_CONTINUE;

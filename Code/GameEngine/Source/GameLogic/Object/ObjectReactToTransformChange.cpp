@@ -27,7 +27,7 @@ struct Region3D
 {
 	Coord3D lo;
 	Coord3D hi;
-	bool isInRegionNoZ( const Coord3D *query ) const
+	bool isInRegionNoZRV( const Coord3D *query ) const
 	{
 		return query->x > lo.x && hi.x > query->x && query->y > lo.y && hi.y > query->y;
 	}
@@ -107,7 +107,7 @@ public:
 	virtual void onTransformChanged();
 
 	void reactToTransformChange( const Matrix3D *oldMtx, const Coord3D *oldPos, Real oldAngle );
-	void rva00291EB1();
+	void setTriggerAreaFlagsForChangeInPosition();
 	void rva0028B98B();
 
 	const Coord3D *getPosition() const { return &m_pos; }
@@ -169,11 +169,11 @@ void Object::reactToTransformChange( const Matrix3D * /*oldMtx*/, const Coord3D 
 			if( m_baseHeight == 0.0f )
 				m_baseHeight = getPosition()->z;
 
-			rva00291EB1();
+			setTriggerAreaFlagsForChangeInPosition();
 
 			Region3D mapExtent;
 			TheTerrainLogic->getExtent( &mapExtent );
-			if( mapExtent.isInRegionNoZ( getPosition() ) )
+			if( mapExtent.isInRegionNoZRV( getPosition() ) )
 				m_privateStatus &= ~OFF_MAP;
 			else
 				m_privateStatus |= OFF_MAP;

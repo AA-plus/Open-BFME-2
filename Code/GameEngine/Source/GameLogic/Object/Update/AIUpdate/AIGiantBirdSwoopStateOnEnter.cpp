@@ -94,17 +94,17 @@ class GeometryInfo
 public:
 	GeometryInfo(const GeometryInfo &other);
 	virtual ~GeometryInfo();
-	Real getBoundingCircleRadius() const { return m_boundingCircleRadius; }
+	Real getBoundingCircleRadiusRV() const { return m_boundingCircleRadius; }
 private:
 	unsigned char m_pad04[0x10 - 4];
 	Real m_boundingCircleRadius; // +0x10
 	unsigned char m_pad14[0x5C - 0x14];
 };
 
-class BfmeBoundaryGeometry3D
+class Rva0073A1C0FloatField
 {
 public:
-	Real bfmeZDeltaToCenter(void) const;
+	Real get(void) const;	// 0x0073A1C0 (rowed float getter)
 };
 
 class TerrainLogic
@@ -323,7 +323,7 @@ public:
 class WeaponTemplate
 {
 public:
-	Int getClipSize() const { return m_clipSizeE4; }
+	Int getClipSizeRV() const { return m_clipSizeE4; }
 private:
 	unsigned char m_pad000[0xE4];
 	Int m_clipSizeE4; // +0xE4
@@ -351,7 +351,7 @@ public:
 
 	Object *getOwner() const { return m_owner; }
 	Object *getGoalObject();
-	const Coord3D *getGoalPosition() const { return &m_goalPosition; }
+	const Coord3D *getGoalPositionRV() const { return &m_goalPosition; }
 	void setGoalPosition(const Coord3D *pos);
 
 private:
@@ -409,11 +409,11 @@ StateReturnType AIGiantBirdSwoopState::onEnter()
 	if (m_targetID == INVALID_OBJECT_ID)
 	{
 		owner->chooseBestWeaponForTarget(0, PREFER_BEST_OVERALL, CMD_FROM_AI);
-		m_pos = *m_machine->getGoalPosition();
+		m_pos = *m_machine->getGoalPositionRV();
 		ai->m_victimID4C0 = INVALID_OBJECT_ID;
 		{
 			GeometryInfo geometry(owner->getGeometryInfo());
-			m_pos.z += ((const BfmeBoundaryGeometry3D *)&geometry)->bfmeZDeltaToCenter();
+			m_pos.z += ((const Rva0073A1C0FloatField *)&geometry)->get();
 		}
 	}
 	else
@@ -471,7 +471,7 @@ StateReturnType AIGiantBirdSwoopState::onEnter()
 			ai->m_flags4B8 |= 0x110;
 		else if (victim->getTemplate()->testKindOf(0, 0x800))
 			ai->m_flags4B8 = (ai->m_flags4B8 & ~0x100) | 0x20;
-		else if (weapon->getTemplate()->getClipSize() > 1 && !victim->testStatusBit38())
+		else if (weapon->getTemplate()->getClipSizeRV() > 1 && !victim->testStatusBit38())
 			ai->m_flags4B8 |= 8;
 
 		ai->setCurrentVictim(victim);
@@ -649,7 +649,7 @@ StateReturnType AIGiantBirdSwoopState::update()
 	Real dy = m_pos.y - owner->getPosition()->y;
 	Real dz = m_pos.z - owner->getPosition()->z;
 	Real distSq = dx * dx + dy * dy + dz * dz;
-	if (distSq < geometry.getBoundingCircleRadius() * geometry.getBoundingCircleRadius() * 0.5f)
+	if (distSq < geometry.getBoundingCircleRadiusRV() * geometry.getBoundingCircleRadiusRV() * 0.5f)
 		rva0036C438(true);
 
 	Real range = ai->m_swoopRadius538;
