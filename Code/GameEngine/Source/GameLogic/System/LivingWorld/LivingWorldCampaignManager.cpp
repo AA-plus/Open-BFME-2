@@ -58,10 +58,39 @@ public:
 
 class LivingWorldRegionManager;
 
+// The campaign's regions (+0x2C vector of region pointers): each region's id
+// at +0x12C and, at +0x198, the object whose +0x10 point the region manager
+// fills (0x0020F27E, WB GetRegionCenterPoint).
+struct Rva0020F3E8Point { int x, y; };
+struct Rva0020F3E8Marker
+{
+	unsigned char m_pad00[0x10];
+	Rva0020F3E8Point m_point;		// +0x10
+};
+struct Rva0020F3E8Region
+{
+	unsigned char m_pad000[0x12c];
+	int m_id;						// +0x12C
+	unsigned char m_pad130[0x198 - 0x130];
+	Rva0020F3E8Marker *m_marker;	// +0x198
+};
+#include "../../../Common/RegionCenterPointDispatchView.h"	// 0x0020F27E, WB GetRegionCenterPoint
+template<class T> struct Rva0020F3E8Vector
+{
+	T *begin;
+	T *end;
+	T *capacity;
+	unsigned size() const { return (unsigned)(end - begin); }
+	T &operator[](unsigned i) { return begin[i]; }
+};
+
 class LivingWorldRegionCampaign
 {
 public:
 	void rva0020F3E8(LivingWorldRegionManager *regionManager);	// 0x0020F3E8
+
+	unsigned char m_pad00[0x2c];
+	Rva0020F3E8Vector<Rva0020F3E8Region *> m_regions;	// +0x2C
 };
 
 class LivingWorldRegionManager
@@ -316,4 +345,17 @@ void LivingWorldCampaignManager::CallActSubroutine(const AsciiString &name)
     ((Gen_003bcb40 *)TheLivingWorldLogic)->m(addressForEmptyCallback(entry->rva00564DF2()));
     ((Glo012F1024Item *)entry)->bfmeEnter();
     TheLivingWorldManager->m_regionEffects->rva003EF2FF();
+}
+
+// Retail 0x0020F3E8, 90 bytes (RET 4; callers StartNewCampaign and
+// 0x003B8DD7): asks the region manager for each campaign region's point by
+// the region's id and stores it in the region's +0x198 marker.
+void LivingWorldRegionCampaign::rva0020F3E8(LivingWorldRegionManager *regionManager)
+{
+	for (unsigned i = 0; i < m_regions.size(); ++i)
+	{
+		Rva0020F3E8Point point;
+		((Rva0020F27EHost *)regionManager)->rva0020F27E(m_regions[i]->m_id, (int)&point);
+		m_regions[i]->m_marker->m_point = point;
+	}
 }
