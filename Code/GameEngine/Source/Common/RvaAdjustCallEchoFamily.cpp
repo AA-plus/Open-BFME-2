@@ -208,3 +208,26 @@ void Rva0053863ESub::rva0053856F()
 	m_cachedScale = sqrtf(halfW * halfW + halfH * halfH);
 	m_refresh = 0;
 }
+
+// Native 00330C35..00330C50: RET 8, returns the destination in EAX.
+// Reads an array pointer at receiver-0x34, indexes eight-byte records and
+// copies the first word as a float and the second as unchanged bits. The
+// adjacent rowed 330C0F/330C22 wrappers adjust their receiver by -0x3C;
+// this access is consistent with their underlying object's +8 array, but
+// neither an original owner name nor a semantic record type is asserted.
+struct Rva00330C35Record { float first; int second; };
+class Rva00330C35
+{
+public:
+    Rva00330C35Record *get(Rva00330C35Record *out, int index);
+};
+
+Rva00330C35Record *Rva00330C35::get(Rva00330C35Record *out, int index)
+{
+    Rva00330C35Record *array =
+        *reinterpret_cast<Rva00330C35Record **>(reinterpret_cast<char *>(this) - 0x34);
+    Rva00330C35Record *slot = &array[index];
+    out->first = slot->first;
+    out->second = slot->second;
+    return out;
+}
