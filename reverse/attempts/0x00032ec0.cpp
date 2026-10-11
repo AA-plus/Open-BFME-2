@@ -1,4 +1,6 @@
 // ?rva00032EC0@GeneralAllocator@Allocator@EA@@QAEXPBXPAUBlockInfo@23@@Z
+// partial score=0.93 date=2026-10-11
+// ?rva00032EC0@GeneralAllocator@Allocator@EA@@QAEXPBXPAUBlockInfo@23@@Z
 // partial score=0.8893478504882703 date=2026-10-10
 // ?rva00032EC0@GeneralAllocator@Allocator@EA@@QAEXPBXPAUBlockInfo@23@@Z
 // partial score=0.6 date=2026-10-07
@@ -28,22 +30,22 @@ void GeneralAllocator::rva00032EC0(const void *block, BlockInfo *out)
 {
     const char *chunk = (const char *)block;
     unsigned int header = *(const unsigned int *)(chunk + 4);
-    unsigned int mapped = header & 2;
     unsigned int size = header & 0x7FFFFFF8;
     unsigned char nextFlags = *(const volatile unsigned char *)(chunk + size + 4);
+    int mapped = (int)header & 2;
     if ((nextFlags & 1) != 0)
     {
         void *data = (void *)(chunk + 8);
         unsigned int usable = rva00032A20(data);
         out->m_blockType = 2;
-        if (mapped >= 2)
+        if (mapped != 0)
         {
             out->m_core = (void *)((unsigned int)chunk - *(const unsigned int *)chunk);
             unsigned int prefix = *(const unsigned int *)chunk;
             out->m_data = data;
             out->m_blockSize = prefix + size + 0x10;
             out->m_dataSize = usable;
-            out->m_mapped = true;
+            out->m_mapped = mapped != 0;
         }
         else
         {
