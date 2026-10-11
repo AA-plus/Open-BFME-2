@@ -17203,3 +17203,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??0?$list@PAVNetPacket@@V?$allocator@PAVNetPacket@@@_STL@@@_STL@@QAE@ABV01@@Z,0x00594689,Native ConstructBigCommandPacketList REL32; whole emitted helper; all owner relocations; and associative EH graph verified; fold-proof=Code/GameEngine/Source/GameNetwork/NetPacket.cpp
 ?rva004FBF8E@RegionAwardDispute@@QAEXXZ,0x004FBF8E,callee of ??0RegionAwardDispute@@QAE@HABV?$vector@IV?$allocator@I@_STL@@@_STL@@H@Z
 ?rva001076EE@Rva001076EE@@QAE_NXZ,0x001076EE,callee of ?rva0009A254@W3DShadowManager@@QAE_NXZ
+?rva005A2899@AptOnlineCustomMatch@@QAEXXZ,0x005A2899,callee of ?rva005A61C6@AptOnlineCustomMatch@@UAEXXZ
+?UpdatePings@AptOnlineCustomMatch@@QAEXXZ,0x0059ED8B,callee of ?rva005A61C6@AptOnlineCustomMatch@@UAEXXZ

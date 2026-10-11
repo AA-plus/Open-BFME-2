@@ -142,9 +142,16 @@ public:
 	int getSlotNum(AsciiString) const;
 	void setMap(AsciiString mapName);	// rowed 0x00400126
 
-	unsigned char m_pad04[0x14 - 0x04];
+	unsigned char m_pad04[0x11 - 0x04];
+	bool m_11;						   // +0x11, tested before a state-14 launch
+	unsigned char m_pad12[0x14 - 0x12];
 	unsigned int m_14;				   // +0x14, the buddy invite's second field
-	unsigned char m_pad18[0x5C - 0x18];
+	unsigned char m_pad18[0x38 - 0x18];
+	// +0x38: an 8-byte address pair the custom match fills from
+	// TheGameSpyInfo vslots 85 and 86 when it creates the NAT (retail copies
+	// it through an 8-byte local whose first dword it forwards).
+	struct Address38 { int ip; unsigned short port; } m_38;
+	unsigned char m_pad40[0x5C - 0x40];
 	unsigned int m_5c;				   // +0x5C, the buddy invite's last field
 	int m_rules[10];					 // +0x60, saved as "Rules"
 	void rva003FF1A7(int);
@@ -165,6 +172,8 @@ class GameSpyStagingRoom : public GameInfo
 {
 public:
 	GameSpyGameSlot *getGameSpySlot(int index); // rowed 0x004FDA3D
+	void launchWOTRMPGame(); // rowed 0x004FE126
+	void launchGame();		 // rowed 0x004FED35
 	// RequestJoinGame copies this WORD between complete staging-room objects.
 	unsigned char m_pad88[0x1008 - 0x88];
 	unsigned short m_1008; // purpose remains unknown
@@ -219,6 +228,19 @@ public:
 	V(62) V(63) V(64)
 	// Slot 65 (+0x104): text alone (PrintMessage kind 2).
 	virtual void v65(UnicodeString text) = 0;
+	V(66) V(67) V(68) V(69)
+	V(70) V(71) V(72) V(73) V(74) V(75) V(76) V(77) V(78) V(79)
+	V(80) V(81) V(82) V(83) V(84)
+	// Slots 85/86 (+0x154/+0x158) seed the room's +0x38/+0x3C when state 12
+	// creates the NAT; 88 (+0x160), 89 (+0x164) and 93 (+0x174) serve
+	// state 14's disconnect drain (address-derived names).
+	virtual int v85() = 0;
+	virtual unsigned short v86() = 0;
+	V(87)
+	virtual bool v88(bool) = 0;
+	virtual void v89(int reason) = 0;
+	V(90) V(91) V(92)
+	virtual int v93() = 0;
 #undef V
 };
 
@@ -259,6 +281,24 @@ struct PeerRequest
 	unsigned char m_tail[0x1EC - 0x11C];
 };
 
+// The peer thread response (PeerThreadRetail.h layout): type +0x00, the
+// disconnect reason at +0x10C, 0x348 bytes; rowed ctor 0x00389F77, dtor
+// 0x0038A063.
+class PeerResponse
+{
+public:
+	PeerResponse();
+	~PeerResponse();
+	enum { PEERRESPONSE_LOGIN, PEERRESPONSE_DISCONNECT };
+	int peerResponseType;
+	unsigned char m_pad004[0x10C - 0x04];
+	union
+	{
+		unsigned int unknown_payload[143];
+		struct { int reason; } discon;
+	};
+};
+
 // TheGameSpyPeerMessageQueue 0x00A02340: addRequest is virtual slot 6.
 class GameSpyPeerMessageQueueInterface
 {
@@ -270,6 +310,9 @@ public:
 	virtual int isConnected() = 0;
 	virtual int isConnecting() = 0;
 	virtual void addRequest(const PeerRequest &request) = 0;
+	virtual void v07() = 0;
+	virtual void v08() = 0;
+	virtual bool getResponse(PeerResponse &response) = 0; // slot 9 (+0x24)
 };
 
 extern GameSpyPeerMessageQueueInterface *TheGameSpyPeerMessageQueue;
@@ -279,6 +322,8 @@ struct AptOnlineCustomMatchOwner
 {
 	unsigned char m_pad000[0x274];
 	void *m_movie; // +0x274
+	unsigned char m_pad278[0x2B0 - 0x278];
+	int m_2b0; // +0x2B0, nonzero while its pending reset (0x005170CD) is due
 };
 
 // The screen's game-mode preferences (GameModePreferences.cpp; vslot 3 is
@@ -368,7 +413,9 @@ class Rva0043DB47DoubleSetter
 public:
 	void enable();
 
-	char m_lead[0x2B9];
+	char m_lead[0x2B0];
+	int m_2b0; // +0x2B0 (+0x320 of the screen), required for state 0's start
+	char m_lead2b4[0x2B9 - 0x2B4];
 	unsigned char m_a;
 	unsigned char m_b;
 };
@@ -378,10 +425,26 @@ class AptMpGameSetup
 public:
 	void rva0043E5C1(int slot, int kind, int value);
 	void rva0043DE19();
+	bool rva00440BDF(bool host); // rowed 0x00440BDF (WB OnHostStartGame)
+	bool WaitStartGame();		 // rowed 0x0044127C
+	bool OnUpdate();			 // rowed 0x00443EA8
 };
 
 // The NAT negotiator at 0x00A063F8 keeps its port negotiation at +0x28.
 struct Elem005DB98E;
+
+// The screen's +0x6C observer base and the NAT's observer list (rowed
+// append 0x005A0B4C).
+struct Rva002BA8F1Listener
+{
+	void *m_vptr;
+};
+
+class Rva005A0B4CList
+{
+public:
+	void append(Rva002BA8F1Listener *listener);
+};
 
 class PortNegotiationSchema
 {
@@ -397,6 +460,18 @@ public:
 	int m_10;					   // +0x10, zero when idle
 	unsigned char m_pad14[0x28 - 0x14];
 	PortNegotiationSchema m_schema; // +0x28
+	unsigned char m_pad29[0x2C - 0x29];
+	Rva005A0B4CList m_observers; // +0x2C (WB Observable<PortNegotiationSchemaObserver>)
+	int rva005A8F57(); // rowed 0x005A8F57, the per-frame negotiation step
+};
+
+// The NAT the custom match creates in state 12 (0x974 bytes, rowed ctor
+// 0x005A721C); it is stored into g_Va00E063F8.
+class Rva005A734B
+{
+public:
+	Rva005A734B();
+	unsigned char m_data[0x974];
 };
 
 extern Rva005A6D47 *g_Va00E063F8;
@@ -419,7 +494,8 @@ public:
 	// Slot 2 of vftable 0x00871414 (WorldBuilder and the retail string
 	// "AptOnlineCustomMatch::InitGadgets").
 	virtual void InitGadgets();
-	virtual void v03();
+	// Slot 3 of vftable 0x00871414: the per-frame update (WB unnamed).
+	virtual void rva005A61C6();
 	virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
 	// Slots 8 and 9 of vftable 0x00871414 (unnamed in WorldBuilder).
 	virtual bool rva0059EF49();
@@ -515,12 +591,20 @@ public:
 	// Unrowed 0x005A0D61 (97 bytes; ret 4, a byte flag), pinned by address.
 	void rva005A0D61(bool force);
 
+	virtual void rva005A61C6();
+	void UpdatePings();					 // banked 0x0059ED8B, pinned
+	void rva005A2899();					 // unrowed 0x005A2899 (990 bytes), pinned
+	bool rva005A1EEE();					 // rowed 0x005A1EEE
+	void UpdateHostStartGameButton();	   // rowed 0x0059EEE2
+	void rva0059EE96(unsigned char a, unsigned char b); // rowed 0x0059EE96
+	bool rva005A57BA(bool flag);			// rowed 0x005A57BA
+
 private:
 	// Everything after the screen's own state that the full object refreshes
 	// when the local slot changes (placeholder row 0x0059F950).
 	void RefreshScreen() { ((Rva0059F950 *)this)->rva0059F950(); }
 
-	unsigned char m_pad06c[0x70 - 0x6C];
+	Rva002BA8F1Listener m_observer; // +0x6C
 	Rva0043DB47DoubleSetter m_70; // +0x70
 	unsigned char m_pad32b[0x450 - (0x70 + sizeof(Rva0043DB47DoubleSetter))];
 	Rva00580316 m_prefsLoader; // +0x450
@@ -546,6 +630,8 @@ private:
 	unsigned char m_pad4c3[0x4D4 - 0x4C3];
 	AptConnectionScreen *m_connectionGrid; // +0x4D4
 	bool m_connectionsScreen; // +0x4D8
+	unsigned char m_pad4d9[0x4DC - 0x4D9];
+	unsigned int m_inviteTime; // +0x4DC, timeGetTime when the buddy invite went out
 };
 
 // Retail 0x0059EC65, 13 bytes: "AptOnline::CustomMatch::PlayGame".
@@ -1177,4 +1263,135 @@ void AptOnlineCustomMatch::FillGameNameTextEntry(bool flag)
  m_textentryGameName->winEnable(flag);
  m_createDialog->winEnable(true);
  GadgetTextEntrySetText(m_createDialog, secondText);
+}
+
+extern int g_Va00E063F0;
+extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime();
+void __cdecl Rva00381C2DClear(unsigned int value);
+void GSMessageBoxOk(UnicodeString title, UnicodeString message, void (*okFunc)());
+class Rva005170CD { public: void rva005170CD(); };
+class Rva0059FC9F { public: int rva0059FC9F(); };
+class Rva005A5BAFClass { public: void rva005A5BAF(); };
+
+// Retail 0x005A61C6, 956 bytes: slot 3 of vftable 0x00871414, the screen's
+// per-frame step over its +0x488 state (WorldBuilder twin 0x014E76B0, a
+// later revision with extra calls, unnamed; strings "OnStartLobby",
+// "GUI:GSBuddyInviteFailed", "GUI:GSDisconReason%d"). Every state ends in
+// the +0x70 panel's OnUpdate and, when that reports a change, UpdatePings,
+// except the state-14 launch which returns at once.
+void AptOnlineCustomMatch::rva005A61C6()
+{
+	switch (m_state)
+	{
+	case 0:
+		if (g_Va00E063F0 == 1 && rva005A1EEE() && m_70.m_2b0 != 0)
+			m_state = 4;
+		break;
+	case 1:
+	{
+		void *movie = m_owner->m_movie;
+		Rva00524EF4AptCall((*(Rva00222A8BTarget **)&g_bfmeAptWindowManager), movie, v10(), "OnStartLobby");
+		m_state = 2;
+	}
+		// fall through
+	case 2:
+		rva005A0D61(false);
+		break;
+	case 4:
+		rva005A2899();
+		break;
+	case 6:
+		if (g_Va00E063F8)
+			g_Va00E063F8->rva005A8F57();
+		UpdateHostStartGameButton();
+		break;
+	case 7:
+		if (((AptMpGameSetup *)&m_70)->rva00440BDF(true))
+		{
+			m_state = 8;
+		}
+		else
+		{
+			m_state = 6;
+			rva0059EE96(1, 1);
+			Rva00381C2DClear(1);
+		}
+		break;
+	case 8:
+		if (!((AptMpGameSetup *)&m_70)->WaitStartGame())
+		{
+			m_state = 6;
+			rva0059EE96(1, 1);
+		}
+		break;
+	case 9:
+		rva005A57BA(false);
+		break;
+	case 13:
+		if (timeGetTime() - m_inviteTime > 15000)
+		{
+			((Rva005170CD *)m_owner)->rva005170CD();
+			m_inviteTime = 0;
+			GSMessageBoxOk(TheGameText->fetch("GUI:GSBuddyInviteFailedTitle"),
+				TheGameText->fetch("GUI:GSBuddyInviteFailed"), 0);
+			rva005A1EEE();
+		}
+		else if (((Rva0059FC9F *)this)->rva0059FC9F() >= 0)
+		{
+			((Rva005A5BAFClass *)this)->rva005A5BAF();
+		}
+		break;
+	case 12:
+		if (!g_Va00E063F8 && TheGameSpyGame->getLocalSlotNum() >= 0)
+		{
+			g_Va00E063F8 = (Rva005A6D47 *)new Rva005A734B;
+			GameInfo::Address38 address;
+			address.ip = TheGameSpyInfo->v85();
+			address.port = TheGameSpyInfo->v86();
+			TheGameSpyGame->m_38 = address;
+			g_Va00E063F8->m_observers.append(&m_observer);
+		}
+		if (g_Va00E063F8)
+			g_Va00E063F8->rva005A8F57();
+		if (m_owner->m_2b0)
+			((Rva005170CD *)m_owner)->rva005170CD();
+		break;
+	case 14:
+		if (TheGameSpyGame && TheGameSpyGame->m_11)
+		{
+			if (!TheGameSpyInfo->v88(false))
+			{
+				int count = TheGameSpyInfo->v93();
+				bool done = false;
+				PeerResponse resp;
+				while (count--)
+				{
+					if (done || !TheGameSpyPeerMessageQueue->getResponse(resp))
+						break;
+					switch (resp.peerResponseType)
+					{
+					case PeerResponse::PEERRESPONSE_DISCONNECT:
+					{
+						done = true;
+						AsciiString reason;
+						reason.format("GUI:GSDisconReason%d", resp.discon.reason);
+						TheGameSpyInfo->v89(resp.discon.reason);
+						break;
+					}
+					}
+				}
+			}
+		}
+		else
+		{
+			if (TheGameSpyGame->m_5c == 1)
+				TheGameSpyGame->launchWOTRMPGame();
+			else
+				TheGameSpyGame->launchGame();
+			return;
+		}
+		break;
+	}
+	if (((AptMpGameSetup *)&m_70)->OnUpdate())
+		UpdatePings();
 }
