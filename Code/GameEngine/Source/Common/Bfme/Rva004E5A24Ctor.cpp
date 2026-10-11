@@ -9,12 +9,14 @@ extern "C" void _ReadWriteBarrier(void);
 
 struct BfmeE16 { float x, y, z, w; };
 
+// 0x001B4E63 is the rowed SubsystemInterface ctor; the base construct calls it by that name.
+class SubsystemInterface { public: SubsystemInterface(); };
+
 class __declspec(novtable) BFME2NativeNetwork
 {
 public:
-	__declspec(dllimport) __forceinline BFME2NativeNetwork() { baseConstruct(); }
+	__declspec(dllimport) __forceinline BFME2NativeNetwork() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
 	virtual ~BFME2NativeNetwork() { _ReadWriteBarrier(); }
-	void baseConstruct();
 private:
 	virtual void unused() = 0;
 	char m_flag;
