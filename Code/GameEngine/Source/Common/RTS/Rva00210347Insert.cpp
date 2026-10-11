@@ -30,7 +30,6 @@ class Rva00210347
 {
 public:
 	NocasePair &rva00210347(const NocasePair &value);
-	void *rva0020F569(const NocasePair &src);
 private:
 	void *m_unused;
 	Rva00210347Node **m_beginBuckets;
@@ -39,12 +38,23 @@ private:
 	unsigned int m_numElements;
 };
 
+void *__stdcall Rva0020F569Alloc(const NocasePair &);
+// The complete 20F569 allocator consumes the stack value and ignores ECX.
+// MSVC's four-byte member-pointer representation retains the native unused
+// receiver while naming the existing stdcall provider and no extra symbol.
+union NativeNodeAllocCall {
+ void *(__stdcall *target)(const NocasePair &);
+ void *(Rva00210347::*member)(const NocasePair &);
+};
+typedef char NodeAllocPointerWidth[sizeof(NativeNodeAllocCall)==4 ? 1 : -1];
+
 NocasePair &Rva00210347::rva00210347(const NocasePair &value)
 {
 	((Rva000427195 *)this)->rva00212858(m_numElements + 1);
 	unsigned int bucket = ((Rva000427195 *)this)->bucketIndex(&value.first);
 	Rva00210347Node *first = m_beginBuckets[bucket];
-	Rva00210347Node *node = (Rva00210347Node *)rva0020F569(value);
+	NativeNodeAllocCall call={&Rva0020F569Alloc};
+	Rva00210347Node *node = (Rva00210347Node *)(this->*call.member)(value);
 	node->m_next = first;
 	m_beginBuckets[bucket] = node;
 	++m_numElements;
