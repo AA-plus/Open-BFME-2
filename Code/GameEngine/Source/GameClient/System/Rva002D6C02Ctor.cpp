@@ -7,8 +7,10 @@ extern "C" const void *const vtbl_00C0331C[];  // ??_7Rva002D6C02@@6B@
 class BFME2NativeNetwork
 {
 public:
-	void baseConstruct();
 };
+
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
 
 class Rva002D6C02
 {
@@ -21,7 +23,7 @@ public:
 
 Rva002D6C02::Rva002D6C02()
 {
-	((BFME2NativeNetwork *)this)->baseConstruct();
+	reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface();
 	m_0C = 0;
 	m_10 = 0;
 	*(void **)this = (void *)((unsigned int)vtbl_00C0331C);

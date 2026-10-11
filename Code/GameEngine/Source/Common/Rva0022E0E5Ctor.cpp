@@ -13,14 +13,16 @@ struct BfmePod72 { int a[18]; };
 inline bool operator==(const BfmePod72 &x, const BfmePod72 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod72 &x, const BfmePod72 &y) { return x.a[0] < y.a[0]; }
 
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
+
 class __declspec(novtable) BFME2NativeNetwork
 {
 public:
 	BFME2NativeNetwork()
 	{
-		baseConstruct();
+		reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface();
 	}
-	void baseConstruct();
 	virtual ~BFME2NativeNetwork();
 private:
 	char m_flag04;

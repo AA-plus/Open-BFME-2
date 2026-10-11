@@ -19,13 +19,15 @@ template <> void _STLP_alloc_proxy<BfmeE16*, BfmeE16, allocator<BfmeE16> >::deal
 class BFME2NativeNetwork
 {
 public:
-	void baseConstruct();
 };
+
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
 
 class __declspec(novtable) Rva00421242Base
 {
 public:
-	Rva00421242Base() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
+	Rva00421242Base() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
 	virtual void unused();
 	char m_flag;
 	int m_value;

@@ -27,16 +27,18 @@ extern const void *const g_00BBB554[];
 class BFME2NativeNetwork
 {
 public:
-	void baseConstruct();
 };
 
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
+
 class __declspec(novtable) Rva003733C8Primary
 {
 public:
-	__forceinline Rva003733C8Primary() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
+	__forceinline Rva003733C8Primary() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
 	virtual ~Rva003733C8Primary() { _ReadWriteBarrier(); }
 private:
 	char m_flag;

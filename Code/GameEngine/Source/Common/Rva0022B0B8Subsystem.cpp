@@ -25,13 +25,15 @@ template <> void **vector<void*>::end();
 class BFME2NativeNetwork
 {
 public:
-	void baseConstruct();
 };
+
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
 
 class __declspec(novtable) BFME2NativeNetworkBase
 {
 public:
-	__forceinline BFME2NativeNetworkBase() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
+	__forceinline BFME2NativeNetworkBase() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
 	virtual ~BFME2NativeNetworkBase();
 private:
 	char m_flag;

@@ -33,13 +33,15 @@ struct Rva0022D95AElement
 class BFME2NativeNetwork
 {
 public:
-	void baseConstruct();
 };
+
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
 
 class __declspec(novtable) Rva0022A968SubsystemBase
 {
 public:
-	Rva0022A968SubsystemBase() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
+	Rva0022A968SubsystemBase() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
 	virtual ~Rva0022A968SubsystemBase();
 
 private:

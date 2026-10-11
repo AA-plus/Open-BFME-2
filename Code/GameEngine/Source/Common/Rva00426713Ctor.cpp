@@ -7,13 +7,15 @@ extern const void *const g_00C3C3F8[];
 class BFME2NativeNetwork
 {
 public:
-	void baseConstruct();
 };
+
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
 
 class __declspec(novtable) Rva00426713Base
 {
 public:
-	Rva00426713Base() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
+	Rva00426713Base() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
 	virtual void unused();
 	char m_flag;
 	int m_value;

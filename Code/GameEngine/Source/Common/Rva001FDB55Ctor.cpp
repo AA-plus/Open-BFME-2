@@ -23,12 +23,14 @@ bool operator<(const AsciiString &, const AsciiString &);
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
+
 class __declspec(novtable) BFME2NativeNetwork
 {
 public:
 	BFME2NativeNetwork();
 	virtual ~BFME2NativeNetwork() { _ReadWriteBarrier(); }
-	void baseConstruct();
 private:
 	virtual void unused() = 0;
 	char m_flag;
@@ -38,7 +40,7 @@ private:
 // ??0BFME2NativeNetwork@@QAE@XZ present-unmatched
 __forceinline BFME2NativeNetwork::BFME2NativeNetwork()
 {
-	baseConstruct();
+	reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface();
 }
 
 class Rva001FDB55 : public BFME2NativeNetwork

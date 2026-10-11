@@ -12,13 +12,19 @@ extern "C" void _ReadWriteBarrier(void);
 class BFME2NativeNetwork
 {
 public:
-	void baseConstruct();
+};
+
+class SubsystemInterface
+{
+public:
+	SubsystemInterface();  // rowed 0x001B4E63
+	void setName(AsciiString name);
 };
 
 class __declspec(novtable) BFME2NativeNetworkBase
 {
 public:
-	__forceinline BFME2NativeNetworkBase() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
+	__forceinline BFME2NativeNetworkBase() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
 	virtual ~BFME2NativeNetworkBase() { _ReadWriteBarrier(); }
 private:
 	char m_flag;
@@ -34,11 +40,6 @@ private:
 	char m_pad[0x1C];
 };
 
-class SubsystemInterface
-{
-public:
-	void setName(AsciiString name);
-};
 
 class Rva00222061 : public BFME2NativeNetworkBase
 {

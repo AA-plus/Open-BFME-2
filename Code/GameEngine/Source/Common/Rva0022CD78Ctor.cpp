@@ -14,14 +14,16 @@
 class BFME2NativeNetwork
 {
 public:
-	void baseConstruct();
 };
+
+// 0x001B4E63 is the rowed SubsystemInterface ctor.
+class SubsystemInterface { public: SubsystemInterface(); };
 
 class __declspec(novtable) Rva0022CD78Head
 {
 public:
-	__forceinline Rva0022CD78Head() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
-	virtual ~Rva0022CD78Head() { ((BFME2NativeNetwork *)this)->baseConstruct(); }
+	__forceinline Rva0022CD78Head() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
+	virtual ~Rva0022CD78Head() { reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface(); }
 private:
 	char m_flag;
 	int m_value;
