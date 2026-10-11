@@ -833,6 +833,11 @@ struct BfmePod8 {
     int m_at00;
     int m_viewType;
 };
+// Retail keeps one vector<BfmePod8>::erase (0x00054B3F); this unit calls it
+// rather than leading link order with its own copy.
+namespace _STL {
+template <> BfmePod8 *vector<BfmePod8, allocator<BfmePod8> >::erase(BfmePod8 *);
+}
 
 // Tree-like member at GlobalVolumeData +0x1B8; its clear is rowed at
 // 0x00057B74 under this address-derived name.
