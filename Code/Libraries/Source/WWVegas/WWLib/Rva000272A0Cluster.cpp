@@ -31,6 +31,9 @@ namespace _STL { __declspec(nothrow) void* __copy_trivial(const void*, const voi
 template <> void **_STL::vector<void *>::erase(void **first, void **last);
 // The allocating unit owns the verified fill-assign specialization.
 template <> void _STL::vector<void *>::_M_fill_assign(size_t n, void *const &value);
+// The allocating unit now owns the verified 525-byte fill-insert body.
+// Keep this unit's primary-template copy out of COMDAT selection.
+template <> void _STL::vector<void *>::_M_fill_insert(void **position, size_t n, void *const &value);
 // Likewise, the allocating unit owns native insertion at 0x000291D0.
 template <> void **_STL::vector<void *>::insert(void **position, void *const &value);
 
