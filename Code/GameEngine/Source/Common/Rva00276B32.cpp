@@ -5,10 +5,11 @@ class Thing
 public:
 	const Coord3D *getUnitDirectionVector2D() const;
 };
-class Rva002763E6Aux
+// Native 002763E6 is the existing Drawable position accessor.
+class Drawable
 {
 public:
-	int auxValue();
+	const Coord3D *getPosition() const;
 };
 class Rva00270276Host
 {
@@ -53,7 +54,7 @@ bool Rva00276B32Host::rva00276B32(int a, int b)
 		{
 			if (s->m_4->m_74 == 1)
 			{
-				void *r1 = (void *)((Rva002763E6Aux *)this)->auxValue();
+				void *r1 = (void *)((const Drawable *)this)->getPosition();
 				const Coord3D *r2 = ((const Thing *)this)->getUnitDirectionVector2D();
 				return ((Rva00270276Host *)this)->rva00270276(mid, s, r1, (void *)r2, a, b);
 			}
