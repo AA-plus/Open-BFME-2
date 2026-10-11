@@ -10,7 +10,14 @@
 
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
+// LINK: hide math.h's inline float ceil wrapper (r3 LK4 recipe; dllimport
+// extern keeps math.h's indirect-call shape). This TU's ?ceil@@YAMM@Z/_ceilf
+// copies lose (first-copy); the calls inline but still emit loser COMDATs.
+// No flags touched.
+#define ceil bfme_hidden_ceil
 #include <math.h>
+#undef ceil
+extern "C" __declspec(dllimport) double __cdecl ceil(double x);
 
 class Rva002034E9Host
 {
