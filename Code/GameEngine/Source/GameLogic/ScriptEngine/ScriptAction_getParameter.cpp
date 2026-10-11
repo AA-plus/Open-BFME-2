@@ -28,10 +28,19 @@ private:
 	Parameter *m_parms[MAX_PARMS]; // +0x0C
 };
 
-Parameter *ScriptAction::getParameter(int ndx)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Parameter *ScriptAction::getParameter(int ndx)
 {
 	if (ndx >= 0 && ndx < m_numParms)
 		return m_parms[ndx];
 
 	return 0;
 }
+
+// ?bfmeAnchorScriptActionGetParameter absent-from-retail
+Parameter *bfmeAnchorScriptActionGetParameter(ScriptAction *p, int ndx)
+{
+	return p->getParameter(ndx);
+}
+

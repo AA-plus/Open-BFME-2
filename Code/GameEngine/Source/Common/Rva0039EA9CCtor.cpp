@@ -23,6 +23,16 @@ private:
 	int m_10;
 	Rva0039EA9CHandle m_14;
 };
-Rva0039EA9C::Rva0039EA9C() : m_00(0), m_04(0), m_08(1), m_0c(0), m_10(0)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0039EA9C::Rva0039EA9C() : m_00(0), m_04(0), m_08(1), m_0c(0), m_10(0)
 {
 }
+
+// ?bfmeAnchorRva0039EA9C absent-from-retail
+void *bfmeAnchorRva0039EA9C(void *where)
+{
+	return new (where) Rva0039EA9C();
+}
+

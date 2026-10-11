@@ -42,13 +42,23 @@ private:
     Impl *m_ptr;
 };
 
-Rva00579E47::Rva00579E47(const DelegateDesc &d)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00579E47::Rva00579E47(const DelegateDesc &d)
 {
     Impl *p = new Impl(d);
     m_ptr = p;
     if (p)
         p->m_ref++;
 }
+
+// ?bfmeAnchorRva00579E47 absent-from-retail
+void *bfmeAnchorRva00579E47(void *where, const DelegateDesc &d)
+{
+	return new (where) Rva00579E47(d);
+}
+
 
 // Four more delegate-wrapper constructors of this 59-byte shape, each installing
 // its own impl vtable (the only differing operand): VA 0xbe5898, 0xc67e80,

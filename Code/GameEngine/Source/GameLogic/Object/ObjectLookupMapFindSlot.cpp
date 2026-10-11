@@ -66,7 +66,9 @@ private:
 
 
 // ?findSlot@ObjectLookupMap@@QAEPAPAVObject@@PAH@Z
-Object **ObjectLookupMap::findSlot( int *key )
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Object **ObjectLookupMap::findSlot( int *key )
 {
 	NameKeyGenerator::KeyToBucketMap::Slot out;
 	m_map.find( out, key );
@@ -81,6 +83,13 @@ Object **ObjectLookupMap::findSlot( int *key )
 	}
 	return &node->value;
 }
+
+// ?bfmeAnchorObjectLookupMapFindSlot absent-from-retail
+Object **bfmeAnchorObjectLookupMapFindSlot(ObjectLookupMap *p, int *key)
+{
+	return p->findSlot(key);
+}
+
 
 class Player
 {

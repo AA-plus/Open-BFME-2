@@ -43,8 +43,17 @@ private:unsigned argument4;
 class __declspec(novtable) Iface00C1C780 {public:virtual void slot00()=0;};
 class __declspec(novtable) Rva003ADFDB:public Rva003ADFDBPrimary,public Iface00C1C780 {public:Rva003ADFDB(unsigned);virtual ~Rva003ADFDB();};
 // Target C1D294 and C1D2C0 both select 3AE16E; it calls native24 at3A583E.
-Rva003ADFDB::~Rva003ADFDB(){
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva003ADFDB::~Rva003ADFDB(){
  unsigned char* b08=this?(unsigned char*)this+8:0;
  *(volatile unsigned int*)b08=((unsigned int)vtbl_00C1C780);
  *(volatile unsigned int*)this=((unsigned int)vtbl_00C1B320);
 }
+
+// ?bfmeAnchorRva003ADFDBDtor absent-from-retail
+void bfmeAnchorRva003ADFDBDtor(Rva003ADFDB *p)
+{
+	p->Rva003ADFDB::~Rva003ADFDB();
+}
+

@@ -39,11 +39,21 @@ private:
 	unsigned int m_field08;
 };
 
-Rva00359853::Rva00359853(unsigned int field04, unsigned int field08)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00359853::Rva00359853(unsigned int field04, unsigned int field08)
 {
 	m_field04 = field04;
 	m_field08 = field08;
 }
+
+// ?bfmeAnchorRva00359853 absent-from-retail
+void *bfmeAnchorRva00359853(void *where, unsigned int a, unsigned int b)
+{
+	return new (where) Rva00359853(a, b);
+}
+
 
 class Rva00431A34
 {

@@ -24,11 +24,20 @@ private:
 	void *m_ptr;
 };
 
-Rva004C9B8F::~Rva004C9B8F()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva004C9B8F::~Rva004C9B8F()
 {
 	if (m_ptr != 0)
 		reinterpret_cast<RadarMarker *>(m_ptr)->DeleteReference();
 }
+
+// ?bfmeAnchorRva004C9B8FDtor absent-from-retail
+void bfmeAnchorRva004C9B8FDtor(Rva004C9B8F *p)
+{
+	p->~Rva004C9B8F();
+}
+
 
 Rva004C9B8F &Rva004C9B8F::operator=(const Rva004C9B8F &other)
 {

@@ -158,13 +158,23 @@ private:
 	Impl004106FA *m_impl;
 };
 
-Rva004106FA::Rva004106FA(const int *arg)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva004106FA::Rva004106FA(const int *arg)
 {
 	Impl004106FA *p = new Impl004106FA(*arg);
 	m_impl = p;
 	if (p != 0)
 		++p->m_ref;
 }
+
+// ?bfmeAnchorRva004106FA absent-from-retail
+void *bfmeAnchorRva004106FA(void *where, const int *arg)
+{
+	return new (where) Rva004106FA(arg);
+}
+
 
 // ??0Rva0044BC76@@QAE@PBH@Z @0x0044BC76 53B, impl vtable VA 0xc3ed7c
 struct Impl0044BC76 : Rva00080221RefImpl

@@ -33,7 +33,9 @@ struct WideCharCompare
     int compareNoCase(const wchar_t *a, const wchar_t *b, int len) const;
 };
 
-int WideCharCompare::compareNoCase(const wchar_t *a, const wchar_t *b, int len) const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline int WideCharCompare::compareNoCase(const wchar_t *a, const wchar_t *b, int len) const
 {
     while (len > 0) {
         const WideChar leftLower = (WideChar)towlower(*a);
@@ -46,3 +48,10 @@ int WideCharCompare::compareNoCase(const wchar_t *a, const wchar_t *b, int len) 
     }
     return 0;
 }
+
+// ?bfmeAnchorWideCharCompare absent-from-retail
+int bfmeAnchorWideCharCompare(const WideCharCompare *p, const wchar_t *a, const wchar_t *b, int len)
+{
+	return p->compareNoCase(a, b, len);
+}
+

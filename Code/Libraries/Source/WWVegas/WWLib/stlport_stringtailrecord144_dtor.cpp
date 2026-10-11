@@ -112,11 +112,21 @@ BfmePoolRef10::BfmePoolRef10(BfmePoolHolder88 *p) : m_target(p)
         InterlockedIncrement((Long *)((char *)m_target + 0x8c));
 }
 // ??0BfmePoolRef10@@QAE@ABV0@@Z 0x00051950 33B copy ctor via InterlockedIncrement on holder+0x8c; 9 callers incl 0x519F1/0x51C7E; double-deref of source ref
-BfmePoolRef10::BfmePoolRef10(const BfmePoolRef10 &other) : m_target(other.m_target)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmePoolRef10::BfmePoolRef10(const BfmePoolRef10 &other) : m_target(other.m_target)
 {
     if (m_target)
         InterlockedIncrement((Long *)((char *)m_target + 0x8c));
 }
+
+// ?bfmeAnchorBfmePoolRef10Copy absent-from-retail
+void *bfmeAnchorBfmePoolRef10Copy(void *where, const BfmePoolRef10 *src)
+{
+	return new (where) BfmePoolRef10(*src);
+}
+
 // Assignment's verified 0x00051971 provider lives in HostClass005C908B.cpp,
 // whose caller needs the full visible noinline body for VC7.1 alias analysis.
 // ?rva000519BD@BfmePoolRef10@@QAEXXZ 0x000519BD 25B release via pinned 0x50ED3 then and-zero; 7 callers incl 0x53D32/0x599FD/0x2D97C7; address-derived clear on BfmePoolRef10 (dtor already rowed at 0x519AB)
