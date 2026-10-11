@@ -147,7 +147,12 @@ public:
 	Relationship getRelationship(const Object *that) const;
 	bool isKindOf(KindOfType kind) const;
 	int rva0028B511() const;
-	class Module *findModule(NameKeyType key);
+protected:
+	// Rowed Object::findModule (0x0028B6D6) is a protected const member, so
+	// the mangled call name carries that access; Weapon calls it here.
+	class Module *findModule(NameKeyType key) const;
+	friend class Weapon;
+public:
 	unsigned char m_pad000[4];
  ThingTemplate *m_template;
  unsigned char m_pad008[0x38-8];
@@ -300,21 +305,22 @@ class WeaponTemplate { public:
  char pad0[0xc]; int m_key; char pad10[0x2c-0x10]; float m_minTargetAngle; char pad30[0x58-0x30]; int m_damageType;
  char pad5C[0x10c-0x5c]; unsigned m_anti; char pad110[4]; bool m_damage; char pad115[0x128-0x115]; int m_128; char pad12C[0x168-0x12c]; unsigned char m_168; char pad169[0x170-0x169]; bool m_noVictimAttack;
 };
+class Weapon;
+enum WeaponStatus
+{
+	READY_TO_FIRE = 0,
+	OUT_OF_AMMO = 1,
+	BETWEEN_FIRING_SHOTS = 2,
+	RELOADING_CLIP = 3,
+	PRE_ATTACK = 4,
+	WEAPON_STATUS_5 = 5
+};
 class Weapon { public:
  virtual void *nativeSlot0(unsigned)=0;
  void rva002CE226(const Object *,const SavedWeaponState *);
  bool isWithinAttackRange(const Object *,const Object *,float,int) const;
  char isWithinAttackRange(Object *,void *,float,int) const;
  bool rva002CCED3(const Object *,const Object *);
- enum WeaponStatus
- {
- 	READY_TO_FIRE = 0,
- 	OUT_OF_AMMO = 1,
- 	BETWEEN_FIRING_SHOTS = 2,
- 	RELOADING_CLIP = 3,
- 	PRE_ATTACK = 4,
- 	WEAPON_STATUS_5 = 5
- };
  WeaponStatus computeStatus(bool *cacheable) const;
  WeaponTemplate *m_template; unsigned m_ownerID;
  char padC[0x4c-0xc]; bool m_pitch;
@@ -792,7 +798,6 @@ CanAttackResult WeaponSet::getAbleToAttackSpecificObject(AbleToAttackType attack
 
 	return getAbleToUseWeaponAgainstTarget(attackType, source, victim, &victim->m_position, commandSource);
 }
-
 // Native 0x002CCED3..0x002CCC47: 244B RET8. Fires only when the template and
 // ammo state allow it and no occlusion blocks the victim: an OUT_OF_AMMO
 // weapon with a nonzero +0x128 stays silent; a nonzero +0x168 byte runs the
