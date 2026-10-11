@@ -34370,11 +34370,11 @@ pin	reverse/symbols.csv	0x0073B410	1
 pin	reverse/symbols.csv	0x0073B660	1
 pin	reverse/symbols.csv	0x0073B7E0	1
 pin	reverse/symbols.csv	0x0073B940	1
-pin	reverse/symbols.csv	0x0073BFE0	1	allow=a7ff4faa0241c6c882d97b92440f50f28dd71cdd
+pin	reverse/symbols.csv	0x0073BFE0	1
+pin	reverse/symbols.csv	0x0073C450	1	allow=c4c2d262e5289d3eae3745ecd3011b3af96a7db2
 pin	reverse/symbols.csv	0x0073C9D0	2
 pin	reverse/symbols.csv	0x0073CAF0	1
 pin	reverse/symbols.csv	0x0073CC60	1
-pin	reverse/symbols.csv	0x0073CCC0	1
 pin	reverse/symbols.csv	0x0073D030	1
 pin	reverse/symbols.csv	0x0073D090	1
 pin	reverse/symbols.csv	0x0073D5E0	3

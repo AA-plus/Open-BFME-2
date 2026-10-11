@@ -3,7 +3,8 @@
 // Retail callers name this operation processPending(bool), at 0x0073D4F0
 // (144 bytes). Its queue advances in 0x20-byte records and frees 0x80-byte
 // blocks; the helper call at 0x0073D52D reaches 0x0073CCC0. That callee's
-// semantic name is not established, so it remains an address-derived pin.
+// method spelling remains address-derived; native CCC0 and WB UndoShroudReveal
+// consume record+18 as float rotation. The 0x20 queue layout is unchanged.
 
 #include <deque>
 
@@ -17,7 +18,7 @@ struct BfmeE32
 	int field0c;
 	int field10;
 	int field14;
-	int field18;
+	float rotation;
 	int field1c;
 };
 
@@ -43,7 +44,7 @@ private:
 
 	void processPending(bool drainAll);
 	void rva0073CCC0(int field04, int field08, void *field0c,
-		int field18, int field1c);
+		float rotation, int field1c);
 };
 
 void ShroudManagerImpl::processPending(bool drainAll)
@@ -54,7 +55,7 @@ void ShroudManagerImpl::processPending(bool drainAll)
 	{
 		BfmeE32 &record = records.front();
 		rva0073CCC0(record.field04, record.field08, &record.field0c,
-			record.field18, record.field1c);
+			record.rotation, record.field1c);
 		records.pop_front();
 	}
 }

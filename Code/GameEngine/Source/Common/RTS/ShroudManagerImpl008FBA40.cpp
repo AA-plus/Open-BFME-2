@@ -257,6 +257,7 @@ public:
 
 private:
 	void rva0073CAF0(int,int,void*,float,int);
+	void rva0073CCC0(int,int,void*,float,int);
 	int mode;
 	Region3D region;
 	Real defaultCellSize;
@@ -791,4 +792,28 @@ void ShroudManagerImpl::rva0073CAF0(int x,int y,void *opaque,float rotation,int 
   ys[15-i]=(int)(y+(float)sin(angle)*s*radii[1]+(float)cos(angle)*c2*radii[(i/4)&2]+0.5f);
  }
  Rva0073BFE0Raster(xs,ys,16,revealUpdater((Gen_008F7CD0*)this,mask));
+}
+
+char __cdecl Rva0073C3B0Raster(int,int,int,Rva0073BAA0Base);
+char __cdecl Rva0073C450Raster(int*,int*,int,Rva0073BAA0Base);
+void ShroudManagerImpl::rva0073CCC0(int x,int y,void *opaque,float rotation,int mask)
+{
+ int *radii=(int*)opaque;
+ if(!mask || radii[0]<0)return;
+ mask&=0xfffff;
+ if(radii[0]==radii[1] && radii[1]==radii[2]){
+  Rva0073C3B0Raster(x,y,radii[0],revealUpdater((Gen_008F7CD0*)this,mask));return;
+ }
+ float a=1.5705f-rotation;
+ float c=(float)cos(a);
+ float s=-(float)sin(a);
+ float minusS=-s;
+ float c2=c;
+ int xs[16],ys[16];
+ for(int i=0;i<16;++i){
+  float angle=(i-4)*3.141f/8.f;
+  xs[15-i]=(int)(x+(float)sin(angle)*c*radii[1]+(float)cos(angle)*minusS*radii[(i/4)&2]+0.5f);
+  ys[15-i]=(int)(y+(float)sin(angle)*s*radii[1]+(float)cos(angle)*c2*radii[(i/4)&2]+0.5f);
+ }
+ Rva0073C450Raster(xs,ys,16,revealUpdater((Gen_008F7CD0*)this,mask));
 }
