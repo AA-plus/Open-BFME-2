@@ -43979,7 +43979,7 @@ __purecall,,0x0003B810,62,Code/Libraries/Source/debug/debug_purecall.cpp,matched
 ?xfer@RebuildHoleBehavior@@MAEXPAVXfer@@@Z,,0x004833EC,338,Code/GameEngine/Source/GameLogic/Object/Behavior/RebuildHoleBehaviorXfer.cpp,matched,slot3 vtable 0x00849A74 via UpdateModule base and Spawn shape
 ?rva00506A52@Rva00506A52@@QAEXXZ,,0x00506A52,168,Code/GameEngine/Source/Common/Rva00506A52.cpp,matched,chain from 0x005AD6C3 via rowed bucket_count getter check new push_back
 ?rva00506AFA@Rva00506A52@@QAEXXZ,,0x00506AFA,33,Code/GameEngine/Source/Common/Rva00506AFA.cpp,matched,chain from 0x00506A52 calls filler then slot0 per element
-?rva005A6732@Rva005A6732@@QBE_NXZ,,0x005A6732,92,Code/GameEngine/Source/Common/Rva005A6732Check.cpp,matched,callers 0x005A8ABF 0x005A8F57 neighbours Rva005A6709Predicate Disp8CmpBoolGetters no callees
+?rva005A6732@NAT@@QBE_NXZ,,0x005A6732,92,Code/GameEngine/Source/Common/Rva005A6732Check.cpp,matched,class renamed Rva005A6732->NAT: table +0x08 / slot ints +0x14 +0x18 / state bytes +0x94C +0x950 are the NAT views m_slotList m_localSlot m_targetSlot m_state94c; callers 0x005A8ABF 0x005A8F57 neighbours Rva005A6709Predicate Disp8CmpBoolGetters no callees
 ??0HordeContainModuleData@@QAE@XZ,,0x00475C9A,492,Code/GameEngine/Source/GameLogic/Object/Contain/HordeContainModuleDataCtor.cpp,matched,vtable 0x00C457B0 INI 0x00C45530 donor BFME1 HordeUpdate plus Production precedent
 ?rva001FA48D@Rva001FA48D@@QAEXXZ,,0x001FA48D,23,Code/GameEngine/Source/Common/Thing/Rva001FA48D.cpp,matched,chain via rowed 0x001F93EB null-checked virtual slot plus4 then tail-jmp
 ?rva001FA4A4@Rva001FA4A4@@QAEXH@Z,,0x001FA4A4,34,Code/GameEngine/Source/Common/Thing/Rva001FA4A4.cpp,matched,chain via rowed 0x001F9402 null-checked slot C with int then forward

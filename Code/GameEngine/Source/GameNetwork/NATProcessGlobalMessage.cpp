@@ -90,7 +90,13 @@ struct NAT
 	void rva005A7829(Int cookie);
 	void rva005A89C2(Int slot, Int value);
 };
-extern NAT *TheNAT;
+// TheNAT: defined here (zero-initialised, exactly as retail's image holds the
+// four bytes at VA 0x00E063F8) because the rowed body below proves the
+// address: NAT::processGlobalMessage at 0x005A8ABF loads dword [0x00E063F8]
+// into ecx before its call to NAT::attachSlotList at 0x005A6B14. The data
+// ledger already binds 0x00A063F8 to ?TheNAT@@3PAUNAT@@A (31 references, no
+// definition), so this definition is what links the unit.
+NAT *TheNAT = 0;
 
 void NAT::processGlobalMessage(Int slotNum, const char *options)
 {
