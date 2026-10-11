@@ -111,4 +111,10 @@ template <> inline void vector<void *>::_M_fill_assign(size_t n, void *const &va
 }
 }
 
+// Suppress this unit's non-retail clear copy (row 57 family2-LK3) so the link
+// keeps the retail copy another unit provides.
+namespace _STL {
+template <> void _STL::vector<void *>::clear();
+}
+
 template class _STL::vector<void *, _STL::allocator<void *> >;
