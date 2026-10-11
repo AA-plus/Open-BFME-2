@@ -21,13 +21,20 @@ struct BfmeObjectIdSlot
 class BfmeObjectReference
 {
 public:
-	BfmeObjectIdSlot *getObjectIdSlot();
 	Object *resolve();
 };
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameLogic/GameLogic.h
 // Zero Hour's GameCommon.h spells the id an enum; retail's 0x00049DC5 row takes it.
 enum ObjectID { INVALID_ID = 0, FORCE_OBJECTID_TO_LONG_SIZE = 0x7ffffff };
+namespace _STL { template <class T> class allocator; template <class T, class A> class vector; }
+// LINK: 0x0036F710 is rowed as AIGroup::getAllIDs; the reference reads the same
+// word, so the slot read keeps its shape through a member-pointer cast.
+class AIGroup
+{
+public:
+	const _STL::vector<ObjectID, _STL::allocator<ObjectID> > &getAllIDs() const;
+};
 class GameLogic
 {
 public:
@@ -39,7 +46,7 @@ extern GameLogic *TheGameLogic;
 Object *BfmeObjectReference::resolve()
 {
 	if (this != 0) {
-		BfmeObjectIdSlot *slot = getObjectIdSlot();
+		BfmeObjectIdSlot *slot = (((AIGroup *)this)->*reinterpret_cast<BfmeObjectIdSlot *(AIGroup::*)()>(&AIGroup::getAllIDs))();
 		return TheGameLogic->findObjectByID((ObjectID)slot->m_value->m_id);
 	}
 	return 0;
