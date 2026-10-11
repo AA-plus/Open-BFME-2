@@ -81,11 +81,6 @@ private:
 	int m_34;
 };
 
-FakePathfindPortalBehaviour::~FakePathfindPortalBehaviour()
-{
-	rva0046183B();
-}
-
 class AI;
 extern AI *TheAI;
 
@@ -107,19 +102,6 @@ struct Rva004618D4AI
 	Rva002E9042 *m_p10;
 };
 
-// ?rva004618D4@FakePathfindPortalBehaviour@@QAEXXZ, retail 0x004618D4 (54B): forwards the two
-// waypoints at +0x28/+0x2C to the TheAI+0x10 object, calls its no-argument helper through the
-// local thiscall view, then clears the +0x32 flag.
-void FakePathfindPortalBehaviour::rva004618D4()
-{
-	Rva002E9042 *obj = (*reinterpret_cast<Rva004618D4AI **>(&TheAI))->m_p10;
-	obj->rva002E9042(*reinterpret_cast<void **>(m_28));
-	obj = (*reinterpret_cast<Rva004618D4AI **>(&TheAI))->m_p10;
-	obj->rva002E9042(*reinterpret_cast<void **>(m_28 + 4));
-	reinterpret_cast<Rva004618D4Caller *>((*reinterpret_cast<Rva004618D4AI **>(&TheAI))->m_p10)->rva002E7023();
-	m_32 = false;
-}
-
 // Placeholder virtuals in this unit's vftables: in retail, every vftable that holds
 // each one has the same function in that slot (vftable addresses from matched vptr
 // stores). Bind them to the rows at those functions.
@@ -127,38 +109,6 @@ void FakePathfindPortalBehaviour::rva004618D4()
 
 class Rva002E6ECA { public: virtual void *destroy(unsigned); int get() const; };
 typedef Rva002E6ECA Rva0046183BWaypoint;
-void FakePathfindPortalBehaviour::rva0046183B()
-{
- if(m_30) {
-  Rva0046183BWaypoint **p=(Rva0046183BWaypoint**)m_28;
-  for(int i=0;i<2;++i,++p) {
-   Rva0046183BWaypoint *wp=*p;
-   if(wp) {
-    if((unsigned char)wp->get()) (*reinterpret_cast<Rva004618D4AI**>(&TheAI))->m_p10->rva002E9042(wp);
-    ::operator delete(*p ? (*p)->destroy(0) : 0);
-    *p=0;
-   }
-  }
-  reinterpret_cast<Rva004618D4Caller*>((*reinterpret_cast<Rva004618D4AI**>(&TheAI))->m_p10)->rva002E7023();
-  m_30=false;
- }
-}
-
-// Native461A46..461B1B RET4 allocatesC0 and calls proven Waypoint ctor282212.
-// Five by-value strings and argument order come from that ctor provider;
-// target fake-name literal and ownerB0/flagsA8/A9 establish this factory's role.
-Waypoint *FakePathfindPortalBehaviour::rva00461A46(const Coord3D *point)
-{
- const FakePortalDataView *data=m_data;
- Waypoint *wp=new Waypoint(0x7ffffffe,AsciiString("#fakepathfindportal_wp"),point,
-  AsciiString::TheEmptyString,AsciiString::TheEmptyString,AsciiString::TheEmptyString,
-  false,7,AsciiString::TheEmptyString);
- wp->ownerID=m_owner->id;
- wp->flagA8=data->flag118;
- wp->flagA9=data->flag119;
- return wp;
-}
-
 #include <math.h>
 class TerrainLogic { public:
  virtual void slot0();virtual void slot1();virtual void slot2();

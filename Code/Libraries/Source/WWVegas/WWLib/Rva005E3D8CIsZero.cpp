@@ -22,17 +22,6 @@ struct SBServer
     void Rva005E3E8A(void *newHandle);
 };
 
-__declspec(noinline) SBServer::SBServer(const SBServer &src)
-{
-    void *handle = src.m_handle;
-    m_handle = handle;
-    if (handle != 0) {
-        void *slot = *(void **)handle;
-        char *obj = (char *)((void **)slot)[1] + (unsigned int)handle;
-        ++*(int *)(obj + 4);
-    }
-}
-
 #include <map>
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
@@ -57,59 +46,7 @@ static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
 struct TargetRef00217D4C { virtual void *destroy(unsigned flags); int references; };
 extern void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *p);
 
-__declspec(noinline) SBServer::~SBServer()
-{
-    void *handle = m_handle;
-    if (handle != 0) {
-        void *slot = *(void **)handle;
-        char *obj = (char *)((void **)slot)[1] + (unsigned int)handle;
-        ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)obj);
-    }
-}
-
-void SBServer::Rva005E3B9E()
-{
-    void *handle = m_handle;
-    if (handle != 0) {
-        void *slot = *(void **)handle;
-        char *obj = (char *)((void **)slot)[1] + (unsigned int)handle;
-        ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)obj);
-        m_handle = 0;
-    }
-}
-
-void SBServer::Rva005E3E8A(void *newHandle)
-{
-    if (newHandle != m_handle) {
-        Rva005E3B9E();
-        m_handle = newHandle;
-        if (newHandle != 0) {
-            void *slot = *(void **)newHandle;
-            char *obj = (char *)((void **)slot)[1] + (unsigned int)newHandle;
-            ++*(int *)(obj + 4);
-        }
-    }
-}
-
-SBServer &SBServer::operator=(const SBServer &src)
-{
-    if (this != &src) {
-        void *shandle = src.m_handle;
-        if (shandle != 0) {
-            void *slot = *(void **)shandle;
-            char *obj = (char *)((void **)slot)[1] + (unsigned int)shandle;
-            ++*(int *)(obj + 4);
-        }
-        void *h = m_handle;
-        if (h != 0) {
-            void *slot2 = *(void **)h;
-            char *obj2 = (char *)((void **)slot2)[1] + (unsigned int)h;
-            ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)obj2);
-        }
-        m_handle = src.m_handle;
-    }
-    return *this;
-}
+// SBServer::operator= is recovered in stlport_map_int_sbserver.cpp (0x5E3B4A).
 
 namespace _STL {
 
@@ -150,11 +87,6 @@ public:
     char unknown00[0x10];
     Rva005E4087 *implementation;
 };
-void Rva005E4157::rva005E4157(int index)
-{
-    implementation->rva005E4087(index);
-}
-
 // BF1 9cb assetmgr.cpp HAnimIterator predicate is a structural lead, not
 // naming proof. Complete native 5E3D8C..5E3D95 follows the previous tail
 // branch and tests receiver+14 for zero. Original owner remains unknown.
