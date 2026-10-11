@@ -140,6 +140,11 @@ struct Rva004AD613Iterator
 	Rva004AD613Iterator &operator++() { m_node = m_node->m_next; return *this; }
 	bool operator!=(const Rva004AD613Iterator &other) const { return m_node != other.m_node; }
 };
+// Native2A1B6F and its whole insertion helper copy one opaque four-byte
+// element into a 12-byte list node; they never dereference the word as a
+// pointer. Reuse that existing owner for these ObjectID payloads.
+class Rva002A1B6FNativeList { public: void append(void *const &value); };
+
 class Rva0029FB3BMember
 {
 public:
@@ -147,7 +152,6 @@ public:
 	Rva004AD613Iterator begin() const { Rva004AD613Iterator it; it.m_node = m_head->m_next; return it; }
 	Rva004AD613Iterator end() const { Rva004AD613Iterator it; it.m_node = m_head; return it; }
 	void reset();
-	void push_back(const ObjectID &id);	// 0x002A1B6F
 	Rva004AD613Node *m_head;
 };
 // BFME2's partition filters (the view AIStructureCreepTactic.cpp documents):
@@ -332,7 +336,9 @@ void GloriousChargeUpdate::rva004AD7B6()
 	for (Object *obj = hits.next(); obj; obj = hits.next()) {
 		if (obj == self)
 			continue;
-		m_88.push_back(obj->getID());
+		const ObjectID id = obj->getID();
+		reinterpret_cast<Rva002A1B6FNativeList *>(&m_88)->append(
+			reinterpret_cast<void *const &>(id));
 	}
 }
 void GloriousChargeUpdate::rva004AD8E3()
