@@ -1138,6 +1138,8 @@ def layout(r, overlay=(), status=LINK_STATUS, rows=None):
 def build_image(base=0x10000000, out=OUT, tag="boot", overlay=(), status=LINK_STATUS, rows=None):
     """Link (and check) the image; `overlay` specs (or explicit ledger `rows`) put
     authored units in it."""
+    # Paths passed to Wine link.exe must remain valid when cwd is changed to out.
+    out = out.resolve()
     out.mkdir(parents=True, exist_ok=True)
     r = Retail()
     t = time.time()
