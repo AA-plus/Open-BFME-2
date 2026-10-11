@@ -147,6 +147,8 @@ public:
 	virtual bool a110();
 };
 
+#include "../../Common/RTS/XYDistanceCallView.h"
+
 class Object
 {
 public:
@@ -240,7 +242,7 @@ Object *Rva00495183::rva00495183()
  Object *hit;
  while((hit=results.next())!=0) {
   if(((NearestQueryObjectHead *)hit)->definition[0x10C]&1) {
-   float distance=owner->rva002615E3((const Coord3D *)((char *)hit+0x38));
+   float distance=reinterpret_cast<Rva000CBA20 *>(owner)->distSq((const Rva000CBA20Point *)((char *)hit+0x38));
    if(!best || closest>distance) {best=hit;closest=distance;}
   }
  }

@@ -14,5 +14,6 @@ class Rva000CBA20
     float m_x;
     float m_y;
 public:
-    float distSq(const Rva000CBA20Point *point);
+    // The complete retail leaf performs only scalar arithmetic and cannot throw.
+    float distSq(const Rva000CBA20Point *point) throw();
 };

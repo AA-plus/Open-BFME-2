@@ -10,7 +10,7 @@ public:
 #include "RTS/XYDistanceCallView.h"
 
 
-float Rva000CBA20::distSq(const Rva000CBA20Point *p)
+float Rva000CBA20::distSq(const Rva000CBA20Point *p) throw()
 {
 	float dx = m_x - p->x;
 	float dy = m_y - p->y;
