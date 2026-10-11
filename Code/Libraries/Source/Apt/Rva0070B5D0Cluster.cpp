@@ -18,13 +18,13 @@ struct Rva008B4260StringRef
 	int compare008B4260(const Rva008B4260StringRef &other) const;
 };
 
-extern EAStringC saConstantAtE18388[];
+extern "C" EAStringC bfmeObjDAE[178];
 extern EAStringC g_00E18650;
 
 bool Rva0070B5D0Check()
 {
 	int i = 0;
-	EAStringC *p = saConstantAtE18388;
+	EAStringC *p = bfmeObjDAE;
 	do
 	{
 		if (p->IsEmpty())
