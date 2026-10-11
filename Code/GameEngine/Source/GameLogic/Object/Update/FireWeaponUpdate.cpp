@@ -40,6 +40,16 @@ typedef float Real;
 // A reference maximum that compares with '>': retail keeps the entry's frame
 // when it is strictly later, which STLport's max (a < b) spells the other way.
 template <class T> inline const T &maxOf(const T &a, const T &b) { return a > b ? a : b; }
+// LINK: static overload takes the UnsignedInt maxOf call below (identical
+// inlined bytes) so this TU emits no loser ??$maxOf@I COMDAT.
+static inline const UnsignedInt &maxOf(const UnsignedInt &a, const UnsignedInt &b) { return a > b ? a : b; }
+namespace _STL {
+// LINK: static overload takes the UnsignedInt min call below (identical
+// inlined bytes to the template) so this TU emits no loser ??$min@I COMDAT.
+// Mirrors stlport's `__b < __a ? __b : __a` spelling exactly.
+static inline const UnsignedInt &min(const UnsignedInt &a, const UnsignedInt &b)
+{ return b < a ? b : a; }
+}
 
 class Thing;
 class ModuleData;
