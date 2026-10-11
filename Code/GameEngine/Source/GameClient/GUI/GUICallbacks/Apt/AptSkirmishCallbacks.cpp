@@ -229,9 +229,12 @@ private:
 	void *m_currentUserName;
 };
 
-// The screen's member at +0x668; its unrowed 0x005C1ABA takes the current
-// user name, pinned by address.
-class Rva005C1ABA
+// The screen's member at +0x668. Renamed from the address-derived
+// Rva005C1ABA view to the rowed class spelling Rva005C1A36 (its vtable
+// 0x008743DC carries ??_G 0x005C1A9E, rva005C1AE4 at slot 2 and
+// ?rva005C1ABA@Rva005C1A36@@QAEXABVUnicodeString@@@Z at 0x005C1ABA), which is
+// the same class: four virtuals then the same non-virtual entry point.
+class Rva005C1A36
 {
 public:
 	virtual void vslot0();
@@ -402,7 +405,7 @@ void AptSkirmish::OnChangeProfile(const char *unused)
 		prefs->v3slotC();
 		prefs->setCurrentUserName(name);
 		prefs->v3slotC();
-		((Rva005C1ABA *)((char *)this + 0x668))->rva005C1ABA(prefs->Rva0043B9F5());
+		((Rva005C1A36 *)((char *)this + 0x668))->rva005C1ABA(prefs->Rva0043B9F5());
 		m_state = 5;
 	}
 	m_6c1 = true;
@@ -451,7 +454,7 @@ void AptSkirmish::OnDeleteProfile(const char *unused)
 		name = prefs->Rva0043BB88();
 		prefs->setCurrentUserName(name);
 		prefs->v3slotC();
-		((Rva005C1ABA *)((char *)this + 0x668))->rva005C1ABA(prefs->Rva0043B9F5());
+		((Rva005C1A36 *)((char *)this + 0x668))->rva005C1ABA(prefs->Rva0043B9F5());
 	}
 	rva00522556();
 }
@@ -484,7 +487,7 @@ void AptSkirmish::OnAddProfileAccept(const char *unused)
 		prefs->rva0043C612(name);
 		prefs->setCurrentUserName(name);
 		prefs->v3slotC();
-		((Rva005C1ABA *)((char *)this + 0x668))->rva005C1ABA(prefs->Rva0043B9F5());
+		((Rva005C1A36 *)((char *)this + 0x668))->rva005C1ABA(prefs->Rva0043B9F5());
 		m_6c1 = true;
 		m_state = 5;
 	}
@@ -655,7 +658,7 @@ void AptSkirmish::rva00523303()
 		prefs->setCurrentUserName(prefs->Rva0043BB88());
 		prefs->v3slotC();
 	}
-	Rva005C1ABA *nameMember = (Rva005C1ABA *)((char *)this + 0x668);
+	Rva005C1A36 *nameMember = (Rva005C1A36 *)((char *)this + 0x668);
 	nameMember->vslot3();
 	nameMember->rva005C1ABA(prefs->Rva0043B9F5());
 	m_6c0 = false;
