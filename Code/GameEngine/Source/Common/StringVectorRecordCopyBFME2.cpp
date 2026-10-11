@@ -18,6 +18,8 @@ template <> vector<AsciiString, allocator<AsciiString> >::~vector();
 template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();
 template <> void _STLP_alloc_proxy<AsciiString*, AsciiString, allocator<AsciiString> >::deallocate(AsciiString*, size_t);
 template <> void allocator<AsciiString>::deallocate(AsciiString*, size_t) const;
+template <> vector<AsciiString, allocator<AsciiString> >::vector(const vector<AsciiString, allocator<AsciiString> >&);
+template <> _Vector_base<AsciiString, allocator<AsciiString> >::_Vector_base(size_t, const allocator<AsciiString>&);
 template <> AsciiString *__uninitialized_copy(const AsciiString*, const AsciiString*, AsciiString*, const __false_type&);
 template <> vector<AsciiString, allocator<AsciiString> > &vector<AsciiString, allocator<AsciiString> >::operator=(const vector<AsciiString, allocator<AsciiString> >&);
 }
