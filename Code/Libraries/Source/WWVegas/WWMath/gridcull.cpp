@@ -19,6 +19,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "colmath.h"
 #include "colmathinlines.h"
 
+// Retail keeps one GridLinkClass pool allocator (0x0071AED0); this unit calls it.
+template <> GridLinkClass *ObjectPoolClass<GridLinkClass, 256>::Allocate_Object_Memory(void);
+
 
 DEFINE_AUTO_POOL(GridLinkClass,256);
 
