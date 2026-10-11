@@ -128,6 +128,8 @@ class Parameter
 {
 public:
 	Int getInt() const { return m_int; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getInt copy loses to the first-in-order copy. No flags touched.
+	Int bfme_getInt_f996b() const { return m_int; }
 	const AsciiString *getString() const { return (const AsciiString *)m_string; }
 private:
 	unsigned char m_beforeInt[8];
@@ -146,6 +148,12 @@ class ThingTemplate
 public:
 	Bool isEquivalentTo(const ThingTemplate *other) const;
 	Bool isKindOf(KindOfType t) const
+	{
+		return (m_kindOf[t >> 3] >> (t & 7)) & 1;
+	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the isKindOf
+	// copy loses to the kept copy. No flags touched.
+	Bool bfme_isKindOf_puc(KindOfType t) const
 	{
 		return (m_kindOf[t >> 3] >> (t & 7)) & 1;
 	}
@@ -308,6 +316,10 @@ public:
 	{
 		return (m_disabledMask[type >> 3] >> (type & 7)) & 1;
 	}
+	Bool bfme_isDisabledByType_puc(DisabledType type) const
+	{
+		return (m_disabledMask[type >> 3] >> (type & 7)) & 1;
+	}
 private:
 	void *m_vtbl;
 	const ThingTemplate *m_template; // +0x04
@@ -413,13 +425,13 @@ Bool ScriptConditions::rva003E85E0(Parameter *playerParm, Parameter *countParm, 
 				Object *obj = iter2.cur();
 				if (!obj)
 					continue;
-				if (obj->getTemplate()->isKindOf(KINDOF_90) && obj->getExperienceTracker() != 0
-					&& obj->getExperienceTracker()->getRank() >= rankParm->getInt())
+				if (obj->getTemplate()->bfme_isKindOf_puc(KINDOF_90) && obj->getExperienceTracker() != 0
+					&& obj->getExperienceTracker()->getRank() >= rankParm->bfme_getInt_f996b())
 					count++;
 			}
 		}
 	}
-	if (count >= countParm->getInt())
+	if (count >= countParm->bfme_getInt_f996b())
 		return true;
 	return false;
 }
@@ -467,19 +479,19 @@ Bool ScriptConditions::evaluateSkirmishUnownedFactionUnitComparison(Parameter *p
 			for (DLINK_ITERATOR<Object> iter2 = team->iterate_TeamMemberList(); !iter2.done(); iter2.advance())
 			{
 				Object *obj = iter2.cur();
-				if (obj->isDisabledByType(DISABLED_UNMANNED))
+				if (obj->bfme_isDisabledByType_puc(DISABLED_UNMANNED))
 					count++;
 			}
 		}
 	}
-	switch (pComparisonParm->getInt())
+	switch (pComparisonParm->bfme_getInt_f996b())
 	{
-		case 0: return count < pCountParm->getInt();
-		case 1: return count <= pCountParm->getInt();
-		case 2: return count == pCountParm->getInt();
-		case 3: return count >= pCountParm->getInt();
-		case 4: return count > pCountParm->getInt();
-		case 5: return count != pCountParm->getInt();
+		case 0: return count < pCountParm->bfme_getInt_f996b();
+		case 1: return count <= pCountParm->bfme_getInt_f996b();
+		case 2: return count == pCountParm->bfme_getInt_f996b();
+		case 3: return count >= pCountParm->bfme_getInt_f996b();
+		case 4: return count > pCountParm->bfme_getInt_f996b();
+		case 5: return count != pCountParm->bfme_getInt_f996b();
 	}
 	return false;
 }
@@ -515,14 +527,14 @@ Bool ScriptConditions::evaluateSkirmishPlayerHasComparisonGarrisoned(Parameter *
 			}
 		}
 		Bool result = false;
-		switch (pComparisonParm->getInt())
+		switch (pComparisonParm->bfme_getInt_f996b())
 		{
-			case 0: result = numGarrisonedBuildings < pCountParm->getInt(); break;
-			case 1: result = numGarrisonedBuildings <= pCountParm->getInt(); break;
-			case 2: result = numGarrisonedBuildings == pCountParm->getInt(); break;
-			case 3: result = numGarrisonedBuildings >= pCountParm->getInt(); break;
-			case 4: result = numGarrisonedBuildings > pCountParm->getInt(); break;
-			case 5: result = numGarrisonedBuildings != pCountParm->getInt(); break;
+			case 0: result = numGarrisonedBuildings < pCountParm->bfme_getInt_f996b(); break;
+			case 1: result = numGarrisonedBuildings <= pCountParm->bfme_getInt_f996b(); break;
+			case 2: result = numGarrisonedBuildings == pCountParm->bfme_getInt_f996b(); break;
+			case 3: result = numGarrisonedBuildings >= pCountParm->bfme_getInt_f996b(); break;
+			case 4: result = numGarrisonedBuildings > pCountParm->bfme_getInt_f996b(); break;
+			case 5: result = numGarrisonedBuildings != pCountParm->bfme_getInt_f996b(); break;
 		}
 		if (result)
 			return true;
@@ -558,14 +570,14 @@ Bool ScriptConditions::evaluateSkirmishPlayerHasComparisonCapturedUnits(Paramete
 			}
 		}
 		Bool result = false;
-		switch (pComparisonParm->getInt())
+		switch (pComparisonParm->bfme_getInt_f996b())
 		{
-			case 0: result = numCapturedUnits < pCountParm->getInt(); break;
-			case 1: result = numCapturedUnits <= pCountParm->getInt(); break;
-			case 2: result = numCapturedUnits == pCountParm->getInt(); break;
-			case 3: result = numCapturedUnits >= pCountParm->getInt(); break;
-			case 4: result = numCapturedUnits > pCountParm->getInt(); break;
-			case 5: result = numCapturedUnits != pCountParm->getInt(); break;
+			case 0: result = numCapturedUnits < pCountParm->bfme_getInt_f996b(); break;
+			case 1: result = numCapturedUnits <= pCountParm->bfme_getInt_f996b(); break;
+			case 2: result = numCapturedUnits == pCountParm->bfme_getInt_f996b(); break;
+			case 3: result = numCapturedUnits >= pCountParm->bfme_getInt_f996b(); break;
+			case 4: result = numCapturedUnits > pCountParm->bfme_getInt_f996b(); break;
+			case 5: result = numCapturedUnits != pCountParm->bfme_getInt_f996b(); break;
 		}
 		if (result)
 			return true;
@@ -641,7 +653,7 @@ Bool ScriptConditions::rva003E86A3(Parameter *playerParm, Parameter *countParm, 
 				Object *obj = iter2.cur();
 				if (obj->testStatus((ObjectStatusTypes)0x26))
 					continue;
-				if (modeParm->getInt() == 0 && obj->getTemplate()->isKindOf(KINDOF_90))
+				if (modeParm->bfme_getInt_f996b() == 0 && obj->getTemplate()->bfme_isKindOf_puc(KINDOF_90))
 					continue;
 				ExperienceTracker *tracker = obj->getExperienceTracker();
 				if (tracker && tracker->getRank() > tracker->getLevelCap())
@@ -649,7 +661,7 @@ Bool ScriptConditions::rva003E86A3(Parameter *playerParm, Parameter *countParm, 
 			}
 		}
 	}
-	if (count >= countParm->getInt())
+	if (count >= countParm->bfme_getInt_f996b())
 		return true;
 	return false;
 }
@@ -703,7 +715,7 @@ Bool ScriptConditions::rva003E8863(Parameter *playerParm, Parameter *countParm, 
 			}
 		}
 	}
-	if (count >= countParm->getInt())
+	if (count >= countParm->bfme_getInt_f996b())
 		return true;
 	return false;
 }
