@@ -161,6 +161,16 @@ public:
 	unsigned short m_5DA;	// +0x5DA
 };
 
+// ContainModuleInterface view for allow 0x0026144C: isGarrisonable is
+// vtable slot 4 (the +0x10 call); the preceding slots are never called here.
+#define CONTAIN_GAP(n) virtual void gap##n();
+class ContainModuleInterface
+{
+public:
+	CONTAIN_GAP(0) CONTAIN_GAP(1) CONTAIN_GAP(2) CONTAIN_GAP(3)
+	virtual bool isGarrisonable() const;	// slot 4
+};
+
 class Object
 {
 public:
@@ -170,7 +180,20 @@ public:
 	const ThingTemplate *m_template;	// +0x04
 	char m_pad008[0x38 - 0x08];
 	Coord3D m_pos;			// +0x38
+	char m_pad044[0x250 - 0x44];
+	ContainModuleInterface *m_contain;	// +0x250
 };
+
+// Retail 0x0026144C (41B, vftable 0x00C1FE04 slot 1): Zero Hour's
+// PartitionFilterGarrisonable::allow. Without a contain module the flag
+// decides; otherwise the garrisonable query must equal the flag.
+bool Rva0026144CFilter::allow(Object *obj)
+{
+	ContainModuleInterface *cmi = obj->m_contain;
+	if (!cmi)
+		return !m_match;
+	return cmi->isGarrisonable() == m_match;
+}
 
 struct BfmeWideResult
 {
