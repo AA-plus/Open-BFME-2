@@ -29,6 +29,14 @@
 // vector at +0x24; the template argument of 0x0059D089 holds a float at
 // +0x30. Method names and the class views are address-derived.
 
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <math.h>
 #include <map>
 #include <vector>

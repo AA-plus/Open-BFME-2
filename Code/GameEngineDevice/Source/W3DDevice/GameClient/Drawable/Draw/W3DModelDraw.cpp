@@ -43,6 +43,17 @@
 // vendored STLport carries that spelling behind this switch.
 #define _BFME_RETAIL_TREE_INSERT_LAYOUT
 
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+// (Placed before quoted includes: Common/CRC.h -> winsock2 -> windows
+// min/max macros would expand the declarator below.)
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
+
 #include "Common/CRC.h"
 // The exact assignment specialization is provided by StlportAsciiStringVectorAssign.cpp.
 // Keep this consumer on that verified body rather than instantiate the stock copy.

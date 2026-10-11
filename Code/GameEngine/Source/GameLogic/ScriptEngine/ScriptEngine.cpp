@@ -176,6 +176,14 @@ struct BreezeInfo
 // body as retail here. This projection establishes no ModuleData payload claim.
 // Keeping STLport append visible tells the compiler that its const reference
 // cannot change the local pointer; declaration-only produces 159B with spills.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 class ModuleData;
 
