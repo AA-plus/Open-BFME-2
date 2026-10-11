@@ -5,11 +5,15 @@
 // places uniquely on unclaimed game.dat .text by masked whole-.text search:
 //   ?bfmeShutdownFY@BfmeOwnerFY@@QAEXXZ 0x004CF8D5 (49B)
 // Callee addresses are read off retail call sites (reverse/symbols.csv).
-class BfmeSlotFY
+// LINK: the slot's close is rowed as Connection::doSend(bool); the flag word is
+// passed the same way, so the call keeps its void/int shape through a cast.
+class BfmeSlotFY;
+class Connection
 {
 public:
-	void bfmeCloseFY(int flag);
+	unsigned int doSend(bool flag);
 };
+typedef void (Connection::*BfmeCloseFYShape)(int);
 
 // The native 0x004CF900 call reaches Transport::doSend. The outer owner
 // remains address-derived; this field now uses the actual recovered provider.
@@ -31,7 +35,7 @@ void BfmeOwnerFY::bfmeShutdownFY(void)
 	for (int i = 0; i < 8; ++i)
 	{
 		if (m_bfmeSlotsFY[i] != 0)
-			m_bfmeSlotsFY[i]->bfmeCloseFY(0);
+			(((Connection *)m_bfmeSlotsFY[i])->*reinterpret_cast<BfmeCloseFYShape>(&Connection::doSend))(0);
 	}
 
 	if (m_bfmeExtraFY != 0)
