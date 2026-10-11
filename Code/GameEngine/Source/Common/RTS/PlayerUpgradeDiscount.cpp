@@ -10,10 +10,10 @@
 // method's constness are not established.
 #include "ascii_string.h"
 
-class Rva002ACF02Record
+class Rva002ACF02
 {
 public:
-	float rva002ACF02(const AsciiString &upgradeName) const;
+	float rva002ACF02(const AsciiString &upgradeName);
 
 private:
 	unsigned char m_bytes[0x24];
@@ -26,14 +26,14 @@ public:
 
 private:
 	unsigned char m_pad000[0x3B0];
-	Rva002ACF02Record *m_discountsBegin; // +0x3B0
-	Rva002ACF02Record *m_discountsEnd; // +0x3B4
+	Rva002ACF02 *m_discountsBegin; // +0x3B0
+	Rva002ACF02 *m_discountsEnd; // +0x3B4
 };
 
 float Player::getProductionCostChangeBasedOnUpgradeDiscount(AsciiString upgradeName) const
 {
 	float total = 0.0f;
-	for (const Rva002ACF02Record *it = m_discountsBegin; it != m_discountsEnd; ++it)
+	for (Rva002ACF02 *it = m_discountsBegin; it != m_discountsEnd; ++it)
 		total += it->rva002ACF02(upgradeName);
 	return total;
 }
