@@ -57,9 +57,24 @@ struct Rva009AF530Context;
 typedef void (__cdecl *Vp6LoopFilterEdge)(Vp6LoopFilterInstance *, unsigned char *, unsigned int, int *);
 
 extern int *(__cdecl *g_rva01356e68SetupBounding)(Rva009AF530Context *, int);
-extern Vp6LoopFilterEdge g_00E22FB8;
-extern Vp6LoopFilterEdge g_00E22FD8;
-extern const int g_00DB7428[64];
+// The two edge dispatchers. Retail's VA 0x00E22FB8 / 0x00E22FD8 (RVA
+// 0x00A22FB8 / 0x00A22FD8) sit in .data's zero tail -- raw data ends at RVA
+// 0x009DE008 -- so retail's image holds a null pointer for both; the decoder
+// installs its horizontal and vertical edge routines into them at startup,
+// which no rowed body does. Only this unit reads them, so the zero-initialised
+// objects are owned here.
+Vp6LoopFilterEdge g_00E22FB8 = 0;
+Vp6LoopFilterEdge g_00E22FD8 = 0;
+// The per-Q-index filter limit. Retail VA 0x00DB7428 (RVA 0x009B7428) is raw
+// .data holding these 64 dwords verbatim, so the table is transcribed and not
+// zero-filled; this unit's rowed bodies read it by Q index and return on a
+// zero limit, which is what the trailing zeros encode.
+extern const int g_00DB7428[64] = {
+	30, 25, 20, 20, 15, 15, 14, 14, 13, 13, 12, 12, 11, 11, 10, 10,
+	 9,  9,  8,  8,  7,  7,  7,  7,  6,  6,  6,  6,  5,  5,  5,  5,
+	 4,  4,  4,  4,  3,  3,  3,  3,  2,  2,  2,  2,  2,  2,  2,  2,
+	 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+};
 
 #define CODED(i) ctx->IsCoded(i)
 #define FILTER_H(x) g_00E22FB8(ctx, (x), stride, bounding)
