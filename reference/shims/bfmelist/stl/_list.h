@@ -567,6 +567,17 @@ inline bool  _STLP_CALL operator<(const list<_Tp,_Alloc>& __x,
                                  __y.begin(), __y.end());
 }
 
+// list<int> is the exception to the inlined _M_create_node above: retail keeps it
+// out of line (insert 0x005925E2 is 37 bytes and calls 0x000B6447, 29 bytes).
+template <>
+inline __declspec(noinline) list<int, allocator<int> >::_Node*
+list<int, allocator<int> >::_M_create_node(const int& __x)
+{
+  _Node* __p = this->_M_node.allocate(1);
+  _Construct(&__p->_M_data, __x);
+  return __p;
+}
+
 # define _STLP_TEMPLATE_CONTAINER list<_Tp, _Alloc>
 # define _STLP_TEMPLATE_HEADER    template <class _Tp, class _Alloc>
 _STLP_RELOPS_OPERATORS(_STLP_TEMPLATE_HEADER, _STLP_TEMPLATE_CONTAINER)

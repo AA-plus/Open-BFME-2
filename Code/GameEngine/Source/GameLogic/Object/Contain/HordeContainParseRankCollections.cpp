@@ -1,4 +1,4 @@
-// cl: /Oy- /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_BFME_RETAIL_TREE_INSERT_LAYOUT
+// cl: /Oy- /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_BFME_RETAIL_TREE_INSERT_LAYOUT /Ireference/shims/bfmelist /Ireference/shims/bfmealloc
 // stlport
 // Donor: Open-BFME-1 HordeContainParseRanksThatStopAdvance.cpp and
 // HordeContainParseRankSets.cpp; donor RVAs are NOT BFME2 addresses.

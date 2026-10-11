@@ -1,4 +1,4 @@
-// cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB
+// cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmelist /Ireference/shims/bfmealloc
 // stlport
 //
 // ?rva004638F1@OpenContain@@UAEXPAVObject@@@Z @0x004638F1 42B

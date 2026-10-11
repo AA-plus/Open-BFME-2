@@ -1,4 +1,4 @@
-// cl: /O1 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii
+// cl: /O1 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /Ireference/shims/bfmealloc
 // stlport
 // Native49D7B3..49D82F ctor and49DE6D..49DEC8 field parser. The field table
 // C51380 independently names RequiredUpgrade string0, ModifierFilter4,

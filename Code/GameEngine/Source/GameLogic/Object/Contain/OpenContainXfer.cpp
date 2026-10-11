@@ -1,4 +1,4 @@
-// cl: /G7 /Ireference/shims/bfme2_ascii /ICode/Libraries/Include /O1 /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB
+// cl: /G7 /Ireference/shims/bfme2_ascii /ICode/Libraries/Include /O1 /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmelist /Ireference/shims/bfmealloc
 // stlport
 // OpenContain::xfer, slot 3 of the OpenContain module vftable, reviewed against
 // the BFME1 reference OpenContain::xfer (reference/open-bfme-1 revision
