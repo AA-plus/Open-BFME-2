@@ -28,6 +28,9 @@ template <> IntMapTree::_Link_type IntMapTree::_M_clone_node(IntMapTree::_Link_t
 // the retail copy another unit provides.
 template <> _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::iterator _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::lower_bound(const int &);
 template <> _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::const_iterator _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::lower_bound(const int &) const;
+// Same for map::find (row 38): suppress so the link keeps the retail copy.
+template <> _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::iterator _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::find(const int &);
+template <> _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::const_iterator _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::find(const int &) const;
 }
 
 // The historical int-map spelling of erase at 0x61F8A0 reaches the existing
