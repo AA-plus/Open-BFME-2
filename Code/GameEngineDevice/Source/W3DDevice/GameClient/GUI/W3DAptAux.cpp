@@ -253,3 +253,12 @@ void w3dDrawRenderingUnit(AptRenderingUnit *renderingUnit,Int mode)
  case 0: rebuildMask();((Rva00785FD0Item*)renderShape)->cleanup();return;
  }
 }
+
+// Native ABA2F installs A91D3 at the Apt allocator callback slot E17728.
+// The complete five-byte tail jump reaches the verified array allocator.
+// WB 8A5F80 independently shows allocation between debug-only Apt timers;
+// the original callback name is unknown.
+void *Rva000A91D3AptAlloc(unsigned int bytes)
+{
+ return ::operator new[](bytes);
+}
