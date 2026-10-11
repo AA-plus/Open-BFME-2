@@ -24,7 +24,11 @@ private:
 };
 
 // The Apt window manager (VA 0x00DFE4CC) and its background switch.
-class BfmeAptWindowManager;
+class BfmeAptWindowManager
+{
+public:
+	void bfmeSetText(const AsciiString &key, const UnicodeString &text, bool usePlaceholder);
+};
 extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class Rva00222A8BTarget
@@ -258,4 +262,69 @@ int AptDisconnectScreen::rva00512DB1()
 			((Rva00512CE9 *)this)->rva00512CE9(slot, m_kickButtons[slot]);
 	}
 	return 1;
+}
+
+// Retail 0x00512EDD, 355 bytes: empties a slot's name (BFME 1's
+// DisconnectMenu::removePlayer shape). Adapted from the 0.97 bank in
+// reverse/attempts/0x00512edd.cpp: blank name writes L" " over
+// DisconnectScreen::PlayerName%d, otherwise the name plus a
+// Network:PlayerLeftGame chat line, then the kick-button hide and the
+// DisconnectScreen::VotesReceived%d reset.
+class GameTextInterface
+{
+public:
+	virtual void v0();
+	virtual void v1();
+	virtual void v2();
+	virtual void v3();
+	virtual void v4();
+	virtual void v5();
+	virtual void v6();
+	virtual void v7();
+	virtual void v8();
+	virtual void v9();
+	virtual void v10();
+	virtual void v11();
+	virtual void v12();
+	virtual void v13();
+	virtual void v14();
+	virtual UnicodeString fetch(const char *label, bool *exists = 0);
+	virtual void v16();
+	virtual const UnicodeString *slot44(const char *label, bool *exists);
+};
+
+extern GameTextInterface *TheGameText;
+extern int g_00DD1488;
+
+int GadgetListBoxAddEntryText(GameWindow *listbox, UnicodeString text, int color, int row, int column, bool overwrite);
+
+static inline bool Rva00512EDDIsEmpty(const UnicodeString &s)
+{
+	const char *data = *(const char *const *)&s;
+	return data == 0 || *(const unsigned short *)(data + 4) == 0;
+}
+
+void AptDisconnectScreen::rva00512EDD(int slot, UnicodeString name)
+{
+	AsciiString key;
+	key.format("DisconnectScreen::PlayerName%d", slot);
+	if (Rva00512EDDIsEmpty(name))
+	{
+		g_bfmeAptWindowManager->bfmeSetText(key, UnicodeString(L" "), false);
+	}
+	else
+	{
+		g_bfmeAptWindowManager->bfmeSetText(key, name, false);
+		if (m_chatBox)
+		{
+			UnicodeString msg;
+			const char *data = *(const char *const *)&name;
+			const unsigned short *nameText = data ? (const unsigned short *)(data + 8) : L"";
+			msg.format(TheGameText->slot44("Network:PlayerLeftGame", 0), nameText);
+			GadgetListBoxAddEntryText(m_chatBox, msg, g_00DD1488, -1, -1, true);
+		}
+	}
+	((Rva00512CE9 *)this)->rva00512CE9(slot, false);
+	key.format("DisconnectScreen::VotesReceived%d", slot);
+	g_bfmeAptWindowManager->bfmeSetText(key, UnicodeString(L" "), false);
 }
