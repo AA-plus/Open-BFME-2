@@ -30,7 +30,7 @@ int GetGameLogicRandomValue(int low, int high, char *file, int line);
 #define THINGFACTORY_FILE "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\Common\\Thing\\ThingFactory.cpp"
 
 typedef int Int;
-typedef unsigned int ObjectID;
+enum ObjectID { INVALID_OBJECT_ID=0 };
 
 class ThingTemplate
 {
@@ -79,21 +79,36 @@ class BehaviorModule : public ModuleBase, public BehaviorModuleInterface
 class Team;
 struct CreateMask;
 
-class Object
+// The native constructor has a virtual base and therefore a hidden most-derived
+// word. These call-only base views preserve its observed 0x74 ID, 0x244 module
+// list and 0x4D8 allocation; constructor stores establish the base offsets.
+class Thing { public: virtual ~Thing(); private: char unknown04[0x5c]; };
+#define BFME_SNAPSHOT_CAPITALIZED_SLOTS
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
+class BfmeCtorFirstBase001B3A20 { public: virtual void slot(); };
+class BfmeCtorVirtualBase001B3A20 { public: virtual void slot(); };
+class BfmeCtor001B3A20 : public BfmeCtorFirstBase001B3A20, public virtual BfmeCtorVirtualBase001B3A20 {};
+struct Rva00BFC2B8Base { virtual void base06CSlot0(); };
+struct Rva00BFC290Base { virtual void base070Slot0(); };
+class Object : public Thing, public Snapshot, public BfmeCtor001B3A20, public Rva00BFC2B8Base, public Rva00BFC290Base
 {
 public:
-	Object(const ThingTemplate *tmplate, const CreateMask *mask, Team *team, bool flag, bool);
+	Object(const ThingTemplate *tmplate, const CreateMask *mask, Team *team, ObjectID id);
+	virtual void LoadPostProcess();
+	virtual void crc(Xfer *);
+	virtual void DoXfer(Xfer *);
 	ObjectID getID() const { return m_id; }
 	BehaviorModule **getBehaviorModules() const { return m_behaviors; }
 	void initObject();
 
 private:
-	char m_pad[0x74];
 	ObjectID m_id; // +0x74
 	char m_pad78[0x244 - 0x78];
 	BehaviorModule **m_behaviors; // +0x244
-	char m_pad248[0x4D8 - 0x248]; // target allocation size at 0x0023CAE7
+	char m_pad248[0x4D4 - 0x248]; // target allocation size at 0x0023CAE7
 };
+
+typedef char NativeObjectAllocationSize[sizeof(Object)==0x4D8?1:-1];
 
 class GameLogic
 {
@@ -113,11 +128,13 @@ public:
 // @0x0023CAE7, 69B. Its matched caller at 0x002D0A23 supplies TheGameLogic
 // and (template, mask, team, flag). Target allocates 0x4D8 bytes via scalar
 // operator new 0x0002FDA0, then calls the Object constructor at 0x00298EA9
-// with those four values followed by true. The helper's purpose beyond
+// with those four values preceded on the stack by the hidden most-derived
+// true word. The helper's purpose beyond
 // constructing an Object remains inferred from the caller and target calls.
 Object *GameLogic::friend_createObject(const ThingTemplate *tmplate, const CreateMask *mask, Team *team, bool flag)
 {
-	return new Object(tmplate, mask, team, flag, true);
+	// Retail forwards the complete four-byte argument slot to ObjectID.
+	return new Object(tmplate, mask, team, *reinterpret_cast<const ObjectID *>(&flag));
 }
 
 Object *ThingFactory::newObject(const ThingTemplate *tmplate, Team *team, const CreateMask *mask, bool flag)
