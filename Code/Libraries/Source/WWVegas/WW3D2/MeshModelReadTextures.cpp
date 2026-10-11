@@ -48,6 +48,18 @@ public:
 		p = other.p;
 		return *this;
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's operator= copy loses to the first-in-order copy (no
+	// retail address); the Add below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	BfmeHandleCX &bfme_assign(const BfmeHandleCX &other)
+	{
+		if (other.p) ++other.p->m_refCount;
+		if (p) p->Release_Ref();
+		p = other.p;
+		return *this;
+	}
 
 	TextureClass *p;
 };
@@ -84,7 +96,7 @@ public:
 				return false;
 			}
 		}
-		(*this)[ActiveCount++] = object;
+		(*this)[ActiveCount++].bfme_assign(object);
 		return true;
 	}
 
