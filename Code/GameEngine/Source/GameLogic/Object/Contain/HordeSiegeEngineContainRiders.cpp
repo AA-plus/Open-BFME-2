@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc  /D_CRTIMP=
 // stlport
 //
 // HordeSiegeEngineContain rider overrides (retail HordeSiegeEngineContain.cpp):

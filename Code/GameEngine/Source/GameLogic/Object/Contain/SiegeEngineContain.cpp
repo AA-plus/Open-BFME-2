@@ -1,4 +1,4 @@
-// cl: /O1 /ICode/GameEngine/Source/Common /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /O1 /ICode/GameEngine/Source/Common /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc  /D_CRTIMP=
 //
 // Target evidence: SiegeEngineContain ctor 0x0047C21E installs primary vtable
 // 0x00C470F8, whose slot 8 is this body. The same primary slot in OpenContain

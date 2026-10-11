@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /GX /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /DNDEBUG /MD /GX /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc  /D_CRTIMP=
 // stlport
 //
 // ??0GiantBirdAIUpdate@@QAE@PAVThing@@PBVModuleData@@@Z, retail 0x0036B717,

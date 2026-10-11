@@ -1,4 +1,4 @@
-// cl: /G7 /arch:SSE /Ireference/shims/bfme2_ascii /ICode/Libraries/Include /O1 /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB
+// cl: /G7 /arch:SSE /Ireference/shims/bfme2_ascii /ICode/Libraries/Include /O1 /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB  /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
 // HordeContain::xfer, the snapshot slot of the HordeContain module vftable.
 // No BFME1 donor body exists (the BFME1 reference has no HordeContain::xfer at

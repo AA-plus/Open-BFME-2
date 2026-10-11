@@ -1,4 +1,4 @@
-// cl: /arch:SSE /O1 /ICode/GameEngine/Source/Common /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /arch:SSE /O1 /ICode/GameEngine/Source/Common /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc  /D_CRTIMP=
 //
 // Target evidence: HordeSiegeEngineContain ctor 0x0047D247 installs primary
 // vtable 0x00C474A0; slot 8 at 0x00C474C0 points to 0x0047CB4D. That slot in
