@@ -9,7 +9,7 @@
 // existing63B cleanup405350; generic default base initialization is an exact
 // byte-and-relocation twin of the existing211E58 constructor.
 #include <vector>
-typedef int Bool;
+typedef bool Bool;
 #include "subsystem_interface.h"
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"

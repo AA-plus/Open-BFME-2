@@ -53,7 +53,7 @@ public:
 };
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"
-typedef int Bool;
+typedef bool Bool;
 #include "subsystem_interface.h"
 class Rva002A8F24 :public SubsystemInterface,public Snapshot
 {

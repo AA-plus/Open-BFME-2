@@ -44,7 +44,7 @@ template <> __declspec(dllimport) __forceinline
 void *&vector<void*>::operator[](size_t __n)
 { return *(begin() + __n); }
 }
-typedef int Bool;
+typedef bool Bool;
 #include "subsystem_interface.h"
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"

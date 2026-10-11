@@ -13,7 +13,7 @@
 #include <map>
 #include <hash_map>
 #include <new>
-typedef int Bool;
+typedef bool Bool;
 #include "subsystem_interface.h"
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"

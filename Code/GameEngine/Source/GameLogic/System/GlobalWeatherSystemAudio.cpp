@@ -80,7 +80,7 @@ void Rva003184B8::rva003184B8()
 // 0x00318329, dtor 0x0010F149); the +0x58 bit flags (rowed ctor 0x003B31AD).
 // The +0x18..+0x2C field roles are unknown; EH state 3 before the array
 // shows +0x20 is an object with a destructor.
-typedef int Bool;
+typedef bool Bool;
 #include "subsystem_interface.h"
 #include "Common/Snapshot.h"
 
