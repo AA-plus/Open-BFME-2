@@ -26,6 +26,13 @@
 
 #include "ascii_string.h"
 
+// Declaration-only: the rowed list<AsciiString> base members are bound,
+// this TU emits no per-flag copy of them or of their allocator leaves.
+namespace _STL {
+template <> _List_base<AsciiString, allocator<AsciiString> >::~_List_base();
+template <> void _List_base<AsciiString, allocator<AsciiString> >::clear();
+}
+
 class DestroyDieModuleData
 {
 public:

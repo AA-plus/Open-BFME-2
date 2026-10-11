@@ -42,6 +42,13 @@ namespace _STL { void __cdecl free(void *block) throw(...); }
 #include <vector>
 #include <list>
 
+// Declaration-only: the rowed list<AsciiString> base members are bound,
+// this TU emits no per-flag copy of them or of their allocator leaves.
+namespace _STL {
+template <> _List_base<AsciiString, allocator<AsciiString> >::~_List_base();
+template <> void _List_base<AsciiString, allocator<AsciiString> >::clear();
+}
+
 // A declaration-only specialization stops this TU emitting its own
 // vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
 namespace _STL {
