@@ -35,11 +35,25 @@ private:
 	void *m_action; // +0x34
 };
 
-class ScriptEngine
+class BfmeRoomZC;
+class TeamPrototype;
+class Rva003573C4Owner
 {
 public:
-	Script *rva003573C4(const AsciiString &owner, const AsciiString &name, AsciiString *outName);
-	void rva0020D451(AsciiString &scope, void *action, Script *script, const AsciiString &scriptName, int flags);
+	void *rva003573C4(const AsciiString &owner, const BfmeRoomZC &name, void *outName);	// rowed 0x003573C4
+};
+class Rva0020D451Engine
+{
+public:
+	void rva0020D451(const AsciiString &scope, void *action, void *script, void *scriptName, Team *team);	// rowed 0x0020D451
+};
+class Rva0039FE6COwner
+{
+public:
+	TeamPrototype *findPrototype(const AsciiString &owner, const AsciiString &name);	// rowed 0x0039FE6C
+};
+class ScriptEngine
+{
 };
 
 extern ScriptEngine *TheScriptEngine;
@@ -78,7 +92,6 @@ class TeamFactory
 {
 public:
 	Team *createInactiveTeam(const AsciiString &owner, const AsciiString &name);
-	TeamPrototype *findTeamPrototype(const AsciiString &owner, const AsciiString &name);
 
 private:
 	unsigned char m_pad00[0xC0];
@@ -87,7 +100,7 @@ private:
 
 Team *TeamFactory::createInactiveTeam(const AsciiString &owner, const AsciiString &name)
 {
-	TeamPrototype *tp = findTeamPrototype(owner, name);
+	TeamPrototype *tp = ((Rva0039FE6COwner *)this)->findPrototype(owner, name);
 	if (!tp)
 		throw ERROR_BAD_ARG;
 
@@ -100,9 +113,9 @@ Team *TeamFactory::createInactiveTeam(const AsciiString &owner, const AsciiStrin
 			if (tp->getExecuteActions())
 			{
 				AsciiString scope;
-				Script *script = TheScriptEngine->rva003573C4(tp->getOwnerName(), tp->getProductionCondition(), &scope);
+				Script *script = (Script *)((Rva003573C4Owner *)TheScriptEngine)->rva003573C4(tp->getOwnerName(), reinterpret_cast<const BfmeRoomZC &>(tp->getProductionCondition()), &scope);
 				if (script)
-					TheScriptEngine->rva0020D451(scope, script->getAction(), script, tp->getProductionCondition(), 0);
+					((Rva0020D451Engine *)TheScriptEngine)->rva0020D451(scope, script->getAction(), script, (void *)&tp->getProductionCondition(), (Team *)0);
 			}
 			return t;
 		}
@@ -112,9 +125,9 @@ Team *TeamFactory::createInactiveTeam(const AsciiString &owner, const AsciiStrin
 	if (tp->getExecuteActions())
 	{
 		AsciiString scope;
-		Script *script = TheScriptEngine->rva003573C4(tp->getOwnerName(), tp->getProductionCondition(), &scope);
+		Script *script = (Script *)((Rva003573C4Owner *)TheScriptEngine)->rva003573C4(tp->getOwnerName(), reinterpret_cast<const BfmeRoomZC &>(tp->getProductionCondition()), &scope);
 		if (script)
-			TheScriptEngine->rva0020D451(scope, script->getAction(), script, tp->getProductionCondition(), 0);
+			((Rva0020D451Engine *)TheScriptEngine)->rva0020D451(scope, script->getAction(), script, (void *)&tp->getProductionCondition(), (Team *)0);
 	}
 	return t;
 }
