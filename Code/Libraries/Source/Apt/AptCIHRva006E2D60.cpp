@@ -13,8 +13,8 @@
 // rowed or pinned (jumpToFrame doFrameControls queueFrameActions isUndefined
 // getVtblIndex 0x006E1F90 0x006E2010 0x006F7A30); caller 0x006F7AA1 is the
 // child walk 0x006F7A30 itself. 0x006E1F90 returns int: all five retail
-// callers test eax (its body sets eax 0/1), so it is called through the
-// placeholder spelling ?rva006E1F90@AptCIH@@QAEHH@Z.
+// callers test eax (its body sets eax 0/1); invoke the owned bool method
+// through an int-return member-pointer view to retain the native full-EAX test.
 extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char *, const char *, int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
 extern int g_00E17704;
@@ -50,12 +50,11 @@ struct AptCharacterSpriteInstBase
 };
 class Rva006F7A30 { public: void rva006F7A30(); };
 struct Rva006E1090Target { unsigned char prefix[0x1c]; Rva006F7A30 list; };
-class Rva006E2010Dispatcher { public: void dispatch(int, int, int); };
+class Rva006DBB30SarDwordField { public: int get() const; };
 
 class AptValue
 {
 public:
-	int getVtblIndex() const;
 	bool isUndefined() const;
 };
 
@@ -63,15 +62,6 @@ class AptCIH : public AptValue
 {
 public:
 	bool IsSpriteInstBase() const;
-	AptCharacterSpriteInstBase *GetSpriteInstBase() const
-	{
-		if (!IsSpriteInstBase()) {
-			g_bfmeAptAssertAtE17734("isSpriteInstBase()", "c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h", 0x7d);
-			if (g_bfmeAptBreakOnAssertAtDDC01C)
-				__debugbreak();
-		}
-		return character;
-	}
 	__forceinline bool isEditText() const
 	{
 		if (!this) {
@@ -79,11 +69,12 @@ public:
 			if (g_bfmeAptBreakOnAssertAtDDC01C)
 				__debugbreak();
 		}
-		return getVtblIndex() == 0xe && !isUndefined();
+		return ((const Rva006DBB30SarDwordField *)this)->get() == 0xe && !isUndefined();
 	}
-	bool isButton() const { return getVtblIndex() == 0x12 && !isUndefined(); }
+	bool isButton() const { return ((const Rva006DBB30SarDwordField *)this)->get() == 0x12 && !isUndefined(); }
 	void jumpToFrame(int);
-	int rva006E1F90(int);
+	bool rva006E1F90(int);
+	bool queueClipEvents(int, int, int);
 	void *rva006E1090() const;
 	void rva006E2D60();
 
@@ -94,7 +85,12 @@ public:
 void AptCIH::rva006E2D60()
 {
 	if (IsSpriteInstBase()) {
-		AptCharacterSpriteInstBase *sprite = GetSpriteInstBase();
+		if (!IsSpriteInstBase()) {
+			g_bfmeAptAssertAtE17734("isSpriteInstBase()", "c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h", 0x7d);
+			if (g_bfmeAptBreakOnAssertAtDDC01C)
+				__debugbreak();
+		}
+		AptCharacterSpriteInstBase *sprite = character;
 		sprite->mnGotoAnded = 0;
 		if (sprite->playing) {
 			if (sprite->mode == 1)
@@ -119,11 +115,11 @@ void AptCIH::rva006E2D60()
 		}
 	events:
 		if (!sprite->latched || isButton()) {
-			if (rva006E1F90(2))
-				((Rva006E2010Dispatcher *)this)->dispatch(2, g_00E17704, 1);
+			if ((this->*reinterpret_cast<int (AptCIH::*)(int)>(&AptCIH::rva006E1F90))(2))
+				queueClipEvents(2, g_00E17704, 1);
 		}
 		if (sprite->latched) {
-			((Rva006E2010Dispatcher *)this)->dispatch(1, g_00E17704, 1);
+			queueClipEvents(1, g_00E17704, 1);
 			sprite->latched = 0;
 		}
 		((Rva006F7A30 *)&sprite->display)->rva006F7A30();
