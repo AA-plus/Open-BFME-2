@@ -40,6 +40,13 @@ typedef _STL::basic_string<char, _STL::char_traits<char>, _STL::allocator<char> 
 typedef _STL::pair<const Rva009D86E0String, int> Rva009D86E0Pair;
 
 #include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 // Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

@@ -15,6 +15,13 @@
 // from the former ArmorHashMapErase.cpp row that byte-matched here.
 #include <hash_set>
 #include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 struct Rva00051B89Keyed;
 
