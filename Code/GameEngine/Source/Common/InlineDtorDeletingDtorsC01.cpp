@@ -376,11 +376,9 @@ public:
 	virtual ~Rva002C1283() {}
 };
 
-// ??0Rva002C1283@@QAE@XZ @0x002C127A 9B: the default constructor, storing the
-// class's own vtable (VA 0x00BFE5B4) and returning this.
-Rva002C1283::Rva002C1283()
-{
-}
+// The default constructor at 0x002C127A is emitted by its modal-window
+// home, GameWindowManagerModal.cpp. Keep only the vtable-emission overload
+// here so that the default constructor has one strong definition.
 
 // ?<Rva002C1283::Rva002C1283> absent-from-retail
 Rva002C1283::Rva002C1283(EmitVtableTag *)
