@@ -76469,3 +76469,6 @@ uw_0077909c,,0x0077909C,13,Code/GameEngine/Source/GameLogic/AI/AIObjectTargetPre
 ?rva002E061D@@YAHXZ,,0x002E061D,11,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,mov ecx [TheLivingWorldLogic] then tail jump to rowed bump 0x002B317C; address-named
 ?rva003BA938@@YGXABVAsciiString@@_N@Z,,0x003BA938,11,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,mov ecx [TheScriptEngine] then tail jump to rowed ScriptEngine::AppendDebugMessage (stdcall-shaped wrapper); address-named
 ?rva006CC5F0@@YAXXZ,,0x006CC5F0,11,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,mov ecx [g_bfmeAptPtrAtE176D0] then tail jump to rowed rva006FA340; address-named
+?rva0009A328@@YAXXZ,,0x0009A328,16,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,null-guarded mov ecx [Rva00DEC2D8Manager] then tail jump to rowed rva00109236; address-named
+?rva0009A487@@YAXXZ,,0x0009A487,16,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,null-guarded mov ecx [Rva00DEC2D8Manager] then tail jump to rowed rva00108E28; address-named
+?rva0061F190@@YAXXZ,,0x0061F190,16,Code/GameEngine/Source/Common/SingletonForwarders.cpp,matched,null-guarded mov ecx [TheQ1Receiver] then tail jump to rowed Q1Receiver0134FAAC::Rva00624790; address-named
