@@ -166,19 +166,6 @@ Rva005BA2CB::Rva005BA2CB(EmitVtableTag *)
 {
 }
 
-class Rva005BA593
-{
-public:
-	Rva005BA593(EmitVtableTag *);
-public:
-	virtual ~Rva005BA593();
-};
-
-// ?<Rva005BA593::Rva005BA593> absent-from-retail
-Rva005BA593::Rva005BA593(EmitVtableTag *)
-{
-}
-
 class Rva005C4230
 {
 public:

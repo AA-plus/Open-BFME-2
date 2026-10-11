@@ -1,7 +1,8 @@
 // cl: /O1 /G7 /EHsc /MD /Ireference/shims/bfme2_ascii
 // Complete native 5BA593..5BA621 and WB 15875B0 establish the QuickMatch
 // singleton cleanup, non-owning window reference+80, preferences+64 and base.
-// Retain the already pinned opaque owner pending reconciliation of other views.
+// The constructor at5BAB7E installs this same C73E24 vptr and binds the
+// named AptOnline::OnlineQuickMatch callbacks; reconcile its real owner here.
 #include "ascii_string.h"
 class Rva005248D0 {
 public:
@@ -33,9 +34,10 @@ private:
 };
 extern int g_Va00E06550;
 void _bfme_closeAptScreen(const AsciiString&);
-class Rva005BA593:public Rva0056DC4C {
+class AptOnline { public: class OnlineQuickMatch; };
+class AptOnline::OnlineQuickMatch:public Rva0056DC4C {
 public:
-    virtual ~Rva005BA593();
+    virtual ~OnlineQuickMatch();
 private:
     int state60;
     QuickMatchPreferences preferences;
@@ -45,7 +47,7 @@ private:
     GameWindow *numPlayers84,*side88,*connection8c,*ladder90;
     void *selected94,*unselected98,*unknown9c;
 };
-Rva005BA593::~Rva005BA593()
+AptOnline::OnlineQuickMatch::~OnlineQuickMatch()
 {
     if((int)this==g_Va00E06550) {
         _bfme_closeAptScreen("AptOnlineQuickMatch::InitGadgets");
