@@ -28,6 +28,7 @@ public:
 class AICommandInterface { public: void aiIdle(CommandSourceType); };
 class AIUpdateInterface {
 public:
+	virtual void aiDoCommand(const AICommandParms *parms);
 	WhichTurretType getWhichTurretForCurWeapon() const;
 	void setTurretEnabled(WhichTurretType,Bool);
 	void recenterTurret(WhichTurretType);
@@ -187,7 +188,7 @@ public:
 	virtual void slot145();
 	virtual void slot146();
 	virtual void slot147();
-	virtual void slot148();
+	virtual bool isAllowedToRespondToAiCommands(const AICommandParms *);	// +0x250
 	virtual void slot149();
 	virtual void slot150();
 	virtual void slot151();
@@ -248,6 +249,8 @@ public:
 	DeployStyleAIUpdate(Thing *thing, const ModuleData *moduleData);
 	void reset();
 	void doLastOutsideCommand();
+	void doCommand(const AICommandParms *parms, bool fromLastOutside);
+	void setGoal(const BfmeVec12 &pos) { float *goal = &m_4C4; goal[0] = pos.x; goal[1] = pos.y; goal[2] = pos.z; }
  void rva0048EB53(DeployStateTypes);
  Object *getObject() const { return *reinterpret_cast<Object *const *>(reinterpret_cast<const char *>(this)+8); }
  const void *getModuleData() const { return *reinterpret_cast<const void *const *>(reinterpret_cast<const char *>(this)+4); }
@@ -437,3 +440,72 @@ void DeployStyleAIUpdate::rva0048EB53(DeployStateTypes stateID)
  }
 }
 
+
+// ?doCommand@DeployStyleAIUpdate@@QAEXPBUAICommandParms@@_N@Z, retail
+// 0x0048EA0F (324 bytes): the primary slot +0x268 that doLastOutsideCommand
+// dispatches to. Unless the AI may not respond (slot +0x250), every command
+// other than 5 and 0x35 first idles the unit. AI-sourced commands remember
+// +0x4B0 in +0x4AC and go straight to AIUpdateInterface::aiDoCommand (the
+// +0x20 AICommandInterface view). Others reset the deploy-motion block and,
+// except command 5, are stored at +0x3E4 (0x00351570) as the last outside
+// command (clearing +0x4A8 unless replayed). They run at once (+0x4A8 set)
+// unless the unit is deploying or undeploying, which marks a replay (+0x4A9).
+// Finally the command's kind records the goal object ID (+0x4C0, flag
+// +0x4D1), the goal position (+0x4C4, flags +0x4D2/+0x4D3) or a move (+0x4D0).
+void DeployStyleAIUpdate::doCommand(const AICommandParms *parms, bool fromLastOutside)
+{
+	if (!reinterpret_cast<DeployStyleCommandDispatchView *>(this)->isAllowedToRespondToAiCommands(parms))
+		return;
+	if (parms->m_00 != 5 && parms->m_00 != 0x35)
+		aiIdle(CMD_FROM_AI);
+	if (parms->m_04 != CMD_FROM_AI)
+	{
+		reset();
+		if (parms->m_00 != 5)
+		{
+			reinterpret_cast<Rva00351570 *>(&m_member3E4)->rva00351570(*parms);
+			if (!fromLastOutside)
+				m_flag4A8 = false;
+		}
+		if (m_4B4 != DEPLOY && m_4B4 != UNDEPLOY)
+		{
+			reinterpret_cast<AIUpdateInterface *>(&m_p20)->AIUpdateInterface::aiDoCommand(parms);
+			m_flag4A8 = true;
+		}
+		else
+		{
+			m_flag4A9 = true;
+		}
+		switch (parms->m_00)
+		{
+		case 0x0B:
+		case 0x0C:
+		case 0x39:
+			m_4D1 = 1;
+			m_4C0 = parms->m_14 ? parms->m_14->m_74 : 0;
+			break;
+		case 0x0E:
+			m_4D2 = 1;
+			setGoal(parms->m_08);
+			break;
+		case 0x1E:
+			setGoal(parms->m_08);
+			m_4D3 = 1;
+			// fall through
+		case 0x0F:
+		case 0x10:
+		case 0x11:
+		case 0x12:
+		case 0x1F:
+		case 0x21:
+		case 0x23:
+			m_4D0 = 1;
+			break;
+		}
+	}
+	else
+	{
+		m_4AC = m_4B0;
+		reinterpret_cast<AIUpdateInterface *>(&m_p20)->AIUpdateInterface::aiDoCommand(parms);
+	}
+}

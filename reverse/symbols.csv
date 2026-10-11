@@ -17196,3 +17196,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??1Rva001D92BB@@QAE@XZ,0x001D92BB,placeholder: 5-byte jmp thunk to 0x001D904A that the 0x001D92C0 unwind funclet 0x007695BF reaches (the map wrapper out-of-line destructor)
 ?rva0009AACF@Rva0009C134Host@@QAEXHM@Z,0x0009AACF,callee of ?rva0009BC17@Rva0009D55BProduct@@UAEXXZ
 ??1Rva00216BF0@@QAE@XZ,0x00216BF0,placeholder: 5-byte jmp thunk to ??1Rva00216AF6 0x00216B80 that the 0x00216BF5 unwind funclet 0x0076E2BE reaches (the +0xC table wrapper out-of-line destructor)
+?rva001014A9@WaterRenderObjClass@@IAEXAAVRenderInfoClass@@_N@Z,0x001014A9,callee of ?Render@WaterRenderObjClass@@UAEXAAVRenderInfoClass@@@Z
+?rva00115DD2@W3DTerrainBackground@@QAEXXZ,0x00115DD2,callee of ?rva000E1185@Rva000E3B41@@QAEXXZ

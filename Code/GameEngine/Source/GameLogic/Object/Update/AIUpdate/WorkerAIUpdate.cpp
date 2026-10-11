@@ -252,7 +252,64 @@ Real WorkerAIUpdate::getWarehouseScanDistance() const
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-// ?update@WorkerAIUpdate@@UAE?AW4UpdateSleepTime@@XZ present-unmatched
+// BFME 2's Object private status byte (+0x438); bit 0 is effectively-dead.
+struct BfmeWorkerPrivateStatus { unsigned char m_unreconstructed_000[ 0x438 ]; unsigned char m_privateStatus; };
+// Only the slot positions matter in these views: the interface gained
+// entries rather than being reordered (DozerAIUpdate.cpp spells the same).
+template <Int N>
+class BfmeWorkerSlots : public BfmeWorkerSlots<N - 1>
+{
+public:
+	virtual void unused(char (*)[N]) = 0;
+};
+template <>
+class BfmeWorkerSlots<0>
+{
+};
+class BfmeWorkerTaskSlots : public BfmeWorkerSlots<7>
+{
+public:
+	virtual ObjectID getTaskTarget( DozerTask task ) = 0;		///< +0x1C
+	virtual void unusedSlot8() = 0;
+	virtual DozerTask getCurrentTask( void ) = 0;			///< +0x24
+	virtual void unusedSlot10() = 0;
+	virtual void unusedSlot11() = 0;
+	virtual void unusedSlot12() = 0;
+	virtual void cancelTask( DozerTask task ) = 0;			///< +0x34
+};
+class BfmeWorkerCommandSourceSlots : public BfmeWorkerSlots<143>
+{
+public:
+	virtual CommandSourceType getLastCommandSource( void ) = 0;	///< +0x23C
+};
+class BfmeWorkerMachine : public BfmeWorkerSlots<4>
+{
+public:
+	virtual void updateStateMachine( void ) = 0;			///< +0x10
+	struct CurrentState { void *m_vtable; StateID m_id; };
+	StateID getCurrentStateID( void ) const { return m_currentState ? m_currentState->m_id : INVALID_STATE_ID; }
+	CurrentState *m_currentState;					///< +0x04
+};
+// BFME 2's module fields: the dozer task interface (+0x3E4), a byte at
+// +0x3CC that suspends the worker, and the worker, dozer and supply truck
+// machines (+0x4C0/+0x4C4/+0x4C8).
+struct BfmeWorkerUpdateFields
+{
+	unsigned char m_unreconstructed_000[ 0x3cc ];
+	Bool m_suspended;						///< +0x3CC
+	unsigned char m_unreconstructed_3cd[ 0x3e4 - 0x3cd ];
+	unsigned char m_taskInterface[ 4 ];				///< +0x3E4, a BfmeWorkerTaskSlots
+	unsigned char m_unreconstructed_3e8[ 0x4c0 - 0x3e8 ];
+	BfmeWorkerMachine *m_workerMachine;				///< +0x4C0
+	BfmeWorkerMachine *m_dozerMachine;				///< +0x4C4
+	BfmeWorkerMachine *m_supplyTruckStateMachine;			///< +0x4C8
+};
+#define WORKER_FIELDS ((BfmeWorkerUpdateFields *)this)
+#define WORKER_TASKS ((BfmeWorkerTaskSlots *)WORKER_FIELDS->m_taskInterface)
+// Retail 0x004AA92B (222B), update-interface slot 0 (this = module +0x10):
+// Zero Hour's WorkerAIUpdate::update; BFME 2 also stops while the +0x3CC
+// byte is set, tests the worker machine before reading its state and no
+// longer raises the mine-clearing weapon set flag.
 UpdateSleepTime WorkerAIUpdate::update( void )
 {
 
@@ -268,56 +325,56 @@ UpdateSleepTime WorkerAIUpdate::update( void )
 	// create all the machines if they don't yet exist
 	createMachines();
 
-	// DO NOT set us as being to able to move with super precision off grid locations
-	// Causes workers to get stuck.  jba.
-	//if( getCurLocomotor() )
-		//getCurLocomotor()->setUltraAccurate( TRUE );
-
 	// extend the normal AI system
 	AIUpdateInterface::update();
 
 	// do nothing if we're dead
-	///@todo shouldn't this be at a higher level?
-	if( getObject()->isEffectivelyDead() )
+	if( ((const BfmeWorkerPrivateStatus *)getObject())->m_privateStatus & 1 )	// isEffectivelyDead, inline in retail
+		return UPDATE_SLEEP_NONE;
+	if( WORKER_FIELDS->m_suspended )
 		return UPDATE_SLEEP_NONE;
 
 	// run our own state machine, and the appropriate sub machine
-	m_workerMachine->updateStateMachine();
+	WORKER_FIELDS->m_workerMachine->updateStateMachine();
 
-	if( m_workerMachine->getCurrentStateID() == AS_DOZER )
+	if( WORKER_FIELDS->m_workerMachine )
 	{
-
-		// get and validate our current task
-		DozerTask currentTask = getCurrentTask();
-		if( currentTask != DOZER_TASK_INVALID )
+		if( WORKER_FIELDS->m_workerMachine->getCurrentStateID() == AS_DOZER )
 		{
-			ObjectID taskTarget = getTaskTarget( currentTask );
-			Object *targetObject = TheGameLogic->findObjectByID( taskTarget );
-			Bool invalidTask = FALSE;
 
-			// validate the task and the target
-			if( currentTask == DOZER_TASK_REPAIR &&
-					TheActionManager->canRepairObject( getObject(), targetObject, getLastCommandSource() ) == FALSE )
-				invalidTask = TRUE;
-			
-			// cancel the task if it's now invalid
-			if( invalidTask == TRUE )
-				cancelTask( currentTask );
+			// get and validate our current task
+			DozerTask currentTask = WORKER_TASKS->getCurrentTask();
+			if( currentTask != DOZER_TASK_INVALID )
+			{
+				ObjectID taskTarget = WORKER_TASKS->getTaskTarget( currentTask );
+				Object *targetObject = TheGameLogic->findObjectByID( taskTarget );
+				Bool invalidTask = FALSE;
+
+				// validate the task and the target
+				if( currentTask == DOZER_TASK_REPAIR &&
+						TheActionManager->canRepairObject( getObject(), targetObject,
+							((BfmeWorkerCommandSourceSlots *)this)->getLastCommandSource() ) == FALSE )
+					invalidTask = TRUE;
+
+				// cancel the task if it's now invalid
+				if( invalidTask == TRUE )
+					WORKER_TASKS->cancelTask( currentTask );
+
+			}  // end if
+
+			// update dozer behavior
+			WORKER_FIELDS->m_dozerMachine->updateStateMachine();
 
 		}  // end if
-
-		// update dozer behavior
-		m_dozerMachine->updateStateMachine();
-
-	}  // end if
-	else
-	{
-		m_supplyTruckStateMachine->updateStateMachine();
-		// If we are harvesting, we can be diverted to clear mines.  jba.
-		getObject()->setWeaponSetFlag(WEAPONSET_MINE_CLEARING_DETAIL);//maybe go clear some mines, if I feel like it
+		else
+		{
+			WORKER_FIELDS->m_supplyTruckStateMachine->updateStateMachine();
+		}
 	}
 	return UPDATE_SLEEP_NONE;
-} 
+}
+#undef WORKER_TASKS
+#undef WORKER_FIELDS
 
 
 // ------------------------------------------------------------------------------------------------

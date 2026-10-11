@@ -43,7 +43,7 @@ virtual void s20();
 virtual void s21();
 virtual void s22();
 virtual void s23();
-virtual void s24();
+virtual void s24(int,Rva0008A234*,int,bool,float,float);
 virtual void s25();
 virtual void s26();
 virtual void s27();
@@ -157,6 +157,7 @@ virtual float s134(float);
 void rva0008A2EF(const V3 *p,const CameraGoalInfo*info,int time,bool orient,float easeIn,float easeOut);
 void rva00089C2D(int time,bool orient,float easeIn,float easeOut);
 Rva0008A234* rva0008A566(const StringBase<char>&name);
+void rva0008AD96(const AsciiString&name);
 private: void moveAlongWaypointPath(int frames); public:
 char pad04[8]; V3 position; char pad18[0x138-0x18];float f138;
 char pad13c[0x284-0x13c];int time284;char pad288[0x2ac-0x288];
@@ -169,4 +170,23 @@ Rva0008A234*W3DView::rva0008A566(const StringBase<char>&name){
  V3 pos;pos.x=position.x;pos.y=position.y;pos.z=position.z;
  *((bool*)this+0x44)=false;
  return new Rva0008A234(name,(const ThreeInts*)&pos,*(float*)((char*)this+0x2408),s64(),*(float*)((char*)this+0x70),s73(),*(float*)((char*)this+0x6c),s68());
+}
+
+// ?rva0008AD96@W3DView@@QAEXABVAsciiString@@@Z, retail 0x0008AD96 (84 bytes,
+// RET 4): the vftable slot after the snapshot factory above. Looks the name
+// up in the snapshot list TheTacticalView keeps at +0x80 (next at +0, name at
+// +4, compared through the rowed StringBase compare 0x000069D6) and, when
+// found, clears the +0x44 flag and moves the camera to it through slot +0x60
+// (300 ms, no ease).
+class View;
+extern View *TheTacticalView;
+struct Rva0008AD96Node {Rva0008AD96Node *next;AsciiString name;};
+void W3DView::rva0008AD96(const AsciiString&name){
+ Rva0008AD96Node *node=*(Rva0008AD96Node**)((char*)TheTacticalView+0x80);
+ for(;node;node=node->next)
+  if(node->name.compare(name)==0)break;
+ if(node){
+  *((bool*)this+0x44)=false;
+  s24(0,(Rva0008A234*)node,300,false,0.0f,0.0f);
+ }
 }

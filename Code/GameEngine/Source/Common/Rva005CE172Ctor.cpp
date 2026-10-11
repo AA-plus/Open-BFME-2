@@ -12,6 +12,8 @@ public:
 	virtual ~Rva0007DF07() {}
 private:
 	unsigned int count;
+	friend struct Rva005CE172Handle;
+	void addRef() { ++count; }
 };
 
 struct Rva005CE172Link
@@ -56,4 +58,33 @@ Rva005CE172::Rva005CE172(void *a, void *b, Rva005CE172Context *c)
 	: Rva005E87E0(a, b, c), context(c->link)
 {
 	context->owner = this;
+}
+
+// ?rva005CE349@Rva005CE349@@QAE?AURva005CE172Handle@@PAX0@Z, retail 0x005CE349 (99B):
+// a factory slot whose receiver keeps the constructor's context at +8. It
+// allocates 0x18 bytes, constructs this class (most-derived flag 1) and
+// returns a counted handle by hidden pointer (RET 0C); the AddRef reaches the
+// shared Rva0007DF07 count through the vbptr at +4. Receiver and handle names
+// are address-derived storage views.
+struct Rva005CE172Handle
+{
+	Rva005CC5E5 *m_p;
+	__forceinline Rva005CE172Handle(Rva005CC5E5 *p) : m_p(p)
+	{
+		if (p)
+			p->addRef();
+	}
+	~Rva005CE172Handle();
+};
+
+struct Rva005CE349
+{
+	char m_prefix[8];
+	Rva005CE172Context m_context;
+	Rva005CE172Handle rva005CE349(void *a, void *b);
+};
+
+Rva005CE172Handle Rva005CE349::rva005CE349(void *a, void *b)
+{
+	return Rva005CE172Handle(new Rva005CE172(a, b, &m_context));
 }

@@ -27,8 +27,12 @@ public:
 	virtual void s03();
 	virtual void s04();
 	virtual void s05();
-	virtual void s06();
+	virtual bool rva18(int a) = 0; // +0x18
 	virtual Coord3D rva1C(int a, int *extra) = 0; // +0x1C
+	virtual void s08();
+	virtual void s09();
+	virtual void s10();
+	virtual void rva2C(int a) = 0; // +0x2C
 };
 class Rva0049A8FAContain
 {
@@ -81,7 +85,7 @@ class Iface3E4
 {
 public:
 	virtual void s00();
-	virtual void s01();
+	virtual bool rva0049A8A1(int a, Coord3D *pos, int *out) = 0;
 	virtual void s02();
 	virtual void s03();
 	virtual void s04();
@@ -90,6 +94,7 @@ public:
 class Rva0049A64B : public B00, public B0C, public B10, public B20, public B24, public Iface3E4
 {
 public:
+	virtual bool rva0049A8A1(int a, Coord3D *pos, int *out);
 	virtual void rva0049A8FA(int a, Coord3D *out);
 };
 void Rva0049A64B::rva0049A8FA(int a, Coord3D *out)
@@ -100,4 +105,23 @@ void Rva0049A64B::rva0049A8FA(int a, Coord3D *out)
 	{
 		*out = p->rva1C(a, &extra);
 	}
+}
+
+// ?rva0049A8A1@Rva0049A64B@@UAE_NHPAUCoord3D@@PAH@Z @0x0049A8A1 89B: slot 1
+// of the same +0x3E4 table (0x00C50868). No provider from the object's +0x250
+// module (vslot +0x7C): false. Otherwise the provider is asked about the first
+// argument (vslot +0x18) and, if it says no, given it (vslot +0x2C); then
+// slot 5 above fills the position, the out word is cleared and the answer is
+// true. Names stay address-derived.
+bool Rva0049A64B::rva0049A8A1(int a, Coord3D *pos, int *out)
+{
+	Rva0049A8FAProvider *p = m_object->m_250->rva7C();
+	if (!p)
+		return false;
+	if (!p->rva18(a))
+		p->rva2C(a);
+	rva0049A8FA(a, pos);
+	if (out)
+		*out = 0;
+	return true;
 }
