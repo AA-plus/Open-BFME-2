@@ -104,6 +104,9 @@ class Rva001F4C67 : public Rva001F376E
 {
 public:
 	Rva001F4C67(const RvaSmartPtr12 &a, const Rva001F376E &b);
+	// Native 1F4C67 unlinks the particle and releases both handles.
+	// Use its rowed owner rather than an implicit member-only destructor.
+	virtual ~Rva001F4C67();
 	RvaSmartPtr12 m_smart;
 	Vec12 m_48;
 	int m_54;
