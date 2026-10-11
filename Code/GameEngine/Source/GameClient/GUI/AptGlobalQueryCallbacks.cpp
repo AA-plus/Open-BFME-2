@@ -39,11 +39,26 @@ extern Rva00222A8BTarget *TheRva00222A8BTarget;
 // The click-through handler (Rva0043283CDtor.cpp's singleton
 // g_Va00E032C8); its unrowed press and release handlers 0x00432AA2 and
 // 0x00432AC5 are pinned by address.
+// Both native handlers pick between the constructor's twenty 24-byte
+// records at +8. The selected entry uses the existing payload prefix.
+struct Rva00432931Entry {
+ int m_00,m_04,m_08,m_0C;
+ unsigned int m_10;
+ unsigned char m_14;
+ char m_pad15[3];
+};
+Rva00432931Entry *Rva00432931Pick(Rva00432931Entry *,Rva00432931Entry *);
+struct Rva004328D8Payload;
+void __stdcall Rva004328D8Emit(Rva004328D8Payload *);
+
 class Rva0043283C
 {
 public:
 	void rva00432AA2();
 	void rva00432AC5();
+private:
+ unsigned char m_prefix00[8];
+ Rva00432931Entry m_entries08[20];
 };
 
 extern int g_Va00E032C8;
@@ -146,3 +161,32 @@ void __cdecl DoTrace(int query, char *result, bool skip)
 
 // Retail's strcpy call lands on the import thunk rowed as ji_00629176.
 #pragma comment(linker, "/alternatename:_strcpy=?ji_00629176@@YAXXZ")
+
+// Retail 432AA2..432AC5 and432AC5..432AEB: choose press/release records
+// 4/14 and6/16, then emit once. The existing emitter ignores the incoming
+// ECX and pops one payload word. This projection retains native's receiver
+// load and reuses that complete row without asserting a second identity.
+void Rva0043283C::rva00432AA2()
+{
+ Rva00432931Entry *entry=Rva00432931Pick(&m_entries08[4],&m_entries08[14]);
+ if(entry) {
+  union {
+   void (__stdcall *provider)(Rva004328D8Payload *);
+   void (Rva0043283C::*caller)(Rva004328D8Payload *);
+  } emit;
+  emit.provider=&Rva004328D8Emit;
+  (this->*emit.caller)(reinterpret_cast<Rva004328D8Payload *>(entry));
+ }
+}
+void Rva0043283C::rva00432AC5()
+{
+ Rva00432931Entry *entry=Rva00432931Pick(&m_entries08[6],&m_entries08[16]);
+ if(entry) {
+  union {
+   void (__stdcall *provider)(Rva004328D8Payload *);
+   void (Rva0043283C::*caller)(Rva004328D8Payload *);
+  } emit;
+  emit.provider=&Rva004328D8Emit;
+  (this->*emit.caller)(reinterpret_cast<Rva004328D8Payload *>(entry));
+ }
+}
