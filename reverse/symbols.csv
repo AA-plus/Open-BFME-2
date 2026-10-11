@@ -17217,3 +17217,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??1Rva002BBD4D@@QAE@XZ,0x002BBD4D,placeholder: 5-byte jmp thunk to the rowed vector destructor 0x002BBB18 that the 0x004FA2E2 unwind funclet 0x0079330A reaches (+0 element-vector wrapper out-of-line destructor)
 ??0Rva006003FC@@QAE@PAX00@Z,0x00600432,callee of ??0Rva005FB1AD@@QAE@PAX00@Z
 ??0Rva005FAD8D@@QAE@PAX0@Z,0x005FAFE8,callee of ??0Rva005FB1AD@@QAE@PAX00@Z
+??0Rva0059E920@@QAE@XZ,0x0059E920,callee of ?ParseINI@StartingRestriction@@SAXPAVINI@@PAX@Z
