@@ -76850,3 +76850,9 @@ uw_00771e2c,,0x00771E2C,14,Code/GameEngine/Source/GameLogic/Object/Update/Invisi
 ?isValidContainerFor@TunnelContain@@UAE_NPAVObject@@_N1@Z,,0x0047DDA2,55,Code/GameEngine/Source/GameLogic/Object/Contain/TunnelContain.cpp,matched,TunnelContain::isValidContainerFor
 ?onSelling@TunnelContain@@UAEXXZ,,0x0047E00F,8,Code/GameEngine/Source/GameLogic/Object/Contain/TunnelContain.cpp,matched,TunnelContain::onSelling
 ?rva004631FA@SiegeEngineContain@@UAE_NH@Z,,0x0047CDCE,62,Code/GameEngine/Source/GameLogic/Object/Contain/HordeSiegeEngineContainIface20Slots.cpp,matched,SiegeEngineContain::rva004631FA
+?getContainMax@RiderChangeContain@@UBEHXZ,,0x0047E4EE,17,Code/GameEngine/Source/GameLogic/Object/Contain/RiderChangeContainRemoveFirst.cpp,matched,RiderChangeContain::getContainMax
+?friend_getRider@RiderChangeContain@@UBEPBVObject@@XZ,,0x0047EA26,50,Code/GameEngine/Source/GameLogic/Object/Contain/RiderChangeContainRemoveFirst.cpp,matched,RiderChangeContain::friend_getRider
+?setOriginalTeam@Rva004783F4@@UAEXPAVTeam@@@Z,,0x004783DC,24,Code/GameEngine/Source/GameLogic/Object/Contain/Rva004783F4.cpp,matched,Rva004783F4::setOriginalTeam
+?rva0047876A@GarrisonContain@@UAEXPBVDamageInfo@@W4BodyDamageType@@1@Z,,0x0047876A,70,Code/GameEngine/Source/GameLogic/Object/Contain/GarrisonContainHealSingleObject.cpp,matched,GarrisonContain::rva0047876A
+?isExitBusy@TransportContain@@UBE_NXZ,,0x00466DA9,19,Code/GameEngine/Source/GameLogic/Object/Contain/Rva00466D93ExitReserve.cpp,matched,TransportContain::isExitBusy
+?rva004672B7@TransportContain@@WCA@AEXHH@Z,,0x00467F33,8,Code/GameEngine/Source/GameLogic/Object/Contain/TransportContainDtor.cpp,matched,TransportContain::rva004672B7 adjustor thunk

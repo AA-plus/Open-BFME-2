@@ -7,8 +7,19 @@
 #include "../../../../Include/GameLogic/ContainmentListView.h"
 namespace _STL { template<> _List_base<Rva0036ADF9Element,allocator<Rva0036ADF9Element> >::~_List_base(); }
 class Object;
+class Rva0046247DDescriptor {
+public:
+    Rva0036AE51ListView rva0046247D();
+};
+struct RiderChangeContainModuleDataView {
+    char pad[0x98];
+    int m_slotCapacity;
+};
 class RiderChangeContainPrimary {
-    virtual void primary0(); char prefix[0x1c];
+protected:
+    virtual void primary0();
+    const RiderChangeContainModuleDataView *m_moduleData;
+    char prefix[0x18];
 };
 class RiderChangeContainInterface {
 public:
@@ -40,7 +51,7 @@ public:
     virtual void slot25();
     virtual void slot26();
     virtual Object *rva0047EA58();
-    virtual void slot28();
+    virtual int getContainMax() const;
     virtual void slot29();
     virtual void slot30();
     virtual void slot31();
@@ -81,14 +92,29 @@ public:
     virtual void slot66();
     virtual void slot67();
     virtual void slot68();
-    virtual void slot69();
+    virtual unsigned int getContainCount(int) const;
     virtual void slot70();
     virtual Rva0036AE51ListView getContainedItemsList();
+    virtual const Object *friend_getRider() const;
 };
 class RiderChangeContain : public RiderChangeContainPrimary, public RiderChangeContainInterface {
 public:
     virtual Object *rva0047EA58();
+    virtual int getContainMax() const;
+    virtual const Object *friend_getRider() const;
 };
+int RiderChangeContain::getContainMax() const
+{
+    if (m_moduleData)
+        return m_moduleData->m_slotCapacity;
+    return 0;
+}
+const Object *RiderChangeContain::friend_getRider() const
+{
+    if (getContainCount(0) <= 0)
+        return 0;
+    return (const Object *)containmentFirstWord(((Rva0046247DDescriptor *)(RiderChangeContainPrimary *)this)->rva0046247D().b->front());
+}
 Object *RiderChangeContain::rva0047EA58()
 {
     ContainmentList list=getContainedItemsList().rva0036AE51();

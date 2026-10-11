@@ -38240,3 +38240,9 @@ TexturePacker::UpdateResultTexture	0x001711A6	892	blocked	Whole-file follow-up a
 ?isValidContainerFor@TunnelContain@@UAE_NPAVObject@@_N1@Z	0x0047DDA2	55	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/TunnelContain.cpp 55B; TunnelContain::isValidContainerFor
 ?onSelling@TunnelContain@@UAEXXZ	0x0047E00F	8	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/TunnelContain.cpp 8B; TunnelContain::onSelling
 ?rva004631FA@SiegeEngineContain@@UAE_NH@Z	0x0047CDCE	62	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/HordeSiegeEngineContainIface20Slots.cpp 62B; SiegeEngineContain::rva004631FA
+?getContainMax@RiderChangeContain@@UBEHXZ	0x0047E4EE	17	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/RiderChangeContainRemoveFirst.cpp 17B; RiderChangeContain::getContainMax
+?friend_getRider@RiderChangeContain@@UBEPBVObject@@XZ	0x0047EA26	50	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/RiderChangeContainRemoveFirst.cpp 50B; RiderChangeContain::friend_getRider
+?setOriginalTeam@Rva004783F4@@UAEXPAVTeam@@@Z	0x004783DC	24	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/Rva004783F4.cpp 24B; Rva004783F4::setOriginalTeam
+?rva0047876A@GarrisonContain@@UAEXPBVDamageInfo@@W4BodyDamageType@@1@Z	0x0047876A	70	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/GarrisonContainHealSingleObject.cpp 70B; GarrisonContain::rva0047876A
+?isExitBusy@TransportContain@@UBE_NXZ	0x00466DA9	19	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/Rva00466D93ExitReserve.cpp 19B; TransportContain::isExitBusy
+?rva004672B7@TransportContain@@WCA@AEXHH@Z	0x00467F33	8	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/TransportContainDtor.cpp 8B; TransportContain::rva004672B7 adjustor thunk

@@ -32,5 +32,18 @@ virtual void v24();
 virtual void v25();
 virtual void v26();
 virtual bool v27(Object*);};
+class GameLogic;
+extern GameLogic *TheGameLogic;
+struct Rva00466DA9GameLogicView { char m_pad[0x40]; unsigned int m_frame; };
 class Rva00466D93 {public:virtual int rva00466D93(const ThingTemplate*,Object*);};
 int Rva00466D93::rva00466D93(const ThingTemplate*,Object*arg){return reinterpret_cast<Rva00466D93Primary*>(reinterpret_cast<char*>(this)-0x30)->v27(arg)?0:-1;}
+class TransportContain {
+public:
+	virtual bool isExitBusy() const;
+private:
+	char m_pad[0xD0];
+	unsigned int m_frameExitNotBusy;
+};
+bool TransportContain::isExitBusy() const {
+	return ((Rva00466DA9GameLogicView *)TheGameLogic)->m_frame < m_frameExitNotBusy;
+}
