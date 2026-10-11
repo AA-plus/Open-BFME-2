@@ -185,3 +185,58 @@ void Rva005E2178Owner::rva005E2178()
 {
 	m_target->slot07();
 }
+
+// Self-virtual forwarders: a member that only calls another virtual slot of
+// its own object (mov eax, [ecx]; jmp [eax+4*slot]); same caveats as above.
+// 0x000B3779 is referenced by three vtables; 0x00481832 by one.
+class Rva000B3779SlotSelf
+{
+public:
+	virtual void slot00();
+	virtual void slot01();
+	virtual void slot02();
+	virtual void slot03();
+	virtual void slot04();
+	virtual void slot05();
+	virtual void slot06();
+	virtual void slot07();
+	virtual void slot08();
+	virtual void slot09();
+	virtual void slot10();
+	virtual void slot11();
+	virtual void slot12();
+	virtual void slot13();
+	virtual void slot14();
+	virtual void slot15();
+	virtual void slot16();
+	virtual void slot17();
+	virtual void slot18();
+	virtual void slot19();
+	virtual void slot20();
+	virtual void slot21();
+	virtual void slot22();
+	virtual void slot23();
+	virtual void slot24();
+	virtual void slot25();
+	void rva000B3779();
+	void rva00481832();
+	void rva006C1670();
+};
+
+// 0x000B3779: own slot 25
+void Rva000B3779SlotSelf::rva000B3779()
+{
+	slot25();
+}
+
+// 0x00481832: own slot 13
+void Rva000B3779SlotSelf::rva00481832()
+{
+	slot13();
+}
+
+// 0x006C1670: own slot 9
+void Rva000B3779SlotSelf::rva006C1670()
+{
+	slot09();
+}
