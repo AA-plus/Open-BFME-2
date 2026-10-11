@@ -17230,3 +17230,6 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??1?$list@UICoord2D@@V?$allocator@UICoord2D@@@_STL@@@_STL@@QAE@XZ,0x00200667,fold-proof=Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/SkirmishGameOptionsMenu.cpp; full native23B base and5B direct destructor tail with all owner relocations; donor UICoord2D template identity retained as donor; target parent3015E7 EH state0 cleanup77961B independently bound to200667
 ?rva0006E605@RTS3DScene@@QAEXPAVVector3@@_N@Z,0x0006E605,callee of ?rva000982F9@Gen006E2310@@QAEXXZ
 ?rva000953B3@Gen006E2310@@QAEXXZ,0x000953B3,callee of ?rva000982F9@Gen006E2310@@QAEXXZ
+?rva0005F2BB@MilesAudioManager@@QAEXPAVRva00052B3D@@@Z,0x0005F2BB,callee of ?rva00062690@MilesAudioManager@@UAEXXZ
+?rva000521F4@GlobalVolumeData@MilesAudioManager@@QAEXM@Z,0x000521F4,callee of ?rva00062690@MilesAudioManager@@UAEXXZ
+?rva0005E0A4@MilesAudioManager@@QAEXXZ,0x0005E0A4,callee of ?rva00062690@MilesAudioManager@@UAEXXZ

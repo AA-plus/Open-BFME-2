@@ -697,7 +697,7 @@ struct AudioSettings {
     unsigned int m_at90;                 // +0x90
     char at94[0xA8 - 0x94];
     int m_atA8;                          // +0xA8, seconds before 0x61C87 reopens the device
-    char atAC[0xB0 - 0xAC];
+    int m_atAC;                          // +0xAC, seconds before the update reopens the device
     float m_atB0;                        // +0xB0, position change 0x55C5D ignores
     int m_atB4;                          // +0xB4, processRequest's preload limit
     float m_atB8;
@@ -934,7 +934,8 @@ public:
     // event info up by name.
     virtual void init(); virtual void slot02(); virtual void slot03(); virtual void slot04();
     virtual void slot05(); virtual void slot06(); virtual void slot07(); virtual void slot08(); virtual void slot09();
-    virtual void slot10(); virtual void slot11(); virtual void slot12(); virtual void slot13(); virtual void rva00061C87(unsigned int viewMask);
+    // Slot 10 (retail 0x00062690) is the per-frame update below.
+    virtual void rva00062690(); virtual void slot11(); virtual void slot12(); virtual void slot13(); virtual void rva00061C87(unsigned int viewMask);
     virtual void slot15(); virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
     virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23(); virtual void slot24();
     virtual void slot25(); virtual void removePlayingAudio(const AsciiString &eventName, int viewType); virtual void slot27();
@@ -970,7 +971,8 @@ public:
     virtual void slot105(Coord3D *cameraPos);
     virtual void slot106(Rva0005276C *corners);
     virtual bool rva000516EF(const Coord3D *pos);
-    virtual void slot108(); virtual void slot109();
+    // Slot 109 (+0x1B4) returns the frame's elapsed time the update keeps at +0x90.
+    virtual void slot108(); virtual float slot109();
     // Slot 110 (+0x1B8), the first call init() makes.
     virtual void rva000541DB(void);
     bool rva00055FCA(int key, void **result, int flags);
@@ -1033,6 +1035,10 @@ public:
         void rva0005213E(const MicrophoneSettings *settings, const Coord3D *delta);
         // Per-view volume state transfer (rowed 0x0005CE7E).
         void rva0005CE7E(Xfer *transfer);
+        // Per-frame step with the frame time (0x000521F4, pinned) and the
+        // end-of-frame step (rowed 0x000520C6); both from the update 0x62690.
+        void rva000521F4(float elapsed);
+        void rva000520C6(void);
 
         int m_myViewFocus;                         // +0x00 (WB assert name)
         float m_volumes[6][2];                     // +0x04
@@ -1060,6 +1066,10 @@ public:
     void rva0005B256(Xfer *xfer, PlayingAudioRef &playing, int *unused);
     bool rva000613A9(unsigned int handle);
     bool rva006AD9B0(void);    // 0x00059646, cached reinitialize setting
+    void rva0005E0A4(void);    // 0x0005E0A4 (pinned), called by the update
+    void rva0005B708(void);    // 0x0005B708 (rowed in MilesAudioSubtitleDrain.cpp)
+    // 0x0005F2BB (pinned; WorldBuilder names it processAmbientStreams).
+    void rva0005F2BB(class Rva00052B3D *state);
     void rva00060309(void);
     void rva0006047C(void);
     void rva000603ED(void);
@@ -1190,7 +1200,8 @@ private:
     bool m_at6A5;                        // +0x6A5, marks a view-type change (0x5DAFC, xfer)
     bool m_forceHeadphones;             // +0x6A6, provider speaker override
     bool m_at6A7;                        // +0x6A7, read by 0x52F4C and 0x53AFA
-    char at6A8[0x6AA - 0x6A8];
+    bool m_at6A8;                        // +0x6A8, cleared by the update
+    bool m_at6A9;                        // +0x6A9, set by the update when areas need a retest
     bool m_at6AA;                        // +0x6AA, retest areas on every call (0x55C5D)
     bool m_at6AB;                        // +0x6AB, set by loadPostProcess
     bool m_at6AC;                        // +0x6AC, cleared by loadPostProcess
@@ -1236,7 +1247,7 @@ private:
     bool m_atBE0;                        // +0xBE0, stops the 0x5EFE9 thread loop
     char atBE1[0xBE4 - 0xBE1];
     int m_atBE4;                         // +0xBE4, reverb room type (0x530DF zeroes it)
-    char atBE8[0xBEC - 0xBE8];
+    class SubTitleWindow *m_subTitleWindow; // +0xBE8, deleted by the update once finished
     unsigned int m_atBEC;                // +0xBEC, view types reset since the last update
     int m_selectedSpeakerType;          // +0xBF0, provider-selection speaker type
     char atBF4[0xBF8 - 0xBF4];
@@ -3639,7 +3650,7 @@ void MilesAudioManager::rva000606CE(bool accelerated)
     selectProvider(accelerated);
     if (m_selectedProvider != (unsigned int)-1) {
         internalSetReverbRoomType(m_atBE4);
-        slot10();
+        rva00062690();
     }
 }
 
@@ -3817,7 +3828,8 @@ bool MilesAudioManager::rva0005538C(void)
     return false;
 }
 
-class Rva0005C892 { public: void rva0005C892(void); };
+class Rva00052B3D;
+class Rva0005C892 { public: void rva0005C892(void); void rva0005C23C(Rva00052B3D *state); };
 
 // Retail 0x0005DAFC (address-derived): under the mutex, switches the active
 // view type (+0x678) and refreshes the reverb, the microphone and the 0x5C892
@@ -4958,4 +4970,113 @@ void MilesAudioManager::playAudioEvent(Rva00051107AudioRequest *req)
     }
     if (playing.get() && playing->m_event->hasMoreLoops())
         rva0005AA72(playing);
+}
+
+// Views for the per-frame update 0x00062690 below.
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+// The global audio switch the update tests first.
+struct Rva00062690GlobalDataView
+{
+    char at000[0x99C];
+    bool m_audioOn;                      // +0x99C
+};
+
+class GameEngine
+{
+    friend class MilesAudioManager;
+private:
+    bool rva00225D38(void);              // 0x00225D38 (rowed, private)
+};
+extern GameEngine *TheGameEngine;
+
+// The ambient-stream pass state built on the stack (rowed ctor 0x00052B3D).
+class Rva00052B3D
+{
+public:
+    Rva00052B3D();
+private:
+    int m_at00;
+    int m_at04;
+};
+
+// The subtitle window the update deletes once it reports itself finished.
+class SubTitleWindow
+{
+public:
+    ~SubTitleWindow();
+};
+class Rva00260A3C { public: bool test() const; };
+
+// Zero Hour's LatchRestore: restores the latched value when the scope ends
+// (vftable 0x007C5314, ??_7?$LatchRestore@_N@@6B@).
+template <class T>
+class LatchRestore
+{
+public:
+    LatchRestore(T &dest, const T &src) : m_whereToRestore(dest)
+    {
+        m_valueToRestore = dest;
+        dest = src;
+    }
+    virtual ~LatchRestore(void) { m_whereToRestore = m_valueToRestore; }
+
+protected:
+    T m_valueToRestore;
+    T &m_whereToRestore;
+};
+
+// Retail 0x00062690 (587 bytes, slot 10; WorldBuilder twin 0x0078A530):
+// the per-frame update. Skipped while audio is off; under the manager mutex
+// and a re-entry latch it reopens the device once the configured interval
+// since the last open has passed (if the cached reinitialize setting allows
+// it), clears +0xB78, keeps the frame time from slot 109, flags the trigger
+// areas for a retest, recalculates the microphone, steps the view-2 and the
+// current view's volume records, runs the request, music and ambient passes,
+// clears the per-frame flags, ends each view's volume frame and deletes a
+// finished subtitle window.
+void MilesAudioManager::rva00062690()
+{
+    if (TheWritableGlobalData && !((Rva00062690GlobalDataView *)TheWritableGlobalData)->m_audioOn)
+        return;
+    MilesMutexGuard guard(&m_mutex, 0);
+    static bool inUpdate;
+    if (inUpdate)
+        return;
+    LatchRestore<bool> latch(inUpdate, true);
+    if (m_audioSettings->m_atAC > 0) {
+        if (_time64(0) - m_atBF8 > m_audioSettings->m_atAC) {
+            static bool allowReinitialize = rva006AD9B0();
+            if (allowReinitialize)
+                rva0006179C(1);
+        }
+    }
+    ((Rva00056DA2 *)atB78)->rva00056DA2();
+    m_at90 = slot109();
+    if (m_at6AA || (!m_triggerAreas.empty() && TheGameEngine && TheGameEngine->rva00225D38()))
+        m_at6A9 = true;
+    if (m_at6AB)
+        recalculateMicrophone();
+    reinterpret_cast<GlobalVolumeData *>(m_volumeData[2])->rva000521F4(m_at90);
+    if (m_at678 != 2 && TheGameLogic && !TheGameLogic->isGamePaused())
+        reinterpret_cast<GlobalVolumeData *>(m_volumeData[m_at678])->rva000521F4(m_at90);
+    rva0005E0A4();
+    ((Rva0005F279Host *)this)->rva0005F279();
+    processRequestList();
+    startPendingMusicTracks();
+    Rva00052B3D ambient;
+    ((Rva0005C892 *)this)->rva0005C23C(&ambient);
+    rva0005F2BB(&ambient);
+    rva0005B708();
+    m_at6A5 = false;
+    m_at6A8 = false;
+    m_at6A9 = false;
+    m_at6AA = false;
+    for (int i = 0; i < 3; ++i)
+        reinterpret_cast<GlobalVolumeData *>(m_volumeData[i])->rva000520C6();
+    SubTitleWindow *subTitles = m_subTitleWindow;
+    if (subTitles && !((Rva00260A3C *)subTitles)->test()) {
+        delete subTitles;
+        m_subTitleWindow = 0;
+    }
 }
