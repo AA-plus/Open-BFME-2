@@ -3,6 +3,11 @@
 // ??1Rva00427311@@UAE@XZ @0x00427311 129B
 // Dtor storing vtable 0x0083C5DC frees WindowVideoMap at +0xc then base.
 // Evidence: calls rowed begin 0x00427195 and iterator inc 0x0041E832 releaseBuffer 0x00036410 delete 0x0002FD60 hashtable dtor 0x004271D9 base dtor 0x001B4E74 caller 0x004274AB deleting dtor.
+// Link: declare ~AsciiString only (the shim's documented per-unit switch) so this TU calls the out-of-line
+// retail destructor instead of emitting a non-retail ??_GAsciiString copy; the // cl: line is untouched.
+#ifndef BFME_ASCII_DTOR_DECL
+#define BFME_ASCII_DTOR_DECL
+#endif
 #include <hash_map>
 #include "ascii_string.h"
 

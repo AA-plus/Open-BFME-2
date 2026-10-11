@@ -11,6 +11,11 @@
 // The heap entries' first member is the AsciiString, so its teardown folds to
 // the StringBase spelling at the same address.
 
+// Link: declare ~AsciiString only (the shim's documented per-unit switch) so this TU calls the out-of-line
+// retail destructor instead of emitting a non-retail ??_GAsciiString copy; the // cl: line is untouched.
+#ifndef BFME_ASCII_DTOR_DECL
+#define BFME_ASCII_DTOR_DECL
+#endif
 #include <list>
 
 // Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it

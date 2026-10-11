@@ -8,6 +8,11 @@
 // result triple through the int-returning spelling of rowed 0x005243FA
 // (pinned; the body forwards 0x0052408B's eax), and on a changed m_10
 // runs the singleton's pinned 0x002245FF plus m_C's pinned 0x00523EC8.
+// Link: declare ~AsciiString only (the shim's documented per-unit switch) so this TU calls the out-of-line
+// retail destructor instead of emitting a non-retail ??_GAsciiString copy; the // cl: line is untouched.
+#ifndef BFME_ASCII_DTOR_DECL
+#define BFME_ASCII_DTOR_DECL
+#endif
 #include "ascii_string.h"
 
 struct Out00524477
