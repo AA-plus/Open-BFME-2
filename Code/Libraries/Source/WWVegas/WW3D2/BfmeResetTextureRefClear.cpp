@@ -15,7 +15,9 @@ struct BfmeResetTextureRef
 	void clear();
 };
 
-void BfmeResetTextureRef::clear()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void BfmeResetTextureRef::clear()
 {
 	if (pointer)
 	{
@@ -23,6 +25,13 @@ void BfmeResetTextureRef::clear()
 		pointer = 0;
 	}
 }
+
+// ?bfmeAnchorBfmeResetTextureRefClear absent-from-retail
+void bfmeAnchorBfmeResetTextureRefClear(BfmeResetTextureRef *p)
+{
+	p->clear();
+}
+
 
 class Member0C00739C70
 {

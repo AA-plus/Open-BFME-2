@@ -14,10 +14,13 @@ class BfmeAptValue006DCD20
     virtual void vtableSlot0();
     unsigned int m_flags;
     void setTypeAt006DBBC0(int type);
+    friend void bfmeAnchorAptValueSetType(BfmeAptValue006DCD20 *, int);
 public:
     BfmeAptValue006DCD20(int type, unsigned int unused);
 };
-void BfmeAptValue006DCD20::setTypeAt006DBBC0(int type)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void BfmeAptValue006DCD20::setTypeAt006DBBC0(int type)
 {
     if (!(type > 0)) {
         g_bfmeAptAssertAtE17734("n > AptVFT_xxx", "c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptValue/AptValue.inl", 326);
@@ -29,3 +32,10 @@ void BfmeAptValue006DCD20::setTypeAt006DBBC0(int type)
     }
     m_flags = (m_flags & 0x01ffffffu) | (static_cast<unsigned int>(type) << 25);
 }
+
+// ?bfmeAnchorAptValueSetType absent-from-retail
+void bfmeAnchorAptValueSetType(BfmeAptValue006DCD20 *p, int type)
+{
+	p->setTypeAt006DBBC0(type);
+}
+

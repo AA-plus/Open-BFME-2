@@ -51,7 +51,9 @@ public:
 	BfmeKeyLC *m_bfmeKey;
 };
 
-void BfmeThing925D::bfmeGo925D(void *v)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void BfmeThing925D::bfmeGo925D(void *v)
 {
 	BfmeKeyLC *k = m_bfmeKey;
 	if (k) {
@@ -60,3 +62,10 @@ void BfmeThing925D::bfmeGo925D(void *v)
 		p->m_bfmeR = v;
 	}
 }
+
+// ?bfmeAnchorBfmeGo925D absent-from-retail
+void bfmeAnchorBfmeGo925D(BfmeThing925D *p)
+{
+	p->bfmeGo925D(0);
+}
+

@@ -34,7 +34,10 @@ BfmeAptValue006DCD20::BfmeAptValue006DCD20(int type, unsigned int)
 // AptValueVector::rva006E6C00 via global at 0x00E17710; callers pass type
 // constants (e.g. 9 at 0x006D6519); types 0x1c/0x2b/0x2c clear releaseAtEnd.
 // ?rva006DCCC0 naming would hide the proven class; this keeps the ctor family.
-BfmeAptValue006DCD20::BfmeAptValue006DCD20(int type)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmeAptValue006DCD20::BfmeAptValue006DCD20(int type)
 {
     setTypeAt006DBBC0(type);
     m_flags = (m_flags & 0xFE000035u) | 0x30u;
@@ -45,6 +48,13 @@ BfmeAptValue006DCD20::BfmeAptValue006DCD20(int type)
         g_releaseVectorAtE17710->rva006E6C00(reinterpret_cast<AptValue *>(this));
     }
 }
+
+// ?bfmeAnchorBfmeAptValue006DCD20 absent-from-retail
+void *bfmeAnchorBfmeAptValue006DCD20(void *where, int type)
+{
+	return new (where) BfmeAptValue006DCD20(type);
+}
+
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
 // call sites in their matched rows land on these addresses (same ABI). Bind them.

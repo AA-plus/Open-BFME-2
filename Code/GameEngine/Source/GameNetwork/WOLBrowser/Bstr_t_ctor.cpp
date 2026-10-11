@@ -30,10 +30,20 @@ public:
 	_bstr_t(const char *value);
 };
 
-_bstr_t::_bstr_t(const char *value)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline _bstr_t::_bstr_t(const char *value)
 {
 	Data *data = new Data(value);
 	m_data = data;
 	if (!m_data)
 		_com_issue_error(0x8007000e);
 }
+
+// ?bfmeAnchorBstrT absent-from-retail
+void *bfmeAnchorBstrT(void *where, const char *value)
+{
+	return new (where) _bstr_t(value);
+}
+

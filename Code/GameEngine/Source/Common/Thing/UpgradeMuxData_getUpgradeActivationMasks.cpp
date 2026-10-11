@@ -139,7 +139,9 @@ private:
 };
 
 // ?getUpgradeActivationMasks@UpgradeMuxData@@QBEXAAUUpgradeMaskType@@0@Z
-void UpgradeMuxData::getUpgradeActivationMasks(
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void UpgradeMuxData::getUpgradeActivationMasks(
 	UpgradeMaskType &activation, UpgradeMaskType &conflicting) const
 {
 	if (!m_activationUpgradeNames.empty() || !m_conflictingUpgradeNames.empty())
@@ -187,6 +189,13 @@ void UpgradeMuxData::getUpgradeActivationMasks(
 	activation = m_activationMask;
 	conflicting = m_conflictingMask;
 }
+
+// ?bfmeAnchorUpgradeMuxDataMasks absent-from-retail
+void bfmeAnchorUpgradeMuxDataMasks(const UpgradeMuxData *p, UpgradeMaskType &a, UpgradeMaskType &c)
+{
+	p->getUpgradeActivationMasks(a, c);
+}
+
 
 // ?rva004CB333@UpgradeMuxData@@QAE_NPAVObject@@@Z
 // retail 0x004CB333, 197 bytes: optional drawable 19-dword mask check, then the

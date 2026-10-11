@@ -20,9 +20,19 @@ public:
 	const AudioEventInfo *m_info;
 };
 
-AudioEventInfoRef::AudioEventInfoRef(const AudioEventInfo *info)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AudioEventInfoRef::AudioEventInfoRef(const AudioEventInfo *info)
 	: m_info(info)
 {
 	if (m_info)
 		InterlockedIncrement(&const_cast<AudioEventInfo *>(m_info)->m_refCount);
 }
+
+// ?bfmeAnchorAudioEventInfoRef absent-from-retail
+void *bfmeAnchorAudioEventInfoRef(void *where, const AudioEventInfo *info)
+{
+	return new (where) AudioEventInfoRef(info);
+}
+
