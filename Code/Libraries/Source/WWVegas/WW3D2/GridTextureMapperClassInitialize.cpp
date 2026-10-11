@@ -33,6 +33,7 @@ class GridTextureMapperClass : public TextureMapperClass
 {
 protected:
 	void initialize(float fps, unsigned int gridwidth_log2);
+	friend void bfmeAnchorGridTextureMapperInitialize(GridTextureMapperClass *, float, unsigned int);
 
 	float Fps;
 	int Sign;
@@ -46,7 +47,9 @@ protected:
 	unsigned LastUsedSyncTime;
 };
 
-void GridTextureMapperClass::initialize(float fps, unsigned int gridwidth_log2)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void GridTextureMapperClass::initialize(float fps, unsigned int gridwidth_log2)
 {
 	unsigned int grid_width = (1u << gridwidth_log2);
 
@@ -72,3 +75,10 @@ void GridTextureMapperClass::initialize(float fps, unsigned int gridwidth_log2)
 	}
 	Remainder = 0;
 }
+
+// ?bfmeAnchorGridTextureMapperInitialize absent-from-retail
+void bfmeAnchorGridTextureMapperInitialize(GridTextureMapperClass *p, float fps, unsigned int gridwidth_log2)
+{
+	p->initialize(fps, gridwidth_log2);
+}
+

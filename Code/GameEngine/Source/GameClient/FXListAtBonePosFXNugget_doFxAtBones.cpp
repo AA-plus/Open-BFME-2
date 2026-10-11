@@ -77,6 +77,7 @@ class FXListAtBonePosFXNugget : public Rva001DFEAABase
 {
 protected:
 	void doFxAtBones(const Object *obj, int startIndex) const;
+	friend void bfmeAnchorFXListAtBonePosDoFxAtBones(const FXListAtBonePosFXNugget *, const Object *, int);
 
 private:
 	const FXList *m_fx;
@@ -89,7 +90,9 @@ struct WorldMtx
 };
 
 // ?doFxAtBones@FXListAtBonePosFXNugget@@IBEXPBVObject@@H@Z
-void FXListAtBonePosFXNugget::doFxAtBones(const Object *obj, int startIndex) const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void FXListAtBonePosFXNugget::doFxAtBones(const Object *obj, int startIndex) const
 {
 	Coord3D bonePositions[MAX_BONE_POINTS];
 	Matrix3D boneTransforms[MAX_BONE_POINTS];
@@ -110,3 +113,10 @@ void FXListAtBonePosFXNugget::doFxAtBones(const Object *obj, int startIndex) con
 		}
 	}
 }
+
+// ?bfmeAnchorFXListAtBonePosDoFxAtBones absent-from-retail
+void bfmeAnchorFXListAtBonePosDoFxAtBones(const FXListAtBonePosFXNugget *p, const Object *obj, int startIndex)
+{
+	p->doFxAtBones(obj, startIndex);
+}
+

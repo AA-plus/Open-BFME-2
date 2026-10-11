@@ -30,7 +30,16 @@ private:
 };
 
 // ?getSkirmishSideInfo@SidesList@@QAEPAVSidesInfo@@H@Z
-SidesInfo *SidesList::getSkirmishSideInfo(int i)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline SidesInfo *SidesList::getSkirmishSideInfo(int i)
 {
 	return (i >= 0 && i < m_numSkirmishSides) ? &m_skirmishSides[i] : 0;
 }
+
+// ?bfmeAnchorSidesListGetSkirmishSideInfo absent-from-retail
+SidesInfo *bfmeAnchorSidesListGetSkirmishSideInfo(SidesList *p, int i)
+{
+	return p->getSkirmishSideInfo(i);
+}
+
