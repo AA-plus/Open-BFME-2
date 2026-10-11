@@ -21,7 +21,7 @@ class PolygonTrigger
 {
 public:
 	void getCenterPoint(Coord3D *center) const;
-	void getBounds(IRegion2D *bounds);
+	void getBounds(int *bounds);
 };
 class Rva0027D30D
 {
@@ -56,15 +56,28 @@ inline const int &largerDimension(const int &width, const int &height)
 
 struct BfmeTempCME
 {
-	BfmeTempCME();
 	unsigned char m_bfmeHead[0x14];
 	int m_bfmeResult;
 };
 
+// LINK: the temp's initializer and the grid query are rowed under their retail
+// names (0x0027D1C6, 0x0027DCF2); the views keep the call shapes.
+class Rva0027D1C6
+{
+public:
+	Rva0027D1C6 *rva0027D1C6();
+};
+class Rva0027D244;
+class Rva0027DCF2
+{
+public:
+	void rva0027DCF2(Coord3D *center, float radius, Rva0027D244 *result, bool flag, int mode);
+};
+typedef void (Rva0027DCF2::*Rva0027DCF2Shape)(void *, float, void *, int, int);
+
 class BfmeThingCME
 {
 public:
-	void bfmeCallCME(void *what, float value, BfmeTempCME *out, int one, int two);
 	int bfmeGoCME(void *what);
 	int rva0027F108(void *what, float value, int one, int two);
 	int rva0027F171(PolygonTrigger *trigger);
@@ -74,14 +87,16 @@ public:
 int BfmeThingCME::bfmeGoCME(void *what)
 {
 	BfmeTempCME tmp;
-	bfmeCallCME(what, 10.0f, &tmp, 0, 0);
+	((Rva0027D1C6 *)&tmp)->rva0027D1C6();
+	(((Rva0027DCF2 *)this)->*reinterpret_cast<Rva0027DCF2Shape>(&Rva0027DCF2::rva0027DCF2))(what, 10.0f, &tmp, 0, 0);
 	return tmp.m_bfmeResult;
 }
 
 int BfmeThingCME::rva0027F108(void *what, float value, int one, int two)
 {
 	BfmeTempCME tmp;
-	bfmeCallCME(what, value, &tmp, one, two);
+	((Rva0027D1C6 *)&tmp)->rva0027D1C6();
+	(((Rva0027DCF2 *)this)->*reinterpret_cast<Rva0027DCF2Shape>(&Rva0027DCF2::rva0027DCF2))(what, value, &tmp, one, two);
 	return tmp.m_bfmeResult;
 }
 
@@ -97,7 +112,7 @@ int BfmeThingCME::rva0027F171(PolygonTrigger *trigger)
 	Coord3D center;
 	trigger->getCenterPoint(&center);
 	IRegion2D bounds;
-	trigger->getBounds(&bounds);
+	trigger->getBounds((int *)&bounds);
 	int height = bounds.hi.y - bounds.lo.y;
 	int width = bounds.hi.x - bounds.lo.x;
 	float radius = static_cast<float>(largerDimension(width, height));
