@@ -17193,3 +17193,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??1Rva0008B4CD@@QAE@XZ,0x0008B4CD,out-of-line copy of the vector wrapper's inline dtor (tail jump to rowed 0x0008B470) used by the unwind funclet of 0x000EDA94
 ?rva0009CD9B@Rva0009C134Host@@QAEXXZ,0x0009CD9B,callee of ?rva0009D862@Rva0009D55BProduct@@UAEXXZ
 ?rva002BF391@LivingWorld@@UAEX_N@Z,0x002BF391,callee of ?rva0009DB5A@Rva0009D55BProduct@@UAEX_N@Z
+??1Rva001D904A@@QAE@XZ,0x001D904A,placeholder view of the +0xC table destructor of 0x001D92C0 (REL32 at 0x001D9394); byte twin of the rowed ArmorTemplate hashtable destructor 0x003609BE with its own EH handler
+??1Rva001D92BB@@QAE@XZ,0x001D92BB,placeholder: 5-byte jmp thunk to 0x001D904A that the 0x001D92C0 unwind funclet 0x007695BF reaches (the map wrapper out-of-line destructor)
