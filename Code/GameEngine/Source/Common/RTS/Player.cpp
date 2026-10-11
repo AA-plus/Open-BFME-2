@@ -3379,9 +3379,15 @@ Bool Player::isPlayerDead(void) const
 
 // ------------------------------------------------------------------------------------------------
 // ?isPlayerActive@Player@@QBE_NXZ present-unmatched
+// Retail 0x002AA231 (20B): tests the observer byte at +0x33A and the dead
+// byte at +0x734 (xor/test/jnz/test/jnz/inc/ret). Spelled with explicit
+// offsets like isPlayerObserver above: the TU-local member view carries
+// different offsets.
 Bool Player::isPlayerActive(void) const
 {
-	return !m_observer && !m_isPlayerDead;
+	const char *p = reinterpret_cast<const char *>(this);
+	return !*reinterpret_cast<const Bool *>(p + 0x33A)
+		&& !*reinterpret_cast<const Bool *>(p + 0x734);
 }
 
 // ------------------------------------------------------------------------------------------------
