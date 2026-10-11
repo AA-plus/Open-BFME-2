@@ -26,13 +26,13 @@ static inline float sqr(float x)
 
 extern int g_Va00DBA4E4;
 
-// This unit's statics, built in this order (0x007B461B, 0x007B4636,
-// 0x007B4651, 0x007B4662, 0x007B4670).
-AsciiString AIFarmKillSquad_IsRunning("AIFarmKillSquad_IsRunning");
-AsciiString AIFarmKillSquad_FrameNextRun("AIFarmKillSquad_FrameNextRun");
-float g_00E06434 = sqr(1100.0f);
-int g_00E06438 = g_Va00DBA4E4 * 30;
-int g_00E0643C = g_Va00DBA4E4 * 120;
+// AIFarmKillSquad.cpp defines these statics and owns their initializers
+// (0x007B461B, 0x007B4636, 0x007B4651, 0x007B4662, 0x007B4670).
+extern AsciiString AIFarmKillSquad_IsRunning;
+extern AsciiString AIFarmKillSquad_FrameNextRun;
+extern float g_00E06434;
+extern int g_00E06438;
+extern int g_00E0643C;
 
 struct Coord3DBase
 {

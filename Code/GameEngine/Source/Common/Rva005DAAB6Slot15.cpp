@@ -6,7 +6,7 @@ extern class ThingFactory *TheThingFactory;
 extern class GameLogic *TheGameLogic;
 extern class Rva00A027B8 *g_00A027B8;
 // g_00A027B8: matched references place it at VA 0xe027b8 (zero-filled .bss).
-class Rva00A027B8 * g_00A027B8;
+// defined in Rva005DAB30Build.cpp; a second definition here blocked linking.
 
 enum ObjectID
 {
