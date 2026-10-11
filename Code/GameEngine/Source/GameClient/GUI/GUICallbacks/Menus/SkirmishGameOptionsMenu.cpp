@@ -32,6 +32,12 @@
 // Description: Lan Game Options Menu
 ///////////////////////////////////////////////////////////////////////////////////////
 
+// This unit retains the unrowed Zero Hour menu implementation and its
+// narrow slot initializer. Keep that local donor helper distinct from
+// BFME2 GameSlot::setPlayerTemplate, whose row at 0x00400E33 remaps factions
+// and clears two fields. The menu bodies and that layout remain unclaimed.
+#define setPlayerTemplate bfmeZhSetPlayerTemplate
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 #include <map>
 
