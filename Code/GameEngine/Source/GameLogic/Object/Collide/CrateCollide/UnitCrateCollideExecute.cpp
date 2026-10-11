@@ -85,7 +85,12 @@ public:
 	static bool findPositionAround(const Coord3D *center, const FindPositionOptions *options, Coord3D *result);	// 0x00285202 pin
 };
 
-extern const float g_00C5A910;
+// Retail's value at RVA 0x0085A910 (.rdata, four bytes): the bytes there are
+// f3 4f c3 c7, i.e. the float -99999.9f. The rowed crate-collide body passes it
+// straight to FindPositionOptions::startAngle. `extern` on the definition keeps
+// the const object external (otherwise MSVC gives it internal linkage and the
+// reference in this very TU is unresolved).
+extern const float g_00C5A910 = -99999.9f;
 
 class AudioManager;
 extern AudioManager *TheAudio;

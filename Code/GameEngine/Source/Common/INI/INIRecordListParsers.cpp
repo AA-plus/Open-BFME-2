@@ -48,7 +48,14 @@ public:
 extern Debug *theDebug;
 void _bfme_debugRecordCallsite(int kind);
 bool bfmeRva000387C0();
-extern const char g_00C1A8D8[];
+// Retail's message at RVA 0x0081A8D8 (.rdata, 194 bytes including the NUL), read
+// verbatim from retail's image: the debug crash line reports it through theDebug
+// (retail 0x00395D77's path) when the obsolete FactionDecal branch is taken.
+// `extern` on the definition keeps the const array external; without it MSVC
+// gives a const namespace-scope array internal linkage and this TU's own
+// reference to ?g_00C1A8D8@@3QBDB is unresolved.
+extern const char g_00C1A8D8[] =
+	"A CastleBehavior entry calls for a FactionDecal.\n This is an obsolete feature, which will be removed soon. \nYou should expect bad results. \nPlease use an object with W3DFloorDraw, instead. -MLo";
 
 class Rva00395D77
 {
