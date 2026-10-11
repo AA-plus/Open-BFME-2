@@ -306,12 +306,53 @@ static Bool findSingleBone(RenderObjClass* robj, const AsciiString& boneName, Ma
 }
 
 //-------------------------------------------------------------------------------------------------
+// Native B6BF0..B6CF1 and WB921AF0 identify the subobject helper.
+// Only called root-object slots are typed; the verified donor child
+// transform validity and reference-count handling remain unchanged.
+class RetailSubObjRenderView {public:
+virtual void slot00();
+virtual void slot01();
+virtual void slot02();
+virtual void slot03();
+virtual void slot04();
+virtual void slot05();
+virtual void slot06();
+virtual void slot07();
+virtual void slot08();
+virtual void slot09();
+virtual void slot10();
+virtual void slot11();
+virtual void slot12();
+virtual void slot13();
+virtual void slot14();
+virtual void slot15();
+virtual void slot16();
+virtual void slot17();
+virtual void slot18();
+virtual void slot19();
+virtual void slot20();
+virtual void slot21();
+virtual void slot22();
+virtual void slot23();
+virtual void slot24();
+virtual void slot25();
+virtual void slot26();
+virtual void slot27();
+virtual int Get_Num_Sub_Objects()const;
+virtual void slot29();
+virtual RenderObjClass*Get_Sub_Object(int)const;
+virtual void slot31();
+virtual RenderObjClass*Get_Sub_Object_By_Name(const char*,int * =0)const;
+virtual void slot33();
+virtual void slot34();
+virtual int Get_Sub_Object_Bone_Index(int,int)const;
+};
 static Bool findSingleSubObj(RenderObjClass* robj, const AsciiString& boneName, Matrix3D& mtx, Int& boneIndex)
 {
 	if (((const StringBase<char>*)&boneName)->isNone() || boneName.isEmpty())
 		return false;
 
-	RenderObjClass* childObject = robj->Get_Sub_Object_By_Name(boneName.str());
+	RenderObjClass* childObject = ((RetailSubObjRenderView*)robj)->Get_Sub_Object_By_Name(boneName.str());
 	if (childObject)
 	{
 		mtx = childObject->Get_Transform();
@@ -319,15 +360,15 @@ static Bool findSingleSubObj(RenderObjClass* robj, const AsciiString& boneName, 
 		// you'd think this would work, but, it does not. do it the hard way.
 		// boneIndex = childObject->Get_Sub_Object_Bone_Index(childObject);
 
-		for (Int subObj = 0; subObj < robj->Get_Num_Sub_Objects(); subObj++)
+		for (Int subObj = 0; subObj < ((RetailSubObjRenderView*)robj)->Get_Num_Sub_Objects(); subObj++)
 		{	
-			RenderObjClass* test = robj->Get_Sub_Object(subObj);
+			RenderObjClass* test = ((RetailSubObjRenderView*)robj)->Get_Sub_Object(subObj);
 			if (test == childObject)
 			{
-				boneIndex = robj->Get_Sub_Object_Bone_Index(0, subObj);
+				boneIndex = ((RetailSubObjRenderView*)robj)->Get_Sub_Object_Bone_Index(0, subObj);
 #if defined(_DEBUG) || defined(_INTERNAL)
 				test->Release_Ref();
-				test = robj->Get_Sub_Object_On_Bone(0, boneIndex);
+				test = ((RetailSubObjRenderView*)robj)->Get_Sub_Object_On_Bone(0, boneIndex);
 				DEBUG_ASSERTCRASH(test != NULL && test == childObject, ("*** ASSET ERROR: Hmm, bone problem"));
 #endif
 			}
@@ -831,8 +872,8 @@ private:
 // which MSVC only does for a static whose address is never taken, so it is
 // kept alive by direct calls rather than by taking its address. Build
 // scaffolding; it claims no retail bytes.
-// ?doSingleBoneNameAnchor absent-from-retail
-Bool doSingleBoneNameAnchor(RenderObjClass *robj, const AsciiString &a, const AsciiString &b, PristineBoneInfoMap &map)
+// ?doSingleBoneNameBfme2Anchor absent-from-retail
+Bool doSingleBoneNameBfme2Anchor(RenderObjClass *robj, const AsciiString &a, const AsciiString &b, PristineBoneInfoMap &map)
 {
 	return doSingleBoneName(robj, a, map) && doSingleBoneName(robj, b, map);
 }
