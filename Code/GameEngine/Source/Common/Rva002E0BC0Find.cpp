@@ -1,11 +1,16 @@
 // cl: /O1 /DNDEBUG /MD
 //
 // ?rva002E0BC0@Rva002E071E@@QAEHH@Z @0x002E0BC0 43B: id-gated compare
-// (thiscall, 1 int arg, bool). Looks the id up through landed
+// (thiscall, 1 int arg). Looks the id up through landed
 // Rva002BA8F1Logic::find on g_00DFEF10 (null index); false on miss,
 // else forwards the player to landed rva002E071E (player-to-other
-// conversion unproven, explicit cast). Owner reuses Rva002E071E so
-// the rowed call resolves.
+// conversion unproven, explicit cast) and zero-extends its bool into the
+// int result (retail movzx eax,al at 0x002E0BE0). Owner reuses Rva002E071E
+// so the rowed call resolves. NOTE the return type is a one-way street: the
+// three retail callers (0x0056B7A0, 0x005003DF, 0x0009C814) each test only
+// AL after the call, so their TUs declared this byte-sized while this TU
+// declared it int. One spelling cannot serve both, which is why the
+// Rva002E0BC0Helper views in those units stay unresolved.
 
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;

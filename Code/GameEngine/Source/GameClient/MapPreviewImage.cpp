@@ -73,7 +73,7 @@ private: char *text;int tag;
 // Native3007F1/300854 use the existing game array allocation operators.
 void * __cdecl operator new[](unsigned int bytes);
 void __cdecl operator delete[](void *block);
-class Rva003006C4 { public: int rva003006C4(const AsciiString &); };
+class Rva003006C4 { public: bool rva003006C4(const AsciiString &); };
 static void copyFromBigToDir(const AsciiString &infile,const AsciiString &outfile) {
  File *file=TheFileSystem->openFile(infile.str(),0x41);
  if(!file) throw XferException(5,0);

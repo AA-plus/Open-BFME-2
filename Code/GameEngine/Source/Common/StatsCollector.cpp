@@ -241,7 +241,7 @@ public:
 extern GlobalData *TheWritableGlobalData;
 #define TheGlobalData ((const GlobalData *)TheWritableGlobalData)
 extern char g_00DC8AF0[];
-class Rva003006C4 { public: Bool rva003006C4(const AsciiString &directory); };
+class Rva003006C4 { public: bool rva003006C4(const AsciiString &directory); };
 extern Rva003006C4 *TheFileSystem;
 
 class StatsCollector

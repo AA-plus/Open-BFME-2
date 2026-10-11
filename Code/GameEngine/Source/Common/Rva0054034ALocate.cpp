@@ -52,7 +52,12 @@ private:
 	char m_pad04[0x24];
 };
 
-class Rva0054034A
+// Rva00540B03 (renamed from the address-derived Rva0054034A view): the same
+// class as the rowed ctor @0x00540B03 in Rva00540B03Ctors.cpp, which calls
+// rva00540A26 below, and as the +0x24 member view in
+// Rva00540888CameraTransform.cpp. Layout: a 40-byte sorted key vector
+// (begin +0x10, end +0x14) plus an int hint at +0x1C.
+class Rva00540B03
 {
 public:
 	void rva005404CF(int value);
@@ -65,7 +70,7 @@ private:
 	int m_hint1C;
 };
 
-void Rva0054034A::rva00540A26()
+void Rva00540B03::rva00540A26()
 {
 	typedef _STL::vector<Rva0054000B, _STL::allocator<Rva0054000B> > Vec4000B;
 	BfmePod40 **vec = &m_begin10;
