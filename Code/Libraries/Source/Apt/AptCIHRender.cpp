@@ -110,7 +110,7 @@ extern "C" AptMatrix g_bfmeD1206;
 extern "C" void (__cdecl *bfmeNotify1209Callback)(void *ctx);
 extern void *g_aptDrawStringSlot;
 extern void *g_aptCustomControlRenderSlot;
-extern bool (__cdecl *g_00E177B0)(int);
+bool (__cdecl *g_aptCustomControlFilter)(int);
 extern char g_00DDC2E0;
 
 class Rva006DBB30SarDwordField
@@ -281,7 +281,7 @@ void Rva006E15C0::call(void *ctx, void *arg1, int arg2)
             AptValue *pValue = g_aptDateInterpreter.getVariable(this, 0, Rva0070B4F0GetString(0x10), 1, 1, 0);
             pValue->AddRef();
             EAStringC text;
-            if (!g_00E177B0 || g_00E177B0(((AptRenderShape *)pRectObject->rva006E1100())->m_C->m_18) == true)
+            if (!g_aptCustomControlFilter || g_aptCustomControlFilter(((AptRenderShape *)pRectObject->rva006E1100())->m_C->m_18) == true)
                 text = rva006DDF60();
             AptString *pValueString = pValue->c_string();
             AptString *pHandlerString = pHandler->c_string();

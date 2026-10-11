@@ -100,7 +100,7 @@ public:
     AptCIH *mpParentAnim; // +0x24
 };
 extern AptValue *gpUndefinedValue;
-extern void (__cdecl *g_00E177C4)(const char *);
+void (__cdecl *g_aptUndefinedVariableCallback)(const char *);
 
 struct AptActionInterpreter
 {
@@ -172,7 +172,7 @@ AptValue *AptActionInterpreter::getVariable(AptValue *pCurrentContext, AptValue 
                 return pResult;
         }
     }
-    if (g_00E177C4)
-        g_00E177C4(pName->rva00620090());
+    if (g_aptUndefinedVariableCallback)
+        g_aptUndefinedVariableCallback(pName->rva00620090());
     return gpUndefinedValue;
 }
