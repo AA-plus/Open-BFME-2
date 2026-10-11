@@ -82,9 +82,40 @@ struct LivingWorldBuildingNuggetSpawnArmy;
 // and no unit defined it, so the callers reading it could not link.
 LivingWorldLogic *TheLivingWorldLogic = 0;
 
+// The resolver's owned members, as its rowed dtor (Rva002B74DEDtor.cpp)
+// tears them down: the +8 element array (set through 0x002B2EC7, released
+// through 0x002B2EA0) and the +0xC auto-resolve object (reset 0x002B4326,
+// cleared 0x002B430C); address names throughout.
+struct Item002B2EC7;
+class Rva002B2EA0 { public: void rva002B2EA0(); };	// 0x002B2EA0
+class Rva002B2EC7
+{
+public:
+	Rva002B2EC7() : m_p(0) {}
+	~Rva002B2EC7() { ((Rva002B2EA0 *)this)->rva002B2EA0(); }
+	void rva002B2EC7(Item002B2EC7 *v);			// 0x002B2EC7
+
+private:
+	Item002B2EC7 *m_p;
+};
+class Rva004FA2E2;
+class Rva002B430C { public: void clear(); };		// 0x002B430C
+class Rva002B4326
+{
+public:
+	Rva002B4326() : m_ptr(0) {}
+	~Rva002B4326() { ((Rva002B430C *)this)->clear(); }
+	void reset(Rva004FA2E2 *p);				// 0x002B4326
+	Rva004FA2E2 *get() const { return m_ptr; }
+
+private:
+	Rva004FA2E2 *m_ptr;
+};
+class ModuleData;
+
 // LivingWorldLogic::AutoBattleResolver (WB name), 0x28 bytes; rowed in the
-// ledger under the placeholder Rva002B74DE (dtor 0x002B74DE). Its ctor
-// (0x002BD40D) and Update (0x002BB7D6) are unrowed.
+// ledger under the placeholder Rva002B74DE (dtor 0x002B74DE). Its Update
+// (0x002BB7D6) is unrowed.
 class Rva002B74DE
 {
 public:
@@ -93,7 +124,12 @@ public:
 	Int Update();						// 0x002BB7D6, 1 when done
 
 private:
-	unsigned char m_data[0x28];
+	LivingWorldLogic *m_logic;				// +0x00
+	Int m_battle;						// +0x04
+	Rva002B2EC7 m_holder08;					// +0x08
+	Rva002B4326 m_holder0C;					// +0x0C
+	_STL::vector<const ModuleData *> m_vector10;		// +0x10
+	_STL::vector<const ModuleData *> m_vector1C;		// +0x1C
 };
 
 // m_autoBattleResolver at +0x178: an owning pointer whose reset and clear
@@ -291,6 +327,24 @@ class Rva002B616FList
 {
 public:
 	void forEach(void (Rva002B616FListener::*notify)(void *, int), void *arg, int value);	// 0x002B616F
+
+private:
+	unsigned char m_data[0x10];
+};
+
+// Auto-resolve listeners at +0x2C are told (logic, battle, auto-resolve
+// object) through slot 0 (vcall thunk 0x001FF3A9) by the rowed forEach
+// 0x002B6126 (Rva002B55F2ListenerWalks.cpp).
+class Rva002B6126Listener
+{
+public:
+	virtual void notify(void *, int, int);
+};
+
+class Rva002B6126List
+{
+public:
+	void forEach(void (Rva002B6126Listener::*notify)(void *, int, int), void *arg, int value, int extra);	// 0x002B6126
 
 private:
 	unsigned char m_data[0x10];
@@ -650,13 +704,14 @@ public:
  void rva002B3833(LivingWorldBattle*,struct Rva002B89BBInfo*);
 
 private:
+	friend class Rva002B74DE;	// the auto battle resolver's ctor reads +0x2C and +0xB0
 	void AddDelayedRegionVictory(Rva003F287F *region, Int player, UnsignedInt flags);	// 0x002B9B42
 	void CheckTurnPhaseTransitions();		// 0x002BD23E
 	void rva002B5B55(void *army);			// 0x002B5B55, destroys one army
 
 	unsigned char m_pad18[0x1c - 0x18];
 	Rva002B616FList m_turnListeners;		// +0x1C
-	unsigned char m_pad2C[0x3c - 0x2c];
+	Rva002B6126List m_resolverListeners;		// +0x2C
 	Rva002B616FList m_battleListeners;		// +0x3C, told (logic, battle) when a battle completes
 	unsigned char m_pad4C[0x8c - 0x4c];
 	_STL::vector<LivingWorldPlayer *> m_players;	// +0x8C
@@ -1945,7 +2000,8 @@ public:
 	Rva002BC1DASide *m_sidesEnd;				// +0x1C
 	unsigned char m_pad20[0x24 - 0x20];
 	Rva003F287F *m_region;					// +0x24
-	unsigned char m_pad28[0x38 - 0x28];
+	unsigned char m_pad28[0x34 - 0x28];
+	Int m_field34;						// +0x34, handed to the region manager's 0x0020E63F
 	Int m_side;						// +0x38, the winning side
 };
 class Rva003F468D
@@ -2052,6 +2108,63 @@ void LivingWorldLogic::rva002BCCFB(LivingWorldBattle *battle, Int a, Int b)
 	}
 	Rva003F287F *region = battle->m_region;
 	SetUpAutoResolveBattle(armies, battle->rva003F4D09(), units, region, a, b);
+}
+
+// The resolver's per-army slots: 0x2C-byte objects built by the rowed
+// default ctor 0x002B2508 and destroyed by 0x002A983D (the folded trivial
+// derived dtor, pinned as ??1Rva002A983D), over the rank base 0x00380523.
+class Rva00380200
+{
+public:
+	Rva00380200();
+	virtual ~Rva00380200();
+};
+class Rva002B2508 : public Rva00380200
+{
+public:
+	Rva002B2508();
+	virtual ~Rva002B2508();
+
+private:
+	unsigned char m_data[0x2c - 0x04];
+};
+// The local result list handed to the setup above and to the 0x80-byte
+// auto-resolve object (ctor 0x004FA3C9, pinned; dtor 0x004FA2E2); its list
+// dtor 0x002BBB18 is rowed in StlportVectorDtorFamily.cpp.
+struct Rva002BBB96Element { public: ~Rva002BBB96Element(); };
+class Rva0020E5BB
+{
+public:
+	void rva0020E63F(Int a, Int b);				// 0x0020E63F
+};
+class Rva004FA2E2
+{
+public:
+	Rva004FA2E2(const _STL::vector<Rva002BBB96Element> &results);	// 0x004FA3C9
+	~Rva004FA2E2();						// 0x004FA2E2
+
+private:
+	unsigned char m_data[0x80];
+};
+
+// LivingWorldLogic::AutoBattleResolver::AutoBattleResolver, retail 0x002BD40D
+// (311 bytes, RET 8; WorldBuilder D7B150). Keeps the logic and battle, tells
+// the region manager about the battle (+0x34, 1), allocates one slot per
+// army of the battle, has the logic build the battle lists (0x002BCCFB),
+// creates the auto-resolve object over the results and tells the +0x2C
+// listeners (logic, battle, object).
+Rva002B74DE::Rva002B74DE(LivingWorldLogic *logic, Int battle)
+	: m_logic(logic), m_battle(battle)
+{
+	LivingWorldBattle *b = (LivingWorldBattle *)battle;
+	Int field34 = b->m_field34;
+	((Rva0020E5BB *)m_logic->m_field0B0)->rva0020E63F(field34, 1);
+	Int count = b->rva003F459A();
+	_STL::vector<Rva002BBB96Element> results;
+	m_holder08.rva002B2EC7((Item002B2EC7 *)new Rva002B2508[count]);
+	m_logic->rva002BCCFB(b, (Int)&results, (Int)&m_holder08);
+	m_holder0C.reset(new Rva004FA2E2(results));
+	m_logic->m_resolverListeners.forEach(&Rva002B6126Listener::notify, m_logic, battle, (int)m_holder0C.get());
 }
 
 // OnBattleComplete's region manager calls, pinned under address names
