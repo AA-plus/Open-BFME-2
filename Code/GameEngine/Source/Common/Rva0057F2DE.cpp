@@ -53,10 +53,11 @@ class Rva0057F2DE : public Rva005248D0
 public:
 	Rva0057F2DE(TargetRef00217D4C *ref);
 	virtual ~Rva0057F2DE();
+	UnicodeString rva0057F3A9();
 private:
 	GameSpyLoginPreferences m_gameSpy;
 	TreeHintHolder00217D4C m_holder;
-	int m_a0;
+	int m_a0;		// +0xA0, a combo box window
 	int m_a4;
 	unsigned char m_a8;
 	char m_padA9[3];
@@ -71,4 +72,19 @@ Rva0057F2DE::Rva0057F2DE(TargetRef00217D4C *ref) : m_holder(ref), m_a0(0), m_a4(
 
 Rva0057F2DE::~Rva0057F2DE()
 {
+}
+
+class GameWindow;
+UnicodeString GadgetComboBoxGetText(GameWindow *comboBox);	// rowed 0x00322D21
+
+// ?rva0057F3A9@Rva0057F2DE@@QAE?AVUnicodeString@@XZ @0x0057F3A9 113B (RET 4;
+// caller AptMpGameSetup::HandleClanChange 0x004409D2): the +0xA0 combo box's
+// text, trimmed, or UnicodeString::TheEmptyString without a combo box.
+UnicodeString Rva0057F2DE::rva0057F3A9()
+{
+	if (!m_a0)
+		return UnicodeString::TheEmptyString;
+	UnicodeString text = GadgetComboBoxGetText((GameWindow *)m_a0);
+	text.trim();
+	return text;
 }
