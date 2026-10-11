@@ -25,6 +25,7 @@ private:
 class AITacticOffensive : public AITactic
 {
 public:
+	virtual ~AITacticOffensive();
 	AITacticOffensive(const AsciiString &name);
 	unsigned char m_pad04[0x58 - 4];
 };
@@ -32,6 +33,7 @@ public:
 class AITacticSiege : public AITactic
 {
 public:
+	virtual ~AITacticSiege();
 	AITacticSiege(const AsciiString &name);
 	unsigned char m_pad04[0x5C - 4];
 };
@@ -39,6 +41,7 @@ public:
 class AITacticDefensive : public AITactic
 {
 public:
+	virtual ~AITacticDefensive();
 	AITacticDefensive(const AsciiString &name);
 	unsigned char m_pad04[0x58 - 4];
 };
@@ -46,6 +49,7 @@ public:
 class Rva005DCBE3 : public AITactic
 {
 public:
+	virtual ~Rva005DCBE3();
 	Rva005DCBE3(const AsciiString &name, int kind);
 	unsigned char m_pad04[0x58 - 4];
 };
@@ -53,6 +57,7 @@ public:
 class Rva005DCC24 : public AITactic
 {
 public:
+	virtual ~Rva005DCC24();
 	Rva005DCC24(const AsciiString &name);
 	unsigned char m_pad04[0x58 - 4];
 };
@@ -61,6 +66,7 @@ public:
 class AIBasePenetrationTroopsTactic : public AITacticOffensive
 {
 public:
+	virtual ~AIBasePenetrationTroopsTactic();
 	AIBasePenetrationTroopsTactic();
 };
 
@@ -73,6 +79,7 @@ AIBasePenetrationTroopsTactic::AIBasePenetrationTroopsTactic()
 class AISiegeGatesTactic : public AITacticSiege
 {
 public:
+	virtual ~AISiegeGatesTactic();
 	AISiegeGatesTactic();
 private:
 	bool m_5C;
@@ -89,6 +96,7 @@ AISiegeGatesTactic::AISiegeGatesTactic()
 class AISimpleSiegeTactic : public AITacticSiege
 {
 public:
+	virtual ~AISimpleSiegeTactic();
 	AISimpleSiegeTactic();
 private:
 	int m_5C;
@@ -103,6 +111,7 @@ AISimpleSiegeTactic::AISimpleSiegeTactic()
 class AIFlankAttackTactic : public AITacticOffensive
 {
 public:
+	virtual ~AIFlankAttackTactic();
 	AIFlankAttackTactic();
 private:
 	Rva0015334F *m_58;
@@ -118,6 +127,7 @@ AIFlankAttackTactic::AIFlankAttackTactic()
 class Rva005AA735 : public AITacticDefensive
 {
 public:
+	virtual ~Rva005AA735();
 	Rva005AA735();
 };
 
@@ -130,6 +140,7 @@ Rva005AA735::Rva005AA735()
 class AISimpleExpansionTactic : public Rva005DCBE3
 {
 public:
+	virtual ~AISimpleExpansionTactic();
 	AISimpleExpansionTactic();
 private:
 	int m_58;
@@ -145,6 +156,7 @@ AISimpleExpansionTactic::AISimpleExpansionTactic()
 class AIRoamingDefenseTactic : public Rva005DCC24
 {
 public:
+	virtual ~AIRoamingDefenseTactic();
 	AIRoamingDefenseTactic();
 private:
 	bool m_58;
@@ -161,6 +173,7 @@ AIRoamingDefenseTactic::AIRoamingDefenseTactic()
 class AIStartWoTRBattleTactic : public Rva005DCC24
 {
 public:
+	virtual ~AIStartWoTRBattleTactic();
 	AIStartWoTRBattleTactic();
 };
 
@@ -173,6 +186,7 @@ AIStartWoTRBattleTactic::AIStartWoTRBattleTactic()
 class AIRingHeroTactic : public Rva005DCC24
 {
 public:
+	virtual ~AIRingHeroTactic();
 	AIRingHeroTactic();
 private:
 	int m_58;
@@ -195,6 +209,7 @@ AIRingHeroTactic::AIRingHeroTactic()
 class AIReturnTheRingTactic : public Rva005DCC24
 {
 public:
+	virtual ~AIReturnTheRingTactic();
 	AIReturnTheRingTactic();
 private:
 	int m_58;
@@ -219,6 +234,7 @@ AIReturnTheRingTactic::AIReturnTheRingTactic()
 class AIStructureCreepTactic : public Rva005DCC24
 {
 public:
+	virtual ~AIStructureCreepTactic();
 	AIStructureCreepTactic();
 private:
 	int m_58;
@@ -257,6 +273,7 @@ int GetGameLogicRandomValue(int lo, int hi, char *file, int line);
 class AIFarmKillSquad : public Rva005DCC24
 {
 public:
+	virtual ~AIFarmKillSquad();
 	AIFarmKillSquad();
 private:
 	int m_58;
