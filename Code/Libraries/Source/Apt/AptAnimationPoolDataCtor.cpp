@@ -11,7 +11,7 @@
 extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char*,const char*,int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
 extern void *(__cdecl *g_bfmeAptAllocAtE17728)(unsigned int);
-class BfmeAptValue006DCD20;extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue;extern AptValue *gpUndefinedValue;
 class Rva006DB160 {public:void*allocBlock(int);};class Rva006DB270 {public:void freeBlock(void*,int);};extern Rva006DB270*g_pChainBlockAllocator;
 inline void Rva006D8680Free(void*p,int size){((Rva006DB270*)g_pChainBlockAllocator)->freeBlock(p,size);}void*Rva006CD440Alloc(int);void Rva006CD460Free(void*);static __forceinline void Rva006E31F0Free(void*p){Rva006CD460Free(p);}
 class Rva006E4F10 {unsigned short count,capacity;void**array;
@@ -24,7 +24,7 @@ class AptIntervalTimer{char data[32];public:AptIntervalTimer();~AptIntervalTimer
 struct Rva00222343 {int fields[14];bool flag38,flag39;};
 class Rva006E6060Root{
  void**newInsts;int numNew;Rva006E4F10 a;int numIntervals;void*records28;Rva006E4F10 b,c,d;AptDisplayList display;AptIntervalTimer*timers;
- int value38,value3C;void**inputs;BfmeAptValue006DCD20*value44;char pad48[0x60-0x48];BfmeAptValue006DCD20*value60,*value64,*value68;
+ int value38,value3C;void**inputs;AptValue*value44;char pad48[0x60-0x48];AptValue*value60,*value64,*value68;
  int value6C;bool value70;char pad71[3];int value74,value78;char pad7C[0x9C-0x7C];int value9C;AptActionQueueC*queue;
  int maxNew,maxTimers,maxInputs,maxRecords;
 public:Rva006E6060Root(const Rva00222343*);~Rva006E6060Root();
@@ -44,7 +44,7 @@ Rva006E6060Root::Rva006E6060Root(const Rva00222343*p):a(p->fields[0]),b(p->field
  inputs=(void**)((Rva006DB160*)g_pChainBlockAllocator)->allocBlock(maxInputs*4);
  ROOT_CHECK(inputs!=0,0x28E,"aQueuedInputs != NULL");
  numNew=0;value3C=0;value6C=0;value70=false;numIntervals=0;value74=0;value78=0;value38=0;value9C=0;
- value44=g_aptUndefinedAtE18078;value60=g_aptUndefinedAtE18078;value64=g_aptUndefinedAtE18078;value68=g_aptUndefinedAtE18078;
+ value44=gpUndefinedValue;value60=gpUndefinedValue;value64=gpUndefinedValue;value68=gpUndefinedValue;
 }
 
 Rva006E6060Root::~Rva006E6060Root(){
