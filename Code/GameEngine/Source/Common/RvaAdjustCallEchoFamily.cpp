@@ -8,6 +8,7 @@
 // 0x00330C0F (-0x3C -> 0x0007E03A), 0x00330C22 (-0x3C -> 0x002E3876).
 // Callee identities unproven (opaque pins); owner names address-derived.
 // One ledger row per member.
+#include <math.h>
 
 #include <new>
 #include "Lib/Coord3D.h"
@@ -172,4 +173,38 @@ int Rva0053863ESub::run(int outputAddress)
 	OutputValue &output = *reinterpret_cast<OutputValue *>(outputAddress);
 	::new (&output) OutputValue(m_cached);
 	return outputAddress;
+}
+
+struct Rva005381DCPt { float x, y; };
+struct Rva005381DCBox { float xMin, yMin, xMax, yMax; };
+struct Rva0053856FSeg { Rva005381DCPt p0, p1; };
+
+static __declspec(noinline) void rva005381DC(Rva005381DCBox &box, const Rva005381DCPt &pt)
+{
+	if (box.xMin > pt.x) box.xMin = pt.x;
+	if (box.yMin > pt.y) box.yMin = pt.y;
+	if (pt.x > box.xMax) box.xMax = pt.x;
+	if (pt.y > box.yMax) box.yMax = pt.y;
+}
+
+void Rva0053863ESub::rva0053856F()
+{
+	const float maxVal = 3.4028234663852886e+38f;
+	const float minVal = -3.4028234663852886e+38f;
+	Rva0053856FSeg *end = reinterpret_cast<Rva0053856FSeg *>(m_finish);
+	Rva005381DCBox *box = reinterpret_cast<Rva005381DCBox *>(&m_cached);
+	reinterpret_cast<float *>(&m_cached)[1] = maxVal;
+	reinterpret_cast<float *>(&m_cached)[0] = maxVal;
+	Rva0053856FSeg *cur = reinterpret_cast<Rva0053856FSeg *>(m_begin);
+	reinterpret_cast<float *>(&m_cached)[3] = minVal;
+	reinterpret_cast<float *>(&m_cached)[2] = minVal;
+	for (; cur != end; ++cur)
+	{
+		rva005381DC(*box, cur->p0);
+		rva005381DC(*box, cur->p1);
+	}
+	float halfW = (reinterpret_cast<float *>(&m_cached)[2] - reinterpret_cast<float *>(&m_cached)[0]) * 0.5f;
+	float halfH = (reinterpret_cast<float *>(&m_cached)[3] - reinterpret_cast<float *>(&m_cached)[1]) * 0.5f;
+	m_cachedScale = sqrtf(halfW * halfW + halfH * halfH);
+	m_refresh = 0;
 }
