@@ -46,6 +46,7 @@ struct Rva0009D55BVec3
 {
 	float x, y, z;
 	Rva0009D55BVec3(float v) : x(v), y(v), z(v) {}
+	Rva0009D55BVec3 &operator=(const Rva0009D55BVec3 &v) { x = v.x; y = v.y; z = v.z; return *this; }
 };
 
 struct Rva0009D55BPair
@@ -106,6 +107,7 @@ public:
 	Rva0009D55BProduct();
 	virtual ~Rva0009D55BProduct();
 	virtual void rva0009C784(unsigned int phase, unsigned int previous);
+	virtual void rva0009D862();
 
 private:
 	Rva0009D6FARef *m_C0;
@@ -206,4 +208,29 @@ void Rva0009D55BProduct::rva0009C784(unsigned int phase, unsigned int previous)
 		m_138 = 0.0f;
 		((Rva0009C784Slots *)this)->slot10(true);
 	}
+}
+
+// ?rva0009D862@Rva0009D55BProduct@@UAEXXZ retail 0x0009D862 (319 bytes, EH;
+// slot 4 of the product table): after the rowed shutdown 0x0009AB85 it
+// creates the camera (+0xC0, CameraClass), the scene built on this (+0xC4,
+// rowed 0x0009AA0F) and three lights (+0xC8/+0xCC/+0xD0, LightClass type 1),
+// sets +0x134 to 1, copies the +0x104 vector to +0xF8 and runs the pinned
+// refreshes 0x0009BAA4 and 0x0009CD9B.
+class CameraClass { public: CameraClass(); char m_data[0x3FC]; };
+class Rva0009AA0F { public: Rva0009AA0F(int owner); char m_data[0x10C]; };
+class LightClass { public: enum LightType { POINT = 0, DIRECTIONAL = 1 }; LightClass(LightType type); char m_data[0x120]; };
+class Rva0009C134Host { public: void rva0009BAA4(); void rva0009CD9B(); };
+
+void Rva0009D55BProduct::rva0009D862()
+{
+	((Rva0009AB6B *)this)->rva0009AB85();
+	m_C0 = (Rva0009D6FARef *)new CameraClass;
+	m_C4 = (Rva0009D6FAScene *)new Rva0009AA0F((int)this);
+	m_C8 = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_CC = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_D0 = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_134 = 1.0f;
+	m_F8 = m_104;
+	((Rva0009C134Host *)this)->rva0009BAA4();
+	((Rva0009C134Host *)this)->rva0009CD9B();
 }

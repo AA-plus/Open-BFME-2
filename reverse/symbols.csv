@@ -17191,3 +17191,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??A?$hash_map@W4NameKeyType@@VRadiusDecalTemplate@@U?$hash@W4NameKeyType@@@rts@@U?$equal_to@W4NameKeyType@@@_STL@@V?$allocator@U?$pair@$$CBW4NameKeyType@@VRadiusDecalTemplate@@@_STL@@@6@@_STL@@QAEAAVRadiusDecalTemplate@@ABW4NameKeyType@@@Z,0x002A3FAF,callee of ?parseNamedRadiusDecalTemplate@InGameUI@@SAXPAVINI@@PAX1PBX@Z
 ??4RadiusDecalTemplate@@QAEAAV0@ABV0@@Z,0x00330CDD,callee of ?parseNamedRadiusDecalTemplate@InGameUI@@SAXPAVINI@@PAX1PBX@Z
 ??1Rva0008B4CD@@QAE@XZ,0x0008B4CD,out-of-line copy of the vector wrapper's inline dtor (tail jump to rowed 0x0008B470) used by the unwind funclet of 0x000EDA94
+?rva0009CD9B@Rva0009C134Host@@QAEXXZ,0x0009CD9B,callee of ?rva0009D862@Rva0009D55BProduct@@UAEXXZ
