@@ -33,6 +33,12 @@ template <typename T> struct BfmeStringData
 
 #include "unicode_string.h"
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_node<UnicodeString> *list<UnicodeString, allocator<UnicodeString> >::_M_create_node(const UnicodeString &);
+}
+
 
 inline bool operator==(const UnicodeString &a, const UnicodeString &b) { return a.compare(b) == 0; }
 bool operator<(const UnicodeString &a, const UnicodeString &b);
