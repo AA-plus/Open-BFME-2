@@ -173,10 +173,19 @@ class Rva0041F449 { public: StringBase<char>*rva0041F449(const StringBase<char>&
 class ArmyMemberDefinition {public:float*rva0041F28C(int);};
 struct Rva002A8AB1Record {char pad[0x160]; Rva0041F449*members;char pad164[8];int mode;};
 class Rva002A8F24 {public:Rva002A8AB1Record*rva002A8AB1(void*);};
-extern Rva002A8F24*TheSkirmishAIManager;
+// Retail's SkirmishAI manager singleton at VA 0x00DFEEF8 (RVA 0x009FEEF8),
+// which three rowed bodies here load and call rva002A8AB1 through (retail
+// 0x005DA69C, 0x005DA86A, 0x005DA8AE, all `mov 0xdfeef8,%ecx`). The address
+// already has an owner: Rva005EEA20Find.cpp:36 defines it under the ledger's
+// name ?g_00DFEEF8@@3PAVRva002A8F24@@A, which GameEngineInit.cpp:787 also writes
+// when it installs the subsystem registered as "TheSkirmishAIManager" (site
+// 0x0022F939). The ZH spelling this unit carried was therefore a private view of
+// one retail object, and a second definition of it is a duplicate; this unit
+// now reads the same object under the name the ledger binds to the address.
+extern Rva002A8F24*g_00DFEEF8;
 int AIUpgradeHeuristicFactoryUnlock::rva005DA67F(int unused) {
  Object*object=TheGameLogic->findObjectByID(((const Rva005DA6F3Object*)m_held)->m_id);
- Rva002A8AB1Record*owner=TheSkirmishAIManager->rva002A8AB1(object->getControllingPlayer());
+ Rva002A8AB1Record*owner=g_00DFEEF8->rva002A8AB1(object->getControllingPlayer());
  for(std::vector<PlayerAITypeEntry>::iterator it=m_modules.begin();it!=m_modules.end();++it){
   StringBase<char>*key=(StringBase<char>*)((char*)*it+0x64);
   ArmyMemberDefinition*entry=(ArmyMemberDefinition*)owner->members->rva0041F449(*key);
