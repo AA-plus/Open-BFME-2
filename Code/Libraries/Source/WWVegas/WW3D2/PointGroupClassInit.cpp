@@ -10,6 +10,9 @@
 // device-guard ABI. Existing indexbuffercount shim supplies that layout.
 // BFME2 lacks W3D pools (same established delta as dx8renderer.cpp); use
 // native allocation, with no W3DMPO_GLUE-generated allocator methods.
+// Keep this inlined header helper private to the unit. Its O2 copy is
+// not retail's shared 106-byte out-of-line Float_To_Int_Floor provider.
+#define Float_To_Int_Floor BfmePointGroupInlineFloatFloor
 #include "always.h"
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(CLASS)
@@ -26,6 +29,7 @@ void Rva0017E210Init(void);
 #include "wwmath.h"
 #include "dx8indexbuffer.h"
 #include "always.h"
+#undef Float_To_Int_Floor
 
 extern DX8IndexBufferClass *Tris;
 extern DX8IndexBufferClass *Quads;

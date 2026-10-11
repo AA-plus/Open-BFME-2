@@ -70,6 +70,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
  *   LightImpClass::Process_Pop -- exposes the "pop" process for an srLight                    *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+// Keep this inlined header helper private to the unit. Its O2 copy is
+// not retail's shared 106-byte out-of-line Float_To_Int_Floor provider.
+#define Float_To_Int_Floor BfmeLightInlineFloatFloor
 #include "light.h"
 #include "ww3d.h"
 #include "ww3dids.h"
@@ -81,6 +84,7 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "scene.h"
 #include "persistfactory.h"
 #include "statistics.h"
+#undef Float_To_Int_Floor
 
 
 
