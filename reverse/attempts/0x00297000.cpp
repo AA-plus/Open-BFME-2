@@ -1,5 +1,5 @@
 // ?rva00297000@Object@@QAEXPBVCommandButton@@PAV1@HH@Z
-// partial score=0.94 date=2026-10-10
+// partial score=0.99 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
 // Reference: Object::doSpecialPower and doSpecialPowerAtObject in ZH
 // Object.cpp at pinned donor575ba2b04. Names are carried from that source;
@@ -17,17 +17,14 @@
 // push. Both bodies independently match, with no newpins or address globals.
 class Object;class Module;class SpecialPowerTemplate;
 enum NameKeyType {NK_UNKNOWN=0};
+enum WeaponSlotType { PRIMARY_WEAPON = 0 };
+enum WeaponLockType { NOT_LOCKED = 0, LOCKED_TEMPORARILY = 1, LOCKED_PERMANENTLY = 2 };
+enum CommandSourceType { CMD_FROM_PLAYER = 0, CMD_FROM_SCRIPT = 1, CMD_FROM_AI = 2 };
 class NameKeyGenerator{public:NameKeyType nameToKey(const char*);};extern NameKeyGenerator*TheNameKeyGenerator;
 template<int N>class BitFlags {public:BitFlags():bits(0){}bool any()const;bool test(const void*)const;unsigned bits;};
 typedef BitFlags<11>DisabledMaskType;
 class AutoAbilityMaskView{public:virtual void slot00();virtual DisabledMaskType slot04()const;};
 class AutoAbilitySlot01View{public:virtual void *slot00();virtual DisabledMaskType slot01();};
-class SpecialPowerStore{public:bool canUseSpecialPower(Object*,const SpecialPowerTemplate*);};extern SpecialPowerStore*TheSpecialPowerStore;
-class SpecialPowerModuleInterface{public:virtual void v00();virtual void v01();virtual void v02();virtual void v03();virtual void v04();virtual void v05();virtual void v06();virtual void v07();virtual void v08();virtual void v09();virtual void doSpecialPower(unsigned);virtual void doSpecialPowerAtObject(Object*,unsigned);};
-static __forceinline bool testAllowed(const DisabledMaskType&mask,const void*objMask){return mask.test(objMask);}
-enum WeaponSlotType { PRIMARY_WEAPON = 0 };
-enum WeaponLockType { LOCKED_TEMPORARILY = 1 };
-enum CommandSourceType { CMD_FROM_PLAYER = 0, CMD_FROM_SCRIPT = 1 };
 class AICommandInterface
 {
 public:
@@ -37,11 +34,10 @@ public:
 };
 class AIUpdateInterface
 {
-public:
-	AICommandInterface *getCommandInterface() { return &m_commandInterface; }
 private:
 	unsigned char m_pad00[0x20];
-	AICommandInterface m_commandInterface;
+public:
+	AICommandInterface m_commands20;
 };
 class CommandButton
 {
@@ -60,7 +56,13 @@ private:
 	char m_unknown48[0x80 - 0x48];
 	WeaponSlotType m_weaponSlot;
 };
-class Object{public:void doSpecialPower(const SpecialPowerTemplate*,unsigned,bool);void doSpecialPowerAtObject(const SpecialPowerTemplate*,Object*,unsigned,bool);protected:Module*findModule(NameKeyType)const;public:SpecialPowerModuleInterface*getSpecialPowerModule(const SpecialPowerTemplate*)const;void rva0028C4B6();__declspec(noinline) void rva0028C24C();bool setWeaponLock(WeaponSlotType,WeaponLockType);void rva00297000(const CommandButton*,Object*,int,int);char pad[0x1c8];DisabledMaskType disabled;char pad1CC[0x258-0x1CC];AIUpdateInterface*m_ai;};
+class SpecialPowerStore{public:bool canUseSpecialPower(Object*,const SpecialPowerTemplate*);};extern SpecialPowerStore*TheSpecialPowerStore;
+class SpecialPowerModuleInterface{public:virtual void v00();virtual void v01();virtual void v02();virtual void v03();virtual void v04();virtual void v05();virtual void v06();virtual void v07();virtual void v08();virtual void v09();virtual void doSpecialPower(unsigned);virtual void doSpecialPowerAtObject(Object*,unsigned);};
+static __forceinline bool testAllowed(const DisabledMaskType&mask,const void*objMask){return mask.test(objMask);}
+class Object{public:void doSpecialPower(const SpecialPowerTemplate*,unsigned,bool);void doSpecialPowerAtObject(const SpecialPowerTemplate*,Object*,unsigned,bool);protected:Module*findModule(NameKeyType)const;public:SpecialPowerModuleInterface*getSpecialPowerModule(const SpecialPowerTemplate*)const;void rva0028C4B6();__declspec(noinline) void rva0028C24C();bool setWeaponLock(WeaponSlotType,WeaponLockType);void rva00297000(const CommandButton*,Object*,int,int);char pad[0x1c8];DisabledMaskType disabled;char pad1CC[0x258-0x1CC];AIUpdateInterface*m_ai;char pad25C[0x458-0x25C];int m_deadline458;};
+extern int g_Va00DBA4E4;
+#include "../../Common/GameLogicObjectLookupView.h"
+extern GameLogic *TheGameLogic;
 void Object::doSpecialPower(const SpecialPowerTemplate*t,unsigned options,bool forced){
  if(options&0x20000000){static NameKeyType autoKey=TheNameKeyGenerator->nameToKey("AutoAbilityBehavior");Module*m=findModule(autoKey);if(disabled.any()&&!testAllowed(((AutoAbilityMaskView*)((char*)m+0x10))->slot04(),&disabled))return;}
  else if(disabled.any())return;
@@ -75,16 +77,23 @@ void Object::doSpecialPowerAtObject(const SpecialPowerTemplate*t,Object*target,u
  SpecialPowerModuleInterface*m=getSpecialPowerModule(t);if(m){rva0028C4B6();m->doSpecialPowerAtObject(target,options);}
 }
 
+// Same 24B body as Object.cpp (rowed 0x0028C24C): the native helper leaves
+// ECX unchanged, and this TU's dispatcher below relies on the compiler
+// seeing that (it skips reloading ECX for setWeaponLock). Byte-identical
+// copy folds with the rowed one at link; defining it here is what lets the
+// 0x17 case below match retail exactly.
+void Object::rva0028C24C()
+{
+ m_deadline458 = g_Va00DBA4E4 * 10 + TheGameLogic->getFrame();
+}
+
 // ?rva00297000@Object@@QAEXPBVCommandButton@@PAV1@HH@Z retail 0x00297000 326B.
 // Object command-button dispatch at an object: ZH Object::doCommandButtonAtObject
 // donor with BFME2 changes (fourth bfmeArg gates the AutoAbilityBehavior module
 // dance above with the slot01 mask query; subtractive command-type dispatch
 // 0xE/0x17/0x18/0x1D/0x26 with shared special-power handling for 0x18/0x26).
-// Evidence: pin from Rva003C5825Do 0x003C5825; AIGroupDoCommandButton declares
-// (cmdSource, bfmeArg); InGameUIInputModes CommandButton layout
-// (+0x14/+0x1C/+0x44/+0x80); FellBeast AIUpdateInterface +0x20 command
-// interface; rowed callees (findModule, doSpecialPowerAtObject, setWeaponLock,
-// rva0026C347/rva0026C2D9/aiIdle, nameToKey, BitFlags any/test).
+// Callees rowed (findModule, doSpecialPowerAtObject, setWeaponLock,
+// rva0026C347/rva0026C2D9/aiIdle, rva0028C24C).
 void Object::rva00297000(const CommandButton *commandButton, Object *obj, int cmdSource, int bfmeArg)
 {
 	if (*(char *)&bfmeArg)
@@ -102,10 +111,8 @@ void Object::rva00297000(const CommandButton *commandButton, Object *obj, int cm
 		if (disabled.any())
 			return;
 	}
-	if (!commandButton)
-		return;
 	AIUpdateInterface *ai = m_ai;
-	if (!ai)
+	if (!commandButton)
 		return;
 	switch (commandButton->getCommandType())
 	{
@@ -122,17 +129,17 @@ void Object::rva00297000(const CommandButton *commandButton, Object *obj, int cm
 		return;
 	}
 	case 0x1D:
-		if (ai)
-			ai->getCommandInterface()->rva0026C347(obj, (CommandSourceType)cmdSource);
+		if (m_ai)
+			ai->m_commands20.rva0026C347(obj, (CommandSourceType)cmdSource);
 		return;
 	case 0x17:
 		rva0028C24C();
 		setWeaponLock(commandButton->getWeaponSlot(), LOCKED_TEMPORARILY);
-		ai->getCommandInterface()->rva0026C2D9(obj, 1, (CommandSourceType)cmdSource);
+		ai->m_commands20.rva0026C2D9(obj, 1, (CommandSourceType)cmdSource);
 		return;
 	case 0x0E:
-		if (ai)
-			ai->getCommandInterface()->aiIdle((CommandSourceType)cmdSource);
+		if (m_ai)
+			ai->m_commands20.aiIdle((CommandSourceType)cmdSource);
 		return;
 	}
 }
