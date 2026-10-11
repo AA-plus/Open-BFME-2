@@ -34,7 +34,7 @@ public:
 	int getDelayEvaluationSeconds() const { return m_delaySeconds; }
 	bool isOneShot() const { return m_oneShot; }
 	void *getAction() const { return m_action; }
-	bool isActive() const { return m_isActive; }
+	bool isActiveRV() const { return m_isActive; }
 
 private:
 	unsigned char m_pad00[0x10];
@@ -48,6 +48,19 @@ private:
 	void *m_action; // +0x34
 	unsigned char m_pad38[0x40 - 0x38];
 	bool m_isActive; // +0x40
+};
+
+class Rva0020479E
+{
+public:
+	Rva0020479E();	// 0x0020479E (SequentialScript ctor, rowed under this name)
+	unsigned char opaque[0x2C];
+};
+class Team;
+class Rva0020D451Engine
+{
+public:
+	void rva0020D451(const AsciiString &scope, void *action, void *script, void *scriptName, Team *team);	// rowed 0x0020D451
 };
 
 class SequentialScript
@@ -72,8 +85,7 @@ class ScriptEngine
 {
 public:
 	bool rva0020A1D0(const AsciiString &scope, Script *script, Team *team, Player *player);
-	void rva0020D451(AsciiString &scope, void *action, Script *script, const AsciiString &scriptName, int team);
-	void appendSequentialScript(const SequentialScript *scriptToSequence);
+	void appendSequentialScript(const Rva0020479E *scriptToSequence);
 	void AppendDebugMessage(const AsciiString &strToAdd, bool forcePause);
 };
 
@@ -120,7 +132,7 @@ void Team::updateGenericScripts()
 		{
 			AsciiString scope;
 			Script *script = m_proto->getGenericScript(i, &scope);
-			if (script && script->isActive())
+			if (script && script->isActiveRV())
 			{
 				int delay = script->getDelayEvaluationSeconds();
 				if (delay > 0 && m_nextGenericScriptFrame[i] > TheGameLogic->getFrame())
@@ -135,18 +147,18 @@ void Team::updateGenericScripts()
 					{
 						if (script->isOneShot())
 						{
-							SequentialScript *seq = new SequentialScript;
+							SequentialScript *seq = (SequentialScript *)new Rva0020479E;
 							seq->m_teamToExecOn = this;
 							seq->m_bfmeScriptScope = scope;
 							seq->m_bfmeScriptName = m_proto->getGenericScriptName(i);
 							seq->m_scriptToExecuteSequentially = script;
 							seq->m_timesToLoop = script->getLoopCount();
-							TheScriptEngine->appendSequentialScript(seq);
+							TheScriptEngine->appendSequentialScript((const Rva0020479E *)seq);
 						}
 					}
 					else
 					{
-						TheScriptEngine->rva0020D451(scope, script->getAction(), script, AsciiString("some Generic Script"), (int)this);
+						((Rva0020D451Engine *)TheScriptEngine)->rva0020D451(scope, script->getAction(), script, (void *)&AsciiString("some Generic Script"), (Team *)this);
 						AsciiString msg = "Generic script '";
 						msg.concat(m_proto->getGenericScriptName(i));
 						msg.concat("' run on team ");
