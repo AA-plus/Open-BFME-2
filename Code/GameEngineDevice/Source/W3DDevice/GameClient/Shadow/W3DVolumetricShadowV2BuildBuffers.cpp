@@ -24,8 +24,11 @@
 **	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "wwmath.h"
-class Vector3 {public:float X,Y,Z;__forceinline Vector3(){} __forceinline Vector3(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;} __forceinline Vector3&operator=(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;return *this;} __forceinline void Normalize(){float len2=X*X+Y*Y+Z*Z;if(len2!=0.0f){float oolen=WWMath::Inv_Sqrt(len2);X*=oolen;Y*=oolen;Z*=oolen;}}__forceinline Vector3&operator*=(float k){X*=k;Y*=k;Z*=k;return *this;}};
-__forceinline Vector3 operator+(const Vector3&a,const Vector3&b){Vector3 r;r.X=a.X+b.X;r.Y=a.Y+b.Y;r.Z=a.Z+b.Z;return r;}
+class Vector3 {public:float X,Y,Z;__forceinline Vector3(){} __forceinline Vector3(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;} __forceinline Vector3&operator=(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;return *this;} __forceinline void Normalize(){float len2=X*X+Y*Y+Z*Z;if(len2!=0.0f){float oolen=WWMath::Inv_Sqrt(len2);X*=oolen;Y*=oolen;Z*=oolen;}}};
+// LINK: file-static helpers replace operator*= and operator+ (identical inlined
+// bytes); the TU no longer emits their loser COMDAT copies. No flags touched.
+static __forceinline void bfmeScaleV3(Vector3&v,float k){v.X*=k;v.Y*=k;v.Z*=k;}
+static __forceinline Vector3 bfmeAddV3(const Vector3&a,const Vector3&b){Vector3 r;r.X=a.X+b.X;r.Y=a.Y+b.Y;r.Z=a.Z+b.Z;return r;}
 
 
 // Scoped vector operations reproduce the donor header behavior and full557
@@ -91,13 +94,13 @@ void Rva00107E76Elem::rva00107B41(Vector3 *vertex, short vertexBase,
 {
 	Vector3 dir = offset;
 	dir.Normalize();
-	dir *= 0.1f;
+	bfmeScaleV3(dir,0.1f);
 	int count = m_mesh->m_model->m_vertexCount;
 	int i, j;
 	for (i = 0; i < count; ++i)
-		*vertex++ = m_allocation0[i] + dir;
+		*vertex++ = bfmeAddV3(m_allocation0[i],dir);
 	for (j = 0; j < count; ++j)
-		*vertex++ = m_allocation0[j] + offset;
+		*vertex++ = bfmeAddV3(m_allocation0[j],offset);
 
 	BfmeShadowEdge *edge = m_allocation2;
 	for (int e = m_reserved10; e > 0; --e, ++edge, index += 6)
