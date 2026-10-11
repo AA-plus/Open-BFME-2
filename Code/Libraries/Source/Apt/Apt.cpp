@@ -82,8 +82,7 @@ extern unsigned char g_00E177E0,g_00E177E1,g_00E177E2,g_00E177E8;
 extern int g_00E177E4;
 void rva006D2D90();
 void *Rva006CBC40Allocate(unsigned);
-class Rva006CC4A0;
-void rva00ACBC50(Rva006CC4A0 *,int);
+void rva006CBC50(void *,unsigned);
 void __debugbreak();
 #pragma intrinsic(__debugbreak)
 class Rva006DAEB0 {
@@ -96,7 +95,7 @@ class Rva006DAEB0 {
 public:
  Rva006DAEB0(unsigned,int,int,unsigned,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char);
  static void *operator new(unsigned size) {return Rva006CBC40Allocate(size);}
- static void operator delete(void *ptr,unsigned size) {rva00ACBC50((Rva006CC4A0 *)ptr,size);}
+ static void operator delete(void *ptr,unsigned size) {rva006CBC50(ptr,size);}
 };
 class Rva006CC380ValuePool : public Rva006DAEB0 {
 public:
@@ -105,7 +104,7 @@ public:
  // nine-argument base initialization; place_bodies found all70 bytes.
  Rva006CC380ValuePool(unsigned size,int count) : Rva006DAEB0(size,count,g_00E177E1,g_00E177E4,g_00E177E2,1,g_00E177E0,0,g_00E177E8) {}
  static void *operator new(unsigned size) {return g_bfmeAptAllocAtE17728(size);}
- static void operator delete(void *ptr,unsigned size) {rva00ACBC50((Rva006CC4A0 *)ptr,size);}
+ static void operator delete(void *ptr,unsigned size) {rva006CBC50(ptr,size);}
 };
 class Rva006DB270;class Rva006D2A60 {public:void *allocBlock(int);};
 extern Rva006DB270 *g_pChainBlockAllocator;

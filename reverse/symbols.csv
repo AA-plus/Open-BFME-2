@@ -12110,8 +12110,6 @@ name,address,notes
 ?rva009CC208@@YIXPAURva009CC208Sub@@HH@Z,0x005CC208,fastcall sub method called from 0x005F963A with fwd untouched in edx; identity unproven
 ?rva009CC208Push0@@YGXH@Z,0x005CC208,stdcall-1 global view (ignores ambient ecx) for 0x005F96D4 zero-push sites; same address as fastcall pin; identity unproven
 ?rva00A00062@@YIXPAURva00A00062Sub@@HHH@Z,0x00A00062,fastcall sub method called from 0x005FA98C with fwd-passthrough edx; identity unproven
-?rva00ACBC50@@YAXPAVRva006CC4A0@@H@Z,0x006CBC50,cdecl-2 called from 0x006CC4A0; identity unproven
-?rva00ADAFA0@Rva006CC4A0@@QAEXXZ,0x006DAFA0,thiscall-0 on this called from 0x006CC4A0 with ecx ambient; identity unproven
 ?rva00ca1ee@?$vector@UCoord3D@@V?$allocator@UCoord3D@@@_STL@@@_STL@@QAEXPAUCoord3D@@IABU3@@Z,0x000CA1EE,REL32 from 0x000CA2F3 fill branch decodes 0x000CA1EE; address-derived same-ABI vector helper; full identity unresolved
 ?rva152d1c@Rva00152D1CObj@@QAEXH@Z,0x00152D1C,method reached from 0x117120 as [mesh+0x94]->[+0xB8] with arg 4; 170B ret-4 thiscall building a StringBase and vector and calling 0x15288F; Ghidra FUN_00552d1c; identity unproven; address-derived name
 ?rva174ba6@Rva00DF6F94GapFillerContext@@QAEXXZ,0x00174BA6,cached-render-state reset reached by tail jmp from 0x1173F0; compares three pointer pairs at +0 +4 +0C +10 +18 +1C then resets light/texture device state; Ghidra start FUN_00574ba6; identity unproven; address-derived method of the established 0xDF6F94 class
