@@ -20,6 +20,17 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #define W3DMPO_GLUE(ARGCLASS)
 #define Matrix4x4 Matrix4  // BFME renamed it
 #define __PLACEMENT_VEC_NEW_INLINE  // always.h/GameMemory.h define array placement-new themselves
+// This unit has no /O1 /arch:SSE, so the ShaderClass setters it inlines are emitted here as COMDATs that are not
+// the /O1 bodies retail keeps (rowed in the units that do compile with them); every use is inlined, so
+// TU-local names keep them from competing with those copies.
+#define Set_Primary_Gradient Set_Primary_Gradient_RV
+#define Set_Secondary_Gradient Set_Secondary_Gradient_RV
+#define Set_Depth_Compare Set_Depth_Compare_RV
+#define Set_Depth_Mask Set_Depth_Mask_RV
+#define Set_Color_Mask Set_Color_Mask_RV
+#define Set_Dst_Blend_Func Set_Dst_Blend_Func_RV
+#define Set_Src_Blend_Func Set_Src_Blend_Func_RV
+#define Set_Fog_Func Set_Fog_Func_RV
 // stlport
 /*
 **	Command & Conquer Generals Zero Hour(tm)
