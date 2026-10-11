@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 //
 // BFME2's lobby game rules panel (the AptMpGameSetup panel's +0xD0 member)
 // Apt callback "AptMpGameRules::Reset", 0x0057E6DD, bound by that name as
@@ -29,6 +29,8 @@ void *GadgetComboBoxGetItemData(GameWindow *window, int selection);
 bool GadgetCheckBoxIsChecked(GameWindow *window);
 
 // A rule widget list (+0x64 combo boxes, +0x70 check boxes).
+// Retail/WB vector access uses a separate begin pointer per subscript.
+template<class T> struct RuleVectorView { T *m_begin; T *m_end; T *m_capacity; T &operator[](unsigned int i) {T *begin=m_begin; return begin[i];} unsigned int size() const {return m_end-m_begin;} };
 struct AptMpGameRulesWidgets
 {
 	void *m_begin;
@@ -180,6 +182,7 @@ public:
 
 	// Retail 0x0057E5B5: refreshes one rule widget; WB names UpdateRuleGadget.
 	void UpdateRuleGadget(int rule);
+    void PopulateComboBoxes();
 	// Unrowed 0x0057EF46 (files a widget under its index), 0x0057EF18 and
 	// 0x0057ED2B, pinned by address.
 	void rva0057EF46(AptMpGameRulesWidgets *widgets, const char *index, GameWindow *window);
@@ -204,6 +207,7 @@ private:
 	bool m_89; // +0x89
 	unsigned char m_pad08a[0x8C - 0x8A];
 	unsigned char m_rules[0x28]; // +0x8C
+    AptMpGameRulesWidgets m_ruleStates; // +0xB4: retail integer state vector
 };
 
 // Retail 0x0057E55A, 65 bytes: bound as "MpGameRules::NumComboBoxes" and
@@ -400,4 +404,81 @@ void AptMpGameRules::rva0057EF46(AptMpGameRulesWidgets *widgets, const char *ind
         ((_STL::vector<Drawable *, _STL::allocator<Drawable *> > *)widgets)->resize(position + 1, 0);
     ((GameWindow **)widgets->m_begin)[position] = window;
     window->winHide(true);
+}
+
+// Native 57EAAD..57ED2B, complete638B. WB159E9E0 names this callback.
+// Descriptor/state/widget offsets are measured independently in retail.
+// WorldBuilder vector access guides compiler structure without transferring layout.
+struct RuleChoice {const char *label; int value;};
+struct RuleCombo {int id; const RuleChoice *choices; int count; int defaultIndex;};
+const RuleCombo * const *Rva00559F48Get(int);
+UnicodeString Rva0055A04C(int);
+void GadgetComboBoxReset(GameWindow *);
+int GadgetComboBoxAddEntry(GameWindow *, UnicodeString, int);
+void GadgetComboBoxSetItemData(GameWindow *, int, void *);
+class GameTextInterface;
+extern GameTextInterface *TheGameText;
+class RuleTextFormatView {
+public:
+virtual void slot0();
+virtual void slot1();
+virtual void slot2();
+virtual void slot3();
+virtual void slot4();
+virtual void slot5();
+virtual void slot6();
+virtual void slot7();
+virtual void slot8();
+virtual void slot9();
+virtual void slot10();
+virtual void slot11();
+virtual void slot12();
+virtual void slot13();
+virtual void slot14();
+virtual UnicodeString fetch(const char *, bool *);
+virtual void slot16();
+virtual const UnicodeString *fetchFormat(const char *, bool *);
+};
+void AptMpGameRules::PopulateComboBoxes() {
+    int count = Rva00559F7EGet(m_mode);
+    const RuleCombo * const *combos = Rva00559F48Get(m_mode);
+    m_88 = false;
+    int widgetIndex = 0;
+    for (int i = 0; i < count; ++i) {
+        const RuleCombo *cur = combos[i];
+        if (!cur) continue;
+        int rule = cur->id;
+        if (((RuleVectorView<int>&)m_ruleStates)[rule] == 3) continue;
+        if ((unsigned int)i >= ((RuleVectorView<GameWindow*>&)m_comboBoxes).size()) break;
+        GameWindow *window = ((RuleVectorView<GameWindow*>&)m_comboBoxes)[widgetIndex];
+        if (!window) continue;
+        GadgetComboBoxReset(window);
+        if (((RuleVectorView<GameWindow*>&)m_ruleWindows)[rule]) continue;
+        ((RuleVectorView<GameWindow*>&)m_ruleWindows)[rule] = window;
+        AsciiString key;
+        key.format("APT:RuleComboBox_%d", widgetIndex++);
+        g_bfmeAptWindowManager->bfmeSetText(key, Rva0055A04C(cur->id), false);
+        int choiceCount = cur->count;
+        for(int j=0; j<choiceCount; ++j) {
+            const RuleChoice *choice = &cur->choices[j];
+            UnicodeString text;
+            text.format(((RuleTextFormatView *)TheGameText)->fetchFormat(choice->label,0), choice->value);
+            if(j == cur->defaultIndex)
+                text += ((RuleTextFormatView *)TheGameText)->fetch("VALUE:Default",0);
+            int entry = GadgetComboBoxAddEntry(window,text,-1);
+            GadgetComboBoxSetItemData(window,entry,(void *)choice->value);
+        }
+        ((RuleVectorView<int>&)m_ruleStates)[rule] = 1;
+        window->winHide(false);
+        UpdateRuleGadget(rule);
+    }
+    while (widgetIndex < count) {
+        GameWindow *window = ((RuleVectorView<GameWindow*>&)m_comboBoxes)[widgetIndex];
+        if (!window) break;
+        window->winHide(true);
+        AsciiString key;
+        key.format("APT:RuleComboBox_%d", widgetIndex++);
+        g_bfmeAptWindowManager->bfmeSetText(key, UnicodeString(L" "), false);
+    }
+    m_88 = true;
 }
