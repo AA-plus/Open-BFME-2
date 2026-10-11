@@ -43,7 +43,7 @@ namespace EA { namespace Allocator {
 class GeneralAllocator
 {
 public:
-	int rva00031430(const void *block, unsigned int buffer, char *size); // 0x00031430
+	int rva00031430(const void *block, char *buffer, unsigned int size); // 0x00031430
 };
 }}
 
@@ -79,7 +79,7 @@ int Rva006C2D20Sink::rva006C2D20(const char *block, const char *buffer, unsigned
 	Rva00030DD0Guard guard(m_lock);
 	void *data = (void *)(block + 8);
 	char *end = (char *)buffer + bufferLength;
-	unsigned int n0 = rva00031430(block, (unsigned int)buffer, (char *)bufferLength);
+	unsigned int n0 = rva00031430(block, (char *)buffer, bufferLength);
 	char *p = (char *)buffer + n0;
 	if (p > buffer && p[-1] == m_lineEnd)
 		*--p = 0;
