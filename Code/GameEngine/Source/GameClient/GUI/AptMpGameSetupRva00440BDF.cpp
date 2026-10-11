@@ -149,7 +149,7 @@ public:
 // Unrowed 0x00300E42 (cdecl; whether the game's map starts with the map
 // cache's 0x00300D7A folder name, through startsWithNoCase), pinned by
 // address.
-bool Rva00300E42(GameInfo *game);
+bool Rva00300E42Check(GameInfo *game);
 
 // A saved game (the panel's +0x2B0): eight GameSlot copies at +0x4C, the
 // digest it is filed under at +0xDAC, the rules at +0xDBC and the +0xDE8
@@ -1031,7 +1031,7 @@ bool AptMpGameSetup::rva00440BDF(bool countdown)
  int maxPlayers=((AptMapPreview*)&m_60)->GetMaxNumPlayers();
  if(maxPlayers<=0) return false;
  UnicodeString mapName;
- bool willTransfer=Rva00300E42(game);
+ bool willTransfer=Rva00300E42Check(game);
  game->getSlot(0)->m_accepted=true;
  if(md) {
   mapName.format((const unsigned short*)L"%ls",const_cast<MapMetaData*>(md)->bfme_getDisplayName(true).str());

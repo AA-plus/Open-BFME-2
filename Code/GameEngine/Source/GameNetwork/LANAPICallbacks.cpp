@@ -336,7 +336,7 @@ protected:
 	LANSlotAddress m_slots[MAX_SLOTS];		// +0xDC, addresses from +0x114
 };
 
-Bool Rva00300E42( GameInfo *game );
+Bool Rva00300E42Check( GameInfo *game );
 
 // LANGameInfo, under the ledger's names for the classes of its getLANSlot
 // (0x00447773) and its destructor (0x004482FB).
@@ -840,7 +840,7 @@ void LANAPI::OnHasMap( const BfmeNetAddress *ip, Bool status )
 
 	UnicodeString mapDisplayName;
 	const MapMetaData *mapData = TheMapCache->findMap( m_currentGame->getMap() );
-	Bool willTransfer = Rva00300E42( m_currentGame );
+	Bool willTransfer = Rva00300E42Check( m_currentGame );
 	if( mapData )
 	{
 		mapDisplayName.format( L"%ls", ((MapMetaData *)mapData)->bfme_getDisplayName( true ).str() );

@@ -334,7 +334,7 @@ public:
 	const MapMetaData *findMap(AsciiString mapName);
 };
 extern MapCache *TheMapCache;
-Bool Rva00300E42(GameInfo *game);	// ZH WouldMapTransfer, keyed by the game in BFME2
+Bool Rva00300E42Check(GameInfo *game);	// ZH WouldMapTransfer, keyed by the game in BFME2
 extern unsigned char g_Va00A0335C;	// ZH slotListUpdatesEnabled
 inline Bool AreSlotListUpdatesEnabled( void ) { return g_Va00A0335C != 0; }
 extern Int acceptTrueColor;		// VA 0x00DBA764
@@ -363,7 +363,7 @@ void UpdateSlotList( GameInfo *myGame, GameWindow *comboPlayer[],
 	}
 	else
 	{
-		willTransfer = Rva00300E42(myGame);
+		willTransfer = Rva00300E42Check(myGame);
 	}
 	if (myGame)
 	{
