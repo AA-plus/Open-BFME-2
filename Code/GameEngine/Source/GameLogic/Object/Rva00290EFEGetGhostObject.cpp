@@ -87,7 +87,10 @@ void *Rva00290EFE::getGhostObject()
 	if ((thing->m_kindOf & 4) != 0) {
 		ModuleInfo *drawMod = &thing->m_drawModuleInfo;
 		int makeGhostObject = 1;
-		for (int i = 0; i < drawMod->getCount(); i++) {
+		// LINK: drawMod->getCount() inlined here but the live call emits a
+		// loser COMDAT (first-copy-wins, no retail address). Manual inline of
+		// the identical body keeps the bytes and drops the emission.
+		for (int i = 0; i < (((char *)drawMod->m_end - (char *)drawMod->m_begin) / 20); i++) {
 			if (strcmp(drawMod->getNthName(i).str(), "W3DDefaultDraw") == 0) {
 				makeGhostObject = 0;
 				break;
