@@ -17208,3 +17208,9 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??1Rva003089CFList@@QAE@XZ,0x0007FAB3,placeholder: the +0x68 listener-list base destructor of 0x0030902E (free first pointer when non-null); its unwind funclet 0x00779E1C reaches the shared free-first-pointer body
 ??0Rva003A59C3@@QAE@IAAURva003A59C3Src@@@Z,0x003A59C3,callee of ?rva003AD03B@Rva003AD03BTemplate@@UAEPAVRva003AD03BModule@@I@Z
 ?Rva0053FE64Get@@YA?AVRva0053FDE6@@MPAV1@H0H0H0H@Z,0x0053FE64,callee of ?getFrameData@?$CameraAnimationTrack@VRva0053FDE6@@@@QAE?AVRva0053FDE6@@M@Z
+??1Rva00242E71@@QAE@XZ,0x00242E71,placeholder view of the +0x10 table destructor of 0x00243BA0 (gen-alias row ?dup_00242e71); REL32 at 0x00243EBA
+??1Rva00243B48@@QAE@XZ,0x00243B48,placeholder: 5-byte jmp thunk to 0x00242E71 that the 0x00243BA0 unwind funclet 0x0077143B reaches (+0x10 wrapper out-of-line destructor)
+??1Rva00243B4D@@QAE@XZ,0x00243B4D,placeholder: 5-byte jmp thunk to ??1Rva00240CAB 0x00242EAF that the 0x00243BA0 unwind funclet 0x00771446 reaches (+0x24 wrapper out-of-line destructor); same bytes as the rowed ?rva00243B4D
+??1Rva00240C27@@QAE@XZ,0x00240C27,placeholder view of the +0xB4 table destructor of 0x00243BA0 (gen-alias row ?dup_00240c27); REL32 at 0x00243E0A
+??1Rva00240E13@@QAE@XZ,0x00240E13,placeholder: 5-byte jmp thunk to 0x00240C27 that the 0x00243BA0 unwind funclet 0x007714D6 reaches (+0xB4 wrapper out-of-line destructor)
+??1Rva00073116@@QAE@XZ,0x00073116,placeholder: 5-byte jmp thunk to the set destructor 0x000730DE that the HordeContainModuleData destructor unwind funclets 0x0078B2F3/0x0078B301 reach (name-set wrapper out-of-line destructor); same bytes as the rowed ?rva00073116
