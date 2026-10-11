@@ -32,10 +32,13 @@ public:
 	const CommandButton *getCommandButton(int i) const;
 };
 
-class ControlBar
+class Rva0031D5F8
 {
 public:
-	const CommandSet *findCommandSet(const AsciiString &name);
+	void *rva0031D5F8(const AsciiString *name);	// rowed 0x0031D5F8 (ControlBar::findCommandSet)
+};
+class ControlBar
+{
 };
 extern ControlBar *TheControlBar;
 
@@ -84,7 +87,7 @@ void __stdcall Rva003C57A9Do(Parameter *unit, const AsciiString &ability)
 	Object *obj = TheScriptEngine->getUnitNamed(unit);
 	if (obj == 0)
 		return;
-	const CommandSet *set = TheControlBar->findCommandSet(*obj->rva00290E67());
+	const CommandSet *set = (const CommandSet *)((Rva0031D5F8 *)TheControlBar)->rva0031D5F8(obj->rva00290E67());
 	if (set == 0)
 		return;
 	for (int i = 0; i < 32; i++)
@@ -107,7 +110,7 @@ void __stdcall Rva003C58C9Do(Parameter *unit, const AsciiString &ability, int wa
 	Waypoint *way = TheTerrainLogic->s34(waypointId);
 	if (obj == 0 || way == 0)
 		return;
-	const CommandSet *set = TheControlBar->findCommandSet(*obj->rva00290E67());
+	const CommandSet *set = (const CommandSet *)((Rva0031D5F8 *)TheControlBar)->rva0031D5F8(obj->rva00290E67());
 	if (set == 0)
 		return;
 	for (int i = 0; i < 32; i++)

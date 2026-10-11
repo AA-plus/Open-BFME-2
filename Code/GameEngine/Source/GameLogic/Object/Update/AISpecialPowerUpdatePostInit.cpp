@@ -73,10 +73,13 @@ public:
 	const CommandButton *getCommandButton(int index) const;
 };
 
-class ControlBar
+class Rva0031D5F8
 {
 public:
-	const CommandSet *findCommandSet(const AsciiString &name);
+	void *rva0031D5F8(const AsciiString *name);	// rowed 0x0031D5F8 (ControlBar::findCommandSet)
+};
+class ControlBar
+{
 };
 extern ControlBar *TheControlBar;
 
@@ -96,7 +99,7 @@ struct ThingTemplateView
 class Object
 {
 public:
-	const AsciiString &getCommandSetString() const;
+	const AsciiString *rva00290E67() const;	// rowed 0x00290E67 (command-set string selector)
 	void *rva0028BD92(int key);
 	const ThingTemplateView *getTemplate() const { return m_template; }
 private:
@@ -149,7 +152,7 @@ void AISpecialPowerUpdate::postInitAISpecialPower()
 	const CommandButton *commandButton = 0;
 	Real range = 0.0f;
 
-	const CommandSet *commandSet = TheControlBar->findCommandSet(getObject()->getCommandSetString());
+	const CommandSet *commandSet = (const CommandSet *)((Rva0031D5F8 *)TheControlBar)->rva0031D5F8(getObject()->rva00290E67());
 	if (commandSet)
 	{
 		for (int i = 0; i < 32; ++i)
