@@ -101,48 +101,6 @@ static BodyModuleInterface *getRetailBodyModule( const Object *obj ) { return *(
 //-------------------------------------------------------------------------------------------------
 // byte-exact reconstruction: Code/GameEngine/Source/GameLogic/Object/Update/StealthUpdate_ctor_Thunk.cpp
 // ??0StealthUpdate@@ present-unmatched
-StealthUpdate::StealthUpdate( Thing *thing, const ModuleData* moduleData ) : UpdateModule( thing, moduleData )
-{
-	const StealthUpdateModuleData *data = getStealthUpdateModuleData();
-
-	m_stealthAllowedFrame = TheGameLogic->getFrame() + data->m_stealthDelay;
-
-	//Must be enabled manually if using disguise system (bomb truck uses)
-	m_enabled = !data->m_teamDisguised;
-
-	//Added By Sadullah Nader
-	//Initialization(s) inserted
-	m_detectionExpiresFrame = 0;
-	//
-	m_pulsePhaseRate		= 0.2f;
-	m_pulsePhase				= GameClientRandomValueReal(0, PI);
-
-	m_disguiseAsPlayerIndex			= -1;
-	m_disguiseAsTemplate			  = NULL;
-	m_transitioningToDisguise		= false;
-	m_disguised									= false;
-	m_disguiseTransitionFrames	= 0;
-	m_disguiseHalfpointReached  = false;
-	m_nextBlackMarketCheckFrame = 0;
-	m_framesGranted = 0;
-	
-	if( data->m_innateStealth )
-	{
-		//Giving innate stealth units this status bit allows other code to easily check the status bit.
-		getObject()->setStatus( MAKE_OBJECT_STATUS_MASK( OBJECT_STATUS_CAN_STEALTH ) );
-	}
-
-	// start active, since some stealths start enabled from the get-go
-  if ( data->m_grantedBySpecialPower )
-	  setWakeFrame( getObject(), UPDATE_SLEEP_FOREVER );
-  else
-	  setWakeFrame( getObject(), UPDATE_SLEEP_NONE );
-
-	// we do not need to restore a disguise
-	m_xferRestoreDisguise = FALSE;
-
-} 
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 // byte-exact reconstruction: Code/GameEngine/Source/Common/StealthUpdateDestructorThunk.cpp
@@ -563,11 +521,6 @@ Object* StealthUpdate::calcStealthOwner()
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 // ?StealthUpdate::calcSleepTime present-unmatched
-UpdateSleepTime StealthUpdate::calcSleepTime() const
-{
-	return m_enabled ? UPDATE_SLEEP_NONE : UPDATE_SLEEP_FOREVER;
-}
-
 //-------------------------------------------------------------------------------------------------
 /** The update callback. */
 //-------------------------------------------------------------------------------------------------

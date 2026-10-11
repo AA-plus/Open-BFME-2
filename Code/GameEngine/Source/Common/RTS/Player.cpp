@@ -409,62 +409,6 @@ void PlayerRelationMap::loadPostProcess( void )
 
 //=============================================================================
 // ?Player::Player present-unmatched
-Player::Player( Int playerIndex )
-{
-	m_isPreorder = FALSE;
-	m_isPlayerDead = FALSE;
-
-	m_playerIndex = playerIndex;
-
-	// allocate new relation map pools
-	m_playerRelations = newInstance(PlayerRelationMap);
-	m_teamRelations = newInstance(TeamRelationMap);
-
-	m_upgradeList = NULL;
-	m_pBuildList = NULL;
-	m_ai = NULL;
-	m_resourceGatheringManager = NULL;
-	m_defaultTeam = NULL;
-	m_radarCount = 0;
-	m_disableProofRadarCount = 0;
-	m_radarDisabled = FALSE;
-	m_bombardBattlePlans = 0;
-	m_holdTheLineBattlePlans = 0;
-	m_searchAndDestroyBattlePlans = 0;
-	m_tunnelSystem = NULL;
-	m_playerTemplate = NULL;
-	m_battlePlanBonuses = NULL;
-	m_skillPointsModifier = 1.0f;
-	//Added By Sadullah 
-	//Initializations inserted
-	m_canBuildUnits = TRUE;
-	m_canBuildBase  = TRUE;
-	m_cashBountyPercent = 0.0f;
-	m_color = 0;
-	m_currentSelection = NULL;
-	m_rankLevel = 0;
-	m_sciencePurchasePoints = 0;
-	m_side = (const char *)0;
-	m_baseSide = (const char *)0;
-	m_skillPoints = 0;
-	Int i;
-	m_upgradeList = NULL;
-	for(i = 0; i < NUM_HOTKEY_SQUADS; i++)
-	{
-		m_squads[i] = NULL;
-	}
-	//
-	for (i = 0; i < MAX_PLAYER_COUNT; ++i) 
-	{
-		m_attackedBy[i] = false;
-	}
-	m_attackedFrame = 0;
-
-	m_unitsShouldHunt = FALSE;
-	init( NULL );
-
-}
-
 //=============================================================================
 // ??1Player@@UAE@XZ present-unmatched
 Player::~Player()

@@ -856,10 +856,6 @@ void FXList::doFXObj(const Object* primary, const Object* secondary) const
 
 //-------------------------------------------------------------------------------------------------
 // ??0FXListStore@@ present-unmatched
-FXListStore::FXListStore()
-{
-}
-
 //-------------------------------------------------------------------------------------------------
 // ??1FXListStore@@ present-unmatched
 FXListStore::~FXListStore()

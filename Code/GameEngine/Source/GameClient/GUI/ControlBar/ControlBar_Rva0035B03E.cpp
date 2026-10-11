@@ -904,51 +904,6 @@ public:
 //-------------------------------------------------------------------------------------------------
 /** Parse a command set */
 //-------------------------------------------------------------------------------------------------
-/*static*/ void ControlBar::parseCommandSetDefinition( INI *ini )
-{
-	AsciiString name;
-	CommandSet *commandSet;
-
-	// read the name
-	const char* c = ini->getNextToken();
-	name.set( c );	
-
-	// find existing item if present
-	commandSet = TheControlBar->findNonConstCommandSet( name );
-	if( commandSet == NULL )
-	{
-
-		// allocate a new item
-		commandSet = TheControlBar->newCommandSet( name );
-		if (ini->getLoadType() == INI_LOAD_CREATE_OVERRIDES) {
-			commandSet->markAsOverride();
-		}
-	}  // end if
-	else if( ini->getLoadType() != INI_LOAD_CREATE_OVERRIDES )
-	{
-		//Holy crap, this sucks to debug!!!
-		//If you have two different command sets, the previous
-		//code would simply allow you to define multiple command set
-		//with the same name, and just nuke the old button with the new one.
-		//So, I (KM) have added this assert to notify in case of two same-name
-		//command set.
-		DEBUG_CRASH(( "[LINE: %d in '%s'] Duplicate commandset %s found!", ini->getLineNum(), ini->getFilename().str(), name.str() ));
-		throw INI_INVALID_DATA;
-
-		//@todo SUPPORT OVERRIDES -- JM
-	} else {
-		commandSet = TheControlBar->newCommandSetOverride(commandSet);
-	}
-
-	// sanity
-	DEBUG_ASSERTCRASH( commandSet, ("parseCommandSetDefinition: Unable to allocate set '%s'\n", name.str()) );
-
-	// parse the ini definition
-	ini->initFromINI( commandSet, commandSet->friend_getFieldParse() );
-
-}  // end parseCommandSetDefinition
-
-//-------------------------------------------------------------------------------------------------
 /** Find existing command set by name */
 //-------------------------------------------------------------------------------------------------
 // A BFME command set holds twenty command slots where Zero Hour's holds

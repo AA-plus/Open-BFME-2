@@ -86,16 +86,6 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 
 //-----------------------------------------------------------------------------
 // ?PlayerList::PlayerList present-unmatched
-PlayerList::PlayerList() :
-	m_local(NULL),
-	m_playerCount(0)
-{
-	// we only allocate a few of these, so don't bother pooling 'em
-	for (Int i = 0; i < MAX_PLAYER_COUNT; i++)
-		m_players[ i ] = NEW Player( i );
-	init();
-}
-
 //-----------------------------------------------------------------------------
 // PlayerList::~PlayerList: defined in PlayerListDtor.cpp (its row's unit).
 
@@ -149,15 +139,6 @@ void PlayerList::teamAboutToBeDeleted(Team* team)
 
 //=============================================================================
 // ?PlayerList::updateTeamStates present-unmatched
-void PlayerList::updateTeamStates(void) 
-{
-	// Clear team flags for all players.
-	for( Int i = 0; i < MAX_PLAYER_COUNT; i++ )
-	{
-		m_players[i]->updateTeamStates();
-	}  // end for i
-}
-
 //-----------------------------------------------------------------------------
 // ?PlayerList::validateTeam present-unmatched
 Team *PlayerList::validateTeam( AsciiString owner )

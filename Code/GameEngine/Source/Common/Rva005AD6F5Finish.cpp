@@ -176,13 +176,6 @@ public:
 	Int m_field0C;
 };
 
-AINavyUnitBattleShip::AINavyUnitBattleShip(const Rva005DCC4BSource *source)
-	: Rva005DCC4B(source)
-{
-	m_field08 = 0;
-	m_field0C = (Int)TheGameLogic->m_frame;
-}
-
 void AINavyUnitBattleShip::patrol()
 {
 	Object *ship = TheGameLogic->findObjectByID((ObjectID)m_field04);

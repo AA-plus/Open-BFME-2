@@ -900,25 +900,6 @@ EMPTY_DTOR(DozerPrimaryGoingHomeState)
 //-------------------------------------------------------------------------------------------------
 // matched via Code/masm_dumps/_sa3___0DozerPrimaryStateMachine__QAE_PAVObject___Z_2B7870.asm (AsciiString-ctor shape C++ can't reproduce)
 // ??0DozerPrimaryStateMachine@@ present-unmatched
-DozerPrimaryStateMachine::DozerPrimaryStateMachine( Object *owner ) : StateMachine( owner, "DozerPrimaryStateMachine" )
-{
-	static const StateConditionInfo idleConditions[] = 
-	{
-		StateConditionInfo(isBuildMostImportant, DOZER_PRIMARY_BUILD, NULL),
-		StateConditionInfo(isRepairMostImportant, DOZER_PRIMARY_REPAIR, NULL),
-		StateConditionInfo(isFortifyMostImportant, DOZER_PRIMARY_FORTIFY, NULL),
-		StateConditionInfo(NULL, NULL, NULL)	// keep last
-	};
-
-	// order matters: first state is the default state.
-	defineState( DOZER_PRIMARY_IDLE, newInstance(DozerPrimaryIdleState)( this ), INVALID_STATE_ID, INVALID_STATE_ID, idleConditions );
-	defineState( DOZER_PRIMARY_BUILD, newInstance(DozerActionState)( this, DOZER_TASK_BUILD ), DOZER_PRIMARY_IDLE, DOZER_PRIMARY_IDLE );
-	defineState( DOZER_PRIMARY_REPAIR, newInstance(DozerActionState)( this, DOZER_TASK_REPAIR ), DOZER_PRIMARY_IDLE, DOZER_PRIMARY_IDLE );
-	defineState( DOZER_PRIMARY_FORTIFY, newInstance(DozerActionState)( this, DOZER_TASK_FORTIFY ), DOZER_PRIMARY_IDLE, DOZER_PRIMARY_IDLE );
-	defineState( DOZER_PRIMARY_GO_HOME, newInstance(DozerPrimaryGoingHomeState)( this ), DOZER_PRIMARY_IDLE, DOZER_PRIMARY_IDLE );
-
-}  // end DozerPrimaryStateMachine
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 // ??1DozerPrimaryStateMachine@@MAE@XZ present-unmatched
@@ -1115,61 +1096,9 @@ Bool DozerPrimaryStateMachine::isFortifyMostImportant( State *thisState, void* u
 //-------------------------------------------------------------------------------------------------
 // byte-exact reconstruction: Code/GameEngine/Source/GameLogic/AI/DozerAIUpdateCtorThunk.cpp
 // ??0DozerAIUpdate@@QAE@PAVThing@@PBVModuleData@@@Z present-unmatched
-DozerAIUpdate::DozerAIUpdate( Thing *thing, const ModuleData* moduleData ) : 
-							 AIUpdateInterface( thing, moduleData )
-               
-{
-	Int i, j;
-
-	for( i = 0; i < DOZER_NUM_TASKS; i++ )
-	{
-
-		m_task[ i ].m_targetObjectID = INVALID_ID;
-		m_task[ i ].m_taskOrderFrame = 0;
-
-		for( j = 0; j < DOZER_NUM_DOCK_POINTS; j++ )
-		{
-
-			m_dockPoint[ i ][ j ].valid = FALSE;
-			m_dockPoint[ i ][ j ].location.zero();
-
-		}  // end for j
-
-	}  // end for i
-	m_currentTask = DOZER_TASK_INVALID;
-
-	m_buildSubTask = DOZER_SELECT_BUILD_DOCK_LOCATION;  // irrelavant, but I want non-garbage value
-
-	//
-	// initialize the dozer machine to NULL, we want to do this and create it during the update
-	// implementation because at this point we don't have the object all setup
-	//
-	m_dozerMachine = NULL;
-
-	createMachines();
-}  // end DozerAIUpdate
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 // ??1DozerAIUpdate@@ present-unmatched
-DozerAIUpdate::~DozerAIUpdate( void )
-{
-
-	// delete our behavior state machine
-	if( m_dozerMachine )
-		m_dozerMachine->deleteInstance();
-
-	// no orders
-	for( Int i = 0; i < DOZER_NUM_TASKS; i++ )
-	{
-
-		m_task[ i ].m_targetObjectID = INVALID_ID;
-		m_task[ i ].m_taskOrderFrame = 0;
-
-	}  // end for i
-
-}  // end ~DozerAIUpdate
-
 // ------------------------------------------------------------------------------------------------
 /** Create any sub machines we need to do all our behavior */
 // ------------------------------------------------------------------------------------------------

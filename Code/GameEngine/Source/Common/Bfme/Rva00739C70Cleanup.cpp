@@ -133,10 +133,6 @@ TextureBaseClass *Rva00739C70::update( int arg )
 }
 
 // ?Rva00739C70::~Rva00739C70 present-unmatched
-Rva00739C70::~Rva00739C70()
-{
-}
-
 // ?Rva00739C70::rva_00739E50 present-unmatched
 bool Rva00739C70::rva_00739E50()
 {

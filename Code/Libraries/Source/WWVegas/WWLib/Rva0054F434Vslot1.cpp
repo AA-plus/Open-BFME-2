@@ -69,10 +69,6 @@ private:
 	AsciiString m_str64;
 };
 
-Rva0054F434::~Rva0054F434()
-{
-}
-
 #pragma optimize("y", off)
 _STL::list<AsciiString, _STL::allocator<AsciiString> > Rva0054F434::rva0054F3E2()
 {

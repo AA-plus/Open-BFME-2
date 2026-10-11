@@ -377,14 +377,6 @@ void SidesList::removeSide(int index)
 	m_notifier.post(Rva005CC208, this, index);
 }
 
-// SidesList::getSideInfo, retail 0x002035BA: rowed in SidesList_getSideInfo.cpp
-// under the struct-key spelling; this class-key copy reproduces the same body
-// and is pinned onto it as a proven fold (fold-proof) for DoXfer's call.
-SidesInfo *SidesList::getSideInfo(int side)
-{
-	return (side >= 0 && side < m_numSides) ? &m_sides[side] : 0;
-}
-
 // SidesList::duplicateScripts, retail 0x00329A80 (106 bytes): WB names it
 // in SidesList.cpp and asserts both lists hold as many sides; each side takes
 // a copy of the other list's scripts.

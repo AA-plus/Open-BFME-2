@@ -70,16 +70,6 @@ class UpgradeCenter *TheUpgradeCenter = NULL;
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 // ??0Upgrade@@ present-unmatched
-Upgrade::Upgrade( const UpgradeTemplate *upgradeTemplate )
-{
-
-	m_template = upgradeTemplate;
-	m_status = UPGRADE_STATUS_INVALID;
-	m_next = NULL;
-	m_prev = NULL;
-
-}  // end Upgrade
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 // ??1Upgrade@@ present-unmatched
@@ -241,27 +231,6 @@ UpgradeCenter::UpgradeCenter( void )
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 // ??1UpgradeCenter@@ present-unmatched
-UpgradeCenter::~UpgradeCenter( void )
-{
-	
-	// delete all the upgrades loaded from the INI database
-	UpgradeTemplate *next;
-	while( m_upgradeList )
-	{
-
-		// get next
-		next = m_upgradeList->friend_getNext();
-
-		// delete head of list
-		m_upgradeList->deleteInstance();
-
-		// set head to next element
-		m_upgradeList = next;
-
-	}  // end while
-
-}  // end ~UpgradeCenter
-
 //-------------------------------------------------------------------------------------------------
 /** Upgrade center initialization */
 //-------------------------------------------------------------------------------------------------

@@ -131,14 +131,6 @@ protected:
 	int m_size;	// +0x1c
 };
 
-// ??0RAMFile@@QAE@XZ, RVA 0x006054E7 (29 bytes). Table 0x0087AA00
-// contains the verified RAMFile read/seek/close/scan methods; the constructor
-// calls File 0x006024FD and clears data/position/size at +0x14/+0x18/+0x1C.
-// The former DieModuleData spelling was refuted by this independent identity.
-RAMFile::RAMFile() : m_data(0), m_pos(0), m_size(0)
-{
-}
-
 int RAMFile::read(void *buffer, int bytes)
 {
 	if (m_data == NULL)

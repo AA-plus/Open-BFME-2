@@ -99,26 +99,6 @@ Rva003400CE::Rva003400CE(StateMachine *machine)
 {
 }
 
-// ??0AIInternalMoveToState@@QAE@PAVStateMachine@@I@Z @ 0x0033F279 (92B): the
-// base every constructor below calls (pinned name), vtable 0x00C10DE8. It calls
-// the State ctor 0x004D73FC with (machine, hash), then clears the goal and path
-// positions and sets the layer at +0x40 and m_adjustsDestination to 1, the
-// Zero Hour shape plus BFME2's extra fields.
-AIInternalMoveToState::AIInternalMoveToState(StateMachine *machine, unsigned int hash)
-	: State(machine, hash)
-{
-	m_goalPosition.zero();
-	m_2C = 0.0f;
-	m_30 = 0;
-	m_pathGoalPosition.zero();
-	m_44 = 0;
-	m_49 = false;
-	m_4A = false;
-	m_4B = false;
-	m_goalLayer = 1;
-	m_adjustsDestination = true;
-}
-
 // AI state constructors, retail 0x00342978..0x00343077. Each calls the pinned
 // AIInternalMoveToState ctor 0x0033F279 (or a rowed intermediate) with its own
 // name hash, installs its own vtable and initialises its members. The class

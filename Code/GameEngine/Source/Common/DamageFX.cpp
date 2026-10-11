@@ -357,14 +357,3 @@ void DamageFXStore::reset()
 void DamageFXStore::update()
 {
 }
-
-//-------------------------------------------------------------------------------------------------
-/*static */ void DamageFXStore::parseDamageFXDefinition(INI* ini)
-{
-
-	const char *c = ini->getNextToken();
-	NameKeyType key = TheNameKeyGenerator->nameToKey(c);
-	DamageFX& dfx = TheDamageFXStore->m_dfxmap[key];
-	dfx.clear();
-	ini->initFromINI(&dfx, dfx.getFieldParse());
-}

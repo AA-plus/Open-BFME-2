@@ -454,59 +454,6 @@ typedef struct
 //-------------------------------------------------------------------------------------------------
 // byte-exact reconstruction: game/GameEngine/Source/GameLogic/AI/TAiDataCtor.cpp
 // ??0TAiData@@QAE@XZ present-unmatched
-TAiData::TAiData() : 
-m_next(NULL), 
-m_sideInfo(NULL), 
-m_attackIgnoreInsignificantBuildings(false),
-m_skirmishGroupFudgeValue(0.0f),
-m_structureSeconds(0), 
-m_teamSeconds(0), 
-m_resourcesWealthy(0), 
-m_resourcesPoor(0), 
-m_forceIdleFramesCount(1),
-m_structuresWealthyMod(0),
-m_teamPoorMod(0),
-m_teamResourcesToBuild(0),
-m_guardInnerModifierAI(0),
-m_guardOuterModifierAI(0),
-m_guardInnerModifierHuman(0),
-m_guardOuterModifierHuman(0),
-m_guardChaseUnitFrames(0),
-m_guardEnemyScanRate(LOGICFRAMES_PER_SECOND/2),
-m_guardEnemyReturnScanRate(LOGICFRAMES_PER_SECOND),
-m_wallHeight(0),
-m_alertRangeModifier(0),
-m_aggressiveRangeModifier(0),
-m_attackPriorityDistanceModifier(0),
-m_maxRecruitDistance(0),
-m_skirmishBaseDefenseExtraDistance(0),
-m_repulsedDistance(0),
-m_enableRepulsors(false),
-m_forceSkirmishAI(false),
-m_rotateSkirmishBases(false),
-m_attackUsesLineOfSight(true),
-m_minInfantryForGroup(3),
-m_minVehiclesForGroup(4),
-m_minDistanceForGroup(100),
-m_minClumpDensity(0.5f),
-m_infantryPathfindDiameter(6),
-m_vehiclePathfindDiameter(6),
-m_supplyCenterSafeRadius(250),
-m_rebuildDelaySeconds(10),
-//Added By Sadullah Nader
-//Initialization(s) inserted
-m_distanceRequiresGroup(0.0f),
-m_sideBuildLists(NULL),
-m_structuresPoorMod(0.0f),
-m_teamWealthyMod(0.0f),
-m_aiDozerBoredRadiusModifier(2.0),
-m_aiCrushesInfantry(true), 
-m_maxRetaliateDistance(210.0f), 
-m_retaliateFriendsRadius(120.0f)
-//
-{
-}
-
 //-------------------------------------------------------------------------------------------------
 // ?crc@TAiData@@UAEXPAVXfer@@@Z present-unmatched
 

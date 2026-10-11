@@ -76,31 +76,6 @@ const Int MAX_IDX = 32;
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-StructureToppleUpdate::StructureToppleUpdate( Thing *thing, const ModuleData* moduleData ) : UpdateModule( thing, moduleData )
-{
-	
-	//Added By Sadullah Nader
-	//Initialization(s) inserted
-	m_delayBurstLocation.zero();
-	m_structuralIntegrity = 0.0f;
-	m_toppleDirection.x = m_toppleDirection.y = 0;
-	//
-	m_toppleFrame = 0;
-	m_toppleState = TOPPLESTATE_STANDING;
-	m_toppleVelocity = 0.0f;
-	m_accumulatedAngle = 0.001f; // Need to give it a little nudge in the right direction
-	m_lastCrushedLocation = 0.0f;
-	m_nextBurstFrame = -1;
-	setWakeFrame(getObject(), UPDATE_SLEEP_FOREVER);
-
-	//Get the extent height here, rather than after it dies -- when it switches to dead state
-	//the rubble state has a tiny height.
-	Object *building = getObject();
-	m_buildingHeight = building->getGeometryInfo().getMaxHeightAbovePosition();
-}
-
-//-------------------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------------------
 // ?StructureToppleUpdate::~StructureToppleUpdate present-unmatched
 StructureToppleUpdate::~StructureToppleUpdate( void )
 {
@@ -120,34 +95,6 @@ static void parseOCL( INI* ini, void *instance, void * /*store*/, const void* /*
 
 //-------------------------------------------------------------------------------------------------
 void parseAngleFX(INI* ini, void *instance, void *store, const void *userData);
-
-//-------------------------------------------------------------------------------------------------
-/*static*/ void StructureToppleUpdateModuleData::buildFieldParse(MultiIniFieldParse& p) 
-{
-  UpdateModuleData::buildFieldParse(p);
-
-	static const FieldParse dataFieldParse[] = 
-	{
-		{ "MinToppleDelay",						INI::parseDurationUnsignedInt,		NULL, offsetof( StructureToppleUpdateModuleData, m_minToppleDelay ) },
-		{ "MaxToppleDelay",						INI::parseDurationUnsignedInt,		NULL, offsetof( StructureToppleUpdateModuleData, m_maxToppleDelay ) },
-		{ "MinToppleBurstDelay",			INI::parseDurationUnsignedInt,		NULL, offsetof( StructureToppleUpdateModuleData, m_minToppleBurstDelay ) },
-		{ "MaxToppleBurstDelay",			INI::parseDurationUnsignedInt,		NULL, offsetof( StructureToppleUpdateModuleData, m_maxToppleBurstDelay ) },
-		{ "StructuralIntegrity",			INI::parseReal,										NULL, offsetof( StructureToppleUpdateModuleData, m_structuralIntegrity ) },
-		{ "StructuralDecay",					INI::parseReal,										NULL, offsetof( StructureToppleUpdateModuleData, m_structuralDecay ) },
-		{ "DamageFXTypes",						INI::parseDamageTypeFlags,				NULL, offsetof( StructureToppleUpdateModuleData, m_damageFXTypes ) },
-		{ "TopplingFX",								INI::parseFXList,									NULL, offsetof( StructureToppleUpdateModuleData, m_toppleFXList ) },
-		{ "ToppleDelayFX",						INI::parseFXList,									NULL, offsetof( StructureToppleUpdateModuleData, m_toppleDelayFXList ) },
-		{ "ToppleStartFX",						INI::parseFXList,									NULL, offsetof( StructureToppleUpdateModuleData, m_toppleStartFXList ) },
-		{ "ToppleDoneFX",							INI::parseFXList,									NULL, offsetof( StructureToppleUpdateModuleData, m_toppleDoneFXList ) },
-		{ "CrushingFX",								INI::parseFXList,									NULL, offsetof( StructureToppleUpdateModuleData, m_crushingFXList ) },
-		{ "CrushingWeaponName",				INI::parseAsciiString,						NULL, offsetof( StructureToppleUpdateModuleData, m_crushingWeaponName ) },
-		{ "OCL",											parseOCL,													NULL, 0 },
-		{ "AngleFX",									parseAngleFX,											NULL, 0 },
-		{ 0, 0, 0, 0 }
-	};
-  p.add(dataFieldParse);
-	p.add(DieMuxData::getFieldParse(), offsetof( StructureToppleUpdateModuleData, m_dieMuxData ));
-}
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------

@@ -310,57 +310,6 @@ Real W3DTerrainLogic::getGroundHeight( Real x, Real y, Coord3D* normal ) const
 /** Get the height considering the layer. */
 //-------------------------------------------------------------------------------------------------
 // ?getLayerHeight@W3DTerrainLogic@@ present-unmatched
-Real W3DTerrainLogic::getLayerHeight( Real x, Real y, PathfindLayerEnum layer, Coord3D* normal, Bool clip ) const
-{
-#ifdef USE_THE_TERRAIN_OBJECT
-
-	if (!TheTerrainRenderObject)
-	{
-		if (normal)
-		{	
-			//return a default normal pointing up
-			normal->x=0.0f;
-			normal->y=0.0f;
-			normal->z=1.0f;
-		}
-		return 0;
-	}
-
-	Real height = TheTerrainRenderObject->getHeightMapHeight(x,y,normal);
-
-	if (layer != LAYER_GROUND) 
-	{
-		Coord3D loc;
-		loc.x = x;
-		loc.y = y;
-		loc.z = height;
-		if (layer == LAYER_WALL) 
-		{
-			if (!clip || TheAI->pathfinder()->isPointOnWall(&loc)) 
-			{
-				return TheAI->pathfinder()->getWallHeight();
-			}
-			else
-			{
-				return height;
-			}
-		}
-		Bridge* pBridge;
-		if ((pBridge = findBridgeLayerAt(&loc, layer, clip)) != 0) 
-		{
-			Real bridgeHeight = pBridge->getBridgeHeight(&loc, normal);
-			if (bridgeHeight > height) 
-			{
-				return bridgeHeight;	// Don't return bridge height if it's in the ground.
-			}
-		}
-	}
-
-	return height;
-
-#endif
-}  // end getLayerHeight
-
 //-------------------------------------------------------------------------------------------------
 /** W3D isCliffCell for terrain logic */
 //-------------------------------------------------------------------------------------------------

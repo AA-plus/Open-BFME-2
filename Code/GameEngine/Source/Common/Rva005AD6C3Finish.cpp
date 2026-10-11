@@ -183,13 +183,6 @@ public:
 	Int m_field0C;
 };
 
-AINavyUnitBattleShip::AINavyUnitBattleShip(const Rva005DCC4BSource *source)
-	: Rva005DCC4B(source)
-{
-	m_field08 = 0;
-	m_field0C = (Int)TheGameLogic->m_frame;
-}
-
 // AINavyUnitBattleShip::patrol is defined with its retail-matched body in Code/GameEngine/Source/Common/Rva005AD6F5Finish.cpp (0x005AD6F5).
 
 void AINavyUnitBattleShip::update()

@@ -132,12 +132,6 @@ W3DShadowTexture::W3DShadowTexture()
 	m_shadowUV[1].Set(0.0f,-1.0f,0.0f);
 }
 
-void W3DShadowTexture::setDecalUVAxis(Vector3 &u, Vector3 &v)
-{
-	m_shadowUV[0]=u;
-	m_shadowUV[1]=v;
-}
-
 // Ghidra boundary at 0x00109236 is 131 bytes. Retail clears three linked
 // heads at +0x04/+0x08/+0x0C; each node's link is at +0x114 and each payload
 // is released through slot 0 with flag 0, followed by scalar operator delete.
@@ -173,51 +167,3 @@ public:
 };
 
 void __cdecl operator delete(void *pointer);
-
-void Rva00109236::rva00109236()
-{
-	Rva00109236Node *cursor = m_head0C;
-	m_head0C = 0;
-	Rva00109236Node *current;
-	goto check0C;
-loop0C:
-	{
-		Rva00109236Node *&link = cursor->m_next114;
-		cursor = link;
-		link = 0;
-		::operator delete(current->deleteInstance(0));
-	}
-check0C:
-	current = cursor;
-	if (cursor != 0) goto loop0C;
-
-	cursor = m_head04;
-	m_head04 = 0;
-	goto check04;
-loop04:
-	{
-		Rva00109236Node *&link = cursor->m_next114;
-		cursor = link;
-		link = 0;
-		::operator delete(current->deleteInstance(0));
-	}
-check04:
-	current = cursor;
-	if (cursor != 0) goto loop04;
-
-	cursor = m_head08;
-	m_head08 = 0;
-	goto check08;
-loop08:
-	{
-		Rva00109236Node *&link = cursor->m_next114;
-		cursor = link;
-		link = 0;
-		::operator delete(current->deleteInstance(0));
-	}
-check08:
-	current = cursor;
-	if (cursor != 0) goto loop08;
-	m_value250 = 0;
-	((BfmeThing928F *)this)->bfmeTwo928F();
-}

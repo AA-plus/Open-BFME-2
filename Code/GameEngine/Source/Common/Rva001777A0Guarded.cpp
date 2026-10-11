@@ -263,12 +263,6 @@ class Rva00176C50Word {
  unsigned long value0;
 public: Rva00176C50Word *initialize(unsigned long argument);
 };
-Rva00176C50Word *Rva00176C50Word::initialize(unsigned long argument) {
- value0=0;
- if(argument != 0) _com_issue_error(0x80004003L);
- return this;
-}
-
 // Complete1777A0..177825/133 forwards two C-string arguments through the
 // existing two-BSTR invoke177130, after checking actual g_bfmeObjECF DF7040.
 // BF1 f989 WebBrowserComWrappers provides semantics; target calls independently

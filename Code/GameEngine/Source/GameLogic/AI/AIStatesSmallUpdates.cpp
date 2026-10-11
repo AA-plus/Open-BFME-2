@@ -298,10 +298,6 @@ AIFollowWaypointPathExactState::AIFollowWaypointPathExactState(StateMachine *mac
 }
 
 // ?AIFollowWaypointPathExactState::~AIFollowWaypointPathExactState present-unmatched
-AIFollowWaypointPathExactState::~AIFollowWaypointPathExactState()
-{
-}
-
 StateReturnType AIFollowWaypointPathExactState::onEnter()
 {
 	const Waypoint *currentWaypoint = m_machine->getGoalWaypoint();

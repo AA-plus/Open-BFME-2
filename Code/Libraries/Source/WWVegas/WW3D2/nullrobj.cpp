@@ -70,16 +70,6 @@ NullLoaderClass _NullLoader;
 // (select-any) so this TU still emits Clone and the Set_ObjectScale gen-alias
 // without a duplicate plain definition.
 
-inline Null3DObjClass::Null3DObjClass(const char * name)																	
-{
-	strcpy(Name, name);
-}
-
-inline Null3DObjClass::Null3DObjClass(const Null3DObjClass & src)									
-{
-	strcpy(Name, src.Name);
-}
-
 inline Null3DObjClass & Null3DObjClass::operator = (const Null3DObjClass & that)				
 {
 	strcpy(Name, that.Name);

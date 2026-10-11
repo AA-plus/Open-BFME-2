@@ -514,51 +514,6 @@ TheInGameUI->DEBUG_addFloatingText("exiting wanting state", getMachineOwner()->g
 
 //-------------------------------------------------------------------------------------------------
 // ?update@SupplyTruckWantsToPickUpOrDeliverBoxesState@@ present-unmatched
-StateReturnType SupplyTruckWantsToPickUpOrDeliverBoxesState::update()
-{
-	Object* owner = getMachineOwner();
-	AIUpdateInterface* ownerAI = owner->getAIUpdateInterface();
-	if (!ownerAI)
-		return STATE_FAILURE;
-
-	Player* ownerPlayer = owner->getControllingPlayer();
-	ResourceGatheringManager *manager = ownerPlayer->getResourceGatheringManager();
-
-	SupplyTruckAIInterface* update = ownerAI->getSupplyTruckAIInterface();
-	if (!update)
-		return STATE_FAILURE;
-
-	if (!update->isAvailableForSupplying())
-	{
-		DEBUG_CRASH(("SupplyTruckWantsToPickUpOrDeliverBoxesState: isAvailableForSupplying==false; should not get here"));
-		return STATE_FAILURE;
-	}
-
-	Int numBoxes = update->getNumberBoxes();
-	if (numBoxes > 0)
-	{
-		// want a center.
-		Object *bestCenter = manager->findBestSupplyCenter( owner );
-		if( bestCenter )
-		{
-			ownerAI->aiDock( bestCenter, CMD_FROM_AI );
-			return STATE_SUCCESS;
-		}
-	}
-	else
-	{
-		// want a warehouse.
-		Object* bestWarehouse = manager->findBestSupplyWarehouse( owner );
-		if( bestWarehouse )
-		{
-			ownerAI->aiDock( bestWarehouse, CMD_FROM_AI );
-			return STATE_SUCCESS;
-		}
-	}
-	return STATE_FAILURE;// we aren't going to wait right here, we will go back to base and wait for
-	// wanting to succeed some place safe.
-}
-
 //-------------------------------------------------------------------------------------------------
 // ?onEnter@RegroupingState@@ present-unmatched
 StateReturnType RegroupingState::onEnter()

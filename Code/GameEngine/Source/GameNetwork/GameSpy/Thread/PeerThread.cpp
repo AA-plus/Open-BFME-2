@@ -579,22 +579,6 @@ void PeerThreadClass::clearServers( void )
 }
 
 // ?findServerByID@PeerThreadClass@@ present-unmatched
-SBServer PeerThreadClass::findServerByID( Int id )
-{
-	std::map<Int, SBServer>::iterator it = m_stagingServers.find(id);
-	if (it != m_stagingServers.end())
-	{
-		SBServer server = it->second;
-		if (server && !server->keyvals)
-		{
-			DEBUG_CRASH(("Referencing a missing server!"));
-			return 0;
-		}
-		return it->second;
-	}
-	return 0;
-}
-
 static enum CallbackType
 {
 	CALLBACK_CONNECT,

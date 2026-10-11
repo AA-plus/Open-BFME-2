@@ -90,11 +90,6 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 //-----------------------------------------------------------------------------
 
 // ?ScoreKeeper::ScoreKeeper present-unmatched
-ScoreKeeper::ScoreKeeper( void )
-{
-	reset(0);
-}
-
 // ?ScoreKeeper::~ScoreKeeper present-unmatched
 ScoreKeeper::~ScoreKeeper( void )
 {

@@ -120,10 +120,6 @@ private:
 };
 
 // ??1AODHordeContain@@UAE@XZ present-unmatched
-AODHordeContain::~AODHordeContain()
-{
-}
-
 // Gap between ??1 (0x0047B563) and ??_G (0x0047B674) in this TU; same flags.
 // Large-unit tracker update: validates the second arg (null, +0x438 flag,
 // +0x4 -> +0x5F5 == 2), stores +0x74 to +0x1FC (full +0x318) unless equal,
