@@ -69,7 +69,6 @@ static __declspec(noinline) void parseParticleSysBone(INI *ini,void *instance,vo
  }
  ((_STL::list<BfmePod32>*)list)->push_back(info);
 }
-// ?ParseScriptedModelParticleSysBone@@YAXPAVINI@@PAX1PBX@Z present-unmatched
 void ParseScriptedModelParticleSysBone(INI *ini,void *instance,void *,const void *)
 {
  parseParticleSysBone(ini,instance,(char *)instance+0xB4);
