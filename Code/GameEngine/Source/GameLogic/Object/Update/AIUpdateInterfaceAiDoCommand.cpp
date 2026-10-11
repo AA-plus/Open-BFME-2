@@ -49,9 +49,10 @@ public:
 };
 // Retail 0x00DFE7A8 (.data): one-byte flag, loader-zero; set when the
 // aggregation pass runs (Rva003B9EC4) and tested here plus
-// FlatHeightMapUpdateCenter. data_xrefs shows width-1 read/write/address
-// at RVA 0x9FE7A8 from 12 retail sites. Owned here (sole-U unit).
-unsigned char g_00DFE7A8 = 0;
+// FlatHeightMapUpdateCenter. Owned by Rva003B9EC4.cpp (race: that seat
+// landed its definition minutes earlier; one owner per address, so this
+// unit keeps only the reference). data_rows.csv names the owner.
+extern unsigned char g_00DFE7A8;
 class AICommandInterface { public: virtual void aiDoCommand(const AICommandParms *)=0; };
 class AIUpdateInterface24 { public: virtual void slot0(); };
 class UpdateModule {
