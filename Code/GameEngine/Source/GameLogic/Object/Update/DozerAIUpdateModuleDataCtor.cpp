@@ -10,7 +10,38 @@
 
 extern "C" const void *const vtbl_00C4B6C8[];  // folded, 3 classes; via ??_7AnimalAIUpdateModuleData@@6B@
 #pragma comment(linker, "/alternatename:_vtbl_00C4B6C8=??_7AnimalAIUpdateModuleData@@6B@")
-extern const struct FieldParse g_00C4B748[];
+
+class INI
+{
+public:
+	static void parsePercentToReal(INI *ini, void *instance, void *store, const void *userData);
+	static void parseDurationReal(INI *ini, void *instance, void *store, const void *userData);
+	static void parseReal(INI *ini, void *instance, void *store, const void *userData);
+};
+
+struct FieldParse
+{
+	const char *token;
+	void (__cdecl *parse)(INI *ini, void *instance, void *store, const void *userData);
+	const void *userData;
+	int offset;
+};
+
+// Retail VA 0x00C4B748 (.rdata, file offset 0x0084B348): the dozer's three module
+// data fields - RepairHealthPercentPerSecond through the rowed
+// INI::parsePercentToReal (0x0002F1BA) at +0x64, BoredTime through the rowed
+// INI::parseDurationReal (0x00338B0A) at +0x68 and BoredRange through the rowed
+// INI::parseReal (0x0002EFC0) at +0x6C - then the zero sentinel. The three
+// offsets are the same words the ctor above zeroes, and the 64-byte extent is the
+// ledger's own bound.
+// Symbol ?g_00C4B748@@3QBUFieldParse@@B, transcribed below.
+extern const struct FieldParse g_00C4B748[] =
+{
+	{ "RepairHealthPercentPerSecond", &INI::parsePercentToReal, 0, 0x64 },
+	{ "BoredTime",                    &INI::parseDurationReal,  0, 0x68 },
+	{ "BoredRange",                   &INI::parseReal,          0, 0x6C },
+	{ 0, 0, 0, 0 }
+};
 
 class MultiIniFieldParse;
 struct FieldParse;

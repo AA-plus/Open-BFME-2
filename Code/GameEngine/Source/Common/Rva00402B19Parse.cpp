@@ -82,7 +82,7 @@ int Rva0056B767Get(void);
 // zero sentinel. The +0x10/+0x14/+0x18 offsets are the three sound slots and
 // +0x04 the name slot both the parser above and the rowed constructor 0x00402EFA
 // fill through the shared 0x0056B767 table.
-// ?g_00C38380@@3QBUFieldParse@@B
+// Symbol ?g_00C38380@@3QBUFieldParse@@B, transcribed below.
 extern const FieldParse g_00C38380[] =
 {
 	{ "OnSelectedSound",              &Rva00339900Parse, 0, 0x10 },
