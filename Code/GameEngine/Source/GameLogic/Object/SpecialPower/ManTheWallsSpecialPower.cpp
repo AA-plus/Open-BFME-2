@@ -215,8 +215,11 @@ template<> inline __declspec(noinline) _Vector_base<Object *,allocator<Object *>
 template<> inline void allocator<Object *>::deallocate(Object **p,unsigned int) const { if(p) Rva00030830FreeAllocation(p); }
 template<> void vector<Object *,allocator<Object *> >::push_back(Object * const &);
 }
+// Keep the proven29B record-vector base as the exclusive provider, as the
+// E8 specialization above does. An earlier library COMDAT emits14B and
+// otherwise wins the link despite this caller reproducing native29.
 namespace _STL {
-template<> inline __declspec(noinline) _Vector_base<Rva004C7878Record,allocator<Rva004C7878Record> >::_Vector_base(const allocator<Rva004C7878Record> &a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0) {}
+template<> __declspec(noinline) _Vector_base<Rva004C7878Record,allocator<Rva004C7878Record> >::_Vector_base(const allocator<Rva004C7878Record> &a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0) {}
 template<> inline void allocator<Rva004C7878Record>::deallocate(Rva004C7878Record *p,unsigned int) const { if(p) Rva00030830FreeAllocation(p); }
 template<> inline __declspec(noinline) void _Destroy<Rva004C7878Record *>(Rva004C7878Record *first,Rva004C7878Record *last) { for(;first!=last;++first) first->~Rva004C7878Record(); }
 template<> inline __declspec(noinline) vector<Rva004C7878Record,allocator<Rva004C7878Record> >::~vector() { _Destroy(_M_start,_M_finish); }
