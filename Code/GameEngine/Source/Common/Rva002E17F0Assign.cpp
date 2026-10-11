@@ -1,13 +1,21 @@
 // cl: /Ob0
 
-class Rva002E9E70Mid
+// LINK: the middle member's assignment is rowed as the STLport vector's
+// operator= over Rva00332217Record (0x002E9E70); only that call is used here.
+struct Rva00332217Record;
+namespace _STL
+{
+template <class T> class allocator;
+template <class T, class A> class vector
 {
 public:
-	Rva002E9E70Mid &operator=(const Rva002E9E70Mid &other);
+	vector &operator=(const vector &other);
 
 private:
 	void *m_item;
 };
+}
+typedef _STL::vector<Rva00332217Record, _STL::allocator<Rva00332217Record> > Rva002E9E70Mid;
 
 class Rva002E17F0
 {
