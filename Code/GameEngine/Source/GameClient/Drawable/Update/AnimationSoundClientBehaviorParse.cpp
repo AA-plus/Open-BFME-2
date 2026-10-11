@@ -18,7 +18,9 @@ template<int N>class LookupSlots:public LookupSlots<N-1>{public:virtual void gap
 class SoundLookupView:public LookupSlots<75>{public:virtual Rva0036CA00Str lookup(const AsciiString&);};
 class AudioManager;extern AudioManager *TheAudio;
 template<int N>class BitFlags{public:bool setBitByName(const char*);};
-class WeaponTemplateSetHead {public:WeaponTemplateSetHead(){} WeaponTemplateSetHead(const WeaponTemplateSetHead&);unsigned words[19];};
+// LINK: the empty default ctor's COMDAT loses to the first-in-order copy; the parse
+// locals use a TU-unique no-init ctor instead (same empty body). No flags touched.
+class WeaponTemplateSetHead {public:struct BfmeNoInitAnim{};WeaponTemplateSetHead(){} WeaponTemplateSetHead(BfmeNoInitAnim){} WeaponTemplateSetHead(const WeaponTemplateSetHead&);unsigned words[19];};
 class Rva004C9E94 {public:Rva004C9E94(const Rva0036CA00Str&,const int*,float,const WeaponTemplateSetHead&,const WeaponTemplateSetHead&);int key;Rva0036CA00Str sound;float frame;WeaponTemplateSetHead required,excluded;bool check;};
 struct AnimationSoundTreeNode;
 class AnimationSoundTree {public:AnimationSoundTreeNode**rva004CA68B(AnimationSoundTreeNode**,const void*);};
@@ -36,7 +38,7 @@ void Rva004CA798Parse(INI *ini,void *data,void*)
  Rva0036CA00Str sound=((SoundLookupView*)TheAudio)->lookup(soundName);
  if(!sound.object)throw INIException(3,"AnimationSound line: unknown sound '%s'",soundName.str());
  const char *token=ini->getNextTokenOrNull(ini->separators);
- WeaponTemplateSetHead required,excluded;
+ WeaponTemplateSetHead required((WeaponTemplateSetHead::BfmeNoInitAnim())),excluded((WeaponTemplateSetHead::BfmeNoInitAnim()));
  memset(&required,0,sizeof(required));memset(&excluded,0,sizeof(excluded));
  if(token && !_strcmpi(token,requiredTag)){
   token=ini->getNextToken(ini->separators);
