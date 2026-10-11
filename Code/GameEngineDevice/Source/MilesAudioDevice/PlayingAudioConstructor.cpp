@@ -16,8 +16,12 @@ private:
     volatile long m_refCount;
 };
 
-class BfmeStringTailRecord156 {public:~BfmeStringTailRecord156();private:void *ptr;};
+class BfmeStringTailRecord156 {public:~BfmeStringTailRecord156();protected:void *ptr;};
 class PlayingAudioUnknown0C:public BfmeStringTailRecord156 {public:PlayingAudioUnknown0C();private:int unknown4;};
+// Native 7E81F returns this and zeroes exactly the two stream-holder words.
+// The owning constructor passes its +0x0C subobject; the original stream type
+// remains unresolved. This replaces the unrelated DataChunkInfo alias claim.
+__declspec(noinline) PlayingAudioUnknown0C::PlayingAudioUnknown0C() { ptr=0; unknown4=0; }
 class OpaqueRefCounted {public:void Release_Ref();};
 struct BfmePoolHolder88 {char unknown00[0x88];OpaqueRefCounted ref;};
 class BfmePoolRef10 {public:BfmePoolRef10():ptr(0){}~BfmePoolRef10(){if(ptr)ptr->ref.Release_Ref();}private:BfmePoolHolder88 *ptr;};
