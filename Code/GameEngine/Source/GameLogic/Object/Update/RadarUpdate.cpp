@@ -65,6 +65,20 @@ public:
 			rva0028AE6D();
 		}
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's clearAndSetModelConditionState copy loses to the
+	// first-in-order copy (no retail address); the call below inlines it but
+	// still emits the loser COMDAT. Rebinding there emits only this unique
+	// (trivially kept) copy. No flags touched.
+	__forceinline void bfme_clear_and_set(ModelConditionFlagType clr, ModelConditionFlagType set)
+	{
+		if (m_modelConditionFlags.test(clr) || !m_modelConditionFlags.test(set))
+		{
+			m_modelConditionFlags.clear(clr);
+			m_modelConditionFlags.set(set);
+			rva0028AE6D();
+		}
+	}
 private:
 	unsigned char m_pad000[0x10C];
 	ModelConditionFlags m_modelConditionFlags; // +0x10C
@@ -158,7 +172,7 @@ UpdateSleepTime RadarUpdate::update()
 	{
 		m_extendDoneFrame = 0;
 		m_extendComplete = true;
-		getObject()->clearAndSetModelConditionState(MODELCONDITION_RADAR_EXTENDING, MODELCONDITION_RADAR_UPGRADED);
+		getObject()->bfme_clear_and_set(MODELCONDITION_RADAR_EXTENDING, MODELCONDITION_RADAR_UPGRADED);
 	}
 	return UPDATE_SLEEP_NONE;
 }

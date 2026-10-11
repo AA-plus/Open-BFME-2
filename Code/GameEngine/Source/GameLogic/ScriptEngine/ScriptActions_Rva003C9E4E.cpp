@@ -85,6 +85,12 @@ class Object : public BfmeObjectVtbl, public BfmeObjectDlinkBase,
 public:
 	__forceinline bool isKindOf(int bit) const { return m_template->isKindOf(bit); }
 	AIUpdateInterface *getAIUpdateInterface() { return m_ai; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getAIUpdateInterface copy loses to the first-in-order
+	// copy (no retail address); the call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	AIUpdateInterface *bfme_ai_update() { return m_ai; }
 	BodyModuleInterface *getBodyModule() const { return m_body; }
 private:
 	unsigned char m_pad070[0x254 - 0x70];
@@ -149,7 +155,7 @@ void ScriptActions::rva003C9E4E(const AsciiString &teamName, const AsciiString &
 			for (DLINK_ITERATOR<Object> iter2 = theTeam->iterate_TeamMemberList(); !iter2.done(); iter2.advance()) {
 				Object *obj = iter2.cur();
 				if (obj && obj->isKindOf(14)) {
-					AIUpdateInterface *ai = obj->getAIUpdateInterface();
+					AIUpdateInterface *ai = obj->bfme_ai_update();
 					if (ai)
 						ai->m_commands.rva0036F19B(weakest, CMD_FROM_SCRIPT);
 				}

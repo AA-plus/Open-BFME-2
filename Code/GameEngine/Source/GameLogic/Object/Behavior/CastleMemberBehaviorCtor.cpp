@@ -79,7 +79,7 @@ CastleMemberBehavior::CastleMemberBehavior(Thing *thing, const ModuleData *modul
 // Existing XferObjectID3060B2 and BehaviorModule4C9C7D supply owned calls.
 // The following vtable slot views describe only the invoked ABI; original
 // transfer method name and the unaccessed virtual slots remain unknown.
-class Xfer { public: struct Version {unsigned char loaded,current; Version():loaded(1),current(1){} };
+class Xfer { public: struct Version {unsigned char loaded,current; /* LINK: no user ctor (implicit trivial emits nothing); the single use below assigns manually. The previous :loaded(1),current(1){} copy loses to the first-in-order copy. */ };
 virtual void pad0();
 virtual void pad1();
 virtual void pad2();
@@ -213,7 +213,7 @@ extern AudioManager* TheAudio;
 enum ObjectID { INVALID_ID=0 };
 void XferObjectID(Xfer*, ObjectID*);
 void CastleMemberBehavior::rva003957C6(Xfer* xfer) {
- Xfer::Version v; xfer->version(&v);
+ Xfer::Version v; v.loaded = 1; v.current = 1; xfer->version(&v);
  XferObjectID(xfer,reinterpret_cast<ObjectID*>(&m_14));
  xfer->xferBool(reinterpret_cast<bool*>(&m_24));
  xfer->xferUnsignedInt(reinterpret_cast<unsigned*>(&m_1C));
