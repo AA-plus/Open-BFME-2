@@ -1,20 +1,203 @@
-// ?rva00541579@Rva00541579@@QAE_NH@Z
-// partial score=0.65 date=2026-10-09
-// cl: /O1 /Oy- /G7 /arch:SSE /MD /DNDEBUG /EHsc
-struct BfmePod28 { int m_00; char frame[24]; };
-class Rva00541579 { public: bool rva00541579(int); private: char listener00[16]; BfmePod28 *m_begin10,*m_end14,*capacity18; int m_hint1C; };
-BfmePod28 *rva005414C2(BfmePod28 *,BfmePod28 *,const BfmePod28 &);
-bool Rva00541579::rva00541579(int key)
+// ?seekKeyFrame@?$CameraAnimationTrack@VRva00540D94@@@@QAE_NH@Z
+// partial score=0.8 date=2026-10-11
+// cl: /O1 /G7 /arch:SSE /MD /DNDEBUG
+// stlport
+//
+// CameraAnimationTrack<T>::getFrameData for the LookAt camera channel,
+// retail 0x00541955 (281 bytes, ret 8). WorldBuilder's debug twin 0x00454320
+// is CameraAnimationTrack<class LookAtCameraAnimationCameraFrameData>::
+// getFrameData (CameraAnimationTrack.h, asserts at lines 124..139); the frame
+// data keeps the address name of the rowed interpolator's result
+// Rva00540D94 (0x00540DCA). A negative frame returns the first key; else the
+// pinned locator 0x00541579 moves the last used key to the floored frame,
+// the last key (or a key whose successor shares its frame) is returned as
+// is, and otherwise the four surrounding keys (clamped at both ends) are
+// interpolated at the fraction between the key and its successor.
+//
+// The frame data's out-of-line copy constructor is ICF-folded with the rowed
+// Region3D copy constructor 0x0009AC04 (six dword copies, ret 4).
+#include <math.h>
+#include <vector>
+
+struct Rva00540E9DSrc
 {
-    if(m_hint1C>=0 && (unsigned)m_hint1C<(unsigned)(m_end14-m_begin10)) {
-        int current=m_begin10[m_hint1C].m_00;
-        if(key>=current && ((unsigned)(m_hint1C+1)>=(unsigned)(m_end14-m_begin10) || key<m_begin10[m_hint1C+1].m_00))
-            return current==key;
-    }
-    if(m_begin10==m_end14) { m_hint1C=-1; return false; }
-    m_hint1C=rva005414C2(m_begin10,m_end14,*reinterpret_cast<const BfmePod28 *>(&key))-m_begin10;
-    if((unsigned)m_hint1C>=(unsigned)(m_end14-m_begin10) || (m_hint1C>0 && m_begin10[m_hint1C].m_00!=key))
-        --m_hint1C;
-    return m_begin10[m_hint1C].m_00==key;
+	int a, b, c;
+};
+class Rva00540D94
+{
+public:
+	__declspec(noinline) Rva00540D94(const Rva00540D94 &other);
+	int mode;
+	Rva00540E9DSrc position;
+	float scalar10, scalar14;
+};
+
+Rva00540D94::Rva00540D94(const Rva00540D94 &other)
+{
+	mode = other.mode;
+	position.a = other.position.a;
+	position.b = other.position.b;
+	position.c = other.position.c;
+	scalar10 = other.scalar10;
+	scalar14 = other.scalar14;
 }
 
+Rva00540D94 Rva00540DCAGet(float t, Rva00540D94 *a, int ta, Rva00540D94 *b, int tb, Rva00540D94 *c, int tc, Rva00540D94 *d, int td);
+
+// The look-at channel's 16-byte frame data, whose out-of-line copy
+// constructor is ICF-folded with the rowed Region2D copy constructor
+// 0x0004254E (four dword copies, ret 4).
+class Rva00540E9D
+{
+public:
+	__declspec(noinline) Rva00540E9D(const Rva00540E9D &other);
+	int m_00;
+	Rva00540E9DSrc m_04;
+};
+
+Rva00540E9D::Rva00540E9D(const Rva00540E9D &other)
+{
+	m_00 = other.m_00;
+	m_04.a = other.m_04.a;
+	m_04.b = other.m_04.b;
+	m_04.c = other.m_04.c;
+}
+
+class Rva005C71ADView;
+Rva00540E9D rva00540EBD(float value, void *arg10, void *arg14, Rva005C71ADView *view,
+	void *arg1C, void *arg20, void *arg24, void *arg28, void *arg2C);
+
+// The rowed key lower bounds (STLport __lower_bound on the leading frame).
+struct BfmePod28 { int key; char frame[24]; };
+struct BfmePod20 { int key; char frame[16]; };
+BfmePod28 *rva005414C2(BfmePod28 *first, BfmePod28 *last, const BfmePod28 &key);
+BfmePod20 *rva0054150A(BfmePod20 *first, BfmePod20 *last, const BfmePod20 &key);
+
+// Per-channel lower bound and interpolator.
+template <class K>
+static inline K *cameraTrackLowerBound(K *first, K *last, const int &frame, const Rva00540D94 *)
+{
+	return (K *)rva005414C2((BfmePod28 *)first, (BfmePod28 *)last, (const BfmePod28 &)frame);
+}
+template <class K>
+static inline K *cameraTrackLowerBound(K *first, K *last, const int &frame, const Rva00540E9D *)
+{
+	return (K *)rva0054150A((BfmePod20 *)first, (BfmePod20 *)last, (const BfmePod20 &)frame);
+}
+static inline Rva00540D94 cameraTrackInterpolate(float t, Rva00540D94 *a, int ta, Rva00540D94 *b, int tb,
+	Rva00540D94 *c, int tc, Rva00540D94 *d, int td)
+{
+	return Rva00540DCAGet(t, a, ta, b, tb, c, tc, d, td);
+}
+static inline Rva00540E9D cameraTrackInterpolate(float t, Rva00540E9D *a, int ta, Rva00540E9D *b, int tb,
+	Rva00540E9D *c, int tc, Rva00540E9D *d, int td)
+{
+	return rva00540EBD(t, a, (void *)ta, (Rva005C71ADView *)b, (void *)tb, c, (void *)tc, d, (void *)td);
+}
+
+template <class T>
+struct CameraAnimationKeyFrame
+{
+	int m_frame;
+	T m_data;
+};
+
+template <class T>
+class CameraAnimationTrack
+{
+public:
+	T getFrameData(float frameNum);
+	bool seekKeyFrame(int frameNum);
+private:
+	typedef CameraAnimationKeyFrame<T> KeyFrame;
+	char m_pad00[0x10];
+	_STL::vector<KeyFrame> m_keyFrames;	// +0x10
+	int m_lastUsedKeyFrame;		// +0x1C
+};
+
+template <class T>
+T CameraAnimationTrack<T>::getFrameData(float frameNum)
+{
+	if (frameNum < 0.0f)
+		return m_keyFrames[0].m_data;
+	seekKeyFrame((int)floor(frameNum));
+	if ((unsigned int)m_lastUsedKeyFrame >= m_keyFrames.size() - 1)
+		return m_keyFrames[m_lastUsedKeyFrame].m_data;
+	const KeyFrame &k0 = m_keyFrames[m_lastUsedKeyFrame];
+	const KeyFrame &k1 = m_keyFrames[m_lastUsedKeyFrame + 1];
+	if (k0.m_frame == k1.m_frame)
+		return k0.m_data;
+	frameNum = (frameNum - k0.m_frame) / (k1.m_frame - k0.m_frame);
+	const KeyFrame &kPrev = m_lastUsedKeyFrame > 0 ? m_keyFrames[m_lastUsedKeyFrame - 1] : k0;
+	const KeyFrame &kNext = m_lastUsedKeyFrame + 2 < m_keyFrames.size() ? m_keyFrames[m_lastUsedKeyFrame + 2] : k1;
+	return cameraTrackInterpolate(frameNum, (T *)&kPrev.m_data, kPrev.m_frame, (T *)&k0.m_data, k0.m_frame,
+		(T *)&k1.m_data, k1.m_frame, (T *)&kNext.m_data, kNext.m_frame);
+}
+
+// Locates the key at or before frameNum, starting from the last used key,
+// and reports whether that key sits exactly on frameNum (WB 0x00455D50).
+// The method name is a placeholder.
+template <class T>
+bool CameraAnimationTrack<T>::seekKeyFrame(int frameNum)
+{
+	if (m_lastUsedKeyFrame >= 0 && (unsigned int)m_lastUsedKeyFrame < m_keyFrames.size())
+	{
+		const KeyFrame &k = m_keyFrames[m_lastUsedKeyFrame];
+		if (frameNum >= k.m_frame
+			&& ((unsigned int)(m_lastUsedKeyFrame + 1) >= m_keyFrames.size() || frameNum < m_keyFrames[m_lastUsedKeyFrame + 1].m_frame))
+			return k.m_frame == frameNum;
+	}
+	if (m_keyFrames.empty())
+	{
+		m_lastUsedKeyFrame = -1;
+		return false;
+	}
+	KeyFrame *first = m_keyFrames.begin();
+	m_lastUsedKeyFrame = cameraTrackLowerBound(first, m_keyFrames.end(), frameNum, (const T *)0) - first;
+	if ((unsigned int)m_lastUsedKeyFrame >= (unsigned int)(m_keyFrames.end() - first)
+		|| (m_lastUsedKeyFrame > 0 && first[m_lastUsedKeyFrame].m_frame != frameNum))
+		--m_lastUsedKeyFrame;
+	return first[m_lastUsedKeyFrame].m_frame == frameNum;
+}
+
+template bool CameraAnimationTrack<Rva00540D94>::seekKeyFrame(int frameNum);
+template bool CameraAnimationTrack<Rva00540E9D>::seekKeyFrame(int frameNum);
+template Rva00540D94 CameraAnimationTrack<Rva00540D94>::getFrameData(float frameNum);
+template Rva00540E9D CameraAnimationTrack<Rva00540E9D>::getFrameData(float frameNum);
+
+// ?rva00541F72@Rva00541F72@@QAEXABMPAURva00540888Transform@@@Z retail
+// 0x00541F72 (90 bytes, ret 8): the look-at camera animation's transform
+// slot (table 0x00C69510, beside the free-camera sibling 0x00540888 of the
+// same signature). It samples the camera track (+0x24) and the target track
+// (+0x44) at the time, aims the output matrix from the camera position at
+// the target with the camera frame's roll (rowed Matrix3D::Look_At) and
+// copies its field of view. Owner and output names are address-derived.
+class Vector3;
+class Matrix3D
+{
+public:
+	void Look_At(const Vector3 &p, const Vector3 &t, float roll);
+	float m_rows[12];
+};
+struct Rva00540888Transform
+{
+	Matrix3D m_transform;	// +0x00
+	float m_fov;	// +0x30
+};
+class Rva00541F72
+{
+public:
+	void rva00541F72(const float &time, Rva00540888Transform *out);
+private:
+	char m_pad00[0x24];
+	CameraAnimationTrack<Rva00540D94> m_cameraTrack;	// +0x24
+	CameraAnimationTrack<Rva00540E9D> m_targetTrack;	// +0x44
+};
+
+void Rva00541F72::rva00541F72(const float &time, Rva00540888Transform *out)
+{
+	Rva00540D94 camera = m_cameraTrack.getFrameData(time);
+	Rva00540E9D target = m_targetTrack.getFrameData(time);
+	out->m_transform.Look_At((const Vector3 &)camera.position, (const Vector3 &)target.m_04, camera.scalar10);
+	out->m_fov = camera.scalar14;
+}
