@@ -412,6 +412,7 @@ class INI {
 public:
  const char *getNextToken(const char *separators = 0);
  static void Rva000C2C5FParseBoneRecord(INI *, void *, void *, const void *);
+ static void Rva000C2CA4ParseTurretPitch(INI *, void *, void *, const void *);
 };
 class Rva000C2AA4 {
 public: void rva000C2AA4(const AsciiString &);
@@ -504,4 +505,13 @@ void W3DScriptedModelDraw::rva000C2CBF(int count, _STL::vector<AsciiString> *ori
    }
   }
  }
+}
+
+// Native C2CA4..C2CBF, 27B: TurretPitch FieldParse at BCAD00 selects
+// word+4 in the last24B turret record. The same-unit private bone-key
+// helper retains its proven ECX/EDI ABI; no new helper alias is introduced.
+void INI::Rva000C2CA4ParseTurretPitch(INI *ini, void *instance, void *, const void *userData)
+{
+ Rva000C2C5FOwner *owner = static_cast<Rva000C2C5FOwner *>(instance);
+ parseBoneNameKey(ini, instance, &owner->records.back().a[1], userData);
 }
