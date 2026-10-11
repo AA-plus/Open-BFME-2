@@ -14,7 +14,7 @@
 // rowed.
 // BFME 2 differences: getLocalSlotNum keeps one result and a single exit;
 // resetAccepted only resets TheLAN's start timer (its
-// vslot 31; TheLAN is the rowed global g_Va009FE958) before unaccepting the
+// vslot 31; TheLAN is the canonical global at VA 0x00DFE958) before unaccepting the
 // slots, without Zero Hour's host start-button refresh.
 // Layout: m_inGame +0x10.
 typedef bool Bool;
@@ -35,8 +35,8 @@ struct Global009FE958 : public VSlots<31>
 {
 	virtual void ResetGameStartTimer(void) = 0;
 };
-extern Global009FE958 *g_Va009FE958;
-#define TheLAN g_Va009FE958
+class LANAPI;
+extern LANAPI *TheLAN;
 class GameSlot
 {
 public:
@@ -85,7 +85,7 @@ void LANGameInfo::resetAccepted( void )
 {
 	if (TheLAN)
 	{
-		TheLAN->ResetGameStartTimer();
+		((Global009FE958 *)TheLAN)->ResetGameStartTimer();
 	}
 	for(int i = 0; i< MAX_SLOTS; i++)
 	{

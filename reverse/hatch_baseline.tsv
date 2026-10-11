@@ -1842,7 +1842,6 @@ address_global	Code/GameEngine/Source/GameNetwork/LANAPIOnGameCreate.cpp	g_Va00E
 address_global	Code/GameEngine/Source/GameNetwork/LANAPIReset.cpp	g_Rva0023D30FFlag	1
 address_global	Code/GameEngine/Source/GameNetwork/LANAPIReset.cpp	g_Rva00E02EEC	5
 address_global	Code/GameEngine/Source/GameNetwork/LANAPIRva00248D9D.cpp	g_Va00A03354	4
-address_global	Code/GameEngine/Source/GameNetwork/LANGameInfoSlots.cpp	g_Va009FE958	2
 address_global	Code/GameEngine/Source/GameNetwork/Rva007B55E0TxnNameInits.cpp	g_Va00DD7F48	21
 address_global	Code/GameEngine/Source/GameNetwork/Rva007B55E0TxnNameInits.cpp	g_Va00DD80AC	11
 address_global	Code/GameEngine/Source/GameNetwork/Rva007B55E0TxnNameInits.cpp	g_Va00DD80DC	3
