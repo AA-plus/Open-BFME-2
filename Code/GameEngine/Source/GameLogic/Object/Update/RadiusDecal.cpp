@@ -10,7 +10,10 @@
 extern "C" __declspec(dllimport) double __cdecl ceil(double);
 float Sin(float);float normalizeAngle(float);
 extern float g_00DBA500;
-extern float g_bfmeSecondCF; // donor name retained for native DBA508 scalar
+// Retail VA 0x00DBA508 holds 0.033333335f (0x3D088889); the donor name is
+// retained for this scalar. Defined once here, loader-initialized: the only
+// reader scales by it, and no ledger address is claimed yet.
+float g_bfmeSecondCF = 0.033333335f;
 class GameClient { public:
  virtual void slot0()=0;
  virtual void slot1()=0;
