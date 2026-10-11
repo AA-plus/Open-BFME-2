@@ -1,6 +1,8 @@
 // ?rva00453BF1@GettingBuiltBehavior@@UAEXXZ
+// partial score=0.87 date=2026-10-11
+// ?rva00453BF1@GettingBuiltBehavior@@UAEXXZ
 // partial score=0.85 date=2026-10-04
-// cl: /O1 /DNDEBUG /MD /arch:SSE
+// cl: /O1 /DNDEBUG /MD /arch:SSE /EHsc
 //
 // Three slots of the +0x20 interface vtable 0x00C403C8 that GettingBuiltBehavior's
 // ctor 0x004542FA installs, over the work list at +0x40 (+0x20 from the
@@ -70,10 +72,20 @@ enum DeathType
 class GettingBuiltBehaviorInterface;
 class Object;
 
-class Rva0039B7AD
+class Rva0039CBCE
 {
 public:
 	void rva0039CBCE(Object *obj, int count);
+};
+
+class Rva0023DAA5List
+{
+public:
+	void clear();
+};
+
+class Rva0039B7AD
+{
 private:
 	unsigned char m_pad[4];
 };
@@ -81,7 +93,7 @@ private:
 class Rva003B0D7C
 {
 public:
-	void rva003B0D7C(unsigned int amount, Rva0039B7AD *score, bool flag);
+	void rva003B0D7C(int amount, Rva0039B7AD *score, bool flag);
 private:
 	unsigned char m_pad[4];
 };
@@ -299,6 +311,14 @@ bool GettingBuiltBehavior::rva00453E5C()
 	return anyLaterBuilding(myId);
 }
 
+// 2026-10-11 rebank: callees now resolve through existing names (amount
+// as (int)(unsigned int) for the rowed int 0x003B0D7C gives retail's
+// fld/__ftol2; placeholder pins ?rva0039CBCE@Rva0039CBCE and
+// ?clear@Rva0023DAA5List for the folded list clear); /O1 /arch:SSE /EHsc is
+// the closest flag set (home /O2 defaults emit 432-437B). Wall: retail
+// spills `this` to [ebp-4] and keeps entry.m_id in EDI for the loop; cl
+// keeps `this` in EDI and reloads the ID. An explicit ID local spills it
+// instead (416B); a `self` copy of this changes nothing.
 // NEAR MISS (slot 26, retail 0x00453BF1, 417 bytes): logic and calls line
 // up; register allocation differs (retail keeps the entry ID in edi and
 // spills `this` to [ebp-4]; cl here keeps `this` in edi). The amount handed
@@ -344,7 +364,7 @@ void GettingBuiltBehavior::rva00453BF1()
 		Rva00453BF1Module *module = (Rva00453BF1Module *)other->rva0028BC58(0);
 		if (module)
 			module->rva00453BF1Slot15();
-		player->m_money.rva003B0D7C((unsigned int)other->m_324, &player->m_3BC, true);
+		player->m_money.rva003B0D7C((int)(unsigned int)other->m_324, &player->m_3BC, true);
 		other->setStatus((ObjectStatusTypes)0x56, true);
 		if (other->m_280 <= 0.075f)
 			TheGameLogic->destroyObject(other);
@@ -354,8 +374,8 @@ void GettingBuiltBehavior::rva00453BF1()
 			other->kill((DamageType)8, (DeathType)8);
 			other->setStatus((ObjectStatusTypes)0x56, false);
 		}
-		player->m_3BC.rva0039CBCE(other, -1);
+		((Rva0039CBCE *)&player->m_3BC)->rva0039CBCE(other, -1);
 	}
 	m_3E = false;
-	m_40.clear();
+	((Rva0023DAA5List *)&m_40)->clear();
 }
