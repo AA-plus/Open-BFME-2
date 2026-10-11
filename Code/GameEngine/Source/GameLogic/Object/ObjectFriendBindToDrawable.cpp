@@ -32,7 +32,7 @@ enum ModelConditionFlagType
 class WeaponTemplateSetHead
 {
 public:
-	WeaponTemplateSetHead() { memset(m_bits, 0, sizeof(m_bits)); }
+	__declspec(dllimport) __forceinline WeaponTemplateSetHead() { memset(m_bits, 0, sizeof(m_bits)); }
 	void set(ModelConditionFlagType bit) { m_bits[(unsigned int)bit >> 5] |= 1 << ((unsigned int)bit & 31); }
 	void rva000B3FA5(int bit, int value);
 	unsigned int m_bits[19];

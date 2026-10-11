@@ -54,7 +54,7 @@ public:
 	UnicodeString() : StringBase<unsigned short>() {}
 	UnicodeString( const unsigned short *text ) : StringBase<unsigned short>( text ) {}
 	UnicodeString( const UnicodeString &other ) : StringBase<unsigned short>( other ) {}
-	~UnicodeString() {}
+	__declspec(dllimport) __forceinline ~UnicodeString() {}
 	void format(UnicodeString pattern, ...);
 	const unsigned short *str( void ) const;
 
