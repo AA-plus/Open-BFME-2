@@ -119,6 +119,12 @@ public:
 	Object *getOwner() const { return m_owner; }
 	Object *getGoalObject();
 	void unlock() { m_locked = false; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's unlock copy loses to the first-in-order copy (no
+	// retail address); the onExit call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only this unique (trivially kept)
+	// copy. No flags touched.
+	void bfme_unlock() { m_locked = false; }
 private:
 	unsigned char m_pad00[0x14];
 	Object *m_owner; // +0x14
@@ -356,5 +362,5 @@ void AIDockWaitForClearanceState::onExit( StateExitType status )
 void AIDockProcessDockState::onExit( StateExitType status )
 {
 	// unlock the machine
-	getMachine()->unlock();
+	getMachine()->bfme_unlock();
 }
