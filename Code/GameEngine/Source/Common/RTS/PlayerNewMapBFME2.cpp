@@ -20,10 +20,10 @@
 // snapshot local matches native lifetime and register allocation.
 // The local vector's D8-stride element uses its existing Rva002E2690Element
 // destructor/constructor ABI. Its layout is only an opaque revival-record
-// view, not a claim of EA's original record name. addRevivableUnit's rowed
-// second argument is unused and typed int; native supplies this Player
-// pointer in that four-byte slot. The already rowed addInitialBuildUnit
-// call keeps its raw Rva0037F32F owner name pending canonical reconciliation.
+// view, not a claim of EA's original record name. addRevivableUnit's
+// second argument is this Player (unused by the rowed body). The already
+// rowed addInitialBuildUnit call keeps its raw Rva0037F32F owner name
+// pending canonical reconciliation.
 #include <vector>
 #include "ascii_string.h"
 #include "../GameLogicObjectLookupView.h"
@@ -74,7 +74,7 @@ struct Rva002E2690Element { char bytes[0xD8]; ~Rva002E2690Element(); };
 namespace _STL { template<> vector<Rva002E2690Element>::~vector(); }
 struct Rva002E2D10Record { char bytes[0xD8]; };
 class Player;
-class UnitRevivalTracker { public: void addRevivableUnit(const Rva002E2D10Record &,int); char bytes[0x14]; };
+class UnitRevivalTracker { public: void addRevivableUnit(const Rva002E2D10Record &,Player *); char bytes[0x14]; };
 class Rva0037F32F { public: void rva0037F32F(const ThingTemplate *,Player *); };
 class LivingWorldPlayer { public: void ExtractRevivalUnitDataForCurrentMap(_STL::vector<Rva002E2690Element> *); };
 class Rva002E2903Player;
@@ -126,7 +126,7 @@ void Player::initBuildableHeroes() {
    _STL::vector<Rva002E2690Element> units;
    living->ExtractRevivalUnitDataForCurrentMap(&units);
    for (unsigned int i=0;i<units.size();++i)
-    revival.addRevivableUnit(*(Rva002E2D10Record *)&units[i],(int)this);
+    revival.addRevivableUnit(*(Rva002E2D10Record *)&units[i],this);
   }
  } else {
   if (((Rva0023C6A4 *)TheGameLogic)->rva00200084()) return;
