@@ -1,7 +1,7 @@
 // 36-byte copy walk, retail 0x00161150, 45 bytes.
 //
 // Bounded-by-end-pointer walk handing each 36-byte slot to the helper at
-// 0x001610F0 (unmatched; pinned here under an address-derived name). Both
+// 0x001610F0 (rowed STLport placement construction; element identity still opaque). Both
 // cursors advance by the retail step 0x24; the returned value is the
 // advanced dest cursor. Element identity is not recovered -- Elem36 is a
 // stride-sized stand-in in the ElementStrideWalks donor's own convention.
@@ -11,14 +11,17 @@ struct Elem36
 	char m_bytes[36];
 };
 
-void gen001610F0(Elem36 *slot, const Elem36 *source);
+namespace _STL {
+template <class T1, class T2> void _Construct(T1 *, const T2 &);
+template <> void _Construct<Elem36, Elem36>(Elem36 *, const Elem36 &);
+}
 
 Elem36 *rva00161150CopyWalk(Elem36 *first, Elem36 *last, Elem36 *dest)
 {
 	Elem36 *cursor = dest;
 	for ( ; first != last; ++first)
 	{
-		gen001610F0(cursor, first);
+		_STL::_Construct(cursor, *first);
 		++cursor;
 	}
 	return cursor;

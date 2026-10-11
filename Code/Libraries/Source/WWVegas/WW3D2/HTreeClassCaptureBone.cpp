@@ -68,12 +68,10 @@ struct Elem36
 	}
 };
 
-// The existing target placement-copy provider is address-derived; call its
-// real row spelling directly instead of adding a second external alias.
-void gen001610F0(Elem36 *, const Elem36 *);
+// Native placement construction is owned once, by the rowed 81-byte helper
+// at 0x001610F0. Declare it; a forwarding COMDAT is not that retail body.
 namespace _STL {
-template<> inline void _Construct<Elem36, Elem36>(Elem36 *p, const Elem36 &v)
-{ gen001610F0(p, &v); }
+template<> void _Construct<Elem36, Elem36>(Elem36 *, const Elem36 &);
 }
 #include <vector>
 namespace _STL {

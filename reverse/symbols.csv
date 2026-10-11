@@ -9378,7 +9378,6 @@ name,address,notes
 ?g_rva00A177BC@@3P6AHPBDH@ZA,0x00A177BC,Ghidra string_xrefs.tsv maps gAptFuncs.pfnGetBytesTotal to 0x006EE3B0; retail calls VA 0x00E177BC with (const char*, int), second argument zero; address-derived slot name
 ?g_rva00A177C0@@3P6AHPBDH@ZA,0x00A177C0,Ghidra string_xrefs.tsv maps gAptFuncs.pfnGetBytesLoaded to 0x006EE540; retail calls VA 0x00E177C0 with (const char*, int), second argument zero; address-derived slot name
 ?g_rva00DB81B0Weights@@3QAY0BA@$$CBGA,0x009B81B0,Native codec1D7200 six DIR32 refs with32B row stride; independently verified288 readonly bytes nine16-short rows and16B base alignment; address-qualified identity only
-?gen001610F0@@YAXPAUElem36@@PBU1@@Z,0x001610F0
 ?gen003661E0@@YAXPAUElem88@@PBU1@@Z,0x004E3706,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?gen006896F0@@YAXPAUElem28@@PBU1@@Z,0x006896F0
 ?get@AptArray@@QAEPAVAptValue@@H@Z,0x006D9640,Native GetMember703AE0/SetMember703CE0 calls; original AptValue header504032fc6593aab6 and AptArray header9e5fc78057531b2e types; get checks index against length+28 and returns undefined on missing slot; source4416f7dfadc1781e get confirms semantics

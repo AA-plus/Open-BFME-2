@@ -62,8 +62,12 @@ __forceinline Rva00161050::Rva00161050(const Rva00161050 &other)
 inline void *operator new(unsigned int, void *storage) { return storage; }
 struct Elem36;
 
-void gen001610F0(Elem36 *slot, const Elem36 *source)
+namespace _STL {
+// STLport declaration only; keep this unit's established compiler inputs.
+template <class T1, class T2> void _Construct(T1 *, const T2 &);
+template <> void _Construct<Elem36, Elem36>(Elem36 *slot, const Elem36 &source)
 {
 	if (slot)
-		new (slot) Rva00161050(*reinterpret_cast<const Rva00161050 *>(source));
+		new (slot) Rva00161050(*reinterpret_cast<const Rva00161050 *>(&source));
+}
 }
