@@ -1404,7 +1404,7 @@ public:
 	BitFlags(const BitFlags &src);
 	bool any(void) const;
 	bool test(const void *other) const;
-	bool anyIntersectionWith(const BitFlags &that) const { return that.test(this); }
+	__declspec(dllimport) __forceinline bool anyIntersectionWith(const BitFlags &that) const { return that.test(this); }
 
 private:
 	unsigned int m_bits[(NUM_BITS + 31) / 32];
