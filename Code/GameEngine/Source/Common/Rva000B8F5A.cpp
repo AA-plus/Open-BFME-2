@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 // String-slot cluster around 0x000B82F9. Members carry a flag byte, a raw
 // name pointer and AsciiString slots; destruction of by-value AsciiString
 // parameters emits the shared releaseBuffer worker (0x00036410) through the
@@ -18,18 +18,26 @@ public:
 	void *rva000B4CBE(const void *entry);
 };
 
-struct Rva000B8F5AOuter
+class Matrix3D;struct Coord3D;class Object;
+class Drawable {public:const Matrix3D*getTransformMatrix()const;const Coord3D*getPosition()const;char pad00[0xFC];Object*object;char pad100[0x14];unsigned char flags114;};
+class FXList {public:static void doFXObj(const FXList*,const Object*,const Object*);static void doFXPos(const FXList*,const Coord3D*,const Matrix3D*,float,const Coord3D*);};
+struct AnimationStateBF9FC {char pad00[0x68];const FXList*fx68;char pad6C[0x9C-0x6C];bool repeat9C;};
+class Rva000BF9FCHeader {public:virtual void slot0();void*data;Drawable*drawable;};
+class Rva000BF9FCModelInterface {public:
+virtual void v00();virtual void v01();virtual void v02();virtual void v03();virtual void v04();virtual void v05();virtual void v06();virtual void v07();virtual void v08();virtual void v09();virtual void v10();virtual void v11();virtual void v12();virtual void v13();virtual void v14();virtual void v15();virtual void v16();virtual void v17();virtual void v18();virtual void v19();virtual void v20();virtual void v21();virtual void v22();virtual void v23();virtual void v24();virtual void v25();virtual void v26();virtual void v27();virtual void v28();virtual void refresh();};
+struct Rva000B8F5AOuter:public Rva000BF9FCHeader,public Rva000BF9FCModelInterface
 {
-	void rva000BF9FC(void *entry, int a, int b);
-	void rva000BEE25(void *entry, float value, int zero, int oneA, int oneB);
-	void rva000BFB51(float value);
-	void rva000C0386();
-
+ bool rva000BF9FC(void *entry,bool force,int options);
+ void rva000BEE25(void*,float,int,int,int);
+ void rva000BFB51(float);void rva000C0386();
 private:
-	char m_pad00[0x18];
-	void *m_18;
-	char m_pad1C[0x28C - 0x1C];
-	bool m_flag28C;
+ char pad10[8];AnimationStateBF9FC*m_18;
+ char pad1C[0x48-0x1C];bool flag48;char pad49[0x68-0x49];
+ void *begin68,*end6C,*cap70,*begin74,*end78,*cap7C;
+ char pad80[0xB8-0x80];unsigned syncB8;
+ char padBC[0x1C8-0xBC];bool flag1C8,flag1C9;
+ char pad1CA[0x25C-0x1CA];bool flag25C;
+ char pad25D[0x28C-0x25D];bool m_flag28C;
 };
 
 struct Rva000C144AEntry
@@ -311,4 +319,40 @@ int Rva000B8F5A::rva000B83A7()
         if(handle) { result=handle->probe(); if(!result) handle->Release_Ref(); }
     }
     return result;
+}
+
+extern int g_bfmeDisplayAnimationSyncClock;
+class Rva000BC9B1 {public:void rva000BC9B1(bool);};
+class Rva000B2EB5 {public:float rva000B2EB5();};
+class Rva000B9A0E {public:void rva000B9A0E(void*,int,int);};
+// Full nativeBF9FC..BFB51 RET12: WB931DE0 animation-state transition.
+// Reference W3DModelDraw state/animation sequence is semantic context only;
+// target owns added state callbacks, effects, tick synchronization and vectors.
+bool Rva000B8F5AOuter::rva000BF9FC(void*entry,bool force,int options){
+ AnimationStateBF9FC*next=(AnimationStateBF9FC*)entry;
+ if(m_18==next){
+  if(m_18 && m_18->repeat9C && force)m_18=next;
+  else if(force)refresh();else return false;
+ }
+ unsigned now=(unsigned)g_bfmeDisplayAnimationSyncClock;
+ if(now>syncB8)flag25C=false;
+ syncB8=now;
+ if(!(drawable->flags114&8))flag48=true;
+ ((Rva000BC9B1*)this)->rva000BC9B1(true);
+ AnimationStateBF9FC*previous=m_18;
+ float fraction=((Rva000B2EB5*)this)->rva000B2EB5();
+ m_18=next;
+ rva000BEE25(previous,fraction,0,0,options);
+ if(previous!=m_18){
+  if(previous)((Rva000B9A0E*)previous)->rva000B9A0E(drawable->object,2,0);
+  if(m_18)((Rva000B9A0E*)m_18)->rva000B9A0E(drawable->object,1,0);
+ }
+ if(m_18!=next)return true;
+ if(next && next->fx68){
+  Drawable*draw=drawable;
+  if(draw->object)FXList::doFXObj(next->fx68,draw->object,0);
+  else FXList::doFXPos(next->fx68,draw->getPosition(),draw->getTransformMatrix(),0.0f,0);
+ }
+ if((begin74!=end78 && flag1C9)||(begin68!=end6C && flag1C8))refresh();
+ return true;
 }

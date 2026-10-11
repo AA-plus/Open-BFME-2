@@ -44,7 +44,7 @@ class ModelConditionFlags{public:bool rva000B3EB3()const;private:unsigned bits[1
 struct ModelStateView{int pad;ModelConditionFlags flags;char rest[0x5c-0x50];unsigned stateFlags;};
 struct ModelDataView{char pad[0x6b];bool requirePower;};
 __forceinline unsigned char Flag(unsigned value){return (value>>5)&1;}
-class Rva000B8F5AOuter{public:void rva000BF9FC(void*,int,int);void rva000BEE25(void*,float,int,int,int);};
+class Rva000B8F5AOuter{public:bool rva000BF9FC(void*,bool,int);void rva000BEE25(void*,float,int,int,int);};
 class W3DScriptedModelDraw{public:void processAnimations();__forceinline Rva0027532F*GetDrawable(){return drawable;}
  char pad0[4];ModelDataView*data;Rva0027532F*drawable;char padc[0xc];ModelStateView*state;
  char pad1c[0x44-0x1c];int whichAnimation;bool changed;char pad49[7];RenderAnimationObj*render;
