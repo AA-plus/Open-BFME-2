@@ -12,6 +12,8 @@ class TextureBaseClass
 {
 public:
 	void Add_Ref() { ++m_refs; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the Add_Ref copy loses to the first-in-order copy. No flags touched.
+	void bfme_Add_Ref_f2d8e() { ++m_refs; }
 	void Release_Ref();
 
 private:
@@ -40,7 +42,7 @@ void Rva0013EEB0PassClass::Rva0013EEB0(Rva0013EEB0Stage *incoming, int index)
 	TextureBaseClass **slot = &Stages[index].Pointer;
 
 	if (incoming->Pointer)
-		incoming->Pointer->Add_Ref();
+		incoming->Pointer->bfme_Add_Ref_f2d8e();
 
 	if (*slot)
 		(*slot)->Release_Ref();
