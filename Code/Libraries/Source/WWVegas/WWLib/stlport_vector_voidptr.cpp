@@ -17,6 +17,9 @@ template <> void **_STL::vector<void *>::erase(void **first, void **last);
 template <> void _STL::vector<void *>::_M_fill_assign(size_t n, void *const &value);
 // Likewise, the allocating unit owns native insertion at 0x000291D0.
 template <> void **_STL::vector<void *>::insert(void **position, void *const &value);
+// Suppress this unit's non-retail clear copy (row 57 family2-LK3) so the link
+// keeps the retail copy another unit provides.
+template <> void _STL::vector<void *>::clear();
 
 template class _STL::vector<void *, _STL::allocator<void *> >;
 
