@@ -1450,25 +1450,7 @@ const Coord3D *OpenContain::getRallyPoint( void ) const
 }
 
 //-------------------------------------------------------------------------------------------------
-// ?OpenContain::getNaturalRallyPoint present-unmatched
-Bool OpenContain::getNaturalRallyPoint( Coord3D& rallyPoint, Bool offset )  const
-{
-	Int numberExits = getOpenContainModuleData()->m_numberOfExitPaths;
-	if( numberExits > 0 )
-	{
-		AsciiString endBone("ExitEnd");
-		if( numberExits > 1 )
-		{
-				endBone.concat("01");
-		}
-		getObject()->getSingleLogicalBonePosition( endBone.str(), &rallyPoint, NULL );
-	}
-	else
-	{
-		rallyPoint = *getObject()->getPosition();
-	}
-	return TRUE;
-}
+// OpenContain::getNaturalRallyPoint (0x0046363F) is rowed in SlaughterHordeContainIterate.cpp; a second definition here would not link.
 
 
 
