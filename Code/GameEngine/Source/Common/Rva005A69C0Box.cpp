@@ -17,6 +17,7 @@ struct Rva005A69C0Sub
 	void Do3(int a, int b, int c);
 	bool Q1(int j, int i);
 	void *Q2(int j, int i);
+	bool rva005DBC2E(int i, int j);
 };
 
 struct NAT
@@ -36,6 +37,7 @@ struct NAT
 	bool rva005A6709();
 	void reconnectPlayers(int a, int b, int c);
 	void rva005A6CA5();
+	void rva005A6D47();
 };
 
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime();
@@ -101,6 +103,36 @@ void NAT::rva005A6CA5()
 									reconnectPlayers(i, j, 0);
 							}
 						}
+					}
+				}
+				++j;
+			} while (j < 8);
+		}
+		++i;
+	} while (i < 8);
+}
+
+// NAT::rva005A6D47 @0x005A6D47 101B (unnamed in WB, twin at 0x014E3C60): the
+// retry pass over the same slot pairs. For each present human pair (i, j)
+// with i != j whose +0x28 schema reports the retries over their limit
+// (0x5DBC2E, WB PortNegotiationSchema::isRetryConnectingOverLimit), the pair
+// is reconnected with the third argument 1. WB inlines the gate the retail
+// body calls (0x5A6709); its loops are the same.
+void NAT::rva005A6D47()
+{
+	if (!rva005A6709())
+		return;
+	int i = 0;
+	do {
+		Rva005A69C0Obj *o = m_8[i];
+		if (o != 0 && o->IsHuman()) {
+			int j = 0;
+			do {
+				if (i != j) {
+					Rva005A69C0Obj *o2 = m_8[j];
+					if (o2 != 0 && o2->IsHuman()) {
+						if (m_28.rva005DBC2E(i, j))
+							reconnectPlayers(i, j, 1);
 					}
 				}
 				++j;
