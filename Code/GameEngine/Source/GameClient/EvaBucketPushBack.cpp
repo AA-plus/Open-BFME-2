@@ -3,6 +3,14 @@
 // ?rva003F7BB4@Rva003F7BB4@@QAEXABURva003F7B22Element@@@Z @0x003F7BB4 8B
 // Tail-jmp forwarder adding 0x2c then calling rowed vector push_back 0x003F7B22.
 // Evidence: add ecx 0x2c plus jmp to rowed push_back; neighbours share Eva bucket TU; unblocks 0x004E0860 0x003F2150.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 
 struct Rva003F7B22Element { int a[1]; };

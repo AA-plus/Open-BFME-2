@@ -12,6 +12,14 @@
 // pointer append provider at4DFCB0: this cast asserts no semantic element type.
 // A wrap byte declared per input line, outside switch, lets the compiler reuse
 // the dead filename home +B; alpha stays -8 and blue -4. Full886 and EH exact.
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include <stdio.h>
 #include <ctype.h>
