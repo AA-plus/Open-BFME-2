@@ -18,11 +18,11 @@ public:
 	virtual int rva005CB265();
 };
 
-class Rva001FF3A9
+class Rva003FE20FBase
 {
 public:
 	virtual void rva001FF3A9();
-	virtual void rva001FF3A9(int *flag);
+	virtual void slot1(void *flag);
 };
 
 class Rva005796B3
@@ -54,5 +54,5 @@ void Rva005796B3::rva005796B3(void *newObj)
 	int *pFlag = &m_1C;
 	if (*pFlag == 0)
 		return;
-	((Rva001FF3A9 *)newObj)->Rva001FF3A9::rva001FF3A9(pFlag);
+	((Rva003FE20FBase *)newObj)->Rva003FE20FBase::slot1(pFlag);
 }

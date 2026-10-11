@@ -54,11 +54,11 @@ public:
 	virtual void newMap(Bool saveGame);
 	virtual Real getGroundHeight(Real x, Real y, Coord3D *normal) const = 0;
 
-private:
-	// Retail calls this no-argument member through ILT 0x00010DCA after
-	// updating every waypoint.  Its 0x001ADF10 body consumes ECX as the same
-	// TerrainLogic receiver; no public semantic spelling is yet proven.
-	void rva001ADF10(void);
+protected:
+	// 0x001ADF10 is rowed as TerrainLogic::buildBeacons (270B,
+	// TerrainLogicBuildBeacons.cpp; named by target diagnostic BFB230);
+	// retail calls it through ILT 0x00010DCA after updating every waypoint.
+	void buildBeacons(void);
 };
 
 void TerrainLogic::newMap(Bool)
@@ -69,5 +69,5 @@ void TerrainLogic::newMap(Bool)
 		location->z += getGroundHeight(location->x, location->y, 0);
 	}
 
-	rva001ADF10();
+	buildBeacons();
 }
