@@ -315,11 +315,9 @@ SimpleSceneClass::SimpleSceneClass(void) :
  * HISTORY:                                                                                    *
  *   3/24/98    GTH : Created.                                                                 *
  *=============================================================================================*/
-// ??1SimpleSceneClass@@UAE@XZ present-unmatched
-SimpleSceneClass::~SimpleSceneClass(void)
-{
-	Remove_All_Render_Objects();
-}
+// Native SimpleSceneClass destructor is owned by SimpleSceneClass_dtor.cpp.
+// The unrowed donor copy here did not reproduce the native member teardown.
+
 
 /***********************************************************************************************
  * SimpleSceneClass::Remove_All_Render_Objects -- Removes all render objects from the scene    *
