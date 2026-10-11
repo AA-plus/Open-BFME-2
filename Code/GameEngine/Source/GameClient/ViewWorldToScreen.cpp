@@ -40,7 +40,16 @@ public:
 };
 
 // ?worldToScreen@View@@QAE_NPBUCoord3D@@PAUICoord2D@@@Z
-bool View::worldToScreen( const Coord3D *w, ICoord2D *s )
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline bool View::worldToScreen( const Coord3D *w, ICoord2D *s )
 {
 	return worldToScreenTriReturn( w, s ) == WTS_INSIDE_FRUSTUM;
 }
+
+// ?bfmeAnchorViewWorldToScreen absent-from-retail
+bool bfmeAnchorViewWorldToScreen(View *p, const Coord3D *w, ICoord2D *s)
+{
+	return p->worldToScreen(w, s);
+}
+

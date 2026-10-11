@@ -31,7 +31,16 @@ Rva0004D729 *Rva0004D729::rva0004D729(void *surf, void **bitsOut, int *pitchOut,
 	return this;
 }
 
-Rva0004D729::~Rva0004D729()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0004D729::~Rva0004D729()
 {
 	((Member0C00739C70 *)m_surf)->clear();
 }
+
+// ?bfmeAnchorRva0004D729Dtor absent-from-retail
+void bfmeAnchorRva0004D729Dtor(Rva0004D729 *p)
+{
+	p->Rva0004D729::~Rva0004D729();
+}
+

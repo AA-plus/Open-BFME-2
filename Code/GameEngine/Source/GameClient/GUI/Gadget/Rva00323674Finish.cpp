@@ -24,7 +24,9 @@ public:
 private:
 	GameWindow *m_0;
 };
-int Rva00323674::rva00323674() const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline int Rva00323674::rva00323674() const
 {
 	GameWindow *win = m_0;
 	if (win == 0)
@@ -36,6 +38,13 @@ int Rva00323674::rva00323674() const
 	GadgetListBoxGetSelected(listWin, &sel);
 	return sel;
 }
+
+// ?bfmeAnchorRva00323674 absent-from-retail
+int bfmeAnchorRva00323674(const Rva00323674 *p)
+{
+	return p->rva00323674();
+}
+
 
 // ??0Rva00323674@@QAE@PAVGameWindow@@@Z and ??1Rva00323674@@QAE@XZ: the
 // wrapper's out-of-line constructor (store the window, return this) and

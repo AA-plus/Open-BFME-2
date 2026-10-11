@@ -19,6 +19,15 @@ private:
 	_STL::vector<BfmeE16, _STL::allocator<BfmeE16> > m_10;
 };
 
-BfmeItemERF::BfmeItemERF() : m_0(-2)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmeItemERF::BfmeItemERF() : m_0(-2)
 {
 }
+
+// ?bfmeAnchorBfmeItemERF absent-from-retail
+void *bfmeAnchorBfmeItemERF(void *where)
+{
+	return new (where) BfmeItemERF();
+}
+

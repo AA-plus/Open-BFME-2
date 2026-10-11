@@ -41,7 +41,16 @@ public:
 private:
 	void *m_14;
 };
-Rva00575125::~Rva00575125()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00575125::~Rva00575125()
 {
 	((Rva002B7250 *)((char *)m_14 + 4))->rva002B7250((CreateAHeroData *)((char *)this + 0x10));
 }
+
+// ?bfmeAnchorRva00575125Dtor absent-from-retail
+void bfmeAnchorRva00575125Dtor(Rva00575125 *p)
+{
+	p->Rva00575125::~Rva00575125();
+}
+

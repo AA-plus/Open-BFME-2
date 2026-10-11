@@ -47,9 +47,18 @@ struct Rva005E4AE2Listener
 };
 // ??0Rva005E4AE2Listener@@QAE@XZ @0x005E399D 9B: the default constructor, storing the
 // class's own vtable (VA 0x00C79544) and returning this.
-Rva005E4AE2Listener::Rva005E4AE2Listener()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005E4AE2Listener::Rva005E4AE2Listener()
 {
 }
+
+// ?bfmeAnchorRva005E4AE2Listener absent-from-retail
+void *bfmeAnchorRva005E4AE2Listener(void *where)
+{
+	return new (where) Rva005E4AE2Listener();
+}
+
 class Rva005E4AE2Base
 {
 public:

@@ -25,6 +25,15 @@ Rva0043DAE0::Rva0043DAE0(TargetRef00217D4C *ref) : Rva0057F2DE(ref)
 {
 }
 
-Rva0043DAE0::~Rva0043DAE0()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0043DAE0::~Rva0043DAE0()
 {
 }
+
+// ?bfmeAnchorRva0043DAE0Dtor absent-from-retail
+void bfmeAnchorRva0043DAE0Dtor(Rva0043DAE0 *p)
+{
+	p->Rva0043DAE0::~Rva0043DAE0();
+}
+

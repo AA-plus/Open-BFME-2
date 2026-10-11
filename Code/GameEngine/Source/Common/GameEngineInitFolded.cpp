@@ -23,7 +23,16 @@ private:
     int m_seed;
 };
 void GameInfo::init() { reset(); }
-void GameInfo::setSeed(int seed) { m_seed = seed; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void GameInfo::setSeed(int seed) { m_seed = seed; }
+
+// ?bfmeAnchorGameInfoSetSeed absent-from-retail
+void bfmeAnchorGameInfoSetSeed(GameInfo *p, int seed)
+{
+	p->setSeed(seed);
+}
+
 
 // The early argc/argv hook is a bare RET in this build; its original name
 // and disabled-purpose identity are unknown.

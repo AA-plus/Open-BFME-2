@@ -181,11 +181,20 @@ struct BlockParse
 extern BlockParse *theBlockParseList;
 
 // ??0BlockParse@@QAE@PBDP6AXPAVINI@@@Z@Z
-BlockParse::BlockParse( const char *token, INIBlockParse parse ) :
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BlockParse::BlockParse( const char *token, INIBlockParse parse ) :
 	next(theBlockParseList), token(token), parse(parse)
 {
 	theBlockParseList = this;
 }
+
+// ?bfmeAnchorBlockParse absent-from-retail
+void *bfmeAnchorBlockParse(void *where, const char *token, INIBlockParse parse)
+{
+	return new (where) BlockParse(token, parse);
+}
+
 
 
 

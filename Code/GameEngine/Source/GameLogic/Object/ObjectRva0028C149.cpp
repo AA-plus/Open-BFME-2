@@ -42,10 +42,19 @@ Bool Object::rva0028C149(Int attribute, Real *value, Int arg)
 // tail-jumps to 0x00403448, the pool's multiplicative sibling of
 // 0x00403382 (seeds *value with a constant, multiplies matching modifiers
 // and forwards its fourth argument where 0x00403382 pushes literal 1).
-Bool Object::rva0028C15E(Int attribute, Real *value, Int arg, Int arg2)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Bool Object::rva0028C15E(Int attribute, Real *value, Int arg, Int arg2)
 {
 	AttributeModifierPoolUpdate *pool = findAttributeModifierPoolUpdate();
 	if (!pool)
 		return false;
 	return pool->rva00403448(attribute, value, arg, arg2);
 }
+
+// ?bfmeAnchorObjectRva0028C15E absent-from-retail
+Bool bfmeAnchorObjectRva0028C15E(Object *p, Int attribute, Real *value, Int arg, Int arg2)
+{
+	return p->rva0028C15E(attribute, value, arg, arg2);
+}
+

@@ -67,13 +67,22 @@ private:
 	Rva0040CB3AEntryArray m_entries;	// +0x40
 };
 
-ArmySummaryEntryRef ArmySummary::GetEntry(int key)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline ArmySummaryEntryRef ArmySummary::GetEntry(int key)
 {
 	int index = ((const Rva0040CB3AIndexedField *)this)->find(key);
 	if (index < 0)
 		return ArmySummaryEntryRef();
 	return ArmySummaryEntryRef(m_entries.m_begin[index].m_holder);
 }
+
+// ?bfmeAnchorArmySummaryGetEntry absent-from-retail
+ArmySummaryEntryRef bfmeAnchorArmySummaryGetEntry(ArmySummary *p, int key)
+{
+	return p->GetEntry(key);
+}
+
 
 // ?rva0040CC8F@ArmySummary@@QAEXXZ retail 0x0040CC8F, 55 B. WorldBuilder's
 // twin 0x01089620 is unnamed. Every entry whose +0xBC is set gets its

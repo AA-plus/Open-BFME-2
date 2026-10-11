@@ -10,6 +10,7 @@
 // the compiler emits resolves in this unit. The owning classes are not
 // recovered, so each keeps its address.
 
+inline void *operator new(unsigned int, void *p) { return p; }
 struct RvaSmallVtableZeroBase
 {
 	void *m_04;
@@ -242,9 +243,18 @@ private:
 	void *m_04;
 };
 
-Rva005B253F::Rva005B253F(void *p) : m_04(p)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005B253F::Rva005B253F(void *p) : m_04(p)
 {
 }
+
+// ?bfmeAnchorRva005B253F absent-from-retail
+void *bfmeAnchorRva005B253F(void *where, void *p)
+{
+	return ::new (where) Rva005B253F(p);
+}
+
 
 // ??0Rva005C1860@@QAE@PAX@Z @0x005C1860 18B, vtable VA 0xc743b8
 class Rva005C1860
@@ -284,9 +294,18 @@ private:
 	void *m_04;
 };
 
-Rva005CF872::Rva005CF872(void *p) : m_04(p)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005CF872::Rva005CF872(void *p) : m_04(p)
 {
 }
+
+// ?bfmeAnchorRva005CF872 absent-from-retail
+void *bfmeAnchorRva005CF872(void *where, void *p)
+{
+	return ::new (where) Rva005CF872(p);
+}
+
 
 // ??0Rva005EA1D5@@QAE@PAX@Z @0x005EA1D5 18B, vtable VA 0xc781b4
 class Rva005EA1D5
@@ -417,9 +436,18 @@ public:
 	virtual ~Rva002390F8() {}
 };
 
-Rva002390F8::Rva002390F8()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva002390F8::Rva002390F8()
 {
 }
+
+// ?bfmeAnchorRva002390F8 absent-from-retail
+void *bfmeAnchorRva002390F8(void *where)
+{
+	return ::new (where) Rva002390F8();
+}
+
 
 // ??0Rva0026FFB1@@QAE@XZ @0x0026FFB1 13B, vtable VA 0xbfad1c
 class Rva0026FFB1 : public RvaSmallVtableZeroBase
@@ -650,9 +678,18 @@ public:
 	virtual ~Rva0043A340() {}
 };
 
-Rva0043A340::Rva0043A340()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0043A340::Rva0043A340()
 {
 }
+
+// ?bfmeAnchorRva0043A340 absent-from-retail
+void *bfmeAnchorRva0043A340(void *where)
+{
+	return ::new (where) Rva0043A340();
+}
+
 
 // ??0Rva004817F4@@QAE@XZ @0x004817F4 17B, vtable VA 0xc49174
 class Rva004817F4 : public RvaSmallVtableZeroBase2
@@ -806,3 +843,4 @@ Rva004318C6::~Rva004318C6()
 Rva005B253F::~Rva005B253F()
 {
 }
+

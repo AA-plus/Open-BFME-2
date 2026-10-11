@@ -175,9 +175,19 @@ Rva006655B0::~Rva006655B0()
 
 // ??0Rva006655B0@@QAE@XZ @0x006655F0 9B: the default constructor, storing the
 // class's own vtable (VA 0x00CE3168) and returning this.
-Rva006655B0::Rva006655B0()
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva006655B0::Rva006655B0()
 {
 }
+
+// ?bfmeAnchorRva006655B0 absent-from-retail
+void *bfmeAnchorRva006655B0(void *where)
+{
+	return new (where) Rva006655B0();
+}
+
 
 // ?<Rva006655B0::Rva006655B0> absent-from-retail
 Rva006655B0::Rva006655B0(EmitVtableTag *)

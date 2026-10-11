@@ -40,7 +40,9 @@ void Rva00323619::rva00323619(int v)
 // ?rva00323642@Rva00323619@@QAEXXZ @0x00323642 21B
 // Adjacent method of same class: *this+0 GameWindow* null-guarded then GadgetListBoxReset(*(GameWindow**)(userData+8)).
 // Evidence: callees rowed 0x005C4ACD winGetUserData plus 0x003247E5 GadgetListBoxReset; prev row same class.
-void Rva00323619::rva00323642()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void Rva00323619::rva00323642()
 {
 	GameWindow *w = m_window;
 	if (w == 0)
@@ -48,3 +50,10 @@ void Rva00323619::rva00323642()
 	void *userData = w->winGetUserData();
 	GadgetListBoxReset(*(GameWindow **)((char *)userData + 8));
 }
+
+// ?bfmeAnchorRva00323619 absent-from-retail
+void bfmeAnchorRva00323619(Rva00323619 *p)
+{
+	p->rva00323642();
+}
+

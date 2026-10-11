@@ -36,7 +36,10 @@ private:
 	unsigned char m_19;
 };
 
-Rva0006AB90FunctionCurve::Rva0006AB90FunctionCurve(Rva0006AB10Curve *curve)
+inline void *operator new(unsigned int, void *p) { return p; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0006AB90FunctionCurve::Rva0006AB90FunctionCurve(Rva0006AB10Curve *curve)
 {
 	m_00 = curve;
 	m_04 = 1;
@@ -47,3 +50,10 @@ Rva0006AB90FunctionCurve::Rva0006AB90FunctionCurve(Rva0006AB10Curve *curve)
 	m_18 = 0;
 	m_19 = 0;
 }
+
+// ?bfmeAnchorRva0006AB90FunctionCurve absent-from-retail
+void *bfmeAnchorRva0006AB90FunctionCurve(void *where, Rva0006AB10Curve *curve)
+{
+	return new (where) Rva0006AB90FunctionCurve(curve);
+}
+
