@@ -345,13 +345,3 @@ void Rva005026B1::rva005026B1()
 	reinterpret_cast<Rva00501F2D *>(this)->rva0050247A();
 }
 
-class Rva00502926
-{
-public:
-	void rva00502926();
-};
-
-void Rva00502926::rva00502926()
-{
-	reinterpret_cast<Rva005026B6 *>(this)->~Rva005026B6();
-}

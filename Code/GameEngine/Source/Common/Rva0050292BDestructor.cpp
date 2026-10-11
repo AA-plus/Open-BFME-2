@@ -20,6 +20,15 @@ private:
 	char m_data[8];
 };
 
+// Retail EH calls the5B destructor wrapper502926, while the containing
+// destructor inlines it to the56B base destructor5026B6.
+// Address-derived view; original class and payload identities stay unknown.
+class Rva00502926 : public Rva005026B6
+{
+public:
+    ~Rva00502926() {}
+};
+
 class Rva0050292BFree
 {
 public:
@@ -44,7 +53,7 @@ private:
 	char m_pad14[0x10];
 	Rva0050292BFree m_free24;
 	char m_pad28[0x10];
-	Rva005026B6 m_tree38;
+	Rva00502926 m_tree38;
 	char m_pad40[4];
 	Rva00500D30 m_tree44;
 };
