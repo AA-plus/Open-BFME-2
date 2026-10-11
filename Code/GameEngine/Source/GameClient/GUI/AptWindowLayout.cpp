@@ -42,6 +42,7 @@ void Rva006CD6F0Get(void **,void **);
 // AptWindowLayout owner and its window+24 and initialized-byte+28.
 class AptWindowLayout {
 public:
+ AptWindowLayout(void *info);
  virtual void rva0040FB9C(void *);
  virtual void slot1(); virtual void slot2(void *); virtual void slot3(void *);
  virtual void hide(bool); virtual void bringForward(); virtual void addWindow(GameWindow *);
@@ -68,4 +69,12 @@ void AptWindowLayout::rva0040FB9C(void *)
  reinterpret_cast<Rva00223CBD *>(g_bfmeAptWindowManager)->rva00223CBD(*reinterpret_cast<const ModuleData **>(reinterpret_cast<char *>(m_gameWindow)+0x274));
  reinterpret_cast<AptLayoutWindowCallbacks *>(m_gameWindow)->initialized();
  m_initialized=true;
+}
+
+// Retail 0x002223FE..0x00222435, 55 bytes, RET 4; WB 0x00B93C20.
+// Both allocate 0x2C bytes and pass the sole layout-info argument to the
+// constructor rowed at 0x0040FDD1. The factory's original name is unknown.
+AptWindowLayout *__stdcall Rva002223FECreateLayout(void *info)
+{
+ return new AptWindowLayout(info);
 }
