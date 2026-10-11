@@ -24,11 +24,23 @@ private:
 	unsigned int m_words[1];
 };
 
-class BfmeVNITree
+// LINK: the 12-byte tree is rowed as map<int, BfmePod24>'s default ctor
+// (0x005011C1); only that ctor is used here.
+struct BfmePod24;
+namespace _STL
+{
+template <class T> struct less;
+template <class T> class allocator;
+template <class A, class B> struct pair;
+template <class K, class V, class C, class A> class map
 {
 public:
-	BfmeVNITree();
+	map();
+private:
+	char m_pad[12];
 };
+}
+typedef _STL::map<int, BfmePod24, _STL::less<int>, _STL::allocator<_STL::pair<const int, BfmePod24> > > BfmeVNITree;
 
 class Rva00417F7C
 {
