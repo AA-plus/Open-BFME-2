@@ -1,5 +1,24 @@
 // cl: /DNDEBUG /MD /EHs-c- /Ob2
 //
+/*
+**	Command & Conquer Generals Zero Hour(tm)
+**	Copyright 2025 Electronic Arts Inc.
+**
+**	This program is free software: you can redistribute it and/or modify
+**	it under the terms of the GNU General Public License as published by
+**	the Free Software Foundation, either version 3 of the License, or
+**	(at your option) any later version.
+**
+**	This program is distributed in the hope that it will be useful,
+**	but WITHOUT ANY WARRANTY; without even the implied warranty of
+**	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+**	GNU General Public License for more details.
+**
+**	You should have received a copy of the GNU General Public License
+**	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
 // ?DownloadFile@CDownload@@UAEJPBD00000_N@Z,
 // retail 0x006C9760, 449 bytes. Dedicated TU.
 //
@@ -16,6 +35,10 @@
 // register after the first load.
 
 #include <string.h>
+#include <sys/stat.h>
+#define DEBUG_LOG(x) ((void)0)
+extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime();
+extern "C" __declspec(dllimport) int __stdcall MulDiv(int,int,int);
 
 typedef const char *LPCSTR;
 typedef long HRESULT;
@@ -34,13 +57,75 @@ extern "C" __declspec(dllimport) int __cdecl _mkdir(const char *dirname);
 extern "C" __declspec(dllimport) char *__cdecl strncpy(
 	char *destination, const char *source, unsigned int count);
 
+#define DOWNLOADSTATUS_NONE				0
+#define DOWNLOADSTATUS_GO					1
+#define DOWNLOADSTATUS_CONNECTING		2
+#define DOWNLOADSTATUS_LOGGINGIN			3
+#define DOWNLOADSTATUS_FINDINGFILE		4
+#define DOWNLOADSTATUS_QUERYINGRESUME	5
+#define DOWNLOADSTATUS_DOWNLOADING		6
+#define DOWNLOADSTATUS_DISCONNECTING	7
+#define DOWNLOADSTATUS_FINISHING			8
+#define	DOWNLOADSTATUS_DONE				0
+
+// CDownload return codes
+
+#define DOWNLOAD_SUCCEEDED		S_OK
+#define DOWNLOAD_PARAMERROR	0x80040001
+#define DOWNLOAD_STATUSERROR	0x80040002
+#define DOWNLOAD_NETWORKERROR	0x80040003
+#define DOWNLOAD_FILEERROR		0x80040004
+#define DOWNLOAD_REENTERERROR	0x80040004
+
+// CDownloadEvent return codes.
+
+#define DOWNLOADEVENT_SUCCEEDED		S_OK
+#define	DOWNLOADEVENT_FAILED		0x80040005
+#define	DOWNLOADEVENT_RESUME		S_OK
+#define	DOWNLOADEVENT_DONOTRESUME	0x80040006
+
+// CDownloadEvent error codes for OnError()
+
+#define DOWNLOADEVENT_NOSUCHSERVER			1
+#define DOWNLOADEVENT_COULDNOTCONNECT		2
+#define DOWNLOADEVENT_LOGINFAILED			3
+#define DOWNLOADEVENT_NOSUCHFILE			4
+#define DOWNLOADEVENT_LOCALFILEOPENFAILED	5
+#define DOWNLOADEVENT_TCPERROR				6
+#define DOWNLOADEVENT_DISCONNECTERROR		7
+
+
+#define FTP_SUCCEEDED 0
+#define FTP_FAILED 0x80040001
+#define FTP_TRYING 0x80040002
+// Existing native FileRecoveryPosition provider owns this neutral spelling.
+// Its RET8 second word is unused; preserve that admitted ABI and pass the
+// registry-root pointer bits unchanged rather than adding a second pin/name.
+class Rva00886A20Class {public: int d_00886a20(const char *,int);};
+
 class Cftp
 {
 public:
 	HRESULT DisconnectFromServer();
+ HRESULT ConnectToServer(LPCSTR);
+ HRESULT LoginToServer(LPCSTR,LPCSTR);
+ HRESULT FindFile(LPCSTR,int *);
+ HRESULT GetNextFileBlock(LPCSTR,int *);
+ virtual ~Cftp();
+ int m_iCommandSocket; // native +4
+ char unknown08[0x2C-8];
+ int m_iFilePos; // native +0x2C
+
 };
 
-class IDownload;
+class IDownload {
+public:
+ virtual HRESULT OnError(int)=0;
+ virtual HRESULT OnEnd()=0;
+ virtual HRESULT OnQueryResume()=0;
+ virtual HRESULT OnProgressUpdate(int,int,int,int)=0;
+ virtual HRESULT OnStatusUpdate(int)=0;
+};
 
 class __declspec(novtable) CDownload
 {
@@ -131,4 +216,280 @@ HRESULT CDownload::GetLastLocalFile(char *local_file, int maxlen)
 	local_file[maxlen - 1] = 0;
 
 	return S_OK;
+}
+
+// Complete native 6C99D0..6C9DF9, 1065B RET; CDownload table slot0.
+// PumpMessages semantic/control-flow donor: Zero Hour Download.cpp at BF1
+// reference575ba2b. All member offsets and callback slots are native BFME2.
+HRESULT CDownload::PumpMessages()
+{
+	int iResult = 0;
+	int timetaken = 0;
+	int averagetimepredicted = -1;
+	static int reenter = 0;
+
+	/* Avoid reentrancy. */
+
+   ////DBGMSG("Download Pump");
+
+	if( reenter != 0 )
+	{
+		return( DOWNLOAD_REENTERERROR );
+	}
+
+	reenter = 1;
+
+
+	if( m_Status == DOWNLOADSTATUS_GO )
+	{
+		// Check to see whether the file already exists locally
+
+/***********
+		if (m_TryResume == false)
+		{
+			m_StartPosition = 0;
+		}
+		else if(	( m_StartPosition = ((Rva00886A20Class *)m_Ftp)->d_00886a20( m_LocalFile, (int)m_RegKey ) ) != 0 )
+		{
+			if( m_Listener->OnQueryResume() == DOWNLOADEVENT_DONOTRESUME )
+			{
+				m_Ftp->m_iFilePos = 0;
+				m_StartPosition = 0;
+			}
+		}
+************/
+
+		// Tell the client that we're starting to connect.
+
+		m_Listener->OnStatusUpdate( DOWNLOADSTATUS_CONNECTING );
+
+		m_Status = DOWNLOADSTATUS_CONNECTING;
+	}
+
+
+	if( m_Status == DOWNLOADSTATUS_CONNECTING )
+	{
+		// Connect to the server
+      //////////DBGMSG("Connect to Server");
+
+		iResult = m_Ftp->ConnectToServer( m_Server );
+      ////////////DBGMSG("out of FTP connect");
+
+		if( iResult == FTP_SUCCEEDED )
+		{
+			m_Status = DOWNLOADSTATUS_LOGGINGIN;
+		}
+		else
+		{
+			if( iResult == FTP_FAILED )
+			{
+				// Tell the client we couldn't connect
+            ///////////DBGMSG("Couldn't connect");
+				m_Listener->OnError( DOWNLOADEVENT_COULDNOTCONNECT );
+				reenter = 0;
+				return DOWNLOAD_NETWORKERROR;
+			}
+		}
+		reenter = 0;
+		return DOWNLOAD_SUCCEEDED;
+	}
+
+	if( m_Status == DOWNLOADSTATUS_LOGGINGIN )
+	{
+		// Login to the server
+      ////////////DBGMSG("Login to server");
+
+		iResult = m_Ftp->LoginToServer( m_Login, m_Password );
+
+		if( iResult == FTP_SUCCEEDED )
+		{
+			m_Listener->OnStatusUpdate( DOWNLOADSTATUS_FINDINGFILE );
+			m_Status = DOWNLOADSTATUS_FINDINGFILE;
+		}
+
+		if( iResult == FTP_FAILED )
+		{
+			// Tell the client we couldn't log in
+
+			m_Listener->OnError( DOWNLOADEVENT_LOGINFAILED );
+			reenter = 0;
+			return( DOWNLOAD_NETWORKERROR );
+		}
+
+		reenter = 0;
+		return DOWNLOAD_SUCCEEDED;
+	}
+
+	if(( m_Status == DOWNLOADSTATUS_FINDINGFILE ) && (strlen(m_File)))
+	{
+
+		// Find the file on the server
+      ///////////DBGMSG("Find File");
+
+		if( m_Ftp->FindFile( m_File, &m_FileSize ) == FTP_FAILED )
+		{
+			// Tell the client we couldn't find the file
+
+			m_Listener->OnError( DOWNLOADEVENT_NOSUCHFILE );
+			reenter = 0;
+			return( DOWNLOAD_FILEERROR );
+		}
+
+		if( m_FileSize > 0 )
+		{
+			// First check to see if we already have the complete file in the proper dest location...
+			//
+			// Note, we will only skip the download if the file is a patch.  Patch files should
+			//   never ever change so this is not a concern.
+			//
+			// We identify patches because they are written into the patches folder.
+			struct _stat statdata;
+			if (	(_stat(m_LocalFile, &statdata) == 0) &&
+					(statdata.st_size == m_FileSize) &&
+					(_strnicmp(m_LocalFile, "patches\\", strlen("patches\\"))==0)) {
+				// OK, no need to download this again....
+
+				m_Status				= DOWNLOADSTATUS_FINDINGFILE;  // ready to find another file
+				m_TimeStarted		= 0;
+				m_StartPosition	= 0;
+				m_FileSize			= 0;
+				m_BytesRead			= 0;
+				m_File[ 0 ]			= '\0';
+				m_LocalFile[ 0 ]	= '\0';
+
+				m_Listener->OnEnd();
+
+				reenter = 0;
+				return DOWNLOAD_SUCCEEDED;
+			}
+
+
+			//
+			// Check if we can do a file resume
+			//
+			if (m_TryResume == false)
+			{
+				m_StartPosition = 0;
+			}
+			else if(	( m_StartPosition = ((Rva00886A20Class *)m_Ftp)->d_00886a20( m_LocalFile, (int)m_RegKey ) ) != 0 )
+			{
+				if( m_Listener->OnQueryResume() == DOWNLOADEVENT_DONOTRESUME )
+				{
+					m_Ftp->m_iFilePos = 0;
+					m_StartPosition = 0;
+				}
+			}
+			// end resume check
+
+
+			m_Status = DOWNLOADSTATUS_DOWNLOADING;
+
+			// Tell the client we're starting to download
+
+			m_Listener->OnStatusUpdate( DOWNLOADSTATUS_DOWNLOADING );
+		}
+
+		reenter = 0;
+		return DOWNLOAD_SUCCEEDED;
+	}
+
+	if( m_Status == DOWNLOADSTATUS_DOWNLOADING )
+	{
+
+		// Get the next chunk of the file
+      ///DBGMSG("Get Next File Block");
+
+		iResult = m_Ftp->GetNextFileBlock( m_LocalFile, &m_BytesRead );
+
+		if( m_TimeStarted == 0 )
+		{
+			// This is the first time through here - record the starting time.
+			m_TimeStarted = timeGetTime();
+		}
+
+		if( iResult == FTP_SUCCEEDED )
+		{
+			m_Status = DOWNLOADSTATUS_FINISHING;
+		}
+		else
+		{
+			if( iResult == FTP_FAILED )
+			{
+				m_Listener->OnError( DOWNLOADEVENT_TCPERROR );
+				reenter = 0;
+				return( DOWNLOAD_NETWORKERROR );
+			}
+		}
+
+		// Calculate time taken so far, and predict how long there is left.
+		// The prediction returned is the average of the last 8 predictions.
+
+		timetaken = ( timeGetTime() - m_TimeStarted ) / 1000;
+
+		//////////if( m_BytesRead > 0 ) // NAK - RP said this is wrong
+      if( ( m_BytesRead - m_StartPosition ) > 0 )
+		{
+			// Not the first read.
+			int predictionIndex = ( m_predictions++ ) & 0x7;
+			m_predictionTimes[ predictionIndex ] = MulDiv( timetaken, (m_FileSize - m_BytesRead), (m_BytesRead - m_StartPosition) );
+			//__int64 numerator = ( m_FileSize - m_BytesRead )  * timetaken;
+			//__int64 denominator = ( m_BytesRead - m_StartPosition );
+			//m_predictionTimes[ predictionIndex ] = numerator/denominator;
+			//m_predictionTimes[ predictionIndex ] = ( ( m_FileSize - m_BytesRead )  * timetaken ) / ( m_BytesRead - m_StartPosition );
+			//m_predictionTimes[ predictionIndex ] = ( ( m_FileSize - m_BytesRead ) / ( m_BytesRead - m_StartPosition ) * timetaken );
+
+			DEBUG_LOG(("About to OnProgressUpdate() - m_FileSize=%d, m_BytesRead=%d, timetaken=%d, numerator=%d",
+				m_FileSize, m_BytesRead, timetaken, ( ( m_FileSize - m_BytesRead )  * timetaken )));
+			DEBUG_LOG((", m_startPosition=%d, denominator=%d, predictionTime=%d\n",
+				m_StartPosition, ( m_BytesRead - m_StartPosition ), predictionIndex));
+			DEBUG_LOG(("vals are %d %d %d %d %d %d %d %d\n",
+				m_predictionTimes[ 0 ], m_predictionTimes[ 1 ], m_predictionTimes[ 2 ], m_predictionTimes[ 3 ],
+				m_predictionTimes[ 4 ], m_predictionTimes[ 5 ], m_predictionTimes[ 6 ], m_predictionTimes[ 7 ]));
+
+			if( m_predictions > 8 )
+			{
+				// We've had enough time to build up a few predictions, so calculate
+				// an average.
+				averagetimepredicted = ( m_predictionTimes[ 0 ] + m_predictionTimes[ 1 ] +
+										 m_predictionTimes[ 2 ] + m_predictionTimes[ 3 ] +
+										 m_predictionTimes[ 4 ] + m_predictionTimes[ 5 ] +
+										 m_predictionTimes[ 6 ] + m_predictionTimes[ 7 ] ) / 8;
+			}
+			else
+			{
+				// Wait a while longer before passing a "real" prediction
+				averagetimepredicted = -1;
+			}
+
+		}
+		else
+		{
+			averagetimepredicted = -1;
+		}
+
+		// Update the client's progress bar (or whatever)
+
+		m_Listener->OnProgressUpdate( m_BytesRead, m_FileSize, timetaken, averagetimepredicted + 1);
+	}
+
+
+	if( m_Status == DOWNLOADSTATUS_FINISHING )
+	{
+		if (m_Ftp->m_iCommandSocket)
+			m_Status = DOWNLOADSTATUS_FINDINGFILE;  // ready to find another file
+		else
+			m_Status = DOWNLOADSTATUS_DONE;			// command channel closed, connect again...
+
+		m_TimeStarted		= 0;
+		m_StartPosition		= 0;
+		m_FileSize			= 0;
+		m_BytesRead			= 0;
+		m_File[ 0 ]			= '\0';
+		m_LocalFile[ 0 ]	= '\0';
+
+		m_Listener->OnEnd();
+	}
+
+	reenter = 0;
+	return DOWNLOAD_SUCCEEDED;
 }
