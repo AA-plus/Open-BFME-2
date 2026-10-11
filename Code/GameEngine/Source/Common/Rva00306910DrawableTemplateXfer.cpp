@@ -87,6 +87,12 @@ class ThingTemplate
 {
 public:
 	const AsciiString &getName() const { return m_name; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getName copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	const AsciiString &bfme_get_name() const { return m_name; }
 private:
 	unsigned char m_pad00[0x64];
 	AsciiString m_name; // +0x64
@@ -137,7 +143,7 @@ void Rva00306910::xfer(Xfer *xfer)
 			id = m_drawable->getObject()->getID();
 		AsciiString name("");
 		if (m_template)
-			name = m_template->getName();
+			name = m_template->bfme_get_name();
 		XferObjectID(xfer, &id);
 		xfer->xferAsciiString(&name);
 	}
