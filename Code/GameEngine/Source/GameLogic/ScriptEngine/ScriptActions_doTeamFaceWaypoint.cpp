@@ -7,6 +7,9 @@
 // the action semantics and linked-list traversal; target iterator ABI is
 // represented with an opaque 24-byte local matching the helper at 0x263864.
 
+// The waypoint-clear call lands at rowed AIUpdateInterface::rva0026295E
+// (0x0026295E), whose target stores are +0x134/+0x3BF. The donor member
+// spelling currently resolves to a different-layout body in AIUpdate.cpp.
 #include "ascii_string.h"
 typedef bool Bool;
 class Object;
@@ -55,7 +58,7 @@ class AIUpdateInterface
 public:
     unsigned char pad[0x20];
     AICommandInterface command;
-    void clearWaypointQueue();
+    void rva0026295E();
 };
 class Team
 {
@@ -108,7 +111,7 @@ void ScriptActions::doTeamFaceWaypoint(const AsciiString &teamName,
         Object *object = iter.cur();
         AIUpdateInterface *ai = object->getAIUpdateInterface();
         if (ai) {
-            ai->clearWaypointQueue();
+            ai->rva0026295E();
             object->leaveGroup();
             ai->command.aiFacePosition(waypoint->location(), 1);
         }

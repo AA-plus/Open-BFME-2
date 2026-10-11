@@ -9,6 +9,9 @@
 // its linked-list traversal; target-specific helper identities remain pinned
 // only where target call evidence supports them.
 
+// The waypoint-clear call lands at rowed AIUpdateInterface::rva0026295E
+// (0x0026295E), whose target stores are +0x134/+0x3BF. The donor member
+// spelling currently resolves to a different-layout body in AIUpdate.cpp.
 #include "ascii_string.h"
 typedef bool Bool;
 class Object;
@@ -43,7 +46,7 @@ class AIUpdateInterface
 public:
     unsigned char pad[0x20];
     AICommandInterface command;
-    void clearWaypointQueue();
+    void rva0026295E();
 };
 class Team
 {
@@ -85,7 +88,7 @@ void ScriptActions::doTeamFaceNamed(const AsciiString &teamName,
         Object *object = iter.cur();
         AIUpdateInterface *ai = object->getAIUpdateInterface();
         if (ai) {
-            ai->clearWaypointQueue();
+            ai->rva0026295E();
             object->leaveGroup();
             ai->command.aiFaceObject(faceObject, 1);
         }

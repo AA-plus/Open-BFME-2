@@ -7,6 +7,9 @@
 // at 0x3C7782 with Waypoint+0x0C and source 1. BFME1 donor maps this behavior
 // to doNamedFaceWaypoint and aiFacePosition.
 
+// The waypoint-clear call lands at rowed AIUpdateInterface::rva0026295E
+// (0x0026295E), whose target stores are +0x134/+0x3BF. The donor member
+// spelling currently resolves to a different-layout body in AIUpdate.cpp.
 #include "ascii_string.h"
 
 struct Coord3D { float x, y, z; };
@@ -46,7 +49,7 @@ class AIUpdateInterface
 public:
     char pad[0x20];
     AICommandInterface command;
-    void clearWaypointQueue();
+    void rva0026295E();
 };
 class Object
 {
@@ -75,7 +78,7 @@ void ScriptActions::doNamedFaceWaypoint(const AsciiString &unitName,
     if (!waypoint) return;
     AIUpdateInterface *ai = unit->aiUpdate();
     if (!ai) return;
-    ai->clearWaypointQueue();
+    ai->rva0026295E();
     unit->leaveGroup();
     ai->command.aiFacePosition(waypoint->location(), 1);
 }

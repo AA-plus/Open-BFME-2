@@ -7,6 +7,9 @@
 // calls aiFaceObject with source 1. BFME1 donor maps that operation to
 // doNamedFaceNamed. The second resolver remains deliberately opaque.
 
+// The waypoint-clear call lands at rowed AIUpdateInterface::rva0026295E
+// (0x0026295E), whose target stores are +0x134/+0x3BF. The donor member
+// spelling currently resolves to a different-layout body in AIUpdate.cpp.
 #include "ascii_string.h"
 
 class Object;
@@ -31,7 +34,7 @@ class AIUpdateInterface
 public:
     char pad[0x20];
     AICommandInterface command;
-    void clearWaypointQueue();
+    void rva0026295E();
 };
 class Object
 {
@@ -59,7 +62,7 @@ void ScriptActions::doNamedFaceNamed(const AsciiString &unitName,
     if (!faceUnit) return;
     AIUpdateInterface *ai = unit->aiUpdate();
     if (!ai) return;
-    ai->clearWaypointQueue();
+    ai->rva0026295E();
     unit->leaveGroup();
     ai->command.aiFaceObject(faceUnit, CMD_FROM_SCRIPT);
 }
