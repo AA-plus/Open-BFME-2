@@ -24,18 +24,16 @@ public:
 	const ArmorTemplate *rva0035516C(NameKeyType key) const;
 };
 
-class BfmeY1038;
+class BfmeY1038
+{
+public:
+	void rva0040F7E5();	// 0x0040F7E5 (rowed)
+};
 
 class Rva0040C985
 {
 public:
 	int rva0040C9F4();
-};
-
-class Rva0040F7E5Runner
-{
-public:
-	void run();
 };
 
 BfmeY1038 *__stdcall bfmeFind1038(int value);
@@ -97,9 +95,9 @@ void Rva0040D3E8Owner::fwd(int value)
 // ?Rva0040FAFEOwner::fwd present-unmatched
 void Rva0040FAFEOwner::fwd(int value)
 {
-	Rva0040F7E5Runner *found = (Rva0040F7E5Runner *)bfmeFind1038(value);
+	BfmeY1038 *found = bfmeFind1038(value);
 	if (found)
-		found->run();
+		found->rva0040F7E5();
 }
 
 // AiOrdersManager::clearOrders, retail 0x00355183 (27 B, ret 8; WorldBuilder

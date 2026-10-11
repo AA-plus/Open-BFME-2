@@ -202,10 +202,10 @@ public:
 	void release();
 };
 
-class Rva005E549EHelper
+class Rva005E549E
 {
 public:
-	void prepare();
+	void rva005E549E();
 };
 
 class Rva005F327ARun
@@ -242,6 +242,6 @@ public:
 
 void Rva005E5554::step()
 {
-	((Rva005E549EHelper *)this)->prepare();
+	((Rva005E549E *)this)->rva005E549E();
 	((Rva005F327ARun *)((char *)this - 8))->run();
 }

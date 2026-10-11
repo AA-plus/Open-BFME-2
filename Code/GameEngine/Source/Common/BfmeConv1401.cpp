@@ -18,7 +18,7 @@ class BfmeThingVKH;
 // defined in game/gen_small/imports_000.cpp as a no-argument jump stub; its
 // caller supplies the three arguments on the stack, so the stub is reached
 // through a typed pointer.
-extern void __cdecl ji_009facad();
+extern void __cdecl ji_0062af26();
 typedef void (__stdcall *Rva009FACADCalc)(BfmeMat4VKH *out,
     BfmeThingVKH *self, int a);
 
@@ -31,6 +31,6 @@ public:
 BfmeMat4VKH BfmeThingVKH::bfmeGoVKH(int a)
 {
 	BfmeMat4VKH t;
-	reinterpret_cast<Rva009FACADCalc>(&ji_009facad)(&t, this, a);
+	reinterpret_cast<Rva009FACADCalc>(&ji_0062af26)(&t, this, a);
 	return t;
 }
