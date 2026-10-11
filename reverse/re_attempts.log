@@ -38099,3 +38099,4 @@ uw_00771526	0x00771526	14	landed	add_match verified Code/GameEngine/Source/GameL
 uw_00771534	0x00771534	14	landed	add_match verified Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp 14B; gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6404
 uw_00771542	0x00771542	24	landed	add_match verified Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp 24B; gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6405
 uw_0077155a	0x0077155A	8	landed	add_match verified Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp 8B; gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6406
+?rva00771427@@YAXXZ	0x00771427	20	landed	add_match verified Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp 20B; gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6384;replaces=MASM-EHStateCleanupRange36;identity=address-only
