@@ -37,6 +37,13 @@ public:
 // The remaining two words in its four-word prefix are not read by this
 // body; their original meaning and the listener's class identity are unknown.
 class __multiple_inheritance Rva004E0918Listener;
+class Rva004ECallbackSlots {
+public:
+ virtual void notify0(int);
+ virtual void slot1();
+ virtual void notify2(int);
+ virtual void notify3(int,int);
+};
 
 struct Rva004E0918Call
 {
@@ -77,6 +84,15 @@ struct Rva004EFour
 	int c;
 	int d;
 };
+
+// A native callback prefix is the two-word MSVC member pointer followed
+// by two zero words. The compiler supplies the retail slot0/2/3 vcall thunks.
+union NativeBuildingObserverCallback {
+ void (Rva004ECallbackSlots::*one)(int);
+ void (Rva004ECallbackSlots::*two)(int,int);
+ Rva004EFour words;
+};
+typedef char NativeObserverThunkWidth[sizeof(void (Rva004ECallbackSlots::*)(int))==4 ? 1 : -1];
 
 struct Rva004E20Packet
 {
@@ -127,7 +143,9 @@ public:
 	void rva0052B17F();
 };
 
-extern Rva004E0918 g_00E04424;
+// The established single datum uses the Rva002B7250 registry owner.
+class Rva002B7250;
+extern Rva002B7250 g_00E04424;
 
 struct Holder0052B003
 {
@@ -177,13 +195,13 @@ void Rva004E0918::rva004E0B02(Rva004EFour f, int e1, int e2)
 void Rva004E0B60::rva004E0B60(Rva004EFour f, int e)
 {
 	m_08.rva004E0ADB(f, e);
-	g_00E04424.rva004E0ADB(f, e);
+	((Rva004E0918 *)&g_00E04424)->rva004E0ADB(f, e);
 }
 
 void Rva004E0B60::rva004E0B9B(Rva004EFour f, int e1, int e2)
 {
 	m_08.rva004E0B02(f, e1, e2);
-	g_00E04424.rva004E0B02(f, e1, e2);
+	((Rva004E0918 *)&g_00E04424)->rva004E0B02(f, e1, e2);
 }
 
 void Rva004E0B60::rva004E0C49()
@@ -192,7 +210,10 @@ void Rva004E0B60::rva004E0C49()
 	for (Rva004E0C49Elem **p = m_30; p != end; ++p)
 		(*p)->v6();
 	m_20 = *(int *)((char *)(*(Rva002BA8F1Logic **)&TheLivingWorldLogic) + 0xFC);
-	Rva004EFour f = { 0x5FF3A9, 0, 0, 0 };
+	NativeBuildingObserverCallback callback;
+	callback.one = &Rva004ECallbackSlots::notify0;
+	callback.words.d = callback.words.c = callback.words.b = 0;
+	Rva004EFour f = callback.words;
 	rva004E0B60(f, (int)this);
 }
 
@@ -207,7 +228,10 @@ void Rva004E0B60::rva004E0CA3()
 
 bool Rva004E0B60::rva004E0CCB()
 {
-	Rva004EFour f = { 0x9CC208, 0, 0, 0 };
+	NativeBuildingObserverCallback callback;
+	callback.one = &Rva004ECallbackSlots::notify2;
+	callback.words.d = callback.words.c = callback.words.b = 0;
+	Rva004EFour f = callback.words;
 	rva004E0B60(f, (int)this);
 	if (((Rva004E0705 *)this)->rva004E08A9(true))
 	{
@@ -219,7 +243,10 @@ bool Rva004E0B60::rva004E0CCB()
 
 void Rva004E0B60::rva004E0D19(int arg)
 {
-	Rva004EFour f = { 0x9CB265, 0, 0, 0 };
+	NativeBuildingObserverCallback callback;
+	callback.two = &Rva004ECallbackSlots::notify3;
+	callback.words.d = callback.words.c = callback.words.b = 0;
+	Rva004EFour f = callback.words;
 	rva004E0B9B(f, (int)this, arg);
 }
 
