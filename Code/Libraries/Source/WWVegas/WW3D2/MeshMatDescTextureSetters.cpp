@@ -18,6 +18,17 @@ public:
         p=other.p;
         return *this;
     }
+    // LINK: same-body helper under a TU-unique name (identical inlined
+    // bytes). This TU's operator= copy loses to the first-in-order copy (no
+    // retail address); both setters below inline it but still emit the loser
+    // COMDAT. Rebinding them here emits only this unique (trivially kept)
+    // copy. No flags touched.
+    RefCountPtr &bfme_assign(const RefCountPtr &other) {
+        if(other.p) other.p->Add_Ref();
+        if(p) p->Release_Ref();
+        p=other.p;
+        return *this;
+    }
 };
 class TexBufferClass {
     char prefix[8];
@@ -33,10 +44,10 @@ public:
     void Set_Texture(int,const RefCountPtr<TextureClass>&,int,int);
 };
 void MeshMatDescClass::Set_Single_Texture(const RefCountPtr<TextureClass>& texture,int pass,int stage) {
-    Textures[pass][stage]=texture;
+    Textures[pass][stage].bfme_assign(texture);
 }
 void MeshMatDescClass::Set_Texture(int index,const RefCountPtr<TextureClass>& texture,int pass,int stage) {
-    Get_Texture_Array(pass,stage,true)->Get_Array()[index]=texture;
+    Get_Texture_Array(pass,stage,true)->Get_Array()[index].bfme_assign(texture);
 }
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
