@@ -77,7 +77,35 @@ public:
 	bool rva00541641(int frame);
 };
 
+// The free camera's 0x24-byte frame (rowed copy constructor 0x0053FF5F),
+// its pinned locator 0x0054034A and the rowed evaluator 0x0053FE64, which
+// fills the frame through its first stack word (pinned here under a
+// by-value spelling).
+class Rva0053FDE6
+{
+public:
+	Rva0053FDE6(const Rva0053FDE6 &other);
+	int m_00;
+	char m_04[0x20];
+};
+class Rva0054034A
+{
+public:
+	bool rva0054034A(int frame);
+};
+Rva0053FDE6 Rva0053FE64Get(float t, Rva0053FDE6 *a, int ta, Rva0053FDE6 *b, int tb,
+	Rva0053FDE6 *c, int tc, Rva0053FDE6 *d, int td);
+
 // Per-channel locator and interpolator.
+static inline void cameraTrackSeek(void *track, int frame, const Rva0053FDE6 *)
+{
+	((Rva0054034A *)track)->rva0054034A(frame);
+}
+static inline Rva0053FDE6 cameraTrackInterpolate(float t, Rva0053FDE6 *a, int ta, Rva0053FDE6 *b, int tb,
+	Rva0053FDE6 *c, int tc, Rva0053FDE6 *d, int td)
+{
+	return Rva0053FE64Get(t, a, ta, b, tb, c, tc, d, td);
+}
 static inline void cameraTrackSeek(void *track, int frame, const Rva00540D94 *)
 {
 	((Rva00541579 *)track)->rva00541579(frame);
@@ -137,6 +165,7 @@ T CameraAnimationTrack<T>::getFrameData(float frameNum)
 
 template Rva00540D94 CameraAnimationTrack<Rva00540D94>::getFrameData(float frameNum);
 template Rva00540E9D CameraAnimationTrack<Rva00540E9D>::getFrameData(float frameNum);
+template Rva0053FDE6 CameraAnimationTrack<Rva0053FDE6>::getFrameData(float frameNum);
 
 // ?rva00541F72@Rva00541F72@@QAEXABMPAURva00540888Transform@@@Z retail
 // 0x00541F72 (90 bytes, ret 8): the look-at camera animation's transform
