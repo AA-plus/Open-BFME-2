@@ -140,7 +140,7 @@ UnicodeString CreditsManager::getUnicodeString(AsciiString str)
 	if (str.compare("<BLANK>") == 0)
 		return UnicodeString::TheEmptyString;
 
-	if (str.find(':'))
+	if (((const StringBase<char> &)str).find(':'))
 		uStr = TheGameText->fetch(str);
 	else
 		uStr.translate(str);
