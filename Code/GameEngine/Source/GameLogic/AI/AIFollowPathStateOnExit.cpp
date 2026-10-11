@@ -45,17 +45,33 @@ public:
 		else
 			m_flags &= ~(1 << PRECISE_Z_POS);
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the setUsePreciseZPos copy loses to the first-in-order copy. No flags touched.
+	void bfme_setUsePreciseZPos_772eb(Bool b)
+	{
+		if (b)
+			m_flags |= (1 << PRECISE_Z_POS);
+		else
+			m_flags &= ~(1 << PRECISE_Z_POS);
+	}
 private:
 	unsigned char m_pad00[0x44];
 	unsigned int m_flags; // +0x44
 };
+// LINK: the 0x00262FEB one-store setter is ICF-shared with ParticleEmitterDefClass::Set_Burst_Size (called directly, not via vtable).
+class ParticleEmitterDefClass
+{
+public:
+	virtual void Set_Burst_Size(unsigned int value);
+};
+
 class AIUpdateInterface
 {
 public:
 	void setCanPathThroughUnits(Bool b) { m_canPathThroughUnits = b; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the setCanPathThroughUnits copy loses to the first-in-order copy. No flags touched.
+	void bfme_setCanPathThroughUnits_9c10a(Bool b) { m_canPathThroughUnits = b; }
 	Locomotor *getCurLocomotor() { return m_curLocomotor; }
 	void friend_setCurrentGoalPathIndex(int index) { m_currentGoalPathIndex = index; }
-	void rva00262FEB(int value);
 private:
 	unsigned char m_pad000[0x194];
 	int m_currentGoalPathIndex; // +0x194
@@ -131,10 +147,10 @@ void AIFollowPathState::onExit( StateExitType status )
 	// turn off precision-z-pos when we exit, just in case.
 	AIUpdateInterface *ai = getMachineOwner()->getAI();
 	if (!ai) return;
-	ai->setCanPathThroughUnits(false);
-	ai->rva00262FEB(0);
+	ai->bfme_setCanPathThroughUnits_9c10a(false);
+	((ParticleEmitterDefClass *)ai)->ParticleEmitterDefClass::Set_Burst_Size(0);
 	if (ai->getCurLocomotor())
-		ai->getCurLocomotor()->setUsePreciseZPos(false);
+		ai->getCurLocomotor()->bfme_setUsePreciseZPos_772eb(false);
 
 	//Assign this value to the AIUpdateInterface so object's can access this value while
 	//determine which waypoints to plot in the waypoint renderer.
