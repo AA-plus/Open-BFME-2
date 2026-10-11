@@ -1,95 +1,71 @@
-// ?rva005775C1@Rva005775C1@@UAEXURva005775C1Key@@@Z
-// partial score=0.9 date=2026-10-11
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// ?rva005775C1@Rva0057709A@@QAEXH@Z
+// partial score=0.95 date=2026-10-11
+// cl: /MD /EHsc /DNDEBUG
 //
-// Two 115-byte twins that keep one current 0x1C-byte record in an owner's
-// +0x14 slot: if the current record's +0x0C key already equals the argument
-// it is refreshed (rowed 0x00576FBA); otherwise the slot is cleared (rowed
-// 0x0057702E) and a new record for (owner, key) is constructed (unrowed
-// 0x005774E3, pinned by address) and installed (rowed 0x0057704C).
-// ?rva005775C1@Rva005775C1@@UAEXH@Z, retail 0x005775C1: slot 15 of table
-// 0x0086E8A8, owner pointer at +0x08.
-// ?rva00577634@Rva00577634@@UAEXH@Z, retail 0x00577634: the same body with
-// the owner pointer at +0x18.
-// Address-derived names; the views emit no vtables.
-struct Rva005775C1Key
-{
-	int m_value;
-	bool operator==(const Rva005775C1Key &that) const { return m_value == that.m_value; }
-};
+// ?rva005775C1@Rva0057709A@@QAEXH@Z retail 0x005775C1 (115 bytes, EH,
+// ret 4): slot 15 of the PlanRetreatsPhaseBehavior table 0x00C6E8A8 (owner
+// built by the rowed 0x0057709A, the Impl at +0x08). When the Impl's +0x14
+// selection holder already holds the army with this id (+0x0C) it refreshes
+// that selection (rowed 0x00576FBA); otherwise it clears the holder (rowed
+// 0x0057702E) and installs a new 0x1C-byte selection for the id, built by
+// the unrowed selection constructor 0x005774E3 (pinned under an address
+// name) and stored through the rowed 0x0057704C. The method name is a
+// placeholder for the vtable slot.
 
 struct Rva0057702EBase
 {
-	virtual void f0();
-	virtual void f1();
-	virtual void f2();
-	virtual void f3();
-	virtual void *f4(int);
+	char m_pad00[0x0C];
+	int m_0C;	// the selected army id
 };
-
-class Rva005774E3 : public Rva0057702EBase
+class Rva0057702E
 {
 public:
-	Rva005774E3(void *owner, Rva005775C1Key key);
-	unsigned char m_pad04[0x0C - 0x04];
-	Rva005775C1Key m_key;		// +0x0C
-	unsigned char m_pad10[0x1C - 0x10];
+	void rva0057702E();
+	Rva0057702EBase *m_ptr;
 };
-
-class Rva00576FBA { public: void rva00576FBA(); };
-class Rva0057702E { public: void rva0057702E(); };
-class Rva0057704C { public: void rva0057704C(Rva0057702EBase *n); };
-
-struct Rva005775C1Slot
-{
-	Rva005774E3 *m_current;
-};
-struct Rva005775C1Owner
-{
-	unsigned char m_pad00[0x14];
-	Rva005775C1Slot m_slot;	// +0x14
-};
-
-class Rva005775C1
+class Rva0057704C
 {
 public:
-	virtual void rva005775C1(Rva005775C1Key key);
+	void rva0057704C(Rva0057702EBase *selection);
+};
+class Rva00576FBA
+{
+public:
+	void rva00576FBA();
+};
+class Rva005774E3
+{
+public:
+	Rva005774E3(void *owner, int id);
 private:
-	unsigned char m_pad04[0x08 - 0x04];
-	Rva005775C1Owner *m_owner;	// +0x08
+	char m_data[0x1C];
 };
-
-class Rva00577634
+struct Rva005775C1Impl
+{
+	char m_pad00[0x14];
+	Rva0057702E m_14;	// the current selection holder
+};
+class Rva0057709A
 {
 public:
-	virtual void rva00577634(Rva005775C1Key key);
+	void rva005775C1(int id);
 private:
-	unsigned char m_pad04[0x18 - 0x04];
-	Rva005775C1Owner *m_owner;	// +0x18
+	char m_pad00[0x08];
+	Rva005775C1Impl *m_08;
 };
 
-void Rva005775C1::rva005775C1(Rva005775C1Key key)
+void Rva0057709A::rva005775C1(int id)
 {
-	Rva005775C1Slot *slot = &m_owner->m_slot;
-	Rva005774E3 *current = slot->m_current;
-	if (current && current->m_key == key)
+	Rva0057702E *holder = &m_08->m_14;
+	Rva0057702EBase *current = holder->m_ptr;
+	if (current && current->m_0C == id)
 	{
 		((Rva00576FBA *)current)->rva00576FBA();
-		return;
 	}
-	((Rva0057702E *)slot)->rva0057702E();
-	((Rva0057704C *)&m_owner->m_slot)->rva0057704C(new Rva005774E3(m_owner, key));
-}
-
-void Rva00577634::rva00577634(Rva005775C1Key key)
-{
-	Rva005775C1Slot *slot = &m_owner->m_slot;
-	Rva005774E3 *current = slot->m_current;
-	if (current && current->m_key == key)
+	else
 	{
-		((Rva00576FBA *)current)->rva00576FBA();
-		return;
+		holder->rva0057702E();
+		Rva005774E3 *selection = new Rva005774E3(m_08, id);
+		((Rva0057704C *)&m_08->m_14)->rva0057704C((Rva0057702EBase *)selection);
 	}
-	((Rva0057702E *)slot)->rva0057702E();
-	((Rva0057704C *)&m_owner->m_slot)->rva0057704C(new Rva005774E3(m_owner, key));
 }
