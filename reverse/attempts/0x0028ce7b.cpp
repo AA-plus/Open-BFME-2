@@ -1,4 +1,6 @@
 // ?rva0028CE7B@Object@@QBECXZ
+// partial score=0.928571 date=2026-10-11
+// ?rva0028CE7B@Object@@QBECXZ
 // partial score=0.92 date=2026-10-11
 // ?rva0028CE7B@Object@@QBECXZ
 // partial score=0.92 date=2026-10-11
@@ -13,7 +15,7 @@ signed char Object::rva0028CE7B() const
 	if (pool && pool->rva00403382(0x19, &bonus, 0))
 		add = (signed char)(int)bonus;
 	signed char level = tpl->alternateCrushable;
-	if (level != -1 && ((unsigned char)(mountedFlags >> 22) & 1) == 0)
+	if (level == -1 || ((unsigned char)(mountedFlags >> 22) & 1) == 0)
 		level = tpl->crushable;
 	return level + add;
 }
