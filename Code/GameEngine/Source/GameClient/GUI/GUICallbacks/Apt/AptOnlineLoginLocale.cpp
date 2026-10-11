@@ -50,7 +50,8 @@ public:
 extern int g_Va00E062EC;
 
 // Set when no locale is selected.
-extern bool g_Va00E062F0;
+// Retail loader-zeroed byte at VA 0x00E062F0; one owner for the flag.
+bool g_Va00E062F0 = false;
 
 struct AptOnlineLoginOwner
 {

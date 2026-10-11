@@ -32,12 +32,7 @@ public:
 	
 };
 
-// Retail 0x003808E8, 8 bytes: "AptGuiFX::OnInitialized" marks the GuiFX
-// movie ready.
-void AptGuiFX::OnInitialized(const char *unused)
-{
-	g_Va00E022E0 = true;
-}
+// OnInitialized is defined and rowed in AptGuiFXCallbacks.cpp.
 
 #include "ascii_string.h"
 class BfmeAptWindowManager;

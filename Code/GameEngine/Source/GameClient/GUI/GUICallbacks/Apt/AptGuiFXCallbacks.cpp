@@ -7,7 +7,8 @@
 
 // The GuiFX movie's ready flag (0x00E022E0, beside the "GuiFX.apt" name at
 // 0x00E022E8).
-extern bool g_Va00E022E0;
+// Retail loader-zeroed ready byte; this callback unit is its sole owner.
+bool g_Va00E022E0 = false;
 
 class AptGuiFX
 {
