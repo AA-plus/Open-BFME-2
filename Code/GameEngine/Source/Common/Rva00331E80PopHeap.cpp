@@ -8,6 +8,11 @@ struct S4SortElem12
 	int m_a;
 	AsciiString m_name;
 	char m_flag;
+	// LINK: declaration-only copy ctor (no body in this TU). The by-value
+	// argument below E8-calls it; with no local body the call binds the kept
+	// (first-in-order) copy instead of this TU's loser copy, and the call
+	// bytes are unchanged (same reloc name). No flags touched.
+	S4SortElem12(const S4SortElem12 &other);
 };
 
 struct S4Cmp002E0CD0
