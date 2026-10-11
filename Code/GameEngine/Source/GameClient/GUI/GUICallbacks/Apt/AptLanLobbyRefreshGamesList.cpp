@@ -80,7 +80,9 @@ public:
 	virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
 	virtual void v04(); virtual void v05();
 	virtual const Image *v06(int index);
-	virtual void v07();
+	// v07's result feeds the sort record's (void*,uint) ctor at 0x581171,
+	// so it returns a 32-bit value; no other caller in this TU uses it.
+	virtual unsigned int v07();
 	virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
 	virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
 	virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
@@ -108,10 +110,49 @@ public:
 };
 
 // The +0x668 game list; 0x0058113D (87 bytes) is pinned by this name.
+// Minimal sort-record view for 0x58113D: the 16-byte member layout, the
+// (void*,uint) converting ctor, the (declared-elsewhere) copy ctor, and an
+// empty throw() dtor. The copy marks the type non-trivial so the by-value
+// temporary is built directly in the argument slot (no copy); the empty
+// dtor emits no destruction call and no EH registration. The full
+// interface (copy/compare/dtor bodies) lives in the WWLib sort TUs. This
+// TU emits no Record methods of its own, so the views cannot collide.
+class Rva000795C1Record
+{
+public:
+	Rva000795C1Record(void *owner, unsigned int n);
+	// Declared but defined elsewhere (rowed sort code references it): its
+	// presence marks the copy non-trivial, so the by-value temporary is
+	// built directly in the argument slot with no copy and no dtor call.
+	Rva000795C1Record(const Rva000795C1Record &other);
+	// Empty throw() dtor, matching the BfmeConv/Q3 record views: the type
+	// stays non-trivial (outgoing-slot template with the esp home), but no
+	// destruction call and no EH registration is emitted.
+	~Rva000795C1Record() throw() {}
+
+private:
+	unsigned int m_key;
+	void *m_first;
+	void *m_last;
+	void *m_end;
+};
+
+void __cdecl Rva005810B6Sort(void **first, void **last, Rva000795C1Record compare);
+
 class Rva0058113D
 {
 public:
 	LANGameInfo *rva0058113D(unsigned int index);
+
+private:
+	// Begin/end pointer list at +0/+4, sorted-once flag at +0x15.
+	// Inline accessors: the sort call below goes through them.
+	void **first() { return m_first; }
+	void **last() { return m_last; }
+	void **m_first;
+	void **m_last;
+	unsigned char m_pad008[0x15 - 0x08];
+	bool m_sorted;
 };
 
 class AptMapPreview
@@ -150,8 +191,9 @@ private:
 	unsigned char m_pad2e9[0x304 - 0x2E9];
 	int m_304; // +0x304
 	unsigned char m_pad308[0x668 - 0x308];
-	Rva0058113D m_668; // +0x668
-	unsigned char m_pad669[0x6A8 - 0x669];
+	Rva0058113D m_668; // +0x668 (0x18 bytes: first/last pointers plus
+	// the +0x15 sorted flag; the rest to +0x6A8 is padding)
+	unsigned char m_pad680[0x6A8 - 0x680];
 	GameWindow *m_customGamesList; // +0x6A8
 };
 
@@ -245,4 +287,22 @@ void AptLanLobby::rva004457BC()
 		m_panel.rva0043FA68(0);
 		rva0044469C();
 	}
+}
+
+// Retail 0x0058113D (87 bytes): indexed getter over the lobby's game list
+// with a lazy sort. An out-of-range index returns null; the first in-range
+// call sorts the pointer list through the rowed 0x5810B6 introsort, keyed
+// by a record built from this list and the element's v07 value, then marks
+// the list sorted so later calls index it directly.
+LANGameInfo *Rva0058113D::rva0058113D(unsigned int index)
+{
+	if (index >= (unsigned int)(((char *)m_last - (char *)m_first) >> 2))
+		return 0;
+	if (!m_sorted)
+	{
+		unsigned int sortKey = ((LANGameInfo *)m_first[index])->v07();
+		Rva005810B6Sort(first(), last(), Rva000795C1Record(this, sortKey));
+		m_sorted = true;
+	}
+	return (LANGameInfo *)m_first[index];
 }
