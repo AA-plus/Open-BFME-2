@@ -126,6 +126,10 @@ public:
 	SpecialPowerModule( Thing *thing, const ModuleData *moduleData );
 };
 
+#include "../../../Common/PartitionRangeQueryCallView.h"
+namespace _STL {
+template<> void vector<Object *,allocator<Object *> >::push_back(Object * const &);
+}
 class ManTheWallsSpecialPower : public SpecialPowerModule
 {
 public:
@@ -134,6 +138,7 @@ public:
 	void rva004C7167(Rva004C734DElement *entry);
 	void rva004C7621(Rva004C7621Range *, const Rva004C7621Pos *, _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > *);
 	BfmeVecAV *rva004C76AC(Rva004C7621Range *, const Rva004C7621Pos *);
+	void rva004C7734(Rva004C7621Range *, BfmeWideResult *);
 };
 
 ManTheWallsSpecialPower::ManTheWallsSpecialPower( Thing *thing, const ModuleData *moduleData )
@@ -229,4 +234,16 @@ BfmeVecAV *ManTheWallsSpecialPower::rva004C76AC(Rva004C7621Range *range,const Rv
   }
  }
  return (BfmeVecAV *)candidates[0].m_item;
+}
+
+// Native4C7734..4C7767 (51B, RET8); WB1268CB0. Assign each yielded
+// Object to the selected entry's member vector. Native ECX save/restore
+// proves the primary ManTheWalls receiver; 1F211B owns Object* push_back.
+void ManTheWallsSpecialPower::rva004C7734(Rva004C7621Range *range,BfmeWideResult *hits)
+{
+ for(Object *other=hits->next();other;other=hits->next())
+ {
+  _STL::vector<Object *> *members=(_STL::vector<Object *> *)rva004C76AC(range,(const Rva004C7621Pos *)other);
+  members->push_back(other);
+ }
 }
