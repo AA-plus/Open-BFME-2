@@ -108,10 +108,13 @@ struct BfmeWideResult
 class PartitionManager
 {
 public:
-	BfmeWideResult iterateObjectsInRange(const Coord3D &pos, float radius, int distCalc,
+	BfmeWideResult iterateObjectsInRange(const Coord3D *pos, float radius, int distCalc,
 		Rva000421C8 *filters, int order);	// 0x00625610
 };
 extern PartitionManager *ThePartitionManager;
+
+// LINK: the base check 0x00573CFB is rowed as AIBuildableStructure::canMake (AIBuildableStructure.cpp, UAEHPAVPlayer).
+class AIBuildableStructure { public: virtual int canMake(Player *player); };
 
 // The build-order object (Rva00573B23Dtor.cpp; 0x40 bytes) and the derived
 // order whose slot 4 this is (Rva00573F03; vftable 0x00C6E2F8).
@@ -148,7 +151,7 @@ int Rva00573F03::rva00573CFB(Player *player)
 	kinds.set(7);
 	Rva0057402FMask other;
 	other.set(205);
-	BfmeWideResult hits = ThePartitionManager->iterateObjectsInRange(rva_slot13(), 300.0f, 0,
+	BfmeWideResult hits = ThePartitionManager->iterateObjectsInRange(&(const Coord3D &)rva_slot13(), 300.0f, 0,
 		Rva0026119DFilter().link(&Rva00261409Filter(player, true, 4))
 			->link(Rva003959FA(*(BfmeFixedStorage0004543D *)&kinds)
 				.link(&Rva0027231F(*(BfmeFixedStorage0004543D *)&other))), 0);
@@ -156,6 +159,6 @@ int Rva00573F03::rva00573CFB(Player *player)
 	while (hits.next() != 0)
 		++count;
 	if (count <= 2)
-		return Rva00573B23::rva00573CFB(player);
+		return ((AIBuildableStructure *)this)->AIBuildableStructure::canMake(player);
 	return 9;
 }
