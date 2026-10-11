@@ -76,8 +76,8 @@ class BfmeAptValue006DCD20 {
 public:
     // These call-site views follow the retail test-al instruction at 0x6FED89
     // and 0x6FEF02; the matched predicate declarations keep their own names.
-    bool rva006E0260() const;
-    bool rva006DCC60(bool) const;
+    int rva006E0260() const;
+    int rva006DCC60(bool) const;
     void *rva006E04A0() const;
 };
 
@@ -88,10 +88,13 @@ extern int g_bfmeAptBreakOnAssertAtDDC01C;
 // class-gate: allow AptScriptFunctionBase target-proven field view: retail
 // SetVariable reads parent animation at +0x24; static frame pointer is the
 // established AptScriptFunctionBase::spFrameStack at VA 0x00E1835C.
+class AptActionInterpreter;
 class AptScriptFunctionBase {
     unsigned char m_beforeParentAnimation[0x24];
+protected:
+    static AptFrameStack *spFrameStack;	// protected: rowed ?spFrameStack@AptScriptFunctionBase@@1PAVAptFrameStack@@A
+    friend class AptActionInterpreter;
 public:
-    static AptFrameStack *spFrameStack;
     AptValue *mpParentAnim;
     AptValue *mpCreatorScope;
     void rva006FBED0();
@@ -131,7 +134,7 @@ bool AptActionInterpreter::setVariable(AptValue *context, AptValue *with,
     if (!resolvedContext)
         return false;
     if (resolvedContext->isCIH(false)
-        && ((BfmeAptValue006DCD20 *)resolvedContext->c_cih(false))->rva006E0260())
+        && (unsigned char)((BfmeAptValue006DCD20 *)resolvedContext->c_cih(false))->rva006E0260())
         return false;
     if (!resolvedContext->isUndefined()
         && resolvedContext->objectMemberSet(resolvedContext, &name, value))
@@ -166,7 +169,7 @@ bool AptActionInterpreter::setVariable(AptValue *context, AptValue *with,
         }
 
         if (resolvedContext->isCIH(false)) {
-            if (!((BfmeAptValue006DCD20 *)resolvedContext->c_cih(false))->rva006DCC60(false))
+            if (!(unsigned char)((BfmeAptValue006DCD20 *)resolvedContext->c_cih(false))->rva006DCC60(false))
                 return true;
             g_bfmeAptAssertAtE17734(
                 "false && \"SHOULD NOT GET HERE ANYMORE\"",
