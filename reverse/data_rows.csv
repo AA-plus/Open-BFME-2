@@ -179,3 +179,5 @@ name,address,address_kind,size,section,source,status,evidence,model
 ?g_00E02868@@3PAEA,0x00A02868,rva,28,.data,Code/GameEngine/Source/Common/Rva007ADC9CMaskInits.cpp,matched,Scoring mask cleared by the inits in this TU; retail holds zeros; data ledger unowned,muse-spark-1.3-contributor
 ?g_00E02884@@3PAEA,0x00A02884,rva,28,.data,Code/GameEngine/Source/Common/Rva007ADC9CMaskInits.cpp,matched,Scoring mask cleared by the inits in this TU; retail holds zeros; data ledger unowned,muse-spark-1.3-contributor
 ?g_00E028A0@@3PAEA,0x00A028A0,rva,28,.data,Code/GameEngine/Source/Common/Rva007ADC9CMaskInits.cpp,matched,Scoring mask cleared by the inits in this TU; retail holds zeros; data ledger unowned,muse-spark-1.3-contributor
+?g_00DFE794@@3PAEA,0x009FE794,rva,16,.data,Code/GameEngine/Source/Common/Rva007ADC9CMaskInits.cpp,matched,Cleared by the inits in this TU; retail holds zeros; data ledger unowned,muse-spark-1.3-contributor
+?g_00DFEA50@@3PAEA,0x009FEA50,rva,76,.data,Code/GameEngine/Source/Common/Rva007ADC9CMaskInits.cpp,matched,Cleared by the inits in this TU; retail holds zeros; data ledger unowned,muse-spark-1.3-contributor

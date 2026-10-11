@@ -18,6 +18,9 @@ class BitFlags;
 
 extern unsigned char g_00DFE794[16];
 extern unsigned char g_00DFEA50[76];
+// Owned here (retail BSS zeros): cleared by the inits below.
+unsigned char g_00DFE794[16] = { 0 };
+unsigned char g_00DFEA50[76] = { 0 };
 extern unsigned char g_00DFEFA4StoragePrototype[28];
 extern unsigned char g_00E01EC0[4];
 extern unsigned char g_00E01EC4[4];
