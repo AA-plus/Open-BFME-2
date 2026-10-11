@@ -1,0 +1,76 @@
+// ?rva000CF3BA@W3DFloorDraw@@UAEXH@Z
+// partial score=0.95 date=2026-10-11
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
+//
+// ?rva000CF3BA@W3DFloorDraw@@UAEXH@Z, retail 0x000CF3BA (94 bytes, RET 4):
+// slot 11 (+0x2C) of W3DFloorDraw's vtable 0x007CD4E0; the argument is
+// unused. With module data (+4) and a drawable (+8), a non-zero module value
+// at +0x20 and a drawable whose Object (+0xFC) is effectively dead (+0x438
+// bit 0), the terrain render object gets the drawable, a copy of the module
+// data's name at +0x08 and that value (rowed 0x0006B7BF, which hands them to
+// its +0x3860 member). The name travels by value: the private StringBase
+// copy constructor builds it in the argument slot.
+template <typename T> class StringBase
+{
+public:
+	~StringBase();
+private:
+	StringBase(const StringBase &other);
+	friend class W3DFloorDraw;
+	T *m_data;
+};
+
+class Rva0055A88BDwordField;
+
+class BaseHeightMapRenderObjClass
+{
+public:
+	void rva0006B7BF(const Rva0055A88BDwordField *id, StringBase<char> name, float value);
+};
+extern BaseHeightMapRenderObjClass *TheTerrainRenderObject;
+
+class Object
+{
+public:
+	unsigned char m_pad000[0x438];
+	unsigned char m_privateStatus;	// +0x438
+};
+
+class Drawable
+{
+public:
+	unsigned char m_pad000[0xFC];
+	Object *m_object;	// +0xFC
+};
+
+struct W3DFloorDrawModuleData
+{
+	unsigned char m_pad00[0x08];
+	StringBase<char> m_name;	// +0x08
+	unsigned char m_pad0C[0x20 - 0x0C];
+	float m_value;			// +0x20
+};
+
+class W3DFloorDraw
+{
+public:
+	virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+	virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+	virtual void s08(); virtual void s09(); virtual void s10();
+	virtual void rva000CF3BA(int unused);	// +0x2C
+private:
+	const W3DFloorDrawModuleData *m_moduleData;	// +0x04
+	Drawable *m_drawable;				// +0x08
+};
+
+void W3DFloorDraw::rva000CF3BA(int unused)
+{
+	const W3DFloorDrawModuleData *data = m_moduleData;
+	Drawable *draw = m_drawable;
+	if (data && draw && data->m_value != 0.0f)
+	{
+		Object *obj = draw->m_object;
+		if (obj && (obj->m_privateStatus & 1))
+			TheTerrainRenderObject->rva0006B7BF((const Rva0055A88BDwordField *)draw, StringBase<char>(data->m_name), data->m_value);
+	}
+}
