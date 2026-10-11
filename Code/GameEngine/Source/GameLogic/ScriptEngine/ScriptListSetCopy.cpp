@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /MD /DNDEBUG /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
+// cl: /O1 /G7 /MD /DNDEBUG /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
 // BFME2 extends the ZH/BF1 ScriptList linked lists with two record sets.
 // WB ScriptSetBase deep-copy algorithm is also used by the verified workers
@@ -24,6 +24,8 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 }
 #include <vector>
+// Reuse the kept unsigned allocator rather than emitting a TU-specific copy.
+namespace _STL { template<> unsigned int *allocator<unsigned int>::allocate(size_t, const void*) const; }
 class Rva003B32E5;
 void rva003B7FE0(Rva003B32E5 *, const Rva003B32E5 *);
 void rva003B825F(Rva003B32E5 *, const Rva003B32E5 *);

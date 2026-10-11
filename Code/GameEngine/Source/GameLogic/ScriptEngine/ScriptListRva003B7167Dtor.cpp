@@ -7,7 +7,9 @@
 // through the base destructor (pinned Rva00030830FreeAllocation 0x00030830).
 #include <vector>
 
-struct Rva003B7057Record { Rva003B7057Record(); Rva003B7057Record(const Rva003B7057Record &); ~Rva003B7057Record(); Rva003B7057Record &operator=(const Rva003B7057Record &); char bytes[1]; };
+struct BfmeStringRecord003B3F78;
+namespace _STL {template<> vector<BfmeStringRecord003B3F78>::~vector();}
+
 
 struct Rva003B678ARange
 {
@@ -35,7 +37,7 @@ class Rva003B7167 : public Rva003B7167Base
 public:
 	~Rva003B7167();
 private:
-	_STL::vector<Rva003B7057Record> m_vec;
+	_STL::vector<BfmeStringRecord003B3F78> m_vec;
 };
 
 Rva003B7167::~Rva003B7167()
