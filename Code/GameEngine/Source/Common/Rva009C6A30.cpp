@@ -6,7 +6,7 @@ extern void __cdecl rva009C6470BinkMmx(const void *, void *, int, int, int, int,
 extern void __cdecl rva009C6780BinkMmx(const void *, void *, int, int, int, int, const void *);
 extern void __cdecl rva009C69D0BinkMmx(const void *, void *, int, const void *, const void *);
 extern void __cdecl Rva009C6800(const unsigned char *, unsigned char *, int, const void *, const void *);
-extern void __cdecl bfmeUnpack8to16Mmx(const void *, void *, int);
+extern "C" void __cdecl UnpackBlock_MMX(const unsigned char *, short *, unsigned int);
 
 void __cdecl Rva009C6A30(void *arg1, void *arg2, void *arg3,
     int stride, int weightsA, int weightsB, int mode)
@@ -63,7 +63,7 @@ void __cdecl Rva009C6A30(void *arg1, void *arg2, void *arg3,
                 (const void *)((const unsigned char *)g_bfmeBinkRoundMmx + 0x10 + (weightsA << 5)),
                 (const void *)((const unsigned char *)g_bfmeBinkRoundMmx + 0x10 + (weightsB << 5)));
     }
-    bfmeUnpack8to16Mmx(scratch, arg3, 8);
+    UnpackBlock_MMX(scratch, (short *)arg3, 8);
 }
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's

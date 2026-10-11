@@ -1,11 +1,12 @@
 // ?Rva009A4D00Init@@YAXXZ
 // Address-derived: two opaque setup helpers seed a global, a 64-entry signed
 // 16-bit table is halved (rounding toward zero) and offset by 2 into an int
-// array, then an opaque helper and bfmeRun_009A75E0 run in tail position.
+// array, then an opaque helper and InitVPUtil run in tail position.
 
 extern void d_009a8430();
 extern void d_009a5aa0();
-void bfmeRun_009A75E0(void);
+// VP6 clean-room InitVPUtil (Code/Libraries/Source/VP6/InitVPUtil.cpp).
+extern "C" void __cdecl InitVPUtil(void);
 
 extern void __cdecl bfmeQueryCpuTierFlags(int *pTierA, int *pTierB, int *pTierC);
 extern void __cdecl initBlocksRva009B3EC0(void *self);
@@ -104,5 +105,5 @@ void Rva009A4D00Init(void)
 		*dst = *src / 2 + 2;
 
 	reinterpret_cast<Fn009A5AA0>(d_009a5aa0)(g_00DFD950, g_00DFD950, g_00DFD950, 7);
-	bfmeRun_009A75E0();
+	InitVPUtil();
 }

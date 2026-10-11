@@ -111,9 +111,12 @@ static int Rva009AC660ReadHeader(unsigned char* s)
     return 1;
 }
 
-// Native1BD550..1BD56C RET: codec-reader Boolean normalization wrapper.
-// BFME1 donor874e uses explicit initialized result and zero-on-failure branch.
-int Rva001BD550ReadHeader(unsigned char* s)
+// VP6_LoadFrame retail 0x001BD550..0x001BD56B (28 bytes), cdecl.
+// Clean room: reverse/vp6_cleanroom/specs/001bd550.md plus retail only.
+// Calls the frame header reader above with the instance in ESI (its private
+// static convention, which needs the caller in this unit) and returns 1 when
+// it succeeded, else 0. Retail keeps the 1 in EDI across the call.
+extern "C" int __cdecl VP6_LoadFrame(unsigned char* s)
 {
     int result = 1;
     if (!Rva009AC660ReadHeader(s))

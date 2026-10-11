@@ -54,16 +54,19 @@ void * g_bfmeSlotD8C;
 // Landed callees, declared with their real signatures so the mangled name
 // matches their existing row.
 extern void __cdecl widen8x8(const unsigned char *, unsigned short *, int);
-struct Rva009C6DA0Vec3;
-extern void __cdecl copyTwelveVec3(const Rva009C6DA0Vec3 *, Rva009C6DA0Vec3 *, int, int);
 extern void __cdecl bfmeAvg8to16Mmx(const void *, const void *, void *, int);
-extern void __cdecl bfmeUnpack8to16Mmx(const void *, void *, int);
-extern void __cdecl bfmeSub8to16Mmx(const void *, void *, int);
-extern void __cdecl bfmeAddPack8Mmx(const void *, const void *, void *, int);
-extern void __cdecl bfmeAddPack8Sse(void *, void *, const void *, const void *, int);
-extern void __cdecl bfmeAddPack8MmxRow(void *, void *, const void *, const void *, int);
-extern void __cdecl bfmePackXor80Sse(void *, void *, const void *, int);
-extern void __cdecl bfmePackXor80Mmx(void *, void *, const void *, int);
+
+// VP6 block reconstruction helpers recovered from the clean-room specs
+// (Code/Libraries/Source/VP6/ReconMmx.cpp and ReconWmt.cpp), declared with
+// the extern "C" signatures those units define.
+extern "C" void __cdecl MMXReconIntra(void *, unsigned char *, const short *, unsigned int);
+extern "C" void __cdecl MmxReconInter(void *, unsigned char *, const unsigned char *, const short *, unsigned int);
+extern "C" void __cdecl Copy12x12_MMX(const unsigned char *, unsigned char *, unsigned int, unsigned int);
+extern "C" void __cdecl UnpackBlock_MMX(const unsigned char *, short *, unsigned int);
+extern "C" void __cdecl SubtractBlock_MMX(const unsigned char *, short *, unsigned int);
+extern "C" void __cdecl ReconBlock_MMX(const short *, const short *, unsigned char *, unsigned int);
+extern "C" void __cdecl WmtReconIntra(void *, unsigned char *, const short *, unsigned int);
+extern "C" void __cdecl WmtReconInter(void *, unsigned char *, const unsigned char *, const short *, unsigned int);
 
 // Unconverted gen-dump callees that already carry a functions.csv row (the
 // row is the candidate; no new pin needed).
@@ -136,18 +139,18 @@ void __cdecl bfmeInstallSpreadTable(void)
 				*(BfmeSpreadFn *)((char *)&g_bfmeTableJX + 0x120 + i) = tail;
 		}
 
-		g_bfmeSlotD8C = (void *)&bfmePackXor80Sse;
-		g_bfmeSlotD84 = (void *)&bfmeAddPack8Sse;
+		g_bfmeSlotD8C = (void *)&WmtReconIntra;
+		g_bfmeSlotD84 = (void *)&WmtReconInter;
 		g_bfmeSlotB58 = (void *)&d_009c7760;
 		g_bfmeSlotB48 = (void *)&Rva009C6D20;
 		g_bfmeSlotB4C = (void *)&bfmeAvg8to16Mmx;
-		g_bfmeSlotB50 = (void *)&bfmeUnpack8to16Mmx;
-		g_bfmeSlotD88 = (void *)&bfmeAddPack8Mmx;
-		g_bfmeSlotB5C = (void *)&bfmeSub8to16Mmx;
+		g_bfmeSlotB50 = (void *)&UnpackBlock_MMX;
+		g_bfmeSlotD88 = (void *)&ReconBlock_MMX;
+		g_bfmeSlotB5C = (void *)&SubtractBlock_MMX;
 		g_bfmeSlotB44 = (void *)&d_009c6d30;
 		g_bfmeSlotABC = (void *)&Rva009C7380;
 		g_bfmeSlotB54 = (void *)&d_009c74f0;
-		g_bfmeSlotB40 = (void *)&copyTwelveVec3;
+		g_bfmeSlotB40 = (void *)&Copy12x12_MMX;
 		return;
 	}
 
@@ -178,18 +181,18 @@ void __cdecl bfmeInstallSpreadTable(void)
 				*(BfmeSpreadFn *)((char *)&g_bfmeTableJX + 0x0 + i) = tail;
 		}
 
-		g_bfmeSlotD8C = (void *)&bfmePackXor80Mmx;
-		g_bfmeSlotD84 = (void *)&bfmeAddPack8MmxRow;
+		g_bfmeSlotD8C = (void *)&MMXReconIntra;
+		g_bfmeSlotD84 = (void *)&MmxReconInter;
 		g_bfmeSlotB58 = (void *)&d_009c6cb0;
 		g_bfmeSlotB48 = (void *)&Rva009C6D20;
 		g_bfmeSlotB4C = (void *)&bfmeAvg8to16Mmx;
-		g_bfmeSlotB50 = (void *)&bfmeUnpack8to16Mmx;
-		g_bfmeSlotD88 = (void *)&bfmeAddPack8Mmx;
-		g_bfmeSlotB5C = (void *)&bfmeSub8to16Mmx;
+		g_bfmeSlotB50 = (void *)&UnpackBlock_MMX;
+		g_bfmeSlotD88 = (void *)&ReconBlock_MMX;
+		g_bfmeSlotB5C = (void *)&SubtractBlock_MMX;
 		g_bfmeSlotB44 = (void *)&d_009c6d30;
 		g_bfmeSlotABC = (void *)&Rva009C6900;
 		g_bfmeSlotB54 = (void *)&Rva009C6A30;
-		g_bfmeSlotB40 = (void *)&copyTwelveVec3;
+		g_bfmeSlotB40 = (void *)&Copy12x12_MMX;
 		return;
 	}
 
@@ -232,7 +235,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 		g_bfmeSlotB44 = (void *)&Rva009A74D0;
 		g_bfmeSlotABC = (void *)&Rva009A8110;
 		g_bfmeSlotB54 = (void *)&Rva009A7B00;
-		g_bfmeSlotB40 = (void *)&copyTwelveVec3;
+		g_bfmeSlotB40 = (void *)&Copy12x12_MMX;
 	}
 }
 

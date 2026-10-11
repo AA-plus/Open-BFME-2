@@ -970,7 +970,6 @@ Code/GameEngine/Source/Common/Rva008A2C80Constructor.cpp	uw_007a91a0	??1Rva008A2
 Code/GameEngine/Source/Common/Rva008A2C80Constructor.cpp	uw_007a91b0	??1Rva008A2BA0Handle@@QAE@XZ	0x000A9DF3	wrong
 Code/GameEngine/Source/Common/Rva008B2EF0Constructors.cpp	??0Rva008B38D0@@QAE@I@Z	??0Rva008B2EF0@@QAE@II@Z	0x006F1310	unowned
 Code/GameEngine/Source/Common/Rva008C3E70CallAdapter.cpp	?rva008C3E70Adapter@@YGXHHH@Z	?rva008AF650Implementation@@YAXHHH@Z	0x006EE6C0	unowned
-Code/GameEngine/Source/Common/Rva009A4D00TableInit.cpp	?Rva009A4D00Init@@YAXXZ	?bfmeRun_009A75E0@@YAXXZ	0x001B8040	unowned
 Code/GameEngine/Source/Common/Rva009A5800Forward.cpp	?Rva009A5620DecodeFrame@@YAHPAE0I@Z	?d_009a8c50@@YAXXZ	0x001B96A0	unowned
 Code/GameEngine/Source/Common/Rva009A5800Forward.cpp	?Rva009A5620DecodeFrame@@YAHPAE0I@Z	?d_009acb60@@YAXXZ	0x001BD550	unowned
 Code/GameEngine/Source/Common/Rva009A6130PostFilterDispatch.cpp	?Rva009A6130PostFilterDispatch@@YAXPAURva009A6130Context@@HHHHPAE11HH@Z	?Rva009B2530@@YAXPAURva009A6130Context@@PAE1@Z	0x001C2F20	unowned

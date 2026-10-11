@@ -14,8 +14,9 @@ class BfmeCursorXF;
 struct BfmeBits1186;
 struct Rva009A6130Context;
 void __cdecl Rva001B8E70(unsigned int *result);
-// Native1BD550 wrapper has a typed state argument and int Boolean result.
-int __cdecl Rva001BD550ReadHeader(unsigned char *);
+// VP6 clean-room VP6_LoadFrame (spec 001bd550): typed state argument and int
+// Boolean result; defined in Rva009AC660ReadHeader.cpp.
+extern "C" int __cdecl VP6_LoadFrame(unsigned char *);
 void bfmeReadWordXF(BfmeCursorXF *out, const unsigned char *data);
 void bfmeInit1186(BfmeBits1186 *s, unsigned char *p);
 struct FramePB;
@@ -38,7 +39,7 @@ static int Rva009A5620DecodeFrame(unsigned char *s, unsigned char *data, unsigne
 	Rva001B8E70(&start);
 	U(0x1e8) = size;
 	bfmeReadWordXF((BfmeCursorXF *)(s + 0x450c), data);
-	if (!Rva001BD550ReadHeader(s))
+	if (!VP6_LoadFrame(s))
 		return -1;
 	if (U(0x944) || !B(0x19d))
 	{

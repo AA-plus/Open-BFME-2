@@ -2,27 +2,32 @@
 // dispatch table: 26 contiguous slots plus one standalone outlier slot.
 // Probes the tier via bfmeQueryCpuTierFlags (0x009B3A90, parked partial --
 // declared extern and pinned since a pin does not require the callee to be
-// converted): the SSE tier (top flag set) resets the spread table and
-// installs the full SIMD set; the MMX tier (basic flag set) resets the
-// spread table and installs the MMX-only set (mostly shared with the SSE
-// tier); otherwise the generic scalar/table-driven set installs directly
-// with no spread-table reset. Sibling of bfmeFilterPairMmx, bfmeExpandMmx,
-// bfmeBlurRows* and BfmeLimitedEdgeFilters.cpp.
+// converted): the SSE tier (top flag set) expands the loop-filter limit
+// table for the SIMD filters (FillLoopFilterLimitValues_MMX) and installs the
+// full SIMD set; the MMX tier (basic flag set) does the same expansion and
+// installs the MMX-only set (mostly shared with the SSE tier); otherwise the
+// generic scalar/table-driven set installs directly with no expansion.
+// Sibling of bfmeFilterPairMmx, bfmeExpandMmx, bfmeBlurRows* and
+// BfmeLimitedEdgeFilters.cpp.
 
 extern void __cdecl bfmeQueryCpuTierFlags(int *pTierA, int *pTierB, int *pTierC);
-extern void __cdecl spreadTable(void);
+
+// VP6 clean-room bodies (Code/Libraries/Source/VP6/), declared with the
+// extern "C" signatures those units define.
+struct POSTPROC_INSTANCE;
+extern "C" void __cdecl FillLoopFilterLimitValues_MMX(void);
+extern "C" int *__cdecl SetupDeblockValueArray_ForMMX(POSTPROC_INSTANCE *, int);
+extern "C" int *__cdecl SetupBoundingValueArray_ForMMX(POSTPROC_INSTANCE *, int);
+extern "C" void __cdecl LastVerticalBand_1_2_Scale_MMX(unsigned char *, unsigned int, unsigned int);
 
 // Landed siblings, declared with their real signatures so the mangled name
 // matches their existing row.
-struct Rva009C2930Owner;
 extern void __cdecl bfmeFilterPairMmx(void *, void *, int, const void *);
-extern void __cdecl initPattern(Rva009C2930Owner *, unsigned int);
 extern void __cdecl bfmeExpandMmx(const void *, int, void *);
 extern void __cdecl Rva009A98E0(const void *, int, void *);
 extern void __cdecl bfmeExpand3to5Mmx(const void *, int, void *);
 extern void __cdecl bfmeExpand4to5Mmx(const void *, int, void *);
 extern void __cdecl bfmeAverageMmx(void *, int, int);
-extern void __cdecl bfmeCopyMmx(void *, int, int);
 extern void __cdecl bfmeInterpRows6Mmx(void *, int, int);
 extern void __cdecl bfmeInterpRows2Mmx(void *, int, int);
 extern void __cdecl bfmeInterpRows5Mmx(void *, int, int);
@@ -68,8 +73,6 @@ extern void __cdecl d_009a5f50(void);
 
 // Slot fillers with neither a real identity nor a ghidra-boundary row yet;
 // address-derived names, pinned in reverse/symbols.csv.
-struct Rva009B6D40Context;
-extern int * __cdecl Rva009B6D40(Rva009B6D40Context *, int);
 extern void __cdecl Rva009B6D80(void);
 extern void __cdecl Rva009BD570(void);
 extern "C" void __cdecl Rva009BA790(void);
@@ -175,11 +178,11 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	bfmeQueryCpuTierFlags(&tierA, &tierB, &tierC);
 	if (tierC)
 	{
-		spreadTable();
+		FillLoopFilterLimitValues_MMX();
 		g_bfmeCodecDispatch.slot[15] = (BfmeDispatchFn)&bfmeFilterBlockMmx;
 		g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&bfmeFilterPairMmx;
-		g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&initPattern;
-		g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&Rva009B6D40;
+		g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&SetupBoundingValueArray_ForMMX;
+		g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&SetupDeblockValueArray_ForMMX;
 		g_bfmeCodecDispatch.slot[16] = (BfmeDispatchFn)&Rva009C2620Vp6FilterDiag4;
 		g_bfmeCodecDispatch.slot[24] = (BfmeDispatchFn)&Rva009C2320Vp6FilterDiag4;
 		g_bfmeCodecDispatch.slot[10] = (BfmeDispatchFn)&d_009bebb0;
@@ -191,7 +194,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&bfmeExpand3to5Mmx;
 		g_bfmeCodecDispatchOutlier = (BfmeDispatchFn)&bfmeExpand4to5Mmx;
 		g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&bfmeAverageMmx;
-		g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&bfmeCopyMmx;
+		g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&bfmeInterpRows6Mmx;
 		g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&bfmeInterpRows2Mmx;
 		g_bfmeCodecDispatch.slot[7] = (BfmeDispatchFn)&bfmeInterpRows5Mmx;
@@ -207,11 +210,11 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 	}
 	if (tierA)
 	{
-		spreadTable();
+		FillLoopFilterLimitValues_MMX();
 		g_bfmeCodecDispatch.slot[15] = (BfmeDispatchFn)&bfmeFilterBlockMmx;
 		g_bfmeCodecDispatch.slot[23] = (BfmeDispatchFn)&bfmeFilterPairMmx;
-		g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&initPattern;
-		g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&Rva009B6D40;
+		g_bfmeCodecDispatch.slot[2] = (BfmeDispatchFn)&SetupBoundingValueArray_ForMMX;
+		g_bfmeCodecDispatch.slot[1] = (BfmeDispatchFn)&SetupDeblockValueArray_ForMMX;
 		g_bfmeCodecDispatch.slot[16] = (BfmeDispatchFn)&Rva009BE180Vp6FilterWideV2;
 		g_bfmeCodecDispatch.slot[24] = (BfmeDispatchFn)&Rva009BD750Vp6FilterWide;
 		g_bfmeCodecDispatch.slot[10] = (BfmeDispatchFn)&Rva009B6D80;
@@ -223,7 +226,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&bfmeExpand3to5Mmx;
 		g_bfmeCodecDispatchOutlier = (BfmeDispatchFn)&bfmeExpand4to5Mmx;
 		g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&bfmeAverageMmx;
-		g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&bfmeCopyMmx;
+		g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&bfmeInterpRows6Mmx;
 		g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&bfmeInterpRows2Mmx;
 		g_bfmeCodecDispatch.slot[7] = (BfmeDispatchFn)&bfmeInterpRows5Mmx;

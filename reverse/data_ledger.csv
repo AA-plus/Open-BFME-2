@@ -16937,10 +16937,10 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009B8188,24,.data,global,?Rva009B3A00Source@@3PAGA,Code/GameEngine/Source/Common/S3GuardedDelegates3.cpp,owned,,1,1
 0x009B81A0,16,.data,global,?g_bfmeBinkRoundMmx@@3QBGB,Code/GameEngine/Source/Common/Rva009C6390BinkMmx.cpp,owned,,1,30
 0x009B81B0,784,.data,global,?g_rva00DB81B0Weights@@3QAY0BA@$$CBGA,Code/GameEngine/Source/Common/Rva001D7200CodecDispatch.cpp,owned,,1,6
-0x009B84C0,16,.data,global,_g_bfmeXor80Mmx,Code/GameEngine/Source/Common/BfmePackXor80Mmx.cpp,owned,,1,1
+0x009B84C0,16,.data,global,_g_bfmeXor80Mmx,Code/Libraries/Source/VP6/ReconMmx.cpp,owned,,1,1
 0x009B84D0,16,.data,global,?g_bfmeBinkRound@@3QBGB,Code/GameEngine/Source/Common/Rva009C6F20BinkSse.cpp,owned,,1,12
 0x009B84E0,768,.data,global,_g_00DB84E0,Code/GameEngine/Source/Common/Rva009C7380BinkSse.cpp,owned,,1,6
-0x009B87E0,32,.data,global,_g_bfmeXor80Sse,Code/GameEngine/Source/Common/BfmePackXor80Sse.cpp,owned,,1,1
+0x009B87E0,32,.data,global,_g_bfmeXor80Sse,Code/Libraries/Source/VP6/ReconWmt.cpp,owned,,1,1
 0x009B8800,32,.data,global,?kRva012D8F20@@3QBGB,Code/GameEngine/Source/Common/Rva009C77C0.cpp,owned,,1,8
 0x009B8820,276,.data,global,?kRva012D8F40@@3QBGB,Code/GameEngine/Source/Common/Rva009C77C0.cpp,owned,,1,2
 0x009B8934,52,.data,global,?theAIDataBlockParse@@3UBlockParse@@A,,unowned,,0,2
@@ -21832,7 +21832,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A22968,4,.data,global,_ghiProxyPort,,unowned,,0,3
 0x00A2296C,20,.data,global,_ghiProxyAddress,,unowned,,0,8
 0x00A22980,96,.data,global,?Rva009B3A00Table@@3PAGA,Code/GameEngine/Source/Common/S3GuardedDelegates3.cpp,owned,,1,12
-0x00A229E0,512,.data,global,?Rva009C0D10Table@@3PAGA,Code/GameEngine/Source/Common/SmallGaps/spreadTable.cpp,owned,,1,6
+0x00A229E0,512,.data,global,?Rva009C0D10Table@@3PAGA,Code/Libraries/Source/VP6/FillLoopFilterLimitValuesMmx.cpp,owned,,1,6
 0x00A22BE0,256,.data,global,?g_rva01356940@@3PAHA,Code/GameEngine/Source/Common/Rva009A5AA0InstallFilter.cpp,owned,,1,3
 0x00A22CE0,4,.data,global,?g_bfmeFilterLimit@@3PAHA,,unowned,?Rva009C0D10Src@@3PAGA;?g_bfmeFilterLimit@@3PAHA,1,9
 0x00A22CE4,4,.data,global,?g_rva01356A88@@3PBXB,Code/GameEngine/Source/Common/Rva009A5AA0InstallFilter.cpp,owned,,1,1
