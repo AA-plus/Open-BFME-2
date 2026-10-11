@@ -527,3 +527,42 @@ AptCIH *_AptGetAnimationAtLevel(int key) {
  }
  return 0;
 }
+
+// Native 6CDF60..6CE07C: allocator shutdown with no arguments; WB174D4C0
+// Apt.cpp lines 666..691. Both pool allocations are 28B. WB's two deleting
+// helpers receive flags 1; inline delete views retain the native operand copy.
+class DOGMA_PoolManager {public:unsigned GetTotalBytesUsed();};
+class Rva006DAFA0Walk {public:void rva006DAFA0();};
+void rva006CBC50(void *,unsigned);
+class Rva006CD6C0SizedDeleting {public:virtual ~Rva006CD6C0SizedDeleting();};
+struct ShutdownPoolStats {char pad[0x14];int allocated,freeCount;};
+class ShutdownChainPoolDelete {
+ char bytes[28];
+public:
+ ~ShutdownChainPoolDelete(){((Rva006DAFA0Walk *)this)->rva006DAFA0();}
+ static void operator delete(void *p,unsigned n){rva006CBC50(p,n);}
+};
+class ShutdownValuePoolDelete {
+ char bytes[28];
+public:
+ ~ShutdownValuePoolDelete(){((Rva006CD6C0SizedDeleting *)this)->Rva006CD6C0SizedDeleting::~Rva006CD6C0SizedDeleting();}
+ static void operator delete(void *p,unsigned n){g_bfmeAptFreeSizeAtE17730(p,n);}
+};
+void Rva006CDF60() {
+ if(g_bfmeAptInitAtE17700) {
+  g_bfmeAptAssertAtE17734("bInitialized == 0 && \"Apt Allocator must be shutdown after Apt Core!\"","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\Apt.cpp",0x29a);
+  if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();
+ }
+ Rva006CC110Log(0,"--+-Apt NonGC Items Pool Shutdown\n");
+ Rva006CC110Log(0,"  +- Items In Free Lists:0x%X\n",((ShutdownPoolStats *)g_pChainBlockAllocator)->freeCount);
+ if(((ShutdownPoolStats *)g_pChainBlockAllocator)->allocated)
+  Rva006CC110Log(0,"  +- Items Allocated    :0x%X   <-- !Warning! Shutting down with items allocated!!!\n",((ShutdownPoolStats *)g_pChainBlockAllocator)->allocated);
+ Rva006CC110Log(0,"  +- Total Bytes Used   :0x%X\n",((DOGMA_PoolManager *)g_pChainBlockAllocator)->GetTotalBytesUsed());
+ Rva006CC110Log(0,"--+-Apt Garbage Collected Items Pool Shutdown\n");
+ Rva006CC110Log(0,"  +- Items In Free Lists:0x%X\n",((ShutdownPoolStats *)g_pChainBlockAllocatorF4)->freeCount);
+ if(((ShutdownPoolStats *)g_pChainBlockAllocatorF4)->allocated)
+  Rva006CC110Log(0,"  +- Items Allocated    :0x%X   <-- !Warning! Shutting down with items allocated!!!\n",((ShutdownPoolStats *)g_pChainBlockAllocatorF4)->allocated);
+ Rva006CC110Log(0,"  +- Total Bytes Used   :0x%X\n",((DOGMA_PoolManager *)g_pChainBlockAllocatorF4)->GetTotalBytesUsed());
+ delete (ShutdownChainPoolDelete *)g_pChainBlockAllocator;
+ delete (ShutdownValuePoolDelete *)g_pChainBlockAllocatorF4;
+}
