@@ -17219,3 +17219,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??1Rva00210CC5@@QAE@XZ,0x00210CC5,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
 ??1Rva0021397C@@QAE@XZ,0x0021397C,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
 ??1Rva00211FA3@@QAE@XZ,0x00211FA3,callee of ??0Rva0022B12DSubsystem@@QAE@XZ
+?rva006C3D30@GeneralAllocatorDebug@@QAE_NPAURva006C2270Record@@PAX_N@Z,0x006C3D30,callee of ?rva006C4300@Rva006C4460@@QAEHHHHH@Z
+?rva006C26F0@GeneralAllocatorDebug@@QAEXPAXH@Z,0x006C26F0,callee of ?rva006C4300@Rva006C4460@@QAEHHHHH@Z

@@ -33887,11 +33887,12 @@ pin	reverse/symbols.csv	0x006C15E0	1
 pin	reverse/symbols.csv	0x006C1A50	1
 pin	reverse/symbols.csv	0x006C21B0	1
 pin	reverse/symbols.csv	0x006C25F0	1
-pin	reverse/symbols.csv	0x006C26F0	1
+pin	reverse/symbols.csv	0x006C26F0	2	allow=8c0961b74074a55bec6c9f59a9b333fac93a1c54
 pin	reverse/symbols.csv	0x006C2FB0	2
 pin	reverse/symbols.csv	0x006C30C0	1
 pin	reverse/symbols.csv	0x006C33D0	1
 pin	reverse/symbols.csv	0x006C3940	1
+pin	reverse/symbols.csv	0x006C3D30	1	allow=8c0961b74074a55bec6c9f59a9b333fac93a1c54
 pin	reverse/symbols.csv	0x006C40C0	1
 pin	reverse/symbols.csv	0x006C4300	1
 pin	reverse/symbols.csv	0x006C4530	1
