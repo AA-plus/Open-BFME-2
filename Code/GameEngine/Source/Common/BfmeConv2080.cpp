@@ -57,9 +57,9 @@ public:
 void *bfmeMakeBZB(void *q);
 BfmeSubJX *bfmeMakeSubJX();
 int bfmeCheckJX(CodecState *s);
-class Rva009A8C30Owner;
+struct PB_INSTANCE;
 
-void Rva009A8C30(Rva009A8C30Owner *s);
+extern "C" void __cdecl VP6_InitialiseConfiguration(PB_INSTANCE *pbi);
 struct BfmeHolderBZB;
 
 void Rva009A6EC0Release(void **q);
@@ -105,7 +105,7 @@ int bfmeInitCodecJX(CodecState **p, int a, int b)
 
 	(*p)->m_bfme13cJX->m_bfme38JX = 0;
 
-	Rva009A8C30((Rva009A8C30Owner *)*p);
+	VP6_InitialiseConfiguration((PB_INSTANCE *)*p);
 
 	return 1;
 }

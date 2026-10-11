@@ -143,19 +143,6 @@ int Rva00699700( const Rva00699700Record *record )
 	return record->m_18d4;
 }
 
-// Target 0x001B6330, 11 bytes; preceding int3 padding; terminal ret and int3 padding.
-// Donor b1 RVA 0x009A5870; target instructions corroborate these accesses.
-struct Rva001B6330Record
-{
-	char m_lead[ 0x244 ];
-	int m_244;
-};
-
-int Rva001B6330( const Rva001B6330Record *record )
-{
-	return record->m_244;
-}
-
 // Target 0x00665670, 11 bytes; preceding int3 padding; terminal ret and int3 padding.
 // Donor b1 RVA 0x007F90D0; target instructions corroborate these accesses.
 class Rva00665670

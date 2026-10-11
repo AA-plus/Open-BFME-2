@@ -6436,7 +6436,6 @@ name,address,notes
 ?Rva009A7F60@@YAXPAHPAGHHHHPBH@Z,0x001B89C0
 ?Rva009A8550Init@@YAXXZ,0x001B8FB0
 ?Rva009A86F0Allocate@@YAHPAX@Z,0x001B9140,BFME1-donor declaration Rva009A86F0Allocate(void*) in BfmeCheckJX.cpp; its call site at body+0x1D6 pushes the state pointer only; address is the retail call target
-?Rva009A8C30@@YAXPAVRva009A8C30Owner@@@Z,0x001B9680
 ?Rva009ACBA0SetupBounding@@YAPAHPAURva009ACC40State@@H@Z,0x001BD590
 ?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z,0x001BE490
 ?Rva009B2530@@YAXPAURva009A6130Context@@PAE1@Z,0x001C2F20,native dispatcher calls 0x001B6D13 and 0x001B7016; three cdecl arguments; helper plain ret 0x001C343C; donor 10af19f44a89 label 0x009B2530 is address-derived not original symbol
