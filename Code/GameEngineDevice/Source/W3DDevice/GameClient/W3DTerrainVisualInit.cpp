@@ -150,7 +150,17 @@ private:
 };
 
 class BfmeB991;
+// The smudge manager slot three units reach (BaseHeightMapReleaseResources,
+// W3DTerrainVisualDestructor, BfmeConv991) and this one assigns. RVA 0x009E612C
+// is past .data's raw end (file offset 0x009DCC08), so retail's image holds it
+// zero until the rowed body below stores the new W3DSmudgeManager into it - a
+// tentative definition, for the same reason as g_Va00DB6218: an explicit "= 0"
+// would let MSVC learn the value and fold the guards in BfmeConv991 and
+// BaseHeightMapReleaseResources into literals. Only a pointer is declared here,
+// so no complete class or destructor is needed.
+// Symbol ?g_bfmeB991@@3PAVBfmeB991@@A, defined below.
 extern BfmeB991 *g_bfmeB991;
+BfmeB991 *g_bfmeB991;
 
 extern unsigned int g_Va00DFE7A8;
 
