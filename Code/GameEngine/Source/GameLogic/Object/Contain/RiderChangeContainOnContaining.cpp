@@ -56,9 +56,14 @@ private:
 	unsigned int m_words[19];
 };
 
+class Rva0023DA79
+{
+public:
+	Rva0023DA79 *rva0023DA79(int base, int status);	// 0x0023DA79 (rowed)
+};
+class Rva00346BC0;
 struct ObjectStatusMask
 {
-	ObjectStatusMask *Rva0023DA79(int base, ObjectStatusTypes status, bool on);	// 0x0023DA79
 	unsigned int m_words[4];
 };
 
@@ -78,7 +83,7 @@ extern ThingFactory *TheThingFactory;
 class Drawable
 {
 public:
-	bool isSelected() const { return m_selected; }
+	bool isSelectedRV() const { return m_selected; }
 private:
 	char m_pad000[0x43C];
 	bool m_selected;	// +0x43C
@@ -171,7 +176,7 @@ public:
 	Drawable *getDrawable() const;	// 0x005508E2
 	void rva0028AE6D();	// model-condition change notifier
 	void setWeaponSetFlag(WeaponSetType wst);	// 0x00290963
-	void Rva0028CDEB(ObjectStatusMask *mask);	// 0x0028CDEB
+	void rva0028CDEB(const Rva00346BC0 &mask, bool on);	// 0x0028CDEB (rowed)
 	void setStatus(ObjectStatusTypes status, bool set);	// 0x0023DB0E
 	void setCommandSetStringOverride(const AsciiString &str);	// 0x0029336F
 	bool rva002943B2(const Player *player);	// 0x002943B2
@@ -270,7 +275,7 @@ void RiderChangeContain::onContaining(Object *rider, bool wasSelected)
 	m_containing = true;
 
 	Drawable *containDraw = getObject()->getDrawable();
-	if (containDraw && wasSelected && !containDraw->isSelected())
+	if (containDraw && wasSelected && !containDraw->isSelectedRV())
 	{
 		GameMessage *teamMsg = TheMessageStream->appendMessage(0x3E9);
 		teamMsg->appendBooleanArgument(false);
@@ -288,7 +293,7 @@ void RiderChangeContain::onContaining(Object *rider, bool wasSelected)
 			obj->setModelConditionState(data->m_riders[i].m_modelConditionFlagType);
 			obj->setWeaponSetFlag((WeaponSetType)data->m_riders[i].m_weaponSetFlag);
 			ObjectStatusMask mask;
-			obj->Rva0028CDEB(mask.Rva0023DA79(0, (ObjectStatusTypes)data->m_riders[i].m_objectStatusType, true));
+			obj->rva0028CDEB(*(const Rva00346BC0 *)((Rva0023DA79 *)&mask)->rva0023DA79(0, (int)data->m_riders[i].m_objectStatusType), true);
 			rider->setStatus(OBJECT_STATUS_RIDER_CONTAINED, true);
 			obj->setCommandSetStringOverride(data->m_riders[i].m_commandSet);
 			TheControlBar->markUIDirty();
