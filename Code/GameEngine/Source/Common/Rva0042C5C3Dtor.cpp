@@ -13,6 +13,12 @@
 // 0x00BED658 and 0x00BDBA74 (out-of-line copies 0x004EDFFF, 0x00238D97 and
 // 0x00429191). Identities are not established.
 class CreateAHeroData;
+class Rva0042C1B7Item;
+class Rva002D3627Host;
+class Rva0042D8D4;
+struct Rva002BA8F1Listener;
+class Rva005A0B4CList { public: void append(Rva002BA8F1Listener *); };
+namespace StrategicHUD { class HUD { public: void Show(); }; }
 
 class Rva002B7250
 {
@@ -35,11 +41,13 @@ class Rva0042CBB6
 {
 public:
 	void rva0042CAEB(int who);
+	void rva002B230F(int impl);
 };
 
 class Rva000AD6F4
 {
 public:
+	Rva000AD6F4() : m_ptr(0) {}
 	~Rva000AD6F4();
 private:
 	void *m_ptr;
@@ -48,6 +56,7 @@ private:
 class Rva0042C1DF
 {
 public:
+	Rva0042C1DF() : m_ptr(0) {}
 	~Rva0042C1DF() { clear(); }
 	void clear();
 private:
@@ -57,6 +66,7 @@ private:
 class Rva0042DFF5
 {
 public:
+	Rva0042DFF5(const unsigned int &level);
 	~Rva0042DFF5();
 private:
 	void *m_ptr;
@@ -65,6 +75,7 @@ private:
 class Rva00574A8A
 {
 public:
+	Rva00574A8A(unsigned int first, unsigned int second);
 	virtual ~Rva00574A8A();
 private:
 	int m_04;
@@ -95,15 +106,41 @@ class Rva0042C5C3 : public Gen_uwm_00429191, public Gen_uwm_00238d97, public Gen
 	public Rva0042DFF5, public Rva00574A8A
 {
 public:
+	Rva0042C5C3(Rva0042C1B7Item *owner, Rva002D3627Host *holder,
+		Rva0042CBB6 *source, Rva0042D8D4 *state);
 	virtual ~Rva0042C5C3();
 private:
 	int m_18;
 	int m_1C;
 	Rva0042CBB6 *m_owner;			// +0x20
-	unsigned char m_pad24[0x34 - 0x24];
+	int m_24;
+	int m_28;
+	int m_2C;
+	int m_30;
 	Rva000AD6F4 m_34;
 	Rva0042C1DF m_38;
 };
+
+// Native42C693..42C76B RET16 and the two rowed wrapper constructors prove
+// these four argument words. The destructor above supplies the actual base
+// layout and unwind ordering; WB12BB6F0 is a structural constructor guide.
+// The +14 cell consumes the first word of state by reference. The +C base
+// forwards holder and that cell's address as opaque words through its rowed
+// constructor; no additional names or pointee layouts are claimed here.
+Rva0042C5C3::Rva0042C5C3(Rva0042C1B7Item *owner, Rva002D3627Host *holder,
+	Rva0042CBB6 *source, Rva0042D8D4 *state)
+	: Rva0042DFF5(*reinterpret_cast<const unsigned int *>(state)),
+	  Rva00574A8A((unsigned int)holder, (unsigned int)static_cast<Rva0042DFF5 *>(this)),
+	  m_18((int)owner), m_1C((int)holder), m_owner(source),
+	  m_24(0), m_28(0), m_2C(-1), m_30(-1)
+{
+	reinterpret_cast<StrategicHUD::HUD *>(static_cast<Rva0042DFF5 *>(this))->Show();
+	m_owner->rva002B230F((int)this);
+	reinterpret_cast<Rva005A0B4CList *>(&TheLivingWorldLogic->m_list4C)->append(
+		reinterpret_cast<Rva002BA8F1Listener *>(static_cast<Gen_uwm_00238d97 *>(this)));
+	reinterpret_cast<Rva005A0B4CList *>(&TheLivingWorldLogic->m_list1C)->append(
+		reinterpret_cast<Rva002BA8F1Listener *>(static_cast<Gen_uwm_004edfff *>(this)));
+}
 
 Rva0042C5C3::~Rva0042C5C3()
 {
