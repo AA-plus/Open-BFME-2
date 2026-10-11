@@ -17,6 +17,16 @@ template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::ins
 // COMDAT (one byte shape per TU flags); a file-static overload takes those
 // calls instead so this TU emits no external copy.
 #include <new>
+
+// map/set<int> internals otherwise instantiate the less<int>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+// (Do NOT use where a rowed body inlines less<int>: _M_find/_M_insert and
+// map/set bodies fail. Those TUs need the dllimport+body form instead.)
+namespace _STL {
+template <> bool less<int>::operator()(const int &a, const int &b) const;
+}
 namespace _STL {
 static inline void _Construct(int *__p, const int &__val)
 { new (__p) int(__val); }
