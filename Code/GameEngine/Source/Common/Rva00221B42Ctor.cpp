@@ -34,9 +34,39 @@ class INI
 {
 public:
 	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
+	static void parseColorInt(INI *ini, void *instance, void *store, const void *userData);
+};
+class GlobalLanguage
+{
+public:
+	static void parseFontDesc(INI *ini, void *instance, void *store, const void *userData);
 };
 
+struct FieldParse
+{
+	const char *token;
+	void (*parse)(INI *, void *, void *, const void *);
+	const void *userData;
+	int offset;
+};
+
+// Retail's own five-record table, transcribed from .rdata at RVA 0x007E6BD8 (VA
+// 0x00BE6BD8, file offset 0x007E0FD8): Title, OpenAudio and Icon with
+// INI::parseAsciiString at +0/+4/+8, MessageFont with
+// GlobalLanguage::parseFontDesc at +0xC, and MessageColor with
+// INI::parseColorInt at +0x18, then the zero terminator. `extern` on the
+// definition keeps the table external.
 extern const FieldParse g_00BE6BD8[];
+const FieldParse g_00BE6BD8[] =
+{
+	{ "Title", &INI::parseAsciiString, 0, 0 },
+	{ "OpenAudio", &INI::parseAsciiString, 0, 4 },
+	{ "Icon", &INI::parseAsciiString, 0, 8 },
+	{ "MessageFont", &GlobalLanguage::parseFontDesc, 0, 12 },
+	{ "MessageColor", &INI::parseColorInt, 0, 24 },
+	{ 0, 0, 0, 0 }
+};
 
 class Rva00221B42
 {
