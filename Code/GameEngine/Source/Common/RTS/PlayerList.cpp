@@ -113,115 +113,11 @@ void PlayerList::reset()
 }
 
 //-----------------------------------------------------------------------------
-// ?PlayerList::newGame present-unmatched
-void PlayerList::newGame()
-{
-	Int i;
+// Note: a ZH-derived PlayerList::newGame body stood here. The census proves
+// our copy is not retail's (S: the kept definition differs from retail bytes)
+// while 0x002A8008 is rowed 766B from PlayerListRva002A8008.cpp, so this
+// unit no longer defines it and the link keeps the rowed copy.
 
-	DEBUG_ASSERTCRASH(this != NULL, ("null this"));
-	
-	TheTeamFactory->clear(); // cleans up energy, among other things
-
-	// first, re-init ourselves.
-	init();
-
-	// ok, now create the rest of players we need.
-	Bool setLocal = false;
-	for( i = 0; i < TheSidesList->getNumSides(); i++)
-	{
-		Dict *d = TheSidesList->getSideInfo(i)->getDict();
-		AsciiString pname = d->getAsciiString(TheKey_playerName);
-		if (pname.isEmpty())
-			continue;	// it's neutral, which we've already done, so skip it.
-
-		/// @todo The Player class should have a reset() method, instead of directly calling initFromDict() (MSB)
-		Player* p = m_players[m_playerCount++];
-		p->initFromDict(d);
-
-		// Multiplayer override
-		Bool exists;	// throwaway, since we don't care if it exists
-		if (d->getBool(TheKey_multiplayerIsLocal, &exists))
-		{
-			DEBUG_LOG(("Player %s is multiplayer local\n", pname.str()));
-			setLocalPlayer(p);
-			setLocal = true;
-		}
-
-		if (!setLocal && !TheNetwork && d->getBool(TheKey_playerIsHuman))
-		{
-			setLocalPlayer(p);
-			setLocal = true;
-		}
-
-		// Set the build list.
-		p->setBuildList(TheSidesList->getSideInfo(i)->getBuildList());
-		// Build list is attached to player now, so release it from the side info.
-		TheSidesList->getSideInfo(i)->releaseBuildList();
-	}
-
-	if (!setLocal)
-	{
-		DEBUG_ASSERTCRASH(TheNetwork, ("*** Map has no human player... picking first nonneutral player for control\n"));
-		for( i = 0; i < TheSidesList->getNumSides(); i++)
-		{
-			Player* p = getNthPlayer(i);
-			if (p != getNeutralPlayer())
-			{
-				p->setPlayerType(PLAYER_HUMAN, false);
-				setLocalPlayer(p);
-				setLocal = true;
-				break;
-			}
-		}
-	}
-
-	// must reset teams *after* creating players.
-	TheTeamFactory->initFromSides(TheSidesList);
-
-	for( i = 0; i < TheSidesList->getNumSides(); i++)
-	{
-		Dict *d = TheSidesList->getSideInfo(i)->getDict();
-		Player* p = findPlayerWithNameKey(NAMEKEY(d->getAsciiString(TheKey_playerName)));
-
-		AsciiString tok;
-
-		AsciiString enemies = d->getAsciiString(TheKey_playerEnemies);
-		while (enemies.nextToken(&tok))
-		{
-			Player *p2 = findPlayerWithNameKey(NAMEKEY(tok));
-			if (p2)
-			{
-				p->setPlayerRelationship(p2, ENEMIES);
-			}
-			else
-			{
-				DEBUG_LOG(("unknown enemy %s\n",tok.str()));
-			}
-		}
-
-		AsciiString allies = d->getAsciiString(TheKey_playerAllies);
-		while (allies.nextToken(&tok))
-		{
-			Player *p2 = findPlayerWithNameKey(NAMEKEY(tok));
-			if (p2)
-			{
-				p->setPlayerRelationship(p2, ALLIES);
-			}
-			else
-			{
-				DEBUG_LOG(("unknown ally %s\n",tok.str()));
-			}
-		}
-
-		// finally, make sure self & neutral are correct.
-		p->setPlayerRelationship(p, ALLIES);
-		if (p != getNeutralPlayer())
-			p->setPlayerRelationship(getNeutralPlayer(), NEUTRAL);
-
-		p->setDefaultTeam();
-	}
-
-}
 
 //-----------------------------------------------------------------------------
 // PlayerList::init is defined with its retail-matched body in Code/GameEngine/Source/Common/RTS/PlayerList_playerLoops.cpp (0x002A7EF1).
