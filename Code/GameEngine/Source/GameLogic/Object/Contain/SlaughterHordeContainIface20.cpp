@@ -74,6 +74,8 @@ class GarrisonContain
 {
 public:
 	virtual void rva00464D02(Object *obj);
+	// LINK: the base body is rowed as GarrisonContain::onRemoving (0x00464D02).
+	virtual void onRemoving(Object *obj);
 };
 
 class HordeGarrisonContain : public GarrisonContain
@@ -89,6 +91,6 @@ public:
 // ?rva00464D02@SlaughterHordeContain@@UAEXPAVObject@@@Z @0x004806D3
 void SlaughterHordeContain::rva00464D02(Object *obj)
 {
-	GarrisonContain::rva00464D02(obj);
+	((GarrisonContain *)((char *)this + 0x20))->GarrisonContain::onRemoving(obj);
 	setModelConditionBit(m_object, 10);
 }
