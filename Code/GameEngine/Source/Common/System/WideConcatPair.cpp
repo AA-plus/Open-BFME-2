@@ -153,7 +153,7 @@ BFME2WideConcatPair::operator StringBase<unsigned short>()
 class BFME2WideConcatTriple : public BFME2WideConcatPair
 {
 public:
-	operator StringBase<unsigned short>();
+	operator UnicodeString();
 	int totalLength() const;
 	int copyPayloads(unsigned short *dst) const;
 
@@ -175,7 +175,7 @@ int BFME2WideConcatTriple::copyPayloads(unsigned short *dst) const
 	return first + second;
 }
 
-BFME2WideConcatTriple::operator StringBase<unsigned short>()
+BFME2WideConcatTriple::operator UnicodeString()
 {
 	UnicodeString tmp;
 	copyPayloads(tmp.getBufferForRead(totalLength()));
