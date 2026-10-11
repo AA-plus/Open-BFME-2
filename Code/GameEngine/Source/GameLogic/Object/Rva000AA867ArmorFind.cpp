@@ -4,6 +4,11 @@
 // Armor map find with map at +0x08 calling rowed _M_find 0x002888D4 returning it->second.m_ptr via mov [eax+8]; mirrors Rva0035516C at +0x24; honest Rva name
 #include <hash_map>
 #include <cstddef>
+// Suppress the TU's non-retail const-begin copy (row 47 family2-LK3): the
+// /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
+namespace _STL {
+template <> vector<void *>::const_iterator _STL::vector<void *>::begin() const;
+}
 enum NameKeyType
 {
 	NAMEKEY_INVALID = 0,
