@@ -127,7 +127,7 @@ class Locomotor
 public:
 	Real getWanderWidthFactor() const { return m_template->getWanderWidthFactor(); }
 	Real getWanderAboutPointRadius() const { return m_template->getWanderAboutPointRadius(); }
-	void setUsePreciseZPos(Bool use)
+	__declspec(dllimport) __forceinline void setUsePreciseZPos(Bool use)
 	{
 		if (use)
 			m_flags |= 8;
@@ -169,7 +169,7 @@ public:
     void setDesiredSpeed(Real speed);
     void setPathExtraDistance(Real dist);
     void setCompletedWaypoint(const Waypoint *wp);
-    const LocomotorSet &getLocomotorSet() const
+    __declspec(dllimport) __forceinline const LocomotorSet &getLocomotorSet() const
     {
         return *reinterpret_cast<const LocomotorSet *>(reinterpret_cast<const char *>(this) + 0x1CC);
     }
@@ -206,7 +206,7 @@ public:
     const Coord3D *getPosition() const { return &m_position; }
     unsigned int getID() const { return m_id; }
     AIUpdateInterface *getAI() { return m_ai; }
-    Team *getTeam() { return m_team; }
+    __declspec(dllimport) __forceinline Team *getTeam() { return m_team; }
     Bool isKindOfCanBeRepulsed() const { return m_template->isKindOfCanBeRepulsed(); }
     Bool isKindOfProjectile() const { return m_template->isKindOfProjectile(); }
     Real getVisionRange() const;
@@ -323,7 +323,7 @@ class Waypoint
 {
 public:
 	const Coord3D *getLocation() const { return &m_location; }
-	Int getNumLinks() const { return m_numLinks; }
+	__declspec(dllimport) __forceinline Int getNumLinks() const { return m_numLinks; }
 	Waypoint *getLink(Int ndx) const;
 private:
 	unsigned char m_pad00[0x0C];

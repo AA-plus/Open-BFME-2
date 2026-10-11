@@ -23,13 +23,13 @@ public:
 struct VideoPair
 {
     struct { void *first, *second; } s;
-    VideoPair(void *first, void *second)
+    __declspec(dllimport) __forceinline VideoPair(void *first, void *second)
     {
         s.first = first;
         s.second = second;
     }
     // Retail constructs the argument table word before the node word.
-    VideoPair(const VideoPair &other)
+    __declspec(dllimport) __forceinline VideoPair(const VideoPair &other)
     {
         s.second = other.s.second;
         s.first = other.s.first;
