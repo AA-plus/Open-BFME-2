@@ -6,9 +6,9 @@
 //
 // _STL::_Destroy(T *) runs T's non-virtual destructor on its argument; the
 // destructor call becomes a tail jump. Each instance tail-jumps to a matched
-// ledger destructor whose owner class is address-named, so the element type
-// is that owner (structural inference from the shape and the jump target;
-// the class key follows the owner's every existing declaration). The
+// ledger destructor, so the element type is that destructor's owner (structural inference from the shape and the jump target;
+// the class key follows the owner's every existing declaration, or the
+// declaration in the unit that compiles its destructor where views differ). The
 // emitting units are not recovered, so the instances are instantiated here.
 #include <vector>
 
@@ -148,6 +148,96 @@ struct Rva0073EEE0ListValue
 public:
 	~Rva0073EEE0ListValue();
 };
+struct Rva000543F5Record
+{
+public:
+	~Rva000543F5Record();
+};
+struct Rva00111B25Record
+{
+public:
+	~Rva00111B25Record();
+};
+struct BfmeStringRecord000B94D2
+{
+public:
+	~BfmeStringRecord000B94D2();
+};
+struct BfmeStringTailRecord180
+{
+public:
+	~BfmeStringTailRecord180();
+};
+class BfmePod248
+{
+public:
+	~BfmePod248();
+};
+struct BfmeVectorRecord001B4A39
+{
+public:
+	~BfmeVectorRecord001B4A39();
+};
+struct Rva0010F149Handle
+{
+public:
+	~Rva0010F149Handle();
+};
+struct Rva00204686
+{
+public:
+	~Rva00204686();
+};
+class RvaSmartPtr12
+{
+public:
+	~RvaSmartPtr12();
+};
+struct Rva0029E00D
+{
+public:
+	~Rva0029E00D();
+};
+class Rva001EB63C
+{
+public:
+	~Rva001EB63C();
+};
+class Rva00358B65
+{
+public:
+	~Rva00358B65();
+};
+struct PeerResponse
+{
+public:
+	~PeerResponse();
+};
+class Rva001EB940
+{
+public:
+	~Rva001EB940();
+};
+struct Rva004F7DD4
+{
+public:
+	~Rva004F7DD4();
+};
+class Rva005C8FBD
+{
+public:
+	~Rva005C8FBD();
+};
+class BfmeVectorRecord002AF478
+{
+public:
+	~BfmeVectorRecord002AF478();
+};
+class Rva001D28F0Element
+{
+public:
+	~Rva001D28F0Element();
+};
 template void _STL::_Destroy<Rva000C2980>(Rva000C2980 *);
 template void _STL::_Destroy<Rva00216108>(Rva00216108 *);
 template void _STL::_Destroy<Rva0022304A>(Rva0022304A *);
@@ -175,3 +265,21 @@ template void _STL::_Destroy<BfmeNodeValueEBD>(BfmeNodeValueEBD *);
 template void _STL::_Destroy<BuddyMessage>(BuddyMessage *);
 template void _STL::_Destroy<Rva0041579E>(Rva0041579E *);
 template void _STL::_Destroy<Rva0073EEE0ListValue>(Rva0073EEE0ListValue *);
+template void _STL::_Destroy<Rva000543F5Record>(Rva000543F5Record *);
+template void _STL::_Destroy<Rva00111B25Record>(Rva00111B25Record *);
+template void _STL::_Destroy<BfmeStringRecord000B94D2>(BfmeStringRecord000B94D2 *);
+template void _STL::_Destroy<BfmeStringTailRecord180>(BfmeStringTailRecord180 *);
+template void _STL::_Destroy<BfmePod248>(BfmePod248 *);
+template void _STL::_Destroy<BfmeVectorRecord001B4A39>(BfmeVectorRecord001B4A39 *);
+template void _STL::_Destroy<Rva0010F149Handle>(Rva0010F149Handle *);
+template void _STL::_Destroy<Rva00204686>(Rva00204686 *);
+template void _STL::_Destroy<RvaSmartPtr12>(RvaSmartPtr12 *);
+template void _STL::_Destroy<Rva0029E00D>(Rva0029E00D *);
+template void _STL::_Destroy<Rva001EB63C>(Rva001EB63C *);
+template void _STL::_Destroy<Rva00358B65>(Rva00358B65 *);
+template void _STL::_Destroy<PeerResponse>(PeerResponse *);
+template void _STL::_Destroy<Rva001EB940>(Rva001EB940 *);
+template void _STL::_Destroy<Rva004F7DD4>(Rva004F7DD4 *);
+template void _STL::_Destroy<Rva005C8FBD>(Rva005C8FBD *);
+template void _STL::_Destroy<BfmeVectorRecord002AF478>(BfmeVectorRecord002AF478 *);
+template void _STL::_Destroy<Rva001D28F0Element>(Rva001D28F0Element *);
