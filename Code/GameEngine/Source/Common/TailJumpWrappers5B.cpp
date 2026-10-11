@@ -1011,6 +1011,26 @@ unsigned char Rva005E687F::get() const
 	return ((const Rva005F6037ByteChaseField *)this)->get();
 }
 
+// Native5E6884..5E6894 RET0: first calls the independently rowed empty
+// body at B3FD0 with the receiver, then tail-dispatches virtual slot6.
+// Two retail tables store this member (file offsets8744A4 and877260).
+// Existing opaque empty-body pin supplies the no-argument thiscall ABI;
+// the original owner and the empty operation's purpose remain unknown.
+class Rva000B3FD0Nop { public: void noop(); };
+class Rva005E6884
+{
+public:
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6();
+    void rva005E6884();
+};
+void Rva005E6884::rva005E6884()
+{
+    reinterpret_cast<Rva000B3FD0Nop *>(this)->noop();
+    slot6();
+}
+
 class Rva005F327ARun
 {
 public:
