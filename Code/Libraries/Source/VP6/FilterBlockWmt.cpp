@@ -10,14 +10,14 @@
 // Rva009C7380BinkSse.cpp owns.
 #include <emmintrin.h>
 
-extern const unsigned char g_00DB84E0[];
+extern "C" const unsigned char g_00DB84E0[];
 
 #define BILINEAR_BANK(phase) (g_00DB84E0 + (phase) * 32)
 #define BICUBIC_BANK(phase) (g_00DB84E0 + 0x100 + (phase) * 64)
 
 void __cdecl rva009C6F20BinkSse(const void *, void *, int, int, int, int, const void *);
 void __cdecl rva009C6FC0BinkSse(const void *, void *, int, int, int, int, const void *);
-void __cdecl rva009C7490BinkSse(const unsigned char *, unsigned char *, int, const void *, const void *);
+extern "C" void __cdecl FilterBlock2d_wmt(const unsigned char *, unsigned char *, int, const void *, const void *);
 void __cdecl rva009C72C0BinkSse(const void *, void *, int, int, int, int, const void *);
 void __cdecl rva009C7320BinkSse(const void *, void *, int, int, int, int, const void *);
 void __cdecl rva009C7200BinkSse(const void *, void *, int, const void *, const void *);
@@ -40,9 +40,9 @@ extern "C" void __cdecl FilterBlock_wmt(const unsigned char *a, const unsigned c
 		else if (diff == pixelsPerLine)
 			rva009C6FC0BinkSse(a, block, pixelsPerLine, pixelsPerLine, 8, 8, BICUBIC_BANK(verticalPhase));
 		else if (diff == pixelsPerLine - 1)
-			rva009C7490BinkSse(a - 1, block, pixelsPerLine, BICUBIC_BANK(horizontalPhase), BICUBIC_BANK(verticalPhase));
+			FilterBlock2d_wmt(a - 1, block, pixelsPerLine, BICUBIC_BANK(horizontalPhase), BICUBIC_BANK(verticalPhase));
 		else if (diff == pixelsPerLine + 1)
-			rva009C7490BinkSse(a, block, pixelsPerLine, BICUBIC_BANK(horizontalPhase), BICUBIC_BANK(verticalPhase));
+			FilterBlock2d_wmt(a, block, pixelsPerLine, BICUBIC_BANK(horizontalPhase), BICUBIC_BANK(verticalPhase));
 		{
 			int srcStride = 8;
 			const unsigned char *src = block;

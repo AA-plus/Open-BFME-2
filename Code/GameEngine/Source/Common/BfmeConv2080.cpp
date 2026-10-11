@@ -55,7 +55,7 @@ public:
 	static void *operator new(unsigned int n, AllocationTag m);
 };
 extern "C" void *__cdecl CreatePostProcInstance(void *q);
-BfmeSubJX *bfmeMakeSubJX();
+extern "C" BfmeSubJX *__cdecl VP6_CreateQuantizer();
 int bfmeCheckJX(CodecState *s);
 struct PB_INSTANCE;
 
@@ -66,21 +66,7 @@ void Rva009A6EC0Release(void **q);
 extern "C" void __cdecl DeletePostProcInstance(BfmeHolderBZB *h);
 void bfmeStepJW(void *q);
 void Rva009A8880Release(void *q);
-void releaseCodecState(CodecState **q);
-
-int bfmeFreeCodecJW(CodecState **p)
-{
-	if (*p != 0)
-	{
-		Rva009A6EC0Release((void **)((char *)*p + 0x13c));
-		DeletePostProcInstance((BfmeHolderBZB *)((char *)*p + 0x298));
-		bfmeStepJW(*p);
-		Rva009A8880Release(*p);
-		releaseCodecState(p);
-	}
-
-	return 1;
-}
+extern "C" void __cdecl VP6_DeletePBInstance(PB_INSTANCE **instance);
 
 int bfmeInitCodecJX(CodecState **p, int a, int b)
 {
@@ -93,12 +79,12 @@ int bfmeInitCodecJX(CodecState **p, int a, int b)
 	(*p)->m_bfme1b0JX = a;
 	(*p)->m_bfme1b4JX = b;
 	(*p)->m_bfme298JX = CreatePostProcInstance((char *)*p + 0x1b0);
-	(*p)->m_bfme13cJX = bfmeMakeSubJX();
+	(*p)->m_bfme13cJX = VP6_CreateQuantizer();
 	(*p)->m_bfme1a4JX = g_bfmeSharedJX;
 
 	if (bfmeCheckJX(*p) == 0)
 	{
-		releaseCodecState(p);
+		VP6_DeletePBInstance((PB_INSTANCE **)p);
 
 		return 0;
 	}

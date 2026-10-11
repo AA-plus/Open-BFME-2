@@ -4,7 +4,7 @@ extern void __cdecl rva009C6390BinkMmx(const void *, void *, int, int, int, int,
 extern void __cdecl rva009C66F0BinkMmx(const void *, void *, int, int, int, int, const void *);
 extern void __cdecl rva009C6470BinkMmx(const void *, void *, int, int, int, int, const void *);
 extern void __cdecl rva009C6780BinkMmx(const void *, void *, int, int, int, int, const void *);
-extern void __cdecl rva009C69D0BinkMmx(const void *, void *, int, const void *, const void *);
+extern "C" void __cdecl FilterBlock2d_mmx(const void *, void *, int, const void *, const void *);
 extern void __cdecl Rva009C6800(const unsigned char *, unsigned char *, int, const void *, const void *);
 extern "C" void __cdecl UnpackBlock_MMX(const unsigned char *, short *, unsigned int);
 
@@ -44,7 +44,7 @@ void __cdecl Rva009C6A30(void *arg1, void *arg2, void *arg3,
     else if (distance == stride - 1)
     {
         if (mode != 0)
-            rva009C69D0BinkMmx((const unsigned char *)arg1 - 1, scratch, stride,
+            FilterBlock2d_mmx((const unsigned char *)arg1 - 1, scratch, stride,
                 (const void *)((const unsigned char *)g_bfmeBinkRoundMmx + 0x110 + (weightsA << 6)),
                 (const void *)((const unsigned char *)g_bfmeBinkRoundMmx + 0x110 + (weightsB << 6)));
         else
@@ -55,7 +55,7 @@ void __cdecl Rva009C6A30(void *arg1, void *arg2, void *arg3,
     else if (distance == stride + 1)
     {
         if (mode != 0)
-            rva009C69D0BinkMmx(arg1, scratch, stride,
+            FilterBlock2d_mmx(arg1, scratch, stride,
                 (const void *)((const unsigned char *)g_bfmeBinkRoundMmx + 0x110 + (weightsA << 6)),
                 (const void *)((const unsigned char *)g_bfmeBinkRoundMmx + 0x110 + (weightsB << 6)));
         else

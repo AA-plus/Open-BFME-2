@@ -193,7 +193,7 @@ extern "C" __declspec(dllimport) int __cdecl sprintf(char *buffer, const char *f
 extern "C" unsigned char *__cdecl _mbscpy(unsigned char *dest, const unsigned char *src);
 AsciiString GetRegistryLanguage();
 extern "C" void __cdecl duck_mem_set_allocator(void *allocator);
-void Rva009A4D00Init();
+extern "C" void __cdecl VP6_VPInitLibrary();
 extern unsigned int g_Va00DE4878;
 extern unsigned int g_Va00DE3498[0x400];
 extern int g_Va00DE3098[0x100];
@@ -231,7 +231,7 @@ void Rva009111B::init()
 	sprintf(g_Va00DE44A8[2].m_path, "%s\\", "Data\\Movies");
 	_mbscpy((unsigned char *)g_Va00DE44A8[2].m_label, (const unsigned char *)"Non-Localized Path");
 	duck_mem_set_allocator(&g_Va00DE4878);
-	Rva009A4D00Init();
+	VP6_VPInitLibrary();
 
 	for (unsigned int i = 0; i < 0x400; ++i)
 	{

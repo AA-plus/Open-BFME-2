@@ -1,0 +1,50 @@
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d72d0.md 001d7d90.md and
+// 001b8280.md plus retail only. No decoder source was consulted.
+//
+// Separable bicubic 8x8 two-pass filters (retail 0x001D72D0 MMX,
+// 0x001D7D90 SSE2, 0x001B8280 generic): a horizontal pass over eleven rows
+// starting one line above the source into a pitch-8 buffer, then a vertical
+// pass from buffer row 1 into the output.
+
+void __cdecl rva009C6390BinkMmx(const void *, void *, int, int, int, int, const void *); // 0x001D6C90
+void __cdecl rva009C6470BinkMmx(const void *, void *, int, int, int, int, const void *); // 0x001D6D70
+void __cdecl rva009C6F20BinkSse(const void *, void *, int, int, int, int, const void *); // 0x001D7820
+void __cdecl rva009C6FC0BinkSse(const void *, void *, int, int, int, int, const void *); // 0x001D78C0
+void __cdecl bfmeGo76A0(int, int *, void *, int, int, int, void *); // 0x001B8100 FilterBlock2dFirstPass
+void __cdecl bfmeGo7760(int *, void *, int, int, int, int, void *); // 0x001B81C0 FilterBlock2dSecondPass
+
+// Retail 0x00DFDA58: the generic filter's scratch rows (8 dwords per row).
+int g_bfmeTableC7E0;
+// Retail 0x00DFDA78: scratch row 1.
+int g_bfmeTableC800;
+
+// RVA 0x001D72D0
+extern "C" void __cdecl FilterBlock2d_mmx(const void *source, void *output,
+	int pixelsPerLine, const void *horizontalTaps, const void *verticalTaps)
+{
+	unsigned char scratch[256];
+
+	rva009C6390BinkMmx((const unsigned char *)source - pixelsPerLine, scratch,
+		pixelsPerLine, 1, 11, 8, horizontalTaps);
+	rva009C6470BinkMmx(scratch + 8, output, 8, 8, 8, 8, verticalTaps);
+}
+
+// RVA 0x001D7D90
+extern "C" void __cdecl FilterBlock2d_wmt(const unsigned char *source, unsigned char *output,
+	int pixelsPerLine, const void *horizontalTaps, const void *verticalTaps)
+{
+	unsigned char scratch[256];
+
+	rva009C6F20BinkSse(source - pixelsPerLine, scratch, pixelsPerLine, 1, 11, 8, horizontalTaps);
+	rva009C6FC0BinkSse(scratch + 8, output, 8, 8, 8, 8, verticalTaps);
+}
+
+// RVA 0x001B8280
+extern "C" void __cdecl FilterBlock2d(void *source, void *output,
+	void *pixelsPerLine, void *horizontalTaps, void *verticalTaps)
+{
+	bfmeGo76A0((char *)source - (char *)pixelsPerLine, &g_bfmeTableC7E0, pixelsPerLine,
+		1, 11, 8, horizontalTaps);
+	bfmeGo7760(&g_bfmeTableC800, output, 8, 8, 8, 8, verticalTaps);
+}

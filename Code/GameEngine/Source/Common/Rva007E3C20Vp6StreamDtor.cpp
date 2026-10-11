@@ -58,7 +58,7 @@ public:
 extern AudioManager *TheAudio;
 
 struct CodecState;
-int bfmeFreeCodecJW(CodecState **p);
+extern "C" int __cdecl VP6_StopDecoder(CodecState **p);
 void Rva00090714Free(void **p);
 
 class Rva007E3C20Vp6Stream : public Gen_uwm_0068a110
@@ -89,11 +89,11 @@ private:
 Rva007E3C20Vp6Stream::~Rva007E3C20Vp6Stream()
 {
 	if (m_at14 != 0) {
-		bfmeFreeCodecJW((CodecState **)&m_at14);
+		VP6_StopDecoder((CodecState **)&m_at14);
 		m_at14 = 0;
 	}
 	if (m_at18 != 0) {
-		bfmeFreeCodecJW((CodecState **)&m_at18);
+		VP6_StopDecoder((CodecState **)&m_at18);
 		m_at18 = 0;
 	}
 	if (m_at2c != 0) {

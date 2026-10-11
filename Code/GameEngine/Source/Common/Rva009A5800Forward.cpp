@@ -18,7 +18,7 @@ extern "C" void __cdecl VP6_readTSC(unsigned int *result);
 // Boolean result; defined in Rva009AC660ReadHeader.cpp.
 extern "C" int __cdecl VP6_LoadFrame(unsigned char *);
 extern "C" void __cdecl InitHeaderBuffer(BfmeCursorXF *out, const unsigned char *data);
-void bfmeInit1186(BfmeBits1186 *s, unsigned char *p);
+extern "C" void __cdecl VP6_StartDecode(BfmeBits1186 *s, unsigned char *p);
 struct FramePB;
 extern "C" void VP6_DecodeFrameMbs(FramePB *pbi);
 void __cdecl d_009a8c50(void);
@@ -50,7 +50,7 @@ static int Rva009A5620DecodeFrame(unsigned char *s, unsigned char *data, unsigne
 			P(0x198) = data + U(0x451c);
 		}
 		else
-			bfmeInit1186((BfmeBits1186 *)(s + 0x170), data + U(0x451c));
+			VP6_StartDecode((BfmeBits1186 *)(s + 0x170), data + U(0x451c));
 	}
 	VP6_DecodeFrameMbs((FramePB *)s);
 	unsigned char *swap = P(0x254);

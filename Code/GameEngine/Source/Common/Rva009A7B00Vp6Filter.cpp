@@ -20,7 +20,7 @@ extern const int g_012D7818[8][2] =
 
 extern void __cdecl Rva009A75F0Vp6FourTapFilter(const unsigned char *, unsigned short *,
 	unsigned int, unsigned int, unsigned int, unsigned int, const int *);
-extern void __cdecl bfmeGo7820(void *, void *, void *, void *, void *);
+extern "C" void __cdecl FilterBlock2d(void *, void *, void *, void *, void *);
 extern void __cdecl Rva009A79D0Vp6Filter(
 	const unsigned char *, unsigned short *, int, const int *, const int *);
 
@@ -84,7 +84,7 @@ void __cdecl Rva009A7B00Vp6Filter(
 	else if (diff == (int)(sourcePitch - 1))
 	{
 		if (useBicubic)
-			bfmeGo7820((void *)(source1 - 1), destination, (void *)sourcePitch,
+			FilterBlock2d((void *)(source1 - 1), destination, (void *)sourcePitch,
 				(void *)g_012D7798[modeX], (void *)g_012D7798[modeY]);
 		else
 			Rva009A79D0Vp6Filter(source1 - 1, destination, sourcePitch, g_012D7818[modeX], g_012D7818[modeY]);
@@ -92,7 +92,7 @@ void __cdecl Rva009A7B00Vp6Filter(
 	else if (diff == (int)(sourcePitch + 1))
 	{
 		if (useBicubic)
-			bfmeGo7820((void *)source1, destination, (void *)sourcePitch,
+			FilterBlock2d((void *)source1, destination, (void *)sourcePitch,
 				(void *)g_012D7798[modeX], (void *)g_012D7798[modeY]);
 		else
 			Rva009A79D0Vp6Filter(source1, destination, sourcePitch, g_012D7818[modeX], g_012D7818[modeY]);

@@ -27,7 +27,7 @@ extern void __cdecl bfmeExpandMmx(const void *, int, void *);
 extern "C" void __cdecl HorizontalLine_1_2_Scale_C(const void *, int, void *, int);
 extern void __cdecl bfmeExpand3to5Mmx(const void *, int, void *);
 extern void __cdecl bfmeExpand4to5Mmx(const void *, int, void *);
-extern void __cdecl bfmeAverageMmx(void *, int, int);
+extern "C" void __cdecl VerticalBand_1_2_Scale_MMX(void *, int, int);
 extern void __cdecl bfmeInterpRows6Mmx(void *, int, int);
 extern void __cdecl bfmeInterpRows2Mmx(void *, int, int);
 extern void __cdecl bfmeInterpRows5Mmx(void *, int, int);
@@ -161,7 +161,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[8] = (BfmeDispatchFn)&bfmeExpandMmx;
 		g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&bfmeExpand3to5Mmx;
 		g_bfmeCodecDispatchOutlier = (BfmeDispatchFn)&bfmeExpand4to5Mmx;
-		g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&bfmeAverageMmx;
+		g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&VerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&bfmeInterpRows6Mmx;
 		g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&bfmeInterpRows2Mmx;
@@ -193,7 +193,7 @@ void __cdecl bfmeInstallCpuDispatchTable(void)
 		g_bfmeCodecDispatch.slot[8] = (BfmeDispatchFn)&bfmeExpandMmx;
 		g_bfmeCodecDispatch.slot[20] = (BfmeDispatchFn)&bfmeExpand3to5Mmx;
 		g_bfmeCodecDispatchOutlier = (BfmeDispatchFn)&bfmeExpand4to5Mmx;
-		g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&bfmeAverageMmx;
+		g_bfmeCodecDispatch.slot[4] = (BfmeDispatchFn)&VerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[17] = (BfmeDispatchFn)&LastVerticalBand_1_2_Scale_MMX;
 		g_bfmeCodecDispatch.slot[18] = (BfmeDispatchFn)&bfmeInterpRows6Mmx;
 		g_bfmeCodecDispatch.slot[12] = (BfmeDispatchFn)&bfmeInterpRows2Mmx;

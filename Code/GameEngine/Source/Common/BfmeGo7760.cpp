@@ -41,9 +41,9 @@ void __cdecl bfmeGo7760(
 }
 
 // BFME 1 donor 1399ad37d42ea52a63829e417c46a1ba9ed2cd20; native RVA 0x009A76A0.
-// BFME 2 caller bfmeGo7820 (0x001B8280) selects this 8-bit input filter.
+// BFME 2 caller FilterBlock2d (0x001B8280) selects this 8-bit input filter.
 // Byte-source sibling of bfmeGo7760: four-tap filter from an 8-bit source
-// into an int table. Called by bfmeGo7820 (0x009A7820) and bfmeGo79D0.
+// into an int table. Called by FilterBlock2d (0x009A7820) and bfmeGo79D0.
 void __cdecl bfmeGo76A0(
 	int sourceAddress, int *table, void *sourcePitch, int sourceDelta,
 	int rows, int columns, void *weights)

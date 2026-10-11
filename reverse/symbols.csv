@@ -6434,7 +6434,6 @@ name,address,notes
 ?Rva009A6EC0Release@@YAXPAPAX@Z,0x001B7930
 ?Rva009A7950@@YAXPAHPAGHHHHPBH@Z,0x001B83B0
 ?Rva009A7F60@@YAXPAHPAGHHHHPBH@Z,0x001B89C0
-?Rva009A8550Init@@YAXXZ,0x001B8FB0
 ?Rva009A86F0Allocate@@YAHPAX@Z,0x001B9140,BFME1-donor declaration Rva009A86F0Allocate(void*) in BfmeCheckJX.cpp; its call site at body+0x1D6 pushes the state pointer only; address is the retail call target
 ?Rva009ACBA0SetupBounding@@YAPAHPAURva009ACC40State@@H@Z,0x001BD590
 ?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z,0x001BE490
@@ -8265,7 +8264,6 @@ name,address,notes
 ?bfmeMakeRG@@YAPAVBfmeMakerRG@@XZ,0x006617F0
 ?bfmeMakeRecUNB@@YAPAXH@Z,0x006724D0
 ?bfmeMakeResultA@BfmeResultSourceA@@QAE?AUBfmeResultA@@H@Z,0x00628980
-?bfmeMakeSubJX@@YAPAUBfmeSubJX@@XZ,0x001B7990
 ?bfmeMakeWideResult@BfmeWideResultSource@@QAE?AUBfmeWideResult@@HHHHHH@Z,0x00628770
 ?bfmeMarkXS@BfmeThingXS@@QBEEH@Z,0x0061FF70
 ?bfmeMore1035@BfmeA1035@@QAEXXZ,0x000CE0EA,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
@@ -10541,7 +10539,6 @@ name,address,notes
 ?releaseBuffer@UnicodeString@@QAEXXZ,0x00036E70,Dict TU spelling of rowed StringBase wide releaseBuffer; same body
 ?releaseCodecBuffer@@YAXPAPAX@Z,0x001B7930
 ?releaseCodecMembers@@YAXPAUCodecState@@@Z,0x001B5530
-?releaseCodecState@@YAXPAPAUCodecState@@@Z,0x001B56A0
 ?releaseDependentResources@BfmeShaderShutdown@@SAXXZ,0x00076790,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?releaseNative@Rva004DD206TreeView@@QAEXXZ,0x004636FE,Native ctor EH943814 unwind7916E1 destroys first tree at+14 through thunk4638EC then this full56B rowed destructor; observed three-word tree ABI; original names stay unknown; narrow provider repair removes obsolete wrong keeper
 ?releasePrefix@BfmeStringTailRecord144@@AAEXXZ,0x002D9A43,ABI-only private helper alias to rowed ??1BfmeStringTailRecord144@@UAE@XZ; native50FC4 E9 target and9-byte Destroy53E2B call chain prove endpoint; no original target name asserted

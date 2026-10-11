@@ -21,7 +21,7 @@ extern "C" void VP6_FindNearestandNextNearest(void);
 typedef void (__cdecl *Rva009B5420Vp6FindPredictorFn)(void *, int, int, int, int *);
 
 extern int Rva009B50F0DecodeToken(unsigned char *, int, int);
-extern int Rva009B5090DecodeMode(unsigned char *);
+extern "C" int __cdecl VP6_DecodeBlockMode(unsigned char *);
 extern void Rva009B5200DecodeMotionVector(void *, short *, int);
 
 struct Rva009B5AF0Mv {
@@ -62,10 +62,10 @@ void Rva009B5AF0Vp6DecodeBlock(unsigned char *ctx, int row, int column)
 	state->mode = mode;
 
 	if (mode == 7) {
-		state->blockMode[0] = Rva009B5090DecodeMode((unsigned char *)state);
-		state->blockMode[1] = Rva009B5090DecodeMode((unsigned char *)state);
-		state->blockMode[2] = Rva009B5090DecodeMode((unsigned char *)state);
-		state->blockMode[3] = Rva009B5090DecodeMode((unsigned char *)state);
+		state->blockMode[0] = VP6_DecodeBlockMode((unsigned char *)state);
+		state->blockMode[1] = VP6_DecodeBlockMode((unsigned char *)state);
+		state->blockMode[2] = VP6_DecodeBlockMode((unsigned char *)state);
+		state->blockMode[3] = VP6_DecodeBlockMode((unsigned char *)state);
 		state->blockMode[4] = 7;
 		state->blockMode[5] = 7;
 

@@ -54,7 +54,7 @@ void * g_bfmeSlotD8C;
 // Landed callees, declared with their real signatures so the mangled name
 // matches their existing row.
 extern void __cdecl widen8x8(const unsigned char *, unsigned short *, int);
-extern void __cdecl bfmeAvg8to16Mmx(const void *, const void *, void *, int);
+extern "C" void __cdecl AverageBlock_MMX(const void *, const void *, void *, int);
 
 // VP6 block reconstruction helpers recovered from the clean-room specs
 // (Code/Libraries/Source/VP6/ReconMmx.cpp and ReconWmt.cpp), declared with
@@ -96,7 +96,7 @@ extern void __cdecl Rva009C80C0(void);
 extern void __cdecl Rva009C77C0(void);
 extern void __cdecl Rva009C3630(void);
 extern void __cdecl Rva009C2CE0(void);
-extern void __cdecl Rva009C3CF0(void);
+extern "C" void __cdecl MMX_idct1(void);
 extern void __cdecl Rva009C4450(void);
 extern void __cdecl Rva009C3D50(void);
 extern void __cdecl Rva009C6360(void);
@@ -143,7 +143,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 		g_bfmeSlotD84 = (void *)&WmtReconInter;
 		g_bfmeSlotB58 = (void *)&d_009c7760;
 		g_bfmeSlotB48 = (void *)&Rva009C6D20;
-		g_bfmeSlotB4C = (void *)&bfmeAvg8to16Mmx;
+		g_bfmeSlotB4C = (void *)&AverageBlock_MMX;
 		g_bfmeSlotB50 = (void *)&UnpackBlock_MMX;
 		g_bfmeSlotD88 = (void *)&ReconBlock_MMX;
 		g_bfmeSlotB5C = (void *)&SubtractBlock_MMX;
@@ -156,7 +156,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 
 	if (tierA)
 	{
-		BfmeSpreadFn low = (BfmeSpreadFn)&Rva009C3CF0;
+		BfmeSpreadFn low = (BfmeSpreadFn)&MMX_idct1;
 		BfmeSpreadFn mid = (BfmeSpreadFn)&Rva009C3630;
 		BfmeSpreadFn tail = (BfmeSpreadFn)&Rva009C2CE0;
 
@@ -185,7 +185,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 		g_bfmeSlotD84 = (void *)&MmxReconInter;
 		g_bfmeSlotB58 = (void *)&d_009c6cb0;
 		g_bfmeSlotB48 = (void *)&Rva009C6D20;
-		g_bfmeSlotB4C = (void *)&bfmeAvg8to16Mmx;
+		g_bfmeSlotB4C = (void *)&AverageBlock_MMX;
 		g_bfmeSlotB50 = (void *)&UnpackBlock_MMX;
 		g_bfmeSlotD88 = (void *)&ReconBlock_MMX;
 		g_bfmeSlotB5C = (void *)&SubtractBlock_MMX;

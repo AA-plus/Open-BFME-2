@@ -32,7 +32,7 @@ struct Vp6EncodeCoder {
     int measureCost;
 };
 struct Rva009AC4B0State;
-extern void __cdecl Rva009AC4B0AddValue(Rva009AC4B0State *,int,int);
+extern "C" void __cdecl VP6_EncodeBool2(Rva009AC4B0State *,int,int);
 extern "C" void __cdecl VP6_EncodeBool(void *,int,int);
 
 // Target identity is supported by the VP6 PDB record and existing huffman
@@ -49,7 +49,7 @@ extern "C" void VP6_EncodeValue(Vp6EncodeCoder *coder,
     do {
         int bit=(bits>>bitIndex)&1;
         if(coder->measureCost!=0)
-            Rva009AC4B0AddValue((Rva009AC4B0State *)coder,bit,nodes[node].probability);
+            VP6_EncodeBool2((Rva009AC4B0State *)coder,bit,nodes[node].probability);
         else
             VP6_EncodeBool(coder,bit,nodes[node].probability);
         if(bit)

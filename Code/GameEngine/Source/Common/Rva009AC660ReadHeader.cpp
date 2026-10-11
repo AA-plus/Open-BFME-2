@@ -7,7 +7,7 @@ struct BfmeS1040;
 struct CodecState;
 unsigned Rva009AC5D0ReadBits(Rva009AC5D0State*, unsigned);
 extern "C" void __cdecl VP6_InitQTables(unsigned char*);
-void bfmeInit1186(BfmeBits1186*, unsigned char*);
+extern "C" void __cdecl VP6_StartDecode(BfmeBits1186*, unsigned char*);
 // Post-processing setters at 0x001B6900 and 0x001B6910 (VP6 clean room).
 extern "C" void __cdecl SetPPInterlacedMode(void*,int);
 extern "C" void __cdecl SetDeInterlaceMode(void*,int);
@@ -37,10 +37,10 @@ static int Rva009AC660ReadHeader(unsigned char* s)
         U(0x1dc)=(unsigned char)Rva009AC5D0ReadBits(bits,1);
         if (!U(0x944) && B(0x19d)) {
             decoder=(BfmeBits1186*)(s+0x150);
-            bfmeInit1186(decoder,P(0x450c)+2);
+            VP6_StartDecode(decoder,P(0x450c)+2);
         } else {
             decoder=(BfmeBits1186*)(s+0x150);
-            bfmeInit1186(decoder,P(0x450c)+4);
+            VP6_StartDecode(decoder,P(0x450c)+4);
             U(0x451c)=Rva009AC5D0ReadBits(bits,16);
         }
         SetPPInterlacedMode(P(0x298),U(0x1dc));
@@ -88,10 +88,10 @@ static int Rva009AC660ReadHeader(unsigned char* s)
     } else {
         if (!U(0x944) && B(0x19d)) {
             decoder=(BfmeBits1186*)(s+0x150);
-            bfmeInit1186(decoder,P(0x450c)+1);
+            VP6_StartDecode(decoder,P(0x450c)+1);
         } else {
             decoder=(BfmeBits1186*)(s+0x150);
-            bfmeInit1186(decoder,P(0x450c)+3);
+            VP6_StartDecode(decoder,P(0x450c)+3);
             U(0x451c)=Rva009AC5D0ReadBits(bits,16);
         }
         U(0x698)=Rva009B4600DecodeBool(decoder,128);
