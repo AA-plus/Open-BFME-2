@@ -3,6 +3,17 @@
 #define _STLP_NO_EXCEPTIONS 1
 #define __PLACEMENT_VEC_NEW_INLINE
 #include <list>
+
+// Compare nodes locally so this TU does not emit a conflicting iterator-base
+// wrapper: the list copy ctor's insert loop would otherwise leave an /O1 copy of
+// _List_iterator_base::operator!= that differs from retail's 0x006CFE40.
+namespace _STL {
+template <class T, class Traits>
+static inline bool operator!=(const _List_iterator<T, Traits>& a,
+                              const _List_iterator<T, Traits>& b)
+{ return a._M_node != b._M_node; }
+}
+
 // NetPacket.cpp: the NetPacket bodies retail links from this TU (tu_map approved),
 // folded from 24 one-function split units. EHs plus explicit C-runtime
 // throw() contracts preserve those 99 bodies while recovering the list factory.
