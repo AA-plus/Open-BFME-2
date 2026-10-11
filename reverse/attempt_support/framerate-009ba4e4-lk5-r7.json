@@ -1,24 +1,24 @@
 {
   "seat": "LK5",
   "round": 7,
-  "basis_revision": "8e44e18206228d690ab6cb3e2bad226af75073fa",
+  "basis_revision": "5a1409bd3de4beba7299d6f0ebfcfe6da0085c49",
   "reference_pointer": "9e3be919b",
   "address": "0x00DBA4E4",
   "rva": "0x009BA4E4",
   "current_symbol": "?g_Va00DBA4E4@@3HA",
   "proposed_symbol": "?g_logicFramesPerSecond@@3HA",
-  "status": "prepared only; production unchanged; ScriptConditions.cpp live w5-lk8 claim prevents atomic application",
+  "status": "prepared only; production unchanged; Rva004B89C4Update.cpp w5-lk4, ScriptConditions.cpp w5-lk8 and AIMeleeReAcquireStateOnEnter.cpp w5-lk9 live claims prevent atomic application",
   "identity": {
     "target_facts": "GameEngine225D68 divides client-frame rate by this value; network logic timing and seconds-to-frame conversion families use the same DIR32 address; owner initializes signed32-bit datum to5.",
     "inference": "logic-frame-rate semantic role is supported; descriptive recovery name does not claim original lexical spelling.",
     "donor": "ZH/BF1 frame timing and build-time algorithms provide semantic guidance only; native initializer5 is preserved rather than donor/comment30."
   },
   "verification": {
-    "sources": 138,
-    "compiled": 138,
-    "rows": 652,
-    "pass": 652,
-    "rate_relocations": 222,
+    "sources": 139,
+    "compiled": 139,
+    "rows": 665,
+    "pass": 665,
+    "rate_relocations": 228,
     "problem_count": 0,
     "problems": []
   },
@@ -193,7 +193,7 @@
     },
     {
       "path": "Code/GameEngine/Source/Common/GameEngineInit.cpp",
-      "sha256": "514dffb8588121cbcddb4538e456ce47e342cedd38b96a8799755fec67964e1b",
+      "sha256": "cd0f3e2bc68437c91cef1e93db51edb6dd6ae55f4276b37b4067671d048a6ef8",
       "replacements": 2
     },
     {
@@ -720,9 +720,14 @@
       "path": "Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarRva0031AA86.cpp",
       "sha256": "26ce5a33e3d3ae9e5b65f74b6785296c0f8a2e211786af9cde1062b115be5e84",
       "replacements": 2
+    },
+    {
+      "path": "Code/GameEngine/Source/Common/GlobalData.cpp",
+      "sha256": "c69089ec262ebba29865bc5ee0bc847cb070226f60f1fec54050b70672a8a960",
+      "replacements": 2
     }
   ],
-  "planned_changes": "Atomically rename existing owner and all138 exact-token consumer sources; canonical data_ledger name and one four-byte data_rows owner; no second datum, macro alias, added pin, flag/cl change or baseline change. Preserve every unrelated address/global.",
+  "planned_changes": "Atomically rename existing owner and all139 exact-token consumer sources; canonical data_ledger name and one four-byte data_rows owner; no second datum, macro alias, added pin, flag/cl change or baseline change. Preserve every unrelated address/global.",
   "next": "Check live claims and fresh origin file history; claim entire scope before applying prepared build/lk5-r7-frame-name-prepared.patch, regenerate if source hashes changed; gate<=8sources per call, data_rows --verify owner, explicit provider/consumer link preview, then close exact608-byte33AA1F bank using canonical globals.",
   "credit": {
     "recovered_bytes": 0,
