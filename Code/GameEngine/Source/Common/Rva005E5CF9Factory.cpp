@@ -252,11 +252,12 @@ class Rva005FB204
 public:
 	Rva005FB204(unsigned int first, unsigned int second, void *context);
 };
-class Rva005FB4DF
+// Constructor-only view of the second verified Rva005FB204Ctor.cpp owner.
+class Rva005FB3D9
 {
 	char m_pad[0x20];
 public:
-	Rva005FB4DF(unsigned int first, unsigned int second, void *context);
+	Rva005FB3D9(unsigned int first, unsigned int second, void *context);
 };
 struct Rva005E9761
 {
@@ -287,5 +288,5 @@ RvaF1Handle Rva005E97D5::rva005E97D5(unsigned int first, unsigned int second)
 }
 RvaF1Handle Rva005E9849::rva005E9849(unsigned int first, unsigned int second)
 {
-	return RvaF1Handle(new Rva005FB4DF(first, second, &m_context));
+	return RvaF1Handle(new Rva005FB3D9(first, second, &m_context));
 }
