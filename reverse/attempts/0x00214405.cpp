@@ -1,5 +1,11 @@
 // ??1LivingWorldManager@@UAE@XZ
-// partial score=0.97 date=2026-10-09
+// partial score=0.99 date=2026-10-11
+// Remaining: retail packs the second hash-loop cursor (+0x204 table) into the
+// first cursor's slot (frame 0xC); this compiles it to its own slot (frame
+// 0x14). Bracing, renaming, while forms, a shared variable, the tree loop's
+// end() compare and /G7 removal do not change it; deleting either the vector
+// loop or the tree loop does. Wrapper views and placeholder pins for the
+// table twins 0x2129DD/0x21231B and thunks 0x2130CA/0x212379 are in place.
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/moduledata /DNDEBUG /MD /EHsc
 //
 // ??1LivingWorldManager@@UAE@XZ, retail 0x00214405..0x002146B8 (691 bytes);
@@ -174,22 +180,39 @@ private:
 	char m_pad[0x204 - 0x14];
 };
 
+// The four int-keyed tables: their hashtable destructor is the twin
+// 0x002129DD (gen-alias of ??1Rva000427195) and the hash_map wrapper's
+// out-of-line destructor the 5-byte thunk 0x002130CA the unwind map uses.
 class Rva002129DD
 {
 public:
 	~Rva002129DD();
-	HashIterator begin() { return reinterpret_cast<HashBeginTable *>(this)->begin(); }
-	void clear() { reinterpret_cast<Rva000427195 *>(this)->rva003A2A41(); }
 private:
 	char m_pad[0x14];
 };
 
+struct Rva002130CA
+{
+	~Rva002130CA() {}
+	HashIterator begin() { return reinterpret_cast<HashBeginTable *>(this)->begin(); }
+	void clear() { reinterpret_cast<Rva000427195 *>(this)->rva003A2A41(); }
+	Rva002129DD m_table;
+};
+
+// The +0x218 table: hashtable destructor twin 0x0021231B, wrapper thunk
+// 0x00212379.
 class Rva0021231B
 {
 public:
 	~Rva0021231B();
 private:
 	char m_pad[0x14];
+};
+
+struct Rva00212379
+{
+	~Rva00212379() {}
+	Rva0021231B m_table;
 };
 
 struct RefHolder
@@ -269,8 +292,8 @@ public:
 
 private:
 	Rva00212ED3 m_14; // +0x14
-	Rva002129DD m_204; // +0x204
-	Rva0021231B m_218; // +0x218
+	Rva002130CA m_204; // +0x204
+	Rva00212379 m_218; // +0x218
 	RefHolder m_22C; // +0x22C
 	int m_230;
 	FreeBuffer m_234; // +0x234
@@ -279,9 +302,9 @@ private:
 	FreeBuffer m_258; // +0x258
 	void *m_264; // +0x264
 	Rva003EF14A *m_268; // +0x268
-	Rva002129DD m_26C; // +0x26C
-	Rva002129DD m_280; // +0x280
-	Rva002129DD m_294; // +0x294
+	Rva002130CA m_26C; // +0x26C
+	Rva002130CA m_280; // +0x280
+	Rva002130CA m_294; // +0x294
 	Vector2A8 m_2A8; // +0x2A8
 	Rva0021119B m_2B4; // +0x2B4
 	bool m_2C0;

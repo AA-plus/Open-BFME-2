@@ -17200,3 +17200,7 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva00115DD2@W3DTerrainBackground@@QAEXXZ,0x00115DD2,callee of ?rva000E1185@Rva000E3B41@@QAEXXZ
 ??1Rva005E186A@@QAE@XZ,0x005E186A,placeholder: second interface base view of 0x00574CC1 restoring table 0x00C6E330 (its +0xC subobject; the +8 one uses the generated pin at the same body); unwind funclet 0x0079B066 reaches this shared 7-byte destructor
 ?rva0009B510@Rva0009C134Host@@QAEXAAVMatrix3D@@MM@Z,0x0009B510,callee of ?rva0009BAA4@Rva0009D55BProduct@@QAEXXZ
+??1Rva002129DD@@QAE@XZ,0x002129DD,placeholder view of the int-keyed hashtable destructor twin (gen-alias row ?dup_002129dd); REL32 callee of ~LivingWorldManager 0x00214405 for its +0x26C/+0x280/+0x294/+0x204 tables
+??1Rva002130CA@@QAE@XZ,0x002130CA,placeholder: 5-byte jmp thunk to 0x002129DD that the 0x00214405 unwind funclets reach (hash_map wrapper out-of-line destructor)
+??1Rva0021231B@@QAE@XZ,0x0021231B,placeholder view of the +0x218 hashtable destructor twin (gen-alias row ?dup_0021231b); REL32 callee of ~LivingWorldManager 0x00214405
+??1Rva00212379@@QAE@XZ,0x00212379,placeholder: 5-byte jmp thunk to 0x0021231B that the 0x00214405 unwind funclet 0x0076DFBB reaches (hash_map wrapper out-of-line destructor)
