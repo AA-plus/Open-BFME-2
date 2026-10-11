@@ -1,4 +1,6 @@
 // ?rva006CDE50@Rva00893030Manager@@QAEXPAVRva004A9DF3Element@@H@Z
+// partial score=0.9602 date=2026-10-11
+// ?rva006CDE50@Rva00893030Manager@@QAEXPAVRva004A9DF3Element@@H@Z
 // partial score=0.931951286261631 date=2026-10-10
 // cl: /O2 /MD /EHsc
 // Native6CDE50..6CDF55 RET8; head/next at0/4 and four-byte ref payload.
@@ -34,8 +36,10 @@ struct Rva006CDE50Node {unsigned *value;Rva006CDE50Node *next;};
 class Rva00893030Manager {Rva006CDE50Node *head;public:void rva006CDE50(Rva004A9DF3Element *,int);};
 void Rva00893030Manager::rva006CDE50(Rva004A9DF3Element *output,int nMaxSize){
  volatile int j=0;
+ Rva006CDE50Node *node=head;
+ if(!node)return;
  Rva006CDE50Cursor cursor(output);
- for(Rva006CDE50Node *node=head;node;node=node->next){
+ for(;node;node=node->next){
   if(!(j<nMaxSize)){
    g_bfmeAptAssertAtE17734("j < nMaxSize","c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\_AptLoad.h",0x4C);
    if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();
