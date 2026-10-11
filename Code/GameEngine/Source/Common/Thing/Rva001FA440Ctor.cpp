@@ -20,6 +20,13 @@ namespace _STL {
 template <> bool less<unsigned int>::operator()(const unsigned int &a, const unsigned int &b) const;
 }
 #include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 enum NameKeyType
 {

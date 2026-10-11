@@ -3,6 +3,13 @@
 // ??0Rva002D0E14@@QAE@XZ @0x002D0E14 85B: SubsystemInterface base via 0x001B4E63 vtable 0x00C0233C member Rva002D0C71 at +0x14 plus +0xC zero plus +0x10 one plus reserve 0x3000 via pinned rva00212858. Evidence: caller 0x0004CA01 revtables to 0x007C4858; calls baseConstruct and hashtable ctor.
 #include <hash_map>
 #include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 enum NameKeyType
 {

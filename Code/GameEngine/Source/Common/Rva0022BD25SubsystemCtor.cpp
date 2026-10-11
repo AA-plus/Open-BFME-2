@@ -11,11 +11,17 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 }
 #include <hash_map>
+#include <cstddef>
 // map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
 // COMDAT (one byte shape per TU flags); an explicit specialization declaration
 // suppresses this TU's copy so callers bind retail's instead.
 namespace _STL {
 template <> bool less<unsigned int>::operator()(const unsigned int &a, const unsigned int &b) const;
+// Suppress this TU's non-retail vector<void*> size/begin/end copies (family2-LK3 rows 17/6/9):
+// the retail copies serve the link. Plain declaration-only form (no __imp_).
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
 }
 #include "ascii_string.h"
 
