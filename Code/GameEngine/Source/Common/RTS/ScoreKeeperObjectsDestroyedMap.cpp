@@ -1,5 +1,3 @@
-// ?getObjectsDestroyedMap@ScoreKeeper@@QAEPAV?$map@PBVThingTemplate@@HU?$less@PBVThingTemplate@@@_STL@@V?$allocator@U?$pair@QBVThingTemplate@@H@_STL@@@3@@_STL@@H@Z
-// partial score=0.99 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
 // Retail39C3AC..39C40A94B and whole WBFA3D70 getter: ScoreKeeper.cpp848.
