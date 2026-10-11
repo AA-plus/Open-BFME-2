@@ -300,3 +300,19 @@ void Rva000A91FDSetExtern(const char *name, int value)
 {
  reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->SetExtern(name, value);
 }
+
+// The Apt string-release callback observes only a virtual destructor.
+// Its concrete string type and original declaration remain unknown.
+class Rva000A923EString
+{
+public:
+ virtual ~Rva000A923EString();
+};
+
+// Native A923E..A925D, installed at E17774. WB 8A6900 independently
+// shows the 0x406 mask, explicit null guard and global-delete expression.
+void Rva000A923EReleaseString(Rva000A923EString *value, unsigned int flags)
+{
+ if ((flags & 0x406) && value)
+  ::delete value;
+}
