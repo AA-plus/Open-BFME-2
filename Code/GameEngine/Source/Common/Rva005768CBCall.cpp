@@ -27,10 +27,15 @@ public:
 	Rva0057682F(void *a, void *b, int c);
 	char m_pad[16];
 };
-class Rva005CD1A9
+class StrategicInGameUI
 {
 public:
-	void AddItem(struct BfmeRefPtr *p);
+	struct ChecklistItemRef;
+	class Checklist
+	{
+	public:
+		void AddItem(const ChecklistItemRef &newItem);
+	};
 };
 class Rva005768CBCall
 {
@@ -38,12 +43,15 @@ public:
 	void rva005768CB(void *lookup);
 private:
 	char m_pad[4];
-	Rva005CD1A9 m_04;
+	StrategicInGameUI::Checklist m_04;
 };
 void Rva005768CBCall::rva005768CB(void *lookup)
 {
 	int flag = ((*(int *)((char *)lookup + 0x14) & 0x1e) != 0);
 	Rva0057682F *p = new Rva0057682F(this, lookup, flag);
 	BfmeRefPtr ref(p);
-	m_04.AddItem(&ref);
+	// 0x005CD0C2 is rowed as StrategicInGameUI::Checklist::AddItem (21B);
+	// the 4B ref word passes unchanged, so this resolves to the rowed body
+	// instead of the unrowed spelling (sole U on this unit).
+	m_04.AddItem((const StrategicInGameUI::ChecklistItemRef &)ref);
 }

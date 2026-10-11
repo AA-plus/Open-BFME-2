@@ -37,7 +37,9 @@ class Rva0023D049 {
 public:
     void *rva0023D049(int army);
 };
-UnicodeString Rva00220E30(void *army, bool detailed);
+class Rva0040CFC7;
+
+UnicodeString GetArmySummaryDescription(Rva0040CFC7 *army, int detailed);
 class Rva00406BB0 {
 public:
     virtual TreeHintRef00217D4C rva00406BF3();
@@ -50,7 +52,7 @@ TreeHintRef00217D4C Rva00406BB0::rva00406BF3()
     UnicodeString description;
     if (m_army) {
         void *army = ((Rva0023D049 *)TheGameLogic)->rva0023D049(m_army);
-        if (army) description = Rva00220E30(army, true);
+        if (army) description = GetArmySummaryDescription((Rva0040CFC7 *)army, true);
     }
     TreeHintRef00217D4C help((TargetRef00217D4C *)new InGameSimpleHelp(m_title, description));
     return static_cast<const TreeHintRef00217D4C &>(help);
