@@ -178,3 +178,9 @@ void Rva00510D0C::rva005111FA()
 		m_externHandlers.AddExternHandler(name, 0, AptRef<AptExternHandler>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
 }
+
+// The named _OnInitialized binding targets native47A69C: complete RET4,
+// folded with other empty one-argument callbacks; no state is accessed.
+void Rva00510D0C::OnInitialized(const char *)
+{
+}
