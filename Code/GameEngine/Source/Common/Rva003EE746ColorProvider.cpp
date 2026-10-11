@@ -15,7 +15,7 @@ class Rva002E2903Player {public:char pad[0x184];Rva003EE746Color color;};
 class Rva002BA8F1Logic {public:Rva002E2903Player*find(int,unsigned*);};
 struct Rva0059E647World;
 class LivingWorldLogic; extern LivingWorldLogic*TheLivingWorldLogic;
-class Rva003EE711 {public:virtual ~Rva003EE711(){};virtual Rva003EE746Color color(const Rva003EE746Region*)=0;};
+class Rva003EE711 {public:__declspec(dllimport) __forceinline Rva003EE711(){} virtual ~Rva003EE711(){};virtual Rva003EE746Color color(const Rva003EE746Region*)=0;};
 class Rva003EE746ColorProvider:public Rva003EE711 {public:Rva003EE746ColorProvider(int*s):selector(s){} virtual Rva003EE746Color color(const Rva003EE746Region*);int*selector;};
 // ?color@Rva003EE746ColorProvider@@UAE?AURva003EE746Color@@PBURva003EE746Region@@@Z
 Rva003EE746Color Rva003EE746ColorProvider::color(const Rva003EE746Region*r) {

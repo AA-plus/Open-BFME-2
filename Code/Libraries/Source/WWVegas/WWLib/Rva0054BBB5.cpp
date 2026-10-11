@@ -38,6 +38,7 @@ template<> deque<BfmeTrivialDequeElement8,allocator<BfmeTrivialDequeElement8> >:
 // a new name. Its layout is four bytes; the derived cursor occupies +4..+14.
 class Rva00549C74 {
 public:
+	__declspec(dllimport) __forceinline Rva00549C74() {}
 	virtual ~Rva00549C74() {}
 	virtual int first() = 0;
 	virtual int next() = 0;

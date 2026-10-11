@@ -596,6 +596,7 @@ public:
 class Rva003EE711
 {
 public:
+	__declspec(dllimport) __forceinline Rva003EE711() {}
 	virtual ~Rva003EE711() {}
 	virtual void *v04(void *color, void *arg) = 0;
 };
