@@ -59,6 +59,25 @@ public:
 		out->Y = (A[1][0] * v->X + A[1][1] * v->Y + A[1][2] * v->Z + A[1][3]);
 		out->Z = (A[2][0] * v->X + A[2][1] * v->Y + A[2][2] * v->Z + A[2][3]);
 	}
+	// LINK: same-body file-static helper (identical inlined bytes; kept inside
+	// the same optimize region so codegen matches). This TU's Transform_Vector
+	// copy is not retail's (home: frustum.cpp @0x7B501); the call below inlines
+	// it but still emits the loser COMDAT. Rebinding there emits nothing
+	// (internal linkage, fully inlined). No flags touched.
+	static WWINLINE void bfme_xform(const Matrix3D &A, const Vector3 &in, Vector3 *out)
+	{
+		Vector3 tmp;
+		Vector3 *v;
+		if (out == &in) {
+			tmp = in;
+			v = &tmp;
+		} else {
+			v = (Vector3 *)&in;
+		}
+		out->X = (A[0][0] * v->X + A[0][1] * v->Y + A[0][2] * v->Z + A[0][3]);
+		out->Y = (A[1][0] * v->X + A[1][1] * v->Y + A[1][2] * v->Z + A[1][3]);
+		out->Z = (A[2][0] * v->X + A[2][1] * v->Y + A[2][2] * v->Z + A[2][3]);
+	}
 };
 #pragma optimize("", on)
 
@@ -94,7 +113,7 @@ bool Rva000E48BC::rva000E48BC(Rva000E488F *container)
 		Vector3 *out = &m_pos;
 		const Vector3 *in = &m_offset;
 		const Matrix3D *mtx = m_drawable->getTransformMatrix();
-		Matrix3D::Transform_Vector(*mtx, *in, out);
+		Matrix3D::bfme_xform(*mtx, *in, out);
 	}
 	bool cur = !container->rva000E488F(this);
 	m_flag = cur;
