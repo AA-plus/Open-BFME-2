@@ -15,11 +15,16 @@ struct BfmePartCDF
 	int m_0, m_1, m_2;
 };
 
-class Rva0018B8B0Arg
+// LINK: 0x0036F710 is rowed as AIGroup::getAllIDs; the argument is that group
+// and the returned word is the part pointer, so the call keeps its shape
+// through a member-pointer cast.
+class AIGroup
 {
 public:
-	BfmePartCDF *getPart();
+	const _STL::vector<ObjectID> &getAllIDs() const;
 };
+
+class Rva0018B8B0Arg;
 
 class Rva0018B8B0Holder
 {
@@ -39,6 +44,6 @@ void Rva0018B8B0Holder::apply(Rva0018B8B0Arg *arg, bool shouldClearExistingIds)
 		if (shouldClearExistingIds)
 			m_ids.clear();
 
-		((BfmePartCDF *)&m_ids)->bfmeCopyOneCDF(arg->getPart());
+		((BfmePartCDF *)&m_ids)->bfmeCopyOneCDF((((AIGroup *)arg)->*reinterpret_cast<BfmePartCDF *(AIGroup::*)()>(&AIGroup::getAllIDs))());
 	}
 }
