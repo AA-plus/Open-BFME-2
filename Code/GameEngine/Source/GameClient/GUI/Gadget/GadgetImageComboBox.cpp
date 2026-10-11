@@ -421,7 +421,7 @@ WindowMsgHandledType GadgetImageComboBoxInput(GameWindow *window, UnsignedInt ms
 				return MSG_IGNORED;
 			if (mData2 & KEY_STATE_DOWN)
 			{
-				if (TheKeyboard->getModifierFlags() & KEY_STATE_LSHIFT)
+				if (TheKeyboard->m_modifiers & KEY_STATE_LSHIFT)
 					TheWindowManager->winPrevTab(window);
 				else
 					TheWindowManager->winNextTab(window);

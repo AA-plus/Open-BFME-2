@@ -27,6 +27,8 @@ struct BfmeNodeLC
 	void *m_bfmeR;
 };
 
+class GameWindow { public: void *winGetUserData(); };
+
 class BfmeKeyLC
 {
 public:
@@ -35,7 +37,7 @@ public:
 
 void *bfmeGo925A(BfmeKeyLC *k)
 {
-	BfmeNodeLC *o = k->bfmeFindLC();
+	BfmeNodeLC *o = (BfmeNodeLC *)((GameWindow *)k)->winGetUserData();
 	if (o) {
 		void *p = o->m_bfmeQ;
 		if (p)
@@ -57,8 +59,8 @@ __declspec(noinline) inline void BfmeThing925D::bfmeGo925D(void *v)
 {
 	BfmeKeyLC *k = m_bfmeKey;
 	if (k) {
-		BfmeNodeLC *o = k->bfmeFindLC();
-		BfmeNodeLC *p = ((BfmeKeyLC *)o->m_bfmeP)->bfmeFindLC();
+		BfmeNodeLC *o = (BfmeNodeLC *)((GameWindow *)k)->winGetUserData();
+		BfmeNodeLC *p = (BfmeNodeLC *)((GameWindow *)o->m_bfmeP)->winGetUserData();
 		p->m_bfmeR = v;
 	}
 }
