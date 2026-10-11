@@ -3,6 +3,12 @@
 #define Matrix4x4 Matrix4
 #include "PreRTS.h"
 #include <hash_map>
+// map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); an explicit specialization declaration
+// suppresses this TU's copy so callers bind retail's instead.
+namespace _STL {
+template <> bool less<unsigned int>::operator()(const unsigned int &a, const unsigned int &b) const;
+}
 // Suppress the TU's non-retail const-begin copy (row 47 family2-LK3): the
 // /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
 namespace _STL {

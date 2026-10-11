@@ -14,10 +14,14 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <cstddef>
 // Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
 // the retail copy serves the link. Plain declaration-only form (no __imp_).
+// map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT; the same declaration-only form suppresses this TU's copy so callers
+// bind retail's instead.
 namespace _STL {
 template <> size_t vector<void*>::size() const;
 template <> void **vector<void*>::begin();
 template <> void **vector<void*>::end();
+template <> bool less<unsigned int>::operator()(const unsigned int &a, const unsigned int &b) const;
 }
 #include "ascii_string.h"
 

@@ -3,6 +3,12 @@
 // ?rva00171583@Rva00171583@@QAE_NABIPAUVec2@@1@Z retail 0x00171583 162B unlock lane map-lookup rect scaler
 // Evidence: calls rowed _M_find 0x00357180 at +8; flag at +0x1c calls pin 0x001711A6; scales at +0x20/+0x24; floats at node+0x14-0x20; callers 0x000EB40F 0x000E7B3F.
 #include <map>
+// map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); an explicit specialization declaration
+// suppresses this TU's copy so callers bind retail's instead.
+namespace _STL {
+template <> bool less<unsigned int>::operator()(const unsigned int &a, const unsigned int &b) const;
+}
 
 struct Vec2
 {

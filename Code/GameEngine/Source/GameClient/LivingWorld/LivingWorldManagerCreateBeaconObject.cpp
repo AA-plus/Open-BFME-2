@@ -35,6 +35,12 @@
 #include "Common/BfmeAudioEventPrefix136.h"
 #include <vector>
 #include <hash_map>
+// map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); an explicit specialization declaration
+// suppresses this TU's copy so callers bind retail's instead.
+namespace _STL {
+template <> bool less<unsigned int>::operator()(const unsigned int &a, const unsigned int &b) const;
+}
 
 extern "C" AsciiString rva0060E7F0(int marker);
 void rva0010E4F6(void *robj, bool flag);
