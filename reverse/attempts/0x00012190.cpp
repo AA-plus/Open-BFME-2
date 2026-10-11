@@ -1,45 +1,20 @@
-// ?do_get@?$money_get@GV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@_STL@@@_STL@@MBE?AV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@_STL@@0AAVios_base@2@GABV?$locale@_STL@@@2@@Z
-// partial score=0.65 date=2026-09-29
-// ?do_get@?$money_get@GV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@_STL@@@_STL@@MBE?AV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@_STL@@0AAVios_base@2@GABV?$locale@_STL@@@2@@Z
-// partial score=0.65 date=2026-09-29
 // ?do_get@?$money_get@GV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@_STL@@@_STL@@MBE?AV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@2@V32@0_NAAVios_base@2@AAHAAV?$basic_string@GV?$char_traits@G@_STL@@V?$allocator@G@2@@2@@Z
-// partial score=0.65 date=2026-09-24
-// ?do_get@?$money_get@GV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@_STL@@@_STL@@MBE?AV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@2@V32@0_NAAVios_base@2@AAHAAV?$basic_string@GV?$char_traits@G@_STL@@V?$allocator@G@2@@2@@Z
-// partial score=0.65 date=2026-09-24
-// ?do_get@?$money_get@GV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@_STL@@@_STL@@MBE?AV?$istreambuf_iterator@GV?$char_traits@G@_STL@@@2@V32@0_NAAVios_base@2@AAHAAV?$basic_string@GV?$char_traits@G@_STL@@V?$allocator@G@2@@2@@Z
-// partial score=0.63 date=2026-09-23
+// partial score=0.7 date=2026-10-11
 // cl: /Ob1 /EHsc /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC
 // stlport
-//
-// Banked reconstruction of STLport 4.5.3 wide money_get string parser (2802B).
-// Current: 2816B (+14), all 63 E8 sites 1:1 in order, vendor-verbatim operator=
-// (__digits = __buf, NOT .assign(): vendor _monetary.c uses operator=, and only
-// operator= emits retail's inlined self-check cmp/je at both assign sites).
-// Retail spans RVA 0x12190-0x12C82; 122+2680 dump fragments are one body.
-//
-// REMAINING WALLS (all mapped 2026-09-24):
-// (1) Temp-vs-named destruction split: retail destroys 13 conditional temps via
-// out-of-line ~_String_base (B3C0) but frees the 3 named strings (__buf/__ns/__ps)
-// inline (test+free-30830). PROVEN MECHANISM (num_put_bool precedent, rowed):
-// hide the dtor via `template <> _String_base<unsigned short,
-// allocator<unsigned short> >::~_String_base();` (use unsigned short, NOT
-// wchar_t, or C2888) so all destructions outline, then carve the 3 named
-// strings into explicit-free storage owners (placement-new + `if (data)
-// free(data)` dtor, _BoolStorageTag trick to avoid extra EH states). Hiding
-// alone gives 2672B/10xB3C0 (verified). The 3 owners must forward copy-ctor
-// (ea90), dispatch-source, insert (push_back/de40 + insert_aux/12d10),
-// begin/data/size, and back_insert_iterator wrapping.
-// (2) Tag store: retail `mov byte [esp+0x1e],0` zeroes the __false_type temp
-// before the shared dispatch tail (slot reuses dead __symbol_required). No
-// natural spelling emits it (operator=/assign/begin-end probes all bare);
-// value-init-temp-zeroing (num_put comment) did NOT reproduce under /Ob1 or
-// /O2. May fall out of the owner rewrite (different temp slot/pressure).
-// (3) EDI: retail homes __i (loop counter) + zero/facet temps in edi from the
-// prologue (push edi + xor edi,edi + mov [esp+0xc],edi); ours uses immediates.
-// Pressure-coupled, likely falls out of (1).
-// REFUTED: /O2-full (2988B, worse), member-template-direct assign (no check,
-// no tag), /Ob1-vs-/O2 for tag (neither emits it), wchar_t-spelled dtor decl
-// (C2888; must be unsigned short).
+// STLport4.5.3 wide money_get string parser; complete source, partial bytes.
+// Native12190..12C82 is2802B code;20B switch table follows before padding.
+// Retire both122B head12190 and2680B tail1220A only after full verification.
+// Adapted the earlier wide bank using the verified named-string storage
+// pattern in stlport_wide_num_put_bool.cpp and the landed narrow sibling.
+// Three named owners free their buffers; conditional string temporaries use
+// the separately verified base destructor. All fields remain vendor types.
+// This trial emits2740B and matches the first573B including the formerly
+// failing EDI prologue. Residue: tag/boolean homes, early iterator result
+// copies, cleanup factoring and exception states. Inline locale destructor
+// emits2912B with duplicated cleanup; O1/Os1883B, Og-off4586B regress.
+// Explicit assignment member-template declarations trigger MSVC C1001.
+// No gates/pins/Code were changed for this bank; never count it as recovery.
 /*
  * Copyright (c) 1999
  * Silicon Graphics Computer Systems, Inc.
@@ -105,6 +80,8 @@ int __cdecl wctomb(char *dest, unsigned short ch);
 // Only pointer calls to streambuf are needed here. Keeping this interface
 // opaque preserves the retail sbumpc call inside inline iterator increment.
 #define _STLP_INTERNAL_STREAMBUF
+struct _MoneyStorageTag {};
+__forceinline void *operator new(size_t, void *storage, _MoneyStorageTag) { return storage; }
 #include <locale>
 
 namespace _STL {
@@ -175,6 +152,24 @@ __forceinline pair<_MoneyIn, bool> __get_symbol(_MoneyIn first, _MoneyIn last, c
   pair<_MoneyIn, const wchar_t*> result = mismatch(first, last, start);
   return make_pair(result.first, result.second == end);
 }
+template <> _String_base<unsigned short, allocator<unsigned short> >::~_String_base();
+typedef basic_string<wchar_t> _MoneyString;
+class _MoneyNameStorage {
+ union { unsigned char storage[sizeof(_MoneyString)]; void *alignment; };
+public:
+ __forceinline _MoneyNameStorage() { new(storage,_MoneyStorageTag()) _MoneyString; }
+ __forceinline _MoneyNameStorage(const _MoneyString &value) { new(storage,_MoneyStorageTag()) _MoneyString(value); }
+ __forceinline ~_MoneyNameStorage() { wchar_t *p=ref().begin(); if(p) free(p); }
+ __forceinline _MoneyString &ref() { return *reinterpret_cast<_MoneyString *>(storage); }
+ __forceinline const _MoneyString &ref() const { return *reinterpret_cast<const _MoneyString *>(storage); }
+ __forceinline operator _MoneyString &() { return ref(); }
+ __forceinline operator const _MoneyString &() const { return ref(); }
+ __forceinline const wchar_t *data() const { return ref().data(); }
+ __forceinline size_t size() const { return ref().size(); }
+ __forceinline wchar_t *begin() { return ref().begin(); }
+ __forceinline wchar_t &operator[](size_t i) { return ref()[i]; }
+ __forceinline void insert(wchar_t *p,wchar_t c) { ref().insert(p,c); }
+};
 template <> _MoneyIn money_get<wchar_t, _MoneyIn>::do_get(_MoneyIn __s, _MoneyIn __end, bool __intl, ios_base& __str, ios_base::iostate& __err, basic_string<wchar_t>& __digits) const
 {
   typedef wchar_t _CharT;
@@ -195,14 +190,14 @@ template <> _MoneyIn money_get<wchar_t, _MoneyIn>::do_get(_MoneyIn __s, _MoneyIn
                    
   money_base::pattern __format = __intl ? __punct_intl.neg_format()
                                         : __punct.neg_format();
-  string_type __ns = __intl ? __punct_intl.negative_sign()
+  _MoneyNameStorage __ns = __intl ? __punct_intl.negative_sign()
                             : __punct.negative_sign();
-  string_type __ps = __intl ? __punct_intl.positive_sign()
+  _MoneyNameStorage __ps = __intl ? __punct_intl.positive_sign()
                             : __punct.positive_sign();
   int __i;
   bool __is_positive = true;
   bool __symbol_required = (__str.flags() & ios_base::showbase) !=0;
-  string_type __buf;
+  _MoneyNameStorage __buf;
   back_insert_iterator<string_type> __out(__buf);
 
   for (__i = 0; __i < 4; ++__i) {
