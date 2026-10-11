@@ -169,10 +169,14 @@ public:
 	virtual void slot8C(int a, int b, int c);
 };
 
-class RvaLogicHolder
-{
-public:
-	void rva002B2E77(int value);
+class RvaLogicHolder {};
+// The rowed stdcall wrapper at 2B2E77 ignores ECX; native callers still load
+// the living-world receiver before its ret-4 call. Project only that unused
+// receiver register while naming the existing real provider.
+void __stdcall Rva002B2E77Append(int value);
+union LogicAppendCall {
+ void (__stdcall *provider)(int);
+ void (RvaLogicHolder::*receiver)(int);
 };
 
 void Rva0051AF0BEnable(int value);
@@ -204,11 +208,23 @@ private:
 	_STL::list<TreeHintOpaque0043671B, _STL::allocator<TreeHintOpaque0043671B> > m_list;
 };
 
+// Native DC8A20 is the complete three-pointer deregistration table.
+// The pointed strings are independently owned bytes at C3CB64/C3CB58/C3CB48;
+// the original source identifiers are unknown.
+extern const char BfmeSaveLoadRegistrationMode[] = "SaveLoadMode";
+extern const char BfmeSaveLoadRegistrationTypes[] = "GameTypes";
+extern const char BfmeSaveLoadRegistrationCurrentType[] = "CurrentGameType";
+extern const char *const BfmeSaveLoadRegistrations[3] = {
+ BfmeSaveLoadRegistrationMode,
+ BfmeSaveLoadRegistrationTypes,
+ BfmeSaveLoadRegistrationCurrentType
+};
+
 Rva00435DE7::~Rva00435DE7()
 {
 	bool showBackground = true;
 	const char *const *registrations =
-		(const char *const *)0x00DC8A20;
+		BfmeSaveLoadRegistrations;
 
 	if (*(void **)&g_bfmeAptWindowManager != 0)
 	{
@@ -303,11 +319,13 @@ Rva00435DE7::~Rva00435DE7()
 
 		RvaLogicHolder *livingWorld =
 			(RvaLogicHolder *)*(void **)&TheLivingWorldLogic;
+		LogicAppendCall append;
+		append.provider = &Rva002B2E77Append;
 		if (m_2A8 == 1 && livingWorld != 0)
-			livingWorld->rva002B2E77(1);
+			(livingWorld->*append.receiver)(1);
 		else if (m_2A8 == 2 && livingWorld != 0)
 		{
-			livingWorld->rva002B2E77(2);
+			(livingWorld->*append.receiver)(2);
 		}
 	}
 
