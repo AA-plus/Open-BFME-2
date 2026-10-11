@@ -157,10 +157,10 @@ public:
 	virtual StateReturnType setState(StateID newStateID);
 	Object *getOwner() const { return m_owner; }
 	Object *getGoalObject();
-	const Coord3D *getGoalPosition() const { return &m_goalPosition; }
-	void lock(const char *msg) { m_locked = true; }
-	void unlock() { m_locked = false; }
-	StateID getCurrentStateID() const;
+	__declspec(dllimport) __forceinline const Coord3D *getGoalPosition() const { return &m_goalPosition; }
+	__declspec(dllimport) __forceinline void lock(const char *msg) { m_locked = true; }
+	__declspec(dllimport) __forceinline void unlock() { m_locked = false; }
+	__declspec(dllimport) __forceinline StateID getCurrentStateID() const;
 	State *m_currentState; // +0x04
 	UnsignedInt m_pad08[3];
 	Object *m_owner; // +0x14
@@ -196,7 +196,7 @@ public:
 // Retail carries the direct-load shape (mov [ecx+4] / test / mov [eax+4] /
 // mov 999999) once at 0x00260DDC; the getID call is inlined there, so this
 // TU spells the direct form.
-inline StateID StateMachine::getCurrentStateID() const
+__declspec(dllimport) __forceinline StateID StateMachine::getCurrentStateID() const
 {
 	return m_currentState ? m_currentState->m_ID : INVALID_STATE_ID;
 }
