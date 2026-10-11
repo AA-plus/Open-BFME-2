@@ -121,9 +121,9 @@ public:
  int Get_Pass_Count() const { return PassCount; }
  int Get_Vertex_Count() const { return VertexCount; }
  int Get_Polygon_Count() const { return PolygonCount; }
- bool Has_Material_Array(int pass) const { return MaterialArray[pass] != 0; }
+ bool Has_Material_ArrayRV(int pass) const { return MaterialArray[pass] != 0; }
  bool Has_Texture_Array(int pass, int stage) const { return TextureArray[pass][stage] != 0; }
- VertexMaterialClass *Peek_Single_Material(int pass) const { return Material[pass]; }
+ VertexMaterialClass *Peek_Single_MaterialRV(int pass) const { return Material[pass]; }
  VertexMaterialClass *Peek_Material(int index, int pass) const;
  void Set_Material(int index, VertexMaterialClass *material, int pass);
  void Set_Single_Material(VertexMaterialClass *material, int pass);
@@ -172,13 +172,13 @@ void MaterialRemapperClass::Remap_Mesh(const MeshMatDescClass *src, MeshMatDescC
 {
  if (SrcMatInfo->Vertex_Material_Count() >= 1) {
   for (int pass = 0; pass < src->Get_Pass_Count(); ++pass) {
-   if (src->Has_Material_Array(pass)) {
+   if (src->Has_Material_ArrayRV(pass)) {
     for (int vertex = 0; vertex < src->Get_Vertex_Count(); ++vertex) {
      VertexMaterialClass *material = src->Peek_Material(vertex, pass);
      dest->Set_Material(vertex, Remap_Vertex_Material(material), pass);
     }
    } else {
-    dest->Set_Single_Material(Remap_Vertex_Material(src->Peek_Single_Material(pass)), pass);
+    dest->Set_Single_Material(Remap_Vertex_Material(src->Peek_Single_MaterialRV(pass)), pass);
    }
   }
  }
