@@ -77,7 +77,7 @@ class AptValueVectorDelete {public:~AptValueVectorDelete(){((AptValueVector *)th
 extern AptValueVector *g_releaseVectorAtE17710;
 extern AptValueVector *g_aptOptionalValueVector;
 class EAStringC {void *data;public:void rva006D3470();};
-extern EAStringC g_eaStringAtE177D4;
+extern void *g_eaStringAtE177D4Storage;
 void Rva0070D9F0Shutdown();
 void Rva006D37F0Clear();
 struct AptActionInterpreter {void rva006FEB50();};
@@ -120,7 +120,7 @@ void Rva006CFAB0(int arg)
 	g_bfmeAptPtrAtE176D0=0;
 	if(g_aptOptionalValueVector)delete (AptValueVectorDelete *)g_aptOptionalValueVector;
 	g_aptOptionalValueVector=0;
-	g_eaStringAtE177D4.rva006D3470();
+	(*reinterpret_cast<EAStringC *>(&g_eaStringAtE177D4Storage)).rva006D3470();
 	Rva0070D9F0Shutdown();
 	g_releaseVectorAtE17710->ReleaseValues();
 	delete (AptValueVectorDelete *)g_releaseVectorAtE17710;

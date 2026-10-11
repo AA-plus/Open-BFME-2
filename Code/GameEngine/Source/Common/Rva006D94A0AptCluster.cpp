@@ -101,7 +101,7 @@ class EAStringC
 public:
 	void rva006D3470();
 };
-extern EAStringC g_eaStringAtE18060;
+extern void *g_eaStringAtE18060Storage;
 
 // The qsort comparators at VA 0x00AD9D70 / 0x00AD9E40 / 0x00AD9F70; only their
 // addresses reach these bodies, and every push is a DIR32 site masked at verify.
@@ -197,9 +197,9 @@ BfmeAptValue006DCD20 *rva006DA0C0(BfmeAptValue006DCD20 *pValue, int mode)
 
 		if (mode > 0)
 		{
-			g_aptValueStackAtE182E0.At(0)->rva006DD6C0(&g_eaStringAtE18060);
+			g_aptValueStackAtE182E0.At(0)->rva006DD6C0(&(*reinterpret_cast<EAStringC *>(&g_eaStringAtE18060Storage)));
 			qsort(array->m_data, array->mnLength, 4, rva006DA0C0Comparator);
-			g_eaStringAtE18060.rva006D3470();
+			(*reinterpret_cast<EAStringC *>(&g_eaStringAtE18060Storage)).rva006D3470();
 		}
 	}
 

@@ -13,21 +13,21 @@ public:
     EAStringC &clear();
 };
 
-extern EAStringC g_eaStringAtE177D4;
-extern EAStringC g_eaStringAtE18060;
+extern void *g_eaStringAtE177D4Storage;
+extern void *g_eaStringAtE18060Storage;
 
-// g_eaStringAtE177D4: VA 0x00E177D4 (.data BSS), one zero-filled pointer.
+// g_eaStringAtE177D4Storage: VA 0x00E177D4 (.data BSS), one zero-filled pointer.
 // The EAStringC layout is one pointer; keep raw storage so its matched
 // initializer's explicit atexit callback remains the sole cleanup registration.
+// Consumers cast the address of these actual storage cells to the proven
+// one-pointer EAStringC representation; each address has one defining symbol.
 void *g_eaStringAtE177D4Storage;
-#pragma comment(linker, "/alternatename:?g_eaStringAtE177D4@@3VEAStringC@@A=?g_eaStringAtE177D4Storage@@3PAXA")
-// g_eaStringAtE18060: VA 0x00E18060 (.data BSS), one zero-filled pointer.
+// g_eaStringAtE18060Storage: VA 0x00E18060 (.data BSS), one zero-filled pointer.
 void *g_eaStringAtE18060Storage;
-#pragma comment(linker, "/alternatename:?g_eaStringAtE18060@@3VEAStringC@@A=?g_eaStringAtE18060Storage@@3PAXA")
 
 void rva007B9C30()
 {
-    g_eaStringAtE177D4.~EAStringC();
+    (*reinterpret_cast<EAStringC *>(&g_eaStringAtE177D4Storage)).EAStringC::~EAStringC();
 }
 
 // Complete 10B Ghidra boundary; independently registered at 0x007B678A.
@@ -35,7 +35,7 @@ void rva007B9C30()
 // then registers this same object's destructor callback.
 void rva007B9C40()
 {
-    g_eaStringAtE18060.~EAStringC();
+    (*reinterpret_cast<EAStringC *>(&g_eaStringAtE18060Storage)).EAStringC::~EAStringC();
 }
 
 extern "C" int __cdecl atexit(void (__cdecl *callback)());
@@ -44,7 +44,7 @@ extern "C" int __cdecl atexit(void (__cdecl *callback)());
 // singleton and increments its refcount, then CRT owns the cleanup callback.
 void rva007B6760()
 {
-    g_eaStringAtE177D4.clear();
+    (*reinterpret_cast<EAStringC *>(&g_eaStringAtE177D4Storage)).clear();
     atexit(rva007B9C30);
 }
 
@@ -52,6 +52,6 @@ void rva007B6760()
 // independently checked global VA E18060 and callback RVA 007B9C40.
 void rva007B6780()
 {
-    g_eaStringAtE18060.clear();
+    (*reinterpret_cast<EAStringC *>(&g_eaStringAtE18060Storage)).clear();
     atexit(rva007B9C40);
 }

@@ -95,7 +95,7 @@ bool rva006fc370(AptValue *);
 class AptBoolean { public: static AptValue *Create(bool); bool GetBool() const; };
 AptValue *Rva008A4EA0MakeFloat(float);
 EAStringC *Rva0070B4F0GetString(int);
-extern EAStringC g_eaStringAtE177D4;
+extern void *g_eaStringAtE177D4Storage;
 extern AptValue *gpUndefinedValue;
 extern AptValue *gpGlobalGlobalObject;
 class AptValueVector { public: int GetNumValues() const; void ReleaseValues(); };
@@ -464,8 +464,8 @@ void AptActionInterpreter::_FunctionAptActionPushStringGetVar(AptActionInterpret
     c->pInstruction=(const unsigned char *)(((unsigned int)c->pInstruction+3)&~3U);
     const char *const *data=(const char *const *)c->pInstruction;
     c->pInstruction+=4;
-    g_eaStringAtE177D4=*data;
-    AptValue *v=p->getVariable((AptValue *)c->pCurrentContext,c->pCurWith,&g_eaStringAtE177D4,1);
+    (*reinterpret_cast<EAStringC *>(&g_eaStringAtE177D4Storage))=*data;
+    AptValue *v=p->getVariable((AptValue *)c->pCurrentContext,c->pCurWith,&(*reinterpret_cast<EAStringC *>(&g_eaStringAtE177D4Storage)),1);
     p->stack.Push(v);
 }
 

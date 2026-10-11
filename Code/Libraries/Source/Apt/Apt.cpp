@@ -343,7 +343,7 @@ void Rva006CC150FreeWithSize(void *block,unsigned int) {
 // opaque slots do not claim callable signatures that this body never uses.
 struct Rva00222343 {Rva00222343();int fields[14];bool flag38,flag39;};
 #define CHECK(e,s,l) do{if(!(e)){g_bfmeAptAssertAtE17734(s,"C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\Apt.cpp",l);if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();}}while(0)
-extern EAStringC g_eaStringAtE177D4;
+extern void *g_eaStringAtE177D4Storage;
 unsigned char g_00E1771C=0;
 unsigned char g_aptInitFlag39=0;
 extern void (__cdecl *g_bfmeAptFreeSizeAtE17730)(void*,unsigned);
@@ -401,7 +401,7 @@ void Rva006CF230Initialize(const Rva00222343 *input) {
  Rva00222343 defaults;
  const Rva00222343 *parms=input?input:&defaults;
  CHECK(parms->fields[12]>4,"(initParms.iRegArraySize > 4) && \"Register Array Size must be at least 4. Flash regularly uses these\"",362);
- if(!g_eaStringAtE177D4.rva006CD4A0())g_eaStringAtE177D4.rva006D3C60();
+ if(!(*reinterpret_cast<EAStringC *>(&g_eaStringAtE177D4Storage)).rva006CD4A0())(*reinterpret_cast<EAStringC *>(&g_eaStringAtE177D4Storage)).rva006D3C60();
  g_00E1771C=parms->flag38;g_aptInitFlag39=parms->flag39;
  CHECK(g_bfmeAptAssertAtE17734,"gAptFuncs.pfnAssertFail",375);
  CHECK(g_bfmeAptAllocAtE17728,"gAptFuncs.pfnMemAlloc",376);
