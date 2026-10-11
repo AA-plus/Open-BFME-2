@@ -29,7 +29,9 @@ struct Rva0046247DPair
 class Rva0046247D
 {
 public:
-	void *rva0046247D(Rva0046247DPair &result);
+	// LINK: 0x0046247D is rowed as void Rva0046247D::rva0046247D(Pair&) (Rva0046247DCondPair.cpp); the eax result read here is
+	// kept through a member-pointer cast to the old pointer-returning shape.
+	void rva0046247D(Rva0046247DPair &result);
 };
 
 // The shared helper and its eight-byte element copier are now recovered.
@@ -71,6 +73,6 @@ public:
 void OpenContain::rva00464286()
 {
 	Rva0046247DPair pair;
-	slot26(((Rva0036AE51ListView *)((Rva0046247D *)this)->rva0046247D(pair))->rva0036AE51(),
+	slot26(((Rva0036AE51ListView *)(((Rva0046247D *)this)->*reinterpret_cast<void *(Rva0046247D::*)(Rva0046247DPair &)>(&Rva0046247D::rva0046247D))(pair))->rva0036AE51(),
 			 (void *)((char *)this + 0x48));
 }
