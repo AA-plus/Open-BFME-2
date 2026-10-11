@@ -32,3 +32,17 @@ private:
 Rva000A9551::Rva000A9551()
 {
 }
+
+static __declspec(noinline) void rva000A94F9(Coord2D &low, Coord2D &high, const Coord2D &point)
+{
+	if (point.x < low.x) low.x = point.x;
+	else if (point.x > high.x) high.x = point.x;
+	if (point.y < low.y) low.y = point.y;
+	else if (point.y > high.y) high.y = point.y;
+}
+
+// ?callerA94F9 absent-from-retail
+void callerA94F9(Coord2D &low, Coord2D &high, const Coord2D &point)
+{
+	rva000A94F9(low, high, point);
+}
