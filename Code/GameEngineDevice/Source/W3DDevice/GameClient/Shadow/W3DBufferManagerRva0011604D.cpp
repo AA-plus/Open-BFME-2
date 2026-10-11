@@ -28,7 +28,22 @@ private:
 	char m_pad[24];
 };
 
-extern unsigned g_00DB5F30[];
+// Retail's own per-format FVF table at RVA 0x009B5F30 (.data, file offset
+// 0x00975FB0): eighteen unsigned entries in the order of W3DBufferManager's
+// VBM_FVF_TYPES, so the D3D flexible vertex format the rowed body below hands to
+// the dynamic vertex buffer. XYZ is D3DFVF_XYZ (0x002); the D suffix adds
+// D3DFVF_DIFFUSE (0x040); UV is D3DFVF_TEX1 (0x100) and UV2 D3DFVF_TEX2 (0x200);
+// the N prefix adds D3DFVF_NORMAL (0x010); and XYZRHW is D3DFVF_XYZRHW (0x004).
+// Eighteen entries is MAX_FVF, and 72 bytes is all but eight of the ledger's
+// bound - the words that follow belong to retail's next object. The words are
+// transcribed verbatim from retail's own .data.
+// Symbol ?g_00DB5F30@@3PAIA, transcribed below.
+extern unsigned g_00DB5F30[] =
+{
+	0x002, 0x042, 0x102, 0x142, 0x202, 0x242,
+	0x012, 0x052, 0x112, 0x152, 0x212, 0x252,
+	0x004, 0x044, 0x104, 0x144, 0x204, 0x244
+};
 
 class W3DBufferManager
 {

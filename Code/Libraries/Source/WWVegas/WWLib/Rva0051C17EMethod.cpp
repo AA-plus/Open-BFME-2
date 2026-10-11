@@ -10,7 +10,13 @@ public:
 UnicodeString __cdecl GadgetTextEntryGetText(GameWindow *textEntry);
 int __cdecl GadgetListBoxAddEntryText(GameWindow *listbox, UnicodeString text, int color, int row, int column, bool overwrite);
 
-extern int g_00DD16C4;
+// Retail's own word at RVA 0x009D16C4 (.data, file offset 0x0097D2C4): -1. The
+// rowed body below passes it to the listbox adder in place of a row index, so
+// the missing object was the constant itself. The ledger's 100-byte bound spans
+// the pointer array that follows it in .data, which belongs to retail's next
+// object.
+// Symbol ?g_00DD16C4@@3HA, transcribed below.
+extern int g_00DD16C4 = -1;
 
 struct Rva0051C17EInner {
 	char _00[0xA0];
