@@ -366,6 +366,10 @@ public:
 	Int m_regionID;						// +0x12C
 	unsigned char m_pad130[0x13c - 0x130];
 	Int m_ownerPlayer;					// +0x13C
+	unsigned char m_pad140[0x14c - 0x140];
+	Int m_field14C;						// +0x14C
+	Int m_field150;						// +0x150
+	Int m_field154;						// +0x154
 };
 
 // One delayed region victory (WB m_delayedRegionVictories element, 12
@@ -583,6 +587,7 @@ public:
  void RemovePlayer(LivingWorldPlayer*);
 	UnsignedInt rva002B77B2();
 	UnsignedInt rva002B77F7();
+	Int rva002B783C(LivingWorldArmy *army, Rva003F287F *from, Rva003F287F *to, Coord2D *direction);
 	void rva002B5AF7();
  void rva002BD9B4();
  void rva002B768F();
@@ -2384,6 +2389,35 @@ UnsignedInt LivingWorldLogic::rva002B77F7()
  _STL::set<Int> keys;
  reinterpret_cast<Rva002B69A6*>(this)->rva002B69A6(&keys);
  return keys.size();
+}
+
+Int LivingWorldLogic::rva002B783C(LivingWorldArmy *army, Rva003F287F *from, Rva003F287F *to, Coord2D *direction)
+{
+	if (to != 0 && army != 0)
+	{
+		if (from == to)
+			return from->m_field14C;
+
+		Int steps;
+		{
+			_STL::vector<Int> path;
+			Int result = m_field0B0->ValidateArmyRegionEntry(army, (Rva00318C32Ret *)to, (Rva00318C32Ret *)from, (Int)&path, 0);
+			if (result < 0 || result > 1)
+				return -1;
+			steps = (Int)path.size() - 1;
+			CalcAttackingDirection(path, direction);
+		}
+
+		if (steps <= 1)
+			return from->m_field14C;
+		if (steps == 2)
+			return from->m_field150;
+		return from->m_field154;
+	}
+
+	direction->x = 1.0f;
+	direction->y = 0.0f;
+	return from->m_field154;
 }
 
 // ?LivingWorldLogic::rva002B4B83 present-unmatched
