@@ -56,6 +56,24 @@ static __forceinline void configAppendChar(AsciiString &text,char c){((StringBas
 #include "GameNetwork/GameSpy/GSConfig.h"
 #include "GameNetwork/RankPointValue.h"
 
+// codegen otherwise instantiates the max<unsigned> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy. TRANSITIVE anchor (no angle includes here).
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
+
+// vector<int> fill/insert otherwise instantiates the _Construct<int,int>
+// COMDAT; a file-static overload takes those calls instead.
+#include <new>
+namespace _STL {
+static inline void _Construct(int *__p, const int &__val)
+{ new (__p) int(__val); }
+}
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)

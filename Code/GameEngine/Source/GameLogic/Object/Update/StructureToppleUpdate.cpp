@@ -51,6 +51,16 @@
 #include "GameClient/Drawable.h"
 #include "GameClient/InGameUI.h"
 
+// codegen otherwise instantiates the max<unsigned> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy. TRANSITIVE anchor (no angle includes here).
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
+
 // Keep the retail AngleFXInfo vector providers emitted in this /O2 TU after
 // parseAngleFX moved to the O1/SSE phase-parser unit.
 template void _STL::vector<AngleFXInfo, _STL::allocator<AngleFXInfo> >::push_back(const AngleFXInfo &);
