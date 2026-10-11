@@ -10,6 +10,11 @@
 // caller is unclaimed 0x0009AB6B 26B which this unblocks.
 #include <hash_map>
 #include <cstddef>
+// Suppress this TU's non-retail vector<void*> operator[] copy (family2-LK3 row 25):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void *&_STL::vector<void*>::operator[](size_t);
+}
 // Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
 // the retail copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {
