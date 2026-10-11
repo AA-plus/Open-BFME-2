@@ -670,14 +670,10 @@ void AptCreateAHero::Powers::rva005B314B(const char *path)
 // Retail's own ten words transcribed from .rdata at RVA 0x00872CAC (file
 // offset 0x008720AC): the level 0..9 entries are 0,0,1,1,1,1,2,2,2,3, so two
 // powers fit in column 0, four in column 1 and three in column 2, which is the
-// 4-wide row grid Rva005B4653 walks backwards from maxSlot. `extern` on the
-// definition keeps the array external; a plain const array at namespace scope
-// would take internal linkage and leave AptCreateAHeroPowersRva005B4653.cpp
-// referencing an unresolved symbol.
+// 4-wide row grid Rva005B4653 walks backwards from maxSlot.
+// AptCreateAHeroPowersRva005B4653.cpp owns the definition (data row
+// 0x00C72CAC); a second one here would not link.
 extern const int g_00C72CAC[10];
-const int g_00C72CAC[10] = {
-	0, 0, 1, 1, 1, 1, 2, 2, 2, 3,
-};
 void Rva0044C0A8(UnicodeString,UnicodeString,void*);
 void AptCreateAHero::Powers::rva005B335E()
 {
