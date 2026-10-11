@@ -61,10 +61,10 @@ public:
 };
 
 // The pinned check shared with the rowed slot 0x00508925.
-class Rva00508925
+class Rva00507823
 {
 public:
-	unsigned char rva005075D6(int a, int b);
+	unsigned char rva005075D6(const void *a, Object *b);	// rowed 0x005075D6
 };
 
 class Made002CC8A4
@@ -105,7 +105,7 @@ bool Made002CC8A4::rva00509E43(int a, Object *obj)
 					}
 					else if (m_154)
 						return false;
-					return reinterpret_cast<Rva00508925 *>(this)->rva005075D6(a, (int)obj);
+					return reinterpret_cast<Rva00507823 *>(this)->rva005075D6((const void *)a, (Object *)obj);
 				}
 			}
 		}
