@@ -145,7 +145,7 @@ class BfmeParserRegistryVE;
 class BfmeParserBindingBaseVE
 {
 public:
-	virtual ~BfmeParserBindingBaseVE() { m_registry->handle(m_token); }
+	__declspec(dllimport) __forceinline virtual ~BfmeParserBindingBaseVE() { m_registry->handle(m_token); }
 	virtual void bfmeSlot0();
 	virtual void bfmeSlot1();
 
