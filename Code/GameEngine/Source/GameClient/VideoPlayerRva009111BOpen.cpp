@@ -201,6 +201,18 @@ extern int g_Va00DE2C98[0x100];
 extern int g_Va00DE2898[0x100];
 extern int g_Va00DE2498[0x100];
 extern unsigned int g_Va00DE2098[0x100];
+// The seven colour tables and the byte the language setter is pointed at are all
+// filled in by the body above, and all seven addresses (VA 0x00DE2098 ..
+// 0x00DE4878) sit past .data's raw end, file offset 0x009DCC08, so retail loads
+// them zero. Tentative definitions, for the same reason as g_Va00DB6218: an
+// explicit "= 0" lets MSVC learn the value and fold a load into a literal.
+unsigned int g_Va00DE4878;
+unsigned int g_Va00DE3498[0x400];
+int g_Va00DE3098[0x100];
+int g_Va00DE2C98[0x100];
+int g_Va00DE2898[0x100];
+int g_Va00DE2498[0x100];
+unsigned int g_Va00DE2098[0x100];
 
 void Rva009111B::init()
 {
