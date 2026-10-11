@@ -17,7 +17,6 @@ address_global	Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	g_Va00E1F8E0	
 address_global	Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	g_Va00E20DA0	2
 address_global	Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	g_Va00E20FC0	2
 address_global	Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	g_Va00E21220	2
-address_global	Code/GameEngine/Source/Common/BfmeCheckJX.cpp	g_Rva01142620	13
 address_global	Code/GameEngine/Source/Common/BfmeConv1292.cpp	g_Va00E02FE4	2
 address_global	Code/GameEngine/Source/Common/BfmeConv1292.cpp	g_Va00E02FF8	2
 address_global	Code/GameEngine/Source/Common/BfmeConv1292.cpp	g_Va00E0300C	2
@@ -2339,7 +2338,6 @@ alternatename	Code/GameEngine/Source/Common/BfmeFormatBuffer88A640.cpp	?bfmeWrit
 alternatename	Code/GameEngine/Source/Common/BfmeGrokOdIf0.cpp	?m@Gen_0082ad50@@QAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/BfmeInstallSpreadTable.cpp	?g_bfmeToneReady@@3P6AXXZA	1
 alternatename	Code/GameEngine/Source/Common/BfmeInstallSpreadTable.cpp	?g_rva01356B40@@3P6AXPAX0HH@ZA	1
-alternatename	Code/GameEngine/Source/Common/BfmeLimitedEdgeFilters.cpp	?g_bfmeFilterLimit@@3PAHA	1
 alternatename	Code/GameEngine/Source/Common/BfmeLoadReplayControlAR.cpp	?g_bfmeReplayControlAR@@3PAXA	1
 alternatename	Code/GameEngine/Source/Common/BfmeLoadReplayControlAR.cpp	?g_bfmeWindowManagerAR@@3PAVBfmeWindowManagerAR@@A	1
 alternatename	Code/GameEngine/Source/Common/BfmeMakeBZA.cpp	?bfme5MakeObj70@@YAPAUBfme5Obj70@@H@Z	1
@@ -3159,11 +3157,7 @@ alternatename	Code/GameEngine/Source/Common/Rva0090C280Ctor.cpp	_vtbl_00BD25C8	1
 alternatename	Code/GameEngine/Source/Common/Rva0098477Ctor.cpp	_vtbl_00BC8298	1
 alternatename	Code/GameEngine/Source/Common/Rva009A5800Forward.cpp	?g_bfmeToneReady@@3P6AXXZA	1
 alternatename	Code/GameEngine/Source/Common/Rva009A7B00Vp6Filter.cpp	?Rva009A7B00@@YAXXZ	1
-alternatename	Code/GameEngine/Source/Common/Rva009AB320BuildTables.cpp	_ConvertBoolTrees	1
-alternatename	Code/GameEngine/Source/Common/Rva009AF320CopyPlanes.cpp	?g_rva01356E64@@3P6APAHPAURva009ACBA0Context@@H@ZA	1
-alternatename	Code/GameEngine/Source/Common/Rva009B3800PlaneCopy.cpp	?g_rva01356E64@@3P6APAHPAURva009B3800Context@@H@ZA	1
 alternatename	Code/GameEngine/Source/Common/Rva009C5890.cpp	?Rva009C5890@@YAXXZ	1
-alternatename	Code/GameEngine/Source/Common/Rva009C6A30.cpp	?Rva009C6A30@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009C77C0.cpp	?Rva009C77C0@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva009F68C6PointerArray.cpp	?bfmeCallDXB@BfmeSubDXB@@QAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva00CE12FCMutex.cpp	?release@Rva00CE12FCMutex@@UAEXXZ	1

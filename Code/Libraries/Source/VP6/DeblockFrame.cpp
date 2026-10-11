@@ -21,7 +21,7 @@ extern const unsigned int *g_rva01356A98;
 struct Rva009AF200Context;
 extern "C" void __cdecl DeblockPlaneNew(Rva009AF200Context *, unsigned, int, unsigned, unsigned, unsigned char *, unsigned char *, const unsigned int *);
 // Retail 0x001BF8D0 DeblockPlane (ledger name from its owning unit).
-void copyPlane009AEEE0(Rva009AF200Context *, int, int, int);
+extern "C" void __cdecl DeblockPlane(Rva009AF200Context *, int, int, int);
 
 struct Rva009AF200Context
 {
@@ -84,8 +84,8 @@ extern "C" void __cdecl DeblockFrame(Rva009AF200Context *ctx, int x, int y)
 			ctx->m_planeV + y,
 			g_rva01356A98);
 	} else {
-		copyPlane009AEEE0(ctx, x, y, 0);
-		copyPlane009AEEE0(ctx, x, y, 1);
-		copyPlane009AEEE0(ctx, x, y, 2);
+		DeblockPlane(ctx, x, y, 0);
+		DeblockPlane(ctx, x, y, 1);
+		DeblockPlane(ctx, x, y, 2);
 	}
 }

@@ -22,7 +22,7 @@ typedef void (__cdecl *Rva009B5420Vp6FindPredictorFn)(void *, int, int, int, int
 
 extern "C" int __cdecl VP6_DecodeMode(unsigned char *, int, int);
 extern "C" int __cdecl VP6_DecodeBlockMode(unsigned char *);
-extern void Rva009B5200DecodeMotionVector(void *, short *, int);
+extern "C" void __cdecl VP6_decodeMotionVector(void *, short *, int);
 
 struct Rva009B5AF0Mv {
 	short x;
@@ -87,7 +87,7 @@ void Rva009B5AF0Vp6DecodeBlock(unsigned char *ctx, int row, int column)
 				sumX += state->candidateMv1.x;
 				sumY += state->candidateMv1.y;
 			} else if (kind == 2) {
-				Rva009B5200DecodeMotionVector(state, (short *)&scratch, 2);
+				VP6_decodeMotionVector(state, (short *)&scratch, 2);
 				short vx = ((short *)&scratch)[0];
 				short vy = ((short *)&scratch)[1];
 				state->blockMv[b].x = vx;
@@ -130,13 +130,13 @@ void Rva009B5AF0Vp6DecodeBlock(unsigned char *ctx, int row, int column)
 		y = state->goldenCandidateMv1.y;
 		break;
 	case 2:
-		Rva009B5200DecodeMotionVector(state, (short *)&scratch, 2);
+		VP6_decodeMotionVector(state, (short *)&scratch, 2);
 		x = ((short *)&scratch)[0];
 		y = ((short *)&scratch)[1];
 		break;
 	case 6:
 		((Rva009B5420Vp6FindPredictorFn)VP6_FindNearestandNextNearest)(state, row, column, 2, &scratch);
-		Rva009B5200DecodeMotionVector(state, (short *)&scratch, 6);
+		VP6_decodeMotionVector(state, (short *)&scratch, 6);
 		x = ((short *)&scratch)[0];
 		y = ((short *)&scratch)[1];
 		break;

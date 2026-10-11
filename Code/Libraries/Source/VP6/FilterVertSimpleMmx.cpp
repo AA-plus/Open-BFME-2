@@ -1,15 +1,13 @@
 // cl: /DNDEBUG /MD /Oy-
+// Clean room: reverse/vp6_cleanroom/specs/001d2a70.md plus retail only.
+// No decoder source was consulted.
 //
-// Open-BFME5: VP6-style MMX in-loop deblocking filter across a horizontal
-// edge, writing four adjacent rows (y-2, y-1, y, y+1).  Looks its per-block
-// strength value up through the shared spread table (g_rva01356A9C, already
-// used by Rva009AF320CopyPlanes/Rva009ACC40SetupFilter for the same
-// ctx->m_tableIndex field) and reassigns the context pointer parameter to
-// that raw value -- retail never needs a fresh stack frame here, so unlike
-// bfmeFilterBlockByIndexMmx's family the 1/4 and 1/2 constant vectors and
-// the edge-limit/sign-bias masks stay the pre-existing globals retail reads
-// them from instead of being rebuilt on the stack.  Retail 0x009C2170, 424
-// bytes.
+// FilterVert_Simple_MMX (retail 0x001D2A70, 424 bytes): MMX loop filter
+// across one horizontal block edge, writing the four rows y-2..y+1. The
+// instance's frame q index (+0xC) selects the deblock limit through the
+// table pointer g_rva01356A9C (data RVA 0x00A22CEC, owned here); the fourth
+// argument is not read. The constant vectors are the retail constants at
+// image 0x00BD99C0.. read straight from the shared pool.
 
 struct Rva009C2170Ctx
 {
@@ -27,7 +25,7 @@ extern const unsigned short Rva01143880Half[4];	// retail 0x01143880 ({1} x4)
 extern const unsigned char Rva011438A0Limit[8];	// retail 0x011438A0 ({1} x8)
 extern const unsigned char Rva011438B0Bias[8];		// retail 0x011438B0 ({0x80} x8)
 
-void __cdecl bfmeDeblockEdgeByIndexMmx(Rva009C2170Ctx *ctx, void *row, int stride)
+extern "C" void __cdecl FilterVert_Simple_MMX(Rva009C2170Ctx *ctx, unsigned char *row, int stride, const void *bounding)
 {
 	ctx = (Rva009C2170Ctx *)g_rva01356A9C[ctx->m_tableIndex];
 

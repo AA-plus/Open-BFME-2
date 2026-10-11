@@ -1,4 +1,12 @@
-// Address-derived cdecl configuration ABI proven by VP6 stream invoke callers.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b5910.md plus retail only.
+// No decoder source was consulted.
+//
+// VP6_SetPbParam (retail 0x001B5910, 432 bytes): dispatches on a command code
+// (above 9 does nothing) to set the post-processing level, the CPU-free
+// percentage, the clamps, the de-interlace and add-noise modes, or the
+// reference frames of a decoder instance.
+
 extern "C" double __cdecl sqrt(double);
 #pragma intrinsic(sqrt)
 struct Rva009A9070Context;
@@ -6,7 +14,7 @@ struct Rva009A9070Source;
 // SetAddNoiseMode at 0x001B6920 (VP6 clean room).
 extern "C" void __cdecl SetAddNoiseMode(void *, int);
 extern "C" void __cdecl CopyFrame(Rva009A9070Context *, Rva009A9070Source *, int);
-void Rva009A4E50Configure(void *context, unsigned selector, int value)
+extern "C" void __cdecl VP6_SetPbParam(void *context, unsigned selector, int value)
 {
     if (selector > 9) return;
 again:

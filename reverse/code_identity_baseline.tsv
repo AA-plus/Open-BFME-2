@@ -20,7 +20,6 @@ Code/GameEngine/Source/Common/BfmeApplierBHRva003C4070.cpp	?rva003C4070@BfmeAppl
 Code/GameEngine/Source/Common/BfmeApplierBHRva003C4145.cpp	?rva003C4145@BfmeApplierBH@@QAEXPAXABVAsciiString@@1@Z	?bfmeApplyBH@BfmeApplierBH@@QAEXPAX0PAVBfmeSubBH@@@Z	0x003C069B	unowned
 Code/GameEngine/Source/Common/BfmeApplierBHRva003C4145.cpp	?rva003C4145@BfmeApplierBH@@QAEXPAXABVAsciiString@@1@Z	?rva0039E5B9@Team@@QAEXPAUCoord3D@@@Z	0x0039E5B9	unowned
 Code/GameEngine/Source/Common/BfmeApplierBHRva003C41BA.cpp	?rva003C41BA@BfmeApplierBH@@QAEXPAXABVAsciiString@@0@Z	?bfmeApplyBH@BfmeApplierBH@@QAEXPAX0PAVBfmeSubBH@@@Z	0x003C069B	unowned
-Code/GameEngine/Source/Common/BfmeCheckJX.cpp	?bfmeCheckJX@@YAHPAUCodecState@@@Z	?Rva009A86F0Allocate@@YAHPAX@Z	0x001B9140	unowned
 Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp	?bfmeInstallCpuDispatchTable@@YAXXZ	?Rva009ACF90@@YAXXZ	0x001BD980	unowned
 Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp	?bfmeInstallCpuDispatchTable@@YAXXZ	?Rva009ADD80@@YAXXZ	0x001BE770	unowned
 Code/GameEngine/Source/Common/BfmeCodecCpuDispatch.cpp	?bfmeInstallCpuDispatchTable@@YAXXZ	?Rva009AE6A0@@YAXXZ	0x001BF090	unowned
@@ -974,7 +973,6 @@ Code/GameEngine/Source/Common/Rva009A6130PostFilterDispatch.cpp	?Rva009A6130Post
 Code/GameEngine/Source/Common/Rva009A6130PostFilterDispatch.cpp	?Rva009A6130PostFilterDispatch@@YAXPAURva009A6130Context@@HHHHPAE11HH@Z	?d_009a8c50@@YAXXZ	0x001B96A0	unowned
 Code/GameEngine/Source/Common/Rva009A9AD0Scale2D.cpp	?Rva009A9AD0Scale2D@@YAXPAEHII0HII0EIIIII@Z	?Rva009A9980@@YAXPBEHIIPAEHII@Z	0x001BA3C0	unowned
 Code/GameEngine/Source/Common/Rva009A9AD0Scale2D.cpp	?Rva009A9AD0Scale2D@@YAXPAEHII0HII0EIIIII@Z	?Rva009A9A20@@YAXPBEHIIPAEHII@Z	0x001BA460	unowned
-Code/GameEngine/Source/Common/Rva009AB320BuildTables.cpp	?Rva009AB320BuildTables@@YAXPAURva009AB320Tables@@@Z	?Rva009B60E0BuildTree@@YAXPAI0H@Z	0x001C69E0	unowned
 Code/GameEngine/Source/Common/Rva009B5DB0Vp6DecodeBlock.cpp	?Rva009B5AF0Vp6DecodeBlock@@YAXPAEHH@Z	?d_009b5420@@YAXXZ	0x001C5D20	unowned
 Code/GameEngine/Source/Common/Rva009B5DB0Vp6DecodeBlock.cpp	?Rva009B5DB0Vp6DecodeBlock@@YAXPAEHI@Z	?d_009b58f0@@YAXXZ	0x001C61F0	unowned
 Code/GameEngine/Source/Common/Rva009F5970StateCtor.cpp	??0Rva009F5970State@@QAE@XZ	??1?$vector@UGen_p8cd@@V?$allocator@UGen_p8cd@@@_STL@@@_STL@@QAE@XZ	0x00142D70	wrong

@@ -3,7 +3,7 @@
 // No decoder source was consulted.
 // ?Rva009B60E0BuildTree@@YAXPAI0H@Z retail 0x001C69E0..0x001C6B98 (441 bytes)
 // (spec name VP6_BuildHuffTree; the name is the existing pin that the
-// matched caller Rva009AB320BuildTables.cpp already calls at its three
+// matched caller ConvertBoolTrees.cpp already calls at its three
 // sites). cdecl: 12-byte node array / symbol weights (a 0 weight becomes 1
 // in place) / symbol count. Builds 64 stack sort records (successor /
 // weight / edge) whose edge is a bitfield: bit 0 leaf and bits 1..7 the

@@ -1,4 +1,13 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d7330.md plus retail only.
+// No decoder source was consulted.
+//
+// FilterBlock_mmx (retail 0x001D7330, 486 bytes): builds an 8x8 sub-pixel
+// prediction block from two reference pointers (difference 0, 1, one line,
+// one line minus 1 or one line plus 1) with the bilinear or bicubic filter
+// bank, then widens the byte block into the int16 output. The filter bank
+// is addressed relative to g_bfmeBinkRoundMmx (retail 0x00DB81A0).
+
 extern const unsigned short g_bfmeBinkRoundMmx[4];
 extern "C" void __cdecl FilterBlock1d_h_mmx(const void *, void *, int, int, int, int, const void *);
 extern "C" void __cdecl FilterBlock1d_hb8_mmx(const void *, void *, int, int, int, int, const void *);
@@ -8,7 +17,7 @@ extern "C" void __cdecl FilterBlock2d_mmx(const void *, void *, int, const void 
 extern "C" void __cdecl FilterBlock2dBil_mmx(const unsigned char *, unsigned char *, int, const void *, const void *);
 extern "C" void __cdecl UnpackBlock_MMX(const unsigned char *, short *, unsigned int);
 
-void __cdecl Rva009C6A30(void *arg1, void *arg2, void *arg3,
+extern "C" void __cdecl FilterBlock_mmx(void *arg1, void *arg2, void *arg3,
     int stride, int weightsA, int weightsB, int mode)
 {
     unsigned char scratch[256];
@@ -65,7 +74,3 @@ void __cdecl Rva009C6A30(void *arg1, void *arg2, void *arg3,
     }
     UnpackBlock_MMX(scratch, (short *)arg3, 8);
 }
-
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?Rva009C6A30@@YAXXZ=?Rva009C6A30@@YAXPAX00HHHH@Z")

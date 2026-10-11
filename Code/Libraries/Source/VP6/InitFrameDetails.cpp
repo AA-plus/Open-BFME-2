@@ -1,12 +1,19 @@
-// Target 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
-// Its allocator and native14B body differ from NameKeyGenerator::Bucket's
-// donor operator new. Address-derived identity; original class is unknown.
-// Retail 009A89C0. Existing VP6_StartDecoder caller establishes this name.
-// Fields are offset-derived; sizes and helper ABIs were checked against retail.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001b9410.md plus retail only.
+// No decoder source was consulted.
+//
+// VP6_InitFrameDetails (retail 0x001B9410, 616 bytes): derives the frame
+// geometry of a decoder instance (plane sizes, fragment counts, strides,
+// offsets, macroblock rows and columns), allocates the fragment and frame
+// information and fills the neighbouring macroblock offset tables. Returns 1
+// on success, 0 on failure. Fields are offset-derived from the spec; the
+// signed dword table is the retail constant at image 0x00BD8778 (owned here).
+// Retail 0x001B6400 forwards bytes to duck_malloc at 0x001B63C0.
+
 struct CodecState;
 struct Rva009A8910Context;
 class Rva001B6400Allocation { public: enum AllocationTag { Zero = 0 }; static void* operator new(unsigned, AllocationTag); };
-void Rva009A4E50Configure(void*,unsigned,int);
+extern "C" void __cdecl VP6_SetPbParam(void*,unsigned,int);
 extern "C" void __cdecl ChangePostProcConfiguration(void*,void*);
 // 0x001B9140 is the row _VP6_AllocateFragmentInfo (Code/Libraries/Source/VP6/AllocateFragmentInfo.cpp, cdecl).
 extern "C" int VP6_AllocateFragmentInfo(void*);
@@ -54,9 +61,9 @@ struct CodecState {
     unsigned char pad026c[0x2c];
     unsigned at0298;
 };
-int bfmeCheckJX(CodecState* s)
+extern "C" int __cdecl VP6_InitFrameDetails(CodecState* s)
 {
-    if(s->at01a8>0) Rva009A4E50Configure(s,1,(int)s->at01a8);
+    if(s->at01a8>0) VP6_SetPbParam(s,1,(int)s->at01a8);
     s->at01ec=s->at01b0*s->at01b4;
     s->at01f0=s->at01ec/4;
     s->at01f8=s->at01b0/s->at01c0;

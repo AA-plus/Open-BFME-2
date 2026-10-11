@@ -2903,7 +2903,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x007D8760,8,.rdata,global,?g_Rva01142608@@3PAEA,Code/GameEngine/Source/Common/Rva009A6780BuildQuantizers.cpp,owned,,1,1
 0x007D8768,8,.rdata,global,?g_Rva01142610@@3NA,Code/GameEngine/Source/Common/Rva009A6780BuildQuantizers.cpp,owned,,1,4
 0x007D8770,8,.rdata,float,__real@3eb0c6f7a0b5ed8d,,literal,,0,1
-0x007D8778,96,.rdata,global,?g_Rva01142620@@3PAHA,Code/GameEngine/Source/Common/BfmeCheckJX.cpp,owned,,1,12
+0x007D8778,96,.rdata,global,?g_Rva01142620@@3PAHA,Code/Libraries/Source/VP6/InitFrameDetails.cpp,owned,,1,12
 0x007D87D8,12,.rdata,string,??_C@_09CGHNGBD@y?$CF04d?4raw?$AA@,,literal,,0,1
 0x007D87E4,8,.rdata,string,??_C@_07LBIOEGAO@y?$CFd?4raw?$AA@,,literal,,0,1
 0x007D87EC,12,.rdata,string,??_C@_0L@GKIDLMNF@?$CFs?$CF04d?4raw?$AA@,,literal,,0,2
@@ -2914,7 +2914,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x007D8864,4,.rdata,string,??_C@_03NDEAONJP@?5?5?5?$AA@,,literal,,0,3
 0x007D8868,12,.rdata,string,??_C@_0L@MMPACDJP@Frame?5?$CFd?6?6?$AA@,,literal,,0,1
 0x007D8874,468,.rdata,string,??_C@_09DADCMHOE@modes?4txt?$AA@,,literal,,0,1
-0x007D8A48,568,.rdata,global,?g_rva011428E8@@3PAHA,Code/GameEngine/Source/Common/Rva009B3800PlaneCopy.cpp,owned,,1,1
+0x007D8A48,568,.rdata,global,?g_rva011428E8@@3PAHA,Code/Libraries/Source/VP6/SimpleDeblockFrame.cpp,owned,,1,1
 0x007D8C80,64,.rdata,global,?DefaultNonInterlacedScanBands@@3PAEA,,unowned,,0,1
 0x007D8CC0,64,.rdata,global,?DefaultInterlacedScanBands@@3PAEA,,unowned,,0,1
 0x007D8D00,64,.rdata,global,?g_bfmeVp6SelectorMap@@3PAEA,Code/Libraries/Source/VP6/PredictDc.cpp,owned,,1,2
@@ -2928,11 +2928,11 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x007D94F0,8,.rdata,global,?defaultMvSign@@3PAEA,,unowned,,0,1
 0x007D94F8,960,.rdata,global,?g_bfmeQuantRow@@3PAEA,Code/Libraries/Source/VP6/DecodeModeProbs.cpp,owned,,1,20
 0x007D98B8,88,.rdata,global,?defaultModeProbs@@3PAEA,Code/Libraries/Source/VP6/decodembs.cpp,owned,,1,1
-0x007D9910,16,.rdata,global,_g_bfmeW51b,Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp,provisional,_g_bfmeW51@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW51b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW51c@Code/GameEngine/Source/Common/BfmeInterpRows5Mmx.cpp;_g_bfmeW51d@Code/GameEngine/Source/Common/BfmeInterpRows6Mmx.cpp,4,11
-0x007D9920,16,.rdata,global,_g_bfmeW102,Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp,provisional,_g_bfmeW102@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW102b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW102c@Code/GameEngine/Source/Common/BfmeInterpRows5Mmx.cpp;_g_bfmeW102d@Code/GameEngine/Source/Common/BfmeInterpRows6Mmx.cpp,4,7
-0x007D9930,16,.rdata,global,_g_bfmeW154d,Code/GameEngine/Source/Common/BfmeInterpRows6Mmx.cpp,provisional,_g_bfmeW154@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW154b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW154c@Code/GameEngine/Source/Common/BfmeInterpRows5Mmx.cpp;_g_bfmeW154d@Code/GameEngine/Source/Common/BfmeInterpRows6Mmx.cpp,4,5
-0x007D9940,16,.rdata,global,_g_bfmeW205b,Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp,provisional,_g_bfmeW205@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW205b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW205c@Code/GameEngine/Source/Common/BfmeInterpRows5Mmx.cpp;_g_bfmeW205d@Code/GameEngine/Source/Common/BfmeInterpRows6Mmx.cpp,4,11
-0x007D9950,16,.rdata,global,_g_bfmeW128c,Code/GameEngine/Source/Common/BfmeInterpRows5Mmx.cpp,provisional,_g_bfmeRound8@Code/Libraries/Source/VP6/HorizontalLine35ScaleMmx.cpp;_g_bfmeRound8b@Code/Libraries/Source/VP6/HorizontalLine45ScaleMmx.cpp;_g_bfmeW128@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW128b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW128c@Code/GameEngine/Source/Common/BfmeInterpRows5Mmx.cpp;_g_bfmeW128d@Code/GameEngine/Source/Common/BfmeInterpRows6Mmx.cpp,6,30
+0x007D9910,16,.rdata,global,_g_bfmeW51b,Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp,provisional,_g_bfmeW51@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW51b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW51c@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp;_g_bfmeW51d@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp,4,11
+0x007D9920,16,.rdata,global,_g_bfmeW102,Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp,provisional,_g_bfmeW102@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW102b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW102c@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp;_g_bfmeW102d@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp,4,7
+0x007D9930,16,.rdata,global,_g_bfmeW154d,Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp,provisional,_g_bfmeW154@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW154b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW154c@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp;_g_bfmeW154d@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp,4,5
+0x007D9940,16,.rdata,global,_g_bfmeW205b,Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp,provisional,_g_bfmeW205@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW205b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW205c@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp;_g_bfmeW205d@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp,4,11
+0x007D9950,16,.rdata,global,_g_bfmeW128c,Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp,provisional,_g_bfmeRound8@Code/Libraries/Source/VP6/HorizontalLine35ScaleMmx.cpp;_g_bfmeRound8b@Code/Libraries/Source/VP6/HorizontalLine45ScaleMmx.cpp;_g_bfmeW128@Code/Libraries/Source/VP6/LastVerticalBand45ScaleMmx.cpp;_g_bfmeW128b@Code/Libraries/Source/VP6/LastVerticalBand35ScaleMmx.cpp;_g_bfmeW128c@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp;_g_bfmeW128d@Code/Libraries/Source/VP6/VerticalBandInterpMmx.cpp,6,30
 0x007D9960,16,.rdata,global,_g_bfmeRoundMmx,Code/Libraries/Source/VP6/VerticalBandScaleMmx.cpp,owned,,1,2
 0x007D9970,16,.rdata,global,_g_bfmeW4B,Code/Libraries/Source/VP6/HorizontalLine45ScaleMmx.cpp,owned,,1,1
 0x007D9980,16,.rdata,global,_g_bfmeW4A,Code/Libraries/Source/VP6/HorizontalLine45ScaleMmx.cpp,owned,,1,1
@@ -21837,7 +21837,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A22CE0,4,.data,global,?g_bfmeFilterLimit@@3PAHA,,unowned,?Rva009C0D10Src@@3PAGA;?g_bfmeFilterLimit@@3PAHA,1,9
 0x00A22CE4,4,.data,global,?g_rva01356A88@@3PBXB,Code/Libraries/Source/VP6/InitPostProcessing.cpp,owned,,1,1
 0x00A22CE8,4,.data,global,?g_rva01356A98@@3PBIB,Code/Libraries/Source/VP6/InitPostProcessing.cpp,owned,,1,5
-0x00A22CEC,4,.data,global,?g_rva01356A9C@@3PAHA,Code/GameEngine/Source/Common/BfmeDeblockEdgeByIndexMmx.cpp,owned,,1,12
+0x00A22CEC,4,.data,global,?g_rva01356A9C@@3PAHA,Code/Libraries/Source/VP6/FilterVertSimpleMmx.cpp,owned,,1,12
 0x00A22CF0,16,.data,global,?g_rva01356AA0@@3PBIB,Code/Libraries/Source/VP6/InitPostProcessing.cpp,owned,,1,4
 0x00A22D00,8,.data,global,?g_bfmeSlotABC@@3PAXA,Code/GameEngine/Source/Common/BfmeInstallSpreadTable.cpp,owned,,1,3
 0x00A22D08,4,.data,global,?g_bfmeSlotB40@@3PAXA,Code/GameEngine/Source/Common/BfmeInstallSpreadTable.cpp,provisional,?g_bfmeSlotB40@@3PAXA;?g_rva01356B40@@3P6AXPAX0HH@ZA,1,4
@@ -21870,7 +21870,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A22FCC,4,.data,global,?g_horizontalScale35Slot@@3P6AXPBEIPAEI@ZA,Code/GameEngine/Source/Common/Rva009AA260Scale.cpp,owned,,1,5
 0x00A22FD0,12,.data,global,_g_rva01356EB4,Code/Libraries/Source/VP6/DeblockPlaneNew.cpp,owned,,1,1
 0x00A22FDC,292,.data,global,?g_rva01356EC0@@3P6AXPAURva009A6130Context@@PAE1HHPBH@ZA,Code/GameEngine/Source/Common/Rva009B2A50DeringFrame.cpp,owned,,1,16
-0x00A23100,512,.data,global,?g_bfmeClampTable@@3QBEB,Code/GameEngine/Source/Common/BfmeLimitedEdgeFilters.cpp,owned,,1,57
+0x00A23100,512,.data,global,?g_bfmeClampTable@@3QBEB,Code/Libraries/Source/VP6/FilteringC.cpp,owned,,1,57
 0x00A23300,4,.data,global,?g_bfmeSharedJX@@3HA,Code/Libraries/Source/VP6/CreatePBInstance.cpp,owned,,1,2
 0x00A23304,12,.data,global,_g_buckets,,unowned,,0,12
 0x00A23310,4,.data,global,?g_rva00E23310@@3PAXA,Code/GameEngine/Source/Common/System/MemoryImportFreeAdapters.cpp,owned,,1,2

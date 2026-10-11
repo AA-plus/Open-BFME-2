@@ -30,7 +30,7 @@ void __cdecl d_009a8c50();                                  // 0x001B96A0 Update
 void __cdecl d_009aa4f0();                                  // 0x001BAF30 AnyRatioFrameScale
 struct Rva009AA750Context;
 struct Rva009AA750Block;
-extern void __cdecl Rva009AA750CopyPlanes(
+extern "C" void __cdecl CenterImage(
 	Rva009AA750Context *context, int frame, Rva009AA750Block *config); // 0x001BB190 CenterImage
 
 // RVA 0x001BB330
@@ -43,7 +43,7 @@ extern "C" void __cdecl ScaleOrCenter(ScaleOrCenterInstance *instance, int frame
 	{
 		if (instance->scalingMode != 2)
 			return;
-		Rva009AA750CopyPlanes(
+		CenterImage(
 			(Rva009AA750Context *)instance, frame, (Rva009AA750Block *)config);
 		return;
 	}

@@ -34,8 +34,8 @@ struct Rva009AF320Context;
 struct Rva009B3800Context;
 extern "C" void __cdecl UpdateFragQIndex(BfmeGridZJ *);
 extern "C" void __cdecl DeblockFrame(Rva009AF200Context *, int, int);
-void __cdecl Rva009AF320CopyPlanes(Rva009AF320Context *, int, int);
-void __cdecl Rva009B3800PlaneCopy(Rva009B3800Context *, int, int);
+extern "C" void __cdecl DeblockFrameInterlaced(Rva009AF320Context *, int, int);
+extern "C" void __cdecl SimpleDeblockFrame(Rva009B3800Context *, int, int);
 
 struct Rva009A6130Context;
 void __cdecl d_009a8c50(void);
@@ -86,8 +86,8 @@ struct Rva009A6130Context
 // The landed helpers each declare their own view of this context.
 #define FILL(c) UpdateFragQIndex((BfmeGridZJ *)(c))
 #define AF200(c, a, b) DeblockFrame((Rva009AF200Context *)(c), (int)(a), (int)(b))
-#define AF320(c, a, b) Rva009AF320CopyPlanes((Rva009AF320Context *)(c), (int)(a), (int)(b))
-#define B3800(c, a, b) Rva009B3800PlaneCopy((Rva009B3800Context *)(c), (int)(a), (int)(b))
+#define AF320(c, a, b) DeblockFrameInterlaced((Rva009AF320Context *)(c), (int)(a), (int)(b))
+#define B3800(c, a, b) SimpleDeblockFrame((Rva009B3800Context *)(c), (int)(a), (int)(b))
 
 void __cdecl Rva009A6130PostFilterDispatch(Rva009A6130Context *ctx, int mode, int a3,
 	int level, int tableIndex, unsigned char *source, unsigned char *destination,

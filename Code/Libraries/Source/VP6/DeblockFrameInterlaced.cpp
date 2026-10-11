@@ -1,4 +1,13 @@
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001bfd10.md plus retail only.
+// No decoder source was consulted.
+//
+// DeblockFrameInterlaced (retail 0x001BFD10, 368 bytes): builds the deblock
+// bounding array for the frame Q index (generic builder for version >= 2,
+// else the platform pointer), zeroes the fragment variances, then deblocks
+// the Y plane as two fields (line step twice the stride, the variance pointer
+// advanced for the odd field) and the U and V planes with their own scales.
+
 
 extern "C" void * __cdecl memset(void *, int, unsigned int);
 #pragma intrinsic(memset)
@@ -7,7 +16,8 @@ struct Rva009ACBA0Context;
 extern "C" int *__cdecl SetupDeblockValueArray_Generic(Rva009ACBA0Context *ctx, int flimit);
 
 extern int *g_rva01356A9C;
-extern int *(__cdecl *g_rva01356E64)(Rva009ACBA0Context *, int);
+struct Rva009ACC40State;
+extern int (__cdecl *g_rva01356E64)(Rva009ACC40State *, int);
 extern const unsigned int *g_rva01356AA0;
 extern const unsigned int *g_rva01356A98;
 
@@ -36,7 +46,7 @@ struct Rva009AF320Context
 	unsigned m_strideUV;
 };
 
-void Rva009AF320CopyPlanes(Rva009AF320Context *ctx, int a, int b)
+extern "C" void __cdecl DeblockFrameInterlaced(Rva009AF320Context *ctx, int a, int b)
 {
 	int *bound;
 	if (ctx->m_mode >= 2) {
@@ -45,8 +55,8 @@ void Rva009AF320CopyPlanes(Rva009AF320Context *ctx, int a, int b)
 			(Rva009ACBA0Context *)ctx, value);
 	} else {
 		int value = g_rva01356A9C[ctx->m_tableIndex];
-		bound = g_rva01356E64(
-			(Rva009ACBA0Context *)ctx, value);
+		bound = (int *)g_rva01356E64(
+			(Rva009ACC40State *)ctx, value);
 	}
 
 	unsigned char *saved = ctx->m_scratch;
@@ -105,7 +115,3 @@ void Rva009AF320CopyPlanes(Rva009AF320Context *ctx, int a, int b)
 		ctx->m_planeV + b,
 		g_rva01356A98);
 }
-
-// Retail's data references in this unit's matched rows land on globals defined
-// under other spellings at the same addresses (addend-corrected DIR32). Bind them.
-#pragma comment(linker, "/alternatename:?g_rva01356E64@@3P6APAHPAURva009ACBA0Context@@H@ZA=?g_rva01356E64@@3P6AHPAURva009ACC40State@@H@ZA")

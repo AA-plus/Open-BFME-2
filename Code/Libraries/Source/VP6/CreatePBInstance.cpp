@@ -59,7 +59,7 @@ public:
 };
 extern "C" void *__cdecl CreatePostProcInstance(void *q);
 extern "C" BfmeSubJX *__cdecl VP6_CreateQuantizer();
-int bfmeCheckJX(CodecState *s);
+extern "C" int __cdecl VP6_InitFrameDetails(CodecState *s);
 struct PB_INSTANCE;
 
 extern "C" void __cdecl VP6_InitialiseConfiguration(PB_INSTANCE *pbi);

@@ -6429,7 +6429,6 @@ name,address,notes
 ?Rva009372C0Get@@YAHXZ,0x00129620
 ?Rva00958570_Flush_Buffered_Frames@FrameGrabClass@@IAEXXZ,0x001767D0,FrameGrabClass buffered-frame flush called first by GetBuffer (0x00176860); BFME1 donor spelling (its 0x00958570)
 ?Rva00990030Lookup@@YAIPAUlua_State@@H@Z,0x00747190,address read from the REL32 displacement at a placed body
-?Rva009A4E50Configure@@YAXPAXIH@Z,0x001B5910,BFME1-donor declaration Rva009A4E50Configure(void* unsigned int) in BfmeCheckJX.cpp; its call site at body+0x015 pushes count/1/state and the retail displacement lands here; address is the retail call target
 ?Rva009A6DA0ReleaseBuffers@@YAXPAURva009A6DA0Buffer@@@Z,0x001B7810,called 5x from InitializeBuffers at 0x1B7860 in the same TU; ghidra FUN_005b7810 67B
 ?Rva009A86F0Allocate@@YAHPAX@Z,0x001B9140,BFME1-donor declaration Rva009A86F0Allocate(void*) in BfmeCheckJX.cpp; its call site at body+0x1D6 pushes the state pointer only; address is the retail call target
 ?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z,0x001BE490
@@ -7826,7 +7825,6 @@ name,address,notes
 ?bfmeCheckA@@YAHPAX@Z,0x006CFDF0
 ?bfmeCheckABI@BfmeThingCDE@@QAE_NXZ,0x00739FE0,address read from REL32 at placed bfmeReleaseABI 0x73B350; ghidra 188B boundary
 ?bfmeCheckBW@@YAHPAX@Z,0x006CFDF0
-?bfmeCheckJX@@YAHPAUCodecState@@@Z,0x001B9410
 ?bfmeCheckStrVHR@@YAPBDPAUBfmeLuaVHR@@HPAI@Z,0x007519A0
 ?bfmeCleanupCC@BfmeOwnerCC@@QAEXXZ,0x00072583,address read from the REL32 displacement at a placed body; the body there is held under another instantiation name and the two folded
 ?bfmeClear987@BfmeDrop987@@QAEXHH@Z,0x002984D4,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
@@ -8879,7 +8877,6 @@ name,address,notes
 ?copyFromQueueNode@BFMENetworkQueueItem@@QAEXPAX@Z,0x005565C5,callee of ?popQueue0@BFMENetwork@@QAE_NPAVBFMENetworkQueueItem@@@Z at retail 0x00557D98 read from its REL32 displacement; body unrowed
 ?copyItems@Rva00403055@@QAEXABV1@@Z,0x00402FD8,address read from the REL32 displacement at byte-matched body 0x00403055
 ?copyPayloadTo@BFME2WideStringRef@@QBEHPAG@Z,0x0021AC32,null-safe UTF16 payload memcpy with empty-literal fallback; called twice from pair copier 0x21B8A0
-?copyPlane009AEEE0@@YAXPAURva009AF200Context@@HHH@Z,0x001BF8D0
 ?copyPlane009AF0D0@@YAXPAURva009AF320Context@@IHIIPAE1PBI@Z,0x001BFAC0
 ?count@XmlNameSlotList@@QAEHXZ,0x005C4AE1,alias of rowed Disp8 dword getter ?get@Rva005C4AE1DwordField; XmlNameSlotList count reads +0x28
 ?countBuildings@Player@@QAEHXZ,0x002AB10F,"call-site agreement: the matched evaluatePlayerHasNOrFewerBuildings 0x003E4132 (PLAYER_HAS_N_OR_FEWER_BUILDINGS) adds it per masked player as the ZH donor adds Player::countBuildings; body sums 0x0039ECD9 over the list at Player +0x32C like the ZH m_playerTeamPrototypes walk"

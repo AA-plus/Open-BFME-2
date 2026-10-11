@@ -1,5 +1,13 @@
-// Retail 009AB320: construct groups of prefix lookup tables.
-// All offsets are witnessed in this body; no semantic context identity is asserted.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001bbd60.md plus retail only.
+// No decoder source was consulted.
+//
+// ConvertBoolTrees (retail 0x001BBD60, 521 bytes): for the DC tables, the
+// zero-run tables and the AC tables (precedence-major, then plane, then
+// band) converts each boolean probability tree to Huffman codes, builds the
+// tree and the lookup table, and creates the code arrays. All offsets are
+// witnessed in this body; no decoder class identity is asserted.
+
 struct Rva009B6320Node;
 extern "C" void __cdecl BoolTreeToHuffCodes(const unsigned char*, unsigned*);
 extern "C" void __cdecl ZerosBoolTreeToHuffCodes(unsigned char*, int*);
@@ -30,7 +38,7 @@ struct Rva009AB320Tables {
     unsigned short at31fc[3][2][6][64];
     unsigned short at43fc[2][64];
 };
-void Rva009AB320BuildTables(Rva009AB320Tables* s)
+extern "C" void __cdecl ConvertBoolTrees(Rva009AB320Tables* s)
 {
     int plane,group,band;
     for(plane=0;plane<2;++plane) {
@@ -56,7 +64,3 @@ void Rva009AB320BuildTables(Rva009AB320Tables* s)
         }
     }
 }
-
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:_ConvertBoolTrees=?Rva009AB320BuildTables@@YAXPAURva009AB320Tables@@@Z")

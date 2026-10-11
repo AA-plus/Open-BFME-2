@@ -11,7 +11,7 @@
 struct Video;
 struct CodecState;
 extern "C" int __cdecl VP6_StartDecoder(CodecState **,int,int);
-void Rva009A4E50Configure(void*,unsigned,int);
+extern "C" void __cdecl VP6_SetPbParam(void*,unsigned,int);
 void Rva00090714Free(void**);
 void *Rva0009072BAlloc(int,int);
 extern "C" __declspec(dllimport) unsigned __stdcall timeGetTime();
@@ -41,9 +41,9 @@ bool Rva007E3C20Vp6Stream::open(const AsciiString &path,const Video *video,bool 
  length=((header->maxFrameSize+3)&~3)+8;
  Rva00090714Free(&raw);
  buffer=Rva0009072BAlloc(0,length);
- VP6_StartDecoder(&frame,width,height);Rva009A4E50Configure(frame,0,0);
+ VP6_StartDecoder(&frame,width,height);VP6_SetPbParam(frame,0,0);
  hasAlpha=foundAlpha&&alpha;
- if(hasAlpha){VP6_StartDecoder(&alphaFrame,width,height);Rva009A4E50Configure(alphaFrame,0,0);}
+ if(hasAlpha){VP6_StartDecoder(&alphaFrame,width,height);VP6_SetPbParam(alphaFrame,0,0);}
  s02();start=-s20(video);start+=timeGetTime();last=-1;lastAlpha=-1;
  return true;
 }

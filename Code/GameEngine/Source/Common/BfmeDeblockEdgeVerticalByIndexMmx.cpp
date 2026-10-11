@@ -1,6 +1,6 @@
 // cl: /DNDEBUG /MD
 //
-// Open-BFME5: vertical-edge sibling of bfmeDeblockEdgeByIndexMmx -- same
+// Open-BFME5: vertical-edge sibling of FilterVert_Simple_MMX -- same
 // table-index lookup through the shared spread table (g_rva01356A9C) and the
 // same edge-limit/round/half/bias constant vectors, but the edge runs along
 // columns instead of rows: it loads four rows' worth of a 4-pixel-wide strip

@@ -12,7 +12,7 @@ extern "C" void __cdecl VP6_StartDecode(BfmeBits1186*, unsigned char*);
 extern "C" void __cdecl SetPPInterlacedMode(void*,int);
 extern "C" void __cdecl SetDeInterlaceMode(void*,int);
 extern "C" int __cdecl VP6_bitread(void *, int);
-int bfmeCheckJX(CodecState*);
+extern "C" int __cdecl VP6_InitFrameDetails(CodecState*);
 extern "C" int __cdecl VP6_DecodeBool(void*,int);
 extern "C" void __cdecl VP6_UpdateQ(BfmeS1040*,int);
 extern "C" void* __cdecl memset(void*,int,unsigned);
@@ -71,7 +71,7 @@ static int Rva009AC660ReadHeader(unsigned char* s)
         if (a!=U(0x1f4) || b!=U(0x1f8)) {
             U(0x1b0)=b*8;
             U(0x1b4)=a*8;
-            bfmeCheckJX((CodecState*)s);
+            VP6_InitFrameDetails((CodecState*)s);
         }
         if (P(0x264) && (oldB!=newB || oldA!=newA)) {
             memset(P(0x264),0,(U(0x240)+32)*(U(0x23c)+32));

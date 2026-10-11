@@ -1,17 +1,14 @@
-// ?Rva009B3800PlaneCopy@@YAXPAURva009B3800Context@@HH@Z
-// Retail 0x009B3800 (503 bytes): three-plane VP6 copy/filter helper.
-//
-// Reached only from the anonymous VP6 grid driver at 0x009A6130 (2 sites).
-// Identity is not recovered beyond the codec role, so the function and the
-// context keep the retail address token rather than claiming a class name.
-// The context offsets are the plane layout already witnessed by the landed
-// siblings DeblockFrame.cpp and Rva009AF320CopyPlanes.cpp
-// (m_mode 0x00, m_tableIndex 0x0C, m_planeY/U/V 0x78/0x7C/0x80,
-// m_width 0x90, m_height 0x94, m_strideY 0x98, m_strideUV 0x9C).
-//
-// All seven relocations are DIR32 data references (the two bounding tables and
-// the three indirect callback slots); there are no direct calls and no pins.
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001c4100.md plus retail only.
+// No decoder source was consulted.
+//
+// SimpleDeblockFrame (retail 0x001C4100, 503 bytes): three-plane deblock of
+// a frame with the simple filters. The context offsets are the plane layout
+// shared with DeblockFrame (m_mode 0x00, m_tableIndex 0x0C, m_planeY/U/V
+// 0x78/0x7C/0x80, m_width 0x90, m_height 0x94, m_strideY 0x98, m_strideUV
+// 0x9C). The two bounding tables are retail .rdata/.bss data; the two filters
+// are dispatch slots 9 (VA 0x00E22FA0) and 25 (VA 0x00E22FE0) of the codec
+// dispatch table at VA 0x00E22F7C.
 
 extern "C" void * __cdecl memcpy(void *, const void *, unsigned int);
 #pragma intrinsic(memcpy)
@@ -37,7 +34,6 @@ struct Rva009B3800Context
 	unsigned int m_strideUV;
 };
 
-typedef int *(__cdecl *Rva009B3800Setup)(Rva009B3800Context *, int);
 typedef void (__cdecl *Rva009B3800Filter)(
 	Rva009B3800Context *, unsigned char *, unsigned int, int *);
 
@@ -64,7 +60,8 @@ int g_rva011428E8[142] = {
 	3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 0,
 };
-extern Rva009B3800Setup g_rva01356E64;
+struct Rva009ACC40State;
+extern int (__cdecl *g_rva01356E64)(Rva009ACC40State *, int);
 // The two filters are slots 9 (VA 0x00E22FA0) and 25 (VA 0x00E22FE0) of the
 // codec dispatch table at VA 0x00E22F7C that bfmeInstallCpuDispatchTable
 // (BfmeCodecCpuDispatch.cpp) defines and fills.
@@ -77,7 +74,7 @@ extern BfmeCodecDispatchTable g_bfmeCodecDispatch;
 #define g_rva01356E84 (*(Rva009B3800Filter *)&g_bfmeCodecDispatch.slot[9])
 #define g_rva01356EC4 (*(Rva009B3800Filter *)&g_bfmeCodecDispatch.slot[25])
 
-void __cdecl Rva009B3800PlaneCopy(
+extern "C" void __cdecl SimpleDeblockFrame(
 	Rva009B3800Context *ctx, int sourceOffset, int destinationOffset)
 {
 	unsigned char *base = 0;
@@ -95,7 +92,7 @@ void __cdecl Rva009B3800PlaneCopy(
 	else
 		selector = g_rva011428E8[tableIndex];
 
-	bounding = g_rva01356E64(ctx, selector);
+	bounding = (int *)g_rva01356E64((Rva009ACC40State *)ctx, selector);
 
 	plane = 0;
 	do
@@ -173,7 +170,3 @@ void __cdecl Rva009B3800PlaneCopy(
 	}
 	while (plane < 3);
 }
-
-// Retail's data references in this unit's matched rows land on globals defined
-// under other spellings at the same addresses (addend-corrected DIR32). Bind them.
-#pragma comment(linker, "/alternatename:?g_rva01356E64@@3P6APAHPAURva009B3800Context@@H@ZA=?g_rva01356E64@@3P6AHPAURva009ACC40State@@H@ZA")

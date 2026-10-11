@@ -1,12 +1,13 @@
 // cl: /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d3270.md plus retail only.
+// No decoder source was consulted.
 //
-// Open-BFME5: two-pass MMX interpolation filter over a 2x4 pixel block --
-// vertical differences for four source rows are staged into a scratch
-// buffer, then combined per-column and written back as words.  Sibling of
-// FilterVert_MMX (same clamp/limit shape, applied across a block rather
-// than a single row pair).  Retail 0x009C2970, 551 bytes.
+// FilterHoriz_MMX (retail 0x001D3270, 551 bytes): MMX loop filter across one
+// vertical block edge, eight rows in two batches of four. The constants
+// block (limit, ones, fours, then scratch) is the caller's fourth argument;
+// the first argument is not read and the routine leaves MMX state in use.
 
-void __cdecl bfmeFilterBlockMmx(void *, void *row, int stride, void *work)
+extern "C" void __cdecl FilterHoriz_MMX(void *instance, unsigned char *row, int stride, void *work)
 {
 	__asm
 	{

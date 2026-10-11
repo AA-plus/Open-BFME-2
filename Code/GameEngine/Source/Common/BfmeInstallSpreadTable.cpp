@@ -86,7 +86,7 @@ extern void __cdecl Rva009A74D0(void);
 extern void __cdecl Rva009C6D20(void);
 extern void __cdecl Rva009A7030(void);
 extern "C" void __cdecl AverageBlock_C(void);
-extern void __cdecl Rva009C6A30(void);
+extern "C" void __cdecl FilterBlock_mmx(void *, void *, void *, int, int, int, int);
 extern void __cdecl Rva009A7B00(void);
 extern "C" void __cdecl SubtractBlock_C(void);
 extern "C" void __cdecl ScalarReconInter(void);
@@ -191,7 +191,7 @@ void __cdecl bfmeInstallSpreadTable(void)
 		g_bfmeSlotB5C = (void *)&SubtractBlock_MMX;
 		g_bfmeSlotB44 = (void *)&CopyBlockMMX;
 		g_bfmeSlotABC = (void *)&FilterBlockBil_8_mmx;
-		g_bfmeSlotB54 = (void *)&Rva009C6A30;
+		g_bfmeSlotB54 = (void *)&FilterBlock_mmx;
 		g_bfmeSlotB40 = (void *)&Copy12x12_MMX;
 		return;
 	}

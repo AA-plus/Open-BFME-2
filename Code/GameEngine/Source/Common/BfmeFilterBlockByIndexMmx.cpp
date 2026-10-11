@@ -1,6 +1,6 @@
 // cl: /DNDEBUG /MD
 //
-// Open-BFME5: same MMX block filter as bfmeFilterBlockMmx, but self
+// Open-BFME5: same MMX block filter as FilterHoriz_MMX, but self
 // contained -- looks the coefficient qword up from the retail strength
 // table (Rva009C0D10Table, 8 bytes/entry) by index instead of taking a
 // caller-supplied work buffer, and keeps the 1/4 constant vectors plus the

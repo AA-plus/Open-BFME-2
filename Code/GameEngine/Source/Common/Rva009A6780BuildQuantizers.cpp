@@ -80,31 +80,3 @@ void Rva009A6780BuildQuantizers(Rva009A6780State* s)
         s->at0790[1][i]=(int)(g_Rva01141808[s->index]*g_Rva01142208[i]*4)/100;
     }
 }
-
-// Retail 009A6BA0: quantize a 64-coefficient block in table order with a
-// dead zone widened by the zero run; the compiler unrolls the loop by three.
-void Rva009A6BA0QuantizeBlock(Rva009A6780State* s,const short* src,short* dst,unsigned char mode)
-{
-    unsigned char run=0;
-    int bank=g_Rva01142608[mode];
-    int* multipliers=s->at0190[bank];
-    int* offsets=s->at0390[bank];
-    int* thresholds=s->at0590[bank];
-    int* runs=s->at0790[bank];
-    memset(dst,0,128);
-    int value=src[0];
-    int threshold=thresholds[0];
-    if(value>=threshold) dst[0]=(short)(((value+offsets[0])*multipliers[0])>>16);
-    else if(value<=-threshold) dst[0]=(short)(((value-offsets[0])*multipliers[0]+65535)>>16);
-    else run=1;
-    for(unsigned int i=1;i<64;i++) {
-        int pos=g_rva01142308[i];
-        if(src[pos]>=thresholds[pos]+runs[run]) {
-            dst[i]=(short)(((src[pos]+offsets[pos])*multipliers[pos])>>16);
-            run=0;
-        } else if(src[pos]<=-thresholds[pos]-runs[run]) {
-            dst[i]=(short)(((src[pos]-offsets[pos])*multipliers[pos]+65535)>>16);
-            run=0;
-        } else ++run;
-    }
-}

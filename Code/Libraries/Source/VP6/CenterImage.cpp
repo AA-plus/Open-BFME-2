@@ -1,4 +1,10 @@
-// Open-BFME5 conversion of the codec's three-plane row copier.
+// cl: /O2 /G6 /DNDEBUG /MD
+// Clean room: reverse/vp6_cleanroom/specs/001bb190.md plus retail only.
+// No decoder source was consulted.
+//
+// CenterImage (retail 0x001BB190, 406 bytes): copies the reconstructed
+// frame (frame width by height) into the middle of the output YUV buffer,
+// Y rows then U and V rows at half size.
 
 extern "C" void * __cdecl memcpy(void *destination, const void *source, unsigned int bytes);
 #pragma intrinsic(memcpy)
@@ -29,7 +35,7 @@ struct Rva009AA750Block
 	unsigned char *m_destination2;
 };
 
-void Rva009AA750CopyPlanes(
+extern "C" void __cdecl CenterImage(
 	Rva009AA750Context *self, int offset, Rva009AA750Block *block)
 {
 	int width = (unsigned int)(block->m_height - self->m_rows) >> 1;

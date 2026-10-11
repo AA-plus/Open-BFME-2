@@ -1,18 +1,16 @@
-// ?Rva009B5200DecodeMotionVector@@YAXPAXPAFH@Z
-// Retail RVA 0x009B5200, 539 bytes.  This is the VP6 motion-vector
-// component decoder paired with the matched arithmetic decoder at 0x009B4600.
-// The codec island and the typed callers of the adjacent block decoder prove
-// the state layout and this cdecl ABI; the name is deliberately address
-// qualified because no original source symbol is available.
-//
-// The long branch loads the next probability before combining the previous
-// decoded bit. The Y output accumulates in its short destination; MSVC folds
-// the two assignments into retail's one add and one short store.
 // cl: /Ob0 /DNDEBUG /DWIN32 /D_WINDOWS /MD
+// Clean room: reverse/vp6_cleanroom/specs/001c5b00.md plus retail only.
+// No decoder source was consulted.
+//
+// VP6_decodeMotionVector (retail 0x001C5B00, 539 bytes): decodes one motion
+// vector (x then y, signed 16-bit) with the primary bool coder, using the
+// nearest inter or golden vector as prediction for the coding mode. The long
+// branch loads the next probability before combining the previous decoded
+// bit; the Y output accumulates in its short destination.
 
 extern "C" int __cdecl VP6_DecodeBool(void *coder, int prob);
 
-void Rva009B5200DecodeMotionVector(void *ctxRaw, short *outMv, int mode)
+extern "C" void __cdecl VP6_decodeMotionVector(void *ctxRaw, short *outMv, int mode)
 {
 	unsigned char *ctx = (unsigned char *)ctxRaw;
 	int predX = 0;

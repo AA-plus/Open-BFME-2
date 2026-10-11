@@ -1,10 +1,8 @@
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001bf8d0.md plus retail only.
 // No decoder source was consulted.
-// ?copyPlane009AEEE0@@YAXPAURva009AF200Context@@HHH@Z retail
-// 0x001BF8D0..0x001BFAB8 (488 bytes) cdecl (post-processor instance /
-// source offset / destination offset / channel); the pinned name its
-// matched caller DeblockFrame (0x001BFBF0) uses is kept.
+// DeblockPlane retail 0x001BF8D0..0x001BFAB8 (488 bytes) cdecl
+// (post-processor instance / source offset / destination offset / channel).
 // DeblockPlane: version (field 0) 2 and up takes the non-filtered band
 // routine from the slot at 0x00E22FB0 with DeblockVerticalEdgesInNonFilteredBand
 // (0x001BE140) and older versions the loop-filtered slot at 0x00E22FA4 with
@@ -51,7 +49,7 @@ extern const unsigned int *g_rva01356AA0;
 extern const unsigned int *g_rva01356A98;
 extern const void *g_rva01356A88;
 
-void copyPlane009AEEE0(Rva009AF200Context *ctx, int sourceOffset, int destinationOffset, int channel)
+extern "C" void __cdecl DeblockPlane(Rva009AF200Context *ctx, int sourceOffset, int destinationOffset, int channel)
 {
 	DeblockPlaneBand band;
 	DeblockPlaneBand edges;
