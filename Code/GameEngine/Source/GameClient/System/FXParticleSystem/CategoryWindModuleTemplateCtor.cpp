@@ -30,6 +30,14 @@ public:
         *(void **)this=(void*)vtbl_00BBB58C;
         v4=(void*)vtbl_00C1C780;
     }
+    // LINK: the default ctor's COMDAT loses to the kept copy; the derived ctor calls a
+    // TU-unique no-init ctor with the identical stores instead. No flags touched.
+    struct BfmeNoInitWind {};
+    CategoryModuleTemplateBase(BfmeNoInitWind) {
+        *(void *volatile *)&v4=(void*)windBaseInfoTable;
+        *(void **)this=(void*)vtbl_00BBB58C;
+        v4=(void*)vtbl_00C1C780;
+    }
     virtual ~CategoryModuleTemplateBase();
     void *v4;
 };
@@ -44,7 +52,7 @@ template<int N> class __declspec(novtable) CategoryModuleTemplate : public Categ
 public:
     CategoryModuleTemplate();
 };
-template<int N> CategoryModuleTemplate<N>::CategoryModuleTemplate() {
+template<int N> CategoryModuleTemplate<N>::CategoryModuleTemplate() : CategoryModuleTemplateBase<N>(typename CategoryModuleTemplateBase<N>::BfmeNoInitWind()) {
     *(void **)&wind=(void*)vtbl_00BE16D8;
     *(void **)this=(void*)vtbl_00BE16C8;
     v4=(void*)windCategoryInfoTable;
