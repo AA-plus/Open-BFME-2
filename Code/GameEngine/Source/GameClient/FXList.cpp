@@ -755,25 +755,8 @@ public:
 
 protected:
 
-	void doFxAtBones(const Object* obj, Int start) const
-	{
-    Coord3D bonePos[MAX_BONE_POINTS];
-    Matrix3D boneMtx[MAX_BONE_POINTS];
-
-    Drawable* draw = obj->getDrawable();
-		if (draw)
-		{
-			// yes, BONEPOS_CURRENT_CLIENT_ONLY -- this is client-only, so should be safe to do.
-			Int count = draw->getCurrentClientBonePositions(m_boneName.str(), start, bonePos, boneMtx, MAX_BONE_POINTS);
-			for (Int i = 0; i < count; ++i)
-			{
-				Coord3D p;
-				Matrix3D m;
-				obj->convertBonePosToWorldPos(&bonePos[i], &boneMtx[i], &p, &m);
-				FXList::doFXPos(m_fx, &p, &m, 0.0f, NULL, 0.0f);
-			}
-		}
-	}
+	// Rowed in FXListAtBonePosFXNugget_doFxAtBones.cpp (0x001E2DD6); this unit only calls it.
+	void doFxAtBones(const Object* obj, Int start) const;
 
 private:
 
