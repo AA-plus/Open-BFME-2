@@ -270,6 +270,7 @@ public:
 	virtual float rva0045342F(Object *obj);
 	virtual void rva00454501();
 	virtual bool rva004533B2();
+	virtual bool rva004540F5();
 	void rva0045318B();
 private:
 	bool rva004541AB();
@@ -436,6 +437,50 @@ void GettingBuiltBehavior::rva00453F31(int a1)
 		GettingBuiltBehaviorInterface *gbi = interfaceOf(other);
 		if (gbi)
 			gbi->rva00453652(a1);
+	}
+}
+
+// The owner carries the +0x438 flag and slot 8 answers for it.
+static __forceinline bool rva004540F5Ready(GettingBuiltBehavior *self, const Object *me)
+{
+	return rva00453F31Flag(me) && self->rva004533B2();
+}
+
+// ?rva004540F5@GettingBuiltBehavior@@UAE_NXZ, retail 0x004540F5, 182 bytes:
+// slot 19 of the +0x20 vtable; with the flag and slot 8 on the owner, whether
+// any such neighbour's slot 8 answers too (a neighbour without an interface
+// is skipped, not a stop). Retail saves EBP/EDI for the template and ID, and
+// EBX/ESI only after the early false: the opening test is an inlined helper
+// and the walks its else scope.
+bool GettingBuiltBehavior::rva004540F5()
+{
+	Object *me = m_object;
+	const ThingTemplate *tmpl = me->m_template;
+	int id = me->m_74;
+	if (!rva004540F5Ready(this, me))
+		return false;
+	else
+	{
+		Object *other;
+		int upId = id + 1;
+		while ((other = TheGameLogic->findObjectByID((ObjectID)upId)) != 0)
+		{
+			if (!other->m_template->isEquivalentTo(tmpl) || !rva00453F31Flag(other))
+				break;
+			GettingBuiltBehaviorInterface *gbi = interfaceOf(other);
+			if (gbi && gbi->rva004533B2())
+				return true;
+			++upId;
+		}
+		while ((other = TheGameLogic->findObjectByID((ObjectID)--id)) != 0)
+		{
+			if (!other->m_template->isEquivalentTo(tmpl) || !rva00453F31Flag(other))
+				break;
+			GettingBuiltBehaviorInterface *gbi = interfaceOf(other);
+			if (gbi && gbi->rva004533B2())
+				return true;
+		}
+		return false;
 	}
 }
 
