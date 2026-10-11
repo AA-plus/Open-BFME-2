@@ -9,13 +9,13 @@ struct Rva002F600CMetadata
     unsigned char prefix0C[12];
     unsigned int packed;
 };
-class Rva002F52A7Query
-{
-public:
-    bool rva002F52A7(unsigned int a, unsigned int b, unsigned char mode,
-        unsigned int c, unsigned int d, unsigned int kind, unsigned int e,
-        unsigned char option, Rva002F600CCoord *position, unsigned int zero,
-        float value, unsigned int *word, unsigned int finalZero);
+class Object;
+class LocomotorSet;
+struct Coord3D;
+// Use the existing provider's layer view; full layer identity is unresolved.
+enum PathfindLayerEnum { PATHFIND_LAYER_UNKNOWN = 0, PATHFIND_LAYER_GROUND = 1 };
+class Pathfinder { public:
+ bool CheckForAdjust(Object *, const LocomotorSet &, bool, int, int, PathfindLayerEnum, int, bool, Coord3D *, const Coord3D *, float, int *, int);
 };
 
 struct PathfinderLogFile;
@@ -27,10 +27,10 @@ struct Rva002F6F90Object { unsigned int word0; Rva002F6F90Template *objectTempla
 class Rva002F6F90Context {
 public: bool rva002F6F90(unsigned int first,int second);
 private:
- Rva002F52A7Query *query;
+ Pathfinder *query;
  Rva002F6F90Object *object;
  unsigned int word08;
- unsigned char mode0C,option0D,pad0E[2];
+ bool mode0C,option0D; unsigned char pad0E[2];
  unsigned int word10,word14,word18;
  float value1C;
  unsigned int saved20;
@@ -45,7 +45,7 @@ bool Rva002F6F90Context::rva002F6F90(unsigned int first,int second)
  if(g_00E03745 && g_00DFEFF0)
   fprintf((PathfinderLogFile*)g_00DFEFF0,"\t\t  Pathfinder_IsCheckForAdjust() called with cell=%d,%d",first,second);
  int count;
- if(!query->rva002F52A7((unsigned int)object,word08,mode0C,first,second,word18,word10,option0D,&position30,word14,value1C,(unsigned int*)&count,word2C)) {
+ if(!query->CheckForAdjust((Object *)object,*(const LocomotorSet *)word08,mode0C,first,second,(PathfindLayerEnum)word18,word10,option0D,(Coord3D *)&position30,(const Coord3D *)word14,value1C,&count,word2C)) {
   if(g_00E03745 && g_00DFEFF0)
    fprintf((PathfinderLogFile*)g_00DFEFF0,"\t\t  Pathfinder_IsCheckForAdjust() checkAdjust failed");
   return false;
