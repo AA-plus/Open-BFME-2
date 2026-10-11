@@ -21,7 +21,8 @@ public:
 extern Rva006E34D0 *g_bfmeAptPtrAtE176D0;
 // LINK: defined once here. Retail's dword at this address lives in
 // zero-filled PE data (loader-zeroed); all referrers only read it.
-// No ledger address claimed yet.
+// The data row owns its complete4-byte word at RVA A17704. Native readers
+// pass the value into clip-event dispatch; its further meaning is unknown.
 int g_00E17704 = 0;
 struct Rva0070F680Entry
 {
