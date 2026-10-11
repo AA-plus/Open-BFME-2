@@ -3229,11 +3229,10 @@ void AIUpdateInterface::ignoreObstacleID( ObjectID id )
 }
 
 //-------------------------------------------------------------------------------------------------
-// ?getIgnoredObstacleID@AIUpdateInterface@@ present-unmatched
-ObjectID AIUpdateInterface::getIgnoredObstacleID( void ) const
-{ 
-	return m_ignoreObstacleID; 
-}
+// AIUpdateInterface::getIgnoredObstacleID: defined in AIUpdateInterfaceIgnoreObstacle.cpp (its row's
+// unit at retail 0x0006E009). This TU's ZH-layout view reads +0x154, retail reads +0x164, so the
+// local copy lost the COMDAT and S-blocked consumers; the home copy emits retail's bytes.
+//-------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------------------------
 // AIUpdateInterface::getEnterTarget is defined with its retail-matched body in Code/GameEngine/Source/GameLogic/Object/Update/AIUpdateInterfacePrivateCommands.cpp (0x00264EF2).

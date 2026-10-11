@@ -81,6 +81,11 @@ class AIUpdateInterface
 {
 public:
 	void ignoreObstacle(const Object *obj);
+	// Retail 0x0006E009 (7B, proved by game.dat bytes 8B 81 64 01 00 00 C3):
+	// out-of-line dword getter at +0x164, ICF-folded with the rowed +0x164
+	// twin. AIUpdate.cpp's copy reads +0x154 (stale ZH layout) so link keeps
+	// the wrong bytes; this TU's +0x164 view emits retail's copy.
+	ObjectID getIgnoredObstacleID() const;
 
 private:
 	char m_pad00[0x08];
@@ -122,6 +127,12 @@ void AIUpdateInterface::ignoreObstacle(const Object *obj)
 		}
 	}
 	m_ignoreObstacleID = obj ? obj->getID() : INVALID_ID;
+}
+
+// ?getIgnoredObstacleID@AIUpdateInterface@@QBE?AW4ObjectID@@XZ present-unmatched
+ObjectID AIUpdateInterface::getIgnoredObstacleID() const
+{
+	return m_ignoreObstacleID;
 }
 
 // ?g_00DFEFF0@@3PAXA: matched references place it at VA 0xdfeff0; also referenced as _theLogicRandomLogFile.
