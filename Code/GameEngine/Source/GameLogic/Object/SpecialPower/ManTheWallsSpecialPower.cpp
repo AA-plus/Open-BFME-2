@@ -1,5 +1,7 @@
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// stlport
 #include "Coord3D.h"
+#include <vector>
 
 struct BfmeE8
 {
@@ -21,33 +23,23 @@ struct Rva004C7621Range
  Rva004C734DElement *m_last;
 };
 
-namespace _STL {
-
-template <class _Tp> class allocator
-{
-};
-
-template <class _Tp, class _Alloc> class vector
-{
-public:
-	void push_back(const _Tp &v);
-	_Tp *_M_start;
-	_Tp *_M_finish;
-	_Tp *_M_end;
-};
-
-template <class _Tp, class _Pred> void sort(_Tp, _Tp, _Pred);
-
-}
-
+void Rva00030830FreeAllocation(void *);
 typedef bool (*BfmeE8Less)(const BfmeE8 &, const BfmeE8 &);
-
 namespace _STL {
+template <class T, class Pred> void sort(T, T, Pred);
 template <> void sort<BfmeE8 *, BfmeE8Less>(BfmeE8 *, BfmeE8 *, BfmeE8Less);
+// Native cleanup calls the potentially throwing game allocator, not the CRT.
+template<> inline void allocator<BfmeE8>::deallocate(BfmeE8 *p,unsigned int) const
+{ if(p) Rva00030830FreeAllocation(p); }
+// The whole emitted 29-byte constructor and allocator-proxy call retain
+// the already admitted E8 fold at 211E58. Its visible body proves the
+// unnamed allocator temporary cannot escape; AIGroupRva00372571.cpp
+// documents the same target-supported default-argument frame pattern.
+template<> __declspec(noinline)
+_Vector_base<BfmeE8,allocator<BfmeE8> >::_Vector_base(const allocator<BfmeE8> &a)
+ : _M_start(0),_M_finish(0),_M_end_of_storage(a,0) {}
 }
-
 bool Rva0007B701Cmp(const BfmeE8 &, const BfmeE8 &);
-
 
 class Object;
 class Player;
@@ -141,6 +133,7 @@ public:
 	void rva004C70AD(BfmeVecAV *range, AIGroup *group);
 	void rva004C7167(Rva004C734DElement *entry);
 	void rva004C7621(Rva004C7621Range *, const Rva004C7621Pos *, _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > *);
+	BfmeVecAV *rva004C76AC(Rva004C7621Range *, const Rva004C7621Pos *);
 };
 
 ManTheWallsSpecialPower::ManTheWallsSpecialPower( Thing *thing, const ModuleData *moduleData )
@@ -217,5 +210,23 @@ void ManTheWallsSpecialPower::rva004C7621(Rva004C7621Range *range, const Rva004C
 		e.m_distSq = dy * dy + dx * dx;
 		out->push_back(e);
 	}
-	_STL::sort(out->_M_start, out->_M_finish, &Rva0007B701Cmp);
+	_STL::sort(out->begin(), out->end(), &Rva0007B701Cmp);
+}
+
+// Native4C76AC..4C7734 (136B, RET8), WB1268940. Collect/sort the
+// squared-distance candidates, then choose the first member-vector whose
+// size is at most the ascending threshold 0..9. After ten passes the
+// native body reads the nearest entry unconditionally. Method/type names
+// stay neutral; control flow, E8 stride, vector offsets and cleanup are native.
+BfmeVecAV *ManTheWallsSpecialPower::rva004C76AC(Rva004C7621Range *range,const Rva004C7621Pos *object) {
+ _STL::vector<BfmeE8> candidates;
+ rva004C7621(range,object,&candidates);
+ for(int count=0;count<10;++count) {
+  for(_STL::vector<BfmeE8>::iterator i=candidates.begin();i!=candidates.end();++i) {
+   BfmeVecAV *members=(BfmeVecAV *)i->m_item;
+   if((unsigned)(members->m_end-members->m_begin)<=(unsigned)count)
+    return (BfmeVecAV *)i->m_item;
+  }
+ }
+ return (BfmeVecAV *)candidates[0].m_item;
 }
