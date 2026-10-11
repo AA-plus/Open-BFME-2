@@ -148,6 +148,47 @@ sys.stdout.buffer.write(b"".join(path.encode("utf-8") + b"\0" for path in result
 PY
 }
 
+# run_final_audits REV BASE LIST COUNT: both audits read the byte-verified objects.
+# In an unbounded dependency scope, overlap those independent read-only checks.
+# Each receives its complete original scope; wait for both and preserve failures.
+run_final_audits() {
+    local revision="$1" base="$2" listing="$3" count="$4"
+    local eh_out data_out eh_pid="" data_pid eh_status=0 data_status=0
+    [ -f "$listing" ] || fail "missing final audit source list"
+    case "$count" in ''|*[!0-9]*) fail "invalid final audit source count" ;; esac
+    python3 - "$listing" "$count" <<'PY' || fail "incomplete final audit source list"
+import pathlib, sys
+raw = pathlib.Path(sys.argv[1]).read_bytes()
+count = int(sys.argv[2])
+if not 0 <= count <= 2**31 - 1:
+    raise ValueError("invalid source count")
+if count == 0:
+    if raw:
+        raise ValueError("unexpected source list")
+elif not raw.endswith(b"\0") or len(raw.split(b"\0")) - 1 != count or any(not path for path in raw.split(b"\0")[:-1]):
+    raise ValueError("incomplete source list")
+PY
+    eh_out=$(mktemp) || fail "temporary exception audit output"
+    data_out=$(mktemp) || { rm -f "$eh_out"; fail "temporary data audit output"; }
+    if [ "$count" -ne 0 ]; then
+        python3 tools/eh_verify.py --sources-from - < "$listing" > "$eh_out" 2>&1 &
+        eh_pid=$!
+    fi
+    python3 tools/data_check.py --converged --ref "$revision" --converged-base "$base" --all > "$data_out" 2>&1 &
+    data_pid=$!
+    if [ -n "$eh_pid" ]; then
+        wait "$eh_pid" || eh_status=$?
+    fi
+    wait "$data_pid" || data_status=$?
+    if ! cat "$eh_out" "$data_out"; then
+        rm -f "$eh_out" "$data_out"
+        fail "reading final audit output"
+    fi
+    rm -f "$eh_out" "$data_out"
+    [ "$eh_status" -eq 0 ] || fail "exception data differs from retail in outgoing sources (see above)"
+    [ "$data_status" -eq 0 ] || fail "data identity: a second name for a converged data address (every source, see above)"
+}
+
 refs="$(cat || true)"
 
 ZERO=0000000000000000000000000000000000000000
@@ -344,19 +385,22 @@ PY
     else
         build_chunks "byte-verify of outgoing sources (see above)" "${verify[@]}"
     fi
-    if [ "${#verify[@]}" -ne 0 ]; then
-        printf '%s\0' "${verify[@]}" | python3 tools/eh_verify.py --sources-from - \
-            || fail "exception data differs from retail in outgoing sources (see above)"
-    fi
-    # Data identity at converged addresses, ENFORCED (pre-commit step 3b): every
-    # byte-verified source above, header dependents included, judged on objects
-    # proven current; the list as of the pushed commit, which may only grow.
+    # Data identity at converged addresses, ENFORCED: all sources for an
+    # unbounded dependency change, otherwise exactly the byte-verified scope.
     if [ "$header_all" -ne 0 ]; then
         git diff --quiet "$local_sha" -- Code \
             || fail "a tracked source differs from the pushed commit $local_sha in the working tree: check it out or stash first"
-        python3 tools/data_check.py --converged --ref "$local_sha" --converged-base "$base" --all \
-            || fail "data identity: a second name for a converged data address (every source, see above)"
+        final_list=$(mktemp) || fail "temporary final audit source list"
+        if [ "${#verify[@]}" -ne 0 ]; then
+            printf '%s\0' "${verify[@]}" > "$final_list" || { rm -f "$final_list"; fail "writing final audit source list"; }
+        fi
+        run_final_audits "$local_sha" "$base" "$final_list" "${#verify[@]}"
+        rm -f "$final_list"
     else
+        if [ "${#verify[@]}" -ne 0 ]; then
+            printf '%s\0' "${verify[@]}" | python3 tools/eh_verify.py --sources-from - \
+                || fail "exception data differs from retail in outgoing sources (see above)"
+        fi
         printf '%s\0' "${verify[@]}" \
             | python3 tools/data_check.py --converged --ref "$local_sha" --converged-base "$base" --sources-from - \
             || fail "data identity: a second name for a converged data address in outgoing sources (see above)"

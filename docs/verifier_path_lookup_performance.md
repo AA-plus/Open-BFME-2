@@ -84,3 +84,27 @@ not a full-push timing claim. The isolated affected suite passed 180 tests with
 one existing skip, including every gate-exploit case. New cases cover definition
 and relocation identity, fresh ownership/directory choices, complete scopes,
 each propagated reference refusal and fatal worker errors.
+
+
+## Overlap independent final push audits
+
+After an unbounded dependency change has passed its complete byte gate, the
+push hook now runs the unchanged outgoing EH audit and unchanged enforced
+all-source converged-data audit concurrently. Both only read verified objects;
+neither compiles, writes a baseline or reuses a verification verdict. The EH
+source list preserves every selected path and its order; data still receives
+the pushed revision, remote base and entire source scope. Bounded pushes retain
+their existing serial audits.
+
+Both processes are joined before publication can proceed. Either nonzero exit,
+including process termination, refuses the push; diagnostics retain the earlier
+EH-then-data order. Missing source lists, bad counts, temporary-file failures
+and unreadable output also refuse it. Empty outgoing scopes still audit all
+data without inventing an EH scope. The final worktree equality check remains
+before either audit, and the data audit retains its fresh input/currency checks.
+
+Thirteen new regressions prove overlap without timing assumptions, complete
+scopes and output, both independent refusals, process termination, joined
+workers, empty scope and orchestration failures. Existing push-scope,
+fail-closed hook and every gate-exploit case retain their checks. No full-push
+timing saving is claimed until the normal hook is measured on a complete push.
