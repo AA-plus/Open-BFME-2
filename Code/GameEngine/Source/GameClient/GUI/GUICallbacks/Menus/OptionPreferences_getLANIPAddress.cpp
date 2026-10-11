@@ -93,6 +93,11 @@ template <> struct less<AsciiString>
 };
 }
 
+// Declaration-only: the rowed map<AsciiString,AsciiString>::operator[] is bound,
+// this TU emits no per-flag copy of it or of the tree internals it pulls in.
+namespace _STL {
+template <> AsciiString &map<AsciiString, AsciiString, less<AsciiString>, allocator<pair<const AsciiString, AsciiString> > >::operator[](const AsciiString &);
+}
 typedef _STL::map<AsciiString, AsciiString> PreferenceMap;
 
 class UserPreferences : public PreferenceMap

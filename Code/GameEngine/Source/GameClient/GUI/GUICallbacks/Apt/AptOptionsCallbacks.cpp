@@ -167,6 +167,11 @@ inline const int &(min)(const int &__a, const int &__b)
 }
 
 // Zero Hour's UserPreferences: a key/value map behind a vftable.
+// Declaration-only: the rowed map<AsciiString,AsciiString>::operator[] is bound,
+// this TU emits no per-flag copy of it or of the tree internals it pulls in.
+namespace _STL {
+template <> AsciiString &map<AsciiString, AsciiString, less<AsciiString>, allocator<pair<const AsciiString, AsciiString> > >::operator[](const AsciiString &);
+}
 class UserPreferences : public _STL::map<AsciiString, AsciiString>
 {
 public:
