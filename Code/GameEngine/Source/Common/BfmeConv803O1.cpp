@@ -37,16 +37,24 @@ extern void *g_bfmeXEBK;
 class BfmeObjEBL
 {
 public:
-	void bfmeCallEBL(void *a, void *b);
 	void *m_bfmeA;
 	void *m_bfmeB;
 };
 
 extern BfmeObjEBL g_bfmeObjEBL;
 
+// LINK: the call is rowed as Rva00361624::rva00361624 (0x00361624), which also
+// returns its first argument; the result is unused here.
+class Rva0036105B;
+class Rva00361624
+{
+public:
+	Rva0036105B *rva00361624(Rva0036105B *a, Rva0036105B *b);
+};
+
 void bfmeGoEBL()
 {
-	g_bfmeObjEBL.bfmeCallEBL(g_bfmeObjEBL.m_bfmeA, g_bfmeObjEBL.m_bfmeB);
+	((Rva00361624 *)&g_bfmeObjEBL)->rva00361624((Rva0036105B *)g_bfmeObjEBL.m_bfmeA, (Rva0036105B *)g_bfmeObjEBL.m_bfmeB);
 }
 
 char bfmeCmpEBMa(void *a, void *b);
