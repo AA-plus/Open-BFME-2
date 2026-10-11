@@ -49,6 +49,8 @@ int AptDate::getDayOfWeek(int year,int month,int day)
     if (nCentury<0 || anchor<0) return -1;
     int d=day;
     if (anchor>d) d=anchor-(anchor-d)%7+7;
-    int result = (((int)floor((year-base)*0.25f)-base+nCentury+year)%7+(d-anchor)%7)%7;
+    // Spell out math.h's float overload conversions: the same inlined
+    // computation, without emitting its conflicting floor/floorf copies.
+    int result = (((int)static_cast<float>(floor(static_cast<double>((year-base)*0.25f)))-base+nCentury+year)%7+(d-anchor)%7)%7;
     return result;
 }
