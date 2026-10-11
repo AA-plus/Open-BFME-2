@@ -218,6 +218,12 @@ Rva0052B894Registration::Rva0052B894Registration(const AsciiString &name)
 
 // stlport
 #include <hash_map>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+}
 // Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
 // the retail copies serve the link. Plain declaration-only form (no __imp_).
 namespace _STL {
