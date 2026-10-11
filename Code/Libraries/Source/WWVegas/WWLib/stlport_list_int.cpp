@@ -6,6 +6,18 @@
 // Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
 // rather than emitting its own.
 namespace _STL {
+template <> _List_base<int, allocator<int> >::_List_base(const allocator<int> &);
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::_Node *list<int, allocator<int> >::_M_create_node(const int &);
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
 template <> void _List_base<int, allocator<int> >::clear();
 }
 

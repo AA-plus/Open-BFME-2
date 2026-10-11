@@ -8,6 +8,12 @@
 // callers 0x0047C155 and HordeSiege override 0x0047D17E; neighbours
 // Rva004DD206TwoTreeConstructor and HordeTransportContainRva00463A4D.
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::_Node *list<int, allocator<int> >::_M_create_node(const int &);
+}
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 // vector<int> fill/insert otherwise instantiates the _Construct<int,int>

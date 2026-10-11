@@ -12,6 +12,12 @@
 #define _STLP_NO_EXCEPTIONS 1
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::_Node *list<int, allocator<int> >::_M_create_node(const int &);
+}
+
 // Declaration-only: retail has one list<int>::insert (rowed in stlport_list_int_insert.cpp, node creation out of line);
 // this unit calls it rather than emitting a copy with the node creation inlined.
 namespace _STL {
