@@ -37790,3 +37790,4 @@ _Rva00817B30	0x00683A30	2207	attempted	r3 independent re-derivation (commudp.cpp
 ?init@W3DTerrainVisual@@UAEXXZ	0x00091AEA	445	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DTerrainVisualInit.cpp 445B; BFME2 W3DTerrainVisual::init under the DX8 lock; height-map render object 0x000E3BFE then terrain tracks 0x00084CA5 shadow manager water render object 0x00082329 and smudge manager published through their globals; water joins the scene unless DFE7A8 or water type 1
 ??0Rva0035DCF9@@QAE@XZ	0x0035DE55	80	landed	add_match verified Code/GameEngine/Source/Common/Rva0035DCF9Ctor.cpp 80B; trial
 ??1ThingFactory@@UAE@XZ	0x002D0588	71	landed	add_match verified Code/GameEngine/Source/Common/Thing/ThingFactoryDtor.cpp 71B; trial
+??1SubsystemInterfaceList@@QAE@XZ	0x001B5207	95	landed	add_match verified Code/GameEngine/Source/Common/SubsystemInterfaceListDtor.cpp 95B; trial

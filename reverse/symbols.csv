@@ -17223,3 +17223,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??0Rva00082329@@QAE@XZ,0x00082329,constructor of the 0x264-byte water render object W3DTerrainVisual::init 0x00091AEA allocates (REL32 at 0x00091BC2 after operator new 0x264; result stored as the visual +0x14 and VA 0x00DE2000); address-derived name
 ?rva0009A254@W3DShadowManager@@QAEXXZ,0x0009A254,thiscall on the freshly constructed TheW3DShadowManager in W3DTerrainVisual::init 0x00091AEA (REL32 at 0x00091BA5; result unused); address-derived name
 ??1Rva002CFF2D@@QAE@XZ,0x002CFF2D,callee of ??1ThingFactory@@UAE@XZ
+?rva001B51C0@SubsystemInterfaceList@@QAEXXZ,0x001B51C0,callee of ??1SubsystemInterfaceList@@QAE@XZ
