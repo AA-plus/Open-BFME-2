@@ -21,6 +21,12 @@
 // Names address-derived except rowed callees.
 #include <vector>
 #include <algorithm>
+// Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
+// the retail copies serve the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 class Rva002E2903Player;
 class Rva002BA8F1Logic
