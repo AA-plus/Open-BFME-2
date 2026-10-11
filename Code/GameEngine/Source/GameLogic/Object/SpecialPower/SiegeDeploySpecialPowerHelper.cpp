@@ -9,16 +9,12 @@ class Object
 {
 };
 
-class BfmeOwnerEBC
-{
-public:
-	void bfmeCallEBC();
-};
-
+// LINK: the owner call binds the rowed 0x0046094C (DynamicPortalBehaviour::rva0046094C, DynamicPortalBehaviourClearPortals.cpp).
 class DynamicPortalBehaviour
 {
 public:
 	static Module *rva004608E0(Object *obj);
+	void rva0046094C();
 };
 
 class BehaviorModule
@@ -40,6 +36,6 @@ void SiegeDeploySpecialPower::rva004C573C()
 	Module *found = DynamicPortalBehaviour::rva004608E0(m_object);
 	if (found)
 	{
-		((BfmeOwnerEBC *)found)->bfmeCallEBC();
+		((DynamicPortalBehaviour *)found)->rva0046094C();
 	}
 }

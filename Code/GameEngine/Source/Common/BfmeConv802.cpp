@@ -7,10 +7,11 @@
 // 0x0046094C (bfmeCallEBC) and 0x00383EEA (bfmeCallEBD), the donor's own
 // family names on unclaimed ground.
 
-class BfmeOwnerEBC
+// LINK: the owner call binds the rowed 0x0046094C (DynamicPortalBehaviour::rva0046094C, DynamicPortalBehaviourClearPortals.cpp).
+class DynamicPortalBehaviour
 {
 public:
-	void bfmeCallEBC();
+	void rva0046094C();
 };
 
 struct BfmeThingEBC
@@ -23,7 +24,7 @@ struct BfmeThingEBC
 // ?bfmeGoEBC@BfmeThingEBC@@QAEXPAX@Z
 void BfmeThingEBC::bfmeGoEBC(void *unused)
 {
-	((BfmeOwnerEBC *)((char *)this - 0x1c))->bfmeCallEBC();
+	((DynamicPortalBehaviour *)((char *)this - 0x1c))->rva0046094C();
 	m_bfmeFlag = 1;
 }
 

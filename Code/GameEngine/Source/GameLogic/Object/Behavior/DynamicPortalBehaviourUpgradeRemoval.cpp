@@ -27,11 +27,6 @@ private:
 	unsigned char m_pad000[0x258];
 	AIUpdateInterface *m_ai;	// +0x258
 };
-class BfmeOwnerEBC
-{
-public:
-	void bfmeCallEBC();
-};
 class ObjectModuleBase
 {
 public:
@@ -68,15 +63,18 @@ public:
 	void rva004CE4A0();
 	void rva004CE4A8();
 };
+// LINK: the owner call binds the rowed 0x0046094C (DynamicPortalBehaviour::rva0046094C, DynamicPortalBehaviourClearPortals.cpp).
 class DynamicPortalBehaviour : public UpgradeModule
 {
+public:
+	void rva0046094C();
 protected:
 	virtual void upgradeRemovalImplementation();
 };
 void DynamicPortalBehaviour::upgradeRemovalImplementation()
 {
 	setUpgradeExecuted(false);
-	((BfmeOwnerEBC *)this)->bfmeCallEBC();
+	rva0046094C();
 	rva004CE4A8();
 	Object *obj = m_object;
 	if (obj->getAI())

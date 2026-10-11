@@ -72,16 +72,13 @@ public:
 	virtual void dynamicPortalExtraB();
 };
 
-class BfmeOwnerEBC
-{
-public:
-	void bfmeCallEBC();
-};
-
+// LINK: the owner call binds the rowed 0x0046094C (DynamicPortalBehaviour::rva0046094C, DynamicPortalBehaviourClearPortals.cpp).
 class DynamicPortalBehaviour : public UpgradeModule,
 	public DynamicPortalExtraA,
 	public DynamicPortalExtraB
 {
+public:
+	void rva0046094C();
 protected:
 	virtual ~DynamicPortalBehaviour();
 
@@ -95,7 +92,7 @@ private:
 // ??1DynamicPortalBehaviour@@MAE@XZ @0x00460C18
 DynamicPortalBehaviour::~DynamicPortalBehaviour()
 {
-	((BfmeOwnerEBC *)this)->bfmeCallEBC();
+	rva0046094C();
 }
 
 // Placeholder virtuals in this unit's vftables: in retail, every vftable that holds
