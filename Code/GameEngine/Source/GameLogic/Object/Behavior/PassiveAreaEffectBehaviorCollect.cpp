@@ -5,6 +5,12 @@
 // PassiveAreaEffectCollect00202490.cpp at575ba2b04 supplies list/filter scan
 // semantics; target changes kind bit150 to151, and uses owned opaque query.
 #include <list>
+
+// LINK: single-node insert binds the verified native STLport owner at RVA
+// 0x005925E2; keep the out-of-line call without emitting a competing copy.
+namespace _STL {
+template <> list<int>::iterator list<int>::insert(iterator position, const int &x);
+}
 #include <algorithm>
 
 // vector<int> fill/insert otherwise instantiates the _Construct<int,int>
