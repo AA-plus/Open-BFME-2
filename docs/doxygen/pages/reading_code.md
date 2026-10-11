@@ -109,13 +109,14 @@ the functions in that file to compile to retail's bytes.
   Two files can therefore see different declarations of a class with the same
   name.
 
-## One function per file, and the original files {#page_reading_code_files}
+## Files and the original translation units {#page_reading_code_files}
 
-The ledger records where a body sits in this tree, and that is usually a file
-holding one function and named after it, such as
-`BridgeIsPointOnBridge.cpp`. Retail was linked from the original
-translation units, whose paths survive in its assert strings, and a unit's
-functions sit next to each other in the binary.
+The ledger records where a body sits in this tree. Many files hold one
+function and are named after it, such as `HandicapReadFromDict.cpp` for
+`Handicap::readFromDict`; others hold several, and some hold a hundred or
+more. Retail was linked from the original translation units, whose paths
+survive in its assert strings, and a unit's functions sit next to each other
+in the binary.
 
 `reverse/tu_map.csv` recovers that structure: for each function it names the
 original file, how sure the assignment is (`approved`, `proposed`, or
@@ -229,7 +230,7 @@ Run these from the repository root. None of them compiles anything.
 | Who calls it? | `python3 tools/callers_of.py` followed by the row's address |
 | What does the debug build's body look like? | `python3 tools/wb_show.py` followed by the decorated name or address; add `--gd` for retail's body too |
 | Is the name proven? | `rg -F "isPointOnBridge" reverse/name_tiers.csv` (no line means the name is not independently proven: a reconstruction, or a `uw_` or `Bfme` placeholder by its form) |
-| Where is its original file? | `rg -F "/File.cpp" reverse/tu_map.csv`, with the current file's name |
+| Where is its original file? | `rg "^ADDR," reverse/tu_map.csv`, with the row's address in place of `ADDR` (the map's last column, the file a body sat in when the map was built, can lag behind later moves) |
 | Does the file link? | `rg -F "/File.cpp," reverse/link_status.csv` |
 | Which views of a class exist? | `python3 tools/class_views.py --class Bridge` |
 | What did Zero Hour do? | `rg -n "Bridge::isPointOnBridge" reference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code` |

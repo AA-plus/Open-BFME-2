@@ -154,12 +154,12 @@ the slot deletes the subsystem and clears its global). Only if the legend
 supplied nothing does it load the INI paths the caller passed;
 `GameEngine::init` passes none. `GameEngine::init` also passes a CRC xfer to
 some registrations and none to others, but that argument only reaches those
-unused fallback paths. Which subsystems' legend data enter the INI CRC
-therefore depends on the legend lookup
-(`SubsystemInterface::loadIniFilesFromLegend`), which is not yet matched;
-the current draft finds the `LoadSubsystem` block named after the subsystem
-and loads every file and directory it lists through the list's CRC xfer, for
-all of them. See \ref sub_ini.
+unused fallback paths. The legend lookup
+(`SubsystemInterface::loadIniFilesFromLegend`) finds the `LoadSubsystem`
+block named after the subsystem and loads the files and directories it
+lists, less its exclusions, through the list's current xfer. During
+`GameEngine::init` that is the CRC xfer, so the legend data of every
+subsystem it registers enters the INI CRC (\ref sub_ini_legend).
 
 ## Shutdown {#page_startup_shutdown}
 
@@ -209,9 +209,9 @@ flag whose meaning is not yet known then picks one of two paths.
   `Environment.ini` definitely load through the CRC xfer, and the
   Create-a-Hero data's own CRC is added to the INI CRC. `GameEngine::init`
   passes a CRC xfer to some registrations and none to others, but that
-  argument only reaches the unused fallback paths. Which subsystems' legend
-  data enter the INI CRC depends on the legend lookup, which is not yet
-  matched; the current draft uses the list's CRC xfer for all of them.
+  argument only reaches the unused fallback paths. The legend lookup passes
+  the list's CRC xfer for every subsystem, so legend data loaded during
+  `GameEngine::init` enters the INI CRC (\ref sub_ini_legend).
   `SubsystemLegend.ini` and `CommandMap.ini` load without it.
 - **Where the CRC is checked.** In BFME 2, `LANAPI::RequestGameJoin` sends
   the INI CRC with a LAN join request, and the online custom-match join
@@ -257,7 +257,7 @@ flag whose meaning is not yet known then picks one of two paths.
 - **Window.** The window is created for an 800 by 600 client area, placed
   near the screen centre unless `-xpos` and `-ypos` are given. The display
   resolution is not chosen here: `-xres` and `-yres` write it into the global
-  data, which the renderer reads later (Zero Hour: `W3DDisplay::init`).
+  data, which `W3DDisplay::init` reads later (\ref sub_w3d_rendering_entry).
   In `WinMain.cpp`, windowed and fullscreen differ by window style, topmost
   z-order and whether the splash is painted (painting is switched off once
   the fullscreen window exists), and in fullscreen `WndProc` blocks moving,
@@ -274,9 +274,9 @@ flag whose meaning is not yet known then picks one of two paths.
 The startup path is largely matched through `GameEngine::init`, including
 the command-line handlers and the launcher code. Still open: the main loop
 (`GameEngine::execute` and `GameEngine::update`, described only by contract
-on \ref page_frame_loop), the command-line dispatcher, the legend lookup,
-and the identity of many registered BFME 2-only classes and of
-`Win32GameEngine`'s factory overrides. `GameEngine` has no shared header yet:
+on \ref page_frame_loop), the command-line dispatcher, and the identity
+of many registered BFME 2-only classes and of `Win32GameEngine`'s factory
+overrides. `GameEngine` has no shared header yet:
 each source file declares only the members it uses (\ref page_reading_code).
 To refresh this picture, search `reverse/functions.csv` for the file names
 above.
