@@ -274,6 +274,7 @@ class AptPlayer
 {
 public:
  void OnCommand(const char *name, int value);
+ void SetExtern(const char *name, int value);
 };
 
 // Apt command slot E17758: native A91DD..A91F1 forwards both cdecl
@@ -291,4 +292,11 @@ void *Rva006CB9D0(const char *text);
 void *Rva000A91F1EmptyValue()
 {
  return Rva006CB9D0("");
+}
+
+// Native A91FD..A9211 is the analogous SetExtern callback at E17764.
+// WB 8A6770 and the owned member at 223DD7 establish the two-word ABI.
+void Rva000A91FDSetExtern(const char *name, int value)
+{
+ reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->SetExtern(name, value);
 }
