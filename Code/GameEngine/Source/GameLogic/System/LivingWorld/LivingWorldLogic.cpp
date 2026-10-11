@@ -417,6 +417,8 @@ public:
 	void rva003F287F(_STL::vector<const ModuleData *> &out);	// 0x003F287F
 	void rva003F28DB(_STL::vector<const ModuleData *> &out);	// 0x003F28DB
 
+	Int getRegionID() const { return m_regionID; }
+
 	unsigned char m_pad000[0x12c];
 	Int m_regionID;						// +0x12C
 	unsigned char m_pad130[0x13c - 0x130];
@@ -713,7 +715,9 @@ private:
 	Rva002B616FList m_turnListeners;		// +0x1C
 	Rva002B6126List m_resolverListeners;		// +0x2C
 	Rva002B616FList m_battleListeners;		// +0x3C, told (logic, battle) when a battle completes
-	unsigned char m_pad4C[0x8c - 0x4c];
+	unsigned char m_pad4C[0x5c - 0x4c];
+	Rva002B616FList m_disputeListeners;		// +0x5C, told (logic, dispute) when a region award dispute opens
+	unsigned char m_pad6C[0x8c - 0x6c];
 	_STL::vector<LivingWorldPlayer *> m_players;	// +0x8C
 	LivingWorldPlayer *m_localPlayer;		// +0x98 (WB member name)
 	Int m_field9C, m_fieldA0, m_fieldA4, m_fieldA8, m_fieldAC; // native reset words
@@ -1943,11 +1947,42 @@ Rva002B2858Coord LivingWorldLogic::AdjustArmyMoveTargetPos(Rva00318C32Ret *targe
 class RegionAwardDispute
 {
 public:
+	RegionAwardDispute(Int regionID, const _STL::vector<UnsignedInt> &players, Int flags);	// 0x004FC002
 	Int GetResolvableBy();					// 0x004FBED6
+	void rva004FC0ED(const _STL::vector<Int> &players);	// 0x004FC0ED, adds players to an open dispute
 
-	unsigned char m_pad00[0x1c];
+	unsigned char m_pad00[0x14];
+	UnsignedInt m_flags;					// +0x14
+	unsigned char m_pad18[0x1c - 0x18];
 	Bool m_resolved;					// +0x1C
 };
+
+// Retail 0x002B9A90, 178 bytes (RET 0xC; callers OnBattleComplete and the
+// region manager 0x0020FDDF pass the region pointer as an int): opens a
+// region award dispute for the region's ID (+0x12C) -- a new 0x20-byte
+// RegionAwardDispute kept in m_regionAwardDisputes and announced to the
+// +0x5C listeners through their slot 0 -- or, when one is already open,
+// adds the players to it and ORs in the flags. The map is read through
+// its map<int,int> instantiation, which retail's identical-code folding
+// shares (find 0x00388F63, operator[] 0x0028932C).
+void LivingWorldLogic::rva002B9A90(Int regionID, const _STL::vector<Int> &players, UnsignedInt flags)
+{
+	Rva003F287F *region = (Rva003F287F *)regionID;
+	_STL::map<Int, Int> &disputes = *(_STL::map<Int, Int> *)&m_regionAwardDisputes;
+	_STL::map<Int, Int>::iterator it = disputes.find(region->getRegionID());
+	if (it == disputes.end())
+	{
+		RegionAwardDispute *dispute = new RegionAwardDispute(region->getRegionID(), (const _STL::vector<UnsignedInt> &)players, flags);
+		disputes[region->getRegionID()] = (Int)dispute;
+		m_disputeListeners.forEach(&Rva002B616FListener::onTurnPhaseChanged, this, (int)dispute);
+	}
+	else
+	{
+		RegionAwardDispute *dispute = (RegionAwardDispute *)(*it).second;
+		dispute->rva004FC0ED(players);
+		dispute->m_flags |= flags;
+	}
+}
 
 // Retail 0x002B5CBB (64 bytes; WorldBuilder leaves it unnamed, its callees
 // are the map iterator step and RegionAwardDispute::GetResolvableBy;
