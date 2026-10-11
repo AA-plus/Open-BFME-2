@@ -33,6 +33,21 @@
 // WorldBuilder's inline two-argument constructor; the elevation call goes
 // through the slot +0x18 member pointer (retail target ??_9@$BBI@AE).
 #include "matrix3d.h"
+// File-static math helpers (LK3-style): the TU's Vector3==, Matrix3D
+// bool-ctor and copy-ctor COMDATs all lose the link, and the rowed bodies
+// below inline all three, so none of the defs can just go away. The helpers
+// keep calls in the source (regalloc preserved) while the three losers go
+// unused.
+static bool VecSharedEdgesEqual(const Vector3 &a, const Vector3 &b)
+{
+    return ((a.X == b.X) && (a.Y == b.Y) && (a.Z == b.Z));
+}
+static void InitSharedEdgesMatrix3D(Matrix3D &m, bool init)
+{
+    if (init)
+        m.Make_Identity();
+}
+
 // Keep the native per-row sum order. Explicit unary plus in the first
 // product retains MSVC7.1's X-before-Z SSE scheduling without changing it.
 static __forceinline void transformVertex(const Matrix3D &A, const Vector3 &in, Vector3 *out)
@@ -214,7 +229,8 @@ PolygonTrigger *W3DScriptedModelDraw::getPolygon(RenderObjClass *robj, float *he
 		return 0;
 	}
 
-	Matrix3D mtx(true);
+	Matrix3D mtx;
+	InitSharedEdgesMatrix3D(mtx, true);
 	if (m_moduleData->m_attachAtDrawablePosition)
 		mtx.Set_Translation(m_drawable->getTransformMatrix()->Get_Translation());
 	else
@@ -240,7 +256,7 @@ PolygonTrigger *W3DScriptedModelDraw::getPolygon(RenderObjClass *robj, float *he
 			{
 				for (int j = i + 1; j < numVerts; j++)
 				{
-					if (verts[i] == verts[j])
+					if (VecSharedEdgesEqual(verts[i], verts[j]))
 						remap[j] = remap[i];
 				}
 			}
@@ -365,7 +381,8 @@ int Rva000B8F5AOuter::rva000B89E9(int robjArg, float *height)
 		return 0;
 	}
 
-	Matrix3D mtx(true);
+	Matrix3D mtx;
+	InitSharedEdgesMatrix3D(mtx, true);
 	mtx = *obj->getTransformMatrix();
 	m_renderObject->Set_Transform(mtx);
 
@@ -387,7 +404,7 @@ int Rva000B8F5AOuter::rva000B89E9(int robjArg, float *height)
 			{
 				for (int j = i + 1; j < numVerts; j++)
 				{
-					if (verts[i] == verts[j])
+					if (VecSharedEdgesEqual(verts[i], verts[j]))
 						remap[j] = remap[i];
 				}
 			}
