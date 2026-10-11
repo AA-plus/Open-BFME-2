@@ -13,6 +13,10 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 
 // BFME 2 has no W3D memory pools (see Code/Libraries/Source/WWVegas/WWLib/always.h).
 #include "always.h"
+#include "Vector.H"
+#include "vector3.h"
+// Retail keeps one VectorClass<Vector3>::Resize (0x000F0BF1); this unit calls it.
+template <> bool VectorClass<Vector3>::Resize(int newsize, Vector3 const * array);
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(ARGCLASS)
 #define Matrix4x4 Matrix4
