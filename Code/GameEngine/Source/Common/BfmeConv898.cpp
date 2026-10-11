@@ -7,10 +7,17 @@ struct BfmeSubGE
 	int m_bfmeC;
 };
 
+struct ScriptGroupLink;
+struct BfmeNodeZK;
+
+// LINK: 0x3B7DAC / 0x3B84C9 are rowed as ScriptList::takeGroups / takeScripts; bfmeOneGE / bfmeTwoGE
+// were the address-derived spellings of those two calls on the same receiver.
 class ScriptList
 {
 public:
 	void swap(ScriptList *other);
+	void takeGroups(ScriptList *other, ScriptGroupLink **link, ScriptGroupLink **last);
+	void takeScripts(ScriptList *other, BfmeNodeZK **link, BfmeNodeZK **last);
 };
 
 class Rva003B3ECBOwner
@@ -23,8 +30,6 @@ class BfmeThingGE
 {
 public:
 	void bfmeGoGE(BfmeSubGE *d);
-	void bfmeOneGE(BfmeSubGE *d, int *x, int *y);
-	void bfmeTwoGE(BfmeSubGE *d, int *x, int *y);
 	void rva003B40CB();
 	void rva003B89A7(BfmeSubGE *d);
 	int m_bfmeA;
@@ -37,8 +42,8 @@ public:
 
 void BfmeThingGE::bfmeGoGE(BfmeSubGE *d)
 {
-	bfmeOneGE(d, &d->m_bfmeB, &m_bfmeB);
-	bfmeTwoGE(d, &d->m_bfmeC, &m_bfmeC);
+	((ScriptList *)this)->takeGroups((ScriptList *)d, (ScriptGroupLink **)&d->m_bfmeB, (ScriptGroupLink **)&m_bfmeB);
+	((ScriptList *)this)->takeScripts((ScriptList *)d, (BfmeNodeZK **)&d->m_bfmeC, (BfmeNodeZK **)&m_bfmeC);
 }
 
 void BfmeThingGE::rva003B40CB()
