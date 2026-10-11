@@ -1,4 +1,5 @@
-// cl: /EHsc
+// cl: /EHsc /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7
+// stlport
 //
 // ?rva00206706@Rva00206706@@QAEXPAURva00206706Node@@@Z @0x00206706 53B: thiscall
 // recursive clear over child +0x0C with iteration over next +0x08, destroying
@@ -6,10 +7,12 @@
 // 0x00204686, rowed free 0x00030830, self-call 0x00206706, caller 0x00206FE6
 // same-this clear; unblocks 0x00206FE6.
 
-struct Rva00204686
-{
-	~Rva00204686();
-};
+#include "ascii_string.h"
+#include <utility>
+typedef _STL::pair<AsciiString,AsciiString> ScriptStringKey;
+typedef _STL::pair<const ScriptStringKey,AsciiString> ScriptStringValue;
+template <> ScriptStringValue::~pair();
+typedef ScriptStringValue Rva00204686;
 
 struct Rva00206706Node
 {
@@ -32,7 +35,7 @@ private:
 	int m_count; // +0x04
 };
 
-extern "C" void __cdecl free(void *block);
+void __cdecl free(void *block);
 
 void Rva00206706::rva00206706(Rva00206706Node *node)
 {

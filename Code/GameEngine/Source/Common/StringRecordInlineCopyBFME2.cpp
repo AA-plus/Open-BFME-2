@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /Ob2 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB
+// cl: /Ireference/shims/bfme2_ascii /O1 /Ob2 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /arch:SSE /G7
 // stlport
 // BFME2 record copies with verified StringBase member operations.
 // Layouts are read from the complete retail constructors and their STLport
@@ -217,13 +217,7 @@ struct BfmeStringRecord00448113 {
 BfmeStringRecord00448113::BfmeStringRecord00448113(const BfmeStringRecord00448113 &o) : text0(o.text0), text1(o.text1) {}
 template void _STL::_Construct<BfmeStringRecord00448113,BfmeStringRecord00448113>(BfmeStringRecord00448113*,const BfmeStringRecord00448113&);
 
-struct BfmeStringRecord002049D6 {
-    _STL::pair<AsciiString,AsciiString> pair;
-    AsciiString third;
-    BfmeStringRecord002049D6(const BfmeStringRecord002049D6 &o);
-};
-BfmeStringRecord002049D6::BfmeStringRecord002049D6(const BfmeStringRecord002049D6 &o) : pair(o.pair), third(o.third) {}
-template void _STL::_Construct<BfmeStringRecord002049D6,BfmeStringRecord002049D6>(BfmeStringRecord002049D6*,const BfmeStringRecord002049D6&);
+
 
 
 struct Rva00468520Obj { int m_00; int m_04; };

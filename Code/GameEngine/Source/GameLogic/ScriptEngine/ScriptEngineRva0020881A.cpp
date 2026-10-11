@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /EHs /D_BFME_RETAIL_TREE_INSERT_LAYOUT
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /EHs /D_BFME_RETAIL_TREE_INSERT_LAYOUT /arch:SSE /G7
 // stlport
 // Native ScriptEngine lookup family: 20874B/207B, 20881A/134B, 2088A0/200B.
 // The resolved/original string key and map offsets 190A0/190AC come from
@@ -51,9 +51,22 @@ ScriptFlagTree::_Link_type ScriptFlagTree::_M_create_node(const ScriptFlagTree::
  return node;
 }
 
+typedef _STL::map<ScriptKey,AsciiString> ScriptStringMap;
+typedef _STL::_Rb_tree<ScriptKey,_STL::pair<const ScriptKey,AsciiString>,
+ _STL::_Select1st<_STL::pair<const ScriptKey,AsciiString> >,_STL::less<ScriptKey>,
+ _STL::allocator<_STL::pair<const ScriptKey,AsciiString> > > ScriptStringTree;
+// ?_M_create_node@?$_Rb_tree@U?$pair@VAsciiString@@V1@@_STL@@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@VAsciiString@@@2@U?$_Select1st@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@VAsciiString@@@_STL@@@2@U?$less@U?$pair@VAsciiString@@V1@@_STL@@@2@V?$allocator@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@VAsciiString@@@_STL@@@2@@_STL@@IAEPAU?$_Rb_tree_node@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@VAsciiString@@@_STL@@@2@ABU?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@VAsciiString@@@2@@Z
+template <>
+ScriptStringTree::_Link_type ScriptStringTree::_M_create_node(const ScriptStringTree::value_type &value) {
+ _Link_type node=(_Link_type)_STL::allocator<char>::allocate(sizeof(_STL::_Rb_tree_node<ScriptStringTree::value_type>),0);
+ _STL::_Construct(&node->_M_value_field,value);
+ return node;
+}
+
 class ScriptEngine {
 public:
  void *rva0020881A(AsciiString name);
+ void *rva00208DB8(AsciiString name);
 protected:
  ScriptCounter *bfmeCounter(AsciiString name);
  bool *bfmeFlagForWrite(AsciiString name);
@@ -61,6 +74,8 @@ private:
  char m_unreconstructed[0x190A0];
  _STL::map<ScriptKey,ScriptCounter> m_counters;
  _STL::map<ScriptKey,bool> m_flags;
+ char m_beforeStrings[0x190F4 - 0x190B8];
+ ScriptStringMap m_strings;
 };
 // Retail's complete 207B and 200B lookup-and-insert bodies. The key is the
 // resolved script name followed by the original name; the values are the
@@ -88,4 +103,12 @@ void *ScriptEngine::rva0020881A(AsciiString name) {
  _STL::map<ScriptKey,bool>::iterator found=m_flags.find(key);
  if(found!=m_flags.end()) return &found->second;
  return 0;
+}
+
+void *ScriptEngine::rva00208DB8(AsciiString name) {
+ AsciiString resolved = ((Rva002046C0Owner *)this)->resolveName(name);
+ ScriptKey key(resolved,name);
+ _STL::pair<_STL::map<ScriptKey,AsciiString>::iterator,bool> result =
+  m_strings.insert(_STL::make_pair(key,AsciiString(AsciiString::TheEmptyString)));
+ return &result.first->second;
 }

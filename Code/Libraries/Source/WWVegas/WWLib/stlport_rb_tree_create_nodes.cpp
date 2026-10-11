@@ -1,4 +1,4 @@
-// cl: /EHsc /D_STLP_NO_EXCEPTIONS /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
+// cl: /EHsc /D_STLP_NO_EXCEPTIONS /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT /O1 /arch:SSE /G7
 // stlport
 // Batch _M_create_node family recovery (generated): one explicit
 // specialization per sibling, each proven by its own retail call
@@ -49,7 +49,6 @@ public:
 
 struct TreeKey00242F5E { public: unsigned char m_data[8]; };
 struct BfmeRecord001DD3BC { public: unsigned char m_data[8]; };
-struct BfmeStringRecord002049D6 { public: unsigned char m_data[12]; };
 struct BfmeStringRecord004071F7 { public: unsigned char m_data[12]; };
 struct BfmeE16 { float x, y, z, w; };
 struct BfmePod16 { int a[4]; };
@@ -88,20 +87,6 @@ UBfmeRecord001DD3BCSetTree::_Link_type UBfmeRecord001DD3BCSetTree::_M_create_nod
 }
 template UBfmeRecord001DD3BCSetTree::_Link_type UBfmeRecord001DD3BCSetTree::_M_create_node(const UBfmeRecord001DD3BCSetTree::value_type &);
 
-
-// ?_M_create_node@?$_Rb_tree@UBfmeStringRecord002049D6@@U1@U?$_Identity@UBfmeStringRecord002049D6@@@_STL@@U?$less@UBfmeStringRecord002049D6@@@3@V?$allocator@UBfmeStringRecord002049D6@@@3@@_STL@@IAEPAU?$_Rb_tree_node@UBfmeStringRecord002049D6@@@2@ABUBfmeStringRecord002049D6@@@Z
-typedef _STL::_Rb_tree<BfmeStringRecord002049D6, BfmeStringRecord002049D6, _STL::_Identity<BfmeStringRecord002049D6>, _STL::less<BfmeStringRecord002049D6>, _STL::allocator<BfmeStringRecord002049D6> > UBfmeStringRecord002049D6SetTree;
-namespace _STL {
-template <> void _Construct<BfmeStringRecord002049D6>(BfmeStringRecord002049D6 *, const BfmeStringRecord002049D6 &);
-}
-template <>
-UBfmeStringRecord002049D6SetTree::_Link_type UBfmeStringRecord002049D6SetTree::_M_create_node(const UBfmeStringRecord002049D6SetTree::value_type &value)
-{
-	_Link_type node = (_Link_type)_STL::allocator<char>::allocate(sizeof(_STL::_Rb_tree_node<UBfmeStringRecord002049D6SetTree::value_type>), 0);
-	_STL::_Construct(&node->_M_value_field, value);
-	return node;
-}
-template UBfmeStringRecord002049D6SetTree::_Link_type UBfmeStringRecord002049D6SetTree::_M_create_node(const UBfmeStringRecord002049D6SetTree::value_type &);
 
 // ?_M_create_node@?$_Rb_tree@UBfmeStringRecord004071F7@@U1@U?$_Identity@UBfmeStringRecord004071F7@@@_STL@@U?$less@UBfmeStringRecord004071F7@@@3@V?$allocator@UBfmeStringRecord004071F7@@@3@@_STL@@IAEPAU?$_Rb_tree_node@UBfmeStringRecord004071F7@@@2@ABUBfmeStringRecord004071F7@@@Z
 typedef _STL::_Rb_tree<BfmeStringRecord004071F7, BfmeStringRecord004071F7, _STL::_Identity<BfmeStringRecord004071F7>, _STL::less<BfmeStringRecord004071F7>, _STL::allocator<BfmeStringRecord004071F7> > UBfmeStringRecord004071F7SetTree;

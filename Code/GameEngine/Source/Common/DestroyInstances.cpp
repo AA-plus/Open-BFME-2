@@ -1,4 +1,5 @@
-// cl: /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7
+// stlport
 // stlport
 // STLport single-object _Destroy instances: nine-byte free functions
 //
@@ -183,11 +184,12 @@ struct Rva0010F149Handle
 public:
 	~Rva0010F149Handle();
 };
-struct Rva00204686
-{
-public:
-	~Rva00204686();
-};
+#include "ascii_string.h"
+#include <utility>
+typedef _STL::pair<AsciiString,AsciiString> ScriptStringKey;
+typedef _STL::pair<const ScriptStringKey,AsciiString> ScriptStringValue;
+template <> ScriptStringValue::~pair();
+typedef ScriptStringValue Rva00204686;
 class RvaSmartPtr12
 {
 public:
