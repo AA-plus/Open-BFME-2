@@ -173,8 +173,9 @@ public:
 	// bytes). This TU's isSelected copy loses to the first-in-order copy (no
 	// retail address); both calls below inline it but still emit the loser
 	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
-	// No flags touched.
-	Bool bfme_is_selected() const { return m_selected != 0; }
+	// Named _nz because another TU's same-named helper has a different body
+	// (sharing it would emit conflicting COMDATs). No flags touched.
+	Bool bfme_is_selected_nz() const { return m_selected != 0; }
 	void rva0027411F(void *out, float healthRatio);
 
 	char m_pad000[0xFC];
@@ -201,7 +202,7 @@ void Rva0027601BHost::rva0027601B()
 	Drawable *self = reinterpret_cast<Drawable *>(this);
 	if (!TheWritableGlobalData->m_9BD)
 		return;
-	Bool selected = self->bfme_is_selected();
+	Bool selected = self->bfme_is_selected_nz();
 	if (!selected)
 	{
 		Object *obj = self->getObject();
@@ -211,7 +212,7 @@ void Rva0027601BHost::rva0027601B()
 			if (container != 0 && container->getTemplate()->isKindOf(0x6D))
 			{
 				Drawable *draw = container->getDrawable();
-				selected = draw != 0 && draw->bfme_is_selected();
+				selected = draw != 0 && draw->bfme_is_selected_nz();
 			}
 		}
 	}
