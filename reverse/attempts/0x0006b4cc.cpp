@@ -1,4 +1,6 @@
 // ?getStaticDiffuse@BaseHeightMapRenderObjClass@@QAEHHHH@Z
+// partial score=0.6 date=2026-10-12
+// ?getStaticDiffuse@BaseHeightMapRenderObjClass@@QAEHHHH@Z
 // partial score=0.6 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // ?getStaticDiffuse@BaseHeightMapRenderObjClass@@QAEHHHH@Z, retail

@@ -1,4 +1,6 @@
 // ?loadFXShaderSetup@StandingWaterArea@@QAEXXZ
+// partial score=0.962 date=2026-10-12
+// ?loadFXShaderSetup@StandingWaterArea@@QAEXXZ
 // partial score=0.962 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc /Ireference/shims/bfme2_ascii
 #include "ascii_string.h"
