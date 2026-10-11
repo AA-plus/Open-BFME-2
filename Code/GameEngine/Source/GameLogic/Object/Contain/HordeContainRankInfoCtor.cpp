@@ -37,7 +37,7 @@ protected:
 template <class T> class vector : public _Vector_base<T, allocator<T> >
 {
 public:
-	__forceinline vector() : _Vector_base<T, allocator<T> >(allocator<T>()) {}
+	__declspec(dllimport) __forceinline vector() : _Vector_base<T, allocator<T> >(allocator<T>()) {}
 };
 
 template <unsigned Bits> class bitset
