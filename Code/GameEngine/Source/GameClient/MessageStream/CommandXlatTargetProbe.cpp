@@ -4,6 +4,10 @@
 // this BFME2 helper's name is unknown. Measured offsets and virtual slots
 // come from this complete 161-byte body. Child/container interpretation of
 // +274/+250 is structural, not a recovered target member identity.
+// The header inlines below are only expanded here (no reloc to them); the COMDATs this unit still emits are not
+// retail's, so they get TU-local names instead of colliding with the rowed bodies.
+#define width width_RV
+#define height height_RV
 #include "../../Common/GameLogicObjectLookupView.h"
 struct ICoord2D {int x,y;};
 struct IRegion2D {ICoord2D lo,hi;int width()const{return hi.x-lo.x;}int height()const{return hi.y-lo.y;}};

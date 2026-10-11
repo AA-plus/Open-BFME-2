@@ -10,6 +10,10 @@
 // AIPlayer slot bodies), and startTraining to a forward to AIPlayer's.
 // getAiEnemy (slot 12) keeps Zero Hour's 5-second re-acquire, with BFME's
 // logic frame rate read from its global.
+// The header inlines below are only expanded here (no reloc to them); the COMDATs this unit still emits are not
+// retail's, so they get TU-local names instead of colliding with the rowed bodies.
+#define width width_RV
+#define height height_RV
 #include "ascii_string.h"
 #include <math.h>
 typedef bool Bool;

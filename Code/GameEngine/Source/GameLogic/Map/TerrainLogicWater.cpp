@@ -14,6 +14,9 @@
 // form) and the range scan is ThePartitionManager's unfiltered native query
 // (0x006255D0) walked with next() only. The water damage is DamageInfo's
 // damage type 9 and death type 7 from no source.
+// The header inlines below are only expanded here (no reloc to them); the COMDATs this unit still emits are not
+// retail's, so they get TU-local names instead of colliding with the rowed bodies.
+#define zero zero_RV
 #include "Lib/Coord3D.h"
 #include "../../Common/PartitionRangeQueryCallView.h"
 

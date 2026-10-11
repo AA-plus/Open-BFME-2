@@ -82,6 +82,10 @@ enum GameDifficulty
 	DIFFICULTY_HARD
 };
 
+// The header inlines below are only expanded here (no reloc to them); the COMDATs this unit still emits are not
+// retail's, so they get TU-local names instead of colliding with the rowed bodies.
+#define width width_RV
+#define height height_RV
 #include "ascii_string.h"
 
 
