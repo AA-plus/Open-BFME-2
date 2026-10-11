@@ -10,7 +10,18 @@
 extern "C" void Rva006FD040(void *,void *,void *);
 class Rva006DB270 {public:void freeBlock(void*,int);};
 extern Rva006DB270 *g_pChainBlockAllocator;
-class Rva0070A840 {public:~Rva0070A840();};
+// The rowed scalar destructor frees a native 20-byte hash through the pool.
+// Match its complete allocation size and deallocator so implicit cleanup
+// emits the existing 35-byte scalar body instead of global-delete(size1).
+class Rva0070A840 {
+public:
+ ~Rva0070A840();
+ static void operator delete(void *p,unsigned int size) {
+  g_pChainBlockAllocator->freeBlock(p,size);
+ }
+private:
+ char m_nativeHash[20];
+};
 class AptNativeHash {public:void DestroyGCPointers();};
 struct Entry {int kind; char *p4; char *p8; char pad[0x28]; char *p34; char pad38[4]; struct Extra *extra;};
 struct Item {int unused[2];char *p;};
