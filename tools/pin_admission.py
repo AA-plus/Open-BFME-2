@@ -32,7 +32,9 @@ symbols.csv, per ADDED line (an edited line counts as added):
         compiled and REL32-resolved exactly as the byte gate resolves a row,
         reproduces retail's whole body at the address: the extent of a ledger
         row already there, at least build.MIN_LIB_CONCRETE non-relocation
-        bytes, nothing masked and nothing unresolved;
+        bytes, nothing masked and nothing unresolved. A five-byte direct tail
+        jump may instead anchor that minimum in its same-object callee, whose
+        whole body and identity are proven even if it already has a pin;
       - it carries the relocations of EVERY matched ledger body of that extent
         there: the same offsets, types and addends, each DIR32 binding the same
         external symbol or the same TU-local symbol of the same object, because
@@ -205,7 +207,9 @@ def fold_proof_problems(pin, rva, rows, symbol_map, pins=(), receipt=None):
                  object and resolved exactly as compile_function resolves a
                  row, and it equals retail's whole body at rva: the extent of a
                  ledger row there, nothing masked, nothing unresolved, and (for
-                 the pinned name) at least MIN_LIB_CONCRETE non-relocation bytes.
+                 the pinned name) at least MIN_LIB_CONCRETE non-relocation bytes,
+                 or a five-byte direct tail jump to a separately proven
+                 same-object callee meeting that minimum.
     relocations -- compile_function copies every DIR32 slot from retail, so
                  equal bytes say nothing about a vtable store, a global, a
                  string, a float, an import or a function-pointer operand. The
@@ -273,11 +277,51 @@ def fold_proof_problems(pin, rva, rows, symbol_map, pins=(), receipt=None):
     relocated = sum(min(build.RELOC_WIDTH.get(t, 4), len(compiled) - o)
                     for o, t, _ in relocs if o < len(compiled))
     if len(compiled) - relocated < build.MIN_LIB_CONCRETE:
-        return [f"only {len(compiled) - relocated} non-relocation bytes; too few to prove a fold"]
+        problems = _tail_fold_anchor(name, rva, compiled, relocs, proof)
+        if problems:
+            return [f"only {len(compiled) - relocated} non-relocation bytes; too few to "
+                    "prove a fold without a proven tail-jump callee: " + "; ".join(problems)]
     problems = _prove_body(name, rva, proof, 0)
     if not problems and receipt is not None:
         # Publish only a complete proof, never provisional recursive bindings.
         receipt.update(output=output, bindings=dict(proof["proven"]))
+    return problems
+
+
+def _tail_fold_anchor(name, rva, compiled, relocs, proof):
+    """A tiny fold is only a pure direct jump to a substantial proven body.
+
+    Pins resolve calls without verifying the selected callee's object. Here
+    the anchor must be defined in this object and pass the complete fold proof
+    regardless of existing pins. Ordinary tiny bodies and chains of tiny
+    wrappers cannot borrow evidence from merely named destinations.
+    """
+    if (compiled != b"\xe9" + b"\0" * 4 or len(relocs) != 1
+            or relocs[0][:2] != (1, build.REL32)):
+        return ["not one five-byte direct tail jump with a zero-addend REL32"]
+    callee = relocs[0][2]
+    try:
+        _, _, info = build.read_object_symbol_bytes(proof["output"], name,
+                                                    code_only=True, detail=True)
+        symbol = info["symbols"][info["reloc_symbols"][0]]
+        defined = [s for s in info["symbols"] if s["name"] == callee and s["section"] > 0]
+        if (callee == name or symbol.get("storage") != SYM_CLASS_EXTERNAL
+                or symbol["section"] <= 0 or len(defined) != 1):
+            return [f"{callee} is not one distinct external function this object defines"]
+        body, sites = build.read_object_symbol_bytes(proof["output"], callee, code_only=True)
+        relocated = sum(min(build.RELOC_WIDTH.get(t, 4), len(body) - o)
+                        for o, t, _ in sites if o < len(body))
+        if len(body) - relocated < build.MIN_LIB_CONCRETE:
+            return [f"{callee} has too few non-relocation bytes to anchor a fold"]
+        target = build.read_target_bytes(rva, len(compiled))
+        if len(target) != 5 or target[0] != 0xE9:
+            return ["retail is not a five-byte direct tail jump"]
+        called = (rva + 5 + struct.unpack_from("<i", target, 1)[0]) & 0xFFFFFFFF
+    except (OSError, ValueError, SystemExit) as error:
+        return [f"{proof['source']}: {error}"]
+    problems = _prove_body(callee, called, proof, 1)
+    if not problems:
+        proof["overlay"][callee] = [called]
     return problems
 
 

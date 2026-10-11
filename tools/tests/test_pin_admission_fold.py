@@ -374,6 +374,106 @@ def test_tiny_identical_body_is_not_enough(fold):
     assert problems and "too few" in problems[0]
 
 
+TAIL = b"\xe9" + b"\0" * 4
+
+
+def tail_fold_fixture(fold, *, root=TAIL, helper=OV, native_helper=OV,
+                      relocs=((1, 5, 0x14),), defined=True,
+                      owner_relocs=((1, 11, 0x14),)):
+    """A five-byte destructor wrapper and its independently owned full body."""
+    fold.rows[0]["target_size"] = str(len(root))
+    fold.rows[1]["target_size"] = str(len(native_helper))
+    fold.memory[OWNER] = root[:1] + struct.pack("<i", HELPER - OWNER - 5) + root[5:]
+    fold.memory[HELPER] = native_helper
+    fold.obj.write_bytes(coff(
+        [(".text", TEXT, root, list(relocs)), (".text", TEXT, helper, []),
+         (".text", TEXT, root, list(owner_relocs)), (".text", TEXT, native_helper, [])],
+        [(".text", 0, 1, 0, 3, 1), (NEW_PB, 0, 1, 0x20, 2, 0),
+         (".text", 0, 2, 0, 3, 1), (NEW_OV, 0, 2 if defined else 0, 0x20, 2, 0),
+         (".text", 0, 3, 0, 3, 1), (OLD_PB, 0, 3, 0x20, 2, 0),
+         (".text", 0, 4, 0, 3, 1), (OLD_OV, 0, 4, 0x20, 2, 0)]))
+
+
+@pytest.mark.parametrize("pinned", [False, True])
+def test_tail_fold_proves_full_callee_even_when_pinned(fold, pinned):
+    tail_fold_fixture(fold)
+    if pinned:
+        write_pins(fold, [(NEW_OV, hex(HELPER), PROOF)])
+    receipt = {}
+    pin = {"name": NEW_PB, "address": hex(OWNER), "notes": PROOF}
+    assert fold.admission.fold_proof_problems(
+        pin, OWNER, fold.rows, fold.build.load_symbol_map, receipt=receipt) == []
+    assert receipt["bindings"] == {NEW_PB: OWNER, NEW_OV: HELPER}
+    assert judge(fold, PROOF) == []
+
+
+@pytest.mark.parametrize("pinned", [False, True])
+def test_tail_fold_rejects_wrong_full_callee(fold, pinned):
+    tail_fold_fixture(fold, helper=OV[:5] + b"\x48" + OV[6:])
+    if pinned:
+        write_pins(fold, [(NEW_OV, hex(HELPER), PROOF)])
+    receipt = {"bindings": "stale"}
+    pin = {"name": NEW_PB, "address": hex(OWNER), "notes": PROOF}
+    assert fold.admission.fold_proof_problems(
+        pin, OWNER, fold.rows, fold.build.load_symbol_map, receipt=receipt)
+    assert receipt == {}
+
+
+@pytest.mark.parametrize("mutation", ["call", "addend", "missing_reloc", "dir32",
+                                     "overlap", "undefined", "tiny_helper",
+                                     "tail_helper", "owner_reloc", "other_address"])
+def test_tail_fold_refuses_unproven_shapes(fold, mutation):
+    kwargs = {}
+    if mutation == "call":
+        kwargs["root"] = b"\xe8" + b"\0" * 4 + b"\xc3"
+    elif mutation == "addend":
+        kwargs["root"] = b"\xe9\x01\0\0\0"
+    elif mutation == "missing_reloc":
+        kwargs["relocs"] = ()
+    elif mutation == "dir32":
+        kwargs["relocs"] = ((1, 5, 6),)
+    elif mutation == "overlap":
+        kwargs["relocs"] = ((1, 5, 0x14), (1, 5, 0x14))
+    elif mutation == "undefined":
+        kwargs["defined"] = False
+    elif mutation == "tiny_helper":
+        kwargs["helper"] = kwargs["native_helper"] = b"\x33\xc0\xc3"
+    elif mutation == "tail_helper":
+        kwargs["helper"] = kwargs["native_helper"] = TAIL
+    elif mutation == "owner_reloc":
+        kwargs["owner_relocs"] = ()
+    tail_fold_fixture(fold, **kwargs)
+    # A known pin must not substitute for proving the emitted callee.
+    write_pins(fold, [(NEW_OV, hex(HELPER), PROOF)])
+    if mutation == "other_address":
+        fold.memory[0x3000] = OV
+        fold.row(NEW_OV, 0x3000, len(OV))
+    assert judge(fold, PROOF)
+
+
+@pytest.mark.parametrize("wrong", [False, True])
+def test_tail_fold_checks_pinned_callee_data_binding(fold, wrong):
+    # Both callees pass the byte comparison because DIR32 operands are copied
+    # from retail. The full anchor proof must still compare the data identity.
+    helper = PB[:6] + b"\x68" + PB[7:]
+    tail_fold_fixture(fold, helper=helper, native_helper=helper)
+    native = bytearray(helper)
+    struct.pack_into("<I", native, 7, 0x405000)
+    fold.memory[HELPER] = bytes(native)
+    fold.obj.write_bytes(coff(
+        [(".text", TEXT, TAIL, [(1, 5, 0x14)]),
+         (".text", TEXT, helper, [(7, 12 if wrong else 13, 6)]),
+         (".text", TEXT, TAIL, [(1, 11, 0x14)]),
+         (".text", TEXT, helper, [(7, 13, 6)])],
+        [(".text", 0, 1, 0, 3, 1), (NEW_PB, 0, 1, 0x20, 2, 0),
+         (".text", 0, 2, 0, 3, 1), (NEW_OV, 0, 2, 0x20, 2, 0),
+         (".text", 0, 3, 0, 3, 1), (OLD_PB, 0, 3, 0x20, 2, 0),
+         (".text", 0, 4, 0, 3, 1), (OLD_OV, 0, 4, 0x20, 2, 0),
+         ("_wrong_global", 0, 0, 0, 2, 0), ("_right_global", 0, 0, 0, 2, 0)]))
+    write_pins(fold, [(NEW_OV, hex(HELPER), PROOF)])
+    assert bool(judge(fold, PROOF)) == wrong
+
+
 def test_renaming_a_pin_is_not_a_second_identity(fold):
     # The old pin line goes away in the same change: one name on the address.
     old = {"name": "?Callee@@YAXPAX@Z", "address": "0x00003000", "notes": "x"}
