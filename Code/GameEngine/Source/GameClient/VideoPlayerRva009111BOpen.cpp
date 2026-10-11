@@ -192,7 +192,7 @@ VideoStreamInterface *Rva009111B::open(AsciiString movieTitle, int flags)
 extern "C" __declspec(dllimport) int __cdecl sprintf(char *buffer, const char *format, ...);
 extern "C" unsigned char *__cdecl _mbscpy(unsigned char *dest, const unsigned char *src);
 AsciiString GetRegistryLanguage();
-void Rva001B6380Set(int value);
+extern "C" void __cdecl duck_mem_set_allocator(void *allocator);
 void Rva009A4D00Init();
 extern unsigned int g_Va00DE4878;
 extern unsigned int g_Va00DE3498[0x400];
@@ -218,7 +218,7 @@ void Rva009111B::init()
 	g_Va00DE44A8[2].m_00 = true;
 	sprintf(g_Va00DE44A8[2].m_path, "%s\\", "Data\\Movies");
 	_mbscpy((unsigned char *)g_Va00DE44A8[2].m_label, (const unsigned char *)"Non-Localized Path");
-	Rva001B6380Set((int)&g_Va00DE4878);
+	duck_mem_set_allocator(&g_Va00DE4878);
 	Rva009A4D00Init();
 
 	for (unsigned int i = 0; i < 0x400; ++i)

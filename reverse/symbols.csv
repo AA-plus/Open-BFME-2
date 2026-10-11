@@ -8507,7 +8507,6 @@ name,address,notes
 ?bfmeTouch982C@BfmeT982@@QAEXXZ,0x000A9570,address read from the REL32 displacement at a placed body
 ?bfmeTry1033@BfmeSub1033@@QAEHPAVBfmeF1033@@@Z,0x000069D6
 ?bfmeTry996@BfmeB996@@QAEDHHPAD@Z,0x00106715,callee read from the retail REL32 in placed BFME1-donor body ?movePair@BfmeB996@@QAEDPAH0PAII@Z (0x00106812)
-?bfmeTwoBZB@@YAXPAX@Z,0x001B6410
 ?bfmeTwoCGD@BfmeThingCGD@@QAEXXZ,0x00758DE0
 ?bfmeTwoCKE@BfmeOneCKE@@QAEPAVBfmeTwoCKE@@XZ,0x0028BCB4
 ?bfmeTwoCKF@BfmeOneCKF@@QAEPAVBfmeTwoCKF@@XZ,0x0028BCB4

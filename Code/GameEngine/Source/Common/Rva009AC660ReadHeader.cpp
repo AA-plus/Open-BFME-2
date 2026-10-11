@@ -6,12 +6,11 @@ struct BfmeBits1186;
 struct BfmeS1040;
 struct CodecState;
 unsigned Rva009AC5D0ReadBits(Rva009AC5D0State*, unsigned);
-void bfmeLoadTable(unsigned char*);
+extern "C" void __cdecl VP6_InitQTables(unsigned char*);
 void bfmeInit1186(BfmeBits1186*, unsigned char*);
-// BFME 2 rows these two callees as Rva001B6900Set / Rva001B6910Set (0x001B6900,
-// 0x001B6910); the BFME 1 donor named them after its own addresses.
-void __cdecl Rva001B6900Set(void*,int);
-void __cdecl Rva001B6910Set(void*,int);
+// Post-processing setters at 0x001B6900 and 0x001B6910 (VP6 clean room).
+extern "C" void __cdecl SetPPInterlacedMode(void*,int);
+extern "C" void __cdecl SetDeInterlaceMode(void*,int);
 int bfmeGoUSC(void*,int);
 int bfmeCheckJX(CodecState*);
 int Rva009B4600DecodeBool(void*,int);
@@ -34,7 +33,7 @@ static int Rva009AC660ReadHeader(unsigned char* s)
         B(0x19d)=(unsigned char)Rva009AC5D0ReadBits(bits,2);
         if (B(0x19c)>7) return 0;
         // Retail passes a second unused slot to the existing one-argument callee.
-        ((void (__cdecl *)(unsigned char*,unsigned char))bfmeLoadTable)(P(0x13c),B(0x19c));
+        ((void (__cdecl *)(unsigned char*,unsigned char))VP6_InitQTables)(P(0x13c),B(0x19c));
         U(0x1dc)=(unsigned char)Rva009AC5D0ReadBits(bits,1);
         if (!U(0x944) && B(0x19d)) {
             decoder=(BfmeBits1186*)(s+0x150);
@@ -44,8 +43,8 @@ static int Rva009AC660ReadHeader(unsigned char* s)
             bfmeInit1186(decoder,P(0x450c)+4);
             U(0x451c)=Rva009AC5D0ReadBits(bits,16);
         }
-        Rva001B6900Set(P(0x298),U(0x1dc));
-        if (U(0x1dc)) Rva001B6910Set(P(0x298),U(0x4944));
+        SetPPInterlacedMode(P(0x298),U(0x1dc));
+        if (U(0x1dc)) SetDeInterlaceMode(P(0x298),U(0x4944));
         unsigned a=(unsigned char)bfmeGoUSC(decoder,8)*2u;
         unsigned b=(unsigned char)bfmeGoUSC(decoder,8)*2u;
         unsigned c=(unsigned char)bfmeGoUSC(decoder,8)*2u;

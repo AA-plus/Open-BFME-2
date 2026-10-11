@@ -24,7 +24,6 @@ Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	wrong-name	?g_Va00E20DA0@@3P
 Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	wrong-name	?g_Va00E20FC0@@3PAHA	0x00A20FC0
 Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	wrong-name	?g_Va00E21220@@3PAHA	0x00A21220
 Code/GameEngine/Source/Common/Bfme5TinyEleven.cpp	wrong-name	?g_bfmeCurrentCB@@3PAXA	0x00A02EF0
-Code/GameEngine/Source/Common/Bfme5TinyNine.cpp	wrong-name	?g_bfmeTableBZ@@3PAHA	0x007D7860
 Code/GameEngine/Source/Common/Bfme5TinyNineteen.cpp	wrong-name	?g_timedOperationHead@@3PAVTimedOperationNode@@A	0x00A02EC0
 Code/GameEngine/Source/Common/BfmeAllocBlock.cpp	wrong-name	?g_bfmeAllocGlobal@@3PAVBfmeAllocGlobal@@A	0x009FDA54
 Code/GameEngine/Source/Common/BfmeApplierBHRva003C4070.cpp	wrong-name	?g_00E02D4C@@3PAVSpecialPowerStore@@A	0x00A02D4C

@@ -3,9 +3,8 @@ extern "C" double __cdecl sqrt(double);
 #pragma intrinsic(sqrt)
 struct Rva009A9070Context;
 struct Rva009A9070Source;
-// BFME 2 rows this callee as Rva001B6920Set (0x001B6920); the BFME 1 donor
-// named it after its own address.
-void __cdecl Rva001B6920Set(void *, int);
+// SetAddNoiseMode at 0x001B6920 (VP6 clean room).
+extern "C" void __cdecl SetAddNoiseMode(void *, int);
 void Rva009A9070CopyStreams(Rva009A9070Context *, Rva009A9070Source *, int);
 void Rva009A4E50Configure(void *context, unsigned selector, int value)
 {
@@ -25,7 +24,7 @@ again:
     }
     case 9:
         *(int *)((char *)context + 0x4948) = value;
-        Rva001B6920Set(*(void **)((char *)context + 0x298), value);
+        SetAddNoiseMode(*(void **)((char *)context + 0x298), value);
         return;
     case 7:
         Rva009A9070CopyStreams(*(Rva009A9070Context **)((char *)context + 0x298), (Rva009A9070Source *)value, *(int *)((char *)context + 0x254));
