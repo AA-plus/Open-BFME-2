@@ -16,6 +16,7 @@
 // teardown2AF1EC. Force-inlining construction removes a forwarding call.
 #include "ascii_string.h"
 #include <vector>
+#include <list>
 struct Rva002AAC9ERange {float const *begin,*end;};
 struct AsciiRange002ADD75 {AsciiString const *begin,*end;};
 int Rva002AAC9EEqual(const Rva002AAC9ERange *,const Rva002AAC9ERange *);
@@ -50,4 +51,60 @@ void Rva002B212A::rva002B212A(Rva002B212AArg *arg,const AsciiString &name) {
  }
  Rva002B212AOwned fresh(name,arg->values,arg->tags);
  records.push_back(*reinterpret_cast<BfmeVectorRecord002AF478*>(&fresh.value));
+}
+
+// ?rva002ADC03@Player@@QAEXPAVRva004B5A65Owner@@H@Z, native 2ADC03..2ADC82
+// (127B), RET8; callers 0x004B5A65 and 0x004B5AC0 (the cost-modifier
+// upgrade pair). Finds the entry of the player's +0x6F4 list whose value
+// range equals the upgrade's (+0x11C, the rowed comparator above), whose
+// first referenced word is the upgrade's +0x118 and whose +0x10 is the
+// given value; erases it (the folded list erase 0x00438539), destroys it
+// through the folded 16-byte pair destructor 0x000796BC and frees it, then
+// marks TheControlBar dirty (+0x28). Address-derived names; the list is
+// spelled with the element type its folded erase carries.
+class Snapshot;
+enum LocomotorSetType { LOCOMOTORSET_INVALID = -1 };
+class LocomotorTemplate;
+typedef _STL::pair<const LocomotorSetType, _STL::vector<const LocomotorTemplate *> > Rva002ADC03Pair;
+struct Rva002ADC03Ref { int m_value; };
+struct Rva002ADC03Entry
+{
+	Rva002ADC03Ref *m_ref;			// +0x00
+	Rva002AAC9ERange m_range;		// +0x04
+	int m_0C;
+	int m_value;					// +0x10
+};
+class Rva004B5A65Owner
+{
+public:
+	char m_pad000[0x118];
+	int m_118;						// +0x118
+	Rva002AAC9ERange m_range;		// +0x11C
+};
+class ControlBar { public: char m_pad00[0x28]; bool m_dirty; };
+extern ControlBar *TheControlBar;
+class Player
+{
+public:
+	void rva002ADC03(Rva004B5A65Owner *owner, int value);
+	char m_pad000[0x6f4];
+	_STL::list<Snapshot *> m_6F4;	// +0x6F4
+};
+void Player::rva002ADC03(Rva004B5A65Owner *owner, int value)
+{
+	_STL::list<Snapshot *> &entries = m_6F4;
+	_STL::list<Snapshot *>::iterator end = entries.end();
+	for (_STL::list<Snapshot *>::iterator it = entries.begin(); it != end; ++it)
+	{
+		Rva002ADC03Entry *entry = reinterpret_cast<Rva002ADC03Entry *>(*it);
+		if ((unsigned char)Rva002AAC9EEqual(&entry->m_range, &owner->m_range) &&
+			entry->m_ref->m_value == owner->m_118 && entry->m_value == value)
+		{
+			entries.erase(it);
+			reinterpret_cast<Rva002ADC03Pair *>(entry)->~Rva002ADC03Pair();
+			::operator delete(entry);
+			TheControlBar->m_dirty = true;
+			return;
+		}
+	}
 }
