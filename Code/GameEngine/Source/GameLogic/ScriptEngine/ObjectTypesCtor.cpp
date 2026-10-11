@@ -1,4 +1,4 @@
-// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /DNDEBUG /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /O1 /G7 /EHsc /Ireference/shims/moduledata /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /DNDEBUG /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // ??0ObjectTypes@@QAE@XZ @0x003769F9 32B: ObjectTypes default ctor.
 // ??4ObjectTypes@@QAEAAV0@ABV0@@Z @0x00376A9C 39B: ObjectTypes copy-assign.
@@ -16,16 +16,18 @@
 // this TU adds the proven STLport flags from Rva00330757Member for the same
 // Vector_base call shape.
 #include <vector>
+#include "Common/Snapshot.h"
 
 template <typename T> struct BfmeStringData;
 
 #include "ascii_string.h"
 
 
-class ObjectTypes
+class ObjectTypes : public Snapshot
 {
 public:
 	ObjectTypes();
+ ObjectTypes(const AsciiString &);
 	ObjectTypes &operator=(const ObjectTypes &that);
 	virtual ~ObjectTypes();
 private:
@@ -44,4 +46,14 @@ ObjectTypes &ObjectTypes::operator=(const ObjectTypes &that)
 	m_listName = that.m_listName;
 	m_objectTypes = that.m_objectTypes;
 	return *this;
+}
+
+// Native376A1F..376A62 RET4; named-list constructor called by ScriptEngine
+// at3582BA. WB F647C0 proves string4/vector8 initialization; its initial
+// Snapshot vptr and EH state establish the base independently. ZH ObjectTypes
+// named constructor is the semantic lead at donor9e3be919b10a. Explicit
+// allocator construction matches the existing default ctor and folded211E58.
+ObjectTypes::ObjectTypes(const AsciiString &name)
+    : m_listName(name), m_objectTypes(_STL::allocator<AsciiString>())
+{
 }
