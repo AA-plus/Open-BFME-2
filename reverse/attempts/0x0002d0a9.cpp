@@ -1,4 +1,6 @@
 // ?preprocessMacro@INI@@SAPBDPBD@Z
+// partial score=0.98 date=2026-10-11
+// ?preprocessMacro@INI@@SAPBDPBD@Z
 // partial score=0.9 date=2026-10-05
 // ?preprocessMacro@INI@@SAPBDPBD@Z
 // partial score=0.9 date=2026-10-05
@@ -19,6 +21,8 @@
 // - other DE0878 reuses AsciiString::TheEmptyString (real definition in
 //   Code/GameEngine/Source/Common/Rva00380200Getter.cpp at 0x00DE0878).
 // - table DDF58C absolute (exact); map DDF5A0 absolute (sole xref, exact).
+// r11 (LK8): tail computed as r=text+8; if(text==0) r="" gives retail's hoisted lea
+// and 156B; only residue is the text register (ecx vs retail edi).
 // Next: try double member access (return node->m_text ? node->m_text+8 : "")
 // or re-derive from r10 compiled hex (exact through map call, tail-only diff).
 
@@ -85,7 +89,10 @@ const char *INI::preprocessMacro(const char *token)
 				((Rva002CA26Map *)0xDDF5A0)->opaqueCall(&slot, (const StringBase<char> &)*scope);
 			}
 			char *text = node->m_text;
-			return text != 0 ? text + 8 : "";
+			const char *r = text + 8;
+			if (text == 0)
+				r = "";
+			return r;
 		}
 		return tok;
 	}
