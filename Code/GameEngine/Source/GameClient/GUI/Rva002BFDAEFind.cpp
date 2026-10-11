@@ -6,6 +6,14 @@
 // hashtable<GameWindow*,WindowVideo*>::begin at 0x427195 then Rva000411084::next
 // at 0x411084, with the [node+8]->[+0xc] compare pattern of it->second->field.
 #include <hash_map>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 class GameWindow;
 class WindowVideo

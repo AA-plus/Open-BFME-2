@@ -3,6 +3,14 @@
 // ?Rva000AACE4ForEach@@YAXXZ @0x000AACE4 34B for_each over WindowVideoMap
 // Evidence: calls rowed Ht_iterator prefix ++ 0x0041E832; cmp [ebp+8] vs [ebp+0x10] is inlined !=; add eax 4 push is inlined * passing pair& to indirect deleter at [ebp+0x18]; returns deleter; callers 0x000AAEA6 0x000AAED1 in dtor 0x000AAE59 pass begin/end plus funcs 0x000A97C9 0x000A9DA8 with add esp 0x14; honest Rva free-function name
 #include <hash_map>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 class GameWindow;
 class WindowVideo;
 class WindowVideoManager

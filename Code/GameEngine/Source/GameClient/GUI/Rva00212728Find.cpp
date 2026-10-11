@@ -6,6 +6,14 @@
 // whose second equals the query else -1. Callers 0x005769A7 0x00576A54
 // in 0x00576946 and 0x005777EC in 0x005777A0. Flags from Rva002BFDAEFind.
 #include <hash_map>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
 
 class GameWindow;
 class WindowVideo;
