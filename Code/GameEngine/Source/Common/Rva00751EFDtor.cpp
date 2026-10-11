@@ -57,7 +57,9 @@ private:
 	Rva000751EFRef *m_refs[5];		// +0x11C
 };
 
-Rva00751EF::~Rva00751EF()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00751EF::~Rva00751EF()
 {
 	if (m_string28 && TheDisplayStringManager)
 		TheDisplayStringManager->freeDisplayString(m_string28);
@@ -70,4 +72,10 @@ Rva00751EF::~Rva00751EF()
 		}
 	}
 	g_00DE1ED0 = 0;
+}
+
+// ?bfmeAnchorRva00751EFDtor absent-from-retail
+void bfmeAnchorRva00751EFDtor(Rva00751EF *p)
+{
+	p->Rva00751EF::~Rva00751EF();
 }

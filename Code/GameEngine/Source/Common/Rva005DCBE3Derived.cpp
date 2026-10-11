@@ -21,6 +21,14 @@ public:
 	virtual ~AISimpleExpansionTactic();
 };
 
-AISimpleExpansionTactic::~AISimpleExpansionTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AISimpleExpansionTactic::~AISimpleExpansionTactic()
 {
+}
+
+// ?bfmeAnchorAISimpleExpansionTacticDtor absent-from-retail
+void bfmeAnchorAISimpleExpansionTacticDtor(AISimpleExpansionTactic *p)
+{
+	p->AISimpleExpansionTactic::~AISimpleExpansionTactic();
 }

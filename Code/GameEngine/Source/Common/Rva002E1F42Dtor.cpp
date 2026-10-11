@@ -23,8 +23,16 @@ private:
 	char *m_c;
 };
 
-Rva002E1F42::~Rva002E1F42()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva002E1F42::~Rva002E1F42()
 {
 	if (m_c)
 		free(m_c);
+}
+
+// ?bfmeAnchorRva002E1F42Dtor absent-from-retail
+void bfmeAnchorRva002E1F42Dtor(Rva002E1F42 *p)
+{
+	p->Rva002E1F42::~Rva002E1F42();
 }

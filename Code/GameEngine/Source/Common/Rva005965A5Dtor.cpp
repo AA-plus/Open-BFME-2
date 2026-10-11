@@ -51,9 +51,17 @@ private:
 	_STL::vector<ScienceType> m_sciences; // +0x10
 };
 
-Rva005965A5::~Rva005965A5()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005965A5::~Rva005965A5()
 {
 	m_sciences.clear();
 	if (m_sciences._M_start)
 		free(m_sciences._M_start);
+}
+
+// ?bfmeAnchorRva005965A5Dtor absent-from-retail
+void bfmeAnchorRva005965A5Dtor(Rva005965A5 *p)
+{
+	p->Rva005965A5::~Rva005965A5();
 }

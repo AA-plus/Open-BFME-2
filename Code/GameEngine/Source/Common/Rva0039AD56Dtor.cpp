@@ -62,6 +62,14 @@ public:
 	virtual ~Rva0039ADF3();
 };
 
-Rva0039ADF3::~Rva0039ADF3()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0039ADF3::~Rva0039ADF3()
 {
+}
+
+// ?bfmeAnchorRva0039ADF3Dtor absent-from-retail
+void bfmeAnchorRva0039ADF3Dtor(Rva0039ADF3 *p)
+{
+	p->Rva0039ADF3::~Rva0039ADF3();
 }

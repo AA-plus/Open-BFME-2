@@ -12,6 +12,7 @@
 // TimedOperationRef TU keeps its own address-derived spelling through
 // the standing alias pin.
 
+inline void *operator new(unsigned int, void *p) { return p; }
 class __declspec(dllimport) exception
 {
 public:
@@ -27,14 +28,30 @@ public:
 };
 
 // ??0FunctorNotSet@@QAE@XZ @0x2035E2
-FunctorNotSet::FunctorNotSet()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline FunctorNotSet::FunctorNotSet()
 	: exception()
 {
 	*(unsigned int *)this = 0x00BD3B54;
 }
 
-FunctorNotSet::~FunctorNotSet()
+// ?bfmeAnchorFunctorNotSetCtor absent-from-retail
+void *bfmeAnchorFunctorNotSetCtor(void *where)
 {
+	return ::new (where) FunctorNotSet();
+}
+
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline FunctorNotSet::~FunctorNotSet()
+{
+}
+
+// ?bfmeAnchorFunctorNotSetDtor absent-from-retail
+void bfmeAnchorFunctorNotSetDtor(FunctorNotSet *p)
+{
+	p->FunctorNotSet::~FunctorNotSet();
 }
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's

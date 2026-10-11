@@ -35,6 +35,14 @@ private:
 	Rva004EC395Member m10;
 };
 
-Rva00420E67::~Rva00420E67()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00420E67::~Rva00420E67()
 {
+}
+
+// ?bfmeAnchorRva00420E67Dtor absent-from-retail
+void bfmeAnchorRva00420E67Dtor(Rva00420E67 *p)
+{
+	p->Rva00420E67::~Rva00420E67();
 }

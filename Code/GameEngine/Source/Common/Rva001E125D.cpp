@@ -17,6 +17,14 @@ private:
 	AsciiString m_str148;
 };
 
-Rva001E125D::~Rva001E125D()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva001E125D::~Rva001E125D()
 {
+}
+
+// ?bfmeAnchorRva001E125DDtor absent-from-retail
+void bfmeAnchorRva001E125DDtor(Rva001E125D *p)
+{
+	p->Rva001E125D::~Rva001E125D();
 }

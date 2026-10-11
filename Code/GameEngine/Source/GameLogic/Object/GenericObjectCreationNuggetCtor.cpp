@@ -128,7 +128,9 @@ private:
 };
 
 // ??0GenericObjectCreationNugget@@QAE@XZ @0x001F0E32
-GenericObjectCreationNugget::GenericObjectCreationNugget()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline GenericObjectCreationNugget::GenericObjectCreationNugget()
 	: m_putInContainer(TheEmptyString)
 	, m_fxFinal(0)
 	, m_particleSysName(TheEmptyString)
@@ -190,4 +192,10 @@ GenericObjectCreationNugget::GenericObjectCreationNugget()
 	m_offset.x = 0.0f;
 	m_offset.y = 0.0f;
 	m_offset.z = 0.0f;
+}
+
+// ?bfmeAnchorGenericObjectCreationNuggetCtor absent-from-retail
+void *bfmeAnchorGenericObjectCreationNuggetCtor(void *where)
+{
+	return ::new (where) GenericObjectCreationNugget();
 }

@@ -95,7 +95,15 @@ private:
 	int m_unk484;
 };
 
-W3DTruckDraw::~W3DTruckDraw()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline W3DTruckDraw::~W3DTruckDraw()
 {
 	((W3DTankTruckDraw *)this)->tossEmitters();
+}
+
+// ?bfmeAnchorW3DTruckDrawDtor absent-from-retail
+void bfmeAnchorW3DTruckDrawDtor(W3DTruckDraw *p)
+{
+	p->W3DTruckDraw::~W3DTruckDraw();
 }

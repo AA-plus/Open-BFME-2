@@ -12,6 +12,7 @@
 // Inline row Set operations preserve native EH state4 after first matrix row.
 // Row16 ctor is a3-byte twin of retail's empty constructor47A6A9: the
 // native array-iterator arguments independently prove16-byte rows/count3.
+inline void *operator new(unsigned int, void *p) { return p; }
 #include "ascii_string.h"
 class ParticleSystemTemplate;
 class ParticleSystem;
@@ -53,7 +54,15 @@ struct ParticleVec {float x,y,z;void zero(){z=y=x=0.0f;}};
 class GameClientRandomVariable {public: float getValue()const;int type;float low,high;};
 struct ParticleRegion {float x1,y1,x2,y2;};
 struct Rva0047A6A9Row16 {__declspec(noinline) Rva0047A6A9Row16();float x,y,z,w;void Set(float a,float b,float c,float d){x=a;y=b;z=c;w=d;}};
-Rva0047A6A9Row16::Rva0047A6A9Row16() {}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0047A6A9Row16::Rva0047A6A9Row16() {}
+
+// ?bfmeAnchorRva0047A6A9Row16Ctor absent-from-retail
+void *bfmeAnchorRva0047A6A9Row16Ctor(void *where)
+{
+	return ::new (where) Rva0047A6A9Row16();
+}
 struct ParticleMatrix {__forceinline ParticleMatrix() {} Rva0047A6A9Row16 r[3];void Make_Identity(){
  r[0].Set(1.0f,0.0f,0.0f,0.0f);
  r[1].Set(0.0f,1.0f,0.0f,0.0f);

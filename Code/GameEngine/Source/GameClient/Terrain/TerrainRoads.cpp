@@ -133,9 +133,17 @@ void TerrainRoadType::friend_setTexture(AsciiString texture)
     slot = texture;
 }
 
-AsciiString TerrainRoadType::getDamageToOCLString( BodyDamageType state, Int index )
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AsciiString TerrainRoadType::getDamageToOCLString( BodyDamageType state, Int index )
 {
 	return m_damageToOCLString[ state ][ index ];
+}
+
+// ?bfmeAnchorTerrainRoadTypegetDamageToOCLString absent-from-retail
+AsciiString bfmeAnchorTerrainRoadTypegetDamageToOCLString(TerrainRoadType *p, BodyDamageType state, Int index)
+{
+	return p->getDamageToOCLString(state, index);
 }
 
 void TerrainRoadType::friend_setDamageToOCLString( BodyDamageType state, Int index, AsciiString str )

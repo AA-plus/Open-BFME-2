@@ -6,6 +6,7 @@
 // rowed process 0x141C40, scope-end dtor pushing to 0xDB4254.
 // 197-vs-201B 4B delta = EH + unordered-max/div shape under /arch:SSE /G7.
 // Layout 0x28 TU-local matching canonical (actual header included).
+inline void *operator new(unsigned int, void *p) { return p; }
 #include "rendobj.h"
 #include "aabox.h"
 #include "scene.h"
@@ -168,10 +169,18 @@ void BfmeSceneVector::Set_Level(unsigned int level)
 // Target [142900,14295C)92B initializes the array, count and level mask,
 // passes six zero floats to the matched rescale, then sets level zero.
 // These newly rowed callees resolve the earlier missing-callee blocker.
-BfmeSceneVector::BfmeSceneVector()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmeSceneVector::BfmeSceneVector()
 	: vector(0), vector_max(0), level_mask(0)
 {
 	Rva00141F90Bounds initialBounds = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 	rva00141F90(initialBounds);
 	Set_Level(0);
+}
+
+// ?bfmeAnchorBfmeSceneVectorCtor absent-from-retail
+void *bfmeAnchorBfmeSceneVectorCtor(void *where)
+{
+	return ::new (where) BfmeSceneVector();
 }

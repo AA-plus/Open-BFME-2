@@ -36,6 +36,14 @@ private:
 	Rva005961D6Buffer m_buffer; // +0x98
 };
 
-Rva005961D6::~Rva005961D6()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005961D6::~Rva005961D6()
 {
+}
+
+// ?bfmeAnchorRva005961D6Dtor absent-from-retail
+void bfmeAnchorRva005961D6Dtor(Rva005961D6 *p)
+{
+	p->Rva005961D6::~Rva005961D6();
 }

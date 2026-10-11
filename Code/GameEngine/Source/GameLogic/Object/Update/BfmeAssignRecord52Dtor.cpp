@@ -29,6 +29,14 @@ private:
 	char m_pad18[28];
 };
 
-BfmeAssignRecord52::~BfmeAssignRecord52()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmeAssignRecord52::~BfmeAssignRecord52()
 {
+}
+
+// ?bfmeAnchorBfmeAssignRecord52Dtor absent-from-retail
+void bfmeAnchorBfmeAssignRecord52Dtor(BfmeAssignRecord52 *p)
+{
+	p->BfmeAssignRecord52::~BfmeAssignRecord52();
 }

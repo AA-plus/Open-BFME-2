@@ -43,6 +43,14 @@ struct BfmeStringTailRecord180
 // ??1BfmeStringTailRecord180@@QAE@XZ @0x000C0DA3 53B. Empty body: reverse
 // member teardown (values10, then text); words and heads are trivially
 // destructible and emit no calls.
-BfmeStringTailRecord180::~BfmeStringTailRecord180()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmeStringTailRecord180::~BfmeStringTailRecord180()
 {
+}
+
+// ?bfmeAnchorBfmeStringTailRecord180Dtor absent-from-retail
+void bfmeAnchorBfmeStringTailRecord180Dtor(BfmeStringTailRecord180 *p)
+{
+	p->BfmeStringTailRecord180::~BfmeStringTailRecord180();
 }

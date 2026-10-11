@@ -1,6 +1,7 @@
 // cl: /DNDEBUG /MD
 // ??0Rva004FAC6B@@QAE@XZ @0x004FAC6B 21B: honest ctor with member at +4.
 // Evidence: calls rowed Rva00330757Member ctor 0x00330757 for member at +4; installs vtable 0x008633C0; called by derived ctor 0x004FADF4 which overrides vtable to 0x008633FC; prev row is dtor in same subsystem.
+inline void *operator new(unsigned int, void *p) { return p; }
 class Rva00330757Member
 {
 public:
@@ -35,8 +36,16 @@ public:
 	virtual ~Rva00578C2E() {}
 };
 
-Rva00578C2E::Rva00578C2E()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00578C2E::Rva00578C2E()
 {
+}
+
+// ?bfmeAnchorRva00578C2ECtor absent-from-retail
+void *bfmeAnchorRva00578C2ECtor(void *where)
+{
+	return ::new (where) Rva00578C2E();
 }
 
 // Placeholder virtuals in this unit's vftables: in retail, every vftable that holds

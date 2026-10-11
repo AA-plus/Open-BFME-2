@@ -105,7 +105,15 @@ Rva0057BCEC::~Rva0057BCEC()
 struct BfmeE8 { void *p; unsigned char flag; char pad[3]; };
 #include "../../Include/Common/Rva005D639A.h"
 
-Rva005D639A::~Rva005D639A() {}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005D639A::~Rva005D639A() {}
+
+// ?bfmeAnchorRva005D639ADtor absent-from-retail
+void bfmeAnchorRva005D639ADtor(Rva005D639A *p)
+{
+	p->Rva005D639A::~Rva005D639A();
+}
 
 class Rva004FCA9C
 {

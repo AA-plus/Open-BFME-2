@@ -41,6 +41,14 @@ private:
 	int m_x;
 };
 
-Rva004FAC21::~Rva004FAC21()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva004FAC21::~Rva004FAC21()
 {
+}
+
+// ?bfmeAnchorRva004FAC21Dtor absent-from-retail
+void bfmeAnchorRva004FAC21Dtor(Rva004FAC21 *p)
+{
+	p->Rva004FAC21::~Rva004FAC21();
 }

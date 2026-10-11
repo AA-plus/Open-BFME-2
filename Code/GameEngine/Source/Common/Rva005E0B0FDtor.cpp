@@ -8,6 +8,7 @@
 // 0x0007DEEF then two UnicodeStrings at +0xC +0x10 via 0x00036E70. Precedent
 // Rva005F918DDtor for holder plus Release shape and Rva005D3AF2Method.
 // Evidence: deleting dtors at 0x005CB301 0x005CB31D 0x005CB337 call it.
+inline void *operator new(unsigned int, void *p) { return p; }
 #include "unicode_string.h"
 
 class Rva005CB260
@@ -42,8 +43,16 @@ public:
 };
 // ??0Rva0086E330Base@@QAE@XZ @0x005E1871 9B: the default constructor, storing the
 // class's own vtable (VA 0x00C6E330) and returning this.
-Rva0086E330Base::Rva0086E330Base()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0086E330Base::Rva0086E330Base()
 {
+}
+
+// ?bfmeAnchorRva0086E330BaseCtor absent-from-retail
+void *bfmeAnchorRva0086E330BaseCtor(void *where)
+{
+	return ::new (where) Rva0086E330Base();
 }
 
 class Rva005E0B0F : public Rva0086E330Base

@@ -3,6 +3,7 @@
 // Ctor storing vtable 0x00879EB4 at +0, zeroing +4, copying 16 bytes from
 // arg+0 to this+8 via 4x movsd. Evidence: caller 0x005FAC76; vtable DIR32
 // filled by gate; neighbours use /O1 /MD.
+inline void *operator new(unsigned int, void *p) { return p; }
 #include "BattlePromptCallbackPayloadView.h"
 struct Rva005FAB16 {
     virtual void _vf() {}
@@ -23,7 +24,15 @@ struct Rva005F4C52 {
     Payload005FAB16 m8;
     Rva005F4C52(const Payload005FAB16 &o);
 };
-Rva005F4C52::Rva005F4C52(const Payload005FAB16 &o) : m4(0), m8(o) {}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005F4C52::Rva005F4C52(const Payload005FAB16 &o) : m4(0), m8(o) {}
+
+// ?bfmeAnchorRva005F4C52Ctor absent-from-retail
+void *bfmeAnchorRva005F4C52Ctor(void *where, const Payload005FAB16 &o)
+{
+	return ::new (where) Rva005F4C52(o);
+}
 
 struct Rva005F4C70 {
     virtual void _vf() {}
@@ -31,4 +40,12 @@ struct Rva005F4C70 {
     Payload005FAB16 m8;
     Rva005F4C70(const Payload005FAB16 &o);
 };
-Rva005F4C70::Rva005F4C70(const Payload005FAB16 &o) : m4(0), m8(o) {}
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005F4C70::Rva005F4C70(const Payload005FAB16 &o) : m4(0), m8(o) {}
+
+// ?bfmeAnchorRva005F4C70Ctor absent-from-retail
+void *bfmeAnchorRva005F4C70Ctor(void *where, const Payload005FAB16 &o)
+{
+	return ::new (where) Rva005F4C70(o);
+}

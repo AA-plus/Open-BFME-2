@@ -38,7 +38,9 @@ private:
 	NetGameCommandMsgArg *m_argList; // +0x28
 };
 
-NetGameCommandMsg::~NetGameCommandMsg()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline NetGameCommandMsg::~NetGameCommandMsg()
 {
 	NetGameCommandMsgArg *arg = m_argList;
 	while (arg != 0)
@@ -47,6 +49,12 @@ NetGameCommandMsg::~NetGameCommandMsg()
 		deleteInstance(arg);
 		arg = m_argList;
 	}
+}
+
+// ?bfmeAnchorNetGameCommandMsgDtor absent-from-retail
+void bfmeAnchorNetGameCommandMsgDtor(NetGameCommandMsg *p)
+{
+	p->NetGameCommandMsg::~NetGameCommandMsg();
 }
 
 

@@ -61,7 +61,9 @@ private:
 	char m_76[2];
 	Wrap78 m_w78;
 };
-Rva001F4C67::~Rva001F4C67()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva001F4C67::~Rva001F4C67()
 {
 	m_w3c.m_h.m_system->m_slot2->slot6(this);
 	if (m_w78.m_h.m_system) {
@@ -70,6 +72,12 @@ Rva001F4C67::~Rva001F4C67()
 		m_w78.m_h.m_system->destroy();
 	}
 	((Rva001F4882 *)TheParticleSystemManager)->rva001F4882((Node001F4882 *)this);
+}
+
+// ?bfmeAnchorRva001F4C67Dtor absent-from-retail
+void bfmeAnchorRva001F4C67Dtor(Rva001F4C67 *p)
+{
+	p->Rva001F4C67::~Rva001F4C67();
 }
 // ?Base001F4C67::~Base001F4C67 present-unmatched
 Base001F4C67::~Base001F4C67() {}

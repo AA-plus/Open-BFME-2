@@ -20,8 +20,16 @@ public:
 	virtual ~AIBasePenetrationTroopsTactic();
 };
 
-AIBasePenetrationTroopsTactic::~AIBasePenetrationTroopsTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIBasePenetrationTroopsTactic::~AIBasePenetrationTroopsTactic()
 {
+}
+
+// ?bfmeAnchorAIBasePenetrationTroopsTacticDtor absent-from-retail
+void bfmeAnchorAIBasePenetrationTroopsTacticDtor(AIBasePenetrationTroopsTactic *p)
+{
+	p->AIBasePenetrationTroopsTactic::~AIBasePenetrationTroopsTactic();
 }
 
 class AISimpleAttackTactic : public AITacticOffensive
@@ -40,6 +48,14 @@ public:
 	virtual ~AITacticSiege();
 };
 
-AITacticSiege::~AITacticSiege()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AITacticSiege::~AITacticSiege()
 {
+}
+
+// ?bfmeAnchorAITacticSiegeDtor absent-from-retail
+void bfmeAnchorAITacticSiegeDtor(AITacticSiege *p)
+{
+	p->AITacticSiege::~AITacticSiege();
 }

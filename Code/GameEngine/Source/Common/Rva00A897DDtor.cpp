@@ -44,8 +44,16 @@ private:
 	Rva00041004 m_lock38;	// +0x38
 };
 
-Rva00A897D::~Rva00A897D()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00A897D::~Rva00A897D()
 {
+}
+
+// ?bfmeAnchorRva00A897DDtor absent-from-retail
+void bfmeAnchorRva00A897DDtor(Rva00A897D *p)
+{
+	p->Rva00A897D::~Rva00A897D();
 }
 
 // ??0Rva000A8903AudioDevice@@QAE@PAX@Z, retail 0x000A8903..0x000A897D (122

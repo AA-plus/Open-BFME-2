@@ -32,7 +32,9 @@ private:
 	Rva005AA55DData *m_data;
 };
 
-AIFlankAttackTactic::~AIFlankAttackTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIFlankAttackTactic::~AIFlankAttackTactic()
 {
 	Rva005AA55DData *data = m_data;
 	if (data != 0) {
@@ -40,4 +42,10 @@ AIFlankAttackTactic::~AIFlankAttackTactic()
 			free(data->m_buf);
 		delete data;
 	}
+}
+
+// ?bfmeAnchorAIFlankAttackTacticDtor absent-from-retail
+void bfmeAnchorAIFlankAttackTacticDtor(AIFlankAttackTactic *p)
+{
+	p->AIFlankAttackTactic::~AIFlankAttackTactic();
 }

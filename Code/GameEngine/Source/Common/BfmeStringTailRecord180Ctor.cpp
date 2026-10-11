@@ -32,6 +32,14 @@ private:
 	Rva0042526Member m_head68;
 };
 
-BfmeStringTailRecord180::BfmeStringTailRecord180()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmeStringTailRecord180::BfmeStringTailRecord180()
 {
+}
+
+// ?bfmeAnchorBfmeStringTailRecord180Ctor absent-from-retail
+void *bfmeAnchorBfmeStringTailRecord180Ctor(void *where)
+{
+	return ::new (where) BfmeStringTailRecord180();
 }

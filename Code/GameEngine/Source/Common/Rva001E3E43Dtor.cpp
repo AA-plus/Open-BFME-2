@@ -52,9 +52,17 @@ extern int g_Va00DFDC64;
 // g_Va00DFDC64: matched references place it at VA 0xdfdc64 (zero-filled .bss).
 int g_Va00DFDC64;
 
-Rva001E3E43::~Rva001E3E43()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva001E3E43::~Rva001E3E43()
 {
 	--g_Va00DFDC64;
+}
+
+// ?bfmeAnchorRva001E3E43Dtor absent-from-retail
+void bfmeAnchorRva001E3E43Dtor(Rva001E3E43 *p)
+{
+	p->Rva001E3E43::~Rva001E3E43();
 }
 
 Rva001E3E43 &Rva001E3E43::operator=(const Rva001E3E43 &rhs)

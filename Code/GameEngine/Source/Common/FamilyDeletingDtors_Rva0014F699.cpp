@@ -65,6 +65,14 @@ private:
 };
 
 // ??1Rva0014F699@@UAE@XZ present-unmatched
-Rva0014F699::~Rva0014F699()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva0014F699::~Rva0014F699()
 {
+}
+
+// ?bfmeAnchorRva0014F699Dtor absent-from-retail
+void bfmeAnchorRva0014F699Dtor(Rva0014F699 *p)
+{
+	p->Rva0014F699::~Rva0014F699();
 }

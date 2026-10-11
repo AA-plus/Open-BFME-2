@@ -50,8 +50,16 @@ public:
 	virtual ~Rva005E54AE();
 };
 
-Rva005E54AE::~Rva005E54AE()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva005E54AE::~Rva005E54AE()
 {
+}
+
+// ?bfmeAnchorRva005E54AEDtor absent-from-retail
+void bfmeAnchorRva005E54AEDtor(Rva005E54AE *p)
+{
+	p->Rva005E54AE::~Rva005E54AE();
 }
 
 // ??1Rva005FB204@@UAE@XZ @0x005FB204 11B: vtable VA 0xc79ef0, then ~Rva006003FC

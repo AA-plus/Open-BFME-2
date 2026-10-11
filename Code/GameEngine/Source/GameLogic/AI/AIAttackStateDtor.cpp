@@ -68,7 +68,9 @@ private:
 	unsigned int m_attackMachineType;
 };
 
-AIAttackState::~AIAttackState()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIAttackState::~AIAttackState()
 {
 	if (m_attackMachine)
 	{
@@ -76,4 +78,10 @@ AIAttackState::~AIAttackState()
 		operator delete(m_attackMachine ? m_attackMachine->destroy(0) : 0);
 		m_attackMachine = 0;
 	}
+}
+
+// ?bfmeAnchorAIAttackStateDtor absent-from-retail
+void bfmeAnchorAIAttackStateDtor(AIAttackState *p)
+{
+	p->AIAttackState::~AIAttackState();
 }

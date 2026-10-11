@@ -7,5 +7,13 @@
 // ??_GBaseUpgradeModuleData@@UAEPAXI@Z @0x004B3769
 class BaseUpgradeModuleData { public: __declspec(noinline) virtual ~BaseUpgradeModuleData(); private: int m_famgen;
   friend void famgenDelete(BaseUpgradeModuleData *p); };
-BaseUpgradeModuleData::~BaseUpgradeModuleData() { m_famgen = 0; }
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BaseUpgradeModuleData::~BaseUpgradeModuleData() { m_famgen = 0; }
+
+// ?bfmeAnchorBaseUpgradeModuleDataDtor absent-from-retail
+void bfmeAnchorBaseUpgradeModuleDataDtor(BaseUpgradeModuleData *p)
+{
+	p->BaseUpgradeModuleData::~BaseUpgradeModuleData();
+}
 void famgenDelete(BaseUpgradeModuleData *p) { delete p; }

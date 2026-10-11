@@ -82,9 +82,17 @@ private:
 	unsigned int m_numElements;		// +0x10
 };
 
-Rva003A393A::~Rva003A393A()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva003A393A::~Rva003A393A()
 {
 	clear();
+}
+
+// ?bfmeAnchorRva003A393ADtor absent-from-retail
+void bfmeAnchorRva003A393ADtor(Rva003A393A *p)
+{
+	p->Rva003A393A::~Rva003A393A();
 }
 
 struct Rva002EE9B7Node

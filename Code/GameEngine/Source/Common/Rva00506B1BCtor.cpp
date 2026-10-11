@@ -10,6 +10,7 @@
 // ??_GRva00506B1B@@UAEPAXI@Z @0x00506B3B 29B: vtable slot 0; the dtor is the
 // inline vptr reset (0x00506B28 is its out-of-line copy), then delete.
 
+inline void *operator new(unsigned int, void *p) { return p; }
 class Rva00506B1B
 {
 public:
@@ -20,9 +21,17 @@ public:
 	bool m_04;
 };
 
-Rva00506B1B::Rva00506B1B()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00506B1B::Rva00506B1B()
 {
 	m_04 = false;
+}
+
+// ?bfmeAnchorRva00506B1BCtor absent-from-retail
+void *bfmeAnchorRva00506B1BCtor(void *where)
+{
+	return ::new (where) Rva00506B1B();
 }
 
 void Rva00506B1B::rva00506B2F()

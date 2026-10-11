@@ -318,12 +318,20 @@ inline void GameSlot::unAccept()
 }
 
 // ?setMapAvailability@GameSlot@@QAEX_N@Z
-void GameSlot::setMapAvailability(Bool hasMap)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void GameSlot::setMapAvailability(Bool hasMap)
 {
     if (isHuman())
     {
         m_hasMap = hasMap;
     }
+}
+
+// ?bfmeAnchorGameSlotsetMapAvailability absent-from-retail
+void bfmeAnchorGameSlotsetMapAvailability(GameSlot *p, Bool hasMap)
+{
+	p->setMapAvailability(hasMap);
 }
 
 // ?isSkirmish@GameInfo@@UAE_NXZ

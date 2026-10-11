@@ -44,10 +44,18 @@ private:
     Rva00340BDCMember *m_ptr4C;
 };
 
-Rva00340BDC::~Rva00340BDC()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Rva00340BDC::~Rva00340BDC()
 {
     if (m_ptr4C != 0) {
         ::operator delete(m_ptr4C->scalarDeletingDestructor(0));
         m_ptr4C = 0;
     }
+}
+
+// ?bfmeAnchorRva00340BDCDtor absent-from-retail
+void bfmeAnchorRva00340BDCDtor(Rva00340BDC *p)
+{
+	p->Rva00340BDC::~Rva00340BDC();
 }

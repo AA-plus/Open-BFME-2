@@ -20,8 +20,16 @@ public:
 	virtual ~AISiegeGatesTactic();
 };
 
-AISiegeGatesTactic::~AISiegeGatesTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AISiegeGatesTactic::~AISiegeGatesTactic()
 {
+}
+
+// ?bfmeAnchorAISiegeGatesTacticDtor absent-from-retail
+void bfmeAnchorAISiegeGatesTacticDtor(AISiegeGatesTactic *p)
+{
+	p->AISiegeGatesTactic::~AISiegeGatesTactic();
 }
 
 class AISimpleSiegeTactic : public AITacticSiege
@@ -30,6 +38,14 @@ public:
 	virtual ~AISimpleSiegeTactic();
 };
 
-AISimpleSiegeTactic::~AISimpleSiegeTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AISimpleSiegeTactic::~AISimpleSiegeTactic()
 {
+}
+
+// ?bfmeAnchorAISimpleSiegeTacticDtor absent-from-retail
+void bfmeAnchorAISimpleSiegeTacticDtor(AISimpleSiegeTactic *p)
+{
+	p->AISimpleSiegeTactic::~AISimpleSiegeTactic();
 }

@@ -32,6 +32,7 @@
 // N = normal becomes three separate mov/mov pairs. Dropping that operator (as a
 // bare three-float struct does) produces push esi/push edi and three `rep movsd`
 // instead -- 25 bytes, not retail's 32.
+inline void *operator new(unsigned int, void *p) { return p; }
 class Vector3
 {
 public:
@@ -61,8 +62,16 @@ public:
 // and MSVC 7.1 does not emit an inline member this TU never calls, so the body
 // would be missing from the object and the byte gate would have nothing to
 // compare. The emitted code is the same either way.
-PlaneClass::PlaneClass(const Vector3 &normal, float dist)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline PlaneClass::PlaneClass(const Vector3 &normal, float dist)
 {
 	N = normal;
 	D = dist;
+}
+
+// ?bfmeAnchorPlaneClassCtor absent-from-retail
+void *bfmeAnchorPlaneClassCtor(void *where, const Vector3 &normal, float dist)
+{
+	return ::new (where) PlaneClass(normal, dist);
 }

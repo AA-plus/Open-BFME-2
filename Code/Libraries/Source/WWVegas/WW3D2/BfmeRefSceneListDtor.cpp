@@ -3,6 +3,7 @@
 // Dtor drains the list via the rowed Release_Head, then the rowed generic
 // base dtor runs. Single-inheritance chain so one vtable store lands.
 
+inline void *operator new(unsigned int, void *p) { return p; }
 class MultiListObjectClass;
 class RenderObjClass;
 
@@ -48,8 +49,16 @@ public:
 // ??0BfmeRefSceneList@@QAE@XZ, retail 0x0006E518 (18B): the rowed
 // GenericMultiListClass constructor 0x00065815 (RefMultiListClass's own is
 // empty) then vtable 0x00BC6260, the one the destructor below restores.
-BfmeRefSceneList::BfmeRefSceneList()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmeRefSceneList::BfmeRefSceneList()
 {
+}
+
+// ?bfmeAnchorBfmeRefSceneListCtor absent-from-retail
+void *bfmeAnchorBfmeRefSceneListCtor(void *where)
+{
+	return ::new (where) BfmeRefSceneList();
 }
 
 BfmeRefSceneList::~BfmeRefSceneList()

@@ -16,6 +16,7 @@
 // +0x2C and +0x28 (pinned Gen_uw_000ad6f4 dtor 0x000AD6F4) and +0x24
 // (0x0055076F). Class identity is address-derived.
 
+inline void *operator new(unsigned int, void *p) { return p; }
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 
@@ -77,8 +78,16 @@ public:
 };
 // ??0VBase00C6EE28@@QAE@XZ @0x002E701A 9B: the default constructor, storing the
 // class's own vtable (VA 0x00C6EE28) and returning this.
-VBase00C6EE28::VBase00C6EE28()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline VBase00C6EE28::VBase00C6EE28()
 {
+}
+
+// ?bfmeAnchorVBase00C6EE28Ctor absent-from-retail
+void *bfmeAnchorVBase00C6EE28Ctor(void *where)
+{
+	return ::new (where) VBase00C6EE28();
 }
 
 class BfmeCtorVirtualBase001B3A20
