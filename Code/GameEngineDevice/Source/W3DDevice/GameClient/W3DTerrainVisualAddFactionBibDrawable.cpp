@@ -89,6 +89,10 @@ public:
 	virtual ~GeometryInfo();
 	Real getMajorRadius() const { return m_majorRadius; }
 	Real getMinorRadius() const { return m_minorRadius; }
+	// LINK: same-body helpers under TU-unique names (identical inlined bytes);
+	// this TU's getters lose to the first-in-order copies, so rebind the calls.
+	Real bfme_bib_major() const { return m_majorRadius; }
+	Real bfme_bib_minor() const { return m_minorRadius; }
 
 private:
 	char m_pad04[0x24 - 0x04];
@@ -102,6 +106,8 @@ class ThingTemplate
 public:
 	Real getFactoryExitWidth() const { return m_factoryExitWidth; }
 	Real getFactoryExtraBibWidth() const { return m_factoryExtraBibWidth; }
+	Real bfme_bib_exit_width() const { return m_factoryExitWidth; }
+	Real bfme_bib_extra_width() const { return m_factoryExtraBibWidth; }
 	const GeometryInfo &getTemplateGeometryInfo() const { return m_geometryInfo; }
 
 private:
@@ -151,11 +157,11 @@ void W3DTerrainVisual::addFactionBibDrawable(Drawable *factionBuilding, Bool hig
 		Vector3 corners[4];
 		Coord3DSet pos;
 		pos.set(0, 0, 0);
-		Real exitWidth = factionBuilding->getTemplate()->getFactoryExitWidth();
-		Real extraWidth = factionBuilding->getTemplate()->getFactoryExtraBibWidth() + extra;
+		Real exitWidth = factionBuilding->getTemplate()->bfme_bib_exit_width();
+		Real extraWidth = factionBuilding->getTemplate()->bfme_bib_extra_width() + extra;
 		const GeometryInfo info = factionBuilding->getTemplate()->getTemplateGeometryInfo();
-		Real sizeX = info.getMajorRadius();
-		Real sizeY = info.getMinorRadius();
+		Real sizeX = info.bfme_bib_major();
+		Real sizeY = info.bfme_bib_minor();
 		corners[0].Set(pos.x, pos.y, pos.z);
 		corners[0].X -= sizeX + extraWidth;
 		corners[0].Y -= sizeY + extraWidth;
