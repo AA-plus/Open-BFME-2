@@ -20,7 +20,12 @@ extern const StaticNameKey TheKey_InitialCameraPosition;
 // The erased find ABI is key-only and shared with MapCache; this view is
 // restricted to the links/key and the 12 bytes copied by the waypoint caller.
 struct MapCacheNode { int links[4]; AsciiString key; Coord3D coordinate; };
-class MapCache { public: MapCacheNode *bfmeFind(const AsciiString &); };
+// The rowed string-pair tree finder only consumes links and the string key.
+// Its returned node prefix is also valid for the coordinate-valued tree.
+
+typedef _STL::pair<const AsciiString, AsciiString> AsciiPair;
+typedef _STL::_Rb_tree<AsciiString, AsciiPair, _STL::_Select1st<AsciiPair>, _STL::less<AsciiString>, _STL::allocator<AsciiPair> > AsciiTree;
+typedef _STL::map<AsciiString, AsciiString> AsciiFindMap;
 
 struct TreeHintPayload003012F0 { unsigned int a,b,c; };
 typedef _STL::pair<const AsciiString,TreeHintPayload003012F0> PayloadPair;
@@ -60,13 +65,13 @@ void WaypointMap::update()
     clear();
     AsciiString startingCamName = TheNameKeyGenerator->keyToName(
         reinterpret_cast<Rva00148F5ECache *>(const_cast<StaticNameKey *>(&TheKey_InitialCameraPosition))->get());
-    MapCacheNode *node=reinterpret_cast<MapCache *>(m_waypoints)->bfmeFind(startingCamName);
+    MapCacheNode *node=reinterpret_cast<MapCacheNode *>(reinterpret_cast<const AsciiFindMap *>(m_waypoints)->find(startingCamName)._M_node);
     if (node!=*reinterpret_cast<MapCacheNode **>(m_waypoints))
         copyWaypoint(*this,startingCamName,*node);
     numStartSpots=0;
     for (int i=0;i<8;++i) {
         startingCamName.format("Player_%d_Start",i+1);
-        node=reinterpret_cast<MapCache *>(m_waypoints)->bfmeFind(startingCamName);
+        node=reinterpret_cast<MapCacheNode *>(reinterpret_cast<const AsciiFindMap *>(m_waypoints)->find(startingCamName)._M_node);
         if (node==*reinterpret_cast<MapCacheNode **>(m_waypoints)) break;
         copyWaypoint(*this,startingCamName,*node);
         ++numStartSpots;

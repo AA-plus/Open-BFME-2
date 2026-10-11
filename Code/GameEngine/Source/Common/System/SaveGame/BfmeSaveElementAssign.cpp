@@ -3,8 +3,7 @@
 // Copy-assign of the 0x1AC-byte save element: scalars/flags field-by-field,
 // UnicodeString at +0x30 and AsciiStrings at +0x34/+0x1A8 via shared
 // AsciiString/UnicodeString operator= (inline set 0x37150/0x366F0), 0x140-byte
-// member at +0x64 via pinned 0x00409359 (CreateAHeroData assign stashed 0.97,
-// pinned as ?Use@Rva005B5C02Entry@@QAEXPAX@Z; declared as pinned spelling),
+// member at +0x64 via the rowed CreateAHeroData assignment at 0x00409359,
 // byte at +0x1A4, return *this. No self-check in retail. Evidence: layout from
 // SaveGameInfoCopyBFME2.cpp (8x0x1AC at +4); base of Rva00382398 (caller
 // 0x003824A5) and GameInfo prefix (caller 0x00447B58); callees all rowed/pinned.
@@ -13,10 +12,11 @@
 
 struct Rva005B5C02Entry
 {
-	void Use(void *s);
 	unsigned int _pad[0x50];
 };
 typedef char RvaEntrySizeCheck[sizeof(Rva005B5C02Entry) == 0x140 ? 1 : -1];
+
+class CreateAHeroData { public: CreateAHeroData &operator=(const CreateAHeroData &); };
 
 class GameSlot {
 public:
@@ -82,7 +82,7 @@ GameSlot &GameSlot::rva002DBAB9(const GameSlot &o)
 	word58 = o.word58;
 	word5C = o.word5C;
 	flag60 = o.flag60;
-	hero64.Use((void *)&o.hero64);
+	*reinterpret_cast<CreateAHeroData *>(&hero64) = *reinterpret_cast<const CreateAHeroData *>(&o.hero64);
 	flag1A4 = o.flag1A4;
 	text1A8 = o.text1A8;
 	return *this;

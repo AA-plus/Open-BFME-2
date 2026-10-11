@@ -19,7 +19,6 @@ public:
 struct Rva002BFF5AData { char unknown[0x10]; int key; };
 class Rva0035C95FView {
 public:
-    const Rva002BFF5AData *rva0035C95F() const;
     void *head;
 };
 struct Rva002BFF5AEntry { char unknown[8]; Rva0035C95FView version; };
@@ -33,13 +32,18 @@ private:
     char unknown[0xac];
     Rva000427195 table;
 };
+// The existing OVERRIDE<LocomotorTemplate> provider follows the same
+// one-pointer override chain before this caller reads the key at +0x10.
+class LocomotorTemplate;
+template<class T> class OVERRIDE {public:OVERRIDE():head(0) {} const T *head;const T *operator->()const;};
+
 Rva002BFF5AEntry *Rva002BFF5A::rva002BFF5A(int key)
 {
     Rva000411084 it;
     table.first(&it);
     while (it.current) {
         Rva002BFF5ANode *node = static_cast<Rva002BFF5ANode *>(it.current);
-        if (node->value->version.rva0035C95F()->key == key)
+        if (reinterpret_cast<const Rva002BFF5AData *>(reinterpret_cast<OVERRIDE<LocomotorTemplate> *>(&node->value->version)->operator->())->key == key)
             return node->value;
         it.next();
     }
@@ -47,8 +51,6 @@ Rva002BFF5AEntry *Rva002BFF5A::rva002BFF5A(int key)
 }
 
 // Complete 0x24-byte target view from the owned 166B constructor unit.
-class LocomotorTemplate;
-template<class T> class OVERRIDE {public:OVERRIDE():head(0) {} const T *head;const T *operator->()const;};
 struct Rva00539926Base {unsigned references;Rva00539926Base():references(0) {} virtual ~Rva00539926Base();};
 class Rva003FA835 : public Rva00539926Base
 {
