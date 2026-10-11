@@ -44,6 +44,16 @@ namespace _STL { template<> basic_string<char>::basic_string(const char*, const 
 // 22/26): the rowed 63B copy in stlport_narrow_string_base_dtor.cpp serves the link.
 template <> _STL::_String_base<char, _STL::allocator<char> >::~_String_base();
 #include <locale>
+// The complete native float scanners are owned by the read_float units
+// (F850 narrow;10420 wide). Keep this unit's generic copies out of the link.
+namespace _STL {
+template <> bool _M_read_float<istreambuf_iterator<char, char_traits<char> >, char>(
+    string &, istreambuf_iterator<char, char_traits<char> > &,
+    istreambuf_iterator<char, char_traits<char> > &, ios_base &, char *);
+template <> bool _M_read_float<istreambuf_iterator<wchar_t, char_traits<wchar_t> >, wchar_t>(
+    string &, istreambuf_iterator<wchar_t, char_traits<wchar_t> > &,
+    istreambuf_iterator<wchar_t, char_traits<wchar_t> > &, ios_base &, wchar_t *);
+}
 // The wide __get_integer<unsigned short/long/unsigned long> instances are rowed at
 // 0x0000AFA0 and its siblings and emitted by stlport_wide_get_integer_{uint16,long,
 // ulong}.cpp; declaring their instantiations keeps this unit's own copies, which

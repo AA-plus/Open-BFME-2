@@ -2,6 +2,13 @@
 // stlport
 
 #include <locale>
+// The complete native float scanners are owned by the read_float units
+// (F850 narrow;10420 wide). Keep this unit's generic copies out of the link.
+namespace _STL {
+template <> bool _M_read_float<istreambuf_iterator<wchar_t, char_traits<wchar_t> >, wchar_t>(
+    string &, istreambuf_iterator<wchar_t, char_traits<wchar_t> > &,
+    istreambuf_iterator<wchar_t, char_traits<wchar_t> > &, ios_base &, wchar_t *);
+}
 // basic_string<char>::reserve is retail's 116-byte body at 0x0000C390, owned by
 // stlport_narrow_string_reserve.cpp; this unit's header copy is not retail's and
 // came before it in link order, so only declare its instantiation here.
