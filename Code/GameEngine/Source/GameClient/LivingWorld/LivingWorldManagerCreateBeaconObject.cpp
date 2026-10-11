@@ -35,6 +35,12 @@
 #include "Common/BfmeAudioEventPrefix136.h"
 #include <vector>
 #include <hash_map>
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 // map<unsigned> internals otherwise instantiate the less<unsigned>::operator()
 // COMDAT (one byte shape per TU flags); an explicit specialization declaration
 // suppresses this TU's copy so callers bind retail's instead.

@@ -14,6 +14,12 @@
 #include <map>
 #include <algorithm>
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 // Native2DFCF6 releases trivial index storage with a conditional game free.
 // The generic header leaves cleanup out of line for this instantiation;
 // this specialization keeps the same trivial destruction and allocator

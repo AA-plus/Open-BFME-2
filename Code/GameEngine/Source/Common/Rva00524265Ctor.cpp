@@ -5,5 +5,11 @@
 // and allocator-base relocation twin of ObjectCreationList; no unique-byte gain.
 #include "ascii_string.h"
 #include <vector>
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 class Rva00524265 { public: Rva00524265(); ~Rva00524265(); private: _STL::vector<AsciiString> names; };
 Rva00524265::Rva00524265() {}

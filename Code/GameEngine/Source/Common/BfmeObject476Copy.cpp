@@ -119,6 +119,12 @@ protected:
 
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "../../../../reference/shims/moduledata/Common/Snapshot.h"
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 class S3Money : public Snapshot { public: int words[2];
  __forceinline S3Money(){words[0]=0;words[1]=0;}
  // ?S3Money::S3Money present-unmatched

@@ -4,6 +4,12 @@
 #include <vector>
 #include "ascii_string.h"
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 struct BfmeVectorRecord001B4A39 {
     AsciiString text0;
     _STL::vector<AsciiString> names0, names1, names2, names3, names4;

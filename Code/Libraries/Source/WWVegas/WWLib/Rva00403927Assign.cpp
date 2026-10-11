@@ -10,6 +10,12 @@
 #include "ascii_string.h"
 #include <vector>
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 class Rva00403927 {
 public:
 	Rva00403927(const Rva00403927 &other);

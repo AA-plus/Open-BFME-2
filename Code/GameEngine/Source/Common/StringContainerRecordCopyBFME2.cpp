@@ -66,6 +66,12 @@ BfmeContainerRecord002CF46E::BfmeContainerRecord002CF46E(const BfmeContainerReco
 template void _STL::_Construct<BfmeContainerRecord002CF46E,BfmeContainerRecord002CF46E>(BfmeContainerRecord002CF46E*,const BfmeContainerRecord002CF46E&);
 
 #include <vector>
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 struct BfmeAsciiScalarValue8 {
     AsciiString text; unsigned int value;
     BfmeAsciiScalarValue8(const BfmeAsciiScalarValue8 &o) : text(o.text), value(o.value) {}

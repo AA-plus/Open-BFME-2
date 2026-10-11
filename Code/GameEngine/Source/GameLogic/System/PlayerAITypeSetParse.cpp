@@ -16,6 +16,12 @@
 // retail-proven29B copy. No link-census credit is asserted without its index.
 #include "ascii_string.h"
 #include <vector>
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 class Rva0015334F { public: __declspec(nothrow) Rva0015334F(); public: __declspec(noinline) ~Rva0015334F(); private: AsciiString name; _STL::vector<AsciiString> libraries; };
 struct BfmeItemERE : Rva0015334F { __declspec(nothrow) __forceinline BfmeItemERE():Rva0015334F(){} BfmeItemERE(const BfmeItemERE&); ~BfmeItemERE(); };
 class BfmeVecERE {public:void bfmeResizeERE(unsigned count,BfmeItemERE item);};

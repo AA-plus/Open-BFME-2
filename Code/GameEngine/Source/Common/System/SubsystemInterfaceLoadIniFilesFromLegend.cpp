@@ -18,6 +18,12 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include "subsystem_interface.h"
 #include "Common/INI/INI.h"
 #include "ascii_string.h"
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 struct IniLoadFileList;
 class SubsystemLegend {public:IniLoadFileList *rva001B49C4(AsciiString);};
 extern SubsystemLegend *TheSubsystemLegend;

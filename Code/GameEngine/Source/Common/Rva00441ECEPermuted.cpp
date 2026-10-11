@@ -9,6 +9,12 @@
 #include <vector>
 #include <string.h>
 #include "ascii_string.h"
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 struct TargetRef00217D4C { void *vtable; int references; };
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C*);
 class Rva0043F103 {public: TargetRef00217D4C *rva0043F103(int);};

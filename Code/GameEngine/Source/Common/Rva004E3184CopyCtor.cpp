@@ -16,6 +16,12 @@
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 class Rva004E3184 : public Snapshot {
 public:
     virtual ~Rva004E3184();

@@ -11,6 +11,12 @@
 #include "ascii_string.h"
 #include "unicode_string.h"
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 // Complete retail record copy at 0x000BDF17.
 struct BfmeVectorRecord000BDF17 {
     _STL::vector<AsciiString> names; AsciiString text0, text1; unsigned int word14, word18, word1C, word20, word24, word28; unsigned char flag2C, flag2D; unsigned int word30, word34, word38; unsigned char flag3C;

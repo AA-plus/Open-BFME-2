@@ -20,6 +20,12 @@ extern "C" const void *const vtbl_00BBB554[];  // folded, 23 classes; via ??_7Bf
 
 #include "ascii_string.h"
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 struct Rva00B6CF1
 {
 	~Rva00B6CF1();

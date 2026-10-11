@@ -16,6 +16,12 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 extern "C" unsigned char *__cdecl _mbscpy(unsigned char *,const unsigned char *);
 #include "ascii_string.h"
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 // WorldBuilder10802C0 names SplitString/CreateAHeroHero.cpp1243;
 // target40952C169 has vectorAsciiString output and AsciiString input.
 static int SplitString(_STL::vector<AsciiString> &out, const AsciiString &text, const char *delimiters)

@@ -41,6 +41,12 @@ namespace _STL { void __cdecl free(void *block) throw(...); }
 #include "ascii_string.h"
 #include <vector>
 #include <list>
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 #undef free
 
 struct Rva00B9AC2 { char _pad[0x18]; };

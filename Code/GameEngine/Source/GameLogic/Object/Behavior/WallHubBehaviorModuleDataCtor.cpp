@@ -24,6 +24,12 @@ extern "C" const void *const vtbl_00C3FF98[];  // ??_7WallHubBehaviorModuleData@
 
 #include "ascii_string.h"
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 class UpdateModuleData
 {
 public:

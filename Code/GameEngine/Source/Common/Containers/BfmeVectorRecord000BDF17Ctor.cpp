@@ -6,6 +6,12 @@
 // String and vector headers use canonical existing ABI; EH state0 owns names.
 #include "ascii_string.h"
 #include <vector>
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 struct BfmeVectorRecord000BDF17 {
  _STL::vector<AsciiString>names;AsciiString text0,text1;
  float word14,word18;int word1C;float word20,word24,word28;

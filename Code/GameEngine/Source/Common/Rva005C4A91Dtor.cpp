@@ -7,6 +7,12 @@
 // no-argument vector push_back candidate as the structural queue suggests.
 #include "ascii_string.h"
 #include <vector>
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 class Rva004FA830 {
 public: virtual ~Rva004FA830();
 private: AsciiString m_s;

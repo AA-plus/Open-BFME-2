@@ -104,6 +104,12 @@ public:char bytes00[0x64];AsciiString name;
 class ThingFactory {public:const ThingTemplate*findTemplate(const AsciiString&);};
 extern ThingFactory*TheThingFactory;
 #include "../../Common/GameLogicObjectLookupView.h"
+
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 extern GameLogic*TheGameLogic;
 class Rva0040D8D6List {public:~Rva0040D8D6List();void*begin,*end,*limit;unsigned index;};
 class ArmySummary : public Snapshot, public Rva0040D8D6List {

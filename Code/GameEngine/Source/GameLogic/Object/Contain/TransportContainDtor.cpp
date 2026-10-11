@@ -25,6 +25,12 @@ class Object;
 
 #include "ascii_string.h"
 
+// A declaration-only specialization stops this TU emitting its own
+// vector<AsciiString> dtor COMDAT, so the call binds the kept copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 class B0 { public: virtual void b0(); virtual void rva004672B7(int a1, int a2) = 0; private: unsigned char m_pad[8]; };
 class B1 { public: virtual void b1(); };
 class B2 { public: virtual void b2(); private: unsigned char m_pad[12]; };
