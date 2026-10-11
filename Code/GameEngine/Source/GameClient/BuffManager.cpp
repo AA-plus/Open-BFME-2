@@ -125,7 +125,18 @@ struct BuffTypeConfig {
     unsigned int mask;
     int subtype;
 };
+// Retail's own nine records, transcribed from .data at RVA 0x009C0138
+// (file offset 0x009BED38): every subtype is 1 (sub type 2, BST_EDGE_GLOW, is
+// unsupported and the MakeGlowOutlineBuff path already asserts), and the
+// mask word is 0x40 for buff 2 and 0x44 for buff 7, 0 for the rest. `extern`
+// on the definition keeps the symbol external, which a plain const object at
+// namespace scope would not be.
 extern BuffTypeConfig g_00DC0138[9];
+BuffTypeConfig g_00DC0138[9] = {
+    { 0x00000000u, 1 }, { 0x00000000u, 1 }, { 0x00000040u, 1 },
+    { 0x00000000u, 1 }, { 0x00000000u, 1 }, { 0x00000000u, 1 },
+    { 0x00000000u, 1 }, { 0x00000044u, 1 }, { 0x00000000u, 1 },
+};
 class Rva0036276F {
 public:
     void rva0036276F();
