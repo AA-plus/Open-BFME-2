@@ -36,6 +36,19 @@ private:
 	ObjectID m_id;	// +0x74
 };
 
+class Rva0020479E
+{
+public:
+	Rva0020479E();	// 0x0020479E (SequentialScript ctor, rowed under this name)
+	unsigned char opaque[0x2C];
+};
+class BfmeRoomZC;
+class BfmeOwnZC
+{
+public:
+	void *bfmeCallZC(const BfmeRoomZC &name, void *outScope);	// 0x00357130 (rowed)
+};
+
 class SequentialScript
 {
 public:
@@ -78,8 +91,7 @@ class ScriptEngine
 public:
 	Object *getUnitNamed(Parameter *pUnitParm);
 	Team *getTeamNamed(AsciiString name, bool exact);
-	Script *rva00357130(const AsciiString &scriptName, AsciiString *outScope);
-	void appendSequentialScript(const SequentialScript *scriptToSequence);
+	void appendSequentialScript(const Rva0020479E *scriptToSequence);
 };
 extern ScriptEngine *TheScriptEngine;
 
@@ -98,19 +110,19 @@ void ScriptActions::doUnitStartSequentialScript(Parameter *pUnitParm, const Asci
 	}
 
 	AsciiString scope;
-	Script *script = TheScriptEngine->rva00357130(scriptName, &scope);
+	Script *script = (Script *)((BfmeOwnZC *)TheScriptEngine)->bfmeCallZC(*(const BfmeRoomZC *)&scriptName, &scope);
 	if (!script) {
 		return;
 	}
 
-	SequentialScript *seqScript = new SequentialScript;
+	SequentialScript *seqScript = (SequentialScript *)new Rva0020479E;
 	seqScript->m_objectID = obj->getID();
 	seqScript->m_bfmeScriptScope = scope;
 	seqScript->m_bfmeScriptName = scriptName;
 	seqScript->m_scriptToExecuteSequentially = script;
 	seqScript->m_timesToLoop = loopVal;
 
-	TheScriptEngine->appendSequentialScript(seqScript);
+	TheScriptEngine->appendSequentialScript((const Rva0020479E *)seqScript);
 
 	::delete seqScript;
 }
@@ -123,7 +135,7 @@ void ScriptActions::doTeamStartSequentialScript(const AsciiString &teamName, con
 	}
 
 	AsciiString scope;
-	Script *script = TheScriptEngine->rva00357130(scriptName, &scope);
+	Script *script = (Script *)((BfmeOwnZC *)TheScriptEngine)->bfmeCallZC(*(const BfmeRoomZC *)&scriptName, &scope);
 	if (!script) {
 		return;
 	}
@@ -137,14 +149,14 @@ void ScriptActions::doTeamStartSequentialScript(const AsciiString &teamName, con
 	team->getTeamAsAIGroup(theGroup);
 	theGroup->groupIdle(CMD_FROM_SCRIPT);
 
-	SequentialScript *seqScript = new SequentialScript;
+	SequentialScript *seqScript = (SequentialScript *)new Rva0020479E;
 	seqScript->m_teamToExecOn = team;
 	seqScript->m_bfmeScriptScope = scope;
 	seqScript->m_bfmeScriptName = scriptName;
 	seqScript->m_scriptToExecuteSequentially = script;
 	seqScript->m_timesToLoop = loopVal;
 
-	TheScriptEngine->appendSequentialScript(seqScript);
+	TheScriptEngine->appendSequentialScript((const Rva0020479E *)seqScript);
 
 	::delete seqScript;
 }
