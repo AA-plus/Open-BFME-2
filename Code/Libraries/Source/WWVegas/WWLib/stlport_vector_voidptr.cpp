@@ -15,8 +15,13 @@
 template <> void **_STL::vector<void *>::erase(void **first, void **last);
 // The allocating unit owns the verified fill-assign specialization.
 template <> void _STL::vector<void *>::_M_fill_assign(size_t n, void *const &value);
+// The allocating unit owns native 0x00029CA0's 525-byte fill insertion.
+// Preserve its provider rather than emitting this allocator's other copy.
+template <> void _STL::vector<void *>::_M_fill_insert(void **position, size_t n, void *const &value);
 // Likewise, the allocating unit owns native insertion at 0x000291D0.
 template <> void **_STL::vector<void *>::insert(void **position, void *const &value);
+// Its 38-byte default-value wrapper at 0x00029350 has the same owner.
+template <> void **_STL::vector<void *>::insert(void **position);
 // Suppress this unit's non-retail clear copy (row 57 family2-LK3) so the link
 // keeps the retail copy another unit provides.
 template <> void _STL::vector<void *>::clear();

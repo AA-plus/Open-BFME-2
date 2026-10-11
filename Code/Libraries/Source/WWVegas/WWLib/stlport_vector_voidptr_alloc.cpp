@@ -36,6 +36,10 @@ void *__cdecl operator new(unsigned int size, void *place);
 // Keep its declaration so explicit class instantiation cannot emit a
 // competing 84-byte definition. Call sites retain the same symbol and ABI.
 template <> void **_STL::vector<void *>::erase(void **first, void **last);
+// The 33-byte count-insert wrapper at 0x0002A2D0 is already owned by
+// stlport_vector_voidptr.cpp. Do not emit another copy with this unit's
+// allocating-template frame bookkeeping.
+template <> void _STL::vector<void *>::insert(void **position, size_t n, void *const &value);
 
 // Native _M_fill_assign calls the distinct 78-byte erase at 0x00027400,
 // already owned by vector<unsigned int>. Both views use 12-byte vector
