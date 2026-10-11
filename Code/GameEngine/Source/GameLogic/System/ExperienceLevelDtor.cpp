@@ -2,6 +2,12 @@
 // stlport
 #include <vector>
 #include "ascii_string.h"
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 void Rva00030830FreeAllocation(void *);
 // Retail2892ED owns a 12B record buffer, consumed at ExperienceLevel+3C.
 // Its stride8/string-tail cleanup uses the already rowed _Destroy body48CE25

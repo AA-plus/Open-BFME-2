@@ -7,6 +7,12 @@
 
 #include "ascii_string.h"
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
+
 
 class OpaqueRefCounted
 {

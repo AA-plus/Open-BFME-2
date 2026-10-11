@@ -14,6 +14,12 @@
 #include <vector>
 #include "ascii_string.h"
 #include "Common/INIException.h"
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+}
 class Rva0040394A {public:Rva0040394A();int m_id;float m_val;_STL::vector<AsciiString>m_strs;};
 class Rva004045B4 {public:void rva004045B4(int,float,const _STL::vector<AsciiString>*);};
 class INI {public:const char*getNextToken(const char*);const char*rva0002DFE2(const char*,bool*);float scanReal(const char*);float dup_002EE10(const char*);static void parseAsciiStringVectorAppend(INI*,void*,void*,const void*);};
