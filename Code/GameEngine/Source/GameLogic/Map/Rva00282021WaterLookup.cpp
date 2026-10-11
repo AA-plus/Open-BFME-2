@@ -39,7 +39,9 @@ struct Rva00282021Store {
 // bytes match this 8B cursor view; original template identity remains unknown.
 // Its range is already covered by ?dup_0007e394 in stlport_pod_hash_bodies.cpp,
 // so this byte-identical typed copy adds no row or recovered-byte credit.
-extern "C" __declspec(noinline) bool __cdecl rva0007E394CursorEqual(
+// Inline gives both existing copies select-any linkage; noinline preserves
+// the native out-of-line call and visible-body scheduling in this caller.
+extern "C" inline __declspec(noinline) bool __cdecl rva0007E394CursorEqual(
     const Rva00282021Cursor &a, const Rva00282021Cursor &b)
 {
     return a.store == b.store && a.index == b.index;
