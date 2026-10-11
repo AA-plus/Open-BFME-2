@@ -2,6 +2,15 @@
 // stlport
 // ??1FlammableUpdate@@UAE@XZ @0x0048C724 77B
 // Dtor restores four vptrs (+0 +0xC +0x10 +0x20) then calls rowed stopBurningSound at 0x0048C55E and pinned base ??1UpdateModule at 0x0024A797; DamageModuleInterface trivial so no call; vtable values DIR32 auto-patches. Model follows PoisonedBehaviorDtor.
+// codegen otherwise instantiates the min<unsigned> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy.
+namespace _STL {
+static inline const unsigned int &min(const unsigned int &a, const unsigned int &b)
+{
+    return b < a ? b : a;
+}
+}
 #include <list>
 #include "../../../../Include/GameLogic/ContainmentListView.h"
 #include <vector>

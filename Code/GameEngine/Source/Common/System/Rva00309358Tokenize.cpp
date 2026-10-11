@@ -19,6 +19,15 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
     return a < b ? b : a;
 }
 }
+// codegen otherwise instantiates the min<unsigned> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy.
+namespace _STL {
+static inline const unsigned int &min(const unsigned int &a, const unsigned int &b)
+{
+    return b < a ? b : a;
+}
+}
 #include <string>
 #include <vector>
 
