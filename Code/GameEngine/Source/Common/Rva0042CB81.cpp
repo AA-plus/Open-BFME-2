@@ -24,6 +24,7 @@ public:
 	void rva0042CC1B();
 	void rva0042CAEB(int y);
 	void rva0042CB57(int x);
+	void rva002B230F(int impl);
 private:
 	const void *m_vtable;
 	int m_04;
@@ -48,6 +49,15 @@ private:
 	unsigned char m_41;
 	unsigned char m_42;
 };
+
+// The complete 10-byte body at 002B230F is folded with the rowed listener
+// setters. Native 42C693 passes its new impl and the same +20 owner whose
+// conditional clear42CAEB tests the +4 slot below; this establishes the
+// receiver and storage relationship without claiming an original method name.
+void Rva0042CBB6::rva002B230F(int impl)
+{
+	m_04 = impl;
+}
 
 void Rva0042CBB6::rva0042CAEB(int y)
 {

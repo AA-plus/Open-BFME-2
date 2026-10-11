@@ -1,0 +1,9 @@
+# Verified BFME 1 donor update
+
+At BFME 2 base `d9296356f1a3a23b04dd80305bc9b510c7b454de`, the full gate passed with both preserved donor `575ba2b04743f190f069805fbdc59936123c45da` and official fetched master `9e3be919b10ae956e3c8a13995e0d62f2be1d016`. Both runs verified all 76,590 functions and 192 data rows, with every late identity, relocation, source-claim and no-op patch check green. The update recompiled 159 translation units and introduced no regression; the old baseline had no pre-existing failure.
+
+The donor checkout was clean before the update. The existing layout resolver maps the actual local game, reference, toolchain, baseline, vendor and ledger subtrees to `game`, `inputs/reference`, `inputs/toolchains`, `inputs/baselines`, `inputs/vendor` and `targets/game/reverse`. Those directories, every configured ZH include directory and the changed wwstring/AsciiString/GameInfo headers were checked on disk. No layout or header substitution was needed. The path tests passed 37 cases; two symlink cases were unavailable because this Windows process lacks symlink creation privilege.
+
+The updated BFME 1 scan reproduced 5,399 independently recovered boundaries. Ranked, near and the named lift lane (`--limit 1000`) were refreshed. The only servable exact donor remains the previously refused 232-byte inline-assembly filter; the near EH fragments still lack independent parent identities. Read-only clean-donor compilations of BoxSetTexture and DX8ErrorTranslator found no new bodies or pins. ZH source/toolchain/flags were unchanged; its compile pass retained 919 objects and reported 68 failures separately, then regenerated match results and packets. No VP6 decoder source was read.
+
+Scratch receipts and complete gate output are kept in this worktree's `build/resume-*-20261011.*`. The freshness success stamp was written only after both full gates completed successfully.
