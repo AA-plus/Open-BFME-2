@@ -67,7 +67,7 @@ void EmotionTrackerUpdateModuleData::IniParseAddEmotion(INI *ini, void *, void *
         throw INIException(3, "Emotion not found");
     Rva004DC920 *copy = new Rva004DC920;
     copy->rva004DC788(*source);
-    copy->name.set(AsciiString(token));
+    copy->name.setCopyInline(AsciiString(token));
     if (hasOverride) {
         ((Rva004DCAD2 *)copy)->rva004DCAD2(ini);
         copy->isOverride = true;
