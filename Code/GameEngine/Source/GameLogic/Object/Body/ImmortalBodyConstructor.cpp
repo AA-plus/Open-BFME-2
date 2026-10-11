@@ -21,6 +21,14 @@ inline const T& max(const T& a, const T& b)
 	return b;
 }
 
+// LINK helper for internalChangeHealth below (see note there).
+static __forceinline const Real &bfme_max_real(const Real &a, const Real &b)
+{
+	if (a > b)
+		return a;
+	return b;
+}
+
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameLogic/Module/BehaviorModule.h
 class BehaviorModule
 {
@@ -105,7 +113,13 @@ void ImmortalBody::xfer( Xfer *xfer )
 // 0x004BF005 (ret 8).
 void ImmortalBody::internalChangeHealth( Real delta, DamageInfo *damageInfo )
 {
-	delta = max( delta, -getHealth() + 1.0f );
+	// LINK: file-static ref-returning max with the identical template body;
+	// the TU-local max<float> instantiation is not retail's copy (home:
+	// updateMinMax.cpp @0x579D) and the live call emits the loser COMDAT,
+	// while this internal-linkage helper inlines the same x87 and emits
+	// nothing. No flags touched.
+	Real floorVal = -getHealth() + 1.0f;
+	delta = bfme_max_real(delta, floorVal);
 	ActiveBody::internalChangeHealth( delta, damageInfo );
 }
 
