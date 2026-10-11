@@ -72,13 +72,13 @@ public:
 	virtual void Slot1();
 	virtual bool Load_W3D(ChunkLoadClass &cload);
 
-	void Release_Ref() { if (--RefCount == 0) Delete_This(); }
+	__declspec(dllimport) __forceinline void Release_Ref() { if (--RefCount == 0) Delete_This(); }
 	int Get_Flag(int flag) { return Flags & flag; }
 	int Get_Polygon_Count() { return PolyCount; }
-	bool Has_Shader_Array(int pass) const { return CurMatDesc->Has_Shader_Array(pass); }
+	__declspec(dllimport) __forceinline bool Has_Shader_Array(int pass) const { return CurMatDesc->Has_Shader_Array(pass); }
 	bool Has_Pass_Buffer(int pass) const { return CurMatDesc->Has_Pass_Buffer(pass); }
-	ShaderClass Get_Shader(int pidx, int pass) const { return CurMatDesc->Get_Shader(pidx, pass); }
-	ShaderClass Get_Single_Shader(int pass) const { return CurMatDesc->Get_Single_Shader(pass); }
+	__declspec(dllimport) __forceinline ShaderClass Get_Shader(int pidx, int pass) const { return CurMatDesc->Get_Shader(pidx, pass); }
+	__declspec(dllimport) __forceinline ShaderClass Get_Single_Shader(int pass) const { return CurMatDesc->Get_Single_Shader(pass); }
 
 	int RefCount;				// +0x04
 	char Pad08[0x10];
