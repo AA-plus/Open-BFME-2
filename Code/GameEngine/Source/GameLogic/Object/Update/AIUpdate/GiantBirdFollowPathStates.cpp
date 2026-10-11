@@ -94,8 +94,7 @@ public:
 	virtual Real getGroundHeight(Real x, Real y, int unused);
 };
 extern TerrainLogic *TheTerrainLogic;
-// ?g_00E01EC0@@3PAEA @0x00A01EC0 (4B): scratch passed to rva003681F2; retail holds zeros.
-unsigned char g_00E01EC0[4] = { 0, 0, 0, 0 };
+extern unsigned char g_00E01EC0[4]; // defined once in Rva00368C7A.cpp (rowed below)
 
 class Locomotor
 {
