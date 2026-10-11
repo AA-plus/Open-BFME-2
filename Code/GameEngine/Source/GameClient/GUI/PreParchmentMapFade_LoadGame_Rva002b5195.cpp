@@ -29,17 +29,18 @@ public:
 // game/GameEngine/Source/Common/S3GuardedIndirectRelease.cpp owns the
 // giveBack body at 0x0057F100, so the call is made through that view, exactly
 // as Rva0051DD10StartBattleSchool.cpp does.
-class Rva0057F100
+class Rva0035BD3F
 {
 public:
-	void giveBack(void);
+	void rva0035BD3F(void);
 };
 extern Shell *TheShell;
 
-class WindowManager
+class ModuleData;
+class Rva00223CBD
 {
 public:
-	void unidentified_0002e9a1(int a);
+	void rva00223CBD(const ModuleData *data);
 };
 extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
 
@@ -52,9 +53,9 @@ int parchmentMapFadeLoadGame(int, bool start)
 	{
 		TheTransitionHandler->setGroup(AsciiString("PreParchmentMapFade_LoadGame"), 0);
 		if (TheShell)
-			((Rva0057F100 *)TheShell)->giveBack();
-		if ((*(WindowManager **)&g_bfmeAptWindowManager))
-			(*(WindowManager **)&g_bfmeAptWindowManager)->unidentified_0002e9a1(-1);
+			((Rva0035BD3F *)TheShell)->rva0035BD3F();
+		if ((*(Rva00223CBD **)&g_bfmeAptWindowManager))
+			(*(Rva00223CBD **)&g_bfmeAptWindowManager)->rva00223CBD((const ModuleData *)-1);
 	}
 	else if (TheTransitionHandler->isFinished())
 		result = 3;
