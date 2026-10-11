@@ -21,3 +21,7 @@ binding finding. The two actual address-global occurrences become zero, so
 only the corresponding `g_Va009FE958` hatch-baseline key is removed. No pin,
 alias, source marker, or additional global is introduced. Link and gameplay
 parity are not claimed; this repair adds no C++ coverage bytes.
+
+The code-identity shadow check still reports the existing call from `amIHost`
+to the unconverted `LANGameSlot::isLocalPlayer` at `0x0044770F`. Canonicalizing
+the global does not recover that helper or establish a linked implementation.
