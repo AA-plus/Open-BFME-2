@@ -10,6 +10,27 @@
 // command-map machinery as the HUD::Impl ctor (Common/Rva0042DB21Method.cpp).
 #include "ascii_string.h"
 
+// Preserve the primary 56-byte helper in Rva0054C83FAptWrapper.cpp.
+// This byte-and-relocation-identical COMDAT copy is visible so the compiler
+// observes that it reads the bool argument before dispatching.
+class Rva00222A8BTarget
+{
+public:
+	int rva00222B19(void *level, const char *prefix, const char *function,
+		int argc, const char *a0, void *a1, void *a2, void *a3, void *a4);
+};
+
+char ** __cdecl Rva004E678BGet(char **out, bool flag);
+
+inline __declspec(noinline) int __cdecl Rva0054C83FAptCall(Rva00222A8BTarget *t, void *level, const char *prefix, const char *function, const char **a0, bool *flag)
+{
+	char *tmp;
+	char *s = *Rva004E678BGet(&tmp, *flag);
+	const char *a0s = *a0;
+	return t->rva00222B19(level, prefix, function, 2, a0s, s, 0, 0, 0);
+}
+
+
 
 // Page reference ABI view: retail visibility dispatch uses virtual slots4/8.
 // The original page-reference declaration is not inferred from this view.
@@ -216,6 +237,7 @@ public:
 	void OnPageLoaded(const char *path); // 0x005E2F49
 	void OnPageUnloaded(const char *path); // 0x005E321E
 	void OnTabClicked(const char *path); // 0x005E2D4B
+	void SetPageEnabled(int page, bool enabled);
 	void SetCurrentPage(int page);
 	void ShowPage(int page); // 0x005E2E91 (WorldBuilder name, pinned)
 	void HidePage(int page); // 0x005E2EED (WorldBuilder name, pinned)
@@ -384,4 +406,18 @@ void *Rva005E2D8AGet(const char *p)
 	if (!Rva004128F0GetParam(p, "id", tmp))
 		return 0;
 	return Rva005E2CFAGet(tmp.str());
+}
+
+// Native005E2E3A..005E2E91 RET8; WB15F4D00 SetPageEnabled and the retail
+// SetTabEnabled literal establish this operation. Save the requested flag
+// across the dispatch before updating the indexed byte at receiver+30.
+void StrategicHUD::RegionDetailsMovieClip::Impl::SetPageEnabled(int page, bool enabled)
+{
+ bool &flag=m_pageEnabled[page];
+ if(flag!=enabled) {
+  const bool initialEnabled=enabled;
+  const char *id=Rva005E2D26Get(page);
+  Rva0054C83FAptCall(reinterpret_cast<Rva00222A8BTarget *>(g_bfmeAptWindowManager),(void*)m_level,m_name.str(),"SetTabEnabled",&id,&enabled);
+  flag=initialEnabled;
+ }
 }
