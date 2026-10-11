@@ -44,22 +44,22 @@ void Rva005CB852::rva005CB852()
 	m_04->rva005CB748();
 }
 
-class Rva005E2E3A
-{
-public:
-	void rva005E2E3A(Int a0, Int a1);
-};
+// The target now has a verified bool parameter and a real C++ provider.
+namespace StrategicHUD {
+class RegionDetailsMovieClip { public: class Impl; };
+class RegionDetailsMovieClip::Impl { public: void SetPageEnabled(Int page, bool enabled); };
+}
 class Rva005E3049
 {
 public:
-	void rva005E3049(Int a0, Int a1);
+    void rva005E3049(Int page, bool enabled);
 private:
-	char m_pad00[0x04];
-	Rva005E2E3A *m_04;
+    char m_pad00[0x04];
+    StrategicHUD::RegionDetailsMovieClip::Impl *m_04;
 };
-void Rva005E3049::rva005E3049(Int a0, Int a1)
+void Rva005E3049::rva005E3049(Int page, bool enabled)
 {
-	m_04->rva005E2E3A(a0, a1);
+    m_04->SetPageEnabled(page, enabled);
 }
 
 class Rva005ED385

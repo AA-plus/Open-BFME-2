@@ -48,7 +48,7 @@ struct Rva005CC5C8Context
 };
 
 class Rva002B2B66 { public: int rva002B2B66(); };
-class Rva005E3049 { public: void rva005E3049(int mode, int flag); };
+class Rva005E3049 { public: void rva005E3049(int mode, bool flag); };
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 
