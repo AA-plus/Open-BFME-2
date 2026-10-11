@@ -1,4 +1,6 @@
-// cl: /O1 /DNDEBUG /MD /EHsc
+// cl: /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// stlport
+#include <vector>
 #include "BFME2ParticleTextureHandles.h"
 
 // Native fallback getters 0x00132E76..0x00132F30 and 0x00132F30..0x00132FE9.
@@ -78,6 +80,12 @@ class Rva009EB960;
 extern Rva009EB960 *Rva0134FAA0;
 extern unsigned g_Va00DF2984;
 extern unsigned g_Va00DF29A8;
+static __forceinline CriticalSection *deferredDeviceMutex() {
+ return reinterpret_cast<CriticalSection *>(&g_Va00DF2984);
+}
+static __forceinline _STL::vector<void *> &deferredDeviceQueue() {
+ return *reinterpret_cast<_STL::vector<void *> *>(&g_Va00DF29A8);
+}
 class Rva0020FB8BVec20 { public: void vecPushBack(void *&); };
 class Rva0013331A {
  unsigned char prefix[8]; BfmeDeferredTexture *texture;
@@ -86,10 +94,32 @@ public: void rva0013331A();
 void Rva0013331A::rva0013331A() {
  if(!texture)return;
  if(Rva0134FAA0) {
-  ScopedCriticalSection guard(reinterpret_cast<CriticalSection *>(&g_Va00DF2984));
-  reinterpret_cast<Rva0020FB8BVec20 *>(&g_Va00DF29A8)->vecPushBack(reinterpret_cast<void *&>(texture));
+  ScopedCriticalSection guard(deferredDeviceMutex());
+  reinterpret_cast<Rva0020FB8BVec20 *>(&deferredDeviceQueue())->vecPushBack(reinterpret_cast<void *&>(texture));
  } else {
   texture->Release();
  }
  texture=0;
+}
+
+// Native 0x00133283..0x0013331A (151 bytes); the corrected whole boundary
+// includes both guard lifetimes and the final EH epilogue. Callers include
+// the matched shadow-map update and game-start paths. The adjacent unload
+// body above enqueues pointers into this same three-pointer range at DF29A8
+// under the same critical section at DF2984. These are views of the existing
+// globals, with no additional data owner or donor class identity claimed.
+void bfmeReleaseQueuedDeviceInterfaces() {
+ _STL::vector<void *> &queue=deferredDeviceQueue();
+ if(queue.empty())return;
+ BfmeFallbackTextureLock device;
+ ScopedCriticalSection guard(deferredDeviceMutex());
+ void **i=queue.begin();
+ if(i!=queue.end()) {
+  do {
+   reinterpret_cast<BfmeDeferredTexture *>(*i)->Release();
+   ++i;
+  } while(i!=queue.end());
+  i=queue.begin();
+ }
+ queue.erase(i,queue.end());
 }
