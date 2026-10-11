@@ -8,6 +8,14 @@
 // Flags copy the sibling map<unsigned void*> TU stlport_map_int_ptr_lower.cpp.
 #include <map>
 
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+
 // __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
 // COMDATs (one byte shape per TU malloc/free wiring); explicit
 // dllimport+forceinline specializations take those calls inline so this

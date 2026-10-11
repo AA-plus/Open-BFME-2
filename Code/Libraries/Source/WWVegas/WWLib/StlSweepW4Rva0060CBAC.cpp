@@ -6,6 +6,14 @@
 #include <string>
 #include <utility>
 
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+
 struct Rva0060CBACElement { char bytes[1]; Rva0060CBACElement();Rva0060CBACElement(const Rva0060CBACElement&);~Rva0060CBACElement();Rva0060CBACElement& operator=(const Rva0060CBACElement&); bool operator<(const Rva0060CBACElement&)const; bool operator==(const Rva0060CBACElement&)const; };
 
 // Instantiate the recovered operation and its required template dependencies.

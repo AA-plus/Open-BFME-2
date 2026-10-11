@@ -20,6 +20,14 @@ template <> bool less<unsigned int>::operator()(const unsigned int &a, const uns
 }
 #include <vector>
 
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+
 // vector<void*> operator[] otherwise instantiates a per-TU COMDAT (one
 // byte shape per TU flags); an explicit dllimport+forceinline specialization
 // takes those calls inline so this TU emits no external copy.
