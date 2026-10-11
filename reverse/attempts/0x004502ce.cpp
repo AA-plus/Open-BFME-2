@@ -1,6 +1,8 @@
 // ?onExit@SpecialAbilityUpdate@@MAEX_N0@Z
+// partial score=0.98 date=2026-10-11
+// ?onExit@SpecialAbilityUpdate@@MAEX_N0@Z
 // partial score=0.98 date=2026-10-08
-// cl: /O1 /DNDEBUG /MD
+// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD
 // SpecialAbilityUpdate.cpp: bodies retail links from this TU (tu_map approved),
 // folded from three split units with these exact flags. The two
 // address-named helper classes keep their names (their rows are mangled with

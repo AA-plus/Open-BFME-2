@@ -1,5 +1,5 @@
 // ?rva0051DE3D@AptScoreScreen@@QAEXXZ
-// partial score=0.98 date=2026-10-07
+// partial score=0.98 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
@@ -8,6 +8,17 @@
 // screen's registration; that binding is their only reference. The class
 // is named for the strings' prefix. +0x27C is the screen's state.
 
+class Rva002BA8F1Logic;
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include "unicode_string.h"
 #include "ascii_string.h"
@@ -81,12 +92,10 @@ public:
 // TheLivingWorldLogic (VA 0x00DFEF10, the ledger's g_009FEF10); its
 // unrowed 0x002B3740 returns a byte of its current entry, pinned by
 // address.
-class Rva0020E89C;
-
-class Rva0020EAF6View
+class Rva002104B6
 {
 public:
-	Rva0020E89C *rva0020EAF6(int index);
+	void *rva002104B6(void *name);
 };
 
 class Rva002BA8F1Logic
@@ -95,14 +104,93 @@ public:
 	bool rva002B3740();
 
 	unsigned char m_pad000[0xB0];
-	Rva0020EAF6View *m_B0; // +0xB0, the regions
+	Rva002104B6 *m_B0; // +0xB0, its regions by name
 	int m_B4;
 	int m_B8; // +0xB8, the current region's index
 };
 
-extern class Rva002BA8F1Logic *g_009FEF10;
+class Rva0020E89C;
 
+// The same regions by index (Rva0020EAF6IndexLookup.cpp).
+class Rva0020EAF6View
+{
+public:
+	Rva0020E89C *rva0020EAF6(int index);
+};
+
+// The persistent-unit list box (BFME 1's ScoreScreenRva005778E0.cpp):
+// Zero Hour's list box gadget API, the living world's armies of
+// persistent units from GameLogic and their thing templates.
 class Image;
+void GadgetListBoxReset(GameWindow *listbox);
+int GadgetListBoxGetNumColumns(GameWindow *listbox);
+void GadgetListBoxSetColumnWidths(GameWindow *listbox, int numColumns, int *widths);
+int GadgetListBoxAddEntryText(GameWindow *listbox, UnicodeString text, int color, int row, int column, bool overwrite);
+int GadgetListBoxAddEntryImage(GameWindow *listbox, const Image *image, int row, int column, int height, int width, bool overwrite, int color);
+// GadgetListBoxSetItemData(listbox, data, row, column).
+void GadgetListBoxSetItemData(GameWindow *listbox, void *data, int row, int column);
+void GadgetListBoxSetTopVisibleEntry(GameWindow *listbox, int top);
+
+extern int g_00DD16C4;
+
+struct AptScorePersistentUnit
+{
+	unsigned char m_pad00[4];
+	AsciiString m_templateName; // +0x04
+	unsigned char m_pad08[4];
+	int m_0C;
+	unsigned char m_pad10[0x94 - 0x10];
+	int m_94;
+	int m_98;
+	int m_9C;
+	UnicodeString m_name; // +0xA0
+	AsciiString m_regionName; // +0xA4
+	bool m_upgraded; // +0xA8, whether its veterancy upgraded on the map
+};
+
+struct Rva0040CC0EEntry
+{
+	int first;
+	int second;
+};
+
+class Rva0040CB2CIndexedField
+{
+public:
+	int get(int index) const;
+
+	unsigned char m_pad[0x40];
+	_STL::vector<Rva0040CC0EEntry> m_entries; // +0x40
+};
+
+class GameLogic
+{
+public:
+	_STL::vector<Rva0040CB2CIndexedField *> rva002401C0();
+};
+
+extern GameLogic *TheGameLogic;
+
+class ThingTemplate
+{
+public:
+	const Image *getButtonImage();
+
+	unsigned char m_pad00[0x30];
+	UnicodeString m_displayName; // +0x30
+	unsigned char m_pad034[0x113 - 0x34];
+	unsigned char m_113; // +0x113, bit 2: a hero
+	unsigned char m_pad114[0x638 - 0x114];
+	int m_638; // +0x638, the hero's place in the list
+};
+
+class ThingFactory
+{
+public:
+	const ThingTemplate *findTemplate(const AsciiString &name);
+};
+
+extern ThingFactory *TheThingFactory;
 
 // A living world region (Rva0020E89CFetch.cpp): its display name, its
 // bonuses at +0x90..+0x98 and its map image (Rva003F038EImageGet.cpp).
@@ -165,65 +253,9 @@ public:
 
 extern GameTextInterface *TheGameText;
 
-// A persistent unit of an army: its template's name at +4 and, at +0xA8,
-// whether its veterancy upgraded on the map.
-struct AptScorePersistentUnit
-{
-	int m_00;
-	AsciiString m_templateName; // +0x04
-	unsigned char m_pad08[0xA8 - 0x08];
-	bool m_upgraded; // +0xA8
-};
-
-// An army (Rva0040CC0EIndexedGetters.cpp): its units are the second
-// dwords of the eight-byte entries at +0x40.
-struct Rva0040CC0EEntry
-{
-	int first;
-	int second;
-};
-
-class Rva0040CB2CIndexedField
-{
-public:
-	int get(int index) const;
-
-	unsigned char m_pad[0x40];
-	_STL::vector<Rva0040CC0EEntry> m_entries; // +0x40
-};
-
-class GameLogic
-{
-public:
-	// Unrowed 0x002401C0: a copy of the armies of the army summary at
-	// +0x184; pinned by address.
-	_STL::vector<Rva0040CB2CIndexedField *> rva002401C0();
-};
-
-extern GameLogic *TheGameLogic;
-
-class ThingTemplate
-{
-public:
-	const Image *getButtonImage();
-
-	unsigned char m_pad000[0x113];
-	unsigned char m_113; // +0x113, bit 2: a hero
-	unsigned char m_pad114[0x638 - 0x114];
-	int m_638; // +0x638, the hero's place in the list
-};
-
-class ThingFactory
-{
-public:
-	const ThingTemplate *findTemplate(const AsciiString &name);
-};
-
-extern ThingFactory *TheThingFactory;
-
 // A hero of the score screen's list, sorted by its template's place
 // (the folded sort 0x0051D868, the first dword) and pushed through the
-// folded twelve-byte push_back 0x002DF89B; both pinned by address.
+// folded twelve-byte push_back 0x002DF89B.
 struct Rva0051DE3DHero
 {
 	int order;
@@ -231,17 +263,33 @@ struct Rva0051DE3DHero
 	const Image *image;
 };
 
-namespace _STL
-{
-template <class RandomAccessIter> void sort(RandomAccessIter first, RandomAccessIter last);
-}
-
 // AptHeroPowerText.cpp: one region bonus row, numbered through *index.
 class Rva0051C2E2
 {
 public:
 	void rva0051C2E2(int *index, const AsciiString &name, int bonus);
 };
+
+class Rva0051D009
+{
+public:
+	AsciiString rva0051D009(int value);
+};
+
+// One list row, sorted by its operator< (0x005EC52E) before display.
+struct Rva0051DA24Row
+{
+	Rva0051DA24Row(AptScorePersistentUnit *u, ThingTemplate *t) : unit(u), thing(t) {}
+	AptScorePersistentUnit *unit;
+	ThingTemplate *thing;
+
+	bool operator<(const Rva0051DA24Row &other) const;
+};
+
+namespace _STL
+{
+template <class RandomAccessIter> void sort(RandomAccessIter first, RandomAccessIter last);
+}
 
 // The Apt callback functors (Rva0057BC63FunctorHolder.cpp, as in
 // AptQuitMenuCallbacks.cpp): a binding of an object and an eight-byte
@@ -398,10 +446,9 @@ public:
 	// Unrowed 0x0051CE72: the Apt queries "ShowSaveReplay" ...
 	// "NumberFormatter" by index.
 	void Externs(int query, char *value, bool set);
+	// Retail 0x0051DA24: fills the persistent-unit list box.
+	bool PopulatePersistentUnitsListbox();
 	void rva0051DE3D();
-	// Unrowed 0x0051DA24: fills the persistent units list; pinned by
-	// address.
-	bool rva0051DA24();
 
 private:
 	int m_state; // +0x27C
@@ -446,7 +493,7 @@ void AptScoreScreen::RestartGame(const char *unused)
 // Retail 0x0051BFB6, 28 bytes: "AptScoreScreen::Continue".
 void AptScoreScreen::Continue(const char *unused)
 {
-	g_009FEF10->rva002B3740();
+	(*(Rva002BA8F1Logic **)&TheLivingWorldLogic)->rva002B3740();
 	m_state = 3;
 }
 
@@ -605,6 +652,77 @@ AptScoreScreen::AptScoreScreen(void *context)
 	}
 }
 
+// Retail's strcpy call lands on the import thunk rowed as ji_00629176.
+#pragma comment(linker, "/alternatename:_strcpy=?ji_00629176@@YAXXZ")
+
+// Retail 0x0051DA24, 1049 bytes: BFME 1's 0x005778E0 on BFME 2's armies.
+// Each living-world army's persistent units with a known template become
+// a row (name, button image, region, four counters, the unit as item
+// data) of the +0x2A0 list box, sorted first.
+bool AptScoreScreen::PopulatePersistentUnitsListbox()
+{
+	if (!TheGameLogic || !TheThingFactory || !m_units)
+		return false;
+	_STL::vector<Rva0051DA24Row> rows;
+	_STL::vector<Rva0040CB2CIndexedField *> armies = TheGameLogic->rva002401C0();
+	for (unsigned int i = 0; i < armies.size(); ++i)
+	{
+		Rva0040CB2CIndexedField *army = armies[i];
+		if (!army)
+			return false;
+		int count = army->m_entries.size();
+		for (int j = 0; j < count; ++j)
+		{
+			AptScorePersistentUnit *unit = (AptScorePersistentUnit *)army->get(j);
+			ThingTemplate *thing = (ThingTemplate *)TheThingFactory->findTemplate(unit->m_templateName);
+			if (thing)
+			{
+				Rva0051DA24Row row(unit, thing);
+				rows.push_back(row);
+			}
+		}
+	}
+	if (rows.size() == 0)
+		return false;
+	_STL::sort(rows.begin(), rows.end());
+	GadgetListBoxReset(m_units);
+	if (GadgetListBoxGetNumColumns(m_units) < 7)
+	{
+		int widths[7] = { 10, 25, 17, 13, 13, 12, 8 };
+		GadgetListBoxSetColumnWidths(m_units, 7, widths);
+	}
+	const int color = g_00DD16C4;
+	for (_STL::vector<Rva0051DA24Row>::iterator it = rows.begin(); it != rows.end(); ++it)
+	{
+		AptScorePersistentUnit *unit = it->unit;
+		ThingTemplate *thing = it->thing;
+		UnicodeString text;
+		if (!unit->m_name.isEmpty())
+			text = unit->m_name;
+		else
+			text = thing->m_displayName;
+		int row = GadgetListBoxAddEntryText(m_units, text, color, -1, 1, true);
+		const Image *image = thing->getButtonImage();
+		if (image)
+			GadgetListBoxAddEntryImage(m_units, image, row, 0, 40, 40, true, -1);
+		Rva002104B6 *regions = (*(Rva002BA8F1Logic **)&TheLivingWorldLogic)->m_B0;
+		Rva0020E89C *region = (Rva0020E89C *)regions->rva002104B6(&unit->m_regionName);
+		if (region)
+			GadgetListBoxAddEntryText(m_units, region->rva0020E89C(), color, row, 2, true);
+		text.translate(((Rva0051D009 *)this)->rva0051D009(unit->m_0C));
+		GadgetListBoxAddEntryText(m_units, text, color, row, 3, true);
+		text.translate(((Rva0051D009 *)this)->rva0051D009(unit->m_94));
+		GadgetListBoxAddEntryText(m_units, text, color, row, 4, true);
+		text.translate(((Rva0051D009 *)this)->rva0051D009(unit->m_98));
+		GadgetListBoxAddEntryText(m_units, text, color, row, 5, true);
+		text.translate(((Rva0051D009 *)this)->rva0051D009(unit->m_9C));
+		GadgetListBoxAddEntryText(m_units, text, color, row, 6, true);
+		GadgetListBoxSetItemData(m_units, (void *)unit, row, 0);
+	}
+	GadgetListBoxSetTopVisibleEntry(m_units, 0);
+	return true;
+}
+
 // Retail 0x0051DE3D, 1061 bytes: fills the screen. Each objective's
 // label is "APT:objective%d"; the heroes of the player's armies, in their
 // templates' order, set the veterancy icons and the upgrade flags; in the
@@ -653,11 +771,11 @@ void AptScoreScreen::rva0051DE3D()
 		TheRva00222A8BTarget->rva002239E2(key, heroes[k].image);
 		m_heroUpgrades.push_back(heroes[k].upgraded);
 	}
-	Rva002BA8F1Logic *livingWorld = g_009FEF10;
+	Rva002BA8F1Logic *livingWorld = *(Rva002BA8F1Logic **)&TheLivingWorldLogic;
 	if (livingWorld)
 	{
 		int id = livingWorld->m_B8;
-		Rva0020EAF6View *regions = livingWorld->m_B0;
+		Rva0020EAF6View *regions = (Rva0020EAF6View *)livingWorld->m_B0;
 		Rva0020E89C *region = regions->rva0020EAF6(id);
 		if (region)
 		{
@@ -692,10 +810,7 @@ void AptScoreScreen::rva0051DE3D()
 				TheRva00222A8BTarget->rva002239E2(key, ((Rva003F038E *)region)->rva003F03B9());
 			}
 			if (m_280 == 1)
-				rva0051DA24();
+				PopulatePersistentUnitsListbox();
 		}
 	}
 }
-
-// Retail's strcpy call lands on the import thunk rowed as ji_00629176.
-#pragma comment(linker, "/alternatename:_strcpy=?ji_00629176@@YAXXZ")
