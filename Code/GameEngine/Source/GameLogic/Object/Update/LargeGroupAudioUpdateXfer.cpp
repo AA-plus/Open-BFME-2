@@ -96,20 +96,16 @@ public:
 
 #include "../../../../../Libraries/Include/Lib/Coord2D.h"
 
-class Rva000BB710
+// The two flag sets xfer through the rowed BitFlags<591>::xfer (0x000BB710)
+// and BitFlags<101>::xfer (0x00292550); their sizes, 0x4C and 0x10, are the
+// dword arrays those bit counts need.
+template <int NUMBITS>
+class BitFlags
 {
 public:
 	void xfer(Xfer *xfer);
 private:
-	char m_unrecovered00[0x4C];
-};
-
-class Rva00292550
-{
-public:
-	void xfer(Xfer *xfer);
-private:
-	char m_unrecovered00[0x10];
+	unsigned int m_bits[(NUMBITS + 31) / 32];
 };
 
 class UpdateModule
@@ -128,8 +124,8 @@ protected:
 
 private:
 	Coord2D m_28;
-	Rva000BB710 m_30;
-	Rva00292550 m_7C;
+	BitFlags<591> m_30;
+	BitFlags<101> m_7C;
 	bool m_8C;
 	bool m_8D;
 	int m_90;
