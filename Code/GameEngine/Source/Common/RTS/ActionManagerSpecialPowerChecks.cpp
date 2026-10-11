@@ -84,7 +84,8 @@ struct Region3D
 	Coord3D lo;
 	Coord3D hi;
 
-	__forceinline bool isInRegionNoZ(const Coord3D *query) const
+	// LINK: TU-unique name (identical inlined bytes); the isInRegionNoZ copy loses to the first-in-order copy. No flags touched.
+	__forceinline bool bfme_isInRegionNoZ_3d51b(const Coord3D *query) const
 	{
 		return (lo.x < query->x) && (query->x < hi.x)
 			&& (lo.y < query->y) && (query->y < hi.y);
@@ -171,6 +172,8 @@ public:
 	bool flag3() const { return (m_flags >> 3) & 1; }
 	bool flag4() const { return (m_flags >> 4) & 1; }
 	SpecialPowerType getSpecialPowerType() const { return getFinalOverride()->m_type; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getSpecialPowerType copy loses to the first-in-order copy. No flags touched.
+	SpecialPowerType bfme_getSpecialPowerType_8e24c() const { return getFinalOverride()->m_type; }
 	unsigned int m_flags;	// +0x18
 	SpecialPowerType m_type;	// +0x1C
 	char m_pad20[0x54 - 0x20];
@@ -840,15 +843,15 @@ bool ActionManager::canDoSpecialPowerAtObject(const Object *obj, const Object *t
 	if (!spTemplate)
 		return false;
 
-	if (checkSourceRequirements && !obj->hasSpecialPower(spTemplate->getSpecialPowerType()))
+	if (checkSourceRequirements && !obj->hasSpecialPower(spTemplate->bfme_getSpecialPowerType_8e24c()))
 		return false;
 
 	ActionSpecialPowerModuleView *module =
 		reinterpret_cast<ActionSpecialPowerModuleView *>(obj->getSpecialPowerModule(spTemplate));
 
 	bool capturePower = false;
-	bool isCapture = spTemplate->getSpecialPowerType() == CAPTURE_POWER ||
-		spTemplate->getSpecialPowerType() == 0x1a;
+	bool isCapture = spTemplate->bfme_getSpecialPowerType_8e24c() == CAPTURE_POWER ||
+		spTemplate->bfme_getSpecialPowerType_8e24c() == 0x1a;
 	bool filterValid = reinterpret_cast<const ObjectFilter *>(spTemplate->getFinalOverride()->m_60)->isValid();
 	if (filterValid) {
 		Rva2225E0Filter *filter =
@@ -885,7 +888,7 @@ bool ActionManager::canDoSpecialPowerAtObject(const Object *obj, const Object *t
 		if (isObjectShroudedForAction(obj, target, commandSource))
 			return false;
 
-		switch (spTemplate->getSpecialPowerType()) {
+		switch (spTemplate->bfme_getSpecialPowerType_8e24c()) {
 		case 39:
 		case 40: {
 			int id = *reinterpret_cast<const int *>(reinterpret_cast<const char *>(target) + 0x74);
@@ -922,9 +925,9 @@ bool ActionManager::canDoSpecialPowerAtObject(const Object *obj, const Object *t
 				return false;
 			bool allowed = true;
 			unsigned int kindFlags = *reinterpret_cast<const unsigned int *>(actionTemplate(target) + 0x118);
-			if ((kindFlags & 0x10) && spTemplate->getSpecialPowerType() != 40)
+			if ((kindFlags & 0x10) && spTemplate->bfme_getSpecialPowerType_8e24c() != 40)
 				allowed = false;
-			if ((kindFlags & 0x100) && spTemplate->getSpecialPowerType() != 39)
+			if ((kindFlags & 0x100) && spTemplate->bfme_getSpecialPowerType_8e24c() != 39)
 				allowed = false;
 			if (allowed && contain->allow(target, true, false))
 				return true;
@@ -1487,7 +1490,7 @@ bool BFMEActionManager::rva0041D435(const Object *obj, const Object *target, Com
 		for (int i = 0; i < 32; ++i) {
 			const CommandButton *button = commandSet->getCommandButton(i);
 			if (button && button->m_commandType == 0x18 &&
-				button->m_specialPower->getSpecialPowerType() == SPECIAL_POWER_27) {
+				button->m_specialPower->bfme_getSpecialPowerType_8e24c() == SPECIAL_POWER_27) {
 				ActionSpecialPowerInterfaceView *spm = reinterpret_cast<ActionSpecialPowerInterfaceView *>(
 					obj->findSpecialPowerModuleInterface(SPECIAL_POWER_27));
 				unsigned int options = button->m_options & ~0x8000;
@@ -1588,7 +1591,7 @@ bool ActionManager::rva0041CC65(const SpecialPowerTemplate *sp, const Coord3D *p
 	extent.hi.y -= margin;
 	extent.lo.x += margin;
 	extent.lo.y += margin;
-	if (extent.isInRegionNoZ(pos))
+	if (extent.bfme_isInRegionNoZ_3d51b(pos))
 		return true;
 	return false;
 }
