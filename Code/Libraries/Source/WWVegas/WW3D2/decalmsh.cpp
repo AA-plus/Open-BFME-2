@@ -76,6 +76,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "dx8vertexbuffer.h"
 #include "dx8indexbuffer.h"
 #include "simplevec.h"
+// Native 7E2D7 is owned by simplevec_vector3_dtor.cpp; do not emit
+// the different donor destructor under this unit's frozen flags.
+template <> SimpleDynVecClass<Vector3>::~SimpleDynVecClass();
 #include "texture.h"
 #include "dx8wrapper.h"
 #include "dx8caps.h"
