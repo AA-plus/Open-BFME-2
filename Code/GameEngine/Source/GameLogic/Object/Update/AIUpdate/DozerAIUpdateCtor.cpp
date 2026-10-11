@@ -703,7 +703,12 @@ public:
 	ObjectID getBuilderID() const { return m_builderID; }
 	__forceinline UnsignedInt isDisabledByType(DisabledType type) const { return m_disabledMask & (1U << type); }
 	Bool isEffectivelyDead() const { return (m_privateStatus & 1) != 0; }
-	Real getConstructionPercent() const { return m_constructionPercent; }
+	// LINK: TU-unique helper (see Rva004E669APoint/getPosition pattern).
+	// The generic Object::getConstructionPercent copy in this TU compiles
+	// x87 (TU flags) while the three /arch:SSE siblings emit movss; the
+	// mismatch loses link order. Rebinding in-TU uses to this unique copy
+	// (inlined at all use sites) drops the loser symbol. No flags touched.
+	Real bfme_construction_percent() const { return m_constructionPercent; }
 	void setConstructionPercent(Real percent) { m_constructionPercent = percent; }
 	void setStatus(ObjectStatusTypes status, Bool set);
 protected:
@@ -2257,7 +2262,7 @@ StateReturnType DozerActionDoActionState::update()
 					return STATE_CONTINUE;
 				}
 
-				if (goalObject->getConstructionPercent() == CONSTRUCTION_COMPLETE)
+				if (goalObject->bfme_construction_percent() == CONSTRUCTION_COMPLETE)
 				{
 					Rva0048A3B9Do(dozer, goalObject, TRUE);
 					complete = TRUE;
@@ -2267,7 +2272,7 @@ StateReturnType DozerActionDoActionState::update()
 					// increase the construction percent of the goal object
 					Int framesToBuild = goalObject->getTemplate()->rva0033AA1F(dozer->getControllingPlayer(), (Int)dozer, -1);
 					Real percentProgressThisFrame = 100.0f / framesToBuild;
-					goalObject->setConstructionPercent(goalObject->getConstructionPercent() + percentProgressThisFrame);
+					goalObject->setConstructionPercent(goalObject->bfme_construction_percent() + percentProgressThisFrame);
 
 					// every time we construct a piece of the goal object, the goal object gets a little bit o health
 					BodyModuleInterface *body = goalObject->getBodyModule();
@@ -2277,7 +2282,7 @@ StateReturnType DozerActionDoActionState::update()
 						goalObject->setProducer(dozer);
 
 					// check for construction complete
-					if (goalObject->getConstructionPercent() >= 100.0f)
+					if (goalObject->bfme_construction_percent() >= 100.0f)
 					{
 						// clear the under construction status
 						goalObject->setStatus(OBJECT_STATUS_UNDER_CONSTRUCTION, false);
