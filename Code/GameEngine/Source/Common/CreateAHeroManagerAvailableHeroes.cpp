@@ -309,154 +309,7 @@ private:
 // The manager's global: GameEngine::init registers the subsystem under the
 // name "TheCreateAHeroManager" (call site 0x0022FC2F) into VA 0x00DFE344;
 // matched references place it there (retail .data initial value 0).
-CreateAHeroManager *TheCreateAHeroManager = 0;
-
-// CreateAHeroManager::GetBlingCount, retail 0x00219239.
-Int CreateAHeroManager::GetBlingCount(Int blingKey, const CreateAHeroHero *hero) const
-{
-	if (hero)
-		return hero->GetBlingCount(blingKey);
-	return 0;
-}
-
-// CreateAHeroManager::CreateAHeroClass::GetBlingCount, retail 0x0021BE23.
-Int CreateAHeroManager::CreateAHeroClass::GetBlingCount(Int blingKey, UnsignedInt subClassIndex) const
-{
-	const CreateAHeroSubClass *subClass = rva00219B9E(subClassIndex);
-	if (subClass)
-		return subClass->rva0021BC2C(blingKey);
-	return 0;
-}
-
-// CreateAHeroManager::CreateAHeroClass::GetSubClassDefaultBlingId, retail
-// 0x0021BEA2.
-Int CreateAHeroManager::CreateAHeroClass::GetSubClassDefaultBlingId(Int blingKey, UnsignedInt subClassIndex) const
-{
-	const CreateAHeroSubClass *subClass = rva00219B9E(subClassIndex);
-	if (subClass)
-		return subClass->GetDefaultBlingId(blingKey);
-	return 0;
-}
-
-// CreateAHeroManager::GetBlingNameTag, retail 0x00219DAA. WB asserts the hero
-// exists and the index is in range; retail answers the empty string.
-const AsciiString &CreateAHeroManager::GetBlingNameTag(Int blingKey, const CreateAHeroHero *hero, UnsignedInt index)
-{
-	if (hero && index < (UnsignedInt)hero->GetBlingCount(blingKey))
-	{
-		CreateAHeroBling *bling = (CreateAHeroBling *)GetBling(hero->GetBlingId(blingKey, index));
-		if (bling)
-			return bling->m_nameTag;
-	}
-	return AsciiString::TheEmptyString;
-}
-
-// CreateAHeroManager::GetBlingDescTag, retail 0x00219DEA.
-const AsciiString &CreateAHeroManager::GetBlingDescTag(Int blingKey, const CreateAHeroHero *hero, UnsignedInt index)
-{
-	if (hero && index < (UnsignedInt)hero->GetBlingCount(blingKey))
-	{
-		CreateAHeroBling *bling = (CreateAHeroBling *)GetBling(hero->GetBlingId(blingKey, index));
-		if (bling)
-			return bling->m_descTag;
-	}
-	return AsciiString::TheEmptyString;
-}
-
-// CreateAHeroManager::GetBlingUpgradeName, retail 0x00219E2F.
-const AsciiString &CreateAHeroManager::GetBlingUpgradeName(Int blingKey, const CreateAHeroHero *hero, UnsignedInt index)
-{
-	if (hero && index < (UnsignedInt)hero->GetBlingCount(blingKey))
-	{
-		CreateAHeroBling *bling = (CreateAHeroBling *)GetBling(hero->GetBlingId(blingKey, index));
-		if (bling)
-			return bling->m_upgradeName;
-	}
-	return AsciiString::TheEmptyString;
-}
-
-// CreateAHeroManager::FindBlingByUpgradeName, retail 0x0021D4CE: the table
-// index and id of the bling granted by an upgrade.
-Bool CreateAHeroManager::FindBlingByUpgradeName(const AsciiString &upgradeName, Int *index, Int *blingId)
-{
-	CreateAHeroBlingEntry *it = rva0021D120(m_blings.begin(), m_blings.end(), upgradeName);
-	if (it == m_blings.end())
-		return false;
-	*index = it - m_blings.begin();
-	*blingId = it->m_blingId;
-	return true;
-}
-
-// Target calls the matched CreateAHeroClass::GetBlingCount at 0x0021BE23.
-// The original method name is not independently proven, so keep the RVA label.
-Int CreateAHeroManager::rva0021BEE0(Int blingKey, UnsignedInt classIndex, UnsignedInt subClassIndex) const
-{
-	if (classIndex < m_classes.size())
-		return m_classes[classIndex].GetBlingCount(blingKey, subClassIndex);
-	return 0;
-}
-
-// CreateAHeroManager::GetSubClassDefaultBlingId, retail 0x0021BF11.
-Int CreateAHeroManager::GetSubClassDefaultBlingId(Int blingKey, UnsignedInt classIndex, UnsignedInt subClassIndex) const
-{
-	if (classIndex < m_classes.size())
-		return m_classes[classIndex].GetSubClassDefaultBlingId(blingKey, subClassIndex);
-	return 0;
-}
-
-// CreateAHeroManager::GetHeroForPlayer, retail 0x0021B5D6 (154 bytes): WB
-// names it and asserts a slot was found for the controlling player. Without a
-// game the manager's own hero answers; otherwise the hero of the first slot
-// whose player name keys to the player's.
-const CreateAHeroHero *CreateAHeroManager::GetHeroForPlayer(const Player *player)
-{
-	if (TheGameInfo)
-	{
-		GameSlot *slot = 0;
-		for (UnsignedInt i = 0; slot == 0 && i < 8; ++i)
-		{
-			AsciiString playerName = TheGameInfo->getSlot(i)->getPlayerName();
-			NameKeyType key = TheNameKeyGenerator->nameToKey(playerName);
-			if (player->getPlayerNameKey() == key)
-				slot = TheGameInfo->getSlot(i);
-		}
-		if (slot == 0)
-			return 0;
-		return slot->getHero();
-	}
-	return &m_localHero;
-}
-
-// CreateAHeroManager::init, retail 0x0021A3B7 (113 bytes), vtable slot 1: WB
-// names it; when the gate at 0x00DFE348 is set the create-a-hero system INI
-// is loaded.
-void CreateAHeroManager::init()
-{
-	if (g_Va00DFE348)
-	{
-		INI ini;
-		ini.loadFile(AsciiString("Data\\INI\\CreateAHeroSystem.ini"), INI_LOAD_OVERWRITE, TheSubsystemList ? TheSubsystemList->getXfer() : 0);
-	}
-}
-
-Int CreateAHeroManager::CreateAHeroSubClass::GetDefaultBlingId(Int blingKey) const
-{
-    std::map<int, int>::const_iterator def = m_defaultBlingIds.find(blingKey);
-    if (def != m_defaultBlingIds.end()) {
-        std::map<int, std::vector<unsigned int> >::const_iterator ids = m_blingIds.find(blingKey);
-        if (ids != m_blingIds.end()) {
-            const std::vector<unsigned int> &list = ids->second;
-            // The existing native search uses the corresponding signed
-            // alias of these four-byte indices. Equality consumes the same
-            // bits, preserving its already verified const-int provider.
-            const int *it = std::find(reinterpret_cast<const int *>(list.begin()),
-                reinterpret_cast<const int *>(list.end()), def->second);
-            if (it != reinterpret_cast<const int *>(list.end()))
-                return it - reinterpret_cast<const int *>(list.begin());
-        }
-    }
-    return 0;
-}
+extern CreateAHeroManager *TheCreateAHeroManager;
 
 // iniParseCreateAHeroSystem's views. The CreateAHeroSystem block's field table
 // (VA 0x00BE6888) names each manager field it fills; the stat names are
@@ -489,75 +342,6 @@ extern UpgradeCenter *TheUpgradeCenter;
 // knowing the body, does not reload TheCreateAHeroManager across it.
 template <> inline bool StringBase<char>::isEmpty() const { return m_data == 0 || m_data->length == 0; }
 
-// CreateAHeroManager::iniParseCreateAHeroSystem, retail 0x0022044C (684
-// bytes), the CreateAHeroSystem block parser (BlockParse node VA 0x00DB9D38).
-// WB names it (CreateAHero.cpp:3270..3367): fill the manager from the block,
-// require every stat, clamp the special-animation chance to [0, 100], require
-// a weapon group and the three animation names, and drop a CanBuild upgrade
-// name that no upgrade answers. The DEBUG reports are compiled out.
-void CreateAHeroManager::iniParseCreateAHeroSystem(INI *ini)
-{
-	if (TheCreateAHeroManager == 0)
-		return;
-
-	ini->initFromINI(TheCreateAHeroManager, CreateAHeroSystemFieldParse);
-
-	Rva00219453Validate(TheCreateAHeroManager->m_stratigicDefeatStat, "StratigicDefeatStatName");
-	Rva00219453Validate(TheCreateAHeroManager->m_stratigicVictoryStat, "StratigicVictoryStatName");
-	Rva00219453Validate(TheCreateAHeroManager->m_stratigicMPDefeatStat, "StratigicMPDefeatStatName");
-	Rva00219453Validate(TheCreateAHeroManager->m_stratigicMPVictoryStat, "StratigicMPVictoryStatName");
-	Rva00219453Validate(TheCreateAHeroManager->m_skirmishDefeatStat, "SkirmishDefeatStatName");
-	Rva00219453Validate(TheCreateAHeroManager->m_skirmishVictoryStat, "SkirmishVictoryStatName");
-	Rva00219453Validate(TheCreateAHeroManager->m_openPlayDefeatStat, "OpenPlayDefeatStatName");
-	Rva00219453Validate(TheCreateAHeroManager->m_openPlayVictoryStat, "OpenPlayVictoryStatName");
-
-	TheCreateAHeroManager->m_specialAnimPercentChance = std::min(100.0f, TheCreateAHeroManager->m_specialAnimPercentChance);
-	TheCreateAHeroManager->m_specialAnimPercentChance = std::max(0.0f, TheCreateAHeroManager->m_specialAnimPercentChance);
-
-	static NameKeyType noneKey = TheNameKeyGenerator->nameToKey("None");
-	static NameKeyType emptyKey = TheNameKeyGenerator->nameToKey("");
-	if (TheCreateAHeroManager->m_weaponGroupName == NAMEKEY_INVALID
-		|| TheCreateAHeroManager->m_weaponGroupName == noneKey
-		|| TheCreateAHeroManager->m_weaponGroupName == emptyKey)
-		throw INIException(3, "WeaponGroupName is not a valid in CreateAHeroSystem.ini.");
-
-	if (TheCreateAHeroManager->m_selectedCheerAnimName.isNone() || ((const StringBase<char> *)&TheCreateAHeroManager->m_selectedCheerAnimName)->isEmpty())
-		throw INIException(3, "SelectedCheerAninName is not a valid in CreateAHeroSystem.ini.");
-	if (TheCreateAHeroManager->m_examineWeaponAnimName.isNone() || ((const StringBase<char> *)&TheCreateAHeroManager->m_examineWeaponAnimName)->isEmpty())
-		throw INIException(3, "ExamineWeaponAninName is not a valid in CreateAHeroSystem.ini.");
-	if (TheCreateAHeroManager->m_examineSelfAnimName.isNone() || ((const StringBase<char> *)&TheCreateAHeroManager->m_examineSelfAnimName)->isEmpty())
-		throw INIException(3, "ExamineSelfAninName is not a valid in CreateAHeroSystem.ini.");
-
-	if (!((const StringBase<char> *)&TheCreateAHeroManager->m_canBuildUpgradeName)->isEmpty())
-	{
-		if (TheUpgradeCenter->findUpgrade(TheCreateAHeroManager->m_canBuildUpgradeName) == 0)
-			TheCreateAHeroManager->m_canBuildUpgradeName.clear();
-	}
-}
-
-// Retail 0x0021B31C: the hero class granted by an upgrade, or NULL. The class
-// parser (0x002202BF) refuses a second class with the same upgrade through it.
-CreateAHeroManager::CreateAHeroClass *CreateAHeroManager::rva0021B31C(const AsciiString &upgradeName)
-{
-	for (UnsignedInt i = 0; i < m_classes.size(); i++) {
-		if (upgradeName.compareNoCase(m_classes[i].getUpgradeName()) == 0)
-			return &m_classes[i];
-	}
-	return 0;
-}
-
-// Retail 0x0021A428 (callers AptSkirmish::InitCreateAHeroOnStartGame and the
-// two hero-box Run handlers): copies the hero into the local hero, clears its
-// +4 field through the rowed setter, and when the local hero has a name passes
-// "MyHero.dat" to 0x004098BE.
-void CreateAHeroManager::rva0021A428(const CreateAHeroData &hero)
-{
-	*(CreateAHeroData *)&m_localHero = hero;
-	((Rva00406E47 *)&m_localHero)->rva00406E47(0);
-	if (!((const StringBase<char> *)&m_localHeroName)->isEmpty())
-		m_localHero.rva004098BE(AsciiString("MyHero.dat"), false);
-}
-
 // Native 21AD88..21ADD9 is the cdecl comparator passed by the independently
 // bounded sort wrapper21E673. The preceding43B member ends exactly at21AD88;
 // the comparator returns at21ADD8 before the following member starts21ADD9.
@@ -565,50 +349,13 @@ void CreateAHeroManager::rva0021A428(const CreateAHeroData &hero)
 // word at upgrade+88 participates in ordering. Its original field and
 // comparator names are unresolved. Ghidra omitted this standalone boundary.
 struct BlingUpgradeOrderView { char unknown00[0x88]; unsigned int word88; };
-bool Rva0021AD88Less(unsigned int first, unsigned int second)
-{
-    const BlingUpgradeOrderView *a = reinterpret_cast<const BlingUpgradeOrderView *>(
-        TheUpgradeCenter->findUpgrade(static_cast<CreateAHeroBling *>(
-            TheCreateAHeroManager->GetBling(first))->m_upgradeName));
-    const BlingUpgradeOrderView *b = reinterpret_cast<const BlingUpgradeOrderView *>(
-        TheUpgradeCenter->findUpgrade(static_cast<CreateAHeroBling *>(
-            TheCreateAHeroManager->GetBling(second))->m_upgradeName));
-    return a->word88 < b->word88;
-}
-
 typedef bool (*BlingIndexLess)(unsigned int, unsigned int);
 namespace _STL {
 template <> void sort<unsigned int *, BlingIndexLess>(unsigned int *, unsigned int *, BlingIndexLess);
 }
-// Native21E673..21E68A supplies the verified comparator and the unsigned
-// index vector's complete range to the recursively proven value-sort fold.
-void Rva0021E673Sort(std::vector<unsigned int> *values)
-{
-    std::sort(values->begin(), values->end(), Rva0021AD88Less);
-}
-
 namespace _STL {
 template <> vector<unsigned int> &map<int, vector<unsigned int> >::operator[](const int &);
 }
-// WB B770E0 names AddBling; native21E954..21E9D8 RET12 fixes the map
-// offsets24/48. The four-byte index selects a bling through the comparator
-// above; the integer key groups indices. New groups receive default index0,
-// existing groups may replace it, and unique appended indices are sorted.
-void CreateAHeroManager::CreateAHeroSubClass::AddBling(Int blingKey, UnsignedInt index, Bool makeDefault)
-{
-    if (!g_Va00DFE348) return;
-    if (m_defaultBlingIds.find(blingKey) == m_defaultBlingIds.end())
-        m_defaultBlingIds[blingKey] = 0;
-    else if (makeDefault)
-        m_defaultBlingIds[blingKey] = index;
-    std::vector<unsigned int> &ids = m_blingIds[blingKey];
-    unsigned int *finish = ids.end();
-    if (std::find(ids.begin(), finish, index) == finish) {
-        ids.push_back(index);
-        Rva0021E673Sort(&ids);
-    }
-}
-
 // Native substring builder and conversion use the same12-byte view ABI.
 struct Rva000B6AF5Rec { void *p; int a; int b; };
 struct Rva000B6AA9Rec {
@@ -622,27 +369,6 @@ inline char BlingFirstChar(const AsciiString &string)
 {
     const char *buffer=*reinterpret_cast<const char *const *>(&string);
     return buffer ? buffer[8] : 0;
-}
-
-void CreateAHeroManager::parseHeroBlingUpgrades(INI *ini, void *instance, void *, const void *)
-{
-    std::vector<AsciiString> upgrades;
-    INI::parseAsciiStringVectorAppend(ini,0,&upgrades,0);
-    CreateAHeroSubClass *subClass=static_cast<CreateAHeroSubClass *>(instance);
-    for (unsigned i=0;i<upgrades.size();++i) {
-        int index=0;
-        int blingId=0;
-        AsciiString upgrade=upgrades[i];
-        bool makeDefault=false;
-        if (upgrade.getLength()>1 && BlingFirstChar(upgrade)=='@') {
-            makeDefault=true;
-            Rva000B6AF5Rec view;
-            upgrade=*reinterpret_cast<Rva000B6AA9Rec *>(
-                Rva000B6AF5Build(&view,reinterpret_cast<void **>(&upgrade),upgrade.getLength()-1));
-        }
-        if (TheCreateAHeroManager->FindBlingByUpgradeName(upgrade,&index,&blingId))
-            subClass->AddBling(blingId,index,makeDefault);
-    }
 }
 
 class Rva0040A3F9 { public: CreateAHeroData *rva0040A32F(int); };
