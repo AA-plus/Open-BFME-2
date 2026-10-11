@@ -211,7 +211,7 @@ public:
 	bool canDoSpecialPowerAtObject(const Object *obj, const Object *target, CommandSourceType commandSource,
 		const SpecialPowerTemplate *spTemplate, unsigned int commandOptions, bool checkSourceRequirements);
 	bool rva0041BA61(const Object *obj);
-	bool rva0041CE27(Object *obj, Object *target, int);
+	bool Rva0041CE27Check(Object *obj, Object *target, int);	// rowed 0x0041CE27 (Rva0041CE27Check.cpp); same address+ABI as the old rva0041CE27 spelling
 	bool canTransferSuppliesAt(const Object *obj, const Object *transferDest);
 	bool canDockAt(const Object *obj, const Object *dockDest, CommandSourceType commandSource,
 		bool checkDockUpdate);
@@ -954,7 +954,7 @@ bool ActionManager::canDoSpecialPowerAtObject(const Object *obj, const Object *t
 		case 29:
 			return rva0041C79C(obj, target, commandSource, reinterpret_cast<CapturePowerView *>(module));
 		case 51:
-			if (rva0041CE27(const_cast<Object *>(obj), const_cast<Object *>(target), 0))
+			if (Rva0041CE27Check(const_cast<Object *>(obj), const_cast<Object *>(target), 0))
 				return *reinterpret_cast<void *const *>(reinterpret_cast<const char *>(target) + 0x258) &&
 					!(actionTemplate(target)[0x108] & 4);
 			return false;
