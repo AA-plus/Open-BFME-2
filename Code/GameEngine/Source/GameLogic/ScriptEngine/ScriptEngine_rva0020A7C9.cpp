@@ -129,7 +129,7 @@ void ScriptEngine::rva0020A7C9()
 		if (((StringBase<char> *)&obj->m_name88)->isEmpty())
 			continue;
 		Rva0020A227Element tmp;
-		tmp.key.set(obj->m_name88);
+		((StringBase<char> &)(tmp.key)).set((const StringBase<char> &)(obj->m_name88));
 		tmp.obj = obj;
 		m_vec.push_back(tmp);
 	}

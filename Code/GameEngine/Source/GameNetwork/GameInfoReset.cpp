@@ -116,7 +116,7 @@ void GameInfo::reset()
 	{
 		AsciiString tmp("NOMAP");
 		AsciiString &dst = m_40;
-		dst.set(tmp);
+		((StringBase<char> &)(dst)).set((const StringBase<char> &)(tmp));
 	}
 	m_58 = -1;
 	m_4C = 0;

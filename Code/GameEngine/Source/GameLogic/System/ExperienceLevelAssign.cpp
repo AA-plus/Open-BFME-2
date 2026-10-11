@@ -107,7 +107,7 @@ Rva00289902 &Rva00289902::rva00289902(const Rva00289902 &other)
 	unsigned int i;
 	if (&other == this)
 		return *this;
-	m_str10.set(other.m_str10);
+	((StringBase<char> &)(m_str10)).set((const StringBase<char> &)(other.m_str10));
 	m_14 = other.m_14;
 	m_18 = other.m_18;
 	m_1C = other.m_1C;

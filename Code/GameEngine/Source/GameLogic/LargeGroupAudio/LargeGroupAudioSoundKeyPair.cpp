@@ -447,7 +447,7 @@ void LargeGroupAudioSoundKeyPair::rva0056A378(Rva0056A378Source arg)
  }while(--arg.count);
  reinterpret_cast<LargeGroupAudioKeyMap *>(this)->operator=(*reinterpret_cast<const LargeGroupAudioKeyMap *>(other));
  *reinterpret_cast<OpaqueRefElement4 *>(&m_owner)=*reinterpret_cast<const OpaqueRefElement4 *>(&other->m_owner);
- m_name.set(other->m_name);
+ ((StringBase<char> &)(m_name)).set((const StringBase<char> &)(other->m_name));
  Rva00569F0CVec *v=reinterpret_cast<Rva00569F0CVec *>(&m_subjects);
  v->rva00569F0C(const_cast<BfmeStringRecord00568CE0 *>(other->m_subjects.begin()),const_cast<BfmeStringRecord00568CE0 *>(other->m_subjects.end()),&arg.result.ok);
  for(BfmeStringRecord00568CE0 *e=reinterpret_cast<BfmeStringRecord00568CE0 *>(v->m_begin);e!=m_subjects.end();++e)e->subject=0;

@@ -67,7 +67,7 @@ private:
 
 Rva0057F2DE::Rva0057F2DE(TargetRef00217D4C *ref) : m_holder(ref), m_a0(0), m_a4(0), m_a8(0)
 {
-	m_ascii.set(m_gameSpy.rva005C9FC4());
+	((StringBase<char> &)(m_ascii)).set((const StringBase<char> &)(m_gameSpy.rva005C9FC4()));
 }
 
 Rva0057F2DE::~Rva0057F2DE()

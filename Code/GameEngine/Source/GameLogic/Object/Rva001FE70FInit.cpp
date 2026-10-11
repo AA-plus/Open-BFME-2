@@ -50,5 +50,5 @@ void Rva001FE70F::rva001FE70F(class INI *ini)
 	parse.add(g_00BE2070, 0);
 	parse.add((const FieldParse *)Rva003B0E57Get(), 0x154);
 	ini->initFromINIMulti(this, parse);
-	m_154.set(m_18);
+	((StringBase<char> &)(m_154)).set((const StringBase<char> &)(m_18));
 }

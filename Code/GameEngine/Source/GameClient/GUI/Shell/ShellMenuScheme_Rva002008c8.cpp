@@ -278,7 +278,7 @@ ShellMenuScheme *ShellMenuSchemeManager::newShellMenuScheme(AsciiString name)
 			++it;
 	}
 	ShellMenuScheme *newScheme = NEW ShellMenuScheme;
-	newScheme->m_name.set(name);
+	((StringBase<char> &)(newScheme->m_name)).set((const StringBase<char> &)(name));
 	m_schemeList.push_back(newScheme);
 	return newScheme;
 }

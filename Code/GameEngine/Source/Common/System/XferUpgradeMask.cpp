@@ -144,7 +144,7 @@ void __cdecl rva003064CB(Xfer *xfer, Rva00291440 *bits)
 		while (t) {
 			unsigned int bit = t->m_bitIndex;
 			if (b->testBit(bit)) {
-				tmp.set(t->m_name);
+				((StringBase<char> &)(tmp)).set((const StringBase<char> &)(t->m_name));
 				*x == tmp;
 			}
 			t = t->m_next;

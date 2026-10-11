@@ -61,7 +61,7 @@ class Rva001E1890Nugget;
 void __cdecl Rva001E1890Parse(INI *ini, void *instance, void *store, const void *user)
 {
 	Rva001E125D *nugget = new Rva001E125D;
-	nugget->m_str148.set(ini->getNextAsciiString());
+	((StringBase<char> &)(nugget->m_str148)).set((const StringBase<char> &)(ini->getNextAsciiString()));
 	((StringBase<char> &)(nugget->m_str148)).toLower();
 	const char *tok = ini->getNextTokenOrNull(*(const char **)((char *)ini + 0x420));
 	strncpy(nugget->m_buf160, tok, 0x3F);

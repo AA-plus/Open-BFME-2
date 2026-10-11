@@ -172,7 +172,7 @@ private:
 WeaponTemplate &WeaponTemplate::operator=(const WeaponTemplate &other)
 {
 	m04 = other.m04;
-	m08.set(other.m08);
+	((StringBase<char> &)(m08)).set((const StringBase<char> &)(other.m08));
 	m0C = other.m0C;
 	m10 = other.m10;
 	m14 = other.m14;
@@ -207,7 +207,7 @@ WeaponTemplate &WeaponTemplate::operator=(const WeaponTemplate &other)
 	m84 = other.m84;
 	m88 = other.m88;
 	m8C = other.m8C;
-	m90.set(other.m90);
+	((StringBase<char> &)(m90)).set((const StringBase<char> &)(other.m90));
 	for (int i = 0; i < 4; ++i)
 		m94[i] = other.m94[i];
 	for (int i = 0; i < 4; ++i)
@@ -275,7 +275,7 @@ WeaponTemplate &WeaponTemplate::operator=(const WeaponTemplate &other)
 	m170 = other.m170;
 	m171 = other.m171;
 	m174 = other.m174;
-	m178.set(other.m178);
+	((StringBase<char> &)(m178)).set((const StringBase<char> &)(other.m178));
 	m17C = other.m17C;
 	return *this;
 }
