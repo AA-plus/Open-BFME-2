@@ -18,6 +18,7 @@ template <> vector<AsciiString, allocator<AsciiString> >::~vector();
 template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();
 template <> void _STLP_alloc_proxy<AsciiString*, AsciiString, allocator<AsciiString> >::deallocate(AsciiString*, size_t);
 template <> void allocator<AsciiString>::deallocate(AsciiString*, size_t) const;
+template <> vector<AsciiString, allocator<AsciiString> > &vector<AsciiString, allocator<AsciiString> >::operator=(const vector<AsciiString, allocator<AsciiString> >&);
 }
 
 // Complete retail record copy at 0x000BDF17.
