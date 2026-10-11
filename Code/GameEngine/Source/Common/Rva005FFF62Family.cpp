@@ -156,3 +156,15 @@ void Rva005FFF62::SetSwapButtonVisibility(int idx, bool visible) {
   Rva00577C23AptCall((Rva00222A8BTarget *)g_bfmeAptWindowManager,m_04,m_08.str(),"SetSwapButtonVisibility",&idx,&visible);
   state->_0=saved;
 }
+
+// Native00600052..0060005A: member+4 forwards both original stack arguments
+// to the independently verified visibility setter at005FFF17. The enclosing
+// object's identity is unproven; the adjacent state forwarder0060005A and
+// panel swap forwarder00600062 already live in this family unit.
+struct Rva00600052VisibilityForward {
+    char opaque[4]; Rva005FFF62 *impl;
+    void forward(int index, bool visible);
+};
+void Rva00600052VisibilityForward::forward(int index, bool visible) {
+    impl->SetSwapButtonVisibility(index,visible);
+}
