@@ -80,6 +80,7 @@ typedef int Bool;
 namespace _STL {
 typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
 template <> Lk6AsciiSetTree::~_Rb_tree();
+template <> set<AsciiString, less<AsciiString>, allocator<AsciiString> >::set();
 }
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
 struct Rva00224C76Element {Rva00224C76Element();Rva00224C76Element(const Rva00224C76Element&);Rva00224C76Element&operator=(const Rva00224C76Element&);~Rva00224C76Element(){}char bytes[8]; bool operator==(const Rva00224C76Element&)const;};

@@ -16,6 +16,7 @@
 namespace _STL {
 typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
 template <> Lk6AsciiSetTree::~_Rb_tree();
+template <> set<AsciiString, less<AsciiString>, allocator<AsciiString> >::set();
 }
 struct VideoNode {VideoNode *next;AsciiString name;Rva0010EDC2 *entry;};
 struct AudioCacheCursor {

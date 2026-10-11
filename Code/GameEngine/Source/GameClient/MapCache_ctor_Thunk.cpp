@@ -23,6 +23,7 @@ typedef int Bool;
 namespace _STL {
 typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
 template <> Lk6AsciiSetTree::~_Rb_tree();
+template <> set<AsciiString, less<AsciiString>, allocator<AsciiString> >::set();
 }
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameClient/MapUtil.h

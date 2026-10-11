@@ -28,6 +28,7 @@ template <> struct less<AsciiString> {
 namespace _STL {
 typedef _Rb_tree<AsciiString, AsciiString, _Identity<AsciiString>, less<AsciiString>, allocator<AsciiString> > Lk6AsciiSetTree;
 template <> Lk6AsciiSetTree::~_Rb_tree();
+template <> set<AsciiString, less<AsciiString>, allocator<AsciiString> >::set();
 }
 
 struct BfmeE16 { float x, y, z, w; };
