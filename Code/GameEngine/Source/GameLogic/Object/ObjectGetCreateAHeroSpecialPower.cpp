@@ -69,17 +69,85 @@ private:
 	ModuleData *m_data; // +0x04
 };
 
+enum KindOfType
+{
+	KIND_12C = 0x12c
+};
+
+enum Relationship
+{
+	REL_0 = 0
+};
+
+enum NameKeyType
+{
+	NAMEKEY_INVALID = 0
+};
+
+class ThingTemplate;
+class Team;
+class Player
+{
+public:
+	Relationship getRelationship(const Team *team) const;
+};
+
+class PlayerList
+{
+public:
+	char m_pad[0x10];
+	Player *m_player;
+};
+
+extern PlayerList *ThePlayerList;
+
+class NameKeyGenerator
+{
+public:
+	NameKeyType nameToKey(const char *name);
+};
+
+extern NameKeyGenerator *TheNameKeyGenerator;
+
+class Module;
+class Rva004B0333
+{
+public:
+	void *rva004B0333();
+};
+
+class Rva002A7DD0
+{
+public:
+	bool rva002A7DD0();
+};
+
+class Rva00373EC6
+{
+public:
+	char m_pad[0x3c];
+	void *m_ptr3c;
+};
+
+
 class Object
 {
 public:
+	ThingTemplate *rva002911B7();
+	bool isKindOf(KindOfType kind) const;
+	Rva00373EC6 *rva0028F4BC();
 	const SpecialPowerTemplate *GetCreateAHeroSpecialPower(unsigned int index);
 	BehaviorModule *rva0028F2C4(int key) const;
 	const AsciiString &rva00292330(const AsciiString &name);
 
+protected:
+	Module *findModule(NameKeyType key) const;
 private:
 	unsigned char m_pad000[0x244];
 	BehaviorModule **m_behaviors; // +0x244
-	unsigned char m_pad248[0x4A4 - 0x248];
+	unsigned char m_pad248[0x304 - 0x248];
+	Team *m_team304; // Native display-template paths read this relation owner.
+	unsigned char m_pad308[0x4A4 - 0x308];
 	_STL::vector<int> m_createAHeroPowers; // +0x4A4
 };
 
@@ -120,4 +188,45 @@ const AsciiString &Object::rva00292330(const AsciiString &name)
 		}
 	}
 	return AsciiString::TheEmptyString;
+}
+
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
+// Retail 0x002911B7..0x00291298, 225 bytes, RET 0. The matched portrait
+// caller 0x00294759 establishes the returned ThingTemplate pointer. Native
+// kind 0x12c selects the SpecialDisguiseUpdate module, while the other path
+// uses the template at the owned 0x0028F4BC result +0x3c; local-player state
+// and team relationship gate both paths. Original lexical method name unknown.
+// Module key static initialization has the native guard-clear EH action.
+// One null exit and a zero-code fence on the final successful return retain
+// retail's common tail layout, with every existing compiler flag unchanged.
+ThingTemplate *Object::rva002911B7()
+{
+	if (isKindOf(KIND_12C)) {
+		if (((Rva002A7DD0 *)ThePlayerList)->rva002A7DD0())
+			goto failed;
+		Team *team = m_team304;
+		Player *pl = ThePlayerList->m_player;
+		if (pl->getRelationship(team) != REL_0)
+			goto failed;
+		static NameKeyType s_key = TheNameKeyGenerator->nameToKey("SpecialDisguiseUpdate");
+		Module *mod = findModule(s_key);
+		if (mod == 0)
+			goto failed;
+		return (ThingTemplate *)((Rva004B0333 *)mod)->rva004B0333();
+	} else {
+		Rva00373EC6 *p = rva0028F4BC();
+		if (p == 0)
+			goto failed;
+		if (p->m_ptr3c == 0)
+			goto failed;
+		if (((Rva002A7DD0 *)ThePlayerList)->rva002A7DD0())
+			goto failed;
+		Team *team2 = m_team304;
+		Player *pl2 = ThePlayerList->m_player;
+		if (pl2->getRelationship(team2) == REL_0) { _ReadWriteBarrier(); return (ThingTemplate *)p->m_ptr3c; }
+		goto failed;
+	}
+failed: return 0;
 }
