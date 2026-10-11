@@ -1,5 +1,5 @@
 // ?rva0008A566@W3DView@@QAEPAVRva0008A234@@ABV?$StringBase@D@@@Z
-// cl: /I. /O1 /G7 /ICode /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
+// cl: /I. /O1 /G7 /ICode /Ireference/shims/bfme2_ascii /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /arch:SSE /DNDEBUG /MD /EHsc
 // Native 0008A566..0008A612: complete 172-byte snapshot factory.
 // Allocation size 0x30, owned constructor 0008A234 and three virtual float
 // getters establish the ABI. Neutral names retain uncertain original identity.
