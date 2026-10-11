@@ -38,6 +38,9 @@ class Image
 public:
 	virtual ~Image();
 	const AsciiString &getName() const { return m_name; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the
+	// original copy loses to the first-in-order copy. No flags touched.
+	const AsciiString &bfme_image_name_fi() const { return m_name; }
 
 private:
 	AsciiString m_name;
@@ -89,5 +92,5 @@ const Image *ImageCollection::findImageByName(const AsciiString &name)
 // ?addImage@ImageCollection@@QAEXPAVImage@@@Z, retail 0x002D9457 (48B).
 void ImageCollection::addImage(Image *image)
 {
-	((ImageSubscriptMap *)&m_imageMap)->operator[](TheNameKeyGenerator->Rva002D91AF(image->getName())) = image;
+	((ImageSubscriptMap *)&m_imageMap)->operator[](TheNameKeyGenerator->Rva002D91AF(image->bfme_image_name_fi())) = image;
 }

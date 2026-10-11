@@ -29,7 +29,10 @@
 #include <stddef.h>
 
 class MaterialPassClass { public: int vptr; int references; void Add_Ref() { ++references; } };
-class MeshClass { public: int vptr; int references; void Add_Ref() { ++references; } };
+class MeshClass { public: int vptr; int references; void Add_Ref() { ++references; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the
+	// Add_Ref copy loses to the first-in-order copy. No flags touched.
+	void bfme_add_ref_rmpa() { ++references; } };
 struct MatPassTaskClass;
 class MatPassTaskPoolClass { public: MatPassTaskClass *Allocate_Object_Memory(); };
 extern MatPassTaskPoolClass MatPassTaskPool;
@@ -41,7 +44,7 @@ public:
         : MaterialPass(pass), Mesh(mesh), NextVisible(0)
     {
         MaterialPass->Add_Ref();
-        Mesh->Add_Ref();
+        Mesh->bfme_add_ref_rmpa();
     }
     void Set_Next_Visible(MatPassTaskClass *task) { NextVisible = task; }
     static void *operator new(size_t) { return MatPassTaskPool.Allocate_Object_Memory(); }
