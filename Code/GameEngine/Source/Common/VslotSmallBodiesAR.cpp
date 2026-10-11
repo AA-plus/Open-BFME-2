@@ -4,7 +4,7 @@
 // shape (dtor call, flags byte test, conditional scalar delete through pinned
 // ??3@YAXPAX@Z 0x0002FD60, return this), same recipe as
 // FamilyDeletingDtors11.cpp and RvaDeletingDtorBatch04.cpp. Each dtor is
-// declared but not defined here and resolves through an address-derived pin
+// generally declared here and resolves through an address-derived pin
 // in reverse/symbols.csv read from the wrapper's own REL32 at +4; every
 // retail site calls it directly, so the dtors are non-virtual here. Emitted
 // via delete anchors that are never called. Owner identities and layouts are
@@ -19,6 +19,9 @@
 //  0x004BAF11 via dtor 0x004BAEC8   0x00558F6E via dtor 0x00557CCC
 //  0x006022AE via dtor 0x006022CA
 
+// ABI-only declaration: no UpdateModule layout or local provider is emitted.
+class UpdateModule { public: virtual ~UpdateModule(); };
+
 class Rva002BEDA4 { public: ~Rva002BEDA4(); };
 class Rva00419B8D { public: ~Rva00419B8D(); };
 class Rva004318D8 { public: ~Rva004318D8(); };
@@ -31,7 +34,7 @@ class Rva004102A4 { public: ~Rva004102A4(); };
 class Rva004E84A4 { public: ~Rva004E84A4(); };
 class Rva0040C39E { public: ~Rva0040C39E(); };
 class Rva0040FB4A { public: ~Rva0040FB4A(); };
-class Rva004AF17D { public: ~Rva004AF17D(); };
+class Rva004AF17D { public: __declspec(noinline) ~Rva004AF17D(); };
 class Rva004BAEC8 { public: ~Rva004BAEC8(); };
 class Rva00557CCC { public: ~Rva00557CCC(); };
 class Rva006022CA { public: ~Rva006022CA(); };
@@ -54,3 +57,12 @@ void Rva004AF17D_DeleteAnchor(Rva004AF17D *p) { delete p; }
 void Rva004BAEC8_DeleteAnchor(Rva004BAEC8 *p) { delete p; }
 void Rva00557CCC_DeleteAnchor(Rva00557CCC *p) { delete p; }
 void Rva006022CA_DeleteAnchor(Rva006022CA *p) { delete p; }
+
+// Native 4AF17D..4AF182 is one complete JMP to the matched UpdateModule dtor.
+// The existing deleting wrapper at4AF161 calls this entry with unchanged ECX.
+// Keep the address-derived receiver name: its original class is unresolved.
+// noinline preserves the wrapper's observed call boundary when this is visible.
+Rva004AF17D::~Rva004AF17D()
+{
+    reinterpret_cast<UpdateModule *>(this)->UpdateModule::~UpdateModule();
+}
