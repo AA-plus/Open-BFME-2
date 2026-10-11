@@ -7,6 +7,12 @@
 // rowed 0x00079554; callees rowed string cstr+default ctors 0x00009100/0x00007850.
 // Prev 0x0007975E next 0x0007981B stlport TUs.
 #include <string>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 
 struct BfmeNarrowRecord00079C23
 {

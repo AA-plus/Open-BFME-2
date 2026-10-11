@@ -6,6 +6,12 @@
 // their original C++ wrapper types and these method spellings are unknown.
 // stlport
 #include <string>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 typedef std::string NarrowString;
 struct Rva00427F14KeyPrefix {
     const char *first;

@@ -9,6 +9,12 @@
 // vector: parse at 0x00428A8C and 0x00428B27 path at 0x00428B6D. Layout
 // matches the rowed dtor at 0x00238580 freeing [esi] then [esi+0xC].
 #include <string>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 
 struct VersionBlockEntry
 {

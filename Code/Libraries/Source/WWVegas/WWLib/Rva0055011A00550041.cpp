@@ -5,6 +5,12 @@
 // Evidence: vtable slot 10 of 0x0086AB90; callees rowed 0x00613A70 0x00389A4C 0x00613AC0.
 #include <map>
 #include <string>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 
 class MutexClass
 {

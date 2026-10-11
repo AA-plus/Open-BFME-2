@@ -43,6 +43,12 @@ _STL::basic_fstream<wchar_t, _STL::char_traits<wchar_t> >::basic_fstream(
 }
 
 // force emission of the specializations above
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 template _STL::basic_fstream<char, _STL::char_traits<char> >::basic_fstream(
 	const char*, _STL::ios_base::openmode);
 template _STL::basic_fstream<wchar_t, _STL::char_traits<wchar_t> >::basic_fstream(

@@ -33,6 +33,12 @@ typedef _STL::basic_string<char, _STL::char_traits<char>, _STL::allocator<char> 
 	Rva009D86E0String;
 typedef _STL::pair<const Rva009D86E0String, int> Rva009D86E0Pair;
 
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 template class _STL::hashtable<
 	Rva009D86E0Pair,
 	Rva009D86E0String,

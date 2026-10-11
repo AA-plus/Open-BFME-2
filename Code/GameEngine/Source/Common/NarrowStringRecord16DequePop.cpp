@@ -11,6 +11,12 @@
 #include <string>
 void __cdecl free(void *);
 #include "BfmeNarrowRecord0041A617.h"
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 struct Rva0041A3F7 {
     BfmeNarrowRecord0041A617 *_M_cur;
     BfmeNarrowRecord0041A617 *_M_first;

@@ -4,6 +4,12 @@
 // Evidence: thiscall ret0; rowed List_base<string> clear at +0 then rowed _free 0x00030830 of node ptr; callers 0x0007A52E 0x004251A8 plus thunk 0x00424A09
 #include <list>
 #include <string>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 
 extern "C" void __cdecl free(void *);
 

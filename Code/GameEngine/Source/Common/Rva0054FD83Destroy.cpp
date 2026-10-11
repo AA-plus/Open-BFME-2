@@ -6,6 +6,12 @@
 // Evidence: dtor 0x0007FAB3, increment 0x0054FA88, caller 0x0054FE9B copies two 16B iterators.
 #include <deque>
 #include <string>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 struct PodPayload20
 {
 	_STL::basic_string<char> m_str;
