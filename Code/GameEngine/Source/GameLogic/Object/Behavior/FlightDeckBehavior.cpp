@@ -97,6 +97,8 @@ inline void _Destroy(AsciiString * __first, AsciiString * __last)
 // copy (row 35 family-LK3).
 namespace _STL {
 template <> void _Construct<Coord3D, Coord3D>(Coord3D *, const Coord3D &);
+// Use the complete retail push_back provider instead of this unit's copy.
+template <> void vector<Coord3D>::push_back(const Coord3D &);
 }
 
 #ifdef _INTERNAL
