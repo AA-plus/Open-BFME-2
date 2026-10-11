@@ -108,6 +108,8 @@ public:
 	int getPlayerIndex() const { return m_54; }
 	char m_pad00[0x54];
 	int m_54;	// +0x54
+	char m_pad58[0x94 - 0x58];
+	unsigned int m_94;	// +0x94 money
 };
 
 // A waypoint: +0x08 its name, +0x0C its location, +0x1C the next one.
@@ -159,6 +161,8 @@ public:
 
 struct Rva002A8AB1Record : public Rva004EBF4B
 {
+	char m_pad000[0x16C];
+	int m_16C;	// +0x16C
 };
 
 // The AI data the manager keeps at +0x10: +0x874 the scan radius.
@@ -197,7 +201,51 @@ struct Rva00573117 : Rva005CB22A
 	virtual ~Rva00573117();
 	virtual void rva0057327E(AITarget *choice, Player *player, int unused);
 	bool rva00573122(Player *player);	// 0x00573122
+	void *m_04;
+	unsigned int m_08;	// +0x08 frames since the gate last passed
 };
+
+// 0x00573122 helpers: the player list's bool getter (rowed 0x002A7EA0), the
+// logic random-log file (0x00DFEFF0), the frame threshold FrameRateInits sets
+// (0x00E062F4) and the logic random real (0x00234092).
+class Rva002A7EA0CmpBoolField
+{
+public:
+	bool get() const;
+};
+class PlayerList;
+extern PlayerList *ThePlayerList;
+extern void *g_00DFEFF0;
+extern int g_00E062F4;
+extern "C" int __cdecl fprintf(void *file, const char *format, ...);
+float GetGameLogicRandomValueReal(float lo, float hi, char *file, int line);
+
+// ?rva00573122@Rva00573117@@QAE_NPAVPlayer@@@Z @0x00573122 237B: the expansion
+// gate (retail __FILE__ AITargetHeuristicExpansionBase.cpp, line 63): the
+// player-list check and enough frames since it last passed, then 3000 money,
+// a record count of at least 1 and a coin flip; each step logs.
+bool Rva00573117::rva00573122(Player *player)
+{
+	if (g_00DFEFF0)
+		fprintf(g_00DFEFF0, "pos 1: p1=%d, p2= %d", ((const Rva002A7EA0CmpBoolField *)ThePlayerList)->get(), m_08);
+	if (!((const Rva002A7EA0CmpBoolField *)ThePlayerList)->get() || m_08 <= (unsigned int)g_00E062F4) {
+		++m_08;
+		return false;
+	}
+	m_08 = 0;
+	if (g_00DFEFF0)
+		fprintf(g_00DFEFF0, "pos 2: money= %d", player->m_94);
+	if (player->m_94 < 3000)
+		return false;
+	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(player);
+	if (g_00DFEFF0)
+		fprintf(g_00DFEFF0, "pos 3: p1 = %d", record->m_16C);
+	if (record->m_16C < 1)
+		return false;
+	if (GetGameLogicRandomValueReal(0.0f, 1.0f, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\SkirmishAI\\AITacticalAI\\AITargetChooser\\AITargetHeuristics\\AITargetHeuristicExpansionBase.cpp", 63) <= 0.5f)
+		return true;
+	return false;
+}
 
 void Rva00573117::rva0057327E(AITarget *choice, Player *player, int unused)
 {

@@ -33,6 +33,8 @@ extern int g_00E035C8;
 extern int g_00E03994;
 extern int g_00E05F24;
 extern int g_00E062F4;
+// Owned here: written by rva007B3FCA below; retail .data starts it at 0.
+int g_00E062F4 = 0;
 extern int g_00E063E0;
 extern int g_00E063E8;
 extern int TheW3DFrameLengthInMsec;
