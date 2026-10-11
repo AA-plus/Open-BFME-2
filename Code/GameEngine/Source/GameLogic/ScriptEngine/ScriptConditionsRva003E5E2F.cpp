@@ -15,6 +15,8 @@ class Parameter
 public:
     const AsciiString &getString() const { return m_string; }
     int getInt() const { return m_int; }
+    // LINK: same-body helper under a TU-unique name (identical inlined bytes); the getInt copy loses to the first-in-order copy. No flags touched.
+    int bfme_getInt_58502() const { return m_int; }
     unsigned char m_beforeInt[8];
     int m_int;
     float m_real;
@@ -24,7 +26,7 @@ public:
 class Team
 {
 public:
-    int countKind(int kind, Bool includeContained, Bool includeDead);
+    int rva0039DC05(int kind, Bool includeContained, Bool includeDead) const;
 };
 
 class ScriptEngine
@@ -47,8 +49,8 @@ Bool ScriptConditions::evaluateTeamCountCompare(
     Team *team = TheScriptEngine->getTeamNamed(
         teamParm->getString(), false);
     if (team) {
-        int kind = kindParm->getInt();
-        if (countParm->getInt() < team->countKind(kind, false, true)) {
+        int kind = kindParm->bfme_getInt_58502();
+        if (countParm->bfme_getInt_58502() < team->rva0039DC05(kind, false, true)) {
             return true;
         }
         return false;
