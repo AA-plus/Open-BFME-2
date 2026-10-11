@@ -3,7 +3,13 @@
 // Virtual slot 20 offset 0x50 of vtable 0x007C6620 in class Rva0007517F.
 // Evidence: vslot lane, donor TU Rva0007517FCtor.cpp, triple _D11 slot 0x2C
 // calls per iteration with 12-byte stride plus g_00BC6610 index table.
-extern int g_00BC6610[];
+// Retail's own 16-byte index table at RVA 0x007C6610 (.rdata, file offset
+// 0x007C5F90): the four corner orders 0, 1, 3, 2 - which is exactly the ledger's
+// 16-byte bound, and exactly the four entries the loop below reads (it indexes
+// at g_00BC6610[i] and g_00BC6610[i % 4] with a 12-byte element stride). The
+// words that follow it in .rdata belong to retail's next object.
+// Symbol ?g_00BC6610@@3PAHA, transcribed below.
+extern int g_00BC6610[] = { 0, 1, 3, 2 };
 
 class EmptyBase2
 {

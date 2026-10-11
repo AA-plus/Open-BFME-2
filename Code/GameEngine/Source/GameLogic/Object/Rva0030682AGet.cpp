@@ -47,7 +47,12 @@ public:
 };
 
 extern class G00DFF080Obj *g_00DFF080;
-extern const char g_00C07D80[];
+// Retail's own 32-byte literal at RVA 0x00807D80 (file offset 0x008079D0),
+// ending exactly where retail's next literal "Buff " begins at 0x00807DA0. The
+// rowed body streams it straight after the buff's name, so the missing piece was
+// the literal itself rather than a view of it.
+// Symbol ?g_00C07D80@@3QBDB, transcribed below.
+extern const char g_00C07D80[] = " requires a W3DBuffDrawModule.\n";
 
 class Debug
 {

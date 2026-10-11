@@ -13,7 +13,12 @@ typedef unsigned long UnsignedLong;
 
 struct Rva00A063B0Obj;
 extern Rva00A063B0Obj *g_a063b0;
-extern UnsignedLong g_00DD35BC;
+// Retail's own value at RVA 0x009D35BC (.data, file offset 0x0098FBBC): a single
+// unsigned long, 500 - the ledger's 4-byte bound for the address. It is the
+// mangler-retry back-off the body below adds to timeGetTime(), so the missing
+// piece was the constant object, not a view of it.
+// Symbol ?g_00DD35BC@@3KA, transcribed below.
+extern UnsignedLong g_00DD35BC = 500;
 extern "C" __declspec(dllimport) UnsignedLong __stdcall timeGetTime(void);
 
 class FirewallHelperClass
