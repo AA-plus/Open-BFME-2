@@ -46565,7 +46565,6 @@ _CpuProbe_Sse2Executes,,0x001D5540,126,Code/Libraries/Source/VP6/CpuProbeSse2.cp
 ?Rva003BF96FDo@@YGXABVAsciiString@@0@Z,,0x003BF96F,89,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_rva003BF96F.cpp,matched,unit player slot7 via mask caller 0x003CB866
 ?Rva003BF903Do@@YGXABVAsciiString@@H@Z,,0x003BF903,108,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_rva003BF903.cpp,matched,team waypoint via terrain slot caller 0x003CB797
 ??1LibraryMapCache@@QAE@XZ,,0x0032D279,84,Code/GameEngine/Source/Common/Rva0032D279Dtor.cpp,matched,loop with ternary delete via virtual plus base vector dtor; identity reconciled from native music loader32FD8E and WB A86AD0 object lifetime plus existing28B team and12B cache layouts; whole provider reverified
-?rva005A91BE@Rva005A91BE@@QAEXPAVXfer@@@Z,,0x005A91BE,87,Code/Libraries/Source/WWVegas/WWLib/Rva005A91BEXfer.cpp,matched,Xfer Version12 count uint via slots 0x28 0x78 0x7c
 ??1TeamFactory@@UAE@XZ,,0x003A383A,95,Code/GameEngine/Source/Common/RTS/TeamFactoryDtor.cpp,matched,unlock dtor EH prolog singleton clear unblocks 0x003A398B
 ??_GTeamFactory@@UAEPAXI@Z,,0x003A398B,28,Code/GameEngine/Source/Common/RTS/TeamFactoryDtor.cpp,matched,chain deleting dtor from ??1 unit vtable slot0
 ?Rva00222B19AptCall@@YGHPAXPBD1H10000@Z,,0x00222B19,180,Code/GameEngine/Source/GameClient/Rva00222B19AptCallLevel.cpp,matched,level-gated APT call via format concat and pinned AptCall
