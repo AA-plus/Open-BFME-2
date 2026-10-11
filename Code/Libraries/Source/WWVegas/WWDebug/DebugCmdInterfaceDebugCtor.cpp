@@ -19,7 +19,7 @@ class DebugCmdInterface
 public:
 	virtual ~DebugCmdInterface() {}
 
-	DebugCmdInterface() {}
+	__declspec(dllimport) __forceinline DebugCmdInterface() {}
 
 	enum CommandMode { Normal, Structured, MAX };
 
