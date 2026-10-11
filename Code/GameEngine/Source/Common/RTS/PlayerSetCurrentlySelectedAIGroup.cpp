@@ -5,7 +5,7 @@
 // rva004D6C29Clear plus rowed Rva0018B8B0 apply(true); prev/next PlayerRva
 // same flags; callers include GameLogicDeselectObject; pin reuses Squad name.
 // ?rva002ACCA3@Player@@QAEXPAVAIGroup@@@Z @0x002ACCA3 102B: chain via +0x730
-// selection plus pin Squad alloc plus pin getPart plus rowed rva004D6C9C loop;
+// selection plus pin Squad alloc plus rowed AIGroup::getAllIDs plus rowed rva004D6C9C loop;
 // prev is setCurrentlySelectedAIGroup same flags; caller 0x0023C991.
 enum ScienceType
 {
@@ -32,10 +32,23 @@ public:
 	void rva004D6C29();
 };
 
-class Rva0018B8B0Arg
+class Rva0018B8B0Arg;
+
+enum ObjectID
+{
+	INVALID_ID = 0
+};
+
+namespace _STL
+{
+template <class T> class allocator;
+template <class T, class A> class vector;
+}
+
+class AIGroup
 {
 public:
-	BfmePartCDF *getPart();
+	const _STL::vector<ObjectID, _STL::allocator<ObjectID> > &getAllIDs() const;
 };
 
 class Rva0018B8B0Holder
@@ -50,7 +63,6 @@ public:
 	void rva004D6C9C(ScienceType science);
 };
 
-class AIGroup;
 class Player
 {
 public:
@@ -76,7 +88,7 @@ void Player::rva002ACCA3(AIGroup *group)
 		return;
 	if (m_currentSelection == 0)
 		m_currentSelection = new Squad;
-	BfmePartCDF *part = ((Rva0018B8B0Arg *)group)->getPart();
+	const BfmePartCDF *part = (const BfmePartCDF *)&group->getAllIDs();
 	int count = part->m_finish - part->m_start;
 	for (int i = 0; i < count; ++i)
 		((Rva004D6C9C *)m_currentSelection)->rva004D6C9C(part->m_start[i]);
