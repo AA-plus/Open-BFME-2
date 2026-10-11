@@ -8,7 +8,11 @@
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 extern StringBase<char> g_00DFE7B0;
-extern unsigned char g_00DFE7A8;
+// VA 0x00DFE7A8 (RVA 0x009FE7A8): the timing-log enable byte this body sets.
+// Retail's storage sits in .data's zero-filled tail (the section's raw data ends
+// at RVA 0x009DE008, so the address loads as zero), so the definition that owns
+// the symbol is zero-initialised, exactly as retail's image holds it.
+unsigned char g_00DFE7A8;
 
 struct Rva003B9EC4Arg { char m_pad00[4]; const char *m_04; };
 

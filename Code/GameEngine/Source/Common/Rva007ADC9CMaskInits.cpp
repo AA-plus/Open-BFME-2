@@ -16,18 +16,27 @@ extern "C" void * __cdecl memset(void *, int, unsigned int);
 template <int N>
 class BitFlags;
 
-extern unsigned char g_00DFE794[16];
-extern unsigned char g_00DFEA50[76];
+// The mask objects this unit's own static initializers clear. Each is defined
+// here, in the unit whose rowed memset body writes it, with the extent that body
+// proves (the memset length) and a zero initialiser: every address lies in
+// .data's zero-filled tail, whose raw data ends at RVA 0x009DE008, so retail's
+// image holds zeros for them and the initializers below then clear them again.
+// g_00DFEFA4StoragePrototype is additionally read by four other units as the
+// script engine's 28-byte storage prototype; no other object defines it.
+unsigned char g_00DFE794[16];
+unsigned char g_00DFEA50[76];
+// Not defined here: Rva00507823Ctor.cpp already owns this prototype (the bytes
+// preserved there from game.dat); this unit's initializer only clears it.
 extern unsigned char g_00DFEFA4StoragePrototype[28];
-extern unsigned char g_00E01EC0[4];
-extern unsigned char g_00E01EC4[4];
-extern unsigned char g_00E01EC8[4];
-extern unsigned char g_00E01ECC[4];
-extern unsigned char g_00E01ED0[4];
-extern unsigned char g_00E0284C[28];
-extern unsigned char g_00E02868[28];
-extern unsigned char g_00E02884[28];
-extern unsigned char g_00E028A0[28];
+unsigned char g_00E01EC0[4];
+unsigned char g_00E01EC4[4];
+unsigned char g_00E01EC8[4];
+unsigned char g_00E01ECC[4];
+unsigned char g_00E01ED0[4];
+unsigned char g_00E0284C[28];
+unsigned char g_00E02868[28];
+unsigned char g_00E02884[28];
+unsigned char g_00E028A0[28];
 extern BitFlags<11> DISABLEDMASK_NONE;
 extern BitFlags<11> DISABLEDMASK_ALL;
 
