@@ -504,16 +504,10 @@ Real WeaponTemplate::getSecondaryDamageRadius(const WeaponBonus& bonus) const
 // ?isContactWeapon@WeaponTemplate@@ present-unmatched
 Bool WeaponTemplate::isContactWeapon() const
 {
-#ifdef RATIONALIZE_ATTACK_RANGE
-	// Note - undersize by 1/4 of a pathfind cell, so that the goal is not teetering on the edge
-	// of firing range.  jba.
-	const Real UNDERSIZE = PATHFIND_CELL_SIZE_F*0.25f; 
-	return (m_attackRange - UNDERSIZE) < PATHFIND_CELL_SIZE_F;
-#else
-// fudge this a little to account for pathfinding roundoff & such
-	const Real ATTACK_RANGE_FUDGE = 1.05f;
-	return m_attackRange * ATTACK_RANGE_FUDGE < PATHFIND_CELL_SIZE_F; 
-#endif
+	// BFME 2 retail: the call from privateAttackPosition (0x0026DC3F) lands on the shared
+	// xor al,al / ret false-predicate stub at 0x0047A699 (symbols.csv pin), so the Zero Hour
+	// attack-range test (PATHFIND_CELL_SIZE_F cutoff) is gone.
+	return false;
 }
 
 //-------------------------------------------------------------------------------------------------
