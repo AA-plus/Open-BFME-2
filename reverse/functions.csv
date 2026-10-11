@@ -76454,3 +76454,4 @@ uw_0077909c,,0x0077909C,13,Code/GameEngine/Source/GameLogic/AI/AIObjectTargetPre
 ?rva0026547E@@YAPAXXZ,,0x0026547E,10,Code/GameEngine/Source/GameLogic/AI/PathRva003649B1.cpp,matched,mov ecx offset g_pathNodePool then tail jump to rowed pool allocate 0x002635C2 (operator-new shape); address-named
 ?rva0028610C@@YAPAXXZ,,0x0028610C,10,Code/GameEngine/Source/Common/Rva00286116PoolFrees.cpp,matched,mov ecx offset g_pool00286116 then tail jump to rowed pool allocate 0x00285A3B (operator-new shape); address-named
 ?rva0028612C@@YAPAXXZ,,0x0028612C,10,Code/GameEngine/Source/Common/Rva00286116PoolFrees.cpp,matched,mov ecx offset g_pool00286136 then tail jump to rowed pool allocate 0x00285AC4 (operator-new shape); address-named
+?LoadPostProcess@CPUParticle@FXParticleSystem@@QAEXXZ,,0x001F6201,142,Code/GameEngine/Source/GameClient/System/FXParticleSystem/CPUParticleLoadPostProcess.cpp,matched,WB FXParticleSystem::CPUParticle::LoadPostProcess line 1070
