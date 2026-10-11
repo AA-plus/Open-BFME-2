@@ -566,33 +566,8 @@ WW3DErrorType VertexMaterialClass::Load_W3D(ChunkLoadClass & cload)
 	return WW3D_ERROR_OK;
 }
 
-// ?Parse_W3dVertexMaterialStruct@VertexMaterialClass@@QAEXABUW3dVertexMaterialStruct@@@Z present-unmatched
-inline void VertexMaterialClass::Parse_W3dVertexMaterialStruct(const W3dVertexMaterialStruct & vmat)
-{
-	Vector3 tmp;
-	W3dUtilityClass::Convert_Color(vmat.Ambient,&tmp);
-	Set_Ambient(tmp);
-	
-	W3dUtilityClass::Convert_Color(vmat.Diffuse,&tmp);
-	Set_Diffuse(tmp);
-	
-	W3dUtilityClass::Convert_Color(vmat.Specular,&tmp);
-	Set_Specular(tmp);
-
-	W3dUtilityClass::Convert_Color(vmat.Emissive,&tmp);
-	Set_Emissive(tmp);
-
-	Set_Shininess(vmat.Shininess);
-	Set_Opacity(vmat.Opacity);
-
-	if (vmat.Attributes & W3DVERTMAT_USE_DEPTH_CUE) {
-		Set_Flag(VertexMaterialClass::DEPTH_CUE,true);
-	}
-
-	if (vmat.Attributes & W3DVERTMAT_COPY_SPECULAR_TO_DIFFUSE) {
-		Set_Flag(VertexMaterialClass::COPY_SPECULAR_TO_DIFFUSE,true);
-	}
-}
+// Native Parse_W3dVertexMaterialStruct is owned by VertexMaterialParseStruct.cpp
+// at 13D030. Do not emit the non-retail donor inline copy from this unit.
 
 void VertexMaterialClass::Parse_Mapping_Args(const W3dVertexMaterialStruct & vmat,char * mapping0_arg_buffer,char * mapping1_arg_buffer)
 {
@@ -1142,3 +1117,7 @@ void _bfmeVertexMaterialSetterAnchor(VertexMaterialClass *material)
 	(void)WW3D::Is_Coloring_Enabled();
 }
 #pragma inline_depth()
+
+// Preserve the independently rowed setter formerly emitted by the removed
+// parser. This address-taking constant is an emission anchor, not retail data.
+void (VertexMaterialClass::*const bfmeVertexMaterialSetFlagAnchor)(VertexMaterialClass::FlagsType, bool) = &VertexMaterialClass::Set_Flag;
