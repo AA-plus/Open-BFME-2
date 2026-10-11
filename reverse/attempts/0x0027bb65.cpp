@@ -1,6 +1,7 @@
 // ?applyPhysicsXform@Drawable@@QAEXPAVMatrix3D@@@Z
 // partial score=0.9977 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
+// seat13 2026-10-11: unchanged best 873/875; residue row1 sum loads [esi+0x14] then [esi+0x10] (retail 0x10 then 0x14).
 // retail 0x0027BB65..0x0027BED0 (875 bytes) thiscall RET 4; ZH Drawable::applyPhysicsXform order and guards.
 // Translation via WWMath Matrix3D::Translate(const Vector3&) with (float) casts on a Vector3(0,0,m_totalZ)
 // temporary: with all three rows 3-term it reproduces retail's zero-term factoring (Y+X, X+Y, Y+X) and every
