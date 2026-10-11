@@ -1,7 +1,3 @@
-// ?update@RespawnUpdate@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.995 date=2026-10-09
-// ?update@RespawnUpdate@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.995 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /I.
 // WB RespawnUpdate::update and native4AF92F..4AFB01 establish identity.
 // Factory4AF8F6/ctor4AF096 prove44B module and secondary update at10;
@@ -64,7 +60,7 @@ class FXList {public:static void doFXObj(const FXList *,const Object *,const Obj
 class RespawnUpdateModuleData {public:
  char pad00[0x58];int conditions58[19];int conditionsA4[19];const FXList *deathFX,*reviveFX;char padF8[8];unsigned reviveTime;
 };
-class ObjectModule {public:virtual ~ObjectModule();const RespawnUpdateModuleData *data;Object *object;};
+class ObjectModule {public:virtual ~ObjectModule();const RespawnUpdateModuleData *data;Object *object; __forceinline const RespawnUpdateModuleData *getData()const{return data;} __forceinline Object *getObject()const{return object;}};
 class BehaviorModuleInterface {public:virtual void slot0()=0;};
 class BehaviorModule:public ObjectModule,public BehaviorModuleInterface {public:virtual ~BehaviorModule();};
 class UpdateModuleInterface {public:virtual UpdateSleepTime update()=0;};
@@ -76,10 +72,14 @@ class RespawnUpdate:public UpdateModule {public:
 };
 class PlayerList {public:__forceinline Player *getLocalPlayer() const{return local;}char pad[0x10];Player *local;};extern PlayerList *ThePlayerList;
 class ControlBar {public:char pad[0x28];bool dirty;};extern ControlBar *TheControlBar;
-// ?update@RespawnUpdate@@UAE?AW4UpdateSleepTime@@XZ present-unmatched
+// The null initialization is dead by the switch and emits no extra code,
+// but fixes MSVC local-home and store ordering: native data goes to frame-4
+// before object goes to frame-8. A reordered declaration exchanges the homes.
+// Whole466-byte body, including both state branches, matches retail.
 UpdateSleepTime RespawnUpdate::update() {
- Object *obj=object;
- const RespawnUpdateModuleData *d=data;
+ Object *obj=0;
+ const RespawnUpdateModuleData *d=getData();
+ obj=getObject();
  switch(state) {
  case 2:return UPDATE_SLEEP_FOREVER;
  case 3: {
