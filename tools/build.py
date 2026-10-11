@@ -130,6 +130,29 @@ def row_object(row):
     return obj_path(source)
 
 
+class RowObjectPaths:
+    """Object-path lookups for one verification pass, never cached verdicts.
+
+    Re-resolve every used selector before reporting success. Library members
+    stay distinct; no mapping survives into another pass or build.
+    """
+    def __init__(self, getter):
+        self.getter = getter
+        self.paths = {}
+
+    def get(self, row):
+        selector = (row["source"], ledger_member(row)
+                    if Path(row["source"]).suffix.lower() == LIB_SUFFIX else None)
+        if selector not in self.paths:
+            self.paths[selector] = (self.getter(row), dict(row))
+        return self.paths[selector][0]
+
+    def check(self):
+        for obj, row in self.paths.values():
+            if self.getter(row) != obj:
+                raise SystemExit(f"{row['source']}: object path changed during verification")
+
+
 def require_row_object(row):
     """row_object, but a missing object is fatal rather than skipped.
 
@@ -2824,9 +2847,10 @@ def verify_functions(only=None):
     patches = []
     renumbered = []
     row_starts = sorted({int(row["target_rva"], 16) for row in load_all_function_rows()})
+    object_paths = RowObjectPaths(row_object)
     for row in rows:
         try:
-            patch = compile_function(row, symbol_map, row_object(row))
+            patch = compile_function(row, symbol_map, object_paths.get(row))
         except ValueError as unreadable:
             # A row whose body cannot be read is a RED row, not a dead gate.
             # read_funclet raises exactly this when a funclet pin names no label
@@ -2851,7 +2875,7 @@ def verify_functions(only=None):
             if (ROOT / row["source"]).suffix.lower() != LIB_SUFFIX and not is_funclet_row(
                     row, ledger_object_symbol(row)):
                 extent = [(check, message) for check, message in
-                          body_extent_problems(row, patch, symbol_map, row_object(row), row_starts)
+                          body_extent_problems(row, patch, symbol_map, object_paths.get(row), row_starts)
                           if not gate_baselined(check, row)]
             if extent:
                 failures += 1
@@ -2877,6 +2901,7 @@ def verify_functions(only=None):
             print(f"    unresolved call(s): {calls} (add to reverse/symbols.csv)")
         print(f"    target:   {format_bytes(target)}")
         print(f"    compiled: {format_bytes(compiled)}")
+    object_paths.check()
 
     if renumbered:
         # Green, but on a pin the ledger got wrong: say so every time, or the
@@ -3013,8 +3038,9 @@ def verify_string_refs(rows):
     mismatches = []
     checked = 0
     empty_ok = 0
+    object_paths = RowObjectPaths(require_row_object)
     for row in rows:
-        obj = require_row_object(row)
+        obj = object_paths.get(row)
         target_rva = int(row["target_rva"], 16)
         target_size = int(row["target_size"])
         target = read_target_bytes(target_rva, target_size)
@@ -3065,6 +3091,7 @@ def verify_string_refs(rows):
                 empty_ok += 1
             else:
                 checked += 1
+    object_paths.check()
     known = [m for m in mismatches if gate_baselined("strnul", m[0])]
     mismatches = [m for m in mismatches if not gate_baselined("strnul", m[0])]
     if mismatches:
@@ -3088,8 +3115,9 @@ def verify_float_refs(rows):
     reside at several addresses because the linker need not pool them.
     """
     checked, mismatches = 0, []
+    object_paths = RowObjectPaths(require_row_object)
     for row in rows:
-        obj = require_row_object(row)
+        obj = object_paths.get(row)
         size = int(row["target_size"])
         target = read_target_bytes(int(row["target_rva"], 16), size)
         try:
@@ -3120,6 +3148,7 @@ def verify_float_refs(rows):
                     checked += 1
             except (ValueError, struct.error) as exc:
                 mismatches.append((row["name"], symbol, f"unverifiable: {exc}"))
+    object_paths.check()
     if mismatches:
         print(f"Float-ref verify: FAIL {len(mismatches)} mismatch(es)")
         for name, symbol, detail in mismatches[:12]:
@@ -3143,8 +3172,9 @@ def verify_import_refs(rows):
     except ValueError as exc:
         raise SystemExit(f"Import-ref verify: FAIL unreadable PE imports: {exc}")
     checked, mismatches = 0, []
+    object_paths = RowObjectPaths(require_row_object)
     for row in rows:
-        obj = require_row_object(row)
+        obj = object_paths.get(row)
         size = int(row["target_size"])
         target = read_target_bytes(int(row["target_rva"], 16), size)
         symbol = ledger_object_symbol(row)
@@ -3172,6 +3202,7 @@ def verify_import_refs(rows):
                 mismatches.append((row["name"], symbol, f"0x{slot:08X}: {actual}"))
             except struct.error as exc:
                 mismatches.append((row["name"], symbol, f"unverifiable: {exc}"))
+    object_paths.check()
     if mismatches:
         print(f"Import-ref verify: FAIL {len(mismatches)} mismatch(es)")
         for name, symbol, detail in mismatches[:20]:
@@ -3192,8 +3223,9 @@ def verify_dir32_consistency(rows):
     whitelist_path = ROOT / "reverse" / "dir32_consistency_whitelist.txt"
     sym2base = defaultdict(set)
     static_symbols = {}
+    object_paths = RowObjectPaths(require_row_object)
     for row in rows:
-        obj = require_row_object(row)
+        obj = object_paths.get(row)
         trva, tsz = int(row["target_rva"], 16), int(row["target_size"])
         target = read_target_bytes(trva, tsz)
         try:
@@ -3236,6 +3268,7 @@ def verify_dir32_consistency(rows):
             final = struct.unpack_from("<I", target, off)[0]
             addend = struct.unpack_from("<I", body, off)[0]
             sym2base[identity].add((final - addend) & 0xFFFFFFFF)
+    object_paths.check()
     inconsistent = sorted(s for s, b in sym2base.items() if len(b) > 1)
     # Duplicate IAT entries can independently declare the exact same import.
     # This is PE metadata evidence, not an address whitelist: both the DLL and

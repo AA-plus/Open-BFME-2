@@ -211,6 +211,36 @@ def test_late_input_changes_discard_all_earlier_facts(tmp_path, monkeypatch, cha
         (r["source"], r["name"]) for r in rows]
 
 
+def test_body_rows_reuse_mapping_only_within_one_audit(tmp_path, monkeypatch):
+    rows, _source, _header, obj, _meta, _command, _env = multi_row_audit(tmp_path, monkeypatch)
+    expanded = rows * 10
+    calls = []
+    monkeypatch.setattr(dc.build, "row_object", lambda row: (calls.append(dict(row)) or obj))
+    unread = []
+    facts = dc.converged_facts(expanded, unread)
+    assert len(facts) == len(expanded) and unread == []
+    assert len(calls) == 2 and all(call == rows[0] for call in calls)
+    calls.clear()
+    assert dc.converged_facts(expanded, unread) == facts and unread == []
+    assert len(calls) == 2
+
+
+def test_changed_source_mapping_refuses_every_row(tmp_path, monkeypatch):
+    rows, _source, _header, obj, _meta, _command, _env = multi_row_audit(tmp_path, monkeypatch)
+    calls = []
+
+    def mapped(row):
+        calls.append(dict(row))
+        return obj if len(calls) == 1 else obj.with_name("different.obj")
+
+    monkeypatch.setattr(dc.build, "row_object", mapped)
+    unread = []
+    assert dc.converged_facts(rows, unread) == []
+    assert len(unread) == len(rows)
+    assert {name for _source, name, _why in unread} == {r["name"] for r in rows}
+    assert all("inputs changed" in why for _source, _name, why in unread)
+
+
 def test_a_late_header_change_invalidates_every_object_using_it(tmp_path, monkeypatch):
     rows, source, header, obj, meta, _command, _env = multi_row_audit(tmp_path, monkeypatch)
     second = tmp_path / "b.obj"

@@ -347,9 +347,14 @@ def converged_facts(rows, unread):
             current, why = False, f"object currency unknown: {error}"
         return current, why
 
+    object_paths = {}
     objects, out, failed, changed_objects = {}, [], set(), set()
     for index, row in enumerate(rows):
-        obj = build.row_object(row)
+        selector = (row["source"], build.ledger_member(row)
+                    if Path(row["source"]).suffix.lower() == build.LIB_SUFFIX else None)
+        if selector not in object_paths:
+            object_paths[selector] = (build.row_object(row), dict(row))
+        obj = object_paths[selector][0]
         key = (row["source"], obj)
         if key not in objects:
             watched = set()
@@ -388,6 +393,13 @@ def converged_facts(rows, unread):
                 continue
             out.append((key, (row["source"], name, base, effective)))
 
+    remapped_objects = set()
+    for obj, row in object_paths.values():
+        try:
+            if build.row_object(row) != obj:
+                remapped_objects.add((row["source"], obj))
+        except (OSError, ValueError, SystemExit):
+            remapped_objects.add((row["source"], obj))
     rejected = set()
     # A shared header is stamped only once, but every object using it is refused
     # if it moved. Ordinary currency rechecks also judge the current command and
@@ -399,7 +411,7 @@ def converged_facts(rows, unread):
             continue
         source, obj = key
         current, why = currency(ROOT / source, obj, proofs=after)
-        if key in changed_objects or watched & moved or global_inputs & moved or dict(os.environ) != environment:
+        if key in remapped_objects or key in changed_objects or watched & moved or global_inputs & moved or dict(os.environ) != environment:
             current, why = False, "object or build inputs changed during data audit"
         if not current:
             rejected.add(key)
