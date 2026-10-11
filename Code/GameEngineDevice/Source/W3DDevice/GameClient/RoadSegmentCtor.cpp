@@ -61,7 +61,7 @@ struct TRoadSegInfo
 class SphereClass
 {
 public:
-	SphereClass(void) { Center.X = 0.0f; Center.Y = 0.0f; Center.Z = 0.0f; Radius = 0.0f; }
+	__declspec(dllimport) __forceinline SphereClass(void) { Center.X = 0.0f; Center.Y = 0.0f; Center.Z = 0.0f; Radius = 0.0f; }
 	Vector3 Center;
 	float Radius;
 };
