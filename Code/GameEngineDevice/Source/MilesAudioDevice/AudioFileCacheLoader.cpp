@@ -7,6 +7,12 @@
 // Codegen: the count read in a named int local keeps the native compare-against-zero form.
 #include <set>
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
 #include "ascii_string.h"
 
 // list<int> destruction otherwise instantiates per-TU deallocate

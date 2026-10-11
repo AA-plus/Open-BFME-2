@@ -4,6 +4,12 @@
 // Evidence: LINK BONUS via 0x0039C09C; inner Rva0039BCF8 at +0x10 via rowed rva0039BCF8 0x0039BCF8; flag +0x14 set -1; list<int> at +0x18 via rowed clear 0x0023DAA5; count +0x1C set 0; callers 0x0039C0CA 0x0041453E 0x0055A93F 0x0055AC2D 0x0055A993; layout like Rva0055AA06 list/count.
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
+
 // Declaration-only: retail has one list<int>::insert (rowed in stlport_list_int_insert.cpp, node creation out of line);
 // this unit calls it rather than emitting a copy with the node creation inlined.
 namespace _STL {

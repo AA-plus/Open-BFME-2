@@ -26,6 +26,12 @@
 // ThingTemplate+0x10C) and also returns the masked word.
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
+
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
 template <class T, class Traits>

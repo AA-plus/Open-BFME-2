@@ -5,6 +5,12 @@
 // Evidence: chain from 0x005B72E7 you landed; callers 0x005B7888 deleting dtor; lists via rowed list<int> clear erase base dtor.
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
+
 // list<int> destruction otherwise instantiates per-TU deallocate
 // COMDATs (one byte shape per TU flags); explicit dllimport+forceinline
 // specializations take those calls inline so this TU emits no external copy.

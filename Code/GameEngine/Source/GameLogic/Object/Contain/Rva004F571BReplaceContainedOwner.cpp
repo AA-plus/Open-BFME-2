@@ -8,6 +8,12 @@
 // A same-valued dead-pointer guard on the Boolean result selects native
 // ESI receiver and direct memory comparison, without emitted condition work.
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
 #include "GameLogicObjectLookupView.h"
 #include "GameLogic/ContainmentListView.h"
 

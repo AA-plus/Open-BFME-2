@@ -3,6 +3,12 @@
 // ?rva00599534@Rva00599534@@QAEXH@Z @0x00599534 48B: list<int> at +4 erase first match via rowed erase 0x00438539; callers 0x004EC911 and 0x004EC055
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
+
 // list<int> destruction otherwise instantiates the allocator<_List_node<int>>
 // deallocate COMDAT (one byte shape per TU flags); an explicit
 // dllimport+forceinline specialization takes those calls inline so this

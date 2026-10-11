@@ -24,6 +24,12 @@
 // /G7 is required: without it the 16-bit count load gains a xor eax,eax.
 #include <map>
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
 #include "ascii_string.h"
 #include "Lib/Coord3D.h"
 #include "../../../Common/GameLogicObjectLookupView.h"

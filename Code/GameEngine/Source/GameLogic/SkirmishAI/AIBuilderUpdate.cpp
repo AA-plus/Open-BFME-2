@@ -9,6 +9,12 @@
 #include <vector>
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
+
 // vector<int> fill/insert otherwise instantiates the _Construct<int,int>
 // COMDAT (one byte shape per TU flags); a file-static overload takes those
 // calls instead so this TU emits no external copy.

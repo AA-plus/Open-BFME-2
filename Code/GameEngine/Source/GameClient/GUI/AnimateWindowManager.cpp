@@ -53,6 +53,12 @@
 #define __PLACEMENT_VEC_NEW_INLINE
 #include <list>		// BFME uses STLport node_alloc for AnimateWindow lists; include
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> list<int, allocator<int> >::iterator list<int, allocator<int> >::erase(list<int, allocator<int> >::iterator);
+}
+
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
 template <class T, class LeftTraits, class RightTraits>
