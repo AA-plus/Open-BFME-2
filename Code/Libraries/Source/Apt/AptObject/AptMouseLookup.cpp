@@ -5,7 +5,7 @@
 // are retained; the animation/listener prefix remains a scoped receiver view.
 #include "AptScriptFunction.h"
 class BfmeAptValue006DCD20 {
-public: bool isCIH(bool=false) const; void setGCRootCount(unsigned int);
+public: int isCIH(bool=false) const; void setGCRootCount(unsigned int);
 };
 class Rva006DBB60ShrNAndField { public: bool get()const; };
 class Rva008A4570Owner { public: bool nameEquals(const char *); };
@@ -42,7 +42,7 @@ AptValue *AptMouse::sMethod_addListener(AptValue *,int nParams)
  if(nParams!=1)return gpUndefinedValue;
  AptValue *value=reinterpret_cast<AptValue *>(g_aptDateInterpreter.stack.At(0));
  if(reinterpret_cast<Rva006DBB60ShrNAndField *>(value)->get()) {
-  if(reinterpret_cast<BfmeAptValue006DCD20 *>(value)->isCIH()) {
+  if((unsigned char)reinterpret_cast<BfmeAptValue006DCD20 *>(value)->isCIH()) {
    if((*reinterpret_cast<unsigned int *>(reinterpret_cast<char *>(value)+0x5c)&0xc0000)!=0)return gpUndefinedValue;
   }
   AptValueSet<AptValue *> *set=&g_bfmeAptPtrAtE176D0->listenerSet;
