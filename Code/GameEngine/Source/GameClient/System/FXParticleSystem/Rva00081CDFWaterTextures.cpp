@@ -80,7 +80,11 @@ struct Rva00200BD9Holder
 	char m_pad08[0x3C - 0x08];
 	AsciiString m_str3C;
 };
-extern Rva00200BD9Holder *g_rva00200BD9Holder;
+// Native DFF488 is owned by the four-byte OVERRIDE object below.
+// Read its pointer through the existing offset-based setting view.
+class WaterTransparencySetting;
+template <class T> class OVERRIDE;
+extern OVERRIDE<WaterTransparencySetting> TheWaterTransparency;
 
 class TextureClass
 {
@@ -131,7 +135,7 @@ public:
 void Rva00081CDF::rva00081CDF()
 {
 	Rva0006C995 assets;
-	Rva00200BD9Holder *p = g_rva00200BD9Holder;
+	Rva00200BD9Holder *p = *reinterpret_cast<Rva00200BD9Holder **>(&TheWaterTransparency);
 	if (!p)
 		p = 0;
 	else if (p->m_04)
@@ -142,7 +146,7 @@ void Rva00081CDF::rva00081CDF()
 	// but this body passes the two .tga literals; kept rowed as served.
 	m_tex44 = BFME2LoadParticleTexture(p->m_str3C.str(), 0, 0);
 
-	p = g_rva00200BD9Holder;
+	p = *reinterpret_cast<Rva00200BD9Holder **>(&TheWaterTransparency);
 	if (!p)
 		p = 0;
 	else if (p->m_04)
