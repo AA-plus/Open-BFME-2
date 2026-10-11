@@ -108,9 +108,17 @@ class Rva003F4DCA
 public:
 	int rva003F4DCA(int side, int player);
 };
+class LivingWorldBattle
+{
+public:
+	void rva003F5397(int side, int player, int army1, int army2);
+};
 class Rva003F468D
 {
 public:
+	char pad18[0x18];
+	char *m_sidesStart;
+	char *m_sidesEnd;
 	int rva003F4DAE(int side);
 };
 // Native 002B2DEE..002B2E31: ECX message; stack output/index/battle/side;
@@ -146,10 +154,40 @@ static __declspec(noinline) bool rva002B2E31(GameMessage *message, int *out, int
 	return value >= 0 && value < ((Rva003F4DCA *)battle)->rva003F4DCA(side, player);
 }
 
-// ?rva002B2E31Caller absent-from-retail
-// Source-only emission anchor for the same MSVC internal ABI optimization
-// as the neighboring helper; no retail address is asserted for this wrapper.
-bool rva002B2E31Caller(GameMessage *message, int *out, int index, Rva003F468D *battle, int side, int player)
+// HandleSwapArmiesInBattleMessage, retail 0x002B4141 (179 bytes): WB's file-static
+// in LivingWorldLogic.cpp; argument 0 is battle, argument 1 is side, argument 2
+// is player, arguments 3 and 4 are army indices to swap.
+static __declspec(noinline) void HandleSwapArmiesInBattleMessage(GameMessage *msg)
 {
-	return rva002B2E31(message, out, index, battle, side, player);
+	Rva003F468D *battle;
+	if (!rva002B2DAD(msg, (void **)&battle, 0))
+		return;
+	if (((Rva002B2DADMessageView *)msg)->count <= 1)
+		return;
+	int side = msg->getArgument(1)->integer;
+	if (side < 0)
+		return;
+	int numSides = (int)(battle->m_sidesEnd - battle->m_sidesStart) / 0x1c;
+	if (side >= numSides)
+		return;
+	if (((Rva002B2DADMessageView *)msg)->count <= 2)
+		return;
+	int player = msg->getArgument(2)->integer;
+	if (player < 0)
+		return;
+	if (player >= battle->rva003F4DAE(side))
+		return;
+	int armyIndex1;
+	if (!rva002B2E31(msg, &armyIndex1, 3, battle, side, player))
+		return;
+	int armyIndex2;
+	if (!rva002B2E31(msg, &armyIndex2, 4, battle, side, player))
+		return;
+	((LivingWorldBattle *)battle)->rva003F5397(side, player, armyIndex1, armyIndex2);
+}
+
+// ?HandleSwapArmiesInBattleMessageCaller absent-from-retail
+void HandleSwapArmiesInBattleMessageCaller(GameMessage *msg)
+{
+	HandleSwapArmiesInBattleMessage(msg);
 }
