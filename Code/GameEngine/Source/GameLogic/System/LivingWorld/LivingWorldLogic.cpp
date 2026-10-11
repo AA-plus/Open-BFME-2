@@ -262,6 +262,7 @@ struct LivingWorldArmy
 	// the army toward the region and position.
 	Int ownerID()const{return m_ownerPlayer;}
  void initiateMove(const Coord2D &pos, class Rva00318C32Ret *target, Int flags);
+ void rva00319EF9(LivingWorldArmy *current, Int entryID);
 
 	unsigned char m_pad00[0x20];
 	Int m_id;						// +0x20 (WB LivingWorldArmy::GetID, inlined)
@@ -1137,6 +1138,40 @@ void HandleMarkUnitForUpgradeMessage(const GameMessage *msg)
 	const Rva004E0632 *upgrades = ((LivingWorldLogic *)((Rva002B254F *)TheLivingWorldLogic))->GetArmoryToUpgradeTroop(entry.m_entry, army, (Rva003F287F *)region);
 	if (upgrades != 0)
 		((LivingWorldLogic *)((Rva002B254F *)TheLivingWorldLogic))->MarkTroopForUpgrades(entryID, army, upgrades);
+}
+
+// CancelArmyMemberMove, retail 0x002B8045 (137 bytes): WB's file-static
+// in LivingWorldLogic.cpp; asserts currentArmy.GetArmySummary() != NULL at line 8074.
+static __declspec(noinline) void CancelArmyMemberMove(LivingWorldArmy *currentArmy, Int entryID)
+{
+	ArmySummary *summary = currentArmy->m_summary;
+	ArmySummaryEntryRef entry = summary->GetEntry(entryID);
+	if (entry.m_entry != 0)
+	{
+		Int sourceArmyID = entry.m_entry->m_moveTarget;
+		LivingWorldArmy *sourceArmy = (LivingWorldArmy *)((Rva002BA8F1Logic *)((Rva002B254F *)TheLivingWorldLogic))->rva002B488E(sourceArmyID);
+		if (sourceArmy != 0)
+		{
+			if (((LivingWorldLogic *)TheLivingWorldLogic)->rva002B8019(currentArmy, entry.m_entry, (Int)sourceArmy))
+			{
+				entry.m_entry->m_moveTarget = 0;
+				sourceArmy->rva00319EF9(currentArmy, entryID);
+			}
+		}
+	}
+}
+
+// ?CancelArmyMemberMoveCaller absent-from-retail
+void CancelArmyMemberMoveCaller(const GameMessage *msg)
+{
+	LivingWorldArmy *army;
+	if (getArmyFromMessage(&army, msg, 0))
+	{
+		Int entryID = msg->getArgument(1)->integer;
+		CancelArmyMemberMove(army, entryID);
+		if (msg)
+			getArmyFromMessage(&army, msg, 0);
+	}
 }
 
 // LivingWorldLogic::GetArmoryToUpgradeTroop, retail 0x002B6DC4 (198 bytes):
