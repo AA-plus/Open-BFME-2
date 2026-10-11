@@ -92,10 +92,10 @@ struct Rva0009C814Owner
 	Int m_13C; // +0x13C
 };
 
-class Rva002E0BC0Helper
+class Rva002E071E
 {
 public:
-	unsigned char rva002E0BC0(Int index);
+	int rva002E0BC0(Int index);
 };
 
 struct Rva0009C814ArmyLine
@@ -154,7 +154,7 @@ void Rva0009C983::rva0009C814(Int arg, Rva002E2903Player *player)
 
 		const Rva0009C814Colors &colors = reinterpret_cast<Rva0009C814ManagerView *>(TheLivingWorldManager)->m_colors;
 		m_108->m_line->Set_Color(owner->m_13C == -1 ? Rva0009C814Color(colors.m_noOwnerColor.X, colors.m_noOwnerColor.Y, colors.m_noOwnerColor.Z)
-			: reinterpret_cast<Rva002E0BC0Helper *>(player)->rva002E0BC0(owner->m_13C) ? Rva0009C814Color(colors.m_ownColor.X, colors.m_ownColor.Y, colors.m_ownColor.Z)
+			: (unsigned char)reinterpret_cast<Rva002E071E *>(player)->rva002E0BC0(owner->m_13C) ? Rva0009C814Color(colors.m_ownColor.X, colors.m_ownColor.Y, colors.m_ownColor.Z)
 			: Rva0009C814Color(colors.m_otherColor.X, colors.m_otherColor.Y, colors.m_otherColor.Z));
 		const Rva0009C814ArmyLine &line = army->getLine();
 		m_108->m_line->Set_Points(line.m_count, line.m_points);

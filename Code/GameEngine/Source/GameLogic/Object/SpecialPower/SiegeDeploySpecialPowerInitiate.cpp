@@ -62,6 +62,13 @@ private:
 	unsigned char m_bytes[28];
 };
 
+// Rowed 44-byte single-bit constructor at 0x45411; same 28-byte mask.
+struct Rva00045411BitSet
+{
+ unsigned int bits[7];
+ Rva00045411BitSet(int reserved, int bit) throw();
+};
+
 // vftable 0x00C1A25C: any of the mask's kinds.
 class Rva003959FA : public Rva000421C8
 {
@@ -218,7 +225,7 @@ void SiegeDeploySpecialPower::initiateIntentToDoSpecialPower(const SpecialPowerT
 	{
 		BfmeWideResult hits = ThePartitionManager->iterateObjectsInRange(
 			(const Coord3D *)&targetObj->m_position, data()->m_searchRadius, 0,
-			&Rva003959FA(BfmeFixedStorage0004543D(0, 0x3C)), 1);
+			&Rva003959FA(reinterpret_cast<const BfmeFixedStorage0004543D &>(Rva00045411BitSet(0, 0x3C))), 1);
 		Object *other;
 		while ((other = hits.next()) != 0)
 		{

@@ -8,6 +8,9 @@
 
 #include "ascii_string.h"
 
+// Retail calls the rowed StringBase text comparator with no unwind state.
+template <> int StringBase<char>::compare(const char *text) const throw();
+
 #define NULL 0
 
 class INI
@@ -89,7 +92,7 @@ static inline int Rva004DBFF1Index(const char *name)
 	{
 		for (int i = 0; i < 4; ++i)
 		{
-			if (Rva004DBFF1Name(g_00DCFC24[i]).compareText(name) == 0)
+			if (reinterpret_cast<const StringBase<char> &>(Rva004DBFF1Name(g_00DCFC24[i])).compare(name) == 0)
 			{
 				result = i;
 				break;
@@ -112,7 +115,7 @@ static inline int Rva0058A617Index(const char *name)
 	{
 		for (int i = 0; i < 41; ++i)
 		{
-			if (Rva004DBFF1Name(g_00DD3068[i]).compareText(name) == 0)
+			if (reinterpret_cast<const StringBase<char> &>(Rva004DBFF1Name(g_00DD3068[i])).compare(name) == 0)
 			{
 				result = i;
 				break;
