@@ -98,3 +98,12 @@ void Path::rva003649B1(const PathNode *arg)
 	if (m_path == 0)
 		m_path = node;
 }
+
+// ?rva0026547E@@YAPAXXZ @0x0026547E 10B: allocation thunk over g_pathNodePool
+// (mov ecx, offset pool; tail jump to its rowed allocate 0x002635C2), the
+// shape of the pooled path node's operator new. Address-named; no referencing
+// site was found in this pass.
+void *rva0026547E()
+{
+	return g_pathNodePool.rva002635C2();
+}

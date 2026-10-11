@@ -11,6 +11,8 @@
 struct Rva00065964ObjectPool
 {
 	void FreeObject(void *obj);
+	void *rva00285A3B();	// 0x00285A3B
+	void *rva00285AC4();	// 0x00285AC4
 };
 
 // g_pool00286116: matched references place it at VA 0xdfec94 (zero-filled; a plain-data view).
@@ -99,4 +101,20 @@ void Rva0028614C::rva0028662D()
 	m_head->m_04 = 0;
 	m_head->m_0C = m_head;
 	m_count = 0;
+}
+
+// Two allocation thunks over these pools (mov ecx, offset pool; tail jump to
+// the pool's rowed allocate): the shape of a pooled class's operator new.
+// Which classes they serve is not established; address-named, no referencing
+// site was found in this pass.
+// ?rva0028610C@@YAPAXXZ @0x0028610C 10B
+void *rva0028610C()
+{
+	return g_pool00286116.rva00285A3B();
+}
+
+// ?rva0028612C@@YAPAXXZ @0x0028612C 10B
+void *rva0028612C()
+{
+	return g_pool00286136.rva00285AC4();
 }
