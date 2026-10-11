@@ -81,7 +81,8 @@ struct Coord3D
 class ICoord3D
 {
 public:
-	ICoord3D(Int ix, Int iy, Int iz) : x(ix), y(iy), z(iz) {}
+	// dllimport+forceinline: expanded here, never emitted against icoord.cpp's strong copy (0x005CC49A).
+	__declspec(dllimport) __forceinline ICoord3D(Int ix, Int iy, Int iz) : x(ix), y(iy), z(iz) {}
 	Int x, y, z;
 };
 
