@@ -5,10 +5,24 @@
 // native2B0F3C establishes initialization order and three base views.
 #include "ascii_string.h"
 #include "unicode_string.h"
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <map>
 #include <hash_map>
 #include <list>
 #include <vector>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+}
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "reference/shims/moduledata/Common/Snapshot.h"
 class Xfer;
