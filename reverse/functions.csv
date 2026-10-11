@@ -76428,3 +76428,9 @@ uw_0077909c,,0x0077909C,13,Code/GameEngine/Source/GameLogic/AI/AIObjectTargetPre
 ?rva006E0F10@Rva006E0F00Owner@@QAEXPAXPAVAptCIH@@HH@Z,,0x006E0F10,11,Code/Libraries/Source/Apt/Rva006E3230Validate.cpp,matched,mov ecx [ecx+0xA0] then jmp rowed AptActionQueueC::rva006E4C70; owner address-named
 ?rva006E0F20@Rva006E0F00Owner@@QAEXPAVAptValue@@00HH@Z,,0x006E0F20,11,Code/Libraries/Source/Apt/Rva006E3230Validate.cpp,matched,mov ecx [ecx+0xA0] then jmp rowed AptActionQueueC::rva006E3740; owner address-named
 ?rva006E0F30@Rva006E0F00Owner@@QAEXPAVAptValue@@00HH@Z,,0x006E0F30,11,Code/Libraries/Source/Apt/Rva006E3230Validate.cpp,matched,mov ecx [ecx+0xA0] then jmp rowed AptActionQueueC::rva006E3810; owner address-named
+?rva0007E0C6@Rva0007E0C6Owner@@QAEPAXH@Z,,0x0007E0C6,8,Code/GameEngine/Source/Common/PointerFieldForwarders.cpp,matched,mov ecx [ecx+0x40] then tail jump into rowed Rva0030812E::rva0030812E; owner address-named
+?rva0026237F@Rva0026237FOwner@@QBEEXZ,,0x0026237F,8,Code/GameEngine/Source/Common/PointerFieldForwarders.cpp,matched,mov ecx [ecx+0x4] then tail jump into rowed Rva002C9400ByteField::get; owner address-named
+?rva0033F9C2@Rva0033F9C2Owner@@QBEEXZ,,0x0033F9C2,8,Code/GameEngine/Source/Common/PointerFieldForwarders.cpp,matched,mov ecx [ecx+0x4] then tail jump into rowed Rva002C9407ByteField::get; owner address-named
+?rva004F5FAC@Rva004F5FACOwner@@QAEPAXXZ,,0x004F5FAC,8,Code/GameEngine/Source/Common/Rva0033A65EGetter.cpp,matched,mov ecx [ecx+0x2C] then tail jump into rowed Rva0033A65E::rva0033A65E; owner address-named
+?rva005CC7DC@Rva005CC7DCOwner@@QAEXXZ,,0x005CC7DC,8,Code/GameEngine/Source/Common/PointerFieldForwarders.cpp,matched,mov ecx [ecx+0x8] then tail jump into rowed Rva005E3266::rva005E3266; owner address-named
+?rva006C0830@Rva006C0830Owner@@QBEHXZ,,0x006C0830,8,Code/GameEngine/Source/Common/PointerFieldForwarders.cpp,matched,mov ecx [ecx+0x10] then tail jump into rowed Rva0013EDC0DwordField::get; owner address-named

@@ -28,3 +28,20 @@ void *Rva0033A65E::rva0033A65E()
 	Rva0041811D *table = g_Va00E030B0;
 	return table->rva00418825();
 }
+
+// ?rva004F5FAC@Rva004F5FACOwner@@QAEPAXXZ @0x004F5FAC 8B: loads the Rva0033A65E pointer held at +0x2C and
+// tail-jumps Rva0033A65E::rva0033A65E. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva004F5FACOwner
+{
+public:
+	void * rva004F5FAC();
+private:
+	char m_pad00[0x2C];
+	Rva0033A65E *m_target;
+};
+
+void * Rva004F5FACOwner::rva004F5FAC()
+{
+	return m_target->rva0033A65E();
+}
