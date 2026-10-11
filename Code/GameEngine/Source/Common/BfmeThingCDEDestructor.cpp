@@ -138,6 +138,11 @@ public:
 
 void __stdcall ArrayDeleteHelperBodyThunk(void *, unsigned, unsigned, void *);
 extern void __cdecl operator delete[](void *);
+// Retail's empty array-element destructor: the shared 1-byte RET at 0x0069E440,
+// rowed as ?DX8_Assert@@YAXXZ (dx8wrapper.cpp). Referencing it by name emits
+// the same push-imm32 through a DIR32 relocation instead of the hard-coded
+// image address, with no alias directive.
+void __cdecl DX8_Assert();
 
 void BfmeThingCDE::d_008f7ec0()
 {
@@ -220,10 +225,11 @@ void BfmeThingCDE::bfmeDtorCDE()
 	if (m_array != 0)
 	{
 		void *cookie = (char *)m_array - 4;
-		// Retail pushes 0x00A9E440 here; the donor's 0x00CF7BD0 is the BFME1
-		// address of the same word. The bytes decide.
+		// Retail pushes 0x00A9E440 here (rva 0x0069E440); the donor's 0x00CF7BD0
+		// is the BFME1 address of the same word. Named as &DX8_Assert above:
+		// the same address through a relocation. The bytes decide.
 		ArrayDeleteHelperBodyThunk(m_array, 0x10, *(unsigned *)cookie,
-			reinterpret_cast<void *>(0x00A9E440));
+			reinterpret_cast<void *>(&DX8_Assert));
 		::operator delete[](cookie);
 	}
 	if (m_prev != 0)
