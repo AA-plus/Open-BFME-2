@@ -48,7 +48,12 @@ void W3DView::init(){
  reinterpret_cast<BfmeThingBFG*>(this)->bfmeGoBFG();subsystem.setName("W3DView");
  Coord3D pos;pos.x=87.0f;pos.y=77.0f;pos.z=0;pos.x*=10.0f;pos.y*=10.0f;position=pos;
  camera3d=new CameraClass;settings.reload();setCameraTransform();
- camera2d=new CameraClass;camera2d->Set_Position(Vector3(0,0,1));
- Vector2 min(-1,-0.75f),max(1,0.75f);camera2d->Set_View_Plane(min,max);camera2d->Set_Clip_Planes(0.995f,2.0f);
+ camera2d=new CameraClass;
+ // LINK: default-plus-assign instead of the (0,0,1)/(min,max) temporaries
+ // (identical stores). This TU's MMM/MM copies are unproven and differ from
+ // the kept copies; the temp constructions inline but still emit loser
+ // COMDATs, while the default ctors' copies are kept. No flags touched.
+ Vector3 pos2;pos2.X=0;pos2.Y=0;pos2.Z=1;camera2d->Set_Position(pos2);
+ Vector2 min,max;min.X=-1;min.Y=-0.75f;max.X=1;max.Y=0.75f;camera2d->Set_View_Plane(min,max);camera2d->Set_Clip_Planes(0.995f,2.0f);
  constraintValid=false;scrollCutoff=TheWritableGlobalData->scrollCutoff;value24c4=0;settings.reset();
 }
