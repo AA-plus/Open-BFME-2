@@ -66,101 +66,16 @@ HijackerUpdate::~HijackerUpdate( void )
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-// ?update@HijackerUpdate@@ present-unmatched
-UpdateSleepTime HijackerUpdate::update( void )
+// HijackerUpdate::update (0x004A40DB) is rowed in HijackerUpdateUpdate.cpp;
+// a second definition here would not link.
+
+// The header setters setIsInVehicle (0x004A3F81) and setUpdate (0x0066CA90)
+// are rowed in this unit; the anchor keeps their out-of-line bodies emitted.
+// ?bfmeAnchorHijackerUpdateSetters absent-from-retail
+void bfmeAnchorHijackerUpdateSetters(HijackerUpdate *p)
 {
-/// @todo srj use SLEEPY_UPDATE here
-
-	if ( ! m_update) // have not flagged for updating
-	{
-		return UPDATE_SLEEP_NONE;
-	}
-
-	if (m_isInVehicle)
-	{
-		Object *obj = getObject();
-
-		// If hijacker has hijacked a vehicle, he needs to move along with it...
-		//Continually reset position of hijacker to match the position of the target.
-		Object *target = getTargetObject();
-		if( target )
-		{
-			// @todo I think we should test for ! IsEffectivelyDead() as well, here
-			obj->setPosition( target->getPosition() );
-			m_wasTargetAirborne = target->isSignificantlyAboveTerrain();
-			m_ejectPos = *target->getPosition();
-			
-			// So, if while I am driving this American war vehicle, I gain skill points, I get to keep them when I wreck the vehicle
-			ExperienceTracker *targetExp = target->getExperienceTracker();
-			ExperienceTracker *jackerExp = obj->getExperienceTracker();
-			if ( targetExp && jackerExp )
-			{
-				VeterancyLevel highestLevel = MAX(targetExp->getVeterancyLevel(),jackerExp->getVeterancyLevel());
-				jackerExp->setVeterancyLevel( highestLevel );
-				targetExp->setVeterancyLevel( highestLevel );
-			}
-
-		}
-		else // the car we have been "driving" is dead now, and has safely ejected us
-		{
-			{
-
-
-				//THIS BLOCK RESTORES HIJACKER TO PARTITION MANAGER AND UNHIDES HIM
-				ThePartitionManager->registerObject( obj );
-
-				if( obj->getDrawable() ) 
-				{
-					// so it is time to unhide ourselves and be a pedestrian hijacker again
-					obj->getDrawable()->setDrawableHidden( false );
-				}
-
-				// We won't come back here until and unless we have hijacked another vehicle
-				obj->clearStatus( MAKE_OBJECT_STATUS_MASK3( OBJECT_STATUS_NO_COLLISIONS, OBJECT_STATUS_MASKED, OBJECT_STATUS_UNSELECTABLE ) );
-
-				AIUpdateInterface* ai = obj->getAIUpdateInterface();
-				if ( ai )
-				{
-					ai->aiIdle( CMD_FROM_AI );
-				}
-
-				if (m_wasTargetAirborne)
-				{
-					const ThingTemplate* putInContainerTmpl = TheThingFactory->findTemplate(getHijackerUpdateModuleData()->m_parachuteName);
-					DEBUG_ASSERTCRASH(putInContainerTmpl,("DeliverPayload: PutInContainer %s not found!",getHijackerUpdateModuleData()->m_parachuteName.str()));
-					if (putInContainerTmpl)
-					{
-						Object* container = TheThingFactory->newObject( putInContainerTmpl, obj->getTeam() );
-						container->setPosition(&m_ejectPos);
-						if (container->getContain()->isValidContainerFor(obj, true))
-						{
-							container->getContain()->addToContain(obj);
-						}
-						else
-						{
-							DEBUG_CRASH(("DeliverPayload: PutInContainer %s is full, or not valid for the payload!",getHijackerUpdateModuleData()->m_parachuteName.str()));
-						}
-					}
-
-				}
-
-
-			}// end if (! hostVehicleHasEjection)
-
-			setTargetObject( NULL ); 
-			setIsInVehicle( FALSE );
-			setUpdate( FALSE );
-			m_wasTargetAirborne = false;
-
-		}// end if( target )
-
-	}
-	else	// not in vehicle
-	{
-		m_wasTargetAirborne = false;
-	}
-
-	return UPDATE_SLEEP_NONE;
+	p->setIsInVehicle(FALSE);
+	p->setUpdate(FALSE);
 }
 
 
