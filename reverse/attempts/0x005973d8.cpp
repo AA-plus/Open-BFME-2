@@ -1,17 +1,51 @@
-// ?rva005973D8@Rva005973D8@@QAEHXZ
-// partial score=0.93 date=2026-10-04
-// cl: /O1 /MD
-// ?rva00597476@Rva0059734B@@UAEMPAX@Z @0x00597476 86B: slot8 cost ratio via UpgradeTemplate calcCostToBuild and rva0026EE30 with idiv and fild; vtable 0x00870BD0
+// ?rva005973D8@AIUpgrade@@QAEHXZ
+// partial score=0.9230769230769231 date=2026-10-12
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
+//
+// AIUpgrade::build, retail 0x0059738A (78 bytes, ret 4), vtable slot beside
+// getCostPerTick in the AIUpgrade tables (refs 0x00870BC4, 0x00870C0C,
+// 0x0087667C).
+// Identity (target): WorldBuilder's debug AIUpgrade.cpp lines 36..37 names it
+// (wb-lead 2/callgraph): the builder object (ObjectID +0x08) runs the upgrade's
+// command button (+0x30) through Object::doCommandButton (0x00296749, flags
+// 1 and 0), then the object query 0x0028BC58(0) is asked through its slot 6
+// about the button's +0x24 field, and that answer is returned.
+// The slot-6 receiver and the argument are not identified by target evidence
+// and stay opaque.
+
 enum ObjectID
 {
 	INVALID_ID = 0
 };
 
+class CommandButton
+{
+public:
+	int getField24() const { return m_field24; }
+
+private:
+	unsigned char m_pad00[0x24];
+	int m_field24; // +0x24 retail-measured
+};
+
+// Opaque receiver returned by Object::rva0028BC58; slot 6 answers the query.
+class Rva0028BC58Result
+{
+public:
+	virtual void slot0();
+	virtual void slot1();
+	virtual void slot2();
+	virtual void slot3();
+	virtual void slot4();
+	virtual void slot5();
+	virtual char slot6(int value);
+};
+
 class Object
 {
 public:
-	char m_pad[4];
-	void *rva0028BC58(int x);
+	void doCommandButton(const CommandButton *commandButton, int cmdSource, bool flags);
+	void *rva0028BC58(int which);
 };
 
 class GameLogic
@@ -22,91 +56,40 @@ public:
 
 extern GameLogic *TheGameLogic;
 
-class Player;
-class UpgradeTemplate
+class AIUpgrade
 {
 public:
-	unsigned int calcCostToBuild(Player *p, unsigned int u) const;
-	int rva0026EE30(void *a, void *b);
-};
+	virtual ~AIUpgrade();
+	virtual bool build(void *context);
+ int rva005973D8();
 
-class Holder
-{
-public:
-	char m_pad00[0x24];
-	UpgradeTemplate *m_24;
-};
-
-class Rva0055B0CC
-{
-public:
-	virtual ~Rva0055B0CC();
-protected:
-	float m_04;
-	ObjectID m_08;
-	char m_pad0c[0x2c - 0x0c];
-};
-
-class Rva0059734B : public Rva0055B0CC
-{
-public:
-	virtual float rva00597476(void *p);
 private:
-	int m_2C;
-	Holder *m_30;
+	unsigned char m_pad04[0x08 - 0x04];
+	ObjectID m_builderID; // +0x08
+	unsigned char m_pad0C[4];
+ int m_remaining10;
+ unsigned char m_pad14[0x30 - 0x14];
+	const CommandButton *m_commandButton; // +0x30
 };
 
-float Rva0059734B::rva00597476(void *p)
+bool AIUpgrade::build(void *context)
 {
-	UpgradeTemplate *tmpl = m_30->m_24;
-	Object *o1 = TheGameLogic->findObjectByID(m_08);
-	unsigned int cost = tmpl->calcCostToBuild((Player *)p, (unsigned int)o1);
-	Object *o2 = TheGameLogic->findObjectByID(m_08);
-	int denom = tmpl->rva0026EE30(p, o2);
-	int quot = (int)cost / denom;
-	float f = (float)quot;
-	return f;
+	TheGameLogic->findObjectByID(m_builderID)->doCommandButton(m_commandButton, 1, 0);
+	ObjectID id = m_builderID;
+	Rva0028BC58Result *result = (Rva0028BC58Result *)TheGameLogic->findObjectByID(id)->rva0028BC58(0);
+	return result->slot6(m_commandButton->getField24()) ? true : false;
 }
 
-class Rva005973D8Slot
-{
-public:
-	virtual void v00(); virtual void v01(); virtual void v02();
-	virtual void v03(); virtual void v04(); virtual void v05();
-	virtual bool slot6(UpgradeTemplate *tmpl);
-};
-
-class Rva005973D8
-{
-	char m_pad00[8];
-	ObjectID m_id08;
-	char m_pad0C[0x10 - 0x0C];
-	int m_int10;
-	char m_pad14[0x30 - 0x14];
-	Holder *m_holder30;
-public:
-	int rva005973D8();
-};
-
-// ?rva005973D8@Rva005973D8@@QAEHXZ @0x005973D8 78B unlock upgrade check via TheGameLogic double find plus pin plus slot6 plus Holder 0x30/0x24 same TU flags callers 0x005975C3
-// ?rva005973D8@Rva005973D8@@QAEHXZ present-unmatched
-int Rva005973D8::rva005973D8()
-{
-	if (m_int10 <= 0)
-		goto ret_zero;
-	GameLogic *gl = TheGameLogic;
-	ObjectID id = m_id08;
-	if (gl->findObjectByID(id) == 0)
-		goto ret_one;
-	{
-		void *p = gl->findObjectByID(id)->rva0028BC58(0);
-		UpgradeTemplate *tmpl = m_holder30->m_24;
-		if (((Rva005973D8Slot *)p)->slot6(tmpl))
-			goto ret_zero;
-		goto ret_one;
-	}
-ret_zero:
-	return 0;
-ret_one:
-	return 1;
+int AIUpgrade::rva005973D8() {
+ if(m_remaining10>0) {
+  GameLogic *gl;
+  ObjectID id=m_builderID;
+  gl=TheGameLogic;
+  if(gl->findObjectByID(id)!=0) {
+   Rva0028BC58Result *result=(Rva0028BC58Result *)gl->findObjectByID(id)->rva0028BC58(0);
+   if(result->slot6(m_commandButton->getField24())) return 0;
+  }
+  return 1;
+ }
+ return 0;
 }
