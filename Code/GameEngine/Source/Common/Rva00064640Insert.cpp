@@ -111,3 +111,31 @@ void Rva005045E0::rva005045E0(Xfer *xfer) {
   }
  }
 }
+
+// ?rva004E12BC@Rva004E12BCOwner@@QAEXABVRva00064640Record@@@Z @0x004E12BC 8B: offsets this to the Rva005045C6 embedded at +0xC and
+// tail-jumps Rva005045C6::rva005045C6. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva004E12BCOwner
+{
+public:
+	void rva004E12BC(const Rva00064640Record &v);
+};
+
+void Rva004E12BCOwner::rva004E12BC(const Rva00064640Record &v)
+{
+	((Rva005045C6 *)((char *)this + 0xC))->rva005045C6(v);
+}
+
+// ?rva004E149D@Rva004E149DOwner@@QAEXABVRva00064640Record@@@Z @0x004E149D 8B: offsets this to the Rva005045C6 embedded at +0x4 and
+// tail-jumps Rva005045C6::rva005045C6. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva004E149DOwner
+{
+public:
+	void rva004E149D(const Rva00064640Record &v);
+};
+
+void Rva004E149DOwner::rva004E149D(const Rva00064640Record &v)
+{
+	((Rva005045C6 *)((char *)this + 0x4))->rva005045C6(v);
+}

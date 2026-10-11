@@ -88,3 +88,17 @@ void TeamsInfoRec::removeFromIndex(int index)
 			m_nodes[node->m_chainNext].m_chainPrevious = node->m_chainPrevious;
 	}
 }
+
+// ?rva0023C619@Rva0023C619Owner@@QAEXH@Z @0x0023C619 11B: offsets this to the TeamsInfoRec embedded at +0xF44 and
+// tail-jumps TeamsInfoRec::removeTeam. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva0023C619Owner
+{
+public:
+	void rva0023C619(int index);
+};
+
+void Rva0023C619Owner::rva0023C619(int index)
+{
+	((TeamsInfoRec *)((char *)this + 0xF44))->removeTeam(index);
+}

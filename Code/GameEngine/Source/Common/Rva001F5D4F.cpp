@@ -27,3 +27,31 @@ void Rva001F5D4F::rva001F5D4F(int x)
         p->slot3(x);
     m_next.call(x);
 }
+
+// ?rva001F820B@Rva001F820BOwner@@QAEXH@Z @0x001F820B 8B: offsets this to the Rva001F5D4F embedded at +0x4 and
+// tail-jumps Rva001F5D4F::rva001F5D4F. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva001F820BOwner
+{
+public:
+	void rva001F820B(int x);
+};
+
+void Rva001F820BOwner::rva001F820B(int x)
+{
+	((Rva001F5D4F *)((char *)this + 0x4))->rva001F5D4F(x);
+}
+
+// ?rva001F8958@Rva001F8958Owner@@QAEXH@Z @0x001F8958 8B: offsets this to the Rva001F5D4F embedded at +0x8 and
+// tail-jumps Rva001F5D4F::rva001F5D4F. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva001F8958Owner
+{
+public:
+	void rva001F8958(int x);
+};
+
+void Rva001F8958Owner::rva001F8958(int x)
+{
+	((Rva001F5D4F *)((char *)this + 0x8))->rva001F5D4F(x);
+}

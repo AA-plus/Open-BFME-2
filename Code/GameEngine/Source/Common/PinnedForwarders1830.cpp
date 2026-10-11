@@ -684,3 +684,17 @@ void Rva002B3D0E::rva002B3D0E()
     }
     m_b0->rva0020FDDF();
 }
+
+// ?rva00367510@Rva00367510Owner@@QBEMXZ @0x00367510 8B: offsets this to the Rva0030B719Shape embedded at +0x8 and
+// tail-jumps Rva0030B719Shape::getRadius. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva00367510Owner
+{
+public:
+	Real rva00367510() const;
+};
+
+Real Rva00367510Owner::rva00367510() const
+{
+	return ((const Rva0030B719Shape *)((const char *)this + 0x8))->getRadius();
+}

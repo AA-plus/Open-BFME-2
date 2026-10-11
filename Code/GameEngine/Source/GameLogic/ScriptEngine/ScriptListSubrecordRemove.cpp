@@ -292,3 +292,31 @@ void rva003B825F(Rva003B32E5 *destination, const Rva003B32E5 *source)
 		throw;
 	}
 }
+
+// ?rva003B68D8@Rva003B68D8Owner@@QAEHABV?$StringBase@D@@@Z @0x003B68D8 8B: offsets this to the Rva003B573E embedded at +0xC and
+// tail-jumps Rva003B573E::rva003B6633. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva003B68D8Owner
+{
+public:
+	int rva003B68D8(const StringBase<char> &key);
+};
+
+int Rva003B68D8Owner::rva003B68D8(const StringBase<char> &key)
+{
+	return ((Rva003B573E *)((char *)this + 0xC))->rva003B6633(key);
+}
+
+// ?rva003B68E0@Rva003B68E0Owner@@QAEHABV?$StringBase@D@@@Z @0x003B68E0 8B: offsets this to the Rva003B573E embedded at +0x2C and
+// tail-jumps Rva003B573E::rva003B6633. Owner and name are address-derived; no
+// referencing site was found in this pass.
+class Rva003B68E0Owner
+{
+public:
+	int rva003B68E0(const StringBase<char> &key);
+};
+
+int Rva003B68E0Owner::rva003B68E0(const StringBase<char> &key)
+{
+	return ((Rva003B573E *)((char *)this + 0x2C))->rva003B6633(key);
+}
