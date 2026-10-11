@@ -64,7 +64,7 @@ public:
 	CBCommandStatus processContextSensitiveButtonClick(GameWindow *button, GadgetGameMessage gadgetMessage);
 	CBCommandStatus processContextSensitiveButtonTransition(GameWindow *button, GadgetGameMessage gadgetMessage);
 	const CommandButton *findCommandButton(const AsciiString &commandName);
-	void togglePurchaseScience();
+	void rva0031AD94();
 	void rva0031BAB1();
 };
 extern ControlBar *TheControlBar;
@@ -264,7 +264,7 @@ WindowMsgHandledType ControlBarSystem( GameWindow *window, UnsignedInt msg,
 			else if( controlID == beaconGeneralButtonID)
 			{
 				Rva0051B11CEnable();
-				TheControlBar->togglePurchaseScience();
+				TheControlBar->rva0031AD94();
 			}
 			else if( controlID == buttonLargeID)
 			{

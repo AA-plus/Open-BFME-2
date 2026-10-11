@@ -236,7 +236,7 @@ class GameTextInterface { public:
  virtual UnicodeString fetch(const char*,bool *exists=0);
 };
 extern GameTextInterface *TheGameText;
-void Rva00512069();
+void Rva00512069Register();
 // Native445EE3..446386: complete1187B constructor. Target callback strings,
 // member construction, field stores and the existing6C4-byte factory prove
 // this screen identity and layout. Keep the name-entry destructor implicit:
@@ -300,7 +300,7 @@ AptLanLobby::AptLanLobby(void *context)
   }
   { AsciiString name("APT:OnlineOrNetwork");
     g_bfmeAptWindowManager->bfmeSetText(name,TheGameText->fetch("APT:Network"),false); }
-  Rva00512069();
+  Rva00512069Register();
  }
 }
 

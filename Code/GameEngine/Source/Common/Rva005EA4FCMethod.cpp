@@ -1,5 +1,7 @@
 // cl: /O1 /MD /EHsc
 // Native 77-byte factory tail at 0x005EA136; preserve its opaque identity.
+// The class is spelled Rva005EA183 everywhere else (rva005EA0C0 / rva005EA0F6 are
+// rowed under it in WWMath/Rva005EA0{C0,F6}Method.cpp), so this tail joins them.
 // Its caller at 0x005EA4FC is already rowed in
 // GameClient/LivingWorld/InGameUI/StrategicInGameUIDynamicAutoResolveDialog.cpp.
 // Retire that caller's obsolete private copy and its unused message-stream view.
@@ -17,7 +19,7 @@ struct Rva005EA4FCM0C
 	int m34;
 };
 
-struct Rva005EA4FCM08
+struct Rva005EA183
 {
 	char m_pad[0x0C];
 	Rva005EA4FCM0C *m0c;
@@ -41,7 +43,7 @@ Rva005E9FC1(void *);
 virtual ~Rva005E9FC1();
 private:char m_rest[12];
 };
-void Rva005EA4FCM08::rva005EA136() {
+void Rva005EA183::rva005EA136() {
 Rva005E9FC1 *replacement=new Rva005E9FC1(this);
 ((Rva00575674*)&m14)->rva00575674((Object*)replacement);
 m14->v01();

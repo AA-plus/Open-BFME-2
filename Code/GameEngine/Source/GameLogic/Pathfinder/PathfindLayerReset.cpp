@@ -67,7 +67,7 @@ class PathfindCell
 {
 public:
 	void rva0052DED3();
-	void rva0052D84C(Xfer *xfer);
+	void DoXfer(Xfer *xfer);
 public:
 	unsigned char m_storage[8];
 	unsigned short m_zone;
@@ -187,7 +187,7 @@ void PathfindLayer::rva003666FD(Xfer *xfer)
 		for (int x = 0; x < m_width; ++x)
 		{
 			for (int y = 0; y < m_height; ++y)
-				m_layerCells[x][y].rva0052D84C(xfer);
+				m_layerCells[x][y].DoXfer(xfer);
 		}
 	}
 	xfer->xferInt(m_width);
