@@ -21,9 +21,45 @@ class INI
 public:
 	const char *getNextToken(const char *seps = 0);
 	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseInt(INI *ini, void *instance, void *store, const void *userData);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
 };
 
+struct FieldParse
+{
+	const char *token;
+	void (*parse)(INI *, void *, void *, const void *);
+	const void *userData;
+	int offset;
+};
+class AI
+{
+public:
+	static void parseSideInfo(INI *ini, void *instance, void *store, const void *userData);
+	static void parseSkillSet(INI *ini, void *instance, void *store, const void *userData);
+};
+
+// Retail's own nine-record side-info table, transcribed from .rdata at RVA
+// 0x00807300 (VA 0x00C07300, file offset 0x00806700): the three gatherer
+// counts with INI::parseInt at +4/+0xC/+0x10, BaseDefenseStructure1 with
+// INI::parseAsciiString at +0x1B8, and the five skill sets with
+// AI::parseSkillSet at +0x14, +0x68, +0xBC, +0x110 and +0x164, then the zero
+// terminator. Every parse target is a rowed body, and the preceding extern keeps
+// the table external.
 extern const FieldParse g_00C07300[];
+const FieldParse g_00C07300[] =
+{
+	{ "ResourceGatherersEasy", &INI::parseInt, 0, 8 },
+	{ "ResourceGatherersNormal", &INI::parseInt, 0, 12 },
+	{ "ResourceGatherersHard", &INI::parseInt, 0, 16 },
+	{ "BaseDefenseStructure1", &INI::parseAsciiString, 0, 440 },
+	{ "SkillSet1", &AI::parseSkillSet, 0, 20 },
+	{ "SkillSet2", &AI::parseSkillSet, 0, 104 },
+	{ "SkillSet3", &AI::parseSkillSet, 0, 188 },
+	{ "SkillSet4", &AI::parseSkillSet, 0, 272 },
+	{ "SkillSet5", &AI::parseSkillSet, 0, 356 },
+	{ 0, 0, 0, 0 }
+};
 
 class Rva002FE620
 {
@@ -45,12 +81,6 @@ struct TAiData
 		info->m_next = m_sideInfo;
 		m_sideInfo = info;
 	}
-};
-
-class AI
-{
-public:
-	static void parseSideInfo(INI *ini, void *instance, void *store, const void *userData);
 };
 
 // ?parseSideInfo@AI@@SAXPAVINI@@PAX1PBX@Z
