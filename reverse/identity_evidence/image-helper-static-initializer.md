@@ -36,5 +36,11 @@ at 20 bytes, consistent with the existing constructor's eight-byte base and
 three four-byte member words. This is evidence for the boundary, not an
 original type or name recovery.
 
+The real parent is recovered in `Rva005E92F7Dtor.cpp`, beside its constructor
+consumer and existing destructor. All three bodies and their complete EH
+sections verify together. The data ledger binds each local-static object to
+this unit alone, and the temporary helper pin is removed now that the normal
+matched row supplies its address. No additional alias or global is introduced.
+
 Scratch evidence is in `build/resume-20261011-image-helper-static.log` and
 `build/resume-20261011-image-helper-eh.log`. Linking and gameplay remain open.

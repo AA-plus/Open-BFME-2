@@ -62,3 +62,22 @@ Rva005E92F7::Rva005E92F7(unsigned int owner, void *record)
 Rva005E92F7::~Rva005E92F7()
 {
 }
+
+class ImageCollection
+{
+public:
+    const Image *findImageByName(const AsciiString &name);
+};
+extern ImageCollection *TheMappedImageCollection;
+const Image *__cdecl Rva005E936AGet(const void *p)
+{
+    static const Image *fallback = TheMappedImageCollection->findImageByName(AsciiString("BuildingNoArt"));
+    const AsciiString &name = *(const AsciiString *)((const char *)p + 0x14);
+    const Image *result = fallback;
+    if (!((const StringBase<char> *)&name)->isEmpty()) {
+        result = TheMappedImageCollection->findImageByName(name);
+        if (result == 0)
+            result = fallback;
+    }
+    return result;
+}

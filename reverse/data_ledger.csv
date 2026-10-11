@@ -21087,7 +21087,9 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A06724,16,.data,global,?g_Va00E06724@@3IA,,unowned,,0,2
 0x00A06734,20,.data,global,?g_Va00E06734@@3IA,,unowned,?g_00E06734@@3HA;?g_Va00E06734@@3IA,0,3
 0x00A06748,20,.data,global,?g_Va00E06748@@3IA,,unowned,?g_00E06748@@3HA;?g_Va00E06748@@3IA,0,3
-0x00A0675C,24,.data,global,?g_rva00E0675C@@3VRva005E16DA@@A,,unowned,?g_00E0675C@@3VRva005E1753Class@@A;?g_rva00E0675C@@3VRva005E16DA@@A,0,3
+0x00A0675C,20,.data,global,?g_rva00E0675C@@3VRva005E16DA@@A,,unowned,?g_00E0675C@@3VRva005E1753Class@@A;?g_rva00E0675C@@3VRva005E16DA@@A,0,3
+0x00A06770,4,.data,global,?fallback@?1??Rva005E936AGet@@YAPBVImage@@PBX@Z@4PBV2@B,Code/GameEngine/Source/Common/Rva005E92F7Dtor.cpp,owned,,1,3
+0x00A06774,4,.data,global,?$S1@?1??Rva005E936AGet@@YAPBVImage@@PBX@Z@4IA,Code/GameEngine/Source/Common/Rva005E92F7Dtor.cpp,owned,,1,2
 0x00A06778,12,.data,global,?g_Va00E06778@@3IA,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,owned,,1,2
 0x00A06784,204,.data,global,_s_rva007B5197,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
 0x00A06850,8,.data,global,_s_rva007B51DB,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
