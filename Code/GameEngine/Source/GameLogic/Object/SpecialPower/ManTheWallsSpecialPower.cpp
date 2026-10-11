@@ -163,7 +163,8 @@ struct Rva00045411BitSet
 	Rva00045411BitSet(int unused, int bit) throw();	// 0x00045411
 	unsigned int m_bits[7];
 };
-extern const BfmeFixedStorage0004543D g_009FEFA4;
+template<int Bits> class BitFlags;
+extern BitFlags<116> KINDOFMASK_NONE;
 
 // vftable 0x00BFBC90, allow 0x00260EB1, getPlayerMask 0x00260E6A: the object,
 // relationship flags and whether a hit allows.
@@ -182,8 +183,10 @@ public:
 
 // Existing whole-map query provider returns this one-word handle. Native
 // 4C78AF calls 6256F0 and the canonical next/dtor at 45623/4AA28;
-// these established provider names are neutral, not original type claims.
-struct BfmeResultA { void *m_value; BfmeResultA(); BfmeResultA(const BfmeResultA &); ~BfmeResultA(); };
+// The legacy return handle forwards cleanup to the actual canonical owner,
+// avoiding the existing mismatched BfmeResultA destructor pin. Provider names
+// remain neutral, not original type claims.
+struct BfmeResultA { void *m_value; BfmeResultA(); BfmeResultA(const BfmeResultA &); __forceinline ~BfmeResultA() { ((BfmeWideResult *)this)->~BfmeWideResult(); } };
 class BfmeResultForwardB { public: BfmeResultA bfmeForwardResultB(int); };
 extern PartitionManager *ThePartitionManager;
 
@@ -344,7 +347,7 @@ bool ManTheWallsSpecialPower::rva004C78AF(Rva004C78AFList *out)
 {
 	BfmeResultA legacyHits = ((BfmeResultForwardB *)ThePartitionManager)->bfmeForwardResultB((int)
 		Rva00260EB1Filter(*(Object **)((char *)this+8), 4, false).link(&Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 115),
-			g_009FEFA4)));
+			*(const BfmeFixedStorage0004543D *)&KINDOFMASK_NONE)));
 	for (Object *other = ((BfmeWideResult *)&legacyHits)->next(); other; other = ((BfmeWideResult *)&legacyHits)->next()) {
 		Rva004BA1B2 entry;
 		((Rva004C734DElement *)&entry)->owner = other;
