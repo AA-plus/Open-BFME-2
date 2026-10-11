@@ -527,6 +527,12 @@ static RetailPlayerRelationMap *playerRelationsOf( const Player *p ) { return *(
 // copies it to a stack temp rather than passing the member's own address.
 static TeamID getRetailTeamID( const Team *that ) { return *(const TeamID *)((const char *)that + 0x34); }
 
+// BFME's SpecialPowerTemplate keeps m_id at +0x14 (m_name is at +0x10; the class contract has it from
+// the bytes of the matched readers), where this tree's Zero Hour SpecialPower.h has +0x10. Read it here
+// rather than through the header's inline getID, whose +0x10 copy would otherwise be the first one
+// in link order and displace ScriptActions' +0x14 copy.
+static UnsignedInt getRetailSpecialPowerID( const SpecialPowerTemplate *that ) { return *(const UnsignedInt *)((const char *)that->friend_getFinalOverride() + 0x14); }
+
 // BFME's TeamPrototype keeps m_id at +0x0c (TeamFactory::loadPostProcess
 // 0x0039F7A5 reads it there); read it here rather than through the header's
 // inline TeamPrototype::getID, whose copy reads this tree's Zero Hour offset.
@@ -2721,7 +2727,7 @@ void Player::addNewSharedSpecialPowerTimer( const SpecialPowerTemplate *temp, Un
 {
 
 	SpecialPowerReadyTimerType newTimer;
-	newTimer.m_templateID = temp->getID();
+	newTimer.m_templateID = getRetailSpecialPowerID( temp );
 	newTimer.m_readyFrame = frame;
 	m_specialPowerReadyTimerList.push_back( newTimer );
 
@@ -2731,7 +2737,7 @@ void Player::addNewSharedSpecialPowerTimer( const SpecialPowerTemplate *temp, Un
 void Player::resetOrStartSpecialPowerReadyFrame( const SpecialPowerTemplate *temp )
 {
 
-	UnsignedInt lookupID = temp->getID();
+	UnsignedInt lookupID = getRetailSpecialPowerID( temp );
 	UnsignedInt now = TheGameLogic->getFrame();
 
 	SpecialPowerReadyTimerType *timer;
@@ -2758,7 +2764,7 @@ void Player::expressSpecialPowerReadyFrame( const SpecialPowerTemplate *temp, Un
 	for( it = m_specialPowerReadyTimerList.begin(); it != m_specialPowerReadyTimerList.end(); ++it )
 	{
 		timer = &(*it);
-		if ( timer->m_templateID == temp->getID() )
+		if ( timer->m_templateID == getRetailSpecialPowerID( temp ) )
 		{
 			timer->m_readyFrame = frame;
 			return;
@@ -2777,7 +2783,7 @@ void Player::expressSpecialPowerReadyFrame( const SpecialPowerTemplate *temp, Un
 UnsignedInt Player::getOrStartSpecialPowerReadyFrame( const SpecialPowerTemplate *temp)
 {
 
-	UnsignedInt lookupID = temp->getID();
+	UnsignedInt lookupID = getRetailSpecialPowerID( temp );
 	UnsignedInt now = TheGameLogic->getFrame();
 
 	SpecialPowerReadyTimerType *timer;
