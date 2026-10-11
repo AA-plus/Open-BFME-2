@@ -127,7 +127,16 @@ private:
 };
 
 struct Rva002E8C23Pair { Int x,y; };
-int __cdecl Rva002E8C4DCall(int,unsigned char,Rva002E8C23Pair *,int);
+void rva002E79A8(int,unsigned char,int,int,int);
+// ?Rva002E8C4DCall@@YAHHEPAURva002E8C23Pair@@H@Z, retail 0x002E8C4D (33 bytes):
+// cdecl cell-centre wrapper forwarding the cell's x/y to 0x002E79A8. Defined
+// here, ahead of its Pathfinder callers, because cl 7.1 reads the body: knowing
+// it keeps no reference to the cell is what fixes AdjustDestination's schedule.
+int __cdecl Rva002E8C4DCall(int a1, unsigned char a2, Rva002E8C23Pair *a3, int a4)
+{
+	rva002E79A8(a1, a2, a3->x, a3->y, a4);
+	return a1;
+}
 bool Rva002EBBFBIsOdd(void *);
 struct ICoord2D;
 ICoord2D *Rva002E7875WorldToCell(ICoord2D *,bool,const Coord3D *);
@@ -2014,6 +2023,72 @@ Int Pathfinder::CheckPathCost(Object *obj,const LocomotorSet &locomotorSet,const
   }
  }
  m_isTunneling=false;rva002F40E7();goal->ReleaseInfo();return MAX_COST;
+}
+
+// Pathfinder::AdjustDestination, retail [0x002FCFCF,0x002FD344) RET16, 885
+// bytes. WorldBuilder D43BA0 names Pathfinder::AdjustDestination (assert
+// lines 4455..4457); clean BFME1 PathfinderAdjustDestination003F6090 (donor
+// 9cbfb551) supplies the semantic and control spine. Target facts: projectile
+// kind bit 25, water kind bit 191 through TerrainLogic slot 0x4C, layer-height
+// slot 0x1C, kind mask 0x4000 on template word 0x108 selecting the layer, the
+// spiral search budget at TheWritableGlobalData+0x11F0, the found-cell copy
+// through Rva002E8C4DCall, and the tighten/cost group check.
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+struct PathfinderSearchRadiusView { char pad[0x11F0]; Int searchRadius; };
+static __forceinline Coord3D adjustCellCenter(bool center,Rva002E8C23Pair *cell,PathfindLayerEnum layer) {
+	Coord3D pos;return *(Coord3D *)Rva002E8C4DCall((int)&pos,center,cell,layer);
+}
+static __forceinline Bool findAdjustedCell(Pathfinder *finder,ICoord2D *cell,Bool center,Coord3D *dest,Pathfinder_IsCheckForAdjust *info) {
+	ICoord2D found={0,0};
+	if(!finder->rva002F8E2D(cell,((const PathfinderSearchRadiusView *)TheWritableGlobalData)->searchRadius,&found,info))return false;
+	if(g_00E03745 && g_00DFEFF0)fprintf((PathfinderLogFile *)g_00DFEFF0,"  got %d,%d",found.x,found.y);
+	*dest=adjustCellCenter(center,(Rva002E8C23Pair *)&found,info->m_layer);return true;
+}
+Bool Pathfinder::AdjustDestination(Object *obj,const LocomotorSet &locomotorSet,Coord3D *dest,const Coord3D *groupDest)
+{
+	if(g_00E03745 && g_00DFEFF0)
+		fprintf((PathfinderLogFile *)g_00DFEFF0,"  Pathfinder::AdjustDestination() onEnter dest=%g,%g,%g",dest->x,dest->y,dest->z);
+	if(obj->m_template->hasKind(25)) {
+		if(g_00E03745 && g_00DFEFF0)fprintf((PathfinderLogFile *)g_00DFEFF0,"  projectile return TRUE");
+		return true;
+	}
+	Bool center=Rva002EBBFBIsOdd(obj);
+	ICoord2D cell;Rva002E7875WorldToCell(&cell,center,dest);
+	if(g_00E03745 && g_00DFEFF0)
+		fprintf((PathfinderLogFile *)g_00DFEFF0,"  AdjDest obj=%i, dest=%g,%g,%g, center=%i",obj->getID(),dest->x,dest->y,dest->z,center?1:0);
+	PathfindLayerEnum layer=TheTerrainLogic->getLayerForDestination(obj,dest);
+	float height=0.0f;
+	if(groupDest)height=groupDest->z;
+	else if(!obj->m_template->hasKind(191) || !((TerrainLogicWaterQuery *)TheTerrainLogic)->slot4C(dest->x,dest->y,&height,0,0))
+		height=TheTerrainLogic->getLayerHeight(dest->x,dest->y,layer,0,true);
+	Pathfinder_IsCheckForAdjust info(this,obj,(void *)&locomotorSet,*dest,groupDest,height,(*(const unsigned int *)obj->m_template->kinds & 0x4000)?layer:PATHFIND_LAYER_UNKNOWN);
+	if(findAdjustedCell(this,&cell,center,dest,&info)) {
+		Bool badGroup=false;
+		if(groupDest) {
+			if(g_00E03745 && g_00DFEFF0)fprintf((PathfinderLogFile *)g_00DFEFF0,"        groupDest tighten path case...");
+			TightenPath(obj,locomotorSet,dest,groupDest);
+			Int cost=CheckPathCost(obj,locomotorSet,groupDest,dest);
+			Int dx=(Int)fabs(groupDest->x-dest->x);
+			Int dy=(Int)fabs(groupDest->y-dest->y);
+			Int distance=dx+dy;
+			if(distance*1.4f<cost) {
+				badGroup=true;
+				if(g_00E03745 && g_00DFEFF0)fprintf((PathfinderLogFile *)g_00DFEFF0,"        badGroup = true in tighten case");
+			}
+		}
+		if(!badGroup)return true;
+	}
+	if(info.m_28) {
+		if(g_00E03745 && g_00DFEFF0)fprintf((PathfinderLogFile *)g_00DFEFF0,"  got with allies %d,%d",info.fallback.x,info.fallback.y);
+		*dest=adjustCellCenter(center,&info.fallback,info.m_layer);return true;
+	}
+	if(groupDest) {
+		if(g_00E03745 && g_00DFEFF0)fprintf((PathfinderLogFile *)g_00DFEFF0,"  IterateCircular with groupDest");
+		return rva002F90E9(&cell,((const PathfinderSearchRadiusView *)TheWritableGlobalData)->searchRadius,&Pathfinder_IsCheckForAdjust(this,obj,(void *)&locomotorSet,*dest,0,dest->z,info.m_2C));
+	}
+	if(g_00E03745 && g_00DFEFF0)fprintf((PathfinderLogFile *)g_00DFEFF0,"  got NOTHING");
+	return false;
 }
 
 void Pathfinder::PrependCells(Path *path,const Coord3D *fromPos,PathfindCell *goalCell,Bool center)
