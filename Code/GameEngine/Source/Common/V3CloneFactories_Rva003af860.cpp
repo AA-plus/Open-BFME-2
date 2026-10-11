@@ -43,17 +43,24 @@
 // IDENTITY IS NOT RECOVERED.  Class names are the constructor's address; the
 // member's own name is not recoverable from the image at all.
 
+// LINK: the copy constructor is rowed under the Rva003AF89A name (0x003AF89A).
+class Rva003AF89A
+{
+public:
+	Rva003AF89A( const Rva003AF89A &other );
+	char m_storage[ 0xa8 ];
+};
+
 #define V3_CLONE_FACTORY( NAME, SIZE )                                     \
 	class NAME                                                             \
 	{                                                                      \
 	public:                                                                \
-		NAME( const NAME &other );                                         \
 		NAME *clone() const;                                               \
 		char m_storage[ SIZE ];                                            \
 	};                                                                     \
 	NAME *NAME::clone() const                                              \
 	{                                                                      \
-		return new NAME( *this );                                          \
+		return reinterpret_cast<NAME *>( new Rva003AF89A( *reinterpret_cast<const Rva003AF89A *>( this ) ) ); \
 	}
 
 V3_CLONE_FACTORY( Rva005EDF60, 0xa8 )
