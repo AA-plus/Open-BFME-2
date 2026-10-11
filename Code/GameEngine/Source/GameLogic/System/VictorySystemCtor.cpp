@@ -13,7 +13,7 @@ typedef bool Bool;
 #include "subsystem_interface.h"
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"
-class Rva00404781 {public:__forceinline Rva00404781(){rva0040475C();}__declspec(nothrow) void rva0040475C();float first[20],second[20];unsigned flags0,flags1;};
+class Rva00404781 {public:__declspec(dllimport) __forceinline Rva00404781(){rva0040475C();}__declspec(nothrow) void rva0040475C();float first[20],second[20];unsigned flags0,flags1;};
 struct Rva0040538FElement {char bytes[24];};
 namespace _STL {template<>Rva0040538FElement*vector<Rva0040538FElement>::erase(Rva0040538FElement*,Rva0040538FElement*);}
 typedef _STL::_Vector_base<Rva0040538FElement,_STL::allocator<Rva0040538FElement> > VictoryParameterBase;
