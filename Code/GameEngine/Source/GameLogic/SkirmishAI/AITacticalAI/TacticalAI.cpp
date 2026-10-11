@@ -277,7 +277,8 @@ public:
 	Rva002A8AB1Record *rva002A8AB1(void *p);
 };
 
-Rva002A8F24 *g_tacticalAIRegistry; // Descriptive registry view; original global name unknown.
+// Native DFEEF8 is the existing single datum owned by Rva005EEA20Find.cpp.
+extern Rva002A8F24 *g_00DFEEF8;
 
 class AIUpdateInterface
 {
@@ -307,10 +308,10 @@ bool TacticalAI::checkEnemyForAttackMove(Object *a, Object *b)
     if ((flag->m_flag120 & 0x10) == 0)
     {
         const Player *enemyPlayer = obj->getControllingPlayer();
-        Rva002A8AB1Record *rec1 = g_tacticalAIRegistry->rva002A8AB1((void *)enemyPlayer);
+        Rva002A8AB1Record *rec1 = g_00DFEEF8->rva002A8AB1((void *)enemyPlayer);
         if (rec1 != 0)
         {
-            Rva002A8AB1Record *rec2 = g_tacticalAIRegistry->rva002A8AB1(player);
+            Rva002A8AB1Record *rec2 = g_00DFEEF8->rva002A8AB1(player);
             return rec1->rva002C6ACB() == player ||
                 rec2->rva002C6ACB() == obj->getControllingPlayer() ||
                 (obj->m_ai258 != 0 && obj->m_ai258->getCurrentVictim() != 0 &&

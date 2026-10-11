@@ -173,11 +173,11 @@ class Rva0041F449 { public: StringBase<char>*rva0041F449(const StringBase<char>&
 class ArmyMemberDefinition {public:float*rva0041F28C(int);};
 struct Rva002A8AB1Record {char pad[0x160]; Rva0041F449*members;char pad164[8];int mode;};
 class Rva002A8F24 {public:Rva002A8AB1Record*rva002A8AB1(void*);};
-// Existing rowed native 0xDFEEF8 registry; original global spelling unknown.
-extern Rva002A8F24*g_tacticalAIRegistry;
+// Native DFEEF8 is the existing single datum owned by Rva005EEA20Find.cpp.
+extern Rva002A8F24*g_00DFEEF8;
 int AIUpgradeHeuristicFactoryUnlock::rva005DA67F(int unused) {
  Object*object=TheGameLogic->findObjectByID(((const Rva005DA6F3Object*)m_held)->m_id);
- Rva002A8AB1Record*owner=g_tacticalAIRegistry->rva002A8AB1(object->getControllingPlayer());
+ Rva002A8AB1Record*owner=g_00DFEEF8->rva002A8AB1(object->getControllingPlayer());
  for(std::vector<PlayerAITypeEntry>::iterator it=m_modules.begin();it!=m_modules.end();++it){
   StringBase<char>*key=(StringBase<char>*)((char*)*it+0x64);
   ArmyMemberDefinition*entry=(ArmyMemberDefinition*)owner->members->rva0041F449(*key);
