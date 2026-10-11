@@ -43,6 +43,12 @@ public:
 	void rva003148A2(UnicodeString tip);
 	int getTooltipDelay() { return m_tooltipDelay; }
 	void setTooltipDelay(int delay) { m_tooltipDelay = delay; }
+	// LINK: same-body helpers under TU-unique names (identical inlined
+	// bytes). This TU's getter/setter copies lose (first-copy); the six call
+	// sites below inline them but still emit loser COMDATs. Rebinding there
+	// emits only unique (trivially kept) copies. No flags touched.
+	int bfme_tooltip_delay() { return m_tooltipDelay; }
+	void bfme_set_tooltip_delay(int delay) { m_tooltipDelay = delay; }
 	Color winGetEnabledTextColor();
 	Color winGetEnabledTextBorderColor();
 	Color winGetDisabledTextColor();
@@ -232,7 +238,7 @@ GameWindow *GameWindowManager::gogoGadgetComboBox(GadgetCreateView *view,
 	buttonView.instance = &winInstData;
 	comboBoxData->dropDownButton = TheWindowManager->gogoGadgetPushButton(&buttonView, 0, true);
 	comboBoxData->dropDownButton->rva003148A2(view->instance->getTooltipText());
-	comboBoxData->dropDownButton->setTooltipDelay(comboBox->getTooltipDelay());
+	comboBoxData->dropDownButton->bfme_set_tooltip_delay(comboBox->bfme_tooltip_delay());
 
 	// create text entry
 	unsigned int statusTextEntry;
@@ -262,7 +268,7 @@ GameWindow *GameWindowManager::gogoGadgetComboBox(GadgetCreateView *view,
 	comboBoxData->editBox = TheWindowManager->gogoGadgetTextEntry(&entryView,
 		comboBoxData->entryData, winInstData.m_font, false);
 	comboBoxData->editBox->rva003148A2(view->instance->getTooltipText());
-	comboBoxData->editBox->setTooltipDelay(comboBox->getTooltipDelay());
+	comboBoxData->editBox->bfme_set_tooltip_delay(comboBox->bfme_tooltip_delay());
 
 	delete comboBoxData->entryData;
 	comboBoxData->entryData = (EntryData *)comboBoxData->editBox->winGetUserData();
@@ -291,7 +297,7 @@ GameWindow *GameWindowManager::gogoGadgetComboBox(GadgetCreateView *view,
 	delete comboBoxData->listboxData;
 	comboBoxData->listboxData = (ListboxData *)comboBoxData->listBox->winGetUserData();
 	comboBoxData->listBox->rva003148A2(view->instance->getTooltipText());
-	comboBoxData->listBox->setTooltipDelay(comboBox->getTooltipDelay());
+	comboBoxData->listBox->bfme_set_tooltip_delay(comboBox->bfme_tooltip_delay());
 
 	GadgetListBoxSetAudioFeedback(comboBoxData->listBox, true);
 
