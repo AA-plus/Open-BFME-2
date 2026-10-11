@@ -29,6 +29,8 @@
 // out-of-line callees already have matched bodies; no constructor pin is needed.
 
 inline void *operator new(unsigned int, void *p) { return p; }
+enum GameMessageDisposition { KEEP_MESSAGE, DESTROY_MESSAGE };
+class GameMessage;
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 
@@ -79,16 +81,18 @@ struct Rva00575F38Owner
 class Base0_00576C4B
 {
 public:
-	virtual void slot0();
-	~Base0_00576C4B() {}
+	virtual GameMessageDisposition translateGameMessage(const GameMessage *) = 0;
+	virtual ~Base0_00576C4B() {}
 };
 
-// The phase interface's two slots are already emitted by the sibling phase
-// constructor 0x005776A7. Its inherited teardown restores the carrier table.
+// Retail C6E430 and C6E720 put translation in slot0 and deleting destruction
+// in slot1. BDBA74 begins with purecall and a deleting destructor. The phase
+// overrides translation while inheriting destruction; adding a second plain
+// virtual would shift the destructor. Only this translator prefix is viewed.
 class Rva0057621AInterface : public Base0_00576C4B
 {
 public:
-	virtual void slot1();
+	virtual GameMessageDisposition translateGameMessage(const GameMessage *);
 };
 
 class VBase00C6EE28
@@ -101,7 +105,7 @@ public:
 // class's own vtable (VA 0x00C6EE28) and returning this.
 // Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
 // the anchor keeps the noinline body emitted.
-__declspec(noinline) inline VBase00C6EE28::VBase00C6EE28()
+inline VBase00C6EE28::VBase00C6EE28()
 {
 }
 
@@ -195,6 +199,7 @@ class Rva00575F38 : public Rva0057621AInterface, public VBase00C6EE28, public Bf
 {
 public:
 	Rva00575F38(class Rva00575D45 *owner, int value);
+	virtual GameMessageDisposition translateGameMessage(const GameMessage *);
 	virtual ~Rva00575F38();
 
 private:
