@@ -28,7 +28,7 @@ class Rva0020E89C;
 class Rva0020EAF6View {public:Rva0020E89C *rva0020EAF6(int);};
 class Rva003F1C56Plot;struct Rva003F1BD3TemplateView;
 class LivingWorldRegion {public:void *rva003F0588();void BuildBuilding(Rva003F1C56Plot*,const Rva003F1BD3TemplateView*);};
-class Rva003F1093 {public:void rva003F1CFE(void*,int);};
+class Rva003F1093 {public:void rva003F1CFE(void*,bool);};
 struct LivingWorldArmy;
 class LivingWorldLogic {public:
  bool CanMoveArmyMember(LivingWorldArmy*,int,int);

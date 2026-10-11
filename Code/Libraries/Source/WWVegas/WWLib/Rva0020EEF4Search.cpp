@@ -57,7 +57,7 @@ int Rva0020EEF4Outer::rva0020EEF4(int v)
 class CreateAHeroData { public: char prefix[0x20]; int field20; };
 class Rva003F1093 { public:
  CreateAHeroData *rva003F083A(void *);
- void rva003F1CA2(CreateAHeroData *,int);
+ void rva003F1CA2(CreateAHeroData *,bool);
 };
 class Rva0060EF3E { public: bool rva0060EF3E(int v); private: char prefix[8]; Rva0020EEF4Inner *inner; };
 bool Rva0060EF3E::rva0060EF3E(int v) {

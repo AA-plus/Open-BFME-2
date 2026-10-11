@@ -481,7 +481,7 @@ void XferLivingWorldPlayerID(Xfer *,int *);
 Xfer *Rva003F2394Xfer(Xfer *,_STL::vector<ScienceType> *);
 class Rva004E075FObj;
 int Rva004E075FGet(Rva004E075FObj *,int);
-class Rva003F1093 { public: CreateAHeroData *rva003F083A(void *); void rva003F1CA2(CreateAHeroData *,int); void rva003F1CFE(void *,int); char prefix[0x170]; BuildPlotVector plots; };
+class Rva003F1093 { public: CreateAHeroData *rva003F083A(void *); void rva003F1CA2(CreateAHeroData *,bool); void rva003F1CFE(void *,bool); char prefix[0x170]; BuildPlotVector plots; };
 class Rva003F3B28View { public: void rva003F3B28(int); };
 // Native construction tracks an eight-byte zero coordinate temporary in the
 // EH bitmap and then clears its bit without a cleanup call. Keep that lifetime
@@ -645,7 +645,7 @@ void Rva003F2A8C::rva003F2A8C(Int newOwner)
 // in that same unit lets the compiler prove this, instead of representing
 // the region call as a free stdcall with an undeclared ambient receiver.
 // Existing neutral owner and argument names remain provisional.
-void Rva003F1093::rva003F1CFE(void *key, int value)
+void Rva003F1093::rva003F1CFE(void *key, bool value)
 {
     CreateAHeroData *plot = rva003F083A(key);
     if (plot)
