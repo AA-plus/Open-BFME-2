@@ -5,7 +5,8 @@
 // with (this,arg1). The derived vtable and its +8 holder are independently
 // supported by the rowed Rva00575D45 destructor and slot-3 method. The nested
 // type name is address-derived; its layout and both argument meanings remain
-// unresolved. Its pin records the direct constructor call target only.
+// unresolved. The subordinate constructor is now recovered with its rowed
+// destructor spelling in Rva00575F38Dtor.cpp; the opaque constructor pin is gone.
 class Rva00575383
 {
 public:
@@ -14,10 +15,10 @@ public:
 	void *m_field04;
 };
 class Rva00575D45;
-class Rva0057621A
+class Rva00575F38
 {
 public:
-	Rva0057621A(Rva00575D45 *owner, int arg);
+	Rva00575F38(Rva00575D45 *owner, int arg);
 private:
 	char m_storage[0x50];
 };
@@ -32,5 +33,5 @@ private:
 Rva00575D45::Rva00575D45(void *held, int arg)
 	: Rva00575383(held)
 {
-	m_unmodelled_08 = new Rva0057621A(this, arg);
+	m_unmodelled_08 = new Rva00575F38(this, arg);
 }

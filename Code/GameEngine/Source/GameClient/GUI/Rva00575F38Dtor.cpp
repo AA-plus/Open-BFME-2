@@ -3,7 +3,8 @@
 // ??1Rva00575F38@@UAE@XZ retail 0x00575F38..0x00576021 (233 bytes EH).
 // The destructor the scalar deleting dtor 0x005760E9 calls (vtable
 // 0x00C6E720). WorldBuilder twin 0x014D3330 (unnamed) has the same shape.
-// Five bases: +0x00 Base0_00576C4B (reset to 0x00BDBA74) +0x04
+// Five bases: +0x00 phase interface over Base0_00576C4B (reset to
+// 0x00BDBA74; constructor table 0x00C6E430), +0x04
 // VBase00C6EE28 (0x00C6EE28) +0x08 BfmeCtorVirtualBase001B3A20 (0x00C078DC)
 // +0x0C the rowed Rva005CD1A9 (out-of-line dtor 0x005CD1A9) and +0x14
 // Rva005753E9 (0x00C6E5C4); the derived vtables are 0x00C6E720 0x00C6E700
@@ -14,7 +15,18 @@
 // the object returned by 0x002B256E called on TheLivingWorldLogic); then
 // the members die: +0x40 (rowed Rva005CD651 dtor) +0x30 (0x005CD7DA)
 // +0x2C and +0x28 (pinned Gen_uw_000ad6f4 dtor 0x000AD6F4) and +0x24
-// (0x0055076F). Class identity is address-derived.
+// (0x0055076F). The retained address-derived spelling is the rowed destructor's.
+// WB identifies the owning phase as PlanningPhaseBehavior::Impl through its
+// translateGameMessage table slot; member type names remain borrowed views.
+//
+// Constructor 0x0057621A..0x00576323 is 265 bytes, RET 8. The same five
+// bases, EH unwind order and 0x50-byte allocation in 0x005763ED establish
+// its relationship to this destructor. The owner at +0x18, int +0x1C,
+// player index +0x20, and members at +0x24/+0x28/+0x2C/+0x30/+0x40 are
+// target evidence. The +0x14 listener base ends at +0x18: the owner belongs
+// to the derived object, rather than to that base. The record constructor
+// receives one saved owner->m_04 receiver and the +0x0C base pointer. All
+// out-of-line callees already have matched bodies; no constructor pin is needed.
 
 inline void *operator new(unsigned int, void *p) { return p; }
 class LivingWorldLogic;
@@ -67,7 +79,16 @@ struct Rva00575F38Owner
 class Base0_00576C4B
 {
 public:
-	virtual ~Base0_00576C4B() {}
+	virtual void slot0();
+	~Base0_00576C4B() {}
+};
+
+// The phase interface's two slots are already emitted by the sibling phase
+// constructor 0x005776A7. Its inherited teardown restores the carrier table.
+class Rva0057621AInterface : public Base0_00576C4B
+{
+public:
+	virtual void slot1();
 };
 
 class VBase00C6EE28
@@ -99,65 +120,87 @@ public:
 class Rva005CD1A9
 {
 public:
+	Rva005CD1A9();
 	virtual ~Rva005CD1A9();
 
 private:
 	int m_04;
 };
 
+class Rva002B2B66 { public: int rva002B2B66(); };
+class Rva00328A83PtrChaseField { public: int get() const; };
+class Rva00574A98 { public: void *rva00574A98(); };
+class Rva005A0B4CList { public: void append(struct Rva002BA8F1Listener*); };
+class Rva005CC61E { public: Rva005CC61E(); private: void *ptr; };
+
 class Rva005753E9
 {
 public:
 	virtual ~Rva005753E9() {}
-
-protected:
-	Rva00575F38Owner *m_owner; // +0x18 (base +0x04)
-	int m_1C;
-	int m_20;
 };
 
 class Rva0055076F
 {
 public:
+	Rva0055076F() : m_member() {}
 	~Rva0055076F() { rva0055076F(); }
 	void rva0055076F();
 
 private:
-	void *m_p;
+	Rva005CC61E m_member;
 };
 
 class Gen_uw_000ad6f4
 {
 public:
+	Gen_uw_000ad6f4() : m_p(0) {}
 	~Gen_uw_000ad6f4();
 
 private:
 	void *m_p;
 };
 
+class Rva005CD7BD
+{
+public:
+	Rva005CD7BD(void *source, int value, int owner);
+private:
+	void *m_words[4];
+};
+
 class Rva005CD7DA
 {
 public:
+	__forceinline Rva005CD7DA(void *source, Rva005CD1A9 *owner)
+		: m_record(((Rva00574A98 *)source)->rva00574A98(),
+			((Rva00328A83PtrChaseField *)source)->get(), (int)owner) {}
 	~Rva005CD7DA() { rva005CD7DA(); }
 	void rva005CD7DA();
 
 private:
-	void *m_data[4];
+	Rva005CD7BD m_record;
 };
 
 class Rva005CD651
 {
 public:
+	Rva005CD651(int);
 	virtual ~Rva005CD651();
+private:
+	char m_data[12];
 };
 
-class Rva00575F38 : public Base0_00576C4B, public VBase00C6EE28, public BfmeCtorVirtualBase001B3A20,
+class Rva00575F38 : public Rva0057621AInterface, public VBase00C6EE28, public BfmeCtorVirtualBase001B3A20,
 	public Rva005CD1A9, public Rva005753E9
 {
 public:
+	Rva00575F38(class Rva00575D45 *owner, int value);
 	virtual ~Rva00575F38();
 
 private:
+	Rva00575F38Owner *m_owner; // +0x18
+	int m_1C;                // +0x1C
+	int m_20;                // +0x20
 	Rva0055076F m_24;      // +0x24
 	Gen_uw_000ad6f4 m_28;  // +0x28
 	Gen_uw_000ad6f4 m_2C;  // +0x2C
@@ -173,4 +216,15 @@ Rva00575F38::~Rva00575F38()
 		reinterpret_cast<Rva002B256EOwner *>(reinterpret_cast<Rva002B256E *>(TheLivingWorldLogic)->rva002B256E())->m_list.rva002B7250(
 			reinterpret_cast<CreateAHeroData *>(static_cast<Rva005753E9 *>(this)));
 	}
+}
+
+Rva00575F38::Rva00575F38(Rva00575D45 *owner, int value)
+	: m_owner((Rva00575F38Owner *)owner), m_1C(value),
+	  m_20(((Rva002B2B66 *)TheLivingWorldLogic)->rva002B2B66()),
+	  m_30(m_owner->m_04, this),
+	  m_40(((Rva00328A83PtrChaseField *)m_owner->m_04)->get())
+{
+	if ((unsigned char)((Rva002B254F *)TheLivingWorldLogic)->rva002B254F())
+		((Rva005A0B4CList *)((char *)((Rva002B256E *)TheLivingWorldLogic)->rva002B256E() + 4))
+			->append((Rva002BA8F1Listener *)(Rva005753E9 *)this);
 }
