@@ -12328,7 +12328,7 @@ _rva0060E7F0,0x00211245,address,placeholder
 ??_GRva00448089@@QAEPAXI@Z,0x004480F7,address,placeholder
 ??_GRva00447B0E@@QAEPAXI@Z,0x0044818B,address,placeholder
 ?name@Rva00448276Named@@QBEPBDXZ,0x00448276,address,placeholder
-?rva004482B7@Rva004482B7@@QAE?AV?$StringBase@G@@H@Z,0x004482B7,address,placeholder
+?rva004482B7@Rva004482B7@@QAE?AVUnicodeString@@H@Z,0x004482B7,address,placeholder
 ??1Rva004482FB@@QAE@XZ,0x004482FB,address,placeholder
 ?rva00448D96@Rva00448D96@@QAEXPAURva00448D96Node@@@Z,0x00448D96,address,placeholder
 ?rva00448E3B@Rva00448E3B@@QAEXXZ,0x00448E3B,address,placeholder
