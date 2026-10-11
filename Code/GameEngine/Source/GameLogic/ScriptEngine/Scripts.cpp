@@ -906,29 +906,7 @@ Bool ScriptGroup::ParseGroupDataChunk(DataChunkInput &file, DataChunkInfo *info,
   Ctor - initializes members.
 */
 // byte-exact reconstruction: Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptCtor.cpp
-// ??0Script@@QAE@XZ present-unmatched
-Script::Script(void) :
-m_isActive(true),
-m_isOneShot(true),
-m_easy(true),
-m_normal(true),
-m_hard(true),	
-m_delayEvaluationSeconds(0),
-m_conditionTime(0),
-m_conditionExecutedCount(0),
-m_frameToEvaluateAt(0),
-m_isSubroutine(false),
-m_hasWarnings(false),
-m_nextScript(NULL),
-m_condition(NULL),
-m_action(NULL),
-//Added By Sadullah Nader
-//Initializations inserted
-m_actionFalse(NULL),
-m_curTime(0.0f)
-//
-{
-}
+// Script::Script (?) is rowed in ScriptWriteDataChunk.cpp; a second definition here would not link.
 
 /**
   Dtor - The condition and action deletes the rest of the list, but we have to loop & delete

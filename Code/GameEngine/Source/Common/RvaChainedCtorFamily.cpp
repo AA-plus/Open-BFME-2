@@ -18,10 +18,10 @@ public:
 	Rva001F9060();
 };
 
-class Rva003B417E
+class Script
 {
 public:
-	Rva003B417E();
+	Script();
 };
 
 class Rva001FA5A5
@@ -84,7 +84,7 @@ public:
 
 private:
 	int m_00;
-	Rva003B417E m_sub;
+	Script m_sub;
 };
 
 // The Rva001FA5A5, Rva001FBA45, Rva001FB8A9 and Rva001FBBE4 ctors are rows of
