@@ -113,7 +113,8 @@ private:
 	unsigned char m_00[0x0C];
 	MetaMapRec *m_metaMaps;	// +0x0C
 };
-extern MetaMap *TheMetaMap;
+// LINK: owned here as in Zero Hour's MetaEvent.cpp (data row: zero-filled pointer; GameEngine init hands its address to initSubsystem).
+MetaMap *TheMetaMap = 0;
 
 class GameClient
 {
