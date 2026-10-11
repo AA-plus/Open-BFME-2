@@ -9,7 +9,13 @@ RenderObjClass *Create_Render_Obj(const char *);
 void Rva00135F6CMakeUnique(void *);
 struct Rva00136F5BRange { void *begin; void *end; void *capacity; bool empty() const { return begin == end; } };
 void rva00136E95(RenderObjClass *, Rva00136F5BRange *, Rva00136F5BRange *, Rva00136F5BRange *);
-extern bool g_Va00DB6218;
+// The "this asset can be coloured" feature flag, retail VA 0x00DB6218 (RVA
+// 0x009B6218, raw .data): the rowed body tests it with
+// `cmpb $0x0,0xdb6218` (retail 0x00136FC0) before including the colour terms.
+// The tentative definition (no initialiser) is deliberate: MSVC must not learn
+// the value or it folds the test and the rowed body stops matching, and a
+// const-qualified flag cannot be left uninitialised at all.
+bool g_Va00DB6218;
 class Rva00136F5BRenderView {
 public:
     virtual void slot0();
