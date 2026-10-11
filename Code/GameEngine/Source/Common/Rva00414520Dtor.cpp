@@ -4,6 +4,18 @@
 // Evidence: chain via 0x0055A91A Clear; vptr 0x00C3A08C own then 0x00BBB554 base; members +0x08 pool release via rowed 0x00360D26 and +0x18 list<int> via rowed List_base dtor 0x004EC395; callers 0x00414571 deleting dtor 0x00414D94 0x00414E13; layout like BfmeAssignRecord44 in Rva0055A91AClear.cpp.
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _List_base<int, allocator<int> >::clear();
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_base<int, allocator<int> >::~_List_base();
+}
+
 // list<int> destruction otherwise instantiates the allocator<_List_node<int>>
 // deallocate COMDAT (one byte shape per TU flags); an explicit
 // dllimport+forceinline specialization takes those calls inline so this

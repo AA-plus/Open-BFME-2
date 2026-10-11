@@ -10,6 +10,12 @@
 // claimed: WB and retail supply this reconstruction. ObjectFilter::DoXfer
 // is the independently rowed362255 provider; list clear/push are23DAA5/5548F.
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_base<int, allocator<int> >::~_List_base();
+}
 #include "Lib/Coord3D.h"
 
 // list<int> destruction otherwise instantiates per-TU deallocate

@@ -18,6 +18,18 @@
 // names. /EHs, not /EHsc: retail keeps the unwind state store before the
 // list<int> dtor, whose body frees through the extern "C" free.
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _List_base<int, allocator<int> >::clear();
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_base<int, allocator<int> >::~_List_base();
+}
 #include "ascii_string.h"
 #include "Common/Snapshot.h"
 

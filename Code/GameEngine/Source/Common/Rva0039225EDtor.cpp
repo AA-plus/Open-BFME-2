@@ -3,6 +3,18 @@
 // ??1Rva0039225E@@UAE@XZ 89B @0x0039225E: virtual dtor storing vtable 0x0081A088. Layout base 0xC plus list<int> at +0xC (size 4) plus Rva0039205C at +0x10 (size 12). Retail calls the Rva dtor twice on the same address (explicit early destroy plus implicit) then list base then GameEngineDeletingBase. Evidence: vptr store plus rowed callees plus ??_G caller at 0x00392DA4. /EHs keeps the list state store.
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _List_base<int, allocator<int> >::clear();
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_base<int, allocator<int> >::~_List_base();
+}
+
 // list<int> destruction otherwise instantiates per-TU deallocate
 // COMDATs (one byte shape per TU flags); explicit dllimport+forceinline
 // specializations take those calls inline so this TU emits no external copy.

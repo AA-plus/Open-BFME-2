@@ -7,6 +7,18 @@
 // ??0Rva002CD4A6@@QAE@XZ @0x002CD169 829B unlock: vtable 0x00802170 ctor with NoNameWeapon plus 999999 plus PI, caller 0x002CD634 new 0x180, neighbours StlportVectorAssignCoord3D and Rva002CD4A6Dtor
 #include <vector>
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _List_base<int, allocator<int> >::clear();
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_base<int, allocator<int> >::~_List_base();
+}
 #include "ascii_string.h"
 
 // list<int> destruction otherwise instantiates per-TU deallocate

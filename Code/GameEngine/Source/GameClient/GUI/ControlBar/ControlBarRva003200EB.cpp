@@ -8,6 +8,18 @@
 // ctor name (owner unproven).
 #include <list>
 
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _List_base<int, allocator<int> >::clear();
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_base<int, allocator<int> >::~_List_base();
+}
+
 // list<int> destruction otherwise instantiates the allocator<_List_node<int>>
 // deallocate COMDAT (one byte shape per TU flags); an explicit
 // dllimport+forceinline specialization takes those calls inline so this

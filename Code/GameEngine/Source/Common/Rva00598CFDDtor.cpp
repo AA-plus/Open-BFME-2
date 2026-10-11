@@ -3,6 +3,18 @@
 // ??1Rva00598B2A@@UAE@XZ @0x00598CFD 125B via clear plus members plus virtual base
 // Evidence: virtual dtor vtable 0x00870D2C; rowed clear 0x00598B2A; vector dtor 0x0002CC70 at +0x4C; holder free at +0x3C via rowed _free 0x00030830; rowed hashtable dtor 0x005982AC at +0x18; rowed List_base dtor 0x004EC395 at +0x14; rowed tree dtor 0x005981CA at +8; base dtor pinned at 0x00506B28
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _List_base<int, allocator<int> >::clear();
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_base<int, allocator<int> >::~_List_base();
+}
 #include <vector>
 #include "ascii_string.h"
 

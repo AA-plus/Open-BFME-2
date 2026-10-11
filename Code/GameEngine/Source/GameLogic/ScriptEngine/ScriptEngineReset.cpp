@@ -30,6 +30,12 @@
 // erase at 0x00207F0D, as ScriptEngine_rva0020A7C9.cpp does.
 #include "ascii_string.h"
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _List_base<int, allocator<int> >::clear();
+}
 #include <vector>
 
 // list<int> destruction otherwise instantiates per-TU deallocate
