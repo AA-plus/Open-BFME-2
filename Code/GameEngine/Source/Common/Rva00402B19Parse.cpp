@@ -23,10 +23,21 @@ public:
 struct FieldParse
 {
 	const char *token;
-	void (__cdecl *parse)(void *ini, void *instance, void *store, const void *userData);
+	void (__cdecl *parse)(class INI *ini, void *instance, void *store, const void *userData);
 	const void *userData;
 	int offset;
 };
+
+// The six field parsers retail's three LivingWorld icon tables reach. Each is an
+// already-rowed body (0x00339900, 0x001DEE74, 0x0056B668, 0x0056BDFC,
+// 0x0056BF1F), so the tables below resolve instead of trading one unresolved
+// name for another. Declared with the real INI* first argument because that is
+// what makes the mangled names the census saw match.
+void Rva00339900Parse(INI *ini, void *instance, void *store, const void *userData);
+void Rva001DEE74Parse(INI *ini, void *instance, void *store, const void *userData);
+void Rva0056B668Parse(INI *ini, void *instance, void *store, const void *userData);
+void Rva0056BDFCParse(INI *ini, void *instance, void *store, const void *userData);
+void Rva0056BF1FParse(INI *ini, void *instance, void *store, const void *userData);
 
 class MultiIniFieldParse
 {
@@ -64,7 +75,22 @@ public:
 extern LivingWorldManager *TheLivingWorldManager;
 
 int Rva0056B767Get(void);
-extern const FieldParse g_00C38380[];
+
+// Retail VA 0x00C38380 (.rdata, file offset 0x00837D80): the building icon's own
+// four field records - three sound events through the rowed audio-token parser
+// 0x00339900 and the object name through the rowed Rva0056BDFC parser - plus the
+// zero sentinel. The +0x10/+0x14/+0x18 offsets are the three sound slots and
+// +0x04 the name slot both the parser above and the rowed constructor 0x00402EFA
+// fill through the shared 0x0056B767 table.
+// ?g_00C38380@@3QBUFieldParse@@B
+extern const FieldParse g_00C38380[] =
+{
+	{ "OnSelectedSound",              &Rva00339900Parse, 0, 0x10 },
+	{ "OnConstructionBegunSound",     &Rva00339900Parse, 0, 0x14 },
+	{ "OnConstructionFinishedSound",  &Rva00339900Parse, 0, 0x18 },
+	{ "Object",                       &Rva0056BDFCParse, 0, 0x04 },
+	{ 0, 0, 0, 0 }
+};
 
 void Rva00402B19Parse(INI *ini)
 {
@@ -87,7 +113,19 @@ void Rva00402B19Parse(INI *ini)
 // that factory. BFME1 donor968ca36c Common/INI/INIArmyIcon.cpp confirms the
 // subsystem relationship but has different guards and a single-table parse.
 // No donor layout or original callback method name is asserted here.
-extern const FieldParse LivingWorldArmyIconFields[];
+extern const FieldParse LivingWorldArmyIconFields[] =
+{
+	{ "OnSelectedSound",                      &Rva00339900Parse, 0, 0x10 },
+	{ "OnMovePlannedSound",                   &Rva00339900Parse, 0, 0x14 },
+	{ "OnMoveStartedSound",                   &Rva00339900Parse, 0, 0x18 },
+	{ "WelcomeReinforcementsSound",           &Rva00339900Parse, 0, 0x1C },
+	{ "KickOutReinforcementsSound",           &Rva00339900Parse, 0, 0x20 },
+	{ "DisbandUnitSound",                     &Rva00339900Parse, 0, 0x24 },
+	{ "RetreatTeleportToHomeRegionEvaEvent",  &Rva001DEE74Parse,  0, 0x28 },
+	{ "RetreatTeleportToNonHomeRegionEvaEvent", &Rva001DEE74Parse, 0, 0x2C },
+	{ "Object",                                &Rva0056B668Parse, 0, 0x04 },
+	{ 0, 0, 0, 0 }
+};
 void Rva003F9EDFParse(INI *ini)
 {
     if (ini->m_type == 2)
@@ -105,7 +143,17 @@ void Rva003F9EDFParse(INI *ini)
 // LivingWorldBuildPlotIcon. Factory214156 has RET4, allocates24 bytes,
 // calls constructor402EFA with the name, and inserts into manager+294.
 // Target literalC38488 and field tableC38448 distinguish this sibling.
-extern const FieldParse LivingWorldBuildPlotIconFields[];
+// Retail VA 0x00C38448 (.rdata, file offset 0x00837E48): two sound
+// records through the rowed audio-token parser 0x00339900 and the object name
+// through the rowed Rva0056BF1F parser, then the zero sentinel - the 64-byte
+// table the ledger bounds before the sibling's rapid-iteration literal.
+extern const FieldParse LivingWorldBuildPlotIconFields[] =
+{
+	{ "OnSelectedSound",         &Rva00339900Parse, 0, 0x10 },
+	{ "OnBuildingDestroyedSound", &Rva00339900Parse, 0, 0x14 },
+	{ "Object",                   &Rva0056BF1FParse, 0, 0x04 },
+	{ 0, 0, 0, 0 }
+};
 void Rva00402E30Parse(INI *ini)
 {
     if (ini->m_type == 2)
