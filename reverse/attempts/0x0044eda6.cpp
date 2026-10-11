@@ -1,15 +1,78 @@
-// ?rva0044EDA6@Rva0044EDA6@@QAE_NH@Z
-// partial score=0.93 date=2026-10-01
-// ?rva0044EDA6@Rva0044EDA6@@QAE_NH@Z
-// partial score=0.93 date=2026-10-01
+// ?rva0044EDA6@SpecialAbilityUpdate@@UAE_NH@Z
+// partial score=0.8872761801410743 date=2026-10-11
 // cl: /O1 /DNDEBUG /MD
 //
-// ?rva0044EDA6@Rva0044EDA6@@QAE_NH@Z @0x0044EDA6 97B:
-// Outer check: null-checked member at -0x1C, rowed validator at -0x20 via
-// ?rva0044E7A8@Rva0044E7A8@@QAE_NH@Z (arg forwarded), Overridable final
-// +0x1C must not be 0x27/0x28, else virtual slot 0x114 vs 0x70 unsigned
-// compare on member at -0x18 plus 0x250. Callers at 7 sites.
-// ?rva0044EDA6@Rva0044EDA6@@QAE_NH@Z present-unmatched
+// ?rva0044EDA6@Rva00492C59@@UAE_NH@Z, retail 0x00492E79 (132 bytes): slot 8
+// of the +0x20 interface table of the teleport special ability update whose
+// constructor is rowed as Rva00492C59 (its xfer 0x00492E10 and update
+// 0x00492D11 share the class), so `this` is that subobject (module data at
+// -0x1C, the Object at -0x18). With a target position and a positive maximum
+// distance in the module data (+0xD4), a target farther than that from the
+// Object's position (+0x38) is refused; otherwise the SpecialAbilityUpdate
+// +0x20 slot-8 base 0x0044EDA6 decides. Named by the base's address, like
+// WeaponFireSpecialAbilityUpdateSlot8.cpp.
+typedef bool Bool;
+#include "../../Code/Libraries/Include/Lib/Coord3D.h"
+typedef float Real;
+class Object
+{
+public:
+	unsigned char m_pad000[0x38];
+	Coord3D m_38; // +0x38
+};
+struct Rva00492C59ModuleData
+{
+	unsigned char m_pad000[0xD4];
+	Real m_maxDistance; // +0xD4
+};
+class UpdateModule
+{
+public:
+	virtual ~UpdateModule();
+protected:
+	const Rva00492C59ModuleData *m_moduleData;	// +0x04
+	Object *m_object;				// +0x08
+	unsigned char m_pad0C[0x20 - 0x0C];
+};
+class SpecialPowerUpdateInterface
+{
+public:
+	virtual void u0(); virtual void u1(); virtual void u2(); virtual void u3();
+	virtual void u4(); virtual void u5(); virtual void u6(); virtual void u7();
+	virtual Bool rva0044EDA6(int value);
+};
+class SpecialAbilityUpdate : public UpdateModule, public SpecialPowerUpdateInterface
+{
+public:
+	virtual Bool rva0044EDA6(int value);
+};
+class Rva00492C59 : public SpecialAbilityUpdate
+{
+public:
+	virtual Bool rva0044EDA6(int value);
+};
+Bool Rva00492C59::rva0044EDA6(int value)
+{
+	const Coord3D *pos = (const Coord3D *)value;
+	if (pos)
+	{
+		const Rva00492C59ModuleData *data = m_moduleData;
+		if (data && data->m_maxDistance > 0.0f)
+		{
+			Object *obj = m_object;
+			if (obj)
+			{
+				Real dx = pos->x - obj->m_38.x;
+				Real dy = pos->y - obj->m_38.y;
+				Real dz = pos->z - obj->m_38.z;
+				if (dz * dz + dy * dy + dx * dx > data->m_maxDistance * data->m_maxDistance)
+					return false;
+			}
+		}
+	}
+	return SpecialAbilityUpdate::rva0044EDA6(value);
+}
+
 class Overridable
 {
 public:
@@ -54,28 +117,19 @@ struct Rva0044EDA6Outer
 	Overridable *m_over38; // +0x38
 };
 
-class Rva0044EDA6
-{
-public:
-	bool rva0044EDA6(int arg);
-};
 
-bool Rva0044EDA6::rva0044EDA6(int arg)
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+Bool SpecialAbilityUpdate::rva0044EDA6(int arg)
 {
-	char *base = (char *)this;
-	void *p = *(void **)(base - 0x1C);
-	if (p == 0 || !((Rva0044E7A8 *)(base - 0x20))->rva0044E7A8(arg))
-		return false;
-	const Overridable *fin = ((Rva0044EDA6Outer *)p)->m_over38->friend_getFinalOverride();
-	int v = fin->m_val1C;
-	if (v != 0x28 && v != 0x27)
-		return true;
-	Rva0044EDA6Virt *virt = *(Rva0044EDA6Virt **)(*(char **)(base - 0x18) + 0x250);
-	if (virt == 0)
-		return false;
-	unsigned int a = virt->s69(0);
-	unsigned int b = virt->s28();
-	if (a >= b)
-		return false;
-	return true;
+ const Rva0044EDA6Outer *data=(const Rva0044EDA6Outer *)m_moduleData;
+ if (!data || !((Rva0044E7A8 *)this)->rva0044E7A8(arg)) return false;
+ const Overridable *fin=data->m_over38->friend_getFinalOverride();
+ int value=fin->m_val1C;
+ if(value!=0x28 && value!=0x27) {_ReadWriteBarrier(); return true;}
+ Rva0044EDA6Virt *virt=*(Rva0044EDA6Virt **)((char *)m_object+0x250);
+ if(!virt)return false;
+ unsigned a=virt->s69(0);unsigned b=virt->s28();
+ if(a>=b)return false;
+ _ReadWriteBarrier(); return true;
 }
