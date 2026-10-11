@@ -216,6 +216,13 @@ BFME_DISP8_CMP_IMM_BOOL_GETTER(Rva0035BCD7CmpBoolField, 0x110, 4, ==)
 BFME_DISP8_CMP_IMM_BOOL_GETTER(Rva0036389FCmpBoolField, 0x20, 0x7FFFFFFF, !=)
 BFME_DISP8_BYTE_CMP_BOOL_GETTER(Rva0031A9E3CmpBoolField, 0x14, ==)
 BFME_DISP8_BYTE_CMP_BOOL_GETTER(Rva003FE581CmpBoolField, 0x28, ==)
+BFME_DISP8_BYTE_CMP_BOOL_GETTER(Rva0020356BCmpBoolField, 0x08, ==)
+BFME_DISP8_BYTE_CMP_BOOL_GETTER(Rva00598025CmpBoolField, 0x34, ==)
+BFME_DISP8_CMP_ZERO_BOOL_GETTER(Rva0023C5C4CmpBoolField, 0x31C, !=)
+BFME_DISP8_CMP_ZERO_BOOL_GETTER(Rva002622D6CmpBoolField, 0x16C, >)
+BFME_DISP8_CMP_ZERO_BOOL_GETTER(Rva002C71F0CmpBoolField, 0x128, ==)
+BFME_DISP8_CMP_ZERO_BOOL_GETTER(Rva005E5A82CmpBoolField, 0x30, !=)
+BFME_DISP8_CMP_IMM_BOOL_GETTER(Rva004E05DFCmpBoolField, 0x20, -1, ==)
 // Backward-chase ternary: the method runs on a subobject BACK bytes into its
 // container, so the pointer member is read at a negative displacement from
 // `this` and the inner byte is tested through it (probe-proven; a direct

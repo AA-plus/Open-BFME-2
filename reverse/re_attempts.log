@@ -37581,3 +37581,10 @@ _Rva00817B30	0x00683A30	2207	attempted	r3 independent re-derivation (commudp.cpp
 ?rva000B3779@Rva000B3779SlotSelf@@QAEXXZ	0x000B3779	5	landed	add_match verified Code/GameEngine/Source/Common/FieldVirtualForwarders.cpp 5B; mov eax [ecx] then jmp own virtual slot 25; args/return passed through; owner address-named
 ?rva00481832@Rva000B3779SlotSelf@@QAEXXZ	0x00481832	5	landed	add_match verified Code/GameEngine/Source/Common/FieldVirtualForwarders.cpp 5B; mov eax [ecx] then jmp own virtual slot 13; args/return passed through; owner address-named
 ?rva006C1670@Rva000B3779SlotSelf@@QAEXXZ	0x006C1670	5	landed	add_match verified Code/GameEngine/Source/Common/FieldVirtualForwarders.cpp 5B; mov eax [ecx] then jmp own virtual slot 9; args/return passed through; owner address-named
+?get@Rva0020356BCmpBoolField@@QBE_NXZ	0x0020356B	9	landed	add_match verified Code/GameEngine/Source/Common/Disp8CmpBoolGetters.cpp 9B; Disp8 byte-cmp bool getter; cmp byte [ecx+0x08] al sete; /O1
+?get@Rva00598025CmpBoolField@@QBE_NXZ	0x00598025	9	landed	add_match verified Code/GameEngine/Source/Common/Disp8CmpBoolGetters.cpp 9B; Disp8 byte-cmp bool getter; cmp byte [ecx+0x34] al sete; /O1
+?get@Rva0023C5C4CmpBoolField@@QBE_NXZ	0x0023C5C4	12	landed	add_match verified Code/GameEngine/Source/Common/Disp8CmpBoolGetters.cpp 12B; Disp32 cmp-zero bool getter; cmp [ecx+0x31C] eax setne; /O1
+?get@Rva002622D6CmpBoolField@@QBE_NXZ	0x002622D6	12	landed	add_match verified Code/GameEngine/Source/Common/Disp8CmpBoolGetters.cpp 12B; Disp32 cmp-zero bool getter; cmp [ecx+0x16C] eax setg; /O1
+?get@Rva002C71F0CmpBoolField@@QBE_NXZ	0x002C71F0	12	landed	add_match verified Code/GameEngine/Source/Common/Disp8CmpBoolGetters.cpp 12B; Disp32 cmp-zero bool getter; cmp [ecx+0x128] eax sete; /O1
+?get@Rva005E5A82CmpBoolField@@QBE_NXZ	0x005E5A82	9	landed	add_match verified Code/GameEngine/Source/Common/Disp8CmpBoolGetters.cpp 9B; Disp8 cmp-zero bool getter; cmp [ecx+0x30] eax setne; /O1
+?get@Rva004E05DFCmpBoolField@@QBE_NXZ	0x004E05DF	10	landed	add_match verified Code/GameEngine/Source/Common/Disp8CmpBoolGetters.cpp 10B; Disp8 cmp-imm bool getter; cmp [ecx+0x20] -1 sete; /O1
