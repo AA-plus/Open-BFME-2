@@ -77,7 +77,9 @@ class AptPlayer
 public:
 	void AddCommandMap(const AsciiString &name, AptRef<AptCommandMap> map);
 };
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 // RegistryAsciiPath's concatenation nodes, spelled as the ledger rows them.
 class Rva000B3F84Pair
@@ -200,10 +202,10 @@ AptRadialMenu::Impl::ButtonShell::ButtonShell(Impl *impl, int slot)
 	AsciiString indexText;
 	indexText.format("%d", m_index);
 	AsciiString movie = ((const Rva00577A0E *)m_impl)->rva00577A0E();
-	TheAptPlayer->AddCommandMap(movie + "_OnButtonFrameLoaded_" + indexText,
+	reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddCommandMap(movie + "_OnButtonFrameLoaded_" + indexText,
 		AptRef<AptCommandMap>(MakeDelegate(this, &Rva00577A2A::rva00577A2A)));
-	TheAptPlayer->AddCommandMap(movie + "_OnButtonFrameUnloaded_" + indexText,
+	reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddCommandMap(movie + "_OnButtonFrameUnloaded_" + indexText,
 		AptRef<AptCommandMap>(MakeDelegate(this, &ButtonShell::rva0057792E)));
 	RadialButtonMovie *button = m_impl->m_holder->m_button;
-	Rva00525203Fire(TheAptPlayer, button->getMovie(), button->m_path.str(), "CreateButton", &indexText);
+	Rva00525203Fire(reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager), button->getMovie(), button->m_path.str(), "CreateButton", &indexText);
 }

@@ -67,7 +67,10 @@ class Rva002246B1
 public:
 	int rva002246B1(const AsciiString *name);
 };
-extern class AptPlayer *TheAptPlayer;
+class AptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 struct DestructorGlobalData
 {
@@ -124,7 +127,7 @@ Rva00513BAB::~Rva00513BAB()
 		}
 		{
 			AsciiString name("CreateAHero::DrawMapComponent");
-			((Rva002246B1 *)TheAptPlayer)->rva002246B1(&name);
+			((Rva002246B1 *)reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager))->rva002246B1(&name);
 		}
 		TheGlobalDataView->m_68 = m_42e;
 		TheGlobalDataView->m_9A5 = true;

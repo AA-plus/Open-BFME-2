@@ -91,12 +91,14 @@ private:
  int m_324;
  bool m_328, m_329;
 };
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 AptPlayer::AptPlayer() : m_startTime(timeGetTime()), m_310(false), m_311(false), m_312(false),
  m_314(0), m_318(0), m_31C(0), m_320(0), m_324(-1), m_328(false), m_329(false)
 {
- if (TheAptPlayer == 0) {
-  TheAptPlayer = this;
+ if (reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager) == 0) {
+  g_bfmeAptWindowManager = reinterpret_cast<BfmeAptWindowManager *>(this);
   rva00224D80();
  }
 }

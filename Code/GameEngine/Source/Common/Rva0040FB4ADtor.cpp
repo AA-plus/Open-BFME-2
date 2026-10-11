@@ -11,7 +11,9 @@ class AptPlayer
 public:
 	bool RemoveLevel(int level);
 };
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class BfmeQuickMatchScreenBase
 {
@@ -42,7 +44,7 @@ private:
 
 Rva0040FB4A::~Rva0040FB4A()
 {
-	TheAptPlayer->RemoveLevel(m_24->m_274);
+	reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->RemoveLevel(m_24->m_274);
 	((BfmeQuickMatchScreenBase *)this)->BfmeQuickMatchScreenBase::rva00538ADC();
 	m_24 = 0;
 }

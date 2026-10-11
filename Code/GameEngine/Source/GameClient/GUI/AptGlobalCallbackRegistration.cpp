@@ -66,7 +66,9 @@ public:
  void AddExternHandler(const AsciiString&,int,AptRef<AptExternHandler>);
  void AddCustomRender(const AsciiString&,AptRef<AptCustomRender>);
 };
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class Coord2D;
 void bfmeGoDYF(const char *);
@@ -83,22 +85,22 @@ void Rva004129DF(const Coord2D *, const Coord2D *, const char *, const char *);
 void Rva00412BFF(const Coord2D *, const Coord2D *, const char *, const char *);
 
 #define BIND_COMMAND(label, callback) \
-	if (TheAptPlayer) { \
+	if (reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)) { \
 		AsciiString name(label); \
 		void *function = (void *)&callback; \
-		TheAptPlayer->AddCommandMap(name, AptRef<AptCommandMap>(function)); \
+		reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddCommandMap(name, AptRef<AptCommandMap>(function)); \
 	}
 #define BIND_QUERY(label, callback, index) \
 	{ \
 		AsciiString name(label); \
 		void *function = (void *)&callback; \
-		TheAptPlayer->AddExternHandler(name, index, AptRef<AptExternHandler>(function)); \
+		reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddExternHandler(name, index, AptRef<AptExternHandler>(function)); \
 	}
 #define BIND_RENDER(label, callback) \
 	{ \
 		AsciiString name(label); \
 		void *function = (void *)&callback; \
-		TheAptPlayer->AddCustomRender(name, AptRef<AptCustomRender>(function)); \
+		reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddCustomRender(name, AptRef<AptCustomRender>(function)); \
 	}
 
 void __cdecl Rva00412F14Register()

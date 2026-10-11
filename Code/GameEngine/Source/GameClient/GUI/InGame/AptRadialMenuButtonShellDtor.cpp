@@ -17,7 +17,9 @@ class Rva00224455
 public:
 	int rva00224455(const AsciiString *name);
 };
-extern Rva00224455 *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class Rva000B3F84Pair
 {
@@ -123,12 +125,12 @@ private:
 
 static __forceinline void removeCommandMap(const AsciiString &name)
 {
-	TheAptPlayer->rva00224455(&name);
+	reinterpret_cast<Rva00224455 *>(g_bfmeAptWindowManager)->rva00224455(&name);
 }
 
 AptRadialMenu::Impl::ButtonShell::~ButtonShell()
 {
-	if (TheAptPlayer)
+	if (reinterpret_cast<Rva00224455 *>(g_bfmeAptWindowManager))
 	{
 		AsciiString indexText;
 		indexText.format("%d", m_index);
@@ -136,7 +138,7 @@ AptRadialMenu::Impl::ButtonShell::~ButtonShell()
 		removeCommandMap(movie + "_OnButtonFrameUnloaded_" + indexText);
 		removeCommandMap(movie + "_OnButtonFrameLoaded_" + indexText);
 		RadialButtonMovie *button = m_impl->m_holder->m_button;
-		Rva0052519DFire(TheAptPlayer, button->getMovie(), button->m_path.str(), "DestroyButton", &m_index);
+		Rva0052519DFire(reinterpret_cast<Rva00224455 *>(g_bfmeAptWindowManager), button->getMovie(), button->m_path.str(), "DestroyButton", &m_index);
 	}
 	m_impl->OnButtonDestroyed();
 }

@@ -13,7 +13,9 @@
 
 class Image;
 class AptPlayer;
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 struct RadialClockResult
 {
@@ -80,7 +82,7 @@ void Rva00412BFF(const Coord2D *origin, const Coord2D *size,
                  const char *path, const char *parameters)
 {
     RadialClockResult result;
-    reinterpret_cast<Rva00223BF6 *>(TheAptPlayer)
+    reinterpret_cast<Rva00223BF6 *>(reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager))
         ->rva00223BF6(&result, path, parameters);
     if (result.fraction >= 0.0f && result.fraction < 1.0f)
     {

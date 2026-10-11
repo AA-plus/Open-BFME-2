@@ -155,7 +155,9 @@ class AptPlayer
 public:
 	void AddCustomRender(const AsciiString &name, AptRef<AptCustomRender> render);
 };
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class AptCreateAHero;
 class AptMyHero
@@ -321,7 +323,7 @@ AptCreateAHero::AptCreateAHero(void *context)
 	{
 		FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptCreateAHero::rva00514070);
 		AsciiString name("CreateAHero::DrawMapComponent");
-		TheAptPlayer->AddCustomRender(name, AptRef<AptCustomRender>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
+		reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddCustomRender(name, AptRef<AptCustomRender>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
 	{
 		FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptCreateAHero::CreateAHeroDemo);

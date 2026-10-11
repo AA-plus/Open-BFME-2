@@ -13,7 +13,9 @@ class AptPlayer
 public:
     const Image *FindRenderImage(const char *path, const char *parameters);
 };
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 int Rva00412AF3(const char *parameters);
 
 class Display;
@@ -28,7 +30,7 @@ public:
 void Rva00412B94(const Coord2D *origin, const Coord2D *size,
                  const char *path, const char *parameters)
 {
-    const Image *image = TheAptPlayer->FindRenderImage(path, parameters);
+    const Image *image = reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->FindRenderImage(path, parameters);
     if (image)
     {
         reinterpret_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(

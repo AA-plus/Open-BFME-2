@@ -18,7 +18,9 @@ class Rva002246B1
 public:
 	int rva002246B1(const AsciiString *name);
 };
-extern Rva002246B1 *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class Rva000B3F84Pair
 {
@@ -74,12 +76,12 @@ private:
 
 static __forceinline void removeCustomRender(const AsciiString &key)
 {
-	TheAptPlayer->rva002246B1(&key);
+	reinterpret_cast<Rva002246B1 *>(g_bfmeAptWindowManager)->rva002246B1(&key);
 }
 
 Rva00527827::~Rva00527827()
 {
-	if (TheAptPlayer)
+	if (reinterpret_cast<Rva002246B1 *>(g_bfmeAptWindowManager))
 	{
 		AsciiString movie = rva00527B03();
 		removeCustomRender(movie + "_Content");

@@ -80,7 +80,9 @@ class AptPlayer
 public:
 	void AddCustomRender(const AsciiString &name, AptRef<AptCustomRender> render);
 };
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class Rva000B3F84Pair
 {
@@ -142,7 +144,7 @@ Rva00527827::Rva00527827(int arg, const AsciiString &name)
 	  m_18(-1)
 {
 	AsciiString movie = rva00527B03();
-	TheAptPlayer->AddCustomRender(movie + "_Content",
+	reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddCustomRender(movie + "_Content",
 		AptRef<AptCustomRender>(MakeDelegate(this, &Rva00527827::rva00527827)));
 }
 

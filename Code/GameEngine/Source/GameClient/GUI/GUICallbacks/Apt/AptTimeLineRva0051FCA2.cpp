@@ -182,7 +182,9 @@ public:
 	void AddCustomRender(const AsciiString &name, AptRef<AptCustomRender> render);
 };
 
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class AptTimeLineStats
 {
@@ -250,7 +252,7 @@ void AptTimeLine::rva0051FCA2()
 	{
 		FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptTimeLine::RenderGraph);
 		AsciiString name("AptTimeLine::RenderGraph");
-		TheAptPlayer->AddCustomRender(name, AptRef<AptCustomRender>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
+		reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddCustomRender(name, AptRef<AptCustomRender>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
 	{
 		FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptTimeLine::rva0051E766);

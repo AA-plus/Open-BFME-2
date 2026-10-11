@@ -685,7 +685,9 @@ class AptPlayer
 public:
 	void PopFocus(AptFocusTarget *target);	// 0x00222A33
 };
-extern AptPlayer *TheAptPlayer;
+// One native manager datum at VA DFE4CC; cast to this unit's receiver view.
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 class Rva00222A8BTarget
 {
@@ -721,8 +723,8 @@ int AptMainMenu::LinearCampaignStart(const AsciiString &campaign, float time, bo
 	int result = 1;
 	if (start)
 	{
-		TheAptPlayer->PopFocus((AptFocusTarget *)-1);
-		reinterpret_cast<Rva00222A8BTarget *>(TheAptPlayer)->rva00222F55(false);
+		reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->PopFocus((AptFocusTarget *)-1);
+		reinterpret_cast<Rva00222A8BTarget *>(reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager))->rva00222F55(false);
 		TheShell->rva0035BF4C(true);
 		TheShell->m_6c = true;
 		TheDisplay->m_114 = true;
@@ -803,7 +805,7 @@ int AptMainMenu::rva00514950(int msg, int p1, int p2)
 						return 1;
 					if (m_state == 4)
 					{
-						reinterpret_cast<Rva00222A8BTarget *>(TheAptPlayer)->invoke(m_274, "HideCredits", 0, 0, 0, 0, 0, 0);
+						reinterpret_cast<Rva00222A8BTarget *>(reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager))->invoke(m_274, "HideCredits", 0, 0, 0, 0, 0, 0);
 						return 1;
 					}
 					return 1;
@@ -847,7 +849,7 @@ int AptMainMenu::rva00514950(int msg, int p1, int p2)
 	{
 		TheMouse->_bfme_setEngineVisibility(true);
 		m_pendingRestart = true;
-		reinterpret_cast<Rva00222A8BTarget *>(TheAptPlayer)->invoke(m_274, "ShowMainMenu", 0, 0, 0, 0, 0, 0);
+		reinterpret_cast<Rva00222A8BTarget *>(reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager))->invoke(m_274, "ShowMainMenu", 0, 0, 0, 0, 0, 0);
 	}
 	return 0;
 }
