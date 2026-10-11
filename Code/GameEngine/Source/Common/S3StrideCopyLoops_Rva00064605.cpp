@@ -15,19 +15,26 @@
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
-struct BfmeCopySubA
+// LINK: the two 12-byte members are rowed as vector<Rva0006447DRecord> (0x0006447D)
+// and vector<MixFileCreator::FileInfoStruct> (0x0006454B) assignments.
+struct Rva0006447DRecord;
+class MixFileCreator
 {
-	void bfmeAssign(BfmeCopySubA *source);		// retail 0x000FF8F0
-
+public:
+	struct FileInfoStruct;
+};
+namespace _STL
+{
+template <class T> class allocator;
+template <class T, class A> class vector
+{
+public:
+	vector &operator=(const vector &that);
 	char m_bfmeBytes[0x0C];
 };
-
-struct BfmeCopySubB
-{
-	void bfmeAssign(BfmeCopySubB *source);		// retail 0x000FFA60
-
-	char m_bfmeBytes[0x0C];
-};
+}
+typedef _STL::vector<Rva0006447DRecord, _STL::allocator<Rva0006447DRecord> > BfmeCopySubA;
+typedef _STL::vector<MixFileCreator::FileInfoStruct, _STL::allocator<MixFileCreator::FileInfoStruct> > BfmeCopySubB;
 
 struct BfmeCopyWords
 {
@@ -107,8 +114,8 @@ BfmeCopyElementA *BfmeCopyElementA::bfmeAssign(BfmeCopyElementA *source)
 	m_bfme18 = source->m_bfme18;
 	m_bfme24 = source->m_bfme24;
 	m_bfme28 = source->m_bfme28;
-	m_bfme2c.bfmeAssign(&source->m_bfme2c);
-	m_bfme38.bfmeAssign(&source->m_bfme38);
+	m_bfme2c = source->m_bfme2c;
+	m_bfme38 = source->m_bfme38;
 	m_bfme44 = source->m_bfme44;
 	// Retail finishes this aggregate copy before scheduling the final tail copy.
 	_ReadWriteBarrier();
