@@ -52,10 +52,10 @@ public:
 	void appendPixelArgument(const ICoord2D &arg);
 };
 
-class ViewLocation
+class BfmeViewLocation
 {
 public:
-	ViewLocation()
+	BfmeViewLocation()
 	{
 		m_valid = false;
 		m_pos.x = 0.0f;
@@ -127,7 +127,7 @@ public:
 	virtual void v13C(); virtual void v140(); virtual void v144(); virtual void v148(); virtual void v14C(); virtual void v150();
 	virtual void v154(); virtual void v158(); virtual void v15C(); virtual void v160(); virtual void v164(); virtual void v168();
 	virtual void v16C();
-	virtual void getLocation(ViewLocation *location); // +0x170
+	virtual void getLocation(BfmeViewLocation *location); // +0x170
 };
 
 class Display
@@ -200,7 +200,7 @@ private:
 class Rva0023C666
 {
 public:
-	bool rva0023C666();
+	int rva0023C666();
 };
 
 class BfmeOwnVVD
@@ -378,9 +378,9 @@ void BfmeOwnVVD::rva0042F213()
 	}
 
 	if (TheWritableGlobalData->m_saveCameraInReplay && TheGameEngine->rva00225D38() &&
-		(((Rva0023C666 *)TheGameLogic)->rva0023C666() || TheGameLogic->m_110 == 2 || TheGameLogic->isInMultiplayerGame()))
+		((unsigned char)((Rva0023C666 *)TheGameLogic)->rva0023C666() || TheGameLogic->m_110 == 2 || TheGameLogic->isInMultiplayerGame()))
 	{
-		ViewLocation currentView;
+		BfmeViewLocation currentView;
 		TheTacticalView->getLocation(&currentView);
 		GameMessage *msg = TheMessageStream->appendMessage(0x447);
 		msg->appendLocationArgument(currentView.m_pos);
