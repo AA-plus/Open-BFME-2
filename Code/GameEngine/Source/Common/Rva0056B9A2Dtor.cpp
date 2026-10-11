@@ -4,11 +4,11 @@
 
 #include "ascii_string.h"
 
-class Rva002D3627Host
-{
-public:
-	void rva002C004F(const char *name);
-};
+// LINK: rva002C004F's rowed home is Rva002BFF5A (Rva002C004FErase.cpp, 0x2C004F);
+// the old Rva002D3627Host spelling named an unresolved symbol. The global keeps
+// its pointer type, the call binds the rowed member through a cast.
+class Rva002D3627Host;
+class Rva002BFF5A { public: void rva002C004F(const char *name); };
 
 extern Rva002D3627Host *g_00DFEF18;
 
@@ -34,5 +34,5 @@ public:
 
 Rva0056B9A2::~Rva0056B9A2()
 {
-	g_00DFEF18->rva002C004F(m_str.str());
+	((Rva002BFF5A *)g_00DFEF18)->rva002C004F(m_str.str());
 }
