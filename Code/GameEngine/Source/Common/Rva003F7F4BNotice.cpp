@@ -67,7 +67,12 @@ class Rva003F7F4B {public:void rva003F7F4B();private:
 };
 void Rva003F7F4B::rva003F7F4B() {
  if(info.referent && id==1) {
- BfmeEventPositionView position(0,0,0);
+ // LINK: default-construct plus plain assignment instead of the (0,0,0)
+ // call (identical stores). This TU's header-inline MMM-ctor copy loses to
+ // the first-in-order copy (no retail address); the call inlines but still
+ // emits the loser COMDAT, while the default ctor's copy is kept. No flags
+ // touched and no header edit.
+ BfmeEventPositionView position; position.x = 0; position.y = 0; position.z = 0;
  BfmeAudioEventPrefix136 event(info,position,1);
  event.m_int70=((Rva002B2B66*)TheLivingWorldLogic)->rva002B2B66();
  id=((Rva003F7F4BAudioView*)TheAudio)->add(&event);
