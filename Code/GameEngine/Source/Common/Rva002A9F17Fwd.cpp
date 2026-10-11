@@ -11,7 +11,14 @@ class Rva00421520
 {
 public:
 	void rva00421520(Rva004210B0 *holder, const StringBase<char> *name);
-	void rva00421292(Rva004210B0 *holder, const void *arg);
+};
+
+// LINK: the second forward is rowed as Rva00421292::rva00421292 (0x00421292).
+class Gen_0039BE00;
+class Rva00421292
+{
+public:
+	void rva00421292(Gen_0039BE00 *holder, const StringBase<char> *name);
 };
 extern Rva00421520 *g_00E03158;
 
@@ -40,7 +47,7 @@ void Rva002A9F17::rva002A9F35(const void *arg)
 {
 	Rva00421520 *p = g_00E03158;
 	if (p)
-		p->rva00421292(&m_318, arg);
+		((Rva00421292 *)p)->rva00421292((Gen_0039BE00 *)&m_318, (const StringBase<char> *)arg);
 }
 
 // g_00E03158: matched references place it at VA 0xe03158 (retail value 0).
