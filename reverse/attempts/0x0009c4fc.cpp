@@ -1,38 +1,309 @@
-// ?rva0009C4FC@Rva0008FF3E@@UAEXHHHH@Z
-// partial score=0.99 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
+// ?rva0009C4FC@Rva0009D55BProduct@@UAEXHHHH@Z
+// partial score=0.99 date=2026-10-11
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
+// stlport
+// ??0Rva0009D55BProduct@@QAE@XZ retail 0x0009D55B..0x0009D6E8 (397 bytes EH).
+// Product of the W3D game client factory 0x0004C8DD (vtable 0x00BC4738;
+// new 0x1D4). Runs the LivingWorld constructor 0x002C0120 (its unwind
+// funclet 0x00760638 calls the base dtor 0x002BFB2D) then stores vtable
+// 0x00BC89C8 and initialises its own members: six zeroed words (+0xC0)
+// two 1.0 floats (+0xD8) five float triples (+0xE0 zero / +0xEC 0.9 /
+// +0xF8 +0x104 +0x110 zero) then 0 / 10.0 at +0x11C/+0x120 and 1.0 / 0 /
+// pi/6 at +0x134..+0x13C; four 12-byte elements at +0x140 built through
+// the vector constructor iterator 0x00001423 with the folded trivial ctor
+// 0x0047A6A9; zeroed words and floats at +0x188..+0x1AC; two zeroed int
+// pairs (+0x1B0 +0x1B8); an STLport vector at +0x1C0 (folded _Vector_base
+// ctor 0x00211E58) and two zeroed words. The deleting dtor 0x0009D9A1 and
+// dtor 0x0009D6FA are rowed under the opaque name Rva009D6FA. Member
+// meanings element types and the class name are unresolved.
 //
-// ?rva0009C4FC@Rva0008FF3E@@UAEXHHHH@Z, retail 0x0009C4FC..0x0009C784
-// (648 bytes, ret 0x10). Slot 9 (+0x24) of the vtable 0x007C7DC8 that the
-// rowed constructor 0x0008FF3E stores (slot 27 is the rowed per-frame update
-// 0x0009B0B7 in Rva0009B0B7Update.cpp). It draws the view into a screen
-// rectangle. With a scene (+0xC4), a camera (+0xC0) and both flag bytes
-// (+0x19, +0x18) set, it:
-//  - stores the rectangle at +0x1B0..+0x1BC;
-//  - sets the camera viewport to the rectangle over TheDisplay's size,
-//    clamped to [0, 1], via the rowed CameraClass::Set_Viewport, and the
-//    aspect ratio to width / height via the rowed Set_Aspect_Ratio;
-//  - enables ShaderOverbrightEnabled and clears colour and depth through the
-//    rowed DX8Wrapper::Clear;
-//  - blends two fog values (+0x13C, +0xD8) from the INI-loaded file statics
-//    by the +0x198 fade, picked by TheWritableGlobalData's +0xD2E flag; the
-//    first is then replaced by TheLivingWorldManager's +0x38;
-//  - sets three render objects' opacity (+0x18C and +0x190 to 0, +0x194 to
-//    0.8) through 0x0009AACF;
-//  - passes +0xE0 to the scene's slot 6, runs 0x0009BAA4 and renders the
-//    scene with the camera through the rowed 0x00118660.
-// 0x0009AACF is rowed as a free __stdcall function, but retail loads ECX
-// with this before each call and the body never reads ECX; it is called here
-// through a thiscall pin. The file statics are address-named; class identity
-// is address-derived from the constructor.
+// ??1Rva0009D55BProduct@@UAE@XZ retail 0x0009D6FA..0x0009D862 (360 bytes EH),
+// the destructor the deleting dtor 0x0009D9A1 calls (pin ??1Rva009D6FA).
+// After the rowed 0x0009AB85 shutdown it takes the three render objects at
+// +0xC8/+0xCC/+0xD0 out of the +0xC4 scene (scene slot 3) when they report
+// being in it (slot 123), releases the five ref-counted words +0xC0..+0xD0
+// (inline Release_Ref, Delete_This slot 0) and clears each, then unwinds
+// the +0x1D0 texture reference (Release_Ref 0x0021ED10) and the +0x1C0
+// vector before the LivingWorld destructor 0x002BFB2D.
+#include <vector>
+#include "ascii_string.h"
+// The +0x1C0 vector's storage is freed inline through the game free
+// (0x00030830), as in the sibling water-object units.
+void Rva00030830FreeAllocation(void *);
+namespace _STL {
+ template<> inline void allocator<int>::deallocate(int *p, size_type) const { if (p) Rva00030830FreeAllocation(p); }
+}
 
-class Vector2
+// 12-byte element whose out-of-line default constructor is the ICF-folded
+// trivial ctor 0x0047A6A9 (rowed as ??0ICoord3D@@QAE@XZ among others).
+struct ICoord3D
 {
-public:
-	float X;
-	float Y;
+	ICoord3D();
+	int x;
+	int y;
+	int z;
 };
 
+struct Rva0009D55BVec3
+{
+	float x, y, z;
+	Rva0009D55BVec3(float v) : x(v), y(v), z(v) {}
+	Rva0009D55BVec3 &operator=(const Rva0009D55BVec3 &v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+
+struct Rva0009D55BPair
+{
+	int a, b;
+	Rva0009D55BPair() : a(0), b(0) {}
+};
+
+class Rva0009AB6B { public: void rva0009AB85(); };
+class TextureBaseClass { public: void Release_Ref(); };
+
+#define D55B_SLOTS4(p) virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3();
+#define D55B_SLOTS16(p) D55B_SLOTS4(p##0) D55B_SLOTS4(p##1) D55B_SLOTS4(p##2) D55B_SLOTS4(p##3)
+
+// The ref-counted words: slot 0 deletes, the count is at +4.
+class Rva0009D6FARef
+{
+public:
+	virtual void Delete_This();
+	void Release_Ref() { if (--m_numRefs == 0) Delete_This(); }
+	int m_numRefs;
+};
+class Rva0009D6FARenderObj : public Rva0009D6FARef
+{
+public:
+	D55B_SLOTS16(r0) D55B_SLOTS16(r1) D55B_SLOTS16(r2) D55B_SLOTS16(r3)
+	D55B_SLOTS16(r4) D55B_SLOTS16(r5) D55B_SLOTS16(r6)
+	D55B_SLOTS4(r70) D55B_SLOTS4(r71) virtual void r720(); virtual void r721();
+	virtual bool isInScene();	// slot 123
+};
+class Rva0009D6FAScene : public Rva0009D6FARef
+{
+public:
+	virtual void s1(); virtual void s2();
+	virtual void removeRenderObject(Rva0009D6FARenderObj *obj);	// slot 3
+	virtual void s4(); virtual void s5();
+	virtual void slot6(const Rva0009D55BVec3 &color);	// slot 6
+};
+struct Rva0009D6FATexture
+{
+	Rva0009D6FATexture() : m_ptr(0) {}
+	~Rva0009D6FATexture() { if (m_ptr) m_ptr->Release_Ref(); }
+	TextureBaseClass *m_ptr;
+};
+#define D55B_REF_PTR_RELEASE(x) { if (x) { x->Release_Ref(); x = 0; } }
+
+class LivingWorld
+{
+public:
+	LivingWorld();
+	virtual ~LivingWorld();
+	virtual void rva002BF391(bool active);	// the state handler 0x002BF391
+
+private:
+	char m_body[0xC0 - 4];
+};
+
+class Rva0009D55BProduct : public LivingWorld
+{
+public:
+	Rva0009D55BProduct();
+	virtual ~Rva0009D55BProduct();
+	virtual void rva0009C784(unsigned int phase, unsigned int previous);
+	virtual void rva0009D862();
+	virtual void rva0009DB5A(bool active);
+	virtual void rva0009BC17();
+	virtual void rva0009C4FC(int x, int y, int width, int height);
+
+private:
+	Rva0009D6FARef *m_C0;
+	Rva0009D6FAScene *m_C4;
+	Rva0009D6FARenderObj *m_C8;
+	Rva0009D6FARenderObj *m_CC;
+	Rva0009D6FARenderObj *m_D0;
+	int m_D4;
+	float m_D8;
+	float m_DC;
+	Rva0009D55BVec3 m_E0;
+	Rva0009D55BVec3 m_EC;
+	Rva0009D55BVec3 m_F8;
+	Rva0009D55BVec3 m_104;
+	Rva0009D55BVec3 m_110;
+	float m_11C;
+	float m_120;
+	char m_pad124[0x134 - 0x124];
+	float m_134;
+	float m_138;
+	float m_13C;
+	ICoord3D m_140[4];
+	char m_pad170[0x188 - 0x170];
+	int m_188;
+	int m_18C;
+	int m_190;
+	int m_194;
+	float m_198;
+	int m_19C;
+	float m_1A0;
+	float m_1A4;
+	float m_1A8;
+	float m_1AC;
+	Rva0009D55BPair m_1B0;
+	Rva0009D55BPair m_1B8;
+	std::vector<int> m_1C0;
+	int m_1CC;
+	Rva0009D6FATexture m_1D0;
+};
+
+Rva0009D55BProduct::Rva0009D55BProduct()
+	: m_C0(0), m_C4(0), m_C8(0), m_CC(0), m_D0(0), m_D4(0),
+	  m_D8(1.0f), m_DC(1.0f),
+	  m_E0(0.0f), m_EC(0.9f), m_F8(0.0f), m_104(0.0f), m_110(0.0f),
+	  m_11C(0.0f), m_120(10.0f), m_134(1.0f), m_138(0.0f), m_13C(0.52359879f),
+	  m_188(0), m_18C(0), m_190(0), m_194(0), m_198(0.0f), m_19C(0), m_1AC(0.0f),
+	  m_1CC(0)
+{
+}
+
+Rva0009D55BProduct::~Rva0009D55BProduct()
+{
+	((Rva0009AB6B *)this)->rva0009AB85();
+	if (m_C8 && m_C4 && m_C8->isInScene())
+		m_C4->removeRenderObject(m_C8);
+	if (m_CC && m_C4 && m_CC->isInScene())
+		m_C4->removeRenderObject(m_CC);
+	if (m_D0 && m_C4 && m_D0->isInScene())
+		m_C4->removeRenderObject(m_D0);
+	D55B_REF_PTR_RELEASE(m_C0);
+	D55B_REF_PTR_RELEASE(m_C4);
+	D55B_REF_PTR_RELEASE(m_C8);
+	D55B_REF_PTR_RELEASE(m_CC);
+	D55B_REF_PTR_RELEASE(m_D0);
+}
+
+// ?rva0009C784@Rva0009D55BProduct@@UAEXII@Z retail 0x0009C784 (144 bytes,
+// ret 8; slot 19 of the product table 0x00BC89C8): after the rowed
+// LivingWorld handler 0x002BE7FA, phase 2 clears the +0x198 fade, starts
+// the "FadeInGameMovie" transition group (rowed setGroup / enable) and hides
+// the engine mouse; phase 3 sets the fade to 1, clears +0x134/+0x138 and
+// calls the table's slot 10 with true.
+class Rva002BE7FA { public: void rva002BE7FA(unsigned int a, unsigned int b); };
+class GameWindowTransitionsHandler { public: void setGroup(AsciiString name, bool immediate); };
+extern GameWindowTransitionsHandler *TheTransitionHandler;
+class Rva001DBB82OneSetter { public: void enable(); };
+class Mouse { public: void _bfme_setEngineVisibility(bool visible); };
+extern Mouse *TheMouse;
+class Rva0009C784Slots
+{
+public:
+	D55B_SLOTS4(v0) D55B_SLOTS4(v1) virtual void v20(); virtual void v21();
+	virtual void slot10(bool flag);
+};
+
+void Rva0009D55BProduct::rva0009C784(unsigned int phase, unsigned int previous)
+{
+	((Rva002BE7FA *)this)->rva002BE7FA(phase, previous);
+	if (phase == 2)
+	{
+		m_198 = 0.0f;
+		TheTransitionHandler->setGroup(AsciiString("FadeInGameMovie"), false);
+		((Rva001DBB82OneSetter *)TheTransitionHandler)->enable();
+		TheMouse->_bfme_setEngineVisibility(false);
+	}
+	else if (phase == 3)
+	{
+		m_198 = 1.0f;
+		m_134 = 0.0f;
+		m_138 = 0.0f;
+		((Rva0009C784Slots *)this)->slot10(true);
+	}
+}
+
+// ?rva0009D862@Rva0009D55BProduct@@UAEXXZ retail 0x0009D862 (319 bytes, EH;
+// slot 4 of the product table): after the rowed shutdown 0x0009AB85 it
+// creates the camera (+0xC0, CameraClass), the scene built on this (+0xC4,
+// rowed 0x0009AA0F) and three lights (+0xC8/+0xCC/+0xD0, LightClass type 1),
+// sets +0x134 to 1, copies the +0x104 vector to +0xF8 and runs the pinned
+// refreshes 0x0009BAA4 and 0x0009CD9B.
+class Vector2;
+class CameraClass { public: CameraClass(); void Set_Viewport(const Vector2 &min, const Vector2 &max); void Set_Aspect_Ratio(float ratio); char m_data[0x3FC]; };
+class Rva0009AA0F { public: Rva0009AA0F(int owner); char m_data[0x10C]; };
+class LightClass { public: enum LightType { POINT = 0, DIRECTIONAL = 1 }; LightClass(LightType type); char m_data[0x120]; };
+class Rva0009C134Host { public: void rva0009BAA4(); void rva0009CD9B(); void rva0009AACF(int obj, float opacity); };
+
+void Rva0009D55BProduct::rva0009D862()
+{
+	((Rva0009AB6B *)this)->rva0009AB85();
+	m_C0 = (Rva0009D6FARef *)new CameraClass;
+	m_C4 = (Rva0009D6FAScene *)new Rva0009AA0F((int)this);
+	m_C8 = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_CC = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_D0 = (Rva0009D6FARenderObj *)new LightClass(LightClass::DIRECTIONAL);
+	m_134 = 1.0f;
+	m_F8 = m_104;
+	((Rva0009C134Host *)this)->rva0009BAA4();
+	((Rva0009C134Host *)this)->rva0009CD9B();
+}
+
+// ?rva0009DB5A@Rva0009D55BProduct@@UAEX_N@Z retail 0x0009DB5A (154 bytes,
+// ret 4): deactivation first resets the view (rowed 0x0009DA28); the
+// LivingWorld handler 0x002BF391 (unrowed, pinned) always runs, but only a
+// change of the +0x18 state continues: activation runs the manager's
+// rowed cleanup and, with the global data's +0x60 shadow flag, copies the
+// manager's +0x1E4 word into the shadow manager, places its light at
+// +0x1A0..+0x1A8 and adds the shadows (rowed 0x0009DB47); deactivation runs
+// the manager's 0x002141D1 and resets the view again.
+class Rva0009D9BD { public: void rva0009DA28(); void rva0009DB47(); };
+class LivingWorldManager { public: void rva002142EA(); };
+extern LivingWorldManager *TheLivingWorldManager;
+class Rva002141D1 { public: void rva002141D1(); };
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+class W3DShadowManager;
+extern W3DShadowManager *TheW3DShadowManager;
+class W3DGameClientShadowShim { public: void setLightPosition(int index, float x, float y, float z); };
+struct Rva0009DB5AShadowView { void *m_vtbl; int m_04; };
+struct Rva0009DB5AGlobalView { unsigned char m_pad[0x60]; bool m_shadows; };
+struct Rva0009DB5AManagerView { unsigned char m_pad[0x1E4]; int m_1E4; };
+struct Rva0009DB5ALivingWorldView { unsigned char m_pad[0x18]; bool m_active; };
+
+void Rva0009D55BProduct::rva0009DB5A(bool active)
+{
+	if (!active)
+		((Rva0009D9BD *)this)->rva0009DA28();
+	if (((Rva0009DB5ALivingWorldView *)this)->m_active == active)
+	{
+		LivingWorld::rva002BF391(active);
+		return;
+	}
+	LivingWorld::rva002BF391(active);
+	if (active)
+	{
+		TheLivingWorldManager->rva002142EA();
+		if (((Rva0009DB5AGlobalView *)TheWritableGlobalData)->m_shadows)
+		{
+			((Rva0009DB5AShadowView *)TheW3DShadowManager)->m_04 = ((Rva0009DB5AManagerView *)TheLivingWorldManager)->m_1E4;
+			((W3DGameClientShadowShim *)TheW3DShadowManager)->setLightPosition(0, m_1A0, m_1A4, m_1A8);
+			((Rva0009D9BD *)this)->rva0009DB47();
+		}
+	}
+	else
+	{
+		((Rva002141D1 *)TheLivingWorldManager)->rva002141D1();
+		((Rva0009D9BD *)this)->rva0009DA28();
+	}
+}
+
+// ?rva0009BC17@Rva0009D55BProduct@@UAEXXZ retail 0x0009BC17 (385 bytes;
+// slot 8 of the product table): with the camera (+0xC0), the scene (+0xC4)
+// and the +0x18 active state it raises the byte at 0x00DB5F84, clears colour,
+// depth and stencil to black (DX8Wrapper::Clear 0x0011D330), blends +0x13C
+// and +0xD8 from the float triples at 0x00DE5E38 and 0x00DE5E2C by the +0x198
+// fade (row 1 when the global data's +0xD2E byte is set), sets the opacity of
+// the three render words +0x18C/+0x190/+0x194 from +0x134 through 0x0009AACF
+// (a member that ignores this, ret 8), passes +0xE0 to scene slot 6, runs the
+// pinned refresh 0x0009BAA4 and renders the scene through 0x00118660.
 class Vector3
 {
 public:
@@ -40,190 +311,119 @@ public:
 	float Y;
 	float Z;
 };
-
-class CameraClass
-{
-public:
-	void Set_Viewport(const Vector2 &min, const Vector2 &max);
-	void Set_Aspect_Ratio(float ratio);
-};
-
 class DX8Wrapper
 {
 public:
-	static void Clear(bool clear_color, bool clear_z_stencil, bool clear_stencil,
-		const Vector3 &color, float dest_alpha, float z, unsigned int stencil);
+	static void Clear(bool clear_color, bool clear_z_stencil, bool clear_stencil, const Vector3 &color, float dest_alpha, float z, unsigned int stencil);
 };
+bool Rva00118660Call(void *scene, void *camera);
+extern bool g_Va00DB5F84;
+extern float g_Va00DE5E2C[3];
+extern float g_Va00DE5E38[3];
+extern float g_Va00DB4AB4;
+static inline float Rva0009BC17Lerp(float a, float b, float t) { return (b - a) * t + a; }
+struct Rva0009BC17GlobalView { unsigned char m_pad[0xD2E]; bool m_D2E; };
 
-class Rva0009C4FCScene
+void Rva0009D55BProduct::rva0009BC17()
+{
+	if (m_C4 == 0 || m_C0 == 0 || !((Rva0009DB5ALivingWorldView *)this)->m_active)
+		return;
+	g_Va00DB5F84 = true;
+	Vector3 black = { 0.0f, 0.0f, 0.0f };
+	DX8Wrapper::Clear(true, true, true, black, 0.0f, 1.0f, 0);
+	int row = 0;
+	if (TheWritableGlobalData && ((Rva0009BC17GlobalView *)TheWritableGlobalData)->m_D2E)
+		++row;
+	m_13C = Rva0009BC17Lerp(g_Va00DE5E38[row], g_Va00DE5E38[2], m_198);
+	m_D8 = Rva0009BC17Lerp(g_Va00DE5E2C[row], g_Va00DE5E2C[2], m_198);
+	if (m_18C)
+		((Rva0009C134Host *)this)->rva0009AACF(m_18C, 1.0f - m_134);
+	if (m_190)
+		((Rva0009C134Host *)this)->rva0009AACF(m_190, (m_134 - 0.5f) * 2.0);
+	if (m_194)
+		((Rva0009C134Host *)this)->rva0009AACF(m_194, (1.0f - g_Va00DB4AB4) * m_134 + g_Va00DB4AB4);
+	m_C4->slot6(m_E0);
+	((Rva0009C134Host *)this)->rva0009BAA4();
+	Rva00118660Call(m_C4, m_C0);
+}
+
+// ?rva0009C4FC@Rva0009D55BProduct@@UAEXHHHH@Z retail 0x0009C4FC (648 bytes,
+// ret 0x10; slot 9 of the product table): the viewport sibling of slot 8.
+// With the camera, the scene and both the +0x19 and +0x18 states it records
+// the rectangle at +0x1B0/+0x1B8, maps it through the display size (slots
+// getHeight 0x44 then getWidth 0x40) into a camera viewport clamped to 0..1
+// (rowed CameraClass::Set_Viewport, Set_Aspect_Ratio of width over height),
+// clears depth and stencil only and runs slot 8's blend, taking +0x13C from
+// the 0x00DFE1C8 singleton's +0x38 float under +0x19; the three render words
+// get fixed opacities 0, 0 and 0.8 before the same scene render tail.
+class Vector2
 {
 public:
-	virtual void v00();
-	virtual void v01();
-	virtual void v02();
-	virtual void v03();
-	virtual void v04();
-	virtual void v05();
-	virtual void v06(void *arg);
+	Vector2() {}
+	Vector2(float x, float y) : X(x), Y(y) {}
+	float X;
+	float Y;
 };
-
 class Display
 {
 public:
-	virtual void v00();
-	virtual void v01();
-	virtual void v02();
-	virtual void v03();
-	virtual void v04();
-	virtual void v05();
-	virtual void v06();
-	virtual void v07();
-	virtual void v08();
-	virtual void v09();
-	virtual void v10();
-	virtual void v11();
-	virtual void v12();
-	virtual void v13();
-	virtual void v14();
-	virtual void v15();
-	virtual unsigned int getWidth();
-	virtual unsigned int getHeight();
+	D55B_SLOTS16(d0)
+	virtual unsigned int getWidth();	// slot 16
+	virtual unsigned int getHeight();	// slot 17
 };
 extern Display *TheDisplay;
+struct Rva0009C4FCHostView { unsigned char m_pad[0x38]; float m_38; };
+extern Rva0009C4FCHostView *g_Va00DFE1C8;
+struct Rva0009C4FCLivingWorldView { unsigned char m_pad[0x18]; bool m_active; bool m_19; };
 
-class GlobalData;
-extern GlobalData *TheWritableGlobalData;
-
-struct Rva0009C4FCGlobalData
+void Rva0009D55BProduct::rva0009C4FC(int x, int y, int width, int height)
 {
-	char m_pad000[0xD2E];
-	bool m_D2E; // +0xD2E
-};
-
-class LivingWorldManager;
-extern LivingWorldManager *TheLivingWorldManager;
-
-struct Rva0009C4FCManager
-{
-	char m_pad00[0x38];
-	float m_38; // +0x38
-};
-
-extern bool ShaderOverbrightEnabled;
-
-extern float g_00DE5E2C[2];
-extern float g_00DE5E34;
-extern float g_00DE5E38[2];
-extern float g_00DE5E40;
-
-class Rva0009C134Host
-{
-public:
-	void rva0009BAA4();
-};
-
-bool Rva00118660Call(void *scene, void *camera);
-
-class Rva0008FF3E
-{
-public:
-	virtual void v00();
-	virtual void v01();
-	virtual void v02();
-	virtual void v03();
-	virtual void v04();
-	virtual void v05();
-	virtual void v06();
-	virtual void v07();
-	virtual void v08();
-	virtual void rva0009C4FC(int x, int y, int width, int height);
-
-	void rva0009AACF(int renderObject, float opacity);
-
-private:
-	char m_pad004[0x18 - 0x04];
-	bool m_active18;                // +0x18
-	bool m_visible19;               // +0x19
-	char m_pad01A[0xC0 - 0x1A];
-	CameraClass *m_camera0C0;       // +0xC0
-	Rva0009C4FCScene *m_scene0C4;   // +0xC4
-	char m_pad0C8[0xD8 - 0xC8];
-	float m_fogD8;                  // +0xD8
-	char m_pad0DC[0xE0 - 0xDC];
-	char m_sceneArgE0[0x13C - 0xE0]; // +0xE0
-	float m_fog13C;                 // +0x13C
-	char m_pad140[0x18C - 0x140];
-	int m_object18C;                // +0x18C
-	int m_object190;                // +0x190
-	int m_object194;                // +0x194
-	float m_fade198;                // +0x198
-	char m_pad19C[0x1B0 - 0x19C];
-	int m_x1B0;                     // +0x1B0
-	int m_y1B4;                     // +0x1B4
-	int m_width1B8;                 // +0x1B8
-	int m_height1BC;                // +0x1BC
-};
-
-void Rva0008FF3E::rva0009C4FC(int x, int y, int width, int height)
-{
-	if (!m_scene0C4 || !m_camera0C0 || !m_visible19 || !m_active18)
+	if (m_C4 == 0 || m_C0 == 0 || !((Rva0009C4FCLivingWorldView *)this)->m_19 || !((Rva0009C4FCLivingWorldView *)this)->m_active)
 		return;
-
-	m_x1B0 = x;
-	m_y1B4 = y;
-	m_width1B8 = width;
-	m_height1BC = height;
-
-	float fw = (float)width;
-	float fh = (float)height;
-	float displayHeight = (float)TheDisplay->getHeight();
+	m_1B0.a = x;
+	m_1B0.b = y;
+	m_1B8.a = width;
+	m_1B8.b = height;
+	float w = (float)width;
+	float h = (float)height;
 	{
-		float displayWidth = (float)TheDisplay->getWidth();
-		Vector2 vmin;
-		Vector2 vmax;
-		vmin.X = x / displayWidth;
-		vmin.Y = y / displayHeight;
-		vmax.X = fw / displayWidth + vmin.X;
-		vmax.Y = fh / displayHeight + vmin.Y;
-		if (vmin.X < 0.0f)
-			vmin.X = 0.0f;
-		if (vmin.Y < 0.0f)
-			vmin.Y = 0.0f;
-		if (vmax.X > 1.0f)
-			vmax.X = 1.0f;
-		if (vmax.Y > 1.0f)
-			vmax.Y = 1.0f;
-		m_camera0C0->Set_Viewport(vmin, vmax);
+		Vector2 view[2] = { Vector2((float)TheDisplay->getWidth(), (float)TheDisplay->getHeight()), Vector2() };
+		float invWidth = 1.0f / view[0].X;
+		view[0].X = x * invWidth;
+		float invHeight = 1.0f / view[0].Y;
+		view[0].Y = y * invHeight;
+		view[1].X = invWidth * w + view[0].X;
+		view[1].Y = invHeight * h + view[0].Y;
+		if (0.0f > view[0].X)
+			view[0].X = 0.0f;
+		if (0.0f > view[0].Y)
+			view[0].Y = 0.0f;
+		if (view[1].X > 1.0f)
+			view[1].X = 1.0f;
+		if (view[1].Y > 1.0f)
+			view[1].Y = 1.0f;
+		((CameraClass *)m_C0)->Set_Viewport(view[0], view[1]);
 	}
-	m_camera0C0->Set_Aspect_Ratio(fw / fh);
-
-	ShaderOverbrightEnabled = true;
+	((CameraClass *)m_C0)->Set_Aspect_Ratio(w / h);
+	g_Va00DB5F84 = true;
 	{
-		Vector3 color;
-		color.X = 0.0f;
-		color.Y = 0.0f;
-		color.Z = 0.0f;
-		DX8Wrapper::Clear(false, true, true, color, 0.0f, 1.0f, 0);
+		Vector3 black = { 0.0f, 0.0f, 0.0f };
+		DX8Wrapper::Clear(false, true, true, black, 0.0f, 1.0f, 0);
 	}
-
-	int index = 0;
-	if (TheWritableGlobalData && reinterpret_cast<Rva0009C4FCGlobalData *>(TheWritableGlobalData)->m_D2E)
-		index = 1;
-	float fog = g_00DE5E38[index];
-	m_fog13C = (g_00DE5E40 - fog) * m_fade198 + fog;
-	fog = g_00DE5E2C[index];
-	m_fogD8 = (g_00DE5E34 - fog) * m_fade198 + fog;
-	if (m_visible19)
-		m_fog13C = reinterpret_cast<Rva0009C4FCManager *>(TheLivingWorldManager)->m_38;
-
-	if (m_object18C)
-		rva0009AACF(m_object18C, 0.0f);
-	if (m_object190)
-		rva0009AACF(m_object190, 0.0f);
-	if (m_object194)
-		rva0009AACF(m_object194, 0.8f);
-
-	m_scene0C4->v06(m_sceneArgE0);
-	reinterpret_cast<Rva0009C134Host *>(this)->rva0009BAA4();
-	Rva00118660Call(m_scene0C4, m_camera0C0);
+	int row = 0;
+	if (TheWritableGlobalData && ((Rva0009BC17GlobalView *)TheWritableGlobalData)->m_D2E)
+		++row;
+	m_13C = Rva0009BC17Lerp(g_Va00DE5E38[row], g_Va00DE5E38[2], m_198);
+	m_D8 = Rva0009BC17Lerp(g_Va00DE5E2C[row], g_Va00DE5E2C[2], m_198);
+	if (((Rva0009C4FCLivingWorldView *)this)->m_19)
+		m_13C = g_Va00DFE1C8->m_38;
+	if (m_18C)
+		((Rva0009C134Host *)this)->rva0009AACF(m_18C, 0.0f);
+	if (m_190)
+		((Rva0009C134Host *)this)->rva0009AACF(m_190, 0.0f);
+	if (m_194)
+		((Rva0009C134Host *)this)->rva0009AACF(m_194, 0.8f);
+	m_C4->slot6(m_E0);
+	((Rva0009C134Host *)this)->rva0009BAA4();
+	Rva00118660Call(m_C4, m_C0);
 }
