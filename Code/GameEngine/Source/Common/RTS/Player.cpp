@@ -276,6 +276,15 @@ static BehaviorModule **getRetailBehaviorModules( const Object *obj ) { return *
 static ContainModuleInterface *getRetailContain( const Object *obj ) { return *(ContainModuleInterface * const *)((const char *)obj + 0x250); }
 static BodyModuleInterface *getRetailBodyModule( const Object *obj ) { return *(BodyModuleInterface * const *)((const char *)obj + 0x254); }
 
+// BFME 2's ThingTemplate keeps its name at +0x64 (retail isEquivalentTo
+// 0x0033BB04 reads [esi+0x64]/[ebx+0x64] for it; XferThingTemplate 0x003063A9
+// adds 0x64 to the template pointer), while this tree's Zero Hour
+// ThingTemplate.h has m_nameString at +0x10. This unit reads it through this
+// function instead of the header's inline getName, whose Zero Hour copy would
+// otherwise be the first one in link order and displace every BFME 2 unit's
+// retail copy.
+static const AsciiString &getRetailTemplateName( const ThingTemplate *t ) { return *(const AsciiString *)((const char *)t + 0x64); }
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
@@ -360,7 +369,7 @@ void dumpBattlePlanBonuses(const BattlePlanBonuses *b, AsciiString name, const P
 {
 	CRCDEBUG_LOG(("dumpBattlePlanBonuses() %s:%d %s\n  Player %d(%ls) object %d(%s) armor:%g/%8.8X bombardment:%d, holdTheLine:%d, searchAndDestroy:%d sight:%g/%8.8X, valid:%s invalid:%s\n",
 		fname.str(), line, name.str(),
-		(p)?p->getPlayerIndex():-1, (p)?((Player *)p)->getPlayerDisplayName().str():L"<No Name>", (o)?o->getID():-1, (o)?o->getTemplate()->getName().str():"<No Name>",
+		(p)?p->getPlayerIndex():-1, (p)?((Player *)p)->getPlayerDisplayName().str():L"<No Name>", (o)?o->getID():-1, (o)?getRetailTemplateName(o->getTemplate()).str():"<No Name>",
 		b->m_armorScalar, AS_INT(b->m_armorScalar),
 		b->m_bombardment, b->m_holdTheLine, b->m_searchAndDestroy,
 		b->m_sightRangeScalar, AS_INT(b->m_sightRangeScalar),
@@ -370,7 +379,7 @@ void dumpBattlePlanBonuses(const BattlePlanBonuses *b, AsciiString name, const P
 		return;
 	DEBUG_LOG(("dumpBattlePlanBonuses() %s:%d %s\n  Player %d(%ls) object %d(%s) armor:%g/%8.8X bombardment:%d, holdTheLine:%d, searchAndDestroy:%d sight:%g/%8.8X, valid:%s invalid:%s\n",
 		fname.str(), line, name.str(),
-		(p)?p->getPlayerIndex():-1, (p)?((Player *)p)->getPlayerDisplayName().str():L"<No Name>", (o)?o->getID():-1, (o)?o->getTemplate()->getName().str():"<No Name>",
+		(p)?p->getPlayerIndex():-1, (p)?((Player *)p)->getPlayerDisplayName().str():L"<No Name>", (o)?o->getID():-1, (o)?getRetailTemplateName(o->getTemplate()).str():"<No Name>",
 		b->m_armorScalar, AS_INT(b->m_armorScalar),
 		b->m_bombardment, b->m_holdTheLine, b->m_searchAndDestroy,
 		b->m_sightRangeScalar, AS_INT(b->m_sightRangeScalar),
@@ -1858,7 +1867,7 @@ void Player::setObjectsEnabled(AsciiString templateTypeToAffect, Bool enable)
 					continue;
 				}
 
-				if (obj->getTemplate()->getName().compare(templateTypeToAffect) == 0) 
+				if (getRetailTemplateName(obj->getTemplate()).compare(templateTypeToAffect) == 0) 
 				{
 					obj->setScriptStatus( OBJECT_STATUS_SCRIPT_DISABLED, !enable );
 				}
@@ -2987,7 +2996,7 @@ static void localApplyBattlePlanBonusesToObject( Object *obj, void *userData )
 
 	DEBUG_LOG(("localApplyBattlePlanBonusesToObject() - looking at object %d (%s)\n",
 		(objectToValidate)?objectToValidate->getID():INVALID_ID,
-		(objectToValidate)?objectToValidate->getTemplate()->getName().str():"<No Object>"));
+		(objectToValidate)?getRetailTemplateName(objectToValidate->getTemplate()).str():"<No Object>"));
 
 	//First check if the obj is a projectile -- if so split the
 	//object so that the producer is validated, not the projectile.
@@ -2997,7 +3006,7 @@ static void localApplyBattlePlanBonusesToObject( Object *obj, void *userData )
 		objectToValidate = TheGameLogic->findObjectByID( obj->getProducerID() );
 		DEBUG_LOG(("Object is a projectile - looking at object %d (%s) instead\n",
 			(objectToValidate)?objectToValidate->getID():INVALID_ID,
-			(objectToValidate)?objectToValidate->getTemplate()->getName().str():"<No Object>"));
+			(objectToValidate)?getRetailTemplateName(objectToValidate->getTemplate()).str():"<No Object>"));
 	}
 	if( objectToValidate && objectToValidate->isAnyKindOf( bonus->m_validKindOf ) )
 	{
