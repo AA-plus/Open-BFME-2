@@ -28,9 +28,13 @@ struct Rva00520211Element {
 	~Rva00520211Element();
 };
 
+class Rva0051F87B { public: Rva0051F87B(const Rva0051F87B &); };
 namespace _STL {
-template <> void _Construct<Rva00520211Element, Rva00520211Element>(
-	Rva00520211Element *, const Rva00520211Element &);
+template <> __declspec(noinline) inline void _Construct<Rva00520211Element, Rva00520211Element>(
+	Rva00520211Element *p, const Rva00520211Element &value)
+{
+ new ((void *)p) Rva0051F87B((const Rva0051F87B &)value);
+}
 }
 
 template void _STL::_Destroy<Rva00520211Element *>(
