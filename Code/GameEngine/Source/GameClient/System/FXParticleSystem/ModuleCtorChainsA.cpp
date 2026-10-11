@@ -56,6 +56,8 @@ extern const void *const g_00C1C574[];
 extern const void *const g_00C1C5B8[];
 extern const void *const g_00C1C608[];
 extern const void *const g_00C1C60C[];
+extern const void *const g_00C1C61C[];
+extern const void *const g_00C1C620[];
 extern const void *const g_00C1C6CC[];
 extern const void *const g_00C1C6DC[];
 extern const void *const g_00C1C72C[];
@@ -79,6 +81,7 @@ extern const void *const g_00C1CE64[];
 extern const void *const g_00C1CE88[];
 extern const void *const g_00C1CE98[];
 extern const void *const g_00C1CEE8[];
+extern const void *const g_00C1CF08[];
 extern const void *const g_00C1CEF8[];
 extern const void *const g_00C1D00C[];
 extern const void *const g_00C1D02C[];
@@ -165,6 +168,17 @@ class Rva003ACC7C { public: Rva003ACC7C(void *a, void *b); };
 class Rva0055BF4B { public: Rva0055BF4B(const RvaSmartPtr12 &a, const Rva0055BF4BSrc *b); };
 class Rva003ABD20 { public: Rva003ABD20(const RvaSmartPtr12 &a, int b); };
 class Rva003ABD81 { public: Rva003ABD81(const RvaSmartPtr12 &a, int b); };
+struct Rva005641EDInput;
+// Borrowed footprint of the existing constructor/copy owner. Its native
+// fields extend through byte+0x3C; four-byte alignment gives a0x40 footprint.
+// this declaration only calls that provider and emits no base lifetime code.
+class Rva003AEE16
+{
+public:
+    Rva003AEE16(const RvaSmartPtr12 &, const Rva005641EDInput &);
+private:
+    unsigned int m_unmodeled[0x40 / 4];
+};
 class Rva003ACC4B
 {
 public:
@@ -247,6 +261,26 @@ Rva003ABDC8::Rva003ABDC8(void *a, void *b)
 	STAMP(0x14, g_00C1C608);
 	STAMP(0x18, g_00C1C780);
 	STAMP(0x1C, g_00C1CEE8);
+}
+
+// Native 0x003ABDF9..0x003ABE2A,49B RET8: forwards both arguments to the
+// independently recovered Rva003AEE16 constructor at0x005641ED and installs
+// four target vtables at+0/+0x14/+0x18/+0x20. The neighbouring ctor pattern
+// is a structural guide; the target call and stores establish this relation.
+// The derived class identity remains address-derived. No donor name is claimed.
+class Rva003ABDF9 : public Rva003AEE16
+{
+public:
+    Rva003ABDF9(void *a, void *b);
+};
+
+Rva003ABDF9::Rva003ABDF9(void *a, void *b)
+    : Rva003AEE16(*(const RvaSmartPtr12 *)a, *(const Rva005641EDInput *)b)
+{
+    STAMP(0x00, g_00C1C620);
+    STAMP(0x14, g_00C1C61C);
+    STAMP(0x18, g_00C1C780);
+    STAMP(0x20, g_00C1CF08);
 }
 
 class Rva003ABECC : public FXParticleSystem::LightningEmissionModule
