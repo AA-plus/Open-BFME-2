@@ -70,7 +70,7 @@ namespace _STL {
 template<> vector<BfmeVectorRecord00319C84> &vector<BfmeVectorRecord00319C84>::operator=(const vector<BfmeVectorRecord00319C84> &);
 template<> vector<Elem003AF9E0>::iterator vector<Elem003AF9E0>::erase(iterator, iterator);
 }
-void Rva0031A160Xfer(Xfer *xfer, _STL::vector<BfmeVectorRecord00319C84> *records);
+Xfer *Rva0031A160Xfer(Xfer *xfer, _STL::vector<BfmeVectorRecord00319C84> *records);
 struct Rva0031A6DBStatus {
     virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
     virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
