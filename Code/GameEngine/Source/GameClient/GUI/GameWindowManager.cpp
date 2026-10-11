@@ -347,63 +347,7 @@ GameWindowManager::~GameWindowManager( void )
 	* be a window in the master list or a child of any window in that master
 	* list */
 //-------------------------------------------------------------------------------------------------
-// ?GameWindowManager::insertWindowAheadOf present-unmatched
-void GameWindowManager::insertWindowAheadOf( GameWindow *window, 
-																						 GameWindow *aheadOf )
-{
-	
-	// sanity
-	if( window == NULL )
-		return;
-
-	// we'll say that an aheadOf window means at the head of the list
-	if( aheadOf == NULL )	
-	{
-
-		linkWindow( window );
-		return;
-
-	}  // end if
-
-	// get parent of aheadOf
-	GameWindow *aheadOfParent = aheadOf->winGetParent();
-
-	//
-	// if ahead of has no parent insert it in the master list just before
-	// ahead of
-	//
-	if( aheadOfParent == NULL )
-	{
-
-		window->m_prev = aheadOf->m_prev;
-
-		if( aheadOf->m_prev )
-			aheadOf->m_prev->m_next = window;
-		else
-			m_windowList = window;
-
-		aheadOf->m_prev = window;
-		window->m_next = aheadOf;
-
-	}  // end if
-	else
-	{
-
-		window->m_prev = aheadOf->m_prev;
-
-		if( aheadOf->m_prev )
-			aheadOf->m_prev->m_next = window;
-		else
-			aheadOfParent->m_child = window;
-
-		aheadOf->m_prev = window;
-		window->m_next = aheadOf;
-
-		window->m_parent = aheadOfParent;
-
-	}  // end else
-
-}  // end insertWindowAheadOf
+// GameWindowManager::insertWindowAheadOf is owned by GameWindowManager_linkWindow.cpp.
 
 //-------------------------------------------------------------------------------------------------
 /** Takes a window off the window list */
