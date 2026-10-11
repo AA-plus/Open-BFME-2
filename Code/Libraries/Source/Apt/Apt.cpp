@@ -534,7 +534,12 @@ AptCIH *_AptGetAnimationAtLevel(int key) {
 class DOGMA_PoolManager {public:unsigned GetTotalBytesUsed();};
 class Rva006DAFA0Walk {public:void rva006DAFA0();};
 void rva006CBC50(void *,unsigned);
-class Rva006CD6C0SizedDeleting {public:virtual ~Rva006CD6C0SizedDeleting();};
+class Rva006CD6C0SizedDeleting {
+public:
+ __declspec(noinline) ~Rva006CD6C0SizedDeleting();
+ static void operator delete(void *storage,unsigned size) {g_bfmeAptFreeSizeAtE17730(storage,size);}
+ unsigned m_fields[7];
+};
 struct ShutdownPoolStats {char pad[0x14];int allocated,freeCount;};
 class ShutdownChainPoolDelete {
  char bytes[28];
@@ -565,4 +570,10 @@ void Rva006CDF60() {
  Rva006CC110Log(0,"  +- Total Bytes Used   :0x%X\n",((DOGMA_PoolManager *)g_pChainBlockAllocatorF4)->GetTotalBytesUsed());
  delete (ShutdownChainPoolDelete *)g_pChainBlockAllocator;
  delete (ShutdownValuePoolDelete *)g_pChainBlockAllocatorF4;
+}
+
+// Native6CC4C0..6CC4C5 is the complete pool-destructor forwarding wrapper.
+// Its real caller above retains the native call boundary.
+Rva006CD6C0SizedDeleting::~Rva006CD6C0SizedDeleting() {
+ ((Rva006DAFA0Walk *)this)->rva006DAFA0();
 }

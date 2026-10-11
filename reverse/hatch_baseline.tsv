@@ -1494,7 +1494,6 @@ address_global	Code/GameEngine/Source/Common/RvaGlobalThisFwds.cpp	g_pRva003BD42
 address_global	Code/GameEngine/Source/Common/RvaSingletonFwdMisc.cpp	g_pRva00224BC9	2
 address_global	Code/GameEngine/Source/Common/RvaSingletonFwdMisc.cpp	g_pRva0039ABFF	2
 address_global	Code/GameEngine/Source/Common/RvaSingletonFwdMisc.cpp	g_pRva00437E9C	2
-address_global	Code/GameEngine/Source/Common/SizedDeleteDestructors.cpp	g_Va00E17730	3
 address_global	Code/GameEngine/Source/Common/SmallGaps/Rva009B3E40Init.cpp	g_Rva009B3E40Arr0	2
 address_global	Code/GameEngine/Source/Common/SmallGaps/Rva009B3E40Init.cpp	g_Rva009B3E40Arr1	2
 address_global	Code/GameEngine/Source/Common/SmallGaps/Rva009B3E40Init.cpp	g_Rva009B3E40Arr2	2
@@ -3183,7 +3182,6 @@ alternatename	Code/GameEngine/Source/Common/S3PolymorphicArrayClear.cpp	?bfmeCle
 alternatename	Code/GameEngine/Source/Common/S3PolymorphicArrayClear.cpp	?bfmeDtorATYA@BfmeHeadTYA@@QAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/S3PolymorphicArrayClear128.cpp	?bfmeRva0066EB40@BfmeSubBZC@@QAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/SListTagBlockIndexRemoveAllThunk.cpp	??1StringBase@@QAE@XZ	1
-alternatename	Code/GameEngine/Source/Common/SizedDeleteDestructors.cpp	?g_Va00E17730@@3P6AXPAXI@ZA	1
 alternatename	Code/GameEngine/Source/Common/SkirmishPreferences.cpp	?g_emptyProfilePath@@3VUnicodeString@@A	1
 alternatename	Code/GameEngine/Source/Common/SmallGaps/Rva007F5A70VideoBufferValue.cpp	?m@Gen_007e88b0@@QAEHXZ	1
 alternatename	Code/GameEngine/Source/Common/SmallGaps/Rva00826840ResetTables.cpp	?Rva00826740BigInit@@3URva00826740Big@@B	1
@@ -33934,7 +33932,6 @@ pin	reverse/symbols.csv	0x006CBC50	1
 pin	reverse/symbols.csv	0x006CBEE0	1
 pin	reverse/symbols.csv	0x006CBF70	1
 pin	reverse/symbols.csv	0x006CC110	1
-pin	reverse/symbols.csv	0x006CC4C0	1
 pin	reverse/symbols.csv	0x006CC530	1
 pin	reverse/symbols.csv	0x006CC600	1
 pin	reverse/symbols.csv	0x006CCB80	1
@@ -37826,7 +37823,6 @@ present_unmatched	Code/GameEngine/Source/Common/RvaSmallVtableCtors.cpp	bfmeEmit
 present_unmatched	Code/GameEngine/Source/Common/RvaSmallVtableCtors.cpp	bfmeEmitRva0030D346Ctor@@YAXPAVRva0030D346@@@Z	1
 present_unmatched	Code/GameEngine/Source/Common/S4ParseThenRegister_Rva0035DEC1.cpp	0S4Parsed0059E290@@QAE@XZ	1
 present_unmatched	Code/GameEngine/Source/Common/S4ParseThenRegister_Rva0035E278.cpp	0S4Parsed0059E860@@QAE@XZ	1
-present_unmatched	Code/GameEngine/Source/Common/SizedDeleteDestructors.cpp	1Rva006CD6C0SizedDeleting@@UAE@XZ	1
 present_unmatched	Code/GameEngine/Source/Common/StringContainerRecordCopyBFME2.cpp	bfmeEmitBfmeContainerRecord00048139Assign@@YAXPAUBfmeContainerRecord00048139@@@Z	1
 present_unmatched	Code/GameEngine/Source/Common/StringRecordCopyBFME2.cpp	bfmeEmitBfmeStringRecord00426A5BAssign@@YAXPAUBfmeStringRecord00426A5B@@ABU1@@Z	1
 present_unmatched	Code/GameEngine/Source/Common/StringRecordInlineCopyBFME2.cpp	bfmeEmitStringRecord005DDD40Copy@@YAXPAUBfmeStringRecord005DDD40@@PBU1@@Z	1

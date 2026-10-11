@@ -4734,7 +4734,6 @@ name,address,notes
 ??1Rva006CBF40@@UAE@XZ,0x006E2A70,"complete dtor of opaque class 0x006CBF40; identity inferred from the scalar deleting dtor call at 0x006CBF47"
 ??1Rva006CC2F0@@UAE@XZ,0x006D1090,"complete dtor call target of scalar deleting dtor 0x006CC2F0; body unrowed"
 ??1Rva006CD620@@UAE@XZ,0x006D6340,"complete dtor call target of scalar deleting dtor 0x006CD620; body unrowed"
-??1Rva006CD6C0SizedDeleting@@UAE@XZ,0x006CC4C0
 ??1Rva006CE380@@QAE@XZ,0x006CE380,scalar destructor spelling of the rowed list clear 0x6CE380 reached as the base sub-object dtor of Rva006D1090
 ??1Rva006CEA60@@UAE@XZ,0x006CE7E0,"complete dtor call target of scalar deleting dtor 0x006CEA60; body unrowed"
 ??1Rva006CEAD0@@QAE@XZ,0x006CEAD0,destructor spelling of the matched Rva006CEAD0::drainChain body: the byte-true Rva006CFA30::Members::~Members call at 0x006CFA30 destroys its +0 member through it
