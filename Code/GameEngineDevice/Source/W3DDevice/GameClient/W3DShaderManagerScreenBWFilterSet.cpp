@@ -55,6 +55,8 @@ public:
 };
 extern View *TheTacticalView;
 
+// Imported inline helpers retain their native inline use while suppressing
+// competing COMDAT definitions; 997B/391B/43B and both EH tables stay exact.
 class StringClass
 {
 public:
@@ -74,7 +76,7 @@ public:
 	};
 	virtual void Delete_This();
 	static VertexMaterialClass *Get_Preset(PresetType type);
-	void Add_Ref() { NumRefs++; }
+	__declspec(dllimport) __forceinline void Add_Ref() { NumRefs++; }
 	void Release_Ref()
 	{
 		NumRefs--;
@@ -106,7 +108,7 @@ public:
 struct BFME2TextureResource;
 struct BFME2TextureRef
 {
-	BFME2TextureRef(BFME2TextureResource *texture) : Ptr(texture) {}
+	__declspec(dllimport) __forceinline BFME2TextureRef(BFME2TextureResource *texture) : Ptr(texture) {}
 	~BFME2TextureRef()
 	{
 		if (Ptr)
@@ -174,7 +176,7 @@ public:
 	static void Get_DX8_Render_State_Value_Name(StringClass &name, unsigned long state, unsigned int value);
 	static IDirect3DDevice8 *_Get_D3D_Device8() { return D3DDevice; }
 
-	static __forceinline void Set_Material(VertexMaterialClass *material)
+	static __declspec(dllimport) __forceinline void Set_Material(VertexMaterialClass *material)
 	{
 		if (material)
 			material->Add_Ref();
@@ -341,10 +343,12 @@ Int ScreenBWFilter::set(FilterModes mode)
 // Zero Hour W3DShaderManager.cpp at BF1 reference575ba2b supplies the
 // ScreenDefaultFilter::set semantic guide only;
 // this slot-9 registered BFME2 filter's original identity remains unresolved.
+enum CustomScenePassModes {CUSTOM_SCENE_PASS_DEFAULT=0};
 class Rva000FDD1C
 {
 public:
- virtual void f00(); virtual void f01(); virtual void f02();
+ virtual void f00(); virtual void f01();
+ virtual bool preRender(Bool &skipRender, CustomScenePassModes &scenePassMode);
  virtual void f03(); virtual void f04();
  virtual int rva000FDD1CFirst(int mode);
  virtual void rva000FDD1CNext();
@@ -360,5 +364,26 @@ int Rva000FDD1C::rva000FDD1CFirst(int mode)
  DX8Wrapper::Set_DX8_Render_State(23,8);
  DX8Wrapper::Set_DX8_Render_State(14,0);
  DX8Wrapper::Apply_Render_State_Changes();
+ return true;
+}
+
+// Table 0x007CF440 slot 2, complete 43B RET8 body. Smudge count +0x20;
+// global-data +0xC60 gate remains unnamed. Zero Hour default-filter preRender
+// provides the rendering role; BFME2's extra global-data condition is native.
+class BfmeB991;
+extern BfmeB991 *g_bfmeB991;
+struct Rva000FDCF1SmudgeView { unsigned char pad[0x20]; int count; };
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+struct Rva000FDCF1GlobalView { unsigned char pad[0xC60]; int option; };
+class W3DShaderManager { public: static void startRenderToTexture(); };
+bool Rva000FDD1C::preRender(Bool &skipRender, CustomScenePassModes &scenePassMode)
+{
+ if (g_bfmeB991) {
+  if (((Rva000FDCF1SmudgeView *)g_bfmeB991)->count == 0 ||
+      ((Rva000FDCF1GlobalView *)TheWritableGlobalData)->option != -1)
+   return false;
+ }
+ W3DShaderManager::startRenderToTexture();
  return true;
 }
