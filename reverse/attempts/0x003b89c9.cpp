@@ -1,4 +1,6 @@
 // ?doTakeGroup@ScriptList@@QAEXPAV1@PAPAUScriptGroupLink@@1@Z
+// partial score=0.995238095238095 date=2026-10-11
+// ?doTakeGroup@ScriptList@@QAEXPAV1@PAPAUScriptGroupLink@@1@Z
 // partial score=0.88 date=2026-10-08
 // WB Scripts.cpp provides pointer-to-list argument semantics and named
 // doTakeGroup/takeGroup/takeGroups; retail proves measured offsets and
@@ -43,6 +45,7 @@ public:
 };
 void ScriptList::doTakeGroup(ScriptList *source,ScriptGroupLink **from,ScriptGroupLink **to)
 {
+    ScriptList *volatile owner=this;
     CapturedGroup *captured=(CapturedGroup*)((Rva003B40A1Holder*)source)->captureGroup(*from);
     ScriptGroupLink **groupAddress=&captured->groups;
     ScriptGroupLink *groups=*groupAddress;
@@ -50,21 +53,22 @@ void ScriptList::doTakeGroup(ScriptList *source,ScriptGroupLink **from,ScriptGro
     ScriptEntryLink **scriptAddress=&captured->scripts;
     ScriptEntryLink *scripts=*scriptAddress;
     *scriptAddress=0;
-    int index=groupSet.rva003B7F8E(&source->groupSet,(*from)->index);
+    int index=owner->groupSet.rva003B7F8E(&source->groupSet,(*from)->index);
     if(index != -1) {
         (*from)->index=index;
-        (*from)->link=groupSet.records[index].references;
+        (*from)->link=owner->groupSet.records[index].references;
         ScriptGroupLink *next=(*from)->next;
         (*from)->next=*to;
         *to=*from;
+        ScriptList *target=owner;
         *from=next;
-        takeGroups(source,&groups,groupAddress);
+        target->takeGroups(source,&groups,groupAddress);
         if(groups) {
             ScriptGroupLink **end=&source->groups;
             while(*end) end=&(*end)->next;
             *end=groups;
         }
-        takeScripts(source,reinterpret_cast<BfmeNodeZK**>(&scripts),reinterpret_cast<BfmeNodeZK**>(scriptAddress));
+        owner->takeScripts(source,reinterpret_cast<BfmeNodeZK**>(&scripts),reinterpret_cast<BfmeNodeZK**>(scriptAddress));
         if(scripts) {
             ScriptEntryLink **end=&source->scripts;
             while(*end) end=&(*end)->next;
