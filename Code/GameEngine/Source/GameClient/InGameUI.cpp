@@ -154,6 +154,18 @@ InGameUI *TheInGameUI = NULL;
 
 GameWindow *m_replayWindow = NULL;
 
+// LINK: TU-local view of CommandButton::m_command at +0x14 (retail truth:
+// matched witnesses isReady 0x0035B069, evaluateSkirmish 0x003E73E7 and
+// rowed 0x003C10D8 all read +0x14). The two call sites below read through
+// this instead of odr-using the ZH inline, whose +0x10 copy sorts ahead of
+// the retail copy in link order (getCommandType L row). Same treatment as
+// AIUpdate.cpp's privateCommandButtonObject.
+struct InGameUICommandButtonView { unsigned char m_pad[0x14]; Int m_command; };
+static Int InGameUIGetCommandType(const CommandButton *button)
+{
+	return reinterpret_cast<const InGameUICommandButtonView *>(button)->m_command;
+}
+
 // ------------------------------------------------------------------------------------------------
 struct KindOfSelectionData
 {
@@ -590,7 +602,7 @@ void InGameUI::setRadiusCursor(RadiusCursorType cursorType, const SpecialPowerTe
 		return;
 
 	Object* obj = NULL;
-	if( m_pendingGUICommand && m_pendingGUICommand->getCommandType() == GUI_COMMAND_SPECIAL_POWER_FROM_SHORTCUT )
+	if( m_pendingGUICommand && InGameUIGetCommandType(m_pendingGUICommand) == GUI_COMMAND_SPECIAL_POWER_FROM_SHORTCUT )
 	{
 		if( ThePlayerList && ThePlayerList->getLocalPlayer() && specPowTempl != NULL )
 		{
@@ -1701,8 +1713,8 @@ void InGameUI::createCommandHint( const GameMessage *msg )
 				if( m_pendingGUICommand )
 				{
 					if( m_pendingGUICommand->isContextCommand() || 
-							m_pendingGUICommand->getCommandType() == GUI_COMMAND_SPECIAL_POWER ||
-							m_pendingGUICommand->getCommandType() == GUI_COMMAND_SPECIAL_POWER_FROM_SHORTCUT )
+							InGameUIGetCommandType(m_pendingGUICommand) == GUI_COMMAND_SPECIAL_POWER ||
+							InGameUIGetCommandType(m_pendingGUICommand) == GUI_COMMAND_SPECIAL_POWER_FROM_SHORTCUT )
 					{
 						//Here is the hook for when we are in a context sensitive command mode. We can
 						//either do the specified command mode command or nothing! Whether or not the 

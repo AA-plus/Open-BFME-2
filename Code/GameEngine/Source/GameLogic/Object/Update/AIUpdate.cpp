@@ -3659,7 +3659,14 @@ void AIUpdateInterface::privateCommandButtonObject( const CommandButton *command
 				if( commandButton == aCommandButton )
 				{
 					//We found the matching command button so now order the unit to do what the button wants.
-					switch( commandButton->getCommandType() )
+					// LINK: read m_command at +0x14 (retail truth: matched
+					// witnesses isReady 0x0035B069, evaluateSkirmish 0x003E73E7
+					// and rowed 0x003C10D8 all read +0x14) through a TU-local
+					// view instead of odr-using the ZH inline, whose +0x10
+					// copy sorts first in link order and displaces the retail
+					// copy (getCommandType L row).
+					struct AIUpdateCommandButtonView { unsigned char m_pad[0x14]; Int m_command; };
+					switch( reinterpret_cast<const AIUpdateCommandButtonView *>(commandButton)->m_command )
 					{
 						//OBJECT BASED COMMANDS ONLY VIA AI
 						case GUI_COMMAND_COMBATDROP:
