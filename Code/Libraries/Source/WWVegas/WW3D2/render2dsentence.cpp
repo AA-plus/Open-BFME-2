@@ -73,31 +73,7 @@
 //	Render2DSentenceClass
 //
 ////////////////////////////////////////////////////////////////////////////////////
-// ??0Render2DSentenceClass@@QAE@XZ present-unmatched
-Render2DSentenceClass::Render2DSentenceClass (void) :
-	Font (NULL),
-	Location (0.0F,0.0F),
-	Cursor (0.0F,0.0F),
-	TextureOffset (0, 0),
-	TextureStartX (0),
-	CurSurface (NULL),
-	CurrTextureSize (0),
-	MonoSpaced (false),
-	IsClippedEnabled (false),
-	ClipRect (0, 0, 0, 0),
-	BaseLocation (0, 0),
-	LockedPtr (NULL),
-	LockedStride (0),
-	TextureSizeHint (0),
-	WrapWidth (0),
-	Centered (false),
-	DrawExtents (0, 0, 0, 0),
-	ParseHotKey( false ),
-	useHardWordWrap( false)
-{
-	Shader = Render2DClass::Get_Default_Shader ();
-	return ;
-}
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -1516,3 +1492,12 @@ FontCharsClass::Grow_Unicode_Array (WCHAR ch)
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
 // call sites in their matched rows land on these addresses (same ABI). Bind them.
 #pragma comment(linker, "/alternatename:??4BfmeRendererVectorBase@@QAEAAV0@ABV0@@Z=??4?$VectorClass@PAVRender2DClass@@@@QAEAAV0@ABV0@@Z")
+
+// Keep the already rowed container members that the retired donor sentence
+// constructor used to instantiate; the native sentence constructor lives in
+// Render2DSentenceConstructorBFME2.cpp. Explicit instantiation preserves the
+// header's private nested-type identity without altering its declarations.
+template class VectorClass<Render2DSentenceClass::PendingSurfaceStruct>;
+template class DynamicVectorClass<Render2DSentenceClass::PendingSurfaceStruct>;
+template class VectorClass<Render2DSentenceClass::RendererDataStruct>;
+template class VectorClass<Render2DSentenceClass::SentenceDataStruct>;
