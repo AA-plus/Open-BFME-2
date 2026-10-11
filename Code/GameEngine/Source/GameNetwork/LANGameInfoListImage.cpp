@@ -35,6 +35,9 @@ public:
 	virtual const Image *rva00401015( Int column );
 
 	Bool isGameInProgress( void ) const { return m_inProgress; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the isGameInProgress copy loses
+	// to the first-in-order copy. No flags touched.
+	Bool bfme_inProgress_lgl( void ) const { return m_inProgress; }
 
 protected:
 	unsigned char m_pre10[0x10 - 4];
@@ -53,7 +56,7 @@ const Image *LANGameInfo::rva00401015( Int column )
 	switch( column )
 	{
 		case 2:
-			if( isGameInProgress() )
+			if( bfme_inProgress_lgl() )
 				return TheMappedImageCollection->findImageByName( AsciiString( "AptLock" ) );
 			return NULL;
 	}
