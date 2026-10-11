@@ -23,7 +23,18 @@ enum LocomotorSetType
 class LocomotorTemplate;
 
 typedef _STL::vector<const LocomotorTemplate *> LocomotorVec;
+// Keep this existing specialization's 16-byte layout, but declare the
+// established complete destructor instead of generating an incidental
+// default allocator cleanup or scalar-deleting destructor in this TU.
+namespace _STL {
+template <> struct pair<const LocomotorSetType, LocomotorVec> {
+    const LocomotorSetType first;
+    LocomotorVec second;
+    ~pair();
+};
+}
 typedef _STL::pair<const LocomotorSetType, LocomotorVec> LocoPair;
+typedef char LocoPairSizeMustBe16[sizeof(LocoPair) == 16 ? 1 : -1];
 
 void Rva004C7542Destroy(LocoPair *first, LocoPair *last)
 {
@@ -51,4 +62,16 @@ void Rva004C77A6::rva004C77A6()
 	LocoPair *tmp = m_start;
 	if (tmp)
 		free(tmp);
+}
+
+// Native4C74D4..4C74DD is a separate nine-byte cdecl body between the
+// complete91B sort ending in RET at4C74D3 and the next sort at4C74DD.
+// It passes its sole pointer argument as this to the existing whole15B
+// destructor796BC. This neutral wrapper recovers that observed operation.
+// LocoPair is the existing callee owner's compatible call view; neither
+// its type nor the matching donor _Destroy<int/vector> specialization is
+// asserted as this unreferenced wrapper's original template identity.
+void Rva004C74D4Destroy(LocoPair *value)
+{
+    value->~LocoPair();
 }
