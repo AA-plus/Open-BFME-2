@@ -1,5 +1,10 @@
 // ?rva00365E98@Path@@QAEXPAVObject@@PBUCoord3D@@H_N@Z
-// partial score=0.9703 date=2026-10-11
+// partial score=0.98 date=2026-10-11
+// ?rva00365E98@Path@@QAEXPAVObject@@PBUCoord3D@@H_N@Z
+// partial date=2026-10-11 round5: non-call diffs 17 -> 4. Scoping only the Coord2D delta
+// into its own block around the 0x363BC7 call puts delta at -0x18 and segment/slow at -0x14 as
+// retail. Remaining: retail stores radius ([ebp+0xc]) after the three option flag stores; ours
+// stores it right after the +0x84 load. Callees 1E4015 364AA2 365309 365B8A still unresolved.
 // cl: /ICode/Libraries/Include /O1 /DNDEBUG /MD /arch:SSE /G7 /EHsc
 // Native365E98..36617B RET16 complete739. Existing Path/Object/Coord3D
 // consumer pin retained. ZH Path::optimize supplies the node/optimized-link
@@ -44,8 +49,8 @@ void Path::rva00365E98(Object *obj,const Coord3D *input,Int surfaces,Bool blocke
   if(controller->rva001E543F(obj))turn=((Rva001E3F27FloatChaseField *)entry)->get();
   else turn=((Rva00373CAAFloatChaseField *)entry)->get();
   if(((const DirectionEntryView *)entry)->settings->wordD8) {
-   Coord2D delta;float length;
-   PathNode *next=(PathNode *)((Rva00363BC7 *)original)->rva00363BC7(&delta,&length);
+   float length;PathNode *next;
+   {Coord2D delta;next=(PathNode *)((Rva00363BC7 *)original)->rva00363BC7(&delta,&length);}
    if(next && controller->rva001E4015(obj,&next->pos)) {
     direction.x*=-1.0f;direction.y*=-1.0f;reversed=true;direction.z*=-1.0f;
     float slow=((Rva00373CAAFloatChaseField *)entry)->get();
