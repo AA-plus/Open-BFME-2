@@ -54,7 +54,6 @@
 #include "GameClient/Gadget.h"
 
 class GameWindow;
-class Rva0031763A;
 
 //-------------------------------------------------------------------------------------------------
 /** Window layout info is a structure that can be passed to the load function of
@@ -221,8 +220,7 @@ public:
 	//---------------------------------------------------------------------------
 	// Creating windows
 	/// create new window(s) from .wnd file ... see definition for what is returned
-	// BFME2 native 3177EC takes a 44-byte info owner and parent (RET12).
-	virtual GameWindow *winCreateFromScript( AsciiString filename, Rva0031763A *info = NULL, GameWindow *parent = NULL );
+	virtual GameWindow *winCreateFromScript( AsciiString filename, WindowLayoutInfo *info = NULL );
 
 	/// create new window(s) from .wnd file and wrap in a WindowLayout
 	virtual WindowLayout *winCreateLayout( AsciiString filename );
