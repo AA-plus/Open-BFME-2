@@ -12,6 +12,14 @@
 // one), and the store's template vector (+0x0C) swaps the entry with the
 // same name key (+0x0C) for the new template. The 0x180-byte allocation
 // and its constructor stand for newInstance(WeaponTemplate).
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <vector>
 #include "ascii_string.h"
 
