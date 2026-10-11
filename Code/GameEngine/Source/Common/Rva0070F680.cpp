@@ -19,7 +19,10 @@ public:
     AptActionQueueC *m_queue;
 };
 extern Rva006E34D0 *g_bfmeAptPtrAtE176D0;
-extern int g_00E17704;
+// LINK: defined once here. Retail's dword at this address lives in
+// zero-filled PE data (loader-zeroed); all referrers only read it.
+// No ledger address claimed yet.
+int g_00E17704 = 0;
 struct Rva0070F680Entry
 {
     int count;
