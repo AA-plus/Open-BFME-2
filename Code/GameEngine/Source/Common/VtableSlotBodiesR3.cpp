@@ -494,17 +494,8 @@ int Rva0016814C::rva0016814C()
 	return m_valueD0 * 2 - 2;
 }
 
-// 0x00188170: two arguments, answers true.
-class Rva00188170
-{
-public:
-	bool rva00188170(int a, int b);
-};
-
-bool Rva00188170::rva00188170(int, int)
-{
-	return true;
-}
+// The shared true predicate188170 now belongs to Rva0073BAA0Base
+// in RTS/Rva0073BAA0.cpp; CF139C establishes its updater relationship.
 
 // 0x00216239: stores the word at +0xC into the +0x38 word of the object at +8;
 // one argument unused.

@@ -1,5 +1,5 @@
 // cl: /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /DBFME_STLP_NODE_ALLOC /D_STLP_NO_EXCEPTIONS /Ireference/shims/stlp_nodealloc
-// ?rva0073BAA0@Rva0073BAA0@@QAEDHHH@Z @0x0073BAA0 159B: shroud range updater with per-cell predicate.
+// ?rva0073BAA0@Rva0073BAA0Base@@QAEDHHH@Z @0x0073BAA0 159B: shroud range updater with per-cell predicate.
 // Donor mask-loop shape from reference/open-bfme-1/Code/GameEngine/Source/Common/BfmeConv1561.cpp
 // BfmeShroudVRA::bfmeUpdateVRA plus volatile-first pattern from taintmanager_impl.cpp BfmeRangeUpdaterFC;
 // range via rowed ?rva0073A2A0@Gen_008F7CD0@@QAEXPAPAVBfmeCellFD@@0HHH@Z (BfmeCellAt.cpp, 0xA8 stride),
@@ -22,7 +22,7 @@ public:
 	void updatePlayerCells008FC300(ShroudManagerImpl *manager, int playerIndex);
 };
 
-class Rva0073BAA0
+class Rva0073BAA0Base
 {
 public:
 	virtual char testFunc(int x, int y);
@@ -32,7 +32,7 @@ private:
 	unsigned int m_mask;
 };
 
-char Rva0073BAA0::rva0073BAA0(int x1, int x2, int y)
+char Rva0073BAA0Base::rva0073BAA0(int x1, int x2, int y)
 {
 	BfmeCellFD *volatile first;
 	BfmeCellFD *last;
@@ -66,3 +66,6 @@ char Rva0073BAA0::rva0073BAA0(int x1, int x2, int y)
 	}
 	return 1;
 }
+
+// Native CF139C slot zero points to 188170: MOV AL,1; RET8.
+char Rva0073BAA0Base::testFunc(int,int) { return 1; }

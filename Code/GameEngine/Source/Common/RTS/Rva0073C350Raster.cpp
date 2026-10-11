@@ -14,7 +14,7 @@ public:
 class ShroudManagerImpl;
 class ShroudManagerImpl008FBA40Element;
 
-class Rva0073BAA0
+class Rva0073BAA0Base
 {
 public:
 	virtual char testFunc(int x, int y);
@@ -23,6 +23,8 @@ private:
 	Gen_008F7CD0 *m_grid;
 	unsigned int m_mask;
 };
+
+class Rva0073BAA0 : public Rva0073BAA0Base { int extra; };
 
 char __cdecl Rva0073C350Raster(int x1, int x2, int y1, int y2, Rva0073BAA0 updater)
 {
