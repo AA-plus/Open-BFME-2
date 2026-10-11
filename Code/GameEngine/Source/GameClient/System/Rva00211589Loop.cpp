@@ -18,11 +18,11 @@ public:
 	void rva003FD6E0();
 };
 
-class Rva003FCD71
+class LivingWorldVisual
 {
 public:
-	void rva003FCD71();
-	void rva003FCDD5(int value);
+	void rva003FCD71();	// rowed 0x003FCD71
+	void rva003FCDD5(bool value);	// rowed 0x003FCDD5
 };
 
 class Rva003F934B
@@ -77,7 +77,7 @@ void Rva00211589::rva00212761()
 	void **it = vec->m_begin;
 	while (it != end)
 	{
-		((Rva003FCD71 *)*it)->rva003FCD71();
+		((LivingWorldVisual *)*it)->rva003FCD71();
 		++it;
 	}
 	vec->erase(vec->m_begin, vec->m_end);
@@ -89,7 +89,7 @@ void Rva00211589::rva002110DF(int value)
 	for (i = 0; i < (unsigned int)(m_items.m_end - m_items.m_begin); ++i)
 	{
 		_ReadWriteBarrier();
-		((Rva003FCD71 *)m_items.m_begin[i])->rva003FCDD5(value);
+		(((LivingWorldVisual *)m_items.m_begin[i])->*reinterpret_cast<void (LivingWorldVisual::*)(int)>(&LivingWorldVisual::rva003FCDD5))(value);
 	}
 }
 
@@ -109,7 +109,7 @@ void Rva00211589::rva002129B4()
 class Rva003FD849
 {
 public:
-	void rva003FD849();
+	bool rva003FD849();	// rowed 0x003FD849
 };
 
 class Rva00211505
