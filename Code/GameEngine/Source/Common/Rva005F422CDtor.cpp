@@ -47,3 +47,14 @@ void *Rva005F445D::destroy(unsigned int flags)
         operator delete(object);
     return object;
 }
+
+// C79468 slot0 names native005F4224..005F422C. Its stored vtordisp at
+// receiver-4 adjusts a shared virtual-base receiver before the exact43B
+// wrapper above. Caller flags and the complete-icon return are unchanged.
+// This is ordinary C++ pointer adjustment and a compiler tail call; no
+// lifted instructions or synthetic class/vtable definitions are emitted.
+class Rva005F4224 { public: void *destroy(unsigned int flags); };
+void *Rva005F4224::destroy(unsigned int flags)
+{
+    return ((Rva005F445D *)((char *)this - *(int *)((char *)this - 4)))->destroy(flags);
+}
