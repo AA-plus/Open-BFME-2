@@ -2877,11 +2877,11 @@ HANDLER_ENTRY = 16     # {adjectives, pType, dispCatchObj, addressOfHandler}
 def funcinfo_ownership(entries):
     """({funclet rva: owner function rva}, counts) read out of the retail image.
 
-    Each `eh_` stub is `B8 <FuncInfo VA> E9 <__CxxFrameHandler>`; its FuncInfo
+    Each handler stub is `B8 <FuncInfo VA> E9 <__CxxFrameHandler>`; its FuncInfo
     lists the function's unwind actions and catch handlers, and those addresses
-    ARE its funclets. The owning function names its stub in the prologue
-    (`6A FF 68 <stub VA>`), so one indexed pass over .text for `push <stub VA>`
-    closes the loop and ownership becomes a lookup rather than a guess.
+    ARE its funclets. The owning function's prologue names its stub, which
+    closes the loop. Discover frames with the same retail-prologue parser the
+    EH verifier uses, rather than requiring a generated handler ledger row.
 
     A stub reached from more than one function, or from none, yields nothing:
     the point of this map is that the parent is known, so an unknown one is
@@ -2893,44 +2893,26 @@ def funcinfo_ownership(entries):
     text = next(s for s in sections if s["name"] == ".text")
     lo, hi = text["rva"], text["rva"] + text["size"]
 
-    stubs = {}
-    for row in B.load_function_rows():
-        if not row["notes"].startswith(EH_NOTE):
-            continue
-        rva = int(row["target_rva"], 16)
-        body = B.read_target_bytes(rva, 10)
-        if body[0] == 0xB8 and body[5] == 0xE9:
-            stubs[rva] = B.u32(body, 1)
-        else:
-            counts["stub-not-B8-E9"] += 1
-
     # A prologue reference is attributed to the function whose body holds it, so
     # the ghidra inventory and the ledger both contribute boundaries: a matched
     # row is a boundary the inventory may not have, and vice versa.
-    spans = sorted({(rva, rva + size) for rva, size, _ in entries}
+    spans = ({(rva, rva + size) for rva, size, _ in entries}
                    | {(int(r["target_rva"], 16),
                        int(r["target_rva"], 16) + int(r["target_size"]))
                       for r in B.load_function_rows()})
-    span_starts = [s for s, _ in spans]
 
-    def enclosing(rva):
-        i = bisect.bisect_right(span_starts, rva) - 1
-        return spans[i][0] if i >= 0 and spans[i][0] <= rva < spans[i][1] else None
-
-    body = B.read_target_bytes(lo, hi - lo)
-    by_va = {rva + base: rva for rva in stubs}
+    import eh_verify
+    retail = eh_verify.Image()
+    stubs = {}
     owners = collections.defaultdict(set)
-    pos = body.find(b"\x68")
-    while pos >= 0:
-        if pos + 5 <= len(body):
-            stub = by_va.get(B.u32(body, pos + 1))
-            if stub is not None:
-                owner = enclosing(lo + pos)
-                if owner is None:
-                    counts["push-outside-any-function"] += 1
-                elif owner != stub:
-                    owners[stub].add(owner)
-        pos = body.find(b"\x68", pos + 1)
+    for parent in sorted({start for start, end in spans if end - start >= 10}):
+        frame = retail.frame_funcinfo(parent)
+        if frame is None:
+            continue
+        stub, funcinfo = frame
+        if parent != stub:
+            stubs[stub] = funcinfo + base
+            owners[stub].add(parent)
 
     def in_text(va):
         return lo <= va - base < hi
