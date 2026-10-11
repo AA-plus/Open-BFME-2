@@ -184,6 +184,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 }
 #include <vector>
+namespace _STL { template<> void vector<Rva002B9062Element>::_M_clear(); }
 
 extern const Real g_00BFDF64;	// 0.6f, file-local rdata used only here
 

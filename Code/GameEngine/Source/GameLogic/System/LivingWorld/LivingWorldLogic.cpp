@@ -2843,6 +2843,7 @@ struct Rva002B9062Element {
  Rva002B9062Element(const Rva002B9062Element &p):object(p.object){if(object)++object->refs;}
  ~Rva002B9062Element(){if(object)ReleaseTreeHintRef00217D4C((TargetRef00217D4C*)object);}
 };
+namespace _STL { template<> void vector<Rva002B9062Element>::_M_clear(); }
 
 // Native002B9FDB..002BA392 whole951 RET0; WB D869E0 names PrepareRetreats
 // and asserts4332..4423. All retained calls have whole-byte providers.
