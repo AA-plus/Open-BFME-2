@@ -3,6 +3,8 @@
 // The three subobjects retain their BFME2 retail vtables after the spherical
 // base constructor runs.
 
+extern "C" char HemisphericalEmissionVelocityModuleTemplate_cvtbl0;  // 0x00C1BC60, defined by HemisphericalEmissionVelocityModuleTemplateCopyCtorThunk.cpp
+
 extern "C" const void *const vtbl_00C1C780[];  // folded, 35 classes; via ??_7?$CategoryModuleInfo@$00@FXParticleSystem@@6B@
 #pragma comment(linker, "/alternatename:_vtbl_00C1C780=??_7?$CategoryModuleInfo@$00@FXParticleSystem@@6B@")
 
@@ -49,7 +51,7 @@ public:
 // ??0HemisphericalEmissionVelocityModuleTemplate@FXParticleSystem@@QAE@XZ
 HemisphericalEmissionVelocityModuleTemplate::HemisphericalEmissionVelocityModuleTemplate()
 {
-    *reinterpret_cast<unsigned int *>(this) = 0x00C1BC60;
+    *reinterpret_cast<unsigned int *>(this) = (unsigned int)&HemisphericalEmissionVelocityModuleTemplate_cvtbl0;
     *reinterpret_cast<unsigned int *>(reinterpret_cast<unsigned char *>(this) + 4) = ((unsigned int)vtbl_00C1C780);
     *reinterpret_cast<unsigned int *>(reinterpret_cast<unsigned char *>(this) + 8) = ((unsigned int)vtbl_00C1C00C);
 }
