@@ -121,7 +121,7 @@ void BFME2Set_Texture(unsigned stage, const BFME2TextureRef &texture);
 struct Matrix3D
 {
 	Real Row[3][4];
-	Matrix3D(bool identity)
+	__declspec(dllimport) __forceinline Matrix3D(bool identity)
 	{
 		if (identity) {
 			Row[0][0] = 1.0f; Row[0][1] = 0.0f; Row[0][2] = 0.0f; Row[0][3] = 0.0f;
@@ -168,7 +168,7 @@ public:
 	static void Set_Vertex_Buffer(const VertexBufferClass *vb, unsigned stream);
 	static void Draw_Triangles(unsigned start_index, unsigned polygon_count, unsigned min_vertex_index, unsigned vertex_count);
 
-	static __forceinline void Set_Material(VertexMaterialClass *material)
+	static __forceinline void Set_MaterialTracksFlush(VertexMaterialClass *material)
 	{
 		if (material)
 			material->Add_Ref();
@@ -347,7 +347,7 @@ void TerrainTracksRenderObjClassSystem::flush(void)
 		return;
 
 	ShaderClass::Invalidate();
-	DX8Wrapper::Set_Material(m_vertexMaterialClass);
+	DX8Wrapper::Set_MaterialTracksFlush(m_vertexMaterialClass);
 	DX8Wrapper::Set_Shader(m_shaderClass);
 	DX8Wrapper::Set_Index_Buffer(m_indexBuffer, 0);
 	DX8Wrapper::Set_Vertex_Buffer(m_vertexBuffer, 0);
