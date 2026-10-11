@@ -11,6 +11,16 @@
 // BFME 2 caller is not recovered, so this unit carries no caller: an explicit
 // instantiation of stable_sort emits the same instantiation chain.
 #include "Common/AsciiString.h"
+// codegen otherwise instantiates the min<int> COMDAT (one byte shape
+// per TU flags); a file-static overload takes those calls instead so this
+// TU emits no external copy.
+#include <stl/_algobase.h>
+namespace _STL {
+static inline const int &min(const int &a, const int &b)
+{
+    return b < a ? b : a;
+}
+}
 #include <vector>
 #include <algorithm>
 
