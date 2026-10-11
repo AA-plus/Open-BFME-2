@@ -204,7 +204,7 @@ private:
 
 // Existing provider's opaque sixteen-byte record call view; target4C78AF
 // passes the exact sixteen-byte Object/member-vector entry at this call.
-struct Rva004C7878Record { Rva004C7878Record(); Rva004C7878Record(const Rva004C7878Record&); ~Rva004C7878Record(); Rva004C7878Record &operator=(const Rva004C7878Record&); private: char bytes[16]; };
+struct Rva004C7878Record { Rva004C7878Record(); Rva004C7878Record(const Rva004C7878Record&); __declspec(noinline) ~Rva004C7878Record() { void *storage=*(void **)(bytes+4); if(storage) Rva00030830FreeAllocation(storage); } Rva004C7878Record &operator=(const Rva004C7878Record&); private: char bytes[16]; };
 typedef _STL::vector<Rva004C7878Record> Rva004C78AFList;
 namespace _STL { template<> void vector<Rva004C7878Record,allocator<Rva004C7878Record> >::push_back(const Rva004C7878Record &); }
 
@@ -213,6 +213,14 @@ template<> inline __declspec(noinline) _Vector_base<Object *,allocator<Object *>
 template<> inline void allocator<Object *>::deallocate(Object **p,unsigned int) const { if(p) Rva00030830FreeAllocation(p); }
 template<> void vector<Object *,allocator<Object *> >::push_back(Object * const &);
 }
+// Native entries own the Object-vector buffer at +4. Their complete15B
+// teardown and the25B stride16 loop reproduce the existing retail folds.
+// Original record name remains unknown; this is the push_back provider's view.
+namespace _STL {
+template<> inline void allocator<Rva004C7878Record>::deallocate(Rva004C7878Record *p,unsigned int) const { if(p) Rva00030830FreeAllocation(p); }
+template<> inline __declspec(noinline) void _Destroy<Rva004C7878Record *>(Rva004C7878Record *first,Rva004C7878Record *last) { for(;first!=last;++first) first->~Rva004C7878Record(); }
+}
+template _STL::vector<Rva004C7878Record>::~vector();
 class ManTheWallsSpecialPower : public SpecialPowerModule
 {
 public:
