@@ -150,6 +150,8 @@ class PlayerList
 {
 public:
 	Player *getLocalPlayer() { return m_local; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getLocalPlayer copy loses to the first-in-order copy. No flags touched.
+	Player *bfme_getLocalPlayer_a455a() { return m_local; }
 private:
 	unsigned char m_00[0x10];
 	Player *m_local;	// +0x10
@@ -225,7 +227,7 @@ GameMessageDisposition MetaEventTranslator::translateGameMessage(const GameMessa
 		else
 		{
 			usable = COMMANDUSABLE_GAME;
-			if (ThePlayerList && ThePlayerList->getLocalPlayer() && ThePlayerList->getLocalPlayer()->m_750 == 2)
+			if (ThePlayerList && ThePlayerList->bfme_getLocalPlayer_a455a() && ThePlayerList->bfme_getLocalPlayer_a455a()->m_750 == 2)
 				usable = 6;
 		}
 

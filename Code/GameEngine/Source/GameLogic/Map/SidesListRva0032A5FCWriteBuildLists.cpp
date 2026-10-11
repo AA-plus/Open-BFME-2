@@ -76,6 +76,8 @@ public:
 	bool isInitiallyBuilt() const { return m_isInitiallyBuilt; }
 	unsigned int getNumRebuilds() const { return m_numRebuilds; }
 	BuildListInfo *getNext() const { return m_nextBuildList; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getNext copy loses to the first-in-order copy. No flags touched.
+	BuildListInfo *bfme_getNext_5d4a9() const { return m_nextBuildList; }
 	int getHealth() const { return m_health; }
 	bool getWhiner() const { return m_whiner; }
 	bool getUnsellable() const { return m_unsellable; }
@@ -226,7 +228,7 @@ void SidesList::rva0032A5FC(DataChunkOutput &chunkWriter)
 		while (pBuildList)
 		{
 			++count;
-			pBuildList = pBuildList->getNext();
+			pBuildList = pBuildList->bfme_getNext_5d4a9();
 		}
 		chunkWriter.writeInt(count);
 		if (count > 0)
@@ -248,7 +250,7 @@ void SidesList::rva0032A5FC(DataChunkOutput &chunkWriter)
 				center.x += pBuildList->getLocation()->x;
 				center.y += pBuildList->getLocation()->y;
 				center.z += pBuildList->getLocation()->z;
-				pBuildList = pBuildList->getNext();
+				pBuildList = pBuildList->bfme_getNext_5d4a9();
 			}
 			if (!pBuildList)
 			{
@@ -279,7 +281,7 @@ void SidesList::rva0032A5FC(DataChunkOutput &chunkWriter)
 				chunkWriter.writeByte(pBuildList->getWhiner());
 				chunkWriter.writeByte(pBuildList->getUnsellable());
 				chunkWriter.writeByte(pBuildList->getRepairable());
-				pBuildList = pBuildList->getNext();
+				pBuildList = pBuildList->bfme_getNext_5d4a9();
 			}
 		}
 	}

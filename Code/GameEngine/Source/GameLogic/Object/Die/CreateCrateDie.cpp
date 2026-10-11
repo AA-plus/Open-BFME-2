@@ -127,6 +127,8 @@ class Player
 public:
 	Bool hasScience(ScienceType t) const;
 	PlayerType getPlayerType() const { return m_playerType; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getPlayerType copy loses to the first-in-order copy. No flags touched.
+	PlayerType bfme_getPlayerType_faef2() const { return m_playerType; }
 	Team *getDefaultTeam() const { return m_defaultTeam; }
 
 private:
@@ -537,7 +539,7 @@ void CreateCrateDie::onDie(const DamageInfo *damageInfo)
 				{
 					// If the killer is a computer controlled player, notify that the crate exists.
 					if (killer->getControllingPlayer() &&
-						killer->getControllingPlayer()->getPlayerType() == PLAYER_COMPUTER)
+						killer->getControllingPlayer()->bfme_getPlayerType_faef2() == PLAYER_COMPUTER)
 					{
 						AIUpdateInterface *ai = killer->getAIUpdateInterface();
 						if (ai)

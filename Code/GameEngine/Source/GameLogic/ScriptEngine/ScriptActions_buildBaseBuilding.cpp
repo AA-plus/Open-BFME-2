@@ -53,6 +53,8 @@ class Parameter
 {
 public:
 	Int getInt() const { return m_int; }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the getInt copy loses to the first-in-order copy. No flags touched.
+	Int bfme_getInt_d5339() const { return m_int; }
 private:
 	unsigned char m_pad[8];
 	Int m_int;	// +0x08
@@ -232,7 +234,7 @@ void ScriptActions::doBuildBaseBuildingInSlot(const AsciiString &buildingType, P
 	if (!player->rva002AA00C(tmpl, 0))
 		return;
 
-	Object *obj = (Object *)((Rva003980BF *)castle)->rva003980BF(tmpl, slotParm->getInt(), 0);
+	Object *obj = (Object *)((Rva003980BF *)castle)->rva003980BF(tmpl, slotParm->bfme_getInt_d5339(), 0);
 	if (!obj)
 		return;
 	if (referenceName.isEmpty())
@@ -283,7 +285,7 @@ void ScriptActions::rva003C66F1(const AsciiString &buildingType, Parameter *mode
 		pos.x = marker->getPosition()->x;
 		pos.y = marker->getPosition()->y;
 		pos.z = marker->getPosition()->z;
-		obj = ((CastleBehavior *)castle)->rva0039815B(tmpl, &pos, modeParm->getInt());
+		obj = ((CastleBehavior *)castle)->rva0039815B(tmpl, &pos, modeParm->bfme_getInt_d5339());
 	} else {
 		obj = (Object *)((Rva003980BF *)castle)->rva003980BF(tmpl, -2, 0);
 	}

@@ -54,7 +54,7 @@ enum NameKeyType
 };
 
 // BFME's REAL_TO_INT_FLOOR: CRT floor() then the engine's x87 round.
-__forceinline Real fast_float_floor(Real f)
+__forceinline Real bfme_fast_float_floor_6c1d2(Real f)
 {
 	return floorf(f);
 }
@@ -67,7 +67,7 @@ __forceinline long fast_float2long_round(Real f)
 	}
 	return i;
 }
-#define REAL_TO_INT_FLOOR(x) (fast_float2long_round(fast_float_floor(x)))
+#define REAL_TO_INT_FLOOR(x) (fast_float2long_round(bfme_fast_float_floor_6c1d2(x)))
 
 struct Coord3D
 {

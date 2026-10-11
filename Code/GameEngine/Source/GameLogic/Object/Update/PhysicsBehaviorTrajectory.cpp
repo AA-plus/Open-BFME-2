@@ -42,6 +42,11 @@ public:
   float len2=Length2();
   if(len2!=0.0f) { float inv=WWMath::Inv_Sqrt(len2); X*=inv;Y*=inv;Z*=inv; }
  }
+ // LINK: same-body helper under a TU-unique name (identical inlined bytes); the Normalize copy loses to the first-in-order copy. No flags touched.
+ __forceinline void bfme_Normalize_05402() {
+  float len2=Length2();
+  if(len2!=0.0f) { float inv=WWMath::Inv_Sqrt(len2); X*=inv;Y*=inv;Z*=inv; }
+ }
 };
 class Matrix3D { public: void buildTransformMatrix(const Vector3 &,const Vector3 &); float values[12]; };
 class Thing { public: void setPosition(const Coord3D *); void setTransformMatrix(const Matrix3D *); };
@@ -145,7 +150,7 @@ UpdateSleepTime PhysicsBehavior::update()
   const Coord3D *previous=&points[index-1];
   Vector3 direction(current->x-previous->x,current->y-previous->y,current->z-previous->z);
   if(bounces>0) direction.Z=TheWritableGlobalData->gravity*d->at4C*100.0f;
-  direction.Normalize();
+  direction.bfme_Normalize_05402();
   Vector3 position(current->x,current->y,current->z);
   Matrix3D transform;
   transform.buildTransformMatrix(position,direction);

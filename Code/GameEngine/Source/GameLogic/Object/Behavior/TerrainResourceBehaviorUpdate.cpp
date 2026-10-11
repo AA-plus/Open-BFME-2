@@ -32,7 +32,7 @@
 // - It returns IncomeInterval.
 //
 // Matching notes:
-// - REAL_TO_INT_CEIL is Zero Hour's fast_float2long_round(fast_float_ceil(x)),
+// - REAL_TO_INT_CEIL is Zero Hour's fast_float2long_round(bfme_fast_float_ceil_9e7a4(x)),
 //   with BFME 2's CRT ceil.
 // - The getData()->getFilter() accessors and the callback record declared at
 //   the top of the player block are what give retail its register and stack
@@ -57,11 +57,11 @@ __forceinline long fast_float2long_round(float f)
 	}
 	return i;
 }
-__forceinline Real fast_float_ceil(Real f)
+__forceinline Real bfme_fast_float_ceil_9e7a4(Real f)
 {
 	return (Real)ceil((double)f);
 }
-#define REAL_TO_INT_CEIL(x) (fast_float2long_round(fast_float_ceil(x)))
+#define REAL_TO_INT_CEIL(x) (fast_float2long_round(bfme_fast_float_ceil_9e7a4(x)))
 
 class GameLogic;
 extern GameLogic *TheGameLogic;

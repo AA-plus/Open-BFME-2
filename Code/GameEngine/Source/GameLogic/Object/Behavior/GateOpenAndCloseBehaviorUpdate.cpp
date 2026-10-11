@@ -115,6 +115,16 @@ public:
 			rva0028AE6D();
 		}
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the clearAndSetModelConditionState copy loses to the first-in-order copy. No flags touched.
+	__forceinline void bfme_clearAndSetModelConditionState_5697e(ModelConditionFlagType clr, ModelConditionFlagType set)
+	{
+		if (m_modelConditionFlags.test(clr) || !m_modelConditionFlags.test(set))
+		{
+			m_modelConditionFlags.clear(clr);
+			m_modelConditionFlags.set(set);
+			rva0028AE6D();
+		}
+	}
 
 private:
 	unsigned char m_pad000[0xA8];
@@ -356,7 +366,7 @@ UpdateSleepTime GateOpenAndCloseBehavior::update()
 	case 3:
 		m_percent = 100.0f;
 		m_30 = true;
-		obj->clearAndSetModelConditionState(MODELCONDITION_GATE_OPENING, MODELCONDITION_GATE_CLOSING);
+		obj->bfme_clearAndSetModelConditionState_5697e(MODELCONDITION_GATE_OPENING, MODELCONDITION_GATE_CLOSING);
 		rva0049924B(true);
 		break;
 
@@ -372,14 +382,14 @@ UpdateSleepTime GateOpenAndCloseBehavior::update()
 		if ((UnsignedInt)elapsed > (UnsignedInt)((Rva00498716 *)data)->rva00498716() && !m_soundPlayed)
 			rva004989F5();
 		m_30 = false;
-		obj->clearAndSetModelConditionState(MODELCONDITION_GATE_OPENING, MODELCONDITION_GATE_CLOSING);
+		obj->bfme_clearAndSetModelConditionState_5697e(MODELCONDITION_GATE_OPENING, MODELCONDITION_GATE_CLOSING);
 		break;
 	}
 
 	case 1:
 		m_percent = 100.0f;
 		m_30 = true;
-		obj->clearAndSetModelConditionState(MODELCONDITION_GATE_CLOSING, MODELCONDITION_GATE_OPENING);
+		obj->bfme_clearAndSetModelConditionState_5697e(MODELCONDITION_GATE_CLOSING, MODELCONDITION_GATE_OPENING);
 		rva004992D5Inline(false, true);
 		break;
 
@@ -395,7 +405,7 @@ UpdateSleepTime GateOpenAndCloseBehavior::update()
 		if ((UnsignedInt)elapsed > (UnsignedInt)((Rva00498707 *)data)->rva00498707() && !m_soundPlayed)
 			rva004989F5();
 		m_30 = false;
-		obj->clearAndSetModelConditionState(MODELCONDITION_GATE_CLOSING, MODELCONDITION_GATE_OPENING);
+		obj->bfme_clearAndSetModelConditionState_5697e(MODELCONDITION_GATE_CLOSING, MODELCONDITION_GATE_OPENING);
 		break;
 	}
 	}
