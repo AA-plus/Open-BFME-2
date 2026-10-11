@@ -185,7 +185,9 @@ Coord3D &Coord3D::Set(float x, float y, float z)
     return *this;
 }
 
-Coord3D &Coord3D::operator-=(const Coord3DBase &that)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline Coord3D &Coord3D::operator-=(const Coord3DBase &that)
 {
     x -= that.x;
     y -= that.y;
@@ -193,6 +195,13 @@ Coord3D &Coord3D::operator-=(const Coord3DBase &that)
 
     return *this;
 }
+
+// ?bfmeAnchorCoord3DSubAssign absent-from-retail
+Coord3D &bfmeAnchorCoord3DSubAssign(Coord3D *p, const Coord3DBase &that)
+{
+	return *p -= that;
+}
+
 
 Coord3D &Coord3D::Sub(const Coord3DBase &that)
 {
@@ -316,7 +325,9 @@ Coord3D &Coord3D::Scale2D(const Coord3DBase &that, float scale)
     return *this;
 }
 
-float Coord3D::GetLength() const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline float Coord3D::GetLength() const
 {
     float x_value = x;
     float y_value = y;
@@ -324,6 +335,13 @@ float Coord3D::GetLength() const
 
     return (float)sqrt(x_value * x_value + y_value * y_value + z_value * z_value);
 }
+
+// ?bfmeAnchorCoord3DGetLength absent-from-retail
+float bfmeAnchorCoord3DGetLength(const Coord3D *p)
+{
+	return p->GetLength();
+}
+
 
 float Coord3D::GetLength2D() const
 {
@@ -350,13 +368,22 @@ float Coord3D::GetLengthSqrd() const
     return x_value * x_value + y_value * y_value + z_value * z_value;
 }
 
-float Coord3D::GetLengthSqrd2D() const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline float Coord3D::GetLengthSqrd2D() const
 {
     float x_value = x;
     float y_value = y;
 
     return x_value * x_value + y_value * y_value;
 }
+
+// ?bfmeAnchorCoord3DGetLengthSqrd2D absent-from-retail
+float bfmeAnchorCoord3DGetLengthSqrd2D(const Coord3D *p)
+{
+	return p->GetLengthSqrd2D();
+}
+
 
 inline float Coord3D::length() const
 {
@@ -377,12 +404,21 @@ Coord3D operator-(Coord3D that)
     return result;
 }
 
-void Coord3D::add(const Coord3DBase *that)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void Coord3D::add(const Coord3DBase *that)
 {
     x += that->x;
     y += that->y;
     z += that->z;
 }
+
+// ?bfmeAnchorCoord3DAdd absent-from-retail
+void bfmeAnchorCoord3DAdd(Coord3D *p, const Coord3DBase *that)
+{
+	p->add(that);
+}
+
 
 inline float Coord3D::lengthSqr() const
 {
@@ -415,7 +451,9 @@ inline void Coord3D::normalize()
     }
 }
 
-float Coord3D::Normalize()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline float Coord3D::Normalize()
 {
     float len = GetLength();
     float scale = one / len;
@@ -424,6 +462,13 @@ float Coord3D::Normalize()
     z *= scale;
     return len;
 }
+
+// ?bfmeAnchorCoord3DNormalize absent-from-retail
+float bfmeAnchorCoord3DNormalize(Coord3D *p)
+{
+	return p->Normalize();
+}
+
 
 float Coord3D::Normalize2D()
 {
@@ -488,10 +533,19 @@ float Coord3D::operator*(const Coord2D &that) const
     return x * that.x + y * that.y;
 }
 
-float Coord3D::operator*(const Coord3DBase &that) const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline float Coord3D::operator*(const Coord3DBase &that) const
 {
     return x * that.x + y * that.y + z * that.z;
 }
+
+// ?bfmeAnchorCoord3DDot absent-from-retail
+float bfmeAnchorCoord3DDot(const Coord3D *p, const Coord3DBase &that)
+{
+	return *p * that;
+}
+
 
 Coord3D &Coord3D::Set2D(float x, float y)
 {
@@ -555,12 +609,21 @@ inline void Coord3D::set(float x, float y, float z)
     this->z = z;
 }
 
-void Coord3D::sub(const Coord3DBase *that)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void Coord3D::sub(const Coord3DBase *that)
 {
     x -= that->x;
     y -= that->y;
     z -= that->z;
 }
+
+// ?bfmeAnchorCoord3DSub absent-from-retail
+void bfmeAnchorCoord3DSub(Coord3D *p, const Coord3DBase *that)
+{
+	p->sub(that);
+}
+
 
 inline void Coord3D::zero()
 {

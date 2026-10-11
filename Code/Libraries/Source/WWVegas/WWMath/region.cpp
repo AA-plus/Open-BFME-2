@@ -228,15 +228,33 @@ LineSegment2D::LineSegment2D(const Coord2D &start, const Coord2D &end)
     m_end = end;
 }
 
-float Region2D::width() const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline float Region2D::width() const
 {
     return x_max - x_min;
 }
 
-float Region2D::height() const
+// ?bfmeAnchorRegion2DWidth absent-from-retail
+float bfmeAnchorRegion2DWidth(const Region2D *p)
+{
+	return p->width();
+}
+
+
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline float Region2D::height() const
 {
     return y_max - y_min;
 }
+
+// ?bfmeAnchorRegion2DHeight absent-from-retail
+float bfmeAnchorRegion2DHeight(const Region2D *p)
+{
+	return p->height();
+}
+
 
 bool Region2D::isInside(const Coord2D &point) const
 {
@@ -291,15 +309,33 @@ bool IRegion2D::operator!=(const IRegion2D &that) const
     return !(*this == that);
 }
 
-int IRegion2D::width() const
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline int IRegion2D::width() const
 {
     return x_max - x_min;
 }
 
-int IRegion2D::height() const
+// ?bfmeAnchorIRegion2DWidth absent-from-retail
+int bfmeAnchorIRegion2DWidth(const IRegion2D *p)
+{
+	return p->width();
+}
+
+
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline int IRegion2D::height() const
 {
     return y_max - y_min;
 }
+
+// ?bfmeAnchorIRegion2DHeight absent-from-retail
+int bfmeAnchorIRegion2DHeight(const IRegion2D *p)
+{
+	return p->height();
+}
+
 
 int IRegion3D::width() const
 {
@@ -369,7 +405,9 @@ void Region3D::expandBy(const Coord3D &point)
     }
 }
 
-void Region3D::zero()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline void Region3D::zero()
 {
     x_min = 0.0f;
     y_min = 0.0f;
@@ -378,6 +416,13 @@ void Region3D::zero()
     y_max = 0.0f;
     z_max = 0.0f;
 }
+
+// ?bfmeAnchorRegion3DZero absent-from-retail
+void bfmeAnchorRegion3DZero(Region3D *p)
+{
+	p->zero();
+}
+
 
 bool Region3D::isInRegionNoZ(const Coord3D *point) const
 {
