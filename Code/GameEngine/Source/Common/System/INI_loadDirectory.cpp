@@ -3,7 +3,7 @@
 // The matched find44B implementation is a byte-identical select-any copy;
 // keeping its definition visible supplies MSVC call-result information and
 // reproduces four TEST EAX,EAX sites that a declaration alone changes to CMP.
-// cl: /Ireference/shims/bfme2_ascii /EHsc /MD /O1 /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /Ireference/shims/bfmealloc
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /EHsc /MD /O1 /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /Ireference/shims/bfmealloc
 // stlport
 //
 // BFME1 9cbfb551 GeneralsMD INI.cpp supplies the two-pass load algorithm.
