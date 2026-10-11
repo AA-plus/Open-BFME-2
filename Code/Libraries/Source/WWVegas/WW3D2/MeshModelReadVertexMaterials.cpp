@@ -78,6 +78,12 @@ public:
 	bool Load_W3D(ChunkLoadClass &cload);
 	void Add_Ref() { ++RefCount; }
 	void Release_Ref() { if (--RefCount == 0) Dispose(); }
+	// LINK: same-body helpers under TU-unique names (identical inlined
+	// bytes). This TU's copies lose (first-copy); the three call sites below
+	// inline them but still emit loser COMDATs. Rebinding there emits only
+	// unique (trivially kept) copies. No flags touched.
+	void bfme_add_ref() { ++RefCount; }
+	void bfme_release() { if (--RefCount == 0) Dispose(); }
 	virtual void Dispose(void);
 
 private:
@@ -90,7 +96,7 @@ class MeshLoadContextClass
 public:
 	int __forceinline Add_Vertex_Material(VertexMaterialClass *vmat)
 	{
-		vmat->Add_Ref();
+		vmat->bfme_add_ref();
 		int index = VertexMaterials.Count();
 		VertexMaterials.Add(vmat);
 		return index;
@@ -117,11 +123,11 @@ bool MeshModelClass::read_vertex_materials(ChunkLoadClass &cload, MeshLoadContex
 		VertexMaterialClass *vmat = new VertexMaterialClass();
 		bool ok = vmat->Load_W3D(cload);
 		if (ok != true) {
-			vmat->Release_Ref();
+			vmat->bfme_release();
 			return ok;
 		}
 		context->Add_Vertex_Material(vmat);
-		vmat->Release_Ref();
+		vmat->bfme_release();
 		cload.Close_Chunk();
 	}
 	return true;
