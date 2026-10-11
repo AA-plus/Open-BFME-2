@@ -17228,3 +17228,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva0073E5A0@ShroudManagerImpl@@QAEXPBUCoord3D@@HHHPAU2@@Z,0x0073E5A0,callee of ?rva00739820@ShroudManager@@QAEXPBUCoord3D@@HHHPAU2@@Z
 ??1?$_List_base@UICoord2D@@V?$allocator@UICoord2D@@@_STL@@@_STL@@QAE@XZ,0x004EC395,fold-proof=Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/SkirmishGameOptionsMenu.cpp; full native23B base and5B direct destructor tail with all owner relocations; donor UICoord2D template identity retained as donor; target parent3015E7 EH state0 cleanup77961B independently bound to200667
 ??1?$list@UICoord2D@@V?$allocator@UICoord2D@@@_STL@@@_STL@@QAE@XZ,0x00200667,fold-proof=Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/SkirmishGameOptionsMenu.cpp; full native23B base and5B direct destructor tail with all owner relocations; donor UICoord2D template identity retained as donor; target parent3015E7 EH state0 cleanup77961B independently bound to200667
+?rva0006E605@RTS3DScene@@QAEXPAVVector3@@_N@Z,0x0006E605,callee of ?rva000982F9@Gen006E2310@@QAEXXZ
+?rva000953B3@Gen006E2310@@QAEXXZ,0x000953B3,callee of ?rva000982F9@Gen006E2310@@QAEXXZ
