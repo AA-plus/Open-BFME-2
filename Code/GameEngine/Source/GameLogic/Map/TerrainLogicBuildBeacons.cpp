@@ -4,7 +4,6 @@
 // and three-zero debug stream. Native waypoints share0C/1C/20/4C/60 accesses.
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
-#define _STLP_BFME_LIST_NE_EXTERN  // call retail's one _List_iterator_base::operator!= (vendor/stlport/stl/_list.h)
 #include <stdlib.h>
 namespace _STL {void __cdecl free(void *) throw(...);}
 #define free _STL::free
