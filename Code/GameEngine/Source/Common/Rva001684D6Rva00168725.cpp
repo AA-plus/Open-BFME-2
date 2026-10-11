@@ -5,6 +5,9 @@
 // Reference semantic guide: BFME1 streak.cpp Cast_Ray (575ba2b04).
 // Target segments use point storage C4 and renderer width EC; collision
 // dispatch is virtual slot120 and the complete native boundary is474 bytes.
+// The Matrix3D::mulVector3Array call below is inlined; the copy this unit still emits is not the one retail
+// keeps, so it gets a TU-local name instead of competing with the rowed body.
+#define mulVector3Array mulVector3Array_RV
 #include "rendobj.h"
 #include <math.h>
 class RayCollisionTestClass {public:CastResultStruct*Result;int CollisionType;RenderObjClass*CollidedRenderObj;LineSegClass Ray;};
