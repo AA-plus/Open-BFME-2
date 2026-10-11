@@ -117,4 +117,41 @@ namespace _STL {
 template <> void _STL::vector<void *>::clear();
 }
 
+namespace _STL {
+// Native 0x00029CA0..0x00029EAD is the complete 525-byte
+// STLport pointer-vector fill insertion, ending in RET12. Preserve the
+// discarded inline word between copy-backward and fill: retail's frame
+// is 0x80, with the later fill/copy homes four bytes below the primary
+// template's 0x7C frame. This is compiler bookkeeping, with no claim
+// about an original game variable. The algorithm below follows the
+// committed BFME1 9e3be919b10ae956e3c8a13995e0d62f2be1d016
+// inputs/vendor/stlport/stl/_vector.c, STLport 4.5.3.
+static __forceinline void retainFillCompilerTemporary() { void *discarded; }
+template <> inline void vector<void *>::_M_fill_insert(iterator __position, size_type __n, void *const &__x) {
+  if (__n != 0) {
+    if (size_type(this->_M_end_of_storage._M_data - this->_M_finish) >= __n) {
+      void *__x_copy = __x;
+      const size_type __elems_after = this->_M_finish - __position;
+      pointer __old_finish = this->_M_finish;
+      if (__elems_after > __n) {
+        __uninitialized_copy(this->_M_finish - __n, this->_M_finish, this->_M_finish, _IsPODType());
+        this->_M_finish += __n;
+        __copy_backward_ptrs(__position, __old_finish - __n, __old_finish, _TrivialAss());
+        retainFillCompilerTemporary();
+        _STL::fill(__position, __position + __n, __x_copy);
+      }
+      else {
+        uninitialized_fill_n(this->_M_finish, __n - __elems_after, __x_copy);
+        this->_M_finish += __n - __elems_after;
+        __uninitialized_copy(__position, __old_finish, this->_M_finish, _IsPODType());
+        this->_M_finish += __elems_after;
+        _STL::fill(__position, __old_finish, __x_copy);
+      }
+    }
+    else 
+      _M_insert_overflow(__position, __x, _IsPODType(), __n);
+  }
+}
+}
+
 template class _STL::vector<void *, _STL::allocator<void *> >;
