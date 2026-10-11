@@ -11,7 +11,6 @@
 // BF1 donor supplies semantics and control structure only.
 #include "ascii_string.h"
 #include <string.h>
-template<class T> __forceinline T StringBase<T>::getCharAt(int i) const throw() {return m_data ? m_data->data[i] : 0;}
 template<class T> __forceinline void StringBase<T>::concat(T c) {concat(&c,1);}
 class File {
 public:
@@ -32,12 +31,12 @@ class GlobalData {public: AsciiString rva002360DE() const;};
 extern GlobalData *TheWritableGlobalData;
 class GameState {public: AsciiString realMapPathToPortableMapPath(const AsciiString &) const;};
 extern GameState *TheGameState;
-class TextureBaseClass {public: void Release_Ref();};
+class TextureClass {public: void Release_Ref();};
 class BfmeMapPictureTexture {
 public:
  BfmeMapPictureTexture(const char *);
  ~BfmeMapPictureTexture() { if(ptr) ptr->Release_Ref(); }
-private: TextureBaseClass *ptr;
+private: TextureClass *ptr;
 };
 #include "../../../Libraries/Include/Lib/Coord2D.h"
 struct Region2D {Coord2D lo,hi;};
@@ -102,7 +101,11 @@ Image *getMapPreviewImage(AsciiString mapName) {
  AsciiString portableName=TheGameState->realMapPathToPortableMapPath(name);
  reinterpret_cast<StringBase<char> *>(&tempName)->set(*reinterpret_cast<const StringBase<char> *>(&AsciiString::TheEmptyString));
  for(int i=0;i<portableName.getLength();++i) {
-  char c=portableName.getCharAt(i);
+  // Canonical StringBase stores its buffer pointer at0 and text atbuffer+8.
+  // Spell this inlined access here; the speed-built23B getter remains owned
+  // by string_base_inline.cpp rather than emitting a size-built shadow copy.
+  const char *buffer=*reinterpret_cast<const char *const *>(&portableName);
+  char c=buffer ? buffer[8+i] : 0;
   if(c=='\\' || c==':') reinterpret_cast<StringBase<char> *>(&tempName)->concat('_'); else reinterpret_cast<StringBase<char> *>(&tempName)->concat(c);
  }
  name=tempName;

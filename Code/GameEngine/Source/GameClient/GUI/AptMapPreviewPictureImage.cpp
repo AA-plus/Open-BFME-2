@@ -21,7 +21,7 @@ public:
 };
 extern FileSystem *TheFileSystem;
 
-class TextureBaseClass
+class TextureClass
 {
 public:
     void Release_Ref();
@@ -33,7 +33,7 @@ public:
     BfmeMapPictureTexture(const char *filename);
     ~BfmeMapPictureTexture() { if (m_texture) m_texture->Release_Ref(); }
 private:
-    TextureBaseClass *m_texture;
+    TextureClass *m_texture;
 };
 #include "../../../../Libraries/Include/Lib/Coord2D.h"
 struct Region2D { Coord2D lo, hi; };
