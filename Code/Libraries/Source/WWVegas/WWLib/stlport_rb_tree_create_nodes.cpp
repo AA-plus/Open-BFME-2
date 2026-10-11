@@ -49,12 +49,10 @@ public:
 
 struct TreeKey00242F5E { public: unsigned char m_data[8]; };
 struct BfmeRecord001DD3BC { public: unsigned char m_data[8]; };
-class Rva0033A4F0 { public: unsigned char m_data[12]; };
 struct BfmeStringRecord002049D6 { public: unsigned char m_data[12]; };
 struct BfmeStringRecord004071F7 { public: unsigned char m_data[12]; };
 struct BfmeE16 { float x, y, z, w; };
 struct BfmePod16 { int a[4]; };
-struct Rva00204B12 { public: unsigned char m_data[16]; };
 struct BfmePod20 { int a[5]; };
 struct BfmePod24 { int a[6]; };
 struct BfmePod52 { int a[13]; };
@@ -90,19 +88,6 @@ UBfmeRecord001DD3BCSetTree::_Link_type UBfmeRecord001DD3BCSetTree::_M_create_nod
 }
 template UBfmeRecord001DD3BCSetTree::_Link_type UBfmeRecord001DD3BCSetTree::_M_create_node(const UBfmeRecord001DD3BCSetTree::value_type &);
 
-// ?_M_create_node@?$_Rb_tree@VRva0033A4F0@@V1@U?$_Identity@VRva0033A4F0@@@_STL@@U?$less@VRva0033A4F0@@@3@V?$allocator@VRva0033A4F0@@@3@@_STL@@IAEPAU?$_Rb_tree_node@VRva0033A4F0@@@2@ABVRva0033A4F0@@@Z
-typedef _STL::_Rb_tree<Rva0033A4F0, Rva0033A4F0, _STL::_Identity<Rva0033A4F0>, _STL::less<Rva0033A4F0>, _STL::allocator<Rva0033A4F0> > VRva0033A4F0SetTree;
-namespace _STL {
-template <> void _Construct<Rva0033A4F0>(Rva0033A4F0 *, const Rva0033A4F0 &);
-}
-template <>
-VRva0033A4F0SetTree::_Link_type VRva0033A4F0SetTree::_M_create_node(const VRva0033A4F0SetTree::value_type &value)
-{
-	_Link_type node = (_Link_type)_STL::allocator<char>::allocate(sizeof(_STL::_Rb_tree_node<VRva0033A4F0SetTree::value_type>), 0);
-	_STL::_Construct(&node->_M_value_field, value);
-	return node;
-}
-template VRva0033A4F0SetTree::_Link_type VRva0033A4F0SetTree::_M_create_node(const VRva0033A4F0SetTree::value_type &);
 
 // ?_M_create_node@?$_Rb_tree@UBfmeStringRecord002049D6@@U1@U?$_Identity@UBfmeStringRecord002049D6@@@_STL@@U?$less@UBfmeStringRecord002049D6@@@3@V?$allocator@UBfmeStringRecord002049D6@@@3@@_STL@@IAEPAU?$_Rb_tree_node@UBfmeStringRecord002049D6@@@2@ABUBfmeStringRecord002049D6@@@Z
 typedef _STL::_Rb_tree<BfmeStringRecord002049D6, BfmeStringRecord002049D6, _STL::_Identity<BfmeStringRecord002049D6>, _STL::less<BfmeStringRecord002049D6>, _STL::allocator<BfmeStringRecord002049D6> > UBfmeStringRecord002049D6SetTree;
@@ -264,25 +249,6 @@ UBfmePod20SetTree::_Link_type UBfmePod20SetTree::_M_create_node(const UBfmePod20
 }
 template UBfmePod20SetTree::_Link_type UBfmePod20SetTree::_M_create_node(const UBfmePod20SetTree::value_type &);
 
-// ?_M_create_node@?$_Rb_tree@URva00204B12@@U1@U?$_Identity@URva00204B12@@@_STL@@U?$less@URva00204B12@@@3@V?$allocator@URva00204B12@@@3@@_STL@@IAEPAU?$_Rb_tree_node@URva00204B12@@@2@ABURva00204B12@@@Z
-// retail 0x00206C10, 34 bytes. _Rb_tree::_M_create_node for a 16-byte set value:
-// allocates a 0x20 node (16-byte links plus 16-byte Rva00204B12) through the rowed
-// byte allocator at 0x307F0, then constructs the value through the rowed
-// Rva00204B12 _Construct at 0x205889. Node size fixes the 16-byte value; the
-// _Construct call displacement proves the Rva00204B12 spelling. Called twice by
-// the 148B tree _M_insert at 0x207187.
-typedef _STL::_Rb_tree<Rva00204B12, Rva00204B12, _STL::_Identity<Rva00204B12>, _STL::less<Rva00204B12>, _STL::allocator<Rva00204B12> > URva00204B12SetTree;
-namespace _STL {
-template <> void _Construct<Rva00204B12>(Rva00204B12 *, const Rva00204B12 &);
-}
-template <>
-URva00204B12SetTree::_Link_type URva00204B12SetTree::_M_create_node(const URva00204B12SetTree::value_type &value)
-{
-	_Link_type node = (_Link_type)_STL::allocator<char>::allocate(sizeof(_STL::_Rb_tree_node<URva00204B12SetTree::value_type>), 0);
-	_STL::_Construct(&node->_M_value_field, value);
-	return node;
-}
-template URva00204B12SetTree::_Link_type URva00204B12SetTree::_M_create_node(const URva00204B12SetTree::value_type &);
 
 // Whole-class instantiation of this tree. It reproduces _M_insert (retail 0x00417B9B), _M_clone_node (retail 0x00417DDD)
 // byte for byte; their calls read the tree's matched STL helpers.

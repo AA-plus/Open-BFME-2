@@ -4669,7 +4669,6 @@ alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions_Rva
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions_Rva003EA764.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions_ctor.cpp	?init@ScriptConditions@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngineGetUnitNamed.cpp	?getUnitNamed@ScriptEngine@@QAEPAVObject@@ABVAsciiString@@@Z	1
-alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngineRva0020881A.cpp	?find@Rva0032C07COwner@@QAEPAUTeamMapNode@@AAURva0002C4FD@@@Z	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngineRva00357AF8.cpp	?g_str009E0878@@3V?$StringBase@D@@A	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngine_dtor.cpp	?TheDebugWindowInterface@@3PAXA	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngine_dtor.cpp	?reset@ScriptEngine@@UAEXXZ	1
@@ -25647,7 +25646,7 @@ pin	reverse/symbols.csv	0x002046C0	3
 pin	reverse/symbols.csv	0x0020479E	1
 pin	reverse/symbols.csv	0x00204848	1
 pin	reverse/symbols.csv	0x002048EC	1
-pin	reverse/symbols.csv	0x0020492B	2
+pin	reverse/symbols.csv	0x0020492B	1
 pin	reverse/symbols.csv	0x00204A13	1
 pin	reverse/symbols.csv	0x00204ABF	1
 pin	reverse/symbols.csv	0x00204C16	1
@@ -27882,7 +27881,7 @@ pin	reverse/symbols.csv	0x0032BDE7	2
 pin	reverse/symbols.csv	0x0032BE80	2
 pin	reverse/symbols.csv	0x0032BF1B	2
 pin	reverse/symbols.csv	0x0032BFE8	1
-pin	reverse/symbols.csv	0x0032C07C	3
+pin	reverse/symbols.csv	0x0032C07C	4	allow=4a90e40984b08ca6c71de209b280e861c8496578
 pin	reverse/symbols.csv	0x0032C0CA	10
 pin	reverse/symbols.csv	0x0032C36B	1
 pin	reverse/symbols.csv	0x0032C3A3	2
@@ -42495,3 +42494,5 @@ present_unmatched	reference/shims/disconnectmanager/GameNetwork/DisconnectManage
 present_unmatched	reference/shims/pathfind/GameLogic/AIPathfind.h	?	1
 present_unmatched	reference/shims/water/W3DDevice/GameClient/W3DWater.h	?	1
 selectany	Code/GameEngine/Source/Common/VslotSmallBodiesW.cpp	__declspec(selectany) Int g_00DFEE18 = 0;	1
+pin	reverse/symbols.csv	0x00204B12	1	allow=4a90e40984b08ca6c71de209b280e861c8496578
+pin	reverse/symbols.csv	0x00204B33	1	allow=4a90e40984b08ca6c71de209b280e861c8496578

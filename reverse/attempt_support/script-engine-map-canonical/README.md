@@ -17,3 +17,35 @@ Compile setting _BFME_RETAIL_TREE_INSERT_LAYOUT comes from the already-matched s
 Integrate at Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngine.cpp, the proposed TU home of both ranges. Reconcile helper ownership and all affected consumers, pass full bodies/relocations/extents, and address the home's scoped link failures: missing counter/flag lookups, neutral203693 provider name, Script/getParameter/getOrCondition views, nonexact updateFades and a divergent max COMDAT. Do not claim either bank as coverage or use its private standalone class declaration as a replacement for the home's other matched methods.
 
 Previous banks are preserved beside this evidence. The banked methods retain the established neutral candidate names until normal ownership admission chooses final declarations. The integer and first flag have target transfer evidence; the second field name comes from the existing home/reference guide. The complete class ABI is not claimed.
+
+## Verified lookup family (2026-10-11)
+
+The former banks are now complete source in
+Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngineRva0020881A.cpp.
+The 207-byte counter insert, 200-byte flag insert and pre-existing 134-byte
+flag read share natural STLport maps at full-receiver offsets 0x190A0 and
+0x190AC. Fourteen existing opaque value/set helper owners were renamed and
+moved into that same unit at their unchanged retail addresses. The retired
+rows are retained in retired-owners.json; verified-helpers.json records their
+whole sizes and relocation chains.
+
+The two const-key value copies fold with the conversion constructors, and
+the flag map's key-only find folds with the existing pair-key tree find
+at 0x0032C07C. All three names were admitted by pin_admission --add, using
+complete bodies and every owner's relocations. The prior hand-written find
+alternatename and unused BFME1 base-copy pin were removed. No second owner
+row or object-symbol alias was added.
+
+Normal gates passed all 62 rows across the four modified live units, and
+all 29 rows with EH data were exact. The lookup unit LINKS under the scoped
+census preview at 7bcd61f5c1: 134 -> 1,470 matched bytes. This preview is
+not a new repository census. The unaffected remainder of the old create-node
+unit retains its prior unrelated linking blockers.
+
+The attempted integration into the larger ScriptEngine.cpp home retained
+its 14 prior rows and made both new lookups exact, but that home still has
+the known updateFades 0x002036CC/171-byte codegen blocker. Its original source
+and the unrelated mode-gate provider were restored. The final container
+family is kept with its existing read sibling; no nonmatching fade attempt
+was introduced into Code. The second timer-flag name remains a carried
+reference name, as distinguished above.

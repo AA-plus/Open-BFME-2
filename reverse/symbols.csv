@@ -2383,7 +2383,6 @@ name,address,notes
 ??0Rva0030F404@@QAE@H@Z,0x0030F404,callee of ?rva00086BC5@Rva00086BC5@@QAEXH@Z
 ??0Rva003328B6Element@@QAE@ABU0@@Z,0x003322E5,copy constructor read from retail REL32 in _Construct<Rva003328B6Element> 0x003324A8 (byte-exact modulo relocs in StlportConstructFamily.cpp); element identity unproven; address-derived name
 ??0Rva0033B84ETok@@QAE@PBD@Z,0x00037BA0,TU-local spelling for the StringBase const-char ctor; RETAIL REL32 in 0x33B84E tmp construction targets 0x37BA0
-??0Rva0033CopyBase@@QAE@ABV0@@Z,0x0020492B
 ??0Rva0033F3B6@@QAE@PAVStateMachine@@_NN@Z,0x0033F3B6,TU-local (bool bool) spelling for the rowed 0x33F3B6 state ctor as declared in its own TU; RETAIL REL32 at 0x003432A1 in 0x34316A
 ??0Rva0033FC0A@@QAE@PAVObject@@I@Z,0x00343BC9,"constructor (ret 8: owner, name key) installing vftable 0x00C11D50 (slot-2 name literal MoveOntoWallStateMachine, dtor rowed as Rva0033FC0A) after the StateMachine base 0x004D79E1; REL32 from AIMoveOntoWallState::xfer 0x00343D33 after a 0x3C-byte operator new, with key 0xD30E2FB3"
 ??0Rva00342843@@QAE@PAVStateMachine@@I@Z,0x0034286E,second Rva00342843 ctor forwarding (machine hash) to the AIInternalMoveToState pin 0x0033F279; same vtable 0x008124D8 and member shape as rowed 0x00342843; base for leaf ctors 0x00342892 0x003428AF 0x003428CC
@@ -17230,3 +17229,6 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?Rva0073BFE0Raster@@YADPAH0HVRva0073BAA0Base@@@Z,0x0073BFE0,callee of ?rva0073CAF0@ShroudManagerImpl@@AAEXHHPAXMH@Z
 ?Rva0073C450Raster@@YADPAH0HVRva0073BAA0Base@@@Z,0x0073C450,callee of ?rva0073CCC0@ShroudManagerImpl@@AAEXHHPAXMH@Z
 ??0?$pair@VAsciiString@@UCoord3D@@@_STL@@QAE@ABU01@@Z,0x0052BEC9,Native string0 Coord3D4 memberwise copy in ScriptEngine old-save list; whole39 and all owner relocations exact; fold-proof=Code/GameEngine/Source/GameLogic/ScriptEngine/Rva0020700FXfer.cpp
+??0?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@UScriptCounter@@@_STL@@QAE@ABU01@@Z,0x00204B12,whole native template body and every owner's relocations proven; fold-proof=Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngineRva0020881A.cpp
+??0?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@_N@_STL@@QAE@ABU01@@Z,0x00204B33,whole native template body and every owner's relocations proven; fold-proof=Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngineRva0020881A.cpp
+??$_M_find@U?$pair@VAsciiString@@V1@@_STL@@@?$_Rb_tree@U?$pair@VAsciiString@@V1@@_STL@@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@_N@2@U?$_Select1st@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@_N@_STL@@@2@U?$less@U?$pair@VAsciiString@@V1@@_STL@@@2@V?$allocator@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@_N@_STL@@@2@@_STL@@ABEPAU?$_Rb_tree_node@U?$pair@$$CBU?$pair@VAsciiString@@V1@@_STL@@_N@_STL@@@1@ABU?$pair@VAsciiString@@V1@@1@@Z,0x0032C07C,whole native template body and every owner's relocations proven; fold-proof=Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngineRva0020881A.cpp
