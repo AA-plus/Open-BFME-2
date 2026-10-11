@@ -334,3 +334,31 @@ Int ScreenBWFilter::set(FilterModes mode)
 	}
 	return false;
 }
+
+// Retail 0x000FDDB8..0x000FDF3F is the complete 391B RET4 body;
+// the next independent 12B method starts at 0x000FDF3F.
+// Target table 0x007CF440 slot 5, called by rowed Rva000FDD1C::rva000FDD1C.
+// Zero Hour W3DShaderManager.cpp at BF1 reference575ba2b supplies the
+// ScreenDefaultFilter::set semantic guide only;
+// this slot-9 registered BFME2 filter's original identity remains unresolved.
+class Rva000FDD1C
+{
+public:
+ virtual void f00(); virtual void f01(); virtual void f02();
+ virtual void f03(); virtual void f04();
+ virtual int rva000FDD1CFirst(int mode);
+ virtual void rva000FDD1CNext();
+};
+int Rva000FDD1C::rva000FDD1CFirst(int mode)
+{
+ VertexMaterialClass *vmat=VertexMaterialClass::Get_Preset(VertexMaterialClass::PRELIT_DIFFUSE);
+ DX8Wrapper::Set_Material(vmat);
+ REF_PTR_RELEASE(vmat);
+ DX8Wrapper::Set_Shader(ShaderClass::_PresetOpaqueShader);
+ BFME2Set_Texture(0,0);
+ DX8Wrapper::Apply_Render_State_Changes();
+ DX8Wrapper::Set_DX8_Render_State(23,8);
+ DX8Wrapper::Set_DX8_Render_State(14,0);
+ DX8Wrapper::Apply_Render_State_Changes();
+ return true;
+}
