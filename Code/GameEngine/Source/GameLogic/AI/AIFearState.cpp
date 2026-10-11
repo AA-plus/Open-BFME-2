@@ -109,6 +109,12 @@ public:
 	virtual Bool chooseLocomotorSet(LocomotorSetType wst);
 
 	Path *getPath() { return m_path; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's getPath copy loses to the first-in-order copy (no
+	// retail address); the call below inlines it but still emits the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	Path *bfme_get_path() { return m_path; }
 	Bool isWaitingForPath() const { return m_waitingForPath; }
 	void requestPath(Coord3D *destination, Bool isFinalGoal);
 	void rva00262AEA();
@@ -331,7 +337,7 @@ StateReturnType AIFearState::update()
 
 	if (m_checkForPath)
 	{
-		Path *thePath = ai->getPath();
+		Path *thePath = ai->bfme_get_path();
 		if (thePath && !ai->isWaitingForPath())
 		{
 			m_goalPosition = *thePath->getLastNode()->getPosition();
