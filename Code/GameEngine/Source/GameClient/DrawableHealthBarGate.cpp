@@ -169,6 +169,12 @@ public:
 	DrawableID getID() const { return m_id; }
 	Object *getObject() const { return m_object; }
 	Bool isSelected() const { return m_selected != 0; }
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's isSelected copy loses to the first-in-order copy (no
+	// retail address); both calls below inline it but still emit the loser
+	// COMDAT. Rebinding there emits only this unique (trivially kept) copy.
+	// No flags touched.
+	Bool bfme_is_selected() const { return m_selected != 0; }
 	void rva0027411F(void *out, float healthRatio);
 
 	char m_pad000[0xFC];
@@ -195,7 +201,7 @@ void Rva0027601BHost::rva0027601B()
 	Drawable *self = reinterpret_cast<Drawable *>(this);
 	if (!TheWritableGlobalData->m_9BD)
 		return;
-	Bool selected = self->isSelected();
+	Bool selected = self->bfme_is_selected();
 	if (!selected)
 	{
 		Object *obj = self->getObject();
@@ -205,7 +211,7 @@ void Rva0027601BHost::rva0027601B()
 			if (container != 0 && container->getTemplate()->isKindOf(0x6D))
 			{
 				Drawable *draw = container->getDrawable();
-				selected = draw != 0 && draw->isSelected();
+				selected = draw != 0 && draw->bfme_is_selected();
 			}
 		}
 	}

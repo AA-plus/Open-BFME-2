@@ -18,7 +18,12 @@ typedef unsigned char UnsignedByte;
 
 class ThingTemplate;
 class Player;
-class PlayerList { public: Player *getLocalPlayer() { return m_local; } char m_pad00[0x10]; Player *m_local; };
+class PlayerList { public: Player *getLocalPlayer() { return m_local; } Player *bfme_local_player() { return m_local; } char m_pad00[0x10]; Player *m_local; };
+	// LINK: bfme_local_player above is the same-body TU-unique helper (identical
+	// inlined bytes). This TU's getLocalPlayer copy loses to the first-in-order
+	// copy (no retail address); the call below inlines it but still emits the
+	// loser COMDAT. Rebinding there emits only the unique (trivially kept)
+	// copy. No flags touched.
 extern PlayerList *ThePlayerList;
 class Rva00373EC6 { public: char m_pad00[0x3c]; const ThingTemplate *m_template; };
 enum ObjectStatusTypes { OBJECT_STATUS_BFME_17 = 0x11 };
@@ -67,7 +72,7 @@ static Bool rva0004E704(Object *object, Color *color)
 		Rva00373EC6 *disguise = object->rva0028F4BC();
 		if (disguise == 0 || disguise->m_template == 0)
 		{
-			if (object->getControllingPlayer() != ThePlayerList->getLocalPlayer() &&
+			if (object->getControllingPlayer() != ThePlayerList->bfme_local_player() &&
 				!(UnsignedByte)object->rva002933CD() && !object->testStatus(OBJECT_STATUS_BFME_17))
 				return false;
 
