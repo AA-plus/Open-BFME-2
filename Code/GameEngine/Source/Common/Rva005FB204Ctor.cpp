@@ -25,6 +25,22 @@ public:
 class Rva005FB22B;
 RvaCloneResult<Rva005FB22B> Rva005FB29ACreate(const void *arg);
 
+// The one-word counted handle the rowed factory 0x005FB46F returns; released
+// inline through 0x0007DEEF like RvaCloneResult.
+struct RvaF1Handle
+{
+	void *m_p;
+	~RvaF1Handle()
+	{
+		if (m_p) ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)m_p);
+	}
+	operator const TreeHintRef00217D4C &() const
+	{
+		return *(const TreeHintRef00217D4C *)this;
+	}
+};
+RvaF1Handle Rva005FB46FCreate(const void *input);
+
 class Rva002BC1DAUnit
 {
 public:
@@ -81,6 +97,37 @@ Rva005FB204::Rva005FB204(unsigned int a, unsigned int b, void *c)
 		Rva002BC1DAUnit *unit = (Rva002BC1DAUnit *)battle->rva003F48FE(side, army, i);
 		Rva002BC1DAUnit *payload = unit;
 		RvaCloneResult<Rva005FB22B> prompt = Rva005FB29ACreate(&payload);
+		if (!unit->m_templateName.isEmpty())
+			((Rva005FFEE5 *)m_list08)->rva005FFEE5(prompt);
+		else
+			((Rva005FFEDD *)m_list08)->rva005FFEDD(prompt);
+	}
+}
+
+// ??0Rva005FB3D9@@QAE@IIPAX@Z @0x005FB4DF 207B (EH, ret 0xC): the twin built
+// by the rowed factory 0x005E9849, whose destructor 0x005FB3D9 and deleting
+// destructor 0x005FB3E4 are rowed in RvaDerivedDtorTails.cpp (vtable
+// 0x00C79F10). Same walk with list mode 2 and the prompt factory 0x005FB46F.
+class Rva005FB3D9 : public Rva006003FC
+{
+public:
+	Rva005FB3D9(unsigned int a, unsigned int b, void *c);
+	virtual ~Rva005FB3D9();
+};
+
+Rva005FB3D9::Rva005FB3D9(unsigned int a, unsigned int b, void *c)
+	: Rva006003FC((void *)a, (void *)b, c)
+{
+	((Rva005FFED5 *)m_list08)->rva005FFED5(2);
+	LivingWorldBattle *battle = m_battle;
+	int side = m_side;
+	int army = m_army;
+	int count = ((Rva003F4DCA *)battle)->rva003F4DCA(side, army);
+	for (int i = 0; i < count; ++i)
+	{
+		Rva002BC1DAUnit *unit = (Rva002BC1DAUnit *)battle->rva003F48FE(side, army, i);
+		Rva002BC1DAUnit *payload = unit;
+		RvaF1Handle prompt = Rva005FB46FCreate(&payload);
 		if (!unit->m_templateName.isEmpty())
 			((Rva005FFEE5 *)m_list08)->rva005FFEE5(prompt);
 		else
