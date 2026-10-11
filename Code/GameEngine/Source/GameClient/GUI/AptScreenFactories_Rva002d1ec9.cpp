@@ -66,11 +66,11 @@ public:
 };
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameClient/BfmeAptScreenBaseLayout.h
-class __declspec(novtable) __multiple_inheritance BfmeAptScreenObjectives
+class __declspec(novtable) __multiple_inheritance AptDisconnectScreen
 	: public _bfme_AptGameWindow, public BfmeAptScreenObjectivesVtableBase
 {
 public:
-	BfmeAptScreenObjectives( void *context );
+	AptDisconnectScreen( void *context );
 
 private:
 	_STL::vector<int> m_players;
@@ -82,5 +82,5 @@ private:
 // ?createAptScreenObjectives@@YGPAXPAX@Z
 void * __stdcall createAptScreenObjectives( void *context )
 {
-	return new BfmeAptScreenObjectives( context );
+	return new AptDisconnectScreen( context );
 }
