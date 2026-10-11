@@ -140,3 +140,52 @@ void LivingWorldCampaignAct::rva00565261()
 		((Rva002B8AC0 *)TheLivingWorldLogic)->rva002B8AC0((const ModuleData *)event);
 	}
 }
+
+// Complete native565344..565436/242B and WB143AC80/440B establish the
+// act's point32 and tree24 record transfers at54/60. The existing neutral
+// Glo012F1024Item name is retained from its verified run caller; no original
+// method spelling or mapped-value identity is asserted. Actual rowed event
+// constructors and independently verified receiver borrower/tree assignment
+// own every call. BF1's clean int/unsigned tree donor did not place and is
+// not substituted for this retail provider. Inline field accessors preserve
+// native constructor evaluation and char argument-home scheduling.
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
+class Rva005045DBTree {
+public:Rva005045DBTree&assign(const Rva005045DBTree&);Rva005045DBTree&self();
+int storage[3];
+};
+class Rva003FD2C2:public BfmeBaseVNH {
+public:Rva003FD2C2(unsigned,const Coord3D*,float,unsigned,char);
+Coord3D point0C;float angle18;unsigned scaled1C;
+};
+class BfmeBaseVNI {
+public:BfmeBaseVNI(unsigned,char);virtual~BfmeBaseVNI();virtual void handle();
+unsigned value04;char flag08;
+};
+class BfmeRectVNI:public BfmeBaseVNI {
+public:BfmeRectVNI(unsigned,char);Rva005045DBTree tree0C;int at18;
+};
+struct ClonePointRecord32 {
+int at00;unsigned value04;Coord3D point08;float angle14;unsigned scaled18;char flag1C;
+unsigned value()const{return value04;}const Coord3D*point()const{return &point08;}
+float angle()const{return angle14;}unsigned scaled()const{return scaled18;}char flag()const{return flag1C;}
+};
+struct CloneTreeRecord24 {
+int at00;unsigned value04;char flag08;Rva005045DBTree tree0C; unsigned value()const{return value04;}char flag()const{return flag08;}
+};
+class Glo012F1024Item {
+public:void j_0002a969();
+private:char pad00[0x54];_STL::vector<ClonePointRecord32>points54;_STL::vector<CloneTreeRecord24>trees60;
+};
+void Glo012F1024Item::j_0002a969(){
+for(unsigned i=0;i<points54.size();++i){
+ ClonePointRecord32&r=points54[i];
+ Rva003FD2C2*event=new Rva003FD2C2(r.value(),r.point(),r.angle(),r.scaled(),r.flag());
+ ((Rva002B8AC0*)TheLivingWorldLogic)->rva002B8AC0((const ModuleData*)event);
+}
+for(CloneTreeRecord24*r=trees60.begin();r!=trees60.end();++r){
+ BfmeRectVNI*event=new BfmeRectVNI(r->value(),r->flag());
+ event->tree0C.assign(r->tree0C.self());
+ ((Rva002B8AC0*)TheLivingWorldLogic)->rva002B8AC0((const ModuleData*)event);
+}
+}
