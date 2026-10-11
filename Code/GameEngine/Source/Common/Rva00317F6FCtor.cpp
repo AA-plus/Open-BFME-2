@@ -1,6 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-// ??0Rva00317F6F@@QAE@XZ @0x00317F6F 129B: ctor storing vtable 0x0080C66C, clearing two AsciiString members, defaulting two vector<ScienceType> members, pushing SCIENCE_NONE into the first, zeroing flag bytes plus0C plus1C and dword plus20. Evidence: rowed Vector_base plus releaseBuffer plus push_back callees plus vtable store; class identity unproven so honest-address name.
+// ??0TerrainType@@QAE@XZ @0x00317F6F 129B: ctor storing vtable 0x0080C66C, clearing two AsciiString members, defaulting two vector<ScienceType> members, pushing SCIENCE_NONE into the first, zeroing flag bytes plus0C plus1C and dword plus20. Evidence: rowed Vector_base plus releaseBuffer plus push_back callees plus vtable store; class identity: ZH TerrainTypeCollection::newTerrain constructs it at 0x00318194 (pinned ??0TerrainType).
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
 // overload takes the call instead, so this TU emits no external max COMDAT.
 #include <stl/_algobase.h>
@@ -19,10 +19,10 @@ enum ScienceType
 };
 
 #include "ascii_string.h"
-class Rva00317F6F {
+class TerrainType {
 public:
-  virtual ~Rva00317F6F();
-  Rva00317F6F();
+  virtual ~TerrainType();
+  TerrainType();
 private:
   AsciiString m_a;
   AsciiString m_b;
@@ -32,7 +32,7 @@ private:
   int m_i20;
   _STL::vector<ScienceType, _STL::allocator<ScienceType> > m_v2;
 };
-Rva00317F6F::Rva00317F6F()
+TerrainType::TerrainType()
 {
   m_a.clear();
   m_b.clear();

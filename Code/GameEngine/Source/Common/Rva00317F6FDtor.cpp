@@ -21,9 +21,9 @@ struct Rva00317E7C
 	void *m_end;
 	~Rva00317E7C();
 };
-class Rva00317F6F {
+class TerrainType {
 public:
-  virtual ~Rva00317F6F();
+  virtual ~TerrainType();
 private:
   AsciiString m_a;
   AsciiString m_b;
@@ -34,6 +34,6 @@ private:
   Rva00317E7C m_v2;
 };
 
-Rva00317F6F::~Rva00317F6F()
+TerrainType::~TerrainType()
 {
 }

@@ -33,11 +33,11 @@ private:
 	void *m_endOfStorage;
 };
 }
-class Rva0031804D
+class TerrainType
 {
 public:
-	virtual ~Rva0031804D();
-	Rva0031804D &operator=(const Rva0031804D &that);
+	virtual ~TerrainType();
+	TerrainType &operator=(const TerrainType &that);
 private:
 	AsciiString m_4;
 	AsciiString m_8;
@@ -49,7 +49,7 @@ private:
 	int m_20;
 	_STL::vector<_STL::pair<const AsciiString, NoCaseTreeValue4>, _STL::allocator<_STL::pair<const AsciiString, NoCaseTreeValue4> > > m_24;
 };
-Rva0031804D &Rva0031804D::operator=(const Rva0031804D &that)
+TerrainType &TerrainType::operator=(const TerrainType &that)
 {
 	m_4 = that.m_4;
 	m_8 = that.m_8;
