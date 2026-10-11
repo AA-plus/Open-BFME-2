@@ -60,6 +60,11 @@ public:
 		AsciiString m_animFlying;
 		AsciiString m_animFinal;
 		AnimSet(const AnimSet &other);
+		// LINK: declaration-only dtor (no body in this TU). The vector
+		// _Construct/_Destroy machinery E8-calls it; with no local body the
+		// calls bind the kept copy instead of this TU's loser copy, and the
+		// call bytes are unchanged (same reloc name). No flags touched.
+		~AnimSet();
 	};
 };
 

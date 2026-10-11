@@ -43,10 +43,11 @@ class CollideModule : public BehaviorModule,
 	public ModuleInterface
 {
 public:
-	CollideModule( Thing *thing, const ModuleData *moduleData )
-		: BehaviorModule( thing, moduleData )
-	{
-	}
+	// LINK: declaration-only base ctor (no body in this TU). CrateCollide's
+	// base-init below E8-calls it; with no local body the call binds the kept
+	// (retail) copy instead of this TU's loser copy, and the call bytes are
+	// unchanged (same reloc name). No flags touched.
+	CollideModule( Thing *thing, const ModuleData *moduleData );
 };
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameLogic/Module/CrateCollide.h
