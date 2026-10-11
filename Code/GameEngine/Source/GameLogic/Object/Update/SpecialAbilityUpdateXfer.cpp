@@ -236,7 +236,8 @@ public:
 	virtual void xferAudioHandle(Xfer *xfer, AudioHandle *handle) = 0;
 };
 
-#define TheAudio (*(AudioManager *const *)0x00DFE6E8)
+// TheAudio (VA 0x00DFE6E8) is defined in AnimationSoundClientBehaviorCtor.cpp.
+extern AudioManager *TheAudio;
 
 enum ObjectID
 {
