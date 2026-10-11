@@ -49,3 +49,12 @@ void Rva002C589B::rva002C58B3()
 	m_ptr->clear();
 	m_34 = 0;
 }
+
+// --- LK8 r4 note (no code change) ---
+// Caller TU Rva002C5D8BChoice.cpp carries // cl: /DNDEBUG /MD only (no
+// /O1, no /arch:SSE): it cannot host this SSE body without a flag change,
+// so the body does not belong there. Sibling TU Rva002C589BDtor.cpp has
+// compatible flags (/O1 /arch:SSE) but its Rva002C589B view has diverged
+// from this stash (threat/invalid/count/m_34-ObjectID shape vs the stash's
+// m_08/floats/m_1C/m_ptr/m_34 shape); reconciling the two views is
+// class-lane work, not attempted here. Next: reconcile, then land.
