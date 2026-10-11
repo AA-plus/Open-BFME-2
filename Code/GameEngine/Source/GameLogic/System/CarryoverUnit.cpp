@@ -24,7 +24,8 @@ class GameLogic;
 extern GameLogic *TheGameLogic;
 struct CarryoverGameLogicView { char unknown00[0x98]; bool enable; bool get() const { return enable; } void set(bool v) { enable=v; } };
 struct CarryoverPlayerView { char unknown00[0x2EC]; Team *team; Team *getTeam() const { return team; } };
-class Rva0037DCA5 { public: void *rva0037DC52(); };
+class Rva002206F9Sink;
+class Rva0037DCA5 { public: void *rva0037DC52(); int rva0037DF8D(Rva002206F9Sink *); };
 class Rva0028CBFD { public: void rva0028CBFD(); };
 class Rva003BD306Target {
 public:
@@ -120,3 +121,17 @@ Object *CarryoverUnit::createSingleObject(Player *player)
     ((CarryoverGameLogicView *)TheGameLogic)->set(old);
     return object;
 }
+
+// Native single-slot vtable C18D64 holds the existing callback 37DE70.
+// 37E07C constructs this eight-byte visitor and returns its counter at+4;
+// the 239-byte iteration provider invokes slot0 once per carried unit.
+// Original visitor and method names remain unknown.
+class Rva0037DE70 {
+public:
+    Rva0037DE70() : m_count04(0) {}
+    virtual int rva0037DE70(int unused);
+    int getCount() const { return m_count04; }
+private:
+    int m_count04;
+};
+int Rva0037DE70::rva0037DE70(int) { ++m_count04; return 1; }

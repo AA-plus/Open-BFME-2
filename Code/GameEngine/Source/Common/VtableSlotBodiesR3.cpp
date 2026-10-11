@@ -729,22 +729,6 @@ int Rva0036803F::rva0036803F()
 	return 0;
 }
 
-// 0x0037DE70: bumps the word at +4 and answers 1; one argument unused.
-class Rva0037DE70
-{
-public:
-	int rva0037DE70(int unused);
-private:
-	char m_pad00[4];
-	int m_count04;
-};
-
-int Rva0037DE70::rva0037DE70(int)
-{
-	++m_count04;
-	return 1;
-}
-
 // 0x003F718D: whether the word at +8 is set; two arguments unused.
 class Rva003F718D
 {
