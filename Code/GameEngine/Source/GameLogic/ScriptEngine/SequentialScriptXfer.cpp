@@ -169,10 +169,15 @@ extern TeamFactory *TheTeamFactory;
 
 class Script;
 
+class BfmeRoomZC;
+class Rva003573C4Owner
+{
+public:
+	void *rva003573C4( const AsciiString &scope, const BfmeRoomZC &name, void *arg );	// rowed 0x003573C4
+};
 class ScriptEngine
 {
 public:
-	Script *rva003573C4( const AsciiString &scope, const AsciiString &name, Int flag );
 };
 extern ScriptEngine *TheScriptEngine;
 
@@ -230,7 +235,7 @@ void SequentialScript::xfer( Xfer *xfer )
 	*xfer == m_bfmeScriptScope;
 	*xfer == m_bfmeScriptName;
 	if( !xfer->IsStoring() )
-		m_scriptToExecuteSequentially = TheScriptEngine->rva003573C4( m_bfmeScriptScope, m_bfmeScriptName, 0 );
+		m_scriptToExecuteSequentially = (Script *)((Rva003573C4Owner *)TheScriptEngine)->rva003573C4( m_bfmeScriptScope, reinterpret_cast<const BfmeRoomZC &>(m_bfmeScriptName), 0 );
 
 	// current instruction
 	*xfer == m_currentInstruction;
