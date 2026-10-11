@@ -147,12 +147,12 @@ private:
 };
 
 class TeamFactory;
-struct Rva003A2FD4Proto;
+class TeamPrototype;
 class TeamFactory
 {
 public:
 	Team *findTeamByID(unsigned int id);
-	Team *rva003A3DBE(Rva003A2FD4Proto *proto, int n);
+	Team *createTeamOnPrototype(TeamPrototype *proto, bool activate);
 };
 extern TeamFactory *TheTeamFactory;
 
@@ -240,7 +240,7 @@ void TeamPrototype::xfer(Xfer *xfer)
 			Team *teamInstance = TheTeamFactory->findTeamByID(teamID);
 			if (teamInstance == 0)
 			{
-				teamInstance = TheTeamFactory->rva003A3DBE((Rva003A2FD4Proto *)this, 1);
+				teamInstance = TheTeamFactory->createTeamOnPrototype(this, true);
 				if (teamInstance)
 					teamInstance->m_id = teamID;
 			}

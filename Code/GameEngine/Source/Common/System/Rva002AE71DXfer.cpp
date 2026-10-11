@@ -4,7 +4,8 @@
 // {1,1}, existing state-pointer worker, same-this float-vector transfer,
 // labelled ObjectID +10 and unsigned word +14. Original owner unknown.
 #include <vector>
-namespace _STL { template<> void vector<float>::push_back(const float &); }
+class ModuleData;
+namespace _STL { template<> void vector<const ModuleData *>::push_back(const ModuleData *const &); }
 class Xfer;
 enum ObjectID { INVALID_ID = 0 };
 void XferObjectID(Xfer *, ObjectID *);
@@ -93,7 +94,9 @@ void Rva002AE71D::rva002ADDD9(Xfer *xfer)
 		for (int i = 0; i < count; ++i) {
 			float value;
 			view->slot28(&value);
-			values04.push_back(value);
+			// Retail uses the rowed four-byte POD push; retain the float bits.
+			reinterpret_cast<_STL::vector<const ModuleData *> &>(values04).push_back(
+				reinterpret_cast<const ModuleData *const &>(value));
 		}
 	}
 }

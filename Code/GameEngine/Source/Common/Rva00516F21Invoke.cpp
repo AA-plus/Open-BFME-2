@@ -13,3 +13,10 @@ void Rva00516F21Invoke(Rva00222A8BTarget *target, void *owner, const char *name,
 {
 	target->invoke(owner, name, 1, value, 0, 0, 0, 0);
 }
+
+// The online shell needs distinct call identities to preserve both branch
+// sequences. WB has two wrappers; retail folds their identical whole bodies.
+void Rva00516F21InvokeFold(Rva00222A8BTarget *target, void *owner, const char *name, const char *value)
+{
+	target->invoke(owner, name, 1, value, 0, 0, 0, 0);
+}
