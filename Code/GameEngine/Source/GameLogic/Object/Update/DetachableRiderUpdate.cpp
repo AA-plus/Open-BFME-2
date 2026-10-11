@@ -1,5 +1,3 @@
-// ?update@DetachableRiderUpdateUpdateReceiver@@QAE?AW4UpdateSleepTime@@XZ
-// partial score=0.9877346278317153 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Source/Common /ICode/GameEngine/Include/GameLogic
 // stlport
 #include "ascii_string.h"
@@ -13,6 +11,10 @@
 // Object condition bit265/status39 and containment child relationships are
 // target reads. Borrowed descriptor uses canonical opaque4-byte list element.
 // Function and interface method names remain neutral where only slots are known.
+// Rider walk: retail keeps begin live in EBX and walks the count loop on a
+// separate iterator; reusing that iterator (i=begin) for the release walk is
+// the shape that gives retail's register assignment (a do-while on begin
+// itself swaps EBX/EDI).
 class ObjectCreationList {public:void create(void*,void*,void*);};
 class Drawable {public:void rva002724FD(const AsciiString&,int,int,float,float);};
 enum DisabledType{DISABLED4=4};enum WeaponSlotType{WEAPON0=0};enum WeaponLockType{LOCK2=2};enum ObjectStatusTypes{STATUS39=39};enum CommandSourceType{SOURCE2=2};
@@ -68,9 +70,15 @@ UpdateSleepTime DetachableRiderUpdateUpdateReceiver::update(){
     if(parent->getRider()){
      int total=parent->contain->getCount(false);int count=0;
      Rva0036AE51ListView list=parent->contain->getList();
-     ContainmentList::iterator i=list.b->begin();ContainmentList::iterator begin=i;ContainmentList::iterator end=list.b->end();
+    
+     ContainmentList::iterator begin=list.b->begin();
+     ContainmentList::iterator end=list.b->end();
+     ContainmentList::iterator i=list.b->begin();
      while(i!=end){Object*child=(Object*)containmentFirstWord(*i);if(child->testStatus(STATUS39))++count;++i;}
-     if(count==total && begin!=end)do {Object*child=(Object*)containmentFirstWord(*begin);++begin;((BfmeSubBGB*)child)->rva00298893();}while(begin!=list.b->end());
+     if(count==total && begin!=end){
+      i=begin;
+      do {Object*child=(Object*)containmentFirstWord(*i);++i;((BfmeSubBGB*)child)->rva00298893();}while(i!=list.b->end());
+     }
     }
    }else ((BfmeSubBGB*)object)->rva00298893();
   }
