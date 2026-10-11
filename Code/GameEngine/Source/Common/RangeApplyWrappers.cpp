@@ -43,10 +43,12 @@ private:
 };
 
 
-class Rva005691DBHelper
+class BitRange;
+
+class LargeGroupAudioSoundKeyPair
 {
 public:
-	void rva005691DB(void *owner, int a);
+	void removePointersToGridCellsInDuckingTarget(BitRange *host, void *tag);
 };
 
 class Rva00569393Owner
@@ -55,12 +57,12 @@ public:
 	void rva00569393(int a);
 private:
 	unsigned char m_pad00[0x58];
-	Rva005691DBHelper **m_begin;
-	Rva005691DBHelper **m_end;
+	LargeGroupAudioSoundKeyPair **m_begin;
+	LargeGroupAudioSoundKeyPair **m_end;
 };
 
 void Rva00569393Owner::rva00569393(int a)
 {
-	for (Rva005691DBHelper **p = m_begin; p != m_end; ++p)
-		(*p)->rva005691DB(this, a);
+	for (LargeGroupAudioSoundKeyPair **p = m_begin; p != m_end; ++p)
+		(*p)->removePointersToGridCellsInDuckingTarget((BitRange *)this, (void *)a);
 }

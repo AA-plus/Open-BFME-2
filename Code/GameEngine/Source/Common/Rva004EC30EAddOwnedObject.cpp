@@ -9,7 +9,10 @@
 // kept address-derived; the more specific add-on-ownership interpretation is
 // supported by the new-owner call path but remains an inference.
 
-typedef unsigned int ObjectID;
+enum ObjectID
+{
+	INVALID_ID = 0
+};
 
 class ThingTemplate
 {
@@ -42,10 +45,10 @@ public:
 	void addFXNugget(FXNugget *nugget);
 };
 
-class Rva00598149
+class AIUnitBuilder
 {
 public:
-	void rva00598431(int objectID);
+	void registerUnitFactory(ObjectID objectID);
 };
 
 class AIDozerManager
@@ -78,7 +81,7 @@ void Rva002A8AB1Record::rva004EC30E(Object *object)
 			(FXNugget *)object->getID());
 
 	if ((object->getThingTemplate()->m_flag10F & 0x80) != 0)
-		((Rva00598149 *)((char *)this + 0x38))->rva00598431(
+		((AIUnitBuilder *)((char *)this + 0x38))->registerUnitFactory(
 			object->getID());
 
 	unsigned int flags = object->getThingTemplate()->m_flags108;
