@@ -271,31 +271,345 @@ def test_parse_variants_and_edits():
     assert redteam.edit_bytes(b"x = a();\r\ny();\r\n", vs[0]["edits"]) == b"x = b();\r\ny();\r\n"
 
 
-def test_trial_restores_the_unit_and_confirms_only_real_differences(tmp_path, monkeypatch):
+GOOD = b"void f() { good(); }\n"
+EVIL = [{"find": "good", "replace": "evil"}]
+OBJ = {"good": coff_obj(b"\xe8\0\0\0\0\xc3", "_good"), "evil": coff_obj(b"\xe8\0\0\0\0\xc3", "_evil")}
+
+
+class FakeUnit:
+    """A committed u.cpp and a fake gate that, like tools/build.py, caches an object and a
+    .deps.json sidecar under build/ for whatever the source holds when it runs."""
+
+    def __init__(self, root):
+        self.root, self.builds = root, []
+        self.obj, self.deps = root / "build" / "u.obj", root / "build" / "u.deps.json"
+
+    def gate(self, src, passes=True):
+        text = (self.root / src).read_bytes()
+        self.builds.append(text)
+        self.obj.parent.mkdir(exist_ok=True)
+        self.obj.write_bytes(OBJ["evil" if b"evil" in text else "good"])
+        self.deps.write_bytes(text)
+        return passes, ""
+
+    def kwargs(self, **override):
+        return {"build_gate": self.gate, "read_obj": lambda src: self.obj.read_bytes() if self.obj.exists() else None,
+                "cache": lambda src: [self.obj, self.deps], **override}
+
+    def assert_restored(self):
+        assert (self.root / "u.cpp").read_bytes() == GOOD
+        assert self.obj.read_bytes() == OBJ["good"] and self.deps.read_bytes() == GOOD  # the tree's object
+
+
+@pytest.fixture
+def fake_unit(tmp_path, monkeypatch):
     subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
-    (tmp_path / "u.cpp").write_bytes(b"void f() { good(); }\n")
+    (tmp_path / "u.cpp").write_bytes(GOOD)
     subprocess.run(["git", "-C", str(tmp_path), "add", "u.cpp"], check=True)
     subprocess.run(["git", "-C", str(tmp_path), "-c", "user.name=t", "-c", "user.email=", "commit", "-qm", "x"],
                    check=True)
+    (tmp_path / "tools").mkdir()
+    (tmp_path / "tools" / "diffexec.py").write_text("")  # present; its process is faked per test
     monkeypatch.setattr(common, "ROOT", tmp_path)
-    obj = {"good": coff_obj(b"\xe8\0\0\0\0\xc3", "_good"), "evil": coff_obj(b"\xe8\0\0\0\0\xc3", "_evil")}
-    read = lambda src: obj["evil" if b"evil" in (tmp_path / src).read_bytes() else "good"]
-    seen = {}
+    monkeypatch.delenv("AUDIT_DIFFEXEC", raising=False)
+    return FakeUnit(tmp_path)
 
-    def gate_passes(src):
-        seen.setdefault("builds", []).append((tmp_path / src).read_bytes())
-        return True, ""
-    res = redteam.trial("u.cpp", [{"find": "good", "replace": "evil"}], build_gate=gate_passes,
-                        read_obj=lambda src: obj["evil" if b"evil" in seen["builds"][-1] else "good"])
+
+def no_diffexec(rva, source):
+    raise AssertionError("diffexec runs only on a confirmed escape with an rva")
+
+
+def test_trial_restores_the_unit_and_confirms_only_real_differences(fake_unit):
+    res = redteam.trial("u.cpp", EVIL, **fake_unit.kwargs(behaviour=no_diffexec))
     assert res["status"] == "escape" and res["diff"] == ["reloc-target:REL32"]
-    assert (tmp_path / "u.cpp").read_bytes() == b"void f() { good(); }\n"
-    assert seen["builds"][-1] == b"void f() { good(); }\n"  # cache left on the tree's object
-    res = redteam.trial("u.cpp", [{"find": "good", "replace": "evil"}], build_gate=lambda s: (True, ""),
-                        read_obj=lambda src: obj["good"])
+    fake_unit.assert_restored()
+    assert len(fake_unit.builds) == res["builds"] == redteam.TRIAL_BUILDS  # cache restored from bytes, not rebuilt
+    res = redteam.trial("u.cpp", EVIL, rva="0x00401000",
+                        **fake_unit.kwargs(read_obj=lambda src: OBJ["good"], behaviour=no_diffexec))
     assert res["status"] == "equivalent"
-    res = redteam.trial("u.cpp", [{"find": "good", "replace": "evil"}],
-                        build_gate=lambda s: (b"evil" not in (tmp_path / s).read_bytes(), ""), read_obj=read)
+    fake_unit.assert_restored()
+    rejects = lambda s: fake_unit.gate(s, passes=b"evil" not in (fake_unit.root / s).read_bytes())
+    res = redteam.trial("u.cpp", EVIL, rva="0x00401000", **fake_unit.kwargs(build_gate=rejects, behaviour=no_diffexec))
     assert res["status"] == "rejected"
+    fake_unit.assert_restored()  # a rejected variant's object does not stay in the cache either
+
+
+def diffexec_process(seen, root):
+    """Stands in for `tools/diffexec.py --json`: emulates whatever object the cache holds when it runs."""
+    def run(argv, **kwargs):
+        seen.update(argv=argv, source=(root / "u.cpp").read_bytes(), obj=(root / "build" / "u.obj").read_bytes())
+        verdict = "binding" if seen["obj"] == OBJ["evil"] else "none"
+        record = {"name": "?f@@YAXXZ", "rva": "0x00401000", "source": "u.cpp", "verdict": verdict, "reason": ""}
+        return subprocess.CompletedProcess(argv, int(verdict == "binding"), json.dumps(record) + "\n", "")
+    return run
+
+
+def test_diffexec_executes_the_variant_object_before_the_restore(fake_unit):
+    seen = {}
+    res = redteam.trial("u.cpp", EVIL, rva="0x00401000", **fake_unit.kwargs(
+        behaviour=lambda rva, src: redteam.diffexec(rva, src, run=diffexec_process(seen, fake_unit.root))))
+    assert seen["source"] == GOOD.replace(b"good", b"evil")
+    assert seen["obj"] == OBJ["evil"]  # not the original, which the old code had rebuilt by then
+    assert res["status"] == "escape"
+    assert res["diffexec"]["status"] == "divergent" and res["diffexec"]["finding"] is True
+    assert res["diffexec"]["verdict"] == "binding"
+    fake_unit.assert_restored()
+
+
+@pytest.mark.parametrize("where", ["variant-gate", "diffexec"])
+def test_trial_restores_source_and_cache_when_the_harness_raises(fake_unit, where):
+    def gate(src):
+        passed = fake_unit.gate(src)  # the variant's object is already in the cache when the gate dies
+        if where == "variant-gate" and b"evil" in (fake_unit.root / src).read_bytes():
+            raise RuntimeError("compiler crashed")
+        return passed
+
+    def behaviour(rva, src):
+        raise RuntimeError("emulator crashed")
+    with pytest.raises(RuntimeError, match="crashed"):
+        redteam.trial("u.cpp", EVIL, rva="0x00401000", **fake_unit.kwargs(build_gate=gate, behaviour=behaviour))
+    fake_unit.assert_restored()
+
+
+def import_diffexec():
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import diffexec
+    return diffexec
+
+
+def test_diffexec_arguments_reach_diffexecs_parser_and_select_the_row(monkeypatch, capsys):
+    diffexec = import_diffexec()
+    monkeypatch.delenv("AUDIT_DIFFEXEC", raising=False)
+    argv = redteam.diffexec_argv("0x00401000", "Code/Foo Bar.cpp")
+    assert argv[:2] == [sys.executable, "tools/diffexec.py"] and "Code/Foo Bar.cpp" in argv  # one argument
+    rows = [{"name": "target", "target_rva": "0x00401000", "target_size": "32", "source": "Code/Foo Bar.cpp",
+             "status": "matched"},
+            {"name": "same-rva-other-unit", "target_rva": "0x00401000", "target_size": "32",
+             "source": "Code/Other.cpp", "status": "matched"},
+            {"name": "other-rva-same-unit", "target_rva": "0x00402000", "target_size": "32",
+             "source": "Code/Foo Bar.cpp", "status": "matched"}]
+    monkeypatch.setitem(sys.modules, "build", type(sys)("build"))
+    sys.modules["build"].load_all_function_rows = lambda: rows
+    monkeypatch.setattr(diffexec, "require_unicorn", lambda: None)
+    monkeypatch.setattr(diffexec, "load_context", lambda map_path=None: "ctx")
+    monkeypatch.setattr(diffexec, "diff_ledger_row", lambda ctx, row, budget, emulate=False: {
+        "name": row["name"], "rva": row["target_rva"], "source": row["source"], "verdict": "binding", "reason": "r"})
+    code = diffexec.main(argv[2:])  # argparse exits 2 on an unknown flag such as the old --rva
+    res = redteam.diffexec_result(code, capsys.readouterr().out, "", argv)
+    assert [r["name"] for r in res["records"]] == ["target"]
+    assert res["status"] == "divergent" and res["finding"] is True
+
+
+def diffexec_record(verdict, reason=""):
+    return json.dumps({"name": "f", "rva": "0x1", "verdict": verdict, "reason": reason})
+
+
+def test_a_diffexec_harness_failure_is_never_a_behavioural_finding(fake_unit, monkeypatch, capsys):
+    import nightly
+    diffexec = import_diffexec()
+    # the tool's real refusals, read the way the subprocess would report them
+    with pytest.raises(SystemExit) as stop:
+        diffexec.main(["--rva", "0x00401000", "--source", "u.cpp"])
+    usage = redteam.diffexec_result(stop.value.code, "", capsys.readouterr().err)
+    assert (usage["status"], usage["kind"], usage["finding"]) == ("harness-error", "usage", False)
+    monkeypatch.setattr(diffexec, "unicorn", None)
+    with pytest.raises(SystemExit) as stop:
+        diffexec.main(redteam.diffexec_argv("0x00401000", "u.cpp")[2:])
+    missing = redteam.diffexec_result(1, "", str(stop.value.code))  # SystemExit(message) exits 1
+    assert (missing["status"], missing["kind"], missing["finding"]) == ("harness-error", "missing-dependency", False)
+    assert nightly.behaviour_summary(missing) == "harness-error (missing-dependency)"
+
+    record = diffexec_record
+    cases = [
+        (1, "", "Traceback (most recent call last):\n  ...\nKeyError: 'x'\n", "harness-error", "crash"),
+        (1, "", "no matched row: 0x00401000\n", "harness-error", "no-record"),
+        (0, record("logic"), "", "harness-error", "inconsistent-exit"),
+        (1, record("none"), "", "harness-error", "inconsistent-exit"),
+        (3, record("binding"), "", "harness-error", "inconsistent-exit"),
+        (0, record("inconclusive", "harness: KeyError: 'x'"), "", "harness-error", "crash"),
+        (0, record("weird"), "", "harness-error", "unknown-verdict"),
+        (0, record("inconclusive", "object u.obj not built"), "", "inconclusive", None),
+        (0, record("regalloc-only"), "", "same", None),
+        (1, record("logic"), "", "divergent", None),
+    ]
+    for code, out, err, status, kind in cases:
+        res = redteam.diffexec_result(code, out, err)
+        assert (res["status"], res.get("kind"), res["finding"]) == (status, kind, status == "divergent"), (code, out)
+
+    def timeout(argv, **kwargs):
+        raise subprocess.TimeoutExpired(argv, kwargs["timeout"])
+
+    def no_python(argv, **kwargs):
+        raise FileNotFoundError(argv[0])
+    for run, kind in ((timeout, "timeout"), (no_python, "spawn")):
+        res = redteam.diffexec("0x00401000", "u.cpp", run=run)
+        assert (res["status"], res["kind"], res["finding"]) == ("harness-error", kind, False)
+    (fake_unit.root / "tools" / "diffexec.py").unlink()
+    res = redteam.diffexec("0x00401000", "u.cpp", run=no_python)
+    assert (res["status"], res["kind"], res["finding"]) == ("harness-error", "missing-tool", False)
+
+
+@pytest.mark.parametrize("code,verdict", [(1, "binding"), (1, "logic"), (0, "none"), (0, "regalloc-only")])
+def test_a_traceback_beside_clean_records_is_a_crash_not_a_verdict(code, verdict):
+    trace = "Traceback (most recent call last):\n  File \"tools/diffexec.py\", line 1\nRuntimeError: boom\n"
+    res = redteam.diffexec_result(code, diffexec_record(verdict) + "\n", trace)
+    assert (res["status"], res["kind"], res["finding"], res["verdict"]) == ("harness-error", "crash", False, None)
+    assert [r["verdict"] for r in res["records"]] == [verdict]  # kept for diagnosis, not counted
+    assert "RuntimeError: boom" in res["reason"]
+    res = redteam.diffexec_result(code, diffexec_record(verdict) + "\n" + trace, "")  # on stdout too
+    assert (res["status"], res["kind"]) == ("harness-error", "crash")
+
+
+@pytest.mark.parametrize("completed,expected", [("none", "inconclusive"), ("regalloc-only", "inconclusive"),
+                                                ("build_env", "inconclusive"), ("logic", "logic"),
+                                                ("binding", "binding")])
+def test_a_vector_that_never_completed_keeps_the_row_inconclusive(monkeypatch, completed, expected):
+    """Through diffexec's real diff_row aggregation; only the emulator and the rebuild are faked."""
+    diffexec = import_diffexec()
+    runs = []
+
+    def run(ctx, va, size, code, vector, timeout):
+        runs.append(vector["name"])
+        return {"end": ("timeout",) if vector["name"] == "objects" else "return"}  # first vector cut short
+    monkeypatch.setattr(diffexec, "require_unicorn", lambda: None)
+    monkeypatch.setattr(diffexec, "rebuild", lambda ctx, row, *rest: (b"\x90" * 8, [], {}, []))
+    monkeypatch.setattr(diffexec, "run", run)
+    monkeypatch.setattr(diffexec, "classify", lambda ctx, a, b, name: (completed, "completed vector"))
+    image = type("Image", (), {"base": 0x400000, "read": lambda self, rva, n: b"\xcc" * n})()
+    ctx = type("Ctx", (), {"image": image})()
+    row = {"name": "f", "target_rva": "0x00001000", "target_size": "8", "source": "u.cpp"}
+    record = diffexec.diff_row(ctx, row, b"\x90" * 8, [])
+    assert runs == ["objects", "objects", "zeros", "zeros", "ints", "ints"]
+    assert record["verdict"] == expected
+    res = redteam.diffexec_result(int(expected in redteam.BEHAVIOURAL), json.dumps(record), "")
+    assert res["status"] == ("divergent" if expected in redteam.BEHAVIOURAL else "inconclusive")
+    assert res["finding"] is (expected in redteam.BEHAVIOURAL)
+
+
+def emu_trace(end="return", calls=(), ret=(0, 0, 0), writes=None):
+    """What diffexec.run returns: `end` is "return" or the ("limit", which) a run limit leaves."""
+    trace = {"calls": list(calls), "writes": dict(writes or {}), "reads": set(), "wild": 0, "end": end,
+             "events": len(calls)}
+    if end == "return":
+        trace["ret"] = ret
+    return trace
+
+
+def call(callee, *args):
+    return (callee, args, None)
+
+
+INSNS, EVENTS = ("limit", "instructions"), ("limit", "events")
+SAME3 = [call("0x00402000", 1), call("0x00402000", 2), call("0x00402000", 3)]
+ARGS_DIFFER = SAME3[:1] + [call("0x00402000", 7), call("0x00402000", 3)]
+OTHER_CALLEE = SAME3[:1] + [call("0x00403000", 2), call("0x00402000", 3)]
+RETURNED_1 = (emu_trace(ret=(1, 0, 0)), emu_trace(ret=(2, 0, 0)))  # a completed vector that diverges
+LIMIT_CUT_CASES = {
+    # name: ({vector: (retail trace, rebuilt trace)}, verdict, text the reason must carry)
+    "equal-truncated-instructions": (
+        {"objects": (emu_trace(INSNS, SAME3), emu_trace(INSNS, SAME3))}, "inconclusive",
+        ["objects: limit cut (retail instructions and rebuilt instructions)"]),
+    "equal-truncated-events": (
+        {"objects": (emu_trace(EVENTS, SAME3), emu_trace(EVENTS, SAME3))}, "inconclusive",
+        ["objects: limit cut (retail events and rebuilt events)"]),
+    "equal-truncated-on-every-vector": (
+        {name: (emu_trace(INSNS, SAME3), emu_trace(INSNS, SAME3)) for name in ("objects", "zeros", "ints")},
+        "inconclusive", ["objects: limit cut", "zeros: limit cut", "ints: limit cut"]),
+    "rebuilt-cut-retail-returned": (
+        {"objects": (emu_trace("return", SAME3), emu_trace(INSNS, SAME3))}, "inconclusive",
+        ["objects: limit cut (rebuilt instructions)"]),
+    "retail-cut-rebuilt-returned": (
+        {"objects": (emu_trace(EVENTS, SAME3), emu_trace("return", SAME3))}, "inconclusive",
+        ["objects: limit cut (retail events)"]),
+    "cut-at-different-points": (  # one side merely got further: more calls and writes prove nothing
+        {"objects": (emu_trace(INSNS, SAME3[:2], writes={0x30000000: 1}),
+                     emu_trace(INSNS, SAME3, writes={0x30000000: 2, 0x30000004: 5}))}, "inconclusive",
+        ["objects: limit cut"]),
+    "cut-side-made-fewer-calls-than-the-returned-side": (
+        {"objects": (emu_trace("return", SAME3), emu_trace(INSNS, SAME3[:2]))}, "inconclusive",
+        ["objects: limit cut (rebuilt instructions)"]),
+    "arguments-diverge-before-the-cut": (
+        {"objects": (emu_trace(INSNS, SAME3), emu_trace(INSNS, ARGS_DIFFER))}, "logic",
+        ["objects: call #1", "before the limit cut"]),
+    "callee-diverges-before-the-cut": (
+        {"objects": (emu_trace(EVENTS, SAME3), emu_trace("return", OTHER_CALLEE))}, "binding",
+        ["objects: call #1", "before the limit cut"]),
+    "returned-side-made-fewer-calls-than-the-cut-side": (
+        {"objects": (emu_trace("return", SAME3[:2]), emu_trace(EVENTS, SAME3))}, "logic",
+        ["objects: 2 calls in retail, 3 rebuilt", "limit cut: rebuilt events"]),
+    # a swapped runtime helper's stub returns another value, so later calls and their count prove nothing
+    "helper-swap-retail-returned-with-fewer-calls-rebuilt-cut": (
+        {"objects": (emu_trace("return", [call("__ftol", 1)]),
+                     emu_trace(EVENTS, [call("__ftol2", 1), call("0x00402000", 2)]))}, "inconclusive",
+        ["objects: limit cut (rebuilt events)", "runtime helper __ftol vs __ftol2"]),
+    "helper-swap-rebuilt-returned-with-fewer-calls-retail-cut": (
+        {"objects": (emu_trace(INSNS, [call("__ftol", 1), call("0x00402000", 2)]),
+                     emu_trace("return", [call("__ftol2", 1)]))}, "inconclusive",
+        ["objects: limit cut (retail instructions)", "runtime helper __ftol vs __ftol2"]),
+    "completed-divergent-vector-beside-a-limit-cut": (
+        {"objects": (emu_trace(INSNS, SAME3), emu_trace(INSNS, SAME3)), "zeros": RETURNED_1}, "logic",
+        ["objects: limit cut", "zeros: end return"]),
+    "completed-divergent-vector-before-a-limit-cut": (
+        {"zeros": RETURNED_1, "ints": (emu_trace("return", SAME3), emu_trace(EVENTS, SAME3))}, "logic",
+        ["zeros: end return", "ints: limit cut (rebuilt events)"]),
+}
+
+
+@pytest.mark.parametrize("case", sorted(LIMIT_CUT_CASES))
+def test_a_run_limit_cut_is_an_incomplete_vector_not_a_result(monkeypatch, case):
+    """Through diffexec's real diff_row and classification; only the emulator and the rebuild are faked.
+    Vectors the case does not name return, identically, on both sides."""
+    diffexec = import_diffexec()
+    plan, expected, said = LIMIT_CUT_CASES[case]
+    sides = {}
+
+    def run(ctx, va, size, code, vector, timeout):
+        pair = plan.get(vector["name"], (emu_trace(calls=SAME3), emu_trace(calls=SAME3)))
+        sides[vector["name"]] = sides.get(vector["name"], -1) + 1  # retail runs first, then the rebuilt
+        return pair[sides[vector["name"]]]
+    monkeypatch.setattr(diffexec, "require_unicorn", lambda: None)
+    monkeypatch.setattr(diffexec, "rebuild", lambda ctx, row, *rest: (b"\x90" * 8, [], {}, []))
+    monkeypatch.setattr(diffexec, "run", run)
+    image = type("Image", (), {"base": 0x400000, "read": lambda self, rva, n: b"\xcc" * n,
+                               "contains_va": lambda self, va: False, "is_code": lambda self, rva: False})()
+    ctx = type("Ctx", (), {"image": image, "name_of": lambda self, ident: "",
+                           "twins": lambda self, a, b: False})()
+    row = {"name": "f", "target_rva": "0x00001000", "target_size": "8", "source": "u.cpp"}
+    record = diffexec.diff_row(ctx, row, b"\x90" * 8, [])
+    assert sides == {"objects": 1, "zeros": 1, "ints": 1}  # every vector ran on both sides
+    assert record["verdict"] == expected, record["reason"]
+    for text in said:
+        assert text in record["reason"]
+    res = redteam.diffexec_result(int(expected in redteam.BEHAVIOURAL), json.dumps(record), "")
+    assert res["status"] == ("divergent" if expected in redteam.BEHAVIOURAL else "inconclusive")
+    assert res["finding"] is (expected in redteam.BEHAVIOURAL)
+
+
+def test_nightly_records_diffexec_structured_and_labels_a_harness_failure(tmp_path, monkeypatch):
+    import nightly
+    missing = redteam.diffexec_result(1, "", "diffexec needs the `unicorn` package (pip install unicorn capstone)")
+    variants = {"variants": [{"defect_class": "wrong_callee", "edits": [{"find": "a", "replace": "b"}]}] * 3}
+    monkeypatch.setattr(panel, "judges_by_id", lambda: {"m": {}})
+    monkeypatch.setattr(panel, "invoke", lambda judge, text: {"reply": json.dumps(variants), "answering_model": "m"})
+    monkeypatch.setattr(sampler, "build_packet", lambda unit, row, salt: ({"retail": "", "source_excerpt": ""}, {}))
+    monkeypatch.setattr(redteam, "record_escape", lambda row, variant, res, base: (tmp_path / "e.json", True))
+    calls = []
+
+    def trial(source, edits, symbol=None, rva=None):
+        calls.append(source)
+        return {"status": "escape", "diff": ["reloc-target:REL32"], "diffexec": missing, "builds": 2}
+    monkeypatch.setattr(redteam, "trial", trial)
+    row = {"name": "?f@@YAXXZ", "target_rva": "0x00401000", "target_size": "32", "source": "Code/u.cpp"}
+    queue = {"items": {}}
+    args = type("Args", (), {"redteam_model": "m", "redteam": 1})()
+    out = nightly.red_team([({"sha": "x"}, "why", row)], "seed", args, queue, lambda msg: None)
+    assert len(calls) == 3
+    assert out[0]["diffexec"] == missing  # run.json keeps the structured record
+    evidence = next(iter(queue["items"].values()))["evidence"][0]["diffexec"]
+    assert evidence["status"] == "harness-error" and evidence["finding"] is False
+    report = nightly.render({"repo": "t", "stamp": "s", "tip": "0" * 10, "window": 0, "seed": "s",
+                             "judge_calls": 0, "created": {}, "alerts": [], "redteam": out})
+    assert "diffexec: harness-error (missing-dependency)" in report
 
 
 def test_structural_only_verdicts_are_not_accusations():

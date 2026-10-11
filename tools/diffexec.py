@@ -37,7 +37,18 @@ address or data-pointer argument; `twin` when the two callees have equal
 retail bytes), `build_env` (the divergence is a runtime-helper substitution such as
 __ftol/__ftol2), `regalloc-only` (behaviour equal,
 bytes or stack-local addresses differ), `none`, and `inconclusive` (no object,
-unreadable symbol, unsupported relocation).
+unreadable symbol, unsupported relocation, or a vector that never completed).
+A vector is incomplete when either run was stopped by the wall-clock safety
+timeout or by a run limit (MAX_INSNS, MAX_EVENTS). A limit-cut trace is only a
+prefix of the run: the cut side's end, return value, writes, reads and call
+count are not results. Such a vector can still show a divergence in two ways:
+a call both sides made differs (`logic`/`binding`), or, the calls both made
+being equal, a side that ran to its end made fewer calls than the other had
+already made (`logic`). A runtime-helper substitution among the shared calls
+makes the later calls incomparable, so that vector stays `inconclusive`.
+A `logic`/`binding` divergence on any vector stands; otherwise one incomplete
+(`inconclusive`) vector outranks whatever the completed vectors showed, since
+equality was never established for it.
 
 Dependency: the `unicorn` package (>= 2.0); `capstone` is optional (callee
 `ret N` cleanup and --disasm). Install into a venv, e.g.
@@ -630,11 +641,13 @@ def addressish(ctx, value):
     return isinstance(value, int) and (PHANTOM <= value < REGION_END or ctx.image.contains_va(value))
 
 
-def classify(ctx, a, b, row_name):
-    """(verdict, reason) for retail trace a against rebuilt trace b."""
-    if (a["calls"], a["writes"], a["reads"], a["end"], a.get("ret")) == \
-            (b["calls"], b["writes"], b["reads"], b["end"], b.get("ret")):
-        return "none", ""
+def limit_cut(trace):
+    """A run limit (MAX_INSNS or MAX_EVENTS) stopped the run: the trace is a prefix, not a result."""
+    return isinstance(trace["end"], tuple) and trace["end"][0] == "limit"
+
+
+def call_divergence(ctx, a, b):
+    """(verdict, reason) for the first differing call that both traces made, else None."""
     for i, (ca, cb) in enumerate(zip(a["calls"], b["calls"])):
         if ca == cb:
             continue
@@ -656,6 +669,40 @@ def classify(ctx, a, b, row_name):
         if all("stk" in (x, y) for x, y in diffs):
             continue
         return "logic", f"call #{i} {describe(ctx, ca[0])}: args differ {diffs[:3]}"
+    return None
+
+
+def classify_cut(ctx, a, b):
+    """(verdict, reason) for a vector where a run limit stopped retail trace a, rebuilt trace b or
+    both. Neither equality nor a difference in how the runs ended is evidence here: the cut side
+    never finished, so its end, return value, writes, reads and call count say nothing. What both
+    sides did before the cut still counts: a call they both made that differs or, when the calls
+    they both made are equal, a side that ran to its end with fewer calls than the other had
+    already made. A runtime-helper substitution (build_env) among the shared calls is neither: the
+    stubs return identity-dependent values, so the calls after it, and their number, may differ
+    because of the substitution alone."""
+    cut = " and ".join(f"{side} {trace['end'][1]}" for side, trace in (("retail", a), ("rebuilt", b))
+                       if limit_cut(trace))
+    found = call_divergence(ctx, a, b)
+    if found and found[0] in ("logic", "binding"):
+        return found[0], f"{found[1]} (before the limit cut: {cut})"
+    if found:  # build_env: the shared call prefix is not comparable past the swapped helper
+        return "inconclusive", f"limit cut ({cut}): vector not completed; {found[1]}"
+    for done, other in ((a, b), (b, a)):
+        if not limit_cut(done) and len(done["calls"]) < len(other["calls"]):
+            return "logic", (f"{len(a['calls'])} calls in retail, {len(b['calls'])} rebuilt "
+                             f"(the completed side made fewer; limit cut: {cut})")
+    return "inconclusive", f"limit cut ({cut}): vector not completed"
+
+
+def classify(ctx, a, b, row_name):
+    """(verdict, reason) for retail trace a against rebuilt trace b, both run to their end."""
+    if (a["calls"], a["writes"], a["reads"], a["end"], a.get("ret")) == \
+            (b["calls"], b["writes"], b["reads"], b["end"], b.get("ret")):
+        return "none", ""
+    found = call_divergence(ctx, a, b)
+    if found:
+        return found
     image_reads = lambda t: {r for r in t["reads"] if not ctx.image.is_code(r - ctx.image.base)}
     ra, rb = image_reads(a), image_reads(b)
     if ra != rb and (rb - ra):
@@ -686,6 +733,12 @@ def describe(ctx, ident):
 
 
 def worst(verdicts):
+    """The row's verdict over its vectors. A divergence (logic/binding) on any vector stands;
+    otherwise an incomplete vector (inconclusive: the wall-clock safety timeout or a run-limit cut) outranks
+    regalloc-only/build_env/none from the others, which say nothing about the vector that did not finish."""
+    verdicts = list(verdicts)
+    if "inconclusive" in verdicts and not {"logic", "binding"} & set(verdicts):
+        return "inconclusive"
     return max(verdicts, key=SEVERITY.index)
 
 
@@ -736,6 +789,11 @@ def diff_row(ctx, row, compiled, relocs, info=None, objdata=None, sections=None,
         if ("timeout",) in (a["end"], b["end"]):
             verdicts.append("inconclusive")
             reasons.append(f"{vector['name']}: wall-clock safety timeout")
+            continue
+        if limit_cut(a) or limit_cut(b):
+            verdict, reason = classify_cut(ctx, a, b)
+            verdicts.append(verdict)
+            reasons.append(f"{vector['name']}: {reason}")
             continue
         verdict, reason = classify(ctx, a, b, row["name"])
         if verdict == "none" and not same_code:

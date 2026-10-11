@@ -29,7 +29,12 @@ for %%A in (build\audit\dirty.txt) do if %%~zA gtr 0 (
   echo %DATE% %TIME% refusing: %WT% has local changes >> build\audit\nightly.log
   exit /b 2
 )
+rem A failed fetch must not audit the old tip as if it were new: no new window, no new trials.
 git fetch --quiet origin master >> build\audit\nightly.log 2>&1
+if errorlevel 1 (
+  echo %DATE% %TIME% refusing: git fetch origin master failed, not auditing a stale tip >> build\audit\nightly.log
+  exit /b 2
+)
 git checkout --quiet --detach origin/master >> build\audit\nightly.log 2>&1 || exit /b 2
 set PYTHONIOENCODING=utf-8
 py -3 tools\audit\nightly.py %1 %2 %3 %4 %5 %6 %7 %8 %9 >> build\audit\nightly.log 2>&1

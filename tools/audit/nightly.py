@@ -250,12 +250,13 @@ def red_team(picked, seed, args, queue, log):
         log(f"  redteam {row['target_rva']} {row['source']}: {len(variants)} variants from "
             f"{got['answering_model']}")
         for variant in variants:
-            if builds + 3 > redteam.MAX_BUILDS:
+            if builds + redteam.TRIAL_BUILDS > redteam.MAX_BUILDS:
                 break
             res = redteam.trial(row["source"], variant["edits"], symbol=row["name"], rva=row["target_rva"])
-            builds += 3 if res["status"] not in ("invalid", "skipped") else (1 if res["status"] == "skipped" else 0)
+            builds += res.get("builds", redteam.TRIAL_BUILDS)
             entry = {"rva": row["target_rva"], "source": row["source"], "class": variant["defect_class"],
-                     "status": res["status"], "diff": res.get("diff"), "proposer": got["answering_model"]}
+                     "status": res["status"], "diff": res.get("diff"), "proposer": got["answering_model"],
+                     "diffexec": res.get("diffexec")}
             if res["status"] == "escape":
                 path, new = redteam.record_escape(row, variant, res, "HEAD")
                 entry.update(fixture=str(path), new_escape=new)
@@ -266,9 +267,18 @@ def red_team(picked, seed, args, queue, log):
                              severity="high", root_cause=redteam.signature(variant["defect_class"], res["diff"]),
                              acceptance=f"python3 tools/audit/redteam.py replay {path.as_posix()}",
                              affected=[row["source"]])
-            log(f"    {variant['defect_class']}: {res['status']} {res.get('diff') or res.get('why') or ''}")
+            log(f"    {variant['defect_class']}: {res['status']} {res.get('diff') or res.get('why') or ''}"
+                + (f" diffexec {behaviour_summary(entry['diffexec'])}" if entry["diffexec"] else ""))
             out.append(entry)
     return out
+
+
+def behaviour_summary(result):
+    """One line for diffexec's opinion: `divergent (binding)`, `harness-error (missing-dependency)`..."""
+    if not result:
+        return None
+    detail = result.get("kind") if result.get("status") == redteam.HARNESS_ERROR else result.get("verdict")
+    return f"{result.get('status')} ({detail})" if detail else str(result.get("status"))
 
 
 def render(r):
@@ -291,6 +301,7 @@ def render(r):
     if r.get("redteam"):
         lines += ["", "## Red team", ""]
         lines += [f"- {e['rva']} {e['source']} {e['class']}: {e['status']} {e.get('diff') or ''}"
+                  + (f" diffexec: {behaviour_summary(e['diffexec'])}" if e.get("diffexec") else "")
                   for e in r["redteam"]]
     return "\n".join(lines) + "\n"
 

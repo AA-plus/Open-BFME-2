@@ -6,12 +6,28 @@ independently of any model:
   1. builds the row's unit as it is (`tools/build.py SOURCE` must pass) and keeps
      its object;
   2. applies the variant's exact find/replace edits, builds again with the same
-     repo gate, keeps that object, and restores the file byte for byte;
+     repo gate and keeps that object;
   3. if the gate PASSED the variant, compares the two objects: the row's own
      COMDAT section (whole object when the symbol is absent) - code bytes, data
      bytes and relocation targets. A difference means the gate accepted two
      different programs for one retail function: a confirmed escape.
-     When tools/diffexec.py exists, it is run as a second, behavioural opinion.
+     tools/diffexec.py then runs on that escape as a second, behavioural
+     opinion, while the variant's source and object are still the current ones
+     (run after the restore it would emulate the original and could never
+     disagree). Its result is structured (`diffexec_result`): only `divergent`
+     is a behavioural finding; a missing tool or emulator, a crash, a usage
+     error or an exit that contradicts the records is a `harness-error`;
+  4. restores the file byte for byte and the unit's build cache entries (object
+     and .deps.json) to their pre-variant bytes, in a `finally`, so an exception
+     anywhere in step 2 or 3 still leaves the tree and build/ as they were.
+
+Trials assume an EXCLUSIVE audit worktree and build cache: nothing else may
+build, edit or run the gate there while a trial runs (one audit at a time, no
+shared or junctioned build/match/). tools/build.py's compile lock does not
+cover this: it is taken only for large rebuilds and released after compiling,
+so a per-file trial's edit, gate, snapshot, emulation and restore are
+unlocked, and a concurrent writer could interleave with them or change which
+object diffexec sees.
 
 Confirmed escapes are deduplicated by root-cause signature (claimed class +
 how the objects differ). A new signature writes a fixture
@@ -40,6 +56,16 @@ import common
 MAX_ROWS = 2
 MAX_VARIANTS = 3
 MAX_BUILDS = 12
+TRIAL_BUILDS = 2  # the unit as it is, then the variant; the cache is restored from bytes, not rebuilt
+# tools/diffexec.py's own CLI (--row NAME|0xRVA, --source substring filter, --json
+# one record per row). AUDIT_DIFFEXEC replaces the arguments (keep --json: a run
+# without records is a harness error); {rva} and {source} are filled per word, so
+# a path with spaces stays one argument.
+DIFFEXEC_ARGS = "tools/diffexec.py --row {rva} --source {source} --json"
+DIFFEXEC_TIMEOUT = 1800
+HARNESS_ERROR = "harness-error"
+BEHAVIOURAL = ("logic", "binding")  # diffexec verdicts that mean "the variant does something else"
+VERDICTS = ["none", "inconclusive", "regalloc-only", "build_env", "binding", "logic"]  # diffexec.SEVERITY
 ESCAPES = common.STATE / "escapes"
 PROMOTED = common.ROOT / "tools" / "tests" / "fixtures" / "audit_escapes"
 CODE_FLAGS = 0x20
@@ -184,53 +210,158 @@ def gate(source):
     return proc.returncode == 0, (proc.stdout + proc.stderr)[-1500:]
 
 
-def object_bytes(source):
-    sys.path.insert(0, str(common.ROOT / "tools"))
+def _build():
+    tools = str(common.ROOT / "tools")
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
     import build
-    path = Path(build.obj_path(source))
+    return build
+
+
+def object_bytes(source):
+    path = Path(_build().obj_path(common.ROOT / source))
     return path.read_bytes() if path.exists() else None
 
 
-def diffexec(rva, source):
-    tool = common.ROOT / "tools" / "diffexec.py"
-    if not tool.exists():
-        return None
-    template = os.environ.get("AUDIT_DIFFEXEC", "tools/diffexec.py --rva {rva} --source {source}")
-    proc = subprocess.run([*common.PY, *template.format(rva=rva, source=source).split()], cwd=common.ROOT,
-                          capture_output=True, text=True, encoding="utf-8", errors="replace")
-    return {"exit": proc.returncode, "tail": (proc.stdout + proc.stderr)[-600:]}
+def cache_entries(source):
+    """The build/ files `tools/build.py SOURCE` rewrites for a unit: its object and .deps.json sidecar."""
+    build = _build()
+    obj = Path(build.obj_path(common.ROOT / source))
+    return [obj, Path(build._deps_sidecar(obj))]
 
 
-def trial(source, edits, symbol=None, rva=None, build_gate=gate, read_obj=object_bytes):
-    """Run one variant through the gate. The file is always restored."""
+def snapshot(paths):
+    return {Path(p): (Path(p).read_bytes() if Path(p).exists() else None) for p in paths}
+
+
+def restore(saved):
+    """Put every snapshotted file back byte for byte (absent ones are removed)."""
+    for path, data in saved.items():
+        if data is None:
+            path.unlink(missing_ok=True)
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_name(path.name + ".audit-restore")
+        tmp.write_bytes(data)
+        os.replace(tmp, path)
+
+
+def diffexec_argv(rva, source):
+    template = os.environ.get("AUDIT_DIFFEXEC") or DIFFEXEC_ARGS
+    return [*common.PY, *(word.format(rva=rva, source=source) for word in template.split())]
+
+
+def harness_error(kind, reason, **extra):
+    return {"status": HARNESS_ERROR, "kind": kind, "reason": reason[-600:], "finding": False,
+            "verdict": None, "records": [], **extra}
+
+
+def diffexec_result(returncode, stdout, stderr, argv=None):
+    """Structured reading of one tools/diffexec.py --json run.
+
+    status  divergent      a record's verdict is logic/binding (exit 1): the one behavioural finding
+            same           every record is none/regalloc-only/build_env (exit 0)
+            inconclusive   diffexec ran and could not decide for this row (no object, unreadable symbol,
+                           a vector that never completed...)
+            harness-error  no trustworthy verdict: missing emulator, crash, usage error, no record, an
+                           unknown verdict or an exit status that contradicts the records. Never a
+                           finding, whatever the exit. A Python traceback anywhere in the output is a
+                           crash even beside clean records (they are kept, for diagnosis only).
+    """
+    records, diagnostics = [], []
+    for line in (stdout or "").splitlines():
+        try:
+            record = json.loads(line) if line.strip().startswith("{") else None
+        except ValueError:
+            record = None
+        if isinstance(record, dict) and isinstance(record.get("verdict"), str):
+            records.append({k: record.get(k) for k in ("name", "rva", "source", "verdict", "reason")})
+        else:
+            diagnostics.append(line)
+    text = "\n".join(diagnostics) + "\n" + (stderr or "")  # everything that is not a record
+    base = {"exit": returncode, "argv": argv, "records": records}
+    verdicts = {r["verdict"] for r in records}
+    divergent = bool(verdicts & set(BEHAVIOURAL))
+    if returncode == 2 and "usage:" in (stderr or ""):
+        return harness_error("usage", text, **base)
+    if re.search(r"needs the `unicorn` package|No module named '?unicorn", text):
+        return harness_error("missing-dependency", text, **base)
+    if "Traceback (most recent call last)" in text:
+        return harness_error("crash", text, **base)
+    if not records:
+        return harness_error("no-record", text, **base)
+    if verdicts - set(VERDICTS):
+        return harness_error("unknown-verdict", ", ".join(sorted(verdicts - set(VERDICTS))), **base)
+    if returncode not in (0, 1) or (returncode == 1) != divergent:
+        return harness_error("inconsistent-exit", text, **base)
+    crashed = [str(r.get("reason")) for r in records if r["verdict"] == "inconclusive"
+               and str(r.get("reason") or "").startswith("harness:")]  # diffexec caught its own crash
+    if crashed and not divergent:
+        return harness_error("crash", "; ".join(crashed), **base)
+    if divergent:
+        status, verdict = "divergent", max(verdicts, key=VERDICTS.index)
+    elif "inconclusive" in verdicts:  # one undecided row or vector: equality is not shown
+        status, verdict = "inconclusive", "inconclusive"
+    else:
+        status, verdict = "same", max(verdicts, key=VERDICTS.index)
+    return {"status": status, "finding": divergent, "verdict": verdict, **base}
+
+
+def diffexec(rva, source, run=subprocess.run):
+    """Behavioural opinion on the object build/ holds for `source` NOW (trial calls it on the variant's)."""
+    if not (common.ROOT / "tools" / "diffexec.py").exists():
+        return harness_error("missing-tool", "tools/diffexec.py not found")
+    argv = diffexec_argv(rva, source)
+    try:
+        proc = run(argv, cwd=common.ROOT, capture_output=True, text=True, encoding="utf-8",
+                   errors="replace", timeout=DIFFEXEC_TIMEOUT)
+    except subprocess.TimeoutExpired:
+        return harness_error("timeout", f"no result within {DIFFEXEC_TIMEOUT}s", argv=argv)
+    except OSError as error:
+        return harness_error("spawn", f"{type(error).__name__}: {error}", argv=argv)
+    return diffexec_result(proc.returncode, proc.stdout, proc.stderr, argv)
+
+
+def trial(source, edits, symbol=None, rva=None, build_gate=gate, read_obj=object_bytes,
+          behaviour=diffexec, cache=cache_entries):
+    """Run one variant through the gate.
+
+    The unit's source and build cache entries are restored in a `finally`, after
+    the behavioural check has run on the variant's own object."""
     path = common.ROOT / source
     if common.git("status", "--porcelain", "--", source).strip():
-        return {"status": "skipped", "why": "unit has local changes"}
+        return {"status": "skipped", "why": "unit has local changes", "builds": 0}
     original = path.read_bytes()
     edited = edit_bytes(original, edits)
     if edited is None:
-        return {"status": "invalid", "why": "an edit's find text is absent or ambiguous"}
+        return {"status": "invalid", "why": "an edit's find text is absent or ambiguous", "builds": 0}
     ok, log = build_gate(source)
     if not ok:
-        return {"status": "skipped", "why": "unit fails the gate unmodified", "log": log}
+        return {"status": "skipped", "why": "unit fails the gate unmodified", "log": log, "builds": 1}
     before = read_obj(source)
+    saved = snapshot(cache(source))
+    result = {"builds": TRIAL_BUILDS}
     try:
         path.write_bytes(edited)
         passed, log = build_gate(source)
-        after = read_obj(source) if passed else None
+        if not passed:
+            result.update(status="rejected", log=log)
+        else:
+            after = read_obj(source)
+            if before is None or after is None:
+                result.update(status="passed-unconfirmed", why="object file not found")
+            else:
+                kinds = compare_objects(before, after, symbol)
+                result.update(status="escape" if kinds else "equivalent", diff=kinds)
+                if kinds and rva:
+                    result["diffexec"] = behaviour(rva, source)  # the variant is still what build/ holds
     finally:
-        path.write_bytes(original)
+        try:
+            path.write_bytes(original)
+        finally:
+            restore(saved)
     if common.git("status", "--porcelain", "--", source).strip():
         raise RuntimeError(f"{source} not restored")
-    build_gate(source)  # leave build/match/ holding the tree's object, not the variant's
-    if not passed:
-        return {"status": "rejected", "log": log}
-    if before is None or after is None:
-        return {"status": "passed-unconfirmed", "why": "object file not found"}
-    kinds = compare_objects(before, after, symbol)
-    result = {"status": "escape" if kinds else "equivalent", "diff": kinds}
-    if kinds and rva:
-        result["diffexec"] = diffexec(rva, source)
     return result
 
 
