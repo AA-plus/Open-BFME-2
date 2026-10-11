@@ -2614,50 +2614,10 @@ void AIUpdateInterface::privateFollowPath( const std::vector<Coord3D>* path, Obj
 /**
  * Attack given object
  */
-// ?privateAttackObject@AIUpdateInterface@@ present-unmatched
-void AIUpdateInterface::privateAttackObject( Object *victim, Int maxShotsToFire, CommandSourceType cmdSource )
-{
-	//Resetting the locomotor here was initially added for scripting purposes. It has been moved
-	//to the responsibility of the script to reset the locomotor before moving. This is needed because
-	//other systems (like the battle drone) change the locomotor based on what it's trying to do, and
-	//doesn't want to get reset when ordered to move.
-	//chooseLocomotorSet(LOCOMOTORSET_NORMAL);
-
-	if (!victim) 
-	{
-		// Hard to kill em if they're already dead.  jba
-		return;
-	}
-
-	getStateMachine()->clear();
-	getStateMachine()->setGoalObject( victim );
-	setLastCommandSource( cmdSource );
-	getStateMachine()->setState( AI_ATTACK_OBJECT );
-
-	// do this after setting it as the current state, as the max-shots-to-fire is reset in AttackState::onEnter()
-	Weapon* weapon = getObject()->getCurrentWeapon();
-	if (weapon)
-		weapon->setMaxShotCount(maxShotsToFire);
-}
+// AIUpdateInterface::privateAttackObject (0x0026BCD2) is rowed in AIUpdateInterfaceAttackObjectCommands.cpp; a second definition here would not link.
 
 //-----------------------------------------------------------------------------------------
-// ?privateForceAttackObject@AIUpdateInterface@@ present-unmatched
-void AIUpdateInterface::privateForceAttackObject( Object *victim, Int maxShotsToFire, CommandSourceType cmdSource )
-{
-	if (!victim) {
-		return;
-	}
-
-	getStateMachine()->clear();
-	getStateMachine()->setGoalObject( victim );
-	setLastCommandSource( cmdSource );
-	getStateMachine()->setState( AI_FORCE_ATTACK_OBJECT );
-
-	// do this after setting it as the current state, as the max-shots-to-fire is reset in AttackState::onEnter()
-	Weapon* weapon = getObject()->getCurrentWeapon();
-	if (weapon)
-		weapon->setMaxShotCount(maxShotsToFire);
-}
+// AIUpdateInterface::privateForceAttackObject (0x0026BEE6) is rowed in AIUpdateInterfaceAttackObjectCommands.cpp; a second definition here would not link.
 
 //-----------------------------------------------------------------------------------------
 // AIUpdateInterface::privateGuardRetaliate: defined in AIUpdate/AIUpdateInterface_privateGuardRetaliate.cpp (its row's unit).
