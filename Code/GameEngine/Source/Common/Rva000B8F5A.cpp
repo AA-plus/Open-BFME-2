@@ -184,7 +184,7 @@ struct Rva000B8F5AOuter:public Rva000BF9FCHeader,public Rva000BF9FCModelInterfac
 struct Rva000C144AEntry
 {
 	void *m_ptr00;
-	char m_pad04[0x1C - 0x04];
+	float f04,f08,f0C;int mode10,direction14;bool active18;char pad19[3];
 };
 
 struct Rva000C14BDTarget
@@ -193,11 +193,14 @@ struct Rva000C14BDTarget
 	virtual void v01();
 	virtual const char *v02();
 	virtual void *v03();
+	virtual void v04();
+	virtual int v05();
 };
 
 class Rva000B8F5A
 {
 public:
+	void rva000C15F1(int i,float *first,float *second);
 	AsciiString rva000C146D(int i);
 	void rva000B8F5A(char *a, AsciiString b);
 	void rva000BFD77();
@@ -538,4 +541,46 @@ void Rva000BFB76Interface::rva000BFB76(const ModelConditionFlags&conditions,bool
  }
  if(info)((Rva000B8F5AOuter*)((char*)this-0x10))->applyInfo(info,change,state);
  if(state){m_flag28C=false;((Rva000B8F5AOuter*)((char*)this-0x10))->rva000BF9FC(state,force,options);}
+}
+
+// Native C15F1..C1788 complete407B RET12, WB930BA0 named frame ranges.
+// Secondary+C receiver and three1C records are independently shared with
+// existing indexed getters and native B5D7F blending. Field roles inferred
+// only from accesses: mode10, direction14, active18; no full record identity.
+struct Rva000C15F1Range {float first,second;};
+void Rva000B8F5A::rva000C15F1(int i,float*first,float*second){
+ ((Rva000B8F5AOuter*)((char*)this-12))->rva000C0386();
+ if(i<0 || (unsigned)i>=3 || !m_entries104[i].m_ptr00){
+  first[0]=0.0f;first[1]=0.0f;
+  *(Rva000C15F1Range*)second=*(const Rva000C15F1Range*)first;return;
+ }
+ Rva000B8F5A*slot=(Rva000B8F5A*)((char*)this+i*0x1C);
+ if(slot->m_entries104[0].active18){
+  switch(slot->m_entries104[0].mode10){
+  case 1:
+   first[0]=slot->m_entries104[0].f08;
+   first[1]=(float)((Rva000C14BDTarget*)slot->m_entries104[0].m_ptr00)->v05();
+   second[0]=-0.00001f;second[1]=slot->m_entries104[0].f04;return;
+  case 3:
+   if(m_entries104[i].direction14==1){
+    if(slot->m_entries104[0].f08>slot->m_entries104[0].f04){first[0]=slot->m_entries104[0].f08;first[1]=0.0f;}
+    else{first[0]=-0.00001f;first[1]=slot->m_entries104[0].f04;}
+   }else{
+    if(slot->m_entries104[0].f04>slot->m_entries104[0].f08){
+     first[0]=slot->m_entries104[0].f08;
+     first[1]=(float)((Rva000C14BDTarget*)slot->m_entries104[0].m_ptr00)->v05()-1.0f;
+    }else{
+     first[0]=(float)((Rva000C14BDTarget*)slot->m_entries104[0].m_ptr00)->v05()-0.99999f;
+     first[1]=slot->m_entries104[0].f04;
+    }
+   }
+   second[0]=0.0f;second[1]=0.0f;return;
+  case 5:
+   first[0]=slot->m_entries104[0].f08;first[1]=0.0f;
+   second[0]=(float)((Rva000C14BDTarget*)slot->m_entries104[0].m_ptr00)->v05();
+   second[1]=slot->m_entries104[0].f04;return;
+  }
+ }
+ first[0]=slot->m_entries104[0].f08;first[1]=slot->m_entries104[0].f04;
+ second[0]=0.0f;second[1]=0.0f;
 }
