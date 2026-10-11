@@ -1,19 +1,11 @@
 // cl: /O1 /G7 /arch:SSE /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
-// Retail39C3AC..39C40A94B and whole WBFA3D70 getter: ScoreKeeper.cpp848.
-// Parent code is94/94 and its EH graph is EXACT. This is not an admitted
-// recovery: emitted constructor and dynamic cleanup require complete native
-// helper identity/relocation closure before this unit can link as retail.
-// BF1 donor575ba2b ScoreKeeperCounters.cpp gives the template-pointer/int
-// count-map semantic lead; BFME2 calls and map counter39BEC3 confirm the
-// pointers/count storage. The target maps have stride12 at+1FC and twenty
-// indices. Invalid indices return static mapE02838 guarded atE02844.
-// The existing custom ScoreKeeper allocator view gave33B tree base instead
-// of native36B; ordinary donor allocator emits the native36B tree base.
-// EHs also fixes the tree destructor frame compared with EHsc.
-// Remaining: constructor42B at1F068F and destructor56B at357C6A recursive
-// fold proof; map destructor5B and dynamic cleanup10B identity; static-data
-// owner reconciliation with existing g_Va00E02838. No alias/pin invented.
+// ScoreKeeper::getObjectsDestroyedMap, retail 0x0039C3AC..0x0039C40A (94
+// bytes). Returns the per-player-index count map from the twenty-entry
+// array at +0x1FC (stride 12); an out-of-range index returns a function-
+// local static empty map (0x00E02838, guard 0x00E02844). Callers include
+// the rowed LivingWorldScoreKeeper fold at 0x004EE950. The plain STLport
+// allocator gives the native tree base; /EHs gives the native frame.
 #include <map>
 class ThingTemplate;
 typedef _STL::map<const ThingTemplate*,int> ScoreCountMap;
