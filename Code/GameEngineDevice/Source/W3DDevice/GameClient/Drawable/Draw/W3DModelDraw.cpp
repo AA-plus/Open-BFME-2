@@ -1846,25 +1846,7 @@ W3DModelDraw::~W3DModelDraw(void)
 }
 
 //-------------------------------------------------------------------------------------------------
-// ?doStartOrStopParticleSys@W3DModelDraw@@ present-unmatched
-void W3DModelDraw::doStartOrStopParticleSys()
-{
-	Bool hidden = getDrawable()->isDrawableEffectivelyHidden() || m_fullyObscuredByShroud;
-
-	for (std::vector<ParticleSysTrackerType>::const_iterator it = m_particleSystemIDs.begin(); it != m_particleSystemIDs.end(); ++it)
-	//for (std::vector<ParticleSystemID>::const_iterator it = m_particleSystemIDs.begin(); it != m_particleSystemIDs.end(); ++it)
-	{
-		ParticleSystem *sys = TheParticleSystemManager->findParticleSystem((*it).id);
-		if (sys != NULL) {
-			// this can be NULL
-			if (hidden) {
-				sys->stop();
-			} else {
-				sys->start();
-			}
-		}
-	}
-}
+// W3DModelDraw::doStartOrStopParticleSys (0x000B6EDE) is rowed in W3DModelDrawParticles.cpp; a second definition here would not link.
 
 //-------------------------------------------------------------------------------------------------
 // W3DModelDraw::setHidden is defined with its retail-matched body in Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DModelDraw_setHidden_Rva000B6F6D.cpp (0x000B6F6D).
@@ -3877,37 +3859,7 @@ void W3DModelDraw::setAnimationFrame( int frame )
 }
 
 //-------------------------------------------------------------------------------------------------
-// ?setPauseAnimation@W3DModelDraw@@ present-unmatched
-void W3DModelDraw::setPauseAnimation(Bool pauseAnim)
-{
-	if (m_pauseAnimation == pauseAnim) 
-	{
-		return;
-	}
-
-	m_pauseAnimation = pauseAnim;
-
-	if (m_renderObject && m_renderObject->Class_ID() == RenderObjClass::CLASSID_HLOD)
-	{
-		float framenum, dummy;
-		int mode, numFrames;
-
-		HLodClass* hlod = (HLodClass*)m_renderObject;
-		HAnimClass* anim = hlod->Peek_Animation_And_Info(framenum, numFrames, mode, dummy);
-		if (anim)
-		{
-			if (m_pauseAnimation) 
-			{
-				m_animationMode = mode;
-				hlod->Set_Animation(anim, framenum, RenderObjClass::ANIM_MODE_MANUAL);
-			} 
-			else 
-			{
-				hlod->Set_Animation(anim, framenum, m_animationMode);
-			}
-		}
-	}
-}
+// W3DModelDraw::setPauseAnimation (0x000B377E) is rowed in W3DModelDrawSetPauseAnimation.cpp; a second definition here would not link.
 
 //-------------------------------------------------------------------------------------------------
 #ifdef ALLOW_ANIM_INQUIRIES
