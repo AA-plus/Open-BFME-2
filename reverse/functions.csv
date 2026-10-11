@@ -20531,7 +20531,6 @@ uw_007713f5,,0x007713F5,8,Code/gen_small/uw_gen_003.cpp,matched,gen-funclet;obje
 uw_007713fd,,0x007713FD,8,Code/gen_small/uw_gen_002.cpp,matched,gen-funclet;object-symbol=$L293
 uw_00771405,,0x00771405,8,Code/gen_small/uw_gen_003.cpp,matched,gen-funclet;object-symbol=$L329
 uw_0077140d,,0x0077140D,8,Code/gen_small/uw_gen_004.cpp,matched,gen-funclet;object-symbol=$L808
-uw_00771467,,0x00771467,11,Code/gen_small/uw_gen_008.cpp,matched,gen-funclet;object-symbol=$L2897
 uw_00771472,,0x00771472,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L567
 uw_0077147d,,0x0077147D,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L568
 uw_00771488,,0x00771488,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L571
@@ -76785,3 +76784,4 @@ uw_0077155a,,0x0077155A,8,Code/GameEngine/Source/GameLogic/System/GameLogicDestr
 ?rva00771427@@YAXXZ,,0x00771427,20,Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp,matched,gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6384;replaces=MASM-EHStateCleanupRange36;identity=address-only
 uw_0077141f,,0x0077141F,8,Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp,matched,gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6383
 uw_0077145c,,0x0077145C,11,Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp,matched,gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6388
+uw_00771467,,0x00771467,11,Code/GameEngine/Source/GameLogic/System/GameLogicDestructor.cpp,matched,gen-funclet;parent=??1Rva00243BA0@@UAE@XZ;object-symbol=$L6389
