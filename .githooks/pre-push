@@ -315,9 +315,15 @@ PY
     # of 200 sources still overflows once their paths average ~160 characters.
     full_scope=0
     extra=()
-    # Small scopes retain the existing bounded builds. Prove coverage from the
-    # pushed ledgers before replacing a large scope with the ordinary full gate.
-    if [ "${#verify[@]}" -ge 1024 ]; then
+    # An unbounded header/reference change reads every provider below. Build
+    # those objects first, even when the outgoing body list is small or empty.
+    # Keep explicit selectors as well: a full gate does not judge rowless files.
+    if [ "$header_all" -ne 0 ]; then
+        full_scope=1
+        extra=("${verify[@]}")
+    # Small bounded scopes retain chunk builds. Prove coverage from the pushed
+    # ledgers before replacing a large bounded scope with the ordinary full gate.
+    elif [ "${#verify[@]}" -ge 1024 ]; then
         verify_list=$(mktemp) || fail "temporary source list"
         printf '%s\0' "${verify[@]}" > "$verify_list"
         capture scope_out "proving full build scope" classify_full_scope "$local_sha" "$verify_list"
@@ -332,7 +338,7 @@ PY
     if [ "$full_scope" -ne 0 ]; then
         git diff --quiet "$local_sha" -- Code \
             || fail "a tracked source differs from the pushed commit $local_sha in the working tree: check it out or stash first"
-        echo "pre-push: every matched provider selected; running the ordinary full gate once"
+        echo "pre-push: full provider scope required; running the ordinary full gate once"
         BUILD_POOL="${BUILD_POOL:-4}" run_build \
             || fail "full byte-verify of outgoing sources (see above)"
         build_chunks "byte-verify of additional outgoing sources (see above)" "${extra[@]}"

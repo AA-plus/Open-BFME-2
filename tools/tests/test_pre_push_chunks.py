@@ -125,6 +125,49 @@ def test_full_gate_failure_stops_before_eh_and_data(repo):
     assert not calls(repo[0], 'conv-calls.jsonl')
 
 
+def unbounded_headers(fixture):
+    path, sources, base, _ = fixture
+    hooks.write(path, 'tools/header_dependents.py', 'raise SystemExit(2)\n')
+    hooks.git(path, 'commit', '-qam', 'unbounded reference dependency fixture')
+    return path, sources, base, hooks.git(path, 'rev-parse', 'HEAD')
+
+
+@pytest.mark.parametrize('selected', [[], [EXTRA]], ids=['no-body-delta', 'rowless-extra'])
+def test_unbounded_headers_build_full_tree_before_all_data(repo, selected):
+    fixture = unbounded_headers(repo)
+    done = run_hook(fixture, selected)
+    assert done.returncode == 0, done.stderr
+    assert calls(repo[0]) == ([[], selected] if selected else [[]])
+    converged = calls(repo[0], 'conv-calls.jsonl')
+    assert len(converged) == 1 and '--all' in converged[0]['argv']
+
+
+def test_unbounded_header_full_failure_stops_before_eh_and_data(repo):
+    fixture = unbounded_headers(repo)
+    done = run_hook(fixture, [repo[1][0]], FAIL_FULL='1')
+    assert done.returncode == 1 and 'full byte-verify' in done.stderr
+    assert calls(repo[0]) == [[]]
+    assert calls(repo[0], 'eh-calls.jsonl') == [
+        ['--assert-shrink-range', fixture[2], fixture[3]]]
+    assert not calls(repo[0], 'conv-calls.jsonl')
+
+
+def test_unbounded_headers_bind_unselected_sources_before_build(repo):
+    fixture = unbounded_headers(repo)
+    hooks.write(repo[0], EXTRA, '// dirty unselected source\n')
+    done = run_hook(fixture, [repo[1][0]])
+    assert done.returncode == 1 and 'tracked source differs' in done.stderr
+    assert not calls(repo[0])
+
+
+def test_unbounded_headers_keep_rowless_refusal_after_full_build(repo):
+    fixture = unbounded_headers(repo)
+    done = run_hook(fixture, [EXTRA], FAIL_EXTRA=EXTRA)
+    assert done.returncode == 1 and 'additional outgoing sources' in done.stderr
+    assert calls(repo[0]) == [[], [EXTRA]]
+    assert not calls(repo[0], 'conv-calls.jsonl')
+
+
 def test_full_scope_still_binds_sources_outside_the_selected_provider_set(repo):
     # The full gate reads more than the selected rows: bind all tracked Code.
     hooks.write(repo[0], EXTRA, '// dirty additional source\n')
