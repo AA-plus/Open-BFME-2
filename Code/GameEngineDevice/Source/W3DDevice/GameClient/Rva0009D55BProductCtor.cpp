@@ -113,6 +113,7 @@ public:
 	virtual void rva0009D862();
 	virtual void rva0009DB5A(bool active);
 	virtual void rva0009BC17();
+	virtual void rva0009C144();
 	void rva0009BAA4();
 
 private:
@@ -407,4 +408,16 @@ void Rva0009D55BProduct::rva0009BAA4()
 		if (TheAudio)
 			((Rva0009BAA4AudioSlots *)TheAudio)->slot22();
 	}
+}
+
+// ?rva0009C144@Rva0009D55BProduct@@UAEXXZ retail 0x0009C144 (70 bytes; slot 7
+// of the product table): clears +0x11C and +0x138, sets the +0x134 zoom to 1,
+// copies the +0x104 vector to +0xF8 and tail-calls the camera refresh.
+void Rva0009D55BProduct::rva0009C144()
+{
+	m_11C = 0.0f;
+	m_134 = 1.0f;
+	m_138 = 0.0f;
+	m_F8 = m_104;
+	rva0009BAA4();
 }
