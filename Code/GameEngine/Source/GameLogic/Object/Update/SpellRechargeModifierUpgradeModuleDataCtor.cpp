@@ -26,6 +26,13 @@ public:
 public:
 	void *m_data;	// public so the body zeroes it explicitly (retail and-idiom)
 };
+// Declaration-only: the rowed vector<AsciiString> members are bound, this TU emits no per-flag copy.
+namespace _STL {
+template <> vector<AsciiString, allocator<AsciiString> >::~vector();
+template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();
+template <> void _STLP_alloc_proxy<AsciiString*, AsciiString, allocator<AsciiString> >::deallocate(AsciiString*, size_t);
+template <> void allocator<AsciiString>::deallocate(AsciiString*, size_t) const;
+}
 
 class Rva00253487Base
 {
