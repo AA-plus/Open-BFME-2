@@ -264,6 +264,14 @@ private:
 	static AptCreateAHero *s_instance; // 0x00A048D4
 };
 
+// VA 0x00A048D4: the create-a-hero screen singleton this unit's constructor
+// stores (`s_instance = this` below), so the definition lives here, in the
+// assigning unit, and is zero-initialised: the three readers (this unit,
+// AptCreateAHeroCallbacks OpenScreen, Rva00513866Notify) all test it before
+// use, and the address sits in the image's zero-loaded tail. Until now
+// nothing defined it, so all three carried U ?s_instance@AptCreateAHero@@0PAV1@A.
+AptCreateAHero *AptCreateAHero::s_instance;
+
 class Rva005248D0CustomRenders
 {
 public:
