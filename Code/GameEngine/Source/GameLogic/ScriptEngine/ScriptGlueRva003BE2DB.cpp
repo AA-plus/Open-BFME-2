@@ -20,10 +20,14 @@ enum NameKeyType
 {
 	NAMEKEY_NONE = 0
 };
+class ThingTemplate;
+// LINK: 0x00399C6C is rowed as CastleBehavior::initiateUnpack (CastleBehaviorRegisterOwnedObject.cpp); the old
+// (int, int) call shape is kept through a member-pointer cast.
 class CastleBehavior
 {
 public:
 	static NameKeyType rva0003955DA();
+	void initiateUnpack(bool a, const ThingTemplate *b);
 };
 
 class Object;
@@ -62,11 +66,6 @@ class Rva0039718B
 public:
 	bool rva0039718B(Player *pl);
 };
-class Rva00399C6C
-{
-public:
-	void rva00399C6C(int a, int b);
-};
 
 class ScriptActions
 {
@@ -93,7 +92,7 @@ void ScriptActions::doUnpackBase(Parameter *p1, const AsciiString *str, int flag
 		if (!((Rva0039718B *)mod)->rva0039718B(obj->getControllingPlayer()))
 			return;
 	}
-	((Rva00399C6C *)mod)->rva00399C6C(flag, 0);
+	(((CastleBehavior *)mod)->*reinterpret_cast<void (CastleBehavior::*)(int, int)>(&CastleBehavior::initiateUnpack))(flag, 0);
 	if (str->isEmpty())
 		return;
 	TheScriptEngine->rva00208968(*str, obj);

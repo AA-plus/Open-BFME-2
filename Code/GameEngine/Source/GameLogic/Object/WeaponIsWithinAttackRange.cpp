@@ -19,11 +19,14 @@ public:
 	Coord3D m_position;
 };
 
-class Rva002CB35CObj
+// LINK: 0x002CB35C is rowed as Rva002C9B80Owner::isWithinAttackRange (WeaponRva002CB2D1Range.cpp); the old six-slot
+// call shape is kept through a member-pointer cast.
+class Rva002C9B80Owner
 {
 public:
-	bool rva002CB35C(int a, void *b, void *c, void *d, float e, int f);
+	bool isWithinAttackRange(Object *a, const Coord3D *b, Object *c, const Coord3D *d, float e, bool f);
 };
+typedef bool (Rva002C9B80Owner::*Rva002CB35CShape)(int, void *, void *, void *, float, int);
 
 class Weapon
 {
@@ -35,7 +38,7 @@ public:
 bool Weapon::isWithinAttackRange(const Object *source, const Object *target, float extra, int flag) const
 {
 	if (source && target)
-		return ((Rva002CB35CObj *)this)->rva002CB35C((int)source, (void *)&source->m_position, (void *)target, (void *)&target->m_position, extra, flag);
+		return (((Rva002C9B80Owner *)this)->*reinterpret_cast<Rva002CB35CShape>(&Rva002C9B80Owner::isWithinAttackRange))((int)source, (void *)&source->m_position, (void *)target, (void *)&target->m_position, extra, flag);
 	return false;
 }
 
@@ -45,6 +48,6 @@ bool Weapon::isWithinAttackRange(const Object *source, const Object *target, flo
 char Weapon::isWithinAttackRange(Object *source, void *pos, float extra, int flag) const
 {
 	if (source && pos)
-		return ((Rva002CB35CObj *)this)->rva002CB35C((int)source, (void *)&source->m_position, 0, pos, extra, flag);
+		return (((Rva002C9B80Owner *)this)->*reinterpret_cast<Rva002CB35CShape>(&Rva002C9B80Owner::isWithinAttackRange))((int)source, (void *)&source->m_position, 0, pos, extra, flag);
 	return 0;
 }
