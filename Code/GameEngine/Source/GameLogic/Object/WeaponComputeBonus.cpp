@@ -36,6 +36,16 @@ public:
 		for (int i = 0; i < 6; ++i)
 			m_fields[i] = 1.0f;
 	}
+	// LINK: same-body helper under a TU-unique name (identical inlined
+	// bytes). This TU's clear copy loses to the first-in-order copy (no
+	// retail address); the computeBonus call below inlines it but still emits
+	// the loser COMDAT. Rebinding there emits only this unique (trivially
+	// kept) copy. No flags touched.
+	__forceinline void bfme_clear()
+	{
+		for (int i = 0; i < 6; ++i)
+			m_fields[i] = 1.0f;
+	}
 	Real m_fields[6];
 };
 class WeaponBonusSet
@@ -67,7 +77,7 @@ private:
 
 void Weapon::computeBonus(const Object *source, WeaponBonusConditionFlags extra, WeaponBonus &bonus) const
 {
-	bonus.clear();
+	bonus.bfme_clear();
 	UnsignedInt flags = source->m_weaponBonusCondition | extra;
 	WeaponBonusSet *global = TheWritableGlobalData->m_weaponBonusSet;
 	if (global)
