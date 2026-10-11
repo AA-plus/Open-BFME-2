@@ -349,7 +349,7 @@ void Rva0009D55BProduct::rva0009BC17()
 // refresh slots 8 and 9 and the setup 0x0009D862 run, pinned there as
 // Rva0009C134Host::rva0009BAA4): eases the +0x134 zoom through the rowed
 // 0x0009AAA8 into a distance between +0xD8 and +0xDC and a pitch from +0x13C
-// towards 0 (the 0x00DFE1C8 singleton's +0x38 float under +0x19); with a
+// towards 0 (TheLivingWorldManager's +0x38 float under +0x19); with a
 // camera it sets the clip planes (10, 1.5 * distance + 2000) and a 50-degree
 // view plane, builds the camera transform from an identity matrix through
 // 0x0009B510, hands it to camera slot 21 and pokes TheAudio's slot 22.
@@ -387,7 +387,6 @@ public:
 };
 float __cdecl Rva0009AAA8Get(float x);
 struct Rva0009BAA4HostView { unsigned char m_pad[0x38]; float m_38; };
-extern Rva0009BAA4HostView *g_Va00DFE1C8;
 struct Rva0009BAA4LivingWorldView { unsigned char m_pad[0x19]; bool m_19; };
 
 void Rva0009D55BProduct::rva0009BAA4()
@@ -398,7 +397,7 @@ void Rva0009D55BProduct::rva0009BAA4()
 	float distance = Rva0009BC17Lerp(m_D8, m_DC, Rva0009AAA8Get((square + zoom) * 0.5f));
 	float pitch = Rva0009BC17Lerp(m_13C, 0.0f, Rva0009AAA8Get(m_134));
 	if (((Rva0009BAA4LivingWorldView *)this)->m_19)
-		pitch = g_Va00DFE1C8->m_38;
+		pitch = ((Rva0009BAA4HostView *)TheLivingWorldManager)->m_38;
 	if (m_C0)
 	{
 		((CameraClass *)m_C0)->Set_Clip_Planes(10.0f, distance * 1.5f + 2000.0f);
