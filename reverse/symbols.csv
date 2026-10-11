@@ -17206,3 +17206,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??1Rva00212379@@QAE@XZ,0x00212379,placeholder: 5-byte jmp thunk to 0x0021231B that the 0x00214405 unwind funclet 0x0076DFBB reaches (hash_map wrapper out-of-line destructor)
 ??1Rva0014DC76@@UAE@XZ,0x0014DC76,placeholder: the four-interface member destructor (stores 0x00BC6F24 at +0xC/+8/+4/+0; no own table) that the 0x001505CD unwind funclet 0x00766A6A reaches; same body as the rowed ?rva0014DC76@Rva0014DC76
 ??1Rva003089CFList@@QAE@XZ,0x0007FAB3,placeholder: the +0x68 listener-list base destructor of 0x0030902E (free first pointer when non-null); its unwind funclet 0x00779E1C reaches the shared free-first-pointer body
+??0Rva003A59C3@@QAE@IAAURva003A59C3Src@@@Z,0x003A59C3,callee of ?rva003AD03B@Rva003AD03BTemplate@@UAEPAVRva003AD03BModule@@I@Z
