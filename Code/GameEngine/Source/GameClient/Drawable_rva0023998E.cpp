@@ -2,9 +2,10 @@
 // ?rva0023998E@Drawable@@QAEXH@Z @0x0023998E 93B.
 // Target evidence: indexes the +0xF8 circular-list holders, brackets their
 // node callbacks with TheDisplay vslots +0xD4/+0x100, then clears the holder.
+// LINK: the callback owner is spelled Rva002796D9Host, as rowed at 0x002796D9 (Rva002796D9.cpp).
 // Identity remains address-derived; callback owner and list semantics are inferred.
 
-class Rva002796D9
+class Rva002796D9Host
 {
 public:
 	void rva002796D9(int slot);
@@ -14,7 +15,7 @@ struct Rva0023998EListNode
 {
 	Rva0023998EListNode *m_next;
 	void *m_prev;
-	Rva002796D9 *m_callback;
+	Rva002796D9Host *m_callback;
 };
 
 class Rva00239380Holder
