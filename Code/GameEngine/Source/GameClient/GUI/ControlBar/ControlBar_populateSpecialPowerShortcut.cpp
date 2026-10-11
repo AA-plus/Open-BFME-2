@@ -32,6 +32,14 @@ enum
 namespace _STL { void __cdecl free(void *); }
 #include <vector>
 
+// Match the established ScienceType vector cleanup's actual game allocator:
+// _STL::free was only a pin spelling of this verified17-byte provider.
+void __cdecl Rva00030830GameFree(void *);
+namespace _STL {
+template <> inline _Vector_base<ScienceType, allocator<ScienceType> >::~_Vector_base()
+{ if (_M_start) Rva00030830GameFree(_M_start); }
+}
+
 // __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
 // COMDATs (one byte shape per TU malloc/free wiring); explicit
 // dllimport+forceinline specializations take those calls inline so this
