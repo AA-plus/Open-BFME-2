@@ -31,6 +31,8 @@ template <> _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<cons
 // Same for map::find (row 38): suppress so the link keeps the retail copy.
 template <> _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::iterator _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::find(const int &);
 template <> _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::const_iterator _STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::find(const int &) const;
+// Same for operator[] (row 39 S): suppress so the link keeps the retail copy.
+template <> int &_STL::map<int, int, _STL::less<int>, _STL::allocator<_STL::pair<const int, int> > >::operator[](const int &);
 // Member-template suppression attempt (row 37 _Rb_tree::find).
 template <> template <> IntMapTree::iterator IntMapTree::find<int>(const int &);
 }
