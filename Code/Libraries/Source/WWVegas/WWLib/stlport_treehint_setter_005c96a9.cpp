@@ -45,6 +45,9 @@ void Rva005C96A9::rva005C96A9(TreeHintRef00217D4C hint, int value)
     m_value = value;
 }
 
+// LINK: the open call binds the rowed owner at 0x00524D01 (MovieWindowPlayback::OpenMovie, Rva00524B7ACtor.cpp).
+class MovieWindowPlayback { public: void OpenMovie(const AsciiString &, int); };
+
 // The owner at 0x005C976F contains this same setter object at +0x218.
 // Native calls expose its vptr at +0 and state byte +0x24 while the
 // already verified setter establishes +0x34/+0x38. Original names remain
@@ -84,7 +87,7 @@ void Rva005C976F::rva005C976F()
     if (m_pending268)
     {
         m_helper218.rva005C96A9(m_hint260, m_value264);
-        m_helper218.rva00524D01(m_name258, m_flags25c);
+        reinterpret_cast<MovieWindowPlayback *>(&m_helper218)->OpenMovie(m_name258, m_flags25c);
     }
 }
 
