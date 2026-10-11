@@ -88,6 +88,7 @@ public:
  unsigned short *next, *last;
  unsigned short rva00531AEE(unsigned short);
  void rva00531B3A(unsigned short);
+ unsigned short GetNextSetMember(unsigned short n) { return next[n]; }
 };
 // Target array callback531FCF is a5B destructor forwarding to the rowed
 // union-find release40B at531A93. The wrapper name stays address-qualified.
@@ -102,6 +103,8 @@ public:
 	~Rva00531E14() { delete [] table; }
  unsigned char rva00531E14(unsigned short);
  unsigned char rva00531DAE(unsigned short);
+ unsigned short rva00531D52();
+ unsigned short rva00531DE1();
 	unsigned short capacity, first, second, end;
 	unsigned short *table;
 };
@@ -110,7 +113,7 @@ class PathfindCell;
 class PathfindLayer {public: char unknown00[0x2C]; unsigned short zone; char unknown2E[0x40-0x2E]; unsigned short getZone()const{return zone;} };
 bool Rva001E3679(int);
 class Rva005335B0 {public: void rva005335B0(unsigned short,unsigned short);};
-class BooleanBitmapSet {public: BooleanBitmapSet(int); ~BooleanBitmapSet() throw() { rva00530FAE(); } __declspec(nothrow) void rva00530FAE(); void SetBit(int); unsigned numBitsDiv32; int *bits; unsigned *summary; unsigned cursor,bit;};
+class BooleanBitmapSet {public: BooleanBitmapSet(int); ~BooleanBitmapSet() throw() { rva00530FAE(); } __declspec(nothrow) void rva00530FAE(); void SetBit(int); void rva00530FC5(); void ResetEnum() { bit=0; cursor=0; } bool DoEnum(int *); unsigned numBitsDiv32; int *bits; unsigned *summary; unsigned cursor,bit;};
 // The first 20B bitmap subobject uses a size-preserving derived construction
 // view to reproduce native LEA-before-PUSH ordering at5323C7. This is compiler
 // shape evidence; no claim about an original derived type is made.
@@ -121,7 +124,7 @@ typedef char PathfindBitmapViewSize[(sizeof(PathfindInitialBitmapView)==20)?1:-1
 class Rva00532DF6 {public: bool remove(unsigned short,unsigned short); bool add(unsigned short,unsigned short);};
 class Rva00532330 {public: bool rva00532330(unsigned short*,unsigned short*);};
 
-class Rva00531E74 { public: Rva00531E74():count(0) { for(int i=0;i<4001;++i)words[i]=0; } __declspec(nothrow) void rva005320C1(); ~Rva00531E74() throw() { rva005320C1(); } private: unsigned words[4001]; unsigned count; };
+class Rva00531E74 { public: Rva00531E74():count(0) { for(int i=0;i<4001;++i)words[i]=0; } __declspec(nothrow) void rva005320C1(); void rva00531E74(); ~Rva00531E74() throw() { rva005320C1(); } private: unsigned words[4001]; unsigned count; };
 class PathfindZoneManager : public Rva00531E14
 {
 public:
@@ -153,6 +156,8 @@ public:
  unsigned char rva005316E0(unsigned short first,unsigned short second);
  void rva00532FEA(Block *,PathfindCell **,const IRegion2D&);
  void rva00533664(Block *,PathfindCell **,PathfindLayer *,const IRegion2D&,bool);
+ void Update(PathfindCell **map, PathfindLayer *layers, const IRegion2D &bounds);
+ void rva005329C8(PathfindCell **map, const IRegion2D &region);
 	// Accessed layout only. Cell storage's full element count is unproven.
 	char unknown0C[0x1770C - 0xC];
  Rva00531E74 buckets;
@@ -377,6 +382,7 @@ void Rva00531A44::rva00531B3A(unsigned short n) {
 class Rva00531C5A {
 public: unsigned short rva00531C5A(unsigned short);
  void rva00531C8C(unsigned short);
+ unsigned short GetNextSetMember(unsigned short n) { return next[n]; }
  unsigned short capacity, first;
  unsigned short *parents;
  unsigned char *ranks;
@@ -471,6 +477,78 @@ unsigned char PathfindZoneManager::rva005316E0(unsigned short first,unsigned sho
  unsigned char type=av;
  type^=bv;
  return (type & 7)==0;
+}
+
+// Native 0x005329C8..0x00532C75 (685 bytes) and WB 0x012D0400: label the
+// cells of one region with provisional zones through a 256-entry local
+// union-find (UnionFindSimpleStatic in WB), give each root a fresh manager
+// zone (0x00531D52) marked changed and made a set in every union, then write
+// the final zones back and link neighbouring zones (0x005324D8). The WB body
+// recomputes the left neighbour and takes the lower neighbour only after the
+// equality test; that shape fixes the register choice in the first loop.
+// Original method name unknown.
+class Rva00531ED3 { public: unsigned short rva00531ED3(unsigned short); };
+class Rva0053222F {
+public: void rva00532479(unsigned short,unsigned short);
+ unsigned short parents[256]; unsigned char ranks[256];
+ void MakeSet(unsigned short n) { parents[n]=n; ranks[n]=0; }
+};
+class Rva00531196 { public: void rva00531196(unsigned int *); };
+
+void PathfindZoneManager::rva005329C8(PathfindCell **map,const IRegion2D &region) {
+ unsigned short mappedID[256];
+ bool initialized[256];
+ Rva0053222F local;
+ unsigned count=0;
+ PathfindCell *cell;
+ int x;
+ for(x=region.lo.x;x<=region.hi.x;++x) {
+  for(int y=region.lo.y;y<=region.hi.y;++y) {
+   cell=&map[x][y];
+   cell->zone=0xFFFF;
+   if(x>region.lo.x && Rva0053166DEqual(cell,&map[x-1][y]))
+    cell->zone=map[x-1][y].zone;
+   if(y>region.lo.y && Rva0053166DEqual(cell,&map[x][y-1])) {
+    PathfindCell *down=&map[x][y-1];
+    {
+     if(cell->zone==0xFFFF)cell->zone=down->zone;
+     else local.rva00532479(down->zone,cell->zone);
+    }
+   }
+   if(cell->zone==0xFFFF) {
+    unsigned n=count++;
+    local.MakeSet((unsigned short)n);
+    cell->zone=(unsigned short)n;
+   }
+  }
+ }
+ for(unsigned n=0;n<count;++n) {
+  if(((Rva00531ED3 *)&local)->rva00531ED3((unsigned short)n)!=n)continue;
+  initialized[n]=false;
+  mappedID[n]=rva00531D52();
+  changed.SetBit(mappedID[n]);
+  for(int variant=0;variant<8;variant+=2)
+   for(int equivalent=0;equivalent<7;++equivalent)
+    unions[variant][equivalent].rva00531ABB(mappedID[n]);
+  finalUnion.rva00531ABB(mappedID[n]);
+ }
+ for(x=region.lo.x;x<=region.hi.x;++x) {
+  for(int y=region.lo.y;y<=region.hi.y;++y) {
+   cell=&map[x][y];
+   unsigned root=((Rva00531ED3 *)&local)->rva00531ED3(cell->zone);
+   if(!initialized[root]) {
+    initialized[root]=true;
+    ((Rva00531196 *)(reinterpret_cast<CellType *>(unknown0C)+mappedID[root]))->rva00531196((unsigned int *)cell);
+   } else ++table[mappedID[root]];
+   cell->zone=mappedID[root];
+   if(x>region.lo.x && cell->zone!=map[x-1][y].zone)
+    rva005324D8(0,cell->zone,map[x-1][y].zone);
+   if(y>region.lo.y) {
+    unsigned short other=map[x][y-1].zone;
+    if(cell->zone!=other)rva005324D8(0,cell->zone,other);
+   }
+  }
+ }
 }
 
 // Native 0x00532FEA..0x005334A4 and WB0x012D1CE0 establish zone-link
@@ -680,3 +758,205 @@ PathfindZoneManager::PathfindZoneManager()
 {
  dimensions.zero();
 }
+
+// BooleanBitmapSet::DoEnum (WB Source/common/BitmapSet.h; retail 0x0053104A,
+// 153 bytes). Retail's Update was compiled with this body visible: it keeps
+// the enumerated index in a register across the union-find calls and reads
+// the cell type through the live index, which only an earlier definition in
+// this unit reproduces (the same body is byte-exact here).
+bool BooleanBitmapSet::DoEnum(int *out)
+{
+	while (cursor < numBitsDiv32) {
+		unsigned int word = summary[cursor >> 5];
+		if (word != 0) {
+			unsigned int shifted = word >> (cursor & 31);
+			if (shifted != 0) {
+				while ((shifted & 1) == 0) {
+					shifted >>= 1;
+					++cursor;
+				}
+				unsigned int d = ((unsigned int *)bits)[cursor] >> bit;
+				while (true) {
+					if (d == 0) {
+						bit = 0;
+						++cursor;
+						break;
+					}
+					if (d & 1) {
+						*out = (cursor << 5) + bit;
+						if (++bit == 32) {
+							bit = 0;
+							++cursor;
+						}
+						return true;
+					}
+					d >>= 1;
+					++bit;
+				}
+				continue;
+			} else {
+				cursor = (cursor + 31) & ~31u;
+			}
+		} else {
+			cursor += 32;
+		}
+	}
+	return false;
+}
+class Rva0036667B { public: void rva0036667B(int); };
+// WB 0x012CDDE0 names PathfindZoneManager::Update (pathfinder_zonemanager.cpp,
+// asserts 550..629); native 0x00533BEC..0x005342CB (1759 bytes, RET 12). A set
+// rebuild flag regenerates every zone, block and equivalency union; otherwise
+// only blocks flagged at +0x35 are relinked and the unions of the changed
+// zones are reset and rejoined. All callees are existing rows in this unit or
+// rowed providers; the region labeller 0x005329C8 is defined above.
+void PathfindZoneManager::Update(PathfindCell **map, PathfindLayer *layers, const IRegion2D &bounds) {
+ if (!flag1BA31 && !flag1BA30) return;
+ if (flag1BA31) {
+ int x,v,k;
+  flag1BA31=false;
+  flag1BA30=false;
+  end=0; first=0; second=capacity;
+  buckets.rva00531E74();
+  for (int layer=2; layer<=15; ++layer) {
+   int zone=rva00531D52();
+   CellType &cell=reinterpret_cast<CellType *>(unknown0C)[zone];
+   cell.id=layer; cell.unknown15=0; cell.secondary=0; cell.type=0; cell.bridge=0;
+   ((Rva0036667B *)&layers[layer])->rva0036667B(zone);
+  }
+  for(v=0; v<8; v+=2) for(int e=0;e<7;++e) for(unsigned k=0;k<14;++k)
+   unions[v][e].rva00531ABB((unsigned short)k);
+  finalUnion.first=0;
+  for(k=0;k<end;++k) finalUnion.rva00531ABB((unsigned short)k);
+  for(v=1;v<8;v+=2) for(int e=0;e<7;++e) {
+   unions[v][e].first=0;
+   for(unsigned k=0;k<end;++k) unions[v][e].rva00531ABB((unsigned short)k);
+  }
+  for(x=0;x<dimensions.x;++x) {
+   IRegion2D region;
+   region.lo.x=bounds.lo.x+x*16;
+   region.hi.x=region.lo.x+15;
+   if(region.hi.x>bounds.hi.x)region.hi.x=bounds.hi.x;
+   for(int y=0;y<dimensions.y;++y) {
+    Block *block=&blocks[x][y];
+    region.lo.y=bounds.lo.y+y*16;
+    region.hi.y=region.lo.y+15;
+    if(region.hi.y>bounds.hi.y)region.hi.y=bounds.hi.y;
+    rva005329C8(map,region); block->flag35=false;
+   }
+  }
+  for(x=0;x<dimensions.x;++x) {
+   IRegion2D region;
+   region.lo.x=bounds.lo.x+x*16;
+   region.hi.x=region.lo.x+15;
+   if(region.hi.x>bounds.hi.x)region.hi.x=bounds.hi.x;
+   for(int y=0;y<dimensions.y;++y) {
+    Block *block=&blocks[x][y];
+    region.lo.y=bounds.lo.y+y*16;
+    region.hi.y=region.lo.y+15;
+    if(region.hi.y>bounds.hi.y)region.hi.y=bounds.hi.y;
+    rva00533664(block,map,layers,region,false);
+   }
+  }
+  for(v=1;v<8;v+=2) for(int e=0;e<7;++e) {
+   unions[v][e].first=0;
+   for(unsigned k=0;k<end;++k)unions[v][e].rva00531ABB((unsigned short)k);
+  }
+  finalUnion.first=0;
+  for(k=0;k<end;++k)finalUnion.rva00531ABB((unsigned short)k);
+  for(k=0;k<end;++k) {
+   ZoneAdjacencyRange range=((ZoneAdjacencyTable *)((char *)this+0x1770C))->rva00532104((unsigned short)k);
+   for(;range.begin!=range.end;++range.begin) rva005324D8(1,(unsigned short)k,range.begin->zone);
+  }
+ } else {
+  flag1BA30=false;
+  unsigned oldEnd=end;
+  changed.rva00530FC5();
+  for(int x=0;x<dimensions.x;++x) {
+   IRegion2D region;
+   region.lo.x=bounds.lo.x+x*16;
+   region.hi.x=region.lo.x+15;
+   if(region.hi.x>bounds.hi.x)region.hi.x=bounds.hi.x;
+   for(int y=0;y<dimensions.y;++y) {
+    Block *block=&blocks[x][y];
+    if(!block->flag35)continue;
+    region.lo.y=bounds.lo.y+y*16;
+    region.hi.y=region.lo.y+15;
+    if(region.hi.y>bounds.hi.y)region.hi.y=bounds.hi.y;
+    rva00532FEA(block,map,region);
+    rva005329C8(map,region);
+    rva00533664(block,map,layers,region,true);
+    block->flag35=false;
+   }
+  }
+  for(int v=1;v<8;v+=2)for(int e=0;e<7;++e) {
+   affected.rva00530FC5();
+   changed.ResetEnum();
+   {
+   int n;
+   while(changed.DoEnum(&n)) {
+    if((unsigned)n<oldEnd) {
+     unsigned short member=unions[v][e].rva00531AEE((unsigned short)n);
+     for(;;) {
+      affected.SetBit(member);
+      unsigned short next=unions[v][e].GetNextSetMember(member);
+      if(next==member)break;
+      member=next;
+     }
+     unions[v][e].rva00531B3A((unsigned short)n);
+    } else {unions[v][e].rva00531ABB((unsigned short)n);affected.SetBit(n);}
+   }
+   }
+   affected.ResetEnum();
+   {
+   int zone;
+   while(affected.DoEnum(&zone)) {
+    if(!((Rva00531720 *)this)->rva00531720(v,zone))continue;
+    if(!CouldBeInEquivSet(e,zone))continue;
+    ZoneAdjacencyRange range=((ZoneAdjacencyTable *)((char *)this+0x1770C))->rva00532104((unsigned short)zone);
+    for(;range.begin!=range.end;++range.begin) {
+     unsigned short other=range.begin->zone;
+     if(!((Rva00531720 *)this)->rva00531720(v,other))continue;
+     if(!InEquivSet(e,zone,other))continue;
+     ((Rva00532165 *)&unions[v][e])->rva00532431((unsigned short)zone,other);
+    }
+   }
+   }
+  }
+  affected.rva00530FC5();
+  changed.ResetEnum();
+  {
+  int n;
+  while(changed.DoEnum(&n)) {
+   if((unsigned)n<oldEnd) {
+    unsigned short member=((Rva00531C5A *)&finalUnion)->rva00531C5A((unsigned short)n);
+    for(;;) {
+     affected.SetBit(member);
+     unsigned short next=((Rva00531C5A *)&finalUnion)->GetNextSetMember(member);
+     if(next==member)break;
+     member=next;
+    }
+    ((Rva00531C5A *)&finalUnion)->rva00531C8C((unsigned short)n);
+   } else {finalUnion.rva00531ABB((unsigned short)n);affected.SetBit(n);}
+  }
+  }
+  affected.ResetEnum();
+  {
+  int zone;
+  while(affected.DoEnum(&zone)) {
+   CellType &cell=reinterpret_cast<CellType *>(unknown0C)[zone];
+   if(cell.type!=0 && cell.type!=4)continue;
+   ZoneAdjacencyRange range=((ZoneAdjacencyTable *)((char *)this+0x1770C))->rva00532104((unsigned short)zone);
+   for(;range.begin!=range.end;++range.begin) {
+    unsigned short other=range.begin->zone;
+    CellType &target=reinterpret_cast<CellType *>(unknown0C)[other];
+    if(cell.id!=target.id)continue;
+    if(target.type!=0 && target.type!=4)continue;
+    ((Rva005321D1 *)&finalUnion)->rva00532455((unsigned short)zone,other);
+   }
+  }
+  }
+  while(rva00531DE1()!=24000) {}
+ }
+}
+

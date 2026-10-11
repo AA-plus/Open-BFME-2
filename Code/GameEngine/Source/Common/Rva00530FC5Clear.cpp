@@ -78,45 +78,6 @@ BooleanBitmapSet::BooleanBitmapSet(int numBits)
 	ji_006291ae(m_summaryBits, 0, (m_numBitsDiv32 >> 5) * 4);
 }
 
-bool BooleanBitmapSet::DoEnum(int *out)
-{
-	while (m_curBitDiv32 < m_numBitsDiv32) {
-		unsigned int word = m_summaryBits[m_curBitDiv32 >> 5];
-		if (word != 0) {
-			unsigned int shifted = word >> (m_curBitDiv32 & 31);
-			if (shifted != 0) {
-				while ((shifted & 1) == 0) {
-					shifted >>= 1;
-					++m_curBitDiv32;
-				}
-				unsigned int d = ((unsigned int *)m_bits)[m_curBitDiv32] >> m_extra10;
-				while (true) {
-					if (d == 0) {
-						m_extra10 = 0;
-						++m_curBitDiv32;
-						break;
-					}
-					if (d & 1) {
-						*out = (m_curBitDiv32 << 5) + m_extra10;
-						if (++m_extra10 == 32) {
-							m_extra10 = 0;
-							++m_curBitDiv32;
-						}
-						return true;
-					}
-					d >>= 1;
-					++m_extra10;
-				}
-				continue;
-			} else {
-				m_curBitDiv32 = (m_curBitDiv32 + 31) & ~31u;
-			}
-		} else {
-			m_curBitDiv32 += 32;
-		}
-	}
-	return false;
-}
 // BooleanBitmapSet::SetBit @ 0x00531008 (57B): __thiscall two-level bit set m_bits at +4 and m_summaryBits at +8; callers in 0x005329C8 0x00532FEA.
 void BooleanBitmapSet::SetBit(int bit)
 {
