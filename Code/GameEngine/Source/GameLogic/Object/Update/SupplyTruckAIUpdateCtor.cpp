@@ -4,26 +4,30 @@
 // stlport
 //
 // ??0HordeDispatchSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z at
-// retail 0x004C89E6 (47B). Same opaque-base pattern as MissileLauncherBuildingUpdate:
-// unidentified 0x88-byte UpdateModule-derived intermediate base 0x00493C5A
-// (pinned opaque as Rva00493C5A); the derived body re-stores the inherited
-// +0x0C/+0x10/+0x20 pointer slots (address-of TU-local dummies,
-// DIR32-patched). No trailing members (factory size 0x88). Do NOT declare an
-// explicit vptr member on the base: the compiler's hidden vptr already sits
-// at +0 and a declared one shifts every slot by 4.
+// retail 0x004C89E6 (47B). The intermediate base is SpecialPowerModule:
+// retail's derived E8 targets 0x00493C5A, rowed as
+// ??0SpecialPowerModule@@QAE@PAVThing@@PBVModuleData@@@Z (330B,
+// SpecialPowerModuleCtor.cpp), same (Thing*, ModuleData*) ABI; the base
+// dtor resolves to rowed ??1SpecialPowerModule@@UAE@XZ (0x00493DEF).
+// The derived body re-stores the inherited +0x0C/+0x10 pointer slots
+// (address-of TU-local dummies, DIR32-patched). No trailing members
+// (factory size 0x88). Do NOT declare an explicit vptr member on the base:
+// the compiler's hidden vptr already sits at +0 and a declared one shifts
+// every slot by 4.
 class Thing;
 class ModuleData;
 
 static int s_dummy0C;
 static int s_dummy10;
 
-// Opaque 0x88-byte UpdateModule-derived intermediate; ctor resolves to the
-// opaque pin at 0x00493C5A. Protected slots mirror the retail stores.
-class Rva00493C5A
+// Minimal ABI view of SpecialPowerModule: only the ctor/dtor the derived
+// body binds (rowed 0x00493C5A / 0x00493DEF). Protected slots mirror the
+// retail stores; the full virtual sequence lives in SpecialPowerModuleCtor.
+class SpecialPowerModule
 {
 public:
-	Rva00493C5A(Thing *thing, const ModuleData *moduleData);
-	virtual ~Rva00493C5A();
+	SpecialPowerModule(Thing *thing, const ModuleData *moduleData);
+	virtual ~SpecialPowerModule();
 
 protected:
 	unsigned char m_pad0[8];
@@ -32,12 +36,7 @@ protected:
 	unsigned char m_pad1[0x88 - 0x14];
 };
 
-// ??1Rva00493C5A@@ present-unmatched
-Rva00493C5A::~Rva00493C5A()
-{
-}
-
-class HordeDispatchSpecialPower : public Rva00493C5A
+class HordeDispatchSpecialPower : public SpecialPowerModule
 {
 public:
 	HordeDispatchSpecialPower(Thing *thing, const ModuleData *moduleData);
@@ -45,7 +44,7 @@ public:
 };
 
 HordeDispatchSpecialPower::HordeDispatchSpecialPower(Thing *thing, const ModuleData *moduleData)
-	: Rva00493C5A(thing, moduleData)
+	: SpecialPowerModule(thing, moduleData)
 {
 	m_p0C = &s_dummy0C;
 	m_p10 = &s_dummy10;
