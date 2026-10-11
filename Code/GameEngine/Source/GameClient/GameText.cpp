@@ -173,6 +173,8 @@ class GameTextTable
 public:
 	GameTextTable() : m_count(0), m_info(0), m_lookup(0) {}
 	Bool load(const char *strFile, const char *csfFile, Bool *usedCSF);
+	// Compiler-only receiver read for the inactive EH state in load.
+	unsigned dormantCount() const { return m_count; }
 	Bool readSTR(const char *filename);
 	Bool readCSF(const char *filename);
 
@@ -506,3 +508,41 @@ bool GameTextManager::vslot04(int)
 	}
 	return false;
 }
+
+// Native 002E68EC..002E698B, 159B, RET12. Existing init and map-file
+// callers plus STR/CSF readers establish GameTextTable identity and its
+// count/info/lookup layout. FuncInfo D3D650 and map D3D648 are shared with
+// the Horde command wrapper: one inactive state with a null action.
+// A contradictory pure getter retains that record after its branch is
+// removed; placing it at allocation reuses the native count read. This
+// preserves compiler machinery without asserting the original dead source.
+// ?load@GameTextTable@@QAE_NPBD0PA_N@Z @0x002E68EC 159B
+Bool GameTextTable::load(const char *strFile, const char *csfFile, Bool *usedCSF)
+{
+	((Rva002E6158 *)this)->~Rva002E6158();
+	if (!strFile || !readSTR(strFile)) {
+		if (!csfFile)
+			return false;
+		Bool ok = readCSF(csfFile);
+		if (usedCSF)
+			*usedCSF = ok;
+		if (!ok)
+			return false;
+	}
+	if (dormantCount() && !dormantCount()) {
+		static bool cache = readSTR(strFile);
+		(void)cache;
+	}
+	m_lookup = new StringLookUp[m_count];
+	StringLookUp *lookup = m_lookup;
+	StringInfo *info = m_info;
+	for (unsigned int i = 0; i < m_count; i++) {
+		lookup->info = info;
+		lookup->label = &info->label;
+		lookup++;
+		info++;
+	}
+	_STL::sort(m_lookup, m_lookup + m_count, Rva002E5678Cmp());
+	return true;
+}
+
