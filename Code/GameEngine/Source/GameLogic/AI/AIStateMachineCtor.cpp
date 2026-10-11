@@ -55,7 +55,7 @@ public:
 	AIStateMachine(Object *owner, UnsignedInt nameKey);
 	virtual ~AIStateMachine();
 private:
-	_STL::vector<Coord3D> m_goalPath;	// +0x3C
+	_STL::vector<Gen_p12pod> m_goalPath;	// +0x3C
 	Waypoint *m_goalWaypoint;			// +0x48
 	Squad *m_goalSquad;					// +0x4C
 	State *m_temporaryState;			// +0x50
@@ -501,7 +501,7 @@ private:
 
 AIStateMachine::AIStateMachine(Object *owner, UnsignedInt nameKey) : StateMachine(owner, nameKey, false)
 {
-	reinterpret_cast<_STL::vector<Gen_p12pod> &>(m_goalPath).clear();
+	m_goalPath.clear();
 	m_goalWaypoint = NULL;
 	m_goalSquad = NULL;
 	m_goalObjectID = 0;
