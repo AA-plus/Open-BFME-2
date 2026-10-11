@@ -3,12 +3,16 @@
 // retains its time-window eviction and probabilistic culling, with frame40,
 // GameMemory free, the target source literal/line and native list append.
 // Original method spelling is unproven; retain its existing linker name.
-namespace _STL { void free(void *); }
+namespace _STL { void free(void *); template <class T> class allocator; template <class T, class A> class list; }
+struct Rva002923DFElement;
+// LINK: 0x002923DF is rowed as the STLport list size; the frame-history list is
+// that list, so the count is read through the rowed name.
+namespace _STL { template <class T, class A> class list { public: unsigned size() const; }; }
 int GetGameClientRandomValue(int,int,char *,int);
 class GameLogic;
 extern GameLogic *TheGameLogic;
 struct FxPlayTimeNode {FxPlayTimeNode *next,*previous;unsigned frame;};
-class IntFrameList {public:unsigned size()const;FxPlayTimeNode *head;};
+class IntFrameList {public:FxPlayTimeNode *head;};
 class Rva0005548FNativeList {public:void append(void *const &);};
 class FXList {
 public:bool rva001E2EF1()const;
@@ -30,7 +34,7 @@ bool FXList::rva001E2EF1()const {
   _STL::free(node);
   node=next;
  }
- unsigned count=times->size();
+ unsigned count=((const _STL::list<Rva002923DFElement, _STL::allocator<Rva002923DFElement> > *)times)->size();
  unsigned start=startCull1C;
  if(count>start)return true;
  if(count>allCull20){
