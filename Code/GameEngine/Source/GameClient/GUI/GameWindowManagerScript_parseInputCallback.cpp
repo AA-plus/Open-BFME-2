@@ -48,6 +48,8 @@ class Rva00DFF024Registry
 {
 public:
 	__forceinline void *lookup(int key, int index) { return ((FunctionLexicon *)(void *)this)->findFunction((NameKeyType)key, (FunctionLexicon::TableIndex)index); }
+	// LINK: same-body helper under a TU-unique name (identical inlined bytes); the lookup copy loses to the first-in-order copy. No flags touched.
+	__forceinline void *bfme_lookup_c3028(int key, int index) { return ((FunctionLexicon *)(void *)this)->findFunction((NameKeyType)key, (FunctionLexicon::TableIndex)index); }
 };
 
 extern Rva00DFF024Registry *TheRva00DFF024Registry;
@@ -74,7 +76,7 @@ static Bool parseInputCallback(char *token, WinInstanceData *instData, char *buf
 	g_inputCallbackName.set(c);
 
 	NameKeyType key = TheNameKeyGenerator->nameToKey(g_inputCallbackName);
-	g_inputCallback = TheRva00DFF024Registry->lookup(key, 1);
+	g_inputCallback = TheRva00DFF024Registry->bfme_lookup_c3028(key, 1);
 
 	return true;
 }
