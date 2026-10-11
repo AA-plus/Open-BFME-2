@@ -37270,8 +37270,6 @@ pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/tri_compute_normal.cpp	"gsy
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/tri_compute_normal.cpp	"s",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/tri_compute_normal.cpp	"y",off	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/tri_compute_normal.cpp	"y",on	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/v3_rnd.cpp	"",on	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/v3_rnd.cpp	"gsy",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/vehiclecurve.cpp	"",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/vehiclecurve.cpp	"gsy",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/vp.cpp	"",on	1
