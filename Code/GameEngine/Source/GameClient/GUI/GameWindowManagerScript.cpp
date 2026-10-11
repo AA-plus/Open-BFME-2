@@ -359,7 +359,7 @@ static Int scanUnsignedInt( const char *source, UnsignedInt& val )
 // resetWindowStack ===========================================================
 //=============================================================================
 #pragma optimize("s", on)
-static void resetWindowStack( void )
+void resetWindowStack( void )
 {
 
   memset( windowStack, 0, sizeof( windowStack ) );
@@ -370,7 +370,7 @@ static void resetWindowStack( void )
 
 // resetWindowDefaults ========================================================
 //=============================================================================
-static void resetWindowDefaults( void )
+void resetWindowDefaults( void )
 {
 
 	defEnabledColor = 0;
@@ -2646,194 +2646,70 @@ WindowLayoutInfo::WindowLayoutInfo() :
 	* not be at the head of the window list if there is a modal window active.
 	*/
 //=============================================================================
-// ?winCreateFromScript@GameWindowManager@@ present-unmatched
-GameWindow *GameWindowManager::winCreateFromScript( AsciiString filenameString,
-																										WindowLayoutInfo *info )
+// This caller imports strchr/sprintf directly; existing parsers retain their thunk declarations.
+namespace NativeWindowCrt {
+extern "C" __declspec(dllimport) char *__cdecl strchr(const char *, int);
+extern "C" __declspec(dllimport) int __cdecl sprintf(char *, const char *, ...);
+}
+
+// STLport 4.5.3 node creation, kept out of line as in retail.
+// ?_M_create_node@?$list@PAVGameWindow@@V?$allocator@PAVGameWindow@@@_STL@@@_STL@@IAEPAU?$_List_node@PAVGameWindow@@@2@ABQAVGameWindow@@@Z present-unmatched
+namespace _STL {
+template<> __declspec(noinline)
+_List_node<GameWindow*> *list<GameWindow*>::_M_create_node(GameWindow *const &value)
 {
-	const char* filename = filenameString.str();
-	static char buffer[ WIN_BUFFER_LENGTH ]; 		// input buffer for reading
-	GameWindow *firstWindow = NULL;
-  GameWindow *window;
-  char filepath[ _MAX_PATH ] = "Window\\";
-  File *inFile;
-	WindowLayoutInfo scriptInfo;
-	AsciiString asciibuf;
+    _List_node<GameWindow*> *node = this->_M_node.allocate(1);
+    _Construct(&node->_M_data, value);
+    return node;
+}
+}
+// Keep the already-rowed STLport assignment and range erase emitted after
+// the native caller delegates layout assignment to its 44-byte ABI owner.
+namespace _STL {
+template list<GameWindow*>& list<GameWindow*>::operator=(const list<GameWindow*>&);
+template list<GameWindow*>::iterator list<GameWindow*>::erase(list<GameWindow*>::iterator, list<GameWindow*>::iterator);
+}
+// ABI view of the existing 44-byte constructor/dtor/assign owner.
+// Native callbacks prove +4/+8/+C/+10 functions and +14/+18/+1C/+20 names;
+// WindowLayoutInfo::load proves the filename at +24. The list payload holds
+// window pointers here; the provider's integer-list view has the same four-byte ABI.
+// The leading word's purpose and original class spelling remain unestablished.
+class Rva0031763A {public:
+ Rva0031763A();~Rva0031763A();Rva0031763A &operator=(const Rva0031763A&);
+ unsigned version;void *init,*update,*shutdown,*field_10;
+ AsciiString initNameString,updateNameString,shutdownNameString,field_20,field_24;
+ _STL::list<GameWindow*> windows;
+};
 
-	// zero info struct
-	//memset( &scriptInfo, 0, sizeof( WindowLayoutInfo ) ); // it's a class - use a constructor
-
-  // Reset the window stack
-  resetWindowStack();
-	resetWindowDefaults();
-
-	//
-	// get the filename from the parameter, if it doesn't contain a '\' it is
-	// a it is assumed to be a filename only, which we will prefix a "window\"
-	// directory to, otherwise it is assumed to be an absolute path.  When using
-	// a filename only make sure the current directory is set to the right
-	// place for the window files subdirectory
-	//
-	if( strchr( filename, '\\' ) == NULL )
-		sprintf( filepath, "Window\\%s", filename );
-	else
-		strcpy( filepath, filename );
-
-  // Open the input file
-	inFile = TheFileSystem->openFile(filepath, File::READ);
-	if (inFile == NULL)
-	{
-		DEBUG_LOG(( "WinCreateFromScript: Cannot access file '%s'.\n", filename ));
-		return NULL;
-	}
-
-  // read into memory
-  inFile=inFile->convertToRAMFile();
-  
-	// read the file version
-	Int version;
-	inFile->read(NULL, strlen("FILE_VERSION = "));
-	inFile->scanInt(version);
-	inFile->nextLine();
-
-	// version 2+ have a special block called the layout block
-	if( version >= 2 )
-	{
-
-		if( parseLayoutBlock( inFile, buffer, version, &scriptInfo ) == FALSE )
-		{
-
-			DEBUG_LOG(( "WinCreateFromScript: Error parsing layout block\n" ));
-			return FALSE;
-
-		}  // end if
-
-	}  // end if
-	else
-	{
-
-		// default none names
-		scriptInfo.initNameString = "[None]";
-		scriptInfo.updateNameString = "[None]";
-		scriptInfo.shutdownNameString = "[None]";
-
-	}  // end else
-
-	while( TRUE ) 
-	{
-
-		if (inFile->scanString(asciibuf) == FALSE) {
-			break;
-		}
-
-		if (asciibuf.compare("END") == 0) {
-      continue;
-		}
-
-		if (asciibuf.compare("ENABLEDCOLOR") == 0)
-		{
-
-			if( parseDefaultColor( &defEnabledColor, inFile, buffer ) == FALSE ) 
-			{
-				inFile->close();
-				inFile = NULL;
-				return NULL;
-			}
-
-		}
-		else if (asciibuf.compare("DISABLEDCOLOR") == 0)
-		{
-
-			if( parseDefaultColor( &defDisabledColor, inFile, buffer ) == FALSE ) 
-			{
-				inFile->close();
-				inFile = NULL;
-				return NULL;
-			}
-
-		}
-		else if (asciibuf.compare("HILITECOLOR") == 0)
-		{
-
-			if( parseDefaultColor( &defHiliteColor, inFile, buffer ) == FALSE ) 
-			{
-				inFile->close();
-				inFile = NULL;
-				return NULL;
-			}
-
-		}
-		else if (asciibuf.compare("SELECTEDCOLOR") == 0)
-		{
-
-			if( parseDefaultColor( &defSelectedColor, inFile, buffer ) == FALSE ) 
-			{
-				inFile->close();
-				inFile = NULL;
-				return NULL;
-			}
-
-		}
-		else if (asciibuf.compare("TEXTCOLOR") == 0)
-		{
-
-			if( parseDefaultColor( &defTextColor, inFile, buffer ) == FALSE ) 
-			{
-				inFile->close();
-				inFile = NULL;
-				return NULL;
-			}
-
-		}
-		else if (asciibuf.compare("BACKGROUNDCOLOR") == 0)
-		{
-
-			if( parseDefaultColor( &defBackgroundColor, inFile, buffer ) == FALSE ) 
-			{
-				inFile->close();
-				inFile = NULL;
-				return NULL;
-			}
-
-		}
-		else if (asciibuf.compare("FONT") == 0)
-		{
-
-			if( parseDefaultFont( defFont, inFile, buffer ) == FALSE ) 
-			{
-				inFile->close();
-				inFile = NULL;
-				return NULL;
-			}
-
-		}
-		else if (asciibuf.compare("WINDOW") == 0)
-		{
-
-      // Parse window descriptions until the last END is read
-      window = parseWindow( inFile, buffer );
-
-			// save first window created
-			if( firstWindow == NULL )
-				firstWindow = window;
-
-			scriptInfo.windows.push_back(window);
-
-    }  // end else if
-
-	}  // end while( TRUE )
-
-	// close the file
-	inFile->close();
-	inFile = NULL;
-
-	// if info parameter is provided, copy info to the param
-	if( info )
-		*info = scriptInfo;
-
-	// return the first window created
-	return firstWindow;
-
-}  // end WinCreateFromScript
+// BFME1 9e3be919b10a clean parser lead; target 3177EC..317B35, RET12.
+// Keep this in the static stack/default/parser owner. Third argument is the parent;
+// inherited status uses bit 0x08000000, and native defaults are APT:None.
+GameWindow *GameWindowManager::winCreateFromScript(AsciiString filenameString,Rva0031763A *info,GameWindow *parent) {
+ const char *filename=filenameString.str();static char buffer[2048];GameWindow *firstWindow=0,*window;
+ char filepath[260]="Window\\";File *inFile;Rva0031763A scriptInfo;AsciiString asciibuf;
+ bool inherit=parent ? ((parent->winGetStatus() & 0x8000000)!=0):false;
+ memset(windowStack,0,sizeof(windowStack));stackPtr=windowStack;
+ defEnabledColor=0;defDisabledColor=0;defBackgroundColor=0;defHiliteColor=0;defSelectedColor=0;defTextColor=0;defFont=0;
+ if(parent)*stackPtr++=parent;
+ if(NativeWindowCrt::strchr(filename,'\\')==0)NativeWindowCrt::sprintf(filepath,"Window\\%s",filename);else strcpy(filepath,filename);
+ inFile=TheFileSystem->openFile(filepath,1,0);if(inFile==0)return 0;
+ int version;((GoalScriptFileSlots*)inFile)->read(0,strlen("FILE_VERSION = "));((GoalScriptFileSlots*)inFile)->scanInt(version);((GoalScriptFileSlots*)inFile)->nextLine(0,0);
+ if(version>=2) {if(!parseLayoutBlock(inFile,buffer,version,(WindowLayoutInfo*)&scriptInfo))return 0;}
+ else {scriptInfo.initNameString="APT:None";scriptInfo.updateNameString="APT:None";scriptInfo.shutdownNameString="APT:None";scriptInfo.field_20="APT:None";}
+ while(true) {
+ if(!((GoalScriptFileSlots*)inFile)->scanString(asciibuf))break;
+ if(asciibuf.compare("END")==0)continue;
+ if(asciibuf.compare("ENABLEDCOLOR")==0){if(!parseDefaultColor(&defEnabledColor,inFile,buffer)){((GoalScriptFileSlots*)inFile)->close();inFile=0;return 0;}}
+ else if(asciibuf.compare("DISABLEDCOLOR")==0){if(!parseDefaultColor(&defDisabledColor,inFile,buffer)){((GoalScriptFileSlots*)inFile)->close();inFile=0;return 0;}}
+ else if(asciibuf.compare("HILITECOLOR")==0){if(!parseDefaultColor(&defHiliteColor,inFile,buffer)){((GoalScriptFileSlots*)inFile)->close();inFile=0;return 0;}}
+ else if(asciibuf.compare("SELECTEDCOLOR")==0){if(!parseDefaultColor(&defSelectedColor,inFile,buffer)){((GoalScriptFileSlots*)inFile)->close();inFile=0;return 0;}}
+ else if(asciibuf.compare("TEXTCOLOR")==0){if(!parseDefaultColor(&defTextColor,inFile,buffer)){((GoalScriptFileSlots*)inFile)->close();inFile=0;return 0;}}
+ else if(asciibuf.compare("BACKGROUNDCOLOR")==0){if(!parseDefaultColor(&defBackgroundColor,inFile,buffer)){((GoalScriptFileSlots*)inFile)->close();inFile=0;return 0;}}
+ else if(asciibuf.compare("FONT")==0){if(!parseDefaultFont(defFont,inFile,buffer)){((GoalScriptFileSlots*)inFile)->close();inFile=0;return 0;}}
+ else if(asciibuf.compare("WINDOW")==0){window=parseWindow(inFile,buffer);if(inherit)window->winSetStatus(0x8000000);if(firstWindow==0)firstWindow=window;scriptInfo.windows.push_back(window);}
+ }
+ ((GoalScriptFileSlots*)inFile)->close();inFile=0;if(info)*info=scriptInfo;if(parent)popWindow();return firstWindow;
+}
 
 
 // Retail's call sites in this unit's matched rows land on bodies rowed under
