@@ -15625,7 +15625,7 @@ ___CxxFrameHandler,0x00629182,callee of __ehhandler$??1Rva005813E@@UAE@XZ
 ??0Rva00141D00@@QAE@XZ,0x00141830,callee of ?Set_Level@BfmeSceneVector@@QAEXI@Z
 ??1Rva0006FB50List@@QAE@XZ,0x0006FB50,callee of ?Set_Level@BfmeSceneVector@@QAEXI@Z
 ??0Rva005E8DCF@@QAE@IPAX@Z,0x005E8DCF,callee of ?rva005CE2D3@Rva005CE2D3@@QAE?AURvaF1Handle@@I@Z
-??0Rva005E91ED@@QAE@IPAX@Z,0x005E91ED,callee of ?rva005CE2D3@Rva005CE2D3@@QAE?AURvaF1Handle@@I@Z
+??0Rva005E91A9@@QAE@IPAX@Z,0x005E91ED,rename constructor view to the independently rowed60B destructor and C77FF0/C77FD0 vtable owner Rva005E91A9; native140B RET8 and factory005CEA92 allocate32B and forward opaque owner plus context; original application identity unknown
 ??0Rva006004C1@@QAE@IIPAX@Z,0x006004C1,callee of ?rva005CE2D3@Rva005CE2D3@@QAE?AURvaF1Handle@@I@Z
 ?Rva006D05E0Copy@@YAPAVBfmeRefVGO@@URva006D1130Iterator@@0PAV1@@Z,0x006D05E0,callee of ?grow@Rva006D1130@@QAEXH@Z
 ?erase@?$vector@PAVWeaponTemplate@@V?$allocator@PAVWeaponTemplate@@@_STL@@@_STL@@QAEPAPAVWeaponTemplate@@PAPAV3@@Z,0x001FF51F,pointer-vector single erase fold: WeaponStore::newOverride drops the same-key template from the +0x0C vector; REL32 at 0x002CE0DF; fold-proof=Code/GameEngine/Source/GameLogic/Object/WeaponStoreNewOverride.cpp

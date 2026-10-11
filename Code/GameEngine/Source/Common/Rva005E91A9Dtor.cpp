@@ -1,29 +1,53 @@
-// cl: /Ob2 /EHsc /MD
-// ??1Rva005E91A9@@UAE@XZ retail 0x005E91A9 60B
-// MI dtor second base at +8 via pin 0x005E12D1 plus base vtable restore to g_00BC6F20.
-// Layout from deleting wrapper 0x005E9279 vtable 0x00C77FF0#0 and twin 0x005CC37C 60B.
-// Evidence: EH_prolog plus two vptr stores C77FF0/C77FD0 then member-base call then BC6F20.
-
+// cl: /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7 /Ob2 /EHsc /MD
+#include "ascii_string.h"
+class Image;
 class Rva005E12D1
 {
 public:
-	virtual ~Rva005E12D1();
+    Rva005E12D1(void *, const AsciiString &, void *);
+    virtual ~Rva005E12D1();
+private:
+    char holderStorage[0x10];
 };
-
+class Rva005E1158
+{
+public:
+    void rva005E1158(const Image *);
+};
+class Rva005E16B9
+{
+public:
+    const Image *rva005E16B9();
+};
+class Rva005E16DA;
+extern Rva005E16DA g_rva00E0675C;
 class Rva005E91A9Base
 {
 public:
-	virtual ~Rva005E91A9Base() {}
+    Rva005E91A9Base() : m_04(0) {}
+    virtual ~Rva005E91A9Base() {}
 protected:
-	int m_04;
+    int m_04;
 };
-
-class Rva005E91A9 : public Rva005E91A9Base, public Rva005E12D1
+class Rva005F5C77Base0 : public Rva005E91A9Base
 {
 public:
-	virtual ~Rva005E91A9();
+    virtual ~Rva005F5C77Base0() {}
 };
-
+class Rva005E91A9 : public Rva005F5C77Base0, public Rva005E12D1
+{
+public:
+    Rva005E91A9(unsigned int owner, void *record);
+    virtual ~Rva005E91A9();
+private:
+    unsigned int m_state;
+};
+Rva005E91A9::Rva005E91A9(unsigned int owner, void *record)
+    : Rva005E12D1((void *)owner, AsciiString("button"), *(void **)record)
+{
+    m_state = ((unsigned int *)record)[1];
+    reinterpret_cast<Rva005E1158 *>(static_cast<Rva005E12D1 *>(this))->rva005E1158(((Rva005E16B9 *)&g_rva00E0675C)->rva005E16B9());
+}
 Rva005E91A9::~Rva005E91A9()
 {
 }

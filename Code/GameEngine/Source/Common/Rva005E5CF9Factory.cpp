@@ -53,11 +53,11 @@ class Rva005E8DCF
 public:
 	Rva005E8DCF(unsigned int argument, void *context);
 };
-class Rva005E91ED
+class Rva005E91A9
 {
 	char m_pad[0x20];
 public:
-	Rva005E91ED(unsigned int argument, void *context);
+	Rva005E91A9(unsigned int argument, void *context);
 };
 class Rva006004C1
 {
@@ -90,7 +90,7 @@ RvaF1Handle Rva005CE2D3::rva005CE2D3(unsigned int argument)
 }
 RvaF1Handle Rva005CEA92::rva005CEA92(unsigned int argument)
 {
-	return RvaF1Handle(new Rva005E91ED(argument, &m_context));
+	return RvaF1Handle(new Rva005E91A9(argument, &m_context));
 }
 RvaF1Handle Rva005FB418::rva005FB418(unsigned int first, unsigned int second)
 {
