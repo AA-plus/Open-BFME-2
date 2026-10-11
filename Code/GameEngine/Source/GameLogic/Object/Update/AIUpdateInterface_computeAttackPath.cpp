@@ -188,7 +188,7 @@ public:
 	Bool IsValidMovementPositionForObject(const Coord3D *pos, Int layer, Int surfaces, const Object *obj);
 	void moveAllies(Object *obj, Path *path, Bool flag);
  Bool isAttackViewBlockedByObstacle(const Object*,const Coord3D*,const Object*,const Coord3D*);
- Bool adjustDestination(Object*,const LocomotorSet&,Coord3D*,const Coord3D*);
+ Bool AdjustDestination(Object*,const LocomotorSet&,Coord3D*,const Coord3D*);
  void rva003E3BFB(ObjectID);
  void SetDebugPath(struct Rva002EDEABArg*);
 };
@@ -384,7 +384,7 @@ Bool AIUpdateInterface::computeAttackPath(PathfindServicesInterface *services,co
     Coord3D objPos;const Coord3D *position=getObject()->getPosition();objPos.x=position->x;objPos.y=position->y;objPos.z=position->z;
     goal.x-=objPos.x;goal.y-=objPos.y;goal.z-=objPos.z;
     if(goal.length()<30.0f){
-     destroyPath();TheAI->pathfinder()->adjustDestination(getObject(),m_locomotorSet,&objPos,0);
+     destroyPath();TheAI->pathfinder()->AdjustDestination(getObject(),m_locomotorSet,&objPos,0);
      m_path=services->findClosestPath(getObject(),m_locomotorSet,getObject()->getPosition(),&objPos,false,0.2f,true);
     }
     if(!m_path){TheAI->pathfinder()->rva003E3BFB((ObjectID)0);return false;}

@@ -296,7 +296,7 @@ class Pathfinder
 {
 public:
 	void AddObjectToPathfindMap(Object *obj);
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = 0);
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = 0);
 };
 
 class AI
@@ -416,7 +416,7 @@ void DefaultProductionExitUpdate::exitObjectViaDoor( Object *newObj, ExitDoorTyp
 				tmp = m_rallyPoint;
 				if (ai && ai->isDoingGroundMovement())
 				{
-					if (TheAI->pathfinder()->adjustDestination(newObj, ai->getLocomotorSet(), &tmp))
+					if (TheAI->pathfinder()->AdjustDestination(newObj, ai->getLocomotorSet(), &tmp))
 						exitPath.push_back(tmp);
 				}
 			}

@@ -410,7 +410,7 @@ protected:
 class Pathfinder
 {
 public:
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = NULL);
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = NULL);
 };
 struct FprintfTarget
 {
@@ -483,7 +483,7 @@ StateReturnType AIGuardReturnState::onEnter( void )
 		{
 			if (ai->isDoingGroundMovement()) 
 			{
-				TheAI->pathfinder()->adjustDestination(getMachineOwner(), ai->getLocomotorSet(), &m_goalPosition);
+				TheAI->pathfinder()->AdjustDestination(getMachineOwner(), ai->getLocomotorSet(), &m_goalPosition);
 			}
 			ai->destroyPath();
 		}

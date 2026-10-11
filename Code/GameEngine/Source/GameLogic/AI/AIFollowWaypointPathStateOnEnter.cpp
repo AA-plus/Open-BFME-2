@@ -252,7 +252,7 @@ extern AI *TheAI;
 class Pathfinder
 {
 public:
-    Bool adjustDestination(Object *object, const LocomotorSet &locomotorSet,
+    Bool AdjustDestination(Object *object, const LocomotorSet &locomotorSet,
         Coord3D *destination, const Coord3D *other = 0);
 };
 class StateMachine
@@ -442,7 +442,7 @@ StateReturnType AIFollowWaypointPathState::onEnter()
         setAdjustsDestination(ai->isDoingGroundMovement());
         if (getAdjustsDestination())
         {
-            if (!TheAI->pathfinder()->adjustDestination(getMachineOwner(), ai->getLocomotorSet(),
+            if (!TheAI->pathfinder()->AdjustDestination(getMachineOwner(), ai->getLocomotorSet(),
                 &m_goalPosition, 0))
                 return STATE_FAILURE;
             getMachineOwner()->rva0028ACEE((int)&m_goalPosition, m_goalLayer);

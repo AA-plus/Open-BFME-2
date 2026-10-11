@@ -75,7 +75,7 @@ public:
  PathfindLayerEnum getLayerForDestination(Object*,const Coord3D*);
 };
 extern TerrainLogic *TheTerrainLogic;
-class Pathfinder {public:bool adjustDestination(Object*,const LocomotorSet&,Coord3D*,const Coord3D*);};
+class Pathfinder {public:bool AdjustDestination(Object*,const LocomotorSet&,Coord3D*,const Coord3D*);};
 class AI {public:char pad[0x10];Pathfinder *pathfinder;};extern AI *TheAI;
 class AIGroup
 {
@@ -104,13 +104,13 @@ void AIGroup::computeIndividualDestination(Coord3D *dest,const Coord3D *groupDes
   switch(mode){
   case 0:
    if(obj->info->flags11c&(1u<<26)){float current=obj->angle;angle=current+obj->GetRelativeAngle(dest);}
-   adjusted=TheAI->pathfinder->adjustDestination(obj,*(const LocomotorSet*)((char*)ai+0x1cc),dest,groupDest);break;
+   adjusted=TheAI->pathfinder->AdjustDestination(obj,*(const LocomotorSet*)((char*)ai+0x1cc),dest,groupDest);break;
   case 1:
    if(obj->info->flags11c&(1u<<26)){float current=obj->angle;angle=current+obj->GetRelativeAngle(dest);}
-   adjusted=TheAI->pathfinder->adjustDestination(obj,*(const LocomotorSet*)((char*)ai+0x1cc),dest,0);break;
+   adjusted=TheAI->pathfinder->AdjustDestination(obj,*(const LocomotorSet*)((char*)ai+0x1cc),dest,0);break;
   case 2:
    if(facing && (obj->info->flags11c&(1u<<26)))angle=*facing;
-   adjusted=TheAI->pathfinder->adjustDestination(obj,*(const LocomotorSet*)((char*)ai+0x1cc),dest,0);break;
+   adjusted=TheAI->pathfinder->AdjustDestination(obj,*(const LocomotorSet*)((char*)ai+0x1cc),dest,0);break;
   }
   if(!adjusted)*dest=*groupDest;
   obj->rva0028AD00((int)dest,angle,1);

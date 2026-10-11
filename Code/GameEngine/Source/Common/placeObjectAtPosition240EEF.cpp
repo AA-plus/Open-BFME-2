@@ -113,7 +113,7 @@ class Pathfinder
 {
 public:
  void AddObjectToPathfindMap(Object*);
-	bool adjustDestination(Object *obj, const LocomotorSet &set, Coord3D *dst, const Coord3D *group);
+	bool AdjustDestination(Object *obj, const LocomotorSet &set, Coord3D *dst, const Coord3D *group);
 };
 
 class AI
@@ -172,7 +172,7 @@ static Object *placeObjectAtPosition(int slot, AsciiString name, const Coord3D *
 	if (aiu && !((*(ThingTemplate **)((char *)obj + 4))->m_flags108 & 4)) {
 		LocomotorSet *loco = &aiu->m_loco;
 		Pathfinder *pf = TheAI->m_pf;
-		if (pf->adjustDestination(obj, *loco, (Coord3D *)pos, 0)) {
+		if (pf->AdjustDestination(obj, *loco, (Coord3D *)pos, 0)) {
 			obj->rva0028ACEE((int)pos, 1);
 			((Thing*)obj)->setPosition(pos);
 		}

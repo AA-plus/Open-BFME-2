@@ -187,7 +187,7 @@ class Pathfinder
 {
 public:
 	bool IsPointOnWall(int pos, bool flag);
-	bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest);
+	bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest);
 	bool IsPointOnRamp(const Coord3D *pos);
 	void RemoveObjectFromPathfindMap(Object *object);
 	void RemoveObjectGoalFromPathfindMap(Object *object);
@@ -3010,7 +3010,7 @@ void HordeContain::rva00472790(bool reposition)
 			AIUpdateInterface *ai = obj->m_ai;
 			if (!ai)
 				return;
-			TheAI->m_pathfinder->adjustDestination(obj, ai->getLocomotorSet(), &pos, 0);
+			TheAI->m_pathfinder->AdjustDestination(obj, ai->getLocomotorSet(), &pos, 0);
 			float dist;
 			{
 				Rva0055A627Difference diff;

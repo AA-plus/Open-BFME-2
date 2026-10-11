@@ -659,7 +659,7 @@ class Pathfinder
 {
 public:
 	Bool CanApproachToTarget(Object *obj, const Coord3D *targetPos, Rva002C9B80Owner *weapon, Bool flag);
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet,
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet,
 		Coord3D *dest, const Coord3D *groupDest);
 	Bool adjustToPossibleDestination(Object *obj, const LocomotorSet &locomotorSet,
 		Coord3D *dest);
@@ -813,7 +813,7 @@ Bool AIAttackMeleeEngageState::computePath()
 			m_goalPosition = m_prevVictimPos;
 			if (rva003449C5(&m_goalPosition, source, victim))
 			{
-				TheAI->pathfinder()->adjustDestination(source, ai->m_locomotorSet, &m_goalPosition, 0);
+				TheAI->pathfinder()->AdjustDestination(source, ai->m_locomotorSet, &m_goalPosition, 0);
 				ai->requestPath(&m_goalPosition, true);
 				return true;
 			}
@@ -868,7 +868,7 @@ Bool AIMoveToStateSA::computePath()
 	{
 		AIUpdateInterface *ai = owner->getAI();
 		TheAI->pathfinder()->adjustToPossibleDestination(owner, ai->m_locomotorSet, &m_goalPosition);
-		TheAI->pathfinder()->adjustDestination(owner, ai->m_locomotorSet, &m_goalPosition, 0);
+		TheAI->pathfinder()->AdjustDestination(owner, ai->m_locomotorSet, &m_goalPosition, 0);
 	}
 	return AIInternalMoveToState::computePath();
 }

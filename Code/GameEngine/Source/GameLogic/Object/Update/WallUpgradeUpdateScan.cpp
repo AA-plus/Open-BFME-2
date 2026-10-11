@@ -182,7 +182,7 @@ class Pathfinder
 public:
 	int GetGroundLayer(const Coord3D *pos);		// 0x002E9871
 	bool rva002EDFF9(Object *obj, Coord3D *pos);	// 0x002EDFF9
-	bool adjustDestination(Object *obj, const LocomotorSet &locoSet, Coord3D *dest,
+	bool AdjustDestination(Object *obj, const LocomotorSet &locoSet, Coord3D *dest,
 		const Coord3D *groupDest);		// 0x002FCFCF
 };
 
@@ -287,7 +287,7 @@ void WallUpgradeUpdate::rva004AB57E()
 			pos.x = offset.x + pos.x;
 			pos.y = offset.y + pos.y;
 			pos.z = offset.z + pos.z;
-			pathfinder->adjustDestination(obj, ai->getLocomotorSet(), &pos, 0);
+			pathfinder->AdjustDestination(obj, ai->getLocomotorSet(), &pos, 0);
 			obj->rva0029660C(&pos, 1);
 			if (obj->getDrawable())
 				obj->getDrawable()->fadeIn(10);

@@ -120,7 +120,7 @@ public:
 class Pathfinder
 {
 public:
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet,
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet,
 		Coord3D *dest, const Coord3D *groupDest);
 	void updateGoal(Object *obj, const Coord3D *newGoalPos,
 		PathfindLayerEnum layer, const char *file, int line);
@@ -361,7 +361,7 @@ Bool AIAttackApproachTargetState::computePath()
 			CRCDEBUG_LOG("CritterDesync: setAdjustDestination(FALSE) 19");
 			m_adjustDestinations = false;
 			CALL(SetPathExtraDistance, ai, j_0000ebab)(100.0f);
-			TheAI->m_pathfinder->adjustDestination(getMachineOwner(), ai->m_locomotorSet,
+			TheAI->m_pathfinder->AdjustDestination(getMachineOwner(), ai->m_locomotorSet,
 				&m_goalPosition, 0);
 		}
 		else if (ai->m_path && CALL(Rva0026F330, ai, j_0000142e)())

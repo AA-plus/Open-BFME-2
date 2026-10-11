@@ -151,7 +151,7 @@ private:
 class Pathfinder
 {
 public:
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest,
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest,
 		const Coord3D *groupDest);
 };
 
@@ -258,7 +258,7 @@ StateReturnType AIEnterState::onEnter()
 		{
 			m_goalPosition = *contain->getEnterPosition();
 			if (goal->getTemplate()->isKindOf(KINDOF_BIT_191))
-				TheAI->pathfinder()->adjustDestination(obj, obj->getAI()->m_locomotorSet,
+				TheAI->pathfinder()->AdjustDestination(obj, obj->getAI()->m_locomotorSet,
 					&m_goalPosition, 0);
 			contain->onObjectWantsToEnterOrExit(obj, WANTS_TO_ENTER);
 			m_entryToClear = goal->getID();

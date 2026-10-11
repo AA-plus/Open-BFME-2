@@ -333,7 +333,7 @@ class Pathfinder
 {
 public:
 	void AddObjectToPathfindMap(Object *obj);
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = 0);
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = 0);
 	Int MoveAlliesAwayFromDestination(Object *obj, const Coord3D *from, const Coord3D *dest);
 };
 
@@ -529,7 +529,7 @@ void QueueProductionExitUpdate::exitObjectViaDoor( Object *newObj, ExitDoorType 
 				tmp = m_rallyPoint;
 				if( raised )
 					exitPath.push_back( tmp );
-				else if( TheAI->pathfinder()->adjustDestination( newObj, ai->getLocomotorSet(), &tmp, NULL ) )
+				else if( TheAI->pathfinder()->AdjustDestination( newObj, ai->getLocomotorSet(), &tmp, NULL ) )
 					exitPath.push_back( tmp );
 			}
 

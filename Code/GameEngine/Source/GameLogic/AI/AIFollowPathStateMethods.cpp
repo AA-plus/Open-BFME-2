@@ -156,7 +156,7 @@ private:
 class Pathfinder
 {
 public:
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = NULL);
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = NULL);
 };
 class AI
 {
@@ -356,7 +356,7 @@ StateReturnType AIFollowPathState::update()
 			setAdjustsDestination(m_adjustFinal && (m_adjustFinalOverride || ai->isDoingGroundMovement()));
 			if (getAdjustsDestination()) 
 			{
-				if (!TheAI->pathfinder()->adjustDestination(getMachineOwner(), ai->getLocomotorSet(), &m_goalPosition)) {
+				if (!TheAI->pathfinder()->AdjustDestination(getMachineOwner(), ai->getLocomotorSet(), &m_goalPosition)) {
 					return STATE_FAILURE;
 				}
 				getMachineOwner()->rva0028ACDC((int)&m_goalPosition);

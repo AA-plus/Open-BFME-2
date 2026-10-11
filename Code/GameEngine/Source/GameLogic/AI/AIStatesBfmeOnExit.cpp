@@ -198,7 +198,7 @@ class LocomotorSet;
 class Pathfinder
 {
 public:
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest,
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest,
 		const Coord3D *groupDest);
 	Bool getClosestPointOnLand(const Coord3D *pos, Object *obj, Coord3D *dest);
 	Bool QuickDoesPathExist(Object *obj, const Coord3D *from, const Coord3D *to, int flag);
@@ -1026,7 +1026,7 @@ StateReturnType AIMoveToPositionAndEnterState::onEnter()
 	Object *goal = getMachine()->getGoalObject();
 	m_goalPosition = *goal->getContain()->getEnterPosition();
 	if (goal->getTemplate()->testKindByte11F())
-		TheAI->pathfinder()->adjustDestination(owner, ai->getLocomotorSet(), &m_goalPosition, 0);
+		TheAI->pathfinder()->AdjustDestination(owner, ai->getLocomotorSet(), &m_goalPosition, 0);
 
 	StateReturnType ret = AIInternalMoveToState::onEnter();
 	if (owner->getBfme410())

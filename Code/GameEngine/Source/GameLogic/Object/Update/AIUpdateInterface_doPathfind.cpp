@@ -191,7 +191,7 @@ public:
 	Bool IsValidMovementPositionForObject(const Coord3D *pos, Int layer, Int surfaces, const Object *obj);
 	void moveAllies(Object *obj, Path *path, Bool flag);
  Bool isAttackViewBlockedByObstacle(const Object*,const Coord3D*,const Object*,const Coord3D*);
- Bool adjustDestination(Object*,const LocomotorSet&,Coord3D*,const Coord3D*);
+ Bool AdjustDestination(Object*,const LocomotorSet&,Coord3D*,const Coord3D*);
  Bool adjustToPossibleDestination(Object*,const LocomotorSet&,Coord3D*);
  void rva003E3BFB(ObjectID);
  void SetDebugPath(struct Rva002EDEABArg*);

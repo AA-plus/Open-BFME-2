@@ -279,7 +279,7 @@ public:
 	bool IsBuildRestrictedCell(const Coord3D *pos, bool flagA, bool flagB, int layer);
 	// (position, layer) as the rowed name's two ints.
 	bool IsCliffCell(int pos, int layer);
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest,
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest,
 		const Coord3D *groupDest);
 };
 struct TAiData

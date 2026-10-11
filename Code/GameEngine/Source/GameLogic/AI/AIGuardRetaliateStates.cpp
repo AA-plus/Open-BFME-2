@@ -326,7 +326,7 @@ private:
 class Pathfinder
 {
 public:
-	Bool adjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = NULL);
+	Bool AdjustDestination(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest, const Coord3D *groupDest = NULL);
 };
 struct TAiData
 {
@@ -448,7 +448,7 @@ StateReturnType AIGuardRetaliateReturnState::onEnter( void )
 	AIUpdateInterface *ai = getMachineOwner()->getAI(); 
 	if (ai && ai->isDoingGroundMovement()) 
 	{
-		TheAI->pathfinder()->adjustDestination(getMachineOwner(), ai->getLocomotorSet(), &m_goalPosition);
+		TheAI->pathfinder()->AdjustDestination(getMachineOwner(), ai->getLocomotorSet(), &m_goalPosition);
 	}
 	Rva00545355Module *module = getMachineOwner()->getBfme250();
 	if (module)
