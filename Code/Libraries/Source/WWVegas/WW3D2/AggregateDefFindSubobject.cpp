@@ -32,6 +32,18 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "wwdebug.h"
 #include <windows.h>
 
+// LINK: offset-mirror for RefCountClass's private NumRefs (vtable +0, NumRefs
+// +4: proven by this TU's own Add_Ref copy `add [ecx+4],1` and retail's dtor
+// `dec [ecx+4]` with Delete_This via slot 0). This TU's Add_Ref/Release_Ref
+// const copies lose to the first copies in link order (33/62 emitters, flag-
+// shape fork); the mirror rebinds our 3 call sites with identical inlined
+// bytes so neither loser COMDAT emits. No header touched.
+struct BfmeRefCountMirror
+{
+	void *vtable;
+	mutable int numRefs;
+};
+
 // BFME1 donor revision 5cae4bdffcc0fb2dd6f0a2a6c1a7328bd0fb0cfc,
 // game/Libraries/Source/WWVegas/WW3D2/agg_def.cpp.
 // Target RVA0x001A3190 262B: aggregate vtable VA0x00BD6C70 slot0x30.
@@ -46,7 +58,7 @@ AggregateDefClass::Find_Subobject
 )
 {
 	RenderObjClass *parent_model = &model;
-	parent_model->Add_Ref ();
+	((BfmeRefCountMirror *)parent_model)->numRefs++;
 
 	// Loop through all the models in our "path" until we've either failed
 	// or found the exact mesh we were looking for...
@@ -71,12 +83,12 @@ AggregateDefClass::Find_Subobject
 				if (::lstrcmpi (ptemp_obj->Get_Name (), mesh_path[index]) == 0) {
 					sub_obj = ptemp_obj;
 				} else {
-					REF_PTR_RELEASE (ptemp_obj);
+					if (ptemp_obj) { ((BfmeRefCountMirror *)ptemp_obj)->numRefs--; if (((BfmeRefCountMirror *)ptemp_obj)->numRefs == 0) ptemp_obj->Delete_This(); ptemp_obj = NULL; }
 				}
 			}
 		}
 
-		REF_PTR_RELEASE (parent_model);
+		if (parent_model) { ((BfmeRefCountMirror *)parent_model)->numRefs--; if (((BfmeRefCountMirror *)parent_model)->numRefs == 0) parent_model->Delete_This(); parent_model = NULL; }
 
 		// The parent for the next iteration is the subobject on this one.
 		parent_model = sub_obj;
