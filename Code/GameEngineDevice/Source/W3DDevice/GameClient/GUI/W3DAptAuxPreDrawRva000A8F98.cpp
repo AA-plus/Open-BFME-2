@@ -13,7 +13,7 @@ class Rva00785FD0Renderer {public:Rva00785FD0Renderer();private:char nativeStora
 class Rva00110FBF {public:void rva00110FBF();};
 void Rva00118990();
 extern float g_Va00DEC49C;
-extern unsigned char g_00DB4CE0;
+extern unsigned char g_00DB4CE0[32];
 extern unsigned long g_00DE617C,g_00DE6180;
 extern unsigned long AptObservedPreviousElapsed;
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
@@ -24,7 +24,7 @@ void Rva000A8F98() {
   W3DAptAux::s_syncTime1=WW3D::SyncTime;g_Va00DEC49C=0.0f;W3DAptAux::s_syncTime0=WW3D::PreviousSyncTime;
   WW3D::Sync(AptObservedPreviousElapsed);
   unsigned long elapsed=g_00DE617C;
-  if(g_00DB4CE0) {
+  if(g_00DB4CE0[0]) {
    elapsed+=timeGetTime()-g_00DE6180;
    if(elapsed-AptObservedPreviousElapsed>100) {
     elapsed=AptObservedPreviousElapsed+100;g_00DE617C=elapsed;g_00DE6180=timeGetTime();

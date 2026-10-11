@@ -39,6 +39,7 @@ typedef int Int;
 class WW3D
 {
 public:
+	static void Get_Device_Resolution(int &width, int &height, int &bits, bool &windowed);
 	static void Sync(UnsignedInt sync_time);	// 0x00117490
 };
 
@@ -159,7 +160,7 @@ struct AptRenderTransform
 	int m_data[6];
 };
 
-extern AptRenderTransform g_Va00DE6148;
+AptRenderTransform g_Va00DE6148; // native zero-filled DE6148..DE6160
 
 class AptShapeContainer
 {
@@ -347,4 +348,53 @@ public:
 void *Rva000AA8C3LoadRenderingUnit(Rva00786BD0Owner *owner, unsigned int key)
 {
  return owner->find(key);
+}
+
+extern unsigned char g_00DB4CE0[32];
+// Pair comparison follows the Vector2i operation visible in WB 8A6D50.
+// Keep a local neutral type: its use here proves two integers, not a class name.
+struct AptSizePair {
+ int x,y;
+ __forceinline bool operator!=(const AptSizePair &b) const {
+  return !(x==b.x && y==b.y);
+ }
+};
+AptSizePair g_aptLastStageSize,g_aptLastDeviceSize; // DE61B8 and DE61C0, zero-filled
+AptRenderTransform g_aptUnscaledTransform; // DE6130, before the linear scale
+void Rva006CD6F0Get(void **,void **);
+extern "C" double __cdecl fabs(double);
+static __forceinline bool aptFar(float value) {
+ float magnitude=fabs(value);
+ return magnitude>0.0001f;
+}
+#define aptScaleX (*reinterpret_cast<float*>(g_00DB4CE0+0x10))
+#define aptScaleY (*reinterpret_cast<float*>(g_00DB4CE0+0x14))
+#define aptInvScaleX (*reinterpret_cast<float*>(g_00DB4CE0+0x18))
+#define aptInvScaleY (*reinterpret_cast<float*>(g_00DB4CE0+0x1c))
+#define aptMatrixMode (*reinterpret_cast<int*>(g_00DB4CE0+4))
+// Apt SetMatrix callback at A92B0..A94F9 (585 bytes, cdecl pointer).
+// Retail establishes the six-word transform, dimension-cache comparisons,
+// zero-size/zero-scale fallbacks and 0.0001f identity tolerance. WB 8A6D50
+// independently preserves the same operations and the Vector2i comparisons.
+// Its float temporaries are significant to the native mixed SSE/x87 shape.
+// Original callback/global names remain unknown; no donor layout is asserted.
+void Rva000A92B0SetMatrix(const AptRenderTransform *input) {
+ g_Va00DE6148=*input;
+ AptSizePair stage,device;
+ int bits;bool windowed;
+ Rva006CD6F0Get(reinterpret_cast<void**>(&stage.x),reinterpret_cast<void**>(&stage.y));
+ WW3D::Get_Device_Resolution(device.x,device.y,bits,windowed);
+ if(stage!=g_aptLastStageSize || device!=g_aptLastDeviceSize) {
+  aptScaleX=stage.x ? (float)device.x/(float)stage.x : 1.0f;
+  aptScaleY=stage.y ? (float)device.y/(float)stage.y : 1.0f;
+  aptInvScaleX=aptScaleX ? 1.0f/aptScaleX : 1.0f;
+  aptInvScaleY=aptScaleY ? 1.0f/aptScaleY : 1.0f;
+  g_aptLastStageSize=stage;g_aptLastDeviceSize=device;
+ }
+ float *m=reinterpret_cast<float*>(&g_Va00DE6148);
+ m[4]*=aptScaleX;m[5]*=aptScaleY;
+ g_aptUnscaledTransform=g_Va00DE6148;
+ m[0]*=aptScaleX;m[2]*=aptScaleX;m[1]*=aptScaleY;m[3]*=aptScaleY;
+ if(aptFar(m[0]-1.0f) || aptFar(m[1]) || aptFar(m[2]) || aptFar(m[3]-1.0f)) aptMatrixMode=1;
+ else aptMatrixMode=3;
 }

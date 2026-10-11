@@ -6,9 +6,14 @@
 // Evidence: mov al [esp+4] cmp [0xDB4CE0] al je test al mov [0xDB4CE0] al
 // je IAT timeGetTime mov [0xDE6180] eax ret call sub add; caller 0x00062A2D.
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
-extern unsigned char g_00DB4CE0;
-// g_00DB4CE0: matched references place it at VA 0xdb4ce0 (retail .data initial value 1).
-unsigned char g_00DB4CE0 = 1;
+extern unsigned char g_00DB4CE0[32];
+// Existing consumers also use +8 and +10..+1C. Provide the complete observed
+// DB4CE0..DB4D00 storage, with the exact retail .data initial bytes. Original
+// grouping is unknown; this preserves the single existing owner and its views.
+__declspec(align(4)) unsigned char g_00DB4CE0[32] = {
+ 1,0,0,0, 3,0,0,0, 1,0,0,0, 0x33,0x33,0x33,0x3f,
+ 0,0,0x80,0x3f, 0,0,0x80,0x3f, 0,0,0x80,0x3f, 0,0,0x80,0x3f
+};
 extern unsigned long g_00DE6180;
 // g_00DE6180: matched references place it at VA 0xde6180 (zero-filled .bss).
 unsigned long g_00DE6180;
@@ -18,9 +23,9 @@ unsigned long g_00DE617C;
 
 void __cdecl Rva000A8F64Set(bool enabled)
 {
-    if (g_00DB4CE0 == enabled)
+    if (g_00DB4CE0[0] == enabled)
         return;
-    g_00DB4CE0 = enabled;
+    g_00DB4CE0[0] = enabled;
     if (enabled)
         g_00DE6180 = timeGetTime();
     else
