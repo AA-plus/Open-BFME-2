@@ -30,17 +30,35 @@ enum WeaponSetType
 	WEAPONSET_NONE = 0
 };
 
+enum ObjectStatusTypes
+{
+	OBJECT_STATUS_26 = 0x26
+};
+
 class Object
 {
 public:
 	bool rva0029091E(unsigned int bit) const;
 	void setWeaponSetFlag(WeaponSetType wst);
+	bool testStatus(ObjectStatusTypes status) const;
+	unsigned char m_pad000[0x274];
+	Object *m_containedBy;	// +0x274
+};
+
+// An entry the +0x11D helper keeps per contained object (rowed lookup
+// 0x00588B8A); slot 73 (+0x124) tells it the object left.
+
+class Rva00477305Owner
+{
+public:
+	void rva00477305(Object *obj);
 };
 
 class Rva0047A040Base9E0
 {
 public:
 	// Rows 0x00588C4E / 0x00588F61 spellings.
+	void *rva00588B8A(void *key);
 	Object *rva00588C4E(void *contain, const struct Coord3D *obj);
 	void rva00588F61(void *contain, Object *owner, enum CommandSourceType obj);
 	void rva00588D99(Object *obj);
@@ -48,7 +66,31 @@ public:
 
 #define SLOT08(a,b,c,d,e,f,g,h) virtual void a(); virtual void b(); virtual void c(); virtual void d(); virtual void e(); virtual void f(); virtual void g(); virtual void h();
 
-struct Iface00 { virtual void f00(); const void *m_moduleData; Object *m_object; };
+class Rva004773D6Entry
+{
+public:
+	SLOT08(e00,e01,e02,e03,e04,e05,e06,e07)
+	SLOT08(e08,e09,e10,e11,e12,e13,e14,e15)
+	SLOT08(e16,e17,e18,e19,e20,e21,e22,e23)
+	SLOT08(e24,e25,e26,e27,e28,e29,e30,e31)
+	SLOT08(e32,e33,e34,e35,e36,e37,e38,e39)
+	SLOT08(e40,e41,e42,e43,e44,e45,e46,e47)
+	SLOT08(e48,e49,e50,e51,e52,e53,e54,e55)
+	SLOT08(e56,e57,e58,e59,e60,e61,e62,e63)
+	SLOT08(e64,e65,e66,e67,e68,e69,e70,e71)
+	virtual void e72();
+	virtual void rva004773D6Left();	// +0x124
+};
+
+struct Iface00
+{
+	virtual void f00();
+	SLOT08(f01,f02,f03,f04,f05,f06,f07,f08)
+	SLOT08(f09,f10,f11,f12,f13,f14,f15,f16)
+	virtual void f17();
+	virtual void rva004773D6Refresh();	// +0x48
+	const void *m_moduleData; Object *m_object;
+};
 struct Iface0C { virtual void f0C(); };
 struct Iface10 { virtual void f10(); unsigned char m_pad[12]; };
 struct Iface20
@@ -60,7 +102,9 @@ struct Iface20
 	virtual void g28(); virtual void g29(); virtual void g30(); virtual void g31();
 	virtual void rva00465011(Object *obj) = 0;
 	virtual void g33(); virtual void g34(); virtual void g35();
-	SLOT08(g36,g37,g38,g39,g40,g41,g42,g43)
+	virtual void g36(); virtual void g37(); virtual void g38();
+	virtual void rva00464830(Object *obj) = 0;
+	virtual void g40(); virtual void g41(); virtual void g42(); virtual void g43();
 	SLOT08(g44,g45,g46,g47,g48,g49,g50,g51)
 	SLOT08(g52,g53,g54,g55,g56,g57,g58,g59)
 	virtual void g60();
@@ -124,6 +168,7 @@ public:
 	virtual void rva00465011(Object *obj);
 	virtual void rva004632E0(Object *obj);
 	virtual void rva004770A6(Object *obj);
+	virtual void rva00464830(Object *obj);
 private:
 	unsigned char m_11C;
 	Rva0047A040Base9E0 m_helper; // +0x11D
@@ -147,4 +192,28 @@ void HordeTransportContain::rva004770A6(Object *obj)
 	m_helper.rva00588D99(obj);
 	if (obj->rva0029091E(0x14))
 		obj->setWeaponSetFlag((WeaponSetType)0x14);
+}
+
+// ?rva00464830@HordeTransportContain@@UAEXPAVObject@@@Z, retail 0x004773D6,
+// 92 bytes. Slot 39 of the +0x20 vftable (OpenContain's pinned 0x00464830 in
+// its own table): for an Object no longer contained (+0x274 clear) the
+// helper's entry for it is told it left (slot 73) and the object goes
+// through 0x004770A6 above; without an entry an object with status 0x26 is
+// handled by the rowed 0x00477305 instead. Either way the contain then
+// refreshes through primary slot 18.
+void HordeTransportContain::rva00464830(Object *obj)
+{
+	if (obj->m_containedBy)
+		return;
+	Rva004773D6Entry *entry = (Rva004773D6Entry *)m_helper.rva00588B8A(obj);
+	if (entry)
+	{
+		entry->rva004773D6Left();
+		HordeTransportContain::rva004770A6(obj);
+	}
+	else if (obj->testStatus(OBJECT_STATUS_26))
+		((Rva00477305Owner *)this)->rva00477305(obj);
+	else
+		HordeTransportContain::rva004770A6(obj);
+	rva004773D6Refresh();
 }

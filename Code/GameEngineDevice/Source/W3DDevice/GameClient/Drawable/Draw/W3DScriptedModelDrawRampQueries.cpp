@@ -154,6 +154,36 @@ bool Rva000BBFD6DrawInterface::rva000BBFD6(BridgeInfo *info,
   ->getRamp(info, name, polygon, mesh, useObjectTransform);
 }
 
+// NativeBBF55..BBFD6 RET16, the slot before BBFD6 in the same secondary
+// table (complete-object+0C): the same query over the override string at
+// complete-object264 with the module-data string at114 as fallback.
+struct Rva000BBF55ModuleDataView
+{
+ char unknown00[0x114];
+ AsciiString string114;
+};
+
+class Rva000BBF55DrawInterface
+{
+public:
+ bool rva000BBF55(BridgeInfo *, PolygonTrigger **, RenderObjClass **, bool);
+private:
+ char unknown00[0x258];
+ AsciiString string258;
+};
+
+bool Rva000BBF55DrawInterface::rva000BBF55(BridgeInfo *info,
+ PolygonTrigger **polygon, RenderObjClass **mesh, bool useObjectTransform)
+{
+ AsciiString name;
+ if (!string258.isEmpty())
+  name = string258;
+ else
+  name = (*reinterpret_cast<const Rva000BBF55ModuleDataView *const *>(reinterpret_cast<const char *>(this) - 8))->string114;
+ return reinterpret_cast<W3DScriptedModelDraw *>(reinterpret_cast<char *>(this) - 0xC)
+  ->getRamp(info, name, polygon, mesh, useObjectTransform);
+}
+
 void W3DScriptedModelDraw::allocateShadows()
 {
  const Rva000B9B4ATemplatePrefix *t=drawable8->thing4;
