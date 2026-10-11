@@ -6,10 +6,11 @@
 // establishes the receiver's +204 table. Method semantics retain address name.
 // Target fields: optional cleanup objects264/268 and cleared byte2C0.
 class Rva002141D1 { public: void rva002141D1(); };
-class Rva002126BB { public: void rva002126BB(); };
+// LINK: calls bind the rowed owners at the same addresses (Rva0021237E::rva002126BB, Rva002115EC::rva002115EC).
+class Rva002115EC { public: void rva002115EC(); };
 class Rva00211589 { public: void rva002129B4(); };
 class Rva00213A85 { public: void rva00213A0E(); };
-class Rva0021237E { public: void rva0021237E(); };
+class Rva0021237E { public: void rva0021237E(); void rva002126BB(); };
 #include "../../Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 class Rva002D3627Host {
@@ -90,7 +91,6 @@ class LivingWorldManager {
 public:
     void rva0021427A();
     void rva002142EA();
-    void rva002115EC();
 private:
     char unknown00[0x3C];
     Rva001F3899Arg m_position3C;
@@ -106,7 +106,7 @@ private:
 void LivingWorldManager::rva0021427A()
 {
     ((Rva002141D1 *)this)->rva002141D1();
-    ((Rva002126BB *)this)->rva002126BB();
+    ((Rva0021237E *)this)->rva002126BB();
     ((Rva00211589 *)this)->rva002129B4();
     ((Rva00213A85 *)this)->rva00213A0E();
     ((Rva0021237E *)this)->rva0021237E();
@@ -140,6 +140,6 @@ void LivingWorldManager::rva002142EA()
             }
             m_systems2A8.push_back(*reinterpret_cast<Rva00214243Element *>(&record));
         }
-        rva002115EC();
+        ((Rva002115EC *)this)->rva002115EC();
     }
 }
