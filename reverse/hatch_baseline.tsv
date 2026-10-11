@@ -35281,8 +35281,6 @@ pragma_optimize	Code/GameEngine/Source/GameClient/Rva0055F368Write.cpp	"t",on	1
 pragma_optimize	Code/GameEngine/Source/GameClient/Rva0055FB37Write.cpp	"",on	1
 pragma_optimize	Code/GameEngine/Source/GameClient/Rva0055FB37Write.cpp	"s",off	1
 pragma_optimize	Code/GameEngine/Source/GameClient/Rva0055FB37Write.cpp	"t",on	1
-pragma_optimize	Code/GameEngine/Source/GameClient/SelectionInfo.cpp	"",on	1
-pragma_optimize	Code/GameEngine/Source/GameClient/SelectionInfo.cpp	"gsy",on	1
 pragma_optimize	Code/GameEngine/Source/GameClient/System/FXParticleSystem/Rva003AFBC1Write.cpp	"",on	1
 pragma_optimize	Code/GameEngine/Source/GameClient/System/FXParticleSystem/Rva003AFBC1Write.cpp	"s",off	1
 pragma_optimize	Code/GameEngine/Source/GameClient/System/FXParticleSystem/Rva003AFBC1Write.cpp	"t",on	1
