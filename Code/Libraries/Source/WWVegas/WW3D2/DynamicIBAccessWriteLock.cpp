@@ -66,6 +66,15 @@ public:
 		if (--NumRefs == 0)
 			Delete_This();
 	}
+	// LINK: TU-unique same-body helper (identical inlined bytes, virtual
+	// Delete_This call included). This TU's Release_Ref copy loses to the
+	// first copy in link order; rebinding our only call site emits just this
+	// unique (trivially kept) copy. Name is TU-unique; no cross-TU collision.
+	void bfme_release_ref_dib()
+	{
+		if (--NumRefs == 0)
+			Delete_This();
+	}
 
 	int NumRefs;
 	unsigned unexamined[3];
@@ -155,7 +164,7 @@ DynamicIBAccessClass::WriteLockClass::~WriteLockClass()
 	default:
 		break;
 	}
-	DynamicIBAccess->IndexBuffer->Release_Ref();
+	DynamicIBAccess->IndexBuffer->bfme_release_ref_dib();
 }
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
