@@ -5,11 +5,11 @@
 
 extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *, const char *);
 
-class WindowManager
+class Rva00222A8BTarget
 {
 public:
-	void bfme_hideBackground(bool hide);
-	void bfme_showBackground(int kind);
+	void rva00222F55(bool hide);
+	void rva002233A6(int kind);
 };
 
 // Retail global 0x012F19E8. EA's own name for this pointer; see
@@ -25,16 +25,16 @@ void Rva0046ED80(const char *command)
 	int (__cdecl *compare)(const char *, const char *) = _strcmpi;
 	if (compare(command, "fadein") == 0)
 	{
-		(*(WindowManager **)&g_bfmeAptWindowManager)->bfme_showBackground(1);
+		(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->rva002233A6(1);
 		return;
 	}
 
 	if (compare(command, "fadeout") == 0)
 	{
-		(*(WindowManager **)&g_bfmeAptWindowManager)->bfme_hideBackground(false);
+		(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->rva00222F55(false);
 		return;
 	}
 
 	if (compare(command, "off") == 0)
-		(*(WindowManager **)&g_bfmeAptWindowManager)->bfme_hideBackground(true);
+		(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->rva00222F55(true);
 }

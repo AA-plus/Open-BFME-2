@@ -11,20 +11,27 @@
 // atB3FD0 with the original receiver. No original class, destructor/lifetime,
 // base relation, complete layout or allocator identity is asserted.
 // Address-named member calls preserve observed zero-argument thiscall ABIs.
+// LINK: the callees are rowed on Rva005E508F::rva005E509F and PathfindLayer::rva000B3FD0.
 struct Rva005E509FCallView {
-    void rva005E509F();
     char m_unmodelled00[0x10];
     void *m_pointer10;
+};
+class Rva005E508F {
+public:
+    void rva005E509F();
+};
+class PathfindLayer {
+public:
+    void rva000B3FD0();
 };
 class Rva005E6894 {
 public:
     void releaseAndEmptyHook();
-    void rva000B3FD0CallView();
 private:
     char m_unmodelled00[0xC];
     Rva005E509FCallView m_member0C;
 };
 void Rva005E6894::releaseAndEmptyHook() {
-    m_member0C.rva005E509F();
-    rva000B3FD0CallView();
+    ((Rva005E508F *)&m_member0C)->rva005E509F();
+    ((PathfindLayer *)this)->rva000B3FD0();
 }
