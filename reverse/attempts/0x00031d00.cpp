@@ -1,14 +1,10 @@
 // ?rva00031D00@GeneralAllocator@Allocator@EA@@QAEHPBX@Z
-// partial score=0.6174358638171409 date=2026-10-10
+// partial score=0.600757192512933 date=2026-10-11
 template<class T> static __forceinline T p4Operand(const T &v) { return *(const volatile T*)&v; }
-// ?rva00031D00@GeneralAllocator@Allocator@EA@@QAEHPBX@Z
-// partial score=0.7 date=2026-10-06
-// ?rva00031D00@GeneralAllocator@Allocator@EA@@QAEHPBX@Z
-// partial score=0.7 date=2026-10-06
 // Banked candidate for GeneralAllocator depth-guarded block score @0x00031D00 (351B).
 // Home: Code/GameEngine/Source/Common/System/memory_pool.cpp (members m_440/m_470/m_4D4
 // already located there; declarations added in failed attempt, reverted).
-// Full retail decode in re_attempts.log; semantics settled. WALL = ebx/esi/edi rotation:
+// Prior allocation notes; final pointer comparison corrected from native31E23..31E2C. WALL = ebx/esi/edi rotation:
 // retail homes this=edi lock=ebx score=esi masked=ebp; every source shape tried homes
 // this=ebx (or ebp) lock=esi score=edi. 12 scratch variants tested (V2-V20): temp
 // elimination (masked/end/blockEnd/mask/base inlined), size-liveness kill (fresh-load bit
@@ -96,7 +92,7 @@ int GeneralAllocator::rva00031D00(const void *block)
 			else if (m_sentinel.m_prev == m_sentinel.m_next)
 			{
 				score += ((unsigned int)block < *(const unsigned int *)node);
-				score += (*(const unsigned int *)node + *(const unsigned int *)((const char *)node + 4) - 0x10 < (this?p4Operand(blockEnd):p4Operand(blockEnd)));
+				score += ((unsigned int)node + *(const unsigned int *)((const char *)node + 4) - 0x10 < (this?p4Operand(blockEnd):p4Operand(blockEnd)));
 			}
 		}
 		m_470 = next - 1;
