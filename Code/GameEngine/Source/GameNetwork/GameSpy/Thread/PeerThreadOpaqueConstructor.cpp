@@ -17,6 +17,12 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <string>
 #include <map>
 #include <string.h>
+#include <cstddef>
+// Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
+}
 class MutexClass;
 class __declspec(novtable) ThreadClass{public:ThreadClass(const char*);virtual ~ThreadClass();virtual void Execute();protected:virtual void Thread_Function()=0;private:char pad[0x4c];};
 struct BfmeOpaqueOwnedRecord492{BfmeOpaqueOwnedRecord492();~BfmeOpaqueOwnedRecord492();char bytes[492];};
