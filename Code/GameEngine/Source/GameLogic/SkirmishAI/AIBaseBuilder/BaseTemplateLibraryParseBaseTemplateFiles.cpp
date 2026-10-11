@@ -25,6 +25,12 @@
 // - The open failure continues the loop, so the label temporary and the file
 //   name share retail's frame slots.
 #include <hash_map>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+}
 #include "ascii_string.h"
 
 typedef int Int;

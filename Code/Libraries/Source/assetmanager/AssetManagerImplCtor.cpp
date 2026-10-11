@@ -27,6 +27,12 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <set>
 #include <string.h>
 #include <windows.h>
+#include <cstddef>
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+}
 
 extern "C" __declspec(dllimport) unsigned long __cdecl _beginthread(void (__cdecl *start_address)(void *), unsigned stack_size, void *arglist);
 
