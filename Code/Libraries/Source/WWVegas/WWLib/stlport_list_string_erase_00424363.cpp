@@ -37,4 +37,9 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 namespace _STL {
 template <> void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(char*, size_t);
 }
+// Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
+// the kept copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> char *_STLP_alloc_proxy<char*, char, allocator<char> >::allocate(size_t);
+}
 template class _STL::list<_STL::basic_string<char> >;
