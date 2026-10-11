@@ -1024,6 +1024,7 @@ address_global	Code/GameEngine/Source/Common/Rva005210ECEnable.cpp	g_Va00E0492C	
 address_global	Code/GameEngine/Source/Common/Rva00523775Dtor.cpp	g_Va00A01E48	3
 address_global	Code/GameEngine/Source/Common/Rva00523775Dtor.cpp	g_Va00A04934	3
 address_global	Code/GameEngine/Source/Common/Rva00523775Dtor.cpp	g_Va00E046B8	3
+address_global	Code/GameEngine/Source/Common/Rva00524B7ACtor.cpp	g_Va00E04938	2	allow=ee20faca4b38a6b9fd1fc856d509bfe9414a2fd2
 address_global	Code/GameEngine/Source/Common/Rva00528B37Compare.cpp	g_Va00BC2424	4
 address_global	Code/GameEngine/Source/Common/Rva0052DC3F.cpp	g_Va007C26F0	1
 address_global	Code/GameEngine/Source/Common/Rva0052DC3F.cpp	g_Va00BC2428	2

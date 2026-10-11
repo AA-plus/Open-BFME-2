@@ -149,3 +149,14 @@ void MovieWindowPlayback::draw()
 		return;
 	owner->broadcast(m_0C->s08(), (float)m_10, (float)m_14, (float)m_18, (float)m_1C);
 }
+
+// MovieWindowPlayback::OpenMovie's complete native subtitle settings at
+// VA BF63DC..BF63F8. These descriptive names retain the proven word types;
+// the original identifiers and the meaning of the three draw words are unknown.
+extern const int MovieSubtitleDrawWord0=8;
+extern const int MovieSubtitleDrawWord1=0x61a8;
+extern const int MovieSubtitleDrawWord2=0x3f3f3f3f;
+extern const float MovieSubtitleXScale=0.52734375f;
+extern const float MovieSubtitleYScale=0.4228515625f;
+extern const float MovieSubtitleNormalWidth=0.813802063465118408203125f;
+extern const float MovieSubtitleLockedWidth=0.9765625f;
