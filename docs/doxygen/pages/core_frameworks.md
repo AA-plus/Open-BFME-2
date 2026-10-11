@@ -73,10 +73,15 @@ when a log is open, which is how a desync is traced.
 `InitRandom` with no argument seeds all streams from the clock
 (`GameEngine::init` calls it); the seeded `InitRandom` and
 `InitGameLogicRandom` start a match or a replay. BFME 2 adds a check Zero
-Hour lacks: when `TheGameLogic` exists and a particular `GameLogic` field is
-not -1, that field's value replaces the requested seed. The reconstruction
-labels it a frame, but it is not the frame counter other matched code reads;
-what it holds and why it overrides the seed are not yet established.
+Hour lacks: both seeded forms, which the no-argument form also goes
+through, read a seed field in the global data, and when that field is not
+-1 its value replaces the requested seed. The `-randomSeed` command-line
+option writes that field, so it forces every later seeding to one value.
+Zero Hour stores a similar fixed seed, set by its `-seed` option or the
+`FixedSeed` key of `GameData.ini`, but its seeding functions do not read it.
+BFME 2's `GameData` INI block still accepts a `FixedSeed` field, but it
+fills a different global-data field, which these functions do not read;
+what reads that field is not established.
 
 **Random variables** (`GameLogicRandomVariable`, `GameClientRandomVariable`)
 store a range and a distribution: `CONSTANT`, `UNIFORM`, `GAUSSIAN`,

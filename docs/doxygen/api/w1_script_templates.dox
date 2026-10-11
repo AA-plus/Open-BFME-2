@@ -130,8 +130,11 @@
 
 /// \class ScriptEngine
 /// \ingroup grp_w1_script_templates
-/// \brief The map-script engine, `TheScriptEngine`. This group covers only
-///        its action and condition template tables.
+/// \brief The map-script engine, `TheScriptEngine`.
+///
+/// Its template tables are described here and in
+/// \ref grp_w1_script_templates; its name lookups, named reveals and science
+/// notifications are in \ref grp_w3_script_engine_queries.
 ///
 /// The engine object embeds two fixed arrays of Template records: 599
 /// action slots and 202 condition slots. ScriptEngine::init fills them once,
