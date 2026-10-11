@@ -44,7 +44,7 @@ public:
 class Rva00064390
 {
 public:
-	Rva00064390()
+	__declspec(dllimport) __forceinline Rva00064390()
 	{
 		m_18 = 0;
 		m_00 = 0.0f;

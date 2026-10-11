@@ -19,7 +19,7 @@ struct Parent0057605D;
 class Rva0057605DSecond
 {
 public:
-    Rva0057605DSecond() {}
+    __declspec(dllimport) __forceinline Rva0057605DSecond() {}
     virtual ~Rva0057605DSecond() {}
 protected:
     Parent0057605D *m_parentC; // Secondary +4, complete object +C.

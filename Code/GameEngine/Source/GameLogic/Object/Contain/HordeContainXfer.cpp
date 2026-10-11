@@ -176,14 +176,14 @@ private:
 class Rva00469155
 {
 public:
-	Rva00469155() : m_value(0)
+	__declspec(dllimport) __forceinline Rva00469155() : m_value(0)
 	{
 		m_pos.x = 0.0f;
 		m_pos.y = 0.0f;
 		m_pos.z = 0.0f;
 	}
 	Rva00469155(const Rva00469155 &o) : m_pos(o.m_pos), m_value(o.m_value) {}
-	Rva00469155 &operator=(const Rva00469155 &o)
+	__declspec(dllimport) __forceinline Rva00469155 &operator=(const Rva00469155 &o)
 	{
 		m_pos = o.m_pos;
 		m_value = o.m_value;

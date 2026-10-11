@@ -34,7 +34,7 @@ extern AptValueVector *g_releaseVectorAtE17710;
 
 class BfmeAptValue006DCD20
 {
-	void setTypeAt006DBBC0(int type)
+	__declspec(dllimport) __forceinline void setTypeAt006DBBC0(int type)
 	{
 		m_flags = (m_flags & 0x01ffffffu) | (static_cast<unsigned int>(type) << 25);
 	}

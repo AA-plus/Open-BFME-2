@@ -20,7 +20,7 @@ struct Rva005F4C52
 	virtual void _vf() {}
 	int m_ref;
 	Payload005FAB16 m8;
-	__forceinline Rva005F4C52(const Payload005FAB16 &o) : m_ref(0), m8(o) {}
+	__declspec(dllimport) __forceinline Rva005F4C52(const Payload005FAB16 &o) : m_ref(0), m8(o) {}
 };
 
 struct Rva005F4C70
@@ -28,7 +28,7 @@ struct Rva005F4C70
 	virtual void _vf() {}
 	int m_ref;
 	Payload005FAB16 m8;
-	__forceinline Rva005F4C70(const Payload005FAB16 &o) : m_ref(0), m8(o) {}
+	__declspec(dllimport) __forceinline Rva005F4C70(const Payload005FAB16 &o) : m_ref(0), m8(o) {}
 };
 
 // A counted handle to either action (count at +4), released through the
