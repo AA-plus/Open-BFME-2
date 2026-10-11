@@ -44,6 +44,11 @@ static __forceinline void zeroCoord3D(Coord3D &c)
 	c.y = 0.0f;
 	c.z = 0.0f;
 }
+// The 12-byte POD erase at retail 0x2A133B is the rowed Gen_p12pod copy.
+// Coord3D erase also has a distinct retail owner at 0x81A24; clear the
+// same three-pointer vector representation through the required POD twin.
+struct Gen_p12pod { int a[3]; };
+
 class AIStateMachine : public StateMachine
 {
 public:
@@ -496,7 +501,7 @@ private:
 
 AIStateMachine::AIStateMachine(Object *owner, UnsignedInt nameKey) : StateMachine(owner, nameKey, false)
 {
-	m_goalPath.clear();
+	reinterpret_cast<_STL::vector<Gen_p12pod> &>(m_goalPath).clear();
 	m_goalWaypoint = NULL;
 	m_goalSquad = NULL;
 	m_goalObjectID = 0;
