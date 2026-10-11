@@ -17,7 +17,7 @@
 // LivingWorldLogic::rva002B693F counts as leaving; when leaving (or the
 // manager says 0x004CF3E1) in game it processes the local player's leave
 // (slot +0xB8 is the local player id) queues a destroy-player command
-// (NetDestroyPlayerCommandMsg 0x004D57AE) through 0x0025E539 and enters
+// (Rva004D57AE 0x004D57AE) through 0x0025E539 and enters
 // status 2.
 #include "../Common/GameLogicObjectLookupView.h"
 
@@ -81,11 +81,7 @@ class BFMEConnectionManager
 {
 public:
 	bool isPacketRouter();			// 0x004CF9CD
-};
-class Rva004CF0CDNullTarget
-{
-public:
-	bool rva004CF0CD(int playerID);		// 0x004CF0CD
+	int isPlayerSlotActive(int playerID);	// 0x004CF0CD
 };
 class Rva004CF0FB
 {
@@ -98,10 +94,10 @@ class NetCommandMsg
 public:
 	void detach();				// 0x004D55BC
 };
-class NetDestroyPlayerCommandMsg : public NetCommandMsg
+class Rva004D57AE : public NetCommandMsg
 {
 public:
-	NetDestroyPlayerCommandMsg();		// 0x004D57AE
+	Rva004D57AE();		// 0x004D57AE
 	void setPlayerIndex(unsigned int playerIndex);	// 0x00318B09
 	unsigned char m_pad00[0x0C];
 	int m_0C;				// +0x0C
@@ -133,15 +129,22 @@ public:
 	unsigned int m_count;
 	unsigned char m_compare;
 };
-class Rva002EE9B7
+// LINK: the folded ctor 0x000D3A71 is rowed as set<AsciiString>::set().
+class AsciiString;
+namespace _STL
+{
+template <class T> struct less;
+template <class T> class allocator;
+template <class K, class C, class A> class set
 {
 public:
-	Rva002EE9B7();
+	set();
 	void *m_header;
 	unsigned int m_count;
 	unsigned char m_compare;
 };
-class Rva00073116 : public Rva002EE9B7
+}
+class Rva00073116 : public _STL::set<AsciiString, _STL::less<AsciiString>, _STL::allocator<AsciiString> >
 {
 public:
 	~Rva00073116() { ((Rva00072FE6 *)this)->~Rva00072FE6(); }
@@ -238,10 +241,10 @@ void Rva0025E4CD::rva0025E75F()
 	{
 		if (m_conMgr != 0)
 			m_conMgr->processPlayerLeave((unsigned char)getLocalPlayerID());
-		if (((Rva004CF0CDNullTarget *)m_conMgr)->rva004CF0CD(getLocalPlayerID())
+		if ((((BFMEConnectionManager *)m_conMgr)->*reinterpret_cast<bool (BFMEConnectionManager::*)(int)>(&BFMEConnectionManager::isPlayerSlotActive))(getLocalPlayerID())
 			&& ((Rva004CF0FB *)m_conMgr)->rva004CF0FB(getLocalPlayerID()) == 0)
 		{
-			NetDestroyPlayerCommandMsg *cmd = new NetDestroyPlayerCommandMsg;
+			Rva004D57AE *cmd = new Rva004D57AE;
 			cmd->m_0C = getLocalPlayerID();
 			cmd->setPlayerIndex(getLocalPlayerID());
 			((NetworkInterface *)this)->rva0025E539((NetWrapperCommandMsg *)cmd);
