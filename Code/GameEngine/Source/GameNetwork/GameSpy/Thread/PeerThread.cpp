@@ -36,6 +36,14 @@
 // is read here under /D_CRTIMP= and only those functions are declared as imports.
 #define _snprintf _snprintf_unimported
 #define sscanf sscanf_unimported
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <stdio.h>
 #undef _snprintf
 #undef sscanf
@@ -113,6 +121,18 @@ PEERBool peerParseQuery(PEER peer, char *data, int len, struct sockaddr *from) t
 #include "thread.h"
 
 #include "Common/MiniLog.h"
+
+// _Rb_tree_iterator comparisons otherwise instantiate the base-class
+// operator!= COMDAT (one byte shape per TU flags); exact-match free
+// overloads take those calls instead so this TU emits no external copy.
+// TRANSITIVE-ANCHOR EXPERIMENT (no direct <map>/<set> include in this TU):
+// placed before the first TU body; header-inline callers keep prior binding.
+namespace _STL {
+template <class _RbVal, class _RbLeft, class _RbRight>
+static inline bool operator!=(const _Rb_tree_iterator<_RbVal, _RbLeft> &a,
+                              const _Rb_tree_iterator<_RbVal, _RbRight> &b)
+{ return a._M_node != b._M_node; }
+}
 
 // The retail58B append body is owned by StlportNarrowAppendCStr.cpp.
 namespace _STL { template <> string &string::append(const char *); }
