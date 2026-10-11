@@ -194,8 +194,7 @@ public:
 	bool isInMultiplayerGame();
 	// The pinned pause setter (paused, reason, pause music).
 	void rva0023CD9E(bool paused, int reason, bool music);
-	// The pinned multiplayer-or-skirmish predicate.
-	char rva0023C6FD();
+	// (rva0023C6FD decl removed; call goes through BfmeGlob939D below)
 
 	unsigned char m_pad000[0x6D];
 	bool m_6d; // +0x6D
@@ -204,6 +203,16 @@ public:
 };
 
 extern GameLogic *TheGameLogic;
+
+// The multiplayer-or-skirmish predicate at 0x0023C6FD is rowed as
+// BfmeGlob939D::bfmeCall939D (75B from BfmeConv939Call939D.cpp). This call
+// goes through a TU-local derivation so it resolves to the rowed body
+// instead of the unrowed GameLogic spelling.
+class BfmeGlob939D : public GameLogic
+{
+public:
+	char bfmeCall939D();
+};
 
 class Rva0023C902
 {
@@ -652,7 +661,7 @@ void Rva004E41AB()
 	TheMouse->slot19(2);
 	TheShell->rva0035C7CF(false);
 	int mode;
-	if (TheGameLogic->rva0023C6FD())
+	if (((BfmeGlob939D *)TheGameLogic)->bfmeCall939D())
 	{
 		mode = 1;
 		TheShell->push(AsciiString("PlayerStatus.apt"), false);
