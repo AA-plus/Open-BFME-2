@@ -1,10 +1,13 @@
 // ?rva0033AA1F@ThingTemplate@@QBEHPBVPlayer@@HH@Z
 // partial score=1.0 date=2026-10-11
+// ?rva0033AA1F@ThingTemplate@@QBEHPBVPlayer@@HH@Z
 // cl: /O1 /arch:SSE /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // ?getBuildFacilityTemplate@ThingTemplate@@QBEPBV1@PBVPlayer@@@Z @0x0033A97F 38B ThingTemplate prereq vector +0x324 element 0x24 tailcalls ProductionPrerequisite::getExistingBuildFacilityTemplate callers 0x0033AB48 donor ThingTemplate.cpp Zero Hour
 #include <vector>
 #include "GameLogicObjectLookupView.h"
+// Whole-file recovery: keep the existing frame-rate data owner, rather than
+// assert an original target variable name. Its mutable int ABI is retail-proven.
 
 typedef int Int;
 
