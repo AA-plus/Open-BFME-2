@@ -67,7 +67,7 @@ private:
 class AIUpdateInterface
 {
 public:
-	Path *getPath() { return m_path; }
+	__declspec(dllimport) __forceinline Path *getPath() { return m_path; }
 	Bool isWaitingForPath() const { return m_waitingForPath; }
 	Locomotor *getCurLocomotor() { return m_curLocomotor; }
 private:
