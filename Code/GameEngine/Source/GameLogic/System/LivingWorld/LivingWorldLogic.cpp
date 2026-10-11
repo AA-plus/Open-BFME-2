@@ -645,6 +645,8 @@ public:
 	void rva002B9A90(Int regionID, const _STL::vector<Int> &players, UnsignedInt flags);	// 0x002B9A90
 	void rva002B37FF(class LivingWorldBattle *battle);	// 0x002B37FF
 	void PrepareBattleForLoading(class LivingWorldBattle *battle);
+	void SetUpAutoResolveBattle(const _STL::vector<const ModuleData *> &armies, void *battleValue, const _STL::vector<const ModuleData *> &units, Rva003F287F *region, Int a, Int b);	// 0x002BC971 (WorldBuilder name, pinned)
+	void rva002BCCFB(class LivingWorldBattle *battle, Int a, Int b);	// 0x002BCCFB
  void rva002B3833(LivingWorldBattle*,struct Rva002B89BBInfo*);
 
 private:
@@ -1936,6 +1938,7 @@ public:
 	Int rva003F459A();					// 0x003F459A, total army count (pinned)
 	void *rva003F4ABB(Int side, Int army);			// 0x003F4ABB, the army object or null (pinned)
 	void AddArmy(Int player, void *army);			// 0x003F6DF9 (WorldBuilder name, pinned)
+	void *rva003F4D09();					// 0x003F4D09
 
 	unsigned char m_pad00[0x18];
 	struct Rva002BC1DASide { unsigned char m_data[0x1c]; } *m_sides;	// +0x18
@@ -2026,6 +2029,29 @@ void LivingWorldLogic::GameLogic_tacticalBattleComplete()
 		m_battleListeners.forEach(&Rva002B616FListener::onTurnChanged, this, (int)battle);
 	}
 	m_fieldB8 = -1;
+}
+
+// LivingWorldLogic::rva002BCCFB, retail 0x002BCCFB (297 bytes; WorldBuilder
+// leaves it unnamed but shows it calling SetUpAutoResolveBattle). Every army
+// of every side of the battle, and every unit of each of those armies, is
+// collected; both lists go to SetUpAutoResolveBattle (0x002BC971, pinned
+// under its WorldBuilder name) with the battle's 0x003F4D09 value, its
+// region and the two forwarded arguments.
+void LivingWorldLogic::rva002BCCFB(LivingWorldBattle *battle, Int a, Int b)
+{
+	_STL::vector<const ModuleData *> armies;
+	_STL::vector<const ModuleData *> units;
+	for (UnsignedInt side = 0; side < (UnsignedInt)(battle->m_sidesEnd - battle->m_sides); ++side)
+	{
+		for (UnsignedInt army = 0; army < (UnsignedInt)((Rva003F468D *)battle)->rva003F4DAE(side); ++army)
+		{
+			armies.push_back((const ModuleData *)((Rva003F468D *)battle)->rva003F468D(side, army));
+			for (UnsignedInt unit = 0; unit < (UnsignedInt)((Rva003F4DCA *)battle)->rva003F4DCA(side, army); ++unit)
+				units.push_back((const ModuleData *)battle->rva003F48FE(side, army, unit));
+		}
+	}
+	Rva003F287F *region = battle->m_region;
+	SetUpAutoResolveBattle(armies, battle->rva003F4D09(), units, region, a, b);
 }
 
 // OnBattleComplete's region manager calls, pinned under address names
