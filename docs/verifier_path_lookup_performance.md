@@ -27,3 +27,28 @@ path remapping after exact function bytes, final checks in every reference gate,
 and refusal of all converged-data rows when their object mapping changes.
 Every existing gate-exploit case retains its verdict. Normal commit and push
 hooks still perform their complete required verification scopes.
+
+
+## Avoid rebuilding the full provider scope twice
+
+An unbounded dependency change already requires the ordinary full build. The
+push hook previously passed every explicitly selected provider to scoped builds
+again after that full build, even when the full gate had just verified it. A
+driver change can select all 22,100 current source files, creating dozens of
+redundant chunk builds before EH and data checks can begin.
+
+The hook now uses the existing pushed-ledger scope classifier for unbounded
+changes as well. Matched C, C++ and assembly providers in functions.csv and
+data_rows.csv are covered by the ordinary full gate. Every other selector stays
+explicit, including rowless sources and library-member paths. Bounded partial
+scopes still build every selector in chunks. Nothing reuses a previous verdict;
+the full gate, all outgoing EH checks, all converged-data checks and worktree
+equality checks still run in the current push. A failed or malformed scope proof
+refuses publication before a build can report success.
+
+Nine added regressions exercise unbounded complete and partial scopes, data-only
+and assembly providers, retained rowless and library selectors, and malformed
+provider ledgers. Together with the existing coverage and failure controls, the
+isolated push-scope suite passed 33 cases.
+The live push-scope, fail-closed hook and gate-exploit suites passed 84 tests,
+with one existing skip.

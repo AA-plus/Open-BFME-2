@@ -99,14 +99,18 @@ build_chunks() {
     fi
 }
 
-# classify_full_scope REV LIST: use the full build only when LIST covers every
-# matched compileable provider at the pushed revision. Keep additional selectors
+# classify_full_scope REV LIST [FULL_REQUIRED]: choose the ordinary full build
+# when LIST covers every matched compileable provider, or an unbounded dependency
+# change already requires it. In either case use the pushed ledgers to retain only
+# selectors the ordinary full build does not cover. Keep additional selectors
 # explicit: a row-less source must still be refused by its scoped build.
 # LIST and the result are NUL-delimited so paths never become shell arguments.
 classify_full_scope() {
-    python3 - "$1" "$2" <<'PY'
+    python3 - "$1" "$2" "${3:-0}" <<'PY'
 import csv, io, pathlib, subprocess, sys
-rev, listing = sys.argv[1:]
+rev, listing, full_required = sys.argv[1:]
+if full_required not in ("0", "1"):
+    raise ValueError("invalid full-build requirement")
 
 
 def git(*argv):
@@ -138,7 +142,7 @@ required = providers("reverse/functions.csv")
 # Missing data_rows.csv is allowed only when Git proves its absence.
 if git("ls-tree", rev, "--", "reverse/data_rows.csv").strip():
     required |= providers("reverse/data_rows.csv")
-full = bool(required) and required.issubset(selected)
+full = full_required == "1" or (bool(required) and required.issubset(selected))
 result = ["full"] + [path for path in selected if path not in required] if full else ["chunks"]
 sys.stdout.buffer.write(b"".join(path.encode("utf-8") + b"\0" for path in result))
 PY
@@ -315,18 +319,13 @@ PY
     # of 200 sources still overflows once their paths average ~160 characters.
     full_scope=0
     extra=()
-    # An unbounded header/reference change reads every provider below. Build
-    # those objects first, even when the outgoing body list is small or empty.
-    # Keep explicit selectors as well: a full gate does not judge rowless files.
-    if [ "$header_all" -ne 0 ]; then
-        full_scope=1
-        extra=("${verify[@]}")
-    # Small bounded scopes retain chunk builds. Prove coverage from the pushed
-    # ledgers before replacing a large bounded scope with the ordinary full gate.
-    elif [ "${#verify[@]}" -ge 1024 ]; then
+    # An unbounded dependency change already requires a full gate. Otherwise
+    # prove a large bounded scope covers all providers before choosing it. In
+    # both cases keep only selectors outside the full build as additional work.
+    if [ "$header_all" -ne 0 ] || [ "${#verify[@]}" -ge 1024 ]; then
         verify_list=$(mktemp) || fail "temporary source list"
         printf '%s\0' "${verify[@]}" > "$verify_list"
-        capture scope_out "proving full build scope" classify_full_scope "$local_sha" "$verify_list"
+        capture scope_out "proving full build scope" classify_full_scope "$local_sha" "$verify_list" "$header_all"
         mapfile -d '' -t scope < "$scope_out"
         rm -f "$scope_out" "$verify_list"
         case "${scope[0]:-}" in

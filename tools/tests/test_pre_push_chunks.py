@@ -74,12 +74,12 @@ def run_hook(fixture, selected=None, **env):
     return hooks.run(repo, "pre-push", refs, env)
 
 
-def classify(fixture, selected, rev=None, listing_bytes=None):
+def classify(fixture, selected, rev=None, listing_bytes=None, full_required=0):
     repo, _, _, pushed = fixture
     listing = repo / "scope-list"
     listing.write_bytes(listing_bytes if listing_bytes is not None else
                         b"".join(path.encode() + b"\0" for path in selected))
-    harness = _definition(HOOK, 'classify_full_scope') + f"\nclassify_full_scope {rev or pushed} scope-list\n"
+    harness = _definition(HOOK, 'classify_full_scope') + f"\nclassify_full_scope {rev or pushed} scope-list {full_required}\n"
     done = subprocess.run([hooks._bash(), "--noprofile", "--norc"], cwd=repo,
                           input=harness.encode(), capture_output=True)
     return done, [p.decode() for p in done.stdout.split(b"\0") if p]
@@ -243,3 +243,56 @@ def test_full_scope_classifier_failure_stops_the_real_hook(repo):
     done = run_hook(updated)
     assert done.returncode == 1 and 'proving full build scope' in done.stderr
     assert not calls(path)
+
+
+@pytest.mark.parametrize('selected_kind', ['complete', 'subset', 'data-and-asm'])
+def test_unbounded_headers_do_not_repeat_covered_providers(repo, selected_kind):
+    fixture = unbounded_headers(repo)
+    selected = {'complete': repo[1], 'subset': repo[1][:3],
+                'data-and-asm': [ASM, DATA]}[selected_kind]
+    done = run_hook(fixture, selected)
+    assert done.returncode == 0, done.stderr
+    assert calls(repo[0]) == [[]]
+    assert calls(repo[0], 'eh-calls.jsonl') == [
+        ['--assert-shrink-range', fixture[2], fixture[3]], selected]
+    converged = calls(repo[0], 'conv-calls.jsonl')
+    assert len(converged) == 1 and '--all' in converged[0]['argv']
+
+
+@pytest.mark.parametrize('failure', ['', EXTRA], ids=['extra-kept', 'extra-refused'])
+def test_unbounded_headers_filter_providers_but_keep_rowless_extras(repo, failure):
+    fixture = unbounded_headers(repo)
+    done = run_hook(fixture, repo[1] + [EXTRA], FAIL_EXTRA=failure)
+    assert calls(repo[0]) == [[], [EXTRA]]
+    assert done.returncode == (1 if failure else 0), done.stderr
+    if failure:
+        assert not calls(repo[0], 'conv-calls.jsonl')
+
+
+def test_required_full_scope_uses_pushed_data_and_function_ledgers(repo):
+    done, scope = classify(repo, [repo[1][0], ASM, DATA, EXTRA], full_required=1)
+    assert done.returncode == 0 and scope == ['full', EXTRA], done.stderr
+    done, scope = classify(repo, [repo[1][0], EXTRA], full_required=0)
+    assert done.returncode == 0 and scope == ['chunks'], done.stderr
+
+
+def test_required_full_scope_keeps_library_selectors_explicit(repo):
+    done, scope = classify(repo, [repo[1][0], LIB], full_required=1)
+    assert done.returncode == 0 and scope == ['full', LIB], done.stderr
+
+
+def test_required_full_scope_refuses_malformed_provider_ledger(repo):
+    hooks.write(repo[0], 'reverse/data_rows.csv', 'name\n?bad\n')
+    hooks.git(repo[0], 'commit', '-qam', 'malformed data ledger')
+    done, scope = classify(repo, [], 'HEAD', full_required=1)
+    assert done.returncode != 0 and not scope
+
+
+def test_unbounded_header_classifier_failure_stops_real_hook(repo):
+    fixture = unbounded_headers(repo)
+    hooks.write(repo[0], 'reverse/data_rows.csv', 'name\n?bad\n')
+    hooks.git(repo[0], 'commit', '-qam', 'malformed data ledger')
+    fixture = (*fixture[:3], hooks.git(repo[0], 'rev-parse', 'HEAD'))
+    done = run_hook(fixture, [])
+    assert done.returncode == 1 and 'proving full build scope' in done.stderr
+    assert not calls(repo[0])
