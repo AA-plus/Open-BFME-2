@@ -37235,8 +37235,6 @@ pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/lineseg.cpp	"",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/lineseg.cpp	"gsy",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/lookuptable.cpp	"",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/lookuptable.cpp	"gsy",on	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3.cpp	"",on	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3.cpp	"gsy",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3d.cpp	"",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3d.cpp	"gsy",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWMath/matrix3d_inverse.cpp	"",on	1
