@@ -3,7 +3,7 @@
 // Every link has the BigChainBaseDtorsO1.cpp shape: the null-preserving
 // this+4 conversion names a second base destroyed first then the first base
 // pointer holder runs the verified 001F4206 cleanup. Second-base callees by
-// REL32: 001F8BE8 -> pinned Rva005C67C0 dtor 001F8167; 001F9076 -> 001F8BE8;
+// REL32: 001F8BE8 -> rowed H1F8167 dtor 001F8167; 001F9076 -> 001F8BE8;
 // 001F9B69 -> 001F9076; 001FA5BB and 001FA5F6 -> 001F9B69; 001FAB1E ->
 // 001FA5BB; 001FB829 -> 001FA5F6; 001FB98A -> 001FAB1E; 001FB9C5 -> 001FB829;
 // 001FBB29 -> 001FB98A; 001FBB64 -> 001FB9C5; 001FBCDC -> 001FBB29; 001FBEB7 -> 001FBB64.
@@ -24,12 +24,12 @@ inline Rva001F8BE8Hold::~Rva001F8BE8Hold()
 {
     ((Rva001F4206 *)this)->rva001F4206();
 }
-class Rva005C67C0
+class H1F8167
 {
 public:
-    ~Rva005C67C0();
+    ~H1F8167();
 };
-class Rva001F8BE8 : public Rva001F8BE8Hold, public Rva005C67C0
+class Rva001F8BE8 : public Rva001F8BE8Hold, public H1F8167
 {
 public:
     ~Rva001F8BE8();
