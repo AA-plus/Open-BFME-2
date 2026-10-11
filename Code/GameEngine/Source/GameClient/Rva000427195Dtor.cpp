@@ -40,22 +40,33 @@ Rva000427195::~Rva000427195()
 	rva003A2A41();
 }
 
-// Pinned unrowed copy worker at 0x001FDC0F (Ghidra FUN_005fdc0f, 192B):
-// thiscall taking one pointer (proven by the push-arg plus ecx call site
-// below). Identity beyond the address is unrecovered, so the honest
-// address-derived class keeps the pin target stable.
-class Rva001FDC0F
-{
-public:
-	void rva001FDC0F(void *other);
-};
+// Native 1FDC0F is already owned by the STLport hashtable copy worker.
+// This declaration names that owner; its opaque record is a donor type, while
+// the caller's reference/receiver ABI and full 192-byte provider are verified.
+struct Rva001FDC0FRecord;
+namespace _STL {
+ template<class A,class B> struct pair;
+ template<class T> struct hash;
+ template<class T> struct _Select1st;
+ template<class T> struct equal_to;
+ template<class T> class allocator;
+ template<class Value,class Key,class Hash,class Extract,class Equal,class Alloc>
+ class hashtable {
+ private: void _M_copy_from(const hashtable &);
+ friend struct ::Rva000427195;
+ };
+}
+typedef _STL::pair<const int,Rva001FDC0FRecord> NativeCopyValue;
+typedef _STL::hashtable<NativeCopyValue,int,_STL::hash<int>,
+ _STL::_Select1st<NativeCopyValue>,_STL::equal_to<int>,
+ _STL::allocator<NativeCopyValue> > NativeCopyTable;
 
-// ??4Rva000427195@@QAEAAV0@ABV0@Z present-unmatched
+// ??4Rva000427195@@QAEAAU0@ABU0@@Z
 Rva000427195 &Rva000427195::operator=(const Rva000427195 &other)
 {
 	if (&other != this) {
 		rva003A2A41();
-		reinterpret_cast<Rva001FDC0F *>(this)->rva001FDC0F(const_cast<Rva000427195 *>(&other));
+		reinterpret_cast<NativeCopyTable *>(this)->_M_copy_from(reinterpret_cast<const NativeCopyTable &>(other));
 	}
 	return *this;
 }
