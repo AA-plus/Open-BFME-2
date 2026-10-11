@@ -26,6 +26,8 @@ private:
 	int m_flags;
 };
 
+class Rva0054034A { public: void rva00540A26(); };
+
 class Rva00540B03
 {
 public:
@@ -41,7 +43,7 @@ Rva00540B03::Rva00540B03()
 	: m_head(), m_vec10()
 {
 	m_1C = 0;
-	rva00540A26();
+	reinterpret_cast<Rva0054034A *>(this)->rva00540A26();
 }
 
 class Rva00542225

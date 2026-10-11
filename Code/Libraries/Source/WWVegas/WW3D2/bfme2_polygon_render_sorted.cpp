@@ -56,6 +56,9 @@ public:
 
 class SphereClass {};
 
+struct TargetCenter3 { float x, y, z; };
+class BfmeSortingDispatchAt0012FE00 { public: static void Insert(const TargetCenter3 &,unsigned,unsigned,unsigned,unsigned); };
+
 class SortingRendererClass {
 public:
 	static void Insert_Triangles(const SphereClass &,unsigned,unsigned,unsigned,unsigned);
@@ -93,9 +96,9 @@ inline void DX8PolygonRendererClass::Render_Sorted(
 	unsigned min_vertex=MinVertex;
 	unsigned polygon_count=IndexCount/3;
 	unsigned index_offset=IndexOffset;
-	SortingRendererClass::
-		Insert_Triangles(
-		bounding_sphere,index_offset,polygon_count,min_vertex,vertex_range);
+	BfmeSortingDispatchAt0012FE00::
+		Insert(
+		reinterpret_cast<const TargetCenter3 &>(bounding_sphere),index_offset,polygon_count,min_vertex,vertex_range);
 }
 
 // Header inlines that the units including the header emit as select-any

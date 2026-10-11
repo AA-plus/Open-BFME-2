@@ -24,9 +24,11 @@ Rva0036CA00Str Rva00274DD4(){
  if(!value.item)((Rva000A8C9B*)&value)->rva000A8CE5((OpaqueRefCounted*)new Rva00433390(0));
  return value;
 }
+struct OpaqueRefElement4 { OpaqueRefCounted *referent; OpaqueRefElement4 &operator=(const OpaqueRefElement4 &); };
+
 class Rva00279354Host {public:void rva00279354(bool);};
 class Rva0027974B {public:void rva0027974B();char unknown0[0x10C];Rva0036CA00Str held;};
 void Rva0027974B::rva0027974B(){
  ((Rva00279354Host*)this)->rva00279354(false);
- held.assign(Rva00274DD4());
+ reinterpret_cast<OpaqueRefElement4 &>(held).operator=(reinterpret_cast<const OpaqueRefElement4 &>(Rva00274DD4()));
 }

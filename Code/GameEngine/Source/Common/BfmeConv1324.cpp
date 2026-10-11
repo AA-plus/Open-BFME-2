@@ -47,6 +47,9 @@ extern void *g_bfmeVftTVA[];
 // calls its own release/free helpers.
 extern "C" __declspec(dllimport) int __stdcall CloseHandle(void *handle);
 
+// The rowed base cleanup restores the base vtable at retail 0x65D180.
+class Rva00CE1E14Base { public: virtual ~Rva00CE1E14Base(); };
+
 class BfmeThingTVA
 {
 public:
@@ -62,7 +65,7 @@ void *BfmeThingTVA::bfmeDelTVA(unsigned char flags)
 	m_bfmeVft = g_bfmeVftTVA;
 	if (h)
 		CloseHandle(h);
-	bfmeDtorTVA();
+	reinterpret_cast<Rva00CE1E14Base *>(this)->Rva00CE1E14Base::~Rva00CE1E14Base();
 	if (flags & 1)
 		operator delete(this);
 	return this;
