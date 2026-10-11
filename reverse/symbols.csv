@@ -9486,7 +9486,6 @@ name,address,notes
 ?getDrawable@Object@@QBEPAVDrawable@@XZ,0x005508E2,chain doFXObj 0x001E09D8 calls getDrawable at 0x001E09E5 plus 0x001E09F2 plus 0x001E0A29; boundary 0x005508E2/7 ICF twin of rowed BuildListInfo getter same bytes
 ?getDrawable@Thing@@QBEPAVDrawable@@XZ,0x005508E2,SpawnPointProductionExitUpdate::initializeBonePositions calls this 7-byte this+0x84 getter; body is ICF-folded with the already matched BuildListInfo getter at the same address
 ?getEachPlayerFromMask@PlayerList@@QAEPAVPlayer@@AAG@Z,0x002A7BC9,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
-?getEnergy@Player@@QAEPAVEnergy@@XZ,0x00657650,lea-getter alias read from REL32 at placed run 0x660EF0; target rowed under Rva006576xx name
 ?getError@Rva007E8810Message@@QAEHXZ,0x0066DD00
 ?getFieldParse@DieMuxData@@SAPBUFieldParse@@XZ,0x004CE52E,callee of buildFieldParse (0x0045D35F) at the site its BFME1 donor calls it; may be an ICF alias
 ?getFilePathInSaveDirectory@GameState@@QBE?AVAsciiString@@ABV2@@Z,0x002DC74A,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1

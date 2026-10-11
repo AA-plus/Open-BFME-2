@@ -221,14 +221,16 @@ public:
 	virtual void v04(); virtual void v05(); virtual void v06();
 	virtual void draw(Int pixelX, Int pixelY, Int width, Int height, UnsignedInt color = 0xFFFFFFFF);   // +0x1C
 
-	Bool isRadarHidden(void) { return m_radarHidden; }
-	Bool isRadarForced(void) { return m_radarForceOn; }
-
-private:
 	char m_pad04[0x10 - 0x04];
 	Bool m_radarHidden;    // +0x10
 	Bool m_radarForceOn;   // +0x11
 };
+
+// File-static flag readers: retail inlines both reads, and a member spelling would
+// emit an external ?isRadarForced@Radar COMDAT that differs from the other
+// translation units' guesses at the same inline.
+static inline Bool radarHidden(Radar *radar) { return radar->m_radarHidden; }
+static inline Bool radarForced(Radar *radar) { return radar->m_radarForceOn; }
 
 class InGameUI
 {
@@ -407,7 +409,7 @@ void W3DLeftHUDDraw(GameWindow *window, WinInstanceData *instData)
 
 		TheDisplay->drawVideoBuffer(video, pos.x, pos.y, pos.x + size.x, pos.y + size.y);
 	}
-	else if (TheRadar->isRadarForced() || (TheRadar->isRadarHidden() == false && player->hasRadar()))
+	else if (radarForced(TheRadar) || (radarHidden(TheRadar) == false && player->hasRadar()))
 	{
 		ICoord2D pos, size;
 		window->winGetScreenPosition(&pos.x, &pos.y);

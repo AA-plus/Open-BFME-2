@@ -36,12 +36,12 @@ public:
 	char *bfmePlatform();
 };
 
-class Energy;
-
-class Player
+// Retail 0x00657650 is a disp32 lea getter (lea eax,[ecx+0x80]) on this opaque
+// owner view, spelled as ConnectRequest's accessor, not Player::getEnergy.
+class Rva007EA6B0Accessor
 {
 public:
-	Energy *getEnergy();
+	void *getAt80();
 };
 
 class Rva007EA650FieldAddress
@@ -113,7 +113,7 @@ void Rva007F4440Runner::run( int mode, int, int )
 		( (Rva007EA650FieldAddress *)owner )->get(),
 		( (Rva007EA690FieldAddress *)owner )->get(),
 		( (Rva007EA6A0FieldAddress *)owner )->get(),
-		( char * )( (Player *)owner )->getEnergy(),
+		( char * )( (Rva007EA6B0Accessor *)owner )->getAt80(),
 		g_Rva012C3A18,
 		( (Gen_007ea670 *)owner )->bfmePlatform(),
 		clientType );
