@@ -1,5 +1,7 @@
 // ?rva002CCED3@Weapon@@QAE_NPBVObject@@0@Z
 // partial score=0.95 date=2026-10-11
+// ?rva002CCED3@Weapon@@QAE_NPBVObject@@0@Z
+// partial score=0.95 date=2026-10-11
 // cl: /O1 /Oy /G7 /arch:SSE /DNDEBUG /MD
 //
 // WeaponSet::setWeaponLock, retail 0x002C8AAE (237 bytes).
@@ -798,7 +800,7 @@ CanAttackResult WeaponSet::getAbleToAttackSpecificObject(AbleToAttackType attack
 
 	return getAbleToUseWeaponAgainstTarget(attackType, source, victim, &victim->m_position, commandSource);
 }
-// Native 0x002CCED3..0x002CCC47: 244B RET8. Fires only when the template and
+// Native 0x002CCED3..0x002CCFC7: 244B RET8. Fires only when the template and
 // ammo state allow it and no occlusion blocks the victim: an OUT_OF_AMMO
 // weapon with a nonzero +0x128 stays silent; a nonzero +0x168 byte runs the
 // victim through a 120-kind partition occlusion query (9999.0f) and a
