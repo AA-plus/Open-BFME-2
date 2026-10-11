@@ -132,8 +132,8 @@ arguments, then run or test it), `ObjectDispatchEvent`, the
 `ObjectHasUpgrade` and `ObjectDoSpecialPower`, `GetFrame` and
 `GetRandomNumber`. It then runs `Data\Scripts\Scripts.lua` and reads
 `Data\Scripts\ScriptEvents.xml`. BFME 1 also loads a `Scripts.lua` and a
-`ScriptEvents.xml` from the map's own folder; that BFME 2 step is not yet
-reconstructed. A second set, the `CurDrawable*` functions, works on the
+`ScriptEvents.xml` from the map's own folder; whether BFME 2 does is not
+established. A second set, the `CurDrawable*` functions, works on the
 drawable being animated.
 
 The XML root is `SageLuaScriptSection`, with `Events` elements (declaring
@@ -182,8 +182,8 @@ documented upstream and not described further here.
 - **Map compatibility.** BFME 2's map writer stores each action's template
   internal name next to its type number. Zero Hour: on load the name wins
   over the number; an unknown name becomes a no-op action, so appending
-  templates is safe and renaming one breaks maps that use it. BFME 2's reader
-  has been reconstructed but is not yet byte-verified.
+  templates is safe and renaming one breaks maps that use it. Whether BFME 2's
+  reader does the same is not established.
 - **Lockstep.** Both engines run in `GameLogic::update` on every machine, so
   a script that behaves differently on one machine desyncs the game.
   `GetRandomNumber` uses the logic random generator;
@@ -198,8 +198,12 @@ documented upstream and not described further here.
 - **Saves.** Script state is saved through `Script::xfer`,
   `ScriptGroup::xfer`, `SequentialScript::xfer`, `ObjectTypes::xfer` and
   `DelayedLuaEventList::xfer`. BFME 2's `ScriptGroup::xfer` keeps only the
-  active flag, where Zero Hour also saves each script; how saved state is
-  matched to a changed map's scripts is not yet reconstructed
+  active flag, where Zero Hour also saves each script. As in Zero Hour,
+  `ScriptList::xfer` pairs saved state with the map's scripts by count and
+  position, not by name: it stores how many scripts there are, transfers
+  that many in list order and reads any surplus saved scripts into a
+  throwaway script, then, depending on the save version, does the same for
+  script groups, without Zero Hour's throwaway for surplus groups
   (\ref sub_save_load_crc).
 
 ## Remastering notes {#sub_scripting_remastering}
@@ -224,10 +228,8 @@ documented upstream and not described further here.
 
 Largely matched, with most bytes in named functions (the two template-table
 builders above all). Many small helpers keep address-derived names, several
-BFME-only action and condition names rest on WorldBuilder leads, and the
-`ScriptActions` and `ScriptConditions` dispatchers and the Lua engine's init
-and update were not yet reconstructed when this page was written. At that
-time none of these classes had a shared header registered in
+BFME-only action and condition names rest on WorldBuilder leads. When this
+page was written none of these classes had a shared header registered in
 `reverse/canonical_classes.csv` (\ref page_reading_code). The vendored Lua sources nearly all link; the
 script engine files do not all link yet. To refresh this, search
 `reverse/functions.csv` and `reverse/link_status.csv` for the paths above.

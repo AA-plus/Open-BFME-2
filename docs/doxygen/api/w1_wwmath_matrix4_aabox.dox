@@ -224,8 +224,8 @@
 /// The mirror of the Matrix3D-first overload, for a projection applied
 /// after an ordinary transform. Its BFME 2 callers have not been
 /// identified. Zero Hour: TexProjectClass and the decal system use it to combine a
-/// projection with a world-to-texture transform, and this source tree has
-/// the same calls in code that is not yet matched.
+/// projection with a world-to-texture transform; this source tree carries
+/// the same calls, not confirmed as BFME 2's.
 ///
 /// \par Implementation
 /// Columns 0 to 2 of the result use three terms per element, because B's

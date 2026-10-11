@@ -126,22 +126,22 @@ latency-sorted list of fallback routers that peers step through to pick
 the next router. `docs/bfme2-network-timing-path.md` has the details and
 the evidence.
 
-The main-loop routine that calls these queries is still being reverse
-engineered; \ref page_frame_loop describes its contract.
+\ref page_frame_loop describes the contract of the main-loop routine that
+calls these queries.
 
 ## Entry points {#sub_network_entry}
 
-| Function | Role | State |
-|---|---|---|
-| `NetworkInterface::getFrameAdvanceCount` | how many logic frames may run now | matched |
-| `NetworkInterface::getFramePacingStatus` | headroom or router pacing, for client-frame admission | matched |
-| `NetworkInterface::isPacketRouter` | whether this machine is the router | matched |
-| `ConnectionManager::update` | one pass of receive, relay and send | matched |
-| `DisconnectManager::update` | disconnect timeouts and screen | matched |
-| `LANAPI::init` | binds the LAN lobby socket and reads the user and machine names | matched |
-| `LANAPI::OnGameStart` | creates the network, runs the transfers and launches a LAN game | matched |
-| `LANAPI::update` | LAN lobby pump | not yet reconstructed |
-| the network's own update and light update | pump commands and call `ConnectionManager::update` | matched, under address names |
+| Function | Role |
+|---|---|
+| `NetworkInterface::getFrameAdvanceCount` | how many logic frames may run now |
+| `NetworkInterface::getFramePacingStatus` | headroom or router pacing, for client-frame admission |
+| `NetworkInterface::isPacketRouter` | whether this machine is the router |
+| `ConnectionManager::update` | one pass of receive, relay and send |
+| `DisconnectManager::update` | disconnect timeouts and screen |
+| `LANAPI::init` | binds the LAN lobby socket and reads the user and machine names |
+| `LANAPI::OnGameStart` | creates the network, runs the transfers and launches a LAN game |
+| `LANAPI::update` | LAN lobby pump |
+| the network's own update and light update | pump commands and call `ConnectionManager::update` |
 
 ## How it connects {#sub_network_connects}
 
@@ -190,9 +190,8 @@ engineered; \ref page_frame_loop describes its contract.
 - **Join check.** The LAN join request carries an executable check value,
   the INI CRC and a third BFME checksum. In Zero Hour's source the host's
   comparison of these values is commented out. BFME 2 keeps the
-  CRC-mismatch error and its "LAN:ErrorCRCMismatch" text, but the host's
-  join handler is not yet reconstructed, so whether it compares them is
-  not known.
+  CRC-mismatch error and its "LAN:ErrorCRCMismatch" text, but whether the
+  host's join handler compares them is not established.
 - **Online.** BFME 2 keeps the GameSpy SDK and adds EA's FESL services on
   DirtySock.
 
@@ -215,8 +214,8 @@ engineered; \ref page_frame_loop describes its contract.
   lacks the map is sent it, and players' Create-a-Hero data is exchanged.
   Zero Hour's map transfer sends the map and, as its contents mask says,
   the files in the map's folder (preview image, `map.ini`, `map.str`,
-  `solo.ini`, asset usage and readme), and nothing game-wide; BFME 2's
-  transfer routine is not yet reconstructed. Plan on every player
+  `solo.ini`, asset usage and readme), and nothing game-wide; what BFME 2's
+  transfer routine sends is not established. Plan on every player
   installing the same mod.
 - **New actions reuse existing messages.** A new command button or power
   that uses an existing `GameMessage` type needs no network change. A new
@@ -262,10 +261,9 @@ The lockstep core is largely named and matched: `NetPacket`'s serialisers
 and parsers, `ConnectionManager` and its command handlers, the frame
 rings, the frame-admission queries, `Transport` and `UDP`, the LAN
 handlers and much of `GameInfo` and `GameSlot`. The network's update and
-light update are matched but still carry address names; the LAN lobby's
-update is not yet reconstructed. Many BFME 2-only connection-manager
-methods carry class and method names carried over from the BFME 1
-reconstruction rather than from retail evidence. Most GameSpy SDK modules
+light update are matched but still carry address names. Many BFME 2-only
+connection-manager methods carry class and method names carried over from
+the BFME 1 reconstruction rather than from retail evidence. Most GameSpy SDK modules
 are vendored C, matched and named; `chat/` and `peer/` are
 reconstructions transcribed from the public SDK (see their
 `PROVENANCE.txt` files). The FESL and DirtySock code is mostly

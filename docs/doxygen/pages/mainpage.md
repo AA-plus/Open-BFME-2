@@ -80,9 +80,8 @@ The engine starts the way Zero Hour's does, and all of these are matched:
 - `GameEngine::init` creates and initialises the engine's subsystems, the
   global `TheX` singletons such as `TheGameLogic` and `TheGameClient`.
 
-The main loop and its per-frame step are not yet reconstructed in BFME 2
-(Zero Hour names them `GameEngine::execute` and `GameEngine::update`), so the
-guide describes their contract only.
+The guide describes the main loop and its per-frame step (Zero Hour names
+them `GameEngine::execute` and `GameEngine::update`) by their contract only.
 \ref page_startup and \ref page_frame_loop follow this path in detail, and
 \ref page_architecture shows how the singletons relate.
 
@@ -147,12 +146,12 @@ The subsystem pages list the differences inside each subsystem.
 
 Matching proceeds one function at a time, and a function counts as *matched*
 only when its source compiles to retail's bytes. Start-up, engine
-initialisation and many libraries are largely matched and named; the frame
-loop driver is not yet reconstructed; and a large share of the game code still
-sits in staging files with placeholder names. Matched code does not yet link
-into a complete engine. `README.md` charts the current figures, and
-`python3 tools/progress.py` recomputes them. The pages in this guide stick to
-code whose identity is settled, so they describe less than the ledger holds.
+initialisation and many libraries are largely matched and named, and a large
+share of the game code still sits in staging files with placeholder names.
+Matched code does not yet link into a complete engine. `README.md` charts the
+current figures, and `python3 tools/progress.py` recomputes them. The pages in
+this guide stick to code whose identity is settled, so they describe less than
+the ledger holds.
 
 ## Modding notes {#page_mainpage_modding}
 
@@ -199,9 +198,9 @@ code whose identity is settled, so they describe less than the ledger holds.
   frames-per-second render rate and a 5 ticks-per-second logic rate from
   initialised data in `game.dat`; whether anything changes them at run time
   is not yet established. \ref page_frame_loop explains how the two rates
-  relate and what is still unreconstructed. Higher frame rates, a memory fix
-  and bigger maps are goals on the README's roadmap, not changes in this
-  tree.
+  relate and which steps it gives by contract only. Higher frame rates, a
+  memory fix and bigger maps are goals on the README's roadmap, not changes in
+  this tree.
 
 ## Building the guide {#page_mainpage_build}
 

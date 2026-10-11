@@ -10,10 +10,10 @@ two rates fit together and how input becomes a game action.
 Most of a frame's path is byte-matched: `Win32GameEngine::update`, the client
 half (under a placeholder name), `GameClient::update`,
 `MessageStream::propagateMessages`, `GameLogic::update`, `setFPMode` and the
-network's admission queries. `GameEngine::execute`, `GameEngine::update` and
-the phase scheduler are not yet reconstructed, so this page gives only their
-contract. `rg` a name in `reverse/functions.csv` for status; many sources below
-are split units that `reverse/tu_map.csv` will merge, so search by name.
+network's admission queries. For `GameEngine::execute`, `GameEngine::update`
+and the phase scheduler this page gives only the contract. `rg` a name in
+`reverse/functions.csv` for status; many sources below are split units that
+`reverse/tu_map.csv` will merge, so search by name.
 
 ## Where it lives {#page_frame_loop_where}
 
@@ -63,7 +63,8 @@ still a placeholder). In order, it:
 1. calls `GameLogic::deleteLoadScreen`, advances the `GameClient` frame number
    while a client flag says time is running, and updates the window manager.
    `GameLogic::update` sets and clears that flag; BFME 1's
-   `GameEngine::update` also writes it, and BFME 2's is not reconstructed;
+   `GameEngine::update` also writes it, and whether BFME 2's does is not
+   established;
 2. when `TheNetwork` exists, **skips** the rest of the frame if
    `NetworkInterface::getFramePacingStatus` (for a client, the admitted logic
    frames not yet run) exceeds a fixed threshold (a lower one while the

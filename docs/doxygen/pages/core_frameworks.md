@@ -50,7 +50,8 @@ options (`GlobalData::applyOptionPreferences`) and many more.
 read-only code writes `TheGlobalData` (Zero Hour: a const view of the same
 pointer). Zero Hour fills it from the `GameData` INI block and lets a later
 load, such as a map's INI, push an override on top; BFME 2 registers the same
-keyword, but its parser is not reconstructed yet. There is no shared
+keyword, but whether its parser keeps that override behaviour is not
+established. There is no shared
 declaration yet: files use partial views (\ref page_reading_code), so do not
 trust a field name seen in one file.
 
@@ -117,7 +118,7 @@ names each type, so it is the readable index of the enum.
    scheduled logic frame (\ref sub_network, \ref page_frame_loop).
 5. `GameLogic::update` calls `GameLogic::processCommandList`, which hands
    each message to the logic's dispatcher (Zero Hour:
-   `GameLogic::logicMessageDispatcher`; not yet reconstructed in BFME 2) and
+   `GameLogic::logicMessageDispatcher`) and
    resets the list. Zero Hour's version also compares CRC messages; BFME 2's
    does not (\ref sub_save_load_crc).
 

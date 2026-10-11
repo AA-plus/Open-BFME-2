@@ -64,8 +64,8 @@ paths. The roles come from the reconstructed code; inferences are marked.
   (BFME 1: `Act` sub-blocks of `LivingWorldCampaign`).
   `LinearCampaignManager` (`TheLinearCampaignManager`, INI block
   `LinearCampaign`) saves the current linear campaign's name and difficulty;
-  how its work divides with the Living World campaign manager is not yet
-  reconstructed.
+  how its work divides with the Living World campaign manager is not
+  established.
 - **Auto-resolve.** `LivingWorldAutoResolveBattle` settles a battle without
   playing it. Its data are the `AutoResolve*` definitions, held in six stores
   (`TheLivingWorldAutoResolveArmorStore` and the weapon, body, leadership,
@@ -74,7 +74,7 @@ paths. The roles come from the reconstructed code; inferences are marked.
 - **Campaign AI** code lives under `LivingWorldAISupport/` (retail assert
   paths). A `LivingWorldAITemplate` block and
   `TheLivingWorldAITemplateStore` exist and are probably its data; how the
-  two connect is not yet reconstructed.
+  two connect is not established.
 - **Presentation.** `LivingWorldManager` (`TheLivingWorldManager`) is filed
   under `GameClient/LivingWorld` by WorldBuilder's source path, but it also
   holds settings and state that the campaign logic reads and saves (see
@@ -115,7 +115,7 @@ matched, but their names come from WorldBuilder leads and may change
   others). Retail holds four file-extension strings selected by a mode id
   (`.BfME2Campaign`, `.BfME2Skirmish`, `.BfME2WotR`, `.BfME2WotRMP`); by
   their names the WotR pair belongs to War of the Ring games, but which
-  files use them is not yet reconstructed.
+  files use them is not established.
 - **UI** (\ref sub_gui_apt): the HUD and its panels are Apt movies. The map
   preview, the LAN lobby (a `LanStrategic` mode) and the online shell (an
   `OnlineStrategic` screen) offer the mode; preferences and stats keep the

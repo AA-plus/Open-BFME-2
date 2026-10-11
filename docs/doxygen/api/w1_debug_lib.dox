@@ -106,8 +106,8 @@
 ///
 /// Zero Hour's `debug_debug.cpp`. Only some of its functions are BFME 2's
 /// own here; the file also keeps Zero Hour's versions of functions whose
-/// BFME 2 bodies live in other files or are not reconstructed yet, so read
-/// a function's page rather than the file to learn what BFME 2 does.
+/// BFME 2 bodies live in other files or may differ from them, so read a
+/// function's page rather than the file to learn what BFME 2 does.
 
 
 /// \file debug_internal.cpp

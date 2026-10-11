@@ -35,29 +35,27 @@
 /// mostly reached through the BFME 1 reconstruction
 /// (GadgetComboBoxSetColors() was ported directly from Zero Hour's
 /// GadgetComboBox.cpp), with the BFME 2 differences noted on each function.
-/// GameWindow and the window manager are still being reconstructed, so
-/// they are described here only by what these functions need from them.
+/// GameWindow and the window manager are described here only by what these
+/// functions need from them.
 ///
 /// \par Modding
 /// - None of these functions touches game logic. They change client-side
 ///   window state only, so changing them cannot desynchronise a multiplayer
 ///   game.
-/// - What a layout can set: .wnd window files carry a TABCONTROLDATA block
-///   and a COMBOBOXDATA block. BFME 2's .wnd loader is only partly
-///   reconstructed, but its parsers for these two blocks are matched, and
-///   retail's keyword table pairs each name with its parser. Each parser
-///   reads its values in a fixed order and skips the label in front of each
-///   value, so only the order counts. The roles of the values come from
+/// - What a layout can set: .wnd window files carry a TABCONTROLDATA block and
+///   a COMBOBOXDATA block. BFME 2's .wnd parsers for these two blocks are
+///   matched, and retail's keyword table pairs each name with its parser. Each
+///   parser reads its values in a fixed order and skips the label in front of
+///   each value, so only the order counts. The roles of the values come from
 ///   Zero Hour and BFME 1: tab orientation, tab edge, tab width, tab height,
 ///   tab count, pane border, then a disabled-pane count followed by one flag
-///   per pane; and for a combo box, editable, maximum characters, rows
-///   shown, then two flags (ASCII only, letters and numbers only), which
-///   BFME 2 stores as bits instead of Zero Hour's two separate fields. The
-///   disabled-pane count is not checked against the eight panes, so a
-///   larger count writes past the flag array. BFME 2's copy of
-///   parseChildWindows has no matched row yet, and which BFME 2 screens
-///   still load .wnd layouts is not established here. Zero Hour also has a
-///   CHECK_LIKE window status for push buttons.
+///   per pane; and for a combo box, editable, maximum characters, rows shown,
+///   then two flags (ASCII only, letters and numbers only), which BFME 2 stores
+///   as bits instead of Zero Hour's two separate fields. The disabled-pane
+///   count is not checked against the eight panes, so a larger count writes
+///   past the flag array. Which BFME 2 screens still load .wnd layouts is not
+///   established here. Zero Hour also has a CHECK_LIKE window status for push
+///   buttons.
 /// - Command buttons: ControlBar::setControlCommand makes a command button
 ///   check-like when the CommandButton's options include the flag Zero Hour
 ///   calls CHECK_LIKE (GadgetButtonEnableCheckLike()). That part is data.
@@ -352,9 +350,8 @@
 /// follow the order in which the panes were created.
 ///
 /// Zero Hour: the .wnd loader calls this when it finishes a TABCONTROL
-/// window, once all its children exist. BFME 2: no named retail caller has
-/// been identified yet; the BFME 2 copy of parseChildWindows that would call
-/// it is not yet matched.
+/// window, once all its children exist. BFME 2: which code calls it, the
+/// .wnd loader's parseChildWindows included, is not established.
 ///
 /// \param tabControl The tab control; its user data must be the tab control
 ///                   data.

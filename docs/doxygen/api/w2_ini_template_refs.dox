@@ -342,7 +342,8 @@
 /// INI::parseLanguageDefinition, fills that instance through the class's
 /// field table, and does nothing when the instance does not exist. Zero
 /// Hour and BFME 1 read the block from a Language.ini in the folder of the
-/// installed language; BFME 2's own loading code is not reconstructed yet.
+/// installed language; BFME 2's GlobalLanguage::init instead loads
+/// language.ini by that bare name, without a language folder.
 ///
 /// \par What it holds
 /// Zero Hour's fields are the Unicode font name, a list of local font files,
@@ -351,8 +352,8 @@
 /// CopyrightFont and MessageFont to the credits fonts. Open-BFME-1's table
 /// for BFME 1 adds decimal, thousand and minute-to-second separators, an
 /// audio language, an audio subtitle font and help box fonts, and drops
-/// Zero Hour's MilitaryCaptionDelayMS. BFME 2's field table is not
-/// reconstructed yet, so its exact field list is not established.
+/// Zero Hour's MilitaryCaptionDelayMS. BFME 2's exact field list is not
+/// established.
 ///
 /// \par Users in BFME 2
 /// - InGameUI::init copies several of these font settings into its own
