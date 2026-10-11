@@ -10,15 +10,19 @@
 extern "C" const void *const vtbl_00C3B988[];  // ??_7Rva0041FE0E@@6B@
 #pragma comment(linker, "/alternatename:_vtbl_00C3B988=??_7Rva0041FE0E@@6B@")
 
-class BFME2NativeNetwork
+// LINK: the pin ?baseConstruct@BFME2NativeNetwork was retired when its address 0x1B4E63 was
+// rowed as SubsystemInterface::SubsystemInterface; the base is a non-polymorphic 0xC-byte view
+// whose extern ctor is that rowed symbol (first call, ecx = this, as before).
+class SubsystemInterface
 {
 public:
-	void baseConstruct();
+	SubsystemInterface();
+private:
+	int m_pad00[3];
 };
 
-class Rva0041FE0E
+class Rva0041FE0E : public SubsystemInterface
 {
-	int m_pad00[3];
 	int m_0C;
 public:
 	Rva0041FE0E();
@@ -26,7 +30,6 @@ public:
 
 Rva0041FE0E::Rva0041FE0E()
 {
-	((BFME2NativeNetwork *)this)->baseConstruct();
 	m_0C = 0;
 	*(void **)this = (void *)((unsigned int)vtbl_00C3B988);
 }
