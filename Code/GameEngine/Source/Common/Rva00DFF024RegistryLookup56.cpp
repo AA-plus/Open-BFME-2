@@ -24,7 +24,7 @@ protected:
 class Rva00DFF024Registry
 {
 public:
-    __forceinline void *lookup(int a, int b) { return ((FunctionLexicon *)(void *)this)->findFunction((NameKeyType)a, (FunctionLexicon::TableIndex)b); }
+    __declspec(dllimport) __forceinline void *lookup(int a, int b) { return ((FunctionLexicon *)(void *)this)->findFunction((NameKeyType)a, (FunctionLexicon::TableIndex)b); }
     void *lookup56(int a, int b);
     void *lookup34(int a, int b);
 };

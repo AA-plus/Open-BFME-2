@@ -7,6 +7,8 @@
 // WWMath::Sin is the donor's existing x87 helper (FLD/FSIN/FSTP). Plain CRT
 // sin lets MSVC keep all arithmetic in x87 and does not reproduce retail's
 // float rounding boundary; the helper preserves the target's SSE/x87 shape.
+// The Sin call below is inlined; the copy this unit still emits is not the retail one, so it gets a TU-local name.
+#define Sin Sin_RV
 #include "wwmath.h"
 // Retail DB6C28 has the same sixteen power-of-ten seed values as ZH;
 // DB6C68..DB7028 is zero-filled before this dynamic initialization runs.
