@@ -195,6 +195,13 @@ class RefRenderObjListIterator
 {
 public:
 	RefRenderObjListIterator(GenericMultiListClass *list) : List(list), CurNode(list->Head.Next) {}
+	// LINK: TU-unique same-body init (identical inlined stores). This TU's
+	// list-ctor copy loses to rva0007054f's first copy; rebinding the only
+	// call site here emits no loser COMDAT. The empty default ctor below is
+	// emitted only by this TU (no other emitter fleet-wide) so it is
+	// trivially kept.
+	RefRenderObjListIterator() {}
+	void bfme_iter_rehome(GenericMultiListClass *list) { List = list; CurNode = list->Head.Next; }
 	bool Is_Done() const { return CurNode == &List->Head; }
 	void Next() { CurNode = CurNode->Next; }
 	RenderObjClass *Peek_Obj() const { return (RenderObjClass *)Current_Object(); }
@@ -228,7 +235,8 @@ void RTS3DScene::rva00072109(RayCollisionTestClass &raytest, int collisionType, 
 {
 	((Rva0006F318 *)&hits)->rva0006FA70();
 
-	RefRenderObjListIterator it(&RenderList);
+	RefRenderObjListIterator it;
+	it.bfme_iter_rehome(&RenderList);
 	while (!it.Is_Done())
 	{
 		RenderObjClass *robj = it.Peek_Obj();
