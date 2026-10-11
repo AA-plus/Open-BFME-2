@@ -16,13 +16,14 @@ public:
 	Bool rva002CAA59(Int arg, const void *obj);		// 0x002CAA59
 };
 
-class Rva00508925
+// LINK: 0x005075D6 is rowed as Rva00507823::rva005075D6(const void *, Object *) (Rva005075D6TargetFilter.cpp).
+class Rva00507823
 {
 public:
-	unsigned char rva005075D6(Int obj, Int arg);		// 0x005075D6
+	unsigned char rva005075D6(const void *obj, Object *arg);		// 0x005075D6
 };
 
-class ProjectileNugget : public Rva00508925
+class ProjectileNugget : public Rva00507823
 {
 public:
 	Bool canAffectObject(const Object *obj, Int arg);
@@ -35,7 +36,7 @@ private:
 // ProjectileNugget::canAffectObject, retail 0x00509720.
 Bool ProjectileNugget::canAffectObject(const Object *obj, Int arg)
 {
-	if (!rva005075D6((Int)obj, arg))
+	if (!rva005075D6((const void *)obj, (Object *)arg))
 		return false;
 	if (m_filter == 0)
 		return false;

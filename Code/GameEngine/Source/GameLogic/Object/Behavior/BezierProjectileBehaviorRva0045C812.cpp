@@ -28,10 +28,16 @@ class WeaponTemplate
 {
 };
 
+// LINK: 0x002A1B6F is rowed as Rva002A1B6FNativeList::append (Rva002A1316.cpp; pointer-sized element by reference).
+class Rva002A1B6FNativeList
+{
+public:
+	void append(void *const &value);
+};
+
 class BridgeBehaviorObjectIDList
 {
 public:
-	void push_back(const ObjectID &id);
 };
 
 class WeaponStore
@@ -110,5 +116,5 @@ void BezierProjectileBehavior::rva0045C812(const Object *obj)
 {
 	TheWeaponStore->handleProjectileDetonation(m_weapon40, &m_coord2C, (const Object *)*(void **)((char *)this + 8), &obj->m_position, m_int74);
 	ObjectID id = obj->m_id;
-	m_list7C.push_back(id);
+	((Rva002A1B6FNativeList *)&m_list7C)->append(*(void *const *)&id);
 }

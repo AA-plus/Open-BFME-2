@@ -7,7 +7,8 @@ struct Coord3D { float x, y, z; };
 class Object
 {
 public:
-	void rva0029660C(const Coord3D *pos, int flag);
+	// LINK: 0x0029660C is rowed as Object::teleportTo (ObjectRva0029660C.cpp).
+	void teleportTo(const Coord3D *pos, bool flag);
 };
 class ScriptEngine
 {
@@ -37,5 +38,5 @@ void __stdcall Rva003BD116Set(Parameter *p1, void *p2)
 	void *base = TheTerrainLogic->s34(p2);
 	if (base == 0)
 		return;
-	obj->rva0029660C((const Coord3D *)((const char *)base + 0xC), 0);
+	obj->teleportTo((const Coord3D *)((const char *)base + 0xC), false);
 }
