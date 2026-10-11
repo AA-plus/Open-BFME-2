@@ -49,3 +49,14 @@ and the unrelated mode-gate provider were restored. The final container
 family is kept with its existing read sibling; no nonmatching fade attempt
 was introduced into Code. The second timer-flag name remains a carried
 reference name, as distinguished above.
+
+## Incidental insertion wrappers (2026-10-11)
+
+The post-recovery placement scan found the natural map::insert wrappers at
+0x00207EA4 and 0x00207EB8, each a complete 20-byte straight-line body ending
+in ret8. Their sole calls reach the already verified counter and flag
+insert_unique implementations at 0x0020783F and 0x002078D6. Both bodies pass
+normal add_match_batch and build.sh verification, giving 19 exact rows in
+the lookup unit. verified-wrappers.json distinguishes target instructions,
+ABI and callee facts from the inferred template identity; no Ghidra boundary
+or caller inventory entry is asserted. No source or pin was changed.
