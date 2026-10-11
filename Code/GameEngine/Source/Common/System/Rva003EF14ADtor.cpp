@@ -278,3 +278,43 @@ void Rva004E2E53::rva004E2E53()
 {
     ((Rva004E2990 *)this)->~Rva004E2990();
 }
+
+// Two owners that clear a flag byte and then reset an embedded Rva00072FE6
+// container through rva00072FE6 above (mov byte [ecx+N], 0; add ecx, N+4;
+// tail jump). Owners and names are address-derived; no referencing site was
+// found in this pass.
+// ?rva000732AC@Rva000732ACOwner@@QAEXXZ @0x000732AC 12B: flag +0x48, container +0x4C.
+class Rva000732ACOwner
+{
+public:
+    void rva000732AC();
+private:
+    char m_pad00[0x48];
+    bool m_flag48;
+    char m_pad49[3];
+    Rva00072FE6 m_container4C;
+};
+
+void Rva000732ACOwner::rva000732AC()
+{
+    m_flag48 = false;
+    m_container4C.rva00072FE6();
+}
+
+// ?rva000740C2@Rva000740C2Owner@@QAEXXZ @0x000740C2 12B: flag +0x40, container +0x44.
+class Rva000740C2Owner
+{
+public:
+    void rva000740C2();
+private:
+    char m_pad00[0x40];
+    bool m_flag40;
+    char m_pad41[3];
+    Rva00072FE6 m_container44;
+};
+
+void Rva000740C2Owner::rva000740C2()
+{
+    m_flag40 = false;
+    m_container44.rva00072FE6();
+}

@@ -9,7 +9,7 @@ class GameWindow
 	void *m_userData;
 
 public:
-	void *winGetUserData();
+	__declspec(noinline) void *winGetUserData();
 };
 
 void *GameWindow::winGetUserData()
@@ -23,3 +23,20 @@ void *GameWindow::winGetUserData()
 #pragma comment(linker, "/alternatename:?bfmeFindLC@BfmeKeyLC@@QAEPAUBfmeNodeLC@@XZ=?winGetUserData@GameWindow@@QAEPAXXZ")
 #pragma comment(linker, "/alternatename:?bfmeFindBHF@BfmeSubBHF@@QAEPAUBfmeGotBHF@@XZ=?winGetUserData@GameWindow@@QAEPAXXZ")
 #pragma comment(linker, "/alternatename:?bfmeGetENK@BfmeObjENK@@QAEPAUBfmeSubENK@@XZ=?winGetUserData@GameWindow@@QAEPAXXZ")
+
+// ?rva000A210B@Rva000A210BOwner@@QAEPAXXZ @0x000A210B 7B: returns the user
+// data of the GameWindow held at +0 (mov ecx, [ecx]; tail jump to
+// winGetUserData above). Owner and name are address-derived; no referencing
+// site was found in this pass.
+class Rva000A210BOwner
+{
+public:
+	void *rva000A210B();
+private:
+	GameWindow *m_window00;
+};
+
+void *Rva000A210BOwner::rva000A210B()
+{
+	return m_window00->winGetUserData();
+}
