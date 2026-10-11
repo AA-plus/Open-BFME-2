@@ -83,6 +83,7 @@ public:
 	Player *getControllingPlayer() const;
 	Bool rva002943B2(const Player *p);
 	Bool rva0029493F(Object *victim, int mode);
+	Bool rva0028CECF();	// 0x0028CECF (rowed)
 	const Weapon *getCurrentWeapon(WeaponSlotType *slot) const;
 	const Coord3D *getPosition() const { return &m_position; }
 	AIUpdateInterface *getObservedAI() const { return m_ai; }
@@ -91,12 +92,6 @@ public:
 	Coord3D m_position; // +0x38
 	unsigned char m_pad44[0x258 - 0x44];
 	AIUpdateInterface *m_ai; // +0x258
-};
-
-class Rva0028CECFOwner
-{
-public:
-	Bool rva0028CECF();
 };
 
 class TurretStateMachine
@@ -206,7 +201,7 @@ StateReturnType Rva00349611::rva00349611()
 			return STATE_FAILURE;
 		if (victim->rva002943B2(source->getControllingPlayer()))
 			return STATE_FAILURE;
-		if (source->rva0029493F(victim, 2) && reinterpret_cast<Rva0028CECFOwner *>(source)->rva0028CECF())
+		if (source->rva0029493F(victim, 2) && source->rva0028CECF())
 		{
 			m_machine->setState(0xe9);
 			return STATE_CONTINUE;

@@ -136,7 +136,7 @@ class Path
 {
 public:
 	Path();
-	void rva003661FC(Xfer *xfer);
+	void DoXfer(Xfer *xfer);	// 0x003661FC (rowed)
 private:
 	unsigned char m_storage[0x28];
 };
@@ -304,5 +304,5 @@ void Rva0026AFDAMember::doXfer(Xfer *xfer)
 	if (hasPath && m_path == 0)
 		m_path = new Path;
 	if (hasPath)
-		m_path->rva003661FC(xfer);
+		m_path->DoXfer(xfer);
 }

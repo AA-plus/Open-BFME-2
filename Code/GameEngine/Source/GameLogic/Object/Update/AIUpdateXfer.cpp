@@ -153,7 +153,7 @@ public:
 };
 class Path {
 public:
- Path(); void rva003661FC(Xfer *);
+ Path(); void DoXfer(Xfer *);
  char m_data[0x28];
 };
 class Locomotor;
@@ -523,7 +523,7 @@ void AIUpdateInterface::xfer(Xfer *xfer)
  bool gotPath = m_path != 0;
  *xfer == gotPath;
  if (xfer->IsLoading() && gotPath) m_path = new Path;
- if (gotPath) m_path->rva003661FC(xfer);
+ if (gotPath) m_path->DoXfer(xfer);
  XferObjectID(xfer, &m_requestedVictimID);
  *xfer == m_requestedDestination;
  *xfer == m_requestedDestination2;

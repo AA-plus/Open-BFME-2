@@ -137,7 +137,7 @@ public:
 	Team *getTeam() const { return m_team; }
 	void kill(DamageType damageType, DeathType deathType);
 	Real GetRelativeAngle(const Coord3D *pos) const;
-	void setTransformMatrix(const Matrix3D *mtx);
+	void rva0028D412(const Matrix3D *mtx);	// 0x0028D412 (rowed)
 private:
 	char m_unknown48[0x74 - 0x48];
 	ObjectID m_id; // +0x74
@@ -281,7 +281,7 @@ void FloodUpdate::rva0048E189()
 				Vector3 pos(start.x, start.y, start.z);
 				Matrix3D mtx;
 				mtx.buildTransformMatrix(pos, dir);
-				obj->setTransformMatrix(&mtx);
+				obj->rva0028D412(&mtx);
 				m_records.push_back(entry);
 			}
 		}

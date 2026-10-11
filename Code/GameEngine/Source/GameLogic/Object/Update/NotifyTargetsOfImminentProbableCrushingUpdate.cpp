@@ -36,9 +36,9 @@ class GeometryInfo{public:
 class Rva0087E370{public:void method(const Coord3D&,float,Region2D&)const;};
 class Rva0008BB38FloatField{public:float get()const;};
 struct Rva0028AC4EEntry;
-class Rva0028CECFOwner{public:bool rva0028CECF();};
 class Rva0028FC7F{public:void rva0028FC7F(const void*);};
 class Object{public:
+ bool rva0028CECF();
  char pad0[0x38];NotifyCoord position;char pad44[0xa8-0x44];GeometryInfo geometry;
  const Rva0028AC4EEntry *rva0028AC4E()const;char rva00294815();
  void rva0028E8FD(Coord3D*);void rva0028EC68(int,void*,int);
@@ -67,7 +67,7 @@ bool Rva004CE700Notifier::rva004CE700(Object*object,const int*data,UpdateSleepTi
  *sleep=(UpdateSleepTime)GetGameLogicRandomValue(data[0],(unsigned)(data[0]*3)/2,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\NotifyTargetsOfImminentProbableCrushingMux.cpp",63);
  const Rva0028AC4EEntry*entry=object->rva0028AC4E();
  if(!entry || ((const Rva0008BB38FloatField*)entry)->get()==0.0f)return false;
- if(object->rva00294815()<=0 || !((Rva0028CECFOwner*)object)->rva0028CECF())return false;
+ if(object->rva00294815()<=0 || !object->rva0028CECF())return false;
  const int *settings=data;int ahead=settings[1];if(!ahead)return false;
  NotifyCoord velocity;object->rva0028E8FD(&velocity);velocity.scale((float)ahead);
  if(velocity.estimate()<1.0f)return false;
