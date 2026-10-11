@@ -1,22 +1,33 @@
-// ??0LivingWorldArmy@@QAE@XZ
-// partial score=0.969448 date=2026-10-12
-// cl: /O1 /MD /EHsc /arch:SSE /G7 /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /Ireference/shims/bfmealloc
+// ??0Rva0031A257@@QAE@XZ
+// partial score=1.0 date=2026-10-11
+// cl: /O1 /MD /EHsc /arch:SSE /G7 /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /Ireference/shims/bfmealloc /ICode/Libraries/Include/Lib
 // stlport
 // Target: 0031942B..00319517; WB names UseArmySummary, assertions 691..705.
 // This is a target field view, not a claim about the complete army/summary layout.
 // Existing address-derived providers retain their ledger spellings.
 #include <vector>
-void __cdecl Rva00030830GameFree(void *);
-namespace _STL {
-template<> __declspec(dllimport) __forceinline _Vector_base<void *,allocator<void *> >::~_Vector_base() {
- if (_M_start) Rva00030830GameFree(_M_start);
-}
-template<> __declspec(dllimport) __forceinline vector<void *>::~vector() { _Destroy(_M_start,_M_finish); }
-}
-
 #include "ascii_string.h"
 #include "unicode_string.h"
+#define BFME_SNAPSHOT_CAPITALIZED_SLOTS
+#define BFME_SNAPSHOT_NAME_SLOT
+#define BFME_SNAPSHOT_NONCONST_NAME_SLOT
 #include "Common/Snapshot.h"
+#include "Coord2D.h"
+void Rva00030830FreeAllocation(void*);
+struct BfmeE16{float x,y,z,w;};
+namespace _STL{
+template<>void allocator<BfmeE16>::deallocate(pointer p,size_type)const{Rva00030830FreeAllocation(p);}
+template<>__declspec(nothrow) __declspec(noinline) _Vector_base<BfmeE16,allocator<BfmeE16> >::_Vector_base(const allocator<BfmeE16>&a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0){}
+}
+struct Header:public _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> >{
+ __forceinline Header():_STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> >(_STL::allocator<BfmeE16>()){}
+};
+class Rva00330757Member:public Header{public:__declspec(noinline) Rva00330757Member();__forceinline ~Rva00330757Member(){}int flag;};
+inline Rva00330757Member::Rva00330757Member(){flag|=-1;}
+class Rva004EDFFFDwordImmSetter {public:void apply();};
+class CtorRegionTurnObserver {public:~CtorRegionTurnObserver(){((Rva004EDFFFDwordImmSetter*)this)->apply();}virtual void first(int,int);virtual void second(int,int);};
+
+
 
 // vector<void*> begin/end otherwise instantiate per-TU COMDATs (one byte
 // shape per TU flags); explicit dllimport+forceinline specializations take
@@ -74,7 +85,6 @@ struct ArmySummaryView {
     char pad20[0x40 - 0x20];
     _STL::vector<ArmySummaryEntryRefView> entries40;
     int size() const { return entries40.size(); }
-    int nativeSize() const { const ArmySummaryEntryRefView *last=entries40.end(); return last-entries40.begin(); }
 };
 class Rva00318C32Owner { public: int rva00318C32(); };
 class Rva003193EC { public: void rva003198B8(Rva003193EC *); };
@@ -94,148 +104,34 @@ class Rva002BA8F1Logic { public: Rva002E2903Player *find(int,unsigned int *); };
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 class Rva002E34A9 { public: void rva002E34A9(const Rva0040DD3ARef &,int); };
-class ArmySummary { char bytes[0x68]; public: ArmySummary(); int AddArmyEntry(const Rva004F6093Holder &); Rva0040DD3ARef RemoveEntry(int); Rva0040DD3ARef rva0040E672(int); Rva0040DD3ARef rva0040E6A4(ArmySummaryEntry *); };
+class ArmySummary { public: ArmySummary(); char footprint[0x68]; int AddArmyEntry(const Rva004F6093Holder &); Rva0040DD3ARef RemoveEntry(int); Rva0040DD3ARef rva0040E672(int); Rva0040DD3ARef rva0040E6A4(ArmySummaryEntry *); };
 struct HeroTemplateKindView { char pad00[0x113]; unsigned char kind113; };
-void __cdecl Rva00030830GameFree(void *);
-
-class Rva003197EEListener
-{
+class LivingWorldArmy {
 public:
- virtual void slot0(void *owner); virtual void slot1(void *); virtual void slot2(void *); virtual void slot3(void *); virtual void slot4(void *);
-};
-
-struct Rva00330757Member { Rva00330757Member() : data(),index(-1) {} _STL::vector<void *> data; int index; };
-class Rva003197EEList
-{
-public:
-	__forceinline Rva003197EEList() : storage() {}
- ~Rva003197EEList() {  }
-	void forEach(void (Rva003197EEListener::*notify)(void *), void *owner);
-private:
-	Rva00330757Member storage;
-};
-
-// Retail's unwind map tracks three bases in construction order: Snapshot,
-// the listener list (+8, null-checked conversion) and this observer (+4,
-// table 0x00C0C824 reset to 0x00C62A20); MSVC lays the polymorphic
-// observer out before the plain list.
-class Rva00319D01ObserverBase
-{
-public:
-	Rva00319D01ObserverBase() {}
- __forceinline ~Rva00319D01ObserverBase() {}
- virtual void BeginTurn(int,int) {}
- virtual void EndTurn(int,int) {}
-};
-
-class CreateAHeroData;
-class Rva002B7250
-{
-public:
-	void rva002B7250(CreateAHeroData *data);
-};
-
-class LivingWorldRegion
-{
-public:
-	void rva003F0FA3(void *army);
-};
-
-struct RegionPointerHandleView {
- LivingWorldRegion *value;
- __forceinline LivingWorldRegion *operator->()const {return value;}
-};
-struct Rva00319D01RegionOwner
-{
-	unsigned char m_pad00[0x2C];
-	_STL::vector<RegionPointerHandleView> m_regions;	// +0x2C
-};
-
-struct Rva00319D01RegionHolder
-{
-	_STL::vector<RegionPointerHandleView> *regions()
-	{
-		if (m_owner)
-			return &m_owner->m_regions;
-		return 0;
-	}
-	unsigned char m_pad00[8];
-	Rva00319D01RegionOwner *m_owner;		// +0x08
-};
-
-extern LivingWorldLogic *TheLivingWorldLogic;
-
-class Rva000AD6F4
-{
-public:
-	Rva000AD6F4() : m_summary(0) {}
- ~Rva000AD6F4();
-	ArmySummaryView *m_summary;
-};
-
-class Rva00538F61 {
-public: __forceinline Rva00538F61() {} ~Rva00538F61();
-protected: unsigned int first; void *buffer;
-};
-struct ArmyBufferStateTag;
-template<class Owner> struct BufferStateWordsView : Rva00538F61 {
- __declspec(noinline) BufferStateWordsView();
-};
-template<> __declspec(noinline) BufferStateWordsView<ArmyBufferStateTag>::BufferStateWordsView();
-class Rva00319D01Status
-{
-public:
-	virtual ~Rva00319D01Status();
-};
-
-struct BfmeVectorRecord00319C84 { unsigned int words[4]; };
-namespace _STL {
-template<> vector<BfmeVectorRecord00319C84>::~vector();
-}
-
-
-class Rva00318BEB { public: void rva00318BEB(); };
-struct ArmyDestructorLogicView { unsigned char pad00[0x1C]; Rva002B7250 registry1C; unsigned char pad20[0xB0-0x20]; Rva00319D01RegionHolder *regionsB0; };
-
-struct ArmyZeroPair { float x,y; ArmyZeroPair():x(0),y(0){} };
-class LivingWorldArmy : public Snapshot, public Rva003197EEList, public Rva00319D01ObserverBase {
-public:
-    LivingWorldArmy();
-    virtual ~LivingWorldArmy();
-    virtual void BeginTurn(int,int); virtual void EndTurn(int,int);
-    virtual void crc(Xfer *); virtual void xfer(Xfer *); virtual void loadPostProcess();
     void UseArmySummary(Rva00319CED *source);
     void KillSummaryEntry(int index);
     void rva00319EF9(LivingWorldArmy *source,int key);
     void rva00319EA3(LivingWorldArmy *source,ArmySummaryEntry *entry);
     void TakeUnitFromArmy_Internal(LivingWorldArmy *source, const Rva004F6093Holder &entry);
-    AsciiString name18,name1C;
+    char pad00[0x20];
     int owner20;
-    AsciiString name24,name28;
-    int word2C,word30;
-    ArmyZeroPair floats34,floats3C,floats44,floats4C;
+    char pad24[0x4C - 0x24];
+    int source4C;
+    char pad50[4];
     int owner54;
-    bool flag58,flag59;char pad5A[2];float real5C;int word60;bool flag64,flag65;char pad66[2];
-    UnicodeString text68,text6C;
-    int word70;bool flag74,flag75;char pad76[2];
-    Rva000AD6F4 summary78;
-    _STL::vector<BfmeVectorRecord00319C84> records7C;
-    Rva00319D01Status *status88;
-    int word8C;
-    BufferStateWordsView<ArmyBufferStateTag> member90;
+    char pad58[0x78 - 0x58];
+    ArmySummaryView *summary78;
 };
-typedef char LivingWorldArmyExtentCheck[(sizeof(LivingWorldArmy)==0x98)?1:-1];
-
 void LivingWorldArmy::UseArmySummary(Rva00319CED *source)
 {
     if (!TheCampaignManager) return;
     void *summary = source->rva004E23C1();
     if (!summary) return;
-    *reinterpret_cast<Rva003F40EFRecord *>(summary78.m_summary) = *static_cast<Rva003F40EFRecord *>(summary);
-    summary78.m_summary->owner1C = owner20;
-    int count = summary78.m_summary->size();
+    *reinterpret_cast<Rva003F40EFRecord *>(summary78) = *static_cast<Rva003F40EFRecord *>(summary);
+    summary78->owner1C = owner20;
+    int count = summary78->size();
     for (int i = 0; i < count; ++i) {
-        ArmySummaryEntryView *entry = reinterpret_cast<ArmySummaryEntryView *>(reinterpret_cast<Rva0040CB2CIndexedField *>(summary78.m_summary)->get(i));
+        ArmySummaryEntryView *entry = reinterpret_cast<ArmySummaryEntryView *>(reinterpret_cast<Rva0040CB2CIndexedField *>(summary78)->get(i));
         ThingTemplate *thing = static_cast<ThingTemplate *>(reinterpret_cast<Rva0037DCA5 *>(entry)->rva0037DC52());
         if (!thing) continue;
         int level = thing->rva0033B479();
@@ -249,7 +145,7 @@ void LivingWorldArmy::UseArmySummary(Rva00319CED *source)
 
 void LivingWorldArmy::TakeUnitFromArmy_Internal(LivingWorldArmy *source, const Rva004F6093Holder &entry)
 {
-    reinterpret_cast<ArmySummary *>(summary78.m_summary)->AddArmyEntry(entry);
+    reinterpret_cast<ArmySummary *>(summary78)->AddArmyEntry(entry);
     if (reinterpret_cast<Rva00318C32Owner *>(this)->rva00318C32() != reinterpret_cast<Rva00318C32Owner *>(source)->rva00318C32())
         entry.entry->CancelUpgrades();
     reinterpret_cast<Rva003193EC *>(this)->rva003198B8(reinterpret_cast<Rva003193EC *>(source));
@@ -263,9 +159,57 @@ template<> void vector<const ModuleData *>::reserve(unsigned int);
 template<> void vector<const ModuleData *>::push_back(const ModuleData * const &);
 template<> vector<void *>::iterator vector<void *>::erase(iterator,iterator);
 }
-class Rva0031A257 {
-public: Rva0031A257(); char bytes[0x98];
+
+struct BfmeVectorRecord00319C84 { unsigned words[4]; };
+namespace _STL { template<> vector<BfmeVectorRecord00319C84>::~vector(); }
+class PlayingAudioUnknown0C {public: PlayingAudioUnknown0C();void*words[2];};
+class Rva00538F61 { public: __forceinline Rva00538F61(){ ((PlayingAudioUnknown0C*)this)->PlayingAudioUnknown0C::PlayingAudioUnknown0C(); } ~Rva00538F61(); void *words[2]; };
+class Object;
+class Rva00575674 {public:void rva00575674(Object*);};
+class Rva000AD6F4 {public: ~Rva000AD6F4();void*word;};
+struct ArmySummaryOwner {
+ ArmySummary *word;
+ ArmySummaryOwner():word(0){}
+ ~ArmySummaryOwner() { ((Rva000AD6F4*)this)->Rva000AD6F4::~Rva000AD6F4(); }
+ void reset(ArmySummary *x) { ((Rva00575674*)this)->rva00575674((Object*)x); }
 };
+struct Rva002BA8F1Listener;
+class Rva005A0B4CList {public:void append(Rva002BA8F1Listener*);};
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+struct CtorArmyMinusOneWord { int word; __forceinline CtorArmyMinusOneWord(int v):word(v){_ReadWriteBarrier();} };
+struct CtorArmyPair {float x,y; __forceinline CtorArmyPair():x(0),y(0){} };
+struct CtorArmyLastPair {float x,y; __forceinline CtorArmyLastPair():x(0),y(0){_ReadWriteBarrier();} };
+class Rva0031A257:public Snapshot,public Rva00330757Member,public CtorRegionTurnObserver {
+public:
+ Rva0031A257();
+ virtual ~Rva0031A257();
+ virtual void LoadPostProcess();
+ virtual const char *GetSnapshotName();
+ virtual void DoXfer(Xfer*);
+ virtual void first(int,int);virtual void second(int,int);
+ AsciiString a18,a1C;
+ int owner20;
+ AsciiString a24,a28;
+ CtorArmyMinusOneWord v2C; int v30;
+ CtorArmyPair pos34,pos3C,pos44; CtorArmyLastPair pos4C;
+ int owner54;
+ bool b58,b59;
+ float f5C;
+ int v60;
+ bool b64,b65;
+ UnicodeString u68,u6C;
+ int v70;
+ bool b74,b75;
+ ArmySummaryOwner summary78;
+ _STL::vector<BfmeVectorRecord00319C84> records7C;
+ int v88,v8C;
+ Rva00538F61 audio90;
+};
+Rva0031A257::Rva0031A257(): v2C(-1),v30(0),owner54(-1),b58(true),b59(false),f5C(0),v60(1),b64(false),b65(false),v70(-1),b74(false),b75(false),v88(0),v8C(0) {
+ summary78.reset(new ArmySummary);
+ ((Rva005A0B4CList*)((char*)TheLivingWorldLogic+0x1C))->append((Rva002BA8F1Listener*)(CtorRegionTurnObserver*)this);
+}
 class Xfer {
 public:
     struct Version { unsigned char current, minimum; Version(unsigned char a,unsigned char b):current(a),minimum(b){} };
@@ -328,21 +272,21 @@ void XferOwningLivingWorldArmyVec(Xfer *xfer, _STL::vector<const ModuleData *> *
 void LivingWorldArmy::KillSummaryEntry(int index)
 {
     if (index < 0) return;
-    Rva0040DD3ARef entry(reinterpret_cast<Rva004F69C3Target *>(reinterpret_cast<Rva0040CB2CIndexedField *>(summary78.m_summary)->get(index)));
+    Rva0040DD3ARef entry(reinterpret_cast<Rva004F69C3Target *>(reinterpret_cast<Rva0040CB2CIndexedField *>(summary78)->get(index)));
     void *thing = reinterpret_cast<Rva0037DCA5 *>(entry.value)->rva0037DC52();
     if (thing && (static_cast<HeroTemplateKindView *>(thing)->kind113 & 4)) {
         Rva002E2903Player *player = reinterpret_cast<Rva002BA8F1Logic *>(TheLivingWorldLogic)->find(owner54,0);
         if (!player) return;
         reinterpret_cast<Rva002E34A9 *>(player)->rva002E34A9(entry,1);
     }
-    reinterpret_cast<ArmySummary *>(summary78.m_summary)->RemoveEntry(index);
+    reinterpret_cast<ArmySummary *>(summary78)->RemoveEntry(index);
 }
 
 // Native319EF9..319F4F owns the returned reference through the transfer.
 void LivingWorldArmy::rva00319EF9(LivingWorldArmy *source,int key)
 {
  LivingWorldArmy *from=(source?source:source);
- Rva0040DD3ARef entry=reinterpret_cast<ArmySummary *>(from->summary78.m_summary)->rva0040E672(key);
+ Rva0040DD3ARef entry=reinterpret_cast<ArmySummary *>(from->summary78)->rva0040E672(key);
  TakeUnitFromArmy_Internal(from,*reinterpret_cast<const Rva004F6093Holder *>(&entry));
 }
 
@@ -353,42 +297,6 @@ void LivingWorldArmy::rva00319EF9(LivingWorldArmy *source,int key)
 void LivingWorldArmy::rva00319EA3(LivingWorldArmy *source,ArmySummaryEntry *entryToTake)
 {
  LivingWorldArmy *from=(source?source:source);
- Rva0040DD3ARef entry=reinterpret_cast<ArmySummary *>(from->summary78.m_summary)->rva0040E6A4(entryToTake);
+ Rva0040DD3ARef entry=reinterpret_cast<ArmySummary *>(from->summary78)->rva0040E6A4(entryToTake);
  TakeUnitFromArmy_Internal(from,*reinterpret_cast<const Rva004F6093Holder *>(&entry));
 }
-
-// Native319D01..319E76 RET0; WB102A540 names the army destructor.
-// Target fields and twelve-state unwind map establish the base/member order.
-// The region span contains four-byte pointer handles; their accessor adds no
-// ownership operation. Observer base has two callbacks and no virtual dtor.
-LivingWorldArmy::~LivingWorldArmy()
-{
-	forEach(&Rva003197EEListener::slot0, this);
-	reinterpret_cast<Rva00318BEB *>(this)->rva00318BEB();
-	if (reinterpret_cast<ArmyDestructorLogicView *>(TheLivingWorldLogic)->regionsB0)
-	{
-		_STL::vector<RegionPointerHandleView> *regions = reinterpret_cast<ArmyDestructorLogicView *>(TheLivingWorldLogic)->regionsB0->regions();
-		if (regions)
-		{
-			for (unsigned int i = 0; i < regions->size(); ++i)
-				(*regions)[i]->rva003F0FA3(this);
-		}
-	}
-	::delete status88;
-	for (int i = summary78.m_summary->nativeSize() - 1; i >= 0; --i)
-		KillSummaryEntry(i);
-	reinterpret_cast<ArmyDestructorLogicView *>(TheLivingWorldLogic)->registry1C.rva002B7250(
-		reinterpret_cast<CreateAHeroData *>(static_cast<Rva00319D01ObserverBase *>(this)));
-}
-
-class Object;
-class Rva00575674 {public: void rva00575674(Object *);};
-struct Rva002BA8F1Listener;
-class Rva005A0B4CList {public: void append(Rva002BA8F1Listener *);};
-struct ArmyConstructorLogicView {char pad[0x1C];Rva005A0B4CList registry;};
-LivingWorldArmy::LivingWorldArmy() : word2C(-1),word30(0),owner54(-1),flag58(true),flag59(false),real5C(0),word60(1),flag64(false),flag65(false),word70(-1),flag74(false),flag75(false),status88(0),word8C(0) {
- reinterpret_cast<Rva00575674 *>(&summary78)->rva00575674(reinterpret_cast<Object *>(new ArmySummary));
- reinterpret_cast<ArmyConstructorLogicView *>(TheLivingWorldLogic)->registry.append(reinterpret_cast<Rva002BA8F1Listener *>(static_cast<Rva00319D01ObserverBase *>(this)));
-}
-
-template<> BufferStateWordsView<ArmyBufferStateTag>::BufferStateWordsView() { first=0;buffer=0; }
