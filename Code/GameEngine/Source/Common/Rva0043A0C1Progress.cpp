@@ -9,8 +9,13 @@ class Rva0057E3DB
 {
 public:
 	void rva0057E24B(int arg);
-	bool rva0057DFFB(int arg);
 	char m_pad[0x70];
+};
+
+class Rva0057DFFB
+{
+public:
+	bool rva0057DFFB(bool arg);	// rowed 0x0057DFFB
 };
 
 class LoadScreen
@@ -118,7 +123,7 @@ void Rva0043A0C1::rva0043A0C1(int percent)
 {
 	if (!m_D0) {
 		m_18.rva0057E24B((int)m_88);
-		m_D0 = m_18.rva0057DFFB(1);
+		m_D0 = ((Rva0057DFFB *)&m_18)->rva0057DFFB(true);
 	}
 	m_10->a2(0);
 	int mode = m_14;
