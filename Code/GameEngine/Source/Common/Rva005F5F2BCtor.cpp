@@ -55,7 +55,7 @@ public:
 struct Rva002BA8F1Listener;
 struct Rva005E4AE2Listener
 {
-	Rva005E4AE2Listener() {}
+	__declspec(dllimport) __forceinline Rva005E4AE2Listener() {}
 	virtual ~Rva005E4AE2Listener();
 };
 
