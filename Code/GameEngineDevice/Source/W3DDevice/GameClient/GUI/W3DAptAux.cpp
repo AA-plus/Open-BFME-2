@@ -283,3 +283,12 @@ void Rva000A91DDOnCommand(const char *name, int value)
 {
  reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->OnCommand(name, value);
 }
+
+void *Rva006CB9D0(const char *text);
+
+// Apt callback E1775C: A91F1..A91FD returns the existing string factory's
+// result for the native empty literal at BBAC1C. WB 8A6750 agrees.
+void *Rva000A91F1EmptyValue()
+{
+ return Rva006CB9D0("");
+}
