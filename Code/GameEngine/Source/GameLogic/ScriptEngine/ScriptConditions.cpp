@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE
+// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE /G7
 // ScriptConditions.cpp -- condition evaluators recovered from WorldBuilder
 // leads (reverse/wb_name_leads.csv): WB's debug build names each function and
 // its source file; retail supplies the bytes. The evaluators are thiscall
@@ -73,7 +73,6 @@ public:
 	// Zero Hour's comparison codes.
 	enum { LESS_THAN = 0, LESS_EQUAL, EQUAL, GREATER_EQUAL, GREATER, NOT_EQUAL };
 
-	Int getIntRV() const { return m_int; }
 	Real getReal() const { return m_real; }
 	const AsciiString &getString() const { return m_string; }
 
@@ -144,8 +143,7 @@ public:
 	const SpecialPowerTemplate *findSpecialPowerTemplate(AsciiString name);	// 0x0029B6EB
 };
 
-extern SpecialPowerStore *g_00E02D4C;
-#define TheSpecialPowerStore g_00E02D4C
+extern SpecialPowerStore *TheSpecialPowerStore;
 
 enum CommandSourceType { CMD_FROM_PLAYER = 0, CMD_FROM_SCRIPT, CMD_FROM_AI };
 
@@ -214,7 +212,7 @@ Bool ScriptConditions::evaluatePlayerHasNumberUnitsDistanceFromObject(Parameter 
 	Parameter *pComparisonParm, Parameter *pCountParm, Parameter *pDistanceParm, Parameter *pObjectParm)
 {
 	Int mask = TheScriptEngine->rva00357B82(pPlayerParm);
-	Int count = pCountParm->getIntRV();
+	Int count = pCountParm->m_int;
 	Rva003E5563 data;
 	Real dist = pDistanceParm->getReal();
 	if (dist < 0.0f)
@@ -240,7 +238,7 @@ Bool ScriptConditions::evaluatePlayerHasNumberUnitsDistanceFromObject(Parameter 
 			player->iterateObjects((Int (*)(Object *, void *))Rva003E6032, &data);
 	}
 	Bool result;
-	switch (pComparisonParm->getIntRV())
+	switch (pComparisonParm->m_int)
 	{
 	case Parameter::LESS_THAN:	result = data.m_count < count; break;
 	case Parameter::LESS_EQUAL:	result = data.m_count <= count; break;
