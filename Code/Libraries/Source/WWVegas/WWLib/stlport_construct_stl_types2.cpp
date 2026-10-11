@@ -76,5 +76,4 @@ template void _STL::_Construct<ConstructPairHR, ConstructPairHR>(ConstructPairHR
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
 // call sites in their matched rows land on these addresses (same ABI). Bind them.
 #pragma comment(linker, "/alternatename:?dup_00223168@@YAXXZ=??$_Construct@U?$pair@$$CBVAsciiString@@UTreeHintRef00217D4C@@@_STL@@U12@@_STL@@YAXPAU?$pair@$$CBVAsciiString@@UTreeHintRef00217D4C@@@0@ABU10@@Z")
-#pragma comment(linker, "/alternatename:?dup_002057A8@@YAXXZ=??$_Construct@U?$pair@$$CBVAsciiString@@UTreeHintPayload003012F0@@@_STL@@U12@@_STL@@YAXPAU?$pair@$$CBVAsciiString@@UTreeHintPayload003012F0@@@0@ABU10@@Z")
 #pragma comment(linker, "/alternatename:?dup_002BF35B@@YAXXZ=??$_Construct@U?$pair@$$CBVAsciiString@@UTreeHintRef00217D4C@@@_STL@@U12@@_STL@@YAXPAU?$pair@$$CBVAsciiString@@UTreeHintRef00217D4C@@@0@ABU10@@Z")

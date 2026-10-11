@@ -5741,7 +5741,6 @@ alternatename	Code/Libraries/Source/WWVegas/WWLib/stlport_construct_stl_types.cp
 alternatename	Code/Libraries/Source/WWVegas/WWLib/stlport_construct_stl_types.cpp	?dup_00511CB9@@YAXXZ	1
 alternatename	Code/Libraries/Source/WWVegas/WWLib/stlport_construct_stl_types2.cpp	??$_Construct@URva0056644EElement@@U1@@_STL@@YAXPAURva0056644EElement@@ABU1@@Z	1
 alternatename	Code/Libraries/Source/WWVegas/WWLib/stlport_construct_stl_types2.cpp	?Rva0052C404Construct@@YAXPAXPBX@Z	1
-alternatename	Code/Libraries/Source/WWVegas/WWLib/stlport_construct_stl_types2.cpp	?dup_002057A8@@YAXXZ	1
 alternatename	Code/Libraries/Source/WWVegas/WWLib/stlport_construct_stl_types2.cpp	?dup_00223168@@YAXXZ	1
 alternatename	Code/Libraries/Source/WWVegas/WWLib/stlport_construct_stl_types2.cpp	?dup_002BF35B@@YAXXZ	1
 alternatename	Code/Libraries/Source/WWVegas/WWLib/stlport_create_filebuf.cpp	??1stdio_istreambuf@_SgI@@UAE@XZ	1
@@ -25667,7 +25666,6 @@ pin	reverse/symbols.csv	0x00205709	1
 pin	reverse/symbols.csv	0x0020572F	1
 pin	reverse/symbols.csv	0x00205754	1
 pin	reverse/symbols.csv	0x0020577A	1
-pin	reverse/symbols.csv	0x002057A8	1
 pin	reverse/symbols.csv	0x002058E3	1
 pin	reverse/symbols.csv	0x00205910	1
 pin	reverse/symbols.csv	0x0020596A	4
@@ -25677,7 +25675,6 @@ pin	reverse/symbols.csv	0x00205EEC	1
 pin	reverse/symbols.csv	0x0020611D	1
 pin	reverse/symbols.csv	0x00206255	1
 pin	reverse/symbols.csv	0x002064CB	1
-pin	reverse/symbols.csv	0x00206AE0	1
 pin	reverse/symbols.csv	0x00206BCF	2
 pin	reverse/symbols.csv	0x00206C54	1
 pin	reverse/symbols.csv	0x00206C76	1
@@ -25688,7 +25685,6 @@ pin	reverse/symbols.csv	0x00206F19	1
 pin	reverse/symbols.csv	0x00206F42	1
 pin	reverse/symbols.csv	0x00206F94	1
 pin	reverse/symbols.csv	0x00206FBD	1
-pin	reverse/symbols.csv	0x00207162	1
 pin	reverse/symbols.csv	0x00207343	1
 pin	reverse/symbols.csv	0x00207557	1
 pin	reverse/symbols.csv	0x002075F3	1
@@ -31367,7 +31363,7 @@ pin	reverse/symbols.csv	0x0052B7B3	1
 pin	reverse/symbols.csv	0x0052B7B8	1
 pin	reverse/symbols.csv	0x0052B84F	1
 pin	reverse/symbols.csv	0x0052BB9A	2
-pin	reverse/symbols.csv	0x0052BEC9	1
+pin	reverse/symbols.csv	0x0052BEC9	2	allow=8bd4548ac84cdf4d2e8c00c6343bb485ce7898c7
 pin	reverse/symbols.csv	0x0052BF33	1
 pin	reverse/symbols.csv	0x0052BFE1	1
 pin	reverse/symbols.csv	0x0052C0C8	1

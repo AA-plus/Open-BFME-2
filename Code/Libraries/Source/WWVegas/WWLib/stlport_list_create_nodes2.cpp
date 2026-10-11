@@ -35,16 +35,3 @@ _STL::_List_node<_STL::pair<const AsciiString, NoCaseTreeValue4> > *_STL::list<_
 	return __p;
 }
 template _STL::_List_node<_STL::pair<const AsciiString, NoCaseTreeValue4> > *_STL::list<_STL::pair<const AsciiString, NoCaseTreeValue4>, _STL::allocator<_STL::pair<const AsciiString, NoCaseTreeValue4> > >::_M_create_node(_STL::pair<const AsciiString, NoCaseTreeValue4> const &);
-
-// ?_M_create_node@?$list@U?$pair@$$CBVAsciiString@@UTreeHintPayload003012F0@@@_STL@@V?$allocator@U?$pair@$$CBVAsciiString@@UTreeHintPayload003012F0@@@_STL@@@2@@_STL@@IAEPAU?$_List_node@U?$pair@$$CBVAsciiString@@UTreeHintPayload003012F0@@@_STL@@@2@ABU?$pair@$$CBVAsciiString@@UTreeHintPayload003012F0@@@2@@Z
-void __cdecl dup_002057A8(void);
-typedef void (__cdecl *VAsciiStringUTreeHintPayload003012F0ListConstructFn)(_STL::pair<const AsciiString, TreeHintPayload003012F0> *, _STL::pair<const AsciiString, TreeHintPayload003012F0> const &);
-template <>
-_STL::_List_node<_STL::pair<const AsciiString, TreeHintPayload003012F0> > *_STL::list<_STL::pair<const AsciiString, TreeHintPayload003012F0>, _STL::allocator<_STL::pair<const AsciiString, TreeHintPayload003012F0> > >::_M_create_node(_STL::pair<const AsciiString, TreeHintPayload003012F0> const &__x)
-{
-	_STL::_List_node<_STL::pair<const AsciiString, TreeHintPayload003012F0> > *__p =
-		(_STL::_List_node<_STL::pair<const AsciiString, TreeHintPayload003012F0> > *)_STL::allocator<char>::allocate(sizeof(_STL::_List_node<_STL::pair<const AsciiString, TreeHintPayload003012F0> >), 0);
-	((VAsciiStringUTreeHintPayload003012F0ListConstructFn)&dup_002057A8)(&__p->_M_data, __x);
-	return __p;
-}
-template _STL::_List_node<_STL::pair<const AsciiString, TreeHintPayload003012F0> > *_STL::list<_STL::pair<const AsciiString, TreeHintPayload003012F0>, _STL::allocator<_STL::pair<const AsciiString, TreeHintPayload003012F0> > >::_M_create_node(_STL::pair<const AsciiString, TreeHintPayload003012F0> const &);

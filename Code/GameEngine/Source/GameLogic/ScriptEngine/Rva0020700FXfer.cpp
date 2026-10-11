@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/Libraries/Source/WWVegas/WWLib /ICode/GameEngine/Source/Common
+// cl: /Ireference/shims/bfme2_ascii /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/Libraries/Source/WWVegas/WWLib /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib
 // stlport
 // ?Rva0020700FXfer@@YAPAVXfer@@PAV1@PAV?$list@VAsciiString@@V?$allocator@VAsciiString@@@_STL@@@_STL@@@Z @0x0020700F 232B free list<AsciiString> Xfer helper version 1 1 via slot 0x28 size via slots 0x2C 0x78.
 // Evidence: leaf lane 3 callers in FUN_0060a859; prev 0x00206FE6 next 0x002070F7; strings std-list List-must-be-empty.
@@ -61,17 +61,31 @@ public:
 	virtual Xfer &xferUnsignedShort(UnsignedInt *value);
 };
 
-struct XferException
+// Native constructor 0x0060C36E and throw type CFFD18 identify the real class.
+// The ordinary C++ throw emits those same constructor/runtime references.
+class XferException
 {
-	char *text;
-	int tag;
+public:
+ XferException(int tag, const char *format, ...);
+ XferException(const XferException &);
+ ~XferException();
+ char *text;
+ int tag;
 };
 
-extern "C" XferException *__cdecl bfmeFormatText(XferException *result, int tag, const char *format, ...);
-extern int g_guardTargetTypeThrowInfo;
-extern "C" void __stdcall _CxxThrowException(void *pExceptionObject, const _s__ThrowInfo *pThrowInfo);
-
 typedef _STL::list<AsciiString> ListAsciiString;
+
+// Retail expands the list size traversal; keeping it local avoids conflicting
+// public iterator/distance COMDAT copies without changing its loop.
+static __forceinline UnsignedInt asciiListSize(const ListAsciiString *list)
+{
+ const _STL::_List_node_base *head = list->_M_node._M_data;
+ const _STL::_List_node_base *at = head->_M_next;
+ UnsignedInt result = 0;
+ while (at != head) { at = at->_M_next; ++result; }
+ return result;
+}
+
 
 Xfer *Rva0020700FXfer(Xfer *xfer, ListAsciiString *list)
 {
@@ -80,7 +94,7 @@ Xfer *Rva0020700FXfer(Xfer *xfer, ListAsciiString *list)
 	version.m_currentVersion = 1;
 	xfer->xferVersion(&version);
 
-	UnsignedInt count = (UnsignedInt)list->size();
+	UnsignedInt count = asciiListSize(list);
 	xfer->xferTypeName("std::list").xferUnsignedShort(&count);
 
 	if (xfer->isSaving()) {
@@ -92,14 +106,68 @@ Xfer *Rva0020700FXfer(Xfer *xfer, ListAsciiString *list)
 		}
 	} else {
 		if (!list->empty()) {
-			XferException error;
-			bfmeFormatText(&error, 4, "List must be empty on load");
-			_CxxThrowException(&error, (const _s__ThrowInfo *)&g_guardTargetTypeThrowInfo); __assume(0);
+			throw XferException(4, "List must be empty on load");
 		}
 		AsciiString value;
 		while (count != 0) {
 			--count;
 			xfer->xferAsciiString(value);
+			list->push_back(value);
+		}
+		--count;
+	}
+	return xfer;
+}
+
+// BFME1 donor575 XferListAsciiStringCoord3D is the semantic guide.
+// BFME2 allocation206AE0 proves24-byte nodes and16-byte string/coordinate payload;
+// Chain203DA2 transfers string0 and Coord3D4; caller20A859 loads the old save format.
+// Original helper name is unknown.
+#include "Coord3D.h"
+namespace _STL {
+ template<> pair<AsciiString,Coord3D>::pair() {}
+ template<> pair<AsciiString,Coord3D>::pair(const pair<AsciiString,Coord3D> &that) : first(that.first) {
+  second.x=that.second.x; second.y=that.second.y; second.z=that.second.z;
+ }
+}
+typedef _STL::pair<AsciiString,Coord3D> Rva002080DARecord;
+typedef _STL::list<Rva002080DARecord> ListAscii;
+
+class Rva00203DA2A;
+void Rva00203DA2Chain(Rva00203DA2A *a, void *b);
+
+Xfer *Rva002080DAXferList(Xfer *xfer, ListAscii *list)
+{
+	XferVersion version;
+	version.m_version = 1;
+	version.m_currentVersion = 1;
+	xfer->xferVersion(&version);
+
+	UnsignedInt count = (UnsignedInt)list->size();
+	xfer->xferTypeName("std::list").xferUnsignedShort(&count);
+
+	if (xfer->isSaving())
+	{
+		ListAscii::_Node *sentinel = (ListAscii::_Node *)list->_M_node._M_data;
+		ListAscii::_Node *node = (ListAscii::_Node *)sentinel->_M_next;
+		while (node != sentinel)
+		{
+			Rva00203DA2Chain((Rva00203DA2A *)xfer, &node->_M_data);
+			node = (ListAscii::_Node *)node->_M_next;
+		}
+	}
+	else
+	{
+		if (!list->empty())
+		{
+			throw XferException(4, "List must be empty on load");
+		}
+
+		Rva002080DARecord value;
+		while (count != 0)
+		{
+			--count;
+			Rva00203DA2Chain((Rva00203DA2A *)xfer, &value);
 			list->push_back(value);
 		}
 		--count;
