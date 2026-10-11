@@ -7,7 +7,7 @@
 class Rva005E4300Cmp
 {
 public:
-	bool operator()(int a, int b) const;
+	char operator()(int a, int b) const;
 };
 
 int *__cdecl Rva005E4817Partition(int *first, int *last, Rva005E4300Cmp comp, int pivot)
