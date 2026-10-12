@@ -57,7 +57,7 @@ void rva00149002(int,int,Rva0014921EVector *,int);
 struct FieldParse;
 class INI {public:
  void initFromINI(void *,const FieldParse *);
- static void dup_002EF72(INI *,void *,void *,const void *);
+ static void parseUnsignedInt(INI *,void *,void *,const void *);
  static void parseAsciiString(INI *,void *,void *,const void *);
 };
 typedef void (*AwardFieldParser)(INI *,void *,void *,const void *);
@@ -66,7 +66,7 @@ extern const char BfmeAwardTriggerStatField[]="Stat";
 extern const char BfmeAwardTriggerThresholdField[]="Threshold";
 extern const FieldParse BfmeAwardTriggerFields[3]={
  {BfmeAwardTriggerStatField,reinterpret_cast<AwardFieldParser>(&rva00149002),0,0},
- {BfmeAwardTriggerThresholdField,&INI::dup_002EF72,0,12},
+ {BfmeAwardTriggerThresholdField,&INI::parseUnsignedInt,0,12},
  {0,0,0,0}
 };
 class NameKeyGenerator {public:

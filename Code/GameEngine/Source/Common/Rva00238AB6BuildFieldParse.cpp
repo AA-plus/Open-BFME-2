@@ -15,7 +15,7 @@ struct FieldParse
 class INI
 {
 public:
-	static void dup_002EF72(INI *ini, void *instance, void *store, const void *userData);
+	static void parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
 	static void parseDurationUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 	static void parsePercentToReal(INI *ini, void *instance, void *store, const void *userData);
@@ -35,8 +35,8 @@ extern const FieldParse g_00BED3E0[] = {
 	{ "DefaultMusicVolume", &INI::parsePercentToReal, 0, 0x24 },
 	{ "DefaultMovieVolume", &INI::parsePercentToReal, 0, 0x2C },
 	{ "DefaultAmbientVolume", &INI::parsePercentToReal, 0, 0x28 },
-	{ "VoiceMoveToCampMaxCampnessAtStartPoint", &INI::dup_002EF72, 0, 0x44 },
-	{ "VoiceMoveToCampMinCampnessAtEndPoint", &INI::dup_002EF72, 0, 0x48 },
+	{ "VoiceMoveToCampMaxCampnessAtStartPoint", &INI::parseUnsignedInt, 0, 0x44 },
+	{ "VoiceMoveToCampMinCampnessAtEndPoint", &INI::parseUnsignedInt, 0, 0x48 },
 	{ "MinDelayBetweenEnterStateVoiceMS", &INI::parseDurationUnsignedInt, 0, 0x4C },
 	{ 0, 0, 0, 0 }
 };

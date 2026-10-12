@@ -1,6 +1,6 @@
 // cl: /Oy- /DNDEBUG /MD /GX /Oi-
 //
-// ?dup_002EF72@INI@@SAXPAV1@PAX1PBX@Z, retail 0x002EF72, 78 bytes.
+// ?parseUnsignedInt@INI@@SAXPAV1@PAX1PBX@Z, retail 0x002EF72, 78 bytes.
 // Dedicated ebp-frame TU (same INI scanner family as INI_scanUnsignedInt.cpp).
 //
 // Opaque name: max-bounded unsigned parse (value out of range unless
@@ -15,7 +15,7 @@ class INI
 public:
 	const char *getNextToken(const char *seps);
 	unsigned scanUnsignedInt(const char *token);
-	static void dup_002EF72(INI *ini, void *instance, void *store, const void *userData);
+	static void parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 };
 
 class INIException
@@ -29,8 +29,8 @@ public:
 };
 
 
-// ?dup_002EF72@INI@@SAXPAV1@PAX1PBX@Z
-void INI::dup_002EF72(INI *ini, void *instance, void *store, const void *userData)
+// ?parseUnsignedInt@INI@@SAXPAV1@PAX1PBX@Z
+void INI::parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData)
 {
 	unsigned value = ini->scanUnsignedInt(ini->getNextToken(0));
 	if ((unsigned)userData != 0 && value > (unsigned)userData) {
