@@ -123,6 +123,7 @@ public:
     int rva0037E6E8(void *extra, void *object);
     int rva0037E649(int index, Object *object);
     float rva0037E898(int index, int *cost, Object *object);
+    float rva0037E815(int index, Object *object);
 };
 int Rva0037E6E8::rva0037E6E8(void *extra, void *object)
 {
@@ -224,6 +225,23 @@ float Rva0037E6E8::rva0037E898(int index, int *cost, Object *object) {
  return 0.0f;
 }
 
+
+// Native37E815..37E87A: build progress of the indexed entry, 0 for a missing
+// or unrecruited entry, elapsed/start over the revival time otherwise, 1 when
+// that time is not positive. The rest written as the null test's else keeps
+// retail's first shared zero block (the -1 test jumps back to it).
+float Rva0037E6E8::rva0037E815(int index, Object *object)
+{
+ Elem216 *entry = static_cast<Elem216 *>(rva0037E421(index));
+ if (!entry) return 0.0f;
+ else
+ {
+  if (entry->m_98 == -1) return 0.0f;
+  int time = reinterpret_cast<UnitRevivalEntry *>(entry)->revivalEntryCalcTimeToBuild(m_10, object);
+  if (time > 0) return ((float)TheGameLogic->getFrame() - entry->m_98) / time;
+  return 1.0f;
+ }
+}
 
 // Native37E915..37E94A and caller49CCF0. Same measured +4/+8 216B array
 // as this unit's getters; indexed entry uses owned getThingTemplate37E270.
