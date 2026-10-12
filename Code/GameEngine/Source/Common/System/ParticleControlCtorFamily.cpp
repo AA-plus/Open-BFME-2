@@ -385,3 +385,15 @@ void Rva003FD14DBase::rva003FBD9F()
   }
  }
 }
+
+// Native3FDBD1..3FDC25 is84B RET4. WB10729F0 and the native doomRays
+// allocation at2133E0 prove the owning string parameter and visual base.
+// The base311B source and its ABI are already matched; the derived class
+// adds a zero Coord3D at +AC. No original class name is asserted.
+class Rva003FDBD1 : public Rva003FD14DBase { public:
+ Rva003FDBD1(AsciiString name);
+ virtual void vfunc();
+ Coord3D extra;
+};
+Rva003FDBD1::Rva003FDBD1(AsciiString name)
+ : Rva003FD14DBase(reinterpret_cast<int>(&name)), extra(0.f,0.f,0.f) {}
