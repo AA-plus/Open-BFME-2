@@ -196,7 +196,7 @@ void Rva0010FE6D::rva0010FE6D(float value, int tag)
 }
 
 // Native10FD5E..10FDE9 allocates20B and calls rowed float-pair ctor10EF14.
-// The callerA8B0A forwards two floats; this is not the donor Shadow::setSize.
+// The caller at 0xA8B04 forwards two floats; this is not the donor Shadow::setSize.
 class Rva0010EF14 : public Rva001164D3
 {
 	float m_value0c;
