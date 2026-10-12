@@ -13,6 +13,8 @@
 // Five getGroundHeight calls use vtable +0x18 with a null normal out pointer.
 // The global bindings and member offsets are read independently from retail.
 
+#include <math.h>
+
 typedef float Real;
 typedef int Int;
 typedef bool Bool;
@@ -372,6 +374,7 @@ public:
 	virtual void cameraModFinalZoom(Real finalZoom, Real easeIn, Real easeOut);
 	virtual void lookAt(const Coord3D *o);
 	virtual void setZoom(Real z);
+	virtual void setHeightAboveGround(Real z);
 	virtual void rva0008D218(Real value);
 
 	void setZoomToDefault();
@@ -572,6 +575,39 @@ void W3DView::lookAt(const Coord3D *o)
 // limited view or a camera move is running. (setHeightAboveGround 0x0008D2B8
 // shares the shape plus a travelled-height accumulator at +0x24FC.)
 struct GameClientCameraLocks { char m_pad00[0xC0]; Bool m_lockC0; };
+
+// W3DView::setHeightAboveGround, retail 0x0008D2B8 (265B, RET 4), directly
+// before setZoom. ZH body plus the BFME2 lock and camera-move gates, a
+// height-lock gate (+0x2503) and the travelled-height accumulator (+0x24FC).
+// The math.h fabsf wrapper (float in, double fabs call, float out) is what
+// schedules the z load and both argument pops ahead of the accumulator store.
+void W3DView::setHeightAboveGround(Real z)
+{
+	if (reinterpret_cast<const GameClientCameraLocks *>(TheGameClient)->m_lockC0 && m_zoomLimited)
+		return;
+	if (m_heightLocked)
+		return;
+	if (m_cameraMovementMode || m_doingRotateCamera || m_doingPitchCamera ||
+	    m_doingZoomCamera || m_CameraArrivedAtWaypointOnPathFlag || m_doingScriptedCameraLock)
+		return;
+	Real delta = z - m_heightAboveGround;
+	m_heightTravelled += fabsf(delta);
+	m_heightAboveGround = z;
+	if (m_zoomLimited)
+	{
+		if (m_cameraLimits.getMinimum() > m_heightAboveGround)
+			m_heightAboveGround = m_cameraLimits.getMinimum();
+		if (m_heightAboveGround > m_cameraLimits.getMaximum())
+			m_heightAboveGround = m_cameraLimits.getMaximum();
+	}
+	m_doingRotateCamera = false;
+	m_doingPitchCamera = false;
+	m_doingZoomCamera = false;
+	m_doingScriptedCameraLock = false;
+	m_CameraArrivedAtWaypointOnPathFlag = false;
+	m_cameraConstraintValid = false;
+	setCameraTransform();
+}
 
 void W3DView::setZoom(Real z)
 {
