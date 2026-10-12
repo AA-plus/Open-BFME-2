@@ -1,4 +1,6 @@
 // ?update@AIFollowPathAndEvacuateState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.93 date=2026-10-13
+// ?update@AIFollowPathAndEvacuateState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.8 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc /ICode/Libraries/Include/Lib
 // stlport
@@ -481,17 +483,16 @@ StateReturnType AIFollowPathAndEvacuateState::update()
   ContainedObjects objects=owner->m_contain->getContainedObjects();
   for(_STL::list<Object *>::const_iterator it=objects.list->begin();it!=objects.list->end();++it) {
    Object *unit=*it;
-   unit->getAI()->ignoreObstacle(owner);
+   AIUpdateInterface *ai=unit->getAI();
+   ai->ignoreObstacle(owner);
    unit->clearDisabled(DISABLED_HELD);
    bool special=(unit->m_template->kind115 & 0x20)!=0;
-   AIUpdateInterface *ai=unit->getAI();
    if(special)
     ai->m_command.rva00353168(owner,reinterpret_cast<const Rva0035149F &>(path),owner->getAI()->getSource());
    else
     ai->m_command.rva00353080(owner,reinterpret_cast<const Rva0035149F &>(path),owner->getAI()->getSource());
   }
-  AIUpdateInterface *ownerAI=owner->getAI();
-  reinterpret_cast<AICommandInterface *>(&ownerAI->m_command)->aiIdle(CMD_FROM_AI);
+  reinterpret_cast<AICommandInterface *>(&owner->getAI()->m_command)->aiIdle(CMD_FROM_AI);
   return STATE_SUCCESS;
  }
  return AIFollowPathState::update();

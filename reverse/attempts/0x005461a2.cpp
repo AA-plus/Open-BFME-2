@@ -1,4 +1,6 @@
 // ?lookForInnerTarget@AITNGuardMachine@@QAE_NXZ
+// partial score=0.94 date=2026-10-13
+// ?lookForInnerTarget@AITNGuardMachine@@QAE_NXZ
 // partial score=0.9379894668760972 date=2026-10-10
 // ?lookForInnerTarget@AITNGuardMachine@@QAE_NXZ
 // partial score=0.9218 date=2026-10-05
@@ -198,6 +200,7 @@ private:
 Bool AITNGuardMachine::lookForInnerTarget(void)
 {
 	Object* owner = getOwner();
+	GameLogic *gameLogic = TheGameLogic;
 
 	// Check if team auto targets same victim.
 	Object *teamVictim = NULL;
@@ -223,7 +226,7 @@ Bool AITNGuardMachine::lookForInnerTarget(void)
 	}
 	const _STL::list<ObjectID> *allTunnels = tunnels->getContainerList();
 	for( _STL::list<ObjectID>::const_iterator iter = allTunnels->begin(); iter != allTunnels->end(); iter++ ) {
-		Object *currentTunnel = TheGameLogic->findObjectByID( *iter );
+		Object *currentTunnel = gameLogic->findObjectByID( *iter );
 		if( currentTunnel ) {
 			// Check for attacking.
 			if (currentTunnel->m_ai) {
@@ -241,10 +244,10 @@ Bool AITNGuardMachine::lookForInnerTarget(void)
 					if (info->out.m_noEffect) {
 						continue;
 					}
-					if (body->getLastDamageTimestamp() + TheAI->getAiData()->m_guardEnemyScanRate > TheGameLogic->getFrame()) {
+					if (body->getLastDamageTimestamp() + TheAI->getAiData()->m_guardEnemyScanRate > gameLogic->getFrame()) {
 						// winner.
 						ObjectID attackerID = info->in.m_sourceID;
-						Object *attacker = (TheGameLogic?TheGameLogic:TheGameLogic)->findObjectByID(attackerID);
+						Object *attacker = gameLogic->findObjectByID(attackerID);
 
 						if( attacker )
 						{

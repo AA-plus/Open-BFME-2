@@ -1,4 +1,6 @@
 // ?onEnter@AIAttackPositionAimAtTargetState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.88 date=2026-10-13
+// ?onEnter@AIAttackPositionAimAtTargetState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.8732703916 date=2026-10-09
 // ?rva0034A570@AIAttackPositionAimAtTargetState@@QAE?AW4StateReturnType@@_N@Z
 // partial score=0.97 date=2026-10-09

@@ -1,4 +1,6 @@
 // ?groupRotateFiringarc@AIGroup@@QAEXPBUCoord3D@@W4CommandSourceType@@@Z
+// partial score=0.94 date=2026-10-13
+// ?groupRotateFiringarc@AIGroup@@QAEXPBUCoord3D@@W4CommandSourceType@@@Z
 // partial score=0.9254123112659699 date=2026-10-10
 // ?groupRotateFiringarc@AIGroup@@QAEXPBUCoord3D@@W4CommandSourceType@@@Z
 // partial score=0.9 date=2026-10-06
@@ -25,7 +27,8 @@ struct Coord3D
 	float lengthSqr2D() const { return x * x + y * y; }
 };
 
-struct RotateCoord:Coord3D{__forceinline RotateCoord(float X,float Y,float Z){y=Y;x=X;z=Z;}__forceinline RotateCoord(const Coord3D&p){x=p.x;y=p.y;z=p.z;}__forceinline void sub(const Coord3D*p){x-=p->x;y-=p->y;z-=p->z;}};
+struct RotateCoord:Coord3D{__forceinline RotateCoord(){}
+__forceinline RotateCoord(float X,float Y,float Z){x=X;y=Y;z=Z;}__forceinline RotateCoord(const Coord3D&p){x=p.x;y=p.y;z=p.z;}__forceinline void sub(const Coord3D*p){x-=p->x;y-=p->y;z-=p->z;}};
 float ACos(float x);
 
 enum CommandSourceType
@@ -83,7 +86,11 @@ void AIGroup::groupRotateFiringarc(const Coord3D *pos, CommandSourceType cmdSour
 		AIUpdateInterface *ai = obj->getObservedAI();
 		if (!ai)
 			continue;
-RotateCoord dir(pos->x-obj->getPosition()->x,pos->y-obj->getPosition()->y,pos->z-obj->getPosition()->z);		if (dir.lengthSqr2D() < 1.0f)
+RotateCoord dir;
+		dir.z=pos->z-obj->getPosition()->z;
+		dir.y=pos->y-obj->getPosition()->y;
+		dir.x=pos->x-obj->getPosition()->x;
+		if (dir.lengthSqr2D() < 1.0f)
 			continue;
 		dir.Normalize2D();
 		float angle;

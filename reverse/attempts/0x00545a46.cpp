@@ -1,4 +1,10 @@
 // ?update@AIGuardRetaliateAttackAggressorState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.99 date=2026-10-13
+// ?update@AIGuardRetaliateAttackAggressorState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.99 date=2026-10-13
+// ?update@AIGuardRetaliateAttackAggressorState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.99 date=2026-10-13
+// ?update@AIGuardRetaliateAttackAggressorState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.99 date=2026-10-09
 // ?update@AIGuardRetaliateAttackAggressorState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.8 date=2026-10-04
@@ -543,8 +549,9 @@ StateReturnType AIGuardRetaliateAttackAggressorState::update( void )
 		{
 			if (controller->bfmeIsTarget(nemesis))
 				extend = true;
-			int reportedID = controller->bfmeTargetID(nemesis->getID());
-			if (reportedID == nemesis->getID())
+			int nemID = nemesis->getID();
+			int reportedID = controller->bfmeTargetID(nemID);
+			if (reportedID == nemID)
 				extend = true;
 		}
 	}

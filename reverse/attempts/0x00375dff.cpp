@@ -1,4 +1,8 @@
 // ?rva00375DFF@AerialPathfinder@@QAE_NPAVObject@@PAVRva00375A73Context@@MM@Z
+// partial score=0.97 date=2026-10-13
+// ?rva00375DFF@AerialPathfinder@@QAE_NPAVObject@@PAVRva00375A73Context@@MM@Z
+// partial score=0.97 date=2026-10-13
+// ?rva00375DFF@AerialPathfinder@@QAE_NPAVObject@@PAVRva00375A73Context@@MM@Z
 // partial score=0.9777 date=2026-10-12
 // cl: /O1 /arch:SSE /G7 /MD /EHs
 // BFME1 donor f98983a7d: game/GameEngine/Source/GameLogic/AI/
@@ -102,9 +106,9 @@ bool AerialPathfinder::rva00375DFF(Object *obj, Rva00375A73Context *context, flo
         if (rva00375A73(context, distance, &pos))
         {
             pos.z -= clearance * 0.5f;
+            float t = TheTerrainLogic->getGroundHeight(pos.x, pos.y, 0);
             bool above = false;
             bool hit = false;
-            float t = TheTerrainLogic->getGroundHeight(pos.x, pos.y, 0);
             if (pos.z > t)
                 above = true;
             t = 0.0f;
@@ -114,7 +118,11 @@ bool AerialPathfinder::rva00375DFF(Object *obj, Rva00375A73Context *context, flo
             where.z = 0.0f;
             if (TheAerialPathfinder->rva00375C28(obj, &pos, &t, &where))
                 hit = true;
-            return ((above == true) && (hit == true));
+            if (above != true)
+                return false;
+            if (hit != true)
+                return false;
+            return true;
         }
     }
     return true;
