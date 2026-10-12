@@ -29,6 +29,7 @@ class BannerUI
 {
 public:
 	void Hide(bool on);
+	void rva00216D2D();
 private:
 	char m_pad00[0x20];
 	unsigned char m_flag20;
@@ -36,6 +37,8 @@ private:
 	void *m_ptr24;
 	_STL::vector<BfmePod28> m_vec28;
 	bool m_flag34;
+	char m_pad35[0x3C - 0x35];
+	float m_3C[2];											// +0x3C
 };
 
 void BannerUI::Hide(bool on)
@@ -54,4 +57,15 @@ void BannerUI::Hide(bool on)
 	{
 		((AptPlayer *)(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager))->ShowLevel((int)m_ptr24);
 	}
+}
+
+// ?rva00216D2D@BannerUI@@QAEXXZ, retail 0x00216D2D (47B, reached from a retail
+// table): hide, empty the +0x28 records and zero the two +0x3C floats.
+void BannerUI::rva00216D2D()
+{
+	Hide(true);
+	_STL::vector<BfmePod28> &vr = m_vec28;
+	vr.erase(vr.begin(), vr.end());
+	for (float *p = m_3C; p != m_3C + 2; ++p)
+		*p = 0.0f;
 }
