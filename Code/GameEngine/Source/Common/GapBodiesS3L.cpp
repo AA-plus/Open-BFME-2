@@ -10,6 +10,9 @@ class INI
 public:
 	const char *getNextToken(const char *seps);				// 0x0002DF97
 	static void parseInt(INI *ini, void *instance, void *store, const void *userData);	// 0x0002EF56
+	static void parseBool(INI *ini, void *instance, void *store, const void *userData);	// 0x0002E850
+	static void parseReal(INI *ini, void *instance, void *store, const void *userData);	// 0x0002EFC0
+	static void parseDurationUnsignedInt(INI *ini, void *instance, void *store, const void *userData);	// 0x00338B30
 };
 
 enum NameKeyType { NAMEKEY_INVALID = 0 };
@@ -216,4 +219,65 @@ void Rva004FA5B8::buildFieldParse(MultiIniFieldParse &p)
 {
 	FXParticleSystem::EmissionVelocityInfo::DoXfer((Xfer &)p);
 	p.add(s_dataFieldParse, 0);
+}
+
+// --- 0x00584C69 / 0x00587217 (19B each): module-data field-parse builders
+// adding the follow-leader table 0x00C6FD28 and the facing / idle-activation
+// table 0x00C6FE88 (retail's field names).
+void Rva000B9468Parse(INI *ini, void *instance, void *store, const void *userData);	// 0x000B9468
+
+class Rva00584C69
+{
+public:
+	virtual void buildFieldParse(MultiIniFieldParse &p);
+private:
+	static const FieldParse s_dataFieldParse[];
+};
+
+const FieldParse Rva00584C69::s_dataFieldParse[] =
+{
+	{ "FollowLeader", INI::parseBool, 0, 0x04 },
+	{ "DistanceToActiveLeader", INI::parseReal, 0, 0x08 },
+	{ "DistanceToPassiveLeader", INI::parseReal, 0, 0x0C },
+	{ 0, 0, 0, 0 }
+};
+
+void Rva00584C69::buildFieldParse(MultiIniFieldParse &p)
+{
+	p.add(s_dataFieldParse, 0);
+}
+
+class Rva00587217
+{
+public:
+	virtual void buildFieldParse(MultiIniFieldParse &p);
+private:
+	static const FieldParse s_dataFieldParse[];
+};
+
+const FieldParse Rva00587217::s_dataFieldParse[] =
+{
+	{ "FacingBonus", INI::parseReal, 0, 0x04 },
+	{ "AngleLimitCos", INI::parseReal, 0, 0x08 },
+	{ "InnerRange", INI::parseReal, 0, 0x0C },
+	{ "OuterRange", INI::parseReal, 0, 0x10 },
+	{ "OuterRangeBuildings", INI::parseReal, 0, 0x14 },
+	{ "IdleModelConditions", Rva000B9468Parse, 0, 0x18 },
+	{ "DelayUntilIdle", INI::parseDurationUnsignedInt, 0, 0x64 },
+	{ "DelayRandomActivateMin", INI::parseDurationUnsignedInt, 0, 0x68 },
+	{ "DelayRandomActivateMax", INI::parseDurationUnsignedInt, 0, 0x6C },
+	{ 0, 0, 0, 0 }
+};
+
+void Rva00587217::buildFieldParse(MultiIniFieldParse &p)
+{
+	p.add(s_dataFieldParse, 0);
+}
+
+// --- 0x00343EE5 (21B): 1 when the pinned 0x00343DD8 test fails, else 0.
+bool rva00343DD8(void *a, void *b);							// 0x00343DD8
+
+int rva00343EE5(void *a, void *b)
+{
+	return !rva00343DD8(a, b);
 }
