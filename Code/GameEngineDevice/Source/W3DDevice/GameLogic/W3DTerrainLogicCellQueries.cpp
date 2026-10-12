@@ -36,6 +36,19 @@ public:
 
 extern BaseHeightMapRenderObjClass *TheTerrainRenderObject;
 
+// The rowed base-object lookups the two tail-jump slots below reach.
+template <class T> class StringBase;
+class Rva00282021WaterLookup
+{
+public:
+	void *rva00282021(const StringBase<char> &name);
+};
+class Rva0027CD63
+{
+public:
+	void rva0027CD63();
+};
+
 // TerrainLogic's rowed position lookup 0x0028170E (TerrainLogicWaterLookup.cpp).
 struct Rva0028170EArea;
 class Rva0028170EHost
@@ -53,6 +66,8 @@ public:
 	virtual unsigned char rva00062E10(float x, float y) const;
 	virtual bool rva00063082(const Coord3D *pos) const;
 	virtual Rva0028170EArea *rva00062ACA(float x, float y, float z);
+	virtual void *rva00062AEC(const StringBase<char> &name);
+	virtual void rva00062B97();
 	unsigned char m_unknown0004[0x1C - 4];
 	int m_width;  // +0x1C
 	int m_height; // +0x20
@@ -64,6 +79,19 @@ public:
 Rva0028170EArea *W3DTerrainLogic::rva00062ACA(float x, float y, float z)
 {
 	return reinterpret_cast<Rva0028170EHost *>(this)->rva0028170E(x, y, z);
+}
+
+// Native 0x00062AEC and 0x00062B97 (5 bytes each), more W3DTerrainLogic
+// vftable entries (the first also in three more tables): tail jumps to the
+// base-object name lookup 0x00282021 and to 0x0027CD63.
+void *W3DTerrainLogic::rva00062AEC(const StringBase<char> &name)
+{
+	return reinterpret_cast<Rva00282021WaterLookup *>(this)->rva00282021(name);
+}
+
+void W3DTerrainLogic::rva00062B97()
+{
+	reinterpret_cast<Rva0027CD63 *>(this)->rva0027CD63();
 }
 
 // vftable 0x007C58E4, callee 0x0006B187
