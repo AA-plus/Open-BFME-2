@@ -27,7 +27,47 @@ class Rva002DC267 { public: UnicodeString rva002DC267() const; };
 extern "C" __declspec(dllimport) int __stdcall CreateDirectoryW(const unsigned short *, void *);
 class HeroFile { public: virtual ~HeroFile(); virtual bool open(const char *, int); virtual void close(); };
 int Rva00409892(int, int);
-class Xfer;
+class Xfer { public:
+virtual void slot00();
+virtual bool load();
+virtual bool save();
+virtual bool checksum();
+virtual void slot04();
+virtual void slot05();
+virtual void slot06();
+virtual void slot07();
+virtual void slot08();
+virtual void slot09();
+virtual void version(void *);
+virtual void slot11();
+virtual void slot12();
+virtual void slot13();
+virtual void slot14();
+virtual void slot15();
+virtual void slot16();
+virtual void slot17();
+virtual void slot18();
+virtual void slot19();
+virtual void slot20();
+virtual void slot21();
+virtual void slot22();
+virtual void slot23();
+virtual void slot24();
+virtual void slot25();
+virtual void slot26();
+virtual void text(AsciiString *);
+virtual void slot28();
+virtual void slot29();
+virtual void word(unsigned *);
+virtual void slot31();
+virtual void slot32();
+virtual void slot33();
+virtual void slot34();
+virtual void slot35();
+virtual void slot36();
+};
+enum ObjectID { INVALID_ID=0 };
+
 class XferSave {
 public:
     XferSave();
@@ -87,6 +127,8 @@ class CreateAHeroHero;
 // operator[] returns the eight-byte bit reference by value (native6BE1F).
 #include <vector>
 #include <map>
+#include <string.h>
+#pragma intrinsic(memset)
 
 namespace _STL {
 template<class T, class L, class R>
@@ -314,9 +356,78 @@ class GameLogic;
 extern GameLogic *TheGameLogic;
 struct Rva004088F0GameLogicView { unsigned char m_pad00[0x110]; int m_mode; };
 
+class Rva00407137;
+class Rva004071AAVirt;
+// Native CRC initialization clears byte zero, then the word and flag.
+class Rva00406FBF { public: unsigned crc; bool flag; Rva00406FBF() { memset(&crc,0,1); crc=0; flag=false; } };
+void Rva00407099Update(Xfer *,ObjectID *,void *,Rva00406FBF *);
+void Rva004071AAForward(Rva004071AAVirt *,const UnicodeString &,int,Rva00407137 *);
+void Rva0040707EUpdate(void *,void *,void *,Rva00406FBF *);
+void Rva004070B6Update(void *,void *,void *,Rva00406FBF *);
+void Rva0040718FForward(void *,const AsciiString &,int,Rva00407137 *);
+class Rva00407218 { public: void rva00407218(void *,void *); };
+class Rva00407C6B { public: void rva00407C6B(); };
+class Rva00407E28 { public: bool rva00407E53(int); bool rva00407DE0(int,int); };
+class CreateAHeroData { public: bool WriteNamedHeroAtRva004074CF(); bool rva00408A55(); };
+class HeroTransferLog { public:
+virtual void slot00();
+virtual void slot01();
+virtual void slot02();
+virtual void slot03();
+virtual void slot04();
+virtual void slot05();
+virtual void slot06();
+virtual void slot07();
+virtual void slot08();
+virtual void slot09();
+virtual void slot10();
+virtual void slot11();
+virtual void slot12();
+virtual void slot13();
+virtual HeroTransferLog *message(const char *);
+virtual void slot15();
+virtual void slot16();
+virtual void slot17();
+virtual void slot18();
+virtual void severity(int);
+};
+class Debug { public:
+virtual void slot00();
+virtual void slot01();
+virtual void slot02();
+virtual void slot03();
+virtual void slot04();
+virtual void slot05();
+virtual void slot06();
+virtual void slot07();
+virtual void slot08();
+virtual void slot09();
+virtual void slot10();
+virtual void slot11();
+virtual void slot12();
+virtual void slot13();
+virtual void slot14();
+virtual void slot15();
+virtual void slot16();
+virtual void slot17();
+virtual void slot18();
+virtual void slot19();
+virtual void slot20();
+virtual void slot21();
+virtual void slot22();
+virtual void slot23();
+virtual void slot24();
+virtual void slot25();
+virtual void slot26();
+virtual HeroTransferLog *record(int,int,int);
+};
+extern Debug *theDebug;
+void _bfme_debugRecordCallsite(int);
+
 class CreateAHeroHero
 {
 public:
+	void DoXfer(Xfer &xfer);
 	Bool HasEarnedAward(const CreateAHeroAward *award) const;
 	Int GetBlingCount(Int blingKey) const;
 	Int GetBlingId(Int blingKey, UnsignedInt index) const;
@@ -335,7 +446,9 @@ public:
 private:
 	Bool rva004079D5(Int blingKey, CreateAHeroBlingNode **found) const;	// 0x004079D5
 
-	unsigned char m_pad00[0x0C];
+	void *m_vtable;
+	ObjectID m_id; // +0x04, DoXfer ID tag
+	UnicodeString m_name; // +0x08, DoXfer Name tag
 	UnsignedInt m_heroClass;				// +0x0C
 	UnsignedInt m_heroSubclass;				// +0x10
 	_STL::map<Int, Int> m_bling;			// +0x14
@@ -353,7 +466,7 @@ private:
 	CreateAHeroBlingNode *m_blingHeader;	// +0x74, map end node
 	unsigned char m_pad78[0x80 - 0x78];
 	BfmeHeroElement005C39DE m_buttons[CAH_MAX_EXP_LEVELS];	// +0x80
-	unsigned char m_pad134[4];
+	unsigned m_savedCRC; // +0x134, DoXfer version-eight CRC
 	Int m_animationState;					// +0x138
 	Int m_animationState2;					// +0x13C
 };
@@ -762,4 +875,71 @@ bool CreateAHeroHero::rva004098BE(const AsciiString &name, bool isSystem)
     ((Gen009D6DD0 *)&writer)->bfmeClose();
     file->close();
     return true;
+}
+
+// WB107D500 names DoXfer; native408C11..4091E2 supplies the full RET4
+// body, tagged fields, two bling loops, version gates and CRC. Helper types
+// retain their existing provider spellings; field layouts come from retail.
+void CreateAHeroHero::DoXfer(Xfer &xfer)
+{
+    if(xfer.checksum())return;
+    Rva00406FBF crc;
+    // Retail passes two version bytes in a four-byte-aligned local.
+    struct __declspec(align(4)) Version { unsigned char minimum,current; } version={1,8};
+    xfer.version(&version);
+    { AsciiString tag("ID"); Rva00407099Update(&xfer,&m_id,&tag,&crc); }
+    { AsciiString tag("Name"); Rva004071AAForward((Rva004071AAVirt*)&xfer,m_name,(int)&tag,(Rva00407137*)&crc); }
+    { AsciiString tag("ClassIndex"); Rva0040707EUpdate(&xfer,&m_heroClass,&tag,&crc); }
+    { AsciiString tag("SubClassIndex"); Rva0040707EUpdate(&xfer,&m_heroSubclass,&tag,&crc); }
+    unsigned dummy=0;
+    { AsciiString tag("Dummy"); Rva0040707EUpdate(&xfer,&dummy,&tag,&crc); }
+    { AsciiString tag("Dummy"); Rva0040707EUpdate(&xfer,&dummy,&tag,&crc); }
+    { AsciiString tag("PrimaryColor"); Rva0040707EUpdate(&xfer,&m_red,&tag,&crc); }
+    { AsciiString tag("SecondaryColor"); Rva0040707EUpdate(&xfer,&m_green,&tag,&crc); }
+    { AsciiString tag("TertiaryColor"); Rva0040707EUpdate(&xfer,&m_blue,&tag,&crc); }
+    for(unsigned i=0;i<15;++i)((Rva00407218*)&m_buttons[i])->rva00407218(&xfer,&crc);
+    if(xfer.load()) {
+        ((Rva00407C6B*)this)->rva00407C6B();
+        unsigned count=0;
+        { AsciiString tag("BlingCount"); Rva0040707EUpdate(&xfer,&count,&tag,&crc); }
+        for(unsigned i=0;i<count;++i) {
+            AsciiString group;
+            { AsciiString tag("GroupName"); Rva0040718FForward(&xfer,group,(int)&tag,(Rva00407137*)&crc); }
+            if(group.isNone() || group.isEmpty()) {
+                _bfme_debugRecordCallsite(1); theDebug->slot24();
+                theDebug->record(0,0,0)->message("Fatal error in CreateAHeroHero::DoXfer(Xfer& xfer). Invalid or empty bling group name.")->severity(1);
+            }
+            NameKeyType key=TheNameKeyGenerator->nameToKey(group);
+            unsigned index=0;
+            { AsciiString tag("BlingIndex"); Rva0040707EUpdate(&xfer,&index,&tag,&crc); }
+            ((Rva00407E28*)this)->rva00407E53(key);
+            ((Rva00407E28*)this)->rva00407DE0(key,index);
+        }
+    } else {
+        unsigned count=m_bling.size();
+        { AsciiString tag("BlingCount"); Rva0040707EUpdate(&xfer,&count,&tag,&crc); }
+        for(_STL::map<int,int>::iterator i=m_bling.begin();i!=m_bling.end();++i) {
+            AsciiString group(TheNameKeyGenerator->keyToName((NameKeyType)i->first));
+            if(group.isNone() || group.isEmpty()) {
+                _bfme_debugRecordCallsite(1); theDebug->slot24();
+                theDebug->record(0,0,0)->message("Fatal error in CreateAHeroHero::DoXfer(Xfer& xfer). Invalid or empty bling group name.")->severity(1);
+            }
+            { AsciiString tag("GroupName"); Rva0040718FForward(&xfer,group,(int)&tag,(Rva00407137*)&crc); }
+            unsigned index=i->second;
+            { AsciiString tag("BlingIndex"); Rva0040707EUpdate(&xfer,&index,&tag,&crc); }
+        }
+    }
+    if(version.current>6) {
+        xfer.text(&m_className);
+        if(m_flag70 && !m_className.isEmpty()) {
+            if(xfer.load())((CreateAHeroData*)this)->rva00408A55();
+            else if(xfer.save())((CreateAHeroData*)this)->WriteNamedHeroAtRva004074CF();
+        }
+    }
+    if(version.current>7) {
+        { AsciiString tag("IsSystemHero"); Rva004070B6Update(&xfer,&m_systemHero,&tag,&crc); }
+        if(xfer.load()) { xfer.word(&m_savedCRC); m_updateAwards=crc.crc==m_savedCRC; }
+        else { m_savedCRC=crc.crc; xfer.word(&m_savedCRC); }
+    } else { m_updateAwards=true; m_savedCRC=crc.crc; }
+    if(xfer.load())m_state38=0x2ff;
 }
