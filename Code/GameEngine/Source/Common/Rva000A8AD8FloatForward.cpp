@@ -46,3 +46,22 @@ void Rva000A8AEE::rva000A8AEE(float f)
 		return;
 	m_target->rva0010FCDB(f);
 }
+class Rva0010FD5E
+{
+public:
+	void rva0010FD5E(float first, float second);
+};
+
+class Rva000A8B04
+{
+	Rva0010FD5E *m_target;
+public:
+	void rva000A8B04(float first, float second);
+};
+
+void Rva000A8B04::rva000A8B04(float first, float second)
+{
+	if (!m_target)
+		return;
+	m_target->rva0010FD5E(first, second);
+}
