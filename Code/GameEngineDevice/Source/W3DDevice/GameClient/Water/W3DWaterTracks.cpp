@@ -30,7 +30,17 @@ class Rva0030C900IntGetter { public: int get()const; };
 class RenderObjClass { public: virtual void *Get_User_Data(); };
 class Drawable; class Thing { public: Drawable *getDrawable()const; };
 struct waveInfo { float finalWidth,finalHeight,distance,velocity; int fadeMs; float widthFraction,heightFraction; int compressMs,secondOffset; char *textureName,*typeName; };
-extern waveInfo waveTypeInfo[7];
+// Zero Hour's per-type wave table, unchanged in BFME 2: retail 0x009B5C18 holds
+// these five 44-byte entries and a zero WaveTypeStationary slot (WaveTypeMax 6),
+// both texture pointers on one pooled "wave256.tga" literal.
+waveInfo waveTypeInfo[6]= //TODO: Move this into INI
+{
+	{	28.0f,	18.0f,	25.0f,	0.018f,	900,	0.01f,	0.18f,	1500,	0,		"wave256.tga",	"Pond"},	//pond
+	{	28.0f,	18.0f,	40.0f,	0.005f,	2000,	0.5f,	1.0f,	1000,	6267,	"wave256.tga",	"Ocean"},	//ocean
+	{	55.0f,	36.0f,	80.0f,	0.015f,	2000,	0.05f,	0.18f,	1000,	6267,	"wave256.tga",	"Close Ocean"},	//close ocean
+	{	55.0f,	36.0f,	80.0f,	0.015f,	4000,	0.01f,	0.18f,	2000,	6267,	"wave256.tga",	"Close Ocean Double"},	//close ocean double
+	{	55.0f,	27.0f,	80.0f,	0.015f,	2000,	0.01f,	8.0f,	2000,	5367,	"wave256.tga",	"Radial"},	//radial
+};
 // The bounding sphere is a real SphereClass (its out-of-line copy is what the
 // bounds getter calls); init() keeps the inline field-wise Init it was
 // matched with.
