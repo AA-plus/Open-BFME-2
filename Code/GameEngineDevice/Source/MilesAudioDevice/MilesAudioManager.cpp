@@ -239,6 +239,9 @@ struct BfmePoolHolder88;
 class BfmePoolRef10 {
 public:
     BfmePoolRef10() : m_ptr(0) {}
+    // Retail 0x00051931 (rowed in stlport_stringtailrecord144_dtor.cpp), visible
+    // like the copy below so 0x0005286A keeps its new reference in ESI.
+    __declspec(noinline) BfmePoolRef10(BfmePoolHolder88 *p) : m_ptr(reinterpret_cast<AudioEventRTS *>(p)) { if (m_ptr) reinterpret_cast<OpaqueRefCounted *>(reinterpret_cast<char *>(m_ptr) + 0x88)->Add_Ref(); }
     // Retail 0x00051950 (rowed in stlport_stringtailrecord144_dtor.cpp; same
     // bytes here). Out of line in retail but visible to this unit, so cl knows
     // the copy keeps no pointer to itself: checkForNaturalSoundCompletion then
@@ -1229,6 +1232,8 @@ private:
     char atB0[0xBC - 0xB0];
     Rva00059FBBMap m_allAudioEventInfo;  // +0xBC
     unsigned int m_nextHandle;           // +0xD0, next playing handle (0x0005B256)
+    // Zero Hour's inline AudioManager::allocateNewHandle.
+    unsigned int allocateNewHandle(void) { return m_nextHandle++; }
     char atD4[0xE0 - 0xD4];
     QueuedAudioEvents m_queuedEvents[3];  // +0xE0, per view type (0x60123)
     char at104[0x12C - 0x104];
@@ -5421,4 +5426,28 @@ void MilesAudioManager::removePlayingAudio(const AsciiString &eventName, int vie
             ++request;
         }
     }
+}
+
+// The 0x90-byte event copy 0x0005286A allocates (copy ctor 0x00051DCC).
+struct BfmeAudioEventPrefix136;
+class Rva005813E
+{
+public:
+    Rva005813E(const BfmeAudioEventPrefix136 &source);
+private:
+    char m_opaque[0x90];
+};
+
+// Retail 0x0005286A (address-derived, RET 0xC; WorldBuilder twin 0x00786D30,
+// Zero Hour's addAudioEvent preparation): copies the event into a new pooled
+// event, gives it a fresh playing handle unless the caller keeps its own, and
+// generates its file and play info.
+BfmePoolRef10 MilesAudioManager::rva0005286A(AudioEventRTS *event, int arg)
+{
+    BfmePoolRef10 copy(reinterpret_cast<BfmePoolHolder88 *>(new Rva005813E(*reinterpret_cast<const BfmeAudioEventPrefix136 *>(event))));
+    if (!arg)
+        reinterpret_cast<GameMessage *>(copy.get())->friend_setList(reinterpret_cast<GameMessageList *>(allocateNewHandle()));
+    copy->rva002D9ADC();
+    copy->generatePlayInfo();
+    return copy;
 }
