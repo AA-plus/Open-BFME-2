@@ -31,6 +31,36 @@ typedef _STL::pair<const int, BfmePod72> IntPod72Pair;
 typedef _STL::pair<const int, BfmePod32> IntPod32Pair;
 typedef _STL::pair<const int, BfmePod20> IntPod20Pair;
 
+// This payload's native pair copy has its own string-aware provider.
+// Do not emit the generic BfmePod20 copy from this placement-only view.
+template <> _STL::pair<const int, BfmePod20>::pair(const _STL::pair<const int, BfmePod20> &);
+
 template void _STL::_Construct<IntPod72Pair, IntPod72Pair>(IntPod72Pair *, const IntPod72Pair &);
 template void _STL::_Construct<IntPod20Pair, IntPod20Pair>(IntPod20Pair *, const IntPod20Pair &);
 template _STL::pair<const int, BfmePod72>::pair(const int &, const BfmePod72 &);
+
+// LivingWorld AI's non-const-key temporaries convert to tree value_type.
+// GatherWorldInformation 0x0050366B calls these at the same native bodies
+// as the independently rowed pair<const int, T> copy constructors. Only
+// the verified record extents and their existing copy providers are used.
+// The STLport 4.5.3 member template copies first, then constructs second;
+// each complete emitted 29-byte body must prove the fold before it is pinned.
+struct Rva00501656
+{
+	int storage[0x58 / 4];
+	Rva00501656(const Rva00501656 &);
+};
+struct Rva00501776
+{
+	int storage[0x2C / 4];
+	Rva00501776(const Rva00501776 &);
+};
+struct Rva00501E3FElement
+{
+	int storage[0x14 / 4];
+	Rva00501E3FElement(const Rva00501E3FElement &);
+};
+
+template _STL::pair<const int, Rva00501656>::pair(const _STL::pair<int, Rva00501656> &);
+template _STL::pair<const int, Rva00501776>::pair(const _STL::pair<int, Rva00501776> &);
+template _STL::pair<const int, Rva00501E3FElement>::pair(const _STL::pair<int, Rva00501E3FElement> &);
