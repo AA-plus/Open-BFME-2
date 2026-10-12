@@ -64,10 +64,10 @@ private:
 
 // The 0x28-byte record of the two 512-entry arrays (rowed ctor 0x000AF215,
 // dtor 0x004D9A3C).
-struct Rva004D9A3C
+struct Rva000AF215
 {
-	Rva004D9A3C();
-	~Rva004D9A3C();
+	Rva000AF215();
+	~Rva000AF215();
 	unsigned char m_data[0x28];
 };
 
@@ -130,9 +130,9 @@ private:
 	_STL::vector<BfmeE16> m_80B0;
 	_STL::vector<int> m_80BC;
 	int m_80C8;
-	Rva004D9A3C m_80CC[0x200];
+	Rva000AF215 m_80CC[0x200];
 	int m_D0CC;
-	Rva004D9A3C m_D0D0[0x200];
+	Rva000AF215 m_D0D0[0x200];
 	RefCountPtr<TextureClass> m_120D0;
 	int m_120D4;
 	RefCountPtr<TextureClass> m_120D8[2];

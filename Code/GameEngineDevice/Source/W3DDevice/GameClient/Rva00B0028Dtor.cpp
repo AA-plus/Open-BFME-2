@@ -53,9 +53,9 @@ private:
 	T *m_ptr;
 };
 
-struct Rva004D9A3C
+struct Rva000AF215
 {
-	~Rva004D9A3C();
+	~Rva000AF215();
 	unsigned char m_data[0x28];
 };
 
@@ -101,9 +101,9 @@ private:
 	Gen_uw_0007fab3 m_80B0;
 	Gen_uw_0007fab3 m_80BC;
 	int m_80C8;
-	Rva004D9A3C m_80CC[0x200];
+	Rva000AF215 m_80CC[0x200];
 	int m_D0CC;
-	Rva004D9A3C m_D0D0[0x200];
+	Rva000AF215 m_D0D0[0x200];
 	RefCountPtr<TextureClass> m_120D0;
 	int m_120D4;
 	RefCountPtr<TextureClass> m_120D8[2];
