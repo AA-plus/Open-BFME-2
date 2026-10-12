@@ -15,9 +15,27 @@
 // played for the owner through TheAudio (slot 25), as in
 // TurretAIStartRotOrPitchSound.cpp. Method identity beyond the slot is not
 // established.
+//
+// ?rva004B04B2@SpecialDisguiseUpdate@@QAEX_N@Z, retail 0x004B04B2 (323 bytes).
+// The visual swap the slot-17 override above calls with whether to take the
+// owner's own template (true) or the disguise template (the rowed 0x004B031E
+// lookup, false); WB's debug body 0x01106BA0 and Zero Hour's
+// StealthUpdate::changeVisualDisguise give its shape. Where the module data's
+// +0xDC flag is set and the owner passes the pinned test 0x0006F039(300) it
+// sets condition 214, tells the AI (slot 142) 7, sets weapon-set flag 0x15 and
+// calls 0x0028B78A(6). Then, if the disguise template exists, it copies the
+// 0x4C-byte condition block at Object +0x10C (rowed 0x00045455), keeps the old
+// drawable's +0x44C word, destroys the drawable (GameClient slot 29), creates
+// the new one (0x002CF21B; WB spells two newDrawable calls, which gives retail's
+// hoisted pushes and merged tail), binds it (0x0023CD4A), copies position,
+// orientation and this+0x8C (drawable +0xB0), re-applies the conditions
+// through the rowed 0x001E42F2/0x001E431E, restores the +0x44C word
+// (0x0027290C) and re-selects it (InGameUI slot 66) if the old one was selected.
 
 #include "ascii_string.h"
 #include "Common/BfmeAudioEventPrefix136.h"
+#include "../../../Common/GameLogicObjectLookupView.h"
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 #define SLOT08(a,b,c,d,e,f,g,h) virtual void a(); virtual void b(); virtual void c(); virtual void d(); virtual void e(); virtual void f(); virtual void g(); virtual void h();
 
@@ -40,6 +58,12 @@ public:
 	virtual void s68(); virtual void s69(); virtual void s6A(); virtual void s6B();
 	virtual void s6C(); virtual void s6D();
 	virtual bool isIdle(); // slot 110
+	SLOT08(s6F,s70,s71,s72,s73,s74,s75,s76)
+	SLOT08(s77,s78,s79,s7A,s7B,s7C,s7D,s7E)
+	SLOT08(s7F,s80,s81,s82,s83,s84,s85,s86)
+	virtual void s87(); virtual void s88(); virtual void s89(); virtual void s8A();
+	virtual void s8B(); virtual void s8C(); virtual void s8D();
+	virtual void rva004B04B2Slot142(int value); // slot 142 (+0x238)
 };
 
 class ContainModuleInterface
@@ -77,11 +101,91 @@ public:
 	Rva0036CA00Str m_4;
 };
 
-class Drawable
+class Thing
 {
 public:
+	void setOrientation(float angle); // 0x0030AB9D
+	unsigned char m_thingPad[0xB0];
+};
+
+class Drawable : public Thing
+{
+public:
+	void setPosition(const Coord3D *position); // 0x002710E7
+	void rva0027290C(int value);
 	void rva00275DCE(int mode, float a, float b, float c);
 	Rva002390CB rva00274CD8(const AsciiString &name); // keyed sound lookup
+
+	int m_b0; // +0xB0
+	unsigned char m_padB4[0x43C - 0xB4];
+	bool m_43C; // +0x43C
+	unsigned char m_pad43D[0x44C - 0x43D];
+	int m_44C; // +0x44C
+};
+
+class ThingFactory
+{
+public:
+	void *newDrawable(void *tmplate, int a, int b); // 0x002CF21B
+};
+extern ThingFactory *TheThingFactory;
+extern GameLogic *TheGameLogic;
+
+class GameClient
+{
+public:
+	SLOT08(s00,s01,s02,s03,s04,s05,s06,s07)
+	SLOT08(s08,s09,s0A,s0B,s0C,s0D,s0E,s0F)
+	SLOT08(s10,s11,s12,s13,s14,s15,s16,s17)
+	virtual void s18(); virtual void s19(); virtual void s1A(); virtual void s1B(); virtual void s1C();
+	virtual void destroyDrawable(Drawable *draw); // slot 29 (+0x74)
+};
+extern GameClient *TheGameClient;
+
+class InGameUI
+{
+public:
+	SLOT08(s00,s01,s02,s03,s04,s05,s06,s07)
+	SLOT08(s08,s09,s0A,s0B,s0C,s0D,s0E,s0F)
+	SLOT08(s10,s11,s12,s13,s14,s15,s16,s17)
+	SLOT08(s18,s19,s1A,s1B,s1C,s1D,s1E,s1F)
+	SLOT08(s20,s21,s22,s23,s24,s25,s26,s27)
+	SLOT08(s28,s29,s2A,s2B,s2C,s2D,s2E,s2F)
+	SLOT08(s30,s31,s32,s33,s34,s35,s36,s37)
+	SLOT08(s38,s39,s3A,s3B,s3C,s3D,s3E,s3F)
+	virtual void s40(); virtual void s41();
+	virtual void selectDrawable(Drawable *draw); // slot 66 (+0x108)
+};
+extern InGameUI *TheInGameUI;
+
+class WeaponTemplateSetHead
+{
+public:
+	WeaponTemplateSetHead(const WeaponTemplateSetHead &other); // 0x00045455
+	unsigned char m_data[0x4C];
+};
+
+class Rva001E42F2
+{
+public:
+	void rva001E42F2(const int *block);
+};
+
+class Rva001E431E
+{
+public:
+	void rva001E431E(const int *block);
+};
+
+class Rva004B031E
+{
+public:
+	void *rva004B031E();
+};
+
+enum WeaponSetType
+{
+	WEAPONSET_NONE = 0
 };
 
 class Player;
@@ -121,6 +225,9 @@ class Object
 public:
 	bool rva0006F039(int bit) const; // tests a word-run bit at +0x10C
 	void rva0028AE6D();
+	void *getTemplate() const { return m_template; }
+	void setWeaponSetFlag(WeaponSetType type);
+	void rva0028B78A(int value);
 	Drawable *getDrawable() const;
 	Player *getControllingPlayer() const;
 
@@ -143,7 +250,12 @@ public:
 		}
 	}
 
-	unsigned char m_pad000[0x74];
+	unsigned char m_pad000[0x04];
+	void *m_template; // +0x04
+	unsigned char m_pad008[0x38 - 0x08];
+	Coord3D m_position; // +0x38
+	float m_orientation; // +0x44
+	unsigned char m_pad048[0x74 - 0x48];
 	int m_id; // +0x74
 	unsigned char m_pad078[0x10C - 0x78];
 	ModelConditionFlags m_conditionBits; // +0x10C
@@ -194,11 +306,21 @@ protected:
 	int m_state; // +0x24
 };
 
+class SpecialDisguiseUpdateModuleData
+{
+public:
+	unsigned char m_pad00[0xDC];
+	bool m_DC; // +0xDC
+};
+
 class SpecialDisguiseUpdate : public SpecialAbilityUpdate
 {
 public:
 	virtual void triggerAbilityEffect();
 	void rva004B04B2(bool value);
+private:
+	unsigned char m_pad28[0x8C - 0x28];
+	int m_8C; // +0x8C
 };
 
 // ?triggerAbilityEffect@SpecialDisguiseUpdate@@UAEXXZ @0x004B0653
@@ -238,5 +360,43 @@ void SpecialDisguiseUpdate::triggerAbilityEffect()
 		BfmeAudioEventPrefix136 sound(*(const OpaqueRefElement4 *)&draw->rva00274CD8(AsciiString("DisguiseStarted")).m_4, 0);
 		reinterpret_cast<Rva002D9531 *>(&sound)->rva002D9531(obj->m_id);
 		TheAudio->addAudioEvent(&sound);
+	}
+}
+
+// ?rva004B04B2@SpecialDisguiseUpdate@@QAEX_N@Z @0x004B04B2
+void SpecialDisguiseUpdate::rva004B04B2(bool value)
+{
+	Object *obj = m_object;
+	Drawable *draw = obj->getDrawable();
+	bool wasSelected = draw->m_43C != 0;
+	const SpecialDisguiseUpdateModuleData *data = (const SpecialDisguiseUpdateModuleData *)m_moduleData;
+	if (data->m_DC && obj->rva0006F039(300))
+	{
+		obj->setModelConditionState(214);
+		obj->m_ai->rva004B04B2Slot142(7);
+		obj->setWeaponSetFlag((WeaponSetType)0x15);
+		obj->rva0028B78A(6);
+	}
+	if (((Rva004B031E *)this)->rva004B031E())
+	{
+		WeaponTemplateSetHead conditions(*(const WeaponTemplateSetHead *)((const char *)obj + 0x10C));
+		int savedValue = draw->m_44C;
+		TheGameClient->destroyDrawable(draw);
+		if (value)
+			draw = (Drawable *)TheThingFactory->newDrawable(obj->getTemplate(), 0, -1);
+		else
+			draw = (Drawable *)TheThingFactory->newDrawable(((Rva004B031E *)this)->rva004B031E(), 0, -1);
+		if (draw)
+		{
+			TheGameLogic->bindObjectAndDrawable((Object *)obj, (Drawable *)draw);
+			draw->setPosition(&obj->m_position);
+			draw->setOrientation(obj->m_orientation);
+			draw->m_b0 = m_8C;
+			((Rva001E42F2 *)obj)->rva001E42F2((const int *)&conditions);
+			((Rva001E431E *)obj)->rva001E431E((const int *)&conditions);
+			draw->rva0027290C(savedValue);
+			if (wasSelected)
+				TheInGameUI->selectDrawable(draw);
+		}
 	}
 }
