@@ -1,30 +1,54 @@
 // ?Add_Mesh@DX8RigidFVFCategoryContainer@@UAEXPAVMeshModelClass@@@Z
-// partial score=0.743966774 date=2026-10-09
+// partial score=0.8 date=2026-10-12
 // cl: /O2 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // Semantic donor ZH dx8renderer.cpp Add_Mesh, BFME1 revision9cbfb551fe20.
 // WB9D97D0 confirms target148180 identity and source1010..1024. Native
 //148180..148517 RET4 proves extended96B FVF descriptor, vertex bufferE8,
 //used verticesEC, FVF D8, sortingE4; all called providers already matched.
+// 2026-10-12: providers now use the matched inline shapes (MeshMatDescClass
+// Get_UV_Array_By_Index/Get_UV_Array/Get_Color_Array, real noinline
+// MeshGeometryClass::Get_Vertex_Normal_Array(false) at 0x16AB90); UV loop now
+// strength-reduces/counts down like retail. Residue: retail keeps
+// split_table.mmc in ebp across new/VB ctors/AppendLock/normals (this in esi,
+// zero CSE in edi, i homed at 0x3c below split_table); MSVC here reloads the
+// field after every call (const member, visible ctor, /Oa /Ow tried: no).
 #include <new>
-struct Vector2 {float X,Y;};
-struct Vector3 {float X,Y,Z;Vector3&operator=(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;return *this;}};
-struct S2Buffer {char pad[12];void *Data;};
-struct S2MaterialDesc {char pad[12];unsigned UVCount;S2Buffer *UV[8];int UVIndex[2];char gap[0x18];S2Buffer *Colors[2];};
-class BfmeC998 {public:int bfmeGo998C(int);};
-class MeshModelClass {
+class Vector2 {public:float X,Y;};
+class Vector3 {public:float X,Y,Z;Vector3&operator=(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;return *this;}};
+template <class T> class ShareBufferClass {public:virtual void Delete_This();T *Get_Array(){return m_array;}protected:int m_refs;T *m_rawBuffer;T *m_array;int m_count;int m_alignment;};
+class MeshMatDescClass {
 public:
- char pad[0x28];unsigned vertex_count;S2Buffer *polygons,*vertices;char gap34[0x60];S2MaterialDesc *descriptor;
- unsigned Get_Vertex_Count()const{return vertex_count;}
- const Vector3*Get_Vertex_Array()const{return (Vector3*)vertices->Data;}
- const Vector3*Get_Vertex_Normal_Array(unsigned n)const{return (Vector3*)((BfmeC998*)this)->bfmeGo998C(n);}
- const unsigned *Get_Color_Array(unsigned n)const{S2Buffer*b=descriptor->Colors[n];return b?(unsigned*)b->Data:0;}
- const Vector2*Get_UV_Array_By_Index(int n)const {
-  S2MaterialDesc *d=descriptor;
-  S2Buffer*b;
-  if(d->UVCount && n<2){int i=d->UVIndex[n];if(i==-1)return 0;b=d->UV[i];}
-  else b=d->UV[n];
-  if(b)return (Vector2*)b->Data;return 0;
+ Vector2 *Get_UV_Array(int pass,int stage){
+  if(UVSource[pass][stage]==-1)return 0;
+  if(UV[UVSource[pass][stage]]!=0)return UV[UVSource[pass][stage]]->Get_Array();
+  return 0;
  }
+ Vector2 *Get_UV_Array_By_Index(int index,bool create){
+  if(create && !UV[index])UV[index]=0;
+  if(!create && m_unknown0C!=0 && index<2)return Get_UV_Array(0,index);
+  if(UV[index])return UV[index]->Get_Array();
+  return 0;
+ }
+ unsigned *Get_Color_Array(int index,bool create){
+  if(create && !ColorArray[index])ColorArray[index]=0;
+  if(ColorArray[index])return ColorArray[index]->Get_Array();
+  return 0;
+ }
+ int PassCount,VertexCount,PolyCount,m_unknown0C;
+ ShareBufferClass<Vector2> *UV[8];
+ int UVSource[4][2];
+ ShareBufferClass<unsigned> *ColorArray[2];
+};
+class MeshGeometryClass {public:__declspec(noinline) const Vector3 *Get_Vertex_Normal_Array(bool);
+ char pad[0x28];unsigned VertexCount;void *Poly;ShareBufferClass<Vector3> *Vertex;
+ unsigned Get_Vertex_Count()const{return VertexCount;}
+ const Vector3*Get_Vertex_Array()const{return Vertex->Get_Array();}
+};
+class MeshModelClass:public MeshGeometryClass {
+public:
+ char gap34[0x60];MeshMatDescClass *CurMatDesc;
+ unsigned *Get_Color_Array(int index,bool create=true){return CurMatDesc->Get_Color_Array(index,create);}
+ Vector2 *Get_UV_Array_By_Index(int index,bool create=false){return CurMatDesc->Get_UV_Array_By_Index(index,create);}
 };
 class Vertex_Split_Table {
 public:
@@ -33,9 +57,9 @@ public:
  ~Vertex_Split_Table(){if(allocated)delete[](unsigned short*)polygons;}
  unsigned Get_Vertex_Count()const{return model->Get_Vertex_Count();}
  const Vector3 *Get_Vertex_Array()const{return model->Get_Vertex_Array();}
- const Vector3 *Get_Vertex_Normal_Array(unsigned n)const{return model->Get_Vertex_Normal_Array(n);}
- const unsigned*Get_Color_Array(unsigned n)const{return model->Get_Color_Array(n);}
- const Vector2*Get_UV_Array(int n)const{return model->Get_UV_Array_By_Index(n);}
+ const Vector3 *Get_Vertex_Normal_Array()const{return model->Get_Vertex_Normal_Array(false);}
+ const unsigned*Get_Color_Array(unsigned index)const{return model->Get_Color_Array(index,false);}
+ const Vector2*Get_UV_Array(unsigned uv_array_index)const{return model->Get_UV_Array_By_Index(uv_array_index);}
 };
 struct S2FVFInfo {
  unsigned fvf;bool basis;unsigned count,stride,location,extension,normal,extensionEnd,blend,tex[8],diffuse,specular,basisOffset,basisSecond,basisEnd,extensionData,formatIndex;
@@ -71,14 +95,14 @@ void DX8RigidFVFCategoryContainer::Add_Mesh(MeshModelClass* mmc_) {
   else vertex_buffer=new BfmeDynamicNativeVB(FVF,vb_size,(DX8Wrapper::Get_Current_Caps()->Support_NPatches() && WW3D::Get_NPatches_Level()>1)?4:0,0);
  }
  VertexBufferClass::AppendLockClass l((VertexBufferClass*)vertex_buffer,used_vertices,split_table.Get_Vertex_Count(),0);
- const Vector3 *locs=split_table.Get_Vertex_Array();
  const S2FVFInfo fi=vertex_buffer->FVF_Info();
  unsigned char *vb=(unsigned char*)l.Get_Vertex_Array();
- unsigned i=0;
- const Vector3 *norms=split_table.Get_Vertex_Normal_Array(i);
+ unsigned int i;
+ const Vector3 *locs=split_table.Get_Vertex_Array();
+ const Vector3 *norms=split_table.Get_Vertex_Normal_Array();
  const unsigned *diffuse=split_table.Get_Color_Array(0);
  const unsigned *specular=split_table.Get_Color_Array(1);
- for(;i<split_table.Get_Vertex_Count();++i){
+ for(i=0;i<split_table.Get_Vertex_Count();++i){
   *(Vector3*)(vb+fi.Get_Location_Offset())=locs[i];
   if((FVF&0x10)==0x10 && norms)*(Vector3*)(vb+fi.Get_Normal_Offset())=norms[i];
   if((FVF&0x40)==0x40){if(diffuse)*(unsigned*)(vb+fi.Get_Diffuse_Offset())=diffuse[i];else *(unsigned*)(vb+fi.Get_Diffuse_Offset())=0xFFFFFFFF;}
