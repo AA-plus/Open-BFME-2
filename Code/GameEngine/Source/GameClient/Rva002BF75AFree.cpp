@@ -5,13 +5,7 @@
 // Private AsciiString kept not shared header: header inlines AsciiString teardown and the pair call stops resolving to rowed 0x002BF0D6.
 extern "C" void __cdecl free(void *);
 
-class AsciiString
-{
-public:
-	~AsciiString();
-private:
-	char m_pad[4];
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 struct TargetRef00217D4C;
 struct TreeHintRef002BF0D6

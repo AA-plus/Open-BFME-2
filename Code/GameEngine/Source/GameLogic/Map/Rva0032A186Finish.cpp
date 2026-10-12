@@ -12,23 +12,7 @@ extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 extern "C" const void *const vtbl_00BBB554[];
 #pragma comment(linker, "/alternatename:_vtbl_00BBB554=??_7BfmeBaseVUQ@@6B@")
-template <typename T> class StringBase
-{
-	friend class AsciiString;
-private:
-	StringBase() { m_data = 0; }
-	StringBase(const StringBase<T> &other);
-	void releaseBuffer();
-	void *m_data;
-};
-class AsciiString : private StringBase<char>
-{
-public:
-	AsciiString() {}
-	AsciiString(const AsciiString &other) : StringBase<char>(other) {}
-	~AsciiString() { releaseBuffer(); }
-	AsciiString &operator=(const AsciiString &other);
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 // Declared, not defined inline: retail's calls land on the rowed releaseBuffer
 // body at 0x00036410, and an inline body here was the tree's only copy of this
 // name, so every caller bound to it instead of to that row.

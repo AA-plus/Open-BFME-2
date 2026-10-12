@@ -16,18 +16,8 @@ public:
 	__declspec(nothrow) BfmeObject872Header(const BfmeObject872Header &);
 };
 // Out-of-line StringBase<char>::isEmpty is the matched row 0x00001E2F.
-template <class T>
-class StringBase
-{
-public:
-	bool isEmpty() const;
-private:
-	void *m_data;
-};
+#include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 // class-gate: allow AsciiString retail calls the out-of-line StringBase<char>::isEmpty at 0x00001E2F here, which the shared shim header inlines; the call is proved by the byte match
-class AsciiString : public StringBase<char>
-{
-};
 
 void *__cdecl ji_006291ae(void *dest, int val, unsigned int count);
 #pragma comment(linker, "/alternatename:?ji_006291ae@@YAPAXPAXHI@Z=?ji_006291ae@@YAXXZ")

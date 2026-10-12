@@ -33,13 +33,7 @@ struct AsciiStringHeader
 	char m_data[1];
 };
 
-class AsciiString
-{
-public:
-	const char *str() const { return m_data ? m_data->m_data : ""; }
-private:
-	AsciiStringHeader *m_data;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 typedef _STL::vector<AsciiString> AsciiStringVec;
 
