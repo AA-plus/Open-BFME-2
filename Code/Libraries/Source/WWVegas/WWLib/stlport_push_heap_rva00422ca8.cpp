@@ -197,14 +197,16 @@ void partial_sort(RandomAccessIter first, RandomAccessIter middle,
 template void partial_sort<int *,
 	Rva00422CA8>(int *, int *, int *, Rva00422CA8);
 
-// ??$upper_bound@PAHHVRva00422CA8@@@_STL@@YAPAHPAH0ABHVRva00422CA8@@@Z
-// retail 0x00423098, 83 bytes. Upper bound over int sort keys with the
+// ??$__upper_bound@PAHHVRva00422CA8@@H@_STL@@YAPAHPAH0ABHVRva00422CA8@@0@Z present-unmatched
+// retail 0x00423098, 83 bytes. Internal upper-bound over int sort keys;
+// the public 27B wrapper at 0x004235B2 forwards the unused distance pointer.
+// STLport4.5.3 _algo.c supplies this five-argument helper contract. With the
 // rowed thiscall comparator Rva00422CA8: caches val once, halves the range
 // while comp(cached, *middle) holds. Evidence: callee rowed 0x00422CA8;
 // caller 0x004235C4 in unclaimed 0x00423558.
-template <class RandomAccessIter, class T, class Compare>
-RandomAccessIter upper_bound(RandomAccessIter first, RandomAccessIter last,
-	const T &val, Compare comp)
+template <class RandomAccessIter, class T, class Compare, class Distance>
+RandomAccessIter __upper_bound(RandomAccessIter first, RandomAccessIter last,
+	const T &val, Compare comp, Distance *)
 {
 	int len = (int)(last - first);
 	int cached;
@@ -227,8 +229,8 @@ RandomAccessIter upper_bound(RandomAccessIter first, RandomAccessIter last,
 	return first;
 }
 
-template int *upper_bound<int *, int,
-	Rva00422CA8>(int *, int *, const int &, Rva00422CA8);
+template int *__upper_bound<int *, int,
+	Rva00422CA8, int>(int *, int *, const int &, Rva00422CA8, int *);
 
 }
 
