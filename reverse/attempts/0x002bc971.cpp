@@ -1,11 +1,20 @@
 // ?rva002BC971@LivingWorldLogic@@QAEXPBV?$vector@PAUSetupPlayer@@V?$allocator@PAUSetupPlayer@@@_STL@@@_STL@@PAUSetupPlayer@@PBV?$vector@PAUSetupArmy@@V?$allocator@PAUSetupArmy@@@_STL@@@3@PAXPAVRva002BC8C9Vector@@PAUSetupSimulationVector@@@Z
-// partial score=0.7996 date=2026-10-12
+// partial score=0.8516132983459511 date=2026-10-12
+// ?rva002BC971@LivingWorldLogic@@QAEXPBV?$vector@PAUSetupPlayer@@V?$allocator@PAUSetupPlayer@@@_STL@@@_STL@@PAUSetupPlayer@@PBV?$vector@PAUSetupArmy@@V?$allocator@PAUSetupArmy@@@_STL@@@3@PAXPAVRva002BC8C9Vector@@PAUSetupSimulationVector@@@Z
 // cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
-// Native2BC971..2BCCBA RET0x18. WB D85CD0 names LivingWorldLogic::SetUpAutoResolveBattle.
+// Native2BC971..2BCCBC, 843B, RET0x18. WB D85CD0 names LivingWorldLogic::SetUpAutoResolveBattle.
 // Target reads establish all view offsets. Native52B output records contain a
 // 12B round/summary-word tree and a12B bonus-vector header, then three floats,
 // two pointers and two ints. Actual application record names remain unknown.
+// Bank: 835B, frame now exactly 0x5C; diagnostic fitness 0.8516132983459511.
+// Discard the trivial tree iterator into the dead army pointer's storage.
+// The nonallocating placement overload has no placement-delete EH edge.
+// Inline scaling and explicit evaluation lifetimes improve the SSE/call shape;
+// ESI/EDI are still exchanged and evaluation scheduling still differs.
+// Placement is a reconstruction experiment, not an original-source claim.
+// The four schedule globals retain the earlier bank's data-ownership caveat;
+// zero matching-time unresolved references does not establish LINK closure.
 #include <map>
 #include <vector>
 #include "ascii_string.h"
@@ -64,6 +73,9 @@ class LivingWorldLogic {public:
  void rva002BC971(const _STL::vector<SetupPlayer*>*,SetupPlayer*,const _STL::vector<SetupArmy*>*,void*,Rva002BC8C9Vector*,SetupSimulationVector*);
  char gap00[0xB0];Rva0020EB4EOuter*regionBonuses;
 };
+static __forceinline void Scale(float factor,float &value){const float &original=value;value=original*factor;}
+struct LocalPlacement {void *where; LocalPlacement(void *p):where(p){}};
+__forceinline void *operator new(unsigned int,LocalPlacement p) throw() {return p.where;}
 void LivingWorldLogic::rva002BC971(const _STL::vector<SetupPlayer*>*players,SetupPlayer*sidePlayer,const _STL::vector<SetupArmy*>*armies,void*context,Rva002BC8C9Vector*out,SetupSimulationVector*simulation)
 {
  unsigned count=players->size();out->resize(count);
@@ -71,7 +83,7 @@ void LivingWorldLogic::rva002BC971(const _STL::vector<SetupPlayer*>*players,Setu
  for(unsigned i=0;i<count;++i) {
   SetupPlayer*player=(*players)[i];
   int side=!((Rva002E071E*)player)->rva002E071E((Rva002E071E*)sidePlayer);
-  out->begin[i].side=side;out->begin[i].playerID=player->playerID;
+  out->begin[i].side=side;int id=player->playerID;out->begin[i].playerID=id;
   LivingWorldAutoResolveReinforcementSchedule *schedule=(LivingWorldAutoResolveReinforcementSchedule*)((char*)TheLivingWorldAutoResolveReinforcementScheduleStore+0x0C+side*16);
   int number=0;
   for(unsigned j=0;j<armies->size();++j) {
@@ -79,7 +91,7 @@ void LivingWorldLogic::rva002BC971(const _STL::vector<SetupPlayer*>*players,Setu
    if(((Rva00318CEB*)army)->rva00318CEB((const Rva00318CEBOther*)player)) {
     int round;
     if(!army->name.isEmpty())round=schedule->getRoundForArmyNumber(number++);else round=0;
-    RoundWordPair value(round,army->summaryWord);out->begin[i].armies.insert_equal(value);
+    int summary=army->summaryWord;RoundWordPair value(round,summary);new(LocalPlacement(&army)) RoundWordTree::iterator(out->begin[i].armies.insert_equal(value));
    }
   }
   Rva002BB7AA bonus((int)context,(int)player);
@@ -92,17 +104,17 @@ void LivingWorldLogic::rva002BC971(const _STL::vector<SetupPlayer*>*players,Setu
   Rva00413E27Bucket *bucket=((Rva00413E27*)TheLivingWorldAutoResolveResourceBonusScheduleStore)->rva00413E27(player->faction);
   if(bucket) {
    int*word=((LivingWorldAutoResolveResourceBonusSchedule*)bucket)->getBonusForResourceAmount(player->resources);
-   if(word) {out->begin[i].weapon*=((float*)word)[1];out->begin[i].armor*=((float*)word)[2];}
+   if(word) {Scale(((float*)word)[1],out->begin[i].weapon);Scale(((float*)word)[2],out->begin[i].armor);}
   }
   int*handicap=((Rva004134E3*)TheLivingWorldAutoResolveHandicapStore)->rva004134E3(player->handicap);
-  out->begin[i].weapon*=((float*)handicap)[1];out->begin[i].armor*=((float*)handicap)[2];out->begin[i].experience*=((float*)handicap)[3];
+  Scale(((float*)handicap)[1],out->begin[i].weapon);Scale(((float*)handicap)[2],out->begin[i].armor);Scale(((float*)handicap)[3],out->begin[i].experience);
   if(simulation) {
-   out->begin[i].science=((Rva00413E27*)TheLivingWorldAutoResolveSciencePurchasePointBonusScheduleStore)->rva00413E27(player->faction);
+   SetupRecord52 *records=out->begin;records[i].science=((Rva00413E27*)TheLivingWorldAutoResolveSciencePurchasePointBonusScheduleStore)->rva00413E27(player->faction);
    const PlayerTemplate*pt=ThePlayerTemplateStore->findPlayerTemplate(TheNameKeyGenerator->nameToKey(*(AsciiString*)((char*)player->faction+4)));
    if(pt)simulation->begin[i].templateValues=(const void*)((char*)pt+0x154);
    simulation->begin[i].object.rva003805BB(player->skillPoints,false);
    simulation->begin[i].object.rva002E6A93(simulation->begin[i].team);
-   simulation->begin[i].object.update(((Rva004E05E9DwordField*)player)->get());
+   Rva003805BB &object=simulation->begin[i].object;object.update(((Rva004E05E9DwordField*)player)->get());
    out->begin[i].simulation=simulation->begin+i;
   }
  }
