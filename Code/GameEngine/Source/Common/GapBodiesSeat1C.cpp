@@ -1244,3 +1244,168 @@ void Rva005B129FVector::rva004FB577()
 {
 	erase(m_start, m_finish);
 }
+
+// --- 0x00527D7E (10B): sets +8 to 2 (word argument unused); 0x00531101
+// (10B): byte setter +0x34; 0x0056DC7E (10B): the +0x58 object's +0x274.
+struct Rva0056DC7EInner
+{
+	char m_pad000[0x274];
+	int m_274;
+};
+
+class Rva00527D7E
+{
+public:
+	void rva00527D7E(int unused);
+	void rva00531101(bool value);
+	int rva0056DC7E() const;
+private:
+	int m_00;
+	int m_04;
+	int m_08;
+	char m_pad0C[0x34 - 0x0C];
+	bool m_34;
+	char m_pad35[0x58 - 0x35];
+	Rva0056DC7EInner *m_58;
+};
+
+void Rva00527D7E::rva00527D7E(int)
+{
+	m_08 = 2;
+}
+
+void Rva00527D7E::rva00531101(bool value)
+{
+	m_34 = value;
+}
+
+int Rva00527D7E::rva0056DC7E() const
+{
+	return m_58->m_274;
+}
+
+// --- 0x00575474..0x00576F3D (11B each): the rowed field getters on the
+// +4 member of the record at +0x18 / +0x10 / +0x0C.
+class Rva00328A83PtrChaseField
+{
+public:
+	int get() const;										// 0x00328A83
+};
+
+class Rva00574AACAddDwordField
+{
+public:
+	int get() const;										// 0x00574AAC
+};
+
+class Rva00574AA5AddDwordField
+{
+public:
+	int get() const;										// 0x00574AA5
+};
+
+struct Rva00575474Record
+{
+	int m_00;
+	void *m_04;
+};
+
+class Rva00575474
+{
+public:
+	int rva00575474() const;
+	int rva0057547F() const;
+private:
+	char m_pad00[0x18];
+	Rva00575474Record *m_18;
+};
+
+int Rva00575474::rva00575474() const
+{
+	return ((const Rva00328A83PtrChaseField *)m_18->m_04)->get();
+}
+
+int Rva00575474::rva0057547F() const
+{
+	return ((const Rva00574AACAddDwordField *)m_18->m_04)->get();
+}
+
+class Rva0057645D
+{
+public:
+	int rva0057645D() const;
+	int rva00576468() const;
+	int rva00576473() const;
+private:
+	char m_pad00[0x10];
+	Rva00575474Record *m_10;
+};
+
+int Rva0057645D::rva0057645D() const
+{
+	return ((const Rva00328A83PtrChaseField *)m_10->m_04)->get();
+}
+
+int Rva0057645D::rva00576468() const
+{
+	return ((const Rva00574AACAddDwordField *)m_10->m_04)->get();
+}
+
+int Rva0057645D::rva00576473() const
+{
+	return ((const Rva00574AA5AddDwordField *)m_10->m_04)->get();
+}
+
+class Rva00576F32
+{
+public:
+	int rva00576F32() const;
+	int rva00576F3D() const;
+private:
+	char m_pad00[0x0C];
+	Rva00575474Record *m_0C;
+};
+
+int Rva00576F32::rva00576F32() const
+{
+	return ((const Rva00328A83PtrChaseField *)m_0C->m_04)->get();
+}
+
+int Rva00576F32::rva00576F3D() const
+{
+	return ((const Rva00574AACAddDwordField *)m_0C->m_04)->get();
+}
+
+// --- 0x00565A89, 0x00566BEB (11B each): erase every element of the vector
+// at +0 through its rowed range eraser.
+class Rva00564B1A;
+class Rva00565898
+{
+public:
+	Rva00564B1A *rva00565898(Rva00564B1A *first, Rva00564B1A *last);	// 0x00565898
+	void rva00565A89();
+private:
+	Rva00564B1A *m_start;
+	Rva00564B1A *m_finish;
+};
+
+void Rva00565898::rva00565A89()
+{
+	rva00565898(m_start, m_finish);
+}
+
+class Rva00566695;
+class Rva00566B81Vector
+{
+public:
+	Rva00566695 *EraseRange(Rva00566695 *first, Rva00566695 *last);	// 0x00566B81
+	void rva00566BEB();
+private:
+	Rva00566695 *m_start;
+	Rva00566695 *m_finish;
+};
+
+void Rva00566B81Vector::rva00566BEB()
+{
+	EraseRange(m_start, m_finish);
+}

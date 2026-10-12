@@ -83620,3 +83620,15 @@ uw_007aa060,,0x007AA060,15,Code/Libraries/Source/Apt/Rva006F6A50Cluster.cpp,matc
 ?rva004D99F4@Rva004D99F4@@QAEPAV1@XZ,,0x004D99F4,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
 ?Rva004F5F80@@YA_NH@Z,,0x004F5F80,10,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
 ?rva004FB577@Rva005B129FVector@@QAEXXZ,,0x004FB577,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00527D7E@Rva00527D7E@@QAEXH@Z,,0x00527D7E,10,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00531101@Rva00527D7E@@QAEX_N@Z,,0x00531101,10,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00565A89@Rva00565898@@QAEXXZ,,0x00565A89,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00566BEB@Rva00566B81Vector@@QAEXXZ,,0x00566BEB,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0056DC7E@Rva00527D7E@@QBEHXZ,,0x0056DC7E,10,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00575474@Rva00575474@@QBEHXZ,,0x00575474,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0057547F@Rva00575474@@QBEHXZ,,0x0057547F,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0057645D@Rva0057645D@@QBEHXZ,,0x0057645D,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00576468@Rva0057645D@@QBEHXZ,,0x00576468,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00576473@Rva0057645D@@QBEHXZ,,0x00576473,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00576F32@Rva00576F32@@QBEHXZ,,0x00576F32,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00576F3D@Rva00576F32@@QBEHXZ,,0x00576F3D,11,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
