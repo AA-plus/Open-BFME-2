@@ -79153,3 +79153,5 @@ __ehhandler$?reset@W3DDisplay@@UAEXXZ,,0x0075CF58,10,Code/GameEngineDevice/Sourc
 __ehhandler$?rva000481AA@W3DDisplay@@UAE?AV?$StringBase@D@@ABV2@@Z,,0x0075D15B,10,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplayRva000481AA.cpp,matched,EH handler of W3DDisplay rva000481AA
 ?rva0025DA8D@BfmeStrVM0@@UAE_NVAsciiString@@H@Z,,0x0025DA8D,160,Code/GameEngine/Source/GameClient/DisplayRva0025DA8DPlayMovie.cpp,matched,Display slot 72 Win9x gate then slot 66 movie start
 __ehhandler$?rva0025DA8D@BfmeStrVM0@@UAE_NVAsciiString@@H@Z,,0x00772BCC,10,Code/GameEngine/Source/GameClient/DisplayRva0025DA8DPlayMovie.cpp,matched,EH handler of Display slot 72
+?setFadeParameters@W3DView@@UAEXHH@Z,,0x00085EC7,62,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DViewSetFadeParameters.cpp,matched,ZH W3DView::setFadeParameters; vtable slot 69
+?rva00312DBC@View@@UAEXXZ,,0x00312DBC,14,Code/GameEngine/Source/GameClient/ViewRva00312DBC.cpp,matched,View slot 3 clears record vector at +0x2C
