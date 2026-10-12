@@ -1,13 +1,13 @@
-// ?writeDict@DataChunkOutput@@QAEXABVDict@@@Z
-// partial score=0.93 date=2026-10-09
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
-// ?writeDict@DataChunkOutput@@QAEXABVDict@@@Z
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // DataChunkOutput::writeDict, retail 0x00307D85, 343 bytes. Semantic donor:
 // Zero Hour Common/System/DataChunk.cpp writeDict (the BFME1 donor has the same
 // body): a u16 pair count (fwrite to the temp file), then per pair the key's
 // table-of-contents id shifted by 8 or'd with the type byte, then the value by
-// type. Retail writes a Real through writeInt (the float's bits) rather than
-// fwrite, and the Unicode value as a by-value temp (writeUnicodeString 0x0030708E).
+// type. writeReal is its own out-of-line call (ICF-folded onto writeInt), the
+// Unicode value goes as a by-value temp (writeUnicodeString 0x0030708E), and
+// retail stores no EH state around the AsciiString value temp, which is what
+// a nothrow writeAsciiString gives; that also restores retail's register
+// roles (the Dict in EBX, the index in the argument slot).
 // Evidence: caller of the rowed Dict getNth* accessors, allocateID 0x00307A6A,
 // writeInt 0x00306CFF, writeByte 0x00306D17, writeAsciiString 0x00307033.
 
@@ -59,7 +59,7 @@ public:
 		DICT_UNICODESTRING
 	};
 
-	UnsignedShort getPairCount() const { return m_data ? m_data->m_numPairsUsed : 0; }
+	Int getPairCount() const { return m_data ? m_data->m_numPairsUsed : 0; }
 	NameKeyType getNthKey(Int n) const;
 	DataType getNthType(Int n) const;
 	Bool getNthBool(Int n) const;
@@ -85,9 +85,9 @@ public:
 	void writeDict(const Dict &d);
 	void writeInt(Int value);
 	void writeByte(unsigned char value);
-	void writeAsciiString(const AsciiString &value);
+	void writeAsciiString(const AsciiString &value) throw();
 	void writeUnicodeString(UnicodeString value);
-	void writeReal(float value) { writeInt(*(Int *)&value); }
+	void writeReal(float value);
 
 private:
 	void *m_outputStream;			// +0x00
