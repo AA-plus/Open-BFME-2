@@ -1,10 +1,10 @@
 // ?parseSubtitleText@@YAXPAVINI@@PAX1PBX@Z
-// partial score=0.75 date=2026-09-24
+// partial score=0.75 date=2026-10-12
 // Retail 0x00688B10, 1,578 bytes. The beta error strings identify the
 // subtitle label, color, style, alignment, line, and frame checks. Retail's
 // SubtitleManager FieldParse table registers this callback under "SubTitle".
 // The target calls the already matched SubtitleManager::addSubtitle body.
-// cl: /O2 /DNDEBUG /MD /EHsc
+// cl: /Ireference/shims/iniexception /O2 /DNDEBUG /MD /EHsc
 
 typedef int Int;
 typedef unsigned char Bool;
@@ -13,8 +13,9 @@ typedef unsigned int UnsignedInt;
 class AsciiString
 {
 public:
-	AsciiString();
+	AsciiString() : m_data(0) {}
 	~AsciiString();
+	bool empty() const { return m_data == 0 || *(const unsigned short *)((const char *)m_data + 4) == 0; }
 
 	void *m_data;
 };
@@ -70,16 +71,7 @@ public:
 
 extern VideoPlayerInterface *TheVideoPlayer;
 
-class INIException
-{
-public:
-	INIException(Int code, const char *format, ...);
-	INIException(const INIException &other);
-private:
-	Int m_code;
-	const char *m_message;
-public:
-};
+#include "Common/INIException.h"
 
 typedef void *(__cdecl *CreateSubtitleEntry)(AsciiString *, Int,
 	const AsciiString &, UnsignedInt, Int, Int, Int, Int, Int);
@@ -106,10 +98,9 @@ static const char *const subtitleAlignments[] = {
 	"CENTER", "LEFT", "RIGHT", 0
 };
 
-// ?parseSubtitleText@@YAXPAVINI@@PAX@Z
+// ?parseSubtitleText@@YAXPAVINI@@PAX1PBX@Z
 void parseSubtitleText(INI *ini, void *instance, void *fieldContext, const void *userData)
 {
-	AsciiString label;
 	SubtitleManager *manager = (SubtitleManager *)TheVideoPlayer->getVideo(ini->getFilename());
 	if (manager == 0 || fieldContext == 0)
 	{
@@ -117,6 +108,7 @@ void parseSubtitleText(INI *ini, void *instance, void *fieldContext, const void 
 		throw INIException(9, "Could not locate SubTitleManager for %s", filename.m_data);
 	}
 
+	AsciiString label;
 	UnsignedInt color = 0;
 	Int style = 0x7fffffff;
 	Int alignment = 0x7fffffff;
@@ -126,7 +118,7 @@ void parseSubtitleText(INI *ini, void *instance, void *fieldContext, const void 
 	const char *token = ini->getNextTokenOrNull(ini->m_defaultSeparators);
 	while (token != 0)
 	{
-		if (_strcmpi(token, "Label") == 0 && label.m_data == 0)
+		if (_strcmpi(token, "Label") == 0 && label.empty())
 		{
 			const char *value = ini->getNextTokenOrNull(ini->m_defaultSeparators);
 			if (value == 0 || !manager->m_resolveLabel(value, &label))
