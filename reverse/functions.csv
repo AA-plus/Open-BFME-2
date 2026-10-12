@@ -23760,7 +23760,6 @@ uw_00780e2d,,0x00780E2D,8,Code/gen_small/uw_gen_003.cpp,matched,gen-funclet;obje
 uw_00780e3f,,0x00780E3F,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
 uw_00780e47,,0x00780E47,8,Code/gen_small/uw_gen_002.cpp,matched,gen-funclet;object-symbol=$L293
 uw_00780ea1,,0x00780EA1,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
-uw_00780f17,,0x00780F17,8,Code/gen_small/uw_gen_011.cpp,matched,gen-funclet;object-symbol=$L1534
 uw_00780f1f,,0x00780F1F,11,Code/gen_small/uw_gen_009.cpp,matched,gen-funclet;object-symbol=$L2254
 uw_00780f2a,,0x00780F2A,11,Code/gen_small/uw_gen_009.cpp,matched,gen-funclet;object-symbol=$L2257
 uw_00780f35,,0x00780F35,11,Code/gen_small/uw_gen_009.cpp,matched,gen-funclet;object-symbol=$L2260
@@ -86851,3 +86850,4 @@ __ehhandler$?FrameUpdate@AptMyHero@@QAEXXZ,,0x0079EFDC,10,Code/GameEngine/Source
 ?SetActiveBattleID@LivingWorldRegionManager@@QAEXHH@Z,,0x0020E63F,110,Code/GameEngine/Source/GameLogic/LivingWorld/Rva002B2DAD.cpp,matched,
 ?addCarryoverStuffToMap@LinearCampaign@@QAEXXZ,,0x001EC63D,540,Code/GameEngine/Source/GameLogic/System/LinearCampaign/LinearCampaignAddCarryover.cpp,matched,
 ?rva001E46E1@Rva001E46E1@@QAEMPAVObject@@@Z,,0x001E46E1,356,Code/GameEngine/Source/Common/Rva001E46E1Ratios.cpp,matched,LINK BONUS 2 files 533B via Object 254-258 TerrainLogic slot19
+uw_00780f17,,0x00780F17,8,Code/GameEngine/Source/GameLogic/Object/Behavior/CastleBehaviorDtor.cpp,matched,gen-funclet;object-symbol=$L1342;parent=??1CastleBehavior@@UAE@XZ; Native parent225B and full EH graph EXACT establish this state; whole native extent and every callee relocation resolved through existing providers. Five12B opaque storage headers use the existing neutral Rva004E013BBuffer provider whose complete14B and free relocation equal native7FAB3. Original element and class identities remain unknown; no new pin

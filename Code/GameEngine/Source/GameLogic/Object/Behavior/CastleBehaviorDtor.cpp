@@ -74,12 +74,15 @@ public:
 	virtual void f30();
 };
 
-struct Rva0039857DVec
+// Native unwind calls prove the existing neutral 12-byte storage provider at
+// 0x0007FAB3. Its whole destructor and free relocation match here; the buffer
+// element types and original class name remain unknown.
+struct Rva004E013BBuffer
 {
 	void *m_begin;
 	void *m_end;
 	void *m_cap;
-	~Rva0039857DVec()
+	~Rva004E013BBuffer()
 	{
 		if (m_begin != 0)
 			free(m_begin);
@@ -92,11 +95,11 @@ public:
 	virtual ~CastleBehavior();
 private:
 	char m_pad34[0x1c];
-	Rva0039857DVec m_vec50;
-	Rva0039857DVec m_vec5c;
-	Rva0039857DVec m_vec68;
-	Rva0039857DVec m_vec74;
-	Rva0039857DVec m_vec80;
+	Rva004E013BBuffer m_vec50;
+	Rva004E013BBuffer m_vec5c;
+	Rva004E013BBuffer m_vec68;
+	Rva004E013BBuffer m_vec74;
+	Rva004E013BBuffer m_vec80;
 	Rva002EE9B7 m_tree8c;
 	AsciiString m_str98;
 	char m_pad9c[4];
