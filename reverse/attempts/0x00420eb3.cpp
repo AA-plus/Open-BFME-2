@@ -1,5 +1,7 @@
 // ?update@DelayedExperienceLevelGrantSystem@@UAEXXZ
-// partial score=0.93 date=2026-10-11
+// partial score=0.94 date=2026-10-12
+// ?update@DelayedExperienceLevelGrantSystem@@UAEXXZ
+// partial score=0.94 date=2026-10-12
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /Ireference/shims/moduledata /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
 // Retail 0x00420F3F..0x00421084 (325 bytes), secondary Snapshot transfer.
@@ -82,7 +84,7 @@ class Object {
 public:
     bool testStatus(ObjectStatusTypes) const;
     unsigned char isEffectivelyDead() const { return m_privateStatus & 1; }
-private:
+public:
     unsigned char unknown000[0x438];
     unsigned char m_privateStatus; // +0x438
 };
@@ -90,7 +92,7 @@ class DelayedExperienceLevelGrantSystem : public GameEngineDeletingBase, public 
 public:
     virtual void xfer(Xfer *);
     virtual void update();
-    void rva00420C8E(const Overridable *level, Object *obj, bool grant);
+    void rva00420C8E(struct ExperienceLevelView *level, Object *obj, bool grant);
 private:
     _STL::list<BfmePod12> entries;
     bool loading;
@@ -136,8 +138,8 @@ void DelayedExperienceLevelGrantSystem::xfer(Xfer *xfer) {
 void DelayedExperienceLevelGrantSystem::update() {
     for (_STL::list<BfmePod12>::iterator it=entries.begin(); it!=entries.end(); ++it) {
         Object *obj = TheGameLogic->findObjectByID(it->object);
-        if (obj && (!obj->isEffectivelyDead() || obj->testStatus(OBJECT_STATUS_58)))
-            rva00420C8E(it->level, obj, it->grant);
+        if (obj && !(obj->isEffectivelyDead() && !obj->testStatus(OBJECT_STATUS_58)))
+            rva00420C8E((ExperienceLevelView *)it->level, obj, it->grant);
     }
     reinterpret_cast<_STL::_List_base<int,_STL::allocator<int> > *>(&entries)->clear();
 }
