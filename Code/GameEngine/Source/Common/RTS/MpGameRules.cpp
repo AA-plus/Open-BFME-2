@@ -168,7 +168,18 @@ public:
  virtual UnicodeString fetch(const char *, bool *);
 };
 static const char *ruleStringTags[]={"RULE:AllowCustomHeroes","RULE:ClanGame","RULE:AllowRingHeroes","RULE:CommandPointFactor","RULE:InitialResources","RULE:MapRevealMode","RULE:StrategicPhaseTimer","RULE:BattleType","RULE:BattleChoice","RULE:AutoResolveType"};
-UnicodeString Rva0055A04C(int rule) {
+class MpGameRules
+{
+public:
+	static UnicodeString GetRuleString(int rule);
+};
+
+// ?GetRuleString@MpGameRules@@SA?AVUnicodeString@@H@Z @0x0055A04C 59B:
+// renamed from placeholder Rva0055A04C — the WorldBuilder twin names
+// MpGameRules::GetRuleString in EA's own MpGameRules.cpp and the body's
+// "Invalid Rule" assertion matches. Static member: ABI-identical to the
+// proven cdecl free function (EBP frame, stack arguments, no ECX use).
+UnicodeString MpGameRules::GetRuleString(int rule) {
  if((unsigned int)rule>=10)return UnicodeString((const unsigned short*)L"Invalid Rule");
  return ((RuleTextInterfaceView*)TheGameText)->fetch(ruleStringTags[rule],0);
 }

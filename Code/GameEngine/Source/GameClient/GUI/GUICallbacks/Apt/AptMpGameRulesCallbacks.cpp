@@ -414,7 +414,7 @@ void AptMpGameRules::rva0057EF46(AptMpGameRulesWidgets *widgets, const char *ind
 struct RuleChoice {const char *label; int value;};
 struct RuleCombo {int id; const RuleChoice *choices; int count; int defaultIndex;};
 const RuleCombo * const *Rva00559F48Get(int);
-UnicodeString Rva0055A04C(int);
+class MpGameRules { public: static UnicodeString GetRuleString(int rule); };
 void GadgetComboBoxReset(GameWindow *);
 int GadgetComboBoxAddEntry(GameWindow *, UnicodeString, int);
 void GadgetComboBoxSetItemData(GameWindow *, int, void *);
@@ -459,7 +459,7 @@ void AptMpGameRules::PopulateComboBoxes() {
         ((RuleVectorView<GameWindow*>&)m_ruleWindows)[rule] = window;
         AsciiString key;
         key.format("APT:RuleComboBox_%d", widgetIndex++);
-        g_bfmeAptWindowManager->bfmeSetText(key, Rva0055A04C(cur->id), false);
+        g_bfmeAptWindowManager->bfmeSetText(key, MpGameRules::GetRuleString(cur->id), false);
         int choiceCount = cur->count;
         for(int j=0; j<choiceCount; ++j) {
             const RuleChoice *choice = &cur->choices[j];
@@ -489,7 +489,7 @@ void AptMpGameRules::PopulateComboBoxes() {
 // +9D4 low flag bits come from native accesses to the canonical global.
 struct RuleCheck {int id; bool value;};
 const RuleCheck * const *Rva00559F63Get(int);
-UnicodeString Rva0055A04C(int);
+class MpGameRules { public: static UnicodeString GetRuleString(int rule); };
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 struct RulesOverrideView {char padding[0x9D4]; unsigned char bits;};
@@ -509,7 +509,7 @@ void AptMpGameRules::PopulateCheckBoxes() {
         ((RuleVectorView<GameWindow*>&)m_ruleWindows)[cur->id] = window;
         AsciiString key;
         key.format("APT:RuleCheckBox_%d", widgetIndex++);
-        g_bfmeAptWindowManager->bfmeSetText(key, Rva0055A04C(cur->id), false);
+        g_bfmeAptWindowManager->bfmeSetText(key, MpGameRules::GetRuleString(cur->id), false);
         UpdateRuleGadget(rule);
         ((RuleVectorView<int>&)m_ruleStates)[rule] = 1;
         window->winHide(false);
