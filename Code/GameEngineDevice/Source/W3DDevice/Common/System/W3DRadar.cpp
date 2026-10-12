@@ -827,31 +827,7 @@ public:
 extern void W3DRadarResetLock();
 extern void W3DRadarResetUnlock();
 
-// ?reset@W3DRadar@@UAEXXZ present-unmatched
-void W3DRadar::reset( void )
-{
-	Radar::reset();
-	W3DRadarResetLock();
-
-	char *radar = reinterpret_cast<char *>(this) + 4;
-	reinterpret_cast<W3DRadarResetTexture *>(radar + 0x1474)->getSurfaceLevel().clear(0);
-	reinterpret_cast<W3DRadarResetTexture *>(radar + 0x1484)->getSurfaceLevel().clear(0);
-
-	W3DRadarResetTextureRef *&texture =
-		*reinterpret_cast<W3DRadarResetTextureRef **>(radar + 0x1478);
-	if (texture)
-	{
-		texture->releaseRef();
-		texture = NULL;
-	}
-
-	W3DRadarResetVirtuals *virtuals =
-		reinterpret_cast<W3DRadarResetVirtuals *>(this);
-	virtuals->slot20();
-	virtuals->slot28();
-	*reinterpret_cast<Bool *>(radar + 0x1468) = TRUE;
-	W3DRadarResetUnlock();
-}  // end reset
+// W3DRadar::reset is implemented in W3DRadarReset.cpp (retail 0x0004E2FA).
 
 //-------------------------------------------------------------------------------------------------
 /** Update */
