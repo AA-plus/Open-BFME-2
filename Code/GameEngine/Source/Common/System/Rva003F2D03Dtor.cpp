@@ -26,8 +26,8 @@ extern "C" void __cdecl free(void *block);
 
 extern const void *const g_00BBB554[];
 
-class Rva000D1930 {public:__declspec(nothrow) Rva000D1930();int *vtable;int values[6];};
-class Snapshot78 {public:__forceinline Snapshot78(){}~Snapshot78(){*(const void **)this=g_00BBB554;}__forceinline void reset(){bonus.values[0]=0;bonus.values[1]=0;bonus.values[2]=0;bonus.values[3]=0;bonus.values[4]=0;bonus.values[5]=0;}Rva000D1930 bonus;};
+class RegionBonusInfo {public:__declspec(nothrow) RegionBonusInfo();int *vtable;int values[6];};
+class Snapshot78 {public:__forceinline Snapshot78(){}~Snapshot78(){*(const void **)this=g_00BBB554;}__forceinline void reset(){bonus.values[0]=0;bonus.values[1]=0;bonus.values[2]=0;bonus.values[3]=0;bonus.values[4]=0;bonus.values[5]=0;}RegionBonusInfo bonus;};
 class OpaqueRefCounted
 {
 public:

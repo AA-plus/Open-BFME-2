@@ -344,10 +344,7 @@ int Rva002D6E02Get(void)
 // ?Rva002E07C6Get@@YAHXZ @ 0x002e07c6 (6B): returns 0x00C04920.
 // Follows a ret-4 (prev C2-04-00), carried by 1 .rdata vtable slot,
 // no direct callers, no branch sources. Opaque address-derived name.
-int Rva002E07C6Get(void)
-{
-	return (int)"LivingWorldPlayer";
-}
+
 
 // ?Rva003A59ADGet@@YAHXZ @ 0x003a59ad (6B): returns 0x00C1B5B8.
 // Follows a ret-8 (prev C2-08-00), carried by 1 .rdata vtable slot,
@@ -664,10 +661,7 @@ int Rva003ECCD0Get(void)
 // ?Rva003EFD37Get@@YAHXZ @ 0x003efd37 (6B): returns 0x00C36BA8.
 // Follows a ret-4 (prev C2-04-00), carried by 1 .rdata vtable slot,
 // no direct callers, no branch sources. Opaque address-derived name.
-int Rva003EFD37Get(void)
-{
-	return (int)"RegionBonusInfo";
-}
+
 
 // ?Rva003F24D0Get@@YAHXZ @ 0x003f24d0 (6B): returns 0x00C36E58.
 // Follows a ret-4 (prev C2-04-00), carried by 1 .rdata vtable slot,
