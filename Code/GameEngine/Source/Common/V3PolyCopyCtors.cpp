@@ -423,6 +423,7 @@ class Rva0015E640 : public Rva0015E640Base
 {
 public:
 	Rva0015E640(const Rva0015E640 &other);
+	Rva0015E640 &operator=(const Rva0015E640 &other);
 	virtual ~Rva0015E640();
 
 	Int m_field0C;
@@ -432,6 +433,15 @@ Rva0015E640::Rva0015E640(const Rva0015E640 &other)
 	: Rva0015E640Base(other)
 {
 	m_field0C = other.m_field0C;
+}
+
+// Retail 0x0015E670 (27 bytes), the matching assignment: the three fields after the vptr.
+Rva0015E640 &Rva0015E640::operator=(const Rva0015E640 &other)
+{
+	m_field04 = other.m_field04;
+	m_field08 = other.m_field08;
+	m_field0C = other.m_field0C;
+	return *this;
 }
 
 // ---- vptr + two ints base plus derived vptr and third int (retail 0x00168040)

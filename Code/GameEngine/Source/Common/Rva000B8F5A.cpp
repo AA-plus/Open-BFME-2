@@ -249,6 +249,8 @@ public:
 	int rva000B82F9();
 	int rva000B83A7();
 	void *rva000C14BD(int i);
+	int rva000B5766(int slot);
+	bool rva000B82C2(int index, struct CameraMarker *out);
 
 private:
 	char m_pad00[0x0C];
@@ -261,7 +263,10 @@ private:
 	AsciiString m_A8;
 	char m_padAC[0xBC-0xAC];RecoilVector367 recoilBC[3];char m_padE0[0x104-0xE0];
 	Rva000C144AEntry m_entries104[3];
-	char m_pad158[0x254 - 0x158];
+	char m_pad158[0x1BF - 0x158];
+	bool m_useState1C0;			// +0x1BF
+	StateView367 *m_state1C0;		// +0x1C0
+	char m_pad1C4[0x254 - 0x1C4];
 	AsciiString m_name254;
 	char m_pad258[0x280 - 0x258];
 	bool m_flag280;
@@ -663,4 +668,54 @@ bool Rva000B8F5A::rva000B57A7(int slot,int barrel,const FXList*fx,float speed,co
   }
  }
  return handled;
+}
+
+// ?rva000B5766@Rva000B8F5A@@QAEHH@Z, retail 0x000B5766 (65 bytes, RET 4), slot 23 of the
+// table 0x007CC588 beside rva000B57A7: the barrel count of the given slot in the active
+// state record (the +0x1C0 override while the +0x1BF flag is set, else +0x0C), or zero
+// when there is no record or its +0xF4 bit 3 is clear.
+int Rva000B8F5A::rva000B5766(int slot)
+{
+	const StateView367 *state = m_useState1C0 ? m_state1C0 : (const StateView367 *)m_ptr0C;
+	if (state && (state->validF4 & 8))
+	{
+		const BarrelVector367 &vec = state->barrels[slot];
+		return vec.end - vec.begin;
+	}
+	return 0;
+}
+
+// ?rva000B82C2@Rva000B8F5A@@QAE_NHPAUCameraMarker@@@Z, retail 0x000B82C2 (55 bytes, RET 8),
+// table 0x007CC588 neighbour of the probe slots: copies entry [index] of the module data's
+// 8-byte marker vector (+0x11C of the record at this-8) into out through the rowed
+// CameraMarker::operator=, false when index is outside the vector.
+struct CameraMarker
+{
+	CameraMarker &operator=(const CameraMarker &that);
+	int m_00;
+	int m_04;
+};
+struct MarkerVectorB82C2
+{
+	CameraMarker *begin;
+	CameraMarker *end;
+	CameraMarker *capacity;
+	int size() const { return end - begin; }
+	const CameraMarker &operator[](int i) const { return begin[i]; }
+};
+struct MarkerDataB82C2
+{
+	char unknown[0x11C];
+	MarkerVectorB82C2 markers;
+};
+
+bool Rva000B8F5A::rva000B82C2(int index, CameraMarker *out)
+{
+	const MarkerDataB82C2 *data = *reinterpret_cast<MarkerDataB82C2 *const *>((char *)this - 8);
+	if (index >= 0 && index < data->markers.size())
+	{
+		*out = data->markers[index];
+		return true;
+	}
+	return false;
 }

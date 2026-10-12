@@ -78,6 +78,13 @@ class Rva000B9B4ARenderView : public Rva000B9B4ASlots<100> {
 public: virtual int Is_Hidden() const;
 };
 
+class Rva000B3A80Animation
+{
+public:
+ virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03(); virtual void s04();
+ virtual int Get_Num_Frames();
+};
+
 class W3DScriptedModelDraw
 {
 public:
@@ -94,6 +101,8 @@ public:
 #undef SLOT
  virtual void SetRampMeshOverload(const char *name, int index);
  virtual int rva000B5FD5();
+ virtual void slot56();
+ virtual void rva000B3A80();
  bool getRamp(BridgeInfo *, AsciiString, PolygonTrigger **, RenderObjClass **, bool);
  PolygonTrigger *getPolygon(RenderObjClass *mesh, float *out);
 private:
@@ -107,7 +116,11 @@ private:
  RenderObjClass *render50;
  char unknown54[4];
  Shadow *shadow58;
- char unknown5C[0x260-0x5c];
+ char unknown5C[0x110-0x5c];
+ Rva000B3A80Animation *animation110;
+ float lastFrame114;
+ float previousLastFrame118;
+ char unknown11C[0x260-0x11c];
  StringBase<char> string260;
  StringBase<char> rampNames[2];
 };
@@ -120,6 +133,18 @@ void W3DScriptedModelDraw::SetRampMeshOverload(const char *name, int index)
 int W3DScriptedModelDraw::rva000B5FD5()
 {
  return !string260.isEmpty();
+}
+
+// Retail 0x000B3A80 (43 bytes), primary-table slot 57 after rva000B5FD5: with an animation
+// at +0x110, keep the previous last-frame value (+0x114 -> +0x118) and store the animation's
+// frame count minus one. Its original name is not recovered.
+void W3DScriptedModelDraw::rva000B3A80()
+{
+ if (animation110)
+ {
+  previousLastFrame118 = lastFrame114;
+  lastFrame114 = (float)(animation110->Get_Num_Frames() - 1);
+ }
 }
 
 // NativeBBFD6..BC057 RET16. Secondary-table7CC588 slot43 is shared by

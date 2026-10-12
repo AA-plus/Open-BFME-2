@@ -8,14 +8,24 @@ class MeshMatDescClass
 {
 public:
 	bool Has_Color_Array(int array);
+	void rva00188010(int pass, int value);
 
 private:
 	char m_pad0[0x50];
 	unsigned int *ColorArray[2];
-	char m_pad1[0x118 - 0x58];
+	int m_perPass58[4];
+	char m_pad1[0x118 - 0x68];
 };
 
 bool MeshMatDescClass::Has_Color_Array(int array)
 {
 	return ColorArray[array] != 0;
+}
+
+// ?rva00188010@MeshMatDescClass@@QAEXHH@Z, retail 0x00188010 (15 bytes, RET 8), the inline
+// placed after Has_Texture_Data's neighbours: stores a per-pass value into the four-entry
+// array at +0x58. Which per-pass source it is is not established, so the name is address-derived.
+void MeshMatDescClass::rva00188010(int pass, int value)
+{
+	m_perPass58[pass] = value;
 }

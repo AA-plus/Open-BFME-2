@@ -43,6 +43,13 @@ class Rva000A217F;
 class Rva000A2137;
 Rva000A217F *__stdcall Rva0008FABBCreate(void *context);
 Rva000A2137 *__stdcall Rva0008FA81Create(void *context);
+class Rva0008FF3E;
+Rva0008FF3E *__stdcall Rva0008FF84Create(void *context);
+class Rva002C19C9ButtonFactoryForward
+{
+public:
+	GameWindow *create(GadgetCreateView *view, GameFont *font, bool flag);
+};
 
 // The shared entry and combo box factories are rowed under the base manager's name
 // (GameWindowManager_gogoGadgetTextEntry.cpp, _gogoGadgetComboBox.cpp); only
@@ -69,6 +76,7 @@ public:
 	virtual GameWindow *rva0008FE84(GadgetCreateView *view, GameFont *font, bool flag);
 	virtual GameWindow *rva0008FEAF(GadgetCreateView *view, EntryData *data, GameFont *font, bool flag);
 	virtual GameWindow *rva0008FEDE(GadgetCreateView *view, ComboBoxData *data, GameFont *font, bool flag);
+	virtual GameWindow *rva0008FFE0(GadgetCreateView *view, GameFont *font, bool flag);
 };
 
 // vtable 0x00BC7C90 slot 19
@@ -149,4 +157,14 @@ GameWindow *Rva008FCA3::rva0008FEDE(GadgetCreateView *view, ComboBoxData *data, 
 	else
 		view->unknown24 = (void *)Rva0008FA81Create;
 	return ((GameWindowManager *)this)->GameWindowManager::gogoGadgetComboBox(view, data, font, flag);
+}
+
+// vtable 0x00BC7C90 slot 20 (0x007C7CE0), between the push-button and check-box creators:
+// always image-drawn -- sets GADGET_CREATE_IMAGE, installs the 0x0008FF84 draw factory and
+// creates the gadget through the rowed 0x002C19C9 button creator.
+GameWindow *Rva008FCA3::rva0008FFE0(GadgetCreateView *view, GameFont *font, bool flag)
+{
+	view->status |= GADGET_CREATE_IMAGE;
+	view->unknown24 = (void *)Rva0008FF84Create;
+	return reinterpret_cast<Rva002C19C9ButtonFactoryForward *>(this)->create(view, font, flag);
 }

@@ -79154,4 +79154,19 @@ __ehhandler$?rva000481AA@W3DDisplay@@UAE?AV?$StringBase@D@@ABV2@@Z,,0x0075D15B,1
 ?rva0025DA8D@BfmeStrVM0@@UAE_NVAsciiString@@H@Z,,0x0025DA8D,160,Code/GameEngine/Source/GameClient/DisplayRva0025DA8DPlayMovie.cpp,matched,Display slot 72 Win9x gate then slot 66 movie start
 __ehhandler$?rva0025DA8D@BfmeStrVM0@@UAE_NVAsciiString@@H@Z,,0x00772BCC,10,Code/GameEngine/Source/GameClient/DisplayRva0025DA8DPlayMovie.cpp,matched,EH handler of Display slot 72
 ?setFadeParameters@W3DView@@UAEXHH@Z,,0x00085EC7,62,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DViewSetFadeParameters.cpp,matched,ZH W3DView::setFadeParameters; vtable slot 69
-?rva00312DBC@View@@UAEXXZ,,0x00312DBC,14,Code/GameEngine/Source/GameClient/ViewRva00312DBC.cpp,matched,View slot 3 clears record vector at +0x2C
+?rva00312DBC@Rva008B77D@@UAEXXZ,,0x00312DBC,14,Code/GameEngine/Source/GameClient/Rva008B77DRecordClear.cpp,matched,Rva008B77D table 0x7C7514 slot 3 clears record vector
+?rva000B3A80@W3DScriptedModelDraw@@UAEXXZ,,0x000B3A80,43,Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DScriptedModelDrawRampQueries.cpp,matched,W3DScriptedModelDraw primary slot 57 last-frame refresh
+?rva001A1500@ParticleEmitterClass@@UAEXH@Z,,0x001A1500,26,Code/Libraries/Source/WWVegas/WW3D2/ParticleEmitterRva001A1500.cpp,matched,ParticleEmitterClass slot 82 forwards to Buffer
+?rva000B5766@Rva000B8F5A@@QAEHH@Z,,0x000B5766,65,Code/GameEngine/Source/Common/Rva000B8F5A.cpp,matched,table 0x7CC588 slot 23 barrel count of active state
+?rva000B82C2@Rva000B8F5A@@QAE_NHPAUCameraMarker@@@Z,,0x000B82C2,55,Code/GameEngine/Source/Common/Rva000B8F5A.cpp,matched,table 0x7CC588 marker copy from module data
+?rva000BC057@Rva000B8F5A@@QAEXH@Z,,0x000BC057,39,Code/GameEngine/Source/Common/Rva000B8F5AMapErase.cpp,matched,model-draw map erase by key at +0x9C
+?rva000C199D@Rva000C199DInterface@@QAEXABV?$vector@URva00B6CF1@@V?$allocator@URva00B6CF1@@@_STL@@@_STL@@@Z,,0x000C199D,38,Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/Rva000C199DInterface.cpp,matched,model-draw interface slot 33 list assign plus slot 64
+?getModuleNameKey@W3DTreeDraw@@UBE?AW4NameKeyType@@XZ,,0x000CEB7A,69,Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DTreeDrawModuleNameKey.cpp,matched,ZH module name key W3DTreeDraw
+__ehhandler$?getModuleNameKey@W3DTreeDraw@@UBE?AW4NameKeyType@@XZ,,0x00762666,10,Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DTreeDrawModuleNameKey.cpp,matched,EH handler of W3DTreeDraw getModuleNameKey
+??4Rva0015E640@@QAEAAV0@ABV0@@Z,,0x0015E670,27,Code/GameEngine/Source/Common/V3PolyCopyCtors.cpp,matched,assignment beside the matched copy ctor
+?rva00188010@MeshMatDescClass@@QAEXHH@Z,,0x00188010,15,Code/Libraries/Source/WWVegas/WW3D2/MeshMatDescHasColorArray.cpp,matched,per-pass setter at +0x58
+?rva00133400@FrustumClass@@QAEXABVMatrix3D@@ABVVector2@@1MM@Z,,0x00133400,35,Code/Libraries/Source/WWVegas/WW3D2/FrustumInitWrappers.cpp,matched,FrustumClass Init forwarder flag false
+?rva00133430@FrustumClass@@QAEXABVMatrix3D@@ABVVector2@@1MM@Z,,0x00133430,35,Code/Libraries/Source/WWVegas/WW3D2/FrustumInitWrappers.cpp,matched,FrustumClass Init forwarder flag true
+?Rva0008FF84Create@@YGPAVRva0008FF3E@@PAX@Z,,0x0008FF84,58,Code/GameEngine/Source/Common/Rva0008FF84Create.cpp,matched,new plus ctor factory for 0x8FF3E
+?rva0008FFE0@Rva008FCA3@@UAEPAVGameWindow@@PAVGadgetCreateView@@PAVGameFont@@_N@Z,,0x0008FFE0,32,Code/GameEngineDevice/Source/W3DDevice/GameClient/GUI/W3DGameWindowManagerGadgets.cpp,matched,W3D gadget creator slot 20 image button
+?rva000B8FA1@Rva000B8FA1@@QAEXPBUNameSpan@@@Z,,0x000B8FA1,124,Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DModelDrawRva000B8FA1.cpp,matched,house-colour slot 126 sibling of B901D; WB 942D20 two-branch call shape gives EDI zero and tail merge
