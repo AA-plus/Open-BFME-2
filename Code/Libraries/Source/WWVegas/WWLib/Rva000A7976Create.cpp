@@ -11,7 +11,7 @@
 #include <set>
 #include <list>
 #include <vector>
-class AsciiString { public: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct NoCaseTreeValue4 { public: unsigned char m_data[4]; };
 namespace _STL {
 template <> class allocator<char> {

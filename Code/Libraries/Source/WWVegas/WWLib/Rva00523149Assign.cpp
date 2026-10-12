@@ -21,7 +21,7 @@ template <> __declspec(dllimport) __forceinline
 void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
-class AsciiString : private StringBase<char> { public: AsciiString(const AsciiString &); };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 typedef _STL::pair<const AsciiString, AsciiString> StringPair;
 typedef _STL::_Rb_tree<AsciiString, StringPair, _STL::_Select1st<StringPair>, _STL::less<AsciiString>, _STL::allocator<StringPair> > StringPairTree;
 struct Rva00523149 {

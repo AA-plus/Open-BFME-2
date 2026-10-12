@@ -8,13 +8,7 @@
 // shape, trip_count (last-first)>>4 with 4B elements, tail switch on remainder.
 #include <vector>
 #include <algorithm>
-template <typename T> class StringBase {
-public:
-    int compare(const char *s) const;
-protected:
-    char *m_data;
-};
-class AsciiString : public StringBase<char> {};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 inline bool operator==(const AsciiString &a, const char *b) { return a.compare(b) == 0; }
 template AsciiString *_STL::__find(AsciiString *, AsciiString *, const char *const &, const _STL::random_access_iterator_tag &);
 template AsciiString *_STL::find(AsciiString *, AsciiString *, const char *const &);

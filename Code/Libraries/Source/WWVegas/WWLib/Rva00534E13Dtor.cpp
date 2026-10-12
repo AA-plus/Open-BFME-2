@@ -12,19 +12,7 @@
 // List_base dtors 0x4EC395, StringBase<D> dtor 0x36410, caller 0x5353E3.
 #include <list>
 
-template <class T> class StringBase
-{
-	friend struct AsciiString;
-	void releaseBuffer();
-public:
-	void *m_data;
-};
-struct AsciiString : public StringBase<char>
-{
-public:
-    AsciiString(){m_data=0;}
-	~AsciiString() { releaseBuffer(); }
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 struct Coord3D
 {

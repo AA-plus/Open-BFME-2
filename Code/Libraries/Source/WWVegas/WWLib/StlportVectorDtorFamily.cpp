@@ -62,7 +62,7 @@ template _STL::vector<BfmeObject544>::~vector();
 
 // ??1?$vector@URvaPair004C3D4C@@V?$allocator@URvaPair004C3D4C@@@_STL@@@_STL@@QAE@XZ @0x4c3d4c (_Destroy at 0x32c0ca, stride-identical fold with rowed Rva0032C0CADestroyPairs).
 // ElvenWoodSpecialPowerModuleData's +0x7C member: retail destroys the range through the rowed 8-byte AsciiString-keyed DestroyPairs at 0x32C0CA then frees storage via 0x30830 (EH states 0/-1); called by the ElvenWood dtor at 0x004C3EEC plus its Unwind funclet. The 8-byte stride plus key dtor are all this body observes; true element name unproven so the honest RvaPair address name stands in for the 8-byte AsciiString-plus-int layout the retail destroy proves.
-class AsciiString { public: ~AsciiString(); private: char *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct RvaPair004C3D4C { AsciiString m_key; int m_value; public: ~RvaPair004C3D4C(); };
 template _STL::vector<RvaPair004C3D4C>::~vector();
 

@@ -18,7 +18,7 @@ public:
 }
 
 struct NoCaseTreeValue4 { public: unsigned char m_data[4]; };
-class AsciiString { public: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 void __cdecl dup_002CF954(void);
 typedef void (__cdecl *NoCasePairConstructFn)(_STL::pair<const AsciiString, NoCaseTreeValue4> *, _STL::pair<const AsciiString, NoCaseTreeValue4> const &);

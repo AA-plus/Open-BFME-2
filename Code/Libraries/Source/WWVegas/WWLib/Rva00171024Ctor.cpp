@@ -7,12 +7,7 @@
 #include "unicode_string.h"
 
 // Retail copies each string through its matching narrow or wide StringBase body.
-class AsciiString : private StringBase<char>
-{
-public:
-    __forceinline AsciiString(const AsciiString &source) : StringBase<char>(source) {}
-    ~AsciiString();
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 // Names agree with upstream Common/LadderPreferences.h record and its time_t map key.
 class LadderPref
