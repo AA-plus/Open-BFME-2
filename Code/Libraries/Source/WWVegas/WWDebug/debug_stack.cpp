@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/debugstacklayout /Ireference/shims/debugvtable /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc /Ireference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/debug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/sweep
+// cl: /Ireference/shims/debugstacklayout /Ireference/shims/debugvtable /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc /Ireference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/debug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/sweep /Oy-
 // stlport
 #define Matrix4x4 Matrix4  // BFME renamed it
 /*
@@ -517,3 +517,127 @@ int DebugStackwalk::StackWalk(Signature &sig, struct _CONTEXT *ctx, bool useFall
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
 // call sites in their matched rows land on these addresses (same ABI). Bind them.
 #pragma comment(linker, "/alternatename:?StackWalk@DebugStackwalk@@SAHAAUSignature@1@PAU_CONTEXT@@_N@Z=?StackWalk@DebugStackwalk@@SAHAAVSignature@1@PAU_CONTEXT@@_N@Z")
+
+// Crash minidump writer (retail 0x0003C550, 465 bytes), right after
+// StackWalk in this unit. It reads this unit's static g_dbghelp directly.
+// The exception filter (DebugExceptionFilter.cpp) calls it with the
+// exception and Debug's full-dump flag (+0x9F56). BFME 1 has the same body
+// (b1 0x0088D240) only as a generated dump, and no Zero Hour source exists;
+// the name follows that dump and the filter's existing declaration.
+
+struct MiniDumpLuid
+{
+  DWORD LowPart;
+  LONG HighPart;
+};
+
+struct MiniDumpTokenPrivileges
+{
+  DWORD PrivilegeCount;
+  MiniDumpLuid Luid;
+  DWORD Attributes;
+};
+
+struct MiniDumpExceptionInformation
+{
+  DWORD ThreadId;
+  struct _EXCEPTION_POINTERS *ExceptionPointers;
+  BOOL ClientPointers;
+};
+
+extern "C"
+{
+  __declspec(dllimport) int __cdecl _snprintf(char *buffer, unsigned int count, const char *fmt, ...);
+  __declspec(dllimport) BOOL WINAPI OpenThreadToken(HANDLE thread, DWORD access, BOOL openAsSelf,
+    HANDLE *token);
+  __declspec(dllimport) BOOL WINAPI OpenProcessToken(HANDLE process, DWORD access, HANDLE *token);
+  __declspec(dllimport) BOOL WINAPI LookupPrivilegeValueA(LPCSTR systemName, LPCSTR name,
+    MiniDumpLuid *luid);
+  __declspec(dllimport) BOOL WINAPI AdjustTokenPrivileges(HANDLE token, BOOL disableAll,
+    MiniDumpTokenPrivileges *newState, DWORD bufferLength, MiniDumpTokenPrivileges *previousState,
+    DWORD *returnLength);
+}
+
+typedef BOOL (WINAPI *MiniDumpWriteDumpType)(HANDLE process, DWORD processId, HANDLE file,
+  int dumpType, MiniDumpExceptionInformation *exceptionParam, void *userStreamParam,
+  void *callbackParam);
+
+// Debug's version getters (vtable +0xA0/+0xA4); the shim's Debug lacks them.
+class MiniDumpDebugView
+{
+public:
+  virtual void pad00(); virtual void pad01(); virtual void pad02(); virtual void pad03();
+  virtual void pad04(); virtual void pad05(); virtual void pad06(); virtual void pad07();
+  virtual void pad08(); virtual void pad09(); virtual void pad10(); virtual void pad11();
+  virtual void pad12(); virtual void pad13(); virtual void pad14(); virtual void pad15();
+  virtual void pad16(); virtual void pad17(); virtual void pad18(); virtual void pad19();
+  virtual void pad20(); virtual void pad21(); virtual void pad22(); virtual void pad23();
+  virtual void pad24(); virtual void pad25(); virtual void pad26(); virtual void pad27();
+  virtual void pad28(); virtual void pad29(); virtual void pad30(); virtual void pad31();
+  virtual void pad32(); virtual void pad33(); virtual void pad34(); virtual void pad35();
+  virtual void pad36(); virtual void pad37(); virtual void pad38(); virtual void pad39();
+  virtual const char *GetVersion();
+  virtual const char *GetInternalVersion();
+};
+
+extern Debug *theDebug;
+
+// _d_0088d240
+extern "C" void d_0088d240(struct _EXCEPTION_POINTERS *exptr, bool fullMemory)
+{
+  if (!g_dbghelp)
+    return;
+  MiniDumpWriteDumpType writeDump=(MiniDumpWriteDumpType)GetProcAddress(g_dbghelp,"MiniDumpWriteDump");
+  if (!writeDump)
+    return;
+
+  SYSTEMTIME time;
+  GetLocalTime(&time);
+  const char *internalVersion=((MiniDumpDebugView *)theDebug)->GetInternalVersion();
+  const char *version=((MiniDumpDebugView *)theDebug)->GetVersion();
+  char fileName[262];
+  _snprintf(fileName,sizeof(fileName),"DUMP_%s_%04d%02d%02d-%02d%02d%02d_%s_%ld_%ld.dmp",
+    version,time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond,
+    internalVersion,GetCurrentProcessId(),GetCurrentThreadId());
+
+  HANDLE file=CreateFileA(fileName,GENERIC_READ|GENERIC_WRITE,FILE_SHARE_READ|FILE_SHARE_WRITE,NULL,
+                          CREATE_ALWAYS,0,NULL);
+  if (file==INVALID_HANDLE_VALUE)
+    return;
+
+  // the dump wants SeDebugPrivilege on the thread (or else process) token
+  HANDLE token=NULL;
+  if (!OpenThreadToken(GetCurrentThread(),0x28,TRUE,&token))  // TOKEN_ADJUST_PRIVILEGES|TOKEN_QUERY
+  {
+    if (GetLastError()!=0x3F0)                                  // ERROR_NO_TOKEN
+      return;
+    if (!OpenProcessToken(GetCurrentProcess(),0x28,&token))
+      return;
+  }
+
+  MiniDumpExceptionInformation info={0};
+  info.ThreadId=GetCurrentThreadId();
+  info.ExceptionPointers=exptr;
+  info.ClientPointers=TRUE;
+
+  MiniDumpTokenPrivileges privileges;
+  privileges.PrivilegeCount=1;
+  privileges.Attributes=2;                                      // SE_PRIVILEGE_ENABLED
+  MiniDumpTokenPrivileges previous;
+  BOOL ok=FALSE;
+  ok=LookupPrivilegeValueA(NULL,"SeDebugPrivilege",&privileges.Luid);
+  if (ok)
+  {
+    DWORD previousSize=sizeof(previous);
+    ok=AdjustTokenPrivileges(token,FALSE,&privileges,previousSize,&previous,&previousSize);
+  }
+  BOOL adjusted=ok&&GetLastError()!=0x514;                     // ERROR_NOT_ALL_ASSIGNED
+
+  // MiniDumpWithFullMemory or MiniDumpWithDataSegs
+  writeDump(GetCurrentProcess(),GetCurrentProcessId(),file,fullMemory?2:1,&info,NULL,NULL);
+
+  if (adjusted)
+    AdjustTokenPrivileges(token,FALSE,&previous,0,NULL,NULL);
+  CloseHandle(token);
+  CloseHandle(file);
+}
