@@ -52,3 +52,7 @@ void Rva00170E7D::rva00170E7D()
 	((Rva00170AE4 *)this)->~Rva00170AE4();
 }
 
+// The outer multimap::insert at retail 0x00170EEA (20 bytes): forwards the
+// result slot and the argument to the tree/table member of this unit.
+typedef _STL::multimap<unsigned int, Rva00170E3DElement, _STL::less<unsigned int >, _STL::allocator<_STL::pair<const unsigned int, Rva00170E3DElement> > > MM_00170EEA;
+template MM_00170EEA::iterator MM_00170EEA::insert(const MM_00170EEA::value_type &);

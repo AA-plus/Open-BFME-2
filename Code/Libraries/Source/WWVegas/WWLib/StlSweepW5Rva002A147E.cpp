@@ -28,3 +28,8 @@ typedef _STL::_Rb_tree<unsigned,PreviewTreeValue,_STL::_Select1st<PreviewTreeVal
 template void _STL::_Construct<PreviewTreeValue,PreviewTreeValue>(PreviewTreeValue*,const PreviewTreeValue&);
 
 template PreviewTree::_Link_type PreviewTree::_M_create_node(const PreviewTreeValue&);
+
+// The outer multimap::insert at retail 0x002A1B89 (20 bytes): forwards the
+// result slot and the argument to the tree/table member of this unit.
+typedef _STL::multimap<unsigned int, Rva002A147EElement, _STL::less<unsigned int >, _STL::allocator<_STL::pair<const unsigned int, Rva002A147EElement> > > MM_002A1B89;
+template MM_002A1B89::iterator MM_002A1B89::insert(const MM_002A1B89::value_type &);

@@ -22,3 +22,9 @@ namespace _STL {template<> struct hash<Rva00054EBEElement> { unsigned operator()
 
 // Instantiate the recovered operation and its required template dependencies.
 template _STL::_Ht_iterator<_STL::pair<int const, Rva00054EBEElement>, _STL::_Nonconst_traits<_STL::pair<int const, Rva00054EBEElement> >, int, _STL::hash<int>, _STL::_Select1st<_STL::pair<int const, Rva00054EBEElement> >, _STL::equal_to<int>, _STL::allocator<_STL::pair<int const, Rva00054EBEElement> > > _STL::hashtable<_STL::pair<int const, Rva00054EBEElement>, int, _STL::hash<int>, _STL::_Select1st<_STL::pair<int const, Rva00054EBEElement> >, _STL::equal_to<int>, _STL::allocator<_STL::pair<int const, Rva00054EBEElement> > >::find<int>(int const &);
+
+// The outer hash_map::find at retail 0x00055811 (20 bytes): forwards the
+// result slot and the argument to the tree/table member of this unit.
+#include <hash_map>
+typedef _STL::hash_map<int, Rva00054EBEElement, _STL::hash<int>, _STL::equal_to<int>, _STL::allocator<_STL::pair<const int, Rva00054EBEElement> > > HM_00055811;
+template HM_00055811::iterator HM_00055811::find(const int &);

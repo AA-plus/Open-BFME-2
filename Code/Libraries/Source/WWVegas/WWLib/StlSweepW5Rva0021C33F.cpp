@@ -12,3 +12,7 @@ struct Rva0021C33FElement { int words[1]; bool operator<(const Rva0021C33FElemen
 
 // Instantiate the recovered operation and its required template dependencies.
 template _STL::_Rb_tree<Rva0021C33FElement, _STL::pair<Rva0021C33FElement const, int>, _STL::_Select1st<_STL::pair<Rva0021C33FElement const, int> >, _STL::less<Rva0021C33FElement>, _STL::allocator<_STL::pair<Rva0021C33FElement const, int> > > & _STL::_Rb_tree<Rva0021C33FElement, _STL::pair<Rva0021C33FElement const, int>, _STL::_Select1st<_STL::pair<Rva0021C33FElement const, int> >, _STL::less<Rva0021C33FElement>, _STL::allocator<_STL::pair<Rva0021C33FElement const, int> > >::operator=(_STL::_Rb_tree<Rva0021C33FElement, _STL::pair<Rva0021C33FElement const, int>, _STL::_Select1st<_STL::pair<Rva0021C33FElement const, int> >, _STL::less<Rva0021C33FElement>, _STL::allocator<_STL::pair<Rva0021C33FElement const, int> > > const &);
+
+// The outer map operator= at retail 0x0021CEF1 (18 bytes): forwards to the tree
+// member instantiated above and returns this.
+template _STL::map<Rva0021C33FElement, int, _STL::less<Rva0021C33FElement >, _STL::allocator<_STL::pair<const Rva0021C33FElement, int> > > &_STL::map<Rva0021C33FElement, int, _STL::less<Rva0021C33FElement >, _STL::allocator<_STL::pair<const Rva0021C33FElement, int> > >::operator=(const _STL::map<Rva0021C33FElement, int, _STL::less<Rva0021C33FElement >, _STL::allocator<_STL::pair<const Rva0021C33FElement, int> > > &);

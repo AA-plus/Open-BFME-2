@@ -9,3 +9,8 @@ struct BfmeRecord001DD3BC {
 bool operator<(const BfmeRecord001DD3BC &a, const BfmeRecord001DD3BC &b);
 typedef _STL::_Rb_tree<BfmeRecord001DD3BC, BfmeRecord001DD3BC, _STL::_Identity<BfmeRecord001DD3BC>, _STL::less<BfmeRecord001DD3BC>, _STL::allocator<BfmeRecord001DD3BC> > BfmeRecord001DD3BCSetTree;
 template BfmeRecord001DD3BCSetTree::_Rb_tree(const BfmeRecord001DD3BCSetTree &);
+
+// The outer set copy constructor at retail 0x001DE6B3 (18 bytes): forwards to the tree
+// member instantiated above and returns this.
+#include <set>
+template _STL::set<BfmeRecord001DD3BC, _STL::less<BfmeRecord001DD3BC >, _STL::allocator<BfmeRecord001DD3BC > >::set(const _STL::set<BfmeRecord001DD3BC, _STL::less<BfmeRecord001DD3BC >, _STL::allocator<BfmeRecord001DD3BC > > &);

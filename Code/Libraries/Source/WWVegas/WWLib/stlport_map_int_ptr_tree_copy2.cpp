@@ -17,3 +17,7 @@ struct Rva001FDAB0Less
 
 typedef _STL::_Rb_tree<int, _STL::pair<const int, void *>, _STL::_Select1st<_STL::pair<const int, void *> >, Rva001FDAB0Less, _STL::allocator<_STL::pair<const int, void *> > > IntPtrCopyTree2;
 template IntPtrCopyTree2::_Rb_tree(const IntPtrCopyTree2 &);
+
+// The outer map copy constructor at retail 0x001FDD21 (18 bytes): forwards to the tree
+// member instantiated above and returns this.
+template _STL::map<int, void *, Rva001FDAB0Less, _STL::allocator<_STL::pair<const int, void *> > >::map(const _STL::map<int, void *, Rva001FDAB0Less, _STL::allocator<_STL::pair<const int, void *> > > &);

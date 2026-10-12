@@ -41,3 +41,7 @@ typedef _STL::_Rb_tree<NameKeyType, ModuleFactoryMapValueCopy00413EE6, ModuleFac
 template ModuleFactoryMapTreeCopy00413EE6::_Rb_tree(const ModuleFactoryMapTreeCopy00413EE6 &);
 
 #undef _M_copy
+
+// The outer map copy constructor at retail 0x00413FF7 (18 bytes): forwards to the tree
+// member instantiated above and returns this.
+template _STL::map<NameKeyType, ModuleFactory::ModuleTemplate, _STL::less<NameKeyType >, _STL::allocator<_STL::pair<const NameKeyType, ModuleFactory::ModuleTemplate> > >::map(const _STL::map<NameKeyType, ModuleFactory::ModuleTemplate, _STL::less<NameKeyType >, _STL::allocator<_STL::pair<const NameKeyType, ModuleFactory::ModuleTemplate> > > &);

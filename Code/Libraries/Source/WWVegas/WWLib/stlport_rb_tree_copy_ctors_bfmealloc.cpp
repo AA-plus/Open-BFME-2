@@ -22,3 +22,7 @@ template _STL::_Rb_tree<int, _STL::pair<const int, BfmePod8>, _STL::_Select1st<_
     const _STL::_Rb_tree<int, _STL::pair<const int, BfmePod8>, _STL::_Select1st<_STL::pair<const int, BfmePod8> >, _STL::less<int>, _STL::allocator<_STL::pair<const int, BfmePod8> > > &);
 template _STL::_Rb_tree<int, _STL::pair<const int, BfmePod24>, _STL::_Select1st<_STL::pair<const int, BfmePod24> >, _STL::less<int>, _STL::allocator<_STL::pair<const int, BfmePod24> > >::_Rb_tree(
     const _STL::_Rb_tree<int, _STL::pair<const int, BfmePod24>, _STL::_Select1st<_STL::pair<const int, BfmePod24> >, _STL::less<int>, _STL::allocator<_STL::pair<const int, BfmePod24> > > &);
+
+// The outer map copy constructor at retail 0x0041810B (18 bytes): forwards to the tree
+// member instantiated above and returns this.
+template _STL::map<int, BfmePod24, _STL::less<int >, _STL::allocator<_STL::pair<const int, BfmePod24> > >::map(const _STL::map<int, BfmePod24, _STL::less<int >, _STL::allocator<_STL::pair<const int, BfmePod24> > > &);

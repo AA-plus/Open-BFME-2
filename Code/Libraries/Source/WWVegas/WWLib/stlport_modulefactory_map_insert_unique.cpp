@@ -47,3 +47,8 @@ typedef _STL::pair<const NameKeyType, ModuleFactory::ModuleTemplate> ModuleFacto
 typedef _STL::_Rb_tree<NameKeyType, ModuleFactoryInsertValue, _STL::_Select1st<ModuleFactoryInsertValue>, _STL::less<NameKeyType>, _STL::allocator<ModuleFactoryInsertValue> > ModuleFactoryInsertTree;
 
 template _STL::pair<ModuleFactoryInsertTree::iterator, bool> ModuleFactoryInsertTree::insert_unique(const ModuleFactoryInsertTree::value_type &);
+
+// The outer map::insert at retail 0x004138A1 (20 bytes): forwards the
+// result slot and the argument to the tree/table member of this unit.
+typedef _STL::map<NameKeyType, ModuleFactory::ModuleTemplate, _STL::less<NameKeyType >, _STL::allocator<_STL::pair<const NameKeyType, ModuleFactory::ModuleTemplate> > > MP_004138A1;
+template _STL::pair<MP_004138A1::iterator, bool> MP_004138A1::insert(const MP_004138A1::value_type &);
