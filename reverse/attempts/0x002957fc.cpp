@@ -1,4 +1,6 @@
 // ?rva002957FC@Object@@QAEEXZ
+// partial score=0.97 date=2026-10-12
+// ?rva002957FC@Object@@QAEEXZ
 // partial score=0.97 date=2026-10-10
 // ?rva002957FC@Object@@QAEEXZ
 // partial score=0.9706 date=2026-10-10
@@ -156,13 +158,16 @@ class Object {
  char pad0[4];TemplateView *m_template;char pad8[0x110];unsigned m_bits;
  public:void *rva0029439D();unsigned char rva002957FC();
 };
+static __forceinline bool rva002957FCTestBit(unsigned int word, int bit)
+{
+ return ((word >> bit) & 1) != 0;
+}
+
 unsigned char Object::rva002957FC(){
  if(!(m_template->bits&1)) return false;
  Interface142 *module=(Interface142*)rva0029439D();
  if(module)return module->predicate();
- unsigned flags=m_bits;
- _ReadWriteBarrier();
- unsigned result=1;
- if(!((unsigned char)(flags>>7)&result) && !((unsigned char)(flags>>9)&result)) result=0;
+ int result=1;
+ if(!rva002957FCTestBit(m_bits, 7) && !rva002957FCTestBit(m_bits, 9)) result=0;
  return result;
 }
