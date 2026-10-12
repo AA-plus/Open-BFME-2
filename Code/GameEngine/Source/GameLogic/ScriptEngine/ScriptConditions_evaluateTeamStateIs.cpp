@@ -420,6 +420,8 @@ public:
 	// KindOf 48 (BFME 1's ScriptConditionsRva0032A710.cpp).
 	bool testKindOf30() const { return (m_kindOf10E & 0x01) != 0; }
 	bool testKindOf59() const { return (m_kindOf113 & 0x02) != 0; }
+	int rva000456AC(int kind) const;
+	bool isKindOf(int kind) const { return (unsigned char)rva000456AC(kind) != 0; }
 	float getRva51C() const { return m_51C; }
 	// KindOf bit 0x2F (byte +0x10D, bit 7), unnamed: skipped by the team
 	// health total alongside 0x59.
@@ -980,6 +982,7 @@ protected:
 	bool rva003EA12A(Parameter *);
 	bool rva003EA228(Parameter *, bool);
 	bool evaluateSkirmishValueInArea(Condition *, Parameter *, Parameter *, Parameter *, Parameter *);
+	bool rva003E64A6(Condition *, Parameter *, Parameter *, Parameter *, Parameter *, Parameter *);
 	bool evaluateHasCommandPointsToBuildUnit(Parameter *, Parameter *);
 	bool evaluatePlayerHasKilledTypeUnits(Parameter *, Parameter *, Parameter *);
 	bool rva003E63CD(Condition *, Parameter *, Parameter *, Parameter *);
@@ -2231,4 +2234,73 @@ bool ScriptConditions::evaluateSkirmishValueInArea(Condition *pCondition, Parame
 	if (comparison) { pCondition->setCustomData(1); return true; }
 	pCondition->setCustomData(-1);
 	return false;
+}
+// ?rva003E64A6@ScriptConditions@@IAE_NPAVCondition@@PAVParameter@@1111@Z, retail 0x003E64A6 (559 bytes): case 75
+// PLAYER_HAS_COMPARISON_UNIT_KIND_IN_TRIGGER_AREA. Donor: BFME 1 ScriptConditionsRva0032ABC0.cpp.
+bool ScriptConditions::rva003E64A6(Condition *pCondition, Parameter *pPlayerParm, Parameter *pComparisonParm,
+	Parameter *pCountParm, Parameter *pKindParm, Parameter *pTriggerParm)
+{
+	PolygonTrigger *pTrig = TheScriptEngine->getQualifiedTriggerAreaByName(pTriggerParm->getString());
+	if (pTrig == 0)
+		return false;
+	int kind = pKindParm->getInt();
+	int playerMask = TheScriptEngine->rva00357B82(pPlayerParm);
+	int count = 0;
+	while (playerMask) {
+		Player *pPlayer = ThePlayerList->getEachPlayerFromMask(playerMask);
+		PlayerTeamList::const_iterator it;
+		bool anyChanges = false;
+		if (pCondition->getCustomData() != 0 && TheScriptEngine->getFrameObjectCountChanged() <= pCondition->getCustomFrame()) {
+			for (it = pPlayer->getPlayerTeams()->begin(); it != pPlayer->getPlayerTeams()->end(); ++it) {
+				if (anyChanges)
+					break;
+				for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance()) {
+					if (anyChanges)
+						break;
+					Team *team = iter.cur();
+					if (!team)
+						continue;
+					if (team->didEnterOrExit())
+						anyChanges = true;
+				}
+			}
+			if (!anyChanges) {
+				if (pCondition->getCustomData() == -1)
+					continue;
+				if (pCondition->getCustomData() == 1)
+					return true;
+			}
+		}
+		for (it = pPlayer->getPlayerTeams()->begin(); it != pPlayer->getPlayerTeams()->end(); ++it) {
+			for (DLINK_ITERATOR<Team> titer = (*it)->iterate_TeamInstanceList(); !titer.done(); titer.advance()) {
+				Team *team = titer.cur();
+				if (!team)
+					continue;
+				for (DLINK_ITERATOR<Object> iter = team->iterate_TeamMemberList(); !iter.done(); iter.advance()) {
+					Object *pObj = iter.cur();
+					if (!pObj)
+						continue;
+					_ReadWriteBarrier();
+					const ThingTemplate *tmpl = pObj->getTemplate();
+					if (tmpl->isKindOf(kind)) {
+						if (!tmpl->testKindOf59() && pObj->isInside(pTrig)) {
+							if (!pObj->isEffectivelyDead())
+								count++;
+						}
+					}
+				}
+			}
+		}
+	}
+	bool comparison = false;
+	switch (pComparisonParm->getInt()) {
+		case 0: comparison = (count < pCountParm->getInt()); break;
+		case 1: comparison = (count <= pCountParm->getInt()); break;
+		case 2: comparison = (count == pCountParm->getInt()); break;
+		case 3: comparison = (count >= pCountParm->getInt()); break;
+		case 4: comparison = (count > pCountParm->getInt()); break;
+		case 5: comparison = (count != pCountParm->getInt()); break;
+	}
+	pCondition->setCustomData(TheScriptEngine->getFrameObjectCountChanged());
+	return comparison;
 }
