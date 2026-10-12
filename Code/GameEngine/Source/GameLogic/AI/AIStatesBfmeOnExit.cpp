@@ -773,7 +773,8 @@ protected:
 	Coord3D m_goalPosition; // +0x20
 	unsigned char m_pad2C[0x48 - 0x2C];
 	Bool m_adjustDestination; // +0x48
-	unsigned char m_pad49[0x4C - 0x49];
+	Bool m_waitingForPath; // +0x49
+	unsigned char m_pad4A[0x4C - 0x4A];
 };
 
 class AIFollowPathAsTeamState : public AIInternalMoveToState
@@ -928,11 +929,11 @@ public:
 	virtual void onExit(StateExitType status);
 	virtual StateReturnType update();
 	Bool rva00344D60(Coord3D *goal, Object *source, Object *victim);
+protected:
+	virtual Bool computePath();
 private:
-	Real m_bfmeReal4C; // +0x4C
-	Real m_bfmeReal50; // +0x50
-	Real m_bfmeReal54; // +0x54
-	int m_bfmeFrame58; // +0x58
+	Coord3D m_prevVictimPos; // +0x4C
+	unsigned int m_approachTimestamp; // +0x58
 	Bool m_successOnPathFailure; // +0x5C
 	Bool m_isInitialApproach; // +0x5D
 };
