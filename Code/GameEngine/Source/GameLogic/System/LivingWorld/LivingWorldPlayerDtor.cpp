@@ -36,7 +36,8 @@ class LivingWorldAI { public: LivingWorldAI(); ~LivingWorldAI(); char bytes[308]
 class Rva001EAE6FHelper { public: __declspec(nothrow) Rva001EAE6FHelper*clear80(); };
 struct ClearStorage { char bytes[128]; ClearStorage(){ ((Rva001EAE6FHelper*)this)->clear80(); } };
 class LivingWorldArmy;
-struct PlayerPointerArray:public _STL::_Vector_base<LivingWorldArmy*,_STL::allocator<LivingWorldArmy*> > { __forceinline PlayerPointerArray():_STL::_Vector_base<LivingWorldArmy*,_STL::allocator<LivingWorldArmy*> >(_STL::allocator<LivingWorldArmy*>()){} };
+// Storage-only three-pointer header; application element identity stays at the consumer.
+struct PlayerPointerArray:public Header {__forceinline PlayerPointerArray():Header(){} };
 struct Color { float x,y,z; Color(float v):x(v),y(v),z(v){} };
 class RegionBonusInfo:public Snapshot { public:__declspec(nothrow) RegionBonusInfo();virtual ~RegionBonusInfo(){};protected:virtual void loadPostProcess();virtual const char*GetSnapshotName()const;virtual void xfer(Xfer*);private:char bytes[24]; };
 
@@ -48,7 +49,7 @@ class LivingWorldScoreKeeper:public Snapshot {public:
 struct Rva002E2690Element {char bytes[216];};
 namespace _STL {template<> vector<Rva002E2690Element>::~vector();}
 class Rva002B317CBumpCounter {public:int bump();};
-extern Rva002B317CBumpCounter *TheLivingWorldLogic;
+class LivingWorldLogic; extern LivingWorldLogic *TheLivingWorldLogic;
 class Rva002E15E6 {public:~Rva002E15E6();void rva002E15E6();};
 typedef _STL::set<int> PlayerSetCtor;
 class Rva002E1F83 {public:__forceinline Rva002E1F83(){((PlayerSetCtor*)this)->PlayerSetCtor::set();}__forceinline ~Rva002E1F83(){((Rva002E15E6*)this)->Rva002E15E6::~Rva002E15E6();}char bytes[12];};
@@ -77,7 +78,7 @@ Rva002E2AAE::Rva002E2AAE()
  : id(-1),p40(0),kind(0),colorIndex(-1),color1(1.0f),color2(1.0f),color3(1.0f),zero1C4(0),value1C8(1.0f),zero290(0),zero294(0),zero298(0),zero2C4(0),member2C8(id,(LivingWorldPlayer*)(Rva00330757Member*)this),flag3C4(false),flag3C5(false)
  {memset(&storage,0,128);memset(zero2B4,0,16);}
 Rva002E2AAE::Rva002E2AAE(Rva002BA8F1Input*src,void*context)
- : id(TheLivingWorldLogic->bump()),input(*(const LWPlayerDef*)src),p40(context),kind(src->flag?2:0),colorIndex(-1),color1(1.0f),color2(1.0f),color3(1.0f),zero1C4(0),value1C8(1.0f),zero290(0),zero294(0),zero298(0),zero2C4(0),member2C8(id,(LivingWorldPlayer*)(Rva00330757Member*)this),flag3C4(false),flag3C5(false)
+ : id(((Rva002B317CBumpCounter*)TheLivingWorldLogic)->bump()),input(*(const LWPlayerDef*)src),p40(context),kind(src->flag?2:0),colorIndex(-1),color1(1.0f),color2(1.0f),color3(1.0f),zero1C4(0),value1C8(1.0f),zero290(0),zero294(0),zero298(0),zero2C4(0),member2C8(id,(LivingWorldPlayer*)(Rva00330757Member*)this),flag3C4(false),flag3C5(false)
  {memset(&storage,0,128);memset(zero2B4,0,16);}
 
 class Rva002E1E51Listener {public:virtual void slot0(void*);virtual void slot1(void*);virtual void slot2(void*);virtual void notify(void*);};
