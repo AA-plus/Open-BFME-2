@@ -31,6 +31,10 @@ public:
 		Z = v.Z;
 		return *this;
 	}
+	Vector3 &operator+=(const Vector3 &v) { X += v.X; Y += v.Y; Z += v.Z; return *this; }
+	Vector3 &operator-=(const Vector3 &v) { X -= v.X; Y -= v.Y; Z -= v.Z; return *this; }
+	friend Vector3 operator+(const Vector3 &a, const Vector3 &b) { return Vector3(a.X + b.X, a.Y + b.Y, a.Z + b.Z); }
+	friend Vector3 operator-(const Vector3 &a, const Vector3 &b) { return Vector3(a.X - b.X, a.Y - b.Y, a.Z - b.Z); }
 	void Scale(const Vector3 &scale)
 	{
 		X *= scale.X;
@@ -142,6 +146,9 @@ public:
 	virtual const Vector3 &Get_Ambient_Light(void);		// slot 7
 protected:
 	void updateFixedLightEnvironments(RenderInfoClass &rinfo);
+public:
+	void rva0006E605(Vector3 *delta, bool remove);	// 0x0006E605
+protected:
 private:
 	char m_pad004[0x130 - 0x04];
 	LightClass *m_globalLight[4];				// +0x130
@@ -214,4 +221,32 @@ void RTS3DScene::updateFixedLightEnvironments(RenderInfoClass &rinfo)
 	m_foggedLightEnv.m_flag = m_lightEnvironmentFlag;
 	m_ambientLightEnv.Pre_Render_Update(rinfo.Camera.Get_Transform());
 	m_ambientLightEnv.m_flag = m_lightEnvironmentFlag;
+}
+
+// ?rva0006E605@RTS3DScene@@QAEXPAVVector3@@_N@Z, retail 0x0006E605..0x0006E716
+// (273 bytes, RET 8; the spelling is pinned through its caller 0x000982F9,
+// which loads the receiver from W3DDisplay::m_3DScene). It adds a colour
+// delta to the first global light (+0x130), or removes it: the full delta
+// on the diffuse and half of it on the ambient, read through the rowed
+// Get_Diffuse/Get_Ambient and stored back by one shared tail. Retail's
+// compound per-component update (diffuse -= delta / += delta) is what keeps
+// the six results in xmm0-5 ahead of that tail.
+void RTS3DScene::rva0006E605(Vector3 *delta, bool remove)
+{
+	Vector3 diffuse;
+	m_globalLight[0]->Get_Diffuse(&diffuse);
+	Vector3 ambient;
+	m_globalLight[0]->Get_Ambient(&ambient);
+	if (remove)
+	{
+		diffuse -= *delta;
+		ambient -= *delta * 0.5f;
+	}
+	else
+	{
+		diffuse += *delta;
+		ambient += *delta * 0.5f;
+	}
+	m_globalLight[0]->Set_Diffuse(diffuse);
+	m_globalLight[0]->Set_Ambient(ambient);
 }
