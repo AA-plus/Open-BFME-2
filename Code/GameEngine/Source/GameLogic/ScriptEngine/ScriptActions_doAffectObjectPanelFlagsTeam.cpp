@@ -78,12 +78,16 @@ public:
 	ThreatInfo getThreatForPlayer(Player *player, int threatType, Player *other);
 };
 
-class Rva003ED2A3Manager
+class Rva003ED2A3Manager;
+extern Rva003ED2A3Manager *g_manager;
+// Its by-name lookup is the ICF-folded hash_map find at 0x0041F474, rowed as
+// ArmorStore::rva0041F474 (ArmorStoreFindByName.cpp): call it by that name.
+class ArmorTemplate;
+class ArmorStore
 {
 public:
-	ThreatFinder *rva0041F474(const AsciiString &name) const;
+	const ArmorTemplate *rva0041F474(const AsciiString &name) const;
 };
-extern Rva003ED2A3Manager *g_manager;
 
 class ScriptActions
 {
@@ -138,7 +142,7 @@ void ScriptActions::doSetCounterToThreatFinderThreat(const AsciiString &counterN
 		type = 1;
 	else
 		return;
-	ThreatFinder *finder = g_manager->rva0041F474(threatFinderName);
+	ThreatFinder *finder = (ThreatFinder *)((const ArmorStore *)g_manager)->rva0041F474(threatFinderName);
 	if (finder) {
 		counter->m_value = (int)finder->getThreatForPlayer(player, type, 0).m_threat;
 	} else {

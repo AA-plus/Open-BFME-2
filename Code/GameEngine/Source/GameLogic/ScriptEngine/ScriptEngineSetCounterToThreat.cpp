@@ -90,18 +90,29 @@ public:
 	ThreatInfo getThreatForPlayer(Player *player, int threatType, Player *other);
 };
 
-class Rva003ED2A3Manager
+class Rva003ED2A3Manager;
+extern Rva003ED2A3Manager *g_manager;
+// Its by-name lookup is the ICF-folded hash_map find at 0x0041F474, rowed as
+// ArmorStore::rva0041F474 (ArmorStoreFindByName.cpp): call it by that name.
+class ArmorTemplate;
+class ArmorStore
 {
 public:
-	ThreatFinder *rva0041F474(const AsciiString &name) const;
+	const ArmorTemplate *rva0041F474(const AsciiString &name) const;
 };
-extern Rva003ED2A3Manager *g_manager;
+
+// The by-value unit lookup 0x00358752 is rowed as
+// Rva00358752Opaque::lookupUnitByValue (ScriptEngineRva00358752.cpp).
+class Rva00358752Opaque
+{
+public:
+	Object *lookupUnitByValue(AsciiString name);
+};
 
 class ScriptEngine
 {
 public:
 	Team *getTeamNamed(AsciiString name, bool unused);
-	Object *rva00358752(AsciiString name);	// 0x00358752, unit by name
 
 protected:
 	ScriptCounter *bfmeCounter(AsciiString name);
@@ -121,10 +132,10 @@ void ScriptEngine::setCounterToThreat(ScriptAction *pAction, bool useTeam)
 		if (team)
 			value = team->rva003A3736(radius);
 	} else {
-		Object *obj = TheScriptEngine->rva00358752(pAction->getParameter(1)->m_string);
+		Object *obj = ((Rva00358752Opaque *)TheScriptEngine)->lookupUnitByValue(pAction->getParameter(1)->m_string);
 		if (obj) {
 			if (obj->getTemplate()->isKindOf(0xC3)) {
-				ThreatFinder *finder = g_manager->rva0041F474(pAction->getParameter(1)->m_string);
+				ThreatFinder *finder = (ThreatFinder *)((const ArmorStore *)g_manager)->rva0041F474(pAction->getParameter(1)->m_string);
 				if (finder) {
 					Player *player = obj->getControllingPlayer();
 					value = finder->getThreatForPlayer(player, 0, 0).m_threat;
