@@ -29,9 +29,9 @@ public:
 };
 }
 
-struct Rva0037DF2C {
-	Rva0037DF2C();
-	virtual ~Rva0037DF2C();
+struct CarryoverUnit {
+	CarryoverUnit();
+	virtual ~CarryoverUnit();
 	unsigned char body[0xA8];
 };
 
@@ -39,18 +39,18 @@ class Rva001EC9BDVector
 {
 public:
 	unsigned int size() const { return (unsigned int)(m_finish - m_start); }
-	Rva0037DF2C *begin() { return m_start; }
-	Rva0037DF2C *end() { return m_finish; }
-	void resize(unsigned int newSize, Rva0037DF2C value);
+	CarryoverUnit *begin() { return m_start; }
+	CarryoverUnit *end() { return m_finish; }
+	void resize(unsigned int newSize, CarryoverUnit value);
 	void resize(unsigned int newSize);
 
 private:
-	Rva0037DF2C *m_start;
-	Rva0037DF2C *m_finish;
-	Rva0037DF2C *m_endOfStorage;
+	CarryoverUnit *m_start;
+	CarryoverUnit *m_finish;
+	CarryoverUnit *m_endOfStorage;
 };
 
-void Rva001EC9BDVector::resize(unsigned int newSize, Rva0037DF2C value)
+void Rva001EC9BDVector::resize(unsigned int newSize, CarryoverUnit value)
 {
 	if (newSize < size()) {
 		reinterpret_cast<_STL::vector<BfmeAssignRecord172> *>(this)->erase(
@@ -66,5 +66,5 @@ void Rva001EC9BDVector::resize(unsigned int newSize, Rva0037DF2C value)
 
 void Rva001EC9BDVector::resize(unsigned int newSize)
 {
-	resize(newSize, Rva0037DF2C());
+	resize(newSize, CarryoverUnit());
 }

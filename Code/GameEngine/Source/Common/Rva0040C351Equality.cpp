@@ -7,10 +7,10 @@
 // caller at 0x0040CB95, callee Equal rowed, ret 4 single pointer arg.
 bool __cdecl Rva0037E0ECEqual(const void *a, const void *b);
 
-class Rva0037DF2C
+class CarryoverUnit
 {
 public:
-	Rva0037DF2C();
+	CarryoverUnit();
 private:
 	char m_pad[0xac];
 };
@@ -21,7 +21,7 @@ struct MemberAC
 	int m_04;
 };
 
-class ArmySummaryEntry : public Rva0037DF2C
+class ArmySummaryEntry : public CarryoverUnit
 {
 public:
 	bool rva0040C3BB(const ArmySummaryEntry *other);

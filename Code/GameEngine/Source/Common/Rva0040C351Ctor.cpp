@@ -1,7 +1,7 @@
 // cl: /O1 /DNDEBUG /MD /G7 /arch:SSE /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP=
 // stlport
 // ??0ArmySummaryEntry@@QAE@XZ @0x0040C351 (77B).
-// Derived of rowed Rva0037DF2C ctor 0x0037DF2C (same this, no offset) with own
+// Derived of rowed CarryoverUnit ctor 0x0037DF2C (same this, no offset) with own
 // vtable 0x00C3944C at +0x0 overwriting base vtable, member at +0xAC with base
 // vtable 0x00BC6F20 plus int 0 plus derived vtable 0x00C3945C via inline base
 // plus int init plus body derived store (preserves dead base store as mixed
@@ -16,11 +16,14 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 extern "C" const void *const vtbl_00BC6F20[];  // folded, 7 classes; via ??_7Rva0007DF07@@6B@
 #pragma comment(linker, "/alternatename:_vtbl_00BC6F20=??_7Rva0007DF07@@6B@")
 
-class Rva0037DF2C
+class Player;
+class Object;
+class CarryoverUnit
 {
 public:
-	Rva0037DF2C();
-	Rva0037DF2C(const Rva0037DF2C &o);
+	CarryoverUnit();
+	CarryoverUnit(const CarryoverUnit &o);
+	Object *createSingleObject(Player *player);
 private:
 	char m_pad[0xac];
 };
@@ -30,7 +33,7 @@ struct MemberAC
 	void *m_vtable;
 	int m_04;
 };
-class ArmySummaryEntry : public Rva0037DF2C
+class ArmySummaryEntry : public CarryoverUnit
 {
 public:
 	ArmySummaryEntry();
@@ -77,7 +80,7 @@ struct Rva0040C430Ret
 	virtual void f2();
 	virtual void slotC(void *p);
 };
-ArmySummaryEntry::ArmySummaryEntry() : Rva0037DF2C()
+ArmySummaryEntry::ArmySummaryEntry() : CarryoverUnit()
 {
 	MemberAC *p = &m_ac;
 	p->m_vtable = (void *)0x00C3945C;
@@ -97,7 +100,7 @@ ArmySummaryEntry::ArmySummaryEntry() : Rva0037DF2C()
 // 0x0040E96D 0x0040EAED 0x0040F34E 0x004E0BDC 0x004F7B6B 0x0059B1EC.
 extern const void *const g_00C3944C[];
 extern const void *const g_00C3945C[];
-ArmySummaryEntry::ArmySummaryEntry(const ArmySummaryEntry &o) : Rva0037DF2C(o), m_ac()
+ArmySummaryEntry::ArmySummaryEntry(const ArmySummaryEntry &o) : CarryoverUnit(o), m_ac()
 {
 	*(const void **)this = g_00C3944C;
 	MemberAC *p = &m_ac;
@@ -281,16 +284,10 @@ void ArmySummaryEntry::ApplyWorldMapUpgrades() {
 // Retail 0x0040C495 (54 bytes; WB twin 0x010920D0, callgraph), called once per
 // unit by ArmySummary::LoadArmyEntry (0x0040E534): the base CarryoverUnit
 // creates the object for the player (pinned createSingleObject 0x0037DCE8, the
-// base Rva0037DF2C under its WorldBuilder name), GameLogic's rowed 0x0023D0C2
+// base CarryoverUnit under its WorldBuilder name), GameLogic's rowed 0x0023D0C2
 // takes it with the handle, and the entry's +0xC0 value goes to the object's
 // +0x460 (WB +0x474).
 extern GameLogic *TheGameLogic;
-class Player;
-class CarryoverUnit
-{
-public:
-	Object *createSingleObject(Player *player);
-};
 
 struct Rva0040C495Object
 {

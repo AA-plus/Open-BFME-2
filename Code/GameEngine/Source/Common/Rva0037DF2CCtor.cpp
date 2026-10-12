@@ -36,10 +36,10 @@ public:
 	int m_10;
 	unsigned char m_14;
 };
-class Rva0037DF2C : public EmptyBase
+class CarryoverUnit : public EmptyBase
 {
 public:
-	Rva0037DF2C();
+	CarryoverUnit();
 private:
 	unsigned int m_vtable;
 	AsciiString m_s04;
@@ -49,6 +49,6 @@ private:
 	int m_90;
 	Rva004E04FD m_94;
 };
-Rva0037DF2C::Rva0037DF2C() : m_vtable((unsigned int)g_00BDF158), m_s04(AsciiString::TheEmptyString), m_f08(0.0f), m_c0C(0), m_90(0)
+CarryoverUnit::CarryoverUnit() : m_vtable((unsigned int)g_00BDF158), m_s04(AsciiString::TheEmptyString), m_f08(0.0f), m_c0C(0), m_90(0)
 {
 }

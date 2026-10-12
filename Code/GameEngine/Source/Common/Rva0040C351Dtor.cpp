@@ -8,11 +8,11 @@ extern const void *const g_00C3944C[];
 extern const void *const g_00C3945C[];
 extern const void *const g_00BC6F20[];
 
-class Rva0037DF2C
+class CarryoverUnit
 {
 public:
-	Rva0037DF2C();
-	virtual ~Rva0037DF2C();
+	CarryoverUnit();
+	virtual ~CarryoverUnit();
 private:
 	char m_pad[0xAC - 4];
 };
@@ -27,7 +27,7 @@ struct MemberAC
 // ??1MemberAC@@QAE@XZ present-unmatched
 __forceinline MemberAC::~MemberAC() { m_vtable = (void *)g_00BC6F20; }
 
-class __declspec(novtable) ArmySummaryEntry : public Rva0037DF2C
+class __declspec(novtable) ArmySummaryEntry : public CarryoverUnit
 {
 public:
 	ArmySummaryEntry();

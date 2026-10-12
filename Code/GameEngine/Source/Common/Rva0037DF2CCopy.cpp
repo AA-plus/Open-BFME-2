@@ -1,5 +1,5 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ??0Rva0037DF2C@@QAE@ABV0@@Z @0x001EB79E 119B: copy ctor of Rva0037DF2C.
+// ??0Rva0037DF2C@@QAE@ABV0@@Z @0x001EB79E 119B: copy ctor of CarryoverUnit.
 // Same vtable 0x00BDF158 at +0 and layout as default ctor 0x0037DF2C:
 // AsciiString at +4 via rowed 0x000365F0, float at +8 int at +C, 128B block
 // at +0x10 via rowed 0x0004548B, int at +0x90, tail at +0x94 via rowed
@@ -23,10 +23,10 @@ struct Rva001EB15A
 	Rva001EB15A(const Rva001EB15A &o);
 	unsigned char bytes[24];
 };
-class Rva0037DF2C : public EmptyBase
+class CarryoverUnit : public EmptyBase
 {
 public:
-	Rva0037DF2C(const Rva0037DF2C &o);
+	CarryoverUnit(const CarryoverUnit &o);
 private:
 	unsigned int m_vtable;
 	AsciiString m_s04;
@@ -36,7 +36,7 @@ private:
 	int m_90;
 	Rva001EB15A m_94;
 };
-Rva0037DF2C::Rva0037DF2C(const Rva0037DF2C &o)
+CarryoverUnit::CarryoverUnit(const CarryoverUnit &o)
 	: m_vtable((unsigned int)g_00BDF158)
 	, m_s04(o.m_s04)
 	, m_f08(o.m_f08)

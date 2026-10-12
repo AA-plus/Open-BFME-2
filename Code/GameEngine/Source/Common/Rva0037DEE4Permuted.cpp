@@ -6,7 +6,7 @@
 // require reconciliation before this can be moved to Code. Target slots:
 // scalar dtor1EB815; shared noopB3FD0; name37DC84; xfer37DE79.
 // Getter currently owned by Rva0037DC84Named::name. Existing ctor37DF2C /
-// copy1EB79E and destructor pins Rva0037DEE4/Rva0037DF2C/Element remain
+// copy1EB79E and destructor pins Rva0037DEE4/CarryoverUnit/Element remain
 // address-named views of this same CarryoverUnit record; retain consumers
 // until a verified class reconciliation gives them one shared owner.
 // Vtable BDF158 names CarryoverUnit and slot3 is existing xfer37DE79.

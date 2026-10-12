@@ -329,26 +329,26 @@ Xfer *Rva003F5729Xfer(Xfer*xfer, std::vector<ArmySummary>*vec)
 // the 172-byte carryover unit records (constructor 0x0037DF2C, rowed; virtual
 // destructor 0x0037DEE4, pinned as ??1Rva0037DF2C), reusing the rowed
 // 172-byte reserve 1EBE2D and push 1EC056 owners through the same casts.
-class Rva0037DF2C { public: Rva0037DF2C();virtual ~Rva0037DF2C();char pad[0xA8]; };
+class CarryoverUnit { public: CarryoverUnit();virtual ~CarryoverUnit();char pad[0xA8]; };
 struct BfmeAssignRecord172 { int data[43]; };
 struct BfmePod172 { int data[43]; };
 namespace _STL {
  template<> void vector<BfmeAssignRecord172,allocator<BfmeAssignRecord172> >::reserve(unsigned int);
  template<> void vector<BfmePod172,allocator<BfmePod172> >::push_back(const BfmePod172&);
 }
-Xfer *Rva001EC0A0Xfer(Xfer*xfer, std::vector<Rva0037DF2C>*vec)
+Xfer *Rva001EC0A0Xfer(Xfer*xfer, std::vector<CarryoverUnit>*vec)
 {
  XferVersion version;version.m_version=1;version.m_currentVersion=1;
  xfer->xferVersion(version);
  UnsignedInt count=(UnsignedInt)vec->size();
  xfer->xferTypeName("std::vector").xferUnsignedInt(count);
  if(xfer->isSaving()) {
-  Rva0037DF2C*end=vec->end();Rva0037DF2C*cur=vec->begin();
+  CarryoverUnit*end=vec->end();CarryoverUnit*cur=vec->begin();
   while(cur!=end){xfer->xferSnapshot(cur);++cur;}
  }else{
   if(!vec->empty())throw XferException(4,"Vector must be empty on load");
   ((_STL::vector<BfmeAssignRecord172>*)vec)->reserve(count);
-  Rva0037DF2C value;
+  CarryoverUnit value;
   while(count--){
    ((_STL::vector<BfmePod172>*)vec)->push_back(*(BfmePod172*)&value);
    xfer->xferSnapshot(&vec->back());

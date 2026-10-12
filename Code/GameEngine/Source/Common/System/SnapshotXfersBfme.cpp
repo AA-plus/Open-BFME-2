@@ -302,8 +302,8 @@ public:
 }
 struct BfmeAssignRecord172;
 struct Rva005334A4Element;
-class Rva0037DF2C;
-Xfer *Rva001EC0A0Xfer( Xfer *xfer, _STL::vector<Rva0037DF2C> *units );
+class CarryoverUnit;
+Xfer *Rva001EC0A0Xfer( Xfer *xfer, _STL::vector<CarryoverUnit> *units );
 Xfer *Rva001ECA2DXfer( Xfer *xfer, void *sciences );
 extern "C" void *__cdecl memset( void *dst, int value, unsigned int size );
 
@@ -481,14 +481,14 @@ void Rva001EBAEA::xfer( Xfer *xfer )
 		*xfer == m_bfmeFlagC3;
 	else
 		m_bfmeFlagC3 = false;
-	Rva001EC0A0Xfer( xfer, (_STL::vector<Rva0037DF2C> *)&m_bfmeUnitsA4 );
+	Rva001EC0A0Xfer( xfer, (_STL::vector<CarryoverUnit> *)&m_bfmeUnitsA4 );
 	*xfer == m_bfmeFlagC0;
 	*xfer == m_bfmeFlagC1;
 	*xfer == m_bfmeFlagC2;
 	if( version.m_minimum >= 2 )
 	{
 		*xfer == m_bfmeValueB0;
-		Rva001EC0A0Xfer( xfer, (_STL::vector<Rva0037DF2C> *)&m_bfmeUnitsB4 );
+		Rva001EC0A0Xfer( xfer, (_STL::vector<CarryoverUnit> *)&m_bfmeUnitsB4 );
 	}
 	else
 	{
