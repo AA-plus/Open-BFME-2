@@ -17246,3 +17246,6 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?parse@WorldHeightMap@@QAEXAAVDataChunkInput@@HHH@Z,0x000AF238,callee of ??0WorldHeightMap@@QAE@PAVChunkInputStream@@HHH@Z
 ??1?$list@PAVNetPacket@@V?$allocator@PAVNetPacket@@@_STL@@@_STL@@QAE@XZ,0x00200667,fold-proof=Code/GameEngine/Source/GameNetwork/NetPacket.cpp; NetPacket template destructor name carried from existing C++ factory; native cleanup ownership proven independently by parent EH graph; five-byte direct tail fold anchored by complete same-object base and clear bodies with every native owner relocation proven
 ?rva000ABA2F@@YAXXZ,0x000ABA2F,callee of ?ReAcquireResources@BaseHeightMapRenderObjClass@@UAEXXZ
+?rva0035A8D7@Rva0035A8D7@@QAEXPAX00@Z,0x0035A8D7,callee of a seat-3 batch D gap forwarder; argument count from its ret immediate
+?rva004E7FCA@Rva004E7FCA@@QAEXPAX0M@Z,0x004E7FCA,callee of a seat-3 batch D gap forwarder; argument count from its ret immediate
+?rva005AED3C@AptMessenger@@QAEXXZ,0x005AED3C,callee of a seat-3 batch D gap forwarder; argument count from its ret immediate
