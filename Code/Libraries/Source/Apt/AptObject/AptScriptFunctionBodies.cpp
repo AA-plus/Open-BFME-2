@@ -59,7 +59,6 @@ private:
     void *data;
 };
 EAStringC *Rva0070B4F0GetString(int);
-void Rva00709F70Set(int, AptValue *);
 extern AptValue *gpGlobalGlobalObject;
 extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char *,const char *,int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
@@ -81,30 +80,30 @@ void AptScriptFunction2::SetupBeforeExecution(_AptScriptFunctionState *pState, A
     int nStartReg=1;
     if(mpFunction->getDF2Flag(1)) {
         pTemp=((AptValue *)mpCIH)->findChild(Rva0070B4F0GetString(0xA4),0);
-        Rva00709F70Set(nStartReg++,pTemp);
+        AptScriptFunctionBase::SetRegisterValue(nStartReg++,pTemp);
     }
     if(mpFunction->getDF2Flag(4)) {
         g_bfmeAptAssertAtE17734("false && \"Arguments Array is unsupported in Apt at this time.\"", "C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptObject\\AptScriptFunction.cpp", 0x303);
         if(g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
-        Rva00709F70Set(nStartReg++,gpUndefinedValue);
+        AptScriptFunctionBase::SetRegisterValue(nStartReg++,gpUndefinedValue);
     }
     if(mpFunction->getDF2Flag(0x10)) {
         pTemp=pContext->findChild(Rva0070B4F0GetString(0xA0),0);
         if(pTemp==0 || !pTemp->getIsDefined()) pTemp=((AptValue *)mpCIH)->findChild(Rva0070B4F0GetString(0xA0),0);
-        Rva00709F70Set(nStartReg++,pTemp);
+        AptScriptFunctionBase::SetRegisterValue(nStartReg++,pTemp);
     }
     if(mpFunction->getDF2Flag(0x40)) {
         EAStringC pTmpStr="_root";
         pTemp=((AptValue *)mpCIH)->findChild(&pTmpStr,0);
-        Rva00709F70Set(nStartReg++,pTemp);
+        AptScriptFunctionBase::SetRegisterValue(nStartReg++,pTemp);
     }
     if(mpFunction->getDF2Flag(0x80)) {
         EAStringC pTmpStr="_parent";
         pTemp=((AptValue *)mpCIH)->findChild(&pTmpStr,0);
         if(pTemp==0) pTemp=gpUndefinedValue;
-        Rva00709F70Set(nStartReg++,pTemp);
+        AptScriptFunctionBase::SetRegisterValue(nStartReg++,pTemp);
     }
-    if(mpFunction->getDF2Flag(0x100)) Rva00709F70Set(nStartReg++,gpGlobalGlobalObject);
+    if(mpFunction->getDF2Flag(0x100)) AptScriptFunctionBase::SetRegisterValue(nStartReg++,gpGlobalGlobalObject);
 }
 
 // Existing providers own the predicate and the zero-initialized global storage.

@@ -139,6 +139,7 @@ public:
     virtual void CleanupAfterExecution(_AptScriptFunctionState *);
     static AptValue **spRegBlockBase, **spRegBlockCurrentFrameBase;
     static int snRegBlockCurrentFrameCount, snRegisterBlockSize;
+    static void SetRegisterValue(int nIndex, AptValue *pNewValue);
     static void InitializeStaticData(const AptInitParmsT &);
     static void ShutdownStaticData();
     static void *PushStaticData();

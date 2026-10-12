@@ -60,7 +60,12 @@ void AptScriptFunctionBase::InitializeStaticData(const AptInitParmsT &parms)
     snRegBlockCurrentFrameCount=0;
 }
 
-void __cdecl Rva00709F70Set(int nIndex, AptValue *pNewValue)
+// ?SetRegisterValue@AptScriptFunctionBase@@SAXHPAVAptValue@@@Z @0x00709F70 198B:
+// renamed from placeholder Rva00709F70Set — the WorldBuilder twin asserts
+// "pNewValue" and "nIndex < MAX_REGISTERS_IN_FUNCTION" at EA's own
+// AptScriptFunction.cpp lines 706-718. Static member: ABI-identical to the
+// proven cdecl free function (no this in either body).
+void AptScriptFunctionBase::SetRegisterValue(int nIndex, AptValue *pNewValue)
 {
     CHECK_AT(pNewValue,"pNewValue",0x2C2);
     CHECK_AT(nIndex < 256,"nIndex < MAX_REGISTERS_IN_FUNCTION",0x2C3);
