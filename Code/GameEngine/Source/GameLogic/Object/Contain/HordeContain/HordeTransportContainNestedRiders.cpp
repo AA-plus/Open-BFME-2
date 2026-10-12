@@ -1,14 +1,23 @@
-// ?rva0047748E@HordeTransportContain@@QAEXXZ
-// partial score=0.9 date=2026-10-08
 // cl: /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
+// ?rva0047748E@HordeTransportContain@@QAEXXZ, retail 0x0047748E..0x00477513
+// (133 B): for each contained rider transport (list from 0x0046247D, the
+// +0x11D helper 0x00588B8A maps it to its rider contain), the first object of
+// the nested rider list (slot 108 descriptor) is handed back through the
+// horde's slot 15 when its drawable passes 0x00270260, clearing the
+// descriptor's +0. The method name is address-derived.
 #include <list>
-#include "../../Code/GameEngine/Include/GameLogic/ContainmentListView.h"
+#include "../../../../../Include/GameLogic/ContainmentListView.h"
 typedef ContainmentList IntList;
 namespace _STL {template<> _List_base<Rva0036ADF9Element,allocator<Rva0036ADF9Element> >::~_List_base();}
 
 struct Rva0046247DPair {void *a; IntList *objects;};
-class Rva0046247D {public:void rva0046247D(Rva0046247DPair &);};
+// Rowed at 0x0046247D (Rva0046247DCondPair.cpp); visible and kept out of
+// line so the caller knows the pair it fills keeps no pointer to it. (The
+// sibling 0x004779F9 in HordeTransportContain.cpp needs it opaque, hence this
+// unit.)
+class Rva0046247D {public:__declspec(noinline) void rva0046247D(Rva0046247DPair &p)
+{void *base=this;char *field=(char *)base+0x20;p.a=base?field:0;p.objects=(IntList *)((char *)base+0x54);}};
 class Rva0047A040Base9E0 {public:void *rva00588B8A(void *);};
 class Rva00270260 {public:bool rva00270260();};
 class Rva002716Holder {public:void rva00271601(unsigned char);};
