@@ -52,12 +52,15 @@ class SidesList
 {
 public:
 	SidesInfo *findSideInfo(AsciiString name, int *index = 0);
+	SidesInfo *findSkirmishSideInfo(AsciiString name, int *index = 0);
 	bool validateAllyEnemyList(const AsciiString &tname, AsciiString &allies);
 
 private:
 	unsigned char m_pad[0x3C];
 	int m_numSides;
 	SidesInfo m_sides[20];
+	int m_numSkirmishSides;				// +0x7C0
+	SidesInfo m_skirmishSides[20];		// +0x7C4
 };
 
 SidesInfo *SidesList::findSideInfo(AsciiString name, int *index)
@@ -67,6 +70,22 @@ SidesInfo *SidesList::findSideInfo(AsciiString name, int *index)
 			if (index)
 				*index = i;
 			return &m_sides[i];
+		}
+	}
+	return 0;
+}
+
+// ?findSkirmishSideInfo@SidesList@@QAEPAVSidesInfo@@VAsciiString@@PAH@Z
+// @0x0032B13F 162B. Donor: ZH SidesList.cpp findSkirmishSideInfo; the same
+// search over the skirmish sides (count +0x7C0, array +0x7C4, 0x60 stride)
+// that directly follow m_sides in retail.
+SidesInfo *SidesList::findSkirmishSideInfo(AsciiString name, int *index)
+{
+	for (int i = 0; i < m_numSkirmishSides; i++) {
+		if (m_skirmishSides[i].getDict()->getAsciiString(g_00DBDE24.get()) == name) {
+			if (index)
+				*index = i;
+			return &m_skirmishSides[i];
 		}
 	}
 	return 0;
