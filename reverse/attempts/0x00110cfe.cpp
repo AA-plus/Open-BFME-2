@@ -1,9 +1,14 @@
 // ?rva00110CFE@W3DAptRenderer@@QAEXXZ
-// partial score=0.96 date=2026-10-09
+// partial score=0.99 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep
-// WB BeginTriangleList 0x979290, asserts 125..144; native 0x111224.
+// W3DAptRenderer::BeginTriangleList, retail 0x00111224 (238 bytes). Identity:
+// the BFME2 WorldBuilder build's BeginTriangleList (0x979290; asserts 125..144)
+// has the same vertex-budget/flush/lock sequence. 0x00110CFE (the batch flush,
+// 705 bytes, banked separately) is called through its address-derived pin.
 #include "matrix4.h"
 #include "shader.h"
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 struct BFME2TextureResource;
 struct BFME2TextureRef { BFME2TextureResource* Ptr; };
 void BFME2Set_Texture(unsigned,const BFME2TextureRef&);
@@ -67,8 +72,8 @@ void W3DAptRenderer::rva00110CFE() {
   }
   shader.Set_Fog_Func(ShaderClass::FOG_DISABLE);
   shader.Set_Primary_Gradient((ShaderClass::PriGradientType)6);
-  if(texture.Ptr) shader.Set_Texturing(ShaderClass::TEXTURING_ENABLE);
-  else shader.Set_Texturing(ShaderClass::TEXTURING_DISABLE);
+  if(texture.Ptr) { _ReadWriteBarrier(); shader.Set_Texturing(ShaderClass::TEXTURING_ENABLE); }
+  else { _ReadWriteBarrier(); shader.Set_Texturing(ShaderClass::TEXTURING_DISABLE); }
   shader.Set_Cull_Mode(ShaderClass::CULL_MODE_DISABLE);
   if(DX8Wrapper::Has_Stencil()) {
    if(mode==0) {
