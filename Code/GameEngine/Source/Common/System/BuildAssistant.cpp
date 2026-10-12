@@ -798,7 +798,8 @@ class BuildAssistant
 public:
 	virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
 	virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
-	virtual void slot08(); virtual void slot09();
+	virtual void slot08();
+	virtual void reset( void );		// +0x24
 	virtual void update( void );		// +0x28
 	virtual void slot11();
 	virtual void slot12(); virtual void slot13();
@@ -2330,3 +2331,14 @@ void BuildAssistant::iterateFootprint( const ThingTemplate *build,
 	}  // end for y
 
 }  // end iterateFootprint
+
+// BuildAssistant::reset, retail 0x00391F90..0x00391FC4 (52 bytes), vtable 0x0081A088 slot
+// +0x24 next to update: as in Zero Hour, delete every pending sell entry and empty the list
+// (the clear is the folded STLport _List_base::clear 0x0023DAA5, tail-called).
+void BuildAssistant::reset( void )
+{
+	ObjectSellListIterator it;
+	for( it = m_sellList.begin(); it != m_sellList.end(); ++it )
+		(*it)->deleteInstance();
+	m_sellList.clear();
+}

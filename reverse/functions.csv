@@ -79134,3 +79134,4 @@ __ehhandler$?reset@ShroudTextureShader@@EAEXXZ,,0x00763CE9,10,Code/GameEngineDev
 ?rva00187AD0@GridTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z,,0x00187AD0,475,Code/Libraries/Source/WWVegas/WW3D2/TextureMapperFXShaderConvert.cpp,matched,BFME2 texture mapper FXShader conversion; WB 0xA33B70 strings
 __ehhandler$?rva00187690@ScaleTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z,,0x00768520,10,Code/Libraries/Source/WWVegas/WW3D2/TextureMapperFXShaderConvert.cpp,matched,EH handler shared by the three mapper conversions
 ?rva000EF7B8@Rva000EF7B8Texture@@UAEXH@Z,,0x000EF7B8,190,Code/GameEngineDevice/Source/W3DDevice/GameClient/Rva000EF7B8TextureApply.cpp,matched,texture vtable 0x7CEF60 apply override; clamp plus alpha blend state
+?reset@BuildAssistant@@UAEXXZ,,0x00391F90,52,Code/GameEngine/Source/Common/System/BuildAssistant.cpp,matched,ZH BuildAssistant::reset; vtable 0x81A088 slot 0x24 beside update; WB 0xF95960
