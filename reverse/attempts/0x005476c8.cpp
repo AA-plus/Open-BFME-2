@@ -1,6 +1,6 @@
 // ?rva005476C8@MoveToGroupOrder@@QAEPAUCoord3D@@W4ObjectID@@@Z
-// partial score=0.9 date=2026-10-09
-// cl: /Ireference/shims/bfmealloc /Ireference/shims/stlp_nodealloc /O1 /G7 /arch:SSE /MD /GX /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
+// partial score=0.9 date=2026-10-12
+// cl: /MD /GX /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
 // stlport
 //
 // Xfer of the two MoveTo group orders (vftable slot 3 of 0x00C6A478 /
@@ -28,6 +28,35 @@
 
 #include <hash_map>
 #include <cstddef>
+// Suppress this TU's non-retail vector<void*> operator[] copy (family2-LK3 row 25):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void *&_STL::vector<void*>::operator[](size_t);
+}
+// Suppress this TU's non-retail vector<void*> size copy (family2-LK3 row 17):
+// the retail copy serves the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> size_t vector<void*>::size() const;
+}
+// Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
+// the retail copies serve the link. Plain declaration-only form (no __imp_).
+namespace _STL {
+template <> void **vector<void*>::begin();
+template <> void **vector<void*>::end();
+}
+
+// map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
+// COMDAT (one byte shape per TU flags); a declaration-only specialization
+// stops this TU emitting its copy so callers bind the kept copy.
+// Plain (non-dllimport) form: no __imp_ reference is emitted.
+namespace _STL {
+template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
+}
+// Suppress the TU's non-retail const-begin copy (row 47 family2-LK3): the
+// /Od retail copy in stlport_vector_voidptr.cpp serves the link instead.
+namespace _STL {
+template <> vector<void *>::const_iterator _STL::vector<void *>::begin() const;
+}
 
 typedef unsigned char UnsignedByte;
 typedef unsigned int UnsignedInt;
@@ -154,16 +183,17 @@ class Object
 {
 public:
 	char pad0[4]; ThingTemplate *theTemplate;
- char pad08[0x38-8]; Coord3D position;float angle;
- char pad48[0x258-0x48];AIUpdateInterface *ai;
- char pad25C[0x274-0x25C];void *physics;
- char pad278[0x31C-0x278];
- float GetRelativeAngle(const Coord3D*)const;
- void rva0028AD00(int,float,int);
- void rva0028ACEE(const Coord3D*,int);
+	char pad08[0x38-8]; Coord3D position;float angle;
+	char pad48[0x258-0x48];AIUpdateInterface *ai;
+	char pad25C[0x274-0x25C];void *physics;
+	char pad278[0x31C-0x278];
+	float GetRelativeAngle(const Coord3D*)const;
+	void rva0028AD00(int,float,int);
+	void rva0028ACEE(const Coord3D*,int);
 	int m_31C; // +0x31C float bits
 	int m_320; // +0x320 float bits
 };
+struct ThingTemplate { char pad[0x11C]; unsigned kindHigh; };
 
 class Rva00295A0FCommands
 {
@@ -184,157 +214,6 @@ public:
 	char m_pad0[0x20];
 	AICommandInterface m_commands; // +0x20
 };
-
-void Rva00547245Xfer(Xfer *xfer, ObjectCoord3DPair *pair)
-{
-	XferObjectID(xfer, &pair->first).xferCoord3D(&pair->second);
-}
-
-Xfer *Rva0054755BXfer(Xfer *xfer, ObjectCoord3DMap *map)
-{
-	XferVersion version;
-	version.m_version = 1;
-	version.m_currentVersion = 1;
-	xfer->xferVersion(&version);
-
-	UnsignedInt count = map->size();
-	xfer->xferTypeName("std::hash_map").xferUnsignedInt(&count);
-
-	if (xfer->isSaving()) {
-		for (ObjectCoord3DMap::iterator it = map->begin(); it != map->end(); ++it) {
-			ObjectCoord3DPair item(*it);
-			Rva00547245Xfer(xfer, &item);
-		}
-	} else {
-		if (map->size() != 0) {
-			XferException error;
-			bfmeFormatText(&error, 4, "Map must be empty on load");
-			_CxxThrowException(&error, &g_guardTargetTypeThrowInfo);
-		}
-		ObjectCoord3DPair item;
-		while (count != 0) {
-			--count;
-			Rva00547245Xfer(xfer, &item);
-			(*map)[item.first] = item.second;
-		}
-	}
-	return xfer;
-}
-
-class GroupOrder
-{
-public:
-	virtual ~GroupOrder();
-	virtual void v01();
-	virtual void v02();
-	virtual void xfer(Xfer *xfer);
-
-private:
-	unsigned char m_pad04[0x18 - 4];
-};
-
-class MoveToGroupOrder : public GroupOrder
-{
-public:
-	virtual void xfer(Xfer *xfer);
-	bool rva00547188(Object *obj, int dummy);
-	void rva0054764C(Object *obj, AIUpdateInterface *aiUpdate, Coord3D *pos);
- Coord3D *rva005476C8(ObjectID);
-
-private:
-	Coord3D m_destination;             // +0x18
-	Bool m_flag24;                     // +0x24
-	Bool m_flag25;                     // +0x25
-	ObjectCoord3DMap m_positions;      // +0x28
-	Int m_value3C;                     // +0x3C
-};
-
-class MoveToFormationGroupOrder : public GroupOrder
-{
-public:
-	virtual void xfer(Xfer *xfer);
-
-private:
-	Int m_value18;                     // +0x18
-	Coord3D m_destination;             // +0x1C
-	Real m_angle;                      // +0x28
-	Bool m_flag2C;                     // +0x2C
-	ObjectCoord3DMap m_positions;      // +0x30
-	Bool m_flag44;                     // +0x44
-};
-
-void MoveToGroupOrder::xfer(Xfer *xfer)
-{
-	XferVersion version;
-	version.m_version = 1;
-	version.m_currentVersion = 2;
-	GroupOrder::xfer(xfer);
-	xfer->xferVersion(&version);
-	xfer->xferCoord3D(&m_destination);
-	xfer->xferBool(&m_flag24);
-	Rva0054755BXfer(xfer, &m_positions);
-	if (version.m_currentVersion >= 2)
-		xfer->xferBool(&m_flag25);
-	else if (xfer->isLoading())
-		m_flag25 = false;
-}
-
-void MoveToFormationGroupOrder::xfer(Xfer *xfer)
-{
-	XferVersion version;
-	version.m_version = 1;
-	version.m_currentVersion = 1;
-	GroupOrder::xfer(xfer);
-	xfer->xferVersion(&version);
-	xfer->xferInt(&m_value18);
-	xfer->xferCoord3D(&m_destination);
-	xfer->xferReal(&m_angle);
-	xfer->xferBool(&m_flag2C);
-	Rva0054755BXfer(xfer, &m_positions);
-	xfer->xferBool(&m_flag44);
-}
-
-// ?rva0054764C@MoveToGroupOrder@@QAEXPAVObject@@PAVAIUpdateInterface@@PAUCoord3D@@@Z, retail 0x0054764C 124B.
-// Chain from 0x00547188: if destination check passes copy x/y to obj+0x31C and
-// issue aiMoveToPositionAmphibious else branch on m_flag24 to Rva00295A0FCommand or aiMoveToPosition.
-// Evidence: this+0x18/+0x24 MoveTo layout plus caller 0x005478B5 (slot 4) passing
-// Object+AIUpdate+Coord3D plus rowed callees.
-void MoveToGroupOrder::rva0054764C(Object *obj, AIUpdateInterface *aiUpdate, Coord3D *pos)
-{
-	if (rva00547188(obj, (int)pos)) {
-		float xy[2];
-		xy[0] = m_destination.x;
-		xy[1] = m_destination.y;
-		obj->m_31C = *(int *)&xy[0];
-		obj->m_320 = *(int *)&xy[1];
-		aiUpdate->m_commands.aiMoveToPositionAmphibious(&m_destination, CMD_FROM_PLAYER);
-	} else {
-		if (m_flag24)
-			((Rva00295A0FCommands *)&aiUpdate->m_commands)->Rva00295A0FCommand(pos, 0x7FFFFFFF, 0);
-		else
-			aiUpdate->m_commands.aiMoveToPosition(pos, (CommandSourceType)0);
-	}
-}
-
-class ThingTemplate { public: char pad[0x11C]; unsigned kindHigh; };
-enum PathfindLayerEnum {LAYER_GROUND=1};
-class TerrainLogic {public:
- virtual void slot0();
- virtual void slot1();
- virtual void slot2();
- virtual void slot3();
- virtual void slot4();
- virtual void slot5();
- virtual void slot6();
-
- virtual float slot7(float,float,PathfindLayerEnum,Coord3D*,bool);
- PathfindLayerEnum getLayerForDestination(Object*,const Coord3D*);
-};
-extern TerrainLogic *TheTerrainLogic;
-class LocomotorSet;
-class Pathfinder {public: bool adjustDestination(Object*,const LocomotorSet&,Coord3D*,const Coord3D*);};
-struct AIView {char pad[16];Pathfinder *pathfinder;};extern AIView *TheAI;
-class GameLogic {public:Object *findObjectByID(ObjectID);};extern GameLogic *TheGameLogic;
 class MoveAIUpdateView {public:
  virtual void slot0();
  virtual void slot1();
@@ -476,20 +355,162 @@ class MoveAIUpdateView {public:
 
  virtual bool slot137();
 };
-class Rva00547223 {public: unsigned words[4];};
-Rva00547223 *Rva00547297Init(Rva00547223*,int*,int*);
+enum PathfindLayerEnum {LAYER_GROUND=1};
+class TerrainLogic {public:
+ virtual void slot00();virtual void slot01();virtual void slot02();virtual void slot03();virtual void slot04();virtual void slot05();virtual void slot06();
+ virtual float slot7(float,float,PathfindLayerEnum,Coord3D*,bool);
+ PathfindLayerEnum getLayerForDestination(Object*,const Coord3D*);
+};
+extern TerrainLogic *TheTerrainLogic;
+class LocomotorSet;
+class Pathfinder {public: Bool AdjustDestination(Object*,const LocomotorSet&,Coord3D*,const Coord3D*);};
+class AI {public: Pathfinder *pathfinder() { return m_pathfinder; } private: unsigned char m_pad00[0x10]; Pathfinder *m_pathfinder;};
+extern AI *TheAI;
+class GameLogic {public:Object *findObjectByID(ObjectID);};extern GameLogic *TheGameLogic;
+
+void Rva00547245Xfer(Xfer *xfer, ObjectCoord3DPair *pair)
+{
+	XferObjectID(xfer, &pair->first).xferCoord3D(&pair->second);
+}
+
+Xfer *Rva0054755BXfer(Xfer *xfer, ObjectCoord3DMap *map)
+{
+	XferVersion version;
+	version.m_version = 1;
+	version.m_currentVersion = 1;
+	xfer->xferVersion(&version);
+
+	UnsignedInt count = map->size();
+	xfer->xferTypeName("std::hash_map").xferUnsignedInt(&count);
+
+	if (xfer->isSaving()) {
+		for (ObjectCoord3DMap::iterator it = map->begin(); it != map->end(); ++it) {
+			ObjectCoord3DPair item(*it);
+			Rva00547245Xfer(xfer, &item);
+		}
+	} else {
+		if (map->size() != 0) {
+			XferException error;
+			bfmeFormatText(&error, 4, "Map must be empty on load");
+			_CxxThrowException(&error, &g_guardTargetTypeThrowInfo);
+		}
+		ObjectCoord3DPair item;
+		while (count != 0) {
+			--count;
+			Rva00547245Xfer(xfer, &item);
+			(*map)[item.first] = item.second;
+		}
+	}
+	return xfer;
+}
+
+class GroupOrder
+{
+public:
+	virtual ~GroupOrder();
+	virtual void v01();
+	virtual void v02();
+	virtual void xfer(Xfer *xfer);
+
+private:
+	unsigned char m_pad04[0x18 - 4];
+};
+
+class MoveToGroupOrder : public GroupOrder
+{
+public:
+	virtual void xfer(Xfer *xfer);
+	bool rva00547188(Object *obj, int dummy);
+	void rva0054764C(Object *obj, AIUpdateInterface *aiUpdate, Coord3D *pos);
+	Coord3D *rva005476C8(ObjectID);
+
+private:
+	Coord3D m_destination;             // +0x18
+	Bool m_flag24;                     // +0x24
+	Bool m_flag25;                     // +0x25
+	ObjectCoord3DMap m_positions;      // +0x28
+	Int m_value3C;                     // +0x3C
+};
+
+class MoveToFormationGroupOrder : public GroupOrder
+{
+public:
+	virtual void xfer(Xfer *xfer);
+
+private:
+	Int m_value18;                     // +0x18
+	Coord3D m_destination;             // +0x1C
+	Real m_angle;                      // +0x28
+	Bool m_flag2C;                     // +0x2C
+	ObjectCoord3DMap m_positions;      // +0x30
+	Bool m_flag44;                     // +0x44
+};
+
+void MoveToGroupOrder::xfer(Xfer *xfer)
+{
+	XferVersion version;
+	version.m_version = 1;
+	version.m_currentVersion = 2;
+	GroupOrder::xfer(xfer);
+	xfer->xferVersion(&version);
+	xfer->xferCoord3D(&m_destination);
+	xfer->xferBool(&m_flag24);
+	Rva0054755BXfer(xfer, &m_positions);
+	if (version.m_currentVersion >= 2)
+		xfer->xferBool(&m_flag25);
+	else if (xfer->isLoading())
+		m_flag25 = false;
+}
+
+void MoveToFormationGroupOrder::xfer(Xfer *xfer)
+{
+	XferVersion version;
+	version.m_version = 1;
+	version.m_currentVersion = 1;
+	GroupOrder::xfer(xfer);
+	xfer->xferVersion(&version);
+	xfer->xferInt(&m_value18);
+	xfer->xferCoord3D(&m_destination);
+	xfer->xferReal(&m_angle);
+	xfer->xferBool(&m_flag2C);
+	Rva0054755BXfer(xfer, &m_positions);
+	xfer->xferBool(&m_flag44);
+}
+
+// ?rva0054764C@MoveToGroupOrder@@QAEXPAVObject@@PAVAIUpdateInterface@@PAUCoord3D@@@Z, retail 0x0054764C 124B.
+// Chain from 0x00547188: if destination check passes copy x/y to obj+0x31C and
+// issue aiMoveToPositionAmphibious else branch on m_flag24 to Rva00295A0FCommand or aiMoveToPosition.
+// Evidence: this+0x18/+0x24 MoveTo layout plus caller 0x005478B5 (slot 4) passing
+// Object+AIUpdate+Coord3D plus rowed callees.
+void MoveToGroupOrder::rva0054764C(Object *obj, AIUpdateInterface *aiUpdate, Coord3D *pos)
+{
+	if (rva00547188(obj, (int)pos)) {
+		float xy[2];
+		xy[0] = m_destination.x;
+		xy[1] = m_destination.y;
+		obj->m_31C = *(int *)&xy[0];
+		obj->m_320 = *(int *)&xy[1];
+		aiUpdate->m_commands.aiMoveToPositionAmphibious(&m_destination, CMD_FROM_PLAYER);
+	} else {
+		if (m_flag24)
+			((Rva00295A0FCommands *)&aiUpdate->m_commands)->Rva00295A0FCommand(pos, 0x7FFFFFFF, 0);
+		else
+			aiUpdate->m_commands.aiMoveToPosition(pos, (CommandSourceType)0);
+	}
+}
+
 Coord3D *MoveToGroupOrder::rva005476C8(ObjectID id)
 {
  Object *obj=TheGameLogic->findObjectByID(id);
  Coord3D result;
  const Coord3D *position;
  if(obj) {
-  AIUpdateInterface *ai=obj->ai;
+  AIUpdateInterface *ai=(AIUpdateInterface *)obj->ai;
   if((ai && reinterpret_cast<MoveAIUpdateView*>(ai)->slot137()) || obj->physics) {
    PathfindLayerEnum layer=TheTerrainLogic->getLayerForDestination(obj,&m_destination);
    result.z=TheTerrainLogic->slot7(m_destination.x,m_destination.y,layer,0,true);
    result.x=m_destination.x;result.y=m_destination.y;
-   if(!TheAI->pathfinder->adjustDestination(obj,*reinterpret_cast<LocomotorSet*>(reinterpret_cast<char*>(ai)+0x1CC),&result,&m_destination))result=m_destination;
+   if(!TheAI->pathfinder()->AdjustDestination(obj,*reinterpret_cast<LocomotorSet*>(reinterpret_cast<char*>(ai)+0x1CC),&result,&m_destination))result=m_destination;
    if(obj->theTemplate->kindHigh & 0x04000000) {float angle=obj->angle; obj->rva0028AD00((int)&result,obj->GetRelativeAngle(&result)+angle,layer);}
    else obj->rva0028ACEE(&result,layer);
    position=&result;
