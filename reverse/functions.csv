@@ -79099,3 +79099,4 @@ __ehhandler$?rva005D5001@Rva005D5001@@QAEXABUTreeHintRef00217D4C@@@Z,,0x007A2543
 ??0Rva003AD0CAModule@@QAE@PAXPAVRva003AD9BBTemplate@@@Z,,0x003AD0CA,49,Code/GameEngine/Source/GameClient/System/FXParticleSystem/ModuleCtorChainsA.cpp,matched,Pinned module constructor over 0x003ABDF9 with its stamps
 ??0Rva003AD100Module@@QAE@PAXPAVRva003AD9F7Template@@@Z,,0x003AD100,49,Code/GameEngine/Source/GameClient/System/FXParticleSystem/ModuleCtorChainsA.cpp,matched,Pinned module constructor over 0x003ABE40 with its stamps
 ??0Rva005E7AD0Object@@QAE@PAXPAVV3HostRva005E7AD0@@@Z,,0x003AD136,49,Code/GameEngine/Source/GameClient/System/FXParticleSystem/ModuleCtorChainsA.cpp,matched,Pinned module constructor over 0x003ABE8D with its stamps
+??0BFMENetworkQueue@@QAE@XZ,,0x00558D41,21,Code/GameEngine/Source/GameNetwork/BFMENetworkQueueCtor.cpp,matched,Pinned out-of-line queue constructor; empty deque through the rowed _Deque_base constructor 0x005532FF
