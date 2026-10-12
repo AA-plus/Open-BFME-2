@@ -1,5 +1,5 @@
 // ?findMeACrashSite@AIUpdateInterface@@QAE_NMPBUCoord3D@@PAU2@VBfmeFixedStorage0004543D@@@Z
-// partial score=0.9325 date=2026-10-11
+// partial score=0.995 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc /ICode/GameEngine/Source /ICode/Libraries/Include
 #include "Common/PartitionRangeQueryCallView.h"
 #include "Lib/Coord3D.h"
@@ -18,7 +18,7 @@ static __forceinline float crashSpacing(const float &a,const float &b) { return 
 class AIUpdateInterface { char pad[8];Object *object; public: bool findMeACrashSite(float,const Coord3D*,Coord3D*,BfmeFixedStorage0004543D); };
 bool AIUpdateInterface::findMeACrashSite(float maxRange,const Coord3D *startPos,Coord3D *output,BfmeFixedStorage0004543D mask) {
  Object *self=object;if(!self)return false;
- float spacing=crashSpacing(self->radius,10.0f);
+ float spacing=crashSpacing(10.0f,self->radius);
  BfmeWideResult hits=ThePartitionManager->iterateObjectsInRange(startPos,maxRange,0,&Rva0004584D(mask,g_009FEFA4),1);
  for(float range=spacing;range<=maxRange;range+=spacing) {
   float numPoints=(6.2831855f*range)/spacing;
