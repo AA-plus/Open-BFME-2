@@ -1,8 +1,9 @@
-// ?rva0020202B@Rva0020202B@@QAEPAXH@Z
+// ?newLODPreset@GameLODManager@@QAEPAULODPresetInfo@@W4StaticGameLODLevel@@@Z
 // cl: /DNDEBUG /MD /EHsc
 //
-// ?rva0020202B@Rva0020202B@@QAEPAXH@Z, retail 0x0020202B, 45 bytes.
-// Fixed-slot pool allocator. The sibling constructor Rva00201EACLODManager
+// ?newLODPreset@GameLODManager@@QAEPAULODPresetInfo@@W4StaticGameLODLevel@@@Z, retail 0x0020202B, 45 bytes.
+// GameLODManager::newLODPreset (WorldBuilder GameLOD.cpp:394; ZH signature,
+// called from INI::parseLODPreset 0x00202E23). Fixed-slot pool allocator. The sibling constructor Rva00201EACLODManager
 // (Code/GameEngine/Source/Common/Rva00201DC4LODDefaults.cpp) proves the array
 // composition this addresses: presets[5][32] of 32-byte stride at +0x208
 // (5*32*32 = 0x1000, running 0x208..0x1208) and the pool of five 32-entry
@@ -18,23 +19,25 @@
 // whole diff against retail.
 // Neighbours: prev 0x0020200D RetailBenchProfileAllocator, next 0x002025AC.
 // Unlock lane: landing this makes 0x00202E23 ready.
-class Rva0020202B
+enum StaticGameLODLevel { STATIC_GAME_LOD_UNKNOWN = -1 };
+struct LODPresetInfo
 {
-public:
-	struct Slot
-	{
-		char data[32];
-	};
-	char m_pad0[0x208];
-	Slot m_pool[160];
-	char m_pad1[0x1A4];
-	int m_counts[5];
-	void* rva0020202B(int index);
+	char data[32];
 };
 
-void* Rva0020202B::rva0020202B(int index)
+class GameLODManager
 {
-	if (m_counts[index] < 32)
-		return (void*)&m_pool[index * 32 + (++m_counts[index])];
+public:
+	char m_pad0[0x208];
+	LODPresetInfo m_lodPresets[160];
+	char m_pad1[0x1A4];
+	int m_numLevelPresets[5];
+	LODPresetInfo *newLODPreset(StaticGameLODLevel index);
+};
+
+LODPresetInfo *GameLODManager::newLODPreset(StaticGameLODLevel index)
+{
+	if (m_numLevelPresets[index] < 32)
+		return &m_lodPresets[index * 32 + (++m_numLevelPresets[index])];
 	return 0;
 }

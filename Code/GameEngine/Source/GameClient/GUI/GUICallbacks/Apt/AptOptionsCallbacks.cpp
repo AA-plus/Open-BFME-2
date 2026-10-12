@@ -219,6 +219,7 @@ public:
 	int m_1768; // +0x1768, the setting AptOptions::Save stores with a static LOD change
 	unsigned char m_pad176c[0x17c4 - 0x176c];
 	int m_17c4; // +0x17C4
+	int findAudioLODLevel() const;
 };
 
 extern GameLODManager *TheGameLODManager;
@@ -228,11 +229,6 @@ void Rva005186E1Format(OptionPreferences *prefs, AsciiString *text);
 
 // What AptOptions::Reset calls. The LOD manager's 0x002026A0 is the WB twin's
 // GameLODManager::findAudioLODLevel; 0x005183FA is rowed on Rva005183A0.
-class Rva002026A0
-{
-public:
-	int rva002026A0() const;
-};
 
 class Rva005183A0
 {
@@ -629,7 +625,7 @@ void AptOptions::Reset(const char *unused)
 		}
 		if (m_2d8)
 		{
-			if (((Rva002026A0 *)TheGameLODManager)->rva002026A0() == 1)
+			if (TheGameLODManager->findAudioLODLevel() == 1)
 				GadgetCheckBoxSetChecked(m_2d8, true);
 			else
 				GadgetCheckBoxSetChecked(m_2d8, false);

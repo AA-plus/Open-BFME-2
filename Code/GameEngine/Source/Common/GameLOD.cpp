@@ -200,17 +200,11 @@ void INI::parseBenchProfile( INI* ini)
 /**Parse a description of all the LOD settings for a given detail level*/
 // ?parseLODPreset@INI@@SAXPAV1@@Z
 // Retail 0x00202E23 226B. INI block-parse node for token LODPreset.
-// Calls rowed getNextToken set copy-ctor rva00202B6C rva0020202B parse helpers.
+// Calls rowed getNextToken set copy-ctor rva00202B6C newLODPreset parse helpers.
 class Rva00202B6C
 {
 public:
 	Int rva00202B6C(AsciiString name);
-};
-
-class Rva0020202B
-{
-public:
-	void *rva0020202B(int index);
 };
 
 void INI::parseLODPreset(INI *ini)
@@ -223,7 +217,7 @@ void INI::parseLODPreset(INI *ini)
 		Int index = reinterpret_cast<Rva00202B6C *>(TheGameLODManager)->rva00202B6C(name);
 		if (index != -1)
 		{
-			void *preset = reinterpret_cast<Rva0020202B *>(TheGameLODManager)->rva0020202B(index);
+			void *preset = TheGameLODManager->newLODPreset((StaticGameLODLevel)index);
 			if (preset)
 			{
 				INI::parseIndexList(ini, NULL, preset, CPUNames);
@@ -287,18 +281,8 @@ BenchProfile *GameLODManager::newBenchProfile(void)
 	return NULL;
 }
 
-// ?newLODPreset@GameLODManager@@QAEPAULODPresetInfo@@W4StaticGameLODLevel@@@Z present-unmatched
-LODPresetInfo *GameLODManager::newLODPreset(StaticGameLODLevel index)
-{
-	if (m_numLevelPresets[index] < MAX_LOD_PRESETS_PER_LEVEL)
-	{	
-		m_numLevelPresets[index]++;
-		return &m_lodPresets[index][m_numLevelPresets[index]-1];
-	}
-
-	DEBUG_CRASH(( "GameLODManager::newLODPreset - Too many presets defined for '%s'\n", TheGameLODManager->getStaticGameLODLevelName(index)));
-	return NULL;
-}
+// GameLODManager::newLODPreset: retail 0x0020202B, rowed in
+// Rva0020202BFinish.cpp (BFME2 indexes the slot after the increment).
 
 // ?init@GameLODManager@@QAEXXZ
 // Body in GameLOD_init.asm (exact 967B retail).

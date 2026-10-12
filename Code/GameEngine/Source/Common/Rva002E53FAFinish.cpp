@@ -38,12 +38,8 @@ namespace _STL
 template <> AsciiString &map<AsciiString, AsciiString, less<AsciiString>, allocator<pair<const AsciiString, AsciiString> > >::operator[](const AsciiString &key);
 }
 
-// The rowed indexed getter at 0x00202678 is a __stdcall free function
-// (?Rva00202678Get@@YGPBDH@Z), but the retail caller sets ecx to
-// TheGameLODManager immediately before the call, i.e. it was compiled
-// against a GameLODManager thiscall method at the same address. Model that
-// call shape here and bind this spelling to the rowed address so the linker
-// emits the same REL32 the retail caller uses.
+// The rowed GameLODManager::getAudioLODLevelName at 0x00202678 (the retail
+// caller sets ecx to TheGameLODManager immediately before the call).
 class GameLODManager
 {
 public:
@@ -52,7 +48,6 @@ public:
 
 extern GameLODManager *TheGameLODManager;
 
-extern "C" const char *__stdcall Rva00202678Get(int);
 
 class OptionPreferences : public AsciiPreferenceMap
 {
