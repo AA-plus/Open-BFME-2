@@ -24,11 +24,28 @@ public:
  Rva0036CA00Str choice;
 };
 Rva0036CA00Str Rva00274DD4();
+// The same by-value four-byte owner is passed by the verified map-properties
+// caller at 0x0029576F. It is released after the string temporary at this entry.
+struct Rva0010F149Handle
+{
+ Rva0010F149Handle(const Rva0010F149Handle &);
+ ~Rva0010F149Handle() { if (referent) referent->Release_Ref(); }
+ OpaqueRefCounted *referent;
+};
+class Rva004EC166
+{
+public:
+ void rva00433403(const AsciiString &);
+};
 class Drawable {
 public:
- char pad10c[0x10c];const AudioEventInfo *raw;
+ char pad100[0x100];
+ int customNameID;
+ char pad104[8];
+ const AudioEventInfo *raw;
  Rva002390CB rva0027756D(int);
  Rva0036CA00Str rva0027824D(int);
+ void rva002781DA(Rva0010F149Handle);
 };
 Rva0036CA00Str Drawable::rva0027824D(int selector)
 {
@@ -42,4 +59,17 @@ Rva0036CA00Str Drawable::rva0027824D(int selector)
   if(selector!=0 && selector!=3){Rva002390CB fallback=rva0027756D(0);if(fallback.choice.handle.value)return fallback.choice;}
  }
  return Rva0036CA00Str();
+}
+
+// Native 0x002781DA..0x0027824D: by-value audio-info rename, RET4.
+// Target facts: Drawable receiver from the matched map-properties caller;
+// identifier +0x100, incoming name +8, exact format literal and all callees.
+// Donor audio naming is a semantic lead only; the original method name is unknown.
+void Drawable::rva002781DA(Rva0010F149Handle info)
+{
+ AsciiString name;
+ name.format(" CUSTOM %d ", customNameID);
+ name.concat(*reinterpret_cast<const AsciiString *>(
+  reinterpret_cast<const char *>(info.referent) + 8));
+ reinterpret_cast<Rva004EC166 *>(info.referent)->rva00433403(name);
 }
