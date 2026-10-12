@@ -21,9 +21,8 @@ class Parameter;
 
 class ScriptActions
 {
-public:
-	void doFlashSpellStoreButton(int seconds);
 protected:
+	void doFlashSpellStoreButton(int seconds);
 	void doPlaySoundEffect(const AsciiString &sound);
 	void doPlaySoundEffectAt(const AsciiString &sound, const AsciiString &waypoint);
 	void doSoundPlayFromNamed(const AsciiString &sound, const AsciiString &unitName);
