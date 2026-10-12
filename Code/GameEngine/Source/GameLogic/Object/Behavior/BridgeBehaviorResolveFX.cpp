@@ -57,15 +57,13 @@ public:
 	AsciiString rva00456774(Int state, Int index);
 };
 
-struct Rva002DB4DANode;
-
-// TheTerrainRoads->findBridge.
-struct Rva002DB4DA
+class TerrainRoadCollection
 {
-	Rva002DB4DANode *rva002DB4DA(AsciiString name);
+public:
+	TerrainRoadType *findBridge(AsciiString name);
 };
 
-extern Rva002DB4DA *TheTerrainRoads;
+extern TerrainRoadCollection *TheTerrainRoads;
 
 class Bridge
 {
@@ -177,7 +175,7 @@ void BridgeBehavior::resolveFX( void )
 	AsciiString bridgeTemplateName = bridge->rva000AF1DD();
 
 	// find the bridge template
-	TerrainRoadType *bridgeTemplate = (TerrainRoadType *)TheTerrainRoads->rva002DB4DA( bridgeTemplateName );
+	TerrainRoadType *bridgeTemplate = TheTerrainRoads->findBridge( bridgeTemplateName );
 
 	// sanity
 	if( bridgeTemplate == 0 )

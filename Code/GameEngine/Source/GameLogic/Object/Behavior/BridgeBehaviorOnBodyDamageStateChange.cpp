@@ -54,15 +54,13 @@ public:
 	OpaqueRefElement4 m_repairedToSound[4];
 };
 
-struct Rva002DB4DANode;
-
-// TheTerrainRoads->findBridge.
-struct Rva002DB4DA
+class TerrainRoadCollection
 {
-	Rva002DB4DANode *rva002DB4DA(AsciiString name);
+public:
+	TerrainRoadType *findBridge(AsciiString name);
 };
 
-extern Rva002DB4DA *TheTerrainRoads;
+extern TerrainRoadCollection *TheTerrainRoads;
 
 class Bridge
 {
@@ -276,7 +274,7 @@ void BridgeBehavior::onBodyDamageStateChange( const DamageInfo* damageInfo,
 	AsciiString bridgeTemplateName = bridge->rva000AF1DD();
 
 	// find the bridge template
-	TerrainRoadType *bridgeTemplate = (TerrainRoadType *)TheTerrainRoads->rva002DB4DA( bridgeTemplateName );
+	TerrainRoadType *bridgeTemplate = TheTerrainRoads->findBridge( bridgeTemplateName );
 
 	//
 	// given the old state and the new state, did we get worse (damaged) or did

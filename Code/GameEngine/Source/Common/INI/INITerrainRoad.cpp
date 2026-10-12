@@ -44,21 +44,16 @@ class TerrainRoadCollection
 public:
     TerrainRoadType *newRoad(AsciiString name);
     TerrainRoadType *newBridge(AsciiString name);
+    TerrainRoadType *findRoad(AsciiString name);
     TerrainRoadType *findBridge(AsciiString name);
 };
 extern TerrainRoadCollection *TheTerrainRoads;
-class Rva002DB496
-{
-public:
-    void *rva002DB496(AsciiString name);
-};
 
 void INI::parseTerrainRoadDefinition(INI *ini)
 {
     AsciiString name;
     name = ini->getNextToken();
-    TerrainRoadType *road = (TerrainRoadType *)
-        ((Rva002DB496 *)TheTerrainRoads)->rva002DB496(name);
+    TerrainRoadType *road = TheTerrainRoads->findRoad(name);
     if (road)
     {
         if (road->isBridge())

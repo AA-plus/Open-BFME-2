@@ -46,10 +46,8 @@ class SurfaceClass { public: void DrawPixel(unsigned,unsigned,unsigned); };
 void BFME_DX8_Thread_Lock(); bool BFME_DX8_Thread_Assert();
 class BFMEDX8DeviceLock { public: BFMEDX8DeviceLock(){BFME_DX8_Thread_Lock();} ~BFMEDX8DeviceLock(){BFME_DX8_Thread_Assert();} };
 class Radar { public: bool radarToWorld(const ICoord2D*,Coord3D*); float getTerrainAverageZ() const {return averageZ;} private: char pad0[0x1c];float averageZ;char pad20[0x1430-0x20]; };
-struct Rva002DB4DANode;
-struct Rva002DB4DA { Rva002DB4DANode *rva002DB4DA(AsciiString); };
-class TerrainRoadCollection;extern TerrainRoadCollection *TheTerrainRoads;
-struct TerrainRoadType {char pad[0x28];RGBColor radarColor; RGBColor getRadarColor(){return radarColor;} };
+class TerrainRoadType {char pad[0x28];RGBColor radarColor; public: RGBColor getRadarColor(){return radarColor;} };
+class TerrainRoadCollection { public: TerrainRoadType *findBridge(AsciiString name); };extern TerrainRoadCollection *TheTerrainRoads;
 class TerrainType { public: AsciiString getTexture() const; };
 struct Bridge { char pad[0x30];float z0;char p34[8];float z1;char p40[8];float z2;char p4c[8];float z3;char p58[8];ObjectID objectID; };
 class RadarBodyView {public:
@@ -256,7 +254,7 @@ void W3DRadar::buildTerrainTexture( TerrainLogic *terrain )
 								if( workingBridge )
 								{
 									AsciiString bridgeTName = ((TerrainType*)bridge)->getTexture();
-									TerrainRoadType *bridgeTemplate = (TerrainRoadType*)((Rva002DB4DA*)TheTerrainRoads)->rva002DB4DA(bridgeTName);
+									TerrainRoadType *bridgeTemplate = TheTerrainRoads->findBridge(bridgeTName);
 
 									if ( bridgeTemplate )
 										color = bridgeTemplate->getRadarColor();
