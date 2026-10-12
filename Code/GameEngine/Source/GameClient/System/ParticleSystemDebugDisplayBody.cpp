@@ -1,17 +1,12 @@
-// ?ParticleSystemDebugDisplay@@YAXPAVDebugDisplayInterface@@PAXPAU_iobuf@@@Z
-// partial score=0.9977301332675221 date=2026-10-10
-// ?ParticleSystemDebugDisplay@@YAXPAVDebugDisplayInterface@@PAXPAU_iobuf@@@Z
-// partial score=0.998025 date=2026-10-09
-// ?ParticleSystemDebugDisplay@@YAXPAVDebugDisplayInterface@@PAXPAU_iobuf@@@Z
-// partial score=0.998025 date=2026-10-09
-// ?ParticleSystemDebugDisplay@@YAXPAVDebugDisplayInterface@@PAXPAU_iobuf@@@Z
-// partial score=0.98 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_MALLOC
 // stlport
-// BF1 readonly9cbfb551 ParticleSystemDebugDisplay semantic donor.
-// Native001FA04B..001FA4401013B has identical statistics literals and
-// list/template-tree purpose, with target slots and layout witnessed below.
-// Candidate only: providers and full body still need normal verification.
+// ParticleSystemDebugDisplay (0x001FA04B, 1013 bytes): the particle statistics
+// debug page. Identity and layout from the BF1 readonly9cbfb551 semantic donor
+// plus the target's literals, vtable slots and offsets (see the banked attempt's
+// record); the STL helper instantiations it calls are verified in
+// ParticleSystemDebugDisplay.cpp. Closed from the 0.9977 banked partial: the
+// "Avg per system" average is one in-flight x87 expression inside the print call
+// (a float local with a compound divide put the display vtable in EAX, not ECX).
 #include "ascii_string.h"
 #define _BFME_RETAIL_TREE_INSERT_LAYOUT
 #define _STLP_USE_STATIC_LIB
@@ -75,7 +70,6 @@ static bool timing() { return *((char *)TheWritableGlobalData+0x9c2)!=0; }
 static float managerFloat(unsigned off) { return *(float *)((char *)TheParticleSystemManager+off); }
 static int managerInt(unsigned off) { return *(int *)((char *)TheParticleSystemManager+off); }
 
-// ?ParticleSystemDebugDisplay@@YAXPAVDebugDisplayInterface@@PAXPAU_iobuf@@@Z present-unmatched
 void ParticleSystemDebugDisplay(DebugDisplayInterface *display, void *, _iobuf *) {
  Rva001FA04BDisplay *dd=(Rva001FA04BDisplay *)display;
  if(!dd) return;
@@ -115,9 +109,8 @@ void ParticleSystemDebugDisplay(DebugDisplayInterface *display, void *, _iobuf *
   if(timing()) costIt=templateMapCost.find(mapIt->first);
   dd->print("  %s: %d instances",mapIt->first.str(),mapIt->second);
   if(countIt!=templateMapParticleCount.end() && mapIt->second>0) {
-   // A separate compound divide preserves retail's x87/argument-stack order.
-   float average=(float)countIt->second; average/=mapIt->second;
-   dd->print("    (Avg per system %.2f) ",average);
+   // Parenthesised cast: retail builds the divide as one in-flight x87 expression.
+   dd->print("    (Avg per system %.2f) ",((float)countIt->second)/mapIt->second);
   }
   if(timing() && costIt!=templateMapCost.end() && mapIt->second>0)
    dd->print("   (Avg cost per system %.2f msec)",costIt->second/(float)mapIt->second);
