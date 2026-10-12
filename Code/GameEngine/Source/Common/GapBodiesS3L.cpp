@@ -2,12 +2,14 @@
 // INI field-parse callbacks from .text gaps no ledger row covers (seat-3
 // batch L; see GapBodiesS3A.cpp). Retail bytes establish every shape; the
 // error text is retail's own literal.
+#include "ascii_string.h"
 #include "unicode_string.h"
 
 class INI
 {
 public:
 	const char *getNextToken(const char *seps);				// 0x0002DF97
+	static void parseInt(INI *ini, void *instance, void *store, const void *userData);	// 0x0002EF56
 };
 
 enum NameKeyType { NAMEKEY_INVALID = 0 };
@@ -144,4 +146,74 @@ Rva005114C6Messenger *Rva005114C6::rva005114C6(void *owner)
 	if (messenger)
 		return messenger;
 	return 0;
+}
+
+// --- 0x00419BB8 (19B): append the third argument to the +0x08 text while the
+// +0x04 flag is set.
+class Rva00419BB8
+{
+public:
+	virtual void rva00419BB8(int a, int b, const char *text);
+private:
+	bool m_enabled;											// +0x04
+	char m_pad05[3];
+	AsciiString m_text;										// +0x08
+};
+
+void Rva00419BB8::rva00419BB8(int, int, const char *text)
+{
+	if (m_enabled)
+		m_text.concat(text);
+}
+
+// --- 0x004FA5B8 (28B): a module data's field-parse builder: the base's
+// (folded, empty) builder, then the QueueSize / ArmyToSpawn table at
+// 0x00C63344 (retail's field names).
+class Xfer;
+
+class FXParticleSystem
+{
+public:
+	class EmissionVelocityInfo
+	{
+	public:
+		virtual void DoXfer(Xfer &xfer);					// 0x0047A69C (the folded empty body)
+	};
+};
+
+struct FieldParse
+{
+	const char *token;
+	void (*parse)(INI *ini, void *instance, void *store, const void *userData);
+	const void *userData;
+	int offset;
+};
+
+class MultiIniFieldParse
+{
+public:
+	void add(const FieldParse *table, unsigned int offset);	// 0x0002BC6E
+};
+
+void rva004E3BD8(INI *ini, void *instance, void *store, const void *userData);	// 0x004E3BD8
+
+class Rva004FA5B8 : public FXParticleSystem::EmissionVelocityInfo
+{
+public:
+	virtual void buildFieldParse(MultiIniFieldParse &p);
+private:
+	static const FieldParse s_dataFieldParse[];
+};
+
+const FieldParse Rva004FA5B8::s_dataFieldParse[] =
+{
+	{ "QueueSize", INI::parseInt, 0, 0x14 },
+	{ "ArmyToSpawn", rva004E3BD8, 0, 0x08 },
+	{ 0, 0, 0, 0 }
+};
+
+void Rva004FA5B8::buildFieldParse(MultiIniFieldParse &p)
+{
+	FXParticleSystem::EmissionVelocityInfo::DoXfer((Xfer &)p);
+	p.add(s_dataFieldParse, 0);
 }
