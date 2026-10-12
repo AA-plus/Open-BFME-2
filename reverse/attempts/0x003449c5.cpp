@@ -1,33 +1,8 @@
 // ?rva003449C5@@YA_NPAUCoord3D@@PAVObject@@1@Z
-// partial score=0.9650028477340173 date=2026-10-10
-// ?rva003449C5@@YA_NPAUCoord3D@@PAVObject@@1@Z
-// partial score=0.95 date=2026-10-09
-// cl: /O1 /G7 /EHsc /MD /arch:SSE /I.
+// partial score=0.96 date=2026-10-12
+// cl: /O1 /G7 /EHsc /MD /arch:SSE /DNDEBUG /ICode/Libraries/Include/Lib
 //
-// ?rva003449C5@@YA_NPAUCoord3D@@PAVObject@@1@Z retail 0x003449C5..0x00344D60 923B.
-// cdecl melee fallback goal helper (goal; source; victim) called from
-// 0x00345AB7 and 0x00348E9F; BFME 1 places the same body at 0x001752A0
-// (called from AIAttackMeleeEngageState::computePath). WorldBuilder twin
-// 0x00E10AB0 has the same call graph.
-// Without an AI (+0x258) it fails. A victim of kind 93 whose
-// SiegeDeploySpecialPower module reports set (0x004C5772) keeps the goal.
-// When the source can approach the target (victim position or the goal)
-// and a quick path to the goal exists the goal is kept. Otherwise it walks
-// back from the goal toward the source in 20-unit steps until a quick path
-// exists (fails when none does) and notes cells on an upper layer or on a
-// blocked gate; such a goal is pulled back by the AI data radius (+0xD4)
-// plus the source radius (+0xB8) unless the target was approachable. An
-// unadjusted point must be at least 20 units closer than the goal. The point
-// is fitted with adjustToPossibleDestination and written to the goal.
-// R6: canonical Coord3D plus scalar-copy derived value wrapper restores native
-// assignment copies without extra conversion temporaries. Whole923B and all
-// existing callee spellings resolve; only firstscale and loop SSE allocation
-// remain. Pointer goal query uses the legacy owned integer ABI spelling of
-// 2E98EA with explicit address conversion and byte-result test; native/WB prove
-// the first input denotes a Coord3D pointer. Future type repair should rename
-// that owner's ABI, rather than add another pin on the same address.
-
-#include "Code/Libraries/Include/Lib/Coord3D.h"
+#include "Coord3D.h"
 struct ApproachCoordCopy:Coord3D{
  __forceinline ApproachCoordCopy(const Coord3D&r){x=r.x;y=r.y;z=r.z;}
  __forceinline void sub(const Coord3D*p){x-=p->x;y-=p->y;z-=p->z;}
@@ -181,7 +156,9 @@ bool rva003449C5(Coord3D *goal, Object *source, Object *victim)
 	delta.z = 0.0f;
 	int steps = -(int)(-delta.length() / 20.0f) - 1;
 	delta.Normalize();
-	delta.scale(20.0f);
+	delta.x *= 20.0f;
+	delta.y *= 20.0f;
+	delta.z *= 20.0f;
 	bool found = false;
 	bool blocked = false;
 	for (int i = 0; i < steps; ++i)

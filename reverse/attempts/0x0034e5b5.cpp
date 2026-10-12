@@ -1,5 +1,5 @@
 // ?update@AIFollowPathAsTeamState@@UAE?AW4StateReturnType@@XZ
-// partial score=0.93 date=2026-10-11
+// partial score=0.94 date=2026-10-12
 // cl: /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
 // AIStates.cpp bodies of BFME 2's attack state machine that are not yet rowed
@@ -93,8 +93,8 @@ Real normalizeAngle(Real angle);
 
 #define PATHFIND_CELL_SIZE_F 10.0f
 
-extern const int g_009BA4E4;
-#define LOGICFRAMES_PER_SECOND g_009BA4E4
+extern int g_Va00DBA4E4;
+#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
 
 extern GameLogic *TheGameLogic;
 
@@ -111,15 +111,15 @@ public:
 };
 
 class Rva002C9B80Owner;
-class LocomotorSet;
 
+class LocomotorSet;
 class Pathfinder
 {
 public:
 	Bool isAttackViewBlockedByObstacle(const Object *obj, const Coord3D *objPos, const Object *target, const Coord3D *targetPos);
 	Bool CanApproachToTarget(Object *obj, const Coord3D *targetPos, Rva002C9B80Owner *weapon, Bool flag);
 	Bool rva002ED313(Object *obj);
- Bool adjustDestination(Object *obj,const LocomotorSet &set,Coord3D *dest,const Coord3D *group);
+	Bool AdjustDestination(Object *obj, const LocomotorSet &set, Coord3D *dest, const Coord3D *group);
 };
 
 class AI
@@ -218,7 +218,7 @@ class AIUpdateInterface : public AIApproachAISlots<135>
 {
 public:
 	virtual void slot135(Real angle) = 0;
- virtual void slot136() = 0;
+	virtual void slot136() = 0;
 	virtual Bool isDoingGroundMovement() const = 0;
 	virtual void slot138() = 0;
 	virtual void slot139() = 0;
@@ -238,12 +238,12 @@ public:
 	Real getCurLocomotorSpeed() const { return ((const Rva002627E8 *)this)->rva002627E8(); }
 	void setCurrentVictim(const Object *victim);
 	void setDesiredSpeed(Real speed);
- Object *checkForCrateToPickup();
- Object *getNextMoodTarget(Bool calledByAI,Bool calledDuringIdle);
- void rva00262AEA();
- void rva00262ACE();
- void rva00262FEB(Int id);
- const LocomotorSet *getLocomotorSet() const { return (const LocomotorSet *)m_locomotorSet; }
+	Object *checkForCrateToPickup();
+	Object *getNextMoodTarget(Bool calledByAI, Bool calledDuringIdle);
+	void rva00262AEA();
+	void rva00262ACE();
+	void rva00262FEB(Int id);
+	const LocomotorSet *getLocomotorSet() const { return (const LocomotorSet *)m_locomotorSet; }
 	void requestPath(Coord3D *destination, Bool isFinalGoal);
 	void requestAttackPath(ObjectID victimID, const Coord3D *victimPos);
 	void destroyPath();
@@ -263,11 +263,11 @@ private:
 public:
 	class Rva00346FA5 *m_goalPath; // +0x30
 private:
-	char m_pad034[0x48-0x34];
+	char m_pad034[0x48 - 0x34];
 public:
- Int m_48;
+	Int m_48;
 private:
- char m_pad04C[0x140-0x4C];
+	char m_pad04C[0x140 - 0x4C];
 	void *m_path; // +0x140
 	unsigned char m_pad144[0x16C - 0x144];
 public:
@@ -277,7 +277,7 @@ public:
 	unsigned char m_pad18C[0x194 - 0x18C];
 	Int m_currentGoalPathIndex; // +0x194
 	unsigned char m_pad198[0x1A0 - 0x198];
-	Real m_1a0; // +0x1A0
+	Int m_1a0; // +0x1A0
 	unsigned char m_pad1A4[0x1CC - 0x1A4];
 	unsigned char m_locomotorSet[0x1F0 - 0x1CC]; // +0x1CC
 private:
@@ -319,7 +319,7 @@ public:
 	const ThingTemplate *getTemplate() const { return m_template; }
 	const Coord3D *getPosition() const { return &m_position; }
 	const Coord3D *getUnitDirectionVector2D() const;
- void setOrientation(Real angle);
+	void setOrientation(Real angle);
 private:
 	unsigned char m_pad00[0x04];
 	const ThingTemplate *m_template; // +0x04
@@ -461,13 +461,14 @@ public:
 	Bool rva0028ADE0() const;
 	const Rva0028AC4EEntry *rva0028AC4E() const;
 	void rva0028CDB6();
- void rva0028AE6D();
+	void rva0028AE6D();
 	Bool rva0028C264(Int *out, Int kind);
 	Real GetRelativeAngle(const Coord3D *pos) const;
 	Real getOrientation() const { return m_orientation; }
 	Bool rva002943B2(const Player *player);
 	Object *rva002931F5(Bool flag);
 	void rva00346C53(ObjectStatusTypes bit, Bool set);
+	void rva0028ACDC(const Coord3D *pos);
 	void rva0028ACDC(Int pos);
 	void setStatus(ObjectStatusTypes bit, Bool set);
 	Bool isKindOf(KindOfType t) const;
@@ -484,9 +485,9 @@ public:
 	unsigned char m_pad078[0xA8 - 0x78];
 	BfmeObjE15 m_geometryShapes; // +0xA8
 	Real m_geometryRadiusB8; // +0xB8
-	char m_pad0BC[0x110-0xBC];
- UnsignedInt m_110;
- char m_pad114[0x1C0-0x114];
+	char m_pad0BC[0x110 - 0xBC];
+	UnsignedInt m_110;
+	char m_pad114[0x1C0 - 0x114];
 	Real m_1c0; // +0x1C0
 	unsigned char m_pad1C4[0x1C8 - 0x1C4];
 	UnsignedInt m_1c8; // +0x1C8
@@ -593,7 +594,7 @@ enum
 {
 	AI_IDLE = 0,
 	AI_ATTACK_OBJECT = 10,
-	AI_PICK_UP_CRATE = 0x27, // ZH's 40, one lower in BFME 2
+	AI_PICK_UP_CRATE = 0x27,
 	INVALID_STATE_ID = 999999
 };
 
@@ -605,12 +606,12 @@ public:
 	virtual void slot06();
 	virtual StateReturnType initDefaultState(); // slot 7
 	virtual StateReturnType setState(UnsignedInt newStateID); // slot 8
-	virtual StateMachine *slot09(); // returns a new attack sub-machine (AIAttackSquadState::onEnter)
+	virtual void slot09();
 	virtual void slot10();
 	virtual void slot11();
 	virtual void slot12();
 	virtual void slot13();
-	virtual void setGoalObject(const Object *obj);
+	virtual void setGoalObject(const Object *obj); // slot 14
 	UnsignedInt getCurrentStateID() const { return m_currentState ? m_currentState->m_id : INVALID_STATE_ID; }
 	inline Bool isInIdleState() const;
 	void setGoalPosition(const Coord3D *pos);
@@ -626,9 +627,6 @@ public:
 	Int m_goalObjectID; // +0x20
 private:
 	Coord3D m_goalPosition; // +0x24
-	unsigned char m_pad30[0x38 - 0x30];
-public:
-	Bool m_locked; // +0x38 (ZH lock()/unlock() without the debug owner string)
 };
 
 // StateMachine::isGoalObjectDestroyed (0x004D7ADD), rowed under this name.
@@ -675,7 +673,7 @@ public:
 	virtual StateReturnType update();
 protected:
 	void setAdjustsDestination(Bool b) { m_adjustsDestination = b; }
- Bool getAdjustsDestination() const;
+	Bool getAdjustsDestination() const;
 	unsigned char m_pad1C[0x20 - 0x1C];
 	Coord3D m_goalPosition; // +0x20
 	unsigned char m_pad2C[0x48 - 0x2C];
@@ -841,10 +839,6 @@ class Rva00346FA5
 {
 public:
 	void *rva00346FA5(Int index) const;
-private:
- char m_pad[0x3C];
- int m_begin3C;
- int m_end40;
 };
 
 class Rva0034E3A5Helper
@@ -859,30 +853,30 @@ public:
 class StateIdleView : public VirtualSlots<8>
 {
 public:
- virtual Bool isIdle() const;
+	virtual Bool isIdle() const;
 };
 inline Bool StateMachine::isInIdleState() const
 {
- return m_currentState ? ((const StateIdleView *)m_currentState)->isIdle() : true;
+	return m_currentState ? ((const StateIdleView *)m_currentState)->isIdle() : true;
 }
 class Rva00340E5E
 {
 public:
- Real rva00340E5E() const;
+	Real rva00340E5E() const;
 };
 // AIFollowPathAsTeamState, vtable 0x00C121E8.
 class AIFollowPathAsTeamState : public AIInternalMoveToState
 {
 public:
 	virtual StateReturnType onEnter();
- virtual StateReturnType update();
+	virtual StateReturnType update();
 private:
 	Bool canMoveToNextFormationPathPoint();
 	Int m_index; // +0x4C
-	Int m_retryCount;
+	Int m_retryCount; // +0x50
 	Bool m_adjustFinal; // +0x54
-	Bool m_adjustFinalOverride;
- Bool m_waitingForTeam;
+	Bool m_adjustFinalOverride; // +0x55
+	Bool m_waitingForTeam; // +0x56
 	Bool m_57; // +0x57
 	Int m_lastCommandSource; // +0x58
 	StateMachine *m_5c; // +0x5C
@@ -1306,28 +1300,6 @@ Bool AIFollowPathAsTeamState::canMoveToNextFormationPathPoint()
 // PMF adjustment uses real MemoryPoolObject/Snapshot inheritance and the
 // rowed Team next-member provider; iterator output keeps its witnessed24B ABI.
 
-// Retail 0x00346FA5, 43 bytes: the bounds-checked 12-byte element accessor
-// of the AI goal path (+0x3C begin, +0x40 end). It sits in the AIStates unit
-// ahead of the path states that call it: AIFollowPathAsTeamState::update keeps
-// ECX and XMM1-XMM3 live across its calls, which cl only does for a callee it
-// has already compiled in the same unit.
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
-void *Rva00346FA5::rva00346FA5(int index) const
-{
-	if (index >= 0)
-	{
-		int count = (m_end40 - m_begin3C) / 12;
-		if ((unsigned)index < (unsigned)count)
-		{
-			_ReadWriteBarrier();
-			return (void *)(m_begin3C + index * 12);
-		}
-	}
-	return 0;
-}
-
-
 // Retail 0x0034E5B5, 1481 bytes: slot 6 of AIFollowPathAsTeamState (vtable
 // 0x00C121E8). The team member first lets its own machine (+0x5C) finish an
 // attack, then picks up crates (state 0x27) or mood targets (state 10, AI
@@ -1335,7 +1307,7 @@ void *Rva00346FA5::rva00346FA5(int index) const
 // (within PI/10 it snaps and succeeds). The movement half is Zero Hour's
 // AIFollowPathState::update with BFME 2's team wait (+0x56, rva00349E74), the
 // retry count (+0x50), the step-back flag (+0x57), the skip-behind test of the
-// next point, CritterDesync 47/48/35, and a failed adjustDestination halving
+// next point, CritterDesync 47/48/35, and a failed AdjustDestination halving
 // the way to the goal.
 static inline Real angleBetween(Real a, Real b)
 {
@@ -1442,8 +1414,6 @@ StateReturnType AIFollowPathAsTeamState::update()
 	m_waitingForTeam = false;
 	m_57 = false;
 	{
-		Object *obj = getMachineOwner();
-		AIUpdateInterface *ai = obj->getObservedAI();
 		Real ownerX = obj->getPosition()->x;
 		Real ownerY = obj->getPosition()->y;
 		const Coord3D *pos = (const Coord3D *)ai->m_goalPath->rva00346FA5(m_index);
@@ -1502,7 +1472,7 @@ StateReturnType AIFollowPathAsTeamState::update()
 			if (getAdjustsDestination())
 			{
 				Coord3D *goal = &m_goalPosition;
-				if (!TheAI->pathfinder()->adjustDestination(getMachineOwner(), *ai->getLocomotorSet(), goal, 0))
+				if (!TheAI->pathfinder()->AdjustDestination(getMachineOwner(), *ai->getLocomotorSet(), goal, 0))
 				{
 					if (--m_retryCount > 0)
 					{
