@@ -1,13 +1,12 @@
-// ?rva0020EBA0@Rva0020EBA0@@QAEXXZ
-// partial score=0.89558 date=2026-10-11
-// ?rva0020EBA0@Rva0020EBA0@@QAEXXZ
-// partial score=0.96 date=2026-10-06
 // cl: /O1 /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Oi
-// ?rva0020EBA0@Rva0020EBA0@@QAEXXZ @0x0020EBA0 249B
-// Evidence: chain lane via 0x003F830F; vector +0x14/+0x18 over LivingWorldBattle
-//   like Rva0020E794Loop; global g_009FEF10 with rowed 0x002B254F/0x002B5256
-//   and thunk 0x002B256E plus proxy 0x003F830F; loop compares rowed 0x003F4831
-//   to 0x002B5256 count then callback via pinned 0x0020E7BD with BE433C/20 tmps.
+// LivingWorldRegionManager::UpdateBattleMarkers, retail 0x0020EBA0 249B (WB
+// 0x00B57470, LivingWorldRegionManager.cpp:1496..1515; the name is already
+// pinned from LivingWorldLogic::OnBattleComplete's call). With pending battles
+// it refreshes the logic's proxy (0x002B254F gate, 0x002B256E getter, 0x003F830F)
+// and, for more than one player (0x002B5256), enumerates the battle whose
+// 0x003F4831 id matches through 0x0020E7BD with the 0x00BE433C visitor, else
+// the 0x0020E794 selection with the 0x00BE433C or 0x00BE4320 visitor by
+// 0x003F48EF. The emptiness test is WB's `size() > 0` (retail sar/je).
 #pragma intrinsic(_ReadWriteBarrier)
 extern "C" void _ReadWriteBarrier(void);
 
@@ -18,17 +17,6 @@ public:
 	bool rva003F48EF(void *p);
 };
 
-class LivingWorldRegionManager
-{
-public:
-	LivingWorldBattle *SelectPendingBattle();
-};
-
-class Rva0020E7BD
-{
-public:
-	void rva0020E7BD(void *p);
-};
 
 class Rva002B254F
 {
@@ -48,9 +36,15 @@ public:
 	void rva003F830F(void *p);
 };
 
-class Rva002B256E {public:void *rva002B256E();};
+class Rva002B256E
+{
+public:
+	void *rva002B256E();
+};
 
-extern Rva002BA8F1Logic *g_009FEF10;
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
+#define g_009FEF10 ((Rva002BA8F1Logic *)TheLivingWorldLogic)
 extern const void *const g_00BE433C[];
 extern const void *const g_00BE4320[];
 
@@ -75,22 +69,26 @@ struct TmpBE4320 : EmptyBase20EBA0
 	~TmpBE4320() {}
 };
 
-class Rva0020EBA0
+class PendingBattleVisitor;
+
+class LivingWorldRegionManager
 {
 public:
-	void rva0020EBA0();
+	void UpdateBattleMarkers();
+	LivingWorldBattle *SelectPendingBattle();
+	void EnumeratePendingBattles(PendingBattleVisitor &visitor) const;
 private:
 	unsigned char m_pad[0x14];
 	LivingWorldBattle **m_begin;
 	LivingWorldBattle **m_end;
 };
 
-void Rva0020EBA0::rva0020EBA0()
+void LivingWorldRegionManager::UpdateBattleMarkers()
 {
-	if ((((int)m_end - (int)m_begin) >> 2) == 0)
+	if (!((unsigned int)(m_end - m_begin) > 0))
 		return;
 	if ((unsigned char)((Rva002B254F *)g_009FEF10)->rva002B254F()) {
-		((Rva003F81FDProxy *)reinterpret_cast<Rva002B256E *>(g_009FEF10)->rva002B256E())->rva003F830F(this);
+		((Rva003F81FDProxy *)((Rva002B256E *)g_009FEF10)->rva002B256E())->rva003F830F(this);
 	}
 	int n = g_009FEF10->rva002B5256(false);
 	if (n <= 1)
@@ -103,11 +101,11 @@ void Rva0020EBA0::rva0020EBA0()
 			if (!e)
 				break;
 			TmpBE433C tmp(e);
-			((Rva0020E7BD *)this)->rva0020E7BD(&tmp);
+			EnumeratePendingBattles(*(PendingBattleVisitor *)&tmp);
 			return;
 		}
 	}
-	LivingWorldBattle *p = ((LivingWorldRegionManager *)this)->SelectPendingBattle();
+	LivingWorldBattle *p = SelectPendingBattle();
 	if (!p)
 		return;
 	void *q = *(void **)((char *)g_009FEF10 + 0x98);
@@ -115,10 +113,10 @@ void Rva0020EBA0::rva0020EBA0()
 		return;
 	if (p->rva003F48EF(q)) {
 		TmpBE433C tmp(p);
-		((Rva0020E7BD *)this)->rva0020E7BD(&tmp);
+		EnumeratePendingBattles(*(PendingBattleVisitor *)&tmp);
 	}
 	else {
 		TmpBE4320 tmp;
-		((Rva0020E7BD *)this)->rva0020E7BD(&tmp);
+		EnumeratePendingBattles(*(PendingBattleVisitor *)&tmp);
 	}
 }
