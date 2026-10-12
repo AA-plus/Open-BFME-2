@@ -1,6 +1,8 @@
 // ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
+// partial score=0.99 date=2026-10-13
+// ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
 // partial score=0.98 date=2026-10-11
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // BFME2's score screen Apt callbacks, 0x0051BF75 onward, bound by these

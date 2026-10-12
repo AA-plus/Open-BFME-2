@@ -1,45 +1,27 @@
 // ?rva0043DC40@AptMpGameSetup@@QAEXH@Z
-// partial score=0.93 date=2026-10-13
+// partial score=0.9 date=2026-10-13
+// ?rva0043DC40@AptMpGameSetup@@QAEXH@Z
+// partial score=0.9 date=2026-10-13
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB
+// stlport
+// FRAGMENT for Code/GameEngine/Source/GameClient/GUI/MpGameSetupSlots.cpp (needs its AptMpGameSetup view).
+// Retail 0x0043DC40, 53 bytes: games-list sort-column pick. Wall: reg numbering (retail column:EAX/old:EDX/next:ESI via single ESI save; best variant c/old/next gives column:ESI/old:EDX/next:EDI, 49B). Tried: next-first, dual inline column+1 (inc, 46B), c-copy-first.
+
 // Retail 0x0043DC40, 53 bytes: picks the games list sort column (the same
 // column again toggling to the next value). The next value is computed
 // first so the argument load precedes the column load, as retail does.
 void AptMpGameSetup::rva0043DC40(int column)
 {
-	int next = column + 1;
+	int c = column;
 	int old = m_sortColumn;
-	if (old == column)
+	int next = c + 1;
+	if (old == c)
 		m_sortColumn = next;
 	else
 	{
-		m_sortColumn = column;
+		m_sortColumn = c;
 		if (old != next)
 			m_previousSortColumn = old;
 	}
 	m_2bc = true;
-}
-
-// Retail 0x0043DF22, 79 bytes: the number of accepted seated humans (human
-// non-observer slots whose accepted flag is set). The accepted flag is
-// compared against the observer result register rather than immediate zero.
-unsigned int AptMpGameSetup::rva0043DF22()
-{
-	GameInfo *game = (GameInfo *)m_game->rva0043DA65();
-	if (!game)
-		return 0;
-	unsigned int count = 0;
-	for (unsigned int i = 0; i < 8; ++i)
-	{
-		GameSlot *slot = game->getSlot(i);
-		if (!slot)
-			continue;
-		if (!slot->isHuman())
-			continue;
-		bool observer = slot->isObserver();
-		if (observer)
-			continue;
-		if (slot->m_accepted == observer)
-			continue;
-		++count;
-	}
-	return count;
 }

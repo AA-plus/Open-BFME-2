@@ -1,6 +1,9 @@
 // ?rva0057B328@Rva0057B328@@QAEXM@Z
-// partial score=0.85 date=2026-10-08
-// cl: /DNDEBUG /MD /EHsc
+// partial score=0.95 date=2026-10-13
+// ?rva0057B328@Rva0057B328@@QAEXM@Z
+// partial score=0.95 date=2026-10-13
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfmelist /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// stlport
 // ?rva0057B328@Rva0057B328@@QAEXM@Z 0x0057B328 91B. Walks the list at +0x44 and,
 // for each node's object, adds the float field's value to the offset value and
 // hands it back to the field's setter; then calls the owner's finish at +0x40.
@@ -67,9 +70,12 @@ private:
 
 void Rva0057B328::rva0057B328(float value)
 {
-	Rva0057B328Node *end = m_40->m_end;
-	Rva0057B328Node *node = m_44->m_head;
-	value = m_30 - value;
+	Rva0057B328 *self = this;
+	StrategicHUD::ChecklistUIImpl *owner = self->m_40;
+	Rva0057B328List *list = self->m_44;
+	Rva0057B328Node *end = owner->m_end;
+	Rva0057B328Node *node = list->m_head;
+	value = self->m_30 - value;
 	if (node != end)
 	{
 		do
@@ -80,5 +86,5 @@ void Rva0057B328::rva0057B328(float value)
 			node = node->m_next;
 		} while (node != end);
 	}
-	m_40->rva0057B16D();
+	self->m_40->rva0057B16D();
 }

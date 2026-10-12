@@ -1,6 +1,8 @@
 // ?rva00232B7B@Keyboard@@QAEXXZ
-// partial score=0.9 date=2026-10-13
-// cl: /DNDEBUG /MD /EHsc
+// partial score=0.93 date=2026-10-13
+// ?rva00232B7B@Keyboard@@QAEXXZ
+// partial score=0.93 date=2026-10-13
+// cl: /DNDEBUG /MD /EHsc /O1 /G7 /arch:SSE
 // stlport
 // ?rva00232AE8@Keyboard@@AAEXXZ @0x00232AE8 147B. Clears key vector then re-adds flagged slots.
 // Evidence: erase row 0x003FA4DB plus push_back row 0x00539A2E plus rva00232A42 pin plus slot 0x3c virtual plus LINK BONUS.

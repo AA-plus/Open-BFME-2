@@ -1,11 +1,15 @@
 // ??0Rva0042FD9E@@QAE@XZ
-// partial score=0.93 date=2026-10-03
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /Os /GX /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /DNDEBUG /DWIN32 /D_WINDOWS /arch:SSE
+// partial score=0.96 date=2026-10-13
+// ??0Rva0042FD9E@@QAE@XZ
+// partial score=0.96 date=2026-10-13
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /DNDEBUG /DWIN32 /D_WINDOWS /arch:SSE
 // stlport
 // ??0Rva0042FD9E@@QAE@XZ, retail 0x0042FD9E, 129 bytes.
 // Ctor with vtable 0x00C3C960, map<int,void*> at +0x28, ints/floats zeroed, int at +0x0C set to -1, global 0x00E03220 stores this.
-// Evidence: target bytes only; callees map ctor 0x0033C432 and clear 0x00357416 rowed; vtable and global from immediates.
+// Evidence: target bytes only; map ctor 0x0033C432 rowed (signed-key mangling kept); clear respelled to rowed unsigned-key 0x00357416 via unsigned-map ref cast (signed clear misresolves to 0x286656 twin); vtable and global from immediates. Wall: or(+0x0C)/xorps order swapped + EH-state-1 store hoisted above zero stores; /O1/G7/EHsc/barrier-before-b20 probed, barrier sinks mov ecx,edi only.
 // ??0Rva0042FD9E@@QAE@XZ present-unmatched
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <map>
 extern const void *const g_00C3C960[];
 extern void *g_00E03220;
@@ -56,7 +60,8 @@ Rva0042FD9E::Rva0042FD9E()
 	m_f34 = 0.0f;
 	m_f38 = 0.0f;
 	m_f3C = 0.0f;
+	_ReadWriteBarrier();
 	m_b20 = false;
-	m_map28.clear();
+	reinterpret_cast<_STL::map<unsigned int, void *> &>(m_map28).clear();
 	g_00E03220 = this;
 }

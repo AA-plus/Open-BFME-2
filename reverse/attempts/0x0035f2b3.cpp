@@ -1,9 +1,9 @@
 // ??0FullFadeTransition@@QAE@XZ
-// partial score=0.93 date=2026-09-27
+// partial score=0.93 date=2026-10-13
 // ??0FullFadeTransition@@QAE@XZ
-// partial score=0.93 date=2026-09-27
+// partial score=0.93 date=2026-10-13
 // cl: /O2 /DNDEBUG /MD /arch:SSE
-// ??0FullFadeTransition@@QAE@XZ @0x0035F2B3 67B
+// ??0FullFadeTransition@@QAE@XZ @0x0035F2B3 67B. R3 decode (retail bytes): base 0x1DBAA4, mem-inits start=0/end=30 (BEFORE the vtable store), vtable 0x81663C, pos/size zero, ecx=end, drawState via or-imm -1, win=0, percent=xmm0, frameLength=end-via-ecx, isForward=byte-1. So: : m_startFrame(0), m_endFrame(30) + m_frameLength = m_endFrame. BLOCKED: vtable needs reverse/skip slots (only init/update/draw rowed); Init/Update TUs declare ~FullFadeTransition but never define it so no TU emits the real vtable; dtor lives under Rva0035F1D0 in FamilyTailDtors (minimal view). Unblocks when reverse+skip land.
 // FullFadeTransition ctor: base Rva001DBAA4 (Transition) then vtable 0x0081663C,
 // start 0 end 0x1E pos/size zero percent 0.0 drawState -1 frameLength from end.
 // Donor: reference/open-bfme-1/Code/GameEngine/Source/GameClient/GUI/GameWindowTransitionsStyles.cpp

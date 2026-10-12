@@ -1,6 +1,8 @@
 // ?rva00442BCC@MpGameSetup@@QAE_NXZ
-// partial score=0.85 date=2026-10-05
-// ?rva00442BCC@MpGameSetup@@QAE_NXZ draft: the body (decode calls, edi key, lea quirk on +0x2F4) is exact; cl rotates the loop test to the bottom (jmp to test) where retail tests at the top and jumps back. Tried for/while/for(;;)+return/goto/temp end/#pragma optimize g off. Needs pins ??0Gen_00528EC0@@QAE@F@Z=0x003F2968 and ?Rva003F1E2E@@YAFII@Z=0x003F1E2E. BFME1 SkirmishScreenState::shouldRefresh 0x00529BE0 hit the same wall.
+// partial score=0.93 date=2026-10-13
+// ?rva00442BCC@MpGameSetup@@QAE_NXZ
+// partial score=0.93 date=2026-10-13
+// ?rva00442BCC@MpGameSetup@@QAE_NXZ draft: the body (decode calls, edi key, lea quirk on +0x2F4) is exact; cl rotates the loop test to the bottom (jmp to test) where retail tests at the top and jumps back. Tried for/while/for(;;)+return/goto/temp end/#pragma optimize g off. Rowed since: ?rva003F2968@Gen_00528EC0@@QAEXF@Z=0x003F2968 (called via inline short-ctor wrapper, LivingWorldRegion idiom), ?Rva003F1E2EHook@@YAHHH@Z=0x003F1E2E (2-arg int hook, (short) cast keeps movsx), bfmeDiffers/rva003F3133 rowed. Wall: cl bottom-tests the loop (for/while/for(;;)/goto/while-break all rotate to entry-jmp+bottom-test, 212B vs 208B) + return-true emits inc al vs mov al,1. BFME1 SkirmishScreenState::shouldRefresh 0x00529BE0 hit the same wall.
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
 //
 // Small MpGameSetup members of BFME2's LAN lobby panel (the screen's +0x288
@@ -198,7 +200,7 @@ void Rva00446A67Set(unsigned char value);
 
 // The S5 encoded small integer of S5HandleHashCompares.cpp: a four-byte
 // head and the encoded value at +0x04. Two compare through 0x003F2330.
-short Rva003F1E2E(unsigned int value, unsigned int key);
+int __cdecl Rva003F1E2EHook(int a, int b);
 
 class Gen_00528EC0
 {
@@ -206,7 +208,8 @@ public:
 	Gen_00528EC0() {}
 	Gen_00528EC0(const Gen_00528EC0 &other) { m_value = other.m_value; }
 	// Unrowed 0x003F2968 (21 bytes; encodes the value at +0x04), pinned.
-	Gen_00528EC0(short value);
+	void rva003F2968(short value);
+	Gen_00528EC0(short value) { rva003F2968(value); }
 	Gen_00528EC0(unsigned int encoded, int) { m_value = encoded; }
 	bool bfmeDiffers(const Gen_00528EC0 &other) const;
 	// Unrowed 0x003F3133 (36 bytes; adds the encoded 1 and returns the new
@@ -901,24 +904,28 @@ void MpGameSetup::rva0043FB5C(int index)
 // four arrays with the encoding inlined. Tail-jumped from 0x00442C9C.
 bool MpGameSetup::rva00442BCC()
 {
+	Gen_00528EC0 slot(0);
 	Gen_00528EC0 end;
 	end.m_value = 0xB9DC8031;
-	for (Gen_00528EC0 slot(0); slot.bfmeDiffers(end); slot.rva003F3133())
+	while (true)
 	{
+		if (!slot.bfmeDiffers(end))
+			break;
 		unsigned int key = slot.m_value;
-		if (!m_player[Rva003F1E2E(key, key)])
+		if (!m_player[(short)Rva003F1E2EHook((int)key, (int)key)])
 			return false;
-		MpGameSetupSlotWindow *window = &m_2f4[Rva003F1E2E(key, key)];
+		MpGameSetupSlotWindow *window = &m_2f4[(short)Rva003F1E2EHook((int)key, (int)key)];
 		if (!window->m_window)
 			return false;
-		if (!m_team[Rva003F1E2E(key, key)])
+		if (!m_team[(short)Rva003F1E2EHook((int)key, (int)key)])
 			return false;
-		if (!m_playerTemplate[Rva003F1E2E(key, key)])
+		if (!m_playerTemplate[(short)Rva003F1E2EHook((int)key, (int)key)])
 			return false;
-		if (!m_handicap[Rva003F1E2E(key, key)])
+		if (!m_handicap[(short)Rva003F1E2EHook((int)key, (int)key)])
 			return false;
-		if (!m_hero[Rva003F1E2E(key, key)])
+		if (!m_hero[(short)Rva003F1E2EHook((int)key, (int)key)])
 			return false;
+		slot.rva003F3133();
 	}
 	return true;
 }
