@@ -97,9 +97,10 @@ void Rva003FA835::rva003FA7D3(int enabled)
 // is asserted. The inline zeroing counted base and its existing 7B virtual
 // destructor alias supply the native EH cleanup; its +4 field is witnessed
 // by the constructor, not inherited from a donor layout.
-// Exact six-entry retail table; the enum names are unresolved.
+// Six names followed by the null sentinel the INI index scanner consumes.
+// Native VA DBE980..DBE99C; the enum names are unresolved.
 const char *EmissiveTemplateNames[] = {
- "ARMY", "BATTLE_MARKER", "REGION_AWARD_DISPUTE", "CLOUD", "BUILDING", "DEFAULT"
+ "ARMY", "BATTLE_MARKER", "REGION_AWARD_DISPUTE", "CLOUD", "BUILDING", "DEFAULT", 0
 };
 class Rva00DFE1C8Host { public: int rva002122FD(const AsciiString &); };
 // g_00DFE1C8 is only an alias of the owned global TheLivingWorldManager (ledger names column); this unit reads the owner through its own view type.

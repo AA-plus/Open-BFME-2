@@ -8,11 +8,19 @@
 // Existing address-derived providers retain their unknown original names;
 // the clone and field-table getter use the method ABI witnessed by this caller.
 #include "Common/INIException.h"
-struct FieldParse;
+class INI;
+struct FieldParse {
+ const char *token;
+ void (__cdecl *parse)(INI *, void *, void *, const void *);
+ const void *userData;
+ int offset;
+};
 class INI {
 public:
  const char *getNextToken(const char *seps);
  void initFromINI(void *, const FieldParse *);
+ static void parseIndexList(INI *, void *, void *, const void *);
+ static void parseReal(INI *, void *, void *, const void *);
  char pad[8]; int loadType;
 };
 enum NameKeyType { NAMEKEY_INVALID = 0 };
@@ -38,6 +46,16 @@ template<class A> struct less;
 template<class A> class allocator;
 template<class A, class B, class C, class D> class map { public: B &operator[](const A &); };
 }
+// Native C378F0..C37930: three 16-byte records followed by the null sentinel.
+// The constructor and parser independently witness object offsets 10/14/18;
+// the existing emissive-template name array is the ObjectType index list.
+extern const char *EmissiveTemplateNames[];
+extern const FieldParse LivingWorldObjectFields[] = {
+ {"ObjectType", INI::parseIndexList, EmissiveTemplateNames, 0x10},
+ {"DefaultFlashValue", INI::parseReal, 0, 0x14},
+ {"FlashVariation", INI::parseReal, 0, 0x18},
+ {0, 0, 0, 0}
+};
 typedef _STL::map<int,int,_STL::less<int>,_STL::allocator<_STL::pair<const int,int> > > NameMap;
 class LivingWorldManager { public: Rva00210F3D *rva00211142(Rva00210F3D *); char pad[0x2b4]; NameMap names; };
 extern LivingWorldManager *TheLivingWorldManager;
