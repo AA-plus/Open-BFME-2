@@ -6,6 +6,7 @@
 // num), a TheWritableGlobalData guard, one GlobalData store, and the number
 // of arguments consumed. Their command names are not recovered, so they keep
 // address-derived names; the GlobalData offsets are the stores retail makes.
+#include <stdlib.h>
 template<class T> class StringBase {
     T *data;
 public: void set(const T*);
@@ -31,7 +32,9 @@ struct CommandLineSwitchView
     bool m_bfmeBD4;
     char pad0BD5[0xd46 - 0xbd5];
     bool m_bfmeD46;
-    char pad0D47[0xea4 - 0xd47];
+    char pad0D47[0xd48 - 0xd47];
+    int m_bfmeD48;
+    char pad0D4C[0xea4 - 0xd4c];
     bool m_bfmeEA4;
     bool m_bfmeEA5;
     char pad0EA6[0x1111 - 0xea6];
@@ -145,5 +148,13 @@ int Rva003B9F30Parse(char *args[],int num) {
 // Native 3B9FB7..3B9FD3: copies the argument into the +8C string, unguarded.
 int Rva003B9FB7Parse(char *args[],int num) {
     TheSwitches->m_bfme8C.set(args[1]);
+    return 2;
+}
+
+// Native 3B9A3D..3B9A62: atoi of the argument into +D48 (no guard on
+// TheWritableGlobalData, only on the argument count).
+int Rva003B9A3DParse(char *args[],int num) {
+    if(num>1)
+        TheSwitches->m_bfmeD48=atoi(args[1]);
     return 2;
 }

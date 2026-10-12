@@ -12,7 +12,9 @@ public: void set(const T*);
 };
 class GlobalData {
 public:
-    char prefix[0x60];
+    char prefix[0xc];
+    StringBase<char> m_bfme0C; // map path of the unlisted 0x003BA30A parser
+    char unknown10[0x60 - 0x10];
     bool m_bfme60, m_bfme61, m_bfme62; // cleared by the unlisted 0x003B9679 switch
     char unknown63[0x9c1 - 0x63];
     bool m_bfme9C1; // set by the unlisted 0x003B974B switch
@@ -100,6 +102,17 @@ int Rva003B974BParse(char *args[],int num) {
     if(TheWritableGlobalData) {
         TheWritableGlobalData->m_bfme9C1=true;
         TheWritableGlobalData->m_bfme9C6=true;
+    }
+    return 1;
+}
+
+// Native 3BA30A..3BA348 (62 bytes), directly before parseMod and not in the
+// -command table: parseFile's flow into the +0C path with the same label.
+int Rva003BA30AParse(char *args[],int num) {
+    if(TheWritableGlobalData && num>=2) {
+        TheWritableGlobalData->m_bfme0C.set(args[1]);
+        ConvertShortMapPathToLongMapPath(TheWritableGlobalData->m_bfme0C,TheWritableGlobalData->m_bfmeFileLabel);
+        return 2;
     }
     return 1;
 }
