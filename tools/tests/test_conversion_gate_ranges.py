@@ -269,3 +269,53 @@ def test_invalid_revision_is_not_an_import_exemption(repo, imports, which):
     with pytest.raises(SystemExit, match="failed"):
         gate.clean_coverage_lost("not-a-real-ref" if which == "old" else base,
                                 "not-a-real-ref" if which == "new" else base)
+
+
+@pytest.mark.parametrize("staged", [False, True])
+def test_existing_dump_reorder_with_cpp_edit_is_not_a_wave(repo, staged):
+    git, write, commit, _ = repo
+    wave(write)
+    # Several retained rows make Git report the moved dump as delete/add,
+    # as it does when dedup_csv sorts a real ledger.
+    retained = REAL_ROW + "".join(
+        REAL_ROW.replace("?old@@", "?kept%d@@" % i)
+        .replace("0x00001000", "0x%08X" % (0x4000 + i * 0x10))
+        for i in range(5))
+    write("reverse/functions.csv", HEADER + retained + DUMP_ROW)
+    base = commit()
+    write("reverse/functions.csv", HEADER + DUMP_ROW + retained)
+    write("Code/Old.cpp", "int old() { return 2; }\n")
+    if staged:
+        git("add", "Code/Old.cpp", "reverse/functions.csv")
+        tip = ":"
+    else:
+        tip = commit()
+    assert gate.gen_asm_offences(base, tip) == []
+
+
+@pytest.mark.parametrize("extra", [
+    DUMP_ROW,
+    DUMP_ROW.replace("00002000", "00003000"),
+    DUMP_ROW.replace("gen-dump", "gen-dump changed extent evidence"),
+])
+def test_reorder_does_not_hide_added_or_changed_dump_row(repo, extra):
+    git, write, commit, _ = repo
+    wave(write)
+    base = commit()
+    write("reverse/functions.csv", HEADER + DUMP_ROW + REAL_ROW + extra)
+    write("Code/Old.cpp", "int old() { return 2; }\n")
+    git("add", "Code/Old.cpp", "reverse/functions.csv")
+    assert any(offence.startswith("C3 ")
+               for offence in gate.gen_asm_offences(base, ":"))
+
+
+def test_changed_existing_dump_row_is_still_a_wave(repo):
+    git, write, commit, _ = repo
+    wave(write)
+    base = commit()
+    changed = DUMP_ROW.replace("gen-dump", "gen-dump changed extent evidence")
+    write("reverse/functions.csv", HEADER + changed + REAL_ROW)
+    write("Code/Old.cpp", "int old() { return 2; }\n")
+    git("add", "Code/Old.cpp", "reverse/functions.csv")
+    assert any(offence.startswith("C3 ")
+               for offence in gate.gen_asm_offences(base, ":"))

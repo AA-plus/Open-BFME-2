@@ -31,6 +31,7 @@ Rule C: Code/gen_asm/ is machine output and stays that way. C1 every added
         expressible in this directory.
 """
 
+from collections import Counter
 import csv
 import io
 import re
@@ -96,6 +97,7 @@ def _gen_asm_diff_offences(old, new):
     offences = []
     path = None
     dump_rows, other_code_edits = [], set()
+    removed_dump_rows = Counter()
     for line in diff_lines(old, new, "Code/", LEDGER):
         if line.startswith("--- a/"):
             # Deleted sources have +++ /dev/null, so retain their old path.
@@ -115,11 +117,12 @@ def _gen_asm_diff_offences(old, new):
                 offences.append("C1 %s: not generator output: %s"
                                 % (path, body.strip()[:80]))
         elif path == LEDGER:
-            if not added:
-                continue
             fields = next(csv.reader([body]), [])
             if len(fields) >= 5 and fields[4].startswith(GEN_ASM):
-                dump_rows.append(fields)
+                if added:
+                    dump_rows.append(fields)
+                else:
+                    removed_dump_rows[tuple(fields)] += 1
         elif path.startswith("Code/"):
             other_code_edits.add(path)
 
@@ -133,7 +136,12 @@ def _gen_asm_diff_offences(old, new):
         if not notes.lstrip().startswith("gen-dump"):
             offences.append("C2 %s: a Code/gen_asm/ row must carry gen-dump "
                             "notes, or is_scaffold_row cannot see it" % rva)
-    if dump_rows and other_code_edits:
+    # A ledger normalization can move unchanged dump rows. Git represents
+    # those moves as delete/add; they do not introduce a dump wave. Compare
+    # complete parsed rows with multiplicity, retaining C2 checks above and
+    # C3 for new, changed, or additionally duplicated rows.
+    added_dump_rows = Counter(map(tuple, dump_rows)) - removed_dump_rows
+    if added_dump_rows and other_code_edits:
         offences.append("C3 wave commit also edits %s — dumps-and-ledger only, "
                         "so a deleted C++ body cannot ride inside an unreadable "
                         "diff" % ", ".join(sorted(other_code_edits)))
