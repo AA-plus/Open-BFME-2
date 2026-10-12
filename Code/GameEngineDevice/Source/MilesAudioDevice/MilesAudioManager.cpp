@@ -796,6 +796,7 @@ public:
         struct value_type
         {
             value_type(unsigned int f, void *s) : first(f), second(s) {}
+            value_type(const unsigned int &a, const unsigned int &b) : first(a), second(reinterpret_cast<void *>(b)) {}
             unsigned int first;
             void *second;
         };
@@ -805,9 +806,19 @@ public:
             KeyToBucketMap *second;
             bool inserted;
         };
+        struct equal_result
+        {
+            void *node;
+            KeyToBucketMap *table;
+        };
         insert_result insert(const value_type &value);
+        equal_result rva00057C5C(const value_type &value);
     };
 };
+
+// Logical/physical handle alias tables at +0x104/+0x118 (mapLogicalHandleToPhysicalHandle).
+typedef _STL::hash_multimap<unsigned int, int> MilesKeyAliases;
+typedef _STL::hash_map<unsigned int, int> MilesPhysicalHandles;
 
 class AILMutexScope {
 public:
@@ -835,6 +846,13 @@ namespace rts
 		bool operator()(const T &left, const T &right) const;
 	};
 }
+
+// Range-erase provider for the alias multimap (rowed 0x00056B0A); the hash
+// functors are never called by erase, so the file's rts views are reused.
+enum NameKeyType;
+class DamageFX { public: int m_valueWords[0x1E0]; };
+typedef _STL::hash_map<NameKeyType, DamageFX, rts::hash<NameKeyType>, rts::equal_to<NameKeyType> > ExistingRangeErase;
+namespace _STL { template<> void ExistingRangeErase::erase(ExistingRangeErase::iterator, ExistingRangeErase::iterator); }
 
 // File name -> UnicodeString text map at +0x9E8 (value at node +8 is read
 // with StringBase<unsigned short>::isEmpty and queued into a UnicodeString
@@ -1074,6 +1092,7 @@ public:
     float rva0005A9F8(void *ref, int a, int b);
     float rva00059AD0(void *event, int a);
     void unmapPhysicalHandle(unsigned int handle);  // WorldBuilder name (0x000578B3)
+    void mapLogicalHandleToPhysicalHandle(unsigned int logical, unsigned int physical);
     void rva00057948(const void *input);
     void rva000577E3(unsigned int affect, unsigned int viewMask, bool value);
     // Ledger rows name it (refreshAll/rva00052048 share its this).
