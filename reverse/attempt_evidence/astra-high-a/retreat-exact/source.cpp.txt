@@ -386,8 +386,11 @@ class Rva00380200 {public:Rva00380200();virtual ~Rva00380200();};
 class Rva002B2508:public Rva00380200 {public:Rva002B2508();virtual ~Rva002B2508();char opaque04[0x2C-4];};
 class Rva002B2EA0 {public:void rva002B2EA0();};
 struct RetreatSlots {Rva002B2508 *first;RetreatSlots(Rva002B2508 *p):first(p){}~RetreatSlots(){reinterpret_cast<Rva002B2EA0 *>(this)->rva002B2EA0();}};
-class Rva004FA2E2 {public:Rva004FA2E2(const _STL::vector<Rva002BBB96Element>&);~Rva004FA2E2();char opaque00[0x80];};
-class LivingWorldAutoResolveBattle {public:void applyResults();};
+struct PlayerStorage;
+class LivingWorldAutoResolveBattle {public:LivingWorldAutoResolveBattle(const PlayerStorage&);void applyResults();};
+class Rva004FA2E2 {public:
+ __forceinline Rva004FA2E2(const _STL::vector<Rva002BBB96Element>&p){((LivingWorldAutoResolveBattle*)this)->LivingWorldAutoResolveBattle::LivingWorldAutoResolveBattle(*(const PlayerStorage*)&p);}
+ ~Rva004FA2E2();char opaque00[0x80];};
 class Rva004FA10FOwner {public:void rva004FA10F();};
 class Rva002B8644 {public:void rva002B8644(int);};
 class ModuleData;
@@ -409,8 +412,7 @@ void LivingWorldBattle::RetreatArmiesForPlayer(void *player) {
   if(record.player30==id)record.strength18=0.0f;
  }
  Rva004FA2E2 battle(players);
- for(int i=0;i<reinterpret_cast<LivingWorldLogic *>(TheLivingWorldLogic)->campaignB0->settings08->rounds58;++i)
-  reinterpret_cast<Rva004FA10FOwner *>(&battle)->rva004FA10F();
+ RetreatSettings *settings=reinterpret_cast<LivingWorldLogic *>(TheLivingWorldLogic)->campaignB0->settings08;for(int i=0;i<settings->rounds58;++i){reinterpret_cast<Rva004FA10FOwner *>(&battle)->rva004FA10F();settings=reinterpret_cast<LivingWorldLogic *>(TheLivingWorldLogic)->campaignB0->settings08;}
  reinterpret_cast<LivingWorldAutoResolveBattle *>(&battle)->applyResults();
  for(int i=int(entry->m_armies.size())-1;i>=0;--i) {
   LivingWorldArmy *army=entry->m_armies[i];
