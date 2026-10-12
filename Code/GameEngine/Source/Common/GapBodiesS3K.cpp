@@ -76,3 +76,71 @@ void W3DFloorDraw::rva000CF370(const Rva000CF0D6 *what, int, int)
 		}
 	}
 }
+
+// --- 0x005E965A / 0x005E9669 / 0x005E9678 (15B each): pick the +0x08
+// object's +0x1C handler (three member bodies the toolchain folded into the
+// rowed 0x005CC208 / 0x005CB265 / 0x005CB26A) and run the rowed 0x005E95E9.
+class Rva0042C0DBDelegate;
+class GameMessage;
+
+class Rva0042C0DBDelegate
+{
+public:
+	int invokeMessage(GameMessage *msg);					// 0x005CC208
+};
+
+class Rva002D5333
+{
+public:
+	void rva005CB265();										// 0x005CB265
+};
+
+class Rva005CB26A
+{
+public:
+	int rva005CB26A();										// 0x005CB26A
+};
+
+class Rva005E965AHandlerOwner
+{
+public:
+	void handler();
+};
+
+typedef void (Rva005E965AHandlerOwner::*Rva005E965AHandler)();
+
+struct Rva005E965ATarget
+{
+	char m_pad[0x1C];
+	Rva005E965AHandler m_handler;							// +0x1C
+};
+
+class Rva005E957C
+{
+public:
+	void rva005E95E9();										// 0x005E95E9
+	virtual void rva005E965A();
+	virtual void rva005E9669();
+	virtual void rva005E9678();
+private:
+	int m_04;
+	Rva005E965ATarget *m_target;							// +0x08
+};
+
+void Rva005E957C::rva005E965A()
+{
+	m_target->m_handler = reinterpret_cast<Rva005E965AHandler>(&Rva0042C0DBDelegate::invokeMessage);
+	rva005E95E9();
+}
+
+void Rva005E957C::rva005E9669()
+{
+	m_target->m_handler = reinterpret_cast<Rva005E965AHandler>(&Rva002D5333::rva005CB265);
+	rva005E95E9();
+}
+
+void Rva005E957C::rva005E9678()
+{
+	m_target->m_handler = reinterpret_cast<Rva005E965AHandler>(&Rva005CB26A::rva005CB26A);
+	rva005E95E9();
+}
