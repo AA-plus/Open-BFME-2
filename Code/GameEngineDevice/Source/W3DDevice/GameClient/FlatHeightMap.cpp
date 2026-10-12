@@ -201,7 +201,12 @@ extern Rva000E19A3Interface *g_00DEBC60;
 // TheTerrainRenderObject's slot 18 returns a state whose +0x14 mode 1 makes
 // the roads draw untextured.
 struct BfmeTerrainRenderState { char m_pad[0x14]; Int m_mode; };
-class BaseHeightMapRenderObjClass;
+// The rowed base resource hook 0x00066808 (only its slot name is modelled).
+class BaseHeightMapRenderObjClass
+{
+public:
+	virtual void ReleaseResources(void);
+};
 extern BaseHeightMapRenderObjClass *TheTerrainRenderObject;
 class BfmeTerrainRenderView
 {
@@ -222,6 +227,7 @@ class FlatHeightMapRenderObjClass : public BfmeTerrainRenderView {
 public:
  void renderTerrain(RenderInfoClass&rinfo,int *minX,int *maxX,int *minY,int *maxY);
  void rva000E1C1A(RenderInfoClass&rinfo,bool untextured,int *minX,int *maxX,int *minY,int *maxY,FXShader::RenderingMethod*method);
+ virtual void ReleaseResources(void);
 private:
  char unknown04[0x3888-4];
  struct TerrainTileView *m_tiles; int m_numTiles,m_tilesWidth,m_tilesHeight;
@@ -272,4 +278,12 @@ void FlatHeightMapRenderObjClass::rva000E1C1A(RenderInfoClass &rinfo,bool untext
    if((j+1)*16>*maxY)*maxY=(j+1)*16;
   }
  }
+}
+
+// Retail 0x000E1271 (5 bytes), the resource-hook table entry before
+// ReAcquireResources: Zero Hour's FlatHeightMapRenderObjClass::ReleaseResources,
+// which only forwards to the base heightmap release (a tail jump).
+void FlatHeightMapRenderObjClass::ReleaseResources(void)
+{
+	reinterpret_cast<BaseHeightMapRenderObjClass *>(this)->BaseHeightMapRenderObjClass::ReleaseResources();
 }
