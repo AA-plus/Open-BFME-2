@@ -134,9 +134,11 @@ public:
 	void rva004C49AE(const Coord3D *loc);
 };
 
+class FXList;
 struct FreezingRainSpecialPowerModuleData
 {
-	unsigned char m_pad00[0x84];
+	unsigned char m_pad00[0x80];
+	const FXList *m_fx;
 	int m_84;			// +0x84
 };
 
@@ -252,4 +254,80 @@ void ElvenWoodSpecialPower::doSpecialPowerAtLocation(const Coord3D *loc, unsigne
 		return;
 	SpecialPowerModule::doSpecialPowerAtLocation(loc, options);
 	rva004C3B17(loc);
+}
+
+// Native 4C4C99..4C4D22 and 4C4E93..4C4F1C: paired weather FX helpers.
+// WB12611A0 proves the weather2 path and map-centre/local-height geometry.
+// The original helper names remain unknown. Native supplies FX+80, state+10,
+// terrain slot20 and the shared half literal; the point lives through one FX
+// call. Expressing its initialization as a temporary preserves native argument
+// scheduling. No global address alias or canonical-header change is needed.
+struct WeatherPoint : Coord3D
+{
+ __forceinline WeatherPoint(float a, float b, float c) { x = a; y = b; z = c; }
+};
+struct GlobalWeatherState
+{
+ unsigned char m_pad00[0x10];
+ int m_state10;
+};
+class GlobalWeatherSystem;
+extern GlobalWeatherSystem *TheGlobalWeatherSystem;
+struct Region3D
+{
+ float lo[3];
+ float hi[3];
+};
+class TerrainLogic
+{
+public:
+ virtual void slot00() = 0;
+ virtual void slot01() = 0;
+ virtual void slot02() = 0;
+ virtual void slot03() = 0;
+ virtual void slot04() = 0;
+ virtual void slot05() = 0;
+ virtual void slot06() = 0;
+ virtual void slot07() = 0;
+ virtual void getExtent(Region3D *extent) = 0;
+};
+extern TerrainLogic *TheTerrainLogic;
+class Matrix3D;
+class FXList
+{
+public:
+ static void doFXPos(const FXList *, const Coord3D *, const Matrix3D *, float, const Coord3D *);
+};
+struct DarknessSpecialPowerFXData
+{
+ unsigned char m_pad00[0x80];
+ const FXList *m_fx;
+};
+
+void FreezingRainSpecialPower::rva004C4C99(const Coord3D *loc)
+{
+ if (((const GlobalWeatherState *)TheGlobalWeatherSystem)->m_state10 == 2)
+  return;
+ const FreezingRainSpecialPowerModuleData *data = getData();
+ if (data->m_fx == 0)
+  return;
+ Region3D extent;
+ TheTerrainLogic->getExtent(&extent);
+ FXList::doFXPos(data->m_fx,
+  &WeatherPoint((extent.lo[0] + extent.hi[0]) * 0.5f,
+   (extent.lo[1] + extent.hi[1]) * 0.5f, loc->z), 0, 0.0f, 0);
+}
+
+void DarknessSpecialPower::rva004C4E93(const Coord3D *loc)
+{
+ if (((const GlobalWeatherState *)TheGlobalWeatherSystem)->m_state10 == 1)
+  return;
+ const DarknessSpecialPowerFXData *data = (const DarknessSpecialPowerFXData *)m_moduleData;
+ if (data->m_fx == 0)
+  return;
+ Region3D extent;
+ TheTerrainLogic->getExtent(&extent);
+ FXList::doFXPos(data->m_fx,
+  &WeatherPoint((extent.lo[0] + extent.hi[0]) * 0.5f,
+   (extent.lo[1] + extent.hi[1]) * 0.5f, loc->z), 0, 0.0f, 0);
 }
