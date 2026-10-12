@@ -11319,8 +11319,8 @@ name,address,notes
 ?rva0037D0EF@Rva0037BBED@@QAE_NVUnicodeString@@@Z,0x0037D0EF,address-derived member check called from AptSaveLoad 0x0043448C; receives UnicodeString by value per caller copy and callee cleanup
 ?rva0037D6E8@Bfme939Helper@@QAE_NABVUnicodeString@@0@Z,0x0037D6E8,Address-derived member on g_bfme939Helper at 0x00E02290: caller 0x004358C8 passes trimmed and raw filename strings; AL selects replay-save outcome
 ?rva0037E915@Rva0037E915@@QAEPAXH@Z,0x0037E915,callee of ?rva0049CCF0@Rva0049CCF0@@QAEXH@Z
-?rva0037EEB9@Rva0037F32F@@QAEXPBVThingTemplate@@@Z,0x0037EEB9,"member (ret 4) of the object at Player +0x738 taking a ThingTemplate, the removal twin of rva0037F32F: BuildableHeroListUpgrade::upgradeRemovalImplementation 0x004B8484 feeds it each listed hero template"
-?rva0037F32F@Rva0037F32F@@QAEXPBVThingTemplate@@PAVPlayer@@@Z,0x0037F32F,"member (EH, ret 8) of the object at Player +0x738 taking a ThingTemplate and the Player; BuildableHeroListUpgrade::upgradeImplementation 0x004B837F feeds it each listed hero template"
+?removeBuildUnit@UnitRevivalTracker@@QAEXPBVThingTemplate@@@Z,0x0037EEB9,"member (ret 4) of the object at Player +0x738 taking a ThingTemplate, the removal twin of rva0037F32F: BuildableHeroListUpgrade::upgradeRemovalImplementation 0x004B8484 feeds it each listed hero template"
+?addInitialBuildUnit@UnitRevivalTracker@@QAEXPBVThingTemplate@@PAVPlayer@@@Z,0x0037F32F,"member (EH, ret 8) of the object at Player +0x738 taking a ThingTemplate and the Player; BuildableHeroListUpgrade::upgradeImplementation 0x004B837F feeds it each listed hero template"
 ?rva00381618@@YAXPAVGameWindow@@H@Z,0x00381618,cdecl 2-arg callee of 0x5AFC21 (batched caller cleanup; pushes m_C then m_4); SEH function body; signature unproven
 ?rva00390533@Rva00390533@@QAE_NXZ,0x00390533,TU-local flag-pair check (bit31 of +0x118 or bit8 of +0x114); RETAIL REL32 in 0x341C54 targets 0x390533
 ?rva00392092@Rva00392092Target@@QAEXXZ,0x00392092,"method a vtable-slot forwarder tail-jumps to (ret 0); opaque address name"

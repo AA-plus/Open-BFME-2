@@ -31,11 +31,11 @@ public:
 	const ThingTemplate *findTemplate(const AsciiString &name);
 };
 extern ThingFactory *TheThingFactory;
-class Rva0037F32F
+class UnitRevivalTracker
 {
 public:
-	void rva0037F32F(const ThingTemplate *tmpl, Player *player);
-	void rva0037EEB9(const ThingTemplate *tmpl);
+	void addInitialBuildUnit(const ThingTemplate *tmpl, Player *player);
+	void removeBuildUnit(const ThingTemplate *tmpl);
 };
 struct Rva004B837FList
 {
@@ -50,7 +50,7 @@ public:
 	unsigned char m_pad038[0x32C - 0x38];
 	PlayerTeamNode *m_teamHead;
 	unsigned char m_pad330[0x738 - 0x330];
-	Rva0037F32F m_738;			// +0x738
+	UnitRevivalTracker m_738;			// +0x738
 };
 class Object
 {
@@ -117,7 +117,7 @@ void BuildableHeroListUpgrade::upgradeImplementation()
 	for (_STL::vector<AsciiString>::iterator it = names.begin(); it != names.end(); ++it)
 	{
 		const ThingTemplate *tmpl = TheThingFactory->findTemplate(*it);
-		player->m_738.rva0037F32F(tmpl, player);
+		player->m_738.addInitialBuildUnit(tmpl, player);
 	}
 	TheControlBar->m_28 = true;
 	rva004CE4A0();
@@ -126,12 +126,12 @@ void BuildableHeroListUpgrade::upgradeRemovalImplementation()
 {
 	Player *player = getObject()->getControllingPlayer();
 	_STL::vector<AsciiString> &names = player->m_34->m_names;
-	Rva0037F32F *holder = &player->m_738;
+	UnitRevivalTracker *holder = &player->m_738;
 	for (_STL::vector<AsciiString>::iterator it = names.begin(); it != names.end(); ++it)
 	{
 		const ThingTemplate *tmpl = TheThingFactory->findTemplate(*it);
 		rva004B83D2(tmpl);
-		holder->rva0037EEB9(tmpl);
+		holder->removeBuildUnit(tmpl);
 	}
 	TheControlBar->m_28 = true;
 	rva004CE4A8();

@@ -351,6 +351,7 @@ public:
 	Bool productionSystemQueueCreateUnit(Int index, Int productionID, const Image **outImage);
     Object *productionSystemNewObject(unsigned int productionID,const Coord3D *position);
     void rva0037EF2D(unsigned int);
+    void addInitialBuildUnit(const ThingTemplate *thingTemplate, Player *player);
     UnitRevivalEntry *begin() const { return *reinterpret_cast<UnitRevivalEntry* const*>(reinterpret_cast<const char*>(this)+4); }
     UnitRevivalEntry *end() const { return *reinterpret_cast<UnitRevivalEntry* const*>(reinterpret_cast<const char*>(this)+8); }
 
@@ -427,10 +428,8 @@ struct Rva002E2D10Record {
 namespace _STL {
     template<> void vector<Rva002E2D10Record>::push_back(const Rva002E2D10Record &);
 }
-class Rva0037F32F {
-public:
-    void rva0037F32F(const ThingTemplate *, Player *);
-private:
+// Layout view of UnitRevivalTracker's record vector at +4.
+struct UnitRevivalTrackerEntries {
     unsigned char pad00[4];
     _STL::vector<Rva002E2D10Record> entries;
 };
@@ -438,11 +437,11 @@ private:
 // independently establishes a complete 96-byte EH body (ret 8). It constructs
 // the existing 0xD8 record from the template, puts template rank at +0x0C,
 // and appends it to the tracker vector at +4. Retain the established caller
-// symbol and pointer ABI; the WB ownership assertion is absent in retail.
-void Rva0037F32F::rva0037F32F(const ThingTemplate *thingTemplate, Player *player) {
+// pointer ABI; the WB ownership assertion is absent in retail.
+void UnitRevivalTracker::addInitialBuildUnit(const ThingTemplate *thingTemplate, Player *player) {
     Rva002E2D10Record entry(thingTemplate);
     entry.rank = thingTemplate->rva0033B479();
-    entries.push_back(entry);
+    reinterpret_cast<UnitRevivalTrackerEntries *>(this)->entries.push_back(entry);
 }
 
 // Native 37E94A..37EACA, complete 386-byte constructor from Object*.
