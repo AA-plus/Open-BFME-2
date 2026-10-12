@@ -47,10 +47,11 @@ private:
 };
 struct TargetRef00217D4C { virtual void *destroy(unsigned); int references; };
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
+// Inline-only storage reference: no imported call or out-of-line COMDAT is emitted.
 struct TreeHintRef00217D4C
 {
-    __forceinline TreeHintRef00217D4C(TargetRef00217D4C *p) : m_ptr(p) { if (m_ptr) ++m_ptr->references; }
-    __forceinline TreeHintRef00217D4C(const TreeHintRef00217D4C &other) : m_ptr(other.m_ptr) { if (m_ptr) ++m_ptr->references; }
+    __declspec(dllimport) __forceinline TreeHintRef00217D4C(TargetRef00217D4C *p) : m_ptr(p) { if (m_ptr) ++m_ptr->references; }
+    __declspec(dllimport) __forceinline TreeHintRef00217D4C(const TreeHintRef00217D4C &other) : m_ptr(other.m_ptr) { if (m_ptr) ++m_ptr->references; }
     __forceinline ~TreeHintRef00217D4C() { if (m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
     TargetRef00217D4C *m_ptr;
 };
