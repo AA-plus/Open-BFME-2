@@ -18,8 +18,17 @@ typedef unsigned int UnsignedInt;
 #include "Code/Libraries/Include/Lib/Coord3D.h"
 class Object;
 
+// Event values with target evidence: construction 1 (DozerAIUpdate), battle
+// plan 7 (BattlePlanUpdate), stealth discovered/neutralized 8/9
+// (InvisibilityManager), invalid 0x0B (this table's terminator). The other
+// slots keep their numbers; their colours are Zero Hour's but their names are
+// not established for BFME 2.
 enum RadarEventType
 {
+	RADAR_EVENT_CONSTRUCTION = 1,
+	RADAR_EVENT_BATTLE_PLAN = 7,
+	RADAR_EVENT_STEALTH_DISCOVERED = 8,
+	RADAR_EVENT_STEALTH_NEUTRALIZED = 9,
 	RADAR_EVENT_INVALID = 0x0B
 };
 
@@ -67,7 +76,24 @@ public:
 
 
 
-extern RadarColorLookup radarColorLookupTable[];
+// Zero Hour's colour table (retail rva 0x009BCD08, 12 x 36 B): BFME 2 adds slot 0
+// and moves the terminator to 0x0B; slot 4 carries Zero Hour's infiltration
+// colours and slots 5/6 its information/beacon colours.
+RadarColorLookup radarColorLookupTable[] =
+{
+	{ (RadarEventType)0,                 { 255, 255,   0, 255 },  { 255, 255, 128, 255 } },
+	{ RADAR_EVENT_CONSTRUCTION,          { 128, 128, 255, 255 },  { 128, 255, 255, 255 } },
+	{ (RadarEventType)2,                 { 128,   0,  64, 255 },  { 255, 185, 220, 255 } },
+	{ (RadarEventType)3,                 { 255,   0,   0, 255 },  { 255, 128, 128, 255 } },
+	{ (RadarEventType)4,                 {   0, 255, 255, 255 },  { 128, 255, 255, 255 } },
+	{ (RadarEventType)5,                 { 255, 255,   0, 255 },  { 255, 255, 128, 255 } },
+	{ (RadarEventType)6,                 { 255, 255,   0, 255 },  { 255, 255, 128, 255 } },
+	{ RADAR_EVENT_BATTLE_PLAN,           { 255, 255, 255, 255 },  { 255, 255, 255, 255 } },
+	{ RADAR_EVENT_STEALTH_DISCOVERED,    {   0, 255,   0, 255 },  {   0, 128,   0, 255 } },
+	{ RADAR_EVENT_STEALTH_NEUTRALIZED,   {   0, 255,   0, 255 },  {   0, 128,   0, 255 } },
+	{ (RadarEventType)10,                {   0,   0,   0,   0 },  {   0,   0,   0,   0 } },
+	{ RADAR_EVENT_INVALID,               {   0,   0,   0,   0 },  {   0,   0,   0,   0 } }
+};
 
 class Radar
 {
@@ -95,7 +121,6 @@ struct Rva002D893BColorSource
 
 extern void GameGetColorComponents(int color, unsigned char *a, unsigned char *b,
 	unsigned char *c, unsigned char *d);
-extern float g_00BC7810;
 
 void Radar::createEvent(const Coord3D *world, RadarEventType type, Real secondsToLive)
 {
@@ -140,9 +165,9 @@ void Radar::rva002D893B(const Rva002D893BColorSource *source, const Coord3D *wor
 	color[0].blue = green;
 	color[0].alpha = red;
 	color[1] = color[0];
-	color[1].red += (UnsignedInt)(color[0].red * g_00BC7810);
-	color[1].green += (UnsignedInt)(color[0].green * g_00BC7810);
-	color[1].blue += (UnsignedInt)(color[0].blue * g_00BC7810);
+	color[1].red += (UnsignedInt)(color[0].red * -0.75f);
+	color[1].green += (UnsignedInt)(color[0].green * -0.75f);
+	color[1].blue += (UnsignedInt)(color[0].blue * -0.75f);
 	internalCreateEvent(world, type, scale, &color[0], &color[1]);
 }
 
