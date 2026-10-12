@@ -55,3 +55,46 @@ void Rva006CD330()
 	if (g_bfmeAptHashAtE180E4)
 		g_bfmeAptHashAtE180E4->rva0070B220(0);
 }
+
+// 0x006CD2C0 (98B), Ghidra-unlisted: copies a display name into the caller's
+// buffer through the rowed AptValue::rva006DE870: the pool's +0x6C value when
+// set, else its +0x68 value when that is a CIH whose +8 name string is not
+// empty (rowed EAStringC::IsEmpty); otherwise the buffer is emptied. The
+// pool is re-read from the global before the second copy, as native.
+// Address-derived name.
+class AptCIH;
+class AptValue
+{
+public:
+	bool isCIH(bool undefinedOK) const;
+	AptCIH *c_cih(bool undefinedOK);
+	void rva006DE870(char *buffer) const;
+};
+class EAStringC
+{
+public:
+	bool IsEmpty() const;
+};
+struct Rva006CD2C0Pool
+{
+	char pad[0x68];
+	AptValue *m_68;
+	AptValue *m_6C;
+};
+
+void Rva006CD2C0Name(char *buffer)
+{
+	Rva006CD2C0Pool *pool = (Rva006CD2C0Pool *)g_bfmeAptPtrAtE176D0;
+	if (pool->m_6C)
+	{
+		pool->m_6C->rva006DE870(buffer);
+		return;
+	}
+	if (((Rva006CD2C0Pool *)g_bfmeAptPtrAtE176D0)->m_68 && ((Rva006CD2C0Pool *)g_bfmeAptPtrAtE176D0)->m_68->isCIH(false)
+		&& !((EAStringC *)((char *)((Rva006CD2C0Pool *)g_bfmeAptPtrAtE176D0)->m_68->c_cih(false) + 8))->IsEmpty())
+	{
+		((Rva006CD2C0Pool *)g_bfmeAptPtrAtE176D0)->m_68->rva006DE870(buffer);
+		return;
+	}
+	*buffer = 0;
+}
