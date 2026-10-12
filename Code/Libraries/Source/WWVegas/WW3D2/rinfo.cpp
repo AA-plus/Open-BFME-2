@@ -106,6 +106,12 @@ class RenderingMethod : public RefCountClass
 };
 }
 
+// Retail's unwind funclet for Push_Rendering_Method releases through the
+// size-optimized RefCountPtr destructor (dec, at 0x0007B724): compile this
+// unit's copy and destructor the same way (the /O1 units' copies). Implicit
+// instantiations compile with the unit's end state, so the two members are
+// explicit specializations defined inside the size-optimized region.
+#pragma optimize("s", on)
 template <class T>
 class RefCountPtr
 {
@@ -127,6 +133,19 @@ public:
 private:
 	T *Referent;
 };
+template <> inline RefCountPtr<FXShader::RenderingMethod>::RefCountPtr(const RefCountPtr<FXShader::RenderingMethod> &rhs) : Referent(rhs.Referent)
+{
+	if (Referent) {
+		Referent->Add_Ref();
+	}
+}
+template <> inline RefCountPtr<FXShader::RenderingMethod>::~RefCountPtr(void)
+{
+	if (Referent) {
+		Referent->Release_Ref();
+	}
+}
+#pragma optimize("", on)
 
 class Vector3
 {
