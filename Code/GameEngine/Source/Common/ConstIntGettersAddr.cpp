@@ -477,10 +477,19 @@ int Rva00337055Get(void)
 }
 
 
-// ?Rva003FA6FFGet@@YAHXZ @ 0x003FA6FF (6B): returns 0x00C378F0.
-int Rva003FA6FFGet(void)
+// The LivingWorldObject parser at 0x0021376B supplies its object in ECX;
+// WorldBuilder's twin also calls this through the object. Keep the method ABI
+// and the field-table pointer return; the original method name is unknown.
+struct FieldParse;
+extern const FieldParse LivingWorldObjectFields[];
+class Rva003FA776
 {
-	return 0x00C378F0;
+public:
+	const FieldParse *rva003FA6FF();
+};
+const FieldParse *Rva003FA776::rva003FA6FF()
+{
+	return LivingWorldObjectFields;
 }
 
 // ?Rva0041A967Get@@YAHXZ @ 0x0041A967 (6B): returns 0x0081A8B1.
