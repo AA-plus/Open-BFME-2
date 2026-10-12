@@ -103,6 +103,77 @@ Rva00567847::Rva00567847(unsigned int field04, unsigned int field08)
 	m_field08 = field08;
 }
 
+
+// Three more of this shape, out-of-line copies with their own vtables:
+// 0x0029B32D (VA 0xbfd010), 0x002B25D6 (VA 0xbfdfec), 0x002B262D (VA 0xbfdff0).
+// Same select-any recipe as Rva00359853 above; class names address-derived.
+
+class Rva0029B32D
+{
+public:
+	Rva0029B32D(unsigned int field04, unsigned int field08);
+	virtual void slot00() {}
+private:
+	unsigned int m_field04;
+	unsigned int m_field08;
+};
+
+__declspec(noinline) inline Rva0029B32D::Rva0029B32D(unsigned int field04, unsigned int field08)
+{
+	m_field04 = field04;
+	m_field08 = field08;
+}
+
+// ?bfmeAnchorRva0029B32D absent-from-retail
+void *bfmeAnchorRva0029B32D(void *where, unsigned int a, unsigned int b)
+{
+	return new (where) Rva0029B32D(a, b);
+}
+
+class Rva002B25D6
+{
+public:
+	Rva002B25D6(unsigned int field04, unsigned int field08);
+	virtual void slot00() {}
+private:
+	unsigned int m_field04;
+	unsigned int m_field08;
+};
+
+__declspec(noinline) inline Rva002B25D6::Rva002B25D6(unsigned int field04, unsigned int field08)
+{
+	m_field04 = field04;
+	m_field08 = field08;
+}
+
+// ?bfmeAnchorRva002B25D6 absent-from-retail
+void *bfmeAnchorRva002B25D6(void *where, unsigned int a, unsigned int b)
+{
+	return new (where) Rva002B25D6(a, b);
+}
+
+class Rva002B262D
+{
+public:
+	Rva002B262D(unsigned int field04, unsigned int field08);
+	virtual void slot00() {}
+private:
+	unsigned int m_field04;
+	unsigned int m_field08;
+};
+
+__declspec(noinline) inline Rva002B262D::Rva002B262D(unsigned int field04, unsigned int field08)
+{
+	m_field04 = field04;
+	m_field08 = field08;
+}
+
+// ?bfmeAnchorRva002B262D absent-from-retail
+void *bfmeAnchorRva002B262D(void *where, unsigned int a, unsigned int b)
+{
+	return new (where) Rva002B262D(a, b);
+}
+
 // Placeholder virtuals in this unit's vftables: in retail, every vftable that holds
 // each one has the same function in that slot (vftable addresses from matched vptr
 // stores). Bind them to the rows at those functions.
