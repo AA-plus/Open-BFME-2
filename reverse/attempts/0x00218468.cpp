@@ -1,13 +1,54 @@
 // ?rva00218468@FontLibrary@@QAEXPAVAsciiString@@PAMPA_N@Z
-// partial score=0.94 date=2026-10-10
+// partial score=0.97 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
 // stlport
-// Clean BFME1 FontLibraryBFMEAdjustFont.cpp at575ba2b04; donor supplies size/style interpolation.
-// Native218468..21857E and styled font caller21857E establish table20 and records16.
-// Function purpose follows source and target operations; original method name unknown.
+//
+// ?rva00218468@FontLibrary@@QAEXPAVAsciiString@@PAMPAE@Z, retail 0x00218468,
+// 278 bytes. FontLibrary font-substitution adjustment: look the name up in the
+// substitution tree at this+0x20, and when a non-empty substitution list is
+// found, replace the name/size/style with the neighbouring record's values,
+// interpolating the size when the request falls between two records.
+//
+// BFME1 donor game/GameEngine/Source/GameClient/GUI/FontLibraryBFMEAdjustFont.cpp
+// (Rva00476B00FontLibrary::adjustFont, retail 0x00476B00, 260 bytes) supplies
+// the whole shape: tree find, empty-list early-out, __upper_bound over the
+// 16-byte records, interpolating vs flat branch, flag bits 1/2 to style.
+// BFME2 deltas (all retail-measured): tree at this+0x20 (not +0x1C); the int
+// key comes from the float via cvttss2si (/arch:SSE, no __ftol2 call); both
+// name assignments go through the direct StringBase::set worker at 0x000366F0
+// (no out-of-line operator=); the flat branch takes the if/else form
+// (previous = last - 1 vs previous = first) rather than the donor's
+// unconditional-assign shape. Original method name unknown: honest
+// address-derived name. Callees Gen00473A40 at 0x0021764D and the
+// AsciiString-keyed _M_find worker at 0x001F8437 are rowed.
 #include <map>
+
 #include "ascii_string.h"
-namespace _STL {template<>struct less<AsciiString>{bool operator()(const AsciiString&a,const AsciiString&b)const{return a<b;}};}
+
+bool operator<(const AsciiString &left, const AsciiString &right);
+
+namespace _STL
+{
+template <> struct less<AsciiString>
+{
+	bool operator()(const AsciiString &left, const AsciiString &right) const
+	{
+		return left < right;
+	}
+};
+}
+
+// Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
+namespace _STL
+{
+template <class T, class LeftTraits, class RightTraits>
+static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits> &a,
+			      const _Rb_tree_iterator<T, RightTraits> &b)
+{
+	return a._M_node != b._M_node;
+}
+}
+
 struct Rva004779C0Vector
 {
 	char *m_first;
@@ -28,7 +69,13 @@ struct Rva00475680Node
 class Rva00475680Tree
 {
 public:
-	Rva00475680Node *find(const AsciiString &key) const { return reinterpret_cast<Rva00475680Node *>(reinterpret_cast<const _STL::map<AsciiString,AsciiString> *>(this)->find(key)._M_node); }
+	Rva00475680Node *find(const AsciiString &key) const
+	{
+		return reinterpret_cast<Rva00475680Node *>(
+			reinterpret_cast<const _STL::map<AsciiString, AsciiString> *>(this)
+				->find(key)
+				._M_node);
+	}
 
 	Rva00475680Node *m_header;
 };
@@ -41,42 +88,33 @@ struct Gen00473A40Elem
 	AsciiString m_name;
 };
 
-// STLport's __upper_bound takes its comparator BY VALUE, and retail hands it a
-// 4-byte stack slot whose first byte it zeroes (`mov byte ptr [esp+0x10],0` at
-// +0x43) before pushing the whole dword.  A real one-byte member assigned zero
-// reproduces that exactly.  An EMPTY functor does not: value-initialising
-// `Gen00473A40Less()` elides the store and the body comes out 259 bytes, which
-// is why the earlier revision forced the byte with `*(unsigned char *)&less = 0`
-// through a cast into an empty struct.  What the byte MEANS is still unknown --
-// no member of this comparator is read here -- so it is spelled by its offset
-// rather than given an invented name.
+// The comparator carries one byte retail zeroes with stosb before pushing the
+// whole dword to the by-value __upper_bound parameter; an empty functor
+// elides that store and the body comes out short.
 struct Gen00473A40Less
 {
 	bool operator()(const int &value, const Gen00473A40Elem &elem) const;
 
-	
+	unsigned char m_pad0x00;
 };
 
-Gen00473A40Elem *Gen00473A40(Gen00473A40Elem *first,
-	Gen00473A40Elem *last, const int &value, Gen00473A40Less,
-	int *);
+Gen00473A40Elem *Gen00473A40(Gen00473A40Elem *first, Gen00473A40Elem *last,
+	const int &value, Gen00473A40Less, int *);
 
 class FontLibrary
 {
 public:
-	void rva00218468(AsciiString *name, float *size,
-		bool *style);
+	void rva00218468(AsciiString *name, float *size, bool *style);
 
-	// Nothing before the tree is read here.  The landed sibling
-	// FontLibraryBFME.cpp spells the real prefix (subsystem vtable, font list,
-	// two STLport maps); this body witnesses none of it, so it stays a pad.
+	// Nothing before the tree is read here; the landed sibling
+	// FontLibraryFontList.cpp spells the real prefix (font list at +0x0C,
+	// count at +0x10, table map at +0x14), so this stays a pad.
 	char m_pad0x00[0x20];
 	Rva00475680Tree m_fontSubstitution;
 };
 
 // ?rva00218468@FontLibrary@@QAEXPAVAsciiString@@PAMPAE@Z
-void FontLibrary::rva00218468(AsciiString *name,
-	float *size, bool *style)
+void FontLibrary::rva00218468(AsciiString *name, float *size, bool *style)
 {
 	Rva00475680Tree *tree = &m_fontSubstitution;
 	Rva00475680Node *node = tree->find(*name);
@@ -92,11 +130,10 @@ void FontLibrary::rva00218468(AsciiString *name,
 	if ((((char *)last - (char *)first) & ~0x0f) == 0)
 		return;
 
-	
-	Gen00473A40Elem *next = Gen00473A40(first, last, (int)*size,
-		Gen00473A40Less(), 0);
 	Gen00473A40Elem *previous;
 	int flags;
+	Gen00473A40Elem *next =
+		Gen00473A40(first, last, (int)*size, Gen00473A40Less(), 0);
 
 	if (next != last && next != first)
 	{
@@ -119,8 +156,8 @@ void FontLibrary::rva00218468(AsciiString *name,
 			previous = last - 1;
 
 		if (previous->m_name.getLength() != 0)
-			((StringBase<char> *)name)->set(
-				*(const StringBase<char> *)&previous->m_name);
+			((StringBase<char> *)name)
+				->set(*(const StringBase<char> *)&previous->m_name);
 		flags = previous->m_flags;
 		*size = (float)previous->m_outputSize;
 	}
