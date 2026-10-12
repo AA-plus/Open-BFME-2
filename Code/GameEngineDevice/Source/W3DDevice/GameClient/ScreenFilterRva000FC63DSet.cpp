@@ -247,17 +247,22 @@ protected:
 
 #define REF_PTR_RELEASE(x) { if (x) x->Release_Ref(); x = 0; }
 
-extern Int g_00DEC1BC;		// current fade frame
-extern Int g_00DEC1B4;		// fade direction
-extern Int g_00DEC1B8;		// fade frames
-extern unsigned char g_00DEC1C4;	// time of day swapped
-extern Int g_00DB5B88;		// swap counter
+// The transition's remaining state shares the fade value's zero-filled group
+// (0x00DEC1B4..0x00DEC1C7, retail zeros); the swap counter is initialised
+// .data at 0x00DB5B88 holding 1, the value Rva00085553Get re-arms it to.
+// Neutral role names, as for the fade value: the original identifiers are
+// unknown.
+Int BfmeScreenTransitionCurFadeFrame;		// current fade frame
+Int BfmeScreenTransitionFadeDirection;		// fade direction
+Int BfmeScreenTransitionFadeFrames;		// fade frames
+unsigned char BfmeScreenTransitionTimeOfDaySwapped;	// time of day swapped
+Int BfmeScreenTransitionSwapCounter = 1;		// swap counter
 // Shared transition fade scalar: native setup writes normalized progress and
 // DOT3 postRender converts (1 - progress) to alpha. The neutral role name
 // preserves uncertainty about the original identifier. Retail stores 0.0f
 // initially; data_rows verifies this source's complete four-byte definition.
 Real BfmeScreenTransitionFadeValue = 0.0f;
-extern UnsignedInt g_Va00DEC1C0;	// last logic frame
+UnsignedInt BfmeScreenTransitionLastLogicFrame;	// last logic frame
 
 class Rva000FC63DFilter
 {
@@ -282,37 +287,37 @@ Int Rva000FC63DFilter::set(FilterModes mode)
 	TheWritableGlobalData->m_D34 = false;
 	Bool newFrame = false;
 	UnsignedInt frame = TheGameLogic->getFrame();
-	if (g_Va00DEC1C0 != frame)
+	if (BfmeScreenTransitionLastLogicFrame != frame)
 	{
 		newFrame = true;
-		g_Va00DEC1C0 = frame;
+		BfmeScreenTransitionLastLogicFrame = frame;
 	}
-	if (g_00DB5B88 != 0 && newFrame)
+	if (BfmeScreenTransitionSwapCounter != 0 && newFrame)
 	{
-		if (g_00DEC1B4 < 0 && !g_00DEC1C4)
+		if (BfmeScreenTransitionFadeDirection < 0 && !BfmeScreenTransitionTimeOfDaySwapped)
 		{
-			g_00DEC1C4 = true;
-			g_00DB5B88 = 30;
+			BfmeScreenTransitionTimeOfDaySwapped = true;
+			BfmeScreenTransitionSwapCounter = 30;
 			TheWritableGlobalData->setTimeOfDay(m_savedTimeOfDay);
 			TheGameClient->setTimeOfDay(m_savedTimeOfDay);
 		}
-		if (g_00DEC1C4)
+		if (BfmeScreenTransitionTimeOfDaySwapped)
 		{
-			g_00DB5B88 -= 3;
-			if (g_00DB5B88 < 1)
+			BfmeScreenTransitionSwapCounter -= 3;
+			if (BfmeScreenTransitionSwapCounter < 1)
 			{
-				g_00DEC1C4 = false;
-				g_00DB5B88 = 0;
+				BfmeScreenTransitionTimeOfDaySwapped = false;
+				BfmeScreenTransitionSwapCounter = 0;
 				TheTacticalView->setViewFilterMode(FM_NULL_MODE);
 				TheTacticalView->setViewFilter(FT_NULL_FILTER);
 			}
 		}
 		else
 		{
-			g_00DB5B88 += 3;
-			if (g_00DB5B88 >= 30)
+			BfmeScreenTransitionSwapCounter += 3;
+			if (BfmeScreenTransitionSwapCounter >= 30)
 			{
-				g_00DEC1C4 = true;
+				BfmeScreenTransitionTimeOfDaySwapped = true;
 				TheTacticalView->setViewFilterMode((FilterModes)15);
 				TheTacticalView->setViewFilter((FilterTypes)7);
 				m_savedTimeOfDay = TheWritableGlobalData->m_timeOfDay;
@@ -324,38 +329,38 @@ Int Rva000FC63DFilter::set(FilterModes mode)
 
 	if (mode > FM_NULL_MODE)
 	{
-		if (g_00DEC1B4 > 0)
+		if (BfmeScreenTransitionFadeDirection > 0)
 		{
 			if (newFrame)
-				g_00DEC1BC++;
-			Int fade = g_00DEC1BC;
-			if (fade < g_00DEC1B8)
+				BfmeScreenTransitionCurFadeFrame++;
+			Int fade = BfmeScreenTransitionCurFadeFrame;
+			if (fade < BfmeScreenTransitionFadeFrames)
 			{
-				BfmeScreenTransitionFadeValue = (Real)fade / (Real)g_00DEC1B8;
+				BfmeScreenTransitionFadeValue = (Real)fade / (Real)BfmeScreenTransitionFadeFrames;
 			}
 			else
 			{
-				g_00DEC1BC = 0;
+				BfmeScreenTransitionCurFadeFrame = 0;
 				BfmeScreenTransitionFadeValue = 1.0f;
-				g_00DEC1B4 = 0;
+				BfmeScreenTransitionFadeDirection = 0;
 			}
 		}
-		else if (g_00DEC1B4 < 0)
+		else if (BfmeScreenTransitionFadeDirection < 0)
 		{
 			if (newFrame)
-				g_00DEC1BC++;
-			Int fade = g_00DEC1BC;
-			if (fade < g_00DEC1B8)
+				BfmeScreenTransitionCurFadeFrame++;
+			Int fade = BfmeScreenTransitionCurFadeFrame;
+			if (fade < BfmeScreenTransitionFadeFrames)
 			{
-				BfmeScreenTransitionFadeValue = 1.0f - (Real)fade / (Real)g_00DEC1B8;
+				BfmeScreenTransitionFadeValue = 1.0f - (Real)fade / (Real)BfmeScreenTransitionFadeFrames;
 			}
 			else
 			{
 				BfmeScreenTransitionFadeValue = 0.0f;
 				TheTacticalView->setViewFilterMode(FM_NULL_MODE);
 				TheTacticalView->setViewFilter(FT_NULL_FILTER);
-				g_00DEC1BC = 0;
-				g_00DEC1B4 = 0;
+				BfmeScreenTransitionCurFadeFrame = 0;
+				BfmeScreenTransitionFadeDirection = 0;
 			}
 		}
 
@@ -576,20 +581,20 @@ Bool Rva000FCF54Filter::postRender(FilterModes mode, Coord2D &scrollDelta,
 // fade ladder and material/shader/empty-texture/depth-state setup.
 Int Rva000FCF54Filter::set(FilterModes mode) {
  if (mode > FM_NULL_MODE) {
-  if (g_00DEC1B4 > 0) {
-   Int fade = ++g_00DEC1BC;
-   if (fade < g_00DEC1B8)
-    BfmeScreenTransitionFadeValue = (Real)fade / (Real)g_00DEC1B8;
-   else { BfmeScreenTransitionFadeValue = 1; g_00DEC1BC=0; g_00DEC1B4=0; }
-  } else if (g_00DEC1B4 < 0) {
-   Int fade = ++g_00DEC1BC;
-   if (fade < g_00DEC1B8)
-    BfmeScreenTransitionFadeValue = 1 - (Real)fade / (Real)g_00DEC1B8;
+  if (BfmeScreenTransitionFadeDirection > 0) {
+   Int fade = ++BfmeScreenTransitionCurFadeFrame;
+   if (fade < BfmeScreenTransitionFadeFrames)
+    BfmeScreenTransitionFadeValue = (Real)fade / (Real)BfmeScreenTransitionFadeFrames;
+   else { BfmeScreenTransitionFadeValue = 1; BfmeScreenTransitionCurFadeFrame=0; BfmeScreenTransitionFadeDirection=0; }
+  } else if (BfmeScreenTransitionFadeDirection < 0) {
+   Int fade = ++BfmeScreenTransitionCurFadeFrame;
+   if (fade < BfmeScreenTransitionFadeFrames)
+    BfmeScreenTransitionFadeValue = 1 - (Real)fade / (Real)BfmeScreenTransitionFadeFrames;
    else {
     BfmeScreenTransitionFadeValue=0;
     TheTacticalView->setViewFilterMode(FM_NULL_MODE);
     TheTacticalView->setViewFilter(FT_NULL_FILTER);
-    g_00DEC1BC=0; g_00DEC1B4=0;
+    BfmeScreenTransitionCurFadeFrame=0; BfmeScreenTransitionFadeDirection=0;
    }
   }
   VertexMaterialClass *vmat = VertexMaterialClass::Get_Preset(VertexMaterialClass::PRELIT_DIFFUSE);
@@ -625,6 +630,12 @@ public:
 	static Int m_curFadeFrame;
 	static Real m_curFadeValue;
 };
+// Zero Hour W3DShaderManager.cpp's ScreenBWFilter fade statics, zero-filled
+// at 0x00DEC1A0..0x00DEC1AF just ahead of this unit's transition group.
+Int ScreenBWFilter::m_fadeFrames;
+Int ScreenBWFilter::m_fadeDirection;
+Int ScreenBWFilter::m_curFadeFrame;
+Real ScreenBWFilter::m_curFadeValue;
 class Rva000FC34FFilter
 {
 public:
@@ -684,7 +695,7 @@ Int Rva00075E3CGet();
 
 Int Rva000FCF54Filter::init()
 {
-	g_00DEC1BC = 0;
+	BfmeScreenTransitionCurFadeFrame = 0;
 	if (W3DShaderManager::canRenderToTexture() && Rva00075E3CGet())
 	{
 		W3DFilters[6] = reinterpret_cast<W3DFilterInterface *>(&g_Va00DEC1DC);
@@ -732,7 +743,7 @@ Int Rva000FC5B7Filter::init()
 {
 	long hr;
 	m_shader = 0;
-	g_00DEC1BC = 0;
+	BfmeScreenTransitionCurFadeFrame = 0;
 	if (!W3DShaderManager::canRenderToTexture())
 		return false;
 	hr = Rva00077E05Load("shaders\\monochromezoom.nvp", &m_shader);

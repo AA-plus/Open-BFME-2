@@ -296,7 +296,8 @@ public:
 	virtual void *__stdcall GetBufferPointer();
 };
 
-extern long __stdcall Rva0062AF3E(const char *source, unsigned long size,
+// d3dx9_27's D3DXAssembleShader, reached through its import thunk at 0x0062AF3E.
+extern "C" long __stdcall D3DXAssembleShader(const char *source, unsigned int size,
 	const void *defines, void *include, unsigned long flags,
 	Rva00077E05ShaderBuffer **shader, Rva00077E05ShaderBuffer **errors);
 
@@ -342,7 +343,7 @@ long __cdecl Rva00077E05Load(const char *strFilePath, unsigned long *pHandle)
 			source[fileSize] = 0;
 			file->close();
 
-			long hr = Rva0062AF3E(source, fileSize, 0, 0, 0, &shader, &errors);
+			long hr = D3DXAssembleShader(source, fileSize, 0, 0, 0, &shader, &errors);
 			HeapFree(GetProcessHeap(), 0, source);
 			if (hr < 0) {
 				if (shader) {
