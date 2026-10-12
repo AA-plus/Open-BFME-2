@@ -1,15 +1,6 @@
-// ?rva00499D23@OneRingPenaltyUpdate@@AAEXXZ
-// partial score=0.995 date=2026-10-12
-// ?rva00499D23@OneRingPenaltyUpdate@@AAEXXZ
-// partial score=0.9856523681858802 date=2026-10-10
-// ?rva00499D23@OneRingPenaltyUpdate@@AAEXXZ
-// partial score=0.98 date=2026-10-09
-// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD
-// NEAR draft for Code/GameEngine/Source/GameLogic/Object/Update/OneRingPenaltyUpdateRva00499D23.cpp
-// (relative includes assume that path). Remaining diffs are scheduling only:
-// retail loads start as [esi+0x28] then adds [ebx+0xC] (cl swaps the two
-// loads whatever the source order) and fetches TheTerrainLogic's vtable
-// before the pos.y fadd instead of after the argument pushes.
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
+// OneRingPenaltyUpdate wandering step. Target identity/layout evidence is
+// documented below; the original private method name remains unknown.
 // ?rva00499D23@OneRingPenaltyUpdate@@AAEXXZ retail 0x00499D23..0x00499E98
 // (373 bytes). Private helper on the primary this that update 0x00499E98
 // runs while the ring is worn with the +0x24 object id set. WorldBuilder
@@ -24,11 +15,9 @@
 // position offset by Cos/Sin of the angle times a radius shrinking from the
 // data's +0x18 to half of it over the window (z from TheTerrainLogic's
 // getGroundHeight vtable +0x18).
-#include "Code/Libraries/Include/Lib/Coord3D.h"
-#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../../Common/GameLogicObjectLookupView.h"
 
-extern "C" void _ReadWriteBarrier();
-#pragma intrinsic(_ReadWriteBarrier)
 typedef float Real;
 typedef unsigned int UnsignedInt;
 
@@ -119,6 +108,14 @@ public:
 	virtual Real getGroundHeight(Real x, Real y, Coord3D *normal) const; // +0x18
 };
 extern TerrainLogic *TheTerrainLogic;
+// MSVC 7.1 represents this single-inheritance member pointer as one code
+// address. Retail's primary vtable slot is that same four-byte code address;
+// no receiver adjustment is required. This checked ABI view binds the table
+// read after Sin and before the Y addition, preserving retail's x87 scheduling.
+// It describes the witnessed slot, not unobserved TerrainLogic methods.
+typedef Real (TerrainLogic::*GroundHeightMember)(Real,Real,Coord3D *) const;
+struct TerrainGroundCallTable {GroundHeightMember slots[7];};
+typedef char GroundMemberWidth[sizeof(GroundHeightMember)==4?1:-1];
 extern GameLogic *TheGameLogic;
 
 struct OneRingPenaltyUpdateModuleData
@@ -182,8 +179,11 @@ void OneRingPenaltyUpdate::rva00499D23()
 			radius = startRadius + ratio * (d->m_18 / 2.0f - startRadius);
 		}
 		pos.x += Cos(m_2C) * radius;
-		pos.y += Sin(m_2C) * radius;
-		pos.z = TheTerrainLogic->getGroundHeight(pos.x, pos.y, 0);
+		Real sine = Sin(m_2C);
+		TerrainLogic *terrain = TheTerrainLogic;
+		const TerrainGroundCallTable &ground = **reinterpret_cast<TerrainGroundCallTable **>(terrain);
+		pos.y += sine * radius;
+		pos.z = (terrain->*ground.slots[6])(pos.x, pos.y, 0);
 		ringer->getAI()->aiMoveToPosition(&pos, CMD_FROM_AI);
 	}
 }
