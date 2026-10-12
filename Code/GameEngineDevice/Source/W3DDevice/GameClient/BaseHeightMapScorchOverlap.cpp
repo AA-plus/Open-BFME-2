@@ -7,6 +7,9 @@
 // the overlap algorithm and every accessed target offset come from retail.
 // Native uses x87 FSQRT between SSE vector length and SSE radius comparison.
 // This narrow WWMath-style primitive preserves that proven x87 codegen shape.
+// The location is a by-value Vector3 (W3DTerrainVisual's forwarder 0x00091EEC
+// pushes its 12-byte position then the radius); this TU views it as WWMath's
+// X/Y/Z float triple.
 static __forceinline float scorchSqrt(float value)
 {
     float result;
@@ -15,21 +18,22 @@ static __forceinline float scorchSqrt(float value)
             fstp result }
     return result;
 }
-struct TerrainScorchVector
+class Vector3
 {
+public:
     float X, Y, Z;
-    TerrainScorchVector(float x, float y, float z) : X(x), Y(y), Z(z) {}
+    Vector3(float x, float y, float z) : X(x), Y(y), Z(z) {}
     __forceinline float Length() const { return scorchSqrt(Z*Z + Y*Y + X*X); }
 };
-__forceinline TerrainScorchVector operator-(const TerrainScorchVector &a,
-                                           const TerrainScorchVector &b)
+__forceinline Vector3 operator-(const Vector3 &a,
+                                           const Vector3 &b)
 {
-    return TerrainScorchVector(a.X-b.X, a.Y-b.Y, a.Z-b.Z);
+    return Vector3(a.X-b.X, a.Y-b.Y, a.Z-b.Z);
 }
 struct TerrainScorchEntry
 {
     void *snapshotView; // untouched leading word; no original field name asserted
-    TerrainScorchVector position;
+    Vector3 position;
     float radius;
     int type;
     bool active;
@@ -38,18 +42,18 @@ struct TerrainScorchEntry
 class BaseHeightMapRenderObjClass
 {
 public:
-    void rva00069C5F(float x, float y, float z, float radius);
+    void rva00069C5F(Vector3 location, float radius);
 private:
     char unreconstructed[0xE0];
     TerrainScorchEntry scorches[500];
     int count, cached;
 };
-void BaseHeightMapRenderObjClass::rva00069C5F(float x, float y, float z, float radius)
+void BaseHeightMapRenderObjClass::rva00069C5F(Vector3 location, float radius)
 {
     for (int i=0; i<count; ++i)
     {
         TerrainScorchEntry &scorch=scorches[i];
-        TerrainScorchVector delta=TerrainScorchVector(x,y,z)-scorch.position;
+        Vector3 delta=location-scorch.position;
         float distance=delta.Length();
         if (scorch.radius+radius > distance) scorch.active=true;
     }
