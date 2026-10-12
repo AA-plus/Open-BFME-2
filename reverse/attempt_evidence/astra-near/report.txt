@@ -1,0 +1,49 @@
+astra-near escalation seat, 2026-10-12
+Base origin/master: 842bf8da5e. Isolated branch wotr/astra-near.
+No pushes; normal hooks required for local commits.
+
+CAPTION 0x00278064, 300 bytes:
+Started from origin bank .91563. Inline getPointSize/isBold accessors restore
+reference-source argument evaluation order: .95756, eleven stack offsets left.
+A force-inlined helper taking the sanitized string by value places its local
+copy in dead incoming argument storage. Same filtering/lifetime semantics;
+all 300 bytes exact, no unresolved direct calls, no new pins. The helper is
+an implementation device, fully inlined, not a recovered original identity.
+Retail 278064..278190 RET4, not the stale ..27818E end in the earlier bank.
+Canonical strings retained, target layouts and virtual slots from retail/WB;
+ZH/BFME1 are semantic guides. Local add_match byte gate passes 1/1.
+code_identity_gate --staged: one row, zero new findings (shadow mode).
+place_bodies: zero incidental bodies/pins.
+
+RETREAT 0x003F6727, 527 bytes:
+Fresh bank 523/527 byte equality, .99166 diagnostic. Exact four raw operand
+mismatches +108,+10A,+12B,+12D: round-counter ESI versus retail EDI.
+20 new variants tested (four compile/relocation errors), plus control:
+inline getters/helpers, vector reference lifetimes, reused index storage,
+array/struct/union/reference/align4 round storage all failed to improve.
+Early vector reference: 540 bytes. align8 changes frame/relocation sites.
+Original bank untouched; no nonmatching Code or owner/pin changes.
+DIR32 callback +72 is undefined ??1Rva002B2508@@UAE@XZ, retail RVA2A983D.
+That seven-byte reset remains owned by Rva002A983DDwordImmSetter::apply;
+a parent byte score does not establish a valid callback identity contract.
+
+RVA 0x0020FB8B already matched on fetched base, 132 bytes, so not retried.
+
+REFERENCE:
+Initialized committed BFME1 cee35b7d8ca077d7255f1c39cb69e9fd9627aa85.
+Fetched official master 7d70ea9addc7027ef5f438bd15550eb21a0a408b.
+No changes to LivingWorld source directory, toolchain, library includes,
+inputs/vendor or lift_lane between these pointers. Pinned input retained;
+no full pointer-update verification or freshness success claimed. Full
+reference migration is outside this bounded near-match lane and conflicts
+with the requested light footprint. Ran lift_lane separately (read only).
+
+Raw disassembly is paired with symbolic COFF relocations. Relocated
+candidate disassembly from nonmatching variants is diagnostic only because
+copied DIR32 bytes can corrupt a differently shaped instruction stream.
+
+LINK STATUS (caption):
+link_check --prepare-current passed strict reusable receipts and 1/1 bytes.
+Ordinary link_check refused preview: new unit absent from census 2c46f084e1.
+--new-variants completed without a refusal. LINKED status is unconfirmed.
+No link_cycle, census, nightly, boot-smoke or publisher was started.
