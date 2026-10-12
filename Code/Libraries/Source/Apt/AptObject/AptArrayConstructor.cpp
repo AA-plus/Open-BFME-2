@@ -27,6 +27,7 @@ public:
     void set(int,AptValue*);
     void _reserve(int);
     void toString(EAStringC &,const char * = ",");
+    void rva006DA590(char *out,const char *szSeparator);
     void SetAt(int,AptValue*);
     static void *operator new(unsigned int n) { return g_pChainBlockAllocatorF4->allocBlock(n); }
     static AptValue *sMethod_concat(AptValue *,int);
@@ -369,3 +370,19 @@ void AptValue::toString(EAStringC &sBuf) const {
 #pragma comment(linker, "/alternatename:?getName@AptActionInterpreter@@SAXPAVAptCIH@@AAVEAStringC@@@Z=?rva006ffce0@@YAXPAVAptValue@@AAVEAStringC@@@Z")
 #pragma comment(linker, "/alternatename:?rva006DD6C0@BfmeAptValue006DCD20@@QAEXPAVEAStringC@@@Z=?toString@AptValue@@QBEXAAVEAStringC@@@Z")
 #pragma comment(linker, "/alternatename:?rva006DD6C0@BfmeAptValue006DCD20@@QAEXAAVEAStringC@@@Z=?toString@AptValue@@QBEXAAVEAStringC@@@Z")
+
+// Native6DA590..6DA62D: Ghidra-unlisted C-buffer join. Asserts szSeparator
+// (AptArray.cpp 0x14D, retail texts), joins through the rowed
+// toString(EAStringC&,const char*) into a local string and copies its text
+// into the caller's buffer with the intrinsic strcpy. Address-derived name.
+extern "C" char *__cdecl strcpy(char *,const char *);
+#pragma intrinsic(strcpy)
+void AptArray::rva006DA590(char *out,const char *szSeparator) {
+ if(!szSeparator) {
+  g_bfmeAptAssertAtE17734("szSeparator","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptArray.cpp",0x14d);
+  if(g_bfmeAptBreakOnAssertAtDDC01C) { __asm int 3 }
+ }
+ EAStringC text;
+ toString(text,szSeparator);
+ strcpy(out,text.rva00620090());
+}
