@@ -1,4 +1,7 @@
 // ?rva00032C60@GeneralAllocator@Allocator@EA@@QAEII@Z
+// partial score=0.99 date=2026-10-12
+// cl: /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// ?rva00032C60@GeneralAllocator@Allocator@EA@@QAEII@Z
 // partial score=0.78 date=2026-10-05
 // ?rva00032C60@GeneralAllocator@Allocator@EA@@QAEII@Z
 // partial score=0.78 date=2026-10-05
@@ -30,9 +33,9 @@
 // See /mnt/titan_nv3/open-bfme2-agent-fleet/normal-restart/meta-9-continue-explain1.txt
 // for the full side-by-side diff (389B, first diff +0x3F, classification
 // instruction/register encoding mismatch).
-extern "C" __declspec(dllimport) void __stdcall TrialEnterCriticalSection(void *section);
-extern "C" __declspec(dllimport) void __stdcall TrialLeaveCriticalSection(void *section);
-extern "C" __declspec(dllimport) void *__stdcall TrialVirtualFree(void *address, unsigned size, unsigned type);
+extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(void *section);
+extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void *section);
+extern "C" __declspec(dllimport) int __stdcall VirtualFree(void *address, unsigned int size, unsigned long type);
 
 namespace EA
 {
@@ -87,7 +90,7 @@ unsigned int GeneralAllocator::rva00032C60(unsigned int size)
 	Lock *lock = m_lock4E4;
 	if (lock != 0)
 	{
-		TrialEnterCriticalSection(lock);
+		EnterCriticalSection(lock);
 		++lock->m_count;
 	}
 	unsigned int acc = 0;
@@ -97,10 +100,9 @@ unsigned int GeneralAllocator::rva00032C60(unsigned int size)
 		if (node->m_flagD == 0)
 			continue;
 		unsigned int sz = node->m_size4;
-		unsigned char tag = *(unsigned char *)((char *)node + sz - 0x0C);
 		unsigned int saved = sz;
 		unsigned char *chunkB = (unsigned char *)((char *)node + sz - 0x10);
-		if ((tag & 1) != 0)
+		if ((chunkB[4] & 1) != 0)
 			continue;
 		unsigned int first = *(unsigned int *)chunkB;
 		unsigned char f2 = node->m_flagF;
@@ -116,7 +118,7 @@ unsigned int GeneralAllocator::rva00032C60(unsigned int size)
 		unsigned int commit = round;
 		if (round + round < need2)
 		{
-			unsigned int limit = round + round;
+			unsigned int limit = commit + round;
 			do
 			{
 				limit += round;
@@ -126,7 +128,7 @@ unsigned int GeneralAllocator::rva00032C60(unsigned int size)
 		if (commit >= need2)
 			continue;
 		void *addr = (char *)node + (saved - commit);
-		if (TrialVirtualFree(addr, commit, 0x4000) == 0)
+		if (VirtualFree(addr, commit, 0x4000) == 0)
 			continue;
 		acc += commit;
 		node->m_size4 -= commit;
@@ -155,7 +157,7 @@ unsigned int GeneralAllocator::rva00032C60(unsigned int size)
 	if (lock != 0)
 	{
 		--lock->m_count;
-		TrialLeaveCriticalSection(lock);
+		LeaveCriticalSection(lock);
 	}
 	return acc;
 }
