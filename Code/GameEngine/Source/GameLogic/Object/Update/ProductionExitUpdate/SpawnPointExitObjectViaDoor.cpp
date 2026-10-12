@@ -65,8 +65,7 @@ public:
 
 private:
 	void initializeBonePositions();
-	char m_pad[4];
-	bool m_bonesInitialized;
+	bool m_bonesInitialized;								// +0x04 (vtable at +0x00)
 	char m_pad2[3];
 	int m_spawnPointCount;
 	Coord3D m_worldCoordSpawnPoints[10];

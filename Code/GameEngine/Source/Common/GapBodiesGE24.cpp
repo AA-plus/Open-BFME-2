@@ -250,7 +250,8 @@ bool Rva004CBBF4::rva004CBBF4(int *out) const
 	return m_1DC;
 }
 
-// --- 0x004CDBE1 (27B): a module data's field parse: the rowed
+// --- 0x004CDBE1 (27B): EvacuateGarrisonSpecialPowerModuleData::buildFieldParse
+// (ModuleFactory registers this proc under that module): the rowed
 // SpecialAbilityUpdateModuleData table plus the empty table.
 struct FieldParse;
 
@@ -268,13 +269,13 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &p);		// 0x0004ED95
 };
 
-class Rva004CDBE1ModuleData : public SpecialAbilityUpdateModuleData
+class EvacuateGarrisonSpecialPowerModuleData : public SpecialAbilityUpdateModuleData
 {
 public:
 	static void buildFieldParse(MultiIniFieldParse &p);
 };
 
-void Rva004CDBE1ModuleData::buildFieldParse(MultiIniFieldParse &p)
+void EvacuateGarrisonSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &p)
 {
 	SpecialAbilityUpdateModuleData::buildFieldParse(p);
 	p.add((const FieldParse *)g_emptyFieldParseTable, 0);
