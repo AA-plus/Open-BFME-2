@@ -15,6 +15,7 @@
 // load order of the total-time sum needs that statement order).
 #include "vector2.h"
 #include "vector3.h"
+#include "sphere.h"
 #include <math.h>
 class TextureBaseClass { public: void Release_Ref(); };
 class TextureClass : public TextureBaseClass {};
@@ -30,11 +31,14 @@ class RenderObjClass { public: virtual void *Get_User_Data(); };
 class Drawable; class Thing { public: Drawable *getDrawable()const; };
 struct waveInfo { float finalWidth,finalHeight,distance,velocity; int fadeMs; float widthFraction,heightFraction; int compressMs,secondOffset; char *textureName,*typeName; };
 extern waveInfo waveTypeInfo[7];
-struct InitSphere { Vector3 Center; float Radius; void Init(const Vector3 &v,float r) {Center=v;Radius=r;} };
+// The bounding sphere is a real SphereClass (its out-of-line copy is what the
+// bounds getter calls); init() keeps the inline field-wise Init it was
+// matched with.
+struct InitSphere : SphereClass { void Init(const Vector3 &v,float r) {Center=v;Radius=r;} };
 struct InitBox { Vector3 Center,Extent; };
 class WaterTracksObj {
 public:
- void *vtable; BFME2ParticleTextureHandle texture;
+ BFME2ParticleTextureHandle texture;
  InitSphere sphere; InitBox box;
  int type,x,y; bool bound; Vector2 startPos,waveDir,perpDir,initStart,initEnd;
  int initOffset,fadeMs,totalMs,elapsedMs;
@@ -42,6 +46,7 @@ public:
  float velocity,distance,timeToBeach,frontAcc,timeToStop,timeToRetreat,backAcc,timeToCompress,flipU;
  WaterTracksObj *next,*previous;
  void init(float,float,Vector2&,Vector2&,char*,int,void*);
+ virtual void Get_Obj_Space_Bounding_Sphere(SphereClass &out) const;
 };
 // Target FE440..FE488 evaluates cos before sin, then Y*cos + X*sin.
 // Keep that arithmetic visible locally without changing the shared donor header.
@@ -50,6 +55,12 @@ static __forceinline void rotateInit(Vector2 &v,float angle)
  float c=WWMath::Cos(angle);float s=WWMath::Sin(angle);
  float x=v.X*c-v.Y*s;float y=v.Y*c+v.X*s;
  v.X=x;v.Y=y;
+}
+// Retail 0x000FE359 (16 bytes), the vftable slot after the destructor: the
+// Zero Hour body, a SphereClass copy of the +0x08 bounds.
+void WaterTracksObj::Get_Obj_Space_Bounding_Sphere(SphereClass &out) const
+{
+ out=sphere;
 }
 void WaterTracksObj::init(float width,float length,Vector2 &start,Vector2 &end,char *textureName,int timeOffset,void *settings)
 {
