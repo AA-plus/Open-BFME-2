@@ -13,7 +13,10 @@
 //   (.bss/.data) and return it; GameData
 //   (0x0023624A) skips the message without TheInGameUI.
 //
-// The store names come from the literals; the classes keep their
+// The store names come from the literals. WorldBuilder names slot 4
+// UpgradeCenter::attemptReload (Upgrade.cpp:667) and slot 5
+// PlayerTemplateStore::attemptRefresh (PlayerTemplate.cpp:500), so those two
+// stores carry their real names and both slots; the other classes keep their
 // address-derived ledger names, and the slot-2 and message meanings are
 // inferred from the calls. The ten bodies above never touch their stack
 // argument (typed int here; the banked Locomotor slot 4 0x001E51AC writes a
@@ -113,14 +116,14 @@ bool Rva001D92C0::rva001D8FAD(int reason)
 // g_Va00DFE0D4: VA 0x00DFE0D4 (.bss); retail initial byte 00.
 bool g_Va00DFE0D4;
 
-class Rva001FDB55 : public RifStore
+class PlayerTemplateStore : public RifStore
 {
 public:
-	virtual bool rva001FD5B2();
-	virtual bool rva001FD57A(int reason);
+	virtual bool attemptRefresh();
+	virtual bool attemptReload(int reason);
 };
 
-bool Rva001FDB55::rva001FD57A(int reason)
+bool PlayerTemplateStore::attemptReload(int reason)
 {
 	if (rva001B5384Slot2())
 	{
@@ -173,14 +176,14 @@ bool Rva0022CA95::rva0021494B(int reason)
 // g_Va00DFEB64: VA 0x00DFEB64 (.bss); retail initial byte 00.
 bool g_Va00DFEB64;
 
-class Rva0026F445 : public RifStore
+class UpgradeCenter : public RifStore
 {
 public:
-	bool rva0026EF1E();
-	bool rva0026F16D(int reason);
+	virtual bool attemptRefresh();
+	virtual bool attemptReload(int reason);
 };
 
-bool Rva0026F445::rva0026F16D(int reason)
+bool UpgradeCenter::attemptReload(int reason)
 {
 	if (rva001B5384Slot2())
 	{
@@ -241,7 +244,7 @@ bool Rva0022CA95::rva002146E1()
 	return false;
 }
 
-bool Rva0026F445::rva0026EF1E()
+bool UpgradeCenter::attemptRefresh()
 {
 	if (g_Va00DFEB64)
 	{
@@ -251,7 +254,7 @@ bool Rva0026F445::rva0026EF1E()
 	return false;
 }
 
-bool Rva001FDB55::rva001FD5B2()
+bool PlayerTemplateStore::attemptRefresh()
 {
 	if (g_Va00DFE0D4)
 	{
