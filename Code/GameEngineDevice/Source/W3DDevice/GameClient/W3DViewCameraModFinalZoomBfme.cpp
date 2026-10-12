@@ -96,6 +96,10 @@ struct WaypointXY
 	char padding[4];
 };
 
+// View's +0x30 float setter (View vftable slot after getPitch); retail 0x004583AF
+// is one ICF fold of every 'store float at +0x30' body, rowed as a dup_ alias.
+class View { public: void rva004583AF(Real value); };
+
 class Rva0030E7D0 { public: Real rva0030E67C(Real x,Real y); };
 
 class Matrix3D;
@@ -368,6 +372,7 @@ public:
 	virtual void cameraModFinalZoom(Real finalZoom, Real easeIn, Real easeOut);
 	virtual void lookAt(const Coord3D *o);
 	virtual void setZoom(Real z);
+	virtual void rva0008D218(Real value);
 
 	void setZoomToDefault();
 	void rva0008D925(const Coord3D *,Int,Real,Real);
@@ -586,5 +591,17 @@ void W3DView::setZoom(Real z)
 	m_doingScriptedCameraLock = false;
 	m_CameraArrivedAtWaypointOnPathFlag = false;
 	m_cameraConstraintValid = false;
+	setCameraTransform();
+}
+
+// W3DView vftable slot 81 (0x7C7674): the setter after setPitch/getPitch.
+void W3DView::rva0008D218(Real value)
+{
+	reinterpret_cast<View *>(this)->rva004583AF(value);
+	m_doingRotateCamera = false;
+	m_doingPitchCamera = false;
+	m_doingScriptedCameraLock = false;
+	m_doingZoomCamera = false;
+	m_CameraArrivedAtWaypointOnPathFlag = false;
 	setCameraTransform();
 }
