@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // ?rva0028449F@TerrainLogic@@QAEXPBUCoord3D@@ABVGeometryInfo@@M@Z retail
 // 0x0028449F..0x0028458F (240 bytes) RET 0xC. Called from DozerAIUpdate
 // 0x0048A15A. Builds a local cylinder GeometryInfo (rowed ctor 0x00050B74:
@@ -13,6 +13,10 @@
 // GeometryInfo destructor 0x00050B2A. WB twin 0x00C483E0 (callgraph 3.1)
 // has the same order with GeometryInfo::CollidesWith.
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../../../Libraries/Include/Lib/Coord2D.h"
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
+#include "ascii_string.h"
+#include <math.h>
 
 typedef float Real;
 
@@ -30,9 +34,11 @@ public:
 	virtual ~GeometryInfo();
 	bool bfmeIntersects(const Coord3D &pos, Real angle, const GeometryInfo &other,
 		const Coord3D &otherPos, Real otherAngle) const;
+	bool getIsSmall() const { return m_isSmall; }
 
 private:
-	char m_data[0x5C - 4];
+	bool m_isSmall;
+	char m_data[0x5C - 5];
 };
 
 class GameLogic;
@@ -80,13 +86,34 @@ public:
 	virtual void slot50() = 0;
 	virtual void slot54() = 0;
 	virtual void slot58(unsigned int key) = 0;
+	virtual void slot5C() = 0;
+	virtual void slot60() = 0;
+	virtual void slot64() = 0;
+	virtual void slot68() = 0;
+	virtual void slot6C() = 0;
+	virtual void slot70() = 0;
+	virtual void slot74() = 0;
+	virtual void slot78() = 0;
+	virtual void slot7C() = 0;
+	virtual void slot80() = 0;
+	virtual void slot84() = 0;
+	virtual void setRawMapHeight(const ICoord2D *gridPos, int height) = 0;
 };
+
+class Object;
 
 class TerrainLogic
 {
 public:
-	virtual void reset();
+	virtual void slot00();
+	virtual void slot04();
+	virtual void slot08();
+	virtual void slot0C();
+	virtual void slot10();
+	virtual void slot14();
+	virtual Real getGroundHeight(Real x, Real y, Coord3D *normal = 0) const;
 	void rva0028449F(const Coord3D *pos, const GeometryInfo &geom, Real angle);
+	void flattenTerrain(Object *obj);
 
 private:
 	char unknown04[0x578 - 4];
@@ -115,4 +142,135 @@ void TerrainLogic::rva0028449F(const Coord3D *pos, const GeometryInfo &geom, Rea
 		}
 	}
 	reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->slot48(pos, geom, angle);
+}
+
+// ?flattenTerrain@TerrainLogic@@QAEXPAVObject@@@Z retail 0x0028458F..0x00284AC6
+// (1335 bytes) RET 4. Pinned ZH/BFME1 flattenTerrain twin (WorkerAIUpdate and
+// DozerAIUpdate construct callers). BFME1 TerrainLogicFlattenTerrain.cpp
+// (b1 0x001AE610) guides the order: skip small geometry, average the ground
+// height over the footprint, clamp to the centre height and write it to nine
+// neighbouring raw map cells per footprint point. BFME2 target differences:
+// the object's GeometryInfo sits at +0xA8 and takes a TERRAIN_BOUNDS flag
+// (rowed setFlag 0x006BF3C0) around the walk; the footprint sampler is the
+// rowed Rva004DC1BF ctor 0x004DC1BF with next 0x004DC096 and reset 0x004DC082;
+// grid cells are REAL_TO_INT_FLOOR(p * 0.1f) and TheTerrainVisual is the
+// g_00DFF080 slot +0x88 receiver. The floor import goes through math.h's
+// inline floorf: the float floor overload or a double floor reorders the
+// unrolled cell stores.
+__forceinline long fast_float2long_round(float f)
+{
+	long i;
+	__asm {
+		fld [f]
+		fistp [i]
+	}
+	return i;
+}
+#define REAL_TO_INT_FLOOR(x) (fast_float2long_round(floorf(x)))
+
+class BfmeStrF9;
+class BfmeObjF9
+{
+public:
+	void setFlag(const BfmeStrF9 &name, char flag);
+};
+
+class Vector3;
+
+class Rva004DC1BF
+{
+public:
+	Rva004DC1BF(const GeometryInfo &geometry, float angle, const Vector3 &position);
+	bool rva004DC096(Coord2D *out);
+
+private:
+	GeometryInfo m_geometry;
+	char m_data[0xB4 - 0x5C];
+};
+
+class Rva004DC082
+{
+public:
+	void rva004DC082();
+};
+
+struct Rva0028458FObjectView
+{
+	char unknown00[0x38];
+	Coord3D pos;
+	Real angle;
+	char unknown48[0xA8 - 0x48];
+	GeometryInfo geometry;
+};
+
+extern TerrainLogic *TheTerrainLogic;
+
+__forceinline const BfmeStrF9 &flagName(const AsciiString &name)
+{
+	return reinterpret_cast<const BfmeStrF9 &>(name);
+}
+
+void TerrainLogic::flattenTerrain(Object *obj)
+{
+	Rva0028458FObjectView *view = reinterpret_cast<Rva0028458FObjectView *>(obj);
+	if (view->geometry.getIsSmall())
+		return;
+	Coord3D pos;
+	pos.x = view->pos.x;
+	pos.y = view->pos.y;
+	pos.z = view->pos.z;
+	BfmeObjF9 *geom = reinterpret_cast<BfmeObjF9 *>(&view->geometry);
+	geom->setFlag(flagName(AsciiString("TERRAIN_BOUNDS")), true);
+	Rva004DC1BF iter(view->geometry, view->angle, reinterpret_cast<const Vector3 &>(pos));
+	Real totalHeight = 0.0f;
+	int count = 0;
+	Coord2D pt;
+	while (iter.rva004DC096(&pt))
+	{
+		totalHeight += getGroundHeight(pt.x, pt.y);
+		++count;
+	}
+	if (count == 0)
+	{
+		geom->setFlag(flagName(AsciiString("TERRAIN_BOUNDS")), false);
+		return;
+	}
+	Real average = totalHeight / count;
+	int height = REAL_TO_INT_FLOOR(average * 25.6f + 0.5f);
+	int center = REAL_TO_INT_FLOOR(TheTerrainLogic->getGroundHeight(pos.x, pos.y) * 25.6f);
+	if (height > center)
+		height = center;
+	reinterpret_cast<Rva004DC082 *>(&iter)->rva004DC082();
+	while (iter.rva004DC096(&pt))
+	{
+		ICoord2D grid;
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f);
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f);
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f) - 1;
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f);
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f) + 1;
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f);
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f);
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f) - 1;
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f);
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f) + 1;
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f) - 1;
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f) - 1;
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f) + 1;
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f) + 1;
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f) + 1;
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f) - 1;
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+		grid.x = REAL_TO_INT_FLOOR(pt.x * 0.1f) - 1;
+		grid.y = REAL_TO_INT_FLOOR(pt.y * 0.1f) + 1;
+		reinterpret_cast<Rva0028449FGlobalView *>(g_00DFF080)->setRawMapHeight(&grid, height);
+	}
+	geom->setFlag(flagName(AsciiString("TERRAIN_BOUNDS")), false);
 }
