@@ -1,7 +1,6 @@
 // ?PlaceLivingWorldObjectsForPlayer@@YAXPAVPlayer@@@Z
-// partial score=0.8 date=2026-10-09
-// partial score=0.93 date=2026-10-06
-// cl: /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
+// partial score=0.9081527347781218 date=2026-10-12
+// cl: /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
 // Lookup via g_009FF000 Rva002D06CA 0x002D06CA, GlobalData guard +0x1110,
 // set<AsciiString> ctor 0x000D3A71 + notify 0x0033CF34 + merge 0x0061F010,
@@ -11,7 +10,7 @@
 #include "ascii_string.h"
 #include <set>
 
-#include "../../Code/Libraries/Include/Lib/Coord3D.h"
+#include "Coord3D.h"
 struct Rva001408C0Target;
 class AssetList {public:AssetList():pad(0),changed(true){} private:_STL::set<Rva001408C0Target*> prototypes;unsigned pad;bool changed;};
 struct AssetLoadMode{bool alternate;AssetLoadMode():alternate(false){}};
@@ -27,12 +26,6 @@ class GlobalData;
 class AI;
 struct CreateMask;
 
-class Rva002D06CA
-{
-public:
-	void *rva002D06CA(const AsciiString *key);
-};
-
 extern ThingFactory *TheThingFactory;
 
 class GlobalData
@@ -43,12 +36,6 @@ public:
 };
 
 extern GlobalData *TheWritableGlobalData;
-
-class Rva0020AA00Target
-{
-public:
-	void notify(int a, int b);
-};
 
 void __cdecl bfmeMergeReceiverKeys(int value);
 
@@ -62,6 +49,8 @@ struct CreateMask
 
 class ThingFactory
 {
+public:
+	const ThingTemplate *findTemplate(const AsciiString &name);	// 0x002D06CA
 public:
 	Object *newObject(const ThingTemplate *tmpl, Team *team, const CreateMask *mask, bool flag);
 };
@@ -80,6 +69,7 @@ public:
 	unsigned char m_flags108;
 	char m_pad2[0x4D0 - 0x109];
 	float m_orient4D0;
+	void GetAssetList(int a, int b);
 };
 
 class Team
@@ -125,7 +115,7 @@ class Pathfinder
 {
 public:
  void AddObjectToPathfindMap(Object*);
-	bool adjustDestination(Object *obj, const LocomotorSet &set, Coord3D *dst, const Coord3D *group);
+	bool AdjustDestination(Object *obj, const LocomotorSet &set, Coord3D *dst, const Coord3D *group);
 };
 
 class AI
@@ -150,14 +140,14 @@ public:
 
 static Object *placeObjectAtPosition(int slot, AsciiString name, const Coord3D *pos, Player *player, const void *playerTemplate)
 {
-	void *tmplRaw = ((Rva002D06CA*)TheThingFactory)->rva002D06CA(&name);
+	void *tmplRaw = (void *)TheThingFactory->findTemplate(name);
 	if (tmplRaw == 0)
 		return 0;
 	ThingTemplate *tmpl = (ThingTemplate *)tmplRaw;
 	if (TheWritableGlobalData->m_1110 == 0) {
 		AssetLoadMode mode;
 		AssetList receivers;
-		((Rva0020AA00Target *)tmpl)->notify((int)&receivers, (int)&mode);
+		tmpl->GetAssetList((int)&receivers, (int)&mode);
 		bfmeMergeReceiverKeys((int)&receivers);
 	}
 	Object *obj;
@@ -184,7 +174,7 @@ static Object *placeObjectAtPosition(int slot, AsciiString name, const Coord3D *
 	if (aiu && !((*(ThingTemplate **)((char *)obj + 4))->m_flags108 & 4)) {
 		LocomotorSet *loco = &aiu->m_loco;
 		Pathfinder *pf = TheAI->m_pf;
-		if (pf->adjustDestination(obj, *loco, (Coord3D *)pos, 0)) {
+		if (pf->AdjustDestination(obj, *loco, (Coord3D *)pos, 0)) {
 			obj->rva0028ACEE((int)pos, 1);
 			((Thing*)obj)->setPosition(pos);
 		}
@@ -194,7 +184,7 @@ static Object *placeObjectAtPosition(int slot, AsciiString name, const Coord3D *
 }
 
 
-#include "../../Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 class Rva003F468D;
 class Rva0020E89C;
@@ -202,11 +192,12 @@ class Rva002E2903Player;
 class Rva0020E6B7RegionManager {public:Rva003F468D *rva0020E6B7();};
 class Rva0020EAF6View {public:Rva0020E89C *rva0020EAF6(int);};
 class Rva002BA8F1Logic {public:char pad[0xB0];Rva0020E6B7RegionManager *regions;char padB4[4];int currentRegion;Rva002E2903Player *find(int,unsigned*);};
-extern Rva002BA8F1Logic *TheLivingWorldLogic;
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
 class LivingWorldBattle {public:void *rva003F4FBD(void*);};
 struct LivingArmy {char pad[0x20];int id;};
 struct LivingBuildingTemplate {char pad[0xC];AsciiString name;};
-class LivingWorldBuilding {public:char pad[0x18];int id;char pad1C[0xC];LivingBuildingTemplate *definition;};
+class LivingWorldBuilding {public:char pad[0x18];int id;char pad1C[0xC];const AsciiString &getName()const {const LivingBuildingTemplate &d=*definition;return d.name;} LivingBuildingTemplate *definition;};
 class LivingWorldRegion {public:char pad[0x13C];int owner;int rva003F05CE();LivingWorldBuilding *GetBuildingByIndex(int)const;};
 class Waypoint {public:Waypoint(unsigned,AsciiString,const Coord3D*,AsciiString,AsciiString,AsciiString,bool,int,AsciiString);virtual ~Waypoint();char pad[8];Coord3D position;char rest[0xC0-0x18];};
 Waypoint *Rva00506CC3FindWaypoint(const AsciiString&);
@@ -221,15 +212,16 @@ void PlaceLivingWorldObjectsForPlayer(Player *player) {
  int savedLivingId;
  *(volatile int*)&savedLivingId=livingId;
  if(livingId==-1) return;
- LivingWorldBattle *battle=(LivingWorldBattle*)TheLivingWorldLogic->regions->rva0020E6B7();
+ LivingWorldBattle *battle=(LivingWorldBattle*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->regions->rva0020E6B7();
  if(!battle) return;
- Rva002E2903Player *worldPlayer=TheLivingWorldLogic->find(livingId,0);
+ Rva002E2903Player *worldPlayer=((Rva002BA8F1Logic*)TheLivingWorldLogic)->find(livingId,0);
  if(!worldPlayer) return;
  LivingArmy *army=(LivingArmy*)battle->rva003F4FBD(worldPlayer);
  armyId=army?army->id:0;
  if(!armyId) return;
- int currentRegion=TheLivingWorldLogic->currentRegion;
- region=(LivingWorldRegion*)((Rva0020EAF6View*)TheLivingWorldLogic->regions)->rva0020EAF6(currentRegion);
+ int currentRegion=((Rva002BA8F1Logic*)TheLivingWorldLogic)->currentRegion;
+ Rva0020EAF6View *manager=(Rva0020EAF6View*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->regions;
+ region=(LivingWorldRegion*)manager->rva0020EAF6(currentRegion);
  if(!region || region->owner!=savedLivingId) return;
  }
  AsciiString waypointName("Player_1_Start");
@@ -238,7 +230,7 @@ void PlaceLivingWorldObjectsForPlayer(Player *player) {
  ValidateLivingWorldBuildPlotWaypoints(start,region->rva003F05CE());
  for(int i=0;i<region->rva003F05CE();++i){
   LivingWorldBuilding *building=region->GetBuildingByIndex(i);
-  const AsciiString &name=building->definition->name;
+  const AsciiString &name=building->getName();
   if(name.isEmpty()) continue;
   waypointName.format("Player_1_BuildPlot_%d",i+1);
   Waypoint *waypoint=Rva00506CC3FindWaypoint(waypointName);
