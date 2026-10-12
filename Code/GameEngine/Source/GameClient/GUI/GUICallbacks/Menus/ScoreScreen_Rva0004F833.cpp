@@ -9,15 +9,7 @@
 // through the AsciiString copy constructor at 0x000365F0; AsciiString's inline
 // destructor gives the /EHsc return-value frame retail shows. Emitted
 // out-of-line here, the donor's other bodies omitted.
-class AsciiString
-{
-public:
-	AsciiString( const AsciiString &other );
-	~AsciiString();
-
-private:
-	void *m_data;
-};
+#include "../../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 class Player
 {

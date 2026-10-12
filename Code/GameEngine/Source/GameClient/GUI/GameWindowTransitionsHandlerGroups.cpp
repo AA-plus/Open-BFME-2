@@ -50,34 +50,8 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 }
 
 
-template <typename T> class StringBase
-{
-public:
-	int compareNoCase(const StringBase<T> &other) const throw();
-	bool isEmpty() const { return m_data == 0 || m_data->length == 0; }
-	void set(const T *s);
-	~StringBase();
-private:
-	StringBase() : m_data(0) {}
-	friend class AsciiString;
-	StringBase(const StringBase<T> &src);
-	void releaseBuffer();
-	struct Header
-	{
-		int ref_count;
-		unsigned short length;
-		unsigned short capacity;
-		T data[1];
-	};
-	Header *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-class AsciiString : public StringBase<char>
-{
-public:
-	AsciiString() {}
-	AsciiString(const AsciiString &src) : StringBase<char>(src) {}
-};
 
 // The 0x14-byte group object and its rowed ctor 0x001DC0C7.
 class Rva001DC0EC

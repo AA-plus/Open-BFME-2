@@ -5,23 +5,8 @@
 // callees getName 0x00002600 and compareNoCase 0x00006A00 and releaseBuffer 0x00036410 all rowed;
 // callers are STL sort helpers 0x002057D5 and 0x00205840 and 0x00206D33 and 0x00209A62 passing comparator as this.
 
-template <typename T>
-class StringBase
-{
-    friend class AsciiString;
-    StringBase(const StringBase<T> &that);
-    void releaseBuffer();
-    __forceinline ~StringBase() { releaseBuffer(); }
-    void *m_data;
-public:
-    __declspec(nothrow) int compareNoCase(const StringBase<T> &that) const;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-class AsciiString : public StringBase<char>
-{
-public:
-    __forceinline ~AsciiString() {}
-};
 
 namespace FXParticleSystem
 {

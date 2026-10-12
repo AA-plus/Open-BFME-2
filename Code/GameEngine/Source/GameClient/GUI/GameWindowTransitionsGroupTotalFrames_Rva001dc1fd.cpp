@@ -12,24 +12,10 @@ struct AsciiStringData
 
 // The inline forwarders over StringBase are what put retail's EH saved-esp
 // store ahead of the in-place ctor `this` (EH transposition).
-template <typename T> class StringBase
-{
-	friend class AsciiString;
-private:
-	StringBase( const StringBase<T> &other );
-	~StringBase();
-	AsciiStringData *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 // class-gate: allow AsciiString the donor's own private StringBase-derived view; the placed body is byte-exact only under its inline dtor forwarding to the pinned teardown at 0x0036410
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/AsciiString.h
-class AsciiString : private StringBase<char>
-{
-public:
-	AsciiString( const AsciiString &other ) : StringBase<char>( other ) {}
-	~AsciiString() {}
-	const char *str( void ) const { return m_data ? m_data->m_text : ""; }
-};
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/NameKeyGenerator.h
 class NameKeyGenerator

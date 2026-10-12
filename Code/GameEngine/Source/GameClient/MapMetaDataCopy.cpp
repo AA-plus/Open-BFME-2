@@ -24,7 +24,7 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 #include <map>
 #include <set>
 #include "unicode_string.h"
-class AsciiString : private StringBase<char> { public: __forceinline AsciiString(const AsciiString &o) : StringBase<char>(o) {} void set(const AsciiString &o) { StringBase<char>::set(o); } __forceinline ~AsciiString(); };
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 struct Region3D { Coord3D lo,hi; Region3D(const Region3D &); };
 typedef _STL::list<Coord3D> Coord3DList;
