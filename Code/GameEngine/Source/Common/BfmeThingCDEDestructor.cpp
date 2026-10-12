@@ -106,7 +106,6 @@ struct CDEListNode
 class BfmeThingCDE
 {
 public:
-	bool bfmeCheckABI();
 	void bfmeDtorCDE();
 	void d_008f7990();
 	bool DoRectFill(float x,float y,float halfX,float halfY,float angle);
@@ -165,9 +164,38 @@ void BfmeThingCDE::d_008f7ec0()
 	}
 }
 
-bool BfmeThingCDE::bfmeCheckABI()
+// ?KeepAsGhost@Data@ShroudManager@@QAE_NXZ @0x00739FE0 188B: renamed from
+// placeholder BfmeThingCDE::bfmeCheckABI (WorldBuilder lead: the WB twin of
+// this body is ShroudManager::Data::KeepAsGhost in EA's own
+// shroudmanager_data.cpp). The body is the matched BFME1 donor verbatim;
+// the sibling call goes through the still-placeholder row name.
+class ShroudManager
 {
-	d_008f7990();
+public:
+	class Data
+	{
+	public:
+		bool KeepAsGhost();
+
+	private:
+		void *m_owner;
+		CDEProvider *m_ptr4;
+		CDEProvider *m_ptr8;
+		CDELinkNode *m_link0;
+		CDELinkNode *m_link1;
+		CDELinkNode *m_prev;
+		CDELinkNode *m_next;
+		void *m_array;
+		int m_count;
+		int m_values[20];
+		int m_slots[20];
+		unsigned char m_status[20];
+	};
+};
+
+bool ShroudManager::Data::KeepAsGhost()
+{
+	((BfmeThingCDE *)this)->d_008f7990();
 
 	if (m_ptr8 == 0)
 		return false;
