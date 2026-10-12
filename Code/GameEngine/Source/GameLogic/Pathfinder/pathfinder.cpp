@@ -366,7 +366,7 @@ public:
 	Int m_radius;							// +0x10
 	PathfindLayerEnum m_layer;				// +0x14
 	float m_range;							// +0x18
-	char m_pad1C[0x24 - 0x1C];
+	Rva002E8C23Pair m_1C;
 	Int m_24;								// +0x24
 	Coord3D m_goal;							// +0x28
 };
@@ -575,6 +575,7 @@ public:
 	Bool rva002EB11B(const ICoord2D *,Int,ICoord2D *,void *);
 	Bool rva002F379E(ICoord2D *,Int,void *);
 	Bool AdjustDestination(Object *,const LocomotorSet &,Coord3D *,const Coord3D *);
+	Bool AdjustHordeMeleeDestination(Object *,void *,Coord3D *);
 	Int CheckPathCost(Object *,const LocomotorSet &,const Coord3D *,const Coord3D *);
 	Bool rva002F8E2D(const ICoord2D *,Int,ICoord2D *,void *);
 	Bool rva002F90E9(ICoord2D *,Int,void *);
@@ -2546,4 +2547,30 @@ Bool Pathfinder::CheckForAdjust(Object *obj, const LocomotorSet &loco,
  if(g_00E03745 && g_00DFEFF0)fprintf((PathfinderLogFile *)g_00DFEFF0,"        dest calculated to be %g,%g,%g and returning true",adjustDest.x,adjustDest.y,adjustDest.z);
  *dest=adjustDest;
  return true;
+}
+
+// Pathfinder::AdjustHordeMeleeDestination, retail 0x002FA202 (218 bytes).
+// Name from WorldBuilder (pathfinder.cpp line 4599, wb-name-unverified);
+// Zero Hour's checkForAdjust purpose with the melee/horde functor: searches
+// around dest's cell for one the functor accepts (else the functor's
+// fallback cell at +0x1C when +0x24 is set) and moves dest there. The
+// spiral-search budget lives at TheWritableGlobalData+0x11F4. The middle
+// parameter travels opaquely into the functor's void* slot (callers pass
+// the AI's LocomotorSet); spelling it void* keeps this TU free of the AI
+// header the sibling AdjustDestination needs.
+struct PathfinderHordeMeleeRadiusView { char pad[0x11F4]; Int searchRadius; };
+static __forceinline Bool findHordeMeleeCell(Pathfinder *finder,const ICoord2D *cell,Bool center,Coord3D *dest,Pathfinder_IsCheckForMeleeHordeAdjust *info) {
+	ICoord2D found={0,0};
+	if(!finder->rva002F92BC(cell,((const PathfinderHordeMeleeRadiusView *)TheWritableGlobalData)->searchRadius,&found,info))return false;
+	*dest=adjustCellCenter(center,(Rva002E8C23Pair *)&found,info->m_layer);return true;
+}
+Bool Pathfinder::AdjustHordeMeleeDestination(Object *obj,void *arg,Coord3D *dest)
+{
+	if(obj->m_template->hasKind(25))return true;
+	Bool center=Rva002EBBFBIsOdd(obj);
+	ICoord2D cell;Rva002E7875WorldToCell(&cell,center,dest);
+	Pathfinder_IsCheckForMeleeHordeAdjust info(this,obj,arg,*dest,TheTerrainLogic->getLayerHeight(dest->x,dest->y,TheTerrainLogic->getLayerForDestination(obj,dest),0,true));
+	if(findHordeMeleeCell(this,&cell,center,dest,&info))return true;
+	if(info.m_24){*dest=adjustCellCenter(center,&info.m_1C,info.m_layer);return true;}
+	return false;
 }
