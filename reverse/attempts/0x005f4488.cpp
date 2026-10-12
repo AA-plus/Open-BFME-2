@@ -1,4 +1,6 @@
 // ?DoUpdate@ArmyUnitIcon@StrategicInGameUI@@UAEXXZ
+// partial score=0.9 date=2026-10-12
+// ?DoUpdate@ArmyUnitIcon@StrategicInGameUI@@UAEXXZ
 // partial score=0.9 date=2026-10-09
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD /EHsc
 #include "ascii_string.h"
@@ -14,8 +16,9 @@ struct UnitView {
  char pad10[0xb8-0x10]; int flagB8; int flagBC; int unknownC0; unsigned char valueC4;
 };
 struct TemplateView { char pad[0x5c4]; int tooltip; };
-class Rva002D06CA {public:void *rva002D06CA(const AsciiString *);};
-class ThingFactory; extern ThingFactory *TheThingFactory;
+class ThingTemplate;
+class ThingFactory {public:const ThingTemplate *findTemplate(const AsciiString &);};
+extern ThingFactory *TheThingFactory;
 struct RGBColor;
 class Mouse {public:void rva001EEA6D(UnicodeString,int,const RGBColor *,float);};
 extern Mouse *TheMouse;
@@ -58,7 +61,7 @@ void StrategicInGameUI::ArmyUnitIcon::DoUpdate() {
  if(((Rva005FC73BPtrChaseField *)clip.get())->get()) {
   const AsciiString *name=&unit->name;
   if(!((const StringBase<char> *)name)->isEmpty()) {
-   TemplateView *t=(TemplateView *)((Rva002D06CA *)TheThingFactory)->rva002D06CA(name);
+   TemplateView *t=(TemplateView *)TheThingFactory->findTemplate(*name);
    if(t) { int tooltip=t->tooltip; TheMouse->rva001EEA6D(GetTooltipText(tooltip),-1,0,1.0f); }
   }
  }

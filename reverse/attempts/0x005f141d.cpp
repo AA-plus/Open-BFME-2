@@ -1,4 +1,6 @@
 // ??0Impl@RegionDetailsStructuresMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@HH@Z
+// partial score=0.91 date=2026-10-12
+// ??0Impl@RegionDetailsStructuresMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@HH@Z
 // partial score=0.91 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
