@@ -17249,3 +17249,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva0035A8D7@Rva0035A8D7@@QAEXPAX00@Z,0x0035A8D7,callee of a seat-3 batch D gap forwarder; argument count from its ret immediate
 ?rva004E7FCA@Rva004E7FCA@@QAEXPAX0M@Z,0x004E7FCA,callee of a seat-3 batch D gap forwarder; argument count from its ret immediate
 ?rva005AED3C@AptMessenger@@QAEXXZ,0x005AED3C,callee of a seat-3 batch D gap forwarder; argument count from its ret immediate
+??0Rva003F9C11@@QAE@XZ,0x003F9C11,callee of the seat-3 0x003F9CD2 INI block parser (new 0x74-byte record constructor)
