@@ -245,7 +245,6 @@ void Rva000E2B00CloudTexture(ID3DXEffect *effect, D3DXHANDLE handle)
 		effect->SetTexture(handle, Rva00132E76WhiteTexture().Peek_D3D_Base_Texture());
 }
 
-// ?rva000E236D@Rva000E236D@@QAEXPBD0PAVFXShaderParameterBinder@@@Z @0x000E236D 156B
 // Terrain FX three-name ResolveBindings dispatcher (Texture, ScaleUV_OffsetUV,
 // ObjectShroudStatus), same WaterDraw member pattern as the rowed particle
 // dispatcher Rva001F69B1 (Common/Rva001F69B1ParticleDrawBinder.cpp): base call,
@@ -298,11 +297,11 @@ public:
 	virtual void ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry);
 };
 
-class Rva000E236D : public FXShaderParameterSourceNamespace_Struct
-{
-public:
-	void rva000E236D(const char *name, const char *handle, FXShaderParameterBinder *registry);
-};
+// ?ResolveBindings@SourceNamespace_Shroud@TerrainFXShaderParameterSourceNamespace@@UAEXPBD0PAVFXShaderParameterBinder@@@Z @0x000E236D 156B:
+// renamed from placeholder Rva000E236D::rva000E236D — the WorldBuilder twin
+// asserts the name at EA's own FlatHeightMap.cpp line 316. Virtual override
+// of the base ResolveBindings (UAE); scope spelling follows the landed
+// SourceNamespace_Taint sibling.
 
 void Rva000E24C5ShroudTexture(ID3DXEffect *effect, const char *name);
 void Rva000E2409ScaleOffset(ID3DXEffect *effect, const char *name);
@@ -312,23 +311,6 @@ typedef void (*Rva000E236DCallback)(ID3DXEffect *effect, D3DXHANDLE handle);
 
 // Retail 7BA518 is the existing _strcmpi IAT slot, not a second global.
 extern "C" __declspec(dllimport) int __cdecl _strcmpi(const char *, const char *);
-
-void Rva000E236D::rva000E236D(const char *name, const char *handle, FXShaderParameterBinder *registry)
-{
-	FXShaderParameterSourceNamespace_Struct::ResolveBindings(name, handle, registry);
-	if (name)
-	{
-		Rva001530E9Path path;
-		Rva001530E9Parse(name, &path);
-		int (__cdecl *compare)(const char *, const char *) = _strcmpi;
-		if (compare(path.m_name, "Texture") == 0)
-			registry->AddBinding(Rva000E24C5ShroudTexture, handle);
-		else if (compare(path.m_name, "ScaleUV_OffsetUV") == 0)
-			registry->AddBinding(Rva000E2409ScaleOffset, handle);
-		else if (compare(path.m_name, "ObjectShroudStatus") == 0)
-			registry->AddBinding(Rva000E249DObjectShroudStatus, handle);
-	}
-}
 
 void Rva000E26CFIsEnabled(ID3DXEffect *, const char *);
 void Rva000E2700Offset(ID3DXEffect *, const char *);
@@ -344,7 +326,30 @@ class TerrainFXShaderParameterSourceNamespace
 {
 public:
  class SourceNamespace_Taint;
+ class SourceNamespace_Shroud;
 };
+class TerrainFXShaderParameterSourceNamespace::SourceNamespace_Shroud : public FXShaderParameterSourceNamespace_Struct
+{
+public:
+ ~SourceNamespace_Shroud() {}
+ virtual void ResolveBindings(const char *name,const char *handle,FXShaderParameterBinder *registry);
+};
+void TerrainFXShaderParameterSourceNamespace::SourceNamespace_Shroud::ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry)
+{
+	FXShaderParameterSourceNamespace_Struct::ResolveBindings(name, handle, registry);
+	if (name)
+	{
+		Rva001530E9Path path;
+		Rva001530E9Parse(name, &path);
+		int (__cdecl *compare)(const char *, const char *) = _strcmpi;
+		if (compare(path.m_name, "Texture") == 0)
+			registry->AddBinding(Rva000E24C5ShroudTexture, handle);
+		else if (compare(path.m_name, "ScaleUV_OffsetUV") == 0)
+			registry->AddBinding(Rva000E2409ScaleOffset, handle);
+		else if (compare(path.m_name, "ObjectShroudStatus") == 0)
+			registry->AddBinding(Rva000E249DObjectShroudStatus, handle);
+	}
+}
 class TerrainFXShaderParameterSourceNamespace::SourceNamespace_Taint : public FXShaderParameterSourceNamespace_Struct
 {
 public:
