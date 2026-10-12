@@ -1078,3 +1078,141 @@ void Rva005CC9B8::rva005CC9B8(Int)
 {
 	m_24->target();
 }
+
+// Slot N taking two integer arguments.
+template <int N>
+class Rva005EA539Target : public Rva004888F8Slots<N>
+{
+public:
+	virtual void target(Int a, Int b);
+};
+
+
+// 0x005EA539: slot 4 of the +0x14 object of the +0x08 object, passed the
+// receiver's +0x0C and +0x10 words.
+struct Rva005EA539Inner
+{
+	char m_pad00[0x14];
+	Rva005EA539Target<4> *m_14;
+};
+class Rva005EA539
+{
+public:
+	void rva005EA539();
+private:
+	char m_pad00[0x08];
+	Rva005EA539Inner *m_08;
+	Int m_0C;
+	Int m_10;
+};
+void Rva005EA539::rva005EA539()
+{
+	m_08->m_14->target(m_0C, m_10);
+}
+
+// 0x005EA54D: slot 5 of the +0x14 object of the +0x08 object, passed the
+// receiver's +0x0C and +0x10 words.
+struct Rva005EA54DInner
+{
+	char m_pad00[0x14];
+	Rva005EA539Target<5> *m_14;
+};
+class Rva005EA54D
+{
+public:
+	void rva005EA54D();
+private:
+	char m_pad00[0x08];
+	Rva005EA54DInner *m_08;
+	Int m_0C;
+	Int m_10;
+};
+void Rva005EA54D::rva005EA54D()
+{
+	m_08->m_14->target(m_0C, m_10);
+}
+
+// 0x005EA561: slot 6 of the +0x14 object of the +0x08 object, passed the
+// receiver's +0x0C and +0x10 words.
+struct Rva005EA561Inner
+{
+	char m_pad00[0x14];
+	Rva005EA539Target<6> *m_14;
+};
+class Rva005EA561
+{
+public:
+	void rva005EA561();
+private:
+	char m_pad00[0x08];
+	Rva005EA561Inner *m_08;
+	Int m_0C;
+	Int m_10;
+};
+void Rva005EA561::rva005EA561()
+{
+	m_08->m_14->target(m_0C, m_10);
+}
+
+// 0x00494ABE (RET 4, argument unused): the receiver's own slot 2.
+class Rva00494ABE : public Rva004888F8Target<2>
+{
+public:
+	void rva00494ABE(Int unused);
+};
+void Rva00494ABE::rva00494ABE(Int)
+{
+	target();
+}
+
+// 0x005CFB93 (RET 4, argument unused): slot 1 of the +0x08 object.
+class Rva005CFB93
+{
+public:
+	void rva005CFB93(Int unused);
+private:
+	char m_pad00[0x08];
+	Rva004888F8Target<1> *m_08;
+};
+void Rva005CFB93::rva005CFB93(Int)
+{
+	m_08->target();
+}
+
+// 0x005D1358: tail jump to slot 2 of the object the +0x08 object points to
+// first.
+struct Rva005D1358Inner
+{
+	Rva004888F8Target<2> *m_00;
+};
+class Rva005D1358
+{
+public:
+	void rva005D1358();
+private:
+	char m_pad00[0x08];
+	Rva005D1358Inner *m_08;
+};
+void Rva005D1358::rva005D1358()
+{
+	m_08->m_00->target();
+}
+
+// 0x005EA052: tail jump to slot 1 of the +0x04 object of the +0x08 object.
+struct Rva005EA052Inner
+{
+	char m_pad00[0x04];
+	Rva004888F8Target<1> *m_04;
+};
+class Rva005EA052
+{
+public:
+	void rva005EA052();
+private:
+	char m_pad00[0x08];
+	Rva005EA052Inner *m_08;
+};
+void Rva005EA052::rva005EA052()
+{
+	m_08->m_04->target();
+}

@@ -79043,3 +79043,10 @@ uw_007876e0,,0x007876E0,11,Code/GameEngine/Source/Common/Rva0042C5C3Dtor.cpp,mat
 ?rva005CC9A9@Rva005CC9A9@@QAEXH@Z,,0x005CC9A9,15,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Slot 4 of the plus24 object with the argument unused
 ?rva005CC9B8@Rva005CC9B8@@QAEXH@Z,,0x005CC9B8,11,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Slot 5 of the plus24 object with the argument unused
 ??1DynamicPortalLinkVectorCopy1FFD2C@@QAE@XZ,,0x001FFD2C,63,Code/GameEngine/Source/GameLogic/Object/Behavior/DynamicPortalLinkVector.cpp,matched,Native1FFD2C..1FFD6B63B owns its separate EH handler; exact STLport4.5.3 vector teardown through Destroy3F29F8 and the original vector-base cleanup/free30830. Existing Rva001FFE93 member at1C and 12B pointer triplet establish ABI; application type remains unresolved. Real C++ destructor replaces former object-symbol alias; no new retail range.
+?rva005EA539@Rva005EA539@@QAEXXZ,,0x005EA539,20,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Slot 4 of the plus14 object of the plus08 object passed plus0C and plus10
+?rva005EA54D@Rva005EA54D@@QAEXXZ,,0x005EA54D,20,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Slot 5 of the plus14 object of the plus08 object passed plus0C and plus10
+?rva005EA561@Rva005EA561@@QAEXXZ,,0x005EA561,20,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Slot 6 of the plus14 object of the plus08 object passed plus0C and plus10
+?rva00494ABE@Rva00494ABE@@QAEXH@Z,,0x00494ABE,8,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Own slot 2 with the argument unused
+?rva005CFB93@Rva005CFB93@@QAEXH@Z,,0x005CFB93,11,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Slot 1 of the plus08 object with the argument unused
+?rva005D1358@Rva005D1358@@QAEXXZ,,0x005D1358,10,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Tail jump to slot 2 of the first object behind plus08
+?rva005EA052@Rva005EA052@@QAEXXZ,,0x005EA052,11,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Tail jump to slot 1 of the plus04 object of the plus08 object
