@@ -36,10 +36,10 @@ public:
 
 extern Rva002A8F24 *g_00DFEEF8;
 
-class Rva004DF98B
+class AIStatCollector
 {
 public:
-	void rva004DF98B(void *a1, int a2);
+	void Register(Object *a1, int a2);
 };
 
 void Object::setCommandSetStringOverride(const AsciiString &s)
@@ -55,5 +55,5 @@ void Object::setCommandSetStringOverride(const AsciiString &s)
 	void *handler = g_00DFEEF8->rva002A8F24(p);
 	if (handler == 0)
 		return;
-	((Rva004DF98B *)handler)->rva004DF98B(this, 2);
+	((AIStatCollector *)handler)->Register(this, 2);
 }

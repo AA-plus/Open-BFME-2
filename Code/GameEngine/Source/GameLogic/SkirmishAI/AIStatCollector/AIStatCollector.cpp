@@ -4,8 +4,11 @@
 // Register/UnRegister sibling owner and the SkirmishAIManager allocation.
 // Native 4E030B..4E0425 proves the offsets and allocation sizes below.
 // The hash table stores four-byte counts (Register increments node+8),
-// while listener element identity is unresolved; an int header suffices
-// only for this empty-vector constructor and its free-on-rollback path.
+// while listener pointees remain opaque. The existing const ModuleData*
+// container spelling binds the proven49B push_back provider; it does not
+// establish the original receiver class. Target Register proves a vptr at0
+// and callback-selection flags at8; WB Register/addInfoReceiver establish
+// method identities independently of those storage and receiver observations.
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
 // overload takes the call instead, so this TU emits no external max COMDAT.
 namespace _STL {
@@ -64,6 +67,10 @@ void *&vector<void*>::operator[](size_t __n)
 { return *(begin() + __n); }
 }
 class Player;
+class Object;
+class ModuleData;
+class Rva004DF98BReceiver { public: virtual void v0(void *,int); virtual void v1(void *); int m_pad; int m_flags; };
+namespace _STL { template <> void vector<const ModuleData *>::push_back(const ModuleData *const &); }
 class Rva005961D6 { public: Rva005961D6(); private: char bytes[0xa4]; };
 class Rva00596069 { public: Rva00596069(); private: char bytes[0x10]; };
 class Rva005965A5 { public: Rva005965A5(); private: char bytes[0x1c]; };
@@ -75,6 +82,7 @@ struct CollectorManagerView { char prefix[0x878]; float interval; };
 void *Rva004DF983Field(void *);
 class AIStatCollector {
 public: AIStatCollector(Player *);
+ void Register(Object *,int);
 private:
  Rva005961D6 *units;
  Rva00596069 *otherUnits;
@@ -83,7 +91,7 @@ private:
  Rva00283081 *positions;
  _STL::hash_map<int,int> counts;
  Player *player;
- _STL::vector<int> listeners;
+ _STL::vector<const ModuleData *> listeners;
 };
 typedef char AIStatCollectorNativeSize[(sizeof(AIStatCollector)==0x38)?1:-1];
 // The target has no operator-delete rollback state for this last helper's
@@ -102,3 +110,8 @@ AIStatCollector::AIStatCollector(Player *owner)
 
 // Independently recovered native cdecl callback at4DF983..4DF98B.
 void *Rva004DF983Field(void *owner) { return static_cast<char *>(owner)+0x38; }
+
+void AIStatCollector::Register(Object *a,int mask) {
+ const ModuleData **beg= listeners.begin(); const ModuleData **end=listeners.end();
+ for (;beg!=end;++beg) { Rva004DF98BReceiver *e=(Rva004DF98BReceiver *)*beg; if(e->m_flags & mask) e->v0(a,mask); }
+}
