@@ -138,6 +138,19 @@ void setPlayerMagicProgress(int progress)
 	(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->invoke(TheRva009C1A0COwner, "SetPlayerMagicProgress", 1, (char *)&progress, 0, 0, 0, 0);
 }
 
+// hideButtonFlash 0x003FEE0F (52 bytes): "HideButtonFlash" with the name's
+// text (AsciiString::str inline: buffer + 8, or the empty literal).
+struct Rva003FEE0FName
+{
+	char *m_data;
+	const char *str() const { return m_data ? m_data + 8 : ""; }
+};
+
+void hideButtonFlash(const Rva003FEE0FName &name)
+{
+	(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->invoke(TheRva009C1A0COwner, "HideButtonFlash", 1, name.str(), 0, 0, 0, 0);
+}
+
 // ?TheRva002D3627Host@@3PAVRva002D3627Host@@A: matched references place it at VA 0xdff028; also referenced as ?theRadarWindowOverrideSource@@3PAVRadarWindowOverrideSource@@A.
 Rva002D3627Host * TheRva002D3627Host = 0;
 #pragma comment(linker, "/alternatename:?theRadarWindowOverrideSource@@3PAVRadarWindowOverrideSource@@A=?TheRva002D3627Host@@3PAVRva002D3627Host@@A")

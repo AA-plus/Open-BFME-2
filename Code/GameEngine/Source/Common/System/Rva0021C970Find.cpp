@@ -16,6 +16,7 @@ public:
 	void *GetBling(int key, unsigned int index);
 	const AsciiString *rva0021C970(int key, unsigned int index);
 	void *rva0021C9A6(int key, unsigned int index);
+	const AsciiString *rva0021C9D7(int key, unsigned int index);
 };
 
 extern void *g_00DFE354;
@@ -37,4 +38,14 @@ void *CreateAHeroManager::CreateAHeroSubClass::rva0021C9A6(int key, unsigned int
 	if (p)
 		return p;
 	return (void *)&AsciiString::TheEmptyString;
+}
+// rva0021C9D7 0x0021C9D7 54B: the same lookup answering the bling's +8 name.
+const AsciiString *CreateAHeroManager::CreateAHeroSubClass::rva0021C9D7(int key, unsigned int index)
+{
+	if (!rva0021BC0D(key, (void **)&g_00DFE354))
+		return &AsciiString::TheEmptyString;
+	void *p = GetBling(key, index);
+	if (p)
+		return (const AsciiString *)((const char *)p + 8);
+	return &AsciiString::TheEmptyString;
 }
