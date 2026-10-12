@@ -78,8 +78,8 @@ class Overridable;
 class Rva0033A68A {public: Overridable *rva0033A68A();};
 class Handicap {public: enum HandicapType {BUILDCOST,BUILDTIME}; float getHandicap(HandicapType,const ThingTemplate*)const; char opaque[16];};
 class Rva002AE98B {public: float rva002AE98B(const class AsciiString*);};
-class Rva004DF161 {public: float rva004DF161()const;};
-struct PlayerBuildView {char before[0x3c];Handicap handicap; char after[0x1bc-0x4c];Rva004DF161 energy;};
+class Energy {public: float getEnergySupplyRatio()const;};
+struct PlayerBuildView {char before[0x3c];Handicap handicap; char after[0x1bc-0x4c];Energy energy;};
 class Player {public: void countObjectsByThingTemplate(int,const ThingTemplate *const*,bool,int*,bool)const;};
 class Object {public:void *rva0028BC94();};
 class BuildTimeModule {public:
@@ -120,7 +120,7 @@ int ThingTemplate::rva0033AA1F(const Player *player,int objectCarrier,int timeOv
  buildTime *= factionModifier;
  Object *object=(Object *)objectCarrier;
  if(object) {BuildTimeModule *module=(BuildTimeModule *)object->rva0028BC94();if(module)buildTime *= module->multiplier(this);}
- float energyPercent=((const PlayerBuildView *)player)->energy.rva004DF161();
+ float energyPercent=((const PlayerBuildView *)player)->energy.getEnergySupplyRatio();
  if(energyPercent>1.0f)energyPercent=1.0f;
  float shortage=1.0f-energyPercent;
  shortage *= ((const GlobalDataBuildView *)TheWritableGlobalData)->penalty;
