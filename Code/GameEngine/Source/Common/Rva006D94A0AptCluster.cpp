@@ -16,6 +16,8 @@ class AptBasePtrStack
 {
 public:
 	BfmeAptValue006DCD20 *At(int nPos);
+	void Push(BfmeAptValue006DCD20 *pValue);
+	void rva006FE920();
 
 	int m_nElements;
 	int m_nCapacity;
@@ -83,6 +85,7 @@ public:
 	void rva006D95E0(int nIndex, BfmeAptValue006DCD20 *pValue);
 	void rva006DD6C0(EAStringC *pBuffer);
 	void rva006D94A0();
+	int toInteger() const;
 
 	unsigned int m_flags;
 	char m_pad[0x18];
@@ -148,6 +151,50 @@ BfmeAptValue006DCD20 *rva006D9CE0(BfmeAptValue006DCD20 *pValue, int count)
 	}
 
 	return g_aptUndefinedAtE18078;
+}
+
+// _rva006D9E40Comparator @0x006D9E40 (181 bytes). Ghidra-unlisted qsort
+// comparator for the script-function sort path of rva006D9F00 below: with a
+// published handle it runs the script function through the interpreter
+// (setup named "AptArraySortScriptFunction", action 0x1000000, retail
+// literals) with the two elements pushed right then left, takes the integer
+// result from stack slot 0, pops it and restores the interpreter. A null
+// handle compares equal. The interpreter object is the stack's own address;
+// callees are the rowed PrepareForExecution, Push, callFunction, toInteger,
+// pop and CleanupAfterExecution.
+struct AptActionSetup
+{
+	BfmeAptValue006DCD20 *context, *value;
+	const char *name;
+	int action;
+};
+struct AptActionInterpreter
+{
+	void *PrepareForExecution(AptActionSetup *);
+	void CleanupAfterExecution(void *, AptActionSetup *);
+	void callFunction(AptValue *, AptValue *, int);
+};
+
+extern "C" int __cdecl rva006D9E40Comparator(const void *a, const void *b)
+{
+	if (!g_rva006D9F00Handle)
+		return 0;
+	BfmeAptValue006DCD20 *left = *(BfmeAptValue006DCD20 **)a;
+	BfmeAptValue006DCD20 *right = *(BfmeAptValue006DCD20 **)b;
+	AptActionInterpreter *interpreter = (AptActionInterpreter *)&g_aptValueStackAtE182E0;
+	AptActionSetup setup;
+	setup.context = (BfmeAptValue006DCD20 *)g_rva006D9F00Data;
+	setup.value = g_rva006D9F00Handle;
+	setup.name = "AptArraySortScriptFunction";
+	setup.action = 0x1000000;
+	void *saved = interpreter->PrepareForExecution(&setup);
+	g_aptValueStackAtE182E0.Push(right);
+	g_aptValueStackAtE182E0.Push(left);
+	interpreter->callFunction((AptValue *)g_rva006D9F00Data, (AptValue *)g_rva006D9F00Handle, 2);
+	int result = g_aptValueStackAtE182E0.At(0)->toInteger();
+	g_aptValueStackAtE182E0.rva006FE920();
+	interpreter->CleanupAfterExecution(saved, &setup);
+	return result;
 }
 
 // ?rva006D9F00@@YAPAVBfmeAptValue006DCD20@@PAV1@H@Z @0x006D9F00 (103 bytes).
