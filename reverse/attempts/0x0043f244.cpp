@@ -1996,3 +1996,70 @@ void AptMpGameSetup::rva0043F244(int slot, bool reset)
 			GadgetComboBoxSetSelectedPos(m_team[slot], gameSlot->getTeamNumber(), false);
 	}
 }
+
+// ?rva0043F244@AptMpGameSetup@@QAEXH_N@Z
+// partial score=0.98 date=2026-10-12 seat=w6-mo1
+// Alternative 575B reconstruction (565 exact): int-mode + count 2+2*!mode1 +
+// rowed AptMapPreview::GetStartPositionInfoForSlot (no opaque getter) + fetch/AddEntry
+// idiom. Same text/startTeam slot swap as prior bank; slot pair proven invariant
+// over decl/init/scope/const/name variations (scratch-faithful). Needs the
+// structural trigger for text-before-startTeam. Function body only (needs the
+// MpGameSetupSlots.cpp TU context of the prior bank).
+void AptMpGameSetup::rva0043F244(int slot, bool reset)
+{
+	int mode = m_60.m_mode;
+	bool mode1 = mode == 1;
+	int count = 2 + 2 * !mode1;
+	UnicodeString text;
+	int startTeam = -1;
+	if (Rva0057C71FEntry *entry = (Rva0057C71FEntry *)((AptMapPreview *)&m_60)->GetStartPositionInfoForSlot(slot))
+		startTeam = entry->m_team;
+	int selected;
+	int selectedData = -1;
+	GadgetComboBoxGetSelectedPos(m_team[slot], &selected);
+	if (selected >= 0)
+		selectedData = (int)GadgetComboBoxGetItemData(m_team[slot], selected);
+	GadgetComboBoxReset(m_team[slot]);
+	MultiplayerColorDefinition *color = TheMultiplayerSettings->getColor(-1);
+	if (!mode1 && (reset || startTeam < 0))
+	{
+		selected = GadgetComboBoxAddEntry(m_team[slot], TheGameText->fetch("Team:0"), color->m_color);
+		GadgetComboBoxSetItemData(m_team[slot], selected, (void *)-1);
+		if (reset)
+		{
+			GadgetComboBoxSetSelectedPos(m_team[slot], 0, false);
+			return;
+		}
+	}
+	int selectPos = -1;
+	for (int team = 0; team < count; ++team)
+	{
+		if (startTeam >= 0 && startTeam != team)
+			continue;
+		AsciiString num;
+		num.format("Team:%d", team + 1);
+		text = TheGameText->fetch(num.str());
+		selected = GadgetComboBoxAddEntry(m_team[slot], text, color->m_color);
+		GadgetComboBoxSetItemData(m_team[slot], selected, (void *)team);
+		if (team == selectedData)
+			selectPos = selected;
+	}
+	if (selectPos == -1)
+	{
+		selectPos = 0;
+		if (mode1 && slot == 1 && GadgetComboBoxGetLength(m_team[1]) >= 2)
+			selectPos = 1;
+	}
+	GadgetComboBoxSetSelectedPos(m_team[slot], selectPos, false);
+	GameInfo *game = (GameInfo *)m_game->rva0043DA65();
+	if (game && game->isLocked())
+	{
+		GameSlot *gameSlot = game->getSlot(slot);
+		if (gameSlot)
+		{
+			int team = gameSlot->m_team;
+			GadgetComboBoxSetSelectedPos(m_team[slot], team, false);
+		}
+	}
+}
+
