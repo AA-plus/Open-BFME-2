@@ -64,7 +64,13 @@ public:
 	Bool m_selected;			// +0x43C
 };
 
-class Player { public: unsigned char m_pad00[0x54]; Int m_playerIndex; };
+class Player
+{
+public:
+	Int iterateObjects(Int (*callback)(Object *, void *), void *userData) const;
+	unsigned char m_pad00[0x54];
+	Int m_playerIndex;
+};
 
 class ThingTemplate { public: unsigned char m_pad000[0x11F]; unsigned char m_kindOf11F; };
 
@@ -138,6 +144,11 @@ public:
 	V(00) V(01) V(02) V(03) V(04) V(05) V(06) V(07) V(08) V(09) V(10) V(11) V(12) V(13) V(14) V(15)
 #undef V
 	virtual void message(UnicodeString message, ...);	// +0x40
+	virtual void v17();
+	virtual void v18();
+	// F4BB40/3774AB use this distinct variadic message slot. Its original
+	// identifier is unresolved; it is not the +0x40 feedback overload.
+	virtual void rvaVirtual4C(UnicodeString message, ...);	// +0x4C
 };
 extern InGameUI *TheInGameUI;
 
@@ -250,4 +261,49 @@ Bool Rva0037711ADoSetRallyPoint(Object *object, const Coord3D *position, Bool sh
 	return true;
 	}
 	return false;
+}
+
+// Native 0x0037747C..0x003774AB and WB 0x00F4BD10 prove an integer
+// iterateObjects callback: apply the global point to AUTO_RALLYPOINT objects
+// and count successful changes. KindOfGetNameFromSingleBit names bit 69;
+// the native template mask byte is +0x110 bit 0x20. The original helper
+// identifier is unavailable, so the name retains its address qualifier.
+struct GlobalRallyPointData
+{
+	Coord3D position;
+	int changed;
+};
+
+int Rva0037747CSetGlobalRallyPoint(Object *object, void *userData)
+{
+	GlobalRallyPointData *data = (GlobalRallyPointData *)userData;
+	if ((object->m_template->m_pad000[0x110] & 0x20) &&
+		Rva0037711ADoSetRallyPoint(object, &data->position, false, 0))
+		++data->changed;
+	return 1;
+}
+
+// Native 0x003774AB..0x003775F7 and WB F4BB40 establish the helper's
+// complete behavior and two-argument cdecl ABI. The callback/coordinate
+// record is shared with the integer Player::iterateObjects provider.
+void Rva003774ABSetGlobalRallyPoint(Object *object, const Coord3D *position)
+{
+	Bool isLocal = object->isLocallyControlled();
+	GlobalRallyPointData data;
+	copyCoord(&data.position, position);
+	data.changed = 0;
+	object->getControllingPlayer()->iterateObjects(Rva0037747CSetGlobalRallyPoint, &data);
+	if (isLocal && data.changed > 0)
+	{
+		UnicodeString message;
+		message.format(&TheGameText->fetchRef("GUI:GlobalRallyPointSet"));
+		TheInGameUI->rvaVirtual4C(message);
+		static BfmeAudioEventPrefix136 globalRallyPointSet(TheAudio->getAudioSettings()->m_rallyPointSet, 0);
+		((Rva002D9508 *)&globalRallyPointSet)->rva002D9508(position);
+		((Rva0033F15DDwordSlot *)&globalRallyPointSet)->set(object->getControllingPlayer()->m_playerIndex);
+		TheAudio->addAudioEvent(&globalRallyPointSet);
+		Drawable *drawable = object->getDrawable();
+		if (drawable && drawable->m_selected)
+			TheControlBar->m_uiDirty = true;
+	}
 }
