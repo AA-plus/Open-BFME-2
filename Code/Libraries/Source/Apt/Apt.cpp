@@ -34,13 +34,14 @@ public:
 class AptCIH : public AptValue {};
 class AptString : public AptValue {public:static AptString *Create();};
 class BfmeAptValue006DCD20;
-class AptBasePtrStack {public:int count,capacity;BfmeAptValue006DCD20 **elements;};
+class AptBasePtrStack {public:int count,capacity;BfmeAptValue006DCD20 **elements;void Push(BfmeAptValue006DCD20 *);BfmeAptValue006DCD20 *At(int);void rva006FE920();};
 struct AptInitParmsT;
 struct AptActionInterpreter {
  void rva006FEAF0(const AptInitParmsT &);
  AptBasePtrStack stack;
  AptValue *getVariable(AptValue *,AptValue *,const EAStringC *,int,int,int);
  bool setVariable(AptValue *,AptValue *,const EAStringC *,AptValue *,int,int,int);
+ void callFunction(AptValue *,AptValue *,int);
 };
 extern AptActionInterpreter g_aptDateInterpreter;
 AptCIH *_AptGetAnimationAtLevel(int);
@@ -692,4 +693,46 @@ bool Rva006CCF30SetFocusPath(const char *path) {
   return false;
  ((Rva006E3700DwordSlot *)g_bfmeAptPtrAtE176D0)->set((int)value->c_cih(false));
  return true;
+}
+
+// Native6CCD90..6CCF20: Ghidra-unlisted host-side script call. Resolves the
+// target (a path from level 0 through the rowed getVariable, or level 0
+// itself), pushes the nArgs variadic AptValue arguments last-first onto the
+// interpreter stack, asserts pContext (Apt.cpp 0x53C, retail texts), looks up
+// the named function on the target, runs it through the rowed callFunction
+// inside the rowed static-data push/pop, copies the stack-top result into the
+// optional C buffer (rowed rva006DE870) and pops it. Address-derived name.
+#include <stdarg.h>
+// Same TU alias of the rowed AptScriptFunctionBase::PushStaticData that
+// AptActionInterpreterConstantHandlers.cpp binds (the class has a shared header).
+void *AptPushStaticData();
+#pragma comment(linker, "/alternatename:?AptPushStaticData@@YAPAXXZ=?PushStaticData@AptScriptFunctionBase@@SAPAXXZ")
+void rva007097B0(void *);
+void Rva006CCD90CallFunction(const char *function,char *result,const char *target,int nArgs,...) {
+ AptValue *context;
+ if(target) {
+  EAStringC path(target);
+  context=g_aptDateInterpreter.getVariable(_AptGetAnimationAtLevel(0),0,&path,1,1,0);
+ } else {
+  context=_AptGetAnimationAtLevel(0);
+ }
+ AptValue *args[32];
+ va_list list;
+ va_start(list,nArgs);
+ for(int i=0;i<nArgs;i++)
+  args[i]=va_arg(list,AptValue *);
+ va_end(list);
+ for(int j=nArgs-1;j>=0;j--)
+  g_aptDateInterpreter.stack.Push((BfmeAptValue006DCD20 *)args[j]);
+ GAPCHECK(context,"pContext",0x53C);
+ EAStringC name(function);
+ AptValue *value=g_aptDateInterpreter.getVariable(context,0,&name,1,1,0);
+ void *saved=AptPushStaticData();
+ g_aptDateInterpreter.callFunction(context,value,nArgs);
+ rva007097B0(saved);
+ if(result) {
+  AptValue *top=(AptValue *)g_aptDateInterpreter.stack.At(0);
+  top->rva006DE870(result);
+ }
+ g_aptDateInterpreter.stack.rva006FE920();
 }
