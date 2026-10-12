@@ -1867,3 +1867,475 @@ Rva002AAEB5Record *Rva002AAEB5::rva002AAEB5(int index)
 {
 	return &m_324[index];
 }
+
+// --- 0x002ABB86 (24B): one node from the freelist pool at VA 0x00DBBD2C,
+// none for a count above one; 0x002ACF8A (18B): constructor running the
+// rowed init.
+extern FreelistPool g_freelistPool009BBD2C;
+
+class Rva002ABB86
+{
+public:
+	void *rva002ABB86(unsigned int count, const void *hint);
+};
+
+void *Rva002ABB86::rva002ABB86(unsigned int count, const void *)
+{
+	if (count > 1)
+		return 0;
+	return g_freelistPool009BBD2C.pop();
+}
+
+class Rva002AC026Member
+{
+public:
+	Rva002AC026Member(void *context);
+	void *init(void *context);								// 0x002AC026
+private:
+	void *m_head;
+};
+
+Rva002AC026Member::Rva002AC026Member(void *context)
+{
+	init(context);
+}
+
+// --- 0x002AD7E9 (61B): the +8 interface of a player feeds the record's
+// +0x34 word to its +0x3B4 member (rowed 0x0039B668), then grants each
+// science of the record's +0x38 list through Player's rowed private
+// addScience; 0x002B1192 (21B): the +4 interface stores Player's rowed
+// 0x002AB855 answer for the hero data.
+enum ScienceType { SCIENCE_INVALID = -1 };
+class CreateAHeroData;
+
+class Rva0039B668
+{
+public:
+	void rva0039B668(int value);							// 0x0039B668
+};
+
+struct Rva002AD7E9Record
+{
+	char m_pad00[0x34];
+	int m_34;
+	int *m_sciencesStart;
+	int *m_sciencesFinish;
+};
+
+class Rva002AD7E9Base0
+{
+	int m_00;
+};
+
+class Rva002B1192Interface
+{
+public:
+	void rva002B1192(CreateAHeroData *data, bool *out);
+private:
+	int m_00;
+};
+
+class Rva002AD7E9Interface
+{
+public:
+	void rva002AD7E9(const Rva002AD7E9Record *record);
+private:
+	char m_pad000[0x3B4];
+	Rva0039B668 m_3B4;
+};
+
+class Player : public Rva002AD7E9Base0, public Rva002B1192Interface, public Rva002AD7E9Interface
+{
+	friend class Rva002AD7E9Interface;
+	friend class Rva002B1192Interface;
+public:
+	bool rva002AB855(CreateAHeroData *data) const;			// 0x002AB855
+private:
+	bool addScience(ScienceType science);					// 0x002AD661
+};
+
+void Rva002AD7E9Interface::rva002AD7E9(const Rva002AD7E9Record *record)
+{
+	if (record)
+	{
+		m_3B4.rva0039B668(record->m_34);
+		for (const int *it = record->m_sciencesStart; it != record->m_sciencesFinish; ++it)
+			((Player *)((char *)this - 8))->addScience((ScienceType)*it);
+	}
+}
+
+void Rva002B1192Interface::rva002B1192(CreateAHeroData *data, bool *out)
+{
+	*out = ((Player *)((char *)this - 4))->rva002AB855(data);
+}
+
+// --- LivingWorld-region leaves: 0x002B2221 (18B) copies a pair to +0x20;
+// 0x002B2260 (14B) the +8 record's +0x4C word or 0; 0x002B229B (10B) ORs
+// into +0x14; 0x002B238A (17B) float setter +0x1C8; 0x002B244D (14B) the
+// +0x0C field of the indexed 16-byte record at +0.
+struct Rva002B2260Record
+{
+	char m_pad00[0x4C];
+	int m_4C;
+};
+
+class Rva002B2221
+{
+public:
+	void rva002B2221(const Rva002226A2Pair &pair);
+	int rva002B2260() const;
+	void rva002B229B(int bits);
+	void rva002B238A(float value);
+private:
+	int m_00;
+	int m_04;
+	Rva002B2260Record *m_08;
+	int m_0C;
+	int m_10;
+	int m_14;
+	char m_pad18[0x20 - 0x18];
+	Rva002226A2Pair m_20;
+	char m_pad28[0x1C8 - 0x28];
+	float m_1C8;
+};
+
+void Rva002B2221::rva002B2221(const Rva002226A2Pair &pair)
+{
+	m_20 = pair;
+}
+
+int Rva002B2221::rva002B2260() const
+{
+	if (m_08)
+		return m_08->m_4C;
+	return 0;
+}
+
+void Rva002B2221::rva002B229B(int bits)
+{
+	m_14 |= bits;
+}
+
+void Rva002B2221::rva002B238A(float value)
+{
+	m_1C8 = value;
+}
+
+class Rva002B244D
+{
+public:
+	int *rva002B244D(int index);
+private:
+	Rva002A7F6CRecord m_records[1];
+};
+
+int *Rva002B244D::rva002B244D(int index)
+{
+	return &m_records[index].m_0C;
+}
+
+// --- 0x002B22FA (21B): 1 for a second argument of 0 or 1.
+class Rva002B22FA
+{
+public:
+	int rva002B22FA(int unused, int value);
+};
+
+int Rva002B22FA::rva002B22FA(int, int value)
+{
+	if (value >= 0 && value <= 1)
+		return 1;
+	return 0;
+}
+
+// --- 0x002B2997 (38B): when TheLivingWorldLogic's +0xC8 flag is set, the
+// campaign manager's rowed 0x003B8CAC runs and the flag clears.
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
+class Rva00E02D6C;
+extern Rva00E02D6C *TheCampaignManager;
+class LivingWorldCampaignManager
+{
+public:
+	bool rva003B8CAC();										// 0x003B8CAC
+};
+
+struct Rva002B2997LogicView
+{
+	char m_pad00[0xC8];
+	bool m_C8;
+};
+
+void Rva002B2997()
+{
+	if (((Rva002B2997LogicView *)TheLivingWorldLogic)->m_C8)
+	{
+		((LivingWorldCampaignManager *)TheCampaignManager)->rva003B8CAC();
+		((Rva002B2997LogicView *)TheLivingWorldLogic)->m_C8 = false;
+	}
+}
+
+// --- 0x002B29EA (14B): stores the second argument at +0x38 of the first.
+struct Rva002B29EATarget
+{
+	char m_pad00[0x38];
+	int m_38;
+};
+
+class Rva002B29EA
+{
+public:
+	void rva002B29EA(Rva002B29EATarget *target, int value);
+};
+
+void Rva002B29EA::rva002B29EA(Rva002B29EATarget *target, int value)
+{
+	target->m_38 = value;
+}
+
+// --- 0x002B2B3F (28B): the current item's +0x88 flag when the +0xB0
+// region manager exists; 0x002B2B94 (11B): the manager's rowed
+// UpdateBattleMarkers.
+struct Rva002B3740Item
+{
+	char m_pad00[0x88];
+	bool m_88;
+};
+
+class LivingWorldRegionManager
+{
+public:
+	void UpdateBattleMarkers();								// 0x0020EBA0
+};
+
+class Rva002E2903Player;
+struct Rva002B488EResult;
+
+class Rva002BA8F1Logic
+{
+public:
+	Rva002B3740Item *rva002B2B2D();							// 0x002B2B2D
+	void setLocal(Rva002E2903Player *player);				// 0x002B38F7
+	Rva002B488EResult *rva002B488E(int value);				// 0x002B488E
+	bool rva002B2B3F();
+	void rva002B2B94();
+private:
+	char m_pad00[0x8C];
+	Rva002E2903Player **m_playersStart;
+	Rva002E2903Player **m_playersFinish;
+	Rva002E2903Player **m_playersEnd;
+	Rva002E2903Player *m_98;
+	char m_pad9C[0xB0 - 0x9C];
+	LivingWorldRegionManager *m_B0;
+};
+
+bool Rva002BA8F1Logic::rva002B2B3F()
+{
+	if (m_B0)
+	{
+		Rva002B3740Item *item = rva002B2B2D();
+		if (item)
+			return item->m_88;
+	}
+	return false;
+}
+
+void Rva002BA8F1Logic::rva002B2B94()
+{
+	m_B0->UpdateBattleMarkers();
+}
+
+// --- 0x002B2B9F (11B): TheScriptEngine's slot 10.
+class ScriptEngine;
+extern ScriptEngine *TheScriptEngine;
+
+class Rva002B2B9FView
+{
+public:
+	GAP_V10(0)
+	virtual void slot10();
+};
+
+void Rva002B2B9F()
+{
+	((Rva002B2B9FView *)TheScriptEngine)->slot10();
+}
+
+// --- 0x002B30D9 (19B): the +0x154 pointer vector is not empty;
+// 0x002B30EC (15B): count of the 8-byte records of the +0x40 vector of the
+// +0x78 object; 0x002B3150 (11B): pre-increments +0x9C.
+static __forceinline bool GapVoidVectorAny(const GapVoidVector *v) { return v->m_start != v->m_finish; }
+
+struct Rva002B30ECVector
+{
+	Rva002226A2Pair *m_start;
+	Rva002226A2Pair *m_finish;
+};
+
+struct Rva002B30ECInner
+{
+	char m_pad00[0x40];
+	Rva002B30ECVector m_40;
+};
+
+class Rva002B30D9
+{
+public:
+	bool rva002B30D9() const;
+	int rva002B30EC() const;
+	int rva002B3150();
+private:
+	char m_pad000[0x78];
+	Rva002B30ECInner *m_78;
+	char m_pad07C[0x9C - 0x7C];
+	int m_9C;
+	char m_pad0A0[0x154 - 0xA0];
+	GapVoidVector m_154;
+};
+
+bool Rva002B30D9::rva002B30D9() const
+{
+	return GapVoidVectorAny(&m_154);
+}
+
+static __forceinline int Rva002B30ECCount(const Rva002B30ECVector *v) { return v->m_finish - v->m_start; }
+
+int Rva002B30D9::rva002B30EC() const
+{
+	return Rva002B30ECCount(&m_78->m_40);
+}
+
+int Rva002B30D9::rva002B3150()
+{
+	return ++m_9C;
+}
+
+// --- 0x002B386A (35B): names the campaign's GUI image by the campaign
+// manager's +0x2C evil flag.
+struct Rva002B386AManagerView
+{
+	char m_pad00[0x2C];
+	bool m_evil;
+};
+
+class Rva002B386A
+{
+public:
+	void rva002B386A(AsciiString *name);
+};
+
+void Rva002B386A::rva002B386A(AsciiString *name)
+{
+	if (((Rva002B386AManagerView *)TheCampaignManager)->m_evil)
+		name->set("GUI:EvilCampaign");
+	else
+		name->set("GUI:GoodCampaign");
+}
+
+// --- 0x002B3DA4 (14B, cdecl): the rowed 0x002B3D81 value divided by the
+// word at VA 0x00DBA4E4.
+int rva002B3D81();
+extern int g_Va00DBA4E4;
+
+unsigned int Rva002B3DA4()
+{
+	return (unsigned int)rva002B3D81() / (unsigned int)g_Va00DBA4E4;
+}
+
+// --- 0x002B4404 (12B, cdecl): the rowed 0x002B2F49 with 0 on the argument.
+class Rva002B2F49
+{
+public:
+	void *rva002B2F49(unsigned int value);					// 0x002B2F49
+};
+
+void *Rva002B4404(Rva002B2F49 *target)
+{
+	return target->rva002B2F49(0);
+}
+
+// --- 0x002B4640 (16B): the indexed word of the array *(+0x170).
+class Rva002B4640
+{
+public:
+	int rva002B4640(int index) const;
+private:
+	char m_pad000[0x170];
+	int *m_170;
+};
+
+int Rva002B4640::rva002B4640(int index) const
+{
+	return m_170[index];
+}
+
+// --- 0x002B4E6D (22B): copies the argument's +0x14 flag to +0xC8, then the
+// rowed 0x002B4CED with it.
+struct Rva002B4E6DArg
+{
+	char m_pad00[0x14];
+	bool m_14;
+};
+
+class Rva002B4CED
+{
+public:
+	void rva002B4CED(void *arg);							// 0x002B4CED
+	void rva002B4E6D(Rva002B4E6DArg *arg);
+private:
+	char m_pad00[0xC8];
+	bool m_C8;
+};
+
+void Rva002B4CED::rva002B4E6D(Rva002B4E6DArg *arg)
+{
+	m_C8 = arg->m_14;
+	rva002B4CED(arg);
+}
+
+// --- 0x002B685D (24B): the rowed 0x002B5B55 on the rowed 0x002B488E result.
+struct Rva002B488EResult;
+class Rva002B5B55Arg;
+
+class Rva002B685D
+{
+public:
+	void rva002B685D(int value);
+};
+
+class Rva002B5B55
+{
+public:
+	void rva002B5B55(Rva002B5B55Arg *arg);					// 0x002B5B55
+};
+
+void Rva002B685D::rva002B685D(int value)
+{
+	((Rva002B5B55 *)this)->rva002B5B55((Rva002B5B55Arg *)((Rva002BA8F1Logic *)this)->rva002B488E(value));
+}
+
+// --- 0x002B77A2 (11B): clears the +0xF0 unicode-string list.
+namespace _STL
+{
+	template <class T, class A> class _List_base
+	{
+	public:
+		void clear();
+	private:
+		void *m_node;
+	};
+}
+
+class Rva002B77A2
+{
+public:
+	void rva002B77A2();
+private:
+	char m_pad00[0xF0];
+	_STL::_List_base<UnicodeString, _STL::allocator<UnicodeString> > m_F0;
+};
+
+void Rva002B77A2::rva002B77A2()
+{
+	m_F0.clear();
+}
