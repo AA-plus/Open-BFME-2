@@ -205,16 +205,19 @@ public:
 void Rva00261D01::rva00261D01(Rva00261D01Holder *holder) { holder->m_04->rva00261C89(); }
 
 // vtable 0x00BE25B4#1 (shared by five stores): clear the pointer vector at
-// +0xC (STLport erase(begin, end), 0x0031BD55).
-class Rva001FF8FB
+// +0xC (STLport erase(begin, end), 0x0031BD55). WorldBuilder names the body
+// ScienceStore::init (Science.cpp:29); the other stores' identical init
+// bodies fold onto it.
+class ScienceStore
 {
 public:
-	void rva001FF8FB();
+	virtual ~ScienceStore();
+	virtual void init();
 private:
-	char m_pad00[0x0C];
+	char m_pad04[0x08];
 	_STL::vector<void *> m_0C;
 };
-void Rva001FF8FB::rva001FF8FB() { m_0C.clear(); }
+void ScienceStore::init() { m_0C.clear(); }
 
 // vtable 0x00C0DB34#2 and #0: write the four-character code 'free' and
 // 'look' through the ledger's DataChunkOutput::writeInt of the object at +4.
