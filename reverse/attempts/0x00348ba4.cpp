@@ -1,6 +1,8 @@
 // ?computePath@AIAttackMeleeHordeApproachTargetState@@MAE_NXZ
+// partial score=0.99 date=2026-10-12
+// ?computePath@AIAttackMeleeHordeApproachTargetState@@MAE_NXZ
 // partial score=0.99 date=2026-10-08
-// cl: /DNDEBUG /MD
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
 //
 // onEnter/onExit/update overrides of BFME 2 states, each named by its
 // vtable's slot-2 name getter (the state's own name literal):
@@ -208,10 +210,10 @@ public:
 	// test only al, so this TU calls it through a Bool view.
 	Bool Rva002F1BA2(void *obj, void *surfaces, PathfindLayerEnum layer, const Coord3D *from, const Coord3D *to);
 	// The rowed Int sibling at 0x002F1B32, read the same way.
-	Bool Rva002F1B32(void *obj, void *surfaces, PathfindLayerEnum layer, const Coord3D *from, const Coord3D *to);
-	// Unrowed 218-byte BFME destination adjuster at 0x002FA202: true at once
+	Bool IsLineBlocked(void *obj, void *surfaces, PathfindLayerEnum layer, const Coord3D *from, const Coord3D *to);
+	// Rowed 218-byte BFME destination adjuster at 0x002FA202: true at once
 	// for KindOf byte +0x10B bit 1 objects, else a cell search around dest.
-	Bool rva002FA202(Object *obj, const LocomotorSet &locomotorSet, Coord3D *dest);
+	Bool AdjustHordeMeleeDestination(Object *obj, void *locomotorSet, Coord3D *dest);
 };
 class AI
 {
@@ -1082,7 +1084,7 @@ Bool AIAttackMeleeHordeApproachTargetState::computePath()
 				Coord3D destination;
 				destination.set(goal);
 				destination.sub(&delta);
-				if (!TheAI->pathfinder()->Rva002F1B32(source, ai->getValidLocomotorSurfaces(),
+				if (!TheAI->pathfinder()->IsLineBlocked(source, ai->getValidLocomotorSurfaces(),
 						LAYER_GROUND, goal, &destination))
 					*goal = destination;
 				if (victim->getTemplate()->testKindByte108())
@@ -1100,7 +1102,7 @@ Bool AIAttackMeleeHordeApproachTargetState::computePath()
 			adjusted.x = goal->x;
 			adjusted.y = goal->y;
 			adjusted.z = goal->z;
-			if (!TheAI->pathfinder()->rva002FA202(source, ai->getLocomotorSet(), &adjusted) && !m_isInitialApproach)
+			if (!TheAI->pathfinder()->AdjustHordeMeleeDestination(source, (void *)&ai->getLocomotorSet(), &adjusted) && !m_isInitialApproach)
 				return true;
 			*goal = adjusted;
 			Real before = victim->rva002C97E8(victim->getPosition(), source->getPosition());
