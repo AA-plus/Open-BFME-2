@@ -31,6 +31,7 @@ public:
 	void rva00052098(int b);
 	void rva000520C6();
 	void rva000522DF(float volume);
+	void rva000521F4(float volume);
 	void setVolumes(float volume, unsigned char flags);
 	static void setGlobalSystemVolume(int volumeType, float volume);
 
@@ -41,7 +42,16 @@ public:
 	float m_atten;
 	float m_vol;
 	float m_scale;
-	char m_padA0[0xC8 - 0xA0];
+	char m_padA0[0xAC - 0xA0];
+	// Volume-ramp state for rva000521F4 (inferred from its ramp behavior).
+	float m_rampBase;      // +0xAC
+	float m_rampTarget;    // +0xB0
+	float m_rampRate;      // +0xB4
+	float m_rampLimit;     // +0xB8
+	float m_rampDivisor;   // +0xBC
+	float m_rampAccum;     // +0xC0
+	unsigned char m_rampActive; // +0xC4
+	char m_padC5[0xC8 - 0xC5];
 	float m_slot[12][4];
 	char m_dirty[6][2][4];
 	char m_pad1B8[0x1C4 - 0x1B8];
@@ -186,6 +196,10 @@ void MilesAudioManager::GlobalVolumeData::rva000522DF(float volume)
 	m_vol = v;
 	refreshAll();
 }
+
+// ?rva000521F4@GlobalVolumeData@MilesAudioManager@@QAEXM@Z retail 0x000521F4 235B.
+// Smoothed m_scale setter (banked 221B, see reverse/attempts/0x000521f4.cpp);
+// ramp members +0xAC..+0xC4 above are kept for its recovery.
 
 void MilesAudioManager::GlobalVolumeData::setVolumes(float volume, unsigned char flags)
 {

@@ -1,4 +1,6 @@
 // ?updateMeshVolume@W3DVolumetricShadow@@IAEXHHPBVMatrix3D@@ABVAABoxClass@@M@Z
+// partial score=0.97 date=2026-10-12
+// ?updateMeshVolume@W3DVolumetricShadow@@IAEXHHPBVMatrix3D@@ABVAABoxClass@@M@Z
 // partial score=0.979 date=2026-10-12
 // ?updateMeshVolume@W3DVolumetricShadow@@IAEXHHPBVMatrix3D@@ABVAABoxClass@@M@Z
 // partial score=0.9684191912493764 date=2026-10-10
@@ -448,6 +450,7 @@ void W3DVolumetricShadow::updateMeshVolume(Int meshIndex, Int lightIndex, const 
 	Vector3 toLight;
 	Vector3 toPrevLight;
 	Vector3 lightPosWorld;
+	Real length;
 	//Figuring out if mesh has rotated is cheaper (no normalization) than figuring out if light angle has changed.
 	//So we divide the 2 tests.  Also, our light (sun) almost never moves so no second test needed at all.
 	Bool isMeshRotating = false;	//flag if mesh has rotated since last update. Translation doesn't matter for infinite light source.
@@ -608,7 +611,6 @@ void W3DVolumetricShadow::updateMeshVolume(Int meshIndex, Int lightIndex, const 
 		Vector3 Corners[8];
 		Vector3 lightRay;
 		Real vectorScale,vectorScaleTemp, vectorScaleMax;
-		Real length;
 
 		//Get vertices of top of bounding box
 		Corners[0]=(meshIndex?(box.Center):(box.Center))+box.Extent;	//top right corner
