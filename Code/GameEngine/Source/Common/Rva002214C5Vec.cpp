@@ -72,3 +72,23 @@ void Rva002214C5Get(_STL::vector<BfmeE16, _STL::allocator<BfmeE16> > *out)
     tmp.push_back(*(const BfmeE16 *)&SlaveAttackFieldTable);
     (( _STL::vector<struct BfmeE12, _STL::allocator<struct BfmeE12> > *)out)->swap(*( _STL::vector<struct BfmeE12, _STL::allocator<struct BfmeE12> > *)&tmp);
 }
+
+// ?Rva0022157BGet@@YAXPAVINI@@@Z @0x0022157B 90B: parses the INI block
+// through the table 0x002214C5 builds (into the global at VA 0x00DFE4BC),
+// then frees the table. Kept beside its builder: retail holds the table
+// buffer in ESI across the parse and frees it from there, which cl only does
+// when the builder (and the vector swap it ends with) are visible.
+class INI
+{
+public:
+    void initFromINI(void *what, const FieldParse *parseTable);
+};
+extern char g_00DFE4BC;
+
+void Rva0022157BGet(INI *ini)
+{
+    _STL::vector<BfmeE16, _STL::allocator<BfmeE16> > table;
+    Rva002214C5Get(&table);
+    if (table.begin() != table.end())
+        ini->initFromINI(&g_00DFE4BC, (const FieldParse *)&*table.begin());
+}
