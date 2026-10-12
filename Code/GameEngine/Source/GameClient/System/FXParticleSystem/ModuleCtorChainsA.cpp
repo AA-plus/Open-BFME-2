@@ -2,7 +2,12 @@
 // ??0Rva003ABAC3@@QAE@PAX0@Z @0x003ABAC3 42B
 // ??0Rva003ABAF3@@QAE@PAX0@Z @0x003ABAF3 42B
 // ??0Rva003ABB23@@QAE@PAX0@Z @0x003ABB23 42B
+// ??0Rva003ABB93@@QAE@PAX0@Z @0x003ABB93 42B
+// ??0Rva003ABBCB@@QAE@PAX0@Z @0x003ABBCB 42B
+// ??0Rva003ABC6E@@QAE@PAX0@Z @0x003ABC6E 49B
 // ??0Rva003ABCB5@@QAE@PAX0@Z @0x003ABCB5 49B
+// ??0Rva003ABE40@@QAE@PAX0@Z @0x003ABE40 49B
+// ??0Rva003ABE8D@@QAE@PAX0@Z @0x003ABE8D 49B
 // ??0Rva003ABDC8@@QAE@PAX0@Z @0x003ABDC8 49B
 // ??0Rva003ABECC@@QAE@PAX0@Z @0x003ABECC 49B
 // ??0Rva003ACDA0Module@@QAE@PAXPAVRva003AD71BTemplate@@@Z @0x003ACDA0 42B
@@ -70,6 +75,19 @@ extern const void *const g_00C1D00C[];
 extern const void *const g_00C1D02C[];
 extern const void *const g_00C1D0BC[];
 extern const void *const g_00C1D788[];
+extern const void *const g_00C1C488[];
+extern const void *const g_00C1CD40[];
+extern const void *const g_00C1C4C8[];
+extern const void *const g_00C1CD80[];
+extern const void *const g_00C1C508[];
+extern const void *const g_00C1C504[];
+extern const void *const g_00C1CDBC[];
+extern const void *const g_00C1C644[];
+extern const void *const g_00C1C640[];
+extern const void *const g_00C1CF28[];
+extern const void *const g_00C1C6A4[];
+extern const void *const g_00C1C6A0[];
+extern const void *const g_00C1C690[];
 
 struct Rva0055BF4BSrc;
 class RvaSmartPtr12;
@@ -93,7 +111,20 @@ class LightningEmissionModule
 public:
 	LightningEmissionModule(TrackingPtr<ParticleSystem> &system, const LightningEmissionModuleTemplate *moduleTemplate);
 };
+
+class LightningDrawModuleTemplate;
+class LightningDrawModule
+{
+public:
+	LightningDrawModule(TrackingPtr<ParticleSystem> &system, const LightningDrawModuleTemplate *moduleTemplate);
+};
 }
+
+struct Rva005648FEInput;
+class Rva003AE94E { public: Rva003AE94E(void *a, void *b); };
+class Rva003AEA42 { public: Rva003AEA42(const RvaSmartPtr12 &a, int b); };
+class Rva003AEF9B { public: Rva003AEF9B(const RvaSmartPtr12 &a, int b); };
+class Rva003AF076 { public: Rva003AF076(const RvaSmartPtr12 &a, const Rva005648FEInput &b); };
 
 class Rva003AE50B { public: Rva003AE50B(void *a, void *b); };
 class Rva00560A1B { public: Rva00560A1B(void *a, void *b); };
@@ -362,3 +393,78 @@ Rva003AD38BModule::Rva003AD38BModule(void *a, Rva003ADBD0Template *b)
 	STAMP(0x1C, g_00C1C6CC);
 }
 
+// ---- five more intermediate constructors (same shape, rowed bases) ----
+
+class Rva003ABB93 : public FXParticleSystem::LightningDrawModule
+{
+public:
+	Rva003ABB93(void *a, void *b);
+};
+
+Rva003ABB93::Rva003ABB93(void *a, void *b)
+	: FXParticleSystem::LightningDrawModule(*(FXParticleSystem::TrackingPtr<FXParticleSystem::ParticleSystem> *)a,
+		(const FXParticleSystem::LightningDrawModuleTemplate *)b)
+{
+	STAMP(0x00, g_00C1C488);
+	STAMP(0x14, g_00C1C780);
+	STAMP(0x18, g_00C1CD40);
+}
+
+class Rva003ABBCB : public Rva003AE94E
+{
+public:
+	Rva003ABBCB(void *a, void *b);
+};
+
+Rva003ABBCB::Rva003ABBCB(void *a, void *b)
+	: Rva003AE94E(a, b)
+{
+	STAMP(0x00, g_00C1C4C8);
+	STAMP(0x14, g_00C1C780);
+	STAMP(0x18, g_00C1CD80);
+}
+
+class Rva003ABC6E : public Rva003AEA42
+{
+public:
+	Rva003ABC6E(void *a, void *b);
+};
+
+Rva003ABC6E::Rva003ABC6E(void *a, void *b)
+	: Rva003AEA42(*(const RvaSmartPtr12 *)a, (int)b)
+{
+	STAMP(0x00, g_00C1C508);
+	STAMP(0x14, g_00C1C504);
+	STAMP(0x18, g_00C1C780);
+	STAMP(0x1C, g_00C1CDBC);
+}
+
+class Rva003ABE40 : public Rva003AEF9B
+{
+public:
+	Rva003ABE40(void *a, void *b);
+};
+
+Rva003ABE40::Rva003ABE40(void *a, void *b)
+	: Rva003AEF9B(*(const RvaSmartPtr12 *)a, (int)b)
+{
+	STAMP(0x00, g_00C1C644);
+	STAMP(0x14, g_00C1C640);
+	STAMP(0x18, g_00C1C780);
+	STAMP(0x1C, g_00C1CF28);
+}
+
+class Rva003ABE8D : public Rva003AF076
+{
+public:
+	Rva003ABE8D(void *a, void *b);
+};
+
+Rva003ABE8D::Rva003ABE8D(void *a, void *b)
+	: Rva003AF076(*(const RvaSmartPtr12 *)a, *(const Rva005648FEInput *)b)
+{
+	STAMP(0x00, g_00C1C6A4);
+	STAMP(0x14, g_00C1C6A0);
+	STAMP(0x18, g_00C1C780);
+	STAMP(0x20, g_00C1C690);
+}
