@@ -48,7 +48,7 @@ public:
     virtual void targetSlot19();
     virtual void targetSlot20();
     virtual void targetSlot21();
-    virtual void targetSlot22();
+    virtual class WeatherSetting *rva00201153();	// slot 22 (+0x58)
     virtual void rva00201085();	// slot 23 (+0x5C), right after init
 private:
     float *m_startingHeights;
@@ -125,6 +125,12 @@ public:
     Overridable *m_nextOverride;
     bool m_isOverride;
     Overridable *deleteOverrides();
+    Overridable *friend_getFinalOverride()
+    {
+        if (m_nextOverride)
+            return m_nextOverride->friend_getFinalOverride();
+        return this;
+    }
     const Overridable *getFinalOverride() const
     {
         if (m_nextOverride)
@@ -197,6 +203,16 @@ extern OVERRIDE<WeatherSetting> TheWeatherSetting;
 // 12B span has no +4/+8 reader behind it.)
 OVERRIDE<WeatherSetting> TheWeatherSetting;
 extern void __cdecl operator delete[](void *);
+
+// Retail 0x00201153 (18 bytes), vtable slot 22 just before rva00201085: the
+// final override of the current weather setting, walked from its base entry
+// without a null check (one level inlined, the rest through the rowed
+// Overridable::friend_getFinalOverride 0x001E35DF).
+WeatherSetting *SnowManager::rva00201153()
+{
+    WeatherSetting *setting = const_cast<WeatherSetting *>(TheWeatherSetting.getNonOverloadedPointer());
+    return static_cast<WeatherSetting *>(setting->friend_getFinalOverride());
+}
 
 SnowManager::~SnowManager()
 {
