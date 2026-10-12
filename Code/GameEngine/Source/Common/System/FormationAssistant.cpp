@@ -17,6 +17,9 @@ class Rva00422CA8 { public: bool operator()(int,int) const; };
 // Refer to that definition rather than emitting the header's different generic body.
 namespace _STL {
 template<> void __unguarded_linear_insert<int*,int,Rva00422CA8>(int*,int,Rva00422CA8);
+// Use the rowed providers rather than emit divergent generic algorithm copies.
+template<> void sort<int*,Rva00422CA8>(int*,int*,Rva00422CA8);
+template<> int* upper_bound<int*,int,Rva00422CA8>(int*,int*,const int&,Rva00422CA8);
 }
 void __cdecl rva004216A2(float *out,const float *base,const float *slot);
 float __cdecl Rva004219F4DistSquared(const float *small,const float *object);
