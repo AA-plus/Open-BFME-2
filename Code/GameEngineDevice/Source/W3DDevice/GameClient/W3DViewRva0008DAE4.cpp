@@ -134,9 +134,11 @@ public:
 	virtual void rva000875D6();
 	virtual void rva00086065(int value);
 	virtual Real rva00086166(Real value);
+	virtual void rva0008BD59();
 
 private:
 	void setCameraTransform();
+	void calcCameraConstraints();
 
 	char m_pad04[0x58 - 4];
 	int m_value58;			// +0x58
@@ -206,4 +208,11 @@ Real W3DView::rva00086166(Real value)
 	if (TheWritableGlobalData->m_valueA0 > 1.0f)
 		return value / m_scale23F0;
 	return 1.0f;
+}
+
+// Retail 0x0008BD59 (5 bytes), a W3DView vftable entry (0x007C7720): just
+// the private calcCameraConstraints 0x00089A21, as a tail jump.
+void W3DView::rva0008BD59()
+{
+	calcCameraConstraints();
 }
