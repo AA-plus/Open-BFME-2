@@ -104,7 +104,7 @@ public:
  virtual void ownerSlot10();
  virtual void ownerSlot11();
  virtual void ownerSlot12();
- virtual void ownerSlot13();
+ virtual void ownerSlot13(const Vector3 *,Vector3 *,Vector3 *);
  virtual void ownerSlot14();
  virtual void ownerSlot15();
  virtual void ownerSlot16();
@@ -140,6 +140,7 @@ public:
  void rva002BEA10(RenderObjClass *,bool);
  void rva002BEF4B(RenderObjClass *);
  bool rva002BF935(void *arg, const Vector3 *pt, Vector3 *out);
+ bool rva002BF841(void *arg, const Vector3 *pt, Vector3 *out);
 };
 
 bool Rva002BF4F3::rva002BF4F3(RenderObjClass *obj, const Vector3 *pt, Vector3 *out, int collisionType, bool checkHidden)
@@ -283,5 +284,24 @@ bool Rva0020F91D::rva0020F91D(void *arg,const Vector3 *start,const Vector3 *dir)
  RenderObjClass *obj=assets->create(name.str(),0);
  bool result=false;
  if(obj) { result=rva0020E354(obj,*start,*dir); if(--obj->m_refs==0)obj->v00(); }
+ return result;
+}
+
+// Native2BF841..2BF935 RET12: same prefix/name/factory sequence as 2BF935.
+// Receiver slot34 constructs start/direction; unchanged receiver calls 2BF198.
+// Target ABI and offsets are proved by retail, owner identity remains unknown.
+bool Rva002BF4F3::rva002BF841(void *arg,const Vector3 *pt,Vector3 *out) {
+ Rva002BF935Config *config=reinterpret_cast<Rva002BF935ManagerView *>(TheLivingWorldManager)->config;
+ AsciiString name=Rva005F17C6Build(static_cast<const Rva005F17C6S12 &>(config->prefix + "."),reinterpret_cast<int>((char *)arg+0x54));
+ config=reinterpret_cast<Rva002BF935ManagerView *>(TheLivingWorldManager)->config;
+ Rva002BF935AssetManager *assets=config->assets;
+ RenderObjClass *obj=assets->create(name.str(),0);
+ bool result=false;
+ if(obj) {
+  Vector3 start,dir;
+  ownerSlot13(pt,&start,&dir);
+  result=((Rva00DFEF18Host *)this)->Cast(obj,start,dir,out,1,true);
+  if(--obj->m_refs==0)obj->v00();
+ }
  return result;
 }
