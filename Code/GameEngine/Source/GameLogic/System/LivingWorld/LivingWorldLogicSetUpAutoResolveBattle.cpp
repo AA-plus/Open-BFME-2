@@ -1,20 +1,14 @@
-// ?rva002BC971@LivingWorldLogic@@QAEXPBV?$vector@PAUSetupPlayer@@V?$allocator@PAUSetupPlayer@@@_STL@@@_STL@@PAUSetupPlayer@@PBV?$vector@PAUSetupArmy@@V?$allocator@PAUSetupArmy@@@_STL@@@3@PAXPAVRva002BC8C9Vector@@PAUSetupSimulationVector@@@Z
-// partial score=0.8516132983459511 date=2026-10-12
-// ?rva002BC971@LivingWorldLogic@@QAEXPBV?$vector@PAUSetupPlayer@@V?$allocator@PAUSetupPlayer@@@_STL@@@_STL@@PAUSetupPlayer@@PBV?$vector@PAUSetupArmy@@V?$allocator@PAUSetupArmy@@@_STL@@@3@PAXPAVRva002BC8C9Vector@@PAUSetupSimulationVector@@@Z
+// ?SetUpAutoResolveBattle@LivingWorldLogic@@QAEXPBV?$vector@PAUSetupPlayer@@V?$allocator@PAUSetupPlayer@@@_STL@@@_STL@@PAUSetupPlayer@@PBV?$vector@PAUSetupArmy@@V?$allocator@PAUSetupArmy@@@_STL@@@3@PAXPAV?$vector@USetupRecord52@@V?$allocator@USetupRecord52@@@_STL@@@3@PAV?$vector@USetupSimulation44@@V?$allocator@USetupSimulation44@@@_STL@@@3@@Z
 // cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
 // Native2BC971..2BCCBC, 843B, RET0x18. WB D85CD0 names LivingWorldLogic::SetUpAutoResolveBattle.
 // Target reads establish all view offsets. Native52B output records contain a
 // 12B round/summary-word tree and a12B bonus-vector header, then three floats,
 // two pointers and two ints. Actual application record names remain unknown.
-// Bank: 835B, frame now exactly 0x5C; diagnostic fitness 0.8516132983459511.
-// Discard the trivial tree iterator into the dead army pointer's storage.
-// The nonallocating placement overload has no placement-delete EH edge.
-// Inline scaling and explicit evaluation lifetimes improve the SSE/call shape;
-// ESI/EDI are still exchanged and evaluation scheduling still differs.
-// Placement is a reconstruction experiment, not an original-source claim.
-// The four schedule globals retain the earlier bank's data-ownership caveat;
-// zero matching-time unresolved references does not establish LINK closure.
+// The actual STL tree insertion definition makes its discarded iterator's
+// lifetime visible; no placement construction or explicit stack slot is needed.
+// Target accesses establish these record views; WB establishes the method name.
+// Schedule globals and calls use existing ledger providers, without new pins.
 #include <map>
 #include <vector>
 #include "ascii_string.h"
@@ -32,10 +26,10 @@ struct Rva00413E27Bucket;
 class Rva00413E27 {public:Rva00413E27Bucket*rva00413E27(int);};
 class Rva004134E3 {public:int*rva004134E3(int);};
 class Rva0022C2A1Subsystem;class Rva0022C316Subsystem;class Rva0022C38BSubsystem;class Rva0022AAC7Subsystem;
-extern Rva0022C2A1Subsystem *TheLivingWorldAutoResolveReinforcementScheduleStore;
+extern void *g_00E03064;
 extern Rva0022C316Subsystem *TheLivingWorldAutoResolveResourceBonusScheduleStore;
 extern Rva0022C38BSubsystem *TheLivingWorldAutoResolveSciencePurchasePointBonusScheduleStore;
-extern Rva0022AAC7Subsystem *TheLivingWorldAutoResolveHandicapStore;
+struct HandicapStore; extern HandicapStore *g_00E03040;
 enum NameKeyType { NAMEKEY_INVALID=0 };
 class NameKeyGenerator {public:NameKeyType nameToKey(const AsciiString&);};extern NameKeyGenerator*TheNameKeyGenerator;
 class PlayerTemplate {public:char gap[0x154];};
@@ -56,42 +50,43 @@ class Rva002BB281 {public:~Rva002BB281();char opaque00[0x2C];_STL::vector<Rva004
 class Rva002BB7AA : public Rva002BB281 {public:Rva002BB7AA(int,int);};
 typedef _STL::pair<const int,int> RoundWordPair;
 typedef _STL::_Rb_tree<int,RoundWordPair,_STL::_Select1st<RoundWordPair>,_STL::less<int>,_STL::allocator<RoundWordPair> > RoundWordTree;
-namespace _STL {template<> RoundWordTree::iterator RoundWordTree::insert_equal(const RoundWordPair&);}
+
 struct SetupRecord52 {
  RoundWordTree armies;
  _STL::vector<Rva0040DC56Element> bonuses;
  float weapon,armor,experience;void*science;void*simulation;int side,playerID;
 };
+typedef _STL::vector<SetupRecord52> OutputVector;
 class Rva002BC8C9Vector {public:void resize(unsigned);SetupRecord52*begin,*end,*capacity;};
 class Rva003805BB {public:
  virtual void slot0();virtual void slot1();virtual void update(int);
  bool rva003805BB(float,bool);void rva002E6A93(int);
 };
 struct SetupSimulation44 {Rva003805BB object;const void*templateValues;char gap08[0x14-8];int team;char gap18[0x2C-0x18];};
-struct SetupSimulationVector {SetupSimulation44 *begin,*end,*capacity;};
+struct SimulationHeader {SetupSimulation44 *begin,*end,*capacity;};
+typedef _STL::vector<SetupSimulation44> SetupSimulationVector;
 class LivingWorldLogic {public:
- void rva002BC971(const _STL::vector<SetupPlayer*>*,SetupPlayer*,const _STL::vector<SetupArmy*>*,void*,Rva002BC8C9Vector*,SetupSimulationVector*);
+ void SetUpAutoResolveBattle(const _STL::vector<SetupPlayer*>*,SetupPlayer*,const _STL::vector<SetupArmy*>*,void*,OutputVector*,SetupSimulationVector*);
  char gap00[0xB0];Rva0020EB4EOuter*regionBonuses;
 };
 static __forceinline void Scale(float factor,float &value){const float &original=value;value=original*factor;}
-struct LocalPlacement {void *where; LocalPlacement(void *p):where(p){}};
-__forceinline void *operator new(unsigned int,LocalPlacement p) throw() {return p.where;}
-void LivingWorldLogic::rva002BC971(const _STL::vector<SetupPlayer*>*players,SetupPlayer*sidePlayer,const _STL::vector<SetupArmy*>*armies,void*context,Rva002BC8C9Vector*out,SetupSimulationVector*simulation)
+static __forceinline void ScaleX(float &value,float factor){value=value*factor;}
+void LivingWorldLogic::SetUpAutoResolveBattle(const _STL::vector<SetupPlayer*>*players,SetupPlayer*sidePlayer,const _STL::vector<SetupArmy*>*armies,void*context,OutputVector*out,SetupSimulationVector*simulation)
 {
- unsigned count=players->size();out->resize(count);
+ unsigned count=players->size();((Rva002BC8C9Vector*)out)->resize(count);
  if(!sidePlayer) sidePlayer=(*players)[0];
  for(unsigned i=0;i<count;++i) {
   SetupPlayer*player=(*players)[i];
   int side=!((Rva002E071E*)player)->rva002E071E((Rva002E071E*)sidePlayer);
-  out->begin[i].side=side;int id=player->playerID;out->begin[i].playerID=id;
-  LivingWorldAutoResolveReinforcementSchedule *schedule=(LivingWorldAutoResolveReinforcementSchedule*)((char*)TheLivingWorldAutoResolveReinforcementScheduleStore+0x0C+side*16);
+  out->begin()[i].side=side;int id=player->playerID;out->begin()[i].playerID=id;
+  LivingWorldAutoResolveReinforcementSchedule *schedule=(LivingWorldAutoResolveReinforcementSchedule*)((char*)g_00E03064+0x0C+side*16);
   int number=0;
   for(unsigned j=0;j<armies->size();++j) {
    SetupArmy*army=(*armies)[j];
    if(((Rva00318CEB*)army)->rva00318CEB((const Rva00318CEBOther*)player)) {
     int round;
     if(!army->name.isEmpty())round=schedule->getRoundForArmyNumber(number++);else round=0;
-    int summary=army->summaryWord;RoundWordPair value(round,summary);new(LocalPlacement(&army)) RoundWordTree::iterator(out->begin[i].armies.insert_equal(value));
+    int summary=army->summaryWord;RoundWordPair value(round,summary);SetupRecord52 *base=out->begin();base[i].armies.insert_equal(value);
    }
   }
   Rva002BB7AA bonus((int)context,(int)player);
@@ -99,23 +94,23 @@ void LivingWorldLogic::rva002BC971(const _STL::vector<SetupPlayer*>*players,Setu
   ((Rva003F7478*)&bonus)->rva003F7465(player->weaponPercent*0.01f+1.0f);
   ((Rva003F7478*)&bonus)->rva003F7478(player->armorPercent*0.01f+1.0f);
   ((Rva003F74A0*)&bonus)->rva003F74A0(player->experiencePercent*0.01f+1.0f);
-  ((LivingWorldAutoResolveBattleBonus*)&bonus)->GetFinalBonuses(&out->begin[i].weapon,&out->begin[i].armor,&out->begin[i].experience);
-  out->begin[i].bonuses=bonus.bonuses;
+  ((LivingWorldAutoResolveBattleBonus*)&bonus)->GetFinalBonuses(&out->begin()[i].weapon,&out->begin()[i].armor,&out->begin()[i].experience);
+  out->begin()[i].bonuses=bonus.bonuses;
   Rva00413E27Bucket *bucket=((Rva00413E27*)TheLivingWorldAutoResolveResourceBonusScheduleStore)->rva00413E27(player->faction);
   if(bucket) {
    int*word=((LivingWorldAutoResolveResourceBonusSchedule*)bucket)->getBonusForResourceAmount(player->resources);
-   if(word) {Scale(((float*)word)[1],out->begin[i].weapon);Scale(((float*)word)[2],out->begin[i].armor);}
+   if(word) {ScaleX(out->begin()[i].weapon,((float*)word)[1]);Scale(((float*)word)[2],out->begin()[i].armor);}
   }
-  int*handicap=((Rva004134E3*)TheLivingWorldAutoResolveHandicapStore)->rva004134E3(player->handicap);
-  Scale(((float*)handicap)[1],out->begin[i].weapon);Scale(((float*)handicap)[2],out->begin[i].armor);Scale(((float*)handicap)[3],out->begin[i].experience);
+  int*handicap=((Rva004134E3*)g_00E03040)->rva004134E3(player->handicap);
+  Scale(((float*)handicap)[1],out->begin()[i].weapon);Scale(((float*)handicap)[2],out->begin()[i].armor);Scale(((float*)handicap)[3],out->begin()[i].experience);
   if(simulation) {
-   SetupRecord52 *records=out->begin;records[i].science=((Rva00413E27*)TheLivingWorldAutoResolveSciencePurchasePointBonusScheduleStore)->rva00413E27(player->faction);
+   int faction=player->faction;SetupRecord52 *records=out->begin();records[i].science=((Rva00413E27*)TheLivingWorldAutoResolveSciencePurchasePointBonusScheduleStore)->rva00413E27(faction);
    const PlayerTemplate*pt=ThePlayerTemplateStore->findPlayerTemplate(TheNameKeyGenerator->nameToKey(*(AsciiString*)((char*)player->faction+4)));
-   if(pt)simulation->begin[i].templateValues=(const void*)((char*)pt+0x154);
-   simulation->begin[i].object.rva003805BB(player->skillPoints,false);
-   simulation->begin[i].object.rva002E6A93(simulation->begin[i].team);
-   Rva003805BB &object=simulation->begin[i].object;object.update(((Rva004E05E9DwordField*)player)->get());
-   out->begin[i].simulation=simulation->begin+i;
+   if(pt){SetupSimulation44 *sim=((SimulationHeader*)simulation)->begin+i;sim->templateValues=(const void*)((char*)pt+0x154);}
+   ((SimulationHeader*)simulation)->begin[i].object.rva003805BB(player->skillPoints,false);
+   simulation->begin()[i].object.rva002E6A93(((SimulationHeader*)simulation)->begin[i].team);
+   simulation->begin()[i].object.update(((Rva004E05E9DwordField*)player)->get());
+   out->begin()[i].simulation=((SimulationHeader*)simulation)->begin+i;
   }
  }
 }
