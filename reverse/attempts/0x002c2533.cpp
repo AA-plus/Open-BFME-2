@@ -1,96 +1,239 @@
-// ?createFromView@TabWindowManagerView@@UAEPAVGameWindow@@PAVGadgetCreateView@@@Z
-// partial score=0.94 date=2026-10-09
-// ?createFromView@TabWindowManagerView@@UAEPAVGameWindow@@PAVGadgetCreateView@@@Z
-// partial score=0.94 date=2026-10-08
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii /ICode/GameEngine/Source/GameClient/GUI
-#include "ascii_string.h"
+// ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
+// partial score=0.8 date=2026-10-13
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /DNDEBUG /MD
+//
+// ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z,
+// retail 0x002C2533, 263 bytes. GameWindowManager record-based window create.
+//
+// BFME1 donor (game/GameEngine/Source/GameClient/GUI/GameWindowManager.cpp,
+// winCreate): allocate via the record's allocator (or the manager fallback
+// with a dump-list diagnostic), parent into the caller list, copy instance
+// data, order pairs, send create, then resolve the font from the global
+// language (falling back to 14pt Times New Roman). BFME2 facts
+// (all retail-measured):
+// - The record is Rva0047EDE0CreateInfo (parent@0, allocator@0x18, instance
+//   at +0x30); the manager/table views follow the adapted donor.
+// - Manager slots: +0x38 unanswered-getter, +0x3C record allocator fallback,
+//   +0xE0 addWindowToParent, +0xE8 winSendSystemMsg (slot 58), +0x130
+//   winFindFont(name, size, bold) with the name passed by value (the same
+//   temp-in-arg-slot idiom as setWindowText's TU).
+// - Window slot +0x28 is a boolean gate; Rva00477DF0::orderPairs reaches the
+//   rowed body through the TU-local view (its TU aliases GameWindow spelling).
+// - GameWindow::winSetFont is invoked qualified (direct call, no vtable).
+// - The language name emptiness uses the out-of-line StringBase::isEmpty
+//   worker at 0x401E2F (the shared shim inlines it).
+// - Callees rowed or pinned: dumpWindow 0x002C1148, linkWindow 0x002C0A89,
+//   winSetInstanceData 0x0031495C, orderPairs 0x0031394A, winSetFont
+//   0x00313D73, StringBase ctors 0x000365F0/0x000437BA0, release-free
+//   StringBase::isEmpty 0x000401E2F.
+
+typedef int Int;
+typedef unsigned int UnsignedInt;
+typedef bool Bool;
+
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+#ifndef FALSE
+#define FALSE false
+#endif
+
+class AsciiString;
+class UnicodeString;
 class GameFont;
+class GameWindow;
 class WinInstanceData;
-class GameWindow {
-public:
- int winSetInstanceData(WinInstanceData *);
- virtual void winSetFont(GameFont *);
+
+#include "ascii_string.h"
+
+struct Rva0047EDE0CreateInfo
+{
+	GameWindow *m_parent;
+	UnsignedInt m_field04;
+	Int m_field08, m_field0C, m_field10, m_field14;
+	GameWindow *(__stdcall *m_allocator)(Rva0047EDE0CreateInfo *);
+	void *m_field1C;
+	Int m_field20, m_field24, m_field28, m_field2C;
+	WinInstanceData *m_field30;
 };
-#include "GameWindowManagerRecordView.h"
-class Rva00477DF0 { public: void orderPairs(); };
-class GameWindowManager {
-public:
- void linkWindow(GameWindow *);
-protected:
- void dumpWindow(GameWindow *);
- friend class TabWindowManagerView;
+
+struct Rva00477DF0
+{
+	void orderPairs();
 };
-class CreatedWindowRecordView {
-public:
-#define V(n) virtual void unused##n();
- V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9)
-#undef V
- virtual bool needsManagerData();
- void *managerData;
- char pad8[0x1F8-8];
- GameWindow *next;
- char pad1FC[8];
- GameWindow *child;
+
+struct Rva0047EDE0FontDesc
+{
+	AsciiString name;
+	Int size;
+	bool bold;
 };
-class WindowCreationManagerView {
-public:
-#define V(n) virtual void unused##n();
- V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9) V(10) V(11) V(12) V(13)
- virtual void *newManagerData();
- virtual GameWindow *allocateFromRecord(GadgetCreateView *);
- V(16) V(17) V(18) V(19) V(20) V(21) V(22) V(23) V(24) V(25) V(26) V(27) V(28) V(29)
- V(30) V(31) V(32) V(33) V(34) V(35) V(36) V(37) V(38) V(39) V(40) V(41) V(42) V(43)
- V(44) V(45) V(46) V(47) V(48) V(49) V(50) V(51) V(52) V(53) V(54) V(55)
- virtual void addToParent(GameWindow *, GameWindow *);
- V(57)
- virtual void sendSystemMsg(GameWindow *, unsigned, unsigned, unsigned);
- V(59) V(60) V(61) V(62) V(63) V(64) V(65) V(66) V(67) V(68) V(69) V(70) V(71) V(72) V(73) V(74) V(75)
- virtual GameFont *findFont(AsciiString, int, bool);
-#undef V
- char pad4[8];
- GameWindow *windowList;
+
+struct Rva0047EDE0GlobalLanguage
+{
+	unsigned char m_pad00[0xA4];
+	Rva0047EDE0FontDesc m_defaultWindowFont;
 };
+
 class GlobalLanguage;
 extern GlobalLanguage *TheGlobalLanguageData;
-struct WindowCreationLanguageView {
- char pad[0xA4];
- AsciiString name;
- int size;
- bool bold;
+
+
+
+class GameWindowManager
+{
+public:
+	virtual void slot00();
+	virtual void slot01();
+	virtual void slot02();
+	virtual void slot03();
+	virtual void slot04();
+	virtual void slot05();
+	virtual void slot06();
+	virtual void slot07();
+	virtual void slot08();
+	virtual void slot09();
+	virtual void slot10();
+	virtual void slot11();
+	virtual void slot12();
+	virtual void slot13();
+	virtual int slot14();
+	virtual GameWindow *slot15(Rva0047EDE0CreateInfo *info);
+	virtual void slot16();
+	virtual void slot17();
+	virtual void slot18();
+	virtual void slot19();
+	virtual void slot20();
+	virtual void slot21();
+	virtual void slot22();
+	virtual void slot23();
+	virtual void slot24();
+	virtual void slot25();
+	virtual void slot26();
+	virtual void slot27();
+	virtual void slot28();
+	virtual void slot29();
+	virtual void slot30();
+	virtual void slot31();
+	virtual void slot32();
+	virtual void slot33();
+	virtual void slot34();
+	virtual void slot35();
+	virtual void slot36();
+	virtual void slot37();
+	virtual void slot38();
+	virtual void slot39();
+	virtual void slot40();
+	virtual void slot41();
+	virtual void slot42();
+	virtual void slot43();
+	virtual void slot44();
+	virtual void slot45();
+	virtual void slot46();
+	virtual void slot47();
+	virtual void slot48();
+	virtual void slot49();
+	virtual void slot50();
+	virtual void slot51();
+	virtual void slot52();
+	virtual void slot53();
+	virtual void slot54();
+	virtual void slot55();
+	virtual void addWindowToParent(GameWindow *window, GameWindow *parent);
+	virtual void slot57();
+	virtual int winSendSystemMsg(GameWindow *window, UnsignedInt msg, int mData1, int mData2);
+	virtual void slot59();
+	virtual void slot60();
+	virtual void slot61();
+	virtual void slot62();
+	virtual void slot63();
+	virtual void slot64();
+	virtual void slot65();
+	virtual void slot66();
+	virtual void slot67();
+	virtual void slot68();
+	virtual void slot69();
+	virtual void slot70();
+	virtual void slot71();
+	virtual void slot72();
+	virtual void slot73();
+	virtual void slot74();
+	virtual void slot75();
+	virtual GameFont *winFindFont(AsciiString name, Int size, bool bold);
+	GameWindow *winCreate(Rva0047EDE0CreateInfo *info);
+private:
+	unsigned char m_pad04[0x0C - 0x04];
+	GameWindow *m_windowList;
+protected:
+	void dumpWindow(GameWindow *window);
+public:
+	void linkWindow(GameWindow *win);
 };
-typedef GameWindow *(__stdcall *RecordWindowFactory)(GadgetCreateView *);
-void GameWindowManager::dumpWindow(GameWindow *window) {
- if (!window) return;
- for (GameWindow *child = ((CreatedWindowRecordView *)window)->child; child;
-      child = ((CreatedWindowRecordView *)child)->next)
-  dumpWindow(child);
-}
-GameWindow *TabWindowManagerView::createFromView(GadgetCreateView *view) {
- WindowCreationManagerView *manager = (WindowCreationManagerView *)this;
- GameWindow *window;
- RecordWindowFactory factory = (RecordWindowFactory)view->unknown24;
- if (factory) {
-  window = factory(view);
-  CreatedWindowRecordView *fields = (CreatedWindowRecordView *)window;
-  if (!fields->managerData && fields->needsManagerData())
-   fields->managerData = manager->newManagerData();
- } else {
-  window = manager->allocateFromRecord(view);
-  if (!window) {
-   for (GameWindow *item = manager->windowList; item; item = ((CreatedWindowRecordView *)item)->next)
-    ((GameWindowManager *)this)->dumpWindow(item);
-   return 0;
-  }
- }
- if (view->parent) manager->addToParent(window, view->parent);
- else ((GameWindowManager *)this)->linkWindow(window);
- if (view->instance) window->winSetInstanceData(view->instance);
- ((Rva00477DF0 *)window)->orderPairs();
- manager->sendSystemMsg(window, 1, 0, 0);
- WindowCreationLanguageView *language = (WindowCreationLanguageView *)TheGlobalLanguageData;
- if (language && !((StringBase<char> *)&language->name)->isEmpty())
-  window->GameWindow::winSetFont(manager->findFont(language->name, language->size, language->bold));
- else
-  window->GameWindow::winSetFont(manager->findFont(AsciiString("Times New Roman"), 14, false));
- return window;
+
+class GameWindow
+{
+public:
+	virtual void slot00();
+	virtual void slot01();
+	virtual void slot02();
+	virtual void slot03();
+	virtual void slot04();
+	virtual void slot05();
+	virtual void slot06();
+	virtual void slot07();
+	virtual void slot08();
+	virtual void slot09();
+	virtual Bool windowSlot10();
+	virtual void winSetFont(GameFont *font);
+	Int winSetInstanceData(WinInstanceData *data);
+	int m_field04;
+	unsigned char m_pad08[0x1F8 - 0x08];
+	GameWindow *m_next;
+};
+
+// ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
+GameWindow *GameWindowManager::winCreate(Rva0047EDE0CreateInfo *info)
+{
+	GameWindow *window;
+
+	if (info->m_allocator)
+	{
+		window = info->m_allocator(info);
+		if (window->m_field04 == 0 && window->windowSlot10())
+			window->m_field04 = slot14();
+	}
+	else
+	{
+		window = slot15(info);
+		if (window == NULL)
+		{
+			GameWindow *win;
+			for (win = m_windowList; win; win = win->m_next)
+				dumpWindow(win);
+			return NULL;
+		}
+	}
+
+	if (info->m_parent)
+		addWindowToParent(window, info->m_parent);
+	else
+		linkWindow(window);
+
+	if (info->m_field30)
+		window->winSetInstanceData(info->m_field30);
+
+	((Rva00477DF0 *)window)->orderPairs();
+
+	winSendSystemMsg(window, 1, 0, 0);
+
+	Rva0047EDE0GlobalLanguage *language = (Rva0047EDE0GlobalLanguage *)TheGlobalLanguageData;
+	if (language && !((const StringBase<char> *)&language->m_defaultWindowFont.name)->isEmpty())
+		window->GameWindow::winSetFont(winFindFont(AsciiString(language->m_defaultWindowFont.name),
+			language->m_defaultWindowFont.size, language->m_defaultWindowFont.bold));
+	else
+		window->GameWindow::winSetFont(winFindFont(AsciiString("Times New Roman"), 14, FALSE));
+
+	return window;
 }

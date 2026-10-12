@@ -17250,3 +17250,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva00142410@BfmeSceneVector@@QAEXPAPAUGen_00943CF0_Node@@PAVCameraClass@@PBM@Z,0x00142410,callee of ?Visibility_Check@RTS3DScene@@UAEXPAVCameraClass@@@Z
 ?_M_erase_after@?$_Slist_base@HV?$allocator@H@_STL@@@_STL@@IAEPAU_Slist_node_base@2@PAU32@0@Z,0x0006FABF,callee of ?Visibility_Check@RTS3DScene@@UAEXPAVCameraClass@@@Z
 ??0Rva005E6D0D@@QAE@PAXPAUHeroDetailsInput@@@Z,0x005E6DAA,Native300B listener ctor RET8 called by panel005E6ED6 at005E6F76 with panel/input pointers; WB names HeroArmyDetailsPanel::Impl::Impl; rowed103B destructor005E6D0D independently fixes same20B listener layout; original names remain descriptive
+?rva00218468@FontLibrary@@QAEXPBVAsciiString@@PAMPA_N@Z,0x00218468,findRecord helper called by FontLibrary::rva0021857E 0x0021857E at retail 0x002185DF; interpolates size and resolves bold flag; worker 0x5F8437 unrowed
