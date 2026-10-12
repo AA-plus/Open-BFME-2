@@ -1,4 +1,6 @@
 // ?rva000EB6BB@Rva000EC9C6@@QAEXXZ
+// partial score=0.9 date=2026-10-12
+// ?rva000EB6BB@Rva000EC9C6@@QAEXXZ
 // partial score=0.8116742830418466 date=2026-10-10
 // ?rva000EB6BB@Rva000EC9C6@@QAEXXZ
 // Matrix-bank continuation: local postMul copies BF1 575ba2b04 matrix3d.h arithmetic.
@@ -62,7 +64,7 @@ a[0][1] = y;
 a[0][2] = z;
 a[0][3] += w;
 x = a[1][0] * b[0][0] + (&a?a[1][1]:a[1][1]) * b[1][0] + a[1][2] * b[2][0];
-y = a[1][0] * *(const volatile float*)&b[0][1] + a[1][1] * b[1][1] + a[1][2] * (&a?*(const volatile float*)&b[2][1]:*(const volatile float*)&b[2][1]);
+y = a[1][0] * b[0][1] + a[1][1] * b[1][1] + a[1][2] * b[2][1];
 z = a[1][0] * b[0][2] + a[1][1] * b[1][2] + a[1][2] * b[2][2];
 w = a[1][0] * b[0][3] + a[1][1] * b[1][3] + a[1][2] * b[2][3];
 a[1][0] = x;
@@ -98,7 +100,7 @@ void Rva000EC9C6::rva000EB6BB(){
    if(trees[curTree].state||trees[curTree].flagC4)transform=trees[curTree].world;
    else transform.Set(location);
    transform.Scale(scale);treePost(transform,trees[curTree].transform);transform.Translate(types[type].offset);
-   int startVertex=vertexCounts[b];trees[curTree].firstVertex=startVertex;trees[curTree].buffer=b;
+   int startVertex=vertexCounts[b];trees[curTree].buffer=b;trees[curTree].firstVertex=startVertex;
    int numVertex=types[type].mesh->Peek_Model()->Get_Vertex_Count();
    Vector3 *pVert=types[type].mesh->Peek_Model()->Get_Vertex_Array();
    if(vertexCounts[b]+numVertex>=30000)break;
