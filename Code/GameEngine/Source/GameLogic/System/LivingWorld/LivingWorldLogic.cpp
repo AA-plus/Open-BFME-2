@@ -69,6 +69,7 @@ class Rva004E3184;
 class Rva00319CED;
 class Rva002E112A { public: Bool rva002E112A(Rva00319CED *); };
 class LivingWorldPlayer { public:
+ int GetConflictResolveType();
  void MarkUnitsForUpgrades(void *region);
  void **RemoveArmy(void **&); // owned iterator erase at 002E10FE
  bool rva002E0B30();
@@ -3558,7 +3559,6 @@ class MessageStream {public:
 extern MessageStream *TheMessageStream;
 struct DispatcherSlot {char pad00[0x34];AsciiString name;char pad38[0x4c-0x38];int id;};
 class BfmeSelectionState {public:bool isSelectionLocked()const;};
-class Rva002E0699 {public:int rva002E0699();};
 class Rva002B9349 {public:void rva002B9349(int,int);};
 class Rva002B9386 {public:void rva002B9386(ScienceType);};
 class Rva003F1093 {public:void rva003F1CA2(CreateAHeroData*,bool);};
@@ -3694,14 +3694,14 @@ void LivingWorldLogic::logicMessageDispatcher(GameMessage*msg,void*unused){
   player->resolve=choice;int flags=0,active=0;
   for(int side=0;side<(int)(battle->m_sidesEnd-battle->m_sides);++side){
    for(int p=0;p<((Rva003F468D*)battle)->rva003F4DAE(side);++p){
-    int choice=((Rva002E0699*)((Rva003F468D*)battle)->rva003F468D(side,p))->rva002E0699();
+    int choice=((LivingWorldPlayer*)((Rva003F468D*)battle)->rva003F468D(side,p))->GetConflictResolveType();
     if(choice==0)flags|=1;else if(choice==2)flags|=4;else if(choice==1){flags|=2;++active;}else if(choice==3){flags|=8;++active;}
    }
   }
   if(flags&1)break;
   if(flags&4){
    for(unsigned p=0;p<m_players.size();++p)if(m_players[p]){
-    Rva002E0699**base=(Rva002E0699**)m_players.begin();_ReadWriteBarrier();if(((Rva002E0699*)base[p])->rva002E0699()==2){
+    LivingWorldPlayer**base=(LivingWorldPlayer**)m_players.begin();_ReadWriteBarrier();if(((LivingWorldPlayer*)base[p])->GetConflictResolveType()==2){
      battle->RetreatArmiesForPlayer(m_players[p]);
      ((Rva002B6126List*)((char*)this+0x6c))->forEach(&Rva002B6126Listener::notify,this,(int)m_players[p],(int)battle);
     }
