@@ -1,10 +1,21 @@
-// ?getLocomotorDistanceToGoal@AIUpdateInterface@@QAEMXZ
-// partial score=0.9401185770750988 date=2026-10-10
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /GX-
+// ?getLocomotorDistanceToGoal@AIUpdateInterface@@QAEMXZ, retail 0x0026435E, 506 bytes
+// (native 0x0026435E..0x00264558).
+//
+// Zero Hour's AIUpdateInterface::getLocomotorDistanceToGoal (AIUpdate.cpp line 2451): the
+// goal type at +0x1FC picks the answer. BFME 2 adds an explicit-position case (types 2 and 4:
+// the distance from the object to the goal stored at +0x200), returns 100 for a missing path
+// and 0 for a missing locomotor, and tests the locomotor's flag bit 10 (isCloseEnoughDist3D)
+// or object kind bit 1 of byte 0x10B (projectile) before the 3-D distance branch. The slot at
+// vtable+0x25C is getTreatAsAircraftForLocoDistToGoal; locomotor type 5 (+0x74 of its template)
+// is excluded. Facts: layouts and branch order from game.dat, the ZH body as the semantic guide.
+//
+// Codegen: the explicit case subtracts through a TU-local delta (copy then subtract) so the three
+// goal loads precede the subtractions, with a compiler barrier before the result is stored, and
+// returns through a named local so the shared return stub is not merged. The self-conditional
+// owner in the aircraft branch keeps the receiver in the register retail uses.
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
-// ?getLocomotorDistanceToGoal@AIUpdateInterface@@QAEMXZ
-// partial score=0.9088476740650654 date=2026-10-09
-// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /GX-
 #include "Code/Libraries/Include/Lib/Coord3D.h"
 #include <math.h>
 class BfmeVec3EJ;
@@ -30,12 +41,15 @@ virtual bool getTreatAsAircraftForLocoDistToGoal();
 float getLocomotorDistanceToGoal();
 char pad4[4];Object*owner;char padC[0x30-0xC];StateMachine*machine;char pad34[0x140-0x34];Path*path;char pad144[0x1F0-0x144];Locomotor*loco;char pad1F4[8];int goalType;Coord3D goal;
 };
+struct Delta3 { float x,y,z; Delta3(const Coord3D &c):x(c.x),y(c.y),z(c.z){} void sub(const Coord3D &p){x-=p.x;y-=p.y;z-=p.z;} };
 float AIUpdateInterface::getLocomotorDistanceToGoal(){
  Coord3D goalPos;
  switch(goalType){
+ case 0:case 3:return 0.0f;
  case 2:case 4:{
   const Coord3D *dest=&goal;const Coord3D *pos=owner->getPosition();
-  float x=dest->x,y=dest->y,z=dest->z;y-=pos->y;z-=pos->z;_ReadWriteBarrier();x-=pos->x;goalPos.x=x;goalPos.y=y;goalPos.z=z;return goalPos.length();
+  Delta3 d(*dest);d.sub(*pos);_ReadWriteBarrier();goalPos.x=d.x;goalPos.y=d.y;goalPos.z=d.z;
+  float len=goalPos.length();return len;
  }
  case 1:{
   if(!path)return 100.0f;
@@ -45,8 +59,8 @@ float AIUpdateInterface::getLocomotorDistanceToGoal(){
    goalPos.x=p->x;goalPos.y=p->y;goalPos.z=p->z;
    if(last)goalPos=last->position;
    return (float)sqrt(((const Gen_000E5A50*)obj)->bfmeDistanceSquared((const BfmeVec3EJ*)&goalPos));
-  }
-  if(loco->templ->type!=5){
+  } else {
+  if(loco->templ->type==5)break;
   bool aircraft=getTreatAsAircraftForLocoDistToGoal();float dist;
   Path *current=path;
   if(aircraft){const Coord3D *pos=(owner ? owner : owner)->getPosition();dist=current->computeFlightDistToGoal(pos,goalPos);}
@@ -60,9 +74,8 @@ float AIUpdateInterface::getLocomotorDistanceToGoal(){
   if(aircraft){if(dist*dist>distanceSquared)return (float)sqrt(distanceSquared);else return dist;}
   if(dist<10.0f || dist*dist<distanceSquared)return sqrtf(distanceSquared);
   return dist;
- } break;
+  }
  }
- case 0:case 3:return 0.0f;
  default:break;
  }
  return 0.0f;
