@@ -83473,3 +83473,22 @@ uw_007aa060,,0x007AA060,15,Code/Libraries/Source/Apt/Rva006F6A50Cluster.cpp,matc
 ?rva00472444@Rva00472444@@QAEXABURva00472444Mask@@PBVAsciiString@@@Z,,0x00472444,401,Code/GameEngine/Source/GameLogic/Object/Contain/HordeContainApplyUpgradeMask.cpp,matched,upgrade mask sweep on the horde +0x20 interface: upgrades of each set bit applied to contained objects and live +0x170 members with optional record-name filter 0x4723F2; 0x46247D visible in-unit
 ?getBattleFromMessage@@YA_NPAVGameMessage@@PAPAXH@Z,,0x002B2DAD,65,Code/GameEngine/Source/GameLogic/LivingWorld/Rva002B2DAD.cpp,matched,WB identity: getBattleFromMessage callgraph lead in EA own LivingWorldLogic.cpp; renamed placeholder rva002B2DAD; bytes unchanged; internal callers follow
 ?shouldActivate@AISpellBookStructureBreaker@@QAE_NPAVObject@@@Z,,0x005D7D93,111,Code/GameEngine/Source/Common/Rva005D7D93.cpp,matched,WB identity: AISpellBookStructureBreaker::shouldActivate in EA own AISpellBookPowers file; renamed placeholder Rva005EE816::rva005D7D93; QAE per byte-matched direct callers; sibling call keeps placeholder row name via view cast
+??0Rva002E6CBE@@QAE@H@Z,,0x002E6CBE,26,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+??4Rva002DBD64@@QAEAAV0@ABV0@@Z,,0x002DBD64,28,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002DBA07@FileSystem@@QAEPAVFile@@PBGH@Z,,0x002DBA07,18,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002E060A@Rva002E060A@@QBE?AUCoord3D@@XZ,,0x002E060A,19,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002E0F81@Rva002E0C68@@QAEHXZ,,0x002E0F81,16,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002E37B1@Rva002E37B1@@QAE_NPBURva0030B7C2Point@@@Z,,0x002E37B1,18,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?Rva002E3889@@YA_NPBURva002E3889Vector@@@Z,,0x002E3889,22,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002E3A67@Rva002E3889Vector@@QBE_NXZ,,0x002E3A67,19,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002E6B19@Rva002E6B19@@QAEXE@Z,,0x002E6B19,23,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002E6C60@Rva002E6B19@@QBEIXZ,,0x002E6C60,18,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?Rva002E6DB8@@YAIH@Z,,0x002E6DB8,12,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002E73FB@Rva002E734E@@QAEHHPBURva002E734ECell@@HH@Z,,0x002E73FB,25,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?Rva002E7FC7@@YAHH@Z,,0x002E7FC7,19,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002EEA5A@Rva002EEA5A@@QAEPAXIPBX@Z,,0x002EEA5A,24,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002EEA72@Rva002EEA5A@@QAEPAXIPBX@Z,,0x002EEA72,24,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002FD661@Rva002FD661@@QAEMXZ,,0x002FD661,10,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002FD7DC@Rva002FD7DC@@QAEXXZ,,0x002FD7DC,19,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva002FDEF1@Rva002FDEF1@@QBEHH@Z,,0x002FDEF1,32,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+??0Rva002614DFFilter@@QAE@PBVObject@@@Z,,0x002FD6E0,22,Code/GameEngine/Source/GameLogic/AI/PartitionFilterCtorCopies.cpp,matched,partition filter out-of-line ctor copy; vftable 0x00C07190; class from AIClosestObjectQueries.cpp; shape from retail bytes

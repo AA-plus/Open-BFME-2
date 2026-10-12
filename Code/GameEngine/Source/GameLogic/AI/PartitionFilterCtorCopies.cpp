@@ -197,3 +197,22 @@ void *bfmeAnchorRva002FD6CA(void *where, const PolygonTrigger *trigger)
 {
 	return ::new (where) Rva00261723Filter(trigger);
 }
+
+// vftable 0x00C07190: Rva002614DFFilter, out-of-line constructor copy at 0x002FD6E0 (22B).
+class Rva002614DFFilter : public Rva000421C8
+{
+public:
+	Rva002614DFFilter(const Object *obj);
+	virtual bool allow(Object *obj);
+	const Object *m_obj;
+};
+
+__declspec(noinline) inline Rva002614DFFilter::Rva002614DFFilter(const Object *obj) : m_obj(obj)
+{
+}
+
+// ?bfmeAnchorRva002FD6E0 absent-from-retail
+void *bfmeAnchorRva002FD6E0(void *where, const Object *obj)
+{
+	return ::new (where) Rva002614DFFilter(obj);
+}

@@ -444,3 +444,310 @@ Rva0046AC52Pair Rva0046AC52::rva002D644C(const Rva0046AC52Key &key)
 {
 	return rva002D563D(key);
 }
+
+#define GAP_V1(n) virtual void v##n();
+#define GAP_V10(n) GAP_V1(n##0) GAP_V1(n##1) GAP_V1(n##2) GAP_V1(n##3) GAP_V1(n##4) GAP_V1(n##5) GAP_V1(n##6) GAP_V1(n##7) GAP_V1(n##8) GAP_V1(n##9)
+
+// --- 0x002DBA07 (18B): opens a wide-named file through the rowed
+// 0x00600676 with a zero third argument.
+class File;
+
+class FileSystem
+{
+public:
+	File *rva00600676(const unsigned short *name, int mode, int flags);	// 0x00600676
+	File *rva002DBA07(const unsigned short *name, int mode);
+};
+
+File *FileSystem::rva002DBA07(const unsigned short *name, int mode)
+{
+	return rva00600676(name, mode, 0);
+}
+
+// --- 0x002DBD64 (28B): assignment copying +4 and the +8 position (the
+// vptr stays).
+class Rva002DBD64
+{
+public:
+	virtual ~Rva002DBD64();
+	Rva002DBD64 &operator=(const Rva002DBD64 &other);
+private:
+	int m_04;
+	Coord3D m_08;
+};
+
+Rva002DBD64 &Rva002DBD64::operator=(const Rva002DBD64 &other)
+{
+	m_04 = other.m_04;
+	m_08 = other.m_08;
+	return *this;
+}
+
+// --- 0x002E060A (19B): the +0x24 position by value.
+class Rva002E060A
+{
+public:
+	Coord3D rva002E060A() const;
+private:
+	char m_pad00[0x24];
+	Coord3D m_24;
+};
+
+Coord3D Rva002E060A::rva002E060A() const
+{
+	return m_24;
+}
+
+// --- 0x002E0F81 (16B): +0x298 plus the rowed 0x002E0C68 count.
+class Rva002E0C68
+{
+public:
+	int rva002E0C68();										// 0x002E0C68
+	int rva002E0F81();
+private:
+	char m_pad000[0x298];
+	int m_298;
+};
+
+int Rva002E0C68::rva002E0F81()
+{
+	int base = m_298;
+	return rva002E0C68() + base;
+}
+
+// --- 0x002E37B1 (18B): the rowed 0x0030B7C2 test of a point against the
+// +8 shape.
+struct Rva0030B7C2Point;
+class Rva0030B719Shape;
+bool rva0030B7C2(const Rva0030B7C2Point *point, Rva0030B719Shape *shape);	// 0x0030B7C2
+
+class Rva002E37B1
+{
+public:
+	bool rva002E37B1(const Rva0030B7C2Point *point);
+private:
+	int m_00;
+	int m_04;
+	int m_shape;
+};
+
+bool Rva002E37B1::rva002E37B1(const Rva0030B7C2Point *point)
+{
+	return rva0030B7C2(point, (Rva0030B719Shape *)&m_shape);
+}
+
+// --- 0x002E3889 (22B, cdecl) and 0x002E3A67 (19B): more than two 8-byte
+// records in the +8 vector.
+struct Rva002E3889Record
+{
+	int m_00;
+	int m_04;
+};
+
+struct Rva002E3889Vector
+{
+	char m_pad00[8];
+	Rva002E3889Record *m_start;
+	Rva002E3889Record *m_finish;
+	bool rva002E3A67() const;
+};
+
+bool Rva002E3889(const Rva002E3889Vector *v)
+{
+	return v->m_finish - v->m_start > 2;
+}
+
+bool Rva002E3889Vector::rva002E3A67() const
+{
+	return m_finish - m_start > 2;
+}
+
+// --- 0x002E6B19 (23B): sets bit 0 of the +0x2C word of the +0 record;
+// 0x002E6C60 (18B): bit 1 of it, 0 without a record.
+struct Rva002E6B19Record
+{
+	char m_pad00[0x2C];
+	unsigned int m_bit0 : 1;
+	unsigned int m_bit1 : 1;
+};
+
+class Rva002E6B19
+{
+public:
+	void rva002E6B19(unsigned char value);
+	unsigned int rva002E6C60() const;
+private:
+	Rva002E6B19Record *m_record;
+};
+
+void Rva002E6B19::rva002E6B19(unsigned char value)
+{
+	m_record->m_bit0 = value != 0;
+}
+
+unsigned int Rva002E6B19::rva002E6C60() const
+{
+	if (m_record)
+		return m_record->m_bit1;
+	return 0;
+}
+
+// --- 0x002E6CBE (26B): constructor of a path record.
+class Rva002E6CBE
+{
+public:
+	Rva002E6CBE(int value);
+private:
+	int m_00;
+	bool m_04;
+	bool m_05;
+	int m_08;
+	bool m_0C;
+};
+
+Rva002E6CBE::Rva002E6CBE(int value) : m_00(value), m_04(false), m_05(false), m_08(-1), m_0C(false)
+{
+}
+
+// --- 0x002E6DB8 (12B, cdecl): the indexed mask of the table at VA
+// 0x00DBD33C.
+extern unsigned int g_00DBD33C[16];
+
+unsigned int Rva002E6DB8(int index)
+{
+	return g_00DBD33C[index];
+}
+
+// --- 0x002E73FB (25B): a pathfinding cell test over the cell's +0x0C flags
+// word; only the cell argument is used.
+struct Rva002E734ECell
+{
+	char m_pad00[0x0C];
+	unsigned int m_flags;
+};
+
+class Rva002E734E
+{
+public:
+	int rva002E73FB(int unused, const Rva002E734ECell *cell, int x, int y);
+private:
+	int m_00;
+	int m_x;
+	int m_y;
+};
+
+int Rva002E734E::rva002E73FB(int, const Rva002E734ECell *cell, int, int)
+{
+	return (cell->m_flags & 0x3F0) != 0x10;
+}
+
+// --- 0x002E7FC7 (19B, cdecl): the next index, wrapping 0x1FF to 0.
+int Rva002E7FC7(int index)
+{
+	return index != 0x1FF ? index + 1 : 0;
+}
+
+// --- 0x002EEA5A, 0x002EEA72 (24B each): one node from the rowed pools at
+// VA 0x00DBD4B0 and 0x00DBD4C8, none for a count above one.
+class Rva002EB448
+{
+public:
+	void *rva002EB448();									// 0x002EB448
+};
+class Rva002E8548;
+extern Rva002E8548 g_IntKeyedTreeNodePool;
+extern Rva002E8548 g_Va00DBD4C8;
+
+class Rva002EEA5A
+{
+public:
+	void *rva002EEA5A(unsigned int count, const void *hint);
+	void *rva002EEA72(unsigned int count, const void *hint);
+};
+
+void *Rva002EEA5A::rva002EEA5A(unsigned int count, const void *)
+{
+	if (count > 1)
+		return 0;
+	return ((Rva002EB448 *)&g_IntKeyedTreeNodePool)->rva002EB448();
+}
+
+void *Rva002EEA5A::rva002EEA72(unsigned int count, const void *)
+{
+	if (count > 1)
+		return 0;
+	return ((Rva002EB448 *)&g_Va00DBD4C8)->rva002EB448();
+}
+
+// --- 0x002FD661 (10B): the +4 object's rowed 0x002CACD7 of this.
+class Rva002CA9CA
+{
+public:
+	float rva002CACD7(const void *other);					// 0x002CACD7
+};
+
+class Rva002FD661
+{
+public:
+	float rva002FD661();
+private:
+	int m_00;
+	Rva002CA9CA *m_04;
+};
+
+float Rva002FD661::rva002FD661()
+{
+	return m_04->rva002CACD7(this);
+}
+
+// --- 0x002FD7DC (19B): the +0x10 pathfinder's rowed 0x002F0F07, then
+// ThePlayerList's slot 10.
+class Pathfinder
+{
+public:
+	void rva002F0F07();										// 0x002F0F07
+};
+
+class PlayerList;
+extern PlayerList *ThePlayerList;
+
+class Rva002FD7DCPlayerListView
+{
+public:
+	GAP_V10(0)
+	virtual void slot10();
+};
+
+class Rva002FD7DC
+{
+public:
+	void rva002FD7DC();
+private:
+	char m_pad00[0x10];
+	Pathfinder *m_10;
+};
+
+void Rva002FD7DC::rva002FD7DC()
+{
+	m_10->rva002F0F07();
+	((Rva002FD7DCPlayerListView *)ThePlayerList)->slot10();
+}
+
+// --- 0x002FDEF1 (32B): the +0x104 word for indices 1..3, else the +0x110
+// one.
+class Rva002FDEF1
+{
+public:
+	int rva002FDEF1(int index) const;
+private:
+	char m_pad000[0x104];
+	int m_104[3];
+	int m_110;
+};
+
+int Rva002FDEF1::rva002FDEF1(int index) const
+{
+	if (index >= 1 && index <= 3)
+		return m_104[index];
+	return m_110;
+}
