@@ -538,6 +538,21 @@ void AIBackAwayState::onExit(StateExitType status)
 	}
 }
 
+// computePath 0x00345B35 (42 bytes, "ComputePath29"): the same shape just
+// before AIPickUpCrateState's; retail holds no reference to it, so its state
+// class is not recovered and keeps the address name.
+class Rva00345B35State : public AIInternalMoveToState
+{
+protected:
+	virtual Bool computePath();
+};
+
+Bool Rva00345B35State::computePath()
+{
+	critterDesyncLog("CritterDesync: ComputePath29");
+	return AIInternalMoveToState::computePath();
+}
+
 class AIPickUpCrateState : public AIInternalMoveToState
 {
 protected:
