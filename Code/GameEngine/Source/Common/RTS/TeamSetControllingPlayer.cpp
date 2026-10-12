@@ -25,7 +25,7 @@ public:
 	unsigned char m_pad[0x115];
 	unsigned char m_115;
 };
-struct Rva002A9B58;
+class Player;
 class BfmeObjectVirtualTail { public: unsigned char m_vt[4]; };
 
 class BfmeObjectVbptrCarrier : public virtual BfmeObjectVirtualTail
@@ -53,7 +53,7 @@ class Object : public BfmeObjectVtbl, public BfmeObjectDlinkBase,
     public BfmeObjectDlinkPad, public BfmeObjectVbptrCarrier {
 public:
     void makeDirty();
-    void rva00290DBB(Rva002A9B58 *a, Rva002A9B58 *b);
+    void rva00290DBB(Player *a, Player *b);
 };
 template<class OBJCLASS>
 class DLINK_ITERATOR
@@ -92,7 +92,7 @@ void Team::setControllingPlayer(Player *player)
 		obj->makeDirty();
 		if ((obj->m_template->m_115 & 0x20) == 0) {
 			if (curOwner && curOwner != owner)
-				obj->rva00290DBB((Rva002A9B58 *)curOwner, (Rva002A9B58 *)owner);
+				obj->rva00290DBB((Player *)curOwner, (Player *)owner);
 		}
 	}
 }

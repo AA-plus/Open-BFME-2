@@ -61,7 +61,7 @@ void Rva002A9ACC::rva002A9ACC(const Dict *dict)
 	}
 }
 
-// ?rva002A9B58@Rva002A9B58@@QAEXPAURva002A7588In@@@Z 35B @0x002A9B58: thiscall with one arg ret4 void.
+// ?removeCommandPoints@Player@@QAEXPAURva002A7588In@@@Z 35B @0x002A9B58 (WorldBuilder Player.cpp:1663; addCommandPoints 0x002A9B35, :1646): thiscall with one arg ret4 void.
 // Evidence: add ecx 0x60 once then cmp [edx+0x61c] jle to choose rowed 0x002A7513 void vs rowed 0x002A75C9 int.
 // Callers at 0x0028DB00 0x0028EB0E 0x0028EBB7 0x00290DD3. LINK BONUS via 0x0028EB42.
 struct Rva002A7588In
@@ -100,16 +100,16 @@ public:
 	int rva002A75B8(Rva002A7588In *p);
 };
 
-class Rva002A9B58
+class Player
 {
 public:
-	void rva002A9B58(Rva002A7588In *p);
-	void rva002A9B35(Rva002A7588In *p);
+	void removeCommandPoints(Rva002A7588In *p);
+	void addCommandPoints(Rva002A7588In *p);
 private:
 	char m_pad00[0x60];
 };
 
-void Rva002A9B58::rva002A9B58(Rva002A7588In *p)
+void Player::removeCommandPoints(Rva002A7588In *p)
 {
 	Rva002A7513 *a = (Rva002A7513 *)((char *)this + 0x60);
 	Rva002A75C9 *b = (Rva002A75C9 *)((char *)this + 0x60);
@@ -120,7 +120,7 @@ void Rva002A9B58::rva002A9B58(Rva002A7588In *p)
 		b->rva002A75C9(p);
 }
 
-void Rva002A9B58::rva002A9B35(Rva002A7588In *p)
+void Player::addCommandPoints(Rva002A7588In *p)
 {
 	Rva002A7500 *a = (Rva002A7500 *)((char *)this + 0x60);
 	Rva002A75B8 *b = (Rva002A75B8 *)((char *)this + 0x60);

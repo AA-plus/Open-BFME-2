@@ -52684,8 +52684,8 @@ rva007916E1_constructor_unwind,,0x007916E1,11,Code/GameEngine/Source/Common/INI/
 ?rva007B8A57@@YAXXZ,,0x007B8A57,10,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,
 ?rva007B8A61@@YAXXZ,,0x007B8A61,10,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,
 ?rva0042D7A3@Rva0042D7A3@@QAEXPAVEndTurnButtonImpl@StrategicHUD@@@Z,,0x0042D7A3,35,Code/GameEngine/Source/Common/Rva0042D7A3Set.cpp,matched,"chain via rowed dtor 0x005794ED plus rowed delete plus caller 0x0042DAF0; parameter respelled with its class, StrategicHUD::EndTurnButtonImpl per WorldBuilder (its slots DoSetEnabled/DoPlayAlertFlash/DoHaltAlertFlash fire the same literals as their WB twins)"
-?rva002A9B58@Rva002A9B58@@QAEXPAURva002A7588In@@@Z,,0x002A9B58,35,Code/GameEngine/Source/Common/Rva002A9ACCDict.cpp,matched,this plus 0x60 dispatches to rowed add vs sub via 0x61c flag
-?rva002A9B35@Rva002A9B58@@QAEXPAURva002A7588In@@@Z,,0x002A9B35,35,Code/GameEngine/Source/Common/Rva002A9ACCDict.cpp,matched,this plus 0x60 dispatches to rowed add variants via 0x61c flag
+?removeCommandPoints@Player@@QAEXPAURva002A7588In@@@Z,,0x002A9B58,35,Code/GameEngine/Source/Common/Rva002A9ACCDict.cpp,matched,this plus 0x60 dispatches to rowed add vs sub via 0x61c flag
+?addCommandPoints@Player@@QAEXPAURva002A7588In@@@Z,,0x002A9B35,35,Code/GameEngine/Source/Common/Rva002A9ACCDict.cpp,matched,this plus 0x60 dispatches to rowed add variants via 0x61c flag
 ??1Rva005D25F2@@QAE@XZ,,0x005D25F2,91,Code/GameEngine/Source/Common/Rva005D25F2Dtor.cpp,matched,native direct nonvirtual destructor91 with vptr transitions C75800 then C078DC and owning six1C elements; five-slot table starts at getter5D24E5 rather than deleting dtor; former virtual spelling corrected from target table
 ?rva007B8A6B@@YAXXZ,,0x007B8A6B,10,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,
 ?rva007B8A75@@YAXXZ,,0x007B8A75,10,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,
@@ -53066,7 +53066,7 @@ _Rva003B8B44CopyDispatch,,0x003B8B44,29,Code/Libraries/Source/WWVegas/WWLib/Stlp
 ?rva002A9D02@Rva002A9BF2@@QAEXHPAVObject@@H@Z,,0x002A9D02,135,Code/GameEngine/Source/Common/RTS/Rva002A9BF2Get.cpp,matched,same 0x2DC window plus rowed callees and globals
 ??1Rva005E129B@@UAE@XZ,,0x005E129B,54,Code/GameEngine/Source/Common/Rva005E129B.cpp,matched,chain via 0x005E1246 base g_00BC6F20 derived caller 0x005E12D1
 ?rva003E6AA9@ScriptConditions@@IAE_NPAVParameter@@0@Z,,0x003E6AA9,174,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions_Rva003E6AA9.cpp,matched,ScriptConditions team bool via dispatcher 0x003EAE15 getTeamNamed flag mask loop
-?rva00290DBB@Object@@QAEXPAURva002A9B58@@0@Z,,0x00290DBB,103,Code/GameEngine/Source/GameLogic/Object/ObjectRva00290DBB.cpp,matched,Object dual-dict plus 250-list self recursion unlocks 3 callers
+?rva00290DBB@Object@@QAEXPAVPlayer@@0@Z,,0x00290DBB,103,Code/GameEngine/Source/GameLogic/Object/ObjectRva00290DBB.cpp,matched,Object dual-dict plus 250-list self recursion unlocks 3 callers
 ??0Rva00469D50@@QAE@XZ,,0x00469D50,54,Code/GameEngine/Source/Common/Rva00469D50Ctor.cpp,matched,caller 0x0046F39E news 0x10 Target at plus0 Result at plus4 InitiateVoice at plus8 via row 0x004CEE6E
 ??1Rva0057C04F@@QAE@XZ,,0x0057C04F,69,Code/GameEngine/Source/GameClient/Rva0057C04FDtor.cpp,matched,dtor with AsciiString and Rva members plus folded base vtable
 ?rva00270BD9Blend@@YAHABURGBAColorInt@@0M@Z,,0x00270BD9,205,Code/GameEngine/Source/GameClient/DrawableRegionBandColors_Rva00270ca6.cpp,matched,BFME1 donor DrawableRegionBandColors.cpp at1281192f682ce6f29b8f06b7daea4b5e8fdfbb24 /Os; native205 boundary and five direct callers prove private EDI/ESI stack-float ABI; four uint32 channels with unsigned x87 interpolation and ARGB packing; original owner/method and RGBAColorInt type name uncertain; existing native ftol2 provider; whole donor mined and two356 siblings banked

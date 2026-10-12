@@ -12,7 +12,7 @@
 
 class Parameter;
 class Team;
-struct Rva002A9B58;
+class Player;
 
 enum ObjectID
 {
@@ -36,7 +36,7 @@ public:
 	Player *getControllingPlayer() const;
 	void setTeam(Team *team);
 	bool testStatus(ObjectStatusTypes bit) const;
-	void rva00290DBB(Rva002A9B58 *a, Rva002A9B58 *b);
+	void rva00290DBB(Player *a, Player *b);
 };
 
 class ScriptEngine
@@ -72,5 +72,5 @@ void __stdcall Rva003BD884Set(Parameter *p1, const AsciiString *name)
 	obj->setTeam(team);
 	rva003BA83F(obj, 0);
 	if (!obj->testStatus((ObjectStatusTypes)0x26))
-		obj->rva00290DBB((Rva002A9B58 *)ctrl, (Rva002A9B58 *)pl);
+		obj->rva00290DBB((Player *)ctrl, (Player *)pl);
 }

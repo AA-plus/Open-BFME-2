@@ -1,12 +1,13 @@
 // cl: /DNDEBUG /MD
-// ?rva00290DBB@Object@@QAEXPAURva002A9B58@@0@Z @0x00290DBB 103B
+// ?rva00290DBB@Object@@QAEXPAVPlayer@@0@Z @0x00290DBB 103B
 // Neighbours rva00290D42 and findSpecialPowerModuleInterface; unlocks 0x0039D97E 0x003BD884 0x002AEA9F.
-// Evidence: null-guarded dual Rva002A9B58 calls 0x002A9B58 0x002A9B35; +0x250 iface slot 0x118 list; self-recursion on node +8; callers 0x00290E0F 0x002AEBF8 0x0039D9C9 0x003BD8F9.
+// Evidence: null-guarded dual Player calls 0x002A9B58 0x002A9B35; +0x250 iface slot 0x118 list; self-recursion on node +8; callers 0x00290E0F 0x002AEBF8 0x0039D9C9 0x003BD8F9.
 struct Rva002A7588In;
-struct Rva002A9B58
+class Player
 {
-	void rva002A9B58(Rva002A7588In *p);
-	void rva002A9B35(Rva002A7588In *p);
+public:
+	void removeCommandPoints(Rva002A7588In *p);
+	void addCommandPoints(Rva002A7588In *p);
 };
 struct Out
 {
@@ -36,18 +37,18 @@ public:
 class Object
 {
 public:
-	void rva00290DBB(Rva002A9B58 *a, Rva002A9B58 *b);
+	void rva00290DBB(Player *a, Player *b);
 	unsigned char m_pad00[0x250];
 	Iface *m_250;
 };
-void Object::rva00290DBB(Rva002A9B58 *a, Rva002A9B58 *b)
+void Object::rva00290DBB(Player *a, Player *b)
 {
 	if (!a)
 		return;
 	if (!b)
 		return;
-	a->rva002A9B58((Rva002A7588In *)this);
-	b->rva002A9B35((Rva002A7588In *)this);
+	a->removeCommandPoints((Rva002A7588In *)this);
+	b->addCommandPoints((Rva002A7588In *)this);
 	Iface *iface = m_250;
 	if (!iface)
 		return;

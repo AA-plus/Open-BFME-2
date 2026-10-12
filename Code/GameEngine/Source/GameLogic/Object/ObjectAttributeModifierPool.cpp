@@ -21,11 +21,11 @@ struct Rva002A7588In;
 
 // Player::removeCommandPoints / addCommandPoints per WorldBuilder; rowed under
 // a placeholder owner.
-class Rva002A9B58
+class Player
 {
 public:
-	void rva002A9B58(Rva002A7588In *obj);		// 0x002A9B58
-	void rva002A9B35(Rva002A7588In *obj);		// 0x002A9B35
+	void removeCommandPoints(Rva002A7588In *obj);		// 0x002A9B58
+	void addCommandPoints(Rva002A7588In *obj);		// 0x002A9B35
 };
 
 class AttributeModifierPoolUpdate
@@ -243,11 +243,11 @@ bool Object::addAttributeModifierToPool(const AsciiString &name, int value)
 		Player *player = getControllingPlayer();
 		bool commandPoints = player && getTemplate()->getCommandPointBonus() > 0;
 		if (commandPoints)
-			((Rva002A9B58 *)player)->rva002A9B58((Rva002A7588In *)this);
+			((Player *)player)->removeCommandPoints((Rva002A7588In *)this);
 		if (pool->addModifierToPool(name, value))
 		{
 			if (commandPoints)
-				((Rva002A9B58 *)player)->rva002A9B35((Rva002A7588In *)this);
+				((Player *)player)->addCommandPoints((Rva002A7588In *)this);
 			return true;
 		}
 	}
@@ -273,9 +273,9 @@ void Object::removeAttributeModifierFromPool(const AsciiString &name)
 		Player *player = getControllingPlayer();
 		bool commandPoints = player && getTemplate()->getCommandPointBonus() > 0;
 		if (commandPoints)
-			((Rva002A9B58 *)player)->rva002A9B58((Rva002A7588In *)this);
+			((Player *)player)->removeCommandPoints((Rva002A7588In *)this);
 		pool->rva00403744(name);
 		if (commandPoints)
-			((Rva002A9B58 *)player)->rva002A9B35((Rva002A7588In *)this);
+			((Player *)player)->addCommandPoints((Rva002A7588In *)this);
 	}
 }
