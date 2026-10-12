@@ -79147,3 +79147,5 @@ __ehhandler$?rva00187690@ScaleTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z,,0x007
 ?Render_And_Clear@DefaultStaticSortListClass@@UAEXAAVRenderInfoClass@@@Z,,0x001769B0,121,Code/Libraries/Source/WWVegas/WW3D2/static_sort_list.cpp,matched,ZH sortlist Render_And_Clear without render hooks plus FXShader flush
 ?reset@W3DDisplay@@UAEXXZ,,0x00043418,249,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplayReset.cpp,matched,ZH W3DDisplay::reset with BFME2 eviction and streak reinit; vtable 0x7C3C80 slot 9
 __ehhandler$?reset@W3DDisplay@@UAEXXZ,,0x0075CF58,10,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplayReset.cpp,matched,EH handler of W3DDisplay::reset
+?rva0025C238@BfmeStrVM0@@UAEXXZ,,0x0025C238,34,Code/GameEngine/Source/Common/BfmeStrVM0Dtor.cpp,matched,Display slot 40 view-list walk slot 95
+?setDebugDisplayCallback@Display@@UAEXP6AXPAVDebugDisplayInterface@@PAXPAU_iobuf@@@Z1@Z,,0x0025C6BD,37,Code/GameEngine/Source/GameClient/DisplaySetDebugDisplayCallback.cpp,matched,ZH Display::setDebugDisplayCallback plus network flag

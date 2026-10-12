@@ -276,7 +276,7 @@ public:
 	virtual void v37();
 	virtual void rva0025C14D();
 	virtual void rva0025C18B(Rva0025C18BCoord *a, Rva0025C18BCoord *b);
-	virtual void v40();
+	virtual void rva0025C238();
 	virtual void v41() = 0;
 	virtual void v42() = 0;
 	virtual void v43() = 0;
@@ -465,3 +465,11 @@ void BfmeStrVM0::rva00049F94(AsciiString s)
 // stores). Bind them to the rows at those functions.
 #pragma comment(linker, "/alternatename:?v07@BfmeStrVM0@@UAEXXZ=?DoXfer@EmissionVelocityInfo@FXParticleSystem@@UAEXAAVXfer@@@Z")
 #pragma comment(linker, "/alternatename:?v13@BfmeStrVM0@@UAEXXZ=?DoXfer@EmissionVelocityInfo@FXParticleSystem@@UAEXAAVXfer@@@Z")
+
+// ?rva0025C238@BfmeStrVM0@@UAEXXZ, retail 0x0025C238 (34 bytes), slot 40 next to the slot-38
+// walker above: every node of the +0x1C list gets its slot-95 step, unconditionally.
+void BfmeStrVM0::rva0025C238()
+{
+	for (ListNode0025D9E3 *node = m_head1C; node != 0; node = node->getNext())
+		node->s095();
+}
