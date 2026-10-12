@@ -1,9 +1,16 @@
 // ?rva00515C64@AptMainMenu@@QAEHXZ
+// partial score=0.985 date=2026-10-12
+// ?rva00515C64@AptMainMenu@@QAEHXZ
 // partial score=0.97 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /Ireference/shims/bfme2_ascii
 // ?rva00515C64@AptMainMenu@@QAEHXZ
 // Retail 0x00515C64..0x00515F7B (791 bytes, followed by the 12-entry jump
 // table of the inner switch, which this build emits after the code as well).
+// 2026-10-12: naming the case-1 "0" string in its own block (found computed
+// inside it) aligns case 5/6 temporaries; 9 slot operands remain: retail
+// callback at -0x18 (shared with the case-6 spill), "0" string at -0x14 and the
+// ESP save alone at -0x2c; this build: callback -0x14, string+ESP save -0x18.
+// Callback at top / switch / own block, case 9 unbraced, outer-case reorder: no gain.
 // BANKED NEAR MISS (score ~0.97): every instruction and the frame size
 // (0x20) match; only the stack-slot assignment differs (18 operands):
 // retail puts the "0" save-name temporary at [ebp-0x14], the callback int at
@@ -147,7 +154,11 @@ int AptMainMenu::rva00515C64()
 	case 1:
 	{
 		TheShell->rva0035BF4C(true);
-		bool found = TheGameState->rva002DF2F6(UnicodeString(L"0")) != 0;
+		bool found;
+		{
+			UnicodeString name(L"0");
+			found = TheGameState->rva002DF2F6(name) != 0;
+		}
 		if (found)
 		{
 			TheGameEngine->reset();
