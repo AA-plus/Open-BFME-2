@@ -82,14 +82,9 @@ struct Region3D
 	Coord3D hi;
 };
 
-struct Gen_t_008fb350_p12pod
-{
-	unsigned int timestamp;
-	int x;
-	int y;
-	int radius;
-	unsigned int playerMask;
-};
+// Opaque target32-byte queue element; its fields are not used in this unit.
+// ProcessPending record stride and the rowed E32 map helper prove the size.
+struct BfmeE32 { int a[8]; };
 
 class ShroudManagerImpl;
 class PartitionManager;
@@ -255,8 +250,8 @@ private:
 	ShroudManagerImpl008FBA40Node *nodes;
 	PartitionData *pendingPartitionData;
 	int unknown38;
-	_STL::deque<Gen_t_008fb350_p12pod,
-		_STL::allocator<Gen_t_008fb350_p12pod> > records;
+	_STL::deque<BfmeE32,
+		_STL::allocator<BfmeE32> > records;
 	int unknown64;
 	bool enabled;
 	char padding69[3];
