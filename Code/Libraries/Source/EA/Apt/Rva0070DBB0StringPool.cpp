@@ -155,3 +155,10 @@ StringNode0070D9F0 *Rva0070DBB0Intern(const char *text) {
 int Rva0070B620SavedDelta(StringNode0070D9F0 *node) {
  return -poolStringSize(node);
 }
+
+// ?Rva0070B650SavedSize@@YAHPAUStringNode0070D9F0@@@Z, retail 0x0070B650 (22B).
+// Ghidra-unlisted out-of-line copy of the saved-size helper above: the node
+// string length rounded as the pool stores it, plus the 8-byte header.
+int Rva0070B650SavedSize(StringNode0070D9F0 *node) {
+  return poolSavedSize(node);
+}

@@ -10,11 +10,16 @@ extern int g_bfmeAptBreakOnAssertAtDDC01C;
 void __debugbreak();
 #pragma intrinsic(__debugbreak)
 
+extern "C" unsigned int __cdecl strlen(const char *);
+#pragma intrinsic(strlen)
+
 class EAStringC
 {
 	void *m_pData;
 public:
 	bool IsEmpty() const;
+	unsigned int rva006D3750() const;
+	bool rva006D3510(const char *text) const;
 };
 
 extern "C" EAStringC bfmeObjDAE[178]; // existing owner at 0x00E18388
@@ -29,4 +34,18 @@ EAStringC *Rva0070B4F0GetString(int eSC)
 		}
 	}
 	return entry;
+}
+
+// ?Rva0070B530Find@@YAPAVEAStringC@@PBD@Z, retail 0x0070B530 (88B).
+// Ghidra-unlisted reverse lookup over the same 178-entry constant table: the
+// first entry whose length (rowed rva006D3750) equals strlen(text) and whose
+// text matches case-insensitively (rowed rva006D3510); null when none does.
+EAStringC *Rva0070B530Find(const char *text)
+{
+	unsigned int length = strlen(text);
+	for (int i = 0; i < 178; ++i) {
+		if (bfmeObjDAE[i].rva006D3750() == length && bfmeObjDAE[i].rva006D3510(text))
+			return &bfmeObjDAE[i];
+	}
+	return 0;
 }
