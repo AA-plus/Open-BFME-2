@@ -107,6 +107,7 @@ private:
 public:
 	void set(const StringBase<T> &other);			// 0x00887C90
 	void concat(const T *text, Int length);			// 0x00887D60
+	void concat(const T *text);				// 0x00005629
 	void concat(const StringBase<T> &other);		// 0x00006987
 	Bool startsWith(const T *text, Int length) const;	// 0x008875A0
 
@@ -138,7 +139,7 @@ public:
 		((BFMERetailAsciiString *)this)->releaseBuffer();
 	}
 
-	void __cdecl format(AsciiString format, ...);		// 0x00888FF0
+	void __cdecl format(const char *format, ...);		// 0x00438150
 
 	AsciiString &operator=(const AsciiString &other)
 	{
@@ -149,6 +150,11 @@ public:
 	void concat(const char *text, Int length)
 	{
 		StringBase<char>::concat(text, length);
+	}
+
+	void concat(const char *text)
+	{
+		StringBase<char>::concat(text);
 	}
 
 	void concat(char c)
@@ -248,10 +254,13 @@ class LivingWorldLogic
 {
 public:
 	LivingWorldTurnPhase getTurnPhase() const { return m_turnPhase; }
+	Int getFrameFC() const { return m_frameFC; }
 
 private:
 	unsigned char m_unknown00[0xf4];
 	LivingWorldTurnPhase m_turnPhase;			// +0xF4 (WB member name)
+	Int m_unknownF8;
+	Int m_frameFC;						// +0xFC
 };
 
 class ScriptActions
@@ -456,6 +465,58 @@ extern unsigned int g_00DFE174;				// 0x00DFE174
 void rva00203C21();
 
 extern bool BFME2ScriptDebugLiteMode;					// 0x00E02D78
+
+// ?_appendMessage@@YAXABVAsciiString@@_N1@Z
+// Retail 0x002053FA, 261 bytes (the donor's ScriptEngine_appendMessage.cpp
+// _appendMessage): the Zero Hour twin (ScriptEngine.cpp
+// _appendMessage), reading the same debug-lite flag and the GlobalData string
+// vector at +0x10F4.  BFME 2 takes the logged frame from the living-world
+// logic (+0xFC) when GameLogic 0x001DCD1C says so, as two format calls that cl
+// cross-jumps into one tail.  Ordinary cdecl.
+void _appendMessage(const AsciiString &str, Bool isTrueMessage,
+	Bool shouldPause)
+{
+	if (BFME2ScriptDebugLiteMode)
+		return;
+	if (!TheScriptDebugWindowDLL)
+		return;
+
+	for (AsciiString *name = TheWritableGlobalData->m_stringVec10F4.begin();
+		 name != TheWritableGlobalData->m_stringVec10F4.end();
+		 ++name)
+	{
+		if (str.startsWith(*name))
+			return;
+	}
+
+	{
+		AsciiString msg;
+		GameLogic *logic = TheGameLogic;
+		if (!logic->rva001DCD1C())
+			msg.format("%d ", logic->getFrame());
+		else
+			msg.format("%d ", TheLivingWorldLogic->getFrameFC());
+		if (isTrueMessage)
+			msg.concat("Run script - ");
+		else
+			msg.concat("Run script false -");
+		msg.concat(str);
+
+		HMODULE module = TheScriptDebugWindowDLL;
+		if (!module)
+			return;
+
+		FARPROC proc;
+		if (shouldPause)
+			proc = GetProcAddress(module, "AppendMessageAndPause");
+		else
+			proc = GetProcAddress(module, "AppendMessage");
+		if (!proc)
+			return;
+
+		((void(__cdecl *)(const char *))proc)(msg.str());
+	}
+}
 
 // Retail 0x002054FF, 224 bytes (BFME 1: 0x0033EB70, 297 bytes): the Zero Hour
 // twin at ScriptEngine.cpp:9389
