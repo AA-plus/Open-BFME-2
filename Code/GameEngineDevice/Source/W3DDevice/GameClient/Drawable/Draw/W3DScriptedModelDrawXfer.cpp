@@ -1,7 +1,3 @@
-// ?xfer@W3DScriptedModelDraw@@MAEXPAVXfer@@@Z
-// partial score=0.9977268533365342 date=2026-10-10
-// ?xfer@W3DScriptedModelDraw@@MAEXPAVXfer@@@Z
-// partial score=0.99 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /ICode/Libraries/Include/Lib
 // stlport
 // ?xfer@W3DScriptedModelDraw@@MAEXPAVXfer@@@Z retail 0x000C5C04..0x000C65CB
@@ -11,8 +7,9 @@
 // animation save/restore shape; BFME2 moves it before the member data,
 // versions the block 1..6 and adds the native members below. Field
 // offsets come from the retail accesses; names are not asserted.
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
+// The animation frame is percent * INT_TO_REAL(numFrames - 1): the macro's
+// ((Real)(x)) parentheses fix the x87 schedule around the Set_Animation
+// argument pushes.
 #include <vector>
 #include <set>
 #include <string>
@@ -366,7 +363,7 @@ void W3DScriptedModelDraw::xfer(Xfer *xfer)
 				HAnimClass *anim = hlod->Peek_Animation();
 				if (anim)
 				{
-					float frame = percent * (float)(anim->Get_Num_Frames() - 1); _ReadWriteBarrier();
+					float frame = percent * ((float)(anim->Get_Num_Frames() - 1));
 					float dummy1, dummy2;
 					int curMode, dummy3;
 					hlod->Peek_Animation_And_Info(dummy1, dummy3, curMode, dummy2);
