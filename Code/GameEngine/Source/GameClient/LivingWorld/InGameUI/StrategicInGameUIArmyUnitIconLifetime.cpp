@@ -1,0 +1,64 @@
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// stlport
+// Native constructor005F481C..005F4879 and destructor005F4891..005F48EC
+// share the eight-slot C794AC interface. Its update thunk005F4881 reaches
+// WB-named ArmyUnitIcon::DoUpdate005F4488; the existing AddUpgradeIcons and
+// movie-clip factory corroborate owner04/unit08/clip0C/upgrade IDs10.
+// C794CC is its two-word vbtable, with the shared12-byte base at20 and
+// compiler vtordisp at1C. The base's existing78B constructor and54B
+// destructor establish Rva005F4179; only the observed interface is declared.
+// Slots without recovered spellings remain declarations; the pointer argument
+// spellings are ABI views, not recovered original types. sizeof is44.
+// A real vector<int> owns the upgrade IDs. The established30830 game-free
+// declaration preserves the native state0 cleanup of the counted clip during
+// vector deallocation. No byte lift or new address pin is used.
+// BFME1 pinned donor cee35b7d supplies STLport inputs; this BFME2 widget has
+// no applicable clean donor. Layout and class relationship come from retail
+// stores, vtables and the already named ArmyUnitIcon siblings.
+#include <cstdlib>
+void __cdecl Rva00030830FreeAllocation(void *);
+#define free Rva00030830FreeAllocation
+#include <vector>
+#undef free
+struct TargetRef00217D4C;
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
+struct TreeHintRef00217D4C;
+class AptMovieClipFrame;
+class Rva005F4179 {
+public:
+ Rva005F4179(void *);
+ virtual ~Rva005F4179();
+ virtual void slot01()=0;
+ virtual TreeHintRef00217D4C CreateMovieClip(AptMovieClipFrame *)=0;
+ virtual TreeHintRef00217D4C rva005F4710();
+ virtual void DoUpdate();
+ virtual void slot05();
+ virtual void slot06();
+ virtual void slot07();
+private:int count;void *leaf;
+};
+struct ClipRef {
+ ClipRef():ptr(0){}
+ ~ClipRef(){if(ptr)ReleaseTreeHintRef00217D4C(ptr);}
+ TargetRef00217D4C *ptr;
+};
+struct UnitView;
+namespace StrategicInGameUI {
+class ArmyUnitIcon:public virtual Rva005F4179 {
+public:
+ ArmyUnitIcon(void *owner,void *clip,UnitView *unit);
+ virtual ~ArmyUnitIcon();
+ virtual TreeHintRef00217D4C CreateMovieClip(AptMovieClipFrame *);
+ virtual TreeHintRef00217D4C rva005F4710();
+ virtual void DoUpdate();
+private:
+ void *m_owner;
+ UnitView *m_unit;
+ ClipRef m_clip;
+ _STL::vector<int> m_upgrades;
+};
+}
+StrategicInGameUI::ArmyUnitIcon::ArmyUnitIcon(void *owner,void *clip,UnitView *unit)
+ :Rva005F4179(clip),m_owner(owner),m_unit(unit){}
+StrategicInGameUI::ArmyUnitIcon::~ArmyUnitIcon(){}
+typedef char ArmyUnitIconHas44Bytes[sizeof(StrategicInGameUI::ArmyUnitIcon)==44 ? 1 : -1];
