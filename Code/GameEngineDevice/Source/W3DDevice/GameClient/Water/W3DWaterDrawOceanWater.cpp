@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /DWIN32 /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /DWIN32 /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
 //
 // ?drawOceanWater@WaterRenderObjClass@@IAEXAAVRenderInfoClass@@PAVRenderableStandingWaterArea@@_N@Z
@@ -28,6 +28,7 @@
 // hands m2 to the device's SetTransform and that keeps retail's sixteen
 // dead m2 stores (bfme2_mesh_material_pass.cpp keeps the same switch).
 #include <vector>
+#include <set>
 
 typedef int Int;
 typedef bool Bool;
@@ -48,6 +49,7 @@ template <class T>
 class RefCountPtr
 {
 public:
+	RefCountPtr(void) : Referent(0) {}
 	RefCountPtr(const RefCountPtr &rhs) : Referent(rhs.Referent)
 	{
 		if (Referent)
@@ -91,6 +93,7 @@ class FXShaderSetup : public FXShader::RenderingMethod
 typedef _STL::vector<RefCountPtr<FXShader::RenderingMethod>, _STL::allocator<RefCountPtr<FXShader::RenderingMethod> > > RenderingMethodStackType;
 
 class LightEnvironmentClass;
+class CameraClass;
 
 class RenderInfoClass
 {
@@ -99,7 +102,8 @@ public:
 	void Pop_Rendering_Method(void);
 	const RenderingMethodStackType &Get_Rendering_Method_Stack(void) const;
 
-	char _bfme_unk_00[0x28];
+	CameraClass &Camera;	// +0x00
+	char _bfme_unk_04[0x28 - 0x04];
 	LightEnvironmentClass *light_environment;	// +0x28
 };
 
@@ -149,6 +153,20 @@ public:
 	Real W;
 };
 
+class Vector3
+{
+public:
+	__forceinline Vector3() {}
+	__forceinline Vector3(Real x, Real y, Real z) { X = x; Y = y; Z = z; }
+	__forceinline Vector3(const Vector3 &v) { X = v.X; Y = v.Y; Z = v.Z; }
+	__forceinline Vector3 &operator=(const Vector3 &v) { X = v.X; Y = v.Y; Z = v.Z; return *this; }
+	__forceinline const Real &operator[](int i) const { return (&X)[i]; }
+
+	Real X;
+	Real Y;
+	Real Z;
+};
+
 class Matrix3D
 {
 public:
@@ -160,6 +178,13 @@ public:
 			Row[1].Set(0.0f, 1.0f, 0.0f, 0.0f);
 			Row[2].Set(0.0f, 0.0f, 1.0f, 0.0f);
 		}
+	}
+
+	__forceinline Matrix3D(const Vector3 &x, const Vector3 &y, const Vector3 &z, const Vector3 &pos)
+	{
+		Row[0].Set(x[0], y[0], z[0], pos[0]);
+		Row[1].Set(x[1], y[1], z[1], pos[1]);
+		Row[2].Set(x[2], y[2], z[2], pos[2]);
 	}
 
 	Vector4 Row[3];
@@ -299,23 +324,159 @@ public:
 	void rva000834CE();
 };
 
+#define PAD_VIRTUAL10(p) \
+	virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3(); virtual void p##4(); \
+	virtual void p##5(); virtual void p##6(); virtual void p##7(); virtual void p##8(); virtual void p##9();
+
+// One object attached to a standing water area (the area's +0x58 set): slot
+// 49 answers the object that draws itself with the render info (slot 12).
+class Rva001014A9Drawer
+{
+public:
+	virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
+	virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
+	virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+	virtual void Render(RenderInfoClass &rinfo);	// slot 12
+};
+
+class Rva001014A9Item
+{
+public:
+	PAD_VIRTUAL10(a0) PAD_VIRTUAL10(a1) PAD_VIRTUAL10(a2) PAD_VIRTUAL10(a3)
+	virtual void a40(); virtual void a41(); virtual void a42(); virtual void a43(); virtual void a44();
+	virtual void a45(); virtual void a46(); virtual void a47(); virtual void a48();
+	virtual Rva001014A9Drawer *Get_Drawer();	// slot 49
+};
+
 class RenderableStandingWaterArea
 {
 public:
 	Rva00308DF0 *getStandingWaterArea() const { return m_standingWaterArea; }
+	const _STL::set<Rva001014A9Item *> &getItems() const { return m_items; }
 
 private:
 	unsigned char m_pad00[0x40];
 	Rva00308DF0 *m_standingWaterArea;	// +0x40
+	unsigned char m_pad44[0x58 - 0x44];
+	_STL::set<Rva001014A9Item *> m_items;	// +0x58 (header), +0x5C (count)
+};
+
+// The rowed per-entry visibility test (Rva0007FD89EntryVisible.cpp).
+class Rva0007FD89Entry
+{
+public:
+	bool rva0007FB85(void *camera);
+};
+
+struct WaterRenderBox;
+class Rva0007E6F6
+{
+public:
+	const WaterRenderBox &rva0007E6F6();
+};
+
+class CameraClass
+{
+public:
+	PAD_VIRTUAL10(c0) PAD_VIRTUAL10(c1) PAD_VIRTUAL10(c2) PAD_VIRTUAL10(c3) PAD_VIRTUAL10(c4)
+	PAD_VIRTUAL10(c5) PAD_VIRTUAL10(c6) PAD_VIRTUAL10(c7) PAD_VIRTUAL10(c8) PAD_VIRTUAL10(c9)
+	PAD_VIRTUAL10(d0) PAD_VIRTUAL10(d1) PAD_VIRTUAL10(d2)
+	virtual bool Cull_Box(const WaterRenderBox &box);	// slot 130
+};
+
+class RenderableRiverArea;
+
+class LightClass : public RefCountClass
+{
+public:
+	enum LightType { POINT = 0, DIRECTIONAL, SPOT };
+	LightClass(LightType type = POINT);
+	virtual void l01(); virtual void l02(); virtual void l03(); virtual void l04();
+	virtual void l05(); virtual void l06(); virtual void l07(); virtual void l08(); virtual void l09();
+	virtual void l10(); virtual void l11(); virtual void l12(); virtual void l13(); virtual void l14();
+	virtual void l15(); virtual void l16(); virtual void l17(); virtual void l18(); virtual void l19();
+	virtual void l20();
+	virtual void Set_Transform(const Matrix3D &m);	// slot 21
+	void Set_Ambient(const Vector3 &color) { Ambient = color; }
+	void Set_Diffuse(const Vector3 &color) { Diffuse = color; }
+
+private:
+	unsigned char m_pad08[0xD4 - 0x08];
+	Vector3 Ambient;	// +0xD4
+	Vector3 Diffuse;	// +0xE0
+	unsigned char m_padEC[0x120 - 0xEC];
+};
+
+class LightEnvironmentClass
+{
+public:
+	LightEnvironmentClass();
+	~LightEnvironmentClass();
+	void Add_Light(const LightClass &light);
+
+private:
+	unsigned char m_data[0x228];
+};
+
+class WW3D
+{
+public:
+	static void Flush(RenderInfoClass &rinfo);
+};
+
+// The counted shader holder of the water draw: retail assigns it through the
+// rowed 0x001007B0, the one add-ref/release/store body ICF keeps under
+// HAnimComboDataClass::Set_HAnim. Its body is visible (noinline, as in
+// W3DMeshHolderHold.cpp): cl then proves the holder's address does not
+// escape and keeps the held pointer in EDI across the draw loop as retail
+// does; with only a declaration it reloads the holder after every call.
+class HAnimClass : public RefCountClass
+{
+};
+class HAnimComboDataClass
+{
+public:
+	HAnimComboDataClass() : HAnim(0) {}
+	~HAnimComboDataClass() { if (HAnim) HAnim->Release_Ref(); }
+	__declspec(noinline) void Set_HAnim(HAnimClass *motion)
+	{
+		if (motion != 0)
+			motion->Add_Ref();
+		if (HAnim != 0)
+			HAnim->Release_Ref();
+		HAnim = motion;
+	}
+	operator RefCountPtr<FXShader::RenderingMethod> &() { return *reinterpret_cast<RefCountPtr<FXShader::RenderingMethod> *>(this); }
+
+private:
+	HAnimClass *HAnim;
+};
+
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+struct WaterGlobalLightView
+{
+	unsigned char m_pad000[0x8FC];
+	Vector3 m_diffuse[3];	// +0x8FC
+	Vector3 m_lightPos[3];	// +0x920
+	unsigned char m_pad944[0x988 - 0x944];
+	Int m_numGlobalLights;	// +0x988
 };
 
 class WaterRenderObjClass
 {
 protected:
+	void drawRiverWater(RenderInfoClass &rinfo, RenderableRiverArea *area);
 	void drawOceanWater(RenderInfoClass &rinfo, RenderableStandingWaterArea *area, Bool depthOnly);
+	void rva001014A9(RenderInfoClass &rinfo, bool depthOnly);
 
 private:
-	unsigned char m_pad000[0x260];
+	unsigned char m_pad000[0x108];
+	_STL::vector<RenderableStandingWaterArea *> m_standingWaterAreas;	// +0x108
+	unsigned char m_pad114[0x118 - 0x114];
+	_STL::vector<RenderableRiverArea *> m_riverAreas;	// +0x118
+	unsigned char m_pad124[0x25C - 0x124];
+	Bool m_doWaterRender;	// +0x25C
 	Rva00308DF0 *m_currentStandingWaterArea;	// +0x260
 };
 
@@ -353,4 +514,78 @@ void WaterRenderObjClass::drawOceanWater(RenderInfoClass &rinfo, RenderableStand
 	DX8Wrapper::Set_Light_Environment(0);
 	DX8Wrapper::Set_Vertex_Shader(0);
 	DX8Wrapper::Set_Pixel_Shader(0);
+}
+
+// retail 0x001014A9..0x001017E7 (830 bytes) EH thiscall ret 8; the water
+// object's draw (pinned callee of WaterRenderObjClass::Render 0x001017E7,
+// which passes false). WorldBuilder twin 0x007684C0 (W3DWaterDraw.cpp; its
+// name is lost): a light environment from the global lights, the objects
+// attached to each visible standing water area drawn under that area's
+// shader, then the ocean pass over the visible standing water areas and the
+// river pass over the rivers the camera does not cull.
+void WaterRenderObjClass::rva001014A9(RenderInfoClass &rinfo, bool depthOnly)
+{
+	if (!m_doWaterRender)
+		return;
+
+	LightEnvironmentClass lenv;
+	for (Int i = 0; i < reinterpret_cast<const WaterGlobalLightView *>(TheWritableGlobalData)->m_numGlobalLights; i++)
+	{
+		LightClass *light = new LightClass(LightClass::DIRECTIONAL);
+		light->Set_Ambient(Vector3(0.0f, 0.0f, 0.0f));
+		light->Set_Diffuse(Vector3(reinterpret_cast<const WaterGlobalLightView *>(TheWritableGlobalData)->m_diffuse[i].X,
+			reinterpret_cast<const WaterGlobalLightView *>(TheWritableGlobalData)->m_diffuse[i].Y,
+			reinterpret_cast<const WaterGlobalLightView *>(TheWritableGlobalData)->m_diffuse[i].Z));
+		Matrix3D tm(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f),
+			Vector3(reinterpret_cast<const WaterGlobalLightView *>(TheWritableGlobalData)->m_lightPos[i]),
+			Vector3(0.0f, 0.0f, 0.0f));
+		light->Set_Transform(tm);
+		lenv.Add_Light(*light);
+		light->Release_Ref();
+	}
+	rinfo.light_environment = &lenv;
+
+	Bool drewItems = false;
+	for (_STL::vector<RenderableStandingWaterArea *>::iterator it = m_standingWaterAreas.begin(); it != m_standingWaterAreas.end(); ++it)
+	{
+		RenderableStandingWaterArea *area = *it;
+		if (area->getItems().empty())
+			continue;
+		if (!reinterpret_cast<Rva0007FD89Entry *>(area)->rva0007FB85(&rinfo.Camera))
+			continue;
+		Rva00308DF0 *standingWaterArea = area->getStandingWaterArea();
+		FXShaderSetup *shader = depthOnly
+			? reinterpret_cast<Rva00100981 *>(this)->rva00100981().Peek()
+			: reinterpret_cast<FXShaderSetup *>(standingWaterArea->rva00308DF0());
+		if (!shader)
+			continue;
+		drewItems = true;
+		HAnimComboDataClass method;
+		method.Set_HAnim(reinterpret_cast<HAnimClass *>(shader));
+		rinfo.Push_Rendering_Method(method);
+		for (_STL::set<Rva001014A9Item *>::const_iterator item = area->getItems().begin(); item != area->getItems().end(); ++item)
+		{
+			Rva001014A9Item *object = *item;
+			if (object && object->Get_Drawer())
+				object->Get_Drawer()->Render(rinfo);
+		}
+		rinfo.Pop_Rendering_Method();
+	}
+	if (drewItems)
+		WW3D::Flush(rinfo);
+
+	for (_STL::vector<RenderableStandingWaterArea *>::iterator ocean = m_standingWaterAreas.begin(); ocean != m_standingWaterAreas.end(); ++ocean)
+	{
+		RenderableStandingWaterArea *area = *ocean;
+		if (reinterpret_cast<Rva0007FD89Entry *>(area)->rva0007FB85(&rinfo.Camera))
+			drawOceanWater(rinfo, area, depthOnly);
+	}
+
+	rinfo.light_environment = 0;
+	for (_STL::vector<RenderableRiverArea *>::iterator river = m_riverAreas.begin(); river != m_riverAreas.end(); ++river)
+	{
+		RenderableRiverArea *area = *river;
+		if (!rinfo.Camera.Cull_Box(reinterpret_cast<Rva0007E6F6 *>(area)->rva0007E6F6()))
+			drawRiverWater(rinfo, area);
+	}
 }
