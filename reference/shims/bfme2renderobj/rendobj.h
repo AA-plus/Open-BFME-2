@@ -264,7 +264,16 @@ public:
 	RenderObjClass(void);
 	RenderObjClass(const RenderObjClass & src);
 	RenderObjClass & RenderObjClass::operator = (const RenderObjClass &);
-	virtual ~RenderObjClass(void)																					{ }
+	virtual ~RenderObjClass(void);
+
+// Retail's out-of-line copies of these header inlines are size-optimised (/O1 shape:
+// one shared RET in the bit setters, INC for Add_Ref): 0x0006CE71..0x0006D054 holds them
+// in vtable order, with Set_Sub_Object_Transforms_Dirty at 0x0006334D and Get_Current_LOD at
+// 0x0007E4AF. Inlined call sites keep each caller's own optimisation (75 units verified).
+// In-class bodies are compiled with the state at the class's closing brace, so the two whose
+// retail copies are /O2-shaped are defined after it, once the pragma is reset: the destructor
+// (0x0013BE20, /O2 EH frame) and Set_Sub_Objects_Match_LOD (0x001A30F0, two RETs).
+#pragma optimize("s", on)
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -641,7 +650,7 @@ public:
 	virtual void					Create_Decal(DecalGeneratorClass * generator, bool unk = false)	{ }
 	virtual void					Delete_Decal(uint32 decal_id)												{ }
 
-	void								Set_Sub_Objects_Match_LOD(int onoff)									{ if (onoff) { Bits |= SUBOBJS_MATCH_LOD; } else { Bits &= ~SUBOBJS_MATCH_LOD; } }
+	void								Set_Sub_Objects_Match_LOD(int onoff);
 	int								Is_Sub_Objects_Match_LOD_Enabled(void)									{ return (Bits & SUBOBJS_MATCH_LOD) != 0; }	// BFME normalises to 0/1
 
 	void								Set_Sub_Object_Transforms_Dirty(bool onoff)							{ if (onoff) { Bits |= SUBOBJ_TRANSFORMS_DIRTY; } else { Bits &= ~SUBOBJ_TRANSFORMS_DIRTY; } }
@@ -738,6 +747,15 @@ protected:
 	friend class SceneClass;
 	friend class RenderObjProxyClass;
 };
+
+#pragma optimize("", on)
+
+inline RenderObjClass::~RenderObjClass(void)
+{
+}
+
+inline void RenderObjClass::Set_Sub_Objects_Match_LOD(int onoff)
+{ if (onoff) { Bits |= SUBOBJS_MATCH_LOD; } else { Bits &= ~SUBOBJS_MATCH_LOD; } }
 
 WWINLINE const SphereClass & RenderObjClass::Get_Bounding_Sphere(void) const
 {
