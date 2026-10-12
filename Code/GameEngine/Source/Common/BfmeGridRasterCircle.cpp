@@ -149,6 +149,8 @@ public:
 	void bfmeApplyCircle(int x, int y, int radius, int amount, bool absolute, int mode);
 	BfmeCellFC *bfmeCellAtWorld(Real worldX, Real worldY) const;
 	int rva006C0E40(const BfmePointFC *point, int *extra);
+	BfmeCellFC *rva006C0C60(int x, int y);
+	int rva006C0DF0(int x, int y, int *extra);
 	int rva006C0E70(int x, int y);
 	int rva006C0EB0(const BfmePointFC *point) const;
 	int rva006C0860(Real worldX) const;
@@ -170,6 +172,8 @@ private:
 class BfmeRangeUpdaterFC
 {
 public:
+	BfmeRangeUpdaterFC() {}
+	BfmeRangeUpdaterFC(Gen_008812D0 *grid, int amount, bool absolute, int mode);
 	__declspec(noinline) void operator()(int firstX, int lastX, int y);
 
 	friend class Gen_008812D0;
@@ -404,6 +408,44 @@ BfmeCellFC *Gen_008812D0::bfmeCellAtWorld(Real worldX, Real worldY) const
 int Gen_008812D0::rva006C0E40(const BfmePointFC *point, int *extra)
 {
 	BfmeCellFC *cell = bfmeCellAtWorld(point->x, point->y);
+	if (cell != 0)
+	{
+		*extra = cell->m_bfmeExtra;
+		return cell->m_bfmeValue;
+	}
+	return 0;
+}
+
+// ??0BfmeRangeUpdaterFC@@QAE@PAVGen_008812D0@@H_NH@Z @ 0x006C0B80 32B.
+// Ghidra-unlisted out-of-line updater constructor: grid +0, amount +4, mode
+// +8 and the absolute flag byte +0C, in bfmeApplyCircle's argument order
+// (retail stores arg4 at +8 and the byte arg3 at +0C). Owner by layout.
+BfmeRangeUpdaterFC::BfmeRangeUpdaterFC(Gen_008812D0 *grid, int amount, bool absolute, int mode)
+{
+	m_bfmeGrid = grid;
+	m_bfmeAmount = amount;
+	m_bfmeMode = mode;
+	m_bfmeAbsolute = absolute;
+}
+
+// ?rva006C0C60@Gen_008812D0@@QAEPAVBfmeCellFC@@HH@Z @ 0x006C0C60 53B.
+// Ghidra-unlisted bounds-checked cell lookup by cell coordinates over the
+// +0x20/+0x24 extents and 12-byte +0x28 cells; null when outside.
+BfmeCellFC *Gen_008812D0::rva006C0C60(int x, int y)
+{
+	if (x < 0 || x >= m_bfmeWidth)
+		return 0;
+	if (y < 0 || y >= m_bfmeHeight)
+		return 0;
+	return &m_bfmeCells[y * m_bfmeWidth + x];
+}
+
+// ?rva006C0DF0@Gen_008812D0@@QAEHHHPAH@Z @ 0x006C0DF0 69B. Ghidra-unlisted
+// cell-coordinate twin of rva006C0E40: the inlined lookup above, then the
+// +8 extra word out and the +4 value returned; 0 when outside.
+int Gen_008812D0::rva006C0DF0(int x, int y, int *extra)
+{
+	BfmeCellFC *cell = rva006C0C60(x, y);
 	if (cell != 0)
 	{
 		*extra = cell->m_bfmeExtra;
