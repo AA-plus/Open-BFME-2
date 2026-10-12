@@ -202,3 +202,30 @@ void Rva006F6D30::rva006F6D30(void *arg)
 		node = node->m_next;
 	} while (node != 0);
 }
+
+// ?rva006F6D00@Rva006F6D00List@@QAEPAXH@Z, retail 0x006F6D00 (33 bytes).
+// Ghidra-unlisted n-th node of the singly linked list headed at +0 and
+// chained through each node's +0x54 link; null when the list runs out.
+// Owning class unrecovered: address-derived view.
+struct Rva006F6D00Node
+{
+    char pad[0x54];
+    Rva006F6D00Node *next;
+};
+class Rva006F6D00List
+{
+public:
+    void *rva006F6D00(int n);
+private:
+    Rva006F6D00Node *m_head;
+};
+void *Rva006F6D00List::rva006F6D00(int n)
+{
+    for (Rva006F6D00Node *p = m_head; p != 0; p = p->next)
+    {
+        if (n == 0)
+            return p;
+        --n;
+    }
+    return 0;
+}

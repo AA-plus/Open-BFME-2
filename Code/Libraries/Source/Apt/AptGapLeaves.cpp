@@ -75,3 +75,26 @@ void Rva006E3C50Table::clear()
 	m_count = 0;
 	memset(m_slots, 0, m_capacity * sizeof(void *));
 }
+
+// ?set@Rva006F6980Bits24@@QAEXH@Z @ 0x006F6980 (31B) and
+// ?clear@Rva006F6980Bits24@@QAEXH@Z @ 0x006F69A0 (37B): OR a mask into, or
+// mask it out of, the signed 24-bit field at the bottom of the +0x1C word.
+class Rva006F6980Bits24
+{
+public:
+	void set(int mask);
+	void clear(int mask);
+private:
+	char m_pad[0x1C];
+	int m_bits : 24;
+};
+
+void Rva006F6980Bits24::set(int mask)
+{
+	m_bits |= mask;
+}
+
+void Rva006F6980Bits24::clear(int mask)
+{
+	m_bits &= ~mask;
+}

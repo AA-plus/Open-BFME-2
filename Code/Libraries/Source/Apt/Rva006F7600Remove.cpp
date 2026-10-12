@@ -8,6 +8,7 @@ class Rva006F7600
 {
 public:
     void rva006F7600(int i);
+    void *rva006F7660(int i);
     void rva006F7570(struct Rva006F7570Item *pItem);
 private:
     void *m_items[32];
@@ -62,4 +63,19 @@ void Rva006F7600::rva006F7570(Rva006F7570Item *pItem)
     }
     m_items[i] = pItem;
     ++m_nElements;
+}
+
+// ?rva006F7660@Rva006F7600@@QAEPAXH@Z @0x006F7660 62B. Ghidra-unlisted
+// checked element read of the same 32-slot array: the AptDisplayList.cpp
+// line 0x555 "i >= 0 && i < nElements" assert (retail texts), then slot i;
+// the asm breakpoint keeps the load after it, as native.
+void *Rva006F7600::rva006F7660(int i)
+{
+    if (i < 0 || i >= m_nElements) {
+        g_bfmeAptAssertAtE17734("i >= 0 && i < nElements", "C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptDisplayList.cpp", 0x555);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) {
+            __asm int 3
+        }
+    }
+    return m_items[i];
 }
