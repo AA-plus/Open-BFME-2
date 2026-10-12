@@ -14,12 +14,10 @@ struct BfmeMat4VKH
 
 class BfmeThingVKH;
 
-// Retail's callee at 0x009FACAD is the import thunk ?ji_009facad@@YAXXZ,
-// defined in game/gen_small/imports_000.cpp as a no-argument jump stub; its
-// caller supplies the three arguments on the stack, so the stub is reached
-// through a typed pointer.
-extern void __cdecl ji_0062af26();
-typedef void (__stdcall *Rva009FACADCalc)(BfmeMat4VKH *out,
+// Retail's callee is the d3dx9_27 import thunk _D3DXMatrixMultiply@12 at
+// 0x0062AF26 (Code/masm_dumps/D3DX9ImportThunks.asm); the caller passes its
+// three stack arguments in this unit's own types.
+extern "C" void *__stdcall D3DXMatrixMultiply(BfmeMat4VKH *out,
     BfmeThingVKH *self, int a);
 
 class BfmeThingVKH
@@ -31,6 +29,6 @@ public:
 BfmeMat4VKH BfmeThingVKH::bfmeGoVKH(int a)
 {
 	BfmeMat4VKH t;
-	reinterpret_cast<Rva009FACADCalc>(&ji_0062af26)(&t, this, a);
+	D3DXMatrixMultiply(&t, this, a);
 	return t;
 }
