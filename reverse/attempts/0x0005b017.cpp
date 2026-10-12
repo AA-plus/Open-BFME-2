@@ -1,9 +1,43 @@
 // ?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ
-// partial score=0.9 date=2026-10-09
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc
+// partial score=0.95 date=2026-10-12
+// ?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ
+// 2026-10-12 (claude-opus-5-5): 288B == retail with this unit. Visible
+// noinline copies of AudioEventInfoRef's ctor (0x00051914) and
+// OpaqueRefElement4::operator= (0x00239099), both byte-exact, make cl keep
+// the counted info in ESI and release it from there, as retail. Remaining
+// 26 diff lines are loop layout only: retail jumps into a top test
+// (mov eax,[ebp-0x28]; cmp eax,ebx; je exit) and re-tests music after the
+// loop; cl rotates the loop to a bottom test and threads the break past
+// the post-loop test. for(;;)/while/for(;cond;) and /G6 /G7 /Os flag sets
+// are unchanged. Approved home is MilesAudioManager.cpp.
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 #include "Common/BfmeAudioEventPrefix136.h"
+// Rowed at 0x00239099 (OpaqueRefOwnership.cpp); visible here so the unit
+// knows the copy keeps no pointer to its source.
+inline __declspec(noinline) OpaqueRefElement4 &OpaqueRefElement4::operator=(const OpaqueRefElement4 &other)
+{
+    if (this != &other) {
+        if (other.referent)
+            InterlockedIncrement(reinterpret_cast<Long volatile *>(reinterpret_cast<char *>(other.referent) + 4));
+        if (referent)
+            referent->Release_Ref();
+        referent = other.referent;
+    }
+    return *this;
+}
 class AudioEventInfo { public: char before49[0x49]; unsigned char flags49; char after4A[0x66]; int kindB0; };
-class AudioEventInfoRef { public: AudioEventInfoRef(const AudioEventInfo*); const AudioEventInfo *info; };
+class AudioEventInfoRef
+{
+public:
+ // Rowed at 0x00051914 (AudioEventInfoRefConstructor.cpp); visible so the
+ // unit knows the reference keeps no pointer to itself.
+ __declspec(noinline) AudioEventInfoRef(const AudioEventInfo *p) : info(p)
+ {
+  if (info)
+   InterlockedIncrement(reinterpret_cast<Long volatile *>(reinterpret_cast<char *>(const_cast<AudioEventInfo *>(info)) + 4));
+ }
+ const AudioEventInfo *info;
+};
 struct NonNullAudioRef {
  AudioEventInfoRef value;
  __forceinline NonNullAudioRef(const AudioEventInfo*p):value(p){}
