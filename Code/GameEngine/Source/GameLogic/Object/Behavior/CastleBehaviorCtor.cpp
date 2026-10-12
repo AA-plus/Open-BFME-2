@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MT /GX /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// Native member unwind calls require direct GameMemory free; /MT emits both
+// whole14B pointer-vector destructor copies while preserving parent329B and EH.
 // stlport
 //
 // ??0CastleBehavior@@QAE@PAVThing@@PBVModuleData@@@Z, retail 0x003983D4,
