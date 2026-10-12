@@ -47,3 +47,16 @@ inputs, every intermediate store, MMX tag state, or decoder integration.
 
 No `Code/` source, matched ledger row or pin was added. The bank is evidence for
 continued reconstruction and contributes no recovered bytes.
+
+The independent O2/G6 draft in `root-o2-g6.cpp` is preserved alongside the
+selected bank after an add/add rebase. It emits 1390 bytes versus retail 1034
+and has an aligned 88-byte compiler frame. Its original six fixtures and
+256 seeded output comparisons passed, but it remains nonexact and does not
+reproduce retail ECX/EDX preservation. The measurements and emulation above
+refer to the selected 1444-byte bank, not this alternate.
+
+The same read-only checker also passes all 246 supported-domain, destination
+alias, canary and cdecl checks for the alternate; `root-o2-g6-emulation.json`
+records its source and object hashes. It preserves ECX/EDX in zero of those
+cases. Reproduce with `explain_mismatch.py` using `--source` set to the alternate,
+then pass that source path and an output JSON path to `verify.py`.
