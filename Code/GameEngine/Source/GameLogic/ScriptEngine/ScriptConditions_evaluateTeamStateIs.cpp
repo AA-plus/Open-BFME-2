@@ -971,6 +971,7 @@ protected:
 	bool evaluatePlayerLostObjectType(Parameter *, Parameter *);
 	bool evaluateNamedDestroyedByType(Parameter *, Parameter *);
 	bool rva003EA12A(Parameter *);
+	bool rva003EA228(Parameter *, bool);
 	bool evaluateHasCommandPointsToBuildUnit(Parameter *, Parameter *);
 	bool evaluatePlayerHasKilledTypeUnits(Parameter *, Parameter *, Parameter *);
 	bool rva003E63CD(Condition *, Parameter *, Parameter *, Parameter *);
@@ -2101,6 +2102,62 @@ bool ScriptConditions::rva003EA12A(Parameter *pUnitParm)
 				}
 			}
 		}
+	}
+	return false;
+}
+
+// ?rva003EA228@ScriptConditions@@IAE_NPAVParameter@@_N@Z, retail 0x003EA228
+// (387 bytes, EH, RET 8): the team form of 0x003EA12A. Each member of the
+// named team that passes the same gates (AI slot 110, damaged within five
+// logic seconds by a living attacker) is tested with the same filter and the
+// AI statics; the flag selects whether a failing member ends the walk true or a
+// matching member ends it false, and the end result needs a member that got as
+// far as the filter. Identity of the condition unproven: address name.
+bool ScriptConditions::rva003EA228(Parameter *pTeamParm, bool failingMemberWins)
+{
+	Team *team = TheScriptEngine->getTeamNamed(pTeamParm->getString(), false);
+	if (team) {
+		bool matched = false;
+		bool reachedFilter = false;
+		for (DLINK_ITERATOR<Object> iter = team->iterate_TeamMemberList(); !iter.done(); iter.advance()) {
+			Object *member = iter.cur();
+			if (!failingMemberWins && matched)
+				return false;
+			AIUpdateInterface *ai = member->getAIUpdateInterface();
+			if (!ai)
+				continue;
+			if (!((AIUpdateSlot110View *)ai)->slot110()) {
+				if (failingMemberWins)
+					continue;
+				return false;
+			}
+			BodyModuleInterface *body = member->getBodyModule();
+			if (!body)
+				continue;
+			unsigned int frame = TheGameLogic->getFrame();
+			unsigned int last = body->getLastDamageTime();
+			if (g_009BA4E4 * 5 + last < frame)
+				continue;
+			const DamageInfo *info = body->getLastDamageInfo();
+			if (!info)
+				continue;
+			Object *attacker = TheGameLogic->findObjectByID(info->in.m_sourceID);
+			if (!attacker)
+				continue;
+			if (attacker->isEffectivelyDead())
+				continue;
+			reachedFilter = true;
+			Rva00260FD0Filter filter(member, 2, 0);
+			if (filter.allows(attacker) && (AI::rva002FE193(member, attacker) || ai->isQuickPathAvailable(attacker->getPosition()))) {
+				matched = true;
+			} else if (failingMemberWins) {
+				return true;
+			}
+		}
+		if (failingMemberWins)
+			return false;
+		if (reachedFilter)
+			return matched ? false : true;
 	}
 	return false;
 }
