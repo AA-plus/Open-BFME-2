@@ -57,7 +57,7 @@ inline void _Construct(T1 *destination, const T2 &value)
 
 typedef _STL::basic_string<char, _STL::char_traits<char>, _STL::allocator<char> > BFMENetworkString;
 
-class BFMENetworkLock;
+class MutexClass;
 void *BFMENetworkAllocate(unsigned int bytes);
 
 struct BFMENetworkListNode
@@ -108,7 +108,7 @@ private:
 class BFMENetworkBackend : public ThreadClass
 {
 public:
-	BFMENetworkBackend(BFMENetworkLock *ownerLock);
+	BFMENetworkBackend(MutexClass *ownerLock);
 	virtual ~BFMENetworkBackend();
 	void *destroyAndMaybeDelete(unsigned int flags);
 	virtual void Thread_Function();
@@ -121,7 +121,7 @@ private:
 	Bool m_flag58;
 	char m_pad59[3];
 	BFMENetworkList m_list;
-	BFMENetworkLock *m_ownerLock;
+	MutexClass *m_ownerLock;
 };
 
 class BFMENetworkBackendDestructorShim
@@ -130,11 +130,14 @@ public:
 	void destroy();
 };
 
-class BFMENetworkLock
+// Native ctor558EC1 calls MutexClass6139F0; its two initial lock cleanup
+// states tail-jump to the independently rowed MutexClass destructor613A20.
+// Use that established owner rather than the former private lock name.
+class MutexClass
 {
 public:
-	BFMENetworkLock(const char *name);
-	~BFMENetworkLock();
+	MutexClass(const char *name);
+	~MutexClass();
 
 	void *m_handle;
 	int m_refCount;
@@ -143,12 +146,12 @@ public:
 class BFMEAutoLockRef
 {
 public:
-	BFMEAutoLockRef(BFMENetworkLock *lock, unsigned int timeout);
+	BFMEAutoLockRef(MutexClass *lock, unsigned int timeout);
 	__declspec(noinline) ~BFMEAutoLockRef();
 	Bool failed() const { return m_failed; }
 
 private:
-	BFMENetworkLock *m_lock;
+	MutexClass *m_lock;
 	Bool m_failed;
 };
 
@@ -389,8 +392,8 @@ public:
 	BFMENetworkString copyState84();
 
 private:
-	BFMENetworkLock m_lock0;
-	BFMENetworkLock m_lock1;
+	MutexClass m_lock0;
+	MutexClass m_lock1;
 	BFMENetworkQueue m_queue0;
 	BFMENetworkQueue1 m_queue1;
 	BFMENetworkBackend *m_backend;
@@ -399,7 +402,7 @@ private:
 	BFMENetworkState m_state78;
 	BFMENetworkState m_state84;
 	BFMENetworkPayloadList m_list90;
-	BFMENetworkLock m_lock9c;
+	MutexClass m_lock9c;
 	BFMENetworkLockRefOwner m_backendLockRef;
 };
 
