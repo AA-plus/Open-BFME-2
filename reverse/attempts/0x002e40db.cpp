@@ -1,4 +1,6 @@
 // ?parse@PolygonTriggerDataChunkParserBase@@QAE_NAAVDataChunkInput@@PBUDataChunkInfo@@@Z
+// partial score=0.93 date=2026-10-12
+// ?parse@PolygonTriggerDataChunkParserBase@@QAE_NAAVDataChunkInput@@PBUDataChunkInfo@@@Z
 // partial score=0.92674 date=2026-10-08
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // Banked near miss: native2E40DB..2E41EC273B; WBABB3B0 names parser.
