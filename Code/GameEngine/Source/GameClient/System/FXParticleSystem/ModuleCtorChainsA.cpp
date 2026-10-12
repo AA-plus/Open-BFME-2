@@ -154,7 +154,6 @@ public:
 struct Rva005648FEInput;
 struct Rva005641EDInput;
 struct DrawInfo2;
-class Rva003AEE16 { public: Rva003AEE16(const RvaSmartPtr12 &a, const Rva005641EDInput &b); };
 class Rva005634F7 { public: Rva005634F7(void *a, DrawInfo2 *b); };
 class Rva003AE94E { public: Rva003AE94E(void *a, void *b); };
 class Rva003AEA42 { public: Rva003AEA42(const RvaSmartPtr12 &a, int b); };
@@ -583,21 +582,6 @@ Rva003ABB53::Rva003ABB53(void *a, void *b)
 	STAMP(0x00, g_00C1C444);
 	STAMP(0x14, g_00C1C780);
 	STAMP(0x18, g_00C1CD04);
-}
-
-class Rva003ABDF9 : public Rva003AEE16
-{
-public:
-	Rva003ABDF9(void *a, void *b);
-};
-
-Rva003ABDF9::Rva003ABDF9(void *a, void *b)
-	: Rva003AEE16(*(const RvaSmartPtr12 *)a, *(const Rva005641EDInput *)b)
-{
-	STAMP(0x00, g_00C1C620);
-	STAMP(0x14, g_00C1C61C);
-	STAMP(0x18, g_00C1C780);
-	STAMP(0x20, g_00C1CF08);
 }
 
 class V3HostRva005E7420;
