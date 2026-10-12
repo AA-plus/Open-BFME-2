@@ -1,5 +1,10 @@
 // cl: /MD /EHs-c-
-// ?Rva00426D14Parse@@YAXPAVINI@@@Z @0x00426D14 194B evidence: calls rowed ctor 0x426C4D plus initFromINI wrapper 0x42666E with new 0x10 plus holder g_00E031E8 at +0x10 plus debug theDebug slots 0x60 0x6c 0x38 0x4c plus literal plus INIException filler 0x2F681 plus throw 0x629094
+// ?ParseMapMissionObjective@MissionObjectiveTracker@@SAXPAVINI@@@Z @0x00426D14 194B.
+// Renamed from placeholder Rva00426D14Parse — the WorldBuilder twin names
+// MissionObjectiveTracker::ParseMapMissionObjective in EA's own
+// MissionObjectiveTracker.cpp (assert TheMissionObjectiveTracker, line 303).
+// Static member spelling: ABI-identical to the proven cdecl free function.
+// Original evidence: calls rowed ctor 0x426C4D plus initFromINI wrapper 0x42666E with new 0x10 plus holder g_00E031E8 at +0x10 plus debug theDebug slots 0x60 0x6c 0x38 0x4c plus literal plus INIException filler 0x2F681 plus throw 0x629094
 class INI
 {
 public:
@@ -87,7 +92,13 @@ extern "C" void __stdcall _CxxThrowException(void *pExceptionObject, const _s__T
 struct ThrowAnchor00426D14 { int a; int b; int c; int d; };
 static const ThrowAnchor00426D14 throwAnchor00426D14 = { 0, 0, 0, 0 };
 
-void __cdecl Rva00426D14Parse(INI *ini)
+class MissionObjectiveTracker
+{
+public:
+	static void ParseMapMissionObjective(INI *ini);
+};
+
+void MissionObjectiveTracker::ParseMapMissionObjective(INI *ini)
 {
 	if (ini->m_08 == 2)
 	{
