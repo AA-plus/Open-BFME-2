@@ -1632,3 +1632,92 @@ void Rva0045B4AD(int value)
 {
 	g_Va00DFEFD8 = value;
 }
+
+// --- 0x004E07E4 (17B) and 0x004E07F5 (20B): invoke the stored member
+// function (code +0, this-adjustment +4) on the argument object with the
+// stored +0x10 word (and +0x14 word).
+class __multiple_inheritance Rva004E07E4Target;
+
+struct Rva004E07E4Delegate1
+{
+	void (Rva004E07E4Target::*m_method)(int a);
+	int m_08;
+	int m_0C;
+	int m_10;
+	void rva004E07E4(Rva004E07E4Target *target);
+};
+
+void Rva004E07E4Delegate1::rva004E07E4(Rva004E07E4Target *target)
+{
+	(target->*m_method)(m_10);
+}
+
+struct Rva004E07E4Delegate2
+{
+	void (Rva004E07E4Target::*m_method)(int a, int b);
+	int m_08;
+	int m_0C;
+	int m_10;
+	int m_14;
+	void rva004E07F5(Rva004E07E4Target *target);
+};
+
+void Rva004E07E4Delegate2::rva004E07F5(Rva004E07E4Target *target)
+{
+	(target->*m_method)(m_10, m_14);
+}
+
+// --- 0x004EC044 (11B) and 0x004EC04F (11B): forward to the +0x140 FX list
+// (rowed addFXNugget / 0x00599534).
+class FXNugget;
+class FXList
+{
+public:
+	void addFXNugget(FXNugget *nugget);						// 0x0037D097
+};
+
+class Rva00599534
+{
+public:
+	void rva00599534(int value);							// 0x00599534
+};
+
+class Rva004EC044
+{
+public:
+	void rva004EC044(FXNugget *nugget);
+	void rva004EC04F(int value);
+private:
+	char m_pad000[0x140];
+	FXList m_140;
+};
+
+void Rva004EC044::rva004EC044(FXNugget *nugget)
+{
+	m_140.addFXNugget(nugget);
+}
+
+void Rva004EC044::rva004EC04F(int value)
+{
+	((Rva00599534 *)&m_140)->rva00599534(value);
+}
+
+// --- 0x004C0A6B (11B): from the +0x0C interface, the owner's slot 1 (the
+// word argument is unused).
+class Rva004C0A6BOwner
+{
+public:
+	virtual void s0();
+	virtual void slot1();
+};
+
+class Rva004C0A6BInterface
+{
+public:
+	void rva004C0A6B(int unused);
+};
+
+void Rva004C0A6BInterface::rva004C0A6B(int)
+{
+	((Rva004C0A6BOwner *)((char *)this - 0x0C))->slot1();
+}
