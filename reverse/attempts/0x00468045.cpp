@@ -1,4 +1,6 @@
 // ?UpdateUpgradeCreationTriggers@TransportContain@@QAEXXZ
+// partial score=0.98 date=2026-10-12
+// ?UpdateUpgradeCreationTriggers@TransportContain@@QAEXXZ
 // partial score=0.96 date=2026-10-10
 // ?UpdateUpgradeCreationTriggers@TransportContain@@QAEXXZ
 // partial score=0.9431961569158218 date=2026-10-10
@@ -141,8 +143,7 @@ void TransportContain::UpdateUpgradeCreationTriggers()
   unsigned total=record->count;
   for(unsigned j=0;j<total;++j) {
    if(!((Rva00466D50*)this)->rva00466D50((unsigned)tmpl->transportSlots))break;
-   Team*ownerTeam=obj->team;
-   Object*created=TheThingFactory->newObject(tmpl,ownerTeam,&mask,false);
+   Object*created=TheThingFactory->newObject(tmpl,obj->team,&mask,false);
    if(!created)break;
    if(iface.s98(created,false,false)) {
     TransportBodyView*body=obj->body;
