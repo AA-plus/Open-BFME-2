@@ -171,7 +171,8 @@ struct Rva004F9185Cmp {};
 void rva004F904F(Rva004F8C16Element *,Rva004F8C16Element *,Rva004F8C16Element *,Rva004F9185Cmp);
 
 class Rva004FA168Map {
-public: Rva004FA168Storage &subscript(const int &);
+public: ~Rva004FA168Map();
+ Rva004FA168Storage &subscript(const int &);
  void rva004F88BB(Rva004F88BBIterator);
  void erase(const Rva004F88BBIterator &p){rva004F88BB(p);}
 private: unsigned header,count,unknown8;
@@ -338,4 +339,13 @@ void LivingWorldAutoResolveBattle::completeRound() {
     rva004F9C8E(reinterpret_cast<TreeHintRef00217D4C *>(position),loser);
   }
  }
+}
+
+// Native4F9630..4F9635 is a five-byte tailcall to the rowed tree destructor.
+// The constructor4FA3C9 supplies this callback for two round maps at24/30;
+// map subscript4FA168 and erase4F88BB independently establish their layout.
+class Rva004F9378 {public:~Rva004F9378();};
+Rva004FA168Map::~Rva004FA168Map()
+{
+ reinterpret_cast<Rva004F9378 *>(this)->~Rva004F9378();
 }
