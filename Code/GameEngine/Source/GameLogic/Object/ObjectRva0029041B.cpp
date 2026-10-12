@@ -1,11 +1,15 @@
-// ?rva0029041B@Object@@QAEXPAVPlayer@@@Z
-// partial score=0.93 date=2026-10-01
 // cl: /O1 /DNDEBUG /MD
-// ?rva0029041B@Object@@QAEXPAVPlayer@@@Z retail 0x0029041B 123B.
-// Object player-gated condition setter with provider/target virtuals.
-// Evidence: neighbours ?rva002903EF@Object (0x002903EF) and ?rva0029091E@Object (0x0029091E);
-// rowed callee ?getControllingPlayer@Object@@QBEPAVPlayer@@XZ at 0x0028AFA9;
-// pinned callee ?rva0028AE6D@Object@@QAEXXZ at 0x0028AE6D.
+// Object player-gated condition-bit pair at 0x0029041B / 0x00290496.
+// ?rva0029041B@Object@@QAEXPAVPlayer@@@Z retail 0x0029041B 123B sets condition
+// bit 138 for the controlling player and ?rva00290496@Object@@QAEXPAVPlayer@@@Z
+// retail 0x00290496 70B clears it; both then notify the +0x250 provider's slot
+// 31 target. The early-out tests of bits 186 and 301 read the word and shift
+// (mov/shr/test al,1): written as a generic bool bit test, as retail's inline
+// bit-flag test does, cl keeps that shape instead of a memory byte test.
+// Evidence: neighbours ?rva002903EF@Object (0x002903EF) and ?rva0029091E@Object
+// (0x0029091E); rowed callee ?getControllingPlayer@Object@@QBEPAVPlayer@@XZ at
+// 0x0028AFA9; pinned callee ?rva0028AE6D@Object@@QAEXXZ at 0x0028AE6D; 0x00290496
+// callers 0x0023CA8E 0x00377C90 0x00377D00.
 class Player;
 
 class Rva0029041B_04
@@ -72,6 +76,7 @@ public:
 	virtual void v51();
 	virtual void v52();
 	virtual void v53(Player *p);
+	virtual void v54(Player *p);
 };
 
 class Rva0029041BProvider
@@ -117,6 +122,7 @@ public:
 	Player *getControllingPlayer() const;
 	void rva0028AE6D();
 	void rva0029041B(Player *p);
+	void rva00290496(Player *p);
 	char m_pad00[4];
 	Rva0029041B_04 *m_04;
 	char m_pad08[0x110 - 0x8];
@@ -131,13 +137,21 @@ public:
 		{
 			m_words[bit >> 5] |= 1U << (bit & 0x1f);
 		}
+		void clear(int bit)
+		{
+			m_words[bit >> 5] &= ~(1U << (bit & 0x1f));
+		}
+		bool testBit(int bit) const
+		{
+			return ((m_words[bit >> 5] >> (bit & 0x1f)) & 1) != 0;
+		}
 		int get186() const
 		{
-			return (m_words[5] >> 26) & 1;
+			return testBit(186);
 		}
 		int get301() const
 		{
-			return (m_words[9] >> 13) & 1;
+			return testBit(301);
 		}
 		unsigned int m_words[10];
 	} m_cond110;
@@ -154,7 +168,6 @@ static __forceinline void rva0029041BSetCondition(Object *object, int bit)
 	}
 }
 
-// ?rva0029041B@Object@@QAEXPAVPlayer@@@Z present-unmatched
 void Object::rva0029041B(Player *p)
 {
 	if ((m_04->m_flag108 & 0x80) != 0)
@@ -174,4 +187,30 @@ void Object::rva0029041B(Player *p)
 	}
 	if (t != 0)
 		t->v53(p);
+}
+
+static __forceinline void rva00290496ClearCondition(Object *object, int bit)
+{
+	if (object->m_cond110.test(bit) != 0)
+	{
+		object->m_cond110.clear(bit);
+		object->rva0028AE6D();
+	}
+}
+
+// ?rva00290496@Object@@QAEXPAVPlayer@@@Z retail 0x00290496 70B: the clearing
+// twin of 0x0029041B. When the player is the controlling one, condition bit
+// 138 (+0x120 bit 10) is cleared through rva0028AE6D; then the +0x250
+// provider's slot 31 target, if any, is told through its slot 54 (tail jump).
+void Object::rva00290496(Player *p)
+{
+	if (p == getControllingPlayer())
+		rva00290496ClearCondition(this, 138);
+	Rva0029041BProvider *prov = m_250;
+	if (prov == 0)
+		return;
+	Rva0029041BTarget *t = prov->w31();
+	if (t == 0)
+		return;
+	t->v54(p);
 }

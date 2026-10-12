@@ -1,4 +1,6 @@
 // ?rva00499D23@OneRingPenaltyUpdate@@AAEXXZ
+// partial score=0.995 date=2026-10-12
+// ?rva00499D23@OneRingPenaltyUpdate@@AAEXXZ
 // partial score=0.9856523681858802 date=2026-10-10
 // ?rva00499D23@OneRingPenaltyUpdate@@AAEXXZ
 // partial score=0.98 date=2026-10-09
@@ -145,12 +147,12 @@ private:
 
 void OneRingPenaltyUpdate::rva00499D23()
 {
-	Object *obj = m_object;
 	const OneRingPenaltyUpdateModuleData *d = m_moduleData;
+	Object *obj = m_object;
 	GameLogic *logic = TheGameLogic;
 	Object *ringer = logic->findObjectByID(m_24);
 	UnsignedInt now = logic->getFrame();
-	UnsignedInt start = d->m_0C + m_28;
+	UnsignedInt start = m_28 + d->m_0C;
 	UnsignedInt end = start + d->m_10;
 
 	if (now >= end)
@@ -180,7 +182,7 @@ void OneRingPenaltyUpdate::rva00499D23()
 			radius = startRadius + ratio * (d->m_18 / 2.0f - startRadius);
 		}
 		pos.x += Cos(m_2C) * radius;
-		Real yOffset=Sin(m_2C)*radius; _ReadWriteBarrier(); pos.y+=yOffset;
+		pos.y += Sin(m_2C) * radius;
 		pos.z = TheTerrainLogic->getGroundHeight(pos.x, pos.y, 0);
 		ringer->getAI()->aiMoveToPosition(&pos, CMD_FROM_AI);
 	}
