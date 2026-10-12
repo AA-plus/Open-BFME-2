@@ -1,5 +1,5 @@
 // ?updateMeshVolume@W3DVolumetricShadow@@IAEXHHPBVMatrix3D@@ABVAABoxClass@@M@Z
-// partial score=0.968 date=2026-10-11
+// partial score=0.979 date=2026-10-12
 // ?updateMeshVolume@W3DVolumetricShadow@@IAEXHHPBVMatrix3D@@ABVAABoxClass@@M@Z
 // partial score=0.9684191912493764 date=2026-10-10
 // ?updateMeshVolume@W3DVolumetricShadow@@IAEXHHPBVMatrix3D@@ABVAABoxClass@@M@Z
@@ -185,7 +185,7 @@ struct Geometry
 	}
 
 	AABoxClass &getBoundingBox(void) {return m_boundingBox;}
-	void	setBoundingBox(const AABoxClass &box)	{m_boundingBox=box;}
+	void	setBoundingBox(const AABoxClass &box)	{((Region3D *)&m_boundingBox)->Region3D::Region3D(*(const Region3D *)&box);}
 	void	setBoundingSphere(const SphereClass &sphere) {m_boundingSphere=sphere;}
 	SphereClass &getBoundingSphere(void) {return m_boundingSphere;}
 	void	setVisibleState(VisibleState state)	{m_visibleState=state;}
