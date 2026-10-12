@@ -79142,3 +79142,4 @@ __ehhandler$?rva00187690@ScaleTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z,,0x007
 ?rva00160200@Rva00160150@@QBEXPAMHH@Z,,0x00160200,51,Code/Libraries/Source/WWVegas/WW3D2/Rva00160150VectorChannels.cpp,matched,scale-like channel reader default 1.0
 ?rva00141D60@Rva00141D60@@QAEPAXPAX@Z,,0x00141D60,34,Code/Libraries/Source/WWVegas/WW3D2/Rva00141DC0CreateNode.cpp,matched,8-byte pool node build without link
 ?rva00141CB0@Rva00141CB0@@QAEPAXIPBX@Z,,0x00141CB0,25,Code/Libraries/Source/WWVegas/WW3D2/Rva00141DC0CreateNode.cpp,matched,8-byte pool allocate count hint
+?rva000B3133@Rva000B3133Module@@UAEPAVRva000B3133Part@@XZ,,0x000B3133,24,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DScriptedModelDrawRva000B3133.cpp,matched,W3DScriptedModelDraw second-base slot 3 this-adjusting override
