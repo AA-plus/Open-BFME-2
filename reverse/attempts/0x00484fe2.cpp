@@ -1,4 +1,6 @@
 // ?rva00484FE2@PillageModule@@UAEXHPAVObject@@@Z
+// partial score=0.99 date=2026-10-12
+// ?rva00484FE2@PillageModule@@UAEXHPAVObject@@@Z
 // partial score=0.9115285181 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
 // Native484FE2..485123323B RET8; vtable84A514 slot0 at Pillage+10.
@@ -166,13 +168,16 @@ void PillageModule::rva00484FE2(int,Object*victim)
  Object*self=owner();
  if(!self)return;
  if(!((Rva2225E0Filter*)&d->filter)->accepts(victim,0))return;
+	else
+	{
  ++events;
  if(events<d->eventThreshold)return;
  events=0;
  Player*targetPlayer=victim->getControllingPlayer();
  Player*selfPlayer=self->getControllingPlayer();
- unsigned maxAmount=saved->amount;_ReadWriteBarrier();
- unsigned amount=maxAmount<targetPlayer->money.balance?maxAmount:targetPlayer->money.balance;
+ unsigned maxAmount=saved->amount;
+ unsigned amount=targetPlayer->money.balance;
+ if(maxAmount<amount) amount=maxAmount;
  unsigned cash=targetPlayer->money.rva003B0CB3(amount,(Rva0039B795*)&targetPlayer->stats,true);
  if(cash==0)return;
  selfPlayer->money.rva003B0D7C(cash,(Rva0039B7AD*)&selfPlayer->stats,true);
@@ -182,4 +187,5 @@ void PillageModule::rva00484FE2(int,Object*victim)
  pos.z+=self->geometry.getMaxHeightAbovePosition();
  unsigned color=self->getControllingPlayer()->color|0xe6000000;
  ((Rva00484FE2UI*)TheInGameUI)->addFloatingText(text,&pos,color);
+	}
 }

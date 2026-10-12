@@ -1,4 +1,6 @@
 // ?rva0044E85E@SpecialAbilityUpdate@@QAE_NPAUCoord3D@@M@Z
+// partial score=0.985 date=2026-10-12
+// ?rva0044E85E@SpecialAbilityUpdate@@QAE_NPAUCoord3D@@M@Z
 // partial score=0.949253 date=2026-10-09
 // cl: /O1 /arch:SSE /MD /GX /I.
 #include "Code/Libraries/Include/Lib/Coord3D.h"
@@ -23,7 +25,11 @@ bool SpecialAbilityUpdate::rva0044E85E(Coord3D *pos,float range)
 {
  Object *object=m_object;
  if(object->rva0028B511()>1) return true;
+	else
+	{
  if(!object->m_ai) return false;
+	else
+	{
  Coord3D dir=*pos;
  Coord3D result={pos->x,pos->y,pos->z};
  const Coord3D *objectPos=&object->m_position;
@@ -32,7 +38,7 @@ bool SpecialAbilityUpdate::rva0044E85E(Coord3D *pos,float range)
  dir.z=0;
  int steps=(int)(range/10.0f)-1;
  dir.Normalize();
- dir.x=10.0f*dir.x;dir.y=10.0f*dir.y;dir.z=10.0f*dir.z;
+ dir.z=10.0f*dir.z;dir.y=10.0f*dir.y;dir.x=10.0f*dir.x;
  bool found=false;
  for(int i=0;i<steps;++i) {
   result.x-=dir.x; result.y-=dir.y; result.z-=dir.z;
@@ -41,6 +47,11 @@ bool SpecialAbilityUpdate::rva0044E85E(Coord3D *pos,float range)
   if(finder->QuickDoesPathExist(object,objectPos,&result,0)){found=true;break;}
  }
  if(!found) return false;
+	else
+	{
  *pos=result;
  return true;
+	}
+	}
+	}
 }
