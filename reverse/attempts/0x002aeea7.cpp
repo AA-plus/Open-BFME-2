@@ -1,7 +1,23 @@
 // ?rva002AEEA7@Player@@QAEXH@Z
-// partial score=0.96 date=2026-10-08
+// partial score=0.95 date=2026-10-12
+// stlport
 // cl: /Ireference/shims/bfme2_ascii /MD /EHsc /O1 /arch:SSE /G7
-// ?rva002AEEA7@Player@@QAEXH@Z @0x002AEEA7 400B Player orders all units to enter KindOf-7 structures via all-objects query plus team walks plus mask plus canEnter plus aiEnter. Evidence: LINK BONUS pin plus caller 0x003BBDB5 via ScriptActionsRva003BBD84 plus callee pins dlink_next 0x9C4AF5 plus iterate 0x263864 plus next 0x45623 plus getControllingPlayer 0x28AFA9 plus canEnter 0x41C2D0 plus rva0026C347 plus advance 0x263526 plus dtor 0x4AA28 plus BitSet 0x45411 plus filter 0x4584D plus forwarder 0x6256F0 plus globals KINDOFMASK_NONE ThePartitionManager TheActionManager plus donor Player garrisonAllUnits triple loop plus mask plus canEnter plus aiEnter plus sibling 0x002AF037 outer DLINK 0x32c plus team chain 0x334.
+//
+// ?rva002AEEA7@Player@@QAEXH@Z, retail 0x002AEEA7, 400 bytes. Player orders
+// all units to enter KindOf-7 structures: partition query over the
+// KindOf-7/all-objects filter, prototype/team/member walks, contain and
+// canEnterObject gates, then AICommandInterface::rva0026C347 on each
+// entering unit.
+//
+// Triple-loop skeleton, Team PMF idiom and prototype offsets follow the
+// landed siblings PlayerHuntCommands.cpp (setUnitsShouldHunt 0x002AE9B8) and
+// PlayerTeamCommands.cpp (ungarrisonAllUnits 0x002AF037). The object walk
+// uses the (obj = cur()) != 0 form with no done() call; the Object member
+// iterator is 24 bytes (m_cur plus 20 bytes ABI state). All callees rowed:
+// BitSet 0x00045411, filter 0x0004584D, forwarder 0x0006256F0, next
+// 0x00045623, dtor 0x0004AA28, iterate 0x00263864, advance 0x00263526,
+// getControllingPlayer 0x0028AFA9, canEnterObject 0x0041C2D0,
+// rva0026C347 0x0026C347. Original name unknown: honest address-derived name.
 typedef int Int;
 typedef bool Bool;
 
@@ -296,12 +312,9 @@ void Player::rva002AEEA7(int val)
 			Team* team = iter.cur();
 			if (!team)
 				continue;
-			for (DLINK_ITERATOR<Object> iterObj = team->iterate_TeamMemberList(); !iterObj.done(); iterObj.advance())
+			for (DLINK_ITERATOR<Object> iterObj = team->iterate_TeamMemberList(); iterObj.cur() != 0; iterObj.advance())
 			{
-				Object* obj = iterObj.cur();
-				if (!obj)
-					continue;
-				AIUpdateInterface* ai = obj->getAIUpdateInterface();
+				AIUpdateInterface* ai = iterObj.cur()->getAIUpdateInterface();
 				if (!ai)
 					continue;
 				Object* theBuilding = hits.first();
@@ -311,14 +324,14 @@ void Player::rva002AEEA7(int val)
 					if (contain)
 					{
 						int player = contain->getPlayerWhoEntered();
-						if (!((player == 0) || (player == obj->getControllingPlayer()->getPlayerMask())))
+						if (!((player == 0) || (player == iterObj.cur()->getControllingPlayer()->getPlayerMask())))
 						{
 							theBuilding = hits.next();
 							continue;
 						}
 					}
 					Bool flag;
-					if (!((BFMEActionManager*)TheActionManager)->canEnterObject(obj, theBuilding, (CommandSourceType)val, CHECK_CAPACITY, false, &flag))
+					if (!((BFMEActionManager*)TheActionManager)->canEnterObject(iterObj.cur(), theBuilding, (CommandSourceType)val, CHECK_CAPACITY, false, &flag))
 					{
 						theBuilding = hits.next();
 						continue;
