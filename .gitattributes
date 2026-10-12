@@ -13,11 +13,18 @@ reverse/attempts/*.cpp -text
 # can make the verification policy disappear before it runs.
 .githooks/* text eol=lf
 
-# Append-mostly ledgers written concurrently by many agents. The built-in union
-# merge driver combines both sides' added lines instead of emitting conflict
-# markers, so parallel row appends never conflict. This repo's ledgers are
-# LF-terminated from birth — keep them that way (BFME 1's mixed terminators
-# were pure legacy pain; `check_csv` rejects a mixed file).
+# Append-mostly ledgers written concurrently by many agents. Union merge
+# combines both sides' added lines instead of emitting conflict markers, so
+# parallel row appends never conflict. git's built-in union also brings back
+# rows one side deleted or edited, so clones register tools/merge_rows.py under
+# the name `union` (tools/setup_hooks.sh, .githooks/pre-commit) to remove them;
+# a clone without it still gets plain union, never a conflict. A row both sides
+# edited differently keeps both versions; each ledger's own checks decide
+# whether they can stand together (check_csv refuses two functions.csv rows for
+# one name and address, and accepts two symbols.csv addresses for one name).
+# No baseline, whitelist or other shrink-only list belongs here. This repo's
+# ledgers are LF-terminated from birth — keep them that way (BFME 1's mixed
+# terminators were pure legacy pain; `check_csv` rejects a mixed file).
 reverse/functions.csv text eol=lf merge=union
 reverse/symbols.csv text eol=lf merge=union
 reverse/deleted_rows.csv text eol=lf merge=union

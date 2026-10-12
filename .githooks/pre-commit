@@ -79,6 +79,29 @@ build_chunks() {
     fi
 }
 
+# Clones set up before tools/merge_rows.py existed never rerun setup_hooks.sh;
+# this is how they pick up the union driver (.gitattributes says why). The
+# command is tools/setup_hooks.sh's, character for character: worktrees share
+# one .git/config, so it must also work in a checkout older than the driver,
+# where it merges as git's built-in union did (git merge-file with the histogram
+# diff, git 2.44 or newer; without it that checkout's ledger merge is left
+# conflicted). Registering is no gate: three attempts a second apart at a config
+# another process holds locked, then it is left for a later commit.
+union_driver="if [ -f tools/merge_rows.py ] && [ -f .githooks/run-python3 ]; then sh .githooks/run-python3 tools/merge_rows.py %O %A %B %P; else echo 'merge.union.driver: tools/merge_rows.py or .githooks/run-python3 is not in this checkout; using git merge-file --union for' %P >&2; git merge-file --union --diff-algorithm=histogram '%A' '%O' '%B' || { echo 'merge.union.driver: git merge-file --union --diff-algorithm=histogram failed (it needs git 2.44 or newer); leaving a conflict in' %P >&2; exit 1; }; fi"
+if [ "$(git config --get merge.union.driver || true)" != "$union_driver" ]; then
+    registered=
+    for attempt in 1 2 3; do
+        if git config merge.union.driver "$union_driver" 2>/dev/null; then registered=1; break; fi
+        [ "$attempt" = 3 ] || sleep 1
+    done
+    if [ -n "$registered" ]; then
+        echo "pre-commit: registered tools/merge_rows.py as this clone's union merge driver" >&2
+    else
+        echo "pre-commit: could not write merge.union.driver in three attempts (.git/config locked or read-only?);" \
+             "ledger merges here stay as they were until a later commit registers it" >&2
+    fi
+fi
+
 # No two tracked paths may differ only in case — such a pair cannot check out on
 # Windows/macOS (case-insensitive FS), silently dropping a file and breaking those
 # clones. Reflects the staged index, so a colliding add is caught before it lands.

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Stdlib integration test for tools/setup_local_fleet.py."""
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -57,6 +58,10 @@ def main():
             assert not (gitdir / "openbfme-worker.json").exists()
             assert run("git", "-C", str(repo), "remote", "get-url", "origin") == origin
             assert run("git", "-C", str(repo), "config", "pull.rebase") == "true"
+            # The clone's ledger merge driver is the one tools/setup_hooks.sh registers.
+            setup = (ROOT / "tools" / "setup_hooks.sh").read_text(encoding="utf-8")
+            driver, = re.findall(r'^git config merge\.union\.driver "([^"]+)"$', setup, re.MULTILINE)
+            assert run("git", "-C", str(repo), "config", "merge.union.driver") == driver
     print("PASS local fleet: idempotent setup, isolated independent writers")
 
 

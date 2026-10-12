@@ -15,6 +15,15 @@ GENERATED_INPUTS = (
     "reverse/ghidra_functions.csv",
     "reverse/string_xrefs.tsv",
 )
+# tools/setup_hooks.sh's merge.union.driver, character for character.
+UNION_DRIVER = (
+    "if [ -f tools/merge_rows.py ] && [ -f .githooks/run-python3 ]; "
+    "then sh .githooks/run-python3 tools/merge_rows.py %O %A %B %P; "
+    "else echo 'merge.union.driver: tools/merge_rows.py or .githooks/run-python3 is not in "
+    "this checkout; using git merge-file --union for' %P >&2; "
+    "git merge-file --union --diff-algorithm=histogram '%A' '%O' '%B' || { echo 'merge.union.driver: "
+    "git merge-file --union --diff-algorithm=histogram failed (it needs git 2.44 or newer); "
+    "leaving a conflict in' %P >&2; exit 1; }; fi")
 
 
 def git(repo, *args, capture=False):
@@ -35,6 +44,7 @@ def configure_repo(repo, origin):
     git(repo, "config", "--local", "pull.rebase", "true")
     git(repo, "config", "--local", "rebase.autoStash", "true")
     git(repo, "config", "--local", "core.hooksPath", ".githooks")
+    git(repo, "config", "--local", "merge.union.driver", UNION_DRIVER)
     git(repo, "config", "--local",
         f"lfs.{origin}/info/lfs.locksverify", "false")
     if GH_EXE.exists():

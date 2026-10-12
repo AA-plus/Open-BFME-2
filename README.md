@@ -82,6 +82,18 @@ cd Open-BFME-2
 ./build.sh               # verify every tracked function against retail   (.\build.ps1 on Windows)
 ```
 
+`setup_hooks.sh` also registers `tools/merge_rows.py` as the merge driver for the
+ledgers in `reverse/`, so a rebase does not bring back rows the other side deleted
+or edited. A clone that skipped it gets the driver on its first commit attempt that
+reaches the pre-commit hook, if the hook can write `.git/config` (it makes three
+attempts, then leaves it for a later commit). A clone that only pulls keeps git's
+built-in union merge, unless it is a linked worktree: worktrees share one config, so
+one registers for all. A worktree older than the driver then merges ledgers as
+built-in union did, which needs `git merge-file --diff-algorithm` (git 2.44 or newer);
+with an older git that merge stops on a conflict. To check:
+`git config --get merge.union.driver` prints a command naming `tools/merge_rows.py`,
+or nothing if the driver is not registered.
+
 To check a single function while iterating, pass its file or name — a few seconds instead of the full run:
 
 ```bash
