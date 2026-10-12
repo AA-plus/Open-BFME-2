@@ -1,5 +1,7 @@
 // ?FrameUpdate@AptMyHero@@QAEXXZ
 // partial score=0.996575133485889 date=2026-10-12
+// ?FrameUpdate@AptMyHero@@QAEXXZ
+// partial score=0.996575133485889 date=2026-10-12
 // cl: /O1 /G7 /MD /EHsc /arch:SSE2 /Ireference/shims/bfme2_ascii
 // Identity: WB AptMyHero.cpp names SwitchToPendingHero (assert line816),
 // calls the same assignment/view/bling chain, and uses this+144/+148.
