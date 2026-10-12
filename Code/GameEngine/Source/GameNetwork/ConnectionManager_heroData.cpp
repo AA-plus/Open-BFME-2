@@ -201,7 +201,11 @@ UnsignedShort GenerateNextCommandID();
 class ConnectionManager
 {
 public:
-	void rva004CF1AD(NetCommandMsg *command);
+	// ?processHero@ConnectionManager@@QAEXPAVNetCommandMsg@@@Z: renamed from
+// placeholder rva004CF1AD — the WB twin's assert string
+// "Can not create MemoryReadFile in ConnectionManager::processHero" names the
+// enclosing function (SAGE convention, callgraph 2).
+	void processHero(NetCommandMsg *command);
 	void rva004D01D5(CreateAHeroData *hero, Int seed, UnsignedShort slot,
 		UnsignedByte playerMask);
 	void sendLocalCommand(NetCommandMsg *msg, UnsignedByte relay);
@@ -211,7 +215,7 @@ private:
 	Int m_localSlot;
 };
 
-void ConnectionManager::rva004CF1AD(NetCommandMsg *command)
+void ConnectionManager::processHero(NetCommandMsg *command)
 {
 	Rva004D58DE *msg = (Rva004D58DE *)command;
 	if (msg == 0 || TheGameInfo == 0)
@@ -281,7 +285,7 @@ void ConnectionManager::rva004D01D5(CreateAHeroData *hero, Int seed,
 	unsigned char *data = (unsigned char *)stream->bfmeTakeEC(&size);
 	msg->rva004D5925(data, size);
 	delete[] data;
-	rva004CF1AD(msg);
+	processHero(msg);
 	sendLocalCommand(msg, relay);
 	msg->detach();
 }

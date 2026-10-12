@@ -163,7 +163,7 @@ class ConnectionManager
 {
 public:
 	void rva004CF35D(NetWrapperCommandMsg *msg);
-	void rva004CF1AD(NetCommandMsg *command);
+	void processHero(NetCommandMsg *command);
 
 private:
 	Bool processNetCommand(NetCommandRef *ref);
@@ -277,7 +277,7 @@ Bool ConnectionManager::processNetCommand(NetCommandRef *ref)
 		processChat((NetChatCommandMsg *)msg);
 		return true;
 	case NETCOMMANDTYPE_HERODATA:
-		rva004CF1AD(msg);
+		processHero(msg);
 		return true;
 	case NETCOMMANDTYPE_FILE:
 		processFile((NetFileCommandMsg *)msg);
