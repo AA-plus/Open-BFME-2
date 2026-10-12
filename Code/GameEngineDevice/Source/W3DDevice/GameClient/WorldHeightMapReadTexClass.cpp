@@ -40,6 +40,14 @@ extern TerrainTypeCollection *TheTerrainTypes;
 // ?makeNrmTextureName@@ present-unmatched
 AsciiString makeNrmTextureName(const AsciiString &in);
 
+// ZH TerrainTypes.h getTexture: m_texture (+0x08) by value. Retail keeps it
+// out of line at 0x000AF1DD, directly before getNrmTexture; Anim2DTemplate's
+// identical name getter folds onto it.
+AsciiString TerrainType::getTexture() const
+{
+	return m_texture;
+}
+
 AsciiString TerrainType::getNrmTexture() const
 {
 	return makeNrmTextureName(m_texture);
