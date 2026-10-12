@@ -12,6 +12,13 @@
 // ??0Rva003ABECC@@QAE@PAX0@Z @0x003ABECC 49B
 // ??0Rva003ACDA0Module@@QAE@PAXPAVRva003AD71BTemplate@@@Z @0x003ACDA0 42B
 // ??0Rva003ACE5CModule@@QAE@PAXPAVRva003AD80BTemplate@@@Z @0x003ACE5C 42B
+// ??0Rva003ABB53@@QAE@PAX0@Z @0x003ABB53 42B
+// ??0Rva003ABDF9@@QAE@PAX0@Z @0x003ABDF9 49B
+// ??0Rva005E7420Object@@QAE@PAXPAVV3HostRva005E7420@@@Z @0x003ACE2D 42B
+// ??0Rva003ACEFCModule@@QAE@PAXPAVRva003AD886Template@@@Z @0x003ACEFC 49B
+// ??0Rva003AD0CAModule@@QAE@PAXPAVRva003AD9BBTemplate@@@Z @0x003AD0CA 49B
+// ??0Rva003AD100Module@@QAE@PAXPAVRva003AD9F7Template@@@Z @0x003AD100 49B
+// ??0Rva005E7AD0Object@@QAE@PAXPAVV3HostRva005E7AD0@@@Z @0x003AD136 49B
 // ??0Rva005E76E0Object@@QAE@PAXPAVV3HostRva005E76E0@@@Z @0x003ACE8B 42B
 // ??0Rva003ACDCFModule@@QAE@PAXPAVRva003AD757Template@@@Z @0x003ACDCF 42B
 // ??0Rva003ACDFEModule@@QAE@PAXPAVRva003AD793Template@@@Z @0x003ACDFE 42B
@@ -77,6 +84,21 @@ extern const void *const g_00C1D00C[];
 extern const void *const g_00C1D02C[];
 extern const void *const g_00C1D0BC[];
 extern const void *const g_00C1D788[];
+extern const void *const g_00C1C444[];
+extern const void *const g_00C1CD04[];
+extern const void *const g_00C1C620[];
+extern const void *const g_00C1C61C[];
+extern const void *const g_00C1CF08[];
+extern const void *const g_00C1CD14[];
+extern const void *const g_00C1C26C[];
+extern const void *const g_00C1CDCC[];
+extern const void *const g_00C1C900[];
+extern const void *const g_00C1CF18[];
+extern const void *const g_00C1CA00[];
+extern const void *const g_00C1CF38[];
+extern const void *const g_00C1CA3C[];
+extern const void *const g_00C1CF68[];
+extern const void *const g_00C1CAA0[];
 extern const void *const g_00C1CD54[];
 extern const void *const g_00C1CD50[];
 extern const void *const g_00C1CD90[];
@@ -127,6 +149,10 @@ public:
 }
 
 struct Rva005648FEInput;
+struct Rva005641EDInput;
+struct DrawInfo2;
+class Rva003AEE16 { public: Rva003AEE16(const RvaSmartPtr12 &a, const Rva005641EDInput &b); };
+class Rva005634F7 { public: Rva005634F7(void *a, DrawInfo2 *b); };
 class Rva003AE94E { public: Rva003AE94E(void *a, void *b); };
 class Rva003AEA42 { public: Rva003AEA42(const RvaSmartPtr12 &a, int b); };
 class Rva003AEF9B { public: Rva003AEF9B(const RvaSmartPtr12 &a, int b); };
@@ -506,4 +532,115 @@ Rva005E76E0Object::Rva005E76E0Object(void *a, V3HostRva005E76E0 *b)
 	STAMP(0x00, g_00C1CD90);
 	STAMP(0x14, g_00C1C290);
 	STAMP(0x18, g_00C1CD80);
+}
+
+// ---- two more intermediates over rowed bases, then the five module
+// constructors their factory call sites pin ----
+
+class Rva003ABB53 : public Rva005634F7
+{
+public:
+	Rva003ABB53(void *a, void *b);
+};
+
+Rva003ABB53::Rva003ABB53(void *a, void *b)
+	: Rva005634F7(a, (DrawInfo2 *)b)
+{
+	STAMP(0x00, g_00C1C444);
+	STAMP(0x14, g_00C1C780);
+	STAMP(0x18, g_00C1CD04);
+}
+
+class Rva003ABDF9 : public Rva003AEE16
+{
+public:
+	Rva003ABDF9(void *a, void *b);
+};
+
+Rva003ABDF9::Rva003ABDF9(void *a, void *b)
+	: Rva003AEE16(*(const RvaSmartPtr12 *)a, *(const Rva005641EDInput *)b)
+{
+	STAMP(0x00, g_00C1C620);
+	STAMP(0x14, g_00C1C61C);
+	STAMP(0x18, g_00C1C780);
+	STAMP(0x20, g_00C1CF08);
+}
+
+class V3HostRva005E7420;
+class Rva005E7420Object : public Rva003ABB53
+{
+public:
+	Rva005E7420Object(void *a, V3HostRva005E7420 *b);
+};
+
+Rva005E7420Object::Rva005E7420Object(void *a, V3HostRva005E7420 *b)
+	: Rva003ABB53(a, b)
+{
+	STAMP(0x00, g_00C1CD14);
+	STAMP(0x14, g_00C1C26C);
+	STAMP(0x18, g_00C1CD04);
+}
+
+class Rva003AD886Template;
+class Rva003ACEFCModule : public Rva003ABC6E
+{
+public:
+	Rva003ACEFCModule(void *a, Rva003AD886Template *b);
+};
+
+Rva003ACEFCModule::Rva003ACEFCModule(void *a, Rva003AD886Template *b)
+	: Rva003ABC6E(a, b)
+{
+	STAMP(0x00, g_00C1CDCC);
+	STAMP(0x14, g_00C1C504);
+	STAMP(0x18, g_00C1C900);
+	STAMP(0x1C, g_00C1CDBC);
+}
+
+class Rva003AD9BBTemplate;
+class Rva003AD0CAModule : public Rva003ABDF9
+{
+public:
+	Rva003AD0CAModule(void *a, Rva003AD9BBTemplate *b);
+};
+
+Rva003AD0CAModule::Rva003AD0CAModule(void *a, Rva003AD9BBTemplate *b)
+	: Rva003ABDF9(a, b)
+{
+	STAMP(0x00, g_00C1CF18);
+	STAMP(0x14, g_00C1C61C);
+	STAMP(0x18, g_00C1CA00);
+	STAMP(0x20, g_00C1CF08);
+}
+
+class Rva003AD9F7Template;
+class Rva003AD100Module : public Rva003ABE40
+{
+public:
+	Rva003AD100Module(void *a, Rva003AD9F7Template *b);
+};
+
+Rva003AD100Module::Rva003AD100Module(void *a, Rva003AD9F7Template *b)
+	: Rva003ABE40(a, b)
+{
+	STAMP(0x00, g_00C1CF38);
+	STAMP(0x14, g_00C1C640);
+	STAMP(0x18, g_00C1CA3C);
+	STAMP(0x1C, g_00C1CF28);
+}
+
+class V3HostRva005E7AD0;
+class Rva005E7AD0Object : public Rva003ABE8D
+{
+public:
+	Rva005E7AD0Object(void *a, V3HostRva005E7AD0 *b);
+};
+
+Rva005E7AD0Object::Rva005E7AD0Object(void *a, V3HostRva005E7AD0 *b)
+	: Rva003ABE8D(a, b)
+{
+	STAMP(0x00, g_00C1CF68);
+	STAMP(0x14, g_00C1C6A0);
+	STAMP(0x18, g_00C1CAA0);
+	STAMP(0x20, g_00C1C690);
 }
