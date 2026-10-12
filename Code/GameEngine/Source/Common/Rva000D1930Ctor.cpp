@@ -1,31 +1,19 @@
-// One constant-field constructor from the R3 scalar-field family.
-//
-// BFME1 byte-identical donor (reference/open-bfme-1
-// Code/GameEngine/Source/Common/R3ScalarFieldConstructors2.cpp); trimmed to
-// the single body that places in game.dat. The mov-eax-ecx opening marks a
-// constructor (the return value is `this`). Identity is not recovered: the
-// class name is the BFME1 constructor RVA and fields are offsets. The
-// relocated immediate is spelled as the address of an extern named for the
-// BFME2 address build.py fills in from retail.
-
-extern int Gen00BE4324;
-// Gen00BE4324: matched references place it at VA 0xbe4324 (retail .rdata value 9048317).
-int Gen00BE4324 = 9048317;
-
-class Rva000D1930
-{
+// RegionBonusInfo: retail ctor20E42C writes six zeros after the Snapshot
+// vptr. Native BE4324 has four slots: scalar4A10FD, emptyB3FD0,
+// literal-name3EFD37 and serializer3EFCD1. This replaces the old single-dword
+// address-named table with its complete owner; size0x1C is independently
+// witnessed by the two player member offsets258/274 and other constructors.
+// cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/moduledata
+#define BFME_SNAPSHOT_NAME_SLOT
+#include "Common/Snapshot.h"
+class RegionBonusInfo:public Snapshot {
 public:
-	Rva000D1930();
-	int *m_vtable;
-	int m_04, m_08, m_0C, m_10, m_14, m_18;
+ __declspec(nothrow) RegionBonusInfo(); virtual ~RegionBonusInfo(){}
+protected:
+ virtual void loadPostProcess(){}
+ virtual const char *GetSnapshotName()const{return "RegionBonusInfo";}
+ virtual void xfer(Xfer*);
+private:int m_04,m_08,m_0C,m_10,m_14,m_18;
 };
-Rva000D1930::Rva000D1930()
-{
-	m_vtable = &Gen00BE4324;
-	m_04 = 0;
-	m_08 = 0;
-	m_0C = 0;
-	m_10 = 0;
-	m_14 = 0;
-	m_18 = 0;
-}
+RegionBonusInfo::RegionBonusInfo(){m_04=0;m_08=0;m_0C=0;m_10=0;m_14=0;m_18=0;}
+typedef char BonusSize[sizeof(RegionBonusInfo)==28?1:-1];

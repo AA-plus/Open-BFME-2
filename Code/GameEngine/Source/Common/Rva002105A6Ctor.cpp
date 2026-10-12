@@ -1,7 +1,7 @@
 // cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /EHs /MD /D_STLP_USE_STATIC_LIB
 // Fix over the banked 0.93 attempt, from the retail unwind map: state 0
 // destroys the member at +4 through the folded 7-byte virtual dtor 0x0049B47C,
-// so Rva000D1930 has a virtual destructor; state 1 destroys +0x20 through the
+// so RegionBonusInfo has a virtual destructor; state 1 destroys +0x20 through the
 // vector<AsciiString> dtor 0x0042CC70 and state 2 destroys +0x2C through the
 // BfmeE16 vector dtor 0x0047FAB3, so the first vector holds AsciiStrings.
 // The 0.3 default at +0x54 is a compiler literal (retail pool 0x007CCB3C).
@@ -9,7 +9,7 @@
 //
 // ??0Rva002105A6@@QAE@H@Z @ 0x00210973 133B
 // Ctor for Rva002105A6 (0x58 bytes via factory 0x00210AB8). Evidence: ID at
-// +0 from counter 0x009FE1BC via caller 0x00210AE5; Rva000D1930 at +4 via
+// +0 from counter 0x009FE1BC via caller 0x00210AE5; RegionBonusInfo at +4 via
 // rowed 0x0020E42C; vectors at +0x20 plus 0x2C via rowed Vector_base BfmeE16
 // 0x00211E58; strings at +0x38 plus 0x44 emptied plus -1 at +0x3C plus 0x40;
 // floats 0 at +0x48 plus 0x4C plus 0x50 plus table 0x007CCB3C at +0x54; tail
@@ -35,11 +35,13 @@ namespace _STL {
 template <> void _STLP_alloc_proxy<BfmeE16*, BfmeE16, allocator<BfmeE16> >::deallocate(BfmeE16*, size_t);
 }
 
-class Rva000D1930
+class RegionBonusInfo
 {
 public:
-	Rva000D1930();
-	virtual ~Rva000D1930();
+	RegionBonusInfo();
+	virtual ~RegionBonusInfo();
+private:
+	int m_values[6];
 };
 
 class Rva00210749
@@ -55,13 +57,7 @@ public:
 	Rva002105A6(int id);
 private:
 	int m_id;
-	Rva000D1930 m_rva04;
-	int m_08;
-	int m_0C;
-	int m_10;
-	int m_14;
-	int m_18;
-	int m_1C;
+	RegionBonusInfo m_rva04;
 	_STL::vector<AsciiString> m_vec20;
 	_STL::vector<BfmeE16> m_vec2C;
 	AsciiString m_str38;
