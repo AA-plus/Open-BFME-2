@@ -1,6 +1,7 @@
 // cl: /DNDEBUG /MD /EHsc
-// ?rva002A77C1@Rva002A7611Holder@@QAEXHW4ObjectID@@PBX@Z @0x002A77C1 87B.
-// Rva002A7611Holder::rva002A77C1(int value, ObjectID id, const void *block):
+// ?AddUpgradableCommandPointsToBonus@Command@@QAEXHW4ObjectID@@PBX@Z @0x002A77C1 87B.
+// Command::AddUpgradableCommandPointsToBonus(int value, ObjectID id, const void *block)
+// (WorldBuilder Command.cpp:394):
 // add twin of 0x002A7611 remove. Constructs a 12-byte record at [ebp-0x18]
 // via rowed ??0Rva002A7400, fills value/id/*block, push_backs it into the
 // +0x20 vector (rowed _STL push_back 0x002A778D), then releases the local's
@@ -51,16 +52,16 @@ public:
 };
 }
 
-class Rva002A7611Holder
+class Command
 {
 public:
-	void rva002A77C1(int value, ObjectID id, const void *block);
+	void AddUpgradableCommandPointsToBonus(int value, ObjectID id, const void *block);
 private:
 	unsigned char m_pad[0x20];
 	_STL::vector<Rva002A76A0Element, _STL::allocator<Rva002A76A0Element> > m_vec;
 };
 
-void Rva002A7611Holder::rva002A77C1(int value, ObjectID id, const void *block)
+void Command::AddUpgradableCommandPointsToBonus(int value, ObjectID id, const void *block)
 {
 	Rva002A7400 tmp;
 	tmp.m_id = id;

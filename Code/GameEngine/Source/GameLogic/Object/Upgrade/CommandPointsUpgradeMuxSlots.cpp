@@ -17,25 +17,20 @@ enum ObjectID
 {
 	INVALID_ID = 0
 };
-// Native removal call 0x4B86FF passes the Player+0x60 holder unchanged.
-// The rowed erase worker models its two compared dwords as integers.
-class Rva002A7611
+// The Player+0x60 holder is Command (WorldBuilder Command.cpp).
+class Command
 {
 public:
-	void rva002A7611(int value, int id);
-};
-class Rva002A7611Holder
-{
-public:
-	void rva002A77C1(int value, ObjectID id, const void *block);
+	void AddUpgradableCommandPointsToBonus(int value, ObjectID id, const void *block);
+	void RemoveUpgradableCommandPointsFromBonus(int value, ObjectID id);
 };
 class Player
 {
 public:
-	Rva002A7611Holder *getRva060() { return &m_60; }
+	Command *getRva060() { return &m_60; }
 private:
 	unsigned char m_pad00[0x60];
-	Rva002A7611Holder m_60; // +0x60
+	Command m_60; // +0x60
 };
 class Object
 {
@@ -101,7 +96,7 @@ void CommandPointsUpgrade::upgradeImplementation()
 	Object *object = getObject();
 	Player *player = object->getControllingPlayer();
 	const CommandPointsUpgradeModuleData *data = getData();
-	player->getRva060()->rva002A77C1(data->m_118, object->m_id, data->m_11C);
+	player->getRva060()->AddUpgradableCommandPointsToBonus(data->m_118, object->m_id, data->m_11C);
 }
 void CommandPointsUpgrade::upgradeRemovalImplementation()
 {
@@ -109,8 +104,8 @@ void CommandPointsUpgrade::upgradeRemovalImplementation()
 	{
 		Object *object = getObject();
 		Player *player = object->getControllingPlayer();
-		reinterpret_cast<Rva002A7611 *>(player->getRva060())->rva002A7611(
-			getData()->m_118, static_cast<int>(object->m_id));
+		player->getRva060()->RemoveUpgradableCommandPointsFromBonus(
+			getData()->m_118, object->m_id);
 		setUpgradeExecuted(false);
 	}
 }
