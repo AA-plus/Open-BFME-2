@@ -1,5 +1,3 @@
-// ?update@AIMoneyLender@@QAEXXZ
-// partial score=0.97 date=2026-10-06
 // cl: /O1 /MD /arch:SSE
 // AIMoneyLender.cpp -- AIMoneyLender members at their WorldBuilder home
 // (reverse/wb_name_leads.csv: WB's debug build names the file and
@@ -83,9 +81,7 @@ void AIMoneyLender::update()
 		setState(3);
 		return;
 	}
-	UnsignedInt amount = lender->m_money.countMoney();
-	if (amount > m_rate)
-		amount = m_rate;
+	UnsignedInt amount = lender->m_money.countMoney() > m_rate ? m_rate : lender->m_money.countMoney();
 	if (amount <= 0)
 		return;
 	if (amount > m_remaining)
