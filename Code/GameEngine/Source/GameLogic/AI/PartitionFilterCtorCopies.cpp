@@ -306,3 +306,45 @@ void *bfmeAnchorRva003BA72B(void *where, int value, bool match)
 {
 	return ::new (where) Rva0026176EFilter(value, match);
 }
+
+// vftable 0x00BF91F0: Rva00263077Filter (allow 0x00263077, base getPlayerMask), out-of-line
+// constructor copy at 0x00263061 (22B): one pointer member at +0x08. Class name
+// address-derived from its allow body.
+class Rva00263077Filter : public Rva000421C8
+{
+public:
+	Rva00263077Filter(const void *target);
+	virtual bool allow(Object *obj);
+	const void *m_target;
+};
+
+__declspec(noinline) inline Rva00263077Filter::Rva00263077Filter(const void *target) : m_target(target)
+{
+}
+
+// ?bfmeAnchorRva00263061 absent-from-retail
+void *bfmeAnchorRva00263061(void *where, const void *target)
+{
+	return ::new (where) Rva00263077Filter(target);
+}
+
+// vftable 0x00BFAF88: Rva00271B3CFilter (allow 0x00271B3C, base getPlayerMask), out-of-line
+// constructor copy at 0x00271B26 (22B): one pointer member at +0x08. Class name
+// address-derived from its allow body.
+class Rva00271B3CFilter : public Rva000421C8
+{
+public:
+	Rva00271B3CFilter(const void *target);
+	virtual bool allow(Object *obj);
+	const void *m_target;
+};
+
+__declspec(noinline) inline Rva00271B3CFilter::Rva00271B3CFilter(const void *target) : m_target(target)
+{
+}
+
+// ?bfmeAnchorRva00271B26 absent-from-retail
+void *bfmeAnchorRva00271B26(void *where, const void *target)
+{
+	return ::new (where) Rva00271B3CFilter(target);
+}
