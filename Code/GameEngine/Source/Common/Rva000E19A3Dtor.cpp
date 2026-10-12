@@ -202,6 +202,7 @@ class TerrainFXShaderParameterSourceNamespace
 {
 public:
 	class SourceNamespace_Taint;
+	class SourceNamespace_Weather;
 };
 
 class TerrainFXShaderParameterSourceNamespace::SourceNamespace_Taint : public FXShaderParameterSourceNamespace_Struct
@@ -217,9 +218,13 @@ struct Rva000E2A81Binder : public FXShaderParameterSourceNamespace_Struct
 	virtual void ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry);
 };
 
-struct Rva000E2CA7Binder : public FXShaderParameterSourceNamespace_Struct
+// ?ResolveBindings@SourceNamespace_Weather@TerrainFXShaderParameterSourceNamespace@@UAEXPBD0PAVFXShaderParameterBinder@@@Z @0x000E2CA7 127B:
+// renamed from placeholder Rva000E2CA7Binder — the WorldBuilder twin asserts
+// SourceNamespace_Weather::ResolveBindings at EA's own FlatHeightMap.cpp.
+// Scope spelling follows the landed SourceNamespace_Shroud/Taint siblings.
+struct TerrainFXShaderParameterSourceNamespace::SourceNamespace_Weather : public FXShaderParameterSourceNamespace_Struct
 {
-	~Rva000E2CA7Binder() {}
+	~SourceNamespace_Weather() {}
 	virtual void ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry);
 };
 
@@ -260,7 +265,7 @@ private:
 	Rva000E236DBinder m_08;
 	TerrainFXShaderParameterSourceNamespace::SourceNamespace_Taint m_0C;
 	Rva000E2A81Binder m_10;
-	Rva000E2CA7Binder m_14;
+	TerrainFXShaderParameterSourceNamespace::SourceNamespace_Weather m_14;
 	Rva000E2DFDBinder m_18;
 	int m_1C;
 	RefCountPtr<TextureClass> m_20;
@@ -344,7 +349,7 @@ void Rva000E2A81Binder::ResolveBindings(const char *name, const char *handle, FX
 	}
 }
 
-void Rva000E2CA7Binder::ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry)
+void TerrainFXShaderParameterSourceNamespace::SourceNamespace_Weather::ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry)
 {
 	FXShaderParameterSourceNamespace_Struct::ResolveBindings(name, handle, registry);
 	if (name)
