@@ -1,12 +1,17 @@
 // ?rva00375DFF@AerialPathfinder@@QAE_NPAVObject@@PAVRva00375A73Context@@MM@Z
-// partial score=0.9777 date=2026-10-10
-// ?rva00375DFF@AerialPathfinder@@QAE_NPAVObject@@PAVRva00375A73Context@@MM@Z
-// partial score=0.97 date=2026-10-09
+// partial score=0.9777 date=2026-10-12
 // cl: /O1 /arch:SSE /G7 /MD /EHs
-// BFME1 f98983a7d AerialPathfinder_separationPush semantic donor;
-// target 375C28..375DFF/471 establishes layouts and all callees.
-#include "../../../Code/Libraries/Include/Lib/Coord3D.h"
-#include "../../../Code/GameEngine/Source/Common/PartitionRangeQueryCallView.h"
+// BFME1 donor f98983a7d: game/GameEngine/Source/GameLogic/AI/
+// AerialPathfinder_separationPush.cpp supplies the separation algorithm.
+// Native 00375C28..00375DFF, RET16, proves Object geometry+A8/radius+BC,
+// AI+258 slot97, partner ObjectID+4C0 and ThingTemplate kind words+108.
+// WB F2C0E0 corroborates the algorithm; original method name is unknown.
+// Native clears the temporary filter's unwind state immediately after the
+// range query, before all loop calls. Nonthrowing views of the existing
+// vector helpers preserve that lifetime without changing their linkage.
+// The native loop records an overlap after adding the separation vector.
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../Common/PartitionRangeQueryCallView.h"
 class GeometryInfo { public: char prefix[0x14];float radius; };
 class ThingTemplate {public: char prefix[0x108];unsigned kinds[7];};
 class AerialPartner {public:char prefix[0x4C0];unsigned id;};
@@ -32,9 +37,14 @@ class Rva00261603Filter : public Rva000421C8 {public:
 class BfmeVec3EJ;
 class Gen_000E5A50 {public:float bfmeDistanceSquared(const BfmeVec3EJ*)const throw();};
 class Rva001E438B {public:void rva001E438B(float*,const float*) throw();};
+// ?nativeLength absent-from-retail - source-only nonthrowing call view
 static __forceinline float nativeLength(const Coord3D*p) throw(){return p->length();}
+// ?nativeNormalize absent-from-retail - source-only nonthrowing call view
 static __forceinline void nativeNormalize(Coord3D*p) throw(){p->normalize();}
 extern PartitionManager* ThePartitionManager;
+struct Rva00375A73Coord;
+class Rva00375A73Context;
+class AerialPathfinder {public:bool rva00375C28(Object*,const Coord3D*,float*,Coord3D*);bool rva00375A73(Rva00375A73Context*,float,Rva00375A73Coord*);bool rva00375DFF(Object*,Rva00375A73Context*,float,float);};
 struct Rva00375A73Coord:Coord3D{};
 class Rva00375A73Context {public: char prefix[0x24];bool valid24;};
 class TerrainLogic
@@ -49,8 +59,12 @@ public:
     virtual float getGroundHeight(float x, float y, Coord3D *normal) const;
 };
 extern TerrainLogic *TheTerrainLogic;
-
-class AerialPathfinder {public:bool rva00375A73(Rva00375A73Context*,float,Rva00375A73Coord*); bool rva00375DFF(Object*,Rva00375A73Context*,float,float);bool rva00375C28(Object*,const Coord3D*,float*,Coord3D*);};
+// ?TheAerialPathfinder@@3PAVAerialPathfinder@@A, zero-filled .data at 0x00A01F10.
+// Owner from the retail layout: zero-filled globals follow their TUs in link
+// order, and 0x00A01F10 comes right after the StealthUpdate statics (code
+// 0x00373CCA..0x00373F59) among the 0x0037xxxx units, next to this class's
+// members (0x00375A73..0x00375ED7), not the Locomotor units at 0x001Exxxx.
+AerialPathfinder *TheAerialPathfinder;
 bool AerialPathfinder::rva00375C28(Object*obj,const Coord3D*pos,float*worstOverlap,Coord3D*push){
  bool clear=true;
  AerialAI* ai=obj->ai;
@@ -80,8 +94,6 @@ bool AerialPathfinder::rva00375C28(Object*obj,const Coord3D*pos,float*worstOverl
  }
  return clear;
 }
-
-extern AerialPathfinder *TheAerialPathfinder;
 bool AerialPathfinder::rva00375DFF(Object *obj, Rva00375A73Context *context, float distance, float clearance)
 {
     if (obj->ai && context->valid24)
@@ -102,7 +114,7 @@ bool AerialPathfinder::rva00375DFF(Object *obj, Rva00375A73Context *context, flo
             where.z = 0.0f;
             if (TheAerialPathfinder->rva00375C28(obj, &pos, &t, &where))
                 hit = true;
-            bool ok=above==true&&hit==true; return ok==true;
+            return ((above == true) && (hit == true));
         }
     }
     return true;
