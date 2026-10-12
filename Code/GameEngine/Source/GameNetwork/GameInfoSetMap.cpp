@@ -94,7 +94,7 @@ void GameInfo::setMap(AsciiString mapName)
 			path.removeLastChar();
 			path.removeLastChar();
 			path.removeLastChar();
-			path.concat("tga");
+			reinterpret_cast<StringBase<char> *>(&path)->concat("tga");
 			File *fp = TheFileSystem->openFile(path.str());
 			if (fp)
 			{
@@ -123,7 +123,7 @@ void GameInfo::setMap(AsciiString mapName)
 					mapName.nextToken(&token, "\\/");
 				}
 			}
-			newMapName.concat("/map.ini");
+			reinterpret_cast<StringBase<char> *>(&newMapName)->concat("/map.ini");
 			fp = TheFileSystem->openFile(newMapName.str());
 			if (fp)
 			{

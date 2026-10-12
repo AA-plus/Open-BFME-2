@@ -276,7 +276,7 @@ int AptPlayer::AddLevel(AsciiString directory,AsciiString file,bool show,int par
  }
  if(static_cast<unsigned>(level)>=14) return 0;
  if(m_levelData[level].m_c!=-1) return -1;
- if(!directory.endsWith("\\") && !directory.endsWith("/")) directory.concat("\\");
+ if(!directory.endsWith("\\") && !directory.endsWith("/")) reinterpret_cast<StringBase<char> *>(&directory)->concat("\\");
  m_levelData[level].rva00222647(level,directory,file,parameter);
  *static_cast<int *>(reinterpret_cast<Rva002235F3 *>(m_pad05c)->rva002235F3(&file))=level;
  if(show) {
@@ -545,7 +545,7 @@ GameWindow *AptPlayer::WinCreate(const AsciiString *name,AptLayoutInfoView *layo
  if(found!=window) return 0;
  found->m_name.setCopyInline(*originalName);
  AsciiString mainName(*originalName);
- mainName.concat(":MainWindow");
+ reinterpret_cast<StringBase<char> *>(&mainName)->concat(":MainWindow");
  UnicodeString title;
  title.translate(mainName);
  window->GameWindow::winSetText(title);

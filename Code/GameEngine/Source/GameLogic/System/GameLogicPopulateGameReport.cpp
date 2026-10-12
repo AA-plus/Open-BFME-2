@@ -234,36 +234,36 @@ void GameLogic::bfmePopulateGameReport(GameInfo *game, Int *localSlot)
 
 	m_commandLineArguments.format("  Important CommandLine Arguments:\n    System:");
 	if (Rva000308D0GetByte())
-		m_commandLineArguments.concat(" zeroFillMemory:ON");
+		reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" zeroFillMemory:ON");
 	else
-		m_commandLineArguments.concat(" zeroFillMemory:OFF");
+		reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" zeroFillMemory:OFF");
 	if (!TheGlobalData->m_audioOn)
-		m_commandLineArguments.concat(" -noAudio");
+		reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -noAudio");
 	if (!TheGlobalData->m_musicOn)
-		m_commandLineArguments.concat(" -noMusic");
-	m_commandLineArguments.concat("\n    GamePlay:");
+		reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -noMusic");
+	reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat("\n    GamePlay:");
 	if (TheGlobalData->m_fastGamePlay)
-		m_commandLineArguments.concat(" -fastGamePlay");
+		reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -fastGamePlay");
 	if (TheGlobalData->m_startingMoney)
 	{
 		line.format(" -startingMoney %d", TheGlobalData->m_startingMoney);
 		m_commandLineArguments.concat(line);
 	}
 
-	m_commandLineArguments.concat("\n    Network:");
-	if (TheXObjectCRC) m_commandLineArguments.concat(" -xObjectCRC");
-	if (TheXPartitionCRC) m_commandLineArguments.concat(" -xPartitionCRC");
-	if (TheXCollisionCRC) m_commandLineArguments.concat(" -xCollisionCRC");
-	if (TheXShroudCRC) m_commandLineArguments.concat(" -xShroudCRC");
-	if (TheXTaintCRC) m_commandLineArguments.concat(" -xTaintCRC");
-	if (TheXTerrainLogicCRC) m_commandLineArguments.concat(" -xTerrainLogicCRC");
-	if (TheXPlayerCRC) m_commandLineArguments.concat(" -xPlayerCRC");
-	if (TheXAICRC) m_commandLineArguments.concat(" -xAICRC");
-	if (TheXLWCRC) m_commandLineArguments.concat(" -xLWCRC");
-	if (TheVerifyClientCRC) m_commandLineArguments.concat(" -verifyClientCRC");
-	if (g_Rva00A02D86) m_commandLineArguments.concat(" -deepCRC");
-	if (TheLiteCRC) m_commandLineArguments.concat(" -liteCRC");
-	if (TheBinaryDeepCRC) m_commandLineArguments.concat(" -binaryDeepCRC");
+	reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat("\n    Network:");
+	if (TheXObjectCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xObjectCRC");
+	if (TheXPartitionCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xPartitionCRC");
+	if (TheXCollisionCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xCollisionCRC");
+	if (TheXShroudCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xShroudCRC");
+	if (TheXTaintCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xTaintCRC");
+	if (TheXTerrainLogicCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xTerrainLogicCRC");
+	if (TheXPlayerCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xPlayerCRC");
+	if (TheXAICRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xAICRC");
+	if (TheXLWCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -xLWCRC");
+	if (TheVerifyClientCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -verifyClientCRC");
+	if (g_Rva00A02D86) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -deepCRC");
+	if (TheLiteCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -liteCRC");
+	if (TheBinaryDeepCRC) reinterpret_cast<StringBase<char> *>(&m_commandLineArguments)->concat(" -binaryDeepCRC");
 	if (TheDebugCRCFromFrame != -1)
 	{
 		line.format(" -debugCRCFromFrame %d", TheDebugCRCFromFrame);

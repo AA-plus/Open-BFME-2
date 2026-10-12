@@ -372,12 +372,12 @@ void ScriptEngine::evaluateAndProgressAllSequentialScripts()
 
 				AsciiString msg = "Advancing SeqScript '";
 				msg.concat(seqScript->m_bfmeScriptName);
-				msg.concat("' on ");
+				reinterpret_cast<StringBase<char> *>(&msg)->concat("' on ");
 				AsciiString name;
 				if (team) name = team->getName();
 				if (obj) name = obj->bfme_getName_b94f2();
 				msg.concat(name);
-				msg.concat(" -- ");
+				reinterpret_cast<StringBase<char> *>(&msg)->concat(" -- ");
 
 				int instruction = seqScript->m_currentInstruction;
 				ScriptAction *action = seqScript->m_scriptToExecuteSequentially->bfme_getAction_6f132();
