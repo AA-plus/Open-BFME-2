@@ -1,22 +1,15 @@
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
-// partial score=0.9246599982892996 date=2026-10-12
+// partial score=0.9543393929026057 date=2026-10-12
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
-// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
-// Astra high-b replay: diagnostic fitness 0.9246599982892996.
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
 // stlport
-//
-// Native 50366B..503D15: complete 1706B, exact frame 0x1D8.
-// Every instruction/call/register/branch/EH-state transition aligns, but 99
-// stack operands still differ. This is a bank, not a verified recovery.
-// Explicit placement into two dead scalar/iterator slots removes the former
-// extra four-byte frame slot. LocalPlacement has no placement-delete overload:
-// its storage is automatic and requires no deallocation when construction fails.
-// This is a source-level lifetime experiment, not evidence that retail used
-// placement construction. The return values are discarded and trivially
-// destructible; the overwritten entry/iterator values have no later reads.
-// Existing converting-pair folds and ThingFactory::findTemplate resolve all
-// matching-time calls. Rva004FFE72Part initialization remains link-only debt.
+// Native50366B..503D15:1706B and frame1D8 exact; 60 differing bytes,
+// all stack-slot operands. Every opcode/register/branch/call/EH state aligns.
+// Exposing the ordinary PlayerInfoMap/ArmyInfoMap/IntIntMap insert bodies
+// permits native-size allocation without the old placement experiments.
+// Both discarded insert results are now ordinary C++ expressions.
+// This is a bank, not a verified recovery. Existing Rva004FFE72Part::Init
+// remains link-only debt; target identities/layout evidence is below.
 //
 // Identity: the WorldBuilder twin 0x012FDB20 is
 // LWAIWorldInformation::GatherWorldInformation in
@@ -142,10 +135,7 @@ typedef _STL::map<int, Rva00501776> PlayerInfoMap;
 namespace _STL {
 template <> void PlayerInfoMap::_Rep_type::clear();
 template <> void RegionInfoMap::_Rep_type::clear();
-template <> PlayerInfoMap::iterator PlayerInfoMap::insert(PlayerInfoMap::iterator, const PlayerInfoMap::value_type &);
 template <> RegionInfoMap::iterator RegionInfoMap::insert(RegionInfoMap::iterator, const RegionInfoMap::value_type &);
-template <> ArmyInfoMap::iterator ArmyInfoMap::insert(ArmyInfoMap::iterator, const ArmyInfoMap::value_type &);
-template <> IntIntMap::iterator IntIntMap::insert(IntIntMap::iterator, const IntIntMap::value_type &);
 template <> _STL::pair<IntIntTree::iterator, IntIntTree::iterator> IntIntTree::equal_range(const int &);
 template <> void vector<ScienceType>::push_back(const ScienceType &);
 template <> ScienceType *vector<ScienceType>::erase(ScienceType *, ScienceType *);
@@ -324,8 +314,6 @@ private:
 	IntIntMap m_RegionInfoByRegion;      // +0x1C
 };
 
-struct LocalPlacement {void *where; LocalPlacement(void *p):where(p){}};
-__forceinline void *operator new(unsigned int,LocalPlacement p) throw() {return p.where;}
 void LWAIWorldInformation::GatherWorldInformation()
 {
 	m_PlayerInfo.clear();
@@ -377,7 +365,7 @@ void LWAIWorldInformation::GatherWorldInformation()
 
 		_STL::pair<int, Rva00501656> regionPair(info.m_ownerID, info);
 		RegionInfoMap::iterator it = m_RegionInfo.insert(m_RegionInfo.begin(), regionPair);
-		new(LocalPlacement(&it)) IntIntMap::iterator(m_RegionInfoByRegion.insert(m_RegionInfoByRegion.begin(), _STL::make_pair(info.m_regionID, (int)&it->second)));
+		m_RegionInfoByRegion.insert(m_RegionInfoByRegion.begin(), _STL::make_pair(info.m_regionID, (int)&it->second));
 	}
 
 	int playerCount = ((LWAILogicView *)TheLivingWorldLogic)->m_players.size();
@@ -408,7 +396,7 @@ void LWAIWorldInformation::GatherWorldInformation()
 				int entry = ((const Rva0040CB2CIndexedField *)summary)->get(e);
 				AsciiString name(*(const AsciiString *)(entry + 4));
 				int templateID = ((LWAIThingTemplateView *)TheThingFactory->findTemplate(name))->m_5c4;
-				new(LocalPlacement(&entry)) IntIntTree::iterator(((IntIntTree *)&armyInfo.m_units)->insert_equal(IntIntPair(templateID, ((const Rva0040CC1BIndexedField *)summary)->findBySecond(entry))));
+				((IntIntTree *)&armyInfo.m_units)->insert_equal(IntIntPair(templateID, ((const Rva0040CC1BIndexedField *)summary)->findBySecond(entry)));
 			}
 			int armyRegion = ((Rva00318C79Owner *)army)->rva00318C79();
 			armyInfo.m_region = (Rva00501656 *)m_RegionInfoByRegion.find(armyRegion)->second;
