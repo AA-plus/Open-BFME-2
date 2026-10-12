@@ -60,17 +60,30 @@ inline Rva004CA13::~Rva004CA13()
 {
 }
 
-class Rva00224A90
+// The base is AptPlayer (its rowed constructor 0x00224E10 and destructor
+// 0x00224A90); Rva00628FD is the Win32GameEngine slot-37 factory's 0x32C
+// product (Win32GameEngineFactories.cpp), which adds only its own table.
+class AptPlayer
 {
 public:
-	virtual ~Rva00224A90();
+	AptPlayer();
+	virtual ~AptPlayer();
+private:
+	char m_unmodelled_04[0x32C - 0x04];
 };
 
-class Rva00628FD : public Rva00224A90
+class Rva00628FD : public AptPlayer
 {
 public:
+	Rva00628FD();
 	virtual ~Rva00628FD();
 };
+
+// ??0Rva00628FD@@QAE@XZ, retail 0x000628EB (18 bytes): the base constructor,
+// then the 0x00BC57E0 table.
+Rva00628FD::Rva00628FD()
+{
+}
 
 inline Rva00628FD::~Rva00628FD()
 {
