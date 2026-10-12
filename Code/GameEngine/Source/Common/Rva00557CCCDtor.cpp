@@ -1,5 +1,4 @@
 // ??1Rva00557CCC@@QAE@XZ
-// partial score=0.95 date=2026-10-07
 // cl: /O1 /arch:SSE /G7 /EHsc- /D_STLP_NO_EXCEPTIONS /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // ??1Rva00557CCC@@QAE@XZ @0x00557CCC 204B
@@ -10,10 +9,25 @@
 
 namespace _STL { }
 
-struct MutexClass { unsigned int unknown[2]; ~MutexClass(); };
+struct MutexClass { unsigned int unknown[2]; ~MutexClass(); struct LockClass { ~LockClass(); }; };
 struct Rva00553222 { virtual void virtualSlot(); void rva00553222(); ~Rva00553222() {} };
 struct Rva005562DD { unsigned int unknown[3]; ~Rva005562DD(); };
-struct Rva0009990D { unsigned int unknown[3]; void clear(); ~Rva0009990D() { clear(); } };
+void __cdecl operator delete(void *);
+// Existing neutral lock-owner pin at9990D: this unit emits its whole26B
+// null/clear/LockClass613AC0/delete2FD60 teardown equal to the rowed clear
+// provider. The12B member extent follows the parent layout; fields after
+// the pointer remain unknown. No original class identity is asserted.
+struct Rva006609D0LockHolder {
+ MutexClass::LockClass *m_ptr;
+ unsigned int unknown[2];
+ __declspec(noinline) ~Rva006609D0LockHolder() {
+  MutexClass::LockClass *old=m_ptr;
+  m_ptr=0;
+  if(!old)return;
+  old->~LockClass();
+  ::operator delete(old);
+ }
+};
 
 struct BfmeOpaqueOwnedRecord1408 {
 	unsigned int head[2];
@@ -55,7 +69,7 @@ private:
 	Rva00142D70 m_owned84;
 	Rva005562DD m_member90;
 	MutexClass m_mutex9c;
-	Rva0009990D m_clearA4;
+	Rva006609D0LockHolder m_clearA4;
 };
 
 Rva00557CCC::~Rva00557CCC()
