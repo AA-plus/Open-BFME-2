@@ -135,7 +135,8 @@ public:
  virtual void *rvaDestroy(unsigned);
  int references;
  Rva0037DCA5 *m_object;
- char unknown0C[0x1C];
+ float health;
+ char unknown10[0x18];
  Rva004F9C8ERecord *m_record;
  Rva0037DCA5 *getObject() const {return m_object;}
  Rva004F9C8ERecord *getRecord() const {return m_record;}
@@ -189,6 +190,7 @@ public:
  void rva004F9C8E(TreeHintRef00217D4C *,int);
  void rva004F68B8(unsigned,bool);
  void buildReinforcementMaps();
+ void completeRound();
  void addUnitsForCurrentRound(int);
  void rva004F9635(Rva004F9635Rec *);
  void rva004F9658(Rva004FA168Storage &,EntryVector &,ArmySummary *,unsigned,bool);
@@ -304,4 +306,36 @@ void LivingWorldAutoResolveBattle::rva004F68B8(unsigned index,bool quiet) {
   bonuses[index]=players[index].schedule->getBonusForResourceAmount(amount);
  }
  else bonuses[index]=0;
+}
+
+class Rva0059ADD1 {public:bool rva0059ADD1();};
+class Rva0059AF30 {public:void rva0059AF30(int);};
+// Native4F9D6A..4F9E59239B; WB12EF840 names completeRound at home1014/1018.
+// Walk both unit vectors backwards; remove dead units or update/regenerate.
+// Stop regeneration at round500. At round1000 choose the larger side (ties0),
+// clear the loser health and remove entries whose native predicate permits it.
+void LivingWorldAutoResolveBattle::completeRound() {
+ for(int side=0;side<2;++side) {
+  Rva004FA168Storage &units=currentUnits[side];
+  Rva004F87BCElement *position=units.finish;
+  while(position!=units.start) {
+   --position;
+   if(reinterpret_cast<Rva0059ADD1 *>(position->m_ptr)->rva0059ADD1())
+    rva004F9C8E(reinterpret_cast<TreeHintRef00217D4C *>(position),side);
+   else reinterpret_cast<Rva0059AF30 *>(position->m_ptr)->rva0059AF30(roundNumber<500);
+  }
+ }
+ for(unsigned index=0;index<players.size();++index)rva004F68B8(index,false);
+ if(roundNumber>=1000) {
+  if(reinterpret_cast<UnitVector *>(&currentUnits[0])->size()>=reinterpret_cast<UnitVector *>(&currentUnits[1])->size())winner=0;
+  else winner=1;
+  int loser=winner==0;
+  Rva004F87BCElement *position=currentUnits[loser].finish;
+  while(position!=currentUnits[loser].start) {
+   --position;
+   reinterpret_cast<LivingWorldAutoResolveUnit *>(position->m_ptr)->health=0.0f;
+   if(reinterpret_cast<Rva0059ADD1 *>(position->m_ptr)->rva0059ADD1())
+    rva004F9C8E(reinterpret_cast<TreeHintRef00217D4C *>(position),loser);
+  }
+ }
 }
