@@ -17257,3 +17257,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva0029FCD9@InGameUI@@QAE_NPBD@Z,0x0029FCD9,callee of the seat-3 0x0035AED4 radius-cursor parser (ret 4)
 ?rva0036BB2F@Rva00368344@@QAEXPBVWaypoint@@_NH@Z,0x0036BB2F,callee of ?aiDoCommand@Rva00368344@@UAEXPBUAICommandParms@@@Z
 ?rva00343DD8@@YA_NPAX0@Z,0x00343DD8,callee of the seat-3 0x00343EE5 helper (cdecl; returns its test in AL)
+?rva00142410@BfmeSceneVector@@QAEXPAPAUGen_00943CF0_Node@@PAVCameraClass@@PBM@Z,0x00142410,callee of ?Visibility_Check@RTS3DScene@@UAEXPAVCameraClass@@@Z
+?_M_erase_after@?$_Slist_base@HV?$allocator@H@_STL@@@_STL@@IAEPAU_Slist_node_base@2@PAU32@0@Z,0x0006FABF,callee of ?Visibility_Check@RTS3DScene@@UAEXPAVCameraClass@@@Z
