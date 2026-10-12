@@ -19,7 +19,8 @@ void __debugbreak();
 class Rva006EE1B0Inner
 {
 public:
-	char m_pad1C[0x1C];
+	char m_pad18[0x18];
+	int m_frame;          // +0x18
 	unsigned int m_flags; // +0x1C
 };
 
@@ -73,6 +74,43 @@ AptValue *rva006ee210(BfmeAptValue006DCD20 *entry)
 		}
 		value->m_inner->m_flags |= 0x02000000;
 	}
+	return g_rva00e18078;
+}
+
+// Two 154-byte Ghidra-unlisted siblings: step the sprite one frame forward
+// (0x006EE270) or back (0x006EE310) from the +0x18 current frame through the
+// rowed AptCIH::jumpToFrame 0x006E2C10, then clear the same bit 25 the stop
+// worker above clears. Both carry the AptCIH.h:125 isSpriteInstBase()
+// assert before each inner access. Address-derived names.
+class AptCIH
+{
+public:
+	void jumpToFrame(int frame);
+};
+
+static __forceinline Rva006EE1B0Inner *spriteInst(BfmeAptValue006DCD20 *value)
+{
+	if (!((const Rva006CFCD0 *)value)->isSpriteInstBase())
+	{
+		g_bfmeAptAssertAtE17734("isSpriteInstBase()",
+			"c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h", 0x7D);
+		if (g_bfmeAptBreakOnAssertAtDDC01C)
+			__debugbreak();
+	}
+	return value->m_inner;
+}
+
+AptValue *rva006ee270(BfmeAptValue006DCD20 *entry)
+{
+	((AptCIH *)entry->rva006DCF60(false))->jumpToFrame(spriteInst(entry->rva006DCF60(false))->m_frame + 1);
+	spriteInst(entry->rva006DCF60(false))->m_flags &= 0xFDFFFFFF;
+	return g_rva00e18078;
+}
+
+AptValue *rva006ee310(BfmeAptValue006DCD20 *entry)
+{
+	((AptCIH *)entry->rva006DCF60(false))->jumpToFrame(spriteInst(entry->rva006DCF60(false))->m_frame - 1);
+	spriteInst(entry->rva006DCF60(false))->m_flags &= 0xFDFFFFFF;
 	return g_rva00e18078;
 }
 
