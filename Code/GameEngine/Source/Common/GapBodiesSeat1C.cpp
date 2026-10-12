@@ -653,3 +653,165 @@ Rva003B260FNode *Rva003B260F::rva003B260F(Rva003B260FNode *node) const
 	}
 	return 0;
 }
+
+// --- 0x003E3BAE (13B): bit 2 of the +0x438 byte.
+class Rva003E3BAE
+{
+public:
+	bool rva003E3BAE() const;
+private:
+	char m_pad000[0x438];
+	unsigned char m_438;
+};
+
+bool Rva003E3BAE::rva003E3BAE() const
+{
+	return (m_438 >> 2) & 1;
+}
+
+// --- 0x003E4B74 (15B): the second argument's +8 count is not positive;
+// 0x003EFCC0 (17B): stores the second word through an optional pointer.
+struct Rva003E4B74Arg
+{
+	int m_00;
+	int m_04;
+	int m_08;
+};
+
+class Rva003E4B74
+{
+public:
+	bool rva003E4B74(int unused, const Rva003E4B74Arg *arg);
+	void rva003EFCC0(int *out, int value);
+};
+
+bool Rva003E4B74::rva003E4B74(int, const Rva003E4B74Arg *arg)
+{
+	return arg->m_08 <= 0;
+}
+
+void Rva003E4B74::rva003EFCC0(int *out, int value)
+{
+	if (out)
+		*out = value;
+}
+
+// --- 0x003EF5E8 (19B): zeroes the +0x1C position; 0x003EFE63 (15B): clears
+// +0x17C and the +0x1A3 flag.
+class Rva003EF5E8
+{
+public:
+	void rva003EF5E8();
+	void rva003EFE63();
+private:
+	char m_pad000[0x1C];
+	float m_1C;
+	float m_20;
+	float m_24;
+	char m_pad028[0x17C - 0x28];
+	int m_17C;
+	char m_pad180[0x1A3 - 0x180];
+	bool m_1A3;
+};
+
+void Rva003EF5E8::rva003EF5E8()
+{
+	m_1C = 0.0f;
+	m_20 = 0.0f;
+	m_24 = 0.0f;
+}
+
+void Rva003EF5E8::rva003EFE63()
+{
+	m_17C = 0;
+	m_1A3 = false;
+}
+
+// --- 0x003F0038 (11B): +0 equals +4; 0x003F0043 (14B): flag +0x34 set and
+// +0x20 non-zero; 0x003F0051 (14B): +0x20 non-zero and flag +0x34 clear.
+class Rva003F0038
+{
+public:
+	int rva003F0038() const;
+	int rva003F0043() const;
+	int rva003F0051() const;
+private:
+	int m_00;
+	int m_04;
+	char m_pad08[0x20 - 8];
+	int m_20;
+	char m_pad24[0x34 - 0x24];
+	bool m_34;
+};
+
+int Rva003F0038::rva003F0038() const
+{
+	return m_00 == m_04;
+}
+
+int Rva003F0038::rva003F0043() const
+{
+	return m_34 && m_20 != 0;
+}
+
+int Rva003F0038::rva003F0051() const
+{
+	return m_20 != 0 && !m_34;
+}
+
+// --- 0x003F4332 (16B) and 0x003F452B (13B): the first word of / the
+// indexed 0x30-byte record at *(+4); 0x003F449C (13B): the indexed 0x68-byte
+// record at *(+0x10); 0x003F4627 (13B): the indexed 0x1C-byte record at
+// *(+0x18).
+struct Rva003F4332Record
+{
+	int m_00;
+	char m_pad04[0x30 - 4];
+};
+
+struct Rva003F449CRecord
+{
+	char m_data[0x68];
+};
+
+struct Rva003F4627Record
+{
+	char m_data[0x1C];
+};
+
+class Rva003F4332
+{
+public:
+	int rva003F4332(int index) const;
+	Rva003F4332Record *rva003F452B(int index);
+	Rva003F449CRecord *rva003F449C(int index);
+	Rva003F4627Record *rva003F4627(int index);
+private:
+	int m_00;
+	Rva003F4332Record *m_04;
+	int m_08;
+	int m_0C;
+	Rva003F449CRecord *m_10;
+	int m_14;
+	Rva003F4627Record *m_18;
+};
+
+int Rva003F4332::rva003F4332(int index) const
+{
+	return m_04[index].m_00;
+}
+
+Rva003F4332Record *Rva003F4332::rva003F452B(int index)
+{
+	return &m_04[index];
+}
+
+Rva003F449CRecord *Rva003F4332::rva003F449C(int index)
+{
+	return &m_10[index];
+}
+
+Rva003F4627Record *Rva003F4332::rva003F4627(int index)
+{
+	return &m_18[index];
+}
