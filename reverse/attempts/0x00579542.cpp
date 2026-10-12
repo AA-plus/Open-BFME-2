@@ -1,8 +1,19 @@
-// ?rva00579542@Rva005794ED@@UAEXXZ
-// partial score=0.8 date=2026-10-06
+// ?rva00579542@EndTurnButtonImpl@StrategicHUD@@UAEXXZ
+// partial score=0.95 date=2026-10-12
+// ?rva00579542@EndTurnButtonImpl@StrategicHUD@@UAEXXZ
+// Whole Rva005794EDDtor.cpp with slot 6 added (2026-10-12): the +0x18 handle
+// is TreeHintRef00217D4C with its rowed operator= 0x002174A4 visible
+// (noinline), which removes the empty temporary's normal-path release as in
+// retail. 43 B; the only difference left is retail computing this+0x18
+// (add ecx,0x18) before pushing the temporary's address. Cast target,
+// reference target, setter/accessor, named/bound empty locals and /G5-/G7/GB
+// keep the order.
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
-// ??1Rva005794ED@@UAE@XZ @0x005794ED 85B: virtual dtor with AsciiString at +8 plus Rva0052413E at +0xC plus TargetRef at +0x18.
-// Evidence: deleting-dtor callers 0x0042D4EB 0x0042D7A3 0x0042D7C6 plus rowed Release 0x0007DEEF plus rowed 0x0052413E plus rowed releaseBuffer 0x00036410 plus vtables 0x00C6ECBC 0x00C6EE28; prev Rva004FAC6BCtor.
+// ??1EndTurnButtonImpl@StrategicHUD@@QAE@XZ @0x005794ED 85B: dtor with AsciiString at +8 plus Rva0052413E at +0xC plus TargetRef at +0x18.
+// Evidence: direct callers 0x0042D4EB 0x0042D7A3 0x0042D7C6 plus rowed Release 0x0007DEEF plus rowed 0x0052413E plus rowed releaseBuffer 0x00036410 plus vtables 0x00C6ECBC 0x00C6EE28; prev Rva004FAC6BCtor.
+// Not virtual: slot 0 of the class's table 0x00C6ECBC is the byte getter 0x004C54EC (as WB's
+// table's slot 0 is a 17-byte getter), the base table 0x00C6EE28 is seven __purecall slots,
+// and every delete calls 0x005794ED directly before operator delete.
 #include "ascii_string.h"
 
 struct TargetRef00217D4C
@@ -12,74 +23,216 @@ struct TargetRef00217D4C
 };
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *p);
 
-class Rva0052413E
+// Delegate payload (object, member) handed to the command-map reference
+// (as in Rva0042DB21Method.cpp).
+class AptCommandTarget
+{
+};
+
+struct DelegateDesc
+{
+	template <class T> DelegateDesc(T *object, void (T::*method)(const char *path))
+		: m_object(reinterpret_cast<AptCommandTarget *>(object)), m_method(reinterpret_cast<void (AptCommandTarget::*)(const char *path)>(method)) {}
+
+	AptCommandTarget *m_object;
+	void (AptCommandTarget::*m_method)(const char *path);
+};
+
+class AptCommandMap
 {
 public:
-	~Rva0052413E();
+	void *m_vtbl;
+	int m_refCount;
+};
+
+// 0x00579E47 is rowed as the delegate-wrapper constructor ??0Rva00579E47@@QAE@ABUDelegateDesc@@@Z
+// (built in place as the by-value AddCommandMap argument); AptRef<T> builds through it.
+class Rva00579E47
+{
+public:
+	Rva00579E47(const DelegateDesc &desc); // 0x00579E47
+protected:
+	Rva00579E47() {}
+};
+
+template <class T> class AptRef : public Rva00579E47
+{
+public:
+	AptRef(const DelegateDesc *desc) : Rva00579E47(*desc) {}
+	AptRef(const AptRef &that) : m_ptr(that.m_ptr)
+	{
+		if (m_ptr)
+			m_ptr->m_refCount++;
+	}
+	~AptRef()
+	{
+		if (m_ptr)
+			ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)m_ptr);
+	}
+
+private:
+	T *m_ptr;
+};
+
+// The 12-byte command-map name list: ctor 0x001F81BF (ICF fold, pinned),
+// AddCommandMap 0x0052458E, dtor 0x0052413E (pinned).
+class AptCommandMapAdder
+{
+public:
+	AptCommandMapAdder();
+	~AptCommandMapAdder();
+	void AddCommandMap(const AsciiString &name, AptRef<AptCommandMap> map);
+
+	__forceinline void AddCommandMapDelegate(const AsciiString &name, DelegateDesc desc)
+	{
+		AddCommandMap(name, &desc);
+	}
+
 private:
 	char m_pad[0xC];
 };
 
+// "prefix + name + text" concat nodes (layout as in System/RegistryAsciiPath.cpp).
+class Rva000B3F84Pair
+{
+public:
+	Rva000B3F84Pair() {}
+	Rva000B3F84Pair *init(const char *src); // 0x000B3F84
+
+	const char *m_ptr;
+	int m_len;
+};
+
+struct AsciiStringRef
+{
+	const AsciiString *m_string;
+};
+
+struct AsciiStringPlusString : AsciiStringRef
+{
+	AsciiStringRef m_second;
+};
+
+struct AsciiStringPlusStringText : AsciiStringPlusString
+{
+	operator AsciiString(); // 0x0050F74B
+
+	Rva000B3F84Pair m_right;
+};
+
+static __forceinline AsciiStringPlusString operator+(const AsciiString &left, const AsciiString &right)
+{
+	AsciiStringPlusString result;
+	result.m_string = &left;
+	result.m_second.m_string = &right;
+	return result;
+}
+
+// ?operator+(AsciiStringPlusString, text) present-unmatched (inline, emitted out of line; ICF-folded at 0x00109CFD; pinned)
+inline AsciiStringPlusStringText operator+(const AsciiStringPlusString &left, const char *right)
+{
+	Rva000B3F84Pair text;
+	text.init(right);
+	AsciiStringPlusStringText result;
+	static_cast<AsciiStringPlusString &>(result) = left;
+	result.m_right = text;
+	return result;
+}
+
 extern const void *const g_00C6ECBC[];
 extern const void *const g_00C6EE28[];
 
-class Rva005794EDBase
+// The base table 0x00C6EE28 is seven __purecall slots and no deleting
+// destructor. Slots 1-3 take the names of the EndTurnButtonImpl overrides
+// WorldBuilder gives; slots 0 and 4-6 stay unnamed.
+class __declspec(novtable) Rva005794EDBase
 {
 public:
-	virtual ~Rva005794EDBase();
+	Rva005794EDBase() {}
+	~Rva005794EDBase();
+	virtual bool vslot0() const = 0;
+	virtual void DoSetEnabled(bool newState) = 0;
+	virtual void DoPlayAlertFlash() = 0;
+	virtual void DoHaltAlertFlash() = 0;
+	virtual void vslot4() = 0;
+	virtual void vslot5() = 0;
+	virtual void rva00579542() = 0;
 };
 
-// ??1Rva005794EDBase@@UAE@XZ present-unmatched
+// ??1Rva005794EDBase@@UAE@XZ present-unmatched (register key kept; the dtor is non-virtual)
 inline Rva005794EDBase::~Rva005794EDBase()
 {
 	*(const void **)this = g_00C6EE28;
 }
 
-struct TreeHintRef00217D4C
-{
-	TreeHintRef00217D4C() : m_ptr(0) {}
-	TreeHintRef00217D4C &operator=(const TreeHintRef00217D4C &other);
-	__forceinline ~TreeHintRef00217D4C() { if (m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
-
-	TargetRef00217D4C *m_ptr;
-};
-
-class __declspec(novtable) Rva005794ED : public Rva005794EDBase
-{
-public:
-	virtual ~Rva005794ED();
-	virtual void rva00579435(bool newState);
-	virtual void PlayAlertFlash();
-	virtual void HaltAlertFlash();
-	virtual void rva00579542();
-	void OnClicked(const char *unused);
-private:
-	int m_04;
-	AsciiString m_08;
-	Rva0052413E m_0C;
-	TreeHintRef00217D4C m_18;
-	bool m_1C;
-};
-
-Rva005794ED::~Rva005794ED()
-{
-	*(const void **)this = g_00C6ECBC;
-}
-
-// The +0x18 holder's action, rowed at 0x0044BD79.
+// Click callback holder; invoking it is the rowed 0x0044BD79.
 class BfmeA1042N
 {
 public:
 	void bfmeGo1042D();
+
+	TargetRef00217D4C *m_ptr;
 };
 
-// ?OnClicked@Rva005794ED@@QAEXPBD@Z @0x005794DD 16B: the button's
-// "_level%u." + path + "_OnClicked" delegate, bound by the constructor
-// 0x00579575; fires the +0x18 target when one is set.
-void Rva005794ED::OnClicked(const char *unused)
+// The +0x18 owning handle; its assignment is the rowed 0x002174A4, visible
+// here (noinline, the matched body) so cl knows it leaves its source alone.
+struct TreeHintRef00217D4C : BfmeA1042N
+{
+	TreeHintRef00217D4C() { m_ptr = 0; }
+	__declspec(noinline) TreeHintRef00217D4C &operator=(const TreeHintRef00217D4C &other)
+	{
+		if (this != &other) {
+			if (other.m_ptr)
+				++other.m_ptr->references;
+			if (m_ptr)
+				ReleaseTreeHintRef00217D4C(m_ptr);
+			m_ptr = other.m_ptr;
+		}
+		return *this;
+	}
+	__forceinline ~TreeHintRef00217D4C() { if (m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
+};
+
+// StrategicHUD::EndTurnButtonImpl per WorldBuilder, which names its slots
+// DoSetEnabled, DoPlayAlertFlash and DoHaltAlertFlash; retail fires the same
+// "SetState"/"_disabled", "PlayAlertFlash" and "HaltAlertFlash" literals.
+namespace StrategicHUD
+{
+class EndTurnButtonImpl : public Rva005794EDBase
+{
+public:
+	EndTurnButtonImpl(int level, const AsciiString &name);
+	~EndTurnButtonImpl();
+	virtual void DoSetEnabled(bool newState);
+	virtual void DoPlayAlertFlash();
+	virtual void DoHaltAlertFlash();
+	void OnClicked(const char *path);
+	virtual void rva00579542();
+private:
+	int m_04;
+	AsciiString m_08;
+	AptCommandMapAdder m_0C;
+	TreeHintRef00217D4C m_18;
+	bool m_1C;
+};
+}
+
+StrategicHUD::EndTurnButtonImpl::EndTurnButtonImpl(int level, const AsciiString &name)
+	: m_04(level), m_08(name), m_1C(true)
+{
+	AsciiString prefix;
+	prefix.format("_level%u.", m_04);
+	m_0C.AddCommandMapDelegate(prefix + m_08 + "_OnClicked", DelegateDesc(this, &StrategicHUD::EndTurnButtonImpl::OnClicked));
+}
+
+void StrategicHUD::EndTurnButtonImpl::OnClicked(const char *path)
 {
 	if (m_18.m_ptr != 0)
-		((BfmeA1042N *)&m_18)->bfmeGo1042D();
+		m_18.bfmeGo1042D();
+}
+
+StrategicHUD::EndTurnButtonImpl::~EndTurnButtonImpl()
+{
 }
 
 class Rva00222A8BTarget;
@@ -94,7 +247,7 @@ static __forceinline const char *Rva005794EDGetStr(const AsciiString &s)
 	return t ? t + 8 : g_Rva0107301CEmptyString;
 }
 
-void Rva005794ED::rva00579435(bool newState)
+void StrategicHUD::EndTurnButtonImpl::DoSetEnabled(bool newState)
 {
 	if (newState == m_1C)
 		return;
@@ -104,25 +257,24 @@ void Rva005794ED::rva00579435(bool newState)
 	m_1C = newState;
 }
 
-// ?PlayAlertFlash@Rva005794ED@@UAEXXZ @0x0057948B 41B: vtable slot 2;
-// calls the movie's "PlayAlertFlash".
-void Rva005794ED::PlayAlertFlash()
+// Vtable 0x0086ECBC slots 2 and 3: WorldBuilder
+// StrategicHUD::EndTurnButtonImpl::DoPlayAlertFlash / DoHaltAlertFlash
+// (retail strings "PlayAlertFlash" / "HaltAlertFlash").
+void StrategicHUD::EndTurnButtonImpl::DoPlayAlertFlash()
 {
 	Rva00524EF4AptCall(TheRva00222A8BTarget, (void *)m_04, Rva005794EDGetStr(m_08), "PlayAlertFlash");
 }
 
-// ?HaltAlertFlash@Rva005794ED@@UAEXXZ @0x005794B4 41B: vtable slot 3;
-// calls the movie's "HaltAlertFlash".
-void Rva005794ED::HaltAlertFlash()
+void StrategicHUD::EndTurnButtonImpl::DoHaltAlertFlash()
 {
 	Rva00524EF4AptCall(TheRva00222A8BTarget, (void *)m_04, Rva005794EDGetStr(m_08), "HaltAlertFlash");
 }
 
-// ?rva00579542@Rva005794ED@@UAEXXZ @0x00579542 43B: vtable slot 6; empties
-// the +0x18 target (slot 5 0x0057956D assigns it). Retail registers the
-// temporary's unwind (out-of-line dtor 0x005F8F96) but never runs its inline
-// release on the normal path; cl 13.10 here reloads and tests the temporary.
-void Rva005794ED::rva00579542()
+
+// 0x00579542 (43 B), slot 6 of the table 0x00C6ECBC: drops the click target
+// (slot 5, 0x0057956D, assigns it). Retail never runs the empty temporary's
+// release on the normal path.
+void StrategicHUD::EndTurnButtonImpl::rva00579542()
 {
 	m_18 = TreeHintRef00217D4C();
 }
