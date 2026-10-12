@@ -44,3 +44,13 @@ void Rva006D0A30List::rva006D1680(){
   }
  }while(again);
 }
+
+// Native6D1600..6D1671 RET4 forwards a copied counted owner to6D1520,
+// then releases its by-value parameter through6D0280 and the1C-byte pool.
+// BFME1 cee35b7d Rva00896540RefHolderForward supplies the ownership-pattern
+// lead; the argument ABI, count at0, target teardown and pool size are retail
+// facts. The original callback identity remains unknown.
+void __stdcall Rva006D1600(Rva006D07E0Key key)
+{
+ Rva006D1520(key);
+}
