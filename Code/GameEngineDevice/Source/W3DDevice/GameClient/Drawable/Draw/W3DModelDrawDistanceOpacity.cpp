@@ -1,10 +1,27 @@
-// ?rva000B5A72@Rva000B5C41@@QAEXPAUArg000B5A72@@@Z
-// partial score=0.8495 date=2026-10-05
-// cl: /O1 /MD /arch:SSE /Oi
-// ?rva000B5C41@Rva000B5C41@@QAEXXZ 0x000B5C41 318B evidence: chain via 0x002707FA rowed; array at +0x18 base+0x50 end+0x54 stride 0x40 floats +0x34 +0x38 flag +0x3c vs BfmeZeroRange g_Va00BBB8D8; helper +0x110 slot0x14 int; target +0x50 slots 0x194 0x5c; setter +0x8 is Rva002707FA
+// cl: /ICode/Libraries/Include /O1 /MD /arch:SSE /Oi
+// Target B5A72..B5C41 complete463B RET4 and WB944780 independently
+// establish draw opacity from view distance, including the two thresholds,
+// alpha coefficient and optional final integer. Original method name unknown;
+// receiver relationship follows the existing owned sibling Rva000B5C41.
+// Native proves drawable8/render50/enable28D; argument fields144/148/14C,
+// final value158; renderer byteBC/int98, slots23/101. The TacticalView global
+// and slot71 supply a Coord3D pointer; GameLODManager+1778 is compared to1.
+// Owned Drawable::getPosition2763E6 replaces the old donor's false
+// BFMERopeDrawable spelling; Rva002707FA preserves the owned byte setter ABI.
+// WB and ZH math guide vector distance/interpolation semantics; target proves
+// layouts separately. Only observed prefixes are asserted. There is no clean
+// same-name donor for this BFME2-specific opacity operation.
+// The local RangeSample holds the coordinate and rounded distance together:
+// it reproduces the native16B frame (pointF0/F4, rounded sqrtFC), instead of
+// reusing the freed pointer argument slot. Volatile forces retail's float
+// rounding; the compiler barrier preserves the observed reload order after
+// FSQRT/FSTP. Near-distance is evaluated before span to preserve SSE roles.
 #include <math.h>
-extern const float BfmeZeroRange;
-extern float g_Va00BBB8D8;
+
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
+
 
 class Rva002707FA
 {
@@ -72,14 +89,10 @@ struct Container000B5C41
 	Entry000B5C41 *m54;
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
-
-class BFMERopeDrawable
+#include "Lib/Coord3D.h"
+struct RangeSample {Coord3D point;volatile float distance;};
+__forceinline void opacityCoordCopy(Coord3D*d,const Coord3D*p){d->x=p->x;d->y=p->y;d->z=p->z;}
+class Drawable
 {
 public:
 	const Coord3D *getPosition() const;
@@ -116,7 +129,8 @@ public:
 	int m1778;
 };
 
-extern TacticalView *TheTacticalView;
+class View;
+extern View *TheTacticalView;
 extern GameLODManager *TheGameLODManager;
 
 struct Arg000B5A72
@@ -149,94 +163,21 @@ public:
 	void rva000B5A72(Arg000B5A72 *a);
 };
 
-void Rva000B5C41::rva000B5C41()
-{
-	Container000B5C41 *c = m18;
-	if (c == 0)
-		return;
-	Entry000B5C41 *base = c->m50;
-	Entry000B5C41 *end = c->m54;
-	if (base == end)
-		return;
-	int idx = m44;
-	if (idx == -1)
-		return;
-	Entry000B5C41 *e = (Entry000B5C41 *)((char *)base + (idx << 6));
-	if (e == 0)
-		return;
-	if (!(e->m34 > BfmeZeroRange))
-		return;
-	if (!(e->m38 > e->m34))
-		return;
-	if (m110 == 0)
-		return;
-	float f = m114;
-	int r1 = m110->s05();
-	float f1 = (float)r1;
-	float ref;
-	if (e->m38 > f1) {
-		int r2 = m110->s05();
-		ref = (float)r2;
-	} else {
-		ref = e->m38;
-	}
-	float baseF = e->m34;
-	if (baseF > f) {
-		if (e->m3c == 0)
-			goto one_assign;
-		f = 0.0f;
-		goto zero;
-	}
-	if (f > ref) {
-		if (e->m3c == 0) {
-			f = 0.0f;
-			goto zero;
-		}
-one_assign:
-		f = g_Va00BBB8D8;
-		goto one;
-	}
-	{
-		float t = (f - e->m34) / (ref - e->m34);
-		float t2;
-		if (e->m3c != 0)
-			t2 = t;
-		else
-			t2 = g_Va00BBB8D8 - t;
-		f = t2;
-		if (t2 > BfmeZeroRange)
-			goto one;
-		goto zero;
-	}
-zero:
-	m08->rva002707FA(0);
-	m50->s101(1);
-	m50->s23(1, f);
-	return;
-one:
-	m08->rva002707FA(1);
-	m50->s101(0);
-	m50->s23(1, f);
-	return;
-}
 
-// ?rva000B5A72@Rva000B5C41@@QAEXPAUArg000B5A72@@@Z present-unmatched
 void Rva000B5C41::rva000B5A72(Arg000B5A72 *a)
 {
 	m50->mBC = 0;
 	if (m28D == 0)
 		return;
-	if (!(g_Va00BBB8D8 > a->m14C))
+	if (!(1.0f > a->m14C))
 		return;
-	const Coord3D *p1 = TheTacticalView->t71();
-	float x1 = p1->x;
-	float y1 = p1->y;
-	const Coord3D *p2 = ((BFMERopeDrawable *)m08)->getPosition();
-	float dx = x1 - p2->x;
-	float dy = y1 - p2->y;
-	float dist2 = dy * dy + dx * dx;
-	float r144 = a->m144;
-	if (dist2 >= r144 * r144) {
+	const Coord3D *p1 = ((TacticalView*)TheTacticalView)->t71();
+	RangeSample sample;Coord3D &pos=sample.point;opacityCoordCopy(&pos,p1);
+	const Coord3D *p2 = ((Drawable *)m08)->getPosition();
+	pos.x-=p2->x;pos.y-=p2->y;pos.z-=p2->z;
+	float dist2 = pos.y*pos.y+pos.x*pos.x;
+	
+	if (dist2 >= a->m144 * a->m144) {
 		m08->rva002707FA(1);
 		m50->s101(0);
 		m50->s23(1, 1.0f);
@@ -245,17 +186,16 @@ void Rva000B5C41::rva000B5A72(Arg000B5A72 *a)
 		m50->m98 = 0;
 		return;
 	}
-	float r148 = a->m148;
-	float r148sq = r148 * r148;
+	
+	float innerSqr = a->m148 * a->m148;
 	float res;
-	if (r148sq < dist2) {
-		float dist = sqrtf(dist2);
-		float d1 = r144 - r148;
-		float d2 = dist - r148;
-		res = ((d1 - d2) * a->m14C + d2) / d1;
-	} else {
-		res = a->m14C;
-	}
+ if(dist2<=innerSqr)res=a->m14C;
+ else {
+  sample.distance=sqrtf(dist2);_ReadWriteBarrier();
+  float d2=sample.distance-a->m148;
+  float d1=a->m144-a->m148;
+  res=((d1-d2)*a->m14C+d2)/d1;
+ }
 	GameLODManager *lm = TheGameLODManager;
 	if (lm != 0 && lm->m1778 <= 1) {
 		m08->rva002707FA(0);
@@ -265,7 +205,7 @@ void Rva000B5C41::rva000B5A72(Arg000B5A72 *a)
 		m50->m98 = 0;
 		return;
 	}
-	if (res > BfmeZeroRange) {
+	if (res > 0.0f) {
 		m08->rva002707FA(1);
 		m50->s101(0);
 	} else {

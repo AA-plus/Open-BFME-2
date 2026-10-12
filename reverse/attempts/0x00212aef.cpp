@@ -1,10 +1,10 @@
 // ??0Rva00212ED3@@QAE@XZ
 // partial score=0.965 date=2026-10-12
-// cl: /O1 /G7 /arch:SSE /EHsc /MD /DNDEBUG /Ireference/shims/bfme2_ascii /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /I. /O1 /G7 /arch:SSE /EHsc /MD /DNDEBUG /Ireference/shims/bfme2_ascii /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-#include "../reference/shims/bfme2_ascii/ascii_string.h"
+#include "reference/shims/bfme2_ascii/ascii_string.h"
 #include <vector>
-#include "../Code/Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 namespace _STL {
 template <> vector<AsciiString, allocator<AsciiString> >::~vector();
 template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base();

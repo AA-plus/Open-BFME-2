@@ -1,11 +1,11 @@
 // ?update@AttributeModifierPoolUpdate@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.8 date=2026-10-12
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
 // stlport
 #include <deque>
 #include <vector>
-#include "../reference/shims/bfme2_ascii/ascii_string.h"
-#include "../Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "reference/shims/bfme2_ascii/ascii_string.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 class Rva001E42F2 {public:void rva001E42F2(const int *);};
 class Object {public:void rva00293077(const void *);};

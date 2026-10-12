@@ -1,8 +1,8 @@
 // ?rva002F23A6@Rva002F23A6@@QAE_NPAVObject@@HHPAUCoord3D@@0@Z
 // partial score=0.7 date=2026-10-12
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
-#include "../Code/Libraries/Include/Lib/Coord3D.h"
-#include "../Code/Libraries/Include/Lib/ICoord2D.h"
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+#include "Code/Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/ICoord2D.h"
 enum PathfindLayerEnum {LAYER_UNKNOWN=0,LAYER_GROUND=1};
 enum NameKeyType {NAMEKEY_INVALID=-1};
 class Module {};
