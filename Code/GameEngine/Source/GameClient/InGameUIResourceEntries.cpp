@@ -7,6 +7,7 @@
 // this entry directly. The following 5-byte tail thunk ends at Ghidra's
 // 0x004E4EA3 boundary.
 #include "ascii_string.h"
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class ResourceEntrySlot2
 {
@@ -110,10 +111,40 @@ void ResourceOwnedEntryList::rva004E5542()
         free(sentinel);
 }
 
+// The entry's constructor is rowed as Rva004E4F82 (0x004E4F82), its
+// destructor as Rva004E5086 above and the list element as BfmePod60; this
+// view pairs the first two on one 0x3C-byte local.
+class Rva004E4F82
+{
+public:
+    Rva004E4F82();
+    Coord3D pos;                    // +0x00
+    char unknown0C[0x18 - 0x0C];
+    float value;                    // +0x18
+    char unknown1C[0x30 - 0x1C];
+    int index;                      // +0x30
+    char unknown34[0x3C - 0x34];
+};
+struct ResourceEntryLocal : public Rva004E4F82
+{
+    ~ResourceEntryLocal() { reinterpret_cast<Rva004E5086 *>(this)->~Rva004E5086(); }
+};
+struct BfmePod60;
+namespace _STL
+{
+template <class T> class allocator;
+template <class T, class A = allocator<T> > class list
+{
+public:
+    void push_front(const T &value);
+};
+}
+
 class ResourceEntryCollector
 {
 public:
     __declspec(noinline) void rva004E551E();
+    void rva004E5559(const Coord3D *pos, float value, int index);
 private:
     char unknown00[4];
     ResourceOwnedEntryList entries;
@@ -123,6 +154,18 @@ private:
 void ResourceEntryCollector::rva004E551E()
 {
     entries.rva004E54ED();
+}
+
+// Retail 4E5559/96B RET C builds an entry at a position with a value and
+// an index and pushes it on the front of the +4 list (rowed push_front
+// 0x004E5526); the local dies through the rowed destructor 0x004E5086.
+void ResourceEntryCollector::rva004E5559(const Coord3D *pos, float value, int index)
+{
+    ResourceEntryLocal entry;
+    entry.pos = *pos;
+    entry.value = value;
+    entry.index = index;
+    reinterpret_cast<_STL::list<BfmePod60> &>(entries).push_front(reinterpret_cast<const BfmePod60 &>(entry));
 }
 
 class Rva004E7C1C
