@@ -1,6 +1,13 @@
 // ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
-// partial score=0.88 date=2026-10-10
-// cl: /DNDEBUG /MD /EHsc
+// partial score=0.94 date=2026-10-12
+// ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
+// 2026-10-12 (claude-opus-5-5): +0x90 as a small link wrapper (operator=
+// returning *this, pointer conversion) reproduces retail's lea eax,&m_prev /
+// store / mov eax,esi test and ESI/EDX roles at 51 B. Only left: retail loads
+// *ppTail before the m_next clear; reading it first (named local, inline
+// helper taking it by value) restores the order but swaps ESI/EDX. Needs the
+// region flags /O1 /arch:SSE /G7 explicitly in a new unit.
+// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
 
 // ?isInList@Object@@QBE_NPAPAV1@@Z, retail 0x0028B47C (31 bytes).
 // Object::isInList checks the intrusive list links at +0x8C/+0x90.
@@ -47,6 +54,12 @@ public:
 	void rva004DE2ED();
 };
 
+struct ObjectLink
+{
+	ObjectLink &operator=(Object *p) { m_ptr = p; return *this; }
+	operator Object *() const { return m_ptr; }
+	Object *m_ptr;
+};
 class Object
 {
 public:
@@ -57,7 +70,7 @@ public:
 private:
 	unsigned char m_pre[0x8C];
 	Object *m_next; // +0x8C
-	Object *m_prev; // +0x90
+	ObjectLink m_prev; // +0x90
 	unsigned char m_pad94[0xA4 - 0x94];
 	Rva004DD843 *m_a4; // +0xA4
 	unsigned char m_padA8[0x40C - 0xA8];
@@ -94,11 +107,10 @@ void Object::rva0028B4CE(PathfindLayerEnum layer)
 // friend at 0x00242B19 with (&GameLogic+0xAC, &GameLogic+0xB0).
 void Object::rva0028B49B(Object **ppHead, Object **ppTail)
 {
-	Object *tail = *ppTail;
 	m_next = 0;
-	m_prev = tail;
-	if (tail != 0)
-		tail->m_next = this;
+	m_prev = *ppTail;
+	if (m_prev)
+		((Object *)m_prev)->m_next = this;
 	if (*ppHead == 0)
 		*ppHead = this;
 	*ppTail = this;
