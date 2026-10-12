@@ -1,4 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii
+#include "unicode_string.h"
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 // ?rva004FBC02@Rva004FBC02@@QAEXPBURva004FBC02Src@@@Z 0x004FBC02 21: copies 12 bytes
 // from arg to +0x18 and sets byte at +0x24 to 1. Evidence: callers 0x002BA331 and
 // 0x002BA7E1 pass a pointer; no other callees.
@@ -10,10 +12,39 @@ struct Rva004FBC02Src
 	int m_8;
 };
 
+class __single_inheritance Rva004FBC02;
+typedef void (Rva004FBC02::*DelegateMethod)(int);
+struct DelegateDesc { void *object; DelegateMethod method; };
+// Builds the bound-method descriptor; retail stores the method first, through
+// a register, as this helper's parameter copy does.
+template <class T> inline DelegateDesc MakeDesc(T *object, void (T::*method)(int))
+{
+	DelegateDesc desc;
+	desc.object = object;
+	desc.method = method;
+	return desc;
+}
+class Rva00579E47 { public: Rva00579E47() {} Rva00579E47(const DelegateDesc &); void *ptr; };
+struct TreeHintRef00217D4C : public Rva00579E47
+{
+	TreeHintRef00217D4C() { ptr = 0; }
+	TreeHintRef00217D4C(const DelegateDesc &d) : Rva00579E47(d) {}
+	TreeHintRef00217D4C(const TreeHintRef00217D4C &o) : Rva00579E47(o) { if (ptr) ++((int *)ptr)[1]; }
+	~TreeHintRef00217D4C();
+};
+class Rva0054D2DDTarget { public: void method(int, const UnicodeString &, const UnicodeString &, TreeHintRef00217D4C, TreeHintRef00217D4C); };
+class AptStrategicMessageBox { private: static AptStrategicMessageBox *s_instance; public: static __forceinline AptStrategicMessageBox *get() { return s_instance; } };
+class Eva { public: void reportEvaEvent(int, const Coord3D *, int); };
+extern Eva *TheEva;
+
 class Rva004FBC02
 {
 private:
-	char m_pad[0x14];
+	char m_pad04[4];
+	UnicodeString m_text;	// +0x08
+	UnicodeString m_title;	// +0x0C
+	int m_mode;		// +0x10
+	int m_event;		// +0x14
 	Rva004FBC02Src m_18;
 	unsigned char m_24;
 	bool m_25;
@@ -24,6 +55,8 @@ public:
 	virtual void slot2();
 	void rva004FBBEB(int response);
 	void rva004FBC02(const Rva004FBC02Src *src);
+	void rva004FBD3A();
+	int getMode() const { return m_mode; }
 };
 
 // Native4FBBEB..4FBC02 RET4; 4FBD3A stores VA8FBBEB as its delegate.
@@ -41,6 +74,24 @@ void Rva004FBC02::rva004FBC02(const Rva004FBC02Src *src)
 {
 	m_18 = *src;
 	m_24 = 1;
+}
+
+// ?rva004FBD3A@Rva004FBC02@@QAEXXZ 0x004FBD3A 118: when the strategic
+// message box exists, shows this message (mode, text, title) with no first
+// callback and 0x004FBBEB bound to this as the second, marks it shown,
+// reports its EVA event (at the +0x18 position when +0x24 is set) and runs
+// slot 1. The mode goes through an inline accessor, which loads it before
+// the string arguments as retail does.
+void Rva004FBC02::rva004FBD3A()
+{
+	Rva0054D2DDTarget *box = (Rva0054D2DDTarget *)AptStrategicMessageBox::get();
+	if (box) {
+		box->method(getMode(), m_text, m_title, TreeHintRef00217D4C(),
+			TreeHintRef00217D4C(MakeDesc(this, &Rva004FBC02::rva004FBBEB)));
+		m_25 = true;
+		TheEva->reportEvaEvent(m_event, m_24 ? (const Coord3D *)&m_18 : 0, 0);
+		slot1();
+	}
 }
 
 // ?rva004FBDB0@Rva004FBDB0@@QAEX_N@Z 0x004FBDB0 28: forwards its flag to slot-12
