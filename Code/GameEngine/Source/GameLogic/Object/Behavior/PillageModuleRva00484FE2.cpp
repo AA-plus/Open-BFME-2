@@ -1,7 +1,3 @@
-// ?rva00484FE2@PillageModule@@UAEXHPAVObject@@@Z
-// partial score=0.99 date=2026-10-12
-// ?rva00484FE2@PillageModule@@UAEXHPAVObject@@@Z
-// partial score=0.9115285181 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
 // Native484FE2..485123323B RET8; vtable84A514 slot0 at Pillage+10.
 // Pillage class identity and amount/event/filter fields from owned ctor and
@@ -12,7 +8,8 @@
 // no clean BF1/ZH Pillage callback donor was found. Native offsets/ABI above
 // are target facts; callback semantics are inferred from those calls.
 // Volatile cached-data operand restores its native spill and owner-player
-// register; remaining frame14 vs10 and string/coordinate slot differences.
+// register; reading maxAmount after the filter locals (permute's statement
+// order) closes the frame and the string/coordinate slot homes.
 #include "unicode_string.h"
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
@@ -175,8 +172,8 @@ void PillageModule::rva00484FE2(int,Object*victim)
  events=0;
  Player*targetPlayer=victim->getControllingPlayer();
  Player*selfPlayer=self->getControllingPlayer();
- unsigned maxAmount=saved->amount;
  unsigned amount=targetPlayer->money.balance;
+ unsigned maxAmount=saved->amount;
  if(maxAmount<amount) amount=maxAmount;
  unsigned cash=targetPlayer->money.rva003B0CB3(amount,(Rva0039B795*)&targetPlayer->stats,true);
  if(cash==0)return;
