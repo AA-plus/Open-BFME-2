@@ -168,7 +168,7 @@ AptValue *__cdecl rva006ee540(AptValue *value)
 
 class AptInteger {public:static AptValue *Create(int);};
 class AptBasePtrStack {public:AptValue *At(int);};
-struct AptActionInterpreter {AptBasePtrStack stack;};
+struct AptActionInterpreter {AptBasePtrStack stack;void loadVariables(AptValue *,AptValue *,const EAStringC *);};
 extern AptActionInterpreter g_aptDateInterpreter;
 static int (__cdecl *pointHitTestCallback)(float,float,void*);
 // 006ECA70: target gAptFuncs.pfnPointHitTest assertion identifies the callback
@@ -253,4 +253,20 @@ Rva006EB4B0::Rva006EB4B0(const Rva006EB4B0 &other){
  if(other.indent!=-1)indent=other.indent;
  if(other.left!=-1)left=other.left;
  if(other.right!=-1)right=other.right;
+}
+
+// Native CC20..CCA5: Ghidra-unlisted gap body between the hit-test and format
+// callbacks. With at least one argument it converts stack argument 0 to a
+// string and hands it to the interpreter's rowed loadVariables 0x00706370
+// with the receiver and a null target; always returns the undefined value.
+// The count slot is reused for the string local, as native. Callback name
+// remains address-derived.
+AptValue *Rva006ECC20LoadVariables(AptValue *self,int count){
+ if(count>0){
+  AptValue *arg=g_aptDateInterpreter.stack.At(0);
+  EAStringC url;
+  arg->toString(url);
+  g_aptDateInterpreter.loadVariables(self,0,&url);
+ }
+ return gpUndefinedValue;
 }
