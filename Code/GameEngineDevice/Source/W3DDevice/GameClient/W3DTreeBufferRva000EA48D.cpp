@@ -47,7 +47,11 @@ struct Rva000EA48DRecord
     Vector3 location;
     unsigned char pad0c[0x34];
     Int type;
-    unsigned char pad44[0x14];
+    unsigned char pad44[4];
+    Real field48;
+    Real field4c;
+    Real field50;
+    Real field54;
     void *key;
     unsigned char pad5c[0x10];
     Real height6c;
@@ -70,6 +74,7 @@ class W3DTreeBuffer
 public:
     Bool rva000EA48D(void *key, const Coord3D *direction, Real height);
     Bool rva000EA644(void *key);
+    void rva000EA2C0(void *key);
 
     __forceinline Rva000EA48DRecord *find(void *key)
     {
@@ -85,7 +90,7 @@ private:
     unsigned char pad000[0x5c0];
     Rva000EA48DRecord records[1200];
     Int count;
-    unsigned char pad44544[1];
+    unsigned char dirty44544;
     unsigned char changed;
     unsigned char pad44546[0x44558 - 0x44546];
     Rva000EA48DType types[64];
@@ -153,4 +158,25 @@ Bool W3DTreeBuffer::rva000EA644(void *key)
         }
     }
     return false;
+}
+
+// Native 000EA2C0..000EA327 (103 bytes, ret 4): clears every tree record of a
+// drawable key (position, type -2, the +0x48..+0x50 floats, +0x54 = 1) and
+// marks the buffer changed: the W3DShrubBuffer rva000E70D9 twin (BFME 1
+// W3DShrubBuffer_resetMatchingRow) on the tree layout. Identity unproven.
+void W3DTreeBuffer::rva000EA2C0(void *key)
+{
+    for (Int i = 0; i < count; ++i)
+    {
+        if (records[i].key == key)
+        {
+            records[i].location.Set(0, 0, 0);
+            records[i].type = -2;
+            records[i].field48 = 0;
+            records[i].field4c = 0;
+            records[i].field50 = 0;
+            records[i].field54 = 1.0f;
+            dirty44544 = 1;
+        }
+    }
 }
