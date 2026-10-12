@@ -1124,6 +1124,18 @@ def _host_path(text):
 
 
 _CASEDIR_MEMO = {}
+_FOLDS_CASE = None
+
+
+def _host_folds_case():
+    """True when the checkout's filesystem matches names case-insensitively
+    (macOS APFS/HFS+ by default): a misspelled path then exists as typed."""
+    global _FOLDS_CASE
+    if _FOLDS_CASE is None:
+        probe = str(ROOT)
+        flipped = probe.swapcase()
+        _FOLDS_CASE = os.name != "nt" and flipped != probe and os.path.exists(flipped)
+    return _FOLDS_CASE
 
 
 def _case_resolve(path):
@@ -1132,6 +1144,8 @@ def _case_resolve(path):
     'Basetype.h' for BaseType.h), so exact lookup fails on Linux. The repo bans
     case-colliding names, so per-component lowercase matching is unambiguous.
     Returns None when nothing matches."""
+    if _host_folds_case():
+        return _case_resolve_folding(path)
     if os.path.exists(path):
         return path
     current = "/"
@@ -1150,6 +1164,33 @@ def _case_resolve(path):
                 return None
             _CASEDIR_MEMO[current] = listing
         real = listing.get(part.lower())
+        if real is None:
+            return None
+        current = os.path.join(current, real)
+    return current
+
+
+def _case_resolve_folding(path):
+    """_case_resolve on a case-folding host (macOS). There the misspelled path
+    exists as typed, so existence proves nothing: every component is spelled
+    from its directory listing. A memoized listing is re-read once on a miss,
+    so a file created after it was cached is still found."""
+    current = "/"
+    for part in path.split("/"):
+        if not part or part == ".":
+            continue
+        if part == "..":
+            current = os.path.dirname(current) or "/"
+            continue
+        key = part.lower()
+        listing = _CASEDIR_MEMO.get(current)
+        if listing is None or key not in listing:
+            try:
+                listing = {name.lower(): name for name in os.listdir(current)}
+            except OSError:
+                return None
+            _CASEDIR_MEMO[current] = listing
+        real = listing.get(key)
         if real is None:
             return None
         current = os.path.join(current, real)
