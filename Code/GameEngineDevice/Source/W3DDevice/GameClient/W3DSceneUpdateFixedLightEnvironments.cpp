@@ -1,25 +1,3 @@
-// ?updateFixedLightEnvironments@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
-// partial score=0.98 date=2026-10-12
-// ?updateFixedLightEnvironments@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
-// partial score=0.98 date=2026-10-12
-// Intended home: new unit Code/GameEngineDevice/Source/W3DDevice/GameClient/
-// W3DSceneUpdateFixedLightEnvironments.cpp (retail builds this body at /O1,
-// EBP frame; W3DScene.cpp is overridden to /O2), and the present-unmatched
-// Zero Hour copy in W3DScene.cpp must then be deleted (duplicate definition).
-// State: full 1061/1061 bytes; frame, loop, LOD scale and env scaling match.
-// Blockers:
-//  1. LightEnvironmentClass::Reset must be declared plain out of line (an
-//     inline wrapper over the rowed placeholder Gen_0094AC70::bfmeSetPair
-//     loses the early LEA EDI and is 2 bytes short), so
-//     ?Reset@LightEnvironmentClass@@QAEXABVVector3@@0@Z needs to resolve to
-//     0x0013F620: rename that placeholder row (Bfme5EightyEight.cpp) or admit
-//     a pin.
-//  2. Scratch-diffuse block (~6E954): retail loads m_scratchLight (+0x140)
-//     before the colour and does ADD EAX,EBX before the stores; cl loads it
-//     after. Tried Scale-return chaining, k*v, local scratch, member-wise.
-//  3. First environment ambient scale (~6EA0E): retail X*s.X for all three;
-//     cl emits s.X*X for X only (second/third environments match).
-// Fogged ambient needs foggedLightFrac * Get_Ambient_Light() (fixed here).
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
 //
 // ?updateFixedLightEnvironments@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z,
@@ -94,8 +72,11 @@ protected:
 class LightClass : public RenderObjClass
 {
 public:
-	void Get_Ambient(Vector3 *color) const;
-	void Get_Diffuse(Vector3 *color) const;
+	// The rowed out-of-line accessors (0x0006920D/0x0006922E), visible as in
+	// the WW3D header: cl then knows they keep no pointer to the colour
+	// local and schedules the scratch light's load ahead of it as retail.
+	__declspec(noinline) void Get_Ambient(Vector3 *color) const { if (color != 0) *color = Ambient; }
+	__declspec(noinline) void Get_Diffuse(Vector3 *color) const { if (color != 0) *color = Diffuse; }
 	void Set_Ambient(const Vector3 &color) { Ambient = color; }
 	void Set_Diffuse(const Vector3 &color) { Diffuse = color; }
 private:
@@ -114,7 +95,9 @@ public:
 	CameraClass &Camera;
 };
 
-// The environment's Reset is rowed under its placeholder spelling.
+// LightEnvironmentClass::Reset is rowed under its placeholder spelling. It is
+// called directly (an inline Reset wrapper over it loses retail's early
+// LEA of the first environment).
 class BfmeVecHF;
 class Gen_0094AC70
 {
@@ -122,15 +105,17 @@ public:
 	void bfmeSetPair(const BfmeVecHF *cameraPosition, const BfmeVecHF *ambient);
 };
 
-class LightEnvironmentClass
+class LightEnvironmentClass : public Gen_0094AC70
 {
 public:
-	void Reset(const Vector3 &cameraPosition, const Vector3 &ambient);
 	void Add_Light(const LightClass &light);
 	void Pre_Render_Update(const Matrix3D &camera);
 
 	unsigned char m_flag;					// +0x00
 	char m_pad01[0x164 - 0x01];
+	// WorldBuilder copies the ambient out, scales it and stores it back.
+	const Vector3 &Get_Output_Ambient(void) const { return m_outputAmbient; }
+	void Set_Output_Ambient(const Vector3 &ambient) { m_outputAmbient = ambient; }
 	Vector3 m_outputAmbient;				// +0x164
 	char m_pad170[0x228 - 0x170];
 };
@@ -182,9 +167,9 @@ void RTS3DScene::updateFixedLightEnvironments(RenderInfoClass &rinfo)
 		lodScale.Z = global->m_lowLODLightScaleBlue;
 	}
 
-	m_defaultLightEnv.Reset(Vector3(0, 0, 0), Get_Ambient_Light());
-	m_foggedLightEnv.Reset(Vector3(0, 0, 0), foggedLightFrac * Get_Ambient_Light());
-	m_ambientLightEnv.Reset(Vector3(0, 0, 0), m_infantryAmbient);
+	m_defaultLightEnv.bfmeSetPair(reinterpret_cast<const BfmeVecHF *>(&Vector3(0, 0, 0)), reinterpret_cast<const BfmeVecHF *>(&Get_Ambient_Light()));
+	m_foggedLightEnv.bfmeSetPair(reinterpret_cast<const BfmeVecHF *>(&Vector3(0, 0, 0)), reinterpret_cast<const BfmeVecHF *>(&(Get_Ambient_Light() * foggedLightFrac)));
+	m_ambientLightEnv.bfmeSetPair(reinterpret_cast<const BfmeVecHF *>(&Vector3(0, 0, 0)), reinterpret_cast<const BfmeVecHF *>(&m_infantryAmbient));
 
 	for (Int globalLightIndex = 0; globalLightIndex < m_numGlobalLights; globalLightIndex++)
 	{
@@ -212,12 +197,16 @@ void RTS3DScene::updateFixedLightEnvironments(RenderInfoClass &rinfo)
 		m_foggedLightEnv.Add_Light(*m_scratchLight);
 	}
 
-	m_defaultLightEnv.m_outputAmbient = Vector3(m_defaultLightEnv.m_outputAmbient.X * lodScale.X,
-		m_defaultLightEnv.m_outputAmbient.Y * lodScale.Y, m_defaultLightEnv.m_outputAmbient.Z * lodScale.Z);
-	m_foggedLightEnv.m_outputAmbient = Vector3(m_foggedLightEnv.m_outputAmbient.X * lodScale.X,
-		m_foggedLightEnv.m_outputAmbient.Y * lodScale.Y, m_foggedLightEnv.m_outputAmbient.Z * lodScale.Z);
-	m_ambientLightEnv.m_outputAmbient = Vector3(m_ambientLightEnv.m_outputAmbient.X * lodScale.X,
-		m_ambientLightEnv.m_outputAmbient.Y * lodScale.Y, m_ambientLightEnv.m_outputAmbient.Z * lodScale.Z);
+	Vector3 ambient;
+	ambient = m_defaultLightEnv.Get_Output_Ambient();
+	ambient.Scale(lodScale);
+	m_defaultLightEnv.Set_Output_Ambient(ambient);
+	ambient = m_foggedLightEnv.Get_Output_Ambient();
+	ambient.Scale(lodScale);
+	m_foggedLightEnv.Set_Output_Ambient(ambient);
+	ambient = m_ambientLightEnv.Get_Output_Ambient();
+	ambient.Scale(lodScale);
+	m_ambientLightEnv.Set_Output_Ambient(ambient);
 
 	m_defaultLightEnv.Pre_Render_Update(rinfo.Camera.Get_Transform());
 	m_defaultLightEnv.m_flag = m_lightEnvironmentFlag;

@@ -876,53 +876,9 @@ void RTS3DScene::Flush(RenderInfoClass & rinfo)
 
 /**Generate a predefined light environment(s) that will be applied to many objects.  Useful for things like totally fogged
 objects and most generaic map objects that are not lit by dynamic lights.*/
-// ?RTS3DScene::updateFixedLightEnvironments present-unmatched
-void RTS3DScene::updateFixedLightEnvironments(RenderInfoClass & rinfo)
-{
-	//Figure out how dimly lit fogged objects should be compared to fully lit.
-	Real foggedLightFrac = (Real)TheGlobalData->m_fogAlpha/(Real)TheGlobalData->m_clearAlpha;
-	Real infantryLightScale;
-	if( TheGlobalData->m_scriptOverrideInfantryLightScale != -1.0f )
-		infantryLightScale = TheGlobalData->m_scriptOverrideInfantryLightScale;
-	else
-		infantryLightScale = TheGlobalData->m_infantryLightScale[TheGlobalData->m_timeOfDay];
-	
-	//Generate the default light environment
-	m_defaultLightEnv.Reset(Vector3(0,0,0), Get_Ambient_Light());
-	m_foggedLightEnv.Reset(Vector3(0,0,0), Get_Ambient_Light()*foggedLightFrac);
-
-	Vector3 oldDiffuse, oldAmbient;
-	for (Int globalLightIndex = 0; globalLightIndex < m_numGlobalLights; globalLightIndex++)
-	{	m_defaultLightEnv.Add_Light(*m_globalLight[globalLightIndex]);
-		//copy default lighting for infantry so we can tweak it.
-		*m_infantryLight[globalLightIndex]=*m_globalLight[globalLightIndex];
-		m_infantryLight[globalLightIndex]->Set_Transform(m_globalLight[globalLightIndex]->Get_Transform());
-
-		m_globalLight[globalLightIndex]->Get_Diffuse(&oldDiffuse);
-		m_globalLight[globalLightIndex]->Get_Ambient(&oldAmbient);
-    oldDiffuse *= infantryLightScale; 
-    oldAmbient *= infantryLightScale; 
-    static Vector3 id (1.0f, 1.0f, 1.0f);
-    oldDiffuse.Cap_Absolute_To(id);
-    oldAmbient.Cap_Absolute_To(id);
-		m_infantryLight[globalLightIndex]->Set_Ambient(oldAmbient);//CLAMPED
-		m_infantryLight[globalLightIndex]->Set_Diffuse(oldDiffuse);//CLAMPED
-
-		//copy the normal light for fog so we can modify it
-		m_scratchLight->Set_Transform(m_globalLight[globalLightIndex]->Get_Transform());
-		//modify light with attenuated value to adjust for fog.
-		m_globalLight[globalLightIndex]->Get_Diffuse(&oldDiffuse);
-		m_scratchLight->Set_Diffuse(oldDiffuse*foggedLightFrac);
-		m_globalLight[globalLightIndex]->Get_Ambient(&oldAmbient);
-		m_scratchLight->Set_Ambient(oldAmbient*foggedLightFrac);
-		m_foggedLightEnv.Add_Light(*m_scratchLight);
-	}
-
-	m_defaultLightEnv.Pre_Render_Update(rinfo.Camera.Get_Transform());
-	m_foggedLightEnv.Pre_Render_Update(rinfo.Camera.Get_Transform());
-
-	m_infantryAmbient = Get_Ambient_Light();// * infantryLightScale;	//for now don't adjust ambient so that we don't lose directional lighting.
-}
+// RTS3DScene::updateFixedLightEnvironments (retail 0x0006E716) lives in
+// W3DSceneUpdateFixedLightEnvironments.cpp: BFME 2 builds it at /O1, unlike
+// this unit's /O2 rows, and it differs from the Zero Hour body.
 
 /**Generate custom rendering passes for each potential player color.  This is currently only used
 to render occluded objects using the color of the player*/
