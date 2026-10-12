@@ -821,7 +821,8 @@ class AIAttackPositionAimAtTargetState : public State
 {
 public:
 	virtual StateReturnType onEnter();
-	StateReturnType rva0034A570(Bool firstFrame);
+	virtual StateReturnType update();
+	StateReturnType updateInternal(Bool firstFrame);
 private:
 	unsigned char m_pad1C[0x20 - 0x1C];
 	Bool m_canTurnInPlace; // +0x20
@@ -1076,6 +1077,7 @@ StateReturnType AIAttackMeleeEngageState::updateInternal()
 	return STATE_CONTINUE;
 }
 
+// WB E20060 names AIAttackPositionAimAtTargetState::updateInternal.
 // AIAttackPositionAimAtTargetState's aim body, retail 0x0034A570 (665 bytes):
 // vtable 0x00C11068's update (0x0034A871) calls it with false and its onEnter
 // tail with true. Zero Hour's AIAttackAimAtTargetState::update position path
@@ -1085,7 +1087,7 @@ StateReturnType AIAttackMeleeEngageState::updateInternal()
 // +0x1C0, and the weapon aim offset +0x30 through normalizeAngle. math.h's
 // float fabs overload (the CRT fabs, compared as float) gives retail's x87
 // argument-pop schedule; a bare extern "C" float fabs(double) moves two pops.
-StateReturnType AIAttackPositionAimAtTargetState::rva0034A570(Bool firstFrame)
+StateReturnType AIAttackPositionAimAtTargetState::updateInternal(Bool firstFrame)
 {
 	Object *source = getMachineOwner();
 	AIUpdateInterface *sourceAI = source->getObservedAI();
@@ -1231,3 +1233,11 @@ Bool AIFollowPathAsTeamState::canMoveToNextFormationPathPoint()
 // Load member AI before excluding the owner as witnessed by native349F48.
 // PMF adjustment uses real MemoryPoolObject/Snapshot inheritance and the
 // rowed Team next-member provider; iterator output keeps its witnessed24B ABI.
+
+// Native C11068 slot2 getter names this class; slot6 selects the complete
+// 8B34A871 wrapper, push false / call34A570 / ret, preserving EAX.
+// WB E20760 calls the named updateInternal E20060 with false.
+StateReturnType AIAttackPositionAimAtTargetState::update()
+{
+	return updateInternal(false);
+}

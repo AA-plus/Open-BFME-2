@@ -62,7 +62,7 @@ Bool Rva002CEF14FlagTest::rva002CEF14()
 BFME_CONST_ARG_CALL(Rva0005BD20Host, rva0005BD20, rva0005BBE2, 0)	// vtable 0x00BC55B0 slot 43
 BFME_CONST_ARG_CALL(Rva0005BD28Host, rva0005BD28, rva0005BBE2, 1)	// vtable 0x00BC55B0 slot 44
 BFME_CONST_ARG_CALL(Rva000F42F7Host, rva000F42F7, rva000F4017, 1)	// vtable 0x00BCEFC8 slot 1
-BFME_CONST_ARG_CALL(Rva0034A871Host, rva0034A871, rva0034A570, 0)	// vtable 0x00C11068 slot 6
+// AIAttackPositionAimAtTargetState::update is owned with updateInternal in AIStates.cpp.
 BFME_CONST_ARG_CALL(Rva00351949Host, rva00351949, rva003508C5, 0)	// vtable 0x00C11008 slot 6
 
 // --- Hand `this` to a manager singleton's member.
