@@ -216,3 +216,26 @@ void *bfmeAnchorRva002FD6E0(void *where, const Object *obj)
 {
 	return ::new (where) Rva002614DFFilter(obj);
 }
+
+// vftable 0x00BCECF0: Rva002614ECFilter (allow 0x002614EC in
+// BfmeThreeHundredFifteen.cpp), out-of-line constructor copy at 0x000E9E03 (36B).
+class Rva2225E0Filter;
+class Rva002614ECFilter : public Rva000421C8
+{
+public:
+	Rva002614ECFilter(Rva2225E0Filter *sub, void *extra, bool flag);
+	virtual bool allow(Object *what);
+	Rva2225E0Filter *m_bfmeSub;
+	void *m_bfmeExtra;
+	bool m_bfmeFlag;
+};
+
+__declspec(noinline) inline Rva002614ECFilter::Rva002614ECFilter(Rva2225E0Filter *sub, void *extra, bool flag) : m_bfmeSub(sub), m_bfmeExtra(extra), m_bfmeFlag(flag)
+{
+}
+
+// ?bfmeAnchorRva000E9E03 absent-from-retail
+void *bfmeAnchorRva000E9E03(void *where, Rva2225E0Filter *sub, void *extra, bool flag)
+{
+	return ::new (where) Rva002614ECFilter(sub, extra, flag);
+}
