@@ -21896,7 +21896,6 @@ uw_00777624,,0x00777624,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;obj
 uw_0077770b,,0x0077770B,11,Code/gen_small/uw_gen_001.cpp,matched,gen-funclet;object-symbol=$L4427
 uw_0077772a,,0x0077772A,8,Code/gen_small/uw_gen_002.cpp,matched,gen-funclet;object-symbol=$L293
 uw_00777732,,0x00777732,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
-uw_00777884,,0x00777884,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
 uw_0077788c,,0x0077788C,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
 uw_00777894,,0x00777894,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
 uw_0077789c,,0x0077789C,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
@@ -86799,3 +86798,4 @@ uw_00777864,,0x00777864,8,Code/GameEngine/Source/GameClient/GUI/Palantir/AptPala
 uw_0077786c,,0x0077786C,8,Code/GameEngine/Source/GameClient/GUI/Palantir/AptPalantirConstructor.cpp,matched,gen-funclet;object-symbol=$L7625;parent=??0AptPalantir@@QAE@PAVRva002D3573@@H@Z; Complete owning parent and EH graph EXACT bind this native unwind state; whole 8B Ghidra extent and every callee relocation verified through existing providers; emitted by actual C++ parent; no shape-only or adjacency identity inference
 uw_00777874,,0x00777874,8,Code/GameEngine/Source/GameClient/GUI/Palantir/AptPalantirConstructor.cpp,matched,gen-funclet;object-symbol=$L7627;parent=??0AptPalantir@@QAE@PAVRva002D3573@@H@Z; Complete owning parent and EH graph EXACT bind this native unwind state; whole 8B Ghidra extent and every callee relocation verified through existing providers; emitted by actual C++ parent; no shape-only or adjacency identity inference
 uw_0077787c,,0x0077787C,8,Code/GameEngine/Source/GameClient/GUI/Palantir/AptPalantirConstructor.cpp,matched,gen-funclet;object-symbol=$L7629;parent=??0AptPalantir@@QAE@PAVRva002D3573@@H@Z; Complete owning parent and EH graph EXACT bind this native unwind state; whole 8B Ghidra extent and every callee relocation verified through existing providers; emitted by actual C++ parent; no shape-only or adjacency identity inference
+uw_00777884,,0x00777884,8,Code/GameEngine/Source/GameClient/GUI/Palantir/AptPalantirConstructor.cpp,matched,gen-funclet;object-symbol=$L7631;parent=??0AptPalantir@@QAE@PAVRva002D3573@@H@Z; Complete owning parent and EH graph EXACT bind this native unwind state; whole 8B Ghidra extent and every callee relocation verified through existing providers; emitted by actual C++ parent; no shape-only or adjacency identity inference
