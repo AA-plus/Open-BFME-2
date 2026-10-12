@@ -1,6 +1,11 @@
 // ?update@RampageBehavior@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.18 date=2026-10-08
-// cl: /O1 /DNDEBUG /MD /arch:SSE /G7
+// partial score=0.9759668744 date=2026-10-12
+// Native full689B 458CCB..458F7C, secondary update callback at +10.
+// New native corrections to the old bank: AI commands are embedded at
+// AIUpdate+20; decrement expiry always clears weapon8/possibly idles;
+// saved state compares/stores absolute health; max reference retains NaN
+// selection (one > max ? one : max). No global float alias is introduced.
+// cl: /I. /I. /O1 /DNDEBUG /MD /arch:SSE /G7
 //
 // ?update@RampageBehavior@@UAE?AW4UpdateSleepTime@@XZ
 // Target identity: slot 0 of RampageBehavior's UpdateModuleInterface table
@@ -17,7 +22,7 @@
 // Names for the two BodyModuleInterface float slots and Object condition bits
 // remain address-derived; the target calls below use only rowed helpers.
 
-#include "../../../../../Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 
 typedef bool Bool;
 typedef int Int;
@@ -127,7 +132,7 @@ class AIUpdateInterfaceView
 {
 public:
 	unsigned char m_pad00[0x20];
-	AICommandInterface *m_commands;
+	__forceinline AICommandInterface *commands() { return (AICommandInterface *)((char *)this + 0x20); }
 };
 
 class Rva0028B7AELeaGetter
@@ -172,48 +177,49 @@ public:
 	__forceinline void clearConditionWord5Bit2()
 	{
 		if (m_conditionWords[5] & 4) {
-			m_conditionWords[5] &= ~4U;
+			*(unsigned int *)((char *)this+0x120) &= ~4U;
 			rva0028AE6D();
 		}
 	}
 	__forceinline void setConditionWord5Bit2()
 	{
 		if (!(m_conditionWords[5] & 4)) {
-			m_conditionWords[5] |= 4;
+			*(unsigned int *)((char *)this+0x120) |= 4;
 			rva0028AE6D();
 		}
 	}
 	__forceinline void clearConditionWord5Bit0()
 	{
-		if (m_conditionWords[5] & 1) {
+		if (((const unsigned char *)&m_conditionWords[5])[0] & 1) {
 			m_conditionWords[5] &= ~1U;
 			rva0028AE6D();
 		}
 	}
 	__forceinline void clearConditionWord5Byte1Bits()
 	{
-		unsigned char *bytes = (unsigned char *)&m_conditionWords[5];
-		if (bytes[1] & 0x10) {
-			bytes[1] &= 0xEF;
+		const volatile unsigned char *testBytes = (const volatile unsigned char *)&m_conditionWords[5];
+ unsigned char *bytes = (unsigned char *)&m_conditionWords[5];
+		if (testBytes[1] & 0x10) {
+			bytes[1] &= (unsigned char)0xEF;
 			rva0028AE6D();
 		}
-		if (bytes[1] & 0x20) {
-			bytes[1] &= 0xDF;
+		if (testBytes[1] & 0x20) {
+			bytes[1] &= (unsigned char)0xDF;
 			rva0028AE6D();
 		}
-		if (bytes[1] & 0x40) {
-			bytes[1] &= 0xBF;
+		if (testBytes[1] & 0x40) {
+			bytes[1] &= (unsigned char)0xBF;
 			rva0028AE6D();
 		}
-		if (bytes[1] & 0x80) {
-			bytes[1] &= 0x7F;
+		if (testBytes[1] & 0x80) {
+			bytes[1] &= (unsigned char)0x7F;
 			rva0028AE6D();
 		}
 	}
 	__forceinline Bool hasStatusBit1() const { return (m_status438 & 1) != 0; }
 	__forceinline Bool hasWeaponSet(WeaponSetType type) const
 	{
-		return ((*getWeaponSetFlags() >> type) & 1) != 0;
+		unsigned char flags = (unsigned char)(*getWeaponSetFlags() >> type); return (flags & 1) != 0;
 	}
 
 private:
@@ -235,7 +241,7 @@ public:
 };
 
 extern UpgradeCenter *TheUpgradeCenter;
-extern float g_Va00BBB8D8;
+__forceinline const float &rampageMax(const float &a, const float &b) { return a > b ? a : b; }
 
 class Rva00458BE1
 {
@@ -276,45 +282,40 @@ UpdateSleepTime RampageBehavior::update()
 
 	float health = body->rva0048F64EGetA();
 	float maxHealth = body->rva0048F64EGetB();
-	float divisor = g_Va00BBB8D8;
-	const float *divisorPointer = &divisor;
-	if (maxHealth > 1.0f)
-		divisorPointer = &maxHealth;
-	float healthRatio = health / *divisorPointer;
+	float healthRatio = health / rampageMax(1.0f, maxHealth);
 
 	if (m_14 > 0) {
 		--m_14;
-		if (m_14 > 0) {
-			if (!owner->hasStatusBit1() && !owner->rva0028B7C8())
-				goto updateResetTimer;
-			if (owner->hasWeaponSet(WEAPONSET_8))
-				owner->clearWeaponSetFlag(WEAPONSET_8);
-			if (!owner->hasStatusBit1() && !owner->rva0028B7C8())
-				ai->m_commands->aiIdle(CMD_FROM_AI);
-		}
+		if (m_14 > 0 && !owner->hasStatusBit1() && !(unsigned char)owner->rva0028B7C8())
+			goto updateResetTimer;
+		if (owner->hasWeaponSet(WEAPONSET_8))
+			owner->clearWeaponSetFlag(WEAPONSET_8);
+		if (!owner->hasStatusBit1() && !(unsigned char)owner->rva0028B7C8())
+			ai->commands()->aiIdle(CMD_FROM_AI);
+		Int resetTime = data->m_resetTimer;
+		m_18 = resetTime;
 		m_14 = 0;
-		m_18 = data->m_resetTimer;
 		owner->clearConditionWord5Bit2();
 		drawable->rva00274176(false);
 		goto updateResetTimer;
 	}
 
-	if (data->m_healthThreshold <= healthRatio
+	if (!(data->m_healthThreshold > healthRatio)
 		|| owner->hasStatusBit1()
 		|| owner->hasWeaponSet(WEAPONSET_8)
-		|| m_10 <= healthRatio
+		|| !(m_10 > health)
 		|| m_18 != 0)
 		goto updateResetTimer;
 
 	if (((Rva00458BE1 *)((char *)this - 0x10))->rva00458BE1()) {
 		owner->clearWeaponSetFlag(WEAPONSET_7);
 		owner->setWeaponSetFlag(WEAPONSET_8);
-		ai->m_commands->aiAttackPosition(owner->getPosition(), 0x0FFFFFFE,
+		ai->commands()->aiAttackPosition(owner->getPosition(), 0x0FFFFFFE,
 			CMD_FROM_AI);
 		m_14 = data->m_lifeTimer;
 	} else {
 		owner->setConditionWord5Bit2();
-		ai->m_commands->rva0045003E(0, CMD_FROM_AI);
+		ai->commands()->rva0045003E(0, CMD_FROM_AI);
 		m_14 = data->m_angryLifeTimer;
 	}
 	owner->clearConditionWord5Bit0();
@@ -328,7 +329,7 @@ updateResetTimer:
 	if (m_18 > 0) {
 		--m_18;
 		if (m_18 <= 0)
-			m_10 = healthRatio;
+			m_10 = health;
 	}
 	return UPDATE_SLEEP_NONE;
 }
