@@ -2423,73 +2423,7 @@ void W3DModelDraw::doHideShowSubObjs(const std::vector<ModelConditionInfo::HideS
 	DANGER WARNING READ ME
 	DANGER WARNING READ ME
 */
-// ?handleClientTurretPositioning@W3DModelDraw@@ present-unmatched
-void W3DModelDraw::handleClientTurretPositioning()
-{
-	if (!m_curState || !(m_curState->m_validStuff & ModelConditionInfo::TURRETS_VALID))
-		return;
-
-	for (int tslot = 0; tslot < MAX_TURRETS; ++tslot)
-	{
-		const ModelConditionInfo::TurretInfo& tur = m_curState->m_turrets[tslot];
-		Real turretAngle = 0;
-		Real turretPitch = 0;
-		if (tur.m_turretAngleBone || tur.m_turretPitchBone)
-		{
-			const Object *obj = getDrawable()->getObject();
-			if (obj)
-			{
-				const AIUpdateInterface* ai = obj->getAIUpdateInterface();
-				if (ai)
-					ai->getTurretRotAndPitch((WhichTurretType)tslot, &turretAngle, &turretPitch);
-			}
-
-			// do turret, if any
-			if (tur.m_turretAngleBone != 0)
-			{
-				if (m_curState)
-					turretAngle += tur.m_turretArtAngle;
-				Matrix3D turretXfrm(1);
-				turretXfrm.Rotate_Z(turretAngle);
-				if (m_renderObject)
-				{
-					m_renderObject->Capture_Bone( tur.m_turretAngleBone );
-					m_renderObject->Control_Bone( tur.m_turretAngleBone, turretXfrm );	
-				}
-			}
-
-			// do turret pitch, if any
-			if (tur.m_turretPitchBone != 0)
-			{
-				if (m_curState)
-					turretPitch += tur.m_turretArtPitch;
-				Matrix3D turretPitchXfrm(1);
-				// Inline the Y-rotation post-multiply (header Rotate_Y math):
-				// this TU's fsin/fcos-computed Rotate_Y copy loses the link.
-				// sin/cos are CRT imports (no COMDATs); the float-pointer
-				// write avoids Matrix3D/Vector4 inline accessors. Same
-				// pattern as SlowDeathBehavior calcRandomForce.
-				{
-					float s = (float)sin((double)-turretPitch);
-					float c = (float)cos((double)-turretPitch);
-					float *m = (float*)&turretPitchXfrm; // 3 Vector4 rows
-					float t0 = m[0], t2 = m[2];
-					m[0] = c*t0 - s*t2; m[2] = s*t0 + c*t2;
-					t0 = m[4]; t2 = m[6];
-					m[4] = c*t0 - s*t2; m[6] = s*t0 + c*t2;
-					t0 = m[8]; t2 = m[10];
-					m[8] = c*t0 - s*t2; m[10] = s*t0 + c*t2;
-				}
-				if (m_renderObject)
-				{
-					m_renderObject->Capture_Bone( tur.m_turretPitchBone );
-					m_renderObject->Control_Bone( tur.m_turretPitchBone, turretPitchXfrm );	
-				}
-			}
-		}
-	} // next tslot
-}
-
+// handleClientTurretPositioning is byte-verified in W3DModelDrawClientTurret.cpp.
 
 //void W3DModelDraw::handleClientFlagPositioning()
 //{
@@ -2515,89 +2449,7 @@ void W3DModelDraw::handleClientTurretPositioning()
 
 	@todo fix me someday (srj)
 */
-// ?handleClientRecoil@W3DModelDraw@@ present-unmatched
-void W3DModelDraw::handleClientRecoil()
-{
-	const W3DModelDrawModuleData* d = getW3DModelDrawModuleData();
-	if (!(m_curState->m_validStuff & ModelConditionInfo::BARRELS_VALID))
-	{
-		return;
-	}
-
-	// do recoil, if any
-	for (int wslot = 0; wslot < WEAPONSLOT_COUNT; ++wslot)
-	{
-		if (!m_curState->m_hasRecoilBonesOrMuzzleFlashes[wslot])
-			continue;
-
-		const ModelConditionInfo::WeaponBarrelInfoVec& barrels = m_curState->m_weaponBarrelInfoVec[wslot];
-		WeaponRecoilInfoVec& recoils = m_weaponRecoilInfoVec[wslot];
-		Int count = barrels.size();
-		Int recoilCount = recoils.size();
-		DEBUG_ASSERTCRASH(count == recoilCount, ("Barrel count != recoil count!"));
-		count = (count>recoilCount)?recoilCount:count;
-		for (Int i = 0; i < count; ++i)
-		{
-			if (barrels[i].m_muzzleFlashBone != 0)
-			{
-				Bool hidden = recoils[i].m_state != WeaponRecoilInfo::RECOIL_START;
-				//DEBUG_LOG(("adjust muzzleflash %08lx for Draw %08lx state %s to %d at frame %d\n",subObjToHide,this,m_curState->m_description.str(),hidden?1:0,TheGameLogic->getFrame()));
-				barrels[i].setMuzzleFlashHidden(m_renderObject, hidden);
-			}
-
-			const Real TINY_RECOIL = 0.01f;
-			if (barrels[i].m_recoilBone != 0)
-			{
-				switch (recoils[i].m_state )
-				{
-					case WeaponRecoilInfo::IDLE:
-						// nothing
-						break;
-
-					case WeaponRecoilInfo::RECOIL_START:
-					case WeaponRecoilInfo::RECOIL:
-						recoils[i].m_shift += recoils[i].m_recoilRate;
-						recoils[i].m_recoilRate *= d->m_recoilDamping;			// recoil decelerates
-						if (recoils[i].m_shift >= d->m_maxRecoil)
-						{
-							recoils[i].m_shift = d->m_maxRecoil;
-							recoils[i].m_state = WeaponRecoilInfo::SETTLE;
-						}
-						else if (fabs(recoils[i].m_recoilRate) < TINY_RECOIL)
-						{
-							recoils[i].m_state = WeaponRecoilInfo::SETTLE;
-						}
-						break;
-
-					case WeaponRecoilInfo::SETTLE:
-						recoils[i].m_shift -= d->m_recoilSettle;
-						if (recoils[i].m_shift <= 0.0f)
-						{
-							recoils[i].m_shift = 0.0f;
-							recoils[i].m_state = WeaponRecoilInfo::IDLE;
-						}
-						break;
-				}
-
-				Matrix3D gunXfrm;
-				gunXfrm.Make_Identity();
-				gunXfrm.Translate_X( -recoils[i].m_shift );
-				//DEBUG_ASSERTLOG(recoils[i].m_shift==0.0f,("adjust bone %d by %f\n",recoils[i].m_recoilBone,recoils[i].m_shift));
-
-				if (m_renderObject)
-				{
-					m_renderObject->Capture_Bone( barrels[i].m_recoilBone );
-					m_renderObject->Control_Bone( barrels[i].m_recoilBone, gunXfrm );
-				}
-			}
-			else
-			{
-				recoils[i].m_state = WeaponRecoilInfo::IDLE;
-				//DEBUG_LOG(("reset Draw %08lx state %08lx\n",this,m_curState));
-			}
-		}
-	}
-}
+// handleClientRecoil is byte-verified in W3DModelDrawClientTurret.cpp.
 
 //-------------------------------------------------------------------------------------------------
 /*
@@ -4266,3 +4118,10 @@ void W3DModelDrawModuleData::xfer( Xfer *x )
 void W3DModelDrawModuleData::loadPostProcess( void )
 {
 }
+
+// Preserve the rowed out-of-line Translate_X (0x000B2415, 65B) formerly
+// emitted by the removed unverified recoil body. Like the existing WWMath
+// emitter units, this member pointer requests ordinary compiler emission;
+// it is a compile anchor, with no retail data identity claimed.
+extern void (Matrix3D::*const g_bfmeModelDrawTranslateXAnchor)(float);
+void (Matrix3D::*const g_bfmeModelDrawTranslateXAnchor)(float) = &Matrix3D::Translate_X;
