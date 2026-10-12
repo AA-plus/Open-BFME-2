@@ -64,6 +64,7 @@
 #include "W3DDevice/GameClient/Module/W3DModelDraw.h"
 #include "W3DDevice/GameClient/W3DShadow.h"
 #include "W3DDevice/GameClient/Heightmap.h"
+#include "ref_ptr.h"
 
 // ?setDecalUVAxis@W3DShadowTexture@@QAEXAAVVector3@@0@Z
 // retail 0x00108603, 57 bytes. Dedicated TU carrying the Open-BFME-1 donor
@@ -74,6 +75,14 @@
 //
 // m_shadowUV[0] sits at this+0x8c and m_shadowUV[1] at this+0x98, which is
 // what fixes the two 12-byte Vector3 copies the retail body performs.
+//
+// The four accessors before it (0x001085CF..0x001085FB) are BFME 2's
+// out-of-line forms of the donor's inline setters. setTexture tail-jumps to
+// RefCountPtr<TextureClass>::operator= (0x000424D0), so the texture member is
+// a RefCountPtr here; the sphere copy tail-jumps to the folded 16-byte copy
+// 0x0004254E. setBoundingBox (0x001085FB) stays inline: its tail jump goes to
+// the folded 24-byte copy 0x0009AC04, while the ledger holds the
+// AABoxClass::operator= name at the unreferenced copy 0x001492E0.
 
 class W3DShadowTexture : public RefCountClass, public	HashableClass
 {
@@ -85,7 +94,7 @@ class W3DShadowTexture : public RefCountClass, public	HashableClass
 			m_shadowUV[0].Set(1.0f,0.0f,0.0f);	//u runs along world x axis
 			m_shadowUV[1].Set(0.0f,-1.0f,0.0f);	//v runs along world -y axis
 		}
-		~W3DShadowTexture( void ) { REF_PTR_RELEASE(m_texture);}
+		~W3DShadowTexture( void ) {}
 
 		virtual	const char * Get_Key( void )	{ return m_namebuf;	}
 
@@ -96,15 +105,14 @@ class W3DShadowTexture : public RefCountClass, public	HashableClass
 		{	memset(m_namebuf,0,sizeof(m_namebuf));	//pad with zero so always ends with null character.
 			strncpy(m_namebuf,name,sizeof(m_namebuf)-1);
 		}
-		TextureClass	*getTexture(void)	{ return m_texture;}
-		void			setTexture(TextureClass *texture)	{m_texture = texture;}
-		void			setLightPosHistory(Vector3 &pos) {m_lastLightPosition=pos;}	///<updates the last position of light
+		void			setTexture(const RefCountPtr<TextureClass> &texture);
+		void			setLightPosHistory(Vector3 &pos);	///<updates the last position of light
 		Vector3&		getLightPosHistory(void) {return m_lastLightPosition;}
 		void			setObjectOrientationHistory(Matrix3x3 &mat) {m_lastObjectOrientation=mat;}	///<updates the last position of light
 		Matrix3x3&		getObjectOrientationHistory(void) {return m_lastObjectOrientation;}
-		SphereClass&	getBoundingSphere(void)	{return m_areaEffectSphere;}
+		SphereClass&	getBoundingSphere(void);
 		AABoxClass&		getBoundingBox(void)		{return m_areaEffectBox;}
-		void		setBoundingSphere(SphereClass &sphere)	{m_areaEffectSphere=sphere;}
+		void		setBoundingSphere(SphereClass &sphere);
 		void		setBoundingBox(AABoxClass &box)		{m_areaEffectBox=box;}
 		void		updateBounds(Vector3 &lightPos, RenderObjClass *robj);	///<update extent of shadow
 		void		setDecalUVAxis(Vector3 &u, Vector3 &v);
@@ -114,13 +122,33 @@ class W3DShadowTexture : public RefCountClass, public	HashableClass
 
 		char m_namebuf[2*W3D_NAME_LEN];	///<name of model hierarchy
 
-		TextureClass *m_texture; ///<texture holding the shadow for this renderobject
+		RefCountPtr<TextureClass> m_texture; ///<texture holding the shadow for this renderobject
 		Vector3		m_lastLightPosition;		///<position of light source at time of last texture update.
 		Matrix3x3	m_lastObjectOrientation;	///<orientation of shadow casting object when texture was generated.
 		AABoxClass	m_areaEffectBox;			///<boundary defining object-space volume affected by shadow.
 		SphereClass	m_areaEffectSphere;			///<boundary defining object-space volume affected by shadow.
 		Vector3		m_shadowUV[2];		///<world-space vectors defining the u and v texture coordinate axis.
 };
+
+void W3DShadowTexture::setTexture(const RefCountPtr<TextureClass> &texture)
+{
+	m_texture = texture;
+}
+
+void W3DShadowTexture::setLightPosHistory(Vector3 &pos)
+{
+	m_lastLightPosition = pos;
+}
+
+SphereClass &W3DShadowTexture::getBoundingSphere(void)
+{
+	return m_areaEffectSphere;
+}
+
+void W3DShadowTexture::setBoundingSphere(SphereClass &sphere)
+{
+	m_areaEffectSphere = sphere;
+}
 
 void W3DShadowTexture::setDecalUVAxis(Vector3 &u, Vector3 &v)
 {
