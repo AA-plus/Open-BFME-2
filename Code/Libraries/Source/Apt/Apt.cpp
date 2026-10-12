@@ -649,3 +649,23 @@ struct Rva006CD3A0Record {int a0,a4,a8,aC,a10,a14,a18,a1C;};
 void Rva006CD3A0Clear(Rva006CD3A0Record *r) {
  r->a0=0;r->a4=0;r->a10=0;r->a14=0;r->a8=0;r->aC=0;r->a18=0;r->a1C=0;
 }
+
+// Native6CD120..6CD1E7: Ghidra-unlisted registration of a global extension
+// object. Asserts pExtObject (Apt.cpp 0x685, retail texts), builds its name
+// from virtual slot 15, calls slot 16, asserts the global extension table
+// (E18360) does not already hold that name (0x68C) and adds the object under
+// it. Table calls are the rowed rva0070A5C0 lookup and rva006FBB90 add; the
+// extension object view and this function's name are address-derived.
+class Rva006CD120ExtObject {public:virtual void s0();virtual void s1();virtual void s2();virtual void s3();virtual void s4();virtual void s5();virtual void s6();virtual void s7();virtual void s8();virtual void s9();virtual void s10();virtual void s11();virtual void s12();virtual void s13();virtual void s14();virtual const char *name();virtual void registered();};
+class BfmeN1034;
+class Rva0070A5C0 {public:BfmeN1034 *rva0070A5C0(int);};
+class Rva8D0D80String;class Rva8D0D80Value;
+class Rva8D0D80Result {public:void rva006FBB90(Rva8D0D80String *,Rva8D0D80Value *);};
+extern AptValue *g_shutdownAtE18360;
+void Rva006CD120AddGlobalExtension(Rva006CD120ExtObject *pExtObject) {
+ GAPCHECK(pExtObject != 0,"pExtObject != NULL",0x685);
+ EAStringC sObjName(pExtObject->name());
+ pExtObject->registered();
+ GAPCHECK(0 == ((Rva0070A5C0 *)g_shutdownAtE18360)->rva0070A5C0((int)&sObjName),"NULL == gpGlobalExtensionObject->Lookup(&sObjName)",0x68C);
+ ((Rva8D0D80Result *)g_shutdownAtE18360)->rva006FBB90((Rva8D0D80String *)&sObjName,(Rva8D0D80Value *)pExtObject);
+}
