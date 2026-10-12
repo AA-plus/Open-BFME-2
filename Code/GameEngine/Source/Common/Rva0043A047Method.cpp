@@ -3,7 +3,8 @@
 // in EAX/stack and uses virtual slots 10, 30, and 1 on it. Slot 30 receives
 // this+0x14. If the two-byte slot-10 result's second byte is at least 2, the
 // slot-1 result selects a direct helper at 0x00439F3F or 0x00438FF4. The
-// receiver, helper identities, and field meanings remain address-derived.
+// Both helper names now resolve to byte-verified Rva00439E0C definitions.
+// The receiver and field meanings remain address-derived.
 
 class RvaInterface0043A047
 {
@@ -41,16 +42,12 @@ public:
 	virtual void slot30(unsigned char *out) = 0;
 };
 
-class Rva00439F3F
+class Xfer;
+class Rva00439E0C
 {
 public:
-	void rva00439F3F(void *argument);
-};
-
-class Rva00438FF4
-{
-public:
-	void rva00438FF4(void *argument);
+ void rva00439F3F(Xfer *argument);
+ void rva00438FF4(Xfer *argument);
 };
 
 class Rva0043A047
@@ -72,8 +69,8 @@ void Rva0043A047::method(void *argument)
 	{
 		((RvaInterface0043A047 *)argument)->slot30(&m_opaqueOutput[0]);
 		if (((RvaInterface0043A047 *)argument)->slot01())
-			((Rva00439F3F *)this)->rva00439F3F(argument);
+			((Rva00439E0C *)this)->rva00439F3F((Xfer *)argument);
 		else
-			((Rva00438FF4 *)this)->rva00438FF4(argument);
+			((Rva00439E0C *)this)->rva00438FF4((Xfer *)argument);
 	}
 }

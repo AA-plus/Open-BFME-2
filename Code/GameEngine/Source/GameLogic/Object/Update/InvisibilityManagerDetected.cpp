@@ -15,6 +15,8 @@ class Player {public:Relationship getRelationship(const Team*)const;char pad[0x2
 struct DetectionTemplate {char pad[0x115];unsigned char kind;};
 class Object {public:void *vtable;DetectionTemplate *objectTemplate;char pad8[0x30];Coord3D position;char pad44[0x30];int id;Object *rva002931F5(bool);Player *getControllingPlayer()const;};
 struct BfmePod196 {int a[49];};
+class Rva00438FC5 {public:~Rva00438FC5();char bytes[16];};
+class Rva00438FA7:public Rva00438FC5 {public:Rva00438FA7();};
 struct Rva004393D6:public _STL::list<BfmePod196> {int a,b,c;Rva004393D6();~Rva004393D6();Rva004393D6 &operator=(const Rva004393D6&);};
 typedef _STL::map<int,Rva004393D6,_STL::less<int>,_STL::allocator<_STL::pair<const int,Rva004393D6> > > InvisibilityRecordMap;
 template<> Rva004393D6 &InvisibilityRecordMap::operator[](const int&);
@@ -39,8 +41,8 @@ bool Rva00439E0C::rva00439E0C(Object *object,Object *volatile detectorInput,int 
  scratch.id=object->id;
  DetectionTreeNode *node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find(&scratch.id);
  if(node==*(DetectionTreeNode**)&records) {
-  Rva004393D6 empty;
-  records[scratch.id]=empty;
+  Rva00438FA7 empty;
+  records[scratch.id]=(const Rva004393D6&)empty;
   node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find(&scratch.id);
  }
  Object *detector=detectorInput;
@@ -136,8 +138,8 @@ void Rva00439E0C::rva00439F3F(Xfer *xfer)
 		DetectionTreeNode *node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find((int*)&id);
 		if (node == *(DetectionTreeNode**)&records)
 		{
-			Rva004393D6 empty;
-			records[(int&)id]=empty;
+			Rva00438FA7 empty;
+			records[(int&)id]=(const Rva004393D6&)empty;
 			node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find((int*)&id);
 		}
 		Rva004393D6 *record=&node->record;
