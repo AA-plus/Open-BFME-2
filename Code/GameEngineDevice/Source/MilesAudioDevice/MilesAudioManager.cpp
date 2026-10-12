@@ -392,6 +392,7 @@ struct PlayingAudio {
     char at4C[0x4D - 0x4C];
     bool m_at4D;                         // +0x4D, raise the event's script flag on release (0x5FDCA)
     bool m_at4E;                         // +0x4E, m_at24 holds a position
+    bool m_at4F;                         // +0x4F, set when 0x5634C hands on a new extra volume
 };
 
 // Retain-and-replace setter rowed at 0x000A8CE5 under its address-derived owner.
@@ -1022,6 +1023,7 @@ public:
     bool rva00055E6C(const AsciiString &name, int streamArg, int viewType, int musicSystem);
     bool rva0005623E(int key, void **result, int flags);
     void rva000563FE(Xfer *xfer, int handle);
+    void rva0005634C(int handle, float volume, int mode);
     bool rva00054899(ObjectID objectID, int otherID);
     bool rva00056670(ObjectID objectID);
     bool rva00055426(int objectID);
@@ -3997,6 +3999,34 @@ void MilesAudioManager::rva000563FE(Xfer *xfer, int handle)
             reinterpret_cast<Rva00481FAFFloatSlot *>(event)->store(playing->m_at3C);
         reinterpret_cast<Rva002D9FD9Owner *>(event)->rva002D9FD9(reinterpret_cast<Rva002D9FD9Arg *>(xfer));
         reinterpret_cast<Rva00481FAFFloatSlot *>(event)->store(volume);
+    }
+}
+
+// Retail 0x0005634C (address-derived, RET 0xC; called by the alias forwarder
+// 0x00057530): sets a handle's extra volume. Mode 1 stores it on the event
+// (0x481FAF) and, for a playing record, flags it and restarts its clock;
+// otherwise a playing record takes it with the settings' +0x78 clock, and a
+// queued event just stores it.
+void MilesAudioManager::rva0005634C(int handle, float volume, int mode)
+{
+    AudioEventRTS *event = 0;
+    PlayingAudioRef playing;
+    if (rva00055FCA(handle, reinterpret_cast<void **>(&event), &playing)) {
+        if (mode == 1) {
+            if (event) {
+                reinterpret_cast<Rva00481FAFFloatSlot *>(event)->store(volume);
+                if (playing.get()) {
+                    playing->m_at4F = true;
+                    playing->m_at3C = volume;
+                    playing->m_at40 = 0.0f;
+                }
+            }
+        } else if (playing.get()) {
+            playing->m_at3C = volume;
+            playing->m_at40 = static_cast<float>(m_audioSettings->m_at78);
+        } else if (event) {
+            reinterpret_cast<Rva00481FAFFloatSlot *>(event)->store(volume);
+        }
     }
 }
 
