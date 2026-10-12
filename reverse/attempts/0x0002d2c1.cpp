@@ -1,9 +1,32 @@
 // ?prepFile@INI@@IAE_NABVAsciiString@@W4INILoadType@@@Z
-// partial score=0.35 date=2026-10-08
-// cl: /Ireference/shims/bfme2_ascii /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// partial score=0.9 date=2026-10-12
+// cl: /O1 /arch:SSE /G7 /Ireference/shims/iniexception /Ireference/shims/bfme2_ascii /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // ?prepFile@INI@@IAE_NABVAsciiString@@W4INILoadType@@@Z @0x0002D2C1, 936B.
 //
+// Bank repair 2026-10-12: use the matched INI region's /O1 /arch:SSE /G7
+// explicitly because bank/scratch paths do not receive Code/ region defaults.
+// The old default-/O2 scratch result was 1182B; the corrected bank emits 933B
+// against the native 936B body and first differs at the early throw-tail JMP
+// (+0x47). This remains a partial, not a matched ledger body.
+//
+// Target corrections: helper call at 0x2D39E pushes the just-opened File*, not
+// the INI receiver; startsWith false at 0x2D3F6 exits the record loop; update
+// 0x2D578..0x2D57C stores saved macroCount+1 without updating that saved local.
+// The insertion wrapper's output starts at EBP-0x40 and its inserted flag is
+// at EBP-0x38: the old eight-byte view was undersized. The rowed insertion
+// provider also writes {node, table, byte flag}; that corroborates a 12B view.
+// Exception storage is the canonical 8B {message pointer, argument count};
+// retail ThrowInfo/CatchableType and the matched constructor/copy/destructor
+// independently support it. The inline insertion helper preserves native
+// copy-pair-before-insert and pair/factory destruction order; it is a local
+// reconstruction, not an established original helper identity.
+//
+// Remaining mismatch: duplicate/common exception tail placement, two late
+// error-block ordering differences and their branch displacements. Whole-byte,
+// callee/data identity, literal and EH gates have NOT passed for this bank.
+// Donor name and layout uncertainties documented below are preserved.
+
 // Name/signature are carried from the clean BFME1 INI.cpp prepFile donor;
 // this target body is substantially different. Target evidence: all three
 // matched INI load entries pass (&filename, loadType) and branch on AL; the
@@ -115,6 +138,7 @@ public:
 struct Out0002CA72
 {
 	void *first;
+	void *iteratorOwner;
 	unsigned char second;
 	unsigned char pad[3];
 };
@@ -182,15 +206,11 @@ class INI
 	Rva00601BBCHelper m_helper;
 };
 
-class INIException
-{
-public:
-	INIException(int argCount, const char *format, ...);
-	INIException(const INIException &that);
-	~INIException();
-};
+#include "Common/INIException.h"
 
 typedef _STL::pair<const AsciiString, AsciiString> MacroPair;
+typedef char InsertResultSizeCheck[sizeof(Out0002CA72) == 12 ? 1 : -1];
+typedef char ExceptionSizeCheck[sizeof(INIException) == 8 ? 1 : -1];
 typedef char MacroPairSizeCheck[sizeof(MacroPair) == 8 ? 1 : -1];
 
 // The lifted return record is two StringBase-sized words. Its mangling is
@@ -205,6 +225,12 @@ struct BfmePairEL : MacroPair
 	__forceinline ~BfmePairEL() {}
 };
 BfmePairEL __cdecl bfmeMakePairEL(const BfmeWordEL &first, const BfmeWordEL &second);
+
+static __forceinline void insertMacroPair(Out0002CA72 *inserted, const BfmePairEL &factoryPair)
+{
+	MacroPair pair((const MacroPair &)factoryPair);
+	((Rva0002CD2F *)&g_Va00DDF58C)->rva0002CD2F(inserted, (const Pair0002CA72 *)&pair);
+}
 
 // ?prepFile@INI@@IAE_NABVAsciiString@@W4INILoadType@@@Z
 bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
@@ -235,7 +261,7 @@ bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
 		throw INIException(7, "INI::load, cannot open file '%s'\n", filename.str());
 	}
 
-	m_helper.rva00602072(this);
+	m_helper.rva00602072(m_file);
 	m_file->close();
 	m_file = 0;
 
@@ -250,8 +276,8 @@ bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
 		{
 			*rawLine = 0;
 			AsciiString value;
-			AsciiString name;
 			line.nextToken(&value, 0);
+			AsciiString name;
 			line.nextToken(&name, 0);
 
 			if (filename.endsWith("map.ini"))
@@ -260,18 +286,19 @@ bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
 					"%s:\nMACROs not allowed in map.ini.\n%s.", filename.str(), name.str());
 			}
 
-			const char *nameText = name.str();
-			for (const char *p = nameText; *p != 0; ++p)
+			for (const char *p = name.str(); ; ++p)
 			{
-				if (*p > 'a' && *p < 'z')
+				char ch = *p;
+				if (ch == 0) break;
+				if (ch > 'a' && ch < 'z')
 				{
 					throw INIException(8,
 						"%s:\nMACRO names must use UPPERCASE letters.\n%s.", filename.str(), name.str());
 				}
 			}
 
-			AsciiString part;
 			line.nextToken(&value, 0);
+			AsciiString part;
 			while (line.nextToken(&part, 0))
 			{
 				value += " ";
@@ -284,31 +311,31 @@ bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
 			}
 
 			Out0002CA72 inserted;
-			{
-				BfmePairEL factoryPair = bfmeMakePairEL(
-					(const BfmeWordEL &)name, (const BfmeWordEL &)value);
-				{
-					MacroPair pair((const MacroPair &)factoryPair);
-					((Rva0002CD2F *)&g_Va00DDF58C)->rva0002CD2F(
-						&inserted, (const Pair0002CA72 *)&pair);
-				}
-			}
+			insertMacroPair(&inserted, bfmeMakePairEL(
+				(const BfmeWordEL &)name, (const BfmeWordEL &)value));
 
-			if (loadType != INI_LOAD_UNK5 && inserted.second == 0)
+
+			bool duplicate = inserted.second == 0;
+			if (loadType != INI_LOAD_UNK5)
 			{
+				if (duplicate)
+				{
 				throw INIException(8,
 					"%s:\nDuplicate MACRO names.\n%s.", filename.str(), name.str());
 			}
-			if (loadType == INI_LOAD_UNK5 && inserted.second == 0)
+				}
+			else if (duplicate)
 			{
 				AsciiString *existingValue = (AsciiString *)((char *)inserted.first + 8);
 				if (existingValue->compare(value) != 0)
 				{
 					*existingValue = value;
-					g_00DDF5AC = ++macroCount;
+					g_00DDF5AC = macroCount + 1;
 				}
 			}
 		}
+		else
+			break;
 	}
 
 	m_filename = filename;
