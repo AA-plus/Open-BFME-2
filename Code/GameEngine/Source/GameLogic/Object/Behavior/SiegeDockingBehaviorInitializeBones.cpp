@@ -1,10 +1,6 @@
-// ?rva00459E05@SiegeDockingBehavior@@AAEXXZ
-// partial score=0.99 date=2026-10-10
-// ?rva00459E05@SiegeDockingBehavior@@AAEXXZ
-// partial score=0.99 date=2026-10-09
-// ?rva00459E05@SiegeDockingBehavior@@AAEXXZ
-// partial score=0.99 date=2026-10-09
-// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB
+// STLport 4.5.3: typed pointer-vector instantiations preserve full retail bodies.
+// BFME1 donor cee35b7d8: game/GameEngine/Source/GameLogic/Object/Behavior/SiegeDockingInitialize00206CB0.cpp.
+// cl: /I. /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // Retail 0x00459E05, 554B: SiegeDockingBehavior::rva00459E05 (name pinned:
 // the no-argument member that loadPostProcess 0x0045A16D calls before the
@@ -22,17 +18,16 @@
 // push_back is the ICF-shared pointer-vector body 0x004DFCB0.
 
 #define _STLP_NO_EXCEPTIONS 1
+// Existing matched pointer-vector siblings use this local overload to avoid
+// offering a differently compiled max<unsigned> COMDAT to the link.
+#include <stl/_algobase.h>
+namespace _STL { static inline const unsigned &max(const unsigned&a,const unsigned&b) { return a<b?b:a; } }
 #include <vector>
 
-// class-gate: allow Coord3D the position and direction arrays are built and torn down through BFME 2's out-of-line empty Coord3D constructor and destructor (the eh vector iterators push 0x0047A6A9 and 0x000B3FD0); the canonical data-only header cannot declare them; same three floats
-struct Coord3D
-{
-	Coord3D();
-	~Coord3D();
-	float x;
-	float y;
-	float z;
-};
+#include "Code/Libraries/Include/Lib/Coord3D.h"
+// Reuse the existing 12-byte inherited lifetime ABI from W3DRadarCornerLifetimes.cpp;
+// the array callbacks are owned ctor47A6A9/dtorB3FD0, with no new alias or pin.
+struct BfmeRadarWorldPoint : Coord3D { BfmeRadarWorldPoint(); ~BfmeRadarWorldPoint(); };
 
 // One 16-byte transform row; its empty out-of-line ctor is the shared
 // 0x0047A6A9 (spelled as in SpawnPointInitializeBonePositions.cpp).
@@ -59,7 +54,7 @@ struct Rva00459E05Position
 	float x;
 	float y;
 	float z;
-	void setNegated( float a, float b, float c ) { x = 0.0f - a; y = 0.0f - b; z = 0.0f - c; }
+	__forceinline void setNegated(float const a, float const b, float const c) { ((volatile Rva00459E05Position*)this)->x=0.0f-a; ((volatile Rva00459E05Position*)this)->y=0.0f-b; ((volatile Rva00459E05Position*)this)->z=0.0f-c; }
 };
 
 // SiegeDockingBehavior dock entry (0x24 bytes).
@@ -95,9 +90,9 @@ private:
 void SiegeDockingBehavior::rva00459E05()
 {
 	int index = 0;
-	Coord3D positions[ 10 ];
+	BfmeRadarWorldPoint positions[ 10 ];
 	Matrix3D transforms[ 10 ];
-	Coord3D directions[ 10 ];
+	BfmeRadarWorldPoint directions[ 10 ];
 
 	int count = m_object->getMultiLogicalBonePosition( "SIEGETOWER", 10, positions, transforms, true, 0 );
 	for( ; index < count; ++index )
