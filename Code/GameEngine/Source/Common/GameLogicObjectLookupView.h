@@ -117,6 +117,7 @@ public:
 	void processDestroyList();	// 0x002413DF
 	void prepareLogicForObjectLoad();	// 0x00242C86
 	void processProgressComplete(int playerID);	// 0x0023D76E
+	void CreateWOTRMPPlayers(); // 0x0023E99A; verified provider, campaign caller 0x0052C45E
 	void setControlBarOverride(const AsciiString &commandSetName, int slot, const CommandButton *commandButton);	// 0x0024792F
 	void rva00240866(Rva0023E928 *msg, bool frozen);	// 0x00240866, multiplayer save request handler
 	void rva0023D30F(int a, int b, UnicodeString *name);	// 0x0023D30F, thiscall spelling of the stdcall Rva0023D30FCall

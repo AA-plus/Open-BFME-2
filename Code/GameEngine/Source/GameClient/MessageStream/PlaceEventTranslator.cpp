@@ -310,13 +310,16 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 	case 23:
 	case 24: // left click / double click: place the anchored building
 	{
-		const ThingTemplate *build = TheInGameUI->getPendingPlaceType();
+		const ThingTemplate *pendingBuild = TheInGameUI->getPendingPlaceType();
 
 		// ... and also remove any radius cursor that is active.
 		TheInGameUI->setRadiusCursorNone();
 
-		if (build && TheInGameUI->isPlacementAnchored())
+		if (pendingBuild && TheInGameUI->isPlacementAnchored())
 		{
+			// Keep the placement template scoped to the active placement path.
+			// This preserves retail stack slots with the canonical GameLogic API.
+			const ThingTemplate *build = pendingBuild;
 			GameMessage *placeMsg;
 			PlaceCoord world;
 			float angle;
