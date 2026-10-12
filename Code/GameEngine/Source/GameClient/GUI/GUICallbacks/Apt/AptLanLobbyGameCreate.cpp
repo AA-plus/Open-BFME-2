@@ -1,4 +1,4 @@
-// cl: /MD
+// cl: /MD /Ireference/shims/bfme2_ascii
 //
 // ?rva004443E7@AptLanLobby@@QAEXXZ, retail 0x004443E7 37B.
 // Class: these bodies run on the LAN lobby screen (vftable 0x00C3E0F8, its
@@ -12,6 +12,8 @@
 // Evidence: add ecx 0x288 and call [eax+4]; mov ecx [0xDFE958] test and call [eax+0x48];
 // mov ecx [0xDFE710 TheGameEngine] jmp to rowed stopHeadlessClients 0x2260F7;
 // callers at 0x44459D 0x444E7E 0x444EA4 0x444EE5 0x44666D.
+
+#include "unicode_string.h"
 
 class LANAPI; extern LANAPI *TheLAN;
 
@@ -94,6 +96,7 @@ public:
 	void rva004443E7();
 	void rva00444E69(int unused);
 	void rva00444E8A();
+	void rva00444EC8();
 	virtual int rva0044522D(int msg, unsigned char key, int flags);
 	void OnGameCreate();
 	virtual void rva004442DB();
@@ -226,4 +229,38 @@ void AptLanLobby::rva004442DB()
 	m_mem288.rva0044303D();
 	if (TheInvoke00444E8ATarget->m_31C != 1)
 		TheInvoke00444E8ATarget->rva002233A6(1);
+}
+
+// 0x00444EC8 (149 bytes): the host left the LAN game: the +0x288 setup
+// panel's 0x0043DC0F step, the same reset as 0x00444E8A, then the
+// "GUI:HostLeftTitle" / "GUI:HostLeft" message box (Zero Hour's LAN
+// host-left notice). Method name unrecovered.
+class AptMpGameSetup
+{
+public:
+	void rva0043DC0F();
+};
+
+class GameTextInterface
+{
+public:
+	virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0C();
+	virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1C();
+	virtual void s20(); virtual void s24(); virtual void s28(); virtual void s2C();
+	virtual void s30(); virtual void s34(); virtual void s38();
+	virtual UnicodeString fetch(const char *label, bool *exists = 0);	// +0x3C
+};
+extern GameTextInterface *TheGameText;
+
+class GameWindow;
+GameWindow *MessageBoxOk(UnicodeString titleString, UnicodeString bodyString, void (*okCallback)(void));
+
+void AptLanLobby::rva00444EC8()
+{
+	((AptMpGameSetup *)&m_mem288)->rva0043DC0F();
+	rva004443E7();
+	m_currentState = 0;
+	void *owner = m_274Owner;
+	TheInvoke00444E8ATarget->invoke(owner, "CancelGame", 0, 0, 0, 0, 0, 0);
+	MessageBoxOk(TheGameText->fetch("GUI:HostLeftTitle"), TheGameText->fetch("GUI:HostLeft"), 0);
 }
