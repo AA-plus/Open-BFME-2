@@ -771,21 +771,10 @@ public:
 	void setLeaveFrame(UnsignedInt frame);
 };
 
-enum DozerTask
-{
-	DOZER_TASK_ZERO = 0
-};
-
 class Script
 {
 public:
 	void setActive(bool active);
-};
-
-class DozerAIUpdate
-{
-public:
-	virtual void setCurrentTask(DozerTask task);
 };
 
 // ---------------------------------------------------------------------------
@@ -2917,11 +2906,12 @@ NetCommandMsg *NetPacket::readGameMessage(UnsignedByte *data, Int &readOffset)
 }
 
 // ?rva0058DFB8@NetPacket@@SAPAVNetCommandMsg@@PAEAAH@Z @0x0058DFB8 143B.
-// Static NetCommandMsg factory reading 1-byte bool plus 4-byte enum from data+offset.
-// Evidence: unlock lane plus sibling 0x0058E047 plus new-0x24 plus
-// Rva004D580E ctor plus memcpy-1-4 plus dup_0006ede3 row TYPES wrong
-// (object-symbol ?setActive@Script@@QAEX_N@Z) plus dup_00317b9b row TYPES wrong
-// (object-symbol ?setCurrentTask@DozerAIUpdate@@UAEXW4DozerTask@@@Z); declared as used.
+// Static type-27 message factory reading a byte plus a dword from data+offset.
+// Native 0058E032 calls the complete +0x20 setter at 00317B9B. Bind the
+// existing BFMENetInformPlayerLeaveFrameCommandMsg::setLeavingPlayerID owner,
+// as the other packet readers do; the folded setter does not identify this
+// message payload as a DozerTask. BFME1 readDisconnectVoteMessage supplies
+// the vote-frame meaning, supported by the type-27 sendVoteCommand sibling.
 NetCommandMsg *NetPacket::rva0058DFB8(unsigned char *data, int &readOffset)
 {
 	Rva004D580E *msg = new Rva004D580E();
@@ -2929,10 +2919,10 @@ NetCommandMsg *NetPacket::rva0058DFB8(unsigned char *data, int &readOffset)
 	memcpy(&flag, data + readOffset, 1);
 	readOffset += 1;
 	((Script *)msg)->setActive(flag);
-	DozerTask task = DOZER_TASK_ZERO;
-	memcpy(&task, data + readOffset, 4);
+	UnsignedInt voteFrame = 0;
+	memcpy(&voteFrame, data + readOffset, 4);
 	readOffset += 4;
-	((DozerAIUpdate *)msg)->DozerAIUpdate::setCurrentTask(task);
+	((BFMENetInformPlayerLeaveFrameCommandMsg *)msg)->setLeavingPlayerID((Int)voteFrame);
 	return (NetCommandMsg *)msg;
 }
 
