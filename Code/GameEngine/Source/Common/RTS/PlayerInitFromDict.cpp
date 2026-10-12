@@ -76,7 +76,7 @@ class Rva0039B7AD;
 struct Rva003B0D7C{virtual ~Rva003B0D7C();int money;int owner;void rva003B0D7C(int,Rva0039B7AD*,bool);};
 struct Rva003B0E75 {float values[4];void rva003B0E75();};
 struct HandicapView {float values[4];};
-class RGBColor {public:float red,green,blue;int getAsInt()const;};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 class ScoreKeeper {public:void reset(int);};
 enum NameKeyType{NAMEKEY_INVALID=0};class NameKeyGenerator {public:NameKeyType nameToKey(const AsciiString&);};
 extern NameKeyGenerator* TheNameKeyGenerator;

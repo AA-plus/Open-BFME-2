@@ -83,10 +83,7 @@ private:
 
 UnicodeString Rva005C95ECGet(Rva0020E89C *object);
 
-struct RGBColor
-{
-	int getAsInt() const;
-};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 
 class Rva005EE250
 {

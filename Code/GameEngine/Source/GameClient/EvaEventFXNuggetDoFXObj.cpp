@@ -11,12 +11,7 @@
 // TheEva: matched references place it at VA 0x00DFDC30 (zero-filled .data
 // tail); no unit defines it, so it is defined here.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Team;
 

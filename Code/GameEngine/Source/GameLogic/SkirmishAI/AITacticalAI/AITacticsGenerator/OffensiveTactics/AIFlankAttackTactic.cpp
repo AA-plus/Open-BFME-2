@@ -29,9 +29,7 @@ struct Coord3DBase
 	float z;
 };
 
-struct Coord3D : public Coord3DBase
-{
-};
+#include "../../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Xfer;
 class Player;

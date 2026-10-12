@@ -11,13 +11,7 @@ public:
     unsigned char m_afterString[8];
 };
 class PolygonTrigger;
-class ICoord3D
-{
-public:
-    int x;
-    int y;
-    int z;
-};
+#include "../../../../Libraries/Include/Lib/ICoord3D.h"
 class ScriptEngine
 {
 public:

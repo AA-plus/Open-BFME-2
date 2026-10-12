@@ -14,12 +14,7 @@
 #include "unicode_string.h"
 #include "wwmath.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Shadow
 {

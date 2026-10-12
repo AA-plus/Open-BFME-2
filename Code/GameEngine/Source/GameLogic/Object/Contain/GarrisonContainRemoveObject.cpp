@@ -6,12 +6,7 @@
 // bounds -1/0x28, four zero-stores, dec [esi+0x420] (m_garrisonPointsInUse) and
 // Thing::setPosition([esi+8]+0x38) row 0x0030AA80; callers 0x00478850/0x004788CE.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Thing
 {

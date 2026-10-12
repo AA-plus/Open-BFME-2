@@ -1,12 +1,7 @@
 // cl: /DNDEBUG /MD
 // ?rva00344598@Rva00344598@@QAEHXZ @0x00344598 157B
 // Evidence: unlock lane, caller 0x00347EA8 tail-jmp same this, callees rowed getGoalObject 0x004D7726 plus setOrientation 0x0030AB9D plus winPrevTab 0x000D43D0 plus pin GetRelativeAngle, virtuals 0x244 0x7c 0x19c 0x1a0 0x1d0
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Thing
 {

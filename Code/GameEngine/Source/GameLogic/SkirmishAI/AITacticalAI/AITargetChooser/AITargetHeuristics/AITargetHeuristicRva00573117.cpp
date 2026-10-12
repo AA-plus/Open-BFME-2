@@ -58,12 +58,7 @@ public:
 	virtual bool allow(Object *obj);
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct BfmeWideResult
 {

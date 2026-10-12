@@ -53,13 +53,7 @@ public:
 
 }
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-	void zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 enum UpdateSleepTime
 {

@@ -9,12 +9,7 @@ extern "C" double __cdecl sqrt(double value);
 
 // BfmeZeroRange is float 0.0 at 0x00BBAEAC (data_ledger literal); use 0.0f literal so the TU links.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class BfmeBoundaryGeometry3D
 {

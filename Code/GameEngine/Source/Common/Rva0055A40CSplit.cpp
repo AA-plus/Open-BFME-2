@@ -10,7 +10,7 @@
 // Difference locals are float triples with trivial copy/destruction constructed before scaling; only
 // copies of their three floats use intrinsic memcpy into live point objects.
 typedef float Real;
-class Coord3D { public: Coord3D(); ~Coord3D(); float x,y,z; };
+struct Coord3D { Coord3D(); ~Coord3D(); float x,y,z; };
 class Rva0055A246
 {
 public:

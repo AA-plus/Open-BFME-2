@@ -8,12 +8,7 @@
 // ?get@Rva0073A1C0FloatField@@QBEMXZ (disp 0x20 => this+0xC8),
 // then call rowed ?Rva00263778Distance@@YAMPBUCoord3D@@MM0MM@Z
 // with (ptr float get() float ptr 0 0); neighbours share flags/TU dir.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva0073A1C0FloatField
 {

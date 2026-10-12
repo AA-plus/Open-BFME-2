@@ -5,12 +5,7 @@
 // bone init is the parent and the creation object is the dword at parent+8.
 // The free occupier slot supplies the coord, the angle, and the id store.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 enum PathfindLayerEnum
 {

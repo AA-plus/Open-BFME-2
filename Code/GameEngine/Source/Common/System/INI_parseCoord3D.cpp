@@ -7,12 +7,7 @@
 // INI::parseCoord3D): verbatim X/Y/Z sub-token floats. Unlocked by the
 // getNextSubToken row at 0x002E06B.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class INI
 {

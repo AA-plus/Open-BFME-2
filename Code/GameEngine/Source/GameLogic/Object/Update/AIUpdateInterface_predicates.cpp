@@ -14,10 +14,7 @@
 // body; 0x004501CD and 0x00492095 call it directly.
 // ?BeginDefectedStateMachine@AIUpdateInterface@@QAEXXZ, retail 0x0026336D, 73 bytes.
 
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 #define VM10(p) \
 	virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3(); virtual void p##4(); \

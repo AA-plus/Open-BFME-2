@@ -45,10 +45,7 @@ private:
 	float m_row[3][4];
 };
 
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Drawable
 {

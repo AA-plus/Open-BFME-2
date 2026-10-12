@@ -19,13 +19,7 @@ struct Coord3DBase
 	float x, y, z;
 };
 
-class Coord3D : public Coord3DBase
-{
-public:
-	Coord3D();
-	Coord3D(const Coord3D &that);
-	~Coord3D();
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Region3D
 {

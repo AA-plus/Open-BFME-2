@@ -9,10 +9,7 @@
 // Object::rva0028C197 0x0028C197 and GeometryInfo::getMaxHeight 0x006BD7C0.
 // Caller at 0x00491D6E proves thiscall void(Coord3D* Object*); honest Rva
 // owner since the caller class is unproven.
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object;
 

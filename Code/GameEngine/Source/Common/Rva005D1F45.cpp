@@ -15,12 +15,7 @@ struct ICoord2D
 	int m_x;
 	int m_y;
 };
-struct Coord3D
-{
-	float m_x;
-	float m_y;
-	float m_z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 class GameMessage
 {
 public:

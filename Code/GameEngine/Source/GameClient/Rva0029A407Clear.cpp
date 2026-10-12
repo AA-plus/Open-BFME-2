@@ -33,11 +33,7 @@ void *Rva0029A407::rva0029B53C(unsigned int flag)
 
 // Match the RGBColor struct ABI used by the rowed getAsInt provider and
 // Drawable color callers. The previous class spelling changed mangled args.
-struct RGBColor
-{
-	int getAsInt() const;
-	float red, green, blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Shadow
 {

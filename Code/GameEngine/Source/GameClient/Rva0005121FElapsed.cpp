@@ -39,10 +39,7 @@ public:
 // and default return for the elapsed virtual in this TU).
 float g_00DBA4FC = 0.033333335f;
 
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 class TacticalView
 {

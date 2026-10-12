@@ -11,12 +11,7 @@
 // doSpecialPowerAtLocation (0x004C8155, 32 bytes).
 // The base doSpecialPower 0x0049490F is the Zero Hour body (script-fired
 // commands skip the paused and disabled tests), pinned on that evidence.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

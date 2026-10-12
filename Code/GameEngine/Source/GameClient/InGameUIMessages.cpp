@@ -74,11 +74,7 @@ enum ErrorCode
 	ERROR_OUT_OF_MEMORY = (ERROR_BASE + 0x0001)
 };
 
-struct RGBColor
-{
-	float red, green, blue;
-	int getAsInt() const;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class GameFont;
 

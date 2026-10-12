@@ -12,12 +12,7 @@ public:
 	int get() const;
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 enum PathfindLayerEnum
 {

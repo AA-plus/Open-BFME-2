@@ -41,7 +41,7 @@ typedef _STL::_Rb_tree<int,StrategicIntValue,_STL::_Select1st<StrategicIntValue>
 struct StrategicIntIndexPrefix {StrategicIntNode *end;};
 extern "C" unsigned char *__cdecl _mbscpy(unsigned char *,const unsigned char *);
 
-struct RGBColor { int getAsInt()const;float red,green,blue;};
+#include "../../../../../../Libraries/Include/Lib/RGBColor.h"
 class LivingWorldBattle {public:int rva003F459A();int getSide()const {return side;}char unknown00[0x38];int side;};
 class Rva003F468D {public:int rva003F468D(int,int);int rva003F4DAE(int);};
 struct StrategicPlayerColorView {char unknown00[0x184];RGBColor color;};

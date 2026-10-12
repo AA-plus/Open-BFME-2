@@ -4,12 +4,7 @@
 // Copy src pose onto dst, or the owner at this-0x18 when src is null.
 // Then face dst at its position and consume one count.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 enum PathfindLayerEnum
 {

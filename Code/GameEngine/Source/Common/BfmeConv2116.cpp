@@ -1,10 +1,5 @@
 // cl: -Ireference/open-bfme-1/game/GameEngine/Source/Common
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 // The same complete victim pointer is passed to Weapon as Object and to
 // native getter 0x28B511. The verified const getter reads flag +0x48C and

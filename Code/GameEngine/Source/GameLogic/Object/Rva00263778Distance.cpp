@@ -7,12 +7,7 @@
 // Coord3D layout from Object_planarSubtractWorker.cpp; sqrt import 0x0062921C.
 #include <math.h>
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 float Rva00263778Distance(Coord3D const *a, float b, float c, Coord3D const *d, float e, float f)
 {

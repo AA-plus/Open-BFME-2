@@ -7,7 +7,7 @@
 // That helper's full name is unknown, so it is called by an address-derived
 // alias. Coord3D uses the existing three-float codegen view; the body proves
 // stride and calls, not the target's complete source layout.
-struct Coord3D { Coord3D() {} Coord3D(const Coord3D &) {} ~Coord3D() {} float x; float y; float z; };
+#include "../../../Include/Lib/Coord3D.h"
 namespace _STL {
 template <class T> class allocator {};
 template <class T, class A = allocator<T> > class vector {

@@ -50,7 +50,7 @@ class Rva005FB83E {public:void rva005FB83E(const Image*);};
 class Rva005FBB9E {public:void rva005FBB96(int,int);};
 class BannerUI {public:const AsciiString&GetBannerIconImageName(const AsciiString&);};
 extern BannerUI *g_00DFE32C;
-class RGBColor {public:int getAsInt()const;float r,g,b;};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 struct PlayerView {char pad00[0x1c];UnicodeString name;char pad20[0x184-0x20];RGBColor color;};
 struct PlayerTemplateView {char pad00[0x20];AsciiString image;};
 struct PlayerFullView {char pad00[0x40];PlayerTemplateView *playerTemplate;};

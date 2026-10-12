@@ -12,7 +12,7 @@
 typedef bool Bool;
 
 class PolygonTrigger;
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Waypoint
 {
 public:

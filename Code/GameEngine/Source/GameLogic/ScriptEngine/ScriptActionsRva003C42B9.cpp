@@ -15,12 +15,7 @@ class Player;
 class ThingTemplate;
 class CommandButton;
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class ScriptEngine
 {

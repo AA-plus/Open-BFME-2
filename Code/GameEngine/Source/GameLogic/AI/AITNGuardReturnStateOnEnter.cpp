@@ -36,10 +36,7 @@ private:
 	unsigned char m_pad00[0x238];
 	ObjectID m_crateID; // +0x238
 };
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 struct ObjectIDListNode
 {
 	ObjectIDListNode *m_next;

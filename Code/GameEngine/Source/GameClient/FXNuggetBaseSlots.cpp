@@ -14,7 +14,7 @@
 // 5; secondary: filter +0x0C and masks +0xA8/+0xF4; then +0x140 (2 = any)
 // against TheWritableGlobalData+0x138. Identity of the gate unproven, so it
 // keeps the address name; the base class keeps its do-not-name token.
-struct Coord3D { float x, y, z; };
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 class Matrix3D { public: float m[12]; };
 class Drawable;
 class Player;

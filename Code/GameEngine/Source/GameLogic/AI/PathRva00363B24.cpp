@@ -5,12 +5,7 @@
 // Evidence: Path layout from PathCtor 0x00363DC8 and PathRva00363DF9
 // (tail +8 waypoint +20); callers need tail waypoint set; /O1 int-only.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class PathNode
 {

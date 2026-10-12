@@ -9,11 +9,7 @@ struct Coord3DBase
 	float z;
 };
 
-class Coord3D : public Coord3DBase
-{
-public:
-	bool equals(const Coord3DBase &that) const;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva00051CBA
 {

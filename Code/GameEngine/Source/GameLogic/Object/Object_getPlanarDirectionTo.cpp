@@ -9,12 +9,7 @@
 // returns out. m_position sits at +0x38 (retail displacement). Coord3D is a
 // struct (PAU per the pin mangling), Object a class (PBV).
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

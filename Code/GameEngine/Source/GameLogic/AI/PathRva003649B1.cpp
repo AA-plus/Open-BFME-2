@@ -13,12 +13,7 @@ enum PathfindLayerEnum
 	LAYER_GROUND = 1
 };
 
-struct Coord3D
-{
-	Real x;
-	Real y;
-	Real z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Rva003642DFNode;
 struct Rva003642DFResult

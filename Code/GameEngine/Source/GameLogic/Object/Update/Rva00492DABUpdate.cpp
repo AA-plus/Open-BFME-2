@@ -9,7 +9,7 @@
 // ModuleData weapon AsciiString at +0xD0 plus int at +0xC8; Object pos at +0x38.
 #include "ascii_string.h"
 
-struct Coord3D { float x, y, z; };
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Thing;
 class ModuleData;

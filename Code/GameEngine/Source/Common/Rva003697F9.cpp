@@ -6,12 +6,7 @@
 // AIUpdateInterface::ignoreObstacle 0x00268D88; virtual slots 0x14/0x20 on +0x30;
 // float const VA 0x00BBB8E0 via g_Va00BBB8E0; +0x528 flag.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

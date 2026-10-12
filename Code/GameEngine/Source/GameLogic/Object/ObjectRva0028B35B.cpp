@@ -5,12 +5,7 @@
 // bfmeGeometryIntersects; rowed/pinned bfmeIntersects 0x006BEB80
 // ?bfmeIntersects@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z; callers
 // 0x0028C0EA 0x004C601C; neighbours ObjectRva0028B31A/0028B38D.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class GeometryInfo
 {
 public:

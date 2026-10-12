@@ -8,12 +8,7 @@
 // 0x00081A24 with idiv-12 size calc, virtual at +0x30, ret 4 one pointer arg.
 #include <vector>
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Vector3
 {

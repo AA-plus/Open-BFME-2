@@ -3,12 +3,7 @@
 // helper: rowed IsOdd on one arg (sharing a pushed arg), then the pinned
 // bounded WorldToCell 0x002E7964, returning the out pointer. Identity unproven.
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 unsigned char __cdecl Rva002EBBFBIsOdd(void *p);
 class Rva002E7964
 {

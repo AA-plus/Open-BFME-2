@@ -10,7 +10,7 @@
 
 class TeamPrototype;
 class Team;
-struct Coord3D { float x; float y; float z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva002A9DFE
 {

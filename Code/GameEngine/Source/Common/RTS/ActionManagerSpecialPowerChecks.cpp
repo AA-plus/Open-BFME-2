@@ -72,12 +72,7 @@ public:
 // The four-byte body returns -1. Define the all-players mask directly; its
 // byte-identical ICF owner is FileClass::Get_File_Handle.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Region3D
 {

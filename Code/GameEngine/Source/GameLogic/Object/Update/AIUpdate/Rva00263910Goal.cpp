@@ -9,12 +9,7 @@
 // Evidence: callees rowed 0x004D745C plus pin 0x0030ADDC; callers 0x00265667
 // (26B) and 0x0026C04E (136B slot 14 of AIUpdate derivatives) pass this+own
 // args; globals TheWritableGlobalData TheTerrainLogic 0.5f in use.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

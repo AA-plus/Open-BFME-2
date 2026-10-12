@@ -80,12 +80,7 @@ extern unsigned char g_00DFEFA4StoragePrototype[28];
 // Inherited mask resolves to the real implementation in
 // ActionManagerSpecialPowerChecks.cpp (retail 0x0036CC7A).
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct BfmeWideResult
 {

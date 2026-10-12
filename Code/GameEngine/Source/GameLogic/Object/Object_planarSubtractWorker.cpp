@@ -10,12 +10,7 @@
 // the address token; identity unproven beyond the planar role. Coord3D is a
 // struct (PAU per the pin mangling), Object a class (PBV).
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

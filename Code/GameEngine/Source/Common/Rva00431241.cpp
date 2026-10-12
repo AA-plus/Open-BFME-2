@@ -2,12 +2,7 @@
 // ?doSetRallyPointCommand@@YAHPAXPAUICoord2D@@@Z @0x00431241 164B: free Emit building GameMessage 0x413 via InGameUI slot75 TacticalView screenToTerrain MessageStream createMessage plus Keyboard check. Evidence: unlock lane; globals TheInGameUI TheTacticalView MessageStreamSubsystem g_009FE720; rowed appendObjectIDArgument 0x0030F979 appendLocationArgument 0x0030F9BB isShift 0x00232683 appendBooleanArgument 0x0030F963; caller 0x004317BB.
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct Coord3D
-{
-	float m_x;
-	float m_y;
-	float m_z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 enum ObjectID
 {

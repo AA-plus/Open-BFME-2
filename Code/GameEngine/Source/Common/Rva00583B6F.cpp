@@ -3,12 +3,7 @@
 // Evidence: leaf lane; vtable slot 4 (0x10) of 0x0086FC80 (HordeMeleeSwarm) and
 //   0x0086FD90 (HordeMeleeFormation twin); calls rowed Thing::setOrientation 0x0030AB9D
 //   and Thing::setPosition 0x0030AA80; circular list walk with x87 float arg.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Thing
 {

@@ -6,7 +6,7 @@
 #define _STLP_NO_EXCEPTIONS 1
 #include <list>
 typedef float Real;
-struct Coord3D { Real x, y, z; };
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 namespace _STL {
 template <> void _Construct(Coord3D *p, const Coord3D &val);
 template _List_node<Coord3D> *list<Coord3D>::_M_create_node(const Coord3D &);

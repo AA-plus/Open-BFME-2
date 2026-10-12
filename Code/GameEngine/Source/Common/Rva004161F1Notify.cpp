@@ -149,14 +149,7 @@ public:
 	GameSlot *getSlot(int i);
 };
 
-class RGBColor
-{
-public:
-	void setFromInt(int v);
-	int m00;
-	int m04;
-	int m08;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class InGameUI
 {

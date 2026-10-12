@@ -12,7 +12,7 @@ extern int g_Va00DBA4E4;
 
 #include "ascii_string.h"
 
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object;
 enum ObjectStatusTypes;
 class Waypoint

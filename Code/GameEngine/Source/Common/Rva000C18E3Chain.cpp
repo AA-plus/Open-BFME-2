@@ -6,12 +6,7 @@
 // 0x002A133B, otherwise it resizes each through the rowed 0x000C0513
 // helper and zeroes the Coord3D range. Src stride 0x3C, dst stride 0xC.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Dst12
 {

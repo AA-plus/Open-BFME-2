@@ -10,7 +10,7 @@
 // Original API/class identities and reachability remain unknown.
 // Inline dot products preserve the target's scalar SSE arithmetic.
 typedef float Real;
-class Coord3D { public: Coord3D(); ~Coord3D(); float x,y,z; };
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 #include "d3dx8math.h"
 extern const D3DXMATRIX g_Rva009D2398Basis(-1,3,-3,1,3,-6,3,0,-3,3,0,0,1,0,0,0);
 class Rva0055A246

@@ -6,12 +6,7 @@
 // 0x002A133B, otherwise it grows through the rowed Coord3D fill_insert
 // 0x004E29C8. Both callees share the 12-byte POD layout.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Gen_p12pod
 {

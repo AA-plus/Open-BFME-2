@@ -2,11 +2,7 @@
 
 #include "../../../Libraries/Include/Lib/Region2D.h"
 
-struct RGBColor
-{
-    void setFromInt(int color);
-    float red, green, blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class GameClientRandomVariable
 {

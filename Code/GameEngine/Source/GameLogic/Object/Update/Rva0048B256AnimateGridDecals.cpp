@@ -16,7 +16,7 @@ extern "C" double __cdecl sin(double);
 extern "C" double __cdecl cos(double);
 
 typedef int Int;
-struct Coord3D { float x; float y; float z; };
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 class RadiusDecal {
 public:
 	void setPosition(const Coord3D &pos);

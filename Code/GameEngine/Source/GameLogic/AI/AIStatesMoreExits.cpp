@@ -77,10 +77,7 @@ enum
 {
 	AI_IDLE = 0
 };
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 template <int N> class VSlots : public VSlots<N - 1>
 {
 public:

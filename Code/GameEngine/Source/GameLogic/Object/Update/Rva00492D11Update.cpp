@@ -9,12 +9,7 @@
 // ModuleData AsciiString at +0xCC; Object float at +0x44; this Coord3D at +0x44.
 #include "ascii_string.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Thing
 {

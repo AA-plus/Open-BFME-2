@@ -6,13 +6,7 @@
 
 // The data ledger identifies the shared read-only operand as float +0.0.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-	void normalize();
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 float __cdecl Rva001E3FADGet(const Coord3D *a, const Coord3D *b)
 {

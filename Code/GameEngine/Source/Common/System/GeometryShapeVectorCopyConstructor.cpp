@@ -25,16 +25,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 
 typedef bool Bool;
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-
-	// Making the aggregate copy explicit preserves retail's inlined
-	// source-plus-0x18 cursor while retaining ordinary memberwise semantics.
-	Coord3D(const Coord3D &other) : x(other.x), y(other.y), z(other.z) {}
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct GeometryShape
 {

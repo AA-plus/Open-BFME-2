@@ -9,7 +9,7 @@
 
 class Object;
 class Team;
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 template<class OBJCLASS>
 class DLINK_ITERATOR

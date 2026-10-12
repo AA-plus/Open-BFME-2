@@ -49,12 +49,7 @@ public:
 
 #pragma comment(linker, "/alternatename:?getPlayerMask@Rva000421C8@@UAEHXZ=?Get_File_Handle@FileClass@@UAEPAXXZ")
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 // The module at Object +0x254: slots 4 and 6 return the health and its
 // maximum (inferred from the unit's name and the ratio taken).

@@ -49,12 +49,7 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 class Thing;
 class ModuleData;
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Drawable
 {

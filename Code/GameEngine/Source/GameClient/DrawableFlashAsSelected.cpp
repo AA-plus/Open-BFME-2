@@ -32,7 +32,7 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 class Object;
 class Drawable;
 class Thing { public: Drawable *getDrawable() const; };
-struct RGBColor { float red, green, blue; void setFromInt(int); };
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 inline void RGBColor::setFromInt(int color)
 {
  const float scale = 1.0f / 255.0f;

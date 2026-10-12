@@ -16,10 +16,7 @@
 // the emitted vtable references resolve the same way.
 
 class StateMachine;
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 class State
 {
 public:

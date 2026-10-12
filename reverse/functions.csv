@@ -155,6 +155,50 @@ _zlibVersion,,0x006946C0,6,Code/Libraries/Source/Compression/ZLib/zutil.c,matche
 ??0RandomAlphaKeyframe@FXParticleSystem@@QAE@XZ,0x00001E7F,0x00001E7F,47,Code/Libraries/Source/WWVegas/WWMath/color.cpp,matched,Open-BFME5 clean C++; RandomAlphaKeyframe initializes a zero uniform alpha range and frame
 ?areApproxEqual@@YA_NMMM@Z,0x000034FA,0x000034FA,42,Code/Libraries/Source/WWVegas/WWMath/wwmath.cpp,matched,Open-BFME5 clean C++; float equality within a signed tolerance band
 ?scale@Coord3D@@QAEXM@Z,0x000036D1,0x000036D1,49,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Coord3D component-wise scalar multiplication
+?width@IRegion2D@@QBEHXZ,0x00004D4B,0x00004D4B,6,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D width from EA reference
+?height@IRegion2D@@QBEHXZ,0x00004D51,0x00004D51,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D height from EA reference
+?width@IRegion3D@@QBEHXZ,0x00004E93,0x00004E93,6,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion3D width from EA reference
+?height@IRegion3D@@QBEHXZ,0x00004E99,0x00004E99,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion3D height from EA reference
+?depth@IRegion3D@@QBEHXZ,0x00004EA0,0x00004EA0,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion3D depth from EA reference
+??8IRegion2D@@QBE_NABU0@@Z,0x00004D58,0x00004D58,44,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D equality from EA reference
+??9IRegion2D@@QBE_NABU0@@Z,0x00004D84,0x00004D84,17,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D inequality from EA reference
+?width@Region3D@@QBEMXZ,0x00004DDA,0x00004DDA,6,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D width from pinned BFME1 source
+?height@Region3D@@QBEMXZ,0x00004DE0,0x00004DE0,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D height from pinned BFME1 source
+?depth@Region3D@@QBEMXZ,0x00004DE7,0x00004DE7,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D depth from pinned BFME1 source
+?zero@Region3D@@QAEXXZ,0x00004DEE,0x00004DEE,33,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D zero from EA source with SSE2 retail codegen
+?isInRegionNoZ@Region3D@@QBE_NPBVCoord3D@@@Z,0x00004E0F,0x00004E0F,55,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D no-Z containment from EA source
+?isInRegionWithZ@Region3D@@QBE_NPBVCoord3D@@@Z,0x00004E46,0x00004E46,77,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D with-Z containment from EA source
+?width@Region2D@@QBEMXZ,0x00004C28,0x00004C28,6,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region2D width from pinned BFME1 source
+?isInside@Region2D@@QBE_NABVCoord2D@@@Z,0x00004C2E,0x00004C2E,55,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; direct Open-BFME-1 Region2D isInside source
+?IsExactlyEqualTo@Region2D@@QBE_NABU1@@Z,0x00004C65,0x00004C65,72,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; direct Open-BFME-1 Region2D exact equality source
+?expandBy@Region2D@@QAEXABVCoord2D@@@Z,0x00006423,0x00006423,70,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; verbatim Open-BFME-1 Region2D expandBy source
+?expandBy@Region3D@@QAEXABVCoord3D@@@Z,0x00006495,0x00006495,103,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; verbatim Open-BFME-1 Region3D expandBy source
+??0Region2D@@QAE@ABVCoord2D@@0@Z,0x00004C06,0x00004C06,34,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 Region2D ctor; LineSegment2D export folded alias
+??6@YAAAVDebug@@AAV0@ABUIRegion3D@@@Z,0x000051AB,0x000051AB,47,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 IRegion3D Debug streamer
+??6@YAAAVDebug@@AAV0@ABURegion3D@@@Z,0x0000517C,0x0000517C,47,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 Region3D Debug streamer
+??6@YAAAVDebug@@AAV0@ABURealRange@@@Z,0x00004F7A,0x00004F7A,78,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 RealRange debug insertion
+??6@YAAAVDebug@@AAV0@ABURegion2D@@@Z,0x0000505C,0x0000505C,47,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 Region2D debug insertion
+??6@YAAAVDebug@@AAV0@ABUIRegion2D@@@Z,0x0000508B,0x0000508B,47,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 IRegion2D debug insertion
+?combine@RealRange@@QAEXAAU1@@Z,0x000062AD,0x000062AD,43,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; RealRange combine
+?combine@IntRange@@QAEXAAU1@@Z,0x000062D8,0x000062D8,37,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IntRange combine
+?expandBy@IRegion2D@@QAEXABUICoord2D@@@Z,0x00006469,0x00006469,44,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D expandBy
+?expandBy@IRegion3D@@QAEXABUICoord3D@@@Z,0x000064FC,0x000064FC,60,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion3D expandBy
+??0Region3D@@QAE@ABU0@@Z,0x0009AC04,0x0009AC04,43,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D copy constructor
+?height@Region2D@@QBEMXZ,0x0004259B,0x0004259B,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; simple accessor
+??0RealRange@@QAE@XZ,0x0047A6A9,0x0047A6A9,3,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??0Region2D@@QAE@XZ,0x0047A6A9,0x0047A6A9,3,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??0Region3D@@QAE@XZ,0x0047A6A9,0x0047A6A9,3,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??0IRegion3D@@QAE@XZ,0x0047A6A9,0x0047A6A9,3,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??1Region2D@@QAE@XZ,0x000B3FD0,0x000B3FD0,1,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??1Region3D@@QAE@XZ,0x000B3FD0,0x000B3FD0,1,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??0RealRange@@QAE@MM@Z,0x00003F3A,0x00003F3A,26,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??4RealRange@@QAEAAU0@ABU0@@Z,0x005CFBC2,0x005CFBC2,19,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??4IRegion2D@@QAEAAU0@ABU0@@Z,0x002E7FDA,0x002E7FDA,19,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??4IRegion3D@@QAEAAU0@ABU0@@Z,0x005F178F,0x005F178F,20,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??4Region3D@@QAEAAU0@ABU0@@Z,0x005F178F,0x005F178F,20,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
+??4Region2D@@QAEAAU0@ABU0@@Z,0x002E7FDA,0x002E7FDA,19,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,BFME1 Region2D copy assignment transferred; BFME2 implicit movsd copy folded with IRegion2D
+??0Region2D@@QAE@ABU0@@Z,0x0004254E,0x0004254E,31,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Full31B copy ctor includes ret4 at4256A through4256C; original29B claim truncated return; exact compile; folded Plane/Rect/four-float aliases stay candidate pins without duplicate rows
+??0LineSegment2D@@QAE@ABVCoord2D@@0@Z,0x00004C06,0x00004C06,34,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,exported name (ordinal 281) at the address of Region2D's endpoint ctor; /OPT:ICF fold of the identical two-Coord2D ctor; called twice by MilesAudioManager 0x00053854
 ??0Snapshot@@QAE@XZ,0x000053A6,0x000053A6,9,Code/GameEngine/Source/Common/System/Snapshot.cpp,matched,Open-BFME5 clean C++; Snapshot default constructor installing the vtable at 0x00BBB554
 ??0Xfer@@QAE@XZ,0x000053DE,0x000053DE,9,Code/GameEngine/Source/Common/System/Xfer.cpp,matched,Open-BFME5 clean C++; Xfer constructor installing the vtable at 0x00BBB910
 ??1Xfer@@UAE@XZ,0x000053E7,0x000053E7,7,Code/GameEngine/Source/Common/System/Xfer.cpp,matched,Open-BFME5 clean C++; Xfer destructor restoring the vtable at 0x00BBB910
@@ -179,28 +223,7 @@ _zlibVersion,,0x006946C0,6,Code/Libraries/Source/Compression/ZLib/zutil.c,matche
 ?length@ICoord3D@@QBEHXZ,0x00004D95,0x00004D95,58,Code/Libraries/Source/WWVegas/WWMath/icoord.cpp,matched,Open-BFME5 clean C++; ICoord3D integer length from EA reference
 ??6@YAAAVDebug@@AAV0@ABUICoord2DBase@@@Z,0x00005016,0x00005016,70,Code/Libraries/Source/WWVegas/WWMath/icoord.cpp,matched,Open-BFME5 clean C++; ICoord2DBase debug output from EA reference
 ??6@YAAAVDebug@@AAV0@ABUICoord3D@@@Z,0x00005121,0x00005121,91,Code/Libraries/Source/WWVegas/WWMath/icoord.cpp,matched,Open-BFME5 clean C++; ICoord3D debug output from EA reference
-?width@IRegion2D@@QBEHXZ,0x00004D4B,0x00004D4B,6,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D width from EA reference
-?height@IRegion2D@@QBEHXZ,0x00004D51,0x00004D51,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D height from EA reference
-?width@IRegion3D@@QBEHXZ,0x00004E93,0x00004E93,6,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion3D width from EA reference
-?height@IRegion3D@@QBEHXZ,0x00004E99,0x00004E99,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion3D height from EA reference
-?depth@IRegion3D@@QBEHXZ,0x00004EA0,0x00004EA0,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion3D depth from EA reference
-??8IRegion2D@@QBE_NABU0@@Z,0x00004D58,0x00004D58,44,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D equality from EA reference
-??9IRegion2D@@QBE_NABU0@@Z,0x00004D84,0x00004D84,17,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D inequality from EA reference
-?width@Region3D@@QBEMXZ,0x00004DDA,0x00004DDA,6,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D width from pinned BFME1 source
-?height@Region3D@@QBEMXZ,0x00004DE0,0x00004DE0,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D height from pinned BFME1 source
-?depth@Region3D@@QBEMXZ,0x00004DE7,0x00004DE7,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D depth from pinned BFME1 source
-?zero@Region3D@@QAEXXZ,0x00004DEE,0x00004DEE,33,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D zero from EA source with SSE2 retail codegen
-?isInRegionNoZ@Region3D@@QBE_NPBVCoord3D@@@Z,0x00004E0F,0x00004E0F,55,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D no-Z containment from EA source
-?isInRegionWithZ@Region3D@@QBE_NPBVCoord3D@@@Z,0x00004E46,0x00004E46,77,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D with-Z containment from EA source
-?width@Region2D@@QBEMXZ,0x00004C28,0x00004C28,6,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region2D width from pinned BFME1 source
-?isInside@Region2D@@QBE_NABVCoord2D@@@Z,0x00004C2E,0x00004C2E,55,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; direct Open-BFME-1 Region2D isInside source
-?IsExactlyEqualTo@Region2D@@QBE_NABU1@@Z,0x00004C65,0x00004C65,72,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; direct Open-BFME-1 Region2D exact equality source
-?expandBy@Region2D@@QAEXABVCoord2D@@@Z,0x00006423,0x00006423,70,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; verbatim Open-BFME-1 Region2D expandBy source
-?expandBy@Region3D@@QAEXABVCoord3D@@@Z,0x00006495,0x00006495,103,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; verbatim Open-BFME-1 Region3D expandBy source
-??0Region2D@@QAE@ABVCoord2D@@0@Z,0x00004C06,0x00004C06,34,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 Region2D ctor; LineSegment2D export folded alias
-??6@YAAAVDebug@@AAV0@ABUIRegion3D@@@Z,0x000051AB,0x000051AB,47,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 IRegion3D Debug streamer
 ??6@YAAAVDebug@@AAV0@ABVCoord3D@@@Z,0x000050BA,0x000050BA,103,Code/Libraries/Source/WWVegas/WWMath/coord3d.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 Coord3D Debug streamer; RGBColor folded alias
-??6@YAAAVDebug@@AAV0@ABURegion3D@@@Z,0x0000517C,0x0000517C,47,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 Region3D Debug streamer
 ?getAsInt@RGBColor@@QBEHXZ,0x00004EA7,0x00004EA7,56,Code/Libraries/Source/WWVegas/WWMath/color.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 RGBColor getAsInt with BFME2 O1 codegen
 ?setFromInt@RGBColor@@QAEXH@Z,0x00004EDF,0x00004EDF,76,Code/Libraries/Source/WWVegas/WWMath/color.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 RGBColor setFromInt with BFME2 SSE2 codegen
 ??8@YA_NABURGBColor@@0@Z,0x00004F2B,0x00004F2B,58,Code/Libraries/Source/WWVegas/WWMath/color.cpp,matched,Open-BFME5 clean C++; Open-BFME-1 RGBColor equality source
@@ -749,9 +772,6 @@ AllocProxyIntCtor_dupA,,0x00007410,11,Code/Libraries/Source/WWVegas/WWLib/stlpor
 ?Init@?$CA2WEX@$0IA@@ATL@@AAEXPBDI@Z,,0x00001DB1,98,Code/Libraries/Source/ATL/atlconv.cpp,matched,vendored=atl-7.1
 ??1?$CA2WEX@$0IA@@ATL@@QAE@XZ,,0x00001D9A,18,Code/Libraries/Source/ATL/atlconv.cpp,matched,vendored=atl-7.1
 ?AtlThrowLastWin32@ATL@@YGXXZ,,0x0000113D,26,Code/Libraries/Source/ATL/atlconv.cpp,matched,vendored=atl-7.1
-??6@YAAAVDebug@@AAV0@ABURealRange@@@Z,0x00004F7A,0x00004F7A,78,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 RealRange debug insertion
-??6@YAAAVDebug@@AAV0@ABURegion2D@@@Z,0x0000505C,0x0000505C,47,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 Region2D debug insertion
-??6@YAAAVDebug@@AAV0@ABUIRegion2D@@@Z,0x0000508B,0x0000508B,47,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 IRegion2D debug insertion
 ??$mismatch@V?$istreambuf_iterator@DV?$char_traits@D@_STL@@@_STL@@PBD@_STL@@YA?AU?$pair@V?$istreambuf_iterator@DV?$char_traits@D@_STL@@@_STL@@PBD@0@V?$istreambuf_iterator@DV?$char_traits@D@_STL@@@0@0PBD@Z,,0x00011C30,95,Code/Libraries/Source/WWVegas/WWLib/stlport_narrow_mismatch.cpp,matched,stlport-4.5.3
 ??$__get_string@V?$istreambuf_iterator@DV?$char_traits@D@_STL@@@_STL@@PBD@_STL@@YA?AU?$pair@V?$istreambuf_iterator@DV?$char_traits@D@_STL@@@_STL@@_N@0@V?$istreambuf_iterator@DV?$char_traits@D@_STL@@@0@0PBD1@Z,,0x00011C90,75,Code/Libraries/Source/WWVegas/WWLib/stlport_narrow_mismatch.cpp,matched,stlport-4.5.3
 ?insert@?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@QAEPADPADD@Z,,0x00011CE0,49,Code/Libraries/Source/WWVegas/WWLib/stlport_narrow_string_insert.cpp,matched,stlport-4.5.3
@@ -893,11 +913,7 @@ AllocProxyIntCtor_dupA,,0x00007410,11,Code/Libraries/Source/WWVegas/WWLib/stlpor
 ??G@YA?AVCoord3D@@V0@@Z,0x00003FEE,0x00003FEE,46,Code/Libraries/Source/WWVegas/WWMath/coord3d.cpp,matched,Open-BFME5 clean C++; Coord3D unary minus
 ??0_ATL_WIN_MODULE70@ATL@@QAE@XZ,,0x0000683C,26,Code/Libraries/Source/ATL/atlbase.cpp,matched,Open-BFME5 clean C++; ATL 7.1 _ATL_WIN_MODULE70 constructor initializes its window atom array after constructing the embedded critical section
 ?SetIdentity@Matrix4D@@QAEAAV1@XZ,0x0000401C,0x0000401C,93,Code/Libraries/Source/WWVegas/WWMath/matrix4d.cpp,matched,Open-BFME5 clean C++; Matrix4D SetIdentity
-?combine@RealRange@@QAEXAAU1@@Z,0x000062AD,0x000062AD,43,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; RealRange combine
-?combine@IntRange@@QAEXAAU1@@Z,0x000062D8,0x000062D8,37,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IntRange combine
-?expandBy@IRegion2D@@QAEXABUICoord2D@@@Z,0x00006469,0x00006469,44,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion2D expandBy
 ?expandRange@@YAXPAHH0@Z,,0x000057F1,23,Code/Libraries/Source/WWVegas/WWMath/icoord.cpp,matched,Open-BFME5 clean C++; shared integer expandBy axis worker
-?expandBy@IRegion3D@@QAEXABUICoord3D@@@Z,0x000064FC,0x000064FC,60,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; IRegion3D expandBy
 ??0Matrix4D@@QAE@_N@Z,0x00005AE7,0x00005AE7,102,Code/Libraries/Source/WWVegas/WWMath/matrix4d.cpp,matched,Open-BFME5 clean C++; Matrix4D identity-flag constructor
 ??0Matrix4D@@QAE@ABVCoord3D@@@Z,0x00005BB8,0x00005BB8,116,Code/Libraries/Source/WWVegas/WWMath/matrix4d.cpp,matched,Open-BFME5 clean C++; Matrix4D translation constructor
 ??$?6D@@YAAAVDebug@@AAV0@ABV?$StringBase@D@@@Z,0x000028E8,0x000028E8,37,Code/Libraries/Source/WWVegas/WWLib/string_base.cpp,matched,Open-BFME5 clean C++; Debug stream insertion for StringBase<char>
@@ -997,7 +1013,6 @@ AllocProxyIntCtor_dupA,,0x00007410,11,Code/Libraries/Source/WWVegas/WWLib/stlpor
 ??8Xfer@@UAEAAV0@AAUIRegion2D@@@Z,0x0060BAE4,0x0060BAE4,65,Code/GameEngine/Source/Common/System/Xfer.cpp,matched,Open-BFME5 clean C++; Xfer composite transfer operator
 ??XCoord3D@@QAEAAV0@M@Z,0x000852C4,0x000852C4,51,Code/Libraries/Source/WWVegas/WWMath/coord3d.cpp,matched,Open-BFME5 clean C++; Coord3D scalar operator
 ??_0Coord3D@@QAEAAV0@M@Z,0x00083B9E,0x00083B9E,54,Code/Libraries/Source/WWVegas/WWMath/coord3d.cpp,matched,Open-BFME5 clean C++; Coord3D scalar operator
-??0Region3D@@QAE@ABU0@@Z,0x0009AC04,0x0009AC04,43,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; Region3D copy constructor
 ??0?$CategoryModuleClass@$0A@@FXParticleSystem@@IAE@_NPBD1@Z,0x003A8711,0x003A8711,51,Code/GameEngine/Source/GameClient/FXParticleSystem.cpp,matched,Open-BFME5 clean C++; CategoryModuleClass registration constructor
 ??0?$CategoryModuleClass@$00@FXParticleSystem@@IAE@_NPBD1@Z,0x003A86DE,0x003A86DE,51,Code/GameEngine/Source/GameClient/FXParticleSystem.cpp,matched,Open-BFME5 clean C++; CategoryModuleClass registration constructor
 ??0?$CategoryModuleClass@$01@FXParticleSystem@@IAE@_NPBD1@Z,0x003A8777,0x003A8777,51,Code/GameEngine/Source/GameClient/FXParticleSystem.cpp,matched,Open-BFME5 clean C++; CategoryModuleClass registration constructor
@@ -1210,7 +1225,6 @@ AllocProxyIntCtor_dupA,,0x00007410,11,Code/Libraries/Source/WWVegas/WWLib/stlpor
 ??0?$StringBase@G@@AAE@PBG@Z,0x00037E30,0x00037E30,62,Code/Libraries/Source/WWVegas/WWLib/string_base_inline.cpp,matched,Open-BFME5 clean C++; StringBase C-string constructor
 ?getMinimumValue@GameClientRandomVariable@@QBEMXZ,0x00452D82,0x00452D82,4,Code/GameEngine/Source/GameClient/ClientRandomValue.cpp,matched,Open-BFME5 clean C++; simple accessor
 ?getMaximumValue@GameClientRandomVariable@@QBEMXZ,0x004F5F92,0x004F5F92,4,Code/GameEngine/Source/GameClient/ClientRandomValue.cpp,matched,Open-BFME5 clean C++; simple accessor
-?height@Region2D@@QBEMXZ,0x0004259B,0x0004259B,7,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Open-BFME5 clean C++; simple accessor
 ?IsExactlyEqualTo@Matrix4D@@QAE_NABV1@@Z,0x00004B70,0x00004B70,79,Code/Libraries/Source/WWVegas/WWMath/matrix4d.cpp,matched,Open-BFME5 clean C++; Matrix4D exact bitwise comparison
 ??4EventModuleInfo@FXParticleSystem@@QAEAAV01@ABV01@@Z,0x00001240,0x00001240,15,Code/GameEngine/Source/GameClient/FXParticleSystem.cpp,matched,Open-BFME5 clean C++; EventModuleInfo generated assignment
 ??0?$CategoryModuleTemplate@$07@FXParticleSystem@@QAE@ABV01@@Z,0x00001F30,0x00001F30,52,Code/GameEngine/Source/GameClient/FXParticleSystem.cpp,matched,Open-BFME5 clean C++; CategoryModuleTemplate copy constructor
@@ -1486,17 +1500,6 @@ AllocProxyIntCtor_dupA,,0x00007410,11,Code/Libraries/Source/WWVegas/WWLib/stlpor
 ??4ICoord2D@@QAEAAU0@ABU0@@Z,0x005CFBC2,0x005CFBC2,19,Code/Libraries/Source/WWVegas/WWMath/icoord.cpp,matched,
 ??4ICoord2D@@QAEAAU0@ABUICoord2DBase@@@Z,0x005CFBC2,0x005CFBC2,19,Code/Libraries/Source/WWVegas/WWMath/icoord.cpp,matched,
 ??0ICoord2D@@QAE@HH@Z,0x0007E523,0x0007E523,18,Code/Libraries/Source/WWVegas/WWMath/icoord.cpp,matched,
-??0RealRange@@QAE@XZ,0x0047A6A9,0x0047A6A9,3,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??0Region2D@@QAE@XZ,0x0047A6A9,0x0047A6A9,3,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??0Region3D@@QAE@XZ,0x0047A6A9,0x0047A6A9,3,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??0IRegion3D@@QAE@XZ,0x0047A6A9,0x0047A6A9,3,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??1Region2D@@QAE@XZ,0x000B3FD0,0x000B3FD0,1,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??1Region3D@@QAE@XZ,0x000B3FD0,0x000B3FD0,1,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??0RealRange@@QAE@MM@Z,0x00003F3A,0x00003F3A,26,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??4RealRange@@QAEAAU0@ABU0@@Z,0x005CFBC2,0x005CFBC2,19,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??4IRegion2D@@QAEAAU0@ABU0@@Z,0x002E7FDA,0x002E7FDA,19,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??4IRegion3D@@QAEAAU0@ABU0@@Z,0x005F178F,0x005F178F,20,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
-??4Region3D@@QAEAAU0@ABU0@@Z,0x005F178F,0x005F178F,20,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,
 ??1?$ConcreteModuleTemplate@UPointEmissionVolumeModuleTag@FXParticleSystem@@@FXParticleSystem@@UAE@XZ,0x003A9397,0x003A9397,5,Code/GameEngine/Source/GameClient/FXParticleSystemModules.cpp,matched,
 ??1?$ConcreteModuleTemplate@V?$ModuleTag@$03$E?SPHERICAL_EMISSION_VELOCITY_MODULE_KEY@FXParticleSystem@@3QBDB$E?SPHERICAL_EMISSION_VELOCITY_MODULE_NAME@2@3QBDBVSphericalEmissionVelocityModule@2@VSphericalEmissionVelocityModuleTemplate@2@V?$DefaultParticleModule@$03@2@@FXParticleSystem@@@FXParticleSystem@@UAE@XZ,0x003A9397,0x003A9397,5,Code/GameEngine/Source/GameClient/FXParticleSystemModules.cpp,matched,
 ??1?$ConcreteModuleTemplate@V?$ModuleTag@$04$E?BOX_EMISSION_VOLUME_MODULE_KEY@FXParticleSystem@@3QBDB$E?BOX_EMISSION_VOLUME_MODULE_NAME@2@3QBDBVBoxEmissionVolumeModule@2@VBoxEmissionVolumeModuleTemplate@2@V?$DefaultParticleModule@$04@2@@FXParticleSystem@@@FXParticleSystem@@UAE@XZ,0x003A9397,0x003A9397,5,Code/GameEngine/Source/GameClient/FXParticleSystemModules.cpp,matched,
@@ -2707,7 +2710,7 @@ _XMP_Is_Prime,,0x0061DA50,75,Code/Libraries/Source/WWVegas/WWLib/mpmath.cpp,matc
 ??_G?$VectorClass@H@@UAEPAXI@Z,,0x0000232B,34,Code/Libraries/Source/WWVegas/WWLib/vector_class_resize.cpp,matched,
 ?Clear@?$VectorClass@H@@UAEXXZ,,0x000F0CD4,37,Code/Libraries/Source/WWVegas/WWLib/vector_class_resize.cpp,matched,
 ?nextParam@@YAPADPAD0@Z,,0x00001C72,126,Code/GameEngine/Source/Main/WinMain.cpp,matched,
-??0Matrix4D@@QAE@ABVCoord3D@@M@Z,0x00004079,0x00004079,357,Code/Libraries/Source/WWVegas/WWMath/matrix4d_axis_angle.cpp,matched,clean C++; axis-angle constructor; fsincos compiler blocker
+??0Matrix4D@@QAE@ABUCoord3D@@M@Z,0x00004079,0x00004079,357,Code/Libraries/Source/WWVegas/WWMath/matrix4d_axis_angle.cpp,matched,clean C++; axis-angle constructor; fsincos compiler blocker
 ?ID@?$VectorClass@H@@UAEHABH@Z,,0x000022E9,43,Code/Libraries/Source/WWVegas/WWLib/vector_class_resize.cpp,matched,
 ?ID@?$VectorClass@H@@UAEHPBH@Z,,0x00002314,23,Code/Libraries/Source/WWVegas/WWLib/vector_class_resize.cpp,matched,
 ??8?$VectorClass@H@@UBE_NABV0@@Z,,0x000022B3,54,Code/Libraries/Source/WWVegas/WWLib/vector_class_resize.cpp,matched,
@@ -5898,7 +5901,6 @@ _DeletePostProcBuffers,,0x001B65F0,182,Code/Libraries/Source/VP6/DeletePostProcB
 ??4RGBColor@@QAEAAU0@ABU0@@Z,0x0000353A,0x0000353A,18,Code/Libraries/Source/WWVegas/WWMath/color.cpp,matched,BFME1 RGBColor copy assignment transferred; BFME2 12-byte block copy folded at 0x0000353A
 ??4Coord2DBase@@QAEAAU0@ABU0@@Z,0x005CFBC2,0x005CFBC2,19,Code/Libraries/Source/WWVegas/WWMath/coord2d.cpp,matched,BFME1 Coord2DBase copy assignment transferred; BFME2 two-field copy folded with Coord2D bodies
 ??4ICoord2DBase@@QAEAAU0@ABU0@@Z,0x005CFBC2,0x005CFBC2,19,Code/Libraries/Source/WWVegas/WWMath/icoord.cpp,matched,BFME1 ICoord2DBase copy assignment transferred; BFME2 integer two-field copy folded with ICoord2D bodies
-??4Region2D@@QAEAAU0@ABU0@@Z,0x002E7FDA,0x002E7FDA,19,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,BFME1 Region2D copy assignment transferred; BFME2 implicit movsd copy folded with IRegion2D
 ??4RGBAColorReal@@QAEAAU0@ABU0@@Z,0x002E7FDA,0x002E7FDA,19,Code/Libraries/Source/WWVegas/WWMath/color.cpp,matched,BFME1 RGBAColorReal copy assignment transferred; BFME2 16-byte block copy folded at 0x002E7FDA
 ??4RGBAColorInt@@QAEAAU0@ABU0@@Z,0x002E7FDA,0x002E7FDA,19,Code/Libraries/Source/WWVegas/WWMath/color.cpp,matched,BFME1 RGBAColorInt copy assignment transferred; BFME2 16-byte block copy folded at 0x002E7FDA
 ??4RGBColorKeyframe@FXParticleSystem@@QAEAAU01@ABU01@@Z,0x002E7FDA,0x002E7FDA,19,Code/Libraries/Source/WWVegas/WWMath/color.cpp,matched,BFME1 RGBColorKeyframe copy assignment transferred; BFME2 16-byte block copy folded at 0x002E7FDA
@@ -16182,7 +16184,6 @@ _MMX_idct1,,0x001D45F0,88,Code/Libraries/Source/VP6/AverageBlockMmx.cpp,matched,
 ?readReal@DataChunkInput@@QAEMXZ,,0x00306E56,34,Code/GameEngine/Source/Common/System/DataChunkInputReadScalars.cpp,matched,BFME1 DataChunk.cpp donor; target four-byte stream read and matched protected decrement306E40 then ST0 return; float4 producer538A0B consumes float results; full34B ret boundary
 ?readByte@DataChunkInput@@QAEEXZ,,0x00306E9A,34,Code/GameEngine/Source/Common/System/DataChunkInputReadScalars.cpp,matched,BFME1 DataChunk.cpp donor; target stream read of1 byte and matched protected decrement306E40 then AL return; same receiver layout as matched readInt306E78; full34B ret boundary
 ?readArrayOfBytes@DataChunkInput@@QAEXPADH@Z,,0x00306EBC,32,Code/GameEngine/Source/Common/System/DataChunkInputReadScalars.cpp,matched,BFME1 DataChunk.cpp donor; target reads requested length through same stream then protected decrement306E40; callerB0EB0 also uses matched readInt; full32B ret8 boundary
-??0Region2D@@QAE@ABU0@@Z,0x0004254E,0x0004254E,31,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,Full31B copy ctor includes ret4 at4256A through4256C; original29B claim truncated return; exact compile; folded Plane/Rect/four-float aliases stay candidate pins without duplicate rows
 ??0Line3DClass@@QAE@ABVVector3@@0MMMMM@Z,,0x001673D0,621,Code/Libraries/Source/WWVegas/WW3D2/Line3DClassCtor.cpp,matched,BFME1 line3d.cpp donor; target callersCAB33/CABC7 pass endpoints width RGB opacity; ctor installs known primaryBD3FA8 and secondaryBD3FA0; existing C4 RenderObj shim plus matched ctor13BF00/copy13B430 support layout; exact LookAt7126B0 and SetTransform13B790 calls; shader/float pools independently verified; donor sqrt codegen retained; full ret28 at16763D ends167640
 ?getMinimumAttackRange@WeaponTemplate@@QBEMXZ,,0x002C92FA,40,Code/GameEngine/Source/GameLogic/Object/WeaponTemplateMinimumRange.cpp,matched,BFME1 Weapon.cpp donor minimum-range query; callers2C9B05/2C9B44 load Weapon template+4; own range+18 subtracts targetfloat2.5 atBCFB10 then clampszero and returnsST0; quarter-cell semantics donor-derived; full40B ret at2C9321
 ?Reset@Line3DClass@@QAEXABVVector3@@0@Z,,0x00167B60,318,Code/Libraries/Source/WWVegas/WW3D2/Line3DClassRender.cpp,matched,BFME1 line3d.cpp donor; direct callersCAD71/CAD8F use endpoints; target calls matched three-axis Scale via slot91 then LookAt7126B0 SetTransform slot21 and bounds update69; target zero/0.001/one pools checked; full ret8 ends167C9E; /G7 /arch:SSE
@@ -45051,7 +45052,7 @@ _SetDeInterlaceMode,,0x001B6910,15,Code/Libraries/Source/VP6/PostProcModes.cpp,m
 ?rva0031BEF1@Rva0031BEF1@@QAEPAXABU?$pair@$$CBVAsciiString@@UNoCaseTreeValue4@@@_STL@@@Z,,0x0031BEF1,37,Code/Libraries/Source/WWVegas/WWLib/Rva0031BEF1Create.cpp,matched,unlock hashtable node create via 0x307F0 and dup 0x31BDC1 unlocks 0x31C7D6
 ?Rva0031BA18Copy@@YAPAURva002C99FB@@PAU1@00@Z,,0x0031BA18,47,Code/GameEngine/Source/GameLogic/Object/Rva0031BA18Copy.cpp,matched,unlock __copy 8B via rowed assign 0x2C99FB unblocks 0x31BDA4
 ??$__copy_ptrs@PBUBfmeAsciiScalarValue8@@PAU1@@_STL@@YAPAUBfmeAsciiScalarValue8@@PBU1@0PAU1@ABU__false_type@0@@Z,,0x0031BDA4,29,Code/Libraries/Source/WWVegas/WWLib/stlport_copy_ptrs_scalar8.cpp,matched,chain __copy_ptrs scalar8 via rowed 0x31BA18
-?rva0030A8EE@Rva0030A8EE@@QAEXPAVCoord3D@@@Z,,0x0030A8EE,62,Code/GameEngine/Source/Common/Thing/Rva0030A8EECopy.cpp,matched,unlock Coord3D build from this plus Normalize via 0x5A70
+?rva0030A8EE@Rva0030A8EE@@QAEXPAUCoord3D@@@Z,,0x0030A8EE,62,Code/GameEngine/Source/Common/Thing/Rva0030A8EECopy.cpp,matched,unlock Coord3D build from this plus Normalize via 0x5A70
 ??4Rva003B32E5@@QAEAAV0@ABV0@@Z,,0x003B32E5,57,Code/GameEngine/Source/Common/Rva003B32E5Assign.cpp,matched,copy-assign two ints AsciiString set plus tail bytes callers 0x3B7FE0 0x3B825F linkbody
 ?rva00115DA7@Rva00115DA7@@QAEXHHHHH@Z,,0x00115DA7,43,Code/GameEngine/Source/Common/Rva00115DA7.cpp,matched,unlock setter via caller 0xE424C stores 4 ints at A8 B0 B8 C0
 ?rva0036DBBA@AIGroup@@QAEXHHI@Z,,0x0036DBBA,99,Code/GameEngine/Source/GameLogic/AI/AIGroupAttackTeam.cpp,matched,member walk mapping a type code to a timed special model condition (0x72 or 0xB8..0xBB) through Object::setSpecialModelConditionState
@@ -47582,7 +47583,7 @@ _VP6_readTSC,,0x001B8E70,29,Code/Libraries/Source/VP6/CopyHelpers.cpp,matched,Cl
 ??0Rva0055A246@@QAE@QAM@Z,,0x0055A316,103,Code/GameEngine/Source/Common/Rva0055A246Ctor.cpp,matched,BFME1 6d943 constructor lead; target four 12B entries and full adjacent bounds; original class identity unknown
 ??0Rva0055A246@@QAE@ABVCoord3D@@000@Z,,0x0055A37D,72,Code/GameEngine/Source/Common/Rva0055A246Ctor.cpp,matched,BFME1 6d943 constructor lead; target four 12B entries and full adjacent bounds; original class identity unknown
 _rva0062AF4AD3DXVec4Transform@12,,0x0062AF4A,6,Code/GameEngine/Source/Common/Rva0062AF4AImport.cpp,matched,PE-proven D3DXVec4Transform import; ordinary C++ adapter; original thunk name unknown
-?rva0055A0DD@Rva0055A246@@QBEXMPAVCoord3D@@@Z,,0x0055A0DD,361,Code/GameEngine/Source/Common/Rva0055A0DDEvaluate.cpp,matched,Reference-guided cubic evaluation; donor6d943 purpose; Ghidra361B boundary and control-point prefix; inline scalar dot; PE-proven D3DX import; target original identity unknown
+?rva0055A0DD@Rva0055A246@@QBEXMPAUCoord3D@@@Z,,0x0055A0DD,361,Code/GameEngine/Source/Common/Rva0055A0DDEvaluate.cpp,matched,Reference-guided cubic evaluation; donor6d943 purpose; Ghidra361B boundary and control-point prefix; inline scalar dot; PE-proven D3DX import; target original identity unknown
 ?rva0055A40C@Rva0055A246@@QBEXMAAV1@0@Z,,0x0055A40C,520,Code/GameEngine/Source/Common/Rva0055A40CSplit.cpp,matched,Reference-guided de Casteljau split; donor6d943 arithmetic; target520B RET12 and evaluator call55A0DD; four12B point prefix; float-triple difference locals and intrinsic float copies; original identity unknown
 ?rva0055A627@Rva0055A246@@QBEMM@Z,,0x0055A627,436,Code/GameEngine/Source/Common/Rva0055A246Ctor.cpp,matched,Reference-guided adaptive cubic length; donor6d943 ConstructionAndLength; Ghidra436B boundary and all17 references; two48B holders split at0.5; original target identity unknown
 ??_GRva0014F699@@UAEPAXI@Z,,0x0014DC3F,28,Code/GameEngine/Source/Common/FamilyDeletingDtors_Rva0014F699.cpp,matched,deleting dtor calls 0014D1E3 vtable BC6F24 chain
@@ -63083,7 +63084,7 @@ _Rva0043802B,,0x0043802B,88,Code/GameEngine/Source/Common/Rva00437EDCFinish.cpp,
 ?create@ObjectCreationList@@QAEXPAX000H@Z,,0x001F081A,94,Code/GameEngine/Source/GameLogic/Object/ObjectCreationListRva001F0878.cpp,matched,OCL chain via flag0C and AsciiString name10 sibling of 0x1F0878; wb-lead 2/callgraph: WB ObjectCreationList.cpp:2106-2114 ObjectCreationList::create; findObjectCreationList then the list's virtual create as here
 ?removeInvalidObjectsFromGroup@AIGroup@@QAE_NPAURva0036D7A6Outer@@@Z,,0x0036D7A6,95,Code/GameEngine/Source/GameLogic/AI/AIGroupRemove.cpp,matched,chain caller of remove 0x0036CF07 plus slot38 receiver plus BFME1 removeAny donor; wb-lead 2/callgraph: WB AIGroup.cpp:1890 removeInvalidObjectsFromGroup; contain vcall then AIGroup::remove as here
 ?GetStrategicScenarioComboBoxSelectedCampaign@AptMapPreview@@QAEPAXXZ,,0x0057C649,35,Code/GameEngine/Source/GameClient/GUI/AptMapPreviewSetMapDescription.cpp,matched,AptMapPreview combo at +0x50 via rowed Rva00322910 and GetItemData callers 0x0057CD69 0x0057E0F1; wb-lead 2/callgraph: WB AptMapPreview.cpp:1375 asserts m_comboBoxStrategicScenario then selected pos and GadgetComboBoxGetItemData as here
-?GetDropOffValue@ShareExperienceBehavior@@QAEMPAVCoord3D@@PAUPos0047FFFE@@@Z,,0x0047FFFE,149,Code/GameEngine/Source/GameLogic/Object/Behavior/ShareExperienceBehaviorFalloff.cpp,matched,finish ShareExperience distance falloff polarity-inverted clamp; wb-lead 2/callgraph: WB ShareExperienceBehavior.cpp:86 GetDropOffValue asserts m_DropOff 0 or 1; Coord3D::GetLength falloff as here
+?GetDropOffValue@ShareExperienceBehavior@@QAEMPAUCoord3D@@PAUPos0047FFFE@@@Z,,0x0047FFFE,149,Code/GameEngine/Source/GameLogic/Object/Behavior/ShareExperienceBehaviorFalloff.cpp,matched,finish ShareExperience distance falloff polarity-inverted clamp; wb-lead 2/callgraph: WB ShareExperienceBehavior.cpp:86 GetDropOffValue asserts m_DropOff 0 or 1; Coord3D::GetLength falloff as here
 ?processProgressComplete@GameLogic@@QAEXH@Z,,0x0023D76E,37,Code/GameEngine/Source/GameLogic/System/GameLogicProcessProgress.cpp,matched,GameLogic 8-slot flag init via lastHeardFrom at 0x128; wb-lead 2/callgraph: WB GameLogic.cpp:6712 processProgressComplete; player id check then lastHeardFrom as here
 ?AddEmotionNuggetTemplate@EmotionSystem@@QAEXPAVMultiplayerColorDefinition@@@Z,,0x00426580,89,Code/GameEngine/Source/Common/Rva00426580Emotion.cpp,matched,unlock via rowed tooltip pinned findNugget releaseBuffer pushback vector plus0xC caller 0x004DCBCD; wb-lead 2/callgraph: WB EmotionSystem.cpp:80-86 AddEmotionNuggetTemplate; name/lookup 0x004264F4/push_back agree
 ?validateLocationForForbiddenObjects@ActionManager@@QAE_NPBVObject@@PBUCoord3D@@PBVSpecialPowerTemplate@@@Z,,0x0041C9F8,166,Code/GameEngine/Source/Common/RTS/ActionManagerSpecialPowerChecks.cpp,matched,special-power placement check: no alive module-data-filtered object within override +0x7C when flag bit 4; filter chain; address name; wb-lead 2/callgraph: WB ActionManager.cpp:1693 validateLocationForForbiddenObjects; getFinalOverride x3/getControllingPlayer/PartitionFilter::And/0x00625360 agree
@@ -69428,7 +69429,6 @@ _Rva0059E0C1Lookup,,0x0059E0C1,54,Code/GameEngine/Source/Common/RvaLookupFieldOr
 ?rva00055C1A@@YA_NAAVPlayingAudioRef@@PBUCoord3D@@PAVPolygonTrigger@@@Z,,0x00055C1A,67,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,file-static helper with playing ref in EAX as retail caller 0x55DFF mov eax ecx; object-owned event tests Object::isInside else PolygonTrigger 0x2E3A39 at the position; WB twin 0x78BB00
 ?rva00055C5D@MilesAudioManager@@QAEXAAVPlayingAudioRef@@PA_N@Z,,0x00055C5D,527,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,WB twin 0x78B740 unnamed initFilters3D callee; lowest +0xB54 area level whose trigger holds the event scanning back from +0x38; reports +0x34 change
 ?rva00053854@MilesAudioManager@@QAEMPBUCoord3D@@@Z,,0x00053854,459,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,WorldBuilder 0x7A3290 twin; squared 2D distance from a point to the corner outline at +0x3C (entries 1..4) via the nearest valid corner and its two adjacent edges; Coord2D non-POD private view for the hidden-pointer return of ClosestPointOnLineSegment
-??0LineSegment2D@@QAE@ABVCoord2D@@0@Z,0x00004C06,0x00004C06,34,Code/Libraries/Source/WWVegas/WWMath/region.cpp,matched,exported name (ordinal 281) at the address of Region2D's endpoint ctor; /OPT:ICF fold of the identical two-Coord2D ctor; called twice by MilesAudioManager 0x00053854
 ?processRequest@MilesAudioManager@@QAEXPAURva00051107AudioRequest@@PA_N@Z,,0x0006236D,544,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,request dispatch with short-sound preload; extent includes the switch table at 0x6256D
 ?processRequestList@MilesAudioManager@@QAEXXZ,,0x0006258D,259,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,WorldBuilder MilesAudioManager::processRequestList (assert text and call graph); request list then the +0x9C request set copied and re-filled; STLport frees through C++-linkage _STL::free so the set dtor keeps its unwind reset
 ?rva00059CE6@MilesAudioManager@@QAEXAAVPlayingAudioRef@@@Z,,0x00059CE6,197,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,WorldBuilder twin 0x7a44e0 (unnamed; callee of startNextLoop and 0x5AA72): requeue a looping sound as a fresh request; the request set insert is the real STLport hash_set::insert pinned at 0x58913

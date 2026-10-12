@@ -11,12 +11,7 @@
 // spelling; the +0x4c combined pitch-check flag gates everything.
 typedef float Real;
 
-struct Coord3D
-{
-	Real x;
-	Real y;
-	Real z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 extern "C" double fabs(double value);
 

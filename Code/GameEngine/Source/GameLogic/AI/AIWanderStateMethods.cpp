@@ -80,10 +80,7 @@ enum LocomotorSetType
 	LOCOMOTORSET_NORMAL = 0,
 	LOCOMOTORSET_WANDER = 3
 };
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 #define PATHFIND_CELL_SIZE 10
 #define PATHFIND_CELL_SIZE_F 10.0f
 

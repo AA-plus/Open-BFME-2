@@ -20,12 +20,7 @@ extern "C" const void *const vtbl_00C40A10[];  // ??_7BridgeBehaviorModuleData@@
 
 #include <list>
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class UpdateModuleData
 {

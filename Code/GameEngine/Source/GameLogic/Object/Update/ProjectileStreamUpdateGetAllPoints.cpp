@@ -24,10 +24,7 @@ enum ObjectID
 	INVALID_ID = -1
 };
 
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Vector3
 {

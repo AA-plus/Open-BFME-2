@@ -1,12 +1,6 @@
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
 
-class Coord3D
-{
-public:
-    float x;
-    float y;
-    float z;
-};
+#include "../../../Include/Lib/Coord3D.h"
 
 class Matrix4D
 {

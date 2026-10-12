@@ -5,8 +5,5 @@
 // Calls count-taking _Vector_base at 0x005C8C37 (rowed as PrereqUnitRec 60B; Coord3D spelling ICF twin same 12B stride) and 3-arg uninitialized_fill_n<Coord3D> at 0x000CA1D3 (rowed).
 // Chain lane: caller of just-landed Coord3D fill_n wrapper 0xCA1D3. Callers at 0x7CED5 0x7CFF6 0x7D00E in FUN_0047c8ae. /Ob0 preserves out-of-line wrapper call per FillInsert precedent. throw() on copy removes EH per 4.1-4.2.
 #include <vector>
-struct Coord3D {
-  float x, y, z;
-  Coord3D(const Coord3D &that) throw();
-};
+#include "../../../Include/Lib/Coord3D.h"
 template _STL::vector<Coord3D>::vector(unsigned int, const Coord3D&, const _STL::allocator<Coord3D>&);

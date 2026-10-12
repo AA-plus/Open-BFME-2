@@ -83,12 +83,7 @@ struct Rva004C888DMask
 	unsigned int m_bits[7];
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct BfmeWideResult
 {

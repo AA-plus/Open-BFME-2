@@ -19,9 +19,7 @@ struct Coord2D
 	float y;
 };
 
-struct Coord3D : public Coord3DBase
-{
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 bool __stdcall Rva004C20D5IsWithin(float dist, const Coord3D *a, const Coord3D *b)
 {

@@ -16,10 +16,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 
 #include <vector>
-struct Coord3D {
-  float x, y, z;
-  Coord3D(const Coord3D &that) throw();
-};
+#include "../../../Include/Lib/Coord3D.h"
 namespace _STL {
 template <> void _Construct<Coord3D, Coord3D>(Coord3D *, const Coord3D &);
 }

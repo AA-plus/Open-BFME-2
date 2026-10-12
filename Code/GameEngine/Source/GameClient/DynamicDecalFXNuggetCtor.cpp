@@ -51,13 +51,7 @@ extern const void *const g_00BDD7A4[];
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
-struct RGBColor
-{
-	void setFromInt(int color);
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 #include "../../../Libraries/Include/Lib/Coord2D.h"
 

@@ -11,11 +11,7 @@ struct BfmeE12
 {
 	float x, y, z;
 };
-struct Coord3D
-{
-	float x, y, z;
-	Coord3D(const Coord3D &that);
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Rva000E016A
 {
 public:

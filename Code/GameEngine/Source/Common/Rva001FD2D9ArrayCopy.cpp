@@ -5,12 +5,7 @@
 // Evidence: unlock lane caller at 0x00241EFD in 0x00241C75; both retail paths
 // leave dest in EAX so return type is Coord3D* per shape-lever row 31.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva001FD2D9
 {

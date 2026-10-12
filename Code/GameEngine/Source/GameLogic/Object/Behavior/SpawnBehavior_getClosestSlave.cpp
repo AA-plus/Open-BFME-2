@@ -25,12 +25,7 @@ enum ObjectID
 	INVALID_ID = 0
 };
 
-struct Coord3D
-{
-	Real x;
-	Real y;
-	Real z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva000CBA20Point
 {

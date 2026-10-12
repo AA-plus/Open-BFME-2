@@ -4,12 +4,7 @@
 //   Pathfinder::isAttackViewBlockedByObstacle(Object*,Coord3D*) 0x002F3B9C; donor ZH PartitionManager
 //   PartitionFilterLineOfSight::allow pattern with BFME2 height adjustment.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class GeometryInfo
 {

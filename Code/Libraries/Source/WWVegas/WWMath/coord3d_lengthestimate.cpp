@@ -24,11 +24,7 @@ struct Coord3DBase
     float z;
 };
 
-class Coord3D : public Coord3DBase
-{
-public:
-    float GetLengthEstimate() const;
-};
+#include "../../../Include/Lib/Coord3D.h"
 
 static const float length_estimate_factor = 0.25f;
 

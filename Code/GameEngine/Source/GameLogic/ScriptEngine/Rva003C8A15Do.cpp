@@ -7,7 +7,7 @@
 // Precedent Rva003C8B62Do Rva003C87F1Do.
 #include "ascii_string.h"
 
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Parameter;
 class Object;
 class Waypoint;

@@ -6,12 +6,7 @@
 // TerrainLogic slot 0x3c test. Evidence: vftable pin
 // ??_7Rva002619C1Filter@@6B@ at 0x00C07150 slot 1, stack-constructed
 // filter at 0x003430EE with that vtable, callers 0x00343106 0x0044F4D8.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class ObjectTemplate
 {

@@ -17,13 +17,7 @@ struct Region2D
 };
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include/Lib/BaseType.h
-class ICoord3D
-{
-public:
-	int x;
-	int y;
-	int z;
-};
+#include "../../../../Libraries/Include/Lib/ICoord3D.h"
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameLogic/PolygonTrigger.h
 class PolygonTrigger

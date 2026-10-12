@@ -18,12 +18,7 @@ enum CommandSourceType
 	CMD_FROM_SCRIPT = 1,
 	CMD_FROM_AI = 2
 };
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 class GameLogic
 {
 public:

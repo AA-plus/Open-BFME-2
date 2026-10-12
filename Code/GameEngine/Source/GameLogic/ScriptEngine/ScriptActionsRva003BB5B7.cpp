@@ -16,10 +16,7 @@ class Thing
 public:
 	Drawable *getDrawable() const;
 };
-struct RGBColor
-{
-	int getAsInt() const;
-};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 class Object
 {
 public:

@@ -11,12 +11,7 @@
 // 0x9575C 0xB1C12 0xB586F 0xB58C1 pass FXList plus pos plus mtx plus speed
 // plus secondary and clean 0x14 (cdecl).
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Matrix3D
 {

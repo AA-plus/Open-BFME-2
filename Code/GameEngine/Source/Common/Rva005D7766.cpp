@@ -3,12 +3,7 @@
 // Evidence: slot 6 of 0x00875DB4 class AISpellBookTreeKiller, terrain table via TheTerrainLogic+0x584 with shroud check then 0x005EE8DD.
 class Object;
 class Player;
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

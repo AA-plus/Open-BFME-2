@@ -101,12 +101,7 @@ struct ObjectStatusMaskNone : public ObjectStatusMask
 	ObjectStatusMaskNone() { memset(this, 0, sizeof(*this)); }
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct BfmeWideResult
 {

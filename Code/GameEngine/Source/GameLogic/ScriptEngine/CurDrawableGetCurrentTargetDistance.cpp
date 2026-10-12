@@ -24,12 +24,7 @@ extern "C" void lua_pushnil(lua_State *state);
 // import call at 0x0062921C (same as the PathDistance/Rva00263778 siblings).
 #include <math.h>
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

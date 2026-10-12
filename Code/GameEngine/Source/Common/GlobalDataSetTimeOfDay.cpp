@@ -23,10 +23,7 @@ enum { MAX_GLOBAL_LIGHTS = 3 };
 
 #include "../../../Libraries/Include/Lib/RGBColor.h"
 
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 struct TerrainLighting
 {

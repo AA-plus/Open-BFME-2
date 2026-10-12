@@ -130,12 +130,7 @@ public:
 	virtual void v69();
 	virtual void v70(void *out);
 };
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 class Rva0046D946
 {
 public:

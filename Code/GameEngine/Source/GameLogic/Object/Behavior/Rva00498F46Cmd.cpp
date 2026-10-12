@@ -3,12 +3,7 @@
 // ?rva00498DF3@Rva00498DF3@@QAEXPAURva00498DF3Arg@@M@Z, retail 0x00498DF3, 59 bytes.
 // Evidence: calls rowed 0x00262DD3 AIUpdateInterface::rva00262DD3 and rowed 0x0026C411 AICommandInterface::rva0026C411; Object+0x38 Coord3D and CMD_FROM_AI=2 match donors; caller at 0x00498F9E pushes ebp plus float and tests nothing; this+0xC Object pattern matches caller 0x00498F46.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 enum CommandSourceType
 {

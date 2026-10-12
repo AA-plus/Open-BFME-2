@@ -14,12 +14,7 @@
 #include "ascii_string.h"
 
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Include/Lib/Coord3D.h"
 
 #include "../../../Include/Lib/Coord2D.h"
 

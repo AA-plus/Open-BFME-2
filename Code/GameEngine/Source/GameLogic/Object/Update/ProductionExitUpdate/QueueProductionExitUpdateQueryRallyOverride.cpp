@@ -4,12 +4,7 @@
 
 extern "C" void *memset(void *dst, int val, unsigned size);
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class BfmeFixedStorage0004543D
 {

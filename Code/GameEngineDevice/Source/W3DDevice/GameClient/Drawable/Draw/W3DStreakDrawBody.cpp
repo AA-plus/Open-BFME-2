@@ -9,12 +9,7 @@
 // Rva00167EF8 vector plus Rva00167F15FloatField opacity stores; callees are
 // the rowed BFME2 names.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Vector3
 {

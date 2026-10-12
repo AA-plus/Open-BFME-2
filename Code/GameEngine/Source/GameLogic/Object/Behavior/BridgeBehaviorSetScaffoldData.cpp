@@ -13,13 +13,7 @@
 typedef float Real;
 extern const Real g_00BC2A10;
 
-struct Coord3D
-{
-	Real x;
-	Real y;
-	Real z;
-	Real length() const;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Thing
 {

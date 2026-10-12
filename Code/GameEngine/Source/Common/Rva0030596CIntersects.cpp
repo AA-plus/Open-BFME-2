@@ -1,12 +1,7 @@
 // cl: /MD /EHs-c-
 // ?Rva0030596CIntersects@@YA_NPAXUCoord3D@@M@Z @0x0030596C 137B via GhostObjectManager GhostProvider bfmeIntersects
 // Retail walks GhostObject list from TheGhostObjectManager slot 0x20 and tests GeometryInfo::bfmeIntersects.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 class GeometryInfo
 {
 public:

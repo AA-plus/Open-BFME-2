@@ -3,12 +3,7 @@
 // Evidence: caller 0x0042A398 plus TheInGameUI slot73 plus Rva004D92FE ctor 0x004D92FE plus pickAndPlayUnitVoiceResponse pin plus MessageStreamSubsystem slot 0x48 with 0x420 plus appendObjectIDArgument 0x0030F979
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct Coord3D
-{
-	float m_x;
-	float m_y;
-	float m_z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 enum ObjectID
 {

@@ -33,13 +33,7 @@ enum ObjectID
 
 // class-gate: allow Coord3D canonical header is data-only; this byte-verified
 // call uses the existing Coord3D::GetLengthEstimate thiscall at 0x00003ACE.
-struct Coord3D
-{
-	Real x, y, z;
-	Coord3D() {}
-	Coord3D(Real _x, Real _y, Real _z) { x = _x; y = _y; z = _z; }
-	Real GetLengthEstimate() const;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

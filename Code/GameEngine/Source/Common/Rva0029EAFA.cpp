@@ -1,12 +1,7 @@
 // cl: /Ireference/shims/bfme2_ascii /MD /EHsc /DNDEBUG
 // ?rva0029EAFA@Rva0029EAFA@@QAEXPBVGameMessage@@@Z @0x0029EAFA 232B
 // evidence: chain from 0x0029DE76; rowed GameMessage::getArgument plus Object::rva002907A1 plus Rva0029ACA0::rva0029ACC7
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 union GameMessageArgumentType
 {

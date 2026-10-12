@@ -24,9 +24,7 @@ public:
 };
 }
 
-struct Coord3D {
-	int m_pad;
-};
+#include "../../../Include/Lib/Coord3D.h"
 
 typedef _STL::list<Coord3D> CoordList;
 

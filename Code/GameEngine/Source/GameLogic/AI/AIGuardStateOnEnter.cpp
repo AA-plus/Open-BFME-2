@@ -52,11 +52,7 @@ enum PathfindLayerEnum
 	LAYER_INVALID = 0,
 	LAYER_GROUND = 1
 };
-struct Coord3D
-{
-	Real x, y, z;
-	Real GetLengthEstimate() const;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object;
 class Team;
 class PolygonTrigger;

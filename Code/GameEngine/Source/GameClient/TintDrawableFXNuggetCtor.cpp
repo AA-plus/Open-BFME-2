@@ -41,13 +41,7 @@ protected:
 	unsigned char m_pad[0x148 - 8];
 };
 
-struct RGBColor
-{
-	void setFromInt(int color);
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class TintDrawableFXNugget : public Rva001DFEAABase
 {

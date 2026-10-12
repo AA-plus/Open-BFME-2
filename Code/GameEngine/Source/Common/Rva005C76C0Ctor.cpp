@@ -7,13 +7,7 @@ typedef float Real;
 extern const D3DXMATRIX g_Rva009D2398Basis;
 extern "C" D3DXVECTOR4* __stdcall rva0062AF4AD3DXVec4Transform(D3DXVECTOR4*,const D3DXVECTOR4*,const D3DXMATRIX*);
 
-class Coord3D
-{
-public:
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 // TU-local donor zero operation preserves inline call scheduling.
 // ?rva005C7448Zero present-unmatched

@@ -7,7 +7,7 @@
 // release tail48BA39. Coord3D is three trivially destroyed scalar floats.
 #include <map>
 #include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
-struct Coord3D { float x,y,z; };
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 typedef _STL::pair<const AsciiString,Coord3D> WaypointValue;
 typedef _STL::_Rb_tree<AsciiString,WaypointValue,_STL::_Select1st<WaypointValue>,_STL::less<AsciiString>,_STL::allocator<WaypointValue> > WaypointTree;
 template WaypointTree::~_Rb_tree();

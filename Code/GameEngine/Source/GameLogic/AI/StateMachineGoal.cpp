@@ -89,12 +89,7 @@ enum StateExitType
 #define GET_STATE_SLEEP_FRAMES(ret) ((UnsignedInt)(ret))
 #define STATE_SLEEP(numFrames) ((StateReturnType)(numFrames))
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

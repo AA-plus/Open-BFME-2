@@ -207,13 +207,7 @@ struct GlowShaderOps : ShaderClass {
 // Structural inference: retail lays case 0 directly before case 1 (it falls
 // through into the held store) and keeps the comiss operand order of
 // fade >= 1, fade <= 0, fade < 1 and fade > 0 as written here.
-struct RGBColor {
-    float red;
-    float green;
-    float blue;
-    int getAsInt() const;
-    void setFromInt(int color);
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 class W3DGlowOutlineMaterialPassClass {
     char _pad[0x38];
     int m_base;

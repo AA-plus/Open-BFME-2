@@ -5,12 +5,7 @@
 // (isWithinAttackRange overloads forwarding source/target plus positions at +0x38 into inner);
 // retail outer takes (source target float int) and forwards both plus derived positions.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

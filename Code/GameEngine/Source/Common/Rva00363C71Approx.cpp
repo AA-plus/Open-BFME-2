@@ -11,12 +11,7 @@
 // through a float global), and /arch:SSE enables the P6 fcomi compare
 // (fxch/fcomip/fstp/jbe) retail uses instead of fcomp/fnstsw.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 
 double __cdecl Rva00363C71Approx(const Coord3D *a, const Coord3D *b)

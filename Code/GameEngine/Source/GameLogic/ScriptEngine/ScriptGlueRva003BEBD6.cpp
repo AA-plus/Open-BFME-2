@@ -9,12 +9,7 @@
 // Rva00372571Params block with source 1). Single string param, ret 4.
 #include "ascii_string.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 template <int N>
 class BitFlags

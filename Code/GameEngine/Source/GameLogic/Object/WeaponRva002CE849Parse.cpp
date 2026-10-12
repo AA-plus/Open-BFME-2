@@ -13,9 +13,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 
 #include <vector>
-struct Coord3D {
-  float x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 // Declaration-only _Construct: retail's push_back calls the pinned out-of-line
 // helper (0x002CA82C) instead of inlining the element copy (row 35 family-LK3).
 namespace _STL {

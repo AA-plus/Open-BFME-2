@@ -89,13 +89,7 @@ public:
 	bool m_flag;
 };
 
-struct Coord3D
-{
-	float length() const;	// 0x00003571
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

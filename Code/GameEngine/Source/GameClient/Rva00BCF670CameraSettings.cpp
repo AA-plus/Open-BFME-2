@@ -61,13 +61,7 @@ struct Coord3D
 	void zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
 };
 
-class ICoord3D
-{
-public:
-	int x;
-	int y;
-	int z;
-};
+#include "../../../Libraries/Include/Lib/ICoord3D.h"
 
 class AsciiString;
 

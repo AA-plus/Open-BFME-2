@@ -85,12 +85,7 @@ private:
 	int m_timeoutMs;
 };
 
-struct Coord3D
-{
-	float m_x;
-	float m_y;
-	float m_z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class DynamicPortalBehaviourModuleData : public Rva00253487Base
 {

@@ -6,12 +6,7 @@
 // sibling PathDistance proves Coord3D shape and Approx double clearly,
 // PathCtor proves /O1 flags, callers 7 unclaimed large bodies need length.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 double __cdecl Rva00363C71Approx(const Coord3D *a, const Coord3D *b);
 double __cdecl Rva00363CF3Distance(const Coord3D *a, const Coord3D *b);

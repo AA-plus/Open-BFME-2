@@ -6,12 +6,7 @@
 // Donor ZH Scripts.cpp Parameter::getCoord3D with DEBUG_ASSERTCRASH compiled
 // out (/DNDEBUG). /arch:SSE for xorps/movss zeroing.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Parameter
 {

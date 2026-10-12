@@ -31,10 +31,7 @@ enum StateReturnType
 	STATE_SUCCESS = -1,
 	STATE_FAILURE = -2
 };
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 extern "C" float __cdecl fabs(double); // CRT fabs; x87 result compared as float
 template <int N> class VSlots : public VSlots<N - 1>
 {

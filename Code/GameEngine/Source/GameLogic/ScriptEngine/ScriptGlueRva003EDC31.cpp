@@ -7,12 +7,7 @@ public:
 	void rva00569AA8();
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct TwoCoord
 {

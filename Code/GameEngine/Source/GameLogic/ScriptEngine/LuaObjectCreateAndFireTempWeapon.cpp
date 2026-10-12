@@ -30,7 +30,7 @@ extern GameLogic *TheGameLogic;
 class AudioManager;
 extern AudioManager *TheAudio;
 
-struct Coord3D { float x; float y; float z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object
 {
 public:

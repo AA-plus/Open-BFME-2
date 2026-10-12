@@ -5,10 +5,7 @@
 // inc-from-known-zero for the null-or-one reader, xor-first cmp-mem-reg for
 // the flag test, and hoisted xor plus inc for the bit-test's 1<<slot.
 
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct ICoord2DBase
 {

@@ -25,12 +25,7 @@ typedef int Int;
 typedef unsigned int UnsignedInt;
 typedef bool Bool;
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 // GeometryInfo is a class: the rowed callee 0x000EF154 spells ABVGeometryInfo.
 class GeometryInfo

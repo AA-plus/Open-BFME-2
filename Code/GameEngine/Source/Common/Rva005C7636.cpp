@@ -5,13 +5,7 @@
 // Accumulator on Rva005C76C0::m_38[4]: m_38[i] += m_38[i+1] for i 0..2
 // plus ++m_00. Evidence: 9 movss/addss triples 0x38+=0x44 etc plus inc
 // [ecx]; layout from Rva005C76C0Ctor m_38[4] at +0x38; caller 0x0055A853.
-class Coord3D
-{
-public:
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva0055A246
 {

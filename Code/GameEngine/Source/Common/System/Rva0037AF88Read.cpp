@@ -5,12 +5,7 @@ extern "C" __declspec(dllimport) unsigned int __cdecl fread(void *buf, unsigned 
 
 enum ObjectID;
 enum DrawableID;
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
 struct IRegion2D
 {

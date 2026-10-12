@@ -6,12 +6,7 @@
 // Near miss: X accumulation operand order (retail movss sum/addss pos vs ours movss pos/addss sum, 2 insns) + global reloc;
 // Y/Z, frame, dec-chain-free SSE arithmetic, empty/average shared write tail (ox=x oz=z oy=y order) all exact.
 
-struct Coord3D
-{
-    float x;
-    float y;
-    float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object;
 

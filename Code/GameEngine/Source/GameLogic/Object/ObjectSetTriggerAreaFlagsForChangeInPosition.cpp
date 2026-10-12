@@ -25,11 +25,7 @@ typedef bool Bool;
 class Object;
 struct Coord3D;
 
-class ICoord3D
-{
-public:
-	Int x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/ICoord3D.h"
 
 class GameLogic
 {

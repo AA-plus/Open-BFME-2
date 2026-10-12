@@ -19,10 +19,7 @@ typedef unsigned int UnsignedInt;
 typedef float Real;
 typedef bool Bool;
 
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 extern unsigned char g_00E03745;
 extern "C" void *theLogicRandomLogFile;

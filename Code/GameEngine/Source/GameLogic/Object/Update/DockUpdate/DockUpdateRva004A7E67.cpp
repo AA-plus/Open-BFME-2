@@ -6,12 +6,7 @@
 // BuildListInfo gatherer broadcast or GameLogic::destroyObject. Evidence: chain packet
 // (all callees rowed), prev Rva004A7E43Slot + next SupplyWarehouseDockUpdateModuleData,
 // this-0x18 owner / this-0x1c aux interior-this pattern, TheGameLogic extern.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Thing
 {

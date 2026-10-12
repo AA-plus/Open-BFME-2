@@ -75,12 +75,7 @@ struct Rva00045411BitSet
 };
 extern unsigned char g_00DFEFA4StoragePrototype[28];
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 enum CommandSourceType
 {

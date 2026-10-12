@@ -96,15 +96,7 @@ public:
 	Player *findPlayerWithNameKey(NameKeyType key);
 };
 
-class RGBColor
-{
-public:
-	void setFromInt(Int color);
-
-	Real red;
-	Real green;
-	Real blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class InGameUI
 {

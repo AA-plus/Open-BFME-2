@@ -28,14 +28,7 @@ public:
 	virtual ~OpenContain();
 };
 
-class Coord3D
-{
-public:
-	~Coord3D();
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class GarrisonContain : public OpenContain
 {

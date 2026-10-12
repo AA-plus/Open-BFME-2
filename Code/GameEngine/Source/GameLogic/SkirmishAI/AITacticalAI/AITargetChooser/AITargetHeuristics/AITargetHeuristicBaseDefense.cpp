@@ -101,12 +101,7 @@ public:
 	virtual bool allow(Object *obj);
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 // A KindOfMaskType view: 224 bits, zeroed then set bit by bit.
 struct Rva005737D6Mask

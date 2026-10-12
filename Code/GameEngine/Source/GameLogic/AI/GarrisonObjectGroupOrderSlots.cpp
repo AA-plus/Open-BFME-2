@@ -21,12 +21,7 @@ enum ObjectID
 	INVALID_OBJECT_ID = 0
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 enum CommandSourceType
 {

@@ -41,11 +41,7 @@ private:
     float m_position[3];
 };
 
-class ICoord3D
-{
-public:
-    int x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/ICoord3D.h"
 
 class PolygonTrigger
 {

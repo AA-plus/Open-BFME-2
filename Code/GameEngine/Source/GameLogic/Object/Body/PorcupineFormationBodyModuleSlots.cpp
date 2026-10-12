@@ -18,12 +18,7 @@
 // weapon's range (its +0x14 float; the getter folds with the rowed
 // TerrainRoadType::getRoadWidth and is pinned for WeaponTemplate) by the rowed
 // 0x004C20D5 distance test (reached as a member; pinned for this class).
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 class WeaponTemplate
 {
 public:

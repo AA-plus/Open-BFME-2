@@ -20,12 +20,7 @@ extern "C" void lua_pushnil(lua_State *state);
 
 float normalizeAngle(float angle);
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

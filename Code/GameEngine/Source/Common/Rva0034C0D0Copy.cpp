@@ -6,11 +6,7 @@ struct PrereqUnitRec
 {
 	unsigned int m_data[3];
 };
-struct Coord3D
-{
-	float x, y, z;
-	Coord3D(const Coord3D &that);
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 class AsciiString;
 namespace _STL {
 template <class T> class allocator

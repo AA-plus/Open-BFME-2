@@ -11,12 +11,7 @@
 // (16B, 4x movsd, tag 8) between Pixel and Timestamp. Both feed allocArg
 // (rowed at 0x30F8FF) and stamp the tag at +0x18 over the data at +0x08.
 
-struct Coord3D
-{
-	float m_x;
-	float m_y;
-	float m_z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 struct IRegion2D
 {

@@ -2,7 +2,7 @@
 typedef int Int;
 typedef float Real;
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct Coord3D { Real x; Real y; Real z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 enum PathfindLayerEnum { LAYER_INVALID = 0 };
 class Object {
 public:

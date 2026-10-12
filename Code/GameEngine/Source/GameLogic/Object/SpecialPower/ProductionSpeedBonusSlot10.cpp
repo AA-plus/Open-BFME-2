@@ -16,12 +16,7 @@ public:
 	bool any() const;
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 #include "ascii_string.h"
 

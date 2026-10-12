@@ -12,12 +12,7 @@
 
 typedef int Int;
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Matrix3D
 {

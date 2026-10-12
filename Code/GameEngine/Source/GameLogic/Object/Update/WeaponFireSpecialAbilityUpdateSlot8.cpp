@@ -12,10 +12,7 @@
 // like GiveUpgradeUpdateSlot8.cpp.
 typedef bool Bool;
 typedef float Real;
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 struct Rva004929D1Template
 {
 	unsigned char m_pad000[0x108];

@@ -7,12 +7,7 @@
 // rowed Rva002F6AE3 0x002F6AE3; caller pair 0x0049F119 0x004A0B79; chain from
 // 0x002F6AE3; neighbours 0x002F6D22 and 0x002F95B7 share flags.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 enum PathfindLayerEnum
 {

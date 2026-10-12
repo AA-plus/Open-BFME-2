@@ -5,12 +5,7 @@
 // slot 0x98 with position at +0xC. Evidence: manual loop with next at +0x1C
 // plus movss x y z plus single AsciiString stdcall shape ret 4.
 #include "ascii_string.h"
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 struct Rva003C4DC2Node
 {
 	char m_pad0[8];

@@ -4,12 +4,7 @@
 // union-find subobject at +0x460 through the pinned 0x0053241F/0x00531FD4
 // thunks. Param a2 is overwritten with a ushort result (dead after the
 // ret 0xc pop); the function returns 0. Identities unproven.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object;
 enum PathfindLayerEnum
 {

@@ -6,12 +6,7 @@
 // The BFME1 donor W3DView.cpp only emits it through the included header. Retail
 // 0x0008BB27 copies the 12-byte Coord3D at this+0xC to *pos, which fixes m_pos;
 // the header body is emitted out-of-line here, donor's other bodies omitted.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class View
 {

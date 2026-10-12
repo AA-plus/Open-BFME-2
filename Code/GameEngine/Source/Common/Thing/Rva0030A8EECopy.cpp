@@ -10,11 +10,7 @@ struct Coord3DBase
     float z;
 };
 
-class Coord3D : public Coord3DBase
-{
-public:
-    float Normalize();
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Rva0030A8EE
 {

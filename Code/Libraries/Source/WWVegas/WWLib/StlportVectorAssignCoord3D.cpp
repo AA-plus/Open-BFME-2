@@ -11,7 +11,7 @@
 // parameters; the __copy_ptrs at 0x002CA86E and that allocate-and-copy are
 // pinned under their STLport spellings from this body's REL32s. Caller
 // 0x002CD700.
-struct Coord3D { float x, y, z; };
+#include "../../../Include/Lib/Coord3D.h"
 namespace _STL {
 struct __false_type { __false_type() {} };
 template <class Type> class allocator {};

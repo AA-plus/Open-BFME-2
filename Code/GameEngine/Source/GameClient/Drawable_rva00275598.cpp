@@ -104,13 +104,7 @@ float Sin(float);
 // linkage/name is unknown. A local data owner preserves the measured read.
 float opacityLogicStepSeconds=0.03333333507180214f;
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
- void setFromInt(int);
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Rva00271826
 {

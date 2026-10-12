@@ -1,12 +1,7 @@
 // cl: /MD
 // ?Rva0041C9C4Check@@YG_NPAVObject@@PBUCoord3D@@PBVOverridable@@@Z, retail 0x0041C9C4, 52 bytes.
 // Evidence: free stdcall 3 args ret 0xC; a3 via rowed Overridable::friend_getFinalOverride 0x00288609 tests bit6 of +0x18; AI global TheAI +0x10 Pathfinder pinned QuickDoesPathExist with obj a1 pos+0x38 coord a2 zero.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Overridable
 {

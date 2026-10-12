@@ -28,10 +28,7 @@ enum ObjectStatusTypes
 {
 	OBJECT_STATUS_BFME_26 = 0x26
 };
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object
 {
 public:

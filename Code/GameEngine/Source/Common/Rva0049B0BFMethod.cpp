@@ -6,14 +6,7 @@
 // between m_obj8 position and arg position, copies both GeometryInfos,
 // then calls rowed Rva0026228F with computed point and int arg.
 // Evidence: offsets match Rva0049AE5ECheck; callees all rowed.
-class Coord3D
-{
-public:
-	void normalize();
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class GeometryInfo
 {

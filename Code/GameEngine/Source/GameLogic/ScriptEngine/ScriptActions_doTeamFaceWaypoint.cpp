@@ -14,7 +14,7 @@
 typedef bool Bool;
 class Object;
 class AIUpdateInterface;
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 enum CommandSourceType
 {
 	CMD_FROM_SCRIPT = 1

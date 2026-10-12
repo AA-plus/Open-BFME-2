@@ -185,12 +185,7 @@ struct Coord3DZero
 
 struct DrawableICoord2D { int x, y; };
 
-class RGBColor
-{
-public:
-	void setFromInt(int c);
-	float red, green, blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Rva0010F149Handle
 {

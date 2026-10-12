@@ -5,20 +5,9 @@
 // ?pointInTrigger@PolygonTrigger@@QAE_NABVICoord3D@@@Z on [esi+4], inc [esi]
 // if true. ret 8 means second int arg is dummy like neighbour Rva0027D347.
 // Evidence: callee row PolygonTrigger_pointInTrigger, caller 0x0027E4BD.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
-class ICoord3D
-{
-public:
-	int x;
-	int y;
-	int z;
-};
+#include "../../../Libraries/Include/Lib/ICoord3D.h"
 
 class PolygonTrigger
 {

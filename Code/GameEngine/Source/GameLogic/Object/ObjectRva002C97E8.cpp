@@ -8,12 +8,7 @@
 // (ret 0xC) shape; thunks 0x002C9846 (16B) and 0x002C9856 (21B) wrap this body.
 #include <math.h>
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

@@ -8,7 +8,7 @@
 #include "ascii_string.h"
 typedef bool Bool;
 
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Waypoint
 {
 public:

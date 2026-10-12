@@ -7,7 +7,7 @@
 //   0x001F0188 prove (template object pos); sibling 0x002CE964 is the target
 //   overload firing at an object. Virtual deleteInstance(0) fed to operator
 //   delete follows FireWeaponWhenDamagedBehaviorDtor.
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

@@ -5,12 +5,7 @@
 // rowed byte setter 0x002A9911 and the float setter 0x002A9903; no direct
 // callers (vtable-reached). Identity not recovered: address-derived name.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva002A98F2Coord3DSetter
 {

@@ -51,12 +51,7 @@ private:
 	unsigned int m_bits[(NUMBITS + 31) / 32];
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Waypoint;
 

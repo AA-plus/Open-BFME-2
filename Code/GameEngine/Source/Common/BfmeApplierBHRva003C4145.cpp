@@ -4,13 +4,7 @@
 #include "ascii_string.h"
 
 class Team;
-struct Coord3D
-{
-public:
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class ScriptEngine
 {

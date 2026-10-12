@@ -18,12 +18,7 @@
 //     TheDisplay->createLightPulse (Display slot 0xBC) with the color at +0x148,
 //     inner radius 1, the radius at +0x154 and the frame counts at +0x15C/+0x160.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 #include "../../../Libraries/Include/Lib/RGBColor.h"
 

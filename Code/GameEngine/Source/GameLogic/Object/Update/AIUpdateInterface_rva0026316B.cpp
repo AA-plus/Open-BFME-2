@@ -6,12 +6,7 @@
 // with obj+0x38 then store int at +0x48 then setState 0x46 via slot 0x20.
 // Callees rowed: Turret setGoalPosition 0x00262224.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class StateMachine
 {

@@ -9,12 +9,7 @@
 // +0x20) as a tail jump. Address name: class and slot are proven, the
 // method identity is not.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 // Zero Hour's AICommandInterface takes a CommandSourceType (row 0x0026C26D).
 enum CommandSourceType { CMD_FROM_PLAYER = 0, CMD_FROM_SCRIPT, CMD_FROM_AI, CMD_FROM_DOZER, CMD_DEFAULT_SWITCH_WEAPON };

@@ -1,19 +1,8 @@
 // cl: /MD
 // ?rva00366B30@Rva00366B30@@QAE_NPBUCoord3D@@@Z 0x00366B30 71B walk PolygonTrigger list at +0x38 calling pointInTrigger; float Coord3D arg converted via cvttss2si to ICoord3D; callers in 0x00366B77; callees rowed pointInTrigger 0x002E3A13
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
-class ICoord3D
-{
-public:
-	int x;
-	int y;
-	int z;
-};
+#include "../../../Libraries/Include/Lib/ICoord3D.h"
 
 class PolygonTrigger
 {

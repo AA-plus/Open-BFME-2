@@ -9,16 +9,7 @@ enum StateReturnType
 	STATE_FAILURE = -2
 };
 
-class Coord3D
-{
-public:
-	Coord3D() {}
-	Coord3D(float ax, float ay, float az) { x = ax; y = ay; z = az; }
-	Coord3D(const Coord3D &that) { x = that.x; y = that.y; z = that.z; }
-	Coord3D &operator-=(const Coord3D &that) { x -= that.x; y -= that.y; z -= that.z; return *this; }
-	float length() const;
-	float x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 inline Coord3D operator-(const Coord3D &a, const Coord3D &b)
 {

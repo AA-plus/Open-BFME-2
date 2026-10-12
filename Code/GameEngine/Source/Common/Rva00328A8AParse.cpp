@@ -11,11 +11,7 @@ public:
 	float readReal();
 	AsciiString readAsciiString();
 };
-struct RGBColor
-{
-	int c[3];
-	void setFromInt(int v);
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 struct ElevatedAreaPolygon
 {
 	void parse(DataChunkInput &file, int val);

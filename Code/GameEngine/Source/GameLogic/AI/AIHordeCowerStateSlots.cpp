@@ -162,10 +162,7 @@ template <> class HordeSlots<0>
 
 // What contain slot 31 returns (opaque): slot 31 (position, kind, object),
 // slot 61 (Bool) and slot 63 (Object *) are the AIHordeEnterState calls.
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva00341A3EHordeHead : public HordeSlots<31>
 {

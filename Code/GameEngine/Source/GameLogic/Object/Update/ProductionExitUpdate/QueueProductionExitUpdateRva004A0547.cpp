@@ -1,12 +1,7 @@
 // cl: /DNDEBUG /DWIN32 /D_WINDOWS /MD /GX- /Ob1
 // ?notifyProductionBurstFinished@QueueProductionExitUpdate@@QAEXXZ @0x004A0547 297B chain via 0x4A0403.
 // Evidence: QueueProductionExitUpdate rally logic via rowed bfmeQueryRallyOverride 0x4A0403; TheGameLogic findObjectByID row; setStatus rows; getControllingPlayer row; g_00DFEEF8 plus rva002A8AB1 pin; rva00346C53 pin; AI rva0036EBB8 row; v8 rally coord; v31/v4/v145 virtuals; neighbours SetRallyPoint /O1.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 class Object;
 Object *bfmeQueryRallyOverride(Object *obj, const Coord3D *pos);
 class Iface31

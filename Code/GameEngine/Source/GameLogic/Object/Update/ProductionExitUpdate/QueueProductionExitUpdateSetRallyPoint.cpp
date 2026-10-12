@@ -6,12 +6,7 @@
 //   ?setRallyPoint@QueueProductionExitUpdate@@UAEXPBUCoord3D@@@Z 0x004A051B (44B)
 // Callee addresses are read off retail call sites (reverse/symbols.csv).
 // QueueProductionExitUpdate::setRallyPoint at 0x002D0CA0.
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object;
 Object *bfmeQueryRallyOverride(Object *obj, const Coord3D *pos);

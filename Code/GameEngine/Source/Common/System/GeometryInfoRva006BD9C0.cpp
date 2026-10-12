@@ -26,12 +26,7 @@ enum GeometryType
 	GEOMETRY_BOX
 };
 
-struct Coord3D
-{
-	Real x;
-	Real y;
-	Real z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 #include "../../../../Libraries/Include/Lib/Coord2D.h"
 

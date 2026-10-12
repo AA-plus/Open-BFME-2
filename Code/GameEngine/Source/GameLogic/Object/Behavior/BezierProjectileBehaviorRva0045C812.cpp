@@ -3,12 +3,7 @@
 // ?rva0045C812@BezierProjectileBehavior@@QAEXPBVObject@@@Z @0x0045C812 62B
 // Bezier fire-temp-weapon plus list push calling rowed WeaponStore::handleProjectileDetonation 0x002CE8AA and pinned push_back 0x002A1B6F
 // Evidence: unlock packet 0x0045C812 between PoolKey 0x0045BFD9 and dtor 0x0045C959; Bezier offsets 0x2C 0x40 0x74 0x7C from xfer 0x0045CA8E; Object +0x38 +0x74 from WeaponStoreCreateAndFireTempWeapon; caller 0x0045CDCB
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 enum ObjectID
 {

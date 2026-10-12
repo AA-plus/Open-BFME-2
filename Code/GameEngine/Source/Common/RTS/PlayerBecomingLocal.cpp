@@ -11,7 +11,7 @@
 enum NameKeyType { NAMEKEY_INVALID=0 };
 enum KindOfType { KIND_ZERO=0 };
 enum Relationship { ALLIES=2 };
-class RGBColor {public:void setFromInt(int);float red,green,blue;};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 template<int N> class PlayerLocalSlots:public PlayerLocalSlots<N-1>{public:virtual void slot(char(*)[N])=0;};
 template<> class PlayerLocalSlots<0>{};
 class GameClient:public PlayerLocalSlots<32>{public:virtual void setTeamColor(int,int,int)=0;};

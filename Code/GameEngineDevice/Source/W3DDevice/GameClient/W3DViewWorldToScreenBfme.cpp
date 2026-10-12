@@ -10,12 +10,7 @@
 
 typedef int Int;
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
 

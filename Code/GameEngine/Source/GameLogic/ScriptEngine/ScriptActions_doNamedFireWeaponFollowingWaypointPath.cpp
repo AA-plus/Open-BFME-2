@@ -8,7 +8,7 @@
 // Caller at 0x003CCA56. Prev Rva003C90B1Exit / next doUnitGuardForFramecount share flags.
 #include "ascii_string.h"
 
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object;
 class Waypoint;
 struct RvaWeaponSlot;

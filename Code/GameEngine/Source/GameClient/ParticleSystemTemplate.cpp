@@ -20,12 +20,7 @@ class INI;
 
 #include "../../../Libraries/Include/Lib/Region2D.h"
 
-struct Coord3D
-{
-    float x;
-    float y;
-    float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 // BFME1 ClientRandomValue.h layout (DistributionType first, then the range):
 // 12 bytes, no constructor or destructor by design (used within unions).

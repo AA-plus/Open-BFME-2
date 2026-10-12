@@ -3,10 +3,7 @@
 // Donor Code/GameEngine/Source/GameLogic/AI/AIStatesSmallUpdates.cpp AIFollowWaypointPathExactState ctor pattern (base + vtable + members).
 // Callers 0x00343417 unclaimed.
 class StateMachine;
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 class State
 {
 public:

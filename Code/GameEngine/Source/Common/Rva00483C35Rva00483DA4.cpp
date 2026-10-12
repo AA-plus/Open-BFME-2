@@ -14,7 +14,7 @@
 // this call site) into a temporary copied field by field into out (retail
 // shares the z store between the two paths).
 class ModuleData;
-struct Coord3D { float x, y, z; };
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 class Thing
 {
 public:

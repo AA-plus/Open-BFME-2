@@ -8,7 +8,7 @@
 // List_base 0x00280A8D; layouts +0xC/+0x10/+0x14 match dtor.
 #include <list>
 
-struct Coord3D { float x; float y; float z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class BFME2NativeNetwork
 {

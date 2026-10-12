@@ -8,12 +8,7 @@
 // unproven beyond byte roles.
 #include "ascii_string.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Rva003C4D5CNode
 {

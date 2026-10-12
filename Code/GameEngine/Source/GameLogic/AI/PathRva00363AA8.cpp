@@ -4,12 +4,7 @@
 // matches PathCtor 0x00363DC8 and PathRva00363DF9 (head +4 sel +10
 // nextOpt +8 waypoint +20); 0x7fffffff sentinel; neighbours use /O1.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class PathNode
 {

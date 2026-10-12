@@ -4,10 +4,7 @@
 // (forward push order), then tests the low nibble of the dword at +0x0C
 // (plus bit 16/17) of the returned record. thiscall with ecx passthrough;
 // ?rva names: class lead from the 0x002E9871 Pathfinder pin, identities unproven.
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Pathfinder
 {
 public:

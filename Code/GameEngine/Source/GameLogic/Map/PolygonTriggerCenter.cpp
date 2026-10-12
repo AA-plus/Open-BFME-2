@@ -24,10 +24,7 @@ struct Coord2D
 {
 	Real x, y;
 };
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class TerrainLogic
 {

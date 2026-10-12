@@ -8,12 +8,7 @@
 // then setState 0x48 via slot 0x20. Callees rowed 0x004D745C.
 
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class StateMachine
 {

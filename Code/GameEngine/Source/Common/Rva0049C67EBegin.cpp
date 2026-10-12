@@ -5,12 +5,7 @@
 // +0x89, play FXList at [[this+4]+0xD8] from the object's +0x38, set status
 // 3, then store 1 at +0x88 and 1.0 at +0x8C.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Matrix3D;
 

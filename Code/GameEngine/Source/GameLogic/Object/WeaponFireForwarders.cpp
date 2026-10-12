@@ -1,10 +1,5 @@
 // cl: -Ireference/open-bfme-1/game/GameEngine/Source/GameLogic/Object
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

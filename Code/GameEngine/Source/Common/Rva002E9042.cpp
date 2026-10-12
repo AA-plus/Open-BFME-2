@@ -5,12 +5,7 @@
 // Evidence: 6 unclaimed callers; callees all rowed; LINK BONUS 2 files 103B via 0x0046094C; layout from neighbours 0x002E8BCF and 0x002E9B31.
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 ICoord2D *__cdecl Rva002E7875WorldToCell(ICoord2D *out, bool center, const Coord3D *pos);
 

@@ -43,11 +43,7 @@ public:
 	Rva0007DF07() {}
 	virtual ~Rva0007DF07();
 };
-struct RGBColor
-{
-	float red, green, blue;
-	int getAsInt() const;			// 0x00004EA7
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 // 0x003F468D returns the player as an int (its rowed spelling).
 class Rva003F468D { public: int rva003F468D(int a, int b); };
 struct Rva006003FCPlayer

@@ -15,10 +15,7 @@ template <int NUMBITS> class BitFlags
 	unsigned char m_bits[0x1C];
 };
 typedef BitFlags<116> KindOfMaskType;
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Thing
 {
 public:

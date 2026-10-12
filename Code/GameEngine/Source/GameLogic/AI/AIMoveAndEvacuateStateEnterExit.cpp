@@ -22,10 +22,7 @@ enum StateReturnType
 	STATE_CONTINUE = 0,
 	STATE_FAILURE = -2
 };
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 struct FprintfTarget
 {
 	char m_pad[4];

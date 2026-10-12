@@ -48,10 +48,7 @@ enum StateExitType
 };
 #define IS_STATE_CONTINUE_OR_SLEEP(r) ((r) >= STATE_CONTINUE)
 
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 template <int N> class AIStateMachineAISlots : public AIStateMachineAISlots<N - 1>
 {

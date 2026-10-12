@@ -106,12 +106,7 @@ public:
 	bool m_targetWasSetByIdleMood;
 };
 
-struct Coord3D
-{
-	float m_x;
-	float m_y;
-	float m_z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 void TurretAI::setTurretTargetObject(Object* victim, bool forceAttacking)
 {

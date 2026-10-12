@@ -224,12 +224,7 @@ bool Rva00261246Filter::allow(Object *obj)
 	return m_a;
 }
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class ThingTemplate
 {

@@ -149,16 +149,7 @@ typedef float Real;
 typedef int Int;
 typedef unsigned int UnsignedInt;
 // class-gate: allow Coord3D the canonical data-only header cannot declare BFME 2's out-of-line length (rowed 0x00003571) and GetLengthEstimate (rowed 0x00003ACE) that the updates below call; same three floats
-struct Coord3D
-{
-	Real x;
-	Real y;
-	Real z;
-
-	Real length() const;
-	Real GetLengthEstimate() const;
-	Real GetLengthEstimate2D() const;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 struct Region3D
 {
 	Coord3D lo, hi;

@@ -9,12 +9,7 @@
 // Object position at +0x38 and bounding radius at +0xB8 from retail loads;
 // Display createLightPulse at vtable slot 0xBC; TheDisplay global DIR32 masked by gate.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 #include "../../../Libraries/Include/Lib/RGBColor.h"
 

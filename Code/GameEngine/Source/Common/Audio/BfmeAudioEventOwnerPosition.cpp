@@ -13,7 +13,7 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 // The case3..5 receiver identities remain unasserted. Existing global providers
 // bind the observed DF EF10/18 storage without adding new singleton spellings.
 
-struct Coord3D {float x,y,z;};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Drawable {public: const Coord3D *getPosition() const;};
 class Object {public: char pad[0x38]; BfmeEventPositionView position;};
 // Zero Hour's GameCommon.h spells the id an enum; retail's 0x00049DC5 row takes it.

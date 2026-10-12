@@ -7,7 +7,7 @@
 // Donor: BFME1 AIPathfind.cpp, Pathfinder::isViewBlockedByObstacle.
 // Structural inference: this is the same forwarding helper; retail has no
 // null check on objOther, unlike the donor's source-level guard.
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object
 {
 public:

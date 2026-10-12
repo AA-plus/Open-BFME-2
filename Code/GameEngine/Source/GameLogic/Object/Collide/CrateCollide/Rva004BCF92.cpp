@@ -8,12 +8,7 @@
 // ?getControllingPlayer@Object@@QBEPAVPlayer@@XZ, globals g_Va00BC2428 and
 // TheInGameUI as annotated, ret 8 with two stack args.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object;
 class Player

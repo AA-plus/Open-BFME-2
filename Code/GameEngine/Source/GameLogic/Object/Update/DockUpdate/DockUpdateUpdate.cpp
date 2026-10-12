@@ -132,11 +132,7 @@ public:
 	virtual void dockAnchor() = 0;
 };
 
-struct Coord3D
-{
-	Coord3D() {}
-	float x, y, z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 typedef _STL::vector<Coord3D, _STL::allocator<Coord3D> > VecCoord3D;
 

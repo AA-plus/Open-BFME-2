@@ -173,12 +173,7 @@ public:
 
 extern GameTextInterface *TheGameText;
 
-class RGBColor
-{
-public:
-	int getAsInt() const;
-	float red, green, blue;
-};
+#include "../../../../../../Libraries/Include/Lib/RGBColor.h"
 
 struct Rva00523825Faction
 {

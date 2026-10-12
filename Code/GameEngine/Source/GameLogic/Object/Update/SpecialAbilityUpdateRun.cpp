@@ -54,7 +54,7 @@ virtual void aiGap141();
 virtual void aiGap142();
 virtual int getLastCommandSource();};
 enum Relationship{ENEMIES,NEUTRAL,ALLIES};
-struct RGBColor {float red,green,blue;void setFromInt(int);};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 enum NameKeyType{NAMEKEY_INVALID=0};class ClientUpdateModule;
 class NameKeyGenerator {public:NameKeyType nameToKey(const char*);};extern NameKeyGenerator *TheNameKeyGenerator;
 class Drawable {public:ClientUpdateModule *findClientUpdateModule(NameKeyType);void saturateRGB(RGBColor&,float);void rva00278C7C(int);};

@@ -14,12 +14,7 @@ class PartitionManager;
 class Rva002A8F24;
 class Rva00049D20;
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Player
 {

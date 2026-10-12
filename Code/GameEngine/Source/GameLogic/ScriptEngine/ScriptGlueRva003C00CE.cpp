@@ -8,12 +8,7 @@
 // member on the 0x00DFDC30 global. Globals/extra-arg identities unproven.
 #include "ascii_string.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Team
 {

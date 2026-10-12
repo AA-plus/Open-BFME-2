@@ -12,12 +12,7 @@
 // addAudioEvent is slot 0x64.
 #include "Common/BfmeAudioEventPrefix136.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Matrix3D;
 

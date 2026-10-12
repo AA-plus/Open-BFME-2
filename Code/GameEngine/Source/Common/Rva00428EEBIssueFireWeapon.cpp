@@ -3,12 +3,7 @@
 // ?Rva00428EEBIssueFireWeapon@@YGHPBVCommandButton@@HPAVDrawable@@PBUCoord3D@@@Z @0x00428EEB 284B: free issue command emitting 0x434/0x433 via MessageStreamSubsystem createMessage plus voice response.
 // Evidence: retail bytes options-7 isValid slot75 then 0x20 ground branch; rowed isValid 0x35B112 appends 0x30F936 0x30F9BB 0x30F979 ctor 0x4D92FE pinned pickAndPlay 0x4DAAFD; TheInGameUI MessageStreamSubsystem names.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 enum ObjectID
 {

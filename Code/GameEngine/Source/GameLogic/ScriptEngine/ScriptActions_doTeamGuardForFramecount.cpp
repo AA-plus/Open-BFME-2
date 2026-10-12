@@ -9,7 +9,7 @@ extern int g_Va00DBA4E4;
 
 #include "ascii_string.h"
 typedef bool Bool;
-struct Coord3D { float x, y, z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object;
 class AIUpdateInterface;
 template<class OBJCLASS> class DLINK_ITERATOR

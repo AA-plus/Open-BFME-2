@@ -7,12 +7,7 @@
 // Fallback copies position at +0x38 (12B) and transform at +0x08 (48B) and
 // returns false. Callers include 0x002CAB27 0x00463695 0x0044FBB2.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Vector4
 {

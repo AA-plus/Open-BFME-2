@@ -80,12 +80,7 @@ public:
 
 extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
-class RGBColor
-{
-public:
-	int getAsInt() const;
-	float red, green, blue;
-};
+#include "../../../../../../Libraries/Include/Lib/RGBColor.h"
 
 // Element types of the four per-player score vectors.
 struct Rva0051F7ADRecord

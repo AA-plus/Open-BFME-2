@@ -42,12 +42,7 @@ public:
 	virtual ~Rva005DAAB6();
 private:
 	bool m_2C;
-	struct Coord3D
-	{
-		float x;
-		float y;
-		float z;
-	};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 	Coord3D m_30;
 	float m_3C;
 };

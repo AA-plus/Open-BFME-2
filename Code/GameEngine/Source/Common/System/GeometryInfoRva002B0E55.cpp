@@ -26,12 +26,7 @@ public:
 	void rva002AABEE();
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Rva002AF6C5Element
 {

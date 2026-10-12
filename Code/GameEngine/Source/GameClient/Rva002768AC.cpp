@@ -6,12 +6,7 @@
 // Evidence: callers 0x00276952 and 0x00278869; rowed getCurrentClientBonePositions; pinned getTransformMatrix;
 // global 0x9FE77C slot 0x7C time; string B_TORNADO 0x7FB010.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Matrix3D
 {

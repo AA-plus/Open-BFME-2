@@ -6,7 +6,7 @@
 // `mov eax,ecx` prologue; the only source shape that reproduces it is one
 // whose eax return value is `this`, which byte-matches exactly (39/39).
 
-struct Coord3D { float x; float y; float z; };
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Rva002E7542
 {

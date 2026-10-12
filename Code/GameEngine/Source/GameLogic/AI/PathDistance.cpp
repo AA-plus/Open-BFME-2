@@ -7,12 +7,7 @@
 // sqrt import thunk at 0x0062921C. x87 shape with push-ecx double temp
 // matches retail; gate fills the call relocation.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 double __cdecl Rva00363CF3Distance(const Coord3D *a, const Coord3D *b)
 {

@@ -8,14 +8,7 @@
 extern float g_Va00BBB8D8;
 // BfmeZeroRange is float 0.0 at 0x00BBAEAC (data_ledger literal); use 0.0f literal so the TU links.
 
-class Coord3D
-{
-public:
-	float GetLength() const;
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Pos0047FFFE
 {

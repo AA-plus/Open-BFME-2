@@ -112,7 +112,7 @@ extern TerrainLogic *TheTerrainLogic;
 extern AI *TheAI;
 
 enum PathfindLayerEnum {GROUND_LAYER=1};
-class ICoord3D {public: int x,y,z;};
+#include "../../../../Libraries/Include/Lib/ICoord3D.h"
 class PolygonTrigger {public: void getBounds(int*); bool pointInTrigger(const ICoord3D&);};
 class PathfindZoneManager {public: void MarkDirty(int,int);};
 class Pathfinder

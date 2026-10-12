@@ -3,12 +3,7 @@
 // was ?rva002E74B5@Rva002E74B5@@QAEXPBUCoord3D@@@Z @0x002E74B5 17B
 // Evidence: unlocks 0x00363930; copies 12B to +0x4C; caller passes Coord3D floats.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Pathfinder
 {

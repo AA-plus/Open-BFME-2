@@ -4,12 +4,7 @@
 // Topple the owner at this-0x18 away from src when src's level is higher.
 // A zero height is replaced by the object at src+0x274.
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Object
 {

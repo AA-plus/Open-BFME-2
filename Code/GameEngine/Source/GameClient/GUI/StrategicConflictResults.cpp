@@ -29,7 +29,7 @@ bool less<int>::operator()(const int &a, const int &b) const
 
 extern "C" char *__cdecl _mbscpy(char *, const char *);
 
-struct RGBColor { int getAsInt() const; float red, green, blue; };
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 class LivingWorldBattle { public: int rva003F459A(); };
 class Rva003F468D { public: int rva003F468D(int, int); };
 

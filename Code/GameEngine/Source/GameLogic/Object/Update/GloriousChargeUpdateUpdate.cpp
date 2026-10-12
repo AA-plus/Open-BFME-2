@@ -66,12 +66,7 @@ enum KindOfType
 {
 	KINDOF_FIRST = 0
 };
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 class Object
 {
 public:

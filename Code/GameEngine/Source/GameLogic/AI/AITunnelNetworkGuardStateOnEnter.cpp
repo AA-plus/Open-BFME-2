@@ -28,10 +28,7 @@ enum GuardMode
 {
 	GUARDMODE_NORMAL = 0
 };
-struct Coord3D
-{
-	Real x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object;
 template <int N> class VSlots : public VSlots<N - 1>
 {

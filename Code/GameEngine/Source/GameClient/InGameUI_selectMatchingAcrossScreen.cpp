@@ -30,12 +30,7 @@ struct IRegion2D
 	ICoord2D hi;
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 typedef unsigned short wchar_t;
 

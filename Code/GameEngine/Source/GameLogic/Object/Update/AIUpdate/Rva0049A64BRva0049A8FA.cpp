@@ -17,7 +17,7 @@
 // (declared in the if block it reuses the dead out-pointer argument slot).
 class Thing;
 class ModuleData;
-struct Coord3D { float x, y, z; };
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 class Rva0049A8FAProvider
 {
 public:

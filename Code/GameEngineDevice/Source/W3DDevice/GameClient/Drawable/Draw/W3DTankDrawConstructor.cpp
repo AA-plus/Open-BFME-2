@@ -67,12 +67,7 @@ private:
 	char m_pad14[0x2E8 - 0x14];
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 
 class W3DTankDraw : public W3DScriptedModelDraw
 {

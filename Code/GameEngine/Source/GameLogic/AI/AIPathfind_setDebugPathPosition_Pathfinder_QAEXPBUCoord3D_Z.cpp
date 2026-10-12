@@ -7,10 +7,7 @@
 // The BFME1 donor AIPathfind.cpp only odr-uses it, so it has no donor .cpp
 // definition to copy. Retail 0x005AD929 copies 12 bytes to this+0x40, which
 // fixes debugPathPos's offset. The header body is emitted out-of-line here.
-struct Coord3D
-{
-	float x, y, z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class Pathfinder
 {

@@ -16,12 +16,7 @@
 // calls. Flag/global identities unproven beyond their byte roles.
 #include "ascii_string.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 template <int N>
 class BitFlags
