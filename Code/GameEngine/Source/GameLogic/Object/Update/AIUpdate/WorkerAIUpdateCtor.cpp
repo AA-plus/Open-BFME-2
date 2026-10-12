@@ -1,7 +1,21 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX /ICode/GameEngine/Include
 //
 // Zero Hour's WorkerAIUpdate (GeneralsMD GameLogic/Object/Update/AIUpdate/
 // WorkerAIUpdate.cpp) as BFME 2 kept it.
+//
+// ?gainOneBox@WorkerAIUpdate@@UAE_NH@Z, retail 0x004A9C3F, 314 bytes (the
+// supply truck interface's vslot 4 at +0x3E8, vtable 0x008540B8; the
+// sibling of loseOneBox 0x004A98AC at vslot 3). ZH's WorkerAIUpdate::gainOneBox
+// (WB C9C200 names the same body): refuse at the data's +0x64 maximum, count
+// the box (+0x4A0) and, when the stock behind it is gone (remainingStock 0),
+// announce the empty source if the controlling player's best warehouse
+// (ResourceGatheringManager at Player +0x2E4) is gone or farther than a quarter
+// of the warehouse scan distance (vslot 10). New in BFME 2: the depleted voice
+// (data +0x90) is submitted as a local 0x88-byte event prefix with the object's
+// id (the rowed 0x002D9531), where ZH kept the event in the update and its
+// playing handle; the box notification is the rowed Object::rva00290758.
+// The distance is built in three locals first, which gives retail's three
+// movss loads ahead of the subss chain.
 //
 // ?createMachines@WorkerAIUpdate@@AAEXXZ, retail 0x004A9ED5, 218 bytes. As in
 // ZH: without a worker machine, make one (0x3C bytes, plain operator new;
@@ -144,6 +158,8 @@ enum ObjectID
 {
 	INVALID_ID = 0
 };
+
+#include "Common/BfmeAudioEventPrefix136.h"
 
 class Thing;
 class ModuleData;
@@ -467,6 +483,7 @@ public:
 	void setStatus(ObjectStatusTypes bit, Bool set);
 	void rva0028CFB2(const int *clear, const int *set);
 	void rva00290758(Int a1, Int a2);
+	Player *getControllingPlayer() const;
 	__declspec(dllimport) __forceinline void setConstructionPercent(Real percent) { m_constructionPercent = percent; }
 	void rva0028AE6D();
 	__forceinline void clearModelConditionState(ModelConditionFlagType mc)
@@ -516,6 +533,12 @@ public:
 	UnsignedInt rva003B0CB3(UnsignedInt amount, Rva0039B795 *stats, Bool flag);
 };
 
+class ResourceGatheringManager
+{
+public:
+	Object *findBestSupplyWarehouse(Object *forWhom);
+};
+
 enum PlayerType
 {
 	PLAYER_HUMAN,
@@ -527,6 +550,7 @@ class Player
 public:
 	__declspec(dllimport) __forceinline PlayerType getPlayerType() const { return m_playerType; }
 	Rva003B0D7C *getMoney() { return &m_money; }
+	ResourceGatheringManager *getResourceGatheringManager() const { return m_resourceGatheringManager; }
 	Team *getDefaultTeam() const { return m_defaultTeam; }
 	Rva0039B795 *getStats() { return &m_stats; }
 	void onStructureCreated(Object *builder, Object *structure);
@@ -535,7 +559,9 @@ private:
 	PlayerType m_playerType; // +0x5C
 	unsigned char m_pad060[0x90 - 0x60];
 	Rva003B0D7C m_money; // +0x90
-	unsigned char m_pad091[0x2EC - 0x91];
+	unsigned char m_pad091[0x2E4 - 0x91];
+	ResourceGatheringManager *m_resourceGatheringManager; // +0x2E4
+	unsigned char m_pad2E8[0x2EC - 0x2E8];
 	Team *m_defaultTeam; // +0x2EC
 	unsigned char m_pad2F0[0x3BC - 0x2F0];
 	Rva0039B795 m_stats; // +0x3BC
@@ -732,6 +758,8 @@ struct WorkerAIUpdateModuleData
 {
 	unsigned char m_pad00[0x64];
 	Int m_64; // +0x64
+	unsigned char m_pad68[0x90 - 0x68];
+	OpaqueRefElement4 m_suppliesDepletedVoice; // +0x90
 };
 
 class SupplyTruckAIInterface
@@ -740,9 +768,9 @@ public:
 	virtual void supplyTruckSlot0() = 0;
 	virtual void st01() = 0; virtual void st02() = 0;
 	virtual Bool rva004A98AC() = 0; // vslot 3 (+0x0C)
-	virtual void st04() = 0;
+	virtual Bool gainOneBox(Int remainingStock) = 0; // vslot 4 (+0x10)
 	virtual void st05() = 0; virtual void st06() = 0; virtual void st07() = 0; virtual void st08() = 0;
-	virtual void st09() = 0; virtual void st10() = 0; virtual void st11() = 0;
+	virtual void st09() = 0; virtual Real getWarehouseScanDistance() const = 0; virtual void st11() = 0; // vslot 10 (+0x28)
 	virtual Bool isForcedIntoWantingState() const = 0; // vslot 12 (+0x30)
 };
 
@@ -758,6 +786,24 @@ inline void zeroCoord(Coord3D &c)
 	c.y = 0.0f;
 	c.z = 0.0f;
 }
+
+class Rva002D9531
+{
+public:
+	void rva002D9531(Int objectID);
+};
+
+class AudioManager
+{
+public:
+	virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
+	virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+	virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+	virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+	virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
+	virtual Int addAudioEvent(BfmeAudioEventPrefix136 *event); // vslot 25 (+0x64)
+};
+extern AudioManager *TheAudio;
 
 // The dock point element: an out-of-line empty ctor and dtor (retail's
 // __ehvec_ctor arguments, the ICF-folded 0x0047A6A9 and 0x000B3FD0).
@@ -776,6 +822,7 @@ public:
 	virtual void onDelete();
 	virtual void supplyTruckSlot0();
 	virtual Bool rva004A98AC();
+	virtual Bool gainOneBox(Int remainingStock);
 	virtual void exitingSupplyTruckState();
 	virtual Bool isForcedIntoWantingState() const;
 	virtual void newTask(DozerTask task, Object *target);
@@ -974,6 +1021,48 @@ Bool WorkerAIUpdate::rva004A98AC()
 	if (m_4A0 == 0)
 		return FALSE;
 	--m_4A0;
+	getObject()->rva00290758(getWorkerAIUpdateModuleData()->m_64, m_4A0);
+	return TRUE;
+}
+
+Bool WorkerAIUpdate::gainOneBox(Int remainingStock)
+{
+	if (getWorkerAIUpdateModuleData() && m_4A0 >= getWorkerAIUpdateModuleData()->m_64)
+		return FALSE;
+
+	++m_4A0;
+
+	if (remainingStock == 0)
+	{
+		Object *bestWarehouse = getObject()->getControllingPlayer()->getResourceGatheringManager()->findBestSupplyWarehouse(getObject());
+
+		Bool playDepleted = FALSE;
+		if (bestWarehouse)
+		{
+			Real dx = getObject()->getPosition()->x;
+			Real dy = getObject()->getPosition()->y;
+			Real dz = getObject()->getPosition()->z;
+			dx -= bestWarehouse->getPosition()->x;
+			dy -= bestWarehouse->getPosition()->y;
+			dz -= bestWarehouse->getPosition()->z;
+			Coord3D delta;
+			delta.x = dx;
+			delta.y = dy;
+			delta.z = dz;
+			if (delta.length() > getWarehouseScanDistance() / 4)
+				playDepleted = TRUE;
+		}
+		else
+			playDepleted = TRUE;
+
+		if (playDepleted && getWorkerAIUpdateModuleData()->m_suppliesDepletedVoice.referent != 0)
+		{
+			BfmeAudioEventPrefix136 voice(getWorkerAIUpdateModuleData()->m_suppliesDepletedVoice, 0);
+			((Rva002D9531 *)&voice)->rva002D9531(getObject()->getID());
+			TheAudio->addAudioEvent(&voice);
+		}
+	}
+
 	getObject()->rva00290758(getWorkerAIUpdateModuleData()->m_64, m_4A0);
 	return TRUE;
 }
