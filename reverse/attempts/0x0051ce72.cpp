@@ -1,12 +1,9 @@
 // ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
 // partial score=0.99 date=2026-10-13
 // ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
-// partial score=0.99 date=2026-10-13
-// ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
 // partial score=0.98 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-// R3 trials (still 411B vs 407B, sole and-[ebp-4],0): by-value formatted (same), throw() on formatter (same). The and clears param-temp guard retail omits; copy call present in both so param stays by-value.
 //
 // BFME2's score screen Apt callbacks, 0x0051BF75 onward, bound by these
 // names ("AptScoreScreen::OnInitialized" ...) as member pointers by the
