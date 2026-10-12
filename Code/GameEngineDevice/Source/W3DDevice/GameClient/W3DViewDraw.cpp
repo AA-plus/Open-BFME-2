@@ -6,7 +6,7 @@
 // the primary View vtable / calcDeltaScroll 0x00085FA8 run on this-0xB4.
 // Zero Hour / BFME1 W3DView::draw is the donor; WB 0x0098CCC0 gives the BFME2
 // statement order: scene custom pass modes 0/3/4/5/6 with the rowed screen-filter
-// select 0x000756BF / dispatch 0x000756F1 (display-size Coord2D), the 0x00DFF490
+// select 0x000756BF / dispatch 0x000756F1 (display-size Coord2D), the 0x00DFF490 (g_screenFilterPass)
 // pass setter, the debug-AI path / goal (3) / waypoint (7) / bridge (2) overlays
 // drawn through W3DDisplay 0x0004D664, then the post-draw iterate, ten layer
 // flushes 0x0023998E and the 2D scene render 0x0006EE27.
@@ -87,8 +87,8 @@ Rva001021F7 *Rva00102215Get();
 bool Rva000756BFSelect(int filter, int skip, int mode);
 bool Rva000756F1Dispatch(int filter, int mode, int delta, int extra, int size);
 
-extern int g_Va00DFF490;
-static inline void setFilterPass(int pass) { g_Va00DFF490 = (pass == -1) ? g_Va00DFF490 : pass; }
+extern int g_screenFilterPass;
+static inline void setFilterPass(int pass) { g_screenFilterPass = (pass == -1) ? g_screenFilterPass : pass; }
 
 bool ClipLine2D(ICoord2D *p1, ICoord2D *p2, ICoord2D *c1, ICoord2D *c2, IRegion2D *clipRegion);
 
