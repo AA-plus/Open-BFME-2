@@ -95,6 +95,25 @@ from functools import lru_cache
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _git_env(cwd):
+    """Use the explicit checkout, including from a hook or rebase exec."""
+    env = dict(os.environ)
+    # Git exports repository-local paths to hooks and rebase commands. They
+    # override cwd/-C, so a submodule lookup can otherwise read the parent's
+    # HEAD, index or object store. Keep configuration and authentication.
+    for name in (
+        "GIT_DIR", "GIT_WORK_TREE", "GIT_COMMON_DIR", "GIT_INDEX_FILE",
+        "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+        "GIT_GRAFT_FILE", "GIT_SHALLOW_FILE", "GIT_PREFIX",
+        "GIT_INTERNAL_SUPER_PREFIX", "GIT_IMPLICIT_WORK_TREE",
+    ):
+        env.pop(name, None)
+    env["GIT_CEILING_DIRECTORIES"] = str(Path(cwd).resolve().parent)
+    return env
+
+
 # ---- per-repository configuration ------------------------------------------
 # Everything that differs from Open-BFME-1's tools/claims.py by design is in
 # this block or marked BFME2 below. Keep the rest identical to make syncing a
@@ -110,7 +129,7 @@ SYMBOLS = "reverse/symbols.csv"
 # pushes sets `git config bfme.claimNamespace refs/heads/claims/`.
 NS = (os.environ.get("BFME_CLAIM_NS")
       or subprocess.run(["git", "-C", str(ROOT), "config", "--get", "bfme.claimNamespace"],
-                        capture_output=True, text=True).stdout.strip()
+                        capture_output=True, text=True, env=_git_env(ROOT)).stdout.strip()
       or "refs/claims/")
 # -----------------------------------------------------------------------------
 SEEN = "refs/claims-seen/"          # local mirror; never pushed
@@ -171,7 +190,7 @@ def _git(*args, cwd=None, input_text=None, timeout=60):
     # inherits that checkout's origin, and a "no remote" test created real
     # claims on Open-BFME-1 (review 2026-09-29). Every caller passes a
     # checkout root, so discovery may start there and nowhere else.
-    env = dict(os.environ, GIT_CEILING_DIRECTORIES=str(Path(cwd).resolve().parent))
+    env = _git_env(cwd)
     try:
         return subprocess.run(["git", *extra, *args], cwd=cwd, capture_output=True, text=True,
                               input=input_text, timeout=timeout, env=env)
@@ -791,7 +810,7 @@ def _text_blob_variants(blob, root=None):
     """
     try:
         base = Path(root or ROOT)
-        env = dict(os.environ, GIT_CEILING_DIRECTORIES=str(base.resolve().parent))
+        env = _git_env(base)
         got = subprocess.run(["git", "cat-file", "blob", blob], cwd=root or ROOT,
                              capture_output=True, timeout=60, env=env)
         data = got.stdout

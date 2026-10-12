@@ -597,3 +597,40 @@ def test_crlf_library_bytes_are_not_text_normalized_during_settlement(hosts):
     (a / "Code/x.lib").write_bytes(b"archive\r\n")
     claims.queue_landed(0x100, row)
     assert claims.release_landed() == ([], [0x100])
+
+
+def _inherit_parent_git_environment(monkeypatch, parent):
+    for name, value in {
+        "GIT_DIR": str(parent / ".git"),
+        "GIT_WORK_TREE": str(parent),
+        "GIT_INDEX_FILE": str(parent / ".git/index"),
+        "GIT_COMMON_DIR": str(parent / ".git"),
+    }.items():
+        monkeypatch.setenv(name, value)
+
+
+@pytest.mark.parametrize("dirty", [False, True])
+def test_parent_hook_environment_does_not_rebind_submodule(hosts, monkeypatch, dirty):
+    a = hosts("a")
+    sub = _with_submodule(a)
+    expected = claims._git("rev-parse", "HEAD", cwd=sub).stdout.strip()
+    if dirty:
+        (sub / "x.h").write_text("#define VERSION 2\n", encoding="utf-8")
+    _verified(a, "Code/x.cpp", ["reference/open-bfme-1/x.h"])
+    _inherit_parent_git_environment(monkeypatch, a)
+    evidence, why = claims.landing_evidence("Code/x.cpp", a)
+    if dirty:
+        assert "x.h" in why and "differs from its commit" in why
+    else:
+        assert why == "", why
+        assert evidence["deps"]["reference/open-bfme-1"] == expected
+
+
+def test_parent_hook_environment_does_not_rebind_binary_blob_lookup(hosts, monkeypatch):
+    a = hosts("a")
+    sub = _with_submodule(a)
+    blob = claims._git("rev-parse", "HEAD:x.h", cwd=sub).stdout.strip()
+    data = (sub / "x.h").read_bytes().replace(b"\r\n", b"\n")
+    expected = {claims._blob_id(data), claims._blob_id(data.replace(b"\n", b"\r\n"))}
+    _inherit_parent_git_environment(monkeypatch, a)
+    assert claims._text_blob_variants(blob, sub) == expected
