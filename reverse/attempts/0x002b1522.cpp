@@ -1,5 +1,13 @@
 // ?DoXfer@Player@@QAEXPAVXfer@@@Z
-// partial score=0.99 date=2026-10-11
+// partial score=0.995 date=2026-10-12
+// ?DoXfer@Player@@QAEXPAVXfer@@@Z
+// 2026-10-12 (claude-opus-5-5): permute v3 found `char full` (not bool) for
+// the !lightCRC() flag, which removes most of the old diff; snapshotting
+// money/+0x90 before the upgrade count fixes the count loop (retail zero in
+// EBX, list head in EAX). 3079 of 3080 B. Left: retail's first load-loop test
+// is cmp word [count],0 where ours uses bx (1 byte), one stack home at
+// 0x2B1C23 ([ebp-0x54] vs [ebp-0x50]), and callees 0x2AF236 / 0x2AF33B are
+// unrowed banked partials that must land first (no pins).
 // cl: /O1 /G7 /arch:SSE /GX /MD /DNDEBUG /Ireference/shims/bfme2_ascii
 // stlport
 // Native 2B1522..2B212A, 3080 bytes, WB C205C0 Player::DoXfer (Player.cpp
@@ -187,14 +195,14 @@ template<class T> static __forceinline PlayerListView &listView(T &list) {return
 void Player::DoXfer(Xfer *raw)
 {
  PlayerXferView *xfer=reinterpret_cast<PlayerXferView*>(raw);
- bool full=!xfer->lightCRC();
+ char full=!xfer->lightCRC();
  PlayerVersion version;
  xfer->version(&version);
  if(xfer->crc()) xfer->boolean(&m_field33E);
  if(full) {
   xfer->snapshot(&m_money); xfer->snapshot(&m_field90);
-  PlayerUpgradeNode *upgrade=m_upgradeList;
   unsigned short upgradeCount=0;
+  PlayerUpgradeNode *upgrade=m_upgradeList;
   for(;upgrade;upgrade=upgrade->next)++upgradeCount;
   xfer->ushort(&upgradeCount); xfer->boolean(&m_isPreorder);
   if(xfer->loading()) {
