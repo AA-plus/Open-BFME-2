@@ -1,11 +1,16 @@
-// cl: /DNDEBUG /MD
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// stlport
+#include <list>
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
+class Drawable;
 //
 // BloodthirstyUpdate +0x20 interface override (vtable 0x00C3EFC4, installed
 // by the matched ctor 0x0044E0AA and dtor 0x0044DFE0). Overrides of a
 // non-primary base take the +0x20 subobject this: the module data (+0x04) is
 // [this-0x1C], the Object (+0x08) [this-0x18], m_bestTargetID (+0x24, the
 // member name the matched ctor carries from the BFME 1 donor) [this+4].
-// Names by address; the slot names are not established.
+// Slot0 is sacrificeHorde (WB1166AA0); the other address names retain their
+// established uncertainty until separate identity evidence names them.
 //
 // It resolves the candidate through the rowed Object::rva002931F5(false),
 // fetches its rowed 0x0028C1A9 interface (slots 6 and 7 read a state and an
@@ -56,10 +61,12 @@ enum UpdateSleepTime
 	UPDATE_SLEEP_NONE = 1
 };
 extern const int g_009BA4E4;
+class Object;
 class AICommandInterface
 {
 public:
 	void aiIdle(CommandSourceType cmdSource);
+	void aiForceAttackObject(Object *victim, int maxShots, CommandSourceType source);
 };
 
 #define VSLOTS10(P) \
@@ -111,6 +118,8 @@ public:
 class Object
 {
 public:
+	Drawable *getDrawable() const;
+	const Coord3D *getPosition() const { return &m_position; }
 	void setModelConditionStateForHorde(ModelConditionFlagType flag);
 	void clearModelConditionStateForHorde(ModelConditionFlagType flag);
 	void setStatus(ObjectStatusTypes status, bool set);
@@ -125,7 +134,9 @@ public:
 	ObjectID getID() const { return m_id; }
 	AIUpdateInterface *getAI() { return m_ai; }
 private:
-	unsigned char m_pad00[0x74];
+	unsigned char m_pad00[0x38];
+	Coord3D m_position; // +0x38
+	unsigned char m_pad44[0x74 - 0x44];
 	ObjectID m_id; // +0x74
 	unsigned char m_pad78[0x250 - 0x78];
 	Rva250Module *m_250; // +0x250
@@ -160,7 +171,7 @@ struct B10 { virtual UpdateSleepTime update() = 0; unsigned char m_pad[12]; };
 class Iface20
 {
 public:
-	virtual void s00();
+	virtual void sacrificeHorde(Object *victim, CommandSourceType source) = 0;
 	virtual void cancelSacrifice() = 0;
 	virtual bool rva0044E12F(Object *obj) = 0;
 	virtual bool rva0044E1B9(Object *obj);
@@ -173,6 +184,7 @@ public:
 class BloodthirstyUpdate : public B00, public B0C, public B10, public Iface20
 {
 public:
+	virtual void sacrificeHorde(Object *victim, CommandSourceType source);
 	virtual bool rva0044E12F(Object *obj);
 	virtual void addSacrifice(Object *victim);
 	virtual void cancelSacrifice();
@@ -268,4 +280,71 @@ UpdateSleepTime BloodthirstyUpdate::update()
 		}
 	}
 	return (UpdateSleepTime)(g_009BA4E4 * 2 + 1);
+}
+
+class DrawableList : public _STL::list<Drawable *>
+{
+public:
+	~DrawableList() throw();
+};
+class PickAndPlayInfo
+{
+public:
+	PickAndPlayInfo();
+	bool unknown00;
+	Drawable *target;
+	void *unknown08;
+	int unknown0C;
+	unsigned unknown10;
+	Coord3D position;
+	unsigned unknown20;
+};
+class GameMessage
+{
+public:
+	enum Type { MSG_BFME2_0x7E9 = 0x7e9 };
+};
+void pickAndPlayUnitVoiceResponse(const DrawableList *, GameMessage::Type, PickAndPlayInfo *);
+
+// Native44E374..44E4A9/309B, +20 interface slot0, RET8. WB1166AA0 independently
+// identifies sacrificeHorde and the victim/source ABI; native field accesses
+// establish Object position38,ID74,AI258 and our targetID at subobject+4.
+// Named existing voice callers prove the DrawableList/PickAndPlayInfo ABI.
+// The retained BF1 CEE35 Bloodthirsty donor supports the secondary interface
+// and filter family, but contains no sacrificeHorde body; WB/native are the
+// behavioral evidence here. Native0x7E9 is the voice message, not a ZH enum.
+// Keeping the owner ID in a local reproduces the native ESI interface/EDI
+// self allocation and permits the dead this home to hold the temporary list.
+// PickAndPlayInfo's unused fields retain opaque labels; no new pins or aliases.
+void BloodthirstyUpdate::sacrificeHorde(Object *victim, CommandSourceType source)
+{
+	Object *self = m_object;
+	if (!victim || !self)
+		return;
+	Object *resolved = victim->rva002931F5(false);
+	if (!resolved)
+		return;
+	Rva0028C1A9Interface *iface = (Rva0028C1A9Interface *)resolved->rva0028C1A9();
+	if (!iface)
+		return;
+	ObjectID owner = iface->getOwnerID();
+	if (owner == 0)
+	{
+		AIUpdateInterface *ai = self->getAI();
+		if (ai)
+		{
+			m_bestTargetID = resolved->getID();
+			iface->release(self->getID());
+			ai->getCommandInterface()->aiForceAttackObject(victim, 0x7fffffff, source);
+			self->rva00346C53(OBJECT_STATUS_41, true);
+			resolved->setStatus(OBJECT_STATUS_4A, true);
+			resolved->rva00346C53(OBJECT_STATUS_4A, true);
+			PickAndPlayInfo info;
+			info.position = *resolved->getPosition();
+			info.target = resolved->getDrawable();
+			DrawableList list;
+			list.push_back(self->getDrawable());
+			pickAndPlayUnitVoiceResponse(&list, GameMessage::MSG_BFME2_0x7E9, &info);
+		}
+	}
 }
