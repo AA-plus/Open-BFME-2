@@ -40782,3 +40782,14 @@ uw_007876e0	0x007876E0	11	landed	add_match verified Code/GameEngine/Source/Commo
 ?rva000CF4C2@W3DFloorDraw@@QAEX_N@Z	0x000CF4C2	20	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/Rva000CF2CF.cpp 20B; W3DFloorDraw vftable entry; stores a changed plus16 flag and refreshes via 0x000CF2CF
 ?rva000CFA99@W3DLightDraw@@UAEX_N@Z	0x000CFA99	24	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DLightDrawXfer.cpp 24B; W3DLightDraw vftable entry before xfer; disables the plus0C dynamic light while the flag is set
 ?rva00201153@SnowManager@@UAEPAVWeatherSetting@@XZ	0x00201153	18	landed	add_match verified Code/GameEngine/Source/GameClient/Snow.cpp 18B; SnowManager vtable slot 22; final override of TheWeatherSetting from its base entry via friend_getFinalOverride
+?rva005CC4DA@Rva005CC4DA@@QAEXXZ	0x005CC4DA	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Tail jump to slot 2 of the plus08 object of the plus10 object
+?rva005CC4E5@Rva005CC4E5@@QAEXXZ	0x005CC4E5	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Tail jump to slot 5 of the plus08 object of the plus10 object
+?rva005CC4F0@Rva005CC4F0@@QAEXXZ	0x005CC4F0	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Tail jump to slot 6 of the plus08 object of the plus10 object
+?rva005CC522@Rva005CC522@@QAEXXZ	0x005CC522	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Tail jump to slot 1 of the plus08 object of the plus10 object
+?rva005CC52D@Rva005CC52D@@QAEXXZ	0x005CC52D	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Tail jump to slot 4 of the plus08 object of the plus10 object
+?rva005CC538@Rva005CC538@@QAEXXZ	0x005CC538	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Tail jump to slot 3 of the plus08 object of the plus10 object
+?rva005CC984@Rva005CC984@@QAEXH@Z	0x005CC984	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Slot 6 of the plus24 object with the argument unused
+?rva005CC98F@Rva005CC98F@@QAEXH@Z	0x005CC98F	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Slot 2 of the plus24 object with the argument unused
+?rva005CC99A@Rva005CC99A@@QAEXH@Z	0x005CC99A	15	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 15B; Slot 3 of the plus24 object with the argument unused
+?rva005CC9A9@Rva005CC9A9@@QAEXH@Z	0x005CC9A9	15	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 15B; Slot 4 of the plus24 object with the argument unused
+?rva005CC9B8@Rva005CC9B8@@QAEXH@Z	0x005CC9B8	11	landed	add_match verified Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp 11B; Slot 5 of the plus24 object with the argument unused

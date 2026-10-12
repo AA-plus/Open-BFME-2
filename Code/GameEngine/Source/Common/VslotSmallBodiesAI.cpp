@@ -918,4 +918,163 @@ void Rva005E6863::rva005E6863(Int, Int)
 		((Rva005F62FE *)p)->rva005F62FE(false);
 }
 
+// 0x005CC4DA..0x005CC538 (six bodies in two tables, 11 bytes each): slot N
+// of the object at +0x08 of the receiver's +0x10 object, as a tail jump.
+template <int N>
+struct Rva005CC4DAInner
+{
+	char m_pad00[0x08];
+	Rva004888F8Target<N> *m_08;
+};
 
+// 0x005CC4DA: slot 2.
+class Rva005CC4DA
+{
+public:
+	void rva005CC4DA();
+private:
+	char m_pad00[0x10];
+	Rva005CC4DAInner<2> *m_10;
+};
+void Rva005CC4DA::rva005CC4DA()
+{
+	m_10->m_08->target();
+}
+
+// 0x005CC4E5: slot 5.
+class Rva005CC4E5
+{
+public:
+	void rva005CC4E5();
+private:
+	char m_pad00[0x10];
+	Rva005CC4DAInner<5> *m_10;
+};
+void Rva005CC4E5::rva005CC4E5()
+{
+	m_10->m_08->target();
+}
+
+// 0x005CC4F0: slot 6.
+class Rva005CC4F0
+{
+public:
+	void rva005CC4F0();
+private:
+	char m_pad00[0x10];
+	Rva005CC4DAInner<6> *m_10;
+};
+void Rva005CC4F0::rva005CC4F0()
+{
+	m_10->m_08->target();
+}
+
+// 0x005CC522: slot 1.
+class Rva005CC522
+{
+public:
+	void rva005CC522();
+private:
+	char m_pad00[0x10];
+	Rva005CC4DAInner<1> *m_10;
+};
+void Rva005CC522::rva005CC522()
+{
+	m_10->m_08->target();
+}
+
+// 0x005CC52D: slot 4.
+class Rva005CC52D
+{
+public:
+	void rva005CC52D();
+private:
+	char m_pad00[0x10];
+	Rva005CC4DAInner<4> *m_10;
+};
+void Rva005CC52D::rva005CC52D()
+{
+	m_10->m_08->target();
+}
+
+// 0x005CC538: slot 3.
+class Rva005CC538
+{
+public:
+	void rva005CC538();
+private:
+	char m_pad00[0x10];
+	Rva005CC4DAInner<3> *m_10;
+};
+void Rva005CC538::rva005CC538()
+{
+	m_10->m_08->target();
+}
+
+// 0x005CC984..0x005CC9B8 (one table, RET 4 with the argument unused): slot N
+// of the +0x24 object; the two middle bodies first set (slot 3) or clear
+// (slot 4) the +0x23 flag.
+class Rva005CC984
+{
+public:
+	void rva005CC984(Int unused);
+private:
+	char m_pad00[0x24];
+	Rva004888F8Target<6> *m_24;
+};
+void Rva005CC984::rva005CC984(Int)
+{
+	m_24->target();
+}
+class Rva005CC98F
+{
+public:
+	void rva005CC98F(Int unused);
+private:
+	char m_pad00[0x24];
+	Rva004888F8Target<2> *m_24;
+};
+void Rva005CC98F::rva005CC98F(Int)
+{
+	m_24->target();
+}
+class Rva005CC99A
+{
+public:
+	void rva005CC99A(Int unused);
+private:
+	char m_pad00[0x23];
+	bool m_23;
+	Rva004888F8Target<3> *m_24;
+};
+void Rva005CC99A::rva005CC99A(Int)
+{
+	m_23 = true;
+	m_24->target();
+}
+class Rva005CC9A9
+{
+public:
+	void rva005CC9A9(Int unused);
+private:
+	char m_pad00[0x23];
+	bool m_23;
+	Rva004888F8Target<4> *m_24;
+};
+void Rva005CC9A9::rva005CC9A9(Int)
+{
+	m_23 = false;
+	m_24->target();
+}
+class Rva005CC9B8
+{
+public:
+	void rva005CC9B8(Int unused);
+private:
+	char m_pad00[0x24];
+	Rva004888F8Target<5> *m_24;
+};
+void Rva005CC9B8::rva005CC9B8(Int)
+{
+	m_24->target();
+}
