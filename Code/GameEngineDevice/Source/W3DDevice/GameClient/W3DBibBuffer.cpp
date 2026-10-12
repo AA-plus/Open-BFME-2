@@ -240,29 +240,11 @@ void W3DBibBuffer::loadBibsInVertexAndIndexBuffers(void)
 /** Constructor. Sets m_initialized to true if it finds the w3d models it needs
 for the bibs. */
 //=============================================================================
-// byte-exact reconstruction: Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DBibBuffer_ctor_Thunk.cpp
-// ??0W3DBibBuffer@@QAE@XZ present-unmatched
-W3DBibBuffer::W3DBibBuffer(void)
-{
-	m_initialized = false;
-	m_vertexBib = NULL;
-	m_indexBib = NULL;
-	m_bibTexture = NULL;
-	m_curNumBibVertices=0;
-	m_curNumBibIndices=0;
-	clearAllBibs();
-	m_indexBibSize = INITIAL_BIB_INDEX;
-	m_vertexBibSize = INITIAL_BIB_VERTEX;
-	allocateBibBuffers();
-
-	m_bibTexture = NEW_REF(TextureClass, ("TBBib.tga"));
-	m_highlightBibTexture = NEW_REF(TextureClass, ("TBRedBib.tga"));
-	m_bibTexture->Get_Filter().Set_U_Addr_Mode(TextureFilterClass::TEXTURE_ADDRESS_CLAMP);
-	m_bibTexture->Get_Filter().Set_V_Addr_Mode(TextureFilterClass::TEXTURE_ADDRESS_CLAMP);
-	m_highlightBibTexture->Get_Filter().Set_U_Addr_Mode(TextureFilterClass::TEXTURE_ADDRESS_CLAMP);
-	m_highlightBibTexture->Get_Filter().Set_V_Addr_Mode(TextureFilterClass::TEXTURE_ADDRESS_CLAMP);
-	m_initialized = true;
-}
+// BFME 2's constructor (0x000D42B3: counted particle-texture holders loaded
+// through BFME2LoadParticleTexture, clamp set on each filter) is matched in
+// W3DBibBufferConstructor.cpp, which also emits the TBib array constructor;
+// the Zero Hour body that stood here did not match retail and only
+// duplicated that definition at link time.
 
 
 //=============================================================================
@@ -437,30 +419,8 @@ void W3DBibBuffer::removeBibDrawable(DrawableID id)
 //=============================================================================
 /** Draws the bibs.  Uses camera to cull. */
 //=============================================================================
-// byte-exact reconstruction: Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DBibBuffer_renderBibs_Thunk.cpp
-// ?renderBibs@W3DBibBuffer@@QAEXXZ present-unmatched
-void W3DBibBuffer::renderBibs()
-{
-
-	loadBibsInVertexAndIndexBuffers();
-
-	if (m_curNumBibIndices == 0) {
-		return;
-	}
-	// Setup the vertex buffer, shader & texture.
-	DX8Wrapper::Set_Index_Buffer(m_indexBib,0);
-	DX8Wrapper::Set_Vertex_Buffer(m_vertexBib);
-	DX8Wrapper::Set_Shader(detailAlphaShader);
-	if (m_curNumNormalBibIndices) {
-		DX8Wrapper::Set_Texture(0,m_bibTexture);
-		DX8Wrapper::Draw_Triangles(	0, m_curNumNormalBibIndices/3, 0,	m_curNumNormalBibVertex);
-	}
-	if (m_curNumBibIndices>m_curNumNormalBibIndices) {
-		DX8Wrapper::Set_Texture(0,m_highlightBibTexture);
-// ?Draw_Triangles@DX8Wrapper@@ present-unmatched
-		DX8Wrapper::Draw_Triangles(	m_curNumNormalBibIndices, (m_curNumBibIndices-m_curNumNormalBibIndices)/3, 
-						m_curNumNormalBibVertex,	m_curNumBibVertices-m_curNumNormalBibVertex);
-	}
-}
+// BFME 2's renderBibs (0x000D4228) is matched in
+// Code/GameEngine/Source/Common/Rva000D4228.cpp; the Zero Hour body that
+// stood here did not match retail and only duplicated that definition.
 
 

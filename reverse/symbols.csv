@@ -14730,7 +14730,6 @@ _Rva001117E3Downsample,0x001117E3,callee of ?updateMips@TileData@@QAEXXZ
 ?rva000EBFD1@Rva000EC9C6@@QAEXXZ,0x000EBFD1,callee of ?rva000EC9C6@Rva000EC9C6@@QAEXH@Z
 ?rva000E153A@Rva000E15D1@@QAEXXZ,0x000E153A,callee of ?rva000E15D1@Rva000E15D1@@QAEXXZ
 ?rva00115044@Rva00115044El@@QAEXPAURva000E15D1Rec@@HHE@Z,0x00115044,callee of ?rva000E15D1@Rva000E15D1@@QAEXXZ
-?rva000D3DCF@W3DBibBuffer@@IAEXXZ,0x000D3DCF,callee of ?renderBibs@W3DBibBuffer@@QAEXXZ
 ?rva00112259@Rva00115044El@@QAEXXZ,0x00112259,callee of ?rva000E127B@Rva000E127B@@QAEXH@Z
 ??4?$list@URva000B419E@@V?$allocator@URva000B419E@@@_STL@@@_STL@@QAEAAV01@ABV01@@Z,0x000BDBFA,callee of ??4BfmePod248@@QAEAAU0@ABU0@@Z
 ?renderShadows@W3DVolumetricShadowManagerV2@@QAEXAAVRenderInfoClass@@@Z,0x00107F8B,callee of ?renderShadows@W3DVolumetricShadowManager@@QAEXAAVRenderInfoClass@@@Z

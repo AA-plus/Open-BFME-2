@@ -29,7 +29,7 @@ public:
 	void renderBibs();
 
 protected:
-	void rva000D3DCF();
+	void loadBibsInVertexAndIndexBuffers();
 
 private:
 	VertexBufferClass *m_vertexBib;
@@ -47,7 +47,7 @@ private:
 
 void W3DBibBuffer::renderBibs()
 {
-	rva000D3DCF();
+	loadBibsInVertexAndIndexBuffers();
 	if (m_curNumBibIndices == 0)
 		return;
 	DX8Wrapper::Set_Index_Buffer(m_indexBib, 0);

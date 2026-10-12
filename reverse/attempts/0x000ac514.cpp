@@ -1,23 +1,18 @@
 // ?getTerrainColorAt@WorldHeightMap@@QAEXMMPAURGBColor@@@Z
-// partial score=0.97 date=2026-10-10
-// ?getTerrainColorAt@WorldHeightMap@@QAEXMMPAURGBColor@@@Z
-// partial score=0.97
-// 299B exact size; the RGB555 unpack is an inline asm block (matches retail EBX/BH merge, pointer-through-memory store).
-// Only difference: retail places the first POP ECX of the floor() call cleanup before the FSTP [ebp+8]; cl puts FSTP first (4 lines).
-// Tried: flag sweep (O1/Os/G5/G6/G7/Gy/Zi), x reassign, separate float temps, double math variants, QIfist (incompatible with arch:SSE).
-// ?getTerrainColorAt@WorldHeightMap@@QAEXMMPAURGBColor@@@Z
-// partial score=0.75 date=2026-10-09
+// partial score=0.987 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Oy-
+// ?getTerrainColorAt@WorldHeightMap@@QAEXMMPAURGBColor@@@Z: ZH x/MAP_XY_FACTOR through an inline WWMath::Floor wrapper; second floor now exact, only the first call keeps fstp ahead of the first cleanup pop ecx (4 bytes). The RGB555 unpack is still inline asm from the earlier bank (not admissible as is).
 extern "C" __declspec(dllimport) double __cdecl floor(double);
 __forceinline long round_float(float f) { long i; __asm { fld [f]
  fistp [i] } return i; }
+struct WWMath { static __forceinline float Floor(float val) { return (float)floor(val); } };
 struct RGBColor { float red,green,blue; };
 class Rva000ABD00 { public: int rva000ABD00(unsigned int); };
 struct Tile { char pad[0x2ab0]; unsigned short pixel; };
 class WorldHeightMap { public: void getTerrainColorAt(float,float,RGBColor*); private: char pad[8]; int width,height,border; char pad14[0x20-0x14]; int dataSize; char pad24[0x98-0x24]; short *tileNdxes; };
 void WorldHeightMap::getTerrainColorAt(float x,float y,RGBColor* out) {
- int ix=round_float((float)floor((double)(x*.1f)));
- int iy=round_float((float)floor((double)(y*.1f)));
+ int ix=round_float(WWMath::Floor(x/10.0f));
+ int iy=round_float(WWMath::Floor(y/10.0f));
  ix+=border; iy+=border;
  out->red=out->green=out->blue=0;
  if(ix<0)ix=0;if(iy<0)iy=0;
