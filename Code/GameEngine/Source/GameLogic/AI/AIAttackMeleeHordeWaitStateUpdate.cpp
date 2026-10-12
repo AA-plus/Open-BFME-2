@@ -1,5 +1,8 @@
 // cl: /O1 /G7 /DNDEBUG /MD
-// ?update@Rva0033F364@@UAE?AW4StateReturnType@@XZ @0x003492BD 225B
+// ?update@AIAttackMeleeHordeWaitState@@UAE?AW4StateReturnType@@XZ @0x003492BD 225B
+// Renamed from placeholder Rva0033F364 — the WorldBuilder twin names
+// AIAttackMeleeHordeWaitState::update in EA's own AIStates.cpp (callgraph 5,
+// vslot 6); the class family is already real-named in the sibling units.
 // Evidence: vslot slot 6 of vtable 0x00810F40 owned by Rva0033F364 ctor; TurretStateMachine goal checks and frame gate via g_Va00DBA4E4 and TheGameLogic.
 
 typedef bool Bool;
@@ -119,7 +122,7 @@ protected:
 	unsigned m_hash; // +0x1C
 };
 
-class Rva0033F364 : public State
+class AIAttackMeleeHordeWaitState : public State
 {
 public:
 	virtual StateReturnType update();
@@ -127,7 +130,7 @@ private:
 	int m_20; // +0x20
 };
 
-StateReturnType Rva0033F364::update()
+StateReturnType AIAttackMeleeHordeWaitState::update()
 {
 	Object *owner = m_machine->m_owner;
 	if (m_machine->rva004D7ADD())
