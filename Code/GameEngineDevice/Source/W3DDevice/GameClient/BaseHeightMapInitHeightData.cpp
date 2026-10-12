@@ -1,18 +1,13 @@
-// ?initHeightData@BaseHeightMapRenderObjClass@@QAEHHHPAVWorldHeightMap@@PAX@Z
-// partial score=0.98 date=2026-10-11
-// ?initHeightData@BaseHeightMapRenderObjClass@@QAEHHHPAVWorldHeightMap@@PAX@Z
-// partial score=0.98 date=2026-10-11
 // cl: /O1 /Oy- /G7 /arch:SSE /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /DNDEBUG /MD /EHsc
 // stlport
 // BaseHeightMapRenderObjClass::initHeightData, retail 0x0006D6D9..0x0006DB1C (1091 B, RET 0x10).
 // Identity: WorldBuilder debug body (wb_show 0x6D6D9 --gd) has the ZH BaseHeightMap.cpp
 // initHeightData spine with BFME2 taint/four texture layers/asset preload/DX lock; callees rowed.
-// 2026-10-11 rework: compiles 1091 B, only three PUSH/LEA order swaps remain (stageThree/layer3/
-// layer4 operator= sites: retail lea ecx before push eax; first site push first like ours).
-// Keys found: REF_PTR_SET macro form fixes the map-store timing; a VISIBLE inline getHeight body
-// (not inlined at /O1, so a COMDAT for 0x62A58) makes DX re-read and DY in edi exactly; inline
-// getXExtent/getYExtent/getBorderSize getters stop the 2*border CSE; AssetList inline ctor and
-// separate << statements fix the asset block. Shader global 0xDB4140 still an extern placeholder.
+// Codegen keys: REF_PTR_SET macro form fixes the map-store timing; a visible inline getHeight body
+// (not inlined at /O1, so a COMDAT for 0x62A58) makes DX re-read and DY in edi; inline extent and
+// border getters stop the 2*border CSE; AssetList inline ctor and separate << statements fix the
+// asset block; the texture layers assign through a forced-inline TexSlot operator= so the slot
+// address is formed before the loaded handle is pushed. Shader global 0xDB4140 is an extern.
 #include "ascii_string.h"
 #include <set>
 class WorldHeightMap {
@@ -34,7 +29,7 @@ class W3DRoadBuffer {public:void setMap(WorldHeightMap*);};
 class BoundedShortGrid {public:
  short rva00062A58(int a,int b){int idx=m_stride*b+a;if(idx<0)return 0;if(idx>=m_capacity)return 0;if(m_data)return m_data[idx];return 0;}
  unsigned char m_unknown00[0x08];int m_stride;unsigned char m_unknown0C[0x20-0x0C];int m_capacity;short *m_data;};
-struct Region2D {struct Point {float x,y;}lo,hi;};
+#include "../../../../Libraries/Include/Lib/Region2D.h"
 class TreeBoundsView {public:char pad[0x1948];Region2D bounds;};
 class TextureBaseClass {public:void Release_Ref();};
 class TextureClass:public TextureBaseClass {};
@@ -47,6 +42,8 @@ public:TextureClass*Ptr;
  ~BFME2ParticleTextureHandle(){if(Ptr)Ptr->Release_Ref();}
 };
 BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char*,int,int);
+template<class T>class TexSlot:public RefCountPtr<T>{public:
+ __forceinline TexSlot&operator=(const BFME2ParticleTextureHandle&h){RefCountPtr<T>::operator=(*(const RefCountPtr<T>*)&h);return *this;}};
 void BFME_DX8_Thread_Lock();
 bool BFME_DX8_Thread_Assert();
 struct BFMEDX8DeviceLock {
@@ -211,14 +208,14 @@ private:
  float minHeight,maxHeight;
  char pad37E0[0x3814-0x37e0];unsigned int shader;
  VertexMaterialClass*material;
- RefCountPtr<TextureClass> stageTwo;
+ TexSlot<TextureClass> stageTwo;
  AsciiString stageTwoName,stageTwoDefault;
- RefCountPtr<TextureClass> stageThree;
+ TexSlot<TextureClass> stageThree;
  AsciiString macroName,macroDefault;
  bool flag;char pad3835[3];
- RefCountPtr<TextureClass> layer3;
+ TexSlot<TextureClass> layer3;
  AsciiString layer3Name,layer3Default;
- RefCountPtr<TextureClass> layer4;
+ TexSlot<TextureClass> layer4;
  AsciiString layer4Name,layer4Default;
  char pad3850[4];TreeBoundsView*treeBuffer;
  char pad3858[0x386c-0x3858];W3DRoadBuffer*roadBuffer;
@@ -237,9 +234,9 @@ int BaseHeightMapRenderObjClass::initHeightData(int x,int y,WorldHeightMap*pMap,
  if(pMap)data=pMap->data;
  if(treeBuffer){
   Region2D bounds;
-  bounds.lo.x=0;bounds.lo.y=0;
-  bounds.hi.x=(pMap->getXExtent()-2*pMap->getBorderSize())*10.0f;
-  bounds.hi.y=(pMap->getYExtent()-2*pMap->getBorderSize())*10.0f;
+  bounds.lo=0;bounds.y_min=0;
+  bounds.hi=(pMap->getXExtent()-2*pMap->getBorderSize())*10.0f;
+  bounds.y_max=(pMap->getYExtent()-2*pMap->getBorderSize())*10.0f;
   treeBuffer->bounds=bounds;
  }
  if(pMap){
@@ -274,12 +271,12 @@ int BaseHeightMapRenderObjClass::initHeightData(int x,int y,WorldHeightMap*pMap,
   assets<<layer4Name;
   ((Rva0006C995*)&assets)->rva0006C995((Rva001408C0Target*)"exscorch01.tga");
   bfmeMergeReceiverKeys((int)&assets);
-  stageTwo=*(RefCountPtr<TextureClass>*)&BFME2LoadParticleTexture(stageTwoName.str(),0,0);
-  stageThree=*(RefCountPtr<TextureClass>*)&BFME2LoadParticleTexture(macroName.str(),0,0);
+  stageTwo=BFME2LoadParticleTexture(stageTwoName.str(),0,0);
+  stageThree=BFME2LoadParticleTexture(macroName.str(),0,0);
   {
    BFMEDX8DeviceLock lock;
-   layer3=*(RefCountPtr<TextureClass>*)&BFME2LoadParticleTexture(layer3Name.str(),0,0);
-   layer4=*(RefCountPtr<TextureClass>*)&BFME2LoadParticleTexture(layer4Name.str(),0,0);
+   layer3=BFME2LoadParticleTexture(layer3Name.str(),0,0);
+   layer4=BFME2LoadParticleTexture(layer4Name.str(),0,0);
    ((Rva00067878*)this)->rva0006B3F3();
    ((Rva000686F2*)this)->rva000686F2();
    material=VertexMaterialClass::Get_Preset(VertexMaterialClass::PRELIT_DIFFUSE);
