@@ -299,3 +299,24 @@ void Matrix3D::Lerp(const Matrix3D &A, const Matrix3D &B, float factor, Matrix3D
 		result.Set_Translation(pos);
 	}
 }
+
+// ?Rva00711BB0Median@@YAMMMM@Z, retail 0x00711BB0 (58B). Ghidra-unlisted SSE
+// median of three floats between WWMath::Random_Float and the Vector4 row
+// above; original name unknown, address-derived.
+float Rva00711BB0Median(float a, float b, float c)
+{
+	if (b > a)
+	{
+		if (c > b)
+			return b;
+		if (c > a)
+			return c;
+		return a;
+	}
+	if (c > a)
+		return a;
+	else if (c > b)
+		return c;
+	else
+		return b;
+}
