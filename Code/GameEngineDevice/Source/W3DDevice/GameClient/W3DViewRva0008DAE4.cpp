@@ -10,6 +10,15 @@
 
 typedef float Real;
 
+// The rowed StringBase<char>::set 0x000366F0 (BFME 2's AsciiString copy).
+template <class T> class StringBase
+{
+public:
+	void set(const StringBase &other);
+private:
+	T *m_data;
+};
+
 class W3DView
 {
 public:
@@ -110,6 +119,8 @@ public:
 	virtual void s94();
 	virtual void step95();
 	virtual void rva0008DAE4();
+	virtual void rva000875A2(const StringBase<char> &first, const StringBase<char> &second);
+	virtual void rva000875D6();
 
 private:
 	void setCameraTransform();
@@ -117,8 +128,12 @@ private:
 	char m_pad04[0x6C - 4];
 	Real m_pitchAngle;		// +0x6C
 	Real m_zoom;			// +0x70
-	char m_pad74[0x243A - 0x74];
+	char m_pad74[0x2439 - 0x74];
+	bool m_flag2439;		// +0x2439
 	bool m_flag243A;		// +0x243A
+	char m_pad243B[0x243C - 0x243B];
+	StringBase<char> m_name243C;	// +0x243C
+	StringBase<char> m_name2440;	// +0x2440
 };
 
 void W3DView::rva0008DAE4()
@@ -127,5 +142,23 @@ void W3DView::rva0008DAE4()
 	m_flag243A = false;
 	m_pitchAngle = 0.87266463f;
 	setCameraTransform();
+	step95();
+}
+
+// Retail 0x000875A2 (44 bytes) and 0x000875D6 (28 bytes), two more W3DView
+// vftable entries with no direct callers: the first sets the +0x2439 flag and
+// copies two strings into +0x243C and +0x2440; the second sets the +0x243A
+// flag, zooms back to 1.0 and finishes in the same slot-0x17C step as above.
+void W3DView::rva000875A2(const StringBase<char> &first, const StringBase<char> &second)
+{
+	m_flag2439 = true;
+	m_name243C.set(first);
+	m_name2440.set(second);
+}
+
+void W3DView::rva000875D6()
+{
+	m_flag243A = true;
+	m_zoom = 1.0f;
 	step95();
 }
