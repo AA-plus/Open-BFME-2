@@ -1,6 +1,7 @@
-// ?rva0007E6F6@Rva0007E6F6@@QAEABUWaterRenderBox@@XZ
-// partial score=0.97 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Oy- /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug
+//
+// ?rva0007E6F6@Rva0007E6F6@@QAEABUWaterRenderBox@@XZ, retail 0x0007e6f6, 231 bytes. Banked partial (score 0.97) closed by tools/permute.py;
+// the body is the banked one up to statement/operand order and local types.
 // Native7E6F6..7E7DD231B, RET0. WB73D880 reproduces lazy min/max box.
 // BFME1 575ba2b04 Vector3 operators supply clean math; target proves footprint.
 #include "vector3.h"
@@ -18,7 +19,7 @@ const WaterRenderBox &Rva0007E6F6::rva0007E6F6() {
   float rectangle[4];
   reinterpret_cast<Rva0007E02A*>(scalarBase())->rva0007E02A(rectangle);
   Vector3 minimum(rectangle[0],rectangle[1],float(reinterpret_cast<WaterAreaHeightView*>(scalarBase())->height()));
-  Vector3 maximum(rectangle[2],rectangle[3],float(reinterpret_cast<WaterAreaHeightView*>(scalarBase())->height()));
+  Vector3 maximum((rectangle?rectangle:rectangle)[2],(rectangle?rectangle:rectangle)[3],float(reinterpret_cast<WaterAreaHeightView*>(scalarBase())->height()));
   bounds.center=0.5f*(minimum+maximum);
   bounds.extent=0.5f*(maximum-minimum);
   ready=true;
