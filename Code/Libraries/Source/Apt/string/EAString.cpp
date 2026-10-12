@@ -52,9 +52,12 @@ public:
     EAStringC &operator=(const EAStringC &);
     ~EAStringC() { FreeData(data); }
     EAStringC Left(int) const;
+    EAStringC Mid(int) const;
+    bool rva006D5CD0(const char *);
     bool rva006D5DA0(const char *);
     __declspec(noinline) void rva006D53F0(const char *,va_list);
     void __cdecl rva006D62C0(const char *,...);
+    void __cdecl rva006D5300(const char *,...);
 
 };
 void EAStringC::rva006D53F0(const char *format,va_list args)
@@ -76,6 +79,37 @@ void EAStringC::rva006D53F0(const char *format,va_list args)
     buffer[result]=0;
     SetSize(result);
     data->hash=0;
+}
+
+// Native 0x006D5300 (225B), Ghidra-unlisted: the appending twin of the
+// formatter above. Same pStrFormat assert (line 498, retail texts) and the
+// same four-bytes-per-format-character first guess, but the buffer grows past
+// the current size and _vsnprintf writes after the existing text; the size
+// is set to old size plus the formatted length. Cdecl variadic member entry,
+// receiver first on the stack, as rva006D62C0. Address-derived name.
+void __cdecl EAStringC::rva006D5300(const char *format,...)
+{
+    if (!format) {
+        g_bfmeAptAssertAtE17734("pStrFormat != NULL","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\string\\EAString.cpp",498);
+        if(g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+    }
+    unsigned int count = strlen(format)*4;
+    unsigned int oldSize = data->size;
+    va_list args;
+    va_start(args,format);
+    char *buffer;
+    int result;
+    for (;;) {
+        ChangeBuffer(oldSize+count,0,0,CB_NO_PUSH_ZERO,0);
+        buffer = reinterpret_cast<char *>(data)+8;
+        result = _vsnprintf(buffer+oldSize,data->maxSize-oldSize,format,args);
+        if (result>=0) break;
+        count*=2;
+    }
+    buffer[oldSize+result]=0;
+    SetSize(oldSize+result);
+    data->hash=0;
+    va_end(args);
 }
 
 // The retail assertion identifies this source at line 561. Native varargs
@@ -123,4 +157,31 @@ bool EAStringC::rva006D5DA0(const char *pStrText)
 matched:
     *this = Left(rep->size - len);
     return true;
+}
+
+// Retail 0x006D5CD0 (204B), Ghidra-unlisted: the prefix twin of the suffix
+// remover above. Asserts pStrText (line 0x62A, retail texts); when the text
+// starts the buffer, the string becomes the rowed Mid(len) remainder through
+// copy assignment and the value temporary is released. Address-derived name.
+bool EAStringC::rva006D5CD0(const char *pStrText)
+{
+	if (pStrText == 0)
+	{
+		g_bfmeAptAssertAtE17734("pStrText != NULL",
+			"C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\string\\EAString.cpp",
+			0x62A);
+		if (g_bfmeAptBreakOnAssertAtDDC01C)
+			__debugbreak();
+	}
+
+	unsigned int len = strlen(pStrText);
+	if (data->size >= len)
+	{
+		if (memcmp((char *)data + sizeof(StringDataC), pStrText, len) == 0)
+		{
+			*this = Mid(len);
+			return true;
+		}
+	}
+	return false;
 }
