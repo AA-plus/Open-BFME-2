@@ -1,5 +1,3 @@
-// ?rva000CF3BA@W3DFloorDraw@@UAEXH@Z
-// partial score=0.95 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
 //
 // ?rva000CF3BA@W3DFloorDraw@@UAEXH@Z, retail 0x000CF3BA (94 bytes, RET 4):
@@ -9,11 +7,14 @@
 // bit 0), the terrain render object gets the drawable, a copy of the module
 // data's name at +0x08 and that value (rowed 0x0006B7BF, which hands them to
 // its +0x3860 member). The name travels by value: the private StringBase
-// copy constructor builds it in the argument slot.
+// copy constructor builds it in the argument slot, reached through an inline
+// two-argument wrapper so the slot address is recorded before the call setup,
+// as in retail.
 template <typename T> class StringBase
 {
 public:
 	~StringBase();
+	__forceinline StringBase(const StringBase &other, int) { this->StringBase<T>::StringBase(other); }
 private:
 	StringBase(const StringBase &other);
 	friend class W3DFloorDraw;
@@ -71,6 +72,6 @@ void W3DFloorDraw::rva000CF3BA(int unused)
 	{
 		Object *obj = draw->m_object;
 		if (obj && (obj->m_privateStatus & 1))
-			TheTerrainRenderObject->rva0006B7BF((const Rva0055A88BDwordField *)draw, StringBase<char>(data->m_name), data->m_value);
+			TheTerrainRenderObject->rva0006B7BF((const Rva0055A88BDwordField *)draw, StringBase<char>(data->m_name, 0), data->m_value);
 	}
 }
