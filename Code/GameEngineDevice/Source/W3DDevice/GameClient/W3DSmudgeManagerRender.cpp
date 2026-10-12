@@ -78,7 +78,7 @@ public:
 	float W;
 
 	Vector4(void) {}
-	Vector4(float x, float y, float z, float w) : X(x), Y(y), Z(z), W(w) {}
+	__declspec(dllimport) __forceinline Vector4(float x, float y, float z, float w) : X(x), Y(y), Z(z), W(w) {}
 	Vector4(const Vector4 &v) : X(v.X), Y(v.Y), Z(v.Z), W(v.W) {}
 	Vector4 &operator=(const Vector4 &v) { X = v.X; Y = v.Y; Z = v.Z; W = v.W; return *this; }
 	float &operator[](int i) { return (&X)[i]; }
@@ -94,7 +94,7 @@ public:
 	float *operator[](int i) { return Row[i]; }
 	const float *operator[](int i) const { return Row[i]; }
 
-	static __forceinline void Transform_Vector(const Matrix3D &A, const Vector3 &in, Vector3 *out)
+	static __declspec(dllimport) __forceinline void Transform_Vector(const Matrix3D &A, const Vector3 &in, Vector3 *out)
 	{
 		Vector3 tmp;
 		Vector3 *v;
@@ -120,6 +120,7 @@ public:
 class Matrix4 : public Rva0007671F
 {
 public:
+	__declspec(dllimport) __forceinline Matrix4() {}
 	__forceinline void Make_Identity(void)
 	{
 		Row[0].Set(1.0f, 0.0f, 0.0f, 0.0f);
@@ -430,7 +431,7 @@ public:
 		render_state_changed |= 0x4000;
 	}
 
-	static __forceinline void Set_Shader(const ShaderClass &shader)
+	static __declspec(dllimport) __forceinline void Set_Shader(const ShaderClass &shader)
 	{
 		if (!ShaderClass::ShaderDirty &&
 			shader.ShaderBits == render_state.shader.ShaderBits)
@@ -441,7 +442,7 @@ public:
 		StringClass str;
 	}
 
-	static __forceinline void Set_DX8_Texture(unsigned int stage,
+	static __declspec(dllimport) __forceinline void Set_DX8_Texture(unsigned int stage,
 		IDirect3DBaseTexture8 *texture)
 	{
 		if (Textures[stage] == texture)
@@ -464,7 +465,7 @@ public:
 		++texture_stage_state_changes;
 	}
 
-	static __forceinline void Set_DX8_Texture_Stage_State(unsigned stage, unsigned long state, unsigned value)
+	static __declspec(dllimport) __forceinline void Set_DX8_Texture_Stage_State(unsigned stage, unsigned long state, unsigned value)
 	{
 		unsigned int stateIndex = state;
 		if (TextureStageStates[stage][stateIndex] == value)

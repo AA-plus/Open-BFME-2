@@ -47,7 +47,7 @@ public:
 	float W;
 
 	__declspec(dllimport) __forceinline Vector4(void) {}
-	Vector4(float x, float y, float z, float w)
+	__declspec(dllimport) __forceinline Vector4(float x, float y, float z, float w)
 		: X(x), Y(y), Z(z), W(w) {}
 	Vector4(const Vector4 &other)
 		: X(other.X), Y(other.Y), Z(other.Z), W(other.W) {}
@@ -234,7 +234,7 @@ public:
 	unsigned int ShaderBits;
 	static ShaderClass _PresetOpaqueShader;
 
-	ShaderClass(const ShaderClass &other)
+	__declspec(dllimport) __forceinline ShaderClass(const ShaderClass &other)
 		: ShaderBits(other.ShaderBits) {}
 	ShaderClass(unsigned int bits)
 		: ShaderBits(bits) {}
@@ -270,9 +270,18 @@ public:
 	void Release_Ref(void);
 };
 
+// The stage reference releases through TextureClass::Release_Ref, the ICF
+// alias of the same retail body (0x0061ED10), as BfmeConv1137Uninstall.cpp's
+// view does, so both units emit one destructor.
+class TextureClass : public TextureBaseClass
+{
+public:
+	void Release_Ref(void);
+};
+
 class StageTextureRef
 {
-	TextureBaseClass *Texture;
+	TextureClass *Texture;
 
 public:
 	StageTextureRef(void) : Texture(NULL) {}
@@ -333,7 +342,7 @@ public:
 		StringClass str;
 	}
 
-	static __forceinline void Set_DX8_Texture(unsigned int stage,
+	static __declspec(dllimport) __forceinline void Set_DX8_Texture(unsigned int stage,
 		IDirect3DBaseTexture8 *texture)
 	{
 		if (stage >= 8)

@@ -46,6 +46,13 @@ public:
     void Release_Ref();
 };
 
+// The handle releases through TextureBaseClass::Release_Ref (the same retail
+// body, 0x0061ED10), as the MaterialCollector units' view does.
+class TextureBaseClass {
+public:
+    void Release_Ref();
+};
+
 class BfmeHandleCX {
 public:
     TextureClass *p;
@@ -60,7 +67,7 @@ public:
     bool operator!=(const BfmeHandleCX &other) const { return p!=other.p; }
     ~BfmeHandleCX() {
         if (p) {
-            p->Release_Ref();
+            ((TextureBaseClass *)p)->Release_Ref();
         }
     }
 };
