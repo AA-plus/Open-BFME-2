@@ -1,119 +1,859 @@
 // _DeblockNonFilteredBand_WMT
-// partial score=0.085765952 date=2026-10-12
-// cl: /O2 /G6 /DNDEBUG /MD
-// Clean room: reverse/vp6_cleanroom/specs/001d0340.md and retail only.
-// Partial bank: C++ SSE2 intrinsics from the retail-checked value contract.
-// Complete 960-instruction boundary: 0x001D0340..0x001D1323 RET.
-// Output plane and unsigned activity accumulators match 240 Unicorn trials:
-// 0/1/2/4 blocks, flat/ramp/low-noise/full-byte planes, fixed q
-// 0/1/3/4/63/127/128/255 plus seeded mixed tables, loop limits0..127.
-// This emits3875B versus4068B: frame0x354 versus0x144 and different
-// register/save/staging shape. Scalar1797B and initial SSE3907B are
-// weaker shapes; direct intrinsics alone made no difference. No EMMS.
-#include <emmintrin.h>
+// partial score=0.99 date=2026-10-12
+// cl: /O2 /G6 /Z7 /MD
+// Clean room: reverse/vp6_cleanroom/specs/001d0340.md plus retail only.
+// No decoder source was consulted.
+//
+// DeblockNonFilteredBand_WMT (retail 0x001D0340, 4068 bytes): SSE2 band
+// deblocker for the profile without the in-loop filter. For each block of
+// the band it filters the horizontal edge above the block (q from the block
+// below the edge) and then, for every block but the first, the vertical edge
+// on its left in place on the destination eight rows up (q from the
+// right-hand block), staging each row's ten samples as 16-bit values. Lines
+// that are not smoothed get the four-tap loop filter bounded by the frame's
+// deblock loop limit. Each side's activity is summed into the per-block
+// variance accumulators.
+
+// Retail 0x009B8090 and 0x009B80A0 (defined with DeblockLoopFilteredBand_WMT)
+// and 0x009B80F0: eight 16-bit lanes of 3, of 4 and of 1.
+extern const unsigned short g_vp6Threes[8];
+extern const unsigned short g_vp6Fours[8];
+extern __declspec(align(16)) const unsigned short g_vp6Ones[8] = {
+	1, 1, 1, 1, 1, 1, 1, 1
+};
+
+// Deblock loop limit table selected by the post-processor setup.
 extern int *g_rva01356A9C;
-struct DeblockPostProcView { char opaque00[12]; unsigned frameQ;
-    char opaque10[20]; int *blockQ; unsigned *activity; };
 
+// Post-processor instance view: frame q index, per-block q index and
+// variance arrays.
+struct DeblockNonFilteredWmtContext
+{
+	unsigned char m_pad00[0x0c];
+	unsigned int m_frameQ;
+	unsigned char m_pad10[0x24 - 0x10];
+	unsigned int *m_qIndex;
+	int *m_variance;
+};
 
-#define twice(v) _mm_add_epi16((v),(v))
-static __forceinline __m128i absDifference(const __m128i &a,const __m128i &b) {
-    return _mm_or_si128(_mm_subs_epu16(a,b),_mm_subs_epu16(b,a));
-}
-static __forceinline __m128i activity(const __m128i *p) {
-    __m128i center=_mm_set1_epi16(128),ones=_mm_set1_epi16(1);
-    __m128i v=_mm_sub_epi16(p[0],center),sum=v,square=_mm_mullo_epi16(v,v);
-    for(int k=1;k<4;++k) {v=_mm_sub_epi16(p[k],center);sum=_mm_add_epi16(sum,v);square=_mm_add_epi16(square,_mm_mullo_epi16(v,v));}
-    return _mm_sub_epi16(square,_mm_mullo_epi16(_mm_srai_epi16(sum,1),_mm_srai_epi16(_mm_add_epi16(sum,ones),1)));
-}
-static __forceinline __m128i differenceMask(const __m128i &a,const __m128i &b,const __m128i &q) {
-    return _mm_srai_epi16(_mm_sub_epi16(absDifference(a,b),q),15);
-}
-static __forceinline __m128i select(const __m128i &yes,const __m128i &no,const __m128i &mask) {
-    return _mm_or_si128(_mm_and_si128(yes,mask),_mm_andnot_si128(mask,no));
-}
-static __forceinline __m128i roundBlend(const __m128i &weighted,const __m128i &original,const __m128i &mask) {
-    return select(_mm_srai_epi16(weighted,4),original,mask);
-}
-static __forceinline void filter(const __m128i *p,__m128i *out,unsigned q,int limit,bool vertical,
-    unsigned &firstActivity,unsigned &secondActivity) {
-    __m128i a=activity(p+1),b=activity(p+5),quant=_mm_set1_epi16((short)q);
-    __m128i threshold=_mm_mullo_epi16(_mm_mullo_epi16(_mm_set1_epi16(3),quant),quant);
-    threshold=vertical ? _mm_srli_epi16(threshold,5) : _mm_srai_epi16(threshold,5);
-    __m128i first=_mm_andnot_si128(_mm_srai_epi16(a,15),_mm_srai_epi16(_mm_sub_epi16(a,threshold),15));
-    __m128i second=_mm_andnot_si128(_mm_srai_epi16(b,15),_mm_srai_epi16(_mm_sub_epi16(b,threshold),15));
-    __m128i mask=_mm_and_si128(_mm_and_si128(first,second),differenceMask(p[4],p[5],quant));
-    __m128i correction=_mm_srai_epi16(_mm_add_epi16(_mm_add_epi16(_mm_sub_epi16(p[3],p[6]),_mm_add_epi16(twice(_mm_sub_epi16(p[5],p[4])),_mm_sub_epi16(p[5],p[4]))),_mm_set1_epi16(4)),3);
-    __m128i sign=_mm_srai_epi16(correction,15);
-    __m128i mag=_mm_subs_epi16(_mm_xor_si128(correction,sign),sign);
-    __m128i bound=_mm_set1_epi16((short)limit),distance=_mm_sub_epi16(bound,mag);
-    __m128i distanceSign=_mm_srai_epi16(distance,15);
-    distance=_mm_subs_epi16(_mm_xor_si128(distance,distanceSign),distanceSign);
-    correction=_mm_mullo_epi16(_mm_subs_epu16(bound,distance),_mm_or_si128(sign,_mm_set1_epi16(1)));
-    __m128i zero=_mm_setzero_si128();
-    __m128i fallback0=_mm_unpacklo_epi8(_mm_packus_epi16(_mm_add_epi16(p[4],correction),zero),zero);
-    __m128i fallback1=_mm_unpacklo_epi8(_mm_packus_epi16(_mm_sub_epi16(p[5],correction),zero),zero);
-    __m128i outer0=select(p[0],p[1],differenceMask(p[0],p[1],quant));
-    __m128i outer1=select(p[9],p[8],differenceMask(p[9],p[8],quant));
-    __m128i rolling=_mm_add_epi16(_mm_add_epi16(_mm_add_epi16(_mm_add_epi16(_mm_add_epi16(twice(outer0),outer0),p[1]),p[2]),p[3]),_mm_add_epi16(p[4],_mm_set1_epi16(4)));
-    out[0]=roundBlend(_mm_add_epi16(_mm_sub_epi16(twice(_mm_add_epi16(rolling,p[1])),p[4]),p[5]),p[1],mask);
-    rolling=_mm_add_epi16(_mm_sub_epi16(rolling,outer0),p[5]);
-    out[1]=roundBlend(_mm_add_epi16(_mm_sub_epi16(twice(_mm_add_epi16(rolling,p[2])),p[5]),p[6]),p[2],mask);
-    rolling=_mm_add_epi16(_mm_sub_epi16(rolling,outer0),p[6]);
-    out[2]=roundBlend(_mm_add_epi16(_mm_sub_epi16(twice(_mm_add_epi16(rolling,p[3])),p[6]),p[7]),p[3],mask);
-    rolling=_mm_add_epi16(_mm_sub_epi16(rolling,outer0),p[7]);
-    out[3]=roundBlend(_mm_add_epi16(_mm_sub_epi16(_mm_sub_epi16(_mm_add_epi16(twice(_mm_add_epi16(rolling,p[4])),outer0),p[1]),p[7]),p[8]),fallback0,mask);
-    rolling=_mm_add_epi16(_mm_sub_epi16(rolling,p[1]),p[8]);
-    out[4]=roundBlend(_mm_add_epi16(_mm_sub_epi16(_mm_sub_epi16(_mm_add_epi16(twice(_mm_add_epi16(rolling,p[5])),p[1]),p[2]),p[8]),outer1),fallback1,mask);
-    rolling=_mm_add_epi16(_mm_sub_epi16(rolling,p[2]),outer1);
-    out[5]=roundBlend(_mm_sub_epi16(_mm_add_epi16(twice(_mm_add_epi16(rolling,p[6])),p[2]),p[3]),p[6],mask);
-    rolling=_mm_add_epi16(_mm_sub_epi16(rolling,p[3]),outer1);
-    out[6]=roundBlend(_mm_sub_epi16(_mm_add_epi16(twice(_mm_add_epi16(rolling,p[7])),p[3]),p[4]),p[7],mask);
-    rolling=_mm_add_epi16(_mm_sub_epi16(rolling,p[4]),outer1);
-    out[7]=roundBlend(_mm_sub_epi16(_mm_add_epi16(twice(_mm_add_epi16(rolling,p[8])),p[4]),p[5]),p[8],mask);
-    __declspec(align(16)) unsigned short av[8],bv[8];
-    _mm_store_si128((__m128i *)av,a);_mm_store_si128((__m128i *)bv,b);
-    for(int k=0;k<8;++k) {firstActivity+=av[k];secondActivity+=bv[k];}
-}
-static __forceinline void transposeStore(__m128i *out,unsigned char *dst,unsigned pitch) {
-    __m128i zero=_mm_setzero_si128();
-    __m128i a=_mm_unpacklo_epi8(_mm_packus_epi16(out[0],zero),_mm_packus_epi16(out[1],zero));
-    __m128i b=_mm_unpacklo_epi8(_mm_packus_epi16(out[2],zero),_mm_packus_epi16(out[3],zero));
-    __m128i c=_mm_unpacklo_epi8(_mm_packus_epi16(out[4],zero),_mm_packus_epi16(out[5],zero));
-    __m128i d=_mm_unpacklo_epi8(_mm_packus_epi16(out[6],zero),_mm_packus_epi16(out[7],zero));
-    __m128i ab0=_mm_unpacklo_epi16(a,b),ab1=_mm_unpackhi_epi16(a,b);
-    __m128i cd0=_mm_unpacklo_epi16(c,d),cd1=_mm_unpackhi_epi16(c,d);
-    __m128i r01=_mm_unpacklo_epi32(ab0,cd0),r23=_mm_unpackhi_epi32(ab0,cd0);
-    __m128i r45=_mm_unpacklo_epi32(ab1,cd1),r67=_mm_unpackhi_epi32(ab1,cd1);
-    _mm_storel_epi64((__m128i *)dst,r01);_mm_storel_epi64((__m128i *)(dst+pitch),_mm_srli_si128(r01,8));
-    _mm_storel_epi64((__m128i *)(dst+2*pitch),r23);_mm_storel_epi64((__m128i *)(dst+3*pitch),_mm_srli_si128(r23,8));
-    _mm_storel_epi64((__m128i *)(dst+4*pitch),r45);_mm_storel_epi64((__m128i *)(dst+5*pitch),_mm_srli_si128(r45,8));
-    _mm_storel_epi64((__m128i *)(dst+6*pitch),r67);_mm_storel_epi64((__m128i *)(dst+7*pitch),_mm_srli_si128(r67,8));
-}
-extern "C" void __cdecl DeblockNonFilteredBand_WMT(DeblockPostProcView *post,
-    unsigned char *source,unsigned char *destination,unsigned pitch,
-    unsigned across,unsigned firstBlock,const unsigned *quantizerScale) {
-    int limit=(short)g_rva01356A9C[post->frameQ];
-    __m128i p[10],out[8],zero=_mm_setzero_si128();
-    for(unsigned offset=0;offset<across;++offset) {
-        unsigned index=firstBlock+offset;
-        unsigned q=quantizerScale[post->blockQ[index+across]];
-        for(int k=0;k<10;++k)
-            p[k]=_mm_unpacklo_epi8(_mm_loadl_epi64((const __m128i *)(source+offset*8+(k-5)*pitch)),zero);
-        filter(p,out,q,limit,false,post->activity[index],post->activity[index+across]);
-        for(int k=0;k<8;++k)
-            _mm_storel_epi64((__m128i *)(destination+offset*8+(k-4)*pitch),_mm_packus_epi16(out[k],zero));
-        if(offset) {
-            q=quantizerScale[post->blockQ[index]];
-            unsigned char *edge=destination-8*pitch+offset*8;
-            for(int k=0;k<10;++k) for(int row=0;row<8;++row)
-                p[k].m128i_i16[row]=edge[row*pitch+k-5];
-            filter(p,out,q,limit,true,post->activity[index-1],post->activity[index]);
-            transposeStore(out,edge-4,pitch);
-        }
-    }
-}
+extern "C" void __cdecl DeblockNonFilteredBand_WMT(DeblockNonFilteredWmtContext *ctx, unsigned char *source, unsigned char *destination, unsigned int stride, unsigned int count, unsigned int first, const unsigned int *limits)
+{
+	__declspec(align(16)) unsigned short lowerActivity[8];
+	__declspec(align(16)) unsigned short upperActivity[8];
+	unsigned char *dstRow;
+	unsigned char *srcRow;
+	__declspec(align(16)) unsigned short qv[8];
+	__declspec(align(16)) unsigned short loopLimit[8];
+	unsigned int q;
+	__declspec(align(16)) unsigned short firstFiltered[8];
+	__declspec(align(16)) unsigned short smoothLimit[8];
+	__declspec(align(16)) unsigned short secondFiltered[8];
+	__declspec(align(16)) unsigned short rows[80];
+	unsigned char *edge;
+	unsigned int index;
+	unsigned int end;
+	int limit;
 
+	index = first;
+	limit = g_rva01356A9C[ctx->m_frameQ];
+	loopLimit[0] = (unsigned short)limit;
+	loopLimit[1] = (unsigned short)limit;
+	loopLimit[2] = (unsigned short)limit;
+	loopLimit[3] = (unsigned short)limit;
+	loopLimit[4] = (unsigned short)limit;
+	loopLimit[5] = (unsigned short)limit;
+	loopLimit[6] = (unsigned short)limit;
+	loopLimit[7] = (unsigned short)limit;
 
-
-
+	end = first + count;
+	if (index < end) {
+	do {
+		srcRow = source + (index - first) * 8;
+		dstRow = destination + (index - first) * 8;
+		q = limits[ctx->m_qIndex[index + count]];
+		__asm {
+		push eax
+		push ecx
+		push edx
+		push esi
+		push edi
+		mov eax, dword ptr q
+		xor edx, edx
+		mov ecx, stride
+		pcmpeqw xmm6, xmm6
+		movd mm5, eax
+		psrlw xmm6, 0xe
+		punpcklwd mm5, mm5
+		mov eax, dword ptr srcRow
+		punpckldq mm5, mm5
+		sub edx, ecx
+		movq2dq xmm5, mm5
+		punpcklqdq xmm5, xmm5
+		pmullw xmm6, xmm5
+		movdqa xmmword ptr qv, xmm5
+		lea edi, rows
+		pxor xmm7, xmm7
+		mov esi, dword ptr dstRow
+		pmullw xmm6, xmm5
+		lea eax, [eax+edx*4]
+		lea esi, [esi+edx*2]
+		psraw xmm6, 5
+		movdqa xmmword ptr smoothLimit, xmm6
+		movq xmm0, qword ptr [eax+edx]
+		movq xmm1, qword ptr [eax]
+		punpcklbw xmm0, xmm7
+		punpcklbw xmm1, xmm7
+		movdqa xmmword ptr [edi], xmm0
+		movdqa xmmword ptr [edi+0x10], xmm1
+		movq xmm2, qword ptr [eax+ecx]
+		movq xmm3, qword ptr [eax+ecx*2]
+		punpcklbw xmm2, xmm7
+		punpcklbw xmm3, xmm7
+		movdqa xmmword ptr [edi+0x20], xmm2
+		movdqa xmmword ptr [edi+0x30], xmm3
+		lea eax, [eax+ecx*4]
+		movq xmm0, qword ptr [eax+edx]
+		movq xmm1, qword ptr [eax]
+		punpcklbw xmm0, xmm7
+		punpcklbw xmm1, xmm7
+		movdqa xmmword ptr [edi+0x40], xmm0
+		movdqa xmmword ptr [edi+0x50], xmm1
+		movq xmm2, qword ptr [eax+ecx]
+		movq xmm3, qword ptr [eax+ecx*2]
+		punpcklbw xmm2, xmm7
+		punpcklbw xmm3, xmm7
+		movdqa xmmword ptr [edi+0x60], xmm2
+		movdqa xmmword ptr [edi+0x70], xmm3
+		lea eax, [eax+ecx*4]
+		movq xmm0, qword ptr [eax+edx]
+		movq xmm1, qword ptr [eax]
+		punpcklbw xmm0, xmm7
+		punpcklbw xmm1, xmm7
+		movdqa xmmword ptr [edi+0x80], xmm0
+		movdqa xmmword ptr [edi+0x90], xmm1
+		pcmpeqw xmm3, xmm3
+		psllw xmm3, 0xf
+		psrlw xmm3, 8
+		movdqa xmm2, xmmword ptr [edi+0x10]
+		movdqa xmm6, xmmword ptr [edi+0x50]
+		psubw xmm2, xmm3
+		psubw xmm6, xmm3
+		movdqa xmm0, xmm2
+		movdqa xmm4, xmm6
+		pmullw xmm2, xmm2
+		pmullw xmm6, xmm6
+		movdqa xmm1, xmm2
+		movdqa xmm5, xmm6
+		movdqa xmm2, xmmword ptr [edi+0x20]
+		movdqa xmm6, xmmword ptr [edi+0x60]
+		psubw xmm2, xmm3
+		psubw xmm6, xmm3
+		paddw xmm0, xmm2
+		paddw xmm4, xmm6
+		pmullw xmm2, xmm2
+		pmullw xmm6, xmm6
+		paddw xmm1, xmm2
+		paddw xmm5, xmm6
+		movdqa xmm2, xmmword ptr [edi+0x30]
+		movdqa xmm6, xmmword ptr [edi+0x70]
+		psubw xmm2, xmm3
+		psubw xmm6, xmm3
+		paddw xmm0, xmm2
+		paddw xmm4, xmm6
+		pmullw xmm2, xmm2
+		pmullw xmm6, xmm6
+		paddw xmm1, xmm2
+		paddw xmm5, xmm6
+		movdqa xmm2, xmmword ptr [edi+0x40]
+		movdqa xmm6, xmmword ptr [edi+0x80]
+		psubw xmm2, xmm3
+		psubw xmm6, xmm3
+		paddw xmm0, xmm2
+		paddw xmm4, xmm6
+		pmullw xmm2, xmm2
+		pmullw xmm6, xmm6
+		paddw xmm1, xmm2
+		paddw xmm5, xmm6
+		movdqa xmm7, xmm3
+		psrlw xmm7, 7
+		movdqa xmm2, xmm0
+		movdqa xmm6, xmm4
+		paddw xmm0, xmm7
+		paddw xmm4, xmm7
+		psraw xmm2, 1
+		psraw xmm6, 1
+		psraw xmm0, 1
+		psraw xmm4, 1
+		pmullw xmm2, xmm0
+		pmullw xmm6, xmm4
+		psubw xmm1, xmm2
+		psubw xmm5, xmm6
+		movdqa xmm7, xmmword ptr smoothLimit
+		movdqa xmm2, xmm1
+		movdqa xmmword ptr upperActivity, xmm1
+		movdqa xmmword ptr lowerActivity, xmm5
+		movdqa xmm6, xmm5
+		psubw xmm1, xmm7
+		psubw xmm5, xmm7
+		psraw xmm2, 0xf
+		psraw xmm6, 0xf
+		psraw xmm1, 0xf
+		psraw xmm5, 0xf
+		movdqa xmm7, xmmword ptr [edi+0x40]
+		pandn xmm2, xmm1
+		pandn xmm6, xmm5
+		movdqa xmm4, xmmword ptr [edi+0x50]
+		pand xmm6, xmm2
+		movdqa xmm2, xmm7
+		psubusw xmm7, xmm4
+		psubusw xmm4, xmm2
+		por xmm7, xmm4
+		psubw xmm7, xmmword ptr qv
+		psraw xmm7, 0xf
+		pand xmm7, xmm6
+		movdqa xmm1, xmmword ptr loopLimit
+		movdqa xmm3, xmmword ptr [edi+0x30]
+		movdqa xmm4, xmmword ptr [edi+0x40]
+		movdqa xmm5, xmmword ptr [edi+0x50]
+		movdqa xmm6, xmmword ptr [edi+0x60]
+		psubw xmm5, xmm4
+		psubw xmm3, xmm6
+		movdqa xmm4, xmm5
+		paddw xmm4, xmm5
+		paddw xmm3, xmmword ptr g_vp6Fours
+		paddw xmm5, xmm4
+		paddw xmm3, xmm5
+		psraw xmm3, 3
+		movdqa xmm2, xmm3
+		psraw xmm3, 0xf
+		pxor xmm2, xmm3
+		psubsw xmm2, xmm3
+		por xmm3, xmmword ptr g_vp6Ones
+		movdqa xmm4, xmm1
+		psubw xmm1, xmm2
+		movdqa xmm5, xmm1
+		psraw xmm1, 0xf
+		pxor xmm5, xmm1
+		psubsw xmm5, xmm1
+		psubusw xmm4, xmm5
+		pmullw xmm4, xmm3
+		movdqa xmm1, xmmword ptr [edi+0x40]
+		movdqa xmm2, xmmword ptr [edi+0x50]
+		paddw xmm1, xmm4
+		psubw xmm2, xmm4
+		pxor xmm6, xmm6
+		packuswb xmm1, xmm1
+		packuswb xmm2, xmm2
+		punpcklbw xmm1, xmm6
+		movdqa xmmword ptr firstFiltered, xmm1
+		punpcklbw xmm2, xmm6
+		movdqa xmmword ptr secondFiltered, xmm2
+		movdqa xmm5, xmmword ptr [edi]
+		movdqa xmm4, xmmword ptr [edi+0x10]
+		movdqa xmm3, xmm4
+		movdqa xmm6, xmm5
+		psubusw xmm4, xmm6
+		psubusw xmm5, xmm3
+		por xmm4, xmm5
+		psubw xmm4, xmmword ptr qv
+		psraw xmm4, 0xf
+		movdqa xmm1, xmm4
+		pand xmm4, xmm6
+		pandn xmm1, xmm3
+		por xmm1, xmm4
+		movdqa xmm4, xmmword ptr [edi+0x80]
+		movdqa xmm5, xmmword ptr [edi+0x90]
+		movdqa xmm3, xmm4
+		movdqa xmm6, xmm5
+		psubusw xmm4, xmm6
+		psubusw xmm5, xmm3
+		por xmm4, xmm5
+		psubw xmm4, xmmword ptr qv
+		psraw xmm4, 0xf
+		movdqa xmm2, xmm4
+		pand xmm4, xmm6
+		pandn xmm2, xmm3
+		por xmm2, xmm4
+		pxor xmm0, xmm0
+		movdqa xmm3, xmm1
+		paddw xmm3, xmm3
+		paddw xmm3, xmm1
+		movdqa xmm4, xmmword ptr [edi+0x10]
+		paddw xmm3, xmmword ptr [edi+0x20]
+		paddw xmm4, xmmword ptr [edi+0x30]
+		paddw xmm3, xmmword ptr [edi+0x40]
+		paddw xmm4, xmmword ptr g_vp6Fours
+		paddw xmm3, xmm4
+		movdqa xmm4, xmm3
+		movdqa xmm5, xmmword ptr [edi+0x10]
+		paddw xmm4, xmm5
+		psllw xmm4, 1
+		psubw xmm4, xmmword ptr [edi+0x40]
+		paddw xmm4, xmmword ptr [edi+0x50]
+		psraw xmm4, 4
+		psubw xmm4, xmm5
+		pand xmm4, xmm7
+		paddw xmm4, xmm5
+		packuswb xmm4, xmm0
+		movq qword ptr [esi+edx*2], xmm4
+		movdqa xmm5, xmmword ptr [edi+0x20]
+		psubw xmm3, xmm1
+		paddw xmm3, xmmword ptr [edi+0x50]
+		movdqa xmm4, xmm5
+		paddw xmm4, xmm3
+		paddw xmm4, xmm4
+		psubw xmm4, xmmword ptr [edi+0x50]
+		paddw xmm4, xmmword ptr [edi+0x60]
+		psraw xmm4, 4
+		psubw xmm4, xmm5
+		pand xmm4, xmm7
+		paddw xmm4, xmm5
+		packuswb xmm4, xmm0
+		movq qword ptr [esi+edx], xmm4
+		movdqa xmm5, xmmword ptr [edi+0x30]
+		psubw xmm3, xmm1
+		paddw xmm3, xmmword ptr [edi+0x60]
+		movdqa xmm4, xmm5
+		paddw xmm4, xmm3
+		paddw xmm4, xmm4
+		psubw xmm4, xmmword ptr [edi+0x60]
+		paddw xmm4, xmmword ptr [edi+0x70]
+		psraw xmm4, 4
+		psubw xmm4, xmm5
+		pand xmm4, xmm7
+		paddw xmm4, xmm5
+		packuswb xmm4, xmm0
+		movq qword ptr [esi], xmm4
+		movdqa xmm5, xmmword ptr [edi+0x40]
+		psubw xmm3, xmm1
+		paddw xmm3, xmmword ptr [edi+0x70]
+		movdqa xmm4, xmm5
+		paddw xmm4, xmm3
+		paddw xmm4, xmm4
+		paddw xmm4, xmm1
+		psubw xmm4, xmmword ptr [edi+0x10]
+		psubw xmm4, xmmword ptr [edi+0x70]
+		paddw xmm4, xmmword ptr [edi+0x80]
+		movdqa xmm5, xmmword ptr firstFiltered
+		psraw xmm4, 4
+		psubw xmm4, xmm5
+		pand xmm4, xmm7
+		paddw xmm4, xmm5
+		packuswb xmm4, xmm0
+		movq qword ptr [esi+ecx], xmm4
+		movdqa xmm5, xmmword ptr [edi+0x50]
+		psubw xmm3, xmmword ptr [edi+0x10]
+		paddw xmm3, xmmword ptr [edi+0x80]
+		movdqa xmm4, xmm5
+		paddw xmm4, xmm3
+		paddw xmm4, xmm4
+		paddw xmm4, xmmword ptr [edi+0x10]
+		psubw xmm4, xmmword ptr [edi+0x20]
+		psubw xmm4, xmmword ptr [edi+0x80]
+		paddw xmm4, xmm2
+		movdqa xmm5, xmmword ptr secondFiltered
+		psraw xmm4, 4
+		psubw xmm4, xmm5
+		pand xmm4, xmm7
+		paddw xmm4, xmm5
+		lea esi, [esi+ecx*4]
+		packuswb xmm4, xmm0
+		movq qword ptr [esi+edx*2], xmm4
+		movdqa xmm5, xmmword ptr [edi+0x60]
+		psubw xmm3, xmmword ptr [edi+0x20]
+		paddw xmm3, xmm2
+		movdqa xmm4, xmm5
+		paddw xmm4, xmm3
+		paddw xmm4, xmm4
+		paddw xmm4, xmmword ptr [edi+0x20]
+		psubw xmm4, xmmword ptr [edi+0x30]
+		psraw xmm4, 4
+		psubw xmm4, xmm5
+		pand xmm4, xmm7
+		paddw xmm4, xmm5
+		packuswb xmm4, xmm0
+		movq qword ptr [esi+edx], xmm4
+		movdqa xmm5, xmmword ptr [edi+0x70]
+		psubw xmm3, xmmword ptr [edi+0x30]
+		paddw xmm3, xmm2
+		movdqa xmm4, xmm5
+		paddw xmm4, xmm3
+		paddw xmm4, xmm4
+		paddw xmm4, xmmword ptr [edi+0x30]
+		psubw xmm4, xmmword ptr [edi+0x40]
+		psraw xmm4, 4
+		psubw xmm4, xmm5
+		pand xmm4, xmm7
+		paddw xmm4, xmm5
+		packuswb xmm4, xmm0
+		movq qword ptr [esi], xmm4
+		movdqa xmm5, xmmword ptr [edi+0x80]
+		psubw xmm3, xmmword ptr [edi+0x40]
+		paddw xmm3, xmm2
+		movdqa xmm4, xmm5
+		paddw xmm4, xmm3
+		paddw xmm4, xmm4
+		paddw xmm4, xmmword ptr [edi+0x40]
+		psubw xmm4, xmmword ptr [edi+0x50]
+		psraw xmm4, 4
+		psubw xmm4, xmm5
+		pand xmm4, xmm7
+		paddw xmm4, xmm5
+		packuswb xmm4, xmm0
+		movq qword ptr [esi+ecx], xmm4
+		pop edi
+		pop esi
+		pop edx
+		pop ecx
+		pop eax
+		}
+		ctx->m_variance[index] += upperActivity[0] + upperActivity[1] + upperActivity[2] + upperActivity[3] + upperActivity[4] + upperActivity[5] + upperActivity[6] + upperActivity[7];
+		ctx->m_variance[index + count] += lowerActivity[0] + lowerActivity[1] + lowerActivity[2] + lowerActivity[3] + lowerActivity[4] + lowerActivity[5] + lowerActivity[6] + lowerActivity[7];
+		if (index == first) {
+			index++;
+			continue;
+		}
+		{
+			edge = destination + (index - first) * 8 - stride * 8;
+			dstRow = edge;
+			srcRow = edge;
+			q = limits[ctx->m_qIndex[index]];
+			qv[0] = (unsigned short)q;
+			qv[1] = (unsigned short)q;
+			qv[2] = (unsigned short)q;
+			qv[3] = (unsigned short)q;
+			qv[4] = (unsigned short)q;
+			qv[5] = (unsigned short)q;
+			qv[6] = (unsigned short)q;
+			qv[7] = (unsigned short)q;
+			rows[0] = edge[-5];
+			rows[72] = edge[4];
+			rows[1] = edge[stride - 5];
+			rows[73] = edge[stride + 4];
+			rows[2] = edge[stride * 2 - 5];
+			rows[74] = edge[stride * 2 + 4];
+			rows[3] = edge[stride * 3 - 5];
+			rows[75] = edge[stride * 3 + 4];
+			rows[4] = edge[stride * 4 - 5];
+			rows[76] = edge[stride * 4 + 4];
+			rows[5] = edge[stride * 5 - 5];
+			rows[77] = edge[stride * 5 + 4];
+			rows[6] = edge[stride * 6 - 5];
+			rows[78] = edge[stride * 6 + 4];
+			rows[7] = edge[stride * 7 - 5];
+			rows[79] = edge[stride * 7 + 4];
+			__asm {
+			push eax
+			push ecx
+			push edx
+			push esi
+			push edi
+			movdqa xmm0, xmmword ptr qv
+			movdqa xmm1, xmmword ptr g_vp6Threes
+			pmullw xmm1, xmm0
+			pmullw xmm1, xmm0
+			psrlw xmm1, 5
+			movdqa xmmword ptr smoothLimit, xmm1
+			mov eax, dword ptr srcRow
+			xor edx, edx
+			mov esi, dword ptr dstRow
+			sub eax, 4
+			sub esi, 4
+			lea edi, rows
+			mov ecx, stride
+			sub edx, ecx
+			lea esi, [esi+ecx*2]
+			movq mm0, qword ptr [eax]
+			movq mm1, qword ptr [eax+ecx]
+			movq mm2, qword ptr [eax+ecx*2]
+			lea eax, [eax+ecx*4]
+			movq mm3, qword ptr [eax+edx]
+			movq mm4, mm0
+			punpcklbw mm0, mm1
+			punpckhbw mm4, mm1
+			movq mm5, mm2
+			punpcklbw mm2, mm3
+			punpckhbw mm5, mm3
+			movq mm1, mm0
+			punpcklwd mm0, mm2
+			punpckhwd mm1, mm2
+			movq mm2, mm4
+			punpckhwd mm4, mm5
+			punpcklwd mm2, mm5
+			pxor mm7, mm7
+			movq mm5, mm0
+			punpcklbw mm0, mm7
+			movq qword ptr [edi+0x10], mm0
+			punpckhbw mm5, mm7
+			movq mm0, mm1
+			movq qword ptr [edi+0x20], mm5
+			punpcklbw mm1, mm7
+			punpckhbw mm0, mm7
+			movq qword ptr [edi+0x30], mm1
+			movq mm3, mm2
+			movq mm5, mm4
+			movq qword ptr [edi+0x40], mm0
+			punpcklbw mm2, mm7
+			punpckhbw mm3, mm7
+			movq qword ptr [edi+0x50], mm2
+			punpcklbw mm4, mm7
+			punpckhbw mm5, mm7
+			movq qword ptr [edi+0x60], mm3
+			movq mm0, qword ptr [eax]
+			movq mm1, qword ptr [eax+ecx]
+			movq qword ptr [edi+0x70], mm4
+			movq mm2, qword ptr [eax+ecx*2]
+			lea eax, [eax+ecx*4]
+			movq qword ptr [edi+0x80], mm5
+			movq mm4, mm0
+			movq mm3, qword ptr [eax+edx]
+			punpcklbw mm0, mm1
+			punpckhbw mm4, mm1
+			movq mm5, mm2
+			punpcklbw mm2, mm3
+			punpckhbw mm5, mm3
+			movq mm1, mm0
+			punpcklwd mm0, mm2
+			punpckhwd mm1, mm2
+			movq mm2, mm4
+			punpckhwd mm4, mm5
+			punpcklwd mm2, mm5
+			movq mm5, mm0
+			punpcklbw mm0, mm7
+			movq qword ptr [edi+0x18], mm0
+			punpckhbw mm5, mm7
+			movq mm0, mm1
+			movq qword ptr [edi+0x28], mm5
+			punpcklbw mm1, mm7
+			punpckhbw mm0, mm7
+			movq qword ptr [edi+0x38], mm1
+			movq mm3, mm2
+			movq mm5, mm4
+			movq qword ptr [edi+0x48], mm0
+			punpcklbw mm2, mm7
+			punpckhbw mm3, mm7
+			movq qword ptr [edi+0x58], mm2
+			punpcklbw mm4, mm7
+			punpckhbw mm5, mm7
+			movq qword ptr [edi+0x68], mm3
+			movq qword ptr [edi+0x78], mm4
+			movq qword ptr [edi+0x88], mm5
+			pcmpeqw xmm3, xmm3
+			psllw xmm3, 0xf
+			psrlw xmm3, 8
+			movdqa xmm2, xmmword ptr [edi+0x10]
+			movdqa xmm6, xmmword ptr [edi+0x50]
+			psubw xmm2, xmm3
+			psubw xmm6, xmm3
+			movdqa xmm0, xmm2
+			movdqa xmm4, xmm6
+			pmullw xmm2, xmm2
+			pmullw xmm6, xmm6
+			movdqa xmm1, xmm2
+			movdqa xmm5, xmm6
+			movdqa xmm2, xmmword ptr [edi+0x20]
+			movdqa xmm6, xmmword ptr [edi+0x60]
+			psubw xmm2, xmm3
+			psubw xmm6, xmm3
+			paddw xmm0, xmm2
+			paddw xmm4, xmm6
+			pmullw xmm2, xmm2
+			pmullw xmm6, xmm6
+			paddw xmm1, xmm2
+			paddw xmm5, xmm6
+			movdqa xmm2, xmmword ptr [edi+0x30]
+			movdqa xmm6, xmmword ptr [edi+0x70]
+			psubw xmm2, xmm3
+			psubw xmm6, xmm3
+			paddw xmm0, xmm2
+			paddw xmm4, xmm6
+			pmullw xmm2, xmm2
+			pmullw xmm6, xmm6
+			paddw xmm1, xmm2
+			paddw xmm5, xmm6
+			movdqa xmm2, xmmword ptr [edi+0x40]
+			movdqa xmm6, xmmword ptr [edi+0x80]
+			psubw xmm2, xmm3
+			psubw xmm6, xmm3
+			paddw xmm0, xmm2
+			paddw xmm4, xmm6
+			pmullw xmm2, xmm2
+			pmullw xmm6, xmm6
+			paddw xmm1, xmm2
+			paddw xmm5, xmm6
+			movdqa xmm7, xmm3
+			psrlw xmm7, 7
+			movdqa xmm2, xmm0
+			movdqa xmm6, xmm4
+			paddw xmm0, xmm7
+			paddw xmm4, xmm7
+			psraw xmm2, 1
+			psraw xmm6, 1
+			psraw xmm0, 1
+			psraw xmm4, 1
+			pmullw xmm2, xmm0
+			pmullw xmm6, xmm4
+			psubw xmm1, xmm2
+			psubw xmm5, xmm6
+			movdqa xmm7, xmmword ptr smoothLimit
+			movdqa xmm2, xmm1
+			movdqa xmmword ptr upperActivity, xmm1
+			movdqa xmmword ptr lowerActivity, xmm5
+			movdqa xmm6, xmm5
+			psubw xmm1, xmm7
+			psubw xmm5, xmm7
+			psraw xmm2, 0xf
+			psraw xmm6, 0xf
+			psraw xmm1, 0xf
+			psraw xmm5, 0xf
+			movdqa xmm7, xmmword ptr [edi+0x40]
+			pandn xmm2, xmm1
+			pandn xmm6, xmm5
+			movdqa xmm4, xmmword ptr [edi+0x50]
+			pand xmm6, xmm2
+			movdqa xmm2, xmm7
+			psubusw xmm7, xmm4
+			psubusw xmm4, xmm2
+			por xmm7, xmm4
+			psubw xmm7, xmmword ptr qv
+			psraw xmm7, 0xf
+			pand xmm7, xmm6
+			movdqa xmm1, xmmword ptr loopLimit
+			movdqa xmm3, xmmword ptr [edi+0x30]
+			movdqa xmm4, xmmword ptr [edi+0x40]
+			movdqa xmm5, xmmword ptr [edi+0x50]
+			movdqa xmm6, xmmword ptr [edi+0x60]
+			psubw xmm5, xmm4
+			psubw xmm3, xmm6
+			movdqa xmm4, xmm5
+			paddw xmm4, xmm5
+			paddw xmm3, xmmword ptr g_vp6Fours
+			paddw xmm5, xmm4
+			paddw xmm3, xmm5
+			psraw xmm3, 3
+			movdqa xmm2, xmm3
+			psraw xmm3, 0xf
+			pxor xmm2, xmm3
+			psubsw xmm2, xmm3
+			por xmm3, xmmword ptr g_vp6Ones
+			movdqa xmm4, xmm1
+			psubw xmm1, xmm2
+			movdqa xmm5, xmm1
+			psraw xmm1, 0xf
+			pxor xmm5, xmm1
+			psubsw xmm5, xmm1
+			psubusw xmm4, xmm5
+			pmullw xmm4, xmm3
+			movdqa xmm1, xmmword ptr [edi+0x40]
+			movdqa xmm2, xmmword ptr [edi+0x50]
+			paddw xmm1, xmm4
+			psubw xmm2, xmm4
+			pxor xmm6, xmm6
+			packuswb xmm1, xmm1
+			packuswb xmm2, xmm2
+			punpcklbw xmm1, xmm6
+			movdqa xmmword ptr firstFiltered, xmm1
+			punpcklbw xmm2, xmm6
+			movdqa xmmword ptr secondFiltered, xmm2
+			movdqa xmm5, xmmword ptr [edi]
+			movdqa xmm4, xmmword ptr [edi+0x10]
+			movdqa xmm3, xmm4
+			movdqa xmm6, xmm5
+			psubusw xmm4, xmm6
+			psubusw xmm5, xmm3
+			por xmm4, xmm5
+			psubw xmm4, xmmword ptr qv
+			psraw xmm4, 0xf
+			movdqa xmm1, xmm4
+			pand xmm4, xmm6
+			pandn xmm1, xmm3
+			por xmm1, xmm4
+			movdqa xmm4, xmmword ptr [edi+0x80]
+			movdqa xmm5, xmmword ptr [edi+0x90]
+			movdqa xmm3, xmm4
+			movdqa xmm6, xmm5
+			psubusw xmm4, xmm6
+			psubusw xmm5, xmm3
+			por xmm4, xmm5
+			psubw xmm4, xmmword ptr qv
+			psraw xmm4, 0xf
+			movdqa xmm2, xmm4
+			pand xmm4, xmm6
+			pandn xmm2, xmm3
+			por xmm2, xmm4
+			pxor xmm0, xmm0
+			movdqa xmm3, xmm1
+			paddw xmm3, xmm3
+			paddw xmm3, xmm1
+			movdqa xmm4, xmmword ptr [edi+0x10]
+			paddw xmm3, xmmword ptr [edi+0x20]
+			paddw xmm4, xmmword ptr [edi+0x30]
+			paddw xmm3, xmmword ptr [edi+0x40]
+			paddw xmm4, xmmword ptr g_vp6Fours
+			paddw xmm3, xmm4
+			movdqa xmm4, xmm3
+			movdqa xmm5, xmmword ptr [edi+0x10]
+			paddw xmm4, xmm5
+			psllw xmm4, 1
+			psubw xmm4, xmmword ptr [edi+0x40]
+			paddw xmm4, xmmword ptr [edi+0x50]
+			psraw xmm4, 4
+			psubw xmm4, xmm5
+			pand xmm4, xmm7
+			paddw xmm4, xmm5
+			packuswb xmm4, xmm0
+			movdq2q mm0, xmm4
+			movdqa xmm5, xmmword ptr [edi+0x20]
+			psubw xmm3, xmm1
+			paddw xmm3, xmmword ptr [edi+0x50]
+			movdqa xmm4, xmm5
+			paddw xmm4, xmm3
+			paddw xmm4, xmm4
+			psubw xmm4, xmmword ptr [edi+0x50]
+			paddw xmm4, xmmword ptr [edi+0x60]
+			psraw xmm4, 4
+			psubw xmm4, xmm5
+			pand xmm4, xmm7
+			paddw xmm4, xmm5
+			packuswb xmm4, xmm0
+			movdq2q mm1, xmm4
+			movdqa xmm5, xmmword ptr [edi+0x30]
+			psubw xmm3, xmm1
+			paddw xmm3, xmmword ptr [edi+0x60]
+			movdqa xmm4, xmm5
+			paddw xmm4, xmm3
+			paddw xmm4, xmm4
+			psubw xmm4, xmmword ptr [edi+0x60]
+			paddw xmm4, xmmword ptr [edi+0x70]
+			psraw xmm4, 4
+			psubw xmm4, xmm5
+			pand xmm4, xmm7
+			paddw xmm4, xmm5
+			packuswb xmm4, xmm0
+			movdq2q mm2, xmm4
+			movdqa xmm5, xmmword ptr [edi+0x40]
+			psubw xmm3, xmm1
+			paddw xmm3, xmmword ptr [edi+0x70]
+			movdqa xmm4, xmm5
+			paddw xmm4, xmm3
+			paddw xmm4, xmm4
+			paddw xmm4, xmm1
+			psubw xmm4, xmmword ptr [edi+0x10]
+			psubw xmm4, xmmword ptr [edi+0x70]
+			paddw xmm4, xmmword ptr [edi+0x80]
+			movdqa xmm5, xmmword ptr firstFiltered
+			psraw xmm4, 4
+			psubw xmm4, xmm5
+			pand xmm4, xmm7
+			paddw xmm4, xmm5
+			packuswb xmm4, xmm0
+			movdq2q mm3, xmm4
+			movdqa xmm5, xmmword ptr [edi+0x50]
+			psubw xmm3, xmmword ptr [edi+0x10]
+			paddw xmm3, xmmword ptr [edi+0x80]
+			movdqa xmm4, xmm5
+			paddw xmm4, xmm3
+			paddw xmm4, xmm4
+			paddw xmm4, xmmword ptr [edi+0x10]
+			psubw xmm4, xmmword ptr [edi+0x20]
+			psubw xmm4, xmmword ptr [edi+0x80]
+			paddw xmm4, xmm2
+			movdqa xmm5, xmmword ptr secondFiltered
+			psraw xmm4, 4
+			psubw xmm4, xmm5
+			pand xmm4, xmm7
+			paddw xmm4, xmm5
+			packuswb xmm4, xmm0
+			movdq2q mm4, xmm4
+			movdqa xmm5, xmmword ptr [edi+0x60]
+			psubw xmm3, xmmword ptr [edi+0x20]
+			paddw xmm3, xmm2
+			movdqa xmm4, xmm5
+			paddw xmm4, xmm3
+			paddw xmm4, xmm4
+			paddw xmm4, xmmword ptr [edi+0x20]
+			psubw xmm4, xmmword ptr [edi+0x30]
+			psraw xmm4, 4
+			psubw xmm4, xmm5
+			pand xmm4, xmm7
+			paddw xmm4, xmm5
+			packuswb xmm4, xmm0
+			movdq2q mm5, xmm4
+			movdqa xmm5, xmmword ptr [edi+0x70]
+			psubw xmm3, xmmword ptr [edi+0x30]
+			paddw xmm3, xmm2
+			movdqa xmm4, xmm5
+			paddw xmm4, xmm3
+			paddw xmm4, xmm4
+			paddw xmm4, xmmword ptr [edi+0x30]
+			psubw xmm4, xmmword ptr [edi+0x40]
+			psraw xmm4, 4
+			psubw xmm4, xmm5
+			pand xmm4, xmm7
+			paddw xmm4, xmm5
+			packuswb xmm4, xmm0
+			movdq2q mm6, xmm4
+			movdqa xmm5, xmmword ptr [edi+0x80]
+			psubw xmm3, xmmword ptr [edi+0x40]
+			paddw xmm3, xmm2
+			movdqa xmm4, xmm5
+			paddw xmm4, xmm3
+			paddw xmm4, xmm4
+			paddw xmm4, xmmword ptr [edi+0x40]
+			psubw xmm4, xmmword ptr [edi+0x50]
+			psraw xmm4, 4
+			psubw xmm4, xmm5
+			pand xmm4, xmm7
+			paddw xmm4, xmm5
+			packuswb xmm4, xmm0
+			movdq2q mm7, xmm4
+			movq2dq xmm0, mm0
+			movq2dq xmm1, mm1
+			movq2dq xmm2, mm2
+			movq2dq xmm3, mm3
+			punpcklbw xmm0, xmm1
+			punpcklbw xmm2, xmm3
+			movdqa xmm1, xmm0
+			punpcklwd xmm0, xmm2
+			punpckhwd xmm1, xmm2
+			movq2dq xmm4, mm4
+			movq2dq xmm5, mm5
+			movq2dq xmm6, mm6
+			movq2dq xmm7, mm7
+			punpcklbw xmm4, xmm5
+			punpcklbw xmm6, xmm7
+			movdqa xmm5, xmm4
+			punpcklwd xmm4, xmm6
+			punpckhwd xmm5, xmm6
+			movdqa xmm2, xmm0
+			punpckldq xmm0, xmm4
+			movq qword ptr [esi+edx*2], xmm0
+			psrldq xmm0, 8
+			punpckhdq xmm2, xmm4
+			movq qword ptr [esi+edx], xmm0
+			movdqa xmm3, xmm1
+			punpckldq xmm1, xmm5
+			movq qword ptr [esi], xmm2
+			psrldq xmm2, 8
+			punpckhdq xmm3, xmm5
+			movq qword ptr [esi+ecx], xmm2
+			lea esi, [esi+ecx*4]
+			movq qword ptr [esi+edx*2], xmm1
+			movq qword ptr [esi], xmm3
+			psrldq xmm1, 8
+			psrldq xmm3, 8
+			movq qword ptr [esi+edx], xmm1
+			movq qword ptr [esi+ecx], xmm3
+			pop edi
+			pop esi
+			pop edx
+			pop ecx
+			pop eax
+			}
+			ctx->m_variance[index - 1] += upperActivity[0] + upperActivity[1] + upperActivity[2] + upperActivity[3] + upperActivity[4] + upperActivity[5] + upperActivity[6] + upperActivity[7];
+			ctx->m_variance[index] += lowerActivity[0] + lowerActivity[1] + lowerActivity[2] + lowerActivity[3] + lowerActivity[4] + lowerActivity[5] + lowerActivity[6] + lowerActivity[7];
+		}
+		index++;
+	} while (index < end);
+	}
+}
