@@ -1,6 +1,20 @@
 // ?Rva005020CCBuildRegionDistances@@YAXXZ
-// partial score=0.8530952438640274 date=2026-10-10
+// partial score=0.9717737296260787 date=2026-10-12
+// ?Rva005020CCBuildRegionDistances@@YAXXZ
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
+// Native5020CC..50228B:447B; frame78 and every stack slot exact.
+// Twenty-eight differing bytes: two pair-store schedules around the
+// by-value iterator argument. Every other instruction now aligns.
+// A local campaign pointer with the manager field read in the condition
+// and again in the return restores native EAX/LEA (WB12FCF60 getter shape).
+// The aligned storage holds two actual 8-byte pairs and two 4-byte iterator
+// results; the global insert reuses a dead iterator result slot.
+// This expresses temporary lifetimes, not a claim about original spelling.
+// WB12FCF60 is an unnamed callgraph lead; native establishes all-pairs
+// path distances. The original free-function name remains unknown.
+// GlobalValue<AsciiString> is the existing provider's legacy ABI carrier
+// for the observed 28-byte key-plus-two-trees entry, not an AsciiString claim.
+// A bank only: no target extent, symbol pin, or verified row is changed.
 #include "ascii_string.h"
 enum ObjectID {};
 
@@ -67,7 +81,7 @@ public:
 	typedef typename _Rep_type::iterator iterator;
 	iterator begin() { return _M_t.begin(); }
 	unsigned int size() const { return _M_t.size(); }
-	iterator insert(iterator position, const value_type &x) { return _M_t.insert_unique(position, x); }
+	__forceinline iterator insert(iterator position, const value_type &x) { return _M_t.insert_unique(position, x); }
 	_Rep_type _M_t;
 };
 
@@ -79,7 +93,7 @@ public:
 	typedef _Rb_tree<Key, value_type, _Select1st<value_type>, less<Key>, allocator<value_type> > _Rep_type;
 	typedef typename _Rep_type::iterator iterator;
 	iterator begin() { return _M_t.begin(); }
-	iterator insert(iterator position, const value_type &x) { return _M_t.insert_equal(position, x); }
+	__forceinline iterator insert(iterator position, const value_type &x) { return _M_t.insert_equal(position, x); }
 	_Rep_type _M_t;
 };
 
@@ -137,7 +151,7 @@ class Rva005020CCDistanceTable
 public:
 	unsigned int size() const { return _M_t.size(); }
 	GlobalTree::iterator begin() { return _M_t.begin(); }
-	GlobalTree::iterator insert(const GlobalTree::iterator &position, const GlobalValue &x)
+	__forceinline GlobalTree::iterator insert(const GlobalTree::iterator &position, const GlobalValue &x)
 	{
 		return _M_t.insert_unique_00501587(position, x);
 	}
@@ -186,10 +200,7 @@ class LivingWorldLogic
 public:
 	__forceinline _STL::vector<LivingWorldRegion *> *getRegions()
 	{
-		LivingWorldRegionManager *m = m_campaign->m_regionManager;
-		if (m)
-			return &m->m_regions;
-		return 0;
+LivingWorldCampaign*c=m_campaign;if(c->m_regionManager)return &c->m_regionManager->m_regions;return 0;
 	}
 	__forceinline Rva003EF8E1 *getPathFinder()
 	{
@@ -205,9 +216,11 @@ public:
 };
 extern LivingWorldLogic *TheLivingWorldLogic;
 
+struct LocalPlacement {void *where; LocalPlacement(void *p):where(p){}};
+__forceinline void *operator new(unsigned int,LocalPlacement p) throw() {return p.where;}
 void Rva005020CCBuildRegionDistances()
 {
-	Rva005020CCDistanceTable *table = reinterpret_cast<Rva005020CCDistanceTable *>(&g_Va00E04544);
+	struct __declspec(align(4)) InsertScratch {char regionPair[8],distancePair[8],second[4],first[4];};InsertScratch scratch;Rva005020CCDistanceTable *table = reinterpret_cast<Rva005020CCDistanceTable *>(&g_Va00E04544);
 	if (table->size() != 0)
 		return;
 	_STL::vector<LivingWorldRegion *> *regions = TheLivingWorldLogic->getRegions();
@@ -220,14 +233,14 @@ void Rva005020CCBuildRegionDistances()
 				Rva004FF33DCallback callback;
 				int distance = TheLivingWorldLogic->findShortestPath((LivingWorldSearchCallback*)&callback, -1, region->m_id, other->m_id, 0, 0);
 				if (distance >= 0) {
-					int otherID = other->m_id;
-					distances.m_byDistance.insert(distances.m_byDistance.begin(), IntIntValue(distance, otherID));
-					distances.m_byRegion.insert(distances.m_byRegion.begin(), IntIntValue(otherID, distance));
+					IntIntTree::iterator hintDistance=distances.m_byDistance.begin();int otherID = other->m_id;
+					new(LocalPlacement(scratch.first)) IntIntTree::iterator(distances.m_byDistance.insert(hintDistance, *new(LocalPlacement(scratch.distancePair)) IntIntValue(distance, otherID)));
+					IntIntTree::iterator hintRegion=distances.m_byRegion.begin();new(LocalPlacement(scratch.second)) IntIntTree::iterator(distances.m_byRegion.insert(hintRegion, *new(LocalPlacement(scratch.regionPair)) IntIntValue(otherID, distance)));
 				}
 			}
 			_STL::pair<int, Rva0050055D> value(region->m_id, distances);
 			DistanceEntry entry(reinterpret_cast<const DistanceEntry &>(value));
-			table->insert(table->begin(), reinterpret_cast<const GlobalValue &>(entry));
+			new(LocalPlacement(scratch.second)) GlobalTree::iterator(table->insert(table->begin(), reinterpret_cast<const GlobalValue &>(entry)));
 		}
 	}
 }
