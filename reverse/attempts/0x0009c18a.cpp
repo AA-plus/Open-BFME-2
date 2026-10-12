@@ -1,4 +1,6 @@
 // ?rva0009C18A@Rva0009D55BProduct@@QAEXXZ
+// partial score=0.9041229309 date=2026-10-12
+// ?rva0009C18A@Rva0009D55BProduct@@QAEXXZ
 // partial score=0.8 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // stlport
@@ -47,6 +49,7 @@ struct ICoord3D
 struct Coord3D
 {
 	float x, y, z;
+ float getZ() const {return z;}
 };
 
 // The rowed out-of-line copy constructor 0x0009AC04; the default
@@ -479,6 +482,8 @@ struct Rva0009C18AManagerView
 	Rva0009C18AMapView m_map;	// +0x14
 };
 
+static inline float cameraMax(float x,float y) {return x > y ? x : y;}
+static inline float cameraProduct(float x,float y) {return x*y;}
 void Rva0009D55BProduct::rva0009C18A()
 {
 	m_170.Region3D::Region3D(*((Rva0009C18ARenderObj *)m_D4)->getExtent());
@@ -490,25 +495,26 @@ void Rva0009D55BProduct::rva0009C18A()
 	m_104 = m_170.lo;
 	m_104.z = 0.0f;
 	m_F8 = m_104;
-	float distanceY;
-	float distanceX;
+	float distance[2];
 	double tanX = tan(0.4363323152065277);
-	distanceX = (m_170.hi.x - m_120) / tanX;
+	distance[0] = (m_170.hi.x - m_120) / tanX;
 	double tanY = tan(0.4363323152065277);
-	distanceY = (m_170.hi.y - m_120) * 1.333f / tanY;
+	distance[1] = (m_170.hi.y - m_120) * 1.333f / tanY;
 	Matrix3D tm(true);
-	float drop = m_170.lo.z - m_170.hi.z;
+	float drop = m_170.lo.getZ() - m_170.hi.getZ();
 	tm.Set_Z_Translation(-drop);
 	m_170.lo.z = m_170.hi.z;
 	((Rva0009C18ARenderObj *)m_D4)->Set_Transform(tm);
-	m_DC = distanceX < distanceY ? distanceY : distanceX;
+	float fitted=distance[0];
+	if(distance[1] > fitted) fitted=distance[1];
+	m_DC=fitted;
 	m_134 = 0.0f;
 	rva0009BAA4();
 	Coord3D corners[4];
 	((Rva0009C134Host *)this)->rva0009B7EA(corners);
 	float dx = m_F8.x - corners[0].x;
-	m_124 = m_170.lo.x - m_170.hi.x * manager.m_marginX + m_120 + dx;
-	m_12C = m_170.hi.x * manager.m_marginX + m_170.lo.x - (m_120 + dx);
+	m_124 = m_170.lo.x - cameraProduct(m_170.hi.x,manager.m_marginX) + m_120 + dx;
+	m_12C = cameraProduct(m_170.hi.x,manager.m_marginX) + m_170.lo.x - (m_120 + dx);
 	m_128 = m_170.lo.y - manager.m_marginY * m_170.hi.y + (m_F8.y - corners[2].y) + m_120;
 	m_130 = manager.m_marginY * m_170.hi.y + m_170.lo.y - (corners[0].y - m_F8.y + m_120);
 	m_134 = 1.0f;
