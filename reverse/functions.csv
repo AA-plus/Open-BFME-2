@@ -21896,7 +21896,6 @@ uw_00777624,,0x00777624,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;obj
 uw_0077770b,,0x0077770B,11,Code/gen_small/uw_gen_001.cpp,matched,gen-funclet;object-symbol=$L4427
 uw_0077772a,,0x0077772A,8,Code/gen_small/uw_gen_002.cpp,matched,gen-funclet;object-symbol=$L293
 uw_00777732,,0x00777732,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
-uw_007777ca,,0x007777CA,14,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L602
 uw_0077780c,,0x0077780C,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
 uw_00777814,,0x00777814,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
 uw_0077781c,,0x0077781C,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
@@ -86799,3 +86798,4 @@ __ehhandler$?rva0006ACBD@BaseHeightMapRenderObjClass@@QAEXVAsciiString@@@Z,,0x00
 ?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z,,0x001BE490,730,Code/Libraries/Source/VP6/DeblockVerticalEdges.cpp,matched,VP6 DeblockVerticalEdgesInNonFilteredBandNewFilter (spec 001be490): called by the matched band driver DeblockPlaneNew under the pinned name; ten-sample window in int x[10]; flat 3+2+3 smoothing with the outer right sample cached in a scalar for the last three window steps (fixes the store-ordered tail schedule); g_bfmeClampTable; implemented from the VP6 clean-room spec and retail only
 ?FrameUpdate@AptMyHero@@QAEXXZ,,0x005B1EE2,760,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptMyHero.cpp,matched,WB lead AptMyHero::FrameUpdate; guard ctor defined inline in the class (still called at /O1) fixes the guard/ESP-save frame slot pairing
 uw_007776bf,,0x007776BF,14,Code/GameEngine/Source/GameClient/GUI/Palantir/AptPalantirConstructor.cpp,matched,gen-funclet;object-symbol=$L7233;parent=??1AptPalantir@@UAE@XZ; Complete owning parent and EH graph EXACT bind this native unwind state; whole 14B Ghidra extent and every callee relocation verified through existing providers; emitted by actual C++ parent; no shape-only or adjacency identity inference
+uw_007777ca,,0x007777CA,14,Code/GameEngine/Source/GameClient/GUI/Palantir/AptPalantirConstructor.cpp,matched,gen-funclet;object-symbol=$L7597;parent=??0AptPalantir@@QAE@PAVRva002D3573@@H@Z; Complete owning parent and EH graph EXACT bind this native unwind state; whole 14B Ghidra extent and every callee relocation verified through existing providers; emitted by actual C++ parent; no shape-only or adjacency identity inference
