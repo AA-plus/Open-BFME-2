@@ -45,3 +45,40 @@ void ScoreKeeper::unhookAllScoredKillTrackers()
 		} while (it != tmp.end());
 	}
 }
+
+// ?unhookAllScoredKillTrackers@ScoreKeeper@@QAEXXZ
+// partial score=0.95 date=2026-10-12 seat=w6-mo1
+// Alternative via _Vector_base<unsigned> dtor spec routing to Rva00030830GameFree
+// (see ScoreKeeperReset.cpp) + do-while with begin/end/p separation (end-var forces
+// edi/esi split but adds loads; fresh-load CSE-merges). 84-85/88B. Needs begin/p
+// unmerge + early push order. Function body only.
+// Retail 0x0039C09C, 88 bytes. Unhooks every tracked kill: copies the
+// trackedKills vector (the unhook mutates keeper state, so it iterates a
+// copy), invokes ScoredKillTracker::rva0055A91A on each entry, then frees
+// the copy's storage. Called from the destructor 0x0039C2B5. Evidence:
+// callers 0x0039C2B5; rowed vector<unsigned> copy 0x002CFAB9,
+// ScoredKillTracker::rva0055A91A 0x0055A91A and _free 0x00030830;
+// trackedKills at +0x304 per the destructor layout.
+void ScoreKeeper::unhookAllScoredKillTrackers()
+{
+	_STL::vector<unsigned> tmp = trackedKills;
+	unsigned *begin = tmp.begin();
+	unsigned *end = tmp.end();
+	unsigned *p = begin;
+	if (begin != end)
+	{
+		do
+		{
+			((ScoredKillTracker *)*p)->rva0055A91A();
+			++p;
+		} while (p != tmp.end());
+	}
+}
+
+
+// Supporting declarations for the above (from ScoreKeeperReset.cpp):
+// void __cdecl Rva00030830GameFree(void *);
+// namespace _STL {
+// template <> inline _Vector_base<unsigned, allocator<unsigned> >::~_Vector_base()
+// { if (_M_start) Rva00030830GameFree(_M_start); }
+// }
