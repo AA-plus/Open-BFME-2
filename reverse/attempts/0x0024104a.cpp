@@ -1,4 +1,6 @@
 // ?PlaceLivingWorldObjectsForPlayer@@YAXPAVPlayer@@@Z
+// partial score=0.982834 date=2026-10-12
+// ?PlaceLivingWorldObjectsForPlayer@@YAXPAVPlayer@@@Z
 // partial score=0.9081527347781218 date=2026-10-12
 // cl: /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
@@ -208,23 +210,24 @@ void PlaceLivingWorldObjectsForPlayer(Player *player) {
  if(TheGameLogic->m_114==3) return;
  LivingWorldRegion *region; int armyId;
  {
- int livingId=player->livingId;
  int savedLivingId;
+ { int livingId=player->livingId;
  *(volatile int*)&savedLivingId=livingId;
- if(livingId==-1) return;
+ if(livingId==-1) goto quit;
  LivingWorldBattle *battle=(LivingWorldBattle*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->regions->rva0020E6B7();
- if(!battle) return;
+ if(!battle) goto quit;
  Rva002E2903Player *worldPlayer=((Rva002BA8F1Logic*)TheLivingWorldLogic)->find(livingId,0);
- if(!worldPlayer) return;
+ if(!worldPlayer) goto quit;
  LivingArmy *army=(LivingArmy*)battle->rva003F4FBD(worldPlayer);
  armyId=army?army->id:0;
  if(!armyId) return;
+ }
  int currentRegion=((Rva002BA8F1Logic*)TheLivingWorldLogic)->currentRegion;
  Rva0020EAF6View *manager=(Rva0020EAF6View*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->regions;
  region=(LivingWorldRegion*)manager->rva0020EAF6(currentRegion);
- if(!region || region->owner!=savedLivingId) return;
+ if(!region) return; int finalId=*(volatile int*)&savedLivingId; if(region->owner!=finalId)return;
  }
- AsciiString waypointName("Player_1_Start");
+ {AsciiString waypointName("Player_1_Start");
  Waypoint *start=Rva00506CC3FindWaypoint(waypointName);
  if(!start) return;
  ValidateLivingWorldBuildPlotWaypoints(start,region->rva003F05CE());
@@ -243,4 +246,6 @@ void PlaceLivingWorldObjectsForPlayer(Player *player) {
   ((Rva0040D280Sub*)((char*)TheGameLogic+0x184))->method(obj,armyId);
   *(int*)((char*)obj+0x464)=building->id;
  }
+}
+quit:;
 }
