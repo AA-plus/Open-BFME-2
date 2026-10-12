@@ -17248,3 +17248,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva00420B61@DelayedExperienceLevelGrantSystem@@QAEXPAUExperienceLevelView@@PAVObject@@@Z,0x00420B61,callee of ?rva00420C8E@DelayedExperienceLevelGrantSystem@@QAEXPAUExperienceLevelView@@PAVObject@@_N@Z
 ?rva006C1D60@Rva006C1D60@@QAE_NI_N@Z,0x006C1D60,callee of ?rva006C3660@Rva006C1F60@@QAEXPAX@Z
 ?parse@WorldHeightMap@@QAEXAAVDataChunkInput@@HHH@Z,0x000AF238,callee of ??0WorldHeightMap@@QAE@PAVChunkInputStream@@HHH@Z
+??1?$list@PAVNetPacket@@V?$allocator@PAVNetPacket@@@_STL@@@_STL@@QAE@XZ,0x00200667,fold-proof=Code/GameEngine/Source/GameNetwork/NetPacket.cpp; NetPacket template destructor name carried from existing C++ factory; native cleanup ownership proven independently by parent EH graph; five-byte direct tail fold anchored by complete same-object base and clear bodies with every native owner relocation proven
