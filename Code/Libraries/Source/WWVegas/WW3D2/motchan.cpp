@@ -556,19 +556,16 @@ Quaternion TimeCodedMotionChannelClass::Get_QuatVector(float32 frame)
  * HISTORY:                                                                                    * 
  *   08/11/1997 GH  : Created.                                                                 * 
  *=============================================================================================*/
-// ?TimeCodedMotionChannelClass::set_identity present-unmatched
+// Retail 0x00195DD0 (43 bytes, RET4): BFME 2 stores the shared first
+// component before the type test, where the reference zeroes it in both arms.
 void TimeCodedMotionChannelClass::set_identity(float * setvec)
 {
+	setvec[0] = 0.0f;
 	if (Type == ANIM_CHANNEL_Q) {
 
-		setvec[0] = 0.0f;
 		setvec[1] = 0.0f;
 		setvec[2] = 0.0f;
 		setvec[3] = 1.0f;
-
-	} else {
-
-		setvec[0] = 0.0f;
 
 	}
 }	// set_identity
