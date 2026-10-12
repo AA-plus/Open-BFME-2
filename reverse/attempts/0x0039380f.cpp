@@ -1,4 +1,6 @@
 // ?rva0039380F@BuildAssistant@@UAE_NPAVRva0039205C@@PAVObject@@PBUCoord3D@@2I@Z
+// partial score=0.885 date=2026-10-12
+// ?rva0039380F@BuildAssistant@@UAE_NPAVRva0039205C@@PAVObject@@PBUCoord3D@@2I@Z
 // partial score=0.8828 date=2026-10-09
 // ?rva0039380F@BuildAssistant@@UAE_NPAVRva0039205C@@PAVObject@@PBUCoord3D@@2I@Z
 // partial score=0.87755 date=2026-10-09
@@ -10,6 +12,15 @@
 // Coord2D view is canonical plus already-rowed toAngle(5923), missing from its contract/header.
 // Before moving to Code, adopt that declaration in the canonical contract/header; never use the bank copy to bypass class_gate.
 // Remaining differences: frame F8 vs E8 and temporary storage/lifetime, final hub-step register order; score .87755.
+// 2026-10-12 MP3: toAngle is now in canonical Coord2D.h (drop bank copy on import). D1 previous(Coord3D)->prevZ(Real)
+ // (decl-swap endPoint/nearObject: no effect, reverted).
+// frame EC (was F8), 2238B (was 2242), first-diff still +0xC; D2 stepx/stepy fold helps size but keep separate.
+// Retail packs a 5-home block {-0x58..-0x68} differently (not a uniform shift): extra live temp, likely filter layouts.
+// align_diff (build/align380f_D1.txt, shift-aware): 15 reg + 118 mem diffs, 38 structural regions. Ours +21B.
+// Top regions: +0x6ec(+15 ours: xmm0 home round-trip + xmm1 spill around call args; retail home-based fld);
+// +0x3b5(retail movsd x2 16B copy vs ours movss); +0x402(+8 ours spill); vftable mov-0 vs mov-0xBFAD04
+// (pre-link reloc? our vftable emitted with external refs to rowed allow/getPlayerMask; needs ICF proof at landing);
+// frame EC vs E8 (1 slot). Home sets overlap 34/39; ours +{3c,94,9c}, retail +{38,60}.
 #include <list>
 #include <vector>
 #include <algorithm>
@@ -1562,7 +1573,7 @@ Bool BuildAssistant::rva0039380F(Rva0039205C *out, Object *builder, const Coord3
  Int funds=builder->getControllingPlayer()->getMoney()->countMoney();
  Int index=0;
  Real remaining=delta.length();
- Coord3D previous=current;
+ Real prevZ=current.z;
  Bool connected=endAtObject && Rva003919F6Connected(builder,nearObject);
  Bool lastWouldBeLegal=false;
  remaining-=hubHalf;
@@ -1577,7 +1588,7 @@ Bool BuildAssistant::rva0039380F(Rva0039205C *out, Object *builder, const Coord3
   }
   Real stepy=half*unit.y; Real stepx=half*unit.x;
   Coord3D step={stepx,stepy,0.f};
-  previous=current;
+  prevZ=current.z;
   current.x+=step.x;current.y+=step.y;
   current.z=TheTerrainLogic->getGroundHeight(current.x,current.y,0);
   Int code=isLocationLegalToBuild(&current,segment,angle,0x55,builder,0);
@@ -1596,7 +1607,7 @@ Bool BuildAssistant::rva0039380F(Rva0039205C *out, Object *builder, const Coord3
    const ThingTemplate *terrainPiece=module->getTerrainPiece();
    if (terrainPiece) out->rva0039215F(index,terrainPiece->getName());
    out->rva00392196(index,0);
-   current.z=previous.z;
+   current.z=prevZ;
    out->setPos(index,&current);
    out->rva003921C8(index,1);
    const ThingTemplate *hub=module->getHub();
