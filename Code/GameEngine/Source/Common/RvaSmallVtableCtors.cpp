@@ -891,3 +891,339 @@ Rva005B253F::~Rva005B253F()
 {
 }
 
+
+// Batch of further copies found in .text gaps (same three shapes as above).
+
+// ??0Rva000FC59D@@QAE@XZ @0x000FC59D 13B, vtable VA 0x00bcf380
+class Rva000FC59D : public RvaSmallVtableZeroBase
+{
+public:
+	Rva000FC59D();
+	virtual ~Rva000FC59D() {}
+};
+
+Rva000FC59D::Rva000FC59D()
+{
+}
+
+// ??0Rva001F017B@@QAE@XZ @0x001F017B 13B, vtable VA 0x00be09e8
+class Rva001F017B : public RvaSmallVtableZeroBase
+{
+public:
+	Rva001F017B();
+	virtual ~Rva001F017B() {}
+};
+
+Rva001F017B::Rva001F017B()
+{
+}
+
+// ??0Rva002035D5@@QAE@XZ @0x002035D5 13B, vtable VA 0x00be3990
+class Rva002035D5 : public RvaSmallVtableZeroBase
+{
+public:
+	Rva002035D5();
+	virtual ~Rva002035D5() {}
+};
+
+Rva002035D5::Rva002035D5()
+{
+}
+
+// ??0Rva00285D27@@QAE@XZ @0x00285D27 13B, vtable VA 0x00bfb730
+class Rva00285D27 : public RvaSmallVtableZeroBase
+{
+public:
+	Rva00285D27();
+	virtual ~Rva00285D27() {}
+};
+
+Rva00285D27::Rva00285D27()
+{
+}
+
+// ??0Rva002D3347@@QAE@XZ @0x002D3347 13B, vtable VA 0x00c02a84
+class Rva002D3347 : public RvaSmallVtableZeroBase
+{
+public:
+	Rva002D3347();
+	virtual ~Rva002D3347() {}
+};
+
+Rva002D3347::Rva002D3347()
+{
+}
+
+// ??0Rva0037DE63@@QAE@XZ @0x0037DE63 13B, vtable VA 0x00c18d64
+class Rva0037DE63 : public RvaSmallVtableZeroBase
+{
+public:
+	Rva0037DE63();
+	virtual ~Rva0037DE63() {}
+};
+
+Rva0037DE63::Rva0037DE63()
+{
+}
+
+// ??0Rva004103DA@@QAE@XZ @0x004103DA 13B, vtable VA 0x00c3ed74
+class Rva004103DA : public RvaSmallVtableZeroBase
+{
+public:
+	Rva004103DA();
+	virtual ~Rva004103DA() {}
+};
+
+Rva004103DA::Rva004103DA()
+{
+}
+
+// ??0Rva00545D43@@QAE@XZ @0x00545D43 13B, vtable VA 0x00c6a13c
+class Rva00545D43 : public RvaSmallVtableZeroBase
+{
+public:
+	Rva00545D43();
+	virtual ~Rva00545D43() {}
+};
+
+Rva00545D43::Rva00545D43()
+{
+}
+
+// ??0Rva005CDB5F@@QAE@XZ @0x005CDB5F 13B, vtable VA 0x00c7506c
+class Rva005CDB5F : public RvaSmallVtableZeroBase
+{
+public:
+	Rva005CDB5F();
+	virtual ~Rva005CDB5F() {}
+};
+
+Rva005CDB5F::Rva005CDB5F()
+{
+}
+
+// ??0Rva005E96F8@@QAE@XZ @0x005E96F8 13B, vtable VA 0x00c79e44
+class Rva005E96F8 : public RvaSmallVtableZeroBase
+{
+public:
+	Rva005E96F8();
+	virtual ~Rva005E96F8() {}
+};
+
+Rva005E96F8::Rva005E96F8()
+{
+}
+
+// ??0Rva005F252A@@QAE@XZ @0x005F252A 13B, vtable VA 0x00c4ef80
+class Rva005F252A : public RvaSmallVtableZeroBase
+{
+public:
+	Rva005F252A();
+	virtual ~Rva005F252A() {}
+};
+
+Rva005F252A::Rva005F252A()
+{
+}
+
+// ??0Rva006003EF@@QAE@XZ @0x006003EF 13B, vtable VA 0x00c7a630
+class Rva006003EF : public RvaSmallVtableZeroBase
+{
+public:
+	Rva006003EF();
+	virtual ~Rva006003EF() {}
+};
+
+Rva006003EF::Rva006003EF()
+{
+}
+
+// ??0Rva005CF913@@QAE@PAX@Z @0x005CF913 18B, vtable VA 0x00c752a0
+class Rva005CF913 : public RvaSmallVtablePtrBase
+{
+public:
+	Rva005CF913(void *p);
+	virtual ~Rva005CF913() {}
+};
+
+Rva005CF913::Rva005CF913(void *p) : RvaSmallVtablePtrBase(p)
+{
+}
+
+// ??0Rva005CF925@@QAE@PAX@Z @0x005CF925 18B, vtable VA 0x00c752a8
+class Rva005CF925 : public RvaSmallVtablePtrBase
+{
+public:
+	Rva005CF925(void *p);
+	virtual ~Rva005CF925() {}
+};
+
+Rva005CF925::Rva005CF925(void *p) : RvaSmallVtablePtrBase(p)
+{
+}
+
+// ??0Rva005D1052@@QAE@PAX@Z @0x005D1052 18B, vtable VA 0x00c755a4
+class Rva005D1052 : public RvaSmallVtablePtrBase
+{
+public:
+	Rva005D1052(void *p);
+	virtual ~Rva005D1052() {}
+};
+
+Rva005D1052::Rva005D1052(void *p) : RvaSmallVtablePtrBase(p)
+{
+}
+
+// ??0Rva000EF9F3@@QAE@PAX@Z @0x000EF9F3 18B, vtable VA 0x00bcef9c
+class Rva000EF9F3
+{
+public:
+	Rva000EF9F3(void *p);
+	virtual ~Rva000EF9F3() {}
+private:
+	void *m_04;
+};
+
+Rva000EF9F3::Rva000EF9F3(void *p) : m_04(p)
+{
+}
+
+// ??0Rva002B29F8@@QAE@PAX@Z @0x002B29F8 18B, vtable VA 0x00bfe004
+class Rva002B29F8
+{
+public:
+	Rva002B29F8(void *p);
+	virtual ~Rva002B29F8() {}
+private:
+	void *m_04;
+};
+
+Rva002B29F8::Rva002B29F8(void *p) : m_04(p)
+{
+}
+
+// ??0Rva00306A36@@QAE@PAX@Z @0x00306A36 18B, vtable VA 0x00c07dd8
+class Rva00306A36
+{
+public:
+	Rva00306A36(void *p);
+	virtual ~Rva00306A36() {}
+private:
+	void *m_04;
+};
+
+Rva00306A36::Rva00306A36(void *p) : m_04(p)
+{
+}
+
+// ??0Rva0052787E@@QAE@PAX@Z @0x0052787E 18B, vtable VA 0x00c6805c
+class Rva0052787E
+{
+public:
+	Rva0052787E(void *p);
+	virtual ~Rva0052787E() {}
+private:
+	void *m_04;
+};
+
+Rva0052787E::Rva0052787E(void *p) : m_04(p)
+{
+}
+
+// ??0Rva0056AC9C@@QAE@PAX@Z @0x0056AC9C 18B, vtable VA 0x00c6d0bc
+class Rva0056AC9C
+{
+public:
+	Rva0056AC9C(void *p);
+	virtual ~Rva0056AC9C() {}
+private:
+	void *m_04;
+};
+
+Rva0056AC9C::Rva0056AC9C(void *p) : m_04(p)
+{
+}
+
+// ??0Rva005754ED@@QAE@PAX@Z @0x005754ED 18B, vtable VA 0x00c6e60c
+class Rva005754ED
+{
+public:
+	Rva005754ED(void *p);
+	virtual ~Rva005754ED() {}
+private:
+	void *m_04;
+};
+
+Rva005754ED::Rva005754ED(void *p) : m_04(p)
+{
+}
+
+// ??0Rva005CDCDC@@QAE@PAX@Z @0x005CDCDC 18B, vtable VA 0x00c7508c
+class Rva005CDCDC
+{
+public:
+	Rva005CDCDC(void *p);
+	virtual ~Rva005CDCDC() {}
+private:
+	void *m_04;
+};
+
+Rva005CDCDC::Rva005CDCDC(void *p) : m_04(p)
+{
+}
+
+// ??0Rva005CE8DC@@QAE@PAX@Z @0x005CE8DC 18B, vtable VA 0x00c751a8
+class Rva005CE8DC
+{
+public:
+	Rva005CE8DC(void *p);
+	virtual ~Rva005CE8DC() {}
+private:
+	void *m_04;
+};
+
+Rva005CE8DC::Rva005CE8DC(void *p) : m_04(p)
+{
+}
+
+// ??0Rva005D1023@@QAE@PAX@Z @0x005D1023 18B, vtable VA 0x00c7559c
+class Rva005D1023
+{
+public:
+	Rva005D1023(void *p);
+	virtual ~Rva005D1023() {}
+private:
+	void *m_04;
+};
+
+Rva005D1023::Rva005D1023(void *p) : m_04(p)
+{
+}
+
+// ??0Rva005E9F69@@QAE@PAX@Z @0x005E9F69 18B, vtable VA 0x00c780bc
+class Rva005E9F69
+{
+public:
+	Rva005E9F69(void *p);
+	virtual ~Rva005E9F69() {}
+private:
+	void *m_04;
+};
+
+Rva005E9F69::Rva005E9F69(void *p) : m_04(p)
+{
+}
+
+// ??0Rva005E9F92@@QAE@PAX@Z @0x005E9F92 18B, vtable VA 0x00c780f4
+class Rva005E9F92
+{
+public:
+	Rva005E9F92(void *p);
+	virtual ~Rva005E9F92() {}
+private:
+	void *m_04;
+};
+
+Rva005E9F92::Rva005E9F92(void *p) : m_04(p)
+{
+}
