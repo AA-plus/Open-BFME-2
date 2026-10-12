@@ -36,6 +36,8 @@ typedef unsigned int UnsignedInt;
 
 struct IntVec { int *m_start; int *m_finish; int *m_end; };
 struct Elem16 { char m_data[16]; };
+struct Elem20 { char m_data[20]; };
+struct Vec20 { Elem20 *m_start; Elem20 *m_finish; Elem20 *m_end; };
 struct Vec16 {
     Elem16 *m_start;
     Elem16 *m_finish;
@@ -61,6 +63,7 @@ public:
         const AsciiString *rva0021C970(Int blingKey, UnsignedInt index);   // 0x0021C970, bling desc tag
         Int GetAwardNameKey(UnsignedInt index) const;     // 0x00219B62
         Int GetStatNameKey(UnsignedInt index) const;      // 0x00219B80
+        void *GetBlingGroupNameKey(UnsignedInt index);    // 0x0021AD5D
 
         AsciiString m_nameTag;                  // +0x00
         AsciiString m_descTag;                  // +0x04
@@ -71,7 +74,9 @@ public:
         Int m_18;
         Int m_spendableAttributePoints;         // +0x1C
         AsciiString m_upgradeName;              // +0x20
-        char m_24[0x30 - 0x24];
+        char m_24[0x28 - 0x24];
+        Int m_28;                               // +0x28
+        char m_2C[0x30 - 0x2C];
         IntVec m_awardNameKeys;                 // +0x30
         IntVec m_statNameKeys;                  // +0x3C
         char m_48[0x58 - 0x48];
@@ -110,6 +115,8 @@ public:
         Int GetAttributeMinValue(UnsignedInt attribute, UnsignedInt subClassIndex);
         Int GetAttributeMaxValue(UnsignedInt attribute, UnsignedInt subClassIndex);
         Int GetAttributeDefaultValue(UnsignedInt attribute, UnsignedInt subClassIndex);
+        Int rva00219BCA(UnsignedInt subClassIndex);
+        void *rva0021ADD9(UnsignedInt index, UnsignedInt subClassIndex);
 
         AsciiString m_nameTag;                  // +0x00
         AsciiString m_descTag;                  // +0x04
@@ -157,12 +164,15 @@ public:
     Int GetSubClassAttributeMinValue(UnsignedInt attribute, UnsignedInt classIndex, UnsignedInt subClassIndex);
     Int GetSubClassAttributeMaxValue(UnsignedInt attribute, UnsignedInt classIndex, UnsignedInt subClassIndex);
     Int GetSubClassAttributeDefaultValue(UnsignedInt attribute, UnsignedInt classIndex, UnsignedInt subClassIndex);
+    Int rva002196DA();
+    Int rva002196EC();
 
 private:
     char m_pad[0x14C];
     ClassVec m_classes;                         // +0x14C
     char m_pad3[0x15C - 0x158];
     Vec16 m_blingList;                          // +0x15C
+    Vec20 m_list168;                            // +0x168, 20-byte records
 };
 
 typedef CreateAHeroManager::CreateAHeroClass CreateAHeroClass;
@@ -657,4 +667,33 @@ const AsciiString &CreateAHeroManager::GetBlingDescTag(Int blingKey, UnsignedInt
             return *p->rva0021C970(blingKey, index);
     }
     return err;
+}
+
+// 0x002196DA 18B (unnamed in WB): the class vector's count.
+Int CreateAHeroManager::rva002196DA()
+{
+    return ClassCount(&m_classes);
+}
+// 0x002196EC 21B (unnamed in WB): the count of the 20-byte records at
+// +0x168 (signed idiv by 20).
+static __forceinline int List168Count(const Vec20 *v) { return v->m_finish - v->m_start; }
+Int CreateAHeroManager::rva002196EC()
+{
+    return List168Count(&m_list168);
+}
+// 0x00219BCA 23B (unnamed in WB): subclass +0x28 or 0.
+Int CreateAHeroClass::rva00219BCA(UnsignedInt subClassIndex)
+{
+    const CreateAHeroSubClass *p = rva00219B9E(subClassIndex);
+    if (p)
+        return p->m_28;
+    return 0;
+}
+// 0x0021ADD9 31B (unnamed in WB): the subclass's 0x0021AD5D answer or 0.
+void *CreateAHeroClass::rva0021ADD9(UnsignedInt index, UnsignedInt subClassIndex)
+{
+    CreateAHeroSubClass *p = (CreateAHeroSubClass *)rva00219B9E(subClassIndex);
+    if (p)
+        return p->GetBlingGroupNameKey(index);
+    return 0;
 }
