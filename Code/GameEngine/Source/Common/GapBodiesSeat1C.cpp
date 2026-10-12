@@ -474,3 +474,182 @@ int Rva00388D9D::rva00388D9D() const
 {
 	return m_10 == m_00;
 }
+
+// --- 0x0039165D (10B): byte setter +0x1D; 0x003959A3 (18B): the pointer
+// count of the +0x80 vector; 0x0039ABF2 (13B): +0x18 with -1 read as 0;
+// 0x0039B6CD (33B): three words at +0xE0.
+struct Rva003959A3Vector
+{
+	void **m_start;
+	void **m_finish;
+};
+
+static __forceinline int Rva003959A3Count(const Rva003959A3Vector *v) { return v->m_finish - v->m_start; }
+
+class Rva0039165D
+{
+public:
+	void rva0039165D(bool value);
+	int rva003959A3() const;
+	int rva0039ABF2() const;
+	void rva0039B6CD(int a, int b, int c);
+private:
+	char m_pad00[0x18];
+	int m_18;
+	char m_pad1C[0x1D - 0x1C];
+	bool m_1D;
+	char m_pad1E[0x80 - 0x1E];
+	Rva003959A3Vector m_80;
+	char m_pad88[0xE0 - 0x88];
+	int m_E0;
+	int m_E4;
+	int m_E8;
+};
+
+void Rva0039165D::rva0039165D(bool value)
+{
+	m_1D = value;
+}
+
+int Rva0039165D::rva003959A3() const
+{
+	return Rva003959A3Count(&m_80);
+}
+
+int Rva0039165D::rva0039ABF2() const
+{
+	int value = m_18;
+	return value != -1 ? value : 0;
+}
+
+void Rva0039165D::rva0039B6CD(int a, int b, int c)
+{
+	m_E0 = a;
+	m_E4 = b;
+	m_E8 = c;
+}
+
+// --- 0x003A44DF (14B) and 0x003A450C (15B): count of and the indexed
+// 0xA0-byte record of the vector at +0.
+struct Rva003A44DFRecord
+{
+	char m_data[0xA0];
+};
+
+class Rva003A44DF
+{
+public:
+	int rva003A44DF() const;
+	Rva003A44DFRecord *rva003A450C(int index);
+private:
+	Rva003A44DFRecord *m_start;
+	Rva003A44DFRecord *m_finish;
+};
+
+int Rva003A44DF::rva003A44DF() const
+{
+	return m_finish - m_start;
+}
+
+Rva003A44DFRecord *Rva003A44DF::rva003A450C(int index)
+{
+	return &m_start[index];
+}
+
+// --- 0x003B0C9F (10B): adds to +8; 0x003B2534 (12B): copies a word to
+// +0x24; 0x003B8B7B (10B): the +0x10-indexed word of the +0x14 array.
+class Rva003B0C9F
+{
+public:
+	void rva003B0C9F(int value);
+	void rva003B2534(const int *value);
+	int rva003B8B7B() const;
+private:
+	int m_00;
+	int m_04;
+	int m_08;
+	int m_0C;
+	int m_10;
+	int *m_14;
+	char m_pad18[0x24 - 0x18];
+	int m_24;
+};
+
+void Rva003B0C9F::rva003B0C9F(int value)
+{
+	m_08 += value;
+}
+
+void Rva003B0C9F::rva003B2534(const int *value)
+{
+	m_24 = *value;
+}
+
+int Rva003B0C9F::rva003B8B7B() const
+{
+	return m_14[m_10];
+}
+
+// --- 0x003B0E93 (15B, cdecl): bit 7 of the +0x108 byte.
+struct Rva003B0E93Record
+{
+	char m_pad000[0x108];
+	unsigned char m_108;
+};
+
+int Rva003B0E93(const Rva003B0E93Record *rec)
+{
+	return rec->m_108 >> 7;
+}
+
+// --- 0x003B24DB (23B): latches +0 or clears +4 by the flag, then stores it
+// at +1.
+class Rva003B24DB
+{
+public:
+	void rva003B24DB(bool value);
+private:
+	bool m_00;
+	bool m_01;
+	int m_04;
+};
+
+void Rva003B24DB::rva003B24DB(bool value)
+{
+	if (value)
+		m_00 = true;
+	else
+		m_04 = 0;
+	m_01 = value;
+}
+
+// --- 0x003B260F (31B): the predecessor (next at +4) of a node in the +0x30
+// list, null for the head or when absent.
+struct Rva003B260FNode
+{
+	int m_00;
+	Rva003B260FNode *m_next;
+};
+
+class Rva003B260F
+{
+public:
+	Rva003B260FNode *rva003B260F(Rva003B260FNode *node) const;
+private:
+	char m_pad00[0x30];
+	Rva003B260FNode *m_head;
+};
+
+Rva003B260FNode *Rva003B260F::rva003B260F(Rva003B260FNode *node) const
+{
+	Rva003B260FNode *cur = m_head;
+	if (cur == node)
+		return 0;
+	while (cur)
+	{
+		if (cur->m_next == node)
+			return cur;
+		cur = cur->m_next;
+	}
+	return 0;
+}
