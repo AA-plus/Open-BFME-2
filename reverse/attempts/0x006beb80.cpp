@@ -1,10 +1,6 @@
-// ?bfmeIntersects@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z
-// partial score=0.7 date=2026-10-09
+// ?CollidesWith@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z
+// partial score=0.7 date=2026-10-12
 // cl: /O2 /Ob2 /G6 /DNDEBUG /MD /EHs-c- /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib
-// Correct native extent6BEB80..6BEEB5=821, old814 cuts ADD ESP/RET20.
-// Target enabled32, second flag33, shape36B and nested vector walks2C/30.
-// Transform provider's existing pointer-return pin agrees with native EAX use;
-// its current void ledger provider is an independently observed ABI discrepancy.
 #include "ascii_string.h"
 #include "Coord3D.h"
 struct Rva0087E900Coord { float x,y,z; };
@@ -26,7 +22,7 @@ struct GeometryContact {
 };
 class GeometryInfo {
 public:
- bool bfmeIntersects(const Coord3D &,float,const GeometryInfo &,const Coord3D &,float) const;
+ bool CollidesWith(const Coord3D &,float,const GeometryInfo &,const Coord3D &,float) const;
 private:
  void *vptr; char prefix[0x28]; GeometryShape *begin,*end,*limit;
 };
@@ -46,7 +42,7 @@ static __forceinline bool overlap(GeometryContact &a,GeometryContact &b) {
  }
  return false;
 }
-bool GeometryInfo::bfmeIntersects(const Coord3D &p,float angle,const GeometryInfo &other,const Coord3D &q,float otherAngle) const {
+bool GeometryInfo::CollidesWith(const Coord3D &p,float angle,const GeometryInfo &other,const Coord3D &q,float otherAngle) const {
  bool found=false;
  for(GeometryShape *s=begin;s!=end;++s) {
   if(!s->enabled) continue;
