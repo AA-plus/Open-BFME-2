@@ -620,7 +620,7 @@ StrategicHUD::Palantir *StrategicHUD::Palantir::rva005785BE()
 // Existing rowed bool wrapper is visible for its read-only argument behavior.
 class Rva00222A8BTarget {public:int rva00222B19(void *,const char *,const char *,int,const char *,void *,void *,void *,void *);};
 char ** __cdecl Rva004E678BGet(char **,bool);
-__declspec(noinline) void __cdecl Rva005277D9Fire(Rva00222A8BTarget *target,void *level,const char *prefix,const char *function,bool *flagPtr) {
+inline __declspec(noinline) void __cdecl Rva005277D9Fire(Rva00222A8BTarget *target,void *level,const char *prefix,const char *function,bool *flagPtr) {
  char *value;
  char *val=*Rva004E678BGet((char **)&value,*flagPtr);
  target->rva00222B19(level,prefix,function,1,val,0,0,0,0);
