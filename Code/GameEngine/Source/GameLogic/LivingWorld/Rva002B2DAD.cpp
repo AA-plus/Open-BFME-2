@@ -28,7 +28,10 @@ private:
 };
 struct Rva002B2DADLogicView { char pad[0xB0]; Rva0020E5BB *manager; };
 
-static __declspec(noinline) bool rva002B2DAD(GameMessage *message, void **out, int index)
+// ?getBattleFromMessage@@YA_NPAVGameMessage@@PAPAXH@Z @0x002B2DAD 65B: renamed
+// from placeholder rva002B2DAD (WorldBuilder callgraph lead in EA's own
+// LivingWorldLogic.cpp). Returns the LivingWorldBattle carried by a message.
+static __declspec(noinline) bool getBattleFromMessage(GameMessage *message, void **out, int index)
 {
  if (index < 0) return false;
  if (index >= ((Rva002B2DADMessageView *)message)->count) return false;
@@ -46,7 +49,7 @@ static __declspec(noinline) bool rva002B2DAD(GameMessage *message, void **out, i
 // This wrapper is source-only; no retail identity or address is claimed.
 bool rva002B2DADCaller(GameMessage *message, void **out, int index)
 {
- return rva002B2DAD(message, out, index);
+ return getBattleFromMessage(message, out, index);
 }
 
 // Native 0020E63F..0020E6AD, RET8. This is the same manager passed to
@@ -160,7 +163,7 @@ static __declspec(noinline) bool rva002B2E31(GameMessage *message, int *out, int
 static __declspec(noinline) void HandleSwapArmiesInBattleMessage(GameMessage *msg)
 {
 	Rva003F468D *battle;
-	if (!rva002B2DAD(msg, (void **)&battle, 0))
+	if (!getBattleFromMessage(msg, (void **)&battle, 0))
 		return;
 	if (((Rva002B2DADMessageView *)msg)->count <= 1)
 		return;
