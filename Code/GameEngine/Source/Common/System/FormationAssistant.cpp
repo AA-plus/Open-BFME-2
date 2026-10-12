@@ -1,11 +1,72 @@
-// cl: /O1 /G7 /arch:SSE /MD
-// Native 0x004216A2..0x004216D3, 49 bytes: position helper used by
-// Formation::optimizeUnits at 0x0042550E (WB 0x0113B070 FormationAssistant.cpp431)
-// and its formation siblings. No original helper name or argument class identity
-// is established; preserve the address-derived name and consuming float views.
-// Target adds slot +0x18/+0x1C to the supplied base x/y and writes output z=0.
-// The y and x temporaries remain live until the x/y/z stores, matching retail.
-void __cdecl rva004216A2(float *out, const float *base, const float *other)
-{
-float y=other[7]+base[1];float x=other[6]+base[0];out[0]=x;out[1]=y;out[2]=0;
+// cl: /O1 /G7 /arch:SSE /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
+// stlport
+// Formation::optimizeUnits, WB 0x0113B070 FormationAssistant.cpp:431.
+// Retail 0x0042550E..0x004256D5, RET4. No BF1/ZH FormationAssistant donor
+// is available. STLport is the reference for vector storage and algorithms;
+// retail establishes the record stride, object-ID field, pairwise swap cost,
+// iteration limit, and position helper ABI. Remaining fields are unnamed.
+#include <vector>
+#include <algorithm>
+
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../GameLogicObjectLookupView.h"
+extern GameLogic *TheGameLogic;
+
+class Rva00422CA8 { public: bool operator()(int,int) const; };
+void __cdecl rva004216A2(float *out,const float *base,const float *slot);
+float __cdecl Rva004219F4DistSquared(const float *small,const float *object);
+struct BfmeFormationSlot {
+ int unknown00;
+ ObjectID objectId;
+ unsigned char unknown08[0x18];
+};
+class Formation {
+ _STL::vector<BfmeFormationSlot> slots;
+public:
+ void optimizeUnits(const Coord3D *base);
+};
+void Formation::optimizeUnits(const Coord3D *base) {
+ _STL::vector<long> order;
+ order.reserve(slots.size());
+ for(BfmeFormationSlot *slot=slots.begin();slot!=slots.end();++slot)
+  order.push_back((long)slot);
+ _STL::sort((int*)order.begin(),(int*)order.end(),Rva00422CA8());
+ int limit=order.size()*order.size();
+ long *first=order.begin();
+ while(first!=order.end()) {
+  long *last=(long*)_STL::upper_bound((int*)first,(int*)order.end(),*(int*)first,Rva00422CA8());
+  for(long *current=first;current!=last;++current) {
+   long *next=current+1;
+   if(next==last)continue;
+   BfmeFormationSlot *slot=(BfmeFormationSlot*)*current;
+   Coord3D pos;
+   rva004216A2(&pos.x,&base->x,(const float*)slot);
+   Object *object=TheGameLogic->findObjectByID(slot->objectId);
+   if(!object)continue;
+   float original=Rva004219F4DistSquared(&pos.x,(const float*)object);
+   while(next!=last) {
+    BfmeFormationSlot *other=(BfmeFormationSlot*)*next;
+    Coord3D otherPos;
+    rva004216A2(&otherPos.x,&base->x,(const float*)other);
+    ObjectID otherId=other->objectId;
+    Object *otherObject=TheGameLogic->findObjectByID(otherId);
+    if(otherObject) {
+     // Native stores the rounded float cost before setting up the crossed call.
+     float currentCost=(float)(original+Rva004219F4DistSquared(&otherPos.x,(const float*)otherObject));
+     float crossCost=Rva004219F4DistSquared(&pos.x,(const float*)otherObject);
+     if(currentCost > crossCost+Rva004219F4DistSquared(&otherPos.x,(const float*)object)) {
+      if(--limit<0)return;
+      ObjectID old=((BfmeFormationSlot*)*current)->objectId;
+      ((BfmeFormationSlot*)*current)->objectId=otherId;
+      ((BfmeFormationSlot*)*next)->objectId=old;
+      object=otherObject;
+      next=current;
+      original=Rva004219F4DistSquared(&pos.x,(const float*)object);
+     }
+    }
+    ++next;
+   }
+  }
+  first=last;
+ }
 }
