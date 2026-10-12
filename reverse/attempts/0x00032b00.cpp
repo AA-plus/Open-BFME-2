@@ -1,128 +1,104 @@
-// ?rva00032B00@@YAPAXI@Z
-// partial score=0.8 date=2026-10-10
-// cl: /O2 /G6 /MD
-// NEAR draft for ?rva00032B00@GeneralAllocator@Allocator@EA@@QAEPAXI@Z @0x00032B00 343B
-// (PPMalloc VirtualAlloc core extension: reserve round64k + commit clamp or
-// reserve|commit fallback; CoreBlock init + list insert after the head at
-// +0x448; first chunk + inlined AddDoubleFencepost). 342/343B; head through
-// the +0x14 zero stores exact. Levers found: reassigning the size parameter
-// (fixes arg load order and the uncse'd dec/not mask); if/else type select;
-// the +0xE store through a bool pointer (alias barrier keeps it after +0xD/+0xF
-// as retail). Residue: retail keeps the zero in edx (live to chunk[0]) with
-// the old next in edi and the chunk in ecx; cl gives zero edi so the chunk
-// lands in edx and the tagged/fencepost registers rotate (1 byte shorter).
-extern "C" __declspec(dllimport) void *__stdcall VirtualAlloc(void *address, unsigned long size, unsigned long type, unsigned long protect);
-
+// ?rva00032B00@GeneralAllocator@Allocator@EA@@QAEPAXI@Z
+// partial score=0.85 date=2026-10-13
+// cl: /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+extern "C" __declspec(dllimport) void *__stdcall VirtualAlloc(void *address, unsigned int size, unsigned long type, unsigned long protect);
 namespace EA
 {
 namespace Allocator
 {
-
 class GeneralAllocator
 {
 public:
 	void *rva00032B00(unsigned int size);
 private:
-	struct CoreBlock
+	unsigned int alignUp(unsigned int v) const { unsigned int a = m_alignment; return (v + a - 1) & ~(a - 1); }
+
+	struct ListNode
 	{
-		void *m_core0;
-		unsigned int m_size4;
-		unsigned int m_reserved8;
-		bool m_mapped;
-		bool m_shouldFree;
-		bool m_flagE;
-		bool m_shouldTrim;
-		void *m_free10;
-		void *m_context14;
-		CoreBlock *m_next18;
-		CoreBlock *m_prev1C;
+		unsigned int m_unk0;
+		unsigned int m_size;
+		unsigned int m_releaseSize;
+		unsigned char m_unknownC;
+		bool m_releaseDirect;
+		bool m_releaseAllowed;
+		unsigned char m_unknownF;
+		void (__cdecl *m_releaseCallback)(GeneralAllocator *, void *, unsigned int, void *);
+		void *m_releaseContext;
+		ListNode *m_next;
+		ListNode *m_prev;
 	};
-	static unsigned int AlignUp(unsigned int x, unsigned int a)
-	{
-		return (x + a - 1) & ~(a - 1);
-	}
-	static void AddDoubleFencepost(void *chunk, unsigned int flags)
-	{
-		unsigned int *const header = static_cast<unsigned int *>(chunk);
-		unsigned int size = header[1];
-		unsigned int fencepostOffset = (size & 0x7FFFFFF8) - 9;
-		fencepostOffset &= 0xFFFFFFF8;
-		header[1] = (size & 0x80000007) | fencepostOffset;
-		unsigned int *const fencepost = reinterpret_cast<unsigned int *>(
-			reinterpret_cast<char *>(chunk) + fencepostOffset);
-		fencepost[0] = fencepostOffset;
-		fencepost[1] = flags | 8;
-		fencepost[2] = 8;
-		fencepost[3] = 9;
-	}
 	unsigned char m_pad0[0x448];
-	CoreBlock m_head448;
+	ListNode m_sentinel;
 	unsigned char m_pad468[0x498 - 0x468];
-	bool m_topDown498;
+	unsigned char m_topDown;
 	unsigned char m_pad499[0x4D4 - 0x499];
-	unsigned int m_page4D4;
-	unsigned int m_min4D8;
-	unsigned int m_commit4DC;
+	unsigned int m_alignment;
+	unsigned int m_minCore;
+	unsigned int m_commit;
 };
 
 void *GeneralAllocator::rva00032B00(unsigned int size)
 {
-	unsigned int kind = 1;
-	size = AlignUp(size, m_page4D4);
-	if (size < m_min4D8)
-		size = AlignUp(m_min4D8, m_page4D4);
-	unsigned int reserve = (size + 0xFFFF) & 0xFFFF0000;
-	char *core = (char *)VirtualAlloc(0, reserve, 0x2000, 4);
-	if (core)
+	unsigned int rounded = alignUp(size);
+	unsigned int flags = 1;
+	if (rounded < m_minCore)
+		rounded = alignUp(m_minCore);
+	unsigned int reserve = (rounded + 0xFFFF) & 0xFFFF0000;
+	ListNode *node = (ListNode *)VirtualAlloc(0, reserve, 0x2000, 4);
+	if (node != 0)
 	{
-		size = 0x100000;
-		if (m_commit4DC > 0x100000)
-			size = AlignUp(m_commit4DC, m_page4D4);
-		if (size > reserve)
-			size = reserve;
-		core = (char *)VirtualAlloc(core, size, 0x1000, 4);
+		rounded = 0x100000;
+		if (m_commit > rounded)
+			rounded = alignUp(m_commit);
+		if (rounded > reserve)
+			rounded = reserve;
+		node = (ListNode *)VirtualAlloc(node, rounded, 0x1000, 4);
 	}
-	if (!core)
+	if (node == 0)
 	{
-		unsigned int type = 0x3000;
-		if (m_topDown498)
+		unsigned long type = 0x3000;
+		if (m_topDown)
 			type = 0x103000;
-		core = (char *)VirtualAlloc(0, size, type, 4);
-		if (core)
+		node = (ListNode *)VirtualAlloc(0, rounded, type, 4);
+		if (node != 0)
 		{
-			kind = 3;
-			reserve = size;
+			flags = 3;
+			reserve = rounded;
 		}
 	}
-	if (core)
+	if (node != 0)
 	{
-		CoreBlock *block = (CoreBlock *)core;
-		block->m_reserved8 = size;
-		block->m_size4 = size;
-		block->m_core0 = (void *)((unsigned int)(core + 0x27) & 0xFFFFFFF8);
-		block->m_mapped = (kind >> 1) & 1;
-		CoreBlock *last = m_head448.m_prev1C;
-		CoreBlock *head = &m_head448;
-		block->m_prev1C = head;
-		bool sf = last != head;
-		block->m_shouldFree = sf;
-		block->m_shouldTrim = sf;
-		bool *pe = &block->m_flagE;
+		node->m_releaseSize = rounded;
+		node->m_size = rounded;
+		node->m_unk0 = ((unsigned int)node + 0x27) & 0xFFFFFFF8;
+		node->m_unknownC = (flags >> 1) & 1;
+		ListNode *list = &m_sentinel;
+		bool nonEmpty = m_sentinel.m_prev != list;
+		node->m_prev = list;
+		node->m_releaseDirect = nonEmpty;
+		node->m_unknownF = nonEmpty;
+		bool *pe = &node->m_releaseAllowed;
 		*pe = true;
-		block->m_free10 = 0;
-		block->m_context14 = 0;
-		block->m_next18 = head->m_next18;
-		head->m_next18 = block;
-		block->m_next18->m_prev1C = block;
-		unsigned int *chunk = (unsigned int *)block->m_core0;
-		block->m_reserved8 = reserve;
+		node->m_releaseCallback = 0;
+		node->m_releaseContext = 0;
+		node->m_next = list->m_next;
+		list->m_next = node;
+		node->m_next->m_prev = node;
+		node->m_releaseSize = reserve;
+		unsigned int *chunk = (unsigned int *)node->m_unk0;
+		unsigned int chunkSize = ((unsigned int)node - (unsigned int)chunk + rounded) | flags;
 		chunk[0] = 0;
-		chunk[1] = (unsigned int)(core + size - (char *)chunk) | kind;
-		AddDoubleFencepost(chunk, 0);
+		unsigned int fencepostOffset = (chunkSize & 0x7FFFFFF8) - 9;
+		fencepostOffset &= 0xFFFFFFF8;
+		chunk[1] = (chunkSize & 0x80000007) | fencepostOffset;
+		unsigned int *fencepost = (unsigned int *)((char *)chunk + fencepostOffset);
+		fencepost[0] = fencepostOffset;
+		fencepost[1] = 8;
+		fencepost[2] = 8;
+		fencepost[3] = 9;
 		return chunk;
 	}
 	return 0;
 }
-
 }
 }
