@@ -1,6 +1,13 @@
-// ?rva003C24F0@ScriptActions@@QAEPAVObject@@PBUCoord3D@@PAVObjectTypes@@PAVPlayer@@_N@Z
-// partial score=0.88 date=2026-10-04
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /GX /arch:SSE
+// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// ?rva003C24F0@ScriptActions@@QAEPAVObject@@PBUCoord3D@@PAVObjectTypes@@PAVPlayer@@_N@Z, retail
+// 0x003C24F0 (370 bytes, EH, RET 16): BFME 2's ScriptActions::findClosestObject
+// (Open-BFME-1 ScriptActions_findClosestObject.cpp, 0x002F5D50, is the donor;
+// the BFME 2 body adds a third filter, flag-gated). Over an ObjectTypes list:
+// each entry's template gets a thing filter, linked to the player filter when a
+// player is given and to a fixed filter when the flag is set, and the closest
+// hit to the position wins by squared distance. Called by the nearest-object
+// team actions (0x003C2662 0x003C276A 0x003C33C9 0x003C42B9 0x003C449C ...).
+// Honest address name: the WorldBuilder name is not proven.
 #include "ascii_string.h"
 
 class Object;
@@ -19,7 +26,6 @@ public:
 
 // The base filter's slot 2 is the trivial virtual retail shares across many
 // vftable slots (0x0036CC7A); bind the declaration to that row.
-#pragma comment(linker, "/alternatename:?getPlayerMask@Rva000421C8@@UAEHXZ=?Get_File_Handle@FileClass@@UAEPAXXZ")
 
 class ThingTemplate;
 
@@ -55,8 +61,15 @@ public:
 	bool m_match;
 };
 
-struct Coord3D
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
+
+// Copy of the position, subtracted in place (Open-BFME-1's findClosestObject
+// delta: Coord3D delta = *position; delta.sub(obj position); delta.lengthSqr()).
+struct Rva003C24F0Delta
 {
+	Rva003C24F0Delta(const Coord3D &o) : x(o.x), y(o.y), z(o.z) {}
+	void sub(const Coord3D *o) { x -= o->x; y -= o->y; z -= o->z; }
+	float lengthSqr() const { return x * x + y * y + z * z; }
 	float x;
 	float y;
 	float z;
@@ -88,12 +101,7 @@ public:
 };
 extern ThingFactory *TheThingFactory;
 
-class PartitionManager
-{
-public:
-	Object *getClosestObject(const Coord3D *pos, float maxDist, int dc,
-		Rva000421C8 *filters);	// 0x00625360
-};
+#include "../../Common/PartitionRangeQueryCallView.h"
 extern PartitionManager *ThePartitionManager;
 
 #define REALLY_FAR (100000 * 10.0f)
@@ -123,10 +131,9 @@ Object *ScriptActions::rva003C24F0(const Coord3D *pos, ObjectTypes *types, Playe
 			thing.link(&third);
 		Object *obj = ThePartitionManager->getClosestObject(pos, REALLY_FAR, 0, &thing);
 		if (obj) {
-			float dx = pos->x - obj->getPosition()->x;
-			float dy = pos->y - obj->getPosition()->y;
-			float dz = pos->z - obj->getPosition()->z;
-			float distSqr = dx * dx + dy * dy + dz * dz;
+			Rva003C24F0Delta delta(*pos);
+			delta.sub(obj->getPosition());
+			float distSqr = delta.lengthSqr();
 			if (distSqr < bestDistSqr) {
 				bestDistSqr = distSqr;
 				bestObj = obj;
