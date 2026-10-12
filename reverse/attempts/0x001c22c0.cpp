@@ -1,15 +1,14 @@
 // _DeringBlockWeak_C
-// partial score=0.44 date=2026-10-10
-// _DeringBlockWeak_C
-// partial score=0.44 (structure ratio 0.66) date=2026-10-10
+// partial score=0.724770642201835 date=2026-10-13
 // cl: /O2 /G6 /DNDEBUG /MD
-// Clean room: reverse/vp6_cleanroom/specs/001c22c0.md plus retail only.
-// No decoder source was consulted.
-// Retail 0x001C22C0..0x001C28B6 (1526 bytes) cdecl. Frame size (0x160) and
-// the 4x unrolled weight loops come out; retail walks the weight loops with
-// pointer IVs and a down-counter (inner count 2) where this draft indexes,
-// and the prologue loads Q / sharpen into other registers. The output loop
-// still needs retail's pointer set (above row + pitch / 2*pitch / dst-src).
+// Clean room: approved specs 001c22c0 and 001c1ad0 plus the complete retail body.
+// No external decoder source was consulted.
+// Full weak deringing: all weights precede output; immediate pixel stores retain
+// retail overlapping-buffer behavior. Horizontal source and weight pointers
+// improve byte alignment; vertical and output register/slot shape remain nonexact.
+// Normal mismatch compile:1485 versus1526 bytes, frame0x160, first difference+15.
+// 288 observed differential cases match retail and an independent spec oracle;
+// not exhaustive behavior or byte identity. Existing sharpen global reused.
 extern "C" int Vp6FilterEdgeTagTable[];
 
 extern "C" void __cdecl DeringBlockWeak_C(void *instance, const unsigned char *source,
@@ -23,7 +22,7 @@ extern "C" void __cdecl DeringBlockWeak_C(void *instance, const unsigned char *s
 	short vertical[72];
 	short horizontal[72];
 	int r;
-	unsigned int c;
+	int c;
 
 	if (cap > 24)
 		cap = 24;
@@ -44,22 +43,21 @@ extern "C" void __cdecl DeringBlockWeak_C(void *instance, const unsigned char *s
 			vertical[r * 8 + c] = (short)weight;
 		}
 	}
-
-	for (r = 0; r < 8; r++) {
+	const unsigned char *hrow = source;
+	short *hweight = horizontal;
+	for (r = 8; r != 0; --r) {
 		for (c = 0; c < 9; c++) {
-			int difference = source[r * pitch + c] - source[r * pitch + c - 1];
+			int difference = hrow[c] - hrow[c - 1];
 			int weight;
-			if (difference <= 0)
-				difference = source[r * pitch + c - 1] - source[r * pitch + c];
+			if (difference <= 0) difference = hrow[c - 1] - hrow[c];
 			weight = quality + 2 * (16 - difference);
-			if (weight < -64)
-				weight = sharpen;
-			else if (weight < 0)
-				weight = 0;
-			else if (weight > cap)
-				weight = cap;
-			horizontal[r * 9 + c] = (short)weight;
+			if (weight < -64) weight = sharpen;
+			else if (weight < 0) weight = 0;
+			else if (weight > cap) weight = cap;
+			hweight[c] = (short)weight;
 		}
+		hrow += pitch;
+		hweight += 9;
 	}
 
 	for (r = 0; r < 8; r++) {
