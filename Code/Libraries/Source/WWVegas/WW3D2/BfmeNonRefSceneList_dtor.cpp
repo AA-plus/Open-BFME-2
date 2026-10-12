@@ -18,6 +18,7 @@ class MultiListObjectClass;
 class MultiListNodeClass
 {
 public:
+	MultiListNodeClass() { Prev = Next = NextList = 0; Object = 0; List = 0; }
 	MultiListNodeClass *Prev;
 	MultiListNodeClass *Next;
 	MultiListNodeClass *NextList;
@@ -28,6 +29,7 @@ public:
 class GenericMultiListClass
 {
 public:
+	GenericMultiListClass() { Head.Next = Head.Prev = &Head; Head.Object = 0; Head.NextList = 0; }
 	virtual ~GenericMultiListClass();
 
 	bool Is_Empty()
@@ -48,6 +50,7 @@ protected:
 class BfmeNonRefSceneList : public GenericMultiListClass
 {
 public:
+	BfmeNonRefSceneList();
 	virtual ~BfmeNonRefSceneList();
 };
 
@@ -62,4 +65,11 @@ BfmeNonRefSceneList::~BfmeNonRefSceneList()
 	while (Head.Next != &Head) {
 		Internal_Remove_List_Head();
 	}
+}
+
+// ??0BfmeNonRefSceneList@@QAE@XZ, retail 0x001410B0 (39 bytes): the constructor, the
+// multilist.h inline chain (the node constructor clears all five words, the
+// list constructor points the head at itself) under this class's vtable.
+BfmeNonRefSceneList::BfmeNonRefSceneList()
+{
 }

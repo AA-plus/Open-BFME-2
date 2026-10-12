@@ -24,6 +24,7 @@ public:
 class MultiListNodeClass
 {
 public:
+	MultiListNodeClass() { Prev = Next = NextList = 0; Object = 0; List = 0; }
 	void *Prev;
 	void *Next;
 	void *NextList;
@@ -36,6 +37,7 @@ class GenericMultiListClass
 public:
 	MultiListNodeClass Head;
 
+	GenericMultiListClass() { Head.Next = Head.Prev = &Head; Head.Object = 0; Head.NextList = 0; }
 	virtual ~GenericMultiListClass();
 
 protected:
@@ -45,6 +47,7 @@ protected:
 class Rva00144690 : public GenericMultiListClass
 {
 public:
+	Rva00144690();
 	virtual ~Rva00144690();
 };
 
@@ -59,3 +62,10 @@ Rva00144690::~Rva00144690()
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
 // call sites in their matched rows land on these addresses (same ABI). Bind them.
 #pragma comment(linker, "/alternatename:??1DX8PolygonRendererList@@UAE@XZ=??1Rva00144690@@UAE@XZ")
+
+// ??0Rva00144690@@QAE@XZ, retail 0x00143D10 (39 bytes): the constructor, the
+// multilist.h inline chain (the node constructor clears all five words, the
+// list constructor points the head at itself) under this class's vtable.
+Rva00144690::Rva00144690()
+{
+}
