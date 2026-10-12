@@ -1,3 +1,5 @@
+// ?rva0046BACD@HordeContain@@QAEXXZ
+// partial score=0.93 date=2026-10-12
 // ?rva0046BACD@HordeContain@@UAEXXZ
 // partial score=0.97 date=2026-10-10
 // Bank for 0x0046BACD (107B, HordeContain +0x20 slot): two-loop walk (pair
@@ -12,6 +14,13 @@
 // (119B) wants exactly the swapped assignment, so this file's shape lands
 // there; for 0x0046BACD the mirror (this->edi + direct items->ebx) is open.
 // The (items?items:items) PHI + late self assignment is the closest start.
+// 2026-10-12 (claude-opus-5-5): WB twin 0x010C08E0 has an EH frame whose
+// cleanup calls the pair's m00 slot-0 dtor (debug-only: retail has none),
+// post-increment iterators and a set iterator assigned begin() twice.
+// None of these moves the allocation: the PHI form below is 107B with
+// only this/items swapped (ebx/edi); direct/inline-helper/reference/getter
+// forms stage items through eax (109B); a this-PHI, an early self pointer,
+// a set& local, an empty ~Pair() and post-increment are all unchanged.
 struct HordeContainIface20ViewBacd
 {
 	unsigned char m_pad00[0x150];
