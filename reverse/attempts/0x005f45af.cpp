@@ -1,7 +1,5 @@
 // ?Rva005F45AF@@YAXPAUUnitView@@AAVUnicodeString@@@Z
 // partial score=0.993867 date=2026-10-12
-// ?Rva005F45AF@@YAXPAUUnitView@@AAVUnicodeString@@@Z
-// partial score=0.988 date=2026-10-12
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD /EHsc
 // AddUpgradeIcons: WB 1627540 names ArmyUnitIcon and this source (line189).
 // Native5F4917..5F49F0 is the complete217-byte RET0 body. Unit+8,
@@ -22,9 +20,9 @@ template<unsigned int N> struct _Base_bitset {
 };
 }
 class Rva00406F9C { public: bool rva00406F9C(const void *); };
-struct UnitView { int unknown; AsciiString name; int unknown08; int rank; _STL::_Base_bitset<32> upgrades; };
+struct UnitView { int unknown; AsciiString name; int unknown08; int rank; _STL::_Base_bitset<32> upgrades; char unknown90[0xB8-0x90]; int flagB8,flagBC,unknownC0; unsigned char valueC4; };
 class ThingTemplate;
-struct TemplateView { char unknown00[0x404]; _STL::_Base_bitset<32> upgrades; };
+struct TemplateView { char unknown00[0x404]; _STL::_Base_bitset<32> upgrades; char unknown484[0x5C4-0x484]; int tooltip; };
 class ThingFactory { public: const ThingTemplate *findTemplate(const AsciiString &); };
 extern ThingFactory *TheThingFactory;
 class UpgradeTemplate;
@@ -41,7 +39,7 @@ struct UnitUpgradeList {
  __forceinline void push_back(int &id) { ((Rva0040E6D6Sub *)this)->forward(&id); }
 };
 class Rva005F41AF { public: virtual void DoUpdate(); void rva005F41AF(); };
-struct UnitClipHolder { void *p; __forceinline void *get() const { return p; } };
+struct UnitClipHolder { void *p; __forceinline void *get() const { return p; } __forceinline bool IsBound() const { return p!=0; } };
 namespace StrategicInGameUI {
 class ArmyUnitIcon : public virtual Rva005F41AF {
 public: virtual void DoUpdate(); void AddUpgradeIcons();
@@ -150,6 +148,15 @@ TreeHintRef00217D4C Rva005F4254::rva005F4254()
     return ((Rva001524CA *)((char *)this + offset - 0x14))->rva001524CA();
 }
 
+class Rva005FC70A {public:void rva005FC70A(unsigned char);};
+class Rva005FC71E {public:void rva005FC71E(unsigned char);};
+class Rva005FC73BPtrChaseField {public:bool get()const;};
+class Rva005FD034 {public:void rva005FD034(int);};
+class Rva005FD04B {public:void rva005FD04B(unsigned char);};
+class Rva002A98A7DwordField {public:int get()const;};
+struct RGBColor;
+class Mouse {public:void rva001EEA6D(UnicodeString,int,const RGBColor *,float);};
+extern Mouse *TheMouse;
 class GameTextInterface {public:
  virtual ~GameTextInterface();
  virtual void slot01();virtual void slot02();virtual void slot03();virtual void slot04();
@@ -159,6 +166,39 @@ class GameTextInterface {public:
  virtual UnicodeString fetch(const AsciiString &,bool *)=0;
 };
 extern GameTextInterface *TheGameText;
+namespace StrategicInGameUI { UnicodeString GetTooltipText(int); }
+
+// WB1627180 identifies DoUpdate; retail5F4488..5F45AF is the complete295B body.
+// Virtual-base receiver is icon+20, with unit8/clipC/list10. Native loads
+// rankC, flagsB8/BC and valueC4, then template tooltip5C4 and upgrade label28.
+// Named flag and final buffer values preserve retail register lifetimes.
+void StrategicInGameUI::ArmyUnitIcon::DoUpdate() {
+ Rva005F41AF::rva005F41AF();
+ if(!clip.IsBound()) return;
+ ((Rva005FD034 *)clip.get())->rva005FD034(unit->rank);
+ int state=unit->flagB8;
+ ((Rva005FC70A *)clip.get())->rva005FC70A(state!=0);
+ unsigned char value=unit->valueC4;
+ ((Rva005FC71E *)clip.get())->rva005FC71E(value);
+ ((Rva005FD04B *)clip.get())->rva005FD04B(unit->flagBC!=0);
+ if(((Rva005FC73BPtrChaseField *)clip.get())->get()) {
+  const AsciiString *name=&unit->name;
+  if(!((const StringBase<char> *)name)->isEmpty()) {
+   TemplateView *t=(TemplateView *)TheThingFactory->findTemplate(*name);
+   if(t) { int tooltip=t->tooltip; TheMouse->rva001EEA6D(GetTooltipText(tooltip),-1,0,1.0f); }
+  }
+ }
+ int index=((Rva002A98A7DwordField *)clip.get())->get();
+ if(index<0) return;
+ if((unsigned)index>=upgrades.size()) return;
+ {
+  int *first=upgrades.begin;
+  const UpgradeTemplate *u=TheUpgradeCenter->rva0026EEA0(first[index]);
+  if(!u) return;
+  TheMouse->rva001EEA6D(TheGameText->fetch(*(const AsciiString *)((const char *)u+0x28),0),-1,0,1.0f);
+ }
+}
+
 struct UpgradeDescriptionView { char opaque[0x2c]; AsciiString label; };
 // Same canonical StringBase header fields witnessed by native45AF.
 template<> __forceinline bool StringBase<unsigned short>::isNotEmpty() const {

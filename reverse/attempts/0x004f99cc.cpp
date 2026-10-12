@@ -1,4 +1,9 @@
 // ?rva004F99CC@LivingWorldAutoResolveBattle@@QAEXPA_N@Z
+// partial score=0.969198 date=2026-10-12
+// Astra-high-d alternate: 711B versus 706B; register allocation and spill order
+// now match, but SETNE CL / TEST CL,CL add five bytes. This is not matched.
+// The exact-extent 706B alternative is in attempt_evidence/0x004f99cc-astra-high-d-register.txt.
+// ?rva004F99CC@LivingWorldAutoResolveBattle@@QAEXPA_N@Z
 // partial score=0.9688385269121813 date=2026-10-12
 // ?rva004F99CC@LivingWorldAutoResolveBattle@@QAEXPA_N@Z
 // partial score=0.905099 date=2026-10-12
@@ -352,7 +357,7 @@ void LivingWorldAutoResolveBattle::rva004F99CC(bool *allActed)
     if(unit->bonus)attack=unit->bonus->attack;
     float armorFactor=const_cast<Rva00427157 *>(armor)->rva004270FA(unit->thing->targetType);
     float defense=1.0f;
-    if((*target)->getBonus())defense=(*target)->getBonus()->defense;
+    bool present=(*target)->getBonus()!=0;if(present)defense=(*target)->getBonus()->defense;
     _STL::vector<Rva004F99CCSideBonus *> &sideBonus=*reinterpret_cast<_STL::vector<Rva004F99CCSideBonus *> *>(reinterpret_cast<char*>(this)+0x54);
     float attackerBonus=1.0f;
     if(sideBonus[attacker])attackerBonus=sideBonus[attacker]->attack;
