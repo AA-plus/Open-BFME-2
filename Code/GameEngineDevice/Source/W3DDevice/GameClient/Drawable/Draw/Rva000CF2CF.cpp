@@ -78,6 +78,8 @@ public:
 	void rva000CF20C(AsciiString *out);
 	void rva000CF2CF();
 	void rva000CF25F(unsigned int, unsigned int, unsigned int);
+	void rva000CF4AE(bool value);
+	void rva000CF4C2(bool value);
 };
 
 class GlobalData;
@@ -130,4 +132,25 @@ void W3DFloorDraw::rva000CF25F(unsigned int, unsigned int, unsigned int) {
    TheTerrainRenderObject->rva00068395(drawable->get(), &data->m_name,&terrainName,data->m_flag1D,data->m_flag1C);
   }
  }
+}
+
+// Retail 0x000CF4AE and 0x000CF4C2 (20 bytes each), two W3DFloorDraw
+// vftable entries around the Xfer::IsCRC stub: store a changed +0x15 or
+// +0x16 flag and refresh through 0x000CF2CF above.
+void W3DFloorDraw::rva000CF4AE(bool value)
+{
+	if (value != m_flag15)
+	{
+		m_flag15 = value;
+		rva000CF2CF();
+	}
+}
+
+void W3DFloorDraw::rva000CF4C2(bool value)
+{
+	if (value != m_flag16)
+	{
+		m_flag16 = value;
+		rva000CF2CF();
+	}
 }
