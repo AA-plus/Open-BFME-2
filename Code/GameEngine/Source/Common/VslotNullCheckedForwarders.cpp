@@ -650,3 +650,25 @@ void Rva0035BD00NullForwarder::rva0035BD00()
 	if (m_member)
 		m_member->rva000B3FD0();
 }
+
+class Rva000682E1NullTarget
+{
+public:
+	void rva000682E1(void *p);
+};
+
+class Rva00091F3BNullForwarder
+{
+public:
+	void rva00091F3B(void *p);
+private:
+	char m_lead[0x14];
+	Rva000682E1NullTarget *m_member;
+};
+
+// vtable 0x00BC80A0#25: also skips a null argument.
+void Rva00091F3BNullForwarder::rva00091F3B(void *p)
+{
+	if (m_member && p)
+		m_member->rva000682E1(p);
+}

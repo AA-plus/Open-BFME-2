@@ -17239,3 +17239,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva004583AF@View@@QAEXM@Z,0x004583AF,callee of ?rva0008D218@W3DView@@UAEXM@Z
 ?rva000AC514@Rva000AC514Host@@QAEXMMH@Z,0x000AC514,callee of ?rva00091D3D@W3DTerrainVisual@@UAEXMMH@Z
 ?rva00069C5F@BaseHeightMapRenderObjClass@@QAEXVVector3@@M@Z,0x00069C5F,callee of ?rva00091EEC@W3DTerrainVisual@@UAEXVVector3@@M@Z
+?rva000682E1@Rva000682E1NullTarget@@QAEXPAX@Z,0x000682E1,callee of ?rva00091F3B@Rva00091F3BNullForwarder@@QAEXPAX@Z
