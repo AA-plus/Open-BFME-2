@@ -171,6 +171,7 @@ private:
 
 class ShaderClass
 {
+	friend class ShroudTextureShader;
 	friend class DX8Wrapper;
 public:
 	static ShaderClass _PresetMultiplicativeSpriteShader;
@@ -311,6 +312,7 @@ public:
 		number_of_DX8_calls++;
 		texture_stage_state_changes++;
 	}
+	friend class ShroudTextureShader;
 	static __forceinline void Set_DX8_Texture(unsigned int stage, IDirect3DBaseTexture8 *texture)
 	{
 		if (stage >= 16) {
@@ -356,7 +358,7 @@ protected:
 class ShroudTextureShader
 {
 	virtual void s00();
-	virtual void s01();
+	virtual void rva000F5AD4();
 	virtual void s02();
 	virtual void s03();
 	virtual int set(int stage);
@@ -408,4 +410,14 @@ int ShroudTextureShader::set(int stage)
 	}
 	m_stageOfSet = stage;
 	return 1;
+}
+
+// Retail 0x000F5AD4 (111 bytes), slot 1 of the same vftable (no direct callers): mark the
+// shader state dirty and clear device texture stages 0 and 1 through the inlined
+// Set_DX8_Texture cache (Textures[] 0x00DEC4B0). Its declared name is not recovered.
+void ShroudTextureShader::rva000F5AD4()
+{
+	ShaderClass::ShaderDirty = true;
+	DX8Wrapper::Set_DX8_Texture(0, 0);
+	DX8Wrapper::Set_DX8_Texture(1, 0);
 }

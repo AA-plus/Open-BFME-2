@@ -40878,3 +40878,4 @@ __ehhandler$?Install_Materials@MaterialPassClass@@UBEXXZ	0x00766048	10	landed	ad
 ?Prepare_Render_New_Frame@WW3D@@SA_NXZ	0x001172B0	317	landed	add_match verified Code/Libraries/Source/WWVegas/WW3D2/Rva007ACBC0Ww3dCmdExecute.cpp 317B; WB 0x9BDFD0 WW3D::Prepare_Render_New_Frame ww3d.cpp
 ?rva000E6D94@Rva000EC9C6@@QAEXH@Z	0x000E6D94	341	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/Rva000E6D94AllocateBuffers.cpp 341B; ZH allocateTreeBuffers per-batch form; pairs rowed free 0xE6B99
 __ehhandler$?rva000E6D94@Rva000EC9C6@@QAEXH@Z	0x007635E3	10	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/Rva000E6D94AllocateBuffers.cpp 10B; EH handler of rva000E6D94
+?rva000F5AD4@ShroudTextureShader@@EAEXXZ	0x000F5AD4	111	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/ShroudTextureShaderSet.cpp 111B; shader vftable 0x7CF1C8 slot 1; invalidate plus clear stages 0 and 1
