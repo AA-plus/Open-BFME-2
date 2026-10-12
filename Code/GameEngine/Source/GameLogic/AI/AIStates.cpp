@@ -237,7 +237,7 @@ public:
 	void requestAttackPath(ObjectID victimID, const Coord3D *victimPos);
 	void destroyPath();
 	UnsignedInt getMoodMatrixActionAdjustment(MoodMatrixAction action) const;
-	void rva00262B0F(Int value);
+	void friend_setGoalObject(Object *obj);
 	Bool isMoving() const;
 	void requestApproachPath(Coord3D *destination);
 	void *getPath() const { return m_path; }
@@ -985,7 +985,7 @@ StateReturnType AIAttackMeleeEngageState::updateInternal()
 						victim = rider->slot18(0, source->getPosition(), 0.0f, 0, 0);
 						if (!victim)
 							return STATE_CONTINUE;
-						ai->rva00262B0F((Int)victim);
+						ai->friend_setGoalObject(victim);
 						getMachine()->setGoalObject(victim);
 					}
 				}

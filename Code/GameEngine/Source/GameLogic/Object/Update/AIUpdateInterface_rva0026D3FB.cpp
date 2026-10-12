@@ -57,7 +57,7 @@ class AIUpdateInterface
 {
 public:
 	int rva00260DED() const;
-	void rva00262B0F(int v);
+	void friend_setGoalObject(Object *obj);
 	void destroyPath();
 	void rva0026D3FB(Object *victim);
 private:
@@ -75,7 +75,7 @@ void AIUpdateInterface::rva0026D3FB(Object *victim)
 	bool flag = (cur == 0x21 || cur == 0x3D);
 	if (m_machine->isCurrentReady() || flag)
 	{
-		rva00262B0F((int)victim);
+		friend_setGoalObject(victim);
 		Object *owner = m_owner;
 		if (!rva00344EB2Gate(owner, (Thing *)victim))
 			destroyPath();

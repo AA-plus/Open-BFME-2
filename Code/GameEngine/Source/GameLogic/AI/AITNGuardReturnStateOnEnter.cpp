@@ -30,7 +30,7 @@ class Player;
 class AIUpdateInterface
 {
 public:
-	void rva00262B0F(int obj);
+	void friend_setGoalObject(Object *obj);
 	ObjectID getCrateID() const { return m_crateID; }
 private:
 	unsigned char m_pad00[0x238];
@@ -237,7 +237,7 @@ StateReturnType AITNGuardReturnState::onEnter( void )
 	if (bestTunnel==NULL) return STATE_FAILURE;
 
 	getMachine()->setGoalObject(bestTunnel);
-	getMachineOwner()->getAI()->rva00262B0F((int)bestTunnel);
+	getMachineOwner()->getAI()->friend_setGoalObject(bestTunnel);
 
 	return AIEnterState::onEnter();
 }
@@ -279,7 +279,7 @@ StateReturnType AITNGuardIdleState::update( void )
 
 	m_nextEnemyScanTime = now + TheAI->getAiData()->m_guardEnemyScanRate;
 
-	getMachineOwner()->getAI()->rva00262B0F(NULL);	// friend_setGoalObject(NULL)
+	getMachineOwner()->getAI()->friend_setGoalObject(NULL);	// friend_setGoalObject(NULL)
 
 	Object *owner = getMachineOwner();
 	AIUpdateInterface *ai = owner->getAIUpdateInterface();

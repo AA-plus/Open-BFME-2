@@ -25,7 +25,7 @@
 // the statuses go through the rowed setStatus(ObjectStatusTypes, bool); the
 // conditions are bits 1*32+5..7 of the Object+0x10C words; the weapon-lock
 // release is the Object +0x330 forwarder 0x0028BC4D (pinned by address); only
-// turret 0 is reset; the goal reset is the rowed AIUpdateInterface::rva00262B0F.
+// turret 0 is reset; the goal reset is the rowed AIUpdateInterface::friend_setGoalObject.
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
@@ -91,7 +91,7 @@ public:
 	virtual Bool slot152() = 0;
 	void setCurrentVictim(const Object *nemesis);
 	void setTurretTargetObject(WhichTurretType tur, Object *o, bool isForceAttacking);
-	void rva00262B0F(int x);
+	void friend_setGoalObject(Object *obj);
 };
 class ContainModuleInterface : public AttackSlots<4>
 {
@@ -325,7 +325,7 @@ void AIAttackState::onExit(StateExitType status)
 	{
 		ai->setCurrentVictim(0);
 		ai->setTurretTargetObject(TURRET_MAIN, 0, false);
-		ai->rva00262B0F(0);
+		ai->friend_setGoalObject(0);
 	}
 }
 
@@ -365,7 +365,7 @@ StateReturnType AIAttackState::update()
 		if (!isEnemy && m_49 && (lastCommandSource & 2) && !status1C &&
 			!(victim->getTemplate()->m_kindOf[0xB] & 0x40))
 		{
-			ai->rva00262B0F(0);
+			ai->friend_setGoalObject(0);
 			if (victim == source->getTeam()->getTeamTargetObject())
 				source->getTeam()->rva0039D84A(0);
 			ai->notifyVictimIsDead();
@@ -375,13 +375,13 @@ StateReturnType AIAttackState::update()
 		if (victim->getTeam() != m_victimTeam)
 		{
 if (sourceAI && !victim->testStatus(OBJECT_STATUS_01) && victim->getContain() && victim->getContain()->isGarrisonable() && victim->getContain()->getContainCount(0) == 0 && source->getRelationship(victim) == NEUTRAL) {
-				sourceAI->rva00262B0F(0);
+				sourceAI->friend_setGoalObject(0);
 				if (victim == source->getTeam()->getTeamTargetObject())
 					source->getTeam()->rva0039D84A(0);
 				sourceAI->notifyVictimIsDead();
 				return STATE_FAILURE;
  } else if (source->getRelationship(victim) != ENEMIES) {
-				sourceAI->rva00262B0F(0);
+				sourceAI->friend_setGoalObject(0);
 				if (victim == source->getTeam()->getTeamTargetObject())
 					source->getTeam()->rva0039D84A(0);
 				sourceAI->notifyVictimIsDead();
@@ -415,7 +415,7 @@ if (sourceAI && !victim->testStatus(OBJECT_STATUS_01) && victim->getContain() &&
 		if (sourceAI)
 		{
 			sourceAI->setCurrentVictim(victim);
-			sourceAI->rva00262B0F((int)victim);
+			sourceAI->friend_setGoalObject(victim);
 			reinterpret_cast<StateMachineCallView *>(getMachine())->setGoalObject(victim);
 		}
 		StateReturnType entered=onEnter(); _ReadWriteBarrier(); return entered;

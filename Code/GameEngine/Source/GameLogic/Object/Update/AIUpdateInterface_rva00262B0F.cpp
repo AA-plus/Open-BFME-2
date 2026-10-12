@@ -1,13 +1,16 @@
 // cl: /DNDEBUG /MD
 //
-// ?rva00262B0F@AIUpdateInterface@@QAEXH@Z, retail 0x00262B0F, 42 bytes.
-// AIUpdateInterface lock-guard sibling of friend_setPath: save machine+0x30
-// lock byte +0x38 to bl then clear it then virtual slot 0x38 with the int
-// arg then restore the lock to 1 if it was set. Outer ret 4. Honest
-// address-derived name; slot identity unproven (likely setGoalObject shape).
-// No other callees.
+// ?friend_setGoalObject@AIUpdateInterface@@QAEXPAVObject@@@Z, retail 0x00262B0F, 42 bytes.
+// Retail42B262B0F..262B39 RET4: machine30, lock38, virtual goal setter
+// slot14 (+38), restoring the prior lock. WB E46FC0 has the same
+// sequence and "Friend_setGlobalObject re-locking" diagnostic. ZH
+// AIUpdate.cpp friend_setGoalObject has this exact diagnostic and
+// behavior; the spelling is donor-carried. Native callers34BB5B,
+// 26D3FB and3497E6 pass their Object victim without integer conversion.
 
-class LockMachine
+class Object;
+
+class StateMachine
 {
 public:
 	virtual void s00();
@@ -24,7 +27,7 @@ public:
 	virtual void s2C();
 	virtual void s30();
 	virtual void s34();
-	virtual void s38(int v);
+	virtual void setGoalObject(const Object *obj);
 	char m_pad04[0x38 - 4];
 	bool m_locked;
 };
@@ -32,16 +35,16 @@ public:
 class AIUpdateInterface
 {
 	char m_pad00[0x30];
-	LockMachine *m_machine;
+	StateMachine *m_machine;
 public:
-	void rva00262B0F(int v);
+	void friend_setGoalObject(Object *obj);
 };
 
-void AIUpdateInterface::rva00262B0F(int v)
+void AIUpdateInterface::friend_setGoalObject(Object *obj)
 {
 	bool wasLocked = m_machine->m_locked;
 	m_machine->m_locked = false;
-	m_machine->s38(v);
+	m_machine->setGoalObject(obj);
 	if (wasLocked)
 		m_machine->m_locked = true;
 }

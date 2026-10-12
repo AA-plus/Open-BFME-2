@@ -335,7 +335,7 @@ public:
 	void requestAttackPath(ObjectID victimID, const Coord3D *victimPos);
 	void destroyPath();
 	UnsignedInt getMoodMatrixActionAdjustment(MoodMatrixAction action) const;
-	void rva00262B0F(Int value);
+	void friend_setGoalObject(Object *obj);
 	Bool isMoving() const;
 	void requestApproachPath(Coord3D *destination);
 	void *getPath() const { return m_path; }
@@ -1764,7 +1764,7 @@ StateReturnType AIAttackSquadState::onEnter()
 	{
 		ai->setCurrentVictim(victim);
 		getMachine()->setGoalObject(victim);
-		ai->rva00262B0F((Int)victim);
+		ai->friend_setGoalObject(victim);
 	}
 	m_sawStatus1C = false;
 	return m_attackSquadMachine->initDefaultState();
@@ -1824,7 +1824,7 @@ StateReturnType AIAttackSquadState::update()
 		if (!(tmpl->m_kindOf[0x06] & 0x80) && !(tmpl->m_kindOf[0x13] & 0x08) && !(tmpl->m_kindOf[0x0B] & 0x40) &&
 			victim->getControllingPlayer() == owner->getControllingPlayer())
 		{
-			ai->rva00262B0F(0);
+			ai->friend_setGoalObject(0);
 			getMachine()->setGoalObject(0);
 			m_attackSquadMachine->setGoalObject(0);
 			return STATE_SUCCESS;
@@ -1837,7 +1837,7 @@ StateReturnType AIAttackSquadState::update()
 	m_attackSquadMachine->setGoalObject(victim);
 	ai->setCurrentVictim(victim);
 	getMachine()->setGoalObject(victim);
-	ai->rva00262B0F((Int)victim);
+	ai->friend_setGoalObject(victim);
 	m_attackSquadMachine->setState(AI_ATTACK_OBJECT);
 	return STATE_CONTINUE;
 }

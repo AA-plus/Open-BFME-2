@@ -35,8 +35,8 @@
 //  - AITNGuardIdleState::onEnter, retail 0x00545CAF (72 bytes): slot 4 of
 //    0x00C6A038 (AITNGuardIdleState); Zero Hour's randomised first scan (AITNGuard.cpp
 //    line 586; TAiData m_guardEnemyScanRate +0x40, m_nextEnemyScanTime +0x20),
-//    then the AI's friend_setGoalObject(NULL) (rowed opaque
-//    AIUpdateInterface::rva00262B0F).
+//    then the AI's friend_setGoalObject(NULL) (rowed
+//    AIUpdateInterface::friend_setGoalObject).
 //  - AITNGuardInnerState::update, retail 0x005463C9 (261 bytes): slot 6 of
 //    0x00C6A140; Zero Hour's body, with the guard machine read once into a
 //    local for the nemesis and owner lookups (retail keeps it in a register
@@ -172,7 +172,7 @@ int GetGameLogicRandomValue(int low, int high, char *file, int line);
 class AIUpdateInterface
 {
 public:
-	void rva00262B0F(int goal); // friend_setGoalObject
+	void friend_setGoalObject(Object *obj); // friend_setGoalObject
 };
 class AI
 {
@@ -606,6 +606,6 @@ StateReturnType AITNGuardIdleState::onEnter( void )
 	UnsignedInt now = TheGameLogic->getFrame();
 	m_nextEnemyScanTime = now + GetGameLogicRandomValue(0, TheAI->getAiData()->m_guardEnemyScanRate, AITNGUARD_FILE, 586);
 
-	getMachineOwner()->getAI()->rva00262B0F(NULL); // friend_setGoalObject(NULL)
+	getMachineOwner()->getAI()->friend_setGoalObject(NULL); // friend_setGoalObject(NULL)
 	return STATE_CONTINUE;
 }

@@ -179,9 +179,9 @@ extern int g_Va00DBA4E4;
 class AIUpdateInterface
 {
 public:
-	// The existing row retains an opaque 32-bit slot argument; these
-	// callers prove it carries the goal pointer. Use its native +0x30 machine.
-	void rva00262B0F(int obj);	// 0x00262B0F
+	// The source owner now declares the corroborated Object pointer;
+	// it preserves the native +0x30 machine and its lock guard.
+	void friend_setGoalObject(Object *obj);	// 0x00262B0F
 };
 
 class Object
@@ -269,7 +269,7 @@ StateReturnType AIMeleeReAcquireState::onEnter()
 	Object *goal = getMachine()->getGoalObject();
 	if (goal && !goal->isEffectivelyDead() && !goal->rva002943B2(owner->getControllingPlayer())) {
 		getMachine()->setGoalObject(goal);
-		owner->getAI()->rva00262B0F((int)goal);
+		owner->getAI()->friend_setGoalObject(goal);
 		m_lastAcquireFrame = TheGameLogic->getFrame();
 		return STATE_SUCCESS;
 	}
@@ -289,7 +289,7 @@ StateReturnType AIMeleeReAcquireState::onEnter()
 				->link(&Rva00261058(owner, false)));
 	}
 	getMachine()->setGoalObject(target);
-	owner->getAI()->rva00262B0F((int)target);
+	owner->getAI()->friend_setGoalObject(target);
 	m_lastAcquireFrame = TheGameLogic->getFrame();
 	return STATE_SUCCESS;
 }
