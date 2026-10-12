@@ -20,7 +20,7 @@ public:
 	virtual void v09();
 	virtual void v10();
 	virtual void v11();
-	virtual void v12();
+	virtual void rva0006ED55();
 };
 
 class Rva0006ED36
@@ -40,13 +40,43 @@ private:
 void Rva0006ED36::rva0006ED36(void *p)
 {
 	m_slot814 = p;
-	m_sub.v12();
+	m_sub.rva0006ED55();
 	m_slot814 = 0;
 }
 
 void Rva0006ED36::rva0006EE27(void *p)
 {
 	m_slot118 = p;
-	m_sub.v12();
+	m_sub.rva0006ED55();
 	m_slot118 = 0;
+}
+
+// ?rva0006ED55@Rva0006ED55@@UAEXXZ @0x0006ED55 (26B): that slot 12 itself,
+// compiled against the +0x108 subobject. When the +0x814 pointer the
+// callers above set is non-null, it hands the whole object and that pointer
+// to the rowed 0x00118660 render call. Same object as above, viewed through
+// its two bases (the primary one with its own table at offset 0).
+bool Rva00118660Call(void *owner, void *camera);
+
+class Rva0006ED55Primary
+{
+public:
+	virtual void p00();
+private:
+	char m_pad04[0x108 - 4];
+};
+
+class Rva0006ED55 : public Rva0006ED55Primary, public Rva0006ED36Sub
+{
+public:
+	virtual void rva0006ED55();
+private:
+	char m_pad10C[0x814 - 0x10C];
+	void *m_slot814;
+};
+
+void Rva0006ED55::rva0006ED55()
+{
+	if (m_slot814)
+		Rva00118660Call(this, m_slot814);
 }
