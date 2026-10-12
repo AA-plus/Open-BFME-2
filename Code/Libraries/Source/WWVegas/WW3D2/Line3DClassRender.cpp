@@ -35,6 +35,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 ** along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #define Matrix4x4 Matrix4
+// Link view first: Matrix3D(bool) stays inline without emitting an /O2 copy
+// that competes with retail's owner (0x0004C91A).
+#include "../../../../../reference/shims/bfme_matrix3d_bool_link/matrix3d.h"
 #include "winbase_shim.h"
 #include "vector3.h"
 #include "vector4.h"

@@ -4,6 +4,9 @@
 // (Libraries/Source/WWVegas/WW3D2/collect.cpp); this unit had no counterpart under Code/.
 
 // BFME 2 has no W3D memory pools (see Code/Libraries/Source/WWVegas/WWLib/always.h).
+// Link view first: Matrix3D(bool) stays inline without emitting an /O2 copy
+// that competes with retail's owner (0x0004C91A).
+#include "../../../../../reference/shims/bfme_matrix3d_bool_zh_link/matrix3d.h"
 #include "always.h"
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(ARGCLASS)

@@ -73,6 +73,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 // Keep this inlined header helper private to the unit. Its O2 copy is
 // not retail's shared 106-byte out-of-line Float_To_Int_Floor provider.
 #define Float_To_Int_Floor BfmeLightInlineFloatFloor
+// Link view first: Matrix3D(bool) stays inline without emitting an /O2 copy
+// that competes with retail's owner (0x0004C91A).
+#include "../../../../../reference/shims/bfme_matrix3d_bool_zh_link/matrix3d.h"
 #include "light.h"
 #include "ww3d.h"
 #include "ww3dids.h"
