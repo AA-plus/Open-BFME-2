@@ -104,10 +104,10 @@ public:
 	void rva005ED5BB(int index, const Image *image);
 };
 
-class Rva002E1001
+class LivingWorldPlayer
 {
 public:
-	int rva002E1001();
+	int GetNumRegionsOwned();
 };
 
 struct Rva002E0D02Arg;
@@ -158,7 +158,7 @@ void StrategicInGameUI::RegionAwardDialog::Impl::SetupMovieClipPlayers()
 		temps.currentView->rva005ED5BB(index, image);
 
 		temps.currentView = m_rowView;
-		int regions = ((Rva002E1001 *)entry)->rva002E1001();
+		int regions = ((LivingWorldPlayer *)entry)->GetNumRegionsOwned();
 		temps.currentView->rva005ED851(index, regions);
 
 		temps.currentView = m_rowView;

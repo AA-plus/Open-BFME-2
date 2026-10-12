@@ -132,6 +132,7 @@ public:
 
 	static void ParseLivingWorldPlayer(INI *ini, void *instance);
 	void MarkUnitsForUpgrades(void *region);
+    int GetNumRegionsOwned();
 
 	void OnUnitDequeued(Rva00319CED *unit);
 	void SetColorIndex(Int color);
@@ -466,4 +467,45 @@ void LivingWorldPlayer::MarkUnitsForUpgrades(void *region)
             }
         }
     }
+}
+
+// WBDE39D0 names GetNumRegionsOwned and asserts the region list at source272.
+// Native2E1001..2E1046 counts regions whose owner13C equals player14, through
+// the canonical singleton's B0 holder, its +08 campaign and +2C pointer range.
+// This rehomes the already verified69B body; no unique C++ coverage is added.
+// The original method's const qualification is not established by these bytes.
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
+int LivingWorldPlayer::GetNumRegionsOwned()
+{
+	int c = 0;
+	void **pp = (void **)TheLivingWorldLogic;
+	pp = *(void ***)((char *)pp + 0xB0);
+	pp = *(void ***)((char *)pp + 8);
+	char *p;
+	if (pp)
+		p = (char *)pp + 0x2C;
+	else
+		p = 0;
+	if (!p)
+		goto done;
+	{
+		int *start = *(int **)p;
+		int *end = *(int **)(p + 4);
+		int n = (int)(end - start);
+		if (n == 0)
+			goto done;
+		int id = *(int *)((char *)this + 0x14);
+		int *cur = start;
+		int left = n;
+		while (left) {
+			void *e = *(void **)cur;
+			if (*(int *)((char *)e + 0x13C) == id)
+				c++;
+			cur = (int *)((char *)cur + 4);
+			left--;
+		}
+	}
+done:
+	return c;
 }

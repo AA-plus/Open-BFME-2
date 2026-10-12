@@ -197,10 +197,10 @@ public:
 	unsigned char m_3C5; // +0x3C5, nonzero once the player has left
 };
 
-class Rva002E1001
+class LivingWorldPlayer
 {
 public:
-	int rva002E1001(); // WB LivingWorldPlayer::GetNumRegionsOwned
+	int GetNumRegionsOwned(); // WB LivingWorldPlayer::GetNumRegionsOwned
 };
 
 struct Rva002E0D02Arg;
@@ -289,7 +289,7 @@ static void Rva005235D5(Rva002E2903Player *player, int index, const char *kind)
 	window.format("%s:Name_%d", kind, index);
 	g_bfmeAptWindowManager->bfmeSetText(window, player->m_displayName, false);
 	window.format("%s:Territories_%d", kind, index);
-	text.format(L"%d", ((Rva002E1001 *)player)->rva002E1001());
+	text.format(L"%d", ((LivingWorldPlayer *)player)->GetNumRegionsOwned());
 	g_bfmeAptWindowManager->bfmeSetText(window, text, false);
 	window.format("%s:Regions_%d", kind, index);
 	text.format(L"%d", CountOwnedUnits((Rva002E0D02Arg *)player));
