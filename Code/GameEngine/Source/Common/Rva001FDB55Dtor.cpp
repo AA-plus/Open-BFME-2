@@ -28,17 +28,17 @@ private:
 	AsciiStringMember m_member08;
 };
 
-class Rva001FDB55 : public SubsystemInterface
+class PlayerTemplateStore : public SubsystemInterface
 {
 public:
-	virtual ~Rva001FDB55();
+	virtual ~PlayerTemplateStore();
 private:
 	_STL::vector<BfmeObject476> m_vec;
 	Rva00072FE6 m_set;
 	int m_state24;
 };
 
-inline Rva001FDB55::~Rva001FDB55()
+inline PlayerTemplateStore::~PlayerTemplateStore()
 {
 }
 
@@ -47,6 +47,6 @@ inline Rva001FDB55::~Rva001FDB55()
 // ?_bfmeRva001FDB55DtorInlineAnchor@@YAXXZ absent-from-retail
 void _bfmeRva001FDB55DtorInlineAnchor()
 {
-    static_cast<Rva001FDB55 *>(0)->Rva001FDB55::~Rva001FDB55();
+    static_cast<PlayerTemplateStore *>(0)->PlayerTemplateStore::~PlayerTemplateStore();
 }
 #pragma inline_depth()

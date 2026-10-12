@@ -1,7 +1,8 @@
 // cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /O1 /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // ??0Rva001FDB55@@QAE@XZ @0x001FDB55 76B.
-// Default ctor: base BFME2NativeNetwork via its inline ctor (which calls the
+// PlayerTemplateStore (pinned ??0PlayerTemplateStore at this address; WorldBuilder
+// names its slot 5 PlayerTemplateStore::attemptRefresh). Default ctor: base BFME2NativeNetwork via its inline ctor (which calls the
 // rowed baseConstruct 0x001B4E63), vptr 0x007E1BB0, vector<BfmeE16> at +0xC
 // via the rowed _Vector_base ctor 0x00211E58, set<AsciiString> at +0x18 via
 // the rowed set ctor 0x000D3A71, and -1 at +0x24. Base layout (vptr + flag
@@ -43,17 +44,20 @@ __forceinline BFME2NativeNetwork::BFME2NativeNetwork()
 	reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface();
 }
 
-class Rva001FDB55 : public BFME2NativeNetwork
+class PlayerTemplateStore : public BFME2NativeNetwork
 {
 public:
-	Rva001FDB55();
+	PlayerTemplateStore();
+	// Declared only: the destructor is rowed in Rva001FDB55Dtor.cpp, so this
+	// unit must not emit its own (divergent) implicit copy for the vtable.
+	virtual ~PlayerTemplateStore();
 private:
 	_STL::vector<BfmeE16, _STL::allocator<BfmeE16> > m_vec;
 	_STL::set<AsciiString, _STL::less<AsciiString>, _STL::allocator<AsciiString> > m_set;
 	int m_state24;
 };
 
-Rva001FDB55::Rva001FDB55()
+PlayerTemplateStore::PlayerTemplateStore()
 {
 	m_state24 = -1;
 }
