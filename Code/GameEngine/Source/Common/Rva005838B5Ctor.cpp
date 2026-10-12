@@ -29,3 +29,18 @@ Rva005838B5::Rva005838B5(void *held)
 	: Rva005D6FCC(held), m_vec(_STL::allocator<BfmeE16>())
 {
 }
+
+// ?rva00468A6C@Rva00468A6CFactory@@QAEPAVRva005D6FCC@@PAX@Z RVA 0x00468A6C
+// 64B: slot 1 of a factory table (its deleting destructor, ICF-shared at
+// 0x00587752, is slot 0); creates the 0x14-byte object above around the
+// given pointer. The factory's own identity is unknown.
+class Rva00468A6CFactory
+{
+public:
+	Rva005D6FCC *rva00468A6C(void *held);
+};
+
+Rva005D6FCC *Rva00468A6CFactory::rva00468A6C(void *held)
+{
+	return new Rva005838B5(held);
+}

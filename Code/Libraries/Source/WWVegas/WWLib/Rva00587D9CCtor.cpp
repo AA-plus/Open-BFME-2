@@ -35,3 +35,18 @@ HordeMeleeAmoeba::HordeMeleeAmoeba(void *held, void *other)
 	m_other = other;
 	m_flag = true;
 }
+
+// ?rva00587F11@Rva00587F11Factory@@QAEPAVRva005D6FCC@@PAX@Z, retail
+// 0x00587F11 60B: slot 1 of the HordeMeleeAmoeba factory table (deleting
+// destructor ICF-shared at 0x00587752 in slot 0); creates the amoeba around
+// the given pointer with the factory itself as its second argument.
+class Rva00587F11Factory
+{
+public:
+	Rva005D6FCC *rva00587F11(void *held);
+};
+
+Rva005D6FCC *Rva00587F11Factory::rva00587F11(void *held)
+{
+	return new HordeMeleeAmoeba(held, this);
+}
