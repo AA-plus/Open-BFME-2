@@ -24,6 +24,7 @@ public:
 class MultiListNodeClass
 {
 public:
+	MultiListNodeClass(void) { Prev = Next = NextList = 0; Object = 0; List = 0; }
 	void *Prev;
 	void *Next;
 	void *NextList;
@@ -36,6 +37,7 @@ class GenericMultiListClass
 public:
 	MultiListNodeClass Head;
 
+	GenericMultiListClass(void) { Head.Next = Head.Prev = &Head; Head.Object = 0; Head.NextList = 0; }
 	virtual ~GenericMultiListClass();
 
 protected:
@@ -45,6 +47,7 @@ protected:
 class Rva001447B0 : public GenericMultiListClass
 {
 public:
+	Rva001447B0(void);
 	virtual ~Rva001447B0();
 };
 
@@ -54,4 +57,11 @@ Rva001447B0::~Rva001447B0()
 	while (Head.Next != (void *)&Head) {
 		Internal_Remove_List_Head();
 	}
+}
+
+// ??0Rva001447B0@@QAE@XZ at retail 0x00143DF0 (39B): the constructor, the Zero
+// Hour multilist node and list-head constructors inlined (an empty circular
+// head) before the vtable store. No direct caller remains in retail.
+Rva001447B0::Rva001447B0(void)
+{
 }
