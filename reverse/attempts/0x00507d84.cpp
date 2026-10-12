@@ -1,4 +1,6 @@
 // ?rva00507D84@Made002CC5E1@@UAEXPAXPBUCoord3D@@@Z
+// partial score=0.9 date=2026-10-12
+// ?rva00507D84@Made002CC5E1@@UAEXPAXPBUCoord3D@@@Z
 // partial score=0.9 date=2026-10-09
 // cl: /O1 /DNDEBUG /MD /EHsc /arch:SSE
 //
