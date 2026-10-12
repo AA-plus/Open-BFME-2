@@ -420,6 +420,7 @@ public:
 	// KindOf 48 (BFME 1's ScriptConditionsRva0032A710.cpp).
 	bool testKindOf30() const { return (m_kindOf10E & 0x01) != 0; }
 	bool testKindOf59() const { return (m_kindOf113 & 0x02) != 0; }
+	float getRva51C() const { return m_51C; }
 	// KindOf bit 0x2F (byte +0x10D, bit 7), unnamed: skipped by the team
 	// health total alongside 0x59.
 	bool testKindOf2F() const { return (m_kindOf10D & 0x80) != 0; }
@@ -433,7 +434,9 @@ private:
 	unsigned char m_kindOf113; // +0x113
 	unsigned char m_pad114[0x115 - 0x114];
 	unsigned char m_kindOf115; // +0x115
-	unsigned char m_pad116[0x618 - 0x116];
+	unsigned char m_pad116[0x51C - 0x116];
+	float m_51C; // +0x51C
+	unsigned char m_pad520[0x618 - 0x520];
 	int m_commandPoints; // +0x618
 };
 
@@ -621,6 +624,7 @@ public:
 	// temporary swaps retail's ESI/EDI choice in evaluateCanBuildAtBase.
 	bool isKindOf68() const { return m_template->testKindOf68(); }
 	bool isEffectivelyDead() const { return (m_privateStatus & EFFECTIVELY_DEAD) != 0; }
+	bool isKindOf59() const { return m_template->testKindOf59(); }
 	bool testStatus(ObjectStatusTypes bit) const;
 	float rva002972B1(float range);
 private:
@@ -897,11 +901,14 @@ public:
 	Coord3D *rva0039DA2A(Coord3D *pos) const;
 	Team *dlink_next_TeamInstanceList() const;
 	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
+	bool didEnterOrExit() const { return m_enteredOrExited; }
 private:
 	unsigned char m_pad08[0x30 - 0x08];
 	TeamPrototype *m_proto; // +0x30
 	unsigned char m_pad34[0x44 - 0x34];
 	AsciiString m_state; // +0x44
+	unsigned char m_pad48[0x5C - 0x48];
+	bool m_enteredOrExited; // +0x5C
 };
 
 inline DLINK_ITERATOR<Team> TeamPrototype::iterate_TeamInstanceList() const
@@ -972,6 +979,7 @@ protected:
 	bool evaluateNamedDestroyedByType(Parameter *, Parameter *);
 	bool rva003EA12A(Parameter *);
 	bool rva003EA228(Parameter *, bool);
+	bool evaluateSkirmishValueInArea(Condition *, Parameter *, Parameter *, Parameter *, Parameter *);
 	bool evaluateHasCommandPointsToBuildUnit(Parameter *, Parameter *);
 	bool evaluatePlayerHasKilledTypeUnits(Parameter *, Parameter *, Parameter *);
 	bool rva003E63CD(Condition *, Parameter *, Parameter *, Parameter *);
@@ -2159,5 +2167,68 @@ bool ScriptConditions::rva003EA228(Parameter *pTeamParm, bool failingMemberWins)
 		if (reachedFilter)
 			return matched ? false : true;
 	}
+	return false;
+}
+
+// ?evaluateSkirmishValueInArea@ScriptConditions@@IAE_NPAVCondition@@PAVParameter@@111@Z, retail 0x003E719C (587 bytes, RET 20): SKIRMISH_VALUE_IN_AREA, case 86.
+// Donor: BFME 1 ScriptConditionsSkirmishValueInArea.cpp (per-player mask loop); BFME 2 sums the template float at +0x51C instead of the build cost.
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+bool ScriptConditions::evaluateSkirmishValueInArea(Condition *pCondition, Parameter *pSkirmishPlayerParm,
+	Parameter *pComparisonParm, Parameter *pValueParm, Parameter *pTriggerParm)
+{
+	int mask = TheScriptEngine->rva00357B82(pSkirmishPlayerParm);
+	float total = 0;
+	while (mask) {
+		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
+		if (!player) continue;
+		PolygonTrigger *pTrig = TheScriptEngine->getQualifiedTriggerAreaByName(pTriggerParm->getString());
+		if (!pTrig) continue;
+		PlayerTeamList::const_iterator it;
+		bool anyChanges = false;
+		if (pCondition->getCustomData() == 0) anyChanges = true;
+		for (it = player->getPlayerTeams()->begin(); it != player->getPlayerTeams()->end(); ++it) {
+			if (anyChanges) break;
+			for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance()) {
+				if (anyChanges) break;
+				Team *team = iter.cur();
+				if (!team) continue;
+				if (team->didEnterOrExit()) anyChanges = true;
+			}
+		}
+		if (TheScriptEngine->getFrameObjectCountChanged() != pCondition->getCustomFrame()) anyChanges = true;
+		if (!anyChanges) {
+			if (pCondition->getCustomData() == -1) continue;
+			if (pCondition->getCustomData() == 1) return true;
+		}
+		for (it = player->getPlayerTeams()->begin(); it != player->getPlayerTeams()->end(); ++it) {
+			for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance()) {
+				Team *team = iter.cur();
+				if (!team) continue;
+				Object *pObj;
+				for (DLINK_ITERATOR<Object> oiter = team->iterate_TeamMemberList(); (pObj = oiter.cur()) != 0; oiter.advance()) {
+					_ReadWriteBarrier();
+					if (pObj->isKindOf59()) continue;
+					if (!pObj->isInside(pTrig)) continue;
+					if (pObj->isEffectivelyDead()) continue;
+					const ThingTemplate *tt = pObj->getTemplate();
+					if (!tt) continue;
+					total += tt->getRva51C();
+				}
+			}
+		}
+	}
+	bool comparison = false;
+	switch (pComparisonParm->getInt()) {
+	case 0: comparison = total < pValueParm->m_real; break;
+	case 1: comparison = total <= pValueParm->m_real; break;
+	case 2: comparison = total == pValueParm->m_real; break;
+	case 3: comparison = total >= pValueParm->m_real; break;
+	case 4: comparison = total > pValueParm->m_real; break;
+	case 5: comparison = total != pValueParm->m_real; break;
+	}
+	pCondition->setCustomFrame(TheScriptEngine->getFrameObjectCountChanged());
+	if (comparison) { pCondition->setCustomData(1); return true; }
+	pCondition->setCustomData(-1);
 	return false;
 }
