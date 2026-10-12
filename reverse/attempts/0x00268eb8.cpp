@@ -1,4 +1,6 @@
 // ?getNextMoodTarget@AIUpdateInterface@@QAEPAVObject@@_N0@Z
+// partial score=0.974 date=2026-10-12
+// ?getNextMoodTarget@AIUpdateInterface@@QAEPAVObject@@_N0@Z
 // partial score=0.97428 date=2026-10-10
 // ?getNextMoodTarget@AIUpdateInterface@@QAEPAVObject@@_N0@Z
 // partial score=0.9742788468129749 date=2026-10-10 seat=w5-g5
@@ -282,7 +284,7 @@ public:
 	Int rva0028F4EF();
 	Bool rva002943B2(const Player *player);
 	Int rva0028AF97();
-	Object *adjustVictim(Object *owner, Int flag, Int extra);
+	Object *adjustVictim(Object *owner, Bool flag, Int extra);
 	const Weapon *getCurrentWeapon(WeaponSlotType *slot) const;
 	CanAttackResult getAbleToAttackSpecificObject(AbleToAttackType t, const Object *target, CommandSourceType src) const;
 	Real rva00263763(const void *other) const;
@@ -541,7 +543,7 @@ Object *AIUpdateInterface::getNextMoodTarget(Bool calledByAI, Bool calledDuringI
 
 	{
 		Object *nemesis = TheGameLogic->findObjectByID((ObjectID)obj->rva0028AF97());
-		target = nemesis ? nemesis->adjustVictim(obj, 1, 0) : 0;
+		target = nemesis ? nemesis->adjustVictim(obj, true, 0) : 0;
 		if (target)
 		{
 			if (target->rva002615E3(obj->getPosition()) > rangeToFindWithin * rangeToFindWithin)
@@ -568,7 +570,7 @@ Object *AIUpdateInterface::getNextMoodTarget(Bool calledByAI, Bool calledDuringI
 	{
 found:
 		if (!(obj->getTemplate()->m_kind114 & 0x2000) && (target->getTemplate()->m_kind114 & 0x2000))
-			target = target->adjustVictim(obj, 0, 0);
+			target = target->adjustVictim(obj, false, 0);
 	}
 	if (calledByAI && humanControlled && target && !AI::rva002FE193(obj, target))
 		return 0;

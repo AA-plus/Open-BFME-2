@@ -1,6 +1,15 @@
 // ?getBridgeHeight@Bridge@@QAEMPBUCoord3D@@PAU2@@Z
+// partial score=0.6 date=2026-10-12
+// ?getBridgeHeight@Bridge@@QAEMPBUCoord3D@@PAU2@@Z
 // partial score=0.6 date=2026-10-07
 // cl: /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7 /DNDEBUG /MD
+// 2026-10-12 trials (Opus 5.5, ~40 min, none beat 0.60 instruction-sequence ratio):
+//   scalar deltas from-then-to around the `to` copy (0.52); Coord3D tmp reused for the
+//   to-edge delta so toDY lives in the copy's +4 slot (0.60, 694 B); tmp for both edges
+//   (0.60, 704 B); ZH Coord3D::set/sub helpers (0.41-0.55); /O2, /G6, no /G7, /Oy- (no gain
+//   or far worse: /O1 is right). Retail keeps the three movsd of `to` split 2+1 around the
+//   to-edge deltas, materialises xorps zero late and copies each edge delta through a
+//   scratch xmm (movaps); none of the shapes above reproduced that scheduling.
 //
 // ?getBridgeHeight@Bridge@@QAEMPBUCoord3D@@PAU2@@Z, retail 0x0027FD2A, 713 bytes.
 // Identity: TerrainLogic::getHighestLayerForDestination (0x002803F9) calls it
