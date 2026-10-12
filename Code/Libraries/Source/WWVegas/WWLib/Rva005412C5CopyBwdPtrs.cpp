@@ -12,15 +12,7 @@
 // 4 args; siblings 0x00541231 forward and 0x00541214 share the shape.
 #include <algorithm>
 
-struct Region2D
-{
-	Region2D(const Region2D &that);
-	Region2D &operator=(const Region2D &that);
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Include/Lib/Region2D.h"
 
 class Rva0054103E
 {

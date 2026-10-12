@@ -94,10 +94,7 @@ public:
 extern GameTextInterface *TheGameText;
 
 // TheMouse's rowed tooltip setter 0x001EEA6D (MouseRva001EEA6D.cpp).
-struct RGBColor
-{
-	float red, green, blue;
-};
+#include "../../../../../../Libraries/Include/Lib/RGBColor.h"
 
 class Mouse
 {

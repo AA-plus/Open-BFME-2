@@ -21,10 +21,7 @@ enum TimeOfDay
 
 enum { MAX_GLOBAL_LIGHTS = 3 };
 
-struct RGBColor
-{
-	Real red, green, blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 struct Coord3D
 {

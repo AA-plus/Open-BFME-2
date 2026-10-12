@@ -29,12 +29,7 @@ protected:
 	unsigned char m_pad[0x148 - 8];
 };
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class BuffNuggetFXNugget : public Rva001DFEAABase
 {

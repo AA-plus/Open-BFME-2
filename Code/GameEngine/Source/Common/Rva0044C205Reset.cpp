@@ -32,12 +32,7 @@ public:
 };
 extern NetworkInterface *TheNetwork;
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 class Mouse
 {
 public:

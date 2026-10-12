@@ -10,10 +10,7 @@
 
 typedef float Real;
 
-struct RGBColor
-{
-	float r, g, b;
-};
+#include "../../../../../../Libraries/Include/Lib/RGBColor.h"
 
 struct BfmePod16 { int a[4]; };
 

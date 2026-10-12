@@ -42,14 +42,7 @@ template <> __declspec(dllimport) __forceinline
 void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
-struct Region2D
-{
-	Region2D(const Region2D &that);
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Include/Lib/Region2D.h"
 class Rva0054103E
 {
 public:

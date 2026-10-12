@@ -23,12 +23,7 @@ private:
 	unsigned char unknownBaseTail[0x144];
 };
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 // The target dtor has no derived-vptr store. novtable keeps this view's dtor
 // body aligned with that fact; no constructor is emitted from this file.

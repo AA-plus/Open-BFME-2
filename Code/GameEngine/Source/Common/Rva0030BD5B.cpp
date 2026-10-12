@@ -3,12 +3,7 @@
 // Conditional RGBColor copy with virtual slot 0x20.
 // Evidence: callee rowed operator!= 0x00004F65; member RGBColor at +0x50; 12B copy via movsd x3; virtual call [eax+0x20]; ret 4.
 // Precedent Rva0030BD84/Rva0030BDEE same class same pattern with floats.
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 bool __cdecl operator!=(const RGBColor &left, const RGBColor &right);
 class Rva0030BDEE
 {

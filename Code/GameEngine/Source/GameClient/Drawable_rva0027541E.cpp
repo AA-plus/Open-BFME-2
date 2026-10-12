@@ -6,12 +6,7 @@
 // state38 and affect39. update has no calls; WB cb5ed0 carries the same
 // state machine and Vector3 Add/Subtract/Length assertions.
 #include "vector3.h"
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Rva00271826
 {

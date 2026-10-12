@@ -57,11 +57,7 @@ void Rva001F8B5FWrite(
     char const *key,
     const S001F87D5 &value);
 
-struct RGBColor {
-    float red;
-    float green;
-    float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 struct Vec001F8810 {
     float x;
     float y;

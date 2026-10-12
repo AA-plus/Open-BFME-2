@@ -6,12 +6,7 @@
 
 #include <ostream>
 
-struct RGBColor
-{
-    float red;
-    float green;
-    float blue;
-};
+#include "../../../Include/Lib/RGBColor.h"
 
 extern float g_00BC2900;
 // g_00BC2900: matched references place it at VA 0xbc2900 (retail .rdata value 255.0f).

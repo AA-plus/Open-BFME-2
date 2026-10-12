@@ -10,7 +10,7 @@
 // pointer; the flags view claims only the seven accessed words, not the
 // complete ThingTemplate ABI. The secondary Object argument is unused.
 #include "ascii_string.h"
-struct RGBColor {float red,green,blue;};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 class Drawable;
 class Object {public:Drawable*getDrawable()const;};
 class ThingTemplate;

@@ -18,13 +18,7 @@ class INI;
 #include "ascii_string.h"
 
 
-struct Region2D
-{
-    float x_min;
-    float y_min;
-    float x_max;
-    float y_max;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 
 struct Coord3D
 {

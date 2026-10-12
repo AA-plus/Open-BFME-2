@@ -33,11 +33,7 @@ extern "C" void __cdecl free(void *p);
 void Rva0055CB5DWriteHeader(const void *self, File *file, unsigned int *flags);
 void Rva003AFC6BWrite(File *file, unsigned int *flags);
 
-struct RGBColor {
-    float red;
-    float green;
-    float blue;
-};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 struct Vec001F8810 {
     float x;
     float y;

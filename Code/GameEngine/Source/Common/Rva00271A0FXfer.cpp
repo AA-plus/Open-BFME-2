@@ -25,12 +25,7 @@ struct Coord3DBase
 	float z;
 };
 
-struct ICoord3D
-{
-	int x;
-	int y;
-	int z;
-};
+#include "../../../Libraries/Include/Lib/ICoord3D.h"
 
 struct Region3D
 {
@@ -48,11 +43,7 @@ struct IRegion3D
 
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct Region2D
-{
-	Coord2D lo;
-	Coord2D hi;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 
 struct IRegion2D
 {
@@ -66,12 +57,7 @@ struct RealRange
 	float hi;
 };
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 struct RGBAColorReal
 {

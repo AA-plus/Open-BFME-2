@@ -16,12 +16,7 @@ struct Coord3D
 	float z;
 };
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Matrix3D;
 

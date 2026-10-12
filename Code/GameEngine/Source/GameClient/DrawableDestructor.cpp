@@ -184,12 +184,7 @@ struct Coord3DZero
 
 struct DrawableICoord2D { int x, y; };
 
-class RGBColor
-{
-public:
-	void setFromInt(int c);
-	float red, green, blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 // Rowed release worker 0x00050ED3 (the tail jump of retail's 0x0010F149).
 class OpaqueRefCounted

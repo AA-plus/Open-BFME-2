@@ -40,12 +40,7 @@ enum ObjectStatusTypes
 extern int g_Va00DBA4E4;
 #define DEFECTION_DETECTION_TIME_MAX (10 * g_Va00DBA4E4)
 
-struct RGBColor
-{
-	Real red;
-	Real green;
-	Real blue;
-};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 
 class Drawable
 {

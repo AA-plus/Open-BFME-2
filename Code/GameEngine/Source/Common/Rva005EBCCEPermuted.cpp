@@ -48,7 +48,7 @@ class Rva00226883 {public:void rva0022999F();};
 struct StrategicBattleSideCountView {char unknown00[28];};
 extern "C" unsigned char *__cdecl _mbscpy(unsigned char *,const unsigned char *);
 
-struct RGBColor { int getAsInt()const;float red,green,blue;};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 class LivingWorldBattle {public:int rva003F459A();int getSide()const {return side;}int getSideCount()const {return sideEnd-sideBegin;}char unknown00[0x18];StrategicBattleSideCountView *sideBegin,*sideEnd,*sideCapacity;char unknown24[0x14];int side;};
 class Rva003F468D {public:int rva003F468D(int,int);int rva003F4DAE(int);};
 struct StrategicPlayerColorView {char unknown00[0x184];RGBColor color;};

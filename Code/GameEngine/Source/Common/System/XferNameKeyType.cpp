@@ -22,12 +22,7 @@ class ICoord2D;
 class Region2D;
 class IRegion2D;
 class RealRange;
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 class RGBAColorReal;
 class RGBAColorInt;
 class Snapshot;

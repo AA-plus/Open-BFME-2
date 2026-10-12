@@ -45,10 +45,7 @@ struct VertexFormatXYZDUV1
 	Real u1, v1;
 };
 
-struct RGBColor
-{
-	Real red, green, blue;
-};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 
 class GlobalData
 {

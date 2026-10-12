@@ -80,13 +80,7 @@ private:
 };
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include/Lib/BaseType.h
-class RGBColor
-{
-public:
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 
 namespace FXParticleSystem {
 

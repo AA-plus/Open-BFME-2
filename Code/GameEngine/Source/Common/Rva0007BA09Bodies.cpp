@@ -34,13 +34,7 @@ typedef bool Bool;
 
 void get_far_extent(const Vector3 &a, const Vector3 &b, Vector3 *out);
 
-struct Region2D
-{
-	float x;
-	float y;
-	float w;
-	float h;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 
 namespace _STL
 {

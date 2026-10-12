@@ -21,7 +21,7 @@ extern "C" __declspec(dllimport) int __cdecl sprintf(char *buffer, const char *f
 #pragma function(sprintf)
 
 #include "unicode_string.h"
-struct RGBColor { float red, green, blue; };
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 class Mouse
 {
 public:

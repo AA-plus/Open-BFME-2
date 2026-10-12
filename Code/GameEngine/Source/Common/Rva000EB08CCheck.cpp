@@ -29,15 +29,7 @@ public:
 	void *m_end;
 };
 
-class Region2D
-{
-public:
-	Region2D();
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 
 class Rva000EB08C
 {

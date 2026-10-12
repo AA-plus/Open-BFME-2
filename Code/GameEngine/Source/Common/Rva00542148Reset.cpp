@@ -16,14 +16,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 #include <vector>
 
-struct Region2D
-{
-	Region2D(const Region2D &that);
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 
 class Rva0054103E
 {

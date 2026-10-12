@@ -29,12 +29,7 @@ public:
 	static void parseBool(INI *ini, void *instance, void *store, const void *userData);
 };
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 
 class INIException
 {

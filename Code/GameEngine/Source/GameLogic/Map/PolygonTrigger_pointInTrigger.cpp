@@ -1,16 +1,10 @@
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?pointInTrigger@PolygonTrigger@@QAE_NABVICoord3D@@@Z
+// ?pointInTrigger@PolygonTrigger@@QAE_NABUICoord3D@@@Z
 // Retail boundary 0x002E3A13..0x002E3A39 (38B); target bytes copy x/y into a
 // two-int local and call 0x00285B66 with that pointer and this+8. The ZH donor
 // identifies the method's polygon-test role; its full ray-cast is not this body.
 
-class ICoord3D
-{
-public:
-    int x;
-    int y;
-    int z;
-};
+#include "../../../../Libraries/Include/Lib/ICoord3D.h"
 
 struct PlanarPoint
 {

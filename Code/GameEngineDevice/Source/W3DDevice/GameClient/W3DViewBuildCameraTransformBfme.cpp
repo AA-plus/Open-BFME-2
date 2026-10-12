@@ -20,7 +20,7 @@ typedef float Real;
 typedef int Int;
 typedef bool Bool;
 
-struct Region2D{Coord2D lo,hi;};
+#include "../../../../Libraries/Include/Lib/Region2D.h"
 struct CameraRealTriplet:Coord3D {CameraRealTriplet&operator=(const Coord3D&p){x=p.x;y=p.y;z=p.z;return *this;}};
 class Matrix3D;
 // Native reads VA DB457C and DE2020 as float; semantic names unknown.

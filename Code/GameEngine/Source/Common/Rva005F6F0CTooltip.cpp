@@ -3,7 +3,7 @@
 // Evidence: flag at +0x28 gates TheGameText fetch STRATEGICHUD:ConstructionTurnsRemainingTooltip at slot 0x3c plus Mouse rva001EEA6D with -1 0 1.0f; callers 0x005F7455 0x005F7462; precedent Rva005F06EF in Rva005F0647Deleting.cpp
 #include "unicode_string.h"
 
-struct RGBColor { float red, green, blue; };
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Mouse
 {

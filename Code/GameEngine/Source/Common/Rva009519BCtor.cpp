@@ -26,12 +26,7 @@ private:
 // (stored in member order), the shadow colour only by a chained assignment
 // in the body (stored last, +0x6C first), so they are two types here; the
 // names are not known.
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 struct ZeroedRGBColor
 {

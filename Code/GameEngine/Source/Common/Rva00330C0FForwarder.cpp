@@ -6,14 +6,7 @@
 // this-0x34 float forwarder and the pinned 0x00330C22 this-0x3C center
 // forwarder. Honest address names.
 
-struct Region2D
-{
-	Region2D(const Region2D &that);
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 
 class PolygonTrigger
 {

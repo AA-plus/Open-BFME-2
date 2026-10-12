@@ -5,14 +5,7 @@
 // Evidence: pushes 0x87A6A9 3 0x10 lea +0x10 call 0x1423 mov eax,esi;
 // prev Rva000E76B8 ends at 0xE771B; caller at 0x000E98C5.
 
-struct Region2D
-{
-	Region2D();
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 
 class Rva000E771B
 {

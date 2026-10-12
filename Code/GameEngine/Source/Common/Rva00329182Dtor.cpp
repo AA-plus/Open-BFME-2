@@ -8,10 +8,7 @@ extern "C" void __cdecl free(void *p);
 
 class DataChunkInput;
 
-struct RGBColor
-{
-	int c[3];
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 struct ElevatedAreaPolygon
 {

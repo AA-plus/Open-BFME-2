@@ -19,7 +19,7 @@ namespace _STL {
 template <> char *_STLP_alloc_proxy<char*, char, allocator<char> >::allocate(size_t);
 }
 class File {public: virtual ~File(); virtual bool open(const char*,int=0); virtual void close(); virtual int read(void*,int); virtual int write(const void*,int);};
-struct RGBColor {float red,green,blue;};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 struct ColorKey {RGBColor color;unsigned long frame;};
 struct S001F87D5 {unsigned int first;float x,y;};
 struct Rva001F458BText {const char* start;const char* finish;};

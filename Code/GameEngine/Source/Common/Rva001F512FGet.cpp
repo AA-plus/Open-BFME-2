@@ -3,11 +3,7 @@
 // Null-checked RGBColor holder at +0x1B8 via virtual slot +0x14 with tail jmp.
 // Shape matches 0x001F4E1B sibling. Callers at 0x001F75DE and 0x0055F0D0.
 // Honest Rva names; /O1 for je plus tail-jmp shape.
-struct RGBColor {
-    float r;
-    float g;
-    float b;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 class Rva001F512FHelper {
 public:
     virtual ~Rva001F512FHelper();

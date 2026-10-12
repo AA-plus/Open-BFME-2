@@ -7,10 +7,7 @@
 
 typedef float Real;
 
-struct RGBColor
-{
-	Real red, green, blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Drawable
 {

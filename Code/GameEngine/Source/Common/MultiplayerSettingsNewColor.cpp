@@ -19,13 +19,7 @@
 #include "ascii_string.h"
 
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-	void setFromInt(int value);
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class MultiplayerColorDefinition
 {

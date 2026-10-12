@@ -42,12 +42,7 @@ static inline bool operator!=(const _List_iterator<_IterTp, _LeftTraits> &a,
 class UnicodeString;
 class PooledString;
 struct XferUnknown11;
-struct ICoord3D
-{
-	int x;
-	int y;
-	int z;
-};
+#include "../../../../Libraries/Include/Lib/ICoord3D.h"
 class Region3D;
 class IRegion3D;
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"

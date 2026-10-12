@@ -117,7 +117,7 @@ namespace _STL {
  template<> void vector<Rva002E26E1Record>::reserve(unsigned int);
  template<> void vector<Rva002E2D10Record>::push_back(const Rva002E2D10Record&);
 }
-class RGBColor { public: float r,g,b; };
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 class LivingWorldPlayer {
 public: void rva002E30C8(Xfer*);
  char unknown00[0x14]; int id;

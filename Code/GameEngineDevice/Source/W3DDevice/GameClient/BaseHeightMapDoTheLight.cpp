@@ -87,10 +87,7 @@ public:
 	Real Row[3][4];
 };
 
-struct RGBColor
-{
-	Real red, green, blue;
-};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 
 struct VertexFormatXYZDUV2
 {

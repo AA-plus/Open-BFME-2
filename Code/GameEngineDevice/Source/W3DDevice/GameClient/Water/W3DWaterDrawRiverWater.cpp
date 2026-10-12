@@ -272,10 +272,7 @@ struct WWMathView
 
 #define PI 3.14159265359f
 
-struct RGBColor
-{
-	Real red, green, blue;
-};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 
 class GlobalData
 {

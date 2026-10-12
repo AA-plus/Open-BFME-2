@@ -371,15 +371,7 @@ public:
 
 // Retail ctor 0x000D1AF3 builds the slot array through rowed vector_constructor_iterator
 // (0x1423) with the 3-byte folded empty ctor VA 0x87A6A9 (Region2D shares it; stride 0x10).
-class Region2D
-{
-public:
-	Region2D();
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../../Libraries/Include/Lib/Region2D.h"
 // Source argument views: +0x441 flag, float getter 0x000788D3 (+0x200), position getter
 // 0x002763E6 (rowed under the address-derived Drawable name).
 class Rva000788D3FloatField

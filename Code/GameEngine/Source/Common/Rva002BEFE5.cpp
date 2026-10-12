@@ -4,7 +4,7 @@
 // Evidence: TheMouse + empty UnicodeString tooltip, virtuals +0x64/+0x74/+0x78, members +0x54..+0x84.
 #include "unicode_string.h"
 
-struct RGBColor { float red, green, blue; };
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 class Mouse {
 public:
 	void rva001EEA6D(UnicodeString tooltip, int delay, const RGBColor *color, float width);

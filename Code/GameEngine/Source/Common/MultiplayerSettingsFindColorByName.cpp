@@ -12,7 +12,7 @@
 // No new pins, globals or shared-header changes.
 #include "ascii_string.h"
 #include <map>
-struct RGBColor {float red,green,blue;};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 class MultiplayerColorDefinition {
 public: AsciiString getTooltipName() const;
 private:

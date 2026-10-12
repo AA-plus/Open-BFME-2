@@ -16,15 +16,7 @@ public:
 	void swap(vector &);
 };
 }
-struct Region2D
-{
-	Region2D(const Region2D &that);
-	~Region2D() {}
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 void __cdecl Rva0030B31ASwap(Region2D *a, Region2D *b);
 
 struct Rva005386B7

@@ -32,7 +32,7 @@
 #include "ascii_string.h"
 #include "Lib/Coord3D.h"
 #include "GameLogicObjectLookupView.h"
-struct RGBColor { float red,green,blue; };
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 #include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 class Player { public: AsciiString getBaseSide() const; };
 class GameState; extern GameState *TheGameState;

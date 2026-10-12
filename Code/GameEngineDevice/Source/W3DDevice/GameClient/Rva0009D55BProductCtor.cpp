@@ -34,13 +34,7 @@ namespace _STL {
 
 // 12-byte element whose out-of-line default constructor is the ICF-folded
 // trivial ctor 0x0047A6A9 (rowed as ??0ICoord3D@@QAE@XZ among others).
-struct ICoord3D
-{
-	ICoord3D();
-	int x;
-	int y;
-	int z;
-};
+#include "../../../../Libraries/Include/Lib/ICoord3D.h"
 
 struct Rva0009D55BVec3
 {

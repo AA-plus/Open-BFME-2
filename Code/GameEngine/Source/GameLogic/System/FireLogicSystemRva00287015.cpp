@@ -134,14 +134,7 @@ struct FireCoord3D : public Coord3D
 };
 // The area's shape (PolygonTrigger +8): its bounds come back through
 // 0x0030B6E3 and 0x00285B66 tests a cell centre against it.
-struct Region2D
-{
-	Region2D(const Region2D &that);
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../../Libraries/Include/Lib/Region2D.h"
 class Rva0030B719Shape
 {
 public:

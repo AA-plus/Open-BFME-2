@@ -17,7 +17,7 @@ struct Vector3
 
 
 #include "Lib/Coord3D.h"
-struct RGBColor{float red,green,blue;};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 class W3DDynamicLight
 {
 public:

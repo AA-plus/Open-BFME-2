@@ -23,12 +23,7 @@ struct Vec001F8810
 	float z;
 };
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 int Rva0055CCEFIsZero(const RGBColor &color);
 void Rva001F89E2Write(

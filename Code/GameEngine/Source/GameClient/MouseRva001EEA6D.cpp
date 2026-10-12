@@ -8,7 +8,7 @@
 // the Display width and isEmpty logic so width is unused. Callers at
 // 0x1EB5FC 0x2125C5 0x2227C0 and 8 newly ready bodies.
 #include "unicode_string.h"
-struct RGBColor { float red, green, blue; };
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 struct RGBAColorInt { int red, green, blue, alpha; };
 class Mouse {
 	char _pad0[0x128C];

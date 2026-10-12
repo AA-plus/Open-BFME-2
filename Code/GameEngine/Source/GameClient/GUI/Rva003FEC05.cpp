@@ -66,10 +66,7 @@ public:
 };
 extern Rva002D3627Host *g_00DFEF18;
 
-struct RGBColor
-{
-	float red, green, blue;
-};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 
 class Mouse
 {

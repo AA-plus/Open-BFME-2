@@ -18,12 +18,7 @@
 // argument meaning are inferred views; the method name is address-derived.
 #include "Coord3D.h"
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 // The position argument of the setting's +0x54/+0x58 virtuals: built from a
 // Coord3D and destroyed by the callee.

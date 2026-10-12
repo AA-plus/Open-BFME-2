@@ -57,10 +57,7 @@ public:
 	Real X, Y, Z, W;
 };
 
-struct RGBColor
-{
-	Real red, green, blue;
-};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 
 template <class T> class ShareBufferClass
 {

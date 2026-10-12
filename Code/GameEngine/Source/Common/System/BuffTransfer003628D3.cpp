@@ -113,7 +113,7 @@ extern ThingFactory *TheThingFactory;
 class BuffLogic {public:void *addBuff(void*,void*);};
 extern BuffLogic *TheBuffLogic;
 extern void *g_Va00E01E74;
-struct RGBColor { float red,green,blue; };
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 struct BuffTransfer003628D3 {
  int field00; bool field04; char bytes05[3]; int field08,field0c,field10,field14;
  Snapshot003628D3 *field18; const ThingTemplate *field1c; RGBColor field20; float field2c;

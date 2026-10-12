@@ -76,12 +76,7 @@ void expandRange(int *low, int value, int *high);
 
 Debug &operator<<(Debug &debug, const ICoord2DBase &coord);
 
-struct ICoord3D
-{
-    int x;
-    int y;
-    int z;
-};
+#include "../../../Include/Lib/ICoord3D.h"
 
 Debug &operator<<(Debug &debug, const ICoord3D &coord);
 

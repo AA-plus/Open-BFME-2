@@ -9,15 +9,7 @@
 // (0x18); Region2D ctor shares the same folded address, so the push bytes
 // match. Callers construct 0x40 locals via this ctor (0x0014D44C,
 // 0x0007C1AE, 0x0007C220) and use them in Matrix4::Multiply chains.
-class Region2D
-{
-public:
-	Region2D();
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Include/Lib/Region2D.h"
 class Rva0007671F
 {
 public:

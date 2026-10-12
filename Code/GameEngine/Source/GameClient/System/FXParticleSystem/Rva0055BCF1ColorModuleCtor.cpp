@@ -20,12 +20,7 @@
 
 class Xfer;
 
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../../../Libraries/Include/Lib/RGBColor.h"
 
 struct RGBColorKeyframe
 {

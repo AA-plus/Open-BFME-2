@@ -25,7 +25,7 @@ void Rva005F0C39Destroy(Rva005F0647 *begin, Rva005F0647 *end)
 
 #include "unicode_string.h"
 
-struct RGBColor { float red, green, blue; };
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Mouse
 {

@@ -24,7 +24,7 @@ namespace StrategicHUD
 	void __cdecl SetTimeRemainingString(int level, Rva0057A5A8Team **ppTeam, int totalSeconds);
 }
 
-struct RGBColor { float red, green, blue; };
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 class Mouse
 {
