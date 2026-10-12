@@ -5,7 +5,7 @@
 // 6d9434269164392c5ba62aaa7c15a86b5b020d76, donor flags plus /O1). Compiled
 // that way each body below places uniquely on unclaimed game.dat .text by
 // masked whole-.text search, and ./build.sh reproduces it byte for byte:
-// BfmeApplierBH::bfmeAddBH 0x003C420A (59B). Callee addresses are read off
+// ScriptActions::bfmeAddBH 0x003C420A (59B). Callee addresses are read off
 // retail's call sites (reverse/symbols.csv). Only the placed bodies are
 // carried; the donor's other definitions are omitted.
 //
@@ -50,32 +50,34 @@ class SpecialPowerStore;
 
 extern SpecialPowerStore *TheSpecialPowerStore;	// retail 0x012ED80C
 
-class BfmeSubBH
-{
-public:
-	char m_bfmePadSBH[4];
-};
+class AsciiString;
+class SpecialPowerTemplate;
+struct Coord3D;
 
 class BfmeTargetBH
 {
 public:
 	char m_bfmePadTBH[0x38];
-	BfmeSubBH m_bfmeSubBH;
+	char m_bfmePosition[4];
 };
 
-class BfmeApplierBH
+// WB: a callgraph caller of FireSpecialPowerAtPosition, so a ScriptActions
+// member; its own name is not recovered.
+class ScriptActions
 {
 public:
-	bool bfmeApplyBH(void *owner, void *found, BfmeSubBH *sub) throw();
+	bool FireSpecialPowerAtPosition(const AsciiString &playerName,
+		const SpecialPowerTemplate *power, const Coord3D *position) throw();
 
-	void bfmeAddBH(void *owner, const AsciiStringBH &name, BfmeTargetBH *target);
+	void bfmeAddBH(const AsciiString &playerName, const AsciiStringBH &name, BfmeTargetBH *target);
 };
 
-void BfmeApplierBH::bfmeAddBH(void *owner, const AsciiStringBH &name,
+void ScriptActions::bfmeAddBH(const AsciiString &playerName, const AsciiStringBH &name,
 		BfmeTargetBH *target)
 {
 	void *found = ((BfmeRegistryBH *)TheSpecialPowerStore)->bfmeFindBH(name);
 
 	if (found != 0)
-		bfmeApplyBH(owner, found, &target->m_bfmeSubBH);
+		FireSpecialPowerAtPosition(playerName, (const SpecialPowerTemplate *)found,
+			(const Coord3D *)target->m_bfmePosition);
 }

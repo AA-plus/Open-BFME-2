@@ -1,6 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// Retail 0x003C4145 (RVA 0x003C4145) size 117: BfmeApplierBH apply power at team pos.
-// Evidence: ScriptEngine 0xDFE16C getTeamNamed then Team hasAnyObjects then rva0039E5B9 Coord3D then SpecialPowerStore 0xE02D4C findSpecialPowerTemplate then bfmeApplyBH pin 0x3C069B.
+// Retail 0x003C4145 (RVA 0x003C4145) size 117: ScriptActions apply power at team pos.
+// Evidence: ScriptEngine 0xDFE16C getTeamNamed then Team hasAnyObjects then rva0039E5B9 Coord3D then SpecialPowerStore 0xE02D4C findSpecialPowerTemplate then ScriptActions::FireSpecialPowerAtPosition 0x3C069B (WB callgraph caller of it).
 #include "ascii_string.h"
 
 class Team;
@@ -31,20 +31,15 @@ public:
 
 extern SpecialPowerStore *TheSpecialPowerStore;
 
-class BfmeSubBH
+class ScriptActions
 {
 public:
-	char m_pad[4];
+	void rva003C4145(const AsciiString &playerName, const AsciiString &powerName, const AsciiString &teamName);
+	bool FireSpecialPowerAtPosition(const AsciiString &playerName,
+		const SpecialPowerTemplate *power, const Coord3D *position) throw();
 };
 
-class BfmeApplierBH
-{
-public:
-	void rva003C4145(void *owner, const AsciiString &powerName, const AsciiString &teamName);
-	bool bfmeApplyBH(void *owner, void *found, BfmeSubBH *sub) throw();
-};
-
-void BfmeApplierBH::rva003C4145(void *owner, const AsciiString &powerName, const AsciiString &teamName)
+void ScriptActions::rva003C4145(const AsciiString &playerName, const AsciiString &powerName, const AsciiString &teamName)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	if (team == 0)
@@ -56,5 +51,5 @@ void BfmeApplierBH::rva003C4145(void *owner, const AsciiString &powerName, const
 	const SpecialPowerTemplate *found = TheSpecialPowerStore->findSpecialPowerTemplate(powerName);
 	if (found == 0)
 		return;
-	bfmeApplyBH(owner, (void *)found, (BfmeSubBH *)&pos);
+	FireSpecialPowerAtPosition(playerName, found, &pos);
 }

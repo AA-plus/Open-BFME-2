@@ -1,10 +1,12 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ?rva003C41BA@BfmeApplierBH@@QAEXPAXABVAsciiString@@0@Z @0x003C41BA 80B.
-// BfmeApplierBH helper that resolves a SpecialPowerTemplate by name and applies
-// it when the TerrainLogic helper is present. Evidence: calls rowed
-// findSpecialPowerTemplate 0x0029B6EB via TheSpecialPowerStore and pin-only bfmeApplyBH
-// 0x003C069B; TerrainLogic virtual at +0x88; StringBase copy 0x000365F0 for the
-// by-value AsciiString; prev/next share // cl: /O1; caller 0x003CC74F.
+// ?doFireSpecialPowerAtWaypoint@ScriptActions@@QAEXABVAsciiString@@00@Z
+// @0x003C41BA 80B. WorldBuilder's ScriptActions::doFireSpecialPowerAtWaypoint
+// (ScriptActions.cpp, asserts "Invalid waypoint/power in
+// FireSpecialPowerAtWaypoint") looks the waypoint up through TheTerrainLogic
+// (+0x88), the power through findSpecialPowerTemplate 0x0029B6EB, and fires
+// at the waypoint's location (+0xC) with FireSpecialPowerAtPosition
+// 0x003C069B; retail is that body with the asserts compiled out. StringBase
+// copy 0x000365F0 for the by-value AsciiString; caller 0x003CC74F.
 #include "ascii_string.h"
 
 class TerrainLogic
@@ -44,7 +46,7 @@ public:
 	virtual void v31();
 	virtual void v32();
 	virtual void v33();
-	virtual void *v34(void *arg);
+	virtual void *v34(const AsciiString &name);
 };
 
 extern TerrainLogic *TheTerrainLogic;
@@ -58,23 +60,22 @@ public:
 
 extern SpecialPowerStore *TheSpecialPowerStore;
 
-class BfmeSubBH
+struct Coord3D;
+
+class ScriptActions
 {
 public:
-	char m_pad[4];
+	void doFireSpecialPowerAtWaypoint(const AsciiString &playerName,
+		const AsciiString &powerName, const AsciiString &waypointName);
+	bool FireSpecialPowerAtPosition(const AsciiString &playerName,
+		const SpecialPowerTemplate *power, const Coord3D *position) throw();
 };
 
-class BfmeApplierBH
+void ScriptActions::doFireSpecialPowerAtWaypoint(const AsciiString &playerName,
+	const AsciiString &powerName, const AsciiString &waypointName)
 {
-public:
-	void rva003C41BA(void *owner, const AsciiString &name, void *arg3);
-	bool bfmeApplyBH(void *owner, void *found, BfmeSubBH *sub) throw();
-};
-
-void BfmeApplierBH::rva003C41BA(void *owner, const AsciiString &name, void *arg3)
-{
-	void *helper = TheTerrainLogic->v34(arg3);
-	const SpecialPowerTemplate *found = TheSpecialPowerStore->findSpecialPowerTemplate(name);
-	if (helper != 0 && found != 0)
-		bfmeApplyBH(owner, (void *)found, (BfmeSubBH *)((char *)helper + 0xc));
+	void *waypoint = TheTerrainLogic->v34(waypointName);
+	const SpecialPowerTemplate *power = TheSpecialPowerStore->findSpecialPowerTemplate(powerName);
+	if (waypoint != 0 && power != 0)
+		FireSpecialPowerAtPosition(playerName, power, (const Coord3D *)((char *)waypoint + 0xc));
 }

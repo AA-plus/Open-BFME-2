@@ -3,8 +3,8 @@
 // player/prototype/instance/member traversal and first matching power fire.
 // Target 3C069B..3C075B independently proves full int mask, Player list32C,
 // prototype instance334, member lookup28BB9E and module slot12(location,40000).
-// WB names this FireSpecialPowerAtPosition. Existing BfmeApplierBH spelling
-// remains the owner so callers need no competing name/address binding.
+// WB names this ScriptActions::FireSpecialPowerAtPosition; its callers
+// (0x003C4070, 0x003C4145, 0x003C41BA, 0x003C420A) reach it on ScriptActions.
 #include "ascii_string.h"
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
 class MemoryPoolObject { public: virtual ~MemoryPoolObject(); };
@@ -90,15 +90,16 @@ public:
     int rva00357475(const AsciiString &name, bool *special);
 };
 extern ScriptEngine *TheScriptEngine;
-class BfmeSubBH { unsigned char pad00[4]; };
-class BfmeApplierBH
+class ScriptActions
 {
 public:
-    bool bfmeApplyBH(void *owner, void *found, BfmeSubBH *position) throw();
+    bool FireSpecialPowerAtPosition(const AsciiString &playerName,
+        const SpecialPowerTemplate *power, const Coord3D *position) throw();
 };
-bool BfmeApplierBH::bfmeApplyBH(void *owner, void *found, BfmeSubBH *position) throw()
+bool ScriptActions::FireSpecialPowerAtPosition(const AsciiString &playerName,
+    const SpecialPowerTemplate *power, const Coord3D *position) throw()
 {
-    int mask = TheScriptEngine->rva00357475(*reinterpret_cast<const AsciiString *>(owner), 0);
+    int mask = TheScriptEngine->rva00357475(playerName, 0);
     while (mask)
     {
         Player *player = ThePlayerList->getEachPlayerFromMask(mask);
@@ -119,11 +120,10 @@ bool BfmeApplierBH::bfmeApplyBH(void *owner, void *found, BfmeSubBH *position) t
                     Object *object = objects.cur();
                     if (!object)
                         continue;
-                    SpecialPowerModuleInterface *module = object->getSpecialPowerModule(
-                        reinterpret_cast<const SpecialPowerTemplate *>(found));
+                    SpecialPowerModuleInterface *module = object->getSpecialPowerModule(power);
                     if (module)
                     {
-                        module->s12(reinterpret_cast<const Coord3D *>(position), 0x40000);
+                        module->s12(position, 0x40000);
                         return true;
                     }
                 }

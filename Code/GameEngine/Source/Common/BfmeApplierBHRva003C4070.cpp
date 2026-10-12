@@ -1,11 +1,12 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// Retail 0x003C4070 (RVA 0x003C4070) size 213: BfmeApplierBH skirmish power sweep.
-// Evidence: ScriptEngine 0xDFE16C getSkirmishEnemyPlayer then SpecialPowerStore 0xE02D4C findSpecialPowerTemplate then Overridable 0x54 range vs 50.0f then PlayerList mask loop then Player vtable+0x10 then bfmeApplyBH pin 0x3C069B.
+// Retail 0x003C4070 (RVA 0x003C4070) size 213: ScriptActions skirmish power sweep.
+// Evidence: ScriptEngine 0xDFE16C getSkirmishEnemyPlayer then SpecialPowerStore 0xE02D4C findSpecialPowerTemplate then Overridable 0x54 range vs 50.0f then PlayerList mask loop then Player vtable+0x10 then ScriptActions::FireSpecialPowerAtPosition 0x3C069B (WB callgraph caller of it).
 #include "ascii_string.h"
 
 class Player;
 class Object;
 class SpecialPowerTemplate;
+struct Coord3D;
 
 class ScriptEngine
 {
@@ -50,20 +51,15 @@ public:
 	virtual bool v04(const SpecialPowerTemplate *tmpl, void *out, void *unk, float f);
 };
 
-class BfmeSubBH
-{
-public:
-	char m_pad[16];
-};
-
-class BfmeApplierBH
+class ScriptActions
 {
 public:
 	void rva003C4070(const AsciiString &a, const AsciiString &b);
-	bool bfmeApplyBH(void *owner, void *found, BfmeSubBH *sub) throw();
+	bool FireSpecialPowerAtPosition(const AsciiString &playerName,
+		const SpecialPowerTemplate *power, const Coord3D *position) throw();
 };
 
-void BfmeApplierBH::rva003C4070(const AsciiString &a, const AsciiString &b)
+void ScriptActions::rva003C4070(const AsciiString &a, const AsciiString &b)
 {
 	Player *enemy = TheScriptEngine->getSkirmishEnemyPlayer();
 	if (enemy == 0)
@@ -88,7 +84,7 @@ void BfmeApplierBH::rva003C4070(const AsciiString &a, const AsciiString &b)
 		if (p != 0) {
 			char out[12];
 			p->v04(tmpl, out, unk54, f);
-			if (bfmeApplyBH((void *)&a, (void *)tmpl, (BfmeSubBH *)out))
+			if (FireSpecialPowerAtPosition(a, tmpl, (const Coord3D *)out))
 				return;
 		}
 	} while (mask != 0);
