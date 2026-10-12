@@ -155,7 +155,9 @@ Rva005F4C8ERef<Rva005E6ED6Second> Rva005FAAA1::rva005FAB34(int a, int b)
 //   ?rva005F4CF8@Rva005F4C52@@... @0x005F4CF8 106B, slot 3 of Rva005F4C52:
 //     a new 0x24-byte Rva005E54F7 (constructor 0x005E5590), interface at +0x10;
 //   ?rva005CDF8B@Rva005CDF6C@@... @0x005CDF8B 106B, slot 2 of Rva005CDF6C:
-//     a new 0x30-byte Rva005CDE89 (0x005CDE89, pinned), interface at +0x0C.
+//     a new 0x30-byte Rva005CDCEE (rowed164B ctor0x005CDE89), interface at +0x0C;
+//     inherited Rva005CC5E5 interface, with the shared counted base at28.
+//     Legacy return view only; constructor uses the real level/name/input ABI.
 class AsciiString;
 class Rva005E54AE:public StrategicHUD::ArmyDetailsMovieClip {public:Rva005E54AE(int,const AsciiString &,bool);virtual ~Rva005E54AE();};
 class Rva005E54F7:public Rva005E54AE,public Rva005E4F6D {public:Rva005E54F7(int,const AsciiString &,void*);virtual ~Rva005E54F7();};
@@ -165,25 +167,21 @@ public:
     virtual void iface0();
 };
 
-class Rva005CDE89First : public virtual Rva005E6ED6Counted
-{
-public:
-	virtual void first0();
-	int m_08;
-};
-
 class Rva005CDE89Iface : public virtual Rva005E6ED6Counted
 {
 public:
 	virtual void iface0();
 };
 
-class Rva005CDE89 : public Rva005CDE89First, public Rva005CDE89Iface
+struct PlanningHeroDetailsInput;
+struct Rva005CDCEELink;
+class Rva005CDCEE : public Rva005E6F9D
 {
 public:
-	Rva005CDE89(int a, int b, void *owner);
+	Rva005CDCEE(int,const AsciiString &,PlanningHeroDetailsInput *);
+	virtual ~Rva005CDCEE();
 private:
-	int m_14[5];
+	Rva005CDCEELink *link24;
 };
 
 Rva005F4C8ERef<Rva005E5590Iface> Rva005F4C52::rva005F4CF8(int a, int b)
@@ -205,7 +203,8 @@ private:
 
 Rva005F4C8ERef<Rva005CDE89Iface> Rva005CDF6C::rva005CDF8B(int a, int b)
 {
-	return Rva005F4C8ERef<Rva005CDE89Iface>(new Rva005CDE89(a, b, &m_08));
+	Rva005CDCEE *panel = new Rva005CDCEE(a, *reinterpret_cast<const AsciiString *>(b), reinterpret_cast<PlanningHeroDetailsInput *>(&m_08));
+	return Rva005F4C8ERef<Rva005CDE89Iface>(reinterpret_cast<Rva005CDE89Iface *>(static_cast<Rva005CC5E5 *>(panel)));
 }
 
 // ?rva005CDBAE@Rva005CDB8F@@UAE?AV?$Rva005F4C8ERef@VRva005CD9C0Iface@@@@HH@Z,
