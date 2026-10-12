@@ -1,4 +1,4 @@
-// cl: /DBFME_WWSTRING_NATIVE_CSTR_ASSIGN /Ireference/shims/wwstring_teardown/zhmd /FIzh_ascii.h /Ireference/shims/bfme2_ascii_zh /Ireference/shims/bfme2_ascii /Ireference/shims/indexbuffercount /Ireference/shims/vertexbufferlock /O1 /DNDEBUG /DWIN32 /MD /EHsc /Ireference/open-bfme-1/reference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad
+// cl: /DBFME_SORTING_DWORD_DRAW /Ireference/shims/bfmecamera /DBFME_WWSTRING_NATIVE_CSTR_ASSIGN /Ireference/shims/wwstring_teardown/zhmd /FIzh_ascii.h /Ireference/shims/bfme2_ascii_zh /Ireference/shims/bfme2_ascii /Ireference/shims/indexbuffercount /Ireference/shims/vertexbufferlock /O1 /DNDEBUG /DWIN32 /MD /EHsc /Ireference/open-bfme-1/reference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad
 // stlport
 
 // BFME 2 has no W3D memory pools (see Code/Libraries/Source/WWVegas/WWLib/always.h).
@@ -419,8 +419,34 @@ void W3DBibBuffer::removeBibDrawable(DrawableID id)
 //=============================================================================
 /** Draws the bibs.  Uses camera to cull. */
 //=============================================================================
-// BFME 2's renderBibs (0x000D4228) is matched in
-// Code/GameEngine/Source/Common/Rva000D4228.cpp; the Zero Hour body that
-// stood here did not match retail and only duplicated that definition.
+// BFME 2 binds each bib texture through the counted-holder stage binder
+// (rowed BFME2Set_Texture 0x0011F4B0) and draws through the DWORD
+// Draw_Triangles wrapper 0x00120620; the rest is Zero Hour's body, with the
+// file-static detailAlphaShader (retail 0x00DB5370).
+struct BFME2TextureRef;
+void BFME2Set_Texture(unsigned stage, const BFME2TextureRef &texture);
+
+void W3DBibBuffer::renderBibs()
+{
+
+	loadBibsInVertexAndIndexBuffers();
+
+	if (m_curNumBibIndices == 0) {
+		return;
+	}
+	// Setup the vertex buffer, shader & texture.
+	DX8Wrapper::Set_Index_Buffer(m_indexBib,0);
+	DX8Wrapper::Set_Vertex_Buffer(m_vertexBib);
+	DX8Wrapper::Set_Shader(detailAlphaShader);
+	if (m_curNumNormalBibIndices) {
+		BFME2Set_Texture(0, reinterpret_cast<const BFME2TextureRef &>(m_bibTexture));
+		DX8Wrapper::Draw_Triangles(	0u, (unsigned)(m_curNumNormalBibIndices/3), 0u,	(unsigned)m_curNumNormalBibVertex);
+	}
+	if (m_curNumBibIndices>m_curNumNormalBibIndices) {
+		BFME2Set_Texture(0, reinterpret_cast<const BFME2TextureRef &>(m_highlightBibTexture));
+		DX8Wrapper::Draw_Triangles(	(unsigned)m_curNumNormalBibIndices, (unsigned)((m_curNumBibIndices-m_curNumNormalBibIndices)/3), 
+						(unsigned)m_curNumNormalBibVertex,	(unsigned)(m_curNumBibVertices-m_curNumNormalBibVertex));
+	}
+}
 
 
