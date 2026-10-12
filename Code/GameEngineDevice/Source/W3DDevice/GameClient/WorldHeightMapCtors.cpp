@@ -1,8 +1,11 @@
 // cl: /O1 /MD /EHsc
 // stlport
-// WorldHeightMap's two stream constructors (WorldBuilder names the class's
+// WorldHeightMap's default constructor and its two stream constructors (WorldBuilder names the class's
 // parse 0x000AF238, WorldHeightMap.cpp; the ctor pin of
 // W3DTerrainLogic::loadMap names 0x000B0C38):
+//   0x000B098A (323 bytes)         WorldHeightMap() (no caller in retail;
+//                                   ends in the rowed static alpha-tile
+//                                   setup 0x000AC6F9, as Zero Hour's does)
 //   0x000B0ACD (363 bytes, ret 4)  WorldHeightMap(ChunkInputStream *)
 //   0x000B0C38 (368 bytes, ret 16) WorldHeightMap(ChunkInputStream *, int, int, int)
 // Both share retail's handler 0x00761418 (identical unwind tables).
@@ -85,11 +88,14 @@ public:
 	void rva000B08F7();										// 0x000B08F7
 };
 
+void Rva000AC6F9SetupAlphaTiles();							// 0x000AC6F9
+
 enum { NUM_SOURCE_TILES = 0x1000 };
 
 class WorldHeightMap : public RefCountClass
 {
 public:
+	WorldHeightMap();
 	WorldHeightMap(ChunkInputStream *strm);
 	WorldHeightMap(ChunkInputStream *strm, int a, int b, int c);
 	virtual ~WorldHeightMap();
@@ -132,6 +138,12 @@ private:
 	RefCountPtr<TextureClass> m_120D8[2];
 	int m_120E0[4];
 };
+
+WorldHeightMap::WorldHeightMap()
+{
+	((Rva000B08F7 *)this)->rva000B08F7();
+	Rva000AC6F9SetupAlphaTiles();
+}
 
 WorldHeightMap::WorldHeightMap(ChunkInputStream *strm)
 {
