@@ -1,6 +1,6 @@
 // ?queueCreateUnit@ProductionUpdate@@UAE_NPBVThingTemplate@@HW4ProductionID@@H_NABVAsciiString@@2@Z
-// partial score=0.75 date=2026-10-09
-// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /GX /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /ICode/Libraries/Include /Ireference/shims/bfme2_ascii
+// partial score=0.8 date=2026-10-12
+// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /GX /DBFME_ASCII_DTOR_DECL /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /ICode/Libraries/Include /Ireference/shims/bfme2_ascii  /D_CRTIMP=
 // stlport
 //
 // ProductionUpdate queue members (BFME 2), from the Generals Zero Hour
@@ -60,11 +60,31 @@ class Thing;
 class ModuleData;
 class Object;
 class Player;
-class Upgrade;
 class Image;
+class Upgrade;
 
 
+// vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
+// overload takes the call instead, so this TU emits no external max COMDAT.
+namespace _STL {
+static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
+{
+    return a < b ? b : a;
+}
+}
 #include <list>
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> void _List_base<int, allocator<int> >::clear();
+}
+
+// Declaration-only: retail keeps one copy of this STLport member (rowed elsewhere); this unit calls it
+// rather than emitting its own.
+namespace _STL {
+template <> _List_base<int, allocator<int> >::~_List_base();
+}
 #include <vector>
 
 class UnicodeString;
@@ -241,10 +261,10 @@ public:
 class ThingTemplate : public Rva001E35DFView
 {
 public:
+	Bool isEquivalentTo(const ThingTemplate *tt) const;
 	Int rva0033A69A(const Player *player, Int obj, Int flag) const;
- const Image *getButtonImage();
- unsigned int freeKindWord118() const { return m_kindFlags[4]; }
- Bool isEquivalentTo(const ThingTemplate *tt) const;
+	const Image *getButtonImage();
+	UnsignedInt freeKindWord118() const { return m_kindFlags[4]; }
 	const AsciiString &getName() const { return m_name; }
 	UnsignedInt getProductionPriorityKind() const { return m_kindFlags[0] & (1 << 14); }
 
@@ -255,13 +275,13 @@ private:
 	UnsignedInt m_kindFlags[7]; // +0x108, 218 KindOfType bits
 };
 
-class Rva002D06CA
+class ThingFactory
 {
 public:
-	void *rva002D06CA(const AsciiString *key); // findTemplate
+	const ThingTemplate *findTemplate(const AsciiString &key); // findTemplate
 };
 
-extern Rva002D06CA *TheThingFactory;
+extern ThingFactory *TheThingFactory;
 
 enum UpgradeType
 {
@@ -318,9 +338,9 @@ class Rva0039B7AD;
 class Rva003B0D7C
 {
 public:
- unsigned int countMoney() const { return *reinterpret_cast<const unsigned int *>(m_unknown00+4); }
 	UnsignedInt rva003B0CB3(UnsignedInt amount, Rva0039B795 *tracker, bool flag); // withdraw
 	void rva003B0D7C(Int amount, Rva0039B7AD *tracker, bool flag); // deposit
+	UnsignedInt countMoney() const { return *reinterpret_cast<const UnsignedInt *>(m_unknown00 + 4); }
 
 private:
 	char m_unknown00[0xC];
@@ -337,11 +357,6 @@ public:
 	char m_unknown00[0x14];
 };
 
-struct Rva0039BAD2Input;
-class Rva0039BAD2 { public: void rva0039BAD2(Rva0039BAD2Input *,Int); };
-class Rva0037E6E8 { public: int rva0037E649(int,Object *); };
-class UnitRevivalTracker { public: bool productionSystemQueueCreateUnit(int,int,const Image **); };
-class Rva0037E421 { public: void *rva0037E7A5(int); };
 class Player
 {
 public:
@@ -358,6 +373,14 @@ public:
 	char m_unknown3C0[0x738 - 0x3C0];
 	Rva0037EE4C m_revivalTracker; // +0x738 (WB uses +0x740)
 };
+
+// Retail views over the player's revival tracker and tracker, one per rowed
+// member the queueCreateUnit body calls.
+struct Rva0039BAD2Input;
+class Rva0039BAD2 { public: void rva0039BAD2(Rva0039BAD2Input *, Int); };
+class Rva0037E6E8 { public: int rva0037E649(int, Object *); };
+class UnitRevivalTracker { public: bool productionSystemQueueCreateUnit(int, int, const Image **); };
+class Rva0037E421 { public: void *rva0037E7A5(int); };
 
 enum ObjectID
 {
@@ -488,19 +511,25 @@ public:
 	Bool m_bfme34; // +0x34
 	union { Int m_bfme38; const Image *m_buttonImage; }; // +0x38
 	Int m_bfme3C; // +0x3C
-	AsciiString m_bfme40;
- Bool m_bfme44;
+	AsciiString m_bfme40; // +0x40
+	Bool m_bfme44; // +0x44
+	char m_unknown45[0x48 - 0x45];
 	Rva0049D1B1 *m_next; // +0x48
 	Rva0049D1B1 *m_prev; // +0x4C
 	char m_unknown50[0x54 - 0x50];
 };
 
-struct QuantityModifier { AsciiString m_templateName; Int m_quantity; };
+struct QuantityModifier
+{
+	AsciiString m_templateName;
+	Int m_quantity;
+};
+
 class ProductionUpdateModuleData
 {
 public:
 	char m_unknown00[0x1C];
- _STL::vector<QuantityModifier> m_quantityModifiers;
+	_STL::vector<QuantityModifier> m_quantityModifiers; // +0x1C
 	UnsignedInt m_maxQueueEntries; // +0x28
 };
 
@@ -571,16 +600,21 @@ protected:
 	int m_bfmeReserved;
 };
 
-class Rva00A027B8 { public:
- virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
- virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
- virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
- virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
- virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
- virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
- virtual CanMakeType canMakeUnit(Object *, const ThingTemplate *, Int);
+// BuildAssistant: the observed canMakeUnit slot (+0x60, slot 24) over the real global.
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
+class BuildAssistantView
+{
+public:
+	virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+	virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+	virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+	virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+	virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+	virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
+	virtual CanMakeType canMakeUnit(Object *builder, const ThingTemplate *whatToBuild, Int revivalIndex) const;
 };
-extern Rva00A027B8 *g_00A027B8;
+
 class ProductionUpdateInterface
 {
 public:
@@ -638,7 +672,6 @@ struct DoorInfo
 class ProductionUpdate : public UpdateModule, public ProductionUpdateInterface, public DieModuleInterface
 {
 public:
- virtual Bool queueCreateUnit(const ThingTemplate *unitType, Int revivalIndex, ProductionID productionID, Int slot, Bool five, const AsciiString &name, Bool flag);
 	virtual CanMakeType rva0049CFCD() const;
 	virtual CanMakeType canQueueUpgrade(const UpgradeTemplate *upgrade) const;
 	virtual ProductionID requestUniqueUnitID();
@@ -647,6 +680,7 @@ public:
 	virtual void rva0049CC9D(const ThingTemplate *unitType, Bool five);
 	virtual Bool isUpgradeInQueue(const UpgradeTemplate *upgrade) const;
 	virtual UnsignedInt countUnitTypeInQueue(const ThingTemplate *unitType) const;
+	virtual Bool queueCreateUnit(const ThingTemplate *unitType, Int revivalIndex, ProductionID productionID, Int slot, Bool five, const AsciiString &name, Bool flag);
 	virtual Bool rva0049CC36(ProductionID productionID) const;
 	virtual void rva0049CC61(const ThingTemplate *unitType);
 	virtual void rva0049F8A9(const ThingTemplate *unitType, Bool cancel);
@@ -1187,7 +1221,7 @@ void ProductionUpdate::xfer( Xfer *xfer )
 			{
 				case PRODUCTION_UNIT:
 				case PRODUCTION_HORDE_UNIT:
-					production->m_objectToProduce = (const ThingTemplate *)TheThingFactory->rva002D06CA( &name );
+					production->m_objectToProduce = TheThingFactory->findTemplate(name);
 					production->m_objectToProduce = production->m_objectToProduce ?
 						(const ThingTemplate *)production->m_objectToProduce->getFinalOverride() : NULL;
 					break;
@@ -1269,7 +1303,7 @@ void ProductionUpdate::xfer( Xfer *xfer )
 
 }  // end xfer
 
-// ?queueCreateUnit@ProductionUpdate@@UAE_NPBVThingTemplate@@HW4ProductionID@@H_NABVAsciiString@@2@Z present-unmatched
+// ?queueCreateUnit@ProductionUpdate@@UAE_NPBVThingTemplate@@HW4ProductionID@@H_NABVAsciiString@@2@Z @0x0049DA34 540B
 Bool ProductionUpdate::queueCreateUnit( const ThingTemplate *unitType, Int revivalIndex, ProductionID productionID,
 																				Int slot, Bool five, const AsciiString &name, Bool flag )
 {
@@ -1279,7 +1313,7 @@ Bool ProductionUpdate::queueCreateUnit( const ThingTemplate *unitType, Int reviv
 		unitType = NULL;
 
 	// if we can't create the unit do nothing
-	if( g_00A027B8->canMakeUnit( getObject(), unitType, revivalIndex ) != CANMAKE_OK )
+	if( ((BuildAssistantView *)TheBuildAssistant)->canMakeUnit( getObject(), unitType, revivalIndex ) != CANMAKE_OK )
 		return FALSE;
 
 	if (m_productionCount >= getProductionUpdateModuleData()->m_maxQueueEntries)
@@ -1322,7 +1356,7 @@ Bool ProductionUpdate::queueCreateUnit( const ThingTemplate *unitType, Int reviv
 		{
 			for( _STL::vector<QuantityModifier>::const_iterator it = data->m_quantityModifiers.begin(); it != data->m_quantityModifiers.end(); ++it )
 			{
-				const ThingTemplate* productionTemplate = (const ThingTemplate *)TheThingFactory->rva002D06CA( &it->m_templateName );
+				const ThingTemplate* productionTemplate = TheThingFactory->findTemplate( it->m_templateName );
 				if( productionTemplate && productionTemplate->isEquivalentTo( unitType ) )
 				{
 					production->m_productionQuantityTotal = it->m_quantity;

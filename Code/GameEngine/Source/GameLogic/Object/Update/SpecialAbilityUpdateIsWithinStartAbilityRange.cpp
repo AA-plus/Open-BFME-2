@@ -128,7 +128,8 @@ public:
 	const SpecialPowerTemplate *m_specialPowerTemplate;	// +0x38
 	unsigned char m_pad03C[0x4C - 0x3C];
 	Real m_startAbilityRange;							// +0x4C
-	unsigned char m_pad050[0xB1 - 0x50];
+	Real m_abilityAbortRange;							// +0x50
+	unsigned char m_pad054[0xB1 - 0x54];
 	Bool m_approachRequiresLOS;							// +0xB1
 	unsigned char m_pad0B2[0xB8 - 0xB2];
 	Bool m_contactOnZeroDistance;						// +0xB8
@@ -166,6 +167,7 @@ class SpecialAbilityUpdate
 {
 protected:
 	Bool isWithinStartAbilityRange();
+	Bool isWithinAbilityAbortRange() const;
 
 private:
 	void *m_vtable;
@@ -270,6 +272,53 @@ Bool SpecialAbilityUpdate::isWithinStartAbilityRange()
 		else
 			return true;
 		return false;
+	}
+	return false;
+}
+
+// Zero Hour's __max macro, written out: the comparison reads the zero first, as retail does.
+#define ABILITY_MAX(a, b) (((a) > (b)) ? (a) : (b))
+
+// ZH SpecialAbilityUpdate::isWithinAbilityAbortRange with BFME 2's distance helpers (the same ones
+// isWithinStartAbilityRange reads) and the abort range at module data +0x50.
+Bool SpecialAbilityUpdate::isWithinAbilityAbortRange() const
+{
+	const SpecialAbilityUpdateModuleData *data = m_moduleData;
+	const SpecialPowerTemplate *power = data->m_specialPowerTemplate;
+	const Object *self = m_object;
+
+	Real range = data->m_startAbilityRange;
+	const Real UNDERSIZE = 2.5f;
+	range = ABILITY_MAX(0.0f, range - UNDERSIZE);
+
+	Real fDistSquared = 0.0f;
+	Object *target = 0;
+	if (m_targetID != INVALID_OBJECT_ID)
+	{
+		target = TheGameLogic->findObjectByID(m_targetID);
+		if (target)
+			fDistSquared = self->rva00263763(target);
+	}
+	else if (m_targetPos.x || m_targetPos.y || m_targetPos.z)
+	{
+		fDistSquared = self->rva002C97E8(self->getPosition(), &m_targetPos);
+		if (power->getSpecialPowerType() == 0x27)
+			fDistSquared -= 400.0f;
+	}
+	else
+		return true;
+
+	Real fAbortRangeSquared = data->m_abilityAbortRange * data->m_abilityAbortRange;
+	if (fDistSquared <= fAbortRangeSquared)
+	{
+		if (range == 0.0f && m_targetID != INVALID_OBJECT_ID)
+		{
+			if (!target)
+				return false;
+			if (!self->getGeometryInfo().bfmeIntersects(*self->getPosition(), 0.0f, target->getGeometryInfo(), *target->getPosition(), target->getOrientation()))
+				return false;
+		}
+		return true;
 	}
 	return false;
 }
