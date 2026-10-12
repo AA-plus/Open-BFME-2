@@ -129,16 +129,46 @@ class Actor
 {
 public:
 	virtual void release(float amount);
+	virtual void advance(float amount);	// +0x04
 };
 
-class DestroyEnvironmentUpdate
+struct DestroyEnvironmentUpdateModuleData
+{
+	char m_pad[0x8];
+	unsigned int m_delay;		// +0x08, frames
+	unsigned int m_duration;	// +0x0C, frames
+};
+
+enum UpdateSleepTime
+{
+	UPDATE_SLEEP_NONE = 1,
+	UPDATE_SLEEP_FOREVER = 0x3fffffff
+};
+
+class DestroyEnvironmentUpdatePrimary
+{
+public:
+	virtual ~DestroyEnvironmentUpdatePrimary();
+	const DestroyEnvironmentUpdateModuleData *m_moduleData;	// +0x04
+	char m_pad08[0x10 - 0x08];
+};
+
+class UpdateModuleInterface
+{
+public:
+	virtual UpdateSleepTime update() = 0;
+};
+
+class DestroyEnvironmentUpdate : public DestroyEnvironmentUpdatePrimary, public UpdateModuleInterface
 {
 public:
 	void rva004AC722();
+	virtual UpdateSleepTime update();
 
 private:
-	char m_pad[0x24];
-	unsigned int m_objectID;
+	char m_pad14[0x20 - 0x14];
+	unsigned int m_startFrame;	// +0x20
+	unsigned int m_objectID;	// +0x24
 };
 
 void DestroyEnvironmentUpdate::rva004AC722()
@@ -157,3 +187,44 @@ void DestroyEnvironmentUpdate::rva004AC722()
 	m_objectID = 0;
 }
 
+// ?update@DestroyEnvironmentUpdate@@UAE?AW4UpdateSleepTime@@XZ @0x004AC84B 142B:
+// slot 0 of the update interface (vftable 0x00C54D58, this = module +0x10).
+// Without module data it sleeps forever; it adopts the first matching
+// environment object (0x004AC7C9) or sleeps forever when there is none, waits
+// out the delay (+0x08), and over the duration (+0x0C) drives the object's
+// actor (0x004AC5F5, the lookup WB's twin 0x01224B70 calls through 0x004AC707
+// and retail inlines) by -1/duration per frame; once the duration has run,
+// 0x004AC722 releases it. Writing the body after the first early return as
+// its `else` is what makes cl keep that first sleep-forever block and send
+// the id-search failure back to it, as retail does.
+UpdateSleepTime DestroyEnvironmentUpdate::update()
+{
+	const DestroyEnvironmentUpdateModuleData *data = m_moduleData;
+	if (!data)
+		return UPDATE_SLEEP_FOREVER;
+	else
+	{
+		if (!m_objectID)
+		{
+			m_objectID = (unsigned int)Rva004AC7C9();
+			if (!m_objectID)
+				return UPDATE_SLEEP_FOREVER;
+		}
+		unsigned int elapsed = TheGameLogic->getFrame() - m_startFrame;
+		if (elapsed < data->m_delay)
+			return (UpdateSleepTime)(data->m_delay - elapsed);
+		elapsed -= data->m_delay;
+		if (elapsed >= data->m_duration)
+		{
+			rva004AC722();
+		}
+		else
+		{
+			Object *obj = TheGameLogic->findObjectByID((ObjectID)m_objectID);
+			Actor *actor = obj ? (Actor *)Rva004AC5F5(obj) : 0;
+			if (actor)
+				actor->advance(-1.0f / (float)data->m_duration);
+		}
+		return UPDATE_SLEEP_NONE;
+	}
+}
