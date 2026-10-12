@@ -1,10 +1,7 @@
-// ?update@StrafeAreaUpdate@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.997 date=2026-10-11
-// ?update@StrafeAreaUpdate@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.9054787782177982 date=2026-10-10
-// ?update@StrafeAreaUpdate@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.88 date=2026-10-09
 // cl: /I. /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii
+//
+// ?update@StrafeAreaUpdate@@UAE?AW4UpdateSleepTime@@XZ, retail 0x003a4fda, 948 bytes. Banked partial (score 0.997) closed by tools/permute.py;
+// the body is the banked one up to statement/operand order and local types.
 // Round 4: 948/948 bytes; only diff is the operand order of the case-0
 // second compare (retail movss [slope]; addss [radius], ours radius first;
 // source order, accessors, locals, >= forms all canonicalize the same).
@@ -111,7 +108,6 @@ class WeaponTemplate;
 class WeaponStore {public:const WeaponTemplate *findWeaponTemplate(const AsciiString &) const;void createAndFireTempWeapon(const WeaponTemplate *,const Object *,const Coord3D *);};extern WeaponStore *TheWeaponStore;
 class TerrainLogic {public:virtual void s0()=0;virtual void s1()=0;virtual void s2()=0;virtual void s3()=0;virtual void s4()=0;virtual void s5()=0;virtual float getGroundHeight(float,float,Coord3D *normal=0)=0;virtual void s7()=0;virtual void s8()=0;virtual void s9()=0;virtual void s10()=0;virtual void s11()=0;virtual void s12()=0;virtual void rvaSlot13(Coord3D *,const Coord3D *)=0;};extern TerrainLogic *TheTerrainLogic;
 extern "C" double sin(double);
-// ?update@StrafeAreaUpdate@@UAE?AW4UpdateSleepTime@@XZ present-unmatched
 #include <math.h>
 inline __declspec(noinline) float Coord3D::length() const
 {
@@ -145,7 +141,7 @@ UpdateSleepTime StrafeAreaUpdate::update() {
   }
   break;
  case 1: {
-  const WeaponTemplate *weapon=TheWeaponStore->findWeaponTemplate(d->weaponName);
+  const WeaponTemplate *weapon=(TheWeaponStore?TheWeaponStore:TheWeaponStore)->findWeaponTemplate(d->weaponName);
   if(weapon && TheGameLogic->getFrame()>=nextFire) {
    StrafeDirection firingPosition(obj->position);
    StrafeDirection direction(*obj->getUnitDirectionVector2D());direction.coord()->normalize();
