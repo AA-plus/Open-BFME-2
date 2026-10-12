@@ -1,4 +1,6 @@
 // ??0LivingWorldAutoResolveBattle@@QAE@ABUPlayerStorage@@@Z
+// partial score=0.99 date=2026-10-12
+// ??0LivingWorldAutoResolveBattle@@QAE@ABUPlayerStorage@@@Z
 // partial score=0.9 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -19,7 +21,11 @@ namespace _STL {
 template<> PlayerCopy::vector(const PlayerCopy&);
 template<> void PairReserve::reserve(unsigned);
 template<> void PointerProvider::reserve(unsigned);
-template<> void PointerProvider::push_back(const ModuleData *const&);
+template<> inline __declspec(noinline) void PointerProvider::push_back(const ModuleData *const&x) {
+ if(this->_M_finish != this->_M_end_of_storage._M_data) {
+  _Construct(this->_M_finish,x); ++this->_M_finish;
+ } else _M_insert_overflow(this->_M_finish,x,_IsPODType(),1UL,true);
+}
 template<> UnitCleanup::~vector();
 }
 class LivingWorldAutoResolveResourceBonusSchedule {public:int *getBonusForResourceAmount(int);};
@@ -27,22 +33,23 @@ class Rva004F5FD8 {
 public:__declspec(nothrow) Rva004F5FD8(const Rva004F5FD8&);virtual ~Rva004F5FD8();
 private:int words[10];
 };
-struct ArmySummary {char prefix[0x40];unsigned start,finish,capacity;};
-struct ArmyEntry {int value;};
-typedef _STL::vector<ArmyEntry> EntryVector;
+struct ArmyPair {int a[2];};
+class ArmySummary {public:char prefix[0x40];_STL::vector<ArmyPair> entries;};
+struct Rva0040DC56Element {int value;};
+typedef _STL::vector<Rva0040DC56Element> EntryVector;
 struct PlayerRecord {
  _STL::map<int,ArmySummary*> reinforcements;
  EntryVector entries;int opaque18[3];
  LivingWorldAutoResolveResourceBonusSchedule *schedule;
  Rva004F5FD8 *bonusInput;int side,opaque30;
 };
-struct UnitStorage {
+class Rva004FA168Storage {public:
  unsigned start,finish,capacity;
- UnitStorage() {
+ Rva004FA168Storage() {
  typedef _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> > H;
  ((H*)this)->H::_Vector_base(_STL::allocator<BfmeE16>());
  }
- ~UnitStorage(){((UnitCleanup*)this)->UnitCleanup::~vector();}
+ ~Rva004FA168Storage(){((UnitCleanup*)this)->UnitCleanup::~vector();}
 };
 class Rva004FA168Map {
 public:Rva004FA168Map();~Rva004FA168Map();
@@ -68,28 +75,29 @@ class Rva004F6187 {public:void rva004F61B1();};
 class LivingWorldAutoResolveBattle {
 public:LivingWorldAutoResolveBattle(const PlayerStorage&);
  void rva004F68B8(unsigned,bool);
- void rva004F9658(UnitStorage&,EntryVector&,ArmySummary*,unsigned,bool);
+ void rva004F9658(Rva004FA168Storage&,EntryVector&,ArmySummary*,unsigned,bool);
  void buildReinforcementMaps();void addUnitsForCurrentRound(int);
-private:PlayerStorage players;UnitStorage currentUnits[2];Rva004FA168Map maps[2];
+private:PlayerStorage players;Rva004FA168Storage currentUnits[2];Rva004FA168Map maps[2];
  HeaderStorage combined,bonusInputs,bonuses,opaque60,opaque6c;
  int winner,roundNumber;
 };
 LivingWorldAutoResolveBattle::LivingWorldAutoResolveBattle(const PlayerStorage&input):players(input) {
  roundNumber=0;
  ((PointerProvider*)&bonusInputs)->reserve(players.size());
- unsigned counts[2]={0,0};
+ unsigned counts[2];
+ for(int side=0;side<2;++side)counts[side]=0;
  for(unsigned index=0;index<players.size();++index) {
   PlayerRecord &player=players.start[index];
-  Rva004F5FD8 *bonus=player.bonusInput?new Rva004F5FD8(*player.bonusInput):0;
-  bonusInputs.push(bonus);
-  Rva004F5FD8 *none=0;bonuses.push(none);
+  if(player.bonusInput)bonusInputs.push(new Rva004F5FD8(*player.bonusInput));
+  else bonusInputs.push(0);
+  bonuses.push(0);
   rva004F68B8(index,true);
   rva004F9658(currentUnits[player.side],player.entries,0,index,true);
   counts[player.side]+=player.entries.size();
   _STL::map<int,ArmySummary*>::iterator end=player.reinforcements.end();
   for(_STL::map<int,ArmySummary*>::iterator p=player.reinforcements.begin();p!=end;++p) {
    ArmySummary *army=p->second;
-   counts[player.side]+=(army->finish-army->start)/8;
+   counts[player.side]+=army->entries.size();
   }
  }
  unsigned total=0;
