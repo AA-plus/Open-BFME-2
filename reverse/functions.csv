@@ -86312,3 +86312,6 @@ __ehhandler$?Rva006CCD90CallFunction@@YAXPBDPAD0HZZ,,0x007A8146,10,Code/Librarie
 ?rva006F6D00@Rva006F6D00List@@QAEPAXH@Z,,0x006F6D00,33,Code/Libraries/Source/Apt/AptDisplayList.cpp,matched,Ghidra-unlisted gap body; n-th node of the +0 list chained through +0x54; address-derived view
 ?set@Rva006F6980Bits24@@QAEXH@Z,,0x006F6980,31,Code/Libraries/Source/Apt/AptGapLeaves.cpp,matched,Ghidra-unlisted gap body; OR mask into the signed 24-bit field of the +0x1C word; address-derived view
 ?clear@Rva006F6980Bits24@@QAEXH@Z,,0x006F69A0,37,Code/Libraries/Source/Apt/AptGapLeaves.cpp,matched,Ghidra-unlisted gap body; clear mask from the signed 24-bit field of the +0x1C word; address-derived view
+?rva006F8430@AptPseudoDisplayList@@QAEXH@Z,,0x006F8430,43,Code/Libraries/Source/Apt/AptMovieFrameControls.cpp,matched,Ghidra-unlisted gap body; rowed FindInst at a depth then rowed Remove of the found entry; address name
+?set@Rva006FBA20Holder@@QAEXPAVRva006FBA20Ref@@@Z,,0x006FBA20,36,Code/Libraries/Source/Apt/AptGapLeaves.cpp,matched,Ghidra-unlisted gap body; refcounted +0x1C pointer swap with AddRef/Release slots; address-derived view
+?set@Rva006FBA70Holder@@QAEXPAVRva006FBA20Ref@@@Z,,0x006FBA70,38,Code/Libraries/Source/Apt/AptGapLeaves.cpp,matched,Ghidra-unlisted gap body; refcounted +0x10 pointer store with AddRef/Release slots; address-derived view

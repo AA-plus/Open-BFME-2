@@ -98,3 +98,52 @@ void Rva006F6980Bits24::clear(int mask)
 {
 	m_bits &= ~mask;
 }
+
+// Two refcounted pointer setters (AddRef slot 0, Release slot 1 of the held
+// Apt value). ?set@Rva006FBA20Holder@@QAEXPAVRva006FBA20Ref@@@Z @ 0x006FBA20
+// (36B) swaps in the +0x1C pointer first and releases the old one after the
+// AddRef; ?set@Rva006FBA70Holder@@QAEXPAVRva006FBA20Ref@@@Z @ 0x006FBA70
+// (38B) AddRefs, releases the current +0x10 pointer and then stores.
+class Rva006FBA20Ref
+{
+public:
+	virtual void AddRef();
+	virtual void Release();
+};
+
+class Rva006FBA20Holder
+{
+public:
+	void set(Rva006FBA20Ref *value);
+private:
+	char m_pad[0x1C];
+	Rva006FBA20Ref *m_value;
+};
+
+void Rva006FBA20Holder::set(Rva006FBA20Ref *value)
+{
+	Rva006FBA20Ref *old = m_value;
+	m_value = value;
+	if (value)
+		value->AddRef();
+	if (old)
+		old->Release();
+}
+
+class Rva006FBA70Holder
+{
+public:
+	void set(Rva006FBA20Ref *value);
+private:
+	char m_pad[0x10];
+	Rva006FBA20Ref *m_value;
+};
+
+void Rva006FBA70Holder::set(Rva006FBA20Ref *value)
+{
+	if (value)
+		value->AddRef();
+	if (m_value)
+		m_value->Release();
+	m_value = value;
+}

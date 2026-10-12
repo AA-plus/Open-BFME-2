@@ -94,7 +94,7 @@ struct AptPseudoCIH_t {AptControl *control;AptControlInfo *info; AptPseudoCIH_t 
  static void *operator new(unsigned int size){return ((Rva006DB160 *)g_pChainBlockAllocator)->allocBlock(size);}
  static void operator delete(void *,unsigned int);
 };
-class AptPseudoDisplayList {public:void *head;AptCIH *parent;void FindInst(int,AptPseudoCIH_t **,AptPseudoCIH_t **);void Insert(AptPseudoCIH_t *); void Remove(AptPseudoCIH_t *); __forceinline void Insert(AptPseudoCIH_t *prev,AptPseudoCIH_t *item) {item->next=prev->next;item->prev=prev;if(item->next)item->next->prev=item;item->prev->next=item;}};
+class AptPseudoDisplayList {public:void *head;AptCIH *parent;void FindInst(int,AptPseudoCIH_t **,AptPseudoCIH_t **);void Insert(AptPseudoCIH_t *); void Remove(AptPseudoCIH_t *); void rva006F8430(int); __forceinline void Insert(AptPseudoCIH_t *prev,AptPseudoCIH_t *item) {item->next=prev->next;item->prev=prev;if(item->next)item->next->prev=item;item->prev->next=item;}};
 void AptMovie::DoTemporaryFrameControls(AptPseudoDisplayList *display,int frame) {
  CHECK(frame>=0 && frame<nFrames,0xb2,"nFrame >= 0 && nFrame < (int)nFrames");
  if(frame<0 || frame>=nFrames) return;
@@ -144,6 +144,15 @@ void AptPseudoDisplayList::Insert(AptPseudoCIH_t *item) {
 }
 
 #pragma comment(linker, "/alternatename:?Remove@AptPseudoDisplayList@@QAEXPAUAptPseudoCIH_t@@@Z=?Rva006F7C70Free@@YGXPAURva006F7C70Item@@@Z")
+
+// Native6F8430..6F845A: Ghidra-unlisted pseudo display list helper beside
+// the rowed Insert: finds the entry at a depth through the rowed FindInst and
+// removes it through the rowed Remove. Address-derived name.
+void AptPseudoDisplayList::rva006F8430(int depth) {
+ AptPseudoCIH_t *prev,*item;
+ FindInst(depth,&prev,&item);
+ Remove(item);
+}
 
 // Address-derived identity: the only caller is anonymous ?d_008d3860 and
 // there is no named caller, vtable slot, string literal, or witnessed class
