@@ -18,3 +18,10 @@ Rva00255D17::~Rva00255D17() {}
 // ??1Rva004D9A3C@@QAE@XZ @0x004D9A3C 8B; add ecx,0x14; jmp StringBase D dtor. 2 callers incl Unwind.
 class Rva004D9A3C { public: ~Rva004D9A3C(); private: char m_lead[0x14]; StringBase<char> m_str; };
 Rva004D9A3C::~Rva004D9A3C() {}
+
+// WorldHeightMap's 0x28-byte element has a different constructor (0x000AF215)
+// from the 0x1C-byte Rva004D9A3C record (0x00391FC4). Retail folds their
+// +0x14 StringBase cleanup bodies at 0x004D9A3C; prove this spelling there.
+class Rva000AF215 { public: ~Rva000AF215(); private: char m_lead[0x14]; StringBase<char> m_str; char m_tail[0x10]; };
+// ??1Rva000AF215@@QAE@XZ present-unmatched
+Rva000AF215::~Rva000AF215() {}

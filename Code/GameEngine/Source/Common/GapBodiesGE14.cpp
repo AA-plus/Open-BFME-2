@@ -97,10 +97,12 @@ int Rva003B9D23(char *args[], int)
 
 // --- 0x00391FC4 (77B): four zero floats, an emptied name (+0x14), a -1 id
 // and a cleared flag.
-class Rva00391FC4
+// The 0x00392092 array initializer pairs this ctor with the folded destructor
+// 0x004D9A3C at stride 0x1C, so it owns that destructor's address-derived class.
+class Rva004D9A3C
 {
 public:
-	Rva00391FC4();
+	Rva004D9A3C();
 private:
 	float m_00;
 	float m_04;
@@ -111,7 +113,7 @@ private:
 	int m_18;
 };
 
-Rva00391FC4::Rva00391FC4()
+Rva004D9A3C::Rva004D9A3C()
 {
 	m_00 = 0.0f;
 	m_04 = 0.0f;

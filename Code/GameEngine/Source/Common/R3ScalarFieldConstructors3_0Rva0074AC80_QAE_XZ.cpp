@@ -1,5 +1,5 @@
 // cl: -Ireference/open-bfme-1/game/GameEngine/Source/Common
-// Dedicated TU for Rva004D9A3C::Rva004D9A3C (BFME1 Rva0074AC80) from the BFME1 donor
+// Dedicated TU for Rva000AF215::Rva000AF215 (BFME1 Rva0074AC80) from the BFME1 donor
 // game/GameEngine/Source/Common/R3ScalarFieldConstructors3.cpp
 // (reference/open-bfme-1). Only this one placed body is defined here; the
 // donor's fifteen other definitions are omitted.
@@ -51,18 +51,18 @@
 // build.py fills those four bytes from retail, so they carry no evidence.
 
 // BFME2: this is the default constructor of the 0x28-byte record whose
-// rowed destructor is ??1Rva004D9A3C (0x004D9A3C): WorldHeightMap's two
+// destructor folds at 0x004D9A3C with the distinct 0x1C-byte record: WorldHeightMap's two
 // 512-entry record arrays construct and destroy their elements through this
 // pair (eh vector constructor iterator in 0x000B0ACD / 0x000B0C38), so the
-// class takes the destructor's address-derived name.
-class Rva004D9A3C
+// class takes its constructor's address-derived name to keep the records distinct.
+class Rva000AF215
 {
 public:
-	Rva004D9A3C();
+	Rva000AF215();
 	int m_00, m_04, m_08, m_0C, m_10;
 	int m_14, m_18, m_1C, m_20, m_24;
 };
-Rva004D9A3C::Rva004D9A3C()
+Rva000AF215::Rva000AF215()
 {
 	m_00 = -1;
 	m_04 = 0;
