@@ -86,6 +86,8 @@ public:
 	void rva006DD6C0(EAStringC *pBuffer);
 	void rva006D94A0();
 	int toInteger() const;
+	int isObject() const;
+	BfmeAptValue006DCD20 *rva006DD0E0();
 
 	unsigned int m_flags;
 	char m_pad[0x18];
@@ -103,6 +105,7 @@ class EAStringC
 {
 public:
 	void rva006D3470();
+	const char *rva00620090() const;
 };
 extern void *g_eaStringAtE18060Storage;
 
@@ -195,6 +198,63 @@ extern "C" int __cdecl rva006D9E40Comparator(const void *a, const void *b)
 	g_aptValueStackAtE182E0.rva006FE920();
 	interpreter->CleanupAfterExecution(saved, &setup);
 	return result;
+}
+
+// _rva006DA0C0Comparator @0x006D9F70 (335 bytes). Ghidra-unlisted sortOn
+// comparator the rowed rva006DA0C0 passes to qsort: compares the field named
+// by the scratch key at E18060, looked up in two objects' native hashes
+// (rowed Lookup; 0 when either is missing) or, for two arrays, read at the
+// key's atoi index (undefined when out of range or empty), through the
+// rowed string comparator above. Other pairs hit the AptArray.cpp line
+// 0x328 NOT_REACHED assert (retail texts) and compare equal.
+class AptNativeHash
+{
+public:
+	AptValue *Lookup(const EAStringC *const key) const;
+};
+extern "C" int __cdecl atoi(const char *);
+
+static __forceinline BfmeAptValue006DCD20 *rva006DA0C0Element(BfmeAptValue006DCD20 *value, int i)
+{
+	BfmeAptValue006DCD20 *array = value->rva006DCFA0();
+	if (i >= 0 && i < array->mnLength)
+	{
+		BfmeAptValue006DCD20 *element = array->rva006D8A50(i);
+		if (element)
+			return element;
+	}
+	return g_aptUndefinedAtE18078;
+}
+
+extern "C" int __cdecl rva006DA0C0Comparator(const void *a, const void *b)
+{
+	BfmeAptValue006DCD20 *left = *(BfmeAptValue006DCD20 **)a;
+	BfmeAptValue006DCD20 *right = *(BfmeAptValue006DCD20 **)b;
+	EAStringC *key = reinterpret_cast<EAStringC *>(&g_eaStringAtE18060Storage);
+
+	if (static_cast<unsigned char>(left->isObject()) && static_cast<unsigned char>(right->isObject()))
+	{
+		BfmeAptValue006DCD20 *leftObject = left->rva006DD0E0();
+		BfmeAptValue006DCD20 *rightObject = right->rva006DD0E0();
+		BfmeAptValue006DCD20 *leftField = (BfmeAptValue006DCD20 *)((const AptNativeHash *)((char *)leftObject + 8))->Lookup(key);
+		if (leftField)
+		{
+			BfmeAptValue006DCD20 *rightField = (BfmeAptValue006DCD20 *)((const AptNativeHash *)((char *)rightObject + 8))->Lookup(key);
+			if (rightField)
+				return rva006D9D70Comparator(&leftField, &rightField);
+		}
+		return 0;
+	}
+	if (static_cast<unsigned char>(left->isArray()) && static_cast<unsigned char>(right->isArray()))
+	{
+		BfmeAptValue006DCD20 *leftField = rva006DA0C0Element(left, atoi(key->rva00620090()));
+		BfmeAptValue006DCD20 *rightField = rva006DA0C0Element(right, atoi(key->rva00620090()));
+		return rva006D9D70Comparator(&leftField, &rightField);
+	}
+	g_bfmeAptAssertAtE17734("NOT_REACHED", "C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptArray.cpp", 0x328);
+	if (g_bfmeAptBreakOnAssertAtDDC01C)
+		__asm int 3
+	return 0;
 }
 
 // ?rva006D9F00@@YAPAVBfmeAptValue006DCD20@@PAV1@H@Z @0x006D9F00 (103 bytes).
