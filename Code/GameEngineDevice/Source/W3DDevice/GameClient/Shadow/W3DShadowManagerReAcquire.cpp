@@ -48,10 +48,13 @@ public:
 	Bool ReAcquireResources();
 };
 
+class RenderInfoClass;
+
 class W3DProjectedShadowManager
 {
 public:
 	Bool ReAcquireResources();
+	int rva0010DF33(RenderInfoClass &rinfo);
 };
 
 class Rva00108660ResourceManager
@@ -79,6 +82,7 @@ Rva0007DA23ResourceManager * Rva00DE1FF8Manager;
 
 class W3DShadowManager {
 public:W3DShadowManager(); Bool ReAcquireResources(); Bool rva0009A254();
+ void rva0009A348(RenderInfoClass &rinfo);
 private:
  bool m_isShadowScene;char padding[3];unsigned m_shadowColor;
  int m_stencilShadowMask;Rva0009A710LightPosition m_lightPos[1];
@@ -141,4 +145,15 @@ Bool W3DShadowManager::rva0009A254()
 	if (Rva00DE1FF8Manager && !((Rva0007B6EC *)Rva00DE1FF8Manager)->rva0007B6EC())
 		result = false;
 	return result;
+}
+
+// Retail 0x0009A348 (25 bytes), called from 0x00071606: when the 0x00DEC2D8
+// manager exists and this frame is a shadow scene, it tail-calls that
+// manager's renderShadows-style 0x0010DF33 with the caller's render info, the
+// projected half of Zero Hour's DoShadows. The method name stays
+// address-derived.
+void W3DShadowManager::rva0009A348(RenderInfoClass &rinfo)
+{
+	if (Rva00DEC2D8Manager && m_isShadowScene)
+		((W3DProjectedShadowManager *)Rva00DEC2D8Manager)->rva0010DF33(rinfo);
 }

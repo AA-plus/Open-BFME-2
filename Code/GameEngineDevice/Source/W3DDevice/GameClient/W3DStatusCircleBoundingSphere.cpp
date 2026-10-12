@@ -138,6 +138,15 @@ void W3DStatusCircle::Get_Obj_Space_Bounding_Sphere(SphereClass & sphere) const
 	sphere.Init(ObjSpaceCenter, length);
 }
 
+// Retail 0x0008E5F4 (47B), the vtable slot after the sphere above: the same
+// zero centre and 1000 extent the Zero Hour body passes to AABoxClass::Init.
+void W3DStatusCircle::Get_Obj_Space_Bounding_Box(AABoxClass & box) const
+{
+	Vector3 minPt; minPt.Set(0,0,0);
+	Vector3 maxPt; maxPt.Set((float)1000,(float)1000,(float)1000);
+	box.Init(minPt,maxPt);
+}
+
 
 
 

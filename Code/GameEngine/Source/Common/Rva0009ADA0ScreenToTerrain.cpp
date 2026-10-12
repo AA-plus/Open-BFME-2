@@ -163,12 +163,24 @@ public:
 	virtual void rva0009AFCE(int delta);
 	virtual void rva0009B023(const Vector3 *pos);
 	virtual void v23();
-	virtual void v24();
+	virtual bool rva0009AF90();
 	virtual void v25();
 	virtual void rva0009AFA5(float val);
 	virtual void v27();
 	virtual void rva0009AC4E(Vector3 *out);
 	virtual void rva0009AC77(Vector3 *out);
+	virtual void v30();
+	virtual void v31();
+	virtual void v32();
+	virtual void v33();
+	virtual void v34();
+	virtual void v35();
+	virtual void v36();
+	virtual void v37();
+	virtual void v38();
+	virtual void v39();
+	virtual void rva0009AD4D(bool snap);
+	virtual void rva0009AD78(bool snap);
 
 private:
 	char m_pad004[0xC0 - 0x04];
@@ -240,6 +252,35 @@ void Rva0009D55BProduct::rva0009AD24(int enable)
 {
 	if (m_holderC4.m_ptr && enable)
 		m_holderC4.m_ptr->v03(enable);
+}
+
+// Retail 0x0009AD4D (43B) and 0x0009AD78 (40B), vtable slots 40 and 41: set
+// the +0x138 velocity to the negated 0x00DE5E08 or to the 0x00DE5E04 rate,
+// replaced by a unit step when the flag is set.
+extern float g_00DE5E08;
+extern float g_00DE5E04;
+
+void Rva0009D55BProduct::rva0009AD4D(bool snap)
+{
+	m_velocity138 = -g_00DE5E08;
+	if (snap)
+		m_velocity138 = -1.0f;
+}
+
+void Rva0009D55BProduct::rva0009AD78(bool snap)
+{
+	m_velocity138 = g_00DE5E04;
+	if (snap)
+		m_velocity138 = 1.0f;
+}
+
+// Retail 0x0009AF90 (21B), vtable slot 24 just before 0x0009AFA5: whether
+// the 0x00DE5E44 float has reached the position at +0x134.
+extern float g_00DE5E44;
+
+bool Rva0009D55BProduct::rva0009AF90()
+{
+	return g_00DE5E44 >= m_position134;
 }
 
 void Rva0009D55BProduct::rva0009AFA5(float val)
