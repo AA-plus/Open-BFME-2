@@ -1,6 +1,6 @@
 // ?rva002B49A8@LivingWorldLogic@@QAEXXZ
-// partial score=0.8472781791 date=2026-10-10
-// cl: /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// partial score=0.8472781791 date=2026-10-12
+// cl: /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
 // stlport
 // LivingWorldLogic.cpp -- LivingWorldLogic members recovered from WorldBuilder
 // leads (reverse/wb_name_leads.csv): WB's debug build names the function and
@@ -109,7 +109,7 @@ struct Rva002B5334ArmySet : public Rva002B5334Base, public Rva002B5334ArmyList
 {
 };
 
-#include "C:/Users/franz/.codex/worktrees/recovery-current-origin/openbfme2/Code/Libraries/Include/Lib/Coord2D.h"
+#include "Code/Libraries/Include/Lib/Coord2D.h"
 
 // The region manager at +0xB0 (WB: GetRegionCenterPoint is called on it);
 // its pending battles vector is at +0x14.
@@ -472,8 +472,8 @@ void *__stdcall Rva002B4948Find(void *player, void *region, void *arg);	// 0x002
 // layout, but returned through a hidden pointer and passed by value the way
 // BFME2's Coord2D is (retail 0x002B28B1 builds it in the argument slot), so
 // the TU view carries a user-declared constructor.
-#include "C:/Users/franz/.codex/worktrees/recovery-current-origin/openbfme2/Code/GameEngine/Source/Common/ArmyMoveDispatchView.h"
-#include "C:/Users/franz/.codex/worktrees/recovery-current-origin/openbfme2/Code/GameEngine/Source/Common/RegionCenterPointDispatchView.h"
+#include "Code/GameEngine/Source/Common/ArmyMoveDispatchView.h"
+#include "Code/GameEngine/Source/Common/RegionCenterPointDispatchView.h"
 
 // LivingWorldLogic's bases: a 0x10-byte primary base, then observer
 // interfaces at +0x10 and +0x14 (and the player observer at +0x18, see
