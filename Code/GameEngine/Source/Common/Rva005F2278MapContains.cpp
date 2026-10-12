@@ -89,50 +89,9 @@ bool Rva005F2767::rva005F2767() const
 	return m_ptr->m_flag;
 }
 
-// ?rva005F2577@Rva005F2577Holder@@QAEXXZ, retail 0x005F2577, 23 bytes.
-// Ref-release: if m_ptr non-null, dec ref at +4, virt slot0 on zero, null m_ptr.
-// Retail push esi / mov esi,ecx / mov ecx,[esi] / test / dec [ecx+4] / jne /
-// mov eax,[ecx] / call [eax] / and [esi],0 / pop / ret. Callees none
-// (indirect call). Callers 7 unclaimed. Honest address name.
-struct Rva005F2577Inner
-{
-	virtual void virt0();
-	int m_ref;
-};
-
-class Rva005F2577Holder
-{
-public:
-	void rva005F2577();
-	void rva005F2773(Rva005F2577Inner *p);
-private:
-	Rva005F2577Inner *m_ptr;
-};
-
-void Rva005F2577Holder::rva005F2577()
-{
-	Rva005F2577Inner *p = m_ptr;
-	if (!p)
-		return;
-	if (--p->m_ref == 0)
-		p->virt0();
-	m_ptr = 0;
-}
-
-// ?rva005F2773@Rva005F2577Holder@@QAEXPAURva005F2577Inner@@@Z, retail 0x005F2773, 31 bytes.
-// Smart-ptr assign via rowed release 0x005F2577. If new != m_ptr, release old,
-// store new, inc ref on non-null. Callees all rowed. Caller 0x005F37DC.
-// Honest address name.
-
-void Rva005F2577Holder::rva005F2773(Rva005F2577Inner *p)
-{
-	if (p != m_ptr) {
-		rva005F2577();
-		m_ptr = p;
-		if (p)
-			++p->m_ref;
-	}
-}
+// The icon-slot holder's23B clear005F2577 and31B assign005F2773 now live
+// with their ArmyDetails consumer in Rva005F2CBAProgress.cpp. Keeping those
+// real bodies visible there is required for its632B return/lifetime shape.
 
 // ?rva005E39A6@Rva005E39A6Owner@@QBE_NH@Z @0x005E39A6 8B: loads the map pointer held at +0x14, then tail-jumps Rva005F2278::rva005F2278 above.
 // Owner and name are address-derived; no referencing site was found in this
