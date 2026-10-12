@@ -1,13 +1,15 @@
-// ?action@SupplyCenterDockUpdate@@UAE_NPAVObject@@0@Z
-// partial score=0.993618925831202 date=2026-10-12
-extern "C" void _ReadWriteBarrier();
-#pragma intrinsic(_ReadWriteBarrier)
-// ?action@SupplyCenterDockUpdate@@UAE_NPAVObject@@0@Z
-// partial score=0.97 date=2026-10-09
-// Donor: BFME1 f98983a7 SupplyCenterDockUpdateAction.cpp; native WB identity and vtable slot 12.
-// Native 0x004A0EAD..0x004A10D5 establishes every adjusted object/player offset and call.
-// Only the inline rounding helper uses x87 assembly: existing BaseType.h / Player::ScaleMoney pattern reproduces native fistp.
 // cl: /I. /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// SupplyCenterDockUpdate::action, retail 0x004A0EAD..0x004A10D5 (552 B, RET 8).
+// Identity: WB slot 12 of the SupplyCenterDockUpdate DockUpdateInterface vtable
+// (target evidence); body carried from BFME 1 f98983a7
+// SupplyCenterDockUpdateAction.cpp (donor source), with BFME 2 offsets, the
+// modifier query 0x0028C15E, the multiplayer money multiplier and the bonus
+// science multiplier taken from the native body. The inline rounding helper is
+// WWMath::Float_To_Long, as in Player::ScaleMoney.
+// Frame: the truck interface lives in its own block and the rest of the body in
+// a nested block from the modifier multiplier on, which gives retail's shared
+// truck/multiplier slot at [ebp-0x18] and the separate final value at
+// [ebp-0x1C]. Class views are TU-local and list only what this body uses.
 #include "reference/shims/bfme2_ascii/unicode_string.h"
 #include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 typedef float Real;
@@ -135,7 +137,7 @@ class BfmeGlob939D { public: char bfmeCall939D(); };
 class PlayerList { public: int rva002A7C0B(bool); };
 class MultiPlayMults { public: float getMoneyMult(int) const; };
 extern GameLogic *TheGameLogic; extern PlayerList *ThePlayerList;
-class GlobalData; extern GlobalData *TheGlobalData;
+class GlobalData; extern GlobalData *TheWritableGlobalData;
 class GameText {
 public:
  virtual void s0();
@@ -290,25 +292,30 @@ public:
 };
 bool SupplyCenterDockUpdate::action(Object *docker, Object *drone)
 {
-	SupplyTruckAIInterface *supplyTruckAI = 0;
-	BFMEAIUpdateInterface *ai = bfmeGetAI(docker);
-	if (ai == 0)
-		return false;
-
-	supplyTruckAI = ai->getSupplyTruckAIInterface();
-	if (supplyTruckAI == 0)
-		return false;
-
-	float value = 0.0f;
-	Player *ownerPlayer = getObject()->getControllingPlayer();
-	while (supplyTruckAI->loseOneBox())
+	float value;
+	Player *ownerPlayer;
 	{
-		value += (Real)(unsigned int)ownerPlayer->getSupplyBoxValue();
+		SupplyTruckAIInterface *supplyTruckAI = 0;
+		BFMEAIUpdateInterface *ai = bfmeGetAI(docker);
+		if (ai == 0)
+			return false;
+
+		supplyTruckAI = ai->getSupplyTruckAIInterface();
+		if (supplyTruckAI == 0)
+			return false;
+
+		value = 0.0f;
+		ownerPlayer = getObject()->getControllingPlayer();
+		while (supplyTruckAI->loseOneBox())
+		{
+			value += (Real)(unsigned int)ownerPlayer->getSupplyBoxValue();
+		}
 	}
 
 	if (!(value > 0.0f))
 		return false;
 
+	{
 	float multiplier = 1.0f;
 	getObject()->rva0028C15E(0xd, &multiplier, 0, 1);
 	value *= multiplier;
@@ -318,7 +325,7 @@ bool SupplyCenterDockUpdate::action(Object *docker, Object *drone)
 	if (((BfmeGlob939D *)TheGameLogic)->bfmeCall939D())
 	{
 		int playerCount = ThePlayerList->rva002A7C0B(false);
-		float scale = ((MultiPlayMults *)((char *)TheGlobalData + 0xec4))->getMoneyMult(playerCount);
+		float scale = ((MultiPlayMults *)((char *)TheWritableGlobalData + 0xec4))->getMoneyMult(playerCount);
 		value *= scale;
 	}
 
@@ -351,5 +358,6 @@ bool SupplyCenterDockUpdate::action(Object *docker, Object *drone)
 	unsigned int color = ownerPlayer->getPlayerColor() | 0xe6000000;
 	pos.z=ground;TheInGameUI->addFloatingText(moneys, &pos, color);
 
+	}
 	return false;
 }
