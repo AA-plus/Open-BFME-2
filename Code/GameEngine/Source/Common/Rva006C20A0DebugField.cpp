@@ -25,6 +25,9 @@ class GeneralAllocatorDebug
 {
 public:
 	void *rva006C20A0(void *block, unsigned length, unsigned short id, const void *data, unsigned dataLength);
+	static unsigned rva006C16D0(const void *chunk);
+	void rva006C1710(int a, int b, int c);
+	int rva006C1770(short option);
 };
 
 void *GeneralAllocatorDebug::rva006C20A0(void *block, unsigned length, unsigned short id, const void *data, unsigned dataLength)
@@ -68,4 +71,33 @@ void *GeneralAllocatorDebug::rva006C20A0(void *block, unsigned length, unsigned 
 		return position;
 	}
 	return 0;
+}
+
+// Three Ghidra-unlisted debug-allocator leaves near 0x006C1700, address-named
+// with only the offsets they touch (no layout is claimed):
+// 0x006C16D0 (26B, static): a chunk's usable size from its +4 header word,
+// masked to 0x7FFFFFF8, plus 4 unless the mapped bit (2) is set.
+unsigned GeneralAllocatorDebug::rva006C16D0(const void *chunk)
+{
+	unsigned header = ((const unsigned *)chunk)[1];
+	if (!(header & 2))
+		return (header & 0x7FFFFFF8) + 4;
+	return header & 0x7FFFFFF8;
+}
+
+// 0x006C1710 (24B): stores three values at +0x14/+0x18/+0x1C.
+void GeneralAllocatorDebug::rva006C1710(int a, int b, int c)
+{
+	int *fields = (int *)((char *)this + 0x14);
+	fields[0] = a;
+	fields[1] = b;
+	fields[2] = c;
+}
+
+// 0x006C1770 (22B): option 11 reads as 0, any other as the +0x67C word.
+int GeneralAllocatorDebug::rva006C1770(short option)
+{
+	if (option == 11)
+		return 0;
+	return *(int *)((char *)this + 0x67C);
 }
