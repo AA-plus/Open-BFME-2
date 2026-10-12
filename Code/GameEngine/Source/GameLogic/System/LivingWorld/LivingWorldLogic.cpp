@@ -3522,3 +3522,22 @@ void LivingWorldLogic::CheckHeadToHeadBattles(){
   ((_STL::vector<Rva002B9062Element>*)&m_pending154)->push_back(hint);
  }
 }
+
+// Native2B2D5E..2B2D92 (52B): private message in ECX; output/index on
+// caller-cleaned stack. WB D94BC0 and dispatcher callers prove all three
+// inputs. This replaces the old two-formal signature that inherited ECX
+// through a false static getArgument declaration. Original name unknown.
+class Rva004E0625 {public:int rva004E0625()const;};
+static __declspec(noinline) bool rva002B2D5E(GameMessage *message,void **out,int index)
+{
+ void *entry=((Rva002BA8F1Logic*)TheLivingWorldLogic)->rva002B2579(message->getArgument(index)->integer);
+ if(!entry)return false;
+ *out=(void*)((Rva004E0625*)entry)->rva004E0625();
+ return *out!=0;
+}
+// ?rva002B2D5ECaller absent-from-retail
+// Source-only emission anchor for the same private ABI as the dispatcher.
+bool rva002B2D5ECaller(GameMessage *message,void **out,int index)
+{
+ return rva002B2D5E(message,out,index);
+}
