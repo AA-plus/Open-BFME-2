@@ -53,6 +53,8 @@ public:
  unsigned char flag44A;
  Rva002390CB rva0027756D(int);
  Rva002390CB rva00276893();
+ Rva002390CB rva0027682F();
+ Rva0036CA00Str rva00278190();
  Rva0036CA00Str rva0027824D(int);
  void rva002781DA(Rva0010F149Handle);
  void rva002743D7();
@@ -143,4 +145,12 @@ void Drawable::rva002784EB()
    secondaryHandle=reinterpret_cast<DrawableAudioView *>(TheAudio)->add(&event);
   }
  }
+}
+// Native 0x00278190..0x002781DA (74 bytes, EH, RET4): returns the choice
+// string of the key-0x25 lookup record (rowed rva0027682F) by value, copied
+// through the rowed Rva0036CA00Str copy constructor; the temporary's handle
+// is released by the inlined member destructor (rowed Release_Ref).
+Rva0036CA00Str Drawable::rva00278190()
+{
+ return rva0027682F().choice;
 }

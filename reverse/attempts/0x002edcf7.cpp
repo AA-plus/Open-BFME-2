@@ -1,4 +1,6 @@
 // ?AdjustToNearestGroundCell@Pathfinder@@QAE_NPAUCoord3D@@@Z
+// partial score=0.966 date=2026-10-13
+// ?AdjustToNearestGroundCell@Pathfinder@@QAE_NPAUCoord3D@@@Z
 // partial score=0.97 date=2026-10-07
 // cl: /O1 /DNDEBUG /MD /arch:SSE /G7
 // wb-lead 2.000 callgraph: Pathfinder::SetBridgeStateRepaired at 0x002E7205.
