@@ -21,12 +21,15 @@ public:
  EAStringC(const char *);
  ~EAStringC();
 };
+class AptCIH;
 class AptValue {
 public:
  void rva006DE870(char *) const;
  virtual void AddRef();
  virtual void Release();
  void SetString(const char *);
+ bool isCIH(bool) const;
+ AptCIH *c_cih(bool);
 };
 class AptCIH : public AptValue {};
 class AptString : public AptValue {public:static AptString *Create();};
@@ -668,4 +671,25 @@ void Rva006CD120AddGlobalExtension(Rva006CD120ExtObject *pExtObject) {
  pExtObject->registered();
  GAPCHECK(0 == ((Rva0070A5C0 *)g_shutdownAtE18360)->rva0070A5C0((int)&sObjName),"NULL == gpGlobalExtensionObject->Lookup(&sObjName)",0x68C);
  ((Rva8D0D80Result *)g_shutdownAtE18360)->rva006FBB90((Rva8D0D80String *)&sObjName,(Rva8D0D80Value *)pExtObject);
+}
+
+// Native6CCF30..6CD00D: Ghidra-unlisted focus-by-path helper. A null path
+// clears the E176D0 pool's slot through the rowed setter 0x006E3700 and
+// succeeds; otherwise the path is resolved like AptGetInternalVariable above
+// (rowed getVariable from level 0) and a CIH result is stored through the
+// same setter, else it fails. Address-derived name.
+class Rva006E3700DwordSlot {public:void set(int);};
+bool Rva006CCF30SetFocusPath(const char *path) {
+ if(!path) {
+  ((Rva006E3700DwordSlot *)g_bfmeAptPtrAtE176D0)->set((int)path);
+  return true;
+ }
+ EAStringC key(path);
+ AptValue *value=g_aptDateInterpreter.getVariable(_AptGetAnimationAtLevel(0),0,&key,1,1,0);
+ if(!value)
+  return false;
+ if(!value->isCIH(false))
+  return false;
+ ((Rva006E3700DwordSlot *)g_bfmeAptPtrAtE176D0)->set((int)value->c_cih(false));
+ return true;
 }
