@@ -1,7 +1,7 @@
-// ?rva004C4621@CloudBreakSpecialPower@@QAEXPBUCoord3D@@@Z
-// partial score=0.9747033365908139 date=2026-10-10
-// ?rva004C4621@CloudBreakSpecialPower@@QAEXPBUCoord3D@@@Z
-// partial score=0.9 date=2026-10-09
+// WorldBuilder 0x01260230 uses integer loop counters and independent point
+// locals in the FX and tiling scopes. Those native lifetimes reproduce the
+// full body without scheduling intrinsics. Original entry spelling remains
+// unproved; target offsets and callees are independently read from native.
 // cl: /I. /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
 // Retail 0x004C4621, 377B: CloudBreakSpecialPower::rva004C4621 (name pinned:
 // the member called with the location, ret 4; the location is not read).
@@ -14,8 +14,6 @@
 // body; retail loads ECX with this before calling it, so it is called here
 // through a thiscall placeholder spelling pinned to the same body).
 
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
 typedef float Real;
 typedef int Int;
 
@@ -78,9 +76,9 @@ void CloudBreakSpecialPower::rva004C4621( const Coord3D * )
 	Region3D extent;
 	TheTerrainLogic->getExtent( &extent );
 
-	Coord3D pos;
 	if( data->m_fx )
 	{
+		Coord3D pos;
 		pos.x = ( extent.lo.x + extent.hi.x ) * 0.5f;
 		pos.y = ( extent.lo.y + extent.hi.y ) * 0.5f;
 		pos.z = TheTerrainLogic->getGroundHeight( pos.x, pos.y, 0 );
@@ -90,13 +88,14 @@ void CloudBreakSpecialPower::rva004C4621( const Coord3D * )
 	Real spacing = data->m_spacing;
 	if( spacing > 1.0f )
 	{
-		for( Real y = (Real)(Int)( extent.lo.y + spacing ); y < extent.hi.y - spacing; y = (Real)(Int)( y + spacing ) )
+		for( Int y = (Int)( extent.lo.y + spacing ); y < extent.hi.y - spacing; y = (Int)( y + spacing ) )
 		{
-			for( Real x = (Real)(Int)( extent.lo.x + spacing ); x < extent.hi.x - spacing; x = (Real)(Int)( x + spacing ) )
+			for( Int x = (Int)( extent.lo.x + spacing ); x < extent.hi.x - spacing; x = (Int)( x + spacing ) )
 			{
-				pos.x = x;
-				pos.y = y;
-{ _ReadWriteBarrier(); pos.z = TheTerrainLogic->getGroundHeight( pos.x, pos.y, 0 ); }
+				Coord3D pos;
+				pos.x = (Real)x;
+				pos.y = (Real)y;
+				pos.z = TheTerrainLogic->getGroundHeight( pos.x, pos.y, 0 );
 				rva004C45CF( &pos, (const AsciiString *)data->m_objectName );
 			}
 		}
