@@ -2,7 +2,7 @@
 // stlport
 // Two stdcall living-world upgrade-list walkers (WB 0x00B57F60 is the
 // second, unnamed): each non-null entry of a vector of upgrade templates is
-// handed to the player's upgrade hooks (Rva002E15BC; WB names 0x002E1588
+// handed to the player's upgrade hooks (WB names 0x002E1588
 // LivingWorldPlayer::AddUpgrade and 0x002E15BC RemoveUpgrade).
 //  - rva0020ED51, retail 0x0020ED51 (61 B): adds every entry of the given
 //    list, forwarding the flag; reached through the forwarders 0x0020F2F1
@@ -12,11 +12,12 @@
 //    object's +0xD4 list; called from the battle hand-over 0x0020F832.
 #include <vector>
 
-class Rva002E15BC
+class Rva002E15BC; // Opaque parameter spelling retained for the stdcall provider.
+class LivingWorldPlayer
 {
 public:
-	void rva002E1588(void *upgrade, bool flag);	// 0x002E1588
-	void rva002E15BC(void *upgrade);			// 0x002E15BC
+	void AddUpgrade(void *upgrade, bool flag);	// 0x002E1588
+	void RemoveUpgrade(void *upgrade);			// 0x002E15BC
 };
 
 struct Rva0020ED8EUpgradeOwner
@@ -31,7 +32,7 @@ void __stdcall rva0020ED51(void *list, int player, int flag)
 	for (unsigned int i = 0; i < upgrades.size(); ++i)
 	{
 		if (upgrades[i])
-			((Rva002E15BC *)player)->rva002E1588(upgrades[i], *(bool *)&flag);
+			((LivingWorldPlayer *)player)->AddUpgrade(upgrades[i], *(bool *)&flag);
 	}
 }
 
@@ -41,6 +42,6 @@ void __stdcall rva0020ED8E(Rva0020ED8EUpgradeOwner *owner, Rva002E15BC *player)
 	for (unsigned int i = 0; i < upgrades.size(); ++i)
 	{
 		if (upgrades[i])
-			player->rva002E15BC(upgrades[i]);
+			((LivingWorldPlayer *)player)->RemoveUpgrade(upgrades[i]);
 	}
 }

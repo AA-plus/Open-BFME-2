@@ -314,7 +314,7 @@ public:
 };
 
 class Rva002E062EDwordSlot { public: void set(int value); };
-class Rva002E15BC { public: void rva002E14E9(const BfmeFixedStorage128 &bits); };
+class LivingWorldPlayer { public: void rva002E14E9(const BfmeFixedStorage128 &bits); };
 class Rva002E2578 { public: void rva002E2578(const _STL::vector<ScienceType> &sciences); };
 struct Rva0040F19DLivingWorldPlayer { char pad00[0x1c8]; float m_1C8; };
 class Rva002BA8F1Logic { public: Rva002E2903Player *find(int id, unsigned int *index); };
@@ -376,7 +376,7 @@ void ArmySummarySystem::Save(Object *objects)
 			continue;
 		reinterpret_cast<Rva002E062EDwordSlot *>(lwPlayer)->set(
 			ComputePlayerEarnedSpellPoints(reinterpret_cast<_Rva0040CA61Arg *>(player)));
-		reinterpret_cast<Rva002E15BC *>(lwPlayer)->rva002E14E9(player->m_upgrades);
+		reinterpret_cast<LivingWorldPlayer *>(lwPlayer)->rva002E14E9(player->m_upgrades);
 		reinterpret_cast<Rva002E2578 *>(lwPlayer)->rva002E2578(player->m_sciences);
 		reinterpret_cast<Rva0040F19DLivingWorldPlayer *>(lwPlayer)->m_1C8 = player->m_14;
 	}

@@ -133,6 +133,9 @@ public:
 	static void ParseLivingWorldPlayer(INI *ini, void *instance);
 	void MarkUnitsForUpgrades(void *region);
     int GetNumRegionsOwned();
+    void AddUpgrade(void *upgrade, bool persistentOnly);
+    void RemoveUpgrade(void *upgrade);
+    void rva002E14E9(const BfmeFixedStorage128 &mask);
 
 	void OnUnitDequeued(Rva00319CED *unit);
 	void SetColorIndex(Int color);
@@ -152,7 +155,9 @@ private:
 	_STL::vector<LivingWorldPlayerRecordView> m_records;
 	unsigned char m_pad1B4[4];
 	ArmyVec m_armyVec;			// +0x1B8
-	unsigned char m_pad1C4[0x298 - 0x1c4];
+	unsigned char m_pad1C4[0x1D8 - 0x1C4];
+    unsigned int m_upgradeBits[32]; // +1D8, native and WB BitFlags<1024>
+    unsigned char m_pad258[0x298 - 0x258];
 	Int m_queuedCommandPoints;		// +0x298
 };
 
@@ -508,4 +513,74 @@ int LivingWorldPlayer::GetNumRegionsOwned()
 	}
 done:
 	return c;
+}
+
+// WBDE7000/DE72C0 name AddUpgrade/RemoveUpgrade and independently access
+// the same player mask1D8 and template04/38/78 fields as native2E1588/2E15BC.
+// Their assertions establish player-upgrade type0 and the1024-bit storage.
+// Retain the consumed void* and bool ABI; original argument type/qualifiers
+// remain unknown. Rehome existing exact bodies, without adding coverage.
+struct LivingWorldUpgradeTemplateView
+{
+	int m_00;
+	int m_04;
+	char m_pad[0x38 - 8];
+	int m_38;
+	char m_pad2[0x78 - 0x3C];
+	unsigned char m_78;
+};
+
+void LivingWorldPlayer::RemoveUpgrade(void *argp)
+{
+	LivingWorldUpgradeTemplateView *arg = (LivingWorldUpgradeTemplateView *)argp;
+	if (arg->m_04 != 0)
+		return;
+	unsigned int bit = (unsigned int)arg->m_38;
+	m_upgradeBits[bit >> 5] &= ~(1u << (bit & 31));
+}
+
+void LivingWorldPlayer::AddUpgrade(void *argp, bool flag)
+{
+	LivingWorldUpgradeTemplateView *arg = (LivingWorldUpgradeTemplateView *)argp;
+	if (arg->m_04 != 0)
+		return;
+	if (flag != 0 && arg->m_78 == 0)
+		return;
+	unsigned int bit = (unsigned int)arg->m_38;
+	m_upgradeBits[bit >> 5] |= (1u << (bit & 31));
+}
+
+class UpgradeCenter;
+extern UpgradeCenter *TheUpgradeCenter;
+struct Rva0026F0F0
+{
+	void *rva0026F0F0(const void *mask);
+};
+struct Rva00046827
+{
+	int rva00046827();
+};
+
+// Native 002E14E9..002E1588, 159B, RET4. The adjacent rowed set/clear
+// methods prove the receiver's mask at +1D8 and the template's +04/+38/+78
+// fields. Both native temporary masks are 128 bytes, copied by 0004548B.
+// The player receiver is established by these adjacent named methods and
+// ArmySummarySystem::Save; the original mask-filter method name is unresolved.
+void LivingWorldPlayer::rva002E14E9(const BfmeFixedStorage128 &mask)
+{
+	BfmeFixedStorage128 unchecked(mask);
+	BfmeFixedStorage128 accepted(mask);
+	while (reinterpret_cast<Rva00046827 *>(&unchecked)->rva00046827() > 0) {
+		LivingWorldUpgradeTemplateView *arg = static_cast<LivingWorldUpgradeTemplateView *>(
+			reinterpret_cast<Rva0026F0F0 *>(TheUpgradeCenter)->rva0026F0F0(&unchecked));
+		if (!arg)
+			break;
+		if (!arg->m_78 || arg->m_04 != 0) {
+			unsigned int bit = static_cast<unsigned int>(arg->m_38);
+			reinterpret_cast<unsigned int *>(accepted.bytes)[bit >> 5] &= ~(1u << (bit & 31));
+		}
+		unsigned int bit = static_cast<unsigned int>(arg->m_38);
+		reinterpret_cast<unsigned int *>(unchecked.bytes)[bit >> 5] &= ~(1u << (bit & 31));
+	}
+	*reinterpret_cast<BfmeFixedStorage128 *>(m_upgradeBits) = accepted;
 }
