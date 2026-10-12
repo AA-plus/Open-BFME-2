@@ -30,6 +30,9 @@ public:
 	static Bool canRenderToTexture(void);
 };
 
+// The rowed shader-manager setting read at 0x00075E3C.
+Int Rva00075E3CGet();
+
 long __cdecl Rva00077D0FLoad(const char *strFilePath, unsigned long *pHandle);
 
 class W3DFilterInterface
@@ -69,4 +72,28 @@ Int ScreenBWFilter::init(void)
 	W3DFilters[FT_VIEW_BW_FILTER]=&screenBWFilter;
 
 	return true;
+}
+
+// ScreenBWFilterDOT3::init, retail 0x000FBA20..0x000FBA4A (42 bytes), the
+// slot-0 entry of the next filter vftable: the Zero Hour DOT3 variant, with
+// no shader of its own to load. It shares ScreenBWFilter's fade frame and
+// registers itself (0x00DB5B5C, right after screenBWFilter) as the black &
+// white view filter when render to texture and the 0x00075E3C setting allow.
+class ScreenBWFilterDOT3 : public W3DFilterInterface
+{
+public:
+	virtual Int init(void);
+};
+
+extern ScreenBWFilterDOT3 screenBWFilterDOT3;
+
+Int ScreenBWFilterDOT3::init(void)
+{
+	ScreenBWFilter::m_curFadeFrame = 0;
+	if (W3DShaderManager::canRenderToTexture() && Rva00075E3CGet())
+	{
+		W3DFilters[FT_VIEW_BW_FILTER]=&screenBWFilterDOT3;
+		return true;
+	}
+	return false;
 }

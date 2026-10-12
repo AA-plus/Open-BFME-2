@@ -397,6 +397,7 @@ class W3DShaderManager
 {
 public:
 	static IDirect3DTexture8 *endRenderToTexture();
+	static Bool canRenderToTexture(void);
 };
 struct BfmeDevice;
 
@@ -671,4 +672,23 @@ Int Rva000FC34FFilter::set(FilterModes mode) {
  return false;
 }
 
+// ?init@Rva000FCF54Filter@@UAEHXZ @0x000FC91C (42B): slot 0 of the same
+// vftable. Zero Hour's filter init shape: the shared fade frame is reset,
+// render to texture and the rowed shader-manager setting 0x00075E3C must
+// both be available, then the filter instance at 0x00DEC1DC registers itself
+// as W3DFilters[6] (0x00DE1F44). Instance and table keep their ledger names.
+class W3DFilterInterface;
+extern W3DFilterInterface *W3DFilters[];
+extern UnsignedInt g_Va00DEC1DC;
+Int Rva00075E3CGet();
 
+Int Rva000FCF54Filter::init()
+{
+	g_00DEC1BC = 0;
+	if (W3DShaderManager::canRenderToTexture() && Rva00075E3CGet())
+	{
+		W3DFilters[6] = reinterpret_cast<W3DFilterInterface *>(&g_Va00DEC1DC);
+		return true;
+	}
+	return false;
+}
