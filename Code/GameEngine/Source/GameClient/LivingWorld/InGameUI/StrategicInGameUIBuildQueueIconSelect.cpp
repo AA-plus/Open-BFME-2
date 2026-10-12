@@ -64,6 +64,7 @@ public:
 
 	void SelectQueueIndex(int queueIndex);
 	void ShowUnitStats(int queueIndex); // 0x005E7B28 (WorldBuilder name, pinned)
+	void rva005E7AC6();
 
 private:
 	Icon *GetIconAtQueueIndex(int queueIndex) { return (Icon *)((Rva005E73E4 *)this)->rva005E73E4(queueIndex); }
@@ -72,7 +73,10 @@ private:
  void *m_help; // native hover-help caller follows +14
  Rva005E76AEContext *m_context;
  Rva005E72B4Queue *m_queue;
- char m_pad20[0x30-0x20];
+ Icon *m_inProgressIcon; // +0x20
+ Icon **m_iconsBegin; // +0x24
+ Icon **m_iconsEnd; // +0x28
+ char m_pad2C[0x30-0x2C];
 	int m_selectedQueueIndex; // +0x30, -1 when none
 };
 
@@ -529,4 +533,27 @@ void StrategicInGameUI::BuildQueueDetailsPanel::Impl::InProgressIcon::Init(bool 
  if(remaining<=0) remaining=0;
  progress->SetProgress(total,remaining);
  if(m_progressSlot->v0()) rva005E789A();
+}
+
+// Native 005E7AC6..005E7B28 RET0, directly before ShowUnitStats: runs the
+// panel's 0x005F7498 step, re-posts the 0x00E06724 label as the mouse
+// tooltip while the 0x005F6B35 flag is set, then updates the in-progress
+// icon (+0x20) and every queued icon (+0x24..+0x28) through Icon::Update.
+// Method name unrecovered; the receiver is proven by the Icon::Update calls
+// on the panel's own icon members.
+class Rva005F7498 { public: void rva005F7498(); };
+class Rva005F6B35ByteChaseField { public: unsigned char get() const; };
+class Rva005E755E { public: UnicodeString rva005e755e(); };
+extern unsigned int g_Va00E06724;
+
+void StrategicInGameUI::BuildQueueDetailsPanel::Impl::rva005E7AC6()
+{
+	((Rva005F7498 *)this)->rva005F7498();
+	if (((Rva005F6B35ByteChaseField *)this)->get())
+		TheMouse->rva001EEA6D(((Rva005E755E *)&g_Va00E06724)->rva005e755e(), -1, 0, 1.0f);
+	if (m_inProgressIcon)
+		m_inProgressIcon->Update();
+	Icon **end = m_iconsEnd;
+	for (Icon **it = m_iconsBegin; it != end; ++it)
+		(*it)->Update();
 }
