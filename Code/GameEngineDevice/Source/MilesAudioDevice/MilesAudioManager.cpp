@@ -1103,6 +1103,7 @@ public:
     void rva0005F2BB(class Rva00052B3D *state);
     void rva00060309(void);
     void rva000583BA(unsigned int affect, unsigned int viewMask, int arg);
+    void rva00058591(unsigned int affect, unsigned int viewMask, int keepMasks);
     void rva0006047C(void);
     void rva000603ED(void);
     void rva000544EB(void);
@@ -3725,6 +3726,69 @@ void MilesAudioManager::rva000583BA(unsigned int affect, unsigned int viewMask, 
 }
 
 
+
+// Native 00058591..0005876E, the resume half of 0x000583BA (the next slot
+// of the manager's table): clears the pause flags it set, lets each sound
+// resume, drops the music view masks and the per-view affect masks, and
+// clears the pending-request flags through 0x577E3.
+void MilesAudioManager::rva00058591(unsigned int affect, unsigned int viewMask, int keepMasks)
+{
+    MilesMutexGuard guard(&m_mutex, 0);
+    PlayingAudioRef playing;
+    PlayingAudioList::iterator it;
+    if (affect & 0x02) {
+        for (it = m_playingSounds.begin(); it != m_playingSounds.end(); ++it) {
+            playing = *it;
+            if (playing.get() && (viewMask & (1 << playing->m_event->getViewType()))) {
+                if (affect & 0x20)
+                    playing->m_at4A = false;
+                else
+                    playing->m_at49 = false;
+                pauseResumeSound(playing);
+            }
+        }
+    }
+    if (affect & 0x04) {
+        for (it = m_playing3DSounds.begin(); it != m_playing3DSounds.end(); ++it) {
+            playing = *it;
+            if (playing.get() && (viewMask & (1 << playing->m_event->getViewType()))) {
+                if (affect & 0x20)
+                    playing->m_at4A = false;
+                else
+                    playing->m_at49 = false;
+                pauseResumeSound(playing);
+            }
+        }
+    }
+    for (it = m_playingStreams.begin(); it != m_playingStreams.end(); ++it) {
+        playing = *it;
+        if (playing.get() && (viewMask & (1 << playing->m_event->m_viewType))
+            && (playing->m_event->getSoundClass() & affect)) {
+            if (affect & 0x20)
+                playing->m_at4A = false;
+            else
+                playing->m_at49 = false;
+            pauseResumeSound(playing);
+        }
+    }
+    if (affect & 0x10) {
+        if (affect & 0x20)
+            m_at694 &= ~viewMask;
+        else
+            m_at690 &= ~viewMask;
+    }
+    rva000577E3(affect, viewMask, false);
+    if (!keepMasks) {
+        for (int viewType = 0; viewType < 3; ++viewType) {
+            if (viewMask & (1 << viewType)) {
+                if (affect & 0x20)
+                    m_at6C0[viewType] &= ~(affect & ~0x20);
+                else
+                    m_at6B4[viewType] &= ~affect;
+            }
+        }
+    }
+}
 
 // Retail 0x000606CE, called from onAudioLODChanged (0x607BB) and 0x61A2E.
 // With a provider selected it releases every playing 3D sound under the
