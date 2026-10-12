@@ -489,7 +489,6 @@ void AptMpGameRules::PopulateComboBoxes() {
 // +9D4 low flag bits come from native accesses to the canonical global.
 struct RuleCheck {int id; bool value;};
 const RuleCheck * const *Rva00559F63Get(int);
-class MpGameRules { public: static UnicodeString GetRuleString(int rule); };
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 struct RulesOverrideView {char padding[0x9D4]; unsigned char bits;};
