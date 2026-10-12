@@ -14,6 +14,13 @@
 // TurretVector is an observed three-pointer storage view, not STL ownership.
 // Real donor Matrix3D header is required for its mixed x87/SSE math shape;
 // point copy by pointer helper reproduces native ADD24 then member loads.
+// Recoil B4E43..B508A RET0, WB92FC00, and donor handleClientRecoil
+// establish the second method. Target adds nullable animation state at18.
+// Independently measured: MD4/maxRecoil58/damping5C/settle60, animation
+// barrel vectorsAC (6x12)/flagsF4 bit8, state hasRecoil bytesF6..FB,
+// recoil vectorsC8 (6x12), barrel stride60/bones0+8, recoil stride12
+// state0/shift4/rate8. Muzzle-flash method is owned RvaB304B73B.
+// Vector begin()+index staging preserves the native SIB byte order.
 #include "matrix3d.h"
 #include <math.h>
 #include "Lib/Coord3D.h"
@@ -87,12 +94,50 @@ class TurretRenderView {public:
  virtual void Control_Bone(int,const Matrix3D&,bool);
 };
 struct TurretInfoView {int angleName,pitchName;float artAngle,artPitch;int angleBone,pitchBone;};
-struct TurretStateView {char pad[0xd0];struct TurretVector {TurretInfoView *first,*last,*limit;unsigned size()const{return last-first;}const TurretInfoView &operator[](unsigned n)const{return first[n];}} turrets;char padDC[0xf5-0xdc];bool validTurrets;};
+struct TurretStateView {char pad[0xd0];struct TurretVector {TurretInfoView *first,*last,*limit;unsigned size()const{return last-first;}const TurretInfoView &operator[](unsigned n)const{return first[n];}} turrets;char padDC[0xf5-0xdc];bool validTurrets;bool hasRecoil[6];};
+class Rva000B304B {public:void rva000B304B(void*,bool);};
+struct BarrelView {int recoilBone,fireBone,muzzleFlashBone;char rest[0x3c-12];};
+struct RecoilView {int state;float shift,rate;};
+template<class T>struct RecoilVectorView {T*first,*last,*limit;unsigned size()const{return last-first;}T*begin()const{return first;}T&operator[](int n)const{return *(begin()+n);}};
+struct RecoilStateView {char pad[0xac];RecoilVectorView<BarrelView> barrels[6];unsigned flags;};
+struct RecoilMDView {char pad[0x58];float maxRecoil,damping,settle;};
 class W3DModelDraw {public:
- char pad00[8];TurretDrawableView *drawable;char pad0c[8];TurretStateView *state;void *loadedState;char pad1c[0x50-0x1c];TurretRenderView *render;
- char pad54[0x2c8-0x54];float prevAngle,prevPitch,newAngle,newPitch;
- protected:void handleClientTurretPositioning();
+ char pad00[4];const RecoilMDView *data;TurretDrawableView *drawable;char pad0c[8];TurretStateView *state;RecoilStateView *loadedState;char pad1c[0x50-0x1c];TurretRenderView *render;
+ char pad54[0xc8-0x54];RecoilVectorView<RecoilView> recoils[6];char pad110[0x2c8-0x110];float prevAngle,prevPitch,newAngle,newPitch;
+ protected:void handleClientTurretPositioning();void handleClientRecoil();
 };
+void W3DModelDraw::handleClientRecoil() {
+ if(!loadedState)return;
+ const RecoilMDView*d=data;
+ if(!(loadedState->flags&8))return;
+ for(int wslot=0;wslot<6;++wslot) {
+  if(!state->hasRecoil[wslot])continue;
+  const RecoilVectorView<BarrelView>&barrels=loadedState->barrels[wslot];
+  RecoilVectorView<RecoilView>&r=recoils[wslot];
+  int count=barrels.size(),rc=r.size();
+  count=(count>rc)?rc:count;
+  for(int i=0;i<count;++i) {
+   if(barrels[i].muzzleFlashBone!=0) ((Rva000B304B*)&barrels[i])->rva000B304B(render,r[i].state!=1);
+   if(barrels[i].recoilBone) {
+    switch(r[i].state) {
+     case 0:break;
+     case 1:case 2:
+      r[i].shift+=r[i].rate;
+      r[i].rate*=d->damping;
+      if(r[i].shift>=d->maxRecoil){r[i].shift=d->maxRecoil;r[i].state=3;}
+      else if(fabs(r[i].rate)<0.01f)r[i].state=3;
+      break;
+     case 3:
+      r[i].shift-=d->settle;
+      if(r[i].shift<=0){r[i].shift=0;r[i].state=0;}
+      break;
+    }
+    Matrix3D m;m.Make_Identity();m.Translate_X(-r[i].shift);
+    if(render){render->Capture_Bone(barrels[i].recoilBone);render->Control_Bone(barrels[i].recoilBone,m,false);}
+   }else r[i].state=0;
+  }
+ }
+}
 void W3DModelDraw::handleClientTurretPositioning() {
  if(!state || !state->validTurrets)return;
  for(int tslot=0;tslot<1;++tslot) {
