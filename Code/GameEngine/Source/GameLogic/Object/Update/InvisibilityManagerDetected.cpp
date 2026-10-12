@@ -22,7 +22,9 @@ class Rva00388F63Map {public:void *find(int*);};
 struct DetectionTreeNode {unsigned color;void *parent,*left,*right;int key;Rva004393D6 record;};
 struct Rva004389DBInfo;
 class Rva00438389 {public:Object *detector;unsigned char allied;char pad5[31];Rva00438389 &rva00438389();};
+class Xfer;
 class Rva00439E0C {public:void *vtable;InvisibilityRecordMap records;
+ void rva00439F3F(Xfer*);
  bool rva00439E0C(Object*,Object*,int,int);
  void rva0043822E(Rva004393D6*,unsigned int);
  int rva0043966A(Object*,const Coord3D*,Rva004393D6*,Rva004389DBInfo*);
@@ -51,4 +53,106 @@ bool Rva00439E0C::rva00439E0C(Object *object,Object *volatile detectorInput,int 
  info.allied=allied;info.detector=detector;
  if(rva00438E5B(object,state,scratch.record,(Rva004389DBInfo*)&info,duration)) {rva004389DB(object,(Rva004389DBInfo*)&info,feedback);return true;}
  return false;
+}
+
+typedef bool Bool;
+struct XferVersion {unsigned char version,current;};
+class Xfer
+{
+public:
+	virtual ~Xfer();
+	virtual Bool isLoading();
+	virtual Bool isSaving();
+	virtual void slot03();
+	virtual void slot04();
+	virtual void slot05();
+	virtual void slot06();
+	virtual void slot07();
+	virtual void slot08();
+	virtual void slot09();
+	virtual Xfer &xferVersion(XferVersion *version);
+	virtual Xfer &xferTypeName(const char *const &name);
+	virtual void slot12();
+	virtual void slot13();
+	virtual void slot14();
+	virtual void slot15();
+	virtual void slot16();
+	virtual void slot17();
+	virtual void slot18();
+	virtual void slot19();
+	virtual void slot20();
+	virtual void slot21();
+	virtual void slot22();
+	virtual void slot23();
+	virtual void slot24();
+	virtual void slot25();
+	virtual void slot26();
+	virtual void slot27();
+	virtual void slot28();
+	virtual void slot29();
+	virtual Xfer &xferInt(int *value);
+	virtual void slot31();
+	virtual void slot32();
+	virtual void slot33();
+	virtual void slot34();
+	virtual void slot35();
+	virtual Xfer &xferSlot90(int *value);
+};
+enum ObjectID
+{
+	INVALID_ID = 0
+};
+void XferObjectID(Xfer *xfer, ObjectID *objectID);
+
+class Rva00438758Interface;
+class Rva004382FC
+{
+public:
+	Rva004382FC();
+	void rva00438758(Rva00438758Interface*);
+private:
+	char bytes[196];
+};
+struct Rva004390F7Element;
+namespace _STL {
+	template<> void list<Rva004390F7Element>::push_back(const Rva004390F7Element&);
+}
+
+// Native00439F3F..0043A047, RET4: receive keyed detection records and append
+// their transferred 196-byte entries. Prologue/EH and complete return prove
+// the boundary; earlier no-boundary reports decoded another image address.
+// Field access and transfer ordering are target facts; original method and
+// record identities remain unknown. Existing record constructor/destructor
+// bindings and the rowed list append retain their provider spellings.
+void Rva00439E0C::rva00439F3F(Xfer *xfer)
+{
+	int count;
+	xfer->xferInt(&count);
+	while (count)
+	{
+		--count;
+		ObjectID id;
+		XferObjectID(xfer,&id);
+		DetectionTreeNode *node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find((int*)&id);
+		if (node == *(DetectionTreeNode**)&records)
+		{
+			Rva004393D6 empty;
+			records[(int&)id]=empty;
+			node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find((int*)&id);
+		}
+		Rva004393D6 *record=&node->record;
+		xfer->xferInt(&record->a);
+		xfer->xferInt(&record->b);
+		xfer->xferInt(&record->c);
+		int n;
+		xfer->xferInt(&n);
+		while (n)
+		{
+			--n;
+			Rva004382FC entry;
+			entry.rva00438758((Rva00438758Interface*)xfer);
+			((_STL::list<Rva004390F7Element>*)record)->push_back((const Rva004390F7Element&)entry);
+		}
+		--n;
+	}
 }
