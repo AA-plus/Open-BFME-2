@@ -339,10 +339,11 @@ public:
 	void *rva002104B6(void *name);
 };
 
-class Rva002B2702B0
+class Rva0020E89C;
+class LivingWorldRegionManager
 {
 public:
-	bool rva0020EA58(void *region, float *center);
+	bool GetRegionCenterPoint(Rva0020E89C *region, Coord2D *center);
 };
 
 struct EvaRegionView
@@ -390,7 +391,7 @@ EvaCoord Rva001DCDAF::getPlayPositionForEvent(const Arg001DCDAF *info, Player *l
 		if (region && region->m_13c == localPlayerWorldMap->m_14)
 		{
 			Coord2D center;
-			if (((Rva002B2702B0 *)TheLivingWorldLogic->getRegionManager())->rva0020EA58(region, &center.x))
+			if (((LivingWorldRegionManager *)TheLivingWorldLogic->getRegionManager())->GetRegionCenterPoint((Rva0020E89C *)region, &center))
 			{
 				Coord3D pos;
 				pos.x = center.x;

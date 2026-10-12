@@ -28,10 +28,12 @@ public:
 
 #include "ArmyMoveCoordinateView.h"
 
-class Rva002B2702B0
+class Rva0020E89C;
+class Coord2D { public: float x, y; };
+class LivingWorldRegionManager
 {
 public:
-	bool rva0020EA58(void *key, float *buf);
+	bool GetRegionCenterPoint(Rva0020E89C *region, Coord2D *out);
 };
 
 #include "ArmyMoveDispatchView.h"
@@ -65,7 +67,7 @@ void Rva002B2702::rva002B2702(void *owner, void *key, int extra)
 		return;
 	if (key == 0)
 		return;
-	m_b0->rva0020EA58(key, &buf.x);
+	((LivingWorldRegionManager *)m_b0)->GetRegionCenterPoint((Rva0020E89C *)key, (Coord2D *)&buf);
 	((Rva002B26D0 *)this)->rva002B26D0((Rva00318C79Owner *)owner,
 		key, buf, (void *)extra);
 }

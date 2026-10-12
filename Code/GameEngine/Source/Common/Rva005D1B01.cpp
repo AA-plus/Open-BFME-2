@@ -12,7 +12,8 @@ class Rva000B3FD0Empty {public:void rva000B3FD0Empty();};
 class Rva005CCB5B {public:void rva005CCB5B();};
 class Rva0020E89C;
 class Rva0020EAF6View {public:Rva0020E89C*rva0020EAF6(int);};
-class Rva002B2702B0 {public:bool rva0020EA58(void*,float*);};
+class Coord2D {public:float x,y;};
+class LivingWorldRegionManager {public:bool GetRegionCenterPoint(Rva0020E89C*,Coord2D*);};
 class Rva002BF4F3 {public:bool rva002BF5B0(const Vector3*,Vector3*);};
 class Rva002D3627Host {public:void rva002BF09E(const Coord3D*);};
 class LivingWorldLogic;extern LivingWorldLogic*TheLivingWorldLogic;
@@ -28,10 +29,10 @@ void Rva005D1B01::rva005D1B01(){
  ((Rva005CCB5B*)this)->rva005CCB5B();
  Rva0020EAF6View*manager=*(Rva0020EAF6View**)((char*)TheLivingWorldLogic+0xB0);
  Rva0020E89C*region=manager->rva0020EAF6(region10->id);
- float xy[2];
- if(((Rva002B2702B0*)manager)->rva0020EA58(region,xy)){
-  Coord3D p;p.x=xy[0];p.y=xy[1];p.z=0;
-  ((Rva002BF4F3*)position0C)->rva002BF5B0((const Vector3*)xy,(Vector3*)&p);
+ Coord2D xy;
+ if(((LivingWorldRegionManager*)manager)->GetRegionCenterPoint(region,&xy)){
+  Coord3D p;p.x=xy.x;p.y=xy.y;p.z=0;
+  ((Rva002BF4F3*)position0C)->rva002BF5B0((const Vector3*)&xy,(Vector3*)&p);
   position0C->rva002BF09E(&p);
  }
  finish(region10);

@@ -114,16 +114,22 @@ struct PositionQueryCampaign {char pad[4];PositionQueryFactory*factory;};
 class Rva00DFE1C8Host {public:char pad[0x268];PositionQueryCampaign *campaign;};
 class LivingWorldManager;
 extern LivingWorldManager *TheLivingWorldManager;
-class Rva002B2702B0 {public:bool rva0020EA58(void*key,float*out);};
-bool Rva002B2702B0::rva0020EA58(void*key,float*out){
- Rva0020E47C*region=(Rva0020E47C*)key;
- if(region->custom){*(Rva0020E47CVal*)out=region->rva0020E47C();return true;}
+class Rva0020E89C;
+class Coord2D {public:float x,y;};
+// ?GetRegionCenterPoint@LivingWorldRegionManager@@QAE_NPAVRva0020E89C@@PAVCoord2D@@@Z
+// @0x0020EA58 158B: renamed from placeholder Rva002B2702B0::rva0020EA58 — the
+// WorldBuilder pin carries the real name and signature (region overload with
+// the rowed Rva0020E89C region type and Coord2D out).
+class LivingWorldRegionManager {public:bool GetRegionCenterPoint(Rva0020E89C*region,Coord2D*out);};
+bool LivingWorldRegionManager::GetRegionCenterPoint(Rva0020E89C*region,Coord2D*out){
+ Rva0020E47C*r=(Rva0020E47C*)region;
+ if(r->custom){*(Rva0020E47CVal*)out=r->rva0020E47C();return true;}
  PositionQueryFactory *factory=reinterpret_cast<Rva00DFE1C8Host*>(TheLivingWorldManager)->campaign->factory;
- const char*name=region->name ? region->name+8 : "";
+ const char*name=r->name ? r->name+8 : "";
  PositionQueryObject*object=factory->create(name,0);
  if(!object)return false;
  Region3D bounds(*object->bounds());
- float *o=out+1; o[-1]=bounds.x_min; *o=bounds.y_min;
+ float *o=(float*)out+1; o[-1]=bounds.x_min; *o=bounds.y_min;
  if(--object->references==0)object->destroy();
  return true;
 }
