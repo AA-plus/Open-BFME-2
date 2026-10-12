@@ -239,3 +239,70 @@ void *bfmeAnchorRva000E9E03(void *where, Rva2225E0Filter *sub, void *extra, bool
 {
 	return ::new (where) Rva002614ECFilter(sub, extra, flag);
 }
+
+// Three (int, bool) partition filters with out-of-line constructor copies at
+// 0x003BA6F1 / 0x003BA70E / 0x003BA72B (29B each). vftable 0x00C1FDE0 is
+// Rva002613AFFilter's (allow 0x002613AF, getPlayerMask 0x002613A3, as
+// ScriptConditions_Rva003EA764.cpp declares it); 0x00C1FDEC and 0x00C1FDF8
+// hold the allow bodies at 0x00261750 and 0x0026176E and keep the base
+// getPlayerMask, so those two classes carry address-derived names.
+class Rva002613AFFilter : public Rva000421C8
+{
+public:
+	Rva002613AFFilter(int playerMask, bool match);
+	virtual bool allow(Object *obj);
+	virtual int getPlayerMask();
+	int m_playerMask;
+	bool m_match;
+};
+
+__declspec(noinline) inline Rva002613AFFilter::Rva002613AFFilter(int playerMask, bool match) : m_playerMask(playerMask), m_match(match)
+{
+}
+
+// ?bfmeAnchorRva003BA6F1 absent-from-retail
+void *bfmeAnchorRva003BA6F1(void *where, int playerMask, bool match)
+{
+	return ::new (where) Rva002613AFFilter(playerMask, match);
+}
+
+class ThingTemplate;
+// vftable 0x00C1FDEC is pinned as ??_7Rva00261750Filter (Zero Hour's PartitionFilterThing
+// at ScriptActions::doMoveUnitTowardsNearest): +0x08 the thing template.
+class Rva00261750Filter : public Rva000421C8
+{
+public:
+	Rva00261750Filter(const ThingTemplate *thing, bool match);
+	virtual bool allow(Object *obj);
+	const ThingTemplate *m_thing;
+	bool m_match;
+};
+
+__declspec(noinline) inline Rva00261750Filter::Rva00261750Filter(const ThingTemplate *thing, bool match) : m_thing(thing), m_match(match)
+{
+}
+
+// ?bfmeAnchorRva003BA70E absent-from-retail
+void *bfmeAnchorRva003BA70E(void *where, const ThingTemplate *thing, bool match)
+{
+	return ::new (where) Rva00261750Filter(thing, match);
+}
+
+class Rva0026176EFilter : public Rva000421C8
+{
+public:
+	Rva0026176EFilter(int value, bool match);
+	virtual bool allow(Object *obj);
+	int m_value;
+	bool m_match;
+};
+
+__declspec(noinline) inline Rva0026176EFilter::Rva0026176EFilter(int value, bool match) : m_value(value), m_match(match)
+{
+}
+
+// ?bfmeAnchorRva003BA72B absent-from-retail
+void *bfmeAnchorRva003BA72B(void *where, int value, bool match)
+{
+	return ::new (where) Rva0026176EFilter(value, match);
+}
