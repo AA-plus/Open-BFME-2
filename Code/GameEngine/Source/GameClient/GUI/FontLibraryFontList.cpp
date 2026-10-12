@@ -1,4 +1,4 @@
-// cl: /EHsc /DNDEBUG /MD
+// cl: /O1 /EHsc /DNDEBUG /MD
 //
 // FontLibrary font-list maintenance, Zero Hour GameFont.cpp (BFME 1 donor
 // game/GameEngine/Source/GameClient/GUI/GameFont.cpp, same bodies):
@@ -19,6 +19,29 @@
 // Hour unlink: GameFont::next at +4, m_count at +0x10.
 // Layout (+0x0C list, +0x10 count, maps at +0x14/+0x20) matches the rowed
 // FontLibrary ctor 0x00218942.
+
+namespace _STL
+{
+struct _Rb_tree_node_base
+{
+	bool _M_color;
+	_Rb_tree_node_base *_M_parent, *_M_left, *_M_right;
+};
+template <class Dummy> class _Rb_global
+{
+public:
+	static _Rb_tree_node_base *__cdecl _M_increment(_Rb_tree_node_base *);
+};
+}
+
+// Existing native map-value destructor at 0x00218803. The value's original
+// class identity remains unknown; its scalar deleting destructor is rowed.
+class Rva002189C5 { public: ~Rva002189C5(); };
+struct FontLibraryValueNode : _STL::_Rb_tree_node_base
+{
+	unsigned char m_unreconstructed10[4];
+	Rva002189C5 *m_value; // +0x14, independently read by the cleanup body
+};
 
 class GameFont
 {
@@ -50,8 +73,8 @@ class Rva00217A37
 {
 public:
 	~Rva00217A37();
-private:
-	unsigned char m_pad[0x0C];
+	_STL::_Rb_tree_node_base *m_header;
+	unsigned char m_unreconstructed[8];
 };
 
 class FontLibrary : public SubsystemInterface
@@ -66,7 +89,7 @@ public:
 	virtual void slot18() = 0;
 	virtual void slot1C() = 0;
 	virtual void slot20() = 0;
-	virtual void slot24() = 0;
+	virtual void rva00218BEF();
 	virtual void slot28() = 0;
 	virtual void slot2C() = 0;
 	virtual void slot30() = 0;
@@ -164,5 +187,21 @@ public:
 void Rva00218410::rva00218410()
 {
 	((Rva00217A37 *)this)->~Rva00217A37();
+}
+
+// Native 0x00218BEF..0x00218C2B, 60 bytes; FontLibrary vtable BE5AD0 +0x24.
+// The original method name is unknown. BFME1 66a9f8d6 GameFont.cpp supplies
+// the deleteAllFonts purpose; retail additionally walks the map at this+0x20,
+// beginning at header+8, deletes each nonnull value at node+0x14, and tails
+// to deleteAllFonts. Retail keeps the map nodes and stored pointers intact.
+void FontLibrary::rva00218BEF()
+{
+	_STL::_Rb_tree_node_base *node = m_table2.m_header->_M_left;
+	while (node != m_table2.m_header)
+	{
+		delete static_cast<FontLibraryValueNode *>(node)->m_value;
+		node = _STL::_Rb_global<bool>::_M_increment(node);
+	}
+	deleteAllFonts();
 }
 
