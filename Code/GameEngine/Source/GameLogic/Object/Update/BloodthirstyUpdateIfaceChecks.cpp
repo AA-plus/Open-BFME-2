@@ -186,6 +186,7 @@ class BloodthirstyUpdate : public B00, public B0C, public B10, public Iface20
 public:
 	virtual void sacrificeHorde(Object *victim, CommandSourceType source);
 	virtual bool rva0044E12F(Object *obj);
+	virtual bool rva0044E1B9(Object *obj);
 	virtual void addSacrifice(Object *victim);
 	virtual void cancelSacrifice();
 	virtual UpdateSleepTime update();
@@ -222,6 +223,28 @@ bool BloodthirstyUpdate::rva0044E12F(Object *obj)
 		}
 		return false;
 	}
+}
+
+// 0x0044E1B9: the candidate's sacrificer is this module's object and the candidate is the
+// best target (rva0044E12F's twin without the idle-state test).
+bool BloodthirstyUpdate::rva0044E1B9(Object *obj)
+{
+	Object *candidate = obj->rva002931F5(false);
+	BloodthirstyUpdateModuleData *data = m_moduleData;
+	if (candidate == 0)
+		return false;
+	Rva0028C1A9Interface *iface = (Rva0028C1A9Interface *)candidate->rva0028C1A9();
+	if (iface == 0)
+		return false;
+	Object *self = m_object;
+	if (!data->m_filter.accepts(candidate, self->getControllingPlayer()))
+		return false;
+	if (iface->getOwnerID() == self->getID())
+	{
+		bool best = (m_bestTargetID == candidate->getID());
+		return best;
+	}
+	return false;
 }
 
 void BloodthirstyUpdate::addSacrifice(Object *victim)
