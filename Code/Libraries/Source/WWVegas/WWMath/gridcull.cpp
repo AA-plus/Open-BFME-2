@@ -693,3 +693,10 @@ void GridCullSystemClass::collect_objects_in_leaf(const FrustumClass & frustum,C
 		}
 	}
 }
+
+// BFME1 815ab5e395 declares this provider out of line. Native BFME2
+// constructor 71CBE0 binds vtable 8EFCB0; slot 9 targets 66D5E0 (count at 54).
+int GridCullSystemClass::Get_Object_Count(void) const
+{
+	return ObjCount;
+}
