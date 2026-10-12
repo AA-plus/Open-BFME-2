@@ -4427,7 +4427,6 @@ name,address,notes
 ??1Rva004EC395Member@@QAE@XZ,0x004EC395,address read from the REL32 displacement at byte-matched body 0x00420E67; folded _List_base dtor
 ??1Rva004EDCE9@@UAE@XZ,0x004EDCE9,opaque base dtor; 4 derived dtors tail-call it; identity unproven
 ??1Rva004EE501Subobject@@QAE@XZ,0x004EE501,opaque zero-arg thiscall subobject teardown called at +0x20 by the byte-verified Rva00520211Element dtor; target call displacement gives address, identity only inferred from cleanup order
-??1Rva004EED02@@UAE@XZ,0x004EED02,opaque dtor called by the scalar deleting dtor at 0x004EF28F (vtable 0x00C62AC4#0); identity unproven; address-derived name
 ??1Rva004EFE9@@UAE@XZ,0x004EFE9,opaque SEH dtor (mov-eax-cookie prologue, vptr 0xBC4DDC); called by scalar-deleting-dtor at 0x4F7D8; identity unproven, address-derived name
 ??1Rva004F6352@@QAE@XZ,0x004F691E,same body as ??1Rva004F691E@@QAE@XZ rowed here: STLport's instantiation for Rva004F6352 records reproduces it and its callers call it
 ??1Rva004F6966@@QAE@XZ,0x005F8F96,tail-jump target of retail pop_back in Rva004F81DBQueue::pop 0x004F81DB; ICF alias of the rowed ??1Rva005F8F96 holder dtor at this address

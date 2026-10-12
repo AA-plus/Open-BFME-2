@@ -81,24 +81,9 @@ int LivingWorldScoreKeeper::rva004EE043()
 	return m_78;
 }
 
-void LivingWorldScoreKeeper::rva004EE072(const Rva004E06FBPtrChase32Field *a, int b)
-{
-	if (a->m_20 == -1)
-		return;
-	if (a->get() == m_EC)
-		++m_80[3];
-	if (b == m_EC)
-		++m_80[4];
-}
 
-void LivingWorldScoreKeeper::rva004EE0A6(int a, int b)
-{
-	if (m_60 == 0)
-		return;
-	int now = time(0);
-	m_5C += now - m_60;
-	m_60 = 0;
-}
+
+
 
 int LivingWorldScoreKeeper::GetBuildingsOfTypeBuilt(int i)
 {

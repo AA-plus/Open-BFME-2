@@ -23,7 +23,7 @@ class Rva002E0F1E {public:virtual ~Rva002E0F1E();char bytes[36];};
 class LivingWorldAI {public:~LivingWorldAI();char bytes[308];};
 struct PlayerPodArray {void*p[3];~PlayerPodArray(){if(p[0])free(p[0]);}};
 class Rva002E15E6 {public:~Rva002E15E6();void*p[3];};
-class Rva004EED02 {public:virtual ~Rva004EED02();char bytes[248];};
+class LivingWorldScoreKeeper {public:virtual ~LivingWorldScoreKeeper();char bytes[248];};
 class PlayerSnapshotMember:public Snapshot {public:~PlayerSnapshotMember(){}virtual void loadPostProcess();virtual const char*GetSnapshotName()const;virtual void xfer(Xfer*);char bytes[24];};
 namespace _STL {template<class T>class allocator;template<class T,class A>class vector{public:~vector();void*p[3];};}
 struct Rva002E2690Element;
@@ -33,7 +33,7 @@ class Rva002E2AAE:public Snapshot,public Rva002E1E51List {public:
  char pad180[0x1A8-0x180];_STL::vector<Rva002E2690Element,_STL::allocator<Rva002E2690Element> > records1A8;AsciiString name1B4;
  PlayerPodArray armies1B8;int unknown1C4;float unknown1C8;PlayerPodArray list1CC;char storage1D8[128];
  PlayerSnapshotMember snapshot258,snapshot274;int unknown290,unknown294,unknown298;Rva002E15E6 tree29C,tree2A8;
- char pad2B4[20];Rva004EED02 score2C8;bool flag3C4,flag3C5;
+ char pad2B4[20];LivingWorldScoreKeeper score2C8;bool flag3C4,flag3C5;
 };
 typedef char PlayerSize[sizeof(Rva002E2AAE)==0x3C8?1:-1];
 Rva002E2AAE::~Rva002E2AAE(){((Rva002E21D1*)this)->rva002E21D1();forEach(&Rva002E1E51Listener::notify,this);}

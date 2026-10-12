@@ -68,15 +68,7 @@ void Rva004EE5D2::rva004EE5D2()
 	m_24->rva002B7250(this ? &m_18 : (CreateAHeroData *)0);
 }
 
-void Rva004EE5D2::rva004EE695()
-{
-	if ((*(Rva002BA8F1Logic **)&TheLivingWorldLogic) != 0 && ((BfmeSelectionState *)(*(Rva002BA8F1Logic **)&TheLivingWorldLogic))->isSelectionLocked() != 0)
-		m_70 = time(0);
-	else
-		m_70 = 0;
-	if (m_f8 != 0)
-		return rva004EE5D2();
-}
+
 
 void Rva004EE5D2::rva004EE78A()
 {

@@ -339,10 +339,7 @@ class Rva004EF2FA : public Rva004EF2FAPrimary, public Rva004EF2FAIface
 public:
 	void rva004EF2FA(Int a, Int unused);
 };
-void Rva004EF2FA::rva004EF2FA(Int a, Int)
-{
-	rva004EEE38(a);
-}
+
 
 // 0x00508925: whether the pinned 0x005075D6 accepts both arguments.
 class Rva00508925
