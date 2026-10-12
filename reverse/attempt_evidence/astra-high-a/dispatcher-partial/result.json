@@ -1,0 +1,13 @@
+{
+  "fitness": 0.99845,
+  "exact": false,
+  "class": "regalloc",
+  "raw_size": 3170,
+  "different_offsets": [
+    1031,
+    1287,
+    1293,
+    1304
+  ],
+  "unresolved": []
+}
