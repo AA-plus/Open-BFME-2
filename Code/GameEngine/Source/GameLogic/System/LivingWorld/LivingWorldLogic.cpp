@@ -69,7 +69,7 @@ class Rva004E3184;
 class Rva00319CED;
 class Rva002E112A { public: Bool rva002E112A(Rva00319CED *); };
 class LivingWorldPlayer { public:
- void MarkUnitsForUpgrades(void *region);
+ void **RemoveArmy(void **&); // owned iterator erase at 002E10FE
  bool rva002E0B30();
  void AddArmy(LivingWorldArmy *);
  bool rva002E12F3(int);
@@ -147,11 +147,14 @@ private:
 	Rva002B74DE *m_ptr;
 };
 
-// Keep the existing lookup provider's opaque return type. Native2B5334
-// sends that result and the region to the now-recovered player worker2E2D8D.
-// This declaration-only receiver view constructs no player or layout.
-class Rva002E2903Player;
-
+// Player lookup by id (0x002B51F8) and the per-player upgrade marking
+// (0x002E2D8D, WB LivingWorldPlayer::MarkUnitsForUpgrades) are pinned under
+// placeholder names for this object and the player.
+class Rva002E2903Player
+{
+public:
+	void rva002E2D8D(void *army);				// 0x002E2D8D
+};
 
 class AsciiString;
 class Rva002BA8F1Logic
@@ -872,7 +875,7 @@ void LivingWorldLogic::AutoMarkUnitsForUpgrades()
 		if (army->m_playerID != -1)
 		{
 			Rva002E2903Player *player = ((Rva002BA8F1Logic *)this)->find(army->m_playerID, 0);
-			((LivingWorldPlayer *)player)->MarkUnitsForUpgrades(army);
+			player->rva002E2D8D(army);
 		}
 	}
 }
@@ -3544,4 +3547,45 @@ static __declspec(noinline) bool rva002B2D5E(GameMessage *message,void **out,int
 bool rva002B2D5ECaller(GameMessage *message,void **out,int index)
 {
  return rva002B2D5E(message,out,index);
+}
+
+// Native2B49A8..2B4AF8 / unnamed WB D7E2A0: merge unnamed armies for each
+// player eligible for a region. The original member name remains unresolved.
+// The visible canonical emptiness test reproduces the native iterator reload
+// and entry jump. Its emitted narrow20B body is independently exact at1E2F.
+template<class T> inline bool StringBase<T>::isEmpty() const throw()
+{
+ return m_data==0 || m_data->length==0;
+}
+// Opaque virtual-destruction view; no original hierarchy is asserted.
+class ArmyRegionMergeSlot { public: virtual ~ArmyRegionMergeSlot(); };
+// ?rva002B49A8@LivingWorldLogic@@QAEXXZ
+void LivingWorldLogic::rva002B49A8(){
+ Rva002B5334ArmyList*regions=(m_field0B0?m_field0B0:m_field0B0)->m_armySet;
+ if(regions){
+  Rva002B5334ArmyList *list=regions;
+  for(unsigned i=0;i<list->m_armies.size();++i){
+   LivingWorldUpgradeArmy *region=list->m_armies[i];
+   if(region->m_playerID==-1)continue;
+   for(unsigned j=0;j<m_players.size();++j){
+    LivingWorldPlayer *player=m_players[j];
+    if(player && (unsigned char)((Rva002E071E*)player)->rva002E0BC0(region->m_playerID)){
+     ArmyTargetSpan *armies=(ArmyTargetSpan*)((char*)player+0x1b8);
+     void *first=0;
+     void **iter=armies->first;
+     while(iter!=armies->finish){
+      void *army=*iter;
+      if(!((StringBase<char>*)((char*)army+0x18))->isEmpty()){++iter;continue;}
+      if((void*)((Rva00318C79Owner*)army)->rva00318C32()!=(void*)region){++iter;continue;}
+      if(!first){first=army;++iter;}
+      else{
+       ((Rva003193EC*)first)->rva00319904((Rva003193EC*)army);
+       iter=player->RemoveArmy(iter);
+       ::delete (ArmyRegionMergeSlot*)army;
+      }
+     }
+    }
+   }
+  }
+ }
 }
