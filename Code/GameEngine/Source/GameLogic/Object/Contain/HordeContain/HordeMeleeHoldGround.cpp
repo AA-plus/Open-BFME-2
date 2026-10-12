@@ -66,9 +66,36 @@ void HordeMeleeHoldGround::setUnitArrived(Int index)
 	m_AttackInfo[index] = UNIT_ARRIVED;
 }
 
+#define PAD_VIRTUAL_10(p) 	virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3(); virtual void p##4(); 	virtual void p##5(); virtual void p##6(); virtual void p##7(); virtual void p##8(); virtual void p##9();
+#define PAD_VIRTUAL_100 PAD_VIRTUAL_10(v0) PAD_VIRTUAL_10(v1) PAD_VIRTUAL_10(v2) PAD_VIRTUAL_10(v3) PAD_VIRTUAL_10(v4) 	PAD_VIRTUAL_10(v5) PAD_VIRTUAL_10(v6) PAD_VIRTUAL_10(v7) PAD_VIRTUAL_10(v8) PAD_VIRTUAL_10(v9)
+
 enum ObjectStatusTypes
 {
 	RVA_OBJECT_STATUS_1C = 0x1C
+};
+
+enum CommandSourceType
+{
+	CMD_FROM_AI = 2
+};
+
+class AICommandInterface
+{
+public:
+	void aiIdle(CommandSourceType cmdSource);
+};
+
+// The object's AI (+0x258): slot 110 answers a bool; its command interface
+// sits at +0x20.
+class Rva00583933AIView
+{
+public:
+	PAD_VIRTUAL_100
+	virtual void a100(); virtual void a101(); virtual void a102(); virtual void a103(); virtual void a104();
+	virtual void a105(); virtual void a106(); virtual void a107(); virtual void a108(); virtual void a109();
+	virtual Bool slot110();
+	char m_pad04[0x20 - 0x04];
+	AICommandInterface m_commands;	// +0x20
 };
 
 class Object
@@ -77,6 +104,10 @@ public:
 	Object *rva002931F5(bool flag);
 	Bool testStatus(ObjectStatusTypes status) const;
 	void rva00295F05(bool value);
+	Rva00583933AIView *getAI() const { return m_ai; }
+private:
+	char m_pad000[0x258];
+	Rva00583933AIView *m_ai;	// +0x258
 };
 
 struct Rva00583794Node
@@ -127,6 +158,7 @@ struct Rva00583794Member04
 class Rva00583794
 {
 public:
+	void rva00583933(Object *object);
 	void rva00583794(Object *object);
 
 private:
@@ -146,6 +178,33 @@ void Rva00583794::rva00583794(Object *object)
 		Object *item = node->m_object;
 		if (item != 0 && !item->testStatus(RVA_OBJECT_STATUS_1C))
 			item->rva00295F05(0);
+	}
+}
+
+// Slot 3 of the same table (RVA 0x86FC3C), native 0x00583933..0x005839A7
+// RET 4 (its argument is unused): the same walk over the +0x04 member's
+// object list, sending each live object's AI idle (from the AI, unless its
+// slot 110 says otherwise) before the per-object call slot 5 also makes.
+// ?rva00583933@Rva00583794@@QAEXPAVObject@@@Z @0x00583933 116B
+void Rva00583794::rva00583933(Object *)
+{
+	Rva00583794Range range;
+	((Rva00583794Iface *)&m_member04->m_vtable)->fill(&range);
+	for (Rva00583794Node *node = range.m_list->m_head->m_next;
+		node != range.m_list->m_head;
+		node = node->m_next)
+	{
+		Object *item = node->m_object;
+		if (item != 0)
+		{
+			if (!item->testStatus(RVA_OBJECT_STATUS_1C))
+			{
+				Rva00583933AIView *ai = item->getAI();
+				if (ai != 0 && !ai->slot110())
+					ai->m_commands.aiIdle(CMD_FROM_AI);
+			}
+			item->rva00295F05(0);
+		}
 	}
 }
 
