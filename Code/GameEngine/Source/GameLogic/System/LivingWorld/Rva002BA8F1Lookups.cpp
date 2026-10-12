@@ -104,23 +104,6 @@ Rva002E2903Player *Rva002BA8F1Logic::rva002B52A8(int index)
     return players[index];
 }
 
-// ?rva002B5256@Rva002BA8F1Logic@@QAEH_N@Z @0x002B5256 82B.
-// Gap between find 0x002B51F8 and rva002B52A8 in same TU; counts +0x8C player
-// vector entries with dword at +0x44 == 0 and (byte at +0x3C4 == 0 or flag).
-// Evidence: (finish-start)>>2 count with je early-out plus esi/edi pointer-index
-// loop matching find's id-vector shape; dword cmp at +0x44 then byte cmp at
-// +0x3C4 then byte cmp of stack bool arg; ret 4 single bool arg returning int.
-int Rva002BA8F1Logic::rva002B5256(bool flag)
-{
-    int count = 0;
-    for (unsigned int i = 0; i < players.size(); ++i) {
-        Rva002E2903Player *p = players[i];
-        if (p->m_44 == 0 && (p->m_3C4 == 0 || flag))
-            ++count;
-    }
-    return count;
-}
-
 // ?find@Rva002E1904Lookup@@QAEPAURva002E1904Entry@@ABVAsciiString@@@Z @0x002E1904 68B.
 // Vector +0x0C lookup for an entry string at +4, same shape as Rva002E18C3Lookup
 // find 0x002E18C3 (65B) plus the three-byte add ecx,4 for the +4 field.
