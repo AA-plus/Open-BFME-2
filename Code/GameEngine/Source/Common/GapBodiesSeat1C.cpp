@@ -1544,3 +1544,83 @@ void Rva001F693E::rva001F9B47(Rva002BA8F1Listener *listener)
 {
 	m_C4.append(listener);
 }
+
+// --- 0x0041AC60 (10B) and 0x0043DA7D (10B): byte setters +0x6E and +0x61.
+class Rva0041AC60
+{
+public:
+	void rva0041AC60(bool value);
+	void rva0043DA7D(bool value);
+private:
+	char m_pad00[0x61];
+	bool m_61;
+	char m_pad62[0x6E - 0x62];
+	bool m_6E;
+};
+
+void Rva0041AC60::rva0041AC60(bool value)
+{
+	m_6E = value;
+}
+
+void Rva0041AC60::rva0043DA7D(bool value)
+{
+	m_61 = value;
+}
+
+// --- 0x0040D46F (15B): drops the last 4-byte element, releasing it through
+// its rowed 0x002B2F49 with 0.
+class Rva002B2F49
+{
+public:
+	void *rva002B2F49(unsigned int value);					// 0x002B2F49
+private:
+	int m_00;
+};
+
+class Rva0040D46F
+{
+public:
+	void rva0040D46F();
+private:
+	Rva002B2F49 *m_start;
+	Rva002B2F49 *m_finish;
+};
+
+void Rva0040D46F::rva0040D46F()
+{
+	--m_finish;
+	m_finish->rva002B2F49(0);
+}
+
+// --- 0x00415B2E (18B): the rowed 0x004159E2 assignment, returning this.
+struct Rva0041580E
+{
+	Rva0041580E *rva004159E2(const Rva0041580E &other);		// 0x004159E2
+	Rva0041580E &rva00415B2E(const Rva0041580E &other);
+};
+
+Rva0041580E &Rva0041580E::rva00415B2E(const Rva0041580E &other)
+{
+	rva004159E2(other);
+	return *this;
+}
+
+// --- 0x00418D28 (20B): the rowed 0x00418BFB lookup returned by value.
+struct Rva00418D28Iterator
+{
+	Rva00418D28Iterator(void *node) : m_node(node) {}
+	void *m_node;
+};
+
+class Rva00418BFB
+{
+public:
+	void *rva00418BFB(const void *key);						// 0x00418BFB
+	Rva00418D28Iterator rva00418D28(const void *key);
+};
+
+Rva00418D28Iterator Rva00418BFB::rva00418D28(const void *key)
+{
+	return Rva00418D28Iterator(rva00418BFB(key));
+}
