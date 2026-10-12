@@ -1,4 +1,6 @@
 // ?rva000311E0@GeneralAllocator@Allocator@EA@@QAEIPBXIPADPAGI@Z
+// partial score=0.93 date=2026-10-12
+// ?rva000311E0@GeneralAllocator@Allocator@EA@@QAEIPBXIPADPAGI@Z
 // partial score=0.86 date=2026-10-10
 // ?rva000311E0@GeneralAllocator@Allocator@EA@@QAEIPBXIPADPAGI@Z
 // partial score=0.86379 date=2026-10-09
@@ -690,11 +692,11 @@ unsigned int GeneralAllocator::rva000311E0(const void *src_, unsigned int count,
 	if (cap < 5)
 	{
 		if (cap == 0)
-			return 0;
+			goto fardone;
 		if (0 != ascii)
 			*ascii = 0;
 		if (wide == 0)
-			return 0;
+			goto fardone;
 		*wide = 0;
 		return 0;
 	}
@@ -719,7 +721,7 @@ unsigned int GeneralAllocator::rva000311E0(const void *src_, unsigned int count,
 	if (w_hold != 0)
 		w_hold[limit * 3 - 1] = '\t';
 	if (0 == limit)
-		return 0;
+		goto fardone;
 	unsigned short *wp = w_hold;
 	char *ap = a_hold;
 	unsigned int i = 0;
@@ -752,6 +754,7 @@ unsigned int GeneralAllocator::rva000311E0(const void *src_, unsigned int count,
 		ap = ap + (3);
 		wp = wp + (3);
 	}
+fardone:
 	return 0;
 }
 }}
