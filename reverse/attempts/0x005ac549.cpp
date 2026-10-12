@@ -1,4 +1,6 @@
 // ?v7@Rva005AB7E5@@UAEXXZ
+// partial score=0.88 date=2026-10-12
+// ?v7@Rva005AB7E5@@UAEXXZ
 // partial score=0.88 date=2026-10-04
 // cl: /O1 /G7 /MD /GX /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /arch:SSE /Ireference/shims/bfme2_ascii
 // stlport
@@ -156,7 +158,7 @@ class AICommandInterface
 {
 public:
 	void aiIdle(CommandSourceType source);			// 0x001E8A38
-	void rva0026C26D(const Coord3D *point, int source);	// move to the point
+	void aiMoveToPosition(const Coord3D *point, CommandSourceType source);	// rowed 0x0026C26D; enum (not int) for the mangling
 };
 
 struct Rva005AB7E5AI
@@ -673,7 +675,7 @@ void Rva005AB7E5::v7()
 			if (dz * dz + dy * dy + dx * dx > 62500.0f) {
 				if (logic->getFrame() < m_74 && m_74 != (unsigned int)-1)
 					return;
-				obj->m_ai->m_commands.rva0026C26D(&site->m_pos, 0);
+				obj->m_ai->m_commands.aiMoveToPosition(&site->m_pos, CMD_FROM_PLAYER);
 				m_74 = TheGameLogic->getFrame() + g_00E06424;
 				return;
 			}
