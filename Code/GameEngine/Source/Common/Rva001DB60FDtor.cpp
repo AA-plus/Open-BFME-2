@@ -19,6 +19,7 @@ typedef bool Bool;
 class Rva001DB60F : public SubsystemInterface
 {
 public:
+	Rva001DB60F();
 	virtual ~Rva001DB60F();
 private:
 	MetaMapRec *m_head;
@@ -31,4 +32,11 @@ Rva001DB60F::~Rva001DB60F()
 		delete m_head;
 		m_head = next;
 	}
+}
+
+// ??0Rva001DB60F@@QAE@XZ retail 0x001DB3E8 22B, the matching constructor
+// (same vtable 0x007DBA7C; caller 0x0022E2E4): the canonical subsystem base,
+// then an empty record list.
+Rva001DB60F::Rva001DB60F() : m_head(0)
+{
 }

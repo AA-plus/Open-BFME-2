@@ -79083,3 +79083,4 @@ __ehhandler$??0Rva005EE05E@@QAE@HABVAsciiString@@@Z,,0x007A480E,10,Code/GameEngi
 ??0Rva003ABC6E@@QAE@PAX0@Z,,0x003ABC6E,49,Code/GameEngine/Source/GameClient/System/FXParticleSystem/ModuleCtorChainsA.cpp,matched,Particle-module constructor chain over the rowed base 0x0055B5E9 with its subobject vtable stamps
 ??0Rva003ABE40@@QAE@PAX0@Z,,0x003ABE40,49,Code/GameEngine/Source/GameClient/System/FXParticleSystem/ModuleCtorChainsA.cpp,matched,Particle-module constructor chain over the rowed base 0x005624DE with its subobject vtable stamps
 ??0Rva003ABE8D@@QAE@PAX0@Z,,0x003ABE8D,49,Code/GameEngine/Source/GameClient/System/FXParticleSystem/ModuleCtorChainsA.cpp,matched,Particle-module constructor chain over the rowed base 0x005648FE with its subobject vtable stamps
+??0Rva001DB60F@@QAE@XZ,,0x001DB3E8,22,Code/GameEngine/Source/Common/Rva001DB60FDtor.cpp,matched,Constructor matching the rowed destructor vtable; subsystem base then an empty record list
