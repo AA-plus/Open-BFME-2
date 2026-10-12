@@ -1,5 +1,7 @@
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
-// partial score=0.9 date=2026-10-09
+// partial score=0.8758957277772467 date=2026-10-12
+// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
+// Lane replay 2026-10-12: diagnostic fitness 0.8758957277772467.
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
 // stlport
 //
@@ -10,8 +12,11 @@
 // one extra 4-byte slot holds the two discarded insert results, and the
 // 0xC army vector / 0x14 army record swap which one overlays the building
 // vector). eh_verify: FuncInfo/unwind map agree, funclets differ only in
-// those displacements. Needs the LWAI value-type merge (mapping.tsv) and
-// the three converting-ctor pins in gwi_extra_pins.csv.
+// those displacements. The value-type merge is present. The three converting
+// constructors now have admitted whole29B fold proofs in
+// StlportPairConstructFamily.cpp; ThingFactory uses its current rowed spelling.
+// A matching-time resolved pin is not a link-provider receipt. In particular
+// the older Rva004FFE72Part initialization view remains a link debt.
 //
 // Identity: the WorldBuilder twin 0x012FDB20 is
 // LWAIWorldInformation::GatherWorldInformation in
@@ -294,10 +299,11 @@ struct LWAIArmyView
 	LWAIArmySummary *m_summary;      // +0x78
 };
 
-class Rva002D06CA
+class ThingTemplate;
+class ThingFactory
 {
 public:
-	void *rva002D06CA(const AsciiString *name);
+	const ThingTemplate *findTemplate(const AsciiString &name);
 };
 
 struct LWAIThingTemplateView
@@ -399,7 +405,7 @@ void LWAIWorldInformation::GatherWorldInformation()
 			{
 				int entry = ((const Rva0040CB2CIndexedField *)summary)->get(e);
 				AsciiString name(*(const AsciiString *)(entry + 4));
-				int templateID = ((LWAIThingTemplateView *)((Rva002D06CA *)TheThingFactory)->rva002D06CA(&name))->m_5c4;
+				int templateID = ((LWAIThingTemplateView *)TheThingFactory->findTemplate(name))->m_5c4;
 				armyInfo.m_units.insert(IntIntPair(templateID, ((const Rva0040CC1BIndexedField *)summary)->findBySecond(entry)));
 			}
 			int armyRegion = ((Rva00318C79Owner *)army)->rva00318C79();
