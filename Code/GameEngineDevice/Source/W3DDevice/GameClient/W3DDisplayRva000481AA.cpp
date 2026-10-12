@@ -1,6 +1,9 @@
-// ?rva000481AA@@YGXPAV?$StringBase@D@@PBV1@@Z
-// partial score=0.85 date=2026-10-05
-// cl: /O1 /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// ?rva000481AA@W3DDisplay@@UAE?AV?$StringBase@D@@ABV2@@Z, retail 0x000481AA (194 bytes, EH,
+// RET 8), W3DDisplay vtable 0x007C3C80 slot 34. Returns the given name with a variant suffix
+// ("L" for mode 0, "M" for mode 1, none for 2/3; the mode is +0x1774 of the global at
+// 0x00DFE144) when the rowed 0x0021F3E0 accepts that variant, else the name unchanged. The
+// two return statements give the construct-on-return flag retail keeps in its frame.
 #include <new>
 
 template <typename T> class StringBase
@@ -45,31 +48,34 @@ struct BfmeR1025
 };
 char bfmeGo1025F(BfmeR1025 *p);
 
-void __stdcall Rva000481AA(StringBase<char> *dst, const StringBase<char> *src)
+class W3DDisplay
 {
-	int flag = 0;
-	Rva000481AAString8 a;
-	StringBase<char> b;
+public:
+	virtual StringBase<char> rva000481AA(const StringBase<char> &name);
+};
+
+StringBase<char> W3DDisplay::rva000481AA(const StringBase<char> &name)
+{
+	StringBase<char> suffix;
+	StringBase<char> full;
 	switch (TheRva00DFE144->m_1774)
 	{
 	case 0:
-		a.m_base.set("L");
+		suffix.set("L");
 		break;
 	case 1:
-		a.m_base.set("M");
+		suffix.set("M");
 		break;
 	case 2:
 	case 3:
-		a.m_base.clear();
+		suffix.clear();
 		break;
 	default:
 		break;
 	}
-	b.set(*src);
-	b.concat(a.m_base);
-	if (bfmeGo1025F((BfmeR1025 *)&b))
-		new (dst) StringBase<char>(b);
-	else
-		new (dst) StringBase<char>(*src);
-	flag = 1;
+	full.set(name);
+	full.concat(suffix);
+	if (bfmeGo1025F((BfmeR1025 *)&full))
+		return full;
+	return name;
 }

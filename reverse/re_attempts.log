@@ -40901,3 +40901,5 @@ __ehhandler$?rva00187690@ScaleTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z	0x0076
 __ehhandler$?reset@W3DDisplay@@UAEXXZ	0x0075CF58	10	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplayReset.cpp 10B; EH handler of W3DDisplay::reset
 ?rva0025C238@BfmeStrVM0@@UAEXXZ	0x0025C238	34	landed	add_match verified Code/GameEngine/Source/Common/BfmeStrVM0Dtor.cpp 34B; Display slot 40 view-list walk slot 95
 ?setDebugDisplayCallback@Display@@UAEXP6AXPAVDebugDisplayInterface@@PAXPAU_iobuf@@@Z1@Z	0x0025C6BD	37	landed	add_match verified Code/GameEngine/Source/GameClient/DisplaySetDebugDisplayCallback.cpp 37B; ZH Display::setDebugDisplayCallback plus network flag
+?rva000481AA@W3DDisplay@@UAE?AV?$StringBase@D@@ABV2@@Z	0x000481AA	194	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplayRva000481AA.cpp 194B; W3DDisplay slot 34 variant-suffixed name returned by value
+__ehhandler$?rva000481AA@W3DDisplay@@UAE?AV?$StringBase@D@@ABV2@@Z	0x0075D15B	10	landed	add_match verified Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplayRva000481AA.cpp 10B; EH handler of W3DDisplay rva000481AA
