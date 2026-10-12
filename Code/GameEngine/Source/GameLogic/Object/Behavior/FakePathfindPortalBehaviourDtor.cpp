@@ -148,3 +148,40 @@ Waypoint *FakePathfindPortalBehaviour::rva00461A46(const Coord3D *point)
  wp->flagA9=data->flag119;
  return wp;
 }
+
+// 0x004617CF (108 bytes): the Zero Hour module-finder pattern for this
+// behaviour: a function-static NameKey for "FakePathfindPortalBehaviour"
+// (TheNameKeyGenerator->nameToKey, 0x00148E1A), then the first module in the
+// object's behaviour list (+0x244, null-terminated) whose module name key
+// (slot 4) matches. Identity of the owner function is unproven.
+enum NameKeyType { NAMEKEY_INVALID = 0 };
+class NameKeyGenerator
+{
+public:
+	NameKeyType nameToKey(const char *name);
+};
+extern NameKeyGenerator *TheNameKeyGenerator;
+
+class BehaviorModule
+{
+public:
+	virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0C();
+	virtual NameKeyType getModuleNameKey() const;	// +0x10
+};
+
+struct FakePortalObjectView
+{
+	char pad[0x244];
+	BehaviorModule **m_behaviors;	// +0x244
+};
+
+BehaviorModule *Rva004617CFFind(FakePortalObjectView *obj)
+{
+	static NameKeyType key = TheNameKeyGenerator->nameToKey("FakePathfindPortalBehaviour");
+	for (BehaviorModule **m = obj->m_behaviors; *m; ++m)
+	{
+		if ((*m)->getModuleNameKey() == key)
+			return *m;
+	}
+	return 0;
+}
