@@ -147,3 +147,62 @@ void Rva006FBA70Holder::set(Rva006FBA20Ref *value)
 		m_value->Release();
 	m_value = value;
 }
+
+// Iterator helpers of an Apt pointer vector {count +0, capacity +4, data +8}
+// whose iterators are {position, begin, end} triples returned by value:
+// ?begin@Rva006D0350Vector@@QAE?AURva006D0350Iterator@@XZ @ 0x006D0350 (23B),
+// ?end@Rva006D0350Vector@@QAE?AURva006D0350Iterator@@XZ @ 0x006D0370 (23B),
+// and the iterator's ?advance@Rva006D0350Iterator@@QBE?AU1@H@Z @ 0x006D0170
+// (32B) that offsets the position by n slots. Address-derived views.
+struct Rva006D0350Iterator
+{
+	void **position, **begin, **end;
+	Rva006D0350Iterator(void **p, void **b, void **e) : position(p), begin(b), end(e) {}
+	Rva006D0350Iterator advance(int n) const;
+};
+
+class Rva006D0350Vector
+{
+public:
+	Rva006D0350Iterator begin();
+	Rva006D0350Iterator end();
+private:
+	int m_count;
+	int m_capacity;
+	void **m_data;
+};
+
+Rva006D0350Iterator Rva006D0350Vector::begin()
+{
+	return Rva006D0350Iterator(m_data, m_data, m_data + m_count);
+}
+
+Rva006D0350Iterator Rva006D0350Vector::end()
+{
+	return Rva006D0350Iterator(m_data + m_count, m_data, m_data + m_count);
+}
+
+Rva006D0350Iterator Rva006D0350Iterator::advance(int n) const
+{
+	return Rva006D0350Iterator(position + n, begin, end);
+}
+
+// ?Rva006CE180Release@@YA_NPAURva006CE180Block@@@Z @ 0x006CE180 (53B): notes whether a
+// refcounted block's +0xC kind is 4, then drops one reference through the
+// rowed decrement 0x006CFDF0 and frees it through the rowed 0x006D0440 when
+// that was the last; returns the note.
+int Rva006CFDF0DecRef(int *refCount);
+void bfmeDropVGO(void *block);
+struct Rva006CE180Block
+{
+	int refs;
+	int pad[2];
+	int kind;
+};
+bool Rva006CE180Release(Rva006CE180Block *block)
+{
+	bool wasKind4 = block && block->kind == 4;
+	if (block && !Rva006CFDF0DecRef(&block->refs))
+		bfmeDropVGO(block);
+	return wasKind4;
+}
