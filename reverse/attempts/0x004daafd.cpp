@@ -1,4 +1,6 @@
 // ?pickAndPlayUnitVoiceResponse@@YA_NPBVDrawableList@@W4Type@GameMessage@@PAVPickAndPlayInfo@@@Z
+// partial score=0.89 date=2026-10-12
+// ?pickAndPlayUnitVoiceResponse@@YA_NPBVDrawableList@@W4Type@GameMessage@@PAVPickAndPlayInfo@@@Z
 // partial score=0.94 date=2026-10-10
 // ?pickAndPlayUnitVoiceResponse@@YA_NPBVDrawableList@@W4Type@GameMessage@@PAVPickAndPlayInfo@@@Z
 // partial score=0.93 date=2026-10-10
@@ -1344,8 +1346,8 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 
 	int *crowdData = 0;
 	{
-		int best = 0;
 		CrowdResponseTemplate *bestCrowd = 0;
+		int best = 0;
 		_STL::_Rb_tree_node_base *crowdsEnd = crowds.m_header;
 		for (_STL::_Rb_tree_node_base *n = crowdsEnd->_M_left; n != crowdsEnd; n = _STL::_Rb_global<bool>::_M_increment(n))
 		{
@@ -1630,15 +1632,18 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 			}
 			break;
 		case 0x7DA:
-			if (info && info->m_source && info->m_source->m_template)
+		{
+			const ThingTemplateView *tmpl = info->m_source ? info->m_source->m_template : 0;
+			if (tmpl)
 			{
 				AsciiString voice("VoiceCreatedFrom");
-				voice += info->m_source->m_template->m_name;
+				voice += tmpl->m_name;
 				rec->rva004D9874(voice);
 			}
 			if (!rec->isFilled())
 				rec->rva004D97B0(9);
 			break;
+		}
 		case 0x7DB:
 		{
 			AsciiString voice("VoiceDesperateAttack");
@@ -1661,15 +1666,18 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 			rec->rva004D97B0(0xA);
 			break;
 		case 0x7E2:
-			if (info && info->m_source && info->m_source->m_template)
+		{
+			const ThingTemplateView *tmpl = info->m_source ? info->m_source->m_template : 0;
+			if (tmpl)
 			{
 				AsciiString voice("VoiceFullyCreatedFrom");
-				voice += info->m_source->m_template->m_name;
+				voice += tmpl->m_name;
 				rec->rva004D9874(voice);
 			}
 			if (!rec->isFilled())
 				rec->rva004D97B0(0xF);
 			break;
+		}
 		case 0x7E1:
 			rec->rva004D97B0(0xE);
 			break;
