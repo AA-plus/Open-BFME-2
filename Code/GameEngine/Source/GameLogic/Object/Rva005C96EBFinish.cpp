@@ -1,13 +1,16 @@
 // cl: /DNDEBUG /MD /EHsc
 //
-// ??0Locomotor@@QAE@PBVLocomotorTemplate@@@Z @0x005C96EB (104B):
-// BFME1 Locomotor ctor (donor LocomotorConstructor.cpp); BFME2 layout is
+// ??0Rva005C96EB@@QAE@PAX@Z @0x005C96EB (104B):
+// The previous BFME1 Locomotor donor supplied only a construction-shape lead.
+// That identity is refuted: native's Apt screen base and table 0x00C74B70
+// differ from the independently rowed Locomotor at 0x001E449A / 0x00BDE888.
+// This receiver and its opaque context keep address-derived names. The layout is
 // 0x26C. Base ctor 0x00313847 (BfmeAptScreenBase), member ctor 0x00524B7A at
 // +0x218, vtable 0x00C74B70 at +0. Clears the dword block at +0x258..+0x264
 // through a local int pointer, then ORs status bit 0x640 at +8, copies status
-// to +0x254 and clears the byte at +0x268. Evidence: sole caller newLocomotor
-// 0x005C9886 (pushes 0x26C); symbols.csv pin; rowed base/member ctors.
-class LocomotorTemplate;
+// to +0x254 and clears the byte at +0x268. Evidence: sole factory caller
+// 0x005C9886 (pushes 0x26C), and rowed base/member ctors. No donor establishes
+// the receiver's target name or the context's type.
 
 class BfmeAptScreenBase
 {
@@ -44,12 +47,10 @@ private:
 	int m_38;
 };
 
-extern const void *const g_00C74B70[];
-
-class Locomotor : public BfmeAptScreenBase
+class Rva005C96EB : public BfmeAptScreenBase
 {
 public:
-	Locomotor(const LocomotorTemplate *tmpl);
+	Rva005C96EB(void *ctx);
 private:
 	MovieWindowPlayback m_218;
 	int m_254;
@@ -58,7 +59,7 @@ private:
 	char m_pad[3];
 };
 
-Locomotor::Locomotor(const LocomotorTemplate *tmpl) : BfmeAptScreenBase((void *)tmpl)
+Rva005C96EB::Rva005C96EB(void *ctx) : BfmeAptScreenBase(ctx)
 {
 	int *p = m_258;
 	p[0] = 0;
