@@ -104,11 +104,11 @@ extern "C" void __cdecl ReconBlock_C(void);
 extern "C" void __cdecl ScalarReconIntra(short *, unsigned char *, const short *, int);
 extern void __cdecl Rva009C80C0(void);
 extern "C" void __cdecl Wmt_IDct_Dx(const void *, const void *, void *);
-extern void __cdecl Rva009C3630(void);
-extern void __cdecl Rva009C2CE0(void);
+extern "C" void __cdecl MMX_idct10(void);
+extern "C" void __cdecl MMX_idct(void);
 extern "C" void __cdecl MMX_idct1(void);
-extern void __cdecl Rva009C4450(void);
-extern void __cdecl Rva009C3D50(void);
+extern "C" void __cdecl MMX_idct10_DX(void);
+extern "C" void __cdecl MMX_idct_DX(void);
 extern void __cdecl Rva009C6360(void);
 extern void __cdecl Rva009C5D60(void);
 extern void __cdecl Rva009C5890(void);
@@ -137,8 +137,8 @@ extern "C" void __cdecl UtilMachineSpecificConfig(void)
 				*(BfmeSpreadFn *)((char *)&g_bfmeTableJX + 0x0 + i) = tail;
 		}
 
-		mid = (BfmeSpreadFn)&Rva009C3630;
-		tail = (BfmeSpreadFn)&Rva009C2CE0;
+		mid = (BfmeSpreadFn)&MMX_idct10;
+		tail = (BfmeSpreadFn)&MMX_idct;
 
 		for (i = 0; i <= 0x100; i += 4) {
 			if (i <= 4)
@@ -167,8 +167,8 @@ extern "C" void __cdecl UtilMachineSpecificConfig(void)
 	if (tierA)
 	{
 		BfmeSpreadFn low = (BfmeSpreadFn)&MMX_idct1;
-		BfmeSpreadFn mid = (BfmeSpreadFn)&Rva009C3630;
-		BfmeSpreadFn tail = (BfmeSpreadFn)&Rva009C2CE0;
+		BfmeSpreadFn mid = (BfmeSpreadFn)&MMX_idct10;
+		BfmeSpreadFn tail = (BfmeSpreadFn)&MMX_idct;
 
 		for (i = 0; i <= 0x100; i += 4) {
 			if (i <= 4)
@@ -179,8 +179,8 @@ extern "C" void __cdecl UtilMachineSpecificConfig(void)
 				*(BfmeSpreadFn *)((char *)&g_bfmeTableJX + 0x120 + i) = tail;
 		}
 
-		mid = (BfmeSpreadFn)&Rva009C4450;
-		tail = (BfmeSpreadFn)&Rva009C3D50;
+		mid = (BfmeSpreadFn)&MMX_idct10_DX;
+		tail = (BfmeSpreadFn)&MMX_idct_DX;
 
 		for (i = 0; i <= 0x100; i += 4) {
 			if (i <= 4)
