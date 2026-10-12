@@ -58,6 +58,15 @@ void Profile::RemovePatternEntry(PatternListEntry *entry)
 		lastPatternEntry = 0;
 }
 
+// ?IsEnabled@Profile@@SA_NXZ (Zero Hour body, retail 0x006C5380)
+bool Profile::IsEnabled(void)
+{
+	for (unsigned k = 0; k < m_names; ++k)
+		if (m_frameNames[k].isRecording)
+			return true;
+	return false;
+}
+
 // ?GetFrameCount@Profile@@SAIXZ
 unsigned Profile::GetFrameCount(void)
 {
@@ -299,6 +308,57 @@ void Profile::StartRange(const char *range)
 	{
 		if (match->framesLeft > 0 && !--match->framesLeft)
 			RemovePatternEntry(match);
+		m_frameNames[k].highIndex = ProfileId::FrameStart();
+		m_frameNames[k].funcIndex = ProfileFuncLevelTracer::FrameStart();
+	}
+	else
+	{
+		m_frameNames[k].extraIndex = -1;
+		m_frameNames[k].highIndex = -1;
+		m_frameNames[k].funcIndex = -1;
+	}
+}
+
+// ?AppendRange@Profile@@SAXPBD@Z (retail 0x006C5B50): Zero Hour's body with
+// StartRange's BFME2 changes (Debug::SimpleMatch, high-level index first,
+// the extra index cleared when inactive); no frame budget here.
+void Profile::AppendRange(const char *range)
+{
+	// set default
+	if (!range)
+		range = "frame";
+
+	// known name?
+	unsigned k;
+	for (k = 0; k < m_names; ++k)
+		if (!strcmp(range, m_frameNames[k].name))
+			break;
+	if (k == m_names)
+	{
+		// no, so StartRange will do the job for us
+		StartRange(range);
+		return;
+	}
+
+	// still recording?
+	if (m_frameNames[k].isRecording)
+		// don't do anything
+		return;
+
+	// start new recording
+	m_frameNames[k].isRecording = true;
+	m_frameNames[k].doAppend = true;
+
+	// but check first: is recording enabled?
+	bool active = false;
+	for (PatternListEntry *cur = firstPatternEntry; cur; cur = cur->next)
+	{
+		if (Debug::SimpleMatch(range, cur->pattern))
+			active = cur->isActive;
+	}
+
+	if (active)
+	{
 		m_frameNames[k].highIndex = ProfileId::FrameStart();
 		m_frameNames[k].funcIndex = ProfileFuncLevelTracer::FrameStart();
 	}
