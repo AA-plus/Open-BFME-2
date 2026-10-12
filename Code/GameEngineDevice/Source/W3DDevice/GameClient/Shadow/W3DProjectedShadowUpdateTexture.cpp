@@ -132,7 +132,8 @@ public:
 	void setLightPosHistory(Vector3 &pos) { m_lastLightPosition = pos; }
 	void setBoundingSphere(SphereClass &sphere) { m_areaEffectSphere = sphere; }
 	void setBoundingBox(Region3D &box) { m_areaEffectBox.Region3D::Region3D(box); }
-	void setDecalUVAxis(Vector3 &u, Vector3 &v) { m_shadowUV[0] = u; m_shadowUV[1] = v; }
+	// Reuse the rowed 0x00108603 provider; its field-copy body cannot throw.
+	void setDecalUVAxis(Vector3 &u, Vector3 &v) throw();
 
 private:
 	char m_unmodelled00[0x34];
