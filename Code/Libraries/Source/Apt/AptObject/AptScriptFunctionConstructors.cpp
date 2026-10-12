@@ -67,7 +67,6 @@ public:
 private:
     void *data;
 };
-void Rva00709F70Set(int, AptValue *);
 struct AptDefineFunction2Param { int nRegister; const char *szName; };
 struct AptFrameStackHash : AptValueWithHash
 {
@@ -77,7 +76,7 @@ struct AptFrameStackHash : AptValueWithHash
 void AptScriptFunction2::SetArgument(AptValue *pValue, int nIndex)
 {
     if (DF2_PARAM(nIndex).nRegister) {
-        Rva00709F70Set(DF2_PARAM(nIndex).nRegister, pValue);
+        AptScriptFunctionBase::SetRegisterValue(DF2_PARAM(nIndex).nRegister, pValue);
         return;
     }
     if (!spFrameStack)
