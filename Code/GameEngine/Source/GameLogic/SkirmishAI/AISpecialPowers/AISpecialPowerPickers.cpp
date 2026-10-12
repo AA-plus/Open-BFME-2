@@ -251,6 +251,12 @@ public:
 
 // The AoE special-power target picker (AISPecialPowerTargetAoE.cpp holds
 // 0x005EE816 and 0x005EE8DD).
+class AISpellBookStructureBreaker
+{
+public:
+	bool shouldActivate(Object *source);	// 0x005D7D93
+};
+
 class Rva005EE816
 {
 public:
@@ -283,7 +289,7 @@ bool Rva005EE816::rva005D75BE(Object *source)
 		if (hit)
 			return rva005EE8DD(hit->getPosition(), source);
 	}
-	return rva005D7558(source) ? false : rva005D7D93(source);
+	return rva005D7558(source) ? false : ((AISpellBookStructureBreaker *)this)->shouldActivate(source);
 }
 
 // 0x005D8C4C: the corner of the square of the +0x10 radius (200 when unset) round
