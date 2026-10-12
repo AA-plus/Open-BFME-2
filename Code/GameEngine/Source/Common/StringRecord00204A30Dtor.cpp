@@ -5,18 +5,7 @@
 // then text0 at +0x04 via the StringBase dtor fold at 0x00036410.
 // Same EH scope 0x00B6C7A3 as the copy ctor. Caller 0x00206CBA is the
 // 0x14-stride array destroy loop.
-template <class T> class StringBase
-{
-	friend class AsciiString;
-	void releaseBuffer();
-public:
-	void *p;
-};
-class AsciiString : public StringBase<char>
-{
-public:
-	~AsciiString() { releaseBuffer(); }
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct BfmeStringRecord00204A30 {
     unsigned int word0; AsciiString text0; unsigned int word1; AsciiString text1; unsigned int word2;
     ~BfmeStringRecord00204A30();

@@ -2,18 +2,7 @@
 // Cleanup for the record copied at2CF550: string at0 and shared owner at8.
 // Tree erase256FB5 calls this body; original record identity is unknown.
 class OpaqueRefCounted { public: virtual ~OpaqueRefCounted(); void Release_Ref(); };
-template <class T> class StringBase
-{
-	friend class AsciiString;
-	void releaseBuffer();
-public:
-	void *p;
-};
-class AsciiString : public StringBase<char>
-{
-public:
-	~AsciiString() { releaseBuffer(); }
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 class Rva002390CB {
     void *m_unknown;
     OpaqueRefCounted *m_owner;

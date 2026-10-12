@@ -37,12 +37,7 @@ enum GeometryType
 	GEOMETRY_BOX
 };
 
-struct AsciiString
-{
-	~AsciiString();
-
-	char *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 struct GeometryShape
 {

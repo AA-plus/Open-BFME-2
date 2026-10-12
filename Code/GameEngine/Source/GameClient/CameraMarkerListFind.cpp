@@ -18,25 +18,7 @@ extern "C" int __cdecl memcmp(const void *, const void *, unsigned int);
 #pragma intrinsic(memcmp)
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/AsciiString.h
-class AsciiString
-{
-public:
-	~AsciiString();
-	AsciiString &operator=(const AsciiString &that);
-
-	Int compare(const AsciiString &that) const;
-
-private:
-	struct Data
-	{
-		Int refs;
-		unsigned short length;
-		unsigned short capacity;
-		char text[1];
-	};
-
-	Data *m_data;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 bool operator==(const AsciiString &left, const AsciiString &right);
 

@@ -77,68 +77,9 @@ static void bfmeDataChunkYieldToOS(void)
 // The retail bodies use the shared StringBase<char> implementations at
 // 0x00887B60 and 0x00887BE0, while the returned type keeps the AsciiString
 // ABI name at the DataChunkInput boundary.
-template <typename T>
-class StringBase
-{
-	friend class AsciiString;
-	void releaseBuffer();
-public:
-	StringBase(void) : m_data(0) {}
-	StringBase(const T *text);
-	T *getBufferForRead(Int len);
-	// ?set@?$StringBase@D@@QAEXABV1@@Z aliases the retail
-	// ?set@UnicodeString@@QAEXABV1@@Z pin (see symbols.csv) -- both types
-	// share this StringBase<char> implementation.
-	void set(const StringBase &other);
-
-protected:
-	void *m_data;
-private:
-	StringBase(const StringBase &other);
-	friend class AsciiString;
-	friend class BFME_GameEngineServiceWindowsOS;
-	friend class ChunkInputStream;
-	friend class DataChunkInfo;
-	friend class DataChunkInput;
-	friend class DataChunkTableOfContents;
-	friend class InputChunk;
-	friend class Mapping;
-	friend class NameKeyGenerator;
-	friend class UserParser;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/AsciiString.h
-class AsciiString : public StringBase<char>
-{
-public:
-	AsciiString(void) : StringBase<char>() {}
-	// Retail's AsciiString adds no members to StringBase<char>: a copy of one
-	// encodes the base copy ctor at 0x00887B60 directly, so the delegation has
-	// to be visible here.
-	AsciiString(const AsciiString &other) : StringBase<char>(other) {}
-	// Retail's openDataChunk builds AsciiString("") by calling the
-	// StringBase<char> C-string ctor 0x00037BA0 directly; AsciiString's own
-	// out-of-line const char * ctor (0x0000654A) only forwards to it.
-	AsciiString(const char *text) : StringBase<char>(text) {}
-	~AsciiString() { releaseBuffer(); }
-
-	AsciiString &operator=(const AsciiString &other)
-	{
-		set(other);
-		return *this;
-	}
-
-	const char *str() const
-	{
-		static const char empty = 0;
-		return m_data ? static_cast<const char *>(m_data) + 8 : &empty;
-	}
-
-	// parse()'s scope/label matches inline this compare (repe cmpsb) rather
-	// than calling out -- there is no separate call target for it in the
-	// retail body.
-	int compare(const AsciiString &that) const;
-};
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/NameKeyGenerator.h
 class NameKeyGenerator

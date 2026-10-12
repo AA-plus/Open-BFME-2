@@ -43,18 +43,7 @@ inline Snapshot::~Snapshot()
 	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
 }
 
-template <class T> class StringBase
-{
-	friend struct AsciiString;
-	void releaseBuffer();
-public:
-	char *m_data;
-};
-struct AsciiString : public StringBase<char>
-{
-public:
-	~AsciiString() { releaseBuffer(); }
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 struct GeometryRecord
 {

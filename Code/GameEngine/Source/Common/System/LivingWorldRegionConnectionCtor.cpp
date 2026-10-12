@@ -42,12 +42,7 @@ template <class T, class A = allocator<T> > struct _Vector_base
 };
 }
 
-struct AsciiString
-{
-	AsciiString() : m_data(0) {}
-
-	char *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 class LivingWorldRegionConnection : public Snapshot
 {

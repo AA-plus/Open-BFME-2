@@ -17,15 +17,7 @@
 typedef int Int;
 typedef bool Bool;
 
-class AsciiString
-{
-public:
-	AsciiString(const AsciiString &that);
-	~AsciiString();
-	Int compare(const AsciiString &other) const throw();
-private:
-	void *m_data;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 class TerrainType
 {

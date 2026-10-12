@@ -30,12 +30,7 @@ struct Region2D
 	Point2D hi;
 };
 
-struct AsciiString
-{
-	~AsciiString();
-
-	char *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 enum GeometryType
 {
