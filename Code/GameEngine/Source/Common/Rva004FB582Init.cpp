@@ -114,3 +114,58 @@ void Rva004FB582Owner::rva004FB582()
 	m_74.rva002BF70F(m_74.m_slot);
 	m_80.rva005B129F(m_80.m_slot);
 }
+
+// 0x004FB8A8 (124B): re-runs the channel init unconditionally, then for each
+// LivingWorld player (TheLivingWorldLogic +0x8C vector, the rowed bounds-
+// checked lookup 0x002B52A8) clears the +0x50 word of the player's +0x4C
+// subobject (this owner's +0x04) and makes the same three slot calls, +0x80
+// first. Identity unproven; address-derived name.
+class Rva002E2903Player;
+
+class Rva002BA8F1Logic
+{
+public:
+	Rva002E2903Player *rva002B52A8(int);
+};
+
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
+
+struct Rva004FB8A8PlayerVector
+{
+	int size() const { return m_end - m_begin; }
+	Rva002E2903Player **m_begin;
+	Rva002E2903Player **m_end;
+};
+
+struct Rva004FB8A8Players
+{
+	char m_pad[0x8C];
+	Rva004FB8A8PlayerVector m_players;	// +0x8C
+};
+
+class Rva004FB8A8Slots
+{
+public:
+	char m_pad00[4];
+	int m_04;					// player +0x50
+	char m_pad08[0x60];
+	Rva003FA4DB m_68;
+	char m_pad70[4];
+	Rva002BF70F m_74;
+	char m_pad7C[4];
+	Rva005B129F m_80;
+};
+
+void rva004FB8A8()
+{
+	((Rva0050366B *)&g_Va00E04508)->rva0050366B();
+	for (int i = 0; i < ((Rva004FB8A8Players *)TheLivingWorldLogic)->m_players.size(); ++i)
+	{
+		Rva004FB8A8Slots *slots = (Rva004FB8A8Slots *)((char *)((Rva002BA8F1Logic *)TheLivingWorldLogic)->rva002B52A8(i) + 0x4C);
+		slots->m_04 = 0;
+		slots->m_80.rva005B129F(slots->m_80.m_slot);
+		slots->m_68.rva003FA4DB(slots->m_68.m_slot);
+		slots->m_74.rva002BF70F(slots->m_74.m_slot);
+	}
+}
