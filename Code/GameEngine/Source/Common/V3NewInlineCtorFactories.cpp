@@ -10,7 +10,8 @@
 // 20. Native base-constructor targets are 3ABB53 / 3ABBCB / 3ABE8D, which
 // forward to the independently rowed particle constructors 5634F7 / 563CAF /
 // 5648FE respectively. Storage follows measured full base sizes; member
-// purposes remain open. Explicit noinline preserves retail's separate stages.
+// purposes remain open. The constructor bodies now live in the upstream
+// ModuleCtorChainsA.cpp owner; this factory unit retains only their declarations.
 //
 // ---- measured layout views; unrecovered members are size carriers ----------
 
@@ -29,13 +30,12 @@ class V3Slot3	{ public: virtual void s0(); virtual ~V3Slot3() {} };
 	class BASE : public LEAF \
 	{                                                                      \
 	public:                                                                \
-		__declspec(noinline) BASE( void *arg, V3Host##NAME *owner ) : LEAF ARGS {} \
+		__declspec(noinline) BASE( void *arg, V3Host##NAME *owner ); \
 	};                                                                     \
 	class NAME##Object : public BASE                                       \
 	{                                                                      \
 	public:                                                                \
-		NAME##Object( void *arg, V3Host##NAME *owner )                     \
-			: BASE( arg, owner ) {}                                        \
+		NAME##Object( void *arg, V3Host##NAME *owner );                                        \
 	};                                                                     \
 	typedef char NAME##Size[(sizeof(NAME##Object) == SIZE) ? 1 : -1]; \
 	class V3Host##NAME                                                     \
