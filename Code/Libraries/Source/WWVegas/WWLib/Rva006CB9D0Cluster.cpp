@@ -35,3 +35,27 @@ void *Rva006CB9D0(const char *szValue)
 	}
 	return rva006D7090(szValue);
 }
+
+// ?Rva006CBAD0Format@@YAPAXPBDZZ @ 0x006CBAD0 (80B). Ghidra-unlisted sibling
+// from the same AptValueFactory.cpp: asserts szFormat (line 0xCB, retail
+// strings), creates an empty value through the same 0x006D7090 helper and
+// formats the variadic arguments into its +8 EAStringC through the rowed
+// va_list formatter 0x006D53F0. Address-derived name, as above.
+class EAStringC
+{
+public:
+	void rva006D53F0(const char *szFormat, char *args);
+};
+
+void *Rva006CBAD0Format(const char *szFormat, ...)
+{
+	if (szFormat == 0) {
+		g_bfmeAptAssertAtE17734("szFormat != NULL",
+			"C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptValueFactory.cpp", 0xCB);
+		if (g_bfmeAptBreakOnAssertAtDDC01C)
+			__debugbreak();
+	}
+	void *value = rva006D7090("");
+	((EAStringC *)((char *)value + 8))->rva006D53F0(szFormat, (char *)(&szFormat + 1));
+	return value;
+}
