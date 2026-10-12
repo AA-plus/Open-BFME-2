@@ -1,21 +1,11 @@
-// ?rva00508120@Made002CC5E1@@AAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
-// partial score=0.9889686996647947 date=2026-10-10
-// ?rva00508120@Made002CC5E1@@AAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
-// partial score=0.97 date=2026-10-09
+// ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
+// partial score=0.989 date=2026-10-12
 // cl: /O1 /DNDEBUG /MD /I. /ICode/Libraries/Include /ICode/GameEngine/Include /ICode/GameEngine/Source/Common /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfmelist
 // stlport
-// Retail0x005084FC186B; vtable00864048 slot14 owned by matched Made002CC5E1
-// deleting destructor/constructor. Original method name unknown. This scoped
-// view emits the method body only and deliberately does not model the vtable.
-// BFME1 b25 DamageNugget generateDamageInfo is the fill-helper semantic lead,
-// not this apply wrapper. Nativehelper508120 RET20 receives weapon opaque
-// pointer target Object DamageInfo flag and Coord3D position; nativecall2615E3
-// establishes lastarg coordinate pointer (not float). DamageInfo ctor263895
-// and offsets10/20/70/74 from native loads and matched Object/heal siblings.
-// Target healing passes target itself; source bonus healing passes null.
-// Bonus tests !=0 (unordered included) whereas final result tests >0.
-// Parent correction of uncompiled router artifact; native wrapper5084FC186B.
-// DamageInfo local uses already-pinned ctor263895 and actual named attemptDamage.
+//
+// Retail 0x00508120 (988B): DamageNugget damage-info fill helper, called by
+// 0x005084FC (matched in Made002CC5E1Rva005084FC.cpp). Scoped view: emits the
+// helper body only, does not model the vtable.
 #include <math.h>
 #include <list>
 #include <vector>
@@ -164,7 +154,7 @@ public:
 class Made002CC5E1 : public Rva00507823
 {
 public:
- bool rva005084FC(void *weapon, Object *target, const Coord3D *position);
+ bool rva00508120(void *weapon, Object *target, DamageInfo *info, bool flag, const Coord3D *position);
 private:
  unsigned char pad04[0x128 - 4];
  float damage128;
@@ -188,34 +178,7 @@ private:
  unsigned char pad195[3];
  float value198;
  Rva2225E0Filter filter19C;
- bool rva00508120(void *weapon, Object *target, DamageInfo *info, bool flag, const Coord3D *position);
 };
-bool Made002CC5E1::rva005084FC(void *weapon, Object *target, const Coord3D *position)
-{
- DamageInfo info;
- if (rva00508120(weapon, target, &info, false, position) == true)
- {
-  if (info.damageType10 == 7)
-   target->attemptHealing(info.amount20, target);
-  else
-  {
-   target->attemptDamage(&info);
-   float factor = value198 * info.value70;
-   if (flag194)
-   {
-    if (factor != 0.0f)
-    {
-     Object *source = TheGameLogic->findObjectByID((ObjectID)static_cast<Rva005084FCWeaponView *>(weapon)->sourceID08);
-     if (source && !(source->module04->flags10B & 2))
-      source->attemptHealing(factor, 0);
-    }
-   }
-  }
- }
- if (info.value74 > 0.0f)
-  return true;
- return false;
-}
 
 // Retail 0x00508120 (988B, ret 0x14): the damage-info fill helper called only
 // by 0x005084FC above. WorldBuilder's debug build names it
