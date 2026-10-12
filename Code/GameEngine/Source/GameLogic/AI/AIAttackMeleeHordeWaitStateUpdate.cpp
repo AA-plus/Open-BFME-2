@@ -1,9 +1,12 @@
 // cl: /O1 /G7 /DNDEBUG /MD
 // ?update@AIAttackMeleeHordeWaitState@@UAE?AW4StateReturnType@@XZ @0x003492BD 225B
-// Renamed from placeholder Rva0033F364 — the WorldBuilder twin names
-// AIAttackMeleeHordeWaitState::update in EA's own AIStates.cpp (callgraph 5,
-// vslot 6); the class family is already real-named in the sibling units.
-// Evidence: vslot slot 6 of vtable 0x00810F40 owned by Rva0033F364 ctor; TurretStateMachine goal checks and frame gate via g_Va00DBA4E4 and TheGameLogic.
+// Target identity: native vtable VA C10F40 slot2 names AIAttackMeleeHordeWaitState
+// through getter33F385; slot6 is this225B body, independently named by WB
+// E11DD0 AIStates.cpp6476. Slot4 onEnter344F57 is already named and matched.
+// Preserve native machine18, wait20, owner14, contain250 and virtual slots.
+// Use canonical GameLogic for its native frame40; no new pin or alias.
+// Upstream independently named this owner and moved the file; retain its path
+// and matching O1/G7 override while preserving the native identity evidence.
 
 typedef bool Bool;
 typedef float Real;
@@ -95,12 +98,7 @@ public:
 	Object *m_owner; // +0x14
 };
 
-class GameLogic
-{
-public:
-	unsigned char m_pad00[0x40];
-	int m_frame; // +0x40
-};
+#include "../../Common/GameLogicObjectLookupView.h"
 
 extern int g_Va00DBA4E4;
 extern GameLogic *TheGameLogic;
@@ -151,10 +149,10 @@ StateReturnType AIAttackMeleeHordeWaitState::update()
 		if (inner->slot85(goal))
 		{
 			inner->slot77(goal);
-			m_20 = g_Va00DBA4E4 * 3 + TheGameLogic->m_frame;
+			m_20 = g_Va00DBA4E4 * 3 + TheGameLogic->getFrame();
 			return STATE_CONTINUE;
 		}
-		if ((unsigned)TheGameLogic->m_frame >= (unsigned)m_20)
+		if ((unsigned)TheGameLogic->getFrame() >= (unsigned)m_20)
 		{
 			_WriteBarrier();
 			return STATE_FAILURE;
