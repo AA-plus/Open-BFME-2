@@ -90,6 +90,7 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "ww3d.h"
 #include "matrix4.h"
 #include "dx8wrapper.h"
+#include "colmathinlines.h"
 
 
 /***********************************************************************************************
@@ -598,11 +599,24 @@ const OBBoxClass & CameraClass::Get_Near_Clip_Bounding_Box(void) const
  * HISTORY:                                                                                    *
  *   12/8/98    GTH : Created.                                                                 *
  *=============================================================================================*/
-// ?Cull_Box@CameraClass@@ present-unmatched
+// The six-plane far-extent rejection test, the same body as the out-of-line
+// Rva0092CC40BoxOutsideFrustum at 0x001338C0, inlined into Cull_Box.
+static __forceinline bool Box_Outside_Frustum(const FrustumClass & frustum,const AABoxClass & box)
+{
+	for (int i = 0; i < 6; i++) {
+		Vector3 negfarpt;
+		get_far_extent(frustum.Planes[i].N,box.Extent,&negfarpt);
+		Vector3::Subtract(box.Center,negfarpt,&negfarpt);
+		if (CollisionMath::Overlap_Test(frustum.Planes[i],negfarpt) == CollisionMath::POS) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool CameraClass::Cull_Box(const AABoxClass & box) const
 {
-	const FrustumClass & frustum = Get_Frustum();
-	return CollisionMath::Overlap_Test(frustum,box) == CollisionMath::OUTSIDE;
+	return Box_Outside_Frustum(Get_Frustum(),box);
 }
 
 

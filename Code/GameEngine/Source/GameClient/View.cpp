@@ -276,36 +276,139 @@ void View::setLocation( const ViewLocation *location )
 /** project the 4 corners of this view into the world and return each point as a parameter,
 		the world points are at the requested Z */
 //-------------------------------------------------------------------------------------------------
-// ?View::getScreenCornerWorldPointsAtZ present-unmatched
+// BFME's View vtable is not ZH's: getWidth / getHeight / getOrigin sit at +0x3C / +0x44 / +0x4C
+// and screenToWorldAtZ at +0x16C (ZH: +0x34 / +0x3C / +0x44 / +0x13C). Retail 0x0025EC22
+// calls those slots, so the corner projection dispatches through this slot skeleton.
+#define BFME_VIEW_SLOT(n) virtual void slot##n();
+struct BfmeViewSlots
+{
+	BFME_VIEW_SLOT(0)
+	BFME_VIEW_SLOT(1)
+	BFME_VIEW_SLOT(2)
+	BFME_VIEW_SLOT(3)
+	BFME_VIEW_SLOT(4)
+	BFME_VIEW_SLOT(5)
+	BFME_VIEW_SLOT(6)
+	BFME_VIEW_SLOT(7)
+	BFME_VIEW_SLOT(8)
+	BFME_VIEW_SLOT(9)
+	BFME_VIEW_SLOT(10)
+	BFME_VIEW_SLOT(11)
+	BFME_VIEW_SLOT(12)
+	BFME_VIEW_SLOT(13)
+	BFME_VIEW_SLOT(14)
+	virtual Int getWidth();
+	BFME_VIEW_SLOT(16)
+	virtual Int getHeight();
+	BFME_VIEW_SLOT(18)
+	virtual void getOrigin(Int *x, Int *y);
+	BFME_VIEW_SLOT(20)
+	BFME_VIEW_SLOT(21)
+	BFME_VIEW_SLOT(22)
+	BFME_VIEW_SLOT(23)
+	BFME_VIEW_SLOT(24)
+	BFME_VIEW_SLOT(25)
+	BFME_VIEW_SLOT(26)
+	BFME_VIEW_SLOT(27)
+	BFME_VIEW_SLOT(28)
+	BFME_VIEW_SLOT(29)
+	BFME_VIEW_SLOT(30)
+	BFME_VIEW_SLOT(31)
+	BFME_VIEW_SLOT(32)
+	BFME_VIEW_SLOT(33)
+	BFME_VIEW_SLOT(34)
+	BFME_VIEW_SLOT(35)
+	BFME_VIEW_SLOT(36)
+	BFME_VIEW_SLOT(37)
+	BFME_VIEW_SLOT(38)
+	BFME_VIEW_SLOT(39)
+	BFME_VIEW_SLOT(40)
+	BFME_VIEW_SLOT(41)
+	BFME_VIEW_SLOT(42)
+	BFME_VIEW_SLOT(43)
+	BFME_VIEW_SLOT(44)
+	BFME_VIEW_SLOT(45)
+	BFME_VIEW_SLOT(46)
+	BFME_VIEW_SLOT(47)
+	BFME_VIEW_SLOT(48)
+	BFME_VIEW_SLOT(49)
+	BFME_VIEW_SLOT(50)
+	BFME_VIEW_SLOT(51)
+	BFME_VIEW_SLOT(52)
+	BFME_VIEW_SLOT(53)
+	BFME_VIEW_SLOT(54)
+	BFME_VIEW_SLOT(55)
+	BFME_VIEW_SLOT(56)
+	BFME_VIEW_SLOT(57)
+	BFME_VIEW_SLOT(58)
+	BFME_VIEW_SLOT(59)
+	BFME_VIEW_SLOT(60)
+	BFME_VIEW_SLOT(61)
+	BFME_VIEW_SLOT(62)
+	BFME_VIEW_SLOT(63)
+	BFME_VIEW_SLOT(64)
+	BFME_VIEW_SLOT(65)
+	BFME_VIEW_SLOT(66)
+	BFME_VIEW_SLOT(67)
+	BFME_VIEW_SLOT(68)
+	BFME_VIEW_SLOT(69)
+	BFME_VIEW_SLOT(70)
+	BFME_VIEW_SLOT(71)
+	BFME_VIEW_SLOT(72)
+	BFME_VIEW_SLOT(73)
+	BFME_VIEW_SLOT(74)
+	BFME_VIEW_SLOT(75)
+	BFME_VIEW_SLOT(76)
+	BFME_VIEW_SLOT(77)
+	BFME_VIEW_SLOT(78)
+	BFME_VIEW_SLOT(79)
+	BFME_VIEW_SLOT(80)
+	BFME_VIEW_SLOT(81)
+	BFME_VIEW_SLOT(82)
+	BFME_VIEW_SLOT(83)
+	BFME_VIEW_SLOT(84)
+	BFME_VIEW_SLOT(85)
+	BFME_VIEW_SLOT(86)
+	BFME_VIEW_SLOT(87)
+	BFME_VIEW_SLOT(88)
+	BFME_VIEW_SLOT(89)
+	BFME_VIEW_SLOT(90)
+	virtual void screenToWorldAtZ(const ICoord2D *s, Coord3D *w, Real z);
+};
+#undef BFME_VIEW_SLOT
+
 void View::getScreenCornerWorldPointsAtZ( Coord3D *topLeft, Coord3D *topRight,
 																					Coord3D *bottomLeft, Coord3D *bottomRight,
 																					Real z )
 {
 	ICoord2D screenTopLeft, screenTopRight, screenBottomLeft, screenBottomRight;
 	ICoord2D origin;
-	Int viewWidth = getWidth();
-	Int viewHeight = getHeight();
+	BfmeViewSlots *bfmeView = reinterpret_cast<BfmeViewSlots *>(this);
+	Int viewWidth = bfmeView->getWidth();
+	Int viewHeight = bfmeView->getHeight();
 
 	// sanity
 	if( topLeft == NULL || topRight == NULL || bottomLeft == NULL || bottomRight == NULL )
 		return;
 
 	// setup the screen coords for the 4 corners of the viewable display
-	getOrigin( &origin.x, &origin.y );
+	bfmeView->getOrigin( &origin.x, &origin.y );
 	screenTopLeft.x     = origin.x;								// upper left
 	screenTopLeft.y     = origin.y;								// upper left
-	screenTopRight.x    = origin.x + viewWidth;		// upper right
+	// (w ? w : w) gives the width a merge value numbered after origin.x, so the
+	// shared sum is built width-first (lea edx,[edi+eax]) as in retail.
+	screenTopRight.x    = origin.x + (viewWidth ? viewWidth : viewWidth);		// upper right
 	screenTopRight.y    = origin.y;								// upper right
-	screenBottomLeft.x  = origin.x + viewWidth;		// lower right
+	screenBottomLeft.x  = screenTopRight.x;					// lower right
 	screenBottomLeft.y  = origin.y + viewHeight;  // lower right
 	screenBottomRight.x = origin.x;								// lower left
 	screenBottomRight.y = origin.y + viewHeight;	// lower left
 
 	// project
-	screenToWorldAtZ( &screenTopLeft, topLeft, z );
-	screenToWorldAtZ( &screenTopRight, topRight, z );
-	screenToWorldAtZ( &screenBottomLeft, bottomLeft, z );
-	screenToWorldAtZ( &screenBottomRight, bottomRight, z );
+	bfmeView->screenToWorldAtZ( &screenTopLeft, topLeft, z );
+	bfmeView->screenToWorldAtZ( &screenTopRight, topRight, z );
+	bfmeView->screenToWorldAtZ( &screenBottomLeft, bottomLeft, z );
+	bfmeView->screenToWorldAtZ( &screenBottomRight, bottomRight, z );
 
 }  // end getScreenCornerWorldPointsAtZ
 
