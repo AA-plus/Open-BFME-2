@@ -1369,6 +1369,7 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 		int objIndex = oit._M_cur->m_value;
 		++oit;
 		Drawable *drawable = obj->getDrawable();
+		Drawable *singleDrawable = drawable;
 		if (!drawable)
 			continue;
 
@@ -1425,7 +1426,7 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 					info = &plannedInfo;
 				}
 				DrawableList single;
-				single.push_back(drawable);
+				single.push_back(singleDrawable);
 				getVictimAndEnterMessage(&single, type, info, &victim, &enterMessage, &isAttackOrMove);
 				rit = rit->m_prev;
 			}
