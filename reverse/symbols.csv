@@ -17252,3 +17252,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??0Rva003F9C11@@QAE@XZ,0x003F9C11,callee of the seat-3 0x003F9CD2 INI block parser (new 0x74-byte record constructor)
 ?rva002B29BD@LivingWorldLogic@@QAEXXZ,0x002B29BD,callee of ?rva002B98AD@LivingWorldLogic@@UAEXXZ
 ??1Rva000B3FD0@@QAE@XZ,0x000B3FD0,callee of ?rva0023054C@GameEngine@@UAEXXZ
+??1Rva00395561@@QAE@XZ,0x00395561,callee of ?rva00397BD9@Rva00397BD9@@UAEXHHH@Z
