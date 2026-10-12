@@ -30,10 +30,20 @@ struct Rva004E61C8Inner
 
 void __cdecl operator delete(void *p);
 
+// The rowed 0x54-byte FadeInTextRender constructor 0x005966DD.
+class FadeInTextRender
+{
+public:
+	FadeInTextRender();
+private:
+	char m_body[0x54];
+};
+
 class Rva004E61C8 : public SubsystemInterface
 {
 public:
 	virtual ~Rva004E61C8();
+	virtual void init();
 private:
 	Rva004E61C8Inner *m_c; // +0xc
 	_STL::vector<void *, _STL::allocator<void *> > m_vec; // +0x10
@@ -52,4 +62,13 @@ Rva004E61C8::~Rva004E61C8()
 		p = 0;
 	::operator delete(p);
 	m_c = 0;
+}
+
+// ?init@Rva004E61C8@@UAEXXZ @0x004E56EB 57B: SubsystemInterface slot 1 (the
+// table's deleting destructor precedes it, loadIniFilesFromLegend follows):
+// creates the subsystem's FadeInTextRender at +0xc, the object the
+// destructor above deletes.
+void Rva004E61C8::init()
+{
+	m_c = reinterpret_cast<Rva004E61C8Inner *>(new FadeInTextRender);
 }
