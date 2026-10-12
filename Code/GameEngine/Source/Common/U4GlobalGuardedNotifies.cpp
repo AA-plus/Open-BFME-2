@@ -65,7 +65,7 @@ public:
 	virtual void Validate_Transform() const;							// slot 20
 	virtual void Set_Transform(const LivingWorldVisualTransform &m);	// slot 21
 	const LivingWorldVisualTransform &Get_Transform() const { Validate_Transform(); return Transform; }
-	const Real Get_ObjectScale() const { return ObjectScale; }
+	friend class U4Target0060C2C0;
 private:
 	unsigned char m_pad04[0x18 - 0x04];
 	LivingWorldVisualTransform Transform;								// +0x18
@@ -98,7 +98,9 @@ void U4Target0060C2C0::hand(void *payload) {
  if(primary){
  LivingWorldVisualTransform tm=primary->Get_Transform();
  reinterpret_cast<Matrix3D*>(&tm)->Set_Rotation(*static_cast<const Matrix3*>(payload));
- Real factor=primary->Get_ObjectScale();
+ // The native inline read does not need an emitted Get_ObjectScale COMDAT.
+ // Its global kept copy is census debt; direct access retains the proven48 field.
+ Real factor=primary->ObjectScale;
  tm.Scale(factor);
  primary->Set_Transform(tm);
  if(secondary)secondary->Set_Transform(tm);
