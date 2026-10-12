@@ -1,4 +1,6 @@
 // ?rva000953B3@Gen006E2310@@QAEXXZ
+// partial score=0.97 date=2026-10-12
+// ?rva000953B3@Gen006E2310@@QAEXXZ
 // partial score=0.97 date=2026-10-11
 // ?rva000953B3@Gen006E2310@@QAEXXZ (bank: whole Gen006E2310Update.cpp unit; the landed 0x982F9 shares it)
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE

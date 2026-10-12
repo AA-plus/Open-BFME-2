@@ -1,4 +1,6 @@
 // ?removeInvalidObjectsFromGarrisonPoints@GarrisonContain@@IAEXXZ
+// partial score=0.97 date=2026-10-12
+// ?removeInvalidObjectsFromGarrisonPoints@GarrisonContain@@IAEXXZ
 // partial score=0.97 date=2026-10-09
 // ?removeInvalidObjectsFromGarrisonPoints@GarrisonContain@@IAEXXZ
 // cl: /ICode/GameEngine/Source/Common /O1 /arch:SSE /G7 /MD /DNDEBUG
