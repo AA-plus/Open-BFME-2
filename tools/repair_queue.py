@@ -32,7 +32,37 @@ tools/next_work.py serves these as tiers; this module builds them.
           names): units that do not link, with their blockers. PASS TEST: `tools/
           link_check.py SOURCE` says LINKS; the next census records linked=yes.
           The output names the source used and the commit it describes; with
-          neither, `link` says so and exits 1.
+          neither, `link` says so and exits 1. A status file may be gzip.
+          `link --bundle STORE` reads a PUBLISHED link-cycle bundle instead: the
+          newest measurement in the store tools/cycle_artifacts.py fetch keeps
+          (build/cycle_bundles), authenticated there (designated publisher,
+          immutable release, tag at the measured commit, asset digests) and
+          validated here. It is served only when its rules are positively this
+          checkout's link_cycle's and it was measured at most 24 h ago
+          (--allow-stale serves an older one, labelled STALE, and overrides
+          nothing else). A bundle directory with no fetch evidence (one built
+          locally) needs --local-unpublished and is labelled UNAUTHENTICATED.
+          Nothing falls back to the local cycle or the census; a refusal exits
+          with its reason and prints `[reason=...]`:
+            1 corrupt  2 unavailable  3 empty  4 stale  5 incompatible-rules
+            6 unauthenticated  7 no-closure-report
+          Only 2 is worth retrying; 4 and 7 end with the next published bundle;
+          1, 5 and 6 need a person. An orchestrator routes the seat to other
+          work on any of them and never adds --allow-stale itself.
+          `link --closure --bundle STORE` serves what the rows above cannot
+          show: the CLOSURE ROOTS, the failed nodes that keep placed,
+          self-strict rows out of the credit, ranked by conditional
+          single-address gain (tools/closure_report.py: the unique bytes the
+          credit would gain if every failed node at that one retail address
+          passed, with every edge and every other verdict of the measured graph
+          unchanged). It reads the store's newest bundle THAT HAS a closure
+          report and says so when a newer measurement was published without
+          one. The output names the bundle, whether its graph is the measured
+          one bound to the receipt or a replay, how little of the closure
+          bucket single roots cover, and its limits. It is a conditional figure
+          on a frozen graph, not a repair proof. PASS TEST: a later published
+          bundle no longer lists the root and its beneficiaries are
+          closed_strict=1.
   dest    for a NEW match: the translation unit the row belongs in. EA evidence of
           the source file first (BFME1 ea_evidence.csv `file` rows), then the
           address's approved TU in tu_map.csv (the one tu_ownership A3 checks, read
@@ -46,7 +76,7 @@ tools/next_work.py serves these as tiers; this module builds them.
           of inviting a fresh one-function file.
 
   python3 tools/repair_queue.py repair [--limit N]
-  python3 tools/repair_queue.py link [--limit N]
+  python3 tools/repair_queue.py link [--limit N] [--bundle STORE [--closure] [--allow-stale] [--local-unpublished]]
   python3 tools/repair_queue.py dest 0xRVA
   python3 tools/repair_queue.py pass-test "<baseline line>"
   python3 tools/repair_queue.py verify-removed     # pre-commit, when a debt line is deleted:
@@ -56,6 +86,7 @@ import argparse
 import bisect
 import calendar
 import csv
+import gzip
 import io
 import json
 import os
@@ -465,8 +496,25 @@ def link_items(path=None):
     if kind == "census":
         items = census_items(path)
         return items, f"{len(items)} unit(s) that do not link, from the {note}"
+    items = cycle_items(path)
+    return items, f"{len(items)} row(s) from the {note}"
+
+
+def open_status(path):
+    """A link_status.csv, plain or gzip (by its magic bytes), as text."""
+    path = Path(path)
+    with path.open("rb") as handle:
+        gz = handle.read(2) == b"\x1f\x8b"
+    if gz:
+        return io.TextIOWrapper(gzip.open(path), encoding="utf-8", newline="")
+    return path.open(encoding="utf-8", newline="")
+
+
+def cycle_items(path):
+    """A link cycle's real rows not placed at their retail RVA, or placed but not
+    self-strict: placed ones first, then by size."""
     items = []
-    with path.open(encoding="utf-8", newline="") as handle:
+    with open_status(path) as handle:
         for row in csv.DictReader(handle):
             if row.get("kind") != "real" or (row["placed"] == "1" and row["self_strict"] == "1"):
                 continue
@@ -480,7 +528,87 @@ def link_items(path=None):
             })
     # placed-but-not-strict first: one relocation fix credits the whole row
     items.sort(key=lambda item: (not item["placed"], -item["size"]))
-    return items, f"{len(items)} row(s) from the {note}"
+    return items
+
+
+def cycle_artifacts():
+    """tools/cycle_artifacts.py, imported here, not at the top: the hooks run this file
+    through stdin (verify-removed) without tools/ on the path."""
+    tools = str(Path(__file__).resolve().parent if "__file__" in globals() else ROOT / "tools")
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    import cycle_artifacts as ca
+    return ca
+
+
+def bundle_note(b, fr, what):
+    return (f"{what} from link-cycle bundle {b.tag} ({b.dir}; commit {b.commit[:12]}, measured "
+            f"{fr['measured_end_utc']} UTC, {fr['age_hours']:.1f} h ago{', STALE' if fr['stale'] else ''}; "
+            + ("authenticated publication" if b.evidence else "UNAUTHENTICATED LOCAL BUNDLE") + f"; {fr['ancestry']})")
+
+
+def bundle_warnings(lines, fr):
+    out = [line for line in lines if line.startswith(("STALE", "UNAUTHENTICATED", "NOT THE NEWEST"))]
+    if fr["tool_digest_matches"] is False:
+        out += [line for line in lines if line.startswith("link_cycle tool digest")]
+    return out
+
+
+def bundle_link_items(bundle, now=None, allow_stale=False, local_unpublished=False):
+    """(items, note, warnings) from a published link-cycle bundle (a store, or a bundle
+    directory): authenticated, validated, of this checkout's rules, and fresh or ALLOW_STALE.
+    Raises a cycle_artifacts.Problem with its reason: never a census fallback."""
+    ca = cycle_artifacts()
+    b, fr, lines = ca.serve(bundle, allow_stale=allow_stale, now=now, root=ROOT, local_unpublished=local_unpublished)
+    items = cycle_items(b.link_status)
+    return items, bundle_note(b, fr, f"{len(items)} row(s)"), bundle_warnings(lines, fr)
+
+
+def closure_items(bundle, now=None, allow_stale=False, local_unpublished=False):
+    """(items, note lines, warnings): the closure roots (tools/closure_report.py) of the
+    store's newest bundle that has a closure report, ranked by conditional single-address
+    gain. Raises as bundle_link_items does; reason no-closure-report when there is none."""
+    ca = cycle_artifacts()
+    import closure_report as cr
+    b, fr, lines = ca.serve(bundle, allow_stale=allow_stale, now=now, root=ROOT, need_closure=True,
+                            local_unpublished=local_unpublished)
+    try:
+        doc = cr.load_roots(b.closure_roots)
+    except cr.ReportError as e:                   # another schema or algorithm: not this checkout's ranking
+        raise ca.Refused(f"bundle {b.tag}: {e}", "incompatible-rules") from None
+    items = []
+    for e in doc["roots"]:
+        name, source = cr.root_line(e)
+        items.append({
+            "tier": "closure", "target_rva": e["root"], "function": name, "source": source or "(no unit)",
+            "size": e["conditional_gain_bytes"], "credit": e["conditional_gain_bytes"], "placed": True,
+            "check": "closure",
+            "why": (f"beneficiaries {e['beneficiary_rows']} row(s) {e['beneficiary_bytes']} B + own failing rows "
+                    f"{e['direct_rows']} / {e['direct_bytes']} B; {len(e['nodes'])} failed node(s) at this address; "
+                    f"{len(e['failures'])} failure(s) to clear: " + "; ".join(e["failures"])),
+            "pass_test": "a later published bundle (tools/cycle_artifacts.py fetch --latest) no longer lists root "
+                         f"{e['root']} and its rows are closed_strict=1"
+                         + ("" if e.get("verified") else " [gain not re-proved by a forced closure]"),
+        })
+    s = doc["summary"]
+    reach, buckets = s["closure_blocked_reach"], s["buckets"]
+    size = (lambda table, k: table.get(k, {}).get("unique_bytes", 0))
+    bucket, single = size(buckets, "closure-blocked"), size(reach, "one scored root")
+    share = f"{100.0 * single / bucket:.1f}%" if bucket else "n/a"
+    notes = [bundle_note(b, fr, f"{len(items)} closure root(s) with a gain"),
+             f"  graph: {doc['graph']['label']}"
+             + ("" if doc["graph"]["bound"] else ": the edges were rebuilt after the run, not written by its measure"),
+             f"  credit {s['credit_unique_bytes']:,} B. Placed real rows outside it: {size(buckets, 'failing'):,} B "
+             f"fail their own checks; {bucket:,} B are self-strict but closure-blocked; closed-strict but not "
+             f"placed: {size(buckets, 'closed-strict-unplaced'):,} B (repair_queue.py link).",
+             f"  COVERAGE: single roots cover only {single:,} B of the {bucket:,} B closure bucket ({share}); "
+             f"{size(reach, 'two or more'):,} B sit behind two or more roots and {size(reach, 'one unscored leaf'):,} B "
+             "behind one filler or unknown target, and are in no root's score. "
+             f"{s['roots_with_no_beneficiary']} of the {len(items)} roots unblock only their own failing rows.",
+             "  B column: CONDITIONAL single-address gain = credit(graph with every failed node at that retail "
+             "address passing) - credit(graph), unique bytes, on the frozen graph of the measured commit.",
+             "  limits: " + "; ".join(doc["limits"]) + "."]
+    return items, notes, bundle_warnings(lines, fr)
 
 
 # ---------------------------------------------------------------- destination
@@ -614,6 +742,17 @@ def main(argv=None):
     for name in ("repair", "link"):
         p = sub.add_parser(name)
         p.add_argument("--limit", type=int, default=20)
+        if name == "link":
+            p.add_argument("--bundle", metavar="DIR",
+                           help="a link-cycle bundle (tools/cycle_artifacts.py fetch): its rows, validated, with "
+                                "their freshness; no census fallback")
+            p.add_argument("--allow-stale", action="store_true",
+                           help="with --bundle: serve a bundle measured over 24 h ago, labelled STALE")
+            p.add_argument("--closure", action="store_true",
+                           help="with --bundle: closure roots ranked by conditional single-address gain")
+            p.add_argument("--local-unpublished", action="store_true",
+                           help="with --bundle DIR: a locally built bundle with no fetch evidence, labelled "
+                                "UNAUTHENTICATED (a producer inspecting its own bundle; never for shared work)")
     sub.add_parser("dest").add_argument("rva")
     sub.add_parser("pass-test").add_argument("line")
     sub.add_parser("verify-removed", help="hook: re-verify rows whose debt lines the index deletes")
@@ -631,14 +770,38 @@ def main(argv=None):
         ok, message = pass_test(args.line)
         print(message)
         return 0 if ok else 1
-    items, note = (all_repair_items(), f"{len(parse_debt())} baseline line(s), plus tier C / diffexec / boot, game and static queues") if args.cmd == "repair" else link_items()
-    if args.cmd == "link" and not BFME1 and link_source()[0] is None:
-        print(f"repair_queue: {note}", file=sys.stderr)     # an empty queue would read as "nothing to fix"
+    if getattr(args, "bundle", None):
+        if BFME1:
+            print("repair_queue: BFME1 has no link cycle yet", file=sys.stderr)
+            return 1
+        ca = cycle_artifacts()
+        try:
+            if args.closure:
+                items, notes, warnings = closure_items(args.bundle, allow_stale=args.allow_stale,
+                                                       local_unpublished=args.local_unpublished)
+                note = "\n".join(notes)
+            else:
+                items, note, warnings = bundle_link_items(args.bundle, allow_stale=args.allow_stale,
+                                                          local_unpublished=args.local_unpublished)
+        except ca.Problem as e:                              # a reason, never a fallback
+            print(f"repair_queue: link-cycle bundle {ca.describe(e)}", file=sys.stderr)
+            return ca.exit_code(e)
+        for line in warnings:
+            print(f"repair_queue: {line}", file=sys.stderr)
+    elif any(getattr(args, flag, False) for flag in ("closure", "allow_stale", "local_unpublished")):
+        print("repair_queue: --closure, --allow-stale and --local-unpublished need --bundle STORE "
+              "(tools/cycle_artifacts.py fetch): the closure roots exist only in a published bundle; nothing else "
+              "is served in their place", file=sys.stderr)
         return 1
+    else:
+        items, note = (all_repair_items(), f"{len(parse_debt())} baseline line(s), plus tier C / diffexec / boot, game and static queues") if args.cmd == "repair" else link_items()
+        if args.cmd == "link" and not BFME1 and link_source()[0] is None:
+            print(f"repair_queue: {note}", file=sys.stderr)     # an empty queue would read as "nothing to fix"
+            return 1
     print(note)
     for item in items[:args.limit]:
         print(f"  {item['size']:>6}B {item.get('check', '')} {item['target_rva']} {item['function'][:80]}")
-        print(f"         {item['source']}: {item['why'][:160]}")
+        print(f"         {item['source']}: {item['why'][:400 if item.get('tier') == 'closure' else 160]}")
         print(f"         pass test: {item['pass_test']}")
     return 0
 

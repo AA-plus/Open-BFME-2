@@ -20,10 +20,9 @@ address) scoped on its own evidence, never by another binding's spelling:
            built) or does not define it: matched only for its owner's rows; a
            row of another source reports it as `scope unknown`, never mapped.
 
-With link_cycle's per-row output (`--status link_status.csv`, plain or .gz,
-e.g. the link_status-<sha10>.csv.gz asset of the link-cycle-artifacts
-release; its header is checked, so the census's reverse/link_status.csv is
-refused), each address is ranked by the distinct retail bytes of placed rows
+With link_cycle's per-row output (`--status link_status.csv`, plain or .gz;
+its header is checked, so the census's reverse/link_status.csv is refused),
+each address is ranked by the distinct retail bytes of placed rows
 (kind `real` unless --kind all) failing data-back through any of its names.
 `sole` is the part whose only failures are data-back through this address: the
 rows a fix here alone would make self-strict. A row failing through several
@@ -72,7 +71,25 @@ data-fold summary counts the referenced addresses excused (one per CSV row) and
 the rows failing only data-back at them: what the shadow series
 placed_self_strict_data_fold can gain over placed_self_strict, at most.
 
-  python3 tools/data_back_rank.py --status build/link_status-<sha10>.csv.gz [--disambiguate]
+A published link-cycle bundle (tools/cycle_artifacts.py fetch) carries the
+PRODUCER's report, ranked at the measured commit with that commit's ledgers:
+`--bundle STORE` (the store tools/cycle_artifacts.py fetch keeps; its newest
+measurement) renders that report: stdout is the producer's data_back_rank.txt
+at the default --top/--detail; the bundle's tag, age and distance to
+origin/master go to stderr. The bundle must be an authenticated publication
+(a locally built directory needs --local-unpublished and is labelled), of
+positively this checkout's link_cycle rules, and measured at most 24 h ago
+(--allow-stale serves an older one, labelled STALE). A refusal exits with
+cycle_artifacts' reason code (4 stale, 5 incompatible-rules, 6 unauthenticated,
+1 corrupt, 2 unavailable) and prints `[reason=...]`. In that report `sole` still
+means "a fix here alone would make the row SELF-strict", not "would close it":
+closure is `tools/repair_queue.py link --closure --bundle DIR`. `--bundle
+DIR --rerank` ranks the bundle's link_status and data_fold_list against this
+checkout's ledgers instead, and warns when the local reverse/data_ledger.csv
+or exports.csv is not the measured commit's: such a ranking mixes two trees.
+
+  python3 tools/data_back_rank.py --bundle build/cycle_bundles [--allow-stale] [--top N] [--address 0x..] [--rerank]
+  python3 tools/data_back_rank.py --status build/link_cycle/link_status.csv [--disambiguate]
           [--folds build/link_cycle/data_fold_list.csv]
   python3 tools/data_back_rank.py [--refs relocs|xrefs] [--top 20] [--detail 5]
           [--address 0x7BAC1C ...] [--list-files N] [--json OUT]
@@ -960,6 +977,43 @@ def build_report(args):
     return report
 
 
+def open_bundle(directory, allow_stale=False, local_unpublished=False):
+    """(bundle, 0): the served bundle (tools/cycle_artifacts.py serve), its provenance and
+    freshness on stderr; (None, exit code) after saying why, with the refusal's reason."""
+    tools = str(Path(__file__).resolve().parent)
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    import cycle_artifacts as ca
+    try:
+        bundle, _, lines = ca.serve(directory, allow_stale=allow_stale, local_unpublished=local_unpublished)
+    except ca.Problem as e:
+        print(f"data_back_rank: link-cycle bundle {ca.describe(e)}", file=sys.stderr)
+        return None, ca.exit_code(e)
+    rank = bundle.manifest["analysis"]["data_back_rank"]
+    lines.append("`sole` = bytes a fix at the address alone would make SELF-strict, not closed: for closure see "
+                 "tools/repair_queue.py link --closure --bundle STORE")
+    lines.insert(1, f"report: the producer's data_back_rank ({rank['source']}"
+                    + (f"; inputs from the {rank['inputs']}, objects: {rank['objects']}" if rank.get("inputs") else "")
+                    + ")")
+    for line in lines:
+        print(("data_back_rank: WARNING: " if line.startswith(("STALE", "UNAUTHENTICATED")) else "data_back_rank: ")
+              + line, file=sys.stderr)
+    return bundle, 0
+
+
+def producer_report(bundle, args):
+    """The producer's report from the bundle, filtered like build_report (--address, --detail)."""
+    report = json.loads(bundle.rank_json.read_text(encoding="utf-8"))
+    want = {int(a, 16) for a in args.address}
+    entries = report["addresses"]
+    if want:
+        entries = [e for e in entries if int(e["address"], 16) in want]
+    for n, e in enumerate(entries):
+        e["detail"] = bool(want) or n < args.detail
+    report["addresses"] = entries
+    return report
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--status", help="link_cycle link_status.csv (plain or .gz); omit for the PROVISIONAL ranking")
@@ -985,7 +1039,41 @@ def main(argv=None):
                          "is of unknown scope")
     ap.add_argument("--cache", default=str(CACHE))
     ap.add_argument("--no-cache", action="store_true")
+    ap.add_argument("--bundle", metavar="DIR",
+                    help="a link-cycle bundle (tools/cycle_artifacts.py fetch): render the producer's report")
+    ap.add_argument("--allow-stale", action="store_true",
+                    help="with --bundle: serve a bundle measured over 24 h ago, labelled STALE")
+    ap.add_argument("--local-unpublished", action="store_true",
+                    help="with --bundle DIR: a locally built bundle with no fetch evidence, labelled UNAUTHENTICATED")
+    ap.add_argument("--rerank", action="store_true",
+                    help="with --bundle: rank its link_status and data_fold_list against this checkout's ledgers "
+                         "(warns when they are not the measured commit's)")
     args = ap.parse_args(argv)
+    if args.bundle:
+        if args.status or args.folds:
+            ap.error("--bundle supplies the link status and the data folds (no --status or --folds)")
+        if args.disambiguate and not args.rerank:
+            ap.error("--disambiguate ranks again: add --rerank")
+        bundle, code = open_bundle(args.bundle, args.allow_stale, args.local_unpublished)
+        if bundle is None:
+            return code
+        if not args.rerank:
+            report = producer_report(bundle, args)
+            render(report, len(report["addresses"]) if args.address else args.top, args.list_files)
+            if args.json:
+                Path(args.json).write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
+            return 0
+        args.status, args.folds = str(bundle.link_status), str(bundle.data_fold_list)
+        for rel, local in (("reverse/data_ledger.csv", args.ledger), ("reverse/exports.csv", args.exports)):
+            want = bundle.diagnostic(rel)
+            have = hashlib.sha256(Path(local).read_bytes().replace(b"\r\n", b"\n")).hexdigest() \
+                if Path(local).is_file() else None
+            if want and have != want:
+                print(f"data_back_rank: WARNING: {local} ({'missing' if have is None else have[:12]}) is not the "
+                      f"measured commit's {rel} ({want[:12]}): this ranking mixes the producer's link status with "
+                      "other ledgers; without --rerank the producer's own report is shown", file=sys.stderr)
+    elif args.rerank or args.allow_stale or args.local_unpublished:
+        ap.error("--rerank, --allow-stale and --local-unpublished need --bundle")
     if args.disambiguate and (not args.status or args.no_objects):
         ap.error("--disambiguate needs --status and reads the rows' objects (not with --no-objects)")
     report = build_report(args)

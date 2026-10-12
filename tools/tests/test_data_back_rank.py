@@ -557,3 +557,210 @@ def test_fold_list_starts_are_signed(tmp_path):
     folds = dbr.load_fold_list(path)
     assert folds["starts"][0x00A20D20] == [0x00A20D58, 0x00A20D60]
     assert folds["starts"][-0xFF5DDA08] == [0x00A20D58] and folds["starts"][-0x10] == [0x00A20D60]
+
+
+# ---- link-cycle bundles (tools/cycle_artifacts.py): the producer's report
+
+GOLDEN = {  # tools/data_back_rank.py at 9897d8f693 (before --bundle): (text, sha256 of the normalised JSON)
+    'status': (
+        'data-back: 5 placed real rows, 244 distinct bytes (<tmp>/link_status-0123456789.csv.gz); 0 rows with an '
+        'ambiguous symbol, 0 with one of unknown scope, 1 with an unmapped one\n'
+        'files: no objects read (--objects DIR)\n'
+        "scope: 1 single-name bindings of unknown scope (no owner object), matched only for their owner's rows\n"
+        'data-fold-1 export: 1 addresses (reverse/exports.csv: export-proven, linked datums unverified), 1 ranked '
+        'here; 3 rows 196 bytes fail data-back there, 1 rows 100 bytes nowhere else\n'
+        '  # address    sec    kind    names defs  refs  rows     bytes     sole inv var fold   canonical [other '
+        'blockers]\n'
+        '  1 0x00100000 .rdata string      3    1    10     3       196      100   1   0 exp?   ??_C@_00CNPNBAHC@?$AA@ '
+        '[data-fwd 1, data-back elsewhere 1]\n'
+        '  2 0x00200000 .data  global      4    2     6     2        56       40   1   1        '
+        '?TheWritableGlobalData@@3PAVGlobalData@@A [data-back elsewhere 1]\n'
+        '\n'
+        '0x00100000 .rdata string (literal) defs 1 refs 10: 3 rows 196 bytes, sole 1 rows 100 bytes\n'
+        '  files defs  rows     bytes  flags              name\n'
+        '      -    -     2       116                     ??_C@_00CNPNBAHC@?$AA@\n'
+        '      -    -     1       100                     ?TheNullChr@?1??str@AsciiString@@QBEPBDXZ@4DB\n'
+        '      -    -     0         0  inv                ?g_Rva0107301CEmptyString@@3QBDB\n'
+        '  other blockers (rows): data-fwd 1, data-back elsewhere 1\n'
+        '  data-fold-1: 2 export names; export-proven, linked datums unverified (--folds)\n'
+        '\n'
+        '0x00200000 .data global (provisional) defs 2 refs 6: 2 rows 56 bytes, sole 1 rows 40 bytes\n'
+        '  files defs  rows     bytes  flags              name\n'
+        '      1    -     1        40  static             _TheGameLogic @Code/A.cpp\n'
+        '      -    -     1        16  var:struct/class   ?TheWritableGlobalData@@3PAUGlobalData@@A\n'
+        '      -    -     0         0  var:base           ?TheWritableGlobalData@@3PAVGlobalData@@A\n'
+        '      -    -     0         0  inv                ?g_Va00600000@@3PAXA\n'
+        '  other blockers (rows): data-back elsewhere 1\n'
+        '\n'
+        'unmapped data-back symbols (rows): _TheGameLogic 1\n',
+        'f748ad35a9c7ce284d2cfe9487790be1fc712be7d8385864a8f19188f9566fd5'),
+    'provisional': (
+        'PROVISIONAL (no link_status.csv): addresses with several names or definitions, ranked by the distinct bytes '
+        'of matched real rows referencing them in retail (xrefs). These are not measured data-back failures.\n'
+        'files: no objects read (--objects DIR)\n'
+        'data-fold-1 export: 1 addresses (reverse/exports.csv: export-proven, linked datums unverified), 1 ranked '
+        'here\n'
+        '  # address    sec    kind    names defs  refs  rows     bytes     sole inv var fold   canonical [other '
+        'blockers]\n'
+        '  1 0x00100000 .rdata string      3    1    10     2       116        -   1   0 exp?   ??_C@_00CNPNBAHC@?$AA@\n'
+        '  2 0x00200000 .data  global      4    2     6     1        16        -   1   1        '
+        '?TheWritableGlobalData@@3PAVGlobalData@@A\n'
+        '\n'
+        '0x00100000 .rdata string (literal) defs 1 refs 10: 2 rows 116 bytes\n'
+        '  files defs  rows     bytes  flags              name\n'
+        '      -    -     0         0                     ??_C@_00CNPNBAHC@?$AA@\n'
+        '      -    -     0         0                     ?TheNullChr@?1??str@AsciiString@@QBEPBDXZ@4DB\n'
+        '      -    -     0         0  inv                ?g_Rva0107301CEmptyString@@3QBDB\n'
+        '  data-fold-1: 2 export names; export-proven, linked datums unverified (--folds)\n'
+        '\n'
+        '0x00200000 .data global (provisional) defs 2 refs 6: 1 rows 16 bytes\n'
+        '  files defs  rows     bytes  flags              name\n'
+        '      1    -     0         0  static             _TheGameLogic @Code/A.cpp\n'
+        '      -    -     0         0  var:struct/class   ?TheWritableGlobalData@@3PAUGlobalData@@A\n'
+        '      -    -     0         0  var:base           ?TheWritableGlobalData@@3PAVGlobalData@@A\n'
+        '      -    -     0         0  inv                ?g_Va00600000@@3PAXA\n',
+        '8b2e12e23fdc59e92fdf5dff81307e685f49ccd75cefda244d20be5202fb9d7f'),
+    'address': (
+        'data-back: 5 placed real rows, 244 distinct bytes (<tmp>/link_status-0123456789.csv.gz); 0 rows with an '
+        'ambiguous symbol, 0 with one of unknown scope, 1 with an unmapped one\n'
+        'files: no objects read (--objects DIR)\n'
+        "scope: 1 single-name bindings of unknown scope (no owner object), matched only for their owner's rows\n"
+        'data-fold-1 export: 1 addresses (reverse/exports.csv: export-proven, linked datums unverified), 1 ranked '
+        'here; 3 rows 196 bytes fail data-back there, 1 rows 100 bytes nowhere else\n'
+        '  # address    sec    kind    names defs  refs  rows     bytes     sole inv var fold   canonical [other '
+        'blockers]\n'
+        '  1 0x00200000 .data  global      4    2     6     2        56       40   1   1        '
+        '?TheWritableGlobalData@@3PAVGlobalData@@A [data-back elsewhere 1]\n'
+        '\n'
+        '0x00200000 .data global (provisional) defs 2 refs 6: 2 rows 56 bytes, sole 1 rows 40 bytes\n'
+        '  files defs  rows     bytes  flags              name\n'
+        '      1    -     1        40  static             _TheGameLogic @Code/A.cpp\n'
+        '      -    -     1        16  var:struct/class   ?TheWritableGlobalData@@3PAUGlobalData@@A\n'
+        '      -    -     0         0  var:base           ?TheWritableGlobalData@@3PAVGlobalData@@A\n'
+        '      -    -     0         0  inv                ?g_Va00600000@@3PAXA\n'
+        '  other blockers (rows): data-back elsewhere 1\n'
+        '\n'
+        'unmapped data-back symbols (rows): _TheGameLogic 1\n',
+        '3a30441d1c1c9f31639ae60f61e2ef8f0bb9393e2ac28d1bc9b276a03a3803d3'),
+}
+
+
+def test_output_without_a_bundle_is_unchanged():
+    """The --bundle path changes nothing when it is not used: the Ranking fixtures give,
+    byte for byte, the text and JSON the tool gave before it existed (GOLDEN)."""
+    import hashlib
+    case = Ranking()
+    case.setUp()
+    try:
+        t = case.t
+        write_csv(t / "exports.csv", [["ordinal", "rva", "target_rva", "section", "kind", "name"],
+                                      ["1", "0x00100000", "", ".rdata", "data", "a"],
+                                      ["2", "0x00100000", "", ".rdata", "data", "b"]])
+        base = ["--ledger", str(t / "ledger.csv"), "--functions", str(t / "functions.csv"), "--xrefs",
+                str(t / "xrefs.tsv"), "--no-objects", "--json", str(t / "out.json"), "--exports", str(t / "exports.csv")]
+        status = str(t / "link_status-0123456789.csv.gz")
+        for key, extra in (("status", ["--status", status]), ("provisional", ["--refs", "xrefs"]),
+                           ("address", ["--status", status, "--address", "0x00200000", "--top", "1"])):
+            out = io.StringIO()
+            with redirect_stdout(out):
+                assert dbr.main(base + extra) == 0
+            text = out.getvalue().replace(str(t), "<tmp>").replace("\\", "/")
+            js = json.dumps(json.loads((t / "out.json").read_text(encoding="utf-8")), indent=1)
+            js = js.replace(json.dumps(str(t))[1:-1], "<tmp>").replace("\\\\", "/")
+            assert (text, hashlib.sha256(js.encode()).hexdigest()) == GOLDEN[key], key
+    finally:
+        case.tearDown()
+
+
+def _bundle(tmp_path, **kw):
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import cycle_fixture as cf
+    kw.setdefault("date_utc", cf.recent())
+    run = cf.make_run(tmp_path / "snaps", **kw)
+    out = tmp_path / "bundle"
+    cf.bundle(run, out, "laptop/watchdog", rank="generate")
+    return out, run.parent.parent
+
+
+def _store(tmp_path, bundle):
+    """BUNDLE published on a fake GitHub and fetched into a store: an authenticated publication."""
+    import cycle_artifacts as ca
+    import test_cycle_artifacts as tc
+    gh = tc.FakeGitHub()
+    tc.released(gh, bundle, "2026-10-12T00:00:00Z")
+    ca.fetch(tc.REPO, tmp_path / "store", gh=gh)
+    return tmp_path / "store"
+
+
+def test_bundle_renders_the_producers_report(tmp_path, capsys):
+    bundle, _ = _bundle(tmp_path)
+    store = _store(tmp_path, bundle)
+    assert dbr.main(["--bundle", str(store)]) == 0
+    got = capsys.readouterr()
+    assert got.out == (bundle / "data_back_rank.txt").read_text(encoding="utf-8")   # the producer's, verbatim
+    assert "data_back_rank: bundle link-cycle/275a758e4cbb-" in got.err and "WARNING" not in got.err
+    assert "report: the producer's data_back_rank (generated; inputs from the snapshot" in got.err
+    assert dbr.main(["--bundle", str(store), "--json", str(tmp_path / "r.json")]) == 0
+    capsys.readouterr()
+    assert json.loads((tmp_path / "r.json").read_text()) == json.loads((bundle / "data_back_rank.json").read_text())
+    assert dbr.main(["--bundle", str(store), "--address", "0x00200000"]) == 0
+    assert "0x00100000" not in capsys.readouterr().out
+
+
+def test_a_local_bundle_is_not_served_as_a_publication(tmp_path, capsys):
+    bundle, _ = _bundle(tmp_path)
+    assert dbr.main(["--bundle", str(bundle)]) == 6
+    got = capsys.readouterr()
+    assert got.out == "" and "refused [reason=unauthenticated]" in got.err and "--local-unpublished" in got.err
+    assert dbr.main(["--bundle", str(bundle), "--local-unpublished"]) == 0
+    got = capsys.readouterr()
+    assert got.out == (bundle / "data_back_rank.txt").read_text(encoding="utf-8")
+    assert "data_back_rank: WARNING: UNAUTHENTICATED LOCAL BUNDLE (--local-unpublished)" in got.err
+
+
+def test_rerank_warns_when_local_ledgers_are_not_the_measured_commits(tmp_path, capsys):
+    bundle, snap = _bundle(tmp_path)
+    same = ["--ledger", str(snap / "reverse/data_ledger.csv"), "--exports", str(snap / "reverse/exports.csv"),
+            "--functions", str(snap / "reverse/functions.csv"), "--no-objects", "--local-unpublished"]
+    assert dbr.main(["--bundle", str(bundle), "--rerank", *same]) == 0
+    got = capsys.readouterr()
+    assert "is not the measured commit's" not in got.err and got.out.startswith("data-back: 2 placed real rows")
+    moved = tmp_path / "local_ledger.csv"
+    moved.write_text((snap / "reverse/data_ledger.csv").read_text() + "0x00300000,4,.data,global,_g,,unowned,,1,1\n")
+    assert dbr.main(["--bundle", str(bundle), "--rerank", *same, "--ledger", str(moved)]) == 0
+    got = capsys.readouterr()
+    assert "WARNING: " + str(moved) in got.err and "is not the measured commit's reverse/data_ledger.csv" in got.err
+    assert got.out.startswith("data-back: 2 placed real rows")
+
+
+def test_bundle_arguments_and_unavailable_bundle(tmp_path, capsys):
+    import pytest
+    with pytest.raises(SystemExit):
+        dbr.main(["--bundle", str(tmp_path), "--status", "x.csv"])
+    for flag in ("--rerank", "--allow-stale", "--local-unpublished"):
+        with pytest.raises(SystemExit):
+            dbr.main([flag])
+    assert dbr.main(["--bundle", str(tmp_path / "missing")]) == 2
+    got = capsys.readouterr()
+    assert got.out == "" and "link-cycle bundle unavailable [reason=unavailable]" in got.err
+
+
+def test_a_stale_bundle_is_refused_unless_allowed(tmp_path, capsys):
+    bundle, _ = _bundle(tmp_path, date_utc="2026-01-01 00:00:00")
+    assert dbr.main(["--bundle", str(bundle), "--local-unpublished"]) == 4
+    got = capsys.readouterr()
+    assert got.out == "" and "link-cycle bundle refused [reason=stale]" in got.err and "STALE: measured" in got.err
+    assert dbr.main(["--bundle", str(bundle), "--allow-stale", "--local-unpublished"]) == 0
+    got = capsys.readouterr()
+    assert got.out == (bundle / "data_back_rank.txt").read_text(encoding="utf-8")
+    assert "data_back_rank: WARNING: STALE: measured" in got.err
+    assert "`sole` = bytes a fix at the address alone would make SELF-strict, not closed" in got.err
+
+
+def test_a_bundle_of_other_rules_is_refused_with_no_override(tmp_path, capsys):
+    bundle, _ = _bundle(tmp_path, rules="link-cycle-3")
+    for extra in ([], ["--allow-stale"]):
+        assert dbr.main(["--bundle", str(bundle), "--local-unpublished", *extra]) == 5
+        got = capsys.readouterr()
+        assert got.out == "" and "[reason=incompatible-rules]" in got.err
+        assert "RULES MISMATCH: measured under link-cycle-3" in got.err

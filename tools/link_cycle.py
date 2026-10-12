@@ -98,7 +98,10 @@ fixes of research 29, 31 and the round-2 review:
 
 Outputs in build/link_cycle/: link_status.csv (one row per matched ledger
 row), fold_list.csv, data_fold_list.csv (data-fold-1's verdict per data-back address), provenance.json,
-receipt.json, base.map/.exe/.log, shift.*. Diagnostic:
+receipt.json, base.map/.exe/.log, shift.*, and closure_graph.json.gz: the closure
+graph measure() judged (nodes with their verdict, edges, rows), written after every
+verdict is final and read by nothing here; the receipt names its sha256
+(closure_graph_sha256, outside the receipt core) for tools/closure_report.py. Diagnostic:
 the image is not expected to run.
 """
 import argparse
@@ -2284,6 +2287,7 @@ def cycle(args):
                                "force_duplicates": len(diagnostics(log)["duplicates"]),
                                "force_duplicate_diagnostics": d["codes"].get("LNK4006", 0)},
                    series=res)
+    receipt["closure_graph_sha256"] = sha256(out / CLOSURE_GRAPH)       # not in receipt_core: diagnostic
     # re-prove the start: the same commit/tree, tool, toolchain, retail, ledgers and objects
     end = input_state()
     moved = sorted(k for k in start if start[k] != end.get(k))
@@ -2420,6 +2424,8 @@ def measure(out, units, chunks, objs, R, rsecs, rimp, pins, have_shift, shift_ba
     res["retail_relocations"] = sites_info
     res["retail_text_bytes"] = textsz
     res["link_status_sha256"] = sha256(status)
+    # diagnostic output only: written last, read by nothing in this tool, absent from `res`
+    write_closure_graph(out / CLOSURE_GRAPH, closure_graph_doc(m, recs, hard, ok, edges))
     return res
 
 
@@ -2525,6 +2531,77 @@ def write_data_folds(path, m):
                         max([len(m.folds.get(s, ())) for s in starts] or [0]),
                         ";".join("0x%08X:%s" % (lt, k[1][2] if k[0] == "datum" else k[0]) for lt, k in reach),
                         ";".join(sorted({m.dnodes[key]["name"] for key in keys})), rule or "", why])
+
+
+CLOSURE_GRAPH = "closure_graph.json.gz"
+CLOSURE_GRAPH_SCHEMA = "closure-graph/1"
+
+
+def node_key(n):
+    """A closure node as text: its kind and its numbers, nested keys flattened."""
+    def flat(v):
+        for x in v:
+            if isinstance(x, tuple):
+                yield from flat(x)
+            else:
+                yield str(x)
+    return ":".join(flat(n))
+
+
+def closure_graph_doc(m, recs, hard, ok, edges):
+    """The closure graph measure() judged, as plain sorted values: every node with its
+    verdict and what it is, every edge, and each ledger row with its unit node, placed and
+    self_strict. It READS the finished measure and asks nothing: no shift check runs here
+    (a twin or datum that failed with no failure of its own failed its shift check; one
+    with failures of its own was never asked), so no verdict or counter can move."""
+    nodes = {}
+    rows = []
+    for rec in recs:
+        r, u = rec["row"], rec["unit"]
+        n = ("unit", u["id"])
+        d = nodes.setdefault(node_key(n), {"kind": "unit", "ok": bool(ok[n]), "name": u.get("head") or r["name"],
+                                           "rva": r["rva"], "source": r["source"], "failures": set()})
+        d["rva"] = min(d["rva"], r["rva"])
+        d["failures"].update(rec["fails"])
+        if id(rec) in hard:
+            d["failures"].add(f"shift:{hard[id(rec)]}")
+        if not rec["measured"]:
+            d["failures"].add("unmeasured")
+        rows.append([r["name"], r["kind"], r["source"], r["rva"], r["size"], node_key(n), int(bool(rec["placed"])),
+                     int(bool(rec["measured"] and not rec["fails"]))])
+    for n, v in ok.items():
+        kind, key = n[0], node_key(n)
+        if kind == "unit":
+            continue
+        d = nodes[key] = {"kind": kind, "ok": bool(v), "failures": set()}
+        if kind == "twin":
+            good, why = m.twins[(n[1], n[2])]
+            sym = m.sym_at(n[1])
+            d.update(rva=n[2], linked=n[1], name=sym[1] if sym else "", object=sym[2] if sym else "")
+            d["failures"].update((m.twin_fails.get((n[1], n[2])) or [why]) if not good else ([] if v else ["shift"]))
+        elif kind == "datum":
+            node = m.dnodes[n[1]]
+            d.update(rva=n[1][1], linked=n[1][0], size=n[1][2], name=node["name"])
+            d["failures"].update(node["fails"] or ([] if v else ["shift"]))
+        elif not v:
+            d["failures"].add("shift")
+    for d in nodes.values():
+        d["failures"] = sorted(d["failures"])
+    return {"schema": CLOSURE_GRAPH_SCHEMA, "bad_targets": ["fill", "stub"],
+            "nodes": dict(sorted(nodes.items())),
+            "edges": {node_key(n): sorted(node_key(t) for t in ts) for n, ts in sorted(edges.items(), key=lambda kv:
+                                                                                      node_key(kv[0])) if ts},
+            "rows": sorted(rows, key=lambda r: (r[3], r[0], r[2], r[1], r[4]))}
+
+
+def write_closure_graph(path, doc):
+    """closure_graph.json.gz: canonical JSON (sorted keys), gzip with no name and mtime 0, so
+    the same measure writes the same bytes."""
+    import gzip
+    data = json.dumps(doc, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    with open(path, "wb") as raw:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw, compresslevel=6, mtime=0) as gz:
+            gz.write(data)
 
 
 class Shifted:
@@ -2674,7 +2751,7 @@ def remeasure(args):
     if path.exists():   # the links are the receipt's; the measure, its digest and series are replaced
         receipt = json.loads(path.read_text(encoding="utf-8"))
         receipt.update(series=res, tool_digest=tool_digest(), rules="link-cycle-2", shadow_rules=SHADOW_RULES,
-                       authoritative=False,
+                       authoritative=False, closure_graph_sha256=sha256(out / CLOSURE_GRAPH),
                        remeasured_utc=time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
         receipt.setdefault("seconds", {})["measure"] = round(time.time() - t)
         stamp_cores(receipt)

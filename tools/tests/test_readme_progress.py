@@ -244,17 +244,27 @@ def test_strict_link_reads_the_committed_receipt(tmp_path):
     assert "invalid" in daily.strict_link(tmp_path)
 
 
-def test_strict_line_sits_beside_linking_never_instead(tmp_path):
+def test_strict_line_sits_beside_linking_never_instead(tmp_path, monkeypatch):
     path = tmp_path / daily.RECEIPT
     path.parent.mkdir(parents=True)
     path.write_text(json.dumps(receipt()), encoding="utf-8")
     current = {**sample(), "strict": daily.strict_link(tmp_path)}
-    line = ("Strict link check (2026-10-09 at 9193fd8247): 25.00% self-strict, 12.50% fully linked, "
-            "of all retail .text (libraries included)")
+    line = ("Historical strict link check (2026-10-09 at 9193fd8247, no longer updated): 25.00% self-strict, "
+            "12.50% fully linked, of all retail .text")
     lines = daily.announcement(current, None)["embeds"][0]["description"].split("\n")
-    assert "**Linking: 10.00%**" in lines and lines[-3:] == [line, "", f"[What each bar measures, with charts: README]({daily.README})"]
+    readme = f"[What each bar measures, with charts: README]({daily.README})"
+    # until a bundle is published the card names no feed: one historical line
+    assert daily.PUBLISHED is False
+    assert "**Linking: 10.00%**" in lines and lines[-3:] == [line, "", readme]
     svg = daily.render(current)
-    assert line in svg and ">10.00%<" in svg and 'height="388"' in svg
+    assert line in svg and daily.CURRENT_LINE not in svg and ">10.00%<" in svg and 'height="388"' in svg
+    # from the first published bundle a second line says where the current measurement is
+    monkeypatch.setattr(daily, "PUBLISHED", True)
+    lines = daily.announcement(current, None)["embeds"][0]["description"].split("\n")
+    assert lines[-4:] == [line, daily.CURRENT_LINE, "", readme]
+    assert "published link-cycle bundle" in daily.CURRENT_LINE and "cycle_artifacts.py fetch --latest" in daily.CURRENT_LINE
+    svg = daily.render(current)
+    assert line in svg and daily.CURRENT_LINE in svg and ">10.00%<" in svg and 'height="406"' in svg
     assert 'height="366"' in daily.render(sample())
 
 

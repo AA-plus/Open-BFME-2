@@ -29,7 +29,13 @@ never an arrow.
 
 Under the bars, a line gives the strict link check from the committed
 link_cycle receipt (reverse/link_cycle/receipt.json, stored by
-tools/progress_v2.py --store-receipt): the tree linked at the original's
+tools/progress_v2.py --store-receipt). That receipt is HISTORY: receipts are no
+longer committed, and the current measurement is the newest published
+link-cycle bundle (tools/cycle_artifacts.py). The line says so ("Historical
+strict link check", with the receipt's date and commit); once a bundle has been
+published (PUBLISHED), a second line names the command that fetches the current
+one. This tool does not read a bundle, because the card must depend on the
+repository alone. The check itself: the tree linked at the original's
 addresses with every reference checked. Self-strict counts placed code whose
 own references land where retail's do; fully linked (closed-strict) also needs
 everything it reaches to be right. Both are shares of ALL retail .text, as the
@@ -135,18 +141,34 @@ def strict_link(root=None):
     return strict
 
 
+CURRENT_LINE = ("Current strict link measurement: the newest published link-cycle bundle "
+                "(python3 tools/cycle_artifacts.py fetch --latest)")
+
+
 def strict_line(current):
-    """`Strict link check (2026-10-09 at 9193fd8247): 25.78% self-strict, 13.09% fully linked,
-    of all retail .text (libraries included)`; None without a receipt."""
+    """`Historical strict link check (2026-10-09 at 9193fd8247, no longer updated): 25.78%
+    self-strict, 13.09% fully linked, of all retail .text`; None without a receipt. The
+    committed receipt is an earlier measurement, never the current one (CURRENT_LINE)."""
     strict = current.get("strict")
     if not strict:
         return None
     if strict.get("invalid"):
         return "Strict link check unavailable: the stored link_cycle receipt could not be read"
     share = lambda key: f"{progress.percent(strict[key], strict['text']):.2f}%"  # noqa: E731
-    return (f"Strict link check ({strict['date']} at {strict['commit']}): {share('self_strict')} self-strict, "
-            f"{share('closed_strict')} fully linked, of all retail .text (libraries included)"
+    return (f"Historical strict link check ({strict['date']} at {strict['commit']}, no longer updated): "
+            f"{share('self_strict')} self-strict, {share('closed_strict')} fully linked, of all retail .text"
             + ("" if strict["authoritative"] else " (not authoritative)"))
+
+
+PUBLISHED = False                            # True from the first verified published bundle; until one
+#                                              exists the card does not send readers to an empty feed
+
+
+def strict_lines(current):
+    """The lines under the bars: the historical receipt's and, once a bundle is PUBLISHED,
+    where the current measurement is."""
+    strict = strict_line(current)
+    return ([strict, CURRENT_LINE] if PUBLISHED else [strict]) if strict else []
 
 
 def measured(current):
@@ -196,8 +218,8 @@ def arrow(delta):
 
 def render(current, previous=None):
     rows = measures(current)
-    strict = strict_line(current)
-    height = 70 + 74 * len(ROWS) + (22 if strict else 0)
+    strict = strict_lines(current)
+    height = 70 + 74 * len(ROWS) + (22 + 18 * (len(strict) - 1) if strict else 0)
     body = []
     for index, (key, label, what) in enumerate(ROWS):
         value, denominator = rows[key]
@@ -222,8 +244,8 @@ def render(current, previous=None):
     <rect x="28" y="{y + 10}" width="{width:.2f}" height="14" rx="7" fill="{CARD_FILL[key]}"/>
     <text x="28" y="{y + 44}" class="muted" font-size="12.5">{text}</text>
 ''')
-    if strict:
-        body.append(f'''    <text x="28" y="{64 + 74 * len(ROWS) - 4}" class="muted" font-size="12.5">{strict}</text>
+    for n, line in enumerate(strict):
+        body.append(f'''    <text x="28" y="{64 + 74 * len(ROWS) - 4 + 18 * n}" class="muted" font-size="12.5">{line}</text>
 ''')
     (matched, total), (cpp, game), (linked, linked_game) = rows["matched"], rows["cpp"], rows["linked"]
     linking = f"{progress.percent(linked, linked_game):.2f}% linking" if linked is not None else "linking not measured"
@@ -280,9 +302,9 @@ def announcement(current, previous):
                   + ("  (rules changed)" if changed else f"  {arrow(delta)}" if delta is not None else ""),
                   blocks(value, denominator, BLOCK[key]),
                   detail(current, key, value, denominator, what) + (rule_note(previous, changed) if changed else "")]
-    strict = strict_line(current)
+    strict = strict_lines(current)
     if strict:
-        lines += ["", strict]
+        lines += ["", *strict]
     lines += ["", f"[What each bar measures, with charts: README]({README})"]
     return {"allowed_mentions": {"parse": []},
             "embeds": [{"title": f"{TITLE} {DOT} Rebuild progress", "color": 0x2EA043,

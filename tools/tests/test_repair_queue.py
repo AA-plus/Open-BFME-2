@@ -387,3 +387,343 @@ def test_game_smoke_queue_items_round_trip(tmp_path):
     (item,) = rq.boot_items()
     assert (item["check"], item["function"], item["size"]) == ("desync", "?b@Loco@@QAEXXZ", 64)
     assert "game_smoke.py determinism --image one" in item["pass_test"]
+
+
+# ---- link-cycle bundles (tools/cycle_artifacts.py) and gzip status files
+
+RICH_STATUS = (CYCLE_STATUS.splitlines(True)[0] +
+               "?ok@@YAXXZ,real,Code/a.cpp,0x00001000,64,0x00001000,1,,1,1,1,1,1,0,0,\n"
+               "?far@@YAXXZ,real,Code/a.cpp,0x00002000,500,0x007BBD80,0,retail start violates section alignment,"
+               "1,1,1,1,0,0,0,\n"
+               "?wire@@YAXXZ,real,Code/b.cpp,0x00003000,40,0x00003000,1,,0,0,0,0,0,0,1,data-back:g_x\n"
+               "?big@@YAXXZ,real,Code/c.cpp,0x00005000,90,0x00005000,1,,0,0,0,0,0,0,2,data-fwd:g_y;eh\n"
+               "?gen@@YAXXZ,gen-funclet,Code/gen_small/u.cpp,0x00004000,9,,0,not COMDAT,0,0,0,0,0,0,0,\n")
+GOLDEN = {  # tools/repair_queue.py at 9897d8f693 (before --bundle), on these fixtures
+    'cycle': (0,
+        '1 row(s) from the local link cycle <root>/build/link_cycle/link_status.csv (commit f00dfeedbe, written <when>)\n'
+        '      40B  0x00003000 ?wire@@YAXXZ\n'
+        '         Code/b.cpp: data-back:g_x\n'
+        '         pass test: python3 tools/link_cycle.py --measure-only: this row placed=1 self_strict=1\n',
+        ''),
+    'census': (0,
+        '2 unit(s) that do not link, from the committed link census reverse/link_status.csv (measured at commit '
+        '086d0a7aaa, 2026-10-07 21:52 UTC)\n'
+        '      32B  0x00002000 ?c@Body@@QAEXXZ\n'
+        '         Code/GameEngine/Body.cpp: unit does not link (1 matched row(s)): unresolved 1\n'
+        '         pass test: python3 tools/link_check.py Code/GameEngine/Body.cpp: LINKS (the next census: linked=yes)\n'
+        '     128B  0x00001000 ?a@Loco@@QAEXXZ\n'
+        '         Code/GameEngine/Loco.cpp: unit does not link (2 matched row(s)): unresolved 2, comdat_losers 1\n'
+        '         pass test: python3 tools/link_check.py Code/GameEngine/Loco.cpp: LINKS (the next census: linked=yes)\n',
+        ''),
+    'census_limit': (0,
+        '2 unit(s) that do not link, from the committed link census reverse/link_status.csv (measured at commit '
+        '086d0a7aaa, 2026-10-07 21:52 UTC)\n'
+        '      32B  0x00002000 ?c@Body@@QAEXXZ\n'
+        '         Code/GameEngine/Body.cpp: unit does not link (1 matched row(s)): unresolved 1\n'
+        '         pass test: python3 tools/link_check.py Code/GameEngine/Body.cpp: LINKS (the next census: linked=yes)\n',
+        ''),
+    'named': (0,
+        '3 row(s) from the local link cycle <root>/s/link_status.csv (commit unknown (no receipt.json), written <when>)\n'
+        '      90B  0x00005000 ?big@@YAXXZ\n'
+        '         Code/c.cpp: data-fwd:g_y;eh\n'
+        '         pass test: python3 tools/link_cycle.py --measure-only: this row placed=1 self_strict=1\n'
+        '      40B  0x00003000 ?wire@@YAXXZ\n'
+        '         Code/b.cpp: data-back:g_x\n'
+        '         pass test: python3 tools/link_cycle.py --measure-only: this row placed=1 self_strict=1\n'
+        '     500B  0x00002000 ?far@@YAXXZ\n'
+        '         Code/a.cpp: retail start violates section alignment\n'
+        '         pass test: python3 tools/link_cycle.py --measure-only: this row placed=1 self_strict=1\n',
+        ''),
+    'repair': (0,
+        '2 baseline line(s), plus tier C / diffexec / boot, game and static queues\n'
+        '      64B tail 0x00001000 ?a@Loco@@QAEXXZ\n'
+        "         Code/GameEngine/Loco.cpp: compiled bytes past the row's extent differ from retail; fix the tail (or "
+        "the extent)\n"
+        "         pass test: python3 tools/repair_queue.py pass-test 'tail 0x00001000 ?a@Loco@@QAEXXZ'\n"
+        '      32B ltable 0x00002000 ?c@Body@@QAEXXZ\n'
+        '         Code/GameEngine/Body.cpp: a jump-table entry or same-section pointer lands on the wrong case; fix the '
+        'case mapping\n'
+        "         pass test: python3 tools/repair_queue.py pass-test 'ltable 0x00002000 ?c@Body@@QAEXXZ'\n",
+        ''),
+    'none': (1,
+        '',
+        'repair_queue: no link status: no link-cycle status at <root>/build/link_cycle/link_status.csv (run '
+        'tools/link_cycle.py) and no committed census at reverse/link_status.csv with a '
+        'reverse/link_census_history.csv row\n'),
+}
+
+
+def _main(rq, argv, capsys, root, when=None):
+    code = rq.main(argv)
+    got = capsys.readouterr()
+
+    def norm(text):
+        text = text.replace(str(root), "<root>").replace("\\", "/")
+        return text.replace(when, "<when>") if when else text
+    return code, norm(got.out), norm(got.err)
+
+
+def test_link_and_repair_output_without_a_bundle_is_unchanged(tmp_path, monkeypatch, capsys):
+    """The --bundle path changes nothing when it is not used: these fixtures give, byte for
+    byte, the output the tool gave before it existed (GOLDEN)."""
+    import time
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    root = tmp_path / "a"
+    _cycle(root, CENSUS_TIME + 3600, commit="f00dfeedbeef0123")
+    rq, _, _ = load(root, "bfme2", LEDGER, CENSUS_FILES)
+    assert _main(rq, ["link"], capsys, root, time.ctime(CENSUS_TIME + 3600)) == GOLDEN["cycle"]
+    root = tmp_path / "b"
+    rq, _, _ = load(root, "bfme2", LEDGER, CENSUS_FILES)
+    assert _main(rq, ["link"], capsys, root) == GOLDEN["census"]
+    assert _main(rq, ["link", "--limit", "1"], capsys, root) == GOLDEN["census_limit"]
+    root = tmp_path / "c"
+    (root / "s").mkdir(parents=True)
+    (root / "s/link_status.csv").write_text(RICH_STATUS, newline="\n")
+    monkeypatch.setenv("REPAIR_LINK_STATUS", str(root / "s/link_status.csv"))
+    rq, _, _ = load(root, "bfme2", LEDGER, [("reverse/gate_baseline.txt",
+                                             "tail 0x00001000 ?a@Loco@@QAEXXZ\nltable 0x00002000 ?c@Body@@QAEXXZ\n")])
+    monkeypatch.delenv("REPAIR_LINK_STATUS")
+    when = time.ctime((root / "s/link_status.csv").stat().st_mtime)
+    assert _main(rq, ["link", "--limit", "3"], capsys, root, when) == GOLDEN["named"]
+    assert _main(rq, ["repair"], capsys, root) == GOLDEN["repair"]
+    root = tmp_path / "d"
+    rq, _, _ = load(root, "bfme2", LEDGER)
+    assert _main(rq, ["link"], capsys, root) == GOLDEN["none"]
+
+
+def test_link_items_read_a_gzip_status(tmp_path, monkeypatch, capsys):
+    import gzip
+    rq, _, _ = load(tmp_path, "bfme2", LEDGER)
+    plain, packed = tmp_path / "link_status.csv", tmp_path / "link_status.csv.gz"
+    plain.write_text(RICH_STATUS, newline="\n")
+    with gzip.open(packed, "wb") as f:
+        f.write(plain.read_bytes())
+    items, _ = rq.link_items(plain)
+    assert [i["function"] for i in items] == ["?big@@YAXXZ", "?wire@@YAXXZ", "?far@@YAXXZ"]
+    assert rq.link_items(packed)[0] == items
+    monkeypatch.setenv("REPAIR_LINK_STATUS", str(packed))
+    rq, _, _ = load(tmp_path / "named", "bfme2", LEDGER)
+    monkeypatch.delenv("REPAIR_LINK_STATUS")
+    assert rq.main(["link"]) == 0 and "3 row(s) from the local link cycle" in capsys.readouterr().out
+
+
+def _fixtures():
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import cycle_artifacts as ca
+    import cycle_fixture as cf
+    import test_cycle_artifacts as tc
+    return ca, cf, tc
+
+
+def _checkout(root):
+    """ROOT measures link-cycle-2: the rules a served bundle must positively match."""
+    (root / "tools").mkdir(parents=True, exist_ok=True)
+    (root / "tools/link_cycle.py").write_text('SHADOW_RULES = ["data-fold-1"]\nCANON_RULES = "coff-canon-1"\n'
+                                              'receipt = dict(tool="link_cycle", rules="link-cycle-2")\n')
+
+
+def _bundle(tmp_path, date_utc=None, **kw):
+    ca, cf, _ = _fixtures()
+    out = tmp_path / "bundle"
+    kw.setdefault("rank_files", True)
+    cf.bundle(cf.make_run(tmp_path / "snaps", date_utc=date_utc or cf.recent(), **kw), out, "laptop/watchdog")
+    return out
+
+
+def _closure_bundle(tmp_path, **kw):
+    _, cf, _ = _fixtures()
+    kw.setdefault("closure", True)
+    return _bundle(tmp_path, status=cf.CLOSURE_STATUS, **kw)
+
+
+def _store(tmp_path, *bundles):
+    """BUNDLES published on a fake GitHub (in the order given) and fetched into a store."""
+    ca, _, tc = _fixtures()
+    gh = tc.FakeGitHub()
+    for n, b in enumerate(bundles):
+        tc.released(gh, b, "2026-10-12T00:%02d:00Z" % n)
+    store = tmp_path / "store"
+    ca.fetch(tc.REPO, store, gh=gh)
+    return store
+
+
+def test_link_tier_reads_a_published_bundle_from_the_store(tmp_path, monkeypatch, capsys):
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    store = _store(tmp_path, _bundle(tmp_path))
+    root = tmp_path / "root"
+    _cycle(root, CENSUS_TIME + 3600, commit="f00dfeedbeef0123")           # a local cycle and a census: unused
+    rq, _, _ = load(root, "bfme2", LEDGER, CENSUS_FILES)
+    _checkout(root)
+    assert rq.main(["link", "--bundle", str(store)]) == 0
+    got = capsys.readouterr()
+    head, *rows = got.out.splitlines()
+    assert head.startswith("3 row(s) from link-cycle bundle link-cycle/275a758e4cbb-")
+    assert "1.0 h ago; authenticated publication; ancestry unknown" in head and "STALE" not in head
+    assert "census" not in got.out and "local link cycle" not in got.out and got.err == ""
+    assert [r.split()[2] for r in rows if r.lstrip()[0].isdigit()] == ["?wire@@YAXXZ", "?nul@@YAXXZ", "?far@@YAXXZ"]
+
+
+def test_a_stale_bundle_is_refused_with_its_reason_unless_allowed(tmp_path, monkeypatch, capsys):
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    store = _store(tmp_path, _bundle(tmp_path, "2026-01-01 00:00:00"))
+    root = tmp_path / "root"
+    _cycle(root, CENSUS_TIME + 3600, commit="f00dfeedbeef0123")
+    rq, _, _ = load(root, "bfme2", LEDGER, CENSUS_FILES)
+    _checkout(root)
+    assert rq.main(["link", "--bundle", str(store)]) == 4                  # stale: refused, nothing served
+    got = capsys.readouterr()
+    assert got.out == "" and "link-cycle bundle refused [reason=stale]:" in got.err and "--allow-stale" in got.err
+    assert rq.main(["link", "--bundle", str(store), "--allow-stale"]) == 0
+    got = capsys.readouterr()
+    head = got.out.splitlines()[0]
+    assert "measured 2026-01-01T00:00:00Z UTC" in head and ", STALE;" in head
+    assert "repair_queue: STALE: measured" in got.err
+    ca, _, _ = _fixtures()
+    items, note, warnings = rq.bundle_link_items(store, now=ca.parse_utc("2026-01-01 01:00:00"))
+    assert len(items) == 3 and warnings == [] and "1.0 h ago" in note and "STALE" not in note
+
+
+def test_every_bundle_refusal_exits_with_its_own_reason_and_never_falls_back(tmp_path, monkeypatch, capsys):
+    """An orchestrator routes on the exit code or on `[reason=...]`, not on prose."""
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    root = tmp_path / "root"
+    _cycle(root, CENSUS_TIME + 3600, commit="f00dfeedbeef0123")           # a local cycle and a census exist
+    rq, _, _ = load(root, "bfme2", LEDGER, CENSUS_FILES)
+
+    def refused(argv, code, reason, text):
+        assert rq.main(["link", *argv]) == code
+        got = capsys.readouterr()
+        assert got.out == "" and f"[reason={reason}]" in got.err and text in got.err, got.err
+    fresh = _bundle(tmp_path / "fresh")
+    # this checkout's rules cannot be read: compatibility is not established, whatever is allowed
+    for extra in ([], ["--allow-stale"]):
+        refused(["--bundle", str(fresh), "--local-unpublished", *extra], 5, "incompatible-rules", "RULES UNKNOWN")
+    _checkout(root)
+    refused(["--bundle", str(tmp_path / "missing")], 2, "unavailable", "no bundle at")
+    refused(["--bundle", str(fresh)], 6, "unauthenticated", "has no fetch evidence")
+    rules = _bundle(tmp_path / "rules", rules="link-cycle-3")
+    for extra in ([], ["--allow-stale"], ["--closure"]):
+        refused(["--bundle", str(rules), "--local-unpublished", *extra], 5, "incompatible-rules",
+                "RULES MISMATCH: measured under link-cycle-3")
+    stale = _bundle(tmp_path / "stale", "2026-01-01 00:00:00")
+    refused(["--bundle", str(stale), "--local-unpublished"], 4, "stale", "STALE: measured")
+    refused(["--bundle", str(fresh), "--local-unpublished", "--closure"], 7, "no-closure-report",
+            "carries no closure report (published diagnostic-only")
+    (fresh / "link_status.csv.gz").write_bytes(b"not the measured rows")
+    refused(["--bundle", str(fresh), "--local-unpublished"], 1, "corrupt", "invalid [reason=corrupt]: member "
+                                                                          "link_status.csv.gz")
+    assert rq.main(["link", "--closure"]) == 1                             # no bundle: no local or census fallback
+    got = capsys.readouterr()
+    assert got.out == "" and "need --bundle STORE" in got.err
+
+
+def test_a_local_unpublished_bundle_is_served_only_on_request_and_labelled(tmp_path, monkeypatch, capsys):
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    bundle = _bundle(tmp_path)
+    root = tmp_path / "root"
+    rq, _, _ = load(root, "bfme2", LEDGER)
+    _checkout(root)
+    assert rq.main(["link", "--bundle", str(bundle), "--local-unpublished"]) == 0
+    got = capsys.readouterr()
+    assert "; UNAUTHENTICATED LOCAL BUNDLE; " in got.out.splitlines()[0]
+    assert "repair_queue: UNAUTHENTICATED LOCAL BUNDLE (--local-unpublished)" in got.err
+
+
+# ---- closure roots from a bundle (tools/closure_report.py): link --closure
+
+def test_link_closure_serves_roots_by_conditional_gain_with_their_limits(tmp_path, monkeypatch, capsys):
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    store = _store(tmp_path, _closure_bundle(tmp_path))
+    root = tmp_path / "root"
+    _cycle(root, CENSUS_TIME + 3600, commit="f00dfeedbeef0123")           # a local cycle and a census: unused
+    rq, _, _ = load(root, "bfme2", LEDGER, CENSUS_FILES)
+    _checkout(root)
+    assert rq.main(["link", "--closure", "--bundle", str(store), "--limit", "1"]) == 0
+    got = capsys.readouterr()
+    lines = got.out.splitlines()
+    assert lines[0].startswith("2 closure root(s) with a gain from link-cycle bundle link-cycle/275a758e4cbb-")
+    assert "authenticated publication" in lines[0]
+    assert lines[1] == "  graph: measured graph, bound to the receipt"
+    assert "credit 64 B" in lines[2] and "64 B fail their own checks" in lines[2]
+    assert "46 B are self-strict but closure-blocked; closed-strict but not placed: 500 B" in lines[2]
+    assert lines[3].startswith("  COVERAGE: single roots cover only 30 B of the 46 B closure bucket (65.2%); 16 B sit "
+                               "behind two or more roots and 0 B behind one filler or unknown target")
+    assert lines[3].endswith("1 of the 2 roots unblock only their own failing rows.")
+    assert "CONDITIONAL single-address gain = credit(graph with every failed node at that retail address passing) " \
+           "- credit(graph)" in lines[4]
+    assert lines[5].startswith("  limits: conditional on the frozen graph") and "not a repair proof" in lines[5]
+    assert "do not add them" in lines[5] and "never ranked" in lines[5] and "not its cause or its repair site" in lines[5]
+    assert lines[6].split() == ["70B", "closure", "0x00003000", "?wire@@YAXXZ"]
+    assert lines[7].strip().startswith("Code/b.cpp: beneficiaries 1 row(s) 30 B + own failing rows 1 / 40 B; 1 "
+                                       "failed node(s) at this address; 2 failure(s) to clear: data-back:")
+    assert "no longer lists root 0x00003000 and its rows are closed_strict=1" in lines[8]
+    assert len(lines) == 9 and "census" not in got.out and "local link cycle" not in got.out
+    items, notes, _ = rq.closure_items(store)
+    assert [(i["target_rva"], i["size"]) for i in items] == [("0x00003000", 70), ("0x00004000", 24)]
+
+
+def test_the_closure_queue_says_when_its_graph_is_a_replay(tmp_path, monkeypatch, capsys):
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    store = _store(tmp_path, _closure_bundle(tmp_path, closure="replay"))
+    root = tmp_path / "root"
+    rq, _, _ = load(root, "bfme2", LEDGER)
+    _checkout(root)
+    assert rq.main(["link", "--closure", "--bundle", str(store), "--limit", "1"]) == 0
+    assert capsys.readouterr().out.splitlines()[1] == (
+        "  graph: replayed, graph not receipt-bound: the edges were rebuilt after the run, not written by its measure")
+
+
+def test_the_closure_queue_keeps_its_last_bundle_when_a_newer_one_has_no_report(tmp_path, monkeypatch, capsys):
+    """A measurement published without a closure report does not silently disable the queue:
+    it serves the newest bundle that has one, and says which and why."""
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    ca, cf, _ = _fixtures()
+    ready = _closure_bundle(tmp_path / "ready", date_utc=cf.recent(6), commit=cf.OTHER)
+    bare = _bundle(tmp_path / "bare", cf.recent(1))
+    store = _store(tmp_path, ready, bare)
+    root = tmp_path / "root"
+    rq, _, _ = load(root, "bfme2", LEDGER)
+    _checkout(root)
+    assert rq.main(["link", "--bundle", str(store), "--limit", "0"]) == 0
+    assert "link-cycle bundle link-cycle/275a758e4cbb-" in capsys.readouterr().out      # the newest measurement
+    assert rq.main(["link", "--closure", "--bundle", str(store), "--limit", "1"]) == 0
+    got = capsys.readouterr()
+    assert "link-cycle bundle link-cycle/31d8b0fddd01-" in got.out.splitlines()[0] and "6.0 h ago" in got.out
+    assert "repair_queue: NOT THE NEWEST MEASUREMENT: serving link-cycle/31d8b0fddd01-" in got.err
+    assert "was published without one (published diagnostic-only" in got.err
+    lone = _store(tmp_path / "lone", bare)
+    assert rq.main(["link", "--closure", "--bundle", str(lone)]) == 7
+    got = capsys.readouterr()
+    assert got.out == "" and "[reason=no-closure-report]" in got.err and "nothing else is served in its place" in got.err
+
+
+def test_a_corrupted_closure_report_and_one_of_another_algorithm_are_refused(tmp_path, monkeypatch, capsys):
+    import gzip
+    import hashlib
+    import json
+    monkeypatch.delenv("REPAIR_LINK_STATUS", raising=False)
+    root = tmp_path / "root"
+    rq, _, _ = load(root, "bfme2", LEDGER)
+    _checkout(root)
+    corrupt = _closure_bundle(tmp_path / "corrupt")
+    data = bytearray((corrupt / "closure_roots.json.gz").read_bytes())
+    data[len(data) // 2] ^= 1
+    (corrupt / "closure_roots.json.gz").write_bytes(bytes(data))
+    assert rq.main(["link", "--closure", "--bundle", str(corrupt), "--local-unpublished"]) == 1
+    got = capsys.readouterr()
+    assert got.out == "" and "invalid [reason=corrupt]: member closure_roots.json.gz: sha256" in got.err
+    bundle = _closure_bundle(tmp_path / "algo")
+    path = bundle / "closure_roots.json.gz"
+    doc = json.loads(gzip.decompress(path.read_bytes()))
+    doc["algorithm"] = "affected-bytes/1"
+    raw = json.dumps(doc).encode()
+    path.write_bytes(gzip.compress(raw))
+    manifest = json.loads((bundle / "manifest.json").read_text())
+    manifest["members"][path.name].update(sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                                          size=path.stat().st_size,
+                                          content_sha256=hashlib.sha256(raw).hexdigest(), content_size=len(raw))
+    manifest["components"]["closure_report"]["algorithm"] = "affected-bytes/1"     # a self-consistent other ranking
+    (bundle / "manifest.json").write_text(json.dumps(manifest))
+    assert rq.main(["link", "--closure", "--bundle", str(bundle), "--local-unpublished"]) == 5
+    got = capsys.readouterr()
+    assert got.out == "" and "[reason=incompatible-rules]" in got.err and "algorithm 'affected-bytes/1'" in got.err
