@@ -133,6 +133,7 @@ public:
 	static void ParseLivingWorldPlayer(INI *ini, void *instance);
 	void MarkUnitsForUpgrades(void *region);
     int GetNumRegionsOwned();
+    int GetConflictResolveType();
     void AddUpgrade(void *upgrade, bool persistentOnly);
     void RemoveUpgrade(void *upgrade);
     void rva002E14E9(const BfmeFixedStorage128 &mask);
@@ -149,7 +150,9 @@ public:
     int rva002E199E(const void *thing);
 
 private:
-	unsigned char m_pad000[0x180];
+	unsigned char m_pad000[0x44];
+    int m_playerType; // +44, native and WB switch
+    unsigned char m_pad048[0x180 - 0x48];
 	Int m_colorIndex;
 	LivingWorldPlayerRGBColorView m_color184,m_color190,m_color19C;
 	_STL::vector<LivingWorldPlayerRecordView> m_records;
@@ -159,6 +162,8 @@ private:
     unsigned int m_upgradeBits[32]; // +1D8, native and WB BitFlags<1024>
     unsigned char m_pad258[0x298 - 0x258];
 	Int m_queuedCommandPoints;		// +0x298
+    unsigned char m_pad29C[0x2B4 - 0x29C];
+    int m_conflictResolveType; // +2B4, native and WB case0
 };
 
 // LivingWorldPlayer::OnUnitDequeued, retail 0x002E0764.
@@ -583,4 +588,27 @@ void LivingWorldPlayer::rva002E14E9(const BfmeFixedStorage128 &mask)
 		reinterpret_cast<unsigned int *>(unchecked.bytes)[bit >> 5] &= ~(1u << (bit & 31));
 	}
 	*reinterpret_cast<BfmeFixedStorage128 *>(m_upgradeBits) = accepted;
+}
+
+// WBDE3C90 names GetConflictResolveType at LivingWorldPlayer.cpp368;
+// native2E0699..2E06B8 preserves the type44 switch and case0 field2B4.
+// WB's case1 callee131AD00 is exactly return4. Retail folds that body at
+// 4FB350 with the existing encoding-0 slot2 provider. The declaration below
+// binds that physical body only: it does not identify the player's embedded
+// +4C object as a motion channel. Its original type/method names are unknown.
+// Rehome existing31B C++; no new coverage or original return-enum claim.
+class BFME2Encoding0MotionChannel { public: virtual int UnknownSlot2(); };
+int LivingWorldPlayer::GetConflictResolveType()
+{
+    switch (m_playerType) {
+    case 0:
+        return m_conflictResolveType;
+    case 1:
+        return reinterpret_cast<BFME2Encoding0MotionChannel *>(
+            reinterpret_cast<char *>(this)+0x4C)->BFME2Encoding0MotionChannel::UnknownSlot2();
+    case 2:
+        return 3;
+    default:
+        return 3;
+    }
 }
