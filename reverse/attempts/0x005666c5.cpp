@@ -1,4 +1,6 @@
 // ?rva005666C5@Rva0056616B@@QAEXXZ
+// partial score=0.9233576642335767 date=2026-10-12
+// ?rva005666C5@Rva0056616B@@QAEXXZ
 // partial score=0.182481752 date=2026-10-10
 // ?rva005666C5@Rva0056616B@@QAEXXZ
 // partial score=0.182481752 date=2026-10-10
@@ -166,37 +168,47 @@ class LivingWorldLogic {public:
  char pad[0x8c]; Rva002E2903Player **playersBegin,**playersEnd; char pad94[0xB0-0x94]; Rva002104B6 *regions;
 };
 extern LivingWorldLogic *TheLivingWorldLogic;
-__forceinline bool positionIsZero(const Coord2D &position) {return position.x==0.0f && position.y==0.0f;}
+struct SpawnZero:Coord2D{SpawnZero(){x=0.0f;y=0.0f;}~SpawnZero(){}};
+__forceinline bool spawnEqual(const Coord2D &a,const Coord2D &b){return a.x==b.x && a.y==b.y;}
+
+template<class T>struct SpawnVectorView {
+ T *first,*last,*capacity;
+ unsigned size()const{return unsigned(last-first);}
+ bool empty()const{return first==last;}
+ T &operator[](unsigned n){return first[n];}
+};
+
 void Rva0056616B::rva005666C5() {
- Rva004E3184 *begin=reinterpret_cast<Rva004E3184**>(&m_20)[0];
- Rva004E3184 *end=reinterpret_cast<Rva004E3184**>(&m_20)[1];
- for(unsigned int index=0;index<(unsigned int)(end-begin);++index) {
-  Rva004E3184 *request=reinterpret_cast<Rva004E3184**>(&m_20)[0]+index;
+ SpawnVectorView<Rva004E3184> &requests=*reinterpret_cast<SpawnVectorView<Rva004E3184> *>(&m_20);
+ for(unsigned int index=0;index<requests.size();++index) {
+  Rva004E3184 *request=&requests[index];
   if(request->m_55) {
-   if(request->m_38.begin==request->m_38.end) TheLivingWorldLogic->spawnCity(request);
-   else for(unsigned int t=0;t<(unsigned int)(request->m_38.end-request->m_38.begin);++t) {
-    AsciiString *playerTemplate=Va00DFF0B0Lookup->find(request->m_38.begin[t]);
-    if(playerTemplate) for(unsigned int p=0;p<(unsigned int)(TheLivingWorldLogic->playersEnd-TheLivingWorldLogic->playersBegin);++p) {
+   if(reinterpret_cast<SpawnVectorView<AsciiString> *>(&request->m_38)->empty()) TheLivingWorldLogic->spawnCity(request);
+   else { SpawnVectorView<AsciiString> &names=*reinterpret_cast<SpawnVectorView<AsciiString> *>(&request->m_38); for(unsigned int t=0;t<names.size();++t) {
+    AsciiString *playerTemplate=Va00DFF0B0Lookup->find(names[t]);
+    if(playerTemplate) for(unsigned int p=0;p<reinterpret_cast<SpawnVectorView<Rva002E2903Player *> *>(&TheLivingWorldLogic->playersBegin)->size();++p) {
      Rva002E2903Player *player=reinterpret_cast<Rva002BA8F1Logic*>(TheLivingWorldLogic)->rva002B52A8(p);
-     if(player->template40==playerTemplate && !reinterpret_cast<Rva002B86AA*>(TheLivingWorldLogic)->rva002B86AA(reinterpret_cast<Rva002B86AAKey*>(request),reinterpret_cast<Rva002B86AAVal*>(player))) {
+     if(playerTemplate==player->template40 && !reinterpret_cast<Rva002B86AA*>(TheLivingWorldLogic)->rva002B86AA(reinterpret_cast<Rva002B86AAKey*>(request),reinterpret_cast<Rva002B86AAVal*>(player))) {
       Rva00318E8COut position;
-      if(!positionIsZero(*reinterpret_cast<Coord2D*>(reinterpret_cast<Rva00318E8C*>(request)->rva00318E8C(&position))))
+      if(!spawnEqual(*reinterpret_cast<Coord2D*>(reinterpret_cast<Rva00318E8C*>(request)->rva00318E8C(&position)),SpawnZero()))
        TheLivingWorldLogic->spawnArmy(request,reinterpret_cast<Rva002B6A04Player*>(player),true);
       else {
-       void *region=TheLivingWorldLogic->regions->rva002104B6(reinterpret_cast<char*>(player)+0x2c);
+       Rva002104B6 *regionManager=TheLivingWorldLogic->regions;
+       void *region=regionManager->rva002104B6(reinterpret_cast<char*>(player)+0x2c);
        if(region) {
         Rva004E3184 temporary(0);
         reinterpret_cast<Rva004FAFF2*>(&temporary)->rva004FAFF2(*reinterpret_cast<const Rva004FAFF2*>(request));
         Coord2D center;
-        if(!reinterpret_cast<Rva002B2702B0*>(TheLivingWorldLogic->regions)->rva0020EA58(region,&center.x)) return;
-        temporary.m_20=center.x; temporary.m_24=center.y;
+        Rva002B2702B0 *centers=reinterpret_cast<Rva002B2702B0*>(TheLivingWorldLogic->regions);
+        if(!centers->rva0020EA58(region,&center.x)) return;
+        *reinterpret_cast<unsigned int *>(&temporary.m_20)=*reinterpret_cast<const unsigned int *>(&center.x); *reinterpret_cast<unsigned int *>(&temporary.m_24)=*reinterpret_cast<const unsigned int *>(&center.y);
         TheLivingWorldLogic->spawnArmy(&temporary,reinterpret_cast<Rva002B6A04Player*>(player),true);
        }
       }
      }
     }
-   }
+   }}
   }
-  begin=reinterpret_cast<Rva004E3184**>(&m_20)[0];end=reinterpret_cast<Rva004E3184**>(&m_20)[1];
+  
  }
 }
