@@ -285,6 +285,17 @@ void WaterRenderObjClass::Get_Obj_Space_Bounding_Sphere(SphereClass & sphere) co
 //-------------------------------------------------------------------------------------------------
 /** WW3D method that returns object bounding box used in collision detection*/
 //-------------------------------------------------------------------------------------------------
+// Retail 0x0007E865 (55B), vtable 0x00BC71xx slot after Get_Obj_Space_Bounding_Sphere:
+// BFME 2 drops Zero Hour's m_dy scaling and uses a flat 0.001 thickness.
+void WaterRenderObjClass::Get_Obj_Space_Bounding_Box(AABoxClass & box) const
+{
+	//Since this object is more of a system (containing lots of water pieces),
+	//let's disable culling by making bounds huge.  Let each piece do it's own cull.
+	Vector3 ObjSpaceCenter; ObjSpaceCenter.Set(0,0,0);
+	Vector3 ObjSpaceExtents; ObjSpaceExtents.Set(50000,50000,0.001f);	//since mirror is a plane, it has no thickness.
+
+	box.Init(ObjSpaceCenter,ObjSpaceExtents);
+}
 
 
 //-------------------------------------------------------------------------------------------------
