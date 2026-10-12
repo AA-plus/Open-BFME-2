@@ -17249,3 +17249,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?push_back@?$vector@PAVLivingWorldRegionCampaign@@V?$allocator@PAVLivingWorldRegionCampaign@@@_STL@@@_STL@@QAEXABQAVLivingWorldRegionCampaign@@@Z,0x004DFCB0,fold-proof=Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldRegionCampaign.cpp; region-manager campaign list push_back in the LivingWorldRegionCampaign block parse 0x00210A14 (REL32 at 0x00210AA4)
 ?rva00420B61@DelayedExperienceLevelGrantSystem@@QAEXPAUExperienceLevelView@@PAVObject@@@Z,0x00420B61,callee of ?rva00420C8E@DelayedExperienceLevelGrantSystem@@QAEXPAUExperienceLevelView@@PAVObject@@_N@Z
 ?rva006C1D60@Rva006C1D60@@QAE_NI_N@Z,0x006C1D60,callee of ?rva006C3660@Rva006C1F60@@QAEXPAX@Z
+?parse@WorldHeightMap@@QAEXAAVDataChunkInput@@HHH@Z,0x000AF238,callee of ??0WorldHeightMap@@QAE@PAVChunkInputStream@@HHH@Z
