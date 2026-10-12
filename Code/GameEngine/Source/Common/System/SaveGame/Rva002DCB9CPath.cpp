@@ -23,6 +23,7 @@ public:
 	StringBase() : m_data(0) {}
 	bool startsWithNoCase(const T *text) const;
 	void set(const T *text);
+	void set(const StringBase<T> &other);
 	void concat(const T *text);
 	void concat(const StringBase<T> &other);
 	void toLower();
@@ -59,6 +60,7 @@ class GameState
 {
 public:
 	AsciiString packPortableMapPath(const AsciiString &in) const;
+	AsciiString unpackPortableMapPath(const AsciiString &in) const;
 };
 
 AsciiString GameState::packPortableMapPath(const AsciiString &in) const
@@ -85,5 +87,37 @@ AsciiString GameState::packPortableMapPath(const AsciiString &in) const
 		((StringBase<char> *)&out)->concat((const StringBase<char> &)in);
 	}
 	((StringBase<char> *)&out)->toLower();
+	return out;
+}
+
+// GameState::unpackPortableMapPath, retail 0x002DC340 (376 bytes; WB
+// 0x00E6E0B0, GameState.cpp:1572): the inverse of the packer above. A packed
+// path starting with S, M, U or L gets its directory prefix back in front of
+// the rest; X (the mixed form) keeps the rest as is; anything else is copied.
+AsciiString GameState::unpackPortableMapPath(const AsciiString &in) const
+{
+	AsciiString out;
+	if (((const StringBase<char> &)in).startsWithNoCase(g_00DBD064)) {
+		((StringBase<char> *)&out)->concat(g_00DBD054);
+		const char *s = in.m_data ? &in.m_data->data[0] : "";
+		((StringBase<char> *)&out)->concat(s + strlen(g_00DBD064));
+	} else if (((const StringBase<char> &)in).startsWithNoCase(g_00DBD068)) {
+		((StringBase<char> *)&out)->concat(g_00DBD058);
+		const char *s = in.m_data ? &in.m_data->data[0] : "";
+		((StringBase<char> *)&out)->concat(s + strlen(g_00DBD068));
+	} else if (((const StringBase<char> &)in).startsWithNoCase(g_00DBD06C)) {
+		((StringBase<char> *)&out)->concat(g_00DBD05C);
+		const char *s = in.m_data ? &in.m_data->data[0] : "";
+		((StringBase<char> *)&out)->concat(s + strlen(g_00DBD06C));
+	} else if (((const StringBase<char> &)in).startsWithNoCase(g_00DBD070)) {
+		((StringBase<char> *)&out)->concat(g_00DBD060);
+		const char *s = in.m_data ? &in.m_data->data[0] : "";
+		((StringBase<char> *)&out)->concat(s + strlen(g_00DBD070));
+	} else if (((const StringBase<char> &)in).startsWithNoCase(g_00DBD074)) {
+		const char *s = in.m_data ? &in.m_data->data[0] : "";
+		((StringBase<char> *)&out)->concat(s + strlen(g_00DBD074));
+	} else {
+		((StringBase<char> *)&out)->set((const StringBase<char> &)in);
+	}
 	return out;
 }
