@@ -24503,7 +24503,6 @@ uw_0078431f,,0x0078431F,11,Code/gen_small/uw_gen_009.cpp,matched,gen-funclet;obj
 uw_00784334,,0x00784334,8,Code/gen_small/uw_gen_010.cpp,matched,gen-funclet;object-symbol=$L7760
 uw_0078433c,,0x0078433C,11,Code/gen_small/uw_gen_008.cpp,matched,gen-funclet;object-symbol=$L2882
 uw_00784347,,0x00784347,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L548
-uw_0078435c,,0x0078435C,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;object-symbol=$L320
 uw_0078436e,,0x0078436E,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L3946
 uw_00784376,,0x00784376,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L543
 uw_00784381,,0x00784381,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L544
@@ -86441,3 +86440,4 @@ __ehhandler$?Rva006EC3E0LoadMovie@@YAPAVAptValue@@PAV1@H@Z,,0x007A9830,10,Code/L
 ?buildFieldParse@EvacuateGarrisonSpecialPowerModuleData@@SAXAAVMultiIniFieldParse@@@Z,,0x004CDBE1,27,Code/GameEngine/Source/GameLogic/Object/Update/EvacuateGarrisonSpecialPowerModuleDataCtor.cpp,matched,Target identity: ModuleFactory registers EvacuateGarrisonSpecialPower with data factory 0x002531B0; that retail factory passes this parse proc at VA 0x008CDBE1; extends rowed SpecialAbilityUpdateModuleData parser with an empty table; rehomed from GapBodiesGE24
 ?Rva003F90E4Parse@@YAXPAVINI@@PAURva003F9004@@@Z,,0x003F90E4,192,Code/GameEngine/Source/Common/Rva003F86F9Ctor.cpp,matched,retail parser assertion; opaque accessed-prefix cdecl ABI; canonical INIException deep-copy metadata; whole EH and throw graphs; native INT3 tail
 ?Rva003F91A4Parse@@YAXPAVINI@@PAURva003F9048@@@Z,,0x003F91A4,180,Code/GameEngine/Source/Common/Rva003F877ECtor.cpp,matched,retail parser assertion; opaque accessed-prefix cdecl ABI; canonical INIException deep-copy metadata; whole EH and throw graphs; native INT3 tail
+uw_0078435c,,0x0078435C,8,Code/GameEngine/Source/Common/Rva003F86F9Ctor.cpp,matched,gen-funclet;object-symbol=$L5001; retail cleanup of canonical AsciiString at parent arg home; parent 0x003F90E4 complete EH EXACT; whole native 8B body
