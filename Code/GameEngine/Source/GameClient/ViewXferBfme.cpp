@@ -166,6 +166,10 @@ public:
 	virtual void slot114();
 	virtual void getPosition(Coord3D *pos);
 
+	// +0x30 setter (see below); non-virtual base half of W3DView's
+	// vftable slot-81 override.
+	void rva004583AF(float value);
+
 	unsigned char m_padding04[0x14];
 	int m_bfme18;
 	int m_bfme1c;
@@ -299,4 +303,15 @@ void View::xfer(Xfer *xfer)
 	xfer->xferReal(&m_bfmea8);
 	xfer->xferReal(&m_bfmeac);
 	xfer->xferReal(&m_bfmeb0);
+}
+
+// Retail 0x004583AF (14B, RET4): View's +0x30 float setter, called by
+// W3DView's vftable slot-81 override 0x0008D218 before it clears its camera
+// move flags. +0x30 is the pitch W3DView::pitchCamera starts from; its
+// getter is vftable slot 82 (0x0008BB23). The body is one ICF fold of every
+// 'store float at +0x30' setter (also LineGroupClass::Set_Line_Size); this
+// definition is that byte-and-relocation twin. Original name unknown.
+void View::rva004583AF(float value)
+{
+	m_bfme30 = value;
 }
