@@ -26,3 +26,29 @@ int Rva002B254F::rva002B254F()
 		return 1;
 	return 0;
 }
+
+class GameLogic;
+extern GameLogic *TheGameLogic;
+struct GameLogicView002B2535
+{
+	char m_pad[0x114];
+	int m_114;
+};
+class Rva002D3627Host;
+extern Rva002D3627Host *g_00DFEF18;
+class Rva002BED10
+{
+public:
+	void rva002BED10();
+};
+class Rva002B2535
+{
+public:
+	void rva002B2535();
+};
+void Rva002B2535::rva002B2535()
+{
+	if (reinterpret_cast<GameLogicView002B2535 *>(TheGameLogic)->m_114 == 3)
+		reinterpret_cast<Rva002BED10 *>(g_00DFEF18)->rva002BED10();
+}
+

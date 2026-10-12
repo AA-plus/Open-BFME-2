@@ -42,3 +42,19 @@ ModuleData *BattlePlanUpdateModuleData::friend_newModuleData(INI *ini)
 		ini->initFromINIMultiProc(data, BattlePlanUpdateModuleData::buildFieldParse);
 	return reinterpret_cast<ModuleData *>(data);
 }
+
+struct FieldParse;
+extern const FieldParse g_battlePlanUpdateFieldParseTable[];
+
+class MultiIniFieldParse
+{
+public:
+	void add(const FieldParse *f, unsigned int extraOffset);
+};
+
+// ?buildFieldParse@BattlePlanUpdateModuleData@@SAXAAVMultiIniFieldParse@@@Z @0x0049861A (17B)
+void __declspec(noinline) BattlePlanUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
+{
+	parse.add(g_battlePlanUpdateFieldParseTable, 0);
+}
+

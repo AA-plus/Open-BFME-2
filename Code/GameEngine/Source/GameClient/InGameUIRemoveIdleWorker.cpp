@@ -255,3 +255,9 @@ void InGameUI::removeIdleWorker(Object *obj, int playerNumber)
 	}
 }
 
+int InGameUI::getIdleWorkerCount(void)
+{
+	return m_idleWorkers[ThePlayerList->getLocalPlayer()->getPlayerIndex()].size();
+}
+
+

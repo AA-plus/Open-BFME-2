@@ -47,6 +47,11 @@ enum KindOfType
 };
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
 class Player;
+class ExperienceTracker
+{
+public:
+	bool rva0039B4EC(int levels, bool flag1, bool flag2);
+};
 class Object
 {
 public:
@@ -62,7 +67,9 @@ public:
 	ObjectID m_id; // +0x74
 	unsigned char m_pad078[0x10C - 0x78];
 	Rva0010CConditionBits m_conditionBits; // +0x10C
-	unsigned char m_pad15C[0x44C - 0x15C];
+	unsigned char m_pad15C[0x264 - 0x15C];
+	ExperienceTracker *m_experienceTracker264; // +0x264
+	unsigned char m_pad268[0x44C - 0x268];
 	int m_44C; // +0x44C
 };
 static __forceinline void clearModelConditionBit(Object *object, int bit)
@@ -336,3 +343,10 @@ void RousingSpeechUpdate::rva004AD176()
 			reinterpret_cast<void *const &>(id));
 	}
 }
+
+void rva004ACD8E(Object *obj)
+{
+	if (obj && obj->m_experienceTracker264)
+		obj->m_experienceTracker264->rva0039B4EC(1, true, false);
+}
+

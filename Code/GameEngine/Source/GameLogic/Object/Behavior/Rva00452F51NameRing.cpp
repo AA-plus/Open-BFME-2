@@ -4,5 +4,28 @@
 // stlport
 #include <vector>
 #include "ascii_string.h"
-class Rva00452F51 {public:const AsciiString&rva00452F51(unsigned)const;char pad[8];_STL::vector<AsciiString> names;};
+class Rva00452F51 {public:__declspec(noinline) const AsciiString&rva00452F51(unsigned)const;char pad[8];_STL::vector<AsciiString> names;};
 const AsciiString&Rva00452F51::rva00452F51(unsigned index)const {if(names.empty())return AsciiString::TheEmptyString;return names[index%names.size()];}
+
+class ThingTemplate;
+class ThingFactory
+{
+public:
+	const ThingTemplate *findTemplate(const AsciiString &name);
+};
+extern ThingFactory *TheThingFactory;
+
+class Rva00452F7C
+{
+public:
+	const ThingTemplate *rva00452F7C(unsigned index);
+};
+
+const ThingTemplate *Rva00452F7C::rva00452F7C(unsigned index)
+{
+	const Rva00452F51 *data = reinterpret_cast<const Rva00452F51 *const *>(this)[-7];
+	if (!data)
+		return 0;
+	return TheThingFactory->findTemplate(data->rva00452F51(index));
+}
+

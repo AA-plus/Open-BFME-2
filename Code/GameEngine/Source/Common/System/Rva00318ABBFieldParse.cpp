@@ -48,3 +48,18 @@ void rva00318ABB(INI *ini)
 	if (TheRva00318ABBTarget != 0)
 		return TheRva00318ABBTarget->t14();
 }
+
+class Rva00318A87
+{
+public:
+	void rva00318A87();
+private:
+	char m_pad[0x0C];
+	AsciiString m_0C;
+};
+
+void Rva00318A87::rva00318A87()
+{
+	m_0C = *(AsciiString *)&g_00E01CF4;
+}
+

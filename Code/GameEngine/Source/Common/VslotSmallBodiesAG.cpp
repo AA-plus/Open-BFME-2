@@ -546,3 +546,68 @@ int rva0034373F(State *state, void *)
 {
 	return !state->m_machine->m_owner->testStatus(OBJECT_STATUS_25);
 }
+
+class Waypoint
+{
+public:
+	virtual void *deleteInstance(Int pool);
+};
+extern Waypoint *g_waypointListHead;
+class Rva0027CE80
+{
+public:
+	void rva0027CE80();
+};
+void Rva0027CE80::rva0027CE80()
+{
+	while (g_waypointListHead)
+		::operator delete(g_waypointListHead->deleteInstance(0));
+}
+
+class Display;
+extern Display *TheDisplay;
+struct DisplayView002D7B50 : public Rva00251C24Slots<82>
+{
+	virtual void v82(Int a, Int b);
+};
+void rva002D7B50(Int a, Int b)
+{
+	if (TheDisplay)
+		reinterpret_cast<DisplayView002D7B50 *>(TheDisplay)->v82(a, b);
+}
+
+class LANAPI;
+extern LANAPI *TheLAN;
+struct LANView0044446D : public Rva00251C24Slots<54>
+{
+	virtual bool v54();
+};
+class AptMpGameSetup
+{
+public:
+	void rva0043DC0F();
+};
+class Rva0043DFE0
+{
+public:
+	void rva0043DBA3();
+};
+struct Rva004469D1Receiver
+{
+	void rva0044446D(bool flag);
+	char m_pad00[0x288];
+	int m_288;
+};
+void Rva004469D1Receiver::rva0044446D(bool flag)
+{
+	if (flag)
+	{
+		if (TheLAN && !reinterpret_cast<LANView0044446D *>(TheLAN)->v54())
+			reinterpret_cast<AptMpGameSetup *>(&m_288)->rva0043DC0F();
+	}
+	else
+	{
+		reinterpret_cast<Rva0043DFE0 *>(&m_288)->rva0043DBA3();
+	}
+}
+

@@ -51,3 +51,69 @@ ModuleData *TemporarilyDefectUpdateModuleData::friend_newModuleData(INI *ini)
 		ini->initFromINIMultiProc(data, TemporarilyDefectUpdateModuleData::buildFieldParse);
 	return reinterpret_cast<ModuleData *>(data);
 }
+
+struct FieldParse;
+extern const int g_emptyFieldParseTable[];
+
+class MultiIniFieldParse
+{
+public:
+	void add(const FieldParse *f, unsigned int extraOffset);
+};
+
+// ?rva00254545@@YAXAAVMultiIniFieldParse@@@Z @0x00254545 (17B)
+void __declspec(noinline) rva00254545(MultiIniFieldParse &p)
+{
+	p.add(reinterpret_cast<const FieldParse *>(g_emptyFieldParseTable), 0);
+}
+
+// ?rva004607F3@@YAXAAVMultiIniFieldParse@@@Z @0x004607F3 (17B)
+void __declspec(noinline) rva004607F3(MultiIniFieldParse &p)
+{
+	p.add(reinterpret_cast<const FieldParse *>(g_emptyFieldParseTable), 0);
+}
+
+class Rva002533FCData
+{
+public:
+	Rva002533FCData()
+	{
+		m_vtable = reinterpret_cast<void *>(((unsigned int)vtbl_00C4ED70));
+	}
+
+private:
+	void *m_vtable;
+	int m_unused04;
+};
+
+// ?ModuleFactoryDataAt002533FC@@YAPAVModuleData@@PAVINI@@@Z @0x002533FC (48B)
+ModuleData *ModuleFactoryDataAt002533FC(INI *ini)
+{
+	Rva002533FCData *data = new Rva002533FCData;
+	if (ini)
+		ini->initFromINIMultiProc(data, rva00254545);
+	return reinterpret_cast<ModuleData *>(data);
+}
+
+// ?ModuleFactoryDataAt00253575@@YAPAVModuleData@@PAVINI@@@Z @0x00253575 (48B)
+ModuleData *ModuleFactoryDataAt00253575(INI *ini)
+{
+	Rva002533FCData *data = new Rva002533FCData;
+	if (ini)
+		ini->initFromINIMultiProc(data, rva004607F3);
+	return reinterpret_cast<ModuleData *>(data);
+}
+
+class DebugDisplayInterface;
+struct _iobuf;
+void __cdecl rva000B3FD0DebugDisplay(DebugDisplayInterface *, void *, _iobuf *);
+
+// ?ModuleFactoryDataAt00255ED8@@YAPAVModuleData@@PAVINI@@@Z @0x00255ED8 (48B)
+ModuleData *ModuleFactoryDataAt00255ED8(INI *ini)
+{
+	Rva002533FCData *data = new Rva002533FCData;
+	if (ini)
+		ini->initFromINIMultiProc(data, reinterpret_cast<void (__cdecl *)(MultiIniFieldParse &)>(rva000B3FD0DebugDisplay));
+	return reinterpret_cast<ModuleData *>(data);
+}
+

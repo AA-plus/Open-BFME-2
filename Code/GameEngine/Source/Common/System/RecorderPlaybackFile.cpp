@@ -54,6 +54,7 @@ static unsigned char recorderSavedGlobalFlag;
 void InitRandom(unsigned int);
 class RecorderClass {public:
  bool playbackFile(UnicodeString filename);
+ void rva0037AEE2();
  char unknown00[0xc];Rva0037D076 *crcInfo;FILE *file;
  UnicodeString path14;char unknown18[4];int mode;UnicodeString currentReplayFilename;
  GameInfo gameInfo;int interval,originalMode,playerCount,localPlayer;
@@ -92,3 +93,10 @@ bool RecorderClass::playbackFile(UnicodeString filename)
  currentReplayFilename=filename;
  return true;
 }
+
+void RecorderClass::rva0037AEE2()
+{
+ TheWritableGlobalData->flag1100=recorderSavedGlobalFlag;
+ TheWritableGlobalData->value1104=recorderSavedGlobalValue;
+}
+

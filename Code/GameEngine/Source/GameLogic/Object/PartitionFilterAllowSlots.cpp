@@ -256,3 +256,25 @@ int Rva00260F1BFilter::getPlayerMask()
 	RELATIONSHIP_MASK_FROM_FLAGS(relationships, m_flags);
 	return ThePlayerList->getPlayersWithRelationship(m_player->getPlayerIndex(), relationships, false);
 }
+
+class ScriptEngine
+{
+public:
+	Bool rva00357AF8(void *obj);
+};
+extern ScriptEngine *TheScriptEngine;
+
+class Rva0026149CFilter : public Rva000421C8
+{
+public:
+	virtual Bool allow(Object *objOther);
+
+private:
+	Bool m_match;								// +0x08
+};
+
+Bool Rva0026149CFilter::allow(Object *objOther)
+{
+	return m_match == TheScriptEngine->rva00357AF8(objOther);
+}
+

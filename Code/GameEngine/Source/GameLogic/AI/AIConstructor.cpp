@@ -206,11 +206,13 @@ namespace _STL {template<> _List_base<AIGroup *,allocator<AIGroup *> >::~_List_b
 // construction implementation is the separately rowed Pathfinder ctor.
 class PathfindServicesInterface {public: virtual void slot0()=0;virtual void slot1()=0;virtual void slot2()=0;virtual void slot3()=0;virtual void slot4()=0;virtual void slot5()=0;virtual void slot6()=0;};
 class Pathfinder:public PathfindServicesInterface,public Snapshot {public: Pathfinder();virtual ~Pathfinder();virtual void slot0();virtual void slot1();virtual void slot2();virtual void slot3();virtual void slot4();virtual void slot5();virtual void slot6();virtual void loadPostProcess();virtual const char *GetSnapshotName()const;virtual void xfer(Xfer*);char storage[0x1D200-8];};
+class INI;
 class AI : public SubsystemInterface, public Snapshot
 {
 public:
  AI(); virtual ~AI();
- void newOverride();
+ __declspec(noinline) void newOverride();
+ static void parseAiDataDefinition(INI *ini);
  __declspec(noinline) void addSideInfo(Rva002FE620*);
  virtual void init(); virtual void reset(); virtual void update();
  virtual void loadPostProcess(); virtual const char *GetSnapshotName()const;
@@ -385,3 +387,27 @@ AI::~AI()
   ::delete current;
  }
 }
+
+struct FieldParse;
+class INI
+{
+public:
+ void initFromINI(void *what, const FieldParse *parseTable);
+ int getLoadType() const { return m_loadType; }
+private:
+ char m_pad[8];
+ int m_loadType;
+};
+extern AI *TheAI;
+extern const FieldParse s_aiDataFieldParseTable[];
+
+void AI::parseAiDataDefinition(INI *ini)
+{
+ if (TheAI)
+ {
+  if (ini->getLoadType() == 2)
+   TheAI->newOverride();
+  ini->initFromINI(TheAI->m_aiData, s_aiDataFieldParseTable);
+ }
+}
+

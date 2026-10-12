@@ -97,3 +97,31 @@ ModuleData *ModuleFactoryDataAt00254DB3(INI *ini)
 		ini->initFromINIMultiProc(data, rva00253475);
 	return reinterpret_cast<ModuleData *>(data);
 }
+
+extern const FieldParse g_rva004A33BEFieldParseTable[];
+
+// ?rva004A33BE@@YAXAAVMultiIniFieldParse@@@Z @0x004A33BE (34B)
+void __declspec(noinline) rva004A33BE(MultiIniFieldParse &p)
+{
+	p.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 0x30);
+	p.add(g_rva004A33BEFieldParseTable, 0);
+}
+
+class Rva002553F6
+{
+public:
+	Rva002553F6();
+
+private:
+	unsigned char m_pad[0x144];
+};
+
+// ?ModuleFactoryDataAt00255440@@YAPAVModuleData@@PAVINI@@@Z @0x00255440 (52B)
+ModuleData *ModuleFactoryDataAt00255440(INI *ini)
+{
+	Rva002553F6 *data = new Rva002553F6;
+	if (ini)
+		ini->initFromINIMultiProc(data, rva004A33BE);
+	return reinterpret_cast<ModuleData *>(data);
+}
+

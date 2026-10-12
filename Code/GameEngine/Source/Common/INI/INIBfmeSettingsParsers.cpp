@@ -265,3 +265,15 @@ void Rva0021526CParse(INI *ini)
 	if (g_00DFE1E4)
 		g_00DFE1E4->slot38();
 }
+
+class Rva009519B
+{
+public:
+	virtual void rva002150BE();
+};
+
+void Rva009519B::rva002150BE()
+{
+	TheCloudEffectSettings = TheCloudEffectSettingsSaved;
+}
+
