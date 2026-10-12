@@ -1,4 +1,6 @@
 // ?rva0009C422@Rva0009D55BProduct@@UAEX_N@Z
+// partial score=0.94 date=2026-10-12
+// ?rva0009C422@Rva0009D55BProduct@@UAEX_N@Z
 // partial score=0.94 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // stlport
