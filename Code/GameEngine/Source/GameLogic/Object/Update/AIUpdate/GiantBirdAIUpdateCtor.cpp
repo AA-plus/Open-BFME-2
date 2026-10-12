@@ -152,6 +152,18 @@ private:
 	unsigned char m_pad[0x60];
 };
 
+// The giant bird's state machine (rowed constructor 0x0036792F in
+// Rva0036792FMachineCtor.cpp, 0x68 bytes, an AIStateMachine).
+class AIStateMachine
+{
+	unsigned char m_unmodelled_00[0x68];
+};
+class Rva00367E26 : public AIStateMachine
+{
+public:
+	Rva00367E26(Object *owner, UnsignedInt nameKey);
+};
+
 class GiantBirdAIUpdate : public AIUpdateInterface
 {
 public:
@@ -159,6 +171,7 @@ public:
 	virtual void rva0036B6B9();
 protected:
 	virtual ~GiantBirdAIUpdate();
+	virtual AIStateMachine *makeStateMachine();
 private:
 	Coord3D m_3E4; // +0x3E4
 	Rva0026AFDAMember m_3F0; // +0x3F0
@@ -275,4 +288,13 @@ void GiantBirdAIUpdate::rva0036B6B9()
 	if (((Rva00355B61 *)TheAiOrdersManager)->rva003552C2((NameKeyType)((GiantBirdObjectView *)obj)->m_id))
 		return;
 	aiIdle(CMD_FROM_AI);
+}
+
+// GiantBirdAIUpdate's makeStateMachine, retail 0x0036819D (63 bytes, slot
+// override in the vtable at 0x00817CD8 region): Zero Hour's pattern
+// (AIUpdateInterface::makeStateMachine 0x00262513) with the giant bird's
+// machine and its key 0x244B9AAA.
+AIStateMachine *GiantBirdAIUpdate::makeStateMachine()
+{
+	return new Rva00367E26(getObject(), 0x244B9AAA);
 }
