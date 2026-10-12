@@ -42,3 +42,33 @@ int Rva002ED15AInfo::cellCallback(PathfindCell *from,PathfindCell *to,int x,int 
   return !((Rva002E6DC4 *)pathfinder)->rva002E6DC4(valid,to);
  }
 }
+
+// Native 002ED01E..002ED0CC is a complete 174-byte callback (RET16).
+// The rowed cell walker 002EF016 and IsLineBlocked wrapper 002F1B32 identify
+// the existing address-derived context; its original class name is unresolved.
+// Rowed initializer 002E931F and WB D3E0E0 establish the 58-byte layout,
+// with validity payload +40 and the previous coordinate pair +50/+54.
+// BFME1 cee35b7d8 LinePassableStruct_linePassableCallback.cpp and Zero Hour
+// AIPathfind.cpp::linePassableCallback guide semantics; native accesses prove
+// BFME2 flag masks, helper selection and layout. The current-cell bits must
+// be compared with the previous cell's layer. Grouping the success path in
+// the blocked test's else gives retail's shared return-one branch.
+struct Rva002ED01EInfo {
+ Pathfinder *pathfinder; Object *object; TCheckMovementInfo info;
+ int valid[4]; ICoord2D previous;
+ int cellCallback(PathfindCell *,PathfindCell *,int,int);
+};
+int Rva002ED01EInfo::cellCallback(PathfindCell *from,PathfindCell *to,int x,int y) {
+ info.cell.x=x; info.cell.y=y; info.layer=(PathfindLayerEnum)to->getLayer();
+ if(from) { if(!pathfinder->rva002EA658(object,info,&previous)) return 1; }
+ else { if(!pathfinder->checkForMovement(object,info)) return 1; }
+ if(info.blocked) return 1;
+ else {
+  previous.x=x; previous.y=y;
+  if(from) {
+   unsigned int bits=to->flags; int layer=(bits>>4)&0x3f;
+   if(Rva001E3679(layer) && from->getLayer()==layer && (bits&0xf)==0) return 0;
+  }
+  return !((Rva002E6DC4 *)pathfinder)->rva002E6DC4(valid,to);
+ }
+}
