@@ -79547,3 +79547,13 @@ __ehhandler$??0WorldHeightMap@@QAE@PAVChunkInputStream@@HHH@Z,,0x00761418,10,Cod
 ?rva005ED583@Rva005ED5C3@@QBEPAURva005ED5C3Record@@H@Z,,0x005ED583,16,Code/GameEngine/Source/Common/GapBodiesGE01.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: indexed 0x14-byte record
 ?rva005ED593@Rva005ED5C3@@QBEHH@Z,,0x005ED593,20,Code/GameEngine/Source/Common/GapBodiesGE01.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: indexed record +0x04
 ?rva005ED5A7@Rva005ED5C3@@QBEHH@Z,,0x005ED5A7,20,Code/GameEngine/Source/Common/GapBodiesGE01.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: indexed record +0x08
+?rva003B940A@Rva003B940A@@QAEXXZ,,0x003B940A,4,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: set +0 flag
+?Rva003B940E@@YAXE@Z,,0x003B940E,10,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: set g_Va00DFD944
+?rva003B9418@Rva003B940A@@QAEXXZ,,0x003B9418,9,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: clear +8 and +0xC
+?rva003B9421@Rva003B940A@@QAEX_N@Z,,0x003B9421,10,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: set +0x2C flag
+?Rva003B9433@@YAX_N@Z,,0x003B9433,10,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: set g_Va00DB6218
+?Rva003BD52F@@YAHPBD@Z,,0x003BD52F,61,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: case-insensitive name table index via _strcmpi (6 when absent)
+??0Rva0048FF77@@QAE@H_N@Z,,0x0048FF77,29,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: vtable 0xC4D040 ctor with int and flag
+??0Rva005E9FFB@@QAE@H@Z,,0x005E9FFB,18,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: vtable 0xC78134 ctor over one word
+??0Rva005EA00D@@QAE@HH@Z,,0x005EA00D,25,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: vtable 0xC78154 ctor over two words
+??0Rva005EA026@@QAE@H@Z,,0x005EA026,18,Code/GameEngine/Source/Common/GapBodiesGE09.cpp,matched,Ghidra-unlisted gap body; shape from retail bytes; address-derived identity: vtable 0xC78174 ctor over one word
