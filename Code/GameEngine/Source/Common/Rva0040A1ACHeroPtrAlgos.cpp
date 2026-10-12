@@ -7,6 +7,7 @@
 // 0x40A187 (one resp. two dwords of state). Evidence: target bytes of
 // 0x40A1AC/0x40A1D7/0x40A283; functor spelling is donor inference.
 #include <algorithm>
+#include <vector>
 
 class CreateAHeroData;
 
@@ -49,3 +50,23 @@ template Rva0040A1ACRelease _STL::for_each<CreateAHeroData **, Rva0040A1ACReleas
 template CreateAHeroData **_STL::__find_if<CreateAHeroData **, Rva0040A16E>(CreateAHeroData **, CreateAHeroData **, Rva0040A16E, const _STL::random_access_iterator_tag &);
 template CreateAHeroData **_STL::__find_if<CreateAHeroData **, Rva0040A187>(CreateAHeroData **, CreateAHeroData **, Rva0040A187, const _STL::random_access_iterator_tag &);
 template CreateAHeroData **_STL::find_if<CreateAHeroData **, Rva0040A187>(CreateAHeroData **, CreateAHeroData **, Rva0040A187);
+
+// Native 0x0040A59B..0x0040A5CF (52 bytes): clears the hero-data list: when
+// it owns its elements (+0xC) each is released through the for_each above
+// (the empty functor value-initialised, hence retail's STOSB), then the range
+// is erased (STLport pointer-vector erase folded at 0x0031BD55).
+class Rva0040A59B
+{
+public:
+	void rva0040A59B();
+private:
+	_STL::vector<CreateAHeroData *> m_data;	// +0x00
+	bool m_ownsData;			// +0x0C
+};
+
+void Rva0040A59B::rva0040A59B()
+{
+	if (m_ownsData)
+		_STL::for_each(m_data.begin(), m_data.end(), Rva0040A1ACRelease());
+	m_data.erase(m_data.begin(), m_data.end());
+}
