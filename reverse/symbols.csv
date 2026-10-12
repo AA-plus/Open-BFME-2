@@ -17256,3 +17256,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva005D896F@Rva005D898A@@QAE_NPAVObject@@@Z,0x005D896F,callee of a seat-3 batch H gap body (thiscall; argument count from its ret immediate)
 ?rva002E40DB@Rva002E41EC@@QAE_NPAX0@Z,0x002E40DB,callee of a seat-3 batch H gap body (thiscall; argument count from its ret immediate)
 ?rva0029FCD9@InGameUI@@QAE_NPBD@Z,0x0029FCD9,callee of the seat-3 0x0035AED4 radius-cursor parser (ret 4)
+?rva0036BB2F@Rva00368344@@QAEXPBVWaypoint@@_NH@Z,0x0036BB2F,callee of ?aiDoCommand@Rva00368344@@UAEXPBUAICommandParms@@@Z
