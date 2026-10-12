@@ -149,7 +149,6 @@ public:
 // and the campaign fallback's !local argument are individually read from
 // native and WB. Native call boundaries and associative EH data establish
 // the record and temporary-string lifetimes.
-// ?LivingWorldCampaign::CreatePlayers present-unmatched
 void LivingWorldCampaign::CreatePlayers()
 {
  ((Glo012F1028Type *)TheLivingWorldLogic)->rva002B7D91();
