@@ -79066,3 +79066,4 @@ uw_007876e0,,0x007876E0,11,Code/GameEngine/Source/Common/Rva0042C5C3Dtor.cpp,mat
 ?rva000B330C@Rva000B32EF@@QAEXPBUCoord3D@@MPBI@Z,,0x000B330C,49,Code/GameEngine/Source/Common/Rva000B32EF.cpp,matched,Draw vtable slot between 0x000B32EF and 0x000B333D; plus228 template builds the plus218 radius decal when the plus08 object plusFC is set
 ?rva0004F7F4@Rva004EFE9@@UAEXXZ,,0x0004F7F4,55,Code/GameEngine/Source/Common/Rva0004EFE9Dtor.cpp,matched,Slot 1 after the deleting destructor; erases its plus10 position from the owner plus1500 snapshot list then global-deletes itself
 ?init@Rva004E61C8@@UAEXXZ,,0x004E56EB,57,Code/GameEngine/Source/Common/Bfme/Rva004E61C8Dtor.cpp,matched,SubsystemInterface slot 1 of this table; creates the plus0C FadeInTextRender the destructor deletes
+__ehhandler$?init@Rva004E61C8@@UAEXXZ,,0x0079206C,10,Code/GameEngine/Source/Common/Bfme/Rva004E61C8Dtor.cpp,matched,EH handler of the fade-in text subsystem init 0x004E56EB
