@@ -94,6 +94,13 @@ public:
 
 class DrawModule;
 
+// The rowed W3DDynamicLight::setEnabled 0x00042F30.
+class W3DDynamicLight
+{
+public:
+	void setEnabled(bool enabled);
+};
+
 class ObjectModule
 {
 public:
@@ -119,6 +126,7 @@ class W3DLightDraw : public DrawModule
 {
 public:
 	W3DLightDraw(Thing *thing, const ModuleData *moduleData);
+	virtual void rva000CFA99(bool hidden);
 
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -130,6 +138,16 @@ private:
 	float m_angle; // +0x18
 	float m_height; // +0x1C
 };
+
+// Retail 0x000CFA99 (24 bytes), the W3DLightDraw vftable entry just before
+// the Xfer::IsCRC stub slot (where W3DFloorDraw keeps its +0x15 setter):
+// switches the light at +0x0C off while the flag is set. The slot's
+// DrawModule name is not proven, so it stays address-derived.
+void W3DLightDraw::rva000CFA99(bool hidden)
+{
+	if (m_light)
+		m_light->setEnabled(!hidden);
+}
 
 void W3DLightDraw::xfer(Xfer *xfer)
 {
