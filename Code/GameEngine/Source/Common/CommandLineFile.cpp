@@ -11,12 +11,16 @@ public: void set(const T*);
 };
 class GlobalData {
 public:
-    char prefix[0xab8];
+    char prefix[0x9d4];
+    int m_bfme9D4; // set to 2 by the unlisted 0x003B9F56 parser below
+    char unknown9D8[0xab8 - 0x9d8];
     StringBase<char> m_bfmeFileLabel;
     StringBase<char> m_initialFile;
     char unknownAC0[4];
     bool m_bfmeResumeRequested; // descriptive name; live -resumeGame writes +AC4
     bool m_bfmeAC5; // written by the unlisted 0x003BA2BE parser below
+    char unknownAC6[0xd38 - 0xac6];
+    StringBase<char> m_bfmeModDir; // descriptive: the 0x003B9F56 parser stores "Mods\open_beta"
 };
 extern GlobalData *TheWritableGlobalData;
 void ConvertShortMapPathToLongMapPath(StringBase<char>&,StringBase<char>&);
@@ -49,4 +53,15 @@ int Rva003BA2BEParse(char *args[],int num) {
         ConvertShortMapPathToLongMapPath(TheWritableGlobalData->m_initialFile,TheWritableGlobalData->m_bfmeFileLabel);
     }
     return 2;
+}
+
+// Native 3B9F56..3B9F83 (45 bytes), not in the -command table at 81FBC8:
+// a one-argument switch selecting the open-beta mod directory (+D38) and
+// mode 2 at +9D4. Command name not recovered; address-derived name.
+int Rva003B9F56Parse(char *args[],int num) {
+    if(TheWritableGlobalData) {
+        TheWritableGlobalData->m_bfme9D4=2;
+        TheWritableGlobalData->m_bfmeModDir.set("Mods\\open_beta");
+    }
+    return 1;
 }
