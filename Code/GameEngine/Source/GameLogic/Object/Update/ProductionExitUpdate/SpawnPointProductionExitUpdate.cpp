@@ -78,58 +78,61 @@ public:
 
 //-------------------------------------------------------------------------------------------------
 // ?SpawnPointProductionExitUpdate::exitObjectViaDoor present-unmatched
-void SpawnPointProductionExitUpdate::exitObjectViaDoor( Object *newObj, ExitDoorType exitDoor )
-{
-	DEBUG_ASSERTCRASH(exitDoor == DOOR_1, ("multiple exit doors not supported here"));
+//   (byte-exact definition lives in SpawnPointExitObjectViaDoor.cpp: retail's
+//    receiver is the ExitUpdateInterface sub-object at module+0x20, so the
+//    merged-module ZH layout here cannot host the retail bytes.)
+// void SpawnPointProductionExitUpdate::exitObjectViaDoor( Object *newObj, ExitDoorType exitDoor )
+// {
+// 	DEBUG_ASSERTCRASH(exitDoor == DOOR_1, ("multiple exit doors not supported here"));
 
-	if( !m_bonesInitialized )
-		initializeBonePositions();
+// 	if( !m_bonesInitialized )
+// 		initializeBonePositions();
 
 	// BFME's UpdateModule carries one additional dword before m_object.
-	Object *creationObject = *(Object **)((char *)this + 8);
-	if (creationObject)
-	{
-		for( Int positionIndex = 0; positionIndex < m_spawnPointCount; positionIndex++ )
-		{
-			if( m_spawnPointOccupier[positionIndex] == INVALID_ID )
-				break;
-		}
-		if( positionIndex == m_spawnPointCount )
-		{
-			DEBUG_CRASH( ("A SpawnPoint exit thought it had room but then failed") );
-			return;
-		}
+// 	Object *creationObject = *(Object **)((char *)this + 8);
+// 	if (creationObject)
+// 	{
+// 		for( Int positionIndex = 0; positionIndex < m_spawnPointCount; positionIndex++ )
+// 		{
+// 			if( m_spawnPointOccupier[positionIndex] == INVALID_ID )
+// 				break;
+// 		}
+// 		if( positionIndex == m_spawnPointCount )
+// 		{
+// 			DEBUG_CRASH( ("A SpawnPoint exit thought it had room but then failed") );
+// 			return;
+// 		}
 
-		Coord3D createPoint;
-		Real createAngle;
+// 		Coord3D createPoint;
+// 		Real createAngle;
 
 		// Get the location from our bone array
-		createPoint = m_worldCoordSpawnPoints[positionIndex];
+// 		createPoint = m_worldCoordSpawnPoints[positionIndex];
 
 		// make sure the point is on the terrain
-		createPoint.z = TheTerrainLogic ? ((BfmeSpawnPointTerrainLogic *)TheTerrainLogic)->getLayerHeight( createPoint.x, createPoint.y,
-			((BfmeSpawnPointCreationObject *)creationObject)->getLayer(), FALSE, TRUE) : 0.0f;
+// 		createPoint.z = TheTerrainLogic ? ((BfmeSpawnPointTerrainLogic *)TheTerrainLogic)->getLayerHeight( createPoint.x, createPoint.y,
+// 			((BfmeSpawnPointCreationObject *)creationObject)->getLayer(), FALSE, TRUE) : 0.0f;
 
 		// get the angle
-		createAngle = m_worldAngleSpawnPoints[positionIndex];
+// 		createAngle = m_worldAngleSpawnPoints[positionIndex];
 
 		// record him as taking this spot
-		m_spawnPointOccupier[positionIndex] = newObj->getID();
+// 		m_spawnPointOccupier[positionIndex] = newObj->getID();
 
 		// put him there
-		newObj->setPosition( &createPoint );
-		newObj->setOrientation( createAngle );
-		newObj->setLayer(((BfmeSpawnPointCreationObject *)creationObject)->getLayer());
+// 		newObj->setPosition( &createPoint );
+// 		newObj->setOrientation( createAngle );
+// 		newObj->setLayer(((BfmeSpawnPointCreationObject *)creationObject)->getLayer());
 
-		/** @todo This really should be automatically wrapped up in an actication sequence
-		for objects in general */
+// 		/** @todo This really should be automatically wrapped up in an actication sequence
+// 		for objects in general */
 		// tell the AI about it
-		((BfmeSpawnPointPathfinder *)TheAI->pathfinder())->addObjectToPathfindMap( newObj );
+// 		((BfmeSpawnPointPathfinder *)TheAI->pathfinder())->addObjectToPathfindMap( newObj );
 
 		// You are stuck here, little man.
-		newObj->setDisabled( DISABLED_HELD );
-	}
-}
+// 		newObj->setDisabled( DISABLED_HELD );
+// 	}
+// }
 
 //-------------------------------------------------------------------------------------------------
 ExitDoorType SpawnPointProductionExitUpdate::reserveDoorForExit( const ThingTemplate* objType, Object *specificObject )
