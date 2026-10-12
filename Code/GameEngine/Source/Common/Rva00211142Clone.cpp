@@ -1,5 +1,7 @@
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
-// ?Rva00211142Clone@@YGPAVRva00210F3D@@PAV1@@Z, retail 0x00211142 (89B).
+// ?rva00211142@LivingWorldManager@@QAEPAVRva00210F3D@@PAV2@@Z, retail 0x00211142 (89B).
+// The LivingWorldObject parser at 0x0021376B loads TheLivingWorldManager
+// into ECX before this call. The body does not use this; retain its method ABI.
 // Clone: if src null return null else new Rva003FA776 copy-assign from src then link src+4 and flag +8.
 // Evidence: callees ??2@YAPAXI@Z ??0Rva003FA776@@QAE@XZ ??4Rva00210F3D@@QAEAAV0@ABV0@@Z all rowed; caller 0x002137F1; ret 4 one pointer arg.
 
@@ -24,7 +26,13 @@ public:
 	Rva003FA776();
 };
 
-Rva00210F3D *__stdcall Rva00211142Clone(Rva00210F3D *src)
+class LivingWorldManager
+{
+public:
+	Rva00210F3D *rva00211142(Rva00210F3D *src);
+};
+
+Rva00210F3D *LivingWorldManager::rva00211142(Rva00210F3D *src)
 {
 	if (src == 0)
 		return 0;
