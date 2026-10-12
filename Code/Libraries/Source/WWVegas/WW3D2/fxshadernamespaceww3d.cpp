@@ -44,8 +44,29 @@ public:
     TargetRef00217D4C *m_ptr;
 };
 
-struct TreeHintRef00217D4C : public Rva00080221 {
-    TreeHintRef00217D4C(FogCallback callback) : Rva00080221((const int *)&callback) {}
+class __single_inheritance FXShaderParameterSourceNamespaceWW3D;
+typedef void (FXShaderParameterSourceNamespaceWW3D::*BoundFXMethod)(ID3DXEffect *,D3DXHANDLE);
+struct DelegateDesc { void *m_object; BoundFXMethod m_method; };
+// Builds a bound-method descriptor. Retail stores the method before the
+// object, through a register, as this helper's parameter copy does.
+template <class T>
+inline DelegateDesc MakeDesc(T *object, void (T::*method)(ID3DXEffect *, D3DXHANDLE))
+{
+    DelegateDesc desc;
+    desc.m_object = object;
+    desc.m_method = method;
+    return desc;
+}
+// Both target constructors initialize a four-byte callback handle. This
+// prefix view gives the bound constructor its existing owned linker key.
+class Rva00579E47 : public Rva00080221 {
+public:
+ Rva00579E47(const int *arg):Rva00080221(arg){}
+ Rva00579E47(const DelegateDesc &d);
+};
+struct TreeHintRef00217D4C : public Rva00579E47 {
+    TreeHintRef00217D4C(FogCallback callback) : Rva00579E47((const int *)&callback) {}
+    TreeHintRef00217D4C(const DelegateDesc &d):Rva00579E47(d){}
     ~TreeHintRef00217D4C() {
         if (m_ptr)
             ReleaseTreeHintRef00217D4C(m_ptr);
@@ -65,13 +86,15 @@ public:
 
 class FXShaderParameterSourceNamespaceWW3D {
 public:
+    virtual ~FXShaderParameterSourceNamespaceWW3D();
+    virtual void ResolveBindings(const char*,const char*,FXShaderParameterBinder*);
     void Rva0018BDA0OpacityOverride(ID3DXEffect *effect, D3DXHANDLE handle);
     class SourceNamespace_Fog : public FXShaderParameterSourceNamespace_Struct {
     public:
         virtual void ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry);
     };
 private:
-    unsigned char m_unknown[8];
+    SourceNamespace_Fog m_fog;
     float m_opacityOverride;
 };
 
@@ -169,4 +192,19 @@ void FXShaderParameterSourceNamespaceWW3D::SourceNamespace_Fog::ResolveBindings(
         else if (_strcmpi(path.m_name, "RangeEnd") == 0)
             registry->AddBinding(Rva0018BE65FogRangeEnd, handle);
     }
+}
+
+// Retail 0x0018BF25..0x0018BFCE (169B): the namespace's own ResolveBindings
+// (WorldBuilder fxshadernamespaceww3d.cpp). IsRenderingOverbright binds the
+// free callback, OpacityOverride binds this object's member callback, and
+// Fog hands the rest of the path to the nested Fog namespace above.
+void FXShaderParameterSourceNamespaceWW3D::ResolveBindings(const char *name,const char *handle,FXShaderParameterBinder *registry) {
+ Rva001530E9Path path;
+ Rva001530E9Parse(name,&path);
+ if(_strcmpi(path.m_name,"IsRenderingOverbright")==0)
+  registry->AddBinding(Rva0018BD89IsRenderingOverbright,handle);
+ else if(_strcmpi(path.m_name,"OpacityOverride")==0)
+  registry->AddBinding(MakeDesc(this,&FXShaderParameterSourceNamespaceWW3D::Rva0018BDA0OpacityOverride),handle);
+ else if(_strcmpi(path.m_name,"Fog")==0)
+  m_fog.ResolveBindings(path.m_rest,handle,registry);
 }
