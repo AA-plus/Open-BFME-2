@@ -815,3 +815,35 @@ Rva003F4627Record *Rva003F4332::rva003F4627(int index)
 {
 	return &m_18[index];
 }
+
+// --- 0x003F2371 (17B), 0x003F2382 (18B): the rowed hooks applied to the
+// argument twice (the first widened from a halfword); 0x003F3126 (13B): the
+// second hook on the +4 word twice.
+int Rva003F1DD5Hook(int a, int b);							// 0x003F1DD5
+int Rva003F1E2EHook(int a, int b);							// 0x003F1E2E
+
+class Rva003F2371
+{
+public:
+	int rva003F2371(short value);
+	int rva003F2382(int value);
+	int rva003F3126() const;
+private:
+	int m_00;
+	int m_04;
+};
+
+int Rva003F2371::rva003F2371(short value)
+{
+	return Rva003F1DD5Hook(value, value);
+}
+
+int Rva003F2371::rva003F2382(int value)
+{
+	return Rva003F1E2EHook(value, value);
+}
+
+int Rva003F2371::rva003F3126() const
+{
+	return Rva003F1E2EHook(m_04, m_04);
+}
