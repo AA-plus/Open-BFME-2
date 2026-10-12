@@ -825,9 +825,10 @@ float Rva002636E6::rva002636E6(const Rva002636E6Arg *arg)
 class Locomotor
 {
 public:
-	enum LocoFlag { LOCO_FLAG_3 = 3, LOCO_FLAG_6 = 6 };
+	enum LocoFlag { LOCO_FLAG_1 = 1, LOCO_FLAG_3 = 3, LOCO_FLAG_6 = 6 };
 	void rva002638CC(bool value);
 	void rva002638E4(bool value);
+	void rva00343095(bool value);
 private:
 	void setFlag(LocoFlag flag, bool value);				// 0x001E3459
 };
@@ -840,6 +841,12 @@ void Locomotor::rva002638CC(bool value)
 void Locomotor::rva002638E4(bool value)
 {
 	setFlag(LOCO_FLAG_3, value);
+}
+
+// 0x00343095 (14B): the same for flag 1.
+void Locomotor::rva00343095(bool value)
+{
+	setFlag(LOCO_FLAG_1, value);
 }
 
 // --- 0x00265681 (16B): returns by value the word the +4 handle's pointer

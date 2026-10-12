@@ -83507,3 +83507,35 @@ uw_007aa060,,0x007AA060,15,Code/Libraries/Source/Apt/Rva006F6A50Cluster.cpp,matc
 ?rva0030D47E@Rva0030D4F2@@QAEXH@Z,,0x0030D47E,30,Code/GameEngine/Source/GameClient/Rva0030D4F2Getter.cpp,matched,Dict setter twin of the rowed getters: Dict +0x24 rowed set with key from the rowed NameKey cache get
 ?rva0030D49C@Rva0030D4F2@@QAEXABVAsciiString@@@Z,,0x0030D49C,30,Code/GameEngine/Source/GameClient/Rva0030D4F2Getter.cpp,matched,Dict setter twin of the rowed getters: Dict +0x24 rowed set with key from the rowed NameKey cache get
 ?rva0030D4BA@Rva0030D4F2@@QAEXH@Z,,0x0030D4BA,30,Code/GameEngine/Source/GameClient/Rva0030D4F2Getter.cpp,matched,Dict setter twin of the rowed getters: Dict +0x24 rowed set with key from the rowed NameKey cache get
+??0Rva003297C9@@QAE@XZ,,0x003297C9,14,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+??0Rva0033B123@@QAE@XZ,,0x0033B123,24,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00318E6B@Rva00318E6B@@QBEHXZ,,0x00318E6B,17,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00318E7C@Rva00318E6B@@QBEHXZ,,0x00318E7C,16,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00318E9E@Rva00318E9E@@QBEHXZ,,0x00318E9E,17,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00318EAF@Rva00318E9E@@QBEHXZ,,0x00318EAF,17,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0031911F@Rva0031934BOwner@@QAEXH@Z,,0x0031911F,15,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0031A9F2@Rva0031A9F2@@QAEXPAPAV1@@Z,,0x0031A9F2,14,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?Rva00328A6B@@YAXH@Z,,0x00328A6B,10,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva003297B3@Rva003297B3@@QAEXAAV1@@Z,,0x003297B3,17,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0032A2A3@Rva0032A2A3@@QAEPAURva0032A2A3Record@@H@Z,,0x0032A2A3,12,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0032A42B@Rva0032A2A3@@QAEPAURva00318E6BRecord@@H@Z,,0x0032A42B,13,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0032E013@Rva0032E013@@QAEXABV1@@Z,,0x0032E013,24,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00330450@Rva00330450@@QBEPAXH@Z,,0x00330450,34,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00330AAE@Rva00330AAE@@QAEXM@Z,,0x00330AAE,16,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033162B@Rva0033162B@@QAEXM@Z,,0x0033162B,21,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00332E8F@Rva00332E8F@@QBEHXZ,,0x00332E8F,14,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva003360F6@Rva00335C88@@QAEXXZ,,0x003360F6,11,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00339F65@Rva00339E80@@QAEXXZ,,0x00339F65,11,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?Rva0033B73C@@YAHPBV?$BitFlags@$0HF@@@ABV1@@Z,,0x0033B73C,14,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033CCF2@Rva0033CCF2@@QAEXPBVModuleData@@@Z,,0x0033CCF2,16,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033EBAA@Rva0033EB77Vec@@QAEXXZ,,0x0033EBAA,11,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033F14C@Rva0033F14C@@QAEXM@Z,,0x0033F14C,17,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?Rva0033F220@@YAHH@Z,,0x0033F220,11,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033F22B@Rva0033F14C@@QBE_NXZ,,0x0033F22B,14,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033F2DC@Rva0033F14C@@QAEX_N@Z,,0x0033F2DC,10,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033F2E6@Rva0033F14C@@QAEXPBUCoord3D@@@Z,,0x0033F2E6,17,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033F8F0@Rva0033F14C@@QAEXXZ,,0x0033F8F0,17,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0033F954@Rva0033F14C@@QAEXXZ,,0x0033F954,15,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?Rva0033F9AA@@YAX_N@Z,,0x0033F9AA,10,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00340FBF@Rva00340FBF@@QBE_NXZ,,0x00340FBF,14,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00343095@Locomotor@@QAEX_N@Z,,0x00343095,14,Code/GameEngine/Source/Common/GapBodiesSeat1A.cpp,matched,gap body; Locomotor flag-1 setter through the rowed private setFlag

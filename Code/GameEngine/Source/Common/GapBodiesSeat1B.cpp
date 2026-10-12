@@ -953,3 +953,475 @@ void Rva003182BC::rva00318CCD(bool value)
 			m_90.rva00539141();
 	}
 }
+
+// --- 0x00318E6B (17B) and 0x00318E7C (16B): whether the vector of 16-byte
+// records at +0 has / lacks elements.
+struct Rva00318E6BRecord
+{
+	char m_data[16];
+};
+
+class Rva00318E6B
+{
+public:
+	int rva00318E6B() const;
+	int rva00318E7C() const;
+private:
+	Rva00318E6BRecord *m_start;
+	Rva00318E6BRecord *m_finish;
+};
+
+int Rva00318E6B::rva00318E6B() const
+{
+	return 0 < (unsigned int)(m_finish - m_start);
+}
+
+int Rva00318E6B::rva00318E7C() const
+{
+	return !(0 < (unsigned int)(m_finish - m_start));
+}
+
+// --- 0x00318E9E, 0x00318EAF (17B each): the +0x190 / +0x19C colour as an
+// opaque ARGB word (rowed getAsInt).
+#include "../../../Libraries/Include/Lib/RGBColor.h"
+
+class Rva00318E9E
+{
+public:
+	int rva00318E9E() const;
+	int rva00318EAF() const;
+private:
+	char m_pad000[0x190];
+	RGBColor m_190;
+	RGBColor m_19C;
+};
+
+int Rva00318E9E::rva00318E9E() const
+{
+	return m_190.getAsInt() | 0xFF000000;
+}
+
+int Rva00318E9E::rva00318EAF() const
+{
+	return m_19C.getAsInt() | 0xFF000000;
+}
+
+// --- 0x0031911F (15B): stores +0x54, then the rowed 0x00318EC0 refresh.
+class Rva0031934BOwner
+{
+public:
+	void rva00318EC0();										// 0x00318EC0
+	void rva0031911F(int value);
+private:
+	char m_pad00[0x54];
+	int m_54;
+};
+
+void Rva0031934BOwner::rva0031911F(int value)
+{
+	m_54 = value;
+	rva00318EC0();
+}
+
+// --- 0x0031A9F2 (14B): pushes this onto a singly linked list (next at
+// +0x18).
+class Rva0031A9F2
+{
+public:
+	void rva0031A9F2(Rva0031A9F2 **head);
+private:
+	char m_pad00[0x18];
+	Rva0031A9F2 *m_next;
+};
+
+void Rva0031A9F2::rva0031A9F2(Rva0031A9F2 **head)
+{
+	m_next = *head;
+	*head = this;
+}
+
+// --- 0x00328A6B (10B, cdecl): sets the word at VA 0x00DBD0F0;
+// 0x0033F9AA (10B, cdecl): sets the AI flag byte at VA 0x00E03624.
+extern int g_Va00DBD0F0;
+extern bool g_00E03624;
+
+void Rva00328A6B(int value)
+{
+	g_Va00DBD0F0 = value;
+}
+
+void Rva0033F9AA(bool value)
+{
+	g_00E03624 = value;
+}
+
+// --- 0x003297B3 (17B): swaps the first word with another's;
+// 0x003297C9 (14B): constructor building the +0 Dict with 0 (rowed).
+class Rva003297B3
+{
+public:
+	void rva003297B3(Rva003297B3 &other);
+private:
+	int m_00;
+};
+
+void Rva003297B3::rva003297B3(Rva003297B3 &other)
+{
+	int value = m_00;
+	m_00 = other.m_00;
+	other.m_00 = value;
+}
+
+class Dict
+{
+public:
+	Dict(int numPairsToPreAllocate);						// 0x00313581
+private:
+	void *m_data;
+};
+
+class Rva003297C9
+{
+public:
+	Rva003297C9();
+private:
+	Dict m_dict;
+};
+
+Rva003297C9::Rva003297C9() : m_dict(0)
+{
+}
+
+// --- 0x0032A2A3 (12B): the indexed 128-byte record at *(+0);
+// 0x0032A42B (13B): the indexed 16-byte record at *(+0x0C).
+struct Rva0032A2A3Record
+{
+	char m_data[0x80];
+};
+
+class Rva0032A2A3
+{
+public:
+	Rva0032A2A3Record *rva0032A2A3(int index);
+	Rva00318E6BRecord *rva0032A42B(int index);
+private:
+	Rva0032A2A3Record *m_00;
+	int m_04;
+	int m_08;
+	Rva00318E6BRecord *m_0C;
+};
+
+Rva0032A2A3Record *Rva0032A2A3::rva0032A2A3(int index)
+{
+	return &m_00[index];
+}
+
+Rva00318E6BRecord *Rva0032A2A3::rva0032A42B(int index)
+{
+	return &m_0C[index];
+}
+
+// --- 0x0032E013 (24B): assigns the other's +0xF44 teams record through the
+// rowed TeamsInfoRec::operator=.
+class TeamsInfoRec
+{
+public:
+	TeamsInfoRec &operator=(const TeamsInfoRec &other);		// 0x0032DDB3
+};
+
+class Rva0032E013
+{
+public:
+	void rva0032E013(const Rva0032E013 &other);
+private:
+	char m_pad000[0xF44];
+	TeamsInfoRec m_F44;
+};
+
+void Rva0032E013::rva0032E013(const Rva0032E013 &other)
+{
+	m_F44 = other.m_F44;
+}
+
+// --- 0x00330450 (34B): the indexed pointer of the +0x10 vector, null out
+// of range.
+struct Rva00330450Vector
+{
+	void **m_start;
+	void **m_finish;
+	unsigned int size() const { return m_finish - m_start; }
+	void *at(int index) const { return m_start[index]; }
+};
+
+class Rva00330450
+{
+public:
+	void *rva00330450(int index) const;
+private:
+	char m_pad00[0x10];
+	Rva00330450Vector m_10;
+};
+
+void *Rva00330450::rva00330450(int index) const
+{
+	if (index >= 0 && (unsigned int)index < m_10.size())
+		return m_10.at(index);
+	return 0;
+}
+
+// --- 0x00330AAE (16B): forwards a float to its own slot 9.
+class Rva00330AAE
+{
+public:
+	GAP_V1(0) GAP_V1(1) GAP_V1(2) GAP_V1(3) GAP_V1(4) GAP_V1(5) GAP_V1(6) GAP_V1(7) GAP_V1(8)
+	virtual void slot9(float value);
+	void rva00330AAE(float value);
+};
+
+void Rva00330AAE::rva00330AAE(float value)
+{
+	slot9(value);
+}
+
+// --- 0x0033162B (21B): stores a float at +4 and marks +0x14 set.
+class Rva0033162B
+{
+public:
+	void rva0033162B(float value);
+private:
+	int m_00;
+	float m_04;
+	int m_08;
+	int m_0C;
+	int m_10;
+	int m_14;
+};
+
+void Rva0033162B::rva0033162B(float value)
+{
+	m_04 = value;
+	m_14 = 1;
+}
+
+// --- 0x00332E8F (14B): count of the 0x9C-byte records of the vector at +0.
+struct Rva00332E8FRecord
+{
+	char m_data[0x9C];
+};
+
+class Rva00332E8F
+{
+public:
+	int rva00332E8F() const;
+private:
+	Rva00332E8FRecord *m_start;
+	Rva00332E8FRecord *m_finish;
+};
+
+int Rva00332E8F::rva00332E8F() const
+{
+	return m_finish - m_start;
+}
+
+// --- 0x0033B123 (24B): constructor of a zero word and two 50.0 floats.
+class Rva0033B123
+{
+public:
+	Rva0033B123();
+private:
+	int m_00;
+	float m_04;
+	float m_08;
+};
+
+Rva0033B123::Rva0033B123() : m_00(0), m_04(50.0f), m_08(50.0f)
+{
+}
+
+// --- 0x0033B73C (14B): the rowed BitFlags<117> intersection count of the
+// first argument with the second (cdecl).
+template <int N> class BitFlags
+{
+public:
+	int countIntersection(const BitFlags &other) const;
+};
+
+int Rva0033B73C(const BitFlags<117> *a, const BitFlags<117> &b)
+{
+	return a->countIntersection(b);
+}
+
+// --- 0x0033CCF2 (16B): appends a module data to the +0x18 vector.
+class ModuleData;
+namespace _STL
+{
+	template <class T> class allocator;
+	template <class T, class A> class vector
+	{
+	public:
+		void push_back(const T &value);
+	private:
+		T *m_start;
+		T *m_finish;
+		T *m_end;
+	};
+}
+
+class Rva0033CCF2
+{
+public:
+	void rva0033CCF2(const ModuleData *data);
+private:
+	char m_pad00[0x18];
+	_STL::vector<const ModuleData *, _STL::allocator<const ModuleData *> > m_18;
+};
+
+void Rva0033CCF2::rva0033CCF2(const ModuleData *data)
+{
+	m_18.push_back(data);
+}
+
+// --- Small template-region leaves: 0x0033F14C (17B) float setter +0x1C0;
+// 0x0033F22B (14B) the +4 record's +0x1C flag, true without one;
+// 0x0033F2DC (10B) byte setter +0x48; 0x0033F2E6 (17B) copies a position to
+// +0x20; 0x0033F8F0 (17B) +0x1A0 to FLT_MAX; 0x0033F954 (15B) clears
+// +0x198/+0x19C.
+struct Rva0033F22BRecord
+{
+	char m_pad00[0x1C];
+	bool m_1C;
+};
+
+class Rva0033F14C
+{
+public:
+	void rva0033F14C(float value);
+	bool rva0033F22B() const;
+	void rva0033F2DC(bool value);
+	void rva0033F2E6(const Coord3D *pos);
+	void rva0033F8F0();
+	void rva0033F954();
+private:
+	int m_00;
+	Rva0033F22BRecord *m_04;
+	char m_pad08[0x20 - 8];
+	Coord3D m_20;
+	char m_pad2C[0x48 - 0x2C];
+	bool m_48;
+	char m_pad49[0x198 - 0x49];
+	int m_198;
+	int m_19C;
+	float m_1A0;
+	char m_pad1A4[0x1C0 - 0x1A4];
+	float m_1C0;
+};
+
+void Rva0033F14C::rva0033F14C(float value)
+{
+	m_1C0 = value;
+}
+
+bool Rva0033F14C::rva0033F22B() const
+{
+	if (m_04)
+		return m_04->m_1C;
+	return true;
+}
+
+void Rva0033F14C::rva0033F2DC(bool value)
+{
+	m_48 = value;
+}
+
+void Rva0033F14C::rva0033F2E6(const Coord3D *pos)
+{
+	m_20 = *pos;
+}
+
+void Rva0033F14C::rva0033F8F0()
+{
+	m_1A0 = 3.402823466e+38f;
+}
+
+void Rva0033F14C::rva0033F954()
+{
+	m_198 = 0;
+	m_19C = 0;
+}
+
+// --- 0x0033F220 (11B, cdecl): non-positive values pass, positive become 0.
+int Rva0033F220(int value)
+{
+	if (value > 0)
+		return 0;
+	return value;
+}
+
+// --- 0x00340FBF (14B): the +0x5C record's +0x4C count is positive.
+struct Rva00340FBFRecord
+{
+	char m_pad00[0x4C];
+	int m_4C;
+};
+
+class Rva00340FBF
+{
+public:
+	bool rva00340FBF() const;
+private:
+	char m_pad00[0x5C];
+	Rva00340FBFRecord *m_5C;
+};
+
+bool Rva00340FBF::rva00340FBF() const
+{
+	return m_5C->m_4C > 0;
+}
+
+// --- 0x003360F6, 0x00339F65, 0x0033EBAA (11B each): erase every element of
+// the vector at +0 through its rowed range eraser.
+class Rva00335C88
+{
+public:
+	void *rva00335C88(void *first, void *last);				// 0x00335C88
+	void rva003360F6();
+private:
+	void *m_start;
+	void *m_finish;
+};
+
+void Rva00335C88::rva003360F6()
+{
+	rva00335C88(m_start, m_finish);
+}
+
+struct DynamicPortalLink;
+class Rva00339E80
+{
+public:
+	DynamicPortalLink *rva00339E80(DynamicPortalLink *first, DynamicPortalLink *last);	// 0x00339E80
+	void rva00339F65();
+private:
+	DynamicPortalLink *m_start;
+	DynamicPortalLink *m_finish;
+};
+
+void Rva00339E80::rva00339F65()
+{
+	rva00339E80(m_start, m_finish);
+}
+
+class Rva0033EB77Vec
+{
+public:
+	void *erasePrereqVec(void *first, void *last);			// 0x0033EB77
+	void rva0033EBAA();
+private:
+	void *m_start;
+	void *m_finish;
+};
+
+void Rva0033EB77Vec::rva0033EBAA()
+{
+	erasePrereqVec(m_start, m_finish);
+}
