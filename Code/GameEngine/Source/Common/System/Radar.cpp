@@ -47,6 +47,90 @@ struct RadarRect16
 	int m_0C;
 };
 
+class AsciiString;
+class UnicodeString;
+class PooledString;
+struct XferUnknown11;
+class Coord3DBase;
+class ICoord3D;
+class Region3D;
+class IRegion3D;
+
+
+class Region2D;
+class IRegion2D;
+class RealRange;
+class RGBColor;
+class RGBAColorReal;
+class RGBAColorInt;
+class Snapshot;
+
+class Xfer
+{
+public:
+	class Version;
+
+	Xfer();
+	virtual ~Xfer();
+
+	void Version1();
+
+	virtual bool IsLoading() const;
+	virtual bool IsStoring() const;
+	virtual bool IsCRC() const;
+	virtual bool IsLightCRC() const;
+
+	virtual void v5() = 0;
+	virtual void v6() = 0;
+	virtual void v7() = 0;
+
+	virtual void SkipBadBlock(Snapshot &snapshot, unsigned int size);
+	virtual Xfer &XferRawBytes(void *data,unsigned int size);
+	virtual Xfer &operator==(bool &value);
+	virtual Xfer &operator==(char &value);
+	virtual Xfer &operator==(unsigned char &value);
+	virtual Xfer &operator==(short &value);
+	virtual Xfer &operator==(unsigned short &value);
+	virtual Xfer &operator==(int &value);
+	virtual Xfer &operator==(unsigned int &value);
+	virtual Xfer &operator==(__int64 &value);
+	virtual Xfer &operator==(float &value);
+	virtual Xfer &operator==(AsciiString &value);
+	virtual Xfer &operator==(UnicodeString &value);
+	virtual Xfer &operator==(PooledString &value);
+	virtual Xfer &operator==(Coord3DBase &value);
+	virtual Xfer &operator==(ICoord3D &value);
+	virtual Xfer &operator==(Region3D &value);
+	virtual Xfer &operator==(IRegion3D &value);
+	virtual Xfer &operator==(Coord2D &value);
+	virtual Xfer &operator==(ICoord2D &value);
+	virtual Xfer &operator==(Region2D &value);
+	virtual Xfer &operator==(IRegion2D &value);
+	virtual Xfer &operator==(RealRange &value);
+	virtual Xfer &operator==(RGBColor &value);
+	virtual Xfer &operator==(RGBAColorReal &value);
+	virtual Xfer &operator==(RGBAColorInt &value);
+	virtual Xfer &operator==(Snapshot &value);
+	virtual Xfer &operator==(XferUnknown11 &value) = 0;
+	virtual Xfer &operator==(Version &value);
+
+	virtual Xfer &XferEnum(const char *name, void *data, unsigned int size);
+
+protected:
+	virtual void XferData(unsigned int type, void *data, unsigned int size) = 0;
+};
+
+class Xfer::Version
+{
+public:
+	Version(unsigned char current, unsigned char minimum)
+		: m_current(current), m_minimum(minimum) {}
+
+	unsigned char m_current;
+	unsigned char m_minimum;
+};
+
+
 class Object;
 class RadarObject;
 class Team;
@@ -113,7 +197,9 @@ public:
 	void *m_4;
 	unsigned char m_pad8[0x38-8];
 	Coord3D m_pos; // +0x38, retained for the existing list search
-	unsigned char m_pad44[0x250-0x44];
+	unsigned char m_pad44[0x94-0x44];
+	unsigned int m_destroyed; // native load-side radar guard
+	unsigned char m_pad98[0x250-0x98];
 	void *m_250;
 	unsigned char m_pad254[0x260-0x254];
 	RadarObject *m_260;
@@ -160,6 +246,7 @@ class RadarObject : public Snapshot
 {
 public:
 	RadarObject();
+	RadarObject *friend_getNext() const { return m_next; }
 	virtual ~RadarObject();
 	Object *m_object;
 	RadarObject *m_next;
@@ -178,7 +265,7 @@ inline RadarObject::RadarObject()
 	m_color=-1;
 }
 
-class Radar
+class Radar : public Snapshot
 {
 public:
 	bool isPriorityVisible(RadarPriorityType priority) const;
@@ -192,14 +279,22 @@ public:
 	void rva002D7BB7(void const *src);
 	Bool localPixelToRadar(const ICoord2D *pixel, ICoord2D *radar);
 
+protected:
+	virtual void xfer(Xfer *);
 private:
-	unsigned char m_pad[0x14];
+	unsigned char m_pad04[0x0C];
+	bool m_hidden;
+	bool m_forceOn;
+	char m_pad12[2];
 	RadarObject *m_head14;
 	RadarObject *m_head18;
-	unsigned char m_pad1C[8];
+	float m_viewWidth;
+	float m_viewHeight;
 	float m_xSample; // +0x24
 	float m_ySample; // +0x28
-	char m_pad2C[0x1430 - 0x2C];
+	struct Event { int type; bool active; unsigned int createFrame; unsigned int dieFrame; unsigned int fadeFrame; char color1[16]; char color2[16]; char world[12]; int radar[2]; bool soundPlayed; void *ref; };
+	Event m_events[64]; // native 80-byte event stride
+	int m_nextFree; // +0x142C
 	GameWindow *m_radarWindow; // +0x1430
 	RadarExtent m_extent; // +0x1434..+0x1447
 	char m_pad1448[0x144C - 0x1448];
@@ -502,3 +597,77 @@ RadarObject::~RadarObject() {}
 
 // Native C035D0 slot 1 is the shared empty post-load body at B3FD0.
 void RadarObject::loadPostProcess() {}
+
+struct XferException {char *text; int tag;};
+extern "C" XferException *__cdecl bfmeFormatText(XferException *result,int tag,const char *format,...);
+extern int g_guardTargetTypeThrowInfo;
+struct _s__ThrowInfo;
+extern "C" void __stdcall _CxxThrowException(void *, const _s__ThrowInfo *);
+
+// Native 2D84F6..2D85D7 (225 bytes): ZH Radar.cpp list transfer spine.
+// Reference inputs reviewed at BFME1 cee35b7d8ca077d7255f1c39cb69e9fd9627aa85.
+// WB110A280 and caller 2D85D7 prove identity and the private EDI/EAX ABI.
+// Retail throw-info CFFD18 names XferException (8-byte payload); the formatter
+// and CRT throw calls explicitly construct and throw that payload. Both throw
+// edges are non-returning. The donor's inline next getter preserves native
+// traversal and register allocation. Radar::xfer below supplies both callers.
+static __declspec(noinline) void xferRadarObjectList(Xfer*xfer,RadarObject**head) {
+ xfer->Version1(); unsigned short count=0;
+ RadarObject*r;
+ for(r=*head;r;r=r->m_next)++count;
+ *xfer==count;
+ if(xfer->IsStoring()) {
+  for(r=*head;r;r=r->m_next) *xfer==*reinterpret_cast<Snapshot *>(r);
+ }else {
+  for(r=*head;r;r=r->m_next) {
+   if(!(r->m_object->m_destroyed&1)) {
+    XferException e;bfmeFormatText(&e,5,0);
+    _CxxThrowException(&e,reinterpret_cast<const _s__ThrowInfo *>(&g_guardTargetTypeThrowInfo));__assume(0);
+   }
+  }
+  unsigned short i=0;
+  if(count>i) do {
+   r=new RadarObject;
+   if(!*head)*head=r;
+   else {RadarObject*other=*head;for(;other->friend_getNext()!=0;other=other->friend_getNext()){};other->m_next=r;}
+   *xfer==*reinterpret_cast<Snapshot *>(r);
+   ++i;
+  }while(i<count);
+ }
+}
+
+// Native 2D85D7..2D87B9 (482 bytes), WB1109E60 Radar::DoXfer.
+// ZH event transfer spine; target version 1/3, 64 events and tail field slots.
+// Native slots 70/44 transfer four floats and the 16-byte integer draw rect.
+// Both whole bodies are byte verified; the caller is declared before its own
+// ledger commit so the helper retains its witnessed private register ABI.
+void XferRadarEventType(Xfer*,int*);
+class RadarEventRefSlot {public:void clearRef();};
+// ?xfer@Radar@@MAEXPAVXfer@@@Z present-unmatched
+void Radar::xfer(Xfer*xfer) {
+ if(xfer->IsLightCRC())return;
+ Xfer::Version version(1,3); *xfer==version;
+ *xfer==m_hidden;*xfer==m_forceOn;
+ xferRadarObjectList(xfer,&m_head18);xferRadarObjectList(xfer,&m_head14);
+ unsigned short count=64;*xfer==count;
+ if(count!=64){XferException e;bfmeFormatText(&e,5,0);_CxxThrowException(&e,reinterpret_cast<const _s__ThrowInfo *>(&g_guardTargetTypeThrowInfo));__assume(0);}
+ unsigned short i=0;
+ do {
+  XferRadarEventType(xfer,&m_events[i].type);
+  *xfer==m_events[i].active;*xfer==m_events[i].createFrame;*xfer==m_events[i].dieFrame;*xfer==m_events[i].fadeFrame;
+  *xfer==*reinterpret_cast<RGBAColorInt*>(m_events[i].color1);*xfer==*reinterpret_cast<RGBAColorInt*>(m_events[i].color2);
+  *xfer==*reinterpret_cast<Coord3DBase*>(m_events[i].world);*xfer==*reinterpret_cast<ICoord2D*>(m_events[i].radar);
+  *xfer==m_events[i].soundPlayed;
+  if(!xfer->IsStoring())reinterpret_cast<RadarEventRefSlot*>(&m_events[i].ref)->clearRef();
+  ++i;
+ }while(i<count);
+ *xfer==m_nextFree;
+ if(version.m_minimum<3){int oldIndex=0;*xfer==oldIndex;}
+ *xfer==m_viewWidth;
+ *xfer==m_viewHeight;
+ *xfer==m_xSample;
+ *xfer==m_ySample;
+ *xfer==*reinterpret_cast<IRegion2D*>(&m_rect);*xfer==*reinterpret_cast<bool*>(&m_dirty);*xfer==*reinterpret_cast<IRegion2D*>(&m_rect);*xfer==*reinterpret_cast<unsigned int*>(&m_1460);
+ if(version.m_minimum==2){int old;unsigned int old2;*xfer==old;*xfer==old2;}
+}
+
