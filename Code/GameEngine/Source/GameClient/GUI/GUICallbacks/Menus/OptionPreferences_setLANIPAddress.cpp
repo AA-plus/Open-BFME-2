@@ -50,9 +50,19 @@ class OptionPreferences : public AsciiPreferenceMap
 {
 public:
 	virtual ~OptionPreferences();
+	void setLANIPAddress(AsciiString IP);
 	void setLANIPAddress(unsigned int ip);
+	void setOnlineIPAddress(AsciiString IP);
 	void setOnlineIPAddress(unsigned int ip);
 };
+
+// ?setLANIPAddress@OptionPreferences@@QAEXVAsciiString@@@Z, retail
+// 0x002E505A (97 bytes), directly before the unsigned overload: ZH's
+// string overload, verbatim.
+void OptionPreferences::setLANIPAddress(AsciiString IP)
+{
+	(*this)["IPAddress"] = IP;
+}
 
 // ?setLANIPAddress@OptionPreferences@@QAEXI@Z
 void OptionPreferences::setLANIPAddress(unsigned int ip)
@@ -63,6 +73,14 @@ void OptionPreferences::setLANIPAddress(unsigned int ip)
 	AsciiString key("IPAddress");
 	AsciiString &slot = (*this)[key];
 	slot = text;
+}
+
+// ?setOnlineIPAddress@OptionPreferences@@QAEXVAsciiString@@@Z, retail
+// 0x002E520C (97 bytes), directly before the unsigned overload: ZH's
+// string overload, verbatim.
+void OptionPreferences::setOnlineIPAddress(AsciiString IP)
+{
+	(*this)["GameSpyIPAddress"] = IP;
 }
 
 // ?setOnlineIPAddress@OptionPreferences@@QAEXI@Z
