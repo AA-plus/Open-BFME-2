@@ -16,7 +16,7 @@ static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
 { return a._M_node != b._M_node; }
 }
 struct NoCaseTreeValue4 { public: unsigned char m_data[4]; };
-class AsciiString { public: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct BfmeStringNoCaseLess
 {
 	bool operator()(const AsciiString &left, const AsciiString &right) const;

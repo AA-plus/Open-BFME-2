@@ -16,7 +16,7 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
 
-class AsciiString { public: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 class Rva00064640Record { public: unsigned char m_data[28]; };
 
 typedef _STL::_Rb_tree<int, _STL::pair<const int, AsciiString>, _STL::_Select1st<_STL::pair<const int, AsciiString> >, _STL::less<int>, _STL::allocator<_STL::pair<const int, AsciiString> > > HAsciiStringMapTree;

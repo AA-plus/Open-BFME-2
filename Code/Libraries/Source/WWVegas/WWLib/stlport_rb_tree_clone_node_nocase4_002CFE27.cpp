@@ -10,7 +10,7 @@
 #include <map>
 
 struct NoCaseTreeValue4 { public: unsigned char m_data[4]; };
-class AsciiString { public: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct BfmeStringNoCaseLess
 {
 	bool operator()(const AsciiString &left, const AsciiString &right) const;

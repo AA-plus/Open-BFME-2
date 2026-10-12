@@ -20,7 +20,7 @@ public:
 }
 
 struct NoCaseTreeValue4 { public: unsigned char m_data[4]; };
-class AsciiString { public: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct TreeHintPayload003012F0 { public: unsigned char m_data[12]; };
 
 // ?_M_create_node@?$list@U?$pair@$$CBVAsciiString@@UNoCaseTreeValue4@@@_STL@@V?$allocator@U?$pair@$$CBVAsciiString@@UNoCaseTreeValue4@@@_STL@@@2@@_STL@@IAEPAU?$_List_node@U?$pair@$$CBVAsciiString@@UNoCaseTreeValue4@@@_STL@@@2@ABU?$pair@$$CBVAsciiString@@UNoCaseTreeValue4@@@2@@Z

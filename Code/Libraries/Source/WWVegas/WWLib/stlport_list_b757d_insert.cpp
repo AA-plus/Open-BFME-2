@@ -5,7 +5,7 @@
 // List insert for the 20-byte B757D record (node 0x1c via rowed create_node
 // 0x000BB6EE); same 37B shape as the Pod32 insert pin at 0x000BC180.
 // Evidence: callee 0x000BB6EE plus waiters 0x000BCFC3 0x000BCFDF.
-class AsciiString { public: AsciiString(const AsciiString &); AsciiString &operator=(const AsciiString &); __forceinline ~AsciiString(); protected: void releaseBuffer(); private: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct BfmeStringRecord000B757D {
     unsigned int word0, word1; AsciiString text; unsigned int word2; unsigned char tail;
     BfmeStringRecord000B757D();

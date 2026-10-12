@@ -18,32 +18,7 @@
 
 #include <algorithm>
 
-template <class T>
-class StringBase
-{
-    friend class AsciiString;
-private:
-    struct Header
-    {
-        int m_bfmeRefCount;
-        unsigned short m_bfmeLength;
-        unsigned short m_bfmeCapacity;
-        T m_bfmeData[1];
-    };
-
-    Header *m_bfmeHeader;
-    StringBase(const StringBase<T> &other);
-    ~StringBase();
-
-public:
-    void set(const StringBase<T> &other);
-
-    // Out of line: retail calls the shared StringBase<char>::compare at
-    // 0x000069D6; an inline body here would emit a private copy of it.
-    int compare(const StringBase<T> &other) const;
-
-    friend struct S4SortElem20;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 
 // Retail S4+0 is the AsciiString wrapper. Its four-byte StringBase subobject
@@ -51,24 +26,6 @@ public:
 // AsciiString destructor (RVA 0x005EE90 / ILT 0x0000D828), not the private
 // StringBase<char> destructor.
 // class-gate: allow AsciiString the donor's own view; the placed bodies are byte-exact under it
-class AsciiString : private StringBase<char>
-{
-public:
-    AsciiString(const AsciiString &other)
-        : StringBase<char>(other) {}
-    ~AsciiString();
-    // Public copy-set uses the existing folded StringBase worker.
-    void set(const AsciiString &other);
-    AsciiString &operator=(const AsciiString &other)
-    {
-        StringBase<char>::set(other);
-        return *this;
-    }
-    // No AsciiString::compare here: retail's comparator calls the shared
-    // StringBase<char>::compare at 0x000069D6 directly (S4Cmp002EB8E0 below),
-    // and a member defined in this view was emitted as a private five-byte
-    // forwarding COMDAT that the link kept over BFME 2's /alternatename.
-};
 
 struct BfmeSortTailElement12;
 

@@ -18,7 +18,7 @@
 #include <set>
 
 // class-gate: allow AsciiString Retail erase at 0x0002C8D3 calls the dtor thunk at 0x0048BA39.
-class AsciiString { public: ~AsciiString(); private: char *m_text; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 bool operator<(const AsciiString &, const AsciiString &);
 
