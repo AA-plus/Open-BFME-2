@@ -197,7 +197,6 @@ void partial_sort(RandomAccessIter first, RandomAccessIter middle,
 template void partial_sort<int *,
 	Rva00422CA8>(int *, int *, int *, Rva00422CA8);
 
-// ??$__upper_bound@PAHHVRva00422CA8@@H@_STL@@YAPAHPAH0ABHVRva00422CA8@@0@Z present-unmatched
 // retail 0x00423098, 83 bytes. Internal upper-bound over int sort keys;
 // the public 27B wrapper at 0x004235B2 forwards the unused distance pointer.
 // STLport4.5.3 _algo.c supplies this five-argument helper contract. With the
