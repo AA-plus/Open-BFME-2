@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfme2_vector3 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
 // Two guarded forwarders at 0x00091E83 and 0x00091FBA (90 bytes each, ret 0x2C):
 // when the target at +0x14 is set, the nine-argument terrain add is passed on to
 // BaseHeightMapRenderObjClass::addTree (0x0006813B) and its shrub twin
@@ -35,6 +35,7 @@ struct Rva000ECF79Coord
 
 #include <string.h>
 #include "ascii_string.h"
+#include "vector3.h"
 
 class Matrix3D;
 struct Rva000ECF79Data;
@@ -48,6 +49,7 @@ public:
 		const Rva000ECF79Data *data, int shadowKind, const AsciiString &textureName, const AsciiString &nameD );
 	void rva00068223( unsigned int id, Coord3D location, Real scale, const Matrix3D *transform, Real randomScaleAmount,
 		const Rva000E91CEData *data, int shadowKind, const AsciiString &textureName, const AsciiString &nameD );
+	void rva00069C5F( Vector3 pos, Real radius );
 };
 class GeometryInfo;
 // The rowed terrain callees 0x00068073/0x000680D6 and 0x00068119, under
@@ -222,6 +224,7 @@ public:
 	virtual void rva00091E45( const Coord3D *pos, const GeometryInfo &geom, Real value );
 	virtual void rva00091E64( const Coord3D *pos, const GeometryInfo *geom, Real value );
 	virtual void rva00091D3D( Real x, Real y, int value );
+	virtual void rva00091EEC( Vector3 pos, Real radius );
 private:
 	char m_unrecovered04[ 0x10 ];
 	BaseHeightMapRenderObjClass *m_terrainRenderObject;	///< 0x14
@@ -298,4 +301,12 @@ void W3DTerrainVisual::rva00091D3D( Real x, Real y, int value )
 {
 	if (m_object1C)
 		m_object1C->rva000AC514(x, y, value);
+}
+
+// Retail 0x00091EEC (62B, RET 0x10; vtable entry 0x00BC80FC): passes a
+// by-value position and a radius to the rowed four-float render object method.
+void W3DTerrainVisual::rva00091EEC( Vector3 pos, Real radius )
+{
+	if (m_terrainRenderObject)
+		m_terrainRenderObject->rva00069C5F(pos, radius);
 }
