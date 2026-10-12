@@ -18,6 +18,8 @@ public:
 	virtual void anchor();
 
 	int m_refCount;
+	int m_xExtent;											// +0x08
+	int m_yExtent;											// +0x0C
 };
 
 class Rva0074011F
@@ -33,6 +35,7 @@ class W3DBibBuffer
 	friend class BaseHeightMapRenderObjClass;
 protected:
 	void freeBibBuffers();
+	void allocateBibBuffers();
 };
 
 class W3DRoadBuffer
@@ -40,12 +43,16 @@ class W3DRoadBuffer
 	friend class BaseHeightMapRenderObjClass;
 protected:
 	void freeRoadBuffers();
+	void allocateRoadBuffers();
+public:
+	void loadRoads();
 };
 
 class W3DFloorBuffer
 {
 public:
 	void rva000E473F();
+	void allocateFloorBuffers();
 };
 
 // 0x000B3FD0 is the one-byte empty body the toolchain folds many empties into.
@@ -83,7 +90,47 @@ class W3DSnowManager
 {
 public:
 	void ReleaseResources();
+	bool ReAcquireResources();
 };
+
+class TerrainTracksRenderObjClassSystem
+{
+public:
+	void ReAcquireResources();
+};
+
+class W3DShadowManager
+{
+public:
+	bool ReAcquireResources();
+};
+
+class W3DShroud
+{
+public:
+	bool ReAcquireResources();
+};
+
+class W3DTaint
+{
+public:
+	bool ReAcquireResources();
+};
+
+class W3DBuffBuffer
+{
+public:
+	void allocateBuffBuffers();
+};
+
+class W3DBridgeBuffer
+{
+public:
+	void allocateBridgeBuffers();
+};
+
+// 0x000ABA2F ignores ECX: a free body.
+void rva000ABA2F();
 
 void Rva0009A3DECleanup();
 void Rva000A98BACleanup();
@@ -125,6 +172,7 @@ public:
 	virtual void slot1();
 	virtual void slot2();
 	virtual void releaseResources();
+	virtual void reacquireResources();
 };
 
 class DisplayStringManager
@@ -142,6 +190,31 @@ public:
 	SLOT_ROW(0) SLOT_ROW(1) SLOT_ROW(2)
 	virtual void slot30();
 	virtual void releaseResources();
+	virtual void reacquireResources();
+};
+
+class View
+{
+public:
+	SLOT_ROW(0) SLOT_ROW(1)
+	virtual void forceRedraw();
+};
+
+extern View *TheTacticalView;
+
+// The complete object's table as ReAcquireResources reaches it: slot 130
+// first, slot 131 rebuilds the height data from the map, slot 137 (true)
+// once a map is present.
+class CompleteObjectReacquire
+{
+public:
+	SLOT_ROW(0) SLOT_ROW(1) SLOT_ROW(2) SLOT_ROW(3) SLOT_ROW(4) SLOT_ROW(5) SLOT_ROW(6) SLOT_ROW(7) SLOT_ROW(8) SLOT_ROW(9)
+	SLOT_ROW(10) SLOT_ROW(11) SLOT_ROW(12)
+	virtual void slot130();
+	virtual void initHeightData131(int x, int y, WorldHeightMap *map, void *unused);
+	virtual void slot132(); virtual void slot133(); virtual void slot134(); virtual void slot135();
+	virtual void slot136();
+	virtual void slot137(bool on);
 };
 
 class CompleteObject
@@ -161,6 +234,7 @@ class BaseHeightMapRenderObjClass
 {
 public:
 	virtual void ReleaseResources();
+	virtual void ReAcquireResources();
 
 private:
 	unsigned char m_pad04[0x36FC - 4];
@@ -175,6 +249,7 @@ private:
 	Rva0074011F *m_release37B0;
 	void *m_shroud;
 	void *m_shroudSecondary;
+	bool m_37BC;											// +0x37BC
 };
 
 void BaseHeightMapRenderObjClass::ReleaseResources()
@@ -221,4 +296,54 @@ void BaseHeightMapRenderObjClass::ReleaseResources()
 	if (TheDisplay)
 		TheDisplay->releaseResources();
 	complete->tail129();
+}
+
+// ?ReAcquireResources@BaseHeightMapRenderObjClass@@UAEXXZ, retail 0x00066962
+// (312B): Zero Hour's BaseHeightMapRenderObjClass::ReAcquireResources order
+// (terrain tracks, shadows, shroud, height data, bib/bridge buffers, snow,
+// roads, two tactical-view redraws) with BFME 2's additions read from retail:
+// a complete-object slot 130 first, the taint, buff and floor buffers, the
+// 0x00DE612C manager's slot 4, the free 0x000ABA2F and a TheDisplay slot-32
+// tail call; the height data rebuild is skipped while +0x37BC is set.
+void BaseHeightMapRenderObjClass::ReAcquireResources()
+{
+	CompleteObjectReacquire *complete = (CompleteObjectReacquire *)((unsigned char *)this - 0xC4);
+	complete->slot130();
+	if (TheTerrainTracksRenderObjClassSystem)
+		TheTerrainTracksRenderObjClassSystem->ReAcquireResources();
+	if (TheW3DShadowManager)
+		TheW3DShadowManager->ReAcquireResources();
+	if (m_shroud)
+		((W3DShroud *)m_shroud)->ReAcquireResources();
+	if (m_shroudSecondary)
+		((W3DTaint *)m_shroudSecondary)->ReAcquireResources();
+	if (m_map && !m_37BC)
+		complete->initHeightData131(m_map->m_xExtent, m_map->m_yExtent, m_map, 0);
+	if (m_release37B0)
+		((W3DBuffBuffer *)m_release37B0)->allocateBuffBuffers();
+	if (m_bibBuffer)
+		m_bibBuffer->allocateBibBuffers();
+	if (m_floorBuffer)
+		m_floorBuffer->allocateFloorBuffers();
+	if (m_release37AC)
+		((W3DBridgeBuffer *)m_release37AC)->allocateBridgeBuffers();
+	if (g_bfmeB991)
+		g_bfmeB991->reacquireResources();
+	if (TheSnowManager)
+		((W3DSnowManager *)TheSnowManager)->ReAcquireResources();
+	if (m_roadBuffer)
+	{
+		m_roadBuffer->allocateRoadBuffers();
+		m_roadBuffer->loadRoads();
+	}
+	if (m_map)
+		complete->slot137(true);
+	if (TheTacticalView)
+	{
+		TheTacticalView->forceRedraw();
+		TheTacticalView->forceRedraw();
+	}
+	rva000ABA2F();
+	if (TheDisplay)
+		TheDisplay->reacquireResources();
 }
