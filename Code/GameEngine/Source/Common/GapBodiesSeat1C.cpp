@@ -1624,3 +1624,11 @@ Rva00418D28Iterator Rva00418BFB::rva00418D28(const void *key)
 {
 	return Rva00418D28Iterator(rva00418BFB(key));
 }
+
+// --- 0x0045B4AD (10B, cdecl): sets the word at VA 0x00DFEFD8.
+extern int g_Va00DFEFD8;
+
+void Rva0045B4AD(int value)
+{
+	g_Va00DFEFD8 = value;
+}

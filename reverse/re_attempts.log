@@ -45614,3 +45614,4 @@ Rva00226733Fallback	0x00226733	214	blocked	Nativewhole214B RET0 cdecl2arg fallba
 ?rva00418D28@Rva00418BFB@@QAE?AURva00418D28Iterator@@PBX@Z	0x00418D28	20	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 20B; gap body; shape from retail bytes; address-derived identity
 ?rva0041AC60@Rva0041AC60@@QAEX_N@Z	0x0041AC60	10	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 10B; gap body; shape from retail bytes; address-derived identity
 ?rva0043DA7D@Rva0041AC60@@QAEX_N@Z	0x0043DA7D	10	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 10B; gap body; shape from retail bytes; address-derived identity
+?Rva0045B4AD@@YAXH@Z	0x0045B4AD	10	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 10B; gap body; shape from retail bytes; address-derived identity

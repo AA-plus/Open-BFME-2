@@ -83648,3 +83648,4 @@ uw_007aa060,,0x007AA060,15,Code/Libraries/Source/Apt/Rva006F6A50Cluster.cpp,matc
 ?rva00418D28@Rva00418BFB@@QAE?AURva00418D28Iterator@@PBX@Z,,0x00418D28,20,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
 ?rva0041AC60@Rva0041AC60@@QAEX_N@Z,,0x0041AC60,10,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
 ?rva0043DA7D@Rva0041AC60@@QAEX_N@Z,,0x0043DA7D,10,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?Rva0045B4AD@@YAXH@Z,,0x0045B4AD,10,Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp,matched,gap body; shape from retail bytes; address-derived identity
