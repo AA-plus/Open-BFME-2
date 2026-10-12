@@ -66,6 +66,7 @@ struct LivingWorldBuildPlot
 	LivingWorldBuildPlot(Int id, LivingWorldRegion *region, const Coord2D &position);
     Bool IsOccupied() const { return m_building != 0; }
     Bool HasBuilding() const { return m_building != 0 && !m_hidden; }
+    Bool HasHiddenBuilding() const { return m_hidden && m_building != 0; }
 
 	unsigned char m_pad00[0x18];
     Int m_key18;
@@ -152,6 +153,8 @@ public:
 	void *rva003F0588();
 	Int rva003F1053();
 	Int rva003F0614(CreateAHeroData *key) const;
+	Int rva003F066B(CreateAHeroData *key) const;
+	Int rva003F06C2(CreateAHeroData *key) const;
     LivingWorldBuildPlot *rva003F088C(Int key) const;
 
 private:
@@ -234,6 +237,34 @@ Int LivingWorldRegion::rva003F0614(CreateAHeroData *key) const
     for (UnsignedInt i = 0; i < m_buildPlots.size(); ++i)
     {
         if (m_buildPlots[i]->HasBuilding() &&
+            m_buildPlots[i]->m_building->field28->field2C == key)
+            ++count;
+    }
+    return count;
+}
+
+// Native 3F066B..3F06C2 RET4: the same count over the hidden plots that
+// still hold a building (the plot's +0x34 flag tested first).
+Int LivingWorldRegion::rva003F066B(CreateAHeroData *key) const
+{
+    Int count = 0;
+    for (UnsignedInt i = 0; i < m_buildPlots.size(); ++i)
+    {
+        if (m_buildPlots[i]->HasHiddenBuilding() &&
+            m_buildPlots[i]->m_building->field28->field2C == key)
+            ++count;
+    }
+    return count;
+}
+
+// Native 3F06C2..3F0711 RET4: the same count over every occupied plot,
+// hidden or not.
+Int LivingWorldRegion::rva003F06C2(CreateAHeroData *key) const
+{
+    Int count = 0;
+    for (UnsignedInt i = 0; i < m_buildPlots.size(); ++i)
+    {
+        if (m_buildPlots[i]->IsOccupied() &&
             m_buildPlots[i]->m_building->field28->field2C == key)
             ++count;
     }
