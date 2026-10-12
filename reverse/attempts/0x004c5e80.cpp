@@ -1,13 +1,13 @@
 // ?update@SiegeDeploySpecialPowerUpdateReceiver@@QAE?AW4UpdateSleepTime@@XZ
-// partial score=0.86 date=2026-10-09
-// cl: /O1 /Ob2 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// partial score=0.99711 date=2026-10-12
+// cl: /I. /O1 /Ob2 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // WB1264270 is the semantic guide for SiegeDeploySpecialPower::setPhase.
 // Retail4C5BE3 proves primary this, phase38/frame3C/target40 and Object condition offsets.
-#include "../../../../../Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 #include <math.h>
-#include "../../../../Include/GameLogic/ContainmentListView.h"
-#include "../../../Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Include/GameLogic/ContainmentListView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 namespace _STL {
 template<class T,class Traits> static inline bool operator!=(const _List_iterator<T,Traits>&a,const _List_iterator<T,Traits>&b){return a._M_node!=b._M_node;}
 template<> _List_base<Rva0036ADF9Element,allocator<Rva0036ADF9Element> >::~_List_base();
@@ -20,7 +20,7 @@ class Object;
 class Rva001E46E1 {public:void rva001E53D8(float,Object*);};
 struct Rva0028AC4EEntry;
 class Module;
-class DynamicPortalBehaviour {public:static Module *rva004608E0(Object*);};
+class DynamicPortalBehaviour {public:static Module *rva004608E0(Object*); bool IsEndPortalAboveWall(Coord3D *);};
 class Rva00460F90 {public:void rva00460F90();};
 class AICommandInterface {public:void aiEvacuate(bool,CommandSourceType);void aiExit(Object*,CommandSourceType);void rva0045003E(int,CommandSourceType);void aiMoveToPosition(const Coord3D*,CommandSourceType);void aiFacePosition(const Coord3D*,int);};
 class SiegePhaseAIHead {unsigned char pad[0x20];};
@@ -88,8 +88,7 @@ class SiegeDeploySpecialPowerUpdateReceiver {public:UpdateSleepTime update();uns
 UpdateSleepTime SiegeDeploySpecialPowerUpdateReceiver::update()
 {
  Object *obj=*(Object**)((char*)this-8);
- if(obj->privateStatus&1){((SiegeDeploySpecialPower*)((char*)this-0x10))->rva004C573C();return UPDATE_SLEEP_FOREVER;}
- if(!phase)return UPDATE_SLEEP_FOREVER;
+ if(obj->privateStatus&1){((SiegeDeploySpecialPower*)((char*)this-0x10))->rva004C573C();goto inactive;} if(!phase) goto inactive;
  if(stop){((SiegeDeploySpecialPower*)((char*)this-0x10))->rva004C5BE3(4);stop=false;return UPDATE_SLEEP_NONE;}
  AIUpdateInterface *ai=obj->ai;
  SiegeUpdateAI *view=(SiegeUpdateAI*)ai;
@@ -112,13 +111,13 @@ UpdateSleepTime SiegeDeploySpecialPowerUpdateReceiver::update()
    Rva004598F2Point face(obj->position);face.x+=offset->x;face.y+=offset->y;face.z+=offset->z;
    if(fabs(obj->GetRelativeAngle((const Coord3D*)&face))<0.15f && (obj->rva0028B35B(targetObject)||view->slot110())){
     Module *portal=DynamicPortalBehaviour::rva004608E0(obj);
-    if(portal && ((Rva00460DF6*)portal)->rva00460DF6(0)){
+    if(portal && ((DynamicPortalBehaviour*)portal)->IsEndPortalAboveWall(0)){
      view->slot136();ai->rva0045003E(0,(CommandSourceType)2);((SiegeDeploySpecialPower*)((char*)this-0x10))->rva004C5BE3(2);break;
     }
    }
    if(view->slot110()){
     ai->ignoreObstacle(targetObject);
-    turn=!turn;
+    if(turn) turn=false; else turn=true;
     if(turn){
      bool docked=false;
      approach=((SiegeDeploySpecialPower*)((char*)this-0x10))->computeApproachPoint(targetObject,(Rva004598F2Point*)offset,&docked);
@@ -132,5 +131,5 @@ UpdateSleepTime SiegeDeploySpecialPowerUpdateReceiver::update()
  case 2:if(++frame>=(*(const SiegePhaseData**)((char*)this-0xc))->delay)((SiegeDeploySpecialPower*)((char*)this-0x10))->rva004C5BE3(3);break;
  case 4:((SiegeDeploySpecialPower*)((char*)this-0x10))->rva004C5BE3(0);break;
  }
- return UPDATE_SLEEP_NONE;
+ return UPDATE_SLEEP_NONE; inactive: return UPDATE_SLEEP_FOREVER;
 }
