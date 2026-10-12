@@ -1,9 +1,9 @@
 // ?rva0059DF60@Rva0059E242@@UAEXXZ
-// partial score=0.9 date=2026-10-07
-// cl: /O2 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
+// partial score=0.93421 date=2026-10-12
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
 #include "Common/BfmeAudioEventPrefix136.h"
 
-struct Rva0059DF60EventSource { char pad[0x10]; OpaqueRefElement4 m_10; };
+struct Rva0059DF60EventSource { char pad[0x10]; OpaqueRefElement4 m_10,m_14; };
 struct Rva0059DF60Sequence { char pad[0x13c]; int m_13c; };
 struct Rva0059DF60Owner { char pad[0x1c]; Rva0059DF60Sequence *m_1c; };
 class Rva005391A9 { public: void rva005391A9(); };
@@ -23,7 +23,7 @@ extern AudioManager *TheAudio;
 class Rva0059E242 {
 public:
     virtual ~Rva0059E242();
-    virtual void rva0059DF60();
+    virtual void rva0059DF60(); virtual void rva0059DFFB();
 private:
     char m_pad04[0x10];
     Rva0059DF60EventSource *m_14;

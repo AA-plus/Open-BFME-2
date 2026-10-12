@@ -1,8 +1,8 @@
 // ?rva002BC971@LivingWorldLogic@@QAEXPBV?$vector@PAUSetupPlayer@@V?$allocator@PAUSetupPlayer@@@_STL@@@_STL@@PAUSetupPlayer@@PBV?$vector@PAUSetupArmy@@V?$allocator@PAUSetupArmy@@@_STL@@@3@PAXPAVRva002BC8C9Vector@@PAUSetupSimulationVector@@@Z
-// partial score=0.8 date=2026-10-10
+// partial score=0.7996 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
-// Native2BC971..2BCCBA RET24. WB D85CD0 names LivingWorldLogic::SetUpAutoResolveBattle.
+// Native2BC971..2BCCBA RET0x18. WB D85CD0 names LivingWorldLogic::SetUpAutoResolveBattle.
 // Target reads establish all view offsets. Native52B output records contain a
 // 12B round/summary-word tree and a12B bonus-vector header, then three floats,
 // two pointers and two ints. Actual application record names remain unknown.
