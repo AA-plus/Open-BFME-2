@@ -1,4 +1,6 @@
 // ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
+// partial score=0.988 date=2026-10-12
+// ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
 // partial score=0.988 date=2026-10-09
 // cl: /O1 /EHsc /MD /arch:SSE /Ireference/shims/bfme2_ascii /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -13,7 +15,7 @@
 #include <map>
 #include <new>
 #include "ascii_string.h"
-#include "../Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "../../Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 
 typedef int Int;
