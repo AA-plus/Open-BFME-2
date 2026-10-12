@@ -707,7 +707,16 @@ struct Rva0046D158Record
 class Rva0046247D
 {
 public:
-	void *rva0046247D(Rva0046247DPair &p);
+	// Rowed at 0x0046247D (Rva0046247DCondPair.cpp); visible and kept out of
+	// line so callers know the pair it fills keeps no pointer to it.
+	__declspec(noinline) void *rva0046247D(Rva0046247DPair &p)
+	{
+		void *base = this;
+		char *field = (char *)base + 0x20;
+		p.m00 = base ? field : 0;
+		p.m04 = (const _STL::list<Object *> *)((char *)base + 0x54);
+		return &p;
+	}
 };
 // The rowed 0x0046E740 on the HordeContain base (slots 30 and 49 pass 0).
 class Rva0046E740
@@ -1173,6 +1182,7 @@ public:
 	virtual void rva0046BD70();
 	virtual void rva0046BE0E();
 	virtual void rva0046BA56(Object *source, int unused);
+	void rva0046BACD();
 	virtual void rva0046C3FE(Player *player);
 	virtual void rva004707DB(Object *obj, float amount);
 	virtual void rva004739B4();
@@ -4016,4 +4026,23 @@ bool HordeContain::attemptBestFirePointPosition(Object *source, Weapon *weapon, 
 	return false;
 }
 
-
+// ?rva0046BACD@HordeContain@@QAEXXZ @0x0046BACD (107 B): a +0x20
+// contain-interface slot like rva0046BA56 beside it: the rowed 0x0029A12B
+// on every contained Object, then on the live Object of every +0x170 key.
+// Retail keeps the contained list in EBX straight from the pair, which cl
+// does once 0x0046247D is visible above.
+void HordeContain::rva0046BACD()
+{
+	Rva0046247DPair p;
+	((Rva0046247D *)((char *)this - 0x20))->rva0046247D(p);
+	const _STL::list<Object *> *items = p.m04;
+	for (_STL::list<Object *>::const_iterator it = items->begin(); it != items->end(); ++it)
+		(*it)->rva0029A12B();
+	HordeContainIface20View *self = (HordeContainIface20View *)this;
+	for (_STL::set<int>::iterator k = self->m_ids.begin(); k != self->m_ids.end(); ++k)
+	{
+		Object *obj = TheGameLogic->findObjectByID((ObjectID)*k);
+		if (obj)
+			obj->rva0029A12B();
+	}
+}
