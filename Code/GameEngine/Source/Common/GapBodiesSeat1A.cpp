@@ -7,6 +7,8 @@
 // spellings.
 #include "GameLogicObjectLookupView.h"
 #include "ascii_string.h"
+#include "unicode_string.h"
+#include "RTS/XYDistanceCallView.h"
 
 extern GameLogic *TheGameLogic;
 
@@ -452,4 +454,467 @@ ModuleData *Rva002546EBModuleData::rva0025470D(INI *ini)
 	if (ini)
 		ini->initFromINIMultiProc(data, rva002546EB);
 	return (ModuleData *)data;
+}
+
+// --- 0x0025F342 (67B): swaps a marker into the +0x80 list in place of the
+// one with the same name, returning the unlinked one (or null); 0x0025F3AE
+// (69B): unlinks and deletes the marker with the argument's name.
+class CameraMarker
+{
+public:
+	~CameraMarker();										// 0x0029D7C2
+	CameraMarker *m_next;
+	AsciiString m_name;
+};
+
+class Rva0025F342
+{
+public:
+	CameraMarker *rva0025F342(CameraMarker *marker);
+	void rva0025F3AE(const CameraMarker *marker);
+private:
+	char m_pad00[0x80];
+	CameraMarker *m_markers;
+};
+
+CameraMarker *Rva0025F342::rva0025F342(CameraMarker *marker)
+{
+	CameraMarker *old = 0;
+	for (CameraMarker **link = &m_markers; *link; link = &(*link)->m_next)
+	{
+		CameraMarker *cur = *link;
+		if (cur->m_name.compare(marker->m_name) == 0)
+		{
+			old = *link;
+			*link = marker;
+			marker->m_next = old->m_next;
+			old->m_next = 0;
+			break;
+		}
+	}
+	return old;
+}
+
+void Rva0025F342::rva0025F3AE(const CameraMarker *marker)
+{
+	for (CameraMarker **link = &m_markers; *link; link = &(*link)->m_next)
+	{
+		CameraMarker *cur = *link;
+		if (cur->m_name.compare(marker->m_name) == 0)
+		{
+			CameraMarker *old = *link;
+			*link = old->m_next;
+			delete old;
+			break;
+		}
+	}
+}
+
+// --- 0x002602C1 (25B): constructor from a unicode string and a word.
+class Rva002602C1
+{
+public:
+	Rva002602C1(const UnicodeString &text, int value);
+private:
+	UnicodeString m_text;
+	int m_04;
+};
+
+Rva002602C1::Rva002602C1(const UnicodeString &text, int value) : m_text(text), m_04(value)
+{
+}
+
+// --- 0x00260DCF (13B): bit 3 of the byte at +0x438.
+class Rva00260DCF
+{
+public:
+	bool rva00260DCF() const;
+private:
+	char m_pad000[0x438];
+	unsigned char m_438;
+};
+
+bool Rva00260DCF::rva00260DCF() const
+{
+	return (m_438 >> 3) & 1;
+}
+
+// --- 0x00260DDC (17B) and 0x0026223A (17B): the +4 word of the record at
+// +0x04 / +0x50, or 999999 without one.
+struct Rva00260DDCRecord
+{
+	int m_00;
+	int m_04;
+};
+
+class Rva00260DDC
+{
+public:
+	int rva00260DDC() const;
+private:
+	int m_00;
+	Rva00260DDCRecord *m_record;
+};
+
+int Rva00260DDC::rva00260DDC() const
+{
+	if (m_record)
+		return m_record->m_04;
+	return 999999;
+}
+
+class Rva0026223A
+{
+public:
+	int rva0026223A() const;
+	int rva00262254() const;
+private:
+	char m_pad00[0x50];
+	Rva00260DDCRecord *m_record;
+	int m_54;
+};
+
+int Rva0026223A::rva0026223A() const
+{
+	if (m_record)
+		return m_record->m_04;
+	return 999999;
+}
+
+// 0x00262254 (15B): a record is present and +0x54 is -1.
+int Rva0026223A::rva00262254() const
+{
+	return m_record != 0 && m_54 == -1;
+}
+
+// --- 0x00262263 (14B): byte +8 set and byte +0x0A clear.
+class Rva00262263
+{
+public:
+	int rva00262263() const;
+private:
+	char m_pad00[8];
+	bool m_08;
+	bool m_09;
+	bool m_0A;
+};
+
+int Rva00262263::rva00262263() const
+{
+	return m_08 && !m_0A;
+}
+
+// --- 0x00260E0D (17B): 1 when the object is not on an airborne locomotor.
+class Object
+{
+public:
+	bool isUsingAirborneLocomotor() const;					// 0x0028B81E
+	int rva0028B511() const;								// 0x0028B511
+	bool rva00292FAC() const;								// 0x00292FAC
+};
+
+class Rva00260E0D
+{
+public:
+	int rva00260E0D(const Object *obj);
+};
+
+int Rva00260E0D::rva00260E0D(const Object *obj)
+{
+	return !obj->isUsingAirborneLocomotor();
+}
+
+// --- 0x00260F3B (21B): the argument's +0x304 word equals this +8 word.
+struct Rva00260F3BOther
+{
+	char m_pad000[0x304];
+	int m_304;
+};
+
+class Rva00260F3B
+{
+public:
+	int rva00260F3B(const Rva00260F3BOther *other);
+private:
+	int m_00;
+	int m_04;
+	int m_08;
+};
+
+int Rva00260F3B::rva00260F3B(const Rva00260F3BOther *other)
+{
+	return other->m_304 == m_08;
+}
+
+// --- 0x00261750 (30B): whether the +8 template's rowed isEquivalentTo the
+// argument's +4 template agrees with the +0x0C flag; 0x0026176E (34B): the
+// same over the rowed 0x00376A62 test of that template's +0x64 name.
+class ThingTemplate
+{
+public:
+	bool isEquivalentTo(const ThingTemplate *tmpl) const;	// 0x0033BB04
+};
+
+class Rva00376A62
+{
+public:
+	bool rva00376A62(const StringBase<char> &val);			// 0x00376A62
+};
+
+struct Rva00261750Template
+{
+	char m_pad00[0x64];
+	AsciiString m_name;
+};
+
+struct Rva00261750Arg
+{
+	int m_00;
+	const void *m_04;
+};
+
+class Rva00261750
+{
+public:
+	int rva00261750(const Rva00261750Arg *arg);
+	int rva0026176E(const Rva00261750Arg *arg);
+private:
+	int m_00;
+	int m_04;
+	void *m_08;
+	bool m_0C;
+};
+
+int Rva00261750::rva00261750(const Rva00261750Arg *arg)
+{
+	return ((ThingTemplate *)m_08)->isEquivalentTo((const ThingTemplate *)arg->m_04) == m_0C;
+}
+
+int Rva00261750::rva0026176E(const Rva00261750Arg *arg)
+{
+	return ((Rva00376A62 *)m_08)->rva00376A62(*(const StringBase<char> *)&((const Rva00261750Template *)arg->m_04)->m_name) == m_0C;
+}
+
+// --- 0x002619AE (19B): the argument's rowed BitFlags<69>::test of this
+// +0x108.
+template <int N> class BitFlags
+{
+public:
+	bool test(const void *other) const;
+};
+
+class Rva002619AE
+{
+public:
+	bool rva002619AE(const BitFlags<69> *flags);
+private:
+	char m_pad000[0x108];
+	int m_108;
+};
+
+bool Rva002619AE::rva002619AE(const BitFlags<69> *flags)
+{
+	return flags->test(&m_108);
+}
+
+// --- 0x002628E0 (25B): the +0x224 owner's rowed removeFromMatching of the
+// argument's +0x74 word and the second argument.
+class Rva00331CBAVectorOwner
+{
+public:
+	void removeFromMatching(int entry, int key);			// 0x00331CBA
+};
+
+struct Rva002628E0Arg
+{
+	char m_pad00[0x74];
+	int m_74;
+};
+
+class Rva002628E0
+{
+public:
+	void rva002628E0(const Rva002628E0Arg *arg, int key);
+private:
+	char m_pad000[0x224];
+	Rva00331CBAVectorOwner m_owner;
+};
+
+void Rva002628E0::rva002628E0(const Rva002628E0Arg *arg, int key)
+{
+	m_owner.removeFromMatching(arg->m_74, key);
+}
+
+// --- 0x00262B7D (44B): TheAI's pathfinder (+0x10) validates a position for
+// the +8 object with its rowed 0x0028B511 answer and this +0x1DC word.
+struct Coord3D;
+class Pathfinder
+{
+public:
+	bool IsValidMovementPositionForObject(const Coord3D *pos, int a, int b, const Object *obj);	// 0x002E909F
+};
+
+class AI;
+extern AI *TheAI;
+
+struct Rva00262B7DAIView
+{
+	char m_pad00[0x10];
+	Pathfinder *m_pathfinder;
+};
+
+class Rva00262B7D
+{
+public:
+	bool rva00262B7D(const Coord3D *pos);
+private:
+	char m_pad000[8];
+	Object *m_obj;
+	char m_pad00C[0x1DC - 0x0C];
+	int m_1DC;
+};
+
+bool Rva00262B7D::rva00262B7D(const Coord3D *pos)
+{
+	Rva00262B7DAIView *ai = (Rva00262B7DAIView *)TheAI;
+	Object *obj = m_obj;
+	int value = m_1DC;
+	Pathfinder *pathfinder = ai->m_pathfinder;
+	return pathfinder->IsValidMovementPositionForObject(pos, obj->rva0028B511(), value, obj);
+}
+
+// --- 0x002636E6 (16B): the rowed squared distance to the argument's +0x38
+// point.
+class Rva002636E6Arg
+{
+public:
+	char m_pad00[0x38];
+	Rva000CBA20Point *m_point;
+};
+
+class Rva002636E6 : public Rva000CBA20
+{
+public:
+	float rva002636E6(const Rva002636E6Arg *arg);
+};
+
+float Rva002636E6::rva002636E6(const Rva002636E6Arg *arg)
+{
+	return distSq((const Rva000CBA20Point *)&arg->m_point);
+}
+
+// --- 0x002638CC, 0x002638E4 (14B each): Locomotor flag setters for flags 6
+// and 3 through the rowed private setFlag.
+class Locomotor
+{
+public:
+	enum LocoFlag { LOCO_FLAG_3 = 3, LOCO_FLAG_6 = 6 };
+	void rva002638CC(bool value);
+	void rva002638E4(bool value);
+private:
+	void setFlag(LocoFlag flag, bool value);				// 0x001E3459
+};
+
+void Locomotor::rva002638CC(bool value)
+{
+	setFlag(LOCO_FLAG_6, value);
+}
+
+void Locomotor::rva002638E4(bool value)
+{
+	setFlag(LOCO_FLAG_3, value);
+}
+
+// --- 0x00265681 (16B): returns by value the word the +4 handle's pointer
+// addresses.
+struct Rva00265681Word
+{
+	Rva00265681Word(int v) : m_value(v) {}
+	int m_value;
+};
+
+class Rva00265681
+{
+public:
+	Rva00265681Word rva00265681();
+private:
+	int m_00;
+	int **m_handle;
+};
+
+Rva00265681Word Rva00265681::rva00265681()
+{
+	return Rva00265681Word(**m_handle);
+}
+
+// --- 0x0026891F (27B): constructor storing two words, then the rowed
+// 0x002654D6 reset.
+class Rva002654D6
+{
+public:
+	Rva002654D6(int a, int b);
+	void rva002654D6();										// 0x002654D6
+private:
+	int m_00;
+	int m_04;
+};
+
+Rva002654D6::Rva002654D6(int a, int b) : m_00(a), m_04(b)
+{
+	rva002654D6();
+}
+
+// --- 0x00268B0C (20B, cdecl): whether the string differs from the text.
+int Rva00268B0C(const AsciiString *str, const char *text)
+{
+	return str->compare(text) != 0;
+}
+
+// --- 0x0026FCF9 (14B): the indexed word of the array at +0x148.
+class Rva0026FCF9
+{
+public:
+	int rva0026FCF9(int index) const;
+private:
+	char m_pad000[0x148];
+	int m_words[1];
+};
+
+int Rva0026FCF9::rva0026FCF9(int index) const
+{
+	return m_words[index];
+}
+
+// --- 0x0027175F (26B): 1 when the +0xFC object answers the rowed
+// 0x00292FAC test.
+class Rva0027175F
+{
+public:
+	int rva0027175F() const;
+private:
+	char m_pad00[0xFC];
+	Object *m_obj;
+};
+
+int Rva0027175F::rva0027175F() const
+{
+	if (m_obj && m_obj->rva00292FAC())
+		return 1;
+	return 0;
+}
+
+// --- 0x0027229B (15B): bit 20 of +0x98 clear.
+class Rva0027229B
+{
+public:
+	bool rva0027229B() const;
+private:
+	char m_pad00[0x98];
+	unsigned int m_98;
+};
+
+bool Rva0027229B::rva0027229B() const
+{
+	bool set = (m_98 >> 20) & 1;
+	return !set;
 }
