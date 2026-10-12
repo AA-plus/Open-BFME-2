@@ -1,4 +1,6 @@
-// ?rva005F9DCB@@YIXPAVRva005F9DCBObj@@HHHHHH@Z
+// ??0Rva005F8FEE@@QAE@HABVAsciiString@@PBDHABURva005F91F3Src@@@Z
+// partial score=0.9 date=2026-10-12
+// ??0Rva005F8FEE@@QAE@HABVAsciiString@@PBDHABURva005F91F3Src@@@Z
 // partial score=0.9 date=2026-10-09
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // NEAR draft (not under Code/): every instruction matches retail except the
@@ -81,21 +83,13 @@ public:
 	int m_refCount;
 };
 
-template <class T> class AptRef
-{
+class Rva00579E47 {public:Rva00579E47(const DelegateDesc &); void *ptr;};
+template <class T> class AptRef {
 public:
-	AptRef(const DelegateDesc *desc) { rva00579E47(desc); }
-	AptRef &rva00579E47(const DelegateDesc *desc); // 0x00579E47
-	~AptRef()
-	{
-		if (m_ptr)
-			ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)m_ptr);
-	}
-
-private:
-	T *m_ptr;
+ AptRef(const DelegateDesc *desc):holder(*desc){}
+ ~AptRef(){if(holder.ptr) ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)holder.ptr);}
+private:Rva00579E47 holder;
 };
-
 class AptCommandMapAdder
 {
 public:

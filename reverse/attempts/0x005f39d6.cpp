@@ -1,7 +1,11 @@
 // ??0Impl@ArmyDetailsMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@H_N@Z
-// partial score=0.98 date=2026-10-09
-// Partial constructor: visible existing bool-fire helper closes stack reuse.
-// Remaining native-calibrated vector-base29 fold and dimensions399 two-stack-op repair.
+// partial score=0.99 date=2026-10-12
+// ??0Impl@ArmyDetailsMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@H_N@Z
+// partial score=0.99 date=2026-10-12
+// The genuine typed IconSlot vector and existing delegate provider now resolve.
+// Constructor1213B is exact with its same-TU dimensions helper placed in scratch.
+// That helper399B still differs at two width-spill operands, EBP28 vs EBP30.
+// The helper uses cl internal ECX convention: no external declare-and-pin shortcut.
 // stlport
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // ?rva005F2CBA@Rva005F2FEF@@QAEXM@Z @0x005F2CBA 135B
@@ -63,10 +67,10 @@ public:
 // erase, rowed as vector<void*>'s (pointer elements fold with both).
 #include <vector>
 namespace _STL {template<class F>F rotate(F,F,F);}
-struct Rva005FSlots:public _STL::vector<void*> {
- Rva005FSlots(const _STL::allocator<void*>&a):_STL::vector<void*>(a){}
- using _STL::vector<void*>::_M_start; using _STL::vector<void*>::_M_finish;
- using _STL::vector<void*>::_M_end_of_storage;
+template<class T> struct Rva005FSlots:public _STL::vector<T*> {
+ Rva005FSlots(const _STL::allocator<T*>&a):_STL::vector<T*>(a){}
+ using _STL::vector<T*>::_M_start; using _STL::vector<T*>::_M_finish;
+ using _STL::vector<T*>::_M_end_of_storage;
 };
 // BfmePathLeafAfterMarker.cpp's path helpers.
 const char *__cdecl Rva00412845AfterLevel(const char *path);
@@ -141,24 +145,28 @@ public:
 	void *m_vtbl;
 	int m_refCount;
 };
+class Rva00579E47 {
+public:
+ Rva00579E47(const DelegateDesc &desc);
+ void *m_ptr;
+};
 template <class T> class AptRef
 {
 public:
-	AptRef(const DelegateDesc *desc) { rva00579E47(desc); }
-	AptRef &rva00579E47(const DelegateDesc *desc); // 0x00579E47
-	AptRef(const AptRef &that) : m_ptr(that.m_ptr)
+	AptRef(const DelegateDesc *desc) : m_holder(*desc) {}
+	AptRef(const AptRef &that) : m_holder(that.m_holder)
 	{
-		if (m_ptr)
-			m_ptr->m_refCount++;
+		if (m_holder.m_ptr)
+			((AptCommandMap *)m_holder.m_ptr)->m_refCount++;
 	}
 	~AptRef()
 	{
-		if (m_ptr)
-			ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)m_ptr);
+		if (m_holder.m_ptr)
+			ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)m_holder.m_ptr);
 	}
 
 private:
-	T *m_ptr;
+	Rva00579E47 m_holder;
 };
 class AptPlayer
 {
@@ -366,7 +374,7 @@ private:
  AptCommandMapAdder m_bindings;
 	Rva000AD6F4 m_scrollBar; // +0x1C, held through Rva005F2CBAScrollBarHolder
 	int m_20; // +0x20, cleared when the last icon slot goes
-	Rva005FSlots m_iconSlots; // +0x24
+	Rva005FSlots<IconSlot> m_iconSlots; // +0x24
 	float m_iconStageWidth; // +0x30
 	float m_iconStageHeight; // +0x34
 	float m_iconStageY; // +0x38, the Apt stage's current scroll offset
@@ -618,7 +626,7 @@ void __cdecl Rva005277D9Fire(Rva00222A8BTarget *target, void *level, const char 
 }
 
 StrategicHUD::ArmyDetailsMovieClip::Impl::Impl(ArmyDetailsMovieClip*owner,int level,const AsciiString&name,int layout,bool backVisible)
- :m_iconSlots(_STL::allocator<void*>()),m_owner(owner),m_level08((void*)level),m_name0C(name),m_20(0),m_iconStageWidth(0),m_iconStageHeight(0),m_iconStageY(0),m_slotWidth(0),m_slotHeight(0),m_scrollRow(0),m_rank4C(-1),m_count54(-1),m_progress50(1.0f)
+ :m_iconSlots(_STL::allocator<IconSlot*>()),m_owner(owner),m_level08((void*)level),m_name0C(name),m_20(0),m_iconStageWidth(0),m_iconStageHeight(0),m_iconStageY(0),m_slotWidth(0),m_slotHeight(0),m_scrollRow(0),m_rank4C(-1),m_count54(-1),m_progress50(1.0f)
 {
  m_flags58 &= 0xe0;
  if(layout==1)Rva005FB5E6AptCall((Rva00222A8BTarget*)g_bfmeAptWindowManager,m_level08,m_name0C.str(),"SetLayout","_hero");
