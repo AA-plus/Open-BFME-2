@@ -1,4 +1,6 @@
 // ?Render@DX8SkinFVFCategoryContainer@@UAEXXZ
+// partial score=0.5 date=2026-10-12
+// ?Render@DX8SkinFVFCategoryContainer@@UAEXXZ
 // partial score=0.863408111 date=2026-10-09
 // cl: /O2 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep
 // ZH dx8renderer.cpp Render semantic source; BFME1 revision9cbfb551fe20.
