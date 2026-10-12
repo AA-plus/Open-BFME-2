@@ -1,10 +1,6 @@
 // ?tryUnderAttackEvent@Radar@@QAEXPBVObject@@@Z
-// partial score=0.95 date=2026-10-12
-// ?tryUnderAttackEvent@Radar@@QAEXPBVObject@@@Z
-// partial score=0.96 date=2026-10-12 MP3: volatile-getter (folded mem-tests, no add/merge!): 554B EXACT size, first-diff +0x46.
-// kind8/9 tests split (no mask-3 merge) via distinct base DAGs (direct member vs manual *(object+4)); retail folds
-// +0x109 per test (test [eax+0x109] x2) while ours shares via add eax,0x109 + test [eax] x2 (GVN merges same-address
-// bases despite spelling). Next: break base-sharing (volatile/call/global provenance) to fold without add.
+// partial score=0.96 date=2026-10-12
+// volatile-getter splits kind8/9 into folded mem-tests (no add, no mask-3 merge): 553B (-1B), first-diff +0x19 (branches). test8 matches; test9 base in edi (want eax). Next: base-reg steering + branch layout without tail-merge.
 // cl: /I. /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
 // ?createEvent@Radar@@QAEXPBUCoord3D@@W4RadarEventType@@M@Z, retail
 // 0x002D88A4 (151 bytes).
