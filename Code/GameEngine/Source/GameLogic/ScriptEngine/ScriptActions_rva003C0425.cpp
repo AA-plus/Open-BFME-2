@@ -33,12 +33,19 @@ public:
 	AUDIO_SLOT(10) AUDIO_SLOT(11) AUDIO_SLOT(12) AUDIO_SLOT(13) AUDIO_SLOT(14)
 	AUDIO_SLOT(15) AUDIO_SLOT(16) AUDIO_SLOT(17) AUDIO_SLOT(18) AUDIO_SLOT(19)
 	AUDIO_SLOT(20) AUDIO_SLOT(21) AUDIO_SLOT(22) AUDIO_SLOT(23) AUDIO_SLOT(24)
-	AUDIO_SLOT(25) AUDIO_SLOT(26) AUDIO_SLOT(27) AUDIO_SLOT(28) AUDIO_SLOT(29)
+#undef AUDIO_SLOT
+	virtual void addAudioEvent(const BfmeAudioEventPrefix136 *event);
+#define AUDIO_SLOT(n) virtual void slot##n();
+	AUDIO_SLOT(26) AUDIO_SLOT(27) AUDIO_SLOT(28) AUDIO_SLOT(29)
 	AUDIO_SLOT(30) AUDIO_SLOT(31) AUDIO_SLOT(32)
 #undef AUDIO_SLOT
 	virtual void addAudioEventSlot33(const BfmeAudioEventPrefix136 *event, int flag);
 #define AUDIO_SLOT(n) virtual void slot##n();
-	AUDIO_SLOT(34) AUDIO_SLOT(35) AUDIO_SLOT(36) AUDIO_SLOT(37) AUDIO_SLOT(38)
+	AUDIO_SLOT(34)
+#undef AUDIO_SLOT
+	virtual void slot35(int a, int b, int c);
+#define AUDIO_SLOT(n) virtual void slot##n();
+	AUDIO_SLOT(36) AUDIO_SLOT(37) AUDIO_SLOT(38)
 	AUDIO_SLOT(39) AUDIO_SLOT(40) AUDIO_SLOT(41) AUDIO_SLOT(42) AUDIO_SLOT(43)
 	AUDIO_SLOT(44) AUDIO_SLOT(45) AUDIO_SLOT(46) AUDIO_SLOT(47) AUDIO_SLOT(48)
 	AUDIO_SLOT(49) AUDIO_SLOT(50) AUDIO_SLOT(51) AUDIO_SLOT(52) AUDIO_SLOT(53)
@@ -100,4 +107,24 @@ void __stdcall Rva003C0425Do(const AsciiString &eventName, bool allowOverlap, bo
 		event.m_string84 = TheScriptEngine->rva00205CE7(text);
 	int post = !allowOverlap;
 	reinterpret_cast<Rva003C0425AudioView *>(TheAudio)->addAudioEventSlot33(&event, post);
+}
+
+// 0x003C0308 (285 bytes, EH, RET 0x18): the same action with a TheAudio slot 0x8C
+// pre-call (0, extra, overlap flag inverted) and the plain addAudioEvent post.
+void __stdcall Rva003C0308Do(const AsciiString &eventName, bool allowOverlap, bool leech,
+	int count, const AsciiString &text, int extra)
+{
+	int post = !allowOverlap;
+	reinterpret_cast<Rva003C0425AudioView *>(TheAudio)->slot35(0, extra, post);
+	if (count < 1 && count != -12345)
+		count = 1;
+	AudioEventInfoRef info = reinterpret_cast<Rva003C0425AudioView *>(TheAudio)->findAudioEvent(eventName);
+	BfmeAudioEventPrefix136 event(*reinterpret_cast<const OpaqueRefElement4 *>(&info), 0);
+	reinterpret_cast<Weapon *>(&event)->setLeechRangeActive(leech);
+	reinterpret_cast<Rva0033F15DDwordSlot *>(&event)->set(ThePlayerList->m_localPlayer->m_playerIndex);
+	event.m_int78 = extra;
+	event.m_int7C = count;
+	if (!text.isEmpty())
+		event.m_string84 = TheScriptEngine->rva00205CE7(text);
+	reinterpret_cast<Rva003C0425AudioView *>(TheAudio)->addAudioEvent(&event);
 }
