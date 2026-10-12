@@ -13,6 +13,11 @@ struct BfmeVciAnchorElem { BfmeVciAnchorElem(); };
 #pragma optimize("gsy", on)
 static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #pragma optimize("", on)
+// Link views: these units' scalar-first Vector3 product and row-vector Matrix3
+// constructor stay inline without emitting copies competing with their owners.
+// Included first so the WWMath headers' own sibling includes find the guards set.
+#include "../../../../../reference/shims/bfme_colmath_linebox_link/vector3.h"
+#include "../../../../../reference/shims/bfme_colmath_linebox_link/matrix3.h"
 #include "rendobj.h"
 #include "colmath.h"
 #include "aaplane.h"
