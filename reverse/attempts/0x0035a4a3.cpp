@@ -1,4 +1,6 @@
 // ?isCellClaimable@TerrainResourceManager@@QAE_NHHHH_NH@Z
+// partial score=0.95 date=2026-10-12
+// ?isCellClaimable@TerrainResourceManager@@QAE_NHHHH_NH@Z
 // partial score=0.94 date=2026-10-10
 // ?isCellClaimable@TerrainResourceManager@@QAE_NHHHH_NH@Z
 // partial score=0.94 date=2026-10-09
@@ -58,7 +60,10 @@ bool TerrainResourceManager::isCellClaimable(int x,int y,int id,int ownId,bool f
           if(status==3 || status==4) return true;
        }
        if(!force) return false;
-       if(claimant.a[0]!=player && id!=0x7FFFF43 && id!=claimant.a[1] && ownId!=claimant.a[1]) return false;
+       if(claimant.a[0]==player) return true;
+       if(id==0x7FFFF43) return true;
+       if(id==claimant.a[1]) return true;
+       if(ownId!=claimant.a[1]) return false;
     }
     else cell.state=0;
     return true;

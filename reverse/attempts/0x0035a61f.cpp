@@ -1,8 +1,10 @@
 // ?rva0035A61F@TerrainResourceManager@@QAEXPAIHHH@Z
+// partial score=0.96 date=2026-10-12
+// ?rva0035A61F@TerrainResourceManager@@QAEXPAIHHH@Z
 // partial score=0.95 date=2026-10-10
 // ?rva0035A61F@TerrainResourceManager@@QAEXPAIHHH@Z
 // partial score=0.95 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
+// cl: /O1 /G6 /arch:SSE /DNDEBUG /MD
 // ?rva0035A61F@TerrainResourceManager@@QAEXPAIHHH@Z
 // Retail 0x0035A61F..0x0035A8D7 (696 bytes, ret 0x10).
 // Fades a terrain-resource overlay colour by how claimable the half-
