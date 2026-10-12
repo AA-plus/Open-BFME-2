@@ -30,7 +30,7 @@ class RefCountClass {
 public:
     virtual void Delete_This();
     int RefCount;
-    void Add_Ref() { ++RefCount; }
+    __declspec(dllimport) __forceinline void Add_Ref() { ++RefCount; }
     __declspec(dllimport) __forceinline void Release_Ref() { if(--RefCount==0) Delete_This(); }
 };
 class MeshModelClass : public RefCountClass {

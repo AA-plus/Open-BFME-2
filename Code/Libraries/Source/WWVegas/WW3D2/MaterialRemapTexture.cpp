@@ -16,11 +16,11 @@ class VertexMaterialClass;
 class TextureBaseClass
 {
 public:
-	void Add_Ref(void);
+	__declspec(dllimport) __forceinline void Add_Ref(void);
 	void Release_Ref(void);
 };
 
-inline void TextureBaseClass::Add_Ref(void)
+__declspec(dllimport) __forceinline void TextureBaseClass::Add_Ref(void)
 {
 	++*reinterpret_cast<unsigned short *>(reinterpret_cast<char *>(this) + 4);
 }

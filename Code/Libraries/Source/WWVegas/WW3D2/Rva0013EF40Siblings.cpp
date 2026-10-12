@@ -11,7 +11,7 @@
 struct BFME2TextureResource { unsigned Vtable; unsigned short Refs; void Release_Ref(); };
 struct BFME2TextureRef {
  BFME2TextureResource* Ptr;
- BFME2TextureRef(BFME2TextureResource* p):Ptr(p) { if(Ptr) ++Ptr->Refs; }
+ __declspec(dllimport) __forceinline BFME2TextureRef(BFME2TextureResource* p):Ptr(p) { if(Ptr) ++Ptr->Refs; }
  BFME2TextureRef(const BFME2TextureRef& p):Ptr(p.Ptr) { if(Ptr) ++Ptr->Refs; }
  ~BFME2TextureRef() { if(Ptr) Ptr->Release_Ref(); }
 };
