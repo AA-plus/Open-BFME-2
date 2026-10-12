@@ -4,13 +4,7 @@
 // Evidence: unlock lane every callee rowed; caller 0x00210372 hash insert; same 37B shape as 0x0020D613 and 0x001DD8C9.
 #include <memory>
 #include <map>
-class AsciiString
-{
-public:
-	AsciiString(const AsciiString &other);
-private:
-	char m_pad[4];
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct NoCaseTreeValue4
 {
 	char m_body[4];
