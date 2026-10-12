@@ -1,4 +1,6 @@
 // ?addArchiveFile@Win32BIGFileSystem@@QAE_NPBD_N@Z
+// partial score=0.99 date=2026-10-12
+// ?addArchiveFile@Win32BIGFileSystem@@QAE_NPBD_N@Z
 // partial score=0.99 date=2026-10-09
 // cl: /O1 /Oy- /G7 /MD /EHsc- /DNDEBUG /D_CRTIMP=
 // WB16507D0 names Win32BIGFileSystem::addArchiveFile; native6046B0..6047EA

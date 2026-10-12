@@ -1,4 +1,6 @@
 // ?rva006C3D30@GeneralAllocatorDebug@@QAE_NPAURva006C2270Record@@PAX_N@Z
+// partial score=0.99 date=2026-10-12
+// ?rva006C3D30@GeneralAllocatorDebug@@QAE_NPAURva006C2270Record@@PAX_N@Z
 // partial score=0.99 date=2026-10-11
 // cl: /O2 /arch:SSE /DNDEBUG /MD
 //

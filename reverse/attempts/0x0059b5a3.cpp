@@ -1,4 +1,6 @@
 // ?rva0059B5A3@Rva0059B5A3@@QAE?AV?$StringBase@D@@XZ
+// partial score=0.99 date=2026-10-12
+// ?rva0059B5A3@Rva0059B5A3@@QAE?AV?$StringBase@D@@XZ
 // partial score=0.99 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // ?rva0059B5A3@Rva0059B5A3@@QAE?AV?$StringBase@D@@XZ

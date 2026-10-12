@@ -1,4 +1,6 @@
 // ??HEAStringC@@QBE?AV0@PBD@Z
+// partial score=0.9956 date=2026-10-12
+// ??HEAStringC@@QBE?AV0@PBD@Z
 // partial score=0.995641 date=2026-10-10
 // cl: /O2 /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc
 // BFME 2 target 0x006D4F70..0x006D509D, 301 bytes; complete RET8.

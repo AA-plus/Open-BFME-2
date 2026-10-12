@@ -1,5 +1,7 @@
 // ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
 // partial score=0.989 date=2026-10-12
+// ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
+// partial score=0.989 date=2026-10-12
 // cl: /O1 /DNDEBUG /MD /I. /ICode/Libraries/Include /ICode/GameEngine/Include /ICode/GameEngine/Source/Common /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfmelist
 // stlport
 //

@@ -1,4 +1,6 @@
 // ?UpdateNotice@InGameNotificationBoxMovieClip@@QAEXXZ
+// partial score=0.9974 date=2026-10-12
+// ?UpdateNotice@InGameNotificationBoxMovieClip@@QAEXXZ
 // partial score=0.9974 date=2026-10-10
 // ?UpdateNotice@InGameNotificationBoxMovieClip@@QAEXXZ
 // partial score=0.9974 date=2026-10-10
