@@ -1,4 +1,6 @@
 // ?isLocalPlayer@LANGameSlot@@QBE_NXZ
+// partial score=0.99 date=2026-10-13
+// ?isLocalPlayer@LANGameSlot@@QBE_NXZ
 // partial score=0.94 date=2026-10-04
 // cl: /O1 /DNDEBUG /MD
 //

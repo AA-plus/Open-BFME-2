@@ -1,62 +1,46 @@
 // ?rva002C58B3@Rva002C589B@@QAEXXZ
-// partial score=0.985 date=2026-10-12
+// partial score=0.984 date=2026-10-13
 // ?rva002C58B3@Rva002C589B@@QAEXXZ
-// partial score=0.985 date=2026-10-10
-// ?rva002C58B3@Rva002C589B@@QAEXXZ
-// partial score=0.95 date=2026-09-29
-// ?rva002C58B3@Rva002C589B@@QAEXXZ
-// partial score=0.95 date=2026-09-29
-// cl: /O1 /DNDEBUG /MD /arch:SSE
-// ?rva002C58B3@Rva002C589B@@QAEXXZ @0x002C58B3 92B
-// Reset method of Rva002C589B (layout from Rva002C589BDtor.cpp): int at +8 to
-// -1, floats at +0xC/+0x10/+0x14 to 0, bytes at +0x18/+0x19 and int at +0x1C
-// to 0, 12 zero bytes at m_ptr+0x554 via Vec3 temp copy, rowed clear
-// 0x003ECB0B on m_ptr, int at +0x34 to 0. Caller 0x002C5D02.
+// partial score=0.984 date=2026-10-13
+// cl: /O1 /arch:SSE /DNDEBUG /MD /EHsc
+// Reconciled into the owner TU Rva002C589BDtor.cpp: views are
+// layout-identical (m_frame/m_position/m_18/m_19/m_unknown1C/m_ptr/m_34),
+// canonical Coord3D for floats and position, cast for the clearer pointee.
+// 92/92 with a 3-line push-edi rotation (retail byte-stores then save vs
+// ours save then stores); byte-after-floats reorder and entry fence both
+// churn wider. Pure save-hoist heuristic. t=25 model=muse-spark
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
-struct Vec3 { float x, y, z; };
-class Rva003ECB0BDwordClearer {
+
+// Pointee-side view for the reset below: 12 zero bytes at +0x554 plus the
+// rowed disp32 dword clearer at +0x564 (0x003ECB0B). The cast from the
+// unit's Rva003ECDB7Object is layout evidence from the bank (identical
+// member offsets); the call resolves by the rowed mangled name.
+class Rva003ECB0BDwordClearer
+{
 public:
 	void clear();
 	char m_pad[0x554];
-	Vec3 m_vec;
+	Coord3D m_vec;
 };
-class Rva002C589B {
-private:
-	char m_pad[8];
-	int m_08;
-	float m_0C, m_10, m_14;
-	bool m_18, m_19;
-	char m_pad1A[2];
-	int m_1C;
-	char m_pad20[4];
-	Rva003ECB0BDwordClearer *m_ptr;
-	char m_pad28[12];
-	int m_34;
-public:
-	void rva002C58B3();
-};
+
+// ?rva002C58B3@Rva002C589B@@QAEXXZ @0x002C58B3 92B: reset. int at +8 to -1,
+// floats of the canonical position to 0, bytes at +0x18/+0x19 and int at
+// +0x1C to 0, 12 zero bytes at m_ptr+0x554 via Coord3D temp copy, rowed
+// clear 0x003ECB0B on m_ptr, ObjectID at +0x34 to INVALID_ID. Caller
+// 0x002C5D02. Statement order mirrors the .985 bank.
 void Rva002C589B::rva002C58B3()
 {
-	m_08 = -1;
-	m_1C = 0;
-	m_19 = 0;
-	m_18 = 0;
-	m_0C = 0.0f;
-	m_10 = 0.0f;
-	m_14 = 0.0f;
+	m_frame = -1;
+	m_unknown1C = 0;
+	m_19 = false;
+	m_18 = false;
+	m_position.x = 0.0f;
+	m_position.y = 0.0f;
+	m_position.z = 0.0f;
 	_ReadWriteBarrier();
-	Vec3 tmp = { 0.0f, 0.0f, 0.0f };
-	m_ptr->m_vec = tmp;
-	m_ptr->clear();
-	m_34 = 0;
+	Coord3D tmp = { 0.0f, 0.0f, 0.0f };
+	((Rva003ECB0BDwordClearer *)m_ptr)->m_vec = tmp;
+	((Rva003ECB0BDwordClearer *)m_ptr)->clear();
+	m_34 = INVALID_ID;
 }
-
-// --- LK8 r4 note (no code change) ---
-// Caller TU Rva002C5D8BChoice.cpp carries // cl: /DNDEBUG /MD only (no
-// /O1, no /arch:SSE): it cannot host this SSE body without a flag change,
-// so the body does not belong there. Sibling TU Rva002C589BDtor.cpp has
-// compatible flags (/O1 /arch:SSE) but its Rva002C589B view has diverged
-// from this stash (threat/invalid/count/m_34-ObjectID shape vs the stash's
-// m_08/floats/m_1C/m_ptr/m_34 shape); reconciling the two views is
-// class-lane work, not attempted here. Next: reconcile, then land.

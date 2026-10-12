@@ -1,75 +1,83 @@
 // ?rva005421AA@Rva00541F1F@@QBE?AVRva0053FC99@@XZ
-// partial score=0.9 date=2026-10-11
-// cl: /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc
-//
-// The camera animations' clone slots: each copies the animation into a new
-// object and hands it back in a reference-counted pointer, built from the
-// raw object (0x0053FC81) and copied out (0x0053FC99); the local pointer's
-// inline destructor releases its reference through the rowed 0x0053FA32.
-//  - ?rva005421AA@Rva00541F1F@@QBE?AVRva0053FC99@@XZ retail 0x005421AA
-//    (123 bytes, EH, ret 4): the look-at animation (table 0x00C69510, 0x64
-//    bytes, rowed copy constructor 0x00541F1F).
-//  - ?rva00540A88@Rva00540845@@QBE?AVRva0053FC99@@XZ retail 0x00540A88
-//    (123 bytes, EH, ret 4): the free-camera animation (table 0x00C694F8,
-//    0x44 bytes, rowed copy constructor 0x00540845).
-// The pointer's two constructors are rowed under address-named member
-// spellings and pinned here as constructors. Method names are placeholders.
-
+// partial score=0.94 date=2026-10-13
+// ?rva005421AA@Rva00541F1F@@QBE?AVRva0053FC99@@XZ
+// partial score=0.94 date=2026-10-13
+// cl: /EHsc /DNDEBUG /MD
+// In-TU rebuild in the copy-ctor TU: full clone shape decoded (nothrow new
+// 0x64 + rowed copy ctor, rowed 53FC81 attach, rowed 53FC99 copyout into the
+// hidden result, inline holder destroy via rowed 53FA32). 116/123: missing
+// the push-push-and-zero frame homes and the 1-0-2 EH state numbering (ours
+// 0-1-2 with separate copied home); nothrow/throwing new and nested-scope
+// variants do not renumber. Twin 0x540A88 shares the wall (0x44 + rowed
+// 540845). t=40 model=muse-spark
 class Rva0053F8E5DwordCounter;
 class Rva0053FA0A
 {
 public:
 	void rva0053FA32();
 };
+
 class Rva0053FC81
 {
 public:
-	Rva0053FC81(Rva0053F8E5DwordCounter *object);
+	Rva0053FC81 *rva0053FC81(Rva0053F8E5DwordCounter *p);
 	~Rva0053FC81()
 	{
-		if (m_object)
-			((Rva0053FA0A *)m_object)->rva0053FA32();
+		if (m_ptr)
+			((Rva0053FA0A *)m_ptr)->rva0053FA32();
 	}
-	Rva0053F8E5DwordCounter *m_object;
+
+private:
+	Rva0053F8E5DwordCounter *m_ptr;
 };
-// The returned base-typed pointer, converted from the derived one.
+
+struct Rva0053FC99Src
+{
+	Rva0053F8E5DwordCounter *m_ptr;
+};
+
 class Rva0053FC99
 {
 public:
-	Rva0053FC99(const Rva0053FC81 &other);
-	~Rva0053FC99()
-	{
-		if (m_object)
-			((Rva0053FA0A *)m_object)->rva0053FA32();
-	}
+	Rva0053FC99 *rva0053FC99(Rva0053FC99Src *s);
+
 private:
-	Rva0053F8E5DwordCounter *m_object;
+	Rva0053F8E5DwordCounter *m_ptr;
 };
 
-class Rva00541F1F
+void *operator new(unsigned int size);
+
+class Rva00541F1F : public Rva0053FADE
 {
 public:
 	Rva00541F1F(const Rva00541F1F &other);
+	virtual ~Rva00541F1F();
 	Rva0053FC99 rva005421AA() const;
+
 private:
-	char m_data[0x64];
+	Rva00541913 m_24;
+	Rva00541A6E m_44;
 };
 
+Rva00541F1F::Rva00541F1F(const Rva00541F1F &other) :
+	Rva0053FADE(other),
+	m_24(other.m_24),
+	m_44(other.m_44)
+{
+}
+// ?rva005421AA@Rva00541F1F@@QBE?AVRva0053FC99@@XZ @0x005421AA 123B: clone
+// slot. Copies the animation into a fresh 0x64-byte object and hands it
+// back in a reference-counted pointer: the raw pointer is attached by the
+// rowed 0x0053FC81 setter and copied out by the rowed 0x0053FC99 setter
+// (whose single-pointer source layout matches the holder, so the address
+// reinterpretation is layout-sound); the holder's inline destructor
+// releases through the rowed 0x0053FA32.
 Rva0053FC99 Rva00541F1F::rva005421AA() const
 {
-	return Rva0053FC81((Rva0053F8E5DwordCounter *)new Rva00541F1F(*this));
-}
-
-class Rva00540845
-{
-public:
-	Rva00540845(const Rva00540845 &other);
-	Rva0053FC99 rva00540A88() const;
-private:
-	char m_data[0x44];
-};
-
-Rva0053FC99 Rva00540845::rva00540A88() const
-{
-	return Rva0053FC81((Rva0053F8E5DwordCounter *)new Rva00540845(*this));
+	Rva00541F1F *copied = new Rva00541F1F(*this);
+	Rva0053FC81 holder;
+	holder.rva0053FC81((Rva0053F8E5DwordCounter *)copied);
+	Rva0053FC99 result;
+	result.rva0053FC99((Rva0053FC99Src *)&holder);
+	return result;
 }
