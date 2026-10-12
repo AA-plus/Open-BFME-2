@@ -1,12 +1,5 @@
-// ?rva004CE0D9@UnleashSpecialPower@@UAE_NH@Z
-// partial score=0.9223 date=2026-10-06
-// ?rva004CE0D9@UnleashSpecialPower@@UAE_NH@Z
-// partial score=0.9223 date=2026-10-05
-// ?rva004CE0D9@UnleashSpecialPower@@UAE_NH@Z
-// partial score=0.95 date=2026-10-04
 // cl: /O1 /DNDEBUG /MD /GX
 //
-// ?rva004CE0D9@UnleashSpecialPower@@UAE_NH@Z, retail 0x004CE0D9, 177 bytes:
 // slot 8 of the vtable 0x00C5FD98 that UnleashSpecialPower's ctor 0x004CE006
 // installs at +0x20 (the argument unread). Through the owner's
 // "SlaveWatcherBehavior" module (key cached in a function static, rowed
@@ -23,10 +16,8 @@ enum NameKeyType
 	NAMEKEY_INVALID = 0
 };
 
-enum ObjectID
-{
-	INVALID_ID = 0
-};
+#include "../../../Common/GameLogicObjectLookupView.h"
+extern GameLogic *TheGameLogic;
 
 class NameKeyGenerator
 {
@@ -88,13 +79,6 @@ protected:
 	friend class UnleashSpecialPower;
 };
 
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-};
-
-extern GameLogic *TheGameLogic;
 
 class ModuleData;
 
@@ -144,7 +128,9 @@ Bool UnleashSpecialPower::rva004CE0D9(int unused)
 	if (watcher == 0)
 		return false;
 	Object *slaver = TheGameLogic->findObjectByID(watcher->rva0030D377());
-	if (slaver == 0 || (slaver->m_438 & 1))
+	if (slaver == 0)
+		return false;
+	if (slaver->m_438 & 1)
 		return false;
 	return rva004CE0D9Free(slaver);
 }
