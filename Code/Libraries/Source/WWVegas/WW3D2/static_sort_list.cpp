@@ -56,7 +56,6 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "static_sort_list.h"
 
 #include "rendobj.h"
-#include "dx8renderer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Initialization Functions ////////////////////////////////////////////////////////////////////////
@@ -85,7 +84,22 @@ void DefaultStaticSortListClass::Add_To_List(RenderObjClass * robj, unsigned int
 	SortLists[sort_level].Add_Tail(robj, false);
 }
 
-// ?Render_And_Clear@DefaultStaticSortListClass@@UAEXAAVRenderInfoClass@@@Z present-unmatched
+// BFME 2 retail 0x001769B0 (121 bytes): the render hooks are gone, the mesh renderer is
+// reached through a pointer, and every level that rendered also flushes the FXShader
+// renderer (the gap-filler context at 0x00DF6F94, flush 0x00174BA6).
+class Rva00DF6F94GapFillerContext
+{
+public:
+	void rva174ba6();
+};
+extern Rva00DF6F94GapFillerContext *TheMeshGapFillerContext;
+class DX8MeshRendererClass
+{
+public:
+	void Flush(void);
+};
+extern DX8MeshRendererClass *TheDX8MeshRenderer;
+
 void DefaultStaticSortListClass::Render_And_Clear(RenderInfoClass & rinfo)
 {
 	// We go from higher sort level to lower, since lower sort level means higher priority (in
@@ -93,20 +107,16 @@ void DefaultStaticSortListClass::Render_And_Clear(RenderInfoClass & rinfo)
 	for(unsigned int sort_level = MaxSort; sort_level >= MinSort; sort_level--) {
 		bool render=false;
 		for (	RenderObjClass *robj = SortLists[sort_level].Remove_Head(); robj;
-				robj->Release_Ref(), robj = SortLists[sort_level].Remove_Head())
+				robj = SortLists[sort_level].Remove_Head())
 		{
-			if (robj->Get_Render_Hook()) {
-				if (robj->Get_Render_Hook()->Pre_Render(robj, rinfo)) {
-					robj->Render(rinfo);
-					render = true;
-				}
-				robj->Get_Render_Hook()->Post_Render(robj, rinfo);
-			} else {
-				robj->Render(rinfo);
-				render = true;
-			}
+			robj->Render(rinfo);
+			robj->Release_Ref();
+			render = true;
 		}
-		if (render) TheDX8MeshRenderer.Flush();
+		if (render) {
+			TheDX8MeshRenderer->Flush();
+			TheMeshGapFillerContext->rva174ba6();
+		}
 	}
 }
 

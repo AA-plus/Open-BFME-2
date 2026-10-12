@@ -79144,3 +79144,4 @@ __ehhandler$?rva00187690@ScaleTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z,,0x007
 ?rva00141CB0@Rva00141CB0@@QAEPAXIPBX@Z,,0x00141CB0,25,Code/Libraries/Source/WWVegas/WW3D2/Rva00141DC0CreateNode.cpp,matched,8-byte pool allocate count hint
 ?rva000B3133@Rva000B3133Module@@UAEPAVRva000B3133Part@@XZ,,0x000B3133,24,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DScriptedModelDrawRva000B3133.cpp,matched,W3DScriptedModelDraw second-base slot 3 this-adjusting override
 ?Rotate_Vector@Quaternion@@QBE?AVVector3@@ABV2@@Z,,0x001A0AF0,306,Code/Libraries/Source/WWVegas/WWMath/QuaternionRotateVector.cpp,matched,WWMath quat.h Rotate_Vector out-of-line copy
+?Render_And_Clear@DefaultStaticSortListClass@@UAEXAAVRenderInfoClass@@@Z,,0x001769B0,121,Code/Libraries/Source/WWVegas/WW3D2/static_sort_list.cpp,matched,ZH sortlist Render_And_Clear without render hooks plus FXShader flush
