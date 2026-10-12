@@ -682,3 +682,29 @@ void Rva003F1093::rva003F1CFE(void *key, bool value)
     if (plot)
         rva003F1CA2(plot, value);
 }
+
+// Native 2B3769..2B37B4 RET4: the rva003F088C search shape over another
+// owner's pointer vector at +0xBC, matching the entry's +0x08 id. No direct
+// caller; owner and entry types unknown (address-derived names).
+struct Rva002B3769Entry
+{
+    unsigned char m_pad00[8];
+    Int m_id;
+};
+
+class Rva002B3769
+{
+public:
+    Rva002B3769Entry *rva002B3769(Int id) const;
+private:
+    unsigned char m_pad00[0xBC];
+    _STL::vector<Rva002B3769Entry *> m_entries;
+};
+
+Rva002B3769Entry *Rva002B3769::rva002B3769(Int id) const
+{
+    for (UnsignedInt i=0;i<m_entries.size();++i)
+        if (m_entries[i]->m_id == id)
+            return m_entries[i];
+    return 0;
+}
