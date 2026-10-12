@@ -50455,7 +50455,7 @@ _GetThisFrameReconVPtr,,0x001B6360,17,Code/Libraries/Source/VP6/PbAccessors.cpp,
 ?Rva003B70F0@@YAXPAVRva003B70F0Owner@@PAVGenForwardedArg@@@Z,,0x004E148C,17,Code/GameEngine/Source/Common/S2SubobjectArgForwarders.cpp,matched,BFME1 donor S2SubobjectArgForwarders.cpp at /Os
 ?Rva003B7140@@YAXPAVRva003B7140Owner@@PAVGenForwardedArg@@@Z,,0x004E14BC,17,Code/GameEngine/Source/Common/S2SubobjectArgForwarders.cpp,matched,BFME1 donor S2SubobjectArgForwarders.cpp at /Os
 ?hand@T1Fwd_005C98A0@@QAEPAXPAXPAVT1Sink_005C8D40@@@Z,,0x001F948C,17,Code/GameEngine/Source/Common/T1ReceiverSwappingThunks.cpp,matched,BFME1 donor T1ReceiverSwappingThunks.cpp at /Os
-?u4Guarded0060C2C0@@YGXPAVU4Target0060C2C0@@PAX@Z,,0x003F935A,20,Code/GameEngine/Source/Common/U4GlobalGuardedNotifies.cpp,matched,BFME1 donor U4GlobalGuardedNotifies.cpp at /Os
+?rva003F935A@LivingWorldEyeTower@@AAEXPAVU4Target0060C2C0@@PAX@Z,,0x003F935A,20,Code/GameEngine/Source/Common/U4GlobalGuardedNotifies.cpp,matched,Native20B RET8; both3F962F callers set ECX=eye tower before passing target and payload; unused receiver corrects donor stdcall spelling
 ?u1Insert_005C6350@@YAPAVU1Sink@@PAV1@PBVU1Box@@@Z,,0x001F67FF,20,Code/GameEngine/Source/Common/U1SinkInserters.cpp,matched,BFME1 donor U1SinkInserters.cpp at /Os
 ?bfmeDiffers@Gen_00528EC0@@QBE_NABV1@@Z,,0x003F2330,34,Code/GameEngine/Source/Common/S5HandleHashCompares.cpp,matched,BFME1 donor S5HandleHashCompares.cpp at /Os
 ?bfmeDiffers@Gen_0054EC50@@QBE_NABV1@@Z,,0x0056FA0C,34,Code/GameEngine/Source/Common/S5HandleHashCompares.cpp,matched,BFME1 donor S5HandleHashCompares.cpp at /Os
