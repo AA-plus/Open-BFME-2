@@ -5,7 +5,7 @@
 // with extra -1/-2; skips when StateMachine+0x50 id already equals desired;
 // then Object+0x08 via rowed Object::rva0029439D plus slot 0x13C virtual,
 // rowed Rva0033FCC8 copy, slot 0x38 virtual with second arg, pinned
-// BfmeSubVfn1A6::notify. Evidence: neighbours rva002631A6/rva002632B3 share
+// AIStateMachine::setTemporaryState. Evidence: neighbours rva002631A6/rva002632B3 share
 // +0x30 machine and +0x08 object; caller 0x004DCC84 passes int 2-5 plus Object;
 // INVALID_STATE_ID 0xF423F matches predicates sibling.
 
@@ -21,10 +21,12 @@ public:
 	void rva0033FCC8();
 };
 
-class BfmeSubVfn1A6
+enum StateReturnType { STATE_CONTINUE = 0, STATE_SUCCESS = -1, STATE_FAILURE = -2 };
+
+class AIStateMachine
 {
 public:
-	int notify(int a, void *b);
+	StateReturnType setTemporaryState(unsigned int state, int frameLimit);
 };
 
 class RetState
@@ -122,5 +124,5 @@ void AIUpdateInterface::SetEmotionState(int which, Object *arg)
 		((RetObj *)ret)->v79();
 	((Rva0033FCC8 *)m_machine)->rva0033FCC8();
 	m_machine->slot14(arg);
-	((BfmeSubVfn1A6 *)m_machine)->notify(desired, (void *)extra);
+	((AIStateMachine *)m_machine)->setTemporaryState(desired, extra);
 }

@@ -1,6 +1,12 @@
 // cl: /DNDEBUG /MD
-// ?notify@BfmeSubVfn1A6@@QAEHHPAX@Z @0x0033FCE1 150B
-// Evidence: linkbody lane; callers in AIUpdateInterfacePrivateCommands; internalGetState row; vtable slots 0x14 0x10 0x220; globals g_Va00DBA4E4 TheGameLogic
+// ?setTemporaryState@AIStateMachine@@QAE?AW4StateReturnType@@IH@Z @0x0033FCE1 150B
+// Target identity: WB E02A90 names AIStateMachine::setTemporaryState at AIStates.cpp1830;
+// named SetEmotionState26320D calls this150B33FCE1..33FD77 RET8 body.
+// Retail witnesses machine owner14, temporary state50 and frame limit54,
+// onEnter slot4 returning0/nonzero and onExit slot5 with1/0. ZH carries
+// unsigned StateID and StateReturnType spelling; target preserves the
+// AI notification at owner+258 slot136 and the negative-frame sentinels.
+enum StateReturnType { STATE_CONTINUE = 0, STATE_SUCCESS = -1, STATE_FAILURE = -2 };
 struct State;
 
 class StateMachine
@@ -16,7 +22,7 @@ public:
 	virtual void v01();
 	virtual void v02();
 	virtual void v03();
-	virtual State *v04();
+	virtual StateReturnType v04();
 	virtual void v05(int x);
 };
 
@@ -67,20 +73,15 @@ public:
 	BigObj *m_258;
 };
 
-class GameLogic
-{
-public:
-	char m_pad00[0x40];
-	int m_40;
-};
+#include "GameLogicObjectLookupView.h"
 
 extern int g_Va00DBA4E4; // ?g_Va00DBA4E4@@3HA
-extern GameLogic *TheGameLogic; // ?TheGameLogic@@3PAVGameLogic@@A
+extern GameLogic *TheGameLogic;
 
-class BfmeSubVfn1A6
+class AIStateMachine
 {
 public:
-	int notify(int id, void *param);
+	StateReturnType setTemporaryState(unsigned int id, int frameLimit);
 private:
 	char m_pad00[0x14];
 	MidObj *m_14;
@@ -89,9 +90,9 @@ private:
 	int m_54;
 };
 
-int BfmeSubVfn1A6::notify(int id, void *param)
+StateReturnType AIStateMachine::setTemporaryState(unsigned int id, int frameLimit)
 {
-	State *st = ((StateMachine *)this)->internalGetState(id);
+	State *st = ((StateMachine *)this)->internalGetState((int)id);
 	if (m_50) {
 		m_50->v05(1);
 		m_50 = 0;
@@ -101,14 +102,14 @@ int BfmeSubVfn1A6::notify(int id, void *param)
 		if (big)
 			big->v136();
 		m_50 = st;
-		State *cur = st->v04();
+		StateReturnType cur = st->v04();
 		if (cur) {
 			m_50->v05(0);
 			m_50 = 0;
-			return (int)cur;
+			return cur;
 		}
 		int limit = g_Va00DBA4E4 * 60;
-		int v = (int)param;
+		int v = frameLimit;
 		v = v >= limit ? limit : v;
 		int res;
 		if (v == -2)
@@ -116,10 +117,10 @@ int BfmeSubVfn1A6::notify(int id, void *param)
 		else if (v < 0)
 			res = -1;
 		else
-			res = TheGameLogic->m_40 + v;
+			res = TheGameLogic->getFrame() + v;
 		m_54 = res;
-		return 0;
+		return STATE_CONTINUE;
 	} else {
-		return -2;
+		return STATE_FAILURE;
 	}
 }

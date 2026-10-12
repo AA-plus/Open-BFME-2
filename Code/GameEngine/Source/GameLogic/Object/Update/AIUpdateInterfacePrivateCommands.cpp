@@ -744,6 +744,8 @@ public:
 // ZH's AIStateMachine::setGoalWaypoint (pinned 0x003E3BFB).
 class Team;
 
+enum StateReturnType { STATE_CONTINUE = 0, STATE_SUCCESS = -1, STATE_FAILURE = -2 };
+
 class AIStateMachine
 {
 public:
@@ -752,6 +754,7 @@ public:
 	// passes an integer key (0x4A9A0E38 from makeStateMachine) where Zero
 	// Hour passes the name. The parameter's type is an inference.
 	AIStateMachine(Object *owner, UnsignedInt nameKey);
+	StateReturnType setTemporaryState(unsigned int state, int frameLimit);
 	void addToGoalPath(const Coord3D *pathPoint);	// pinned 0x0035385E (ZH name)
 	void setGoalWaypoint(const Waypoint *way);
 	void setGoalTeam(const Team *team);			///< pinned 0x0035042D
@@ -978,18 +981,13 @@ extern Int g_Va00DBA4E4;
 
 // The two AIStateMachine helpers command 0x31 reaches when given a value:
 // 0x0033FCC8 (matched, Rva0033FCC8Copy.cpp) and 0x0033FCE1, which takes a
-// state id first (pinned under the BFME1 donor_sweep name).
+// state id and frame limit (the rowed AIStateMachine::setTemporaryState).
 class Rva0033FCC8
 {
 public:
 	void rva0033FCC8();
 };
 
-class BfmeSubVfn1A6
-{
-public:
-	void notify(int state, void *value);
-};
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameLogic/Locomotor.h
 // isDoingGroundMovement reads the template's legal surfaces at +0x14.
@@ -1832,7 +1830,7 @@ void AIUpdateInterface::bfmePrivateCommand31(Int value, CommandSourceType comman
 	else
 	{
 		reinterpret_cast<Rva0033FCC8 *>(m_stateMachine)->rva0033FCC8();
-		reinterpret_cast<BfmeSubVfn1A6 *>(m_stateMachine)->notify(0x2a, (void *)value);
+		reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(0x2a, value);
 	}
 }
 
@@ -2171,7 +2169,7 @@ void AIUpdateInterface::privateMoveToPosition(const Coord3D *position, float ran
 		reinterpret_cast<Rva00263910 *>(this)->rva00263910(position, range, commandSource);
 		m_blockedFrames = 0;
 		m_isBlocked = false;
-		reinterpret_cast<BfmeSubVfn1A6 *>(m_stateMachine)->notify(BFME_AI_MOVE_TO, (void *)(g_Va00DBA4E4 * 20));
+		reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(BFME_AI_MOVE_TO, g_Va00DBA4E4 * 20);
 		return;
 	}
 
@@ -2499,7 +2497,7 @@ void AIUpdateInterface::privateMoveAwayFromUnit(Object *unit, const Coord3D *pos
 		if (close)
 			m_stateMachine->setState((StateID)0x1A);
 		else
-			reinterpret_cast<BfmeSubVfn1A6 *>(m_stateMachine)->notify(0x1A, (void *)(g_Va00DBA4E4 * 10));
+			reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(0x1A, g_Va00DBA4E4 * 10);
 
 		if (m_path)
 		{
@@ -2533,7 +2531,7 @@ void AIUpdateInterface::doQuickExit(const _STL::vector<Coord3D> *path)
 	reinterpret_cast<Rva0033FCC8 *>(m_stateMachine)->rva0033FCC8();
 	reinterpret_cast<Rva00351759 *>(m_stateMachine)->rva00351759(*reinterpret_cast<const Rva0035149F *>(path));
 
-	reinterpret_cast<BfmeSubVfn1A6 *>(m_stateMachine)->notify(7, (void *)(g_Va00DBA4E4 * 10));
+	reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(7, g_Va00DBA4E4 * 10);
 	if (locked)
 		m_stateMachine->m_locked = true;
 }

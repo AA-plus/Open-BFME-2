@@ -2,14 +2,16 @@
 //
 // ?rva00263298@AIUpdateInterface@@QAEXXZ, retail 0x00263298, 27 bytes.
 // AIUpdateInterface notifier: machine at +0x30, state ptr at +0x50 with id
-// at +4, gate on +0x54 == -1, then pinned BfmeSubVfn1A6::notify(id, -2).
+// at +4, gate on +0x54 == -1, then rowed AIStateMachine::setTemporaryState(id, -2).
 // Evidence: neighbours rva0026320D/rva002632B3 share +0x30 machine and
 // +0x50 state layout; caller 0x004DCECE.
 
-class BfmeSubVfn1A6
+enum StateReturnType { STATE_CONTINUE = 0, STATE_SUCCESS = -1, STATE_FAILURE = -2 };
+
+class AIStateMachine
 {
 public:
-	int notify(int a, void *b);
+	StateReturnType setTemporaryState(unsigned int state, int frameLimit);
 };
 
 class RetState
@@ -43,5 +45,5 @@ void AIUpdateInterface::rva00263298()
 		return;
 	if (m->m_field54 != -1)
 		return;
-	((BfmeSubVfn1A6 *)m)->notify(s->m_id, (void *)-2);
+	((AIStateMachine *)m)->setTemporaryState(s->m_id, -2);
 }

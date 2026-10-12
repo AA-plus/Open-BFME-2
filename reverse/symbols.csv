@@ -10207,7 +10207,6 @@ name,address,notes
 ?note@Rva00212858Sub@@QAEXH@Z,0x00212858,REL32 callee decoded from target call bytes of same-shape count-note-run member; identity unproven
 ?note@Rva0053F1ECSub@@QAEXH@Z,0x0053F1EC,opaque alias of the rowed Armor hashtable resize at the same address; identity unproven
 ?noteAssign@U4Notify@@QAEXPAVU4Assign006057C0@@@Z,0x00432E5D,callee of ??4U4Assign006057C0@@QAEAAV0@ABV0@@Z at retail 0x004CA223 read from its REL32 displacement; ICF alias onto ?rva00432E5D@Rva00432F23@@QAEXPAVRva00432F23Node@@@Z (matched)
-?notify@BfmeSubVfn1A6@@QAEXHPAX@Z,0x0033FCE1,callee of ?doAction@BfmeThing1A6@@QAEXPAX0@Z at retail 0x00264B86 read from its REL32 displacement; pushes code 0x2a and the value; body unrowed
 ?notify@Rva0020AA00Target@@QAEXHH@Z,0x0033CF34,callee read from the retail REL32 in placed BFME1-donor body ?notifyLookedUp@@YAXPAURva0020AA00Owner@@HH@Z (0x0045F48D)
 ?notify@Rva00802A90Elem@@QAEXPAURva00802A90Query@@PAXHH@Z,0x0066DF80,address read from the REL32 displacement at placed go 0x66EBC0 twice; same FeslBrowser family; ghidra 523B boundary
 ?notify@ShroudManagerImpl008FBA40@@QAEXXZ,0x0073B7E0,Last call of ShroudManagerImpl008FBA40::configure (0x0073DBF0) after the inlined drainPending, matching the BFME1 donor order; Ghidra boundary 159B
