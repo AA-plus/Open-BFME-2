@@ -136,3 +136,28 @@ void *__fastcall Rva00452D78Adjust(void *baseAt20)
     char *complete = static_cast<char *>(baseAt20) - 0x20;
     return complete ? baseAt20 : 0;
 }
+
+// Clean BF1 f98983a7 hanimmgr.cpp Get_Current_Anim and the fresh O1/SSE2/G6
+// donor trial supply this nullable interior-pointer adjustment expression.
+// Native F0BD7..F0BE4 is complete after RET4 at F0BD4 and before an indexed
+// getter at F0BE4. It reads only receiver+C, returns that pointer minus 8
+// when nonnull, and otherwise returns null; RET0, no calls/relocations.
+// Original HAnim/hash iterator identity, pointee type and inheritance are
+// donor leads, not asserted target facts. The prefix states only the access.
+// Retail is the branchless neg/sbb/and form (13 bytes): the pointer read as
+// an unsigned value reproduces it, where the pointer-conditional spelling
+// keeps the 14-byte branch.
+class Rva000F0BD7NullAdjustField
+{
+public:
+	void *get() const;
+private:
+	unsigned char m_unknown[0x0C];
+	void *m_pointer;
+};
+
+void *Rva000F0BD7NullAdjustField::get() const
+{
+	unsigned pointer = (unsigned)m_pointer;
+	return pointer ? (void *)(pointer - 8) : 0;
+}
