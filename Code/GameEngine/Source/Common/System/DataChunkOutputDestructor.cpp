@@ -24,6 +24,7 @@ public:
 class DataChunkTableOfContents
 {
 public:
+    DataChunkTableOfContents() : m_list(0), m_listLength(0), m_nextID(1), m_headerOpened(false) {}
     ~DataChunkTableOfContents();
     void write(OutputStream &stream);
 private:
@@ -36,6 +37,7 @@ class OutputChunk;
 class DataChunkOutput
 {
 public:
+    DataChunkOutput(OutputStream *pOut);
     ~DataChunkOutput();
 private:
     OutputStream *m_pOut;
@@ -43,6 +45,18 @@ private:
     DataChunkTableOfContents m_contents;
     OutputChunk *m_chunkStack;
 };
+
+// Target 00306FA5..00307033 (RET4): Zero Hour's DataChunkOutput ctor with
+// BFME 2's wide user-data path (getter 2360FC) and _wfopen of the same
+// _tmpChunk.dat the destructor reads back.
+DataChunkOutput::DataChunkOutput(OutputStream *pOut) :
+    m_pOut(pOut)
+{
+    UnicodeString tmpFileName = TheWritableGlobalData->rva002360FC();
+    tmpFileName.concat(L"_tmpChunk.dat");
+    m_tmp_file = ::_wfopen(tmpFileName.str(), L"wb");
+    m_chunkStack = 0;
+}
 
 DataChunkOutput::~DataChunkOutput()
 {
