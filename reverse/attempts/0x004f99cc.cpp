@@ -1,4 +1,6 @@
 // ?rva004F99CC@LivingWorldAutoResolveBattle@@QAEXPA_N@Z
+// partial score=0.9688385269121813 date=2026-10-12
+// ?rva004F99CC@LivingWorldAutoResolveBattle@@QAEXPA_N@Z
 // partial score=0.905099 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -312,8 +314,9 @@ struct Rva004F99CCUnitRef {Rva004F99CCUnit *value; Rva004F99CCUnit *operator->()
 struct Rva004F99CCUnit {
  void *vptr;int references;Rva004F99CCEntry *entry;float health,totalHealth;int opaque14;bool acted;char opaque19[3];Rva004F99CCBonus *bonus;
  Rva004F99CCUnitRef target;void *opaque24,*opaque28;Rva004F99CCThing *thing;unsigned player;
- int getLevel() const {return entry->level;}
- float getTotalHealth() const {return totalHealth;}
+ __forceinline Rva004F99CCBonus *getBonus() const {return bonus;}
+ int getLevel() const {const Rva004F99CCEntry &record=*entry;return record.level;}
+ float getTotalHealth() const {const float &health=totalHealth;return health;}
 };
 struct Rva004F99CCPlayer {char opaque00[0x18];float attack,defense,experience;char opaque24[0x10];};
 struct Rva004F99CCSideBonus {char opaque00[4];float attack,defense;};
@@ -349,7 +352,7 @@ void LivingWorldAutoResolveBattle::rva004F99CC(bool *allActed)
     if(unit->bonus)attack=unit->bonus->attack;
     float armorFactor=const_cast<Rva00427157 *>(armor)->rva004270FA(unit->thing->targetType);
     float defense=1.0f;
-    if((*target)->bonus)defense=(*target)->bonus->defense;
+    if((*target)->getBonus())defense=(*target)->getBonus()->defense;
     _STL::vector<Rva004F99CCSideBonus *> &sideBonus=*reinterpret_cast<_STL::vector<Rva004F99CCSideBonus *> *>(reinterpret_cast<char*>(this)+0x54);
     float attackerBonus=1.0f;
     if(sideBonus[attacker])attackerBonus=sideBonus[attacker]->attack;
@@ -368,8 +371,9 @@ void LivingWorldAutoResolveBattle::rva004F99CC(bool *allActed)
      reinterpret_cast<Rva002BED91 *>(&death.first)->set(reinterpret_cast<TargetRef00217D4C *>(unit));
      death.second=*reinterpret_cast<Rva004F6057 *>(target);
      reinterpret_cast<_STL::vector<Rva004F93B0Element> *>(reinterpret_cast<char *>(this)+0x3C)->push_back(*reinterpret_cast<const Rva004F93B0Element *>(&death));
-     ++unit->entry->combatKills;
-     ++unit->entry->kills;
+     Rva004F99CCEntry *entry=unit->entry;
+     ++entry->combatKills;
+     ++entry->kills;
     }
    }
    acted:unit->acted=true;
