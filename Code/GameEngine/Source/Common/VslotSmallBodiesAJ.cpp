@@ -485,6 +485,19 @@ void Rva00041A06::rva00041A06()
 	Rva001EDDBBForwarder::rva001EDDBB();
 }
 
+// 0x00099109: tail jump to Rva00041A06::rva00041A06 (W3DMouse vftable slot
+// 9, the Zero Hour reset position; the existing W3DMouse::reset row sits in
+// slot 1, so this keeps an address-derived name).
+class Rva00099109 : public Rva00041A06
+{
+public:
+	void rva00099109();
+};
+void Rva00099109::rva00099109()
+{
+	Rva00041A06::rva00041A06();
+}
+
 // 0x00041E65: tail jump to Win32GameEngine::rva0005E959.
 class Rva00041E65 : public Win32GameEngine
 {
