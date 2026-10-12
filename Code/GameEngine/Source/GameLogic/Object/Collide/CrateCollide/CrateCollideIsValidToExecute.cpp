@@ -1,9 +1,8 @@
-// ?isValidToExecute@CrateCollide@@MBE_NPBVObject@@@Z
-// partial score=0.8757 date=2026-10-05
-// ?isValidToExecute@CrateCollide@@MBE_NPBVObject@@@Z
-// partial score=0.99 date=2026-10-05
 // cl: /Ireference/shims/bfme2_ascii /O1 /arch:SSE /GX /MD /DNDEBUG /DWIN32 /D_WINDOWS
 // ?isValidToExecute@CrateCollide@@MBE_NPBVObject@@@Z @0x004BC6C2 288B
+// Zero Hour's CrateCollide::isValidToExecute plus BFME 2's ever-executed and
+// controller checks; the body after the null test is that test's else block,
+// which keeps retail's first shared return-false block.
 // Evidence: vtable slot 13 of 5 CrateCollide vtables plus pin plus BFME1 donor CrateCollide_isValidToExecute plus caller Salvage isValidToExecute 0x004BD314.
 #include "ascii_string.h"
 template <int N> class BitFlags { unsigned char m_storage[0x1C]; };
@@ -18,12 +17,9 @@ public:
 class Player {
 public:
 	bool hasScience(ScienceType science) const;
+	bool rva002AA245() const;
 	char m_pad00[0x5C];
 	int m_5C;
-};
-class Rva002AA245MovzxByteChaseField {
-public:
-	unsigned int get() const;
 };
 struct ThingTemplate { char m_pad[0x108]; unsigned char m_kindBits[0x10]; };
 class Object : public Thing {
@@ -66,32 +62,35 @@ bool CrateCollide::isValidToExecute(const Object *other) const
 {
 	if (!other)
 		return false;
-	if (m_everExecuted)
-		return false;
-	if (other->isNeutralControlled())
-		return false;
-	const BfmeCrateCollideModuleData *md = getCrateCollideModuleData();
-	bool validBuildingAttempt = md->m_isBuildingPickup && ((other->m_template->m_kindBits[0] & 0x80) != 0);
-	if (other->getAIUpdateInterface() == 0 && !validBuildingAttempt)
-		return false;
-	if ((other->m_template->m_kindBits[0x15] & 0x40) != 0) {
-		Player *ctrl = other->getControllingPlayer();
-		if (ctrl == 0)
+	else
+	{
+		if (m_everExecuted)
 			return false;
-		if ((unsigned char)((const Rva002AA245MovzxByteChaseField *)ctrl)->get() == 0)
+		if (other->isNeutralControlled())
 			return false;
+		const BfmeCrateCollideModuleData *md = getCrateCollideModuleData();
+		bool validBuildingAttempt = md->m_isBuildingPickup && ((other->m_template->m_kindBits[0] & 0x80) != 0);
+		if (other->getAIUpdateInterface() == 0 && !validBuildingAttempt)
+			return false;
+		if ((other->m_template->m_kindBits[0x15] & 0x40) != 0) {
+			Player *ctrl = other->getControllingPlayer();
+			if (ctrl == 0)
+				return false;
+			if (!ctrl->rva002AA245())
+				return false;
+		}
+		if (!other->isKindOfMulti(md->m_kindof, md->m_kindofnot))
+			return false;
+		if (other->isEffectivelyDead())
+			return false;
+		if (getObject()->isAboveTerrain() && !validBuildingAttempt)
+			return false;
+		if (md->m_isForbidOwnerPlayer && getObject()->getControllingPlayer() == other->getControllingPlayer())
+			return false;
+		if (md->m_isHumanOnlyPickup && other->getControllingPlayer() != 0 && other->getControllingPlayer()->m_5C != 0)
+			return false;
+		if (md->m_pickupScience != SCIENCE_INVALID && other->getControllingPlayer() != 0 && !other->getControllingPlayer()->hasScience((ScienceType)md->m_pickupScience))
+			return false;
+		return getObject()->getIsUndetectedDefector();
 	}
-	if (!other->isKindOfMulti(md->m_kindof, md->m_kindofnot))
-		return false;
-	if (other->isEffectivelyDead())
-		return false;
-	if (getObject()->isAboveTerrain() && !validBuildingAttempt)
-		return false;
-	if (md->m_isForbidOwnerPlayer && getObject()->getControllingPlayer() == other->getControllingPlayer())
-		return false;
-	if (md->m_isHumanOnlyPickup && other->getControllingPlayer() != 0 && other->getControllingPlayer()->m_5C != 0)
-		return false;
-	if (md->m_pickupScience != SCIENCE_INVALID && other->getControllingPlayer() != 0 && !other->getControllingPlayer()->hasScience((ScienceType)md->m_pickupScience))
-		return false;
-	return getObject()->getIsUndetectedDefector();
 }
