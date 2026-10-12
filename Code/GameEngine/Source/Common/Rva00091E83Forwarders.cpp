@@ -50,6 +50,8 @@ public:
 	void rva00068223( unsigned int id, Coord3D location, Real scale, const Matrix3D *transform, Real randomScaleAmount,
 		const Rva000E91CEData *data, int shadowKind, const AsciiString &textureName, const AsciiString &nameD );
 	void rva00069C5F( Vector3 pos, Real radius );
+	void rva0006ABE7( AsciiString name, bool flag );
+	void rva0006ACBD( AsciiString name );
 };
 class GeometryInfo;
 // The rowed terrain callees 0x00068073/0x000680D6 and 0x00068119, under
@@ -225,6 +227,7 @@ public:
 	virtual void rva00091E64( const Coord3D *pos, const GeometryInfo *geom, Real value );
 	virtual void rva00091D3D( Real x, Real y, int value );
 	virtual void rva00091EEC( Vector3 pos, Real radius );
+	virtual void rva000926AC( const AsciiString &name, bool flag, const AsciiString &secondName );
 private:
 	char m_unrecovered04[ 0x10 ];
 	BaseHeightMapRenderObjClass *m_terrainRenderObject;	///< 0x14
@@ -309,4 +312,17 @@ void W3DTerrainVisual::rva00091EEC( Vector3 pos, Real radius )
 {
 	if (m_terrainRenderObject)
 		m_terrainRenderObject->rva00069C5F(pos, radius);
+}
+
+// Retail 0x000926AC (64B, RET 0xC; the last W3DTerrainVisual vtable entry,
+// 0x00BC812C): when the terrain render object is set, hands each name by value
+// to its two rowed texture-slot reloads, 0x0006ABE7 (with the flag) and then
+// 0x0006ACBD.
+void W3DTerrainVisual::rva000926AC( const AsciiString &name, bool flag, const AsciiString &secondName )
+{
+	if (m_terrainRenderObject)
+	{
+		m_terrainRenderObject->rva0006ABE7(name, flag);
+		m_terrainRenderObject->rva0006ACBD(secondName);
+	}
 }

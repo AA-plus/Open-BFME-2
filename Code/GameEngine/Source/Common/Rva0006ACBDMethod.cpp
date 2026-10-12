@@ -45,6 +45,26 @@ class ShroudFilter : public _STL::ios_base
 	friend class BaseHeightMapRenderObjClass;
 	friend class Rva0006D470;
 	friend class Rva0006D3B6;
+public:
+	// Zero Hour TextureFilterClass's inline setters over its first five
+	// words (min, mag, mip, U and V address modes); rva0006ABE7 writes
+	// +0/+4/+C/+10 through four separate filter fetches.
+	void Set_Min_Filter(int filter) { m_minFilter = filter; }
+	void Set_Mag_Filter(int filter) { m_magFilter = filter; }
+	void Set_U_Addr_Mode(int mode) { m_uAddressMode = mode; }
+	void Set_V_Addr_Mode(int mode) { m_vAddressMode = mode; }
+private:
+	int m_minFilter;
+	int m_magFilter;
+	int m_mipFilter;
+	int m_uAddressMode;
+	int m_vAddressMode;
+};
+
+class BfmeResetTextureRef
+{
+public:
+	void clear();
 };
 
 class ShroudTexture
@@ -73,9 +93,35 @@ private:
 	ShroudTexture m_381C;
 	AsciiString m_3820;
 	AsciiString m_3824;
+	ShroudTexture m_3828;
+	AsciiString m_382C;
+	AsciiString m_3830;
+	bool m_3834;
 public:
 	void rva0006ACBD(AsciiString name);
+	void rva0006ABE7(AsciiString name, bool flag);
 };
+
+// ?rva0006ABE7@BaseHeightMapRenderObjClass@@QAEXVAsciiString@@_N@Z @0x0006ABE7 214B
+// The second texture slot after rva0006ACBD's: holder +3828, current name
+// +382C, default name +3830 and a flag byte +3834. Unlike its sibling it
+// first releases the held texture (rowed BfmeResetTextureRef::clear
+// 0x0004D75B) and records the flag, then reloads through the same rowed
+// loader/assign and sets the filter to min/mag 2 and U/V address mode 0.
+// Same-this caller 0x0006B804 and slot caller 0x000926AC.
+void BaseHeightMapRenderObjClass::rva0006ABE7(AsciiString name, bool flag)
+{
+	if (name.isEmpty())
+		((StringBase<char> &)name).set((StringBase<char> &)m_3830);
+	((BfmeResetTextureRef *)&m_3828)->clear();
+	m_3834 = flag;
+	((StringBase<char> &)m_382C).set((StringBase<char> &)name);
+	m_3828.m_tex = BFME2LoadParticleTexture(GetStr0006ACBD(m_382C), 0, 0);
+	m_3828.getFilter()->Set_Min_Filter(2);
+	m_3828.getFilter()->Set_Mag_Filter(2);
+	m_3828.getFilter()->Set_U_Addr_Mode(0);
+	m_3828.getFilter()->Set_V_Addr_Mode(0);
+}
 
 void BaseHeightMapRenderObjClass::rva0006ACBD(AsciiString name)
 {
