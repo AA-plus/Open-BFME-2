@@ -41,6 +41,7 @@ class AptActionQueueC {
 public:
     void rva006E3230(Rva006E3230Action *pCur);
     void rva006E3810(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE);
+    int rva006E38D0();
 };
 void AptActionQueueC::rva006E3810(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE)
 {
@@ -66,4 +67,24 @@ void AptActionQueueC::rva006E3810(AptValue *pContext, AptValue *pA, AptValue *pB
         return;
     }
     Rva006CC110Log(4, "!!!!!!!!!!!!! AptAnimationPoolData:  Dequeue is full !!!!!!!!");
+}
+
+// AptActionQueueC::rva006E38D0 @0x006E38D0 73B. Ghidra-unlisted queue depth:
+// the 24-byte element distance from the cursor to m_pEnd, wrapped by the pool
+// size when negative and then asserted positive (asm breakpoint barrier keeps
+// the return move after it) ("iDelta > 0",
+// AptAnimation.cpp line 0x75F, retail texts). Address-derived name.
+int AptActionQueueC::rva006E38D0()
+{
+    int iDelta = m_pEnd - m_pCurrent;
+    if (iDelta < 0) {
+        iDelta += m_iActionPoolSize;
+        if (!(iDelta > 0)) {
+            g_bfmeAptAssertAtE17734("iDelta > 0", "C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptAnimation.cpp", 0x75f);
+            if (g_bfmeAptBreakOnAssertAtDDC01C) {
+                __asm int 3
+            }
+        }
+    }
+    return iDelta;
 }

@@ -17,6 +17,7 @@ public:
 };
 extern void (__cdecl *g_bfmeAptFreeSizeAtE17730)(void *,unsigned int);
 class Rva006DB270 { public: void freeBlock(void *,int); };
+class Rva006DB160 { public: void *allocBlock(int); };
 extern Rva006DB270* g_pChainBlockAllocator;
 // Native6E3BA0..6E3BEA is this specialization's 74-byte destructor.
 // Timer6E4F60 uses the same 12-byte member at+14. Its FuncInfo VA D62AF8
@@ -29,6 +30,7 @@ template<class T> class AptValuePtrStack {
     int m_nCapacity;
     T **m_aElements;
 public:
+    AptValuePtrStack(int _nSize);
     int size() const { return m_nElements; }
     inline void pop();
     void push(T *value);
@@ -63,6 +65,27 @@ template<class T> void AptValuePtrStack<T>::push(T *value)
     m_aElements[m_nElements] = value;
     ++m_nElements;
     value->AddRef();
+}
+// Native6E3B20..6E3B9A: Ghidra-unlisted sized constructor of the same
+// specialization, just before the rowed destructor. Zeroes the count and
+// element pointer, records the capacity, asserts _nSize > 0 (line 0x42) and
+// takes capacity*4 bytes from the same E176E8 pool the destructor frees to,
+// asserting m_aElements != NULL (line 0x46); retail assert texts. The
+// final breakpoint is an asm barrier so the epilogue follows it as native.
+template<class T> AptValuePtrStack<T>::AptValuePtrStack(int _nSize)
+{
+    m_nElements = 0;
+    m_nCapacity = _nSize;
+    m_aElements = 0;
+    if (!(_nSize > 0)) {
+        g_bfmeAptAssertAtE17734("_nSize > 0", "c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\_AptValuePtrStack.h",0x42);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+    }
+    m_aElements = (T **)((Rva006DB160 *)g_pChainBlockAllocator)->allocBlock(_nSize*4);
+    if (!(m_aElements != 0)) {
+        g_bfmeAptAssertAtE17734("m_aElements != NULL", "c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\_AptValuePtrStack.h",0x46);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) { __asm int 3 }
+    }
 }
 template class AptValuePtrStack<AptValue>;
 struct AptIntervalTimer {
