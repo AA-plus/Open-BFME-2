@@ -88,15 +88,11 @@ public:
 	int getPlayerIndex() const { return m_playerIndex54; }
 	BfmeFixedStorage128 m_upgradeMask13C;
 };
-class Rva004DF207
+class Energy
 {
 public:
-	void rva004DF207(void *arg);
-};
-class Rva004DF231
-{
-public:
-	void rva004DF231(void *arg);
+	void objectEnteringInfluence(Object *obj);
+	void objectLeavingInfluence(Object *obj);
 };
 struct Rva00293DACNode
 {
@@ -573,13 +569,13 @@ void Object::friend_adjustPowerForPlayer(bool flag)
 	Player *player = getControllingPlayer();
 	if (!player)
 		return;
-	Rva004DF207 *power = (Rva004DF207 *)((char *)player + 0x1BC);
+	Energy *power = (Energy *)((char *)player + 0x1BC);
 	if (!power)
 		return;
 	if (flag)
-		power->rva004DF207(this);
+		power->objectEnteringInfluence(this);
 	else
-		((Rva004DF231 *)power)->rva004DF231(this);
+		power->objectLeavingInfluence(this);
 }
 
 // ?friend_getRadarData@Object@@QAEPAVRadarObject@@XZ

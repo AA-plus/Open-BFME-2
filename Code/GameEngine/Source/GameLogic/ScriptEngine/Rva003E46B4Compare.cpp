@@ -1,7 +1,7 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 // free compare-mask @ 0x003E46B4 203B leaf from 0x003EB90E. Evidence:
 // 3x Parameter ret 0xc; mask via rowed rva00357B82 walked with rowed
-// getEachPlayerFromMask; ratio via rowed rva004DF161 at +0x1BC vs float
+// getEachPlayerFromMask; ratio via rowed Energy::getEnergySupplyRatio at +0x1BC vs float
 // threshold (param+8 int * g_Va00BCF628); op at [param+8] 0..5 selects
 // float compares via dec-je switch. Direct transfer of landed sibling
 // Rva003E477FCompare (145B, same shape, int diff) to float ratio.
@@ -14,17 +14,17 @@ public:
     unsigned char m_afterString[8];
 };
 
-class Rva004DF161
+class Energy
 {
 public:
-    float rva004DF161() const;
+    float getEnergySupplyRatio() const;
 };
 
 class Player
 {
 public:
     unsigned char m_pad00[0x1BC];
-    Rva004DF161 m_ratio1BC;
+    Energy m_energy;
 };
 
 class PlayerList
@@ -55,7 +55,7 @@ bool ScriptConditions::rva003E46B4(Parameter *pMaskParm, Parameter *pOpParm, Par
     int mask = TheScriptEngine->rva00357B82(pMaskParm);
     while (mask) {
         Player *pl = ThePlayerList->getEachPlayerFromMask(mask);
-        float ratio = pl->m_ratio1BC.rva004DF161();
+        float ratio = pl->m_energy.getEnergySupplyRatio();
         int op = pOpParm->m_int;
         bool hit = false;
         switch (op) {

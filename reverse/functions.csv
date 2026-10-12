@@ -39409,7 +39409,7 @@ _Rva00020AC0,,0x00020AC0,39,Code/Libraries/Source/WWVegas/WWLib/Rva0084D890CodeP
 ?Rva000BDCEFDestroy@@YAXPAURvaPair000BDCEF@@0@Z,,0x000BDCEF,25,Code/Libraries/Source/WWVegas/WWLib/Rva000BDCEFDestroyPairs.cpp,matched,32B pair record destroy stride 0x20 via rowed pair dtor 796BC same shape as 4C7542
 ??1?$vector@UBfmeStringRecord005D511F@@V?$allocator@UBfmeStringRecord005D511F@@@_STL@@@_STL@@QAE@XZ,,0x005D5434,63,Code/GameEngine/Source/Common/FamilyVectorDtors_muse-3fc4.cpp,matched,vector dtor via rowed Destroy and free same EH shape as 111ACF precedent
 ?Rva003BCFC9Set@@YGX_N@Z,,0x003BCFC9,11,Code/GameEngine/Source/GameLogic/Object/PartitionManagerRva003BCFC9.cpp,matched,forwarder to PartitionManager shroud thunk via TheShroudManager
-?rva004DF161@Rva004DF161@@QBEMXZ,,0x004DF161,30,Code/GameEngine/Source/Common/Rva004DF161Ratio.cpp,matched,callers 0x0033AAAC 0x003E46FB use float plus 1.0f pool 0x007BB8D8 plus fild fidiv
+?getEnergySupplyRatio@Energy@@QBEMXZ,,0x004DF161,30,Code/GameEngine/Source/Common/Rva004DF161Ratio.cpp,matched,callers 0x0033AAAC 0x003E46FB use float plus 1.0f pool 0x007BB8D8 plus fild fidiv
 ?rva004DF18D@Rva004DF18D@@QAEXH@Z,,0x004DF18D,34,Code/GameEngine/Source/Common/Rva004DF18DAdd.cpp,matched,callers 5 sites plus rowed Player onPowerBrownOutChange 0x002AB8D0
 ?rva004DF1AF@Rva004DF1AF@@QAEXH@Z,,0x004DF1AF,34,Code/GameEngine/Source/Common/Rva004DF1AFAdd.cpp,matched,callers 0x004DF1FF 0x004DF21F 0x004DF247 plus sibling 0x004DF18D
 ?rva0049C5F4@Rva0049C5F4@@QAEPAXPAVObject@@@Z,,0x0049C5F4,48,Code/GameEngine/Source/GameLogic/Object/Update/Rva0049C5F4ProviderGet.cpp,matched,unlock producer provider slot31 forward via rowed findObject callers at 0x49C70F and 0x49CAC0 unblocks 0x49C6E1
@@ -44169,7 +44169,7 @@ __purecall,,0x0003B810,62,Code/Libraries/Source/debug/debug_purecall.cpp,matched
 ??$__uninitialized_fill_n@PAVRva004BA1D0@@IV1@@_STL@@YAPAVRva004BA1D0@@PAV1@IABV1@ABU__false_type@0@@Z,,0x004BA26C,37,Code/Libraries/Source/WWVegas/WWLib/Rva00051AF9FillN.cpp,matched,unsigned count fill loop over 0x2C-byte elements through rowed _Construct 0x004BA219
 ??$__uninitialized_copy@PBVAssetReference@@PAV1@@_STL@@YAPAVAssetReference@@PBV1@0PAV1@ABU__false_type@0@@Z,,0x000C9308,38,Code/Libraries/Source/WWVegas/WWLib/Rva00051AF9FillN.cpp,matched,uninitialized copy loop through rowed _Construct<AssetReference> 0x000C92F6
 ??$__uninitialized_copy@PBVRva004BA1D0@@PAV1@@_STL@@YAPAVRva004BA1D0@@PBV1@0PAV1@ABU__false_type@0@@Z,,0x004BA246,38,Code/Libraries/Source/WWVegas/WWLib/Rva00051AF9FillN.cpp,matched,uninitialized copy loop over 0x2C-byte elements through rowed _Construct 0x004BA219
-?rva004DF231@Rva004DF231@@QAEXPAX@Z,,0x004DF231,42,Code/GameEngine/Source/Common/RTS/Energy.cpp,matched,caller 0x0028D99A callee rows 0x004DF1AF 0x004DF18D
+?objectLeavingInfluence@Energy@@QAEXPAVObject@@@Z,,0x004DF231,42,Code/GameEngine/Source/Common/RTS/Energy.cpp,matched,caller 0x0028D99A callee rows 0x004DF1AF 0x004DF18D
 ?rva004DF9E4@Rva004DF9E4@@QAEXPAXH@Z,,0x004DF9E4,42,Code/GameEngine/Source/Common/Rva004DF9E4Loop.cpp,matched,callers 0x004E0449 0x004E0466 0x004E049B pass ptr mask
 ?rva004DF9B9@Rva004DF9B9@@QAEXPAXH@Z,,0x004DF9B9,43,Code/GameEngine/Source/Common/Rva004DF9B9Loop.cpp,matched,sibling of 0x004DF9E4 callers in 0x004E01E3 v0 with 1
 ?rva004DF98B@Rva004DF98B@@QAEXPAXH@Z,,0x004DF98B,46,Code/GameEngine/Source/Common/Rva004DF98BLoop.cpp,matched,caller 0x002933C2 sibling layout match
@@ -48703,7 +48703,7 @@ _rva006D9D70Comparator,,0x006D9D70,203,Code/Libraries/Source/Apt/AptValue/Rva006
 ?rva002DAE1D@Rva002DAE1D@@QAEXVAsciiString@@@Z,,0x002DAE1D,52,Code/Libraries/Source/WWVegas/WWLib/Rva002DAE1DSet.cpp,matched,twin of Rva002DADB5Set plus caller 0x002DB743 plus same EH data VA
 ?rva002DAE51@Rva002DAE51@@QAEXVAsciiString@@@Z,,0x002DAE51,52,Code/Libraries/Source/WWVegas/WWLib/Rva002DAE51Set.cpp,matched,twin of Rva002DAE1DSet plus caller 0x002DB758 plus same EH data VA
 ?Rva0002C025IsNewer@@YA_NABVAsciiString@@PBUSYSTEMTIME@@@Z,,0x0002C025,155,Code/GameEngine/Source/GameClient/Rva0002C025.cpp,matched,isEmpty row 0x1E2F _stat localtime IAT emptyString year 1900 caller 0x2D327 else-chain places returns inline
-?rva004DF207@Rva004DF207@@QAEXPAX@Z,,0x004DF207,42,Code/GameEngine/Source/Common/RTS/Energy.cpp,matched,twin 0x004DF231 caller 0x0028D9D5 rows 0x004DF1AF 0x004DF18D mirror neg
+?objectEnteringInfluence@Energy@@QAEXPAVObject@@@Z,,0x004DF207,42,Code/GameEngine/Source/Common/RTS/Energy.cpp,matched,twin 0x004DF231 caller 0x0028D9D5 rows 0x004DF1AF 0x004DF18D mirror neg
 ?Rva00202678Get@@YGPBDH@Z,,0x00202678,40,Code/GameEngine/Source/Common/Rva00202678Get.cpp,matched,indexed string getter via caller 0x002E53FA plus Unknown plus table 0x00DB96B0
 ??1Rva004F1B56@@UAE@XZ,,0x004F1B56,54,Code/GameEngine/Source/Common/Rva004F1B56Dtor.cpp,matched,dtor vtable 0x00C62E40 then AsciiString at plus0x20 then base vtable 0x007BB554
 ??_GRva004F1B56@@UAEPAXI@Z,,0x004F1D1C,28,Code/GameEngine/Source/Common/Rva004F1B56Dtor.cpp,matched,deleting dtor emits from dtor TU calls ??1Rva004F1B56 then operator delete
