@@ -1,5 +1,5 @@
 // ?rva00278440@Rva00278440Host@@QAEXH@Z
-// partial score=0.98 date=2026-10-12
+// partial score=1.0 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /ICode/GameEngine/Include /Ireference/shims/bfme2_ascii
 // Native27824D..278341 selects a counted4-byte audio reference. The ZH
 // Drawable audio getters are a semantic lead; BFME selectors and fallback
@@ -17,7 +17,7 @@ public:
  Rva0036CA00Str() {}
  Rva0036CA00Str(const AudioEventInfo *p):handle(p){}
  Rva0036CA00Str(const Rva0036CA00Str &) throw();
- ~Rva0036CA00Str(){if(handle.value)handle.value->Release_Ref();}
+ ~Rva0036CA00Str(){OpaqueRefCounted *const volatile &value=handle.value;if(value)value->Release_Ref();}
 };
 class Rva002390CB {
 public:
@@ -45,10 +45,20 @@ public:
  int customNameID;
  char pad104[8];
  const AudioEventInfo *raw;
+ char pad110[0x38];
+ int secondaryHandle;
+ char pad14c[0x11c];
+ unsigned int flags268;
+ char pad26c[0x1dc];
+ unsigned char flag448;
+ unsigned char flag449;
+ unsigned char flag44A;
  Rva002390CB rva0027756D(int);
+ Rva002390CB rva00276893();
  Rva0036CA00Str rva0027824D(int);
  void rva002781DA(Rva0010F149Handle);
  void rva002743D7();
+ void rva002784EB();
 };
 Rva0036CA00Str Drawable::rva0027824D(int selector)
 {
@@ -83,6 +93,8 @@ template<int N> class DrawableAudioSlots : public DrawableAudioSlots<N-1>
 template<> class DrawableAudioSlots<0> {};
 class DrawableAudioView : public DrawableAudioSlots<25>
 { public: virtual int add(BfmeAudioEventPrefix136 *); };
+class DrawableAudioStatusView : public DrawableAudioSlots<52>
+{ public: virtual bool active(int); };
 class AudioManager;
 extern AudioManager *TheAudio;
 class Rva00278341Host
@@ -122,16 +134,39 @@ void Rva00278341Host::rva00278341(int selector, int permanent)
  flag44B=0;
 }
 
+// Target235-byte refresh: keyed record29 supplies its counted +4 choice;
+// the temporary record dies after that copy, before the event is constructed.
+void Drawable::rva002784EB()
+{
+ if(flag449 && flag448 && flag44A && ((static_cast<unsigned char>(flags268>>29)&1)!=0) &&
+    !reinterpret_cast<DrawableAudioStatusView *>(TheAudio)->active(secondaryHandle))
+ {
+  Rva0036CA00Str info=rva00276893().choice;
+  if(info.handle.value)
+  {
+   const OpaqueRefElement4 &owner=reinterpret_cast<const OpaqueRefElement4 &>(info);
+   BfmeAudioEventPrefix136 event(owner,static_cast<DrawableID>(customNameID));
+   secondaryHandle=reinterpret_cast<DrawableAudioView *>(TheAudio)->add(&event);
+  }
+ }
+}
+
+// Native278440..2784AF complete111B RET4. The matched2784AF wrapper
+// and WB CB11D0 establish the receiver, selector and three flag-byte guard.
+// Compare the selected counted owner with field110 and restart only on change.
+// The local volatile reference in the owner destructor retains the two native
+// reads around EH-state reset; it is a scheduling choice, not a claim that
+// the historical member was volatile. The saved current owner preserves the
+// native field load and memory-left comparison; the callee may replace it.
 class Rva00278440Host : public Rva00278341Host
 { public: void rva00278440(int selector); };
-
-// Resume the banked 0x00278440 shape with the selector's proven value-return
-// ABI, removing the old synthetic output pointer and separate owner copy.
+// ?Rva00278440Host::rva00278440 present-unmatched
 void Rva00278440Host::rva00278440(int selector)
 {
  if(flag447 && flag448 && flag44A)
  {
   Rva0036CA00Str info=reinterpret_cast<Drawable *>(this)->rva0027824D(selector);
-  if(playing.referent!=info.handle.value)rva00278341(selector,0);
+  OpaqueRefCounted *current=playing.referent;
+  if(info.handle.value!=current)rva00278341(selector,0);
  }
 }
