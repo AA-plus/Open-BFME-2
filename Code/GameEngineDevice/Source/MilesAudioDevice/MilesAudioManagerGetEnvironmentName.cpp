@@ -67,6 +67,31 @@ const char *getEnvironmentName(int environmentType)
 	return "<Unknown>";
 }
 
+// Inverse lookup (retail 0x0005505F, 65B, a Ghidra-unlisted gap body): the
+// table index of a case-insensitively matching name, -1 when none matches.
+// Retail accepts the misspelling "Hanger" for Hangar (10) first. The name
+// arrives by reference and only the rowed StringBase<char>::compareNoCase
+// (const char *) 0x00037980 is called on it; the descriptive name is ours.
+template <class T> class StringBase
+{
+public:
+	int compareNoCase(const T *str) const;
+};
+class AsciiString;
+
+int getEnvironmentTypeFromName(const AsciiString &name)
+{
+	const StringBase<char> &text = reinterpret_cast<const StringBase<char> &>(name);
+	if (text.compareNoCase("Hanger") == 0)
+		return 10;
+	for (unsigned int i = 0; i < 26; ++i)
+	{
+		if (text.compareNoCase(s_environmentNames[i].name) == 0)
+			return s_environmentNames[i].environmentType;
+	}
+	return -1;
+}
+
 class MilesMutexGuard
 {
 public:
