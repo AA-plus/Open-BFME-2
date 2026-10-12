@@ -1,17 +1,12 @@
-// ?install_materials@MeshModelClass@@IAEXPAVMeshLoadContextClass@@@Z
-// partial score=0.95302 date=2026-10-09
-// ?install_materials@MeshModelClass@@IAEXPAVMeshLoadContextClass@@@Z
-// partial score=0.9261744966 date=2026-10-04
-// ?install_materials@MeshModelClass@@IAEXPAVMeshLoadContextClass@@@Z
-// partial score=0.9261744966 date=2026-09-23
 // cl: /G7 /DNDEBUG /MD /EHsc /O2 /Ob2
-// Adapted from BFME1 MeshModelInstallMaterials.cpp (RVA 0x0096E7C0, 316 bytes).
-// BFME2 candidate: RVA 0x0018A070, 298 bytes through ret 4 at 0x18A197.
-// Target accesses establish descriptors +0x8C/+0x90, MatInfo +0x98 and
-// context TextureCount +0x11C. Class/helper names remain donor-derived.
-// Post_Load_Process is independently qualified at 0x15BB00 but not pinned.
-// Current map: 22 differing bytes, including its two unresolved calls.
-// A scratch callee binding leaves 14 register-allocation/order differences.
+// BFME2 MeshModelClass::install_materials, retail RVA 0x0018A070 (298 bytes through
+// the ret 4 at 0x0018A197). Adapted from BFME1 MeshModelInstallMaterials.cpp
+// (RVA 0x0096E7C0). Dedicated TU like MeshModelInstallAlternate.cpp: the shared
+// meshmdlio.cpp TU cannot host this body under its include chain. TU-local views
+// anchored to retail immediates: DefMatDesc +0x8C, AlternateMatDesc +0x90, MatInfo
+// +0x98, context vertex materials +0xC8/+0xD4 and TextureCount +0x11C. Callees
+// resolve by name: install_alternate_material_desc 0x188290, Post_Load_Process
+// 0x15BB00, Peek_Texture 0x188700, MaterialInfoClass::Add_Texture 0x16FBF0.
 
 class TextureClass
 {
@@ -86,18 +81,6 @@ public:
 	void Post_Load_Process(bool lighting_enabled, MeshModelClass *mesh);
 };
 
-class BfmeSubBJE
-{
-public:
-	bool bfmeDoBJE(void *what);
-};
-
-class BfmeThingBJE
-{
-public:
-	void *bfmeGoBJE(void *what);
-};
-
 class MaterialVector
 {
 private:
@@ -141,11 +124,6 @@ public:
 	virtual void Delete_This(void);
 
 	void *Add_Texture(void *texture);
-	void Add_Texture(const BfmeHandleCX &texture)
-	{
-		Add_Texture((void *)&texture);
-	}
-
 	void Add_Vertex_Material(VertexMaterialClass *material)
 	{
 		if (material) {
@@ -193,8 +171,11 @@ void MeshModelClass::install_materials(MeshLoadContextClass *context)
 		AlternateMatDesc->Post_Load_Process(lighting_enabled, this);
 	}
 
+	// Passing the returned handle's address straight to the out-of-line Add_Texture
+	// gives retail's allocation (this in EBX, the -1 unwind state and the vertex
+	// material in EBP); the inline const-reference wrapper swaps the two registers.
 	for (i = 0; i < context->Texture_Count(); i++) {
-		MatInfo->Add_Texture(context->Peek_Texture(i));
+		MatInfo->Add_Texture((void *)&context->Peek_Texture(i));
 	}
 
 	for (i = 0; i < context->Vertex_Material_Count(); i++) {

@@ -1837,45 +1837,7 @@ void MeshModelClass::modify_for_overbright(void)
 
 }
 
-// ?MeshModelClass::install_materials present-unmatched
-void MeshModelClass::install_materials(MeshLoadContextClass * context)
-{
-	int i;
-
-	/*
-	** If alternate material chunks were loaded, initialize the AlternateMatDesc
-	*/
-	install_alternate_material_desc(context);
-	
-	/*
-	** Finish configuring the vertex materials and color arrays.
-	*/
-	bool lighting_enabled=true;
-	// vertex-lit models need the lighting turned off!
-	if (Get_Flag(MeshGeometryClass::PRELIT_VERTEX)) {
-		lighting_enabled=false;
-	}
-	DefMatDesc->Post_Load_Process (lighting_enabled,this);
-	if (AlternateMatDesc != NULL) {
-		AlternateMatDesc->Post_Load_Process (lighting_enabled,this);
-	}
-
-	/*
-	** transfer the refs to our textures into the MatInfo
-	*/
-	for (i=0; i<context->Texture_Count(); i++) {
-		MatInfo->Add_Texture(context->Peek_Texture(i));
-	}
-
-	/*
-	** transfer the refs to our vertex materials into the MatInfo
-	*/
-	for (i=0; i<context->Vertex_Material_Count(); i++) {
-		MatInfo->Add_Vertex_Material(context->Peek_Vertex_Material(i));
-	}
-}
-
-
+// MeshModelClass::install_materials: defined in MeshModelInstallMaterials.cpp (its row's unit).
 // MeshModelClass::install_alternate_material_desc: defined in MeshModelInstallAlternate.cpp (its row's unit).
 
 /***********************************************************************************************
