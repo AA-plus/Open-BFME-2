@@ -3,7 +3,7 @@
 // True class per vtable is Rva00340D1F but that name is taken by misnamed 111B row at
 // 0x00340CB0 (no vtable proof); honest address name keeps bytes and links. Fix that
 // row in its own commit to free the real name.
-// Version(1,3) via Xfer slot 0x28 then base Rva0033FF2B xfer via rowed 0x0033FF76,
+// Version(1,3) via Xfer slot 0x28 then base AIInternalMoveToState xfer via rowed 0x0033FF76,
 // IsLightCRC via slot 0x10, int at +0x4C via slot 0x7C, bools at +0x54/+0x55/+0x56
 // via slot 0x90, version>1 int at +0x50 via slot 0x7C plus CommandSource at +0x58
 // via rowed XferCommandSourceType 0x00305C02 plus Snapshot ptr at +0x5C via slot
@@ -106,10 +106,10 @@ private:
 	char m_pad04[8];
 };
 
-class Rva0033FF2B : public Rva0049B47C
+class AIInternalMoveToState : public Rva0049B47C
 {
 public:
-	virtual ~Rva0033FF2B();
+	virtual ~AIInternalMoveToState();
 
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -119,7 +119,7 @@ private:
 	unsigned int m_handle40;
 };
 
-class Rva00340D70 : public Rva0033FF2B
+class Rva00340D70 : public AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -142,7 +142,7 @@ void Rva00340D70::xfer(Xfer *xfer)
 {
 	Xfer::Version version(1, 3);
 	*xfer == version;
-	Rva0033FF2B::xfer(xfer);
+	AIInternalMoveToState::xfer(xfer);
 	if (xfer->IsLightCRC())
 		return;
 	*xfer == m_4C;

@@ -2,7 +2,7 @@
 //
 // ?xfer@Rva00341930@@MAEXPAVXfer@@@Z,
 // retail 0x00341930, 73 bytes. Dedicated TU.
-// Version(1,2) via Xfer slot 0x28 then base Rva0033FF2B xfer via rowed
+// Version(1,2) via Xfer slot 0x28 then base AIInternalMoveToState xfer via rowed
 // 0x0033FF76 then ObjectID at +0x4C via rowed XferObjectID 0x003060B2
 // then version>=2 uint at +0x50 via Xfer slot 0x78. Prev is our
 // Rva00341557 (/O1 /MD) and next is Rva0049B47CDerived (/O1 /MD).
@@ -101,10 +101,10 @@ enum ObjectID
 
 void XferObjectID(Xfer *xfer, ObjectID *objectID);
 
-class Rva0033FF2B
+class AIInternalMoveToState
 {
 public:
-	virtual ~Rva0033FF2B();
+	virtual ~AIInternalMoveToState();
 
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -113,7 +113,7 @@ private:
 	char m_pad04[0x4C - 0x04];
 };
 
-class Rva00341930 : public Rva0033FF2B
+class Rva00341930 : public AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -128,7 +128,7 @@ void Rva00341930::xfer(Xfer *xfer)
 {
 	Xfer::Version version(1, 2);
 	*xfer == version;
-	Rva0033FF2B::xfer(xfer);
+	AIInternalMoveToState::xfer(xfer);
 	XferObjectID(xfer, &m_4C);
 	if (version.m_minimum >= 2) {
 		*xfer == m_50;

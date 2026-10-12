@@ -1,7 +1,7 @@
 // cl: /MD
 //
 // ?xfer@Rva00340123@@MAEXPAVXfer@@@Z retail 0x00340123 53B slot 3.
-// Evidence: Version1 via rowed 0x000053EE; base Rva0033FF2B xfer via rowed
+// Evidence: Version1 via rowed 0x000053EE; base AIInternalMoveToState xfer via rowed
 // 0x0033FF76; int at +0x4C via Xfer slot 0x7C; bool at +0x50 via slot 0x90;
 // callers at 0x00340423 0x00340481.
 class AsciiString;
@@ -89,7 +89,7 @@ private:
 	char m_pad04[8];
 };
 
-class Rva0033FF2B : public Rva0049B47C
+class AIInternalMoveToState : public Rva0049B47C
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -107,7 +107,7 @@ private:
 	bool m_4B;
 };
 
-class Rva00340123 : public Rva0033FF2B
+class Rva00340123 : public AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -119,7 +119,7 @@ private:
 void Rva00340123::xfer(Xfer *xfer)
 {
 	xfer->Version1();
-	Rva0033FF2B::xfer(xfer);
+	AIInternalMoveToState::xfer(xfer);
 	*xfer == m_4C;
 	*xfer == m_50;
 }

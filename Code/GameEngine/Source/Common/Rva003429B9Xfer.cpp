@@ -1,5 +1,5 @@
 // cl: /MD
-// ?xfer@Rva003429B9@@MAEXPAVXfer@@@Z @0x003406A5 117B: slot 3 xfer of vtable 0x008126C0 (class of Rva003429B9 ctor 0x003429B9). Version(1 3) then base Rva0033FF2B xfer then IsLightCRC early-out then Coord at +0x4C via slot 0x60 plus uint at +0x58 via slot 0x78 plus bool at +0x5C if min>=2 plus bool at +0x5D if min>=3. Evidence: callees rowed (base 0x0033FF76) layout from Rva003429B9Ctor floats 0x4C 0x50 0x54 as Coord plus int 0x58 plus bools 0x5C 0x5D.
+// ?xfer@Rva003429B9@@MAEXPAVXfer@@@Z @0x003406A5 117B: slot 3 xfer of vtable 0x008126C0 (class of Rva003429B9 ctor 0x003429B9). Version(1 3) then base AIInternalMoveToState xfer then IsLightCRC early-out then Coord at +0x4C via slot 0x60 plus uint at +0x58 via slot 0x78 plus bool at +0x5C if min>=2 plus bool at +0x5D if min>=3. Evidence: callees rowed (base 0x0033FF76) layout from Rva003429B9Ctor floats 0x4C 0x50 0x54 as Coord plus int 0x58 plus bools 0x5C 0x5D.
 class AsciiString;
 class UnicodeString;
 class PooledString;
@@ -101,7 +101,7 @@ private:
 	char m_pad04[8];
 };
 
-class Rva0033FF2B : public Rva0049B47C
+class AIInternalMoveToState : public Rva0049B47C
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -119,7 +119,7 @@ private:
 	bool m_4B;
 };
 
-class Rva003429B9 : public Rva0033FF2B
+class Rva003429B9 : public AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -134,7 +134,7 @@ void Rva003429B9::xfer(Xfer *xfer)
 {
 	Xfer::Version version(1, 3);
 	*xfer == version;
-	Rva0033FF2B::xfer(xfer);
+	AIInternalMoveToState::xfer(xfer);
 	if (xfer->IsLightCRC())
 		return;
 	*xfer == m_4C;

@@ -1,6 +1,6 @@
 // cl: /MD
 // ?xfer@Rva00340D1F@@MAEXPAVXfer@@@Z @ 0x00340CB0 111B: slot 3 xfer of vtable 0x00810E?? family.
-// Version(1,2) via Xfer slot 0x28 then base Rva0033FF2B xfer via rowed 0x0033FF76,
+// Version(1,2) via Xfer slot 0x28 then base AIInternalMoveToState xfer via rowed 0x0033FF76,
 // IsLightCRC via slot 0x10, int at +0x4C via slot 0x7C, bools at +0x50/+0x51 via
 // slot 0x90, version>=2 int at +0x54 via slot 0x7C. Evidence: rowed base xfer
 // 0x0033FF76 plus Xfer slots 0x28/0x10/0x7C/0x90 plus caller 0x0034253E.
@@ -108,7 +108,7 @@ private:
 	char m_pad04[8];
 };
 
-class Rva0033FF2B : public Rva0049B47C
+class AIInternalMoveToState : public Rva0049B47C
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -127,7 +127,7 @@ private:
 	bool m_4B;
 };
 
-class Rva00340D1F : public Rva0033FF2B
+class Rva00340D1F : public AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -144,7 +144,7 @@ void Rva00340D1F::xfer(Xfer *xfer)
 {
 	Xfer::Version version(1, 2);
 	*xfer == version;
-	Rva0033FF2B::xfer(xfer);
+	AIInternalMoveToState::xfer(xfer);
 	if (xfer->IsLightCRC())
 		return;
 	*xfer == m_4C;

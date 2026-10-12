@@ -1,6 +1,6 @@
 // cl: /MD
 // ?xfer@Rva0034103B@@MAEXPAVXfer@@@Z @0x0034103B 217B: Rva0034103B xfer slot 3.
-// Version1 via rowed 0x000053EE then base Rva0033FF2B xfer via rowed 0x0033FF76 then IsLightCRC early-out via Xfer slot 0x10 then Coord2D at +0x4C via slot 0x50 plus float at +0x54 via slot 0x70 plus int at +0x58 via slot 0x7C plus two TerrainLogic ID refs at +0x5C/+0x60 via slot 0x78 plus IsLoading plus slot 0x8C plus bool at +0x64 via slot 0x90.
+// Version1 via rowed 0x000053EE then base AIInternalMoveToState xfer via rowed 0x0033FF76 then IsLightCRC early-out via Xfer slot 0x10 then Coord2D at +0x4C via slot 0x50 plus float at +0x54 via slot 0x70 plus int at +0x58 via slot 0x7C plus two TerrainLogic ID refs at +0x5C/+0x60 via slot 0x78 plus IsLoading plus slot 0x8C plus bool at +0x64 via slot 0x90.
 // Precedent Rva00458AAE xfer (Version1 base float int) plus DockUpdate 0x7fffffff ID shape plus Rva00573A00 TheTerrainLogic at 0x00DFEC50.
 // Unblocks 0x0034117C and 0x00341205.
 class AsciiString;
@@ -70,10 +70,10 @@ public:
 protected:
 	virtual void XferData(unsigned int type, void *data, unsigned int size) = 0;
 };
-class Rva0033FF2B
+class AIInternalMoveToState
 {
 public:
-	virtual ~Rva0033FF2B();
+	virtual ~AIInternalMoveToState();
 protected:
 	virtual void xfer(Xfer *xfer);
 private:
@@ -99,7 +99,7 @@ class TerrainLogic
 	virtual TerrainObj *findObj(unsigned int id);
 };
 extern TerrainLogic *TheTerrainLogic;
-class Rva0034103B : public Rva0033FF2B
+class Rva0034103B : public AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -114,7 +114,7 @@ private:
 void Rva0034103B::xfer(Xfer *xfer)
 {
 	xfer->Version1();
-	Rva0033FF2B::xfer(xfer);
+	AIInternalMoveToState::xfer(xfer);
 	if (xfer->IsLightCRC())
 		return;
 	*xfer == m_4C;

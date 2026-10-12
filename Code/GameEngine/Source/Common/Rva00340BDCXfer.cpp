@@ -2,7 +2,7 @@
 //
 // ?xfer@Rva00340BDC@@MAEXPAVXfer@@@Z, retail 0x00340AE8, 244 bytes.
 // Slot 3 (0x0C) of vtable 0x00812150 (class Rva00340BDC): xfer with Version(1,3),
-// base Rva0033FF2B::xfer, IsLightCRC early-out, Coord+ICoord2D+uint+bool members,
+// base AIInternalMoveToState::xfer, IsLightCRC early-out, Coord+ICoord2D+uint+bool members,
 // version>1 new Rva0033F483 sub-state plus int temp and Snapshot xfer, version>2
 // uint+bool. Layout from retail offsets; Xfer decl copied verbatim from
 // PoisonedBehaviorXfer.cpp for slot order (overloads reversed by MSVC 7.1).
@@ -110,7 +110,7 @@ private:
 	char m_pad25[0x28 - 0x25];
 };
 
-class Rva0033FF2B
+class AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -132,7 +132,7 @@ private:
 	bool m_4B;
 };
 
-class Rva00340BDC : public Rva0033FF2B
+class Rva00340BDC : public AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -153,7 +153,7 @@ void Rva00340BDC::xfer(Xfer *xfer)
 {
 	Xfer::Version version(1, 3);
 	*xfer == version;
-	Rva0033FF2B::xfer(xfer);
+	AIInternalMoveToState::xfer(xfer);
 	if (xfer->IsLightCRC())
 		return;
 	*xfer == m_58;

@@ -1,9 +1,9 @@
 // cl: /MD
 //
 // ?xfer@Rva003424B1@@MAEXPAVXfer@@@Z, retail 0x003424B1, 81 bytes.
-// Chain from 0x0033FF76 (Rva0033FF2B::xfer). Derived xfer calling
+// Chain from 0x0033FF76 (AIInternalMoveToState::xfer). Derived xfer calling
 // Xfer::Version1 via rowed 0x000053EE then bools at +0x55/+0x54/+0x4C via
-// slot 0x90 then int at +0x50 via slot 0x7C then base Rva0033FF2B xfer via
+// slot 0x90 then int at +0x50 via slot 0x7C then base AIInternalMoveToState xfer via
 // rowed 0x0033FF76 last. Prev/next are Rva00341E22Xfer/Rva00342502Xfer
 // (/O1 /MD). Layout is base 0x4C plus bool plus pad plus int plus bools.
 // Identity is base-call plus Version1; class stays honest Rva with xfer.
@@ -94,10 +94,10 @@ public:
 	unsigned char m_minimum;
 };
 
-class Rva0033FF2B
+class AIInternalMoveToState
 {
 public:
-	virtual ~Rva0033FF2B();
+	virtual ~AIInternalMoveToState();
 
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -106,7 +106,7 @@ private:
 	char m_pad04[0x4C - 0x04];
 };
 
-class Rva003424B1 : public Rva0033FF2B
+class Rva003424B1 : public AIInternalMoveToState
 {
 protected:
 	virtual void xfer(Xfer *xfer);
@@ -126,5 +126,5 @@ void Rva003424B1::xfer(Xfer *xfer)
 	*xfer == m_54;
 	*xfer == m_4C;
 	*xfer == m_50;
-	Rva0033FF2B::xfer(xfer);
+	AIInternalMoveToState::xfer(xfer);
 }
