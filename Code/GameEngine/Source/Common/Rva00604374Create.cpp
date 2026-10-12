@@ -46,6 +46,7 @@ struct Rva006044A0 {
 	// Native helper returns the output pointer in EAX.
 	void **rva006043CE(void **result, void *x, void *y, const void *value, void *known);
 	Rva006044A0Pair rva006044A0(const Rva0060426C &v);
+	Rva006044A0Pair rva0060458E(const Rva0060426C &v);
 };
 Rva006044A0Pair Rva006044A0::rva006044A0(const Rva0060426C &v)
 {
@@ -147,6 +148,7 @@ struct Rva00603E50 {
 	// Native helper returns the output pointer in EAX.
 	void **rva00603B0A(void **result, void *x, void *y, const void *value, void *known);
 	Rva00603E50Pair rva00603E50(const Rva00603E50Value &v);
+	Rva00603E50Pair rva00603FAC(const Rva00603E50Value &v);
 };
 Rva00603E50Pair Rva00603E50::rva00603E50(const Rva00603E50Value &v)
 {
@@ -209,4 +211,16 @@ void **Rva00603E50::rva00603B0A(void **result, void *x, void *y, const void *val
 	++m_count;
 	*result = node;
 	return result;
+}
+
+// Gap bodies 0x00603FAC and 0x0060458E (20B each): the insert wrappers that
+// return the rowed 0x00603E50 / 0x006044A0 results by value.
+Rva00603E50Pair Rva00603E50::rva00603FAC(const Rva00603E50Value &v)
+{
+	return rva00603E50(v);
+}
+
+Rva006044A0Pair Rva006044A0::rva0060458E(const Rva0060426C &v)
+{
+	return rva006044A0(v);
 }
