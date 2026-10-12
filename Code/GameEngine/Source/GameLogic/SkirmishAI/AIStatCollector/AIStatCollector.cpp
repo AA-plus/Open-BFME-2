@@ -83,6 +83,7 @@ void *Rva004DF983Field(void *);
 class AIStatCollector {
 public: AIStatCollector(Player *);
  void Register(Object *,int);
+ void addInfoReceiver(const ModuleData *);
 private:
  Rva005961D6 *units;
  Rva00596069 *otherUnits;
@@ -114,4 +115,10 @@ void *Rva004DF983Field(void *owner) { return static_cast<char *>(owner)+0x38; }
 void AIStatCollector::Register(Object *a,int mask) {
  const ModuleData **beg= listeners.begin(); const ModuleData **end=listeners.end();
  for (;beg!=end;++beg) { Rva004DF98BReceiver *e=(Rva004DF98BReceiver *)*beg; if(e->m_flags & mask) e->v0(a,mask); }
+}
+
+// WB addInfoReceiver at129B9C0; native appends one pointer at vector2C.
+void AIStatCollector::addInfoReceiver(const ModuleData *receiver)
+{
+ listeners.push_back(receiver);
 }
