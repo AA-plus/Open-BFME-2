@@ -207,6 +207,20 @@ public:
 	virtual void clearTextures() = 0;
 };
 extern Rva000E19A3Interface *g_00DEBC60;
+// renderBridge passes the bridge texture by value through this argument view:
+// its forced-inline constructor builds the base handle directly, the shape
+// the matched W3DTerrainBackgroundDrawVisiblePolys.cpp uses for the same
+// interface, which gives retail's argument-copy order.
+struct TextureArgumentView : public RefCountPtr<TextureClass> {
+ __forceinline TextureArgumentView(const RefCountPtr<TextureClass>&other):RefCountPtr<TextureClass>(other){}
+};
+class Rva000E19A3TextureArgumentView {
+public:
+ virtual void setRenderingMode(int)=0;
+ virtual void setBaseTexture(TextureArgumentView)=0;
+ virtual void setNormalTexture(TextureArgumentView)=0;
+ virtual void clearTextures()=0;
+};
 
 // TheTerrainRenderObject's slot 18 returns a state whose +0x14 mode 1 makes
 // the roads draw untextured.
@@ -299,6 +313,22 @@ private:
 	Bool m_enabled;	// +0x110
 	char m_pad111[0x114 - 0x111];
 };
+
+// Retail 0x000DDAB7: Zero Hour's renderBridge without the polygon/vertex
+// guards; with a rendering method it hands the bridge texture to the
+// g_00DEBC60 shader interface and sets the method's slot-4 mode 2 before
+// the draw.
+// ?renderBridge@W3DBridge@@QAEXPAVRenderingMethod@FXShader@@@Z
+void W3DBridge::renderBridge(FXShader::RenderingMethod *method)
+{
+	if (m_visible) {
+		if (method) {
+			((Rva000E19A3TextureArgumentView*)g_00DEBC60)->setBaseTexture(m_bridgeTexture);
+			method->slot4(2);
+		}
+		DX8Wrapper::Draw_Triangles(m_firstIndex, m_numPolygons, m_firstVertex, m_numVertex);
+	}
+}
 
 #define MAX_BRIDGES 200
 

@@ -79109,3 +79109,4 @@ __ehhandler$?rva005D5001@Rva005D5001@@QAEXABUTreeHintRef00217D4C@@@Z,,0x007A2543
 ?rva00062AEC@W3DTerrainLogic@@UAEPAXABV?$StringBase@D@@@Z,,0x00062AEC,5,Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogicCellQueries.cpp,matched,W3DTerrainLogic vftable tail jump to the base name lookup 0x00282021
 ?rva00062B97@W3DTerrainLogic@@UAEXXZ,,0x00062B97,5,Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogicCellQueries.cpp,matched,W3DTerrainLogic vftable tail jump to 0x0027CD63
 ?rva00099109@Rva00099109@@QAEXXZ,,0x00099109,5,Code/GameEngine/Source/Common/VslotSmallBodiesAJ.cpp,matched,W3DMouse vftable slot 9 tail jump to 0x00041A06
+?renderBridge@W3DBridge@@QAEXPAVRenderingMethod@FXShader@@@Z,,0x000DDAB7,96,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DBridgeBufferDrawBridges.cpp,matched,Zero Hour renderBridge shape; texture passed through a forced-inline argument view as in the terrain background draw
