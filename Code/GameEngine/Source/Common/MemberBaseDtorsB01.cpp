@@ -239,6 +239,7 @@ class Rva00575D45 : public Rva00575395
 {
 public:
 	virtual ~Rva00575D45();
+	void rva00575D80();
 	int rva00575D88(const void *buf, int len);
 
 private:
@@ -353,6 +354,18 @@ class Rva005753AC
 public:
 	int rva005753AC(const void *buffer, int bytes);
 };
+
+// 0x00575D80 (8 bytes): slot 1 of the same table forwards to the update of
+// the object its +0x8 holder points to (Rva00575723Update.cpp).
+class Rva00575723
+{
+public:
+	void rva00575723();
+};
+void Rva00575D45::rva00575D80()
+{
+	((Rva00575723 *)*(void **)(void *)&m_member)->rva00575723();
+}
 
 // 0x00575D88: vtable slot 3 of the 0x00C6E664 table owned by Rva00575D45.
 // Its +0x8 holder points to an object with a +0x28 delegate. The target bytes
