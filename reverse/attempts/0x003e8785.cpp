@@ -1,4 +1,6 @@
 // ?rva003E8785@ScriptConditions@@IAE_NPAVParameter@@00@Z
+// partial score=0.95 date=2026-10-12
+// ?rva003E8785@ScriptConditions@@IAE_NPAVParameter@@00@Z
 // partial score=0.95 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/moduledata /DNDEBUG /MD /EHsc
 //
