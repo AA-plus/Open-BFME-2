@@ -22,7 +22,6 @@
 //   0x0030DE92  0x0030DBD5  0x00C08A2C#0
 //   0x0030F8E3  0x0030F4AF  0x00C09840#0
 //   0x0031861B  0x00318637  0x00C0C734#0
-//   0x0031A00E  0x00319D01  0x00C0C82C#0
 //   0x0031EB7A  0x0031DCF0  0x00C0CC88#0
 //   0x00328CDC  0x00328CF8  0x00C0D8D8#0
 //   0x0032A0B2  0x0032989F  0x00C0D8FC#0
@@ -187,19 +186,6 @@ public:
 
 // ?<Rva00318637::Rva00318637> absent-from-retail
 Rva00318637::Rva00318637(EmitVtableTag *)
-{
-}
-
-class Rva00319D01
-{
-public:
-	Rva00319D01(EmitVtableTag *);
-public:
-	virtual ~Rva00319D01();
-};
-
-// ?<Rva00319D01::Rva00319D01> absent-from-retail
-Rva00319D01::Rva00319D01(EmitVtableTag *)
 {
 }
 

@@ -4199,7 +4199,6 @@ name,address,notes
 ??1Rva0030DBD5@@UAE@XZ,0x0030DBD5,"destructor the scalar deleting destructor 0x0030DE92 calls (REL32 at 0x0030DE95; vtable 0x00C08A2C#0); opaque address name"
 ??1Rva0030F4AF@@UAE@XZ,0x0030F4AF,"destructor the scalar deleting destructor 0x0030F8E3 calls (REL32 at 0x0030F8E6; vtable 0x00C09840#0); opaque address name"
 ??1Rva00318637@@UAE@XZ,0x00318637,"destructor the scalar deleting destructor 0x0031861B calls (REL32 at 0x0031861E; vtable 0x00C0C734#0); opaque address name"
-??1Rva00319D01@@UAE@XZ,0x00319D01,"destructor the scalar deleting destructor 0x0031A00E calls (REL32 at 0x0031A011; vtable 0x00C0C82C#0); opaque address name"
 ??1Rva00328CF8@@UAE@XZ,0x00328CF8,"destructor the scalar deleting destructor 0x00328CDC calls (REL32 at 0x00328CDF; vtable 0x00C0D8D8#0); opaque address name"
 ??1Rva0032989F@@UAE@XZ,0x0032989F,"destructor the scalar deleting destructor 0x0032A0B2 calls (REL32 at 0x0032A0B5; vtable 0x00C0D8FC#0); opaque address name"
 ??1Rva00329EE9StringValue@@QAE@XZ,0x00036410,retail Rva00329EE9 call at +0x4b; one-pointer returned string cleanup uses matched StringBase<char>::releaseBuffer; linker alias binds the matched definition
