@@ -174,12 +174,30 @@ class W3DDisplayStringManager : public DisplayStringManager
 public:
 	virtual void postProcessLoad( void );
 	virtual void update( void );
+	virtual void rva00090430( void );
 	virtual DisplayString *newDisplayString( void );
 	virtual DisplayString *getGroupNumeralString( Int numeral );
 protected:
 	DisplayString *m_groupNumeralStrings[ MAX_GROUPS ];		///< 0x14
 	DisplayString *m_formationLetterDisplayString;				///< 0x3C
 };
+
+//-------------------------------------------------------------------------------------------------
+// Retail 0x00090430 (46 bytes), the vtable entry just before update: resets
+// both text renderers of every display string and marks each one changed
+// with its resource frame cleared, so all text is rebuilt. The slot's name
+// is not established.
+void W3DDisplayStringManager::rva00090430( void )
+{
+	for (DisplayString *string = m_stringList; string; string = string->next())
+	{
+		W3DDisplayString *str = static_cast<W3DDisplayString *>(string);
+		str->m_textRenderer.Reset();
+		str->m_textRendererHotKey.Reset();
+		str->m_lastResourceFrame = 0;
+		str->m_textChanged = TRUE;
+	}
+}
 
 //-------------------------------------------------------------------------------------------------
 void W3DDisplayStringManager::postProcessLoad( void )

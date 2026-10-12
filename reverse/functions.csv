@@ -79050,3 +79050,4 @@ uw_007876e0,,0x007876E0,11,Code/GameEngine/Source/Common/Rva0042C5C3Dtor.cpp,mat
 ?rva005CFB93@Rva005CFB93@@QAEXH@Z,,0x005CFB93,11,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Slot 1 of the plus08 object with the argument unused
 ?rva005D1358@Rva005D1358@@QAEXXZ,,0x005D1358,10,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Tail jump to slot 2 of the first object behind plus08
 ?rva005EA052@Rva005EA052@@QAEXXZ,,0x005EA052,11,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Tail jump to slot 1 of the plus04 object of the plus08 object
+?rva00090430@W3DDisplayStringManager@@UAEXXZ,,0x00090430,46,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplayStringManager.cpp,matched,Vtable entry before update; resets both text renderers of every display string and marks it changed
