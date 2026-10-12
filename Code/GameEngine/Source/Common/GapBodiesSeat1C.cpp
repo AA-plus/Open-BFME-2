@@ -899,3 +899,172 @@ void Rva004047CE::rva0040CA56()
 	if (m_2C != 1)
 		m_2C = 0;
 }
+
+// --- 0x005AB7BA (10B): byte setter +0x28; 0x005DB8E4 (19B): adds 1.0 to
+// the +8 float; 0x005E3ED3 (15B): the +0x10 record's +8 word by value.
+struct Rva005E3ED3Record
+{
+	int m_00;
+	int m_04;
+	int m_08;
+};
+
+struct Rva005E3ED3Word
+{
+	Rva005E3ED3Word(int v) : m_value(v) {}
+	int m_value;
+};
+
+class Rva005AB7BA
+{
+public:
+	void rva005AB7BA(bool value);
+	void rva005DB8E4();
+	Rva005E3ED3Word rva005E3ED3() const;
+private:
+	int m_00;
+	int m_04;
+	float m_08;
+	int m_0C;
+	Rva005E3ED3Record *m_10;
+	char m_pad14[0x28 - 0x14];
+	bool m_28;
+};
+
+void Rva005AB7BA::rva005AB7BA(bool value)
+{
+	m_28 = value;
+}
+
+void Rva005AB7BA::rva005DB8E4()
+{
+	m_08 += 1.0f;
+}
+
+Rva005E3ED3Word Rva005AB7BA::rva005E3ED3() const
+{
+	return Rva005E3ED3Word(m_10->m_08);
+}
+
+// --- 0x005D3C1F (12B): clears the +0x32 flag, then the rowed 0x005D3AF2;
+// the word argument is unused.
+class Rva005D3AF2
+{
+public:
+	void rva005D3AF2();										// 0x005D3AF2
+	void rva005D3C1F(int unused);
+private:
+	char m_pad00[0x32];
+	bool m_32;
+};
+
+void Rva005D3AF2::rva005D3C1F(int)
+{
+	m_32 = false;
+	rva005D3AF2();
+}
+
+// --- 0x005D7745 (17B) and 0x005D7756 (16B): set / read the +0x18 flag of
+// the indexed entry of the +0x10 pointer array.
+struct Rva005D7745Entry
+{
+	char m_pad00[0x18];
+	bool m_18;
+};
+
+class Rva005D7745
+{
+public:
+	void rva005D7745(int index);
+	bool rva005D7756(int index) const;
+private:
+	char m_pad00[0x10];
+	Rva005D7745Entry **m_10;
+};
+
+void Rva005D7745::rva005D7745(int index)
+{
+	m_10[index]->m_18 = true;
+}
+
+bool Rva005D7745::rva005D7756(int index) const
+{
+	return m_10[index]->m_18;
+}
+
+// --- 0x005DDDF0 (17B): hands this pair's two words to the argument's rowed
+// 0x005DDBAB.
+class Rva005DDBAB
+{
+public:
+	void rva005DDBAB(int a, int b);							// 0x005DDBAB
+};
+
+class Rva005DDDF0
+{
+public:
+	void rva005DDDF0(Rva005DDBAB *target);
+private:
+	int m_00;
+	int m_04;
+};
+
+void Rva005DDDF0::rva005DDDF0(Rva005DDBAB *target)
+{
+	target->rva005DDBAB(m_00, m_04);
+}
+
+// --- 0x005E0D27, 0x005E0D31 (10B each): the +0 object's slots 5 and 6;
+// the word argument is unused.
+class Rva005E0D27Target
+{
+public:
+	virtual void s0();
+	virtual void s1();
+	virtual void s2();
+	virtual void s3();
+	virtual void s4();
+	virtual void slot5();
+	virtual void slot6();
+};
+
+class Rva005E0D27
+{
+public:
+	void rva005E0D27(int value);
+	void rva005E0D31(int value);
+private:
+	Rva005E0D27Target *m_target;
+};
+
+void Rva005E0D27::rva005E0D27(int)
+{
+	m_target->slot5();
+}
+
+void Rva005E0D27::rva005E0D31(int)
+{
+	m_target->slot6();
+}
+
+// --- 0x005E2D66 (14B): the indexed flag of the +0x30 array of the +4
+// record.
+struct Rva005E2D66Record
+{
+	char m_pad00[0x30];
+	bool m_flags[1];
+};
+
+class Rva005E2D66
+{
+public:
+	bool rva005E2D66(int index) const;
+private:
+	int m_00;
+	Rva005E2D66Record *m_04;
+};
+
+bool Rva005E2D66::rva005E2D66(int index) const
+{
+	return m_04->m_flags[index];
+}
