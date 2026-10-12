@@ -7,7 +7,7 @@
 
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
-class AsciiString { void *m_data; };
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 class Image;
 class ImageCollection { public: const Image *findImageByName(const AsciiString &n); };
 extern ImageCollection *TheMappedImageCollection;

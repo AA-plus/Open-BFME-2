@@ -9,18 +9,8 @@
 // name unrecovered, hence the address-derived vehicle. The ??_G at
 // 0x00426316 calls this body directly.
 
-template <class T> class StringBase
-{
-	friend class AsciiString;
-	void releaseBuffer();
-	char m_pad[4];
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-class AsciiString : public StringBase<char>
-{
-public:
-	~AsciiString() { releaseBuffer(); }
-};
 
 class Rva004DC9EDEntry
 {

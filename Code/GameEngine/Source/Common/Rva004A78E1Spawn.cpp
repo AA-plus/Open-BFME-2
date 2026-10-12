@@ -5,11 +5,7 @@
 // particle system onto +0xC8. Then store the frame at +0x98 and set state 3.
 
 // class-gate: allow AsciiString address-only view for isEmpty and findTemplate.
-class AsciiString
-{
-public:
-	bool isEmpty() const;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 class Object;
 

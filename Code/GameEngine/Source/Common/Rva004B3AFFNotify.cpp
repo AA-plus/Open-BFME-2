@@ -8,9 +8,7 @@
 // class-gate: allow AsciiString address-only view. This body only pushes the
 // member address and never constructs or destroys a string; the empty class
 // matches the 67B retail body.
-class AsciiString
-{
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 class Object
 {

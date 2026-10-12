@@ -13,35 +13,8 @@
 #include <vector>
 #include <string.h>
 
-template <typename Char>
-class StringBase
-{
-protected:
-	struct Header
-	{
-		int references;
-		unsigned short length;
-		unsigned short capacity;
-		Char text[1];
-	};
-	Header *m_data;
-public:
-	bool isEmpty() const;
-	bool isNone() const;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-class AsciiString : public StringBase<char>
-{
-public:
-	~AsciiString();
-	const char *str() const
-	{
-		const char *data = *reinterpret_cast<const char *const *>(this);
-		return data ? data + 8 : BfmeEmptyString;
-	}
-private:
-	static const char BfmeEmptyString[];
-};
 
 struct UpgradeMaskType
 {
