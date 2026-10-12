@@ -64,6 +64,7 @@ protected:
 	void rva003C4751(Parameter *teamParam);
 	void doSetUnitReferenceToHomeBaseOfPlayer(const AsciiString &playerName,
 		const AsciiString &unitReference, bool flag);
+	void doEnablePlanningMode(unsigned char enable);
 };
 
 
@@ -1002,4 +1003,19 @@ void ScriptActions::rva003C49AE(Parameter *srcTeamParam, Parameter *dstTeamParam
 	if (!power)
 		return;
 	giver->doSpecialPowerAtObject(power, dstTeam->rva0039E8EB(), 0x40000, 0);
+}
+
+// WB ScriptActions::doEnablePlanningMode @0x003BD424 (11B): forward the flag to
+// the Palantir (WB asserts ThePalantir != NULL; the global at 0x009FF028 is the
+// Palantir by that assert and the call into its SetPlanningModeEnabled).
+class Palantir
+{
+public:
+	void SetPlanningModeEnabled(unsigned char enabled);
+};
+extern Palantir *ThePalantir;
+
+void ScriptActions::doEnablePlanningMode(unsigned char enable)
+{
+	ThePalantir->SetPlanningModeEnabled(enable);
 }
