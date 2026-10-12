@@ -188,6 +188,54 @@ static int Rva006CD7A0Tick(unsigned elapsed) {
  }
  return advanced;
 }
+// Native6CC740..6CC7B0: Ghidra-unlisted body between the rowed 6CC600 and
+// 6CC7C0. While the diagnostics channel is ready (VA E17708) it sends an
+// 8-byte header {current value E176F0, kind 7, 16-bit size} and then the
+// caller's buffer through the E17740 record callback; the Apt.cpp 0x33B
+// assert (retail text) bounds the size. Owners of those cells are rowed in
+// Rva00891FA0Diagnostics.cpp; the header view and name are address-derived.
+extern int g_rva00891FA0Ready,g_rva00891FA0Value;
+extern "C" void (__cdecl *Rva00891FA0SendRecord)(const void *,unsigned);
+struct SavedEventHeader {int value;unsigned short kind,size;};
+void Rva006CC740SendSavedEvent(const void *data,unsigned nSize) {
+ if(!g_rva00891FA0Ready)return;
+ SavedEventHeader header;
+ header.value=g_rva00891FA0Value;
+ header.kind=7;
+ if(!(nSize<=0xFFFF && "Saved Custom Event handler cannot handle a buffer of this size!")) {
+  g_bfmeAptAssertAtE17734("nSize <= 0xFFFF && \"Saved Custom Event handler cannot handle a buffer of this size!\"","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\Apt.cpp",0x33B);
+  if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();
+ }
+ header.size=(unsigned short)nSize;
+ Rva00891FA0SendRecord(&header,8);
+ Rva00891FA0SendRecord(data,nSize);
+}
+// Native6CD990..6CDA31: three Ghidra-unlisted level accessors after the tick
+// helper. Each looks up _AptGetAnimationAtLevel(level) and reads the
+// animation instance that the rowed rva006CD650 returns: +18 when the CIH has
+// its +4C resource (else -1), the +0C movie's +08 word (else 0), and bit 25
+// of +1C when the level is a defined movie clip (type 0x12, not undefined;
+// else -1). Field meanings and original names are unresolved: address names.
+struct LevelMovieView {char pad[8];int value08;};
+struct LevelInstView {char pad[0xc];LevelMovieView *movie;char pad10[8];int value18;unsigned flags1C;};
+int Rva006CD990LevelValue(int level) {
+ AptCIH *cih=_AptGetAnimationAtLevel(level);
+ if(cih && *(void **)((char *)cih+0x4c))
+  return ((LevelInstView *)((Rva006CD650 *)cih)->rva006CD650())->value18;
+ return -1;
+}
+int Rva006CD9C0LevelMovieValue(int level) {
+ AptCIH *cih=_AptGetAnimationAtLevel(level);
+ if(cih)
+  return ((LevelInstView *)((Rva006CD650 *)cih)->rva006CD650())->movie->value08;
+ return 0;
+}
+int Rva006CD9F0LevelFlag(int level) {
+ AptCIH *cih=_AptGetAnimationAtLevel(level);
+ if(cih && ((Rva006DBB30SarDwordField *)cih)->get()==0x12 && !((BfmeAptValue006DCD20 *)cih)->isUndefined())
+  return (((LevelInstView *)((Rva006CD650 *)cih)->rva006CD650())->flags1C>>25)&1;
+ return -1;
+}
 class BfmeRefVGO {unsigned *value;public:BfmeRefVGO():value(0){} ~BfmeRefVGO();};
 class Rva004A9DF3Element : public BfmeRefVGO {public:Rva004A9DF3Element(){} ~Rva004A9DF3Element();};
 class Rva00893030Manager {int head;public:Rva00893030Manager():head(0){} POOL_ALLOC void rva006CDE50(Rva004A9DF3Element *,int);};
