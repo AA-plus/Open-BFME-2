@@ -2920,3 +2920,30 @@ void AptMpGameSetup::PlayerTooltip(GameWindow *window, WinInstanceData *, unsign
   }
  }
 }
+
+// Retail 0x0043DF22, 79 bytes: the number of accepted seated humans (human
+// non-observer slots whose accepted flag is set). The accepted flag is
+// compared against the observer result register rather than immediate zero.
+unsigned int AptMpGameSetup::rva0043DF22()
+{
+	Rva0043DA65 *mgr = m_game;
+	GameInfo *game = (GameInfo *)mgr->rva0043DA65();
+	if (!game)
+		return 0;
+	unsigned int count = 0;
+	for (unsigned int i = 0; i < 8; ++i)
+	{
+		GameSlot *slot = game->getSlot(i);
+		if (!slot)
+			continue;
+		if (!slot->isHuman())
+			continue;
+		bool observer = slot->isObserver();
+		if (observer)
+			continue;
+		if (slot->m_accepted == observer)
+			continue;
+		++count;
+	}
+	return count;
+}
