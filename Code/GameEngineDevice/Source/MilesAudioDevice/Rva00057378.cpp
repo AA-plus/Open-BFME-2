@@ -50,6 +50,41 @@ struct BfmeEventPositionView;
 // alias table (WorldBuilder's unmapPhysicalHandle erases from both).
 typedef _STL::hash_map<unsigned int, int> MilesPhysicalHandles;
 
+// The Xfer slots 0x000596E9 uses (Xfer::Version1 is rowed at 0x000053EE).
+class Xfer
+{
+public:
+    virtual ~Xfer();
+    virtual bool isLoading();
+    virtual bool isSaving(); virtual bool isCRC(); virtual void slot04(); virtual void slot05();
+    virtual void slot06(); virtual void slot07(); virtual void slot08(); virtual void slot09();
+    virtual void slot10(); virtual void slot11(); virtual void slot12(); virtual void slot13();
+    virtual void slot14(); virtual void slot15(); virtual void slot16(); virtual void slot17();
+    virtual void slot18(); virtual void slot19(); virtual void slot20(); virtual void slot21();
+    virtual void slot22(); virtual void slot23(); virtual void slot24(); virtual void slot25();
+    virtual void slot26(); virtual void slot27(); virtual void slot28(); virtual void slot29();
+    virtual void slot30();
+    virtual Xfer &xferInt(int *value); virtual void slot32(); virtual void slot33(); virtual void slot34();
+    virtual void slot35();
+    virtual Xfer &xferBool(bool *value);
+    void Version1(void);
+};
+
+// The manager's table as 0x000596E9 reaches it: slot 27 drops a logical
+// handle's playing audio (Zero Hour's removeAudioEvent).
+class MilesAudioManagerVirtuals
+{
+public:
+    virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
+    virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
+    virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+    virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15();
+    virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
+    virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23();
+    virtual void slot24(); virtual void slot25(); virtual void slot26();
+    virtual void removeAudioEvent(unsigned int handle);
+};
+
 class MilesAudioManager
 {
 public:
@@ -68,8 +103,16 @@ public:
     bool rva00057492(unsigned int key, BfmeEventPositionView *output);
     bool rva000572DC(unsigned int key);
     bool rva0005623E(int key, void **output, int flags);
+    void rva000596E9(Xfer *xfer, unsigned int *handle);
+    void rva000563FE(Xfer *xfer, int handle);
+    int rva000532B7(Xfer *xfer);
+    void mapLogicalHandleToPhysicalHandle(unsigned int logical, unsigned int physical);
+    // Zero Hour's inline AudioManager::allocateNewHandle.
+    unsigned int allocateNewHandle(void) { return m_nextHandle++; }
 private:
-    char at00[0x104];
+    char at00[0xD0];
+    unsigned int m_nextHandle;   // +0xD0, next logical handle
+    char atD4[0x104 - 0xD4];
     MilesKeyAliases aliases;
     MilesPhysicalHandles physicalHandles;   // +0x118
     char atAfterAliases[0x9d4 - 0x118 - sizeof(MilesPhysicalHandles)];
@@ -221,4 +264,52 @@ bool MilesAudioManager::rva000572DC(unsigned int key)
         ++it;
     } while (it != aliases.end() && it->first == key);
     return false;
+}
+
+// Native 000596E9..0005987D, RET8: xfers a logical audio handle. Saving
+// writes whether the handle is aliased and then each aliased physical
+// handle's event (0x563FE), or the handle's own event. Loading drops what the
+// handle played (slot 27), then either allocates a new logical handle and maps
+// each loaded event's physical handle to it or reads the one event back as the
+// handle itself (0x532B7). Each branch holds the manager mutex.
+void MilesAudioManager::rva000596E9(Xfer *xfer, unsigned int *handle)
+{
+    xfer->Version1();
+    if (xfer->isCRC())
+        return;
+    if (xfer->isSaving()) {
+        MilesMutexGuard guard(&mutex, 0);
+        MilesKeyAliases::iterator found;
+        found = aliases.find(*handle);
+        bool aliased = found != aliases.end();
+        xfer->xferBool(&aliased);
+        if (aliased) {
+            int count = 0;
+            MilesKeyAliases::iterator it;
+            for (it = found; it != aliases.end() && it->first == *handle; ++it)
+                ++count;
+            xfer->xferInt(&count);
+            for (it = found; it != aliases.end() && it->first == *handle; ++it)
+                rva000563FE(xfer, it->second);
+        } else {
+            rva000563FE(xfer, *handle);
+        }
+    } else {
+        MilesMutexGuard guard(&mutex, 0);
+        if (*handle >= 5)
+            reinterpret_cast<MilesAudioManagerVirtuals *>(this)->removeAudioEvent(*handle);
+        bool aliased;
+        xfer->xferBool(&aliased);
+        if (aliased) {
+            *handle = allocateNewHandle();
+            int count;
+            xfer->xferInt(&count);
+            while (count > 0) {
+                --count;
+                mapLogicalHandleToPhysicalHandle(*handle, rva000532B7(xfer));
+            }
+        } else {
+            *handle = rva000532B7(xfer);
+        }
+    }
 }
