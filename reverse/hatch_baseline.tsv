@@ -1806,6 +1806,7 @@ address_global	Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp	g_Va00D
 address_global	Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp	g_Va00E01EDC	2
 address_global	Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp	g_Va00E02F3C	4
 address_global	Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldAIOrders.cpp	g_Va00E04508	2	allow=4bc790790ba6d9af45d26f5df1c074508ce2e9a6
+address_global	Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldAISupport/LivingWorldAIInformation.cpp	g_Va00E04544	2	allow=e47d11fae594f3154bb349c7af4abeb4e9feaa19
 address_global	Code/GameEngine/Source/GameNetwork/ConnectionManager_processDisconnectChat.cpp	g_Va00E048D0	3
 address_global	Code/GameEngine/Source/GameNetwork/DisconnectManagerRva004D4637.cpp	g_Va00BC2424	2
 address_global	Code/GameEngine/Source/GameNetwork/GameSpy/GameSpyStagingRoomSlotInit.cpp	g_Va00E063EC	3
