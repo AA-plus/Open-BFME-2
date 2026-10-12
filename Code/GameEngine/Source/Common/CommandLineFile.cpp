@@ -5,13 +5,20 @@
 // retail's extended map normalizer writes a timestamped label there.
 // Helper identity is based on the full 453-byte body at 3BA06E:
 // source-derived slash/token/.map normalization plus BFME2's second output.
+#include <stdlib.h>
 template<class T> class StringBase {
     T *data;
 public: void set(const T*);
 };
 class GlobalData {
 public:
-    char prefix[0x9d4];
+    char prefix[0x60];
+    bool m_bfme60, m_bfme61, m_bfme62; // cleared by the unlisted 0x003B9679 switch
+    char unknown63[0x9c1 - 0x63];
+    bool m_bfme9C1; // set by the unlisted 0x003B974B switch
+    char unknown9C2[0x9c6 - 0x9c2];
+    bool m_bfme9C6; // set by the unlisted 0x003B974B switch
+    char unknown9C7[0x9d4 - 0x9c7];
     int m_bfme9D4; // set to 2 by the unlisted 0x003B9F56 parser below
     char unknown9D8[0xab8 - 0x9d8];
     StringBase<char> m_bfmeFileLabel;
@@ -21,6 +28,8 @@ public:
     bool m_bfmeAC5; // written by the unlisted 0x003BA2BE parser below
     char unknownAC6[0xd38 - 0xac6];
     StringBase<char> m_bfmeModDir; // descriptive: the 0x003B9F56 parser stores "Mods\open_beta"
+    char unknownD3C[0xea0 - 0xd3c];
+    int m_bfmeEA0; // atoi of the argument, unlisted 0x003B9709 parser
 };
 extern GlobalData *TheWritableGlobalData;
 void ConvertShortMapPathToLongMapPath(StringBase<char>&,StringBase<char>&);
@@ -62,6 +71,35 @@ int Rva003B9F56Parse(char *args[],int num) {
     if(TheWritableGlobalData) {
         TheWritableGlobalData->m_bfme9D4=2;
         TheWritableGlobalData->m_bfmeModDir.set("Mods\\open_beta");
+    }
+    return 1;
+}
+
+// Three more parsers between parseFullVersion and parseScriptDebug2 that the
+// 81FB70 -command table no longer lists (BFME1 CommandLine.cpp shapes); their
+// command names are not recovered, so they keep address-derived names.
+// Native 3B9679..3B969B: clears the +60/+61/+62 switches.
+int Rva003B9679Parse(char *args[],int num) {
+    if(TheWritableGlobalData) {
+        TheWritableGlobalData->m_bfme62=false;
+        TheWritableGlobalData->m_bfme60=false;
+        TheWritableGlobalData->m_bfme61=false;
+    }
+    return 1;
+}
+
+// Native 3B9709..3B9737: atoi of the argument into +EA0.
+int Rva003B9709Parse(char *args[],int num) {
+    if(TheWritableGlobalData && num>1)
+        TheWritableGlobalData->m_bfmeEA0=atoi(args[1]);
+    return 2;
+}
+
+// Native 3B974B..3B976B: raises the +9C1 and +9C6 switches.
+int Rva003B974BParse(char *args[],int num) {
+    if(TheWritableGlobalData) {
+        TheWritableGlobalData->m_bfme9C1=true;
+        TheWritableGlobalData->m_bfme9C6=true;
     }
     return 1;
 }
