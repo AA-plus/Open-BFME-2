@@ -1409,3 +1409,138 @@ void Rva00566B81Vector::rva00566BEB()
 {
 	EraseRange(m_start, m_finish);
 }
+
+// --- 0x001E3549 (14B): the rowed Path 0x00363930 test with true.
+class Path
+{
+public:
+	bool rva00363930(const Coord3D *pos, bool flag);		// 0x00363930
+	bool rva001E3549(const Coord3D *pos);
+};
+
+bool Path::rva001E3549(const Coord3D *pos)
+{
+	return rva00363930(pos, true);
+}
+
+// --- 0x001E35BD (13B): the +0 record's +0x28 word or 0; 0x001EAEDC (15B):
+// pushes a node onto the +8 list; 0x001F0128 (10B): byte setter +0x0C;
+// 0x001F3521 (10B): clears +0x19C (word argument unused); 0x001EAE97 (15B):
+// the indexed 0xAC-byte record at *(+0).
+struct Rva001E35BDRecord
+{
+	char m_pad00[0x28];
+	int m_28;
+	char m_pad2C[0xAC - 0x2C];
+};
+
+struct Rva001EAEDCNode
+{
+	Rva001EAEDCNode *m_next;
+};
+
+class Rva001E35BD
+{
+public:
+	int rva001E35BD() const;
+	Rva001E35BDRecord *rva001EAE97(int index);
+	void rva001EAEDC(Rva001EAEDCNode *node);
+	void rva001F0128(bool value);
+	void rva001F3521(int unused);
+private:
+	Rva001E35BDRecord *m_00;
+	int m_04;
+	Rva001EAEDCNode *m_08;
+	bool m_0C;
+	char m_pad0D[0x19C - 0x0D];
+	int m_19C;
+};
+
+int Rva001E35BD::rva001E35BD() const
+{
+	if (m_00)
+		return m_00->m_28;
+	return 0;
+}
+
+Rva001E35BDRecord *Rva001E35BD::rva001EAE97(int index)
+{
+	return &m_00[index];
+}
+
+void Rva001E35BD::rva001EAEDC(Rva001EAEDCNode *node)
+{
+	node->m_next = m_08;
+	m_08 = node;
+}
+
+void Rva001E35BD::rva001F0128(bool value)
+{
+	m_0C = value;
+}
+
+void Rva001E35BD::rva001F3521(int)
+{
+	m_19C = 0;
+}
+
+// --- 0x001E368E (11B, cdecl): the word is 16; 0x001F373A (10B, cdecl):
+// the flag is clear; 0x001F34A7 (10B, cdecl): sum of a pair's words.
+bool Rva001E368E(int value)
+{
+	return value == 16;
+}
+
+bool Rva001F373A(bool value)
+{
+	return value == false;
+}
+
+struct Rva001F34A7Pair
+{
+	int m_00;
+	int m_04;
+};
+
+int Rva001F34A7(const Rva001F34A7Pair *pair)
+{
+	return pair->m_04 + pair->m_00;
+}
+
+// --- 0x001F693E (19B): returns by value a pair {0, &this[+0x88]};
+// 0x001F9B47 (11B): appends a listener to the +0xC4 list (rowed append).
+struct Rva001F693EPair
+{
+	Rva001F693EPair(void *p) : m_00(0), m_04(p) {}
+	int m_00;
+	void *m_04;
+};
+
+struct Rva002BA8F1Listener;
+class Rva005A0B4CList
+{
+public:
+	void append(Rva002BA8F1Listener *listener);				// 0x005A0B4C
+};
+
+class Rva001F693E
+{
+public:
+	Rva001F693EPair rva001F693E();
+	void rva001F9B47(Rva002BA8F1Listener *listener);
+private:
+	char m_pad00[0x88];
+	int m_88;
+	char m_pad8C[0xC4 - 0x8C];
+	Rva005A0B4CList m_C4;
+};
+
+Rva001F693EPair Rva001F693E::rva001F693E()
+{
+	return Rva001F693EPair(&m_88);
+}
+
+void Rva001F693E::rva001F9B47(Rva002BA8F1Listener *listener)
+{
+	m_C4.append(listener);
+}

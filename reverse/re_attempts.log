@@ -45598,3 +45598,14 @@ Rva00226733Fallback	0x00226733	214	blocked	Nativewhole214B RET0 cdecl2arg fallba
 ?rva00576473@Rva0057645D@@QBEHXZ	0x00576473	11	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 11B; gap body; shape from retail bytes; address-derived identity
 ?rva00576F32@Rva00576F32@@QBEHXZ	0x00576F32	11	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 11B; gap body; shape from retail bytes; address-derived identity
 ?rva00576F3D@Rva00576F32@@QBEHXZ	0x00576F3D	11	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 11B; gap body; shape from retail bytes; address-derived identity
+?rva001E3549@Path@@QAE_NPBUCoord3D@@@Z	0x001E3549	14	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 14B; gap body; shape from retail bytes; address-derived identity
+?rva001E35BD@Rva001E35BD@@QBEHXZ	0x001E35BD	13	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 13B; gap body; shape from retail bytes; address-derived identity
+?Rva001E368E@@YA_NH@Z	0x001E368E	11	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 11B; gap body; shape from retail bytes; address-derived identity
+?rva001EAE97@Rva001E35BD@@QAEPAURva001E35BDRecord@@H@Z	0x001EAE97	15	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 15B; gap body; shape from retail bytes; address-derived identity
+?rva001EAEDC@Rva001E35BD@@QAEXPAURva001EAEDCNode@@@Z	0x001EAEDC	15	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 15B; gap body; shape from retail bytes; address-derived identity
+?rva001F0128@Rva001E35BD@@QAEX_N@Z	0x001F0128	10	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 10B; gap body; shape from retail bytes; address-derived identity
+?Rva001F34A7@@YAHPBURva001F34A7Pair@@@Z	0x001F34A7	10	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 10B; gap body; shape from retail bytes; address-derived identity
+?rva001F3521@Rva001E35BD@@QAEXH@Z	0x001F3521	10	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 10B; gap body; shape from retail bytes; address-derived identity
+?Rva001F373A@@YA_N_N@Z	0x001F373A	10	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 10B; gap body; shape from retail bytes; address-derived identity
+?rva001F693E@Rva001F693E@@QAE?AURva001F693EPair@@XZ	0x001F693E	19	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 19B; gap body; shape from retail bytes; address-derived identity
+?rva001F9B47@Rva001F693E@@QAEXPAURva002BA8F1Listener@@@Z	0x001F9B47	11	landed	add_match verified Code/GameEngine/Source/Common/GapBodiesSeat1C.cpp 11B; gap body; shape from retail bytes; address-derived identity
