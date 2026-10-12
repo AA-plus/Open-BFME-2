@@ -16,6 +16,7 @@ public:
     StringBase<char> m_initialFile;
     char unknownAC0[4];
     bool m_bfmeResumeRequested; // descriptive name; live -resumeGame writes +AC4
+    bool m_bfmeAC5; // written by the unlisted 0x003BA2BE parser below
 };
 extern GlobalData *TheWritableGlobalData;
 void ConvertShortMapPathToLongMapPath(StringBase<char>&,StringBase<char>&);
@@ -32,6 +33,18 @@ int parseFile(char *args[],int num) {
 int parseResumeGame(char *args[],int num) {
     if(TheWritableGlobalData && num>1) {
         TheWritableGlobalData->m_bfmeResumeRequested=true;
+        TheWritableGlobalData->m_initialFile.set(args[1]);
+        ConvertShortMapPathToLongMapPath(TheWritableGlobalData->m_initialFile,TheWritableGlobalData->m_bfmeFileLabel);
+    }
+    return 2;
+}
+
+// Native 3BA2BE..3BA30A (76 bytes), directly after parseResumeGame and not
+// in the -command table at 81FBC8: the same file flow, raising the +AC5 flag.
+// Its command name is not recovered; address-derived name.
+int Rva003BA2BEParse(char *args[],int num) {
+    if(TheWritableGlobalData && num>1) {
+        TheWritableGlobalData->m_bfmeAC5=true;
         TheWritableGlobalData->m_initialFile.set(args[1]);
         ConvertShortMapPathToLongMapPath(TheWritableGlobalData->m_initialFile,TheWritableGlobalData->m_bfmeFileLabel);
     }
