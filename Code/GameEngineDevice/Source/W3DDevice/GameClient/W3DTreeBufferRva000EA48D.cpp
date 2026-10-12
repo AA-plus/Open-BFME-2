@@ -30,7 +30,9 @@ struct Rva000EA48DTypeData
     Real factor30;
     unsigned char pad34[4];
     Real defaultHeight;
-    unsigned char pad3c[0x20];
+    unsigned char pad3c[4];
+    unsigned int frames40;
+    unsigned char pad44[0x18];
 };
 
 struct Rva000EA48DType
@@ -56,7 +58,9 @@ struct Rva000EA48DRecord
     Int field88;
     Int field8c;
     Matrix3D matrix;
-    unsigned char padc0[8];
+    Int framesc0;
+    Bool startedc4;
+    unsigned char padc5[3];
     void *guardc8;
     unsigned char padcc[0x1c];
 };
@@ -65,6 +69,7 @@ class W3DTreeBuffer
 {
 public:
     Bool rva000EA48D(void *key, const Coord3D *direction, Real height);
+    Bool rva000EA644(void *key);
 
     __forceinline Rva000EA48DRecord *find(void *key)
     {
@@ -132,4 +137,20 @@ Bool W3DTreeBuffer::rva000EA48D(void *key, const Coord3D *direction, Real height
     record->matrix.Make_Identity();
     record->matrix.Set_Translation(record->location);
     return true;
+}
+
+// Native 000EA644..000EA6A7 (99 bytes, ret 4): whether the tree record of a
+// drawable key stands toppling: started (+0x80 positive), not yet marked at
+// +0xC4, a real type (+0x40 not -2) and no +0xC8 guard. Identity unproven.
+Bool W3DTreeBuffer::rva000EA644(void *key)
+{
+    for (Int i = 0; i < count; ++i)
+    {
+        if (records[i].key == key)
+        {
+            return (records[i].guard80 > 0 && !records[i].startedc4 &&
+                records[i].type != -2 && !records[i].guardc8) ? 1 : 0;
+        }
+    }
+    return false;
 }
