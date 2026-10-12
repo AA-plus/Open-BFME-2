@@ -36,6 +36,14 @@ public:
 
 extern BaseHeightMapRenderObjClass *TheTerrainRenderObject;
 
+// TerrainLogic's rowed position lookup 0x0028170E (TerrainLogicWaterLookup.cpp).
+struct Rva0028170EArea;
+class Rva0028170EHost
+{
+public:
+	Rva0028170EArea *rva0028170E(float x, float y, float z);
+};
+
 class W3DTerrainLogic
 {
 public:
@@ -44,10 +52,19 @@ public:
 	virtual bool rva00062DF1(float x, float y) const;
 	virtual unsigned char rva00062E10(float x, float y) const;
 	virtual bool rva00063082(const Coord3D *pos) const;
+	virtual Rva0028170EArea *rva00062ACA(float x, float y, float z);
 	unsigned char m_unknown0004[0x1C - 4];
 	int m_width;  // +0x1C
 	int m_height; // +0x20
 };
+
+// Native 0x00062ACA (34 bytes, RET 0xC), two adjacent W3DTerrainLogic
+// vftable slots (and the same pair in three more tables): passes the three
+// coordinates unchanged to the base-object lookup 0x0028170E.
+Rva0028170EArea *W3DTerrainLogic::rva00062ACA(float x, float y, float z)
+{
+	return reinterpret_cast<Rva0028170EHost *>(this)->rva0028170E(x, y, z);
+}
 
 // vftable 0x007C58E4, callee 0x0006B187
 unsigned char W3DTerrainLogic::rva00062DB3(float x, float y) const
