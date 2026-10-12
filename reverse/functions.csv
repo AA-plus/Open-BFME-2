@@ -79123,3 +79123,4 @@ __ehhandler$?allocate@W3DVideoBuffer@@UAE_NII_N@Z,,0x0075ED3F,10,Code/GameEngine
 ?Install_Materials@MaterialPassClass@@UBEXXZ,,0x0013EFA0,261,Code/Libraries/Source/WWVegas/WW3D2/MaterialPassInstallMaterials.cpp,matched,ZH matpass Install_Materials; WB 0x9E1F30 vtable lead
 __ehhandler$?Install_Materials@MaterialPassClass@@UBEXXZ,,0x00766048,10,Code/Libraries/Source/WWVegas/WW3D2/MaterialPassInstallMaterials.cpp,matched,EH handler of MaterialPassClass::Install_Materials
 ?Execute@Rva007ACBC0CmdInterface@@UAE_NAAVDebug@@PBDW4CommandMode@DebugCmdInterface@@IPBQBD@Z,,0x00117DC0,330,Code/Libraries/Source/WWVegas/WW3D2/Rva007ACBC0Ww3dCmdExecute.cpp,matched,ww3d debug command group Execute; WB 0x9C02D0 strings
+?Prepare_Render_New_Frame@WW3D@@SA_NXZ,,0x001172B0,317,Code/Libraries/Source/WWVegas/WW3D2/Rva007ACBC0Ww3dCmdExecute.cpp,matched,WB 0x9BDFD0 WW3D::Prepare_Render_New_Frame ww3d.cpp

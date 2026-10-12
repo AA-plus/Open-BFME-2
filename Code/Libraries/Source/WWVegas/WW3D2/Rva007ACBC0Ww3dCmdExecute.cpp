@@ -7,6 +7,9 @@
 // "pixmarker <name>" forwards to the rowed 0x0011F3D0. Both settings are file-scope statics of
 // the WW3D unit (their only other reader is 0x001172B0 in the same range); retail schedules the
 // frame store past the strncpy pushes, which needs the no-alias knowledge a static gives.
+// WW3D::Prepare_Render_New_Frame, retail 0x001172B0 (317 B; WB 0x009BDFD0, ww3d.cpp): device
+// lost/not-reset handling, Begin_Statistics, then the scene analyst countdown that switches
+// the debug log groups through theDebug's command slot 0x8C.
 #include <string.h>
 #include <stdlib.h>
 class Debug;
@@ -76,6 +79,8 @@ public:
 	virtual void slot7C();
 	virtual void slot80();
 	virtual bool AddCommands( const char *cmdgroup, DebugCmdInterface *cmdif ); // slot 0x84
+	virtual void slot88();
+	virtual void slot8C(const char *command);
 };
 
 
@@ -129,4 +134,66 @@ bool Rva007ACBC0CmdInterface::Execute( Debug &dbg, const char *cmd, CommandMode 
 		return true;
 	}
 	return false;
+}
+
+struct IDirect3DDevice8
+{
+	virtual long __stdcall QueryInterface(void *, void **);
+	virtual unsigned long __stdcall AddRef();
+	virtual unsigned long __stdcall Release();
+	virtual long __stdcall TestCooperativeLevel();
+};
+
+class DX8Wrapper
+{
+public:
+	static bool Reset_Device(bool reload_assets);
+	static IDirect3DDevice8 *D3DDevice;
+};
+
+namespace Debug_Statistics
+{
+	void Begin_Statistics();
+}
+
+extern Debug *theDebug;
+
+class WW3D
+{
+public:
+	static bool Prepare_Render_New_Frame();
+};
+
+bool WW3D::Prepare_Render_New_Frame()
+{
+	if (DX8Wrapper::D3DDevice)
+	{
+		long hr = DX8Wrapper::D3DDevice->TestCooperativeLevel();
+		if (hr != 0)
+		{
+			if (hr != (long)0x88760868 && hr == (long)0x88760869)
+				DX8Wrapper::Reset_Device(true);
+			return false;
+		}
+	}
+	Debug_Statistics::Begin_Statistics();
+	if (g_rva00DEC414SceneAnalystFrames > 0)
+	{
+		char command[192];
+		if (--g_rva00DEC414SceneAnalystFrames <= 0)
+		{
+			theDebug->slot8C("debug.add l - SceneAnalystFrame");
+			strcpy(command, "debug.add l - SceneAnalyst");
+			strcat(command, g_rva00DEC418SceneAnalystFilter);
+			theDebug->slot8C(command);
+		}
+		else
+		{
+			strcpy(command, "debug.add l + SceneAnalyst");
+			strcat(command, g_rva00DEC418SceneAnalystFilter);
+			theDebug->slot8C(command);
+			theDebug->slot8C("debug.add l + SceneAnalystFrame");
+		}
+	}
+	return true;
 }
