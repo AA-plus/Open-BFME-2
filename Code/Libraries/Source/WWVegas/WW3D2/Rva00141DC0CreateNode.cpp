@@ -38,3 +38,36 @@ void *Rva00141DC0::rva00141DC0(void *arg)
 	m_head = node;
 	return node;
 }
+
+// Retail 0x00141D60 (34 bytes, RET 4): the same node construction from the 8-byte pool
+// without linking it -- the value is copied into node+4, the link cleared, the node returned.
+class Rva00141D60
+{
+public:
+	void *rva00141D60(void *arg);
+};
+
+void *Rva00141D60::rva00141D60(void *arg)
+{
+	void *node = g_Rva0006EFC8Pool00DB424C.rva00141800();
+	void **valuePtr = (void **)((char *)node + 4);
+	if (valuePtr != 0)
+		valuePtr[0] = *(void **)arg;
+	((void **)node)[0] = 0;
+	return node;
+}
+
+// Retail 0x00141CB0 (25 bytes, RET 8): the pool's allocate(count, hint) -- single nodes come
+// from the 8-byte pool, larger requests get nothing.
+class Rva00141CB0
+{
+public:
+	void *rva00141CB0(unsigned int count, const void *hint);
+};
+
+void *Rva00141CB0::rva00141CB0(unsigned int count, const void *hint)
+{
+	if (count > 1)
+		return 0;
+	return g_Rva0006EFC8Pool00DB424C.rva00141800();
+}
