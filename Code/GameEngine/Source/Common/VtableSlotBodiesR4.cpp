@@ -7,8 +7,8 @@
 // then calls the owner's own slot 12 (offset 0x30), a change notification:
 //
 //   0x00330ABE  the rowed Rva0030BA8C::rva0030BA8C (push of a BfmeE8)
-//   0x00330B14  the rowed Rva0030B92C::rva0030B85A (erase at an index)
-//   0x00330B6B  the rowed Rva0030B92C::rva0030B135 (with a BfmePod8 pointer)
+//   0x00330B14  the rowed AreaPolygonBase::deletePoint (erase at an index)
+//   0x00330B6B  the rowed AreaPolygonBase::rva0030B135 (with a BfmePod8 pointer)
 //   0x00330BBD  the rowed Rva0030B812::rva0030B812 (swap)
 //   0x00330BEB  the rowed Rva00330B50::rva00330B50 (assignment)
 //
@@ -25,10 +25,10 @@ public:
 	void rva0030BA8C(const BfmeE8 &value);
 };
 
-class Rva0030B92C
+class AreaPolygonBase
 {
 public:
-	void rva0030B85A(int index);
+	void deletePoint(int index);
 	void rva0030B135(const BfmePod8 *value);
 };
 
@@ -71,13 +71,13 @@ void Rva00330ABE::rva00330ABE(const BfmeE8 &value)
 
 void Rva00330ABE::rva00330B14(int index)
 {
-	((Rva0030B92C *)m_container08)->rva0030B85A(index);
+	((AreaPolygonBase *)m_container08)->deletePoint(index);
 	changed();
 }
 
 void Rva00330ABE::rva00330B6B(const BfmePod8 *value)
 {
-	((Rva0030B92C *)m_container08)->rva0030B135(value);
+	((AreaPolygonBase *)m_container08)->rva0030B135(value);
 	changed();
 }
 

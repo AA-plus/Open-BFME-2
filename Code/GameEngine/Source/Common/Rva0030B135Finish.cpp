@@ -1,8 +1,8 @@
-// ?rva0030B135@Rva0030B92C@@QAEXPBUBfmePod8@@@Z
+// ?rva0030B135@AreaPolygonBase@@QAEXPBUBfmePod8@@@Z
 // cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
-// ?rva0030B135@Rva0030B92C@@QAEXPBUBfmePod8@@@Z @0x0030B135 114B
+// ?rva0030B135@AreaPolygonBase@@QAEXPBUBfmePod8@@@Z @0x0030B135 114B
 // Two halves: a step-8 vector accumulate over [_STL::vector<BfmePod8>] at +0
 // with addss from the argument pair, then a flag-gated (byte +0x24) accumulate
 // of the same argument pair into the four mid floats at +0x0C..+0x18, in the
@@ -25,7 +25,7 @@ struct BfmePod8
 	float y;
 };
 
-struct Rva0030B92C
+struct AreaPolygonBase
 {
 	_STL::vector<BfmePod8, _STL::allocator<BfmePod8> > m_vec;
 	float m_0c;
@@ -38,7 +38,7 @@ struct Rva0030B92C
 	void rva0030B135(const BfmePod8 *a);
 };
 
-void Rva0030B92C::rva0030B135(const BfmePod8 *a)
+void AreaPolygonBase::rva0030B135(const BfmePod8 *a)
 {
 	for (BfmePod8 *p = m_vec.begin(), *e = m_vec.end(); p != e; ++p) {
 		p->x += a->x;

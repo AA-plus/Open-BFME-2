@@ -15,11 +15,11 @@ typedef unsigned int UnsignedInt;
 // the pinned setter 0x0030BAD8 (index, pair) resp. 0x0030B232 (one
 // argument) on the +0x08 member, then virtual slot 12.
 struct BfmeE8;
-struct Rva0030BAD8 {
+struct AreaPolygonBase {
     _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > m_points;
     char m_pad[0x24 - 12];
     bool m_dirty;
-    void rva0030BAD8(int index, const BfmeE8& point);
+    void insertPoint(int index, const BfmeE8& point);
 };
 class Rva0030B232
 {
@@ -49,11 +49,11 @@ public:
 	void rva00330AF6(Int i, const BfmeE8 &value);
 private:
 	Int m_04;
-	Rva0030BAD8 m_08;
+	AreaPolygonBase m_08;
 };
 void Rva00330AF6::rva00330AF6(Int i, const BfmeE8 &value)
 {
-	m_08.rva0030BAD8(i, value);
+	m_08.insertPoint(i, value);
 	v12();
 }
 class Rva00330BA3 : public Rva00330AF6Base

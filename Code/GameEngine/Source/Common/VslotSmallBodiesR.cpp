@@ -284,14 +284,10 @@ void Rva003FF271::rva003FF271(Int value)
 // slots at 0x00330AD8 and 0x00330B85: the rowed setter of the +0x08 member,
 // then virtual slot 12.
 struct BfmeE8;
-class Rva0030BAA0
+class AreaPolygonBase
 {
 public:
-	void rva0030BAA0(Int a, const BfmeE8 &b);
-};
-class Rva0030B92C
-{
-public:
+	void setPoint(Int a, const BfmeE8 &b);
 	void rva0030B1A7(float f);
 };
 class Rva00330AD8Base
@@ -317,11 +313,11 @@ public:
 	void rva00330AD8(Int a, const BfmeE8 &b);
 private:
 	Int m_04;
-	Rva0030BAA0 m_08;
+	AreaPolygonBase m_08;
 };
 void Rva00330AD8::rva00330AD8(Int a, const BfmeE8 &b)
 {
-	m_08.rva0030BAA0(a, b);
+	m_08.setPoint(a, b);
 	v12();
 }
 class Rva00330B85 : public Rva00330AD8Base
@@ -330,7 +326,7 @@ public:
 	void rva00330B85(float f);
 private:
 	Int m_04;
-	Rva0030B92C m_08;
+	AreaPolygonBase m_08;
 };
 void Rva00330B85::rva00330B85(float f)
 {

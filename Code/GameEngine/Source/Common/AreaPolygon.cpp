@@ -1,6 +1,6 @@
 // cl: /O1 /arch:SSE /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-// ?rva0030BAD8@Rva0030BAD8@@QAEXHABUBfmeE8@@@Z
+// ?insertPoint@AreaPolygonBase@@QAEXHABUBfmeE8@@@Z
 // WorldBuilder 0x00BF5AA0 identifies AreaPolygonBase::insertPoint in
 // AreaPolygon.cpp (line 109). Retail 0x0030BAD8..0x0030BAF8 is its
 // assertion-free body: insert at begin()+index, then invalidate the bounds.
@@ -35,14 +35,14 @@ struct BfmeE8 {
 // copies. Pointer stride and the point caller establish the eight-byte ABI;
 // the original point type name remains unknown.
 
-struct Rva0030BAD8 {
+struct AreaPolygonBase {
     _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > m_points;
     char m_pad[0x24 - 12];
     bool m_dirty;
-    void rva0030BAD8(int index, const BfmeE8& point);
+    void insertPoint(int index, const BfmeE8& point);
 };
 
-void Rva0030BAD8::rva0030BAD8(int index, const BfmeE8& point)
+void AreaPolygonBase::insertPoint(int index, const BfmeE8& point)
 {
     m_points.insert(m_points.begin() + index, point);
     m_dirty = true;
