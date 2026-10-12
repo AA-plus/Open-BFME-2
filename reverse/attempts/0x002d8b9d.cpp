@@ -1,7 +1,7 @@
 // ?tryUnderAttackEvent@Radar@@QAEXPBVObject@@@Z
 // partial score=0.95 date=2026-10-12
 // ?tryUnderAttackEvent@Radar@@QAEXPBVObject@@@Z
-// partial score=0.95 date=2026-10-12 MP3: manual-addr tmpl9 + goto-split: 554B EXACT size, first-diff +0x46.
+// partial score=0.96 date=2026-10-12 MP3: volatile-getter (folded mem-tests, no add/merge!): 554B EXACT size, first-diff +0x46.
 // kind8/9 tests split (no mask-3 merge) via distinct base DAGs (direct member vs manual *(object+4)); retail folds
 // +0x109 per test (test [eax+0x109] x2) while ours shares via add eax,0x109 + test [eax] x2 (GVN merges same-address
 // bases despite spelling). Next: break base-sharing (volatile/call/global provenance) to fold without add.
@@ -353,6 +353,9 @@ struct RadarAttackPlayerList {char opaque[0x10];RadarInfiltrationPlayer *localPl
 __forceinline bool radarObjectKind(const Object *object,int kind) {
  return (((const RadarAttackObject *)object)->objectTemplate->kind[kind>>3] & (1<<(kind&7)))!=0;
 }
+__forceinline const RadarAttackTemplate *getVolTemplate(const Object *object) {
+ return ((const volatile RadarAttackObject *)object)->objectTemplate;
+}
 struct RadarAttackRef : OpaqueRefElement4 {
  RadarAttackRef() {referent=0;}
  ~RadarAttackRef() {if(referent)referent->Release_Ref();}
@@ -363,9 +366,8 @@ void Radar::tryUnderAttackEvent(const Object *object)
  if(!tryEvent((RadarEventType)3,(const Coord3D *)((const char *)object+0x38))) return;
  TheControlBar->rva0031AEC9();
  RadarInfiltrationPlayer *player=((RadarAttackPlayerList *)ThePlayerList)->localPlayer;
- const RadarAttackTemplate *tmpl9 = *(const RadarAttackTemplate *const *)((const char *)object + 4);
  if(radarObjectKind(object,8)) goto isUnit;
- if((tmpl9->kind[1] & 2)) goto isUnit;
+ if((getVolTemplate(object)->kind[1] & 2)) goto isUnit;
  goto checkStructure;
 isUnit:
  {
