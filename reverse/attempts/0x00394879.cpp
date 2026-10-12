@@ -1,5 +1,7 @@
 // ?isLocationClearOfObjects@BuildAssistant@@UAE_NPBUCoord3D@@PBVThingTemplate@@MPAVObject@@IPAVPlayer@@_N@Z
-// partial score=0.83007 date=2026-10-09
+// partial score=0.85 date=2026-10-12
+// ?isLocationClearOfObjects@BuildAssistant@@UAE_NPBUCoord3D@@PBVThingTemplate@@MPAVObject@@IPAVPlayer@@_N@Z
+// partial score=0.85 date=2026-10-12 MP3: hybrid dir/if-inline (1853B, was 1868): dir for else-path, pt*inv inline for if-path (kills xmm spills across Inv_Sqrt). Left: frame 138 vs 11C (+7 slots), +0x424 region, bit-test homes.007 date=2026-10-09
 // cl: /G7 /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /EHs /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_CRTIMP=
 // stlport
 // BuildAssistant.cpp -- BuildAssistant members recovered from WorldBuilder
@@ -1722,13 +1724,16 @@ Bool BuildAssistant::isLocationClearOfObjects( const Coord3D *worldPos, const Th
 				if( len2 != 0.0f )
 				{
 					Real inv = WWMath::Inv_Sqrt( len2 );
-					dir.X *= inv;
-					dir.Y *= inv;
-					dir.Z *= inv;
+					pt.x += pt.x * inv * 20.0f;
+					pt.y += pt.y * inv * 20.0f;
+					pt.z += pt.z * inv * 20.0f;
 				}
-				pt.x += dir.X * 20.0f;
-				pt.y += dir.Y * 20.0f;
-				pt.z += dir.Z * 20.0f;
+				else
+				{
+					pt.x += dir.X * 20.0f;
+					pt.y += dir.Y * 20.0f;
+					pt.z += dir.Z * 20.0f;
+				}
 				break;
 			}
 			const Rva00394879Door *doorData = md->rva00394879Door();
