@@ -1,16 +1,21 @@
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 //
-// ??0LivingWorldAutoResolveBattle@@QAE@ABUPlayerStorage@@@Z, retail 0x004fa3c9, 495 bytes. Banked partial (score 0.99) closed by tools/permute.py;
-// the body is the banked one up to statement/operand order and local types.
+// LivingWorldAutoResolveBattle constructor, native 0x004FA3C9..0x004FA5B8; WB 0x012E96E0.
+// Direct vector members preserve the native 13-byte constructor closure and
+// 63-byte element cleanup callback instead of defining incompatible wrappers.
+// Provider views and opaque element identities are retained from the existing
+// recovery; these callback extents do not establish the original element layout.
 // stlport
-// Native4FA3C9..4FA5B8 and WB12E96E0. Provider storage views only;
-// unresolved member callbacks remain unadmitted rather than inventing pins.
 #include <vector>
 #include <map>
 struct BfmeE16 {float x,y,z,w;};
 struct BfmePod52 {int a[13];};
 struct Rva004F6986 {char bytes[8];};
-struct Rva004F7D7FRecord {char bytes[1];};
+struct Rva004F7D7FRecord {
+ Rva004F7D7FRecord(); Rva004F7D7FRecord(const Rva004F7D7FRecord&);
+ ~Rva004F7D7FRecord(); Rva004F7D7FRecord&operator=(const Rva004F7D7FRecord&);
+ char bytes[1];
+};
 class ModuleData;
 typedef _STL::vector<BfmePod52> PlayerCopy;
 typedef _STL::vector<Rva004F6986> PairReserve;
@@ -42,14 +47,7 @@ struct PlayerRecord {
  LivingWorldAutoResolveResourceBonusSchedule *schedule;
  Rva004F5FD8 *bonusInput;int side,opaque30;
 };
-class Rva004FA168Storage {public:
- unsigned start,finish,capacity;
- Rva004FA168Storage() {
- typedef _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> > H;
- ((H*)this)->H::_Vector_base(_STL::allocator<BfmeE16>());
- }
- ~Rva004FA168Storage(){((UnitCleanup*)this)->UnitCleanup::~vector();}
-};
+class Rva004FA168Storage {public:unsigned start,finish,capacity;};
 class Rva004FA168Map {
 public:Rva004FA168Map();~Rva004FA168Map();
 private:unsigned words[3];
@@ -76,7 +74,7 @@ public:LivingWorldAutoResolveBattle(const PlayerStorage&);
  void rva004F68B8(unsigned,bool);
  void rva004F9658(Rva004FA168Storage&,EntryVector&,ArmySummary*,unsigned,bool);
  void buildReinforcementMaps();void addUnitsForCurrentRound(int);
-private:PlayerStorage players;Rva004FA168Storage currentUnits[2];Rva004FA168Map maps[2];
+private:PlayerStorage players;UnitCleanup currentUnits[2];Rva004FA168Map maps[2];
  HeaderStorage combined,bonusInputs,bonuses,opaque60,opaque6c;
  int winner,roundNumber;
 };
@@ -91,7 +89,7 @@ LivingWorldAutoResolveBattle::LivingWorldAutoResolveBattle(const PlayerStorage&i
   else bonusInputs.push(0);
   bonuses.push(0);
   rva004F68B8(index,true);
-  rva004F9658(currentUnits[player.side],player.entries,0,index,true);
+  rva004F9658(reinterpret_cast<Rva004FA168Storage &>(currentUnits[player.side]),player.entries,0,index,true);
   counts[player.side]+=player.entries.size();
   _STL::map<int,ArmySummary*>::iterator end=player.reinforcements.end();
   for(_STL::map<int,ArmySummary*>::iterator p=player.reinforcements.begin();p!=end;++p) {
