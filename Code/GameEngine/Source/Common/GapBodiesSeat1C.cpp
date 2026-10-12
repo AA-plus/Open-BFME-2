@@ -1721,3 +1721,98 @@ void Rva004C0A6BInterface::rva004C0A6B(int)
 {
 	((Rva004C0A6BOwner *)((char *)this - 0x0C))->slot1();
 }
+
+// --- 0x0056AB25 (16B): from the +8 interface, 1 when the owner's slot 1 is
+// false (the word argument is unused).
+class Rva0056AB25Owner
+{
+public:
+	virtual void s0();
+	virtual bool slot1();
+};
+
+class Rva0056AB25Interface
+{
+public:
+	int rva0056AB25(int unused);
+};
+
+int Rva0056AB25Interface::rva0056AB25(int)
+{
+	return !((Rva0056AB25Owner *)((char *)this - 8))->slot1();
+}
+
+// --- 0x005CE9B4, 0x005CE9BF (11B each): the rowed forwarders on the +4
+// member of the +0x0C record.
+class GameMessage;
+class Rva005E6817Mid
+{
+public:
+	int fwd(GameMessage *msg);								// 0x005E6817
+};
+
+class Rva005E681EMid
+{
+public:
+	void fwd();												// 0x005E681E
+};
+
+class Rva005E6826Mid
+{
+public:
+	void fwd();												// 0x005E6826
+};
+
+
+struct Rva005CE9B4Record
+{
+	int m_00;
+	void *m_04;
+};
+
+class Rva005CE9B4
+{
+public:
+	void rva005CE9B4();
+	void rva005CE9BF();
+private:
+	int m_00;
+	Rva005E6817Mid *m_04;
+	int m_08;
+	Rva005CE9B4Record *m_0C;
+};
+
+void Rva005CE9B4::rva005CE9B4()
+{
+	((Rva005E681EMid *)m_0C->m_04)->fwd();
+}
+
+void Rva005CE9B4::rva005CE9BF()
+{
+	((Rva005E6826Mid *)m_0C->m_04)->fwd();
+}
+
+// --- 0x005E4523 (17B): the stored comparator applied to the pointed word
+// and the stored +4 value.
+struct Rva005E4300Context;
+class Rva005E4300Cmp
+{
+public:
+	char operator()(int a, int b) const;					// 0x005E4300
+private:
+	Rva005E4300Context *m_context;
+};
+
+class Rva005E4523
+{
+public:
+	char rva005E4523(const int *value) const;
+private:
+	Rva005E4300Cmp m_cmp;
+	int m_04;
+};
+
+char Rva005E4523::rva005E4523(const int *value) const
+{
+	return m_cmp(*value, m_04);
+}
