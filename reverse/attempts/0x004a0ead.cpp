@@ -1,13 +1,17 @@
 // ?action@SupplyCenterDockUpdate@@UAE_NPAVObject@@0@Z
+// partial score=0.993618925831202 date=2026-10-12
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+// ?action@SupplyCenterDockUpdate@@UAE_NPAVObject@@0@Z
 // partial score=0.97 date=2026-10-09
 // Donor: BFME1 f98983a7 SupplyCenterDockUpdateAction.cpp; native WB identity and vtable slot 12.
 // Native 0x004A0EAD..0x004A10D5 establishes every adjusted object/player offset and call.
 // Only the inline rounding helper uses x87 assembly: existing BaseType.h / Player::ScaleMoney pattern reproduces native fistp.
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
-#include "../../reference/shims/bfme2_ascii/unicode_string.h"
-#include "../../Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+// cl: /I. /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+#include "reference/shims/bfme2_ascii/unicode_string.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 typedef float Real;
-struct Coord3D { float x, y, z; };
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 enum ScienceType { SCIENCE_INVALID = -1 };
 class Rva0039B7AD;
 class Rva003B0D7C { public: void rva003B0D7C(int, Rva0039B7AD *, bool); };
@@ -275,7 +279,8 @@ public:
 };
 extern InGameUI *TheInGameUI;
 extern "C" __declspec(dllimport) double __cdecl ceil(double);
-__forceinline long fast_float2long_round(float f) { long i; __asm { fld [f] } __asm { fistp [i] } return i; }
+#include "wwmath.h"
+__forceinline long fast_float2long_round(float f) {return WWMath::Float_To_Long(f);}
 struct SupplyCenterDockUpdateModuleData { char pad[0x10]; float m_valueMultiplier; int m_bonusScience; float m_bonusScienceMultiplier; };
 class SupplyCenterDockUpdate {
 public:
@@ -341,10 +346,10 @@ bool SupplyCenterDockUpdate::action(Object *docker, Object *drone)
 	const Coord3D *dockerPos = docker->getPosition();
 	pos.x = dockerPos->x;
 	pos.y = dockerPos->y;
-	pos.z = TheTerrainLogic->getGroundHeight(pos.x, pos.y);
+	float ground = TheTerrainLogic->getGroundHeight(pos.x, pos.y);
 
 	unsigned int color = ownerPlayer->getPlayerColor() | 0xe6000000;
-	TheInGameUI->addFloatingText(moneys, &pos, color);
+	pos.z=ground;TheInGameUI->addFloatingText(moneys, &pos, color);
 
 	return false;
 }
