@@ -15,17 +15,15 @@ extern "C" void _ReadWriteBarrier();
 #include "Common/Snapshot.h"
 #include "Coord2D.h"
 void Rva00030830FreeAllocation(void*);
-struct BfmeE16{float x,y,z,w;};
-namespace _STL{
-template<>void allocator<BfmeE16>::deallocate(pointer p,size_type)const{if(p) Rva00030830FreeAllocation(p);}
-template<>__declspec(nothrow) __declspec(noinline) _Vector_base<BfmeE16,allocator<BfmeE16> >::_Vector_base(const allocator<BfmeE16>&a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0){}
+struct BfmeE16 {float x,y,z,w;};
+class Rva003197EEListener;
+namespace _STL {
+template<>void allocator<Rva003197EEListener*>::deallocate(pointer p,size_type)const{if(p) Rva00030830FreeAllocation(p);}
+template<>__declspec(nothrow) __declspec(noinline) _Vector_base<Rva003197EEListener*,allocator<Rva003197EEListener*> >::_Vector_base(const allocator<Rva003197EEListener*>&a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0){}
 }
-struct LivingWorldArmyListenerHeader:public _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> >{
- __forceinline LivingWorldArmyListenerHeader():_STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> >(_STL::allocator<BfmeE16>()){}
+struct ArmyListenerHeader:public _STL::_Vector_base<Rva003197EEListener*,_STL::allocator<Rva003197EEListener*> > {
+ __forceinline ArmyListenerHeader():_STL::_Vector_base<Rva003197EEListener*,_STL::allocator<Rva003197EEListener*> >(_STL::allocator<Rva003197EEListener*>()){}
 };
-class Rva00330757Member:public LivingWorldArmyListenerHeader{public:__declspec(noinline) Rva00330757Member();__forceinline ~Rva00330757Member(){}int flag;};
-inline Rva00330757Member::Rva00330757Member(){flag|=-1;}
-
 
 // vector<void*> begin/end otherwise instantiate per-TU COMDATs (one byte
 // shape per TU flags); explicit dllimport+forceinline specializations take
@@ -155,12 +153,15 @@ public:
  virtual void slot0(void *owner); virtual void slot1(void *); virtual void slot2(void *); virtual void slot3(void *); virtual void slot4(void *);
 };
 
-class Rva003197EEList : public Rva00330757Member
+class Rva003197EEList : public ArmyListenerHeader
 {
 public:
+ __declspec(noinline) Rva003197EEList();
  ~Rva003197EEList() {}
  void forEach(void (Rva003197EEListener::*notify)(void *), void *owner);
+private:int index;
 };
+inline Rva003197EEList::Rva003197EEList(){index|=-1;}
 
 // Retail's unwind map tracks three bases in construction order: Snapshot,
 // the listener list (+8, null-checked conversion) and this observer (+4,
@@ -347,13 +348,11 @@ public:
 };
 typedef char LivingWorldArmyExtentCheck[(sizeof(LivingWorldArmy)==0x98)?1:-1];
 
-// ??0LivingWorldArmy@@QAE@XZ present-unmatched
 LivingWorldArmy::LivingWorldArmy(): v2C(-1),v30(0),owner54(-1),b58(true),b59(false),f5C(0),v60(1),b64(false),b65(false),v70(-1),b74(false),b75(false),status88(0),v8C(0) {
  ((Rva00575674*)&summary78)->rva00575674((Object*)new ArmySummary);
  ((Rva005A0B4CList*)((char*)TheLivingWorldLogic+0x1C))->append((Rva002BA8F1Listener*)(Rva00319D01ObserverBase*)this);
 }
 
-// ??0LivingWorldArmy@@QAE@HPAVRva004E3184@@PAURva002B6A04Player@@@Z present-unmatched
 LivingWorldArmy::LivingWorldArmy(int owner,Rva004E3184 *desc,Rva002B6A04Player *player):name18(desc->a50),name1C(desc->a18),name24(desc->a04),name28(desc->a08),v2C(-1),v30(0),owner54(-1),b58(true),b59(false),f5C(desc->f44),v60(1),b64(false),b65(false),v70(-1),b74(desc->b54),b75(false),status88(0),v8C(0) {
  _ReadWriteBarrier();
  owner20=owner;
@@ -456,7 +455,6 @@ public:
     virtual void slot30();
     virtual Xfer &xferInt(int &);
 };
-class Rva0031A257 {public:Rva0031A257();char bytes[0x98];};
 void XferOwningLivingWorldArmyVec(Xfer *xfer, _STL::vector<const ModuleData *> *armies)
 {
     Xfer::Version version(1,1);
@@ -468,7 +466,7 @@ void XferOwningLivingWorldArmyVec(Xfer *xfer, _STL::vector<const ModuleData *> *
         xfer->xferInt(count);
         armies->reserve(count);
         for (int i=0; i<count; ++i) {
-            const ModuleData *army=reinterpret_cast<const ModuleData *>(new Rva0031A257);
+            const ModuleData *army=reinterpret_cast<const ModuleData *>(new LivingWorldArmy);
             xfer->xferSnapshot(const_cast<ModuleData *>(army));
             armies->push_back(army);
         }
@@ -584,7 +582,6 @@ void LivingWorldArmy::initiateMove(const Coord2D &position,Rva00318C32Ret *targe
     reinterpret_cast<Rva003197EEList *>(reinterpret_cast<char *>(this)+8)->forEach(&Rva003197EEListener::slot4,this);
 }
 
-// ?rva003191E2@LivingWorldArmy@@UAEXHH@Z present-unmatched
 void LivingWorldArmy::rva003191E2(int mode, int keepPresentation)
 {
 	switch (mode)
@@ -609,7 +606,6 @@ void LivingWorldArmy::rva003191E2(int mode, int keepPresentation)
 	}
 }
 
-// ?loadPostProcess@LivingWorldArmy@@UAEXXZ present-unmatched
 void LivingWorldArmy::loadPostProcess()
 {
     reinterpret_cast<Rva0031934BOwner *>(this)->rva0031934B(&name24);
@@ -643,5 +639,4 @@ void LivingWorldArmy::loadPostProcess()
         reinterpret_cast<Rva003195C9Owner *>(this)->rva003195C9();
 }
 
-// ?GetSnapshotName@LivingWorldArmy@@UBEPBDXZ present-unmatched
 const char *LivingWorldArmy::GetSnapshotName()const{return "LivingWorldArmy";}
