@@ -38,3 +38,40 @@ void Rva006CBDA0Field18::set(int value)
 {
 	m_field18 = value;
 }
+
+// ?set@Rva006E0180Flag16@@QAEXH@Z @ 0x006E0180 (32B): stores a normalised
+// int flag into bit 16 of the +0x5C word.
+class Rva006E0180Flag16
+{
+public:
+	void set(int value);
+private:
+	char m_pad[0x5C];
+	unsigned int m_unused0 : 16;
+	unsigned int m_flag16 : 1;
+};
+
+void Rva006E0180Flag16::set(int value)
+{
+	m_flag16 = value ? 1 : 0;
+}
+
+// ?clear@Rva006E3C50Table@@QAEXXZ @ 0x006E3C50 (36B): resets the 16-bit
+// count at +0 and zero-fills the +4 slot array over the 16-bit capacity at +2.
+extern "C" void *__cdecl memset(void *, int, unsigned int);
+#pragma intrinsic(memset)
+class Rva006E3C50Table
+{
+public:
+	void clear();
+private:
+	unsigned short m_count;
+	unsigned short m_capacity;
+	void **m_slots;
+};
+
+void Rva006E3C50Table::clear()
+{
+	m_count = 0;
+	memset(m_slots, 0, m_capacity * sizeof(void *));
+}

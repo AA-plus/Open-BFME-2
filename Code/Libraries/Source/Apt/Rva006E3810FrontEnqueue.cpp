@@ -42,6 +42,7 @@ public:
     void rva006E3230(Rva006E3230Action *pCur);
     void rva006E3810(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE);
     int rva006E38D0();
+    Rva006E3230Action *rva006E32A0(Rva006E3230Action *pCur);
 };
 void AptActionQueueC::rva006E3810(AptValue *pContext, AptValue *pA, AptValue *pB, int iD, int iE)
 {
@@ -87,4 +88,16 @@ int AptActionQueueC::rva006E38D0()
         }
     }
     return iDelta;
+}
+
+// AptActionQueueC::rva006E32A0 @0x006E32A0 36B. Ghidra-unlisted step-back
+// helper: the element before pCur, wrapping to the last pool slot, validated
+// through the rowed rva006E3230 and returned. Same wrap as rva006E3810 above.
+Rva006E3230Action *AptActionQueueC::rva006E32A0(Rva006E3230Action *pCur)
+{
+    Rva006E3230Action *pPrev = pCur - 1;
+    if (pPrev < m_aActionPool)
+        pPrev = &m_aActionPool[m_iActionPoolSize] - 1;
+    rva006E3230(pPrev);
+    return pPrev;
 }

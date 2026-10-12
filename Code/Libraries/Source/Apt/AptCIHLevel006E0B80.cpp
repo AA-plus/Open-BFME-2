@@ -20,6 +20,7 @@ class AptCIH {
     int m_code;
 public:
     int rva006E0B80(int nLvl) const;
+    int rva006E0B60() const;
     bool rva006E2460(const AptCIH *other) const;
     void *rva006E0FB0() const;
     void *rva006E1020() const;
@@ -313,4 +314,15 @@ void AptCIH::rva006E1F00(int mask)
                 record.m_transform, (int)record.m_color, 0, 0, 0);
         }
     }
+}
+
+// ?rva006E0B60@AptCIH@@QBEHXZ, retail 0x006E0B60 (25B). Ghidra-unlisted depth
+// of this CIH in its +0x48 parent chain (0 for a root), the same chain the
+// level accessor above walks. Address-derived name.
+int AptCIH::rva006E0B60() const
+{
+    int depth = 0;
+    for (AptCIH *p = m_parent; p != 0; p = p->m_parent)
+        ++depth;
+    return depth;
 }
