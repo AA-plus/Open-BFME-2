@@ -64,6 +64,14 @@ if __name__ == '__main__':
         for loc in (' Rva004FA2E2 battle(players);\n',' reinterpret_cast<LivingWorldAutoResolveBattle *>(&battle)->applyResults();\n'):
             before,after=base.split(loc,1)
             variants.append(('army-ref-after-'+('ctor' if 'battle(' in loc else 'apply'),before+loc+' _STL::vector<LivingWorldArmy*>& armyList=entry->m_armies;\n'+after.replace('entry->m_armies','armyList')))
+    elif sys.argv[1]=='parameter':
+        loop=' for(int i=0;i<reinterpret_cast<LivingWorldLogic *>(TheLivingWorldLogic)->campaignB0->settings08->rounds58;++i)\n  reinterpret_cast<Rva004FA10FOwner *>(&battle)->rva004FA10F();'
+        prefix,body=base.split('void LivingWorldBattle::RetreatArmiesForPlayer(void *player) {')
+        for order in (0,1):
+            params='Rva004FA2E2 &battle, int i' if order==0 else 'int i, Rva004FA2E2 &battle'
+            args='battle, 0' if order==0 else '0, battle'
+            helper='\nstatic __forceinline void runRetreatRounds('+params+') {\n'+loop.replace('for(int i=0;','for(;')+'\n}\n'
+            variants.append(('byvalue-round-counter-'+str(order),prefix+helper+'void LivingWorldBattle::RetreatArmiesForPlayer(void *player) {'+body.replace(loop,' runRetreatRounds('+args+');')))
     for name,text in variants:
         result=trial(name,text,'?RetreatArmiesForPlayer@LivingWorldBattle@@QAEXPAX@Z',0x3f6727,527)
         if result.get('exact'): break
