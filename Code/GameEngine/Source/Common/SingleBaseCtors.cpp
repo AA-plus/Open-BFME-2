@@ -37,12 +37,41 @@ public:
 };
 
 
-class Rva005D5095Base
+// The rowed chain constructor 0x005AFE86 (Rva005AFE86Ctor.cpp).
+class Rva005AFE86
+{
+public:
+	Rva005AFE86(void *p);
+	virtual void f0() = 0;
+};
+
+// ??0Rva005D5095Base@@QAE@H@Z retail 0x005D5095 24B (the pinned base of the
+// two constructors below): forwards its int to 0x005AFE86 and stamps vtable
+// 0x00875AC4, the one ??1Rva005D50D8 restores.
+class Rva005D5095Base : public Rva005AFE86
 {
 public:
 	Rva005D5095Base(int a);
 	virtual void f0() = 0;
 };
+
+Rva005D5095Base::Rva005D5095Base(int a) : Rva005AFE86((void *)a)
+{
+}
+
+// ??0Rva005AF9EF@@QAE@XZ retail 0x005AF9EF 20B: the same chain with the
+// constant 1 and vtable 0x0087287C, the one ??1Rva005AFA03 restores (caller
+// 0x00511826).
+class Rva005AF9EF : public Rva005AFE86
+{
+public:
+	Rva005AF9EF();
+	virtual void f0() = 0;
+};
+
+Rva005AF9EF::Rva005AF9EF() : Rva005AFE86((void *)1)
+{
+}
 
 class Rva005D50C4 : public Rva005D5095Base
 {
