@@ -279,11 +279,14 @@ public:
 	void *m_movie;
 };
 
-class Rva002D38D1
+// Native +C8 cleanup calls the existing rowed Rva002D38EB destructor
+// folded with clear2D38D1. Use its neutral provider name; no claim of an
+// original holder identity. The same4B pointer and zero construction remain.
+class Rva002D38EB
 {
 public:
-	Rva002D38D1() : m_movie(0) {}
-	~Rva002D38D1() { clear(); }
+	Rva002D38EB() : m_movie(0) {}
+	~Rva002D38EB();
 	void clear();
 
 	void *m_movie;
@@ -480,7 +483,7 @@ private:
 	Rva002D5188ResourceBar m_resourceBar;	// +0x98
 	Rva00526F46 m_c0;
 	Rva002D3894 m_heroSelect;		// +0xC4
-	Rva002D38D1 m_helpBox;			// +0xC8
+	Rva002D38EB m_helpBox;			// +0xC8
 	Rva002D3931 m_planningModeUI;		// +0xCC
 	bool m_d0[20];				// +0xD0
 	bool m_e4;
