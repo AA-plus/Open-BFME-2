@@ -84,12 +84,18 @@ class Rva00072B3A
 {
 public:
 	RvaTextureHandleView rva00072B3A() const;
+	void rva00072E10(unsigned char level);
 	void rva00072E84(unsigned char level, Rva00116680 *surface);
 private:
-	char m_pad[0x1c];
+	int m_numCellsX;         // +0x00
+	int m_numCellsY;         // +0x04
+	char m_pad08[0x10];
+	unsigned short *m_shroudData;  // +0x18
 	RvaTextureHandleView m_texture;
 	int m_dstTextureWidth;   // +0x20 (Zero Hour's name for the border fill extent)
 	int m_dstTextureHeight;  // +0x24
+	char m_pad28[0x10];
+	unsigned char *m_finalFogData;  // +0x38
 };
 
 RvaTextureHandleView Rva00072B3A::rva00072B3A() const
@@ -193,6 +199,44 @@ unsigned short __cdecl Rva00072D5DShroudPixel(unsigned char level)
 		alpha = 255;
 	}
 	return (unsigned short)(((alpha & 0xf0) << 8) | ((red & 0xf0) << 4) | (green & 0xf0) | ((blue >> 4) & 0xf));
+}
+
+// Native 00072E10..00072E82 RET4. BFME 1's W3DShroud::fillShroudData
+// (donor W3DShroud_fillShroudData.cpp, BFME 1 retail 0x0071A520): the level
+// is raised to the global minimum, every shroud pixel (+0x18) gets its packed
+// value and the logical levels (+0x38) get the level. The second loop
+// rewrites the first row only, as the donor does.
+void Rva00072B3A::rva00072E10(unsigned char level)
+{
+	int x;
+	int y;
+	unsigned short pixel;
+	unsigned short *shroud;
+	unsigned char *fog;
+
+	if (level < TheGlobalData->m_shroudAlpha)
+		level = TheGlobalData->m_shroudAlpha;
+
+	pixel = Rva00072D5DShroudPixel(level);
+	shroud = m_shroudData;
+	for (y = 0; y < m_numCellsY; ++y)
+	{
+		for (x = 0; x < m_numCellsX; )
+		{
+			*shroud = pixel;
+			++x;
+			++shroud;
+		}
+	}
+
+	fog = m_finalFogData;
+	for (y = 0; y < m_numCellsY; ++y)
+	{
+		for (x = 0; x < m_numCellsX; ++x)
+		{
+			fog[x] = level;
+		}
+	}
 }
 
 // Native 00072E84..00072EEB. Zero Hour's fillBorderShroudData destination
