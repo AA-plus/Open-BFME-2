@@ -56,6 +56,8 @@ private:
     StringDataC *data;
 public:
     EAStringC();
+    EAStringC(const char *);
+    EAStringC(const EAStringC &);
     EAStringC &clear();
     EAStringC &operator=(const EAStringC&);
     ~EAStringC();
@@ -267,6 +269,54 @@ AptValue *Rva006ECC20LoadVariables(AptValue *self,int count){
   EAStringC url;
   arg->toString(url);
   g_aptDateInterpreter.loadVariables(self,0,&url);
+ }
+ return gpUndefinedValue;
+}
+
+// Native C590..C669: Ghidra-unlisted callback after the rowed release worker.
+// Asserts nParams == 0 (AptCharacter.cpp 0x320, retail text), reads the
+// receiver's URL through the rowed rva006ffce0 name worker and asks the Apt
+// linker (rowed AptLinker::Load) to load an empty movie over that target:
+// the unloadMovie shape. Callback name remains address-derived.
+class AptLinker {public:void Load(const EAStringC &a,EAStringC b);};
+extern AptLinker *g_bfmeAptLinkerAtE176F8;
+void rva006ffce0(AptValue *,EAStringC &);
+void __debugbreak();
+#pragma intrinsic(__debugbreak)
+AptValue *Rva006EC590UnloadMovie(AptValue *self,int nParams){
+ if(!(nParams==0)){
+  g_bfmeAptAssertAtE17734("nParams == 0","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptCharacter.cpp",0x320);
+  if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();
+ }
+ AptCIH *cih=self->c_cih(false);
+ EAStringC url;
+ rva006ffce0((AptValue *)cih,url);
+ g_bfmeAptLinkerAtE176F8->Load(EAStringC(""),url);
+ return gpUndefinedValue;
+}
+
+// Native D770..D803: Ghidra-unlisted callback beside the rowed walk at
+// 0x006ED490. Resolves the target through the rowed rva007065e0 lookup with
+// the receiver, and when that yields a CIH, removes it from its parent
+// sprite's display list (+0x4C instance, list at +0x24) through the rowed
+// AptDisplayList::removeClonedObject after the AptCIH.h 0x7D
+// isSpriteInstBase() assert on the parent (+0x48): the removeMovieClip shape.
+// Callback name remains address-derived.
+class BfmeAptValue006DCD20;
+void rva007065e0(int,int,BfmeAptValue006DCD20 *,BfmeAptValue006DCD20 **);
+class Rva006CFCD0 {public:bool isSpriteInstBase() const;};
+class AptDisplayList {public:void removeClonedObject(AptCIH *);};
+AptValue *Rva006ED770RemoveMovieClip(AptValue *self,int){
+ BfmeAptValue006DCD20 *found=0;
+ rva007065e0((int)self->c_cih(false),0,(BfmeAptValue006DCD20 *)self->c_cih(false),&found);
+ if(found && ((AptValue *)found)->isCIH(false)){
+  AptCIH *cih=((AptValue *)found)->c_cih(false);
+  AptCIH *parent=*(AptCIH **)((char *)cih+0x48);
+  if(!((const Rva006CFCD0 *)parent)->isSpriteInstBase()){
+   g_bfmeAptAssertAtE17734("isSpriteInstBase()","c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h",0x7D);
+   if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();
+  }
+  ((AptDisplayList *)((char *)parent->member4C+0x24))->removeClonedObject(cih);
  }
  return gpUndefinedValue;
 }
