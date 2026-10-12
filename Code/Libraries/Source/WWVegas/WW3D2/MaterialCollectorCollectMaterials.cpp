@@ -1,7 +1,10 @@
-// ?Collect_Materials@MaterialCollectorClass@@QAEXPAVMeshModelClass@@@Z
-// partial score=0.9965 date=2026-10-06
 // cl: /G7 /DNDEBUG /MD /EHsc /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep /Ireference/open-bfme-1/build/toolchains/dx81/include
-// Near-match of MaterialCollectorClass::Collect_Materials, 0x1703D0, 1238 bytes.
+// ?Collect_Materials@MaterialCollectorClass@@QAEXPAVMeshModelClass@@@Z, retail 0x001703D0, 1238 B.
+// Built from the banked reconstruction (reverse/attempts history). The texture-site
+// DynamicVectorClass<RefCountPtr<TextureClass> >::Add is specialized here so its growth
+// sum reads GrowthStep into a local first: retail adds into the Length() register
+// (add ecx,eax / push ecx), which the shared vector.h spelling compiles the other way.
+// Reconstruction of MaterialCollectorClass::Collect_Materials, 0x1703D0, 1238 bytes.
 // Donor: Open-BFME-1 1281192f68 game/.../WW3D2/matinfo.cpp; BFME2 owning
 // texture operations from MaterialCollectorAddTexture.cpp. Target offsets
 // and the complete loops are independently read from retail. Four bytes
@@ -97,6 +100,21 @@ public:
     RefCountPtr<TextureClass> Peek_Texture(int index,int pass,int stage) const;
     __declspec(noinline) RefCountPtr<TextureClass> Peek_Single_Texture(int pass,int stage) const { return CurMatDesc->Get_Single_Texture(pass,stage); }
 };
+template<> inline bool DynamicVectorClass<RefCountPtr<TextureClass> >::Add(RefCountPtr<TextureClass> const & object)
+{
+	if (ActiveCount >= Length()) {
+		if ((IsAllocated || !VectorMax) && GrowthStep > 0) {
+			int growth = GrowthStep;
+			if (!Resize(Length() + growth)) {
+				return(false);
+			}
+		} else {
+			return(false);
+		}
+	}
+	(*this)[ActiveCount++] = object;
+	return(true);
+}
 class MaterialCollectorClass {
 public:
     void Collect_Materials(MeshModelClass *);

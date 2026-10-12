@@ -224,6 +224,7 @@ MaterialCollectorClass::~MaterialCollectorClass(void)
 	Reset();
 }
 
+// byte-exact reconstruction: Code/Libraries/Source/WWVegas/WW3D2/MaterialCollectorCollectMaterials.cpp
 // ?Collect_Materials@MaterialCollectorClass@@QAEXPAVMeshModelClass@@@Z present-unmatched
 void MaterialCollectorClass::Collect_Materials(MeshModelClass * mesh)
 {
