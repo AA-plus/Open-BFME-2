@@ -12,7 +12,7 @@
 // cl: /DNDEBUG /DWIN32 /MD /EHsc
 // stlport
 #include <vector>
-class AsciiString { public: int compare(const AsciiString &) const; private: void *data; };
+#include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct Rva002BA8F1Input {
     char at00[8]; AsciiString at08, at0C, at10;
     int at14, at18; char at1C[8]; bool at24;

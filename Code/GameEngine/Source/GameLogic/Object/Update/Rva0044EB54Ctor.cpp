@@ -13,32 +13,8 @@
 #include "Common/Snapshot.h"
 
 
-template <typename T> class StringBase
-{
-	friend class AsciiString;
-	StringBase(const T *text);
-public:
-	StringBase() : m_data(0) {}
-private:
-	void releaseBuffer();
-protected:
-	struct Header
-	{
-		int ref_count;
-		unsigned short length;
-		unsigned short capacity;
-		T data[1];
-	};
-	Header *m_data;
-};
+#include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-class AsciiString : public StringBase<char>
-{
-public:
-	AsciiString() {}
-	AsciiString(const char *text) : StringBase<char>(text) {}
-	~AsciiString() { releaseBuffer(); }
-};
 
 class OpaqueRefCounted
 {

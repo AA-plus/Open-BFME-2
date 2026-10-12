@@ -23,19 +23,7 @@ struct BfmeAsciiStringData
 	unsigned short m_pad;
 };
 
-class AsciiString
-{
-public:
-	static const AsciiString TheEmptyString;
-	int compare(const AsciiString &stringSrc) const;
-	const char *str() const
-	{
-		return m_data ? reinterpret_cast<const char *>(m_data + 1) : "";
-	}
-
-private:
-	BfmeAsciiStringData *m_data;
-};
+#include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 // AsciiString::TheEmptyString: defined in Common/Rva00380200Getter.cpp.
 

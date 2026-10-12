@@ -19,14 +19,7 @@ public:
 	bool rva0023C6A4();
 };
 
-class AsciiString
-{
-public:
-	bool isEmpty() const;
-	int compare(const AsciiString &) const;
-private:
-	void *m_data;
-};
+#include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 struct Rva002E2903Element
 {

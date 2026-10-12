@@ -19,12 +19,7 @@ enum ObjectID
 	INVALID_OBJECTID = 0
 };
 
-class AsciiString
-{
-public:
-	const char *str() const { return m_data ? m_data + 8 : ""; }
-	char *m_data;
-};
+#include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 class Rva004AABB4Info
 {
