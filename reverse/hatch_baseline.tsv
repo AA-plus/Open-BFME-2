@@ -5032,7 +5032,6 @@ alternatename	Code/Libraries/Source/Apt/AptActionInterpreterConstantHandlers.cpp
 alternatename	Code/Libraries/Source/Apt/AptActionInterpreterConstantHandlers.cpp	?c_prototype@AptValue@@QBEPAVAptPrototype@@XZ	1
 alternatename	Code/Libraries/Source/Apt/AptActionInterpreterConstantHandlers.cpp	?c_register@AptValue@@QBEPAVAptRegister@@XZ	1
 alternatename	Code/Libraries/Source/Apt/AptActionInterpreterConstantHandlers.cpp	?c_string@AptValue@@QBEPAVAptString@@XZ	1
-alternatename	Code/Libraries/Source/Apt/AptActionInterpreterConstantHandlers.cpp	?g_bfmeFrameStackAtE1835C@@3PAVAptFrameStack@@A	1
 alternatename	Code/Libraries/Source/Apt/AptActionInterpreterConstantHandlers.cpp	?getContext@AptActionInterpreter@@CA_NPAVAptValue@@0PBVEAStringC@@PAPAV2@AAV3@@Z	1
 alternatename	Code/Libraries/Source/Apt/AptActionInterpreterConstantHandlers.cpp	?getIsDefined@AptValue@@QBE_NXZ	1
 alternatename	Code/Libraries/Source/Apt/AptActionInterpreterConstantHandlers.cpp	?getName@AptActionInterpreter@@SAXPAVAptCIH@@AAVEAStringC@@@Z	1

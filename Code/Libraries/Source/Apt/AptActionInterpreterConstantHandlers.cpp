@@ -111,7 +111,7 @@ struct AptConstantPool { int nItems; AptValue **apItems; };
 // the native assertion requires the original inline int3 compiler barrier.
 extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char *, const char *, int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
-void Rva00709F70Set(int, AptValue *);
+
 class BfmeAptValue006DCD20;
 class AptBasePtrStack
 {
@@ -515,13 +515,6 @@ void AptActionInterpreter::_FunctionAptActionStackSwap(AptActionInterpreter *con
     p->stack.PopNoDec();
     p->stack.PushNoInc(a);
     p->stack.PushNoInc(b);
-}
-void AptActionInterpreter::_FunctionAptActionStoreRegister(AptActionInterpreter *const p, LocalContextT *const c)
-{
-    c->pInstruction=(const unsigned char *)(((unsigned int)c->pInstruction+3)&~3U);
-    const int *data=(const int *)c->pInstruction;
-    c->pInstruction+=4;
-    Rva00709F70Set(*data,p->stack.At(0));
 }
 
 #pragma comment(linker, "/alternatename:?PushNoInc@AptBasePtrStack@@QAEXPAVAptValue@@@Z=?rva006FE7B0@AptBasePtrStack@@QAEXPAVBfmeAptValue006DCD20@@@Z")
@@ -2293,48 +2286,6 @@ void AptActionInterpreter::_FunctionAptActionInstanceOf(AptActionInterpreter *co
     p->stack.PopAndPush(2,AptBoolean::Create(result));
 }
 
-class Rva8D0D80Result { public: void rva006FBED0(); };
-class AptFrameStack;
-extern AptFrameStack *g_bfmeFrameStackAtE1835C;
-// Target 706070..706234; donor supplies semantics; native proves +30 function,
-// +8 frame hash and this 20-byte action header. runStream 7002C0 has a verified provider below.
-struct RuntimeTryBlock { unsigned int trySize,catchSize,finallySize; unsigned char flags; unsigned char unused[2]; unsigned char caughtReg; const char *caughtName; };
-void AptActionInterpreter::_FunctionAptActionTry(AptActionInterpreter *const p,LocalContextT *const c)
-{
-    unsigned int nPreStackSize=p->stack.GetSize();
-    c->pInstruction=(const unsigned char *)(((unsigned int)c->pInstruction+3)&~3U);
-    const RuntimeTryBlock *data=(const RuntimeTryBlock *)c->pInstruction;
-    c->pInstruction+=sizeof(RuntimeTryBlock);
-    c->pInstruction+=data->trySize;c->pInstruction+=data->catchSize;c->pInstruction+=data->finallySize;
-    p->runStream((const unsigned char *)(data+1),c->pCurrentContext,data->trySize,c->pParentCharacter);
-    if (p->mpThrownValue && (data->flags&1)) {
-        AptValue *thrown=p->mpThrownValue;
-        if (data->flags&4) Rva00709F70Set(data->caughtReg,thrown);
-        else {
-            EAStringC param(data->caughtName);
-            if(p->mpCurrentFunction) {
-                if(!g_bfmeFrameStackAtE1835C) ((Rva8D0D80Result *)p->mpCurrentFunction)->rva006FBED0();
-                ((AptNativeHash *)((unsigned char *)g_bfmeFrameStackAtE1835C+8))->Set(&param,thrown);
-            } else p->setVariable((AptValue *)c->pCurrentContext,0,&param,thrown);
-        }
-        p->mpThrownValue->Release();p->mpThrownValue=0;
-        p->runStream((const unsigned char *)(data+1)+data->trySize,c->pCurrentContext,data->catchSize,c->pParentCharacter);
-    }
-    if(data->flags&2) {
-        AptValue *thrown=p->mpThrownValue;
-        if(thrown) { thrown->AddRef();p->mpThrownValue->Release();p->mpThrownValue=0; }
-        p->runStream((const unsigned char *)(data+1)+data->trySize+data->catchSize,c->pCurrentContext,data->finallySize,c->pParentCharacter);
-        if(thrown && !p->mpThrownValue) { thrown->AddRef();p->mpThrownValue=thrown;thrown->Release(); }
-    }
-    unsigned int nPostStackSize=p->stack.GetSize();
-    if (nPostStackSize>nPreStackSize) p->stack.rva006E3AA0(nPostStackSize-nPreStackSize);
-    if((unsigned int)p->stack.GetSize()!=nPreStackSize) {
-        g_bfmeAptAssertAtE17734("(uint32_t)pInterpreter->stack.GetSize() == nPreStackSize","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptActionInterpreter.cpp",0x2599);
-        if(g_bfmeAptBreakOnAssertAtDDC01C) { __asm int 3 }
-    }
-}
-
-#pragma comment(linker, "/alternatename:?g_bfmeFrameStackAtE1835C@@3PAVAptFrameStack@@A=?spFrameStack@AptScriptFunctionBase@@2PAVAptFrameStack@@A")
 
 // Native 6FDA40..6FDC29; buffer capacity260 inferred from frame allocation,
 // exact declared source bound within alignment padding is not independently known.
