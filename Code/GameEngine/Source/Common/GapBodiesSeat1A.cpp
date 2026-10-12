@@ -606,6 +606,8 @@ int Rva00262263::rva00262263() const
 
 // --- 0x00260E0D (17B): 1 when the object is not on an airborne locomotor.
 enum ObjectStatusTypes { OBJECT_STATUS_4 = 4 };
+enum ObjectScriptStatusBit { OBJECT_SCRIPT_STATUS_0 };
+struct Coord3D;
 
 class Object
 {
@@ -615,6 +617,11 @@ public:
 	bool rva00292FAC() const;								// 0x00292FAC
 	bool testStatus(ObjectStatusTypes status) const;		// 0x0004E536
 	void rva0028D611(Object *other, int a, int b);
+	float GetRelativeAngle(const Coord3D *pos) const;		// 0x000B4542
+	float rva0028F8A3(const Object *other) const;
+	void setScriptStatus(ObjectScriptStatusBit bit, bool set);	// 0x00292969
+	void rva002934D9(ObjectScriptStatusBit bit);
+	void rva00294C1A(Object *other, bool flag, float scale);	// 0x00294C1A
 	int m_pad00[0x74 / 4];
 	int m_74;												// +0x74
 	char m_pad78[0x244 - 0x78];
@@ -1452,4 +1459,411 @@ TextureClass *Rva00282794::rva0028A665(int stage) const
 void Rva00282794::rva0028C8BD(const _STL::_Base_bitset<32> &bits)
 {
 	m_284._M_do_or(bits);
+}
+
+// --- 0x0028F898 (11B): assigns the argument to the +0x94 member through its
+// rowed operator=.
+class Rva001EAFC1
+{
+public:
+	Rva001EAFC1 &operator=(const Rva001EAFC1 &other);		// 0x001EAFC1
+};
+
+class Rva0028F898
+{
+public:
+	Rva001EAFC1 &rva0028F898(const Rva001EAFC1 &value);
+private:
+	char m_pad00[0x94];
+	Rva001EAFC1 m_94;
+};
+
+Rva001EAFC1 &Rva0028F898::rva0028F898(const Rva001EAFC1 &value)
+{
+	return m_94 = value;
+}
+
+// --- 0x0028F8A3 (16B): the relative angle to the other object's +0x38
+// position; 0x002934D9 (14B): clears a script status bit.
+float Object::rva0028F8A3(const Object *other) const
+{
+	return GetRelativeAngle((const Coord3D *)((const char *)other + 0x38));
+}
+
+void Object::rva002934D9(ObjectScriptStatusBit bit)
+{
+	setScriptStatus(bit, false);
+}
+
+// --- 0x00294D4B (22B, cdecl): the rowed 0x00294C1A on the first object with
+// the second, false and 1.0.
+void Rva00294D4B(Object *obj, Object *other)
+{
+	obj->rva00294C1A(other, false, 1.0f);
+}
+
+// --- 0x0028F92B (21B): returns by value the rowed 0x0028F633 pair of 0 and
+// this +0x38 word.
+class Rva0028F633
+{
+public:
+	Rva0028F633(int a, int b);								// 0x0028F633
+private:
+	int m_00;
+	int m_04;
+};
+
+class Rva0028F92B
+{
+public:
+	Rva0028F633 rva0028F92B() const;
+private:
+	char m_pad00[0x38];
+	int m_38;
+};
+
+Rva0028F633 Rva0028F92B::rva0028F92B() const
+{
+	return Rva0028F633(0, m_38);
+}
+
+// --- 0x00298941, 0x0029894C (11B, 14B): erase every element of the vector
+// at +0 / +0x20 through the rowed EraseRange.
+class Rva00297360Element;
+class Rva002983DAVector
+{
+public:
+	Rva00297360Element *EraseRange(Rva00297360Element *first, Rva00297360Element *last);	// 0x002983DA
+	void rva00298941();
+	void clear() { EraseRange(m_start, m_finish); }
+	Rva00297360Element *m_start;
+	Rva00297360Element *m_finish;
+	Rva00297360Element *m_end;
+};
+
+void Rva002983DAVector::rva00298941()
+{
+	EraseRange(m_start, m_finish);
+}
+
+class Rva0029894C
+{
+public:
+	void rva0029894C();
+private:
+	char m_pad00[0x20];
+	Rva002983DAVector m_20;
+};
+
+void Rva0029894C::rva0029894C()
+{
+	m_20.clear();
+}
+
+// --- 0x0029A389 (19B, cdecl): mixes a word into a hash (rotate left 5).
+unsigned int Rva0029A389(unsigned int hash, unsigned int value)
+{
+	return ((value >> 27) ^ (value << 5)) ^ hash;
+}
+
+// --- 0x0029A48A (30B): sets the low end of the +0x58 range of the +0
+// record, if any.
+struct Rva0029A48ARange
+{
+	void set(float l, float h) { lo = l; hi = h; }
+	float lo;
+	float hi;
+};
+
+struct Rva0029A48ARecord
+{
+	char m_pad00[0x58];
+	Rva0029A48ARange m_range;
+};
+
+class Rva0029A48A
+{
+public:
+	void rva0029A48A(float lo);
+private:
+	Rva0029A48ARecord *m_record;
+};
+
+void Rva0029A48A::rva0029A48A(float lo)
+{
+	if (m_record)
+	{
+		m_record->m_range.set(lo, m_record->m_range.hi);
+	}
+}
+
+// --- 0x0029B5CD (11B): forwards to the rowed body on the +0x9BC object.
+class AnimateWindow;
+class ProcessAnimateWindowSlideFromBottomTimed
+{
+public:
+	virtual bool reverseAnimateWindow(AnimateWindow *win);	// 0x005CB265
+};
+
+class Rva0029B5CD
+{
+public:
+	bool rva0029B5CD(AnimateWindow *win);
+private:
+	char m_pad000[0x9BC];
+	void *m_9BC;
+};
+
+bool Rva0029B5CD::rva0029B5CD(AnimateWindow *win)
+{
+	return ((ProcessAnimateWindowSlideFromBottomTimed *)m_9BC)->ProcessAnimateWindowSlideFromBottomTimed::reverseAnimateWindow(win);
+}
+
+// --- 0x0029E0E6 (24B): one node from the freelist pool at VA 0x00DA60E8
+// (rowed pop), none for a count above one.
+extern FreelistPool g_freelistPool;
+
+class Rva0029E0E6
+{
+public:
+	void *rva0029E0E6(unsigned int count, const void *hint);
+};
+
+void *Rva0029E0E6::rva0029E0E6(unsigned int count, const void *)
+{
+	if (count > 1)
+		return 0;
+	return g_freelistPool.pop();
+}
+
+// --- 0x0029FE9E (29B): the rowed 0x0029BA28 with the word, then appends it
+// to the +0x18 int list.
+namespace _STL
+{
+	template <class T, class A> class list
+	{
+	public:
+		void push_back(const T &value);
+	private:
+		void *m_node;
+	};
+}
+
+class Rva0029BA28
+{
+public:
+	void rva0029BA28(int value);							// 0x0029BA28
+	void rva0029FE9E(int value);
+private:
+	char m_pad00[0x18];
+	_STL::list<int, _STL::allocator<int> > m_18;
+};
+
+void Rva0029BA28::rva0029FE9E(int value)
+{
+	rva0029BA28(value);
+	m_18.push_back(value);
+}
+
+// --- Small Player-region leaves: 0x002A71B1 (11B) word of the +0x60 array;
+// 0x002A73A4/0x002A73AE (10B) add/subtract +0x0C; 0x002A97ED/0x002A97F7
+// (10B) add to +0x18/+0x1C.
+class Rva002A71B1
+{
+public:
+	int rva002A71B1(int index) const;
+	void rva002A73A4(int value);
+	void rva002A73AE(int value);
+	void rva002A97ED(int value);
+	void rva002A97F7(int value);
+private:
+	int m_00;
+	int m_04;
+	int m_08;
+	int m_0C;
+	int m_10;
+	int m_14;
+	int m_18;
+	int m_1C;
+	char m_pad20[0x60 - 0x20];
+	int m_60[1];
+};
+
+int Rva002A71B1::rva002A71B1(int index) const
+{
+	return m_60[index];
+}
+
+void Rva002A71B1::rva002A73A4(int value)
+{
+	m_0C += value;
+}
+
+void Rva002A71B1::rva002A73AE(int value)
+{
+	m_0C -= value;
+}
+
+void Rva002A71B1::rva002A97ED(int value)
+{
+	m_18 += value;
+}
+
+void Rva002A71B1::rva002A97F7(int value)
+{
+	m_1C += value;
+}
+
+// --- 0x002A7F6C (20B): the +0x0C field of the indexed 16-byte record at
+// *(+0xF50); 0x002AAE59 (20B) and 0x002AAE6D (20B): the +0 halfword and the
+// +0x0C field of the indexed 16-byte record at *(+0xF6C).
+struct Rva002A7F6CRecord
+{
+	short m_00;
+	char m_pad02[0x0C - 2];
+	int m_0C;
+};
+
+class Rva002A7F6C
+{
+public:
+	int *rva002A7F6C(int index);
+	int rva002AAE59(int index);
+	int *rva002AAE6D(int index);
+private:
+	char m_pad000[0xF50];
+	Rva002A7F6CRecord *m_F50;
+	char m_padF54[0xF6C - 0xF54];
+	Rva002A7F6CRecord *m_F6C;
+};
+
+int *Rva002A7F6C::rva002A7F6C(int index)
+{
+	return &m_F50[index].m_0C;
+}
+
+int Rva002A7F6C::rva002AAE59(int index)
+{
+	return m_F6C[index].m_00;
+}
+
+int *Rva002A7F6C::rva002AAE6D(int index)
+{
+	return &m_F6C[index].m_0C;
+}
+
+// --- 0x002A87F9 (15B, cdecl): clears the two skirmish-AI words at VA
+// 0x00DFEFC0 and 0x00DFEFC4.
+extern unsigned g_00DFEFC0, g_AITargetThreatFinderSerial;
+
+void Rva002A87F9()
+{
+	g_00DFEFC0 = 0;
+	g_AITargetThreatFinderSerial = 0;
+}
+
+// --- 0x002A9BE3 (15B): constructor from a flag with a cleared +4 word.
+class Rva002A9BE3
+{
+public:
+	Rva002A9BE3(bool flag);
+private:
+	bool m_00;
+	int m_04;
+};
+
+Rva002A9BE3::Rva002A9BE3(bool flag) : m_00(flag), m_04(0)
+{
+}
+
+// --- 0x002AA2BB (14B): count of the 0xD8-byte records of the vector at +0;
+// 0x002AAC2E (15B): the indexed record.
+struct Rva002AA2BBRecord
+{
+	char m_data[0xD8];
+};
+
+class Rva002AA2BB
+{
+public:
+	int rva002AA2BB() const;
+	Rva002AA2BBRecord *rva002AAC2E(int index);
+private:
+	Rva002AA2BBRecord *m_start;
+	Rva002AA2BBRecord *m_finish;
+	Rva002AA2BBRecord *m_end;
+};
+
+int Rva002AA2BB::rva002AA2BB() const
+{
+	return m_finish - m_start;
+}
+
+Rva002AA2BBRecord *Rva002AA2BB::rva002AAC2E(int index)
+{
+	return &m_start[index];
+}
+
+// --- 0x002AA842 (21B): the pointer-vector count at +0x18C of the +0x34
+// object.
+struct Rva002AA842Inner
+{
+	char m_pad000[0x18C];
+	GapVoidVector m_18C;
+};
+
+class Rva002AA842
+{
+public:
+	int rva002AA842() const;
+private:
+	char m_pad00[0x34];
+	Rva002AA842Inner *m_34;
+};
+
+int Rva002AA842::rva002AA842() const
+{
+	return GapVoidVectorCount(&m_34->m_18C);
+}
+
+// --- 0x002AAC3D (24B): returns a node to the free list at VA 0x00DBBD34.
+struct PoolNode002ABAC0
+{
+	PoolNode002ABAC0 *m_next;
+};
+extern PoolNode002ABAC0 *g_00DBBD34;
+
+class Rva002AAC3D
+{
+public:
+	void rva002AAC3D(PoolNode002ABAC0 *node, unsigned int count);
+};
+
+void Rva002AAC3D::rva002AAC3D(PoolNode002ABAC0 *node, unsigned int)
+{
+	if (node)
+	{
+		node->m_next = g_00DBBD34;
+		g_00DBBD34 = node;
+	}
+}
+
+// --- 0x002AAEB5 (16B): the indexed 0x24-byte record at *(+0x324).
+struct Rva002AAEB5Record
+{
+	char m_data[0x24];
+};
+
+class Rva002AAEB5
+{
+public:
+	Rva002AAEB5Record *rva002AAEB5(int index);
+private:
+	char m_pad000[0x324];
+	Rva002AAEB5Record *m_324;
+};
+
+Rva002AAEB5Record *Rva002AAEB5::rva002AAEB5(int index)
+{
+	return &m_324[index];
 }
