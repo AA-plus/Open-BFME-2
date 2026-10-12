@@ -1,5 +1,7 @@
 // ?rva003449C5@@YA_NPAUCoord3D@@PAVObject@@1@Z
-// partial score=0.96 date=2026-10-12
+// partial score=0.985 date=2026-10-13
+// ?rva003449C5@@YA_NPAUCoord3D@@PAVObject@@1@Z
+// partial score=0.985 date=2026-10-13
 // cl: /O1 /G7 /EHsc /MD /arch:SSE /DNDEBUG /ICode/Libraries/Include/Lib
 //
 #include "Coord3D.h"
@@ -156,9 +158,7 @@ bool rva003449C5(Coord3D *goal, Object *source, Object *victim)
 	delta.z = 0.0f;
 	int steps = -(int)(-delta.length() / 20.0f) - 1;
 	delta.Normalize();
-	delta.x *= 20.0f;
-	delta.y *= 20.0f;
-	delta.z *= 20.0f;
+	delta.scale(20.0f);
 	bool found = false;
 	bool blocked = false;
 	for (int i = 0; i < steps; ++i)

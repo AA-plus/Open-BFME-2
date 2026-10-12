@@ -1,6 +1,8 @@
-// ?rva003508C5@Rva00351949Host@@QAEXH@Z
-// partial score=0.67 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// ?updateInternal@AIAttackAimAtTargetState@@AAE?AW4StateReturnType@@_N@Z
+// partial score=0.8 date=2026-10-13
+// ?updateInternal@AIAttackAimAtTargetState@@AAE?AW4StateReturnType@@_N@Z
+// partial score=0.80 date=2026-10-13
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /I.
 // NEAR draft (bank): register allocation swaps ESI/EDI against retail; move to
 // Code/GameEngine/Source/GameLogic/AI/ and restore the ../../Common include paths.
 //
@@ -24,8 +26,8 @@
 // Rva0034311ECheck fails; and the argument stops before the aim test,
 // which also passes inside half the locomotor turn rate.
 
-#include "../../Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
-#include "../../Code/Libraries/Include/Lib/Coord3D.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 
 typedef bool Bool;
 typedef float Real;
@@ -278,6 +280,7 @@ StateReturnType AIAttackAimAtTargetState::updateInternal(Bool stopBeforeAim)
 		return STATE_SUCCESS;
 
 	Coord3D goalPos;
+	const Coord3D *vp;
 	goalPos.x = getMachineGoalPosition()->x;
 	goalPos.y = getMachineGoalPosition()->y;
 	goalPos.z = getMachineGoalPosition()->z;
@@ -288,7 +291,8 @@ StateReturnType AIAttackAimAtTargetState::updateInternal(Bool stopBeforeAim)
 		if (gotContact)
 			gotContact = victim->getWorldspaceBestContactPoint(&goalPos, source->getPosition(), "Ram", 0, 0x2A, false);
 		if (!victim->getTemplate()->isKindOf96() && !gotContact)
-			goalPos = *victim->getPosition();
+			vp = victim->getPosition();
+			goalPos = *vp;
 	}
 
 	Real relAngle = source->GetRelativeAngle(&goalPos);

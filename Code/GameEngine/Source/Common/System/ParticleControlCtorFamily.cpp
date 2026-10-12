@@ -165,6 +165,16 @@ class Rva003FDAAE : public Rva003FD14DBase { public:
 };
 Rva003FDAAE::Rva003FDAAE(AsciiString name):Rva003FD14DBase(reinterpret_cast<int>(&name)) {}
 
+// Sibling 84B 3FDBD1: same base forward and by-value release, its own vtable
+// C37DD8, and a zeroed Coord3D at +AC (the base ends at +AC). Class identity
+// is address-derived; the doom-ray visual allocates it with size 0xB8.
+class Rva003FDBD1 : public Rva003FD14DBase { public:
+ Rva003FDBD1(AsciiString name);
+ virtual void vfuncDBD1();
+ Coord3D vAC;
+};
+Rva003FDBD1::Rva003FDBD1(AsciiString name):Rva003FD14DBase(reinterpret_cast<int>(&name)),vAC(0.f,0.f,0.f) {}
+
 // Donor575ba2b0 BfmeAnimationHolderRotation; native3FC82C proves secondary+14
 // and scale preservation from receiver+48. Original method spelling unknown.
 void Rva003FD14DBase::rva003FC82C(float angle)
