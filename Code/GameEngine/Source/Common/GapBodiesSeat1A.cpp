@@ -605,12 +605,22 @@ int Rva00262263::rva00262263() const
 }
 
 // --- 0x00260E0D (17B): 1 when the object is not on an airborne locomotor.
+enum ObjectStatusTypes { OBJECT_STATUS_4 = 4 };
+
 class Object
 {
 public:
 	bool isUsingAirborneLocomotor() const;					// 0x0028B81E
 	int rva0028B511() const;								// 0x0028B511
 	bool rva00292FAC() const;								// 0x00292FAC
+	bool testStatus(ObjectStatusTypes status) const;		// 0x0004E536
+	void rva0028D611(Object *other, int a, int b);
+	int m_pad00[0x74 / 4];
+	int m_74;												// +0x74
+	char m_pad78[0x244 - 0x78];
+	void **m_modules;										// +0x244, null-terminated
+	char m_pad248[0x484 - 0x248];
+	int m_484;												// +0x484
 };
 
 class Rva00260E0D
@@ -917,4 +927,529 @@ bool Rva0027229B::rva0027229B() const
 {
 	bool set = (m_98 >> 20) & 1;
 	return !set;
+}
+
+struct GapVoidVector
+{
+	void **m_start;
+	void **m_finish;
+	void **m_end;
+};
+
+static __forceinline int GapVoidVectorCount(const GapVoidVector *v) { return v->m_finish - v->m_start; }
+
+// Dummy virtual slots for call views; only the slot index matters.
+#define GAP_V1(n) virtual void v##n();
+#define GAP_V10(n) GAP_V1(n##0) GAP_V1(n##1) GAP_V1(n##2) GAP_V1(n##3) GAP_V1(n##4) GAP_V1(n##5) GAP_V1(n##6) GAP_V1(n##7) GAP_V1(n##8) GAP_V1(n##9)
+
+// --- 0x00272366 (45B): the +0x14C holder's object's slot-42 answer, when
+// there is one, handles the three arguments in its slot 0; else false.
+class Rva00272366Handler
+{
+public:
+	virtual bool handle(int a, int b, int c);
+};
+
+class Rva00272366Target
+{
+public:
+	GAP_V10(0) GAP_V10(1) GAP_V10(2) GAP_V10(3)
+	GAP_V1(40) GAP_V1(41)
+	virtual Rva00272366Handler *getHandler();				// slot 42
+	GAP_V1(43) GAP_V1(44) GAP_V1(45) GAP_V1(46) GAP_V1(47) GAP_V1(48) GAP_V1(49)
+	GAP_V1(50) GAP_V1(51) GAP_V1(52) GAP_V1(53)
+	virtual void slot54(int a, int b);						// slot 54
+};
+
+class Rva00272366Holder
+{
+public:
+	Rva00272366Target *get() const { return m_target; }
+private:
+	Rva00272366Target *m_target;
+};
+
+class Rva00272366
+{
+public:
+	bool rva00272366(int a, int b, int c);
+private:
+	__forceinline Rva00272366Handler *handler() const
+	{
+		if (m_holder)
+		{
+			Rva00272366Target *target = m_holder->get();
+			if (target)
+				return target->getHandler();
+		}
+		return 0;
+	}
+	char m_pad000[0x14C];
+	Rva00272366Holder *m_holder;
+};
+
+bool Rva00272366::rva00272366(int a, int b, int c)
+{
+	Rva00272366Handler *h = handler();
+	if (h)
+		return h->handle(a, b, c);
+	return false;
+}
+
+
+// --- 0x002785D6 (37B): changes the +0x447 flag, then on set the rowed
+// 0x002783F6(0), on clear the rowed 0x002743D7; 0x0027862C (24B): changes the
+// +0x449 flag, then the rowed 0x002784EB.
+class Rva002783F6Host
+{
+public:
+	void rva002783F6(int value);							// 0x002783F6
+};
+
+class Drawable
+{
+public:
+	void rva002743D7();										// 0x002743D7
+	void rva002784EB();										// 0x002784EB
+	void rva002785D6(bool value);
+	void rva0027862C(bool value);
+private:
+	char m_pad000[0x447];
+	bool m_447;
+	bool m_448;
+	bool m_449;
+};
+
+void Drawable::rva002785D6(bool value)
+{
+	if (m_447 != value)
+	{
+		m_447 = value;
+		if (value)
+			((Rva002783F6Host *)this)->rva002783F6(0);
+		else
+			rva002743D7();
+	}
+}
+
+void Drawable::rva0027862C(bool value)
+{
+	if (m_449 != value)
+	{
+		m_449 = value;
+		rva002784EB();
+	}
+}
+
+// --- 0x0027C226 (10B, cdecl): sets the word at VA 0x00DBB708.
+extern int g_Va00DBB708;
+
+void Rva0027C226(int value)
+{
+	g_Va00DBB708 = value;
+}
+
+// --- 0x0027C280 (36B): stores three floats at +0x1C.
+class Rva0027C280
+{
+public:
+	void rva0027C280(float x, float y, float z);
+private:
+	char m_pad00[0x1C];
+	float m_1C;
+	float m_20;
+	float m_24;
+};
+
+void Rva0027C280::rva0027C280(float x, float y, float z)
+{
+	m_1C = x;
+	m_20 = y;
+	m_24 = z;
+}
+
+// --- 0x0028565F (19B): calls the cdecl function pointer at +0x9C;
+// 0x002856B7 (15B): the argument is at most +0x3C.
+class Rva0028565F
+{
+public:
+	int rva0028565F(int a, int b);
+	bool rva002856B7(int value) const;
+private:
+	char m_pad00[0x3C];
+	int m_3C;
+	char m_pad40[0x9C - 0x40];
+	int (*m_9C)(int a, int b);
+};
+
+int Rva0028565F::rva0028565F(int a, int b)
+{
+	return m_9C(a, b);
+}
+
+bool Rva0028565F::rva002856B7(int value) const
+{
+	return value <= m_3C;
+}
+
+// --- 0x00285760 (13B): drops a reference (+4) and frees through the rowed
+// 0x0020DAE0 at zero.
+void Rva0020DAE0(void *p);
+
+class Rva00285760
+{
+public:
+	void rva00285760();
+private:
+	int m_00;
+	int m_refs;
+};
+
+void Rva00285760::rva00285760()
+{
+	if (--m_refs == 0)
+		Rva0020DAE0(this);
+}
+
+// --- 0x00285A0A (12B, cdecl): the argument's slot 11 with 0.
+class Rva00285A0ATarget
+{
+public:
+	GAP_V10(0) GAP_V1(10)
+	virtual void slot11(int value);
+};
+
+void Rva00285A0A(Rva00285A0ATarget *target)
+{
+	target->slot11(0);
+}
+
+// --- 0x00285A16, 0x0028878C (16B each): the rowed comparisons of the first
+// argument with the second; the receiver is unused.
+class Rva00285672
+{
+public:
+	bool rva00285672(const Rva00285672 &other) const;		// 0x00285672
+};
+
+class ExperienceLevel
+{
+public:
+	bool rva00288621(const ExperienceLevel &other) const;	// 0x00288621
+};
+
+class Rva00285A16
+{
+public:
+	bool rva00285A16(const Rva00285672 *a, const Rva00285672 &b);
+	bool rva0028878C(const ExperienceLevel *a, const ExperienceLevel &b);
+};
+
+bool Rva00285A16::rva00285A16(const Rva00285672 *a, const Rva00285672 &b)
+{
+	return a->rva00285672(b);
+}
+
+bool Rva00285A16::rva0028878C(const ExperienceLevel *a, const ExperienceLevel &b)
+{
+	return a->rva00288621(b);
+}
+
+// --- 0x0028667F (20B): the rowed 0x00286214 find returned by value.
+struct Rva00286214Node;
+struct Rva0028667FIterator
+{
+	Rva0028667FIterator(Rva00286214Node *node) : m_node(node) {}
+	Rva00286214Node *m_node;
+};
+
+class Rva00286214
+{
+public:
+	Rva00286214Node *rva00286214(const Rva00285672 *key);	// 0x00286214
+	Rva0028667FIterator rva0028667F(const Rva00285672 *key);
+};
+
+Rva0028667FIterator Rva00286214::rva0028667F(const Rva00285672 *key)
+{
+	return Rva0028667FIterator(rva00286214(key));
+}
+
+// --- 0x002895AF (11B): erases every marker through the rowed erase.
+class CameraMarkerVec
+{
+public:
+	CameraMarker *erase(CameraMarker *first, CameraMarker *last);	// 0x0048D042
+	void rva002895AF();
+	CameraMarker *m_start;
+	CameraMarker *m_finish;
+	CameraMarker *m_end;
+};
+
+void CameraMarkerVec::rva002895AF()
+{
+	erase(m_start, m_finish);
+}
+
+// --- Object-region leaves: 0x0028A638 (12B) +0x464 set; 0x0028A644 (12B)
+// bit 1 of +0x438; float setters 0x0028A6B6 (+0x444), 0x0028A7C7 (+0x200),
+// 0x0028BB8D (+0x1B8); 0x0028A7B7 (16B) byte +1 equals the argument;
+// 0x0028A84B (23B) bit test of +0x30; 0x0028B975 (15B) resets +0x490/+0x48C;
+// 0x0028C8CD (18B) and 0x0028F2E6 (18B) pointer-vector counts at +0x234 and
+// +0x4A4.
+class Rva0028A638
+{
+public:
+	bool rva0028A638() const;
+	bool rva0028A644() const;
+	void rva0028A6B6(float value);
+	void rva0028A7C7(float value);
+	void rva0028BB8D(float value);
+	void rva0028B975();
+	int rva0028C8CD() const;
+	int rva0028F2E6() const;
+private:
+	char m_pad000[0x1B8];
+	float m_1B8;
+	char m_pad1BC[0x200 - 0x1BC];
+	float m_200;
+	char m_pad204[0x234 - 0x204];
+	GapVoidVector m_234;
+	char m_pad240[0x438 - 0x240];
+	unsigned char m_438;
+	char m_pad439[0x444 - 0x439];
+	float m_444;
+	char m_pad448[0x464 - 0x448];
+	int m_464;
+	char m_pad468[0x48C - 0x468];
+	bool m_48C;
+	char m_pad48D[0x490 - 0x48D];
+	int m_490;
+	char m_pad494[0x4A4 - 0x494];
+	GapVoidVector m_4A4;
+};
+
+bool Rva0028A638::rva0028A638() const
+{
+	return m_464 != 0;
+}
+
+bool Rva0028A638::rva0028A644() const
+{
+	return (m_438 >> 1) & 1;
+}
+
+void Rva0028A638::rva0028A6B6(float value)
+{
+	m_444 = value;
+}
+
+void Rva0028A638::rva0028A7C7(float value)
+{
+	m_200 = value;
+}
+
+void Rva0028A638::rva0028BB8D(float value)
+{
+	m_1B8 = value;
+}
+
+void Rva0028A638::rva0028B975()
+{
+	m_490 = -1;
+	m_48C = false;
+}
+
+int Rva0028A638::rva0028C8CD() const
+{
+	return GapVoidVectorCount(&m_234);
+}
+
+int Rva0028A638::rva0028F2E6() const
+{
+	return GapVoidVectorCount(&m_4A4);
+}
+
+class Rva0028A7B7
+{
+public:
+	int rva0028A7B7(int value) const;
+	int rva0028A84B(int bit) const;
+private:
+	unsigned char m_00;
+	unsigned char m_01;
+	char m_pad02[0x30 - 2];
+	int m_30;
+};
+
+int Rva0028A7B7::rva0028A7B7(int value) const
+{
+	return m_01 == value;
+}
+
+int Rva0028A7B7::rva0028A84B(int bit) const
+{
+	return ((1 << bit) & m_30) != 0;
+}
+
+// --- 0x0028BC29 (18B): the +0x23C field's rowed flag, false without one.
+class Rva003B8ACFCmpBoolField
+{
+public:
+	bool get() const;										// 0x003B8ACF
+};
+
+class Rva0028BC29
+{
+public:
+	bool rva0028BC29() const;
+private:
+	char m_pad000[0x23C];
+	Rva003B8ACFCmpBoolField *m_field;
+};
+
+bool Rva0028BC29::rva0028BC29() const
+{
+	if (m_field == 0)
+		return false;
+	return m_field->get();
+}
+
+// --- 0x0028C59F (14B): zeroes twenty bytes of this through the CRT memset
+// thunk 0x006291AE.
+void *__cdecl ji_006291ae(void *dest, int val, unsigned int count);
+#pragma comment(linker, "/alternatename:?ji_006291ae@@YAPAXPAXHI@Z=?ji_006291ae@@YAXXZ")
+
+class Rva0028C59F
+{
+public:
+	void rva0028C59F();
+private:
+	int m_words[5];
+};
+
+void Rva0028C59F::rva0028C59F()
+{
+	ji_006291ae(this, 0, 0x14);
+}
+
+// --- 0x0028D611 (111B): unless the other object shares this one's +0x484
+// relation (against its +0x74 id) or both carry one, each module whose
+// +0x0C interface (slot 1) yields a handler passes it the three arguments,
+// stopping when this object has status 4.
+class Rva0028D611Handler
+{
+public:
+	virtual void handle(Object *other, int a, int b);
+};
+
+class Rva0028D611Interface
+{
+public:
+	virtual void s0();
+	virtual Rva0028D611Handler *getHandler();
+};
+
+void Object::rva0028D611(Object *other, int a, int b)
+{
+	if (other == 0 || m_484 == other->m_74)
+		return;
+	if (other->m_484 != 0 && m_74 != 0)
+		return;
+	for (void **module = m_modules; *module; ++module)
+	{
+		Rva0028D611Handler *handler = ((Rva0028D611Interface *)((char *)*module + 0x0C))->getHandler();
+		if (handler)
+		{
+			if (testStatus(OBJECT_STATUS_4))
+				return;
+			handler->handle(other, a, b);
+		}
+	}
+}
+
+// --- 0x00282206 (12B): pops the last 8-byte element, running its rowed
+// destructor 0x0027EA49.
+class Rva0027EA49
+{
+public:
+	~Rva0027EA49();											// 0x0027EA49
+private:
+	int m_00;
+	int m_04;
+};
+
+class Rva00282206
+{
+public:
+	void rva00282206();
+private:
+	Rva0027EA49 *m_start;
+	Rva0027EA49 *m_finish;
+};
+
+void Rva00282206::rva00282206()
+{
+	--m_finish;
+	m_finish->~Rva0027EA49();
+}
+
+// --- 0x00282794 (11B): reserves the +0x578 module-data vector;
+// 0x0028A665 (11B): the +0x330 material pass's texture for a stage;
+// 0x0028C8BD (11B): ORs a bitset into +0x284.
+class ModuleData;
+class TextureClass;
+namespace _STL
+{
+	template <class T> class allocator;
+	template <class T, class A> class vector
+	{
+	public:
+		void reserve(unsigned int n);
+	private:
+		T *m_start;
+		T *m_finish;
+		T *m_end;
+	};
+	template <int N> struct _Base_bitset
+	{
+		void _M_do_or(const _Base_bitset &other);
+		unsigned int m_words[N / 32];
+	};
+}
+
+class MaterialPassClass
+{
+public:
+	TextureClass *Peek_Texture(int stage) const;			// 0x002C7469
+};
+
+class Rva00282794
+{
+public:
+	void rva00282794(unsigned int n);
+	TextureClass *rva0028A665(int stage) const;
+	void rva0028C8BD(const _STL::_Base_bitset<32> &bits);
+private:
+	char m_pad000[0x284];
+	_STL::_Base_bitset<32> m_284;
+	char m_pad288[0x330 - 0x288];
+	MaterialPassClass m_330;
+	char m_pad331[0x578 - 0x331];
+	_STL::vector<const ModuleData *, _STL::allocator<const ModuleData *> > m_578;
+};
+
+void Rva00282794::rva00282794(unsigned int n)
+{
+	m_578.reserve(n);
+}
+
+TextureClass *Rva00282794::rva0028A665(int stage) const
+{
+	return m_330.Peek_Texture(stage);
+}
+
+void Rva00282794::rva0028C8BD(const _STL::_Base_bitset<32> &bits)
+{
+	m_284._M_do_or(bits);
 }
