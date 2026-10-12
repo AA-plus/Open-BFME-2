@@ -3,6 +3,9 @@
 // BFME2 WB150B150 names OnBttnRegisterFESL and AptOnlineLogin.cpp.
 // Native56E849..56E998 owns the guard, removes donor's eight UI toggles,
 // uses ShellExecuteW and verifies the fetch slot at3C.
+// iswgraph is the msvcr71 import, not the <wctype.h> inline.
+#define _WCTYPE_INLINE_DEFINED
+#define iswgraph iswgraph_unimported
 #include "ascii_string.h"
 #include "unicode_string.h"
 // stlport
@@ -192,6 +195,7 @@ typedef _STL::map<AsciiString,AsciiString> LoginPreferenceMap;
 extern template AsciiString &LoginPreferenceMap::operator[](const AsciiString &);
 class OptionPreferences { public:
     OptionPreferences();virtual ~OptionPreferences();
+    bool hasGotOnline();
     LoginPreferenceMap settings;AsciiString filename;
 };
 class PSPlayerAllStats { public:
@@ -320,6 +324,27 @@ class GameSpyInfoInterface { public:
 };
 extern GameSpyInfoInterface *TheGameSpyInfo;
 
+#undef iswgraph
+extern "C" __declspec(dllimport) int __cdecl iswgraph(unsigned short);
+class Rva0056EE5F { public: unsigned char rva0056EE5F(); };
+class Gen_0054EC50 { public: Gen_0054EC50() {} bool bfmeDiffers(const Gen_0054EC50 &)const; unsigned head,value; };
+class Gen_0054EC80 { public: Gen_0054EC80() {} bool bfmeDiffers(const Gen_0054EC80 &)const; unsigned head,value; };
+class Rva0056FA50 { public: Rva0056FA50() {} bool rva0056FA50(const Rva0056FA50 &)const; unsigned head,value; };
+class Rva0056FA72 { public: Rva0056FA72() {} bool rva0056FA72(const Rva0056FA72 &)const; unsigned head,value; };
+class Rva0056FCDB { public: Rva0056FCDB() {} void rva0056FCDB(short); unsigned head,value; };
+class Rva0056FAA5 { public: Rva0056FAA5() {}
+    void rva0056FD14(int); void rva0056FD2D(int); void rva0056FD46(short);
+    Rva0056FAA5 *rva0057042F(Rva0056FAA5 *);
+    unsigned head,value;
+};
+int Rva0056F84DHook(int,int);
+template<class T> struct BfmeStringData { int refs;unsigned short length,capacity;T text[1]; };
+template<class T> struct LoginApplyStringView {
+    BfmeStringData<T> *data;
+    __forceinline short shortLength()const { if(data) return (short)data->length;return 0; }
+    __forceinline T charAt(int i)const { if(data) return data->text[i];return 0; }
+};
+
 class AptOnlineLogin {
 public:
     void OnBttnRegisterFESL(const char *);
@@ -351,7 +376,7 @@ private:
     unsigned char padB4[4]; GameWindow *m_countryList;
     int m_pendingButtonState; int m_fieldMask; bool loggedIn; bool needsRefresh;
     unsigned char padC6[2]; unsigned long loginStartTime;
-    bool m_tabListRegistered; unsigned char padCD[3]; bool closeLocale;
+    bool m_tabListRegistered; bool loginEnabled,gadgetsReady,registerEnabled; bool closeLocale;
     bool responseFailed; unsigned char padD2[2]; int locale;
     AsciiString m_deleteNickname; bool accountDeleted;
 };
@@ -957,6 +982,101 @@ public:
 };
 class GameSpyPSMessageQueueInterface;
 extern GameSpyPSMessageQueueInterface *TheGameSpyPSMessageQueue;
+// BFME1 34f59164 OnlineLoginApplyGadgets0054FB10 is the semantic donor.
+// Native 5706D4..5709CC establishes all fields and encoded-word operations.
+
+unsigned bfmeHash0002BB70(unsigned,unsigned);
+unsigned bfmeHash00013412(unsigned,unsigned);
+int Rva0056F5DEHook(int,int),Rva0056F637Hook(int,int);
+int Rva0056F690Hook(int,int),Rva0056F7F4Hook(int,int);
+int Rva0056F742Hook(int,int),Rva0056F79BHook(int,int);
+inline __declspec(noinline) bool Gen_0054EC50::bfmeDiffers(const Gen_0054EC50 &o)const
+{ unsigned b=o.value,a=value;return bfmeHash0002BB70(a,b)!=0xA69B3F6A; }
+inline __declspec(noinline) bool Gen_0054EC80::bfmeDiffers(const Gen_0054EC80 &o)const
+{ unsigned b=o.value,a=value;return bfmeHash00013412(a,b)!=0x342C2BE0; }
+inline __declspec(noinline) bool Rva0056FA50::rva0056FA50(const Rva0056FA50 &o)const
+{ int b=o.value,a=value;return Rva0056F5DEHook(a,b)!=(int)0xAA37ACC2; }
+inline __declspec(noinline) bool Rva0056FA72::rva0056FA72(const Rva0056FA72 &o)const
+{ int b=o.value,a=value;return Rva0056F637Hook(a,b)!=(int)0xAA37ACC2; }
+inline __declspec(noinline) void Rva0056FCDB::rva0056FCDB(short x)
+{value=Rva0056F690Hook(x,x);}
+inline __declspec(noinline) void Rva0056FAA5::rva0056FD46(short x)
+{value=Rva0056F7F4Hook(x,x);}
+inline __declspec(noinline) void Rva0056FAA5::rva0056FD14(int x)
+{value=Rva0056F742Hook(x,x);}
+inline __declspec(noinline) void Rva0056FAA5::rva0056FD2D(int x)
+{value=Rva0056F79BHook(x,x);}
+
+bool AptOnlineLogin::rva005706D4()
+{
+    if(needsRefresh || !gadgetsReady || !email || !nickname || !password) return false;
+    bool oldLogin=loginEnabled,oldRegister=registerEnabled;
+    loginEnabled=false;
+    registerEnabled=!((Rva0056EE5F *)this)->rva0056EE5F();
+    AsciiString emailText(((Rva0056EBA1 *)this)->rva0056EB15());
+    Gen_0054EC50 length,zero;
+    ((Rva0056FCDB *)&length)->rva0056FCDB(((const LoginApplyStringView<char> *)&emailText)->shortLength());
+    zero.value=0x858A1A56;
+    if(length.bfmeDiffers(zero)) {
+        int count=0;
+        UnicodeString nicknameText=((Rva0056EA91 *)this)->rva0056EA91();
+        // index goes out of scope before the password text, which retail
+        // places in index's frame slot.
+        {
+            Gen_0054EC80 index;
+            index.value=0x342C2BE0;
+            for(;;) {
+                Rva0056FAA5 limit;
+                limit.rva0056FD14(nicknameText.getLength());
+                if(!index.bfmeDiffers(*(const Gen_0054EC80 *)&limit)) break;
+                if(iswgraph(((const LoginApplyStringView<unsigned short> *)&nicknameText)->charAt(Rva0056F84DHook(index.value,index.value)))) ++count;
+                Rva0056FAA5 discarded;
+                ((Rva0056FAA5 *)&index)->rva0057042F(&discarded);
+            }
+            ((Rva0056FAA5 *)&index)->rva0056FD2D(count);
+            Rva0056FA50 minimum;
+            minimum.value=0x88772DDE;
+            if(!((Rva0056FA50 *)&index)->rva0056FA50(minimum)) goto checked;
+        }
+        {
+            Rva0056FA50 minimum;
+            UnicodeString passwordText=((Rva0056EBD0 *)this)->rva0056EBD0();
+            Rva0056FAA5 passwordLength;
+            passwordLength.rva0056FD46(((const LoginApplyStringView<unsigned short> *)&passwordText)->shortLength());
+            minimum.value=0x88772DDE;
+            if(((Rva0056FA72 *)&passwordLength)->rva0056FA72(*(const Rva0056FA72 *)&minimum)) loginEnabled=true;
+        }
+checked:;
+    }
+    if(oldLogin!=loginEnabled) {
+        { const char *label=loginEnabled?"EnableButtonLogin":"DisableButtonLogin";
+          void *movie=owner->movie;
+          ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,label,0,0,0,0); }
+        { const char *label=loginEnabled?"EnableButtonDeleteNickname":"DisableButtonDeleteNickname";
+          void *movie=owner->movie;
+          ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,label,0,0,0,0); }
+    }
+    if(oldRegister!=registerEnabled) {
+        if(registerEnabled) {
+            OptionPreferences preferences;
+            if(preferences.hasGotOnline()) {
+                void *movie=owner->movie;
+                ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,"EnableButtonRegister",0,0,0,0);
+            } else {
+                void *movie=owner->movie;
+                ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,"GlowButtonRegister",0,0,0,0);
+            }
+        } else {
+            void *movie=owner->movie;
+            ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,"DisableButtonRegister",0,0,0,0);
+            loginEnabled=true;
+        }
+    }
+    void *movie=owner->movie;
+    ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->invoke(movie,"CallChild",1,"EnableButtonServiceTerms",0,0,0,0);
+    return loginEnabled;
+}
+
 class Rva00595D95 { public: bool rva00595D95(); };
 FirewallHelperClass *Rva00595143Get();
 void HandleBuddyResponses();void HandlePersistentStorageResponses();
@@ -1039,7 +1159,7 @@ void AptOnlineLogin::rva00571C9D()
     }
     AsciiString motd=TheGameSpyInfo->getMOTD(),config=TheGameSpyInfo->getConfig();
     TearDownGameSpy();SetUpGameSpy(motd.str(),config.str());
-    padCD[0]=false;rva005706D4();
+    loginEnabled=false;rva005706D4();
     break;
    }
    case 23: {
