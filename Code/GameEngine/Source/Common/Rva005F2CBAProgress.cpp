@@ -4,7 +4,15 @@
 // Evidence: Apt rank progress float at +0x50 flag 4 at +0x58 via rowed Fire 0x00527925 AptCall 0x005FB5E6 strings SetMemberRankProgress SetMemberRankProgressBarState _show globals 0x009FE4CC 0x007BAC1C caller 0x005F2F49.
 #include <math.h>
 #include "ascii_string.h"
-class Rva00222A8BTarget;
+#include "unicode_string.h"
+class Rva00222A8BTarget
+{
+public:
+	int rva00222B19(void *level, const char *prefix, const char *function, int argc, const char *a0, void *a1, void *a2, void *a3, void *a4);
+};
+char ** __cdecl Rva004E678BGet(char **out, bool flag);
+
+
 extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 int __cdecl Rva00527925Fire(void *target, void *level, const char *prefix, const char *function, const float *val);
@@ -57,6 +65,7 @@ void __cdecl Rva00030830FreeAllocation(void *);
 #undef free
 namespace _STL {template<class F>F rotate(F,F,F);}
 template<class T> struct IconSlotVector:public _STL::vector<T*> {
+ IconSlotVector(const _STL::allocator<T*> &a):_STL::vector<T*>(a){}
  using _STL::vector<T*>::_M_start;
  using _STL::vector<T*>::_M_finish;
  using _STL::vector<T*>::_M_end_of_storage;
@@ -145,10 +154,12 @@ protected:
 	Rva00579E47() {}
 };
 
+struct Rva0057ACEBData;
 template <class T> class AptRef : public Rva00579E47
 {
 public:
 	AptRef(const DelegateDesc *desc) : Rva00579E47(*desc) {}
+ AptRef(const Rva0057ACEBData &binding);
 	template <class B> AptRef(B binding) { ((class Rva0057ACEB *)this)->Rva0057ACEB::Rva0057ACEB((const struct Rva0057ACEBData *)&binding); }
 	AptRef(const AptRef &that) : m_ptr(that.m_ptr)
 	{
@@ -274,6 +285,20 @@ private:
 	AsciiString m_name;
 };
 
+struct Rva0057ACEBData { bool *flag; AsciiString *value; };
+template<class T> inline AptRef<T>::AptRef(const Rva0057ACEBData &binding)
+{
+ ((Rva0057ACEB *)this)->Rva0057ACEB::Rva0057ACEB(&binding);
+}
+__forceinline Rva0057ACEBData &CopyBinding(Rva0057ACEBData &out, const Rva005D4E22 &in)
+{
+ bool *flag = in.m_flag;
+ AsciiString *value = in.m_value;
+ out.value = value;
+ out.flag = flag;
+ return out;
+}
+
 // "prefix + name + text" concat nodes (layout as in System/RegistryAsciiPath.cpp).
 class Rva000B3F84Pair
 {
@@ -357,6 +382,54 @@ struct Rva005F38D8Ref
 	void *m_ptr;
 	~Rva005F38D8Ref();
 };
+// "APT:" + prefix + name + text: the text-plus-string node is the rowed
+// 0x002226E5 (System/RegistryAsciiPath.cpp); the two widening concats are
+// emitted out of line here and ICF-folded at 0x005F17C6 and 0x005D2F96
+// (pinned, these definitions are the fold proofs); the materializer is the
+// pinned 0x005F1D47 (WorldBuilder StringCompose::Concat<...>, three levels).
+struct Rva002226E5TextPlusString
+{
+	Rva002226E5TextPlusString() {}
+
+	Rva000B3F84Pair m_left;
+	AsciiStringRef m_right;
+};
+Rva002226E5TextPlusString __cdecl operator+(const char *left, const AsciiString &right); // 0x002226E5
+
+struct AptTextPlusStringPlusString : Rva002226E5TextPlusString
+{
+	AsciiStringRef m_third;
+};
+
+struct AptTextPlusStringPlusStringText : AptTextPlusStringPlusString
+{
+	operator AsciiString(); // 0x005F1D47
+
+	Rva000B3F84Pair m_text;
+};
+
+inline AptTextPlusStringPlusString operator+(const Rva002226E5TextPlusString &left, const AsciiString &right)
+{
+	AptTextPlusStringPlusString r;
+	static_cast<Rva002226E5TextPlusString &>(r) = left;
+	r.m_third.m_string = &right;
+	return r;
+}
+
+inline AptTextPlusStringPlusStringText operator+(const AptTextPlusStringPlusString &left, const char *right)
+{
+	Rva000B3F84Pair p;
+	p.init(right);
+	AptTextPlusStringPlusStringText r;
+	static_cast<AptTextPlusStringPlusString &>(r) = left;
+	r.m_text = p;
+	return r;
+}
+
+class BfmeAptWindowManager {public:void bfmeSetText(const AsciiString&,const UnicodeString&,bool);};
+class AptCommandMapAdder {public:AptCommandMapAdder();~AptCommandMapAdder();void AddCommandMap(const AsciiString&,AptRef<AptCommandMap>);
+ __forceinline void AddCommandMapDelegate(const AsciiString&n,DelegateDesc d){AddCommandMap(n,(const DelegateDesc *)&d);}private:char storage[12];};
+
 class StrategicHUD::ArmyDetailsMovieClip::Impl :public Rva0086EE20
 {
 public:
@@ -383,6 +456,8 @@ public:
 		friend class Impl;
 	};
 
+	Impl(ArmyDetailsMovieClip*,int,const AsciiString&,int,bool);
+ void OnBackButtonClicked(const char*);void OnBackButtonRollOver(const char*);void OnBackButtonRollOut(const char*);void OnIconListBackgroundClicked(const char*);
 	void ShowMemberRankProgress(float progress);
 	void UpdateIconSlotPositions();
 	void SetupScrollBar();
@@ -394,11 +469,11 @@ public:
  Rva005F2577Holder CreateMemberIconSlot(int position);
  virtual void rva005F267E(int,float);
 private:
-	char m_pad04[4];
+	ArmyDetailsMovieClip *m_owner;
 	void *m_level08;
-	Rva005F2FEFTeam *m_team0C;
-	char m_pad10[0x1C - 0x10];
-	void *m_scrollBar; // +0x1C, held through Rva005F2CBAScrollBarHolder
+	AsciiString m_name0C;
+	AptCommandMapAdder m_bindings;
+	Rva000AD6F4 m_scrollBar; // +0x1C, held through Rva005F2CBAScrollBarHolder
 	int m_20; // +0x20, cleared when the last icon slot goes
 	IconSlotVector<IconSlot> m_iconSlots; // +0x24
 	float m_iconStageWidth; // +0x30
@@ -407,21 +482,21 @@ private:
 	float m_slotWidth; // +0x3C
 	float m_slotHeight; // +0x40
 	int m_scrollRow; // +0x44, the first visible row
-	char m_pad48[0x50 - 0x48];
+	UnicodeString m_cached48; int m_rank4C;
 	float m_progress50;
-	char m_pad54[4];
+	int m_count54;
 	unsigned char m_flags58;
 };
 
 void StrategicHUD::ArmyDetailsMovieClip::Impl::ShowMemberRankProgress(float progress)
 {
 	if (progress != m_progress50) {
-		const char *team = m_team0C ? m_team0C->m_name : "";
+		const char *team = m_name0C.str();
 		Rva00527925Fire((*(Rva00222A8BTarget **)&g_bfmeAptWindowManager), m_level08, team, "SetMemberRankProgress", &progress);
 		m_progress50 = progress;
 	}
 	if (!(m_flags58 & 4)) {
-		const char *team = m_team0C ? m_team0C->m_name : "";
+		const char *team = m_name0C.str();
 		Rva005FB5E6AptCall((*(Rva00222A8BTarget **)&g_bfmeAptWindowManager), m_level08, team, "SetMemberRankProgressBarState", "_show");
 		m_flags58 |= 4;
 	}
@@ -441,17 +516,17 @@ void StrategicHUD::ArmyDetailsMovieClip::Impl::SetupScrollBar()
 		float contentHeight = rows * m_slotHeight;
 		if (contentHeight < m_iconStageHeight)
 			contentHeight = m_iconStageHeight;
-		((Rva005D4BAE *)m_scrollBar)->rva005D4BAE(m_iconStageHeight / contentHeight);
-		((Rva005D4BC1 *)m_scrollBar)->rva005D4BC1(m_slotHeight / contentHeight);
-		((Rva005D49CD *)m_scrollBar)->rva005D49CD(true);
-		((Rva005D49CD *)m_scrollBar)->rva005D49D5(contentHeight > m_iconStageHeight);
+		((Rva005D4BAE *)m_scrollBar.m_ptr)->rva005D4BAE(m_iconStageHeight / contentHeight);
+		((Rva005D4BC1 *)m_scrollBar.m_ptr)->rva005D4BC1(m_slotHeight / contentHeight);
+		((Rva005D49CD *)m_scrollBar.m_ptr)->rva005D49CD(true);
+		((Rva005D49CD *)m_scrollBar.m_ptr)->rva005D49D5(contentHeight > m_iconStageHeight);
 	}
 	else
 	{
-		((Rva005D4BAE *)m_scrollBar)->rva005D4BAE(0.0f);
-		((Rva005D4BC1 *)m_scrollBar)->rva005D4BC1(0.0f);
-		((Rva005D49CD *)m_scrollBar)->rva005D49CD(false);
-		((Rva005D49CD *)m_scrollBar)->rva005D49D5(false);
+		((Rva005D4BAE *)m_scrollBar.m_ptr)->rva005D4BAE(0.0f);
+		((Rva005D4BC1 *)m_scrollBar.m_ptr)->rva005D4BC1(0.0f);
+		((Rva005D49CD *)m_scrollBar.m_ptr)->rva005D49CD(false);
+		((Rva005D49CD *)m_scrollBar.m_ptr)->rva005D49D5(false);
 	}
 }
 
@@ -462,7 +537,7 @@ void StrategicHUD::ArmyDetailsMovieClip::Impl::UpdateIconSlotPositions()
 	int count = m_iconSlots._M_finish - m_iconSlots._M_start;
 	for (int i = 0; i < count; ++i)
 		((IconSlot *)m_iconSlots._M_start[i])->m_pos = i;
-	if (m_scrollBar)
+	if (m_scrollBar.m_ptr)
 		SetupScrollBar();
 }
 
@@ -494,7 +569,7 @@ void StrategicHUD::ArmyDetailsMovieClip::Impl::IconSlot::Dispose()
 		m_owner->m_20 = 0;
 	if (g_bfmeAptWindowManager)
 	{
-		const char *team = m_owner->m_team0C ? m_owner->m_team0C->m_name : "";
+		const char *team = m_owner->m_name0C.str();
 		Rva0052519DFire(g_bfmeAptWindowManager, m_owner->m_level08, team, "DeleteUnitIconSlot", &m_aptIndex);
 	}
 	m_owner->UpdateIconSlotPositions();
@@ -531,7 +606,7 @@ void StrategicHUD::ArmyDetailsMovieClip::Impl::rva005F2E85()
 			newY = (_STL::max)(newY - m_slotHeight * 0.2f, targetY);
 		else
 			newY = (_STL::min)(m_slotHeight * 0.2f + newY, targetY);
-		const char *team = m_team0C ? m_team0C->m_name : "";
+		const char *team = m_name0C.str();
 		Rva00527925Fire((*(Rva00222A8BTarget **)&g_bfmeAptWindowManager), m_level08, team, "SetUnitIconStageY", &newY);
 		m_iconStageY = newY;
 	}
@@ -562,10 +637,10 @@ StrategicHUD::ArmyDetailsMovieClip::Impl::IconSlot::IconSlot(Impl *owner, int ap
 	: m_owner(owner), m_aptIndex(aptIndex), m_pos(pos), m_x(0.0f), m_y(0.0f), m_visible(true)
 {
 	m_owner->m_iconSlots[m_pos] = this;
-	const char *team = m_owner->m_team0C ? m_owner->m_team0C->m_name : "";
+	const char *team = m_owner->m_name0C.str();
 	Rva0052519DFire(g_bfmeAptWindowManager, m_owner->m_level08, team, "CreateUnitIconSlot", &m_aptIndex);
 	AsciiString name;
-	team = m_owner->m_team0C ? m_owner->m_team0C->m_name : "";
+	team = m_owner->m_name0C.str();
 	name.format("_level%u.%s_OnUnitIconSlotLoaded%d", m_owner->m_level08, team, m_aptIndex);
 	// Native DIR32 names the independently rowed callback owner at5F27F8.
  AddCommandMapDelegate(name, DelegateDesc(reinterpret_cast<Rva005F2792*>(this), &Rva005F2792::rva005F27F8));
@@ -587,14 +662,14 @@ void StrategicHUD::ArmyDetailsMovieClip::Impl::Update()
 		IconSlot *slot = (IconSlot *)m_iconSlots._M_start[i];
 		if (slot->m_x != x || slot->m_y != y)
 		{
-			const char *team = m_team0C ? m_team0C->m_name : "";
+			const char *team = m_name0C.str();
 			Rva005F2A52AptCall((*(Rva00222A8BTarget **)&g_bfmeAptWindowManager), m_level08, team, "MoveUnitIconSlot", &slot->m_aptIndex, &x, &y);
 			slot->m_x = x;
 			slot->m_y = y;
 		}
 		if (slot->m_visible != visible)
 		{
-			const char *team = m_team0C ? m_team0C->m_name : "";
+			const char *team = m_name0C.str();
 			Rva00577C23AptCall((*(Rva00222A8BTarget **)&g_bfmeAptWindowManager), m_level08, team, "SetUnitIconSlotVisibility", &slot->m_aptIndex, &visible);
 			slot->m_visible = visible;
 		}
@@ -617,7 +692,7 @@ void StrategicHUD::ArmyDetailsMovieClip::Impl::rva005F267E(int,float value)
 {
  int slotsPerRow=fast_float2long_round(floor(m_iconStageWidth/m_slotWidth));
  int rows=((unsigned)(m_iconSlots._M_finish-m_iconSlots._M_start)+slotsPerRow-1)/slotsPerRow;
- float page=((Rva005D48FEFloatChaseField*)m_scrollBar)->get();
+ float page=((Rva005D48FEFloatChaseField*)m_scrollBar.m_ptr)->get();
  if(fabs(page-1.0f)>=0.0001f) {
   m_scrollRow=_STL::min(_STL::max((int)fast_float2long_round(floor(rows*value/(1.0f-page))),0),rows-1);
  }else m_scrollRow=0;
@@ -668,8 +743,8 @@ Rva005F2577Holder StrategicHUD::ArmyDetailsMovieClip::Impl::CreateMemberIconSlot
 		bool heightSet;
 		AsciiString prefix;
 		prefix.format("_level%u.", m_level08);
-		AptSingleExternHandlerAdder widthAdder(prefix + *(AsciiString *)&m_team0C + "_NewSlotWidth", 0, Rva005D4E22(&widthSet, &slotWidth));
-		AptSingleExternHandlerAdder heightAdder(prefix + *(AsciiString *)&m_team0C + "_NewSlotHeight", 0, Rva005D4E22(&heightSet, &slotHeight));
+		AptSingleExternHandlerAdder widthAdder(prefix + m_name0C + "_NewSlotWidth", 0, Rva005D4E22(&widthSet, &slotWidth));
+		AptSingleExternHandlerAdder heightAdder(prefix + m_name0C + "_NewSlotHeight", 0, Rva005D4E22(&heightSet, &slotHeight));
 		m_iconSlots.insert(m_iconSlots.begin() + position, 0);
 		try
 		{
@@ -704,4 +779,51 @@ void Rva005F2577Holder::rva005F2773(Rva005F2577Inner *p) {
   rva005F2577();m_ptr=p;
   if (p)++p->m_ref;
  }
+}
+
+int __cdecl Rva00524EF4AptCall(Rva00222A8BTarget*,void*,const char*,const char*);
+// Native 0x005F32B5..0x005F3444 reads the Apt stage dimensions.
+// The descriptor is dead before the numeric conversion: reuse its storage
+// for the width while atof parses the height. This models the measured
+// shared EBP-30 home; the union is a reconstruction, not a donor type claim.
+struct Rva005F32B5Dimensions { Rva005F32B5Dimensions(float a,float b):x(a),y(b){} float x,y; };
+static Rva005F32B5Dimensions Rva005F32B5(const AsciiString&name,unsigned level)
+{
+ union { Rva0057ACEBData data; float w; } storage; AsciiString width,height;
+ {AsciiString key;
+ bool gotWidth,gotHeight;
+ key.format("_level%u.%s_UnitIconStageWidth",level,name.str());
+ AptSingleExternHandlerAdder widthBinding(key,0,AptRef<AptExternHandler>(CopyBinding(storage.data,Rva005D4E22(&gotWidth,&width))));
+ key.format("_level%u.%s_UnitIconStageHeight",level,name.str());
+ AptSingleExternHandlerAdder heightBinding(key,0,AptRef<AptExternHandler>(CopyBinding(storage.data,Rva005D4E22(&gotHeight,&height))));
+ Rva00524EF4AptCall((Rva00222A8BTarget*)g_bfmeAptWindowManager,(void*)level,name.str(),"GetUnitIconStageDimensions");
+ }
+ storage.w=(float)atof(width.str()); return Rva005F32B5Dimensions(storage.w,(float)atof(height.str()));
+}
+
+inline __declspec(noinline) void __cdecl Rva005277D9Fire(Rva00222A8BTarget *target, void *level, const char *prefix, const char *function, bool *flagPtr)
+{
+	char *value;
+	char *val = *Rva004E678BGet((char **)&value, *flagPtr);
+	target->rva00222B19(level, prefix, function, 1, val, 0, 0, 0, 0);
+}
+
+StrategicHUD::ArmyDetailsMovieClip::Impl::Impl(ArmyDetailsMovieClip*owner,int level,const AsciiString&name,int layout,bool backVisible)
+ :m_iconSlots(_STL::allocator<IconSlot*>()),m_owner(owner),m_level08((void*)level),m_name0C(name),m_20(0),m_iconStageWidth(0),m_iconStageHeight(0),m_iconStageY(0),m_slotWidth(0),m_slotHeight(0),m_scrollRow(0),m_rank4C(-1),m_count54(-1),m_progress50(1.0f)
+{
+ m_flags58 &= 0xe0;
+ if(layout==1)Rva005FB5E6AptCall((Rva00222A8BTarget*)g_bfmeAptWindowManager,m_level08,m_name0C.str(),"SetLayout","_hero");
+ Rva005277D9Fire((Rva00222A8BTarget*)g_bfmeAptWindowManager,m_level08,m_name0C.str(),"SetBackButtonVisibility",&backVisible);
+ Rva005F32B5Dimensions dims=Rva005F32B5(m_name0C,(unsigned)m_level08);
+ m_iconStageWidth=dims.x;m_iconStageHeight=dims.y;
+ AsciiString prefix;prefix.format("_level%u.",m_level08);
+ m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnBackButtonClicked",DelegateDesc(this,&Impl::OnBackButtonClicked));
+ m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnBackButtonRollOver",DelegateDesc(this,&Impl::OnBackButtonRollOver));
+ m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnBackButtonRollOut",DelegateDesc(this,&Impl::OnBackButtonRollOut));
+ m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnIconListBackgroundClicked",DelegateDesc(this,&Impl::OnIconListBackgroundClicked));
+ m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnScrollBarLoaded",DelegateDesc(this,&Impl::OnScrollBarLoaded));
+ m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnScrollBarUnloaded",DelegateDesc(this,&Impl::OnScrollBarUnloaded));
+ g_bfmeAptWindowManager->bfmeSetText("APT:"+prefix+m_name0C+"_MemberName",UnicodeString::TheEmptyString,false);
+ g_bfmeAptWindowManager->bfmeSetText("APT:"+prefix+m_name0C+"_MemberRank",UnicodeString::TheEmptyString,false);
+ g_bfmeAptWindowManager->bfmeSetText("APT:"+prefix+m_name0C+"_CommandPoints",UnicodeString::TheEmptyString,false);
 }
