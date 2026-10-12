@@ -1,4 +1,6 @@
 // ?Rva005F45AF@@YAXPAUUnitView@@AAVUnicodeString@@@Z
+// partial score=0.993867 date=2026-10-12
+// ?Rva005F45AF@@YAXPAUUnitView@@AAVUnicodeString@@@Z
 // partial score=0.988 date=2026-10-12
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD /EHsc
 // AddUpgradeIcons: WB 1627540 names ArmyUnitIcon and this source (line189).
@@ -170,7 +172,15 @@ static void Rva005F45AF(UnitView *entry, UnicodeString &description) {
  if (!bits->_M_is_any()) return;
  UnicodeString list;
  UnicodeString separator=TheGameText->fetch("LW:ListSeparator",0);
- for (int id=0;id<1024;++id) {
+ goto build_list;
+ finish_list:  if (list.isNotEmpty()) {
+  UnicodeString header=TheGameText->fetch("LW:UnitUpgradeListHeader",0);
+  header.format(&header,list.str());
+  description+=(const unsigned short *)L"\n";
+  description+=header;
+ }
+ return;
+ build_list:  for (int id=0;id<1024;++id) {
   if (bits->test(id)) {
    const UpgradeTemplate *upgrade=TheUpgradeCenter->rva0026EEA0(id);
    if (!upgrade) continue;
@@ -180,12 +190,7 @@ static void Rva005F45AF(UnitView *entry, UnicodeString &description) {
    list+=TheGameText->fetch(label,0);
   }
  }
- if (list.isNotEmpty()) {
-  UnicodeString header=TheGameText->fetch("LW:UnitUpgradeListHeader",0);
-  header.format(&header,list.str());
-  description+=(const unsigned short *)L"\n";
-  description+=header;
- }
+goto finish_list;
 }
 UnicodeString GetArmySummaryEntryDescription(Rva0037DCA5 *,int);
 class Rva005F4710 {
