@@ -472,7 +472,7 @@ RealRange::RealRange()
 {
 }
 
-Region2D::Region2D()
+inline Region2D::Region2D()
 {
 }
 
@@ -536,6 +536,7 @@ IRegion3DAssign g_iregion3dAssign = &IRegion3D::operator=;
 void _bfmeRegion3DInlineAnchor(Region3D *r, Region2D *q, Coord3D *c)
 {
     r->Region3D::Region3D();
+    q->Region2D::Region2D();
     r->Region3D::Region3D(*r);
     c->scale(r->width() + r->height());
     r->Region3D::~Region3D();
