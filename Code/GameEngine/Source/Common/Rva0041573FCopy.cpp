@@ -21,7 +21,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 namespace _STL {
 template <> bool less<unsigned>::operator()(const unsigned &a, const unsigned &b) const;
 }
-class AsciiString { void *m_data; public: AsciiString(const AsciiString &o); ~AsciiString(); };
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 class Rva002390CB { void *a; void *b; public: __declspec(nothrow) Rva002390CB(const Rva002390CB &o); ~Rva002390CB(); };
 struct BfmeStringRecord002CF550 {
 	~BfmeStringRecord002CF550();

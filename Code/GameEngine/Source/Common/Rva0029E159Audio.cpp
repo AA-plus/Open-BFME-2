@@ -15,30 +15,8 @@ template <typename T> struct BfmeStringData
 	T text[1];
 };
 
-template <typename T> class StringBase
-{
-	friend class AsciiString;
-	StringBase(const StringBase<T> &that);
-	void releaseBuffer();
-public:
-	void set(const StringBase<T> &that);	// rowed 0x000366F0
-	StringBase() : m_data(0) {}
-	~StringBase() { releaseBuffer(); }
-	bool isEmpty() const;
-private:
-	BfmeStringData<T> *m_data;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-class AsciiString : public StringBase<char>
-{
-public:
-	AsciiString() {}
-	AsciiString(const AsciiString &that) : StringBase<char>(that) {}
-	~AsciiString() {}
-	// Inline, as retail expands it: StringBase<char>::set (0x000366F0) is called directly, not the
-	// out-of-line copy at 0x00001733 the ledger rows ??4AsciiString on (link census, 2026-10-06).
-	AsciiString &operator=(const AsciiString &other) { set(other); return *this; }
-};
 
 // The descriptor is Shadow::ShadowTypeInfo (rowed ctor 0x00079514 and dtor
 // 0x000793FA); the type set below (0x20) is its +8 shadow type.

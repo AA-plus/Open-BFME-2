@@ -7,7 +7,7 @@
 // vector-find idiom and flags as Rva002BA8F1Lookups.cpp.
 #include <vector>
 
-class AsciiString { public: int compare(const AsciiString &) const; private: void *data; };
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct Rva002E1948Entry { char m_0[0x1c]; AsciiString m_1c; };
 class Rva002E1948Lookup {
 public:

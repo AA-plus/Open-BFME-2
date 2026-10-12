@@ -14,23 +14,7 @@
 
 class AsciiString;
 
-template <typename T> class StringBase
-{
-public:
-	~StringBase();
-private:
-	StringBase(const StringBase &other);
-	T *m_data;
-	friend class AsciiString;
-};
-class AsciiString
-{
-public:
-	AsciiString(const AsciiString &o) : m_data(o.m_data) {}
-	~AsciiString();
-private:
-	StringBase<char> m_data;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 enum ScienceType { SCIENCE_NONE = 0 };
 

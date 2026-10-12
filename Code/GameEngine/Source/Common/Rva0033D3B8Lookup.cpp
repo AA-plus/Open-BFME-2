@@ -11,11 +11,7 @@
 // is the local non-inline declaration so retail's direct 0x00001E2F call
 // shape is preserved (the shared header inlines extra checks).
 
-class AsciiString
-{
-public:
-	bool isEmpty() const;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 struct MapNode
 {

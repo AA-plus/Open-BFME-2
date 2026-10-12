@@ -100,13 +100,7 @@ public:
 // `p ? p + 8 : ""` at 0x000F3DAA and 0x000F3DCA.
 // class-gate: allow AsciiString this view is deliberately the minimum that fixes the layout retail inlines str() against; the shared header's many inline members are unused by all five TeamFactory bodies, and the donor places them byte-identically with this one-pointer view rather than the shared header's
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/AsciiString.h
-class AsciiString
-{
-public:
-	const char *str(void) const { return m_data ? ((const char *)m_data + 8) : ""; }
-private:
-	void *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 enum NameKeyType { NAMEKEY_INVALID = 0 };
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/NameKeyGenerator.h

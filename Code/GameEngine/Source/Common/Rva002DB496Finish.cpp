@@ -12,32 +12,8 @@
 // 45B (frame gone); marking neither leaves the 72B state init.
 // class-gate: allow AsciiString TU-local private-derived view is required because the frame shape depends on the canary compare being declared throw() and the AsciiString dtor inline-forwarding a plain releaseBuffer; the shared header's non-throw declarations reproduce neither.
 
-template <typename T>
-class StringBase
-{
-    friend class AsciiString;
-    friend class UnicodeString;
-public:
-    int compare(const StringBase<T> &other) const throw();
-private:
-    void releaseBuffer();
-    struct Header
-    {
-        int ref_count;
-        unsigned short length;
-        unsigned short capacity;
-        T data[1];
-    };
-    Header *m_data;
-};
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-class AsciiString : public StringBase<char>
-{
-public:
-    AsciiString() {}
-    AsciiString(const AsciiString &other);
-    __forceinline ~AsciiString() { releaseBuffer(); }
-};
 
 struct ListNode
 {
