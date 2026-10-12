@@ -14,6 +14,9 @@ struct FieldParse
 	int m_offset;
 };
 
+// Both retail parse procs reference the existing empty table at VA 0x00C6BB18.
+extern const int g_emptyFieldParseTable[4];
+
 class MultiIniFieldParse
 {
 public:
@@ -36,6 +39,7 @@ class EvacuateGarrisonSpecialPowerModuleData : public SpecialAbilityUpdateModule
 public:
 	EvacuateGarrisonSpecialPowerModuleData();
 	virtual ~EvacuateGarrisonSpecialPowerModuleData();
+	static void buildFieldParse(MultiIniFieldParse &p);
 };
 
 class UnleashSpecialPowerModuleData : public SpecialAbilityUpdateModuleData
@@ -54,12 +58,19 @@ EvacuateGarrisonSpecialPowerModuleData::~EvacuateGarrisonSpecialPowerModuleData(
 {
 }
 
+// Target registration: factory 0x002531B0 passes this proc at VA 0x008CDBE1
+// for EvacuateGarrisonSpecialPower; the body extends the shared base parser
+// with an empty table and no member offsets.
+// ?buildFieldParse@EvacuateGarrisonSpecialPowerModuleData@@SAXAAVMultiIniFieldParse@@@Z @0x004CDBE1
+void EvacuateGarrisonSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &p)
+{
+	SpecialAbilityUpdateModuleData::buildFieldParse(p);
+	p.add(reinterpret_cast<const FieldParse *>(g_emptyFieldParseTable), 0);
+}
+
 // ?buildFieldParse@UnleashSpecialPowerModuleData@@SAXAAVMultiIniFieldParse@@@Z @0x004CDFEB
 void UnleashSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &p)
 {
 	SpecialAbilityUpdateModuleData::buildFieldParse(p);
-	static const FieldParse dataFieldParse[] = {
-		{ 0, 0, 0, 0 }
-	};
-	p.add(dataFieldParse, 0);
+	p.add(reinterpret_cast<const FieldParse *>(g_emptyFieldParseTable), 0);
 }

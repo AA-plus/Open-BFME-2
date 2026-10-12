@@ -250,37 +250,6 @@ bool Rva004CBBF4::rva004CBBF4(int *out) const
 	return m_1DC;
 }
 
-// --- 0x004CDBE1 (27B): EvacuateGarrisonSpecialPowerModuleData::buildFieldParse
-// (ModuleFactory registers this proc under that module): the rowed
-// SpecialAbilityUpdateModuleData table plus the empty table.
-struct FieldParse;
-
-class MultiIniFieldParse
-{
-public:
-	void add(const FieldParse *table, unsigned offset);		// 0x0002BC6E
-};
-
-extern const int g_emptyFieldParseTable[];
-
-class SpecialAbilityUpdateModuleData
-{
-public:
-	static void buildFieldParse(MultiIniFieldParse &p);		// 0x0004ED95
-};
-
-class EvacuateGarrisonSpecialPowerModuleData : public SpecialAbilityUpdateModuleData
-{
-public:
-	static void buildFieldParse(MultiIniFieldParse &p);
-};
-
-void EvacuateGarrisonSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &p)
-{
-	SpecialAbilityUpdateModuleData::buildFieldParse(p);
-	p.add((const FieldParse *)g_emptyFieldParseTable, 0);
-}
-
 // --- 0x004CEF4B (13B): the GameSpy stats challenge of the +0x101C game.
 extern "C" char *GetChallenge(void *game);
 
