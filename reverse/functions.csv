@@ -86273,3 +86273,6 @@ __ehhandler$?Rva006ECC20LoadVariables@@YAPAVAptValue@@PAV1@H@Z,,0x007A9868,10,Co
 ?Rva006CD990LevelValue@@YAHH@Z,,0x006CD990,39,Code/Libraries/Source/Apt/Apt.cpp,matched,Ghidra-unlisted gap body; _AptGetAnimationAtLevel then rowed rva006CD650 instance +18 when CIH +4C set else -1; address name
 ?Rva006CD9C0LevelMovieValue@@YAHH@Z,,0x006CD9C0,34,Code/Libraries/Source/Apt/Apt.cpp,matched,Ghidra-unlisted gap body; _AptGetAnimationAtLevel then instance +0C movie +08 else 0; address name
 ?Rva006CD9F0LevelFlag@@YAHH@Z,,0x006CD9F0,66,Code/Libraries/Source/Apt/Apt.cpp,matched,Ghidra-unlisted gap body; defined movie-clip level (type 0x12 not undefined) instance +1C bit 25 else -1; address name
+?Rva006CD0B0ResetPoolCount@@YAXXZ,,0x006CD0B0,69,Code/Libraries/Source/Apt/Apt.cpp,matched,Ghidra-unlisted gap body; Apt.cpp 0x65A bInitialized assert then clears E176D0 pool +3C count unless E176D4 set; address name
+?Rva006CD350ApplyChild@@YAXPAX@Z,,0x006CD350,59,Code/Libraries/Source/Apt/Apt.cpp,matched,Ghidra-unlisted gap body; Apt.cpp 0x7C0 pMCInfo assert then rowed rva006F7AF0 on the E176D0 pool +30 list; address name
+?Rva006CD3A0Clear@@YAXPAURva006CD3A0Record@@@Z,,0x006CD3A0,30,Code/Libraries/Source/Apt/Apt.cpp,matched,Ghidra-unlisted gap body; zeroes an eight-dword record in retail store order; address name

@@ -624,3 +624,28 @@ void Rva006CDF60() {
 Rva006CD6C0SizedDeleting::~Rva006CD6C0SizedDeleting() {
  ((Rva006DAFA0Walk *)this)->rva006DAFA0();
 }
+
+#define GAPCHECK(e,s,l) do{if(!(e)){g_bfmeAptAssertAtE17734(s,"C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\Apt.cpp",l);if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();}}while(0)
+// Native6CD0B0..6CD0F4: Ghidra-unlisted body after the numeric parser. Asserts
+// bInitialized (Apt.cpp 0x65A, retail text) and, unless the E176D4 flag is set,
+// clears the +3C count of the E176D0 animation pool. Address name.
+void Rva006CD0B0ResetPoolCount() {
+ GAPCHECK(g_bfmeAptInitAtE17700,"bInitialized",0x65A);
+ if(!g_bfmeAptFlagAtE176D4 && g_bfmeAptPtrAtE176D0)
+  g_bfmeAptPtrAtE176D0->count=0;
+}
+
+// Native6CD350..6CD38A: asserts pMCInfo (Apt.cpp 0x7C0) and applies it to the
+// E176D0 pool's +30 child list through the rowed rva006F7AF0. Address name.
+class Rva006F7AC0List {public:void rva006F7AF0(int);};
+void Rva006CD350ApplyChild(void *pMCInfo) {
+ GAPCHECK(pMCInfo,"pMCInfo",0x7C0);
+ ((Rva006F7AC0List *)g_bfmeAptPtrAtE176D0->nodes)->rva006F7AF0((int)pMCInfo);
+}
+
+// Native6CD3A0..6CD3BD zeroes an eight-dword record in retail's store order
+// (+0,+4,+10,+14,+8,+C,+18,+1C). Record meaning unresolved: address names.
+struct Rva006CD3A0Record {int a0,a4,a8,aC,a10,a14,a18,a1C;};
+void Rva006CD3A0Clear(Rva006CD3A0Record *r) {
+ r->a0=0;r->a4=0;r->a10=0;r->a14=0;r->a8=0;r->aC=0;r->a18=0;r->a1C=0;
+}
