@@ -43,10 +43,13 @@ public:
 
 int rva00395C80(Object *obj);								// 0x00395C80
 
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
+
 class Eva
 {
 public:
-	void rva001DE2DA(int event, const Coord3D *pos, int arg);	// 0x001DE2DA
+	bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);	// 0x001DE2DA
 };
 
 extern Eva *TheEva;
@@ -118,7 +121,7 @@ void Rva00397BD9::rva00397BD9(int, int, int state)
 				{
 					Module *module = target->findModule(CastleBehavior::rva0003955DA());
 					if (module && ((Rva003974CE *)module)->apply((int (*)(Object *, int))rva00395C80, 0) == 1)
-						TheEva->rva001DE2DA(5, (const Coord3D *)m_object->m_position, 0);
+						TheEva->reportEvaEvent(static_cast<EvaEventID>(5), (const Coord3D *)m_object->m_position, 0);
 				}
 			}
 		}
