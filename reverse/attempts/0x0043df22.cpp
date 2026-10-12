@@ -1,51 +1,46 @@
-// ?rva0043DF22@Rva0043DF22@@QAEHXZ
-// partial score=0.9 date=2026-10-08
-// cl: /DNDEBUG /MD /EHsc
-// ?rva0043DF22@Rva0043DF22@@QAEHXZ 0x0043DF22 79B. Counts the first eight game
-// slots of the info object at +0x5C that are human, not observers, and have a
-// nonzero flag byte at +0x08. Returns 0 when the info object is missing.
-class GameSlot
+// ?rva0043DF22@AptMpGameSetup@@QAEXXZ
+// partial score=0.98 date=2026-10-13
+// Retail 0x0043DC40, 53 bytes: picks the games list sort column (the same
+// column again toggling to the next value). The next value is computed
+// first so the argument load precedes the column load, as retail does.
+void AptMpGameSetup::rva0043DC40(int column)
 {
-public:
-	bool isHuman() const;
-	bool isObserver() const;
-	unsigned char m_pad00[8];
-	unsigned char m8; // +0x08
-};
+	int next = column + 1;
+	int old = m_sortColumn;
+	if (old == column)
+		m_sortColumn = next;
+	else
+	{
+		m_sortColumn = column;
+		if (old != next)
+			m_previousSortColumn = old;
+	}
+	m_2bc = true;
+}
 
-class GameInfo
+// Retail 0x0043DF22, 79 bytes: the number of accepted seated humans (human
+// non-observer slots whose accepted flag is set). The accepted flag is
+// compared against the observer result register rather than immediate zero.
+unsigned int AptMpGameSetup::rva0043DF22()
 {
-public:
-	GameSlot *getSlot(int index);
-};
-
-class Rva0043DA65
-{
-public:
-	int rva0043DA65();
-};
-
-class Rva0043DF22
-{
-public:
-	int rva0043DF22();
-private:
-	unsigned char m_pad00[0x5C];
-	Rva0043DA65 *m_info; // +0x5C
-};
-
-int Rva0043DF22::rva0043DF22()
-{
-	int count = 0;
-	int i = 0;
-	GameInfo *info = reinterpret_cast<GameInfo *>(m_info->rva0043DA65());
-	if (!info)
+	unsigned int i = 0;
+	GameInfo *game = (GameInfo *)m_game->rva0043DA65();
+	if (!game)
 		return 0;
+	unsigned int count = 0;
 	for (; i < 8; ++i)
 	{
-		GameSlot *slot = info->getSlot(i);
-		if (slot && slot->isHuman() && !slot->isObserver() && slot->m8 != 0)
-			++count;
+		GameSlot *slot = game->getSlot(i);
+		if (!slot)
+			continue;
+		if (!slot->isHuman())
+			continue;
+		bool observer = slot->isObserver();
+		if (observer)
+			continue;
+		if (slot->m_accepted == observer)
+			continue;
+		++count;
 	}
 	return count;
 }

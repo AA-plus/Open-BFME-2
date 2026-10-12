@@ -1,42 +1,21 @@
 // ?rva005DE926@Rva005DE5B5@@QAEXXZ
-// partial score=0.9 date=2026-10-09
-// ?rva005DE926@Rva005DE5B5@@QAEXXZ
-// partial score=0.9 date=2026-10-06
-// ?rva005DE926@Rva005DE5B5@@QAEXXZ
-// partial score=0.9 date=2026-10-04
-// ?rva005DE926@Rva005DE5B5@@QAEXXZ
-// cl: /Ireference/shims/stlport_stringrecord_5ddd40 /Ireference/shims/bfme2_ascii /O1 /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
-// stlport
-// Rva005DE5B5::rva005DE926, retail 0x005DE926, 44B. Erases every element of the
-// vector<BfmeStringRecord005DDD40> at +0x04, resizes it back to the count it
-// held (destroy-range call then the resize helper at 0x005DE84E) and clears the
-// byte at +0x14. Callers are the range-apply helpers at 0x005DE96B/0x005DD6D5,
-// which pass this address as a per-element function pointer.
-//
-// Two things the previous banked body got wrong, both load-bearing:
-//  - It was pseudo-code, not compilable C++: `struct Rva005DE5B5;` was left
-//    forward-declared, so m_04/m_14 had no declaration and `m_04.erase` had no
-//    class type. The 44B it claimed was never emitted by any compiler.
-//  - Its struct put the flag byte at +0x10; retail stores it at +0x14
-//    (mov BYTE PTR [ebx+0x14],0). The 4 pad bytes at +0x10 restore that.
-//
-// The `// stlport` marker is required, not decorative: source_needs_stlport()
-// keys the whole vendor/stlport include path off that line, and without it
-// <vector> resolves to the MSVC STL where _STL does not exist.
-#include "unicode_string.h"
-#include <vector>
-struct BfmeStringRecord005DDD40 {
-	UnicodeString text;
-	unsigned int word;
-	BfmeStringRecord005DDD40();
-	BfmeStringRecord005DDD40(const BfmeStringRecord005DDD40 &);
-	BfmeStringRecord005DDD40 &operator=(const BfmeStringRecord005DDD40 &);
+// partial score=0.97 date=2026-10-13
+namespace _STL
+{
+template <> class vector<BfmeStringRecord005DDD40, allocator<BfmeStringRecord005DDD40> >
+{
+public:
+	typedef BfmeStringRecord005DDD40 *iterator;
+	iterator begin() { return m_start; }
+	iterator end() { return m_finish; }
+	unsigned int size() const { return (unsigned int)(m_finish - m_start); }
+	iterator erase(iterator first, iterator last);
+private:
+	iterator m_start;
+	iterator m_finish;
+	iterator m_endOfStorage;
 };
-namespace _STL {
-template <> void _Construct<BfmeStringRecord005DDD40, BfmeStringRecord005DDD40>(BfmeStringRecord005DDD40 *, const BfmeStringRecord005DDD40 &);
 }
-
-class Rva005DE7D1Vector { public: void resize(unsigned); };
 
 class Rva005DE5B5
 {
@@ -49,12 +28,15 @@ private:
 	unsigned char m_14;
 };
 
+// Retail 0x005DE926, 44 bytes: erases every element of the +0x04 vector,
+// resizes it back to the count it held, and clears the +0x14 flag. The
+// count is the inline pointer-difference size held across the erase call;
+// the vector address stays put while the count is computed, as retail does.
 void Rva005DE5B5::rva005DE926()
 {
-	BfmeStringRecord005DDD40 *first = m_04.begin();
-	BfmeStringRecord005DDD40 *last = m_04.end();
-	unsigned int count = m_04.size();
-	m_04.erase(m_04.begin(), m_04.end());
-	reinterpret_cast<Rva005DE7D1Vector *>(&m_04)->resize(count);
+	_STL::vector<BfmeStringRecord005DDD40, _STL::allocator<BfmeStringRecord005DDD40> > *vec = &m_04;
+	unsigned int count = vec->size();
+	vec->erase(vec->begin(), vec->end());
+	((Rva005DE7D1Vector *)vec)->resize(count);
 	m_14 = 0;
 }

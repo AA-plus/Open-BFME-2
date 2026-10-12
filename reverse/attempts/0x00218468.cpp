@@ -1,4 +1,6 @@
 // ?rva00218468@FontLibrary@@QAEXPAVAsciiString@@PAMPA_N@Z
+// partial score=0.95 date=2026-10-13
+// ?rva00218468@FontLibrary@@QAEXPAVAsciiString@@PAMPA_N@Z
 // partial score=0.97 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
 // stlport
@@ -130,10 +132,17 @@ void FontLibrary::rva00218468(AsciiString *name, float *size, bool *style)
 	if ((((char *)last - (char *)first) & ~0x0f) == 0)
 		return;
 
+	float *sizePtr;
+	// Retail reuses the dead size-argument slot [ebp+0xc] for the converted
+	// key: spilling the pointer first, then converting through the spill and
+	// storing the key over the argument word forces that exact coloring.
+	sizePtr = size;
+	*(int *)&size = (int)*sizePtr;
+
 	Gen00473A40Elem *previous;
 	int flags;
 	Gen00473A40Elem *next =
-		Gen00473A40(first, last, (int)*size, Gen00473A40Less(), 0);
+		Gen00473A40(first, last, *(const int *)&size, Gen00473A40Less(), 0);
 
 	if (next != last && next != first)
 	{
@@ -142,8 +151,8 @@ void FontLibrary::rva00218468(AsciiString *name, float *size, bool *style)
 			*name = previous->m_name;
 
 		flags = previous->m_flags;
-		*size = (float)previous->m_outputSize +
-			(*size - (float)previous->m_inputSize) *
+		*sizePtr = (float)previous->m_outputSize +
+			(*sizePtr - (float)previous->m_inputSize) *
 				((float)next->m_outputSize -
 					(float)previous->m_outputSize) /
 				((float)next->m_inputSize -
@@ -151,15 +160,16 @@ void FontLibrary::rva00218468(AsciiString *name, float *size, bool *style)
 	}
 	else
 	{
-		previous = first;
 		if (next == last)
 			previous = last - 1;
+		else
+			previous = first;
 
 		if (previous->m_name.getLength() != 0)
 			((StringBase<char> *)name)
 				->set(*(const StringBase<char> *)&previous->m_name);
 		flags = previous->m_flags;
-		*size = (float)previous->m_outputSize;
+		*sizePtr = (float)previous->m_outputSize;
 	}
 
 	if (flags & 1)
