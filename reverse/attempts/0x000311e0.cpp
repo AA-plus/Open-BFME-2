@@ -1,5 +1,7 @@
 // ?rva000311E0@GeneralAllocator@Allocator@EA@@QAEIPBXIPADPAGI@Z
-// partial score=0.93 date=2026-10-12
+// partial score=0.94 date=2026-10-12
+// ?rva000311E0@GeneralAllocator@Allocator@EA@@QAEIPBXIPADPAGI@Z
+// partial score=0.94 date=2026-10-12 MP3: direct-index loop (drop ap/wp pointers) + split-tails: 498B (+1B), first-diff +0x10 (je cascade). Left: grouped saves (ebx,ebp,esi upfront) vs split; w_hold/a_hold homed not regged.
 // ?rva000311E0@GeneralAllocator@Allocator@EA@@QAEIPBXIPADPAGI@Z
 // partial score=0.86 date=2026-10-10
 // ?rva000311E0@GeneralAllocator@Allocator@EA@@QAEIPBXIPADPAGI@Z
@@ -722,8 +724,6 @@ unsigned int GeneralAllocator::rva000311E0(const void *src_, unsigned int count,
 		w_hold[limit * 3 - 1] = '\t';
 	if (0 == limit)
 		goto fardone;
-	unsigned short *wp = w_hold;
-	char *ap = a_hold;
 	unsigned int i = 0;
 	while (i < limit)
 	{
@@ -732,8 +732,8 @@ unsigned int GeneralAllocator::rva000311E0(const void *src_, unsigned int count,
 		char lo = hex[c & 0xF];
 		if (0 != a_hold)
 		{
-			ap[0] = hi;
-			ap[1] = lo;
+			a_hold[i * 3 + 0] = hi;
+			a_hold[i * 3 + 1] = lo;
 			const char d = (char)src[i];
 			if (0x20 > d || d >= 0x7F || d == '"' || d == '\'')
 				a_hold[limit * 3 + i] = '.';
@@ -742,8 +742,8 @@ unsigned int GeneralAllocator::rva000311E0(const void *src_, unsigned int count,
 		}
 		if (w_hold != 0)
 		{
-			wp[0] = (unsigned short)hi;
-			wp[1] = (unsigned short)lo;
+			w_hold[i * 3 + 0] = (unsigned short)hi;
+			w_hold[i * 3 + 1] = (unsigned short)lo;
 			const char d = (char)src[i];
 			if (d < 0x20 || d == '"' || d == '\'')
 				w_hold[limit * 3 + i] = '.';
@@ -751,8 +751,6 @@ unsigned int GeneralAllocator::rva000311E0(const void *src_, unsigned int count,
 				w_hold[limit * 3 + i] = d;
 		}
 		i++;
-		ap = ap + (3);
-		wp = wp + (3);
 	}
 fardone:
 	return 0;
