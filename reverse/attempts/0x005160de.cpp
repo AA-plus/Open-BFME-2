@@ -1,4 +1,6 @@
 // ?rva005160DE@AptMainMenu@@QAEXPBD@Z
+// partial score=0.99 date=2026-10-12
+// ?rva005160DE@AptMainMenu@@QAEXPBD@Z
 // partial score=0.99 date=2026-10-10
 // ?rva005160DE@AptMainMenu@@QAEXPBD@Z
 // partial score=0.99 date=2026-10-10
