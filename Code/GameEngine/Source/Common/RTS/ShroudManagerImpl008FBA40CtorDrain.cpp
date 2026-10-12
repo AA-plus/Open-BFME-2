@@ -62,7 +62,6 @@ public:
 	void makeDirty();
 
 private:
-	void updateCellsTouched();
 	friend class ShroudManagerImpl;
 };
 
@@ -98,6 +97,10 @@ private:
 	friend class ShroudManagerImpl008FBA40Element;
 };
 
+// Method-only view: the independently named target provider is73AD90.
+// No ShroudManager or nested Data object layout is asserted here.
+class ShroudManager { public: class Data { public: void UpdateCellsTouched(); }; };
+
 ShroudManagerImpl::ShroudManagerImpl()
 	: mode(2),
 	  defaultCellSize(1.0f),
@@ -124,7 +127,7 @@ inline void ShroudManagerImpl::drainPending()
 	{
 		PartitionData *partitionData = pendingPartitionData;
 		partitionData->unlink();
-		partitionData->updateCellsTouched();
+		((ShroudManager::Data *)partitionData)->UpdateCellsTouched();
 	}
 
 	processPending(true);

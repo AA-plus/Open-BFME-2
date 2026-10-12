@@ -159,7 +159,6 @@ public:
 	void makeDirty();
 
 private:
-	void updateCellsTouched();
 	friend class ShroudManagerImpl;
 
 };
@@ -271,6 +270,16 @@ private:
 	friend class ShroudManager;
 	friend ShroudManagerImpl008FBA40ElementLayout *shroudElementAt(
 		const ShroudManagerImpl *manager, Int x, Int y);
+};
+
+class ShroudManager : public ShroudManagerImpl
+{
+public:
+	// Method-only view of the independently recovered73AD90 provider.
+	// No nested Data size, inheritance, or field layout is assumed here.
+	class Data { public: void UpdateCellsTouched(); };
+	void undoRevealMapForPlayerPermanently(int playerIndex);
+	void updatePlayerCells450_Rva0073D860(int playerIndex);
 };
 
 struct ShroudManagerImpl008FBA40ElementLayout
@@ -431,7 +440,8 @@ inline void ShroudManagerImpl::drainPending()
 	{
 		PartitionData *partitionData = pendingPartitionData;
 		partitionData->unlink();
-		partitionData->updateCellsTouched();
+		// Native _ReallocCells calls the73AD90 ShroudManager::Data owner.
+		((ShroudManager::Data *)partitionData)->UpdateCellsTouched();
 	}
 
 	processPending(true);
@@ -685,12 +695,7 @@ __declspec(noinline) int ShroudManagerImpl008FBA40Element::getPlayerStatus_Rva00
 // first and runs the 008FC3B0 (reveal-decrement) variant. ShroudManager
 // derives from the Impl (base at +0), so the member reads and the
 // processPending call need no this adjustment.
-class ShroudManager : public ShroudManagerImpl
-{
-public:
-	void undoRevealMapForPlayerPermanently(int playerIndex);
-	void updatePlayerCells450_Rva0073D860(int playerIndex);
-};
+
 
 // ?undoRevealMapForPlayerPermanently@ShroudManager@@QAEXH@Z
 void ShroudManager::undoRevealMapForPlayerPermanently(int playerIndex)
