@@ -1,5 +1,3 @@
-// ??0Rva0031A257@@QAE@XZ
-// partial score=1.0 date=2026-10-11
 // cl: /O1 /MD /EHsc /arch:SSE /G7 /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /Ireference/shims/bfmealloc /ICode/Libraries/Include/Lib
 // stlport
 // Target: 0031942B..00319517; WB names UseArmySummary, assertions 691..705.
@@ -41,7 +39,7 @@ void **vector<void*>::end()
 { return _M_finish; }
 }
 class ThingTemplate { public: int rva0033B479() const; };
-class Rva00319CED { public: void *rva004E23C1(); char pad00[0x4C]; int source4C; };
+class Rva00319CED { public: bool rva00319CED(); void *rva004E23C1(); char pad00[0x4C]; int source4C; };
 struct Rva003F40EFRecord {
     Rva003F40EFRecord &operator=(const Rva003F40EFRecord &);
     char bytes[104];
@@ -87,7 +85,7 @@ struct ArmySummaryView {
     int size() const { return entries40.size(); }
 };
 class Rva00318C32Owner { public: int rva00318C32(); };
-class Rva003193EC { public: void rva003198B8(Rva003193EC *); };
+class Rva003193EC { public: void rva003198B8(Rva003193EC *); void rva003190E7(bool); };
 class ArmySummaryEntry { public: void CancelUpgrades(); };
 class Rva004F6093Holder { public: ArmySummaryEntry *entry; };
 struct TargetRef00217D4C { void *vtable; int references; };
@@ -180,9 +178,24 @@ extern "C" void _ReadWriteBarrier();
 struct CtorArmyMinusOneWord { int word; __forceinline CtorArmyMinusOneWord(int v):word(v){_ReadWriteBarrier();} };
 struct CtorArmyPair {float x,y; __forceinline CtorArmyPair():x(0),y(0){} };
 struct CtorArmyLastPair {float x,y; __forceinline CtorArmyLastPair():x(0),y(0){_ReadWriteBarrier();} };
+
+class Rva004E3184 {public: char pad00[4]; AsciiString a04,a08; char pad0C[12]; AsciiString a18; char pad1C[12]; AsciiString a28; char pad2C[24]; float f44; char pad48[8]; AsciiString a50; bool b54;};
+struct Rva002B6A04Player {char pad00[20];int id14;};
+class LivingWorldArmyLine {public:void rva00539141();};
+class Rva0031934BOwner {public:void rva0031934B(const AsciiString*);};
+struct Rva00318E8COut {float f;int i;};
+class Rva00318E8C {public:Rva00318E8COut *rva00318E8C(Rva00318E8COut*);};
+struct Rva003F0F13Elem {float x,y;};
+class LivingWorldRegion {public:void GetGarrisonArmyPlacementSpot(Rva003F0F13Elem*);};
+class Rva002104B6 {public:void*rva002104B6(void*);};
+class Rva00319AA0 {public:void rva00319AA0(const Coord2D*);};
+class Rva00318F64 {public:void rva00318F64();};
+
+struct CtorArmyScalar {float x;__forceinline CtorArmyScalar(float v):x(v){} };
 class Rva0031A257:public Snapshot,public Rva00330757Member,public CtorRegionTurnObserver {
 public:
  Rva0031A257();
+ Rva0031A257(int,Rva004E3184*,Rva002B6A04Player*);
  virtual ~Rva0031A257();
  virtual void LoadPostProcess();
  virtual const char *GetSnapshotName();
@@ -195,7 +208,7 @@ public:
  CtorArmyPair pos34,pos3C,pos44; CtorArmyLastPair pos4C;
  int owner54;
  bool b58,b59;
- float f5C;
+ CtorArmyScalar f5C;
  int v60;
  bool b64,b65;
  UnicodeString u68,u6C;
@@ -210,6 +223,34 @@ Rva0031A257::Rva0031A257(): v2C(-1),v30(0),owner54(-1),b58(true),b59(false),f5C(
  summary78.reset(new ArmySummary);
  ((Rva005A0B4CList*)((char*)TheLivingWorldLogic+0x1C))->append((Rva002BA8F1Listener*)(CtorRegionTurnObserver*)this);
 }
+
+Rva0031A257::Rva0031A257(int owner,Rva004E3184 *desc,Rva002B6A04Player *player):a18(desc->a50),a1C(desc->a18),a24(desc->a04),a28(desc->a08),v2C(-1),v30(0),owner54(-1),b58(true),b59(false),f5C(desc->f44),v60(1),b64(false),b65(false),v70(-1),b74(desc->b54),b75(false),v88(0),v8C(0) {
+ _ReadWriteBarrier();
+ owner20=owner;
+ if(player)owner54=player->id14;
+ if(!b74)((LivingWorldArmyLine*)&audio90)->rva00539141();
+ summary78.reset(new ArmySummary);
+ if(((Rva00319CED*)desc)->rva00319CED())((LivingWorldArmy*)this)->UseArmySummary((Rva00319CED*)desc);
+ ((ArmySummaryView*)summary78.word)->owner1C=owner;
+ ((AsciiString*)((char*)summary78.word+0x20))->set(a28);
+ ((Rva0031934BOwner*)this)->rva0031934B(&desc->a04);
+ ((Rva003193EC*)this)->rva003190E7(false);
+ if(desc->a28.isEmpty()) {
+  Rva00318E8COut pos;
+  ((Rva00319AA0*)this)->rva00319AA0((Coord2D*)((Rva00318E8C*)desc)->rva00318E8C(&pos));
+ } else {
+  Rva002104B6 *store=(Rva002104B6*)*(void**)((char*)TheLivingWorldLogic+0xB0);
+  _ReadWriteBarrier();
+  LivingWorldRegion *region=(LivingWorldRegion*)store->rva002104B6(&desc->a28);
+  Rva00318E8COut pos;
+  ((Rva00318E8C*)desc)->rva00318E8C(&pos);
+  if(region)region->GetGarrisonArmyPlacementSpot((Rva003F0F13Elem*)&pos);
+  ((Rva00319AA0*)this)->rva00319AA0((Coord2D*)&pos);
+ }
+ ((Rva00318F64*)this)->rva00318F64();v30=0;
+ ((Rva005A0B4CList*)((char*)TheLivingWorldLogic+0x1C))->append((Rva002BA8F1Listener*)(CtorRegionTurnObserver*)this);
+}
+
 class Xfer {
 public:
     struct Version { unsigned char current, minimum; Version(unsigned char a,unsigned char b):current(a),minimum(b){} };
