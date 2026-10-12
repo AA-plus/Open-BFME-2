@@ -428,7 +428,8 @@ inline AptTextPlusStringPlusStringText operator+(const AptTextPlusStringPlusStri
 
 class BfmeAptWindowManager {public:void bfmeSetText(const AsciiString&,const UnicodeString&,bool);};
 class AptCommandMapAdder {public:AptCommandMapAdder();~AptCommandMapAdder();void AddCommandMap(const AsciiString&,AptRef<AptCommandMap>);
- __forceinline void AddCommandMapDelegate(const AsciiString&n,DelegateDesc d){AddCommandMap(n,(const DelegateDesc *)&d);}private:char storage[12];};
+ private:char storage[12];};
+static __forceinline void BindArmyDetailsCommand(AptCommandMapAdder &adder,const AsciiString &name,DelegateDesc desc){adder.AddCommandMap(name,(const DelegateDesc *)&desc);}
 
 class StrategicHUD::ArmyDetailsMovieClip::Impl :public Rva0086EE20
 {
@@ -817,12 +818,12 @@ StrategicHUD::ArmyDetailsMovieClip::Impl::Impl(ArmyDetailsMovieClip*owner,int le
  Rva005F32B5Dimensions dims=Rva005F32B5(m_name0C,(unsigned)m_level08);
  m_iconStageWidth=dims.x;m_iconStageHeight=dims.y;
  AsciiString prefix;prefix.format("_level%u.",m_level08);
- m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnBackButtonClicked",DelegateDesc(this,&Impl::OnBackButtonClicked));
- m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnBackButtonRollOver",DelegateDesc(this,&Impl::OnBackButtonRollOver));
- m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnBackButtonRollOut",DelegateDesc(this,&Impl::OnBackButtonRollOut));
- m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnIconListBackgroundClicked",DelegateDesc(this,&Impl::OnIconListBackgroundClicked));
- m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnScrollBarLoaded",DelegateDesc(this,&Impl::OnScrollBarLoaded));
- m_bindings.AddCommandMapDelegate(prefix+m_name0C+"_OnScrollBarUnloaded",DelegateDesc(this,&Impl::OnScrollBarUnloaded));
+ BindArmyDetailsCommand(m_bindings,prefix+m_name0C+"_OnBackButtonClicked",DelegateDesc(this,&Impl::OnBackButtonClicked));
+ BindArmyDetailsCommand(m_bindings,prefix+m_name0C+"_OnBackButtonRollOver",DelegateDesc(this,&Impl::OnBackButtonRollOver));
+ BindArmyDetailsCommand(m_bindings,prefix+m_name0C+"_OnBackButtonRollOut",DelegateDesc(this,&Impl::OnBackButtonRollOut));
+ BindArmyDetailsCommand(m_bindings,prefix+m_name0C+"_OnIconListBackgroundClicked",DelegateDesc(this,&Impl::OnIconListBackgroundClicked));
+ BindArmyDetailsCommand(m_bindings,prefix+m_name0C+"_OnScrollBarLoaded",DelegateDesc(this,&Impl::OnScrollBarLoaded));
+ BindArmyDetailsCommand(m_bindings,prefix+m_name0C+"_OnScrollBarUnloaded",DelegateDesc(this,&Impl::OnScrollBarUnloaded));
  g_bfmeAptWindowManager->bfmeSetText("APT:"+prefix+m_name0C+"_MemberName",UnicodeString::TheEmptyString,false);
  g_bfmeAptWindowManager->bfmeSetText("APT:"+prefix+m_name0C+"_MemberRank",UnicodeString::TheEmptyString,false);
  g_bfmeAptWindowManager->bfmeSetText("APT:"+prefix+m_name0C+"_CommandPoints",UnicodeString::TheEmptyString,false);
