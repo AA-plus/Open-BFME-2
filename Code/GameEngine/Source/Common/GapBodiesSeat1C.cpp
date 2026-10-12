@@ -1068,3 +1068,75 @@ bool Rva005E2D66::rva005E2D66(int index) const
 {
 	return m_04->m_flags[index];
 }
+
+// --- 0x005FB607 (14B): the +0x40 flag of the indexed 8-byte record of the
+// +4 object; 0x005FED1F (11B): the indexed word of the +4 array.
+struct Rva005FB607Record
+{
+	bool m_00;
+	char m_pad01[7];
+};
+
+struct Rva005FB607Inner
+{
+	char m_pad00[0x40];
+	Rva005FB607Record m_40[1];
+};
+
+class Rva005FB607
+{
+public:
+	bool rva005FB607(int index) const;
+private:
+	int m_00;
+	Rva005FB607Inner *m_04;
+};
+
+class Rva005FED1F
+{
+public:
+	int rva005FED1F(int index) const;
+private:
+	int m_00;
+	int m_04[1];
+};
+
+bool Rva005FB607::rva005FB607(int index) const
+{
+	return m_04->m_40[index].m_00;
+}
+
+int Rva005FED1F::rva005FED1F(int index) const
+{
+	return m_04[index];
+}
+
+// --- 0x005FC6FF (11B) and 0x005FC712 (12B): bits 1 and 2 of the +0x34
+// byte of the +0x18 record.
+struct Rva005FC6FFRecord
+{
+	char m_pad00[0x34];
+	unsigned char m_bit0 : 1;
+	unsigned char m_bit1 : 1;
+	unsigned char m_bit2 : 1;
+};
+
+class Rva005FC6FF
+{
+public:
+	bool rva005FC6FF() const;
+	bool rva005FC712() const;
+private:
+	char m_pad00[0x18];
+	Rva005FC6FFRecord *m_18;
+};
+
+bool Rva005FC6FF::rva005FC6FF() const
+{
+	return m_18->m_bit1;
+}
+
+bool Rva005FC6FF::rva005FC712() const
+{
+	return m_18->m_bit2;
+}
