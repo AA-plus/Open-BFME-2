@@ -14,10 +14,12 @@
 #include "ascii_string.h"
 #include "unicode_string.h"
 
+// Native parent1EB63C calls the complete54B member cleanup out of line;
+// retaining that boundary prevents a divergent inlined destructor copy.
 class Rva001EB05E
 {
 public:
-	~Rva001EB05E();
+	__declspec(noinline) ~Rva001EB05E();
 
 private:
 	unsigned char m_pad00[0xC];
@@ -42,7 +44,6 @@ private:
 	AsciiString m_D4;			// +0xD4
 };
 
-// ?UnitRevivalEntry::~UnitRevivalEntry present-unmatched
 UnitRevivalEntry::~UnitRevivalEntry()
 {
 }
