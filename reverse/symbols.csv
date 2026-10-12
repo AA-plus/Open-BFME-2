@@ -4606,7 +4606,7 @@ name,address,notes
 ??1Rva005D10D6@@QAE@XZ,0x005D10D6,destructor called by the vtable-referenced scalar deleting dtor 0x005D10BA (REL32 at +4 of its 28B delete-flag wrapper; body stores vftable 0x00C7559C); identity unproven; address-derived name
 ??1Rva005D10F9@@UAE@XZ,0x005D10F9,opaque dtor called by the scalar deleting dtor at 0x005D10DD (vtable 0x00C755AC#0); identity unproven; address-derived name
 ??1Rva005D1129Pointer@@QAE@XZ,0x005EC4AF,REL32 at +0x0A in 0x005D1129 with ECX=this+8; 7B Ghidra body loads [ecx] then tail-jumps to 0x005EC46F; address-derived member-dtor view; exact wrapper identity remains unknown
-??1Rva005D1210@@QAE@XZ,0x005D1210,pointee destructor called by the owning-pointer reset 0x005D127C (byte-exact modulo relocs in OwnedPointerResets.cpp); identity unproven; address-derived name
+??1Impl@TacticalBattleResolver@StrategicInGameUI@@QAE@XZ,0x005D1210,pointee destructor called by the owning-pointer reset 0x005D127C (byte-exact modulo relocs in OwnedPointerResets.cpp); WorldBuilder names it StrategicInGameUI::TacticalBattleResolver::Impl::~Impl (callgraph 1.0)
 ??1Rva005D12E3@@UAE@XZ,0x005D12E3,opaque dtor called by the scalar deleting dtor at 0x005D1319 (vtable 0x00C755B4#0); identity unproven; address-derived name
 ??1Rva005D1ADE@@UAE@XZ,0x005D1ADE,opaque dtor called by the scalar deleting dtor at 0x005D1B85 (vtable 0x00C75694#0); identity unproven; address-derived name
 ??1Rva005D1D38@@UAE@XZ,0x005D1D38,opaque dtor called by the scalar deleting dtor at 0x005D1DAF (vtable 0x00C75734#0); identity unproven; address-derived name

@@ -712,26 +712,32 @@ void Rva005D0ABB::clear()
 	}
 }
 
-class Rva005D1210
+namespace StrategicInGameUI {
+class TacticalBattleResolver
 {
 public:
-	~Rva005D1210();
+	class Impl
+	{
+	public:
+		~Impl();
+	};
 };
+}
 
 class Rva005D127C
 {
 public:
-	Rva005D1210 *m_ptr;
+	StrategicInGameUI::TacticalBattleResolver::Impl *m_ptr;
 	void clear();
 };
 
 void Rva005D127C::clear()
 {
-	Rva005D1210 *p = m_ptr;
+	StrategicInGameUI::TacticalBattleResolver::Impl *p = m_ptr;
 	m_ptr = 0;
 	if (p)
 	{
-		p->Rva005D1210::~Rva005D1210();
+		p->StrategicInGameUI::TacticalBattleResolver::Impl::~Impl();
 		::operator delete(p);
 	}
 }
