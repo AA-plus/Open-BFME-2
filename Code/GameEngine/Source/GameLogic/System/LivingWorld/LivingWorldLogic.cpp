@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // LivingWorldLogic.cpp -- LivingWorldLogic members recovered from WorldBuilder
@@ -3233,7 +3235,7 @@ struct Coord3D;
 struct Rva002BB15FCoord3D {float x,y,z;};
 class Rva002D3627Host {public: bool rva002BF5B0(const Coord2D *,Coord3D *);};
 class Eva;extern Eva *TheEva;
-class Eva {public: void reportEvaEvent(int,const Coord3D *,int);};
+class Eva {public: bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);};
 class LivingWorldRegionEffectsManager {public: void SyncRegion(int);};
 struct LivingWorldManagerEffectsView {char pad000[0x268];LivingWorldRegionEffectsManager *effects;};
 class LivingWorldManager;extern LivingWorldManager *TheLivingWorldManager;
@@ -3261,7 +3263,7 @@ void LivingWorldLogic::rva002BB15F()
 			pos.y = center.y;
 			pos.z = 0.0f;
 			g_00DFEF18->rva002BF5B0(&center, (Coord3D *)&pos);
-			TheEva->reportEvaEvent(0x15, (const Coord3D *)&pos, 0);
+			TheEva->reportEvaEvent(static_cast<EvaEventID>(0x15), (const Coord3D *)&pos, 0);
 		}
 		((Rva002B37B4 *)this)->rva002B37B4((Rva002B37B4P1 *)region, (Rva002B37B4P2 *)player);
 		((LivingWorldManagerEffectsView *)TheLivingWorldManager)->effects->SyncRegion((Int)region);

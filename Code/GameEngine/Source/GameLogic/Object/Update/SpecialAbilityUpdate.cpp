@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /O1 /DNDEBUG /MD /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
 // stlport
 // SpecialAbilityUpdate.cpp: bodies retail links from this TU (tu_map approved),
@@ -71,7 +73,7 @@ public:
 class Eva
 {
 public:
-	void reportEvaEvent(int event, const Coord3D *position, int flag);
+	bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);
 };
 extern Eva *TheEva;
 // The one-Drawable list the voice responses hand out; its destructor is the
@@ -689,7 +691,7 @@ void SpecialAbilityUpdate::startPacking(bool success)
 		if (player && player->isLocalPlayer())
 		{
 			int evaEvent = d->m_specialPowerTemplate->friend_getFinalOverride()->m_evaEvent44;
-			TheEva->reportEvaEvent(evaEvent, &self->m_position, 0);
+			TheEva->reportEvaEvent(static_cast<EvaEventID>(evaEvent), &self->m_position, 0);
 		}
 	}
 }
@@ -760,7 +762,7 @@ void SpecialAbilityUpdate::startPreparation()
 		if (draw)
 			draw->rva002723C0(d->m_preparationFrames);
 		if (target && target->isLocallyControlled())
-			TheEva->reportEvaEvent(0x10, &target->m_position, 0);
+			TheEva->reportEvaEvent(static_cast<EvaEventID>(0x10), &target->m_position, 0);
 	}
 	else if (type == 0x1a)
 	{
@@ -777,7 +779,7 @@ void SpecialAbilityUpdate::startPreparation()
 				m_object->clearAndSetModelConditionState((ModelConditionFlagType)0x60, (ModelConditionFlagType)0x29);
 			}
 			if (target->isLocallyControlled())
-				TheEva->reportEvaEvent(0x10, &target->m_position, 0);
+				TheEva->reportEvaEvent(static_cast<EvaEventID>(0x10), &target->m_position, 0);
 		}
 	}
 	SpecialPowerModuleInterface *module = (SpecialPowerModuleInterface *)((Rva0044E633 *)this)->rva0044E633();

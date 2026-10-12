@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /O1 /DNDEBUG /MD /GX /arch:SSE /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
 //
 // StealthUpdate logic bodies between retail 0x00373D15 and 0x003758A8, the
@@ -523,7 +525,7 @@ public:
 class Eva
 {
 public:
-	void reportEvaEvent(Int event, const Coord3D *pos, Int flag); // 0x001DE2DA
+	bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition); // 0x001DE2DA
 };
 extern Eva *TheEva;
 
@@ -1311,7 +1313,7 @@ void StealthUpdate::markAsDetected(UnsignedInt numFrames, Int feedback, Object *
 					((Rva0033F15DDwordSlot *)&neutralizedSound)->set(ThePlayerList->getLocalPlayer()->getPlayerIndex());
 					TheAudio->addAudioEvent(&neutralizedSound);
 					TheInGameUI->message(TheGameText->fetch("MESSAGE:StealthNeutralized"));
-					TheEva->reportEvaEvent(data->m_evaEventDetectedOwner, self->getPosition(), 0);
+					TheEva->reportEvaEvent(static_cast<EvaEventID>(data->m_evaEventDetectedOwner), self->getPosition(), 0);
 				}
 			}
 			else if (ThePlayerList->getLocalPlayer()->getRelationship(self) != ALLIES)
@@ -1325,7 +1327,7 @@ void StealthUpdate::markAsDetected(UnsignedInt numFrames, Int feedback, Object *
 						((Rva0033F15DDwordSlot *)&discoveredSound)->set(ThePlayerList->getLocalPlayer()->getPlayerIndex());
 						TheAudio->addAudioEvent(&discoveredSound);
 						TheInGameUI->message(TheGameText->fetch("MESSAGE:StealthDiscovered"));
-						TheEva->reportEvaEvent(data->m_evaEventDetectedEnemy, detector->getPosition(), (Int)self->getPosition());
+						TheEva->reportEvaEvent(static_cast<EvaEventID>(data->m_evaEventDetectedEnemy), detector->getPosition(), self->getPosition());
 					}
 				}
 			}
@@ -1334,7 +1336,7 @@ void StealthUpdate::markAsDetected(UnsignedInt numFrames, Int feedback, Object *
 				BfmeAudioEventPrefix136 discoveredSound(TheAudio->getMiscAudio()->m_stealthDiscoveredSound, self->getID());
 				((Rva0033F15DDwordSlot *)&discoveredSound)->set(ThePlayerList->getLocalPlayer()->getPlayerIndex());
 				TheAudio->addAudioEvent(&discoveredSound);
-				TheEva->reportEvaEvent(data->m_evaEventDetectedAlly, self->getPosition(), 0);
+				TheEva->reportEvaEvent(static_cast<EvaEventID>(data->m_evaEventDetectedAlly), self->getPosition(), 0);
 			}
 		}
 	}

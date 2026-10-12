@@ -1,0 +1,304 @@
+Eva provider escalation: exact production-object evidence
+Base bb95e3b187; reference cee35b7d8ca077d7255f1c39cb69e9fd9627aa85.
+Ghidra HTTP 127.0.0.1:8000/mcp failed: Unable to connect to the remote server.
+Identity from WB ACC880 Eva.cpp1230..1270; native bytes are authoritative.
+
+?reportEvaEvent@Eva@@QAE_NW4EvaEventID@@PBUCoord3D@@1@Z
+Source Code/GameEngine/Source/GameClient/Eva.cpp
+RVA 0x001de2da, raw COFF extent 247, target extent 247, exact resolved comparison PASS
+Target SHA256 5c8594ff17aa814e9912ea8725079275a9824476a5552d128745445f26b1a157
+RETAIL
+001de2da 55                     push    ebp
+001de2db 8bec                   mov     ebp, esp
+001de2dd 83ec44                 sub     esp, 0x44
+001de2e0 53                     push    ebx
+001de2e1 56                     push    esi
+001de2e2 8b7508                 mov     esi, dword ptr [ebp + 8]
+001de2e5 83feff                 cmp     esi, -1
+001de2e8 57                     push    edi
+001de2e9 8bd9                   mov     ebx, ecx
+001de2eb 0f84d7000000           je      0x1de3c8
+001de2f1 85f6                   test    esi, esi
+001de2f3 0f8ccf000000           jl      0x1de3c8
+001de2f9 8b4360                 mov     eax, dword ptr [ebx + 0x60]
+001de2fc 2b435c                 sub     eax, dword ptr [ebx + 0x5c]
+001de2ff 6a34                   push    0x34
+001de301 99                     cdq     
+001de302 59                     pop     ecx
+001de303 f7f9                   idiv    ecx
+001de305 3bf0                   cmp     esi, eax
+001de307 0f83bb000000           jae     0x1de3c8
+001de30d 8b4320                 mov     eax, dword ptr [ebx + 0x20]
+001de310 2b431c                 sub     eax, dword ptr [ebx + 0x1c]
+001de313 6a30                   push    0x30
+001de315 99                     cdq     
+001de316 59                     pop     ecx
+001de317 f7f9                   idiv    ecx
+001de319 6a34                   push    0x34
+001de31b 5f                     pop     edi
+001de31c 8bc8                   mov     ecx, eax
+001de31e 8b4360                 mov     eax, dword ptr [ebx + 0x60]
+001de321 2b435c                 sub     eax, dword ptr [ebx + 0x5c]
+001de324 99                     cdq     
+001de325 f7ff                   idiv    edi
+001de327 3bc1                   cmp     eax, ecx
+001de329 0f8599000000           jne     0x1de3c8
+001de32f 8d4de0                 lea     ecx, [ebp - 0x20]
+001de332 e899eeffff             call    0x1dd1d0
+001de337 837d0c00               cmp     dword ptr [ebp + 0xc], 0
+001de33b 8975e0                 mov     dword ptr [ebp - 0x20], esi
+001de33e 7412                   je      0x1de352
+001de340 8b750c                 mov     esi, dword ptr [ebp + 0xc]
+001de343 8d7de8                 lea     edi, [ebp - 0x18]
+001de346 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de347 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de348 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de349 8b7508                 mov     esi, dword ptr [ebp + 8]
+001de34c c645e401               mov     byte ptr [ebp - 0x1c], 1
+001de350 eb04                   jmp     0x1de356
+001de352 c645e400               mov     byte ptr [ebp - 0x1c], 0
+001de356 837d1000               cmp     dword ptr [ebp + 0x10], 0
+001de35a 7412                   je      0x1de36e
+001de35c 8b7510                 mov     esi, dword ptr [ebp + 0x10]
+001de35f 8d7df4                 lea     edi, [ebp - 0xc]
+001de362 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de363 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de364 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de365 8b7508                 mov     esi, dword ptr [ebp + 8]
+001de368 c645e501               mov     byte ptr [ebp - 0x1b], 1
+001de36c eb04                   jmp     0x1de372
+001de36e c645e500               mov     byte ptr [ebp - 0x1b], 0
+001de372 8b431c                 mov     eax, dword ptr [ebx + 0x1c]
+001de375 6bf630                 imul    esi, esi, 0x30
+001de378 8d74060c               lea     esi, [esi + eax + 0xc]
+001de37c 833e00                 cmp     dword ptr [esi], 0
+001de37f 763a                   jbe     0x1de3bb
+001de381 8b3d8ce7df00           mov     edi, dword ptr [0xdfe78c]
+001de387 8bcf                   mov     ecx, edi
+001de389 e88ee9ffff             call    0x1dcd1c
+001de38e 84c0                   test    al, al
+001de390 7529                   jne     0x1de3bb
+001de392 8b4740                 mov     eax, dword ptr [edi + 0x40]
+001de395 0306                   add     eax, dword ptr [esi]
+001de397 8d4dbc                 lea     ecx, [ebp - 0x44]
+001de39a 894508                 mov     dword ptr [ebp + 8], eax
+001de39d 8d45e0                 lea     eax, [ebp - 0x20]
+001de3a0 50                     push    eax
+001de3a1 8d4508                 lea     eax, [ebp + 8]
+001de3a4 50                     push    eax
+001de3a5 e815efffff             call    0x1dd2bf
+001de3aa 50                     push    eax
+001de3ab 8d4508                 lea     eax, [ebp + 8]
+001de3ae 50                     push    eax
+001de3af 8d4b10                 lea     ecx, [ebx + 0x10]
+001de3b2 e865f6ffff             call    0x1dda1c
+001de3b7 b001                   mov     al, 1
+001de3b9 eb0f                   jmp     0x1de3ca
+001de3bb 8d45e0                 lea     eax, [ebp - 0x20]
+001de3be 50                     push    eax
+001de3bf 8bcb                   mov     ecx, ebx
+001de3c1 e8a2f0ffff             call    0x1dd468
+001de3c6 eb02                   jmp     0x1de3ca
+001de3c8 32c0                   xor     al, al
+001de3ca 5f                     pop     edi
+001de3cb 5e                     pop     esi
+001de3cc 5b                     pop     ebx
+001de3cd c9                     leave   
+001de3ce c20c00                 ret     0xc
+RAW COFF
+001de2da 55                     push    ebp
+001de2db 8bec                   mov     ebp, esp
+001de2dd 83ec44                 sub     esp, 0x44
+001de2e0 53                     push    ebx
+001de2e1 56                     push    esi
+001de2e2 8b7508                 mov     esi, dword ptr [ebp + 8]
+001de2e5 83feff                 cmp     esi, -1
+001de2e8 57                     push    edi
+001de2e9 8bd9                   mov     ebx, ecx
+001de2eb 0f84d7000000           je      0x1de3c8
+001de2f1 85f6                   test    esi, esi
+001de2f3 0f8ccf000000           jl      0x1de3c8
+001de2f9 8b4360                 mov     eax, dword ptr [ebx + 0x60]
+001de2fc 2b435c                 sub     eax, dword ptr [ebx + 0x5c]
+001de2ff 6a34                   push    0x34
+001de301 99                     cdq     
+001de302 59                     pop     ecx
+001de303 f7f9                   idiv    ecx
+001de305 3bf0                   cmp     esi, eax
+001de307 0f83bb000000           jae     0x1de3c8
+001de30d 8b4320                 mov     eax, dword ptr [ebx + 0x20]
+001de310 2b431c                 sub     eax, dword ptr [ebx + 0x1c]
+001de313 6a30                   push    0x30
+001de315 99                     cdq     
+001de316 59                     pop     ecx
+001de317 f7f9                   idiv    ecx
+001de319 6a34                   push    0x34
+001de31b 5f                     pop     edi
+001de31c 8bc8                   mov     ecx, eax
+001de31e 8b4360                 mov     eax, dword ptr [ebx + 0x60]
+001de321 2b435c                 sub     eax, dword ptr [ebx + 0x5c]
+001de324 99                     cdq     
+001de325 f7ff                   idiv    edi
+001de327 3bc1                   cmp     eax, ecx
+001de329 0f8599000000           jne     0x1de3c8
+001de32f 8d4de0                 lea     ecx, [ebp - 0x20]
+001de332 e800000000             call    0x1de337 ; 0x59:0x14:??0Rva001DD063@@QAE@XZ
+001de337 837d0c00               cmp     dword ptr [ebp + 0xc], 0
+001de33b 8975e0                 mov     dword ptr [ebp - 0x20], esi
+001de33e 7412                   je      0x1de352
+001de340 8b750c                 mov     esi, dword ptr [ebp + 0xc]
+001de343 8d7de8                 lea     edi, [ebp - 0x18]
+001de346 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de347 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de348 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de349 8b7508                 mov     esi, dword ptr [ebp + 8]
+001de34c c645e401               mov     byte ptr [ebp - 0x1c], 1
+001de350 eb04                   jmp     0x1de356
+001de352 c645e400               mov     byte ptr [ebp - 0x1c], 0
+001de356 837d1000               cmp     dword ptr [ebp + 0x10], 0
+001de35a 7412                   je      0x1de36e
+001de35c 8b7510                 mov     esi, dword ptr [ebp + 0x10]
+001de35f 8d7df4                 lea     edi, [ebp - 0xc]
+001de362 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de363 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de364 a5                     movsd   dword ptr es:[edi], dword ptr [esi]
+001de365 8b7508                 mov     esi, dword ptr [ebp + 8]
+001de368 c645e501               mov     byte ptr [ebp - 0x1b], 1
+001de36c eb04                   jmp     0x1de372
+001de36e c645e500               mov     byte ptr [ebp - 0x1b], 0
+001de372 8b431c                 mov     eax, dword ptr [ebx + 0x1c]
+001de375 6bf630                 imul    esi, esi, 0x30
+001de378 8d74060c               lea     esi, [esi + eax + 0xc]
+001de37c 833e00                 cmp     dword ptr [esi], 0
+001de37f 763a                   jbe     0x1de3bb
+001de381 8b3d00000000           mov     edi, dword ptr [0] ; 0xa9:0x6:?TheGameLogic@@3PAVGameLogic@@A
+001de387 8bcf                   mov     ecx, edi
+001de389 e800000000             call    0x1de38e ; 0xb0:0x14:?rva001DCD1C@GameLogic@@QAE_NXZ
+001de38e 84c0                   test    al, al
+001de390 7529                   jne     0x1de3bb
+001de392 8b4740                 mov     eax, dword ptr [edi + 0x40]
+001de395 0306                   add     eax, dword ptr [esi]
+001de397 8d4dbc                 lea     ecx, [ebp - 0x44]
+001de39a 894508                 mov     dword ptr [ebp + 8], eax
+001de39d 8d45e0                 lea     eax, [ebp - 0x20]
+001de3a0 50                     push    eax
+001de3a1 8d4508                 lea     eax, [ebp + 8]
+001de3a4 50                     push    eax
+001de3a5 e800000000             call    0x1de3aa ; 0xcc:0x14:??0Rva001DD1B3@@QAE@ABHABURva001DD063@@@Z
+001de3aa 50                     push    eax
+001de3ab 8d4508                 lea     eax, [ebp + 8]
+001de3ae 50                     push    eax
+001de3af 8d4b10                 lea     ecx, [ebx + 0x10]
+001de3b2 e800000000             call    0x1de3b7 ; 0xd9:0x14:?insert_equal@?$_Rb_tree@URva001DD1B3@@U1@U?$_Identity@URva001DD1B3@@@_STL@@U?$less@URva001DD1B3@@@3@V?$allocator@URva001DD1B3@@@3@@_STL@@QAE?AU?$_Rb_tree_iterator@URva001DD1B3@@U?$_Nonconst_traits@URva001DD1B3@@@_STL@@@2@ABURva001DD1B3@@@Z
+001de3b7 b001                   mov     al, 1
+001de3b9 eb0f                   jmp     0x1de3ca
+001de3bb 8d45e0                 lea     eax, [ebp - 0x20]
+001de3be 50                     push    eax
+001de3bf 8bcb                   mov     ecx, ebx
+001de3c1 e800000000             call    0x1de3c6 ; 0xe8:0x14:?internalReportEvaEvent@Eva@@QAE_NPBUEvaEventReport@@@Z
+001de3c6 eb02                   jmp     0x1de3ca
+001de3c8 32c0                   xor     al, al
+001de3ca 5f                     pop     edi
+001de3cb 5e                     pop     esi
+001de3cc 5b                     pop     ebx
+001de3cd c9                     leave   
+001de3ce c20c00                 ret     0xc
+
+??0Rva001DD1B3@@QAE@ABHABURva001DD063@@@Z
+Source Code/GameEngine/Source/Common/Rva001DD1B3Ctor2.cpp
+RVA 0x001dd2bf, raw COFF extent 29, target extent 29, exact resolved comparison PASS
+Target SHA256 1bdc3e64eed353a2cfc89b889a21bd689cc9bb6dc4c2d24ddcb7a382673620fd
+RETAIL
+001dd2bf 8b442404               mov     eax, dword ptr [esp + 4]
+001dd2c3 8b00                   mov     eax, dword ptr [eax]
+001dd2c5 56                     push    esi
+001dd2c6 ff74240c               push    dword ptr [esp + 0xc]
+001dd2ca 8bf1                   mov     esi, ecx
+001dd2cc 8d4e04                 lea     ecx, [esi + 4]
+001dd2cf 8906                   mov     dword ptr [esi], eax
+001dd2d1 e88dfdffff             call    0x1dd063
+001dd2d6 8bc6                   mov     eax, esi
+001dd2d8 5e                     pop     esi
+001dd2d9 c20800                 ret     8
+RAW COFF
+001dd2bf 8b442404               mov     eax, dword ptr [esp + 4]
+001dd2c3 8b00                   mov     eax, dword ptr [eax]
+001dd2c5 56                     push    esi
+001dd2c6 ff74240c               push    dword ptr [esp + 0xc]
+001dd2ca 8bf1                   mov     esi, ecx
+001dd2cc 8d4e04                 lea     ecx, [esi + 4]
+001dd2cf 8906                   mov     dword ptr [esi], eax
+001dd2d1 e800000000             call    0x1dd2d6 ; 0x13:0x14:??0Rva001DD063@@QAE@ABU0@@Z
+001dd2d6 8bc6                   mov     eax, esi
+001dd2d8 5e                     pop     esi
+001dd2d9 c20800                 ret     8
+
+??0Rva001DD063@@QAE@ABU0@@Z
+Source Code/GameEngine/Source/Common/Rva001DD063Copy.cpp
+RVA 0x001dd063, raw COFF extent 61, target extent 61, exact resolved comparison PASS
+Target SHA256 811bf0a23bc3f2d8e0952d773d7060740cd132930949077d4bc2b009ae563a57
+RETAIL
+001dd063 8bc1                   mov     eax, ecx
+001dd065 8b4c2404               mov     ecx, dword ptr [esp + 4]
+001dd069 8b11                   mov     edx, dword ptr [ecx]
+001dd06b 8910                   mov     dword ptr [eax], edx
+001dd06d 8a5104                 mov     dl, byte ptr [ecx + 4]
+001dd070 885004                 mov     byte ptr [eax + 4], dl
+001dd073 8a5105                 mov     dl, byte ptr [ecx + 5]
+001dd076 885005                 mov     byte ptr [eax + 5], dl
+001dd079 8b5108                 mov     edx, dword ptr [ecx + 8]
+001dd07c 895008                 mov     dword ptr [eax + 8], edx
+001dd07f 8b510c                 mov     edx, dword ptr [ecx + 0xc]
+001dd082 89500c                 mov     dword ptr [eax + 0xc], edx
+001dd085 8b5110                 mov     edx, dword ptr [ecx + 0x10]
+001dd088 895010                 mov     dword ptr [eax + 0x10], edx
+001dd08b 8b5114                 mov     edx, dword ptr [ecx + 0x14]
+001dd08e 895014                 mov     dword ptr [eax + 0x14], edx
+001dd091 8b5118                 mov     edx, dword ptr [ecx + 0x18]
+001dd094 895018                 mov     dword ptr [eax + 0x18], edx
+001dd097 8b491c                 mov     ecx, dword ptr [ecx + 0x1c]
+001dd09a 89481c                 mov     dword ptr [eax + 0x1c], ecx
+001dd09d c20400                 ret     4
+RAW COFF
+001dd063 8bc1                   mov     eax, ecx
+001dd065 8b4c2404               mov     ecx, dword ptr [esp + 4]
+001dd069 8b11                   mov     edx, dword ptr [ecx]
+001dd06b 8910                   mov     dword ptr [eax], edx
+001dd06d 8a5104                 mov     dl, byte ptr [ecx + 4]
+001dd070 885004                 mov     byte ptr [eax + 4], dl
+001dd073 8a5105                 mov     dl, byte ptr [ecx + 5]
+001dd076 885005                 mov     byte ptr [eax + 5], dl
+001dd079 8b5108                 mov     edx, dword ptr [ecx + 8]
+001dd07c 895008                 mov     dword ptr [eax + 8], edx
+001dd07f 8b510c                 mov     edx, dword ptr [ecx + 0xc]
+001dd082 89500c                 mov     dword ptr [eax + 0xc], edx
+001dd085 8b5110                 mov     edx, dword ptr [ecx + 0x10]
+001dd088 895010                 mov     dword ptr [eax + 0x10], edx
+001dd08b 8b5114                 mov     edx, dword ptr [ecx + 0x14]
+001dd08e 895014                 mov     dword ptr [eax + 0x14], edx
+001dd091 8b5118                 mov     edx, dword ptr [ecx + 0x18]
+001dd094 895018                 mov     dword ptr [eax + 0x18], edx
+001dd097 8b491c                 mov     ecx, dword ptr [ecx + 0x1c]
+001dd09a 89481c                 mov     dword ptr [eax + 0x1c], ecx
+001dd09d c20400                 ret     4
+
+Safety and provenance
+The buffer is a fresh 36-byte local union with Int alignment and unsigned-char storage; no argument home is addressed explicitly. Placement construction begins the record lifetime in that storage. Its returned pointer is used, then its trivial destructor is called. If insertion throws, no owned resource or nontrivial destructor is skipped.
+The nothrow declaration is supported by the complete 29-byte constructor, which loads the integer key and calls only the complete 61-byte leaf member-copy constructor. The actual constructor definition carries the same exception specification; both retain every retail byte. This is a code-generation adaptation, not a claim that the original source used placement construction.
+Frame and iterator storage were the issue: the old single expression keeps frame-key temporary alive and emits [ebp+0C]; the new construction statement ends its lifetime before insertion, retaining the constructor-result pointer and selecting [ebp+08]. Both have exactly 247 bytes.
+All thirteen existing Code caller TUs now use the same bool/EvaEventID/two-Coord3D-pointer method. Old rva001DE2DA names are renamed and two old void/int pins are removed; the new owner needs no pin.
+No BFME1 donor source was adopted. The inherited verified reference pointer is retained to reproduce the prior banks. Upstream master was checked at 4d758c197e635ac743b2d9745f56634b31f757a0; a reference update and full comparative gate are outside this serial escalation lane, and no freshness-success stamp was written.
+
+eva-closure-build.txt
+Source claims: OK (16 sources, scoped byte-verified)
+Compile: 5 of 16 TU(s) (deps-cache: 11 current)
+STLport folds: 4 complete emitted constructor(s) verified against retail owners and resolved callees
+Functions: OK 133/133 matched across 16 source file(s)
+String-ref verify: OK (16 literals + 0 empty-string refs verified, 0 baselined, 0 unverified/skipped)
+Float-ref verify: OK (29 compiler literals verified)
+Import-ref verify: OK (0 named imports verified)
+
+pin-consistency.txt
+Pin consistency: OK (6 multi-pinned symbols of 17238; 0 baselined, 0 new, 0 stale)
+
+eva-link-check.txt

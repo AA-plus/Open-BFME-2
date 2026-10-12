@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /MD /GX
 //
 // AttachUpdate (vftable 0x00C4DB20, UpdateModuleInterface view 0x00C4DB14;
@@ -52,7 +54,7 @@ enum DeathType
 class Eva
 {
 public:
-	void reportEvaEvent(int event, const Coord3D *pos, int flag);	// 0x001DE2DA
+	bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);	// 0x001DE2DA
 };
 extern Eva *TheEva;
 
@@ -136,7 +138,7 @@ UpdateSleepTime AttachUpdate::update()
 		Object *obj = m_object;
 		if (!parent || (parent->m_438 & 1)) {
 			m_parentID = INVALID_ID;
-			TheEva->reportEvaEvent(m_diedEvaEvent, obj->getPosition(), 0);
+			TheEva->reportEvaEvent(static_cast<EvaEventID>(m_diedEvaEvent), obj->getPosition(), 0);
 			obj->kill(DAMAGE_RVA00491D2F_8, DEATH_NORMAL);
 			return UPDATE_SLEEP_FOREVER;
 		}

@@ -1,5 +1,7 @@
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
 // ??0Rva001DD1B3@@QAE@ABHABURva001DD063@@@Z @0x001DD2BF 29B
+// Native29B and its leaf copy61B contain only member copies: no throwing call.
+// The nothrow contract also permits stack placement construction in Eva.cpp.
 // Two-arg ctor of 36-byte record: int head plus Rva001DD063 tail at +4.
 // Evidence: chain lane every callee rowed; retail copies [eax] then calls rowed 0x001DD063 with this+4 and returns this; caller 0x001DE3A5.
 struct Rva001DD063 {
@@ -17,9 +19,9 @@ struct Rva001DD063 {
 struct Rva001DD1B3 {
     int f00;
     Rva001DD063 f04;
-    Rva001DD1B3(const int &key, const Rva001DD063 &tail);
+    Rva001DD1B3(const int &key, const Rva001DD063 &tail) throw();
 };
-Rva001DD1B3::Rva001DD1B3(const int &key, const Rva001DD063 &tail)
+Rva001DD1B3::Rva001DD1B3(const int &key, const Rva001DD063 &tail) throw()
     : f00(key), f04(tail)
 {
 }

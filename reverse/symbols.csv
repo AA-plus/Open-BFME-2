@@ -10872,7 +10872,6 @@ name,address,notes
 ?rva001DD8C9@Rva001DE556@@QAEPAXABU?$pair@$$CBVAsciiString@@UNoCaseTreeValue4@@@_STL@@@Z,0x001DD8C9,thiscall twin of rowed stdcall alloc via call-site mov ecx esi at 0x001DE556
 ?rva001DDAE1@Rva001DDAE1@@QAEXPAUCoord3D@@@Z,0x001DDAE1,Coord3D call on the 0x00DFDC30 global; REL32 callee of dump-range-18 0x003C00CE; identity unproven
 ?rva001DDCC5@Rva001DDCC5@@QAEXPAX@Z,0x001DDCC5,thiscall (ptr); copy helper called from 0x1DE3E3
-?rva001DE2DA@Eva@@QAEXHPBUCoord3D@@H@Z,0x001DE2DA,"Eva (the global at 0x00DFDC30) member, ret 0xC: (event index, position, 0); REL32 callee of AttachUpdate::update 0x00491D2F and the attach helper 0x00491AD0, which pass the module data's attachment/died EVA event ints and an object's +0x38 position; address-named"
 ?rva001DE9C4@Eva@@QAEHPBD@Z,0x001DE9C4,Eva (the global at 0x00DFDC30) member: event index for a name; returns -1 for None (_strcmpi against 0x00BDBFE8); ret 4; called on TheEva by the FieldParse proc 0x001DEE74
 ?rva001DEC48@Eva@@QAEXPAVXfer@@PAH@Z,0x001DEC48,"Eva (the global at 0x00DFDC30) member (EH, ret 8) taking an Xfer and a handle pointer, with its own version-1 block; AttachUpdate::xfer 0x004918AC runs it on its +0x24 handle from version 3"
 ?rva001DF88C@Rva001DF88C@@QAEXHVRva001DE6E1@@@Z,0x001DF88C,"108B EH grower true signature (int plus by-value record); 0x1DF8F8 passes it in place"
@@ -13171,7 +13170,6 @@ rva009C7380WeightPairs,0x009B84E0
 ?setSlotPointer@GameInfo@@QAEXHPAVGameSlot@@@Z,0x003FF332,callee of ??0LANGameInfo@@QAE@XZ
 ?GameInfoToAsciiString@@YA?AVAsciiString@@PBVGameInfo@@_N@Z,0x00400AF8,callee of ?GenerateGameOptionsString@@YA?AVAsciiString@@XZ
 ?GetRelativeAngle@Object@@QBEMPBUCoord3D@@@Z,0x000B4542,opaque relative-angle helper (x87 atan2 of the target minus the object's +0x38 position, less its orientation); REL32 callee of AIFaceState::update 0x003548B7 with ECX the owner, in place of Zero Hour's ThePartitionManager->getRelativeAngle2D
-?reportEvaEvent@Eva@@QAEXHPBUCoord3D@@H@Z,0x001DE2DA,"Eva (the global at 0x00DFDC30) member, ret 0xC: (event index, position, 0); REL32 callee of AttachUpdate::update 0x00491D2F and the attach helper 0x00491AD0, which pass the module data's attachment/died EVA event ints and an object's +0x38 position; address-named"
 ?onComingOutOfShroud@Drawable@@AAEXXZ,0x0027893E,Drawable thiscall member with no stack args (747B; identity open: walks the controlling player's objects and castle modules); Drawable::setFullyObscuredByShroud (0x00278C29) calls it when the drawable leaves the shroud
 ?setTeam@Object@@QAEXPAVTeam@@@Z,0x00298AE4,Object member taking a Team (reads team->getControllingPlayer); REL32 at 0x005ABCE8 in the StructureCreep slot 2 with the controller's +0x2EC team
 ?QuickDoesPathExist@Pathfinder@@QAE_NPAVObject@@PBUCoord3D@@1H@Z,0x002F477E,"TheAI +0x10 (the pathfinder) member: ret 0x10 with (object, from, to, 0) returning a bool path test; REL32 in ScriptConditions 0x003E5D7F (the unit, its position, the found object's position, 0) and in ActionManager 0x0041C9F0; identity not recovered"

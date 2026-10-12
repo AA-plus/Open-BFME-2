@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 //
 // ?onDie@Object@@QAEXPAUDamageInfo@@@Z -- retail 0x00298517..0x00298835 (798 bytes).
@@ -243,7 +245,7 @@ public:
 class Eva
 {
 public:
-	void rva001DE2DA(int eventType, const Coord3D *pos, int playerIndex);
+	bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);
 };
 
 class InGameUI
@@ -448,7 +450,7 @@ void Object::onDie(DamageInfo *damageInfo)
 			else
 				evaEvent = tmpl->m_evaEnemyUnitLost;
 			if (evaEvent != -1)
-				TheEva->rva001DE2DA(evaEvent, getPosition(), 0);
+				TheEva->reportEvaEvent(static_cast<EvaEventID>(evaEvent), getPosition(), 0);
 		}
 	}
 

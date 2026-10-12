@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfmelist /D_STLP_USE_MALLOC /D_BFME_RETAIL_TREE_INSERT_LAYOUT /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
 // stlport
 //
@@ -118,7 +120,7 @@ public:
 class Eva
 {
 public:
-	void reportEvaEvent(Int event, const Coord3D *pos, Int flag);	// 0x001DE2DA
+	bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);	// 0x001DE2DA
 };
 extern Eva *TheEva;
 
@@ -226,7 +228,7 @@ void Rva00439E0C::rva004389DB(Object *obj, Rva004389DBInfo *info, Int feedback)
 			TheAudio->addAudioEvent(&neutralizedSound);
 			TheInGameUI->message(TheGameText->fetch("MESSAGE:StealthNeutralized"));
 			Int message = obj->getTemplate()->m_evaEventDetectedOwner;
-			TheEva->reportEvaEvent(message, obj->getPosition(), 0);
+			TheEva->reportEvaEvent(static_cast<EvaEventID>(message), obj->getPosition(), 0);
 		}
 	}
 	else if (localPlayer->getRelationship(obj) != ALLIES)
@@ -241,7 +243,7 @@ void Rva00439E0C::rva004389DB(Object *obj, Rva004389DBInfo *info, Int feedback)
 				TheAudio->addAudioEvent(&discoveredSound);
 				TheInGameUI->message(TheGameText->fetch("MESSAGE:StealthDiscovered"));
 				Int message = obj->getTemplate()->m_evaEventDetectedEnemy;
-				TheEva->reportEvaEvent(message, info->m_detector->getPosition(), (Int)obj->getPosition());
+				TheEva->reportEvaEvent(static_cast<EvaEventID>(message), info->m_detector->getPosition(), obj->getPosition());
 			}
 		}
 	}
@@ -251,7 +253,7 @@ void Rva00439E0C::rva004389DB(Object *obj, Rva004389DBInfo *info, Int feedback)
 		((Rva0033F15DDwordSlot *)&discoveredSound)->set(localPlayer->getPlayerIndex());
 		TheAudio->addAudioEvent(&discoveredSound);
 		Int message = obj->getTemplate()->m_evaEventDetectedAlly;
-		TheEva->reportEvaEvent(message, obj->getPosition(), 0);
+		TheEva->reportEvaEvent(static_cast<EvaEventID>(message), obj->getPosition(), 0);
 	}
 }
 

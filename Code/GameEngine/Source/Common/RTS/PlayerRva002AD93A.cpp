@@ -1,3 +1,6 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
+struct Coord3D;
 // cl: /Ireference/shims/moduledata /DNDEBUG /MD
 //
 // ?rva002AD93A@Player@@QAEXPBVUpgradeTemplate@@H@Z @ 0x002AD93A 195B
@@ -139,7 +142,7 @@ extern PlayerList *ThePlayerList;
 class Eva
 {
 public:
-	void rva001DE2DA(Int eventId, const struct Coord3D *pos, Int x);
+	bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);
 };
 extern Eva *TheEva;
 
@@ -187,7 +190,7 @@ void Player::rva002AD93A(const UpgradeTemplate *upgrade, Int x)
 		else
 			eventId = upgrade->m_evaEnemy;
 	}
-	TheEva->rva001DE2DA(eventId, 0, 0);
+	TheEva->reportEvaEvent(static_cast<EvaEventID>(eventId), 0, 0);
 }
 
 // Target: 0x002AD9FD..0x002ADAC3, same list and iterator ABI as above.
@@ -225,5 +228,5 @@ void Player::rva002AD9FD(const UpgradeTemplate *upgrade, Int x)
 		else
 			eventId = upgrade->m_evaRemovedEnemy;
 	}
-	TheEva->rva001DE2DA(eventId, 0, 0);
+	TheEva->reportEvaEvent(static_cast<EvaEventID>(eventId), 0, 0);
 }

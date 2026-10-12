@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /Ireference/shims/bfme2_ascii
 #include "unicode_string.h"
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
@@ -34,7 +36,7 @@ struct TreeHintRef00217D4C : public Rva00579E47
 };
 class Rva0054D2DDTarget { public: void method(int, const UnicodeString &, const UnicodeString &, TreeHintRef00217D4C, TreeHintRef00217D4C); };
 class AptStrategicMessageBox { private: static AptStrategicMessageBox *s_instance; public: static __forceinline AptStrategicMessageBox *get() { return s_instance; } };
-class Eva { public: void reportEvaEvent(int, const Coord3D *, int); };
+class Eva { public: bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition); };
 extern Eva *TheEva;
 
 class Rva004FBC02
@@ -89,7 +91,7 @@ void Rva004FBC02::rva004FBD3A()
 		box->method(getMode(), m_text, m_title, TreeHintRef00217D4C(),
 			TreeHintRef00217D4C(MakeDesc(this, &Rva004FBC02::rva004FBBEB)));
 		m_25 = true;
-		TheEva->reportEvaEvent(m_event, m_24 ? (const Coord3D *)&m_18 : 0, 0);
+		TheEva->reportEvaEvent(static_cast<EvaEventID>(m_event), m_24 ? (const Coord3D *)&m_18 : 0, 0);
 		slot1();
 	}
 }

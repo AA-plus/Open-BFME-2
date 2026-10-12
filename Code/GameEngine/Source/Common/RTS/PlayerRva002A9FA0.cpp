@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /O1 /Oy /DNDEBUG /MD /ICode/Libraries/Include/Lib
 // BFME1 ba7ddda7 Player_setRankLevel.cpp and ZH Player::setRankLevel
 // guide the rank-change/EVA/point-change notification sequence. BFME2
@@ -19,7 +21,7 @@ public:
 };
 class Eva {
 public:
-    void rva001DE2DA(int, const Coord3D *, int);
+    bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);
 };
 class PlayerList {
 public:
@@ -41,7 +43,7 @@ bool Rva002A9FA0::rva002A9FA0(int level)
     bool changed = ((Rva00380200 *)this)->rva0038037C(level);
     if (changed && TheControlBar) {
         if ((Player *)((char *)this - 8) == ThePlayerList->localPlayer && TheEva)
-            TheEva->rva001DE2DA(2, 0, 0);
+            TheEva->reportEvaEvent(static_cast<EvaEventID>(2), 0, 0);
         const Player *player = (const Player *)((const char *)this - 8);
         TheControlBar->rva0031B5A3(player);
         if (oldPoints != points)
