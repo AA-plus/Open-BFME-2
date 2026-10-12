@@ -104,11 +104,14 @@ Rva00SlotFloat2 Rva003ABD6B::rva003ABD6B()
 	return Rva00SlotFloat2(m_x34, m_y38);
 }
 
+// 0x0008BBF6: adds the magnitude of its argument to +0x98 (negating via a
+// separate multiply statement keeps retail's mulss by -1.0 and the two adds);
 // 0x0008BC2B: clears the float at +0x98; 0x0008BC3E: stores two floats at
 // +0xAC / +0xB0.
 class Rva0008BC2B
 {
 public:
+	void rva0008BBF6(float delta);
 	void rva0008BC2B();
 	void rva0008BC3E(float a, float b);
 private:
@@ -118,6 +121,17 @@ private:
 	float m_valueAC;
 	float m_valueB0;
 };
+
+void Rva0008BC2B::rva0008BBF6(float delta)
+{
+	if (delta < 0.0f)
+	{
+		delta *= -1.0f;
+		m_value98 += delta;
+	}
+	else
+		m_value98 += delta;
+}
 
 void Rva0008BC2B::rva0008BC2B()
 {
