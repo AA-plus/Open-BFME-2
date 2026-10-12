@@ -151,6 +151,7 @@ extern "C" __declspec(dllimport) long __stdcall InterlockedIncrement(long volati
 class OpaqueRefCounted {
 public:
     virtual ~OpaqueRefCounted();
+    bool rva00050EFA(void);  // add a reference unless the count already reached zero (0x00050EFA)
     void Add_Ref() { InterlockedIncrement(&refs); }
     void Release_Ref();
 private:
@@ -924,6 +925,9 @@ template<> QueuedAudioEvents::iterator QueuedAudioEvents::erase(iterator first, 
 // Owning AudioEventInfo reference returned by the slot-75 lookup.
 class AudioEventInfoRef {
 public:
+    // Retail 0x00051914 (AudioEventInfoRefConstructor.cpp; this unit's struct
+    // AudioEventInfo spelling is a byte-identical alias there).
+    __declspec(noinline) AudioEventInfoRef(const AudioEventInfo *info) : m_ptr(reinterpret_cast<OpaqueRefCounted *>(const_cast<AudioEventInfo *>(info))) { if (m_ptr) m_ptr->Add_Ref(); }
     ~AudioEventInfoRef() { if (m_ptr) m_ptr->Release_Ref(); }
     AudioEventInfo *get(void) const { return (AudioEventInfo *)m_ptr; }
 private:
@@ -1035,6 +1039,8 @@ public:
     void rva000562CF(int key);
     void rva000562A2(int key, const void *value);
     void rva0005A92A(int key, Rva0005A084Vector *output);
+    void rva0005AE2B(int type, Rva0005A084Vector *output);
+    void rva0005AEDD(int type, Rva0005A084Vector *output);
     void rva0005B137(void);
     void recalculateMicrophone(void);
     bool rva0005538C(void);
@@ -5450,4 +5456,57 @@ BfmePoolRef10 MilesAudioManager::rva0005286A(AudioEventRTS *event, int arg)
     copy->rva002D9ADC();
     copy->generatePlayInfo();
     return copy;
+}
+
+// The event-info table at +0xBC is walked through the rowed 0x00427195
+// (first cursor) and 0x00411084 (advance) declared above.
+struct AudioEventInfoTableNode
+{
+    void *m_next;
+    AsciiString m_name;
+    AudioEventInfo *m_info;
+};
+class Rva001D98BD { public: bool rva001D98BD(int type); };
+
+// Native 0005AE2B..0005AEDD, RET8. Under the mutex, appends a counted
+// reference to every event info of the given +0xB0 type that 0x00050EFA can
+// still add a reference to; that extra reference is dropped once queued.
+void MilesAudioManager::rva0005AE2B(int type, Rva0005A084Vector *output)
+{
+    MilesMutexGuard guard(&m_mutex, 0);
+    Rva000411084 it;
+    {
+        Rva000411084 first;
+        reinterpret_cast<Rva000427195 *>(&m_allAudioEventInfo)->first(&first);
+        it = first;
+    }
+    for (; it.m_current; it.next()) {
+        AudioEventInfo *info = reinterpret_cast<AudioEventInfoTableNode *>(it.m_current)->m_info;
+        OpaqueRefCounted *counted = reinterpret_cast<OpaqueRefCounted *>(info);
+        if (info->m_atB0 == type && counted->rva00050EFA()) {
+            output->push_back(*reinterpret_cast<const Rva0005A084Element *>(&AudioEventInfoRef(info)));
+            counted->Release_Ref();
+        }
+    }
+}
+
+// Native 0005AEDD..0005AF92, RET8. As 0x5AE2B, with the type test made by
+// the recursive 0x001D98BD (composite infos of type 5 test their children).
+void MilesAudioManager::rva0005AEDD(int type, Rva0005A084Vector *output)
+{
+    MilesMutexGuard guard(&m_mutex, 0);
+    Rva000411084 it;
+    {
+        Rva000411084 first;
+        reinterpret_cast<Rva000427195 *>(&m_allAudioEventInfo)->first(&first);
+        it = first;
+    }
+    for (; it.m_current; it.next()) {
+        AudioEventInfo *info = reinterpret_cast<AudioEventInfoTableNode *>(it.m_current)->m_info;
+        OpaqueRefCounted *counted = reinterpret_cast<OpaqueRefCounted *>(info);
+        if (reinterpret_cast<Rva001D98BD *>(info)->rva001D98BD(type) && counted->rva00050EFA()) {
+            output->push_back(*reinterpret_cast<const Rva0005A084Element *>(&AudioEventInfoRef(info)));
+            counted->Release_Ref();
+        }
+    }
 }
