@@ -22,10 +22,10 @@ mismatches +108,+10A,+12B,+12D: round-counter ESI versus retail EDI.
 inline getters/helpers, vector reference lifetimes, reused index storage,
 array/struct/union/reference/align4 round storage all failed to improve.
 Early vector reference: 540 bytes. align8 changes frame/relocation sites.
-Original bank untouched; no nonmatching Code or owner/pin changes.
-DIR32 callback +72 is undefined ??1Rva002B2508@@UAE@XZ, retail RVA2A983D.
-That seven-byte reset remains owned by Rva002A983DDwordImmSetter::apply;
-a parent byte score does not establish a valid callback identity contract.
+Original bank untouched; no nonmatching Code or pin changes.
+Initially, DIR32 callback +72 was undefined ??1Rva002B2508@@UAE@XZ,
+retail RVA2A983D, owned by Rva002A983DDwordImmSetter::apply.
+The callback repair described below removes this separate identity wall.
 
 RVA 0x0020FB8B already matched on fetched base, 132 bytes, so not retried.
 
@@ -47,3 +47,45 @@ link_check --prepare-current passed strict reusable receipts and 1/1 bytes.
 Ordinary link_check refused preview: new unit absent from census 2c46f084e1.
 --new-variants completed without a refusal. LINKED status is unconfirmed.
 No link_cycle, census, nightly, boot-smoke or publisher was started.
+
+FINAL ADDITIONS:
+Caption commit 538021c5a6 passes normal hooks, including EXACT EH 1/1.
+
+The separate callback repair renames the old 0x002A983D setter-view owner
+as ??1Rva002B2508@@UAE@XZ, the actual existing array-callback declaration.
+It keeps the same source unit, seven bytes, and vtbl_00BFDC30 relocation.
+No added pin, alias or virtual table; only the destructor is emitted.
+This is identity repair to 7 already-matched bytes, ZERO new coverage.
+The existing AutoBattleResolver 2BD40D callback now classifies as owner.
+Provider/constructor/consumer gate: 136/136; EH: 33/33 EXACT.
+Ordinary link_check still cannot preview the family: Rva002B2508Ctor.cpp
+is absent from census 2c46f084e1. No LINKED claim is made.
+
+The successful caption scope lever motivated two additional retreat trials:
+inline by-value round-counter parameters (both argument orders) still
+527B and exactly the same four ESI/EDI operand differences. There are
+22 new retreat variants total, plus the baseline; the initial re_log entry
+mistakenly says nineteen rather than twenty for its first set. The callback
+wall is now repaired; the unchanged .99166 bank retains the register wall.
+
+COLLECTION 0x0059BE1F:
+The committed .93166/495B bank actually reads the enemy owner before RNG
+and push, contrary to its prior final note. Restoring native order produces
+496B/.88712; it restores the inner-loop shapes but saves EBX early, caches
+zero from the initial call, and swaps EBX/EDI for the army/tree. Explicit
+volatile owner read, signedness, getter, valid owner helpers and by-value
+distance-loop helpers do not improve this; volatile distance grows503B.
+Four accidentally recursive helper-generation trials were rejected and
+rerun correctly; they are marked invalid in collection-trials.json.
+The original bank is preserved, with the source-order caveat recorded;
+collection-reviewed-source.cpp.txt is the complete 496B native-order trial.
+No collection source or pin was admitted. All claims for blocked bodies
+were released. Verified caption/destructor claims remain queued for the
+orchestrator's publication.
+
+FINAL NORMAL-HOOK RECEIPT:
+The callback repair triggered dependent verification across 220 source units.
+Byte gates: 2406/2406 (188 sources) plus 453/453 (32 sources).
+EH: 250/250 EXACT, zero missing objects or baseline allowances.
+Converged-data check: 8 addresses, zero second names or unjudged rows.
+PRE-COMMIT OK. See callback-expanded-byte-gate.txt for extracted receipt.

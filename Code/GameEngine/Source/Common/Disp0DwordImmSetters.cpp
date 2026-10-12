@@ -283,17 +283,22 @@ void Rva00270158DwordImmSetter::apply()
 	m_value = ((unsigned int)vtbl_00BFAD38);
 }
 
-class Rva002A983DDwordImmSetter
+// Native 0x002A983D is the complete seven-byte array-element destructor,
+// supplied alongside ctor 0x002B2508 to the EH vector constructor in
+// RetreatArmiesForPlayer (3F6727) and AutoBattleResolver (2BD40D).
+// The element is a 44-byte derived rank object; teardown only restores its
+// base vptr. Keep this existing table symbol/relocation rather than emit a
+// second private base-class vtable. This prefix view names the destructor
+// already declared by those callers; the original class name is unknown.
+class Rva002B2508
 {
 public:
-	void apply();
-
-	unsigned int m_value;
+	virtual ~Rva002B2508();
 };
 
-void Rva002A983DDwordImmSetter::apply()
+Rva002B2508::~Rva002B2508()
 {
-	m_value = ((unsigned int)vtbl_00BFDC30);
+	*(const void *const **)this = vtbl_00BFDC30;
 }
 
 class Rva002D24EFDwordImmSetter
