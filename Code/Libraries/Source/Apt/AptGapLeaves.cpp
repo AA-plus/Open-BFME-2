@@ -206,3 +206,18 @@ bool Rva006CE180Release(Rva006CE180Block *block)
 		bfmeDropVGO(block);
 	return wasKind4;
 }
+
+// ?isSet@Rva006DAE30Table@@QAE_NI@Z @ 0x006DAE30 (26B): whether the slot for
+// a dword-aligned key (key >> 2) in the +0 table is non-null.
+class Rva006DAE30Table
+{
+public:
+	bool isSet(unsigned int key);
+private:
+	void **m_slots;
+};
+
+bool Rva006DAE30Table::isSet(unsigned int key)
+{
+	return m_slots[key >> 2] != 0;
+}
