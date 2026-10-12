@@ -26,6 +26,9 @@ typedef _STL::map<int,int> IntegerMap;
 struct TreeHintPayload001F8ACB { unsigned int value; };
 bool operator<(const AsciiString &, const AsciiString &);
 typedef _STL::map<AsciiString,TreeHintPayload001F8ACB> StringPayloadMap;
+namespace _STL {
+template <> TreeHintPayload001F8ACB &map<AsciiString,TreeHintPayload001F8ACB>::operator[](const AsciiString &);
+}
 typedef _STL::vector<bool> BitVector;
 typedef _STL::map<int,_STL::vector<unsigned int> > IntegerVectorMap;
 class RvaVecAscii { AsciiString *m_begin; AsciiString *m_end; AsciiString *m_capacity; public: ~RvaVecAscii(); };
@@ -41,6 +44,7 @@ class CreateAHeroData : public Snapshot {
     unsigned int word134, word138, word13C;
 public:
     bool WriteNamedHeroAtRva004074CF();
+    bool rva00408A55();
     unsigned char rva004099CA(StringBase<char> *name, int flag);
     virtual ~CreateAHeroData();
 };
@@ -146,6 +150,8 @@ extern "C" {
 __declspec(dllimport) _iobuf *__cdecl _wfopen(const unsigned short *,const unsigned short *);
 __declspec(dllimport) int __cdecl fprintf(_iobuf *, const char *,...);
 __declspec(dllimport) int __cdecl fclose(_iobuf *);
+// The real fgets import slot; a pointer call preserves retail's two loop tests.
+extern char *(__cdecl *_imp__fgets)(char *, int, _iobuf *);
 }
 // Native 4074CF..4075A3 and the already-owned destructor caller 409285:
 // build a wide save path, set manager +1D8, write map50 key/value pairs,
@@ -209,4 +215,48 @@ unsigned char CreateAHeroData::rva004099CA(StringBase<char> *name, int flag)
         ok = flag71;
     }
     return ok;
+}
+
+// The reader calls the MD CRT import. A scoped C-linkage declaration retains
+// the real atoi symbol without changing the STL bodies' static-free settings.
+namespace HeroStatsCRT {
+extern "C" __declspec(dllimport) int __cdecl atoi(const char *);
+}
+
+// Native408A55..408C11: bool-returning stats reader, with wide path from
+// the same GameState provider as the verified writer. Native line buffer is
+// 1024 bytes; map50 receives trimmed key/value pairs before award refresh.
+// The real IAT symbol is used directly; no alternate name or address pin.
+class Rva0021937DTarget { public: void rva00407E94(); };
+bool CreateAHeroData::rva00408A55()
+{
+    if (reinterpret_cast<const StringBase<char> *>(&text4C)->isEmpty())
+        return false;
+    UnicodeString path = reinterpret_cast<const Rva002DC74A *>(TheGameState)->rva002DC74A(UnicodeString(text4C));
+    _iobuf *file = _wfopen(path.str(), reinterpret_cast<const unsigned short *>(L"r"));
+    char buffer[1024];
+    if (file != 0) {
+      if (_imp__fgets(buffer, sizeof(buffer), file)) {
+        do {
+        AsciiString line(buffer);
+        line.trim();
+        AsciiString key;
+        AsciiString value;
+        line.nextToken(&key, "=");
+        value.set(line.str() + 1);
+        key.trim();
+        value.trim();
+        if (!key.isEmpty()) {
+            if (value.isEmpty())
+                map50[key].value = 0;
+            else
+                map50[key].value = HeroStatsCRT::atoi(value.str());
+        }
+        } while (_imp__fgets(buffer, sizeof(buffer), file));
+      }
+      fclose(file);
+      reinterpret_cast<Rva0021937DTarget *>(this)->rva00407E94();
+      return true;
+    }
+    return false;
 }

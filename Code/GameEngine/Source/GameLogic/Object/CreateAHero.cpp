@@ -65,7 +65,7 @@ public:
 class CreateAHeroData
 {
 public:
-	void rva00408A55(); // Existing refresh spelling on this data prefix.
+	bool rva00408A55(); // Existing refresh spelling on this data prefix.
 	CreateAHeroData &operator=(const CreateAHeroData &that);
 };
 

@@ -175,7 +175,7 @@ class CreateAHeroData
 public:
     CreateAHeroData(int, int, int, const UnicodeString &, int, int, int);
     virtual ~CreateAHeroData();
-    void rva00408A55();
+    bool rva00408A55();
     bool rva004099CA(AsciiString *filename, bool mode);
     unsigned char m_pad04[0x134-4];
     unsigned int m_crc;
