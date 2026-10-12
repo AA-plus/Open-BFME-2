@@ -71,6 +71,7 @@ public:
 	static void *Allocate(int size);
 	AptValue ***GetData();
 	void rva006CC0A0(int iPos);
+	AptValue *operator[](int iPos) const;
 
 	EAStringC m_name;
 	int mCurrentNum;
@@ -124,6 +125,22 @@ void AptValueVector::rva006CC0A0(int iPos)
 		memmove(&m_data[iPos], &m_data[iPos + 1], (mCurrentNum - iPos) * sizeof(*m_data));
 	}
 	m_data[mCurrentNum] = 0;
+}
+
+// ??AAptValueVector@@QBEPAVAptValue@@H@Z, retail 0x006CC040 (81B). Ghidra-
+// unlisted out-of-line subscript: the AptValueVector.h line 0x39 bounds assert
+// (retail strings) then the element pointer. The operator spelling is inferred
+// from the header assert and the vector layout; the int3 barrier keeps
+// retail's triplicated load tail.
+AptValue *AptValueVector::operator[](int iPos) const
+{
+	if (!(iPos >= 0 && iPos < mCurrentNum)) {
+		g_bfmeAptAssertAtE17734("iPos >= 0 && iPos < mCurrentNum", "c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptValue/AptValueVector.h", 0x39);
+		if (g_bfmeAptBreakOnAssertAtDDC01C) {
+			__asm int 3
+		}
+	}
+	return m_data[iPos];
 }
 
 // ??0AptValueNameEntry@@QAE@XZ is a header inline in retail: other units emit

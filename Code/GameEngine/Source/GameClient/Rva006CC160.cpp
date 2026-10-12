@@ -12,6 +12,8 @@ struct Rva006CC160 {
     unsigned int nAptUpdateAllocationGCSize;
     unsigned int m_1C;
     Rva006CC160 operator+(const Rva006CC160 &other);
+    Rva006CC160 &operator+=(const Rva006CC160 &other);
+    void rva006CC230();
 };
 Rva006CC160 Rva006CC160::operator+(const Rva006CC160 &other)
 {
@@ -25,4 +27,34 @@ Rva006CC160 Rva006CC160::operator+(const Rva006CC160 &other)
     sum.nAptUpdateAllocationGCSize=nAptUpdateAllocationGCSize+other.nAptUpdateAllocationGCSize;
     sum.m_1C=m_1C+other.m_1C;
     return sum;
+}
+
+// ??YRva006CC160@@QAEAAU0@ABU0@@Z, retail 0x006CC1E0 (67B). Ghidra-unlisted
+// in-place sum right after operator+: the same eight field additions in the
+// same field order, returning *this. Spelling inferred from that sibling.
+Rva006CC160 &Rva006CC160::operator+=(const Rva006CC160 &other)
+{
+    m_00+=other.m_00;
+    m_04+=other.m_04;
+    m_10+=other.m_10;
+    m_14+=other.m_14;
+    m_08+=other.m_08;
+    m_0C+=other.m_0C;
+    nAptUpdateAllocationGCSize+=other.nAptUpdateAllocationGCSize;
+    m_1C+=other.m_1C;
+    return *this;
+}
+
+// ?rva006CC230@Rva006CC160@@QAEXXZ, retail 0x006CC230 (26B). Ghidra-unlisted
+// reset that zeroes all eight fields in the sibling field order; address name.
+void Rva006CC160::rva006CC230()
+{
+    m_00=0;
+    m_04=0;
+    m_10=0;
+    m_14=0;
+    m_08=0;
+    m_0C=0;
+    nAptUpdateAllocationGCSize=0;
+    m_1C=0;
 }
