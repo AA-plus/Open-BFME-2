@@ -639,11 +639,8 @@ static __declspec(noinline) void xferRadarObjectList(Xfer*xfer,RadarObject**head
 // Native 2D85D7..2D87B9 (482 bytes), WB1109E60 Radar::DoXfer.
 // ZH event transfer spine; target version 1/3, 64 events and tail field slots.
 // Native slots 70/44 transfer four floats and the 16-byte integer draw rect.
-// Both whole bodies are byte verified; the caller is declared before its own
-// ledger commit so the helper retains its witnessed private register ABI.
 void XferRadarEventType(Xfer*,int*);
 class RadarEventRefSlot {public:void clearRef();};
-// ?xfer@Radar@@MAEXPAVXfer@@@Z present-unmatched
 void Radar::xfer(Xfer*xfer) {
  if(xfer->IsLightCRC())return;
  Xfer::Version version(1,3); *xfer==version;
@@ -670,4 +667,3 @@ void Radar::xfer(Xfer*xfer) {
  *xfer==*reinterpret_cast<IRegion2D*>(&m_rect);*xfer==*reinterpret_cast<bool*>(&m_dirty);*xfer==*reinterpret_cast<IRegion2D*>(&m_rect);*xfer==*reinterpret_cast<unsigned int*>(&m_1460);
  if(version.m_minimum==2){int old;unsigned int old2;*xfer==old;*xfer==old2;}
 }
-
