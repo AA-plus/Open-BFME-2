@@ -62,6 +62,7 @@ private:
 public:
 	unsigned char rva0056B89F();
 	int rva0056B88A();
+	bool rva0056B8D7();
 	void rva0056B984(Visitor0056B984 *visitor);
 	void rva0056B993(Visitor0056B984 *visitor);
 };
@@ -73,6 +74,15 @@ int LivingWorldArmyIconSubObject::rva0056B88A()
 	if (record)
 		return record->m_54;
 	return -1;
+}
+
+// @0x0056B8D7 29B, vtable slot 13: true unless the +0xC4 object exists and
+// its slot 10 answers true.
+bool LivingWorldArmyIconSubObject::rva0056B8D7()
+{
+	if (m_c4.m_ptr)
+		return !m_c4.m_ptr->s10();
+	return true;
 }
 
 // @0x0056B984 15B and @0x0056B993 15B, vtable slots 2 and 1.
