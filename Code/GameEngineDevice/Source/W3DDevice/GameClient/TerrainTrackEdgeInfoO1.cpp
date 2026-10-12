@@ -200,3 +200,26 @@ void Rva00083E5C::rva00083E5C()
 		m_0 = 0;
 	}
 }
+
+// ??1Rva00084CEF@@QAE@XZ @0x00084CEF 18B, the pinned destructor of the same
+// track-system object (callers 0x00091AB2 and 0x0009203A, in the terrain
+// visual's init and destructor): Zero Hour's ~TerrainTracksRenderObjClassSystem
+// shape, the full release above (0x00083E87) followed by clearing the +0x08
+// and +0x18 pointers. The pin keeps the address-derived class name.
+class Rva00084CEF
+{
+public:
+	~Rva00084CEF();
+private:
+	char _pad00[8];
+	void *m_08;
+	char _pad0C[0x18 - 0x0C];
+	void *m_18;
+};
+
+Rva00084CEF::~Rva00084CEF()
+{
+	reinterpret_cast<Rva00083CE9Host *>(this)->rva00083E87();
+	m_08 = 0;
+	m_18 = 0;
+}
