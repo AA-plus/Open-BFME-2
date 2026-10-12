@@ -421,6 +421,8 @@ public:
 	bool testKindOf30() const { return (m_kindOf10E & 0x01) != 0; }
 	bool testKindOf59() const { return (m_kindOf113 & 0x02) != 0; }
 	int rva000456AC(int kind) const;
+	// The KindOf mask read in place as 32-bit words from +0x108.
+	template <unsigned int BIT> unsigned int testKindOfBit() const { return ((const unsigned int *)((const char *)this + 0x108))[BIT >> 5] & (1u << (BIT & 31)); }
 	bool isKindOf(int kind) const { return (unsigned char)rva000456AC(kind) != 0; }
 	float getRva51C() const { return m_51C; }
 	// KindOf bit 0x2F (byte +0x10D, bit 7), unnamed: skipped by the team
@@ -956,11 +958,13 @@ public:
 	int rva00357B82(Parameter *pPlayerParm);
 	ObjectTypes *getObjectTypes(const AsciiString &objectTypeList);
 	unsigned int getFrameObjectCountChanged() const { return m_frameObjectCountChanged; }
+	unsigned int getFrameRva1A160() const { return m_frameRva1A160; }
 	int getObjectCount(int playerIndex, const AsciiString &objectTypeName) const;
 	void setObjectCount(int playerIndex, const AsciiString &objectTypeName, int newCount);
 private:
 	unsigned char m_pad00[0x1A15C];
 	unsigned int m_frameObjectCountChanged; // +0x1A15C
+	unsigned int m_frameRva1A160; // +0x1A160
 };
 extern ScriptEngine *TheScriptEngine;
 
@@ -983,6 +987,7 @@ protected:
 	bool rva003EA228(Parameter *, bool);
 	bool evaluateSkirmishValueInArea(Condition *, Parameter *, Parameter *, Parameter *, Parameter *);
 	bool rva003E64A6(Condition *, Parameter *, Parameter *, Parameter *, Parameter *, Parameter *);
+	bool evaluateSkirmishPlayerHasUnitsInArea(Condition *, Parameter *, Parameter *);
 	bool evaluateHasCommandPointsToBuildUnit(Parameter *, Parameter *);
 	bool evaluatePlayerHasKilledTypeUnits(Parameter *, Parameter *, Parameter *);
 	bool rva003E63CD(Condition *, Parameter *, Parameter *, Parameter *);
@@ -2303,4 +2308,66 @@ bool ScriptConditions::rva003E64A6(Condition *pCondition, Parameter *pPlayerParm
 	}
 	pCondition->setCustomData(TheScriptEngine->getFrameObjectCountChanged());
 	return comparison;
+}
+
+// ?evaluateSkirmishPlayerHasUnitsInArea@ScriptConditions@@IAE_NPAVCondition@@PAVParameter@@1@Z, retail 0x003E782D
+// (386 bytes, RET 12): condition 96 (0x003E79AF negates it). Zero Hour's cached "player has units in area": the
+// Condition's custom data (+0x44: 0 unset, -1 false, 1 true) and frame (+0x48) cache the answer until a
+// script-engine frame counter (+0x1A15C or +0x1A160) passes the cached frame; BFME 2 walks every player of the
+// parameter's mask and counts members that pass four template-kind exclusions (89, 134, 152, 175), are inside the
+// trigger, are not private-status bit 0 and not template kind 25.
+bool ScriptConditions::evaluateSkirmishPlayerHasUnitsInArea(Condition *pCondition, Parameter *pSkirmishPlayerParm, Parameter *pTriggerParm)
+{
+	PolygonTrigger *pTrig = TheScriptEngine->getQualifiedTriggerAreaByName(pTriggerParm->getString());
+	if (pTrig == 0)
+		return false;
+	if (pCondition->getCustomData() != 0)
+	{
+		unsigned int frame = pCondition->getCustomFrame();
+		if (!(TheScriptEngine->getFrameObjectCountChanged() > frame) && !(TheScriptEngine->getFrameRva1A160() > frame))
+		{
+			if (pCondition->getCustomData() == -1)
+				return false;
+			if (pCondition->getCustomData() == 1)
+				return true;
+		}
+	}
+	int mask = TheScriptEngine->rva00357B82(pSkirmishPlayerParm);
+	while (mask)
+	{
+		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
+		if (!player)
+			continue;
+		int count = 0;
+		for (PlayerTeamList::const_iterator it = player->getPlayerTeams()->begin(); it != player->getPlayerTeams()->end(); ++it)
+		{
+			for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance())
+			{
+				Team *team = iter.cur();
+				if (!team)
+					continue;
+				Object *pObj;
+				for (DLINK_ITERATOR<Object> iter2 = team->iterate_TeamMemberList(); (pObj = iter2.cur()) != 0; iter2.advance())
+				{
+					_ReadWriteBarrier();
+					if (pObj->getTemplate()->testKindOfBit<89>() || pObj->getTemplate()->testKindOfBit<134>()
+						|| pObj->getTemplate()->testKindOfBit<152>() || pObj->getTemplate()->testKindOfBit<175>())
+						continue;
+					if (!pObj->isInside(pTrig))
+						continue;
+					if (pObj->isEffectivelyDead() || pObj->getTemplate()->testKindOfBit<25>())
+						continue;
+					count++;
+				}
+			}
+		}
+		pCondition->setCustomFrame(TheScriptEngine->getFrameObjectCountChanged());
+		if (count > 0)
+		{
+			pCondition->setCustomData(1);
+			return true;
+		}
+	}
+	pCondition->setCustomData(-1);
+	return false;
 }
