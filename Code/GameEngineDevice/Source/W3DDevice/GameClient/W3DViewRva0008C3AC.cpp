@@ -1,11 +1,11 @@
-// ?update@W3DView@@UAEXXZ
-// partial score=0.994 date=2026-10-11
-// ?update@W3DView@@UAEXXZ
+// cl: /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC
+//
+// ?update@W3DView@@UAEXXZ, retail 0x0008c3ac, 2690 bytes. Banked partial (score 0.994) closed by tools/permute.py;
+// the body is the banked one up to statement/operand order and local types.
 // Round-6 rework (claude-opus-5-5): lock-follow block rewritten in the WB 98A880 debug order
 // (followFactor<0 test, ZH sqr() distances, dx*ratio*GlobalData factor, inner dx/dy
 // recompute), all fences dropped; ratio2 negate-before-sign. Residual: two commutative
 // load orders (shake y sin*intensity; cameraOffset.x *= zoom).
-// cl: /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC
 // BFME W3DView::update, retail 0x007446A0.
 // Constructor 0x00745B10 installs SubsystemInterface table 0x01121764 at +0xFC. Slot 5 reaches this body through ILT 0x00007F31.
 #include <math.h>
@@ -587,7 +587,7 @@ void W3DView::update()
             float curDistSqr=sqr(curpos.x-objpos.x)+sqr(curpos.y-objpos.y);
             if(m_snapImmediate) { curpos.x=objpos.x; curpos.y=objpos.y; }
             else {
-                float dx=objpos.x-curpos.x;
+                float dx=(objpos.x?objpos.x:objpos.x)-curpos.x;
                 float dy=objpos.y-curpos.y;
                 if(m_lockType==1) {
                     if(curDistSqr>=snapThreshSqr) {
