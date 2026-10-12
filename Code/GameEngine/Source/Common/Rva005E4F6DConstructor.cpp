@@ -80,8 +80,10 @@ class Rva005E6D0D {
 public: Rva005E6D0D(void *,HeroDetailsInput *);
 private: char storage[0x20];
 };
+class Rva005E68C0 { public: void rva005E68C0(); };
 class Rva005E6D90
 {
+    friend class Rva005E6F9D;
 public:
     // ?Rva005E6D90::Rva005E6D90 absent-from-retail - inline pointer holder
     Rva005E6D90(Rva005E6D0D *p) : value(p) {}
@@ -95,10 +97,20 @@ class Rva005E6F9D : public Rva005F64F5, public Rva005E4F6D
 public:
     Rva005E6F9D(int,const AsciiString &,HeroDetailsInput *);
     virtual ~Rva005E6F9D();
+    void rva005E69C8();
 private:
     Rva005E6D90 child20;
 };
 Rva005E6F9D::~Rva005E6F9D() {}
+
+// Native005E69C8..005E69D0 forwards the owned listener at+20 to the
+// independently matched120B roster method5E68C0. WB1601CD0 reaches the
+// same owned pointer and corroborates the parent/child relationship;
+// its original wrapper name is unknown, so the method stays descriptive.
+void Rva005E6F9D::rva005E69C8()
+{
+    ((Rva005E68C0 *)child20.value)->rva005E68C0();
+}
 
 
 // Native005E6ED6..005E6F95,191B RET16 (hidden virtual-base flag included).
