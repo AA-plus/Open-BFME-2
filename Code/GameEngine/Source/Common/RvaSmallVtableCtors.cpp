@@ -219,6 +219,53 @@ Rva004318C6::Rva004318C6(void *p) : m_04(p)
 {
 }
 
+// The 0x00431A64 family below stores the pointer before the vtable: the order
+// an inlined base constructor taking it, then the derived vtable store, gives.
+struct RvaSmallVtablePtrBase
+{
+	void *m_04;
+	RvaSmallVtablePtrBase(void *p) : m_04(p) {}
+};
+
+// ??0Rva004318FC@@QAE@PAX@Z @0x004318FC 18B, vtable VA 0xc3c97c (slot 0 the shared
+// deleting dtor 0x00431A64 of this command-handler family)
+class Rva004318FC : public RvaSmallVtablePtrBase
+{
+public:
+	Rva004318FC(void *p);
+	virtual ~Rva004318FC() {}
+};
+
+Rva004318FC::Rva004318FC(void *p) : RvaSmallVtablePtrBase(p)
+{
+}
+
+// ??0Rva0043190E@@QAE@PAX@Z @0x0043190E 18B, vtable VA 0xc3c988 (slot 0 the shared
+// deleting dtor 0x00431A64 of this command-handler family)
+class Rva0043190E : public RvaSmallVtablePtrBase
+{
+public:
+	Rva0043190E(void *p);
+	virtual ~Rva0043190E() {}
+};
+
+Rva0043190E::Rva0043190E(void *p) : RvaSmallVtablePtrBase(p)
+{
+}
+
+// ??0Rva004319C2@@QAE@PAX@Z @0x004319C2 18B, vtable VA 0xc3c9a0 (slot 0 the shared
+// deleting dtor 0x00431A64 of this command-handler family)
+class Rva004319C2 : public RvaSmallVtablePtrBase
+{
+public:
+	Rva004319C2(void *p);
+	virtual ~Rva004319C2() {}
+};
+
+Rva004319C2::Rva004319C2(void *p) : RvaSmallVtablePtrBase(p)
+{
+}
+
 // ??0Rva0059B060@@QAE@PAX@Z @0x0059B060 18B, vtable VA 0xc70e60
 class Rva0059B060
 {
