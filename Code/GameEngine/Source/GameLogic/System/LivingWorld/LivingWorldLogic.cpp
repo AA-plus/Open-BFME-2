@@ -67,6 +67,7 @@ class Rva004E3184;
 class Rva00319CED;
 class Rva002E112A { public: Bool rva002E112A(Rva00319CED *); };
 class LivingWorldPlayer { public:
+ void MarkUnitsForUpgrades(void *region);
  bool rva002E0B30();
  void AddArmy(LivingWorldArmy *);
  bool rva002E12F3(int);
@@ -144,14 +145,11 @@ private:
 	Rva002B74DE *m_ptr;
 };
 
-// Player lookup by id (0x002B51F8) and the per-player upgrade marking
-// (0x002E2D8D, WB LivingWorldPlayer::MarkUnitsForUpgrades) are pinned under
-// placeholder names for this object and the player.
-class Rva002E2903Player
-{
-public:
-	void rva002E2D8D(void *army);				// 0x002E2D8D
-};
+// Keep the existing lookup provider's opaque return type. Native2B5334
+// sends that result and the region to the now-recovered player worker2E2D8D.
+// This declaration-only receiver view constructs no player or layout.
+class Rva002E2903Player;
+
 
 class AsciiString;
 class Rva002BA8F1Logic
@@ -871,7 +869,7 @@ void LivingWorldLogic::AutoMarkUnitsForUpgrades()
 		if (army->m_playerID != -1)
 		{
 			Rva002E2903Player *player = ((Rva002BA8F1Logic *)this)->find(army->m_playerID, 0);
-			player->rva002E2D8D(army);
+			((LivingWorldPlayer *)player)->MarkUnitsForUpgrades(army);
 		}
 	}
 }

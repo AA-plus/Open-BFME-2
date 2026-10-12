@@ -11187,7 +11187,6 @@ name,address,notes
 ?rva002DE311@Rva002DEE9AOwner@@QAEXXZ,0x002DE311,pin for 0x2DEE9A thiscall void () on this
 ?rva002E0A9F@Rva002E0A9FElem@@QAEHPAX@Z,0x002E0A9F,thiscall int scan over +0x1B8/+0x1BC entries with 1 stack arg; head-decoded, Ghidra FUN_006e0a9f 75B
 ?rva002E0BC0@Rva002E0BC0Helper@@QAEEH@Z,0x002E0BC0,callee of predicate 0x00318CA4 read from its REL32 displacement; w3-g26
-?rva002E2D8D@Rva002E2903Player@@QAEXPAX@Z,0x002E2D8D,thiscall with 1 pointer arg on the 0x2B51F8 find result; Ghidra FUN_006e2d8d 428B, head not decoded
 ?rva002E3954@PolygonTrigger@@QAEXPAUFloatRect0073CE30@@@Z,0x002E3954,REL32 at the byte-verified do/undoNamedMapReveal (0x003577DA/0x0035789D) and 0x003C0169: called on the trigger from getQualifiedTriggerAreaByName with a 16-byte rect out-param (copies the rect 0x0007E03A returns)
 ?rva002E3A39@PolygonTrigger@@QAE_NABUCoord3D@@@Z,0x002E3A39,"PolygonTrigger member right after pointInTrigger 0x002E3A13 (ret 4): copies the float x/y of its Coord3D into a local pair and calls the same planar test 0x0070B7C2 with this+8; REL32 callee of the camera-settings slots 0x001019DA and 0x00101CF6, which test al; address-named, float-overload role inferred"
 ?rva002E3AA8@PolygonTrigger@@QAE_NPBUCoord3D@@0PAU2@_N@Z,0x002E3AA8,"PolygonTrigger member (ret 0x10, byte flag at +0x14): REL32 callee of the camera-settings slot 0x00101CF6 at 0x00101DFC with (&last position, position, &out Coord3D, 1), al tested; address-named, segment-clip role inferred"

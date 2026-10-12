@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/iniexception /O1 /G7 /EHsc /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /ICode/Libraries/Source/WWVegas/WWLib
+// cl: /Ireference/shims/bfmealloc /D_CRTIMP= /Ireference/shims/bfme2_ascii /Ireference/shims/iniexception /O1 /G7 /EHsc /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /ICode/Libraries/Source/WWVegas/WWLib
 // stlport
 // LivingWorldPlayer.cpp -- LivingWorldPlayer members recovered from
 // WorldBuilder leads (reverse/wb_name_leads.csv): WB's debug build names the
@@ -21,7 +21,12 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
     return a < b ? b : a;
 }
 }
+#include <stdlib.h>
+namespace _STL { void __cdecl free(void *); }
+#define free _STL::free
 #include <vector>
+#undef free
+#include <algorithm>
 #include "FixedStorage128.h"
 #include "ascii_string.h"
 #include "unicode_string.h"
@@ -126,6 +131,7 @@ public:
 	typedef _STL::vector<void *> ArmyVec;
 
 	static void ParseLivingWorldPlayer(INI *ini, void *instance);
+	void MarkUnitsForUpgrades(void *region);
 
 	void OnUnitDequeued(Rva00319CED *unit);
 	void SetColorIndex(Int color);
@@ -401,4 +407,63 @@ void LivingWorldPlayer::ParseLivingWorldPlayer(INI *ini, void *instance)
 append:
 	((LivingWorldCampaign *)instance)->AddPlayer(*(const Rva002E0A0A *)&record);
 done:;
+}
+
+
+// Native2E2D8D..2E2F39 RET4; WBDE4730 names the operation and the same
+// armory/army/summary-entry loops. ModuleData-pointer vectors retain the
+// existing collector/push providers' spelling only as a storage view.
+// The region argument's original type and the filter slot's name are unknown.
+class Rva003F287F {public:void rva003F28DB(_STL::vector<const ModuleData*>&);};
+class Rva00318C32Ret;
+class Rva002E2504 {public:bool rva002E2504(Rva00318C32Ret*,_STL::vector<const ModuleData*>*);};
+class Rva0040C804Target {public:bool check();};
+class Rva004E0632 {public:int rva004E0632() const;};
+class ArmySummaryEntry {public:void MarkForUpgrades(const Rva004E0632*);};
+struct UpgradeSummaryBoundsView { char pad[0x40]; PlayerHeroPairView *begin,*end; };
+struct LivingWorldUpgradeFilterView {virtual void slot0();virtual bool accepts(ArmySummaryEntry*);};
+struct Rva002E0864Cmp {unsigned char unused;bool operator()(void*,void*) const;};
+namespace _STL {template<> void sort<void**,Rva002E0864Cmp>(void**,void**,Rva002E0864Cmp);}
+
+void LivingWorldPlayer::MarkUnitsForUpgrades(void *region)
+{
+    _STL::vector<const ModuleData*> armories;
+    ((Rva003F287F*)region)->rva003F28DB(armories);
+    if (!armories.empty()) {
+        _STL::vector<const ModuleData*> armies;
+        ((Rva002E2504*)this)->rva002E2504((Rva00318C32Ret*)region,&armies);
+        const ModuleData **armyEnd=armies.end();
+        if (armies.begin()!=armyEnd) {
+            _STL::vector<const ModuleData*> units;
+            // Retail updates the cached byte distance in its stack slot, then shifts
+            // that slot by two. Volatile reproduces this observable local update;
+            // the original source qualification is unknown.
+            volatile int armyCount=(const char*)armyEnd-(const char*)armies.begin();
+            armyCount >>= 2;
+            for(unsigned i=0;i<(unsigned)armyCount;++i) {
+                PlayerHeroArmyView *army=(PlayerHeroArmyView*)armies[i];
+                UpgradeSummaryBoundsView *summary=(UpgradeSummaryBoundsView*)army->summary;
+                int count=summary->end-summary->begin;
+                for(int j=0;j<count;++j) {
+                    ArmySummaryEntry *entry=(ArmySummaryEntry*)((Rva0040CB2CIndexedField*)army->summary)->get(j);
+                    if(!((Rva0040C804Target*)entry)->check()) {
+                        const ModuleData *stored=(const ModuleData*)entry;
+                        units.push_back(stored);
+                    }
+                }
+            }
+            if(!units.empty()) {
+                _STL::sort((void**)units.begin(),(void**)units.end(),Rva002E0864Cmp());
+                for(unsigned i=0;i<armories.size();++i) {
+                    const Rva004E0632 *armory=(const Rva004E0632*)armories[i];
+                    LivingWorldUpgradeFilterView *filter=(LivingWorldUpgradeFilterView*)armory->rva004E0632();
+                    for(unsigned j=0;j<units.size();++j) {
+                        ArmySummaryEntry *entry=(ArmySummaryEntry*)units[j];
+                        if(*(int*)((char*)entry+0xBC)==0 && filter->accepts(entry))
+                        entry->MarkForUpgrades(armory);
+                    }
+                }
+            }
+        }
+    }
 }
