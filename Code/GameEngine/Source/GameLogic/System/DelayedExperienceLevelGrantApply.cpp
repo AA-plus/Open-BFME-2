@@ -1,7 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP=
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /ICode/Libraries/Include
 #include "ascii_string.h"
 // DelayedExperienceLevelGrantSystem's per-entry level application, retail
-// 0x00420C8E..0x00420DF1 (357 bytes, thiscall, ret 12). Its one caller is
+// 0x00420C8E..0x00420DF3 (357 bytes, thiscall, ret 12). Its one caller is
 // the system's update (0x00420EB3 at 0x00420EF8), which drains the queued
 // (object, level, grant) entries of DelayedExperienceLevelGrantXfer.cpp.
 //
@@ -10,7 +10,7 @@
 // object's rowed 0x00293077; a CreateAHero object (template +0x11F bit 0x40)
 // has its CreateAHeroManager record (by object +0x74) take the level's +0xFC
 // command set; a granted level after logic frame 10 runs the system's
-// unrowed 0x00420B61 (level, object) and sets model condition 0xD2 for three
+// rowed 0x00420B61 (level, object) and sets model condition 0xD2 for three
 // seconds (3 * frame rate); the experience tracker (object +0x264) takes the
 // level (rowed 0x0039B2E6); a non-empty +0x58 condition set is applied
 // (0x001E431E); a level with its +0x100 flag tells the object's
@@ -39,11 +39,36 @@ template <class T> struct GrantVectorView
 
 struct Rva0039B2E6Input;
 
+class Object;
+#include "Lib/Coord3D.h"
+// Native48B matrix consumer; identity assignments independently proved by
+// retail and WB01292600. BFME1 cee35b7 WWMath Matrix3D(bool)/Make_Identity
+// corroborates the clean reference algorithm; no original helper-name claim.
+class Matrix3D {
+public:
+ float row[3][4];
+ explicit Matrix3D(bool init) { if(init) {
+  row[0][0]=1;row[0][1]=0;row[0][2]=0;row[0][3]=0;
+  row[1][0]=0;row[1][1]=1;row[1][2]=0;row[1][3]=0;
+  row[2][0]=0;row[2][1]=0;row[2][2]=1;row[2][3]=0;
+ } }
+};
+class Drawable {public:bool rva00272835(int,int);};
+class Thing {public:Drawable *getDrawable()const;};
+class FXList {public:
+ static void doFXPos(const FXList *,const Coord3D *,const Matrix3D *,float,const Coord3D *);
+ static void doFXObj(const FXList *,const Object *,const Object *);
+};
+class ObjectCreationList {public:void create(void *,void *,void *);};
+struct GrantLevelFXInfo {const FXList *fx;AsciiString bone;};
+
+
 struct ExperienceLevelView
 {
 	unsigned char m_pad00[0x30];
 	GrantVectorView<AsciiString> m_attributeModifiers;		// +0x30
-	unsigned char m_pad3C[0x4C - 0x3C];
+	GrantVectorView<GrantLevelFXInfo> m_fx;
+	ObjectCreationList *m_ocl;
 	GrantVectorView<const void *> m_upgrades;				// +0x4C
 	ModelConditionFlags m_conditions;						// +0x58
 	unsigned char m_pad59[0xFC - 0x59];
@@ -179,4 +204,23 @@ void DelayedExperienceLevelGrantSystem::rva00420C8E(ExperienceLevelView *level, 
 	Int special = level->m_specialCondition;
 	if (special != -1)
 		obj->rva0028EC68(special, 0, 1);
+}
+
+// Native00420B61..00420C8E301B RET8; WB01292600 proves indexed FX/bone records,
+// identity matrix, bone transform, translation and optional object creation.
+// BFME1 cee35b7 ExperienceLevelParseLevelUpFx corroborates the record types;
+// native vector stride8/+3C and OCL+48 establish the BFME2 layout. Preserve
+// the existing admitted owner signature and Drawable HH provider ABI.
+void DelayedExperienceLevelGrantSystem::rva00420B61(ExperienceLevelView *level,Object *obj) {
+ for(unsigned i=0;i<level->m_fx.size();++i) {
+  const GrantLevelFXInfo &info=level->m_fx[i];
+  if(!((const StringBase<char> *)&info.bone)->isEmpty() && ((const Thing *)obj)->getDrawable()) {
+   Matrix3D matrix(true);
+   ((const Thing *)obj)->getDrawable()->rva00272835((int)info.bone.str(),(int)&matrix);
+   Coord3D pos;
+   pos.x=matrix.row[0][3];pos.y=matrix.row[1][3];pos.z=matrix.row[2][3];
+   FXList::doFXPos(info.fx,&pos,&matrix,0.0f,0);
+  } else FXList::doFXObj(info.fx,obj,0);
+ }
+ if(level->m_ocl)level->m_ocl->create(obj,0,0);
 }

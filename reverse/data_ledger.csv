@@ -19735,7 +19735,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A03140,4,.data,global,?Va00E03140Lookup@@3PAVRva002E18C3Lookup@@A,Code/GameEngine/Source/GameLogic/System/LivingWorld/Rva002BA8F1AddPlayer.cpp,owned,,1,5
 0x00A03144,4,.data,global,?TheDelayedExperienceLevelGrantSystem@@3PAVDelayedExperienceLevelGrantSystem@@A,,unowned,?TheDelayedExperienceLevelGrantSystem@@3PAVDelayedExperienceLevelGrantSystem@@A;?TheDelayedExperienceLevelGrantSystem@@3PAVRva0022AEE4Subsystem@@A,0,3
 0x00A03148,8,.data,global,_s_rva007B0241,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
-0x00A03150,8,.data,global,?g_Va00E03150@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E031xx.cpp,owned,,1,2
+0x00A03150,8,.data,global,?$S1@?BB@??rva00420C8E@DelayedExperienceLevelGrantSystem@@QAEXPAUExperienceLevelView@@PAVObject@@_N@Z@4IA,Code/GameEngine/Source/GameLogic/System/DelayedExperienceLevelGrantApply.cpp,owned,,1,4
 0x00A03158,8,.data,global,?g_00E03158@@3PAVRva00421520@@A,Code/GameEngine/Source/Common/Rva002A9F17Fwd.cpp,owned,,1,4
 0x00A03160,4,.data,global,?TheFormationAssistant@@3PAVRva0022AD10Subsystem@@A,,unowned,,0,2
 0x00A03164,4,.data,global,_s_rva007B0280,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1

@@ -380,7 +380,6 @@ address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E030xx.cpp	g_Va0
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E030xx.cpp	g_Va00E030E0	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E031xx.cpp	g_Va00E03110	4
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E031xx.cpp	g_Va00E03118	3
-address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E031xx.cpp	g_Va00E03150	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E033xx.cpp	g_Va00E03304	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E033xx.cpp	g_Va00E03334	6
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E033xx.cpp	g_Va00E03350	4
@@ -6145,7 +6144,6 @@ object_symbol	reverse/functions.csv	0x0006EDE3	1
 object_symbol	reverse/functions.csv	0x000796BC	1
 object_symbol	reverse/functions.csv	0x0007975E	1
 object_symbol	reverse/functions.csv	0x0007B719	1
-object_symbol	reverse/functions.csv	0x0007E81F	1
 object_symbol	reverse/functions.csv	0x0007FF18	1
 object_symbol	reverse/functions.csv	0x0008B632	1
 object_symbol	reverse/functions.csv	0x000A8893	1
@@ -6162,7 +6160,6 @@ object_symbol	reverse/functions.csv	0x000D0469	1
 object_symbol	reverse/functions.csv	0x000D04E1	1
 object_symbol	reverse/functions.csv	0x000F0E20	1
 object_symbol	reverse/functions.csv	0x000FDB21	1
-object_symbol	reverse/functions.csv	0x0010670B	1
 object_symbol	reverse/functions.csv	0x001212B0	1
 object_symbol	reverse/functions.csv	0x001212F0	1
 object_symbol	reverse/functions.csv	0x00121400	1
@@ -6221,9 +6218,7 @@ object_symbol	reverse/functions.csv	0x001E7243	1
 object_symbol	reverse/functions.csv	0x001E7E9F	1
 object_symbol	reverse/functions.csv	0x001EDDFF	1
 object_symbol	reverse/functions.csv	0x001F8D70	1
-object_symbol	reverse/functions.csv	0x001FFD2C	1
 object_symbol	reverse/functions.csv	0x00203618	1
-object_symbol	reverse/functions.csv	0x002057A8	1
 object_symbol	reverse/functions.csv	0x0020596A	1
 object_symbol	reverse/functions.csv	0x0020D5E6	1
 object_symbol	reverse/functions.csv	0x0020F321	1
@@ -6338,7 +6333,6 @@ object_symbol	reverse/functions.csv	0x004CC195	1
 object_symbol	reverse/functions.csv	0x004CEE6E	1
 object_symbol	reverse/functions.csv	0x004D9FB9	1
 object_symbol	reverse/functions.csv	0x004DBFA1	1
-object_symbol	reverse/functions.csv	0x004F710A	1
 object_symbol	reverse/functions.csv	0x00511CB9	1
 object_symbol	reverse/functions.csv	0x005227C0	1
 object_symbol	reverse/functions.csv	0x00523DD4	1
@@ -6364,7 +6358,6 @@ object_symbol	reverse/functions.csv	0x005BD5DC	1
 object_symbol	reverse/functions.csv	0x005D1A7D	1
 object_symbol	reverse/functions.csv	0x005D5847	1
 object_symbol	reverse/functions.csv	0x005F69C4	1
-object_symbol	reverse/functions.csv	0x005F69CE	1
 object_symbol	reverse/functions.csv	0x005FE0F5	1
 object_symbol	reverse/functions.csv	0x0060CFFF	1
 object_symbol	reverse/functions.csv	0x006130C0	1
@@ -15255,6 +15248,7 @@ object_symbol	reverse/functions.csv	0x00786EB8	1
 object_symbol	reverse/functions.csv	0x00786EC0	1
 object_symbol	reverse/functions.csv	0x00786ED2	1
 object_symbol	reverse/functions.csv	0x00786EE4	1
+object_symbol	reverse/functions.csv	0x00786F00	1	allow=2b82e256c6e6a8d7694ca214e2d2411e92be4504
 object_symbol	reverse/functions.csv	0x00786F17	1
 object_symbol	reverse/functions.csv	0x00786F1F	1
 object_symbol	reverse/functions.csv	0x00786F34	1
