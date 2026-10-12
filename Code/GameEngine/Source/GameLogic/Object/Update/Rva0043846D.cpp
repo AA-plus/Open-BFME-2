@@ -36,6 +36,11 @@ public:
 	int rva004383EB(Object *obj);
 };
 
+// The converged retail slot is owned by GlobalData; this view supplies only
+// the three offsets independently read by the target body.
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+
 struct Rva0043846DGlobalData
 {
 	char pad[0x11D0];
@@ -60,7 +65,7 @@ void Rva0043846D::rva0043846D(Object *obj)
 	if (drawable == 0)
 		return;
 	int mode = reinterpret_cast<Rva004383EB *>(this)->rva004383EB(obj);
-	Rva0043846DGlobalData *global = *(Rva0043846DGlobalData *const *)0x00DFE758;
+	Rva0043846DGlobalData *global = reinterpret_cast<Rva0043846DGlobalData *>(TheWritableGlobalData);
 	float phase = (float)global->phase / g_Va00DBA4E4;
 	drawable->rva00275DCE(mode, global->x, global->y, phase);
 }
