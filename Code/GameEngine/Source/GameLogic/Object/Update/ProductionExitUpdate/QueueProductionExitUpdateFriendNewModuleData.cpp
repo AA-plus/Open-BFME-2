@@ -28,7 +28,7 @@ public:
     static void parseAngleReal(INI *, void *, void *, const void *);
     static void parseDurationUnsignedInt(INI *, void *, void *, const void *);
     static void parseBool(INI *, void *, void *, const void *);
-    static void dup_002EF72(INI *, void *, void *, const void *);
+    static void parseUnsignedInt(INI *, void *, void *, const void *);
 };
 
 class QueueProductionExitUpdateModuleData
@@ -80,7 +80,7 @@ void QueueProductionExitUpdateModuleData::buildFieldParse(MultiIniFieldParse &pa
         { "NaturalRallyPoint", INI::parseCoord3D, 0, 0x14 },
         { "ExitDelay", INI::parseDurationUnsignedInt, 0, 0x20 },
         { "AllowAirborneCreation", INI::parseBool, 0, 0x24 },
-        { "InitialBurst", INI::dup_002EF72, 0, 0x28 },
+        { "InitialBurst", INI::parseUnsignedInt, 0, 0x28 },
         { "NoExitPath", INI::parseBool, 0, 0x30 },
         { "CanRallyToSlaughter", INI::parseBool, 0, 0x31 },
         { "UseReturnToFormation", INI::parseBool, 0, 0x32 },

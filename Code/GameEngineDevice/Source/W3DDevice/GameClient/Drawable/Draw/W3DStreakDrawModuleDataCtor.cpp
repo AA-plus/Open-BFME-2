@@ -22,7 +22,7 @@ struct FieldParse
 class INI
 {
 public:
-	static void dup_002EF72(INI *ini, void *instance, void *store, const void *userData);
+	static void parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
 	static void parseBool(INI *ini, void *instance, void *store, const void *userData);
 	static void parseRGBColor(INI *ini, void *instance, void *store, const void *userData);
@@ -37,7 +37,7 @@ extern const FieldParse g_00BCDB60[] = {
 	{ "Additive", &INI::parseBool, 0, 0x10 },
 	{ "Color", &INI::parseRGBColor, 0, 0x14 },
 	{ "Texture", &INI::parseAsciiString, 0, 0x24 },
-	{ "NumSegments", &INI::dup_002EF72, 0, 0x20 },
+	{ "NumSegments", &INI::parseUnsignedInt, 0, 0x20 },
 	{ "WeatherTexture", &Rva000D06C6Parse, 0, 0x28 },
 	{ 0, 0, 0, 0 }
 };

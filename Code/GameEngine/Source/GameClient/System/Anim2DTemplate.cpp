@@ -70,7 +70,4 @@ void Anim2DTemplateAccessorEmitAnchor(Anim2DTemplate*t,const Image*i,AsciiString
 }
 #pragma inline_depth()
 
-// Existing pin2EF72 is the complete78B bounded parser with the same static
-// four-argument ABI. Bind its recovered linker name rather than leaving an
-// unresolved donor spelling; the native call proves the consumed identity.
-#pragma comment(linker, "/alternatename:?parseUnsignedInt@INI@@SAXPAV1@PAX1PBX@Z=?dup_002EF72@INI@@SAXPAV1@PAX1PBX@Z")
+// The native 2EF72 call now resolves directly to INI::parseUnsignedInt.

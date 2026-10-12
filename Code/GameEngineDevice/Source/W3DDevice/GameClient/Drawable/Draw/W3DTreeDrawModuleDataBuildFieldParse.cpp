@@ -30,7 +30,7 @@ struct FieldParse
 class INI
 {
 public:
-	static void dup_002EF72(INI *ini, void *instance, void *store, const void *userData);
+	static void parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
 	static void parseBool(INI *ini, void *instance, void *store, const void *userData);
 	static void parseDurationUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
@@ -63,8 +63,8 @@ extern const FieldParse g_00BCCFE8[] = {
 	{ "MorphTime", &INI::parseDurationUnsignedInt, 0, 0x4C },
 	{ "MorphFX", &INI::parseFXList, 0, 0x50 },
 	{ "TaintedTree", &INI::parseBool, 0, 0x54 },
-	{ "FadeRate", &INI::dup_002EF72, 0, 0x58 },
-	{ "FadeTarget", &INI::dup_002EF72, 0, 0x5C },
+	{ "FadeRate", &INI::parseUnsignedInt, 0, 0x58 },
+	{ "FadeTarget", &INI::parseUnsignedInt, 0, 0x5C },
 	{ "FadeDistance", &INI::parseReal, 0, 0x60 },
 	{ 0, 0, 0, 0 }
 };

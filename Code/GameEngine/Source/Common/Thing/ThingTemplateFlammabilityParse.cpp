@@ -18,12 +18,12 @@
 //   Sub-table at RVA 0x9BF8D8 (VA 0xDBF8D8): 5 entries + terminator, decoded
 //   from code immediates + file bytes (first entry token/parse preset in file).
 // - Sub-table entries (token VA -> string, parse VA, user, off):
-//   [0] Fuel (00BFB734) via INI::dup_002EF72 (0x2EF72, 78B max-bounded unsigned)
+//   [0] Fuel (00BFB734) via INI::parseUnsignedInt (0x2EF72, 78B max-bounded unsigned)
 //       user 0xFFFF off 0; [1] FuelFactor (00810544) via 0x33B677 (197B Ghidra,
 //       pinned ?rva0033B677, address-derived ABI only) user instance off 0;
-//   [2] MaxBurnRate (007FB774) via dup_002EF72 user 0xFFF off 4;
-//   [3] Decay (007DA030) via dup_002EF72 user 0x3FF off 8;
-//   [4] Resistance (007FB768) via dup_002EF72 user 0xFF off 12;
+//   [2] MaxBurnRate (007FB774) via parseUnsignedInt user 0xFFF off 4;
+//   [3] Decay (007DA030) via parseUnsignedInt user 0x3FF off 8;
+//   [4] Resistance (007FB768) via parseUnsignedInt user 0xFF off 12;
 //   [5] terminator 0,0,0,0. Delegate: ecx=[esp+4] (INI*), push table,
 //   edx=[esp+8]+0x314, call initFromINI, ret.
 // - Receiver: ThingTemplate* +0x314 = Flammability object (4 bounded ints +
@@ -52,14 +52,14 @@ class INI
 {
 public:
 	void initFromINI(void *what, const FieldParse *table);
-	static void __cdecl dup_002EF72(INI *ini, void *instance, void *store, const void *userData);
+	static void __cdecl parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 };
 
 void __cdecl rva0033B677(INI *ini, void *instance, void *store, const void *userData);
 
 static int s_flammabilityInit;
 static FieldParse s_flammabilityTable[6] = {
-	{ "Fuel", INI::dup_002EF72, 0, 0 },
+	{ "Fuel", INI::parseUnsignedInt, 0, 0 },
 };
 
 class ThingTemplate
@@ -80,15 +80,15 @@ void __cdecl ThingTemplate::parseFlammability(INI *ini, void *instance, void * /
 		s_flammabilityTable[1].userData = instance;
 		s_flammabilityTable[1].offset = 0;
 		s_flammabilityTable[2].token = "MaxBurnRate";
-		s_flammabilityTable[2].parse = INI::dup_002EF72;
+		s_flammabilityTable[2].parse = INI::parseUnsignedInt;
 		s_flammabilityTable[2].userData = (const void *)0xFFF;
 		s_flammabilityTable[2].offset = 4;
 		s_flammabilityTable[3].token = "Decay";
-		s_flammabilityTable[3].parse = INI::dup_002EF72;
+		s_flammabilityTable[3].parse = INI::parseUnsignedInt;
 		s_flammabilityTable[3].userData = (const void *)0x3FF;
 		s_flammabilityTable[3].offset = 8;
 		s_flammabilityTable[4].token = "Resistance";
-		s_flammabilityTable[4].parse = INI::dup_002EF72;
+		s_flammabilityTable[4].parse = INI::parseUnsignedInt;
 		s_flammabilityTable[4].userData = (const void *)0xFF;
 		s_flammabilityTable[4].offset = 12;
 		s_flammabilityTable[5].token = 0;

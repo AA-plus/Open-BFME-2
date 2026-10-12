@@ -18,7 +18,7 @@ public:
     const char *getNextTokenOrNull(const char *);
     static void parseBool(INI *, void *, void *, const void *);
     static void parseInt(INI *, void *, void *, const void *);
-    static void dup_002EF72(INI *, void *, void *, const void *);
+    static void parseUnsignedInt(INI *, void *, void *, const void *);
     static void parsePercentToReal(INI *, void *, void *, const void *);
     char unused[0x420]; const char *colon;
 };
@@ -81,7 +81,7 @@ void RespawnUpdate::iniParseDefaultRule(INI *ini, void *instance, void *store, c
         THROW0("RespawnUpdate::iniParseDefaultRule -- Duplicate RespawnRules entry.")
     const char *token;
     FIELD("AutoSpawn","AutoSpawn:Yes' or 'AutoSpawn:No",parseBool,autoSpawn)
-    FIELD("Cost","Cost",dup_002EF72,cost)
+    FIELD("Cost","Cost",parseUnsignedInt,cost)
     FIELD("Time","Time",parseInt,time)
     FIELD("Health","Health",parsePercentToReal,health)
     rules->insert(rule);
@@ -104,7 +104,7 @@ void RespawnUpdate::iniParseNewRuleForLevel(INI *ini, void *instance, void *stor
     const char *token=ini->getNextToken(ini->colon);
     if(!token || _strcmpi(token,"Level")!=0) THROW1("RespawnUpdate::iniParseNewRuleForLevel -- RespawnEntry expecting 'Level' entry. You specified %s.",token)
     if(strcmp(token,"Level")!=0) THROW1("RespawnUpdate::iniParseNewRuleForLevel -- RespawnEntry for 'Level' is case sensitive. You specified %s.",token)
-    INI::dup_002EF72(ini,instance,&rule.level,0);
+    INI::parseUnsignedInt(ini,instance,&rule.level,0);
     if(((RespawnRuleTree *)rules)->_M_find<unsigned int>(rule.level) != rules->sentinel) THROW1("RespawnUpdate::iniParseNewRuleForLevel -- Multiple 'RespawnEntry' with the same level of %d. You may only have one!",rule.level)
     rule.autoSpawn=defaultRule.autoSpawn;
     rule.cost=defaultRule.cost;
@@ -121,7 +121,7 @@ void RespawnUpdate::iniParseNewRuleForLevel(INI *ini, void *instance, void *stor
         } else if(strcmp(token,"Cost")==0) {
             if(gotCost) THROW1("RespawnUpdate::iniParseNewRuleForLevel -- RespawnEntry Level:%d entry for 'Cost' exists multiple times. Please remove one!",rule.level)
             if(strcmp(token,"Cost")!=0) THROW2("RespawnUpdate::iniParseNewRuleForLevel -- RespawnRules Level:%d entry for 'Cost' is case sensitive. You specified %s.",rule.level,token)
-            INI::dup_002EF72(ini,instance,&rule.cost,0);
+            INI::parseUnsignedInt(ini,instance,&rule.cost,0);
             gotCost=true;
         } else if(strcmp(token,"Time")==0) {
             if(gotTime) THROW1("RespawnUpdate::iniParseNewRuleForLevel -- RespawnEntry Level:%d Level:%d entry for 'Cost' exists multiple times. Please remove one!",rule.level)

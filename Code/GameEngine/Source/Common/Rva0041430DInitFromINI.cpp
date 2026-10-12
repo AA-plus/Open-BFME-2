@@ -9,7 +9,7 @@ class INI
 public:
 	void initFromINI(void *object, const FieldParse *fields);
 	static void parseBool(INI *ini, void *instance, void *store, const void *userData);
-	static void dup_002EF72(INI *ini, void *instance, void *store, const void *userData);
+	static void parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 	static void parseDurationUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 };
 
@@ -34,7 +34,7 @@ public:
 // 0x00C39FF8, file offset 0x008393F8): EvaEvent through the rowed free
 // Rva001DEE74Parse at +8, CountOnlyKillsByLocalPlayer and
 // CountOnlyKillsAgainstLocalPlayer through INI::parseBool at +0x18/+0x19,
-// MinimumCountForAnnouncement through INI::dup_002EF72 at +0xC,
+// MinimumCountForAnnouncement through INI::parseUnsignedInt at +0xC,
 // MaximumTimeForAnnouncementMS through INI::parseDurationUnsignedInt at +0x10, and
 // ObjectFilter through the rowed free iniParseObjectFilter at +0x14, then the
 // zero terminator. `extern` on the definition keeps the table external.
@@ -44,7 +44,7 @@ const FieldParse g_00C39FF8[] =
 	{ "EvaEvent", &Rva001DEE74Parse, 0, 8 },
 	{ "CountOnlyKillsByLocalPlayer", &INI::parseBool, 0, 24 },
 	{ "CountOnlyKillsAgainstLocalPlayer", &INI::parseBool, 0, 25 },
-	{ "MinimumCountForAnnouncement", &INI::dup_002EF72, 0, 12 },
+	{ "MinimumCountForAnnouncement", &INI::parseUnsignedInt, 0, 12 },
 	{ "MaximumTimeForAnnouncementMS", &INI::parseDurationUnsignedInt, 0, 16 },
 	{ "ObjectFilter", &iniParseObjectFilter, 0, 20 },
 	{ 0, 0, 0, 0 }

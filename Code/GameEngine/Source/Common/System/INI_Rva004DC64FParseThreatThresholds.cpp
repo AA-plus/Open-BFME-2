@@ -1,6 +1,6 @@
 // cl: /DNDEBUG /MD /GX-
 // Emotion threat-threshold parsers (retail 0x004DC64F 37 bytes and
-// 0x004DC625 42 bytes). Both parse an int through the rowed dup_002EF72 at
+// 0x004DC625 42 bytes). Both parse an int through the rowed parseUnsignedInt at
 // 0x002EF72 into a stack temp (instance and userData 0). The Above form
 // stores {-1, value} (or-store, retail's 83 08 FF); the Below form stores
 // {1, -value} (negated temp). Each body serves two table entries of the
@@ -12,7 +12,7 @@
 class INI
 {
 public:
-	static void dup_002EF72(INI *ini, void *instance, void *store, const void *userData);
+	static void parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
 	static void Rva004DC64F_ParseThreatAbove(INI *ini, void *instance, void *store, const void *userData);
 	static void Rva004DC625_ParseThreatBelow(INI *ini, void *instance, void *store, const void *userData);
 };
@@ -21,7 +21,7 @@ public:
 void INI::Rva004DC64F_ParseThreatAbove(INI *ini, void *instance, void *store, const void *userData)
 {
 	int value;
-	INI::dup_002EF72(ini, 0, &value, 0);
+	INI::parseUnsignedInt(ini, 0, &value, 0);
 	((int *)store)[0] |= -1;
 	((int *)store)[1] = value;
 }
@@ -30,7 +30,7 @@ void INI::Rva004DC64F_ParseThreatAbove(INI *ini, void *instance, void *store, co
 void INI::Rva004DC625_ParseThreatBelow(INI *ini, void *instance, void *store, const void *userData)
 {
 	int value;
-	INI::dup_002EF72(ini, 0, &value, 0);
+	INI::parseUnsignedInt(ini, 0, &value, 0);
 	value = -value;
 	((int *)store)[0] = 1;
 	((int *)store)[1] = value;

@@ -59,7 +59,7 @@ public:
     static void parseBool(INI *ini, void *instance, void *store, const void *userData);
     static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
     static void parseCoord3D(INI *ini, void *instance, void *store, const void *userData);
-    static void dup_002EF72(INI *ini, void *instance, void *store, const void *userData);
+    static void parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);
     static void parseGameClientRandomVariable(INI *ini, void *instance, void *store, const void *userData);
 };
 
@@ -177,8 +177,8 @@ void ParticleSystemTemplate::parse(INI *ini, void *instance, void *, const void 
         { "SlavePosOffset", INI::parseCoord3D, NULL, offsetof(ParticleSystemTemplate, m_slavePosOffset) },
         { "PerParticleAttachedSystem", INI::parseAsciiString, NULL, offsetof(ParticleSystemTemplate, m_attachedSystemName) },
         { "Lifetime", INI::parseGameClientRandomVariable, NULL, offsetof(ParticleSystemTemplate, m_lifetime) },
-        { "SystemLifetime", INI::dup_002EF72, NULL, offsetof(ParticleSystemTemplate, m_systemLifetime) },
-        { "SortLevel", INI::dup_002EF72, NULL, offsetof(ParticleSystemTemplate, m_sortLevel) },
+        { "SystemLifetime", INI::parseUnsignedInt, NULL, offsetof(ParticleSystemTemplate, m_systemLifetime) },
+        { "SortLevel", INI::parseUnsignedInt, NULL, offsetof(ParticleSystemTemplate, m_sortLevel) },
         { "Size", INI::parseGameClientRandomVariable, NULL, offsetof(ParticleSystemTemplate, m_startSize) },
         { "StartSizeRate", INI::parseGameClientRandomVariable, NULL, offsetof(ParticleSystemTemplate, m_startSizeRate) },
         { "BurstDelay", INI::parseGameClientRandomVariable, NULL, offsetof(ParticleSystemTemplate, m_burstDelay) },
