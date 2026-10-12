@@ -83,6 +83,8 @@ public:
     void friend_setNext(TerrainRoadType *next) { m_next = next; }
     void friend_setRoadWidth(float width) { m_roadWidth = width; }
     void friend_setRoadWidthInTexture(float width) { m_roadWidthInTexture = width; }
+    const AsciiString &getName() const { return m_name; }
+    TerrainRoadType *friend_getNext() { return m_next; }
     const AsciiString &getTexture() const { return m_texture; }
     float getRoadWidth() const { return m_roadWidth; }
     float getRoadWidthInTexture() const { return m_roadWidthInTexture; }
@@ -274,11 +276,9 @@ void TerrainRoadType::friend_setRepairedToFXString( BodyDamageType state, Int in
 
 }  // end parseTransitionToFX
 
-// TerrainRoadCollection: only the lookups are declared. findRoad (0x002DB496)
-// and findBridge (0x002DB4DA) are the ledger's rows reached through their
-// symbols.csv pins. findRoadOrBridge is the Zero Hour body verbatim, placed
-// by compiling the Open-BFME-1 donor at /O1. The calls and adjacency agree
-// with the pinned callees.
+// TerrainRoadCollection: findRoad (0x002DB496), findBridge (0x002DB4DA) and
+// findRoadOrBridge are the Zero Hour lookups. findRoadOrBridge is the donor
+// body verbatim, placed by compiling the Open-BFME-1 donor at /O1.
 // Native collection list slots are +0x0C/+0x10; the subsystem prefix remains opaque.
 class TerrainRoadCollection
 {
@@ -296,6 +296,49 @@ public:
 // Native 0x009FF088 is a zero-initialized 4-byte counter. The collection
 // constructor resets it to one; newRoad and newBridge increment the same slot.
 unsigned int TerrainRoadCollection::m_idCounter;
+
+//-------------------------------------------------------------------------------------------------
+/** Find road with matching name. Retail walks m_roadList (+0x0C) through the
+	* next link at +0x10 inline and compares the name at +0x04 in place through
+	* the nonthrowing AsciiString::compare (0x000069D6), so getName is a reference
+	* here, not Zero Hour's by-value copy. */
+//-------------------------------------------------------------------------------------------------
+TerrainRoadType *TerrainRoadCollection::findRoad( AsciiString name )
+{
+	TerrainRoadType *road;
+
+	for( road = m_roadList; road; road = road->friend_getNext() )
+	{
+
+		if( road->getName() == name )
+			return road;
+
+	}  // end for road
+
+	// not found
+	return 0;
+
+}  // end findRoad
+
+//-------------------------------------------------------------------------------------------------
+/** Find bridge with matching name (list head +0x10) */
+//-------------------------------------------------------------------------------------------------
+TerrainRoadType *TerrainRoadCollection::findBridge( AsciiString name )
+{
+	TerrainRoadType *bridge;
+
+	for( bridge = m_bridgeList; bridge; bridge = bridge->friend_getNext() )
+	{
+
+		if( bridge->getName() == name )
+			return bridge;
+
+	}  // end for bridge
+
+	// not found
+	return 0;
+
+}  // end findBridge
 
 //-------------------------------------------------------------------------------------------------
 /** Search the roads first, then the bridges */
