@@ -155,7 +155,7 @@ template <> class Iface20Slots<0>
 // The +0x20 interface: slots 0..39 placeholders, slot 40 below.
 struct Iface20 : public Iface20Slots<40>
 {
-	virtual void rva004638F1(Object *rider) = 0;
+	virtual void addToContainList(Object *rider) = 0;
 };
 struct Iface24 { virtual void f24(); };
 struct Iface28 { virtual void f28(); };
@@ -177,7 +177,7 @@ class OpenContain
 {
 public:
 	virtual void removeFromContainList(Object *rider);
-	virtual void rva004638F1(Object *rider);
+	virtual void addToContainList(Object *rider);
 };
 class TransportContain : public OpenContain
 {

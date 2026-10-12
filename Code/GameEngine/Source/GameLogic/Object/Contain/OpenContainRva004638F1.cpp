@@ -1,7 +1,10 @@
 // cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmelist /Ireference/shims/bfmealloc
 // stlport
 //
-// ?rva004638F1@OpenContain@@UAEXPAVObject@@@Z @0x004638F1 42B
+// ?addToContainList@OpenContain@@UAEXPAVObject@@@Z @0x004638F1 42B
+// Name: ZH OpenContain::addToContainList; slot 40 of this +0x20 interface is
+// addToContainList in rowed TunnelContain 0x0047DC75 and CaveContain 0x0046646E,
+// and WorldBuilder names the SiegeEngineContain override (0x0047C07F) the same.
 // OpenContain slot-40 add-rider: push rider as int into +0x34 list<int>,
 // bump +0x38, and bump +0x48 when rider template kind bit1 set.
 // Evidence: vslot 78 of 0x00848AA0 SlaughterHordeContain; pin OpenContain;
@@ -68,7 +71,7 @@ public:
 class OpenContain
 {
 public:
-	virtual void rva004638F1(Object *rider);
+	virtual void addToContainList(Object *rider);
 	virtual Object *rva004632E0(const Coord3D *pos);
 private:
 	char m_pad[0x30];
@@ -78,7 +81,7 @@ private:
 	int m_48;
 };
 
-void OpenContain::rva004638F1(Object *rider)
+void OpenContain::addToContainList(Object *rider)
 {
 	m_list.push_back((const int &)rider);
 	++m_38;

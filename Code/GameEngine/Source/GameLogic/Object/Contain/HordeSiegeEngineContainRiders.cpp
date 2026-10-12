@@ -160,7 +160,7 @@ template <> class Iface20Slots<0>
 // The +0x20 interface: slots 0..39 placeholders, slot 40 below.
 struct Iface20 : public Iface20Slots<40>
 {
-	virtual void rva004638F1(Object *rider) = 0;
+	virtual void addToContainList(Object *rider) = 0;
 };
 struct Iface24 { virtual void f24(); };
 struct Iface28 { virtual void f28(); };
@@ -182,7 +182,7 @@ class OpenContain
 {
 public:
 	virtual void removeFromContainList(Object *rider);
-	virtual void rva004638F1(Object *rider);
+	virtual void addToContainList(Object *rider);
 };
 class TransportContain : public OpenContain
 {
@@ -198,7 +198,7 @@ class HordeSiegeEngineContain : public HordeTransportContain
 {
 public:
 	virtual void removeFromContainList(Object *rider);
-	virtual void rva004638F1(Object *rider);
+	virtual void addToContainList(Object *rider);
 private:
 	_STL::list<int> m_list128; // +0x128
 	int m_12C; // +0x12C
@@ -218,7 +218,7 @@ void HordeSiegeEngineContain::removeFromContainList(Object *rider)
 	clearModelConditionBit(rider, 6 * 32 + 17);
 	HordeTransportContain::removeFromContainList(rider);
 }
-void HordeSiegeEngineContain::rva004638F1(Object *rider)
+void HordeSiegeEngineContain::addToContainList(Object *rider)
 {
 	SiegeEngineContainModuleData *data = (SiegeEngineContainModuleData *)m_moduleData;
 	if (data->m_18C.accepts(rider, m_object->getControllingPlayer()) && data->m_190 > 0)
@@ -233,7 +233,7 @@ void HordeSiegeEngineContain::rva004638F1(Object *rider)
 		return;
 	}
 	setModelConditionBit(rider, 6 * 32 + 17);
-	HordeTransportContain::rva004638F1(rider);
+	HordeTransportContain::addToContainList(rider);
 	if (rider->getTemplate()->isKindOf((KindOfType)23))
 		m_130 = true;
 }
@@ -260,16 +260,16 @@ public:
 	// caller ignores the result, but the interface still returns bool.
 	virtual bool rva0047C07FSlot142(int arg) = 0;
 };
-class Rva0047C07FContain : public TransportContain
+class SiegeEngineContain : public TransportContain
 {
 public:
-	virtual void rva004638F1(Object *rider);
+	virtual void addToContainList(Object *rider);
 private:
 	_STL::list<int> m_listFC; // primary+0x11C = secondary+0xFC
 	int m_100; // secondary+0x100
 	bool m_104; // secondary+0x104
 };
-void Rva0047C07FContain::rva004638F1(Object *rider)
+void SiegeEngineContain::addToContainList(Object *rider)
 {
 	if (!rider)
 		return;
@@ -294,7 +294,7 @@ void Rva0047C07FContain::rva004638F1(Object *rider)
 		return;
 	}
 	setModelConditionBit(rider, 6 * 32 + 17);
-	TransportContain::rva004638F1(rider);
+	TransportContain::addToContainList(rider);
 	if (rider->getTemplate()->isKindOf((KindOfType)23))
 		m_104 = true;
 }
