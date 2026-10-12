@@ -35,7 +35,7 @@ struct Matrix3D
 	Real row1[4];
 	Real row2[4];
 
-	Matrix3D(bool identity)
+	__declspec(dllimport) __forceinline Matrix3D(bool identity)
 	{
 		if (identity) {
 			row0[0] = 1.0f;

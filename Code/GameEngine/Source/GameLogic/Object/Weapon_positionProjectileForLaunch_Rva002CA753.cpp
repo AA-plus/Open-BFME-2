@@ -32,7 +32,7 @@ enum ObjectID
 class Matrix3D
 {
 public:
-	__forceinline explicit Matrix3D(bool init)
+	__declspec(dllimport) __forceinline explicit Matrix3D(bool init)
 	{
 		if (init)
 		{

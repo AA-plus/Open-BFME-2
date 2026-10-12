@@ -23,6 +23,17 @@
 #include <vector>
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
+// The unit is /O1, but the vector<Coord3D> const indexer copy the link keeps
+// (AIUpdate.cpp's) is speed-optimized; compile this unit's copy the same way.
+// Implicit instantiations take the unit's end state, so it is an explicit
+// specialization inside the region.
+#pragma optimize("t", on)
+template <> inline const Coord3D &_STL::vector<Coord3D, _STL::allocator<Coord3D> >::operator[](size_type __n) const
+{
+	return *(begin() + __n);
+}
+#pragma optimize("", on)
+
 typedef int Int;
 typedef bool Bool;
 typedef float Real;
@@ -115,7 +126,7 @@ extern unsigned number_of_DX8_calls;
 struct Matrix3D
 {
 	Real Row[3][4];
-	Matrix3D(bool identity)
+	__declspec(dllimport) __forceinline Matrix3D(bool identity)
 	{
 		if (identity) {
 			Row[0][0] = 1.0f; Row[0][1] = 0.0f; Row[0][2] = 0.0f; Row[0][3] = 0.0f;

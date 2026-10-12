@@ -67,7 +67,7 @@ class RenderObjClass;
 class Matrix3D
 {
 public:
-	Matrix3D(bool identity)
+	__declspec(dllimport) __forceinline Matrix3D(bool identity)
 	{
 		Row[0][0] = 1.0f; Row[0][1] = 0.0f; Row[0][2] = 0.0f; Row[0][3] = 0.0f;
 		Row[1][0] = 0.0f; Row[1][1] = 1.0f; Row[1][2] = 0.0f; Row[1][3] = 0.0f;

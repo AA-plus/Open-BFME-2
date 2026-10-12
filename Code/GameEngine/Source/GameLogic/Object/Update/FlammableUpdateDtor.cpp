@@ -479,7 +479,7 @@ extern GameLogic *TheGameLogic;
 class Matrix3D
 {
 public:
-	Matrix3D(bool init)
+	__declspec(dllimport) __forceinline Matrix3D(bool init)
 	{
 		m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
 		m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = 0.0f;
