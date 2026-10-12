@@ -34,3 +34,22 @@ Rva002B72C9::Rva002B72C9(const ICoord2DBase*position,unsigned payload):values08(
  x=position->x;y=position->y;
  ((_STL::vector<const ModuleData*>*)&values08)->push_back(*(const ModuleData*const*)&payload);
 }
+
+// Native2BC830..2BC8C9 RET: append a payload to the first equal coordinate,
+// or construct and append a new20B record. Its original name is unknown.
+// Initialize the index before size(): VC7 then emits TEST and AND at +22/+29.
+void __cdecl Rva002BC830Append(_STL::vector<Rva002B72C9>&records,unsigned payload,const ICoord2DBase&position){
+ unsigned i=0;unsigned count=records.size();Rva002B72C9*begin=records.begin();
+// The local volatile update preserves native offset induction. It is a
+// codegen constraint, not evidence of an original volatile qualifier.
+ if(count>0){unsigned offset=0; do{
+  if(((ICoord2D*)((unsigned)begin+offset))->operator==(position)){
+   ((_STL::vector<const ModuleData*>*)&begin[i].values08)->push_back(*(const ModuleData*const*)&payload);
+   return;
+  }
+ ((volatile unsigned&)offset)+=sizeof(Rva002B72C9);
+ }while(++i<count);
+ }
+ Rva002B72C9 entry(&position,payload);
+ records.push_back(entry);
+}
