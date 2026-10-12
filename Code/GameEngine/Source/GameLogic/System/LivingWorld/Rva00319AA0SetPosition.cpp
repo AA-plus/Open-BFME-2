@@ -20,13 +20,48 @@ public:
 	virtual void slot5(const Coord3D *position);
 };
 
+// The 0x00318B83 getter, under its rowed Drawable spelling; the records it
+// returns and the 0x00538D17 / 0x003195C9 callees keep their ledger names,
+// which are address-derived ABI views, not identities of this receiver.
+struct TWheelInfo;
+class Drawable
+{
+public:
+	const TWheelInfo *getWheelInfo() const;
+};
+
+struct Rva00538CEFPair;
+class Rva00538CEF
+{
+public:
+	bool rva00538D17(Rva00538CEFPair *out);
+};
+
+class Rva003195C9Owner
+{
+public:
+	void rva003195C9();
+};
+
+struct Rva003197B7Record
+{
+	unsigned char m_bytes[16];
+};
+struct Rva003197B7Records
+{
+	unsigned int size() const { return (unsigned int)(m_end - m_begin); }
+	Rva003197B7Record *m_begin;
+	Rva003197B7Record *m_end;
+};
+
 class Rva00319AA0
 {
 public:
 	void rva00319AA0(const Coord2D *position);
 	void rva003197B7();
 private:
-	unsigned char m_head[0x44];
+	unsigned char m_head[0x3C];
+	Coord2D m_cachedPosition;
 	Coord2D m_position;
 	unsigned char m_unknown4C[0x3C];
 	Rva00319AA0Target *m_target;
@@ -48,4 +83,20 @@ void Rva00319AA0::rva00319AA0(const Coord2D *position)
 		g_00DFEF18->rva002BF5B0(&m_position, &world);
 		m_target->slot5(&world);
 	}
+}
+
+// Native 0x003197B7..0x003197EE (55B): nullable record collection from
+// 0x00318B83; with any 16-byte records, 0x00538D17 writes the XY from them to
+// +0x3C/+0x40, otherwise +0x44/+0x48 is copied there; then a tail call to
+// 0x003195C9. The non-empty test is written `size() > 0`, which keeps
+// retail's sar/je rather than cl's folded test of the byte count.
+void Rva00319AA0::rva003197B7()
+{
+	Rva003197B7Records *records = (Rva003197B7Records *)
+		reinterpret_cast<const Drawable *>(this)->getWheelInfo();
+	if (records && records->size() > 0)
+		((Rva00538CEF *)records)->rva00538D17((Rva00538CEFPair *)&m_cachedPosition);
+	else
+		m_cachedPosition = m_position;
+	((Rva003195C9Owner *)this)->rva003195C9();
 }
