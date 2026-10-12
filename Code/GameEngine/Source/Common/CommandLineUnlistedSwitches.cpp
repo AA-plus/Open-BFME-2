@@ -15,6 +15,14 @@ public: void set(const T*);
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 
+struct CommandLineSwitchPair
+{
+    int m_00;
+    int m_04;
+    int m_08;
+    int m_0C;
+};
+
 struct CommandLineSwitchView
 {
     char pad0000[0x27 - 0x0];
@@ -28,7 +36,12 @@ struct CommandLineSwitchView
     bool m_bfme9C0;
     char pad09C1[0xaec - 0x9c1];
     StringBase<char> m_bfmeAEC;
-    char pad0AF0[0xbd4 - 0xaf0];
+    char pad0AF0[0xb04 - 0xaf0];
+    int m_bfmeB04;
+    CommandLineSwitchPair m_bfmeB08;
+    char pad0B18[0xb38 - 0xb18];
+    int m_bfmeB38;
+    char pad0B3C[0xbd4 - 0xb3c];
     bool m_bfmeBD4;
     char pad0BD5[0xd46 - 0xbd5];
     bool m_bfmeD46;
@@ -157,4 +170,17 @@ int Rva003B9A3DParse(char *args[],int num) {
     if(num>1)
         TheSwitches->m_bfmeD48=atoi(args[1]);
     return 2;
+}
+
+// Native 3B9A62..3B9A9C: clears the +B10/+B14 pair and stores the
+// 0xBAADEC4C marker at +B38 and +B04.
+int Rva003B9A62Parse(char *args[],int num) {
+    if(TheWritableGlobalData) {
+        CommandLineSwitchPair *pair=&TheSwitches->m_bfmeB08;
+        pair->m_08=0;
+        pair->m_0C=0;
+        TheSwitches->m_bfmeB38=0xBAADEC4C;
+        TheSwitches->m_bfmeB04=0xBAADEC4C;
+    }
+    return 1;
 }
