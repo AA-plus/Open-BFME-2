@@ -1,6 +1,5 @@
-// ?rva00499AFD@OneRingPenaltyUpdate@@AAEXXZ
-// partial score=0.95 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /arch:SSE
+// The body after the first early return is its else block, which gives retail's scheduling and block layout.
 //
 // ?rva00499AFD@OneRingPenaltyUpdate@@AAEXXZ, retail 0x00499AFD, 284 bytes.
 // Private helper on the primary this: spawns the module-data special object
@@ -21,6 +20,7 @@
 typedef float Real;
 typedef int Int;
 
+// class-gate: allow Coord3D inline member-wise set() is the copy retail inlines; the canonical header declares set out of line
 struct Coord3D
 {
 	Real x;
@@ -183,32 +183,35 @@ void OneRingPenaltyUpdate::rva00499AFD()
 	const ThingTemplate *tmpl = TheThingFactory->findTemplate(data->m_specialObjectName);
 	if (!tmpl)
 		return;
-	Team *team;
-	Player *neutral = ThePlayerList->getNeutralPlayer();
-	if (neutral)
-		team = neutral->getDefaultTeam();
 	else
-		team = obj->m_team304;
-	union MaskPos
 	{
-		CreateMask mask;
-		struct
+		Team *team;
+		Player *neutral = ThePlayerList->getNeutralPlayer();
+		if (neutral)
+			team = neutral->getDefaultTeam();
+		else
+			team = obj->m_team304;
+		union MaskPos
 		{
-			unsigned int pad0;
-			Coord3D pos;
-		} overlay;
-	};
-	MaskPos u;
-	ji_006291ae(&u.mask, 0, sizeof(u.mask));
-	Object *newObj = TheThingFactory->newObject(tmpl, team, &u.mask, false);
-	if (!newObj)
-		return;
-	m_24 = newObj->m_id74;
-	u.overlay.pos.set(obj->getPosition());
-	Real angle = GetGameLogicRandomValueReal(-PI, PI, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\OneRingPenaltyUpdate.cpp", 0xDA);
-	u.overlay.pos.x += Cos(angle) * data->m_startingDistanceFromMe;
-	u.overlay.pos.y += Sin(angle) * data->m_startingDistanceFromMe;
-	u.overlay.pos.z = TheTerrainLogic->getGroundHeight(u.overlay.pos.x, u.overlay.pos.y, 0);
-	newObj->setPosition(&u.overlay.pos);
-	m_2C = angle;
+			CreateMask mask;
+			struct
+			{
+				unsigned int pad0;
+				Coord3D pos;
+			} overlay;
+		};
+		MaskPos u;
+		ji_006291ae(&u.mask, 0, sizeof(u.mask));
+		Object *newObj = TheThingFactory->newObject(tmpl, team, &u.mask, false);
+		if (!newObj)
+			return;
+		m_24 = newObj->m_id74;
+		u.overlay.pos.set(obj->getPosition());
+		Real angle = GetGameLogicRandomValueReal(-PI, PI, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\OneRingPenaltyUpdate.cpp", 0xDA);
+		u.overlay.pos.x += Cos(angle) * data->m_startingDistanceFromMe;
+		u.overlay.pos.y += Sin(angle) * data->m_startingDistanceFromMe;
+		u.overlay.pos.z = TheTerrainLogic->getGroundHeight(u.overlay.pos.x, u.overlay.pos.y, 0);
+		newObj->setPosition(&u.overlay.pos);
+		m_2C = angle;
+	}
 }
