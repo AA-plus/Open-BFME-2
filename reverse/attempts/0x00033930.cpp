@@ -1,4 +1,6 @@
 // ?rva00033930@Rva00034C90@@QAEXXZ
+// partial score=0.985 date=2026-10-13
+// ?rva00033930@Rva00034C90@@QAEXXZ
 // partial score=0.9782453222453222 date=2026-10-10
 // ?rva00033930@Rva00034C90@@QAEXXZ
 // partial score=0.96 date=2026-10-07
@@ -97,13 +99,14 @@ void Rva00034C90::rva00033930()
 				do
 				{
 					next = block->m_next0C;
+					Rva00034C90Block *neighbor = block;
 					unsigned head = block->m_head04 & 0x7ffffffbU;
-					block->m_head04 = head;
-					unsigned base = head & 0x7ffffff8U;
 					unsigned savedHead = head;
+					unsigned base = head & 0x7ffffff8U;
+					block->m_head04 = head;
 _ReadWriteBarrier();
 
-					Rva00034C90Block *neighbor = (Rva00034C90Block *)((char *)block + base);
+					neighbor = (Rva00034C90Block *)((char *)block + base);
 					head = *(unsigned *)((char *)neighbor + 4) & 0x7ffffff8U;
 					if ((savedHead & 1) == 0)
 					{
