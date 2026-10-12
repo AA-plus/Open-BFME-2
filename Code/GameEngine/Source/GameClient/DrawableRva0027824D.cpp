@@ -43,10 +43,20 @@ public:
  int customNameID;
  char pad104[8];
  const AudioEventInfo *raw;
+ char pad110[0x38];
+ int secondaryHandle;
+ char pad14c[0x11c];
+ unsigned int flags268;
+ char pad26c[0x1dc];
+ unsigned char flag448;
+ unsigned char flag449;
+ unsigned char flag44A;
  Rva002390CB rva0027756D(int);
+ Rva002390CB rva00276893();
  Rva0036CA00Str rva0027824D(int);
  void rva002781DA(Rva0010F149Handle);
  void rva002743D7();
+ void rva002784EB();
 };
 Rva0036CA00Str Drawable::rva0027824D(int selector)
 {
@@ -81,6 +91,8 @@ template<int N> class DrawableAudioSlots : public DrawableAudioSlots<N-1>
 template<> class DrawableAudioSlots<0> {};
 class DrawableAudioView : public DrawableAudioSlots<25>
 { public: virtual int add(BfmeAudioEventPrefix136 *); };
+class DrawableAudioStatusView : public DrawableAudioSlots<52>
+{ public: virtual bool active(int); };
 class AudioManager;
 extern AudioManager *TheAudio;
 class Rva00278341Host
@@ -114,4 +126,21 @@ void Rva00278341Host::rva00278341(int selector, int permanent)
   playing=owner;
  }
  flag44B=0;
+}
+
+// Target235-byte refresh: keyed record29 supplies its counted +4 choice;
+// the temporary record dies after that copy, before the event is constructed.
+void Drawable::rva002784EB()
+{
+ if(flag449 && flag448 && flag44A && ((static_cast<unsigned char>(flags268>>29)&1)!=0) &&
+    !reinterpret_cast<DrawableAudioStatusView *>(TheAudio)->active(secondaryHandle))
+ {
+  Rva0036CA00Str info=rva00276893().choice;
+  if(info.handle.value)
+  {
+   const OpaqueRefElement4 &owner=reinterpret_cast<const OpaqueRefElement4 &>(info);
+   BfmeAudioEventPrefix136 event(owner,static_cast<DrawableID>(customNameID));
+   secondaryHandle=reinterpret_cast<DrawableAudioView *>(TheAudio)->add(&event);
+  }
+ }
 }
