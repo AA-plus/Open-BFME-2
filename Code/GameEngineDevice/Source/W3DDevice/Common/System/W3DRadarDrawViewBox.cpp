@@ -1,6 +1,4 @@
-// ?drawViewBox@W3DRadar@@QAEXHHHHH@Z
-// partial score=0.9 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include
 // Native [0004DBD5,0004DDBF),490B, RET20. BFME 2 W3DRadar::drawViewBox: the
 // ZH drawViewBox (W3DRadar.cpp) is the semantic guide - project the
 // tactical view origin to the terrain average Z (+0x1C), convert it to radar
@@ -11,26 +9,16 @@
 // empty ctor/dtor, so only the corner array runs the out-of-line folded
 // copies through the eh vector iterators. The fifth argument is unused here.
 
-struct ICoord2D
-{
-	int x;
-	int y;
-};
+#include "Lib/Coord3D.h"
+#include "Lib/Coord2D.h"
+#include "Lib/ICoord2D.h"
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
-
-class Coord2D
-{
-public:
-	Coord2D() {}
-	~Coord2D() {}
-	float x;
-	float y;
+// Out-of-line empty ctor/dtor (rowed 0x0047A6A9 / 0x000B3FD0, defined in
+// W3DRadarCornerLifetimes.cpp): only the corner array runs them, through the
+// eh vector iterators; the scalar Coord2D temporaries stay plain.
+struct BfmeRadarMapPoint : Coord2D {
+	BfmeRadarMapPoint();
+	~BfmeRadarMapPoint();
 };
 
 struct Region3D
@@ -110,11 +98,11 @@ void Radar::rva0004DB76(const Coord2D *radar, Coord2D *pixel,
 
 void W3DRadar::drawViewBox(int pixelX, int pixelY, int width, int height, int unused)
 {
-	Coord2D radar;
 	ICoord2D ulScreen;
 	Coord2D ulRadar;
 	Coord3D ulWorld;
 	Coord2D ulStart;
+	Coord2D start, end;
 	ulStart.x = 0.0f;
 	ulStart.y = 0.0f;
 
@@ -124,23 +112,28 @@ void W3DRadar::drawViewBox(int pixelX, int pixelY, int width, int height, int un
 	ulRadar.y = ulWorld.y / (m_mapExtent.height() / RADAR_CELL_HEIGHT);
 	rva0004DB76(&ulRadar, &ulStart, pixelX, pixelY, width, height);
 
-	Coord2D corners[4];
+	BfmeRadarMapPoint box[4];
+	Coord2D radar;
+
+	start = ulStart;
 	radar.x = ulRadar.x + m_viewBox[1].x;
 	radar.y = ulRadar.y + m_viewBox[1].y;
-	rva0004DB76(&radar, &ulRadar, pixelX, pixelY, width, height);
-	corners[0] = ulStart;
-	corners[1] = ulRadar;
+	rva0004DB76(&radar, &end, pixelX, pixelY, width, height);
+	(Coord2D &)box[0] = start;
 
+	start = end;
 	radar.x += m_viewBox[2].x;
 	radar.y += m_viewBox[2].y;
-	rva0004DB76(&radar, &ulRadar, pixelX, pixelY, width, height);
-	corners[2] = ulRadar;
+	rva0004DB76(&radar, &end, pixelX, pixelY, width, height);
+	(Coord2D &)box[1] = start;
 
+	start = end;
 	radar.x += m_viewBox[3].x;
 	radar.y += m_viewBox[3].y;
-	rva0004DB76(&radar, &ulRadar, pixelX, pixelY, width, height);
-	corners[3] = ulRadar;
+	rva0004DB76(&radar, &end, pixelX, pixelY, width, height);
+	(Coord2D &)box[2] = start;
+	(Coord2D &)box[3] = end;
 
 	if (theRadarWindowOverrideSource)
-		theRadarWindowOverrideSource->rva002D55D2(reinterpret_cast<const BfmePod8*>(corners));
+		theRadarWindowOverrideSource->rva002D55D2(reinterpret_cast<const BfmePod8*>(box));
 }
