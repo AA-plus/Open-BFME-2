@@ -79021,3 +79021,6 @@ uw_007876e0,,0x007876E0,11,Code/GameEngine/Source/Common/Rva0042C5C3Dtor.cpp,mat
 ?rva00094CA9@Rva009519B@@UAEXXZ,,0x00094CA9,65,Code/GameEngine/Source/Common/Rva009519BSlot44.cpp,matched,Vtable slot 41; sets plus38 to one with both flags then mode 3
 ?rva0009520C@Rva009519B@@UAE_NXZ,,0x0009520C,24,Code/GameEngine/Source/Common/Rva009519BSlot44.cpp,matched,Vtable slot 15; plus20 flag set and mode neither 0 nor 4
 ?rva00094E2C@@YGMMMM@Z,,0x00094E2C,147,Code/GameEngine/Source/GameClient/Rva00094D44Func.cpp,matched,Cloud-record slot 46 after 0x00094D44; plusE0 radius less the distance to the plusD4 centre or 999999
+?rva00091E19@W3DTerrainVisual@@UAEXHMH@Z,,0x00091E19,31,Code/GameEngine/Source/Common/Rva00091E83Forwarders.cpp,matched,W3DTerrainVisual vtable slot beside addProp; guarded forward to the rowed 0x00068073 on the plus14 render object
+?rva00091E45@W3DTerrainVisual@@UAEXPBUCoord3D@@ABVGeometryInfo@@M@Z,,0x00091E45,31,Code/GameEngine/Source/Common/Rva00091E83Forwarders.cpp,matched,W3DTerrainVisual vtable slot; guarded forward to the rowed 0x000680D6
+?rva00091E64@W3DTerrainVisual@@UAEXPBUCoord3D@@PBVGeometryInfo@@M@Z,,0x00091E64,31,Code/GameEngine/Source/Common/Rva00091E83Forwarders.cpp,matched,W3DTerrainVisual vtable slot; guarded forward to the rowed 0x00068119

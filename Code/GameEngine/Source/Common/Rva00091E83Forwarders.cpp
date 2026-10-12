@@ -49,6 +49,20 @@ public:
 	void rva00068223( unsigned int id, Coord3D location, Real scale, const Matrix3D *transform, Real randomScaleAmount,
 		const Rva000E91CEData *data, int shadowKind, const AsciiString &textureName, const AsciiString &nameD );
 };
+class GeometryInfo;
+// The rowed terrain callees 0x00068073/0x000680D6 and 0x00068119, under
+// their ledger owners.
+class Rva00068073Host
+{
+public:
+	void rva00068073( int a, Real b, int c );
+	void rva000680D6( const Coord3D *pos, const GeometryInfo &geom, Real value );
+};
+class Rva00068119
+{
+public:
+	void rva00068119( const Coord3D *pos, const GeometryInfo *geom, Real value );
+};
 
 class Rva00091E83
 {
@@ -197,6 +211,9 @@ class W3DTerrainVisual
 {
 public:
 	virtual void addProp( const ThingTemplate *tTemplate, const Coord3D *pos, Real angle, Real scale );
+	virtual void rva00091E19( int a, Real b, int c );
+	virtual void rva00091E45( const Coord3D *pos, const GeometryInfo &geom, Real value );
+	virtual void rva00091E64( const Coord3D *pos, const GeometryInfo *geom, Real value );
 private:
 	char m_unrecovered04[ 0x10 ];
 	BaseHeightMapRenderObjClass *m_terrainRenderObject;	///< 0x14
@@ -240,4 +257,27 @@ void W3DTerrainVisual::addProp( const ThingTemplate *tTemplate, const Coord3D *p
 	{
 		m_terrainRenderObject->addProp(1, *pos, angle, scale, modelName, bfmeFlag);
 	}
+}
+
+// Three more guarded slots of the same table (retail 0x00091E19, 0x00091E45
+// and 0x00091E64, just before 0x00091E83 above): each passes its
+// arguments unchanged to a rowed terrain render object method when the
+// object at +0x14 is set. Callee purposes are not recovered, so the slots
+// keep address-derived names.
+void W3DTerrainVisual::rva00091E19( int a, Real b, int c )
+{
+	if (m_terrainRenderObject)
+		reinterpret_cast<Rva00068073Host *>(m_terrainRenderObject)->rva00068073(a, b, c);
+}
+
+void W3DTerrainVisual::rva00091E45( const Coord3D *pos, const GeometryInfo &geom, Real value )
+{
+	if (m_terrainRenderObject)
+		reinterpret_cast<Rva00068073Host *>(m_terrainRenderObject)->rva000680D6(pos, geom, value);
+}
+
+void W3DTerrainVisual::rva00091E64( const Coord3D *pos, const GeometryInfo *geom, Real value )
+{
+	if (m_terrainRenderObject)
+		reinterpret_cast<Rva00068119 *>(m_terrainRenderObject)->rva00068119(pos, geom, value);
 }
