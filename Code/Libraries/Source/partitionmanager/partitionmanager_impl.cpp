@@ -33,12 +33,17 @@ typedef _STL::pair<int,int> PartitionAssignPair;
 // used by recovered providers and consumers while consolidating these bodies.
 // Retail inlines the first recursion level in RemoveAllObjects; keeping the
 // recursive definition in this TU also preserves its witnessed register use.
-class Rva009F40E0Owner {
+// ?_ClearNumObjBelow@PartitionManagerImpl@@QAEXPAPAXI@Z @0x00626AA0 72B:
+// renamed from placeholder Rva009F40E0Owner::run — the WorldBuilder twin names
+// PartitionManagerImpl::_ClearNumObjBelow at EA's own partitionmanager_impl.cpp
+// line 180; the class and file are corroborated by the landed DoSmallFill
+// (strings evidence, same file).
+class PartitionManagerImpl {
 public:
     void run(void **slot, unsigned count);
 };
 
-void Rva009F40E0Owner::run(void **slot, unsigned count)
+void PartitionManagerImpl::_ClearNumObjBelow(void **slot, unsigned count)
 {
     if (*slot == 0) return;
     *slot = 0;
@@ -90,7 +95,7 @@ void Gen_dtor_009f2600::cleanup()
     }
     if (trees[0].size() != 0) {
         for (int i = 0; i < 21; ++i)
-            ((Rva009F40E0Owner *)this)->run((void **)trees[i].begin(), trees[0].size() / 4);
+            ((PartitionManagerImpl *)this)->_ClearNumObjBelow((void **)trees[i].begin(), trees[0].size() / 4);
     }
 }
 
