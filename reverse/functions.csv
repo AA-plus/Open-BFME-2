@@ -79054,3 +79054,10 @@ uw_007876e0,,0x007876E0,11,Code/GameEngine/Source/Common/Rva0042C5C3Dtor.cpp,mat
 ?rva0006ED55@Rva0006ED55@@UAEXXZ,,0x0006ED55,26,Code/GameEngine/Source/Common/Rva0006ED36Call.cpp,matched,Slot 12 of the plus108 subobject that 0x0006ED36 calls; renders the object with its plus814 pointer through 0x00118660
 ?Get_Obj_Space_Bounding_Sphere@WaterTracksObj@@UBEXAAVSphereClass@@@Z,,0x000FE359,16,Code/GameEngineDevice/Source/W3DDevice/GameClient/Water/W3DWaterTracks.cpp,matched,Zero Hour WaterTracksObj bounds getter; SphereClass copy of plus08 through the folded copy 0x0004254E
 ?rva00062ACA@W3DTerrainLogic@@UAEPAURva0028170EArea@@MMM@Z,,0x00062ACA,34,Code/GameEngineDevice/Source/W3DDevice/GameLogic/W3DTerrainLogicCellQueries.cpp,matched,Two W3DTerrainLogic vftable slots; forwards three coordinates to the base lookup 0x0028170E
+?rva00575DDA@Rva00575DDA@@QAEXXZ,,0x00575DDA,12,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Passes plus0C to the rowed 0x005757F9 on the plus04 object
+?rva00575DE6@Rva00575DE6@@QAEXXZ,,0x00575DE6,12,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Passes plus0C to the rowed 0x0057590E on the plus04 object
+?rva00575DF2@Rva00575DF2@@QAEXXZ,,0x00575DF2,12,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Passes plus0C to the rowed 0x005759A5 on the plus04 object
+?rva005EA254@Rva005EA254@@QAEXXZ,,0x005EA254,18,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Decrements plus08 and runs 0x005EA0C0 on the plus04 object at zero
+?rva003698A5@Rva003698A5@@QAEXPAURva003698A5Object@@PBVWaypoint@@@Z,,0x003698A5,22,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Own 0x00368E95 toward an object plus38 position with the flag set
+?rva003698BB@Rva003698A5@@QAEXPBUCoord3D@@PBVWaypoint@@@Z,,0x003698BB,18,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Own 0x00368E95 toward a position with the flag clear
+?rva005CCB0E@Rva005CCB0E@@QAEXH@Z,,0x005CCB0E,8,Code/GameEngine/Source/Common/VslotSmallBodiesAI.cpp,matched,Own ChecklistItem Impl 0x005CCA57 with the argument unused

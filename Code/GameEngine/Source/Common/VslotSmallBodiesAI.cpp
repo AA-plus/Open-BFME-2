@@ -1216,3 +1216,124 @@ void Rva005EA052::rva005EA052()
 {
 	m_08->m_04->target();
 }
+
+// 0x00575DDA, 0x00575DE6 and 0x00575DF2: pass the receiver's +0x0C word to a
+// rowed method of the +0x04 object.
+struct Rva005757F9Value;
+class Rva005757F9 { public: void rva005757F9(Rva005757F9Value *value); };
+class Rva0057590E { public: void rva0057590E(Int value); };
+class Rva005759A5 { public: void rva005759A5(Int value); };
+class Rva00575DDA
+{
+public:
+	void rva00575DDA();
+private:
+	Int m_00;
+	Rva005757F9 *m_04;
+	Int m_08;
+	Rva005757F9Value *m_0C;
+};
+void Rva00575DDA::rva00575DDA()
+{
+	m_04->rva005757F9(m_0C);
+}
+class Rva00575DE6
+{
+public:
+	void rva00575DE6();
+private:
+	Int m_00;
+	Rva0057590E *m_04;
+	Int m_08;
+	Int m_0C;
+};
+void Rva00575DE6::rva00575DE6()
+{
+	m_04->rva0057590E(m_0C);
+}
+class Rva00575DF2
+{
+public:
+	void rva00575DF2();
+private:
+	Int m_00;
+	Rva005759A5 *m_04;
+	Int m_08;
+	Int m_0C;
+};
+void Rva00575DF2::rva00575DF2()
+{
+	m_04->rva005759A5(m_0C);
+}
+
+// 0x005EA254: drops the +0x08 count and, once it reaches zero, runs the
+// rowed 0x005EA0C0 on the +0x04 object.
+class Rva005EA183 { public: void rva005EA0C0(); };
+class Rva005EA254
+{
+public:
+	void rva005EA254();
+private:
+	Int m_00;
+	Rva005EA183 *m_04;
+	Int m_08;
+};
+void Rva005EA254::rva005EA254()
+{
+	if (--m_08 <= 0)
+		m_04->rva005EA0C0();
+}
+
+// 0x003698A5 and 0x003698BB (RET 8): the receiver's rowed 0x00368E95 toward
+// an object's +0x38 position (flag set) or toward a given position (flag
+// clear), with the waypoint passed through.
+struct Coord3D;
+class Waypoint;
+class Rva00368344
+{
+public:
+	void rva00368E95(const Coord3D *pos, const Waypoint *waypoint, bool flag);
+};
+struct Rva003698A5Object
+{
+	char m_pad00[0x38];
+	char m_pos38[12];
+};
+class Rva003698A5 : public Rva00368344
+{
+public:
+	void rva003698A5(Rva003698A5Object *obj, const Waypoint *waypoint);
+	void rva003698BB(const Coord3D *pos, const Waypoint *waypoint);
+};
+void Rva003698A5::rva003698A5(Rva003698A5Object *obj, const Waypoint *waypoint)
+{
+	rva00368E95((const Coord3D *)obj->m_pos38, waypoint, true);
+}
+void Rva003698A5::rva003698BB(const Coord3D *pos, const Waypoint *waypoint)
+{
+	rva00368E95(pos, waypoint, false);
+}
+
+// 0x005CCB0E (RET 4, argument unused): the receiver's rowed
+// StrategicInGameUI::ChecklistItem::Impl 0x005CCA57.
+namespace StrategicInGameUI
+{
+	class ChecklistItem
+	{
+	public:
+		class Impl
+		{
+		public:
+			void rva005CCA57();
+		};
+	};
+}
+class Rva005CCB0E : public StrategicInGameUI::ChecklistItem::Impl
+{
+public:
+	void rva005CCB0E(Int unused);
+};
+void Rva005CCB0E::rva005CCB0E(Int)
+{
+	rva005CCA57();
+}
