@@ -211,6 +211,7 @@ public:
 class AssetReference
 {
 public:
+	AssetReference() : m_object(0) {}
 	AssetReference(const AssetReference &other);
 	~AssetReference()
 	{
@@ -362,6 +363,7 @@ class ShroudTextureShader
 	virtual void s02();
 	virtual void s03();
 	virtual int set(int stage);
+	virtual void reset();
 	int m_numPasses;
 	int m_stageOfSet;
 };
@@ -420,4 +422,15 @@ void ShroudTextureShader::rva000F5AD4()
 	ShaderClass::ShaderDirty = true;
 	DX8Wrapper::Set_DX8_Texture(0, 0);
 	DX8Wrapper::Set_DX8_Texture(1, 0);
+}
+
+// Retail 0x000F5B5F (444 bytes), slot 5 (reset): unbind the texture of the stage set() saved
+// at +8 through an empty stage reference, restore ZFUNC LESSEQUAL, then the stage's
+// TEXCOORDINDEX (passthru to itself) and TEXTURETRANSFORMFLAGS DISABLE, as in Zero Hour.
+void ShroudTextureShader::reset()
+{
+	BFME2Set_Texture(m_stageOfSet, AsTextureRef(AssetReference()));
+	DX8Wrapper::Set_DX8_Render_State(23, 4);				// ZFUNC, CMP_LESSEQUAL
+	DX8Wrapper::Set_DX8_Texture_Stage_State(m_stageOfSet, 11, m_stageOfSet);	// TEXCOORDINDEX
+	DX8Wrapper::Set_DX8_Texture_Stage_State(m_stageOfSet, 24, 0);		// TEXTURETRANSFORMFLAGS, TTFF_DISABLE
 }
