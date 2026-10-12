@@ -1144,6 +1144,7 @@ public:
 	virtual bool rva00468C7B(Coord3D *pos);
 	virtual float rva0046F8DA();
 	virtual float rva0046F8E7();
+	virtual bool rva0046C65C();
 	virtual bool rva0046C6E7();
 	virtual void rva00468FDC();
 	virtual bool rva0046A46F();
@@ -1612,6 +1613,42 @@ float HordeContain::rva0046F8DA()
 float HordeContain::rva0046F8E7()
 {
 	return fields()->m_270;
+}
+
+// ?rva0046C65C@HordeContain@@UAE_NXZ @0x0046C65C: slot 39, true when some key of
+// the +0x170 tree names a live Object and none of those has an AI whose
+// rva00260DED is nonzero and either not 1 or with Object +0x110 bit 29 up. The
+// WorldBuilder twin (0x010C4800) sets the iterator before both flags and nests
+// the == 1 test; the bit read is the inline bool bit test (retail mov/shr/test).
+bool HordeContain::rva0046C65C()
+{
+	_STL::set<int>::iterator k = m_170.begin();
+	bool busy = false;
+	bool found = false;
+	for (k = m_170.begin(); k != m_170.end(); ++k)
+	{
+		Object *obj = TheGameLogic->findObjectByID((ObjectID)*k);
+		if (obj)
+		{
+			AIUpdateInterface *ai = obj->m_ai;
+			found = true;
+			if (ai->rva00260DED() != 0)
+			{
+				if (ai->rva00260DED() == 1)
+				{
+					if (obj->test110(29))
+						busy = true;
+				}
+				else
+				{
+					busy = true;
+				}
+			}
+		}
+	}
+	if (!found)
+		return false;
+	return !busy;
 }
 
 // ?rva0046C6E7@HordeContain@@UAE_NXZ @0x0046C6E7: slot 41, whether any key of the
