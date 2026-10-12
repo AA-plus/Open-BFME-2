@@ -1,17 +1,19 @@
+// cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /DWIN32 /D_WINDOWS /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
+// stlport
 // ?rva000E7DF3@W3DShrubBuffer@@QAEXXZ
-// partial score=0.8 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /DWIN32 /D_WINDOWS /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib 
 // W3DShrubBuffer::rva000E7DF3, retail 0x000E7DF3 (1394 bytes): Zero Hour's
 // loadTreesInVertexAndIndexBuffers shape for shrubs (WorldBuilder name
 // loadShrubsInVertexAndIndexBuffers). Per buffer it locks the index and vertex
-// buffers (12-byte locks, no flags) and appends the vertices and triangles of
-// every upright visible record whose mesh is loaded, stopping at 30000
-// vertices / 60000 indices. BFME2 layout read from retail: buffer lists are
-// vectors at +0x04 (vertex buffers), +0x10 (vertex counts), +0x1C (index
-// buffers), +0x28 (index counts); 2000 records of 0xA0 at +0x1958 (count
-// +0x4FB58, changed +0x4FB5C, initialized +0x4FB6C), types of 0x5C at +0x4FB70,
-// tree index step +0x51278. Vertex is 0x2C bytes: position, normal, diffuse,
-// one UV set, sway and the tree's pivot height.
+// buffers and appends the vertices and triangles of every upright visible
+// record whose mesh is loaded, stopping at 30000 vertices / 60000 indices.
+// Layout read from retail: buffer lists are STLport vectors at +0x04/+0x10/
+// +0x1C/+0x28, 2000 records of 0xA0 at +0x1958, types of 0x5C at +0x4FB70,
+// tree index step +0x51278; vertex is 0x2C bytes (position, normal, diffuse,
+// one UV set, sway, pivot height). Codegen depends on the real std::vector
+// (operator[] through begin()), the sibling 0xE8365's x/y/z vertex form and
+// the W3D MeshMatDescClass::Get_UV_Array_By_Index(index, create) nesting.
+#define __PLACEMENT_VEC_NEW_INLINE
+#include <vector>
 #include "vector3.h"
 #include "matrix3d.h"
 
@@ -58,13 +60,13 @@ public:
 	};
 };
 
-// Retail 0x0016AB90 (ledger name BfmeC998::bfmeGo998C): the model's vertex normal getter.
+// Retail 0x0016AB90: MeshGeometryClass::Get_Vertex_Normal_Array(bool).
 
 
 struct Rva000E7DF3Vertex
 {
 	float x, y, z;
-	float nx, ny, nz;
+	Vector3 normal;
 	unsigned int diffuse;
 	float u1, v1;
 	float sway;
@@ -77,7 +79,6 @@ struct Rva000E7DF3ArrayHolder
 	void *m_array;
 };
 
-class BfmeC998 { public: int bfmeGo998C(int); };
 
 class MeshMatDescClass
 {
@@ -86,31 +87,50 @@ public:
 	unsigned char m_head[0x0c];
 	int m_uvSourceCount;
 	Rva000E7DF3ArrayHolder *m_uv0;
+	__forceinline Vector2 *Get_UV_Array_By_Index(int index, bool create)
+	{
+		if (m_uvSourceCount != 0)
+			return Get_UV_Array(0, index);
+		if ((&m_uv0)[index])
+			return (Vector2 *)(&m_uv0)[index]->m_array;
+		return 0;
+	}
 	unsigned char m_gap14[0x50 - 0x14];
 	Rva000E7DF3ArrayHolder *m_color0;
 };
 
-struct Rva000E7DF3Model
+template <class T> class Rva000E7DF3ShareBuffer
 {
+public:
+	T *Get_Array(void) { return m_array; }
+private:
+	unsigned char m_head[0x0c];
+	T *m_array;
+};
+
+class MeshGeometryClass
+{
+public:
+	const Vector3 *Get_Vertex_Normal_Array(bool create);
+	int Get_Polygon_Count(void) const { return m_polyCount; }
+	int Get_Vertex_Count(void) const { return m_vertexCount; }
+	const TriIndex *Get_Polygon_Array(void) { return get_polys(); }
+	Vector3 *Get_Vertex_Array(void) { return m_vertices->Get_Array(); }
+protected:
+	TriIndex *get_polys(void) { return m_polys->Get_Array(); }
 	unsigned char m_head[0x24];
 	int m_polyCount;
 	int m_vertexCount;
-	Rva000E7DF3ArrayHolder *m_polys;
-	Rva000E7DF3ArrayHolder *m_vertices;
+	Rva000E7DF3ShareBuffer<TriIndex> *m_polys;
+	Rva000E7DF3ShareBuffer<Vector3> *m_vertices;
+};
+
+struct Rva000E7DF3Model : public MeshGeometryClass
+{
 	unsigned char m_gap34[0x94 - 0x34];
 	MeshMatDescClass *m_matDesc;
 
-	int Get_Vertex_Count(void) const { return m_vertexCount; }
-	Vector3 *Get_Vertex_Array(void) const { return (Vector3 *)m_vertices->m_array; }
-	int Get_Polygon_Count(void) const { return m_polyCount; }
-	const TriIndex *Get_Polygon_Array(void) const { return (const TriIndex *)m_polys->m_array; }
-	__forceinline const Vector2 *Get_UV_Array_By_Index(int)
-	{
-		if (m_matDesc->m_uvSourceCount != 0)
-			return m_matDesc->Get_UV_Array(0, 0);
-		return m_matDesc->m_uv0 ? (const Vector2 *)m_matDesc->m_uv0->m_array : 0;
-	}
-	__forceinline const Vector3 *Get_Vertex_Normal_Array(void) { return (const Vector3 *)((BfmeC998 *)this)->bfmeGo998C(0); }
+	__forceinline const Vector2 *Get_UV_Array_By_Index(int index) { return m_matDesc->Get_UV_Array_By_Index(index, false); }
 	__forceinline const unsigned *Get_Color_Array0(void) const { return m_matDesc->m_color0 ? (const unsigned *)m_matDesc->m_color0->m_array : 0; }
 };
 
@@ -164,12 +184,14 @@ struct Rva000E7DF3Tree
 	int m_field9c;
 };
 
-template <class T> struct PtrVector
-{
-	T *start, *finish, *eos;
-	T &operator[](unsigned n) { return start[n]; }
-	unsigned size() const { return finish - start; }
-};
+
+// The vertex and index loops each open with a WorldBuilder assert
+// (W3DShrubBuffer.cpp:297 and :360). In retail they compile to no code but keep
+// one action-less unwind state each under the two locks (FuncInfo 0x00D07298,
+// states 2 -> 1 and 3 -> 1): the release macro's dead branch holds a temporary
+// with a destructor. Its type is unknown; this sink reproduces the EH shape.
+struct ShrubAssertSink { ShrubAssertSink(); ~ShrubAssertSink(); void Crash(); };
+#define SHRUB_ASSERT(c) do { if (0) { ShrubAssertSink().Crash(); } } while (0)
 
 class W3DShrubBuffer
 {
@@ -178,14 +200,13 @@ public:
 
 private:
 	void *m_vtable;
-	PtrVector<VertexBufferClass *> m_vertexTree;
-	PtrVector<int> m_curNumTreeVertices;
-	PtrVector<IndexBufferClass *> m_indexTree;
-	PtrVector<int> m_curNumTreeIndices;
+	std::vector<VertexBufferClass *> m_vertexTree;
+	std::vector<int> m_curNumTreeVertices;
+	std::vector<IndexBufferClass *> m_indexTree;
+	std::vector<int> m_curNumTreeIndices;
 	unsigned char m_gap34[0x1958 - 0x34];
 	Rva000E7DF3Tree m_trees[2000];
 	int m_numTrees;
-	
 	bool m_anythingChanged;
 	unsigned char m_gap4fb5d[0x4fb6c - 0x4fb5d];
 	bool m_initialized;
@@ -198,23 +219,28 @@ private:
 // ?rva000E7DF3@W3DShrubBuffer@@QAEXXZ
 void W3DShrubBuffer::rva000E7DF3(void)
 {
-	if (!m_initialized || !m_indexTree[0] || !m_vertexTree[0] || !m_anythingChanged)
+	if (!m_initialized || !m_indexTree[0] || !m_vertexTree[0])
+		return;
+	if (!m_anythingChanged)
 		return;
 
 	int curTree;
+	int bNdx;
 	for (curTree = 0; curTree < m_numTrees; curTree++)
 		m_trees[curTree].bufferNdx = -1;
 
 	curTree = 0;
-	for (unsigned bNdx = 0; bNdx < m_vertexTree.size(); bNdx++) {
+	for (bNdx = 0; bNdx < m_vertexTree.size(); bNdx++) {
 		m_curNumTreeVertices[bNdx] = 0;
 		m_curNumTreeIndices[bNdx] = 0;
 		if (curTree >= m_numTrees)
 			break;
+		Rva000E7DF3Vertex *vb;
+		unsigned short *ib;
 		IndexBufferClass::WriteLockClass lockIdxBuffer(m_indexTree[bNdx], 0);
 		VertexBufferClass::WriteLockClass lockVtxBuffer(m_vertexTree[bNdx], 0);
-		Rva000E7DF3Vertex *vb = (Rva000E7DF3Vertex *)lockVtxBuffer.Get_Vertex_Array();
-		unsigned short *ib = lockIdxBuffer.Get_Index_Array();
+		vb = (Rva000E7DF3Vertex *)lockVtxBuffer.Get_Vertex_Array();
+		ib = lockIdxBuffer.Get_Index_Array();
 		unsigned short *curIb = ib;
 		Rva000E7DF3Vertex *curVb = vb;
 
@@ -230,40 +256,41 @@ void W3DShrubBuffer::rva000E7DF3(void)
 				continue;
 			float scale = m_trees[curTree].scale;
 			Vector3 loc = m_trees[curTree].location;
-			if (m_treeTypes[type].m_mesh == 0)
+			const Matrix3D *mtx = &m_trees[curTree].transform;
+			if (type < 0 || m_treeTypes[type].m_mesh == 0)
 				continue;
 
 			int startVertex = m_curNumTreeVertices[bNdx];
 			m_trees[curTree].firstIndex = startVertex;
 			m_trees[curTree].bufferNdx = bNdx;
-			int numVertex = m_treeTypes[type].m_mesh->Peek_Model()->Get_Vertex_Count();
-			Vector3 *pVert = m_treeTypes[type].m_mesh->Peek_Model()->Get_Vertex_Array();
+			int i;
+			Rva000E7DF3Model *model = m_treeTypes[type].m_mesh->Peek_Model();
+			Vector3 *pVert = model->Get_Vertex_Array();
+			int numVertex = model->Get_Vertex_Count();
 			if (m_curNumTreeVertices[bNdx] + numVertex >= 30000)
 				break;
-			int numIndex = m_treeTypes[type].m_mesh->Peek_Model()->Get_Polygon_Count();
-			const TriIndex *pPoly = m_treeTypes[type].m_mesh->Peek_Model()->Get_Polygon_Array();
+			int numIndex = model->Get_Polygon_Count();
+			const TriIndex *pPoly = model->Get_Polygon_Array();
 			if (m_curNumTreeIndices[bNdx] + 3 * numIndex >= 60000)
 				break;
 
-			const Vector2 *uvs = m_treeTypes[type].m_mesh->Peek_Model()->Get_UV_Array_By_Index(0);
-			const Vector3 *normals = m_treeTypes[type].m_mesh->Peek_Model()->Get_Vertex_Normal_Array();
+			const Vector2 *uvs = model->Get_UV_Array_By_Index(0);
+			const Vector3 *normals = model->Get_Vertex_Normal_Array(false);
 			const unsigned *vecDiffuse = m_treeTypes[type].m_mesh->Peek_Model()->Get_Color_Array0();
+			float uScale = m_treeTypes[type].m_scale.X;
+			float vScale = m_treeTypes[type].m_scale.Y;
+			float uOrigin = m_treeTypes[type].m_origin.X;
+			float vOrigin = m_treeTypes[type].m_origin.Y;
 
-			for (int i = 0; i < numVertex; i++) {
-				float U = uvs[i].U;
-				float V = uvs[i].V;
-				if (U > 1.0f) U = 1.0f;
-				if (U < 0.0f) U = 0.0f;
-				if (V > 1.0f) V = 1.0f;
-				if (V < 0.0f) V = 0.0f;
-
+			for (i = 0; i < numVertex; i++) {
+				SHRUB_ASSERT(m_curNumTreeVertices[bNdx] + i < 30000);
 				float x = pVert[i].X;
 				float y = pVert[i].Y;
 				float z = pVert[i].Z;
 				Vector3 vert(x, y, z);
 				vert += m_treeTypes[type].m_offset;
 				Vector3 vLoc;
-				Matrix3D::Transform_Vector(m_trees[curTree].transform, vert, &vLoc);
+				Matrix3D::Transform_Vector(*mtx, vert, &vLoc);
 				vLoc *= scale;
 				if (m_trees[curTree].pushAside > 0.0f) {
 					vLoc.X += pVert[i].Z * m_trees[curTree].pushAside * m_trees[curTree].pushAsideCos * m_treeTypes[type].m_data->m_maxOutwardMovement;
@@ -272,32 +299,36 @@ void W3DShrubBuffer::rva000E7DF3(void)
 				vLoc.X += loc.X;
 				vLoc.Y += loc.Y;
 				vLoc.Z += loc.Z;
-
+				curVb->z = vLoc.Z;
 				curVb->x = vLoc.X;
 				curVb->y = vLoc.Y;
-				curVb->z = vLoc.Z;
 				if (normals) {
-					curVb->nx = normals[i].X;
-					curVb->ny = normals[i].Y;
-					curVb->nz = normals[i].Z;
+					curVb->normal = normals[i];
 				} else {
-					curVb->nx = 0.0f;
-					curVb->ny = 0.0f;
-					curVb->nz = 1.0f;
+					curVb->normal.X = 0.0f;
+					curVb->normal.Y = 0.0f;
+					curVb->normal.Z = 1.0f;
 				}
 				if (vecDiffuse)
 					curVb->diffuse = vecDiffuse[i] | 0xff000000;
 				else
 					curVb->diffuse = 0xffffffff;
-				curVb->u1 = U * m_treeTypes[type].m_scale.X + m_treeTypes[type].m_origin.X;
-				curVb->v1 = V * m_treeTypes[type].m_scale.Y + m_treeTypes[type].m_origin.Y;
-				curVb->sway = (float)(m_treeTypes[type].m_data->m_noSway ? 0 : m_trees[curTree].swayType);
+				float U = uvs[i].U;
+				float V = uvs[i].V;
+				if (U > 1.0f) U = 1.0f;
+				if (U < 0.0f) U = 0.0f;
+				if (V > 1.0f) V = 1.0f;
+				if (V < 0.0f) V = 0.0f;
+				curVb->u1 = U * uScale + uOrigin;
+				curVb->v1 = V * vScale + vOrigin;
+				curVb->sway = (float)(m_treeTypes[m_trees[curTree].treeType].m_data->m_noSway ? 0 : m_trees[curTree].swayType);
 				curVb->pivotZ = loc.Z;
 				curVb++;
 			}
 			m_curNumTreeVertices[bNdx] += numVertex;
 
-			for (int i = 0; i < numIndex; i++) {
+			for (i = 0; i < numIndex; i++) {
+				SHRUB_ASSERT(m_curNumTreeIndices[bNdx] + 3 * i + 2 < 60000);
 				*curIb++ = startVertex + pPoly[i].I;
 				*curIb++ = startVertex + pPoly[i].J;
 				*curIb++ = startVertex + pPoly[i].K;
