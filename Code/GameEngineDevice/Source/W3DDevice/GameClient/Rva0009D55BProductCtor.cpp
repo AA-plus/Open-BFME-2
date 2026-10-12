@@ -35,6 +35,7 @@ namespace _STL {
 // 12-byte element whose out-of-line default constructor is the ICF-folded
 // trivial ctor 0x0047A6A9 (rowed as ??0ICoord3D@@QAE@XZ among others).
 #include "../../../../Libraries/Include/Lib/ICoord3D.h"
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 struct Rva0009D55BVec3
 {
@@ -108,6 +109,7 @@ public:
 	virtual void rva0009DB5A(bool active);
 	virtual void rva0009BC17();
 	virtual void rva0009C144();
+	virtual void rva0009C4FC(int x, int y, int width, int height);
 	void rva0009BAA4();
 
 private:
@@ -219,7 +221,7 @@ void Rva0009D55BProduct::rva0009C784(unsigned int phase, unsigned int previous)
 // rowed 0x0009AA0F) and three lights (+0xC8/+0xCC/+0xD0, LightClass type 1),
 // sets +0x134 to 1, copies the +0x104 vector to +0xF8 and runs the pinned
 // refreshes 0x0009BAA4 and 0x0009CD9B.
-class CameraClass { public: CameraClass(); void Set_Clip_Planes(float znear, float zfar); void Set_View_Plane(float hfov, float vfov); char m_data[0x3FC]; };
+class CameraClass { public: CameraClass(); void Set_Clip_Planes(float znear, float zfar); void Set_View_Plane(float hfov, float vfov); void Set_Viewport(const Vector2 &min, const Vector2 &max); void Set_Aspect_Ratio(float ratio); char m_data[0x3FC]; };
 class Rva0009AA0F { public: Rva0009AA0F(int owner); char m_data[0x10C]; };
 class LightClass { public: enum LightType { POINT = 0, DIRECTIONAL = 1 }; LightClass(LightType type); char m_data[0x120]; };
 class Matrix3D;
@@ -414,4 +416,81 @@ void Rva0009D55BProduct::rva0009C144()
 	m_138 = 0.0f;
 	m_F8 = m_104;
 	rva0009BAA4();
+}
+
+// ?rva0009C4FC@Rva0009D55BProduct@@UAEXHHHH@Z retail 0x0009C4FC (648 bytes,
+// ret 0x10; slot 9 of the product table): the viewport sibling of slot 8.
+// With the camera, the scene and both the +0x19 and +0x18 states it records
+// the rectangle at +0x1B0/+0x1B8, maps it through the display size (slots
+// getHeight 0x44 then getWidth 0x40) into a camera viewport clamped to 0..1
+// (rowed CameraClass::Set_Viewport, Set_Aspect_Ratio of width over height),
+// clears depth and stencil only and runs slot 8's blend, taking +0x13C from
+// TheLivingWorldManager's +0x38 float under +0x19; the three render words
+// get fixed opacities 0, 0 and 0.8 before the same scene render tail.
+class Display
+{
+public:
+	D55B_SLOTS16(d0)
+	virtual unsigned int getWidth();	// slot 16
+	virtual unsigned int getHeight();	// slot 17
+};
+extern Display *TheDisplay;
+struct Rva0009C4FCLivingWorldView { unsigned char m_pad[0x18]; bool m_active; bool m_19; };
+
+void Rva0009D55BProduct::rva0009C4FC(int x, int y, int width, int height)
+{
+	if (m_C4 == 0 || m_C0 == 0 || !((Rva0009C4FCLivingWorldView *)this)->m_19 || !((Rva0009C4FCLivingWorldView *)this)->m_active)
+		return;
+	m_1B0.a = x;
+	m_1B0.b = y;
+	m_1B8.a = width;
+	m_1B8.b = height;
+	float w = (float)width;
+	float h = (float)height;
+	float invWidth, screenHeight;
+	{
+		Vector2 screen((float)TheDisplay->getWidth(), (float)TheDisplay->getHeight());
+		invWidth = 1.0f / screen.X;
+		screenHeight = screen.Y;
+	}
+	{
+		Vector2 vmin;
+		Vector2 vmax;
+		vmin.X = x * invWidth;
+		float invHeight = 1.0f / screenHeight;
+		vmin.Y = y * invHeight;
+		vmax.X = invWidth * w + vmin.X;
+		vmax.Y = invHeight * h + vmin.Y;
+		if (0.0f > vmin.X)
+			vmin.X = 0.0f;
+		if (0.0f > vmin.Y)
+			vmin.Y = 0.0f;
+		if (vmax.X > 1.0f)
+			vmax.X = 1.0f;
+		if (vmax.Y > 1.0f)
+			vmax.Y = 1.0f;
+		((CameraClass *)m_C0)->Set_Viewport(vmin, vmax);
+	}
+	((CameraClass *)m_C0)->Set_Aspect_Ratio(w / h);
+	g_Va00DB5F84 = true;
+	{
+		Vector3 black = { 0.0f, 0.0f, 0.0f };
+		DX8Wrapper::Clear(false, true, true, black, 0.0f, 1.0f, 0);
+	}
+	int row = 0;
+	if (TheWritableGlobalData && ((Rva0009BC17GlobalView *)TheWritableGlobalData)->m_D2E)
+		++row;
+	m_13C = Rva0009BC17Lerp(g_Va00DE5E38[row], g_Va00DE5E38[2], m_198);
+	m_D8 = Rva0009BC17Lerp(g_Va00DE5E2C[row], g_Va00DE5E2C[2], m_198);
+	if (((Rva0009C4FCLivingWorldView *)this)->m_19)
+		m_13C = ((Rva0009BAA4HostView *)TheLivingWorldManager)->m_38;
+	if (m_18C)
+		((Rva0009C134Host *)this)->rva0009AACF(m_18C, 0.0f);
+	if (m_190)
+		((Rva0009C134Host *)this)->rva0009AACF(m_190, 0.0f);
+	if (m_194)
+		((Rva0009C134Host *)this)->rva0009AACF(m_194, 0.8f);
+	m_C4->slot6(m_E0);
+	((Rva0009C134Host *)this)->rva0009BAA4();
+	Rva00118660Call(m_C4, m_C0);
 }
