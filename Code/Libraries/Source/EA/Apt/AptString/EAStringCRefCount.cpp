@@ -99,6 +99,7 @@ public:
 	void rva006D3C60();
 	void rva006D3CA0(const EAStringC *other);
 	unsigned int GetInternalRefCount() const;
+	void SetInternalRefCount(unsigned int uRefCount);
 	unsigned int rva006D3750() const;
 	void rva006D3BA0() const;
 	bool rva006D36F0(const EAStringC *other) const;
@@ -479,6 +480,23 @@ void EAStringC::rva006D3CA0(const EAStringC *other)
 unsigned int EAStringC::GetInternalRefCount() const
 {
 	return m_pData->m_uRefCount;
+}
+
+// ?SetInternalRefCount@EAStringC@@QAEXI@Z, retail 0x006D2E20 (80B). Gap body
+// right after GetInternalRefCount: asserts "uRefCount <= 0xffff"
+// (EAString.inl 0xB1, retail strings) and stores the low word as the data
+// refcount; retail triplicates the store tail (the __asm int 3 barrier keeps
+// the store after the breakpoint, as in rva006D2F40). The setter spelling mirrors the
+// proven GetInternalRefCount and the assert's parameter name (inference).
+void EAStringC::SetInternalRefCount(unsigned int uRefCount)
+{
+	if (!(uRefCount <= 0xFFFF)) {
+		g_bfmeAptAssertAtE17734("uRefCount <= 0xffff", ".\\string\\EAString.inl", 0xB1);
+		if (g_bfmeAptBreakOnAssertAtDDC01C) {
+			__asm int 3
+		}
+	}
+	m_pData->m_uRefCount = (unsigned short)uRefCount;
 }
 
 // ?rva006D3510@EAStringC@@QBE_NPBD@Z, retail 0x006D3510, 71 bytes.

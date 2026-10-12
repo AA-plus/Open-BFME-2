@@ -7,6 +7,11 @@
 // Evidence: reverse/godfather_disk_evidence.json, eastring_comparisons.
 extern "C" int __cdecl strcmp(const char *,const char *);
 #pragma intrinsic(strcmp)
+extern "C" int __cdecl _strcmpi(const char *,const char *);
+extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char *, const char *, int);
+extern int g_bfmeAptBreakOnAssertAtDDC01C;
+void __debugbreak();
+#pragma intrinsic(__debugbreak)
 class EAStringC {
     struct StringDataC {
         unsigned short refCount,size,maxSize,hash;
@@ -16,11 +21,15 @@ class EAStringC {
 public:
     bool operator<(const EAStringC &) const;
     bool operator<=(const EAStringC &) const;
+    bool operator>(const EAStringC &) const;
+    bool operator>=(const EAStringC &) const;
     bool operator<(const char *) const;
     bool operator<=(const char *) const;
     bool operator>(const char *) const;
     bool operator>=(const char *) const;
     int Compare(const EAStringC &) const;
+    int Compare(const char *) const;
+    int rva006D3670(const char *) const;
 };
 // ??MEAStringC@@QBE_NABV0@@Z
 bool EAStringC::operator<(const EAStringC &other) const
@@ -49,4 +58,42 @@ int EAStringC::Compare(const EAStringC &other) const
 {
     if(data==other.data) return 0;
     return strcmp(buffer(),other.buffer());
+}
+// ??OEAStringC@@QBE_NABV0@@Z, retail 0x006D31F0 (18B). Gap body between the
+// rowed operator<= 0x006D3190 and the next unit: forwards its argument to that
+// operator<= and negates the bool (neg/sbb/inc). The spelling is the natural
+// counterpart of the Godfather-PDB comparison family (inference, not PDB).
+bool EAStringC::operator>(const EAStringC &other) const
+{
+    return !(*this <= other);
+}
+// ??PEAStringC@@QBE_NABV0@@Z, retail 0x006D3210 (18B). Same shape over the
+// rowed operator< 0x006D3130; spelling inferred as above.
+bool EAStringC::operator>=(const EAStringC &other) const
+{
+    return !(*this < other);
+}
+// ?Compare@EAStringC@@QBEHPBD@Z, retail 0x006D35A0 (107B). Gap body just
+// before the rowed Compare(const EAStringC &) 0x006D3610: asserts the text is
+// non-null (EAString.inl line 0x412, retail strings) and returns the inline
+// strcmp of the buffer against it. The C-string overload of the PDB Compare
+// name is inferred from the identical int result and sibling placement.
+int EAStringC::Compare(const char *text) const
+{
+    if (!(text != 0)) {
+        g_bfmeAptAssertAtE17734("pStrText != NULL", ".\\string\\EAString.inl", 0x412);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+    }
+    return strcmp(buffer(),text);
+}
+// ?rva006D3670@EAStringC@@QBEHPBD@Z, retail 0x006D3670 (66B). Case-insensitive
+// counterpart: same non-null assert (line 0x447), then the rowed _strcmpi
+// thunk 0x00629A2A over the buffer; address name, original spelling unknown.
+int EAStringC::rva006D3670(const char *text) const
+{
+    if (!(text != 0)) {
+        g_bfmeAptAssertAtE17734("pStrText != NULL", ".\\string\\EAString.inl", 0x447);
+        if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+    }
+    return _strcmpi(buffer(),text);
 }
