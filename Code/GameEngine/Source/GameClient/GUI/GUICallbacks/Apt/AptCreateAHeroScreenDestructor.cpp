@@ -1,14 +1,11 @@
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE /G7
-//
-// ??1Rva00513BAB@@UAE@XZ, retail 0x00513BAB..0x00513CD4 (297 bytes, EH). The
-// create-a-hero screen's destructor (the class AptCreateAHero of
-// AptCreateAHeroConstructor.cpp, whose deleting destructor 0x00513DB4 keeps
-// the address-derived name Rva00513BAB; vtables 0x00C65D20 / 0x00C65D1C).
-// It stops the transition handler, and when this is the live screen
-// (0x00A048D4): deletes the five pages at +0x418, removes the
-// "CreateAHero::DrawMapComponent" renderer, restores the preview flags it
-// saved at +0x42C..+0x42E into the global data, resets the hero manager and
-// clears the singleton; then the hero (+0x27C) and the Apt window base go.
+// The297B destructor, WB AptCreateAHero callgraph, constructor5142B0
+// and both retail vptrs C65D20/C65D1C establish the owner. Exact native
+// accesses establish the consumed member layout; the constructor proves
+// the trailing flags and full438B storage extent used here.
+// Use the constructor-owned s_instance datum (RVA A048D4 / VA E048D4).
+// The old separate address-named declaration is removed. Original names
+// of saved preview flags and the remaining manager method stay unresolved.
 #include "ascii_string.h"
 
 class GameWindow
@@ -97,13 +94,13 @@ public:
 extern CreateAHeroManager *TheCreateAHeroManager;
 extern unsigned char g_Va00DFD944;
 
-class Rva00513BAB;
-extern Rva00513BAB *g_Va00E048D4;
+class AptCreateAHero;
 
-class Rva00513BAB : public _bfme_AptGameWindow
+
+class AptCreateAHero : public _bfme_AptGameWindow
 {
 public:
-	virtual ~Rva00513BAB();
+	virtual ~AptCreateAHero();
 private:
 	AptMyHero m_myHero; // +0x27C
 	int m_mode; // +0x40C
@@ -113,12 +110,15 @@ private:
 	bool m_42c;
 	bool m_42d;
 	bool m_42e;
+	bool m_takePicture,m_rotateLeft,m_rotateRight,m_zoomIn,m_zoomOut;
+	int m_pictureFrames;
+	static AptCreateAHero *s_instance;
 };
 
-Rva00513BAB::~Rva00513BAB()
+AptCreateAHero::~AptCreateAHero()
 {
 	TheTransitionHandler->slot9();
-	if (g_Va00E048D4 == this)
+	if (s_instance == this)
 	{
 		for (int i = 0; i < 5; ++i)
 		{
@@ -136,6 +136,6 @@ Rva00513BAB::~Rva00513BAB()
 		g_Va00DFD944 = m_42d;
 		TheCreateAHeroManager->rva0021F5F8();
 		TheCreateAHeroManager->m_184 = false;
-		g_Va00E048D4 = 0;
+		s_instance = 0;
 	}
 }

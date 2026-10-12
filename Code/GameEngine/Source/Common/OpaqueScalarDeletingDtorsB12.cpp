@@ -13,7 +13,6 @@
 // (docs/reconstruction/deleting-destructor-identity-audit.md).
 //
 //   wrapper     dtor        vtable#slot
-//   0x00513DB4  0x00513BAB  0x00C65D20#0
 //   0x0051588B  0x00514EAB  0x00C65F10#0
 //   0x00517582  0x005173F8  0x00C66428#0
 //   0x005206E2  0x005204EF  0x00C675DC#0
@@ -35,18 +34,7 @@
 
 struct EmitVtableTag;
 
-class Rva00513BAB
-{
-public:
-	Rva00513BAB(EmitVtableTag *);
-public:
-	virtual ~Rva00513BAB();
-};
-
-// ?<Rva00513BAB::Rva00513BAB> absent-from-retail
-Rva00513BAB::Rva00513BAB(EmitVtableTag *)
-{
-}
+// AptCreateAHero deleting destructor is emitted by its real owning destructor.
 
 // Target514EAB/120B is a destructor, as existing deletingwrapper51588B
 // and the EH teardown prove. It installs primaryC65F10/secondaryC65F0C,
