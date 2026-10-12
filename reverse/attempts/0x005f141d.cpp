@@ -1,4 +1,9 @@
 // ??0Impl@RegionDetailsStructuresMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@HH@Z
+// partial score=0.941334 date=2026-10-12
+// Astra-high-d update: 735B versus 732B. EH state7 timing now agrees; extra
+// MOV [EBP-14],EAX remains plus callback temporary home packing differences.
+// Historical bank notes below are retained as provenance, not current status.
+// ??0Impl@RegionDetailsStructuresMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@HH@Z
 // partial score=0.91 date=2026-10-12
 // ??0Impl@RegionDetailsStructuresMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@HH@Z
 // partial score=0.91 date=2026-10-10
@@ -234,17 +239,7 @@ struct Rva005F13E6Element
 	StrategicHUD::RegionDetailsStructuresMovieClip::Impl::IconSlot *m_slot;
 };
 
-struct Rva005F141DSlotRef
-{
-	Rva005F141DSlotRef(StrategicHUD::RegionDetailsStructuresMovieClip::Impl::IconSlot *slot) : m_slot(slot) {}
-	~Rva005F141DSlotRef()
-	{
-		if (m_slot)
-			ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)&m_slot->m_ref);
-	}
-	StrategicHUD::RegionDetailsStructuresMovieClip::Impl::IconSlot *m_slot;
-};
-
+struct Rva005F141DSlotRef {__forceinline Rva005F141DSlotRef(StrategicHUD::RegionDetailsStructuresMovieClip::Impl::IconSlot *slot):m_slot(slot){} __forceinline ~Rva005F141DSlotRef(){if(m_slot)ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)&m_slot->m_ref);}StrategicHUD::RegionDetailsStructuresMovieClip::Impl::IconSlot *m_slot;};
 namespace _STL { template <> void vector<Rva005F13E6Element,allocator<Rva005F13E6Element> >::push_back(const Rva005F13E6Element &); }
 
 StrategicHUD::RegionDetailsStructuresMovieClip::Impl::Impl(RegionDetailsStructuresMovieClip *owner, int level, const AsciiString &name, int iconSlotCount, int arg)
@@ -254,8 +249,8 @@ StrategicHUD::RegionDetailsStructuresMovieClip::Impl::Impl(RegionDetailsStructur
 	reinterpret_cast<Rva005F122DVector *>(&m_iconSlots)->reserve(iconSlotCount);
 	for (int i = 0; i < iconSlotCount; ++i)
 	{
-		Rva005F141DSlotRef slot(new IconSlot(this, i));
-		m_iconSlots.push_back(slot.m_slot);
+		IconSlot * raw=new IconSlot(this,i);
+Rva005F13E6Element element(raw);Rva005F141DSlotRef slot(raw);m_iconSlots.push_back(element);
 	}
 	StrategicHUD::SetBuildingNameString(m_level, (Rva005F066COuter *)&m_name, m_buildingName);
 	AsciiString prefix;

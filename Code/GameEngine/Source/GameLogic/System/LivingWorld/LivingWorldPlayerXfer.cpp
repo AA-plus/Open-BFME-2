@@ -94,4 +94,3 @@ Xfer *Rva002E07FAXfer(Xfer *xfer, unsigned int *values) {
  for(unsigned int i=0;i<4;++i) *xfer == values[i];
  return xfer;
 }
-

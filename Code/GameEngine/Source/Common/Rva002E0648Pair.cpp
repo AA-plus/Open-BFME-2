@@ -48,4 +48,3 @@ void Rva002E0648Owner::rva002E0648(void *a)
 }
 
 // ?rva002E07CC@Rva002E0648Owner@@QAEXXZ
-
