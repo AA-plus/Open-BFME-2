@@ -1,22 +1,22 @@
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
-// partial score=0.8758957277772467 date=2026-10-12
+// partial score=0.9246599982892996 date=2026-10-12
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
-// Lane replay 2026-10-12: diagnostic fitness 0.8758957277772467.
+// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
+// Astra high-b replay: diagnostic fitness 0.9246599982892996.
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
 // stlport
 //
-// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ retail 0x0050366B
-// (1706 bytes; __EH_prolog frame with 16 unwind states). DRAFT, NEAR: every
-// instruction, call target and EH state matches retail; only the frame
-// packing differs (sub esp 0x1DC vs 0x1D8 and 169 [ebp-X] displacements:
-// one extra 4-byte slot holds the two discarded insert results, and the
-// 0xC army vector / 0x14 army record swap which one overlays the building
-// vector). eh_verify: FuncInfo/unwind map agree, funclets differ only in
-// those displacements. The value-type merge is present. The three converting
-// constructors now have admitted whole29B fold proofs in
-// StlportPairConstructFamily.cpp; ThingFactory uses its current rowed spelling.
-// A matching-time resolved pin is not a link-provider receipt. In particular
-// the older Rva004FFE72Part initialization view remains a link debt.
+// Native 50366B..503D15: complete 1706B, exact frame 0x1D8.
+// Every instruction/call/register/branch/EH-state transition aligns, but 99
+// stack operands still differ. This is a bank, not a verified recovery.
+// Explicit placement into two dead scalar/iterator slots removes the former
+// extra four-byte frame slot. LocalPlacement has no placement-delete overload:
+// its storage is automatic and requires no deallocation when construction fails.
+// This is a source-level lifetime experiment, not evidence that retail used
+// placement construction. The return values are discarded and trivially
+// destructible; the overwritten entry/iterator values have no later reads.
+// Existing converting-pair folds and ThingFactory::findTemplate resolve all
+// matching-time calls. Rva004FFE72Part initialization remains link-only debt.
 //
 // Identity: the WorldBuilder twin 0x012FDB20 is
 // LWAIWorldInformation::GatherWorldInformation in
@@ -324,6 +324,8 @@ private:
 	IntIntMap m_RegionInfoByRegion;      // +0x1C
 };
 
+struct LocalPlacement {void *where; LocalPlacement(void *p):where(p){}};
+__forceinline void *operator new(unsigned int,LocalPlacement p) throw() {return p.where;}
 void LWAIWorldInformation::GatherWorldInformation()
 {
 	m_PlayerInfo.clear();
@@ -375,7 +377,7 @@ void LWAIWorldInformation::GatherWorldInformation()
 
 		_STL::pair<int, Rva00501656> regionPair(info.m_ownerID, info);
 		RegionInfoMap::iterator it = m_RegionInfo.insert(m_RegionInfo.begin(), regionPair);
-		m_RegionInfoByRegion.insert(m_RegionInfoByRegion.begin(), _STL::make_pair(info.m_regionID, (int)&it->second));
+		new(LocalPlacement(&it)) IntIntMap::iterator(m_RegionInfoByRegion.insert(m_RegionInfoByRegion.begin(), _STL::make_pair(info.m_regionID, (int)&it->second)));
 	}
 
 	int playerCount = ((LWAILogicView *)TheLivingWorldLogic)->m_players.size();
@@ -406,7 +408,7 @@ void LWAIWorldInformation::GatherWorldInformation()
 				int entry = ((const Rva0040CB2CIndexedField *)summary)->get(e);
 				AsciiString name(*(const AsciiString *)(entry + 4));
 				int templateID = ((LWAIThingTemplateView *)TheThingFactory->findTemplate(name))->m_5c4;
-				armyInfo.m_units.insert(IntIntPair(templateID, ((const Rva0040CC1BIndexedField *)summary)->findBySecond(entry)));
+				new(LocalPlacement(&entry)) IntIntTree::iterator(((IntIntTree *)&armyInfo.m_units)->insert_equal(IntIntPair(templateID, ((const Rva0040CC1BIndexedField *)summary)->findBySecond(entry))));
 			}
 			int armyRegion = ((Rva00318C79Owner *)army)->rva00318C79();
 			armyInfo.m_region = (Rva00501656 *)m_RegionInfoByRegion.find(armyRegion)->second;
