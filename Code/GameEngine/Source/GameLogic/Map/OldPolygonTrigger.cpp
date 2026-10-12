@@ -5,6 +5,8 @@
 // at +0x48. The helper and holder names remain opaque where WB supplies none.
 #include "../../../../Libraries/Include/Lib/Coord2D.h"
 #include "ascii_string.h"
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
+#include "AreaSetEntryView.h"
 class DataChunkInput
 {
 public:
@@ -213,6 +215,101 @@ void __cdecl rva0032927A(Rva003294B3Obj *record, int areaSet)
 		*reinterpret_cast<const AsciiString *>(reinterpret_cast<char *>(record) + 0x28));
 	reinterpret_cast<Rva0030912A *>(areaSet)->rva0030912A(
 		*reinterpret_cast<int *>(record), water);
+}
+
+// The river area as Rva0030C1FCOwnerCtor.cpp lays it out: the reference
+// count of the primary root at +4, the shared virtual base at +0x90.
+class VBase00C6EE28
+{
+public:
+	virtual void s0() = 0;
+	~VBase00C6EE28();
+};
+
+class Rva0030C1FCRoot
+{
+public:
+	virtual ~Rva0030C1FCRoot();
+	int references;
+	char m_pad08[0x30 - 0x08];
+};
+
+class Rva0030C1FCOwner : public Rva0030C1FCRoot, public virtual VBase00C6EE28
+{
+public:
+	Rva0030C1FCOwner(int count);
+	virtual ~Rva0030C1FCOwner();
+	virtual void s0();
+private:
+	char m_pad34[0x8C - 0x34];	// this view keeps its vbptr at +0x30
+};
+
+class RiverAreaRef
+{
+public:
+	RiverAreaRef(Rva0030C1FCOwner *p) : m_ptr(p)
+	{
+		if (m_ptr) ++m_ptr->references;
+	}
+	~RiverAreaRef()
+	{
+		if (m_ptr) ReleaseTreeHintRef00217D4C(reinterpret_cast<TargetRef00217D4C *>(m_ptr));
+	}
+	Rva0030C1FCOwner *m_ptr;
+};
+
+// One river section: the boundary point pair (Rva0030BE41.cpp's record).
+struct BfmeFloat4Record00469C61
+{
+	BfmeFloat4Record00469C61(const Coord2D &a, const Coord2D &b) : x(a.x), y(a.y), z(b.x), w(b.y) {}
+	float x, y, z, w;
+};
+class Rva0030BDEE { public: void rva0030BD5B(const RGBColor *color); };
+class Rva0030BBC8 { public: void rva0030BBC8(float value); };
+class Rva0030BBE5 { public: void rva0030BBE5(int value); };
+class Rva0030C1C8 { public: void rva0030C1C8(int index, const StringBase<char> &name); };
+class Rva0030BE41 { public: void rva0030BC11(const BfmeFloat4Record00469C61 &section); };
+class RiverAreaSetView { public: void insert(int id, AreaRefValueView area); };
+
+// WB's unnamed helper at 0x00BE1B90 (OldPolygonTrigger.cpp) imports river
+// records; retail 0x00329339..0x003294B3. It news a river area (rowed
+// constructor 0x0030C4DE) sized for half the boundary points, copies the
+// record's name, extra name, colour, alpha, four textures and the polygon's
+// +0x28 int through the river setters rowed for RiverAreasDataChunkParser,
+// then walks the boundary from the record's start index (+0x10) outward in
+// both directions, adding one section per point pair (rowed 0x0030BC11),
+// and inserts the river under the record's id.
+void __cdecl rva00329339(Rva003294B3Obj *record, int areaSet)
+{
+	Out *data = reinterpret_cast<Out *>(record);
+	RiverAreaRef river(new Rva0030C1FCOwner(
+		(data->m_polygon.m_pointsEnd - data->m_polygon.m_pointsBegin) / 2));
+	reinterpret_cast<Rva00537F74 *>(river.m_ptr)->rva00537F74(data->m_name);
+	reinterpret_cast<Rva00537FA0 *>(river.m_ptr)->rva00537FA0(data->m_extra);
+	reinterpret_cast<Rva0030BDEE *>(river.m_ptr)->rva0030BD5B(reinterpret_cast<const RGBColor *>(data->m_rgb));
+	reinterpret_cast<Rva0030BBC8 *>(river.m_ptr)->rva0030BBC8(data->m_44);
+	reinterpret_cast<Rva0030C1C8 *>(river.m_ptr)->rva0030C1C8(0, *(const StringBase<char> *)&data->m_strings[0]);
+	reinterpret_cast<Rva0030C1C8 *>(river.m_ptr)->rva0030C1C8(1, *(const StringBase<char> *)&data->m_strings[1]);
+	reinterpret_cast<Rva0030C1C8 *>(river.m_ptr)->rva0030C1C8(2, *(const StringBase<char> *)&data->m_strings[2]);
+	reinterpret_cast<Rva0030C1C8 *>(river.m_ptr)->rva0030C1C8(3, *(const StringBase<char> *)&data->m_strings[3]);
+	reinterpret_cast<Rva0030BBE5 *>(river.m_ptr)->rva0030BBE5(*reinterpret_cast<const int *>(data->m_polygon.m_pad08 + 0x20));
+
+	int count = data->m_polygon.m_pointsEnd - data->m_polygon.m_pointsBegin;
+	int sections = count / 2;
+	int left = data->m_10;
+	int right = left + 1;
+	if (right >= count)
+		right -= count;
+	for (; sections > 0; --sections)
+	{
+		reinterpret_cast<Rva0030BE41 *>(river.m_ptr)->rva0030BC11(BfmeFloat4Record00469C61(
+			data->m_polygon.m_pointsBegin[left], data->m_polygon.m_pointsBegin[right]));
+		if (--left < 0)
+			left += count;
+		if (++right >= count)
+			right -= count;
+	}
+	reinterpret_cast<RiverAreaSetView *>(areaSet)->insert(data->m_id, reinterpret_cast<const AreaRefValueView &>(river));
 }
 
 // WB 0x00BE2360 identifies this adjacent parser. Retail additionally proves
