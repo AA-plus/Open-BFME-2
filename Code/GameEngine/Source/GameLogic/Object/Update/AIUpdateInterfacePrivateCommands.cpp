@@ -548,6 +548,12 @@ extern ActionManager *TheActionManager;
 // order issuers here are matched under address names: 0x0026C347 builds
 // AICMD 0x17 (the enter order, aiEnter) and 0x0026C3AC AICMD 0x18 (the dock
 // order, aiDock; command 0x18 dispatches to the matched privateDock).
+struct Rva00264D81Arg
+{
+	unsigned char m_unmodelled_00[0x34];
+	UnsignedInt m_value34;
+};
+
 class AICommandInterface
 {
 public:
@@ -1174,6 +1180,7 @@ protected:
 	// BFME2 aiDoCommand handlers named by their command id (see the bodies).
 	virtual void privateAttackArea(const PolygonTrigger *areaToGuard, CommandSourceType commandSource);
 	virtual void privateFacePosition(const Coord3D *position, CommandSourceType commandSource);
+	virtual void bfmePrivateCommand20(const Rva00264D81Arg *target, GuardMode guardMode, CommandSourceType commandSource);
 	virtual void privateGetHealed(Object *healDepot, CommandSourceType commandSource);
 	virtual void bfmePrivateCommand37(Int value, CommandSourceType commandSource);
 	virtual void bfmePrivateCommand3D(Object *obj, CommandSourceType commandSource);
@@ -1542,6 +1549,32 @@ void AIUpdateInterface::privateGetRepaired(Object *repairDepot, CommandSourceTyp
 // (guard target type OBJECT in the free slot, mode at +0x4C, the guarded
 // object's id at +0x64, AI_GUARD) behind BFME2's status-bit guard.
 // AIUpdateInterface::privateGuardObject is defined with its retail-matched body in Code/GameEngine/Source/GameLogic/Object/Update/AIUpdateInterfacePrivateGuardObject.cpp (0x00264D0E).
+
+// Command 0x20, slot 65, retail 0x00264D81: the guard order's LOCATION form
+// as BFME2 issues it, carrying one word of the passed object to +0x68 and
+// clearing the guarded object id.
+void AIUpdateInterface::bfmePrivateCommand20(const Rva00264D81Arg *target, GuardMode guardMode, CommandSourceType commandSource)
+{
+	Object *obj = getObject();
+	if (obj->testStatus(BFME_OBJECT_STATUS_26))
+		return;
+	if (!obj->isMobile())
+		return;
+	if (getObject()->isKindOf(KINDOF_PROJECTILE))
+		return;
+
+	if (m_guardTargetType[1] == GUARDTARGET_NONE)
+		m_guardTargetType[1] = GUARDTARGET_LOCATION;
+	else
+		m_guardTargetType[0] = GUARDTARGET_LOCATION;
+	m_guardMode = guardMode;
+	m_objectToGuard = INVALID_ID;
+	m_guardExtra = target->m_value34;
+
+	m_stateMachine->clear();
+	m_lastCommandSource = commandSource;
+	m_stateMachine->setState(BFME_AI_GUARD);
+}
 
 // Command 0x27, slot 70, retail 0x00267D65. aiFacePosition (0x003C7782)
 // issues AICMD 0x27; ZH's privateFacePosition with BFME2's state 0x25 and
