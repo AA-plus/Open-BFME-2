@@ -63,6 +63,9 @@ public:
     ~EAStringC();
     EAStringC &Rva006D4F00Append(const EAStringC &other);
     const char *rva00620090() const;
+    int GetAt(int) const;
+    unsigned int rva006D3750() const;
+    int rva006D54B0(int,int);
 };
 extern EAStringC::StringDataC g_eaEmptyStringData;
 // Native callers invoke this 16-byte constructor at 0x006D2F90, folded with
@@ -317,6 +320,38 @@ AptValue *Rva006ED770RemoveMovieClip(AptValue *self,int){
    if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();
   }
   ((AptDisplayList *)((char *)parent->member4C+0x24))->removeClonedObject(cih);
+ }
+ return gpUndefinedValue;
+}
+
+// Native C3E0..C589: Ghidra-unlisted callback before unloadMovie. Asserts
+// nParams == 1 (AptCharacter.cpp 0x2ED, retail text) and converts stack
+// argument 0 to a URL. An empty URL, or one ending in ".swf" by retail's
+// character tests (the upper-case alternatives re-test the last character,
+// as native), is loaded: a copy with the four-character extension removed
+// (rowed rva006D54B0) is the movie, the receiver's name from the rowed
+// rva006ffce0 is the target, and both go to the rowed AptLinker::Load: the
+// loadMovie shape. Callback name remains address-derived.
+AptValue *Rva006EC3E0LoadMovie(AptValue *self,int nParams){
+ AptValue *arg=g_aptDateInterpreter.stack.At(0);
+ if(!(nParams==1)){
+  g_bfmeAptAssertAtE17734("nParams == 1","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptCharacter.cpp",0x2ED);
+  if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();
+ }
+ EAStringC url;
+ arg->toString(url);
+ int length=url.rva006D3750();
+ if(length==0 ||
+  ((url.GetAt(length-1)=='f' || url.GetAt(length-1)=='F') &&
+   (url.GetAt(length-2)=='w' || url.GetAt(length-1)=='W') &&
+   (url.GetAt(length-3)=='s' || url.GetAt(length-1)=='S') &&
+   url.GetAt(length-4)=='.')){
+  EAStringC movie;
+  movie=url;
+  if(length>=4)
+   movie.rva006D54B0(length-4,4);
+  rva006ffce0((AptValue *)self->c_cih(false),url);
+  g_bfmeAptLinkerAtE176F8->Load(movie,url);
  }
  return gpUndefinedValue;
 }
