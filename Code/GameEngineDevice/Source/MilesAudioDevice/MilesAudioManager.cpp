@@ -282,6 +282,9 @@ public:
     int m_at14;              // +0x14, events still to finish before that one replays
     char at18[0x30 - 0x18];
     int m_viewType;          // +0x30
+    // Inline view-type getter: the 0x000583BA pause tests read it through
+    // this (the value lands in EAX first, as retail), the stream test does not.
+    int getViewType(void) const { return m_viewType; }
     char at34[0x38 - 0x34];
     int m_ownerType;         // +0x38, 2 when object-owned (getObjectID's test)
     char at3C[0x4A - 0x3C];
@@ -1099,6 +1102,7 @@ public:
     // 0x0005F2BB (pinned; WorldBuilder names it processAmbientStreams).
     void rva0005F2BB(class Rva00052B3D *state);
     void rva00060309(void);
+    void rva000583BA(unsigned int affect, unsigned int viewMask, int arg);
     void rva0006047C(void);
     void rva000603ED(void);
     void rva000544EB(void);
@@ -1220,7 +1224,7 @@ private:
     int m_num3DSamplesPlaying;           // +0x688, counted up by playAudioEvent
     int m_at68C;                         // +0x68C, zeroed by 0x60309
     unsigned int m_at690;                // +0x690, per-view-type bits 0x61C87 clears
-    char at694[0x698 - 0x694];
+    unsigned int m_at694;                // +0x694, view types whose music is paused for affect bit 0x20 (0x583BA)
     unsigned int m_at698;                // +0x698, per-view-type bits processAudioCompletion clears
     unsigned short m_maxAmbientStreams;  // +0x69C
     char at69E[0x6A4 - 0x69E];
@@ -3654,6 +3658,73 @@ void MilesAudioManager::rva0005824D(PolygonTrigger *trigger, float level)
     m_triggerAreas.push_back(area);
     m_at6AA = true;
 }
+
+// Native 000583BA..00058591. Under the mutex, pauses every sound (affect bit
+// 0x02), 3D sound (0x04) and stream whose class meets affect in the view
+// types of viewMask: bit 0x20 marks the playing audio at +0x4A, otherwise
+// +0x49, then pauseResumeSound applies it. Music (0x10) records the views
+// at +0x694/+0x690, pending requests are flagged through 0x577E3, and
+// unless arg is set the per-view masks at +0x6C0/+0x6B4 remember affect.
+void MilesAudioManager::rva000583BA(unsigned int affect, unsigned int viewMask, int arg)
+{
+    MilesMutexGuard guard(&m_mutex, 0);
+    PlayingAudioRef playing;
+    PlayingAudioList::iterator it;
+    if (affect & 0x02) {
+        for (it = m_playingSounds.begin(); it != m_playingSounds.end(); ++it) {
+            playing = *it;
+            if (playing.get() && (viewMask & (1 << playing->m_event->getViewType()))) {
+                if (affect & 0x20)
+                    playing->m_at4A = true;
+                else
+                    playing->m_at49 = true;
+                pauseResumeSound(playing);
+            }
+        }
+    }
+    if (affect & 0x04) {
+        for (it = m_playing3DSounds.begin(); it != m_playing3DSounds.end(); ++it) {
+            playing = *it;
+            if (playing.get() && (viewMask & (1 << playing->m_event->getViewType()))) {
+                if (affect & 0x20)
+                    playing->m_at4A = true;
+                else
+                    playing->m_at49 = true;
+                pauseResumeSound(playing);
+            }
+        }
+    }
+    for (it = m_playingStreams.begin(); it != m_playingStreams.end(); ++it) {
+        playing = *it;
+        if (playing.get() && (viewMask & (1 << playing->m_event->m_viewType))
+            && (playing->m_event->getSoundClass() & affect)) {
+            if (affect & 0x20)
+                playing->m_at4A = true;
+            else
+                playing->m_at49 = true;
+            pauseResumeSound(playing);
+        }
+    }
+    if (affect & 0x10) {
+        if (affect & 0x20)
+            m_at694 |= viewMask;
+        else
+            m_at690 |= viewMask;
+    }
+    rva000577E3(affect, viewMask, true);
+    if (!arg) {
+        for (int viewType = 0; viewType < 3; ++viewType) {
+            if (viewMask & (1 << viewType)) {
+                if (affect & 0x20)
+                    m_at6C0[viewType] |= affect & ~0x20;
+                else
+                    m_at6B4[viewType] |= affect;
+            }
+        }
+    }
+}
+
+
 
 // Retail 0x000606CE, called from onAudioLODChanged (0x607BB) and 0x61A2E.
 // With a provider selected it releases every playing 3D sound under the
