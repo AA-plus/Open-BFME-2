@@ -94,7 +94,8 @@ struct Global9FE710
     int m_38;
 };
 
-extern Global9FE710 *g_Va009FE710;
+class GameEngine;
+extern GameEngine *TheGameEngine;
 
 class Rva000E6AC0 : public Rva000E6AC0Base
 {
@@ -130,7 +131,7 @@ Rva000E6AC0::Rva000E6AC0()
     , m_r40(0x800, 0x35545844)
     , m_r68(0x400, 0x31545844)
 {
-    float f = (g_Va009FE710 != 0) ? (float)g_Va009FE710->m_38 : 1.0f;
+    float f = (TheGameEngine != 0) ? (float)reinterpret_cast<Global9FE710 *>(TheGameEngine)->m_38 : 1.0f;
     m_540 = -1;
     m_5bc = f;
 }
@@ -146,7 +147,3 @@ Rva000E6AC0::~Rva000E6AC0()
     reinterpret_cast<Rva000EC9C6 *>(this)->rva000E6B99();
 }
 
-// ?g_Va009FE710@@3PAUGlobal9FE710@@A: the global at this VA is ?TheGameEngine@@3PAVGameEngine@@A; this name is an alias for it.
-#pragma comment(linker, "/alternatename:?g_Va009FE710@@3PAUGlobal9FE710@@A=?TheGameEngine@@3PAVGameEngine@@A")
-// ?g_Va009FE710@@3PAUGlobal9FE710@@A: the global at VA 0xdfe710 is ?TheGameEngine@@3PAVGameEngine@@A.
-#pragma comment(linker, "/alternatename:?g_Va009FE710@@3PAUGlobal9FE710@@A=?TheGameEngine@@3PAVGameEngine@@A")
