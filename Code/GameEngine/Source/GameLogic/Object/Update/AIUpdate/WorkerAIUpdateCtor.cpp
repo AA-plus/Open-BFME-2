@@ -17,6 +17,19 @@
 // The distance is built in three locals first, which gives retail's three
 // movss loads ahead of the subss chain.
 //
+// ?aiDoCommand@WorkerAIUpdate@@UAEXPBUAICommandParms@@@Z, retail 0x004AB09D,
+// 344 bytes (slot 0 of the AICommandInterface vtable 0x00C54180 at +0x20,
+// compiled with that subobject this). ZH's WorkerAIUpdate::aiDoCommand: clear
+// the actively-constructing condition (BFME 2 also clears conditions 256 and
+// 257), stop if the primary's slot 148 refuses the command, make the machines,
+// then repair / resume-construction (primary slots 44 and 45, parms +0x14
+// object and +0x04 source; idle first when the dozer has no task) or, for any
+// other command, cancel the current task for a player command, run
+// AIUpdateInterface::aiDoCommand (0x002673F6) and reset the dozer machine for a
+// player command. Finally, when slot 112 reports mine clearing, a carried
+// load is dropped and the drawable's supply status refreshed (0x0027164E).
+// The WB body is not used: this follows ZH and the dozer sibling (0x0048AF0B).
+//
 // ?createMachines@WorkerAIUpdate@@AAEXXZ, retail 0x004A9ED5, 218 bytes. As in
 // ZH: without a worker machine, make one (0x3C bytes, plain operator new;
 // pinned ctor 0x004A9D79) and, where missing, the dozer (pinned 0x00488DAB)
@@ -317,10 +330,24 @@ enum CommandSourceType
 	CMD_FROM_AI
 };
 
+struct AICommandParms
+{
+	Int m_cmd; // +0x00
+	CommandSourceType m_cmdSource; // +0x04
+	unsigned char m_pad08[0x14 - 0x08];
+	Object *m_obj; // +0x14
+};
+
+enum
+{
+	AICMD_REPAIR = 0x13,
+	AICMD_RESUME_CONSTRUCTION = 0x14
+};
+
 class AICommandInterface
 {
 public:
-	virtual void aiDoCommand();
+	virtual void aiDoCommand(const AICommandParms *parms);
 	void aiIdle(CommandSourceType cmdSource);
 	void aiMoveToPosition(const Coord3D *position, CommandSourceType cmdSource);
 };
@@ -339,6 +366,7 @@ public:
 	virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
 	virtual void v05(); virtual void v06(); virtual void v07();
 	virtual void onDelete(); // vslot 8
+	virtual void aiDoCommand(const AICommandParms *parms);
 	Int getCurrentStateID() const;
 	Bool isPathAvailable(const Coord3D *destination) const;
 	Bool findNearestLabeledContactPointOnTarget(Object *target, Coord3D *result, const Coord3D *workingPosition, Bool skipCollideTest);
@@ -440,10 +468,19 @@ private:
 	UnsignedInt m_kindOf[4]; // +0x108
 };
 
+class Drawable;
+
+class Rva002716Holder
+{
+public:
+	void Rva0027164EBroadcast(Int maxBoxes, Int boxes); // 0x0027164E, Drawable supply status
+};
+
 class Thing
 {
 public:
 	virtual ~Thing();
+	Drawable *getDrawable() const; // 0x005508E2
 	const ThingTemplate *getTemplate() const { return m_template; }
 	const Coord3D *getPosition() const { return &m_position; }
 	void setPosition(const Coord3D *pos);
@@ -740,7 +777,8 @@ public:
 	virtual void slot1() = 0; virtual void slot2() = 0; virtual void slot3() = 0;
 	virtual void slot4() = 0; virtual void slot5() = 0;
 	virtual Bool isTaskPending(DozerTask task) = 0; // vslot 6
-	virtual void slot7() = 0; virtual void slot8() = 0; virtual void slot9() = 0;
+	virtual void slot7() = 0; virtual void slot8() = 0;
+	virtual Int getCurrentTask() = 0; // vslot 9 (+0x24)
 	virtual void slot10() = 0; virtual void slot11() = 0;
 	virtual void newTask(DozerTask task, Object *target) = 0; // vslot 12
 	virtual void cancelTask(DozerTask task) = 0; // vslot 13
@@ -805,6 +843,38 @@ public:
 };
 extern AudioManager *TheAudio;
 
+template <int N>
+class WorkerAISlots : public WorkerAISlots<N - 1>
+{
+public:
+	virtual void unused(char (*)[N]) = 0;
+};
+
+template <>
+class WorkerAISlots<0>
+{
+};
+
+// Slots of the primary vtable aiDoCommand reaches through the object.
+class WorkerAIRepairSlots : public WorkerAISlots<44>
+{
+public:
+	virtual void privateRepair(Object *obj, CommandSourceType cmdSource) = 0; // slot 44 (+0xB0)
+	virtual void privateResumeConstruction(Object *obj, CommandSourceType cmdSource) = 0; // slot 45 (+0xB4)
+};
+
+class WorkerAIClearingMinesSlot : public WorkerAISlots<112>
+{
+public:
+	virtual Bool isClearingMines() = 0; // slot 112 (+0x1C0)
+};
+
+class WorkerAIRespondSlot : public WorkerAISlots<148>
+{
+public:
+	virtual Bool isAllowedToRespondToAiCommands(const AICommandParms *parms) = 0; // slot 148 (+0x250)
+};
+
 // The dock point element: an out-of-line empty ctor and dtor (retail's
 // __ehvec_ctor arguments, the ICF-folded 0x0047A6A9 and 0x000B3FD0).
 struct BfmeWorkerDockPoint
@@ -821,6 +891,7 @@ public:
 	WorkerAIUpdate(Thing *thing, const ModuleData *moduleData);
 	virtual void onDelete();
 	virtual void supplyTruckSlot0();
+	virtual void aiDoCommand(const AICommandParms *parms);
 	virtual Bool rva004A98AC();
 	virtual Bool gainOneBox(Int remainingStock);
 	virtual void exitingSupplyTruckState();
@@ -1023,6 +1094,51 @@ Bool WorkerAIUpdate::rva004A98AC()
 	--m_4A0;
 	getObject()->rva00290758(getWorkerAIUpdateModuleData()->m_64, m_4A0);
 	return TRUE;
+}
+
+void WorkerAIUpdate::aiDoCommand(const AICommandParms *parms)
+{
+	getObject()->clearModelConditionState(MODELCONDITION_ACTIVELY_CONSTRUCTING);
+	getObject()->clearModelConditionState((ModelConditionFlagType)256);
+	getObject()->clearModelConditionState((ModelConditionFlagType)257);
+
+	if (!reinterpret_cast<WorkerAIRespondSlot *>(this)->isAllowedToRespondToAiCommands(parms))
+		return;
+
+	createMachines();
+
+	switch (parms->m_cmd)
+	{
+	case AICMD_REPAIR:
+		if (getCurrentTask() == DOZER_TASK_INVALID)
+			aiIdle(CMD_FROM_AI);
+		reinterpret_cast<WorkerAIRepairSlots *>(this)->privateRepair(parms->m_obj, parms->m_cmdSource);
+		break;
+
+	case AICMD_RESUME_CONSTRUCTION:
+		if (getCurrentTask() == DOZER_TASK_INVALID)
+			aiIdle(CMD_FROM_AI);
+		reinterpret_cast<WorkerAIRepairSlots *>(this)->privateResumeConstruction(parms->m_obj, parms->m_cmdSource);
+		break;
+
+	default:
+		if (parms->m_cmdSource == CMD_FROM_PLAYER && getCurrentTask() != DOZER_TASK_INVALID)
+			cancelTask((DozerTask)getCurrentTask());
+
+		AIUpdateInterface::aiDoCommand(parms);
+
+		if (parms->m_cmdSource == CMD_FROM_PLAYER)
+			m_dozerMachine->resetToDefaultState();
+		break;
+	}
+
+	if (reinterpret_cast<WorkerAIClearingMinesSlot *>(this)->isClearingMines() && m_4A0 > 0)
+	{
+		m_4A0 = 0;
+		Drawable *draw = getObject()->getDrawable();
+		if (draw)
+			reinterpret_cast<Rva002716Holder *>(draw)->Rva0027164EBroadcast(getWorkerAIUpdateModuleData()->m_64, m_4A0);
+	}
 }
 
 Bool WorkerAIUpdate::gainOneBox(Int remainingStock)
