@@ -63,9 +63,24 @@ public:
 	virtual void getPlacementPoints(ICoord2D *start, ICoord2D *end);	// +0xF4
 
 protected:
-	char m_opaque14[0x544 - 0x14];
+	// BFME's lasso selection: points in screen order, closed to the cursor.
+	struct LassoPointNode
+	{
+		LassoPointNode *next;
+		LassoPointNode *prev;
+		ICoord2D point;
+	};
+
+	char m_opaque14[0x2C - 0x14];
+	ICoord2D m_dragSelectRegionLo;	// +0x2C
+	ICoord2D m_dragSelectRegionHi;	// +0x34
+	char m_opaque3C[0x544 - 0x3C];
 	Drawable **m_placeIcon;		// +0x544
-	char m_opaque548[0x9F0 - 0x548];
+	char m_opaque548[0x910 - 0x548];
+	LassoPointNode *m_lassoPoints;	// +0x910, list sentinel
+	char m_opaque914[0x924 - 0x914];
+	bool m_lassoSelecting;		// +0x924
+	char m_opaque925[0x9F0 - 0x925];
 };
 
 class Rva0008EF3FProduct : public InGameUI
@@ -76,6 +91,7 @@ public:
 	virtual void init();
 	virtual void reset();
 	virtual void update();
+	virtual void drawSelectionRegion(void);
 	virtual void drawPlaceAngle(View *view);
 
 private:
@@ -155,7 +171,13 @@ public:
 	virtual void Add_Render_Object(RenderObjClass *obj);	// +0x08
 	virtual void Remove_Render_Object(RenderObjClass *obj);	// +0x0C
 };
-class W3DDisplay { public: static RTS3DScene *m_3DScene; };
+class W3DDisplay
+{
+public:
+	static RTS3DScene *m_3DScene;
+	void rva0008EE9E(float x1, float y1, float x2, float y2, float width, int color1, int color2);	// line
+	void rva0008EEF0(float x, float y, float w, float h, float width, int color);	// open rect
+};
 class Drawable { public: const Matrix3D *getTransformMatrix(void) const; };
 
 void Rva0008EF3FProduct::drawPlaceAngle(View *view)
@@ -230,5 +252,52 @@ void Rva0008EF3FProduct::drawPlaceAngle(View *view)
 	{
 		if ( m_placeIcon[ 0 ] )
 			m_buildingPlacementArrow->Set_Transform( *m_placeIcon[ 0 ]->getTransformMatrix() );
+	}
+}
+
+// Zero Hour W3DInGameUI::drawSelectionRegion, retail 0x0008F395..0x0008F48E
+// (249B; vtable 0x00BC7A88 slot 120). BFME 2 adds lasso selection: while
+// +0x924 is set it draws the +0x910 point list as a polyline closed to the
+// cursor (Mouse +0x4F0C); otherwise the donor's drag rectangle at +0x2C.
+class Display;
+extern Display *TheDisplay;
+class Mouse;
+extern Mouse *TheMouse;
+struct InGameUIMouseView { char pad[0x4F0C]; ICoord2D position; };
+
+void Rva0008EF3FProduct::drawSelectionRegion(void)
+{
+	float width = 2.0f;
+	unsigned int color = 0xBBFFBB33;
+
+	if( m_lassoSelecting )
+	{
+		LassoPointNode *it = m_lassoPoints->next;
+		while( it != m_lassoPoints )
+		{
+			ICoord2D from = it->point;
+			it = it->next;
+			int toX, toY;
+			if( it != m_lassoPoints )
+			{
+				toX = it->point.x;
+				toY = it->point.y;
+			}
+			else
+			{
+				const ICoord2D &pos = reinterpret_cast<InGameUIMouseView *>(TheMouse)->position;
+				toX = pos.x;
+				toY = pos.y;
+			}
+			reinterpret_cast<W3DDisplay *>(TheDisplay)->rva0008EE9E( from.x, from.y, toX, toY,
+				width, color, color );
+		}
+	}
+	else
+	{
+		reinterpret_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0( m_dragSelectRegionLo.x, m_dragSelectRegionLo.y,
+			m_dragSelectRegionHi.x - m_dragSelectRegionLo.x,
+			m_dragSelectRegionHi.y - m_dragSelectRegionLo.y,
+			width, color );
 	}
 }
