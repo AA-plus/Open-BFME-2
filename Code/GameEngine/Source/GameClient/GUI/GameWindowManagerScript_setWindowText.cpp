@@ -46,6 +46,8 @@ class UnicodeString;
 
 #include "unicode_string.h"
 
+#include "GameWindowManagerRecordView.h"
+
 // Retail fetch call uses vtable offset 0x3c (VersionUnicode.cpp recipe).
 class GameTextInterface
 {
@@ -75,7 +77,63 @@ class GameWindow
 public:
 	UnsignedInt winGetStyle(void);
 	Int winSetText(UnicodeString newText);
+	Int winSetInstanceData(WinInstanceData *data);
+	Int getRva0031450A(void);
 };
+
+class WinInstanceData
+{
+public:
+	unsigned char m_pad00[0x0C];
+	UnsignedInt m_style;	// +0x0C (retail or-byte at +0x0D for |=0x200/0x4000)
+	unsigned char m_pad10[0x188 - 0x10];
+	AsciiString m_textLabelString;	// +0x188 (retail add eax,0x188)
+};
+
+struct GameWindowEditData
+{
+	AsciiString systemCallbackString;
+	AsciiString inputCallbackString;
+	AsciiString tooltipCallbackString;
+	AsciiString drawCallbackString;
+};
+
+class Rva0031404A
+{
+public:
+	Int rva0031404A(Int value);	// rowed 0x0031404A
+};
+
+class GameWindowManager
+{
+public:
+#define V(n) virtual void pad##n(void) = 0;
+	V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7)
+	V(8) V(9) V(10) V(11) V(12) V(13) V(14) V(15)
+	V(16) V(17) V(18) V(19) V(20) V(21) V(22) V(23)
+	V(24) V(25) V(26) V(27) V(28) V(29) V(30) V(31)
+	V(32) V(33)
+#undef V
+	virtual GameWindow *slot88(GadgetCreateView *record) = 0;	// +0x88 USER/TABPANE factory
+#define W(n) virtual void pad##n(void) = 0;
+	W(35) W(36) W(37) W(38) W(39) W(40) W(41) W(42)
+	W(43) W(44) W(45) W(46) W(47) W(48) W(49) W(50)
+	W(51) W(52) W(53) W(54) W(55) W(56) W(57) W(58)
+#undef W
+	virtual Int slotEC(GameWindow *window, UnsignedInt m1, UnsignedInt m2, UnsignedInt m3) = 0;	// +0xEC
+};
+
+extern GameWindowManager *TheWindowManager;
+
+extern GameWindow *peekWindow(void);
+extern AsciiString g_systemCallbackName;
+extern AsciiString g_inputCallbackName;
+extern AsciiString g_tooltipCallbackName;
+extern AsciiString g_drawCallbackName;
+
+GameWindow *createGadget(char *type, void *data, GadgetCreateView *view, GameWindow *source);
+
+extern "C" Int __cdecl strcmp(const char *a, const char *b);
 
 void GadgetButtonSetText(GameWindow *window, UnicodeString text);
 void GadgetRadioSetText(GameWindow *window, UnicodeString text);
@@ -122,14 +180,75 @@ static void setWindowText(GameWindow *window, AsciiString textLabel)
 		window->winSetText(theText);
 }
 
-// Codegen scaffold: MSVC only assigns the private parser ABI to a static with a
-// visible caller, and setWindowText's only caller is createWindow (0x00316BD2).
-// External linkage keeps the scaffold emitted.
-// ?setWindowTextCaller absent-from-retail
-GameWindow *setWindowTextCaller(GameWindow *w, AsciiString textLabel)
+// ?createWindow@@YAPAVGameWindow@@PADHPAXPAVGadgetCreateView@@@Z, retail
+// 0x00316BD2, 294 bytes. BFME1 donor
+// (game/GameEngine/Source/GameClient/GUI/GameWindowManagerScriptParseWindow.cpp,
+// createWindow): USER/TABPANE windows come from the manager factory with a
+// style bit set, other types go through createGadget, then the edit-data
+// callback strings, the text label and the parent send apply. BFME2 passes
+// (type, id, data, record) with the record in EDI under MSVC's private static
+// convention, so the scaffold caller below keeps it emitted. All callees
+// rowed or pinned: peekWindow 0x00314EEE, strcmp import, manager slots
+// 0x88/0xEC, winSetInstanceData 0x0031495C, rva0031404A 0x0031404A,
+// getRva0031450A 0x0031450A, StringBase::set 0x000366F0, StringBase ctor
+// 0x000365F0, setWindowText 0x003161F2, createGadget pin 0x00316518.
+static GameWindow *createWindow(char *type, Int id, void *data, GadgetCreateView *record)
 {
-	GameWindow *window = w;
+	GameWindow *window, *parent;
+
+	parent = peekWindow();
+
+	if (!strcmp(type, "USER"))
+	{
+		window = TheWindowManager->slot88(record);
+		if (window)
+		{
+			record->instance->m_style |= 0x00000200;
+			((Rva0031404A *)window)->rva0031404A(id);
+		}
+	}
+	else if (!strcmp(type, "TABPANE"))
+	{
+		window = TheWindowManager->slot88(record);
+		if (window)
+		{
+			record->instance->m_style |= 0x00004000;
+			window->winSetInstanceData(record->instance);
+			((Rva0031404A *)window)->rva0031404A(id);
+		}
+	}
+	else
+	{
+		window = createGadget(type, data, record, 0);
+		if (window)
+			((Rva0031404A *)window)->rva0031404A(id);
+	}
+
 	if (window)
-		setWindowText(window, textLabel);
+	{
+		GameWindowEditData *editData = (GameWindowEditData *)window->getRva0031450A();
+		if (editData)
+		{
+			editData->systemCallbackString.set(g_systemCallbackName);
+			editData->inputCallbackString.set(g_inputCallbackName);
+			editData->tooltipCallbackString.set(g_tooltipCallbackName);
+			editData->drawCallbackString.set(g_drawCallbackName);
+		}
+	}
+
+	if (window)
+		setWindowText(window, record->instance->m_textLabelString);
+
+	if (window && parent)
+		TheWindowManager->slotEC(parent, 0x16, id, 0);
+
 	return window;
+}
+
+// Codegen scaffold: keeps the static createWindow emitted until its real
+// caller parseWindow (0x00316E8F) lands in this TU.
+// ?createWindowCaller absent-from-retail
+GameWindow *createWindowCaller(char *type, Int id, void *data, GadgetCreateView *record)
+{
+	return createWindow(type, id, data, record);
 }
