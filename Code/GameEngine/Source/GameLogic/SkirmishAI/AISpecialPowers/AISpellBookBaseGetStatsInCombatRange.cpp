@@ -1,4 +1,6 @@
-// ?getStatsInCombatRange@Rva005EEA20@@QAEXPAVRva005EE9CE@@PAVObject@@M@Z
+// ?getStatsInCombatRange@AISpellBookBase@@QAEXPAVRva005EE9CE@@PAVObject@@M@Z
+// Renamed receiver: the WorldBuilder twin names AISpellBookBase::
+// getStatsInCombatRange in EA's own AISpellBookBase.cpp (callgraph 3).
 // Native5EEBF6..5EED92412B; AoE partition tally and normalization.
 // Object template04 flags108/113 and value providers are established by native
 // accesses and rowed callers. Field and helper views retain their existing
@@ -296,13 +298,13 @@ public:
 	float m_0C;		// +0x0C
 };
 
-class Rva005EEA20
+class AISpellBookBase
 {
 public:
 	void getStatsInCombatRange(Rva005EE9CE *tally, Object *source, float radius);
 };
 
-void Rva005EEA20::getStatsInCombatRange(Rva005EE9CE *tally, Object *source, float radius)
+void AISpellBookBase::getStatsInCombatRange(Rva005EE9CE *tally, Object *source, float radius)
 {
 	BfmeWideResult hits = ThePartitionManager->iterateObjectsInRange(source->getPosition(), radius, 0,
 		Rva0026119DFilter().link(&Rva00261409Filter(source->getControllingPlayer(), true, 6)), 0);
