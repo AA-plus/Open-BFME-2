@@ -63,3 +63,26 @@ float __stdcall rva00094E2C(float a, float b, float c)
 	}
 	return r;
 }
+
+// Native 94DB3..94DD3 (32B RET4): returns the +0x6C/+0x70/+0x74 float
+// triple as a three-float value (the matrix column-getter shape of
+// Matrix3D::Get_Y_Vector). No caller or table reaches it; owner unknown.
+struct Rva00094DB3Vector
+{
+	Rva00094DB3Vector(float x, float y, float z) { X = x; Y = y; Z = z; }
+	float X, Y, Z;
+};
+
+class Rva00094DB3
+{
+public:
+	Rva00094DB3Vector rva00094DB3() const;
+private:
+	unsigned char m_pad[0x6C];
+	float m_6C, m_70, m_74;
+};
+
+Rva00094DB3Vector Rva00094DB3::rva00094DB3() const
+{
+	return Rva00094DB3Vector(m_6C, m_70, m_74);
+}
