@@ -21,23 +21,7 @@ template <> __declspec(dllimport) __forceinline
 void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
-template <class T> class StringBase
-{
-    void *m_data;
-    StringBase(const StringBase<T> &);
-    friend class AsciiString;
-};
-class AsciiString
-{
-public:
-    __forceinline AsciiString(const AsciiString &that)
-    {
-        ((StringBase<char> *)this)->StringBase<char>::StringBase(*(const StringBase<char> *)&that);
-    }
-    ~AsciiString();
-private:
-    void *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 // Retail pair copy preserves three four-byte fields without ownership calls.
 // Their application meaning and original mapped-type name are unknown.

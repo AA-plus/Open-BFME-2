@@ -6,24 +6,7 @@
 // Node0x32B62F allocates28bytes; paircopy0x32ACB4 copies mapped dword+8.
 // The original mapped type and its destruction remain unknown.
 #include <map>
-template <class T> class StringBase
-{
-    void *m_data;
-    StringBase(const StringBase<T> &);
-    void releaseBuffer();
-    friend class AsciiString;
-};
-class AsciiString
-{
-public:
-    __forceinline AsciiString(const AsciiString &that)
-    {
-        ((StringBase<char> *)this)->StringBase<char>::StringBase(*(const StringBase<char> *)&that);
-    }
-    ~AsciiString() { ((StringBase<char> *)this)->releaseBuffer(); }
-private:
-    void *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 typedef _STL::pair<AsciiString,AsciiString> TreeKey00206BCF;
 bool operator<(const TreeKey00206BCF &, const TreeKey00206BCF &);

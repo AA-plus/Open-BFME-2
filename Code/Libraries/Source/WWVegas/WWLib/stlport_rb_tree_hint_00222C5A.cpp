@@ -8,18 +8,7 @@
 // Deleting dtor 0x00222DEC in same TU calls this dtor then operator delete 0x0002FD60.
 // Honest address type TreeHintRef00222C5A; application identity remains opaque.
 #include <map>
-template <class T> class StringBase
-{
-	friend class AsciiString;
-	void releaseBuffer();
-public:
-	void *m_data;
-};
-class AsciiString : public StringBase<char>
-{
-public:
-	~AsciiString() { releaseBuffer(); }
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 struct TargetRef00217D4C { virtual void *destroy(unsigned flags); int references; };
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
