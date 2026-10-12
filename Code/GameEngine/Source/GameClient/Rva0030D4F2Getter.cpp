@@ -30,11 +30,15 @@ Rva00148F5ECache MapGenericAIObjectIDCache = { NAMEKEY_INVALID, "GenericAIObject
 Rva00148F5ECache g_00DBDC84 = { NAMEKEY_INVALID, "GenericAIObjectType" };
 Rva00148F5ECache g_00DBDC8C = { NAMEKEY_INVALID, "GenericAIObjectWallHubNumber" };
 Rva00148F5ECache g_00DBDC74 = { NAMEKEY_INVALID, "waypointID" };
+extern Rva00148F5ECache g_00DBDC64;
+extern Rva00148F5ECache g_00DBDC6C;
 
 class Dict
 {
 public:
 	int getInt(int key, bool *exists) const;
+	void setInt(int key, int value);						// 0x00313716
+	void setAsciiString(int key, const AsciiString &value);	// 0x0031375A
 private:
 	void *m_data;
 };
@@ -46,6 +50,11 @@ public:
 	int rva0030D50C();
 	int rva0030D428();
 	int rva0030D4D8();
+	void rva0030D442(int value);
+	void rva0030D460(const AsciiString &value);
+	void rva0030D47E(int value);
+	void rva0030D49C(const AsciiString &value);
+	void rva0030D4BA(int value);
 private:
 	char m_pad0[0x24];
 	Dict m_dict;
@@ -75,4 +84,33 @@ int Rva0030D4F2::rva0030D428()
 int Rva0030D4F2::rva0030D4D8()
 {
     return m_dict.getInt(MapGenericAIObjectIDCache.get(), 0);
+}
+
+// Setter twins (gap bodies 0x0030D442..0x0030D4D5, 30B each): the same Dict
+// at +0x24 through the rowed setInt 0x00313716 / setAsciiString 0x0031375A
+// with the key from the rowed NameKey cache get on the cache each names
+// (VA 0x00DBDC74, 0x00DBDC64, 0x00DBDC7C, 0x00DBDC6C, 0x00DBDC8C).
+void Rva0030D4F2::rva0030D442(int value)
+{
+	m_dict.setInt(g_00DBDC74.get(), value);
+}
+
+void Rva0030D4F2::rva0030D460(const AsciiString &value)
+{
+	m_dict.setAsciiString(g_00DBDC64.get(), value);
+}
+
+void Rva0030D4F2::rva0030D47E(int value)
+{
+	m_dict.setInt(MapGenericAIObjectIDCache.get(), value);
+}
+
+void Rva0030D4F2::rva0030D49C(const AsciiString &value)
+{
+	m_dict.setAsciiString(g_00DBDC6C.get(), value);
+}
+
+void Rva0030D4F2::rva0030D4BA(int value)
+{
+	m_dict.setInt(g_00DBDC8C.get(), value);
 }

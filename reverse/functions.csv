@@ -83492,3 +83492,18 @@ uw_007aa060,,0x007AA060,15,Code/Libraries/Source/Apt/Rva006F6A50Cluster.cpp,matc
 ?rva002FD7DC@Rva002FD7DC@@QAEXXZ,,0x002FD7DC,19,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
 ?rva002FDEF1@Rva002FDEF1@@QBEHH@Z,,0x002FDEF1,32,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
 ??0Rva002614DFFilter@@QAE@PBVObject@@@Z,,0x002FD6E0,22,Code/GameEngine/Source/GameLogic/AI/PartitionFilterCtorCopies.cpp,matched,partition filter out-of-line ctor copy; vftable 0x00C07190; class from AIClosestObjectQueries.cpp; shape from retail bytes
+?rva003004DC@Rva003004DC@@QBE?AURva003004DCWord@@XZ,,0x003004DC,11,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00306BF4@Rva00306BF4@@QAEXHH@Z,,0x00306BF4,20,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0030C025@Rva0030C025@@QBEHHH@Z,,0x0030C025,13,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0030D692@BfmeThingEOC@@QAEXM@Z,,0x0030D692,31,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0030DC73@Rva0030DC73@@QBEABVAsciiString@@XZ,,0x0030DC73,18,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0030E24E@Rva0030E09A@@QAEXPBURva0030E24ETemplate@@@Z,,0x0030E24E,33,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva003182BC@Rva003182BC@@QBE_NXZ,,0x003182BC,17,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva003182E1@Rva003182BC@@QAEXXZ,,0x003182E1,14,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00318B3F@Rva003182BC@@QAEPAVRva0023D2D8DwordClearer@@XZ,,0x00318B3F,29,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva00318CCD@Rva003182BC@@QAEX_N@Z,,0x00318CCD,30,Code/GameEngine/Source/Common/GapBodiesSeat1B.cpp,matched,gap body; shape from retail bytes; address-derived identity
+?rva0030D442@Rva0030D4F2@@QAEXH@Z,,0x0030D442,30,Code/GameEngine/Source/GameClient/Rva0030D4F2Getter.cpp,matched,Dict setter twin of the rowed getters: Dict +0x24 rowed set with key from the rowed NameKey cache get
+?rva0030D460@Rva0030D4F2@@QAEXABVAsciiString@@@Z,,0x0030D460,30,Code/GameEngine/Source/GameClient/Rva0030D4F2Getter.cpp,matched,Dict setter twin of the rowed getters: Dict +0x24 rowed set with key from the rowed NameKey cache get
+?rva0030D47E@Rva0030D4F2@@QAEXH@Z,,0x0030D47E,30,Code/GameEngine/Source/GameClient/Rva0030D4F2Getter.cpp,matched,Dict setter twin of the rowed getters: Dict +0x24 rowed set with key from the rowed NameKey cache get
+?rva0030D49C@Rva0030D4F2@@QAEXABVAsciiString@@@Z,,0x0030D49C,30,Code/GameEngine/Source/GameClient/Rva0030D4F2Getter.cpp,matched,Dict setter twin of the rowed getters: Dict +0x24 rowed set with key from the rowed NameKey cache get
+?rva0030D4BA@Rva0030D4F2@@QAEXH@Z,,0x0030D4BA,30,Code/GameEngine/Source/GameClient/Rva0030D4F2Getter.cpp,matched,Dict setter twin of the rowed getters: Dict +0x24 rowed set with key from the rowed NameKey cache get

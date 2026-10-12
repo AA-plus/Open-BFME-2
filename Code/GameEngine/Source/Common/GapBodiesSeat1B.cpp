@@ -751,3 +751,205 @@ int Rva002FDEF1::rva002FDEF1(int index) const
 		return m_104[index];
 	return m_110;
 }
+
+// --- 0x003004DC (11B): the first word returned by value.
+struct Rva003004DCWord
+{
+	Rva003004DCWord(int v) : m_value(v) {}
+	int m_value;
+};
+
+class Rva003004DC
+{
+public:
+	Rva003004DCWord rva003004DC() const;
+private:
+	int m_00;
+};
+
+Rva003004DCWord Rva003004DC::rva003004DC() const
+{
+	return Rva003004DCWord(m_00);
+}
+
+// --- 0x00306BF4 (20B): stores the first word at +8 and +4, the second at
+// +0x0C.
+class Rva00306BF4
+{
+public:
+	void rva00306BF4(int a, int b);
+private:
+	int m_00;
+	int m_04;
+	int m_08;
+	int m_0C;
+};
+
+void Rva00306BF4::rva00306BF4(int a, int b)
+{
+	m_08 = a;
+	m_04 = a;
+	m_0C = b;
+}
+
+// --- 0x0030C025 (13B): the first word of the indexed 8-byte record at
+// *(+0x14); the first argument is unused.
+class Rva0030C025
+{
+public:
+	int rva0030C025(int unused, int index) const;
+private:
+	char m_pad00[0x14];
+	Rva002E3889Record *m_14;
+};
+
+int Rva0030C025::rva0030C025(int, int index) const
+{
+	return m_14[index].m_00;
+}
+
+// --- 0x0030D692 (31B): stores the normalized angle at +0x1C, then the
+// rowed 0x0030D65B.
+float normalizeAngle(float angle);							// 0x00238954
+
+class BfmeThingEOC
+{
+public:
+	void bfmeAfterEOC();									// 0x0030D65B
+	void rva0030D692(float angle);
+private:
+	char m_pad00[0x1C];
+	float m_1C;
+};
+
+void BfmeThingEOC::rva0030D692(float angle)
+{
+	m_1C = normalizeAngle(angle);
+	bfmeAfterEOC();
+}
+
+// --- 0x0030DC73 (18B): the +0x18 choice's string, else the +0x14 one.
+class Rva0030DA0BStringChoice
+{
+public:
+	const AsciiString &choose() const;						// 0x0030DA0B
+};
+
+class Rva0030DC73
+{
+public:
+	const AsciiString &rva0030DC73() const;
+private:
+	char m_pad00[0x14];
+	AsciiString m_14;
+	Rva0030DA0BStringChoice *m_18;
+};
+
+const AsciiString &Rva0030DC73::rva0030DC73() const
+{
+	if (m_18)
+		return m_18->choose();
+	return m_14;
+}
+
+// --- 0x0030E24E (33B): takes a template, copies its +0x64 name to +0x14,
+// then the rowed 0x0030E09A refresh.
+struct Rva0030E24ETemplate
+{
+	char m_pad00[0x64];
+	AsciiString m_name;
+};
+
+class Rva0030E09A
+{
+public:
+	void rva0030E09A();										// 0x0030E09A
+	void rva0030E24E(const Rva0030E24ETemplate *tmpl);
+private:
+	char m_pad00[0x14];
+	AsciiString m_14;
+	const Rva0030E24ETemplate *m_18;
+};
+
+void Rva0030E09A::rva0030E24E(const Rva0030E24ETemplate *tmpl)
+{
+	m_18 = tmpl;
+	m_14 = tmpl->m_name;
+	rva0030E09A();
+}
+
+// --- 0x003182BC (17B): the +0x34 record's +0x1BC flag, false without one;
+// 0x003182E1 (14B): zeroes the first word through the memset thunk;
+// 0x00318B3F (29B): clears and detaches the +0x88 member, returning it;
+// 0x00318CCD (30B): changes the +0x74 flag, refreshing the +0x90 army line
+// when it turns on.
+struct Rva003182BCRecord
+{
+	char m_pad000[0x1BC];
+	bool m_1BC;
+};
+
+class Rva0023D2D8DwordClearer
+{
+public:
+	void clear();											// 0x0023D2D8
+};
+
+class LivingWorldArmyLine
+{
+public:
+	void rva00539141();										// 0x00539141
+};
+
+class Rva003182BC
+{
+public:
+	bool rva003182BC() const;
+	void rva003182E1();
+	Rva0023D2D8DwordClearer *rva00318B3F();
+	void rva00318CCD(bool value);
+private:
+	int m_00;
+	char m_pad04[0x34 - 4];
+	Rva003182BCRecord *m_34;
+	char m_pad38[0x74 - 0x38];
+	bool m_74;
+	char m_pad75[0x88 - 0x75];
+	Rva0023D2D8DwordClearer *m_88;
+	char m_pad8C[0x90 - 0x8C];
+	LivingWorldArmyLine m_90;
+};
+
+bool Rva003182BC::rva003182BC() const
+{
+	if (m_34)
+		return m_34->m_1BC;
+	return false;
+}
+
+void Rva003182BC::rva003182E1()
+{
+	ji_006291ae(this, 0, 4);
+}
+
+Rva0023D2D8DwordClearer *Rva003182BC::rva00318B3F()
+{
+	if (m_88)
+	{
+		m_88->clear();
+		Rva0023D2D8DwordClearer *result = m_88;
+		m_88 = 0;
+		return result;
+	}
+	return 0;
+}
+
+void Rva003182BC::rva00318CCD(bool value)
+{
+	if (m_74 != value)
+	{
+		m_74 = value;
+		if (value)
+			m_90.rva00539141();
+	}
+}
