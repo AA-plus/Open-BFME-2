@@ -513,16 +513,7 @@ private:
 	Int m_DC;
 	Int m_E0;
 };
-void Rva004EE113::rva004EE113(Int, Int a, Int b)
-{
-	if (a != b)
-	{
-		if (a == m_E0)
-			m_D8++;
-		else if (b == m_E0)
-			m_D4++;
-	}
-}
+
 
 // 0x00573E2B: state 3 clears +0x54 and sets +0x58 to the current frame plus
 // 30 per unit of the Int at VA 0x00DBA4E4; the state is stored at +0x10.
