@@ -1,8 +1,11 @@
 // ?xfer@GettingBuiltBehavior@@MAEXPAVXfer@@@Z
+// partial score=0.9564 date=2026-10-12
+// ?xfer@GettingBuiltBehavior@@MAEXPAVXfer@@@Z
 // partial score=0.95 date=2026-10-09
 // ?xfer@GettingBuiltBehavior@@MAEXPAVXfer@@@Z
 // partial score=0.95 date=2026-10-09
-// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
+// stlport
+// cl: /D_STLP_NO_EXCEPTIONS /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
 // Retail 0x00454557, 551B: GettingBuiltBehavior::xfer.
 // Version (1, 9) through Xfer slot 0x28, the UpdateModule base xfer
 // (0x0044DF9F), then the members in retail order: bool +0x30, float +0x28,
@@ -222,28 +225,11 @@ public:
 	float m_value;
 };
 
-namespace _STL
-{
-	template <class T> class allocator
-	{
-	public:
-		allocator() {}
-	};
-
-	template <class T, class Alloc> class _List_base
-	{
-	public:
-		_List_base( const Alloc &a );
-		~_List_base();
-		void *m_node;
-	};
-
-	template <class T, class Alloc = allocator<T> > class list : public _List_base<T, Alloc>
-	{
-	public:
-		list() : _List_base<T, Alloc>( Alloc() ) {}
-		void push_back( const T &value );
-	};
+#include <list>
+namespace _STL {
+template <> _List_base<int, allocator<int> >::_List_base(const allocator<int> &);
+template <> _List_base<int, allocator<int> >::~_List_base();
+template <> void list<Rva004530ED, allocator<Rva004530ED> >::push_back(const Rva004530ED &);
 }
 
 Xfer *Rva0036ABAFXfer( Xfer *xfer, _STL::list<int, _STL::allocator<int> > *list );
@@ -330,7 +316,8 @@ void GettingBuiltBehavior::xfer( Xfer *xfer )
 	if( version.m_minimum >= 5 )
 		*xfer == m_b3C;
 
-	if( version.m_minimum >= 6 )
+	if( version.m_minimum < 6 )
+		return;
 	{
 		if( version.m_minimum >= 7 )
 		{
