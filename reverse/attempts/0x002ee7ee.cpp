@@ -1,4 +1,8 @@
 // ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
+// partial score=0.96 date=2026-10-13
+// ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
+// partial score=0.96 date=2026-10-13
+// ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
 // partial score=0.9557623478883321 date=2026-10-10
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)

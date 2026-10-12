@@ -1,4 +1,6 @@
 // ?AdjustFlingDestination@Pathfinder@@QAEXPAVObject@@PBUCoord3D@@PAU3@@Z
+// partial score=0.939 date=2026-10-13
+// ?AdjustFlingDestination@Pathfinder@@QAEXPAVObject@@PBUCoord3D@@PAU3@@Z
 // partial score=0.939 date=2026-10-10
 // ?AdjustFlingDestination@Pathfinder@@QAEXPAVObject@@PBUCoord3D@@PAU3@@Z
 // partial score=0.939 date=2026-10-09

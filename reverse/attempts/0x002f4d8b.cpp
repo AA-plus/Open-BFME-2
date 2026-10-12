@@ -1,4 +1,6 @@
 // ?cellCallback@Rva002F4D8BInfo@@QAEHPAVPathfindCell@@0HH@Z
+// partial score=0.94 date=2026-10-13
+// ?cellCallback@Rva002F4D8BInfo@@QAEHPAVPathfindCell@@0HH@Z
 // partial score=0.9417158394 date=2026-10-09
 // cl: /ICode/Libraries/Include /O1 /DNDEBUG /MD /arch:SSE /G7
 // Native2F4D8B..2F4E54 RET16 full201; callback address independently

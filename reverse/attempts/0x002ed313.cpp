@@ -1,4 +1,6 @@
 // ?rva002ED313@Pathfinder@@QAE_NPAVObject@@@Z
+// partial score=0.78 date=2026-10-13
+// ?rva002ED313@Pathfinder@@QAE_NPAVObject@@@Z
 // partial score=0.753315 date=2026-10-09
 // cl: /ICode/Libraries/Include /O1 /G7 /arch:SSE /DNDEBUG /MD
 // Native2ED313..2ED484 RET4 complete369; existing thiscall Object* pin.

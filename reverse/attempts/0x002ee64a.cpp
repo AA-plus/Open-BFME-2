@@ -1,4 +1,6 @@
 // ?rva002EE64A@Pathfinder@@QAE_NPAVObject@@PBUCoord3D@@1@Z
+// partial score=0.88 date=2026-10-13
+// ?rva002EE64A@Pathfinder@@QAE_NPAVObject@@PBUCoord3D@@1@Z
 // partial score=0.8767381765 date=2026-10-10
 // ?IsValidObjectMovement@Pathfinder@@QAE_NXZ
 // partial score=0.85 date=2026-10-09
