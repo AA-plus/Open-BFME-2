@@ -15961,7 +15961,6 @@ _D3DXVec3TransformCoordArray@24,0x0062AF6E,Native 0x00107A47 REL32 reaches six-b
 ?rva002B5A5F@LivingWorldLogic@@QAE_NPAUParent00575E4E@@@Z,0x002B5A5F,callee of ?rva00576323@Rva005756B6@@QAEXPAUParent00575E4E@@@Z
 ?rva004770DE@Rva00477432Outer@@QAEXPAVObject@@@Z,0x004770DE,callee of ?rva00477432@Rva00477432@@QAEXPAVObject@@H@Z
 ?rva00477365@Rva00477432Outer@@QAEXPAVObject@@@Z,0x00477365,callee of ?rva00477432@Rva00477432@@QAEXPAVObject@@H@Z
-??0Rva005E6ED6@@QAE@HHPAX@Z,0x005E6ED6,callee of ?rva005F4C8E@Rva005F4C52@@QAE?AV?$Rva005F4C8ERef@VRva005E6ED6Third@@@@HH@Z
 ??0Rva005CDE89@@QAE@HHPAX@Z,0x005CDE89,callee of ?rva005CDF8B@Rva005CDF6C@@QAE?AV?$Rva005F4C8ERef@VRva005CDE89Iface@@@@HH@Z
 ?rva0025E5F4@Rva0025E4CD@@QAEXXZ,0x0025E5F4,callee of ?rva0025E970@Rva0025E4CD@@QAEXH@Z
 ?rva001FCF11@ParticleSystemManager@@QAEXABVAsciiString@@PAVParticleSystemTemplate@FXParticleSystem@@@Z,0x001FCF11,callee of ?rva002044C7@Rva0020453CHolderBase@@UAEXPBDABVParticleSystemTemplate@FXParticleSystem@@@Z
@@ -17255,3 +17254,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva00343DD8@@YA_NPAX0@Z,0x00343DD8,callee of the seat-3 0x00343EE5 helper (cdecl; returns its test in AL)
 ?rva00142410@BfmeSceneVector@@QAEXPAPAUGen_00943CF0_Node@@PAVCameraClass@@PBM@Z,0x00142410,callee of ?Visibility_Check@RTS3DScene@@UAEXPAVCameraClass@@@Z
 ?_M_erase_after@?$_Slist_base@HV?$allocator@H@_STL@@@_STL@@IAEPAU_Slist_node_base@2@PAU32@0@Z,0x0006FABF,callee of ?Visibility_Check@RTS3DScene@@UAEXPAVCameraClass@@@Z
+??0Rva005E6D0D@@QAE@PAXPAUHeroDetailsInput@@@Z,0x005E6DAA,Native300B listener ctor RET8 called by panel005E6ED6 at005E6F76 with panel/input pointers; WB names HeroArmyDetailsPanel::Impl::Impl; rowed103B destructor005E6D0D independently fixes same20B listener layout; original names remain descriptive

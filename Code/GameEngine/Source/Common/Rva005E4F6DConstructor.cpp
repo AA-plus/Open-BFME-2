@@ -58,17 +58,33 @@ Rva005E4F6D::~Rva005E4F6D() {}
 // The constructor 5E6ED6 calls the 12-byte polymorphic base at 0 and
 // Rva005E4F6D at C. Its shared counted base moves to24; the second owned
 // pointer at20 is independently cleared in the native102-byte teardown.
-class Rva005F64F5
+class AsciiString;
+namespace StrategicHUD {
+class ArmyDetailsMovieClip { public:
+    ArmyDetailsMovieClip(int,const AsciiString &,int,bool);
+    virtual ~ArmyDetailsMovieClip();
+    virtual void notifyBackButtonClicked();
+    virtual void notifyIconListBackgroundClicked();
+private: class Impl *m_impl;
+}; }
+class Rva005F64F5 : public StrategicHUD::ArmyDetailsMovieClip
 {
 public:
+    Rva005F64F5(int,const AsciiString &,bool);
     virtual ~Rva005F64F5();
 private:
-    void *data4;
     void *owned8;
+};
+struct HeroDetailsInput { void *owner,*details,*container; bool backButton; };
+class Rva005E6D0D {
+public: Rva005E6D0D(void *,HeroDetailsInput *);
+private: char storage[0x20];
 };
 class Rva005E6D90
 {
 public:
+    // ?Rva005E6D90::Rva005E6D90 absent-from-retail - inline pointer holder
+    Rva005E6D90(Rva005E6D0D *p) : value(p) {}
     ~Rva005E6D90() { clear(); }
     void clear();
 private:
@@ -77,9 +93,22 @@ private:
 class Rva005E6F9D : public Rva005F64F5, public Rva005E4F6D
 {
 public:
+    Rva005E6F9D(int,const AsciiString &,HeroDetailsInput *);
     virtual ~Rva005E6F9D();
 private:
     Rva005E6D90 child20;
 };
 Rva005E6F9D::~Rva005E6F9D() {}
 
+
+// Native005E6ED6..005E6F95,191B RET16 (hidden virtual-base flag included).
+// Constructor and destructor5E6F9D install the same C77E5C owner vtable.
+// Calls establish primary12B movie clip, secondary interface atC, shared
+// counted virtual base24, and owned20B listener stored at20. The named
+// primary base80 proves the level/name/back-button argument contract;
+// input+C supplies the bool. WB1601A80 corroborates all three initializers,
+// but is unnamed, so the target owner and field labels remain descriptive.
+Rva005E6F9D::Rva005E6F9D(int level,const AsciiString &name,HeroDetailsInput *input)
+    : Rva005F64F5(level,name,input->backButton)
+    , Rva005E4F6D((_Rva005E4AE2In *)input,(int)this)
+    , child20(new Rva005E6D0D(this,input)) {}
