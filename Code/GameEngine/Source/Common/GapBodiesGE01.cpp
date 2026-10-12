@@ -77,7 +77,8 @@ bool Rva002B5C93::rva002B5C93() const
 	return false;
 }
 
-// --- 0x005ED5C3 / 0x005ED5D7 (20B each): fields +0x0C / +0x10 of the indexed
+// --- 0x005ED583 (16B): the indexed record; 0x005ED593..0x005ED5D7 (20B
+// each): fields +0x04 / +0x08 / +0x0C / +0x10 of the indexed
 // 0x14-byte record in the +0x44 table of the +0x04 object.
 struct Rva005ED5C3Record
 {
@@ -97,12 +98,30 @@ struct Rva005ED5C3Table
 class Rva005ED5C3
 {
 public:
+	Rva005ED5C3Record *rva005ED583(int index) const;
+	int rva005ED593(int index) const;
+	int rva005ED5A7(int index) const;
 	int rva005ED5C3(int index) const;
 	int rva005ED5D7(int index) const;
 private:
 	int m_00;
 	Rva005ED5C3Table *m_04;
 };
+
+Rva005ED5C3Record *Rva005ED5C3::rva005ED583(int index) const
+{
+	return &m_04->m_records[index];
+}
+
+int Rva005ED5C3::rva005ED593(int index) const
+{
+	return m_04->m_records[index].m_04;
+}
+
+int Rva005ED5C3::rva005ED5A7(int index) const
+{
+	return m_04->m_records[index].m_08;
+}
 
 int Rva005ED5C3::rva005ED5C3(int index) const
 {

@@ -194,3 +194,88 @@ int Rva00341BF9::rva00341BF9()
 	m_20 = frame;
 	return 0;
 }
+
+// --- 0x00341C13 (29B): vtable 0x00C122F0 constructor over a cleared +0x04
+// storing its two arguments.
+class Rva00341C13
+{
+public:
+	Rva00341C13(int a, int b);
+	virtual ~Rva00341C13() {}
+private:
+	int m_04;
+	int m_08;
+	int m_0C;
+};
+
+Rva00341C13::Rva00341C13(int a, int b) : m_04(0), m_08(a), m_0C(b)
+{
+}
+
+// --- 0x00367422 (55B): add a point into the +0x56C point.
+struct Rva00367422Point
+{
+	float x;
+	float y;
+	float z;
+	void add(const Rva00367422Point *a) { x += a->x; y += a->y; z += a->z; }
+};
+
+class Rva00367422
+{
+public:
+	void rva00367422(const Rva00367422Point *delta);
+private:
+	char m_pad[0x56C];
+	Rva00367422Point m_56C;
+};
+
+void Rva00367422::rva00367422(const Rva00367422Point *delta)
+{
+	m_56C.add(delta);
+}
+
+// --- 0x0050B4E2 (55B): the rowed 0x0050B479, then for a positive +0x12C
+// value virtual slot 6 with the object's +0x38 point.
+class Object;
+
+class Made002CCB04
+{
+public:
+	virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+	virtual void s4(); virtual void s5();
+	virtual void s6(void *a, void *pos);
+	void rva0050B479(void *a, Object *obj);					// 0x0050B479
+	void rva0050B4E2(void *a, Object *obj);
+private:
+	char m_pad[0x12C - 4];
+	float m_12C;
+};
+
+void Made002CCB04::rva0050B4E2(void *a, Object *obj)
+{
+	rva0050B479(a, obj);
+	if (m_12C > 0.0f)
+		s6(a, (char *)obj + 0x38);
+}
+
+// --- 0x0050E952 (56B): describe the +0x20 value into the buffer ("0"
+// first; "%d" unless only the default is wanted).
+extern "C" unsigned char *__cdecl _mbscpy(unsigned char *dest, const unsigned char *src);
+extern "C" __declspec(dllimport) int __cdecl _snprintf(char *buffer, unsigned int count, const char *format, ...);
+
+class Rva0050E952
+{
+public:
+	void rva0050E952(int unused, char *buffer, bool defaultOnly);
+private:
+	char m_pad[0x20];
+	int m_20;
+};
+
+void Rva0050E952::rva0050E952(int, char *buffer, bool defaultOnly)
+{
+	_mbscpy((unsigned char *)buffer, (const unsigned char *)"0");
+	if (!defaultOnly)
+		_snprintf(buffer, 255, "%d", m_20);
+}
