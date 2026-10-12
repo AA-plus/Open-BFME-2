@@ -67,18 +67,35 @@ public:
 	Int m_extra; // +0x0C
 };
 
+// The rowed RadiusDecalTemplate builder 0x0033132D.
+class RadiusDecalTemplate
+{
+public:
+	void rva0033132D(const Coord3D *pos, Real radius, const unsigned int *color, RadiusDecal *result);
+};
+
+struct Rva000B330COwner
+{
+	char m_pad00[0xFC];
+	void *m_FC; // +0xFC
+};
+
 class Rva000B32EF
 {
 public:
+	void rva000B330C(const Coord3D *pos, Real radius, const unsigned int *color);
 	void rva000B32EF(Int *color);
 	void rva000B32C2(const Coord3D *pos);
 	void rva000B32D7(Real v);
 	void rva000B3198(const Coord3D &a, const Coord3D &b);
 private:
-	char m_pad00[0x1D0];
+	char m_pad00[0x08];
+	Rva000B330COwner *m_08; // +0x08
+	char m_pad0C[0x1D0 - 0x0C];
 	RadiusDecal m_decal1D0; // +0x1D0
 	char m_pad1E0[0x218 - 0x1D0 - 0x10];
 	RadiusDecal m_decal218; // +0x218
+	RadiusDecalTemplate m_template228; // +0x228
 };
 
 void Rva000B32EF::rva000B32EF(Int *color)
@@ -111,4 +128,14 @@ void Rva000B32EF::rva000B3198(const Coord3D &a, const Coord3D &b)
 {
 	m_decal1D0.setPosition(a);
 	m_decal1D0.Rva00330E15(b);
+}
+
+// ?rva000B330C@Rva000B32EF@@QAEXPBUCoord3D@@MPBI@Z, retail 0x000B330C, 49
+// bytes, the slot between 0x000B32EF and 0x000B333D in all five tables:
+// while the +0x08 object's +0xFC word is set, the +0x228 template builds the
+// +0x218 decal at the given position, radius and colour.
+void Rva000B32EF::rva000B330C(const Coord3D *pos, Real radius, const unsigned int *color)
+{
+	if (m_08->m_FC)
+		m_template228.rva0033132D(pos, radius, color, &m_decal218);
 }
