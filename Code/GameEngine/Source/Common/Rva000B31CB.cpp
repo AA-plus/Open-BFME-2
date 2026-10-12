@@ -1,24 +1,26 @@
-// ?rva000B31CB@Rva000B31CB@@QAEXIH@Z
-// partial score=0.9 date=2026-10-10
-// cl: /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD
+// cl: /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD /EHsc
 //
 // ?rva000B31CB@Rva000B31CB@@QAEXIH@Z, retail 0x000B31CB, 155 bytes, ret 8.
 // W3D draw radius-decal creation sibling of 0x000B508A / 0x000B3271: when the global flag
 // at +0x9A5 is set and the owning object (Drawable+0xFC) belongs to the local player
-// (ThePlayerList +0x10, skipped when there is no list), it takes the scale default (global
+// (ThePlayerList +0x10, skipped when there is no list), it takes the scale default 20.0 (global
 // float 0x00BC5CCC) or the float at +0x20 of the record behind +0x14/+0xDC, reads the
-// object's visual position through the rowed 0x0028D4E0 into the by-value Coord3D and calls
+// object's visual position from the rowed 0x0028D4E0 straight into the by-value Coord3D and calls
 // the rowed RadiusDecalTemplate creator 0x0033121F on the template at +0x1E0 with the decal
 // at +0x1D0. Evidence: target bytes and the rowed callees; names are neutral views.
 class Object;
-// Private view of the canonical Coord3D: the constructor takes the visual position straight
-// into the by-value argument slot, as the retail call does.
+// class-gate: allow Coord3D retail returns 0x0028D4E0 in place into the argument slot and keeps the slot address for its destructor
+// Private view of the canonical Coord3D: with a user copy constructor and destructor MSVC
+// returns 0x0028D4E0's by-value result directly into the by-value argument slot and records
+// that slot's address in the dead color slot, as the retail call does.
 struct Coord3D
 {
 	float x;
 	float y;
 	float z;
-	Coord3D(Object *object);
+	Coord3D() {}
+	Coord3D(const Coord3D &o) : x(o.x), y(o.y), z(o.z) {}
+	~Coord3D() {}
 };
 
 class GlobalData;
@@ -89,7 +91,7 @@ public:
 	virtual void v32();
 	virtual void v33();
 	virtual void v34();
-	virtual const Coord3D *rva0028D4E0(Coord3D *out, Coord3D *normal);
+	virtual Coord3D rva0028D4E0(Coord3D *normal);
 	Player *getControllingPlayer() const;
 };
 
@@ -127,16 +129,13 @@ private:
 	RadiusDecalTemplate m_template;
 };
 
-__forceinline Coord3D::Coord3D(Object *object)
-{
-	object->Object::rva0028D4E0(this, 0);
-}
 
 void Rva000B31CB::rva000B31CB(unsigned int selected, int color)
 {
 	if (!((Rva000B31CBGlobals *)TheWritableGlobalData)->m_flag9A5)
 		return;
-	Object *object = m_drawable->m_object;
+	Drawable *draw = m_drawable;
+	Object *object = draw->m_object;
 	if (!object)
 		return;
 	if (ThePlayerList)
@@ -145,12 +144,12 @@ void Rva000B31CB::rva000B31CB(unsigned int selected, int color)
 		if (object->getControllingPlayer() != local)
 			return;
 	}
-	float scale = 1.0f;
+	float scale = 20.0f;
 	if (m_holder)
 	{
 		Rva000B31CBScale *source = m_holder->m_scaleSource;
 		if (source)
 			scale = source->m_scale20;
 	}
-	m_template.rva0033121F(Coord3D(object), selected, color, &m_decal, scale);
+	m_template.rva0033121F(object->Object::rva0028D4E0(0), selected, color, &m_decal, scale);
 }
