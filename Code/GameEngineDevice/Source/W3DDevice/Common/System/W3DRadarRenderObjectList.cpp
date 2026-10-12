@@ -1,9 +1,10 @@
-// ?rva00050125@W3DRadar@@QAEXPBVRadarObject@@PBVCursorTextureSlot@@H@Z
-// partial score=0.99 date=2026-10-11
-// ?rva00050125@W3DRadar@@QAEXPBVRadarObject@@PBVCursorTextureSlot@@H@Z
-// partial score=0.99 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 // stlport
+// W3DRadar object-list render, retail 0x00050125 (1049 B), placed with the
+// five static helpers retail calls through private register conventions (so
+// they must share this unit; the standalone helper units keep their rows).
+// x is computed through the inline position accessor and y through a local
+// position pointer, which reproduces retail's operand order for each axis.
 // ?rva00050125@W3DRadar@@QAEXPBVRadarObject@@PBVCursorTextureSlot@@H@Z
 // Native 0x00050125..0x0005053E (1049 bytes) RET 12: W3DRadar object-list
 // render (BFME2 renderObjectList) plus the five static helpers retail calls
@@ -22,6 +23,7 @@
 // per half gives the lower-half column its own slot (4F037/4F29B).
 #include <algorithm>
 #include "Coord3D.h"
+#include "ICoord2D.h"
 
 typedef int Int;
 typedef int Color;
@@ -49,7 +51,6 @@ public:
 		: Rva0004D729(surface, &bits, pitch, left, top, right, bottom) {}
 };
 
-struct ICoord2D { Int x, y; };
 struct Region3D { Coord3D lo, hi; Real width() const { return hi.x - lo.x; } Real height() const { return hi.y - lo.y; } };
 
 class GeometryInfo {
@@ -397,9 +398,10 @@ void W3DRadar::rva00050125(const RadarObject *listHead, const CursorTextureSlot 
 			reinterpret_cast<Rva002A7DD0 *>(ThePlayerList)->rva002A7DD0())
 			continue;
 
+		const Coord3D *pos = obj->getPosition();
 		ICoord2D radarPoint;
-		radarPoint.x = (Int)(scaleX * obj->getPosition()->x);
-		radarPoint.y = (Int)(obj->getPosition()->y * scaleY);
+		radarPoint.x = (Int)(obj->getPosition()->x * scaleX);
+		radarPoint.y = (Int)(pos->y * scaleY);
 		Color c = Rva0004D76EBlend(rObj->getColor(), alpha);
 
 		const ThingTemplate *tmpl = obj->getTemplate();
