@@ -1,4 +1,5 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // ?rva005F2CBA@Rva005F2FEF@@QAEXM@Z @0x005F2CBA 135B
 // Evidence: Apt rank progress float at +0x50 flag 4 at +0x58 via rowed Fire 0x00527925 AptCall 0x005FB5E6 strings SetMemberRankProgress SetMemberRankProgressBarState _show globals 0x009FE4CC 0x007BAC1C caller 0x005F2F49.
 #include <math.h>
@@ -49,26 +50,17 @@ public:
 
 // STLport rotate, rowed as its int* instantiation, and the icon slot list's
 // erase, rowed as vector<void*>'s (pointer elements fold with both).
-namespace _STL {
-template <class _ForwardIter>
-_ForwardIter rotate(_ForwardIter __first, _ForwardIter __middle, _ForwardIter __last);
-template <class _Tp>
-class allocator;
-template <class _Tp, class _Alloc = allocator<_Tp> >
-class vector
-{
-public:
-	_Tp *erase(_Tp *__position);
-	_Tp *begin() { return _M_start; }
-	_Tp &operator[](unsigned int __n) { return *(begin() + __n); }
-	bool empty() const { return _M_start == _M_finish; }
-
-	_Tp *_M_start;
-	_Tp *_M_finish;
-	_Tp *_M_end_of_storage;
+#include <cstdlib>
+void __cdecl Rva00030830FreeAllocation(void *);
+#define free Rva00030830FreeAllocation
+#include <vector>
+#undef free
+namespace _STL {template<class F>F rotate(F,F,F);}
+template<class T> struct IconSlotVector:public _STL::vector<T*> {
+ using _STL::vector<T*>::_M_start;
+ using _STL::vector<T*>::_M_finish;
+ using _STL::vector<T*>::_M_end_of_storage;
 };
-}
-
 // BfmePathLeafAfterMarker.cpp's path helpers.
 namespace AptUtils { const char *__cdecl SkipLevelN(const char *path); }
 namespace AptUtils { int __cdecl LevelIndexFromTarget(const char *path); }
@@ -157,6 +149,7 @@ template <class T> class AptRef : public Rva00579E47
 {
 public:
 	AptRef(const DelegateDesc *desc) : Rva00579E47(*desc) {}
+	template <class B> AptRef(B binding) { ((class Rva0057ACEB *)this)->Rva0057ACEB::Rva0057ACEB((const struct Rva0057ACEBData *)&binding); }
 	AptRef(const AptRef &that) : m_ptr(that.m_ptr)
 	{
 		if (m_ptr)
@@ -178,7 +171,7 @@ public:
 };
 __forceinline void AddCommandMapDelegate(const AsciiString &name, DelegateDesc desc)
 {
-	((AptPlayer *)g_bfmeAptWindowManager)->AddCommandMap(name, &desc);
+	((AptPlayer *)g_bfmeAptWindowManager)->AddCommandMap(name, (const DelegateDesc *)&desc);
 }
 
 // The owning holder of the icon slot's clip: its destructor is the rowed
@@ -198,14 +191,43 @@ public:
 class Rva005F3444Base
 {
 public:
-	Rva005F3444Base() : m_04(0) {}
+	Rva005F3444Base() : m_refCount(0) {}
 	~Rva005F3444Base();
 	virtual void Dispose() = 0;
 	virtual int GetPosition() const = 0;
 	virtual void DoMoveTo(int newPosition) = 0;
 
 protected:
-	void *m_04;
+	int m_refCount;
+};
+
+// The counted reference to an icon slot (Rva005F2278MapContains.cpp's view):
+// the assignment is the rowed address-named 0x005F2773; the release-at-zero
+// destructor is inline and emitted out of line for unwinding (0x0007B724).
+struct Rva005F2577Inner
+{
+	virtual void virt0();
+	int m_ref;
+};
+class Rva005F2577Holder
+{
+public:
+	Rva005F2577Holder() : m_ptr(0) {}
+	Rva005F2577Holder(const Rva005F2577Holder &that) : m_ptr(that.m_ptr)
+	{
+		if (m_ptr)
+			++m_ptr->m_ref;
+	}
+	__forceinline ~Rva005F2577Holder()
+	{
+		Rva005F2577Inner *p = m_ptr;
+		if (p && --p->m_ref == 0)
+			p->virt0();
+	}
+	void rva005F2773(Rva005F2577Inner *p); void rva005F2577();
+
+private:
+	Rva005F2577Inner *m_ptr;
 };
 
 // The icon slot's owning pointer (rowed opaque dtor 0x005F329E: deletes the
@@ -218,12 +240,86 @@ public:
 	Rva005F2B22 *m_elem;
 };
 
+// The Apt extern handler registration (AptCallbackAdders.cpp's view): the
+// adder ctor 0x00523E4C and dtor 0x00523D88; the handler reference is built
+// by the rowed holder ctor 0x0057ACEB from the 8-byte string-out binding
+// (rowed ctor 0x005D4E22: a flag and the AsciiString Apt fills).
+class AptExternHandler
+{
+public:
+	void *m_vtbl;
+	int m_refCount;
+};
+struct Rva0057ACEBData;
+class Rva005D4E22
+{
+public:
+	Rva005D4E22(bool *flag, AsciiString *value);
+	bool *m_flag;
+	AsciiString *m_value;
+};
+class Rva0057ACEB
+{
+public:
+	Rva0057ACEB(const Rva0057ACEBData *d);
+	AptExternHandler *m_impl;
+};
+class AptSingleExternHandlerAdder
+{
+public:
+	AptSingleExternHandlerAdder(const AsciiString &name, int arg, AptRef<AptExternHandler> handler);
+	~AptSingleExternHandlerAdder();
+
+private:
+	AsciiString m_name;
+};
+
+// "prefix + name + text" concat nodes (layout as in System/RegistryAsciiPath.cpp).
+class Rva000B3F84Pair
+{
+public:
+	Rva000B3F84Pair() {}
+	Rva000B3F84Pair *init(const char *src); // 0x000B3F84
+
+	const char *m_ptr;
+	int m_len;
+};
+struct AsciiStringRef
+{
+	const AsciiString *m_string;
+};
+struct AsciiStringPlusString : AsciiStringRef
+{
+	AsciiStringRef m_second;
+};
+struct AsciiStringPlusStringText : AsciiStringPlusString
+{
+	operator AsciiString(); // 0x0050F74B
+
+	Rva000B3F84Pair m_right;
+};
+static __forceinline AsciiStringPlusString operator+(const AsciiString &left, const AsciiString &right)
+{
+	AsciiStringPlusString result;
+	result.m_string = &left;
+	result.m_second.m_string = &right;
+	return result;
+}
+// Inline text concat adapter; the existing native call route is00109CFD.
+inline AsciiStringPlusStringText operator+(const AsciiStringPlusString &left, const char *right)
+{
+	Rva000B3F84Pair text;
+	text.init(right);
+	AsciiStringPlusStringText result;
+	static_cast<AsciiStringPlusString &>(result) = left;
+	result.m_right = text;
+	return result;
+}
+
+
+
 // STLport's max and min (reference-returning).
 namespace _STL {
-template <class _Tp>
-inline const _Tp &(max)(const _Tp &__a, const _Tp &__b) { return __a < __b ? __b : __a; }
-template <class _Tp>
-inline const _Tp &(min)(const _Tp &__a, const _Tp &__b) { return __b < __a ? __b : __a; }
 // Branch-form int overloads: this TU's /O1 /G7 /arch:SSE flags compile the
 // generic ?: to cmov, but retail's out-of-line copies use a branch.
 inline const int &(max)(const int &__a, const int &__b)
@@ -295,6 +391,7 @@ public:
 	void rva005F2E85();
  void Update();
  Rva005F38D8Ref rva005F3652(int position);
+ Rva005F2577Holder CreateMemberIconSlot(int position);
  virtual void rva005F267E(int,float);
 private:
 	char m_pad04[4];
@@ -303,7 +400,7 @@ private:
 	char m_pad10[0x1C - 0x10];
 	void *m_scrollBar; // +0x1C, held through Rva005F2CBAScrollBarHolder
 	int m_20; // +0x20, cleared when the last icon slot goes
-	_STL::vector<void *> m_iconSlots; // +0x24
+	IconSlotVector<IconSlot> m_iconSlots; // +0x24
 	float m_iconStageWidth; // +0x30
 	float m_iconStageHeight; // +0x34
 	float m_iconStageY; // +0x38, the Apt stage's current scroll offset
@@ -549,4 +646,62 @@ public:
 Rva005F38D8Ref Rva005F38D8::rva005F38D8(int position)
 {
 	return implementation->rva005F3652(position);
+}
+
+// StrategicHUD::ArmyDetailsMovieClip::Impl::CreateMemberIconSlot (WorldBuilder
+// name, line 409 asserts position against m_iconSlots.size(); retail strings
+// "_level%u." "_NewSlotWidth" "_NewSlotHeight"): retail 0x005F3652 632B
+// (602B main body and30B erase/rethrow handler),
+// ret 8. Binds the two Apt extern handlers that report the new slot's size,
+// opens a list place, builds the slot there (taking the next Apt index), and
+// on any exception gives the place back and rethrows (catch funclet
+// 0x005F38AC). The first slot's reported size becomes the slot size.
+Rva005F2577Holder StrategicHUD::ArmyDetailsMovieClip::Impl::CreateMemberIconSlot(int position)
+{
+	if (position < 0)
+		position = m_iconSlots.size();
+	Rva005F2577Holder slot;
+	AsciiString slotWidth;
+	AsciiString slotHeight;
+	{
+		bool widthSet;
+		bool heightSet;
+		AsciiString prefix;
+		prefix.format("_level%u.", m_level08);
+		AptSingleExternHandlerAdder widthAdder(prefix + *(AsciiString *)&m_team0C + "_NewSlotWidth", 0, Rva005D4E22(&widthSet, &slotWidth));
+		AptSingleExternHandlerAdder heightAdder(prefix + *(AsciiString *)&m_team0C + "_NewSlotHeight", 0, Rva005D4E22(&heightSet, &slotHeight));
+		m_iconSlots.insert(m_iconSlots.begin() + position, 0);
+		try
+		{
+			slot.rva005F2773((Rva005F2577Inner *)(Rva005F3444Base *)new IconSlot(this, m_20++, position));
+		}
+		catch (...)
+		{
+			m_iconSlots.erase(m_iconSlots.begin() + position);
+			throw;
+		}
+	}
+	if (m_slotWidth == 0.0f)
+	{
+		m_slotWidth = atof(slotWidth.str());
+		m_slotHeight = atof(slotHeight.str());
+	}
+	UpdateIconSlotPositions();
+	return slot;
+}
+
+// Native23B clear and31B assign: the same already matched bodies rehomed
+// from Rva005F2278MapContains.cpp. Visibility proves the local holder does
+// not escape, matching native ESI retention across the string destructors.
+void Rva005F2577Holder::rva005F2577() {
+ Rva005F2577Inner *p=m_ptr;
+ if (!p) return;
+ if (--p->m_ref==0) p->virt0();
+ m_ptr=0;
+}
+void Rva005F2577Holder::rva005F2773(Rva005F2577Inner *p) {
+ if (p!=m_ptr) {
+  rva005F2577();m_ptr=p;
+  if (p)++p->m_ref;
+ }
 }

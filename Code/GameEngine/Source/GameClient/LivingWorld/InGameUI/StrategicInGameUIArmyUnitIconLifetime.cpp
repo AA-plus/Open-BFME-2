@@ -12,9 +12,10 @@
 // A real vector<int> owns the upgrade IDs. The established30830 game-free
 // declaration preserves the native state0 cleanup of the counted clip during
 // vector deallocation. No byte lift or new address pin is used.
-// BFME1 pinned donor cee35b7d supplies STLport inputs; this BFME2 widget has
-// no applicable clean donor. Layout and class relationship come from retail
-// stores, vtables and the already named ArmyUnitIcon siblings.
+// STLport4.5.3 comes from this repo's vendor tree with its bfmealloc shim;
+// the pinned BFME1 cee35b7d supplies the MSVC7.1 toolchain inputs. Layout and
+// class relationship come from retail stores, vtables and the already named
+// ArmyUnitIcon siblings rather than an application-source donor.
 #include <cstdlib>
 void __cdecl Rva00030830FreeAllocation(void *);
 #define free Rva00030830FreeAllocation
