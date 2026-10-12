@@ -1,4 +1,6 @@
 // ?rva00492329@Rva00492179@@UAEXXZ
+// partial score=0.86 date=2026-10-12
+// ?rva00492329@Rva00492179@@UAEXXZ
 // partial score=0.93 date=2026-10-04
 // cl: /Ireference/shims/bfme2_ascii /O1 /MD /GX /arch:SSE /DNDEBUG /Oy-
 // ?rva00492329@Rva00492179@@UAEXXZ at retail 0x00492329 (185B). Slot 17 (offset
@@ -6,7 +8,7 @@
 // (vtable 0x0084DEF8). Evidence: calls pinned SpecialAbilityUpdate::rva0045108D
 // 0x0045108D plus rowed AICommandInterface::aiIdle 0x001E8A38 plus rowed
 // StringBase<char>::isEmpty 0x00001E2F plus rowed StringBase ctor 0x00037BA0
-// plus pinned Object::rva0028EA91 0x0028EA91 plus rowed releaseBuffer 0x00036410
+// plus pinned Object::addAttributeModifierToPool 0x0028EA91 plus rowed releaseBuffer 0x00036410
 // plus rowed Object::isKindOf 0x0006F039 plus rowed
 // Object::setSpecialModelConditionState 0x0028AEB2; ModuleData AsciiString at
 // +0xC8 plus int at +0xCC plus bools at +0xD0/+0xD1; Object holder at +0x258
@@ -35,13 +37,7 @@ enum ModelConditionFlagType
 class Object;
 class AsciiString;
 
-extern const char g_Rva0107301CEmptyString[];
 
-__forceinline const char *GetStr492329(const AsciiString &s)
-{
-	char *t = *(char * *)(void *)&s;
-	return t ? t + 8 : g_Rva0107301CEmptyString;
-}
 
 class AICommandInterface
 {
@@ -54,7 +50,7 @@ class Object
 public:
 	bool isKindOf(KindOfType kind) const;
 	void setSpecialModelConditionState(ModelConditionFlagType mc, unsigned int frames);
-	bool rva0028EA91(const AsciiString &name, int v);
+	bool addAttributeModifierToPool(const AsciiString &name, int v);
 
 	unsigned char m_pad00[0x258];
 	void *m_258;
@@ -87,7 +83,6 @@ public:
 	virtual void rva00492329();
 };
 
-// ?rva00492329@Rva00492179@@UAEXXZ present-unmatched
 void Rva00492179::rva00492329()
 {
 	SpecialAbilityUpdate::rva0045108D();
@@ -101,8 +96,8 @@ void Rva00492179::rva00492329()
 	}
 	if (!((const StringBase<char> &)data->m_C8).isEmpty())
 	{
-		AsciiString tmp(GetStr492329(data->m_C8));
-		object->rva0028EA91(tmp, -1);
+		AsciiString tmp(((const StringBase<char> &)data->m_C8).str());
+		object->addAttributeModifierToPool(tmp, -1);
 	}
 	int kind = 0xBA;
 	if (!data->m_D0)

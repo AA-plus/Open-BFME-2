@@ -1,456 +1,90 @@
 // ?triggerAbilityEffect@RousingSpeechUpdate@@UAEXXZ
-// partial score=0.994 date=2026-10-12
-// cl: /DNDEBUG /MD /GX
-//
-// RousingSpeechUpdate::update, retail 0x004AD019 (213 bytes): slot 0 of the
-// vtable 0x00C54FD8 that the matched RousingSpeechUpdate dtor installs at +0x10
-// (UpdateModuleInterface), compiled with that subobject this. Same scheme as
-// the matched GloriousChargeUpdate::update 0x004AD710: run the +0x88 ObjectID
-// list helper 0x004ACF1D on the full object (pinned), start the speech through
-// virtual primary slot 15 (the matched override 0x004ACE11) with the expiry
-// frame at +0x8C, then while the frame is not reached and the +0x94 radius is
-// below the data cap +0xC8, grow it (+0x94 takes the +0x98 value, +0x98 grows by
-// data +0xE0 capped at +0xC8, when the +0xDC flag is set), call virtual slot 17
-// and return data +0xD0; afterwards clear condition bit 6*32+15 and sleep
-// forever. The cap test is written !(m_94 >= cap), the form retail compares.
-// RousingSpeechUpdate::rva004AD176, retail 0x004AD176 (313 bytes): the
-// non-virtual helper the slot-17 override 0x004AD399 calls, GloriousCharge's
-// 0x004AD7B6 with two more filters: push the ID of every other object within
-// the +0x98 radius that is allied (relationship 4, 0x00260EB1), passes
-// 0x002614EC over the data +0xF4 and the controlling player, is alive, passes
-// 0x002611BF for this object and this unit's 0x004ACDAC (+0x94 radius round
-// the object) onto the +0x88 list (0x002A1B6F). /GX for the filter
-// temporaries.
-// Model as in GloriousChargeUpdateUpdate.cpp; condition word array at
-// Object+0x10C with masked-word accessors.
-
-#include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
-
-class Drawable;
-class Rva0010CConditionBits
-{
-public:
-	unsigned int test(int bit) const
-	{
-		return m_words[bit >> 5] & (1U << (bit & 0x1f));
-	}
-	void set(int bit)
-	{
-		m_words[bit >> 5] |= 1U << (bit & 0x1f);
-	}
-	void clear(int bit)
-	{
-		m_words[bit >> 5] &= ~(1U << (bit & 0x1f));
-	}
-private:
-	unsigned int m_words[20];
-};
-enum ObjectID
-{
-	INVALID_ID = 0
-};
-enum KindOfType
-{
-	KINDOF_FIRST = 0
-};
-#include "../../../../../Libraries/Include/Lib/Coord3D.h"
-class Player;
-class ExperienceTracker
-{
-public:
-	bool rva0039B4EC(int levels, bool flag1, bool flag2);
-};
-class Object;
-typedef void (*Rva004ACD8ECallback)(Object *obj);
-class ContainModuleInterface
-{
-public:
-	virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
-	virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
-	virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
-	virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15();
-	virtual void slot16(); virtual void slot17(); virtual void slot18(); virtual void slot19();
-	virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23();
-	virtual void slot24(); virtual void slot25(); virtual void slot26(); virtual void slot27();
-	virtual void slot28(); virtual void slot29(); virtual void slot30(); virtual void slot31();
-	virtual void slot32(); virtual void slot33(); virtual void slot34(); virtual void slot35();
-	virtual void slot36(); virtual void slot37(); virtual void slot38(); virtual void slot39();
-	virtual void slot40(); virtual void slot41(); virtual void slot42(); virtual void slot43();
-	virtual void slot44(); virtual void slot45(); virtual void slot46(); virtual void slot47();
-	virtual void slot48(); virtual void slot49(); virtual void slot50(); virtual void slot51();
-	virtual void slot52(); virtual void slot53(); virtual void slot54(); virtual void slot55();
-	virtual void slot56(); virtual void slot57(); virtual void slot58(); virtual void slot59();
-	virtual void slot60(); virtual void slot61(); virtual void slot62(); virtual void slot63();
-	virtual void slot64(); virtual void slot65(); virtual void slot66(); virtual void slot67();
-	virtual void rva004AD399Iterate(Rva004ACD8ECallback func, void *userData, bool reverse); // slot 68 (+0x110)
-};
-class Object
-{
-public:
-	void rva0028AE6D();
-	bool addAttributeModifierToPool(const AsciiString &name, int n);
-	Drawable *getDrawable() const;
-	bool isKindOf(KindOfType t) const;
-	Player *getControllingPlayer() const; // 0x0028AFA9
-	const Coord3D *getPosition() const { return &m_pos; }
-	ObjectID getID() const { return m_id; }
-	unsigned char m_pad000[0x38];
-	Coord3D m_pos; // +0x38
-	unsigned char m_pad044[0x74 - 0x44];
-	ObjectID m_id; // +0x74
-	unsigned char m_pad078[0x10C - 0x78];
-	Rva0010CConditionBits m_conditionBits; // +0x10C
-	unsigned char m_pad15C[0x250 - 0x15C];
-	ContainModuleInterface *m_contain; // +0x250
-	unsigned char m_pad254[0x264 - 0x254];
-	ExperienceTracker *m_experienceTracker264; // +0x264
-	unsigned char m_pad268[0x44C - 0x268];
-	int m_44C; // +0x44C
-};
-static __forceinline void clearModelConditionBit(Object *object, int bit)
-{
-	if (object->m_conditionBits.test(bit) != 0)
-	{
-		object->m_conditionBits.clear(bit);
-		object->rva0028AE6D();
-	}
-}
-static __forceinline void setModelConditionBit(Object *object, int bit)
-{
-	if (object->m_conditionBits.test(bit) == 0)
-	{
-		object->m_conditionBits.set(bit);
-		object->rva0028AE6D();
-	}
-}
-class FXList
-{
-public:
-	static void doFXObj(const FXList *fx, const Object *primary, const Object *secondary);
-};
-namespace _STL {
-template <class T> class allocator { };
-template <class T, class A> class vector
-{
-public:
-	vector(const vector &other);
-	~vector();
-	const T *begin() const { return m_start; }
-	const T *end() const { return m_finish; }
-private:
-	T *m_start;
-	T *m_finish;
-	T *m_endOfStorage;
-};
-}
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-	unsigned int getFrame() const { return m_frame; }
-private:
-	unsigned char m_pad[0x40];
-	unsigned int m_frame; // +0x40
-};
+// partial score=0.9826 date=2026-10-12
+// RousingSpeechUpdate primary vtable slot17 identifies the trigger override.
+// WB draft supplies the class/purpose; retail independently establishes data+4,
+// owner+8, affected list+88, MD FX+D8/modifiers+E4/levelUp+F0, Object
+// condition-word+124, contain+250, XP+264 and leader ID+44C. Model words
+// are only the observed seven-word prefix beginning +10C, not a whole class.
+// Callable identities are existing owned rows; vector copy BC07E/dtor2CC70,
+// lookup49DC5, modifier28EA91, notifier28AE6D, FX B2235, XP39B4EC,
+// callback4ACD8E, base45108D and collector4AD176 all resolve.
+// 343/345: sole instruction difference at target4AD4B0: ECX receiver is
+// coalesced instead of native EBX, omitting MOV ECX,EBX before call+110.
+// The retail contain access follows the null guard (and can dereference null).
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
+// stlport
+#include <vector>
+#include <list>
+#include "../reference/shims/bfme2_ascii/ascii_string.h"
+#include "../Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
-class Rva00270619
-{
-public:
-	void Rva00270619Clear(int bit);
-};
-struct Rva004AD613Node
-{
-	Rva004AD613Node *m_next;
-	Rva004AD613Node *m_prev;
-	ObjectID m_id;
-};
-struct Rva004AD613Iterator
-{
-	Rva004AD613Node *m_node;
-	ObjectID &operator*() const { return m_node->m_id; }
-	Rva004AD613Iterator &operator++() { m_node = m_node->m_next; return *this; }
-	bool operator!=(const Rva004AD613Iterator &other) const { return m_node != other.m_node; }
-};
-// Native2A1B6F and its whole insertion helper copy one opaque four-byte
-// element into a 12-byte list node; they never dereference the word as a
-// pointer. Reuse that existing owner for these ObjectID payloads.
-class Rva002A1B6FNativeList { public: void append(void *const &value); };
-
-class Rva0029FB3BMember
-{
-public:
-	bool empty() const { return m_head->m_next == m_head; }
-	Rva004AD613Iterator begin() const { Rva004AD613Iterator it; it.m_node = m_head->m_next; return it; }
-	Rva004AD613Iterator end() const { Rva004AD613Iterator it; it.m_node = m_head; return it; }
-	void reset();
-	Rva004AD613Node *m_head;
-};
-// BFME2's partition filters (the view AIStructureCreepTactic.cpp documents):
-// a vptr, the +0x04 link to the next filter (0x00625790), then each filter's
-// own members.
-class Rva000421C8
-{
-public:
-	Rva000421C8() : m_next(0) {}
-	virtual ~Rva000421C8() {}
-	virtual bool allow(Object *obj) = 0;
-	virtual int getPlayerMask();
-	Rva000421C8 *link(Rva000421C8 *next);	// 0x00625790
-	Rva000421C8 *m_next;
-};
-// vftable 0x00BFAD10, allow 0x0026119D: not effectively dead.
-class Rva0026119DFilter : public Rva000421C8
-{
-public:
-	virtual bool allow(Object *obj);
-};
-// vftable 0x00BFBC90, allow 0x00260EB1: the object, relationship flags and
-// whether a hit allows.
-class Rva00260EB1Filter : public Rva000421C8
-{
-public:
-	Rva00260EB1Filter(const Object *obj, int flags, bool match)
-		: m_obj(obj), m_flags(flags), m_match(match) {}
-	virtual bool allow(Object *obj);
-	virtual int getPlayerMask();
-	const Object *m_obj;
-	int m_flags;
-	bool m_match;
-};
-// vftable 0x00BF91BC, allow 0x002611BF: +0x08 an object.
-class Rva002611BFFilter : public Rva000421C8
-{
-public:
-	Rva002611BFFilter(const Object *obj) : m_obj(obj) {}
-	virtual bool allow(Object *obj);
-	const Object *m_obj;
-};
-// vftable 0x00BCECF0, allow 0x002614EC: +0x08 what to compare, +0x0C a
-// player, +0x10 whether a hit allows.
-class Rva002614ECFilter : public Rva000421C8
-{
-public:
-	Rva002614ECFilter(const void *what, Player *player, bool match)
-		: m_what(what), m_player(player), m_match(match) {}
-	virtual bool allow(Object *obj);
-	const void *m_what;
-	Player *m_player;
-	bool m_match;
-};
-// vftable 0x00C54EB4, allow 0x004ACDAC (this unit's own filter): +0x08 a
-// radius, +0x0C a centre.
-class Rva004ACDACFilter : public Rva000421C8
-{
-public:
-	Rva004ACDACFilter(float radius, const Coord3D *centre)
-		: m_radius(radius), m_centre(centre) {}
-	virtual bool allow(Object *obj);
-	float m_radius;
-	const Coord3D *m_centre;
-};
-// Complete native4ACDAC..4ACE11/101B, range-filter vtable C54EB4 slot1.
-// Target independently proves Object position38, radius8 and centreC.
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
-bool Rva004ACDACFilter::allow(Object *obj)
-{
-    const Coord3D *p = obj->getPosition();
-    float x = p->x, y = p->y, z = p->z;
-    _ReadWriteBarrier();
-    const Coord3D *c = m_centre;
-    float cx = c->x, cy = c->y, cz = c->z;
-    _ReadWriteBarrier();
-    Coord3D delta;
-    delta.x = x - cx;
-    delta.y = y - cy;
-    delta.z = z - cz;
-    if (delta.GetLength2D() > m_radius) return true;
-    return false;
+namespace _STL {
+template<>vector<AsciiString>::vector(const vector<AsciiString>&);
+template<>vector<AsciiString>::~vector();
+template<class I,class L,class R>static inline bool operator!=(const _List_iterator<I,L>&a,const _List_iterator<I,R>&b){return a._M_node!=b._M_node;}
 }
-
-#pragma comment(linker, "/alternatename:?getPlayerMask@Rva000421C8@@UAEHXZ=?Get_File_Handle@FileClass@@UAEPAXXZ")
-struct BfmeWideResult
-{
-	Object *next() throw();	// 0x00045623
-	~BfmeWideResult();	// 0x0004AA28
-	void *m_value;
+class Object;
+void rva004ACD8E(Object *);
+class ExperienceTracker {public:bool rva0039B4EC(int,bool,bool);};
+class SpeechContainedCallView {public:
+ virtual void s0();virtual void s1();virtual void s2();virtual void s3();virtual void s4();virtual void s5();virtual void s6();virtual void s7();virtual void s8();virtual void s9();
+ virtual void s10();virtual void s11();virtual void s12();virtual void s13();virtual void s14();virtual void s15();virtual void s16();virtual void s17();virtual void s18();virtual void s19();
+ virtual void s20();virtual void s21();virtual void s22();virtual void s23();virtual void s24();virtual void s25();virtual void s26();virtual void s27();virtual void s28();virtual void s29();
+ virtual void s30();virtual void s31();virtual void s32();virtual void s33();virtual void s34();virtual void s35();virtual void s36();virtual void s37();virtual void s38();virtual void s39();
+ virtual void s40();virtual void s41();virtual void s42();virtual void s43();virtual void s44();virtual void s45();virtual void s46();virtual void s47();virtual void s48();virtual void s49();
+ virtual void s50();virtual void s51();virtual void s52();virtual void s53();virtual void s54();virtual void s55();virtual void s56();virtual void s57();virtual void s58();virtual void s59();
+ virtual void s60();virtual void s61();virtual void s62();virtual void s63();virtual void s64();virtual void s65();virtual void s66();virtual void s67();
+ virtual void iterateContained(void (*)(Object*,void*),void*,int);
 };
-class PartitionManager
-{
-public:
-	BfmeWideResult iterateObjectsInRange(const Coord3D *pos, float radius, int distCalc,
-		Rva000421C8 *filters, int order);	// 0x00625610
+class Object {public:
+ bool addAttributeModifierToPool(const AsciiString &,int);
+ void rva0028AE6D();
+ char unknown00[0x74];ObjectID id;char unknown78[0x10c-0x78];
+ struct WordMask {unsigned words[7];__forceinline unsigned test(int n)const{return words[n/32]&(1u<<(n%32));} __forceinline void set(int n){words[n/32]|=1u<<(n%32);}} condition;
+ char unknown128[0x250-0x128];SpeechContainedCallView *contained250;
+ char unknown254[0x264-0x254];ExperienceTracker *experience264;
+ char unknown268[0x44c-0x268];ObjectID leader44c;
 };
-extern PartitionManager *ThePartitionManager;
-class Thing;
-class ModuleData;
-class BehaviorModule
-{
-public:
-	virtual ~BehaviorModule();
-protected:
-	const ModuleData *m_moduleData; // +0x04
-	Object *m_object; // +0x08
+class FXList {public:static void doFXObj(const FXList*,const Object*,const Object*);};
+class RousingSpeechUpdateModuleData {public:
+ char unknown00[0xd8];const FXList *followerFX;char unknownDC[8];
+ _STL::vector<AsciiString> modifiers;bool levelUp;
 };
-class BehaviorModuleInterface
-{
-public:
-	virtual void behaviorModuleInterfaceAnchor();
+class SpecialAbilityUpdate {public:
+ virtual void anchor();virtual void rva0045108D();
+ const RousingSpeechUpdateModuleData *data;Object *object;char unknown0c[0x88-0xc];
 };
-enum UpdateSleepTime
-{
-	UPDATE_SLEEP_NONE = 1,
-	UPDATE_SLEEP_FOREVER = 0x3fffffff
+class RousingSpeechUpdate:public SpecialAbilityUpdate {public:
+ virtual void triggerAbilityEffect();void rva004AD176();
+ _STL::list<ObjectID> affected;
 };
-class UpdateModuleInterface
-{
-public:
-	virtual UpdateSleepTime update() = 0;
-};
-class UpdateModule : public BehaviorModule, public BehaviorModuleInterface, public UpdateModuleInterface
-{
-protected:
-	unsigned int m_14;
-	int m_18;
-	int m_1C;
-};
-class SpecialPowerUpdateInterface
-{
-public:
-	virtual void specialPowerUpdateAnchor();
-};
-// Primary-vtable slots 1..17 of SpecialAbilityUpdate (vtable 0x00C3FBA8);
-// only the positions of slots 15 and 17 matter to this unit.
-class SpecialAbilityUpdate : public UpdateModule, public SpecialPowerUpdateInterface
-{
-public:
-	virtual void slot01(); virtual void slot02(); virtual void slot03();
-	virtual void slot04(); virtual void slot05(); virtual void slot06();
-	virtual void slot07(); virtual void slot08(); virtual void slot09();
-	virtual void slot10(); virtual void slot11(); virtual void slot12();
-	virtual void slot13(); virtual void slot14();
-	virtual void slot15(); // 0x00450D9A, GloriousChargeUpdate 0x004AD554
-	virtual void slot16();
-	virtual void triggerAbilityEffect(); // 0x0045108D, GloriousChargeUpdate 0x004AD8E3, RousingSpeechUpdate 0x004AD399
-private:
-	unsigned char m_pad24[0x88 - 0x24];
-};
-class RousingSpeechUpdateModuleData
-{
-public:
-	unsigned char m_pad[0xC8];
-	float m_C8; // +0xC8
-	unsigned int m_CC; // +0xCC
-	int m_D0; // +0xD0
-	unsigned char m_padD4[0xD8 - 0xD4];
-	FXList *m_D8; // +0xD8
-	bool m_DC; // +0xDC
-	float m_E0; // +0xE0
-	_STL::vector<AsciiString, _STL::allocator<AsciiString> > m_E4; // +0xE4
-	bool m_F0; // +0xF0
-	unsigned char m_padF1[0xF4 - 0xF1];
-	unsigned char m_F4[4]; // +0xF4
-};
-class RousingSpeechUpdate : public SpecialAbilityUpdate
-{
-public:
-	void rva004ACF1D();
-	void rva004AD176();
-	virtual UpdateSleepTime update();
-	virtual void triggerAbilityEffect();
-private:
-	const RousingSpeechUpdateModuleData *getRousingSpeechData() const
-	{
-		return (const RousingSpeechUpdateModuleData *)m_moduleData;
-	}
-	Rva0029FB3BMember m_88; // +0x88
-	unsigned int m_8C; // +0x8C
-	bool m_90; // +0x90
-	float m_94; // +0x94
-	float m_98; // +0x98
-};
-UpdateSleepTime RousingSpeechUpdate::update()
-{
-	rva004ACF1D();
-	if (!m_90)
-	{
-		slot15();
-		m_8C = getRousingSpeechData()->m_CC + TheGameLogic->getFrame();
-		m_90 = true;
-	}
-	const RousingSpeechUpdateModuleData *data = getRousingSpeechData();
-	if (TheGameLogic->getFrame() < m_8C && !(m_94 >= data->m_C8))
-	{
-		if (data->m_DC)
-		{
-			m_94 = m_98;
-			m_98 += data->m_E0;
-			if (m_98 > data->m_C8)
-				m_98 = data->m_C8;
-		}
-		triggerAbilityEffect();
-		return (UpdateSleepTime)getRousingSpeechData()->m_D0;
-	}
-	m_90 = false;
-	clearModelConditionBit(m_object, 6 * 32 + 15);
-	return UPDATE_SLEEP_FOREVER;
-}
-void RousingSpeechUpdate::rva004AD176()
-{
-	const RousingSpeechUpdateModuleData *data = getRousingSpeechData();
-	Object *self = m_object;
-	BfmeWideResult hits = ThePartitionManager->iterateObjectsInRange(self->getPosition(), m_98, 0,
-		Rva00260EB1Filter(self, 4, false).link(Rva002614ECFilter(data->m_F4, self->getControllingPlayer(), true)
-			.link(Rva0026119DFilter().link(Rva002611BFFilter(self).link(&Rva004ACDACFilter(m_94, self->getPosition()))))), 1);
-	for (Object *obj = hits.next(); obj; obj = hits.next()) {
-		if (obj == self)
-			continue;
-		const ObjectID id = obj->getID();
-		reinterpret_cast<Rva002A1B6FNativeList *>(&m_88)->append(
-			reinterpret_cast<void *const &>(id));
-	}
-}
-
-void rva004ACD8E(Object *obj)
-{
-	if (obj && obj->m_experienceTracker264)
-		obj->m_experienceTracker264->rva0039B4EC(1, true, false);
-}
-
 void RousingSpeechUpdate::triggerAbilityEffect()
 {
-	const RousingSpeechUpdateModuleData *data = getRousingSpeechData();
-	SpecialAbilityUpdate::triggerAbilityEffect();
-	rva004AD176();
-	if (!m_88.empty())
-	{
-		const _STL::vector<AsciiString, _STL::allocator<AsciiString> > modifiers(data->m_E4);
-		for (const AsciiString *name = modifiers.begin(); name != modifiers.end(); ++name)
-		{
-			for (Rva004AD613Iterator it = m_88.begin(); it != m_88.end(); ++it)
-			{
-				Object *object = TheGameLogic->findObjectByID(*it);
-				if (object)
-				{
-					object->addAttributeModifierToPool(*name, -1);
-					setModelConditionBit(object, 6 * 32 + 9);
-					object->m_44C = m_object->getID();
-					if (data->m_D8)
-						FXList::doFXObj(data->m_D8, object, 0);
-				}
-			}
-		}
-		if (data->m_F0)
-		{
-			for (Rva004AD613Iterator it = m_88.begin(); it != m_88.end(); ++it)
-			{
-				Object *object = TheGameLogic->findObjectByID(*it);
-				if (object)
-					object->m_experienceTracker264->rva0039B4EC(1, true, false);
-				ContainModuleInterface *contain = object->m_contain;
-				if (contain)
-					contain->rva004AD399Iterate(rva004ACD8E, 0, true);
-			}
-		}
-	}
+ const RousingSpeechUpdateModuleData *md=data;
+ SpecialAbilityUpdate::rva0045108D();
+ rva004AD176();
+ if(!affected.empty()) {
+   _STL::vector<AsciiString> names(md->modifiers);
+   for(AsciiString *name=names.begin();name!=names.end();++name) {
+     for(_STL::list<ObjectID>::iterator id=affected.begin();id!=affected.end();++id) {
+       Object *target=TheGameLogic->findObjectByID(*id);
+       if(target) {
+         target->addAttributeModifierToPool(*name,-1);
+         if(!target->condition.test(201)){target->condition.set(201);target->rva0028AE6D();}
+         target->leader44c=object->id;
+         const FXList *fx=md->followerFX;
+         if(fx)FXList::doFXObj(fx,target,0);
+       }
+     }
+   }
+   bool levelUp = md->levelUp;
+   if(levelUp) {
+     for(_STL::list<ObjectID>::iterator id=affected.begin();id!=affected.end();++id) {
+       Object *target=TheGameLogic->findObjectByID(*id);
+       if(target)target->experience264->rva0039B4EC(1,true,false);
+       SpeechContainedCallView *contained=target->contained250;
+       if(contained)contained->iterateContained(reinterpret_cast<void(*)(Object*,void*)>(&rva004ACD8E),0,1);
+     }
+   }
+ }
 }
