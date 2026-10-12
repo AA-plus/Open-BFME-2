@@ -141,6 +141,7 @@ public:
 	void *rva00035190(void *block, unsigned int size, int flags);	// Realloc-like
 	void *rva00035210(unsigned int count, unsigned int size, int flags);	// Calloc-like
 	void *rva000353B0(void *context, int blockTypes, bool copy, void *storage, unsigned int storageSize);	// ReportBegin-like
+	void rva00032EC0(const void *block, BlockInfo *out);	// chunk -> BlockInfo for the report
 	const BlockInfo *rva00032F60(void *context, int blockTypes);	// ReportNext-like
 	void rva00033E90(void *context);			// ReportEnd-like
 
@@ -437,6 +438,54 @@ unsigned int GeneralAllocator::rva00032A20(const void *block)
 		LeaveCriticalSection(lock);
 	}
 	return 0;
+}
+
+// ?rva00032EC0@GeneralAllocator@Allocator@EA@@QAEXPBXPAUBlockInfo@23@@Z
+// @0x00032EC0 151B, RET8. Fills one heap-report BlockInfo from a chunk; the
+// report iterator 0x00032F60 calls it with the chunk and its output slot.
+// Header at chunk+4: bit1 marks a mapped chunk, the masked size locates the
+// next chunk, whose header bit0 says this one is in use. An in-use chunk
+// reports type 2 with its payload (chunk+8) and usable size (0x32A20; a
+// mapped one also widens the core by the prefix at chunk+0); a free chunk
+// reports type 4 with payload chunk+0x10. Offsets and flags are target
+// evidence; the method's original name is unknown.
+void GeneralAllocator::rva00032EC0(const void *block, BlockInfo *out)
+{
+	const char *chunk = (const char *)block;
+	unsigned int size = *(const unsigned int *)(chunk + 4);
+	unsigned int mapped = size & 2;
+	size &= 0x7FFFFFF8;
+	if ((*(const unsigned char *)(chunk + size + 4) & 1) != 0)
+	{
+		void *data = (void *)(chunk + 8);
+		unsigned int usable = rva00032A20(data);
+		out->m_blockType = 2;
+		if (mapped != 0)
+		{
+			out->m_core = (void *)(chunk - *(const unsigned int *)chunk);
+			out->m_blockSize = *(const unsigned int *)chunk + size + 0x10;
+			out->m_data = data;
+			out->m_dataSize = usable;
+			out->m_mapped = true;
+		}
+		else
+		{
+			out->m_data = data;
+			out->m_blockSize = size;
+			out->m_core = (void *)chunk;
+			out->m_dataSize = usable;
+			out->m_mapped = false;
+		}
+	}
+	else
+	{
+		out->m_core = (void *)chunk;
+		out->m_blockSize = size;
+		out->m_blockType = 4;
+		out->m_data = (void *)(chunk + 0x10);
+		out->m_dataSize = (*(const unsigned int *)(chunk + 4) & 0x7FFFFFF8) - 0x10;
+		out->m_mapped = false;
+	}
 }
 
 // ?rva006C1D10@GeneralAllocator@Allocator@EA@@QAEIPBX@Z @0x006C1D10 59B
