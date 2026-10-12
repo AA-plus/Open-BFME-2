@@ -1,6 +1,6 @@
 // ?rva002B49A8@LivingWorldLogic@@QAEXXZ
-// partial score=0.8472781791 date=2026-10-12
-// cl: /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
+// partial score=0.8472781790922721 date=2026-10-12
+// cl: /I. /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
 // stlport
 // LivingWorldLogic.cpp -- LivingWorldLogic members recovered from WorldBuilder
 // leads (reverse/wb_name_leads.csv): WB's debug build names the function and
@@ -615,7 +615,9 @@ class Rva002E071E {public:int rva002E0BC0(int);};
 class Rva003193EC {public:void rva00319904(Rva003193EC*);};
 class Rva00318C79Owner {public:class Rva00318C32Ret *rva00318C32();};
 struct ArmyTargetSpan {void **first,**finish;};
-class ArmyRegionMergeSlot {public:virtual void *release(unsigned flags);};
+// Opaque virtual-destruction view, not an original hierarchy claim.
+// Explicit global delete emits native flag0 followed by the global deallocator.
+class ArmyRegionMergeSlot {public:virtual ~ArmyRegionMergeSlot();};
 void LivingWorldLogic::rva002B49A8(){
  Rva002B5334ArmyList *regions=m_field0B0->m_armySet;
  if(regions){
@@ -637,8 +639,7 @@ void LivingWorldLogic::rva002B49A8(){
       else{
        ((Rva003193EC*)first)->rva00319904((Rva003193EC*)army);
        iter=player->RemoveArmy(iter);
-       void *released=army?((ArmyRegionMergeSlot*)army)->release(0):0;
-       operator delete(released);
+       ::delete (ArmyRegionMergeSlot*)army;
       }
      }
     }

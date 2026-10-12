@@ -1,7 +1,7 @@
 // ?Rva002BC830Append@@YAXAAV?$vector@URva002B72C9@@V?$allocator@URva002B72C9@@@_STL@@@_STL@@IABUICoord2DBase@@@Z
-// partial score=0.96 date=2026-10-09
+// partial score=0.9640866873065015 date=2026-10-12
 // stlport
-// cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
+// cl: /I. /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 void __cdecl free(void*);
 struct ICoord2DBase {int x,y;};
 struct ICoord2D:ICoord2DBase {__forceinline ICoord2D(){x=y=0;}bool operator==(const ICoord2DBase&)const;};
@@ -29,8 +29,12 @@ Rva002B72C9::Rva002B72C9(const ICoord2DBase*position,unsigned payload):values08(
 }
 void __cdecl Rva002BC830Append(_STL::vector<Rva002B72C9>&records,unsigned payload,const ICoord2DBase&position){
  unsigned count=records.size();Rva002B72C9*begin=records.begin();
+// Reconstruction shaping only: the volatile local update retains a byte
+// offset instead of MSVC promoting it to an advancing pointer. This is not
+// evidence that the original source used volatile. All153 bytes now emit;
+// the remaining mismatch is initialization/test ordering at +0x22..+0x2B.
  unsigned offset=0;
- for(unsigned i=0;i<count;++i,offset+=sizeof(Rva002B72C9)){
+ for(unsigned i=0;i<count;++i,((volatile unsigned&)offset)+=sizeof(Rva002B72C9)){
   if(((ICoord2D*)((unsigned)begin+offset))->operator==(position)){
    ((_STL::vector<const ModuleData*>*)&begin[i].values08)->push_back(*(const ModuleData*const*)&payload);
    return;
