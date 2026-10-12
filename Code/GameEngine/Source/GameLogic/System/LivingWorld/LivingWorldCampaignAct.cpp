@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /D_CRTIMP= /Ireference/shims/iniexception
+// cl: /ICode/Libraries/Include/Lib /Ireference/shims/moduledata /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /D_CRTIMP= /Ireference/shims/iniexception
 // Native 566BF6..566D7B (389B), named act parser 566D83 and its WB
 // twin 1438E40 establish the 184B act record and constructor relationship.
 // Existing destructor 56616B independently supplies the 16 member cleanup
@@ -39,6 +39,7 @@ struct FieldParse;
 class Rva0056616B {
 public:
  Rva0056616B(const AsciiString&);
+ void rva005666C5();
  static const FieldParse m_fieldParseTable[];
  virtual ~Rva0056616B();
 AsciiString m_04;
@@ -129,4 +130,87 @@ void ParseLivingWorldCampaignAct(INI *ini,void *instance,void*,const void*) {
  Rva0056616B record(name);
  ini->initFromINI(&record,Rva0056616B::m_fieldParseTable);
  ((Rva0052D83B*)instance)->rva0052D83B((const Rva0052D801Record&)record);
+}
+
+// Native5666C5..5668E9 (548B), complete RET0; WB1439F00 identifies
+// SpawnArmies. Requests are 88-byte spawn records; typed names/player views
+// retain their independently observed strides. The explicit request-buffer
+// load in at() preserves the native reload after each size calculation.
+// Its separate index copy retains the target LEA and late ESI save. This is
+// a local access-order constraint, not a claim that the member is volatile.
+// Target318E8C returns the coordinate pointer; a scoped zero coordinate
+// preserves the release-lifetime boolean shape. No new dependency pins.
+#include "Coord2D.h"
+#define BFME_SNAPSHOT_NAME_SLOT
+#include "Common/Snapshot.h"
+class Xfer; class Image;
+class Rva004E3184:public Snapshot { public:
+ Rva004E3184(int); virtual ~Rva004E3184();
+ virtual void loadPostProcess(); virtual const char *GetSnapshotName()const; virtual void xfer(Xfer*);
+ AsciiString m_04,m_08,m_0c,m_10,m_14,m_18,m_1c;
+ float m_20,m_24; AsciiString m_28,m_2c,m_30,m_34;
+ _STL::vector<AsciiString,_STL::allocator<AsciiString> > m_38;
+ float m_44; int m_48,m_4c; AsciiString m_50; bool m_54,m_55;
+};
+struct Rva004FAFF2 { Rva004FAFF2 &rva004FAFF2(const Rva004FAFF2&); };
+struct Rva00318E8COut {float f;int i;};
+class Rva00318E8C {public:Rva00318E8COut *rva00318E8C(Rva00318E8COut*);};
+class Rva002E18C3Lookup {public:AsciiString *find(const AsciiString&);};
+extern Rva002E18C3Lookup *Va00DFF0B0Lookup;
+class Rva002E2903Player {public:char pad[0x40];AsciiString *template40;};
+class Rva002BA8F1Logic {public:Rva002E2903Player *rva002B52A8(int);};
+struct Rva002B86AAKey; struct Rva002B86AAVal;
+class Rva002B86AA {public:bool rva002B86AA(Rva002B86AAKey*,Rva002B86AAVal*)const;};
+class Rva002104B6 {public:void *rva002104B6(void*);};
+class Rva002B2702B0 {public:bool rva0020EA58(void*,float*);};
+struct Rva002B6A04Player; struct LivingWorldArmy;
+class LivingWorldLogic {public:
+ void spawnCity(Rva004E3184*);
+ LivingWorldArmy *spawnArmy(Rva004E3184*,Rva002B6A04Player*,bool);
+ char pad[0x8c]; Rva002E2903Player **playersBegin,**playersEnd; char pad94[0xB0-0x94]; Rva002104B6 *regions;
+};
+extern LivingWorldLogic *TheLivingWorldLogic;
+struct SpawnZero:Coord2D{SpawnZero(){x=0.0f;y=0.0f;}~SpawnZero(){}};
+__forceinline bool spawnEqual(const Coord2D &a,const Coord2D &b){return a.x==b.x && a.y==b.y;}
+
+template<class T>struct SpawnVectorView {
+ T *first,*last,*capacity;
+ unsigned size()const{return unsigned(last-first);}
+ bool empty()const{return first==last;}
+ T &operator[](unsigned n){return first[n];} T & at(unsigned n){unsigned offset=n; T *p=(*(T *const volatile *)&first); return *(p+offset);}
+};
+
+void Rva0056616B::rva005666C5() {
+ SpawnVectorView<Rva004E3184> &requests=*reinterpret_cast<SpawnVectorView<Rva004E3184> *>(&m_20);
+ for(unsigned int index=0;index<requests.size();++index) {
+  Rva004E3184 *request=&requests.at(index);
+  if(request->m_55) {
+   if(reinterpret_cast<SpawnVectorView<AsciiString> *>(&request->m_38)->empty()) TheLivingWorldLogic->spawnCity(request);
+   else { SpawnVectorView<AsciiString> &names=*reinterpret_cast<SpawnVectorView<AsciiString> *>(&request->m_38); for(unsigned int t=0;t<names.size();++t) {
+    AsciiString *playerTemplate=Va00DFF0B0Lookup->find(names[t]);
+    if(playerTemplate) for(unsigned int p=0;p<reinterpret_cast<SpawnVectorView<Rva002E2903Player *> *>(&TheLivingWorldLogic->playersBegin)->size();++p) {
+     Rva002E2903Player *player=reinterpret_cast<Rva002BA8F1Logic*>(TheLivingWorldLogic)->rva002B52A8(p);
+     if(playerTemplate==player->template40 && !reinterpret_cast<Rva002B86AA*>(TheLivingWorldLogic)->rva002B86AA(reinterpret_cast<Rva002B86AAKey*>(request),reinterpret_cast<Rva002B86AAVal*>(player))) {
+      Rva00318E8COut position;
+      if(!spawnEqual(*reinterpret_cast<Coord2D*>(reinterpret_cast<Rva00318E8C*>(request)->rva00318E8C(&position)),SpawnZero()))
+       TheLivingWorldLogic->spawnArmy(request,reinterpret_cast<Rva002B6A04Player*>(player),true);
+      else {
+       Rva002104B6 *regionManager=TheLivingWorldLogic->regions;
+       void *region=regionManager->rva002104B6(reinterpret_cast<char*>(player)+0x2c);
+       if(region) {
+        Rva004E3184 temporary(0);
+        reinterpret_cast<Rva004FAFF2*>(&temporary)->rva004FAFF2(*reinterpret_cast<const Rva004FAFF2*>(request));
+        Coord2D center;
+        Rva002B2702B0 *centers=reinterpret_cast<Rva002B2702B0*>(TheLivingWorldLogic->regions);
+        if(!centers->rva0020EA58(region,&center.x)) return;
+        *reinterpret_cast<unsigned int *>(&temporary.m_20)=*reinterpret_cast<const unsigned int *>(&center.x); *reinterpret_cast<unsigned int *>(&temporary.m_24)=*reinterpret_cast<const unsigned int *>(&center.y);
+        TheLivingWorldLogic->spawnArmy(&temporary,reinterpret_cast<Rva002B6A04Player*>(player),true);
+       }
+      }
+     }
+    }
+   }}
+  }
+
+ }
 }
