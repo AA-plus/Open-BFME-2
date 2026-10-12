@@ -137,8 +137,9 @@ def _u32(data, offset):
     return int.from_bytes(data[offset:offset + 4], "little")
 
 
-def coff_symbol_names(data):
-    """Every symbol name in a COFF object's symbol table (aux records skipped)."""
+def coff_symbol_names(data, *, include_local=True):
+    """COFF names, optionally excluding object-local STATIC/LABEL symbols.
+    Auxiliary records are skipped; unknown storage classes remain conservative."""
     names = set()
     if len(data) < 20:
         return names
@@ -156,7 +157,11 @@ def coff_symbol_names(data):
             name = data[start:end if end >= 0 else len(data)]
         else:
             name = raw.rstrip(b"\0")
-        names.add(name.decode("latin-1"))
+        # STATIC (3) and LABEL (6) bind within this object, even when another
+        # unit happens to reuse the same compiler label. EXTERNAL (2), weak
+        # externals (105), and other storage classes still trigger verification.
+        if include_local or data[entry + 16] not in (3, 6):
+            names.add(name.decode("latin-1"))
         index += 1 + data[entry + 17]
     return names
 
@@ -258,7 +263,7 @@ def dependents(lost, source_objects, root=ROOT, *, unsettled=frozenset(), commit
         for path in present:
             data = path.read_bytes()
             hits = [name for name, needle in needles if needle in data]
-            if hits and set(hits) & coff_symbol_names(data):
+            if hits and set(hits) & coff_symbol_names(data, include_local=False):
                 return True
         return False
 

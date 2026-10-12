@@ -33,7 +33,7 @@ OLD = "?baseConstruct@BFME2NativeNetwork@@QAEPAV1@XZ"
 NEW = "??0SubsystemInterface@@QAE@XZ"
 
 
-def coff(names):
+def coff(names, storage_classes=None):
     """A minimal COFF object whose symbol table holds `names` (one aux record
     after the first, as a section symbol has), long names in the string table."""
     entries, strings = [], b""
@@ -45,7 +45,8 @@ def coff(names):
             field = b"\0\0\0\0" + struct.pack("<I", 4 + len(strings))
             strings += raw + b"\0"
         aux = 1 if index == 0 else 0
-        entries.append(field + struct.pack("<IhHBB", 0, 0, 0x20, 2, aux))
+        storage = 2 if storage_classes is None else storage_classes[index]
+        entries.append(field + struct.pack("<IhHBB", 0, 0, 0x20, storage, aux))
         if aux:
             entries.append(b"\0" * 18)
     table = 20
@@ -53,7 +54,7 @@ def coff(names):
     return header + b"".join(entries) + struct.pack("<I", 4 + len(strings)) + strings
 
 
-def compiled(root, source, names, text, built_from=None):
+def compiled(root, source, names, text, built_from=None, *, storage_classes=None):
     """Write `source` as `text` and its object holding `names`, with the build's
     sidecar recording the text the object was compiled from (`built_from`,
     default `text`)."""
@@ -63,7 +64,7 @@ def compiled(root, source, names, text, built_from=None):
     path.write_bytes(text.encode("utf-8"))
     obj = root / "obj" / (Path(source).stem + ".obj")
     obj.parent.mkdir(exist_ok=True)
-    obj.write_bytes(coff(names))
+    obj.write_bytes(coff(names, storage_classes))
     digest = hashlib.md5((built_from or text).encode("utf-8")).hexdigest()
     build._deps_sidecar(obj).write_text(json.dumps({"cmd": "x", "source": digest, "deps": {}}))
     return obj
@@ -81,6 +82,34 @@ def admit_all(row):
 def test_coff_symbol_names_reads_long_short_and_skips_aux():
     data = coff([".text", OLD, "_memset", "??_Gx@@UAEPAXI@Z"])
     assert nd.coff_symbol_names(data) == {".text", OLD, "_memset", "??_Gx@@UAEPAXI@Z"}
+
+
+def test_coff_dependency_names_keep_external_weak_and_unknown_storage():
+    data = coff(["$L5008", OLD, "_external", "_weak", "_unknown"],
+                [3, 6, 2, 105, 5])
+    assert nd.coff_symbol_names(data) == {"$L5008", OLD, "_external", "_weak", "_unknown"}
+    assert nd.coff_symbol_names(data, include_local=False) == {"_external", "_weak", "_unknown"}
+
+
+@pytest.mark.parametrize("local_storage", [3, 6])
+@pytest.mark.parametrize("workers", [1, 8])
+def test_reused_private_labels_are_not_foreign_dependencies(tmp_path, local_storage, workers):
+    label = "$L5008"
+    private = compiled(tmp_path, "Code/private.cpp", [".text", label], "void f();\n",
+                       storage_classes=[3, local_storage])
+    # Do not blacklist compiler-label spellings: an actual external or weak
+    # reference to that same name must still bring its consumer into the gate.
+    external = compiled(tmp_path, "Code/external.cpp", [".text", label], "void g();\n",
+                        storage_classes=[3, 2])
+    weak = compiled(tmp_path, "Code/weak.cpp", [".text", label], "void h();\n",
+                    storage_classes=[3, 105])
+    static_function = compiled(tmp_path, "Code/static.cpp", [".text", OLD], "void i();\n",
+                               storage_classes=[3, 3])
+    found = nd.dependents({label: {0x1000}, OLD: {0x2000}},
+                          {"Code/private.cpp": [private], "Code/external.cpp": [external],
+                           "Code/weak.cpp": [weak], "Code/static.cpp": [static_function]},
+                          tmp_path, workers=workers)
+    assert found == {"Code/external.cpp", "Code/weak.cpp"}
 
 
 def test_rename_removal_pin_drop_and_move_lose_a_target():
