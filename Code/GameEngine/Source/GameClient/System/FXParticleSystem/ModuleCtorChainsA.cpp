@@ -11,6 +11,8 @@
 // ??0Rva003ABDC8@@QAE@PAX0@Z @0x003ABDC8 49B
 // ??0Rva003ABECC@@QAE@PAX0@Z @0x003ABECC 49B
 // ??0Rva003ACDA0Module@@QAE@PAXPAVRva003AD71BTemplate@@@Z @0x003ACDA0 42B
+// ??0Rva003ACE5CModule@@QAE@PAXPAVRva003AD80BTemplate@@@Z @0x003ACE5C 42B
+// ??0Rva005E76E0Object@@QAE@PAXPAVV3HostRva005E76E0@@@Z @0x003ACE8B 42B
 // ??0Rva003ACDCFModule@@QAE@PAXPAVRva003AD757Template@@@Z @0x003ACDCF 42B
 // ??0Rva003ACDFEModule@@QAE@PAXPAVRva003AD793Template@@@Z @0x003ACDFE 42B
 // ??0Rva003ACF32Module@@QAE@PAXPAVRva003AD8C5Template@@@Z @0x003ACF32 49B
@@ -75,6 +77,10 @@ extern const void *const g_00C1D00C[];
 extern const void *const g_00C1D02C[];
 extern const void *const g_00C1D0BC[];
 extern const void *const g_00C1D788[];
+extern const void *const g_00C1CD54[];
+extern const void *const g_00C1CD50[];
+extern const void *const g_00C1CD90[];
+extern const void *const g_00C1C290[];
 extern const void *const g_00C1C488[];
 extern const void *const g_00C1CD40[];
 extern const void *const g_00C1C4C8[];
@@ -467,4 +473,37 @@ Rva003ABE8D::Rva003ABE8D(void *a, void *b)
 	STAMP(0x14, g_00C1C6A0);
 	STAMP(0x18, g_00C1C780);
 	STAMP(0x20, g_00C1C690);
+}
+
+// ---- the two module constructors over 0x003ABB93 and 0x003ABBCB, under the
+// names their factory call sites (0x003AD80B, 0x003AD84A) pin ----
+
+class Rva003AD80BTemplate;
+class Rva003ACE5CModule : public Rva003ABB93
+{
+public:
+	Rva003ACE5CModule(void *a, Rva003AD80BTemplate *b);
+};
+
+Rva003ACE5CModule::Rva003ACE5CModule(void *a, Rva003AD80BTemplate *b)
+	: Rva003ABB93(a, b)
+{
+	STAMP(0x00, g_00C1CD54);
+	STAMP(0x14, g_00C1CD50);
+	STAMP(0x18, g_00C1CD40);
+}
+
+class V3HostRva005E76E0;
+class Rva005E76E0Object : public Rva003ABBCB
+{
+public:
+	Rva005E76E0Object(void *a, V3HostRva005E76E0 *b);
+};
+
+Rva005E76E0Object::Rva005E76E0Object(void *a, V3HostRva005E76E0 *b)
+	: Rva003ABBCB(a, b)
+{
+	STAMP(0x00, g_00C1CD90);
+	STAMP(0x14, g_00C1C290);
+	STAMP(0x18, g_00C1CD80);
 }
