@@ -35,10 +35,10 @@ typedef _STL::deque<BfmeOpaqueOwnedRecord1408,
 typedef _STL::deque<BfmeOpaqueOwnedRecord1432,
 	_STL::allocator<BfmeOpaqueOwnedRecord1432> > BfmeDeque1432;
 
-struct BfmeOpaqueOwnedPointer {
+struct Rva00142D70 {
 	void *value;
 	unsigned int unknown[2];
-	~BfmeOpaqueOwnedPointer() { if (value) free(value); }
+	~Rva00142D70() { if (value) free(value); }
 };
 
 class Rva00557CCC : public Rva00553222 {
@@ -50,9 +50,9 @@ private:
 	BfmeDeque1432 m_deque1432;
 	BfmeDeque1408 m_deque1408;
 	unsigned int m_gap64[2];
-	BfmeOpaqueOwnedPointer m_owned6c;
-	BfmeOpaqueOwnedPointer m_owned78;
-	BfmeOpaqueOwnedPointer m_owned84;
+	Rva00142D70 m_owned6c;
+	Rva00142D70 m_owned78;
+	Rva00142D70 m_owned84;
 	Rva005562DD m_member90;
 	MutexClass m_mutex9c;
 	Rva0009990D m_clearA4;
