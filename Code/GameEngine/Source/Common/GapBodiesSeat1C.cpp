@@ -1140,3 +1140,107 @@ bool Rva005FC6FF::rva005FC712() const
 {
 	return m_18->m_bit2;
 }
+
+// --- 0x0049CB95 (11B): the address of the indexed word of the +0x7C array.
+class Rva0049CB95
+{
+public:
+	int *rva0049CB95(int index);
+private:
+	char m_pad000[0x10];
+	int m_10;
+	int m_14;
+	char m_pad018[0x7C - 0x18];
+	int m_7C[(0x284 - 0x7C) / 4];
+	int m_284;
+};
+
+int *Rva0049CB95::rva0049CB95(int index)
+{
+	return &m_7C[index];
+}
+
+// --- 0x004A991F (11B): slot 6 of the +0x4C4 object.
+class Rva004A991FTarget
+{
+public:
+	virtual void s0();
+	virtual void s1();
+	virtual void s2();
+	virtual void s3();
+	virtual void s4();
+	virtual void s5();
+	virtual void slot6();
+};
+
+class Rva004A991F
+{
+public:
+	void rva004A991F();
+private:
+	char m_pad000[0x4C4];
+	Rva004A991FTarget *m_4C4;
+};
+
+void Rva004A991F::rva004A991F()
+{
+	m_4C4->slot6();
+}
+
+// --- 0x004D99F4 (11B): clears +0x18 and +0x1C, returning this.
+class Rva004D99F4
+{
+public:
+	Rva004D99F4 *rva004D99F4();
+private:
+	char m_pad00[0x18];
+	int m_18;
+	int m_1C;
+};
+
+Rva004D99F4 *Rva004D99F4::rva004D99F4()
+{
+	m_18 = 0;
+	m_1C = 0;
+	return this;
+}
+
+// --- 0x004F5F80 (10B, cdecl): the word is zero.
+bool Rva004F5F80(int value)
+{
+	return value == 0;
+}
+
+// --- 0x004BA4C8, 0x004FB577 (11B each): erase every element of the vector
+// at +0 through its rowed range eraser.
+class Rva004BA1C8;
+class Rva004BA399Vector
+{
+public:
+	Rva004BA1C8 *EraseRange(Rva004BA1C8 *first, Rva004BA1C8 *last);	// 0x004BA399
+	void rva004BA4C8();
+private:
+	Rva004BA1C8 *m_start;
+	Rva004BA1C8 *m_finish;
+};
+
+void Rva004BA399Vector::rva004BA4C8()
+{
+	EraseRange(m_start, m_finish);
+}
+
+struct Rva005B09D8Record;
+class Rva005B129FVector
+{
+public:
+	Rva005B09D8Record *erase(Rva005B09D8Record *first, Rva005B09D8Record *last);	// 0x005B129F
+	void rva004FB577();
+private:
+	Rva005B09D8Record *m_start;
+	Rva005B09D8Record *m_finish;
+};
+
+void Rva005B129FVector::rva004FB577()
+{
+	erase(m_start, m_finish);
+}
