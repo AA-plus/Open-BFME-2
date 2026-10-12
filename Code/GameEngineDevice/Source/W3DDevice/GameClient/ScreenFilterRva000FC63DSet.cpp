@@ -692,3 +692,53 @@ Int Rva000FCF54Filter::init()
 	}
 	return false;
 }
+
+// ?init@Rva000FC5B7Filter@@UAEHXZ @0x000FC5B7 (134B, EH): a Ghidra-unlisted
+// filter init slot, Zero Hour's cross-fade init shape: the shared fade frame
+// and the pixel-shader handle (+0x04) are reset, render to texture must be
+// available and the "shaders\monochromezoom.nvp" shader (rowed loader
+// 0x00077E05) must load; the instance at 0x00DEC1CC then registers as
+// W3DFilters[6] and the "circleFade.tga" mask (rowed BFME2LoadParticleTexture)
+// is kept at +0x08.
+class TextureClass : public TextureBaseClass {};
+
+template <class T>
+class RefCountPtr
+{
+public:
+	~RefCountPtr() { if (m_ptr) m_ptr->Release_Ref(); }
+	const RefCountPtr &operator=(const RefCountPtr &that);	// 0x000424D0 for TextureClass
+	T *m_ptr;
+};
+
+class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
+{
+};
+
+BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *filename, int a, int b);	// 0x00132D89
+long Rva00077E05Load(const char *name, unsigned long *handle);	// 0x00077E05
+extern UnsignedInt g_Va00DEC1CC;
+
+class Rva000FC5B7Filter
+{
+public:
+	virtual Int init();
+private:
+	unsigned long m_shader;									// +0x04
+	BFME2ParticleTextureHandle m_fadeTexture;				// +0x08
+};
+
+Int Rva000FC5B7Filter::init()
+{
+	long hr;
+	m_shader = 0;
+	g_00DEC1BC = 0;
+	if (!W3DShaderManager::canRenderToTexture())
+		return false;
+	hr = Rva00077E05Load("shaders\\monochromezoom.nvp", &m_shader);
+	if (hr < 0)
+		return false;
+	W3DFilters[6] = reinterpret_cast<W3DFilterInterface *>(&g_Va00DEC1CC);
+	m_fadeTexture = BFME2LoadParticleTexture("circleFade.tga", 0, 0);
+	return true;
+}
