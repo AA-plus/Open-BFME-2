@@ -204,6 +204,7 @@ public:
 	void rva0035C16A();
 	void shutdownComplete(WindowLayout *screen, Bool impendingPush);
 	void push(AsciiString filename, bool shutdownImmediate);
+	Bool showShellMap(Bool useShellMap, Bool restartShellGame);
 	WindowLayout *getSaveLoadMenuLayout();
 	WindowLayout *getPopupReplayLayout();
 };
@@ -634,5 +635,102 @@ void Shell::rva0035C2B9()
 		BfmeAudioEventPrefix136 music(track, 0);
 		((Rva002D94CE *)&music)->rva002D94CE(2);
 		m_musicHandle = reinterpret_cast<ShellMusicAudioView*>(TheAudio)->addAudioEvent(&music);
+	}
+}
+
+// ?showShellMap@Shell@@QAE_N_N0@Z @0x0035C194 293B: Zero Hour's
+// Shell::showShellMap reshaped by BFME 2. Target evidence: the flags at
+// +0x52 (set only for a requested map while the shell map is off; the
+// linear campaign manager's +0x10 first queues message 0x22) and +0x53,
+// TheGlobalData's initial file +0xABC, pending file +0xAC0, shell map name
+// +0xAEC and shell map flag +0xAF0, TheDisplay's 0x0025D2F6 and Shell's
+// 0x0035BD3F on both paths, TheGameLogic's game mode at +0x110 (GAME_SHELL 4,
+// 9 skips the clear), TheMessageStream's appendMessage (slot 18) with
+// MSG_CLEAR_GAME_DATA 0x1D and MSG_NEW_GAME 0x1E, and InitGameLogicRandom.
+// It returns whether a shell game is (or stays) running; the second flag
+// restarts one already running. The rest of the body after the early
+// return-false is that test's else block: that keeps retail's inline early
+// return-true block for a running shell game, which the end jumps back to.
+struct ShellMapGlobalData
+{
+	unsigned char _pad[0xABC];
+	AsciiString m_initialFile; // +0xABC
+	AsciiString m_pendingFile; // +0xAC0
+	unsigned char _padAC4[0xAEC - 0xAC4];
+	AsciiString m_shellMapName; // +0xAEC
+	Bool m_shellMapOn; // +0xAF0
+};
+class GameMessage
+{
+public:
+	void appendIntegerArgument(int arg);
+};
+class ShellMessageStream
+{
+public:
+	virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+	virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+	virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+	virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+	virtual void s16(); virtual void s17();
+	virtual GameMessage *appendMessage(int type);
+};
+class MessageStream;
+extern MessageStream *TheMessageStream;
+#define TheShellMessageStream ((ShellMessageStream *)TheMessageStream)
+struct ShellLinearCampaignManager
+{
+	unsigned char _pad[0x10];
+	int m_10;
+};
+class LinearCampaignManager;
+extern LinearCampaignManager *TheLinearCampaignManager;
+#define TheShellLinearCampaignManager ((ShellLinearCampaignManager *)TheLinearCampaignManager)
+class W3DDisplay
+{
+public:
+	void rva0025D2F6();
+};
+struct ShellGameLogic
+{
+	unsigned char _pad[0x110];
+	int m_gameMode; // +0x110
+};
+class GameLogic;
+extern GameLogic *TheGameLogic;
+#define TheShellGameLogic ((ShellGameLogic *)TheGameLogic)
+void InitGameLogicRandom(unsigned int seed);
+#define TheShellMapGlobalData ((ShellMapGlobalData *)TheGlobalData)
+
+Bool Shell::showShellMap(Bool useShellMap, Bool restartShellGame)
+{
+	if (useShellMap && TheLinearCampaignManager && TheShellLinearCampaignManager->m_10)
+		TheShellMessageStream->appendMessage(0x22);
+	m_byte52 = useShellMap && !TheShellMapGlobalData->m_shellMapOn;
+
+	if (!TheShellMapGlobalData->m_initialFile.isEmpty() || !TheGameLogic)
+		return false;
+	else
+	{
+		m_lowLODBackdropDone = false;
+		if (useShellMap && TheShellMapGlobalData->m_shellMapOn)
+		{
+			((W3DDisplay *)TheDisplay)->rva0025D2F6();
+			((Rva0035BD3F *)this)->rva0035BD3F();
+			if (TheShellGameLogic->m_gameMode == 4 && !restartShellGame) return true;
+			if (TheShellGameLogic->m_gameMode != 9)
+				TheShellMessageStream->appendMessage(0x1D);
+			TheShellMapGlobalData->m_pendingFile = TheShellMapGlobalData->m_shellMapName;
+			InitGameLogicRandom(0);
+			GameMessage *msg = TheShellMessageStream->appendMessage(0x1E);
+			msg->appendIntegerArgument(4);
+			return true;
+		}
+
+		((W3DDisplay *)TheDisplay)->rva0025D2F6();
+		((Rva0035BD3F *)this)->rva0035BD3F();
+		if (TheShellGameLogic->m_gameMode == 4)
+			TheShellMessageStream->appendMessage(0x1D);
+		return false;
 	}
 }
