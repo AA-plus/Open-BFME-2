@@ -282,6 +282,104 @@ long __cdecl Rva00077D0FLoad(const char *strFilePath, unsigned long *pHandle)
 // the smudge manager probes and set by startRenderToTexture.
 bool W3DShaderManager::m_renderingToTexture;
 
+// Retail 0x00077E05 (345 bytes plus its catch funclet), the assembled-source sibling of
+// Rva00077D0FLoad: the file is read into a terminated heap copy, D3DXAssembleShader (thunk
+// 0x0062AF3E) turns it into shader code, and the pixel shader is created from the assembled
+// buffer. A failed assembly with an error buffer is retried, up to ten attempts; any other
+// failure reports through the same messages and returns E_FAIL.
+class Rva00077E05ShaderBuffer
+{
+public:
+	virtual long __stdcall QueryInterface(const void *iid, void **object);
+	virtual unsigned long __stdcall AddRef();
+	virtual unsigned long __stdcall Release();
+	virtual void *__stdcall GetBufferPointer();
+};
+
+extern long __stdcall Rva0062AF3E(const char *source, unsigned long size,
+	const void *defines, void *include, unsigned long flags,
+	Rva00077E05ShaderBuffer **shader, Rva00077E05ShaderBuffer **errors);
+
+// Retail keeps the file handle in memory at [ebp-0x24], directly above the FileInfo
+// block, and reloads it for close ahead of the terminator store: one frame record whose
+// address escapes through getFileInfo gives that slot, and the close receiver is read
+// into a register before the store.
+struct Rva00077E05FileRead
+{
+	FileInfo info;
+	File *file;
+};
+
+long __cdecl Rva00077E05Load(const char *strFilePath, unsigned long *pHandle)
+{
+	try
+	{
+		for (int attempt = 0; attempt < 10; ++attempt)
+		{
+			Rva00077E05ShaderBuffer *shader = 0;
+			Rva00077E05ShaderBuffer *errors = 0;
+			Rva00077E05FileRead fr;
+			fr.file = TheFileSystem->openFile(strFilePath, File::READ | File::BINARY, 0);
+			if (fr.file == 0) {
+				OutputDebugStringA(g_shaderMsgNotFound);
+				return (long)0x80004005L;
+			}
+
+			{
+				AsciiString path(strFilePath);
+				TheFileSystem->getFileInfo(path, &fr.info);
+			}
+			unsigned long fileSize = fr.info.sizeLow;
+
+			char *source = (char *)HeapAlloc(GetProcessHeap(), 8, fileSize + 8);
+			if (source == 0) {
+				OutputDebugStringA(g_shaderMsgNoMemory);
+				return (long)0x80004005L;
+			}
+
+			((Rva00077D0FFileView *)fr.file)->read(source, fileSize);
+			Rva00077D0FFileView *file = (Rva00077D0FFileView *)fr.file;
+			source[fileSize] = 0;
+			file->close();
+
+			long hr = Rva0062AF3E(source, fileSize, 0, 0, 0, &shader, &errors);
+			HeapFree(GetProcessHeap(), 0, source);
+			if (hr < 0) {
+				if (shader) {
+					shader->Release();
+					shader = 0;
+				}
+				if (errors == 0)
+					return (long)0x80004005L;
+				errors->GetBufferPointer();
+				errors->Release();
+				if (attempt >= 9)
+					return (long)0x80004005L;
+				continue;
+			}
+			IDirect3DDevice8 *device = DX8Wrapper::_Get_D3D_Device8();
+			hr = device->m_vtable->m_createShaderB(device,
+				(const unsigned long *)shader->GetBufferPointer(), pHandle);
+			if (shader) {
+				shader->Release();
+				shader = 0;
+			}
+			if (hr < 0) {
+				OutputDebugStringA(g_shaderMsgCreateFail);
+				return (long)0x80004005L;
+			}
+			break;
+		}
+	}
+	catch (...)
+	{
+		OutputDebugStringA("Error opening file \n");
+		return (long)0x80004005L;
+	}
+
+	return 0;
+}
+
 // Existing native pointer storage DE1F68, previously declared as an integer.
 IDirect3DTexture8 *W3DShaderManager::m_renderTexture;
 
