@@ -197,3 +197,10 @@ bool WW3D::Prepare_Render_New_Frame()
 	}
 	return true;
 }
+
+// Retail 0x00117F10 (28 bytes), the class table's Delete slot (0x007CFBF8): the command
+// interface destroys itself through its virtual destructor and the global operator delete.
+void Rva007ACBC0CmdInterface::Delete()
+{
+	::delete this;
+}
