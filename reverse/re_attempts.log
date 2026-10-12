@@ -41167,3 +41167,4 @@ FUN_0071A372	0x0031A372	543	partial	Native31A372..31A591 complete543B RET12 and 
 ??0Rva00598E85@@QAE@PAX@Z	0x00598E85	131	landed	add_match verified Code/GameEngine/Source/GameLogic/AI/Rva00598E85Ctor.cpp 131B; t=6 model=claude-opus-5-5
 ??0TerrainLogic@@QAE@XZ	0x00283FAA	466	landed	add_match verified Code/GameEngine/Source/GameLogic/Map/TerrainLogicCtor.cpp 466B; t=25 model=claude-opus-5-5
 ?Rva000D1D26Identity@@YAHH@Z	0x000D1D26	5	landed	add_match verified Code/GameEngine/Source/GameLogic/Map/TerrainLogicCtor.cpp 5B; t=25 model=claude-opus-5-5
+??0Rva00062A7EProduct@@QAE@XZ	0x00062A7E	70	landed	add_match verified Code/GameEngine/Source/GameLogic/Map/TerrainLogicCtor.cpp 70B; t=6 model=claude-opus-5-5

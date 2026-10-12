@@ -118,8 +118,10 @@ protected:
 	virtual void xfer(Xfer *xfer);
 	virtual void loadPostProcess();
 
+protected:
+	Int m_18;											// +0x18 (Zero Hour's m_mapData)
+
 private:
-	Int m_18;											// +0x18
 	Int m_1C;											// +0x1C
 	Int m_20;											// +0x20
 	Int m_24;											// +0x24
@@ -176,4 +178,34 @@ TerrainLogic::TerrainLogic()
 	((Rva005A0B4CList *)m_54.m_ptr)->append((Rva002BA8F1Listener *)static_cast<TerrainLogicListenerA *>(this));
 	((Rva005A0B4CList *)m_58.m_ptr)->append((Rva002BA8F1Listener *)static_cast<TerrainLogicListenerB *>(this));
 	m_584 = new Rva00283081(100.0f, (int)&Rva000D1D26Identity);
+}
+
+// ??0Rva00062A7EProduct@@QAE@XZ, retail 0x00062A7E..0x00062AC4 (70 bytes):
+// W3DTerrainLogic's constructor (pinned under its address name; the factory
+// slot 14 of vtable 0x00BC25E0 calls it after new 0x1924, and its destructor
+// is the rowed Rva0062AF7). Zero Hour's body exactly: m_mapMinZ(0),
+// m_mapMaxZ(1), m_mapData = NULL, over this unit's TerrainLogic layout (the
+// ported Zero Hour unit's header places the members elsewhere). Its own
+// tables 0x00BC5890/+4 0x00BC5858; the two listener tables fold with
+// TerrainLogic's.
+class Rva00062A7EProduct : public TerrainLogic
+{
+public:
+	Rva00062A7EProduct();
+	virtual ~Rva00062A7EProduct();
+	virtual void vslot0();
+
+protected:
+	virtual void crc(Xfer *xfer);
+	virtual void xfer(Xfer *xfer);
+	virtual void loadPostProcess();
+
+private:
+	Real m_mapMinZ;										// +0x191C
+	Real m_mapMaxZ;										// +0x1920
+};
+
+Rva00062A7EProduct::Rva00062A7EProduct() : m_mapMinZ(0), m_mapMaxZ(1)
+{
+	m_18 = 0;
 }
