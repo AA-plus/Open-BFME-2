@@ -1,4 +1,6 @@
 // ?rva00055E6C@MilesAudioManager@@QAE_NABVAsciiString@@HHH@Z
+// partial score=0.99 date=2026-10-12
+// ?rva00055E6C@MilesAudioManager@@QAE_NABVAsciiString@@HHH@Z
 // partial score=0.99 date=2026-10-10
 // ?rva00055E6C@MilesAudioManager@@QAE_NABVAsciiString@@HHH@Z
 // banked 2026-10-10: 352B vs 350B, loop1+loop2-body exact, sole residue
