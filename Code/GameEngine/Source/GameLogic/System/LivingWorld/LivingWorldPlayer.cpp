@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /EHsc /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /ICode/Libraries/Source/WWVegas/WWLib
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/iniexception /O1 /G7 /EHsc /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /ICode/Libraries/Source/WWVegas/WWLib
 // stlport
 // LivingWorldPlayer.cpp -- LivingWorldPlayer members recovered from
 // WorldBuilder leads (reverse/wb_name_leads.csv): WB's debug build names the
@@ -23,7 +23,11 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 #include <vector>
 #include "FixedStorage128.h"
-#include "../../../../../../reference/shims/bfme2_ascii/string_base.h"
+#include "ascii_string.h"
+#include "unicode_string.h"
+#include "Common/INIException.h"
+
+class INI;
 
 namespace _STL
 {
@@ -120,6 +124,8 @@ class LivingWorldPlayer
 {
 public:
 	typedef _STL::vector<void *> ArmyVec;
+
+	static void ParseLivingWorldPlayer(INI *ini, void *instance);
 
 	void OnUnitDequeued(Rva00319CED *unit);
 	void SetColorIndex(Int color);
@@ -273,4 +279,126 @@ int LivingWorldPlayer::rva002E199E(const void *thing)
         if (name.compare(wanted)==0) return record.key;
     }
     return 0;
+}
+
+// WB DE74D0 names LivingWorldPlayer::ParseLivingWorldPlayer at source lines
+// 1489..1499. Both retail2E1D22 and WB share the two error literals, null-input
+// checks, getNextToken/initFromINI and two conditional lookup calls before
+// LivingWorldCampaign::AddPlayer. The two consumed stack arguments are INI*
+// and an instance pointer; no stronger original instance type is asserted.
+// Replace the split-out free-function placeholder and manual throw/zero
+// ThrowInfo anchor with this named static callback and ordinary C++ throws.
+// The record's original class/type names remain unknown; keep its rowed views.
+// Retail body241B and EH handler778800 remain under their existing boundaries.
+struct FieldParse
+{
+	const char *token;
+	void (__cdecl *parse)(INI *ini, void *instance, void *store, const void *userData);
+	const void *userData;
+	int offset;
+};
+
+class INI
+{
+public:
+	const char *getNextToken(const char *seps);
+	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
+	static void parseInt(INI *ini, void *instance, void *store, const void *userData);
+	static void parseBool(INI *ini, void *instance, void *store, const void *userData);
+};
+
+// The parsers retail's LivingWorldPlayer table reaches, each an already-rowed
+// body: INI::parseAsciiString (0x0002F11E), INI::parseInt (0x0002EF56) and
+// INI::parseBool (0x0002E850). Declared with the real INI* first argument so the
+// records below bind to those rowed symbols.
+
+// Retail VA 0x00C049D8 (.rdata, file offset 0x00800E18): the seven field records
+// of the 0x28-byte LivingWorldPlayer and the zero terminator, 128 bytes - the
+// ledger's own bound. Four names through INI::parseAsciiString at +0xC/+0x10/
+// +0x14 (the three template/region strings of the rowed record's +0x8 AsciiString
+// pair) and three ints/bools at +0x18..+0x24. Every parse target is a rowed,
+// byte-matched body.
+// The full eight-record array emits ?g_00C049D8@@3QBUFieldParse@@B;
+// its sizeof128 and every retail pointer are verified by data_rows.csv.
+extern const struct FieldParse g_00C049D8[] =
+{
+	{ "PlayerTemplate",    &INI::parseAsciiString, 0, 0x0C },
+	{ "AITemplate",        &INI::parseAsciiString, 0, 0x10 },
+	{ "BaseRegion",        &INI::parseAsciiString, 0, 0x14 },
+	{ "MP_SlotColorIndex", &INI::parseInt,         0, 0x18 },
+	{ "IsDumb",             &INI::parseBool,        0, 0x24 },
+	{ "TeamNumber",         &INI::parseInt,         0, 0x1C },
+	{ "LWHandicap",         &INI::parseInt,         0, 0x20 },
+	{ 0, 0, 0, 0 }
+};
+
+class Rva002E18C3Lookup
+{
+public:
+	AsciiString *find(const AsciiString &name);
+};
+
+extern class Rva002E18C3Lookup *Va00DFF0B0Lookup;
+extern class Rva002E18C3Lookup *Va00E03140Lookup;
+
+class Rva002E0F1E
+{
+public:
+	virtual ~Rva002E0F1E();
+	UnicodeString m_04;
+	AsciiString m_08;
+	AsciiString m_0c;
+	AsciiString m_10;
+	AsciiString m_14;
+	int m_18;
+	int m_1c;
+	int m_20;
+	bool m_24;
+};
+
+class Rva002E0EF7 : public Rva002E0F1E
+{
+public:
+	Rva002E0EF7();
+};
+
+class Rva002E0A0A
+{
+	char opaque[40];
+};
+
+class LivingWorldCampaign
+{
+public:
+	void AddPlayer(const Rva002E0A0A &arg);
+};
+
+void LivingWorldPlayer::ParseLivingWorldPlayer(INI *ini, void *instance)
+{
+	if (ini == 0 || instance == 0)
+	{
+		throw INIException(3, "ParseLivingWorldPlayer::Invalid data passed in.");
+	}
+	Rva002E0EF7 record;
+	const char *tok = ini->getNextToken(0);
+	record.m_08 = tok;
+	if (record.m_08.getLength() == 0)
+	{
+		throw INIException(3, "ParseLivingWorldPlayer::No name specified.");
+	}
+	ini->initFromINI(&record, g_00C049D8);
+	AsciiString *found = Va00DFF0B0Lookup->find(record.m_0c);
+	if (found == 0)
+		goto done;
+	if (record.m_24)
+		goto append;
+	{
+		AsciiString *found2 = Va00E03140Lookup->find(record.m_10);
+		if (found2 == 0)
+			goto done;
+	}
+append:
+	((LivingWorldCampaign *)instance)->AddPlayer(*(const Rva002E0A0A *)&record);
+done:;
 }

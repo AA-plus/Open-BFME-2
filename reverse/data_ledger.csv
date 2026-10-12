@@ -4971,7 +4971,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00804934,20,.rdata,string,??_C@_0BE@DGLHJEGP@DefaultGoodArmyIcon?$AA@,,literal,,0,1
 0x00804948,92,.rdata,vtable,??_7Rva002E0A0A@@6B@,,literal,??_7Rva002E0A0A@@6B@;??_7Rva002E0EF7@@6B@,0,2
 0x008049A4,52,.rdata,string,??_C@_0DA@OEICDJHI@ParseLivingWorldPlayer?3?3Invalid?5@,,literal,,0,1
-0x008049D8,128,.rdata,global,?g_00C049D8@@3UFieldParse@@B,,unowned,,0,1
+0x008049D8,128,.rdata,global,?g_00C049D8@@3QBUFieldParse@@B,Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldPlayer.cpp,owned,,1,1
 0x00804A58,44,.rdata,string,??_C@_0CL@KAJCNJLG@ParseLivingWorldPlayer?3?3No?5name?5@,,literal,,0,1
 0x00804A84,56,.rdata,vtable,??_7Rva002E1F42@@6B@,,literal,,0,2
 0x00804ABC,52,.rdata,string,??_C@_0DD@BMDNOIIA@LivingWorldPlayerTemplateStore?3?3@,,literal,,0,2
