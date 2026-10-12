@@ -1,4 +1,6 @@
 // ?parseBlendTileData@WorldHeightMap@@QAE_NAAVDataChunkInput@@PAUDataChunkInfo@@@Z
+// partial score=0.9991 date=2026-10-12
+// ?parseBlendTileData@WorldHeightMap@@QAE_NAAVDataChunkInput@@PAUDataChunkInfo@@@Z
 // partial score=0.96923828125 date=2026-10-11
 // stlport
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /DNDEBUG /DWIN32 /D_WINDOWS
@@ -109,8 +111,8 @@ bool WorldHeightMap::parseBlendTileData(DataChunkInput &file,DataChunkInfo *info
         m_textureClasses[i].name=file.readAsciiString();
         readTexClass(&m_textureClasses[i],m_sourceTiles);
     }
-    m_numEdgeTextureClasses=0;
     m_numEdgeTiles=0;
+    m_numEdgeTextureClasses=0;
     Sleep(0);
     if(info->version>=4) {
         m_numEdgeTiles=file.readInt();
@@ -157,7 +159,7 @@ bool WorldHeightMap::parseBlendTileData(DataChunkInput &file,DataChunkInfo *info
     }
     if(info->version==1) {
         int newWidth=(m_width+1)/2,newHeight=(m_height+1)/2;
-        for(i=0;i<newHeight;++i) {
+        for(int i=0;i<newHeight;++i) {
             for(j=0;j<newWidth;++j) {
                 m_tileNdxes[i*newWidth+j]=m_tileNdxes[2*i*m_width+2*j];
                 m_blendTileNdxes[i*newWidth+j]=0;
