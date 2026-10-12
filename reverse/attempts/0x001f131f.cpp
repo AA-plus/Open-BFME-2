@@ -1,4 +1,6 @@
 // ?GetAssetList@GenericObjectCreationNugget@@UBEXAAVAssetList@@PAX@Z
+// partial score=0.9885 date=2026-10-12
+// ?GetAssetList@GenericObjectCreationNugget@@UBEXAAVAssetList@@PAX@Z
 // partial score=0.9885244652686512 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
 // Native1F131F..1F14B6; GenericObjectCreationNugget table7E1160 slot4
