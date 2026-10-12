@@ -1,1732 +1,571 @@
 // _CommUdpProcess
-// partial score=0.9148432708594602 date=2026-10-10
-// _CommUdpProcess
-// Standalone bank: faithful home-TU graft at verified BFME1 pointer 575ba2b04.
-// Current 2026-10-10 /Od /GZ /GS baseline has the exact first 0x5A3 bytes.
-// A discarded constant conditional around the callback reaches fitness .95899
-// but adds a 4-byte frame temporary and seven instructions; it is only a
-// diagnostic for callback register coloring and is not the banked semantics.
-// No source or pin change is landed. Only use the normal verification gates.
-// _CommUdpProcess
-// partial score=0.9 date=2026-10-07
-// _CommUdpProcess
-// partial score=0.9 date=2026-09-22, campaign 2026-09-23 (peppy-penguin)
+// partial score=0.65 date=2026-10-12
 // cl: /DNDEBUG /MD /GX /Od /GZ /GS
-// Near miss for _CommUdpProcess at 0x00683A30 (2207 bytes). Drop this function
-// into Code/Libraries/Source/DirtySock/commudp.cpp in place of the 'Convert to
-// real C++ separately' note, and change that file's extern "C" prototype to
-// int CommUdpProcess(unsigned int tick) (its caller already passes tick).
-// GRAFT RECIPE (proven 2026-09-23: compiles+links, all callees resolve): add
-// the 7 missing callees to the TU extern "C" block with C linkage exactly as
-// Rva007FDA50/Rva007FF720/Rva008186C0/Rva008187E0/Rva00818620/Rva00816F60/
-// Rva00818AD0 (C decls match the _Rva rows; C++ decls do NOT resolve). The 3
-// globals (g_commUdpRecv/g_commUdpSplit/g_commUdpRefs) need NO pins: DIR32
-// slots are copied from retail and consistency-verified. Add the row with
-// State: the frame (0x44, /GZ guards around fromLength and from[]) and the first
-// 0x5A3 bytes match exactly. After the indirect callback at +0x592 retail picks
-// ecx where this picks eax for the next statement, and from there 155 of 162
-// diffs are pure eax/ecx/edx permutation (the rest are 1-byte jump shifts that
-// follow from it). Tried: 3 decrement spellings, 3 call spellings, struct-member
-// call, &&/?: guards, /RTC1 /RTCsu /RTCsc, and compiling as C -- no change. With
-// /GZ removed the choice is still eax, so the ESP check is not the trigger.
-// 2026-09-23 PROBE CAMPAIGN (build/probe_*.cpp+*.py harness, ignored scratch:
-// compile_source + read_object_symbol_bytes + capstone; faithful harness proven
-// when the full-body probe reproduces the TU's EAX-home exactly): REFUTED as
-// flip levers -- expanded-assign/prefix-dec/post-dec-paren/+ -1 decrement forms;
-// decl-order perms x10 (slots move but home stays EAX; only same-slot perms are
-// TU-viable); empty-else x4 + comma-RMW + do-while-0 + nested-if-first-conjunct;
-// init-hoisting x2 + break-to-goto x2 + pre/post-inc x2; uchar-ref dropped as too
-// invasive; char-socket + unsigned-count + redundant-char-casts; &&/||
-// associativity + not-canonicalization + nested-last-conjunct; __assume/assert
-// no-ops. PROVEN: removing the dispatch block flips to ECX (so the trigger is
-// dispatch interference in global coloring), as do dropping the compare call,
-// the Setup call, or the socket conjunct -- but all change upstream bytes and
-// are NOT TU-viable. for-to-while on loop2 flips to ECX but loses the retail
-// loop-entry jmp (eb 09) so it breaks the prefix. Sole wall stands: post-call
-// ref home ECX (retail) vs EAX (all shapes). Next levers untried: struct-typed
-// ref member access (also a readability win), truthiness loop conditions.
+
+#define _DLL
+#include <string.h>
+
+// EA's DirtySock CommUDP transport, which BFME uses for its GameSpy/online
+// traffic. It has no counterpart in the vendored Zero Hour reference, and no
+// __FILE__ string for it survives in the executable, so the directory name here
+// is inferred from the module prefixes retail logs -- commudp, commtcp,
+// protoadvt, NetGameUtil -- and from the sibling EA middleware that already
+// lives under Code/Libraries/Source (Compression/EAC). Move it if better
+// evidence turns up; only the `source` column of these rows has to follow.
 //
-// 2026-10-07 (claude-opus-5-5, t=75): REWRITTEN STRUCT-TYPED IN ITS HOME TU.
-// The body below drops straight into Code/Libraries/Source/DirtySock/
-// Y4CommTransportLife.c (C, same TU as CommUdpSetup/CommUdpPoke and the tick
-// pump that calls it; place it just before the `// _g_Rva0130AD08Count:` line)
-// with two struct edits in struct Rva00816BF0Comm:
-//   m_name[0x20] at +0x4C becomes m_name[0x10] followed by
-//   int m_dataSent (+0x5C), m_dataRecv (+0x60), m_packSent (+0x64),
-//   m_packRecv (+0x68); and m_gap5[0x114] becomes
-//   unsigned int m_tickIdle (+0xE0) + m_gap5[0x110].
-// Rename the TU's Rva00817B30 prototype/call to CommUdpProcess, and in
-// commudp.cpp change `int CommUdpProcess();` to `(unsigned int tick)`; drop
-// the _Rva00817B30 pin in reverse/symbols.csv when landing. Same wall: first
-// 0x5A3 bytes exact, then retail's next statement starts in ecx, ours in eax
-// (188 masked diffs, all rotation). Further REFUTED this session: callback
-// return types void/char/short/uchar/__int64/void*/float, unprototyped and
-// variadic typedefs, (void) cast, comma, `if (call);` (test is dropped),
-// ternary-void guard, base-struct pointer cast of the first argument,
-// function-pointer-typed field with and without (*f)(), (*(T*)&field),
-// array-indexed and byte-offset call targets, -=/--x/x-- decrements, empty
-// else x4, no-op statements after the call x5, truthiness conditions on the
-// loops/guards, and compiling the whole TU as C++. Survey of all matched
-// DirtySock/GameSpy /GZ bodies: every rotation skip after a call is a call
-// whose result is consumed through a pointer store (`p->f = call()`); no
-// matched body skips after a discarded result.
-extern "C" {
-// cl: /Od /GZ /GS /MD /DNDEBUG
-/* EA DirtySock -- the construct/destroy pair for a THIRD comm transport,
- * distinct again from the two in Y4CommRingIdle.c and Y4CommTickIdle.c.  Its
- * lock sits at +0x1F4 where theirs are at +0x1EC and +0x1E8, and its object is
- * 0x224 bytes where theirs are smaller; the constructor's own allocation size
- * settles that.
- *
- * WHAT THE OBJECT IS.  Its first fourteen words are a table of FUNCTION
- * POINTERS, filled in one by one, and the first two entries are this file's
- * own two bodies -- construct at +0x00 and destroy at +0x04.  That is
- * DirtySock's usual shape for a transport: a plain C struct whose leading
- * fields are the operations, so a caller holds one pointer and reaches
- * everything through it.  The other twelve land in the address range
- * commudp.cpp already occupies, which is what places this pair.
- *
- * The remaining pointer operands are declared address-derived and asserted to
- * be nothing more: they are DIR32 sites, so the gate fills them from retail
- * and the names below never reach the bytes.
- */
-
-void *Rva007F0000Alloc( int size );
-void Rva007F0030( void *object );
-int Rva007FE780( const char *format, ... );
-unsigned int Rva007FEA00( void );
-void *__cdecl memset( void *destination, int value, unsigned int count );
-void *__cdecl memcpy( void *destination, const void *source,
-	unsigned int count );
-char *__cdecl _mbscpy( char *destination, const char *source );
-
-// g_Rva012C4DF4: matched references place it at VA 0xdd954c (retail .data initial value 0x20000000u).
-unsigned int g_Rva012C4DF4 = 0x20000000u;
-
-/* Lock construct and destruct; the acquire and release live in the socket
- * unit and are already named there. */
-void Rva007FEA20( void *lock );
-void Rva007FEAA0( void *lock );
-
-void Rva00817210Op( void );
-void Rva00817230Op( void );
-void Rva00818D90Op( void );
-void Rva00819300Op( void );
-void Rva008171C0Op( void );
-void Rva008173A0Op( void );
-void Rva008173C0Op( void );
-void Rva00818BF0Op( void );
-void Rva00818D20Op( void );
-
-struct Rva00816BF0Comm
-{
-	/* +0x00..+0x34, and the first two are this file's own bodies. */
-	void *m_op[ 14 ];
-	void ( __cdecl *m_sendProc )( struct Rva00816BF0Comm *comm,
-		const void *payload, int length, unsigned int tick ); /* +0x38 */
-	/* THE RECEIVE CALLBACK, called by 0x008187E0 with the transport, the
-	 * payload, its length and its arrival tick.  Null means nobody is
-	 * listening and the record is still queued. */
-	void ( __cdecl *m_receiveProc )( struct Rva00816BF0Comm *comm,
-		const void *payload, int length, unsigned int tick );  /* +0x3C */
-	char m_gap0b[ 0x08 ];
-	/* A SECOND COPY of the socket pointer.  0x00816DF0 writes the same value
-	 * to this and to +0x7C in consecutive statements; nothing converted so far
-	 * reads this one, so what it is for is not yet established -- only that it
-	 * is kept in step. */
-	struct Rva007FD4E0Socket *m_socketAlias;        /* +0x48 */
-	/* THE NAME BUFFER IS 0x20, NOT the 0x2C the next field's offset alone
-	 * suggested: 0x00818500 writes endpoint fields starting at +0x6C, which
-	 * is where the buffer has to stop. */
-	char m_name[ 0x10 ]; int m_dataSent,m_dataRecv,m_packSent,m_packRecv;            /* +0x4C */
-	/* The four endpoint fields, at the same offsets the ring transport uses
-	 * for them -- local address, peer address, local port, peer port, with
-	 * the ports as shorts.  Two different objects agreeing on this run and on
-	 * +0x7C suggests a shared header, though nothing converted so far proves
-	 * one. */
-	unsigned int m_localAddress;    /* +0x6C */
-	unsigned int m_peerAddress;     /* +0x70 */
-	unsigned short m_localPort;     /* +0x74 */
-	unsigned short m_peerPort;      /* +0x76 */
-	struct Rva00816BF0Comm *m_next; /* +0x78 */
-	/* The socket OBJECT, not a handle: the destructor hands it straight to the
-	 * socket destroy at 0x007FD3F0. */
-	struct Rva007FD4E0Socket *m_socket;     /* +0x7C */
-	char m_peer[ 0x10 ];            /* +0x80 */
-	int m_state;                    /* +0x90 */
-	/* A HASH OF THE CONNECTION STRING'S TAIL.  0x00818FF0 finds the '#' in
-	 * the text it is given and hashes from there to the end, storing the
-	 * result here; the connect and close messages then carry it out as their
-	 * third word.  So it identifies which session on a host is meant, not the
-	 * host. */
-	int m_sessionHash;              /* +0x94 */
-	int m_recvRecordSize;           /* +0x98 */
-	int m_recvBufferSize;           /* +0x9C */
-	/* The two receive cursors.  0x00818BF0 compares them for emptiness and
-	 * reads the record at +0xA8 plus +0xA4, and 0x00818D20 advances +0xA4
-	 * after a successful read -- so +0xA0 is where records arrive and +0xA4 is
-	 * where they are taken from. */
-	int m_recvWriteOffset;          /* +0xA0 */
-	int m_recvReadOffset;           /* +0xA4 */
-	unsigned char *m_recvBuffer;    /* +0xA8 */
-	/* Both rings get a sequence set to 0x65 by the reset at 0x00819260 -- one
-	 * here and one at +0xD0 -- alongside their cursors being zeroed.  101 as a
-	 * starting sequence rather than 0 is what makes "never sent" and "sequence
-	 * zero" distinguishable on the wire. */
-	int m_recvSequence;             /* +0xAC */
-	/* A COPY of the receive sequence, taken by 0x00818AD0 immediately before
-	 * it reports one and used only to build that report.  Keeping the copy
-	 * rather than reading the live field twice is what makes the number sent
-	 * and the number remembered the same one. */
-	int m_reportedSequence;         /* +0xB0 */
-	int m_recvCounter;              /* +0xB4 */
-	int m_sendRecordSize;           /* +0xB8 */
-	int m_sendBufferSize;           /* +0xBC */
-	/* The two send cursors, proven by the depth calculation at 0x00817100:
-	 * the distance from +0xC4 to +0xC0 taken modulo the buffer size and
-	 * divided by the record size, which only reads as a count of records if
-	 * these are the write and read positions. */
-	int m_sendWriteOffset;          /* +0xC0 */
-	int m_sendReadOffset;           /* +0xC4 */
-	/* A THIRD SEND CURSOR, between the read and write ones.  The ack handler
-	 * at 0x008186C0 drags it along with the read cursor while retiring, and
-	 * snaps it back to the read cursor when a code-4 message arrives -- so it
-	 * marks how far transmission has got, distinctly from how far
-	 * acknowledgement has. */
-	int m_sendAckOffset;            /* +0xC8 */
-	unsigned char *m_sendBuffer;    /* +0xCC */
-	int m_sendSequence;             /* +0xD0 */
-	char m_gap4[ 0x04 ];
-	/* Two timestamps, both BACKDATED five seconds by the reset. */
-	unsigned int m_tickA;           /* +0xD8 */
-	unsigned int m_tickB;           /* +0xDC */
-	unsigned int m_tickIdle; char m_gap5[ 0x110 ];
-	char m_lock[ 4 ];               /* +0x1F4 */
-	char m_tail[ 0x20 ];
-	/* A RE-ENTRANCY DEPTH, raised across the whole of 0x008187E0 and lowered
-	 * again at its end -- including across the user callback, which is the
-	 * only place that could re-enter. */
-	int m_depth;                    /* +0x218 */
-	/* A FLAG WORD AND ITS VALUE, written together under the lock by
-	 * 0x008171C0: the value goes into +0x220 and bit 1 is set in +0x21C.  A
-	 * bit per installed thing beside the thing itself is how a caller can ask
-	 * "was this ever set" without a sentinel. */
-	int m_flags;                    /* +0x21C */
-	void *m_value;                  /* +0x220 */
-};
+// The surviving log strings establish the named entry points; the address-
+// derived Rva helpers are retained by their retail RVAs and call graph. They
+// are declared extern "C" because DirtySock is a C library.
+//
+// The lockstep path does not run through here -- that is SAGE's own udp.cpp.
 
 struct Rva007FD4E0Socket;
-int Rva007FD3F0( struct Rva007FD4E0Socket *socket );
+struct Rva007FF720SockAddr;
+struct Rva00816BF0Comm;
+struct Rva00816F60Message;
 
-extern char g_Rva012C4F88Name[];
-// g_Rva0130B188List: matched references place it at VA 0xe0aba0 (retail .data initial value 0).
-struct Rva00816BF0Comm *g_Rva0130B188List = 0;
-
-/* The disconnect pair and the status body sit after the constructor; it
- * stores their addresses into slots 5, 7 and 9. */
-int Rva00817240( struct Rva00816BF0Comm *comm );
-int Rva008172C0( struct Rva00816BF0Comm *comm );
-int Rva00817340( struct Rva00816BF0Comm *comm );
-
-struct Rva00816BF0Comm *Rva00816BF0( int maxPacket, int recvCount,
-	int sendCount );
-void Rva00816E70( struct Rva00816BF0Comm *comm );
-void Rva00816DF0( struct Rva00816BF0Comm *comm,
-	struct Rva007FD4E0Socket *socket );
-void Rva00816E10( struct Rva00816BF0Comm *comm );
-int Rva00816F60( struct Rva00816BF0Comm *comm );
-int Rva00817100( struct Rva00816BF0Comm *comm, int unused );
-void Rva00817140( struct Rva00816BF0Comm *comm );
-
-/* THE TWO QUEUE SIZINGS ARE THE INTERESTING PART, and they are identical:
- * a record is the caller's maximum packet plus 0x10 of per-record header --
- * which is where the timestamp at +0x00, the length at +0x04 and the leading
- * data byte come from -- then rounded UP to a multiple of four.
- *
- * The rounding is `(n + 3) & 0x7FFC`, an AND rather than a modulo, and the
- * mask does two jobs: it clears the low two bits for the alignment and it also
- * clears everything above 0x7FFC.  So a maximum packet larger than about 32KB
- * does not fail, it WRAPS to a small record size.  That is a real limit of
- * this constructor and nothing here checks for it.
- *
- * Neither buffer allocation is checked either, though the object's own is.
- */
-struct Rva00816BF0Comm *Rva00816BF0( int maxPacket, int recvCount,
-	int sendCount )
-{
-	struct Rva00816BF0Comm *comm;
-
-	comm = (struct Rva00816BF0Comm *)Rva007F0000Alloc( 0x224 );
-	if ( comm == 0 )
-		return 0;
-
-	memset( comm, 0, 0x224 );
-
-	comm->m_op[  0 ] = (void *)Rva00816BF0;
-	comm->m_op[  1 ] = (void *)Rva00816E70;
-	comm->m_op[  2 ] = (void *)Rva00817210Op;
-	comm->m_op[  3 ] = (void *)Rva00817230Op;
-	comm->m_op[  4 ] = (void *)Rva00818D90Op;
-	comm->m_op[  5 ] = (void *)Rva00817240;
-	comm->m_op[  6 ] = (void *)Rva00819300Op;
-	comm->m_op[  7 ] = (void *)Rva008172C0;
-	comm->m_op[  8 ] = (void *)Rva008171C0Op;
-	comm->m_op[  9 ] = (void *)Rva00817340;
-	comm->m_op[ 10 ] = (void *)Rva008173A0Op;
-	comm->m_op[ 11 ] = (void *)Rva008173C0Op;
-	comm->m_op[ 12 ] = (void *)Rva00818BF0Op;
-	comm->m_op[ 13 ] = (void *)Rva00818D20Op;
-
-	_mbscpy( comm->m_name, g_Rva012C4F88Name );
-	Rva007FEA20( comm->m_lock );
-
-	comm->m_recvRecordSize = maxPacket + 0x10;
-	comm->m_recvRecordSize = ( comm->m_recvRecordSize + 3 ) & 0x7FFC;
-	comm->m_recvBufferSize = comm->m_recvRecordSize * recvCount;
-	comm->m_recvBuffer = (unsigned char *)
-		Rva007F0000Alloc( comm->m_recvBufferSize );
-
-	comm->m_sendRecordSize = maxPacket + 0x10;
-	comm->m_sendRecordSize = ( comm->m_sendRecordSize + 3 ) & 0x7FFC;
-	comm->m_sendBufferSize = comm->m_sendRecordSize * sendCount;
-	comm->m_sendBuffer = (unsigned char *)
-		Rva007F0000Alloc( comm->m_sendBufferSize );
-
-	Rva00816DF0( comm, 0 );
-
-	memset( comm->m_peer, 0, 0x10 );
-	comm->m_state = 1;
-	comm->m_sessionHash = 0;
-
-	Rva00816E10( comm );
-	return comm;
+extern "C" {
+	int CommUDPWrite(void *ref, void *packet);
+	int CommUDPConnect(void *ref, const char *addr, int bind, int peer);
+	int CommUDPResolve(void *ref, const char *addr, char *buffer, int length, char divider);
+	int Rva007FD920(void *socket, const void *data, int length, int flags, void *address, int addressLength);
+	unsigned int Rva007FEA00();
+	int Rva007FFDD0(unsigned int *address, int *port, int *extra, const char *text);
+	void *Rva007FD2D0(int family, int type, int protocol);
+	int Rva007FD510(void *socket, const void *address, int addressLength);
+	void Rva007FD3F0(void *socket);
+	void Rva00818FF0(void *ref, const char *text);
+	int Rva00819590(void *ref, void *socket, const void *peerAddress);
+	void Rva007FEBD0(void *lock);
+	void Rva007FECB0(void *lock);
+	void Rva00817640(void *ref);
+	int Rva007FDA50(struct Rva007FD4E0Socket *socket, char *buffer, int length, int flags, char *from, int *fromLength);
+	int Rva007FF720(const struct Rva007FF720SockAddr *first, const struct Rva007FF720SockAddr *second);
+	int CommUdpProcess(unsigned int tick);
+	void Rva008186C0(struct Rva00816BF0Comm *comm, struct Rva00816F60Message *message);
+	int Rva008187E0(struct Rva00816BF0Comm *comm, struct Rva00816F60Message *record);
+	int Rva00818620(struct Rva00816BF0Comm *comm);
+	void Rva00818AD0(struct Rva00816BF0Comm *comm);
+	int Rva00816F60(struct Rva00816BF0Comm *comm);
+	struct Rva00816BF0Comm *g_Rva0130B188List;
 }
 
-/* THE SOCKET IS SHARED, AND THIS IS WHERE THAT SHOWS.  Before destroying it
- * the body walks the global list of transports looking for ANOTHER one using
- * the same socket, and destroys it only if none is found.  That is a
- * reference count done by search rather than by counter -- cheap when the list
- * is short, and it means the socket outlives whichever transport happens to be
- * torn down first.
- *
- * The scan relies on this object already being unlinked from that list; the
- * unlink is one of the two calls made before it.
- *
- * The three frees at the end are in allocation order -- receive buffer, send
- * buffer, then the object -- and none of them is null-checked, which is
- * consistent with the constructor never checking the two buffer allocations
- * either.
- */
-void Rva00816E70( struct Rva00816BF0Comm *comm )
-{
-	struct Rva00816BF0Comm *p;
-
-	Rva00817100( comm, 0xC8 );
-	Rva00817140( comm );
-
-	if ( comm->m_state == 4 )
-		Rva00816F60( comm );
-
-	if ( comm->m_socket != 0 )
-	{
-		for ( p = g_Rva0130B188List; p != 0; p = p->m_next )
-		{
-			if ( p->m_socket == comm->m_socket )
-				break;
-		}
-
-		if ( p == 0 )
-		{
-			Rva007FD3F0( comm->m_socket );
-			Rva00816DF0( comm, 0 );
-		}
-	}
-
-	Rva007FEAA0( comm->m_lock );
-	Rva007F0030( comm->m_recvBuffer );
-	Rva007F0030( comm->m_sendBuffer );
-	Rva007F0030( comm );
-}
-
-/* The registry the transports keep themselves in, and the lock guarding it.
- * Both are constructed and destroyed BY the register and unregister bodies
- * below rather than by any module init. */
-extern struct Rva00816BF0Comm *g_Rva0130B188List;
-extern char g_Rva0130AF38Lock[ 4 ];
+extern "C" char g_Rva0130AF38Lock[4];
 extern int g_Rva0130AD08Count;
 
-void Rva007FEBD0( void *lock );
-void Rva007FECB0( void *lock );
+int Rva007FE780Printf(const char *format, ...);
+// The C++ printf spelling and rowed C printer both resolve to retail VA 0x0066AC50.
+#pragma comment(linker, "/alternatename:?Rva007FE780Printf@@YAHPBDZZ=_Rva007FE780")
 
-/* 0x00816DF0 attaches or detaches the socket, and writes it to TWO fields --
- * +0x7C and +0x48 -- one after the other.  The constructor and the destructor
- * both call it with a null socket, so it is also the detach.
- */
-void Rva00816DF0( struct Rva00816BF0Comm *comm,
-	struct Rva007FD4E0Socket *socket )
+// Always fails: it logs "CommUDPResolve: Resolve functionality not supported by
+// CommUDP" and returns the error.
+int CommUDPResolve(void *ref, const char *addr, char *buffer, int length, char divider)
 {
-	comm->m_socket = socket;
-	comm->m_socketAlias = socket;
+	Rva007FE780Printf("CommUDPResolve: Resolve functionality not supported by CommUDP\n");
+	return -1;
 }
 
-/* 0x00816E10 REGISTERS the transport, and the interesting part is that it
- * builds its own lock on the way.
- *
- * The list head being null is taken to mean "nothing has registered yet", and
- * on that path the lock is CONSTRUCTED and a counter zeroed before anything
- * else.  So there is no module initialiser for this registry: the first
- * registration creates it and, in the unregister below, the last one destroys
- * it.  THAT LAZY CONSTRUCTION IS ITSELF UNGUARDED -- the lock cannot protect
- * its own creation -- so two threads registering the first two transports at
- * once would race.  Retail's, and stated rather than quietly fixed.
- *
- * The insertion itself is an ordinary push at the head, under the lock.
- */
-void Rva00816E10( struct Rva00816BF0Comm *comm )
+extern "C" void Rva00817230(void)
 {
-	if ( g_Rva0130B188List == 0 )
-	{
-		Rva007FEA20( g_Rva0130AF38Lock );
-		g_Rva0130AD08Count = 0;
-	}
-
-	Rva007FEBD0( g_Rva0130AF38Lock );
-
-	comm->m_next = g_Rva0130B188List;
-	g_Rva0130B188List = comm;
-
-	Rva007FECB0( g_Rva0130AF38Lock );
 }
 
-/* 0x00817140 UNREGISTERS it, and mirrors the lazy construction: when the list
- * empties, the lock is destroyed again.
- *
- * The unlink walks a POINTER TO the link rather than the node, so the head and
- * every interior link are one case -- the same technique the socket destroy in
- * the socket unit uses.
- *
- * THE SEARCH HAS NO TERMINATION GUARD.  Its only exit is finding the node; a
- * transport that is not on the list walks off the end of the chain.  Nothing
- * here checks for null, and the constructor is what makes that safe, since a
- * transport is registered before it can be handed out.  It is still a real
- * hazard and is not something to add a check for -- the check would change the
- * bytes.
- *
- * The lock is released BEFORE the emptiness test, so the destroy happens
- * outside it, which is the only order that can work: destroying a lock you
- * still hold would not.
- */
-void Rva00817140( struct Rva00816BF0Comm *comm )
+// Hands a datagram to the socket layer, logging "CommUDPWrite: SocketSendto
+// returned %d" on the way out.
+int CommUDPWrite(void *ref, void *packet)
 {
-	struct Rva00816BF0Comm **ppLink;
-
-	Rva007FEBD0( g_Rva0130AF38Lock );
-
-	for ( ppLink = &g_Rva0130B188List; *ppLink != comm;
-		ppLink = &( *ppLink )->m_next )
-	{
-		/* the search is the whole loop */
-	}
-
-	*ppLink = comm->m_next;
-
-	Rva007FECB0( g_Rva0130AF38Lock );
-
-	if ( g_Rva0130B188List == 0 )
-		Rva007FEAA0( g_Rva0130AF38Lock );
-}
-
-/* 0x00817100 REPORTS THE SEND QUEUE DEPTH -- and it is not what its call site
- * suggested.  The destructor invokes it with a second argument of 0xC8, which
- * reads like a timeout, and discards the result; this body IGNORES that
- * argument entirely and returns a count of outstanding records.
- *
- * Both facts are stated rather than smoothed over.  The parameter is declared
- * because the call site pushes it -- two arguments and an eight-byte cleanup
- * -- but nothing here reads it, so a one-parameter definition would compile to
- * the same bytes and misdescribe the interface.  Whether retail meant this to
- * drain for 0xC8 milliseconds and never finished it is not something the bytes
- * can say.
- */
-int Rva00817100( struct Rva00816BF0Comm *comm, int unused )
-{
-	return ( ( comm->m_sendWriteOffset + comm->m_sendBufferSize
-		- comm->m_sendReadOffset ) % comm->m_sendBufferSize )
-		/ comm->m_sendRecordSize;
-}
-
-/* 0x00816F60 is the CLOSE, and it only runs from state 4 -- the state the
- * handshake's 0x13 packet drives the connection into.  Anything else returns
- * immediately, which is why the destructor guards its call the same way.
- *
- * It builds a message on the stack the size of the transport object itself,
- * fills in exactly three words of it, and hands it to 0x00817030.  The third
- * of those carries +0x94 out of the object, and the field is cleared straight
- * afterwards -- so whatever it holds is being handed OVER rather than copied,
- * and the object must not keep it.
- *
- * THE MESSAGE IS OTHERWISE UNINITIALISED.  Only +0x00, +0x08 and +0x0C are
- * written; the rest is whatever the /GZ fill left.  The recipient therefore
- * reads at most those three, and the size is a buffer allowance rather than a
- * payload.
- *
- * State goes to 5 last, so 4 means "peer asked to close" and 5 means "close
- * has been sent".
- */
-struct Rva00816F60Message
-{
-	/* THE PAYLOAD LENGTH, not a kind.  The control senders set it to zero and
-	 * that reads either way; 0x008187E0 settles it by testing this field for
-	 * zero to reject an empty data record, and the submit at 0x00817030 uses
-	 * it as the length it puts on the wire. */
-	int m_length;                   /* +0x00 */
-	unsigned int m_tick;            /* +0x04, the arrival stamp once queued */
-	/* EITHER A CONTROL CODE OR THE MESSAGE'S OWN SEQUENCE, and the two share
-	 * the field without ambiguity because sequences start at 0x65: 1 is
-	 * connect, 3 is close, 4 is a retransmit request, and anything from 101
-	 * upwards is a data sequence.  That is what the reset's odd-looking choice
-	 * of 0x65 buys -- it reserves a hundred values for control. */
-	int m_code;                     /* +0x08 */
-	/* A session hash for the control codes, an acknowledged sequence for the
-	 * data ones. */
-	int m_value;                    /* +0x0C */
-	/* 0x228 in total, four bytes MORE than the transport object -- close, but
-	 * not the same type, so the size is taken from the frame rather than
-	 * assumed to be a copy of the object. */
-	char m_body[ 0x218 ];
-};
-
-/* Returns the submit result; the close discards it, 0x00818620 returns it. */
-int Rva00817030( struct Rva00816BF0Comm *comm,
-	struct Rva00816F60Message *message );
-
-int Rva00816F60( struct Rva00816BF0Comm *comm )
-{
-	struct Rva00816F60Message packet;
-
-	if ( comm->m_state != 4 )
-		return 0;
-
-	packet.m_length = 0;
-	packet.m_code = 3;
-	packet.m_value = comm->m_sessionHash;
-
-	Rva00817030( comm, &packet );
-
-	comm->m_sessionHash = 0;
-	comm->m_state = 5;
-	return 0;
-}
-
-/* 0x008171C0 installs a value and RECORDS THAT IT WAS INSTALLED, both under
- * the lock.  The value lands at +0x220 and bit 1 is set in the flag word at
- * +0x21C.  Setting a bit beside the value rather than relying on the value
- * being non-null is what lets a caller install a null one and still have it
- * count -- and it is why the two writes have to be atomic with respect to each
- * other, which is what the lock is doing here.
- */
-void Rva008171C0( struct Rva00816BF0Comm *comm, void *value )
-{
-	Rva007FEBD0( comm->m_lock );
-
-	comm->m_value = value;
-	comm->m_flags = comm->m_flags | 2;
-
-	Rva007FECB0( comm->m_lock );
-}
-
-/* 0x00817240 DISCONNECTS, returning the transport to the state the constructor
- * left it in, and the interesting part is what happens to the socket.
- *
- * If the connection is established, the socket pointer is CLEARED FIRST.  That
- * makes the block below it unreachable, so an established transport gives up
- * its socket WITHOUT closing it -- consistent with the destructor's scan,
- * which exists precisely because a socket can be shared.  From any other state
- * the socket is closed and destroyed.  The two paths are written as separate
- * ifs and only their order makes them exclusive; reading them as an if/else
- * would describe the same behaviour but not these bytes.
- *
- * It also opens by calling the queue-depth body with 0xC8 and discarding the
- * result, exactly as the destructor does -- the same call, the same unused
- * argument, the same ignored answer, in both of the places that would want a
- * drain.
- */
-int Rva00817240( struct Rva00816BF0Comm *comm )
-{
-	Rva00817100( comm, 0xC8 );
-
-	if ( comm->m_state == 3 )
-		Rva00816DF0( comm, 0 );
-
-	if ( comm->m_socket != 0 )
-	{
-		Rva00816F60( comm );
-		Rva007FD3F0( comm->m_socket );
-		Rva00816DF0( comm, 0 );
-	}
-
-	comm->m_state = 1;
-	return 0;
-}
-
-/* 0x008172C0 IS A SECOND COPY OF THE DISCONNECT ABOVE.  The two bodies are
- * identical byte for byte except for their call displacements, which differ
- * only because the functions sit at different addresses -- so this is real
- * duplicated code that the linker did NOT fold, not one function reached two
- * ways.
- *
- * Which of the two the operation table points at is settled elsewhere: the
- * constructor stores 0xC172C0 into the table, so THIS is the entry point a
- * caller reaches through the object, and 0x00817240 is the copy reached some
- * other way.  Nothing here says why there are two; both are converted because
- * both addresses are real code and the ledger needs each claimed.
- */
-int Rva008172C0( struct Rva00816BF0Comm *comm )
-{
-	Rva00817100( comm, 0xC8 );
-
-	if ( comm->m_state == 3 )
-		Rva00816DF0( comm, 0 );
-
-	if ( comm->m_socket != 0 )
-	{
-		Rva00816F60( comm );
-		Rva007FD3F0( comm->m_socket );
-		Rva00816DF0( comm, 0 );
-	}
-
-	comm->m_state = 1;
-	return 0;
-}
-
-/* 0x00817340 MAPS THE INTERNAL STATE ONTO A SMALLER PUBLIC ONE, and the
- * grouping is the interesting part because it LOSES information deliberately.
- *
- *   internal 2 or 3  ->  2      connecting and established report the same
- *   internal 1 or 5  ->  1      never opened and closed report the same
- *   internal 4       ->  3      peer asked to close
- *   anything else    ->  4
- *
- * So a caller polling this CANNOT TELL "still connecting" FROM "connected",
- * nor "fresh" from "finished".  Anything wanting that has to read +0x90
- * directly.  The pairs are written as separate comparisons joined by ||, not
- * as a switch, which is what keeps this a chain of tests rather than a table.
- */
-int Rva00817340( struct Rva00816BF0Comm *comm )
-{
-	if ( comm->m_state == 2 || comm->m_state == 3 )
-		return 2;
-
-	if ( comm->m_state == 1 || comm->m_state == 5 )
-		return 1;
-
-	if ( comm->m_state == 4 )
-		return 3;
-
-	return 4;
-}
-
-int Rva007FEB00( void *lock );
-
-/* 0x00818D20 forwards four arguments and advances the receive cursor only when
- * the inner call reports success, so a failure leaves the slot to be retried.
- * Nothing here inspects the four, so their types are not recoverable and they
- * are declared as plain words rather than guessed at -- converting 0x00818BF0
- * is what would settle them.
- */
-/* Settled by converting it: a buffer, a size and an optional out-pointer,
- * not the plain words this was declared as while nothing had inspected it. */
-int Rva00818BF0( struct Rva00816BF0Comm *comm, void *buffer, int size,
-	unsigned int *when );
-
-int Rva00818D20( struct Rva00816BF0Comm *comm, void *buffer, int size,
-	unsigned int *when )
-{
-	int iResult;
-
-	iResult = Rva00818BF0( comm, buffer, size, when );
-
-	if ( iResult >= 0 )
-	{
-		comm->m_recvReadOffset = ( comm->m_recvReadOffset + comm->m_recvRecordSize )
-			% comm->m_recvBufferSize;
-	}
-
-	return iResult;
-}
-
-/* 0x00818CB0 is the GLOBAL PUMP, and it finally explains the counter the
- * registry zeroes when it builds the lock.
- *
- * The lock is TRIED.  On success the tick is read ONCE and the worker is
- * driven with that same timestamp until it reports nothing left to do -- so a
- * whole pass shares one consistent time rather than sampling per iteration,
- * the same discipline the other transport's callback uses.  The counter is
- * then cleared.
- *
- * ON FAILURE THE COUNTER IS INCREMENTED INSTEAD.  So +0x0130AD08 counts
- * CONSECUTIVE MISSED PUMPS -- how many times the pump was called while another
- * thread held the lock -- and any successful pass resets it to zero.  That is
- * a contention measure, not a total, and neither body alone shows it: the
- * registry only zeroes it at construction, and this one only makes sense once
- * both branches are read together.
- *
- * The driving loop has an EMPTY BODY; all the work is in the condition.
- *
- * ITS THREE PARAMETERS ARE THE SOCKET-CALLBACK SIGNATURE and none of them is
- * read.  0x00818BF0 calls it as (0, 0, comm) -- handle, flags, ref -- which is
- * exactly how this library installs socket callbacks everywhere else, so the
- * pump is both installed as one and called directly.  A no-argument definition
- * compiles to identical bytes, since the body only touches globals, but it
- * would misdescribe the interface and no caller could then pass anything.
- */
-int CommUdpProcess( unsigned int tick );
-
-int Rva00818CB0( unsigned int socket, int flags,
-	struct Rva00816BF0Comm *ref )
-{
-	unsigned int uTick;
-
-	if ( Rva007FEB00( g_Rva0130AF38Lock ) != 0 )
-	{
-		uTick = Rva007FEA00();
-
-		while ( CommUdpProcess( uTick ) > 0 )
-		{
-			/* the work is the condition */
+	int result;
+	int packetLength = *(int *)packet + 8;
+	result = Rva007FD920(*(void **)((char *)ref + 0x7C),
+	                     (char *)packet + 8, packetLength, 0,
+	                     (char *)ref + 0x80, 0x10);
+	if (result == packetLength) {
+		*(unsigned int *)((char *)ref + 0xD8) = Rva007FEA00();
+		*(int *)((char *)ref + 0x5C) += packetLength;
+		++*(int *)((char *)ref + 0x64);
+		if (*(int *)((char *)packet + 8) != 6) {
+			*(int *)((char *)ref + 0xB4) = 0;
 		}
-
-		g_Rva0130AD08Count = 0;
-		Rva007FECB0( g_Rva0130AF38Lock );
+	} else {
+		Rva007FE780Printf("CommUDPWrite: SocketSendto returned %d\n", result);
+		*(int *)((char *)ref + 0xD4) = result;
+		result = -1;
 	}
-	else
-	{
-		g_Rva0130AD08Count = g_Rva0130AD08Count + 1;
+	return result;
+}
+
+// Opens the port. Logs "CommUdpConnect: addr=%08x, bind=%d, peer=%d
+// connident=0x%08x" on entry and "CommUDPConnect: bind to %d failed with %d"
+// when the bind is refused, then retries with port 0.
+int CommUDPConnect(void *ref, const char *addr, int bind, int peer)
+{
+	int result;
+	int iConnPort;
+	int iListenPort;
+	unsigned int uAddr;
+	void *socket;
+	unsigned char bindaddr[0x10];
+	unsigned char peeraddr[0x10];
+	unsigned int temp;
+
+	*(unsigned short *)&peeraddr[0] = 2;
+	*(unsigned short *)&peeraddr[2] = 0;
+	*(unsigned int *)&peeraddr[4] = 0;
+	*(unsigned int *)&peeraddr[8] = 0;
+	*(unsigned int *)&peeraddr[12] = 0;
+	*(unsigned short *)&bindaddr[0] = 2;
+	*(unsigned short *)&bindaddr[2] = 0;
+	*(unsigned int *)&bindaddr[4] = 0;
+	*(unsigned int *)&bindaddr[8] = 0;
+	*(unsigned int *)&bindaddr[12] = 0;
+	result = Rva007FFDD0(&uAddr, &iListenPort, &iConnPort, addr);
+	if ((result & 3) != 3) {
+		return -3;
 	}
-
-	return 0;
-}
-
-/* A RECEIVED RECORD in this transport, and its header is 0x10 bytes -- exactly
- * the per-record overhead the constructor adds to the caller's maximum packet
- * size, which is what fixes the payload offset.
- *
- * NOTE THIS IS NOT THE OTHER TRANSPORT'S RECORD.  There the length sits at
- * +0x04 and the payload at +0x08 behind a one-byte header; here the length is
- * at +0x00, the timestamp at +0x04, and the payload starts at +0x10 with no
- * header byte.  Two transports, two wire formats.
- */
-struct Rva00818BF0Record
-{
-	int m_length;                   /* +0x00 */
-	unsigned int m_tick;            /* +0x04 */
-	char m_reserved[ 0x08 ];
-	unsigned char m_data[ 4 ];      /* +0x10 */
-};
-
-/* 0x00818BF0 DEQUEUES ONE RECEIVED RECORD.  Same double test as the other
- * transport's: pump only if the queue looks empty, then re-test, so a pump
- * that produced nothing still returns -7 rather than reading a stale slot.
- *
- * THE COPY IS CLAMPED AND THE RETURN IS NOT, again: a caller with a buffer
- * smaller than the record gets a truncated copy and the FULL length back, so
- * comparing the two is the only way to notice.  Unlike the other transport
- * there is no minus-one here -- the stored length IS the payload length,
- * because this record format has no header byte inside the payload.
- */
-int Rva00818BF0( struct Rva00816BF0Comm *comm, void *buffer, int size,
-	unsigned int *when )
-{
-	struct Rva00818BF0Record *record;
-	int iCopy;
-
-	if ( comm->m_recvReadOffset == comm->m_recvWriteOffset )
-		Rva00818CB0( 0, 0, comm );
-
-	if ( comm->m_recvReadOffset == comm->m_recvWriteOffset )
-		return -7;
-
-	record = (struct Rva00818BF0Record *)( comm->m_recvBuffer
-		+ comm->m_recvReadOffset );
-
-	if ( record->m_length < size )
-		iCopy = record->m_length;
-	else
-		iCopy = size;
-
-	memcpy( buffer, record->m_data, iCopy );
-
-	if ( when != 0 )
-		*when = record->m_tick;
-
-	return record->m_length;
-}
-
-char *__cdecl strchr( const char *text, int ch );
-
-/* 0x00818FF0 computes the SESSION HASH from a connection string.
- *
- * It looks for a '#' and does nothing at all if there is none -- the field
- * keeps whatever it had, rather than being cleared -- then hashes from the
- * '#' INCLUSIVE to the end of the string.  Including the separator is
- * deliberate in the sense that the bytes show it: the scan starts at the
- * pointer strchr returned, not one past it.
- *
- * The hash is the same rotating-XOR used at 0x007FF080 in the socket unit:
- * top five bits saved, accumulator shifted left five, saved bits brought back
- * at the bottom by an ARITHMETIC shift right of 27, character folded in last.
- * The sar is what makes the accumulator signed, and the character is read with
- * movsx, so the text is plain char.
- */
-void Rva00818FF0( struct Rva00816BF0Comm *comm, const char *text )
-{
-	char *p;
-	int i;
-	int uHash;
-	int uCarry;
-
-	p = strchr( text, '#' );
-
-	if ( p != 0 )
-	{
-		for ( i = 0, uHash = 0; p[ i ] != 0; i++ )
-		{
-			uCarry = uHash & 0xF8000000;
-			uHash = uHash << 5;
-			uHash = ( uCarry >> 27 ) ^ uHash;
-			uHash = p[ i ] ^ uHash;
-		}
-
-		comm->m_sessionHash = uHash;
+	if (iConnPort == 0) {
+		iConnPort = iListenPort;
+		++iListenPort;
 	}
+	Rva00818FF0(ref, addr);
+	Rva007FE780Printf("CommUdpConnect: addr=%08x, bind=%d, peer=%d connident=0x%08x\n",
+	                   uAddr, iListenPort, iConnPort, *(int *)((char *)ref + 0x94));
+	socket = Rva007FD2D0(2, 2, 0);
+	if (socket == 0) {
+		return -4;
+	}
+	bindaddr[2] = (unsigned char)(iListenPort >> 8);
+	bindaddr[3] = (unsigned char)iListenPort;
+	result = Rva007FD510(socket, bindaddr, 0x10);
+	if (result < 0) {
+		Rva007FE780Printf("CommUDPConnect: bind to %d failed with %d\n", iListenPort, result);
+		bindaddr[2] = 0;
+		bindaddr[3] = 0;
+		result = Rva007FD510(socket, bindaddr, 0x10);
+		Rva007FE780Printf("CommUDPConnect: bind to 0 with result %d\n", result);
+	}
+	if (result < 0) {
+		Rva007FD3F0(socket);
+		return -5;
+	}
+	temp = uAddr;
+	peeraddr[7] = (unsigned char)temp; temp >>= 8;
+	peeraddr[6] = (unsigned char)temp; temp >>= 8;
+	peeraddr[5] = (unsigned char)temp; temp >>= 8;
+	peeraddr[4] = (unsigned char)temp;
+	peeraddr[2] = (unsigned char)(iConnPort >> 8);
+	peeraddr[3] = (unsigned char)iConnPort;
+	*(int *)((char *)ref + 0xD4) = 0;
+	return Rva00819590(ref, socket, peeraddr);
 }
 
-/* 0x00818620 SENDS THE CONNECT MESSAGE, and it is the close's counterpart:
- * the same stack message, the same three words filled in, differing only in
- * the code -- 1 here against 3 there.
- *
- * TWO DIFFERENCES FROM THE CLOSE ARE WORTH NOTING.  There is no state guard,
- * so this can be sent from any state; and the session hash is NOT cleared
- * afterwards, where the close clears it.  So connect carries the hash and
- * keeps it, and close carries it and gives it up -- which is consistent with
- * the field identifying the session for as long as one is wanted.
- *
- * It also returns the submit result, where the close discards it.
- */
-int Rva00818620( struct Rva00816BF0Comm *comm )
-{
-	struct Rva00816F60Message packet;
-
-	packet.m_length = 0;
-	packet.m_code = 1;
-	packet.m_value = comm->m_sessionHash;
-
-	return Rva00817030( comm, &packet );
+extern "C" {
+	void CommUdpSetup(void *ref, void *packet, void *from);
+	int CommUdpPoke(void *ref);
+	int CommUdpListen(void *ref, const char *text);
+	int CommUDPSend(void *ref, const void *buffer, int length, int flags);
+	void Rva00818500(void *ref, void *from);
+	int Rva00819090(void *ref, void *socket, const void *address);
 }
 
-/* 0x00819260 RESETS THE CONNECTION without touching the buffers themselves --
- * only the cursors, the counters, the two sequences and the two clocks.  So it
- * is a reuse path: the allocations the constructor made survive it.
- *
- * BOTH SEQUENCES START AT 0x65, NOT ZERO.  Starting at 101 is what lets a peer
- * tell "nothing has been sent yet" from "sequence zero arrived", which a
- * zero-initialised sequence cannot express.
- *
- * BOTH CLOCKS ARE BACKDATED FIVE SECONDS, the same trick the handshake uses
- * with one second: setting them to the past rather than to now makes the first
- * timeout comparison behave as though the interval had already elapsed, so
- * whatever they gate fires immediately instead of waiting out a full period.
- * The two calls are separate, so the two fields can differ by however long the
- * first one took.
- */
-void Rva00819260( struct Rva00816BF0Comm *comm )
+// Answers an INIT with a CONN, and warns "commudp: warning - connident
+// mismatch" when the connection identifier does not line up.
+void CommUdpSetup(void *ref, void *packet, void *from)
 {
-	comm->m_sendWriteOffset = 0;
-	comm->m_sendReadOffset = 0;
-	comm->m_sendAckOffset = 0;
-	comm->m_sendSequence = 0x65;
-
-	comm->m_recvWriteOffset = 0;
-	comm->m_recvReadOffset = 0;
-	comm->m_recvSequence = 0x65;
-	comm->m_recvCounter = 0;
-
-	comm->m_tickA = Rva007FEA00() - 5000;
-	comm->m_tickB = Rva007FEA00() - 5000;
-}
-
-/* The socket callback installer from the socket unit.  Its second argument is
- * a small INTEGER here -- 2 -- not a pointer, which is worth recording because
- * that unit's own name for the field it lands in reads like a callback. */
-int Rva007FDE80( struct Rva007FD4E0Socket *socket, int mask, unsigned int rate,
-	void *data,
-	int ( __cdecl *proc )( unsigned int, int, struct Rva00816BF0Comm * ) );
-
-/* 0x00819590 ADOPTS A SOCKET and starts connecting on it.
- *
- * THE CALLER GIVES UP THE SOCKET EITHER WAY.  If the transport is not idle the
- * body DESTROYS the socket it was handed and returns -2 -- it does not hand it
- * back -- so a caller must not keep using one it passed in, whatever the
- * return value.  That is the kind of ownership rule a signature cannot carry
- * and only the failure path shows.
- *
- * On the accepting path the old socket is detached first, the connection is
- * reset, the peer address is copied in, the new socket is attached, and the
- * global pump is installed as that socket's callback at a 100ms rate.  THAT
- * INSTALL IS THE PROOF that the pump's three unread parameters really are the
- * socket-callback signature: it is registered here as one.
- */
-int Rva00819590( struct Rva00816BF0Comm *comm,
-	struct Rva007FD4E0Socket *socket, const void *peer )
-{
-	if ( comm->m_state != 1 )
-	{
-		Rva007FD3F0( socket );
-		return -2;
+	if (*(int *)packet != 0) {
+		return;
 	}
 
-	Rva00816DF0( comm, 0 );
-	Rva00819260( comm );
-
-	memcpy( comm->m_peer, peer, 0x10 );
-
-	Rva00816DF0( comm, socket );
-	Rva007FDE80( socket, 2, 0x64, 0, Rva00818CB0 );
-
-	comm->m_state = 2;
-	return 0;
-}
-
-int Rva007FDB60( struct Rva007FD4E0Socket *socket, int selector, void *buffer,
-	int bufferLength );
-int Rva007FDEE0( void );
-
-// g_Rva012C4D48Message: matched references place it at VA 0xdd94a0; retail contents, sized to the
-// 0xb0-byte gap before the next known global there.
-char g_Rva012C4D48Message[176] = {
-	99, 111, 109, 109, 117, 100, 112, 58,
-	32, 112, 101, 101, 114, 61, 48, 120,
-	37, 48, 56, 120, 58, 37, 100, 44,
-	32, 104, 111, 115, 116, 61, 48, 120,
-	37, 48, 56, 120, 58, 37, 100, 10,
-	0, 0, 0, 0, 67, 111, 109, 109,
-	85, 68, 80, 87, 114, 105, 116, 101,
-	58, 32, 83, 111, 99, 107, 101, 116,
-	83, 101, 110, 100, 116, 111, 32, 114,
-	101, 116, 117, 114, 110, 101, 100, 32,
-	37, 100, 10, 0, 99, 111, 109, 109,
-	117, 100, 112, 58, 32, 119, 97, 114,
-	110, 105, 110, 103, 32, 45, 32, 99,
-	111, 110, 110, 105, 100, 101, 110, 116,
-	32, 109, 105, 115, 109, 97, 116, 99,
-	104, 10, 0, 0, 67, 111, 109, 109,
-	85, 100, 112, 83, 101, 116, 117, 112,
-	58, 32, 115, 101, 110, 100, 105, 110,
-	103, 32, 67, 79, 78, 78, 32, 105,
-	110, 32, 114, 101, 115, 112, 111, 110,
-	115, 101, 32, 116, 111, 32, 73, 78,
-	73, 84, 10, 0, 0, 0, 0, 32,
-};
-
-/* 0x00818500 RECORDS BOTH ENDPOINTS, and it is the same body the ring
- * transport has at 0x00816160 -- same field offsets, same order, same 'bind'
- * query, differing only in which message it logs through.  Two transports with
- * two objects and one shared piece of code, duplicated rather than shared.
- *
- * As there, THE LOCAL ADDRESS DOES NOT COME FROM THE BIND QUERY.  A bound
- * socket's own address is usually 0.0.0.0, so the routing query at 0x007FDEE0
- * is used instead -- the body whose purpose was corrected once already, and
- * this is a second independent caller storing its result as a local address.
- */
-void Rva00818500( struct Rva00816BF0Comm *comm, const unsigned char *from )
-{
-	char SockAddr[ 0x10 ];
-
-	comm->m_peerAddress = ( ( ( ( from[ 4 ] << 8 ) | from[ 5 ] ) << 8 )
-		| from[ 6 ] ) << 8 | from[ 7 ];
-	comm->m_peerPort = (unsigned short)( ( from[ 2 ] << 8 ) | from[ 3 ] );
-
-	Rva007FDB60( comm->m_socket, 'bind', SockAddr, 0x10 );
-
-	comm->m_localAddress = Rva007FDEE0();
-	comm->m_localPort = (unsigned short)
-		( ( ( (unsigned char *)SockAddr )[ 2 ] << 8 )
-		| ( (unsigned char *)SockAddr )[ 3 ] );
-
-	Rva007FE780( g_Rva012C4D48Message, comm->m_peerAddress, comm->m_peerPort,
-		comm->m_localAddress, comm->m_localPort );
-}
-
-/* A QUEUED SEND RECORD carries its sequence number at +0x08.  Only that field
- * is established here; the rest of the layout belongs to whatever builds these,
- * which is not in this file. */
-struct Rva008186C0SendRecord
-{
-	int m_reserved0;
-	int m_reserved4;
-	unsigned int m_sequence;        /* +0x08 */
-};
-
-/* 0x00817640 is the address-derived send kick.  Its identity comes from the
- * two retransmit callers and the complete body shape, not from a surviving
- * diagnostic string. */
-void Rva00817640( struct Rva00816BF0Comm *comm )
-{
-	int iOffset;
-	int iCount;
-	int iBudget;
-	int iChunk;
-	struct Rva00816F60Message multi;
-	struct Rva00816F60Message *record;
-	unsigned int uNextCode;
-
-	iBudget = 0x800;
-	iChunk = 0x200;
-	iOffset = comm->m_sendReadOffset;
-
-	for ( ; iOffset != comm->m_sendAckOffset;
-		iOffset = ( iOffset + comm->m_sendRecordSize )
-			% comm->m_sendBufferSize )
-	{
-		record = (struct Rva00816F60Message *)( comm->m_sendBuffer
-			+ iOffset );
-		iBudget = iBudget - record->m_length;
-	}
-
-	if ( iBudget < 0x100
-		&& Rva007FEA00() - comm->m_tickA > 0xFA )
-	{
-		iBudget = 0x100;
-	}
-
-	while ( iBudget > 0 )
-	{
-		iChunk = 0x218;
-		if ( iChunk > iBudget )
-			iChunk = iBudget;
-
-		iCount = 0;
-		for ( ; iCount < 8 && iChunk > 0
-			&& comm->m_sendAckOffset != comm->m_sendWriteOffset;
-			++iCount )
-		{
-			record = (struct Rva00816F60Message *)( comm->m_sendBuffer
-				+ comm->m_sendAckOffset );
-			iChunk = iChunk - ( record->m_length + 1 );
-
-			if ( iCount > 0 && iChunk <= 0 )
-				break;
-
-			comm->m_sendAckOffset = ( comm->m_sendAckOffset
-				+ comm->m_sendRecordSize ) % comm->m_sendBufferSize;
-
-			if ( record->m_length > 0xFA )
-			{
-				++iCount;
-				break;
+		if (*(int *)((char *)packet + 0x0C) != *(int *)((char *)ref + 0x94)) {
+			Rva007FE780Printf("commudp: warning - connident mismatch\n");
+			if (*(int *)((char *)packet + 8) == 1) {
+				*(int *)((char *)ref + 0x90) = 5;
 			}
-		}
-
-		if ( iCount == 0 )
-			break;
-
-		iOffset = ( comm->m_sendAckOffset + comm->m_sendBufferSize
-			- comm->m_sendRecordSize ) % comm->m_sendBufferSize;
-		record = (struct Rva00816F60Message *)( comm->m_sendBuffer
-			+ iOffset );
-		memcpy( &multi, record, record->m_length + 0x10 );
-		--iCount;
-
-		for ( ; iCount > 0; --iCount )
-		{
-			iOffset = ( iOffset + comm->m_sendBufferSize
-				- comm->m_sendRecordSize ) % comm->m_sendBufferSize;
-			record = (struct Rva00816F60Message *)( comm->m_sendBuffer
-				+ iOffset );
-
-			if ( comm->m_sendProc != 0 )
-				comm->m_sendProc( comm, record->m_body,
-					record->m_length, 0 );
-
-			multi.m_code += 0x10000000;
-			memcpy( multi.m_body + multi.m_length, record->m_body,
-				record->m_length );
-			multi.m_length += record->m_length;
-			multi.m_body[ multi.m_length ] =
-				(unsigned char)record->m_length;
-			++multi.m_length;
-		}
-
-		while ( iOffset != comm->m_sendReadOffset
-			&& (unsigned int)multi.m_code <= g_Rva012C4DF4 )
-		{
-			iOffset = ( iOffset + comm->m_sendBufferSize
-				- comm->m_sendRecordSize ) % comm->m_sendBufferSize;
-			record = (struct Rva00816F60Message *)( comm->m_sendBuffer
-				+ iOffset );
-
-			if ( multi.m_length + record->m_length > 0x40 )
-				break;
-
-			if ( comm->m_sendProc != 0 )
-				comm->m_sendProc( comm, record->m_body,
-					record->m_length, 0 );
-
-			multi.m_code += 0x10000000;
-			memcpy( multi.m_body + multi.m_length, record->m_body,
-				record->m_length );
-			multi.m_length += record->m_length;
-			multi.m_body[ multi.m_length ] =
-				(unsigned char)record->m_length;
-			++multi.m_length;
-		}
-
-		if ( iOffset == comm->m_sendReadOffset )
-		{
-			g_Rva012C4DF4 = 0x20000000;
-		}
-		else
-		{
-			if ( g_Rva012C4DF4 < 0x80000000 )
-				uNextCode = g_Rva012C4DF4 << 1;
-			else
-				uNextCode = 0xF0000000;
-			g_Rva012C4DF4 = uNextCode;
-		}
-
-		comm->m_reportedSequence = comm->m_recvSequence;
-		multi.m_value = comm->m_reportedSequence - 1;
-		if ( Rva00817030( comm, &multi ) < 0 )
-			break;
-
-		iBudget = iBudget - multi.m_length;
-	}
-}
-
-/* 0x008186C0 IS THE ACKNOWLEDGEMENT HANDLER: it retires every queued send
- * whose sequence is at or below the one just acknowledged.
- *
- * THE ACKNOWLEDGED SEQUENCE IS OFF BY ONE FOR CODE 4 AND NOT FOR ANYTHING
- * ELSE.  A code-4 message means "I want sequence N next", so everything below
- * N is retired; any other code means "I have N", so N itself goes too.  That
- * single decrement is the whole difference between the two conventions, and
- * getting it backwards would retire one packet too many or too few every time.
- *
- * The comparison is UNSIGNED, so a sequence space that has wrapped past
- * 0x80000000 still retires correctly.
- *
- * Code 4 does one more thing: it snaps the transmit cursor back to the
- * acknowledgement cursor and kicks the sender.  That is a RETRANSMIT REQUEST
- * -- the peer is saying it wants N next, so everything from there on has to go
- * out again -- which is why the same message both retires and rewinds.
- *
- * The flag is computed once into a local with sete rather than tested twice;
- * both uses read that local.
- */
-void Rva008186C0( struct Rva00816BF0Comm *comm,
-	struct Rva00816F60Message *message )
-{
-	int bRewind;
-	unsigned int uAcked;
-	struct Rva008186C0SendRecord *record;
-	int iAcked;
-
-	bRewind = ( message->m_code == 4 );
-
-	if ( bRewind )
-		iAcked = message->m_value - 1;
-	else
-		iAcked = message->m_value;
-
-	uAcked = iAcked;
-
-	while ( comm->m_sendReadOffset != comm->m_sendWriteOffset )
-	{
-		record = (struct Rva008186C0SendRecord *)( comm->m_sendBuffer
-			+ comm->m_sendReadOffset );
-
-		if ( uAcked < record->m_sequence )
-			break;
-
-		if ( comm->m_sendAckOffset == comm->m_sendReadOffset )
-		{
-			comm->m_sendAckOffset = ( comm->m_sendAckOffset
-				+ comm->m_sendRecordSize ) % comm->m_sendBufferSize;
-		}
-
-		comm->m_sendReadOffset = ( comm->m_sendReadOffset
-			+ comm->m_sendRecordSize ) % comm->m_sendBufferSize;
-	}
-
-	if ( bRewind )
-	{
-		comm->m_sendAckOffset = comm->m_sendReadOffset;
-		Rva00817640( comm );
-	}
-}
-
-/* 0x00818AD0 IS THE IDLE DECISION: with nothing new to send, either retransmit
- * or acknowledge.
- *
- * If the send queue is non-empty AND the transmit cursor has caught up to the
- * write cursor -- everything queued has gone out and none of it has been
- * acknowledged -- it backs the transmit cursor up by ONE RECORD and kicks the
- * sender.  Backing up by subtracting the record size and taking the modulus,
- * rather than by comparing against the base, is what makes it wrap correctly
- * at the start of the ring.  So a stalled connection retransmits its most
- * recent packet rather than its oldest, which is the one an ack would be
- * answering.
- *
- * Otherwise it sends a bare message carrying its own sequence and the peer's
- * progress: code gets the send sequence, value gets the reported receive
- * sequence minus one.  The minus one is the same convention the ack handler
- * decodes -- "I want this next" rather than "I have this".
- *
- * The kind word is written LAST, after the two fields it describes, which is
- * retail's order and not the one a reader would write.
- */
-void Rva00818AD0( struct Rva00816BF0Comm *comm )
-{
-	struct Rva00816F60Message packet;
-
-	if ( comm->m_sendReadOffset != comm->m_sendWriteOffset
-		&& comm->m_sendAckOffset == comm->m_sendWriteOffset )
-	{
-		comm->m_sendAckOffset = ( comm->m_sendAckOffset
-			+ comm->m_sendBufferSize - comm->m_sendRecordSize )
-			% comm->m_sendBufferSize;
-
-		Rva00817640( comm );
-	}
-	else
-	{
-		packet.m_code = comm->m_sendSequence;
-		comm->m_reportedSequence = comm->m_recvSequence;
-		packet.m_value = comm->m_reportedSequence - 1;
-		packet.m_length = 0;
-
-		Rva00817030( comm, &packet );
-	}
-}
-
-/* The socket-address compare from the text unit: it compares only 6 bytes for
- * AF_INET, so two addresses agreeing on family, port and address compare equal
- * whatever their trailing bytes hold.  Returns 0 when they match. */
-int Rva007FF720( const void *a, const void *b );
-
-/* The bind wrapper from the socket unit. */
-int Rva007FD510( struct Rva007FD4E0Socket *socket, const void *address,
-	int addressLength );
-
-/* 0x00819090 BINDS -- and it is where SOCKET SHARING COMES FROM.
- *
- * Before binding anything it walks the global transport list looking for
- * another transport already bound to the SAME ADDRESS, asking each one's
- * socket for its bound address and comparing.  If it finds one it takes that
- * transport's socket and DESTROYS THE ONE IT WAS HANDED, so two transports end
- * up sharing a socket.  That is exactly the situation the destructor's
- * shared-socket scan exists to handle, and this body is the only place it can
- * arise.
- *
- * The comparison ignores the trailing eight bytes of an AF_INET address, so
- * two binds agreeing on family, port and address share even if those bytes
- * differ.
- *
- * THE CALLER GIVES UP THE SOCKET ON EVERY PATH: destroyed if the transport is
- * not idle, destroyed if a shared one is found, destroyed if the bind fails,
- * adopted otherwise.  There is no path that hands it back.
- *
- * A FAILED BIND LEAVES THE STATE AT 0, which is not one of the five values any
- * other body uses -- 1 through 5 are the live ones.  So 0 means "construction
- * got as far as binding and failed", a state the object cannot otherwise
- * reach, and nothing here moves it out again.
- *
- * On success the state is 3 whether the socket was shared or freshly bound; a
- * bound listener is treated as established from the start.
- */
-int Rva00819090( struct Rva00816BF0Comm *comm,
-	struct Rva007FD4E0Socket *socket, const void *address )
-{
-	/* Declared scalars-first: retail's frame has the result nearest ebp, then
-	 * the walk pointer, then the buffer. */
-	int iResult;
-	struct Rva00816BF0Comm *p;
-	char glueaddr[ 0x10 ];
-
-	if ( comm->m_state != 1 )
-	{
-		Rva007FD3F0( socket );
-		return -2;
-	}
-
-	Rva00816DF0( comm, 0 );
-	Rva00819260( comm );
-
-	memset( glueaddr, 0, 0x10 );
-	memset( comm->m_peer, 0, 0x10 );
-
-	for ( p = g_Rva0130B188List; p != 0; p = p->m_next )
-	{
-		/* THE FIRST TWO TESTS SHARE ONE CONTINUE, joined by ||, and the bytes
-		 * are specific about it: there is a SINGLE two-byte jump back to the
-		 * increment, with the first test jumping TO it and the second falling
-		 * INTO it.  Two separate continues would emit two such jumps, and an
-		 * && wrapping the rest would send both operands past the whole body
-		 * instead. */
-		if ( p == comm || p->m_socket == 0 )
-			continue;
-
-		if ( Rva007FDB60( p->m_socket, 'bind', glueaddr, 0x10 ) < 0 )
-			continue;
-
-		if ( Rva007FF720( address, glueaddr ) == 0 )
-		{
-			Rva00816DF0( comm, p->m_socket );
-			Rva007FD3F0( socket );
-			break;
-		}
-	}
-
-	if ( p == 0 )
-	{
-		iResult = Rva007FD510( socket, address, 0x10 );
-
-		if ( iResult < 0 )
-		{
-			comm->m_state = 0;
-			Rva007FD3F0( socket );
-			return -5;
-		}
-
-		Rva00816DF0( comm, socket );
-		Rva007FDE80( socket, 2, 0x64, 0, Rva00818CB0 );
-	}
-
-	comm->m_state = 3;
-	return 0;
-}
-
-// g_Rva012C4DF8Message: matched references place it at VA 0xdd9550; retail contents, sized to the
-// 0x190-byte gap before the next known global there.
-char g_Rva012C4DF8Message[400] = {
-	67, 111, 109, 109, 85, 68, 80, 58,
-	32, 73, 110, 112, 117, 116, 32, 98,
-	117, 102, 102, 101, 114, 32, 111, 118,
-	101, 114, 102, 108, 111, 119, 10, 0,
-	67, 111, 109, 109, 85, 100, 112, 80,
-	111, 107, 101, 58, 32, 115, 101, 110,
-	100, 105, 110, 103, 32, 112, 111, 107,
-	101, 32, 112, 97, 99, 107, 101, 116,
-	10, 0, 0, 0, 67, 111, 109, 109,
-	85, 100, 112, 80, 114, 111, 99, 101,
-	115, 115, 58, 32, 103, 111, 116, 32,
-	82, 65, 87, 95, 80, 65, 67, 75,
-	69, 84, 95, 73, 78, 73, 84, 10,
-	0, 0, 0, 0, 67, 111, 109, 109,
-	85, 100, 112, 80, 114, 111, 99, 101,
-	115, 115, 58, 32, 103, 111, 116, 32,
-	82, 65, 87, 95, 80, 65, 67, 75,
-	69, 84, 95, 67, 79, 78, 78, 10,
-	0, 0, 0, 0, 67, 111, 109, 109,
-	85, 68, 80, 58, 32, 99, 108, 111,
-	115, 105, 110, 103, 32, 99, 111, 110,
-	110, 101, 99, 116, 105, 111, 110, 32,
-	100, 117, 101, 32, 116, 111, 32, 116,
-	105, 109, 101, 111, 117, 116, 10, 0,
-	67, 111, 109, 109, 85, 68, 80, 58,
-	32, 116, 105, 99, 107, 61, 37, 100,
-	44, 32, 114, 116, 105, 99, 107, 61,
-	37, 100, 44, 32, 115, 116, 105, 99,
-	107, 61, 37, 100, 10, 0, 0, 0,
-	67, 111, 109, 109, 85, 68, 80, 58,
-	32, 114, 101, 99, 101, 105, 118, 101,
-	100, 32, 112, 111, 107, 101, 32, 112,
-	97, 99, 107, 101, 116, 32, 40, 102,
-	114, 111, 109, 61, 37, 48, 56, 120,
-	41, 10, 0, 0, 67, 111, 109, 109,
-	85, 100, 112, 58, 32, 112, 111, 107,
-	101, 32, 115, 111, 117, 114, 99, 101,
-	32, 61, 32, 37, 48, 56, 120, 32,
-	45, 45, 32, 102, 111, 114, 99, 105,
-	110, 103, 32, 109, 97, 116, 99, 104,
-	10, 0, 0, 0, 0, 0, 0, 0,
-	67, 111, 109, 109, 85, 68, 80, 58,
-	32, 99, 104, 97, 110, 103, 105, 110,
-	103, 32, 112, 101, 101, 114, 32, 116,
-	111, 32, 37, 48, 56, 120, 58, 37,
-	100, 32, 100, 117, 101, 32, 116, 111,
-	32, 112, 111, 107, 101, 32, 40, 119,
-	97, 115, 32, 101, 120, 112, 101, 99,
-	116, 105, 110, 103, 32, 37, 48, 56,
-	120, 58, 37, 100, 41, 10, 0, 0,
-};
-
-/* 0x008187E0 ACCEPTS A RECEIVED RECORD into the receive queue, and it is where
- * the sequence discipline actually lives.
- *
- * A FULL QUEUE IS DETECTED BEFORE ANYTHING ELSE, by advancing the write cursor
- * one record and seeing whether it would land on the read cursor -- so one
- * record's worth of the ring is always left empty and the two cursors never
- * mean "full" and "empty" at the same time.
- *
- * CODE 6 IS UNSEQUENCED and takes a different path: rather than being checked
- * against the expected sequence it is admitted only while more than four
- * records are free, so a flood of them cannot fill the queue and starve
- * sequenced traffic.  It also does not advance the sequence or the byte
- * counter on the way in.
- *
- * Everything else is sequenced, and the three outcomes are the protocol:
- *   - BELOW the expected sequence is a duplicate and is dropped silently;
- *   - ABOVE it means something was missed, and the incoming record is
- *     REWRITTEN IN PLACE into a code-4 retransmit request naming the sequence
- *     actually wanted and sent straight back.  Reusing the caller's buffer
- *     rather than building a message is why this returns -1: the record it was
- *     handed no longer holds what arrived.
- *   - equal, but empty, is a pure acknowledgement and is dropped.
- *
- * The callback is invoked with the payload from +0x10, and the depth counter
- * is raised before the copy and lowered after the callback returns -- so it
- * spans the one window in which a caller could re-enter.
- */
-int Rva008187E0( struct Rva00816BF0Comm *comm,
-	struct Rva00816F60Message *record )
-{
-	struct Rva00816F60Message *slot;
-	int iUsed;
-	int iFree;
-
-	if ( ( comm->m_recvWriteOffset + comm->m_recvRecordSize )
-		% comm->m_recvBufferSize == comm->m_recvReadOffset )
-	{
-		Rva007FE780( g_Rva012C4DF8Message );
-		return 2;
-	}
-
-	if ( record->m_code == 6 )
-	{
-		iUsed = ( comm->m_recvWriteOffset + comm->m_recvBufferSize
-			- comm->m_recvReadOffset ) % comm->m_recvBufferSize;
-
-		iFree = ( comm->m_recvBufferSize - iUsed ) / comm->m_recvRecordSize;
-
-		if ( iFree <= 4 )
-			return 2;
-	}
-	else
-	{
-		if ( (unsigned int)record->m_code < (unsigned int)comm->m_recvSequence )
-			return 0;
-
-		if ( (unsigned int)record->m_code > (unsigned int)comm->m_recvSequence )
-		{
-			record->m_code = 4;
-			record->m_value = comm->m_recvSequence;
-			record->m_length = 0;
-
-			Rva00817030( comm, record );
-			return -1;
-		}
-
-		if ( record->m_length == 0 )
-			return 0;
-	}
-
-	slot = (struct Rva00816F60Message *)( comm->m_recvBuffer
-		+ comm->m_recvWriteOffset );
-
-	memcpy( slot, record, comm->m_recvRecordSize );
-
-	comm->m_depth = comm->m_depth + 1;
-
-	comm->m_recvWriteOffset = ( comm->m_recvWriteOffset
-		+ comm->m_recvRecordSize ) % comm->m_recvBufferSize;
-
-	if ( record->m_code != 6 )
-	{
-		comm->m_recvSequence = comm->m_recvSequence + 1;
-		comm->m_recvCounter = comm->m_recvCounter + slot->m_length;
-	}
-
-	comm->m_flags = comm->m_flags | 1;
-
-	if ( comm->m_receiveProc != 0 )
-	{
-		comm->m_receiveProc( comm, (char *)slot + 0x10, slot->m_length,
-			slot->m_tick );
-	}
-
-	comm->m_depth = comm->m_depth - 1;
-	return 1;
-}
-struct Rva00816F60Message g_commUdpPacket = { 0 };
-struct Rva00816F60Message g_commUdpPiece = { 0 };
-
-int Rva007FDA50( struct Rva007FD4E0Socket *socket, char *buffer, int length,
-	int flags, unsigned char *from, int *fromLength );
-void CommUdpSetup( struct Rva00816BF0Comm *ref,
-	struct Rva00816F60Message *packet, unsigned char *from );
-int CommUdpPoke( struct Rva00816BF0Comm *ref );
-
-typedef int ( __cdecl *CommUdpCallbackT )( struct Rva00816BF0Comm *comm,
-	int flags );
-
-int CommUdpProcess( unsigned int tick )
-{
-	int len;
-	int iCount;
-	struct Rva00816BF0Comm *pRef;
-	struct Rva00816BF0Comm *pFind;
-	unsigned char sin[ 0x10 ];
-	struct Rva007FD4E0Socket *pSock;
-	int iSeq;
-	int iPieces;
-	unsigned int uElapsed;
-
-	iCount = 0;
-	pFind = 0;
-	memset( sin, 0, sizeof( sin ) );
-	g_commUdpPacket.m_length = -1;
-
-	pSock = 0;
-	for ( pRef = g_Rva0130B188List; pRef != 0; pRef = pRef->m_next )
-	{
-		if ( pRef->m_socket != 0 && pRef->m_socket != pSock )
-		{
-			pSock = pRef->m_socket;
-			len = sizeof( sin );
-			len = Rva007FDA50( pSock, (char *)&g_commUdpPacket.m_code,
-				sizeof( g_commUdpPacket ) - 8, 0, sin, &len );
-			if ( len > 0 )
-			{
-				g_commUdpPacket.m_length = len - 8;
-				g_commUdpPacket.m_tick = ( ( ( ( ( sin[ 8 ] << 8 )
-					| sin[ 9 ] ) << 8 ) | sin[ 10 ] ) << 8 ) | sin[ 11 ];
-				if ( g_commUdpPacket.m_code == 1 )
-					Rva007FE780( "CommUdpProcess: got RAW_PACKET_INIT\n" );
-				if ( g_commUdpPacket.m_code == 2 )
-					Rva007FE780( "CommUdpProcess: got RAW_PACKET_CONN\n" );
-				iCount = iCount + 1;
-				break;
-			}
-		}
-	}
-
-	for ( pRef = g_Rva0130B188List; pRef != 0; pRef = pRef->m_next )
-	{
-		tick = Rva007FEA00();
-
-		if ( pFind == 0 && pSock == pRef->m_socket && pRef->m_state == 3
-			&& g_commUdpPacket.m_length == 0
-			&& g_commUdpPacket.m_code == 1
-			&& pRef->m_sessionHash == g_commUdpPacket.m_value )
-		{
-			pFind = pRef;
-		}
-
-		if ( g_commUdpPacket.m_length >= 0 && pRef->m_state != 3
-			&& pRef->m_state != 5 && pSock == pRef->m_socket
-			&& Rva007FF720( pRef->m_peer, sin ) == 0 )
-		{
-			pRef->m_dataRecv = pRef->m_dataRecv + g_commUdpPacket.m_length;
-			pRef->m_packRecv = pRef->m_packRecv + 1;
-
-			if ( g_commUdpPacket.m_code == 1 || g_commUdpPacket.m_code == 2
-				|| g_commUdpPacket.m_code == 3 )
-			{
-				CommUdpSetup( pRef, &g_commUdpPacket, sin );
-			}
-			else if ( pRef->m_state != 4 )
-			{
-				/* data only flows on an open connection */
-			}
-			else if ( g_commUdpPacket.m_code == 4 )
-			{
-				pRef->m_tickB = g_commUdpPacket.m_tick;
-				Rva008186C0( pRef, &g_commUdpPacket );
-			}
-			else if ( (unsigned int)g_commUdpPacket.m_code > 0x10000000 )
-			{
-				iSeq = pRef->m_recvSequence;
-				iPieces = (unsigned int)g_commUdpPacket.m_code >> 28;
-				g_commUdpPiece.m_tick = g_commUdpPacket.m_tick;
-				g_commUdpPiece.m_code = ( g_commUdpPacket.m_code & 0x0FFFFFFF )
-					- iPieces;
-				g_commUdpPiece.m_value = g_commUdpPacket.m_value;
-				pRef->m_tickB = g_commUdpPacket.m_tick;
-
-				for ( ; iPieces >= 0; --iPieces )
-				{
-					if ( iPieces > 0 )
-					{
-						--g_commUdpPacket.m_length;
-						g_commUdpPiece.m_length = ( (unsigned char *)
-							g_commUdpPacket.m_body )[ g_commUdpPacket.m_length ];
-					}
-					else
-					{
-						g_commUdpPiece.m_length = g_commUdpPacket.m_length;
-					}
-
-					g_commUdpPacket.m_length = g_commUdpPacket.m_length
-						- g_commUdpPiece.m_length;
-					memcpy( g_commUdpPiece.m_body,
-						g_commUdpPacket.m_body + g_commUdpPacket.m_length,
-						g_commUdpPiece.m_length );
-
-					Rva008186C0( pRef, &g_commUdpPiece );
-					if ( Rva008187E0( pRef, &g_commUdpPiece ) < 0 )
-						iPieces = 0;
-
-					if ( iPieces > 0 && iSeq != pRef->m_recvSequence )
-						iSeq = pRef->m_recvSequence;
-
-					++g_commUdpPiece.m_code;
+		} else {
+			*(unsigned int *)((char *)ref + 0xDC) = Rva007FEA00() - 1000;
+			if (*(int *)((char *)packet + 8) == 1) {
+				Rva00818500(ref, from);
+				Rva007FE780Printf("CommUdpSetup: sending CONN in response to INIT\n");
+				*(int *)((char *)packet + 8) = 2;
+				((int (__cdecl *)(void *, void *))CommUDPWrite)(ref, packet);
+			} else if (*(int *)((char *)packet + 8) == 2) {
+				if (*(int *)((char *)ref + 0x90) == 2) {
+					Rva00818500(ref, from);
+					*(int *)((char *)ref + 0x90) = 4;
 				}
+			} else if (*(int *)((char *)packet + 8) == 3 &&
+			           *(int *)((char *)ref + 0x90) == 4) {
+				*(int *)((char *)ref + 0x90) = 5;
 			}
-			else
-			{
-				pRef->m_tickB = g_commUdpPacket.m_tick;
-				Rva008186C0( pRef, &g_commUdpPacket );
-				Rva008187E0( pRef, &g_commUdpPacket );
+		}
+}
+
+// Sends a poke packet to prod a peer whose address may have moved.
+int CommUdpPoke(void *ref)
+{
+	char packet[0x228];
+	Rva007FE780Printf("CommUdpPoke: sending poke packet\n");
+	*(int *)&packet[0] = 0;
+	*(int *)&packet[8] = 5;
+	*(int *)&packet[12] = *(int *)((char *)ref + 0x94);
+	return ((int (__cdecl *)(void *, void *))CommUDPWrite)(ref, &packet);
+}
+
+// Puts the socket into listening mode for an incoming CommUDP connection.
+int CommUdpListen(void *ref, const char *text)
+{
+	int result;
+	int iListenPort;
+	int iConnPort;
+	unsigned int poke;
+	void *socket;
+	unsigned char bindaddr[0x10];
+	unsigned int temp;
+
+	*(unsigned short *)&bindaddr[0] = 2;
+	*(unsigned short *)&bindaddr[2] = 0;
+	*(unsigned int *)&bindaddr[4] = 0;
+	*(unsigned int *)&bindaddr[8] = 0;
+	*(unsigned int *)&bindaddr[12] = 0;
+	if ((Rva007FFDD0(&poke, &iListenPort, &iConnPort, text) & 2) == 0) {
+		return -3;
+	}
+	bindaddr[2] = (unsigned char)(iListenPort >> 8);
+	bindaddr[3] = (unsigned char)iListenPort;
+	socket = Rva007FD2D0(2, 2, 0);
+	if (socket == 0) {
+		return -4;
+	}
+	result = Rva00819090(ref, socket, bindaddr);
+	Rva00818FF0(ref, text);
+	Rva007FE780Printf("CommUdpListen: err=%d, bind=%d, connident=0x%08x\n",
+	                   result, iListenPort, *(int *)((char *)ref + 0x94));
+	if (result == 0 && poke != 0) {
+		if (iConnPort == 0) {
+			iConnPort = iListenPort + 1;
+		}
+		Rva007FE780Printf("CommUdpListen: poke=%08x:%d\n", poke, iConnPort);
+		*(unsigned short *)((char *)ref + 0x80) = 2;
+		*(unsigned short *)((char *)ref + 0x82) = 0;
+		*(unsigned int *)((char *)ref + 0x84) = 0;
+		*(unsigned int *)((char *)ref + 0x88) = 0;
+		*(unsigned int *)((char *)ref + 0x8C) = 0;
+		temp = poke;
+		*((unsigned char *)ref + 0x87) = (unsigned char)temp; temp >>= 8;
+		*((unsigned char *)ref + 0x86) = (unsigned char)temp; temp >>= 8;
+		*((unsigned char *)ref + 0x85) = (unsigned char)temp; temp >>= 8;
+		*((unsigned char *)ref + 0x84) = (unsigned char)temp;
+		*((unsigned char *)ref + 0x82) = (unsigned char)(iConnPort >> 8);
+		*((unsigned char *)ref + 0x83) = (unsigned char)iConnPort;
+	}
+	*(int *)((char *)ref + 0xD4) = 0;
+	return result;
+}
+
+// Queues an outbound packet, rejecting anything past the limit with
+// "CommUDP: Oversized packet send (%d bytes)".
+int CommUDPSend(void *ref, const void *buffer, int length, int flags)
+{
+	int queued;
+	char *packet;
+	unsigned int tick;
+
+	if (*(int *)((char *)ref + 0x90) != 4) {
+		return -2;
+	}
+	if ((*(int *)((char *)ref + 0xC0) + *(int *)((char *)ref + 0xB8)) %
+	        *(int *)((char *)ref + 0xBC) == *(int *)((char *)ref + 0xC4)) {
+		return 0;
+	}
+	if (length > *(int *)((char *)ref + 0xB8) - 0x10) {
+		Rva007FE780Printf("CommUDP: Oversized packet send (%d bytes)\n", length);
+		return -6;
+	}
+	if (length == 0) {
+		queued = ((*(int *)((char *)ref + 0xC0) + *(int *)((char *)ref + 0xBC) -
+		           *(int *)((char *)ref + 0xC4)) % *(int *)((char *)ref + 0xBC)) /
+		         *(int *)((char *)ref + 0xB8);
+		return queued + 1;
+	}
+	packet = *(char **)((char *)ref + 0xCC) + *(int *)((char *)ref + 0xC0);
+	*(int *)packet = length;
+	memcpy(packet + 0x10, buffer, length);
+	*(unsigned int *)(packet + 4) = Rva007FEA00();
+	if ((flags & 1) != 0) {
+		Rva007FEBD0(g_Rva0130AF38Lock);
+		*(int *)(packet + 8) = 6;
+		*(int *)(packet + 0x0C) = *(int *)((char *)ref + 0xAC) - 1;
+		CommUDPWrite(ref, packet);
+		Rva007FECB0(g_Rva0130AF38Lock);
+		return 1;
+	}
+	*(int *)(packet + 8) = *(int *)((char *)ref + 0xD0);
+	++*(int *)((char *)ref + 0xD0);
+	*(int *)(packet + 0x0C) = *(int *)((char *)ref + 0xAC) - 1;
+	*(int *)((char *)ref + 0xC0) =
+		(*(int *)((char *)ref + 0xC0) + *(int *)((char *)ref + 0xB8)) %
+		*(int *)((char *)ref + 0xBC);
+	queued = ((*(int *)((char *)ref + 0xC0) + *(int *)((char *)ref + 0xBC) -
+	           *(int *)((char *)ref + 0xC4)) % *(int *)((char *)ref + 0xBC)) /
+	         *(int *)((char *)ref + 0xB8);
+	if (queued < 0x10) {
+		Rva007FEBD0(g_Rva0130AF38Lock);
+		Rva00817640(ref);
+		if (g_Rva0130AD08Count != 0) {
+			tick = Rva007FEA00();
+			while (CommUdpProcess(tick) > 0) {
 			}
-
-			g_commUdpPacket.m_length = -1;
+			g_Rva0130AD08Count = 0;
 		}
+		Rva007FECB0(g_Rva0130AF38Lock);
+	}
+    return queued > 0 ? queued : 1;
+}
 
-		if ( pRef->m_state == 2 && tick - pRef->m_tickA > 1000 )
-			Rva00818620( pRef );
+// ?g_Rva0130AD08Count@@3HA: matched references place it at VA 0xe0a720; also referenced as _g_Rva0130AD08Count.
+int g_Rva0130AD08Count;
+#pragma comment(linker, "/alternatename:_g_Rva0130AD08Count=?g_Rva0130AD08Count@@3HA")
 
-		if ( pRef->m_state == 4
-			&& pRef->m_sendAckOffset != pRef->m_sendWriteOffset )
-		{
-			Rva00817640( pRef );
+// g_Rva0130AD10Packet: the inbound-datagram slot at VA 0xe0a728 (BFME1 VA
+// 0x130ad10): the length minus eight, the sender, the kind and the connident,
+// then the 0x220-byte datagram. 0x228 bytes in all, ending where the DirtySock
+// lock lives; the reassembly slot below has the same shape.
+char g_Rva0130AD10Packet[0x228] = { 0 };
+// g_Rva0130AF60Packet: the reassembly slot at VA 0xe0a978 (BFME1 VA 0x130af60),
+// same shape; ends where the connection list head lives.
+char g_Rva0130AF60Packet[0x228] = { 0 };
+
+// The CommUDP tick. Receives one pending datagram, then walks the connection
+// list: routing control packets (INIT/CONN/ack/close/data/poke) at or below
+// 0x10000000 through the transport, reassembling larger fragmented ones, and
+// doing per-connection timeout, poke and resend maintenance. Returns the
+// number of datagrams received. The frame keeps four untouched dwords (the
+// 0x44 frame against 0x34 of live locals); they are padding below.
+extern "C" int CommUdpProcess(unsigned int tick)
+{
+	int len; // -0xc, "len"
+	unsigned int count; // -0x14
+	void *ref; // -0x18
+	void *saved; // -0x1c
+	unsigned char sin[0x10]; // -0x30, "sin"
+	void *sock; // -0x38
+	unsigned int lastAck; // -0x3c
+	int frags; // -0x40
+	unsigned int dt; // -0x44
+
+	count = 0;
+	saved = 0;
+	memset(sin, 0, 0x10);
+	*(int *)g_Rva0130AD10Packet = -1;
+	sock = 0;
+	for (ref = g_Rva0130B188List; ref != 0;
+	     ref = *(void **)((char *)ref + 0x78)) {
+		if (*(void **)((char *)ref + 0x7c) != 0
+		    && *(void **)((char *)ref + 0x7c) != sock) {
+			sock = *(void **)((char *)ref + 0x7c);
+			len = 0x10;
+			len = Rva007FDA50((struct Rva007FD4E0Socket *)sock,
+			                  g_Rva0130AD10Packet + 8, 0x220, 0,
+			                  (char *)sin, &len);
+			if (len > 0) {
+				*(int *)g_Rva0130AD10Packet = len - 8;
+				*(int *)(g_Rva0130AD10Packet + 4)
+					= ((sin[8] << 8 | sin[9]) << 8 | sin[10]) << 8 | sin[11];
+				if (*(int *)(g_Rva0130AD10Packet + 8) == 1) {
+					Rva007FE780Printf("CommUdpProcess: got RAW_PACKET_INIT\n");
+				}
+				if (*(int *)(g_Rva0130AD10Packet + 8) == 2) {
+					Rva007FE780Printf("CommUdpProcess: got RAW_PACKET_CONN\n");
+				}
+				++count;
+				break;
+			}
 		}
-
-		if ( pRef->m_state == 4 && tick - pRef->m_tickB > 120000
-			&& tick - pRef->m_tickA < 2000 )
-		{
-			Rva007FE780( "CommUDP: closing connection due to timeout\n" );
-			Rva007FE780( "CommUDP: tick=%d, rtick=%d, stick=%d\n", tick,
-				pRef->m_tickB, pRef->m_tickA );
-			Rva00816F60( pRef );
+		continue;
+	}
+	for (ref = g_Rva0130B188List; ref != 0;
+	     ref = *(void **)((char *)ref + 0x78)) {
+		tick = Rva007FEA00();
+		if (saved == 0
+		    && sock == *(void **)((char *)ref + 0x7c)
+		    && *(int *)((char *)ref + 0x90) == 3
+		    && *(int *)g_Rva0130AD10Packet == 0
+		    && *(int *)(g_Rva0130AD10Packet + 8) == 1
+		    && *(int *)((char *)ref + 0x94)
+		        == *(int *)(g_Rva0130AD10Packet + 12)) {
+			saved = ref;
 		}
-
-		if ( pRef->m_state == 3 && *(unsigned short *)pRef->m_peer == 2
-			&& tick > pRef->m_tickA + 1000 )
-		{
-			CommUdpPoke( pRef );
+		if (*(int *)g_Rva0130AD10Packet >= 0
+		    && *(int *)((char *)ref + 0x90) != 3
+		    && *(int *)((char *)ref + 0x90) != 5
+		    && sock == *(void **)((char *)ref + 0x7c)
+		    && Rva007FF720((const struct Rva007FF720SockAddr *)((char *)ref + 0x80),
+		                   (const struct Rva007FF720SockAddr *)sin) == 0) {
+			*(int *)((char *)ref + 0x60) += *(int *)g_Rva0130AD10Packet;
+			++*(int *)((char *)ref + 0x68);
+			if (*(int *)(g_Rva0130AD10Packet + 8) == 1
+			    || *(int *)(g_Rva0130AD10Packet + 8) == 2
+			    || *(int *)(g_Rva0130AD10Packet + 8) == 3) {
+				CommUdpSetup(ref, g_Rva0130AD10Packet, sin);
+				goto recv_done;
+			} else if (*(int *)((char *)ref + 0x90) != 4) {
+				goto recv_done;
+			} else {
+				if (*(int *)(g_Rva0130AD10Packet + 8) == 4) {
+					*(int *)((char *)ref + 0xdc)
+						= *(int *)(g_Rva0130AD10Packet + 4);
+					Rva008186C0((struct Rva00816BF0Comm *)ref,
+					            (struct Rva00816F60Message *)g_Rva0130AD10Packet);
+					goto recv_done;
+				}
+				if (*(unsigned int *)(g_Rva0130AD10Packet + 8) > 0x10000000) {
+					lastAck = *(int *)((char *)ref + 0xac);
+					frags = *(unsigned int *)(g_Rva0130AD10Packet + 8) >> 28;
+					*(int *)(g_Rva0130AF60Packet + 4)
+						= *(int *)(g_Rva0130AD10Packet + 4);
+					*(int *)(g_Rva0130AF60Packet + 8)
+						= (*(int *)(g_Rva0130AD10Packet + 8) & 0x0fffffff) - frags;
+					*(int *)(g_Rva0130AF60Packet + 12)
+						= *(int *)(g_Rva0130AD10Packet + 12);
+					*(int *)((char *)ref + 0xdc)
+						= *(int *)(g_Rva0130AD10Packet + 4);
+					for (; frags >= 0; frags--) {
+						if (frags > 0) {
+							--*(int *)g_Rva0130AD10Packet;
+							*(int *)g_Rva0130AF60Packet
+								= *(unsigned char *)(g_Rva0130AD10Packet + 16
+								                      + *(int *)g_Rva0130AD10Packet);
+						} else {
+							*(int *)g_Rva0130AF60Packet = *(int *)g_Rva0130AD10Packet;
+						}
+						*(int *)g_Rva0130AD10Packet -= *(int *)g_Rva0130AF60Packet;
+						memcpy(g_Rva0130AF60Packet + 16,
+						       g_Rva0130AD10Packet + 16 + *(int *)g_Rva0130AD10Packet,
+						       *(int *)g_Rva0130AF60Packet);
+						Rva008186C0((struct Rva00816BF0Comm *)ref,
+						            (struct Rva00816F60Message *)g_Rva0130AF60Packet);
+						if (Rva008187E0((struct Rva00816BF0Comm *)ref,
+						                (struct Rva00816F60Message *)g_Rva0130AF60Packet) < 0) {
+							frags = 0;
+						}
+						if (frags > 0
+						    && lastAck != *(int *)((char *)ref + 0xac)) {
+							lastAck = *(int *)((char *)ref + 0xac);
+						}
+						++*(int *)(g_Rva0130AF60Packet + 8);
+					}
+					goto recv_done;
+				}
+				*(int *)((char *)ref + 0xdc)
+					= *(int *)(g_Rva0130AD10Packet + 4);
+				Rva008186C0((struct Rva00816BF0Comm *)ref,
+				            (struct Rva00816F60Message *)g_Rva0130AD10Packet);
+				Rva008187E0((struct Rva00816BF0Comm *)ref,
+				            (struct Rva00816F60Message *)g_Rva0130AD10Packet);
+			}
+		recv_done:
+			*(int *)g_Rva0130AD10Packet = -1;
 		}
-
-		if ( pRef->m_flags == 0 && tick > pRef->m_tickIdle + 250 )
-		{
-			pRef->m_tickIdle = tick;
-			pRef->m_flags = pRef->m_flags | 4;
+		if (*(int *)((char *)ref + 0x90) == 2
+		    && tick - *(unsigned int *)((char *)ref + 0xd8) > 1000) {
+			Rva00818620((struct Rva00816BF0Comm *)ref);
 		}
-
-		if ( pRef->m_depth == 0 && pRef->m_flags != 0 )
-		{
-			pRef->m_depth = pRef->m_depth + 1;
-			if ( pRef->m_value != 0 )
-				( (CommUdpCallbackT)pRef->m_value )( pRef, pRef->m_flags );
-			pRef->m_depth = pRef->m_depth - 1;
-			pRef->m_flags = 0;
+		if (*(int *)((char *)ref + 0x90) == 4
+		    && *(int *)((char *)ref + 0xc8) != *(int *)((char *)ref + 0xc0)) {
+			Rva00817640(ref);
+		}
+		if (*(int *)((char *)ref + 0x90) == 4
+		    && tick - *(unsigned int *)((char *)ref + 0xdc) > 120000
+		    && tick - *(unsigned int *)((char *)ref + 0xd8) < 2000) {
+			Rva007FE780Printf("CommUDP: closing connection due to timeout\n");
+			Rva007FE780Printf("CommUDP: tick=%d, rtick=%d, stick=%d\n",
+			                   tick,
+			                   *(int *)((char *)ref + 0xdc),
+			                   *(int *)((char *)ref + 0xd8));
+			Rva00816F60((struct Rva00816BF0Comm *)ref);
+		}
+		if (*(int *)((char *)ref + 0x90) == 3
+		    && *(unsigned short *)((char *)ref + 0x80) == 2
+		    && tick > *(unsigned int *)((char *)ref + 0xd8) + 1000) {
+			CommUdpPoke(ref);
+		}
+		if (*(int *)((char *)ref + 0x21c) == 0
+		    && tick > *(unsigned int *)((char *)ref + 0xe0) + 250) {
+			*(unsigned int *)((char *)ref + 0xe0) = tick;
+			*(int *)((char *)ref + 0x21c) |= 4;
+		}
+		if (*(int *)((char *)ref + 0x218) == 0
+		    && *(int *)((char *)ref + 0x21c) != 0) {
+			++*(int *)((char *)ref + 0x218);
+			if (*(void **)((char *)ref + 0x220) != 0) {
+				((void (__cdecl *)(void *, int))*(void **)((char *)ref + 0x220))(
+					ref, *(int *)((char *)ref + 0x21c));
+			}
+			*(int *)((char *)ref + 0x218) -= 1;
+			*(int *)((char *)ref + 0x21c) = 0;
 			tick = Rva007FEA00();
 		}
-
-		if ( pRef->m_state == 4
-			&& pRef->m_sendAckOffset == pRef->m_sendWriteOffset )
-		{
-			uElapsed = tick - pRef->m_tickA;
-			if ( ( uElapsed > 100
-					&& pRef->m_reportedSequence != pRef->m_recvSequence )
-				|| ( uElapsed > 100
-					&& pRef->m_sendWriteOffset != pRef->m_sendReadOffset )
-				|| uElapsed > 2500 || pRef->m_recvCounter >= 0x800 )
-			{
-				pRef->m_recvCounter = 0;
-				Rva00818AD0( pRef );
+		if (*(int *)((char *)ref + 0x90) == 4
+		    && *(int *)((char *)ref + 0xc8) == *(int *)((char *)ref + 0xc0)) {
+			dt = tick - *(unsigned int *)((char *)ref + 0xd8);
+			if ((dt > 100
+			     && *(int *)((char *)ref + 0xac) != *(int *)((char *)ref + 0xb0))
+			    || (dt > 100
+			        && *(int *)((char *)ref + 0xc0) != *(int *)((char *)ref + 0xc4))
+			    || dt > 2500
+			    || *(int *)((char *)ref + 0xb4) >= 0x800) {
+				*(int *)((char *)ref + 0xb4) = 0;
+				Rva00818AD0((struct Rva00816BF0Comm *)ref);
 			}
 		}
 	}
-
-	if ( g_commUdpPacket.m_length >= 0 && g_commUdpPacket.m_code == 5
-		&& *(unsigned short *)sin == 2 )
-	{
-		Rva007FE780( "CommUDP: received poke packet (from=%08x)\n",
-			( ( ( ( ( sin[ 4 ] << 8 ) | sin[ 5 ] ) << 8 ) | sin[ 6 ] ) << 8 )
-			| sin[ 7 ] );
-
-		for ( pRef = g_Rva0130B188List; pRef != 0; pRef = pRef->m_next )
-		{
-			if ( pRef->m_state == 2 && *(unsigned short *)pRef->m_peer == 2
-				&& pRef->m_sessionHash == g_commUdpPacket.m_value )
-			{
-				Rva007FE780( "CommUdp: poke source = %08x -- forcing match\n",
-					( ( ( ( ( (unsigned char)pRef->m_peer[ 4 ] << 8 )
-					| (unsigned char)pRef->m_peer[ 5 ] ) << 8 )
-					| (unsigned char)pRef->m_peer[ 6 ] ) << 8 )
-					| (unsigned char)pRef->m_peer[ 7 ] );
-
-				if ( pSock == pRef->m_socket )
-				{
-					Rva007FE780( "CommUDP: changing peer to %08x:%d due to poke "
-						"(was expecting %08x:%d)\n",
-						( ( ( ( ( sin[ 4 ] << 8 ) | sin[ 5 ] ) << 8 )
-						| sin[ 6 ] ) << 8 ) | sin[ 7 ],
-						( sin[ 2 ] << 8 ) | sin[ 3 ],
-						( ( ( ( ( (unsigned char)pRef->m_peer[ 4 ] << 8 )
-						| (unsigned char)pRef->m_peer[ 5 ] ) << 8 )
-						| (unsigned char)pRef->m_peer[ 6 ] ) << 8 )
-						| (unsigned char)pRef->m_peer[ 7 ],
-						( (unsigned char)pRef->m_peer[ 2 ] << 8 )
-						| (unsigned char)pRef->m_peer[ 3 ] );
-					memcpy( pRef->m_peer, sin, sizeof( sin ) );
+	if (*(int *)g_Rva0130AD10Packet >= 0
+	    && *(int *)(g_Rva0130AD10Packet + 8) == 5
+	    && *(unsigned short *)sin == 2) {
+		Rva007FE780Printf("CommUDP: received poke packet (from=%08x)\n",
+		                   ((sin[4] << 8 | sin[5]) << 8 | sin[6]) << 8 | sin[7]);
+		for (ref = g_Rva0130B188List; ref != 0;
+		     ref = *(void **)((char *)ref + 0x78)) {
+			if (*(int *)((char *)ref + 0x90) == 2
+			    && *(unsigned short *)((char *)ref + 0x80) == 2
+			    && *(int *)((char *)ref + 0x94)
+			        == *(int *)(g_Rva0130AD10Packet + 12)) {
+				Rva007FE780Printf("CommUdp: poke source = %08x -- forcing match\n",
+				                   ((*(unsigned char *)((char *)ref + 0x84) << 8
+				                     | *(unsigned char *)((char *)ref + 0x85)) << 8
+				                    | *(unsigned char *)((char *)ref + 0x86)) << 8
+				                   | *(unsigned char *)((char *)ref + 0x87));
+				if (*(void **)((char *)ref + 0x7c) == sock) {
+					Rva007FE780Printf("CommUDP: changing peer to %08x:%d due to poke (was expecting %08x:%d)\n",
+					                   ((sin[4] << 8 | sin[5]) << 8 | sin[6]) << 8 | sin[7],
+					                   (sin[2] << 8) | sin[3],
+					                   ((*(unsigned char *)((char *)ref + 0x84) << 8
+					                     | *(unsigned char *)((char *)ref + 0x85)) << 8
+					                    | *(unsigned char *)((char *)ref + 0x86)) << 8
+					                   | *(unsigned char *)((char *)ref + 0x87),
+					                   (*(unsigned char *)((char *)ref + 0x82) << 8)
+					                   | *(unsigned char *)((char *)ref + 0x83));
+					memcpy((char *)ref + 0x80, sin, 0x10);
 					break;
 				}
 			}
+			continue;
 		}
 	}
-
-	if ( pFind != 0 && g_commUdpPacket.m_length == 0 )
-	{
-		pRef = pFind;
-		if ( pRef->m_sessionHash == g_commUdpPacket.m_value )
-		{
-			memcpy( pRef->m_peer, sin, sizeof( sin ) );
-			pRef->m_state = 4;
-			CommUdpSetup( pRef, &g_commUdpPacket, sin );
+	if (saved != 0 && *(int *)g_Rva0130AD10Packet == 0) {
+		ref = saved;
+		if (*(int *)((char *)ref + 0x94)
+		    == *(int *)(g_Rva0130AD10Packet + 12)) {
+			memcpy((char *)ref + 0x80, sin, 0x10);
+			*(int *)((char *)ref + 0x90) = 4;
+			CommUdpSetup(ref, g_Rva0130AD10Packet, sin);
 		}
 	}
-
-	return iCount;
+	return count;
 }
-
-
-// _g_Rva0130AD08Count: the global at VA 0xe0a720 is ?g_Rva0130AD08Count@@3HA.
-#pragma comment(linker, "/alternatename:_g_Rva0130AD08Count=?g_Rva0130AD08Count@@3HA")
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
 // call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:_Rva008171C0Op=_Rva008171C0")
-#pragma comment(linker, "/alternatename:_Rva00818BF0Op=_Rva00818BF0")
-#pragma comment(linker, "/alternatename:_Rva00818D20Op=_Rva00818D20")
-
-}
-
-// ---- appended 2026-10-10 (w5-m1, muse-spark, t=90): home-TU graft state, score 0.92 ----
-// Graft target: Code/Libraries/Source/DirtySock/Y4CommTransportLife.c
-// (1) struct Rva00816BF0Comm: m_name[0x20]->[0x10]+m_dataSent/m_dataRecv/m_packSent/m_packRecv (+0x5C..),
-//     m_gap5[0x114]->m_tickIdle(+0xE0)+m_gap5[0x110]. Verified SAFE: ./build.sh TU -> 23/24 rows exact,
-//     only Rva00818CB0 fails (unresolved _CommUdpProcess call, expected pre-land).
-// (2) fwd decls (exact def sigs): Rva00818620, Rva00817640, Rva008186C0(+struct Rva00816F60Message*),
-//     Rva00818AD0, Rva008187E0(+record*), Rva007FF720.
-// (3) before Rva00818CB0, replacing 'int Rva00817B30(unsigned int tick);': globals g_commUdpPacket/
-//     g_commUdpPiece (struct Rva00816F60Message, = {0}), decls Rva007FDA50/CommUdpSetup/CommUdpPoke,
-//     'typedef int (__cdecl *CommUdpCallbackT)(struct Rva00816BF0Comm*,int);', then the CommUdpProcess
-//     body below in this file (line ~1473 'int CommUdpProcess(unsigned int tick)', back to '=-1' form);
-//     pump call -> CommUdpProcess(uTick). Data ledger rows needed for the 2 globals at land time.
-// Wall: exact first 0x5A3 bytes; at +0x5A3 retail 'mov ecx,[ebp-0x18]' vs ours 'mov eax,[ebp-0x18]';
-// whole tail (161 diffs to +0x843) is the same ECX/EAX/EDX rotation cascade (e.g. retail
-// 'add ecx,0x80' 6B vs ours 'add eax,0x80' 5B). Fix the ONE head choice and the tail should snap.
-// REFUTED this session in the home TU: volatile read of m_depth; prefix --pRef->m_depth (emits sub,
-// same as =-1). PHI levers need slack; extent is exact (2207) so none fit at the wall.
+#pragma comment(linker, "/alternatename:_Rva00817030=_CommUDPWrite")
+#pragma comment(linker, "/alternatename:_Rva00817210Op=_CommUDPResolve")
+#pragma comment(linker, "/alternatename:_Rva008173C0Op=_CommUDPSend")
+#pragma comment(linker, "/alternatename:_Rva00818D90Op=_CommUdpListen")
+#pragma comment(linker, "/alternatename:_Rva00819300Op=_CommUDPConnect")
