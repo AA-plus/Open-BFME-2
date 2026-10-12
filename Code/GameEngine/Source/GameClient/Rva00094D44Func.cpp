@@ -6,7 +6,8 @@
 // retail evaluation order (z*c + y*b + x*a + w). Honest address-derived name;
 // boundary verified (push ebp at 0x94D44, fld + leave + ret 0xC at end).
 struct RvaVec4B { float x; float y; float z; float w; };
-struct RvaDE4880Owner { unsigned char m_pad[0x84]; RvaVec4B m_84; };
+struct RvaVec3B { float x; float y; float z; };
+struct RvaDE4880Owner { unsigned char m_pad[0x84]; RvaVec4B m_84; unsigned char m_pad94[0xD4 - 0x94]; RvaVec3B m_D4; float m_E0; };
 static RvaDE4880Owner *g_00DE4880;
 float __stdcall rva00094D44(float a, float b, float c)
 {
@@ -41,4 +42,24 @@ private:
 float Rva00094DE5Vector::length(const Rva00094DE5Vector *vector)
 {
  return sqrt(vector->x * vector->x + vector->y * vector->y + vector->z * vector->z);
+}
+
+// Retail 0x00094E2C (147B, RET 0xC), the next slot of the same table after
+// 0x00094D44 and the same 999999.0f default: with the 0x00DE4880 state set,
+// the +0xE0 radius less the distance from (a, b, c) to its +0xD4 centre,
+// built from three fabs differences summed z first. Address-derived name.
+float __stdcall rva00094E2C(float a, float b, float c)
+{
+	RvaDE4880Owner *g = g_00DE4880;
+	float r = 999999.0f;
+	if (g) {
+		RvaVec3B center = g->m_D4;
+		r = g->m_E0;
+		RvaVec3B d;
+		d.x = (float)fabs(center.x - a);
+		d.y = (float)fabs(center.y - b);
+		d.z = (float)fabs(center.z - c);
+		r -= (float)sqrt(d.z * d.z + d.y * d.y + d.x * d.x);
+	}
+	return r;
 }

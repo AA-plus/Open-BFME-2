@@ -24,13 +24,47 @@ extern int g_get_00710fb0;	// 0x00DE4880
 class Rva009519B
 {
 public:
+	virtual bool rva0009520C();
+	virtual void rva00094C70();
+	virtual void rva00094CA9();
 	virtual void rva00094CEA();
+	virtual void rva00094C58();
 private:
 	unsigned char m_pad04[0x20 - 0x04];
 	bool m_20;		// +0x20
 	unsigned char m_pad21[0xB8 - 0x21];
 	int m_mode;		// +0xB8
 };
+
+// Slots 47, 40 and 41 (retail 0x00094C58, 0x00094C70 and 0x00094CA9, laid
+// out just before slot 44): clear the state's +0x38 triple; clear it and
+// select mode 1 with +0x69 set; or set +0x38 to one with both flags set and
+// select mode 3.
+void Rva009519B::rva00094C58()
+{
+	Rva00094CEAState *state = TheCloudState;
+	state->m_38 = state->m_3C = state->m_40 = 0.0f;
+}
+
+void Rva009519B::rva00094C70()
+{
+	TheCloudState->m_38 = 0.0f;
+	Rva00094CEAState *state = TheCloudState;
+	state->m_3C = state->m_40 = 0.0f;
+	TheCloudState->m_69 = true;
+	TheCloudState->m_6A = false;
+	m_mode = 1;
+}
+
+void Rva009519B::rva00094CA9()
+{
+	Rva00094CEAState *state = TheCloudState;
+	state->m_3C = state->m_40 = 0.0f;
+	TheCloudState->m_69 = true;
+	TheCloudState->m_6A = true;
+	TheCloudState->m_38 = 1.0f;
+	m_mode = 3;
+}
 
 void Rva009519B::rva00094CEA()
 {
@@ -43,4 +77,11 @@ void Rva009519B::rva00094CEA()
 		TheCloudState->m_6A = false;
 		m_20 = false;
 	}
+}
+
+// Slot 15 (retail 0x0009520C, 24 bytes): the +0x20 flag is set and the mode
+// is neither 0 nor 4.
+bool Rva009519B::rva0009520C()
+{
+	return m_20 && m_mode != 0 && m_mode != 4;
 }
