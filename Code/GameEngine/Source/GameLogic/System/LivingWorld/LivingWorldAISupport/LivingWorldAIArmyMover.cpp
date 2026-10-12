@@ -1,10 +1,15 @@
 // ?rva0059BE1F@LivingWorldAIArmyMover@@QAEXPAUArmyMoverRegion@@HHPAV?$vector@PBVModuleData@@V?$allocator@PBVModuleData@@@_STL@@@_STL@@11PAVRva004FF5B7@@H@Z
-// partial score=0.93166 date=2026-10-12
 // cl: /O1 /G6 /arch:SSE /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Op
 // stlport
 // Native 59BE1F..59C010, 497B, thiscall RET20, unused this.
 // WB14FB870 establishes vector collection, distance tree and difficulty filter.
 // Method name and original container/element spellings remain unknown.
+// Target evidence: native 0x0059BE1F..0x0059C010, RET 0x20, and WB
+// 0x014FB870 establish the distance-filtered collection behavior. The player,
+// region and army records remain offset views, not recovered source layouts.
+// The inline region lookup wrapper controls the returned iterator lifetime;
+// it retains retail's owner load after RNG/push and closes register allocation.
+// Every call resolves through existing ledger providers; no new pins.
 #include <vector>
 #include <map>
 class ModuleData;
@@ -26,7 +31,7 @@ class Rva002E071E {public:int rva002E0BC0(int);};
 struct ArmyMoverRegionInfo {int id;char pad[0x48];IntMap armies;};
 struct Rva004FF5B7Node:public _STL::_Rb_tree_node_base {int key;ArmyMoverRegionInfo region;};
 struct Rva004FF5B7Iter {Rva004FF5B7Node*m_ptr;};
-class Rva004FF5B7 {public:Rva004FF5B7Iter rva004FF5B7(int);};
+class Rva004FF5B7 {public:__forceinline ArmyMoverRegionInfo*get(int id){return &rva004FF5B7(id).m_ptr->region;}Rva004FF5B7Iter rva004FF5B7(int);};
 struct ArmyMoverDistanceLookup { IntMap::iterator find(int id){return ((IntMap*)this)->find(id);} };
 extern unsigned g_Va00E04544;
 int GetGameLogicRandomValue(int,int,char*,int);
@@ -42,7 +47,7 @@ void LivingWorldAIArmyMover::rva0059BE1F(ArmyMoverRegion*region,int maxDistance,
   for(int distance=0;distance<=maxDistance;distance++) {
    _STL::pair<IntTree::const_iterator,IntTree::const_iterator> range=((const IntTree&)tree).equal_range(distance);
    for(IntTree::const_iterator r=range.first;r!=range.second;r++) {
-    ArmyMoverRegionInfo*ri=&info->rva004FF5B7(r->second).m_ptr->region;
+    ArmyMoverRegionInfo*ri=info->get(r->second);
     for(IntMap::iterator a=ri->armies.begin();a!=ri->armies.end();++a) {
      const Rva002B488EResult*army=((Rva002BA8F1Logic*)TheLivingWorldLogic)->rva002B488E(a->second);
      if((unsigned char)((Rva002E071E*)player)->rva002E0BC0(a->first)) {
@@ -54,9 +59,9 @@ void LivingWorldAIArmyMover::rva0059BE1F(ArmyMoverRegion*region,int maxDistance,
       if((found == 0)) {Rva002E2903Player*p=((Rva002BA8F1Logic*)TheLivingWorldLogic)->find(owner,0);players->push_back((const ModuleData*const&)p);}
      } else {
       int chance=2;if(3 == difficulty)chance=1;else if(difficulty==2)chance=0;
-      int owner=army->owner;bool found=false;
       if(0 != distance && GetGameLogicRandomValue(0,chance,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\System\\LivingWorld\\LivingWorldAISupport\\LivingWorldAIArmyMover.cpp",289)!=0)continue;
       enemy->push_back((const ModuleData*const&)army);
+      int owner=army->owner;bool found=false;
       for(unsigned j=0;j<players->size();++j) {
        if(*(int*)((char*)(*players)[j]+0x14)==owner) {found=true;break;}
       }
