@@ -280,7 +280,8 @@ public:
     int m_playingHandle;     // +0x0C, copied into a requeued loop's request
     AudioEventRTS *m_at10;   // +0x10, owning reference to the event waiting on this one (0x002D9AD4 sets it)
     int m_at14;              // +0x14, events still to finish before that one replays
-    char at18[0x30 - 0x18];
+    char at18[0x2C - 0x18];
+    float m_at2C;            // +0x2C, volume (kept across 0x000563FE's event xfer)
     int m_viewType;          // +0x30
     // Inline view-type getter: the 0x000583BA pause tests read it through
     // this (the value lands in EAX first, as retail), the stream test does not.
@@ -396,7 +397,15 @@ struct PlayingAudio {
 // Retain-and-replace setter rowed at 0x000A8CE5 under its address-derived owner.
 class Rva000A8C9B {
 public:
-    void clear(void);
+    // Rowed at 0x000A8C9B (Rva000A8C9BClear.cpp); visible here so the unit
+    // knows it keeps no pointer to the holder it clears.
+    __declspec(noinline) void clear(void)
+    {
+        if (m_ptr) {
+            m_ptr->Release_Ref();
+            m_ptr = 0;
+        }
+    }
     void rva000A8CE5(OpaqueRefCounted *value);
 private:
     OpaqueRefCounted *m_ptr;
@@ -589,6 +598,9 @@ class Rva002D9BDC { public: void rva002D9BDC(float lo, float hi); };
 // WorldBuilder calls this AudioEventRTS::setExtraVolumeMultiplier; retail
 // folded it to 0x00481FAF, rowed under this neutral float-slot name.
 class Rva00481FAFFloatSlot { public: void store(float value); };
+// The event's own xfer (rowed at 0x002D9FD9 under an address-derived owner).
+class Rva002D9FD9Arg;
+class Rva002D9FD9Owner { public: void rva002D9FD9(Rva002D9FD9Arg *xfer); };
 // Float-returning event query rowed at 0x002DA153; prep3DSample compares it
 // with AudioSettings +0xB8 to treat a sound as global.
 class Rva002DA153 { public: float rva002DA153(void); };
@@ -1006,9 +1018,10 @@ public:
     virtual void slot108(); virtual float slot109();
     // Slot 110 (+0x1B8), the first call init() makes.
     virtual void rva000541DB(void);
-    bool rva00055FCA(int key, void **result, int flags);
+    bool rva00055FCA(int key, void **result, PlayingAudioRef *playingOut);
     bool rva00055E6C(const AsciiString &name, int streamArg, int viewType, int musicSystem);
     bool rva0005623E(int key, void **result, int flags);
+    void rva000563FE(Xfer *xfer, int handle);
     bool rva00054899(ObjectID objectID, int otherID);
     bool rva00056670(ObjectID objectID);
     bool rva00055426(int objectID);
@@ -2182,10 +2195,9 @@ public:
 // the request list's pending events and the pending request set; reports
 // the event (and for a playing sound a reference to it through the third
 // argument, a PlayingAudioRef pointer the callers pass as zero).
-bool MilesAudioManager::rva00055FCA(int handle, void **result, int flags)
+bool MilesAudioManager::rva00055FCA(int handle, void **result, PlayingAudioRef *playingOut)
 {
     AudioEventRTS **eventOut = reinterpret_cast<AudioEventRTS **>(result);
-    PlayingAudioRef *playingOut = reinterpret_cast<PlayingAudioRef *>(flags);
     if (eventOut)
         *eventOut = 0;
     if (playingOut)
@@ -3951,12 +3963,41 @@ private:
 bool MilesAudioManager::rva0005623E(int key, void **result, int flags)
 {
     PlayingAudioHolder playing;
-    bool found = rva00055FCA(key, reinterpret_cast<void **>(&key), reinterpret_cast<int>(&playing));
+    bool found = rva00055FCA(key, reinterpret_cast<void **>(&key), reinterpret_cast<PlayingAudioRef *>(&playing));
     if (result)
         *result = reinterpret_cast<void *>(key);
     if (flags)
         reinterpret_cast<PlayingAudioRef *>(flags)->set(playing.get());
     return found;
+}
+
+// Retail 0x000563FE (address-derived, RET 8; WorldBuilder twin 0x0079AA60):
+// xfers one logical handle's event. The event and its playing record come
+// from the 0x55FCA lookup; it counts as present only when found, not
+// flagged at +0x4C and not finished (+0x44). After the present flag, a
+// present event is xferred with the record's pending extra volume applied
+// when one is set (+0x40 > 0), then its own volume is put back.
+void MilesAudioManager::rva000563FE(Xfer *xfer, int handle)
+{
+    PlayingAudioRef playing;
+    AudioEventRTS *event;
+    bool present = rva00055FCA(handle, reinterpret_cast<void **>(&event), &playing);
+    if (present) {
+        if (event == 0)
+            present = false;
+        else if (event->m_at4C)
+            present = false;
+        if (playing.get() != 0 && playing->m_at44)
+            present = false;
+    }
+    xfer->xferBool(&present);
+    if (present) {
+        float volume = event->m_at2C;
+        if (playing.get() != 0 && playing->m_at40 > 0.0f)
+            reinterpret_cast<Rva00481FAFFloatSlot *>(event)->store(playing->m_at3C);
+        reinterpret_cast<Rva002D9FD9Owner *>(event)->rva002D9FD9(reinterpret_cast<Rva002D9FD9Arg *>(xfer));
+        reinterpret_cast<Rva00481FAFFloatSlot *>(event)->store(volume);
+    }
 }
 
 // Retail 0x0005E377 (address-derived): under the mutex, erases the key from
