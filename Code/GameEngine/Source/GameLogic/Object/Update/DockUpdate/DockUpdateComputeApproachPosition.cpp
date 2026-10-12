@@ -1,5 +1,3 @@
-// ?computeApproachPosition@DockUpdate@@IAE?AUCoord3D@@HPAVObject@@@Z
-// partial score=1.0 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
 // ?computeApproachPosition@DockUpdate@@IAE?AUCoord3D@@HPAVObject@@@Z, retail
@@ -16,6 +14,7 @@
 // Called by the matched advanceApproachPosition 0x00589D3E.
 #include "../../../../Common/PartitionRangeQueryCallView.h"
 
+// class-gate: allow Coord3D retail returns and copies Coord3D member-wise (movss pairs, inlined copy ctor 0x0005BC20); the canonical aggregate block-copies
 struct Coord3D
 {
 	Coord3D() {}
