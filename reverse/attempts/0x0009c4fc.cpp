@@ -1,5 +1,5 @@
 // ?rva0009C4FC@Rva0009D55BProduct@@UAEXHHHH@Z
-// partial score=0.99 date=2026-10-11
+// partial score=0.997 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // stlport
 // ??0Rva0009D55BProduct@@QAE@XZ retail 0x0009D55B..0x0009D6E8 (397 bytes EH).
@@ -387,22 +387,23 @@ void Rva0009D55BProduct::rva0009C4FC(int x, int y, int width, int height)
 	float w = (float)width;
 	float h = (float)height;
 	{
-		Vector2 view[2] = { Vector2((float)TheDisplay->getWidth(), (float)TheDisplay->getHeight()), Vector2() };
-		float invWidth = 1.0f / view[0].X;
-		view[0].X = x * invWidth;
-		float invHeight = 1.0f / view[0].Y;
-		view[0].Y = y * invHeight;
-		view[1].X = invWidth * w + view[0].X;
-		view[1].Y = invHeight * h + view[0].Y;
-		if (0.0f > view[0].X)
-			view[0].X = 0.0f;
-		if (0.0f > view[0].Y)
-			view[0].Y = 0.0f;
-		if (view[1].X > 1.0f)
-			view[1].X = 1.0f;
-		if (view[1].Y > 1.0f)
-			view[1].Y = 1.0f;
-		((CameraClass *)m_C0)->Set_Viewport(view[0], view[1]);
+		Vector2 vmax((float)TheDisplay->getWidth(), (float)TheDisplay->getHeight());
+		Vector2 vmin;
+		float invWidth = 1.0f / vmax.X;
+		vmin.X = x * invWidth;
+		float invHeight = 1.0f / vmax.Y;
+		vmin.Y = y * invHeight;
+		vmax.X = invWidth * w + vmin.X;
+		vmax.Y = invHeight * h + vmin.Y;
+		if (0.0f > vmin.X)
+			vmin.X = 0.0f;
+		if (0.0f > vmin.Y)
+			vmin.Y = 0.0f;
+		if (vmax.X > 1.0f)
+			vmax.X = 1.0f;
+		if (vmax.Y > 1.0f)
+			vmax.Y = 1.0f;
+		((CameraClass *)m_C0)->Set_Viewport(vmin, vmax);
 	}
 	((CameraClass *)m_C0)->Set_Aspect_Ratio(w / h);
 	g_Va00DB5F84 = true;
