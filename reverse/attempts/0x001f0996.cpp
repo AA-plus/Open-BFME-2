@@ -1,6 +1,9 @@
 // ??1Rva001F092A@@UAE@XZ
+// partial score=0.897249567448243 date=2026-10-12
+// cl: /O1 /G7 /arch:SSE /EHsc /MD /Ireference/shims/bfme2_ascii /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// ??1Rva001F092A@@UAE@XZ
 // partial score=0.8 date=2026-10-06
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// oldcl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // ??1Rva001F092A@@UAE@XZ @0x001F0996 302B.
@@ -107,15 +110,15 @@ private:
 Rva001F092A::~Rva001F092A()
 {
 	Rva001F092A *self = this;
+	Rva001F0996Elem1 **finish=(Rva001F0996Elem1 **)self->m_vec24.m_end;
 	Rva001F092AVec &v24 = self->m_vec24;
 	Rva001F0996Elem1 **i = (Rva001F0996Elem1 **)v24.m_begin;
-	while (i != (Rva001F0996Elem1 **)v24.m_end)
-	{
+if(i != finish){do{
 		Rva001F0996Elem1 *e = *i;
 		if (e)
 			delete e->v0(0);
 		++i;
-	}
+	}while(i != (Rva001F0996Elem1 **)self->m_vec24.m_end);}
 	((_STL::vector<void *> *)&v24)->erase(((_STL::vector<void *> *)&v24)->begin(), ((_STL::vector<void *> *)&v24)->end());
 	for (Rva001F0996Node *n = self->m_list0C.m_ptr00->m_next08; n != self->m_list0C.m_ptr00; n = (Rva001F0996Node *)_STL::_Rb_global<bool>::_M_increment((_STL::_Rb_tree_node_base *)n))
 	{
@@ -125,7 +128,7 @@ Rva001F092A::~Rva001F092A()
 	}
 	self->m_list0C.rva001F050B();
 	unsigned int idx = 0;
-	if ((((char *)self->m_vec18.m_end - (char *)self->m_vec18.m_begin) >> 2) != 0)
+	if ((((_STL::vector<void *> *)&self->m_vec18)->size()) != 0)
 	{
 		do
 		{
@@ -133,7 +136,7 @@ Rva001F092A::~Rva001F092A()
 			if (e)
 				delete e;
 			++idx;
-		} while (idx < (unsigned int)(((char *)self->m_vec18.m_end - (char *)self->m_vec18.m_begin) >> 2));
+		} while (idx < (unsigned int)(((_STL::vector<void *> *)&self->m_vec18)->size()));
 	}
 	((_STL::vector<void *> *)&self->m_vec18)->erase(self->m_vec18.m_begin, self->m_vec18.m_end);
 }
