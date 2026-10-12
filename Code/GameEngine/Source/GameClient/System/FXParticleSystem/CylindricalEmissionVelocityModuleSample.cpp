@@ -12,6 +12,12 @@
 // path literal and line 59. cos and sin are the CRT imports. The donor's
 // name and layout are carried, not independently re-derived.
 
+// Retail keeps the CRT float wrappers from other units: import them here so
+// this unit inlines them without emitting its own competing out-of-line copies.
+#pragma push_macro("inline")
+#define inline __declspec(dllimport) __forceinline
+#include <math.h>
+#pragma pop_macro("inline")
 #include <math.h>
 
 extern float GetGameClientRandomValueReal( float low, float high,

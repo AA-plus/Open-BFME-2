@@ -9,6 +9,12 @@
 // Explicit coordinate copies avoidREP_MOVSD; grouped deltas plus barrier
 // retain allthreeXMM values beforestores. Local state changes before interval
 // calls reproduce native schedule; fullCircle flag removes redundant floattest.
+// Retail keeps the CRT float wrappers from other units: import them here so
+// this unit inlines them without emitting its own competing out-of-line copies.
+#pragma push_macro("inline")
+#define inline __declspec(dllimport) __forceinline
+#include <math.h>
+#pragma pop_macro("inline")
 #include "Coord3D.h"
 #include <math.h>
 extern "C"void _ReadWriteBarrier(void);

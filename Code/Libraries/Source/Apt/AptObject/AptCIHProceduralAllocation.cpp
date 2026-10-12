@@ -7,6 +7,12 @@
 // already-verified wrapAngle at 0x006E03F0, including its unusual half-pi fold.
 // Reference stores on the first two angles reproduce native float rounding.
 // factoryEnsureProperties is a descriptive binding, not an original symbol.
+// Retail keeps the CRT float wrappers from other units: import them here so
+// this unit inlines them without emitting its own competing out-of-line copies.
+#pragma push_macro("inline")
+#define inline __declspec(dllimport) __forceinline
+#include <math.h>
+#pragma pop_macro("inline")
 #include <math.h>
 #include <string.h>
 class Rva006DB160 { public: void *allocBlock(int); };

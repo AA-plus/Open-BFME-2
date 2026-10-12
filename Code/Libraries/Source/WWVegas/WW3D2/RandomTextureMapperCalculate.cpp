@@ -16,6 +16,12 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 // Dedicated TU so mapper.cpp keeps its matched bodies; flags are neighbour // cl: plus /G7.
 // Evidence: vtable slot 9 offset 0x24 of 0x007D57F4 class of INI ctor 0x001867A0; gap between Reset 0x00183890 and D3DXMATRIX ctor 0x00183A40; ZH donor GeneralsMD WW3D2 mapper.cpp Random Calculate with randomize inlined.
 
+// Retail keeps the CRT float wrappers from other units: import them here so
+// this unit inlines them without emitting its own competing out-of-line copies.
+#pragma push_macro("inline")
+#define inline __declspec(dllimport) __forceinline
+#include <math.h>
+#pragma pop_macro("inline")
 #include "rendobj.h"	// the bfmerendobj shim has to win the include guard
 #include "mapper.h"
 #include "ini.h"

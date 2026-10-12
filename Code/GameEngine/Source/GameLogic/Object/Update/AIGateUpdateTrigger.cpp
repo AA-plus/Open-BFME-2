@@ -14,6 +14,12 @@ struct GateOffset {
 // WB122F280 names loadTrigger; native4B0AAA..4B0C27 is381B. BF1
 // PolygonTrigger donor supplies registration/name purpose; native virtual
 // shape/name40/id44 and100B extent use verified CastleBehavior sibling.
+// Retail keeps the CRT float wrappers from other units: import them here so
+// this unit inlines them without emitting its own competing out-of-line copies.
+#pragma push_macro("inline")
+#define inline __declspec(dllimport) __forceinline
+#include <math.h>
+#pragma pop_macro("inline")
 #include "ascii_string.h"
 #include "reference/shims/wwmath/Vector2.h"
 class Rva00330C50Interface {public:~Rva00330C50Interface(){} virtual void s0()=0;virtual void s1()=0;virtual void s2()=0;virtual void s3()=0;virtual void s4()=0;virtual void s5()=0;virtual void s6()=0;};
