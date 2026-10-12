@@ -1,3 +1,5 @@
+// Eva::reportEvaEvent uses the target enum and two nullable position pointers.
+enum EvaEventID { EVA_INVALID = -1 };
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // LivingWorldLogic.cpp -- LivingWorldLogic members recovered from WorldBuilder
@@ -614,7 +616,7 @@ struct LivingWorldCollectorPlayerView
  char pad38[0x3c4-0x38];
  unsigned char flag3C4;
 };
-class Rva00072FE6 { public: void rva00072FE6(); };
+class Rva00072FE6 { public: void rva00072FE6(); ~Rva00072FE6(); };
 
 struct Parent0057605D;struct Parent00575EEA;
 class Rva004E071D {public:void rva004E071D(Bool);};
@@ -637,6 +639,7 @@ public:
 	void UpdateTurnPhase();
 	void AdjustArmyTargetLocations();
  void PrepareRetreats();
+ void CheckHeadToHeadBattles();
 	void ValidatePlayers();
 	void rva002B693F(void *keys);
  void rva002B9DC7();
@@ -3096,7 +3099,7 @@ class Rva0020E89C {public:
 };
 class Rva0020EAF6View {public:Rva0020E89C *rva0020EAF6(int);};
 class Rva00318C8DOwner {public:Rva0020E89C *rva00318C8D();};
-class Rva003195C9Owner {public:void rva00319E7C();};
+class Rva003195C9Owner {public:void rva00319E7C();void rva00319831(void*);};
 class Rva00319159 {public:UnicodeString rva0031964D();};
 class Rva002E0687 {public:bool rva002E0687()const;};
 class Rva002B2702 {public:void rva002B2702(void*,void*,int);};
@@ -3229,7 +3232,7 @@ struct Coord3D;
 struct Rva002BB15FCoord3D {float x,y,z;};
 class Rva002D3627Host {public: bool rva002BF5B0(const Coord2D *,Coord3D *);};
 class Eva;extern Eva *TheEva;
-class Eva {public: void reportEvaEvent(int,const Coord3D *,int);};
+class Eva {public: bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);};
 class LivingWorldRegionEffectsManager {public: void SyncRegion(int);};
 struct LivingWorldManagerEffectsView {char pad000[0x268];LivingWorldRegionEffectsManager *effects;};
 class LivingWorldManager;extern LivingWorldManager *TheLivingWorldManager;
@@ -3257,7 +3260,7 @@ void LivingWorldLogic::rva002BB15F()
 			pos.y = center.y;
 			pos.z = 0.0f;
 			g_00DFEF18->rva002BF5B0(&center, (Coord3D *)&pos);
-			TheEva->reportEvaEvent(0x15, (const Coord3D *)&pos, 0);
+			TheEva->reportEvaEvent(static_cast<EvaEventID>(0x15), (const Coord3D *)&pos, 0);
 		}
 		((Rva002B37B4 *)this)->rva002B37B4((Rva002B37B4P1 *)region, (Rva002B37B4P2 *)player);
 		((LivingWorldManagerEffectsView *)TheLivingWorldManager)->effects->SyncRegion((Int)region);
@@ -3414,4 +3417,108 @@ void LivingWorldLogic::CheckTurnPhaseTransitions(){
   }
  }
  m_fieldF8=m_turnPhase;
+}
+
+// Native2BCE24..2BD23E1050B; WB D8D930 identifies CheckHeadToHeadBattles.
+// Existing collector2B8F27 is rehomed here: its visible body lets VC7 keep
+// the local result-vector size across notification calls. Both bodies verify.
+// Player key34/flag3C4/armies1B8 and record stride20 are native facts;
+// helper and record types remain structural views with address names.
+struct ICoord2DBase {int x,y;};
+struct Rva002B72C9 {int x,y;_STL::vector<unsigned> values;};
+void __cdecl Rva002BC830Append(_STL::vector<Rva002B72C9>&,unsigned,const ICoord2DBase&);
+// Existing constructor specialization initializes12B inner vector headers.
+// Its opaque element spelling is retained; callers observe20B records.
+struct Rva002BC339Value{int words[3];};
+struct Rva002BB6BE20Rec{int x,y;_STL::vector<unsigned> values;};
+namespace _STL {
+template<> vector<vector<Rva002BB6BE20Rec> >::~vector();
+template<> class vector<vector<Rva002BC339Value>,allocator<vector<Rva002BC339Value> > > {public:
+ vector(unsigned);
+ __forceinline ~vector(){typedef vector<vector<Rva002BB6BE20Rec> > Other;((Other*)this)->~Other();}
+ _STL::vector<Rva002B72C9>*first,*finish,*limit;
+ unsigned size()const{return finish-first;}
+ _STL::vector<Rva002B72C9>&operator[](unsigned i){return first[i];}
+};
+}
+typedef _STL::vector<_STL::vector<Rva002BC339Value> > HeadToHeadRecords;
+class Rva002B2B78 {public:int rva002B2B78(Rva002B2B78*);};
+class Rva002B3A48 {public:bool rva002B3B07(Rva002B3A48*);};
+class ModuleData;
+struct HeadEntry{char opaque00[0x54];int key54;};class Rva002B8F27 {public:void rva002B8F27(_STL::vector<const ModuleData*>*);char opaque00[8];_STL::vector<HeadEntry*>m_entries;};
+struct HeadPlayerView{char pad00[0x34];int key;char pad38[0x180];_STL::vector<LivingWorldArmy*> armies;char pad1c4[0x200];unsigned char flag;};
+
+void Rva002B8F27::rva002B8F27(_STL::vector<const ModuleData*> *out){
+ for(unsigned i=0;i<m_entries.size();++i){
+  HeadEntry*entry=m_entries[i];const ModuleData*module=(const ModuleData*)entry;
+  if(((Rva00318F42*)entry)->rva00318F42()){
+   ((Rva003195C9Owner*)entry)->rva00319831(0);
+   if(entry->key54==((Rva002B2B66*)TheLivingWorldLogic)->rva002B2B66())out->push_back(module);
+  }
+ }
+}
+// Reuse the owned56B tree destructor rather than the older incorrect
+// set<int> destructor pin. The constructor and iterator layout are verified.
+struct HeadIntKeys {
+ void *words[3];
+ __forceinline HeadIntKeys(){((_STL::set<int>*)this)->_STL::set<int>::set();}
+ __forceinline ~HeadIntKeys(){((Rva00072FE6*)this)->~Rva00072FE6();}
+ unsigned size()const{return ((const _STL::set<int>*)this)->size();}
+ _STL::set<int>::iterator begin(){return ((_STL::set<int>*)this)->begin();}
+ _STL::set<int>::iterator end(){return ((_STL::set<int>*)this)->end();}
+};
+void LivingWorldLogic::CheckHeadToHeadBattles(){
+ HeadIntKeys keys;
+ rva002B693F(&keys);
+ HeadToHeadRecords groups(keys.size());
+ unsigned group=0;
+ for(_STL::set<int>::iterator it=keys.begin();it!=keys.end();++it,++group){
+  for(unsigned p=0;p<m_players.size();++p){
+   HeadPlayerView *player=(HeadPlayerView*)m_players[p];
+   if(player->key!=*it || player->flag)continue;
+   _STL::vector<LivingWorldArmy*> &armies=player->armies;
+   for(unsigned a=0;a<armies.size();++a){
+    LivingWorldArmy *army=armies[a];
+    if(((StringBase<char>*)((char*)army+0x18))->isEmpty())continue;
+    int destination=((Rva00318FA1MainOwner*)army)->rva00318FA1();
+    if(!destination)continue;
+    int current=(int)((Rva00318C79Owner*)army)->rva00318C32();
+    if(!current)continue;
+    ICoord2DBase position;position.x=current;position.y=destination;
+    Rva002BC830Append(groups[group],(unsigned)army,position);
+   }
+  }
+ }
+ _STL::vector<const ModuleData*> repelled;
+ for(unsigned first=0;first<groups.size();++first){
+  _STL::vector<Rva002B72C9>& left=groups[first];
+  for(unsigned second=first+1;second<groups.size();++second){
+   _STL::vector<Rva002B72C9>& right=groups[second];
+   for(unsigned a=0;a<left.size();++a){
+    Rva002B72C9& l=left[a];
+    for(unsigned b=0;b<right.size();++b){
+     Rva002B72C9& r=right[b];
+     if((unsigned char)((Rva002B2B78*)&l)->rva002B2B78((Rva002B2B78*)&r)){
+      if(((Rva002B3A48*)&l)->rva002B3B07((Rva002B3A48*)&r))((Rva002B8F27*)&r)->rva002B8F27(&repelled);
+      else ((Rva002B8F27*)&l)->rva002B8F27(&repelled);
+     }
+    }
+   }
+  }
+ }
+ if(repelled.size()){
+  UnicodeString title=TheGameText->fetch("LW:AttackRepelledTitle");
+  UnicodeString summary=TheGameText->fetch("LW:AttackRepelledSummaryText");
+  for(unsigned i=0;i<repelled.size();++i){
+   const ModuleData *army=repelled[i];
+   Rva0020E89C *region=(Rva0020E89C*)((Rva00318C79Owner*)army)->rva00318C32();
+   if(region){
+    UnicodeString item=TheGameText->fetch("LW:AttackRepelledItemText");
+    item.format(&item,((Rva00319159*)army)->rva0031964D().str(),region->rva0020E89C().str());
+    summary.concat(item);
+   }
+  }
+  Rva002B9062Element hint(new Rva004FBCBE(title,summary,0));
+  ((_STL::vector<Rva002B9062Element>*)&m_pending154)->push_back(hint);
+ }
 }
