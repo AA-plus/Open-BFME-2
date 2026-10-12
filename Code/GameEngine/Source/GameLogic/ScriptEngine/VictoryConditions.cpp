@@ -114,6 +114,18 @@ Bool VictoryConditions::hasAchievedVictory(Player *player)
 	}
 }
 
+// VictoryConditions::hasBeenDefeated, retail 0x0041FF6E (63 bytes), vtable slot 15.
+Bool VictoryConditions::hasBeenDefeated(Player *player)
+{
+	if (!isEligiblePlayer(player))
+		return false;
+
+	if (m_singleAllianceRemaining && m_field88 > 0 && !hasAchievedVictory(player))
+		return true;
+
+	return false;
+}
+
 // VictoryConditions::isLocalAlliedDefeat, retail 0x004200CB.
 Bool VictoryConditions::isLocalAlliedDefeat()
 {

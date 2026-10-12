@@ -11,13 +11,25 @@ struct FieldParse
 	void *m_x00;
 };
 
-void rva00224A31();
+class INI;
+
+class Rva002241D6
+{
+public:
+	void rva002241D6(INI *ini);
+};
+
+// ?rva00224A31@@YAXPAVINI@@PAVRva002241D6@@@Z @0x00224A31 (14B)
+void __declspec(noinline) rva00224A31(INI *ini, Rva002241D6 *inst)
+{
+	inst->rva002241D6(ini);
+}
 
 struct BlockParse
 {
 	unsigned char m_pad00[0xC];
 	FieldParse m_field;
-	void (*m_func)();
+	void (*m_func)(INI *, Rva002241D6 *);
 	int m_14;
 	int m_18;
 	int m_1C;
@@ -38,7 +50,7 @@ public:
 class Rva00224A3F
 {
 public:
-	void rva00224A3F(INI *ini);
+	void __declspec(noinline) rva00224A3F(INI *ini);
 };
 
 void Rva00224A3F::rva00224A3F(INI *ini)
@@ -55,4 +67,14 @@ void Rva00224A3F::rva00224A3F(INI *ini)
 		theAptButtonTooltipMapBlockParse.m_28 = 0;
 	}
 	ini->initFromINI(this, &theAptButtonTooltipMapBlockParse.m_field);
+}
+
+class Rva00224CDC;
+Rva00224CDC *rva00224D80();
+
+// ?rva00224DFF@@YAXPAVINI@@@Z @0x00224DFF (17B)
+void rva00224DFF(INI *ini)
+{
+	Rva00224A3F *p = reinterpret_cast<Rva00224A3F *>(rva00224D80());
+	p->rva00224A3F(ini);
 }

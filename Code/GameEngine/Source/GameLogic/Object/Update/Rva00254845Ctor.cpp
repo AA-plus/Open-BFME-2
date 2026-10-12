@@ -73,3 +73,27 @@ ModuleData *ModuleFactoryDataAt00254857(INI *ini)
 		ini->initFromINIMultiProc(data, AllowBannerSpawnUpgradeModuleData::buildFieldParse);
 	return reinterpret_cast<ModuleData *>(data);
 }
+
+struct FieldParse;
+int Rva004CE29DGet();
+
+class MultiIniFieldParse
+{
+public:
+	void add(const FieldParse *f, unsigned int extraOffset);
+};
+
+// ?rva00253475@@YAXAAVMultiIniFieldParse@@@Z @0x00253475 (18B)
+void __declspec(noinline) rva00253475(MultiIniFieldParse &p)
+{
+	p.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 8);
+}
+
+// ?ModuleFactoryDataAt00254DB3@@YAPAVModuleData@@PAVINI@@@Z @0x00254DB3 (52B)
+ModuleData *ModuleFactoryDataAt00254DB3(INI *ini)
+{
+	Rva00253487Base *data = new Rva00253487Base;
+	if (ini)
+		ini->initFromINIMultiProc(data, rva00253475);
+	return reinterpret_cast<ModuleData *>(data);
+}

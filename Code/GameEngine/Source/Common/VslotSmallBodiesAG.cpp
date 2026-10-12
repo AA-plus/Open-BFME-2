@@ -377,4 +377,172 @@ void Rva005C47DC::rva005C47DC(Int)
 		m_14 = v - 1;
 }
 
+class AsciiStringRef
+{
+public:
+	Int write(char *buf);
+private:
+	Int m_ref;
+};
+struct Rva0032AFA4Pair
+{
+	AsciiStringRef m_a;
+	AsciiStringRef m_b;
+};
+class Rva0032AFA4
+{
+public:
+	Int rva0032AFA4(char *buf);
+private:
+	Int m_00;
+	Rva0032AFA4Pair *m_04;
+};
+Int Rva0032AFA4::rva0032AFA4(char *buf)
+{
+	Rva0032AFA4Pair *p = m_04;
+	Int n = p->m_a.write(buf);
+	return p->m_b.write(buf + n) + n;
+}
 
+struct Rva003678D6Sub04
+{
+	virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+	virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+	virtual bool v8();
+};
+struct Rva003678D6Sub28
+{
+	Int m_00;
+	Rva003678D6Sub04 *m_04;
+	bool check() const { return m_04 ? m_04->v8() : true; }
+};
+class Rva003678D6
+{
+public:
+	bool rva003678D6();
+private:
+	char m_pad00[0x28];
+	Rva003678D6Sub28 *m_28;
+};
+bool Rva003678D6::rva003678D6()
+{
+	return !m_28->check();
+}
+
+class Rva0037B7C7
+{
+public:
+	void rva0037BC65();
+};
+class RecorderClass
+{
+public:
+	virtual ~RecorderClass();
+	virtual void init();
+	virtual void postProcessLoad();
+	virtual void reset();
+	virtual void rva0037DC36();
+protected:
+	void updateRecord();
+private:
+	char m_pad04[0x1C - 4];
+	Int m_mode;
+};
+void RecorderClass::rva0037DC36()
+{
+	if (m_mode == 0 || m_mode == 2)
+		updateRecord();
+	else if (m_mode == 1)
+		reinterpret_cast<Rva0037B7C7 *>(this)->rva0037BC65();
+}
+
+void __cdecl operator delete(void *p);
+namespace FXParticleSystem
+{
+class CPUParticle
+{
+public:
+	virtual void *deleteInstance(Int pool);
+	bool update();
+	char m_pad04[0x60];
+	CPUParticle *m_next64;
+};
+}
+class Rva003AFDAA
+{
+public:
+	virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+	virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+	virtual FXParticleSystem::CPUParticle *v8();
+	void rva003AFDF1();
+};
+void Rva003AFDAA::rva003AFDF1()
+{
+	FXParticleSystem::CPUParticle *p = v8();
+	while (p)
+	{
+		FXParticleSystem::CPUParticle *next = p->m_next64;
+		if (!p->update())
+			::operator delete(p->deleteInstance(0));
+		p = next;
+	}
+}
+
+class Rva003F409F
+{
+public:
+	void rva003F409F(bool val);
+};
+struct Rva003F82F4Sub04
+{
+	virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+	virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+	virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+	virtual bool v12(Rva003F409F *arg);
+};
+class Rva003F82F4
+{
+public:
+	bool rva003F82F4(Rva003F409F *arg);
+private:
+	Int m_00;
+	Rva003F82F4Sub04 *m_04;
+};
+bool Rva003F82F4::rva003F82F4(Rva003F409F *arg)
+{
+	arg->rva003F409F(m_04->v12(arg));
+	return true;
+}
+
+class INI;
+void iniParseObjectFilter(INI *ini, void *instance, void *store, const void *userData);
+void rva00421749(INI *ini, void *instance, void *store, const void *userData)
+{
+	iniParseObjectFilter(ini, instance, *static_cast<void **>(store), userData);
+}
+
+enum ObjectStatusTypes
+{
+	OBJECT_STATUS_25 = 0x25
+};
+class Object
+{
+public:
+	bool testStatus(ObjectStatusTypes status) const;
+};
+class StateMachine
+{
+public:
+	char m_pad00[0x14];
+	Object *m_owner;
+};
+class State
+{
+public:
+	char m_pad00[0x18];
+	StateMachine *m_machine;
+};
+int rva0034373F(State *state, void *)
+{
+	return !state->m_machine->m_owner->testStatus(OBJECT_STATUS_25);
+}

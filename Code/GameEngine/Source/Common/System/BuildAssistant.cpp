@@ -809,7 +809,8 @@ public:
 	virtual Bool isLocationClearOfObjects(const Coord3D *worldPos, const ThingTemplate *build, Real angle, Object *builderObject, UnsignedInt options, Player *player, Bool flag);	// +0x44
 	virtual Bool rva0039361E(const Coord3D *pos, const ThingTemplate *whatToBuild, Real angle, Object *builder, Player *unused);	// +0x48
 	virtual void addBibs(const Coord3D *worldPos, const ThingTemplate *build);	// +0x4C
-	virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23();
+	virtual void slot20(); virtual void slot21(); virtual void slot22();
+	virtual Bool rva00391A70(const ThingTemplate *whatToBuild, const Object *builder);	// +0x5C
 	virtual CanMakeType canMakeUnit(Object *builder, const ThingTemplate *whatToBuild, Int revivalIndex) const;	// +0x60
 	virtual Bool isPossibleToMakeUnit(Object *builder, const ThingTemplate *whatToBuild, Int revivalIndex) const;	// +0x64
 	virtual void sellObject(Object *obj);	// +0x68
@@ -2162,6 +2163,14 @@ Bool Rva003919F6Connected(Object*a,Object*b)
  if(x && x->slot23(b->getID()))return true;
  Rva0028BD17Interface *y=(Rva0028BD17Interface*)b->rva0028BD17();
  if(y && y->slot23(a->getID()))return true;
+ return false;
+}
+
+// ?rva00391A70@BuildAssistant@@UAE_NPBVThingTemplate@@PBVObject@@@Z @0x00391A70 (49B)
+Bool BuildAssistant::rva00391A70(const ThingTemplate *whatToBuild, const Object *builder)
+{
+ if (whatToBuild && builder && whatToBuild->isKindOf((KindOfType)156) && builder->isKindOf((KindOfType)156))
+  return true;
  return false;
 }
 

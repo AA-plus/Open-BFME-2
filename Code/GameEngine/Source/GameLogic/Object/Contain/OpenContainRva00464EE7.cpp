@@ -225,6 +225,7 @@ public:
 	virtual void slot85() {}
 	virtual const Coord3D *rva004626CA();
 	virtual const Coord3D *rva004626AF();
+	virtual bool rva00462955(Object *obj, int unused);
 };
 
 class AIUpdateInterfaceView
@@ -315,6 +316,15 @@ bool OpenContainActionIface::rva004628AB(int a, int b)
 			return parentContain->rva004628AB(a, b);
 	}
 	return false;
+}
+
+bool OpenContainActionIface::rva00462955(Object *obj, int)
+{
+	OpenContain *contain = (OpenContain *)((char *)this - 0x20);
+	OpenContainModuleDataView *md = (OpenContainModuleDataView *)contain->m_moduleData;
+	if (md->m_filter44.accepts(obj, contain->m_object->getControllingPlayer()) == false)
+		return false;
+	return true;
 }
 
 char OpenContainActionIface::rva00462BFF(const Object *a, const Object *b) const

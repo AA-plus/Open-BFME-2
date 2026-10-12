@@ -248,6 +248,7 @@ class DeployStyleAIUpdate : public Rva0026E9BDBase
 public:
 	DeployStyleAIUpdate(Thing *thing, const ModuleData *moduleData);
 	void reset();
+	void rva0048E8F7(const AICommandParms *parms);
 	void doLastOutsideCommand();
 	void doCommand(const AICommandParms *parms, bool fromLastOutside);
 	void setGoal(const BfmeVec12 &pos) { float *goal = &m_4C4; goal[0] = pos.x; goal[1] = pos.y; goal[2] = pos.z; }
@@ -323,6 +324,12 @@ void DeployStyleAIUpdate::reset()
 	goal[0] = 0.0f;
 	goal[1] = 0.0f;
 	goal[2] = 0.0f;
+}
+
+// ?rva0048E8F7@DeployStyleAIUpdate@@QAEXPBUAICommandParms@@@Z @0x0048E8F7 (20B)
+void DeployStyleAIUpdate::rva0048E8F7(const AICommandParms *parms)
+{
+	reinterpret_cast<DeployStyleCommandDispatchView *>(reinterpret_cast<char *>(this) - 0x20)->doCommand(parms, false);
 }
 
 // WB11DA210 names doLastOutsideCommand and asserts DeployStyleAIUpdate.cpp535.

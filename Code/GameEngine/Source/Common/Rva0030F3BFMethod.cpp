@@ -3,7 +3,11 @@
 // Evidence: calls rowed 0x0030F388 with same this; flag at +0x1c shared; vtable slot 1 of 0x00809834 (class of ??1Rva0030F42E opaque deleter); floats at +0x14 (spec int at +0x1c) and +0x18; unblocked by landing 0x0030F388.
 struct Rva0030F3BFSpec
 {
-	char m_pad00[0x1c];
+	virtual void v0();
+	virtual void v1();
+	virtual void v2();
+	virtual void v3(float *val, int arg);
+	char m_pad04[0x18];
 	int m_1c;
 };
 
@@ -12,6 +16,7 @@ class Rva0030F388
 public:
 	void rva0030F388();
 	void rva0030F3BF(float value);
+	void rva0030F2CB(int arg);
 private:
 	char m_00[4];
 	char m_listPad[16];
@@ -19,6 +24,11 @@ private:
 	float m_18;
 	bool m_flag;
 };
+
+void Rva0030F388::rva0030F2CB(int arg)
+{
+	m_14->v3(&m_18, arg);
+}
 
 void Rva0030F388::rva0030F3BF(float value)
 {

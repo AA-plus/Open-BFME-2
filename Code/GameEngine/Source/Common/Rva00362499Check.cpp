@@ -7,12 +7,15 @@
 class Rva00362499
 {
 public:
-	unsigned char rva00362499();
+	unsigned char __declspec(noinline) rva00362499();
     unsigned int rva003624A8();
+    void rva003624FE();
 private:
 	char m_00[4];
 	void *m_04;
 	void *m_08;
+	unsigned int m_0C;
+	unsigned int m_10;
 };
 
 unsigned char Rva00362499::rva00362499()
@@ -41,4 +44,19 @@ unsigned int Rva00362499::rva003624A8()
     if (value == 1)
         return value;
     return value;
+}
+
+// ?rva003624FE@Rva00362499@@QAEXXZ @0x003624FE (26B)
+void Rva00362499::rva003624FE()
+{
+    if (rva00362499())
+    {
+        Rva003624A8StatePrefix *s = static_cast<Rva003624A8StatePrefix *>(m_04);
+        if (s)
+        {
+            unsigned int v = m_10;
+            s->word40 = v;
+            m_10 = v;
+        }
+    }
 }

@@ -40,6 +40,11 @@ class UpgradeCenter
 {
 public:
 	const UpgradeTemplate *findUpgrade(const AsciiString &name) const;
+	void rva0026F93C();
+
+private:
+	unsigned char m_pad00[0x0C];
+	UpgradeTemplate *m_upgradeTemplates; // +0x0C
 };
 
 extern UpgradeCenter *TheUpgradeCenter;
@@ -47,12 +52,15 @@ extern UpgradeCenter *TheUpgradeCenter;
 class UpgradeTemplate
 {
 public:
-	void friend_resolveSubUpgradeNames();
+	void __declspec(noinline) friend_resolveSubUpgradeNames();
+	UpgradeTemplate *getNextTemplate() const { return m_nextTemplate; }
 
 private:
 	unsigned char m_unreconstructed_000[0x10];
 	_STL::vector<AsciiString> m_subUpgradeNames; // +0x10
 	_STL::vector<const UpgradeTemplate *> m_subUpgrades; // +0x1C
+	unsigned char m_unreconstructed_028[0x64 - 0x28];
+	UpgradeTemplate *m_nextTemplate; // +0x64
 };
 
 void UpgradeTemplate::friend_resolveSubUpgradeNames()
@@ -69,4 +77,11 @@ void UpgradeTemplate::friend_resolveSubUpgradeNames()
 		}
 		m_subUpgradeNames.clear();
 	}
+}
+
+// ?rva0026F93C@UpgradeCenter@@QAEXXZ @0x0026F93C (22B)
+void UpgradeCenter::rva0026F93C()
+{
+	for (UpgradeTemplate *u = m_upgradeTemplates; u != 0; u = u->getNextTemplate())
+		u->friend_resolveSubUpgradeNames();
 }

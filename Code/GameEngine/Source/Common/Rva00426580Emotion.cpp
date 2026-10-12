@@ -23,15 +23,29 @@ class BfmeEmotionName;
 class EmotionNugget;
 class ModuleData;
 
+struct Rva005334A4Element;
+namespace _STL {
+template <> Rva005334A4Element *vector<Rva005334A4Element, allocator<Rva005334A4Element> >::erase(Rva005334A4Element *, Rva005334A4Element *);
+}
+
 class EmotionSystem
 {
 public:
 	EmotionNugget *findNugget(const BfmeEmotionName &name);
 	void AddEmotionNuggetTemplate(MultiplayerColorDefinition *def);
+	void rva00426572();
 private:
 	char m_pad[0xC];
 	_STL::vector<const ModuleData *> m_vec0C;
+	char m_pad18[0xC];
+	_STL::vector<Rva005334A4Element> m_vec24;
 };
+
+// ?rva00426572@EmotionSystem@@QAEXXZ @0x00426572 (14B)
+void EmotionSystem::rva00426572()
+{
+	m_vec24.clear();
+}
 
 void EmotionSystem::AddEmotionNuggetTemplate(MultiplayerColorDefinition *def)
 {
