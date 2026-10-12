@@ -58,6 +58,13 @@ public:
 	void rva00068073( int a, Real b, int c );
 	void rva000680D6( const Coord3D *pos, const GeometryInfo &geom, Real value );
 };
+// Retail 0x000AC514 (299B, unrowed): a two-float, one-int method of the object
+// at W3DTerrainVisual +0x1C, in the WorldHeightMap code range.
+class Rva000AC514Host
+{
+public:
+	void rva000AC514( Real x, Real y, int value );
+};
 class Rva00068119
 {
 public:
@@ -214,9 +221,12 @@ public:
 	virtual void rva00091E19( int a, Real b, int c );
 	virtual void rva00091E45( const Coord3D *pos, const GeometryInfo &geom, Real value );
 	virtual void rva00091E64( const Coord3D *pos, const GeometryInfo *geom, Real value );
+	virtual void rva00091D3D( Real x, Real y, int value );
 private:
 	char m_unrecovered04[ 0x10 ];
 	BaseHeightMapRenderObjClass *m_terrainRenderObject;	///< 0x14
+	char m_unrecovered18[ 4 ];
+	Rva000AC514Host *m_object1C;	///< 0x1C
 };
 
 void W3DTerrainVisual::addProp( const ThingTemplate *tTemplate, const Coord3D *pos, Real angle, Real scale )
@@ -280,4 +290,12 @@ void W3DTerrainVisual::rva00091E64( const Coord3D *pos, const GeometryInfo *geom
 {
 	if (m_terrainRenderObject)
 		reinterpret_cast<Rva00068119 *>(m_terrainRenderObject)->rva00068119(pos, geom, value);
+}
+
+// Retail 0x00091D3D (36B, RET 0xC; vtable entry 0x00BC80B8): the same guarded
+// pass-through against the object at +0x1C.
+void W3DTerrainVisual::rva00091D3D( Real x, Real y, int value )
+{
+	if (m_object1C)
+		m_object1C->rva000AC514(x, y, value);
 }
