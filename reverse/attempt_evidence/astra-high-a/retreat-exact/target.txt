@@ -57,7 +57,7 @@
 3f67d1:	8b 45 dc             	mov eax, dword ptr [ebp - 0x24]
 3f67d4:	2b 45 d8             	sub eax, dword ptr [ebp - 0x28]
 3f67d7:	6a 34                	push 0x34
-3f67d9:	99                   	cdq 
+3f67d9:	99                   	cdq
 3f67da:	59                   	pop ecx
 3f67db:	f7 f9                	idiv ecx
 3f67dd:	33 f6                	xor esi, esi
@@ -75,7 +75,7 @@
 3f67fd:	8b 45 dc             	mov eax, dword ptr [ebp - 0x24]
 3f6800:	2b 45 d8             	sub eax, dword ptr [ebp - 0x28]
 3f6803:	6a 34                	push 0x34
-3f6805:	99                   	cdq 
+3f6805:	99                   	cdq
 3f6806:	59                   	pop ecx
 3f6807:	f7 f9                	idiv ecx
 3f6809:	46                   	inc esi
@@ -172,5 +172,5 @@
 3f6927:	8b 4d f4             	mov ecx, dword ptr [ebp - 0xc]
 3f692a:	5e                   	pop esi
 3f692b:	64 89 0d 00 00 00 00 	mov dword ptr fs:[0], ecx
-3f6932:	c9                   	leave 
+3f6932:	c9                   	leave
 3f6933:	c2 04 00             	ret 4

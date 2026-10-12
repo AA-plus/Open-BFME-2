@@ -16,4 +16,3 @@ for expr in ['return m_players[i];','return *(m_players.begin()+i);','return ((L
   t=t.replace('((Rva002E0699*)m_players[p])->rva002E0699()','((Rva002E0699*)dispatcherPlayer(p))->rva002E0699()')
   vs.append(('sib-member-'+str(len(vs)),t))
 for name,t in vs:trial(name,t,sym,0x2bdb4c,3058,'dispatcher')
-

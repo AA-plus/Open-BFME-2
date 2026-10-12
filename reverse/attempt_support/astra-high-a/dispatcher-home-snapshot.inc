@@ -3670,4 +3670,3 @@ void LivingWorldLogic::CheckHeadToHeadBattles(){
   ((_STL::vector<Rva002B9062Element>*)&m_pending154)->push_back(hint);
  }
 }
-

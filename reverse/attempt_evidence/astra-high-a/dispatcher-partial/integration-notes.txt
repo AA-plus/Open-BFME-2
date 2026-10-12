@@ -11,3 +11,5 @@ Preference domain caveat: first/second assignments cover only preference values 
 Trials: result summary includes compile failures. pref-outhelper-0..5 from the earlier helper script accidentally recursed after text replacement and are invalid experiments; corrected pref-outhelper-fixed-* trials are valid. All compilation was serial. Scorer clips to requested body and patches DIR32 from retail, so score alone does not prove literal/table identity. Raw COFF relocations and independent extent checks are included.
 
 The replayable bank is split into reverse/attempts/0x002bdb4c.cpp and reverse/attempt_support/astra-high-a/dispatcher-home-snapshot.inc to meet the 64KiB bank limit. The support snapshot is evidence only; integration must use current home code. Its stored home snapshot predates the newly landed army merge.
+
+Superseded by exact local commit8da5e45807. See ../dispatcher-exact for final source ownership, whole3170-byte verification, helper checks and normal commit-hook receipt. This partial bank was cleared by add_match; its support snapshot remains historical evidence only.

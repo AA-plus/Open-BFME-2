@@ -266,7 +266,7 @@
 2bde8f:	8b 43 1c             	mov eax, dword ptr [ebx + 0x1c]
 2bde92:	2b 43 18             	sub eax, dword ptr [ebx + 0x18]
 2bde95:	6a 1c                	push 0x1c
-2bde97:	99                   	cdq 
+2bde97:	99                   	cdq
 2bde98:	59                   	pop ecx
 2bde99:	f7 f9                	idiv ecx
 2bde9b:	33 ff                	xor edi, edi
@@ -311,7 +311,7 @@
 2bdf05:	8b 43 1c             	mov eax, dword ptr [ebx + 0x1c]
 2bdf08:	2b 43 18             	sub eax, dword ptr [ebx + 0x18]
 2bdf0b:	6a 1c                	push 0x1c
-2bdf0d:	99                   	cdq 
+2bdf0d:	99                   	cdq
 2bdf0e:	59                   	pop ecx
 2bdf0f:	f7 f9                	idiv ecx
 2bdf11:	47                   	inc edi
@@ -929,7 +929,7 @@
 2be72f:	8b 4d f4             	mov ecx, dword ptr [ebp - 0xc]
 2be732:	5e                   	pop esi
 2be733:	64 89 0d 00 00 00 00 	mov dword ptr fs:[0], ecx
-2be73a:	c9                   	leave 
+2be73a:	c9                   	leave
 2be73b:	c2 08 00             	ret 8
 2be73e:	00 00                	add byte ptr [eax], al
 2be740:	00 00                	add byte ptr [eax], al

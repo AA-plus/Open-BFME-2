@@ -107,5 +107,5 @@
 2b4af3:	5b                   	pop ebx
 2b4af4:	5f                   	pop edi
 2b4af5:	5e                   	pop esi
-2b4af6:	c9                   	leave 
-2b4af7:	c3                   	ret 
+2b4af6:	c9                   	leave
+2b4af7:	c3                   	ret
