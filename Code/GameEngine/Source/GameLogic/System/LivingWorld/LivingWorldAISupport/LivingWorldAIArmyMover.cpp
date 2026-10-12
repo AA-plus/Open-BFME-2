@@ -36,7 +36,32 @@ struct ArmyMoverDistanceLookup { IntMap::iterator find(int id){return ((IntMap*)
 extern unsigned g_Va00E04544;
 int GetGameLogicRandomValue(int,int,char*,int);
 struct ArmyMoverRegion {char pad[0x12c];int id;char gap130[12];int owner;};
-class LivingWorldAIArmyMover {public:int WinTestBattle(ArmyMoverRegion*,int,int,const ModuleData*,void*,Rva004FF5B7*,int);void rva0059BE1F(ArmyMoverRegion*,int,int,PointerVector*,PointerVector*,PointerVector*,Rva004FF5B7*,int);};
+struct BfmePod20 {int m_id;bool m_flag;int m_08,m_0c,m_step;};
+struct Elem0059BD85
+{
+	void *m_key;
+	char m_pad[16];
+};
+struct Range0059BD85
+{
+	Elem0059BD85 *m_begin;
+	Elem0059BD85 *m_end;
+};
+
+class Rva004FF997Owner {public:int rva004FF997(int);};
+class Rva004FF9B6 {public:void*rva004FF9B6(int);};
+class Rva0020E89C;
+class Rva0020EAF6View {public:Rva0020E89C*rva0020EAF6(int);};
+int rva0050059A(int,int);int rva005009AA(int,int);
+struct StrategyRegion {int id,owner;};
+struct StrategyBonus {char gap00[0x14];int a,b,c;char gap20[12];_STL::vector<int> regions;};
+struct StrategyDefinition {char gap00[0x5c];_STL::vector<StrategyBonus*> bonuses;};
+struct StrategyManager {char gap00[8];StrategyDefinition*definition;};
+struct StrategyLogic {char gap00[0xb0];StrategyManager*manager;__forceinline StrategyManager*getManager(){return manager;}};
+struct StrategyArmy {int id;int unknown04;unsigned unitKinds;int unknown0c;StrategyRegion*region;};
+typedef _STL::vector<StrategyArmy> StrategyArmies;
+
+class LivingWorldAIArmyMover {public:char gap00[0x18];int weightA,weightB,weightC;bool rva0059BD85(Range0059BD85*,int,void*);void rva0059C631(_STL::vector<BfmePod20>*,int,void*,Rva004FF5B7*,int);int WinTestBattle(ArmyMoverRegion*,int,int,const ModuleData*,void*,Rva004FF5B7*,int);void rva0059BE1F(ArmyMoverRegion*,int,int,PointerVector*,PointerVector*,PointerVector*,Rva004FF5B7*,int);};
 
 // WB14FBC60 and native59C15B..59C631 establish two simulated battles.
 // Original parameter and record spellings remain unknown; views below carry
@@ -132,4 +157,72 @@ void LivingWorldAIArmyMover::rva0059BE1F(ArmyMoverRegion*region,int maxDistance,
    }
   }
  }
+}
+
+// Native59C631..59C93C; WB14FCAD0 same class callgraph, method name unknown.
+// Target offsets establish region-bonus weights and army record20 stride.
+// The +8 word is the node count of the army record's +4 unit tree (Gather
+// WorldInformation record view); original method name remains unknown.
+// A per-iteration byte offset keeps its lifetime separate from the inner loop.
+// The range helper must be visible in this unit: MSVC uses its read-only
+// body when scheduling the first army-record loads. Both bodies are gated.
+// ?rva0059C631@LivingWorldAIArmyMover@@QAEXPAV?$vector@UBfmePod20@@V?$allocator@UBfmePod20@@@_STL@@@_STL@@HPAXPAVRva004FF5B7@@H@Z
+void LivingWorldAIArmyMover::rva0059C631(_STL::vector<BfmePod20>*moves,int playerID,void*unused,Rva004FF5B7*info,int difficulty) {
+ StrategyBonus *best=0;
+ Rva002E2903Player*player=((Rva002BA8F1Logic*)TheLivingWorldLogic)->find(playerID,0);
+ _STL::vector<StrategyBonus*>*bonuses=&((StrategyLogic*)TheLivingWorldLogic)->manager->definition->bonuses;float bestScore=0;
+ unsigned i;for(i=0;i<bonuses->size();++i) {
+  StrategyBonus*bonus=(*bonuses)[i];
+  unsigned count=bonus->regions.size();
+  unsigned owned=0;
+  for(unsigned j=0;j<count;++j) {
+   StrategyRegion*r=(StrategyRegion*)((Rva004FF997Owner*)info)->rva004FF997(bonus->regions[j]);
+   if(r->owner==playerID)++owned;
+   else if((unsigned char)((Rva002E071E*)player)->rva002E0BC0(r->owner)){owned=0;break;}
+  }
+  float wa=float(bonus->a)*weightA;float wb=float(bonus->b)*weightB;float wc=float(bonus->c)*weightC;float score=float(owned)/float(count)+(wa+(wb+wc))*0.01f;
+  if(score>bestScore && owned<count) {bestScore=score;best=(*bonuses)[i];}
+ }
+ if(!best)return;
+ int destination=-1;unsigned chosenArmy=0;
+ unsigned count=best->regions.size();float bestArmyScore=0;
+ StrategyArmies*armies=(StrategyArmies*)((Rva004FF9B6*)info)->rva004FF9B6(playerID);
+ for(i=0;i<armies->size();++i) {
+  unsigned offset=i*20;StrategyArmy*army=&(*armies)[i];
+  if(!rva0059BD85((Range0059BD85*)moves,playerID,(void*)army->id)) {
+   unsigned unitKinds=army->unitKinds;int from=army->region->id;
+   float score=0;
+   for(unsigned j=0;j<count;++j) {
+    if(((StrategyRegion*)((Rva004FF997Owner*)info)->rva004FF997(best->regions[j]))->owner!=playerID) {
+     score=1.0f/float(rva0050059A(from,best->regions[j])*unitKinds);
+     if(((StrategyRegion*)((Rva004FF997Owner*)info)->rva004FF997(best->regions[j]))->owner!=-1) {
+      ArmyMoverRegion*r=(ArmyMoverRegion*)((Rva0020EAF6View*)((StrategyLogic*)TheLivingWorldLogic)->getManager())->rva0020EAF6(best->regions[j]);
+      const ModuleData*armyObject=(const ModuleData*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->rva002B488E(((StrategyArmy*)((char*)armies->begin()+offset))->id);
+      if(WinTestBattle(r,1,playerID,armyObject,unused,info,difficulty)!=0)score=0;
+     }
+    }
+    if(score>bestArmyScore){destination=best->regions[j];bestArmyScore=score;chosenArmy=i;}
+   }
+  }
+ }
+ if(bestArmyScore>0) {
+  int step=rva005009AA((*armies)[chosenArmy].region->id,destination);
+  BfmePod20 move;move.m_id=(*armies)[chosenArmy].id;move.m_flag=true;move.m_08=0;move.m_step=step;
+  moves->push_back(move);
+ }
+}
+
+// Native0059BD85..0059BDB9; WB14FC810 member range query.
+// ?rva0059BD85@LivingWorldAIArmyMover@@QAE_NPAURange0059BD85@@HPAX@Z
+bool LivingWorldAIArmyMover::rva0059BD85(Range0059BD85 *range, int unused, void *key)
+{
+	unsigned int i = 0;
+	int count = (char *)range->m_end - (char *)range->m_begin;
+	count /= (int)sizeof(Elem0059BD85);
+	for (; i < (unsigned int)count; ++i)
+	{
+		if (range->m_begin[i].m_key == key)
+			return true;
+	}
+	return false;
 }
