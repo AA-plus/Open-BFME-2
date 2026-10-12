@@ -10,7 +10,8 @@ public:
 	void freeBlock(void *block, int blockSize);
 };
 
-#define ThePool (*(Rva006DB270 *const *)0x00E176E8)
+// Existing Apt pool provider; retail callers load this global at VA 0x00E176E8.
+extern Rva006DB270 *g_pChainBlockAllocator;
 
 class Rva006F84C0
 {
@@ -18,7 +19,7 @@ public:
 	__declspec(noinline) virtual ~Rva006F84C0();
 	static void operator delete(void *p, unsigned int size)
 	{
-		ThePool->freeBlock(p, size);
+		g_pChainBlockAllocator->freeBlock(p, size);
 	}
 	char m_pad[0x1C - 4]; // sizeof 0x1C for the sized delete
 };

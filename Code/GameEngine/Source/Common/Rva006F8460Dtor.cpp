@@ -14,7 +14,8 @@ class Rva006DB270
 public:
 	void freeBlock(void *p, int size);
 };
-#define ThePool (*(Rva006DB270 *const *)0x00E176E8)
+// Existing Apt pool provider; retail callers load this global at VA 0x00E176E8.
+extern Rva006DB270 *g_pChainBlockAllocator;
 class Rva006F8460
 {
 public:
@@ -29,7 +30,7 @@ Rva006F8460::~Rva006F8460()
 	Rva0070A840 *p = m_10;
 	if (p != 0) {
 		p->~Rva0070A840();
-		ThePool->freeBlock(p, 0x14);
+		g_pChainBlockAllocator->freeBlock(p, 0x14);
 	}
 }
 #pragma optimize("", on)
