@@ -79137,3 +79137,6 @@ __ehhandler$?rva00187690@ScaleTextureMapperClass@@UAE_NPAVRva00082EB8@@@Z,,0x007
 ?reset@BuildAssistant@@UAEXXZ,,0x00391F90,52,Code/GameEngine/Source/Common/System/BuildAssistant.cpp,matched,ZH BuildAssistant::reset; vtable 0x81A088 slot 0x24 beside update; WB 0xF95960
 ?Delete@Rva007ACBC0CmdInterface@@UAEXXZ,,0x00117F10,28,Code/Libraries/Source/WWVegas/WW3D2/Rva007ACBC0Ww3dCmdExecute.cpp,matched,ww3d debug command group Delete slot
 ?Has_Color_Array@MeshMatDescClass@@QAE_NH@Z,,0x00187F70,16,Code/Libraries/Source/WWVegas/WW3D2/MeshMatDescHasColorArray.cpp,matched,ZH meshmatdesc.h Has_Color_Array between Has_UV and Has_Texture_Data
+?Get_Bit@BitChannelClass@@QAEHH@Z,,0x00160110,59,Code/Libraries/Source/WWVegas/WW3D2/BitChannelGetBit.cpp,matched,ZH hrawanim BitChannelClass::Get_Bit
+?rva001601D0@Rva00160150@@QBE_NPAMHH@Z,,0x001601D0,39,Code/Libraries/Source/WWVegas/WW3D2/Rva00160150VectorChannels.cpp,matched,rotation channel reader of the raw-anim node record
+?rva00160200@Rva00160150@@QBEXPAMHH@Z,,0x00160200,51,Code/Libraries/Source/WWVegas/WW3D2/Rva00160150VectorChannels.cpp,matched,scale-like channel reader default 1.0
