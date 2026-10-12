@@ -28407,7 +28407,6 @@ uw_007971ef,,0x007971EF,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;obj
 uw_00797204,,0x00797204,8,Code/gen_small/uw_gen_002.cpp,matched,gen-funclet;object-symbol=$L293
 uw_00797220,,0x00797220,8,Code/gen_small/uw_gen_009.cpp,matched,gen-funclet;object-symbol=$L2349
 uw_00797232,,0x00797232,8,Code/gen_small/uw_gen_009.cpp,matched,gen-funclet;object-symbol=$L2235
-uw_00797244,,0x00797244,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L543
 uw_00797286,,0x00797286,11,Code/gen_small/uw_gen_008.cpp,matched,gen-funclet;object-symbol=$L2894
 uw_00797291,,0x00797291,11,Code/gen_small/uw_gen_012.cpp,matched,gen-funclet;object-symbol=$L562
 uw_00797338,,0x00797338,8,Code/gen_small/uw_gen_000.cpp,matched,gen-funclet;object-symbol=$L4737
@@ -86725,3 +86724,4 @@ $L5397,,0x00799313,14,Code/GameEngine/Source/Common/Rva00557CCCDtor.cpp,matched,
 uw_00799321,,0x00799321,14,Code/GameEngine/Source/Common/Rva00557CCCDtor.cpp,matched,gen-funclet;object-symbol=$L5398;parent=??1Rva00557CCC@@QAE@XZ; Complete parent EH graph EXACT binds compiler label to native Unwind state; complete14B Ghidra boundary and all callee relocations verified through existing canonical providers; emitted by this owning real C++ unit; no body-shape or adjacency inference
 uw_0075db0d,,0x0075DB0D,22,Code/GameEngine/Source/Common/Rva006ABC60Destructor_Rva0005925E.cpp,matched,gen-funclet;object-symbol=$L1217;parent=??1Rva006ABC60@@QAE@XZ; Complete parent EH graph EXACT binds compiler label to native Unwind state; complete22B Ghidra boundary and all callee relocations verified through existing canonical providers; emitted by this owning real C++ unit; no body-shape or adjacency inference
 $L1218,,0x0075DB23,14,Code/GameEngine/Source/Common/Rva006ABC60Destructor_Rva0005925E.cpp,matched,gen-funclet;parent=??1Rva006ABC60@@QAE@XZ; Complete parent EH graph EXACT binds compiler label to native Unwind state; complete14B Ghidra boundary and all callee relocations verified through existing canonical providers; emitted by this owning real C++ unit; no body-shape or adjacency inference
+uw_00797244,,0x00797244,11,Code/GameEngine/Source/Common/System/Rva0056616BCopy.cpp,matched,gen-funclet;object-symbol=$L1414;parent=??0Rva0056616B@@QAE@ABV0@@Z; Complete parent EH graph EXACT binds compiler label to native Unwind state; complete11B Ghidra boundary and all callee relocations verified through existing canonical providers; emitted by this owning real C++ unit; no body-shape or adjacency inference
