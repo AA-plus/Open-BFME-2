@@ -22,6 +22,7 @@ namespace _STL {
 
 
 #include "../../../../../../reference/shims/bfme2_ascii/string_base.h"
+struct Rva003F498AOuter;
 struct Rva003F4E07Results;
 struct Rva003F4E07Entry {
  int opaque00; StringBase<char> name; char pad08[0xA8-8]; bool flagA8;
@@ -96,6 +97,9 @@ struct Rva003F5397Slot;
 class LivingWorldBattle
 {
 public:
+	void RetreatArmiesForPlayer(void *);
+	Rva003F498AOuter *rva003F4634(void *);
+	int rva003F459A();
 	class BattlePlayer
 	{
 	public:
@@ -369,4 +373,69 @@ void LivingWorldBattle::rva003F4A46(int side,int player,Rva0020E20C *const &comp
    if(!compare->Compare(a,b)) entry->SwapArmies(first,second);
   }
  }
+}
+
+// Native 3F6727..3F6936 (527 bytes, RET4); WorldBuilder names
+// LivingWorldBattle::RetreatArmiesForPlayer. Native proves the 52-byte
+// player records, round count at world+B0 -> campaign+08 -> settings+58,
+// and reverse army removal. Opaque views describe only observed storage.
+// The auto-resolve constructor calls its existing owned PlayerStorage name;
+// the reference below is a view of the same three-pointer vector header.
+struct Rva003F4CC0Inner;
+class Rva003F4CC0 {public:Rva003F4CC0Inner *rva003F4CC0(int);};
+class Rva003F5DBD {public:void rva003F5E3F(void *,void *);};
+struct Rva002BBB96Element {char opaque00[0x18];float strength18;char opaque1C[0x30-0x1C];int player30;};
+namespace _STL {
+ template<> vector<Rva002BBB96Element>::~vector();
+ template<> _Vector_base<Rva002BBB96Element,allocator<Rva002BBB96Element> >::~_Vector_base();
+ template<> void _STLP_alloc_proxy<Rva002BBB96Element*,Rva002BBB96Element,allocator<Rva002BBB96Element> >::deallocate(Rva002BBB96Element*,unsigned);
+ template<> void allocator<Rva002BBB96Element>::deallocate(Rva002BBB96Element*,unsigned)const;
+}
+class Rva00380200 {public:Rva00380200();virtual ~Rva00380200();};
+class Rva002B2508:public Rva00380200 {public:Rva002B2508();virtual ~Rva002B2508();char opaque04[0x2C-4];};
+class Rva002B2EA0 {public:void rva002B2EA0();};
+struct RetreatSlots {Rva002B2508 *first;RetreatSlots(Rva002B2508 *p):first(p){}~RetreatSlots(){reinterpret_cast<Rva002B2EA0 *>(this)->rva002B2EA0();}};
+struct PlayerStorage;
+class LivingWorldAutoResolveBattle {public:LivingWorldAutoResolveBattle(const PlayerStorage&);void applyResults();};
+class Rva004FA2E2 {public:
+ __forceinline Rva004FA2E2(const _STL::vector<Rva002BBB96Element>&p){((LivingWorldAutoResolveBattle*)this)->LivingWorldAutoResolveBattle::LivingWorldAutoResolveBattle(*(const PlayerStorage*)&p);}
+ ~Rva004FA2E2();char opaque00[0x80];};
+class Rva004FA10FOwner {public:void rva004FA10F();};
+class Rva002B8644 {public:void rva002B8644(int);};
+class ModuleData;
+class Rva002B8A9F {public:void rva002B8A9F(ModuleData*);};
+struct RetreatSettings {char opaque00[0x58];int rounds58;};
+struct RetreatCampaign {char opaque00[8];RetreatSettings *settings08;};
+class LivingWorldLogic {public:void rva002BCCFB(LivingWorldBattle *,int,int);char opaque00[0xB0];RetreatCampaign *campaignB0;};
+void LivingWorldBattle::RetreatArmiesForPlayer(void *player) {
+ Rva003F498AOuter *side=rva003F4634(player);
+ if(!side)return;
+ BattlePlayer *entry=reinterpret_cast<BattlePlayer *>(reinterpret_cast<Rva003F4CC0 *>(side)->rva003F4CC0((int)player));
+ if(!entry)return;
+ _STL::vector<Rva002BBB96Element> players;
+ RetreatSlots slots(new Rva002B2508[rva003F459A()]);
+ reinterpret_cast<LivingWorldLogic *>(TheLivingWorldLogic)->rva002BCCFB(this,(int)&players,(int)&slots);
+ for(unsigned i=0;i<players.size();++i) {
+  int id=reinterpret_cast<Rva003F4E07Player *>(player)->id;
+  Rva002BBB96Element &record=players[i];
+  if(record.player30==id)record.strength18=0.0f;
+ }
+ Rva004FA2E2 battle(players);
+ // Refresh the settings pointer each round, as retail does. Keeping this
+ // pointer live gives VC7 the retail EDI induction variable.
+ RetreatSettings *settings=reinterpret_cast<LivingWorldLogic *>(TheLivingWorldLogic)->campaignB0->settings08;
+ for(int i=0;i<settings->rounds58;++i) {
+  reinterpret_cast<Rva004FA10FOwner *>(&battle)->rva004FA10F();
+  settings=reinterpret_cast<LivingWorldLogic *>(TheLivingWorldLogic)->campaignB0->settings08;
+ }
+ reinterpret_cast<LivingWorldAutoResolveBattle *>(&battle)->applyResults();
+ for(int i=int(entry->m_armies.size())-1;i>=0;--i) {
+  LivingWorldArmy *army=entry->m_armies[i];
+  if(!army->name.isEmpty())reinterpret_cast<Rva002B8644 *>(TheLivingWorldLogic)->rva002B8644((int)army);
+  else reinterpret_cast<Rva002B8A9F *>(TheLivingWorldLogic)->rva002B8A9F(reinterpret_cast<ModuleData *>(army));
+  reinterpret_cast<Rva002B7250 *>((char*)entry->m_armies[i]+8)->rva002B7250(this?reinterpret_cast<CreateAHeroData *>((char*)this+4):0);
+  reinterpret_cast<_STL::vector<void*> *>(&entry->m_armies)->erase(reinterpret_cast<void **>(&entry->m_armies[i]));
+  reinterpret_cast<_STL::vector<Rva003B8B61Elem> *>(&entry->m_records)->erase(reinterpret_cast<Rva003B8B61Elem *>(&entry->m_records[i]));
+ }
+ reinterpret_cast<Rva003F5DBD *>(side)->rva003F5E3F(this,player);
 }
