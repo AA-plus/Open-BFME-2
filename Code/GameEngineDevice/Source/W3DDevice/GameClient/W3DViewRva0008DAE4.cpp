@@ -19,6 +19,17 @@ private:
 	T *m_data;
 };
 
+// The two BFME 2 global settings read below.
+class GlobalData
+{
+public:
+	char m_pad000[0xA0];
+	Real m_valueA0;			// +0xA0
+	char m_pad0A4[0x9A4 - 0xA4];
+	bool m_flag9A4;			// +0x9A4
+};
+extern GlobalData *TheWritableGlobalData;
+
 class W3DView
 {
 public:
@@ -121,14 +132,25 @@ public:
 	virtual void rva0008DAE4();
 	virtual void rva000875A2(const StringBase<char> &first, const StringBase<char> &second);
 	virtual void rva000875D6();
+	virtual void rva00086065(int value);
+	virtual Real rva00086166(Real value);
 
 private:
 	void setCameraTransform();
 
-	char m_pad04[0x6C - 4];
+	char m_pad04[0x58 - 4];
+	int m_value58;			// +0x58
+	char m_pad5C[0x60 - 0x5C];
+	int m_value60;			// +0x60
+	Real m_value64;			// +0x64
+	char m_pad68[0x6C - 0x68];
 	Real m_pitchAngle;		// +0x6C
 	Real m_zoom;			// +0x70
-	char m_pad74[0x2439 - 0x74];
+	char m_pad74[0x27D - 0x74];
+	bool m_flag27D;			// +0x27D
+	char m_pad27E[0x23F0 - 0x27E];
+	Real m_scale23F0;		// +0x23F0
+	char m_pad23F4[0x2439 - 0x23F4];
 	bool m_flag2439;		// +0x2439
 	bool m_flag243A;		// +0x243A
 	char m_pad243B[0x243C - 0x243B];
@@ -161,4 +183,27 @@ void W3DView::rva000875D6()
 	m_flag243A = true;
 	m_zoom = 1.0f;
 	step95();
+}
+
+// Retail 0x00086065 (46 bytes) and 0x00086166 (43 bytes), W3DView vftable
+// entries: the first stores its value at +0x58 and clears +0x60, +0x64 and
+// +0x27D unless the global +0x9A4 flag is set and the value is non-zero; the
+// second returns the value over the +0x23F0 scale while the global +0xA0
+// setting exceeds one, else one.
+void W3DView::rva00086065(int value)
+{
+	if (!TheWritableGlobalData->m_flag9A4 || value == 0)
+	{
+		m_value58 = value;
+		m_value64 = 0.0f;
+		m_value60 = 0;
+		m_flag27D = false;
+	}
+}
+
+Real W3DView::rva00086166(Real value)
+{
+	if (TheWritableGlobalData->m_valueA0 > 1.0f)
+		return value / m_scale23F0;
+	return 1.0f;
 }
