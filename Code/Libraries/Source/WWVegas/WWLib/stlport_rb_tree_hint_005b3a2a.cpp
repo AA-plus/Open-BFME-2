@@ -13,25 +13,7 @@
 #undef _STLP_DEFAULT_CONSTRUCTED
 #define _STLP_DEFAULT_CONSTRUCTED(_TTp) _TTp()
 #include <map>
-template <class T> class StringBase
-{
-	friend class AsciiString;
-	void releaseBuffer();
-    void *m_data;
-    StringBase(const StringBase<T> &);
-    friend class AsciiString;
-};
-class AsciiString
-{
-public:
-    __forceinline AsciiString(const AsciiString &that)
-    {
-        ((StringBase<char> *)this)->StringBase<char>::StringBase(*(const StringBase<char> *)&that);
-    }
-    ~AsciiString() { ((StringBase<char> *)this)->releaseBuffer(); }
-private:
-    void *m_data;
-};
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 // Retail pair copying transfers this 28-byte mapped value without further calls.
 // Its original application type and the meanings of these fields are unknown.

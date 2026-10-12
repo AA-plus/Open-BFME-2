@@ -31,8 +31,7 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 { return a._M_node != b._M_node; }
 }
 
-template <class T> class StringBase { StringBase(const StringBase<T> &); void releaseBuffer(); friend class AsciiString; };
-class AsciiString { public: ~AsciiString(); AsciiString(const AsciiString &that) { ((StringBase<char> *)this)->StringBase<char>::StringBase(*(const StringBase<char> *)&that); } private: char *m_text; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 // The list's base constructor is provided by the verified shared list family.
 extern template _STL::_List_base<AsciiString,_STL::allocator<AsciiString> >::_List_base(const _STL::allocator<AsciiString> &);

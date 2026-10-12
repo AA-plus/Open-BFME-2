@@ -19,7 +19,7 @@
 #define _STLP_NO_EXCEPTIONS 1
 #include <map>
 #include <set>
-class AsciiString { void *m_data; public: AsciiString(const AsciiString &); ~AsciiString(); };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 struct BfmeStringRecord002CF550 { AsciiString key; char rest[8]; BfmeStringRecord002CF550(const BfmeStringRecord002CF550 &); ~BfmeStringRecord002CF550(); };
 inline bool operator<(const BfmeStringRecord002CF550 &a, const BfmeStringRecord002CF550 &b) { return a.key < b.key; }

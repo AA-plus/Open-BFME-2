@@ -22,8 +22,7 @@ template <> __declspec(dllimport) __forceinline
 void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
-template<class T> class StringBase { void *m_data; void releaseBuffer(); StringBase(const StringBase<T> &); friend class AsciiString; protected: __forceinline StringBase() : m_data(0) {} __forceinline ~StringBase() { releaseBuffer(); } };
-class AsciiString : private StringBase<char> { public: __forceinline AsciiString() {} __forceinline AsciiString(const AsciiString &that) : StringBase<char>(*(const StringBase<char> *)&that) {} __forceinline ~AsciiString() {} };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 // Retail _M_create_node 0x00202B4A allocates 24 bytes: 16-byte links + two AsciiStrings.
 // _Construct 0x0002C71B invokes pair copy 0x0002C574, which calls the independently

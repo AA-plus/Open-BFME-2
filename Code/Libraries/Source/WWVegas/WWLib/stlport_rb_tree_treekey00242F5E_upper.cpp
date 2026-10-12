@@ -8,7 +8,7 @@
 // The empty member comparator and rowed stdcall provider use the same key pair.
 #pragma comment(linker, "/alternatename:??RRva000A7AA7Less@@QBE_NABUTreeKey00242F5E@@0@Z=?Rva000A78A3Less@@YG_NABUTreeKey00242F5E@@0@Z")
 #include <set>
-class AsciiString { public: AsciiString(const AsciiString &); ~AsciiString(); private: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct TreeKey00242F5E { unsigned int m_id; AsciiString m_name; };
 struct Rva000A7AA7Less {
     bool operator()(const TreeKey00242F5E &a, const TreeKey00242F5E &b) const;

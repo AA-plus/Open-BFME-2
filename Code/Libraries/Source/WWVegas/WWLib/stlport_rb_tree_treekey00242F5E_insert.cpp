@@ -24,7 +24,7 @@ template <> __declspec(dllimport) __forceinline
 void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
-class AsciiString { public: AsciiString(const AsciiString &); ~AsciiString(); private: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct TreeKey00242F5E { unsigned int m_id; AsciiString m_name; };
 struct Rva000A7AA7Less {
     bool operator()(const TreeKey00242F5E &a, const TreeKey00242F5E &b) const;

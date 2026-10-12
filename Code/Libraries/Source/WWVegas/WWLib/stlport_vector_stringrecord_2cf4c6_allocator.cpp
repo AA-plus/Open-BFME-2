@@ -8,7 +8,7 @@
 // by the rowed 2CF4C6/3B3F78/568CE0/SaveMapPreview allocate_and_copy bodies;
 // rowed under the 2CF4C6 spelling by caller evidence with the image-wide fold
 // documented, sibling 3B3F78/568CE0 pins standing as fold candidates.
-class AsciiString { public: AsciiString(const AsciiString &); __forceinline ~AsciiString(); protected: void releaseBuffer(); private: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct BfmeStringRecord002CF4C6 {
     AsciiString text0, text1;
     unsigned int word0, word1;

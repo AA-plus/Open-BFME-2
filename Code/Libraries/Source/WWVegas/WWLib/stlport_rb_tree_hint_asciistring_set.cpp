@@ -18,7 +18,7 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
 // class-gate: allow AsciiString Retail tree erase at 0x00056CC3 calls the dtor thunk at 0x0048BA39.
-class AsciiString { public: AsciiString(const AsciiString &); ~AsciiString(); private: char *m_text; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 // Retail _M_create_node 0x0002C552 allocates 20 bytes: 16-byte links + AsciiString.
 // _Construct 0x0002C485 invokes the independently established AsciiString copy at 0x000365F0.

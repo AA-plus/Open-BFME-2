@@ -6,7 +6,7 @@
 // Evidence: chain from 0x000A7909; caller 0x000A7E41; neighbours 0x000A7BEE
 // and 0x000A7C50 share the same tree flags.
 #include <set>
-class AsciiString { public: AsciiString(const AsciiString &); ~AsciiString(); private: void *m_data; };
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 struct TreeKey00242F5E { unsigned int m_id; AsciiString m_name; };
 struct Rva000A7AA7Less {
     bool operator()(const TreeKey00242F5E &a, const TreeKey00242F5E &b) const;
