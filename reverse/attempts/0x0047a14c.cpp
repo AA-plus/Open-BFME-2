@@ -1,6 +1,6 @@
 // ?exitObjectViaDoor@HordeGarrisonContain@@UAEXPAVObject@@W4ExitDoorType@@@Z
 // partial score=0.97 date=2026-10-09
-// cl: /O1 /DNDEBUG /MD /EHsc /arch:SSE /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /I. /O1 /DNDEBUG /MD /EHsc /arch:SSE /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // ?exitObjectViaDoor@HordeGarrisonContain@@UAEXPAVObject@@W4ExitDoorType@@@Z,
@@ -16,7 +16,7 @@
 // WorldBuilder's twin (0x011A8120) is unnamed.
 
 #include <list>
-#include "../../../../Include/GameLogic/ContainmentListView.h"
+#include "Code/GameEngine/Include/GameLogic/ContainmentListView.h"
 
 typedef ContainmentList IntList;
 
