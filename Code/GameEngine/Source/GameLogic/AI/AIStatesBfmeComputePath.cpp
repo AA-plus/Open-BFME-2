@@ -220,6 +220,24 @@ class LocomotorSet
 {
 };
 
+class PathNode
+{
+public:
+	const Coord3D *getPosition() const { return &m_pos; }
+private:
+	char m_pad00[0x0C];
+	Coord3D m_pos; // +0x0C
+};
+
+class Path
+{
+public:
+	PathNode *getLastNode() const { return m_pathTail; }
+private:
+	char m_pad00[8];
+	PathNode *m_pathTail; // +0x08
+};
+
 class AIUpdateInterface : public AIComputePathAISlots<136>
 {
 public:
@@ -233,10 +251,10 @@ public:
 	ObjectID getIgnoredObstacleID() const;
 	Bool isMoving() const;
 	void requestPath(Coord3D *destination, Bool isFinalGoal);
-	void *getPath() const { return m_path; }
+	Path *getPath() const { return m_path; }
 	Bool isWaitingForPath() const { return m_waitingForPath; }
 	unsigned char m_pad004[0x140 - 0x04];
-	void *m_path; // +0x140
+	Path *m_path; // +0x140
 	unsigned char m_pad144[0x16C - 0x144];
 	int m_bfmeBlocked16C; // +0x16C; positive fails computePath at once
 	unsigned char m_pad170[0x1CC - 0x170];
@@ -380,11 +398,39 @@ class AIMoveAwayAndCowerState : public AIInternalMoveToState
 {
 public:
 	virtual void onExit(StateExitType status);
+	virtual StateReturnType update();
 protected:
 	virtual Bool computePath();
 private:
 	int m_okToRepathTimes; // +0x4C
+	Bool m_checkForPath; // +0x50
 };
+
+// ?update@AIMoveAwayAndCowerState@@UAE?AW4StateReturnType@@XZ @0x00347F76 136B.
+// The WB twin (0xE0CF60) fetches the goal object and the owner's AI before the
+// combined test; that order is what makes retail materialise the zero first.
+StateReturnType AIMoveAwayAndCowerState::update()
+{
+	Object *obj = getMachineOwner();
+	Object *goal = getMachine()->getGoalObject();
+	AIUpdateInterface *ownerAI = getMachineOwner()->getAI();
+	if (goal == 0 || ownerAI == 0)
+		return STATE_FAILURE;
+	if (m_checkForPath)
+	{
+		AIUpdateInterface *ai = obj->getAI();
+		Path *path = ai->getPath();
+		if (path && !ai->isWaitingForPath())
+		{
+			m_goalPosition = *path->getLastNode()->getPosition();
+			critterDesyncLog("CritterDesync: setAdjustDestination(FALSE) 15");
+			setAdjustsDestination(false);
+			m_checkForPath = false;
+		}
+		return STATE_CONTINUE;
+	}
+	return AIInternalMoveToState::update();
+}
 
 Bool AIMoveAwayAndCowerState::computePath()
 {
