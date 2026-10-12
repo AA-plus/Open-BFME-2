@@ -4046,3 +4046,15 @@ void HordeContain::rva0046BACD()
 			obj->rva0029A12B();
 	}
 }
+
+// ?rva0046AA85@HordeContain@@QAEXXZ @0x0046AA85 (51 B): runs the rowed
+// 0x00469F3A on every contained Object, the list taken from 0x0046247D on
+// the horde itself.
+void HordeContain::rva0046AA85()
+{
+	Rva0046247DPair p;
+	((Rva0046247D *)this)->rva0046247D(p);
+	const _STL::list<Object *> *items = p.m04;
+	for (_STL::list<Object *>::const_iterator it = items->begin(); it != items->end(); ++it)
+		rva00469F3A(*it);
+}
