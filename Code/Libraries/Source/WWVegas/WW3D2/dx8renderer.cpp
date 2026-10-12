@@ -260,20 +260,8 @@ inline static bool Equal_Material(const VertexMaterialClass* mat1,const VertexMa
 // DX8TextureCategoryClass constructor: BFME 2's body is the row 0x00144A00 in DX8TextureCategoryCtor.cpp;
 // Zero Hour's copy here duplicated it.
 
-// ??1DX8TextureCategoryClass@@ present-unmatched
-DX8TextureCategoryClass::~DX8TextureCategoryClass()
-{
-	// Unregistering the mesh where polygon renderers are connected to kills all polygon renderers
-	while (DX8PolygonRendererClass* p_renderer=PolygonRendererList.Get_Head()) {
-		TheDX8MeshRenderer.Unregister_Mesh_Type(p_renderer->Get_Mesh_Model_Class());
-	}
-	for (int a=0;a<MeshMatDescClass::MAX_TEX_STAGES;++a) 
-	{
-		REF_PTR_RELEASE(textures[a]);
-	}
-
-	REF_PTR_RELEASE(material);
-}
+// DX8TextureCategoryClass destructor: BFME 2's body is the row 0x00144AF0 in
+// DX8TextureCategoryDtor.cpp; Zero Hour's copy here duplicated it.
 
 void DX8TextureCategoryClass::Add_Render_Task(DX8PolygonRendererClass * p_renderer,MeshClass * p_mesh)
 {
@@ -1753,7 +1741,8 @@ void DX8MeshRendererClass::Init(void)
 
 // ----------------------------------------------------------------------------
 
-static void Add_Rigid_Mesh_To_Container(FVFCategoryList* container_list,unsigned fvf,MeshModelClass* mmc)
+// External: Register_Mesh_Type (DX8MeshRendererRegisterMeshTypeBFME2.cpp) calls it.
+void Add_Rigid_Mesh_To_Container(FVFCategoryList* container_list,unsigned fvf,MeshModelClass* mmc)
 {
 	WWASSERT(container_list);
 	DX8FVFCategoryContainer * container = NULL;
@@ -1780,89 +1769,9 @@ static void Add_Rigid_Mesh_To_Container(FVFCategoryList* container_list,unsigned
 // Zero Hour's copy here duplicated it.
 
 
-// ?Register_Mesh_Type@DX8MeshRendererClass@@ present-unmatched
-void DX8MeshRendererClass::Register_Mesh_Type(MeshModelClass* mmc)
-{
-	WWMEMLOG(MEM_GEOMETRY);
-#ifdef ENABLE_CATEGORY_LOG
-	WWDEBUG_SAY(("Registering mesh: %s (%d polys, %d verts + %d gap polygons)\n",mmc->Get_Name(),mmc->Get_Polygon_Count(),mmc->Get_Vertex_Count(),mmc->Get_Gap_Filler_Polygon_Count()));
-#endif
-	bool skin=(mmc->Get_Flag(MeshModelClass::SKIN) && mmc->VertexBoneLink);
-	bool sorting=((!!mmc->Get_Flag(MeshModelClass::SORT)) && WW3D::Is_Sorting_Enabled() && (mmc->Get_Sort_Level() == SORT_LEVEL_NONE));
-
-	if (skin) {
-
-		/*
-		** This mesh is a skin.  Add it to a DX8SkinFVFCategoryContainer.
-		*/
-		WWASSERT(texture_category_container_list_skin);
-
-		FVFCategoryListIterator it(texture_category_container_list_skin);
-		while (!it.Is_Done()) {
-			DX8FVFCategoryContainer * container = it.Peek_Obj();
-			if (sorting==container->Is_Sorting() && container->Check_If_Mesh_Fits(mmc)) {
-				container->Add_Mesh(mmc);
-				return;
-			}
-			it.Next();
-		}
-
-		DX8FVFCategoryContainer * new_container=W3DNEW DX8SkinFVFCategoryContainer(sorting);
-		texture_category_container_list_skin->Add_Tail(new_container);
-		new_container->Add_Mesh(mmc);
-	
-	} else {
-
-		/*
-		** We should never try to add the same mesh model to the system twice.
-		*/
-		WWASSERT_PRINT(_RegisteredMeshList.Contains(mmc) == false,("Mesh name: %s",mmc->Get_Name()));
-
-		/*
-		** If the previous step didn't add the mesh, then we have to actually process this mesh
-		*/
-		if (!_RegisteredMeshList.Contains(mmc)) {
-
-			unsigned fvf=DX8FVFCategoryContainer::Define_FVF(mmc,enable_lighting);
-
-			/*
-			** Search for an existing FVF Category Container that matches this mesh
-			*/
-			for (int i=0;i<texture_category_container_lists_rigid.Count();++i) {
-				FVFCategoryList * list=texture_category_container_lists_rigid[i];
-				WWASSERT(list);
-				DX8FVFCategoryContainer * container=list->Peek_Head();
-				if (container && container->Get_FVF()!=fvf) continue;
-
-				Add_Rigid_Mesh_To_Container(list,fvf,mmc);
-				break;
-			}
-
-			if (i==texture_category_container_lists_rigid.Count()) {
-
-				/*
-				** We couldn't find an existing FVF category container so we have to add one.  Future
-				** meshes that use this FVF will also be able to use this container.
-				*/
-				FVFCategoryList * new_fvf_category = W3DNEW FVFCategoryList();
-				texture_category_container_lists_rigid.Add(new_fvf_category);
-				Add_Rigid_Mesh_To_Container(new_fvf_category,fvf,mmc);
-			}
-
-			/*
-			** Done processing the mesh, add its polygon renderers to the global registered mesh list
-			*/
-			if (mmc->PolygonRendererList.Is_Empty() == false) {
-				_RegisteredMeshList.Add_Tail(mmc);
-			}
-			else {
-				WWDEBUG_SAY(("Error: Register_Mesh_Type failed! file: %s line: %d\r\n",__FILE__,__LINE__));
-			}
-		}
-	}
-
-	return;
-}
+// DX8MeshRendererClass::Register_Mesh_Type: BFME 2's body is the row 0x00145C30 in
+// DX8MeshRendererRegisterMeshTypeBFME2.cpp, which calls Add_Rigid_Mesh_To_Container
+// above; Zero Hour's copy here duplicated it.
 
 static unsigned statistics_requested=0;
 
@@ -1896,42 +1805,31 @@ static void Render_FVF_Category_Container_List_Delayed_Passes(FVFCategoryList& l
 	}
 }
 
-// ?Flush@DX8MeshRendererClass@@ present-unmatched
+// BFME 2's Flush (0x00148030): the rigid and skin lists, then the delayed
+// passes, with no decal pass; the two list walks inline, and the cached-state
+// reset calls replace Zero Hour's buffer-only reset.
 void DX8MeshRendererClass::Flush(void)
 {
 	int i;
 
-	WWPROFILE("DX8MeshRenderer::Flush");
 	if (!camera) return;
-	Log_Statistics_String(true);	
+	Log_Statistics_String(true);
 
-	/*
-	** Render the FVF categories.  Note that it is critical that skins be 
-	** rendered *after* the rigid meshes.  This is caused by the fact that an object may
-	** have its base passes disabled and a translucent procedural material pass rendered
-	** instead.  In this case, technically we have to delay rendering of the material pass but
-	** for skins we just render these passes as we go because we can assume that the
-	** bulk of the meshes have already been drawn (there would be extra overhead involved
-	** in solving this for skins)
-	*/
 	for (i=0;i<texture_category_container_lists_rigid.Count();++i) {
 		Render_FVF_Category_Container_List(*texture_category_container_lists_rigid[i]);
 	}
 
 	Render_FVF_Category_Container_List(*texture_category_container_list_skin);
 
-	Render_Decal_Meshes();
-
-	/*
-	** Render the translucent procedural material passes that were applied to meshes that
-	** had their base passes disabled. 
-	*/
 	for (i=0;i<texture_category_container_lists_rigid.Count();++i) {
 		Render_FVF_Category_Container_List_Delayed_Passes(*texture_category_container_lists_rigid[i]);
 	}
 
-	DX8Wrapper::Set_Vertex_Buffer(NULL);
+	DX8Wrapper::Set_Vertex_Buffer(NULL,0);
 	DX8Wrapper::Set_Index_Buffer(NULL,0);
+	DX8Wrapper::Apply_Render_State_Changes();
+	DX8Wrapper::Invalidate_Cached_Render_States();
+	DX8Wrapper::Apply_Default_State();
 }
 
 
