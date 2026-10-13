@@ -1,4 +1,4 @@
-// Thirteen B2-native flag-word clearers on thirteen .data flag words
+// Remaining B2-native flag-word clearers on .data flag words
 // (0x00E02D74-0x00E02DFC):
 //
 //     mov eax,[<address>] / and al,<mask8> / mov [<address>],eax / ret
@@ -12,12 +12,6 @@
 extern unsigned int g_Va00E02DA4;
 // g_Va00E02DA4: matched references place it at VA 0xe02da4 (zero-filled .bss).
 unsigned int g_Va00E02DA4;
-extern unsigned int g_Va00E02DAC;
-// g_Va00E02DAC: matched references place it at VA 0xe02dac (zero-filled .bss).
-unsigned int g_Va00E02DAC;
-extern unsigned int g_Va00E02DB4;
-// g_Va00E02DB4: matched references place it at VA 0xe02db4 (zero-filled .bss).
-unsigned int g_Va00E02DB4;
 extern unsigned int g_Va00E02DBC;
 // g_Va00E02DBC: matched references place it at VA 0xe02dbc (zero-filled .bss).
 unsigned int g_Va00E02DBC;
@@ -36,15 +30,6 @@ unsigned int g_Va00E02DDC;
 extern unsigned int g_Va00E02DE4;
 // g_Va00E02DE4: matched references place it at VA 0xe02de4 (zero-filled .bss).
 unsigned int g_Va00E02DE4;
-extern unsigned int g_Va00E02DEC;
-// g_Va00E02DEC: matched references place it at VA 0xe02dec (zero-filled .bss).
-unsigned int g_Va00E02DEC;
-extern unsigned int g_Va00E02DF4;
-// g_Va00E02DF4: matched references place it at VA 0xe02df4 (zero-filled .bss).
-unsigned int g_Va00E02DF4;
-extern unsigned int g_Va00E02DFC;
-// g_Va00E02DFC: matched references place it at VA 0xe02dfc (zero-filled .bss).
-unsigned int g_Va00E02DFC;
 
 
 unsigned int Rva007828B2ClearFlag(void)
@@ -52,15 +37,7 @@ unsigned int Rva007828B2ClearFlag(void)
 	return g_Va00E02DA4 &= 0xFFFFFFFEu;
 }
 
-unsigned int Rva007828C9ClearFlag(void)
-{
-	return g_Va00E02DAC &= 0xFFFFFFFEu;
-}
 
-unsigned int Rva007828E0ClearFlag(void)
-{
-	return g_Va00E02DB4 &= 0xFFFFFFFEu;
-}
 
 unsigned int Rva00782B88ClearFlag(void)
 {
@@ -92,17 +69,5 @@ unsigned int Rva00782DEFClearFlag(void)
 	return g_Va00E02DE4 &= 0xFFFFFFFEu;
 }
 
-unsigned int Rva00782FDFClearFlag(void)
-{
-	return g_Va00E02DEC &= 0xFFFFFFFEu;
-}
 
-unsigned int Rva00783011ClearFlag(void)
-{
-	return g_Va00E02DF4 &= 0xFFFFFFFEu;
-}
 
-unsigned int Rva0078303BClearFlag(void)
-{
-	return g_Va00E02DFC &= 0xFFFFFFFEu;
-}

@@ -19577,10 +19577,10 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A02D9C,4,.data,global,?g_00E02D9C@@3HA,,unowned,,0,2
 0x00A02DA0,4,.data,global,?nk@?1??helper@Rva002EFB20@@YAXPAX_N@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/Object/Update/Rva002EFB20Helper_Rva003bc27b.cpp,owned,,1,2
 0x00A02DA4,4,.data,global,?g_Va00E02DA4@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,provisional,?$S1@?1??helper@Rva002EFB20@@YAXPAX_N@Z@4IA@Code/GameEngine/Source/GameLogic/Object/Update/Rva002EFB20Helper_Rva003bc27b.cpp;?g_Va00E02DA4@@3IA,2,4
-0x00A02DA8,4,.data,global,?gateKey@?3??Rva003BCD45Do@@YGXPAVParameter@@@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCD45Do.cpp,owned,,1,2
-0x00A02DAC,4,.data,global,?g_Va00E02DAC@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,provisional,?$S1@?3??Rva003BCD45Do@@YGXPAVParameter@@@Z@4IA@Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCD45Do.cpp;?g_Va00E02DAC@@3IA,2,4
-0x00A02DB0,4,.data,global,?gateKey@?3??Rva003BCDD7Do@@YGXPAVParameter@@@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCDD7Do.cpp,owned,,1,2
-0x00A02DB4,4,.data,global,?g_Va00E02DB4@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,provisional,?$S1@?3??Rva003BCDD7Do@@YGXPAVParameter@@@Z@4IA@Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCDD7Do.cpp;?g_Va00E02DB4@@3IA,2,4
+0x00A02DA8,4,.data,global,?gateKey@?3??Rva003BCD45Do@ScriptActions@@QAEXPAVParameter@@@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCD45Do.cpp,owned,,1,2
+0x00A02DAC,4,.data,global,?$S1@?3??Rva003BCD45Do@ScriptActions@@QAEXPAVParameter@@@Z@4IA,Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCD45Do.cpp,owned,,1,2
+0x00A02DB0,4,.data,global,?gateKey@?3??Rva003BCDD7Do@ScriptActions@@QAEXPAVParameter@@@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCDD7Do.cpp,owned,,1,2
+0x00A02DB4,4,.data,global,?$S1@?3??Rva003BCDD7Do@ScriptActions@@QAEXPAVParameter@@@Z@4IA,Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCDD7Do.cpp,owned,,1,2
 0x00A02DB8,4,.data,global,?supplyKey@?3??Rva003C0E87Do@@YGXABVAsciiString@@H@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptGlueRva003C0E87.cpp,owned,,1,2
 0x00A02DBC,4,.data,global,?g_Va00E02DBC@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,provisional,?$S1@?3??Rva003C0E87Do@@YGXABVAsciiString@@H@Z@4IA@Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptGlueRva003C0E87.cpp;?g_Va00E02DBC@@3IA,2,4
 0x00A02DC0,4,.data,global,?dualKey@?3??Rva003C30D9Do@@YGXABVAsciiString@@_N@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_rva003C30D9.cpp,owned,,1,2
@@ -19592,9 +19592,9 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A02DDC,4,.data,global,?g_Va00E02DDC@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,owned,,1,2
 0x00A02DE0,4,.data,global,?key_CommandButtonHuntUpdate@?CA@??doTeamHuntWithCommandButton@ScriptActions@@IAEXABVAsciiString@@0@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_doTeamHuntWithCommandButton.cpp,owned,,1,2
 0x00A02DE4,8,.data,global,?g_Va00E02DE4@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,provisional,?$S1@?CA@??doTeamHuntWithCommandButton@ScriptActions@@IAEXABVAsciiString@@0@Z@4IA@Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_doTeamHuntWithCommandButton.cpp;?g_Va00E02DE4@@3IA,2,4
-0x00A02DEC,8,.data,global,?g_Va00E02DEC@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,owned,,1,2
-0x00A02DF4,8,.data,global,?g_Va00E02DF4@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,owned,,1,2
-0x00A02DFC,4,.data,global,?g_Va00E02DFC@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E02Dxx.cpp,owned,,1,2
+0x00A02DEC,4,.data,global,?$S1@?9??Rva003C6A0EDo@ScriptActions@@QAEXPAVParameter@@00@Z@4IA,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_garrison.cpp,owned,,1,2
+0x00A02DF4,4,.data,global,?$S2@?9??Rva003C6B7BDo@ScriptActions@@QAEXPAVParameter@@00@Z@4IA,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_garrison.cpp,owned,,1,2
+0x00A02DFC,4,.data,global,?$S3@?9??Rva003C6D4FDo@ScriptActions@@QAEXPAVParameter@@00@Z@4IA,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_garrison.cpp,owned,,1,2
 0x00A02E00,4,.data,global,_s_transportStatuses,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditions_evaluateTeamStateIs.cpp,owned,,1,5
 0x00A02E04,4,.data,global,?TheScriptConditions@@3PAVScriptConditions@@A,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngine_init.cpp,owned,,1,8
 0x00A02E08,4,.data,global,_s_rva007AF889,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
