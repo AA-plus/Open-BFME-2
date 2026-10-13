@@ -1,4 +1,6 @@
 // ?upgradeImplementation@GeometryUpgrade@@UAEXXZ
+// partial score=0.8839 date=2026-10-13
+// ?upgradeImplementation@GeometryUpgrade@@UAEXXZ
 // partial score=0.94 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /MD /DNDEBUG /EHsc
 // BFME1 donor874e38488 game/.../GeometryUpgradeRemoveUpgrade.cpp supplies
@@ -186,7 +188,7 @@ void GeometryUpgrade::upgradeImplementation()
     GeometryUpgradeMask setMask;
     GeometryUpgradeMask clearMask;
     masks(setMask, clearMask);
-    Object *object = getObject();
+    Object * volatile object = getObject();
     if (object->upgrades.rva00406F9C(&clearMask))
         return;
     Player *player = object->getControllingPlayer();

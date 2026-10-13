@@ -1,4 +1,6 @@
 // ?rva002829BD@Rva002829BD@@QAEXPBVModuleData@@PAX@Z
+// partial score=0.8892 date=2026-10-13
+// ?rva002829BD@Rva002829BD@@QAEXPBVModuleData@@PAX@Z
 // partial score=0.88920056 date=2026-10-07
 // cl: /O1 /arch:SSE /G7 /MD
 struct Coord3DBase {float x,y,z;};
