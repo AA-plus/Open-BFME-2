@@ -1,7 +1,9 @@
 // ?getRenderRegion@AptShapeContainer@@QAEXAAVCoord2D@@0@Z
+// partial score=0.9451 date=2026-10-13
+// ?getRenderRegion@AptShapeContainer@@QAEXAAVCoord2D@@0@Z
 // partial score=0.97 date=2026-10-10
-// cl: /O1 /arch:SSE /EHsc /MD
-#include "../Code/Libraries/Include/Lib/Coord2D.h"
+// cl: /ICode/Libraries/Include /O1 /G7 /arch:SSE /EHsc /MD
+#include "Lib/Coord2D.h"
 struct AptTriangle { Coord2D point[3]; };
 struct AptLine { Coord2D point[2]; };
 class AptSolidShape { public: char unknown[8]; AptTriangle *first, *last; };

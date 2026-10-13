@@ -1,9 +1,11 @@
 // ?rva00262E24@AIUpdateInterface@@QAEXPAUCoord3D@@@Z
+// partial score=0.904 date=2026-10-13
+// ?rva00262E24@AIUpdateInterface@@QAEXPAUCoord3D@@@Z
 // partial score=0.95 date=2026-10-13
 // ?rva00262E24@AIUpdateInterface@@QAEXPAUCoord3D@@@Z
 // partial score=0.93 date=2026-10-05
-// cl: /O1 /DNDEBUG /MD /arch:SSE
-#include "../../../../../../Code/Libraries/Include/Lib/Coord3D.h"
+// cl: /ICode/Libraries/Include /O1 /G7 /DNDEBUG /MD /arch:SSE
+#include "Lib/Coord3D.h"
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 struct Rva003642DFNode;
