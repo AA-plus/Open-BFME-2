@@ -1,7 +1,7 @@
 // ?rva000062FD@Region2D@@QBE_NABVCoord2D@@0@Z
-// partial score=0.75 date=2026-10-13
+// partial score=0.74 date=2026-10-13
 // ?rva000062FD@Region2D@@QBE_NABVCoord2D@@0@Z
-// partial score=0.75 date=2026-10-13
+// partial score=0.74 date=2026-10-13 (r5b vmin+pminfirst: eager *pmin load fixes interleaving to single-esi reuse, 74 diff lines; 1.0f numbering xmm2-vs-xmm3 + band-mirror + epilogue-layout remain)
 // cl: /O1 /arch:SSE2 /ICode/GameEngine/Source/Common
 
 class Debug
@@ -277,8 +277,9 @@ bool Region2D::rva000062FD(const Coord2D &start, const Coord2D &delta) const
         float t1 = (x_min - start.x) * (1.0f / delta.x);
         float t2 = (x_max - start.x) * (1.0f / delta.x);
         float *pmin = t1 < t2 ? &t1 : &t2;
+        float vmin = *pmin;
         float *pmax = t1 > t2 ? &t1 : &t2;
-        if (*pmin > 1.0f)
+        if (vmin > 1.0f)
             return false;
         if (*pmax < 0.0f)
             return false;
@@ -292,8 +293,9 @@ bool Region2D::rva000062FD(const Coord2D &start, const Coord2D &delta) const
         float t1 = (y_min - start.y) * (1.0f / delta.y);
         float t2 = (y_max - start.y) * (1.0f / delta.y);
         float *pmin = t1 < t2 ? &t1 : &t2;
+        float vmin = *pmin;
         float *pmax = t1 > t2 ? &t1 : &t2;
-        if (*pmin > 1.0f)
+        if (vmin > 1.0f)
             return false;
         if (*pmax < 0.0f)
             return false;
