@@ -148,7 +148,8 @@ void ScriptActions::doSetCounterToThreatFinderThreat(const AsciiString &counterN
 	} else {
 		AsciiString msg = "WARNING - Threat Finder not found during script execution: ";
 		msg.concat(threatFinderName);
-		msg.concat(".");
+		// Retail REL32 +0xDA binds StringBase<char>::concat at 0x00005629.
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(".");
 		TheScriptEngine->AppendDebugMessage(msg, false);
 	}
 }
