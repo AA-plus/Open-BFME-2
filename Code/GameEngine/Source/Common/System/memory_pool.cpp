@@ -132,6 +132,7 @@ public:
 	unsigned int rva000311E0(const void *src, unsigned int count, char *ascii, unsigned short *wide, unsigned int cap);
 	unsigned int rva00032A20(const void *block);		// GetUsableSize-like
 	unsigned int rva006C1D10(const void *block);		// fast usable-size with tail call to 0x32A20 caller 0x6C36FD
+	void *rva00031B60(const void *block);
 	void *rva00031680(const void *block);	// intrusive-list search unblocking 0x31BB0 0x31D00 0x32920
 	bool rva000316B0(void *block, bool release);	// conditional core-release callback / VirtualFree
 	int rva00031BF0(const void *block);
@@ -283,6 +284,35 @@ void *GeneralAllocator::rva00031680(const void *block)
 				return cur;
 		}
 		cur = cur->m_next;
+	}
+	return 0;
+}
+
+// ?rva00031B60@GeneralAllocator@Allocator@EA@@QAEPAXPBX@Z @ 0x00031B60 (75B):
+// the chunk containing an address. A block whose first dword is zero, or that
+// no core region contains (0x00031680), yields null; otherwise the walk starts
+// at the region's first chunk and steps by the masked chunk size until the
+// next chunk would pass the address. Class proven by the ecx pass-through to
+// 0x00031680; the original method name is unknown.
+void *GeneralAllocator::rva00031B60(const void *block)
+{
+	if (*(const unsigned int *)block > 0)
+	{
+		void **node = (void **)rva00031680(block);
+		if (node != 0)
+		{
+			char *chunk = (char *)*node;
+			if ((unsigned int)block > (unsigned int)chunk)
+			{
+				char *next = chunk + (*(unsigned int *)(chunk + 4) & 0x7FFFFFF8);
+				while ((unsigned int)next < (unsigned int)block)
+				{
+					chunk = next;
+					next += *(unsigned int *)(next + 4) & 0x7FFFFFF8;
+				}
+				return chunk;
+			}
+		}
 	}
 	return 0;
 }
