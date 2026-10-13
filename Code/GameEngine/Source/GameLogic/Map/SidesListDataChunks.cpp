@@ -465,6 +465,8 @@ public:
 	SidesInfo *getSideInfo(int side);	// 0x002035BA
 	void swap(SidesList *other);		// 0x0032B690
 	void rva0032E02B();					// 0x0032E02B, WB validateSides
+	void rva0032ED61();					// 0x0032ED61, castle template map clear
+	void parseCastleTemplateMaps();		// 0x0032F84F
 	bool parseCastleTemplateDataChunk(DataChunkInput &file, DataChunkInfo *info);
 	bool parseLibraryMapListsChunk(DataChunkInput &file, DataChunkInfo *info);
 	void writeCastleTemplateDataChunk(DataChunkOutput &out, MapObject *pMapObjs, const AsciiString &mapName, Rva002E3A8DHolder *paths);
@@ -487,7 +489,9 @@ private:
 	// map's second side (cmp [sides+0x3C],1 / lea [sides+0xA0]).
 	SidesInfo *getSideInfoInline(int side) { return side >= 0 && side < m_numSides ? (SidesInfo *)m_sides + side : 0; }
 
-	char m_bases[0x3C - 4];
+	char m_bases[0x20 - 4];
+	_STL::list<AsciiString> m_castleTemplateMaps;	// +0x20
+	char m_castleTemplates[0x3C - 0x24];
 	int m_numSides;						// +0x3C
 	char m_sides[0xF44 - 0x40];
 	TeamsInfoRec m_teamrec;				// +0xF44
