@@ -915,3 +915,6 @@ void FireLogicSystem::xfer(Xfer *xfer)
 		}
 	}
 }
+
+// Native action 0x773f20: complete22B four24B material-array constructor unwind at member+10; callback whole8B29D7C2 and existing CRT EH vector iterator629110.
+// Whole owning parent and native EH graph prove ownership and every relocation.
