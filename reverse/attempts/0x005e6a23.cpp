@@ -1,4 +1,6 @@
 // ?Rva005E6A23@StrategicInGameUI@@YA?AUTreeHintRef00217D4C@@PBURva005E4300Entry@@@Z
+// partial score=0.97 date=2026-10-13
+// ?Rva005E6A23@StrategicInGameUI@@YA?AUTreeHintRef00217D4C@@PBURva005E4300Entry@@@Z
 // partial score=0.97 date=2026-10-10
 // cl: /I. /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc
 // Native005E6B3E..005E6B8F obtains archetype at template+5C4 for the
