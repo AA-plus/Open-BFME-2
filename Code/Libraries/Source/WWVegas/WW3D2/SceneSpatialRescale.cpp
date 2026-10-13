@@ -196,9 +196,23 @@ void *bfmeAnchorBfmeSceneVectorCtor(void *where)
 // the reference structure; int is the existing provider's ABI carrier, not
 // evidence for the original scene-node payload type or list spelling.
 namespace _STL {
-// Existing out-of-line erase: consume its declaration, without a new copy.
-template <> _Slist_node_base *
-_Slist_base<int,allocator<int> >::_M_erase_after(_Slist_node_base*,_Slist_node_base*);
+// Native 6FABF..6FAEC (45 bytes): relinks the nodes after `head` up to `stop` onto
+// the scene pool free list (pool at 0xDB424C, list head at +8). Retail reloads the
+// head from memory on every node, which the volatile pool access reproduces; the
+// qualifier is a codegen hypothesis only, not a claim about the original source.
+template <> __declspec(noinline) _Slist_node_base *
+_Slist_base<int,allocator<int> >::_M_erase_after(_Slist_node_base* head,_Slist_node_base* stop)
+{
+ _Slist_node_base* current=head->_M_next;
+ while(current!=stop) {
+  _Slist_node_base* old=current;
+  current=current->_M_next;
+  _Slist_node_base* freeHead=*(_Slist_node_base* volatile*)&g_Rva0006EFC8Pool00DB424C.m_head;
+  old->_M_next=freeHead;
+  *(_Slist_node_base* volatile*)&g_Rva0006EFC8Pool00DB424C.m_head=old;
+ }
+ return head->_M_next=stop;
+}
 }
 // Access-only view; no new storage, constructed object or class identity.
 struct Rva0006FB50EraseAccess : _STL::_Slist_base<int,_STL::allocator<int> > {
