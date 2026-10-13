@@ -1,4 +1,4 @@
-// Twenty-two B2-native flag-word clearers on 22 .data flag words
+// Twenty-one B2-native flag-word clearers on 21 .data flag words
 // (0x00E04304-0x00E043E0):
 //
 //     mov eax,[<address>] / and al,<mask8> / mov [<address>],eax / ret
@@ -9,6 +9,7 @@
 // following GlobalFlagClearers_E03Fxx.cpp.
 // 0x00790AE8 and guard VA 0x00E043D8 are now owned by the exact
 // UnleashSpecialPower::rva004CE0D9 static-initialization EH graph.
+// 0x00790AFF and guard VA 0x00E043E0 belong to triggerAbilityEffect.
 // cl: /G7 /MD /EHsc /DNDEBUG
 
 extern unsigned int g_Va00E04304;
@@ -74,9 +75,6 @@ unsigned int g_Va00E043C8;
 extern unsigned int g_Va00E043D0;
 // g_Va00E043D0: matched references place it at VA 0xe043d0 (zero-filled .bss).
 unsigned int g_Va00E043D0;
-extern unsigned int g_Va00E043E0;
-// g_Va00E043E0: matched references place it at VA 0xe043e0 (zero-filled .bss).
-unsigned int g_Va00E043E0;
 
 unsigned int Rva0079041FClearFlag(void)
 {
@@ -182,9 +180,3 @@ unsigned int Rva00790AD1ClearFlag(void)
 {
 	return g_Va00E043D0 &= 0xFFFFFFFEu;
 }
-
-unsigned int Rva00790AFFClearFlag(void)
-{
-	return g_Va00E043E0 &= 0xFFFFFFFEu;
-}
-
