@@ -182,7 +182,7 @@ public:
 };
 
 void rebuildMask();						// 0x000AA5E1
-void Rva000A90B0(int);						// 0x000A90B0
+unsigned long Rva000A90B0(unsigned long);						// 0x000A90B0
 
 // The Apt draw callback slot (0x00DB5FC8) and the Apt player (0x00DFE4CC),
 // whose OnCustomRender (WB name) is rowed under a placeholder.
@@ -401,4 +401,21 @@ void Rva000A92B0SetMatrix(const AptRenderTransform *input) {
  m[0]*=aptScaleX;m[2]*=aptScaleX;m[1]*=aptScaleY;m[3]*=aptScaleY;
  if(aptFar(m[0]-1.0f) || aptFar(m[1]) || aptFar(m[2]) || aptFar(m[3]-1.0f)) aptMatrixMode=1;
  else aptMatrixMode=3;
+}
+
+// Native A90B0..A9192, 226B. WB8A5E20 independently preserves unsigned
+// ARGB decode, divide255, multiplier/addend transform and unbounded packing.
+// Timer calls are debug-only. Native channels read the two existing host
+// blocks; their original names remain unknown. WB evaluates alpha/red/green/blue,
+// while retail schedules red first. No class/layout identity inferred.
+unsigned long Rva000A90B0(unsigned long color){
+float a=((color>>24)&255u)/255.0f;
+float r=((color>>16)&255u)/255.0f;
+float g=((color>>8)&255u)/255.0f;
+float b=((color>>0)&255u)/255.0f;
+a=a*g_aptHostColorBlock0.x+g_aptHostColorBlock1.x;
+r=r*g_aptHostColorBlock0.y+g_aptHostColorBlock1.y;
+g=g*g_aptHostColorBlock0.z+g_aptHostColorBlock1.z;
+b=b*g_aptHostColorBlock0.w+g_aptHostColorBlock1.w;
+return (unsigned(a*255.0f)<<24)|(unsigned(r*255.0f)<<16)|(unsigned(g*255.0f)<<8)|unsigned(b*255.0f);
 }

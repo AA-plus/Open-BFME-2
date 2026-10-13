@@ -145,7 +145,7 @@ void LivingWorldRegionEffectsManager::rva003EF2FF()
 
 // vtable 0x00BC57E0#18 and #19: hand the argument to two cdecl functions,
 // the second the ledger's Rva000A8F64Set.
-void __cdecl Rva000A90B0(Int value);
+unsigned long __cdecl Rva000A90B0(unsigned long value);
 void __cdecl Rva000A8F64Set(bool enabled);
 class Rva00062A1C
 {
