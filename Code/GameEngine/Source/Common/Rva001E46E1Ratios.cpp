@@ -56,10 +56,20 @@ struct Rva001E46E1Data
     char m_pad10B[0x14C-0x10B];
 	float m_14C;
 };
+// ?getMaxSpeed@Locomotor@@QAEMPAVObject@@@Z @0x001E46E1 356B: renamed from
+// placeholder Rva001E46E1::rva001E46E1 — the WorldBuilder twin names
+// Locomotor::getMaxSpeed in EA's own Locomotor.cpp (callgraph 8). The sibling
+// placeholder rows on this class keep their view; getMaxSpeed is defined on
+// the real class and the internal callers cast across.
+class Locomotor
+{
+public:
+	float getMaxSpeed(Object *obj);
+};
+
 class Rva001E46E1
 {
 public:
-	float rva001E46E1(Object *obj);
     bool rva001E5F1D(Object*,const Coord3D*,float*);
 	void rva001E546B(Object *obj);
     void rva001E56DC(Object*,const Coord3D*,float,float*);
@@ -323,14 +333,14 @@ public:
 };
 float Rva001E46E1::rva001E4845(Object *obj)
 {
-	float value = rva001E46E1(obj) / (float)m_data->m_44;
+	float value = ((Locomotor *)this)->getMaxSpeed(obj) / (float)m_data->m_44;
 	if (value > m_30)
 		value = m_30;
 	return value;
 }
 float Rva001E46E1::rva001E488A(Object *obj)
 {
-	float value = rva001E46E1(obj) / (float)m_data->m_50;
+	float value = ((Locomotor *)this)->getMaxSpeed(obj) / (float)m_data->m_50;
 	if (value > m_34)
 		value = m_34;
 	return value;
@@ -338,12 +348,12 @@ float Rva001E46E1::rva001E488A(Object *obj)
 bool Rva001E46E1::rva001E543F(Object *obj)
 {
 	float current = m_40;
-	return current > rva001E46E1(obj) * 0.25f;
+	return current > ((Locomotor *)this)->getMaxSpeed(obj) * 0.25f;
 }
 float Rva001E46E1::rva001E48CF(Object *obj)
 {
 	if (m_60 < ((const Rva001E46E1FrameView *)TheGameLogic)->m_frame)
-		return rva001E46E1(obj);
+		return ((Locomotor *)this)->getMaxSpeed(obj);
 	return m_5C;
 }
 
@@ -365,10 +375,10 @@ void Rva001E46E1::rva001E53D8(float limit, Object *obj)
 	} else {
 		m_40 = limit;
 	}
-	float cap = rva001E46E1(obj);
+	float cap = ((Locomotor *)this)->getMaxSpeed(obj);
 	m_40 = bfmeClamp(m_40, 0.0f, cap);
 }
-float Rva001E46E1::rva001E46E1(Object *obj)
+float Locomotor::getMaxSpeed(Object *obj)
 {
 	int cmpVal = obj->m_254->s08();
 	float scale = obj->m_258->m_1F8;
@@ -577,7 +587,7 @@ void Rva001E46E1::rva001E56DC(Object *obj,const Coord3D *goal,float maxTurnRate,
         float c=(float)cos(amount),s=(float)sin(amount);preRotateZ(m_matrix68,s,c);
     }
     float speed=m_40;
-    value.speed=rva001E46E1(obj);bool animate=true;float half=reinterpret_cast<const volatile float&>(value.speed)*0.5f;
+    value.speed=((Locomotor *)this)->getMaxSpeed(obj);bool animate=true;float half=reinterpret_cast<const volatile float&>(value.speed)*0.5f;
     if(speed>half && !m_data->m_10A)animate=false;
     if(slow)animate=false;
     if(!m_99) {
