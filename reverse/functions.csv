@@ -87841,3 +87841,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ?rva0040D43F@ArmySummarySystem@@QAEXPAVRva003F468D@@@Z,,0x0040D43F,48,Code/GameEngine/Source/Common/Rva0040D43FRun.cpp,matched,thiscall ret4 proves the member convention; extent 48 includes the full ret4 at 0x40D46C (the scanner stopped at 46 mid-instruction); callback temp with inline-empty virtual dtor arms the EH prolog/state and rowed 0x3F498A takes it
 ??0Rva003A59C3@@QAE@II@Z,,0x003A59C3,127,Code/GameEngine/Source/GameClient/System/FXParticleSystem/Rva003A59C3Ctor.cpp,matched,
 ?rva0032C2FF@Rva0032C2FF@@QAEXABVAsciiString@@@Z,,0x0032C2FF,103,Code/GameEngine/Source/GameLogic/Map/Rva0032C2FFTeamsInfo.cpp,matched,
+?rva000533CB@MilesAudioManager@@UAEXXZ,,0x000533CB,125,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,

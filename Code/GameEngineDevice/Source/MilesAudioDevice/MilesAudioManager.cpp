@@ -1029,7 +1029,7 @@ public:
     virtual void slot50(); virtual void slot51(); virtual void slot52(); virtual void slot53(); virtual void slot54();
     virtual void slot55(); virtual bool slot56(unsigned int soundClass); virtual void slot57(); virtual void slot58(); virtual void slot59();
     virtual void slot60(); virtual void slot61(); virtual void slot62(); virtual void slot63(); virtual void slot64();
-    virtual void slot65(); virtual void slot66(); virtual void slot67(); virtual void slot68(); virtual void slot69();
+    virtual void slot65(); virtual void slot66(); virtual void rva000533CB(); virtual void slot68(); virtual void slot69();
     virtual void slot70(); virtual void slot71(); virtual void slot72(); virtual void slot73(); virtual void slot74();
     virtual AudioEventInfoRef findAudioEventInfo(const AsciiString &name) const;
     // Slots 76..106 are not named here; slot 107 (+0x1AC, retail vftable
@@ -5986,4 +5986,26 @@ void MilesAudioManager::processAmbientStreams(PlayingAudioList::iterator *stream
         }
     }
     m_atBEC &= ~(1 << m_at678);
+}
+
+
+// Retail 0x000533CB (125B, MilesAudioManager vtable 0x00BC55B0 slot 67):
+// takes the +0x9D4 mutex guard, ignores the call when no provider is
+// selected, flips the +0x6A6 headphone override and applies the resulting
+// speaker type to the selected provider: 1 when the override turns on, else
+// 5 for the Dolby selection (+0xBF0 == 1), else the stored speaker type.
+void MilesAudioManager::rva000533CB(void)
+{
+    MilesMutexGuard guard(&m_mutex, 0);
+    unsigned int provider = m_selectedProvider;
+    if (provider >= m_providerCount)
+        return;
+    bool enable = (m_forceHeadphones == 0);
+    m_forceHeadphones = enable;
+    if (enable)
+        AIL_set_3D_speaker_type(m_provider3D[provider].id, 1);
+    else if (m_selectedSpeakerType == 1)
+        AIL_set_3D_speaker_type(m_provider3D[provider].id, 5);
+    else
+        AIL_set_3D_speaker_type(m_provider3D[provider].id, m_selectedSpeakerType);
 }
