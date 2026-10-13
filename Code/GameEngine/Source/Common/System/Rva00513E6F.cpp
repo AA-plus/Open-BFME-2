@@ -1,3 +1,6 @@
+// Complete exact native parent and associative EH graph establish
+// the naturally emitted return-object cleanup at 0x0079504C.
+// Its 25-byte unwind-map entry excludes the interior return label.
 // cl: /Ireference/shims/bfme2_ascii /EHsc /MD
 #include "unicode_string.h"
 // ?rva00513E6F@Rva00513E6F@@QAE?AVUnicodeString@@XZ @0x00513E6F 98B
