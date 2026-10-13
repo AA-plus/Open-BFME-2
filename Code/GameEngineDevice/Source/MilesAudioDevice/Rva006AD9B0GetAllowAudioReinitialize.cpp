@@ -46,6 +46,9 @@ template <typename T> class StringBase
 {
 	friend class AsciiString;
 
+public:
+	int compareNoCase(const T *text) const throw();
+
 private:
 	StringBase(const T *text);
 	StringBase(const StringBase &other);
@@ -62,7 +65,6 @@ public:
 	AsciiString(const AsciiString &that) : StringBase<char>(that) {}
 	~AsciiString() { releaseBuffer(); }
 
-	int compareNoCase(const char *s) const throw();
 };
 
 struct PreferenceNode
@@ -124,7 +126,10 @@ bool MilesAudioManager::rva006AD9B0(void)
 		return true;
 
 	AsciiString value(it->m_value);
-	if (value.compareNoCase("false") == 0 || value.compareNoCase("no") == 0)
+	// Both native calls target StringBase<char>::compareNoCase at 0x00037980.
+	// Use that existing provider through the donor's one-pointer base view.
+	const StringBase<char> *comparison = (const StringBase<char> *)&value;
+	if (comparison->compareNoCase("false") == 0 || comparison->compareNoCase("no") == 0)
 		return false;
 
 	return true;
