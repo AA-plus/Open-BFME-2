@@ -7,10 +7,8 @@
 // MaterialVector::Add follows WWLib/vector.h: increment the count before the
 // element store, preserving the distinct old and new indices.
 
-extern "C" const void *const vtbl_00BD4658[];  // ??_7?$DynamicVectorClass@PAVVertexMaterialClass@@@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BD4658=??_7?$DynamicVectorClass@PAVVertexMaterialClass@@@@6B@")
-extern "C" const void *const vtbl_00BD4688[];  // ??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BD4688=??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@")
+extern "C" const void *__identifier("??_7?$DynamicVectorClass@PAVVertexMaterialClass@@@@6B@")[];
+extern "C" const void *__identifier("??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@")[];
 
 class VertexMaterialClass {
 public:
@@ -78,7 +76,7 @@ public:
   VectorMax = 0;
   IsValid = true;
   IsAllocated = false;
-  Vtable = ((unsigned int)vtbl_00BD4658);
+  Vtable = ((unsigned int)__identifier("??_7?$DynamicVectorClass@PAVVertexMaterialClass@@@@6B@"));
   GrowthStep = 10;
   ActiveCount = 0;
  }
@@ -111,7 +109,7 @@ public:
 	__forceinline TextureVector()
 		: TextureVectorBaseCtorShim(0, 0)
 	{
-		*(unsigned int *)this = ((unsigned int)vtbl_00BD4688);
+		*(unsigned int *)this = ((unsigned int)__identifier("??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@"));
   GrowthStep = 10;
   ActiveCount = 0;
 	}

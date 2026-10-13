@@ -11,12 +11,9 @@
 // (??0TextureVectorBaseCtorShim@@QAE@HPBV?$RefCountPtr@VTextureClass@@@@@Z)
 // lives at 0x0016ED80 (ghidra FUN_0056ed80, 191B, same size as BFME1's 191B
 // construct); declared only here and pinned, defined in its own TU next.
-extern "C" const void *const vtbl_00BD4658[];  // ??_7?$DynamicVectorClass@PAVVertexMaterialClass@@@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BD4658=??_7?$DynamicVectorClass@PAVVertexMaterialClass@@@@6B@")
-extern "C" const void *const vtbl_00BD46A0[];  // ??_7?$DynamicVectorClass@VShaderClass@@@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BD46A0=??_7?$DynamicVectorClass@VShaderClass@@@@6B@")
-extern "C" const void *const vtbl_00BD4688[];  // ??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BD4688=??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@")
+extern "C" const void *__identifier("??_7?$DynamicVectorClass@PAVVertexMaterialClass@@@@6B@")[];
+extern "C" const void *__identifier("??_7?$DynamicVectorClass@VShaderClass@@@@6B@")[];
+extern "C" const void *__identifier("??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@")[];
 
 class ShaderClass;
 
@@ -66,7 +63,7 @@ public:
 	__forceinline ShaderVector()
 		: VectorClass<ShaderClass>(0, 0)
 	{
-		*(unsigned int *)this = ((unsigned int)vtbl_00BD46A0);
+		*(unsigned int *)this = ((unsigned int)__identifier("??_7?$DynamicVectorClass@VShaderClass@@@@6B@"));
 		*(unsigned int *)((unsigned char *)this + 0x14) = 10;
 		*(unsigned int *)((unsigned char *)this + 0x10) = 0;
 	}
@@ -86,7 +83,7 @@ public:
 		*(unsigned int *)(self + 8) = 0;
 		*(unsigned char *)(self + 0x0c) = 1;
 		*(unsigned char *)(self + 0x0d) = 0;
-		*(unsigned int *)self = ((unsigned int)vtbl_00BD4658);
+		*(unsigned int *)self = ((unsigned int)__identifier("??_7?$DynamicVectorClass@PAVVertexMaterialClass@@@@6B@"));
 		*(unsigned int *)(self + 0x14) = 10;
 		*(unsigned int *)(self + 0x10) = 0;
 	}
@@ -104,7 +101,7 @@ public:
 		: TextureVectorBaseCtorShim(0, 0)
 	{
 		*(unsigned int *)((unsigned char *)this + 0x10) = 0;
-		*(unsigned int *)this = ((unsigned int)vtbl_00BD4688);
+		*(unsigned int *)this = ((unsigned int)__identifier("??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@"));
 		*(unsigned int *)((unsigned char *)this + 0x14) = 10;
 	}
 	~TextureVector();

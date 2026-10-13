@@ -51,8 +51,7 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "realcrc.h"
 #include "dx8wrapper.h"
 
-extern "C" const void *const vtbl_00BD4688[];  // ??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BD4688=??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@")
+extern "C" const void *__identifier("??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@")[];
 
 #include <stdio.h>
 void __cdecl operator delete[](void *) throw();
@@ -108,7 +107,7 @@ public:
 	__forceinline MeshMdlTextureVector()
 		: TextureVectorBaseCtorShim(0, 0)
 	{
-		*(unsigned int *)this = ((unsigned int)vtbl_00BD4688);
+		*(unsigned int *)this = ((unsigned int)__identifier("??_7?$DynamicVectorClass@VBfmeHandleCX@@@@6B@"));
 		GrowthStep = 10;
 		ActiveCount = 0;
 	}
