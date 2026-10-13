@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
 // BFME1 575ba2b AptPalantirResourceImageSlotConstructor.cpp supplies the
 // resource-bar registration sequence. Native2D5188..2D5333 supplies layout,
