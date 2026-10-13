@@ -1,3 +1,5 @@
+// ?insert@?$vector@URva005E71C6Ref@@V?$allocator@URva005E71C6Ref@@@_STL@@QAE?AV?$_Vector_iterator@URva005E71C6Ref@@V?$allocator@URva005E71C6Ref@@@_STL@@@2@V32@ABURva005E71C6Ref@@@Z
+// partial score=0.8177 date=2026-10-13
 // ?insert@?$vector@URva005E71C6Ref@@V?$allocator@URva005E71C6Ref@@@_STL@@@_STL@@QAEPAURva005E71C6Ref@@PAU3@ABU3@@Z
 // partial score=0.94 date=2026-10-05
 // cl: /O1 /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
@@ -16,7 +18,7 @@ template <> inline const unsigned int &max<unsigned int>(const unsigned int &a, 
 #include <vector>
 struct TargetRef00217D4C {
     virtual void *destroy(unsigned int flags);
-    int references;
+    volatile int references;
 };
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *p);
 struct Rva005E7198Object {
