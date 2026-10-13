@@ -352,3 +352,47 @@ void GameStats::Persistent::CalculateTotalColumn(float total) {
   }
  }
 }
+
+// ?rva005DE926@Rva005DE5B5@@QAEXXZ, RVA 0x005DE926, 44B. Clear lane:
+// erase the +4 cell vector then resize it back to its entry count,
+// clearing the +14 flag. Neighbour Init 0x005DE8CD proves the +4
+// vector; the dtor TU proves Rva005DE5B5 layout (UnicodeString +0,
+// vector +4, float +10, flag +14). Callees are the rowed
+// _STL::vector<BfmeStringRecord005DDD40>::erase 0x00381B1F and
+// Rva005DE7D1Vector::resize 0x005DE84E (same 8B record layout).
+namespace _STL {
+template <> class vector<BfmeStringRecord005DDD40, allocator<BfmeStringRecord005DDD40> >
+{
+public:
+	typedef BfmeStringRecord005DDD40 *iterator;
+	iterator begin() { return m_start; }
+	iterator end() { return m_finish; }
+	unsigned int size() const { return (unsigned int)(m_finish - m_start); }
+	iterator erase(iterator first, iterator last);
+private:
+	iterator m_start;
+	iterator m_finish;
+	iterator m_endOfStorage;
+};
+}
+
+class Rva005DE5B5
+{
+public:
+	void rva005DE926();
+private:
+	UnicodeString m_00;
+	_STL::vector<BfmeStringRecord005DDD40, _STL::allocator<BfmeStringRecord005DDD40> > m_04;
+	float m_10;
+	unsigned char m_14;
+};
+
+void Rva005DE5B5::rva005DE926()
+{
+	unsigned int count = m_04.size();
+	_STL::vector<BfmeStringRecord005DDD40, _STL::allocator<BfmeStringRecord005DDD40> > &vec = m_04;
+	vec.erase(vec.begin(), vec.end());
+	_ReadWriteBarrier();
+	((Rva005DE7D1Vector *)&vec)->resize(count);
+	m_14 = 0;
+}
