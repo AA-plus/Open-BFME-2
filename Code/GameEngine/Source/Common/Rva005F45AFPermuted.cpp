@@ -1,11 +1,12 @@
-// ?appendUpgradeList@@YAXAAVUnicodeString@@PBUUpgradeRecordView@@@Z
-// partial score=0.9886685552407932 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP=
+//
+// ?appendUpgradeList@@YAXAAVUnicodeString@@PBUUpgradeRecordView@@@Z, retail 0x005f45af, 353 bytes. Banked partial (score 0.9886685552407932) closed by tools/permute.py;
+// the body is the banked one up to statement/operand order and local types.
 // stlport
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include <bitset>
-template<> bool _STL::_Base_bitset<32>::_M_is_any() const;
+template<> bool _STL::_Base_bitset<24>::_M_is_any() const;
 class GameTextInterface {
 public:
  virtual ~GameTextInterface() {}
