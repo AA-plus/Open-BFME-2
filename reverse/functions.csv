@@ -87970,3 +87970,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?rva005FA98CSwap@@YIXPAVRva005FA98C@@HHHHHH@Z,,0x005FA98C,84,Code/GameEngine/Source/Common/Rva005FA98CSwap.cpp,matched,
 ?GetBlingIndex@CreateAHeroSubClass@CreateAHeroManager@@QAEHHABVAsciiString@@@Z,,0x0021BD41,106,Code/GameEngine/Source/Common/System/Rva0021BD41GetBlingIndex.cpp,matched,
 ?onEnter@TurretAIHoldTurretState@@UAE?AW4StateReturnType@@XZ,,0x004D84D2,53,Code/GameEngine/Source/GameLogic/AI/TurretAIIdleStates.cpp,matched,
+?onEnter@TurretAIIdleState@@UAE?AW4StateReturnType@@XZ,,0x004D83D1,88,Code/GameEngine/Source/GameLogic/AI/TurretAIIdleStates.cpp,matched,

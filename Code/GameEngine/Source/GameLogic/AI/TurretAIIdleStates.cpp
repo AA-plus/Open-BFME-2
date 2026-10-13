@@ -15,9 +15,9 @@
 //    TurretAIHoldTurretState::update, retail 0x004D8935 (63 bytes): Zero
 //    Hour's bodies. The turret's friend_getNextIdleMoodTargetFrame
 //    (0x004D837D) and friend_checkForIdleMoodTarget (0x004D88AC) are out of
-//    line. (TurretAIHoldTurretState::onEnter, 0x004D84D2, needs 0x004D837D
-//    defined ahead of it, below; the other onEnter caller, 0x004D83D1, is a
-//    banked near-miss.)
+//    line. (The two onEnter callers, 0x004D83D1 and 0x004D84D2, need 0x004D837D
+//    defined ahead of them, below: the compiler then knows it leaves ecx alone
+//    and puts the FOREVER arguments in ecx.)
 //  - TurretAIIdleScanState::onEnter, retail 0x004D8448 (138 bytes): Zero
 //    Hour's body (idle scan angles from the turret data +0x50 / +0x54,
 //    desired angle +0x20; TurretAI.cpp lines 1381 and 1382).
@@ -404,9 +404,16 @@ protected:
 	TurretAI *getTurretAI() const { return ((TurretStateMachine *)getMachine())->getTurretAI(); }
 };
 
+class Rva004D839A
+{
+public:
+	void rva004D839A(); // resetIdleScan, rowed in Rva004D839ARva004D839A.cpp
+};
+
 class TurretAIIdleState : public TurretState
 {
 public:
+	virtual StateReturnType onEnter();
 	virtual StateReturnType update();
 private:
 	unsigned char m_pad1C[0x20 - 0x1C];
@@ -488,6 +495,22 @@ StateReturnType TurretAIHoldTurretState::onEnter()
 	m_timestamp = TheGameLogic->getFrame() + getTurretAI()->getRecenterTime();
 
 	return frameToSleepTime(getTurretAI()->rva004D837D(), m_timestamp);
+}
+
+//----------------------------------------------------------------------------------------------------------
+StateReturnType TurretAIIdleState::onEnter()
+{
+	AIUpdateInterface *ai = getMachineOwner()->getAI();
+	if (ai)
+	{
+		ai->resetNextMoodCheckTime();
+		if (ai->friend_getTurretSync() == getTurretAI()->friend_getWhichTurret())
+			ai->friend_setTurretSync(TURRET_INVALID);
+	} // ai doesn't exist if the object was just created this frame.
+
+	((Rva004D839A *)this)->rva004D839A();
+
+	return frameToSleepTime(getTurretAI()->rva004D837D(), m_nextIdleScan);
 }
 
 //----------------------------------------------------------------------------------------------------------
