@@ -1,4 +1,6 @@
 // _AnyRatioFrameScale
+// partial score=0.96 date=2026-10-13
+// _AnyRatioFrameScale
 // partial score=0.96 date=2026-10-12
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001baf30.md plus retail only.
