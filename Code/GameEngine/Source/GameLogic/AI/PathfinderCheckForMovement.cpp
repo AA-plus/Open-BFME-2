@@ -4,17 +4,13 @@
 // checkForMovement, extended):
 //   0x002EA0BA  rva002EA0BA (656 bytes): one cell's check, the body the
 //               WorldBuilder twin 0x00D5B030 calls out of line
-//   0x002EA34A  checkForMovement (782 bytes): resets the result fields and
-//               checks every cell of the footprint (radius, plus one when
-//               centred in a cell) around info.cell on info.layer; a missing
-//               cell or a refused cell fails
-// (0x002EA658, the variant with a second footprint whose cells only count
-// their own flags -- WorldBuilder twin 0x00D5B720 -- inlines the same check;
-// checkCellFlags is its flags-only half.)
-// Retail inlines the per-cell check into both loops; the shared inline
-// helpers below are that check. Field names past Zero Hour's are not
-// recovered; kind-of bits (template +0x108) and cell flag fields follow the
-// WorldBuilder twin's BitFlags tests.
+// checkForMovement itself (0x002EA34A) lives in Pathfinder/pathfinder.cpp:
+// retail compiles it in that object, where InternalFindPath's TCheckMovementInfo
+// does not escape through it. (0x002EA658, the variant with a second footprint
+// -- WorldBuilder twin 0x00D5B720 -- inlines the same check.)
+// checkCellUnits below is the unit half of the per-cell check. Field names
+// past Zero Hour's are not recovered; kind-of bits (template +0x108) and cell
+// flag fields follow the WorldBuilder twin's BitFlags tests.
 
 typedef int Int;
 typedef bool Bool;
@@ -149,36 +145,8 @@ class Pathfinder
 public:
 	PathfindCell *getCell(PathfindLayerEnum layer, Int x, Int y);
 	Bool rva002EA0BA(Object *obj, PathfindCell *cell, TCheckMovementInfo &info, ObjectID *lastID);
-	Bool checkForMovement(Object *obj, TCheckMovementInfo &info);
 
 private:
-	__forceinline void checkCellFlags(Object *obj, PathfindCell *cell, TCheckMovementInfo &info)
-	{
-		if (cell->getType() == 5)
-			info.m_34++;
-		if (cell->rvaBit18() && obj->rva0028AFBB())
-			info.m_34++;
-		if (info.m_14 & 8)
-		{
-			Int layer = cell->getLayer();
-			if (info.layer != layer)
-			{
-				if (info.layer == 1 && layer != 0x10)
-					info.m_34++;
-				else if ((unsigned char)Rva002E6E8AGet(info.layer) && layer != 0x10)
-					info.m_34++;
-			}
-		}
-		if ((info.m_14 & 4) && !((Rva002E6DC4 *)this)->rva002E6DC4(info.m_1C, cell))
-			info.m_34++;
-	}
-
-	__forceinline Bool checkCell(Object *obj, PathfindCell *cell, TCheckMovementInfo &info, ObjectID *lastID)
-	{
-		checkCellFlags(obj, cell, info);
-		return checkCellUnits(obj, cell, info, lastID);
-	}
-
 	__forceinline Bool checkCellUnits(Object *obj, PathfindCell *cell, TCheckMovementInfo &info, ObjectID *lastID)
 	{
 		if (cell->rvaInfo14())
@@ -295,31 +263,4 @@ Bool Pathfinder::rva002EA0BA(Object *obj, PathfindCell *cell, TCheckMovementInfo
 	if ((options & 4) && !((Rva002E6DC4 *)this)->rva002E6DC4(info.m_1C, cell))
 		info.m_34++;
 	return checkCellUnits(obj, cell, info, lastID);
-}
-
-Bool Pathfinder::checkForMovement(Object *obj, TCheckMovementInfo &info)
-{
-	info.m_2C = 0;
-	info.m_31 = false;
-	info.m_32 = false;
-	info.m_30 = false;
-	info.m_34 = 0;
-
-	Int numCellsAbove = info.radius;
-	if (info.centerInCell)
-		numCellsAbove++;
-
-	ObjectID lastID = INVALID_ID;
-	for (Int i = info.cell.x - info.radius; i < info.cell.x + numCellsAbove; i++)
-	{
-		for (Int j = info.cell.y - info.radius; j < info.cell.y + numCellsAbove; j++)
-		{
-			PathfindCell *cell = getCell(info.layer, i, j);
-			if (!cell)
-				return false;
-			if (!checkCell(obj, cell, info, &lastID))
-				return false;
-		}
-	}
-	return true;
 }

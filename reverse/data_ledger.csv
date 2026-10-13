@@ -17164,7 +17164,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009BD190,136,.data,global,?g_volumePreferenceKeys@@3QAY0BE@$$CBDA,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/OptionPreferences_getVolume.cpp,provisional,?g_volumePreferenceKeys@@3QAY0BE@$$CBDA;_volumeNames@Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/OptionPreferences_setVolume.cpp,2,2
 0x009BD218,224,.data,global,?g_useStringFile@@3_NA,,unowned,,0,1
 0x009BD2F8,68,.data,global,?g_bfme939Str@@3PADA,,unowned,,0,1
-0x009BD33C,48,.data,global,?g_00DBD33C@@3PAIA,Code/GameEngine/Source/Common/Rva002E6DC4Check.cpp,owned,,1,3
+0x009BD33C,48,.data,global,?g_00DBD33C@@3PAIA,Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp,owned,,1,3
 0x009BD36C,32,.data,global,?deltaY@?BG@??CheckPathCost@Pathfinder@@QAEHPAVObject@@ABVLocomotorSet@@PBUCoord3D@@2@Z@4PAHA,Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp,owned,,1,1
 0x009BD38C,292,.data,global,?deltaX@?BG@??CheckPathCost@Pathfinder@@QAEHPAVObject@@ABVLocomotorSet@@PBUCoord3D@@2@Z@4PAHA,Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp,owned,,1,1
 0x009BD4B0,8,.data,global,?g_Va00DBD4B0@@3IA,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,owned,,1,2
