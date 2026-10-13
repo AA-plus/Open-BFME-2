@@ -11,6 +11,12 @@ struct BfmeAssignRecord44
 	int a[10];
 };
 
+// Retail calls the verified range-erase owner at0x00414760. Declare it
+// instead of emitting erase and its layout-dependent assignment helpers.
+namespace _STL {
+template <> BfmeAssignRecord44 *vector<BfmeAssignRecord44, allocator<BfmeAssignRecord44> >::erase(BfmeAssignRecord44 *, BfmeAssignRecord44 *);
+}
+
 struct Rva00414F5EGlobal
 {
 	char m_pad[0x10];

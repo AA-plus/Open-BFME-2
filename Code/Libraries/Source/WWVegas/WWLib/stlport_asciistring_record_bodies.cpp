@@ -34,7 +34,10 @@ bool operator<(const AsciiString &, const AsciiString &);
 bool operator==(const AsciiString &, const AsciiString &);
 struct BfmeAssignRecord24 { AsciiString s; int a[5]; };
 inline bool operator==(const BfmeAssignRecord24 &x, const BfmeAssignRecord24 &y) { return x.s == y.s; }
-struct BfmeAssignRecord28 { AsciiString s; int a[6]; };
+// Native copy/fill callers reach the separately verified record assignments.
+// These size-only views supply algorithm strides, not assignment layouts;
+// declare the owners so implicit assignments cannot compete with them.
+struct BfmeAssignRecord28 { AsciiString s; int a[6]; BfmeAssignRecord28 &operator=(const BfmeAssignRecord28 &); };
 inline bool operator==(const BfmeAssignRecord28 &x, const BfmeAssignRecord28 &y) { return x.s == y.s; }
 // This shape view supplies assignment helpers; the independently verified
 // 71B destructor at0x0017330A owns destruction of the complete native record.
@@ -42,9 +45,9 @@ struct BfmeAssignRecord32 { AsciiString s; int a[7]; ~BfmeAssignRecord32(); Bfme
 inline bool operator==(const BfmeAssignRecord32 &x, const BfmeAssignRecord32 &y) { return x.s == y.s; }
 struct BfmeAssignRecord36 { AsciiString s; int a[8]; BfmeAssignRecord36 &operator=(const BfmeAssignRecord36 &); };
 inline bool operator==(const BfmeAssignRecord36 &x, const BfmeAssignRecord36 &y) { return x.s == y.s; }
-struct BfmeAssignRecord44 { AsciiString s; int a[10]; };
+struct BfmeAssignRecord44 { AsciiString s; int a[10]; BfmeAssignRecord44 &operator=(const BfmeAssignRecord44 &); };
 inline bool operator==(const BfmeAssignRecord44 &x, const BfmeAssignRecord44 &y) { return x.s == y.s; }
-struct BfmeAssignRecord52 { AsciiString s; int a[12]; };
+struct BfmeAssignRecord52 { AsciiString s; int a[12]; BfmeAssignRecord52 &operator=(const BfmeAssignRecord52 &); };
 inline bool operator==(const BfmeAssignRecord52 &x, const BfmeAssignRecord52 &y) { return x.s == y.s; }
 struct BfmePod8 { int a[2]; };
 struct BfmeAssignRecord84 { AsciiString s; int a[20]; BfmeAssignRecord84 &operator=(const BfmeAssignRecord84 &); };
