@@ -16,7 +16,7 @@
 // BFME 2 differences from ZH: the gate is TheGameLogic's byte at +0x9A
 // (getDrawIconUI) but the frame comes from TheGameClient (slot 31, unsigned);
 // the default timeout is the logic frame rate g_009BA4E8 / 3 and a configured
-// timeout at +0x8A4 is scaled by g_00DBA500 in floating point. The list at
+// timeout at +0x8A4 is scaled by BfmeClientFramesPerMillisecond in floating point. The list at
 // +0x8A0 takes the record through the folded four-byte push_front 0x00392076.
 #include <list>
 #include "unicode_string.h"
@@ -62,7 +62,7 @@ public:
 
 extern GameLogic *TheGameLogic;
 extern int g_009BA4E8;
-extern float g_00DBA500;
+extern float BfmeClientFramesPerMillisecond;
 
 class FloatingTextData
 {
@@ -138,7 +138,7 @@ void InGameUI::addFloatingText( const UnicodeString &text, const Coord3D *pos, C
 		if( m_floatingTextTimeOut <= 0 )
 			newFTD->m_frameTimeOut = TheGameClient->getFrame() + g_009BA4E8 / 3;
 		else
-			newFTD->m_frameTimeOut = TheGameClient->getFrame() + g_00DBA500 * m_floatingTextTimeOut;
+			newFTD->m_frameTimeOut = TheGameClient->getFrame() + BfmeClientFramesPerMillisecond * m_floatingTextTimeOut;
 
 		m_floatingTextList.push_front( newFTD );
 	}

@@ -4,7 +4,7 @@
 // Target identity: WB 0xF16CF0 names LaserUpdate::initLaser and pairs by callgraph;
 // native 0x36355C is the complete 759B four-argument body (ret 16).
 // Target layout/calls: GameClient frame31/destroy29, ParticleSystem ID+A8,
-// 12B handles and frame-per-millisecond global g_00DBA500 measured in retail.
+// 12B handles and frame-per-millisecond global BfmeClientFramesPerMillisecond measured in retail.
 // Module layout carried from BFME1, corroborated by native field accesses.
 // Bone-on-turret callee identity uses native Object drawable/AI guards and
 // pristine-bone/turret-transform spine; WB's automatic Matrix3D pairing is not evidence.
@@ -52,7 +52,7 @@ public:
     virtual void slot30(); virtual unsigned getFrame();
 };
 extern GameClient *TheGameClient;
-extern float g_00DBA500; // Existing frame/millisecond scalar; native Laser loads this writable global.
+extern float BfmeClientFramesPerMillisecond; // Existing frame/millisecond scalar; native Laser loads this writable global.
 enum ParticleSystemID { INVALID_PARTICLE_SYSTEM_ID=0 };
 struct Rva001F3899Arg { float x,y,z; };
 class Rva001F3899Slot { public: void set(const Rva001F3899Arg &); };
@@ -132,7 +132,7 @@ void LaserUpdate::initLaser(const Object *parent, const Coord3D *startPos, const
         m_currentWidthScalar = 1.0f;
     }
 
-    m_rva00603BB0ExpiryFrame = (unsigned)((float)TheGameClient->getFrame() + g_00DBA500 * data->m_rva00603FE0LifetimeMsec);
+    m_rva00603BB0ExpiryFrame = (unsigned)((float)TheGameClient->getFrame() + BfmeClientFramesPerMillisecond * data->m_rva00603FE0LifetimeMsec);
 
     if( parent && !data->m_parentFireBoneName.isEmpty() )
     {

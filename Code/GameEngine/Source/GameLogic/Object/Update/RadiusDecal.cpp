@@ -9,7 +9,7 @@
 #include "../../../Common/GameLogicObjectLookupView.h"
 extern "C" __declspec(dllimport) double __cdecl ceil(double);
 float Sin(float);float normalizeAngle(float);
-extern float g_00DBA500;
+extern float BfmeClientFramesPerMillisecond;
 // Retail's one-frame-in-seconds at 30 fps, VA 0x00DBA508 (RVA 0x009BA508): the
 // rowed update reads it with `flds 0xdba508` (retail 0x00331FDF) before
 // multiplying the decal's rotationSpeed by the degrees-to-radians constant at
@@ -83,7 +83,7 @@ void RadiusDecal::update() {
  if(!data) goto update_extra;
  {
  unsigned frame=TheGameClient->getFrame();
- float throbTime=(float)ceil(data->throbTime*g_00DBA500);
+ float throbTime=(float)ceil(data->throbTime*BfmeClientFramesPerMillisecond);
  unsigned cycle;
  __asm fld throbTime
  __asm fistp cycle

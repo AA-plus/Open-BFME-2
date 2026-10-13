@@ -1,8 +1,8 @@
 // cl: /DNDEBUG /DWIN32 /D_WINDOWS /MD /GX
 // ?rva00524FA7@Rva00524FA7@@QAEXXZ @0x00524FA7 (70B): combine InGameUI +0x988 scaled
-// by g_00DBA500 with TheGameClient slot31 into +0x1DC. Evidence: single caller
+// by BfmeClientFramesPerMillisecond with TheGameClient slot31 into +0x1DC. Evidence: single caller
 // 0x005270EB, TheInGameUI/TheGameClient globals, unsigned x87 fild/fadd/fmul/ftol2
-// via g_00BC26EC/g_00DBA500, slot 0x7C, neighbours Disp0DwordImmSetters/Rva00524FEDCheck.
+// via g_00BC26EC/BfmeClientFramesPerMillisecond, slot 0x7C, neighbours Disp0DwordImmSetters/Rva00524FEDCheck.
 // Honest Rva owner; /O1 like next sibling.
 class InGameUI
 {
@@ -61,14 +61,14 @@ private:
 extern InGameUI *TheInGameUI;
 class ClientFrameSubsystem; extern class GameClient *TheGameClient;
 extern float g_00BC26EC;
-extern float g_00DBA500;
-// g_00DBA500: matched references place it at VA 0xdba500 (retail .data initial value 0.03f).
-float g_00DBA500 = 0.03f;
+extern float BfmeClientFramesPerMillisecond;
+// BfmeClientFramesPerMillisecond: matched references place it at VA 0xdba500 (retail .data initial value 0.03f).
+float BfmeClientFramesPerMillisecond = 0.03f;
 
 void Rva00524FA7::rva00524FA7()
 {
 	unsigned v = TheInGameUI->m_val;
-	int t = (int)((float)v * g_00DBA500);
+	int t = (int)((float)v * BfmeClientFramesPerMillisecond);
 	int u = ((ClientFrameSubsystem *)TheGameClient)->slot31();
 	m_1dc = u + t;
 }

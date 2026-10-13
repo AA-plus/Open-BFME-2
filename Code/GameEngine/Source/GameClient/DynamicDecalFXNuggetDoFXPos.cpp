@@ -10,7 +10,7 @@
 // matrix when OrientToObject) dropped to the ground; sets its angle, its
 // colour (RGBColor::getAsInt), position, initial opacity (0 while a starting
 // delay remains, else OpacityStart) and the opacity fade frames (seconds
-// times the 0.03 frames-per-millisecond global g_00DBA500).
+// times the 0.03 frames-per-millisecond global BfmeClientFramesPerMillisecond).
 // Donor: Open-BFME-1 DynamicDecalFXNuggetDoFXPos.cpp (same flow; BFME 2's
 // decal description, Shadow::ShadowTypeInfo, holds AsciiStrings and is the
 // rowed 0x00079514 ctor / 0x000793FA dtor).
@@ -104,7 +104,7 @@ public:
 };
 extern void *g_00DEC2D4;	// TheProjectedShadowManager
 
-extern float g_00DBA500;	// seconds to frames
+extern float BfmeClientFramesPerMillisecond;	// seconds to frames
 
 class Object;
 
@@ -188,13 +188,13 @@ void DynamicDecalFXNugget::doFXPos(const Coord3D *primary, const Matrix3D *prima
 		typedef void (Rva00330A37::*FadeFrames)(UnsignedInt, UnsignedInt, UnsignedInt, UnsignedInt,
 			UnsignedInt, UnsignedInt, UnsignedInt, UnsignedInt);
 		(((Rva00330A37 *)shadow)->*(FadeFrames)&Rva00330A37::rva00330A37)(
-			(UnsignedInt)(m_startingDelay * g_00DBA500),
-			(UnsignedInt)(m_lifetime * g_00DBA500),
+			(UnsignedInt)(m_startingDelay * BfmeClientFramesPerMillisecond),
+			(UnsignedInt)(m_lifetime * BfmeClientFramesPerMillisecond),
 			m_opacityStart,
-			(UnsignedInt)(m_opacityFadeTimeOne * g_00DBA500),
+			(UnsignedInt)(m_opacityFadeTimeOne * BfmeClientFramesPerMillisecond),
 			m_opacityPeak,
-			(UnsignedInt)(m_opacityPeakTime * g_00DBA500),
-			(UnsignedInt)(m_opacityFadeTimeTwo * g_00DBA500),
+			(UnsignedInt)(m_opacityPeakTime * BfmeClientFramesPerMillisecond),
+			(UnsignedInt)(m_opacityFadeTimeTwo * BfmeClientFramesPerMillisecond),
 			m_opacityEnd);
 	}
 }

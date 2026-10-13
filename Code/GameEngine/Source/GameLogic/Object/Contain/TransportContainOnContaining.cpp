@@ -16,7 +16,7 @@
 // at non-allied riders with status 0x3C held around it; the frame stamp at
 // this+0xE8; and the filtered fade-in or fade-out of the rider (or of the riders
 // it contains when it has KindOf 109 and a contain) over fadeTime * 0.03
-// (g_00DBA500) frames. Slot numbers count dwords of the interface vtable.
+// (BfmeClientFramesPerMillisecond) frames. Slot numbers count dwords of the interface vtable.
 // The contained-rider list is viewed as list<int>: its base ctor/dtor
 // 0x004EC36C/0x004EC395 and the unwind ~list 0x00200667 are the folded
 // list<int> bodies.
@@ -158,7 +158,7 @@ extern WeaponStore *TheWeaponStore;
 
 extern GameLogic *TheGameLogic;
 
-extern float g_00DBA500;	// logic frames per millisecond (0.03)
+extern float BfmeClientFramesPerMillisecond;	// logic frames per millisecond (0.03)
 
 struct TransportContainModuleData
 {
@@ -405,9 +405,9 @@ void Rva0046781F::rva0046781F(Object *rider, bool wasSelected)
 					if (riderDraw)
 					{
 						if (d->m_fadeOut)
-							riderDraw->fadeOut((UnsignedInt)(g_00DBA500 * d->m_fadeTime));
+							riderDraw->fadeOut((UnsignedInt)(BfmeClientFramesPerMillisecond * d->m_fadeTime));
 						else
-							riderDraw->fadeIn((UnsignedInt)(g_00DBA500 * d->m_fadeTime));
+							riderDraw->fadeIn((UnsignedInt)(BfmeClientFramesPerMillisecond * d->m_fadeTime));
 					}
 				}
 			}
@@ -415,9 +415,9 @@ void Rva0046781F::rva0046781F(Object *rider, bool wasSelected)
 		else
 		{
 			if (d->m_fadeOut)
-				draw->fadeOut((UnsignedInt)(g_00DBA500 * d->m_fadeTime));
+				draw->fadeOut((UnsignedInt)(BfmeClientFramesPerMillisecond * d->m_fadeTime));
 			else
-				draw->fadeIn((UnsignedInt)(g_00DBA500 * d->m_fadeTime));
+				draw->fadeIn((UnsignedInt)(BfmeClientFramesPerMillisecond * d->m_fadeTime));
 		}
 	}
 }

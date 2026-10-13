@@ -140,7 +140,7 @@ public:
 	Int m_framesPerSecond;		// +0x38
 };
 extern GameEngine *TheGameEngine;
-extern float g_00DBA500;	// logic frames per millisecond (0.03)
+extern float BfmeClientFramesPerMillisecond;	// logic frames per millisecond (0.03)
 
 class WeaponTemplate
 {
@@ -311,7 +311,7 @@ void BezierProjectileBehavior::projectileFireAtObjectOrPosition(Object *victim, 
 			if (!cellClear)
 				draw->fadeOut((Int)((Real)TheGameEngine->m_framesPerSecond * (Real)m_flightPathSegments));
 			else if (md->m_value40 != 0 || md->m_value44 != 0)
-				draw->rva00272D77((Int)((Real)md->m_value40 * g_00DBA500), (Int)((Real)md->m_value44 * g_00DBA500));
+				draw->rva00272D77((Int)((Real)md->m_value40 * BfmeClientFramesPerMillisecond), (Int)((Real)md->m_value44 * BfmeClientFramesPerMillisecond));
 		}
 		else if (cellClear)
 		{

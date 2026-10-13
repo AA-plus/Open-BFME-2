@@ -11052,9 +11052,9 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00851220,92,.rdata,vtable,??_7Rva0049C3FC@@6BRva00451F45_Root@@@,,literal,??_7Rva0049C3FC@@6BRva00451F45_Root@@@;_s_vtable@Code/GameEngine/Source/GameLogic/Object/Update/GiveUpgradeUpdateCtor.cpp,1,2
 0x0085127C,4,.rdata,global,?g_bfmeGiveUpgrade0025@@3MA,Code/GameEngine/Source/GameLogic/Object/Update/GiveUpgradeUpdateModuleDataCtor.cpp,owned,,1,1
 0x00851280,132,.rdata,vtable,??_7GiveUpgradeUpdateModuleData@@6B@,,literal,,0,1
-0x00851304,16,.rdata,global,?g_00C51304@@3PAIA,Code/GameEngine/Source/GameLogic/Object/Update/Rva0049D3BC.cpp,owned,,1,3
-0x00851314,16,.rdata,global,?g_00C51314@@3PAIA,Code/GameEngine/Source/GameLogic/Object/Update/Rva0049D3BC.cpp,owned,,1,3
-0x00851324,204,.rdata,global,?g_00C51324@@3PAIA,,unowned,,0,3
+0x00851304,16,.rdata,global,?ProductionDoorOpeningFlags@@3PAIA,Code/GameEngine/Source/GameLogic/Object/Update/Rva0049D3BC.cpp,owned,,1,3
+0x00851314,16,.rdata,global,?ProductionDoorClosingFlags@@3PAIA,Code/GameEngine/Source/GameLogic/Object/Update/Rva0049D3BC.cpp,owned,,1,3
+0x00851324,92,.rdata,global,?ProductionDoorWaitingOpenFlags@@3PAIA,Code/GameEngine/Source/GameLogic/Object/Update/Rva0049D3BC.cpp,owned,,1,3
 0x008513F0,124,.rdata,vtable,??_7Rva0049E03AIface20@@6B@,,literal,,0,1
 0x0085146C,4,.rdata,vtable,??_7Rva0049D1B1@@6B@,,literal,,0,2
 0x00851470,8,.rdata,vtable,??_7ProductionUpdate@@6BIface24@@@,,literal,??_7ProductionUpdate@@6BIface24@@@;??_7ProductionUpdate@@6BRva0049E03AIface24@@@,0,2
@@ -17071,7 +17071,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009BA4F4,4,.data,global,?g_00DBA4F4@@3MA,Code/GameEngine/Source/Common/Rva0040C985Init.cpp,owned,,1,2
 0x009BA4F8,4,.data,float,__real@3e4ccccd,,literal,?g_secondsPerLogicFrame@@3MA;__real@3e4ccccd,1,17
 0x009BA4FC,4,.data,global,?g_00DBA4FC@@3MA,Code/GameEngine/Source/GameClient/Rva0005121FElapsed.cpp,owned,,1,11
-0x009BA500,8,.data,float,__real@3cf5c28f,,literal,?g_00DBA500@@3MA;__real@3cf5c28f,1,10
+0x009BA500,8,.data,float,__real@3cf5c28f,,literal,?BfmeClientFramesPerMillisecond@@3MA;__real@3cf5c28f,1,10
 0x009BA508,208,.data,global,?opacityLogicStepSeconds@@3MA,Code/GameEngine/Source/GameClient/Drawable_rva00275598.cpp,provisional,?g_bfmeSecondCF@@3MA;?opacityLogicStepSeconds@@3MA,1,3
 0x009BA5D8,4,.data,global,?lastFrame@?CC@??update@GameClient@@UAEXXZ@4IA,Code/GameEngine/Source/GameClient/GameClientDrawableTOC.cpp,owned,,1,2
 0x009BA5DC,4,.data,global,?firstUpdate@?4??update@GameClient@@UAEXXZ@4_NA,Code/GameEngine/Source/GameClient/GameClientDrawableTOC.cpp,owned,,1,2

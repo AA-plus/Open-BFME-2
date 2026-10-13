@@ -275,6 +275,7 @@ typedef char EvaListWidth[(sizeof(_STL::_List_base<int,_STL::allocator<int> >)==
 class Eva
 {
 public:
+ void rva001DD3DD();
 	void rva001DF1A4();
 	Bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);
 	Bool internalReportEvaEvent(const EvaEventReport *report);	// 0x001DD468
@@ -295,6 +296,8 @@ private:
 	int m_74;
 	int m_78;
 	Bool m_7C;
+ char m_pad7d[0x90-0x7d];
+ unsigned int m_cycleDuration;
 };
 
 // Eva::reportEvaEvent, retail 0x001DE2DA (247 bytes; WorldBuilder's Eva.cpp
@@ -573,4 +576,32 @@ typedef char Rva001DDBF3Extent[(sizeof(Rva001DDBF3)==20)?1:-1];
 Rva001DDBF3::~Rva001DDBF3()
 {
 	((Rva000427195 *)this)->rva003A2A41();
+}
+
+// Target native1DD3DD..1DD468,139B; translateGameMessage42B68F calls
+// through TheEva. A hotkey advances through remembered event positions.
+// The adjacent named Eva report/status methods establish owner; original
+// member name is unknown. The ZH Eva subsystem is context, not a same-body donor.
+struct EvaCycleNode { EvaCycleNode*next;EvaCycleNode*prev;int id;Coord3D position; };
+template<int N> class EvaCycleSlots : public EvaCycleSlots<N-1> {public: virtual void slot(EvaCycleSlots<N>*);};
+template<> class EvaCycleSlots<0> {};
+class EvaCycleClient : public EvaCycleSlots<31> {public:virtual unsigned getFrame() const;};
+class EvaCycleView : public EvaCycleSlots<21> {public:virtual void lookAt(const Coord3D*);};
+class GameClient;extern GameClient*TheGameClient;
+class View;extern View*TheTacticalView;
+extern float BfmeClientFramesPerMillisecond;
+void Eva::rva001DD3DD()
+{
+ EvaCycleNode*head=*(EvaCycleNode**)&m_queue;
+ if(head->next!=head && !TheGameLogic->rva001DCD1C()) {
+  unsigned now=((EvaCycleClient*)TheGameClient)->getFrame();
+  if((EvaCycleNode*)m_queuePosition!=*(EvaCycleNode**)&m_queue && (unsigned)m_70+(unsigned)(m_cycleDuration*BfmeClientFramesPerMillisecond)>=now) {
+   ++*(_STL::list<int>::iterator*)&m_queuePosition;
+   if((EvaCycleNode*)m_queuePosition==*(EvaCycleNode**)&m_queue)m_queuePosition=(int)(*(EvaCycleNode**)&m_queue)->next;
+  } else m_queuePosition=(int)(*(EvaCycleNode**)&m_queue)->next;
+  if((EvaCycleNode*)m_queuePosition!=*(EvaCycleNode**)&m_queue) {
+   ((EvaCycleView*)TheTacticalView)->lookAt(&((EvaCycleNode*)m_queuePosition)->position);
+   m_70=now;
+  }
+ }
 }
