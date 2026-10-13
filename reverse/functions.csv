@@ -28558,7 +28558,6 @@ uw_007987c2,,0x007987C2,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;obje
 uw_007987ca,,0x007987CA,8,Code/gen_small/uw_gen_006.cpp,matched,gen-funclet;object-symbol=$L3196
 uw_007987dc,,0x007987DC,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L4565
 uw_00798806,,0x00798806,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L4555
-uw_0079885e,,0x0079885E,14,Code/gen_small/uw_gen_009.cpp,matched,gen-funclet;object-symbol=$L2642
 uw_00798876,,0x00798876,8,Code/gen_small/uw_gen_000.cpp,matched,gen-funclet;object-symbol=$L4584
 uw_00798888,,0x00798888,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L4555
 uw_00798890,,0x00798890,11,Code/gen_small/uw_gen_014.cpp,matched,gen-funclet;object-symbol=$L5008
@@ -88050,3 +88049,4 @@ uw_0079880e,,0x0079880E,11,Code/GameEngine/Source/GameNetwork/GameSpy/Thread/Rva
 uw_00798819,,0x00798819,11,Code/GameEngine/Source/GameNetwork/GameSpy/Thread/Rva006609D0Destructor_Rva0054ffa5.cpp,matched,gen-funclet;parent=??1Rva006609D0@@UAE@XZ;object-symbol=$L448
 uw_00798824,,0x00798824,11,Code/GameEngine/Source/GameNetwork/GameSpy/Thread/Rva006609D0Destructor_Rva0054ffa5.cpp,matched,gen-funclet;parent=??1Rva006609D0@@UAE@XZ;object-symbol=$L449
 uw_00798850,,0x00798850,14,Code/GameEngine/Source/GameNetwork/GameSpy/Thread/Rva006609D0Destructor_Rva0054ffa5.cpp,matched,gen-funclet;parent=??1Rva006609D0@@UAE@XZ;object-symbol=$L453
+uw_0079885e,,0x0079885E,14,Code/GameEngine/Source/GameNetwork/GameSpy/Thread/Rva006609D0Destructor_Rva0054ffa5.cpp,matched,gen-funclet;parent=??1Rva006609D0@@UAE@XZ;object-symbol=$L454
