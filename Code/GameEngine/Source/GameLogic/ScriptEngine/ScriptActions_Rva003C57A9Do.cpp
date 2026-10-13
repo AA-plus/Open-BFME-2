@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
-// ?Rva003C57A9Do@@YGXPAVParameter@@ABVAsciiString@@@Z @0x003C57A9 124B and
-// ?Rva003C58C9Do@@YGXPAVParameter@@ABVAsciiString@@H@Z @0x003C58C9 161B: the
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C57A9Do@ScriptActions@@QAEXPAVParameter@@ABVAsciiString@@@Z @0x003C57A9 124B and
+// ?Rva003C58C9Do@ScriptActions@@QAEXPAVParameter@@ABVAsciiString@@H@Z @0x003C58C9 161B: the
 // named-unit command-button script actions (Zero Hour doNamedUseCommandButtonAbility
 // and ...AtWaypoint, GeneralsMD ScriptActions.cpp). The unit is resolved through
 // rowed ScriptEngine 0x003588E7; its command set string (0x00290E67) goes through
@@ -82,7 +84,7 @@ public:
 };
 extern TerrainLogic *TheTerrainLogic;
 
-void __stdcall Rva003C57A9Do(Parameter *unit, const AsciiString &ability)
+void ScriptActions::Rva003C57A9Do(Parameter *unit, const AsciiString &ability)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(unit);
 	if (obj == 0)
@@ -104,7 +106,7 @@ void __stdcall Rva003C57A9Do(Parameter *unit, const AsciiString &ability)
 	}
 }
 
-void __stdcall Rva003C58C9Do(Parameter *unit, const AsciiString &ability, int waypointId)
+void ScriptActions::Rva003C58C9Do(Parameter *unit, const AsciiString &ability, int waypointId)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(unit);
 	Waypoint *way = TheTerrainLogic->s34(waypointId);
@@ -126,3 +128,6 @@ void __stdcall Rva003C58C9Do(Parameter *unit, const AsciiString &ability, int wa
 		}
 	}
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

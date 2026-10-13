@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BC626Set@@YGXABVAsciiString@@H@Z @0x003BC626 84B: free stdcall mask loop over players with two per-player calls.
+// ?Rva003BC626Set@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003BC626 84B: ScriptActions member mask loop over players with two per-player calls.
 // Evidence: mov ecx,[0xDFE16C] call ScriptEngine::rva00357475 0x00357475 with (name,0) test mask je; loop ThePlayerList 0x009FEEE8 getEachPlayerFromMask 0x002A7BC9 then virtual slot1 on Player+8 with second arg then GameSlot::setTeamNumber 0x002E6A93 with Player+0x1c; cmp mask jne loop ret 8; sibling 0x003BC7EF same mask-loop shape.
 
 #include "ascii_string.h"
@@ -42,7 +44,7 @@ public:
 	void setTeamNumber(int val);
 };
 
-void __stdcall Rva003BC626Set(const AsciiString &name, int val)
+void ScriptActions::Rva003BC626Set(const AsciiString &name, int val)
 {
 	int mask = TheScriptEngine->rva00357475(name, 0);
 	if (mask == 0)
@@ -64,7 +66,7 @@ void __stdcall Rva003BC626Set(const AsciiString &name, int val)
 enum GameDifficulty { DIFFICULTY_EASY, DIFFICULTY_NORMAL, DIFFICULTY_HARD, DIFFICULTY_COUNT };
 class AIPlayer {public:void setAIDifficulty(GameDifficulty);};
 class Rva002A9ECA {public:int rva002A9ECA(int);};
-void __stdcall Rva003BC67ASet(const AsciiString &name,int value) {
+void ScriptActions::Rva003BC67ASet(const AsciiString &name,int value) {
  int mask=TheScriptEngine->rva00357475(name,0);
  if(mask==0)return;
  do {
@@ -75,3 +77,6 @@ void __stdcall Rva003BC67ASet(const AsciiString &name,int value) {
   }
  }while(mask!=0);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

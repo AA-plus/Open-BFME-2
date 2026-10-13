@@ -1,5 +1,7 @@
-// cl: /I. /Ireference/shims/bfme2_ascii /O1 /G7 /DNDEBUG /MD /EHsc /arch:SSE
-// ?Rva003C2A9FDo@@YGXABVAsciiString@@H@Z @0x003C2A9F 289B: team attacks the nearest
+// stlport
+// cl: /I. /Ireference/shims/bfme2_ascii /O1 /G7 /DNDEBUG /MD /EHsc /arch:SSE /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C2A9FDo@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003C2A9F 289B: team attacks the nearest
 // object of a KindOf bit among all players (Zero Hour ScriptActions team "attack
 // nearest object type"). The team (rowed ScriptEngine 0x003584E9) gives its centre
 // (pinned Team::rva0039E5B9), each player of the 0xFFFFF mask returns its closest
@@ -115,7 +117,7 @@ public:
 };
 extern AI *TheAI;
 
-void __stdcall Rva003C2A9FDo(const AsciiString &teamName, int kindBit)
+void ScriptActions::Rva003C2A9FDo(const AsciiString &teamName, int kindBit)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	if (team == 0)
@@ -156,7 +158,7 @@ void __stdcall Rva003C2A9FDo(const AsciiString &teamName, int kindBit)
 // 0x003C2260 (319B): the move form of 0x003C2A9F -- the team's new group is
 // ordered to the nearest object's position through 0x00372571 (source 1)
 // instead of attacking it.
-void __stdcall Rva003C2260Do(const AsciiString &teamName, int kindBit)
+void ScriptActions::Rva003C2260Do(const AsciiString &teamName, int kindBit)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	if (team == 0)
@@ -205,7 +207,7 @@ void __stdcall Rva003C2260Do(const AsciiString &teamName, int kindBit)
 
 // 0x003C239F (337B): the player-parameter form of 0x003C2260 -- only the
 // players of the parameter's mask are searched.
-void __stdcall Rva003C239FDo(const AsciiString &teamName, int kindBit, Parameter *playerParm)
+void ScriptActions::Rva003C239FDo(const AsciiString &teamName, int kindBit, Parameter *playerParm)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	if (team == 0)
@@ -256,7 +258,7 @@ void __stdcall Rva003C239FDo(const AsciiString &teamName, int kindBit, Parameter
 
 // 0x003C9C0A (259B): the named unit attacks the nearest object of a KindOf
 // bit over all players (the unit-based form of 0x003C2A9F).
-void __stdcall Rva003C9C0AAttack(Parameter *unitParm, int kindBit)
+void ScriptActions::Rva003C9C0AAttack(Parameter *unitParm, int kindBit)
 {
 	Object *unit = TheScriptEngine->getUnitNamed(unitParm);
 	if (!unit)
@@ -291,3 +293,6 @@ void __stdcall Rva003C9C0AAttack(Parameter *unitParm, int kindBit)
 		return;
 	ai->m_cmd.rva0036F4DF(best, 0, CMD_FROM_SCRIPT);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

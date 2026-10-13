@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C8B62Do@@YGXABVAsciiString@@@Z @0x003C8B62 (105B).
+// ?Rva003C8B62Do@ScriptActions@@QAEXABVAsciiString@@@Z @0x003C8B62 (105B).
 // Team wander-in-place via getTeamNamed plus iterate plus chooseLocomotorSet
 // slot 0x238 plus aiWanderInPlace. Evidence: callees rowed getTeamNamed
 // 0x003584E9 iterate 0x00263864 advance 0x00263526 aiWander 0x003C7853,
@@ -76,7 +78,7 @@ public:
 };
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C8B62Do(const AsciiString &teamName)
+void ScriptActions::Rva003C8B62Do(const AsciiString &teamName)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	if (!team)
@@ -108,7 +110,7 @@ public:
 };
 extern TerrainLogic *TheTerrainLogic;
 
-void __stdcall Rva003C8ABFDo(const AsciiString &teamName, const AsciiString &path)
+void ScriptActions::Rva003C8ABFDo(const AsciiString &teamName, const AsciiString &path)
 {
     Team *team = TheScriptEngine->getTeamNamed(teamName, false);
     if (!team)
@@ -132,7 +134,7 @@ void __stdcall Rva003C8ABFDo(const AsciiString &teamName, const AsciiString &pat
     }
 }
 
-void __stdcall Rva003C8BCBDo(const AsciiString &teamName, const AsciiString &path)
+void ScriptActions::Rva003C8BCBDo(const AsciiString &teamName, const AsciiString &path)
 {
     Team *team = TheScriptEngine->getTeamNamed(teamName, false);
     if (!team)
@@ -155,3 +157,6 @@ void __stdcall Rva003C8BCBDo(const AsciiString &teamName, const AsciiString &pat
         ai->m_command.rva003C78AF(way, CMD_FROM_SCRIPT);
     }
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

@@ -1,7 +1,9 @@
-// cl: /Ireference/shims/bfme2_ascii
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 #include "ascii_string.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BB5B7Do@@YGXPAVParameter@@HPAURGBColor@@@Z @0x003BB5B7 103B: free stdcall Parameter+int+color to Drawable stores.
+// ?Rva003BB5B7Do@ScriptActions@@QAEXPAVParameter@@HPAURGBColor@@@Z @0x003BB5B7 103B: ScriptActions member Parameter+int+color to Drawable stores.
 // Target evidence: ScriptEngine::getUnitNamed 0x003588E7 then Thing::getDrawable 0x005508E2 then v<=0 guard then BfmeLogicFramesPerSecond*v/g_00E02D9C then RGBColor::getAsInt 0x00004EA7 vs Object::getIndicatorColor 0x0028B026 then Drawable+0x168+0x16c ret 0xc; caller 0x003CBB2E.
 class Parameter;
 class Drawable
@@ -36,7 +38,7 @@ extern int g_00E02D9C;
 // these inline accessors rather than repeating the address-derived spelling.
 inline int LogicFrameRate() { return BfmeLogicFramesPerSecond; }
 inline int DrawableFlashFramePeriod() { return g_00E02D9C; }
-void __stdcall Rva003BB5B7Do(Parameter *p, int v, RGBColor *c)
+void ScriptActions::Rva003BB5B7Do(Parameter *p, int v, RGBColor *c)
 {
 	Object *o = TheScriptEngine->getUnitNamed(p);
 	if (!o)
@@ -77,7 +79,7 @@ public:
     bool hasAnyObjects(bool ignoreBuildings);
     DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
 };
-void __stdcall Rva003BFF50Do(const AsciiString *teamName, int seconds, RGBColor *colorOverride)
+void ScriptActions::Rva003BFF50Do(const AsciiString *teamName, int seconds, RGBColor *colorOverride)
 {
     Team *team = TheScriptEngine->getTeamNamed(*teamName, false);
     if (team == 0 || !team->hasAnyObjects(false))
@@ -100,3 +102,6 @@ void __stdcall Rva003BFF50Do(const AsciiString *teamName, int seconds, RGBColor 
         draw->m_168 = count;
     }
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

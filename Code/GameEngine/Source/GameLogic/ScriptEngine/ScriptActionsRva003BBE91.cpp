@@ -1,5 +1,8 @@
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BBE91Set@@YGX_NH@Z @0x003BBE91 66B leaf caller 0x003CC271 globals 0xDFEA3C slots 0xB4 0xBC 0xC0
+// ?Rva003BBE91Set@ScriptActions@@QAEX_NH@Z @0x003BBE91 66B leaf caller 0x003CC271 globals 0xDFEA3C slots 0xB4 0xBC 0xC0
 // Evidence: TheTacticalView triple virtual call with 1 6 and (arg2, arg1?1:-1).
 class View
 {
@@ -55,7 +58,7 @@ public:
 	virtual void s48(int a, int b);
 };
 extern View *TheTacticalView;
-void __stdcall Rva003BBE91Set(bool flag, int v)
+void ScriptActions::Rva003BBE91Set(bool flag, int v)
 {
 	TheTacticalView->s45(1);
 	TheTacticalView->s47(6);
@@ -69,7 +72,7 @@ void __stdcall Rva003BBE91Set(bool flag, int v)
 // booleans by their byte loads; adjacent script actions and the table entries
 // establish TheTacticalView calls at slots 47 and 45. Exact action name is
 // unknown, so retain the address name.
-void __stdcall Rva003BB898(bool first, bool second)
+void ScriptActions::Rva003BB898(bool first, bool second)
 {
 	if (TheTacticalView->s47(2))
 	{
@@ -82,3 +85,6 @@ void __stdcall Rva003BB898(bool first, bool second)
 			TheTacticalView->s47(0);
 	}
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.
