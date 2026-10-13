@@ -44,14 +44,13 @@ class Rva001735F9 { public: void rva001735F9(MeshModelClass *mesh); };
 class Rva00145C30 { public: int rva00145C30(MeshModelClass *mesh); };
 class Rva00199FFB { public: static void rva00199FFB(MeshMatDescClass *, MeshModelClass *); };
 
-// The five globals this body reads. No ledger unit defines any of them, so
-// tools/name_globals.py has no owner to bind them to and there is no recovered
-// identity to spend on a name; the address-derived g_0ADDRESS spelling is what
-// link_debt prescribes for exactly that case. The addresses and the widths read
-// here are fixed by the bytes at 0x00173230, and nothing below depends on the names.
+// The globals this body reads. LODMeshCacheSetting, TheMeshGapFillerContext
+// and TheDX8MeshRenderer bind to their existing providers. The two remaining
+// mode gates retain provisional address-derived names. Keep the flag's
+// volatile access at the use site so the declaration names the byte provider.
 extern volatile unsigned g_0DB5F94;        // renderer mode gate
 extern volatile unsigned g_0DB5F90;        // NPatch mode gate
-extern volatile unsigned char g_0DEC410;   // force-register flag
+extern unsigned char LODMeshCacheSetting; // force-register flag
 extern class Rva00DF6F94GapFillerContext *TheMeshGapFillerContext;            // specialized renderer
 extern class DX8MeshRendererClass *TheDX8MeshRenderer;            // plain renderer
 
@@ -68,7 +67,7 @@ void MeshModelClass::Register_For_Rendering()
 
     MeshMatDescClass *desc = cur_mat_desc;
     if (desc->field_b8 == 0 && desc->field_108 == 0) {
-        if (g_0DEC410 != 0 || (flags & 4) != 0) {
+        if (*(volatile unsigned char *)&LODMeshCacheSetting != 0 || (flags & 4) != 0) {
             Rva00199FFB::rva00199FFB(desc, this);
         }
     }
