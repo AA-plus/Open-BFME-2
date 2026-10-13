@@ -5,6 +5,8 @@
 // whose shared body is 0x002BEDA4) and forwards (arg, &obj) to the callee
 // 0x002BFDE6 with the incoming this unchanged. The callee's identity and the
 // class names are address-derived; layout is read from the retail stores.
+// Native 5CBB4A consumes the returned pointer and 2C025A forwards it.
+// Both wrappers preserve the canonical 2BFDE6 pointer argument and result.
 class Rva005CBB0AObj
 {
 public:
@@ -17,13 +19,13 @@ class Rva005CBB0A
 {
 public:
 	void *rva002BFDE6(void *arg, void *obj);
-	void rva005CBB0A(int arg, const int *src);
-	void rva002C00E0(int arg, const int *src);
+	void *rva005CBB0A(void *arg, const int *src);
+	void *rva002C00E0(void *arg, const int *src);
 };
-void Rva005CBB0A::rva005CBB0A(int arg, const int *src)
+void *Rva005CBB0A::rva005CBB0A(void *arg, const int *src)
 {
 	Rva005CBB0AObj obj(src);
-	rva002BFDE6((void *)arg, &obj);
+	return rva002BFDE6(arg, &obj);
 }
 
 // Twin at 0x002C00E0: byte-identical shape with the 12-byte object's vtable
@@ -36,8 +38,8 @@ public:
 	int m_b;
 	Rva002C00E0Obj(const int *src) : m_a(src[0]), m_b(src[1]) {}
 };
-void Rva005CBB0A::rva002C00E0(int arg, const int *src)
+void *Rva005CBB0A::rva002C00E0(void *arg, const int *src)
 {
 	Rva002C00E0Obj obj(src);
-	rva002BFDE6((void *)arg, &obj);
+	return rva002BFDE6(arg, &obj);
 }
