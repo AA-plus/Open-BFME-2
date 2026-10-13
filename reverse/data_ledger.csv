@@ -18573,7 +18573,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009FDCD8,8,.data,global,?g_Va00DFDCD8@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_DFD8xx.cpp,provisional,?$S1@?7??create@AttackNugget@@UBEPAVObject@@PBV3@PBUCoord3D@@1M@Z@4IA@Code/GameEngine/Source/GameLogic/Object/AttackNuggetCreate.cpp;?g_Va00DFDCD8@@3IA,2,4
 0x009FDCE0,20,.data,global,?g_Va00DFDCE0@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_DFxx.cpp,owned,,1,2
 0x009FDCF4,8,.data,global,?g_Va00DFDCF4@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_DFD8xx.cpp,owned,,1,8
-0x009FDCFC,8,.data,global,?g_Va00DFDCFC@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_DFD8xx.cpp,owned,,1,2
+0x009FDCFC,8,.data,global,?$S1@?BE@??create@GenericObjectCreationNugget@@QBEXPBVObject@@PBUCoord3D@@1I@Z@4IA,Code/GameEngine/Source/GameLogic/Object/GenericObjectCreationNuggetPositionCreate.cpp,owned,,1,4
 0x009FDD04,4,.data,global,?TheParticleSystemManager@@3PAVParticleSystemManager@@A,Code/GameEngine/Source/Common/System/INI_parseParticleSystemTemplate.cpp,provisional,?TheParticleSystemManager@@3PAVParticleSystemManager002B@@A;?TheParticleSystemManager@@3PAVParticleSystemManager@@A;?TheParticleSystemManager@@3PAVParticleSystemManager@FXParticleSystem@@A,1,96
 0x009FDD08,4,.data,global,_s_rva007AD4FB,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
 0x009FDD0C,16,.data,global,?g_Va00DFDD0C@@3IA,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,owned,,1,1
