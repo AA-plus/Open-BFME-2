@@ -58,7 +58,7 @@ public:
 	GameSpyGameSlot *getGameSpySlot(int index);
 };
 
-GameSpyStagingRoom * g_00E02324;	// retail RVA 0x00A02324 (.data, 4 bytes), defined here: nothing else owns it
+extern GameSpyStagingRoom *TheGameSpyGame;	// retail RVA 0x00A02324, defined in CreateAHeroManagerList.cpp
 
 class Rva0059F950
 {
@@ -71,19 +71,19 @@ private:
 
 void Rva0059F950::rva0059F950()
 {
-	if (!g_00E02324)
+	if (!TheGameSpyGame)
 		return;
-	int slotNum = g_00E02324->getLocalSlotNum();
+	int slotNum = TheGameSpyGame->getLocalSlotNum();
 	if (slotNum < 0)
 		return;
-	GameSpyGameSlot *slot = g_00E02324->getGameSpySlot(slotNum);
+	GameSpyGameSlot *slot = TheGameSpyGame->getGameSpySlot(slotNum);
 	if (!slot)
 		return;
 	m_prefs.rva0044DCB9(slot->m_C);
 	m_prefs.rva0044DD1E(slot->m_18);
 	m_prefs.rva0044DC54(slot->m_5C);
-	if (g_00E02324->amIHost())
-		m_prefs.rva0044DD83(g_00E02324->getMap());
+	if (TheGameSpyGame->amIHost())
+		m_prefs.rva0044DD83(TheGameSpyGame->getMap());
 	m_prefs.write();
 }
 

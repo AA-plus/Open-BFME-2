@@ -34,7 +34,8 @@ public:
 	static void parseMetaMap(INI *ini);
 };
 
-extern MetaMap *g_00DFDBF8;
+class MetaMap;
+extern MetaMap *TheMetaMap;
 extern const struct FieldParse g_00BDAD98[];
 
 struct INIException
@@ -55,12 +56,12 @@ static const ParseMetaMapThrowInfoAnchor parseMetaMapThrowInfoAnchor = { 0, 0, 0
 void MetaMap::parseMetaMap(INI *ini)
 {
 	const char *token = ini->getNextToken(0);
-	GameMessage::Type t = g_00DFDBF8->findGameMessageMetaType(token);
+	GameMessage::Type t = TheMetaMap->findGameMessageMetaType(token);
 	if (t == GameMessage::MSG_INVALID) {
 		INIException e(3, "Game message meta type for '%s' not found", token);
 		_CxxThrowException(&e, (const _s__ThrowInfo *)&parseMetaMapThrowInfoAnchor); __assume(0);
 	}
-	MetaMapRec *map = g_00DFDBF8->getMetaMapRec(t);
+	MetaMapRec *map = TheMetaMap->getMetaMapRec(t);
 	if (map == 0) {
 		INIException e(3, "Meta map entry for '%s' not found", token);
 		_CxxThrowException(&e, (const _s__ThrowInfo *)&parseMetaMapThrowInfoAnchor); __assume(0);

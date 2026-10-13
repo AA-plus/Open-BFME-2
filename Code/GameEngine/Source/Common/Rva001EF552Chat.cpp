@@ -13,7 +13,8 @@ struct Rva001EF552State
 	bool m11;
 };
 
-extern Rva001EF552State *g_00E02324;
+class GameSpyStagingRoom;
+extern GameSpyStagingRoom *TheGameSpyGame;
 
 class InGameUI
 {
@@ -43,11 +44,11 @@ void Rva00381C82AddChatText(int window, const UnicodeString &text, int color);
 
 void __stdcall Rva001EF552Chat(UnicodeString text, int color)
 {
-	if (g_00E02324)
+	if (TheGameSpyGame)
 	{
-		if ((g_00E02324->m10?g_00E02324->m10:g_00E02324->m10))
+		if ((((Rva001EF552State *)TheGameSpyGame)->m10?((Rva001EF552State *)TheGameSpyGame)->m10:((Rva001EF552State *)TheGameSpyGame)->m10))
 		{
-			if (g_00E02324->m11)
+			if (((Rva001EF552State *)TheGameSpyGame)->m11)
 			{
 				TheInGameUI->message(text);
 			}

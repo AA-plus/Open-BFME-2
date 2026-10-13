@@ -14,7 +14,8 @@ template <> Lk6AsciiSetTree::~_Rb_tree();
 
 class GameInfo;
 extern GameInfo *TheGameInfo;
-extern void *g_00E02324;
+class GameSpyStagingRoom;
+extern GameSpyStagingRoom *TheGameSpyGame;
 
 struct GameSpyInfo
 {
@@ -121,8 +122,8 @@ private:
 
 Rva00386374::~Rva00386374()
 {
-	if (TheGameInfo == (GameInfo *)g_00E02324)
+	if (TheGameInfo == (GameInfo *)TheGameSpyGame)
 		TheGameInfo = 0;
-	g_00E02324 = 0;
+	TheGameSpyGame = 0;
 	((GameSpyInfo *)this)->GameSpyInfo::reset();
 }

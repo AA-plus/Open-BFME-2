@@ -108,7 +108,8 @@ class Rva00359556
 public:
 	Int rva00359556(Int a);
 };
-extern Rva00359556 *g_rva00359729Target;
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 class Rva00359729
 {
 public:
@@ -116,8 +117,8 @@ public:
 };
 Int Rva00359729::rva00359729(Int a)
 {
-	if (g_rva00359729Target)
-		return g_rva00359729Target->rva00359556(a);
+	if (TheHotKeyManager)
+		return ((Rva00359556 *)TheHotKeyManager)->rva00359556(a);
 	return 0;
 }
 

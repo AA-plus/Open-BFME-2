@@ -6,7 +6,8 @@
 // Structural inference: the six entries at +0x64 with stride 0x14 share the 0x0052936C owner view.
 class GameWindow;
 void *__cdecl GadgetButtonGetData(GameWindow *window);
-extern void *g_00E01CFC;
+class ControlBar;
+extern ControlBar *TheControlBar;
 
 struct Rva005295D5WindowTable
 {
@@ -50,7 +51,7 @@ private:
 
 void Rva0052936C::UpdateButton(int index)
 {
-	Rva005295D5WindowTable *table = (Rva005295D5WindowTable *)g_00E01CFC;
+	Rva005295D5WindowTable *table = (Rva005295D5WindowTable *)TheControlBar;
 	GameWindow *window = table->m_windows[index];
 	Elem *entry = &m_elems[index];
 	if (window)

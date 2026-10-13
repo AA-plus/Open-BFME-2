@@ -291,7 +291,8 @@ extern GameLogic *TheGameLogic;
 extern struct Bfme939Helper *g_bfme939Helper;
 extern Radar *TheRadar;
 extern struct UnknownE03138 *g_00E03138;
-extern class MetaMap *g_00DFDBF8;
+class MetaMap;
+extern MetaMap *TheMetaMap;
 extern HouseColorSystem *TheHouseColorSystem;
 extern Rva0041FB13 *TheMeshInstancingManager;
 extern class Rva00E02D6C *TheCampaignManager;
@@ -794,7 +795,7 @@ void GameEngine::init(Int argc, char *argv[])
 		initSubsystem((reinterpret_cast<RecorderClass *&>(g_bfme939Helper)), "TheRecorder", createRecorder(), 0);
 		initSubsystem(TheRadar, "TheRadar", createRadar(), 0);
 		initSubsystem((reinterpret_cast<VictoryConditionsInterface *&>(g_00E03138)), "TheVictoryConditions", Rva00420353CreateVictoryConditions(), 0);
-		initSubsystem(g_00DFDBF8, "TheMetaMap", new MetaMap, 0);
+		initSubsystem(TheMetaMap, "TheMetaMap", new MetaMap, 0);
 		initSubsystem(TheHouseColorSystem, "TheHouseColorSystem", new HouseColorSystem, 0);
 		initSubsystem(TheMeshInstancingManager, "TheMeshInstancingManager", new Rva0041FB13, 0);
 		initSubsystem((reinterpret_cast<Rva0022BADCSubsystem *&>(TheCampaignManager)), "TheLivingWorldCampaignManager", new Rva0022BADCSubsystem, 0);

@@ -37,7 +37,8 @@ public:
 	virtual void t14() = 0;
 };
 
-extern Rva00318ABBTarget *TheRva00318ABBTarget;
+class CloudBreakEffectManager;
+extern CloudBreakEffectManager *TheCloudBreakEffectManager;
 
 void rva00318ABB(INI *ini)
 {
@@ -45,8 +46,8 @@ void rva00318ABB(INI *ini)
 	ini->initFromINI(&(*(AsciiString *)&g_00E01CF4), &TheRva00318ABBSunbeam);
 	if (ini->m_08 != 2 && ini->m_08 != 4)
 		(*(AsciiString *)&g_00E01CF0) = (*(AsciiString *)&g_00E01CF4);
-	if (TheRva00318ABBTarget != 0)
-		return TheRva00318ABBTarget->t14();
+	if (TheCloudBreakEffectManager != 0)
+		return ((Rva00318ABBTarget *)TheCloudBreakEffectManager)->t14();
 }
 
 class Rva00318A87

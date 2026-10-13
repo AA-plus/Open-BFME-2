@@ -9,12 +9,13 @@
 // The ctor (0x52B278) and the bool method (0x52B003) are unrowed: pinned
 // here as honest address-derived candidates. The 0x44 size comes from the
 // operator-new push; Rva0052B278 is padded to it. The global uses the proven
-// Rva00DFE1C8 void* plus alternatename idiom, cast to the rowed host view.
+// TheLivingWorldManager (0x009FE1C8), cast to the rowed host view.
 
 #include "ascii_string.h"
 #include <new>
 
-extern void *Rva00DFE1C8;
+class LivingWorldManager;
+extern LivingWorldManager *TheLivingWorldManager;
 
 class Rva0021311F
 {
@@ -47,13 +48,12 @@ private:
 	void *m_48;
 };
 
-// ?Rva00DFE1C8@@3PAXA: the global at VA 0xdfe1c8 is ?g_009FE1C8@@3PAVRva0021294A@@A.
-#pragma comment(linker, "/alternatename:?Rva00DFE1C8@@3PAXA=?g_009FE1C8@@3PAVRva0021294A@@A")
+// 0x009FE1C8 is ?TheLivingWorldManager@@3PAVLivingWorldManager@@A.
 
 // was ?rva004E063F@Rva004E063F@@QAEXXZ
 void LivingWorldBuilding::createIcon()
 {
-	void *lookup = ((Rva0021311F *)Rva00DFE1C8)->rva0021311F((const AsciiString *)((char *)m_28 + 0x10));
+	void *lookup = ((Rva0021311F *)TheLivingWorldManager)->rva0021311F((const AsciiString *)((char *)m_28 + 0x10));
 	m_2C = new Rva0052B278(lookup, this, &m_48);
 	m_2C->rva0052B003(m_20 == -1);
 }
