@@ -1,21 +1,24 @@
-// ?rva0045A447@AutoAbilityBehavior@@QAEPAVObject@@PAVBfmeWideResult@@PBVCommandButton@@@Z
-// partial score=0.99 date=2026-10-13
-// ?rva0045A447@AutoAbilityBehavior@@QAEPAVObject@@PAVBfmeWideResult@@PBVCommandButton@@@Z
-// partial score=0.97 date=2026-10-09
-// cl: /I. /Ireference/shims/bfme2_ascii /O1 /G6 /arch:SSE /DNDEBUG /MD /EHsc
-// Reference guide: Open-BFME-1 f98983a7d AutoAbilityBehavior_bfmeCanAutoFire.cpp
-// (clean125B predicate). Target0045A57C/WB117C610 adds module-status mask,
-// target model/status gates, tri-state eligibility and button exclusion mask.
-// Fields below come from native accesses; donor semantics do not establish
-// original BFME2 method names.
-#include "Code/Libraries/Include/Lib/Coord3D.h"
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+//
+// ?rva0045A447@AutoAbilityBehavior@@QAEPAVObject@@PAUBfmeWideResult@@PBVCommandButton@@@Z
+// retail 0x0045A447, 180 bytes. Picks the next object from the wide-result
+// iterator that passes the behavior's gates: not the owner itself (unless the
+// module data allows it), not a body whose slot-14 health fraction exceeds 0.8
+// when the command button wants wounded targets, and not nearer than the module
+// data's minimum range. Reference guide: Open-BFME-1 AutoAbilityBehavior
+// bfmeCanAutoFire (clean 125 B predicate); fields below come from native
+// accesses, donor semantics do not establish original BFME2 method names.
+// WorldBuilder 0x117D380 keeps the iterator advance as the loop step with the
+// null candidate returned from the loop exit; a 'return candidate' inside the
+// loop plus 'return 0' after it gives retail's out-of-line success return.
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
 #include "ascii_string.h"
+#include "../../../Common/PartitionRangeQueryCallView.h"
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 namespace _STL { template<unsigned int N> class _Base_bitset {
 public: bool _M_is_any() const; unsigned int words[N];
 }; }
-class Rva00331682Holder { public: bool test(const void*) const; };
 class Rva00263546 { public: bool rva00263546(const Rva00263546*) const; };
 class AIUpdateInterface { public: char data00[0x34]; void *active; };
 class BodyModule { public:
@@ -42,17 +45,13 @@ public:
  bool flag138;
  char data139[3]; Rva00263546 exclude;
 };
-class ControlBar { public: const CommandButton *findCommandButton(const AsciiString&); };
-extern ControlBar *TheControlBar;
 struct AutoAbilityData {
  char data00[0xC]; float minimumRange;
  char data10[0x1C-0x10]; _STL::_Base_bitset<4> forbiddenStatus;
  char data2C[0x5F-0x2C]; bool allowSelf;
 };
-class BfmeWideResult { public: Object *next(); };
 class AutoAbilityBehavior {
 public:
- bool rva0045A57C();
  Object *rva0045A447(BfmeWideResult*,const CommandButton*);
  char data00[4]; const AutoAbilityData *data; Object *object;
  char data0C[0x20-0xC]; AsciiString command;
@@ -62,12 +61,11 @@ Object *AutoAbilityBehavior::rva0045A447(BfmeWideResult *items,const CommandButt
  const AutoAbilityData *modData=data;
  Object *owner=object;
  Object *candidate;
- goto nextCandidate;
- for(;;) {
-  if(!modData->allowSelf && candidate==owner) goto nextCandidate;
+ for(candidate=items->next();candidate;candidate=items->next()) {
+  if(!modData->allowSelf && candidate==owner) continue;
   if(button && button->flag138) {
    BodyModule *body=candidate->body;
-   if(body && body->slot14()>0.8f) goto nextCandidate;
+   if(body && body->slot14()>0.8f) continue;
   }
   if(modData->minimumRange>0) {
    float x=owner->position.x,y=owner->position.y,z=owner->position.z;
@@ -75,12 +73,10 @@ Object *AutoAbilityBehavior::rva0045A447(BfmeWideResult *items,const CommandButt
    x-=candidate->position.x;y-=candidate->position.y;z-=candidate->position.z;
    _ReadWriteBarrier();
    Coord3D delta;delta.x=x;delta.y=y;delta.z=z;
-   if(delta.length()<modData->minimumRange) goto nextCandidate;
+   if(delta.length()<modData->minimumRange) continue;
   }
-  break;
-nextCandidate:
-  candidate=items->next();
-  if(!candidate) return 0;
+  return candidate;
  }
- return candidate;
+ return 0;
 }
+
