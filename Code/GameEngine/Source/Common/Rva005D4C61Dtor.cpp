@@ -27,7 +27,6 @@ class Rva005D4C01List
 {
 public:
 	void forEach(void (Rva005D4C01Listener::*notify)(void *), void *arg);
-// ??1Rva005D4C01List@@QAE@XZ present-unmatched
 	~Rva005D4C01List()
 	{
 		void *p = storage.m_begin;
