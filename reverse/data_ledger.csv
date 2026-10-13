@@ -20692,7 +20692,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A043C8,4,.data,global,?g_Va00E043C8@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E043xx.cpp,provisional,?$S1@?1??rva004CDD59@ActivateModuleSpecialPower@@SA?AW4NameKeyType@@XZ@4IA@Code/GameEngine/Source/GameLogic/Object/SpecialPower/ActivateModuleSpecialPowerPoolKey.cpp;?g_Va00E043C8@@3IA,2,4
 0x00A043CC,4,.data,global,?TheUnleashSpecialPowerPoolKey@?1??rva004CE05D@UnleashSpecialPower@@SA?AW4NameKeyType@@XZ@4W43@A,Code/GameEngine/Source/GameLogic/Object/SpecialPower/UnleashSpecialPowerPoolKey.cpp,owned,,1,2
 0x00A043D0,8,.data,global,?g_Va00E043D0@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E043xx.cpp,provisional,?$S1@?1??rva004CE05D@UnleashSpecialPower@@SA?AW4NameKeyType@@XZ@4IA@Code/GameEngine/Source/GameLogic/Object/SpecialPower/UnleashSpecialPowerPoolKey.cpp;?g_Va00E043D0@@3IA,2,4
-0x00A043D8,4,.data,global,?g_Va00E043D8@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E043xx.cpp,owned,,1,2
+0x00A043D8,4,.data,global,?$S1@?3??rva004CE0D9@UnleashSpecialPower@@UAE_NH@Z@4IA,Code/GameEngine/Source/GameLogic/Object/SpecialPower/UnleashSpecialPowerRva004CE0D9.cpp,owned,,1,4
 0x00A043DC,4,.data,global,?key@?3??triggerAbilityEffect@UnleashSpecialPower@@UAEXXZ@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/Object/SpecialPower/UnleashSpecialPowerSlot17.cpp,owned,,1,2
 0x00A043E0,4,.data,global,?g_Va00E043E0@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E043xx.cpp,provisional,?$S1@?3??triggerAbilityEffect@UnleashSpecialPower@@UAEXXZ@4IA@Code/GameEngine/Source/GameLogic/Object/SpecialPower/UnleashSpecialPowerSlot17.cpp;?g_Va00E043E0@@3IA,2,4
 0x00A043E4,4,.data,global,_s_rva007B2DEE,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1

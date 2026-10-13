@@ -1,4 +1,4 @@
-// Twenty-three B2-native flag-word clearers on 23 .data flag words
+// Twenty-two B2-native flag-word clearers on 22 .data flag words
 // (0x00E04304-0x00E043E0):
 //
 //     mov eax,[<address>] / and al,<mask8> / mov [<address>],eax / ret
@@ -7,6 +7,8 @@
 // emit `and eax,imm`). Each body carries a .rdata table slot. Identity is
 // not recovered; names derive from addresses.
 // following GlobalFlagClearers_E03Fxx.cpp.
+// 0x00790AE8 and guard VA 0x00E043D8 are now owned by the exact
+// UnleashSpecialPower::rva004CE0D9 static-initialization EH graph.
 // cl: /G7 /MD /EHsc /DNDEBUG
 
 extern unsigned int g_Va00E04304;
@@ -72,9 +74,6 @@ unsigned int g_Va00E043C8;
 extern unsigned int g_Va00E043D0;
 // g_Va00E043D0: matched references place it at VA 0xe043d0 (zero-filled .bss).
 unsigned int g_Va00E043D0;
-extern unsigned int g_Va00E043D8;
-// g_Va00E043D8: matched references place it at VA 0xe043d8 (zero-filled .bss).
-unsigned int g_Va00E043D8;
 extern unsigned int g_Va00E043E0;
 // g_Va00E043E0: matched references place it at VA 0xe043e0 (zero-filled .bss).
 unsigned int g_Va00E043E0;
@@ -182,11 +181,6 @@ unsigned int Rva00790ABAClearFlag(void)
 unsigned int Rva00790AD1ClearFlag(void)
 {
 	return g_Va00E043D0 &= 0xFFFFFFFEu;
-}
-
-unsigned int Rva00790AE8ClearFlag(void)
-{
-	return g_Va00E043D8 &= 0xFFFFFFFEu;
 }
 
 unsigned int Rva00790AFFClearFlag(void)
