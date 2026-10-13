@@ -28,7 +28,7 @@ public:
 };
 
 extern NameKeyGenerator *TheNameKeyGenerator;
-extern const char Rva00BF5CCC[];
+// Rva00BF5CCC was the retail address (RVA 0x007F5CCC) of the "CastleMemberBehavior" text; the literal is the source.
 
 class Module
 {
@@ -57,7 +57,7 @@ struct Rva00395C80Key
 // ?rva00395C80@@YAHPAVObject@@@Z
 int rva00395C80(Object *obj)
 {
-	static Rva00395C80Key s_key(Rva00BF5CCC);
+	static Rva00395C80Key s_key("CastleMemberBehavior");
 	Module *m = obj->findModule(s_key.key);
 	if (m != 0 && m->m_flag25 != 0 && m->m_next->m_flag19 != 0)
 		return false;
