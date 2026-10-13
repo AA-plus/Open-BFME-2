@@ -38,11 +38,21 @@ struct Rva0056850D
 	void *m_value;
 };
 
+// Retail 0x00568527 (101B, RET 8) is the sibling that takes the two trailing
+// pointers as a pair record: the same base and Impl construction from (a,
+// pair[0], pair[1]) and (this, a, pair[0]). The pair's own name is unknown.
+struct Rva005685EEPair
+{
+	void *first;
+	void *second;
+};
+
 class Rva005685EE : public Rva005C3549
 {
 public:
 	virtual ~Rva005685EE();
 	Rva005685EE(void *a, void *b, void *c);
+	Rva005685EE(void *a, const Rva005685EEPair *pair);
 private:
 	char m_unmodelled_04[0x8];
 	Rva0056850D m_member;	// +0xC
@@ -52,4 +62,10 @@ Rva005685EE::Rva005685EE(void *a, void *b, void *c)
 	: Rva005C3549(a, b, c)
 {
 	m_member.m_value = new InGameToggleStanceCommandButton::Impl(reinterpret_cast<Rva00005C357FPtrChaseField *>(this), reinterpret_cast<StanceMenuFactory *>(a), reinterpret_cast<GameWindow *>(b));
+}
+
+Rva005685EE::Rva005685EE(void *a, const Rva005685EEPair *pair)
+	: Rva005C3549(a, pair->first, pair->second)
+{
+	m_member.m_value = new InGameToggleStanceCommandButton::Impl(reinterpret_cast<Rva00005C357FPtrChaseField *>(this), reinterpret_cast<StanceMenuFactory *>(a), reinterpret_cast<GameWindow *>(pair->first));
 }
