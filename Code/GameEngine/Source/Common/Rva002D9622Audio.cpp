@@ -1,5 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /MD
-// ?Rva002D9622Get@@YAPBVAsciiString@@H@Z @ 0x002D9622 100B
+// ?generateFilenamePrefix@AudioEventRTS@@SAPBVAsciiString@@H@Z @ 0x002D9622 100B
+// (WorldBuilder: AudioEventRTS::generateFilenamePrefix, AudioEventRTS.cpp)
 // Evidence: honest free-function name; switch on int arg cases 0..4 plus default empty; TheAudio at 0x009FE6E8 slot 0x134 plus byte adds 4/8/12/16; default AsciiString::TheEmptyString; callers at 0x002DA723 0x002DA99F 0x002DAA63; neighbours Rva002D9608AudioCheck and stringtailrecord144 dtor.
 #include "ascii_string.h"
 
@@ -97,7 +98,13 @@ public:
 
 extern AudioManager *TheAudio;
 
-const AsciiString *Rva002D9622Get(int v)
+class AudioEventRTS
+{
+public:
+	static const AsciiString *generateFilenamePrefix(int audioType);
+};
+
+const AsciiString *AudioEventRTS::generateFilenamePrefix(int v)
 {
 	switch (v) {
 	case 0:

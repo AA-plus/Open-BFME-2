@@ -43889,7 +43889,7 @@ __purecall,,0x0003B810,62,Code/Libraries/Source/debug/debug_purecall.cpp,matched
 ?rva000B3CCF@Rva000B3C61@@QAEXHH@Z,,0x000B3CCF,106,Code/GameEngine/Source/Common/Rva000B3C61.cpp,matched,move slot via setter then clearer same array
 ?rva002C5EF0@Rva002C5EF0@@QAEXPAVXfer@@@Z,,0x002C5EF0,117,Code/GameEngine/Source/Common/Rva002C5EF0Xfer.cpp,matched,Xfer Version13 uint Coord uint float global float gated uint
 ?rva002E5611@Rva002E5611@@QAEHABV1@@Z,,0x002E5611,103,Code/GameEngine/Source/Common/Rva002E5611Compare.cpp,matched,signed 64-bit high-low compare via rowed allmul caller 0x002E5DF9
-?Rva002D9622Get@@YAPBVAsciiString@@H@Z,,0x002D9622,100,Code/GameEngine/Source/Common/Rva002D9622Audio.cpp,matched,honest free-function switch 0-4 plus 5-default TheAudio slot 0x134 EmptyString 3 callers AudioCheck neighbour
+?generateFilenamePrefix@AudioEventRTS@@SAPBVAsciiString@@H@Z,,0x002D9622,100,Code/GameEngine/Source/Common/Rva002D9622Audio.cpp,matched,honest free-function switch 0-4 plus 5-default TheAudio slot 0x134 EmptyString 3 callers AudioCheck neighbour
 ?load@ImageCollection@@QAEXH@Z,,0x002D908D,249,Code/GameEngine/Source/GameClient/System/ImageCollectionLoad.cpp,matched,BFME1 donor trimmed no userData 5 dirs INI 0x87C 3 callers ImageCollection
 ?rva002D9BDC@Rva002D9BDC@@QAEXMM@Z,,0x002D9BDC,43,Code/GameEngine/Source/Common/Audio/AudioEventRTS.cpp,matched,honest method clamp lo val hi member 0x64 2 callers
 ?rva002D9893@Rva002D9893@@QAEXABV1@@Z,,0x002D9893,336,Code/GameEngine/Source/Common/Rva002D9893Copy.cpp,matched,honest Copy void const ref Strings Opaque Pool10 movsd cond 2 unlocked

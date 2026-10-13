@@ -30,7 +30,6 @@ float GetGameAudioRandomValueReal(float lo, float hi, char *file, int line);
 
 // Rowed address-named helpers of this unit: the filename prefix lookup
 // (returns a string owned by TheAudio) and the filename extension builder.
-const AsciiString *Rva002D9622Get(int audioType);
 AsciiString Rva002DA398Get(int audioType);
 
 enum ObjectID
@@ -136,6 +135,7 @@ __forceinline unsigned int retainAudioType(unsigned int type)
 class AudioEventRTS
 {
 public:
+	static const AsciiString *generateFilenamePrefix(int audioType);	// 0x002D9622
 	__forceinline const AudioEventInfo *peekEventInfo(void) const
 	{
 		return m_eventInfo;
@@ -357,7 +357,7 @@ void AudioEventRTS::generateFilename(void)
 	if (bare)
 		m_filenameToLoad.clear();
 	else
-		m_filenameToLoad = *Rva002D9622Get(m_eventInfo->m_soundType);
+		m_filenameToLoad = *AudioEventRTS::generateFilenamePrefix(m_eventInfo->m_soundType);
 
 	if (retainAudioType(m_eventInfo->m_soundType) != AT_SoundEffect)
 	{
@@ -482,7 +482,7 @@ void AudioEventRTS::generatePlayInfo(void)
 			}
 			else
 			{
-				m_attackName = *Rva002D9622Get(m_eventInfo->m_soundType);
+				m_attackName = *AudioEventRTS::generateFilenamePrefix(m_eventInfo->m_soundType);
 				const WeightedSound *soundArray = m_eventInfo->getAttackSounds()->m_begin;
 				m_attackName.concat(soundArray[which].m_name);
 				m_attackName.concat(Rva002DA398Get(retainAudioType(peekEventInfo()->m_soundType)));
@@ -506,7 +506,7 @@ void AudioEventRTS::generatePlayInfo(void)
 			}
 			else
 			{
-				m_decayName = *Rva002D9622Get(m_eventInfo->m_soundType);
+				m_decayName = *AudioEventRTS::generateFilenamePrefix(m_eventInfo->m_soundType);
 				const WeightedSound *soundArray = m_eventInfo->getDecaySounds()->m_begin;
 				m_decayName.concat(soundArray[which].m_name);
 				m_decayName.concat(Rva002DA398Get(retainAudioType(peekEventInfo()->m_soundType)));
