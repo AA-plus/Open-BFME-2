@@ -1,9 +1,13 @@
-// ?rva005CBB4A@Rva005CBB4A@@QAEXPAXHH@Z
-// partial score=1.0 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
-// Native5CBB4A..5CBC95331B RET12: three category queries construct
-// the rowed5CB91E classifier, then route selected records to slot callbacks.
-// WB LivingWorldThingPicker operator() is a relationship lead only.
+// Native 5CBB4A..5CBC95 is the complete 331-byte RET12 dispatcher.
+// Three slot8 category queries construct the rowed 5CB91E classifier;
+// the canonical 5CBB0A picker result supplies a key at +10. The six
+// classifier cases select callback slots10..15 and witnessed child+38
+// views, followed by the LivingWorldLogic+B0 fallback and slot16/slot9.
+// WB LivingWorldThingPicker operator() guides the relationship only;
+// original receiver/method and record identities remain address-derived.
+// Named lookup-result locals reproduce target callback evaluation order.
+// The pointer-result ABI repair is verified in the canonical owner units.
 class Rva005CBB0A {public:void *rva005CBB0A(void *,const int*);};
 class Rva0020EE29 {public:void *rva0020FAB4(int,int);};
 class LivingWorldLogic;extern LivingWorldLogic *TheLivingWorldLogic;
