@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
 // ??0Rva0056616B@@QAE@ABV0@@Z @0x0052D555 333B
 // Copy ctor for Rva0056616B (vtable 0x008689D0) copying 16 members in order via rowed StringBase 0x365F0 vector copy ctors and custom copies then byte at +0xB4.
 // Evidence: unlock lane; callees all rowed per packet (StringBase FXList Pod40 Pod88 Rva0052BDE6 Rva0052BE33 AsciiString Pod32 Rva004E32F2 Rva0052CD81 Rva0052C867 Rva0052C8AB E16 Rva005668E9 Rva0052BEF0); prev vector copy family next deleting dtor share layout.
@@ -39,16 +39,32 @@ struct BfmeE16;
 struct Rva005668E9Element;
 class Rva0052BEF0;
 
+// The native cleanup at 0x0079727B calls the existing 63B owner at
+// 0x0052CCC4. Its verified three-pointer vector destruction supplies the
+// storage cleanup; this does not establish the original element type.
+extern "C" void __cdecl free(void *);
+template <class T> struct RvaCopyVectorStorage {
+ T *m_start; T *m_finish; T *m_end;
+ ~RvaCopyVectorStorage() { if (m_start) free(m_start); }
+};
+struct Rva0052BF9BElem;
+void __cdecl Rva0022C8E3DestroyRange(Rva0052BF9BElem *, Rva0052BF9BElem *);
+
 namespace _STL {
 template <typename T> class allocator {};
-template <typename T, typename A> class vector {
+template <typename T, typename A> class vector : public RvaCopyVectorStorage<T> {
 public:
 	vector(const vector &other);
 	~vector();
-	T *m_start;
-	T *m_finish;
-	T *m_end;
 };
+}
+
+namespace _STL {
+template <> vector<Rva0052BE33, allocator<Rva0052BE33> >::~vector()
+{
+ Rva0022C8E3DestroyRange(reinterpret_cast<Rva0052BF9BElem *>(m_start),
+                       reinterpret_cast<Rva0052BF9BElem *>(m_finish));
+}
 }
 
 class Rva0056616B {
