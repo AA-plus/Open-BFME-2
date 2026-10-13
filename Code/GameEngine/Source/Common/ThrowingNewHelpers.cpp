@@ -241,8 +241,8 @@ Rva005CEE9F::~Rva005CEE9F(){
 }
 
 class Rva0023A128Link {public:Rva0023A128Link(){}~Rva0023A128Link(){}virtual void rva00239B94(int);virtual void v01(int);};
-class Rva005E8F50;
-class Rva005CEA51 {public:Rva005CEA51():pointer(0){}~Rva005CEA51(){rva005CE7EA();}void rva005CEA51(Rva005E8F50*);void rva005CE7EA();Rva005E8F50*pointer;};
+class Rva005E8F50 {public:void rva005E8F6A();};
+class Rva005CEA51 {public:Rva005CEA51():pointer(0){}__declspec(noinline) ~Rva005CEA51();void rva005CEA51(Rva005E8F50*);void rva005CE7EA();Rva005E8F50*pointer;};
 class Rva004FC275 {public:void rva004FC2A6();};
 class Rva005CEF2F:public Rva005CE8F5,public Rva0023A128Link {public:virtual ~Rva005CEF2F();int selection;Rva005CEA51 secondary;};
 Rva005CEF2F::~Rva005CEF2F(){
@@ -273,4 +273,13 @@ Rva005CE236::~Rva005CE236()
  Rva005E893E *p=m_p;
  m_p=0;
  if(p){p->Rva005E893E::~Rva005E893E();::operator delete(p);}
+}
+
+// Complete 26-byte and relocation twin of the owning-pointer clear5CE7EA.
+// Preserve the rowed neutral cleanup method5E8F6A: its original name is unknown.
+Rva005CEA51::~Rva005CEA51()
+{
+ Rva005E8F50 *p=pointer;
+ pointer=0;
+ if(p){p->rva005E8F6A();::operator delete(p);}
 }
