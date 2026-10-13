@@ -1,4 +1,6 @@
 // ?Rva0045D7E0Notify@@YAXPAXHH@Z
+// partial score=0.9496 date=2026-10-13
+// ?Rva0045D7E0Notify@@YAXPAXHH@Z
 // partial score=0.99 date=2026-10-05
 // cl: /O1 /MD
 // ?Rva0045D7E0Notify@@YAXPAXHH@Z @0x0045D7E0 121B. Free-notify pass over the
