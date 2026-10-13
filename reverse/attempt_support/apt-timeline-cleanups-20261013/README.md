@@ -6,10 +6,10 @@ The complete 540-byte constructor at 0x005202C8 and 224-byte destructor at
 0x005204EF both verify EXACT, including their full native associative
 exception graphs. The destructor graph directly locates two complete bodies:
 
-* 0x00796102, 8 bytes, $L5800: saved receiver EBP-0x10 tail-jumps to the
+* 0x00796102, 8 bytes, $L5805: saved receiver EBP-0x10 tail-jumps to the
   existing 90-byte _bfme_AptGameWindow destructor at 0x005126F5. Complete
   bytes: `8b4df0e9ebc5d7ff`.
-* 0x00796126, 14 bytes, $L5803: the same receiver plus 0x2C4 tail-jumps to
+* 0x00796126, 14 bytes, $L5808: the same receiver plus 0x2C4 tail-jumps to
   the existing 63-byte Rva0051C0E7 record destructor at 0x0051E471. Complete
   bytes: `8b4df081c1c4020000e93d83d8ff`.
 
@@ -46,3 +46,12 @@ The remaining vector-base constructor is independently verified as a complete
 is now replayed in verify.py, in addition to the normal gate's fold proof.
 The shadow identity detector's binding diagnostic is preserved for tooling
 review; no new pin, alias row, baseline exception or suppressed check is used.
+
+The data ledger assigns RVA 0x00A04920 to `?g_Va00E04920@@3IA`,
+owned by Rva007B6880Thunks.cpp. The timeline now declares that existing
+unsigned global and casts its address to the local vector view at each use.
+This removes the second typed data symbol while preserving all nine bodies
+and both exception graphs. The ledger owner is provisional; this repair
+does not establish the original global type or reconcile other users. A local
+reference temporary changed instruction selection and was discarded; direct
+casts preserve the complete 224-byte native destructor.

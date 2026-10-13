@@ -182,7 +182,8 @@ struct Rva005334A4Element
 namespace _STL {
 template<> vector<Rva005334A4Element>::iterator vector<Rva005334A4Element>::erase(iterator first, iterator last);
 }
-extern _STL::vector<Rva005334A4Element> g_Va00E04920;
+// Use the data ledger owner; the vector remains a local view.
+extern unsigned int g_Va00E04920;
 
 class Rva005BEA22
 {
@@ -194,7 +195,9 @@ class AptCampaignMenu { public: static bool OpenScreen(); };
 
 Rva005202C8::~Rva005202C8()
 {
-	g_Va00E04920.erase(g_Va00E04920.begin(), g_Va00E04920.end());
+	reinterpret_cast<_STL::vector<Rva005334A4Element> *>(&g_Va00E04920)->erase(
+        reinterpret_cast<_STL::vector<Rva005334A4Element> *>(&g_Va00E04920)->begin(),
+        reinterpret_cast<_STL::vector<Rva005334A4Element> *>(&g_Va00E04920)->end());
 	if (m_284 == 1 || m_284 == 8)
 	{
 		if (TheShell)
