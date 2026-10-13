@@ -330,14 +330,8 @@ void SceneClass::Load(ChunkLoadClass & cload)
  * HISTORY:                                                                                    *
  *   8/27/2001  hy : Created.                                                                  *
  *=============================================================================================*/
-void SimpleSceneClass::Remove_All_Render_Objects(void)
-{
-	RenderObjClass * obj;
-	while ( ( obj = RenderList.Remove_Head() ) != NULL ) {
-		SceneClass::Remove_Render_Object(obj);
-		obj->Release_Ref();							// remove head gets a ref
-	}
-}
+// The retail loop is defined in SceneOwnership.cpp (0x00141370).
+// It peeks the owning list and removes through SimpleScene's virtual path.
 
 /***********************************************************************************************
  * SimpleSceneClass::Add_Render_Object -- add a render object to the scene                     *
