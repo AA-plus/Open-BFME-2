@@ -23,8 +23,15 @@ public:
 };
 extern GameTextInterface *TheGameText;
 // CreateAHeroData's bling value get/set pair, rowed under this owner.
-class Rva00407E28 {public: int rva00407E28(int id);bool rva00407DE0(int id,int value);};
-class CreateAHeroHero;
+class Rva00407E28 {public: int rva00407E28(int id);bool rva00407E53(int id);bool rva00407DE0(int id,int value);};
+class CreateAHeroHero {public: void ConstructHeroBlingList();};
+// A bling binder (20 bytes): its name key, the game-text label, and the
+// slot and category it fills.
+struct BlingBinder {int key;AsciiString label;int pad08;unsigned int slot;int category;};
+struct BlingBinderList {unsigned int size() const {return last-first;}BlingBinder *first,*last,*capacity;};
+class Rva00222A8BTarget;
+extern Rva00222A8BTarget *TheRva00222A8BTarget;
+void __cdecl Rva0043DB23(Rva00222A8BTarget *,void *,const char *);
 class AptPlayer {public: const Image *FindRenderImage(const char *,const char *);};
 class Rva002239B2 {public: void rva002239E2(const AsciiString &,const Image *);};
 // AptMyHero's base: vtable 0x00C38D88's five slots, the rowed assignment
@@ -53,7 +60,7 @@ struct Rva005B0473View {char opaque[0x60];float field60;int field64,field68;};
 struct CreateAHeroClassRecord {char opaque[0x20];};
 struct CreateAHeroClassList {unsigned int size() const {return last-first;}CreateAHeroClassRecord *first,*last,*capacity;};
 class Rva002195E6;
-class CreateAHeroManager {public: const Rva002195E6 *GetViewInfo(unsigned int,unsigned int);const AsciiString &GetClassNameTag(unsigned int);const AsciiString &GetSubClassNameTag(unsigned int,unsigned int);const AsciiString &GetBlingNameTag(int,const CreateAHeroHero *,unsigned int);unsigned int GetClassCount() const {return classes14C.size();}char pad000[0x14C];CreateAHeroClassList classes14C;char pad158[0x1E8-0x158];AsciiString field1E8,field1EC;};
+class CreateAHeroManager {public: const Rva002195E6 *GetViewInfo(unsigned int,unsigned int);const AsciiString &GetClassNameTag(unsigned int);const AsciiString &GetSubClassNameTag(unsigned int,unsigned int);const AsciiString &GetBlingNameTag(int,const CreateAHeroHero *,unsigned int);int GetSubClassSpendableAttributePoints(unsigned int,unsigned int);void *GetBlingBinder(unsigned int);int GetBlingCount(int,const CreateAHeroHero *) const;int GetSubClassDefaultBlingId(int,unsigned int,unsigned int) const;int GetSubClassAttributeMinValue(unsigned int,unsigned int,unsigned int);int GetSubClassAttributeMaxValue(unsigned int,unsigned int,unsigned int);int GetSubClassAttributeDefaultValue(unsigned int,unsigned int,unsigned int);unsigned int GetClassCount() const {return classes14C.size();}char pad000[0x14C];CreateAHeroClassList classes14C;char pad158[0x168-0x158];BlingBinderList binders168;char pad174[0x1E8-0x174];AsciiString field1E8,field1EC;};
 class Object;
 class Drawable {public: char pad000[0xFC];Object *object;char pad100[4];Drawable *next;};
 class GameClient {
@@ -97,6 +104,7 @@ bool __cdecl rva005B2295(const CommandButton *button,const char *prefix,int inde
 class Rva00223A94 {public: int rva00223A94(const AsciiString *);};
 class Rva005241DF {public: void rva005241DF(const StringBase<char> &);};
 class Rva005B1830 {public: void rva005B1830();};
+class Rva005B1A07 {public: void rva005B1B26(unsigned int);};
 const AsciiString &rva005B0A53(const char *kind,int index);
 class AptMyHero : public CreateAHeroData {
 public:
@@ -402,4 +410,70 @@ void AptMyHero::FrameUpdate() {
  }
  flag151=true;
  flag151=!rva005B0725();
+}
+
+// AptMyHero::BuildBlingData, retail 0x005B1B5E..0x005B1E71 (787 bytes, EH).
+// WorldBuilder names it; its asserts (!binder, a slot already used,
+// m_firstBling > m_lastBling) are the early outs and fixups retail keeps.
+// It resets the attributes (0x005B1830), takes the subclass's spendable
+// points as both the available and the maximum, rebuilds the hero's bling
+// list, then fills one record per manager binder: appearance records
+// (category 1) span the bling count with the subclass default, attribute
+// records (category 0) take the subclass min/max/default or, without
+// blings, a value derived from the class, subclass and binder index. Each
+// gets its Apt label and a value clamped into range through SetBling.
+void AptMyHero::BuildBlingData(){
+ reinterpret_cast<Rva005B1830 *>(this)->rva005B1830();
+ int sub=field10;int cls=field0C;
+ maxAttribPoints158=availAttribPoints154=TheCreateAHeroManager->GetSubClassSpendableAttributePoints(cls,sub);
+ reinterpret_cast<CreateAHeroHero *>(this)->ConstructHeroBlingList();
+ unsigned int count=TheCreateAHeroManager->binders168.size();
+ for(unsigned int i=0;i<count;++i){
+  BlingBinder *binder=(BlingBinder *)TheCreateAHeroManager->GetBlingBinder(i);
+  if(!binder)continue;
+  int category=binder->category;
+  unsigned int slot=binder->slot;
+  MyHeroBlingBlock &block=blocks174[category];
+  if(slot>=(unsigned int)(block.last-block.first))reinterpret_cast<Rva005B1A07 *>(&block)->rva005B1B26(slot+1);
+  MyHeroBlingRecord *recs=block.first;MyHeroBlingRecord &record=recs[slot];
+  if(record.field00!=0)continue;
+  record.field00=binder->key;
+  record.field10=0;
+  bool hasValue=reinterpret_cast<Rva00407E28 *>(this)->rva00407E53(record.field00);
+  unsigned int value=reinterpret_cast<Rva00407E28 *>(this)->rva00407E28(record.field00);
+  AsciiString key;
+  switch(category){
+  case 1:
+   record.minimum=0;
+   record.maximum=TheCreateAHeroManager->GetBlingCount(record.field00,reinterpret_cast<const CreateAHeroHero *>(this))-1;
+   {int s2=field10;int c2=field0C;record.field10=TheCreateAHeroManager->GetSubClassDefaultBlingId(record.field00,c2,s2);}
+   key.format("APT:MyHeroAppearance_%d",slot);
+   g_bfmeAptWindowManager->bfmeSetText(key,TheGameText->fetch(binder->label),false);
+   if(hasValue)value=record.field10;
+   break;
+  case 0:
+   if(TheCreateAHeroManager->GetBlingCount(record.field00,reinterpret_cast<const CreateAHeroHero *>(this))){
+    {int s2=field10;int c2=field0C;record.minimum=TheCreateAHeroManager->GetSubClassAttributeMinValue(record.field00,c2,s2);}
+    {int s2=field10;int c2=field0C;record.maximum=TheCreateAHeroManager->GetSubClassAttributeMaxValue(record.field00,c2,s2);}
+    {int s2=field10;int c2=field0C;record.field10=TheCreateAHeroManager->GetSubClassAttributeDefaultValue(record.field00,c2,s2);}
+   }else{
+    {int s2=field10;int c2=field0C;record.minimum=((c2+1)*(s2+1)*(i+1))%10+5;}
+    record.maximum=record.minimum+3+(int)(i*3)%10-field0C;
+   }
+   if(hasValue)value=record.minimum;
+   reinterpret_cast<Rva00407E28 *>(this)->rva00407DE0(record.field00,record.minimum);
+   key.format("APT:MyHeroAttribute_%d",slot);
+   g_bfmeAptWindowManager->bfmeSetText(key,TheGameText->fetch(binder->label),false);
+   break;
+  default:
+   continue;
+  }
+  if(record.minimum>record.maximum)record.minimum=record.maximum;
+  {int lo=record.minimum;record.field04=record.maximum-lo+1;}
+  if(value<(unsigned int)record.minimum||value>(unsigned int)record.maximum)value=record.minimum;
+  if(record.field10<record.minimum||record.field10>record.maximum)record.field10=record.minimum;
+  SetBling(category,slot,value);
+ }
+ slot14();
+ Rva0043DB23(TheRva00222A8BTarget,*(void **)((char *)holder140+0x274),"UpdateHeroBaseAttributes");
 }
