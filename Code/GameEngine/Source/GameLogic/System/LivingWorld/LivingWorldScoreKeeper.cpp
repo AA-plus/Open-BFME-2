@@ -417,3 +417,7 @@ void LivingWorldScoreKeeper::xfer(Xfer *xfer)
 }
 
 const char *LivingWorldScoreKeeper::GetSnapshotName()const{return "LivingWorldScoreKeeper";}
+
+// Native ScoreKeeper cleanup 0x7929f9 is the complete 11-byte member+0x28
+// destructor action of parent 0x4eeade; the whole parent and EH graph
+// bind this lifetime action to the existing rowed 63-byte destructor 0x004EE501.
