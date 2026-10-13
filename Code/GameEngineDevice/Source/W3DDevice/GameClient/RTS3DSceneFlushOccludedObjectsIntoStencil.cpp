@@ -1,27 +1,28 @@
-// ?flushOccludedObjectsIntoStencil@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
-// partial score=0.9969 date=2026-10-13
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
-// ?flushOccludedObjectsIntoStencil@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
-// partial score=0.9968 date=2026-10-10
-// ?flushOccludedObjectsIntoStencil@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
-// partial score=0.99 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
-// ?flushOccludedObjectsIntoStencil@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z  Native 0x00070841..0x00070F80 (1855 bytes)
-// NEAR (helper draft): same 1855-byte instruction stream as retail; the only
-// differences are two swapped 12-byte stack slots (retail keeps the HSV_To_RGB
-// output at ebp-0x3C and hsv at ebp-0x54; this source gets them reversed) and
-// the two calls to renderStenciledPlayerColor 0x0006EB6D which resolve once
-// that row lands. ZH W3DScene.cpp flushOccludedObjectsIntoStencil with BFME2
-// deltas: early return without TheW3DShadowManager; no occluder/occludee
-// guard; template word +0x5E2 bits 0x380 OR into DrawableInfo flags and
-// select per-object stencil refs; renderOneObject is the pinned 4-argument
-// rva0006FB59 and the mesh flush is rva001173F0(rinfo); player colour pass
-// gated on TheGlobalData +0x68 TheGameLogic +0x99 and
-// WW3D::IsCurrentlyRenderingShadowMap; ends by setting D3DRS_AMBIENT from
-// the scene ambient light (vslot 7) through the inline Convert_Color.
-// TheGameLogic +0x99 is read raw because the canonical GameLogic view keeps
-// that byte as padding.
+//
+// ?flushOccludedObjectsIntoStencil@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
+// retail 0x00070841..0x00070F80 (1855 bytes), thiscall RET 4.
+//
+// BFME 2's RTS3DScene::flushOccludedObjectsIntoStencil. Donor: Zero Hour
+// W3DScene.cpp flushOccludedObjectsIntoStencil. BFME 2 differences, read from retail:
+// - early return without TheW3DShadowManager; no occluder/occludee count guard;
+// - the template word +0x5E2 bits 0x380 are ORed into the DrawableInfo flags
+//   while bucketing, and select per-object stencil references ((flags >> 3) & 0x70);
+// - objects render through the four-argument renderOneObject 0x0006FB59 and the
+//   mesh flush rva001173f0(rinfo);
+// - player colours are drawn only when GlobalData +0x68 and GameLogic +0x99 are set
+//   outside shadow-map rendering (WW3D::IsCurrentlyRenderingShadowMap), through the
+//   four-argument renderStenciledPlayerColor 0x0006EB6D;
+// - it ends by setting D3DRS_AMBIENT from the scene ambient light (vslot 7)
+//   through the inline asm Convert_Color.
+// TheGameLogic +0x99 is read raw because the canonical GameLogic view keeps that
+// byte as padding.
+//
+// Same-TU context (retail W3DScene.obj): the colorspace.h inlines RGB_To_HSV and
+// HSV_To_RGB are visible here, as they were to retail (both copies sit inside
+// W3DScene.obj's range); retail still calls them out of line, but knowing they
+// keep no pointer to hsv/rgb is what gives retail's frame, with hsv/rgb at function
+// scope as in Zero Hour. Either change alone leaves the 12-byte homes swapped.
 
 typedef int Int;
 typedef unsigned int UnsignedInt;
@@ -34,11 +35,81 @@ class Vector3
 public:
 	Vector3() {}
 	Vector3(float x, float y, float z) { X = x; Y = y; Z = z; }
+	void Set(float x, float y, float z) { X = x; Y = y; Z = z; }
 	float X, Y, Z;
 };
 
-void RGB_To_HSV(Vector3 &hsv, const Vector3 &rgb);
-void HSV_To_RGB(Vector3 &rgb, const Vector3 &hsv);
+#include <math.h>
+class WWMath
+{
+public:
+	static float Min(float a, float b);
+	static float Max(float a, float b);
+};
+
+inline float WWMath::Min(float a, float b)
+{
+	if (a<b) return a;
+	return b;
+}
+
+inline float WWMath::Max(float a, float b)
+{
+	if (a>b) return a;
+	return b;
+}
+
+// colorspace.h (ZH/BFME 1 WW3D2): the inline bodies retail compiled out of line in
+// W3DScene.obj (RGB_To_HSV 0x0006E2C2, HSV_To_RGB 0x0006E3D7, rowed in ColorSpaceO1Inlines.cpp).
+inline void RGB_To_HSV(Vector3 &hsv,const Vector3 &rgb)
+{
+	float max=WWMath::Max(rgb.X,rgb.Y);
+	max=WWMath::Max(max,rgb.Z);
+	float min=WWMath::Min(rgb.X,rgb.Y);
+	min=WWMath::Min(min,rgb.Z);
+	hsv.Z=max;
+	hsv.Y=(max!=0.0f)?((max-min)/max):0.0f;
+	if (hsv.Y==0.0f) hsv.X=-1.0f;
+	else
+	{
+		float delta=max-min;
+		if (rgb.X==max)
+			hsv.X=(rgb.Y-rgb.Z)/delta;
+		else if (rgb.Y==max)
+			hsv.X=2.0f+ (rgb.Z-rgb.X)/delta;
+		else if (rgb.Z==max)
+			hsv.X=4.0f+ (rgb.X-rgb.Y)/delta;
+		hsv.X*=60.0f;
+		if (hsv.X<0.0f) hsv.X+=360.0f;
+	}
+}
+inline void HSV_To_RGB(Vector3 &rgb, const Vector3 &hsv)
+{
+	float h=hsv.X;
+	float s=hsv.Y;
+	float v=hsv.Z;
+	if (hsv.Y==0.0f)	{
+		rgb.Set(v,v,v);
+	} else	{
+		float f,p,q,t;
+		int i;
+		if (h==360.0f) h=0.0f;
+		h/=60.0f;
+		i=floorf(h);
+		f=h-i;
+		p=v*(1.0f-s);
+		q=v*(1.0f-(s*f));
+		t=v*(1.0f-(s*(1.0f-f)));
+		switch (i)	{
+		case 0: rgb.Set(v,t,p); break;
+		case 1: rgb.Set(q,v,p); break;
+		case 2: rgb.Set(p,v,t); break;
+		case 3: rgb.Set(p,q,v); break;
+		case 4: rgb.Set(t,p,v); break;
+		case 5: rgb.Set(v,p,q); break;
+		}
+	}
+}
 
 class DX8Wrapper
 {
@@ -236,12 +307,12 @@ public:
 	virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
 	virtual void v04(); virtual void v05(); virtual void v06();
 	virtual const Vector3 &Get_Ambient_Light() const;
-	void rva0006FB59(RenderInfoClass &rinfo, RenderObjClass *robj, Int localPlayerIndex, Bool flag);
 	static __forceinline Bool drawOccludedColors()
 	{
 		return TheWritableGlobalData->m_68 && ((const char *)TheGameLogic)[0x99] && !WW3D::IsCurrentlyRenderingShadowMap;
 	}
 protected:
+	void renderOneObject(RenderInfoClass &rinfo, RenderObjClass *robj, Int localPlayerIndex, Int flag);
 	void flushOccludedObjectsIntoStencil(RenderInfoClass &rinfo);
 	char m_pad004[0x7FC - 4];
 	RenderObjClass **m_nonOccludersOrOccludees;
@@ -261,6 +332,7 @@ void RTS3DScene::flushOccludedObjectsIntoStencil(RenderInfoClass &rinfo)
 	Int playerColorIndex[MAX_PLAYER_COUNT];
 	Int visiblePlayerColors[MAX_PLAYER_COUNT];
 	Int numObjects;
+	Vector3 hsv, rgb;
 	Int i;
 
 	if (!TheW3DShadowManager)
@@ -309,11 +381,9 @@ void RTS3DScene::flushOccludedObjectsIntoStencil(RenderInfoClass &rinfo)
 				playerColorIndex[i] = Rva0006EB3BReverse(numVisiblePlayerColors + 1);
 				draw = ((DrawableInfo *)playerObjects[i][0]->Get_User_Data())->m_drawable;
 				Object *object = draw->getObject();
-				Vector3 hsv, rgb;
 				Int color = object->getControllingPlayer()->getPlayerColor();
 				RGB_To_HSV(hsv, Vector3(((color >> 16) & 0xff) / 255.0f, ((color >> 8) & 0xff) / 255.0f, (color & 0xff) / 255.0f));
 				hsv.Z *= TheWritableGlobalData->m_occludedLuminanceScale;
-				_ReadWriteBarrier();
 				HSV_To_RGB(rgb, hsv);
 				visiblePlayerColors[numVisiblePlayerColors++] = DX8Wrapper::Convert_Color(rgb, 0.5f);
 			}
@@ -329,12 +399,12 @@ void RTS3DScene::flushOccludedObjectsIntoStencil(RenderInfoClass &rinfo)
 				{
 					rva001173f0((UnsignedInt)&rinfo);
 					DX8Wrapper::Set_DX8_Render_State(D3DRS_STENCILREF, ((((DrawableInfo *)(*renderList)->Get_User_Data())->m_flags >> 3) & 0x70) | thisPlayerColorIndex);
-					rva0006FB59(rinfo, *renderList, localPlayerIndex, false);
+					renderOneObject(rinfo, *renderList, localPlayerIndex, 0);
 					rva001173f0((UnsignedInt)&rinfo);
 					DX8Wrapper::Set_DX8_Render_State(D3DRS_STENCILREF, thisPlayerColorIndex);
 				}
 				else
-					rva0006FB59(rinfo, *renderList, localPlayerIndex, false);
+					renderOneObject(rinfo, *renderList, localPlayerIndex, 0);
 				renderList++;
 			}
 			rva001173f0((UnsignedInt)&rinfo);
@@ -359,12 +429,12 @@ void RTS3DScene::flushOccludedObjectsIntoStencil(RenderInfoClass &rinfo)
 		{
 			rva001173f0((UnsignedInt)&rinfo);
 			DX8Wrapper::Set_DX8_Render_State(D3DRS_STENCILREF, bits);
-			rva0006FB59(rinfo, robj, localPlayerIndex, false);
+			renderOneObject(rinfo, robj, localPlayerIndex, 0);
 			rva001173f0((UnsignedInt)&rinfo);
 			DX8Wrapper::Set_DX8_Render_State(D3DRS_STENCILREF, 0);
 		}
 		else
-			rva0006FB59(rinfo, *occluderList, localPlayerIndex, false);
+			renderOneObject(rinfo, *occluderList, localPlayerIndex, 0);
 		occluderList++;
 	}
 	rva001173f0((UnsignedInt)&rinfo);
@@ -388,12 +458,12 @@ void RTS3DScene::flushOccludedObjectsIntoStencil(RenderInfoClass &rinfo)
 		{
 			rva001173f0((UnsignedInt)&rinfo);
 			DX8Wrapper::Set_DX8_Render_State(D3DRS_STENCILREF, bits | 0x80808080);
-			rva0006FB59(rinfo, robj, localPlayerIndex, false);
+			renderOneObject(rinfo, robj, localPlayerIndex, 0);
 			rva001173f0((UnsignedInt)&rinfo);
 			DX8Wrapper::Set_DX8_Render_State(D3DRS_STENCILREF, 0x80808080);
 		}
 		else
-			rva0006FB59(rinfo, *nonOccluderOrOccludeeList, localPlayerIndex, false);
+			renderOneObject(rinfo, *nonOccluderOrOccludeeList, localPlayerIndex, 0);
 		nonOccluderOrOccludeeList++;
 	}
 	rva001173f0((UnsignedInt)&rinfo);
