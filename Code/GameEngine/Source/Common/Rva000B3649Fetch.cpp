@@ -1,5 +1,5 @@
 // cl: /MD /EHsc /DNDEBUG /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug
-#include "matrix3d.h"
+#include "../../../../reference/shims/bfme_matrix3d_copy_link/matrix3d_copy_link.h"
 #include "aabox.h"
 #include "obbox.h"
 //
