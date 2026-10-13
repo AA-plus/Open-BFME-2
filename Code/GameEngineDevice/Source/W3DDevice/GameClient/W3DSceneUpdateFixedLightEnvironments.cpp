@@ -128,7 +128,9 @@ class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 struct SceneLightGlobalView
 {
-	char m_pad000[0x944];
+	char m_pad000[0x68];
+	bool m_enableBehindBuildingMarkers;			// +0x68
+	char m_pad069[0x944 - 0x69];
 	Real m_lowLODLightScaleRed;				// +0x944
 	Real m_lowLODLightScaleGreen;
 	Real m_lowLODLightScaleBlue;
@@ -138,19 +140,167 @@ struct SceneLightGlobalView
 };
 extern int LODTextureReduction;
 
+// Zero Hour Override.h: OVERRIDE<T>::operator-> null-checks the base entry and
+// inlines one level of Overridable::getFinalOverride, whose recursion stays the
+// out-of-line COMDAT (retail 0x001E35DF, pinned). Spelling Render through these
+// two inline levels gives retail its two temporaries per weather read (the inner
+// result spilled, the outer one a register phi with the null arm's zero).
+class Overridable
+{
+public:
+	virtual ~Overridable();
+	const Overridable *getFinalOverride(void) const
+	{
+		if (m_nextOverride)
+			return m_nextOverride->getFinalOverride();
+		return this;
+	}
+	Overridable *m_nextOverride; // +4
+};
+class WeatherSetting : public Overridable
+{
+public:
+	char m_pad08[0x8C - 8];
+	Real m_fogColorR, m_fogColorG, m_fogColorB;		// +0x8C
+	bool m_fogEnabled;					// +0x98
+	Real m_fogStart;					// +0x9C
+	Real m_fogEnd;						// +0xA0
+};
+template <class T> class OVERRIDE
+{
+public:
+	const T *operator->(void) const
+	{
+		if (!m_overridable)
+			return 0;
+		return (T *)m_overridable->getFinalOverride();
+	}
+	const T *operator*(void) const
+	{
+		if (!m_overridable)
+			return 0;
+		return (T *)m_overridable->getFinalOverride();
+	}
+private:
+	const T *m_overridable;
+	int m_pad04;
+	int m_pad08;
+};
+extern OVERRIDE<WeatherSetting> TheWeatherSetting;
+extern bool bfmeCameraProjectionOverride;
+
+class ShaderClass { protected: static bool ShaderDirty; public: static void Invalidate() { ShaderDirty = true; } };
+class DX8Wrapper
+{
+public:
+	static void Set_DX8_Render_State(unsigned long state, unsigned value);
+	static bool Has_Stencil();
+	static unsigned Convert_Color(const Vector3 &color, float alpha);
+	static void Set_Fog(bool enable, const Vector3 &color, float start, float end);
+	static bool FogEnable;
+	static unsigned long FogColor;
+	static float FogStart, FogEnd;
+};
+// dx8wrapper.h's x87 colour packing, as in RTS3DSceneFlushTranslucent.cpp.
+__forceinline unsigned DX8Wrapper::Convert_Color(const Vector3 &color, float alpha)
+{
+	const float scale = 255.0;
+	unsigned int col = 0;
+	__asm
+	{
+		sub	esp,20
+		fwait
+		fstcw		[esp+16]
+		mov		eax,[esp+16]
+		mov		edi,eax
+		and		eax,~(1024|2048)
+		or			eax,(1024|2048)
+		sub		edi,eax
+		jz			skip
+		mov		[esp],eax
+		fldcw		[esp]
+skip:
+		mov	esi,dword ptr color
+		fld	dword ptr[scale]
+		fld	dword ptr[esi]
+		fld	dword ptr[esi+4]
+		fld	dword ptr[esi+8]
+		fld	dword ptr[alpha]
+		fld	st(4)
+		fmul	st(4),st
+		fmul	st(3),st
+		fmul	st(2),st
+		fmulp	st(1),st
+		fistp	dword ptr[esp+0]
+		fistp	dword ptr[esp+4]
+		fistp	dword ptr[esp+8]
+		fistp	dword ptr[esp+12]
+		mov	ecx,[esp]
+		mov	eax,[esp+4]
+		mov	edx,[esp+8]
+		mov	ebx,[esp+12]
+		shl	ecx,24
+		shl	ebx,16
+		shl	edx,8
+		or		eax,ecx
+		or		eax,ebx
+		or		eax,edx
+		fstp	st(0)
+		cmp	edi,0
+		je		not_changed
+		fwait
+		fldcw	[esp+16];
+not_changed:
+		add	esp,20
+		mov	col,eax
+	}
+	return col;
+}
+// dx8wrapper.h Set_Fog, forced inline as in retail Render (its out-of-line
+// copy in retail's W3DScene.obj is the rowed 0x0006F0BB).
+// ?DX8Wrapper::Set_Fog present-unmatched
+__forceinline void DX8Wrapper::Set_Fog(bool enable, const Vector3 &color, float start, float end)
+{
+	DX8Wrapper::FogEnable = enable;
+	DX8Wrapper::FogColor = DX8Wrapper::Convert_Color(color, 0.0f);
+	DX8Wrapper::FogStart = start;
+	DX8Wrapper::FogEnd = end;
+	ShaderClass::Invalidate();
+	DX8Wrapper::Set_DX8_Render_State(36, *(unsigned *)(&start));
+	DX8Wrapper::Set_DX8_Render_State(37, *(unsigned *)(&end));
+}
+
+
 class RTS3DScene
 {
 public:
 	virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
 	virtual void s4(); virtual void s5(); virtual void s6();
 	virtual const Vector3 &Get_Ambient_Light(void);		// slot 7
+	virtual void Set_Fog_Enable(bool set);			// slot 8
+	virtual void s9();
+	virtual void Set_Fog_Color(const Vector3 &color);		// slot 10
+	virtual void s11();
+	virtual void Set_Fog_Range(float start, float end);		// slot 12
+	virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16();
+	virtual void s17(); virtual void s18(); virtual void s19(); virtual void s20();
+	virtual void s21(); virtual void s22();
+	virtual void Customized_Render(RenderInfoClass &rinfo);	// slot 23
+	virtual void Render(RenderInfoClass &rinfo);
+	void Flush(RenderInfoClass &rinfo);				// 0x00071606
 protected:
 	void updateFixedLightEnvironments(RenderInfoClass &rinfo);
 public:
 	void rva0006E605(Vector3 *delta, bool remove);	// 0x0006E605
 protected:
 private:
-	char m_pad004[0x130 - 0x04];
+	char m_pad004[0x18 - 0x04];
+	Int m_extraPassPolygonMode;				// +0x18
+	bool m_fogEnabled;					// +0x1C
+	Vector3 m_fogColor;					// +0x20
+	Real m_fogStart;					// +0x2C
+	Real m_fogEnd;						// +0x30
+	char m_pad034[0x130 - 0x34];
 	LightClass *m_globalLight[4];				// +0x130
 	LightClass *m_scratchLight;				// +0x140
 	Vector3 m_infantryAmbient;				// +0x144
@@ -160,6 +310,8 @@ private:
 	LightEnvironmentClass m_foggedLightEnv;			// +0x38C
 	LightEnvironmentClass m_ambientLightEnv;		// +0x5B4
 	unsigned char m_lightEnvironmentFlag;			// +0x7DC
+	char m_pad7DD[0x7EC - 0x7DD];
+	Int m_customPassMode;					// +0x7EC
 };
 
 void RTS3DScene::updateFixedLightEnvironments(RenderInfoClass &rinfo)
@@ -249,4 +401,46 @@ void RTS3DScene::rva0006E605(Vector3 *delta, bool remove)
 	}
 	m_globalLight[0]->Set_Diffuse(diffuse);
 	m_globalLight[0]->Set_Ambient(ambient);
+}
+
+// ?Render@RTS3DScene@@UAEXAAVRenderInfoClass@@@Z, retail 0x00071E40..0x00072109
+// (713 bytes, RET 4). Zero Hour's RTS3DScene::Render default pass with BFME 2's
+// weather fog in front: the final WeatherSetting override switches the scene
+// fog on (only when not under the camera projection override and at static
+// LOD 1 or better) and copies its colour (+0x8C) and range (+0x9C/+0xA0)
+// through the scene's fog virtuals (slots 8/10/12), then DX8Wrapper::Set_Fog,
+// the stencil gate on the behind-building markers, and for the pass modes
+// 0/3/4 the fixed light environments (same unit, as in retail's W3DScene.obj)
+// before Customized_Render (slot 23) and Flush (0x00071606); modes 5/6/7 skip
+// only the light update (one shared tail after cross-jumping).
+void RTS3DScene::Render(RenderInfoClass &rinfo)
+{
+	if (*TheWeatherSetting)
+	{
+		Set_Fog_Enable(TheWeatherSetting->m_fogEnabled && !bfmeCameraProjectionOverride && LODTextureReduction >= 1);
+		if (TheWeatherSetting->m_fogEnabled)
+		{
+			Set_Fog_Color(Vector3(TheWeatherSetting->m_fogColorR, TheWeatherSetting->m_fogColorG, TheWeatherSetting->m_fogColorB));
+			Set_Fog_Range(TheWeatherSetting->m_fogStart, TheWeatherSetting->m_fogEnd);
+		}
+	}
+	DX8Wrapper::Set_Fog(m_fogEnabled, m_fogColor, m_fogStart, m_fogEnd);
+
+	SceneLightGlobalView *const &global = reinterpret_cast<SceneLightGlobalView *const &>(TheWritableGlobalData);
+	global->m_enableBehindBuildingMarkers = global->m_enableBehindBuildingMarkers && DX8Wrapper::Has_Stencil();
+
+	if (m_extraPassPolygonMode == 0)
+	{
+		if (m_customPassMode == 0 || m_customPassMode == 3 || m_customPassMode == 4)
+		{
+			updateFixedLightEnvironments(rinfo);
+			Customized_Render(rinfo);
+			Flush(rinfo);
+		}
+		else if (m_customPassMode == 5 || m_customPassMode == 6 || m_customPassMode == 7)
+		{
+			Customized_Render(rinfo);
+			Flush(rinfo);
+		}
+	}
 }
