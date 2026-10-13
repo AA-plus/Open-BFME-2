@@ -1,7 +1,5 @@
 // ?moveDozerAway@AIStructureCreepTactic@@QAEXXZ
-// partial score=0.81 date=2026-10-12
-// ?moveDozerAway@AIStructureCreepTactic@@QAEXXZ
-// partial score=0.8108270785742775 date=2026-10-10
+// partial score=0.82 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DBFME_ASCII_DTOR_DECL /MD /GX /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
 //
@@ -173,7 +171,7 @@ class AICommandInterface
 {
 public:
 	void aiIdle(CommandSourceType source);			// 0x001E8A38
-	void aiMoveToPosition(const Coord3D *point, CommandSourceType source);	// move to the point
+	void aiMoveToPosition(const Coord3D *point, CommandSourceType source);	// 0x0026C26D
 };
 
 struct Rva005AB7E5AI
@@ -223,49 +221,26 @@ struct Coord3DBase
 
 struct Coord3D : public Coord3DBase
 {
-	Coord3D(float a,float b,float c){x=a;y=b;z=c;}Coord3D(){}Coord3D(const Coord3D&r){x=r.x;y=r.y;z=r.z;}~Coord3D() {}
+	Coord3D(float a, float b, float c) { x = a; y = b; z = c; }
+	Coord3D() {}
+	Coord3D(const Coord3D &r) { x = r.x; y = r.y; z = r.z; }
+	~Coord3D() {}
 };
 
-class AIBaseBuilder{public:char pad[0x28];Coord3D point;bool rva00506B74(Coord3D*);};
-class Rva004EBF4B{public:Coord3D rva004EBF4B();char pad[4];AIBaseBuilder builder;};
-inline __declspec(noinline) Coord3D Rva004EBF4B::rva004EBF4B(){Coord3D tmp;tmp.x=0;tmp.y=0;tmp.z=0;builder.rva00506B74(&tmp);return Coord3D(tmp);}
+class Rva004EBF4B
+{
+public:
+	Coord3D rva004EBF4B();	// 0x004EBF4B
+};
 
-
-struct Rva005996FFArg;
-class Rva005996FF { public: void rva005996FF(Rva005996FFArg *, bool); };
 class WWMath
 {
 public:
-	static float __fastcall Inv_Sqrt(float val);
+	static float __fastcall Inv_Sqrt(float val);	// 0x0004233A
 };
 
-// Vector3-style helper for the dozer step: Normalize multiplies by
-// WWMath::Inv_Sqrt of the squared length when that is non-zero.
-struct Rva005AC40CVector
-{
-	float X;
-	float Y;
-	float Z;
-	__forceinline Rva005AC40CVector() {}
-	__forceinline Rva005AC40CVector(float x, float y, float z) : X(x), Y(y), Z(z) {}
-	__forceinline float Length2() const { return X * X + Y * Y + Z * Z; }
-	__forceinline Rva005AC40CVector operator-(const Rva005AC40CVector &b) const
-	{
-		return Rva005AC40CVector(X - b.X, Y - b.Y, Z - b.Z);
-	}
-	__forceinline void Normalize()
-	{
-		float len2 = Length2();
-		if (len2 != 0.0f)
-		{
-			double oolen = WWMath::Inv_Sqrt(len2);
-			X *= oolen;
-			Y *= oolen;
-			Z *= oolen;
-		}
-	}
-};
-
+struct Rva005996FFArg;
+class Rva005996FF { public: void rva005996FF(Rva005996FFArg *, bool); };
 class AIDozerManager
 {
 public:
@@ -584,13 +559,21 @@ private:
 	unsigned int m_nextRun;	// +0x7C
 };
 
-AIStructureCreepTactic::~AIStructureCreepTactic()
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline AIStructureCreepTactic::~AIStructureCreepTactic()
 {
 	if (m_order) {
 		((Rva00506FE9Hit *)m_order)->rva0055ADBA(m_owner);
 		::delete m_order;
 		m_order = 0;
 	}
+}
+
+// ?bfmeAnchorAIStructureCreepTacticDtor absent-from-retail
+void bfmeAnchorAIStructureCreepTacticDtor(AIStructureCreepTactic *p)
+{
+	p->AIStructureCreepTactic::~AIStructureCreepTactic();
 }
 
 void AIStructureCreepTactic::xfer(Xfer *xfer)
@@ -781,36 +764,53 @@ void AIStructureCreepTactic::run()
 	if (!m_running)
 		end(false, false);
 }
-static __forceinline Rva005AC40CVector towards(const Coord3D &to, const Object *from)
+
+// 0x005AC40C: idle the +0x58 dozer, then order it 500 units from its position
+// along the normalized (base - dozer) direction from the owner record's base
+// centre (0x004EBF4B).
+struct Rva005AC40CVector
 {
-	return Rva005AC40CVector(to.x, to.y, to.z) -
-		Rva005AC40CVector(from->m_pos[0], from->m_pos[1], from->m_pos[2]);
+	float X;
+	float Y;
+	float Z;
+	__forceinline Rva005AC40CVector() {}
+	__forceinline Rva005AC40CVector(float x, float y, float z) : X(x), Y(y), Z(z) {}
+	__forceinline float Length2() const { return Z * Z + Y * Y + X * X; }
+	__forceinline Rva005AC40CVector operator-(const Rva005AC40CVector &b) const
+	{
+		return Rva005AC40CVector(X - b.X, Y - b.Y, Z - b.Z);
+	}
+	__forceinline void Normalize()
+	{
+		float len2 = Length2();
+		if (len2 != 0.0f)
+		{
+			double oolen = WWMath::Inv_Sqrt(len2);
+			X *= oolen;
+			Y *= oolen;
+			Z *= oolen;
+		}
+	}
+};
+
+static __forceinline Rva005AC40CVector towards(const Object *from, const Coord3D &to)
+{
+	Rva005AC40CVector f(from->m_pos[0], from->m_pos[1], from->m_pos[2]);
+	Rva005AC40CVector t(to.x, to.y, to.z);
+	return t - f;
 }
 
-static __forceinline Coord3D offsetFrom(const Object *from, const Rva005AC40CVector &dir)
-{
-	Coord3D result;
-	result.x = from->m_pos[0] + dir.X;
-	result.y = from->m_pos[1] + dir.Y;
-	result.z = from->m_pos[2] + dir.Z;
-	return result;
-}
-
-// ?moveDozerAway@AIStructureCreepTactic@@QAEXXZ
-// Idle the tactic's dozer (+0x58), then order it 500 units from its position
-// straight away from the owner record's base point (0x004EBF4B).
 void AIStructureCreepTactic::moveDozerAway()
 {
 	Object *dozer = TheGameLogic->findObjectByID(m_58);
 	if (dozer == 0)
 		return;
-
 	dozer->m_ai->m_commands.aiIdle(CMD_FROM_PLAYER);
 	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(m_owner);
-	Rva005AC40CVector dir = towards(reinterpret_cast<Rva004EBF4B *>(record)->rva004EBF4B(), dozer);
+	Rva005AC40CVector dir = towards(dozer, ((Rva004EBF4B *)record)->rva004EBF4B());
 	dir.Normalize();
 	dir.X *= 500.0f;
 	dir.Y *= 500.0f;
 	dir.Z *= 500.0f;
-	dozer->m_ai->m_commands.aiMoveToPosition(&Coord3D(dozer->m_pos[0]+dir.X,dozer->m_pos[1]+dir.Y,dozer->m_pos[2]+dir.Z), CMD_FROM_PLAYER);
+	dozer->m_ai->m_commands.aiMoveToPosition(&Coord3D(dozer->m_pos[0] + dir.X, dozer->m_pos[1] + dir.Y, dozer->m_pos[2] + dir.Z), CMD_FROM_PLAYER);
 }
