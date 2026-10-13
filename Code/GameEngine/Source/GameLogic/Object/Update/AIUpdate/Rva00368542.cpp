@@ -1,7 +1,7 @@
 // cl: /DNDEBUG /MD
 // ?rva00368542@Rva00368542@@QAEXHPBVWaypoint@@@Z @0x00368542 82B
 // Evidence: leaf called from 0x0036BD2C plus sibling Rva003683EA layout (+0x30 machine +0x528 done) plus rowed callees.
-class Object { public: bool rva002907A1(); };
+class Object { public: bool isMobile() const; };
 class Waypoint;
 class AIStateMachine { public: void setGoalWaypoint(const Waypoint *p); };
 class StateMachine {
@@ -154,7 +154,7 @@ void Rva00368542::rva00368542(int flag, const Waypoint *wp)
 {
 	if (flag == 0)
 		return;
-	if (!m_gate08->rva002907A1())
+	if (!m_gate08->isMobile())
 		return;
 	((AIStateMachine *)this)->setGoalWaypoint(wp);
 	m_machine->s5();

@@ -3,7 +3,7 @@
 
 // ?privateGuardObject@AIUpdateInterface@@MAEXPAVObject@@W4GuardMode@@W4CommandSourceType@@@Z
 // 0x00264D0E 115B: AIUpdateInterface guard order. Checks testStatus 0x26,
-// rva002907A1 and KINDOF_PROJECTILE, sets guard target 0x50/0x54, stores
+// isMobile and KINDOF_PROJECTILE, sets guard target 0x50/0x54, stores
 // guardMode +0x4C, object id +0x64 from +0x74, clear via slot 0x14 and
 // setState 0x10 via slot 0x20. Vtable slot 64 of DeployStyle/Siege/Supply/
 // Transport/Wander/HordeWorker AIUpdates. Prev/next same flags.
@@ -70,7 +70,7 @@ class Object : public Thing
 {
 public:
 	Bool testStatus(ObjectStatusTypes bit) const;
-	Bool rva002907A1();
+	Bool isMobile() const;
 
 	unsigned char m_unmodelled_08[0x74 - 8];
 	UnsignedInt m_id;
@@ -131,7 +131,7 @@ void AIUpdateInterface::privateGuardObject(Object *objectToGuard, GuardMode guar
 	Object *obj = m_object;
 	if (obj->testStatus(BFME_OBJECT_STATUS_26))
 		return;
-	if (!obj->rva002907A1())
+	if (!obj->isMobile())
 		return;
 	if (m_object->isKindOf(KINDOF_PROJECTILE))
 		return;

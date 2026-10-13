@@ -1,6 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /MD /EHsc /DNDEBUG
 // ?rva0029EAFA@Rva0029EAFA@@QAEXPBVGameMessage@@@Z @0x0029EAFA 232B
-// evidence: chain from 0x0029DE76; rowed GameMessage::getArgument plus Object::rva002907A1 plus Rva0029ACA0::rva0029ACC7
+// evidence: chain from 0x0029DE76; rowed GameMessage::getArgument plus Object::isMobile plus Rva0029ACA0::rva0029ACC7
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 
 union GameMessageArgumentType
@@ -46,7 +46,7 @@ public:
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 	void *m_vtable;
 	Template108 *m_template;
 	char m_pad08[0xfc - 8];
@@ -195,7 +195,7 @@ void Rva0029EAFA::rva0029EAFA(const GameMessage *msg)
 		{
 			if ((inner->m_template->m_108 & 4) != 0)
 				return;
-			if (!inner->rva002907A1())
+			if (!inner->isMobile())
 				return;
 		}
 	}

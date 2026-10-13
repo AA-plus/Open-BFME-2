@@ -30,7 +30,7 @@ public:
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 };
 
 class BfmeThingCSD
@@ -47,7 +47,7 @@ public:
 
 void BfmeThingCSD::bfmeGoCSD(void *one, void *two)
 {
-	if (m_bfmeSub->rva002907A1())
+	if (m_bfmeSub->isMobile())
 	{
 		m_bfmeOut->bfmeBeginCSD();
 		m_bfmeVal = two;

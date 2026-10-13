@@ -30,7 +30,7 @@ public:
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 };
 
 class BfmeThingCSF
@@ -47,7 +47,7 @@ public:
 
 void BfmeThingCSF::bfmeGoCSF(void *one, void *two)
 {
-	if (m_bfmeSub->rva002907A1())
+	if (m_bfmeSub->isMobile())
 	{
 		m_bfmeOut->bfmeBeginCSF();
 		m_bfmeOut->bfmeWriteVCSF(one);

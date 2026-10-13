@@ -9,7 +9,7 @@
 //  - unless the flag is set: TheInGameUI slot 68 (deselectAllDrawables) and
 //    TheMessageStream slot 18 message 0x461 first;
 //  - walks TheGameClient slot 17's drawable list (+0x104 next, +0xFC
-//    Object); an Object qualifies when the rowed rva002907A1 holds, it is
+//    Object); an Object qualifies when the rowed isMobile holds, it is
 //    the player's (rowed getControllingPlayer), not contained (+0x274),
 //    not kind 91, and kind 3 or neither kind 14 nor 16, not effectively dead
 //    (+0x438 bit 0), not status 3 (rowed testStatus) and the rowed
@@ -69,7 +69,7 @@ private:
 class Object
 {
 public:
-	Bool rva002907A1();
+	Bool isMobile() const;
 	Player *getControllingPlayer() const;
 	Bool testStatus(ObjectStatusTypes bit) const;
 	Bool rva00292FAC() const;
@@ -191,7 +191,7 @@ void InGameUI::rva0029BE05(Bool viaLogic, Player *player)
 		Object *obj = draw->getObject();
 		if (!obj)
 			continue;
-		if (!obj->rva002907A1())
+		if (!obj->isMobile())
 			continue;
 		if (obj->getControllingPlayer() != player)
 			continue;

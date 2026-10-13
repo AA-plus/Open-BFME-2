@@ -36,7 +36,7 @@ public:
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 };
 
 class BfmeThingCSH
@@ -53,7 +53,7 @@ public:
 
 void BfmeThingCSH::bfmeGoCSH(void *one, void *two)
 {
-	if (m_bfmeSub->rva002907A1())
+	if (m_bfmeSub->isMobile())
 	{
 		m_bfmeOut->bfmeBeginCSH();
 		m_bfmeVal = two;

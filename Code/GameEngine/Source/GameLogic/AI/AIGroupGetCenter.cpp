@@ -65,7 +65,7 @@ private:
 class Object
 {
 public:
-	Bool rva002907A1();
+	Bool isMobile() const;
 	void rva0028AD32();
 	Int rva0028B511() const;	// the pathfind layer (as Object::getLayer callers)
 	Bool isDisabledByHeld() const { return (m_disabledMask[0] & 8) != 0; }
@@ -203,7 +203,7 @@ Bool AIGroup::getCenter(Coord3D *center)
 	{
 		if ((*i)->isDisabledByHeld())
 			continue;	// don't bother counting riders in the center calculation
-		if (!(*i)->rva002907A1())
+		if (!(*i)->isMobile())
 			continue;
 		AIUpdateInterface *ai = (*i)->getAIUpdateInterface();
 		if (ai)

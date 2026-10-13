@@ -438,7 +438,7 @@ public:
 	Weapon *getCurrentWeapon(WeaponSlotType *slot = 0);
 	Player *getControllingPlayer() const;
 	Int rva0028B511() const;
-	Bool rva002907A1();
+	Bool isMobile() const;
 	Bool isSignificantlyAboveTerrain() const;
 	Bool rva0029493F(Object *other, Int test);
 	Real rva0028AC7D() const;

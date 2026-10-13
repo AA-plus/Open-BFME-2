@@ -3,7 +3,7 @@
 
 // ?privateGuardPosition@AIUpdateInterface@@MAEXPBUCoord3D@@W4GuardMode@@W4CommandSourceType@@@Z
 // 0x00264BC2 249B: AIUpdateInterface guard order. Checks testStatus 0x26,
-// rva002907A1 and KINDOF_PROJECTILE, sets guard target 0x50/0x54 to LOCATION,
+// isMobile and KINDOF_PROJECTILE, sets guard target 0x50/0x54 to LOCATION,
 // clips to playable area via TheTerrainLogic when cmdSource is player, stores
 // position +0x58, guardMode +0x4C, clear via slot 0x14 and setState 0x10 via
 // slot 0x20. Vtable slot 63 of DeployStyle/Siege/Supply/Transport/Wander/
@@ -87,7 +87,7 @@ class Object : public Thing
 {
 public:
 	Bool testStatus(ObjectStatusTypes bit) const;
-	Bool rva002907A1();
+	Bool isMobile() const;
 };
 
 class StateMachine
@@ -162,7 +162,7 @@ void AIUpdateInterface::privateGuardPosition(const Coord3D *pos, GuardMode guard
 	Object *obj = m_object;
 	if (obj->testStatus(BFME_OBJECT_STATUS_26))
 		return;
-	if (!obj->rva002907A1())
+	if (!obj->isMobile())
 		return;
 	if (m_object->isKindOf(KINDOF_PROJECTILE))
 		return;

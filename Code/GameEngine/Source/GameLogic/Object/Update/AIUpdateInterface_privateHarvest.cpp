@@ -59,12 +59,12 @@ public:
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 };
 
 void AIUpdateInterface::privateHarvest(const Coord3D *pos, CommandSourceType cmdSource)
 {
-	if (m_object->rva002907A1())
+	if (m_object->isMobile())
 	{
 		m_stateMachine->bfmeBeginCTA();
 		// ILT 0x0000314D resolves to StateMachine::setGoalPosition at 0x000A0880.

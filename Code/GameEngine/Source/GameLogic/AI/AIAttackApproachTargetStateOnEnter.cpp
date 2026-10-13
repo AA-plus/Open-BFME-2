@@ -33,7 +33,7 @@
 // line-of-sight test (else the machine's slot 14 clears the goal); a victim
 // rowed Rva0034311ECheck fails; the view-blocked test is rva003430A3;
 // the guard-retaliate block is rva00343FB0; an AI module flag +0x24 with
-// layer >= 17 and no quick path, or a non-moving owner (Object::rva002907A1,
+// layer >= 17 and no quick path, or a non-moving owner (Object::isMobile,
 // locomotor 0x001E46E1 speed < 0.1), waits two seconds (+0x68, flag +0x71).
 // Donors: Zero Hour AIStates.cpp, BFME1 AIAttackApproachTargetState_onEnter.cpp.
 //
@@ -460,7 +460,7 @@ public:
 	Weapon *getCurrentWeapon(WeaponSlotType *slot = 0);
 	Player *getControllingPlayer() const;
 	Int rva0028B511() const;
-	Bool rva002907A1();
+	Bool isMobile() const;
 	Bool isSignificantlyAboveTerrain() const;
 	Bool rva0029493F(Object *other, Int test);
 	Real rva0028AC7D() const;
@@ -1196,7 +1196,7 @@ StateReturnType AIAttackApproachTargetState::onEnter()
 		return STATE_FAILURE;
 
 	Bool mobile = true;
-	if (!source->rva002907A1())
+	if (!source->isMobile())
 		mobile = false;
 	if (((Rva001E46E1 *)ai->getCurLocomotor())->rva001E46E1(source) < 0.1f)
 		mobile = false;
@@ -1253,7 +1253,7 @@ StateReturnType AIAttackApproachTargetState00C12678::onEnter()
 		return STATE_FAILURE;
 
 	Bool mobile = true;
-	if (!source->rva002907A1())
+	if (!source->isMobile())
 		mobile = false;
 	if (((Rva001E46E1 *)ai->getCurLocomotor())->rva001E46E1(source) < 0.1f)
 		mobile = false;
@@ -1337,7 +1337,7 @@ Bool AIAttackPursueTargetState::computePath()
 {
 	critterDesyncLog("CritterDesync: ComputePath12");
 	Bool forceRepath = false;
-	if (getMachineOwner()->rva002907A1() == false)
+	if (getMachineOwner()->isMobile() == false)
 		return false;
 	AIUpdateInterface *ai = getMachineOwner()->getObservedAI();
 	if (ai->isBlockedAndStuck())
@@ -1378,7 +1378,7 @@ Bool AIAttackApproachTargetState00C12678::computePath()
 {
 	critterDesyncLog("CritterDesync: ComputePath10");
 	Bool forceRepath = false;
-	if (getMachineOwner()->rva002907A1() == false)
+	if (getMachineOwner()->isMobile() == false)
 		return false;
 	AIUpdateInterface *ai = getMachineOwner()->getObservedAI();
 	if (m_waitingForPath)

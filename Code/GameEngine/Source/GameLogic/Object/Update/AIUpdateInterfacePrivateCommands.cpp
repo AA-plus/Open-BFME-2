@@ -598,8 +598,7 @@ public:
 class Object : public Thing
 {
 public:
-	Bool rva002907A1();  // rowed isMobile (0x002907A1)
-	__declspec(dllimport) __forceinline Bool isMobile() const { return const_cast<Object *>(this)->rva002907A1(); }
+	Bool isMobile() const;  // rowed at 0x002907A1
 	Bool testStatus(ObjectStatusTypes bit) const;	///< 0x0004E536
 	void setStatus(ObjectStatusTypes bit, Bool set);	///< matched 0x0023DB0E
 	// Thing::getPosition: the cached position the object-order handlers hand

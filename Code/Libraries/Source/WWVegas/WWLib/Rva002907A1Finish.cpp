@@ -1,4 +1,4 @@
-// ?rva002907A1@Object@@QAE_NXZ
+// ?isMobile@Object@@QBE_NXZ
 // Landed from banked partial (score 0.92). Two changes close it.
 // The bit8 test reads the mask as a volatile unsigned and takes the second
 // byte through a named local: retail loads all four bytes and shifts
@@ -9,7 +9,7 @@
 // falls THROUGH into the popcount call. Both prior banks read the polarity as
 // a separate defect; it is the same edit as the load form.
 // cl: /DNDEBUG /MD
-// ?rva002907A1@Object@@QAE_NXZ @ 0x002907A1 107B: chain from 0x0028F528 popcount;
+// ?isMobile@Object@@QBE_NXZ @ 0x002907A1 107B: chain from 0x0028F528 popcount;
 // Object disabled-mask gate over +0x1C8 BitFlags<11>::any via rowed 0x0023C58B
 // then bit8 and popcount==1 via rowed 0x0028F528 then !isKindOf(0x81) then
 // template+0x113&0x20 template+0x108&4 then !testStatus(0x3B). Unblocks 59.
@@ -47,7 +47,7 @@ struct ThingTemplate907A1
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 	Bool isKindOf(KindOfType kind) const;
 	Bool testStatus(ObjectStatusTypes bit) const;
 	bool rva0028F518();
@@ -58,12 +58,12 @@ private:
 	BitFlags<11> m_disabled;
 };
 
-bool Object::rva002907A1()
+bool Object::isMobile() const
 {
 	ThingTemplate907A1 *t = m_template;
 	if ((t->m_pad[0x108] & 4) != 0)
 		return false;
-	BitFlags<11> *mask = &m_disabled;
+	const BitFlags<11> *mask = &m_disabled;
 	if (mask->any())
 	{
 		unsigned char byte2 = (unsigned char)(*(const volatile unsigned *)mask >> 8);

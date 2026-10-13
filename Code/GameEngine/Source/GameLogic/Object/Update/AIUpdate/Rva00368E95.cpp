@@ -12,7 +12,7 @@
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 	float GetRelativeAngle(const Coord3D *pos) const;
 	const Coord3D *getPosition() const { return &m_position; }
 	float getOrientation() const { return m_orientation; }
@@ -47,7 +47,7 @@ private:
 void Rva00368344::rva00368E95(const Coord3D *pos, const Waypoint *wp, bool extra)
 {
 	Object *obj = m_gate08;
-	if (!obj->rva002907A1())
+	if (!obj->isMobile())
 		return;
 	m_angle = obj->GetRelativeAngle(pos);
 	m_angle += obj->getOrientation();

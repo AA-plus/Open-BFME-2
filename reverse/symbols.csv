@@ -9942,7 +9942,6 @@ name,address,notes
 ?isKindOfMulti@Thing@@QBE_NABV?$BitFlags@$0HE@@@0@Z,0x0030AD7D,allow@PartitionFilterRejectByKindOf 0x26115D +0xC E8 decodes here; KindOf multi-bit test; Thing.cpp
 ?isLocalPlayer@LANGameSlot@@QBE_NXZ,0x0044770F,REL32 callee of LANGameInfo::getLocalSlotNum 0x004477AE on each LAN slot; body opens with GameSlot::isHuman as Zero Hour's isLocalPlayer
 ?isLookup@AptValue@@QBE_NXZ,0x006DC080,Native stackPushIndirect calls checked existing provider; original AptValue header504032fc6593aab6 signature; linker alias binds provider
-?isMobile@Object@@QBE_NXZ,0x002907A1,callee of ?privateFollowWaypointPathAsTeamExact@AIUpdateInterface@@MAE at retail 0x0026BA33 read from its REL32 displacement; body unrowed
 ?isMobile@ObjectIsMobileBody@@QBE_NXZ,0x002907A1,address read from the REL32 displacement at a placed body
 ?isMoving@AIUpdateInterface@@QBE_NXZ,0x00264688,address read from the REL32 displacement at 0x0026E086 in privateFollowPathAppend 0x0026E074 (aiDoCommand command 0x35) with ECX = this where the BFME1 donor privateFollowPathAppend asks isMoving(); the body walks the owner's +0x274 container chain under template KindOf tests; name donor-carried; body unrowed
 ?isMultiplayer@RecorderClass@@QAE_NXZ,0x0037B18C,B1 Recorder_isMultiplayer 103B shape guides this 110B body (playback 8-slot plus getSlot plus isOccupied plus 0x85124); needed to rebuild banked ScienceStore purchaseCost-prereqs stashes

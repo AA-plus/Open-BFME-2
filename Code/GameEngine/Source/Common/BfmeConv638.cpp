@@ -30,7 +30,7 @@ public:
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 };
 
 class BfmeThingCSA
@@ -47,7 +47,7 @@ public:
 
 void BfmeThingCSA::bfmeGoCSA(void *what)
 {
-	if (m_bfmeSub->rva002907A1())
+	if (m_bfmeSub->isMobile())
 	{
 		m_bfmeOut->bfmeBeginCSA();
 		m_bfmeVal = what;

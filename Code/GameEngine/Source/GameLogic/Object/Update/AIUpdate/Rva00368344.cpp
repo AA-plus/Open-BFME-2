@@ -2,7 +2,7 @@
 // ?rva00368344@Rva00368344@@QAEXPBUCoord3D@@H@Z @0x00368344 83B
 // Evidence: leaf called from 0x0036BDCB plus sibling Rva003683EA layout (+0x30 machine +0x528 done) plus rowed callees.
 #include "../../../../../../Libraries/Include/Lib/Coord3D.h"
-class Object { public: bool rva002907A1(); };
+class Object { public: bool isMobile() const; };
 class Waypoint;
 class AIStateMachine { public: void setGoalWaypoint(const Waypoint *p); };
 class StateMachine {
@@ -39,7 +39,7 @@ struct Rva003682F1ObjectView {
 void Rva00368344::rva003682F1(const Waypoint *goal, bool extra, const Waypoint *next)
 {
 	if (!(reinterpret_cast<Rva003682F1ObjectView *>(m_gate08)->flags & 1)
-		&& m_gate08->rva002907A1()) {
+		&& m_gate08->isMobile()) {
 		m_machine->s5();
 		reinterpret_cast<AIStateMachine *>(m_machine)->setGoalWaypoint(goal);
 		reinterpret_cast<AIStateMachine *>(this)->setGoalWaypoint(next);
@@ -50,7 +50,7 @@ void Rva00368344::rva00368344(const Coord3D *pos, int flag)
 {
 	if (pos == 0)
 		return;
-	if (!m_gate08->rva002907A1())
+	if (!m_gate08->isMobile())
 		return;
 	m_machine->s5();
 	((Rva00263910 *)this)->rva00265667(pos, flag);
@@ -62,7 +62,7 @@ void Rva00368344::rva00368397(const Coord3D *pos, int flag)
 {
 	if (pos == 0)
 		return;
-	if (!m_gate08->rva002907A1())
+	if (!m_gate08->isMobile())
 		return;
 	m_machine->s5();
 	((Rva00263910 *)this)->rva00265667(pos, flag);
@@ -74,7 +74,7 @@ void Rva00368344::rva00368433(const Coord3D *pos, int flag)
 {
 	if (pos == 0)
 		return;
-	if (!m_gate08->rva002907A1())
+	if (!m_gate08->isMobile())
 		return;
 	m_machine->s5();
 	((Rva00263910 *)this)->rva00265667(pos, flag);
@@ -86,7 +86,7 @@ void Rva00368344::rva00368486(const Coord3D *pos, const Waypoint *wp, bool extra
 {
 	if (pos == 0)
 		return;
-	if (!m_gate08->rva002907A1())
+	if (!m_gate08->isMobile())
 		return;
 	((AIStateMachine *)this)->setGoalWaypoint(wp);
 	m_machine->s5();

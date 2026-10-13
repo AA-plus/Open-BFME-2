@@ -1,6 +1,6 @@
 // cl: /O1 /DNDEBUG /MD /EHsc
 // ?rva0029DE76@Rva0029DE76@@QAE_NPBUCoord3D@@@Z @0x0029DE76 164B
-// evidence: unlock caller 0x0029EAFA; rowed PartitionManager::getShroudStatusForPlayer plus Object::rva002907A1 plus AIUpdateInterface::isQuickPathAvailable 0x00264274 path test
+// evidence: unlock caller 0x0029EAFA; rowed PartitionManager::getShroudStatusForPlayer plus Object::isMobile plus AIUpdateInterface::isQuickPathAvailable 0x00264274 path test
 enum CellShroudStatus
 {
 	SHROUD_CLEAR = 0
@@ -46,7 +46,7 @@ public:
 class Object
 {
 public:
-	bool rva002907A1();
+	bool isMobile() const;
 	void *m_vtable;
 	ObjectAux2 *m_aux;
 	char m_pad08[0xfc - 8];
@@ -160,7 +160,7 @@ bool Rva0029DE76::rva0029DE76(const Coord3D *pos)
 		AIUpdateInterface *ai = inner ? inner->m_ai : (AIUpdateInterface *)0;
 		if (!inner)
 			continue;
-		if (!inner->rva002907A1())
+		if (!inner->isMobile())
 			continue;
 		if ((inner->m_aux->m_11a & 0x80) != 0)
 			return true;

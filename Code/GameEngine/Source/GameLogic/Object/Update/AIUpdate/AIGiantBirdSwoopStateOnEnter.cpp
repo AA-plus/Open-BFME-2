@@ -252,7 +252,7 @@ public:
 	Object *adjustVictim(Object *owner, bool useWeaponRange, Int index);
 	Bool getWorldspaceBestContactPoint(Coord3D *pointOut, const Coord3D *callerPos,
 		const char *preferredPoint, Int pref, Int seed, Bool skipCollideTest) const;
-	Bool rva002907A1();
+	Bool isMobile() const;
 	void rva0028AE6D();
 	__forceinline void clearModelConditionBit(int bit)
 	{
@@ -630,7 +630,7 @@ StateReturnType AIGiantBirdSwoopState::update()
 	else
 	{
 		Bool stationary;
-		if (victim->rva002907A1())
+		if (victim->isMobile())
 		{
 			AIUpdateInterface *victimAI = victim->getAI();
 			stationary = victimAI != 0 && ((Rva002627E8 *)victimAI)->rva002627E8() <= 0.0f;

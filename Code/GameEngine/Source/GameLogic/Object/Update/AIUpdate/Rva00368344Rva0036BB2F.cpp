@@ -48,7 +48,7 @@ public:
 class Object
 {
 public:
-	bool rva002907A1(); // 0x002907A1
+	bool isMobile() const; // 0x002907A1
 	char m_unrecovered000[0x438];
 	unsigned char m_flags438; // +0x438
 };
@@ -103,7 +103,7 @@ void Rva00368344::rva0036BB2F(const Waypoint *way, bool flag, int cmdSource)
 {
 	if (m_object->m_flags438 & 1)
 		return;
-	if (!m_object->rva002907A1())
+	if (!m_object->isMobile())
 		return;
 	if (m_speedSource)
 		m_speed = m_speedSource->getSpeed();
