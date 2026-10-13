@@ -69,7 +69,7 @@ struct ICoord2DBase
     int y;
 };
 
-#include "../../../Include/Lib/ICoord2D.h"
+#include "/home/levy/projects/open-bfme2-local-fleet/w6-mo2/Code/Libraries/Include/Lib/ICoord2D.h"
 
 // Both integer expandBy members widen one axis at a time through this shared
 // three-argument worker rather than inlining the comparison pair. It is only
@@ -80,7 +80,7 @@ void expandRange(int *low, int value, int *high);
 
 Debug &operator<<(Debug &debug, const ICoord2DBase &coord);
 
-#include "../../../Include/Lib/ICoord3D.h"
+#include "/home/levy/projects/open-bfme2-local-fleet/w6-mo2/Code/Libraries/Include/Lib/ICoord3D.h"
 
 Debug &operator<<(Debug &debug, const ICoord3D &coord);
 
@@ -103,7 +103,7 @@ inline void Coord3D::scale(float scale)
 
 Debug &operator<<(Debug &debug, const Coord3D &coord);
 
-#include "../../../Include/Lib/Coord2D.h"
+#include "/home/levy/projects/open-bfme2-local-fleet/w6-mo2/Code/Libraries/Include/Lib/Coord2D.h"
 
 Debug &operator<<(Debug &debug, const Coord2D &coord);
 
