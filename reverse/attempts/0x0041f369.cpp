@@ -1,3 +1,5 @@
+// ?rva0041F369@ArmyDefinition@@QAEXXZ
+// partial score=0.93 date=2026-10-13
 // ?rva0041F369@Rva0041F760@@QAEXXZ
 // partial score=0.93 date=2026-09-29
 // ?rva0041F369@Rva0041F760@@QAEXXZ
@@ -37,8 +39,8 @@ void Rva0041F760::rva0041F369()
 	for (Rva0041F369Elem **p = m_begin04; p != m_end08; ++p)
 	{
 		Rva0041F369Elem *e = *p;
-		sum04 += e->m_04;
 		sum08 += e->m_08;
+		sum04 += e->m_04;
 		sum0C += e->m_0C;
 	}
 	float k = 100.0f;
