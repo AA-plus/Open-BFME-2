@@ -25,6 +25,7 @@ public:
     AptCIH *c_cih(bool bUndefinedOK);
     bool isCIH(bool bUndefinedOK) const;
     bool isUndefined() const;
+    bool getIsDefined() const;
     float toFloat() const;
     int toInteger() const;
     void toString(EAStringC &) const;
@@ -39,6 +40,7 @@ public:
     signed int depth:17;
     unsigned int unknownDepth17:15;
     void rva006E1DD0(void *);
+    void *rva006E1170() const;
 };
 
 class EAStringC
@@ -401,5 +403,28 @@ AptValue *__cdecl Rva006EC900StartDrag(AptValue *self,int count)
  if(count>1)g_bfmeAptPtrAtE176D0->m_top=g_aptDateInterpreter.stack.At(2)->toFloat();
  if(count>2)g_bfmeAptPtrAtE176D0->m_right=g_aptDateInterpreter.stack.At(3)->toFloat();
  if(count>3)g_bfmeAptPtrAtE176D0->m_bottom=g_aptDateInterpreter.stack.At(4)->toFloat();
+ return gpUndefinedValue;
+}
+
+// Native DF20..DFEA: Ghidra-unlisted depth swap callback. With one argument
+// (or a non-CIH receiver) it reads stack argument 0: a defined CIH trades its
+// signed 17-bit +0x58 depth for the receiver's, and the receiver's rowed
+// rva006E1170 character instance stores the other's old depth plus one at
+// +4; an undefined argument stores -1 there. Name remains address-derived.
+AptValue *Rva006EDF20SwapDepths(AptValue *self,int count){
+ if(count!=1 && self->isCIH(false))return gpUndefinedValue;
+ AptCIH *mine=self->c_cih(false);
+ AptValue *arg=g_aptDateInterpreter.stack.At(0);
+ if(arg->isCIH(false)){
+  AptCIH *other=arg->c_cih(false);
+  if(other && ((AptValue *)other)->getIsDefined()){
+   int depth=((AptValue *)other)->c_cih(false)->depth;
+   ((AptValue *)other)->c_cih(false)->depth=mine->depth;
+   ((int *)mine->rva006E1170())[1]=depth+1;
+  }
+  return gpUndefinedValue;
+ }
+ if(arg!=gpUndefinedValue)return gpUndefinedValue;
+ ((int *)mine->rva006E1170())[1]=-1;
  return gpUndefinedValue;
 }
