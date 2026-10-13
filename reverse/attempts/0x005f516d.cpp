@@ -1,4 +1,7 @@
+// ?CanSwapArmyMembers@StrategicInGameUI@@QAE_NPAVRva002DCE90@@0@Z
+// partial score=0.9 date=2026-10-13
 // ?Rva005F516DCanSwapArmyMembers@@YA_NPAVRva005FArmyView@@PBURva005FSelectionView@@01@Z
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 // partial score=0.92 date=2026-10-09
 // stlport
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
@@ -146,7 +149,7 @@ static __declspec(noinline) bool Rva005F516DCanSwapArmyMembers(Rva005FArmyView*s
  _STL::forward_iterator_tag marker;
  _STL::vector<int> firstIds((const _STL::allocator<int>&)marker);
  ((_STL::vector<ScienceType>*)&firstIds)->reserve(first->count);
- Rva005E59FCKeyIterator begin={first->root->left},end={first->root};
+ Rva005E59FCKeyIterator begin={first->root->left},end={__vref(first->root)};
  firstIds._M_assign_aux(begin,end,marker);
  _STL::vector<int> secondIds((const _STL::allocator<int>&)marker);
  ((_STL::vector<ScienceType>*)&secondIds)->reserve(second->count);
