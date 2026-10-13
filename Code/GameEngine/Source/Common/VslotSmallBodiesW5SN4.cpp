@@ -1,4 +1,6 @@
-// cl: /DNDEBUG /MD
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+#include "ascii_string.h"
+#include "unicode_string.h"
 //
 // Vtable-slot forwarders with no ledger owner, batch W5SN4: each loads a
 // member pointer and tail-jumps to a function that is either already rowed
@@ -24,6 +26,56 @@ private:
 void Rva00578513::rva00578513(Int a0)
 {
 	m_04->rva0057845C(a0);
+}
+class Image;
+class Rva003F038E { public: const Image *rva003F03B9(); };
+class Rva0020E89C { public: UnicodeString rva0020E89C(); };
+
+class RegionUI {
+public:
+	virtual void v0();
+	virtual void SetRegionImage(const Image *);
+	virtual void v2();
+	virtual void SetText(const UnicodeString &);
+	virtual void v4();
+	virtual void v5();
+	virtual void v6();
+	virtual void v7();
+	virtual void v8();
+	virtual void v9();
+	virtual void v10();
+	virtual void SetVisibility(bool);
+};
+
+static __declspec(noinline) void rva005CB46A(RegionUI *ui, void *item)
+{
+	if (item) {
+		const Image *img = ((Rva003F038E *)item)->rva003F03B9();
+		ui->SetRegionImage(img);
+		ui->SetText(((Rva0020E89C *)item)->rva0020E89C());
+		ui->SetVisibility(1);
+	} else {
+		ui->SetVisibility(0);
+	}
+}
+
+class Rva005CB723 {
+public:
+	void rva005CB723(void *item);
+private:
+	int m_00;
+	void *m_04;
+	RegionUI *m_ui08;
+};
+
+void Rva005CB723::rva005CB723(void *item)
+{
+	if (item != m_04) {
+		if (m_ui08) {
+			rva005CB46A(m_ui08, item);
+		}
+		m_04 = item;
+	}
 }
 
 class Rva005CB748
