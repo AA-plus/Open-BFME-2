@@ -1,4 +1,6 @@
 // ?rva00273F74@Drawable@@QAEXXZ
+// partial score=0.98 date=2026-10-13
+// ?rva00273F74@Drawable@@QAEXXZ
 // partial score=0.985 date=2026-10-13
 // ?rva00273F74@Drawable@@QAEXXZ
 // partial score=0.985 date=2026-10-13
@@ -212,7 +214,7 @@ private:
     Object *m_object;
     int m_id;
     unsigned char m_pad104[0x354-0x104];
-    Rva00270025 *m_354;
+    Rva00270025 *volatile m_354;
     unsigned char m_pad358[0x43c-0x358];
     bool m_selected;
     unsigned char m_pad43d[0x460-0x43d];
