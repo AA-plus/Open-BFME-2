@@ -40,7 +40,7 @@ struct IDirect3DDevice8
 	BFME_DEVICE_SLOT(64) BFME_DEVICE_SLOT(65) BFME_DEVICE_SLOT(66) BFME_DEVICE_SLOT(67)
 	BFME_DEVICE_SLOT(68)
 #undef BFME_DEVICE_SLOT
-	virtual long __stdcall SetTextureStageState(DWORD Stage, int Type, DWORD Value);
+	virtual long __stdcall SetSamplerState(DWORD Sampler, int Type, DWORD Value);
 };
 
 // D3DCAPS8 up to TextureFilterCaps (+0x40); only the filter bits are read.
@@ -68,7 +68,7 @@ struct D3DCAPS8
 class DX8Caps
 {
 public:
-	const D3DCAPS8 &Get_DX8_Caps() const { return Caps; }
+	__declspec(dllimport) __forceinline const D3DCAPS8 &Get_DX8_Caps() const { return Caps; }
 private:
 	// The ZH layout: the caps follow the two display limits (+0x08), so the
 	// filter bits are read at +0x48 of DX8Wrapper::CurrentCaps.
@@ -82,10 +82,12 @@ extern unsigned int number_of_DX8_calls;
 class DX8Wrapper
 {
 public:
-	static const DX8Caps *Get_Current_Caps() { return CurrentCaps; }
-	static void Set_DX8_Texture_Stage_State(unsigned int stage, int state, DWORD value)
+	__declspec(dllimport) __forceinline static const DX8Caps *Get_Current_Caps() { return CurrentCaps; }
+	// BFME 2 renders through Direct3D 9: the filter states go to the sampler
+	// (device slot 0x114) straight, with the two call counters.
+	__declspec(dllimport) __forceinline static void Set_DX8_Sampler_State(unsigned int stage, int state, DWORD value)
 	{
-		D3DDevice->SetTextureStageState(stage, state, value);
+		D3DDevice->SetSamplerState(stage, state, value);
 		number_of_DX8_calls++;
 		texture_stage_state_changes++;
 	}
@@ -97,7 +99,25 @@ protected:
 
 enum { MAX_TEXTURE_STAGES = 16 };
 enum { D3DTEXF_NONE = 0, D3DTEXF_POINT = 1, D3DTEXF_LINEAR = 2, D3DTEXF_ANISOTROPIC = 3 };
-enum { D3DTSS_MAXANISOTROPY = 10 };
+enum { D3DTADDRESS_WRAP = 1, D3DTADDRESS_CLAMP = 3 };
+enum { D3DSAMP_ADDRESSU = 1, D3DSAMP_ADDRESSV = 2, D3DSAMP_MAGFILTER = 5, D3DSAMP_MINFILTER = 6, D3DSAMP_MIPFILTER = 7, D3DSAMP_MAXANISOTROPY = 10 };
+
+enum MipCountType
+{
+	MIP_LEVELS_ALL=0,	// generate all mipmap levels down to 1x1 size
+	MIP_LEVELS_1,		// no mipmapping at all (just one mip level)
+	MIP_LEVELS_2,
+	MIP_LEVELS_3,
+	MIP_LEVELS_4,
+	MIP_LEVELS_5,
+	MIP_LEVELS_6,
+	MIP_LEVELS_7,
+	MIP_LEVELS_8,
+	MIP_LEVELS_10,
+	MIP_LEVELS_11,
+	MIP_LEVELS_12,
+	MIP_LEVELS_MAX
+};
 #define D3DPTFILTERCAPS_MINFLINEAR		0x00000200L
 #define D3DPTFILTERCAPS_MINFANISOTROPIC	0x00000400L
 #define D3DPTFILTERCAPS_MIPFLINEAR		0x00020000L
@@ -113,7 +133,8 @@ public:
 		FILTER_TYPE_FAST,
 		FILTER_TYPE_BEST,
 		FILTER_TYPE_DEFAULT,
-		FILTER_TYPE_BFME,	// BFME 2's fifth column (20-byte stage rows); not written here
+		FILTER_TYPE_4,		// BFME 2's fifth column (20-byte stage rows): every filter starts
+					// here (constructor 0x0013EA00); its name is in neither binary
 		FILTER_TYPE_COUNT
 	};
 	enum TextureFilterMode
@@ -122,12 +143,81 @@ public:
 		TEXTURE_FILTER_TRILINEAR,
 		TEXTURE_FILTER_ANISOTROPIC
 	};
+	enum TxtAddrMode
+	{
+		TEXTURE_ADDRESS_REPEAT=0,
+		TEXTURE_ADDRESS_CLAMP
+	};
+
+	TextureFilterClass(MipCountType mip_level_count);
+	void Apply(unsigned int stage);
+	void Set_Mip_Mapping(FilterType mipmap);
+
+	__declspec(dllimport) __forceinline TxtAddrMode Get_U_Addr_Mode(void) const { return UAddressMode; }
+	__declspec(dllimport) __forceinline TxtAddrMode Get_V_Addr_Mode(void) const { return VAddressMode; }
+
 	static void _Init_Filters(TextureFilterMode texture_filter);
+
+private:
+	FilterType TextureMinFilter;
+	FilterType TextureMagFilter;
+	FilterType MipMapFilter;
+	TxtAddrMode UAddressMode;
+	TxtAddrMode VAddressMode;
 };
 
 unsigned _MinTextureFilters[MAX_TEXTURE_STAGES][TextureFilterClass::FILTER_TYPE_COUNT];
 unsigned _MagTextureFilters[MAX_TEXTURE_STAGES][TextureFilterClass::FILTER_TYPE_COUNT];
 unsigned _MipMapFilters[MAX_TEXTURE_STAGES][TextureFilterClass::FILTER_TYPE_COUNT];
+
+// Retail 0x0013EA00, 43 bytes. Called by the texture constructors and the
+// shared fallback filter of TextureClass::Get_Filter.
+TextureFilterClass::TextureFilterClass(MipCountType mip_level_count)
+:	TextureMinFilter(FILTER_TYPE_4),
+	TextureMagFilter(FILTER_TYPE_4),
+	UAddressMode(TEXTURE_ADDRESS_REPEAT),
+	VAddressMode(TEXTURE_ADDRESS_REPEAT)
+{
+	if (mip_level_count!=MIP_LEVELS_1)
+	{
+		MipMapFilter=FILTER_TYPE_4;
+	}
+	else
+	{
+		MipMapFilter=FILTER_TYPE_NONE;
+	}
+}
+
+// Retail 0x0013EA30, 291 bytes: the stage's min, mag and mip filters from the
+// tables, then the U and V address modes.
+void TextureFilterClass::Apply(unsigned int stage)
+{
+	DX8Wrapper::Set_DX8_Sampler_State(stage,D3DSAMP_MINFILTER,_MinTextureFilters[stage][TextureMinFilter]);
+	DX8Wrapper::Set_DX8_Sampler_State(stage,D3DSAMP_MAGFILTER,_MagTextureFilters[stage][TextureMagFilter]);
+	DX8Wrapper::Set_DX8_Sampler_State(stage,D3DSAMP_MIPFILTER,_MipMapFilters[stage][MipMapFilter]);
+
+	switch (Get_U_Addr_Mode())
+	{
+	case TEXTURE_ADDRESS_REPEAT:
+		DX8Wrapper::Set_DX8_Sampler_State(stage, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
+		break;
+
+	case TEXTURE_ADDRESS_CLAMP:
+		DX8Wrapper::Set_DX8_Sampler_State(stage, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+		break;
+	}
+
+	switch (Get_V_Addr_Mode())
+	{
+	case TEXTURE_ADDRESS_REPEAT:
+		DX8Wrapper::Set_DX8_Sampler_State(stage, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+		break;
+
+	case TEXTURE_ADDRESS_CLAMP:
+		DX8Wrapper::Set_DX8_Sampler_State(stage, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+		break;
+	}
+}
 
 void TextureFilterClass::_Init_Filters(TextureFilterMode filter_type)
 {
@@ -196,6 +286,13 @@ void TextureFilterClass::_Init_Filters(TextureFilterMode filter_type)
 		_MinTextureFilters[i][FILTER_TYPE_DEFAULT]=_MinTextureFilters[i][FILTER_TYPE_BEST];
 		_MipMapFilters[i][FILTER_TYPE_DEFAULT]=_MipMapFilters[i][FILTER_TYPE_BEST];
 
-		DX8Wrapper::Set_DX8_Texture_Stage_State(i,D3DTSS_MAXANISOTROPY,2);
+		DX8Wrapper::Set_DX8_Sampler_State(i,D3DSAMP_MAXANISOTROPY,2);
 	}
+}
+
+// Retail 0x0013ED10, 10 bytes, the function after _Init_Filters; the linker
+// folded the identical setters already rowed there (ICF).
+void TextureFilterClass::Set_Mip_Mapping(FilterType mipmap)
+{
+	MipMapFilter=mipmap;
 }
