@@ -19,6 +19,22 @@ public:
 	bool rva006C1850(unsigned int key, void **out);
 	bool rva006C18A0(unsigned int key, bool freeValue);
 	bool rva006C1920(unsigned int newSize);
+	// Inline presence test: retail 0x006C1D60 inlines the 0x006C1850 walk
+	// without the out parameter.
+	__forceinline bool containsKey(unsigned int key)
+	{
+		Rva006C1850Node *node = 0;
+		if (m_table != 0)
+		{
+			int h = (key >> 3) % m_bucketCount;
+			node = m_table[h];
+			while (node != 0 && node->m_key != key)
+				node = node->m_next;
+		}
+		if (node != 0)
+			return true;
+		return false;
+	}
 private:
 	Rva006C1850Node **m_table;
 	bool m_flag;
@@ -152,4 +168,34 @@ void Rva006C1A50Owner::rva006C1A50(int v)
 	} else {
 		((Rva000338F0 *)m_678)->rva000338F0(v);
 	}
+}
+
+// Retail 0x006C1D60 93B (WB 0x70CEC0): the owner's guarded unlock lane. When the
+// table at +0x684 is enabled (+0x680) the key is looked up (find inlined; WB names
+// the result bReturnValue) and removed through 0x006C18A0; the lookup result is
+// the return value. The found path knows the result is true, which is where
+// retail's `mov bl,1` before the call and `mov al,bl` after it come from.
+class Rva006C1D60
+{
+public:
+	bool rva006C1D60(unsigned int key, bool freeValue);
+private:
+	unsigned char m_pad[0x680];
+	bool m_enabled;
+	unsigned char m_pad681[3];
+	Rva006C1850 m_table;
+};
+
+bool Rva006C1D60::rva006C1D60(unsigned int key, bool freeValue)
+{
+	bool ret;
+	if (m_enabled)
+	{
+		ret = m_table.containsKey(key);
+		if (ret)
+			m_table.rva006C18A0(key, freeValue);
+	}
+	else
+		ret = false;
+	return ret;
 }
