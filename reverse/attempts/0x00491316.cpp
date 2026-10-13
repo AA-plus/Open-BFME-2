@@ -1,6 +1,8 @@
 // ?update@DamageFieldUpdate@@UAE?AW4UpdateSleepTime@@XZ
+// partial score=0.8368660154985625 date=2026-10-13
+// ?update@DamageFieldUpdate@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.6 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /Ireference/shims/bfme2_ascii
+// cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common
 // ?update@DamageFieldUpdate@@UAE?AW4UpdateSleepTime@@XZ
 // Retail 0x00491316..0x0049157D (615 bytes). BANKED ROUGH DRAFT (~0.6):
 // semantics and callees are mapped, codegen is not converged (587 vs 615
@@ -34,7 +36,7 @@ typedef int Int;
 enum UpdateSleepTime { UPDATE_SLEEP_NONE = 1 };
 enum ObjectID { INVALID_ID = 0 };
 
-struct Coord3D { Real x, y, z; };
+#include "Coord3D.h"
 
 class Player;
 class UpgradeTemplate;
@@ -99,17 +101,7 @@ public:
 	bool m_flag;
 };
 
-struct BfmeWideResult
-{
-	Object *next() throw();		// 0x00045623
-	void *m_value;
-	~BfmeWideResult();		// 0x0004AA28
-};
-class PartitionManager
-{
-public:
-	BfmeWideResult iterateObjectsInRange(const Coord3D *pos, float radius, int distCalc, Rva000421C8 *filters, int order);
-};
+#include "PartitionRangeQueryCallView.h"
 extern PartitionManager *ThePartitionManager;
 
 // list<int> views (STLport node: next, prev, value).
@@ -120,6 +112,7 @@ template <class T> struct _Nonconst_traits;
 template <class T, class Traits> struct _List_iterator
 {
 	_List_iterator(IDNode *n) : m_node(n) {}
+_List_iterator(const _List_iterator &i):m_node(i.m_node){}
 	IDNode *m_node;
 };
 template <class It, class T> It find(It first, It last, const T &value);
@@ -128,7 +121,7 @@ typedef _STL::_List_iterator<int, _STL::_Nonconst_traits<int> > IDIter;
 template IDIter _STL::find<IDIter, int>(IDIter, IDIter, const int &);
 
 struct Rva0029FB3BAlloc { Rva0029FB3BAlloc() {} ~Rva0029FB3BAlloc() {} };
-struct Rva0029FB3BIter { IDNode *m_node; };
+struct Rva0029FB3BIter { Rva0029FB3BIter(){} Rva0029FB3BIter(const Rva0029FB3BIter&i):m_node(i.m_node){} IDNode *m_node; };
 class Rva0029FB3BMember
 {
 public:
@@ -199,13 +192,8 @@ UpdateSleepTime DamageFieldUpdate::update()
 				return UPDATE_SLEEP_NONE;
 		}
 
-		Player *player = me->getControllingPlayer();
-		Rva00BCECF0Filter relationship(data->m_filterSpec, player, true);
-		Rva00BF91BCFilter notMe(me);
-		Rva0026119DFilter alive;
-		Rva00BFBC90Filter extra(me, 1, false);
 		BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(me->getPosition(), (Real)data->m_radius, 0,
-			extra.link(alive.link(notMe.link(&relationship))), 0);
+          Rva00BFBC90Filter(me,1,false).link(Rva0026119DFilter().link(Rva00BF91BCFilter(me).link(&Rva00BCECF0Filter(data->m_filterSpec,me->getControllingPlayer(),true)))),0);
 
 		Rva0029FB3BMember inRange((Rva0029FB3BAlloc()));
 		Rva0029FB3BMember gone((Rva0029FB3BAlloc()));
