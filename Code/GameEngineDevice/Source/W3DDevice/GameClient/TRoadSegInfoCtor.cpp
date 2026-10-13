@@ -9,7 +9,16 @@ public:
  __forceinline Vector2(float xValue,float yValue) : x(xValue),y(yValue) {}
  float x,y;
 };
-Vector2::Vector2() {}
+// Select-any like the ~45 identical copies other TUs emit (a strong definition
+// would duplicate theirs at link time); the anchor keeps the body emitted.
+inline Vector2::Vector2() {}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitVector2Ctor@@YAXPAVVector2@@@Z absent-from-retail
+void bfmeEmitVector2Ctor(Vector2 *p)
+{
+	p->Vector2::Vector2();
+}
 struct TRoadSegInfo {
  TRoadSegInfo();
  Vector2 loc,roadNormal,roadVector;
