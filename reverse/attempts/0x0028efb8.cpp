@@ -1,4 +1,6 @@
 // ?rva0028EFB8@Object@@QBEMPBUCoord3D@@PBV1@0@Z
+// partial score=0.992107 date=2026-10-13
+// ?rva0028EFB8@Object@@QBEMPBUCoord3D@@PBV1@0@Z
 // partial score=0.992107 date=2026-10-10
 // ?rva0028EFB8@Object@@QBEMPBUCoord3D@@PBV1@0@Z
 // BF1 pinned575 single-box distance C++ supplies semantic/structural guide;
