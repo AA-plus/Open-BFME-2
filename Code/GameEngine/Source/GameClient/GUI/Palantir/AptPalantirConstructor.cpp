@@ -308,11 +308,18 @@ public:
 	void *m_movie;
 };
 
+class Rva00527FA2 {public: ~Rva00527FA2();};
+
 class Rva002D3931
 {
 public:
 	Rva002D3931() : m_movie(0) {}
-	~Rva002D3931() { clear(); }
+	__declspec(noinline) ~Rva002D3931()
+	{
+		Rva00527FA2 *p = (Rva00527FA2 *)m_movie;
+		m_movie = 0;
+		if (p) { p->Rva00527FA2::~Rva00527FA2(); ::operator delete(p); }
+	}
 	void clear();
 
 	void *m_movie;
