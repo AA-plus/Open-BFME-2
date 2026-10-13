@@ -28,6 +28,6 @@ void ArmyUnitSwapperDialog::Impl::InitMovieClipSlot(const ArmySwapSlotInput& inp
  if(region)movieClip->rva005FDA0D(index,((Rva0020E89C*)region)->rva0020E89C());
  movieClip->rva005FDA15(index,GetDisplayName(army));
  Rva005FD956 *pointsClip=movieClip;
- pointsClip->rva005FD956((int)indexBits,((Rva00318FBE*)armyBits)->rva00318FBE(),GetMaxCommandPoints((void*)armyBits));
+ pointsClip->rva005FD956(index,((Rva00318FBE*)army)->rva00318FBE(),GetMaxCommandPoints(army));
 }
 }
