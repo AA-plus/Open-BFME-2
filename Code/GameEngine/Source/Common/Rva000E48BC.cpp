@@ -135,8 +135,10 @@ bool Rva000E48BC::rva000E48BC(Rva000E488F *container)
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 #include "PartitionRangeQueryCallView.h"
 
-class ShroudManager;
-extern ShroudManager *TheShroudManager;
+// The ledger binds 0x009FE74C (retail [0xdfe74c]) as
+// ?TheShroudManager@@3PAVPartitionManager@@A: the query facade is the
+// partition manager under its shroud-side name.
+extern PartitionManager *TheShroudManager;
 
 struct BitFlagsView
 {
@@ -176,27 +178,27 @@ int Rva000E48BC::rva000E49B8(int player)
 	c.x = __vref(m_pos.X);
 	c.y = m_pos.Y;
 	c.z = m_pos.Z;
-	if (!reinterpret_cast<PartitionManager*>(TheShroudManager)->getShroudStatusForPlayer(player, &c))
+	if (!TheShroudManager->getShroudStatusForPlayer(player, &c))
 		return visible;
 	c.x = m_pos.X + m_extent;
 	c.y = m_pos.Y;
 	c.z = m_pos.Z;
-	if (!reinterpret_cast<PartitionManager*>(TheShroudManager)->getShroudStatusForPlayer(player, &c))
+	if (!TheShroudManager->getShroudStatusForPlayer(player, &c))
 		return visible;
 	c.x = m_pos.X - m_extent;
 	c.y = m_pos.Y;
 	c.z = m_pos.Z;
-	if (!reinterpret_cast<PartitionManager*>(TheShroudManager)->getShroudStatusForPlayer(player, &c))
+	if (!TheShroudManager->getShroudStatusForPlayer(player, &c))
 		return visible;
 	c.x = m_pos.X;
 	c.y = m_pos.Y + m_extent;
 	c.z = m_pos.Z;
-	if (!reinterpret_cast<PartitionManager*>(TheShroudManager)->getShroudStatusForPlayer(player, &c))
+	if (!TheShroudManager->getShroudStatusForPlayer(player, &c))
 		return visible;
 	c.x = m_pos.X;
 	c.y = m_pos.Y - m_extent;
 	c.z = m_pos.Z;
-	if (!reinterpret_cast<PartitionManager*>(TheShroudManager)->getShroudStatusForPlayer(player, &c))
+	if (!TheShroudManager->getShroudStatusForPlayer(player, &c))
 		return visible;
  }
 	return 0;
