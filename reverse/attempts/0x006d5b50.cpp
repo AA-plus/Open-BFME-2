@@ -1,4 +1,6 @@
 // ?TrimRight@EAStringC@@QAEAAV1@PBD@Z
+// partial score=0.9867 date=2026-10-13
+// ?TrimRight@EAStringC@@QAEAAV1@PBD@Z
 // partial score=0.986718 date=2026-10-13
 // ?TrimRight@EAStringC@@QAEAAV1@PBD@Z
 // partial score=0.99 date=2026-10-07
