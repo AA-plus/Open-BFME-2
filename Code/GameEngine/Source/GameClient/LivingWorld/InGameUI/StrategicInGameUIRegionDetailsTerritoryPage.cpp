@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /MD /EHsc /Ireference/shims/bfme2_ascii
 // Native5E38EB..5E3947 complete92B and WB15F6AA0. Owner from
 // admitted dtor5E362F and vtableC77BD0; Impl allocation16B from direct native call5E3753.
