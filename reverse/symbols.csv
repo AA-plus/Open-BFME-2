@@ -3838,7 +3838,6 @@ name,address,notes
 ??1InstantDeathBehaviorModuleData@@UAE@XZ,0x0045D28D,dtor called by audited wrapper RVA 0x0045D271; retail registration InstantDeathBehavior -> data factory RVA 0x0024B213 -> ctor RVA 0x0045D176; primary vptr store RVA 0x0045D189
 ??1InvisibilitySpecialPowerModuleData@@UAE@XZ,0x004C24DF,dtor called by audited wrapper RVA 0x004C24C3; retail registration InvisibilitySpecialPower -> data factory RVA 0x002518CB -> ctor RVA 0x004C244D; primary vptr store RVA 0x004C246C
 ??1LANAPI@@UAE@XZ,0x0044B992,Target LANAPI scalar-deleting destructor 0x44BA0E calls this complete destructor; body restores LANAPI vtable and destroys transport and the name/login/host members
-??1LANGameInfo@@UAE@XZ,0x004482FB,destructor called by the scalar deleting destructor 0x004482DF (slot 0 of vtable 0x00C3E518 whose unique slot-2 name getter returns LANGameInfo); the SEH body does not re-store a vtable
 ??1LANPlayer@@QAE@XZ,0x00447ACA,Target LANAPI::reset list deletion calls this with each LANPlayer node; body releases its three UnicodeString members at +0/+4/+8
 ??1LZHLDecompressor@@QAE@XZ,0x00692300,LZH-Light decompressor destructor; address read from the LZHLDestroyDecompressor REL32 at 0x0068ED8B
 ??1LadderInfo@@QAE@XZ,0x0054D8D8,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
@@ -5305,7 +5304,6 @@ name,address,notes
 ??_7Rva00261D01Filter@@6B@,0x00835B28,"partition filter vftable stored inline at script condition 0x003EA764 (no members beyond the +0x04 link); slot 0 the shared deleting dtor 0x00395A19, slot 1 allow 0x00261D01, slot 2 0x0036CC7A"
 ??_7Rva00359290@@6B@,0x00815398,vtable installed by the 0x359290 dtor (mov [esi] at 0x003592A1)
 ??_7Rva0040EDB@@6B@,0x007C16B8
-??_7Rva0044B27F@@6B@,0x0083E4FC,Rva0044B27F vtable installed by its copy ctor 0x0044B27F (mov [esi] imm at 0x0044B2AB) after the BfmeSaveElement002295D7 base copy
 ??_7Rva004ABFD9@@6B@,0x008549F8,Rva004ABFD9 vtable installed by copy ctor 0x004ABF47 (mov [esi] imm at 0x004ABF6D); slot0 is rowed ??_GRva004ABFD9 0x004AC021
 ??_7Rva004ACDACFilter@@6B@,0x00854EB4,"partition filter vftable stored inline at 0x004AD1A1 in RousingSpeechUpdate 0x004AD176 (+0x08 a radius; +0x0C a centre); slot 0 the shared deleting dtor 0x00395A19, slot 1 allow 0x004ACDAC, slot 2 0x0036CC7A"
 ??_7Rva004E14E1FlashRecord@@6B@,0x008619A0
@@ -13143,13 +13141,7 @@ rva009C7380WeightPairs,0x009B84E0
 ?rva00628040@Rva00628040Impl@@QAEPAVObject@@PBUCoord3D@@MHHPAVRva000421C8@@@Z,0x00628040,"PartitionManager closest-object implementation (1827 bytes) behind +0x10: position, float radius, 0, distance type, filter chain; called from getClosestObject 0x00625360; same address as the int-typed ?bfmeFwd1050 pin"
 ?Rva00447CA9@@YAXPAVLANGameInfo@@PADH@Z,0x00447CA9,callee of ?Rva0044802D@@YAXPADH@Z
 ?enterGame@GameInfo@@QAEXXZ,0x003FF268,callee of ?RequestGameCreate@LANAPI@@UAEXVUnicodeString@@_N@Z
-?setName@LANGameInfo@@QAEXVUnicodeString@@@Z,0x00449A81,callee of ?RequestGameCreate@LANAPI@@UAEXVUnicodeString@@_N@Z
-?setLogin@LANGameSlot@@QAEXVAsciiString@@@Z,0x0024955E,callee of ?RequestGameCreate@LANAPI@@UAEXVUnicodeString@@_N@Z
-?setHost@LANGameSlot@@QAEXVAsciiString@@@Z,0x00249595,callee of ?RequestGameCreate@LANAPI@@UAEXVUnicodeString@@_N@Z
-??0LANGameSlot@@QAE@ABV0@@Z,0x0044B27F,callee of ?RequestGameCreate@LANAPI@@UAEXVUnicodeString@@_N@Z
-?setSlot@LANGameInfo@@QAEXHVLANGameSlot@@@Z,0x00448352,callee of ?RequestGameCreate@LANAPI@@UAEXVUnicodeString@@_N@Z
 ??1LANPreferences@@UAE@XZ,0x0044D285,callee of ?RequestGameCreate@LANAPI@@UAEXVUnicodeString@@_N@Z
-??1LANGameSlot@@UAE@XZ,0x00447B0E,callee of ?RequestGameCreate@LANAPI@@UAEXVUnicodeString@@_N@Z
 ?setSlotPointer@GameInfo@@QAEXHPAVGameSlot@@@Z,0x003FF332,callee of ??0LANGameInfo@@QAE@XZ
 ?GameInfoToAsciiString@@YA?AVAsciiString@@PBVGameInfo@@_N@Z,0x00400AF8,callee of ?GenerateGameOptionsString@@YA?AVAsciiString@@XZ
 ?GetRelativeAngle@Object@@QBEMPBUCoord3D@@@Z,0x000B4542,opaque relative-angle helper (x87 atan2 of the target minus the object's +0x38 position, less its orientation); REL32 callee of AIFaceState::update 0x003548B7 with ECX the owner, in place of Zero Hour's ThePartitionManager->getRelativeAngle2D

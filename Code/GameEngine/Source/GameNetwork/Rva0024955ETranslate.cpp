@@ -1,13 +1,14 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// Retail 0x0024955E, 55 bytes.
-// ?rva0024955E@Rva0024955E@@QAEXVAsciiString@@@Z
-// Honest address name: __thiscall (ret 4: one by-value AsciiString,
-// destroyed in the EH epilogue via rowed narrow releaseBuffer). Translates
-// the argument into the UnicodeString member at +0x1B0 via rowed
-// UnicodeString::translate. Owner class unproven (four callers in unclaimed
-// bodies), so the class carries the address. String models follow
-// LANAPIRequestSetName, with releaseBuffer declared private to match the
-// rowed AAE spellings. Unlock lane.
+// ?setLogin@LANGameSlot@@QAEXVAsciiString@@@Z, retail 0x0024955E, 55 bytes,
+// and ?setHost@LANGameSlot@@QAEXVAsciiString@@@Z, retail 0x00249595, 55
+// bytes: Zero Hour's inline LANGameSlot setters (GameNetwork/LANGameInfo.h),
+// m_user.setLogin(name) / m_user.setHost(name), which translate the by-value
+// AsciiString into LANPlayer's m_login / m_host (slot +0x1B0 / +0x1B4, the
+// LANPlayer at +0x1AC) through rowed UnicodeString::translate and destroy the
+// argument in the EH epilogue (rowed narrow releaseBuffer). Target evidence:
+// LANAPI::RequestGameCreate calls them on its local LANGameSlot, and the
+// host-name handler of LANAPICallbacks.cpp on a getLANSlot result; both are
+// __thiscall with ret 4. Retail keeps them out of line.
 typedef unsigned short WideChar;
 typedef bool Bool;
 
@@ -16,26 +17,23 @@ typedef bool Bool;
 
 #include "unicode_string.h"
 
-class Rva0024955E
+class LANGameSlot
 {
 public:
-	void rva0024955E(AsciiString name);
-	void rva00249595(AsciiString name);
+	void setLogin(AsciiString name);
+	void setHost(AsciiString name);
 private:
 	char m_pad[0x1B0];
-	UnicodeString m_name;
-	UnicodeString m_name2;
+	UnicodeString m_login;				// +0x1B0, m_user.m_login
+	UnicodeString m_host;				// +0x1B4, m_user.m_host
 };
 
-void Rva0024955E::rva0024955E(AsciiString name)
+void LANGameSlot::setLogin(AsciiString name)
 {
-	m_name.translate(name);
+	m_login.translate(name);
 }
 
-// Retail 0x00249595, 55 bytes. Twin of 0x0024955E above, translating into
-// the adjacent UnicodeString member at +0x1B4. Same FuncInfo, callees and
-// caller family.
-void Rva0024955E::rva00249595(AsciiString name)
+void LANGameSlot::setHost(AsciiString name)
 {
-	m_name2.translate(name);
+	m_host.translate(name);
 }

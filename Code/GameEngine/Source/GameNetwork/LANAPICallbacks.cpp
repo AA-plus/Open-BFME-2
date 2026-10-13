@@ -239,13 +239,12 @@ public:
 	UnsignedByte m_pre1AC[0x1AC - 0x1A5];
 };
 
-// The LAN slot's login and host setters (0x0024955E, 0x00249595), under the
-// ledger's class name.
-class Rva0024955E : public GameSlot
+// The LAN slot's login and host setters (0x0024955E, 0x00249595).
+class LANGameSlot : public GameSlot
 {
 public:
-	void rva0024955E( AsciiString login );
-	void rva00249595( AsciiString host );
+	void setLogin( AsciiString login );
+	void setHost( AsciiString host );
 };
 
 struct LANSlotAddress
@@ -345,7 +344,7 @@ class Rva00447773 : public GameInfo
 public:
 	void *rva00447773( Int index );			// getLANSlot
 
-	Rva0024955E *getLANSlot( Int index ) { return (Rva0024955E *)rva00447773( index ); }
+	LANGameSlot *getLANSlot( Int index ) { return (LANGameSlot *)rva00447773( index ); }
 	const BfmeNetAddress *getSlotAddress( Int index ) const { return &m_slots[index].m_address; }
 };
 
@@ -1131,18 +1130,18 @@ void LANAPI::rva0024A348( const BfmeNetAddress &sender, Int playerSlot, AsciiStr
 		AsciiString munkee = options;
 		munkee.nextToken( &key, "=" );
 
-		Rva0024955E *slot = m_currentGame->getLANSlot( playerSlot );
+		LANGameSlot *slot = m_currentGame->getLANSlot( playerSlot );
 		if( !slot )
 			return;
 
 		if( key.compare( "User" ) == 0 )
 		{
-			slot->rva0024955E( AsciiString( munkee.str() + 1 ) );
+			slot->setLogin( AsciiString( munkee.str() + 1 ) );
 			return;
 		}
 		else if( key.compare( "Host" ) == 0 )
 		{
-			slot->rva00249595( AsciiString( munkee.str() + 1 ) );
+			slot->setHost( AsciiString( munkee.str() + 1 ) );
 			return;
 		}
 	}

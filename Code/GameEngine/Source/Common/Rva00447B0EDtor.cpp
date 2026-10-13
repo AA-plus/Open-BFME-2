@@ -1,48 +1,51 @@
-// cl: /EHsc /MD
+// cl: /Ireference/shims/bfme2_ascii /EHsc /MD
 //
-// ??1Rva00447B0E@@QAE@XZ @0x00447B0E 74B.
-// Dtor: release StringBase<char> at +0x1C8 via rowed 0x00036410, destroy
-// LANPlayer at +0x1AC via pinned 0x00447ACA, then base
-// GameSlot dtor rowed 0x002294FD. Evidence: unlock lane;
-// same no-vptr QAE EH shape as landed Rva00448089 0x00448089; base size
-// 0x1AC proven by SaveGameInfoCopyBFME2; unblocks 6 incl 0x0044818B.
-template <typename T> class StringBase
+// ??1LANGameSlot@@UAE@XZ @0x00447B0E 74B: Zero Hour's LANGameSlot declares
+// no destructor (GameNetwork/LANGameInfo.h), so this is the implicit virtual
+// one. Target evidence: slot 0 of vtable 0x00C3E4FC, which the slot
+// constructors 0x00448150 and 0x0044B27F install, is the scalar deleting
+// destructor 0x0044818B calling this body; LANGameInfo's destructor
+// 0x004482FB destroys its eight 0x1D0-byte slots with it. It releases the
+// AsciiString at +0x1C8 (releaseBuffer 0x00036410), destroys the LANPlayer at
+// +0x1AC (0x00447ACA) and runs ~GameSlot (0x002294FD) without re-storing the
+// vtable, which is how MSVC 7.1 compiles an implicit destructor (a
+// user-written one stores it first). Base size 0x1AC proven by
+// SaveGameInfoCopyBFME2.
+
+#include "ascii_string.h"
+
+class GameSlot
 {
-public:
-	~StringBase() { releaseBuffer(); }
-private:
-	void releaseBuffer();
-	T *m_data;
-};
-
-// Existing public narrow teardown spelling resolves to the verified
-// 133-byte releaseBuffer worker at RVA 0x36410. Wide teardown is unchanged.
-template <> StringBase<char>::~StringBase();
-#pragma comment(linker, "/alternatename:??1?$StringBase@D@@QAE@XZ=?releaseBuffer@?$StringBase@D@@AAEXXZ")
-
-
-struct LANPlayer
-{
-	~LANPlayer();
-	char m_pad[0x1C];
-};
-
-class GameSlot {
 public:
 	virtual ~GameSlot();
-	char m_pad[0x1AC - 4];
+
+private:
+	char m_body[0x1AC - 4];
 };
 
-class Rva00447B0E
+class LANPlayer
 {
 public:
-	~Rva00447B0E();
+	~LANPlayer();
+
 private:
-	GameSlot m_base00;
-	LANPlayer m_1AC;
-	StringBase<char> m_1C8;
+	char m_body[0x1C];
 };
 
-Rva00447B0E::~Rva00447B0E()
+class LANGameSlot : public GameSlot
 {
+public:
+	LANGameSlot();
+
+private:
+	LANPlayer m_user;				// +0x1AC
+	AsciiString m_serial;				// +0x1C8
+	unsigned int m_lastHeard;			// +0x1CC
+};
+
+// Makes this unit emit the implicit destructor; not retail code.
+// ?<LANGameSlot::~LANGameSlot anchor> absent-from-retail
+void bfmeAnchorLANGameSlotDtor(LANGameSlot *slot)
+{
+	slot->LANGameSlot::~LANGameSlot();
 }

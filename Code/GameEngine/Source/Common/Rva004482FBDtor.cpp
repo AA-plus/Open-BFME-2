@@ -1,6 +1,12 @@
 // cl: /Ireference/shims/bfme2_ascii /EHsc /MD
-// ??1Rva004482FB@@QAE@XZ retail 0x004482FB 87B
-// Dtor: release UnicodeString at +0xF64 via rowed 0x00036E70 then destroy 8x0x1D0 array at +0xDC via rowed Rva00447B0E 0x00447B0E then base Rva00382FA7 pin 0x00400A7F. Evidence: unlock lane; caller 0x004482DF deleting dtor; prev Rva004482B7Finish array shape 8x0x1D0; wide release same as sibling 0x00448280.
+// ??1LANGameInfo@@UAE@XZ retail 0x004482FB 87B: Zero Hour's LANGameInfo
+// declares no destructor (GameNetwork/LANGameInfo.h), so this is the implicit
+// virtual one, called by the scalar deleting destructor 0x004482DF in slot 0
+// of the LANGameInfo vtable 0x00C3E518. It releases m_gameName at +0xF64
+// (rowed 0x00036E70), destroys the eight 0x1D0-byte slots at +0xDC with
+// ~LANGameSlot 0x00447B0E, then runs the GameInfo base destructor 0x00400A7F
+// without re-storing the vtable (MSVC 7.1's implicit shape). The base is
+// rowed under its address name Rva00382FA7.
 #include "unicode_string.h"
 
 class Rva00382FA7
@@ -13,43 +19,66 @@ public:
 class GameSlot
 {
 public:
-    void setMapAvailability(bool v);
+    virtual ~GameSlot();
+    void setAccept() { m_isAccepted = true; }
+    void setMapAvailability(bool hasMap);
+private:
+    int m_state;                        // +0x04
+    bool m_isAccepted;                  // +0x08
+    char m_rest[0x1AC - 9];
 };
 
-struct Rva00447B0E
-{
-    ~Rva00447B0E();
-    struct Rva00447B0E &rva00447B58(const struct Rva00447B0E &o);
-    char m_pad[0x1D0];
-};
-
-class Rva004482FB
+class LANGameSlot : public GameSlot
 {
 public:
-    ~Rva004482FB();
-    void rva00448352(int index, struct Rva00447B0E v);
-    int rva004483BC(UnicodeString name);
+    virtual ~LANGameSlot();
 private:
-    Rva00382FA7 m_base;
-    struct Rva00447B0E m_items[8];
-    char m_gap[8];
-    UnicodeString m_wide;
+    char m_rest[0x1D0 - 0x1AC];
 };
 
-Rva004482FB::~Rva004482FB()
+// LANGameSlot's copy assignment, rowed under its address name (0x00447B58).
+struct Rva00447B0E
 {
+    struct Rva00447B0E &rva00447B58(const struct Rva00447B0E &o);
+};
+
+enum
+{
+    MAX_SLOTS = 8
+};
+
+class LANGameInfo : public Rva00382FA7
+{
+public:
+    void setSlot(int slotNum, LANGameSlot slotInfo);
+private:
+    LANGameSlot m_LANSlot[MAX_SLOTS];   // +0xDC
+    LANGameInfo *m_next;                // +0xF5C
+    unsigned int m_lastHeard;           // +0xF60
+    UnicodeString m_gameName;           // +0xF64
+    bool m_isDirectConnect;             // +0xF68
+};
+
+// Makes this unit emit the implicit destructor; not retail code.
+// ?<LANGameInfo::~LANGameInfo anchor> absent-from-retail
+void bfmeAnchorLANGameInfoDtor(LANGameInfo *game)
+{
+    game->LANGameInfo::~LANGameInfo();
 }
 
-// ?rva00448352@Rva004482FB@@QAEXHURva00447B0E@@@Z @0x00448352 106B: assign m_items[index] from by-value Rva00447B0E plus index0 GameSlot setMapAvailability. Evidence: prev owns 8x0x1D0 at +0xDC; imul 0x1D0 and ret 0x1D4 prove by-value 0x1D0; callers 4 free; callees rowed.
-void Rva004482FB::rva00448352(int index, struct Rva00447B0E v)
+// ?setSlot@LANGameInfo@@QAEXHVLANGameSlot@@@Z @0x00448352 106B: Zero Hour's
+// LANGameInfo::setSlot. Evidence: imul 0x1D0 over the slots at +0xDC and
+// ret 0x1D4 prove the by-value 0x1D0 slot; the slot 0 copy is accepted (+8)
+// and gets the map; the argument is destroyed with ~LANGameSlot.
+void LANGameInfo::setSlot(int slotNum, LANGameSlot slotInfo)
 {
-    if (index < 0 || index >= 8)
+    if (slotNum < 0 || slotNum >= MAX_SLOTS)
         return;
-    m_items[index].rva00447B58(v);
-    if (index != 0)
+    ((Rva00447B0E &)m_LANSlot[slotNum]).rva00447B58((const Rva00447B0E &)slotInfo);
+    if (slotNum != 0)
         return;
-    m_items[0].m_pad[8] = 1;
-    ((GameSlot *)&m_items[0])->setMapAvailability(true);
+    m_LANSlot[0].setAccept();
+    m_LANSlot[0].setMapAvailability(true);
 }
 
 // ?rva004483BC@Rva004482FB@@QAEHVUnicodeString@@@Z @0x004483BC (103B):
@@ -63,6 +92,12 @@ class Rva00447773
 {
 public:
     void *rva00447773(int index);
+};
+
+class Rva004482FB
+{
+public:
+    int rva004483BC(UnicodeString name);
 };
 
 class Rva004481A7

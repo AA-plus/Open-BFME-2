@@ -1,12 +1,17 @@
 // cl: /Ireference/shims/bfme2_ascii /EHsc /DNDEBUG /MD
 //
-// ??0Rva0044B27F@@QAE@ABV0@@Z @0x0044B27F 107B: copy constructor of a
-// 0x1D0-byte save element (callers 0x0044B6E9 0x00582402 0x0058265D
-// 0x00582D16). It copies the rowed polymorphic save-element base
-// GameSlot (0x002295D7 0x1AC bytes), installs vtable
-// 0x00C3E4FC, copies the LANPlayer member at +0x1AC (rowed copy 0x0044A901),
-// the AsciiString at +0x1C8 and the plain field at +0x1CC. Identities are
-// address-derived; field meanings are not recovered.
+// ??0LANGameSlot@@QAE@ABV0@@Z @0x0044B27F 107B: LANGameSlot's copy
+// constructor (callers 0x0044B6E9 0x00582402 0x0058265D 0x00582D16; Zero
+// Hour's LANAPI::RequestGameCreate passes a local slot by value to
+// LANGameInfo::setSlot). It copies the rowed GameSlot base (0x002295D7,
+// 0x1AC bytes), installs the LANGameSlot vtable 0x00C3E4FC (the one the
+// default constructor 0x00448150 stores), copies the LANPlayer at +0x1AC
+// (rowed copy 0x0044A901), the AsciiString at +0x1C8 and the last-heard
+// word at +0x1CC.
+//
+// ??_GLANGameSlot@@UAEPAXI@Z @0x0044818B 28B: slot 0 of that vtable, the
+// scalar deleting destructor this unit emits with the vtable; it calls the
+// implicit ~LANGameSlot 0x00447B0E and the global operator delete.
 
 #include "ascii_string.h"
 
@@ -28,22 +33,22 @@ private:
 	char m_pad[0x1C];
 };
 
-class Rva0044B27F : public GameSlot
+class LANGameSlot : public GameSlot
 {
 public:
-	Rva0044B27F(const Rva0044B27F &other);
-	virtual ~Rva0044B27F();
+	LANGameSlot(const LANGameSlot &other);
+	virtual ~LANGameSlot();
 
 private:
-	LANPlayer m_1AC;
-	AsciiString m_1C8;
-	int m_1CC;
+	LANPlayer m_user;				// +0x1AC
+	AsciiString m_serial;				// +0x1C8
+	unsigned int m_lastHeard;			// +0x1CC
 };
 
-Rva0044B27F::Rva0044B27F(const Rva0044B27F &other) :
+LANGameSlot::LANGameSlot(const LANGameSlot &other) :
 	GameSlot(other),
-	m_1AC(other.m_1AC),
-	m_1C8(other.m_1C8),
-	m_1CC(other.m_1CC)
+	m_user(other.m_user),
+	m_serial(other.m_serial),
+	m_lastHeard(other.m_lastHeard)
 {
 }
