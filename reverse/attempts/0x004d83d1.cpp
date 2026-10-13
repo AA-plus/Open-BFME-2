@@ -1,4 +1,6 @@
 // ?onEnter@TurretAIIdleState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.97 date=2026-10-13
+// ?onEnter@TurretAIIdleState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.93 date=2026-10-05
 // ?onEnter@TurretAIIdleState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.9 date=2026-10-04
@@ -104,7 +106,7 @@ class TurretStateMachine : public StateMachine
 {
 public:
 	TurretAI *getTurretAI() const { return m_turretAI; }
-private:
+public:
 	unsigned char m_pad18[0x3C - 0x18];
 	TurretAI *m_turretAI; // +0x3C
 };
@@ -129,7 +131,13 @@ protected:
 class TurretState : public State
 {
 protected:
-	TurretAI *getTurretAI() const { return ((TurretStateMachine *)getMachine())->getTurretAI(); }
+	TurretAI *getTurretAI() const { return ((TurretStateMachine *)m_machine)->m_turretAI; }
+};
+
+class Rva004D839A
+{
+public:
+	void rva004D839A();
 };
 
 class TurretAIIdleState : public TurretState
@@ -137,7 +145,6 @@ class TurretAIIdleState : public TurretState
 public:
 	virtual StateReturnType onEnter();
 	virtual StateReturnType update();
-	void resetIdleScan();
 private:
 	unsigned char m_pad1C[0x20 - 0x1C];
 	UnsignedInt m_nextIdleScan; // +0x20
@@ -188,7 +195,7 @@ StateReturnType TurretAIIdleState::onEnter()
 			ai->friend_setTurretSync(TURRET_INVALID);
 	} // ai doesn't exist if the object was just created this frame.
 
-	resetIdleScan();
+	((Rva004D839A *)this)->rva004D839A();
 
 	return frameToSleepTime(getTurretAI()->friend_getNextIdleMoodTargetFrame(), m_nextIdleScan);
 }
