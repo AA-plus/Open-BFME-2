@@ -1,70 +1,78 @@
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromTopFast@@UAE_NPAVAnimateWindow@@@Z
-// partial score=0.93 date=2026-10-13
-// cl: /FIzh_ascii.h /Ireference/shims/bfme2_ascii_zh /Ireference/shims/bfme2_ascii /G7 /arch:SSE /O1 /Oy- /MD /EHsc /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS /DBFME_MODULE_NO_MPO /DZH_EMIT_POOL_GLUE /Ireference/shims/bfmerendobj /Ireference/shims/debugvtable /Ireference/shims/sweep /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/bfmeanimobj /Ireference/shims/indexbuffercount /Ireference/shims/bfmecaps /Ireference/shims/bfmehcanim /Ireference/shims/bfmemapper /Ireference/shims/meshmatdesclayout /Ireference/shims/bfmeshader /Ireference/shims/bfmecpudetect /Ireference/shims/bfmepool /Ireference/open-bfme-1/Code/GameEngine/Include/Precompiled /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameNetwork /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWAudio /Ireference/shims/bfmealloc /Ireference/shims/bfmehashtable /Ireference/shims/bfmelist /Ireference/shims/asciistring_downloadmanager /Ireference/shims/stlp_nodealloc /Ireference/shims/asciistring_thin /ICode/GameEngine/Source/Common /Ireference/shims/w3droadbuffer /Ireference/shims/bfmeterraintracks /ICode/Libraries/Include/Lib /Ireference/shims
-// stlport
-//
-// ?reverseAnimateWindow@ProcessAnimateWindowSlideFromTopFast@@UAE_NPAVAnimateWindow@@@Z,
-// retail 0x005C61EE, 234 bytes. TopFast reverse: slide the window back up
-// toward its start position, snapping and finishing on arrival, otherwise
-// moving and easing the velocity near the end. Sibling of the rowed
-// SlideFromRight reverse (same TU family, includes and donor idioms);
-// Y-axis mirror with the start-position finish test. BFME2 facts
-// (all retail-measured):
-// - AnimateWindow accessors are header-inline (direct field traffic, no
-//   calls); only getVel is out-of-line (rowed 0x005C5046).
-// - winSetPosition is the rowed 0x00313A9E member; timeGetTime rides the
-//   winmm import.
-// - Slowdown state lives on the process object (maxVel at +0x4, threshold
-//   at +0xC, speed-up ratio at +0x14); the min() clamp over -maxVel.y is
-//   the comiss/jbe/movaps idiom under /arch:SSE.
-
-#include "PreRTS.h"
-#include "GameClient/ProcessAnimateWindow.h"
-#include "GameClient/AnimateWindowManager.h"
-#include "GameClient/GameWindow.h"
-#include "GameClient/Display.h"
-
+// partial score=0.99 date=2026-10-13
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromTopFast@@UAE_NPAVAnimateWindow@@@Z
-Bool ProcessAnimateWindowSlideFromTopFast::reverseAnimateWindow(AnimateWindow *animWin)
+// partial score=0.99 date=2026-10-13
+// cl: /O1 /arch:SSE /G6 /Oy- /MD /ICode/Libraries/Include/Lib
+//
+// Retail 0x005C61EE (234B, ret 4): TopFast reverse. 234/234 size-exact in
+// SlideTopUpdate.cpp next to the rowed SlideFromTop update (0x005C6106,
+// prev-row end == start). Sole wall: pure xmm0<->xmm1 swap in the slowdown
+// block (retail slowed-value in xmm0 with zero in xmm1; this TU computes
+// slowed in xmm1 with zero in xmm0). Tried, all neutral (same 234 swap):
+// clamp operand order both ways, else 0.0f-x vs unary minus, mul operand
+// order both ways, out copy-then-update (worse: size mismatch).
+// Structure that closed everything else: startPos struct copy (own homes
+// [ebp-0xc/-8], x dead), cur in scalar regs (no home), vel home [ebp-0x14],
+// endPos struct copy (x dead-stored to startX home), setVel via out struct
+// (vel.x self-copy), setFinished BEFORE winSetPosition in finish branch.
+// Next lever: what pins slowed to xmm0 (first xmm value takes xmm0? named
+// bound local? different mul spelling?).
+struct Coord2D;
+struct RvaTopVelocity { float x,y; };
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
+class GameWindow { public: int winSetPosition(int,int); };
+class AnimateWindow {
+public:
+ Coord2D getVel();
+ void setVel(RvaTopVelocity value) { m_velocity=value; }
+ void *vptr; unsigned delay; ICoord2D start,end,current,rest;
+ GameWindow *window; RvaTopVelocity m_velocity;
+ unsigned startTime,endTime; int animType; bool needsFinish,finished;
+};
+extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime();
+class ProcessAnimateWindowSlideFromTopFast {
+public:
+ virtual ~ProcessAnimateWindowSlideFromTopFast();
+ virtual void initAnimateWindow(AnimateWindow*);
+ virtual void initReverseAnimateWindow(AnimateWindow*,unsigned);
+ virtual bool updateAnimateWindow(AnimateWindow*);
+ virtual bool reverseAnimateWindow(AnimateWindow*);
+ virtual void setMaxDuration(unsigned);
+ RvaTopVelocity maxVel; int slowThreshold; float slowRatio,speedRatio;
+};
+bool ProcessAnimateWindowSlideFromTopFast::reverseAnimateWindow(AnimateWindow *a)
 {
-	if (!animWin)
-		return TRUE;
-	if (animWin->isFinished())
-		return TRUE;
-
-	if (timeGetTime() < animWin->getStartTime())
-		return FALSE;
-
-	GameWindow *win = animWin->getGameWindow();
-	if (!win)
-		return TRUE;
-
-	ICoord2D curPos = animWin->getCurPos();
-	ICoord2D startPos = animWin->getStartPos();
-	Coord2D vel = animWin->getVel();
-	curPos.y += (Int)vel.y;
-
-	if (curPos.y < startPos.y)
-	{
-		animWin->setFinished(TRUE);
-		win->winSetPosition(curPos.x, startPos.y);
-		return TRUE;
-	}
-
-	win->winSetPosition(curPos.x, curPos.y);
-	animWin->setCurPos(curPos);
-
-	ICoord2D endPos = animWin->getEndPos();
-	Real slowedY;
-	if (endPos.y - curPos.y <= m_slowDownThreshold)
-		slowedY = vel.y * m_speedUpRatio;
-	else
-		slowedY = -m_maxVel.y;
-	if (slowedY < -m_maxVel.y)
-		slowedY = -m_maxVel.y;
-	Coord2D slowedVel;
-	slowedVel.x = vel.x;
-	slowedVel.y = slowedY;
-	animWin->setVel(slowedVel);
-	return FALSE;
+ if(!a) return true;
+ if(a->finished) return true;
+ unsigned startTime=a->startTime;
+ if(timeGetTime()<startTime) return false;
+ GameWindow *win=a->window;
+ if(!win) return true;
+ union { ICoord2D position; RvaTopVelocity velocity; } scratch;
+ ICoord2D startPos=a->start;
+ int curX=a->current.x;
+ int curY=a->current.y;
+ typedef void (AnimateWindow::*VelocityOutput)(RvaTopVelocity*);
+ (a->*reinterpret_cast<VelocityOutput>(&AnimateWindow::getVel))(&scratch.velocity);
+ curY+=(int)scratch.velocity.y;
+ if(curY<startPos.y) {
+  a->finished=true;
+  win->winSetPosition(curX,startPos.y);
+  return true;
+ }
+ win->winSetPosition(curX,curY);
+ a->current.x=curX; a->current.y=curY;
+ ICoord2D endPos=a->end;
+ float slowed;
+ if(endPos.y-curY<=slowThreshold)
+  slowed=scratch.velocity.y*speedRatio;
+ else
+  slowed=-maxVel.y;
+ if(slowed<-maxVel.y)
+  slowed=-maxVel.y;
+ RvaTopVelocity out;
+ out.x=scratch.velocity.x;
+ out.y=slowed;
+ a->setVel(out);
+ return false;
 }
