@@ -27,3 +27,20 @@ void *__stdcall Rva000A7976Create(const _STL::pair<const AsciiString, NoCaseTree
 	_STL::_Construct((_STL::pair<const AsciiString, NoCaseTreeValue4> *)(block + 4), *src);
 	return block;
 }
+
+class Rva000427195
+{
+public:
+	void *rva000A7976(const _STL::pair<const AsciiString, NoCaseTreeValue4> *src);
+};
+
+// ICF-folded twin of Rva000A7976Create above (same 37 bytes at 0x000A7976):
+// the member spelling ignores its receiver, so its stack frame matches the
+// stdcall spelling exactly, including the callee-cleaned return.
+void *Rva000427195::rva000A7976(const _STL::pair<const AsciiString, NoCaseTreeValue4> *src)
+{
+	char *block = _STL::allocator<char>::allocate(0xC, 0);
+	*(int *)block = 0;
+	_STL::_Construct((_STL::pair<const AsciiString, NoCaseTreeValue4> *)(block + 4), *src);
+	return block;
+}
