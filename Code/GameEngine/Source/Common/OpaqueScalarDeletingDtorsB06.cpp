@@ -271,16 +271,16 @@ Rva00337AA8::Rva00337AA8(EmitVtableTag *)
 {
 }
 
-class Rva0033DDA1
+class ThingTemplate
 {
 public:
-	Rva0033DDA1(EmitVtableTag *);
+	ThingTemplate(EmitVtableTag *);
 public:
-	virtual ~Rva0033DDA1();
+	virtual ~ThingTemplate();
 };
 
-// ?<Rva0033DDA1::Rva0033DDA1> absent-from-retail
-Rva0033DDA1::Rva0033DDA1(EmitVtableTag *)
+// ?<ThingTemplate::ThingTemplate> absent-from-retail
+ThingTemplate::ThingTemplate(EmitVtableTag *)
 {
 }
 

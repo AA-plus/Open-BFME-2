@@ -1,5 +1,5 @@
 // cl: /EHs /MD
-// ??1Rva0033DDA1@@UAE@XZ @0x0033DDA1 713B.
+// ??1ThingTemplate@@UAE@XZ @0x0033DDA1 713B.
 // Virtual scalar destructor of the large ThingTemplate-side record holder:
 // vptr store, 20 member-dtor calls in reverse order, three ehvec array
 // teardowns, inline free-holder tails, then the rowed base dtor 0x001E3624.
@@ -55,10 +55,10 @@ private:
 	char m[8];
 };
 
-class Rva0033DDA1E14
+class AssetList
 {
 public:
-	~Rva0033DDA1E14();
+	~AssetList();
 
 private:
 	char m[0x14];
@@ -170,10 +170,16 @@ private:
 	char m_pad[0x14 - 4];
 };
 
-class Rva0033DDA1 : public Rva001E3624
+// Empty visible wrapper destructors preserve direct member calls in the parent,
+// while its unwind funclets use the native enclosing-finder destructor thunks.
+struct ArmorSetFinderView { Rva0033BD50 tree; unsigned int comparator; };
+struct WeaponSetFinderView { Rva0033BD88 tree; unsigned int comparator; };
+struct TemplateNameMapView { Rva0033BDC0 tree; unsigned int comparator; };
+
+class ThingTemplate : public Rva001E3624
 {
 public:
-	virtual ~Rva0033DDA1();
+	virtual ~ThingTemplate();
 
 private:
 	Rva0033B84ETok m_s14; // +0x14
@@ -219,24 +225,21 @@ private:
 	char m_pad354[0x358 - 0x354];
 	PtrHolder m_h358; // +0x358
 	char m_pad35C[0x364 - 0x35c];
-	Rva0033BD50 m_d364; // +0x364
-	char m_pad36C[0x370 - 0x36c];
+	ArmorSetFinderView m_d364; // +0x364
 	Rva0033D4ABVec m_v370; // +0x370
-	Rva0033BD88 m_d37c; // +0x37c
-	char m_pad384[0x388 - 0x384];
+	WeaponSetFinderView m_d37c; // +0x37c
 	Rva0025742CTree m_t388; // +0x388
 	Rva0033D00ATree m_t394; // +0x394
-	Rva0033BDC0 m_d3a0; // +0x3a0
-	char m_pad3A8[0x3ac - 0x3a8];
+	TemplateNameMapView m_d3a0; // +0x3a0
 	Rva0026E1A6 m_m3ac; // +0x3ac
 	PtrHolder m_h3b8; // +0x3b8
 	char m_pad3BC[0x3c4 - 0x3bc];
-	Rva0033DDA1E14 m_e3c4[2]; // +0x3c4
+	AssetList m_e3c4[2]; // +0x3c4
 	PtrHolder m_h3ec; // +0x3ec
 	char m_pad3F0[0x3f8 - 0x3f0];
 	PtrHolder m_h3f8; // +0x3f8
 };
 
-Rva0033DDA1::~Rva0033DDA1()
+ThingTemplate::~ThingTemplate()
 {
 }

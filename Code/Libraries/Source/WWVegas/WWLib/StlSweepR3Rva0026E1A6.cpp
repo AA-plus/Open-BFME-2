@@ -14,5 +14,5 @@ template Rva0026E1A6Tree::~_Rb_tree();
 
 // Native0026E1F75B tail-forwards unchanged ECX to the owned56B tree
 // destructor0026E1A6; original wrapper owner/name/lifetime role unknown.
-struct Rva0026E1F7TreeCleanupForward {void cleanup();};
-void Rva0026E1F7TreeCleanupForward::cleanup() {reinterpret_cast<Rva0026E1A6Tree*>(this)->~Rva0026E1A6Tree();}
+struct LocomotorMapView { Rva0026E1A6Tree tree; ~LocomotorMapView(); };
+LocomotorMapView::~LocomotorMapView() {}

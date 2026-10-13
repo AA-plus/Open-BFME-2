@@ -5858,7 +5858,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00810BDC,24,.rdata,string,??_C@_0BF@KMAIIKAM@No?5Body?5allowed?5here?$AA@,,literal,,0,1
 0x00810BF4,24,.rdata,string,??_C@_0BH@HCOMHGKK@Only?5Body?5allowed?5here?$AA@,,literal,,0,1
 0x00810C0C,64,.rdata,global,?g_00C10C0C@@3QBUFieldParse@@B,,unowned,,0,1
-0x00810C4C,20,.rdata,vtable,??_7Rva0033DDA1@@6B@,,literal,,0,1
+0x00810C4C,20,.rdata,vtable,??_7ThingTemplate@@6B@,,literal,,0,1
 0x00810C60,316,.rdata,global,?g_prereqFieldParse@@3QBUFieldParse@@B,,unowned,,0,1
 0x00810D9C,12,.rdata,vtable,??_7ProjectileStreamUpdate@@6B@,,literal,??_7ProjectileStreamUpdate@@6B@;??_7Rva0033EEC9@@6BRva0033EEC9_B2@@@,0,2
 0x00810DA8,56,.rdata,vtable,??_7ProjectileStreamUpdate@@6BBehaviorModuleBase@@@,,literal,??_7ProjectileStreamUpdate@@6BBehaviorModuleBase@@@;??_7Rva0033EEC9@@6BRva0024A797@@@,0,2
