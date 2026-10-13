@@ -14,8 +14,11 @@
 class Rva005E67FE { public: Rva005E67FE(void *); virtual ~Rva005E67FE(); void *held; };
 class Rva005E683EMid { public: void fwd(int,int); };
 class Rva005CE804Observer { public: virtual ~Rva005CE804Observer() {} virtual void onBuildingChanged(); };
-class Rva005CE21C { public: void clear(); };
-class Rva005CE236 { public: Rva005CE236():p(0){} ~Rva005CE236() { ((Rva005CE21C*)this)->clear(); } void *p; };
+// Use the complete owning destructor provided by ThrowingNewHelpers.cpp.
+// Its 26-byte retail body at5CE21C supersedes this view's thin clear wrapper.
+class Rva005E893E;
+class Rva005CE236 {public:Rva005CE236():m_p(0){}__declspec(noinline) ~Rva005CE236();void reset(Rva005E893E*);Rva005E893E*m_p;};
+typedef char Rva005CE236SizeCheck[(sizeof(Rva005CE236)==4)?1:-1];
 struct FwdArg { char pad[0x1c]; int id; };
 class Rva005CE804 : public Rva005E67FE, public Rva005CE804Observer {
  public: Rva005CE804(void*,int,int,int,int,FwdArg*); virtual ~Rva005CE804(); virtual void onBuildingChanged();
