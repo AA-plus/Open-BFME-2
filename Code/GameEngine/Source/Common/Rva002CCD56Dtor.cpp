@@ -1,10 +1,12 @@
-// ??1Rva002CC20E@@UAE@XZ
-// partial score=0.8397814207650274 date=2026-10-13
-// ??1Rva002CC20E@@UAE@XZ
-// partial score=0.8397814207650274 date=2026-10-10
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Ireference/shims/subsystem_bfme2 /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /Ireference/open-bfme-1/game/GameEngine/Include /Ireference/open-bfme-1/game/GameEngine/Include/Precompiled
+// stlport
+// ??1Rva002CCD56@@UAE@XZ @0x002CCD56 225B. Dedicated TU: the matched ctor
+// Rva002CC20ECtor.cpp keeps its own BfmeE16 views/flags. Emitted under the
+// ledger pin name the scalar deleting dtor 0x002CD5E0 calls. R1/S2 stacked
+// equal-arm receiver on both vector end() calls closes the teardown order.
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Ireference/shims/subsystem_bfme2 /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /Ireference/open-bfme-1/game/GameEngine/Include /Ireference/open-bfme-1/game/GameEngine/Include/Precompiled
 // New complete teardown lead for native2CCD56..2CCE37 (225B).
-// Keep existing ctor's neutral Rva002CC20E owner/vtable spelling. Native and
+// Keep existing ctor's neutral Rva002CCD56 owner/vtable spelling. Native and
 // WB BB2EC0 establish base SubsystemInterface plus two4-byte pointer vectors
 // atC/18 and null-guarded virtual slot0/flag0 followed by global delete.
 // Element class names/layouts remain unknown; the element view asserts only
@@ -19,18 +21,57 @@
 // Existing vtable symbol resolution does not verify generated table entries.
 // stlport
 #include <stdlib.h>
-namespace _STL{void __cdecl free(void*);}
+namespace _STL
+
+{
+ void __cdecl free(void*);
+ 
+}
 #define free _STL::free
 #include <vector>
 #undef free
 typedef bool Bool;
 #include "subsystem_interface.h"
-class RvaVector{public:void**erase(void**,void**);};
-class Rva002CCD56Element{public:virtual ~Rva002CCD56Element();};
-class Rva002CC20E:public SubsystemInterface{public:virtual ~Rva002CC20E();_STL::vector<void*> vec0C,vec18;};
-Rva002CC20E::~Rva002CC20E(){
- for(unsigned i=0;i<vec0C.size();++i){Rva002CCD56Element*e=(Rva002CCD56Element*)vec0C[i];if(e)::delete e;}
- ((RvaVector*)&vec0C)->erase(vec0C.begin(),vec0C.end());
- for(unsigned i=0;i<vec18.size();++i){Rva002CCD56Element*e=(Rva002CCD56Element*)vec18[i];if(e)::delete e;}
- ((RvaVector*)&vec18)->erase(vec18.begin(),vec18.end());
+class RvaVector
+
+{
+ public:void**erase(void**,void**);
+ 
+}
+;
+class Rva002CCD56Element
+
+{
+ public:virtual ~Rva002CCD56Element();
+ 
+}
+;
+class Rva002CCD56:public SubsystemInterface
+
+{
+ public:virtual ~Rva002CCD56();
+ _STL::vector<void*> vec0C,vec18;
+ 
+}
+;
+Rva002CCD56::~Rva002CCD56()
+
+{
+ for(unsigned i=0;i<vec0C.size();++i)
+ 
+ {
+  Rva002CCD56Element*e=(Rva002CCD56Element*)vec0C[i];
+  if(e)::delete e;
+  
+ }
+ ((RvaVector*)&vec0C)->erase(vec0C.begin(),((&(vec0C)) ? (vec0C) : (vec0C)).end());
+ for(unsigned i=0;i<vec18.size();++i)
+ 
+ {
+  Rva002CCD56Element*e=(Rva002CCD56Element*)vec18[i];
+  if(e)::delete e;
+  
+ }
+ ((RvaVector*)&vec18)->erase(vec18.begin(),((this) ? (vec18) : (vec18)).end());
+ 
 }
