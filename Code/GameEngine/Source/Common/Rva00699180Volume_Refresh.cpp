@@ -197,9 +197,7 @@ void MilesAudioManager::GlobalVolumeData::rva000522DF(float volume)
 	refreshAll();
 }
 
-// ?rva000521F4@GlobalVolumeData@MilesAudioManager@@QAEXM@Z retail 0x000521F4 235B.
-// Smoothed m_scale setter (banked 221B, see reverse/attempts/0x000521f4.cpp);
-// ramp members +0xAC..+0xC4 above are kept for its recovery.
+// rva000521F4 (smoothed m_scale ramp, 235B) is defined at the end of this file.
 
 void MilesAudioManager::GlobalVolumeData::setVolumes(float volume, unsigned char flags)
 {
@@ -305,4 +303,52 @@ void MilesAudioManager::GlobalVolumeData::setGlobalSystemVolume(int idx, float v
 		return;
 	g_00DB3F64[idx] = value;
 	Rva0005244ALoop(idx);
+}
+
+static __forceinline float volLerp(const float &from, const float &to, float t) { return (from - to) * t + to; }
+
+void MilesAudioManager::GlobalVolumeData::rva000521F4(float volume)
+{
+	if (m_rampActive)
+	{
+		float acc = volume * 0.001f + m_rampAccum;
+		m_rampAccum = acc;
+		if (m_rampRate >= acc)
+		{
+			float t = acc / m_rampRate;
+			m_scale = volLerp(m_rampTarget, m_rampBase, t);
+		}
+		else
+		{
+			acc -= m_rampRate;
+			if (m_rampLimit >= acc)
+			{
+				m_scale = m_rampTarget;
+			}
+			else
+			{
+				acc -= m_rampLimit;
+				if (m_rampDivisor >= acc)
+				{
+					float t = acc / m_rampDivisor;
+					m_scale = volLerp(m_rampBase, m_rampTarget, t);
+				}
+				else
+				{
+					m_scale = m_rampBase;
+					m_rampActive = 0;
+				}
+			}
+		}
+		float s = m_scale;
+		float v;
+		if (0.0f > s)
+			v = 0.0f;
+		else if (s > 1.0f)
+			v = 1.0f;
+		else
+			v = s;
+		m_scale = v;
+		refreshAll();
+	}
 }

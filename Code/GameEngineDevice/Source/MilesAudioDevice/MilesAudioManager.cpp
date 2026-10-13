@@ -5529,3 +5529,110 @@ void MilesAudioManager::rva0005AEDD(int type, Rva0005A084Vector *output)
         }
     }
 }
+
+// Look direction from the camera to the first corner, in the WB shape (a copy of
+// the camera position, the corner subtracted in place, then the squared length):
+// the struct form puts lookDir.z in xmm0 and the squared length in xmm2 as retail
+// does; the plain component expressions swap those registers.
+struct MicVec : public Coord3D {
+    MicVec(const Coord3D &c) { x = c.x; y = c.y; z = c.z; }
+    void sub(const Coord3D &c) { x -= c.x; y -= c.y; z -= c.z; }
+    float lenSqr() const { return x * x + y * y + z * z; }
+};
+
+// WorldBuilder twin MilesAudioManager::recalculateMicrophone (0x78A8C0):
+// pulls the listener from the camera toward the ground, faces it along the
+// camera's ground heading and scales +0x8C by the shortest corner edge.
+void MilesAudioManager::recalculateMicrophone(void)
+{
+    const MicrophoneSettings *settings = &m_audioSettings->m_microphoneSettings[m_at678];
+    m_at6AB = false;
+    Coord3D cameraPos;
+    cameraPos.x = 0.0f;
+    cameraPos.y = 0.0f;
+    cameraPos.z = 0.0f;
+    slot105(&cameraPos);
+    Rva0005276C corners;
+    slot106(&corners);
+    if (m_cameraPos == cameraPos && ((Rva00051CF1 *)m_corners)->rva00051CF1((Rva00051CF1 &)corners))
+        return;
+    *(Rva0005276C *)m_corners = corners;
+    m_cameraPos = cameraPos;
+
+    MicVec lookDir(cameraPos);
+    lookDir.sub(m_corners[0].m_pos);
+    float lengthSqr = lookDir.lenSqr();
+    float fraction;
+    if (lengthSqr * settings->m_at04 >= settings->m_at14) {
+        float dist = sqrtf(lengthSqr);
+        fraction = settings->m_at10 / dist;
+    } else if (lengthSqr <= settings->m_at0C)
+        fraction = 1.0f;
+    else if (lengthSqr * settings->m_at04 <= settings->m_at0C) {
+        float dist = sqrtf(lengthSqr);
+        fraction = settings->m_at08 / dist;
+    } else
+        fraction = settings->m_at00;
+
+    {
+        Coord3D scaled;
+        scaled.x = lookDir.x * fraction;
+        scaled.y = lookDir.y * fraction;
+        scaled.z = lookDir.z * fraction;
+        Coord3D mic;
+        mic.x = cameraPos.x - scaled.x;
+        mic.y = cameraPos.y - scaled.y;
+        mic.z = cameraPos.z - scaled.z;
+        if (m_corners[0].m_valid) {
+            m_micPos.x = (m_corners[0].m_pos.x - mic.x) * settings->m_at18 + mic.x;
+            m_micPos.y = (m_corners[0].m_pos.y - mic.y) * settings->m_at18 + mic.y;
+            m_micPos.z = mic.z;
+        } else {
+            m_micPos = mic;
+        }
+    }
+    if (lookDir.x != 0.0f || lookDir.y != 0.0f) {
+        m_micDir.x = -lookDir.x;
+        m_micDir.y = -lookDir.y;
+        m_micDir.z = 0.0f;
+        m_micDir.Normalize();
+    }
+    if (m_listener) {
+        AIL_set_3D_orientation(m_listener, m_micDir.x, m_micDir.y, -m_micDir.z, 0.0f, 0.0f, -1.0f);
+        AIL_set_3D_position(m_listener, m_micPos.x, m_micPos.y, -m_micPos.z);
+    }
+
+    {
+        Coord3D delta;
+        delta.x = cameraPos.x - m_micPos.x;
+        delta.y = cameraPos.y - m_micPos.y;
+        delta.z = cameraPos.z - m_micPos.z;
+        reinterpret_cast<GlobalVolumeData *>(m_volumeData[m_at678])->rva0005213E(settings, &delta);
+    }
+
+    float shortest = g_Va00BBDA30;
+    for (int i = 1; i < 5; ++i) {
+        int next = i + 1;
+        if (next == 5)
+            next = 1;
+        if (m_corners[i].m_valid && m_corners[next].m_valid) {
+            const AudioAreaCorner &a = m_corners[i];
+            const AudioAreaCorner &b = m_corners[next];
+            float ex = a.m_pos.x - b.m_pos.x;
+            float ey = a.m_pos.y - b.m_pos.y;
+            float edgeSqr = ex * ex + ey * ey;
+            if (shortest > edgeSqr)
+                shortest = edgeSqr;
+        }
+    }
+    if (shortest >= settings->m_at3C)
+        m_at8C = 0.0f;
+    else if (shortest <= settings->m_at44)
+        m_at8C = 1.0f;
+    else
+    {
+        float dist = sqrtf(shortest);
+        m_at8C = (settings->m_at38 - dist) / (settings->m_at38 - settings->m_at40);
+    }
+}
+
