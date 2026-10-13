@@ -1,6 +1,7 @@
 // ?rva004ACF1D@RousingSpeechUpdate@@QAEXXZ
 // partial score=0.83 date=2026-10-01
-// cl: /O1 /DNDEBUG /MD /arch:SSE
+// cl: /O1 /DNDEBUG /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
+// stlport
 // ?rva004ACF1D@RousingSpeechUpdate@@QAEXXZ retail 0x004ACF1D (89 bytes): the
 // RousingSpeechUpdate twin of the matched GloriousChargeUpdate list helper
 // 0x004AD613 (walks the +0x88 ObjectID list clearing condition bit 6*32+9 and
@@ -11,6 +12,9 @@
 // Tried: reference or pointer local for the list, continue form, while loop,
 // object and iterator declared at function scope, a forceinline Object member
 // for the clear-and-zero.
+#include "../../../Common/GameLogicObjectLookupView.h"
+#define _STLP_NO_EXCEPTIONS 1
+#include <hash_map>
 class Drawable;
 class Rva0010CConditionBits
 {
@@ -25,10 +29,6 @@ public:
 	}
 private:
 	unsigned int m_words[20];
-};
-enum ObjectID
-{
-	INVALID_ID = 0
 };
 enum KindOfType
 {
@@ -53,16 +53,20 @@ static __forceinline void clearModelConditionBit(Object *object, int bit)
 		object->rva0028AE6D();
 	}
 }
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-	unsigned int getFrame() const { return m_frame; }
-private:
-	unsigned char m_pad[0x40];
-	unsigned int m_frame; // +0x40
-};
 extern GameLogic *TheGameLogic;
+namespace {
+typedef _STL::hash_map<ObjectID, Object *, _STL::hash<int>, _STL::equal_to<ObjectID> > ObjectPtrHashVF;
+}
+inline Object *GameLogic::findObjectByID(ObjectID id)
+{
+	if (id == 0)
+		return 0;
+	ObjectPtrHashVF &m = *(ObjectPtrHashVF *)((char *)this + 0xB4);
+	ObjectPtrHashVF::iterator it = m.find(id);
+	if (it == m.end())
+		return 0;
+	return (*it).second;
+}
 class Rva00270619
 {
 public:
