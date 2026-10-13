@@ -15,6 +15,8 @@ class GameWindow
 public:
     WinInstanceData *winGetInstanceData();
     int winGetWindowId();
+    bool winIsHidden(); unsigned winGetStatus();
+    char prefix[0x48]; const class Image *image;
 };
 class ControlBar
 {
@@ -174,4 +176,75 @@ void Rva005C349D::rva005C349D()
   Rva005C349DButtonData *data=static_cast<Rva005C349DButtonData *>(GadgetButtonGetData(window));
   PlaySound(data && data->enabled ? "Gui_PalantirCommandButtonClick":"Gui_PalantirCommandButtonDisabledClick");
  } else if(state==1 || state==3) PlaySound("Gui_PalantirCommandButtonClick");
+}
+
+// WB15574B0 names ParasiticInGameCommandButton::Impl::Update in its own
+// source. Native5C36F3..5C38EF RET0 independently proves window0C/objectID10,
+// progress14/count18 and command options1C/override44/countF8; WB offsets
+// differ and are not imported. The one-pass state block preserves priority
+// while producing retail's shared constant-assignment POP tail. Natural
+// static key initialization owns guardE065B0; its exact parent EH graph
+// places the 13-byte reset at7A08F0, replacing the old manual global clearer.
+class Rva000B3FD0Empty {public:void rva000B3FD0Empty();};
+#include "../../Common/GameLogicObjectLookupView.h"
+enum NameKeyType { NAMEKEY_INVALID=0 };
+class Module;
+class ParasiticInGameCommandButton {public:class Impl;};
+class Object {friend class ParasiticInGameCommandButton::Impl;public:bool isLocallyControlled()const;protected:Module *findModule(NameKeyType)const;};
+extern GameLogic *TheGameLogic;
+class PlayerList;extern PlayerList *ThePlayerList;
+class BfmeMemberRV {public:bool bfmeAskRV();};
+struct ParasiticPlayerView {char prefix[0x10];BfmeMemberRV *local;};
+class NameKeyGenerator {public:NameKeyType nameToKey(const char *);};extern NameKeyGenerator *TheNameKeyGenerator;
+class Overridable {public:const Overridable *friend_getFinalOverride()const;};
+class AsciiString;
+struct Rva0045A63FObject;class Rva0045A63FModule;
+Rva0045A63FModule *Rva0045A63F(const Rva0045A63FObject *,const AsciiString &);
+struct Rva0045A6D3Arg;
+class AutoAbilityBehavior {public:int isAutoAbilityCommand(const Rva0045A6D3Arg *);};
+class Rva005C7C7D {public:void rva005C7C7D(const Image *);};
+class Rva005C7C75 {public:void rva005C7C75(int);};
+class Rva005C7C5D {public:void rva005C7C5D(bool);void rva005C7C65(bool);};
+class Rva005C7C6D {public:void rva005C7C6D(int);};
+class BfmeKeyLC;int bfmeGo924B(BfmeKeyLC *);
+class BfmeObjEHA;void *bfmeGoEHAb(BfmeObjEHA *);
+bool Rva00327E0EGet(GameWindow *);void *Rva00327DD8Get(GameWindow *);
+struct ParasiticCommandView {char pad[0x1C];unsigned flags;unsigned getOptions()const{return flags;}char pad20[0x44-0x20];Overridable *override44;char pad48[0xF8-0x48];int count;};
+class ParasiticInGameCommandButton::Impl {public:void Update();char prefix[0xC];GameWindow *window;ObjectID objectID;float progress;int count;};
+void ParasiticInGameCommandButton::Impl::Update()
+{
+ reinterpret_cast<Rva000B3FD0Empty *>(this)->rva000B3FD0Empty();
+ ParasiticCommandView *cmd=static_cast<ParasiticCommandView *>(GadgetButtonGetData(window));
+ if(!cmd)return;
+ Object *object=0;if(objectID)object=TheGameLogic->findObjectByID(objectID);
+ reinterpret_cast<Rva005C7C7D *>(this)->rva005C7C7D(window->image);
+ bool foreign=object && !object->isLocallyControlled() && reinterpret_cast<ParasiticPlayerView *>(ThePlayerList)->local->bfmeAskRV();
+ float amount=1.0f;int countValue=0;int state=0;
+ if(!window->winIsHidden()) {
+  unsigned flags=window->winGetStatus();
+  do {
+   if(flags&0x400000){state=5;break;}
+   if(flags&8){state=(cmd->getOptions()&0x10000000)?4:6;break;}
+   if(flags&0x40000000){state=7;break;}
+   if(Rva00327E0EGet(window)){state=2;break;}
+   state=((flags&0x1000000)|0x800000)>>23;
+  }while(false);
+  if(!foreign){amount=bfmeGo924B(reinterpret_cast<BfmeKeyLC *>(window))*.01f;countValue=reinterpret_cast<int>(bfmeGoEHAb(reinterpret_cast<BfmeObjEHA *>(window)));}
+ }
+ reinterpret_cast<Rva005C7C75 *>(this)->rva005C7C75(state);
+ progress=amount;count=countValue;
+ if(foreign)return;
+ Module *module=0;
+ if(object) {
+  if(cmd->override44)module=reinterpret_cast<Module *>(Rva0045A63F(reinterpret_cast<Rva0045A63FObject *>(object),*reinterpret_cast<const AsciiString *>(reinterpret_cast<const char *>(cmd->override44->friend_getFinalOverride())+0x10)));
+  if(!module) {
+   static NameKeyType key=TheNameKeyGenerator->nameToKey("AutoAbilityBehavior");
+   module=object->findModule(key);
+  }
+ }
+ bool automatic=false;
+ if(state && module && static_cast<unsigned char>(reinterpret_cast<AutoAbilityBehavior *>(module)->isAutoAbilityCommand(reinterpret_cast<const Rva0045A6D3Arg *>(cmd))))automatic=true;
+ reinterpret_cast<Rva005C7C5D *>(this)->rva005C7C5D(automatic);
+ reinterpret_cast<Rva005C7C5D *>(this)->rva005C7C65(cmd->count>0);
+ reinterpret_cast<Rva005C7C6D *>(this)->rva005C7C6D(reinterpret_cast<int>(Rva00327DD8Get(window)));
 }

@@ -26,9 +26,9 @@ unsigned int g_Va00E063C8;
 // statics through E06574 share this owner. The old four-byte definition was
 // insufficient for the caller offsets; the view reserves their full storage.
 MainMenuOnlineState g_mainMenuOnlineState;
-extern unsigned int g_Va00E065B0;
-// g_Va00E065B0: matched references place it at VA 0xe065b0 (zero-filled .bss).
-unsigned int g_Va00E065B0;
+// E065B0 is the compiler-owned static-initializer guard in
+// ParasiticInGameCommandButton::Impl::Update. Its exact parent EH graph
+// supplies the reset at7A08F0 in Rva005C33DDWindowNotification.cpp.
 extern unsigned int g_Va00E065DC;
 // g_Va00E065DC: matched references place it at VA 0xe065dc (zero-filled .bss).
 unsigned int g_Va00E065DC;
@@ -89,11 +89,6 @@ unsigned int Rva0079D3AAClearFlag(void)
 unsigned int Rva0079FB9CClearFlag(void)
 {
 	return g_mainMenuOnlineState.flags &= 0xFFFFFFFEu;
-}
-
-unsigned int Rva007A08F0ClearFlag(void)
-{
-	return g_Va00E065B0 &= 0xFFFFFFFEu;
 }
 
 unsigned int Rva007A0C2AClearFlag(void)

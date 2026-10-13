@@ -11841,7 +11841,6 @@ name,address,notes
 ?rva005C3427@Rva005C3427@@QAEXXZ,0x005C3427,address-derived callee of matched slot 0x005C358E; retail jmp rel32 targets 0x005C3427; Ghidra FUN bounds 44 bytes; thiscall on the +0x08 object 0 arg(s) ret; callee body remains unclaimed; no named identity inferred
 ?rva005C3453@Rva005C3453@@QAEXXZ,0x005C3453,address-derived callee of matched slot 0x005C3596; retail jmp rel32 targets 0x005C3453; Ghidra FUN bounds 74 bytes; thiscall on the +0x08 object 0 arg(s) ret; callee body remains unclaimed; no named identity inferred
 ?rva005C349D@Rva005C349D@@QAEXXZ,0x005C349D,address-derived callee of matched slot 0x005C359E; retail jmp rel32 targets 0x005C349D; Ghidra FUN bounds 118 bytes; thiscall on the +0x08 object 0 arg(s) ret; callee body remains unclaimed; no named identity inferred
-?rva005C36F3@Rva005C36F3@@QAEXXZ,0x005C36F3,address-derived callee of matched slot 0x005C392A; retail REL32 targets 0x005C36F3; Ghidra FUN bounds 508 bytes; thiscall on the +0x08 object no args ret; tail-jumped; callee body remains unclaimed; no named identity inferred
 ?rva005C4180@Obj0052B003@@QAEXH@Z,0x005C4180,thiscall callee of range loop 0x0052B003 (REL32 at 0x0052B013); body unrecovered; address name
 ?rva005C4B26@Rva005C41C9@@QAEEXZ,0x005C4B26,tail callee of Rva005C41C9::v17
 ?rva005C4C69@Rva005C4C69@@QAEXXZ,0x005C4C69,address-derived callee of matched slot 0x005391A9; retail REL32 targets 0x005C4C69; Ghidra FUN bounds 44 bytes; thiscall no args ret; callee body remains unclaimed; no named identity inferred

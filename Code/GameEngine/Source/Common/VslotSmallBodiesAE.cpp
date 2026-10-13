@@ -324,12 +324,12 @@ void Rva005B023A::rva005B023A()
 	reinterpret_cast<CreateAHeroHero *>(this)->Update(0);
 }
 
-// 0x005C392A (one table, two tail jumps): the pinned 0x005C36F3 of the
+// 0x005C392A (one table, two tail jumps): the verified Impl::Update at 0x005C36F3 of the
 // +0x08 object.
-class Rva005C36F3
+class ParasiticInGameCommandButton
 {
 public:
-	void rva005C36F3();
+	class Impl { public: void Update(); };
 };
 class Rva005C392A
 {
@@ -338,11 +338,11 @@ public:
 private:
 	Int m_00;
 	Int m_04;
-	Rva005C36F3 *m_08;
+	ParasiticInGameCommandButton::Impl *m_08;
 };
 void Rva005C392A::rva005C392A()
 {
-	m_08->rva005C36F3();
+	m_08->Update();
 }
 
 // 0x0051483C (table VA 0x00C65F3C): false after the rowed 0x002233A6(1) on
