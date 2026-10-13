@@ -26,9 +26,13 @@ public:
  // ?Rva00211E75::Rva00211E75 present-unmatched
  Rva00211E75(const Rva00211E75 &other) : impl(other.impl) { if (impl) ++impl->references; }
  // ?Rva00211E75::~Rva00211E75 present-unmatched
- ~Rva00211E75() { if (impl) ReleaseTreeHintRef00217D4C(impl); }
+ ~Rva00211E75();
  TargetRef00217D4C *impl;
 };
+// Out-of-line base destructor (also the link's provider for the same-named
+// copy other units call): keeps the derived dtor a tail call instead of an
+// inlined release, matching the kept copy.
+Rva00211E75::~Rva00211E75() { if (impl) ReleaseTreeHintRef00217D4C(impl); }
 class Rva00211E75Callback : public Rva00211E75 {};
 class TimedOp;
 extern TimedOp *g_timedOperationHead;
