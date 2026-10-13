@@ -1,4 +1,6 @@
 // cl: /Ireference/shims/sweep /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 /O1 /G7 /arch:SSE /DNDEBUG /MD
+// Link view first: scalar Vector3 operator* stays inline without emitting a copy that competes with retail's owners (0x00066382, 0x0007DFB3).
+#include "../../../../../reference/shims/bfme_vector3_full_link/vector3_full_link.h"
 // Retail E1669..E185E, 503B RET8, vtable BCE788 slot141. Target
 // independently proves grid3888/width3890/height3894, D4-byte cells and
 // cell+0C center/extent box, filter slot130 (208), and 24B output.

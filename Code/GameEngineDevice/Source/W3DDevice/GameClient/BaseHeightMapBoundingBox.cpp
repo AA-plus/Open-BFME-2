@@ -23,7 +23,7 @@ __forceinline Vector3 operator-(const Vector3 &a, const Vector3 &b)
 {
     return Vector3(a.X-b.X, a.Y-b.Y, a.Z-b.Z);
 }
-__forceinline Vector3 operator*(const Vector3 &a, float k)
+__declspec(dllimport) __forceinline Vector3 operator*(const Vector3 &a, float k)
 {
     return Vector3(a.X*k, a.Y*k, a.Z*k);
 }

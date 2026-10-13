@@ -59,7 +59,7 @@ public:
 	const float &operator[](int i) const { return (&X)[i]; }
 	void Set(float x, float y, float z) { X = x; Y = y; Z = z; }
 
-	friend __forceinline Vector3 operator*(const Vector3 &a, float k)
+	friend __declspec(dllimport) __forceinline Vector3 operator*(const Vector3 &a, float k)
 	{
 		return Vector3(a.X * k, a.Y * k, a.Z * k);
 	}
