@@ -1099,8 +1099,9 @@ class Rva002D3861 {public:void rva002D3861();};
 class RadarWindowOverrideSource;extern RadarWindowOverrideSource*theRadarWindowOverrideSource;
 class GameSpyBuddyMessageQueueInterface;extern GameSpyBuddyMessageQueueInterface*TheGameSpyBuddyMessageQueue;
 // WB AptMessenger.cpp:263 identifies the native E046B8 singleton.
+class AptPlayerTribute {public:static void OpenScreen();};
 class AptMessenger {public:static AptMessenger *s_instance; static void OpenScreen();};class AptInGameChat {public:static void OpenScreen(int);};
-void Rva00511730(int);void Rva004E41AB();void Rva0050EC24();void Rva0051B8EA();void ToggleControlBar(bool);
+void Rva00511730(int);void Rva004E41AB();void Rva0051B8EA();void ToggleControlBar(bool);
 unsigned Rva0030F099(bool);
 struct Rva00429276Entry;
 struct Rva00429276Holder {Rva00429276Entry*first;Rva00429276Entry*second;};
@@ -1166,7 +1167,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
  case 0x6d:{GameLogic*logic=TheGameLogic;if(logic->isInMultiplayerGame()&&!((TranslateLogicFields*)logic)->isReplay()){Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();if(local&&((BfmeMemberRV*)local)->bfmeAskRV()||!translateGlobals()->netMinPlayers)AptInGameChat::OpenScreen(0);}disp=DESTROY_MESSAGE;break;}
  case 0x6e:{GameLogic*logic=TheGameLogic;if(logic->isInMultiplayerGame()&&!((TranslateLogicFields*)logic)->isReplay()){Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();if(local||!translateGlobals()->netMinPlayers){if(((BfmeMemberRV*)local)->bfmeAskRV())AptInGameChat::OpenScreen(1);else AptInGameChat::OpenScreen(4);}}disp=DESTROY_MESSAGE;break;}
  case 0x6c:if(TheGameSpyBuddyMessageQueue){if(!AptMessenger::s_instance)AptMessenger::OpenScreen();else Rva00511730(0);}disp=DESTROY_MESSAGE;break;
- case 0x6f:{GameLogic*logic=TheGameLogic;if(logic->rva0042219()&&!((TranslateTransition*)TheTransitionHandler)->first&&!((TranslateTransition*)TheTransitionHandler)->second){if(logic->rva0023C6FD())Rva0050EC24();else Rva004E41AB();}disp=DESTROY_MESSAGE;break;}
+ case 0x6f:{GameLogic*logic=TheGameLogic;if(logic->rva0042219()&&!((TranslateTransition*)TheTransitionHandler)->first&&!((TranslateTransition*)TheTransitionHandler)->second){if(logic->rva0023C6FD())AptPlayerTribute::OpenScreen();else Rva004E41AB();}disp=DESTROY_MESSAGE;break;}
  case 0x93:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x468);m->appendIntegerArgument(2);disp=DESTROY_MESSAGE;break;}
  case 0x95:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x468);m->appendIntegerArgument(1);disp=DESTROY_MESSAGE;break;}
  case 0x94:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x468);m->appendIntegerArgument(3);disp=DESTROY_MESSAGE;break;}
