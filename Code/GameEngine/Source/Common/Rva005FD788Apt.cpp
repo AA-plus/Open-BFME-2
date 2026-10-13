@@ -164,11 +164,11 @@ struct TreeHintRef00217D4C
 // The 24-byte HUD slot has two reference handles and two Unicode strings.
 // Its zeroing constructor folds with 0x00286297; its distinct destructor is
 // 0x005FD5D4 (84 bytes including the native EH frame).
-class Rva005F4AD7
+struct Rva005F4AD7
 {
-public:
 	__forceinline Rva005F4AD7() : m_ptr(0) {}
 	~Rva005F4AD7();
+	Rva005F4AD7 &operator=(const Rva005F4AD7 &other);
 	void *m_ptr;
 };
 
