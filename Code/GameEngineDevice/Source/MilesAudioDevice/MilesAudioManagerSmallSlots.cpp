@@ -81,6 +81,7 @@ public:
 	void rva00053281();
 	void rva0005329C();
 	void rva0005DABB(Int a);
+	void rva0005DACF(const Int &a);
 	void rva0005DAE6(Int a, Int b);
 private:
 	char m_pad00[0x10];
@@ -195,4 +196,12 @@ void MilesAudioManager::rva0005DABB(Int a)
 void MilesAudioManager::rva0005DAE6(Int a, Int b)
 {
 	addOrResumeAudioEvent(reinterpret_cast<AudioEventRTS *>(a), 1, b, 0, 1);
+}
+
+// vtable 0x00BC55B0#24: the argument is an object whose first dword is the
+// event pointer; the equal-arm read keeps retail's load ahead of the constant
+// pushes.
+void MilesAudioManager::rva0005DACF(const Int &a)
+{
+	addOrResumeAudioEvent(reinterpret_cast<AudioEventRTS *>((a ? a : a)), 0, 1, 0, 1);
 }
