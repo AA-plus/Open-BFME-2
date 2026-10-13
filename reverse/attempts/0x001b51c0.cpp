@@ -1,4 +1,6 @@
 // ?rva001B51C0@SubsystemInterfaceList@@QAEXXZ
+// partial score=0.99 date=2026-10-13
+// ?rva001B51C0@SubsystemInterfaceList@@QAEXXZ
 // partial score=0.99 date=2026-10-11
 // cl: /GX /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /DNDEBUG
 // stlport
