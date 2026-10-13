@@ -1,6 +1,8 @@
 // ?MpOwnerSelectColor@AptOnlineCustomMatch@@UAE_NPAVGameSlot@@H@Z
 // partial score=0.97 date=2026-10-13
 // ?MpOwnerSelectColor@AptOnlineCustomMatch@@UAE_NPAVGameSlot@@H@Z
+// partial score=0.97 date=2026-10-13
+// ?MpOwnerSelectColor@AptOnlineCustomMatch@@UAE_NPAVGameSlot@@H@Z
 // partial score=0.97 date=2026-10-07
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -11,6 +13,8 @@
 // reference. The scope and class are named for the strings. +0x488 is the
 // screen's state.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include <map>
@@ -675,6 +679,7 @@ bool AptOnlineCustomMatch::MpOwnerSelectColor(GameSlot *slot, int color)
 	if (!TheGameSpyInfo)
 		return false;
 	GameSpyStagingRoom *room = TheGameSpyInfo->getCurrentStagingRoom();
+	_ReadWriteBarrier();
 	if (!room)
 		return false;
 
