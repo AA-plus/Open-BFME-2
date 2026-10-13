@@ -1,4 +1,6 @@
 // ?update@AIStructureCreepTactic@@UAEXXZ
+// partial score=0.93 date=2026-10-13
+// ?update@AIStructureCreepTactic@@UAEXXZ
 // partial score=0.89 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DBFME_ASCII_DTOR_DECL /MD /GX /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
@@ -36,6 +38,8 @@
 // Retail keeps one unsigned max, RVA 0x00013740 (the vendored STLport row). This unit's
 // flags (/G7 /arch:SSE) compile a different copy, and retail kept another unit's. This unit-local
 // overload keeps the inlined code and offers the link no second copy.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <stl/_algobase.h>
 namespace _STL {
 static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
@@ -48,6 +52,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <set>
 #include <vector>
 #include "ascii_string.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 extern int g_Va00DBA4E4;
 
@@ -777,9 +782,10 @@ void AIStructureCreepTactic::update()
 			return;
 		}
 		if (m_order == 0) {
-			float dx = site->m_pos.x - obj->m_pos[0];
-			float dy = site->m_pos.y - obj->m_pos[1];
-			float dz = site->m_pos.z - obj->m_pos[2];
+			Rva005ABEA2Site *s = site;
+			float dx = s->m_pos.x - obj->m_pos[0];
+			float dy = s->m_pos.y - obj->m_pos[1];
+			float dz = s->m_pos.z - obj->m_pos[2];
 			if (dz * dz + dy * dy + dx * dx > 62500.0f) {
 				if (logic->getFrame() < m_74 && m_74 != (unsigned int)-1)
 					return;
@@ -793,11 +799,12 @@ void AIStructureCreepTactic::update()
 			goto shared_tail;
 		}
 		if (!((Rva004E9378 *)m_order)->rva004E9378()
-			&& !(m_order->m_status == 0 && logic->getFrame() > m_64)
+			&& !(__vref(m_order->m_status) == 0 && logic->getFrame() > m_64)
 			&& m_order->m_status != 3) {
-			if (logic->getFrame() < m_70 && m_70 != (unsigned int)-1)
+			if (logic->getFrame() < __vref(m_70) && m_70 != (unsigned int)-1)
 				return;
 			m_70 = g_00E06420 + logic->getFrame();
+			_ReadWriteBarrier();
 			Rva005ABEA2Mask mask;
 			mask.set(3);
 			mask.set(90);
