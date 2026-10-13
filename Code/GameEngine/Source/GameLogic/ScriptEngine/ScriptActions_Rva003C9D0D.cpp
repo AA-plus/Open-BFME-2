@@ -73,7 +73,8 @@ struct Rva00045411BitSet
 	Rva00045411BitSet(int unused, int bit);	// 0x00045411
 	unsigned int m_bits[7];
 };
-extern unsigned char g_00DFEFA4StoragePrototype[28];
+template<int N> class BitFlags;
+extern BitFlags<116> KINDOFMASK_NONE;
 
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
 
@@ -149,7 +150,7 @@ class Team
 public:
 	Player *getControllingPlayer() const;			// 0x0039D7CF
 	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;	// 0x00263864
-	void rva0039DA2A(Coord3D *out) const;			// 0x0039DA2A (rowed with the hidden result pointer as an explicit argument)
+	Coord3D *rva0039DA2A(Coord3D *out) const;			// 0x0039DA2A (rowed with the hidden result pointer as an explicit argument)
 };
 
 struct BfmeWideResult
@@ -186,10 +187,11 @@ void ScriptActions::rva003C9D0D(const AsciiString &teamName, float range)
 	if (!team)
 		return;
 
-	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(&(const Coord3D &)(team->*reinterpret_cast<Coord3D (Team::*)() const>(&Team::rva0039DA2A))(), range, 0,
+	Coord3D center;
+	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(team->rva0039DA2A(&center), range, 0,
 		Rva00261409Filter(team->getControllingPlayer(), true, 2)
 			.link(&Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 7),
-				*(BfmeFixedStorage0004543D *)g_00DFEFA4StoragePrototype)), 1);
+				*(BfmeFixedStorage0004543D *)&KINDOFMASK_NONE)), 1);
 
 	Object *building;
 	while ((building = iter.next()) != 0) {

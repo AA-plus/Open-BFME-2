@@ -429,7 +429,7 @@ public:
 	int getTeamKey() const { return m_key34; }
 	Relationship getRelationship(const Team *that) const;
 	const TeamPrototype *getPrototype() const { return m_proto; }
-	void rva0039DA2A(Coord3D *out) const;
+	Coord3D *rva0039DA2A(Coord3D *out) const;
 	Bool recruitUnit(Object **recruit, Real *distSqr, Object *obj, const ThingTemplate *tTemplate, const Coord3D *teamHome);
 	Object *tryToRecruit(const ThingTemplate *tTemplate, const Coord3D *teamHome, Real maxDist, int a4, int a5, int a6);
 	Bool rva003A1542(const ThingTemplate *tTemplate, int minCount);

@@ -304,7 +304,7 @@ public:
 	Player *getControllingPlayer() const;
 	void getTeamAsAIGroup(AIGroup *group);
 	void rva0039E5B9(Coord3D *pos);
-	Coord3D rva0039DA2A() const;	// 0x0039DA2A: the team's position
+	Coord3D *rva0039DA2A(Coord3D *out) const;	// 0x0039DA2A: the team's position
 };
 
 class Parameter
@@ -881,7 +881,8 @@ void ScriptActions::Rva003C6D4FDo(Parameter *teamParm, Parameter *centerTeamParm
 	Team *centerTeam = TheScriptEngine->getTeamNamed(centerTeamParm->m_string, false);
 	if (!centerTeam)
 		return;
-	Coord3D pos = centerTeam->rva0039DA2A();
+	Coord3D pos;
+	centerTeam->rva0039DA2A(&pos);
 	float radius = radiusParm->m_real;
 	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(&pos, radius, 0,
 		&Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 0x3C),

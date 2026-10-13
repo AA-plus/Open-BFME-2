@@ -84,7 +84,7 @@ extern Rva002A8F24 *g_00DFEEF8;
 class Team
 {
 public:
-	void rva0039DA2A(Coord3D *out) const;
+	Coord3D *rva0039DA2A(Coord3D *out) const;
 };
 
 struct Rva005AA55DRecord

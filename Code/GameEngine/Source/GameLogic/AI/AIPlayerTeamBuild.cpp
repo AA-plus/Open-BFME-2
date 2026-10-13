@@ -855,7 +855,7 @@ public:
 	const AsciiString &getOwnerName() const { return m_proto == 0 ? AsciiString::TheEmptyString : m_proto->getOwnerName(); }
 	const AsciiString &getName() const { return m_proto == 0 ? AsciiString::TheEmptyString : m_proto->getName(); }
 	TeamPrototype *getPrototype() const { return m_proto; }
-	void rva0039DA2A(Coord3D *center) const;
+	Coord3D *rva0039DA2A(Coord3D *center) const;
 	__forceinline void deleteInstance() { ::delete this; }
 };
 

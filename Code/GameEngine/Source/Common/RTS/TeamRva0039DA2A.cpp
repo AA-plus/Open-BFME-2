@@ -1,6 +1,9 @@
 // cl: /DNDEBUG /MD
-// ?rva0039DA2A@Team@@QBEXPAUCoord3D@@@Z @ 0x0039DA2A 202B (ours 202B exact size/count, 0 structural, 0 register)
-// Team centroid: averages live member positions. Walks via rowed iterate_TeamMemberList 0x263864 + DLINK advance pin 0x263526 (pin 5911),
+// ?rva0039DA2A@Team@@QBEPAUCoord3D@@PAU2@@Z @ 0x0039DA2A 202B (ours 202B exact size/count, 0 structural, 0 register)
+// Team centroid: averages live member positions.
+// Explicit result-buffer ABI view: WB EF5250 and retail79DADE return the
+// result address in EAX. Callers may consume it directly or ignore it; this
+// reconciles the former void-output and aggregate-return declarations. Walks via rowed iterate_TeamMemberList 0x263864 + DLINK advance pin 0x263526 (pin 5911),
 // skips Object+0x438 bit0 dead + Object+0x94 bit0 status (TeamHasAnyObjects precedent), sums Object+0x38/0x3C/0x40 Coord3D,
 // divides by count via the 1.0f literal at 0xBBB8D8. Neighbours rva0039D9E3/rva0039DC63 share /O1 flags + 24B iterator.
 // Near miss: X accumulation operand order (retail movss sum/addss pos vs ours movss pos/addss sum, 2 insns) + global reloc;
@@ -48,14 +51,14 @@ class Team
 {
 public:
     DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
-    void rva0039DA2A(Coord3D *out) const;
+    Coord3D *rva0039DA2A(Coord3D *out) const;
     Coord3D *rva0039E9A1(Coord3D *out) const;
 private:
     unsigned char m_pad00[0x30];
     int m_slotBase30;
 };
 
-void Team::rva0039DA2A(Coord3D *out) const
+Coord3D *Team::rva0039DA2A(Coord3D *out) const
 {
     Coord3D sum;
     sum.x = 0.0f;
@@ -90,6 +93,7 @@ void Team::rva0039DA2A(Coord3D *out) const
     out->x = ox;
     out->y = oy;
     out->z = oz;
+    return out;
 }
 
 // ?rva0039E9A1@Team@@QBEPAUCoord3D@@PAU2@@Z, retail 0x0039E9A1, 63 bytes.

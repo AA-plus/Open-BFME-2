@@ -30,7 +30,7 @@ public:
 class Team
 {
 public:
-	void rva0039DA2A(Coord3D *out) const;
+	Coord3D *rva0039DA2A(Coord3D *out) const;
 };
 
 class TeamPrototype

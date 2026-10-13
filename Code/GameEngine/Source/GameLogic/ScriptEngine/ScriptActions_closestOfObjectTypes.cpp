@@ -142,7 +142,7 @@ class AIGroup;
 class Team
 {
 public:
-	void rva0039DA2A(Coord3D *center) const;	// 0x0039DA2A
+	Coord3D *rva0039DA2A(Coord3D *center) const;	// 0x0039DA2A
 	Player *getControllingPlayer() const;	// 0x0039D7CF
 	void rva0039E5B9(Coord3D *center);	// 0x0039E5B9
 	void getTeamAsAIGroup(AIGroup *group);	// 0x003A0F62
