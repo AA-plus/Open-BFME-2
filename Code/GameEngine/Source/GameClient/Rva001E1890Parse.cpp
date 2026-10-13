@@ -55,7 +55,9 @@ public:
 };
 
 extern void *__cdecl operator new(unsigned int s) throw();
-extern const char *g_00DB8DB4[];
+// Retail's FXTrigger index list at RVA 0x009B8DB4 (.data): three names and the null terminator (the next
+// list, {NONE, FRONT/RIGHT/BACK/LEFT_DESTROYED}, follows at 0x009B8DC4).
+const char *g_00DB8DB4[] = { "NONE", "CATAPULT_ROCK", "TREBUCHET_ROCK", 0 };
 
 class Rva001E1890Nugget;
 void __cdecl Rva001E1890Parse(INI *ini, void *instance, void *store, const void *user)
