@@ -1,4 +1,6 @@
 // ?rva0026A05D@AIUpdateInterface@@QAE?AW4UpdateSleepTime@@XZ
+// partial score=0.85 date=2026-10-13
+// ?rva0026A05D@AIUpdateInterface@@QAE?AW4UpdateSleepTime@@XZ
 // partial score=0.85 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include/Lib
 // ?rva0026A05D@AIUpdateInterface@@QAE?AW4UpdateSleepTime@@XZ retail
@@ -257,8 +259,6 @@ UpdateSleepTime AIUpdateInterface::rva0026A05D()
 			if (getStateMachine()->getCurrentStateID() != 13 &&
 				!((BfmeSub932C *)getStateMachine())->bfmeQuery932C()) {
 				getStateMachine()->setState(13);
-				getObject()->clearModelConditionState(61);
-				getObject()->clearModelConditionState(156);
 			}
 		} else {
 			if (getStateMachine()->getCurrentStateID() != 0) {
@@ -266,9 +266,9 @@ UpdateSleepTime AIUpdateInterface::rva0026A05D()
 				setLocomotorGoalNone();
 			}
 			obj->rva0028AD32();
-			getObject()->clearModelConditionState(61);
-			getObject()->clearModelConditionState(156);
 		}
+		getObject()->clearModelConditionState(61);
+		getObject()->clearModelConditionState(156);
 		return UPDATE_SLEEP_NONE;
 	}
 
