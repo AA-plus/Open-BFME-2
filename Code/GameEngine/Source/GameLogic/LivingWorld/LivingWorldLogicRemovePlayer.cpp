@@ -48,7 +48,8 @@ struct Rva002B488EResult {char prefix[0x54];int owner;char gap[0x20];ArmyData*da
 class Rva002BA8F1Logic {public:Rva002B488EResult*rva002B488E(int);};
 class LivingWorldPlayer {public:char prefix[0x14];int id;char gap[0x1a0];_STL::vector<int> objects;char gap2[0x200];bool lost;__forceinline bool hasLost()const{return lost;}};
 enum Rva002B7DE6ArmyID { Rva002B7DE6InvalidArmyID=-1 };
-class LivingWorldRegion {public:void rva003F2A8C(int);char prefix[0x164];_STL::vector<Rva002B7DE6ArmyID> armyIDs;};
+class Rva003F2A8C {public:void rva003F2A8C(int);};  // rowed at 0x003F2A8C
+class LivingWorldRegion {public:char prefix[0x164];_STL::vector<Rva002B7DE6ArmyID> armyIDs;};
 class LivingWorldRegionEffectsManager {public:void SyncRegion(int);};
 class Rva00DFE1C8Host {public:char prefix[0x268];LivingWorldRegionEffectsManager*effects;};
 class LivingWorldManager;extern LivingWorldManager*TheLivingWorldManager;
@@ -69,7 +70,7 @@ void LivingWorldLogic::RemovePlayer(LivingWorldPlayer*player){
     if(!best||army->data->count()>best->data->count()){best=army;newOwner=army->owner;}
    }
   }
-  ((LivingWorldRegion*)regions[i])->rva003F2A8C(newOwner);
+  ((Rva003F2A8C*)regions[i])->rva003F2A8C(newOwner);
   LivingWorldRegionEffectsManager*effects=((Rva00DFE1C8Host*)TheLivingWorldManager)->effects;effects->SyncRegion((int)regions[i]);
  }
  const _STL::vector<int>&owned=player->objects;for(unsigned i=0;i<owned.size();++i){

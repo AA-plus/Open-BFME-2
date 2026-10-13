@@ -10,10 +10,10 @@ public:
 	void thru();
 };
 
-class Rva00239105B
+class Rva0042CADDOwner
 {
 public:
-	void tail();
+	void rva0042CADD();	// rowed at 0x0042CADD
 };
 
 class Rva00239105
@@ -23,7 +23,7 @@ public:
 private:
 	char m_pad[0x18];
 	Rva00239105A *m_18;
-	Rva00239105B *m_1C;
+	Rva0042CADDOwner *m_1C;
 };
 
 // ?rva00239105@Rva00239105@@QAEXXZ
@@ -33,6 +33,6 @@ void Rva00239105::rva00239105()
 		m_18->thru();
 	}
 	if (m_1C != 0) {
-		m_1C->tail();
+		m_1C->rva0042CADD();
 	}
 }
