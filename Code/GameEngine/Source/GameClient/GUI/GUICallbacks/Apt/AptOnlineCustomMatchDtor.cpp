@@ -101,7 +101,9 @@ public:
 	Rva002B7250 m_2C; // +0x2C
 };
 
-extern Rva005A6D47 *g_Va00E063F8;
+// Bind the existing NAT datum; retain this unit's access view at use sites.
+struct NAT;
+extern NAT *TheNAT;
 extern int g_currentAptOnlineCustomMatch;
 extern int g_Va00E063F0;
 
@@ -122,6 +124,6 @@ AptOnlineCustomMatch::~AptOnlineCustomMatch()
 	--g_Va00E063F0;
 	if (g_currentAptOnlineCustomMatch == (int)this)
 		g_currentAptOnlineCustomMatch = 0;
-	if (g_Va00E063F8)
-		g_Va00E063F8->m_2C.rva002B7250((CreateAHeroData *)static_cast<Rva0059EB41 *>(this));
+	if (TheNAT)
+		((Rva005A6D47 *)TheNAT)->m_2C.rva002B7250((CreateAHeroData *)static_cast<Rva0059EB41 *>(this));
 }

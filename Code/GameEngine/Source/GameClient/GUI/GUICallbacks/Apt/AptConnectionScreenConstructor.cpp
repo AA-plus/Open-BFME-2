@@ -112,7 +112,9 @@ public:
 	char m_pad04[0x2C - 4];
 	Rva005A0B4CList m_listeners; // +0x2C
 };
-extern Rva005A6D47 *g_Va00E063F8;
+// Bind the existing NAT datum; retain this unit's access view at use sites.
+struct NAT;
+extern NAT *TheNAT;
 
 class Rva0059EB41 : public Rva002BA8F1Listener
 {
@@ -136,8 +138,8 @@ private:
 AptConnectionScreen::AptConnectionScreen(void *level)
 	: m_level(level)
 {
-	if (g_Va00E063F8) {
-		g_Va00E063F8->m_listeners.append(this);
+	if (TheNAT) {
+		((Rva005A6D47 *)TheNAT)->m_listeners.append(this);
 		{
 			FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptConnectionScreen::RedrawGrid);
 			AsciiString name("Connection::RedrawGrid");

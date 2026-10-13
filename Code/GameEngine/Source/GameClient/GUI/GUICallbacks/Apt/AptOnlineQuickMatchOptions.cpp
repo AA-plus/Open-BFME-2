@@ -102,7 +102,9 @@ class GameInfo {public:V(0)V(1)V(2)V(3)V(4)V(5)V(6)V(7)V(8)V(9)virtual void clea
 class GameSpyGameSlot:public GameSlot {public:char at44[0x18c];int rva1d0,rva1d4;};class GameSpyStagingRoom:public GameInfo {public:GameSpyGameSlot *getGameSpySlot(int);void launchGame();};
 extern GameSpyStagingRoom *TheGameSpyGame;
 class Rva005A6D47 {public:virtual void *destroy(unsigned);int rva005A8F57();void rva005A8ABF(int,const char *);};
-extern Rva005A6D47 *g_Va00E063F8;
+// Bind the existing NAT datum; retain this unit's access view at use sites.
+struct NAT;
+extern NAT *TheNAT;
 struct Rva005BA3AD {bool rva005BA3AD();};struct Rva005BA31F {int rva005BA31F();};
 class Rva00222A8BTarget {public:int invoke(void *,const char *,int,const char *,void *,void *,void *,void *);};
 class BfmeAptWindowManager;
@@ -135,11 +137,11 @@ void Rva005BB5F6::rva005BB5F6(){
    }break;}
   }return;
  }
- if(g_Va00E063F8){
-  g_Va00E063F8->rva005A8F57();
-  if(((Rva005BA3AD *)g_Va00E063F8)->rva005BA3AD()){TheGameSpyGame->startGame(0);TheGameSpyGame->launchGame();return;}
-  else if((unsigned char)((Rva005BA31F *)g_Va00E063F8)->rva005BA31F()){
-   void *memory=g_Va00E063F8?g_Va00E063F8->destroy(0):0;operator delete(memory);g_Va00E063F8=0;state=3;
+ if(TheNAT){
+  ((Rva005A6D47 *)TheNAT)->rva005A8F57();
+  if(((Rva005BA3AD *)TheNAT)->rva005BA3AD()){TheGameSpyGame->startGame(0);TheGameSpyGame->launchGame();return;}
+  else if((unsigned char)((Rva005BA31F *)TheNAT)->rva005BA31F()){
+   void *memory=TheNAT?((Rva005A6D47 *)TheNAT)->destroy(0):0;operator delete(memory);TheNAT=0;state=3;
    Rva00437F61(0,TheGameText->fetch("GUI:Error"),TheGameText->fetch("GUI:NATNegotiationFailed"),Rva0023E8D8(bind(reinterpret_cast<FunctorMethod>(&Rva005BB5F6::rva005BA39F),(FunctorTarget *)this)));
    ((Rva00222A8BTarget*)g_bfmeAptWindowManager)->invoke(movieLevel(),"CallChild",1,"CloseFoundAndReset",0,0,0,0);return;
   }
@@ -158,7 +160,7 @@ void Rva005BB5F6::rva005BB5F6(){
     for(int i=0;i<8;++i){GameSlot *slot=TheGameSpyGame->getGameSpySlot(i);if(slot&&slot->isHuman()&&((Rva004FDCE1AsciiField *)slot)->get().compareNoCase(nick)==0){((SlotFields *)slot)->profile=id;break;}}
    }else{
     int slot=TheGameSpyGame->getSlotNum(nick);
-    if(slot>=0&&slot<8&&!_strcmpi(r.unknown_e8.c_str(),"NAT")){important=true;if(g_Va00E063F8)g_Va00E063F8->rva005A8ABF(slot,r.unknown_f4.c_str());}
+    if(slot>=0&&slot<8&&!_strcmpi(r.unknown_e8.c_str(),"NAT")){important=true;if(TheNAT)((Rva005A6D47 *)TheNAT)->rva005A8ABF(slot,r.unknown_f4.c_str());}
    }
   }break;
   case 1:{important=true;UnicodeString title,body;AsciiString reason;reason.format("GUI:GSDisconReason%d",r.payload_word0.value);
@@ -509,7 +511,7 @@ void Rva005BB5F6::rva005BBF15() {
 class MapMetaData {public:char pad[0x20];int players;};class MapCache{public:const MapMetaData *findMap(AsciiString);};extern MapCache *TheMapCache;
 class Rva003821E2 {public:void assign(UnicodeString);};class Rva004FDD36AsciiField{public:void rva004FDD36(AsciiString);};
 void Rva00559FAC(int,void*);void SendStatsToOtherPlayers(GameInfo*);
-class Rva005A734B{public:char storage[0x974];Rva005A734B();};class NAT{public:void attachSlotList(GameInfo*,int,unsigned,unsigned,bool);};
+class Rva005A734B{public:char storage[0x974];Rva005A734B();};struct NAT{public:void attachSlotList(GameInfo*,int,unsigned,unsigned,bool);};
 void Rva005BB5F6::rva005BAF35(PeerResponse &resp){
  TheGameSpyGame->clear();TheGameSpyGame->enterGame();TheGameSpyGame->setSeed(resp.payload_572.words[3]);
  {GameSpyStagingRoom *game=TheGameSpyGame;int m=mode;*(bool*)((char*)game+0xff4)=true;*(int*)((char*)game+0xff8)=m;}
@@ -529,7 +531,7 @@ void Rva005BB5F6::rva005BAF35(PeerResponse &resp){
   }
  }
  SendStatsToOtherPlayers(TheGameSpyGame);matched=true;
- if(g_Va00E063F8){operator delete(g_Va00E063F8->destroy(0));g_Va00E063F8=0;}
- if(TheGameSpyGame->localSlot()>=0){g_Va00E063F8=(Rva005A6D47*)new Rva005A734B;GameSlotConnectInfo address;address.ip=TheGameSpyInfo->getLocalIP();address.port=TheGameSpyInfo->getLocalPort();*(unsigned*)((char*)TheGameSpyGame+0x38)=address.ip;*(unsigned*)((char*)TheGameSpyGame+0x3c)=*(const volatile unsigned*)&address.port;
- unsigned &transportIP=*(unsigned*)((char*)TheGameSpyGame+0x38);((NAT*)g_Va00E063F8)->attachSlotList(TheGameSpyGame,TheGameSpyGame->localSlot(),transportIP,30000,TheGameSpyGame->localSlot()==0);}
+ if(TheNAT){operator delete(((Rva005A6D47 *)TheNAT)->destroy(0));TheNAT=0;}
+ if(TheGameSpyGame->localSlot()>=0){TheNAT=(NAT*)new Rva005A734B;GameSlotConnectInfo address;address.ip=TheGameSpyInfo->getLocalIP();address.port=TheGameSpyInfo->getLocalPort();*(unsigned*)((char*)TheGameSpyGame+0x38)=address.ip;*(unsigned*)((char*)TheGameSpyGame+0x3c)=*(const volatile unsigned*)&address.port;
+ unsigned &transportIP=*(unsigned*)((char*)TheGameSpyGame+0x38);((NAT*)TheNAT)->attachSlotList(TheGameSpyGame,TheGameSpyGame->localSlot(),transportIP,30000,TheGameSpyGame->localSlot()==0);}
 }

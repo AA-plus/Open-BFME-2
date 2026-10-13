@@ -95,7 +95,7 @@ struct GameSlotConnectInfo
 	unsigned int nat;
 	unsigned short port;
 };
-class NAT { public: void processPlayerLeave(int); };
+struct NAT { public: void processPlayerLeave(int); };
 
 class GameSlot
 {
@@ -449,7 +449,9 @@ public:
 	PortNegotiationSchema m_schema; // +0x28
 };
 
-extern Rva005A6D47 *g_Va00E063F8;
+// Bind the existing NAT datum; retain this unit's access view at use sites.
+struct NAT;
+extern NAT *TheNAT;
 
 class AptConnectionScreen
 {
@@ -696,9 +698,9 @@ void AptOnlineCustomMatch::MpOwnerUpdatePlayerTooltip(GameSlot *slot)
                     break;
                 }
             }
-            if (slotIndex >= 8 || !g_Va00E063F8)
+            if (slotIndex >= 8 || !TheNAT)
                 return;
-            PortNegotiationSchema &schema = g_Va00E063F8->m_schema;
+            PortNegotiationSchema &schema = ((Rva005A6D47 *)TheNAT)->m_schema;
             if (schema.GetConnectionState((unsigned short)room->getLocalSlotNum(), slotIndex) == 3)
                 ping = (int)((Elem005DB98E *)schema.peekPing((unsigned short)room->getLocalSlotNum(), slotIndex))->rva005DB95B();
             else

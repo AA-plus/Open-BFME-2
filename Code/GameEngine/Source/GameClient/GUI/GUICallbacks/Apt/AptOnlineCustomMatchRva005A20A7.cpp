@@ -297,7 +297,9 @@ public:
 	virtual void *deleteInstance(int flags);
 };
 
-extern Rva005A6D47 *g_Va00E063F8;
+// Bind the existing NAT datum; retain this unit's access view at use sites.
+struct NAT;
+extern NAT *TheNAT;
 
 class AptConnectionScreen
 {
@@ -494,9 +496,9 @@ void AptOnlineCustomMatch::rva005A20A7()
 		::operator delete(m_connectionGrid->deleteInstance(0));
 		m_connectionGrid = 0;
 	}
-	if (g_Va00E063F8)
+	if (TheNAT)
 	{
-		::operator delete(g_Va00E063F8->deleteInstance(0));
-		g_Va00E063F8 = 0;
+		::operator delete(((Rva005A6D47 *)TheNAT)->deleteInstance(0));
+		TheNAT = 0;
 	}
 }

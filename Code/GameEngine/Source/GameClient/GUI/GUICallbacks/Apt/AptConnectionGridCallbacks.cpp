@@ -19,7 +19,9 @@ public:
 	unsigned char m_28; // +0x28
 };
 
-extern Rva005A6D47 *g_Va00E063F8;
+// Bind the existing NAT datum; retain this unit's access view at use sites.
+struct NAT;
+extern NAT *TheNAT;
 
 #include "ascii_string.h"
 
@@ -69,8 +71,8 @@ private:
 // Retail 0x005DB36A, 18 bytes: "Connection::OnRetryConnections".
 void AptConnectionScreen::OnRetryConnections(const char *unused)
 {
-	if (g_Va00E063F8)
-		g_Va00E063F8->rva005A6D47();
+	if (TheNAT)
+		((Rva005A6D47 *)TheNAT)->rva005A6D47();
 }
 
 // Retail 0x005DB630, 23 bytes. Name unknown. Refreshes all eight players.
@@ -84,7 +86,7 @@ void AptConnectionScreen::rva005DB630()
 // cell, then every player.
 void AptConnectionScreen::RedrawGrid(const char *unused)
 {
-	Rva005A6D47 *connections = g_Va00E063F8;
+	Rva005A6D47 *connections = (Rva005A6D47 *)TheNAT;
 	if (connections)
 	{
 		PortNegotiationSchema *state = (PortNegotiationSchema *)&connections->m_28;
