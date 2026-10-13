@@ -94,11 +94,13 @@ class Rva005D3C2B
 {
 public:
 	Rva005D3C2B(int level, const AsciiString &path);
+	virtual ~Rva005D3C2B();
 	// Unrowed 0x005D3CA6 (hands it the selection), pinned by address.
 	void rva005D3CA6(void *selection);
 
-	unsigned char m_pad[0x34];
+	unsigned char m_pad[0x34-4]; // the rowed virtual destructor owns the vptr
 };
+typedef char Rva005D3C2BSizeCheck[(sizeof(Rva005D3C2B) == 0x34) ? 1 : -1];
 
 // Verified visibility providers, called by the primary interface slot11.
 class Rva005D37F1 { public: void rva005D37F1(bool); };
@@ -384,7 +386,7 @@ class Rva0057873EHolder : public Rva0057873E
 {
 public:
 	Rva0057873EHolder() { m_ptr = 0; }
-	~Rva0057873EHolder() { ((Rva00578724 *)this)->clear(); }
+	__declspec(noinline) ~Rva0057873EHolder();
 };
 
 namespace StrategicHUD {
@@ -711,6 +713,19 @@ Rva00578701Holder::~Rva00578701Holder()
 	if (p)
 	{
 		p->Rva005D3731::~Rva005D3731();
+		::operator delete(p);
+	}
+}
+
+// Complete 26-byte and REL32 twin of clear at 0x00578724. Explicit qualification
+// calls the rowed virtual pointee destructor directly before global deletion.
+Rva0057873EHolder::~Rva0057873EHolder()
+{
+	Rva005D3C2B *p = m_ptr;
+	m_ptr = 0;
+	if (p)
+	{
+		p->Rva005D3C2B::~Rva005D3C2B();
 		::operator delete(p);
 	}
 }
