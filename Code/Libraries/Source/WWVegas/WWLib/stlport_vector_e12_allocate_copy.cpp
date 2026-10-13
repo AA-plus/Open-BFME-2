@@ -17,4 +17,12 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 
 #include <vector>
 struct BfmeE12 { int a[3]; };
-template class _STL::vector<BfmeE12, _STL::allocator<BfmeE12> >;
+namespace _STL { template<> vector<BfmeE12> &vector<BfmeE12>::operator=(const vector<BfmeE12> &); }
+template BfmeE12* _STL::vector<BfmeE12,_STL::allocator<BfmeE12> >::_M_allocate_and_copy<const BfmeE12*>(unsigned int,const BfmeE12*,const BfmeE12*);
+template BfmeE12* _STL::vector<BfmeE12,_STL::allocator<BfmeE12> >::_M_allocate_and_copy<BfmeE12*>(unsigned int,BfmeE12*,BfmeE12*);
+template void _STL::vector<BfmeE12,_STL::allocator<BfmeE12> >::reserve(unsigned int);
+// ?bfmeEmitstlport_vector_e12_copy_ptrs@@YAXPAUBfmeE12@@@Z present-unmatched
+void bfmeEmitstlport_vector_e12_copy_ptrs(const BfmeE12 *p)
+{
+	_STL::__copy_ptrs(p, p, (BfmeE12 *)0, _STL::__false_type());
+}
