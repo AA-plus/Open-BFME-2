@@ -1,4 +1,6 @@
 // ?update@AimWeaponBehavior@@UAE?AW4UpdateSleepTime@@XZ
+// partial score=0.9784 date=2026-10-13
+// ?update@AimWeaponBehavior@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.976 date=2026-10-13
 // Clean BFME1 cee35b7d8 AimWeaponBehaviorUpdate.cpp supplies update purpose
 // and MI hierarchy; target ctor45B226, module data45B1DD, pool45B198 and
