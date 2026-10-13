@@ -1,6 +1,8 @@
 // ?rva00104A75@Rva001041D8@@QAEXXZ
 // partial score=0.98 date=2026-10-13
 // ?rva00104A75@Rva001041D8@@QAEXXZ
+// partial score=0.98 date=2026-10-13
+// ?rva00104A75@Rva001041D8@@QAEXXZ
 // partial score=0.98 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 // ?rva00104A75@Rva001041D8@@QAEXXZ retail 0x00104A75..0x00104BDA (357 bytes,
@@ -154,8 +156,8 @@ void Rva001041D8::rva00104A75()
 		if (next >= 4)
 			next = i - 3;
 		Coord2D *innerNext = &m_inner[next];
-		Coord2D uv0;
-		uv0.x = uv->lo.x;
+		Coord2D *outerNext = &m_outer[next];
+		Coord2D uv0;		uv0.x = uv->lo.x;
 		uv0.y = uv->lo.y;
 		Coord2D uv1;
 		uv1.x = uv->hi.x;
@@ -167,7 +169,7 @@ void Rva001041D8::rva00104A75()
 		uv3.x = uv->lo.x;
 		uv3.y = uv->hi.y;
 		Rva001049C7AddTriangle(renderer, &m_outer[i], &m_inner[i], innerNext, &uv0, &uv1, &uv2);
-		Rva001049C7AddTriangle(renderer, &m_outer[i], innerNext, &m_outer[next], &uv0, &uv2, &uv3);
+		Rva001049C7AddTriangle(renderer, &m_outer[i], innerNext, outerNext, &uv0, &uv2, &uv3);
 	}
 	((Rva0011A040Target *)renderer)->rva0011A040();
 }

@@ -1,4 +1,6 @@
 // ?rva00433F7F@Rva00433F7F@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva00433F7F@Rva00433F7F@@QAEXXZ
 // partial score=0.93 date=2026-09-29
 // ?rva00433F7F@Rva00433F7F@@QAEXXZ
 // partial score=0.93 date=2026-09-29
@@ -12,7 +14,7 @@
 class GameWindow;
 
 void GadgetListBoxGetSelected(GameWindow *listbox, int *selectList);
-int Rva003253BEGet(GameWindow *window, int a, int b);
+void *GadgetListBoxGetItemData(GameWindow *window, int a, int b);
 
 class Rva00433F7F
 {
@@ -31,13 +33,13 @@ void Rva00433F7F::rva00433F7F()
 	if (m_win288 != 0)
 	{
 		GadgetListBoxGetSelected(m_win288, &sel);
-		Rva003253BEGet(m_win288, sel, 0);
+		GadgetListBoxGetItemData(m_win288, sel, 0);
 		if (sel < 0)
 		{
 			if (m_win28c != 0)
 			{
 				GadgetListBoxGetSelected(m_win28c, &sel);
-				Rva003253BEGet(m_win28c, sel, 0);
+				GadgetListBoxGetItemData(m_win28c, sel, 0);
 			}
 		}
 	}

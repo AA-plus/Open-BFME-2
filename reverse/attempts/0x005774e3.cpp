@@ -1,4 +1,6 @@
 // ??0Rva00576F48@@QAE@PAURva00577634Owner@@H@Z
+// partial score=0.98 date=2026-10-13
+// ??0Rva00576F48@@QAE@PAURva00577634Owner@@H@Z
 // partial score=0.97 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
@@ -76,7 +78,7 @@ public:
 
 class Image;
 struct Rva005D2355In;
-const Image *Rva005D2355Get(Rva005D2355In *in);
+namespace StrategicInGameUI { const Image *GetSelectionPortrait(Rva005D2355In *in); }
 
 struct TargetRef00217D4C;
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *p);
@@ -140,7 +142,7 @@ Rva00576F48::Rva00576F48(Rva00577634Owner *owner, int id)
 	const Rva0042D703PtrChaseField *chase = (const Rva0042D703PtrChaseField *)static_cast<const Rva00328A83PtrChaseField *>(m_owner14->m_inner0C->m_field04)->get();
 	if (Rva005774E3Target *target = (Rva005774E3Target *)chase->get())
 	{
-		target->slot1(Rva005D2355Get((Rva005D2355In *)m_id18));
+		target->slot1(StrategicInGameUI::GetSelectionPortrait((Rva005D2355In *)m_id18));
 		{
 			int value = m_id18;
 			Rva005773DB wrapped(&value);

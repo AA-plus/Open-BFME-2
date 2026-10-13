@@ -1,4 +1,6 @@
 // ?Rva005020CCBuildRegionDistances@@YAXXZ
+// partial score=0.97 date=2026-10-13
+// ?Rva005020CCBuildRegionDistances@@YAXXZ
 // partial score=0.9717737296260787 date=2026-10-12
 // ?Rva005020CCBuildRegionDistances@@YAXXZ
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
