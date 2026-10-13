@@ -141,3 +141,45 @@ void NAT::rva005A6D47()
 		++i;
 	} while (i < 8);
 }
+
+// ICF-folded twin of NAT::rva005A6D47 above (same 101 bytes at 0x005A6D47):
+// Rva005A6D47 mirrors the NAT members this scan reads (slot array at +8,
+// schema at +0x28), and the two NAT member calls keep their targets through
+// layout-compatible casts, so every load, call and loop matches exactly.
+class Rva005A6D47
+{
+public:
+	void rva005A6D47();
+private:
+	char pad0[8];
+	Rva005A69C0Obj **m_8;
+	int m_C;
+	int m_10;
+	int m_14;
+	char pad1[0x28 - 0x18];
+	Rva005A69C0Sub m_28;
+};
+
+void Rva005A6D47::rva005A6D47()
+{
+	if (!((NAT *)this)->rva005A6709())
+		return;
+	int i = 0;
+	do {
+		Rva005A69C0Obj *o = m_8[i];
+		if (o != 0 && o->IsHuman()) {
+			int j = 0;
+			do {
+				if (i != j) {
+					Rva005A69C0Obj *o2 = m_8[j];
+					if (o2 != 0 && o2->IsHuman()) {
+						if (m_28.rva005DBC2E(i, j))
+							((NAT *)this)->reconnectPlayers(i, j, 1);
+					}
+				}
+				++j;
+			} while (j < 8);
+		}
+		++i;
+	} while (i < 8);
+}
