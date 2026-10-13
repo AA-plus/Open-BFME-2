@@ -31,3 +31,15 @@ Rva000F0F2B::Rva000F0F2B()
 	m_value60 = 20.0f;
 	m_flag64 = false;
 }
+
+class Rva000F0F19 : public Rva000EFA4E
+{
+public:
+	Rva000F0F19();
+};
+
+Rva000F0F19::Rva000F0F19()
+{
+	*(const void *const **)this = Rva000F0F2BDispatchTable;
+	initialize();
+}
