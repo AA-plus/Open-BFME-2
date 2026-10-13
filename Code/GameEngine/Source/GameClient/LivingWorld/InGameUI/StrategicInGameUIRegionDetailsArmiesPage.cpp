@@ -1,27 +1,48 @@
 // The complete native parents and associative EH code/data graphs prove
 // the naturally emitted handlers recorded with this unit. Each has one
 // primary owner and its full 10-byte extent.
-// cl: /O1 /G7 /MD /EHsc /Ireference/shims/bfme2_ascii
+// cl: /O1 /G7 /MD /EHsc /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// stlport
 // Native9E1B4E..9E1B9A complete76B. WB15F0DD0 names PopulateIconSlots.
 // Existing42-byte Update shares this one partial class view; no class layout inferred beyond observed fields.
 // Prior false-boundary refusal used a VA interpretation; direct native call
 // 9E1BA3 targets9E1B4E and this RVA begins push ECX.
 
 #include "unicode_string.h"
+#include <vector>
+struct Rva005E1BD5Owner;
+class Rva005E1BD5 {public:Rva005E1BD5(Rva005E1BD5Owner*,void*);virtual ~Rva005E1BD5();private:char storage[0x20];};
+struct TargetRef00217D4C {void *vtable;int refs;};
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C*);
+struct Rva005E1E9BElement {
+ Rva005E1BD5 *ptr;
+ Rva005E1E9BElement(Rva005E1BD5*p):ptr(p){if(ptr)++((TargetRef00217D4C*)ptr)->refs;}
+ Rva005E1E9BElement(const Rva005E1E9BElement&o):ptr(o.ptr){if(ptr)++((TargetRef00217D4C*)ptr)->refs;}
+ ~Rva005E1E9BElement();
+};
+// The existing STL element name is a storage view of this counted handle.
+struct RegionArmyIconRef {
+ Rva005E1BD5 *ptr;
+ RegionArmyIconRef(Rva005E1BD5 *p):ptr(p){if(ptr)++((TargetRef00217D4C*)ptr)->refs;}
+ ~RegionArmyIconRef(){if(ptr)ReleaseTreeHintRef00217D4C((TargetRef00217D4C*)ptr);}
+ operator const Rva005E1E9BElement &() const { return *(const Rva005E1E9BElement*)this; }
+};
+namespace _STL { template<> inline __declspec(noinline) __declspec(nothrow) void _Construct<Rva005E1E9BElement,Rva005E1E9BElement>(Rva005E1E9BElement *p,const Rva005E1E9BElement &v) { new(p) Rva005E1E9BElement(v); } }
+
 class Rva005E19CAInterface;
 class Rva005EFF60 {public:void rva005EFF60(int);};
 class Rva005EF3CE {public:int rva005EF3CE(int);};
 class Rva005E1B41Primary {public:void rva005E1AB6(int);};
 namespace StrategicInGameUI {class RegionDetailsArmiesPage {public:class Impl;};}
-class StrategicInGameUI::RegionDetailsArmiesPage::Impl {public:class ArmyIcon;friend class ArmyIcon;void PopulateIconSlots();void Update();void rva005E19CA(int);private:
- Rva005E19CAInterface *ui;char unknown04[8];char clip[8];Rva005E1B41Primary **first,**last;char unknown1C[4];bool dirty;char unknown21[3];int selected;int pending;
+class StrategicInGameUI::RegionDetailsArmiesPage::Impl {public:class ArmyIcon;friend class ArmyIcon;void CreateArmyIcons();void PopulateIconSlots();void Update();void rva005E19CA(int);private:
+ Rva005E19CAInterface *ui;void *region,*owner;char clip[8];_STL::vector<Rva005E1E9BElement> icons;bool dirty;char unknown21[3];int selected;int pending;
 };
 void StrategicInGameUI::RegionDetailsArmiesPage::Impl::PopulateIconSlots(){
- int count=last-first;
+ int count=icons.size();
  Rva005EFF60 *view=(Rva005EFF60*)clip;
  view->rva005EFF60(count);
  for(int index=0;index<count;++index){
-  Rva005E1B41Primary *icon=first[index];
+  Rva005E1B41Primary *icon=(Rva005E1B41Primary*)icons[index].ptr;
   icon->rva005E1AB6(((Rva005EF3CE*)view)->rva005EF3CE(index));
  }
  dirty=false;
@@ -111,4 +132,32 @@ void StrategicInGameUI::RegionDetailsArmiesPage::Impl::ArmyIcon::OnRegionDetails
 }
 void StrategicInGameUI::RegionDetailsArmiesPage::Impl::ArmyIcon::OnRegionDetailsArmiesIconSlotRollOver(Rva005EEF2F &){
  ((Rva005E1928 *)static_cast<Rva005E197E *>(this))->rva005E1928();
+}
+
+// WB15F0A60 lines333..346. The player owns the army vector at +1B8.
+// Keep its vector reference and the visible intrusive copy helper: both affect
+// retail register allocation while push_back stays out of line.
+struct Rva005E1ED2Record {int a,b;};
+struct Rva005E1ED2Catalog {char pad00[0x40];Rva005E1ED2Record *first,*last;};
+class Rva00318C32Ret;
+class Rva00318C79Owner {public:Rva00318C32Ret *rva00318C32();char pad00[0x78];Rva005E1ED2Catalog *catalog;};
+struct Rva005E1ED2Player {char pad00[0x1B8];_STL::vector<Rva00318C79Owner*> armies;};
+struct Rva0059E647World {char pad00[0x98];Rva005E1ED2Player *player;};
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
+void StrategicInGameUI::RegionDetailsArmiesPage::Impl::CreateArmyIcons(){
+ Rva005E1ED2Player *player=((Rva0059E647World*)TheLivingWorldLogic)->player;
+ if(player){
+  _STL::vector<Rva00318C79Owner*> &armies=player->armies;
+  Rva00318C79Owner **const end=armies.end();
+  for(Rva00318C79Owner **i=armies.begin();i!=end;++i){
+   Rva00318C79Owner *army=*i;
+   if(army->rva00318C32()!=region) continue;
+   Rva005E1ED2Catalog *catalog=army->catalog;
+   if(!catalog || !(unsigned)(catalog->last-catalog->first)) continue;
+   icons.push_back(RegionArmyIconRef(new Rva005E1BD5((Rva005E1BD5Owner*)this,army)));
+   if(icons.size()>=4)break;
+  }
+  dirty=!icons.empty();
+ }
 }
