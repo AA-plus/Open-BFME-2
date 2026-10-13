@@ -1,4 +1,6 @@
 // ?Visibility_Check@SimpleSceneClass@@UAEXPAVCameraClass@@@Z
+// partial score=0.9947 date=2026-10-14
+// ?Visibility_Check@SimpleSceneClass@@UAEXPAVCameraClass@@@Z
 // partial score=0.99061 date=2026-10-13
 // ?Visibility_Check@SimpleSceneClass@@UAEXPAVCameraClass@@@Z
 // partial score=0.99 date=2026-10-12
@@ -73,9 +75,10 @@ public:
 };
 typedef char SceneVisibilityCameraSize[(sizeof(SceneVisibilityCamera) == sizeof(CameraClass)) ? 1 : -1];
 
+struct VisIter : public MultiListIterator<RenderObjClass> { VisIter(MultiListClass<RenderObjClass> *l) : MultiListIterator<RenderObjClass>(l) {} MultiListObjectClass *cur() { return Current_Object(); } };
 void SimpleSceneClass::Visibility_Check(CameraClass *camera)
 {
-	MultiListIterator<RenderObjClass> changed(&_bfme_changed_objects);
+	VisIter changed(&_bfme_changed_objects);
 	for (; !changed.Is_Done(); changed.Next()) {
 		RenderObjClass *obj = changed.Peek_Obj();
 		volatile int outY, outX, outLevel;
@@ -105,9 +108,9 @@ void SimpleSceneClass::Visibility_Check(CameraClass *camera)
 			obj->Set_Visible((int)this, _bfme_visibility_token);
 		}
 	}
-	MultiListIterator<RenderObjClass> forced(&_bfme_forced_objects);
+	VisIter forced(&_bfme_forced_objects);
 	for (; !forced.Is_Done(); forced.Next()) {
-		RenderObjClass *forcedObj = forced.Peek_Obj();
+		char *fc = (char *)forced.cur(); fc = fc ? fc + -8 : 0; RenderObjClass *forcedObj = (RenderObjClass *)fc;
 		visible->Add(forcedObj);
 	}
 }

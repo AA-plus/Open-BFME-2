@@ -1,12 +1,8 @@
-// ?rva00343DD8@@YA_NPAVRva00343F8A@@PAX@Z
-// partial score=0.98513 date=2026-10-13
-// ?rva00343DD8@@YA_NPAVRva00343F8A@@PAX@Z
-// partial score=0.98513 date=2026-10-13
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
 // Fresh target-backed corrections: invert owned3430A3 result; unsigned byte
 // projection after a logical shift reproduces the native full-word flag read.
 // Original entry-point name and flag meanings remain unproved.
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
-// ?rva00343DD8@@YA_NPAVRva00343F8A@@PAX@Z @0x00343DD8 269B.
+// ?rva00343DD8@@YA_NPAX0@Z @0x00343DD8 269B.
 // Goal-path test (cdecl, the taken arm of the landed 0x343F8A dispatcher):
 // fetches the current weapon via the rowed Object::getCurrentWeapon, folds a
 // per-slot flag byte through the vslot-137 predicate plus three +0x108/0x112
@@ -101,38 +97,35 @@ public:
 
 bool rva003430A3(Object*,Object*,Weapon*);
 
-bool rva00343DD8(Rva00343F8A *st, void *arg)
+bool rva00343DD8(void *state, void *arg)
 {
+	Rva00343F8A *st = (Rva00343F8A *)state;
 	StateMachine *mach = st->m_machine;
 	Object *self = mach->m_obj14;
 	Object *goal = mach->getGoalObject();
 	const Weapon *weapon = self->getCurrentWeapon(0);
-	if (goal == 0) return true; else {
-	bool b=false;
-	if (weapon == 0) {return b;} else {
-	bool e = true;
-	Rva00343DD8Slot *slot=self->m_slot258;
-	if(slot) e=slot->rva00343DD8Slot137();
-	if ((self->m_flags4->m_pad[0x108] & 4) != 0)
-		e = true;
-	if ((self->m_flags4->m_pad[0x112] & 0x10) != 0)
-		e = true;
-	if (self->m_aux274 != 0) {
-		if ((self->m_aux274->m_flags->m_pad[0x108] & 0x80) != 0
-			|| (self->m_aux274->shifted() & 1) == 0)
+	if (goal == 0) return true;
+	if (weapon != 0) {
+		bool e = true;
+		Rva00343DD8Slot *slot=self->m_slot258;
+		bool b=false;
+		if(slot) e=slot->rva00343DD8Slot137();
+		if ((self->m_flags4->m_pad[0x108] & 4) != 0)
 			e = true;
+		if ((self->m_flags4->m_pad[0x112] & 0x10) != 0)
+			e = true;
+		if (self->m_aux274 != 0) {
+			if ((self->m_aux274->m_flags->m_pad[0x108] & 0x80) != 0
+				|| (self->m_aux274->shifted() & 1) == 0)
+				e = true;
+		}
+		if (!weapon->m_field4->rva0047A699()
+			&& weapon->m_field4->get() == 0
+			&& e
+			&& !goal->isSignificantlyAboveTerrain())
+			b = !rva003430A3(self, goal, (Weapon*)weapon);
+		if (!weapon->rva002C95F0() && b) return true;
+		if (!weapon->rva002C95F0() && !weapon->isWithinAttackRange(self,goal,0.0f,1)) return true;
 	}
-
-
-	if (!weapon->m_field4->rva0047A699()
-		&& weapon->m_field4->get() == 0
-		&& e
-		&& !goal->isSignificantlyAboveTerrain())
-		b = !rva003430A3(self, goal, (Weapon*)weapon);
-
-	if (!weapon->rva002C95F0() && b) return true; if (!weapon->rva002C95F0() && !weapon->isWithinAttackRange(self,goal,0.0f,1)) return true; return false;
-
-}
-
-}
+	return false;
 }
