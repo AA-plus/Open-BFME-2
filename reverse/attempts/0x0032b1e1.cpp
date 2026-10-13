@@ -1,6 +1,8 @@
 // ?isPlayerDefaultTeam@SidesList@@QAE_NPAVTeamsInfo@@@Z
+// partial score=0.93 date=2026-10-13
+// ?isPlayerDefaultTeam@SidesList@@QAE_NPAVTeamsInfo@@@Z
 // partial score=0.8 date=2026-10-12
-// cl: /Ireference/shims/bfme2_ascii
+// cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii
 //
 // ?findSideInfo@SidesList@@QAEPAVSidesInfo@@VAsciiString@@PAH@Z @0x0032B0A9 150B
 // SidesList::findSideInfo: linear search of m_sides for the entry whose dict
@@ -113,7 +115,7 @@ bool SidesList::isPlayerDefaultTeam(TeamsInfo *t)
 	AsciiString tname = t->getDict()->getAsciiString(TheKey_teamName.get());
 	if (tname.startsWith("team"))
 	{
-		const char *rest = tname.str() + 4;
+		const char * volatile rest = tname.str() + 4;
 		for (int j = 0; j < m_numSides; j++)
 		{
 			AsciiString pname = m_sides[j].getDict()->getAsciiString(g_00DBDE24.get());
