@@ -35,6 +35,12 @@ public:
 	basic_string<CharT, Traits, Alloc> &assign(
 			const basic_string<CharT, Traits, Alloc> &that);
 
+	basic_string<CharT, Traits, Alloc> &operator=(
+			const basic_string<CharT, Traits, Alloc> &that)
+	{
+		return assign(that);
+	}
+
 	template <class InputIter>
 	basic_string<CharT, Traits, Alloc> &_M_assign_dispatch(InputIter first,
 			InputIter last, const __false_type &);
@@ -59,6 +65,10 @@ basic_string<CharT, Traits, Alloc>::assign(
 
 template basic_string<char, char_traits<char>, allocator<char> > &
 basic_string<char, char_traits<char>, allocator<char> >::assign(
+		const basic_string<char, char_traits<char>, allocator<char> > &);
+
+template basic_string<char, char_traits<char>, allocator<char> > &
+basic_string<char, char_traits<char>, allocator<char> >::operator=(
 		const basic_string<char, char_traits<char>, allocator<char> > &);
 
 }
