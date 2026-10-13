@@ -6,7 +6,16 @@
 // The real move wrapper and Coord2D normalization are visible so MSVC
 // can prove that their coordinate addresses do not escape and reuse slots.
 #include <list>
-#include "Coord3D.h"
+// class-gate: allow Coord3D visible planar helpers need this TU-scoped method view;
+// adding Normalize2D to the canonical declaration changes TeamTemplateInfo's
+// verified restore order. Native 00005AB2 is the existing Normalize2D owner.
+// Layout remains the canonical three floats; no shared header or ABI changes.
+struct Coord3D
+{
+    float x, y, z;
+    float GetLength2D() const;
+    float Normalize2D();
+};
 #include "Coord2D.h"
 template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
@@ -52,6 +61,7 @@ class AICommandInterface
 public:
 	virtual void aiDoCommand(const AICommandParms *parms);
 	void aiIdle(CommandSourceType cmdSource);
+	void rva0036F6A7(float angle, CommandSourceType cmdSource);
 	// Zero Hour's aiGoProne (0x0036F400: AICMD 0x1D copying the DamageInfo
 	// into the command block at +0x3C), rowed under a placeholder whose
 	// parameter class Rva003427DD is that DamageInfo.
@@ -71,6 +81,7 @@ class AIUpdateInterface
 public:
 	void *getValidSurfaces() const { return m_validSurfaces; }
 	void aiMoveToPosition(const Coord3D *pos,CommandSourceType cmd) { m_commands.aiMoveToPosition(pos,cmd); }
+	AICommandInterface *getCommands() { return &m_commands; }
 
 private:
 	char m_pad0[0x20];
@@ -146,6 +157,7 @@ class AIGroup
 public:
 	Bool getMinMaxAndCenter(Coord2D *minimumBounds, Coord2D *maximumBounds, Coord3D *groupCenter);
 	void groupScatter(CommandSourceType);
+	void groupRotateFiringarc(const Coord3D *pos, CommandSourceType cmdSource);
 
 private:
 	virtual ~AIGroup();
@@ -264,3 +276,59 @@ void AIGroup::groupScatter(CommandSourceType cmdSource)
 #include <math.h>
 inline float Coord2D::length() const {return (float)sqrt(x*x+y*y);}
 inline void Coord2D::normalize(){float len=length();if(len!=0.0f){x/=len;y/=len;}}
+
+// Both levels must remain visible: the length helper proves that the address
+// passed to Normalize2D does not escape. This lets MSVC eliminate the initial
+// coordinate stores before the subtraction in groupRotateFiringarc.
+inline float Coord3D::GetLength2D() const
+{
+	float xValue = x;
+	float yValue = y;
+	return (float)sqrt(xValue * xValue + yValue * yValue);
+}
+
+__declspec(noinline) inline float Coord3D::Normalize2D()
+{
+	float len = GetLength2D();
+	float scale = 1.0f / len;
+	x *= scale;
+	y *= scale;
+	return len;
+}
+
+// The canonical coordinate is a plain layout view. WB EEBCC0 shows a copied
+// three-float local with an empty destructor, then sub and GetLengthSqrd2D.
+struct RotateCoord : Coord3D
+{
+	RotateCoord(const Coord3D &p) { x = p.x; y = p.y; z = p.z; }
+	~RotateCoord() {}
+	void sub(const Coord3D *p) { x -= p->x; y -= p->y; z -= p->z; }
+	float GetLengthSqrd2D() const { return x * x + y * y; }
+};
+
+float ACos(float x);
+
+// Native 003706C8..00370795 (205 bytes), WB EEBCC0, AIGroup.cpp:4256.
+void AIGroup::groupRotateFiringarc(const Coord3D *pos, CommandSourceType cmdSource)
+{
+	for (std::list<Object *>::iterator i = m_memberList.begin(); i != m_memberList.end(); ++i)
+	{
+		Object *obj = *i;
+		if (!obj)
+			continue;
+		AIUpdateInterface *ai = obj->getAI();
+		if (!ai)
+			continue;
+		RotateCoord dir(*pos);
+		dir.sub(obj->getPosition());
+		if (dir.GetLengthSqrd2D() < 1.0f)
+			continue;
+		dir.Normalize2D();
+		float angle;
+		if (dir.y < 0.0f)
+			angle = -ACos(dir.x);
+		else
+			angle = ACos(dir.x);
+		ai->getCommands()->rva0036F6A7(angle, cmdSource);
+	}
+}
