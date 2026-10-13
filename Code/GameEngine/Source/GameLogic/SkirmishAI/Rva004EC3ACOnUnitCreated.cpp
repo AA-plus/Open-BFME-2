@@ -96,7 +96,6 @@ public:
 };
 extern GameLogic *TheGameLogic;
 extern Rva002A8F24 *g_00DFEEF8;
-extern int g_Va00DBA4E4;
 enum ObjectStatusTypes;
 class ThingTemplate
 {
