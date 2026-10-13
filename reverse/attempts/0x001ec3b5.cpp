@@ -1,4 +1,6 @@
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
+// partial score=0.986 date=2026-10-13
+// ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
 // partial score=0.965 date=2026-10-11
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
 // cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
@@ -7,8 +9,8 @@
 #include <string.h>
 struct BfmePod172 {int a[43];};
 struct BfmeAssignRecord172 {int a[43];};
-class CarryoverUnit {public: virtual ~CarryoverUnit();};
-class Rva0037DF2C {public:Rva0037DF2C(); ~Rva0037DF2C(){reinterpret_cast<CarryoverUnit*>(this)->CarryoverUnit::~CarryoverUnit();} char data[172];};
+
+class CarryoverUnit {public: CarryoverUnit(); virtual ~CarryoverUnit(); private: char m_pad[168];};
 struct Rva00291198Dest;
 class Rva00291198Host {public:void rva002910B7(Rva00291198Dest*);};
 class Rva0037EACC {public:void rva0037EACC(void*);};
@@ -28,7 +30,7 @@ void LinearCampaign::onCurrentMissionWon(){
  if(TheGameLogic){
   for(Object*o=TheGameLogic->getFirstObject();o;o=o->next){
    if((o->status&0x10)&&!(o->status&1)){
-    units.push_back(*reinterpret_cast<const BfmePod172*>(&Rva0037DF2C()));
+    units.push_back(*reinterpret_cast<const BfmePod172*>(&CarryoverUnit()));
     reinterpret_cast<Rva00291198Host*>(o)->rva002910B7(reinterpret_cast<Rva00291198Dest*>(&units.back()));
     ++units.back().a[0x94/4];
    }
@@ -41,7 +43,7 @@ void LinearCampaign::onCurrentMissionWon(){
     if(r){int j=0;void*u;
      while((u=r->rva0037E421(j))!=0){
       if(((unsigned char*)u)[0xa1]){
-       units.push_back(*reinterpret_cast<const BfmePod172*>(&Rva0037DF2C()));
+       units.push_back(*reinterpret_cast<const BfmePod172*>(&CarryoverUnit()));
        reinterpret_cast<Rva0037EACC*>(u)->rva0037EACC(&units.back());
        ++units.back().a[0x94/4];
       }++j;
@@ -60,7 +62,7 @@ void LinearCampaign::onCurrentMissionWon(){
    sciences.reserve(ps.size());
    for(_STL::vector<ScienceType>::const_iterator it=ps.begin(),end=ps.end();it!=end;++it){ScienceType s=*it;if(TheScienceStore->isScienceGrantable(s))sciences.push_back(s);}
    memset(&upgrades,0,sizeof(upgrades));
-   for(int i=0;i<1024;++i){unsigned int mask=1U<<(i&31);unsigned int index=((unsigned)i>>5)*4;if(*(unsigned int*)((char*)player+0x13c+index)&mask){const UpgradeTemplate*t=TheUpgradeCenter->rva0026EEA0(i);if(t&&t->carryover)*(unsigned int*)((char*)this+0x20+index)|=mask;}}
+   for(int i=0;i<1024;++i){unsigned int mask=1U<<((*(volatile int*)&i)&31);unsigned int index=((unsigned)(*(volatile int*)&i)>>5)*4;if(*(unsigned int*)(&((char*)player)[0x13c+index])&mask){const UpgradeTemplate*t=TheUpgradeCenter->rva0026EEA0(i);if(t&&t->carryover)*(unsigned int*)(index+((char*)this+0x20))|=mask;}}
    valueA0=player->value314;
   }
  }
