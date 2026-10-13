@@ -1,3 +1,5 @@
+// ?rva00397756@Rva00397756@@QAEXPAUIdRange@@H@Z
+// partial score=0.984 date=2026-10-13
 // ?rva00397756@Rva00397756@@QAEXPAUIdRange@@H@Z (method form; callers pass ecx; same 3B scheduler delta as cdecl attempt)
 // partial score=0.9 date=2026-10-05
 // cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
@@ -35,10 +37,10 @@ extern GameLogic *TheGameLogic;
 class Rva00397756
 {
 public:
-	void rva00397756(IdRange *range, int /*unused*/);
+	void rva00397756(IdRange *range, int arg);
 };
 
-void Rva00397756::rva00397756(IdRange *range, int /*unused*/)
+void Rva00397756::rva00397756(IdRange *range, int arg)
 {
 	ObjectID *p = range->first;
 	if (p == range->last)
@@ -47,7 +49,7 @@ void Rva00397756::rva00397756(IdRange *range, int /*unused*/)
 	do {
 		Object *obj = gameLogic->findObjectByID(*p);
 		if (obj != 0)
-			gameLogic->rva0023D0C2(obj, (int)range);
+			gameLogic->rva0023D0C2(obj, arg);
 		++p;
 	} while (p != range->last);
 }

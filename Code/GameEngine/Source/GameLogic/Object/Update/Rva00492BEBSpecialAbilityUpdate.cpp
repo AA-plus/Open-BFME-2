@@ -1,8 +1,6 @@
 // ?rva00492BEB@SpecialAbilityUpdate@@QAE?AW4UpdateSleepTime@@XZ
-// partial score=0.8 date=2026-10-13
-// ?rva00492BEB@SpecialAbilityUpdate@@QAE?AW4UpdateSleepTime@@XZ
-// partial score=0.55 date=2026-10-06
-// cl: /arch:SSE /Oy- /DNDEBUG /MD
+// /arch:SSE comes from retail region flags (0x1D8E99..0x60273F: O1/SSE/G7); the holder local is load-bearing (reads owner->m_holder once, before the null tests).
+// cl: /O1 /arch:SSE /G7 /Oy- /DNDEBUG /MD /ICode/Libraries/Include
 //
 // ?rva00492BEB@SpecialAbilityUpdate@@QAE?AW4UpdateSleepTime@@XZ @0x00492BEB 110B.
 // When the dword at +0x20 is 2, look up the id at +0x30. If that object, the
@@ -20,19 +18,15 @@ enum UpdateSleepTime
 	UPDATE_SLEEP_NONE = 0
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "Lib/Coord3D.h"
 
 class Object;
+class Thing;
 
 class Rva001E702E
 {
 public:
-	void rva001E702E(Object *obj, Coord3D *pos, int flag);
+	void rva001E702E(Thing *obj, int pos, int flag);
 };
 
 class Rva00492BEBHolder
@@ -51,6 +45,7 @@ public:
 	Rva00492BEBHolder *m_holder;
 };
 
+// class-gate: allow GameLogic only the rowed findObjectByID (0x49DC5) is called; pointer-only view
 class GameLogic
 {
 public:
@@ -78,14 +73,15 @@ UpdateSleepTime SpecialAbilityUpdate::rva00492BEB()
 	{
 		Object *owner = *(Object **)((char *)this - 8);
 		Object *found = TheGameLogic->findObjectByID(this ? m_id : m_id);
+		Rva00492BEBHolder *holder = owner->m_holder;
 		if (found != 0 && owner->m_holder != 0)
 		{
 			Coord3D pos;
 			pos.x = found->m_pos.x;
 			pos.y = found->m_pos.y;
 			pos.z = found->m_pos.z;
-			if (owner->m_holder->m_inner != 0)
-				owner->m_holder->m_inner->rva001E702E(owner, &pos, 0);
+			if (holder->m_inner != 0)
+				holder->m_inner->rva001E702E((Thing *)owner, (int)&pos, 0);
 		}
 	}
 	return SpecialAbilityUpdate::update();
