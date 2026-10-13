@@ -198,7 +198,7 @@ HRawAnimClass::~HRawAnimClass(void)
  * HISTORY:                                                                                    * 
  *   08/11/1997 GH  : Created.                                                                 * 
  *=============================================================================================*/
-void HRawAnimClass::Free(void)
+inline void HRawAnimClass::Free(void)
 {
 	if (NodeMotion != NULL) {
 		delete[] NodeMotion;
@@ -234,18 +234,7 @@ void HRawAnimClass::Free(void)
  * HISTORY:                                                                                    * 
  *   08/11/1997 GH  : Created.                                                                 * 
  *=============================================================================================*/
-bool HRawAnimClass::read_channel(ChunkLoadClass & cload,MotionChannelClass * * newchan,bool pre30)
-{
-	*newchan = W3DNEW MotionChannelClass;
-	bool result = (*newchan)->Load_W3D(cload);	
-	
-	if (result && pre30) {
-//		(*newchan)->PivotIdx += 1;
-		(*newchan)->Set_Pivot((*newchan)->Get_Pivot()+1);
-	}
-	
-	return result;
-}
+// HRawAnimClass::read_channel: exact provider and ledger rows live in HRawLoadW3D.cpp.
 
 /*********************************************************************************************** 
  * HRawAnimClass::add_channel -- Adds a motion channel to the animation                           * 
@@ -259,48 +248,7 @@ bool HRawAnimClass::read_channel(ChunkLoadClass & cload,MotionChannelClass * * n
  * HISTORY:                                                                                    * 
  *   08/11/1997 GH  : Created.                                                                 * 
  *=============================================================================================*/
-void HRawAnimClass::add_channel(MotionChannelClass * newchan)
-{
-	int idx = newchan->Get_Pivot();
-
-	switch (newchan->Get_Type())
-	{
-		case ANIM_CHANNEL_X:
-			NodeMotion[idx].X = newchan;
-			break;
-
-		case ANIM_CHANNEL_Y:
-			NodeMotion[idx].Y = newchan;
-			break;
-
-		case ANIM_CHANNEL_Z:
-			NodeMotion[idx].Z = newchan;
-			break;
-
-		case ANIM_CHANNEL_XR:
-			NodeMotion[idx].XR = newchan;
-			break;
-
-		case ANIM_CHANNEL_YR:
-			NodeMotion[idx].YR = newchan;
-			break;
-
-		case ANIM_CHANNEL_ZR:
-			NodeMotion[idx].ZR = newchan;
-			break;
-
-		case ANIM_CHANNEL_Q:
-			NodeMotion[idx].Q = newchan;
-			break;
-
-		case 15: // ANIM_CHANNEL_FADE: BFME per-pivot fade channel (value 15,
-			// BFME1 w3d_file.h; Zero Hour's enum ends at ADAPTIVEDELTA_Q).
-			// Stored at NodeMotion[idx].Fade (+0x1C), ahead of Vis.
-			NodeMotion[idx].Fade = newchan;
-			break;
-	}
-
-}
+// HRawAnimClass::add_channel: exact provider and ledger rows live in HRawLoadW3D.cpp.
 
 
 /***********************************************************************************************
@@ -315,7 +263,7 @@ void HRawAnimClass::add_channel(MotionChannelClass * newchan)
  * HISTORY:                                                                                    *
  *   1/19/98    GTH : Created.                                                                 *
  *=============================================================================================*/
-// HRawAnimClass::read_bit_channel: defined in HRawReadBitChannel.cpp (its row's unit).
+// HRawAnimClass::read_bit_channel: exact provider and ledger row live in HRawLoadW3D.cpp.
 
 
 /***********************************************************************************************
@@ -330,17 +278,7 @@ void HRawAnimClass::add_channel(MotionChannelClass * newchan)
  * HISTORY:                                                                                    *
  *   1/19/98    GTH : Created.                                                                 *
  *=============================================================================================*/
-void HRawAnimClass::add_bit_channel(BitChannelClass * newchan)
-{
-	int idx = newchan->Get_Pivot();
-
-	switch (newchan->Get_Type())
-	{
-		case BIT_CHANNEL_VIS:
-			NodeMotion[idx].Vis = newchan;
-			break;
-	}
-}
+// HRawAnimClass::add_bit_channel: exact provider and ledger rows live in HRawLoadW3D.cpp.
 
 // BFME per-pivot fade (vtable 0x007D5D24 slot 11, retail 0x0018D540): the
 // fade channel at NodeMotion[pividx].Fade blended like Get_Translation's
