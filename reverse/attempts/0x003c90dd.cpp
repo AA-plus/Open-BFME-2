@@ -1,6 +1,6 @@
 // ?doTransferTeamToPlayer@ScriptActions@@IAEXABVAsciiString@@0@Z
 // partial score=0.9877 date=2026-10-13
-// cl: /G7 /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// cl: /I. /G7 /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE
 // ScriptActions members recovered from WorldBuilder leads
 // (reverse/wb_name_leads.csv) and Zero Hour's ScriptActions.cpp; retail
 // supplies the bytes. Only declared here: members other units row
