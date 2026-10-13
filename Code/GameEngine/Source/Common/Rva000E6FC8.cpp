@@ -12,9 +12,14 @@ public:
 	void rva000E6D94(int value);
 	void rva000E6FC8();
 };
+class Rva000EC9C6
+{
+public:
+	void rva000E6D94(unsigned int value);
+};
 
 void Rva000E6FC8::rva000E6FC8()
 {
 	unsigned char flag = *((unsigned char *)TheWritableGlobalData + 0xD45);
-	rva000E6D94(flag ? 0x14 : 2);
+	((Rva000EC9C6 *)this)->rva000E6D94(flag ? 0x14 : 2);
 }

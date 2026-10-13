@@ -12,6 +12,11 @@ public:
 	void rva000E6D94(int value);
 	void rva000EA1F3();
 };
+class Rva000EC9C6
+{
+public:
+	void rva000E6D94(unsigned int value);
+};
 
 void Rva000E6FC8::rva000EA1F3()
 {
@@ -21,5 +26,5 @@ void Rva000E6FC8::rva000EA1F3()
 		value = 0x14;
 	else
 		value = globalData[0x62] != 0 ? 7 : 4;
-	rva000E6D94(value);
+	((Rva000EC9C6 *)this)->rva000E6D94((unsigned int)value);
 }

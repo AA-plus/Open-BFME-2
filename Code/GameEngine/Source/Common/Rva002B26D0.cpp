@@ -19,11 +19,17 @@
 // emits. Identity unproven: honest address-derived names; owner class
 // follows the rowed 0x318C32 pin.
 class Rva00318C32Ret;
+class Coord2D;
 class Rva00318C79Owner
 {
 public:
 	Rva00318C32Ret *rva00318C32();
 	void rva0031A591(float *pair, void *key, void *extra);
+};
+class LivingWorldArmy
+{
+public:
+	void initiateMove(const Coord2D &pos, Rva00318C32Ret *ret, int extra);
 };
 
 #include "ArmyMoveCoordinateView.h"
@@ -45,7 +51,7 @@ void Rva002B26D0::rva002B26D0(Rva00318C79Owner *owner, void *key, Rva002B2858Coo
 	if (key == 0)
 		return;
 	if (owner->rva00318C32() != key)
-		owner->rva0031A591(&pair.x, key, extra);
+		((LivingWorldArmy *)owner)->initiateMove(*(const Coord2D *)&pair.x, (Rva00318C32Ret *)key, (int)extra);
 }
 
 // Keep the established address-derived pin used by the script-action callers.

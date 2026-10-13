@@ -45,6 +45,13 @@ class Rva007FA6B4Target
 public:
 	Rva007FA6B4Target(Rva002130CFOwner *owner);
 };
+struct Rva003FA62BOwner;
+class Rva003FA62B
+{
+	char m_storage[0x14];
+public:
+	Rva003FA62B(Rva003FA62BOwner *owner);
+};
 
 struct Rva00210D1DStateView
 {
@@ -61,7 +68,7 @@ void Rva00210D1D::rva00210D1D(Rva002130CFOwner *owner)
 {
 	Rva00210D1DStateView *state = (Rva00210D1DStateView *)this;
 	state->m_264 = 0;
-	state->m_264 = new Rva007FA6B4Target(owner);
+	state->m_264 = (Rva007FA6B4Target *)new Rva003FA62B((Rva003FA62BOwner *)owner);
 }
 
 void Rva002130CF::rva002130CF(Rva002130CFOwner *owner)
