@@ -1,14 +1,11 @@
 // ?rva0039B315@ExperienceTracker@@QAEXM_N000@Z
-// partial score=0.9666967184 date=2026-10-10
-// ?rva0039B315@ExperienceTracker@@QAEXM_N000@Z
-// partial score=0.97 date=2026-10-07
+// partial score=0.96 date=2026-10-13
 // cl: /ICode/GameEngine/Source/Common /O1 /arch:SSE /DNDEBUG /MD /G7
-// ?rva0039B315@ExperienceTracker@@QAEXM_N000@Z retail 0x0039B315, 188 B.
-// Zero Hour's ExperienceTracker::addExperiencePoints shape: forward to the
-// experience sink's tracker (scaled, flags true/false; cl turns the tail
-// recursion into retail's loop), else scale by the multiplayer XP multiplier
-// (building or unit by the parent template's KindOf bit 0x108&0x80) and hand
-// everything to 0x0039B16F (unrowed; would need a pin).
+// ?rva0039B315@ExperienceTracker@@QAEXM_N000@Z @0x0039B315 188B (trial r3):
+// sink-chain LOOP (not recursion): walk m_experienceSink via findObjectByID,
+// scale per tracker, single trailing transfer 0x0039B16F on the final tracker.
+// Retail has no self-call and no loop-back before the transfer; the loop-back
+// jne targets the lookup, and null-sink breaks to MULT (not return).
 class Object;
 class ExperienceTracker;
 
@@ -76,24 +73,31 @@ private:
 void ExperienceTracker::rva0039B315(float amount, bool a, bool b, bool c, bool d)
 {
 	GameLogic *gameLogic = TheGameLogic;
-	if (m_experienceSink)
+	ExperienceTracker *tracker = this;
+	unsigned sink;
+	goto cond;
+body:
 	{
-		Object *sink = gameLogic->findObjectByID((ObjectID)m_experienceSink);
-		if (sink)
-		{
-			sink->getExperienceTracker()->rva0039B315(amount * m_experienceScalar, a, b, true, false);
-			return;
-		}
+		Object *obj = gameLogic->findObjectByID((ObjectID)sink);
+		if (!obj)
+			goto mult;
+		amount *= tracker->m_experienceScalar;
+		tracker = obj->getExperienceTracker();
+		d = false;
+		c = true;
 	}
-
+cond:
+	if ((sink = tracker->m_experienceSink))
+		goto body;
+mult:
 	float mult = 1.0f;
 	if (reinterpret_cast<BfmeGlob939D*>(gameLogic)->bfmeCall939D())
 	{
 		int player = ThePlayerList->rva002A7C0B(false);
-		if (m_parent->getTemplate()->isStructure())
+		if (tracker->m_parent->getTemplate()->isStructure())
 			mult = TheWritableGlobalData->m_multiPlayMults.getBuildingXPMult(player);
 		else
 			mult = TheWritableGlobalData->m_multiPlayMults.getUnitXPMult(player);
 	}
-	rva0039B16F(amount, a, b, c, d, mult);
+	tracker->rva0039B16F(amount, a, b, c, d, mult);
 }
