@@ -1,16 +1,13 @@
-// ??0W3DDisplay@@QAE@XZ
-// partial score=0.9886348122866895 date=2026-10-13
-template<class T> __forceinline volatile T &r1_vwrite(T &value) { return *(volatile T *)&value; }
-// ??0W3DDisplay@@QAE@XZ
-// partial score=0.97 date=2026-10-13
-// ??0W3DDisplay@@QAE@XZ
-// partial score=0.97 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+template<class T> __forceinline volatile T &r1_vwrite(T &value) { return *(volatile T *)&value; }
 // ?0W3DDisplay@@QAE@XZ, retail 0x00049DEA, 293 bytes.
+// Stores through r1_vwrite keep the member zero-stores in retail's order (R1 paired volatile
+// stores, 0x49DEA nd4 -> 2); the equal-arm receiver on m_1cc moves the XOR-EAX zero materialisation
+// after the six stores (W7-S2 r4 sweepeq2). Both are scheduling spellings, not source semantics.
 // W3DDisplay constructor (ZH W3DDisplay::W3DDisplay twin). Identity: stores vtable 0x7C3C80 whose
 // init is the W3DDisplay::init at 0x00046A50 (same +0x144 initialized byte, +0x148/+0x158 light
 // arrays, +0x168 Render2D, +0x27C debug display and the three scene globals it fills), and zeroes
-// those globals. Base constructor 0x0025D489 is the Display ctor (see W3DDisplayRva0025D2F6.cpp).
+// those globals. Base constructor 0x0025D489 is the BfmeStrVM0 ctor (see W3DDisplayRva0025D2F6.cpp).
 // Layout beyond the stores below is unmeasured and left as padding.
 namespace _STL
 
@@ -82,19 +79,19 @@ struct GlobalDataView
  
 }
 ;
-class Display
+class BfmeStrVM0
 
 {
  public:
- Display();
- virtual ~Display();
+ BfmeStrVM0();
+ virtual ~BfmeStrVM0();
  virtual void slot04();
  char data[0x13c];
  char pad140[4];
  
 }
 ;
-class W3DDisplay : public Display
+class W3DDisplay : public BfmeStrVM0
 
 {
  public:
@@ -124,7 +121,8 @@ class W3DDisplay : public Display
  
 }
 ;
-extern GlobalDataView *TheWritableGlobalData;
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
 extern void *TheScene3D;
 extern void *TheScene3DInterface;
 extern void *TheScene2D;
@@ -138,7 +136,7 @@ W3DDisplay::W3DDisplay()
  TheScene3D = 0;
  TheScene3DInterface = 0;
  TheScene2D = 0;
- m_180 = (float)TheWritableGlobalData->value28;
+ m_180 = (float)((GlobalDataView *)TheWritableGlobalData)->value28;
  for (int i = 0; i < 4; i++)
  
  {
@@ -158,7 +156,7 @@ W3DDisplay::W3DDisplay()
  m_arr1d0[i] = 0;
  for (int i = 0; i < 17; i++)
  m_arr234[i] = 0;
- r1_vwrite(m_1cc) = 0;
+ r1_vwrite((m_184 ? m_1cc : m_1cc)) = 0;
  r1_vwrite(m_278) = 0;
  m_27c = 0;
  TheRva0065CA4List = new Rva0065CA4;
