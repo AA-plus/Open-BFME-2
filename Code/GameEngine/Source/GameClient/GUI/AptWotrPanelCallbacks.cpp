@@ -222,7 +222,7 @@ public:
 
 	// Scroll layout at 0x0057B16D and stable priority sort at 0x0057B217.
 	void rva0057B16D();
-	void rva0057B217();
+	void SortItems();
 	// Rowed in Rva0057A961Apt.cpp.
 	void SetExpandButtonEnabled(bool enabled);
 	// The item list's height (unrowed 0x0057ABD0, pinned by address).
@@ -240,7 +240,7 @@ private:
 	unsigned char m_pad2c[0x30 - 0x2C];
 	_STL::list<int> items; // +0x30: pointer-sized item payloads
 	_STL::list<int>::iterator current; // +0x34
-	bool m_38; // +0x38: rva0057B217 pending
+	bool m_38; // +0x38: SortItems pending
 };
 
 // Retail 0x0057A3D7, 13 bytes: bound as "<movie>_OnClosed" (0x0057B7E5).
@@ -285,7 +285,7 @@ void StrategicHUD::ChecklistUIImpl::rva0057B499()
 {
 	SetExpandButtonEnabled(true);
 	if (m_38)
-		rva0057B217();
+		SortItems();
 	if (m_scrollBar.m_ptr != 0)
 	{
 		((AptScrollBar *)m_scrollBar.m_ptr)->rva005D49CD(true);
@@ -693,7 +693,11 @@ class Rva0057A24A {public: float rva0057A24A() const;};
 extern unsigned g_Va00E06360;
 class Rva005D3FE4 {public:void rva005D3FE4(float);};
 struct ChecklistSortItem {char prefix[0x38];float height;char pad3c[0x58-0x3c];int priority;bool enabled;int rank()const{return priority*2+(enabled?1:0);}};
-void StrategicHUD::ChecklistUIImpl::rva0057B217()
+// ?SortItems@ChecklistUIImpl@StrategicHUD@@QAEXXZ @0x0057B217 273B: renamed
+// from placeholder rva0057B217 — the WorldBuilder twin names
+// StrategicHUD::ChecklistUIImpl::SortItems at EA's own
+// StrategicHUDChecklistUIImpl.cpp (asserts at lines 1166-1167).
+void StrategicHUD::ChecklistUIImpl::SortItems()
 {
  {
   _STL::list<int> sorted;
