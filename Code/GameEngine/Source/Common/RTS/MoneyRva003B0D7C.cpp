@@ -14,7 +14,9 @@
 class AudioManager;
 extern AudioManager *TheAudio;
 extern class PlayerList *ThePlayerList;
-void *g_00E032F8;
+// 0x00A032F8 is defined once, in BfmeOwnVVDCtor.cpp.
+class StatsCollector;
+extern StatsCollector *g_00E032F8;
 
 class Rva0033F15DDwordSlot { public: void set(int); };
 
