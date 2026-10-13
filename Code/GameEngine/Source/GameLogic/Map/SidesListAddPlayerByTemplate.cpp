@@ -7,7 +7,7 @@
 // GeneralsMD SidesList.cpp (Plyr/Faction/PlyrCivilian/team/addTeam/addSide):
 // builds playerName/display/isHuman from template, team dict then side dict.
 // BFME2 changes read off retail: team dict first then side dict, returns
-// addSide index, Dict(0) ctor, display empty is g_00C0DA78, name empty is
+// addSide index, Dict(0) ctor, neutral display is UTF-16 "Neutral", name empty is
 // g_Rva0107301CEmptyString. Callees all rowed. Layout: TeamsInfoRec at +0xF44
 // as in SidesList_sidesInfo.cpp, addTeam/addSide rowed.
 
@@ -21,19 +21,28 @@ class Rva00148F5ECache
 {
 public:
 	NameKeyType get();
+	NameKeyType m_key;
+	const char *m_name;
 };
 
-extern Rva00148F5ECache g_00DBD9F4;
-extern Rva00148F5ECache g_00DBD9FC;
-extern Rva00148F5ECache g_00DBDA04;
+// Use the existing const StaticNameKey owners through the retail lazy-cache
+// view. get() reads/writes the key at +0 and reads the name pointer at +4.
+class StaticNameKey;
+extern const StaticNameKey TheKey_teamName;
+extern const StaticNameKey TheKey_teamOwner;
+extern Rva00148F5ECache TheKey_teamIsSingleton;
 extern Rva00148F5ECache g_00DBDE24;
-extern Rva00148F5ECache g_00DBDE2C;
-extern Rva00148F5ECache g_00DBDE3C;
 extern Rva00148F5ECache g_00DBDE44;
-extern Rva00148F5ECache g_00DBDE54;
-extern Rva00148F5ECache g_00DBDE4C;
 
-extern const unsigned short g_00C0DA78[];
+// Native initializers are eight-byte {0, name} caches. Their strings and
+// each code reference are independently verified in reverse/data_rows.csv.
+Rva00148F5ECache TheKey_playerIsHuman = { NAMEKEY_INVALID, "playerIsHuman" };
+Rva00148F5ECache TheKey_playerDisplayName = { NAMEKEY_INVALID, "playerDisplayName" };
+Rva00148F5ECache TheKey_playerAllies = { NAMEKEY_INVALID, "playerAllies" };
+Rva00148F5ECache TheKey_playerEnemies = { NAMEKEY_INVALID, "playerEnemies" };
+extern const unsigned short SidesListNeutralDisplayName[8] = {
+	'N', 'e', 'u', 't', 'r', 'a', 'l', 0
+};
 
 class Dict
 {
@@ -73,7 +82,7 @@ int SidesList::rva0032DE04(const AsciiString &playerTemplate)
 
 	if (playerTemplate.isEmpty()) {
 		((StringBase<char> *)&playerName)->set("");
-		playerDisplayName.set(g_00C0DA78);
+		playerDisplayName.set(SidesListNeutralDisplayName);
 		isHuman = false;
 	} else {
 		((StringBase<char> *)&playerName)->set("Plyr");
@@ -93,18 +102,18 @@ int SidesList::rva0032DE04(const AsciiString &playerTemplate)
 	((StringBase<char> *)&teamName)->concat(*(const StringBase<char> *)&playerName);
 
 	d.clear();
-	d.setAsciiString(g_00DBD9F4.get(), teamName);
-	d.setAsciiString(g_00DBD9FC.get(), playerName);
-	d.setBool(g_00DBDA04.get(), true);
+	d.setAsciiString(((Rva00148F5ECache *)&TheKey_teamName)->get(), teamName);
+	d.setAsciiString(((Rva00148F5ECache *)&TheKey_teamOwner)->get(), playerName);
+	d.setBool(TheKey_teamIsSingleton.get(), true);
 	m_teams.addTeam(&d);
 
 	d.clear();
 	d.setAsciiString(g_00DBDE24.get(), playerName);
-	d.setBool(g_00DBDE2C.get(), isHuman);
-	d.setUnicodeString(g_00DBDE3C.get(), playerDisplayName);
+	d.setBool(TheKey_playerIsHuman.get(), isHuman);
+	d.setUnicodeString(TheKey_playerDisplayName.get(), playerDisplayName);
 	d.setAsciiString(g_00DBDE44.get(), playerTemplate);
-	d.setAsciiString(g_00DBDE54.get(), AsciiString::TheEmptyString);
-	d.setAsciiString(g_00DBDE4C.get(), AsciiString::TheEmptyString);
+	d.setAsciiString(TheKey_playerAllies.get(), AsciiString::TheEmptyString);
+	d.setAsciiString(TheKey_playerEnemies.get(), AsciiString::TheEmptyString);
 
 	return addSide(&d);
 }
