@@ -4,7 +4,7 @@
 // ??0Rva001FBAD8@@QAE@XZ @0x001FBAD8 22B
 // ??0Rva001FBC8F@@QAE@XZ @0x001FBC8F 18B
 // ??0Rva001FB93D@@QAE@XZ @0x001FB93D 18B
-// ??0Rva001FC0A0@@QAE@XZ @0x001FC0A0 22B
+// ??0Rva001FC0B6@@QAE@XZ @0x001FC0A0 22B
 // Unnamed ctor initializing int at +4 to 0 and inline ObjectCreationList at +8.
 // Evidence: ret with no stack args; callee ObjectCreationList ctor 0x001F81BF rowed;
 // callers 0x001FA94B and 0x001FB93D and 0x001FBAD8 become ready; honest Rva name.
@@ -79,15 +79,15 @@ Rva001FB93D::Rva001FB93D() : m_00(0), m_08()
 {
 }
 
-class Rva001FC0A0
+class Rva001FC0B6
 {
 public:
     int m_00;
     int m_04;
     Rva001FBAD8 m_08;
-    Rva001FC0A0();
+    Rva001FC0B6();
 };
 
-Rva001FC0A0::Rva001FC0A0() : m_00(0), m_04(0), m_08()
+Rva001FC0B6::Rva001FC0B6() : m_00(0), m_04(0), m_08()
 {
 }

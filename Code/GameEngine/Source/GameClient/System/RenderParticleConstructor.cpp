@@ -128,9 +128,10 @@ struct Rva001408C0Target;
 typedef _STL::set<Rva001408C0Target*,_STL::less<Rva001408C0Target*>,_STL::allocator<Rva001408C0Target*> > AssetSet621;
 struct AssetList00208F90 {AssetSet621 prototypes;unsigned pad;bool changed;AssetList00208F90():pad(0),changed(true){} AssetList00208F90&operator<<(const AsciiString&);};
 void bfmeMergeReceiverKeys(int);
-class Rva001FC0A0 {public:Rva001FC0A0();char unknown[0x2C];};
-class Rva001FC0B6 {public:~Rva001FC0B6();};
-struct ParticleTail621 {Rva001FC0A0 contents;~ParticleTail621(){((Rva001FC0B6*)this)->Rva001FC0B6::~Rva001FC0B6();}};
+// Native parent constructs the 0x2C tail through 1FC0A0 and its EH
+// state1 destroys the same +0x94 storage through the existing 1FC0B6 owner.
+// The neutral destructor-owner spelling unifies these paired ABI views.
+class Rva001FC0B6 {public:Rva001FC0B6();~Rva001FC0B6();char unknown[0x2C];};
 class Rva001FC42D {public:void rva001FC42D(void*,void*);};
 class RenderObjClass;
 class HTreeClass;
@@ -301,7 +302,7 @@ virtual Debug*startReport(int,int,int);
 extern Debug *theDebug;
 bool bfmeRva000387C0();void _bfme_debugRecordCallsite(int);
 template<class T>Debug&operator<<(Debug&,const StringBase<T>&);
-class Rva001FC0F1:public Rva001F4C67 {public:Rva001FC0F1(const RvaSmartPtr12&,const Rva001F376E&);virtual ~Rva001FC0F1();unsigned particleID;RenderObjClass*render;HTreeClass*animation;ParticleTail621 tail;};
+class Rva001FC0F1:public Rva001F4C67 {public:Rva001FC0F1(const RvaSmartPtr12&,const Rva001F376E&);virtual ~Rva001FC0F1();unsigned particleID;RenderObjClass*render;HTreeClass*animation;Rva001FC0B6 tail;};
 Rva001FC0F1::Rva001FC0F1(const RvaSmartPtr12&system,const Rva001F376E&info)
  :Rva001F4C67(system,info),render(0),animation(0)
 {
