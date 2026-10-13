@@ -16,7 +16,7 @@ public:
 	void *allocBlock(int size);
 };
 
-Rva006DB160 *g_pChainBlockAllocator;
+class Rva006DB270; extern Rva006DB270 *g_pChainBlockAllocator;
 
 class AptIntervalTimer
 {
@@ -44,7 +44,7 @@ AptIntervalTimer::AptIntervalTimer()
 	m18 = 6;
 	m1C = 0;
 
-	void *block = g_pChainBlockAllocator->allocBlock(0x18);
+	void *block = (*(Rva006DB160 * *)&g_pChainBlockAllocator)->allocBlock(0x18);
 	m1C = block;
 
 	if (block == 0) {

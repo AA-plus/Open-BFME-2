@@ -30,7 +30,7 @@ public:
  void rva006D3C60();
 };
 class Rva006DB160 { public: void *allocBlock(int); };
-extern Rva006DB160 *g_aptPoolAllocator;
+class Rva006DB270; extern Rva006DB270 *g_pChainBlockAllocator;
 extern "C" EAStringC bfmeObjDAE[178];
 struct StringNode0070D9F0;
 extern StringNode0070D9F0 **g_00E18368;
@@ -226,7 +226,7 @@ void Rva0070B670Initialize(int bucketCount) {
   g_bfmeAptAssertAtE17734("CheckContent()","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\string\\StringPool.cpp",0x104);
   if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
  }
- g_00E18368=(StringNode0070D9F0 **)g_aptPoolAllocator->allocBlock(bucketCount*4);
+ g_00E18368=(StringNode0070D9F0 **)(*(Rva006DB160 * *)&g_pChainBlockAllocator)->allocBlock(bucketCount*4);
  memset(g_00E18368,0,bucketCount*4);
  g_00E1836C=bucketCount;
 }

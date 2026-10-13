@@ -31,7 +31,7 @@ public:
 	void freeBlock(void *block, int blockSize);
 };
 
-extern Rva006DB270 *g_pChainBlockAllocator; // 0x00E176E8
+class Rva006DB270; extern Rva006DB270 *g_pChainBlockAllocator;
 
 class Rva006DB160
 {
@@ -42,7 +42,7 @@ public:
 // Same pool instance, allocation side (companion pin to the freeBlock
 // pin above). Matched DIR32 sites place this pointer at VA 0x00E176E8; its
 // four retail bytes are zero, so it starts null.
-Rva006DB160 *g_aptPoolAllocator = 0;
+// 0x00A176E8 (g_aptPoolAllocator here before) is the allocator declared above.
 
 class EAStringC
 {
@@ -202,7 +202,7 @@ void EAStringC::Reserve(int size)
 		g_bfmeAptAssertAtE17734("uAllocateSize < 0xffff", ".\\string\\EAString.inl", 0x4D2);
 		if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
 	}
-	StringDataC *data = (StringDataC *)g_aptPoolAllocator->allocBlock(rounded);
+	StringDataC *data = (StringDataC *)(*(Rva006DB160 * *)&g_pChainBlockAllocator)->allocBlock(rounded);
 	self->m_pData = data;
 	data->m_uRefCount = 1;
 	data = self->m_pData;

@@ -15,7 +15,7 @@ public:
 	void *allocBlock(int blockSize);
 };
 
-extern Rva006DB160 *g_aptPoolAllocator;
+class Rva006DB270; extern Rva006DB270 *g_pChainBlockAllocator;
 
 struct Rva006D15B0Node
 {
@@ -28,7 +28,7 @@ struct Rva006D15B0Node
 	}
 	static void *operator new(unsigned int size)
 	{
-		return g_aptPoolAllocator->allocBlock((int)size);
+		return (*(Rva006DB160 * *)&g_pChainBlockAllocator)->allocBlock((int)size);
 	}
 	static void operator delete(void *, unsigned int) {}
 
