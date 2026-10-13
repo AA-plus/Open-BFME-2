@@ -1,4 +1,8 @@
 // ?Rva006EFBC0ObjectMemberLookup@@YAPAVAptValue@@PAV1@PBVEAStringC@@@Z
+// partial score=0.7730629595203664 date=2026-10-13
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+// ?Rva006EFBC0ObjectMemberLookup@@YAPAVAptValue@@PAV1@PBVEAStringC@@@Z
 // partial score=0.671748132 date=2026-10-09
 // cl:  /O2 /DNDEBUG /MD /EHsc
 // AptCharacterInst::objectMemberLookup. Native EFBC0..F113C code
@@ -98,9 +102,10 @@ AptValue *Rva008A4EA0MakeFloat(float);
 extern AptValue *gpUndefinedValue;
 struct BfmeM1208 {float a,b,c,d,e,f;};
 void bfmeMul1208(const BfmeM1208*,const BfmeM1208*,BfmeM1208*);
-extern BfmeM1208 lookupIdentity;
+struct BfmeQ1206 {int m_bfme00,m_bfme04,m_bfme08,m_bfme0c,m_bfme10,m_bfme14;};
+extern "C" BfmeQ1206 g_bfmeD1206;
 struct LookupMouse {char pad[0x74];int x,y;};
-extern LookupMouse *lookupMouse;
+
 struct CharacterInstance {char pad[12];struct Definition {int a,b;int frames;};Definition *definition;};
 void rva006ffc30(AptValue*,EAStringC&);
 void rva006ffce0(AptValue*,EAStringC&);
@@ -112,62 +117,63 @@ class Rva006D6500:public BfmeAptValue006DCD20 {
  static void *operator new(unsigned n){return g_pChainBlockAllocatorF4->allocBlock(n);}
  static void operator delete(void *p,unsigned n){g_pChainBlockAllocatorF4->freeBlock(p,n);}
 };
-static AptValue *lookupSingleton24;
-static AptValue *lookupSingleton25;
-static AptValue *lookupSingleton26;
-static AptValue *lookupSingleton27;
-static AptValue *lookupSingleton28;
-static AptValue *lookupSingleton29;
-static Rva006D6500 *lookupCache100;
-static Rva006D6500 *lookupCache101;
-static Rva006D6500 *lookupCache103;
-static Rva006D6500 *lookupCache104;
-static Rva006D6500 *lookupCache105;
-static Rva006D6500 *lookupCache106;
-static Rva006D6500 *lookupCache107;
-static Rva006D6500 *lookupCache108;
-static Rva006D6500 *lookupCache109;
-static Rva006D6500 *lookupCache110;
-static Rva006D6500 *lookupCache111;
-static Rva006D6500 *lookupCache112;
-static Rva006D6500 *lookupCache113;
-static Rva006D6500 *lookupCache114;
-static Rva006D6500 *lookupCache115;
-static Rva006D6500 *lookupCache116;
-static Rva006D6500 *lookupCache117;
-static Rva006D6500 *lookupCache118;
-static Rva006D6500 *lookupCache119;
-static Rva006D6500 *lookupCache120;
-static Rva006D6500 *lookupCache121;
-static Rva006D6500 *lookupCache122;
-static Rva006D6500 *lookupCache123;
-static Rva006D6500 *lookupCache124;
-static Rva006D6500 *lookupCache125;
-static Rva006D6500 *lookupCache126;
-static Rva006D6500 *lookupCache127;
-void __cdecl lookupCallback006EC3E0(); // measured callback RVA0x006EC3E0; signature pending
-void __cdecl lookupCallback006EC590(); // measured callback RVA0x006EC590; signature pending
-void __cdecl lookupCallback006EC670(); // measured callback RVA0x006EC670; signature pending
-void __cdecl lookupCallback006EC6F0(); // measured callback RVA0x006EC6F0; signature pending
+class Acac0Releaseable;
+extern AptValue *g_shutdownAtE180A8; // lookup property 24; owned by Code/Libraries/Source/Apt/AptValueShutdownBFME2.cpp
+extern AptValue *g_shutdownAtE18080; // lookup property 25; owned by Code/Libraries/Source/Apt/AptValueShutdownBFME2.cpp
+extern AptValue *g_shutdownAtE18084; // lookup property 26; owned by Code/Libraries/Source/Apt/AptValueShutdownBFME2.cpp
+extern AptValue *g_shutdownAtE180B4; // lookup property 27; owned by Code/Libraries/Source/Apt/AptValueShutdownBFME2.cpp
+extern AptValue *g_shutdownAtE18074; // lookup property 28; owned by Code/Libraries/Source/Apt/AptValueShutdownBFME2.cpp
+extern AptValue *g_shutdownAtE1806C; // lookup property 29; owned by Code/Libraries/Source/Apt/AptValueShutdownBFME2.cpp
+extern Acac0Releaseable *g_Va00E181A0; // lookup property 100; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181AC; // lookup property 101; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E1819C; // lookup property 103; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E18198; // lookup property 104; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181A4; // lookup property 105; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181D8; // lookup property 106; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181E0; // lookup property 107; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181E8; // lookup property 108; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181B0; // lookup property 109; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181DC; // lookup property 110; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181F0; // lookup property 111; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181EC; // lookup property 112; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181E4; // lookup property 113; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181B8; // lookup property 114; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181BC; // lookup property 115; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181D4; // lookup property 116; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181C8; // lookup property 117; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181D0; // lookup property 118; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181B4; // lookup property 119; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181C0; // lookup property 120; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181A8; // lookup property 121; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181C4; // lookup property 122; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181F8; // lookup property 123; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181FC; // lookup property 124; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181F4; // lookup property 125; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E181CC; // lookup property 126; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+extern Acac0Releaseable *g_Va00E18200; // lookup property 127; owned by Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp
+AptValue *Rva006EC3E0LoadMovie(AptValue *self,int nParams);
+AptValue *Rva006EC590UnloadMovie(AptValue *self,int nParams);
+BfmeAptValue006DCD20 *rva006ec670(BfmeAptValue006DCD20 *pValue, int nParams);
+AptValue *Rva006EC6F0Depth(AptValue *context,int unusedArgumentCount);
 void __cdecl lookupCallback006EC730(); // measured callback RVA0x006EC730; signature pending
-void __cdecl lookupCallback006EC900(); // measured callback RVA0x006EC900; signature pending
-void __cdecl lookupCallback006ECA70(); // measured callback RVA0x006ECA70; signature pending
-void __cdecl lookupCallback006ECC20(); // measured callback RVA0x006ECC20; signature pending
+AptValue *__cdecl Rva006EC900StartDrag(AptValue *self,int count);
+AptValue *__cdecl Rva006ECA70PointHitTest(void *self,int count);
+AptValue *Rva006ECC20LoadVariables(AptValue *self,int count);
 void __cdecl lookupCallback006ECCB0(); // measured callback RVA0x006ECCB0; signature pending
-void __cdecl lookupCallback006ED450(); // measured callback RVA0x006ED450; signature pending
-void __cdecl lookupCallback006ED470(); // measured callback RVA0x006ED470; signature pending
+AptValue *aptHelperClearFlag008AE450(void *entry, int count);
+AptValue *aptHelperSetFlag008AE470(void *entry, int count);
 void __cdecl lookupCallback006ED580(); // measured callback RVA0x006ED580; signature pending
-void __cdecl lookupCallback006ED770(); // measured callback RVA0x006ED770; signature pending
+AptValue *Rva006ED770RemoveMovieClip(AptValue *self,int);
 void __cdecl lookupCallback006ED810(); // measured callback RVA0x006ED810; signature pending
 void __cdecl lookupCallback006EDBD0(); // measured callback RVA0x006EDBD0; signature pending
-void __cdecl lookupCallback006EDF20(); // measured callback RVA0x006EDF20; signature pending
+AptValue *Rva006EDF20SwapDepths(AptValue *self,int count);
 void __cdecl lookupCallback006EDFF0(); // measured callback RVA0x006EDFF0; signature pending
-void __cdecl lookupCallback006EE1B0(); // measured callback RVA0x006EE1B0; signature pending
-void __cdecl lookupCallback006EE210(); // measured callback RVA0x006EE210; signature pending
-void __cdecl lookupCallback006EE270(); // measured callback RVA0x006EE270; signature pending
-void __cdecl lookupCallback006EE310(); // measured callback RVA0x006EE310; signature pending
-void __cdecl lookupCallback006EE3B0(); // measured callback RVA0x006EE3B0; signature pending
-void __cdecl lookupCallback006EE540(); // measured callback RVA0x006EE540; signature pending
+AptValue *rva006ee1b0(BfmeAptValue006DCD20 *entry);
+AptValue *rva006ee210(BfmeAptValue006DCD20 *entry);
+AptValue *rva006ee270(BfmeAptValue006DCD20 *entry);
+AptValue *rva006ee310(BfmeAptValue006DCD20 *entry);
+AptValue *__cdecl rva006ee3b0(AptValue *value);
+AptValue *__cdecl rva006ee540(AptValue *value);
 void __cdecl lookupCallback006EF570(); // measured callback RVA0x006EF570; signature pending
 void __cdecl lookupCallback006EF6D0(); // measured callback RVA0x006EF6D0; signature pending
 void __cdecl lookupCallback006EF920(); // measured callback RVA0x006EF920; signature pending
@@ -177,93 +183,414 @@ static __forceinline void refreshText(AptValue *context,TextInstance *text){
 }
 static __forceinline AptValue *makeLookupString(const EAStringC &s){AptString *v=AptString::Create();v->value()=s;return v;}
 AptValue *__cdecl Rva006EFBC0ObjectMemberLookup(AptValue *context,const EAStringC *name){
+
  float number;
+
  AptCIH *initial=context->c_cih(false);
+
  if(isText(initial)){
+
   const R4Word *word=Rva008ABF40(name->rva00620090(),name->rva006D3750());
+
   if(word){
+
    TextInstance *text=(TextInstance*)((BfmeAptValue006DCD20*)context)->rva006E0F40();
+
    switch(word->id){
-   case 1:{AptString *v=AptString::Create();switch(text->autoSize){case 0:v->value()=*Rva0070B4F0GetString(0x56);break;case 1:v->value()=*Rva0070B4F0GetString(0x7E);break;case 2:v->value()=*Rva0070B4F0GetString(0x29);break;case 3:v->value()=*Rva0070B4F0GetString(0x61);break;default:v->value()=*Rva0070B4F0GetString(0x61);break;}return v;}
-   case 2:return AptBoolean::Create(text->background);
-   case 3:return AptInteger::Create(text->backgroundColor&0xFFFFFF);
-   case 4:return AptBoolean::Create(text->border);
-   case 5:return AptInteger::Create(text->borderColor&0xFFFFFF);
-   case 7:((Rva006EBFF0*)text)->rva006EBFF0((AptValue*)context->c_cih(false));return AptInteger::Create(text->text.rva006D3750());
-   case 8:return gpUndefinedValue;
-   case 9:refreshText(context,text);return AptInteger::Create(text->maxScroll);
-   case 10:return AptBoolean::Create((text->definition->multiline&0xFFFFFF)!=0);
-   case 11:refreshText(context,text);return AptInteger::Create(text->scroll);
-   case 12:((Rva006EBFF0*)text)->rva006EBFF0((AptValue*)context->c_cih(false));return makeLookupString(text->text);
-   case 13:return AptInteger::Create(text->textColor&0xFFFFFF);
-   case 14:refreshText(context,text);return Rva008A4EA0MakeFloat(*(float*)((char*)text+0x48));
-   case 15:refreshText(context,text);return Rva008A4EA0MakeFloat(*(float*)((char*)text+0x44));
-   case 16:{AptString *v=AptString::Create();v->SetString("dynamic");return v;}
-   case 17:if(text->variable.IsEmpty())return gpUndefinedValue;return makeLookupString(text->variable);
-   case 18:return AptBoolean::Create((text->definition->wordWrap&0xFFFFFF)!=0);
-   case 19:{refreshText(context,text);Rect r;context->c_cih(false)->rva006E1DD0(&r);float n=r.bottom-r.top;if(n<0)n=0;return Rva008A4EA0MakeFloat(n);}
-   case 20:{refreshText(context,text);Rect r;context->c_cih(false)->rva006E1DD0(&r);float n=r.right-r.left;if(n<0)n=0;return Rva008A4EA0MakeFloat(n);}
-   case 21:return AptBoolean::Create(text->mouseWheel);
-   }
-  }
- }
- const R4Word *word=context && context->isCIH(false)?Rva008D48F0(name->rva00620090(),name->rva006D3750()):0;
- if(!word)return 0;
- AptCIH *cih=context->c_cih(false);
- if(!cih->IsCharacterInst())aptAssert("isCharacterInst()",CIH_FILE,0xA5);
- CharacterInstance *inst=(CharacterInstance*)cih->instance;
- switch(word->id){
- case 1:{if(((BfmeAptValue006DCD20*)cih)->rva006E02B0()){TextInstance *text=(TextInstance*)((BfmeAptValue006DCD20*)cih)->rva006E0F40();if(text->autoSize!=3 && text->autoSize!=0 && text->dirty&4)((Rva006E1260*)cih)->call(cih->parent);}number=cih->matrix[4];break;}
- case 2:number=cih->matrix[5];break;
- case 3:number=cih->properties?cih->properties[2]:cih->matrix[0]*100.0f;break;
- case 4:number=cih->properties?cih->properties[3]:cih->matrix[3]*100.0f;break;
- case 5:number=(float)(*(int*)((char*)cih->rva006CFF40()+0x18)+1);break;
- case 6:number=(float)inst->definition->frames;break;
- case 7:number=cih->properties?cih->properties[7]:*(float*)((char*)cih+0x24)*100.0f;break;
- case 8:number=cih->properties?cih->properties[11]:1.0f;break;
- case 9:{Rect r;cih->rva006E1DD0(&r);number=r.right-r.left;if(number<0)number=0;break;}
- case 10:{Rect r;cih->rva006E1DD0(&r);number=r.bottom-r.top;if(number<0)number=0;break;}
- case 11:cih->factoryEnsureProperties();number=cih->properties[6];break;
- case 12:{EAStringC s;rva006ffc30((AptValue*)cih,s);return makeLookupString(s);}
- case 13:number=(float)inst->definition->frames;break;
- case 21:{BfmeM1208 m=lookupIdentity;for(AptCIH *p=cih;p;p=p->parent)bfmeMul1208(&m,(BfmeM1208*)p->matrix,&m);number=((float)lookupMouse->x-m.e)*m.a-((float)lookupMouse->y-m.f)*m.b;break;}
- case 22:{BfmeM1208 m=lookupIdentity;for(AptCIH *p=cih;p;p=p->parent)bfmeMul1208(&m,(BfmeM1208*)p->matrix,&m);number=((float)lookupMouse->y-m.f)*m.d+((float)lookupMouse->x-m.e)*m.c;break;}
- case 24:return lookupSingleton24;
- case 25:return lookupSingleton25;
- case 26:return lookupSingleton26;
- case 27:return lookupSingleton27;
- case 28:return lookupSingleton28;
- case 29:return lookupSingleton29;
- case 118:if(!lookupCache118){lookupCache118=new Rva006D6500((int)&lookupCallback006ECA70);lookupCache118->setGCRootCount(1);lookupCache118->AddRef();}return (AptValue*)lookupCache118;
- case 126:if(!lookupCache126){lookupCache126=new Rva006D6500((int)&lookupCallback006EC900);lookupCache126->setGCRootCount(1);lookupCache126->AddRef();}return (AptValue*)lookupCache126;
- case 106:if(!lookupCache106){lookupCache106=new Rva006D6500((int)&lookupCallback006ECC20);lookupCache106->setGCRootCount(1);lookupCache106->AddRef();}return (AptValue*)lookupCache106;
- case 103:if(!lookupCache103){lookupCache103=new Rva006D6500((int)&lookupCallback006ED470);lookupCache103->setGCRootCount(1);lookupCache103->AddRef();}return (AptValue*)lookupCache103;
- case 104:if(!lookupCache104){lookupCache104=new Rva006D6500((int)&lookupCallback006ED450);lookupCache104->setGCRootCount(1);lookupCache104->AddRef();}return (AptValue*)lookupCache104;
- case 100:if(!lookupCache100){lookupCache100=new Rva006D6500((int)&lookupCallback006ED580);lookupCache100->setGCRootCount(1);lookupCache100->AddRef();}return (AptValue*)lookupCache100;
- case 107:if(!lookupCache107){lookupCache107=new Rva006D6500((int)&lookupCallback006EE210);lookupCache107->setGCRootCount(1);lookupCache107->AddRef();}return (AptValue*)lookupCache107;
- case 110:if(!lookupCache110){lookupCache110=new Rva006D6500((int)&lookupCallback006EE1B0);lookupCache110->setGCRootCount(1);lookupCache110->AddRef();}return (AptValue*)lookupCache110;
- case 108:if(!lookupCache108){lookupCache108=new Rva006D6500((int)&lookupCallback006EE310);lookupCache108->setGCRootCount(1);lookupCache108->AddRef();}return (AptValue*)lookupCache108;
- case 113:if(!lookupCache113){lookupCache113=new Rva006D6500((int)&lookupCallback006EE270);lookupCache113->setGCRootCount(1);lookupCache113->AddRef();}return (AptValue*)lookupCache113;
- case 112:if(!lookupCache112){lookupCache112=new Rva006D6500((int)&lookupCallback006EE3B0);lookupCache112->setGCRootCount(1);lookupCache112->AddRef();}return (AptValue*)lookupCache112;
- case 111:if(!lookupCache111){lookupCache111=new Rva006D6500((int)&lookupCallback006EE540);lookupCache111->setGCRootCount(1);lookupCache111->AddRef();}return (AptValue*)lookupCache111;
- case 101:if(!lookupCache101){lookupCache101=new Rva006D6500((int)&lookupCallback006EC670);lookupCache101->setGCRootCount(1);lookupCache101->AddRef();}return (AptValue*)lookupCache101;
- case 109:if(!lookupCache109){lookupCache109=new Rva006D6500((int)&lookupCallback006ED770);lookupCache109->setGCRootCount(1);lookupCache109->AddRef();}return (AptValue*)lookupCache109;
- case 105:if(!lookupCache105){lookupCache105=new Rva006D6500((int)&lookupCallback006EC3E0);lookupCache105->setGCRootCount(1);lookupCache105->AddRef();}return (AptValue*)lookupCache105;
- case 121:if(!lookupCache121){lookupCache121=new Rva006D6500((int)&lookupCallback006EC590);lookupCache121->setGCRootCount(1);lookupCache121->AddRef();}return (AptValue*)lookupCache121;
- case 114:if(!lookupCache114){lookupCache114=new Rva006D6500((int)&lookupCallback006ED810);lookupCache114->setGCRootCount(1);lookupCache114->AddRef();}return (AptValue*)lookupCache114;
- case 119:if(!lookupCache119){lookupCache119=new Rva006D6500((int)&lookupCallback006ED770);lookupCache119->setGCRootCount(1);lookupCache119->AddRef();}return (AptValue*)lookupCache119;
- case 115:if(!lookupCache115){lookupCache115=new Rva006D6500((int)&lookupCallback006EC6F0);lookupCache115->setGCRootCount(1);lookupCache115->AddRef();}return (AptValue*)lookupCache115;
- case 117:if(!lookupCache117){lookupCache117=new Rva006D6500((int)&lookupCallback006EC730);lookupCache117->setGCRootCount(1);lookupCache117->AddRef();}return (AptValue*)lookupCache117;
- case 116:if(!lookupCache116){lookupCache116=new Rva006D6500((int)&lookupCallback006EDFF0);lookupCache116->setGCRootCount(1);lookupCache116->AddRef();}return (AptValue*)lookupCache116;
- case 120:if(!lookupCache120){lookupCache120=new Rva006D6500((int)&lookupCallback006EDBD0);lookupCache120->setGCRootCount(1);lookupCache120->AddRef();}return (AptValue*)lookupCache120;
- case 122:if(!lookupCache122){lookupCache122=new Rva006D6500((int)&lookupCallback006EDF20);lookupCache122->setGCRootCount(1);lookupCache122->AddRef();}return (AptValue*)lookupCache122;
- case 127:if(!lookupCache127){lookupCache127=new Rva006D6500((int)&lookupCallback006ECCB0);lookupCache127->setGCRootCount(1);lookupCache127->AddRef();}return (AptValue*)lookupCache127;
- case 14:return makeLookupString(*(EAStringC*)((char*)cih+8));
- case 16:{AptString *v=AptString::Create();EAStringC s;rva006ffce0((AptValue*)context->c_cih(false),s);v->SetString(s.rva00620090());return v;}
- case 124:if(!lookupCache124){lookupCache124=new Rva006D6500((int)&lookupCallback006EF920);lookupCache124->setGCRootCount(1);lookupCache124->AddRef();}return (AptValue*)lookupCache124;
- case 123:if(!lookupCache123){lookupCache123=new Rva006D6500((int)&lookupCallback006EF6D0);lookupCache123->setGCRootCount(1);lookupCache123->AddRef();}return (AptValue*)lookupCache123;
- case 125:if(!lookupCache125){lookupCache125=new Rva006D6500((int)&lookupCallback006EF570);lookupCache125->setGCRootCount(1);lookupCache125->AddRef();}return (AptValue*)lookupCache125;
- default:return 0;
- }
- return Rva008A4EA0MakeFloat(number);
+
+   case 1:{
+AptString *v=AptString::Create();
+switch(text->autoSize){
+case 0:v->value()=*Rva0070B4F0GetString(0x56);
+break;
+case 1:v->value()=*Rva0070B4F0GetString(0x7E);
+break;
+case 2:v->value()=*Rva0070B4F0GetString(0x29);
+break;
+case 3:v->value()=*Rva0070B4F0GetString(0x61);
+break;
+default:v->value()=*Rva0070B4F0GetString(0x61);
+break;
 }
+return v;
+}
+
+   case 2:return AptBoolean::Create(text->background);
+
+   case 3:return AptInteger::Create(text->backgroundColor&0xFFFFFF);
+
+   case 4:return AptBoolean::Create(text->border);
+
+   case 5:return AptInteger::Create(text->borderColor&0xFFFFFF);
+
+   case 7:((Rva006EBFF0*)text)->rva006EBFF0((AptValue*)context->c_cih(false));
+return AptInteger::Create(text->text.rva006D3750());
+
+   case 8:return gpUndefinedValue;
+
+   case 9:refreshText(context,text);
+return AptInteger::Create(text->maxScroll);
+
+   case 10:return AptBoolean::Create((text->definition->multiline&0xFFFFFF)!=0);
+
+   case 11:refreshText(context,text);
+return AptInteger::Create(text->scroll);
+
+   case 12:((Rva006EBFF0*)text)->rva006EBFF0((AptValue*)context->c_cih(false));
+return makeLookupString(text->text);
+
+   case 13:return AptInteger::Create(text->textColor&0xFFFFFF);
+
+   case 14:refreshText(context,text);
+return Rva008A4EA0MakeFloat(*(float*)((char*)text+0x48));
+
+   case 15:refreshText(context,text);
+return Rva008A4EA0MakeFloat(*(float*)((char*)text+0x44));
+
+   case 16:{
+AptString *v=AptString::Create();
+v->SetString("dynamic");
+return v;
+}
+
+   case 17:if(text->variable.IsEmpty())return gpUndefinedValue;
+return makeLookupString(text->variable);
+
+   case 18:return AptBoolean::Create((text->definition->wordWrap&0xFFFFFF)!=0);
+
+   case 19:{
+refreshText(context,text);
+Rect r;
+context->c_cih(false)->rva006E1DD0(&r);
+float n=r.bottom-r.top;
+_ReadWriteBarrier();
+if(n<0)n=0;
+return Rva008A4EA0MakeFloat(n);
+}
+
+   case 20:{
+refreshText(context,text);
+Rect r;
+context->c_cih(false)->rva006E1DD0(&r);
+float n=r.right-r.left;
+if(n<0)n=0;
+return Rva008A4EA0MakeFloat(n);
+}
+
+   case 21:return AptBoolean::Create(text->mouseWheel);
+
+   }
+
+  }
+
+ }
+
+ const R4Word *word=context && context->isCIH(false)?Rva008D48F0(name->rva00620090(),name->rva006D3750()):0;
+
+ if(!word)return 0;
+
+ AptCIH *cih=context->c_cih(false);
+
+ if(!cih->IsCharacterInst())aptAssert("isCharacterInst()",CIH_FILE,0xA5);
+
+ CharacterInstance *inst=(CharacterInstance*)cih->instance;
+
+ switch(word->id){
+
+ case 1:{
+if(((BfmeAptValue006DCD20*)cih)->rva006E02B0()){
+TextInstance *text=(TextInstance*)((BfmeAptValue006DCD20*)cih)->rva006E0F40();
+if(text->autoSize!=3 && text->autoSize!=0 && text->dirty&4)((Rva006E1260*)cih)->call(cih->parent);
+}
+number=cih->matrix[4];
+break;
+}
+
+ case 2:number=cih->matrix[5];
+break;
+
+ case 3:number=cih->properties?cih->properties[2]:cih->matrix[0]*100.0f;
+break;
+
+ case 4:number=cih->properties?cih->properties[3]:cih->matrix[3]*100.0f;
+break;
+
+ case 7:number=cih->properties?cih->properties[7]:*(float*)((char*)cih+0x24)*100.0f;
+break;
+
+ case 8:number=cih->properties?cih->properties[11]:1.0f;
+break;
+
+ case 5:number=(float)(*(int*)((char*)cih->rva006CFF40()+0x18)+1);
+break;
+
+ case 24:return g_shutdownAtE180A8;
+
+ case 25:return g_shutdownAtE18080;
+
+ case 26:return g_shutdownAtE18084;
+
+ case 27:return g_shutdownAtE180B4;
+
+ case 28:return g_shutdownAtE18074;
+
+ case 29:return g_shutdownAtE1806C;
+
+ case 12:{
+EAStringC s;
+rva006ffc30((AptValue*)cih,s);
+return makeLookupString(s);
+}
+
+ case 9:{
+Rect r;
+cih->rva006E1DD0(&r);
+number=r.right-r.left;
+if(number<0)number=0;
+break;
+}
+
+ case 10:{
+Rect r;
+cih->rva006E1DD0(&r);
+number=r.bottom-r.top;
+if(number<0)number=0;
+break;
+}
+
+ case 11:cih->factoryEnsureProperties();
+number=cih->properties[6];
+break;
+
+ case 6:number=(float)inst->definition->frames;
+break;
+
+ case 13:number=(float)inst->definition->frames;
+break;
+
+ case 21:{
+BfmeM1208 m=*(const BfmeM1208*)&g_bfmeD1206;
+for(AptCIH *p=cih;
+p;
+p=p->parent)bfmeMul1208(&m,(BfmeM1208*)p->matrix,&m);
+number=((float)((LookupMouse*)g_bfmeAptPtrAtE176D0)->x-m.e)*m.a-((float)((LookupMouse*)g_bfmeAptPtrAtE176D0)->y-m.f)*m.b;
+break;
+}
+
+ case 22:{
+BfmeM1208 m=*(const BfmeM1208*)&g_bfmeD1206;
+for(AptCIH *p=cih;
+p;
+p=p->parent)bfmeMul1208(&m,(BfmeM1208*)p->matrix,&m);
+number=((float)((LookupMouse*)g_bfmeAptPtrAtE176D0)->y-m.f)*m.d+((float)((LookupMouse*)g_bfmeAptPtrAtE176D0)->x-m.e)*m.c;
+break;
+}
+
+ case 118:if(!g_Va00E181D0){
+g_Va00E181D0=(Acac0Releaseable*)new Rva006D6500((int)&Rva006ECA70PointHitTest);
+((Rva006D6500*)g_Va00E181D0)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181D0)->AddRef();
+}
+return (AptValue*)g_Va00E181D0;
+
+ case 126:if(!g_Va00E181CC){
+g_Va00E181CC=(Acac0Releaseable*)new Rva006D6500((int)&Rva006EC900StartDrag);
+((Rva006D6500*)g_Va00E181CC)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181CC)->AddRef();
+}
+return (AptValue*)g_Va00E181CC;
+
+ case 106:if(!g_Va00E181D8){
+g_Va00E181D8=(Acac0Releaseable*)new Rva006D6500((int)&Rva006ECC20LoadVariables);
+((Rva006D6500*)g_Va00E181D8)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181D8)->AddRef();
+}
+return (AptValue*)g_Va00E181D8;
+
+ case 103:if(!g_Va00E1819C){
+g_Va00E1819C=(Acac0Releaseable*)new Rva006D6500((int)&aptHelperSetFlag008AE470);
+((Rva006D6500*)g_Va00E1819C)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E1819C)->AddRef();
+}
+return (AptValue*)g_Va00E1819C;
+
+ case 104:if(!g_Va00E18198){
+g_Va00E18198=(Acac0Releaseable*)new Rva006D6500((int)&aptHelperClearFlag008AE450);
+((Rva006D6500*)g_Va00E18198)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E18198)->AddRef();
+}
+return (AptValue*)g_Va00E18198;
+
+ case 100:if(!g_Va00E181A0){
+g_Va00E181A0=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006ED580);
+((Rva006D6500*)g_Va00E181A0)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181A0)->AddRef();
+}
+return (AptValue*)g_Va00E181A0;
+
+ case 107:if(!g_Va00E181E0){
+g_Va00E181E0=(Acac0Releaseable*)new Rva006D6500((int)&rva006ee210);
+((Rva006D6500*)g_Va00E181E0)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181E0)->AddRef();
+}
+return (AptValue*)g_Va00E181E0;
+
+ case 110:if(!g_Va00E181DC){
+g_Va00E181DC=(Acac0Releaseable*)new Rva006D6500((int)&rva006ee1b0);
+((Rva006D6500*)g_Va00E181DC)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181DC)->AddRef();
+}
+return (AptValue*)g_Va00E181DC;
+
+ case 108:if(!g_Va00E181E8){
+g_Va00E181E8=(Acac0Releaseable*)new Rva006D6500((int)&rva006ee310);
+((Rva006D6500*)g_Va00E181E8)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181E8)->AddRef();
+}
+return (AptValue*)g_Va00E181E8;
+
+ case 113:if(!g_Va00E181E4){
+g_Va00E181E4=(Acac0Releaseable*)new Rva006D6500((int)&rva006ee270);
+((Rva006D6500*)g_Va00E181E4)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181E4)->AddRef();
+}
+return (AptValue*)g_Va00E181E4;
+
+ case 112:if(!g_Va00E181EC){
+g_Va00E181EC=(Acac0Releaseable*)new Rva006D6500((int)&rva006ee3b0);
+((Rva006D6500*)g_Va00E181EC)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181EC)->AddRef();
+}
+return (AptValue*)g_Va00E181EC;
+
+ case 111:if(!g_Va00E181F0){
+g_Va00E181F0=(Acac0Releaseable*)new Rva006D6500((int)&rva006ee540);
+((Rva006D6500*)g_Va00E181F0)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181F0)->AddRef();
+}
+return (AptValue*)g_Va00E181F0;
+
+ case 101:if(!g_Va00E181AC){
+g_Va00E181AC=(Acac0Releaseable*)new Rva006D6500((int)&rva006ec670);
+((Rva006D6500*)g_Va00E181AC)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181AC)->AddRef();
+}
+return (AptValue*)g_Va00E181AC;
+
+ case 109:if(!g_Va00E181B0){
+g_Va00E181B0=(Acac0Releaseable*)new Rva006D6500((int)&Rva006ED770RemoveMovieClip);
+((Rva006D6500*)g_Va00E181B0)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181B0)->AddRef();
+}
+return (AptValue*)g_Va00E181B0;
+
+ case 105:if(!g_Va00E181A4){
+g_Va00E181A4=(Acac0Releaseable*)new Rva006D6500((int)&Rva006EC3E0LoadMovie);
+((Rva006D6500*)g_Va00E181A4)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181A4)->AddRef();
+}
+return (AptValue*)g_Va00E181A4;
+
+ case 121:if(!g_Va00E181A8){
+g_Va00E181A8=(Acac0Releaseable*)new Rva006D6500((int)&Rva006EC590UnloadMovie);
+((Rva006D6500*)g_Va00E181A8)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181A8)->AddRef();
+}
+return (AptValue*)g_Va00E181A8;
+
+ case 114:if(!g_Va00E181B8){
+g_Va00E181B8=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006ED810);
+((Rva006D6500*)g_Va00E181B8)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181B8)->AddRef();
+}
+return (AptValue*)g_Va00E181B8;
+
+ case 119:if(!g_Va00E181B4){
+g_Va00E181B4=(Acac0Releaseable*)new Rva006D6500((int)&Rva006ED770RemoveMovieClip);
+((Rva006D6500*)g_Va00E181B4)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181B4)->AddRef();
+}
+return (AptValue*)g_Va00E181B4;
+
+ case 115:if(!g_Va00E181BC){
+g_Va00E181BC=(Acac0Releaseable*)new Rva006D6500((int)&Rva006EC6F0Depth);
+((Rva006D6500*)g_Va00E181BC)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181BC)->AddRef();
+}
+return (AptValue*)g_Va00E181BC;
+
+ case 117:if(!g_Va00E181C8){
+g_Va00E181C8=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006EC730);
+((Rva006D6500*)g_Va00E181C8)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181C8)->AddRef();
+}
+return (AptValue*)g_Va00E181C8;
+
+ case 116:if(!g_Va00E181D4){
+g_Va00E181D4=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006EDFF0);
+((Rva006D6500*)g_Va00E181D4)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181D4)->AddRef();
+}
+return (AptValue*)g_Va00E181D4;
+
+ case 120:if(!g_Va00E181C0){
+g_Va00E181C0=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006EDBD0);
+((Rva006D6500*)g_Va00E181C0)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181C0)->AddRef();
+}
+return (AptValue*)g_Va00E181C0;
+
+ case 122:if(!g_Va00E181C4){
+g_Va00E181C4=(Acac0Releaseable*)new Rva006D6500((int)&Rva006EDF20SwapDepths);
+((Rva006D6500*)g_Va00E181C4)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181C4)->AddRef();
+}
+return (AptValue*)g_Va00E181C4;
+
+ case 127:if(!g_Va00E18200){
+g_Va00E18200=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006ECCB0);
+((Rva006D6500*)g_Va00E18200)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E18200)->AddRef();
+}
+return (AptValue*)g_Va00E18200;
+
+ case 14:return makeLookupString(*(EAStringC*)((char*)cih+8));
+
+ case 16:{
+AptString *v=AptString::Create();
+EAStringC s;
+rva006ffce0((AptValue*)context->c_cih(false),s);
+v->SetString(s.rva00620090());
+return v;
+}
+
+ case 124:if(!g_Va00E181FC){
+g_Va00E181FC=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006EF920);
+((Rva006D6500*)g_Va00E181FC)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181FC)->AddRef();
+}
+return (AptValue*)g_Va00E181FC;
+
+ case 123:if(!g_Va00E181F8){
+g_Va00E181F8=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006EF6D0);
+((Rva006D6500*)g_Va00E181F8)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181F8)->AddRef();
+}
+return (AptValue*)g_Va00E181F8;
+
+ case 125:if(!g_Va00E181F4){
+g_Va00E181F4=(Acac0Releaseable*)new Rva006D6500((int)&lookupCallback006EF570);
+((Rva006D6500*)g_Va00E181F4)->setGCRootCount(1);
+((Rva006D6500*)g_Va00E181F4)->AddRef();
+}
+return (AptValue*)g_Va00E181F4;
+
+ default:return 0;
+
+ }
+
+ _ReadWriteBarrier();
+return Rva008A4EA0MakeFloat(number);
+
+}
+
