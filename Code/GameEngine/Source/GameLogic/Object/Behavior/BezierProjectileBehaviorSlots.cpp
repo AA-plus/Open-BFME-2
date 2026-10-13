@@ -120,7 +120,6 @@ public:
 	{
 		return m_template->m_kindOf[kind >> 5] & (1U << (kind & 0x1f));
 	}
-	bool isEffectivelyDead() const { return (m_438 & 1) != 0; }
 private:
 	void *m_vptr;
 	const ThingTemplate *m_template; // +0x04
@@ -275,7 +274,9 @@ bool BezierProjectileBehavior::rva0045BF06(Object *victim)
 	{
 		if (victim->bfme_isKindOf_68ffe(13) != 0)
 			return false;
-		if (victim->isEffectivelyDead())
+		// Native BF06 checks byte +0x438 bit 0 directly; it is not the
+		// independently owned Object::isEffectivelyDead operation.
+		if ((victim->m_438 & 1) != 0)
 			return false;
 	}
 	Object *launcher = TheGameLogic->findObjectByID(getLauncherID());
