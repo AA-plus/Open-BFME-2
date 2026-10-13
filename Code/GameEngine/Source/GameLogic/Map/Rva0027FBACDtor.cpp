@@ -1,8 +1,12 @@
 // cl: /DNDEBUG /MD /EHsc
-// ??1Rva0027FBAC@@UAE@XZ @0x0027FBAC 82B. Dtor stores vtable 0x00BFB1E0,
+// ??1Bridge@@UAE@XZ @0x0027FBAC 82B. Dtor stores vtable 0x00BFB1E0,
 // null-checked delete of +0xC8 via first virtual with int arg 0 returning
 // pointer freed by rowed ??3@YAXPAX@Z, then releases AsciiString at +8 via
 // rowed ?releaseBuffer@?$StringBase@D@@AAEXXZ. Caller 0x00280C05 is its ??_G.
+// Identity: 0x00BFB1E0 is Bridge's vftable. The matched Bridge constructors
+// (0x00280C21 in BridgeObjectCtor.cpp, BridgeCtor.cpp) store it, its only slot
+// is this ??_G, and the class keeps its AsciiString template name at +8 and
+// the pointer at +0xC8 the Bridge(Object *) constructor clears.
 template <typename T> class StringBase {
 public: ~StringBase() { releaseBuffer(); }
 private: void releaseBuffer();
@@ -19,14 +23,14 @@ class Rva0027FBACHelper {
 public: virtual void *Get(int);
 };
 
-class Rva0027FBAC {
-public: virtual ~Rva0027FBAC();
+class Bridge {
+public: virtual ~Bridge();
 private: char m_pad04[4];
          AsciiString m_str;
          char m_pad0C[188];
          Rva0027FBACHelper *m_c8;
 };
-Rva0027FBAC::~Rva0027FBAC()
+Bridge::~Bridge()
 {
 	if (m_c8) {
 		::operator delete(m_c8->Get(0));

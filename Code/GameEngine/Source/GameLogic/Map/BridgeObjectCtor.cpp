@@ -118,11 +118,18 @@ class GeometryInfo
 public:
 	Real getMajorRadius() const { return m_majorRadius; }
 	Real getMinorRadius() const { return m_minorRadius; }
+	// The two extents calcBoundingStuff (0x006BE700) derives; the bridge
+	// object's half sizes. Inline only, as in StructureToppleUpdateCrushing.
+	__declspec(dllimport) __forceinline Real getExtent24() const { return m_extent24; }
+	__declspec(dllimport) __forceinline Real getExtent28() const { return m_extent28; }
 private:
 	void *m_vptr;
 	char m_pad04[0x10 - 0x04];
 	Real m_majorRadius; // +0x10
 	Real m_minorRadius; // +0x14
+	char m_pad18[0x24 - 0x18];
+	Real m_extent24; // +0x24
+	Real m_extent28; // +0x28
 };
 
 class ThingTemplate
@@ -210,8 +217,8 @@ public:
 private:
 	char m_pad48[0x74 - 0x48];
 	ObjectID m_id; // +0x74
-	char m_pad78[0xBC - 0x78];
-	GeometryInfo m_geometryInfo; // +0xBC
+	char m_pad78[0xA8 - 0x78];
+	GeometryInfo m_geometryInfo; // +0xA8 (Object ctor copies it there)
 	char m_padD4[0x254 - 0xD4];
 	BodyModuleInterface *m_body; // +0x254
 	char m_pad258[0x304 - 0x258];
@@ -291,8 +298,8 @@ m_outline(NULL)
 	const Coord3D *pos = bridgeObj->getPosition();
 	Real angle = bridgeObj->getOrientation();
 
-	Real halfsizeX = bridgeObj->getGeometryInfo().getMajorRadius();
-	Real halfsizeY = bridgeObj->getGeometryInfo().getMinorRadius();
+	Real halfsizeX = bridgeObj->getGeometryInfo().getExtent24();
+	Real halfsizeY = bridgeObj->getGeometryInfo().getExtent28();
 	m_bridgeInfo.bridgeWidth = 2*halfsizeY;
 
 	Real c = (Real)Cos(angle);
