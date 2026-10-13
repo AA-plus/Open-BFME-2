@@ -1,6 +1,6 @@
-// ?link@BfmeLinkedObj@@QAEXPAV1@H@Z
-// partial score=0.79 date=2026-10-09
-// cl: /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// ?transferAssetsFromThat@Player@@QAEXPAV1@_N@Z
+// partial score=0.8538312106454437 date=2026-10-13
+// cl: /I. /ICode/GameEngine/Source/Common/RTS /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // ?transferAssetsFromThat@Player@@QAEXPAV1@_N@Z @0x002AEA9F 1032B.
@@ -17,7 +17,7 @@
 // kind-of 0x6D container takes the team instead; otherwise contain slots
 // 0x10/0x08/0x54 then setTeam and TheRadar remove/add) between a save and
 // restore of the +0x3BC member's +0x110 flag (setter 0x0039B780) with the
-// pinned 0x0039CBCE per object; the second list runs the rowed 0x0029A12B
+// rowed 0x0039CBCE per object; the second list runs the rowed 0x0029A12B
 // unless status 0x26; that player's completed upgrade mask (+0x13C) is
 // copied (0x0004548B) and every set bit but the thirteen faction and hero
 // choice upgrades is granted through the rowed addUpgrade 0x002AE329 with
@@ -140,7 +140,7 @@ class ContainModuleInterface
 public:
 	virtual void slot00();
 	virtual void slot01();
-	virtual Bool slot02();
+	virtual class OpenContain *slot02();
 	virtual void slot03();
 	virtual Bool slot04();
 #define CONTAIN_SLOT(n) virtual void slot##n();
@@ -152,9 +152,6 @@ public:
 	virtual void slot21(Team *team); // slot 0x54
 };
 
-// Object::rva00290DBB's two player views.
-struct Rva002A9B58;
-
 class Object
 {
 public:
@@ -165,7 +162,7 @@ public:
 	Bool testStatus(ObjectStatusTypes bit) const;
 	void setStatus(ObjectStatusTypes bit, bool set);
 	void setTeam(Team *team);
-	void rva00290DBB(Rva002A9B58 *oldOwner, Rva002A9B58 *newOwner);
+	void rva00290DBB(Player *oldOwner, Player *newOwner);
 	void rva0029A12B();
 
 private:
@@ -195,12 +192,12 @@ public:
 
 // The +0x3BC member: its +0x110 flag (setter folded with W3DBridge's) and
 // the pinned per-object call.
-class Rva0039CBCE
+class ScoreKeeper
 {
 public:
 	Bool isEnabled() const { return m_enabled; }
 	void setEnabled(Bool enable) { ((W3DBridge *)this)->setEnabled(enable); }
-	void rva0039CBCE(Object *obj, Int x);
+	void addObjectBuilt(Object *obj, Int x);
 
 private:
 	unsigned char m_pad[0x110];
@@ -265,10 +262,10 @@ public:
 	Bool m_1BC;
 };
 
-class ScoreKeeper
+class PlayerTransferCountsView
 {
 public:
-	__forceinline void addCounts(const ScoreKeeper *other, Bool second)
+	__forceinline void addCounts(const PlayerTransferCountsView *other, Bool second)
 	{
 		Int a = other->m_18;
 		Int b = other->m_1C;
@@ -291,14 +288,14 @@ public:
 	void transferAssetsFromThat(Player *that, Bool flag);
 	Upgrade *rva002AE329(const UpgradeTemplate *upgradeTemplate, UpgradeStatusType status, Int x);
 	Team *getDefaultTeam() const { return m_defaultTeam; }
-	ScoreKeeper *getScoreKeeper() { return &m_scoreKeeper; }
+	PlayerTransferCountsView *getTransferCounts() { return &m_scoreKeeper; }
 	Rva003B0D7C *getMoney() { return &m_money; }
 
 private:
 	unsigned char m_pad00[0x34];
 	PlayerTemplateView *m_playerTemplate; // +0x34
 	unsigned char m_pad38[0x60 - 0x38];
-	ScoreKeeper m_scoreKeeper; // +0x60
+	PlayerTransferCountsView m_scoreKeeper; // +0x60
 	unsigned char m_pad80[0x90 - 0x80];
 	Rva003B0D7C m_money; // +0x90
 	unsigned char m_pad98[0x13C - 0x98];
@@ -308,7 +305,7 @@ private:
 	unsigned char m_pad2F0[0x32C - 0x2F0];
 	PlayerTeamNode *m_playerTeamPrototypes; // +0x32C
 	unsigned char m_pad330[0x3BC - 0x330];
-	Rva0039CBCE m_3BC; // +0x3BC
+	ScoreKeeper m_3BC; // +0x3BC
 };
 
 void Player::transferAssetsFromThat(Player *that, Bool flag)
@@ -343,15 +340,16 @@ void Player::transferAssetsFromThat(Player *that, Bool flag)
 		}
 	}
 
-	Bool wasEnabled = m_3BC.isEnabled();
-	m_3BC.setEnabled(false);
+	ScoreKeeper*scoring=&m_3BC;
+ Bool wasEnabled=scoring->isEnabled();
+	scoring->setEnabled(false);
 	for (_STL::list<const Object *>::iterator itObjs = objsToTransfer.begin(); itObjs != objsToTransfer.end(); ++itObjs)
 	{
 		Object *obj = const_cast<Object *>(*itObjs);
 		if (!obj)
 			continue;
 		if (!obj->testStatus((ObjectStatusTypes)0x26))
-			obj->rva00290DBB((Rva002A9B58 *)that, (Rva002A9B58 *)this);
+			obj->rva00290DBB(that, this);
 		if (flag)
 			obj->setStatus((ObjectStatusTypes)0x50, true);
 		Object *container = obj->getContainedBy();
@@ -368,14 +366,16 @@ void Player::transferAssetsFromThat(Player *that, Bool flag)
 			TheRadar->removeObject((Rva002D76C6Owner *)obj);
 			TheRadar->addObject(obj);
 		}
-		m_3BC.rva0039CBCE(obj, 1);
+		scoring->addObjectBuilt(obj, 1);
 	}
-	m_3BC.setEnabled(wasEnabled);
+	scoring->setEnabled(wasEnabled);
 
-	for (_STL::list<const Object *>::iterator itNotify = objsToNotify.begin(); itNotify != objsToNotify.end(); ++itNotify)
+	for (itObjs = objsToNotify.begin(); itObjs != objsToNotify.end(); ++itObjs)
 	{
-		if (*itNotify && !(*itNotify)->testStatus((ObjectStatusTypes)0x26))
-			const_cast<Object *>(*itNotify)->rva0029A12B();
+		Object*obj=const_cast<Object*>(*itObjs);
+		if(!obj)continue;
+		if(obj->testStatus((ObjectStatusTypes)0x26))continue;
+		obj->rva0029A12B();
 	}
 
 	BfmeFixedStorage128 upgrades(that->m_upgradesCompleted);
@@ -408,13 +408,13 @@ void Player::transferAssetsFromThat(Player *that, Bool flag)
 	that->getMoney()->rva003B0CB3(allMoney, 0, true);
 	getMoney()->rva003B0D7C(allMoney, 0, true);
 
-	if (that->getScoreKeeper())
+	if (that->getTransferCounts())
 	{
-		ScoreKeeper *mine = getScoreKeeper();
+		PlayerTransferCountsView *mine = getTransferCounts();
 		if (mine)
 		{
-			Int a = that->getScoreKeeper()->m_18;
-			Int b = that->getScoreKeeper()->m_1C;
+			Int a = that->getTransferCounts()->m_18;
+			Int b = that->getTransferCounts()->m_1C;
 			if (that->m_playerTemplate->m_1BC)
 				++b;
 			else
