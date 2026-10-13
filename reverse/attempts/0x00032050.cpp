@@ -1,4 +1,6 @@
 // ?rva00032050@GeneralAllocator@Allocator@EA@@QAEIPAXI@Z
+// partial score=0.8 date=2026-10-13
+// ?rva00032050@GeneralAllocator@Allocator@EA@@QAEIPAXI@Z
 // partial score=0.55 date=2026-10-03
 // no // cl: line: base flags -O2 -GR- -EHsc-
 // Banked attempt for ?rva00032050@GeneralAllocator@Allocator@EA@@QAEIPAXI@Z
@@ -10,6 +12,8 @@
 // whole prologue/epilogue shifts by 5 bytes (135 vs 140). Semantics and the
 // term order are as decoded from retail.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(void *section);
 extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void *section);
 
@@ -45,9 +49,10 @@ unsigned int GeneralAllocator::rva00032050(void *block, unsigned int flags)
 
 	unsigned int size = *(unsigned int *)((char *)block + 4) & 0x7FFFFFF8;
 	int result = rva00031F90(block);
-	result += (size & 7) != 0;
+	_ReadWriteBarrier();
+	result += (((unsigned char)size) & 7) != 0;
 	result += size < 0x10;
-	result += ((unsigned int)block & 7) != 0;
+	result += (((unsigned char)(unsigned int)block) & 7) != 0;
 	result += size < 8;
 	result += size >= flags + 0x10;
 
