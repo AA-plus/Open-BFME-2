@@ -1,7 +1,16 @@
 // ?PromptAddFriend@AptSaveLoad@@SA_NXZ
-// partial score=0.99 date=2026-10-09
+// partial score=1.0 date=2026-10-13
+// Target: WB12AD250 names static AptSaveLoad::PromptAddFriend; native
+// 4354F3..43566A and caller435CCC prove375B and bool-in-AL return.
+// Slot name/profile offsets and callback relationship are native evidence.
+// Friend-map value identity is unresolved: this is a key-only layout view;
+// the owned map<int,int> search body reproduces the native key lookup.
+// g_Va00E032E0 is the existing owned4B canonical datum, reused without alias.
+// Shallow prompt holder matches the independently owned refcounted callback.
+// Codegen: declare profiles before slot, read the profile once through a
+// volatile scalar view, and keep message at function scope. Full375B/EH exact.
 // WB12AD250 PromptAddFriend and native4354F3..43566A establish static bool ABI.
-// Complete375B, only key home -10 vs native -14 differs at two displacement bytes.
+// Complete375B and EH now exact; coordinated canonical-global naming blocks landing.
 // Both branches bind named AddFriendConfirmationHandler; native53B Rva holder copy
 // has its proven +4 reference lifetime. Four-byte one-member callback view restores
 // stack-save order. EHs preserves C-linkage prompt cleanup states4/7.
@@ -123,8 +132,8 @@ struct CallbackStorage {
 };
 bool AptSaveLoad::PromptAddFriend()
 {
-	AptSaveLoadSlot *slot;
 	RvaFriendProfileMap *profiles;
+	AptSaveLoadSlot *slot;
 	if (!TheGameSpyInfo)
 		goto declined;
 
@@ -135,7 +144,8 @@ bool AptSaveLoad::PromptAddFriend()
 	profiles = TheGameSpyInfo->getFriendProfiles();
 	if (!profiles)
 		goto declined;
-	int profile = slot->m_profileID;
+	int profile;
+	profile = *(volatile int *)&(slot->m_profileID);
 	if (profiles->find(profile) != profiles->end())
 		goto declined;
 	goto show_prompt;
@@ -144,13 +154,10 @@ declined:
 	return false;
 
 show_prompt:
-	{
 		UnicodeString message;
-	{
 			message.format(TheGameText->fetch("APT:AddFriendOnSaveDescription",0).str(), slot->getName().str());
-		}
 
-		if (g_Va00E032E0)
+		if (g_Va00E032E0 != 0)
 		{
 			void (__cdecl *callback)(int) = AptSaveLoad::AddFriendConfirmationHandler;
 			Rva0043802B(2, TheGameText->fetch("APT:AddFriendOnSaveTitle", 0),
@@ -165,6 +172,5 @@ show_prompt:
 				message,
 				CallbackStorage(&callback));
 		}
-	}
 	return true;
 }
