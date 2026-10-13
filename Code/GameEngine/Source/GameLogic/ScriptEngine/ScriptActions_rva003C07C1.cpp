@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003C07C1Do@@YGXABVAsciiString@@00@Z @0x003C07C1 136B: team unit command-button order.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C07C1Do@ScriptActions@@QAEXABVAsciiString@@00@Z @0x003C07C1 136B: team unit command-button order.
 // Evidence: rowed getTeamNamed 0x003584E9 with false via g_Va009FE16C, rowed
 // lookupUnitByValue 0x00358752 via same global cast to Rva00358752Opaque,
 // findCommandButton 0x0031BE3C via g_bfmeWorldRV, createGroup 0x002FEC4B via
@@ -56,7 +58,7 @@ extern class ScriptEngine *TheScriptEngine;
 extern class ControlBar *TheControlBar;
 extern class AI *TheAI;
 
-void __stdcall Rva003C07C1Do(const AsciiString &teamName, const AsciiString &commandName, const AsciiString &unitName)
+void ScriptActions::Rva003C07C1Do(const AsciiString &teamName, const AsciiString &commandName, const AsciiString &unitName)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);
 	if (team == 0)

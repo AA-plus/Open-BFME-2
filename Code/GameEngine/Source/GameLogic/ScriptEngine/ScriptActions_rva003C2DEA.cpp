@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003C2DEADo@@YGXPAVParameter@@0@Z @0x003C2DEA 119B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C2DEADo@ScriptActions@@QAEXPAVParameter@@0@Z @0x003C2DEA 119B
 // Script sum team member Object+0x618 field then set counter: team via rowed
 // getTeamNamed 0x003584E9 by value with false, iterate via rowed 0x00263864,
 // advance via rowed 0x00263526, value int at *(iter+0)+4 then +0x618, counter via
@@ -57,12 +59,12 @@ public:
 	Team *getTeamNamed(AsciiString name, bool exact);
 protected:
 	ScriptCounter *bfmeCounter(AsciiString name);
-	friend void __stdcall Rva003C2DEADo(Parameter *a, Parameter *b);
+	friend void ScriptActions::Rva003C2DEADo(Parameter *a, Parameter *b);
 };
 
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C2DEADo(Parameter *a, Parameter *b)
+void ScriptActions::Rva003C2DEADo(Parameter *a, Parameter *b)
 {
 	Team *team = TheScriptEngine->getTeamNamed(a->m_string, false);
 	if (team == 0)

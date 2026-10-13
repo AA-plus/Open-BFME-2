@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003C2A29Do@@YGXABVAsciiString@@0@Z @0x003C2A29 118B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C2A29Do@ScriptActions@@QAEXABVAsciiString@@0@Z @0x003C2A29 118B
 // Script team group order via two getTeamNamed pins 0x003584E9 with false,
 // createGroup pin 0x002FEC4B, getTeamAsAIGroup pin 0x003A0F62,
 // then rowed rva00370451 with second team plus 0 and 1.
@@ -44,7 +46,7 @@ public:
 extern ScriptEngine *TheScriptEngine;
 extern AI *TheAI;
 
-void __stdcall Rva003C2A29Do(const AsciiString &team1, const AsciiString &team2)
+void ScriptActions::Rva003C2A29Do(const AsciiString &team1, const AsciiString &team2)
 {
 	Team *t1 = TheScriptEngine->getTeamNamed((AsciiString &)team1, false);
 	Team *t2 = TheScriptEngine->getTeamNamed((AsciiString &)team2, false);

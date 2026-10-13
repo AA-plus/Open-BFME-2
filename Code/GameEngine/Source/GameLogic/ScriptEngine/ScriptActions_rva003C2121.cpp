@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ?Rva003C2121Grant@@YGXABVAsciiString@@0@Z @0x003C2121 69B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C2121Grant@ScriptActions@@QAEXABVAsciiString@@0@Z @0x003C2121 69B
 // Grant upgrade to named team: ScriptEngine::getTeamNamed(team,false) via
 // rowed 0x003584E9 with StringBase copy 0x000365F0, UpgradeCenter::findUpgrade
 // via rowed 0x0026F26D, then Team::rva0039DB31 via rowed 0x0039DB31 when both
@@ -29,7 +31,7 @@ public:
 };
 extern "C" UpgradeCenter *TheUpgradeCenter;
 
-void __stdcall Rva003C2121Grant(const AsciiString &teamName, const AsciiString &upgradeName)
+void ScriptActions::Rva003C2121Grant(const AsciiString &teamName, const AsciiString &upgradeName)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	const UpgradeTemplate *upgrade = TheUpgradeCenter->findUpgrade(upgradeName);

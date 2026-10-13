@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /GX /arch:SSE
-// ?Rva003C0E87Do@@YGXABVAsciiString@@H@Z @0x003C0E87 130B: lookup unit by value
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C0E87Do@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003C0E87 130B: lookup unit by value
 // then SupplyWarehouseDockUpdate module int dispatch via cached NameKey.
 // Evidence: rowed lookupUnitByValue 0x358752 via TheScriptEngine (0x9FE16C), nameToKey PBD
 // 0x148E1A via TheNameKeyGenerator, findModule 0x28B6D6, StringBase copy
@@ -27,7 +29,7 @@ class Object
 {
 protected:
     Module *findModule(NameKeyType key) const;
-    friend void __stdcall Rva003C0E87Do(const AsciiString &, int);
+    friend void ScriptActions::Rva003C0E87Do(const AsciiString &, int);
 };
 
 class NameKeyGenerator
@@ -45,7 +47,7 @@ public:
 class ScriptEngine;
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C0E87Do(const AsciiString &name, int count)
+void ScriptActions::Rva003C0E87Do(const AsciiString &name, int count)
 {
     Object *obj = ((Rva00358752Opaque *)TheScriptEngine)->lookupUnitByValue((AsciiString &)name);
     if (obj == 0)

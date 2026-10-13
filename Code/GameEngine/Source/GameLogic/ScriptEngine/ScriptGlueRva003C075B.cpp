@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C075BDo@@YGXPBVAsciiString@@0@Z @0x003C075B 102B (dump range 18).
+// ?Rva003C075BDo@ScriptActions@@QAEXPBVAsciiString@@0@Z @0x003C075B 102B (dump range 18).
 // Team command-button dispatch: team-name copy, getTeamNamed, command
 // button lookup through the rowed ControlBar 0x0031BE3C member on
 // TheControlBar, AI createGroup, getTeamAsAIGroup, then the rowed AIGroup
@@ -51,7 +53,7 @@ public:
 	void groupDoCommandButton(const CommandButton *btn, CommandSourceType src);
 };
 
-void __stdcall Rva003C075BDo(const AsciiString *teamName, const AsciiString *btnName)
+void ScriptActions::Rva003C075BDo(const AsciiString *teamName, const AsciiString *btnName)
 {
 	Team *team = TheScriptEngine->getTeamNamed(*teamName, false);
 	if (team == 0)

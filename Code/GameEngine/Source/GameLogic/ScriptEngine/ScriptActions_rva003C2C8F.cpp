@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003C2C8FDo@@YGXPAVParameter@@0@Z @0x003C2C8F 73B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C2C8FDo@ScriptActions@@QAEXPAVParameter@@0@Z @0x003C2C8F 73B
 // Script set counter from unit's ExperienceTracker float at Object+0x264 inner +0x10.
 // Evidence: rowed getUnitNamed 0x003588E7 via g_Va009FE16C, pin bfmeCounter 0x0020874B
 // by value via StringBase copy 0x000365F0 temp, cvttss2si float to int, ret 8 stdcall,
@@ -38,12 +40,12 @@ public:
 	Object *getUnitNamed(Parameter *p);
 protected:
 	ScriptCounter *bfmeCounter(AsciiString name);
-	friend void __stdcall Rva003C2C8FDo(Parameter *a, Parameter *b);
+	friend void ScriptActions::Rva003C2C8FDo(Parameter *a, Parameter *b);
 };
 
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C2C8FDo(Parameter *a, Parameter *b)
+void ScriptActions::Rva003C2C8FDo(Parameter *a, Parameter *b)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(a);
 	if (obj == 0)

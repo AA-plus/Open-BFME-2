@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003C0849Do@@YGXABVAsciiString@@00@Z @0x003C0849 131B: team waypoint command-button order.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C0849Do@ScriptActions@@QAEXABVAsciiString@@00@Z @0x003C0849 131B: team waypoint command-button order.
 // Evidence: rowed getTeamNamed 0x003584E9 with false via g_Va009FE16C, TerrainLogic slot
 // 0x88 getWaypointByName via TheTerrainLogic, findCommandButton 0x0031BE3C via
 // g_bfmeWorldRV, createGroup 0x002FEC4B via g_Va009FF0F8, getTeamAsAIGroup 0x003A0F62,
@@ -72,7 +74,7 @@ extern TerrainLogic *TheTerrainLogic;
 extern class ControlBar *TheControlBar;
 extern class AI *TheAI;
 
-void __stdcall Rva003C0849Do(const AsciiString &teamName, const AsciiString &commandName, const AsciiString &waypointName)
+void ScriptActions::Rva003C0849Do(const AsciiString &teamName, const AsciiString &commandName, const AsciiString &waypointName)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);
 	if (team == 0)

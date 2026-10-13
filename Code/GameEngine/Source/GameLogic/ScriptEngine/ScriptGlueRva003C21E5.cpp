@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
 // ?Rva003C21E5Do@@YGXPBVAsciiString@@HPBV0@@Z @0x003C21E5 123B (dump range 18).
 // Two-team wiring: team-name copy (true flag), getTeamNamed, second
@@ -33,7 +35,7 @@ public:
 };
 extern class ThingFactory *TheThingFactory;
 
-void __stdcall Rva003C21E5Do(const AsciiString *str1, int x, const AsciiString *str2, const AsciiString *str3)
+void ScriptActions::Rva003C21E5Do(const AsciiString *str1, int x, const AsciiString *str2, const AsciiString *str3)
 {
 	Team *team1 = TheScriptEngine->getTeamNamed(*str1, true);
 	if (team1 == 0)

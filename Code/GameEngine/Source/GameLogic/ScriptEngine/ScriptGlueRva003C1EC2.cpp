@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /arch:SSE
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C1EC2Set@@YGXABVAsciiString@@H@Z @0x003C1EC2 72B: team experience
+// ?Rva003C1EC2Set@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003C1EC2 72B: team experience
 // set. Resolves the team through rowed ScriptEngine 0x003584E9 getTeamNamed
 // and applies the all-of iterate 0x0039DD12 twice: callback 0x002886E9 with
 // the int as user data, then the rowed callback 0x00288726 with null.
@@ -47,7 +49,7 @@ int __cdecl Rva002886E9(Object *obj, void *userData)
 	return 1;
 }
 
-void __stdcall Rva003C1EC2Set(const AsciiString &team, int v)
+void ScriptActions::Rva003C1EC2Set(const AsciiString &team, int v)
 {
 	Team *t = TheScriptEngine->getTeamNamed(team, false);
 	if (t != 0)

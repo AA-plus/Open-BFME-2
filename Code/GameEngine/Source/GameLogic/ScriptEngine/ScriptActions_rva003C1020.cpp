@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003C1020Do@@YGXABVAsciiString@@0PAVParameter@@@Z @0x003C1020 184B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C1020Do@ScriptActions@@QAEXABVAsciiString@@0PAVParameter@@@Z @0x003C1020 184B
 // Team command-button on object via rowed callees.
 // Evidence: caller 0x003CCCBE; neighbours 0x003C0FEA 0x003C10D8;
 // globals g_Va009FE16C g_Va009FF0F8 g_bfmeWorldRV; StringBase copy 0x000365F0.
@@ -60,7 +62,7 @@ extern class ScriptEngine *TheScriptEngine;
 extern class AI *TheAI;
 extern class ControlBar *TheControlBar;
 
-void __stdcall Rva003C1020Do(const AsciiString &teamName, const AsciiString &cmdName, Parameter *unitParm)
+void ScriptActions::Rva003C1020Do(const AsciiString &teamName, const AsciiString &cmdName, Parameter *unitParm)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);
 	if (team == 0)

@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C0DE1Do@@YGXABVAsciiString@@_N@Z @0x003C0DE1 81B.
+// ?Rva003C0DE1Do@ScriptActions@@QAEXABVAsciiString@@_N@Z @0x003C0DE1 81B.
 // Script team helper over named team via getTeamNamed iterate Rva-advance,
 // applying Rva002EFB20 helper to each member with bool flag. Neighbours
 // ScriptActions_rva003C0A2E / rva003C0F09 share flags. Evidence: rowed
@@ -38,7 +40,7 @@ namespace Rva002EFB20
 void __cdecl helper(void *obj, bool flag);
 }
 
-void __stdcall Rva003C0DE1Do(const AsciiString &teamName, bool flag)
+void ScriptActions::Rva003C0DE1Do(const AsciiString &teamName, bool flag)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);
 	if (team == 0)

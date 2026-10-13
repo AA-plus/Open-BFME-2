@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C1F6CDo@@YGXPBVAsciiString@@H@Z @0x003C1F6C 65B (dump range 18).
+// ?Rva003C1F6CDo@ScriptActions@@QAEXPBVAsciiString@@H@Z @0x003C1F6C 65B (dump range 18).
 // Team player forward: team-name copy, getTeamNamed, rowed Team
 // getControllingPlayer, then the rowed 0x002A9CDE member on the player
 // with (team-as-int, int). Callee identity fuzzy (two rowed names, same
@@ -28,7 +30,7 @@ public:
 	void rva002A9CDE(int a, int b);
 };
 
-void __stdcall Rva003C1F6CDo(const AsciiString *teamName, int x)
+void ScriptActions::Rva003C1F6CDo(const AsciiString *teamName, int x)
 {
 	Team *team = TheScriptEngine->getTeamNamed(*teamName, false);
 	if (team == 0)

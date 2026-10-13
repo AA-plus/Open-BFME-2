@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003C2C28Do@@YGXPAVParameter@@0@Z @0x003C2C28 103B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C2C28Do@ScriptActions@@QAEXPAVParameter@@0@Z @0x003C2C28 103B
 // Script sum player field over mask then set counter: mask via rowed rva00357475
 // 0x00357475 with NULL, each player via rowed getEachPlayerFromMask 0x002A7BC9,
 // value via rowed get 0x002A9ED2, counter via pin bfmeCounter 0x0020874B by value.
@@ -41,13 +43,13 @@ public:
 	int rva00357475(const AsciiString &name, bool *matchedSpecialName);
 protected:
 	ScriptCounter *bfmeCounter(AsciiString name);
-	friend void __stdcall Rva003C2C28Do(Parameter *a, Parameter *b);
+	friend void ScriptActions::Rva003C2C28Do(Parameter *a, Parameter *b);
 };
 
 extern class ScriptEngine *TheScriptEngine;
 extern PlayerList *ThePlayerList;
 
-void __stdcall Rva003C2C28Do(Parameter *a, Parameter *b)
+void ScriptActions::Rva003C2C28Do(Parameter *a, Parameter *b)
 {
 	int total = 0;
 	int mask = TheScriptEngine->rva00357475(a->m_string, (bool *)0);

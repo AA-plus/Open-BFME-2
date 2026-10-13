@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /GX /arch:SSE
-// ?Rva003C1F0A@@YGXABVAsciiString@@ABV?$StringBase@D@@M@Z @0x003C1F0A 98B: Script team to AIGroup anim via getTeamNamed createGroup getTeamAsAIGroup and AIGroup slot10; neighbours ScriptActions_rva003C1E69 ScriptActions_rva003C1FAD; caller 0x003CD5F7.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C1F0A@ScriptActions@@QAEXABVAsciiString@@ABV?$StringBase@D@@M@Z @0x003C1F0A 98B: Script team to AIGroup anim via getTeamNamed createGroup getTeamAsAIGroup and AIGroup slot10; neighbours ScriptActions_rva003C1E69 ScriptActions_rva003C1FAD; caller 0x003CD5F7.
 #include "ascii_string.h"
 
 class Team;
@@ -41,7 +43,7 @@ extern int BfmeLogicFramesPerSecond;
 // ?createGroup@AI@@QAEPAVAIGroup@@XZ present-unmatched
 // ?getTeamAsAIGroup@Team@@QAEXPAVAIGroup@@@Z present-unmatched
 // ?rva0036E1C3@AIGroup@@QAEXABV?$StringBase@D@@H@Z present-unmatched
-void __stdcall Rva003C1F0A(const AsciiString &teamName, const StringBase<char> &animName, float f)
+void ScriptActions::Rva003C1F0A(const AsciiString &teamName, const StringBase<char> &animName, float f)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	if (team == 0)
