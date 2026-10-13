@@ -27,7 +27,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 // Root reconstructed the body; independent Astra review restored the switch
 // and audited the call/data identities before landing.
 #include "matrix3d.h"
-#include "matrix4.h"
+// Link view: Matrix4(Vector4 x4), Transpose and the Matrix3D overloads stay inline without emitting
+// copies that lose to retail's /O1 owners (0x0006A34E, 0x0006A3D1).
+#include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_bfme1_rows_link.h"
 #include "vector3.h"
 #include "multilist.h"
 class VertexMaterialClass {public: float Get_Opacity() const; void Set_Opacity(float); void Get_Emissive(Vector3*) const;void Set_Emissive(const Vector3&);};

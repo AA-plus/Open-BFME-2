@@ -10,6 +10,9 @@
 #include "../../../../../reference/shims/bfme_matrix3d_sse_link/vector4.h"
 // stlport
 #define Matrix4x4 Matrix4  // BFME renamed it
+// Link view: Matrix4(Vector4 x4), Transpose and the Matrix3D overloads stay inline without emitting
+// non-/O1 copies that lose to retail's owners (0x0006A34E, 0x0006A3D1).
+#include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_zh_rows_link.h"
 // Retail deallocation cannot throw; keep member cleanup outside an EH frame.
 void operator delete[](void*) throw();
 /*

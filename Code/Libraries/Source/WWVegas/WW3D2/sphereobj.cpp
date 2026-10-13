@@ -9,6 +9,9 @@
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(ARGCLASS)
 #define Matrix4x4 Matrix4  // BFME renamed it
+// Link view: Matrix4(Vector4 x4), Transpose and the Matrix3D overloads stay inline without emitting
+// copies that lose to retail's /O1 owners (0x0006A34E, 0x0006A3D1).
+#include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_bfme1_rows_link.h"
 #define __PLACEMENT_VEC_NEW_INLINE  // always.h/GameMemory.h define array placement-new themselves
 // stlport
 /*

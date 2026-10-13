@@ -20,6 +20,9 @@ struct BfmeVciAnchorElem { BfmeVciAnchorElem(); };
 static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #pragma optimize("", on)
 #define Matrix4x4 Matrix4
+// Link view: Matrix4(Vector4 x4), Transpose and the Matrix3D overloads stay inline without emitting
+// copies that lose to retail's /O1 owners (0x0006A34E, 0x0006A3D1).
+#include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_bfme1_rows_link.h"
 
 // PointGroupClass::Render(RenderInfoClass &, int) at retail 0x00917B70 and the
 // APT compression helper it calls at 0x00917920.

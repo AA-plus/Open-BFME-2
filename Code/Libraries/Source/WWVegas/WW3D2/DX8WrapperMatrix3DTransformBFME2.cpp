@@ -26,7 +26,9 @@
 // Native WORLD/VIEW flags clear identity before setting the changed bit.
 #include "winbase_shim.h"
 #include "matrix3d.h"
-#include "matrix4.h"
+// Link view: Matrix4(Vector4 x4), Transpose and the Matrix3D overloads stay inline without emitting
+// copies that lose to retail's /O1 owners (0x0006A34E, 0x0006A3D1).
+#include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_bfme1_rows_link.h"
 #include <d3d8.h>
 struct RenderStateStruct { unsigned char unused_fields[0x1EC]; Matrix4 world,view; };
 extern unsigned number_of_DX8_calls;

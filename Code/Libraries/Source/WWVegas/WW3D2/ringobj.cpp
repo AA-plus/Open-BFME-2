@@ -30,6 +30,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #define W3DMPO_GLUE(ARGCLASS)
 #define Matrix4x4 Matrix4  // BFME renamed it
 #define __PLACEMENT_VEC_NEW_INLINE  // always.h/GameMemory.h define array placement-new themselves
+// Link view: Matrix4(Matrix3D), Init(Matrix3D), Matrix4(Vector4 x4) and Transpose stay inline without
+// emitting copies that, first in link order, displace retail's owners (0x0006A34E, 0x0006A3D1).
+#include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_bfme1_rows_link.h"
 // This unit has no /O1 /arch:SSE, so the ShaderClass setters it inlines are emitted here as COMDATs that are not
 // the /O1 bodies retail keeps (rowed in the units that do compile with them); every use is inlined, so
 // TU-local names keep them from competing with those copies.

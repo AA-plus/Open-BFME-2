@@ -12,6 +12,9 @@
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(ARGCLASS)
 #define Matrix4x4 Matrix4  // BFME renamed it
+// Link view: Matrix4(Vector4 x4), Transpose and the Matrix3D overloads stay inline without emitting
+// non-/O1 copies that lose to retail's owners (0x0006A34E, 0x0006A3D1).
+#include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_zh_rows_link.h"
 /*
 **	Command & Conquer Generals Zero Hour(tm)
 **	Copyright 2025 Electronic Arts Inc.

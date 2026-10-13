@@ -44,6 +44,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 // Link view first: Matrix3D(), Matrix3D(bool) and Matrix3D(const Matrix3D&) stay inline without
 // emitting /O2 copies that compete with retail's owners (0x000423C5, 0x0004C91A, 0x0006645C).
 #include "../../../../../reference/shims/bfme_matrix3d_full_link/matrix3d_full_link.h"
+// Link view: Matrix4(Vector4 x4), Transpose and the Matrix3D overloads stay inline without emitting
+// copies that lose to retail's /O1 owners (0x0006A34E, 0x0006A3D1).
+#include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_bfme1_rows_link.h"
 #include "winbase_shim.h"
 #include "vector3.h"
 #include "vector4.h"
