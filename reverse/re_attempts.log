@@ -49770,3 +49770,7 @@ __ehhandler$??BRva002D4688@@QAE?AVAsciiString@@XZ	0x007775C2	10	landed	add_match
 ??1Rva0037DF2C@@UAE@XZ	0x001EC9BD	150	blocked	same CarryoverUnit-dtor twin as LivingWorldBattle: element-type rename would break the rowed Rva0037DF2C ctor ref; needs CarryoverUnit ctor row; t=5 model=muse-spark
 ?Move@ButtonShell@Impl@AptRadialMenu@@QAEXVCoord2D@@0@Z	0x00577D93	136	blocked	rowed twin takes HHHH but retail caller pushes float Coord2Ds bit-identical; int decl would emit cvt; same struct-vs-ints wall as moveTeamTo; t=6 model=muse-spark
 ?rva006d5e70ptr@Rva006D5E70String@@QAEPAXH@Z	0x006D5E70	205	blocked	rowed twin returns void but caller uses the pointer; t=4 model=muse-spark
+?run@Rva002E3876Sub@@QAEXH@Z	0x00330C22	400	blocked	pin maps run(int) to 0x2E3876 rowed as PolygonTrigger::getCenterPoint2D sret; arity and class absurd; suspect wrong pin; t=5 model=muse-spark
+?rva0035C95F@Rva0035C95FView@@QBEPBURva002BFF5AData@@XZ	0x0035C95F	395	blocked	pin maps data-getter to OVERRIDE-LocomotorTemplate operator->; pointee key usage contradicts LocomotorTemplate; suspect wrong pin; t=5 model=muse-spark
+?find@Rva00388F63Map@@QAEPAXPAH@Z	0x00439E0C	571	blocked	pin points at ScienceType-keyed STL _M_find; TU owns int-keyed map; spelling the twin needs full _Rb_tree type surgery; needs own int-keyed _M_find row; t=8 model=muse-spark
+?init@Rva002ECE6AInfo@@QAEPAU1@PAX000HHH@Z	0x002F1AF4	62	blocked	rowed twin is a ctor with a bool 4th param; placement-new would emit test-setne for the void* arg vs retail direct push; t=6 model=muse-spark

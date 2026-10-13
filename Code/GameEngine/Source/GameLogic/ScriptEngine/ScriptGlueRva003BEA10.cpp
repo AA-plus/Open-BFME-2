@@ -55,6 +55,11 @@ public:
 	void rva00372571(Rva00372571Params *params, int source);
 	void rva00372C22(Coord3D *pos, int a, int b, int c);
 };
+class BfmeC986
+{
+public:
+	void rva00372C22(int pos, int a, int b, int c);
+};
 
 class AI
 {
@@ -107,7 +112,7 @@ void __stdcall Rva003BEA10Do(const AsciiString *teamName, void *posSrc)
 	pos.y = ((const Coord3D *)((const char *)base + 0xC))->y;
 	pos.z = ((const Coord3D *)((const char *)base + 0xC))->z;
 	if (count > 1) {
-		group->rva00372C22(&pos, 1, 0, 1);
+		((BfmeC986 *)group)->rva00372C22((int)&pos, 1, 0, 1);
 	} else {
 		Rva00372571Params params;
 		params.m_14 = -1;

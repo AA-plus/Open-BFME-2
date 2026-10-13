@@ -125,11 +125,12 @@ public:
 	virtual void slot124();					// +0x124
 };
 
+class Rva00588E44Contain;
 class Rva0047A040Base9E0
 {
 public:
 	void *rva00588B8A(void *obj);
-	void *rva00588BF3(void *contain, Object *obj);
+	Rva00588E44Contain *rva00588BF3(void *contain, Object *obj);
 };
 
 class HordeGarrisonContain : public GarrisonContain, public Rva0047A040Base9E0
