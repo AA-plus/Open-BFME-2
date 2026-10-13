@@ -18,7 +18,7 @@
 //    0x0054420A (14 bytes), 0x00544218 (115 bytes) and 0x0054428B (65 bytes):
 //    slots 4-6 of 0x00C69940 (AIDockWaitForClearanceState); m_enterFrame
 //    +0x20, and the timeout's LOGICFRAMES_PER_SECOND is the rowed int global
-//    g_009BA4E4. The update's flag-to-result 'and al, 0xFE' needs /G7, which
+//    BfmeLogicFramesPerSecond. The update's flag-to-result 'and al, 0xFE' needs /G7, which
 //    the unit's other bodies accept unchanged.
 //  - AIDockProcessDockState::onExit, retail 0x00544670 (10 bytes): slot 5 of
 //    0x00C69A20; the inline StateMachine::unlock clears +0x38.
@@ -111,8 +111,8 @@ private:
 	UnsignedInt m_frame; // +0x40
 };
 extern GameLogic *TheGameLogic;
-extern const int g_009BA4E4;
-#define LOGICFRAMES_PER_SECOND g_009BA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 class StateMachine
 {
 public:

@@ -3,7 +3,7 @@
 // Object millisecond-to-frame setter: m_448 = (v / 1000u) * rate + TheGameLogic->m_frame.
 // Evidence: unsigned div by 0x3E8 plus imul with VA 0x00DBA4E4 and TheGameLogic VA 0x00DFE78C+0x40;
 // sole caller 0x00295844; neighbours ObjectLeaveGroup and Object_bfmeRefreshPartitionCells are Object TUs.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class GameLogic
 {
@@ -13,7 +13,7 @@ public:
 };
 extern GameLogic *TheGameLogic;
 
-#define BfmeLogicRate (*(unsigned int *)&g_Va00DBA4E4)
+#define BfmeLogicRate (*(unsigned int *)&BfmeLogicFramesPerSecond)
 
 class Object
 {

@@ -79,7 +79,7 @@ public:
 #undef SLOT
 
 extern AudioManager *TheAudio;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class AttributeModifierPoolUpdate
 {
@@ -242,5 +242,5 @@ void Object::rva002929F9(Object *other)
 		remaining = 0.0f;
 	if (entry->m_40 > remaining)
 		entry->m_40 = remaining;
-	reinterpret_cast<Rva001E415F *>(entry)->rva001E415F(remaining, g_Va00DBA4E4);
+	reinterpret_cast<Rva001E415F *>(entry)->rva001E415F(remaining, BfmeLogicFramesPerSecond);
 }

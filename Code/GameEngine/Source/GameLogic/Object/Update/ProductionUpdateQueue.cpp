@@ -1,4 +1,4 @@
-// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /GX /DBFME_ASCII_DTOR_DECL /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /ICode/Libraries/Include /Ireference/shims/bfme2_ascii  /D_CRTIMP=
+// cl: /I. /O1 /arch:SSE /G7 /DNDEBUG /MD /GX /DBFME_ASCII_DTOR_DECL /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /ICode/Libraries/Include /Ireference/shims/bfme2_ascii  /D_CRTIMP=
 // stlport
 //
 // ProductionUpdate queue members (BFME 2), from the Generals Zero Hour
@@ -44,6 +44,16 @@
 // frame slot, where retail reuses the dead parameter slot.
 
 #include "ascii_string.h"
+#include "unicode_string.h"
+#include "Lib/Coord3D.h"
+#include <string.h>
+#include <bitset>
+enum UpdateSleepTime { UPDATE_SLEEP_NONE=1 };
+enum ModelConditionFlagType { MODEL_NONE=0 };
+enum DisabledType { DISABLED_NONE=0 };
+enum KindOfType { KINDOF_NONE=0 };
+enum CellShroudStatus { SHROUD_NONE=0 };
+class Drawable; class Team; struct CreateMask; class Rva0049CD4FArg;
 
 typedef bool Bool;
 typedef int Int;
@@ -210,9 +220,11 @@ class Rva000BB710
 {
 public:
 	void xfer(Xfer *xfer);
-
+ unsigned int test(unsigned bit) const { return m_words[bit>>5] & (1u << (bit&31)); }
+ void clear() { memset(m_words,0,sizeof(m_words)); }
+ void set(unsigned bit,bool value=true) { if(value) m_words[bit>>5] |= 1u << (bit&31); else m_words[bit>>5] &= ~(1u << (bit&31)); }
 private:
-	char m_unknown00[0x4C];
+	unsigned int m_words[19];
 };
 
 enum CanMakeType
@@ -258,6 +270,7 @@ public:
 class ThingTemplate : public Rva001E35DFView
 {
 public:
+	Int rva0033A69A(const Player *,int,int) const;
 	Bool isEquivalentTo(const ThingTemplate *tt) const;
 	const AsciiString &getName() const { return m_name; }
 	UnsignedInt getProductionPriorityKind() const { return m_kindFlags[0] & (1 << 14); }
@@ -265,13 +278,22 @@ public:
 private:
 	char m_unknown0C[0x64 - 0xC];
 	AsciiString m_name; // +0x64
-	char m_unknown68[0x108 - 0x68];
+	char m_unknown68[0x7c-0x68];
+	AsciiString m_upgradeCameos[5];
+	char m_unknown90[0x108-0x90];
 	UnsignedInt m_kindFlags[7]; // +0x108, 218 KindOfType bits
+public:
+	unsigned int productionSkipsDoor() const { return m_kindFlags[6]&0x8000; }
+	const AsciiString *upgradeCameos() const { return m_upgradeCameos; }
+	char m_unknown124[0x348-0x124];
+	_STL::vector<AsciiString> m_auxiliaryTemplates;
+	Real m_buildVariationDuration; // +354
 };
 
 class ThingFactory
 {
 public:
+	Object *newObject(const ThingTemplate *,Team *,const CreateMask *,bool);
 	const ThingTemplate *findTemplate(const AsciiString &key); // findTemplate
 };
 
@@ -308,7 +330,13 @@ public:
 	char m_unknown00[4];
 	UpgradeType m_type; // +4
 	AsciiString m_name; // +8
-	char m_unknown0C[0x70 - 0xC];
+	char m_unknown0C[0x28-0xC];
+	AsciiString m_displayName;
+	char m_unknown2C[0x40-0x2C];
+	void *m_researchSound;
+	int m_evaEvent;
+	void *m_unitSound;
+	char m_unknown4C[0x70-0x4C];
 	Int m_bfme70; // +0x70
 };
 
@@ -355,15 +383,21 @@ class Player
 {
 public:
  Rva002A7461 *revivalGate() { return reinterpret_cast<Rva002A7461 *>(reinterpret_cast<char *>(this)+0x60); }
+	Bool allowedToBuild(const ThingTemplate *) const;
+	void onUnitCreated(Object *,Object *);
 	Rva003B0D7C *getMoney() { return &m_money; }
 	Bool rva002AB87D(const UpgradeTemplate *upgrade) const; // hasUpgradeComplete
 	Bool rva002AA8EF(const UpgradeTemplate *upgrade) const; // hasUpgradeInProduction
 	Upgrade *rva002AE329(const UpgradeTemplate *upgrade, UpgradeStatusType status, Int flag); // addUpgrade
 	void rva002ADAC3(const UpgradeTemplate *upgrade, Int flag); // removeUpgrade
 
-	char m_unknown00[0x90];
+	char m_unknown00[0x54];
+	Int m_playerIndex;
+	char m_unknown58[0x90-0x58];
 	Rva003B0D7C m_money; // +0x90
-	char m_unknown9C[0x3BC - 0x9C];
+	char m_unknown9C[0x2ec-0x9c];
+	Team *m_defaultTeam;
+	char m_unknown2F0[0x3bc-0x2f0];
 	Rva0039B795 m_tracker; // +0x3BC
 	char m_unknown3C0[0x738 - 0x3C0];
 	Rva0037EE4C m_revivalTracker; // +0x738 (WB uses +0x740)
@@ -395,11 +429,8 @@ extern NameKeyGenerator *TheNameKeyGenerator;
 
 #define NAMEKEY(x) (TheNameKeyGenerator->nameToKey(x))
 
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-};
+#define _GAME_TYPE_H_
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 
 class Module;
@@ -418,17 +449,29 @@ public:
 	virtual const void *getRallyPoint() const = 0;
 	virtual Bool useSpawnRallyPoint() const = 0;
 	virtual Bool getNaturalRallyPoint(void *rallyPoint, Bool offset) const = 0;
-	virtual Bool getExitPosition(void *exitPosition) const = 0;
+	virtual Bool getExitPosition(void *exitPosition, float *orientation) const = 0;
 	virtual void exitSlot11() = 0;
 };
 
 class BehaviorModule;
 class ProductionUpdateInterface;
 
+class ProductionContainView; class ProductionAIUpdateView;
 class Object
 {
 public:
+ const ThingTemplate *getTemplate() const { return m_template; }
 	Player *getControllingPlayer() const;
+ void rva0028AE6D();
+ __forceinline void setProductionCondition() { if(m_modelConditionFlags.test(332)) return; m_modelConditionFlags.set(332); rva0028AE6D(); }
+ __forceinline void clearProductionCondition() { if(!m_modelConditionFlags.test(332)) return; m_modelConditionFlags.set(332,false); rva0028AE6D(); } void rva0028CFB2(const int *,const int *);
+ void setProducer(Object *); CellShroudStatus getShroudStatusForPlayer(int) const;
+ void setSpecialModelConditionState(ModelConditionFlagType,unsigned int);
+ void teleportTo(const Coord3D *,bool); void setStatus(ObjectStatusTypes,bool);
+ void updateUpgradeModules(); void setDisabledUntil(DisabledType,unsigned int);
+ bool clearDisabled(DisabledType); bool isKindOf(KindOfType) const;
+ bool isLocallyControlled() const; void rva00293077(const void *);
+ void rva002900FA(int);
 	ExitInterface *getObjectExitInterface() const;
 	Module *findUpdateModule(NameKeyType key) const { return findModule(key); }
 	Bool testStatus(ObjectStatusTypes bit) const;
@@ -436,10 +479,20 @@ public:
 	Bool rva002940B9(const UpgradeTemplate *upgrade); // affectedByUpgrade
 	BehaviorModule **getBehaviorModules() const { return m_behaviors; }
 
-	char m_unknown00[0x244];
-	BehaviorModule **m_behaviors; // +0x244, null-terminated
-	char m_unknown248[0x324 - 0x248];
+	char m_unknown00[4]; const ThingTemplate *m_template;
+ char m_unknown08[0x38-8]; Coord3D m_position;
+ char m_unknown44[0x74-0x44]; ObjectID m_id; ObjectID m_containerID;
+ char m_unknown7C[0x88-0x7c]; AsciiString m_name;
+ char m_unknown8C[0x10c-0x8c]; Rva000BB710 m_modelConditionFlags;
+ char m_unknown158[0x244-0x158];
+ BehaviorModule **m_behaviors; // +0x244, null-terminated
+	char m_unknown248[8]; ProductionContainView *m_contain;
+ char m_unknown254[4]; ProductionAIUpdateView *m_ai;
+ char m_unknown25C[8]; void *m_experience;
+ char m_unknown268[0x324-0x268];
 	Real m_bfme324; // +0x324
+ char m_unknown328[0x438-0x328]; unsigned char m_flag438;
+ char m_unknown439[0x45c-0x439]; int m_handle45C;
 
 protected:
 	Module *findModule(NameKeyType key) const;
@@ -499,7 +552,9 @@ public:
 	Bool m_bfme34; // +0x34
 	Int m_bfme38; // +0x38
 	Int m_bfme3C; // +0x3C
-	char m_unknown40[0x48 - 0x40];
+	AsciiString m_name; // +40
+	Bool m_slave; // +44
+	char m_unknown45[3];
 	Rva0049D1B1 *m_next; // +0x48
 	Rva0049D1B1 *m_prev; // +0x4C
 	char m_unknown50[0x54 - 0x50];
@@ -508,8 +563,16 @@ public:
 class ProductionUpdateModuleData
 {
 public:
-	char m_unknown00[0x28];
+	char m_unknown00[8];
+	Int m_numDoorAnimations;
+	char m_unknown0C[0x18-0xc];
+	UnsignedInt m_constructionCompleteDuration;
+	char m_unknown1C[0x28-0x1c];
 	UnsignedInt m_maxQueueEntries; // +0x28
+	char m_unknown2C[4]; bool m_noExperience; char m_unknown31[3];
+	unsigned m_specialDuration; unsigned m_completeDuration; char m_unknown3C[4];
+	bool m_inheritVeterancy; bool m_economyCondition; char m_unknown42[2];
+	AsciiString m_economyKey; void *m_economySound;
 };
 
 class BehaviorModuleBase
@@ -565,7 +628,7 @@ public:
 class UpdateModuleInterface
 {
 public:
-	virtual void update();
+	virtual UpdateSleepTime update();
 };
 
 class UpdateModule : public BehaviorModule, public UpdateModuleInterface
@@ -633,15 +696,487 @@ struct DoorInfo
 	Bool m_holdOpen;
 };
 
+// Native-only supplemental views for the update bank. No inferred full class ABI.
+#include "Code/GameEngine/Include/Common/BfmeAudioEventPrefix136.h"
+class Rva002D9531 { public: void rva002D9531(int); };
+class Rva0033F15DDwordSlot { public: void set(int); };
+class Rva002AE98B { public: float rva002AE98B(const AsciiString *); };
+class Rva0049D3BC { public: void rva0049D3BC(); };
 struct Rva002A7557In;
 class Rva002A7461 { public: bool rva002A7557(Rva002A7557In *,int); };
-class Rva0037E421 { public: void *rva0037E421(int); };
+class Rva0037E6E8 { public: float rva0037E815(int,Object *); };
+class Rva0037E421 { public: void *rva0037E451(int); void *rva0037E421(int); };
 struct ProductionRevivalCount { char m_pad[0x98]; int m_98; };
+class UnitRevivalTracker { public: Object *productionSystemNewObject(unsigned int,const Coord3D *); };
+class Rva0039ADF3 { public: bool rva0039AE04() const; };
+class ExperienceTracker { public: void rva0039B315(float,bool,bool,bool,bool); };
+struct ProductionExperienceView { char pad[0x24]; int level; int next; };
+class Rva003BD306Target { public: void rva0039B2C7(int,int); };
+class Rva004DC8E7AsciiField { public: AsciiString get() const; };
+class ScriptEngine { public:
+ void rva00357F11(int,const AsciiString &,int);
+ bool didUnitExist(const AsciiString &);
+ void addObjectToCache(Object *,const AsciiString &);
+ void rva00357960(const AsciiString &,Object *);
+};
+extern ScriptEngine *TheScriptEngine;
+class Rva00358752Opaque { public: Object *lookupUnitByValue(AsciiString); };
+class Thing { public: Drawable *getDrawable() const; void setPosition(const Coord3D *); void setOrientation(float); };
+class Rva002390CB { public: int opaque00; OpaqueRefElement4 ref; ~Rva002390CB() { if(ref.referent) ref.referent->Release_Ref(); } };
+class Drawable { public:
+ void setFullyObscuredByShroud(bool); void rva002723C0(int); void rva00274176(bool);
+ void setDrawableHidden(bool); void fadeIn(unsigned int);
+ Rva002390CB rva0049D114();
+ // Native shared empty RET hook; owner/identity still needs fold proof.
+ void rva000B3FD0();
+};
+class Rva002707FA { public: void rva002707FA(unsigned char); };
+class Rva0028CBFD { public: void rva0028CBFD(); };
+class SlaveWatcherBehavior { public: void rva00484869(int); };
+class Rva0049CD24 { public: void rva0049CD24(Object *); };
+struct CreateMask { unsigned int bits[4]; CreateMask() { memset(bits,0,sizeof(bits)); } };
+struct ProductionPlayerListView { char pad[0x10]; Player *localPlayer; };
+class PlayerList; extern PlayerList *ThePlayerList;
+struct ProductionAIDataView { char pad[0xbb]; bool createdFlag; };
+class Pathfinder { public: int MoveAlliesAwayFromDestination(Object *,const Coord3D *,const Coord3D *); };
+struct ProductionAIView { char pad[0x10]; Pathfinder *pathfinder; Pathfinder *getPathfinder() const { return pathfinder; } char pad14[4]; ProductionAIDataView *data; };
+class AI; extern AI *TheAI;
+// Shared writable timing owners and door-state tables are reconciled across
+// their existing consumers; the globals keep one definition at each address.
+extern int BfmeLogicFramesPerSecond;
+extern int BfmeClientFramesPerSecond;
+extern unsigned int ProductionDoorOpeningFlags[4];
+extern unsigned int ProductionDoorClosingFlags[4];
+extern unsigned int ProductionDoorWaitingOpenFlags[4];
+enum EvaEventID { EVA_NONE=0 };
+class Eva { public: bool reportEvaEvent(EvaEventID,const Coord3D *,const Coord3D *); };
+extern Eva *TheEva;
+enum RadarEventType { RADAR_NONE=0 };
+class Radar { public: void createEvent(const Coord3D *,RadarEventType,float); };
+extern Radar *TheRadar;
+class FXList { public: static void doFXObj(const FXList *,const Object *,const Object *); };
+class FXListStore { public: const FXList *findFXList(const char *) const; };
+extern FXListStore *TheFXListStore;
+class GameTextInterface { public:
+ virtual void s00();virtual void s04();virtual void s08();virtual void s0c();
+ virtual void s10();virtual void s14();virtual void s18();virtual void s1c();
+ virtual void s20();virtual void s24();virtual void s28();virtual void s2c();
+ virtual void s30();virtual void s34();virtual void s38();
+ virtual UnicodeString fetch(const char *,bool * =0);
+};
+extern GameTextInterface *TheGameText;
+class InGameUI; extern InGameUI *TheInGameUI;
+class ControlBar; extern ControlBar *TheControlBar;
+struct ProductionControlBarView { char pad[0x28]; bool dirty; };
+struct ProductionDrawableView { char pad[0xfc]; Object *object; };
+class TerrainLogic; extern TerrainLogic *TheTerrainLogic;
+class RespawnUpdate { public: void triggerRevival(Object *); };
+struct Rva0028F633 { Rva0028F633(int,int); unsigned int bits[32]; };
+namespace _STL {
+}
+class DrawableList: public _STL::list<Drawable *> {public: ~DrawableList() throw();};
+class PickAndPlayInfo;
+class Rva004D92FE { public: Rva004D92FE(); char pad[8]; Drawable *drawTarget; char tail[24]; };
+class GameMessage { public: enum Type { MSG_NONE=0 }; };
+void pickAndPlayUnitVoiceResponse(const DrawableList *,GameMessage::Type,PickAndPlayInfo *);
+// WB1207EF0 and native caller prove this member ABI; provider corrected and byte-verified.
+struct Rva0049DF81Input;
+
+class ProductionAudioView { public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void s40();
+virtual void s44();
+virtual void s48();
+virtual void s4c();
+virtual void s50();
+virtual void s54();
+virtual void s58();
+virtual void s5c();
+virtual void s60();
+virtual unsigned int addEvent(const BfmeAudioEventPrefix136 *);
+virtual void s68();
+virtual void stopEvent(unsigned int);
+virtual void s70();
+virtual void s74();
+virtual void s78();
+virtual void s7c();
+virtual void s80();
+virtual void s84();
+virtual void s88();
+virtual void s8c();
+virtual void s90();
+virtual void s94();
+virtual void s98();
+virtual void s9c();
+virtual void sa0();
+virtual void sa4();
+virtual void sa8();
+virtual void sac();
+virtual void sb0();
+virtual void sb4();
+virtual void sb8();
+virtual void sbc();
+virtual void sc0();
+virtual void sc4();
+virtual void sc8();
+virtual void scc();
+virtual bool isPlaying(unsigned int);
+};
+
+class ProductionInGameUIView { public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void message(UnicodeString,...);
+virtual void s44();
+virtual void s48();
+virtual void s4c();
+virtual void s50();
+virtual void s54();
+virtual void s58();
+virtual void s5c();
+virtual void s60();
+virtual void s64();
+virtual void s68();
+virtual void s6c();
+virtual void s70();
+virtual void s74();
+virtual void s78();
+virtual void s7c();
+virtual void s80();
+virtual void s84();
+virtual void s88();
+virtual void s8c();
+virtual void s90();
+virtual void s94();
+virtual void s98();
+virtual void s9c();
+virtual void sa0();
+virtual void sa4();
+virtual void sa8();
+virtual void sac();
+virtual void sb0();
+virtual void sb4();
+virtual void sb8();
+virtual void sbc();
+virtual void sc0();
+virtual void sc4();
+virtual void sc8();
+virtual void scc();
+virtual void sd0();
+virtual void sd4();
+virtual void sd8();
+virtual void sdc();
+virtual void se0();
+virtual void se4();
+virtual void se8();
+virtual void sec();
+virtual void sf0();
+virtual void sf4();
+virtual void sf8();
+virtual void sfc();
+virtual void s100();
+virtual void s104();
+virtual void s108();
+virtual void s10c();
+virtual void s110();
+virtual void s114();
+virtual void s118();
+virtual void s11c();
+virtual void s120();
+virtual void s124();
+virtual void s128();
+virtual Drawable *getSelectedDrawable();
+};
+
+class ProductionAIUpdateView { public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void s40();
+virtual void s44();
+virtual void s48();
+virtual void s4c();
+virtual void s50();
+virtual void s54();
+virtual void s58();
+virtual void s5c();
+virtual void s60();
+virtual void s64();
+virtual void s68();
+virtual void s6c();
+virtual void s70();
+virtual void s74();
+virtual void s78();
+virtual void s7c();
+virtual void s80();
+virtual void s84();
+virtual void s88();
+virtual void s8c();
+virtual void s90();
+virtual void s94();
+virtual void s98();
+virtual void s9c();
+virtual void sa0();
+virtual void sa4();
+virtual void sa8();
+virtual void sac();
+virtual void sb0();
+virtual void sb4();
+virtual void sb8();
+virtual void sbc();
+virtual void sc0();
+virtual void sc4();
+virtual void sc8();
+virtual void scc();
+virtual void sd0();
+virtual void sd4();
+virtual void sd8();
+virtual void sdc();
+virtual void se0();
+virtual void se4();
+virtual void se8();
+virtual void sec();
+virtual void sf0();
+virtual void sf4();
+virtual void sf8();
+virtual void sfc();
+virtual void s100();
+virtual void s104();
+virtual void s108();
+virtual void s10c();
+virtual void s110();
+virtual void s114();
+virtual void s118();
+virtual void s11c();
+virtual void s120();
+virtual void s124();
+virtual void s128();
+virtual void s12c();
+virtual void s130();
+virtual void s134();
+virtual void s138();
+virtual void s13c();
+virtual void s140();
+virtual void s144();
+virtual void s148();
+virtual void s14c();
+virtual void s150();
+virtual void s154();
+virtual void s158();
+virtual void s15c();
+virtual void s160();
+virtual void s164();
+virtual bool s168();
+virtual void s16c();
+virtual void s170();
+virtual void s174();
+virtual void s178();
+virtual void s17c();
+virtual void s180();
+virtual void s184();
+virtual void s188();
+virtual void s18c();
+virtual void s190();
+virtual void s194();
+virtual void s198();
+virtual void s19c();
+virtual void s1a0();
+virtual void s1a4();
+virtual void s1a8();
+virtual void s1ac();
+virtual void s1b0();
+virtual void s1b4();
+virtual void s1b8();
+virtual void s1bc();
+virtual void s1c0();
+virtual void s1c4();
+virtual void s1c8();
+virtual void s1cc();
+virtual void s1d0();
+virtual void s1d4();
+virtual void s1d8();
+virtual void s1dc();
+virtual void s1e0();
+virtual void s1e4();
+virtual void s1e8();
+virtual void s1ec();
+virtual void s1f0();
+virtual void s1f4();
+virtual void s1f8();
+virtual void s1fc();
+virtual void s200();
+virtual void s204();
+virtual void s208();
+virtual void s20c();
+virtual void s210();
+virtual void s214();
+virtual void s218();
+virtual void s21c();
+virtual void s220();
+virtual void s224();
+virtual void s228();
+virtual void s22c();
+virtual void s230();
+virtual void s234(Object *);
+};
+
+class ProductionSlaveInterface { public:
+virtual void s00();
+virtual void setMaster(Object *);
+};
+
+class ProductionBehaviorView { public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void s40();
+virtual void s44();
+virtual void s48();
+virtual void s4c();
+virtual void s50();
+virtual void s54();
+virtual void s58();
+virtual void s5c();
+virtual void s60();
+virtual void s64();
+virtual ProductionSlaveInterface *getSlave();
+};
+
+class ProductionHordeInterface { public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual AsciiString getTemplateName();
+virtual int getExtraCount();
+};
+
+class ProductionContainView { public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void s40();
+virtual void s44();
+virtual void s48();
+virtual void s4c();
+virtual void s50();
+virtual void s54();
+virtual void s58();
+virtual void s5c();
+virtual void s60();
+virtual void s64();
+virtual void s68();
+virtual void s6c();
+virtual void s70();
+virtual void s74();
+virtual ProductionAIUpdateView *getAI();
+virtual ProductionHordeInterface *getHorde();
+};
+
+class ProductionTerrainView { public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void s40();
+virtual void s44();
+virtual void s48();
+virtual void terrainHeight(float,float,float *,int,int);
+};
 
 class ProductionUpdate : public UpdateModule, public ProductionUpdateInterface, public DieModuleInterface
 {
 public:
- void rva0049CF25();
+ virtual UpdateSleepTime update();
+ void rva0049E368(); void rva0049CF25();
+ void rva0049DF81(Rva0049DF81Input *,Object *);
+ Int calcTotalProductionFrames(Rva0049CD4FArg *);
+
 	virtual CanMakeType rva0049CFCD() const;
 	virtual CanMakeType canQueueUpgrade(const UpgradeTemplate *upgrade) const;
 	virtual ProductionID requestUniqueUnitID();
@@ -692,7 +1227,7 @@ protected:
 	UnsignedInt m_bfme118; // +0x118
 	Bool m_bfme11C; // +0x11C
 	ObjectID m_bfme120; // +0x120
-	char m_unknown124[0x128 - 0x124];
+	_STL::list<ObjectID> m_createdAuxiliary; // +124
 	UnsignedInt m_bfme128; // +0x128
 	AudioHandle m_bfme12C; // +0x12C
 	_STL::vector<AsciiString> m_bfme130; // +0x130
@@ -1272,9 +1807,7 @@ void ProductionUpdate::xfer( Xfer *xfer )
 
 }  // end xfer
 
-// Native49CF25..49CF9E primary-this revival counter. WB validates entry+98.
-// Retaining both equivalent call arms gives the native receiver-before-argument
-// schedule for the nextProduction virtual call; no behavior or ABI change.
+
 void ProductionUpdate::rva0049CF25()
 {
  for (const Rva0049D1B1 *entry=m_productionQueue;entry;entry=(m_productionQueue ? nextProduction(entry) : nextProduction(entry))) {
@@ -1290,4 +1823,260 @@ void ProductionUpdate::rva0049CF25()
   ProductionRevivalCount *item=reinterpret_cast<ProductionRevivalCount *>(reinterpret_cast<Rva0037E421 *>(tracker)->rva0037E421(index));
   if (item) ++item->m_98;
  }
+}
+
+// ZH update supplies the queue/door/unit/upgrade structure; BFME2/WB1204250
+// supplies every added revival/companion/condition branch and observed offset.
+UpdateSleepTime ProductionUpdate::update()
+{
+ static NameKeyType respawnKey=NAMEKEY("RespawnUpdate");
+ const ProductionUpdateModuleData *d=getProductionUpdateModuleData();
+ unsigned int now=TheGameLogic->getFrame();
+ Object *us=getObject();
+ void *experience=us->m_experience;
+ rva0049E368();
+ rva0049CF25();
+ Rva0049D1B1 *production=const_cast<Rva0049D1B1 *>(GetEntryToProcess());
+ if(us->getControllingPlayer()) {
+  if(d->m_economyCondition) {
+   if(((Rva002AE98B *)us->getControllingPlayer())->rva002AE98B(&d->m_economyKey)<0.0f) {
+    us->setProductionCondition();
+   } else us->clearProductionCondition();
+  }
+  if(d->m_economySound) {
+   if(((Rva002AE98B *)us->getControllingPlayer())->rva002AE98B(&d->m_economyKey)<0.0f && !(us->m_flag438&1) && !us->testStatus((ObjectStatusTypes)2)) {
+    if(!((ProductionAudioView *)TheAudio)->isPlaying(m_bfme12C)) {
+     BfmeAudioEventPrefix136 sound(*(const OpaqueRefElement4 *)&d->m_economySound,us->m_id);
+     ((Rva0033F15DDwordSlot *)&sound)->set(us->getControllingPlayer()->m_playerIndex);
+     m_bfme12C=((ProductionAudioView *)TheAudio)->addEvent(&sound);
+    }
+   } else { ((ProductionAudioView *)TheAudio)->stopEvent(m_bfme12C); m_bfme12C=1; }
+  }
+ }
+ if(d->m_numDoorAnimations>0) ((Rva0049D3BC *)this)->rva0049D3BC();
+ if(m_bfme128>0) --m_bfme128;
+ if(m_constructionCompleteFrame && now-m_constructionCompleteFrame>d->m_constructionCompleteDuration) {
+  m_constructionCompleteFrame=0;
+  m_clearFlags.set(74,true); m_setFlags.set(74,false); m_flagsDirty=true;
+ }
+ if(m_flagsDirty==true) { us->rva0028CFB2((const int *)&m_clearFlags,(const int *)&m_setFlags); m_clearFlags.clear(); m_setFlags.clear(); m_flagsDirty=false; }
+ if(!production || us->testStatus((ObjectStatusTypes)19)) return UPDATE_SLEEP_NONE;
+ Player *player=us->getControllingPlayer();
+ if(!player) { removeFromProductionQueue(production); ::delete production; return UPDATE_SLEEP_NONE; }
+ if((production->m_type==PRODUCTION_UNIT || production->m_type==PRODUCTION_HORDE_UNIT) && m_bfme120==0 && m_bfme118<=0) {
+  bool allowed=player->allowedToBuild(production->getProductionObject());
+  bool available=((Rva002A7461 *)((char *)player+0x60))->rva002A7557((Rva002A7557In *)production->getProductionObject(),1);
+  if((!allowed || !available) && !production->m_bfme34) {
+   if(!available && player==((ProductionPlayerListView *)ThePlayerList)->localPlayer) TheEva->reportEvaEvent((EvaEventID)11,&us->m_position,0);
+   return UPDATE_SLEEP_NONE;
+  }
+ }
+ if(production->m_type==PRODUCTION_UPGRADE) {
+  const UpgradeTemplate *upgrade=production->m_upgradeToResearch;
+  if(upgrade && upgrade->getUpgradeType()==UPGRADE_TYPE_OBJECT && !getObject()->rva002940B9(upgrade)) { cancelUpgrade(upgrade); return UPDATE_SLEEP_NONE; }
+ }
+ ++production->m_bfme1C;
+ int total=calcTotalProductionFrames((Rva0049CD4FArg *)production);
+ production->m_percentComplete=(float)production->m_bfme1C/(float)total*100.0f;
+ production->m_bfme18=100.0f/(float)total;
+ bool ready=false;
+ if(production->m_type==PRODUCTION_HORDE_UNIT && &player->m_revivalTracker) {
+  int index=player->m_revivalTracker.rva0037EE4C(production->getProductionObject(),production->getProductionID(),0);
+  float progress=((Rva0037E6E8 *)&player->m_revivalTracker)->rva0037E815(index,us);
+  if(progress>=1.0f && m_bfme128==0) ready=true;
+ } else if(production->m_percentComplete>=100.0f) ready=true;
+ if(!ready) return UPDATE_SLEEP_NONE;
+ switch(production->m_type) {
+ case PRODUCTION_UNIT:
+ case PRODUCTION_HORDE_UNIT: {
+  bool revival=production->m_type==PRODUCTION_HORDE_UNIT;
+  ExitInterface *exitInterface=us->getObjectExitInterface();
+  if(exitInterface) {
+  int numberToTry=production->m_productionQuantityTotal-production->m_productionQuantityProduced;
+  for(int i=0;i<numberToTry;++i) {
+   ExitDoorType exitDoor=production->m_exitDoor;
+   if(production->m_objectToProduce && production->m_objectToProduce->productionSkipsDoor()) exitDoor=(ExitDoorType)-2;
+   if(exitDoor==(ExitDoorType)-1) { exitDoor=exitInterface->reserveDoorForExit(production->m_objectToProduce,0); production->m_exitDoor=exitDoor; }
+   if(exitDoor==(ExitDoorType)-1) continue;
+   DoorInfo *door=(exitDoor>=0 && exitDoor<4)? &m_doors[exitDoor] : 0;
+   if(d->m_numDoorAnimations>0 && door) {
+    if(door->m_doorOpenedFrame==0 && door->m_doorWaitOpenFrame==0 && door->m_doorClosedFrame==0) {
+     door->m_doorOpenedFrame=now; m_setFlags.set(ProductionDoorOpeningFlags[exitDoor]); m_flagsDirty=true;
+    } else if(door->m_doorWaitOpenFrame!=0) door->m_doorWaitOpenFrame=now;
+    else if(door->m_doorClosedFrame!=0) {
+     door->m_doorWaitOpenFrame=now;
+     m_clearFlags.set(ProductionDoorOpeningFlags[exitDoor],true); m_clearFlags.set(ProductionDoorClosingFlags[exitDoor],true);
+     m_setFlags.set(ProductionDoorOpeningFlags[exitDoor],false); m_setFlags.set(ProductionDoorClosingFlags[exitDoor],false);
+     m_setFlags.set(ProductionDoorWaitingOpenFlags[exitDoor]); m_flagsDirty=true;
+    }
+   }
+   if(m_constructionCompleteFrame==0) { m_constructionCompleteFrame=now; m_setFlags.set(74); m_flagsDirty=true; }
+   if(d->m_numDoorAnimations!=0 && door && door->m_doorWaitOpenFrame==0) continue;
+   Object *newObj;
+   if(m_bfme120==0) {
+    Coord3D pos; pos.z=pos.y=pos.x=0.0f; float angle=0.0f;
+    bool havePosition=exitInterface->getExitPosition(&pos,&angle);
+    int revivalExperience=0;
+    CreateMask mask;
+    if(revival) {
+     Player *controller=us->getControllingPlayer();
+     UnitRevivalTracker *tracker=(UnitRevivalTracker *)&controller->m_revivalTracker;
+     void *record=((Rva0037E421 *)tracker)->rva0037E451(production->m_productionID);
+     if(record) revivalExperience=*(int *)((char *)record+0xc8);
+     newObj=tracker->productionSystemNewObject(production->m_productionID,&pos);
+     if(!newObj) { removeFromProductionQueue(production); ::delete production; return UPDATE_SLEEP_NONE; }
+     if(newObj->m_handle45C) TheGameLogic->rva0023D0C2(newObj,newObj->m_handle45C);
+     else TheGameLogic->rva0023D0C2(newObj,us->m_handle45C);
+     if(production->m_name!=AsciiString::TheEmptyString) {
+      newObj->m_name=production->m_name;
+      if(!((Rva00358752Opaque *)TheScriptEngine)->lookupUnitByValue(production->m_name) && !TheScriptEngine->didUnitExist(production->m_name)) TheScriptEngine->addObjectToCache(newObj,AsciiString(""));
+      else TheScriptEngine->rva00357960(production->m_name,newObj);
+     }
+    } else {
+     if(((ProductionAIView *)TheAI)->data->createdFlag) mask.bits[1]|=0x00800000;
+     Team *team=us->getControllingPlayer()->m_defaultTeam;
+     newObj=TheThingFactory->newObject(production->m_objectToProduce,team,&mask,false);
+     if(!newObj) { removeFromProductionQueue(production); ::delete production; return UPDATE_SLEEP_NONE; }
+     if(production->m_name!=AsciiString::TheEmptyString) {
+      newObj->m_name=production->m_name;
+      if(!((Rva00358752Opaque *)TheScriptEngine)->lookupUnitByValue(production->m_name) && !TheScriptEngine->didUnitExist(production->m_name)) TheScriptEngine->addObjectToCache(newObj,AsciiString(""));
+      else TheScriptEngine->rva00357960(production->m_name,newObj);
+     }
+     if(production->m_slave) {
+      static NameKeyType slaveKey=NAMEKEY("SlaveWatcherBehavior");
+      Module *watcher=getObject()->findUpdateModule(slaveKey);
+      if(watcher) ((SlaveWatcherBehavior *)watcher)->rva00484869(newObj->m_id);
+      for(BehaviorModule **m=newObj->getBehaviorModules();*m;++m) {
+       ProductionSlaveInterface *slave=((ProductionBehaviorView *)((char *)*m+0xc))->getSlave();
+       if(slave && getObject()) slave->setMaster(getObject());
+      }
+     }
+     ((Rva0049CD24 *)this)->rva0049CD24(newObj);
+     if(d->m_specialDuration>0) newObj->setSpecialModelConditionState((ModelConditionFlagType)0x14a,d->m_specialDuration);
+     newObj->m_bfme324=(float)production->m_cost;
+     TheGameLogic->rva0023D0C2(newObj,us->m_handle45C);
+    }
+    m_bfme120=newObj->m_id; newObj->setProducer(us);
+    if(((Thing *)newObj)->getDrawable() && us->getShroudStatusForPlayer(((ProductionPlayerListView *)ThePlayerList)->localPlayer->m_playerIndex)>=3) ((Thing *)newObj)->getDrawable()->setFullyObscuredByShroud(true);
+    void *newExperience=newObj->m_experience;
+    if(d->m_inheritVeterancy && newExperience && ((ProductionExperienceView *)experience)->level>=3) ((Rva003BD306Target *)newExperience)->rva0039B2C7(1,0);
+    if(experience && !d->m_noExperience && ((Rva0039ADF3 *)experience)->rva0039AE04()) {
+     int cost=production->m_objectToProduce->rva0033A69A(0,0,-1);
+     if(cost>0) ((ExperienceTracker *)experience)->rva0039B315((float)cost,true,true,true,false);
+    }
+    if(havePosition) {
+     ProductionAIUpdateView *ai=newObj->m_ai;
+     if(ai && ai->s168()) {
+      pos.z+=250.0f; newObj->teleportTo(&pos,true); ((Thing *)newObj)->setOrientation(angle);
+     } else { ((Thing *)newObj)->setOrientation(angle); ((ProductionTerrainView *)TheTerrainLogic)->terrainHeight(pos.x,pos.y,&pos.z,0,0); newObj->teleportTo(&pos,true); }
+    }
+    const ThingTemplate *tmpl=newObj->m_template;
+    newObj->setStatus((ObjectStatusTypes)0x5a,true);
+    if(tmpl->m_buildVariationDuration>0.0f) {
+     Coord3D rally; if(exitInterface->getNaturalRallyPoint(&rally,true)) ((ProductionAIView *)TheAI)->getPathfinder()->MoveAlliesAwayFromDestination(newObj,&us->m_position,&rally);
+    }
+    if(production->m_bfme30!=-1) {
+     ((_STL::_Base_bitset<32> *)((char *)newObj+0x284))->_M_do_or((const _STL::_Base_bitset<32> &)Rva0028F633(0,production->m_bfme30));
+    }
+    newObj->updateUpgradeModules();
+    Drawable *drawable=((Thing *)newObj)->getDrawable();
+    drawable->rva000B3FD0(); ((Rva002707FA *)drawable)->rva002707FA(1);
+    BfmeAudioEventPrefix136 voiceCreated(drawable->rva0049D114().ref,0);
+    ((Rva002D9531 *)&voiceCreated)->rva002D9531(m_bfme120);
+    ((Rva0033F15DDwordSlot *)&voiceCreated)->set(us->getControllingPlayer()->m_playerIndex);
+    ((ProductionAudioView *)TheAudio)->addEvent(&voiceCreated);
+    us->getControllingPlayer()->onUnitCreated(us,newObj);
+    ((Rva0028CBFD *)newObj)->rva0028CBFD();
+    if(production->m_productionQuantityTotal==production->m_productionQuantityTotal-production->m_productionQuantityProduced) {
+     DrawableList list; list.push_back(drawable); Rva004D92FE info; info.drawTarget=((Thing *)us)->getDrawable();
+     pickAndPlayUnitVoiceResponse(&list,(GameMessage::Type)0x7da,(PickAndPlayInfo *)&info);
+    }
+    rva0049DF81((Rva0049DF81Input *)production,newObj);
+    float buildDuration=tmpl->m_buildVariationDuration;
+    m_bfme118=(unsigned int)(buildDuration*(float)BfmeLogicFramesPerSecond);
+    newObj->setSpecialModelConditionState((ModelConditionFlagType)0xda,m_bfme118);
+    newObj->setSpecialModelConditionState((ModelConditionFlagType)0x14d,5);
+    newObj->setDisabledUntil((DisabledType)3,TheGameLogic->getFrame()+m_bfme118);
+    if(!revival) { Drawable *draw=((Thing *)newObj)->getDrawable(); if(draw) { drawable->rva002723C0(m_bfme118); draw->rva00274176(true); } }
+    const _STL::vector<AsciiString> &names=tmpl->m_auxiliaryTemplates;
+    if(!names.empty()) {
+     for(_STL::vector<AsciiString>::const_iterator it=names.begin();it!=names.end();++it) {
+      const ThingTemplate *extraTemplate=TheThingFactory->findTemplate(*it); if(!extraTemplate) continue;
+      Team *team=us->getControllingPlayer()->m_defaultTeam;
+      Object *extra=TheThingFactory->newObject(extraTemplate,team,&mask,false);
+      ((Rva0049CD24 *)this)->rva0049CD24(extra);
+      if(exitInterface->getExitPosition(&pos,&angle)) { ((Thing *)extra)->setPosition(&pos); ((Thing *)extra)->setOrientation(angle); }
+      ((Thing *)extra)->getDrawable()->setDrawableHidden(true);
+      if(!extra->m_modelConditionFlags.test(218)) { extra->m_modelConditionFlags.set(218); extra->rva0028AE6D(); }
+      newObj->setSpecialModelConditionState((ModelConditionFlagType)0x14d,5);
+      ObjectID id=extra->m_id; m_createdAuxiliary.push_back(id);
+     }
+     m_bfme11C=false;
+    }
+    Module *respawn=newObj->findUpdateModule(respawnKey);
+    if(revival && respawn) { ((RespawnUpdate *)respawn)->triggerRevival(us); if(newObj->m_experience) ((ProductionExperienceView *)newObj->m_experience)->next=revivalExperience;
+     m_bfme128=4*BfmeLogicFramesPerSecond; newObj->rva002900FA(TheGameLogic->getFrame()+4*BfmeLogicFramesPerSecond); }
+   } else { newObj=TheGameLogic->findObjectByID(m_bfme120); if(!newObj) { removeFromProductionQueue(production); ::delete production; return UPDATE_SLEEP_NONE; } }
+   ProductionContainView *contain=newObj->m_contain;
+   ProductionHordeInterface *horde=contain ? contain->getHorde() : 0;
+   if(horde) { const ThingTemplate *tmpl=TheThingFactory->findTemplate(horde->getTemplateName()); int extraCount=horde->getExtraCount();
+    if(tmpl) { ++extraCount; production->m_cost=0; production->m_objectToProduce=tmpl; production->m_productionQuantityTotal=extraCount; production->m_bfme34=true; } }
+   if(!m_bfme11C) {
+    float duration=getObject()->m_template->m_buildVariationDuration;
+    if(!m_createdAuxiliary.empty()) for(_STL::list<ObjectID>::iterator it=m_createdAuxiliary.begin();it!=m_createdAuxiliary.end();++it) {
+     Object *extra=TheGameLogic->findObjectByID(*it); if(!extra) continue;
+     ((Thing *)extra)->getDrawable()->setDrawableHidden(false); ((Thing *)extra)->getDrawable()->rva000B3FD0();
+     ((Thing *)extra)->getDrawable()->fadeIn((unsigned int)(BfmeClientFramesPerSecond*duration));
+    }
+    m_bfme11C=true;
+   }
+   if(m_bfme118) { --m_bfme118; return UPDATE_SLEEP_NONE; }
+   if(newObj->m_modelConditionFlags.test(218)) { newObj->m_modelConditionFlags.set(218,false); newObj->rva0028AE6D(); }
+   if(d->m_completeDuration>0) newObj->setSpecialModelConditionState((ModelConditionFlagType)0x5f,d->m_completeDuration);
+   if(newObj->isKindOf((KindOfType)0xda)) newObj->clearDisabled((DisabledType)3);
+   m_bfme120=(ObjectID)0;
+   if(!newObj->findUpdateModule(respawnKey)) exitInterface->exitObjectViaDoor(newObj,exitDoor);
+   ++production->m_productionQuantityProduced; production->m_exitDoor=(ExitDoorType)-1;
+   if(production->m_productionQuantityTotal-production->m_productionQuantityProduced==0) {
+    Object *container=TheGameLogic->findObjectByID(newObj->m_containerID);
+    if(container) { ProductionContainView *containerInterface=container->m_contain;
+    if(containerInterface) {
+     ProductionAIUpdateView *hordeAI=containerInterface->getAI();
+     if(hordeAI) { DrawableList list; Drawable *draw=((Thing *)container)->getDrawable(); list.push_back(draw);
+      Rva004D92FE info; info.drawTarget=((Thing *)us)->getDrawable(); pickAndPlayUnitVoiceResponse(&list,(GameMessage::Type)0x7e2,(PickAndPlayInfo *)&info);
+      hordeAI->s234(us); }
+    } }
+   }
+  }
+  if(production->m_productionQuantityTotal-production->m_productionQuantityProduced==0) { removeFromProductionQueue(production); ::delete production; exitInterface->exitSlot11(); }
+  } else { removeFromProductionQueue(production); ::delete production; }
+  break;
+ }
+ case PRODUCTION_UPGRADE: {
+  const UpgradeTemplate *upgrade=production->m_upgradeToResearch;
+  if(experience && !d->m_noExperience && ((Rva0039ADF3 *)experience)->rva0039AE04()) { int cost=upgrade->rva0026EF50(0,0); if(cost>0) ((ExperienceTracker *)experience)->rva0039B315((float)cost,true,true,true,false); }
+  ObjectID producerID=us->m_id;
+  int producerPlayer=us->getControllingPlayer()->m_playerIndex;
+  TheScriptEngine->rva00357F11(producerPlayer,upgrade->getUpgradeName(),producerID);
+  if(us->isLocallyControlled()) {
+   UnicodeString message; UnicodeString format=TheGameText->fetch("UPGRADE:UpgradeComplete"); UnicodeString name=TheGameText->fetch(upgrade->m_displayName.str());
+   message.format(format.str(),name.str()); ((ProductionInGameUIView *)TheInGameUI)->message(message);
+   TheRadar->createEvent(&us->m_position,(RadarEventType)2,4.0f);
+   bool sounded=false;
+   if(upgrade->m_evaEvent!=-1) { TheEva->reportEvaEvent((EvaEventID)upgrade->m_evaEvent,&us->m_position,0); sounded=true; }
+   if(upgrade->m_researchSound) { BfmeAudioEventPrefix136 sound(*(const OpaqueRefElement4 *)&upgrade->m_researchSound,0); ((Rva002D9531 *)&sound)->rva002D9531(us->m_id); ((ProductionAudioView *)TheAudio)->addEvent(&sound); sounded=true; }
+   if(!sounded) TheEva->reportEvaEvent((EvaEventID)4,&us->m_position,0);
+   BfmeAudioEventPrefix136 sound(*(const OpaqueRefElement4 *)&upgrade->m_unitSound,0); ((Rva002D9531 *)&sound)->rva002D9531(us->m_id); ((ProductionAudioView *)TheAudio)->addEvent(&sound);
+  }
+  if(!((Rva004DC8E7AsciiField *)upgrade)->get().isEmpty()) {
+   const FXList *fx=TheFXListStore->findFXList(((Rva004DC8E7AsciiField *)upgrade)->get().str()); if(fx) FXList::doFXObj(fx,us,0);
+  }
+  if(upgrade->getUpgradeType()==UPGRADE_TYPE_PLAYER) player->rva002AE329(upgrade,(UpgradeStatusType)2,0); else us->rva00293077(upgrade);
+  Drawable *draw=((ProductionInGameUIView *)TheInGameUI)->getSelectedDrawable(); Object *selected=draw ? ((ProductionDrawableView *)draw)->object : 0;
+  if(selected) { const ThingTemplate *selectedTemplate=selected->getTemplate(); for(int i=0;i<5;++i) if(TheUpgradeCenter->findUpgrade(selectedTemplate->upgradeCameos()[i])==upgrade) { ((ProductionControlBarView *)TheControlBar)->dirty=true; break; } }
+  removeFromProductionQueue(production); ::delete production; m_bfme120=(ObjectID)0;
+  break;
+ }
+ }
+ return UPDATE_SLEEP_NONE;
 }

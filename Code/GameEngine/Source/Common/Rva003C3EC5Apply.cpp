@@ -30,7 +30,7 @@ public:
 
 extern SpecialPowerStore *TheSpecialPowerStore;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class GameLogic
 {
@@ -63,6 +63,6 @@ void __stdcall Rva003C3EC5Apply(Parameter *p, const AsciiString &name, int arg3)
 	{
 		void *sub = obj->getSpecialPowerModule(found);
 		if (sub != 0)
-			((Rva003C3EC5Target *)sub)->w08(g_Va00DBA4E4 * arg3 + TheGameLogic->m_40);
+			((Rva003C3EC5Target *)sub)->w08(BfmeLogicFramesPerSecond * arg3 + TheGameLogic->m_40);
 	}
 }

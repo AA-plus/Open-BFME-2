@@ -1619,7 +1619,7 @@ StateReturnType AIAttackMeleeHordeApproachTargetState::update()
 	return STATE_CONTINUE;
 	}
 }
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 Bool rva003449C5(Coord3D *goalPos, Object *source, Object *victim);
 static __declspec(noinline) Bool isSamePosition(const Coord3D *ourPos,
 	const Coord3D *prevTargetPos, const Coord3D *curTargetPos)
@@ -1649,7 +1649,7 @@ Bool AIAttackMeleeHordeApproachTargetState::computePath()
 		return true;
 	if (!ai->getPath() && !ai->isWaitingForPath())
 		forceRepath = true;
-	if (!forceRepath && TheGameLogic->getFrame() - m_approachTimestamp < (unsigned int)g_009BA4E4)
+	if (!forceRepath && TheGameLogic->getFrame() - m_approachTimestamp < (unsigned int)BfmeLogicFramesPerSecond)
 		return true;
 	m_approachTimestamp = TheGameLogic->getFrame();
 

@@ -3,7 +3,7 @@
 // PickupStuffUpdate::updateInactive, retail 0x004920B5 (118 bytes), pinned by
 // address from its caller PickupStuffUpdate::update (0x0049212B), which runs
 // it on the primary `this` while the +0x20 flag is clear. Once the logic
-// frame passes the last scan frame (+0x24) plus g_Va00DBA4E4 times the
+// frame passes the last scan frame (+0x24) plus BfmeLogicFramesPerSecond times the
 // module data's float at +0x14, and the Object's +0x258 holder has a zero
 // +0x34, it scans for the nearest candidate (0x00491FA6) and, when one is
 // found, hands it to 0x00492089 and sets +0x20; either way it restamps the
@@ -19,7 +19,7 @@ public:
 	unsigned int m_40;		// +0x40, the frame
 };
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 struct PickupStuffAI
 {
@@ -61,7 +61,7 @@ private:
 };
 void PickupStuffUpdate::updateInactive()
 {
-	if ((float)TheGameLogic->getFrame() > (float)g_Va00DBA4E4 * m_moduleData->m_scanDelay + (float)m_lastScanFrame) {
+	if ((float)TheGameLogic->getFrame() > (float)BfmeLogicFramesPerSecond * m_moduleData->m_scanDelay + (float)m_lastScanFrame) {
 		if (m_object->m_258->m_34 == 0) {
 			Object *found = ((Rva00491FA6 *)this)->rva00491FA6();
 			if (found) {

@@ -15,7 +15,7 @@
 // order and pinned it with volatile members, which left 0.33 on demand in xmm0.
 // The +0x28 slot has no INI field and keeps an address-derived name.
 
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 extern "C" const void *const vtbl_0084ED70[];  // ??_7PhysicsBehaviorModuleData@@6B@
 #pragma comment(linker, "/alternatename:_vtbl_0084ED70=??_7PhysicsBehaviorModuleData@@6B@")
@@ -86,9 +86,8 @@ PhysicsBehaviorModuleData::PhysicsBehaviorModuleData() :
 	m_allowBouncing(false),
 	m_killWhenRestingOnGround(false)
 {
-	m_shockStunnedTimeLow = g_009BA4E4;
-	m_shockStunnedTimeHigh = 2 * g_009BA4E4;
-	m_shockStandingTime = g_009BA4E4;
+	m_shockStunnedTimeLow = BfmeLogicFramesPerSecond;
+	m_shockStunnedTimeHigh = 2 * BfmeLogicFramesPerSecond;
+	m_shockStandingTime = BfmeLogicFramesPerSecond;
 }
-// ?g_009BA4E4@@3HB: the global at VA 0xdba4e4 is ?g_Va00DBA4E4@@3HA.
-#pragma comment(linker, "/alternatename:?g_009BA4E4@@3HB=?g_Va00DBA4E4@@3HA")
+// ?BfmeLogicFramesPerSecond@@3HB: the global at VA 0xdba4e4 is ?BfmeLogicFramesPerSecond@@3HA.

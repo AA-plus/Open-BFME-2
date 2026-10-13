@@ -150,7 +150,7 @@ public:
 
 extern AudioManager *TheAudio;
 
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 template <class T> class StringBase
 {
@@ -316,10 +316,10 @@ void GettingBuiltBehavior::rva004543CA(int)
 
 // ?rva00454430@GettingBuiltBehavior@@UAEXXZ, retail 0x00454430, 66 bytes: slot 2
 // of the +0x20 vtable; +0x2C becomes the module data's +0x24 float times
-// g_009BA4E4 (logic frames), at least 1.
+// BfmeLogicFramesPerSecond (logic frames), at least 1.
 void GettingBuiltBehavior::rva00454430()
 {
-	float frames = (float)g_009BA4E4 * data()->m_24;
+	float frames = (float)BfmeLogicFramesPerSecond * data()->m_24;
 	m_2C = (unsigned int)rva00454430Max(frames, 1.0f);
 }
 

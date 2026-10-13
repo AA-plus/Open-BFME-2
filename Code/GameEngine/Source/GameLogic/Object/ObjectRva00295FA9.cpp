@@ -71,7 +71,7 @@ public:
 	Rva002C9400ByteField *m_4;
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class AIUpdateInterface;
 struct Rva00295F05ContainView;
@@ -152,7 +152,7 @@ void Object::rva00295FA9(Object *other)
 			if (holder != 0)
 			{
 				float f = ((Rva001E46E1 *)holder)->rva001E48CF(this);
-				((Rva001E415F *)holder)->rva001E415F(f, g_Va00DBA4E4);
+				((Rva001E415F *)holder)->rva001E415F(f, BfmeLogicFramesPerSecond);
 			}
 		}
 		return;
@@ -166,7 +166,7 @@ void Object::rva00295FA9(Object *other)
 	if (e != 0)
 	{
 		float f = ((Rva001E46E1 *)e)->rva001E48CF(this);
-		((Rva001E415F *)e)->rva001E415F(f, g_Va00DBA4E4);
+		((Rva001E415F *)e)->rva001E415F(f, BfmeLogicFramesPerSecond);
 	}
 }
 

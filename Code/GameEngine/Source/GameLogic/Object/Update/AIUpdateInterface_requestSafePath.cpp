@@ -7,7 +7,7 @@
 // AIUpdateInterface::requestSafePath. Retail differences read off the body:
 // repulsor current +0x18c prev +0x190, victim +0x144 cleared final +0x3B3
 // attack +0x3B2 approach +0x3B4 safe +0x3B5, repath guard frame-2 via
-// TheGameLogic+0x40, quick path uses setQueueForPathTime 2x g_Va00DBA4E4
+// TheGameLogic+0x40, quick path uses setQueueForPathTime 2x BfmeLogicFramesPerSecond
 // plus destroyPath, else waitingForPath +0x3B1 plus CritterDesync logs via
 // g_00E03745 plus theLogicRandomLogFile with _fprintf row 0x002CEC42,
 // destination +0x148 from object pos +0x38 plus g_Va009FF0F8 pathfinder
@@ -25,8 +25,8 @@ extern unsigned char g_00E03745;
 extern "C" void *theLogicRandomLogFile;
 extern "C" int __cdecl fprintf(void *stream, const char *format, ...);
 
-extern int g_Va00DBA4E4;
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 enum ObjectID
 {

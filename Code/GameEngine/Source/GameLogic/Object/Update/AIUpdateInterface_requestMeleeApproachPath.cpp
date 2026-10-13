@@ -39,8 +39,8 @@ extern unsigned char g_00E03745;
 extern "C" void *theLogicRandomLogFile;
 extern "C" int __cdecl fprintf(void *stream, const char *format, ...);
 
-extern int g_Va00DBA4E4;
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 #include "../../../Common/GameLogicObjectLookupView.h"
 

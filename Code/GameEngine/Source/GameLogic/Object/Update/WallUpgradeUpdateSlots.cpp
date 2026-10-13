@@ -8,7 +8,7 @@
 // slot 0; whether our Object is of KindOf 0x109, 0x108 or 0x107.
 // ?rva004AB3EB@WallUpgradeUpdate@@UAEXHHH@Z, retail 0x004AB3EB, 42 bytes:
 // +0x20 slot 2; when the third argument rises above the second to 3, arms
-// +0x2C with eight times the constant g_009BA4E4 and wakes the module
+// +0x2C with eight times the constant BfmeLogicFramesPerSecond and wakes the module
 // (UpdateModule::setWakeFrame, UPDATE_SLEEP_NONE).
 // ?update@WallUpgradeUpdate@@UAE?AW4UpdateSleepTime@@XZ, retail 0x004AB4D8,
 // 166 bytes: +0x10 slot 0 (vtable 0x00C54774), the update. A raised +0x30
@@ -18,7 +18,7 @@
 // the Object gets 0x0028DA28, its +0x254 body slot 9 with 0, condition bit
 // 1*32+30 cleared (notifying through 0x0028AE6D) and statuses 0x13, 3, 0x56
 // and 4 cleared through 0x0028CDEB with an Rva00346BC0 mask; otherwise it
-// sleeps g_009BA4E4 frames.
+// sleeps BfmeLogicFramesPerSecond frames.
 
 enum KindOfType
 {
@@ -67,7 +67,7 @@ public:
 	Rva004AB4D8Body *m_254; // +0x254
 };
 
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 enum UpdateSleepTime
 {
@@ -146,7 +146,7 @@ void WallUpgradeUpdate::rva004AB3EB(int, int previous, int current)
 {
 	if (current > previous && current == 3)
 	{
-		m_2C = g_009BA4E4 * 8;
+		m_2C = BfmeLogicFramesPerSecond * 8;
 		setWakeFrame(m_object, UPDATE_SLEEP_NONE);
 	}
 }
@@ -183,7 +183,7 @@ UpdateSleepTime WallUpgradeUpdate::update()
 			m_31 = false;
 		}
 		else
-			ret = (UpdateSleepTime)g_009BA4E4;
+			ret = (UpdateSleepTime)BfmeLogicFramesPerSecond;
 	}
 	return ret;
 }

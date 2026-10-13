@@ -100,7 +100,7 @@ public:
 
 #include "../../Common/GameLogicObjectLookupView.h"
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 extern GameLogic *TheGameLogic;
 Bool rva00344EB2Gate(Object *a, Thing *b);
 
@@ -149,7 +149,7 @@ StateReturnType AIAttackMeleeHordeWaitState::update()
 		if (inner->slot85(goal))
 		{
 			inner->slot77(goal);
-			m_20 = g_Va00DBA4E4 * 3 + TheGameLogic->getFrame();
+			m_20 = BfmeLogicFramesPerSecond * 3 + TheGameLogic->getFrame();
 			return STATE_CONTINUE;
 		}
 		if ((unsigned)TheGameLogic->getFrame() >= (unsigned)m_20)

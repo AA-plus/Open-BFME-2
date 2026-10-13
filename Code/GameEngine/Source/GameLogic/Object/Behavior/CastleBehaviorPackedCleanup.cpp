@@ -22,7 +22,7 @@ struct CastleData {char prefix[0x1C];float wait,packedWait,transitionWait;};
 struct LogicLogView {char prefix[0x1B4];int enabled;};
 extern GameLogic*TheGameLogic;
 // Existing data-ledger owner of the mutable FPS integer, RVA009BA4E8.
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 extern "C" void*theLogicRandomLogFile;
 extern "C" int __cdecl fprintf(void*,const char*,...);
 enum UpdateSleepTime {UPDATE_SLEEP_NONE=1};
@@ -69,7 +69,7 @@ void CastleBehavior::rva0039A7D6(){
 
 #include <string.h>
 #pragma function(memset)
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Rva00399959 {public:void unpack(bool);};
 class Rva003979FB {public:void rva003979FB(const int*,const int*);};
 struct CastleConditions {unsigned words[19];void clear(){memset(words,0,sizeof(words));}void set(int n){words[n>>5]|=1U<<(n&31);}};
@@ -83,19 +83,19 @@ UpdateSleepTime CastleBehavior::update(){
  struct FlagPair {CastleConditions condition218,condition219;} flags;
  const CastleData*d=data;
  bool elapsed=false;
- if(wait40>0.0f){wait40-=1.0f/g_009BA4E4;if(wait40<0.0f){wait40=0.0f;elapsed=true;}}
+ if(wait40>0.0f){wait40-=1.0f/BfmeLogicFramesPerSecond;if(wait40<0.0f){wait40=0.0f;elapsed=true;}}
  switch(state34){
  case 0:
   if(checkForInstantUnPack())state34=4;
   rva00398E9A();
-  return (UpdateSleepTime)g_009BA4E4;
+  return (UpdateSleepTime)BfmeLogicFramesPerSecond;
  case 1:
   state34=2;
   ((Rva00399959*)this)->unpack(false);
   wait40=d->wait;
   break;
  case 2:
-  if(wait40+1.0f/g_009BA4E4==d->wait)teleportStragglersFromWallToGround(false);
+  if(wait40+1.0f/BfmeLogicFramesPerSecond==d->wait)teleportStragglersFromWallToGround(false);
   if(elapsed){state34=3;flags.condition219.clear();flags.condition218.clear();flags.condition218.set(218);flags.condition219.set(219);((Rva003979FB*)this)->rva003979FB((const int*)flags.condition218.words,(const int*)flags.condition219.words);wait40=d->transitionWait;}
   break;
  case 3:

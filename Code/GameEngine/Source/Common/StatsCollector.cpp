@@ -9,7 +9,7 @@
 // - /O1: the size-optimized allocator reuses ecx for the frame value where
 //   /O2 spends edx.
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 typedef int Int;
 typedef unsigned int UnsignedInt;
@@ -47,7 +47,7 @@ struct UnicodeStringData
 // BFME2 reads the logic rate from a global (retail 0x00DBA4E4) where Zero
 // Hour and BFME1 use the LOGICFRAMES_PER_SECOND constant 5; baked like
 // GameEngineFrameTiming.cpp does.
-#define LogicFramesPerSecond (*(const UnsignedInt *)&g_Va00DBA4E4)
+#define LogicFramesPerSecond (*(const UnsignedInt *)&BfmeLogicFramesPerSecond)
 
 // Only the vtable slot writeFileEnd reads: getFramesPerSecondLimit at +0x4C.
 // writeStatInfo also reads the inline instant FPS at +0x58.

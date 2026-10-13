@@ -42,9 +42,6 @@ unsigned int g_Va00E03B58;
 extern unsigned int g_Va00E03B60;
 // g_Va00E03B60: matched references place it at VA 0xe03b60 (zero-filled .bss).
 unsigned int g_Va00E03B60;
-extern unsigned int g_Va00E03B6C;
-// g_Va00E03B6C: matched references place it at VA 0xe03b6c (zero-filled .bss).
-unsigned int g_Va00E03B6C;
 extern unsigned int g_Va00E03B78;
 // g_Va00E03B78: matched references place it at VA 0xe03b78 (zero-filled .bss).
 unsigned int g_Va00E03B78;
@@ -140,16 +137,6 @@ unsigned int Rva0078D934ClearFlag(void)
 	return g_Va00E03B60 &= 0xFFFFFFFEu;
 }
 
-unsigned int Rva0078D9C9ClearFlag(void)
-{
-	return g_Va00E03B6C &= 0xFFFFFFFEu;
-}
-
-unsigned int Rva0078DA27ClearFlag(void)
-{
-	return g_Va00E03B6C &= 0xFFFFFFFDu;
-}
-
 unsigned int Rva0078DAA8ClearFlag(void)
 {
 	return g_Va00E03B78 &= 0xFFFFFFFEu;
@@ -215,3 +202,6 @@ unsigned int Rva0078DD17ClearFlag(void)
 	return g_Va00E03BF4 &= 0xFFFFFFFEu;
 }
 
+
+// 78D9C9 and78DA27 are the two static-name initialization unwind actions
+// emitted by ProductionUpdate::update; its compiler-owned guard is E03B6C.

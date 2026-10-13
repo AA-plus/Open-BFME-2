@@ -5,7 +5,7 @@
 // query is slot31. Original method name remains unknown. Keep duration as
 // a float local: native retains it on the x87 stack across the size conversion.
 #include "../../../../../Libraries/Include/Lib/ICoord2D.h"
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 class Anim2D
 {
 public:
@@ -55,7 +55,7 @@ void W3DRadar::rva0004DDBF(int x, int y, int w, int h, int i, int unused)
     BeaconEventRecord *event = &events[i];
     int type = event->type;
     unsigned frame = reinterpret_cast<BeaconClientFrame *>(TheGameClient)->getFrame();
-    const float duration = g_009BA4E8 * 1.5;
+    const float duration = BfmeClientFramesPerSecond * 1.5;
     int size = (int)((1.0f - (float)(frame - event->frame) / duration) *
         (w * (2.0f / 3.0f)));
     if (size < 16)

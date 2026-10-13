@@ -174,7 +174,7 @@ struct Rva005052AEGameLogicView
 	int m_frame;			// +0x40
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 float GetGameLogicRandomValueReal(float lo, float hi, char *file, int line);
 int GetGameLogicRandomValue(int lo, int hi, char *file, int line);
 
@@ -324,7 +324,7 @@ bool AITargetChooser::rva005052AE(Rva002C589B *entry)
 	if (entry->m_34 != 0 && entry->rva002C5DA6() == 0)
 		return true;
 	float elapsed = (float)(((Rva005052AEGameLogicView *)TheGameLogic)->m_frame - entry->m_08);
-	if (elapsed >= (float)g_Va00DBA4E4 * getArmyDef()->m_6C) {
+	if (elapsed >= (float)BfmeLogicFramesPerSecond * getArmyDef()->m_6C) {
 		float roll = GetGameLogicRandomValueReal(0.0f, 1.0f, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\SkirmishAI\\AITacticalAI\\AITargetChooser\\AITargetChooser.cpp", 129);
 		if (roll >= getArmyDef()->m_70)
 			return true;

@@ -161,8 +161,8 @@ public:
 	void rva002CEC34(void);
 };
 
-extern int g_Va00DBA4E4;
-extern int g_009BA4E8;
+extern int BfmeLogicFramesPerSecond;
+extern int BfmeClientFramesPerSecond;
 
 extern GameWindowManager *TheWindowManager;
 extern GameLogic *TheGameLogic;
@@ -354,7 +354,7 @@ void GameEngine::reset(void)
 
 	stopHeadlessClients();
 	m_clientFrameRatioPending = false;
-	m_clientFrameCounter = g_009BA4E8/g_Va00DBA4E4;
+	m_clientFrameCounter = BfmeClientFramesPerSecond/BfmeLogicFramesPerSecond;
 	m_clientFrameLimit = (float)m_clientFrameCounter;
 	m_metric44 = 0;
 	if (theLogicRandomLogFile != 0)

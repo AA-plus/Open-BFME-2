@@ -13,7 +13,7 @@
 // The target vtable relation supports AODHordeContain as the overriding class;
 // the experience-tracker and helper names remain address-derived.
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Drawable
 {
@@ -51,7 +51,7 @@ public:
 void AODHordeContain::onContaining(Object *object, bool wasSelected)
 {
 	if (object->getDrawable())
-		object->getDrawable()->fadeIn(g_Va00DBA4E4 * 5);
+		object->getDrawable()->fadeIn(BfmeLogicFramesPerSecond * 5);
 
 	object->m_experienceTracker->rva0039B28F(1);
 	HordeContain::onContaining(object, wasSelected);

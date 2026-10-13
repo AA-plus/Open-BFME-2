@@ -70,7 +70,7 @@ virtual void slot074();
 virtual void slot078();
 virtual unsigned getTimestamp();};
 extern GameClient *TheGameClient;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 class CameraMotion {public:virtual ~CameraMotion();virtual void update(float);char pad[0x18];bool active;};
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include/W3DDevice/GameClient/W3DView.h
 class W3DView
@@ -156,7 +156,7 @@ Bool W3DView::updateCameraMovements(void)
     case 4:
         if(motion){
             unsigned timestamp=TheGameClient->getTimestamp();
-            motion->update((timestamp-motionTimestamp)*(30.0f/g_009BA4E8));
+            motion->update((timestamp-motionTimestamp)*(30.0f/BfmeClientFramesPerSecond));
             motionTimestamp=timestamp;
             if(!motion->active){::delete motion;motion=0;m_cameraMovementMode=0;goto camera_movement_finished;}
             goto camera_movement_updated;

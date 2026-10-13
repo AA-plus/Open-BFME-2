@@ -477,7 +477,7 @@ AptMyHero::~AptMyHero(){
 // the class (retail still calls the rowed 0x0023C565 copy); its dtor inlines.
 class Keyboard {public:bool rva00232643(unsigned char);};
 extern Keyboard *TheKeyboard;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Rva005B02B5 {public:void rva005B0249();void rva005B027F();void rva005B02B5();void rva005B02FD();};
 class Rva001DBAA4 {public:void unlock();};
 class Rva001DBAA4L {public:void lock();};
@@ -491,7 +491,7 @@ void AptMyHero::FrameUpdate() {
  case 1:
   if(TheTransitionHandler->isFinished()) {
    if(!field18C)SwitchToPendingHero();
-   else if((unsigned)field18C >= (unsigned)(g_Va00DBA4E4+2)) {
+   else if((unsigned)field18C >= (unsigned)(BfmeLogicFramesPerSecond+2)) {
     Rva0023C565 guard;
     const AsciiString &group=TheCreateAHeroManager->field1EC;
     if(!reinterpret_cast<const StringBase<char> &>(group).isEmpty()) {

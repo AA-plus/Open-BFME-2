@@ -9,7 +9,7 @@
 // ObjectRva0028B85B; ret 8 bool via al; name stays address-derived (Object
 // owner proven by callers and offsets, identity unproven).
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva0028C264Inner
 {
@@ -77,7 +77,7 @@ class GameLogic
 
 extern class GameLogic *TheGameLogic;
 
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 bool Object::rva0028C264(int *out, int n)
 {

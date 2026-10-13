@@ -175,7 +175,7 @@ struct Rva00341BF9Logic
 	char m_pad[0x40];
 	int m_frame;
 };
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva00341BF9
 {
@@ -190,7 +190,7 @@ int Rva00341BF9::rva00341BF9()
 {
 	int frame = ((Rva00341BF9Logic *)TheGameLogic)->m_frame;
 	if (m_20)
-		frame += g_Va00DBA4E4;
+		frame += BfmeLogicFramesPerSecond;
 	m_20 = frame;
 	return 0;
 }

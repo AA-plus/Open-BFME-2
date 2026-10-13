@@ -327,7 +327,7 @@ void TunnelContain::onRemoving(Object *obj)
 // a full heal +0xD4), and make an enemy that damaged the tunnel within the
 // last second the system's nemesis. BFME 2 sleeps for good without an owner
 // object or tunnel system.
-extern int g_Va00DBA4E4;	// logic frames per second
+extern int BfmeLogicFramesPerSecond;	// logic frames per second
 UpdateSleepTime TunnelContain::update()
 {
 	// extending functionality to heal the units within the tunnel system
@@ -352,7 +352,7 @@ UpdateSleepTime TunnelContain::update()
 		const TunnelDamageInfoView *info = body->getLastDamageInfo();
 		if (info)
 		{
-			if (body->getLastDamageTimestamp() + g_Va00DBA4E4 > TheGameLogic->getFrame())
+			if (body->getLastDamageTimestamp() + BfmeLogicFramesPerSecond > TheGameLogic->getFrame())
 			{
 				// winner.
 				Object *attacker = TheGameLogic->findObjectByID(info->sourceID);

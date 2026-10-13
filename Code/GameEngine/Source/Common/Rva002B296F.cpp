@@ -2,14 +2,14 @@
 //
 // ?rva002B296F@Rva002B296F@@QAEXXZ @0x002B296F 29B. Flag init plus
 // frames-per-second-derived field: clears +0xE8, sets +0x169 and
-// stores g_00DBA4E8 (FramesPerSecond) times 4 at +0x16C. No calls.
+// stores BfmeClientFramesPerSecond (FramesPerSecond) times 4 at +0x16C. No calls.
 //
 // Target evidence (game.dat, read-only, capstone): frameless thiscall
 // (mov byte [ecx+0xE8],0; mov byte [ecx+0x169],1; mov eax,[0xDBA4E8];
 // shl eax,2; mov [ecx+0x16C],eax; ret). Holder and identities
-// unproven: honest address-derived names; the g_00DBA4E8 spelling
+// unproven: honest address-derived names; the BfmeClientFramesPerSecond spelling
 // follows Rva000806F3BasesParams.cpp.
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 class Rva002B296F
 {
@@ -31,7 +31,7 @@ void Rva002B296F::rva002B296F()
 {
 	m_E8 = 0;
 	m_169 = 1;
-	m_16C = g_009BA4E8 * 4;
+	m_16C = BfmeClientFramesPerSecond * 4;
 }
 
 // ?rva002B35DF@Rva002B296F@@QAEXXZ @0x002B35DF 24B. Same-class
@@ -41,5 +41,5 @@ void Rva002B296F::rva002B35DF()
 {
 	rva002B296F();
 	m_E8 = 1;
-	m_E4 = g_009BA4E8;
+	m_E4 = BfmeClientFramesPerSecond;
 }

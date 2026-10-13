@@ -68,7 +68,7 @@ virtual unsigned getFrame();};
 extern GameClient *TheGameClient;
 class Rva0022AD10Subsystem {public:char pad34[0x34];bool active;};
 extern Rva0022AD10Subsystem *TheFormationAssistant;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 class CommandButton {public:char pad14[0x14];int command;};
 class InGameUI {public:
 virtual void slot0();
@@ -151,7 +151,7 @@ char pad4[0x5ac-4];int expires;bool active;char pad5b1[0x990-0x5b1];Coord3D posi
 extern InGameUI *TheInGameUI;
 bool InGameUI::rva0029DB61() {
  bool result=false;
- expires=TheGameClient->getFrame()+1.5*g_009BA4E8;
+ expires=TheGameClient->getFrame()+1.5*BfmeClientFramesPerSecond;
  if(!expires)expires=1;
  if(active) {
   float angle;{Coord2D direction=rva0029D9F9();angle=direction.toAngle();}

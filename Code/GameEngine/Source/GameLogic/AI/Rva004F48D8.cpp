@@ -1,9 +1,9 @@
 // cl: /MD
 // ?rva004F48D8@Rva004F07E6@@UAEXXZ at 0x004F48D8 (79B).
 // Vtable slot 18 of 0x00862DC8 (class Rva004F07E6 dtor 0x004F07E6).
-// Evidence: calls pin bfmeTailDTK 0x004F46A9 and vslot 0x68; global g_Va00DBA4E4; imul by 5 precedent AIRoamingDefenseTactic.
+// Evidence: calls pin bfmeTailDTK 0x004F46A9 and vslot 0x68; global BfmeLogicFramesPerSecond; imul by 5 precedent AIRoamingDefenseTactic.
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class BfmeThingDTK
 {
@@ -82,5 +82,5 @@ void Rva004F07E6::rva004F48D8()
 	((BfmeThingDTK *)this)->bfmeTailDTK();
 	if (m_10 != 0)
 		((VCall26 *)this)->v26();
-	m_24 = g_Va00DBA4E4 * 5;
+	m_24 = BfmeLogicFramesPerSecond * 5;
 }

@@ -129,7 +129,7 @@ void Rva0042CBB6::rva0042CC1B()
 
 // Reuse the data ledger owner at 0x009FEF18; original class identity is unknown.
 class Rva002D3627Host; extern Rva002D3627Host *g_00DFEF18;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 class Rva002BE8D4 { public: bool rva002BE8D4(); };
 struct CameraPoint42 { float x,y,z; };
 class CameraOperations42 {
@@ -160,7 +160,7 @@ void Rva0042CBB6::rva0042CAFB()
   CameraPoint42 point;
   reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s29(&point);
   reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s39(
-   &point,0.0f,reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s25(g_009BA4E8 / 4));
+   &point,0.0f,reinterpret_cast<CameraOperations42 *>(g_00DFEF18)->s25(BfmeClientFramesPerSecond / 4));
  }
 }
 

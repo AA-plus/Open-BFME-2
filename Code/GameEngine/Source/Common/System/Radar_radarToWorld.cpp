@@ -47,7 +47,7 @@ public:
 
 class GameClient;extern GameClient *TheGameClient;
 
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 float BfmeRadarEventFadeFraction=0.5f;
 
 class RadarEventRef
@@ -144,8 +144,8 @@ void Radar::internalCreateEvent(const Coord3D *pos, RadarEventType tag, float sc
  m_events[m_eventCount].type=tag;
  m_events[m_eventCount].active=true;
  m_events[m_eventCount].createFrame=reinterpret_cast<ClientFrameSubsystem*>(TheGameClient)->getFrame();
- m_events[m_eventCount].dieFrame=(unsigned int)((float)(unsigned)reinterpret_cast<ClientFrameSubsystem*>(TheGameClient)->getFrame()+(float)g_009BA4E8*scale);
- m_events[m_eventCount].fadeFrame=(unsigned int)((float)m_events[m_eventCount].dieFrame-(float)g_009BA4E8*BfmeRadarEventFadeFraction);
+ m_events[m_eventCount].dieFrame=(unsigned int)((float)(unsigned)reinterpret_cast<ClientFrameSubsystem*>(TheGameClient)->getFrame()+(float)BfmeClientFramesPerSecond*scale);
+ m_events[m_eventCount].fadeFrame=(unsigned int)((float)m_events[m_eventCount].dieFrame-(float)BfmeClientFramesPerSecond*BfmeRadarEventFadeFraction);
  m_events[m_eventCount].color1=*a;
  m_events[m_eventCount].color2=*b;
  m_events[m_eventCount].worldLoc=*pos;

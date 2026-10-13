@@ -210,7 +210,7 @@ extern PlayerTemplateStore*ThePlayerTemplateStore;
 // and rowed420353 factory. Use the ledger's existing opaque pointer owner;
 // the accessed interface slots above remain proven by this retail body.
 extern struct UnknownE03138 *g_00E03138;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 Bool Rva005BF28EIsAlly(const GameInfo*,const GameSlot*);
 void Rva005BF2C7Update(UserPreferences*);
@@ -283,7 +283,7 @@ void Rva005BF4BCProcess(Player*player) {
  if(oldFaction!=prefs.rva00537261())prefs.rva005372BD(0);
  else prefs.rva005372BD(prefs.rva00537305()+1);
  ScoreKeeper*s=&player->score;
- prefs.rva00537A9B(side,(float)(reinterpret_cast<Rva0039B709*>(s)->rva0039B718()/(unsigned int)g_Va00DBA4E4));
+ prefs.rva00537A9B(side,(float)(reinterpret_cast<Rva0039B709*>(s)->rva0039B718()/(unsigned int)BfmeLogicFramesPerSecond));
  prefs.rva005366F3(side,prefs.rva0053673A(side)+reinterpret_cast<Rva0039BF22*>(s)->rva0039BF22(Rva00045411BitSet(0,90),Rva00045411BitSet(0,179)));
  prefs.rva00536784(side,prefs.rva005367CB(side)+reinterpret_cast<Rva0039BF50*>(s)->rva0039BF50(Rva00045411BitSet(0,90),Rva00045411BitSet(0,179)));
  prefs.rva0053626B(side,prefs.rva005362B2(side)+s->counter168);

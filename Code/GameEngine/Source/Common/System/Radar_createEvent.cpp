@@ -58,7 +58,7 @@ struct BfmeRadarEventRecord
 
 class GameClient;
 extern GameClient *TheGameClient;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 // Same frame interface used by DrawableFade.cpp: retail calls slot +0x7C.
 class Rva00DFE77CHolder
@@ -346,7 +346,7 @@ bool Radar::tryEvent(RadarEventType type, const Coord3D *world)
         return false;
 
     UnsignedInt currentFrame = ((Rva00DFE77CHolder *)TheGameClient)->slot1F();
-    const UnsignedInt framesBetweenEvents = g_009BA4E8 * 10;
+    const UnsignedInt framesBetweenEvents = BfmeClientFramesPerSecond * 10;
     BfmeRadarEventRecord *event = m_event;
     for (int i = 0; i < 64; ++i, ++event)
     {

@@ -7,7 +7,7 @@
 extern class CommandList *TheCommandList;
 extern class GameLogic *TheGameLogic;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64 *counter);
 
@@ -85,7 +85,7 @@ private:
 };
 
 #define TheGameLogic (*(volatile GameLogicFrame **)&TheGameLogic)
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 #define OneAndHalf 1.5f
 
 int NetworkInterface::getFramePacingStatus(void)

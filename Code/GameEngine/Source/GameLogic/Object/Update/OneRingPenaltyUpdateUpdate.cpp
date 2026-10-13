@@ -10,7 +10,7 @@
 // wearing begins; when wearing stops it clears and, with +0x24 set, runs
 // 0x00499C46; while wearing, +0x24 runs 0x00499D23, else 0x00499AFD fires
 // once the data's +0x0C frames have passed. Sleeps the logic frame rate
-// (g_009BA4E4). The four helpers are members on the primary this, named by
+// (BfmeLogicFramesPerSecond). The four helpers are members on the primary this, named by
 // address (0x00499C46 is also rowed as BfmeC987::bfmeGo987C from a BFME 1
 // donor placement). 0x00499C35 (17 bytes) is carried here: it clears the
 // +0x30 frame and sets the Object's status 0x12.
@@ -27,7 +27,7 @@ enum UpdateSleepTime
 	UPDATE_SLEEP_NONE = 0
 };
 
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class BfmeC987
 {
@@ -143,7 +143,7 @@ UpdateSleepTime OneRingPenaltyUpdate::update()
 		rva00499D23();
 	else if (now > d->m_0C + m_28)
 		rva00499AFD();
-	return (UpdateSleepTime)g_009BA4E4;
+	return (UpdateSleepTime)BfmeLogicFramesPerSecond;
 }
 
 void OneRingPenaltyUpdate::rva00499C35()

@@ -28,7 +28,7 @@ private:
 	int m_fieldF4;
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 int Rva002B4650::rva002B4650()
 {
@@ -41,12 +41,12 @@ int Rva002B4650::rva002B4650()
 }
 
 // ?rva002B3DD0@Rva002B4650@@QAEHXZ @0x002B3DD0 20B: the 0x2B3DB2 measure
-// rounded up to whole units of g_Va00DBA4E4 (lea eax,[eax+ecx-1]; xor edx;
+// rounded up to whole units of BfmeLogicFramesPerSecond (lea eax,[eax+ecx-1]; xor edx;
 // div). Callers 0x00574306 0x005750AA. Summing the measure first, in
 // unsigned arithmetic, gives retail's lea operand order.
 int Rva002B4650::rva002B3DD0()
 {
-	return ((unsigned int)((Rva002B3DB2 *)this)->rva002B3DB2() + (unsigned int)g_Va00DBA4E4 - 1) / (unsigned int)g_Va00DBA4E4;
+	return ((unsigned int)((Rva002B3DB2 *)this)->rva002B3DB2() + (unsigned int)BfmeLogicFramesPerSecond - 1) / (unsigned int)BfmeLogicFramesPerSecond;
 }
 
 // Native 0x002B2BAA..0x002B2BEC, RET0. The existing rva002B4650

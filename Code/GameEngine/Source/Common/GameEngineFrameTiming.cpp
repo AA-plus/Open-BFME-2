@@ -5,11 +5,11 @@
 // helpers are the small pieces used by the main frame loop around the
 // network/logic update path.
 
-extern int g_009BA4E8;
-extern int g_Va00DBA4E4;
+extern int BfmeClientFramesPerSecond;
+extern int BfmeLogicFramesPerSecond;
 
-#define FramesPerSecond g_009BA4E8
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define FramesPerSecond BfmeClientFramesPerSecond
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 class GameEngine
 {

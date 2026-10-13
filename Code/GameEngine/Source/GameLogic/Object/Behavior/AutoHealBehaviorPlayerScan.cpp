@@ -24,7 +24,7 @@ typedef float Real;
 #include "GameLogicObjectLookupView.h"
 
 extern GameLogic *TheGameLogic;
-extern Int g_Va00DBA4E4; // logic frames per second
+extern int BfmeLogicFramesPerSecond; // logic frames per second
 
 // KindOf bits by the retail name table at 0x00DBBE18.
 enum KindOfType
@@ -196,7 +196,7 @@ static Bool Rva004524E5ShouldHeal(Object *testObj, const AutoHealPlayerScanHelpe
 			{
 				body = helper->m_theHealer->getBodyModule();
 				now = TheGameLogic->getFrame();
-				if (body->getLastDamageTimestamp() + g_Va00DBA4E4 > now)
+				if (body->getLastDamageTimestamp() + BfmeLogicFramesPerSecond > now)
 					return false;
 			}
 		}

@@ -8,7 +8,7 @@
 // module data's model-condition flags at +0x164 (0x001E42F2), clears those at
 // +0x118 (0x001E431E), and, given a special condition type (+0x1B0, not -1)
 // with a positive duration in seconds (+0x1B4), sets it for that many logic
-// frames (frame rate g_Va00DBA4E4). Own unit: the destructor unit keeps every
+// frames (frame rate BfmeLogicFramesPerSecond). Own unit: the destructor unit keeps every
 // class down to its destructor so its emitted vtables stay alike; this view
 // defines no constructor or destructor and emits none.
 typedef bool Bool;
@@ -45,7 +45,7 @@ public:
 class Rva001E42F2 { public: void rva001E42F2(const int *flags); };
 class Rva001E431E { public: void rva001E431E(const int *flags); };
 
-extern int g_Va00DBA4E4;	// logic frames per second
+extern int BfmeLogicFramesPerSecond;	// logic frames per second
 
 class Rva004B63BDPrimary
 {
@@ -82,5 +82,5 @@ void Rva004B63BD::upgradeImplementation()
 		((Rva001E431E *)obj)->rva001E431E((const int *)&data->m_conditionsToClear);
 	if (data->m_specialCondition != MODELCONDITION_INVALID && data->m_specialConditionSeconds > 0.0f)
 		obj->setSpecialModelConditionState(data->m_specialCondition,
-			(UnsignedInt)(g_Va00DBA4E4 * data->m_specialConditionSeconds));
+			(UnsignedInt)(BfmeLogicFramesPerSecond * data->m_specialConditionSeconds));
 }

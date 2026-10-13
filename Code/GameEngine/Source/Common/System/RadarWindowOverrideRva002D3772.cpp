@@ -8,8 +8,8 @@ public:
 	void rva002D3389(void *p);
 };
 
-extern int g_009BA4E8;
-static __forceinline int LogicFrameRate() { return g_009BA4E8; }
+extern int BfmeClientFramesPerSecond;
+static __forceinline int LogicFrameRate() { return BfmeClientFramesPerSecond; }
 
 struct Rva002D3772Pair
 {

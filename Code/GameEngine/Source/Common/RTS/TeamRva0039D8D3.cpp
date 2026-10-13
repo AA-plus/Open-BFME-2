@@ -4,7 +4,7 @@
 // Team::rva0039D8D3(unsigned ms): deadline at +0x124 is (ms/1000)*fps plus
 // TheGameLogic frame. Caller at 0x3A2EA0 passes 5000 with float at +0x120.
 // Globals 0xDFE78C frame and 0xDBA4E4 fps. Neighbours share /O1.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class GameLogic
 {
@@ -14,7 +14,7 @@ public:
 };
 extern GameLogic *TheGameLogic;
 
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 class Team
 {

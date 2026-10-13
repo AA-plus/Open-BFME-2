@@ -156,7 +156,7 @@ extern GameTextInterface *TheGameText;
 extern FontLibrary *TheFontLibrary;
 extern GlobalLanguage *TheGlobalLanguageData;
 extern Display *TheDisplay;
-extern const Int g_009BA4E4;					// 0x00DBA4E4 logic frames per second
+extern int BfmeLogicFramesPerSecond;					// 0x00DBA4E4 logic frames per second
 extern StringBase<char> g_str009E0878;				// 0x00DE0878 shared empty string
 
 // The donor's inline member keeps its by-value character in a stack slot whose
@@ -211,6 +211,6 @@ void ScriptActions::doDisplayCinematicText(const AsciiString &displayText, const
 	GameFont *font = TheFontLibrary->getFont(&fontName, (Real)TheGlobalLanguageData->adjustFontSize(size), bold);
 	TheDisplay->setCinematicFont(font);
 
-	Int frames = g_009BA4E4 * timeInSeconds;
+	Int frames = BfmeLogicFramesPerSecond * timeInSeconds;
 	TheDisplay->setCinematicTextFrames(frames);
 }

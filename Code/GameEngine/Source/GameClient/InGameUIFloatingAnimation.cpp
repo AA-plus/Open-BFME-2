@@ -109,7 +109,7 @@ public:
  float m_vx,m_vy,m_1C;
  int m_20;
 };
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class InGameFloatingAnimationHost {
 public:
  void rva002A0F19(Anim2DTemplate *,const ICoord2D *,int,float,float);
@@ -141,7 +141,7 @@ void InGameFloatingAnimationHost::rva002A0F19(Anim2DTemplate *animTemplate, cons
 		return;
 
 	entry->m_anim = anim;
-	entry->m_endFrame = reinterpret_cast<InGameUiFrameView *>(TheGameClient)->getFrame() + g_Va00DBA4E4 * durationInSeconds;
+	entry->m_endFrame = reinterpret_cast<InGameUiFrameView *>(TheGameClient)->getFrame() + BfmeLogicFramesPerSecond * durationInSeconds;
 	entry->m_10 = value;
 	entry->m_x = originalPosition->x;
 	entry->m_y = originalPosition->y;

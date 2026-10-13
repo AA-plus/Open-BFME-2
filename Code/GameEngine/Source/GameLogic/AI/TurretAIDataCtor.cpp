@@ -29,7 +29,7 @@
 //   store ordered after idle angles per retail 40,44,50,54,48 sequence.
 // - Providers: DEFAULT 0.01f unique (1 image ref, TU-local literal),
 //   1.0f shared (1927 refs, literal folds), PI shared (72 refs, literal),
-//   LogicFramesPerSecond int 5 at 0xDBA4E4 (365 refs, extern g_Va00DBA4E4).
+//   LogicFramesPerSecond int 5 at 0xDBA4E4 (365 refs, extern BfmeLogicFramesPerSecond).
 //   No calls, no pins; DIR32 slots patched per docs/matching.md.
 // - Flags from AI SSE siblings (/O1 /DNDEBUG /MD /arch:SSE); /O1 gives
 //   push-6 size loop. Donor rev 6583b3c1 reused read-only, no fetch.
@@ -52,8 +52,8 @@ typedef float Real;
 typedef int Int;
 typedef unsigned int UnsignedInt;
 
-extern int g_Va00DBA4E4;
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 enum { WEAPONSLOT_COUNT = 5 };
 

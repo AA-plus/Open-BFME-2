@@ -64,8 +64,8 @@ public:
     float m_110C; // +0x110C
 };
 extern class GlobalData *TheWritableGlobalData;
-extern int g_Va00DBA4E4; // logic frames per second
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond; // logic frames per second
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 class ScriptConditions
 {
 protected:

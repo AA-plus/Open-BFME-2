@@ -10,7 +10,7 @@
 #include "wwmath.h"
 #include "vector3.h"
 #include <math.h>
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 extern float opacityLogicStepSeconds;
 class LivingWorldManager {
 public:

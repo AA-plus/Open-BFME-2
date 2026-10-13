@@ -231,7 +231,7 @@ void IngameNoticeDisplay::AddWord(NoticeLineInputView *line,int spaces,const Uni
 class Display; class GameClient;
 extern Display *TheDisplay;
 extern class GameClient *TheGameClient;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 class NoticeScreenView {
 public:
     virtual void s0();
@@ -324,10 +324,10 @@ void IngameNoticeDisplay::Start(const UnicodeString &text,int duration)
     int maximum=(int)(reinterpret_cast<NoticeScreenView *>(TheDisplay)->width()*widthFraction);
     startFrame=reinterpret_cast<NoticeClientView *>(TheGameClient)->frame();
     if (duration) {
-        endFrame=startFrame+g_009BA4E8*duration;
-        fadeFrame=endFrame-g_009BA4E8;
+        endFrame=startFrame+BfmeClientFramesPerSecond*duration;
+        fadeFrame=endFrame-BfmeClientFramesPerSecond;
     } else {
-        fadeFrame=startFrame+g_009BA4E8*15;
+        fadeFrame=startFrame+BfmeClientFramesPerSecond*15;
         endFrame=0;
     }
     descriptor->color=0xff000000;
@@ -376,7 +376,7 @@ void IngameNoticeDisplay::Start(const UnicodeString &text,int duration)
         y=(int)(y+height*1.25f);
         reinterpret_cast<Rva004E592C *>(const_cast<ModuleData *>(*it))->rva004E592C(&point);
         reinterpret_cast<Rva004E5911 *>(const_cast<ModuleData *>(*it))->rva004E5911(Rva0048E730Layout(stamp));
-        stamp+=g_009BA4E8;
+        stamp+=BfmeClientFramesPerSecond;
     }
     reinterpret_cast<NoticeManager *>(TheDisplayStringManager)->release(display);
 }
@@ -467,7 +467,7 @@ void Rva004E58BAHolder::invoke(Rva004E58BATarget *target)
 // and slot 12's 0x004E59F4. Once the end frame has passed it resets (tail
 // call through slot 9). While the mouse is inside the descriptor's screen
 // rectangle the fade start keeps moving to the next client frame; after it,
-// the colour's alpha falls linearly to zero over g_009BA4E8 frames (floored
+// the colour's alpha falls linearly to zero over BfmeClientFramesPerSecond frames (floored
 // at 0x40 for a notice without an end frame). It then asks TheInGameUI
 // (slot 109) for a redraw two logic frames ahead.
 #include "../../../Source/Common/GameLogicObjectLookupView.h"
@@ -624,10 +624,10 @@ void IngameNoticeDisplay::update()
     {
         int elapsed = now - fadeFrame;
         unsigned int alpha;
-        if (elapsed > g_009BA4E8)
+        if (elapsed > BfmeClientFramesPerSecond)
             alpha = 0;
         else
-            alpha = 255 - elapsed * 255 / g_009BA4E8;
+            alpha = 255 - elapsed * 255 / BfmeClientFramesPerSecond;
         if (!end && alpha < 0x40)
             alpha = 0x40;
         rect->color = alpha << 24;

@@ -136,7 +136,7 @@ extern GameLogic *TheGameLogic;
 // 0x012F81A9), and the runtime LOGICFRAMES_PER_SECOND at 0x00DBA4E4.
 extern unsigned int g_Va00DE1B30;
 extern unsigned char g_Va00DE1C58;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class W3DDisplay
 {
@@ -240,7 +240,7 @@ void W3DDisplay::rva000438CB()
 					case 8: color = 0xff7878ff; break;
 					case 9: color = 0xff6e6eff; break;
 					case 0:
-						if (g_Va00DE1B30 + g_Va00DBA4E4 <
+						if (g_Va00DE1B30 + BfmeLogicFramesPerSecond <
 							(unsigned int)TheGameLogic->getFrame())
 							color = 0xffff0000;
 						else
@@ -262,7 +262,7 @@ void W3DDisplay::rva000438CB()
 			}
 			else if (i == 9)
 			{
-				if (g_Va00DE1B30 + g_Va00DBA4E4 <
+				if (g_Va00DE1B30 + BfmeLogicFramesPerSecond <
 					(unsigned int)TheGameLogic->getFrame())
 					color = -1;
 				else

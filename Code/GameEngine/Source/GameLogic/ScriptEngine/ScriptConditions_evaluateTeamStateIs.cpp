@@ -2091,7 +2091,7 @@ public:
 	int m_source;
 };
 
-extern const int g_009BA4E4;					// 0x00DBA4E4 logic frames per second
+extern int BfmeLogicFramesPerSecond;					// 0x00DBA4E4 logic frames per second
 
 bool ScriptConditions::rva003EA12A(Parameter *pUnitParm)
 {
@@ -2103,7 +2103,7 @@ bool ScriptConditions::rva003EA12A(Parameter *pUnitParm)
 			if (body) {
 				unsigned int frame = TheGameLogic->getFrame();
 				unsigned int last = body->getLastDamageTime();
-				if (g_009BA4E4 * 5 + last >= frame) {
+				if (BfmeLogicFramesPerSecond * 5 + last >= frame) {
 					const DamageInfo *info = body->getLastDamageInfo();
 					if (info) {
 						Object *attacker = TheGameLogic->findObjectByID(info->in.m_sourceID);
@@ -2152,7 +2152,7 @@ bool ScriptConditions::rva003EA228(Parameter *pTeamParm, bool failingMemberWins)
 				continue;
 			unsigned int frame = TheGameLogic->getFrame();
 			unsigned int last = body->getLastDamageTime();
-			if (g_009BA4E4 * 5 + last < frame)
+			if (BfmeLogicFramesPerSecond * 5 + last < frame)
 				continue;
 			const DamageInfo *info = body->getLastDamageInfo();
 			if (!info)

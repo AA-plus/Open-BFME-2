@@ -229,7 +229,7 @@ public:
 };
 extern GameLogic *TheGameLogic;
 extern Rva002A8F24 *g_00DFEEF8;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 enum ObjectStatusTypes;
 class ThingTemplate
 {
@@ -355,7 +355,7 @@ void AIBuilder::moneySaverUpdate()
             if (amount > 1.0f)
                 saver->rva005963A1(static_cast<int>(amount));
         }
-        value158 = frame + g_Va00DBA4E4 * 2;
+        value158 = frame + BfmeLogicFramesPerSecond * 2;
     }
 }
 

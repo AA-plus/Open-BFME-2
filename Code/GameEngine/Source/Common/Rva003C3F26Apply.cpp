@@ -46,7 +46,7 @@ public:
 
 extern SpecialPowerStore *TheSpecialPowerStore;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class GameLogic
 {
@@ -91,5 +91,5 @@ void ScriptActions::doPlayerSetSpecialPowerCountdown(const AsciiString &playerNa
 	void *sub = obj->getSpecialPowerModule(found);
 	if (sub == 0)
 		return;
-	((Rva003C3F26Target *)sub)->w08(g_Va00DBA4E4 * arg3 + TheGameLogic->m_40);
+	((Rva003C3F26Target *)sub)->w08(BfmeLogicFramesPerSecond * arg3 + TheGameLogic->m_40);
 }

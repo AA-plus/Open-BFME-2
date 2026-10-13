@@ -28,8 +28,8 @@ extern "C" void fprintf(FprintfTarget *target, const char *format, ...);
 extern unsigned char g_00E03745;
 extern void *g_00DFEFF0;
 
-extern int g_Va00DBA4E4;
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 enum ObjectID
 {

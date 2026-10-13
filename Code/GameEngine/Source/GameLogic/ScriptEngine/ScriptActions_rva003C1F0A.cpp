@@ -35,7 +35,7 @@ public:
 	void rva0036E1C3(const StringBase<char> &name, int val);
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // ?getTeamNamed@ScriptEngine@@QAEPAVTeam@@VAsciiString@@_N@Z present-unmatched
 // ?createGroup@AI@@QAEPAVAIGroup@@XZ present-unmatched
@@ -50,6 +50,6 @@ void __stdcall Rva003C1F0A(const AsciiString &teamName, const StringBase<char> &
 	if (grp == 0)
 		return;
 	team->getTeamAsAIGroup(grp);
-	int v = (int)((float)g_Va00DBA4E4 * f);
+	int v = (int)((float)BfmeLogicFramesPerSecond * f);
 	grp->rva0036E1C3(animName, v);
 }

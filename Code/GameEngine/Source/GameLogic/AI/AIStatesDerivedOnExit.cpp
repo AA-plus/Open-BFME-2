@@ -55,7 +55,7 @@
 // object succeeds, and a goal that moved more than 5 (GetLengthEstimate)
 // from the machine's goal is handed back to the machine and forces a repath.
 // The retry tail is Zero Hour's (80-unit close enough, sleep three
-// LOGICFRAMES_PER_SECOND, the BFME 2 int global g_00DBA4E4); forceRepath
+// LOGICFRAMES_PER_SECOND, the BFME 2 int global BfmeLogicFramesPerSecond); forceRepath
 // writes the path goal (+0x34) and the path timestamp (+0x44).
 // AIMoveToState::update, retail 0x00353A65 (450 bytes): slot 6 of vtable
 // 0x00C11EB8, the base update AIAttackMoveToState::update calls. Zero Hour's
@@ -170,8 +170,8 @@ extern TerrainLogic *TheTerrainLogic;
 // 0x3716C6/0x3717B0/0x3718AD). Pinned in symbols.csv; owner and name unproven.
 void Rva0036CBF9Rotate(const Coord3D *from, const Coord3D *to, Coord2D *offset);
 extern GameLogic *TheGameLogic;
-extern int g_00DBA4E4; // LOGICFRAMES_PER_SECOND
-#define LOGICFRAMES_PER_SECOND g_00DBA4E4
+extern int BfmeLogicFramesPerSecond; // LOGICFRAMES_PER_SECOND
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 enum PathfindLayerEnum
 {
 	LAYER_GROUND = 1

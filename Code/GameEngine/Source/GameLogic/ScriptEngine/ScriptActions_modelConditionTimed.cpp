@@ -10,10 +10,10 @@
 #include "ascii_string.h"
 
 extern const char *const ModelConditionNames[];
-extern const int g_009BA4E4;	// logic frames per second
+extern int BfmeLogicFramesPerSecond;	// logic frames per second
 
 enum ModelConditionFlagType { MODEL_CONDITION_FIRST = 0 };
-inline int LogicFramesPerSecond() { return g_009BA4E4; }
+inline int LogicFramesPerSecond() { return BfmeLogicFramesPerSecond; }
 
 class Object
 {

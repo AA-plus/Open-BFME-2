@@ -119,7 +119,7 @@ public:
 };
 
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class ControlBar
 {
@@ -150,7 +150,7 @@ int ControlBar::rva0031AA86()
 		return 0;
 	}
 	unsigned int frame = TheGameLogic->m_0040;
-	int period = g_Va00DBA4E4;
+	int period = BfmeLogicFramesPerSecond;
 	if (frame % (unsigned int)period > (unsigned int)(period / 2))
 		GadgetButtonSetEnabledImage_Rva002C0433(win, m_p0274);
 	else

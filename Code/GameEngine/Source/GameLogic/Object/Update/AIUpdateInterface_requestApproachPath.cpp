@@ -8,7 +8,7 @@
 // log via g_00E03745 plus theLogicRandomLogFile with _fprintf row 0x002CEC42,
 // destination +0x148 victim +0x144 cleared final +0x3B3 attack +0x3B2 approach
 // +0x3B4 safe +0x3B5, repath guard frame-2 via TheGameLogic+0x40, quick path
-// uses setQueueForPathTime 2x g_Va00DBA4E4 plus destroyPath, else waitingForPath
+// uses setQueueForPathTime 2x BfmeLogicFramesPerSecond plus destroyPath, else waitingForPath
 // +0x3B1 plus g_Va009FF0F8 pathfinder queueForPath. Evidence: donor plus
 // CritterDesync requestApproachPath1 string plus rowed callees 0x002CEC42
 // 0x0026282A 0x00262A8A 0x002EBD31 plus callers 0x0034CA43 0x00350651.
@@ -24,8 +24,8 @@ extern unsigned char g_00E03745;
 extern "C" void *theLogicRandomLogFile;
 extern "C" int __cdecl fprintf(void *stream, const char *format, ...);
 
-extern int g_Va00DBA4E4;
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 enum ObjectID
 {

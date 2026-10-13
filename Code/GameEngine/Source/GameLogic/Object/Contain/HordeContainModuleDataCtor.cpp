@@ -43,7 +43,7 @@ void _STLP_alloc_proxy<_List_node<int> *, _List_node<int>, allocator<_List_node<
 
 #include "ascii_string.h"
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 #include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 // bfme link decl-only BfmeE16
@@ -137,8 +137,8 @@ private:
 HordeContainModuleData::HordeContainModuleData()
 	: TransportContainModuleData()
 	, m_b1D8(true)
-	, m_i1DC(g_Va00DBA4E4 / 2)
-	, m_i1E0(g_Va00DBA4E4 * 3)
+	, m_i1DC(BfmeLogicFramesPerSecond / 2)
+	, m_i1E0(BfmeLogicFramesPerSecond * 3)
 	, m_f1E4(3.0f)
 	, m_f1E8(5.0f)
 	, m_f1EC(0.5f)
@@ -158,7 +158,7 @@ HordeContainModuleData::HordeContainModuleData()
 	, m_i260(0)
 {
 	m_b240 = true;
-	m_i264 = g_Va00DBA4E4 * 5;
+	m_i264 = BfmeLogicFramesPerSecond * 5;
 	m_i268 = 0;
 	m_f26C = 0.0f;
 	m_f270 = 0.0f;

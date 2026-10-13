@@ -29,9 +29,9 @@ extern "C" const void *const vtbl_00BDD814[] = {
 	(const void *)&vfn_001DFF5D
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 class Rva001DFEAABase
 {

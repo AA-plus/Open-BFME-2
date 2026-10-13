@@ -77,8 +77,8 @@ static __forceinline void critterDesyncLog(const char *text)
 	}
 }
 
-extern const int g_009BA4E4;
-#define LOGICFRAMES_PER_SECOND g_009BA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 
 #include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;

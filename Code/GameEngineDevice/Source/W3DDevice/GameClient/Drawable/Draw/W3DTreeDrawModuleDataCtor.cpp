@@ -9,9 +9,9 @@
 // LogicFramesPerSecond*10 sink/morph times. Factory 0x64C0B news 0x64 with
 // the ctor as sole caller and pushes the rowed proc 0xCED03.
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 #include "ascii_string.h"
 

@@ -517,7 +517,7 @@ private:
 
 // 0x00573E2B: state 3 clears +0x54 and sets +0x58 to the current frame plus
 // 30 per unit of the Int at VA 0x00DBA4E4; the state is stored at +0x10.
-extern Int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Rva00573E2B
 {
 public:
@@ -535,7 +535,7 @@ void Rva00573E2B::rva00573E2B(Int state)
 	if (state == 3)
 	{
 		m_54 = false;
-		m_58 = (Int)((float)TheGameLogic->m_40 + (float)g_Va00DBA4E4 * 30.0f);
+		m_58 = (Int)((float)TheGameLogic->m_40 + (float)BfmeLogicFramesPerSecond * 30.0f);
 	}
 	m_10 = state;
 }

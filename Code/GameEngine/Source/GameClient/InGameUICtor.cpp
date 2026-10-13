@@ -119,7 +119,7 @@ public:
 extern GlobalData *TheWritableGlobalData;
 #define TheGlobalData TheWritableGlobalData
 
-extern int g_009BA4E8;	// logic frames per second
+extern int BfmeClientFramesPerSecond;	// logic frames per second
 
 class GameWindow;
 extern GameWindow *m_replayWindow;
@@ -664,7 +664,7 @@ InGameUI::InGameUI() :
 	m_namedTimerUsedFlashColor = true; // so next one is false
 	m_showNamedTimers = true;
 
-	m_floatingTextTimeOut = g_009BA4E8 / 3;
+	m_floatingTextTimeOut = BfmeClientFramesPerSecond / 3;
 	m_floatingTextMoveUpSpeed = 1.0f;
 	m_floatingTextMoveVanishRate = 0.1f;
 

@@ -21,7 +21,7 @@
 enum { MAX_GENERIC_SCRIPTS = 32 };
 
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Team;
 class Player;
@@ -169,7 +169,7 @@ void Team::updateGenericScripts()
 
 				delay = script->getDelayEvaluationSeconds();
 				if (delay > 0)
-					m_nextGenericScriptFrame[i] = g_Va00DBA4E4 * delay + TheGameLogic->getFrame();
+					m_nextGenericScriptFrame[i] = BfmeLogicFramesPerSecond * delay + TheGameLogic->getFrame();
 			}
 			else
 			{

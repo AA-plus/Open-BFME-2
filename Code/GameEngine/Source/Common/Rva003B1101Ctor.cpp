@@ -84,7 +84,7 @@ private:
 };
 }
 
-extern Int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 extern const BfmeFixedStorage0004543D g_defaultStorage009FEFA4;
 
 class Rva003B1101Ref
@@ -138,7 +138,7 @@ Rva003B1101::Rva003B1101()
 	, m_3c(0)
 	, m_40(0)
 	, m_44(-1)
-	, m_48(g_Va00DBA4E4 * 10)
+	, m_48(BfmeLogicFramesPerSecond * 10)
 	, m_4c(0)
 	, m_50(0.0f)
 	, m_54(0.0f)

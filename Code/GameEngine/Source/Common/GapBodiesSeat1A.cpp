@@ -2242,11 +2242,11 @@ void Rva002B386A::rva002B386A(AsciiString *name)
 // --- 0x002B3DA4 (14B, cdecl): the rowed 0x002B3D81 value divided by the
 // word at VA 0x00DBA4E4.
 int rva002B3D81();
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 unsigned int Rva002B3DA4()
 {
-	return (unsigned int)rva002B3D81() / (unsigned int)g_Va00DBA4E4;
+	return (unsigned int)rva002B3D81() / (unsigned int)BfmeLogicFramesPerSecond;
 }
 
 // --- 0x002B4404 (12B, cdecl): the rowed 0x002B2F49 with 0 on the argument.

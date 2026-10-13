@@ -9,7 +9,7 @@
 // (slot +0x234) and the normal queue up to the full quota (slot +0x230)
 // under the "pathfind" profile range, with optional QueryPerformanceCounter
 // timing that tints slow pathers (rowed 0x002EBD99). The quota is
-// GlobalData +0x11E8 cells, times 100 for the first 5 * g_Va00DBA4E4 frames.
+// GlobalData +0x11E8 cells, times 100 for the first 5 * BfmeLogicFramesPerSecond frames.
 // The cell indices round through BaseType's REAL_TO_INT_FLOOR spelled with
 // math.h's inline floorf (as the WB twin's floorf/fast_float2long_round
 // parameter stores show); that shape is what places retail's floor-result
@@ -197,7 +197,7 @@ class Rva002EAC7CPool {public:void *rva002EAC7C();bool empty()const {return head
 extern TerrainLogic *TheTerrainLogic;
 extern GlobalData *TheWritableGlobalData;
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Pathfinder {
 public:
  void rva002F0F07();
@@ -223,7 +223,7 @@ void Pathfinder::rva002F0F07()
  logicalExtent=bounds;
  cumulative=0;word40=0;word44=0;
  int quota=TheWritableGlobalData->cellsPerFrame;
- if(TheGameLogic->getFrame()<(unsigned int)(5*g_Va00DBA4E4))quota*=100;
+ if(TheGameLogic->getFrame()<(unsigned int)(5*BfmeLogicFramesPerSecond))quota*=100;
  while(cumulative<quota/2 && !priorityQueue.empty()) {
   Object *obj=TheGameLogic->findObjectByID((ObjectID)(int)priorityQueue.rva002EAC7C());
   if(obj) {AIUpdateInterface *ai=((QueueObjectView *)obj)->ai;if(ai)ai->slot234(this);}

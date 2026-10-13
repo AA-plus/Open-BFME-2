@@ -20,7 +20,7 @@
 // - When the object has a spawn behavior, the hole interface's slot 4 takes
 //   that interface's slot 11 byte (a Bool getter) before startRebuildProcess.
 // - FadeInTimeSeconds (+0x40) > 0 fades the hole's drawable in over that
-//   many logic frames (the frame-rate int g_009BA4E8 times the seconds).
+//   many logic frames (the frame-rate int BfmeClientFramesPerSecond times the seconds).
 #include "../../../Common/GameLogicObjectLookupView.h"
 #include "ascii_string.h"
 #include <string.h>
@@ -29,7 +29,7 @@ typedef bool Bool;
 typedef float Real;
 typedef unsigned int UnsignedInt;
 
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 enum MaxHealthChangeType
 {
@@ -330,6 +330,6 @@ void RebuildHoleExposeDie::onDie(const DamageInfo *damageInfo)
 		}
 
 		if (modData->m_fadeInTimeSeconds > 0.0f)
-			hole->getDrawable()->fadeIn(g_009BA4E8 * modData->m_fadeInTimeSeconds);
+			hole->getDrawable()->fadeIn(BfmeClientFramesPerSecond * modData->m_fadeInTimeSeconds);
 	}
 }

@@ -294,7 +294,7 @@ extern struct UnknownE03138*g_00E03138;
 extern GameInfo*TheGameInfo;extern LivingWorldLogic*TheLivingWorldLogic;
 extern GameLogic*TheGameLogic;extern GlobalData*TheWritableGlobalData;extern CreateAHeroManager*TheCreateAHeroManager;
 extern NameKeyGenerator*TheNameKeyGenerator;extern PlayerList*ThePlayerList;
-extern int g_Va00DBA4E4;extern int g_009C0758;extern int g_009C075C;extern BitFlags<116>KINDOFMASK_NONE; // 0x009FEFA4
+extern int BfmeLogicFramesPerSecond;extern int g_009C0758;extern int g_009C075C;extern BitFlags<116>KINDOFMASK_NONE; // 0x009FEFA4
 template<class T>inline const T&maxRef(const T&a,const T&b){return a>b?a:b;}
 template<class T>inline const T&minRef(const T&a,const T&b){return a<b?a:b;}
 __forceinline const char*retailStr(const AsciiString&s){return reinterpret_cast<const StringBase<char>*>(&s)->str();}
@@ -323,7 +323,7 @@ void StatsReporter::ProcessOnlineGameResults(Player*player){
  bool report=false;if(reinterpret_cast<VictoryConditionsInterface*>(g_00E03138)->isLocalAlliedDefeat()||reinterpret_cast<VictoryConditionsInterface*>(g_00E03138)->isLocalAlliedVictory())report=true;
  if(reinterpret_cast<VictoryConditionsInterface*>(g_00E03138)->gameEnded())report=true;if(reinterpret_cast<StatsGameLogicView*>(TheGameLogic)->desync||noData||disconnected)report=true;
  if(reinterpret_cast<VictoryConditionsInterface*>(g_00E03138)->quit(local))report=true;if(mode==2)report=true;if(!report)return;
- if(TheGameSpyGame->getMode()!=1){float bound=TheWritableGlobalData?TheWritableGlobalData->minDuration*g_Va00DBA4E4:25.0f;if(reinterpret_cast<VictoryConditionsInterface*>(g_00E03138)->elapsed()<bound+g_Va00DBA4E4)return;}
+ if(TheGameSpyGame->getMode()!=1){float bound=TheWritableGlobalData?TheWritableGlobalData->minDuration*BfmeLogicFramesPerSecond:25.0f;if(reinterpret_cast<VictoryConditionsInterface*>(g_00E03138)->elapsed()<bound+BfmeLogicFramesPerSecond)return;}
  bool canReportPackets=TheGameSpyGame->getFF4();bool reportPacket=false;
  if(canReportPackets){if(reinterpret_cast<StatsGameLogicView*>(TheGameLogic)->getDesync())goto report_packet;else if(reinterpret_cast<VictoryConditionsInterface*>(g_00E03138)->isLocalAlliedVictory()&&!noData){
  for(int i=0;i<8;++i){AsciiString name;name=TheGameInfo->getSlot(i)->name;if(!name.isEmpty()){Player*p=ThePlayerList->findPlayerWithNameKey(TheNameKeyGenerator->nameToKey(name));if(p){GameSlot*slot=reinterpret_cast<GameInfo*>(TheGameSpyGame)->getSlot(i);if(reinterpret_cast<VictoryConditionsInterface*>(g_00E03138)->hasWon(p)&&!slot->disconnected()){if(TheGameSpyGame->localSlot()==i)reportPacket=true;break;}}}}
@@ -350,7 +350,7 @@ void StatsReporter::ProcessOnlineGameResults(Player*player){
  core->m_mapsdc_5[(unsigned char)faction]+=(float)s->valueC8;core->m_mapsdc_3[(unsigned char)faction]+=(float)s->getTotalBuildingsDestroyed();core->m_mapsdc_4[(unsigned char)faction]+=(float)s->valueCC;
  core->m_mapsdc_2[(unsigned char)faction]+=(float)s->value70;core->m_mapsdc_0[(unsigned char)faction]+=(float)s->getTotalUnitsDestroyed();core->m_mapsdc_1[(unsigned char)faction]+=(float)s->value74;
  core->m_mapsdc_6[(unsigned char)faction]+=(float)s->value04;core->m_mapsdc_7[(unsigned char)faction]+=(float)s->value08;
- unsigned seconds=TheGameLogic->getFrame()/(unsigned)g_Va00DBA4E4;Rva003844D7*rt=static_cast<Rva003844D7*>(core);
+ unsigned seconds=TheGameLogic->getFrame()/(unsigned)BfmeLogicFramesPerSecond;Rva003844D7*rt=static_cast<Rva003844D7*>(core);
  rt->m_map178[(unsigned char)faction]+=(float)reinterpret_cast<Rva0039BF0B*>(s)->rva0039BF0B(Rva00045411BitSet(0,90),Rva00045411BitSet(0,179));
  rt->m_map184[(unsigned char)faction]+=(float)reinterpret_cast<Rva0039BF39*>(s)->rva0039BF39(Rva00045411BitSet(0,90),Rva00045411BitSet(0,179));
  rt->m_map154[(unsigned char)faction]+=(unsigned short)seconds;{

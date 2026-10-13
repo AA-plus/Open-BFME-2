@@ -34,7 +34,7 @@ static inline float sqr(float x)
 	return x * x;
 }
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // This unit's statics, built in this order (0x007B461B, 0x007B4636,
 // 0x007B4651, 0x007B4662, 0x007B4670).
@@ -45,8 +45,8 @@ AsciiString AIFarmKillSquad_IsRunning("AIFarmKillSquad_IsRunning");
 AsciiString AIFarmKillSquad_FrameNextRun("AIFarmKillSquad_FrameNextRun");
 #pragma inline_depth()
 float g_00E06434 = sqr(1100.0f);
-int g_00E06438 = g_Va00DBA4E4 * 30;
-int g_00E0643C = g_Va00DBA4E4 * 120;
+int g_00E06438 = BfmeLogicFramesPerSecond * 30;
+int g_00E0643C = BfmeLogicFramesPerSecond * 120;
 
 struct Coord3DBase
 {

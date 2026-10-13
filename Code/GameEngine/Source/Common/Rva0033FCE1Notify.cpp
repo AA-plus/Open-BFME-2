@@ -75,7 +75,7 @@ public:
 
 #include "GameLogicObjectLookupView.h"
 
-extern int g_Va00DBA4E4; // ?g_Va00DBA4E4@@3HA
+extern int BfmeLogicFramesPerSecond; // ?BfmeLogicFramesPerSecond@@3HA
 extern GameLogic *TheGameLogic;
 
 class AIStateMachine
@@ -108,7 +108,7 @@ StateReturnType AIStateMachine::setTemporaryState(unsigned int id, int frameLimi
 			m_50 = 0;
 			return cur;
 		}
-		int limit = g_Va00DBA4E4 * 60;
+		int limit = BfmeLogicFramesPerSecond * 60;
 		int v = frameLimit;
 		v = v >= limit ? limit : v;
 		int res;

@@ -105,12 +105,12 @@ private:
 	_STL::vector<BfmeE16> m_vec; // +0x58
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 TransportAIUpdateModuleData::TransportAIUpdateModuleData()
 	: UpdateModuleData()
 	, m_vtable(reinterpret_cast<const void *>(((unsigned int)vtbl_00BFA288)))
-	, m_moodAttackCheckRate(g_Va00DBA4E4 + g_Va00DBA4E4)
+	, m_moodAttackCheckRate(BfmeLogicFramesPerSecond + BfmeLogicFramesPerSecond)
 	, m_autoAcquire(0)
 	, m_stopChaseDistance(500.0f)
 	, m_standGround(false)

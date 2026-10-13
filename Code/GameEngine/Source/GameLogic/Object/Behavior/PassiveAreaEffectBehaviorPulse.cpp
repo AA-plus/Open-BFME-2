@@ -45,7 +45,7 @@ private:
 };
 
 extern GameLogic *TheGameLogic;
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class BodyModule
 {
@@ -154,7 +154,7 @@ void PassiveAreaEffectBehavior::rva0048491F(Object *obj)
 			}
 
 			float rate = d->m_0C;
-			float amount = body->getMaxHealth() * (rate / g_009BA4E4);
+			float amount = body->getMaxHealth() * (rate / BfmeLogicFramesPerSecond);
 			if (d->m_10)
 				amount *= d->m_10;
 			obj->rva0028FEA7(amount, m_object, d->m_10);

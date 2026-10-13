@@ -103,7 +103,7 @@ class Rva002A9BF2 {public:void *rva002A9BF2();};
 struct Rva002A8AB1Record;
 class Rva002A8F24 {public:Rva002A8AB1Record *rva002A8AB1(void*);};extern Rva002A8F24 *g_00DFEEF8;
 struct RegistryBuildView {char before[0x854];float factor;};
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 __forceinline long fast_float2long_round(float f) {
  long i;
  __asm {
@@ -144,7 +144,7 @@ int ThingTemplate::rva0033AA1F(const Player *player,int objectCarrier,int timeOv
  }
  if(((Rva002A9BF2 *)player)->rva002A9BF2()==(void *)3 && g_00DFEEF8->rva002A8AB1((void*)player)) {
   float mult=((const RegistryBuildView *)g_00DFEEF8)->factor < 1.0f ? ((const RegistryBuildView *)g_00DFEEF8)->factor : 1.0f;
-  return fast_float2long_round(buildFloor((1.0f-mult)*(buildTime*g_Va00DBA4E4)));
+  return fast_float2long_round(buildFloor((1.0f-mult)*(buildTime*BfmeLogicFramesPerSecond)));
  }
- return fast_float2long_round(buildFloor((float)(buildTime*g_Va00DBA4E4)));
+ return fast_float2long_round(buildFloor((float)(buildTime*BfmeLogicFramesPerSecond)));
 }

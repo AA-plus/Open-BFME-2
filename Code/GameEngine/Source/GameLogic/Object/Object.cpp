@@ -827,12 +827,12 @@ AsciiString DescribeObject(const Object *obj)
 // unchanged; the dispatcher below relies on the compiler seeing this body.
 // Keep its established global owner (data ledger RVA9BA4E4), frame40 and
 // deadline458. No inline expansion: retail still calls the separate helper.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 extern GameLogic *TheGameLogic;
 
 void Object::rva0028C24C()
 {
- m_deadline458 = g_Va00DBA4E4 * 10 + TheGameLogic->getFrame();
+ m_deadline458 = BfmeLogicFramesPerSecond * 10 + TheGameLogic->getFrame();
 }
 
 // ?doCommandButton@Object@@QAEXPBVCommandButton@@H_N@Z retail 0x00296749

@@ -351,7 +351,7 @@ private:
 extern AI *TheAI;
 
 // Existing data-ledger owner defined by ColdGlobalDwordGetters.cpp; initial value 5.
-extern Int g_Va00DBA4E4; // logic frames per second
+extern int BfmeLogicFramesPerSecond; // logic frames per second
 
 class MineshaftPortalBehaviour
 {
@@ -722,8 +722,8 @@ UpdateSleepTime AIUpdateInterface::doLocomotor()
 							Real dist = sqrt(dSqr);
 							if (1 > dist)
 								dist = 1;
-							pos.x += 20.0f * dx / (dist * g_Va00DBA4E4);
-							pos.y += 20.0f * dy / (dist * g_Va00DBA4E4);
+							pos.x += 20.0f * dx / (dist * BfmeLogicFramesPerSecond);
+							pos.y += 20.0f * dy / (dist * BfmeLogicFramesPerSecond);
 							if (onGround)
 								pos.z = TheTerrainLogic->getGroundHeight(pos.x, pos.y, NULL);
 							obj->setPosition(&pos);

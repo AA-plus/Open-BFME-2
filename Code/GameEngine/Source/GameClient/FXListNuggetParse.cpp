@@ -77,7 +77,7 @@ struct FXListCullingSettingsView
 
 // Retail uses the _strcmpi IAT slot at 0x00BBA518 for these keyword checks.
 extern "C" int (__cdecl * const _imp___strcmpi)(const char *left, const char *right);
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // ?parseCullingInfo@FXList@@SAXPAVINI@@PAX1PBX@Z
 void FXList::parseCullingInfo(INI *ini, void *instance, void *, const void *)
@@ -87,7 +87,7 @@ void FXList::parseCullingInfo(INI *ini, void *instance, void *, const void *)
 	while (token != 0) {
 		if (_imp___strcmpi(token, "TrackingSeconds") == 0) {
 			settings->m_trackingSeconds =
-				(int)(ini->scanReal(ini->getNextToken(0)) * g_Va00DBA4E4);
+				(int)(ini->scanReal(ini->getNextToken(0)) * BfmeLogicFramesPerSecond);
 		} else if (_imp___strcmpi(token, "StartCullingAbove") == 0) {
 			settings->m_cullTrackingMin = ini->scanUnsignedInt(ini->getNextToken(0));
 		} else if (_imp___strcmpi(token, "CullAllAbove") == 0) {

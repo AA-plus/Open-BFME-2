@@ -14,7 +14,7 @@ class Player;
 struct Rva002A8AB1Record { char prefix[0x16c]; int mode; };
 class Rva002A8F24 { public: Rva002A8AB1Record *rva002A8AB1(void *); void *rva002A8F24(Player *); };
 extern Rva002A8F24 *g_00DFEEF8;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Rva005C4AD1LeaField { public: void *get() const; };
 struct IdRange { ObjectID *begin,*end; };
 struct TemplateView { char prefix[0x120]; unsigned char flag120; };
@@ -77,7 +77,7 @@ int AIUpgradeHeuristicFortress::getUpgradeHeuristicResult(Player *player)
  if(ai->mode==2) {
   unsigned int frame=TheGameLogic->getFrame();
   if(nextFrame==-1 || nextFrame<=frame) {
-   nextFrame=frame+60*g_Va00DBA4E4;
+   nextFrame=frame+60*BfmeLogicFramesPerSecond;
    void *stats=g_00DFEEF8->rva002A8F24(player);
    Rva005C4AD1LeaField *structures=*(Rva005C4AD1LeaField **)((char *)stats+8);
    IdRange *range=(IdRange *)structures->get();

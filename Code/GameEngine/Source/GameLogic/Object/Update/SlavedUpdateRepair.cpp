@@ -219,8 +219,8 @@ float GetGameLogicRandomValueReal(float lo, float hi, char *file, int line);
 float Cos(float value);
 float Sin(float value);
 
-extern const int g_009BA4E4;
-#define LOGICFRAMES_PER_SECOND g_009BA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 
 // Zero Hour's DamageInfo as Rva00466C04Heal.cpp views it: the 0x7C record
 // built by the rowed constructor 0x00263895.

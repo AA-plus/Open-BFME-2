@@ -462,7 +462,7 @@ public:
 extern AI *TheAI;
 
 // BFME 2 keeps the logic frame rate in a global (0x009BA4E4).
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class GameLogic
 {
@@ -974,7 +974,7 @@ UpdateSleepTime FlammableUpdate::update()
 		AIUpdateInterface *ai = me->m_ai;
 		if (ai && !ai->isMoving())
 		{
-			m_aflameEndFrame = _STL::min((UnsignedInt)(g_Va00DBA4E4 * 3 + TheGameLogic->getFrame()), m_aflameEndFrame);
+			m_aflameEndFrame = _STL::min((UnsignedInt)(BfmeLogicFramesPerSecond * 3 + TheGameLogic->getFrame()), m_aflameEndFrame);
 			m_fleeing = false;
 		}
 	}

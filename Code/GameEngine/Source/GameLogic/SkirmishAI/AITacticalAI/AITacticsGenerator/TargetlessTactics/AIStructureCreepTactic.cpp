@@ -47,7 +47,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <vector>
 #include "ascii_string.h"
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // This unit's statics (0x00E06418..0x00E06428, built in this order by
 // 0x007B458D, 0x007B45A8, 0x007B45C1, 0x007B45CE and 0x007B45D9).
@@ -56,10 +56,10 @@ extern int g_Va00DBA4E4;
 #pragma inline_depth(0)
 AsciiString AIStructureCreep_IsRunning("AIStructureCreep_IsRunning");
 #pragma inline_depth()
-float g_00E0641C = g_Va00DBA4E4 * 30.0f;
-int g_00E06420 = g_Va00DBA4E4 * 2;
-int g_00E06424 = g_Va00DBA4E4;
-int g_00E06428 = g_Va00DBA4E4 * 5;
+float g_00E0641C = BfmeLogicFramesPerSecond * 30.0f;
+int g_00E06420 = BfmeLogicFramesPerSecond * 2;
+int g_00E06424 = BfmeLogicFramesPerSecond;
+int g_00E06428 = BfmeLogicFramesPerSecond * 5;
 
 // BFME2's Xfer: operator== overloads, grouped by cl at the first overload
 // slot in reverse declaration order (Rva004E0513Xfer.cpp has the same view).

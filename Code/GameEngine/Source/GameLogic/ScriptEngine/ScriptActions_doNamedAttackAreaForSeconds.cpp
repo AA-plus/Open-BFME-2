@@ -12,7 +12,7 @@
 // ScriptActions.cpp identify this action and the sequence of area attack then
 // sequential timer; the target global factor is established from retail data.
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 #include "ascii_string.h"
 
@@ -77,6 +77,6 @@ void ScriptActions::doNamedAttackAreaForSeconds(const AsciiString &unitName,
     }
     theSrcUnit->leaveGroup();
     aiUpdate->m_commandInterface.aiAttackArea(trigger, CMD_FROM_SCRIPT);
-    int framesPerSecond = g_Va00DBA4E4;
+    int framesPerSecond = BfmeLogicFramesPerSecond;
     TheScriptEngine->setSequentialTimer(theSrcUnit, seconds * framesPerSecond);
 }

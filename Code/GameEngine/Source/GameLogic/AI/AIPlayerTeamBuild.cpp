@@ -922,8 +922,8 @@ public:
 	Int m_debugAI;				// +0x9B8
 };
 extern GlobalData *TheWritableGlobalData;
-extern int g_Va00DBA4E4;
-#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 
 class Script
 {

@@ -9,7 +9,7 @@
 
 extern class GameLogic *TheGameLogic;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64 *counter);
@@ -95,7 +95,7 @@ private:
 };
 
 #define TheGameLogic (*(volatile GameLogicFrame **)&TheGameLogic)
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 // g_00DFEA2C: VA 0x00DFEA2C (.data(bss)); retail initial value is zero.
 unsigned long g_00DFEA2C = 0;

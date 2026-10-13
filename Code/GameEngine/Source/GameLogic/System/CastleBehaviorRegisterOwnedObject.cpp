@@ -190,7 +190,7 @@ int Rva00395A9FKill(Object* object,int context) {
 // Native layouts, timer scale, disposal flag and callbacks verified independently.
 class GlobalData { public: char pad[0x110c]; float secondsBeforeBaseCheckActive; };
 extern GlobalData* TheWritableGlobalData;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Rva003975B7Projectile {
 public:
  virtual void unused0(); virtual void unused1(); virtual void unused2();
@@ -213,7 +213,7 @@ bool CastleBehavior::checkForAutoPack() {
  GlobalData* global=TheWritableGlobalData;
  GameLogic* logic=TheGameLogic;
  unsigned frame=logic->getFrame();
- unsigned threshold=(unsigned)(int)(global ? global->secondsBeforeBaseCheckActive*(float)g_Va00DBA4E4 : 25.0f);
+ unsigned threshold=(unsigned)(int)(global ? global->secondsBeforeBaseCheckActive*(float)BfmeLogicFramesPerSecond : 25.0f);
  if(frame<threshold) return false;
  void* data=field<void*>(this,4);
  Object* object=logic->findObjectByID(field<ObjectID>(this,0x38));

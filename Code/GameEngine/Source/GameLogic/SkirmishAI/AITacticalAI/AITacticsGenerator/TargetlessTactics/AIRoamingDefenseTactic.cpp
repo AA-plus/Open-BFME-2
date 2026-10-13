@@ -9,7 +9,7 @@
 // AIRoamingDefenseTactic_NextLogicFrameRun.
 //
 //   0x005AAC35  slot 1: never for an owner that 0x002A9BF2 answers; the first
-//               time only schedule the next run 5 * g_Va00DBA4E4 frames on;
+//               time only schedule the next run 5 * BfmeLogicFramesPerSecond frames on;
 //               then once not running and the frame is reached
 //   0x005AAD26  slot 2: clear both keys
 //   0x005AADD9  slot 3: set the running key, then the AITactic's slot 3
@@ -247,7 +247,7 @@ public:
 	unsigned int m_40;		// +0x40, the frame
 };
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 struct Rva002A8AB1Record
 {
@@ -361,7 +361,7 @@ bool AIRoamingDefenseTactic::canRun(void *)
 		unsigned int next = record->rva002C7196(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"));
 		if (!next) {
 			record->rva002C717E(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"),
-				g_Va00DBA4E4 * 5 + TheGameLogic->getFrame());
+				BfmeLogicFramesPerSecond * 5 + TheGameLogic->getFrame());
 		} else if (!running && TheGameLogic->getFrame() >= next) {
 			return true;
 		}

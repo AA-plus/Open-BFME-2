@@ -5,19 +5,19 @@
 // ??0Rva005876D5@@QAE@XZ @0x005876D5 125B: constructor. Floats +0x04..+0x14
 // from float globals, pointer +0x00 from g_00C6FF28, member +0x18 built by
 // the rowed ??0Rva0042526Member@@QAE@XZ in declaration order, ints +0x64/+0x68
-// as double of g_Va00DBA4E4 and +0x6C as triple, then OR 0x40 into the
+// as double of BfmeLogicFramesPerSecond and +0x6C as triple, then OR 0x40 into the
 // member flags at +0x40. Member view keeps the rowed 0x4C size with the
 // ORed dword at +0x28. The +0x00 store is modeled as a plain data pointer;
 // if the class proves polymorphic it wants a vtable instead.
 // Evidence: caller 0x00469204; member TU Rva0042526MemberCtor.cpp;
-// g+g spelling from TransportAIUpdateModuleDataCtor.cpp; g_Va00DBA4E4
+// g+g spelling from TransportAIUpdateModuleDataCtor.cpp; BfmeLogicFramesPerSecond
 // declared extern int like the cold getters. Neighbours 0x005875DC
 // 0x0058814C.
 
 extern int g_00C6FF28;
 // g_00C6FF28: matched references place it at VA 0xc6ff28 (retail .rdata value 9992018).
 int g_00C6FF28 = 9992018;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva0042526Member
 {
@@ -55,9 +55,9 @@ Rva005876D5::Rva005876D5()
 	, m_f10(90.0f)
 	, m_p00(&g_00C6FF28)
 	, m_f14(140.0f)
-	, m_i64(g_Va00DBA4E4 + g_Va00DBA4E4)
-	, m_i68(g_Va00DBA4E4 + g_Va00DBA4E4)
-	, m_i6C(g_Va00DBA4E4 * 3)
+	, m_i64(BfmeLogicFramesPerSecond + BfmeLogicFramesPerSecond)
+	, m_i68(BfmeLogicFramesPerSecond + BfmeLogicFramesPerSecond)
+	, m_i6C(BfmeLogicFramesPerSecond * 3)
 {
 	Rva0042526Member &m = m_m18;
 	m.m_flags28 |= 0x40;

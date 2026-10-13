@@ -737,7 +737,7 @@ private:
 extern AI *TheAI;
 
 // Minimum frames between melee repaths (int global at 0x009BA4E4).
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // Opaque callees, named by body address with their pinned signatures.
 class Rva002CB35CObj
@@ -818,7 +818,7 @@ Bool AIAttackMeleeEngageState::computePath()
 	}
 	if (!ai->getPath() && !ai->isWaitingForPath())
 		forceRepath = true;
-	if (!forceRepath && TheGameLogic->getFrame() - m_approachTimestamp < g_009BA4E4)
+	if (!forceRepath && TheGameLogic->getFrame() - m_approachTimestamp < BfmeLogicFramesPerSecond)
 		return true;
 	m_approachTimestamp = TheGameLogic->getFrame();
 
@@ -879,7 +879,7 @@ Bool AIAttackMeleeEngageState::computePath()
 				return true;
 			}
 			m_retryPending = true;
-			m_retryFrame = TheGameLogic->getFrame() + g_009BA4E4 * 10;
+			m_retryFrame = TheGameLogic->getFrame() + BfmeLogicFramesPerSecond * 10;
 			return true;
 		}
 		source->rva0028ACDC((int)&m_goalPosition);
@@ -890,7 +890,7 @@ Bool AIAttackMeleeEngageState::computePath()
 	return false;
 }
 
-extern const int g_009BA4E4; // LOGICFRAMES_PER_SECOND
+extern int BfmeLogicFramesPerSecond; // LOGICFRAMES_PER_SECOND
 
 // Retail 0x00347959, 248 bytes: slot 17 of 0x00C11F00. Refreshes the goal
 // position (the goal object's, through the pinned Object 0x0028C2DD, or the
@@ -918,7 +918,7 @@ Bool AIMoveToStateSA::computePath()
 		if (!rva00344249(&m_goalPosition, owner))
 		{
 			m_bfmeFlag50 = true;
-			m_bfmeFrame4C = TheGameLogic->getFrame() + g_009BA4E4 * 10;
+			m_bfmeFrame4C = TheGameLogic->getFrame() + BfmeLogicFramesPerSecond * 10;
 			AIUpdateInterface *ai = owner->getAI();
 			if (ai && ai->isMoving())
 				ai->rva0034C988Slot136();

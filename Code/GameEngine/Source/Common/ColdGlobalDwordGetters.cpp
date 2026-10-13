@@ -244,16 +244,16 @@ int Rva0044C5C1Get(void)
 	return g_Va00E06398;
 }
 
-extern int g_Va00DBA4E4;
-// g_Va00DBA4E4: matched references place it at VA 0xdba4e4 (retail .data initial value 5).
-int g_Va00DBA4E4 = 5;
+extern int BfmeLogicFramesPerSecond;
+// BfmeLogicFramesPerSecond: matched references place it at VA 0xdba4e4 (retail .data initial value 5).
+int BfmeLogicFramesPerSecond = 5;
 
 // ?Rva004B879DGet@@YAHXZ @ 0x004b879d (6B) over 0x00DBA4E4.
 // Follows a ret (prev C3), no .rdata vtable slot, no direct callers,
 // no branch sources. Opaque address-derived name.
 int Rva004B879DGet(void)
 {
-	return g_Va00DBA4E4;
+	return BfmeLogicFramesPerSecond;
 }
 
 extern int g_currentAptOnlineCustomMatch;

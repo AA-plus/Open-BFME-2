@@ -3,7 +3,7 @@
 //
 // ??0Rva004147CF@@QAE@ABVAsciiString@@@Z, retail 0x004148C0, 114 bytes. Ctor
 // of Snapshot subclass Rva004147CF (vtable at [this]): AsciiString at +4 via
-// rowed StringBase copy 0x000365F0, ints at +8/-1 +C/0xA +10/g_Va00DBA4E4,
+// rowed StringBase copy 0x000365F0, ints at +8/-1 +C/0xA +10/BfmeLogicFramesPerSecond,
 // member at +14 via rowed 0x003623E5, flags at +18/+19, vector<BfmeE16> at
 // +1C via rowed Vector_base 0x00211E58, ints at +28/+2C zeroed. Evidence:
 // leaf packet stores vtable and calls rowed bodies; layout mirrors sibling
@@ -26,7 +26,7 @@ private:
 	unsigned int m_record;
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva004147CF : public Snapshot
 {
@@ -49,7 +49,7 @@ Rva004147CF::Rva004147CF(const AsciiString &name)
 	: m_str04(name)
 	, m_unk08(-1)
 	, m_unk0C(10)
-	, m_unk10(g_Va00DBA4E4)
+	, m_unk10(BfmeLogicFramesPerSecond)
 	, m_flag18(true)
 	, m_flag19(true)
 	, m_vec1C(_STL::allocator<BfmeE16>())

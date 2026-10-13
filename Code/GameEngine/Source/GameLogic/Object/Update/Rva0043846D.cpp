@@ -19,7 +19,7 @@ public:
 	void rva00275DCE(int mode, float x, float y, float phase);
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Object
 {
@@ -66,6 +66,6 @@ void Rva0043846D::rva0043846D(Object *obj)
 		return;
 	int mode = reinterpret_cast<Rva004383EB *>(this)->rva004383EB(obj);
 	Rva0043846DGlobalData *global = reinterpret_cast<Rva0043846DGlobalData *>(TheWritableGlobalData);
-	float phase = (float)global->phase / g_Va00DBA4E4;
+	float phase = (float)global->phase / BfmeLogicFramesPerSecond;
 	drawable->rva00275DCE(mode, global->x, global->y, phase);
 }

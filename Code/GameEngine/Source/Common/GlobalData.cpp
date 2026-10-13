@@ -57,8 +57,8 @@ extern GameTextInterface *TheGameText;
 
 enum TimeOfDay { TIME_OF_DAY_INVALID=-1 };
 // The logic frame rate (data ledger owner of VA 0x00DBA4E4).
-extern int g_Va00DBA4E4;
-#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 extern "C" __declspec(dllimport) unsigned int __stdcall GetDoubleClickTime();
 struct Rva00235A21 { char words[528]; Rva00235A21(); };
 class Rva00235A37 { public: char words[48]; Rva00235A37 &operator=(const Rva00235A37&); };

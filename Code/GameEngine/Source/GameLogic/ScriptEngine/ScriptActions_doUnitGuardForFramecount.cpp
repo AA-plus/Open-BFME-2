@@ -8,7 +8,7 @@
 // Callers at 0x003CE24E. Prev doNamedFollowWaypointsExact / next doNamedFaceNamed. Honest GuardMode Int layout.
 extern class TerrainLogic *TheTerrainLogic;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 #include "ascii_string.h"
 
@@ -114,7 +114,7 @@ void ScriptActions::doUnitGuardForFramecount(const AsciiString &unitName, int fr
 	position.z = object->m_position.z;
 	ai->m_command.aiGuardPosition(&position, GUARDMODE_NORMAL, CMD_FROM_SCRIPT);
 	if (seconds)
-		TheScriptEngine->setSequentialTimer(object, framecount * g_Va00DBA4E4);
+		TheScriptEngine->setSequentialTimer(object, framecount * BfmeLogicFramesPerSecond);
 	else
 		TheScriptEngine->setSequentialTimer(object, framecount);
 }

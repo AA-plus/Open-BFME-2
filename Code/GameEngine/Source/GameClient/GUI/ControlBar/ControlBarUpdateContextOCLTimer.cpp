@@ -26,7 +26,7 @@ public:
 
 extern NameKeyGenerator *TheNameKeyGenerator;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Module;
 
@@ -159,7 +159,7 @@ void ControlBar::updateContextOCLTimer()
 	static const NameKeyType key_OCLUpdate = TheNameKeyGenerator->nameToKey("OCLUpdate");
 	OCLUpdate *update = (OCLUpdate *)obj->findModule(key_OCLUpdate);
 	unsigned int frames = update->getRemainingFrames();
-	unsigned int seconds = frames / g_Va00DBA4E4;
+	unsigned int seconds = frames / BfmeLogicFramesPerSecond;
 	float percent = update->getCountdownPercent();
 	// if the time has changed since what was last shown to the user update the text
 	if (m_displayedOCLTimerSeconds != seconds)

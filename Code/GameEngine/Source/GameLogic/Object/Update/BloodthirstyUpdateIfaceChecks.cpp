@@ -38,7 +38,7 @@ class Drawable;
 // UpdateModuleInterface table 0x00C3EFEC. While the ID at +0x28 is set and
 // that Object is gone, flagged (+0x438 bit 0) or lacks status 0x41, interface
 // slot 5 runs with 0 and our own Object gets the same release as the target
-// above; sleeps 2 * g_009BA4E4 + 1 (the logic frame rate) either way.
+// above; sleeps 2 * BfmeLogicFramesPerSecond + 1 (the logic frame rate) either way.
 //
 // 0x00346C53 (pinned by address): the setStatus twin (same mask build via
 // 0x0023DA79) that hands the mask to 0x00293D3B instead of 0x0028CDEB.
@@ -60,7 +60,7 @@ enum UpdateSleepTime
 {
 	UPDATE_SLEEP_NONE = 1
 };
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Object;
 class AICommandInterface
 {
@@ -302,7 +302,7 @@ UpdateSleepTime BloodthirstyUpdate::update()
 			self->getAI()->getCommandInterface()->aiIdle(CMD_FROM_AI);
 		}
 	}
-	return (UpdateSleepTime)(g_009BA4E4 * 2 + 1);
+	return (UpdateSleepTime)(BfmeLogicFramesPerSecond * 2 + 1);
 }
 
 class DrawableList : public _STL::list<Drawable *>

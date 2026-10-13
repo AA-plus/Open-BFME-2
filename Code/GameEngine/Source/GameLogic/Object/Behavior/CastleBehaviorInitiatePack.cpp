@@ -21,7 +21,7 @@ struct CastleData {char prefix[0x1C];float wait;};
 struct LogicLogView {char prefix[0x1B4];int enabled;};
 extern GameLogic*TheGameLogic;
 // Existing data-ledger owner of the mutable FPS integer, RVA009BA4E8.
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 extern "C" void*theLogicRandomLogFile;
 extern "C" int __cdecl fprintf(void*,const char*,...);
 class CastleBehavior {public:void initiatePack();void playEvaEventsForCastlePacking();void rva00397B03(ObjectStatusTypes,bool);
@@ -32,7 +32,7 @@ void CastleBehavior::initiatePack(){
  CastleData*moduleData=data;Object*self=object;if(!self)return;
  playEvaEventsForCastlePacking();state34=5;
  ((Rva0039A270MoveOwner*)this)->rva0039A270Move(self);
- double fps=g_009BA4E8;
+ double fps=BfmeClientFramesPerSecond;
  int delay=(int)(fps*moduleData->wait);
  for(_STL::vector<ObjectID>::iterator it=owned50.begin();it!=owned50.end();++it){Object*owned=TheGameLogic->findObjectByID(*it);if(owned)owned->getDrawable()->fadeOut(delay);}
  for(_STL::vector<ObjectID>::iterator it=owned74.begin();it!=owned74.end();++it){Object*owned=TheGameLogic->findObjectByID(*it);if(owned)owned->getDrawable()->fadeOut(delay);}

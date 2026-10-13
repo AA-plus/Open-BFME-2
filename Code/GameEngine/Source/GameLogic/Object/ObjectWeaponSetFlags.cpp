@@ -16,7 +16,7 @@
 // +0x10C, the base the variable-index test uses here) instead of the
 // Drawable; MODELCONDITION_INVALID (-1) entries are skipped; and the model
 // conditions 0x12D/0x12E/0x12F additionally queue 0x1BD/0x1BE/0x1BF on the
-// ObjectSMCHelper at +0x230 for g_Va00DBA4E4 frames (0x004DE85F, which sets
+// ObjectSMCHelper at +0x230 for BfmeLogicFramesPerSecond frames (0x004DE85F, which sets
 // that condition and records its expiry frame; pinned by address).
 // Bit indexes are unsigned (shr) as in a bitset; the masked-word test makes cl
 // keep the mask in a register and test/or the word in memory.
@@ -128,7 +128,7 @@ public:
 	virtual void rva00290B24Slot90(WeaponSlotType weaponSlot, WeaponLockType lockType) = 0;
 };
 extern const ModelConditionFlagType TheWeaponSetTypeToModelConditionTypeMap[];
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // The target's 0x0029080C consumer reads 104 map entries; the following
 // strings begin at 0x00800868, fixing the table extent at 416 bytes. Numeric
@@ -291,11 +291,11 @@ void Object::setWeaponSetFlag(WeaponSetType wst)
 		}
 	}
 	if (mc == 0x12D)
-		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BD, g_Va00DBA4E4);
+		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BD, BfmeLogicFramesPerSecond);
 	else if (mc == 0x12E)
-		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BE, g_Va00DBA4E4);
+		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BE, BfmeLogicFramesPerSecond);
 	else if (mc == 0x12F)
-		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BF, g_Va00DBA4E4);
+		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BF, BfmeLogicFramesPerSecond);
 }
 void Object::clearWeaponSetFlag(WeaponSetType wst)
 {
@@ -311,11 +311,11 @@ void Object::clearWeaponSetFlag(WeaponSetType wst)
 		}
 	}
 	if (mc == 0x12D)
-		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BD, g_Va00DBA4E4);
+		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BD, BfmeLogicFramesPerSecond);
 	else if (mc == 0x12E)
-		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BE, g_Va00DBA4E4);
+		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BE, BfmeLogicFramesPerSecond);
 	else if (mc == 0x12F)
-		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BF, g_Va00DBA4E4);
+		m_smcHelper->setModelConditionState((ModelConditionFlagType)0x1BF, BfmeLogicFramesPerSecond);
 }
 void Object::rva00290AC1(const WeaponSetFlags &flags)
 {

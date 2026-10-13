@@ -341,7 +341,7 @@ virtual void slot13();
 virtual Object *build(Object*,const ThingTemplate*,const Coord3D*,float,Player*);};
 class ScriptEngine {public:void rva00357960(const AsciiString&,Object*);}; extern ScriptEngine *TheScriptEngine;
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 template<class T> inline T& fld(void*p,int offset) {return *(T*)((char*)p+offset);}
 __forceinline Team *Object::getTeam(){ return fld<Team*>(this,0x304); }
@@ -413,7 +413,7 @@ int Rva00483645::update() {
  BodyView *body=fld<BodyView*>(hole,0x254);
  if(body->getHealth()<body->getMaxHealth()) {
   Rva00263895Member healing;
-  fld<float>(&healing,0x20)=(modData->heal/g_Va00DBA4E4)*body->getMaxHealth();
+  fld<float>(&healing,0x20)=(modData->heal/BfmeLogicFramesPerSecond)*body->getMaxHealth();
   fld<ObjectID>(&healing,8)=fld<ObjectID>(hole,0x74);
   fld<int>(&healing,0x10)=7;
   fld<int>(&healing,0x1c)=1;

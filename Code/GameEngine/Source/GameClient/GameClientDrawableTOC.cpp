@@ -1312,7 +1312,7 @@ extern PlayerList *ThePlayerList;
 extern GameEngine *TheGameEngine;
 extern GhostObjectManager *TheGhostObjectManager;
 extern ParticleSystemManager *TheParticleSystemManager;
-extern int g_Va00DBA4E4;                                // LogicFramesPerSecond
+extern int BfmeLogicFramesPerSecond;                                // LogicFramesPerSecond
 extern int g_00E02EC4;
 
 void Rva0038072AClear();
@@ -1836,9 +1836,9 @@ void GameClient::update()
 					CellShroudStatus ss = object->getShroudStatusForPlayer(localPlayerIndex);
 					if (ss >= SHROUD_STATUS_FOGGED && draw->getShroudClearFrame() != 0)
 					{
-						unsigned int limit = 2 * g_Va00DBA4E4;
+						unsigned int limit = 2 * BfmeLogicFramesPerSecond;
 						if (object->isEffectivelyDead())
-							limit += 3 * g_Va00DBA4E4;
+							limit += 3 * BfmeLogicFramesPerSecond;
 						if (TheGameLogic->getFrame() < limit + draw->getShroudClearFrame())
 							ss = SHROUD_STATUS_CLEAR;
 					}

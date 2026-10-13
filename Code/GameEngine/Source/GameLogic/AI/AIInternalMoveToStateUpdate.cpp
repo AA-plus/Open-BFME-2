@@ -56,7 +56,7 @@
 // object succeeds, and a goal that moved more than 5 (GetLengthEstimate)
 // from the machine's goal is handed back to the machine and forces a repath.
 // The retry tail is Zero Hour's (80-unit close enough, sleep three
-// LOGICFRAMES_PER_SECOND, the BFME 2 int global g_00DBA4E4); forceRepath
+// LOGICFRAMES_PER_SECOND, the BFME 2 int global BfmeLogicFramesPerSecond); forceRepath
 // writes the path goal (+0x34) and the path timestamp (+0x44).
 // AIMoveToState::update, retail 0x00353A65 (450 bytes): slot 6 of vtable
 // 0x00C11EB8, the base update AIAttackMoveToState::update calls. Zero Hour's
@@ -153,8 +153,8 @@ typedef int Int;
 typedef unsigned int UnsignedInt;
 #include "Coord3D.h"
 extern GameLogic *TheGameLogic;
-extern int g_00DBA4E4; // LOGICFRAMES_PER_SECOND
-#define LOGICFRAMES_PER_SECOND g_00DBA4E4
+extern int BfmeLogicFramesPerSecond; // LOGICFRAMES_PER_SECOND
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 #define FLT_MAX 3.402823466e+38F
 Real normalizeAngle(Real angle);
 // The two .data tunables AIInternalMoveToState::update reads for AI state

@@ -101,7 +101,7 @@ extern BfmeOwnVVD *g_bfmeSingletonVVD;
 BfmeOwnVVD * g_bfmeSingletonVVD;
 
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // ??0BfmeOwnVVD@@QAE@XZ
 BfmeOwnVVD::BfmeOwnVVD()
@@ -142,7 +142,7 @@ unsigned char BfmeOwnVVD::Rva0042E8C1()
 	unsigned int &slot = m_150;
 	if (slot > TheGameLogic->getFrame())
 		slot = 0;
-	return slot + g_Va00DBA4E4 >= TheGameLogic->getFrame();
+	return slot + BfmeLogicFramesPerSecond >= TheGameLogic->getFrame();
 }
 
 // ?rva0042E804@BfmeOwnVVD@@QAEXXZ @0x0042E804 88B evidence: same BfmeOwnVVD layout m_1c m_38 m_39 m_148 callers 0x0042EA56 0x0042ED42 TheInGameUI slot 0xa4 TheTacticalView slot 0x1a4 TheMouse slot 0x4c StatsCollector endScrollTime row

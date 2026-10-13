@@ -73,7 +73,7 @@ class Pathfinder { public: int GetOverlapGoalUnits(Object *,const Coord3D *,int 
 struct SwarmAIManager { unsigned char pad[0x10]; Pathfinder *pathfinder; };
 class AI; extern AI *TheAI;
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 struct SwarmAttackEntry { int state; Coord3D position; bool needsPosition; unsigned char pad11[3]; unsigned int nextFrame,lastFrame; };
 class HordeMeleeSwarm {
 public:
@@ -146,7 +146,7 @@ void HordeMeleeSwarm::updateMeleeAttack(Object *victim)
    Object *nearest=other->m_container->rangeQuery()->query(0,&entry.position,0.0f,0,0);
    if(nearest) position=nearest->m_position;
   }
-  bool recent=entry.lastFrame+g_Va00DBA4E4>now;
+  bool recent=entry.lastFrame+BfmeLogicFramesPerSecond>now;
   int frames=0;
   bool overlap=entry.nextFrame>0 && (*(unsigned char *)((char *)victim->m_template+0x108)&0x80)!=0;
   bool found=findMeleeAttackPosition(unit,&entry.position,victim,&position,recent,&frames,overlap);

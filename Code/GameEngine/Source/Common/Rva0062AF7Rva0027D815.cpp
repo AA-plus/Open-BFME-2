@@ -10,7 +10,7 @@
 // Secondary MI vptrs plus 0x04 plus 0x10 plus 0x14 omitted as body touches
 // primary only. Flags per section 4.1: /O1 for EBP frame plus /arch:SSE for
 // xorps and movss float zeroing.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 #include <math.h>
 struct Rva0027D5E0Box
@@ -161,7 +161,7 @@ float Rva0062AF7::Rva0027D85B(void *water)
 // float moves plus /G7 for imul 0x14 and edx loop index (section 4.1).
 void Rva0062AF7::Rva0027D88E(void *water, float finalHeight, float transitionTime, float damageAmount)
 {
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 	enum { MAX_DYNAMIC_WATER = 64 };
 	if (m_count >= MAX_DYNAMIC_WATER)
 		return;

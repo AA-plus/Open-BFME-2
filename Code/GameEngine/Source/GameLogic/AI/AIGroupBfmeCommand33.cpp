@@ -144,7 +144,7 @@ public:
 };
 
 extern GameLogic *TheGameLogic;
-extern const int g_009BA4E4; // logic frames per second
+extern int BfmeLogicFramesPerSecond; // logic frames per second
 
 int GetGameLogicRandomValue(int lo, int hi, char *file, int line);
 
@@ -212,7 +212,7 @@ void AIGroup::groupIdle(CommandSourceType cmdSource)
 					if (stealth)
 					{
 						unsigned int stealthFrames = stealth->m_moduleData->m_stealthDelay;
-						unsigned int randomFrames = GetGameLogicRandomValue(0, g_009BA4E4,
+						unsigned int randomFrames = GetGameLogicRandomValue(0, BfmeLogicFramesPerSecond,
 							"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\AI\\AIGroup.cpp",
 							0x9EE);
 						ai->rva0026304D(TheGameLogic->getFrame() + stealthFrames + randomFrames);

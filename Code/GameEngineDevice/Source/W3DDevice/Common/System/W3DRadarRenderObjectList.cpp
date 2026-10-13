@@ -151,7 +151,7 @@ public:
 	virtual UnsignedInt getFrame();
 };
 extern GameClient *TheGameClient;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 class W3DRadar {
 public:
@@ -269,7 +269,7 @@ static Bool rva0004E704(Object *object, Color *color)
 
 			UnsignedByte red, green, blue, alpha;
 			GameGetColorComponents(*color, &red, &green, &blue, &alpha);
-			const UnsignedInt halfTransition = g_009BA4E8;
+			const UnsignedInt halfTransition = BfmeClientFramesPerSecond;
 			UnsignedInt frame = TheGameClient->getFrame() % (halfTransition * 2);
 			if (frame >= halfTransition)
 				alpha = (UnsignedByte)(255 - ((frame - halfTransition) * 191) / halfTransition);

@@ -5,7 +5,7 @@
 // BFME2 deltas: bool seconds param with factor at 0x00DBA4E4 selecting setSequentialTimer frames like doUnitGuardForFramecount sibling.
 // Evidence: rowed getUnitNamed 0x003588E7 plus AsciiString pin, rowed aiIdle 0x001E8A38, rowed setSequentialTimer Object overload 0x00203FCF.
 // TheScriptEngine at 0x00DFE16C. AIUpdateInterface at Object+0x258 with command at +0x20. Caller at 0x003CE271.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 #include "ascii_string.h"
 
@@ -57,7 +57,7 @@ void ScriptActions::doUnitIdleForFramecount(const AsciiString &unitName, int fra
 		return;
 	ai->m_command.aiIdle(CMD_FROM_SCRIPT);
 	if (seconds)
-		TheScriptEngine->setSequentialTimer(object, framecount * g_Va00DBA4E4);
+		TheScriptEngine->setSequentialTimer(object, framecount * BfmeLogicFramesPerSecond);
 	else
 		TheScriptEngine->setSequentialTimer(object, framecount);
 }

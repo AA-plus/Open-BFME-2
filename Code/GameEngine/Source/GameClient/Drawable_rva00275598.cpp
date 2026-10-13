@@ -100,7 +100,7 @@ template<class T> __forceinline const T& drawableMin(const T&a,const T&b){return
 template<class T> __forceinline const T& drawableMax(const T&a,const T&b){return a<b?b:a;}
 
 class Rva002716Holder { public:void rva00271547(); };
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 float Sin(float);
 // Target reads the stored1/30-second value at VA DBA508; its original
 // linkage/name is unknown. A local data owner preserves the measured read.
@@ -311,12 +311,12 @@ void Drawable::rva00272DEE() {
   if(old!=m_43E)reinterpret_cast<Rva002716Holder *>(this)->rva00271547();
  }else if(m_B8!=m_BC) {
   float pulse=m_C4+m_C8*Sin(m_CC);
-  float blend=(g_009BA4E8*m_C0-m_D4)/(g_009BA4E8*m_C0);
+  float blend=(BfmeClientFramesPerSecond*m_C0-m_D4)/(BfmeClientFramesPerSecond*m_C0);
   if(m_D4>0)--m_D4;
   m_B4=pulse*blend+m_D0*(1.0f-blend);
   m_CC+=(opacityLogicStepSeconds/m_C0)*3.1415927410125732f;
  }else if((float)(m_B8==m_BC)==1.0f && m_B4<1.0f) {
-  float blend=(g_009BA4E8*m_C0-m_D4)/(g_009BA4E8*m_C0);
+  float blend=(BfmeClientFramesPerSecond*m_C0-m_D4)/(BfmeClientFramesPerSecond*m_C0);
   if(m_D4>0)--m_D4;
   m_B4=m_D0*(1.0f-blend)+blend;
  }

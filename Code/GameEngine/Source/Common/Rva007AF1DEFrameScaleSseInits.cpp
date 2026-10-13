@@ -6,7 +6,7 @@
 // /arch:SSE. The owning TUs are unrecovered, so each initializer keeps an
 // honest address name.
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // Never read elsewhere in .text.
 static float s_rva007AF1DE;
@@ -22,11 +22,11 @@ struct Rva007AF1DEFrameScaleSseInits
 // 0x007AF1DE (25B): VA 0x00E027C0 = LOGICFRAMES_PER_SECOND * 1.5f
 void Rva007AF1DEFrameScaleSseInits::rva007AF1DE()
 {
-	s_rva007AF1DE = g_Va00DBA4E4 * 1.5f;
+	s_rva007AF1DE = BfmeLogicFramesPerSecond * 1.5f;
 }
 
 // 0x007AF1F7 (25B): VA 0x00E027C4 = LOGICFRAMES_PER_SECOND * 3.0f
 void Rva007AF1DEFrameScaleSseInits::rva007AF1F7()
 {
-	g_00E027C4 = g_Va00DBA4E4 * 3.0f;
+	g_00E027C4 = BfmeLogicFramesPerSecond * 3.0f;
 }

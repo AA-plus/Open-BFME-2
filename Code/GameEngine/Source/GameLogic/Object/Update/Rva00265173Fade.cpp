@@ -2,7 +2,7 @@
 // ?rva00265173@Rva00265173@@QAEXXZ @0x00265173 225B
 // Evidence (call result kept in a named false-initialised bool: the retail compare is
 // CMP AL,BL against the zero register, not TEST AL,AL): unlock lane, fade hide/show via rowed getDrawable fadeOut fadeIn Drawable toggles pinned bfmeAskBIC, caller 0x0026E40A, neighbours share flags.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Drawable
 {
@@ -79,7 +79,7 @@ after_flag:;
 	{
 		if (m_3cb)
 			return;
-		vsaved->fadeOut((unsigned int)g_Va00DBA4E4);
+		vsaved->fadeOut((unsigned int)BfmeLogicFramesPerSecond);
 		vsaved->rva00272A02(false);
 		m_3cb = true;
 		if (!flag)
@@ -92,7 +92,7 @@ after_flag:;
 	{
 		if (!m_3cb)
 			return;
-		vsaved->fadeIn((unsigned int)g_Va00DBA4E4);
+		vsaved->fadeIn((unsigned int)BfmeLogicFramesPerSecond);
 		vsaved->rva00272A02(true);
 		m_3cb = false;
 		if (!flag)

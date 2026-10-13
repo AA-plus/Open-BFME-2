@@ -522,7 +522,7 @@ void _appendMessage(const AsciiString &str, Bool isTrueMessage,
 // convention: str live in EDI and no argument pop.
 // BFME 2 turns Zero Hour's LOGICFRAMES_PER_SECOND into this global int (5);
 // retail divides by it in memory (fidiv) rather than by a folded constant.
-extern const Int g_009BA4E4;					// 0x00DBA4E4
+extern int BfmeLogicFramesPerSecond;					// 0x00DBA4E4
 
 static void _adjustVariable(const AsciiString &str, Int value,
 	Bool shouldPause, Bool showSeconds)
@@ -544,7 +544,7 @@ static void _adjustVariable(const AsciiString &str, Int value,
 
 	char buff[32];
 	if (showSeconds)
-		sprintf(buff, "%d (%0.2f secs)", value, (float)value / g_009BA4E4);
+		sprintf(buff, "%d (%0.2f secs)", value, (float)value / BfmeLogicFramesPerSecond);
 	else
 		sprintf(buff, "%d ", value);
 

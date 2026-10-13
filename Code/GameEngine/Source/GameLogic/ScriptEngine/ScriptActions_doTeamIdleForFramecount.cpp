@@ -7,7 +7,7 @@
 // ordered idle from a script (groupIdle 0x0076FC23; its centre is queried
 // first, 0x0076D035), then the script engine's sequential timer for the team
 // is set to the frame count.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 #include "ascii_string.h"
 typedef bool Bool;
@@ -106,7 +106,7 @@ void ScriptActions::doTeamIdleForFramecount(const AsciiString &teamName, int fra
 			group->getCenter(&center);
 			group->groupIdle(CMD_FROM_SCRIPT);
 			if (seconds)
-				TheScriptEngine->setSequentialTimer(team, framecount * g_Va00DBA4E4);
+				TheScriptEngine->setSequentialTimer(team, framecount * BfmeLogicFramesPerSecond);
 			else
 				TheScriptEngine->setSequentialTimer(team, framecount);
 		}

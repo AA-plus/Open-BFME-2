@@ -15,7 +15,7 @@
 #include <vector>
 #include "Common/Snapshot.h"
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class OpaqueRefCounted
 {
@@ -97,7 +97,7 @@ FlammableUpdateModuleData::FlammableUpdateModuleData()
 	, m_aflameDamageDelay(0)
 	, m_aflameDamageAmount(0)
 	, m_flameDamageLimit(20.0f)
-	, m_flameDamageExpiration(g_Va00DBA4E4 * 5)
+	, m_flameDamageExpiration(BfmeLogicFramesPerSecond * 5)
 	, m_damageType(6)
 {
 	m_runToWaterDepth = 0.0f;

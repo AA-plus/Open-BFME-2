@@ -6,7 +6,7 @@
 //  253e32: mov eax, FuncInfo / call __EH_prolog
 //          vtable 0x00C4ED70 stored at +0, then the 16-byte record member at
 //          +8 constructed through the rowed 0x004CE6BA (two words of
-//          2*g_009BA4E4 and two -1.0f floats). The only caller is 0x253D58
+//          2*BfmeLogicFramesPerSecond and two -1.0f floats). The only caller is 0x253D58
 //          inside the module-data factory 0x00253D37, so this is the ctor of
 //          one of its update-module-data classes; the original class name is
 //          not established, so the view keeps the address name.

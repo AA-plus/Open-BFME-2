@@ -8,7 +8,7 @@
 // Original TAiData and semantic member names are carried from the donor;
 // target construction spine and Snapshot-family tableC071E4 corroborate
 // the subsystem relationship. Extra field meanings remain unresolved.
-// Existing global owner g_Va00DBA4E4 is read normally twice as retail does.
+// Existing global owner BfmeLogicFramesPerSecond is read normally twice as retail does.
 
 typedef float Real;
 typedef unsigned int UnsignedInt;
@@ -19,7 +19,7 @@ class Xfer;
 #include "ascii_string.h"
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva002FE620;
 class Rva002FED8D;
@@ -129,8 +129,8 @@ TAiData::TAiData() :
 	m_guardInnerModifierHuman( 0.0f ),
 	m_guardOuterModifierHuman( 0.0f ),
 	m_guardChaseUnitFrames( 0 ),
-	m_guardEnemyScanRate( g_Va00DBA4E4 / 2 ),
-	m_guardEnemyReturnScanRate( g_Va00DBA4E4 ),
+	m_guardEnemyScanRate( BfmeLogicFramesPerSecond / 2 ),
+	m_guardEnemyReturnScanRate( BfmeLogicFramesPerSecond ),
 	m_wallHeight( 0.0f ),
 	m_alertRangeModifier( 0.0f ),
 	m_aggressiveRangeModifier( 0.0f ),

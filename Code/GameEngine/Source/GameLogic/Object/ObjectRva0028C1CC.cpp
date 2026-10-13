@@ -7,7 +7,7 @@
 // plus rva0028AF76 0x0028AF76; globals LogicFramesPerSecond 0x00DBA4E4 (=5)
 // and TheGameLogic frame 0x00DFE78C+0x40; bool return via al; name stays
 // address-derived (Object owner proven by callers, identity unproven).
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 enum WeaponSlotType
 {
@@ -46,7 +46,7 @@ class GameLogic
 };
 
 extern class GameLogic *TheGameLogic;
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 bool Object::rva0028C1CC() const
 {

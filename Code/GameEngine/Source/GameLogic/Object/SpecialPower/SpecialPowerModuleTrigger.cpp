@@ -166,7 +166,7 @@ public:
 };
 
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Matrix3D;
 class FXList
@@ -422,7 +422,7 @@ void SpecialPowerModule::triggerSpecialPower(const Coord3D *location)
 
 	if (d->m_50 != MODELCONDITION_INVALID && d->m_54 > 0.0f)
 	{
-		unsigned int frames = (unsigned int)(g_Va00DBA4E4 * d->m_54);
+		unsigned int frames = (unsigned int)(BfmeLogicFramesPerSecond * d->m_54);
 		getObject()->setSpecialModelConditionState(d->m_50, frames);
 		if (d->m_5C)
 			getObject()->setDisabledUntil(DISABLED_3, TheGameLogic->getFrame() + frames);

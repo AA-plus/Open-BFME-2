@@ -28,8 +28,8 @@ typedef float Real;
 #include "../../Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 
-extern int g_Va00DBA4E4;
-#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 
 class Object;
 class Team;

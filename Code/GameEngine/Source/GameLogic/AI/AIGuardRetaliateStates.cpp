@@ -358,8 +358,8 @@ private:
 	UnsignedInt m_frame; // +0x40
 };
 extern GameLogic *TheGameLogic;
-extern const int g_009BA4E4;
-#define LOGICFRAMES_PER_SECOND g_009BA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 int GetGameLogicRandomValue(int low, int high, char *file, int line);
 #define AIGUARDRETALIATE_FILE "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Ai\\AIGuardRetaliate.cpp"
 struct FprintfTarget

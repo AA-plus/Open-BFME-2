@@ -3,13 +3,13 @@
 // ??0Rva00238B90@@QAE@XZ @0x00238AC7 201B.
 // Ctor storing vtable 0x007ED654 then six StringBase members from literals
 // ("Sounds" "Music" "Streams" "AmbientStreams" "wav" plus TheEmptyString copy)
-// via rowed 0x00037BA0/0x000365F0, ints at +0x44/+0x48/+0x4C via g_Va00DBA4E4,
+// via rowed 0x00037BA0/0x000365F0, ints at +0x44/+0x48/+0x4C via BfmeLogicFramesPerSecond,
 // seventh string at +0x50 via g_00BBD3EC, and two float[5] at +0x1C/+0x30 via
 // 1.0f. Layout matches Rva00238B90Dtor.cpp; vtable and callees rowed.
 // Evidence: unlock lane vtable store plus seven constructions; caller 0x0004159B.
 #include "ascii_string.h"
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Rva00238B90
 {
 public:
@@ -29,7 +29,7 @@ private:
 	int m_4C;
 	AsciiString m_50;
 };
-Rva00238B90::Rva00238B90() : m_04("Sounds"), m_08("Music"), m_0C("Streams"), m_10("AmbientStreams"), m_14("wav"), m_18(AsciiString::TheEmptyString), m_44(0), m_48(5), m_4C(g_Va00DBA4E4 * 5), m_50(".")
+Rva00238B90::Rva00238B90() : m_04("Sounds"), m_08("Music"), m_0C("Streams"), m_10("AmbientStreams"), m_14("wav"), m_18(AsciiString::TheEmptyString), m_44(0), m_48(5), m_4C(BfmeLogicFramesPerSecond * 5), m_50(".")
 {
 	float v = 1.0f;
 	for (int i = 0; i < 5; ++i)

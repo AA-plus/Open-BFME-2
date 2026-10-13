@@ -2,7 +2,7 @@
 // ?rva004B4DBF@Rva004B4DBF@@QAEXPAM0@Z @0x004B4DBF 151B: thiscall with two float outs.
 // Evidence: adjacent to 0x004B4DA3/0x004B4E56; call sites 0x004B506A and
 // 0x004B515A; TheGameLogic+0x40 frame check, the 1.0f literal at 0x00BBB8D8
-// and the g_00DBA4E8 int divisor.
+// and the BfmeClientFramesPerSecond int divisor.
 // Structural inference: plain 1.0f divisions let the compiler keep the
 // constant in xmm1 across both reciprocal stores, as retail does.
 
@@ -14,7 +14,7 @@ public:
 };
 
 extern GameLogic *TheGameLogic;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 struct SubA004B4DBF
 {
@@ -55,9 +55,9 @@ void Rva004B4DBF::rva004B4DBF(float *p1, float *p2)
 			return;
 	}
 	if (a->m_148 != 0.0f)
-		*p1 = 1.0f / a->m_148 / (float)g_009BA4E8;
+		*p1 = 1.0f / a->m_148 / (float)BfmeClientFramesPerSecond;
 	else
 		*p1 = 0.0f;
 	if (a->m_14C != 0.0f)
-		*p2 = 1.0f / a->m_14C / (float)g_009BA4E8;
+		*p2 = 1.0f / a->m_14C / (float)BfmeClientFramesPerSecond;
 }

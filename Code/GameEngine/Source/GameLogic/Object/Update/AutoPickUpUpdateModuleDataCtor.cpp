@@ -19,7 +19,7 @@
 // (fold-equivalent and byte-correct, BattlePlanUpdate precedent) and the
 // row carries the identity.
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 #include <vector>
 
@@ -54,7 +54,7 @@ private:
 	int m_x;
 };
 
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 class UpdateModuleData
 {

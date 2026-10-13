@@ -1,7 +1,7 @@
 // cl: /MD
 //
 // Dynamic initializers from the 0x007AB7DA strip that derive an int from the
-// logic frame rate: g_Va00DBA4E4 (LOGICFRAMES_PER_SECOND, 30) or g_00DBA4E8
+// logic frame rate: BfmeLogicFramesPerSecond (LOGICFRAMES_PER_SECOND, 30) or BfmeClientFramesPerSecond
 // (the second frame-rate int the HalfRateInits strip divides) scaled by a
 // constant, the BFME 2 spelling of Zero Hour's frame-count constants once the
 // rate became a variable. Each is one translation unit's compiler-generated
@@ -10,8 +10,8 @@
 // name and type; one never read in .text stays a TU-local static here.
 // /G7: retail scales by 3, 5 and 10 with imul where blended /O1 emits lea.
 
-extern int g_Va00DBA4E4;
-extern int g_009BA4E8;
+extern int BfmeLogicFramesPerSecond;
+extern int BfmeClientFramesPerSecond;
 
 extern int g_00DE1B50;
 int g_00DE1B50 = 0;	// owned here; retail .data starts it at 0
@@ -27,7 +27,7 @@ int g_00DFEFCC = 0;	// owned here; retail .data starts it at 0
 extern int g_00E01E04;
 // Retail's half-the-frame-rate divisor, VA 0x00E02D9C (RVA 0x00A02D9C): the rowed
 // ScriptActions bodies divide by it (`idivl 0xe02d9c`, retail 0x003BB5F14), and
-// this very unit's rowed initialiser writes g_009BA4E8 / 2 into it. RVA
+// this very unit's rowed initialiser writes BfmeClientFramesPerSecond / 2 into it. RVA
 // 0x00A02D9C is past .data's raw end (0x009DE008) but inside its virtual size,
 // so retail's image holds zero until the frame-rate init runs -- which is the
 // definition below. One object, defined in the unit whose rowed body assigns it.
@@ -109,185 +109,185 @@ struct Rva007ABC6FFrameRateInits
 // ?rva007ABC6F@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007ABC6F (16B): global at VA 0x00DE1B50, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007ABC6F()
 {
-	g_00DE1B50 = g_Va00DBA4E4 / 2;
+	g_00DE1B50 = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007AC08C@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AC08C (18B): global at VA 0x00DE204C, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007AC08C()
 {
-	TheW3DFrameLengthInMsec = 1000 / g_009BA4E8;
+	TheW3DFrameLengthInMsec = 1000 / BfmeClientFramesPerSecond;
 }
 
 // ?rva007AD7F3@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AD7F3 (14B): global at VA 0x00DFE18C, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007AD7F3()
 {
-	g_Va00DFE18C = g_Va00DBA4E4 * 5;
+	g_Va00DFE18C = BfmeLogicFramesPerSecond * 5;
 }
 
 // ?rva007ADD08@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007ADD08 (16B): TU-local static at VA 0x00DFE968, never read in .text
 void Rva007ABC6FFrameRateInits::rva007ADD08()
 {
-	s_rva007ADD08 = g_Va00DBA4E4 / 2;
+	s_rva007ADD08 = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007ADD72@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007ADD72 (17B): TU-local static at VA 0x00DFE980, never read in .text
 void Rva007ABC6FFrameRateInits::rva007ADD72()
 {
-	s_rva007ADD72 = g_Va00DBA4E4 / 4;
+	s_rva007ADD72 = BfmeLogicFramesPerSecond / 4;
 }
 
 // ?rva007ADE88@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007ADE88 (16B): TU-local static at VA 0x00DFEB5C, never read in .text
 void Rva007ABC6FFrameRateInits::rva007ADE88()
 {
-	s_rva007ADE88 = g_Va00DBA4E4 / 2;
+	s_rva007ADE88 = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007ADEF6@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007ADEF6 (16B): global at VA 0x00DFEB98, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007ADEF6()
 {
-	g_00DFEB98 = g_009BA4E8 / 2;
+	g_00DFEB98 = BfmeClientFramesPerSecond / 2;
 }
 
 // ?rva007ADF60@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007ADF60 (14B): global at VA 0x00DFEBB0, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007ADF60()
 {
-	BfmeHealingIconDisplayFrames = g_Va00DBA4E4 * 3;
+	BfmeHealingIconDisplayFrames = BfmeLogicFramesPerSecond * 3;
 }
 
 // ?rva007AE043@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AE043 (16B): TU-local static at VA 0x00DFECD8, never read in .text
 void Rva007ABC6FFrameRateInits::rva007AE043()
 {
-	s_rva007AE043 = g_Va00DBA4E4 / 2;
+	s_rva007AE043 = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007AE0AD@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AE0AD (11B): global at VA 0x00DFEE08, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007AE0AD()
 {
-	g_00DFEE08 = g_Va00DBA4E4;
+	g_00DFEE08 = BfmeLogicFramesPerSecond;
 }
 
 // ?rva007AE27C@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AE27C (14B): global at VA 0x00DFEFCC, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007AE27C()
 {
-	g_00DFEFCC = g_Va00DBA4E4 * 4;
+	g_00DFEFCC = BfmeLogicFramesPerSecond * 4;
 }
 
 // ?rva007AE2CE@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AE2CE (16B): TU-local static at VA 0x00DFEFD4, never read in .text
 void Rva007ABC6FFrameRateInits::rva007AE2CE()
 {
-	s_rva007AE2CE = g_Va00DBA4E4 / 2;
+	s_rva007AE2CE = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007AEBAA@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AEBAA (13B): global at VA 0x00E01E04, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007AEBAA()
 {
-	g_00E01E04 = g_Va00DBA4E4 * 2;
+	g_00E01E04 = BfmeLogicFramesPerSecond * 2;
 }
 
 // ?rva007AEE6B@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AEE6B (16B): TU-local static at VA 0x00E01ED8, never read in .text
 void Rva007ABC6FFrameRateInits::rva007AEE6B()
 {
-	s_rva007AEE6B = g_Va00DBA4E4 / 2;
+	s_rva007AEE6B = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007AF85F@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AF85F (16B): global at VA 0x00E02D9C, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007AF85F()
 {
-	g_00E02D9C = g_009BA4E8 / 2;
+	g_00E02D9C = BfmeClientFramesPerSecond / 2;
 }
 
 // ?rva007B014F@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B014F (16B): TU-local static at VA 0x00E030F0, never read in .text
 void Rva007ABC6FFrameRateInits::rva007B014F()
 {
-	s_rva007B014F = g_Va00DBA4E4 / 2;
+	s_rva007B014F = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007B042B@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B042B (16B): TU-local static at VA 0x00E0320C, never read in .text
 void Rva007ABC6FFrameRateInits::rva007B042B()
 {
-	s_rva007B042B = g_Va00DBA4E4 / 2;
+	s_rva007B042B = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007B07F5@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B07F5 (11B): global at VA 0x00E033D0, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007B07F5()
 {
-	g_00E033D0 = g_Va00DBA4E4;
+	g_00E033D0 = BfmeLogicFramesPerSecond;
 }
 
 // ?rva007B08B2@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B08B2 (16B): TU-local static at VA 0x00E033F8, never read in .text
 void Rva007ABC6FFrameRateInits::rva007B08B2()
 {
-	s_rva007B08B2 = g_Va00DBA4E4 / 2;
+	s_rva007B08B2 = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007B0BA0@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B0BA0 (17B): TU-local static at VA 0x00E0359C, never read in .text
 void Rva007ABC6FFrameRateInits::rva007B0BA0()
 {
-	s_rva007B0BA0 = g_Va00DBA4E4 / 4;
+	s_rva007B0BA0 = BfmeLogicFramesPerSecond / 4;
 }
 
 // ?rva007B0C0F@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B0C0F (16B): global at VA 0x00E035C8, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007B0C0F()
 {
-	g_00E035C8 = g_Va00DBA4E4 / 2;
+	g_00E035C8 = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007B1122@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B1122 (16B): TU-local static at VA 0x00E037D0, never read in .text
 void Rva007ABC6FFrameRateInits::rva007B1122()
 {
-	s_rva007B1122 = g_Va00DBA4E4 / 2;
+	s_rva007B1122 = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007B1328@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B1328 (16B): TU-local static at VA 0x00E03888, never read in .text
 void Rva007ABC6FFrameRateInits::rva007B1328()
 {
-	s_rva007B1328 = g_Va00DBA4E4 / 2;
+	s_rva007B1328 = BfmeLogicFramesPerSecond / 2;
 }
 
 // ?rva007B15B2@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B15B2 (11B): global at VA 0x00E03994, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007B15B2()
 {
-	g_00E03994 = g_Va00DBA4E4;
+	g_00E03994 = BfmeLogicFramesPerSecond;
 }
 
 // ?rva007B1A27@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B1A27 (17B): global at VA 0x00E03BBC, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007B1A27()
 {
-	g_Va00E03BBC = g_Va00DBA4E4 / 4;
+	g_Va00E03BBC = BfmeLogicFramesPerSecond / 4;
 }
 
 // ?rva007B3B50@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B3B50 (16B): global at VA 0x00E05F24, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007B3B50()
 {
-	g_00E05F24 = g_009BA4E8 / 2;
+	g_00E05F24 = BfmeClientFramesPerSecond / 2;
 }
 
 // ?rva007B3FCA@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B3FCA (14B): global at VA 0x00E062F4, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007B3FCA()
 {
-	g_00E062F4 = g_Va00DBA4E4 * 60;
+	g_00E062F4 = BfmeLogicFramesPerSecond * 60;
 }
 
 // ?rva007B4316@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B4316 (14B): global at VA 0x00E063CC, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007B4316()
 {
-	g_00E063CC = g_Va00DBA4E4 * 120;
+	g_00E063CC = BfmeLogicFramesPerSecond * 120;
 }
 
 // ?rva007B43BD@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B43BD (14B): global at VA 0x00E063E0, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007B43BD()
 {
-	g_00E063E0 = g_Va00DBA4E4 * 10;
+	g_00E063E0 = BfmeLogicFramesPerSecond * 10;
 }
 
 // ?rva007B440F@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B440F (16B): global at VA 0x00E063E8, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007B440F()
 {
-	g_00E063E8 = g_009BA4E8 / 2;
+	g_00E063E8 = BfmeClientFramesPerSecond / 2;
 }
 
 // ?rva007B4BC6@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007B4BC6 (14B): global at VA 0x00E06648, named as the TU that reads it names it
 void Rva007ABC6FFrameRateInits::rva007B4BC6()
 {
-	g_00E06648 = g_Va00DBA4E4 * 10;
+	g_00E06648 = BfmeLogicFramesPerSecond * 10;
 }

@@ -9,7 +9,7 @@
 #include "wwmath.h"
 #include "vector3.h"
 #include <math.h>
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 extern float opacityLogicStepSeconds;
 class LivingWorldManager {
 public:
@@ -69,5 +69,5 @@ int Rva002D3627Host::rva002BEDCA(const Coord3D *target,float value) {
  float change=(float)fabs((double)(slot25()-value)); change/=settings.rate0; change*=opacityLogicStepSeconds;
  const float &longer=change>distance ? change:distance;
  float time=WWMath::Clamp(longer,0.0f,settings.limit);
- return (int)((double)g_009BA4E8*time);
+ return (int)((double)BfmeClientFramesPerSecond*time);
 }

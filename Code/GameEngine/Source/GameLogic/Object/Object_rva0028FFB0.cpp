@@ -7,7 +7,7 @@
 // 0x004BDA67 rowed ?rva004BDA67@Rva004BDA67, 0x0023DB0E rowed
 // ?setStatus@Object, 0x0028AE6D rowed ?rva0028AE6D@Object, 0x004DE85F rowed
 // ObjectSMCHelper::setModelConditionState; offsets +0x114 cond word 2, +0x230 smcHelper,
-// +0x254 body with vtable slots 9 (+0x24) and 41 (+0xA4); global g_Va00DBA4E4.
+// +0x254 body with vtable slots 9 (+0x24) and 41 (+0xA4); global BfmeLogicFramesPerSecond.
 
 enum ObjectStatusTypes
 {
@@ -97,7 +97,7 @@ public:
 	void setModelConditionState(ModelConditionFlagType mc, unsigned int frames);
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Object
 {
@@ -138,5 +138,5 @@ void Object::WallUpgradeSell()
 		m_dw114 |= 0x400;
 		rva0028AE6D();
 	}
-	m_smcHelper->setModelConditionState((ModelConditionFlagType)0x68, (unsigned int)(3 * g_Va00DBA4E4));
+	m_smcHelper->setModelConditionState((ModelConditionFlagType)0x68, (unsigned int)(3 * BfmeLogicFramesPerSecond));
 }

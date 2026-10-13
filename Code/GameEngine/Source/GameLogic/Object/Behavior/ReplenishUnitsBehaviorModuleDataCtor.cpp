@@ -20,7 +20,7 @@ namespace _STL {
 template<> bitset<128> &bitset<128>::reset();
 }
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva0025342CMember
 {
@@ -56,7 +56,7 @@ ReplenishUnitsBehaviorModuleData::ReplenishUnitsBehaviorModuleData()
 	m_08.construct();
 	((_STL::bitset<128> *)m_124)->reset();
 	m_138 = false;
-	m_134 = g_Va00DBA4E4;
+	m_134 = BfmeLogicFramesPerSecond;
 	m_118 = 100.0f;
 	m_120 = 0;
 	m_139 = false;

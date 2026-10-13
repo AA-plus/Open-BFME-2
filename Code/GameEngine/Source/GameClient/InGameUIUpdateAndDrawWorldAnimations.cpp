@@ -5,7 +5,7 @@
 // BFME1 donor (game/GameEngine/Source/GameClient/InGameUI.cpp) with deltas
 // proven by retail: no null check on wad, world list at +0x8CC as list<int>,
 // GameLogic frame at +0x40, PlayerList local at +0x10 Player index at +0x54,
-// shroud via TheShroudManager, z-rise divided by g_Va00DBA4E4 vs BfmeZeroRange,
+// shroud via TheShroudManager, z-rise divided by BfmeLogicFramesPerSecond vs BfmeZeroRange,
 // fade threshold from g_00DFEE08 with unsigned float conversion storing alpha
 // inline at Anim2D+0x1C, projection at tactical slot 0x160 failing to 0 draws,
 // zoom via slots 0x140/0x124, erase via rowed list<int>::erase. Evidence:
@@ -67,7 +67,7 @@ public:
 };
 
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 extern UnsignedInt g_00DFEE08;
 
 class Player
@@ -260,7 +260,7 @@ void InGameUI::updateAndDrawWorldAnimations()
 			}
 
 			if (wad->m_zRisePerSecond != 0.0f)
-				wad->m_worldPos.z += wad->m_zRisePerSecond / (Real)g_Va00DBA4E4;
+				wad->m_worldPos.z += wad->m_zRisePerSecond / (Real)BfmeLogicFramesPerSecond;
 		}
 
 		Int playerIndex = ThePlayerList->m_localPlayer->m_playerIndex;

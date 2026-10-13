@@ -30,7 +30,7 @@ public:
 
 extern SpecialPowerStore *TheSpecialPowerStore;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva003C3F9ETarget
 {
@@ -55,7 +55,7 @@ void __stdcall Rva003C3F9EApply(Parameter *p, const AsciiString &name, int arg3)
 		Rva003C3F9ETarget *t = (Rva003C3F9ETarget *)obj->getSpecialPowerModule(found);
 		if (t != 0)
 		{
-			int scaled = g_Va00DBA4E4 * arg3;
+			int scaled = BfmeLogicFramesPerSecond * arg3;
 			t->w08(t->w04() + scaled);
 		}
 	}

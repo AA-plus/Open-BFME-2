@@ -113,7 +113,7 @@ extern CreateAHeroManager *TheCreateAHeroManager;
 // the frame offset at +0x1E4 is read through TheCreateAHeroManager.
 extern int g_Va00DFE348;
 // Retail's int at VA 0x00DBA4E4 (initial value 5), the animation frame scale.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 struct CreateAHeroBlingNode
 {
@@ -836,7 +836,7 @@ Bool CreateAHeroHero::Update(Int flags)
 			else { animation.concat(manager->m_shortAnimation); condition = 0x226; }
 			if (GetAnimationFameCount((const Rva002B224BDwordField *)drawable, &animation, &frames)) {
 				frames -= TheCreateAHeroManager->m_animationFrameOffset;
-				frames = (Int)((double)(float)((float)(UnsignedInt)frames * (1.0f / 30.0f)) * g_Va00DBA4E4);
+				frames = (Int)((double)(float)((float)(UnsignedInt)frames * (1.0f / 30.0f)) * BfmeLogicFramesPerSecond);
 				frames = _STL::max(0, frames);
 				((Rva004076EE *)this)->rva00407AE6((ModelConditionFlagType)condition, frames);
 			}

@@ -223,7 +223,7 @@ class Rva001E46E1 {public:float rva001E48CF(Object*);};
 class Rva002627E8 {public:float rva002627E8()const;};
 class Rva001E415F {public:void rva001E415F(float,int);};
 class Rva002D9531 {public:void rva002D9531(int);};
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Object
 {
 public:

@@ -2,14 +2,14 @@
 //
 // Static-initializer strip: half the logic frame rate into a TU-local static.
 // Retail repeats one 16-byte dynamic initializer 429 times between 0x007AB7F0
-// and 0x007B5xxx, each storing g_00DBA4E8 / 2 (the global is 30, the logic
+// and 0x007B5xxx, each storing BfmeClientFramesPerSecond / 2 (the global is 30, the logic
 // frames per second other matched rows scale by) into its own static. It is
 // the per-translation-unit initializer of a header-level constant computed
 // from that global; the owning TUs are unrecovered, and in these copies the
 // static is never read anywhere in .text, so each copy keeps an honest address
 // name and its static stays TU-local here as it was in its own unit.
 
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 struct Rva007AB7F0HalfRateInits
 {
@@ -444,7 +444,7 @@ struct Rva007AB7F0HalfRateInits
 	static int s_##init; \
 	void Rva007AB7F0HalfRateInits::init() \
 	{ \
-		s_##init = g_009BA4E8 / 2; \
+		s_##init = BfmeClientFramesPerSecond / 2; \
 	}
 
 // ?rva007AB7F0@Rva007AB7F0HalfRateInits@@SAXXZ @ 0x007AB7F0 (16B), static at VA 0x00DDE030

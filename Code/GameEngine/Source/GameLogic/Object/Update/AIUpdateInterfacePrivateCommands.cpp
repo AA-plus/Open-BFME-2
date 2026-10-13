@@ -967,7 +967,7 @@ public:
 extern PartitionManager *ThePartitionManager;
 
 // An int global the temporary move order scales by 20 (named by address).
-extern Int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // The two AIStateMachine helpers command 0x31 reaches when given a value:
 // 0x0033FCC8 (matched, Rva0033FCC8Copy.cpp) and 0x0033FCE1, which takes a
@@ -2141,7 +2141,7 @@ void AIUpdateInterface::privateFollowPath(const Rva0035149F *path, Object *ignor
 // Command 0x4E, slot 13, retail 0x0026B487: BFME2's privateMoveToPosition,
 // taking AICommandParms::m_pos and a goal range. An AI-sourced order to a unit
 // that is not idle (slot 110) becomes a temporary move (state 1 for
-// g_Va00DBA4E4 * 20 frames through 0x0033FCE1) that keeps the current state
+// BfmeLogicFramesPerSecond * 20 frames through 0x0033FCE1) that keeps the current state
 // machine; otherwise it is the ordinary move into state 1 with the move voice.
 void AIUpdateInterface::privateMoveToPosition(const Coord3D *position, float range, CommandSourceType commandSource)
 {
@@ -2159,7 +2159,7 @@ void AIUpdateInterface::privateMoveToPosition(const Coord3D *position, float ran
 		reinterpret_cast<Rva00263910 *>(this)->rva00263910(position, range, commandSource);
 		m_blockedFrames = 0;
 		m_isBlocked = false;
-		reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(BFME_AI_MOVE_TO, g_Va00DBA4E4 * 20);
+		reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(BFME_AI_MOVE_TO, BfmeLogicFramesPerSecond * 20);
 		return;
 	}
 
@@ -2390,7 +2390,7 @@ void AIUpdateInterface::privateFollowPathAppend(const Coord3D *pos, CommandSourc
 // owner with status 0x59 that is idle only lets the unit path through it; an
 // owner inside a horde container that is not attacking hands the order up.
 // Otherwise the Zero Hour body follows (the move-out-of-the-way state is 0x1A
-// here, and LOGICFRAMES_PER_SECOND is g_Va00DBA4E4), except that the unit's
+// here, and LOGICFRAMES_PER_SECOND is BfmeLogicFramesPerSecond), except that the unit's
 // path is asked for even when it is null, the locomotor is prepared, a unit
 // whose goal already lies within the other unit's radius of the order point
 // enters the state outright, and moveAllies is gated on several flags.
@@ -2427,13 +2427,13 @@ void AIUpdateInterface::privateMoveAwayFromUnit(Object *unit, const Coord3D *pos
 		if (m_moveOutOfWay1 == id)
 		{
 			if (m_isBlocked)
-				setIgnoreCollisionTime(g_Va00DBA4E4 * 2);
+				setIgnoreCollisionTime(BfmeLogicFramesPerSecond * 2);
 			return;
 		}
 		if (m_moveOutOfWay2 == id)
 		{
 			if (m_isBlocked)
-				setIgnoreCollisionTime(g_Va00DBA4E4 * 2);
+				setIgnoreCollisionTime(BfmeLogicFramesPerSecond * 2);
 			return;
 		}
 	}
@@ -2487,7 +2487,7 @@ void AIUpdateInterface::privateMoveAwayFromUnit(Object *unit, const Coord3D *pos
 		if (close)
 			m_stateMachine->setState((StateID)0x1A);
 		else
-			reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(0x1A, g_Va00DBA4E4 * 10);
+			reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(0x1A, BfmeLogicFramesPerSecond * 10);
 
 		if (m_path)
 		{
@@ -2521,7 +2521,7 @@ void AIUpdateInterface::doQuickExit(const _STL::vector<Coord3D> *path)
 	reinterpret_cast<Rva0033FCC8 *>(m_stateMachine)->rva0033FCC8();
 	reinterpret_cast<Rva00351759 *>(m_stateMachine)->rva00351759(*reinterpret_cast<const Rva0035149F *>(path));
 
-	reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(7, g_Va00DBA4E4 * 10);
+	reinterpret_cast<AIStateMachine *>(m_stateMachine)->setTemporaryState(7, BfmeLogicFramesPerSecond * 10);
 	if (locked)
 		m_stateMachine->m_locked = true;
 }
@@ -2886,7 +2886,7 @@ static __forceinline Bool rva002697FCOwnerEligible(Object *obj)
 }
 
 // AIUpdate vtable 0x00BFA480 slot 152, retail 0x002697FC (234 bytes). On the
-// owner's turn of a 2 * g_Va00DBA4E4 frame cycle (its ID modulo the period),
+// owner's turn of a 2 * BfmeLogicFramesPerSecond frame cycle (its ID modulo the period),
 // outside state 0x11, when the last command came from the AI or the state is
 // 0x21: a victim of BFME_KINDOF_07 is traded for the next mood target
 // (pinned getNextMoodTarget) if that one is another object, not of that
@@ -2903,7 +2903,7 @@ Bool AIUpdateInterface::rva002697FC()
 		return false;
 	else
 	{
-		Int period = 2 * g_Va00DBA4E4;
+		Int period = 2 * BfmeLogicFramesPerSecond;
 		Int slot = obj->getID() % period;
 		if (TheGameLogic->getFrame() % period != slot)
 			return false;

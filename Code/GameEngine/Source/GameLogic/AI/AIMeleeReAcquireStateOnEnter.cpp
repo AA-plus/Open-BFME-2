@@ -173,8 +173,8 @@ public:
 };
 extern GameLogic *TheGameLogic;
 
-extern int g_Va00DBA4E4;
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 class AIUpdateInterface
 {

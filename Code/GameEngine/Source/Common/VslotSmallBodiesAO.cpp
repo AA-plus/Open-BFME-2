@@ -7,7 +7,7 @@
 typedef int Int;
 
 // 0x0058AD9F (42 tables): five times the Int at VA 0x00DBA4E4.
-extern Int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Rva0058AD9F
 {
 public:
@@ -15,13 +15,12 @@ public:
 };
 Int Rva0058AD9F::rva0058AD9F()
 {
-	return g_Va00DBA4E4 * 5;
+	return BfmeLogicFramesPerSecond * 5;
 }
 
 
 // Retail global spelled differently by the unit that defines it (same
 // address in reverse/data_ledger.csv); bind this unit's name to it.
-#pragma comment(linker, "/alternatename:?g_rva0058AD9FBase@@3HA=?g_Va00DBA4E4@@3HA")
 
 // Installed-vtable modular word-difference zero test. Original owner and
 // field meanings remain unknown. Only native data access and ABI are modeled.

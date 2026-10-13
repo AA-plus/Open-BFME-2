@@ -5,9 +5,9 @@
 
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
-#define LogicFramesPerSecond (*(const unsigned *)&g_Va00DBA4E4)
+#define LogicFramesPerSecond (*(const unsigned *)&BfmeLogicFramesPerSecond)
 class Rva004E06FBPtrChase32Field
 {
 public:

@@ -13,7 +13,7 @@
 //    bit 5 when the contain's slot-31 interface accepts the hunt goal
 //    (slot 88; goals with kind byte +0x108 bit 7 never count), skips the
 //    scan.
-//  - The scan rate is three times the int global g_Va00DBA4E4.
+//  - The scan rate is three times the int global BfmeLogicFramesPerSecond.
 //  - AI slot 90 with a busy hunt state (state byte +0x1C clear and state
 //    slot 8 false) delays the next scan without searching.
 //  - AI::findClosestEnemy takes two more arguments and the team-target
@@ -51,8 +51,8 @@ class AttackPriorityInfo;
 class PartitionFilter;
 
 // Int global tripled into the enemy scan interval.
-extern int g_Va00DBA4E4;
-#define ENEMY_SCAN_RATE (g_Va00DBA4E4 * 3)
+extern int BfmeLogicFramesPerSecond;
+#define ENEMY_SCAN_RATE (BfmeLogicFramesPerSecond * 3)
 
 template <int N> class AIHuntSlots : public AIHuntSlots<N - 1>
 {

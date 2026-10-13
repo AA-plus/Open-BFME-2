@@ -27,7 +27,7 @@
 //   callees: TheGameClient slot +0x7C, rowed
 //            ?clearRef@RadarEventRefSlot@@QAEXXZ 0x002D7CC6, TheGameLogic slot
 //            +0x40, rowed terrain refresh through vtable slot +0x10.
-//   globals: TheGameClient, TheGameLogic, g_Va00DBA4E4 (int threshold),
+//   globals: TheGameClient, TheGameLogic, BfmeLogicFramesPerSecond (int threshold),
 //            g_00BC7508 (float scale), g_00BC26EC (float rounding constant that
 //            retail's unsigned-to-float conversion adds when the count is
 //            negative), TheTerrainLogic.
@@ -87,7 +87,7 @@ private:
 };
 
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 extern float g_00BC26EC;
 
 class TerrainLogic;
@@ -176,7 +176,7 @@ void Radar::rva002D7DD5()
 		return;
 	unsigned int dt = TheGameLogic->getFrame() - m_lastFrame;
 	float fdt = (float)dt;
-	float limit = (float)g_Va00DBA4E4 * 3.0f;
+	float limit = (float)BfmeLogicFramesPerSecond * 3.0f;
 	if (fdt > limit) {
 		RadarPrimary *core = (RadarPrimary *)((char *)this - 4);
 		core->refreshTerrain(TheTerrainLogic);

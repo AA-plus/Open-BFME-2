@@ -39,7 +39,7 @@
 extern "C" const void *const vtbl_00C4F870[];  // ??_7BannerCarrierUpdateModuleData@@6B@
 #pragma comment(linker, "/alternatename:_vtbl_00C4F870=??_7BannerCarrierUpdateModuleData@@6B@")
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 #include <vector>
 
@@ -56,7 +56,7 @@ template<> _Vector_base<BfmeMorphCondition *, allocator<BfmeMorphCondition *> >:
 template<> _Vector_base<BfmeExpLevelDraw *, allocator<BfmeExpLevelDraw *> >::_Vector_base(const allocator<BfmeExpLevelDraw *> &);
 }
 
-#define LogicFramesPerSecond g_Va00DBA4E4
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 class BannerCarrierUpdateModuleData
 {

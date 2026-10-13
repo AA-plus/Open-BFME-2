@@ -41,7 +41,7 @@ class AI {public:unsigned char pad[0x10];Pathfinder *pathfinder;};
 extern AI *TheAI;
 class BuildAssistant {public:bool moveObjectsForConstruction(const ThingTemplate *,const Coord3D *,float,Player *);};
 extern BuildAssistant *TheBuildAssistant;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class GettingBuiltUpdateSecondary {
 public:virtual void v0();virtual void v1();virtual void v2();virtual void v3();
  virtual void v4();virtual void cleanup();virtual bool active();
@@ -111,7 +111,7 @@ cleanup:
  secondary->cleanup();
 finish:
  primary->rva00454B5C();primary->rva0045479A();
- return (UpdateSleepTime)g_Va00DBA4E4;
+ return (UpdateSleepTime)BfmeLogicFramesPerSecond;
 handled_or_cleanup:
  if(handled)return UPDATE_SLEEP_NONE;
  goto finish;

@@ -31,7 +31,7 @@ extern class ScriptEngine *TheScriptEngine;
 
 class AIGroup;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // ?getUnitNamed@ScriptEngine@@QAEPAVObject@@PAVParameter@@@Z present-unmatched
 // ?getDrawable@Thing@@QBEPAVDrawable@@XZ present-unmatched
@@ -44,6 +44,6 @@ void __stdcall Rva003BC996Do(Parameter *param, const StringBase<char> &animName,
 	Drawable *d = obj->getDrawable();
 	if (d == 0)
 		return;
-	int v = (int)((float)g_Va00DBA4E4 * f);
+	int v = (int)((float)BfmeLogicFramesPerSecond * f);
 	d->setEmoticon(animName, v);
 }

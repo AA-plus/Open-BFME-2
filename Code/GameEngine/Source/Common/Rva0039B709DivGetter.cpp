@@ -12,10 +12,10 @@
 // No new global addresses or callee pins are introduced.
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "unicode_string.h"
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class GameLogic;
 extern GameLogic *TheGameLogic;
-#define LogicFramesPerSecond (*(const unsigned int *)&g_Va00DBA4E4)
+#define LogicFramesPerSecond (*(const unsigned int *)&BfmeLogicFramesPerSecond)
 struct Global40Holder {
     char pad[0x40];
     unsigned m_val40;

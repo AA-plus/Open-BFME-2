@@ -8,7 +8,7 @@
 // +0x64 the escort. The owner's TheSkirmishAIManager record keeps
 // AIRingHeroTactic_IsRunning and AIRingHeroTactic_NextLogicFrameRun.
 //
-//   0x005ACA97  slot 1: schedule the first run 5 * g_Va00DBA4E4 frames out;
+//   0x005ACA97  slot 1: schedule the first run 5 * BfmeLogicFramesPerSecond frames out;
 //               once due and not running, apply when the ring hero is found
 //               (0x005ACA2D) and 0x005AC98A agrees, else push the next run
 //               out again
@@ -192,7 +192,7 @@ public:
 	unsigned int m_40;		// +0x40
 };
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 struct Rva002A8AB1Record
 {
@@ -335,12 +335,12 @@ bool AIRingHeroTactic::canRun(void *)
 	int running = record->rva002C7196(AsciiString("AIRingHeroTactic_IsRunning"));
 	unsigned int next = record->rva002C7196(AsciiString("AIRingHeroTactic_NextLogicFrameRun"));
 	if (!next) {
-		record->rva002C717E(AsciiString("AIRingHeroTactic_NextLogicFrameRun"), g_Va00DBA4E4 * 5);
+		record->rva002C717E(AsciiString("AIRingHeroTactic_NextLogicFrameRun"), BfmeLogicFramesPerSecond * 5);
 	} else if (!running && TheGameLogic->getFrame() >= next) {
 		if (weHaveGollum() && enemyHasRingHeroUpgrade())
 			return true;
 		int later = record->rva002C7196(AsciiString("AIRingHeroTactic_NextLogicFrameRun"));
-		record->rva002C717E(AsciiString("AIRingHeroTactic_NextLogicFrameRun"), g_Va00DBA4E4 * 5 + later);
+		record->rva002C717E(AsciiString("AIRingHeroTactic_NextLogicFrameRun"), BfmeLogicFramesPerSecond * 5 + later);
 	}
 	return false;
 }

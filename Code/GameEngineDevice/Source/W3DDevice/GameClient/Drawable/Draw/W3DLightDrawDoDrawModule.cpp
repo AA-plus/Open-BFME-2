@@ -8,7 +8,7 @@
 // advance the flicker phase, move the dynamic light to the drawable's position
 // keeping its rotation, step the height drift toward a random target and add
 // the sine flicker, then store the result in the light. BFME 2 differences
-// read from retail: the phase step is 1 / the int global g_Va00DBA4E4 (5 at
+// read from retail: the phase step is 1 / the int global BfmeLogicFramesPerSecond (5 at
 // load, BFME 1's 0.2f) and the drift period is that int over data +0x38
 // (BFME 1's 5.0f); the light's value is at +0xD0 (BFME 1 +0xD4). Layout as
 // the rowed W3DLightDraw xfer/ctor: module data +0x04, drawable +0x08, light
@@ -58,7 +58,7 @@ public:
 	}
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva00276470Drawable
 {
@@ -129,7 +129,7 @@ void W3DLightDraw::doDrawModule(const Matrix3D *)
 {
 	Real phase = m_phase;
 	W3DDynamicLight *light = m_light;
-	phase += 1.0f / (Real)g_Va00DBA4E4;
+	phase += 1.0f / (Real)BfmeLogicFramesPerSecond;
 	m_phase = phase;
 	if (light == 0)
 		return;
@@ -167,7 +167,7 @@ void W3DLightDraw::doDrawModule(const Matrix3D *)
 	{
 		if (m_radius <= 0.0f)
 		{
-			m_radius = (Real)g_Va00DBA4E4 / data->m_38;
+			m_radius = (Real)BfmeLogicFramesPerSecond / data->m_38;
 			Real minimum = -data->m_34;
 			Real maximum = data->m_34;
 			m_angle = ((WWMath::Random_Float() * (maximum - minimum) + minimum) + height - m_height) / m_radius;

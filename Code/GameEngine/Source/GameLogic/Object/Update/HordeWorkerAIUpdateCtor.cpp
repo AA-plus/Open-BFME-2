@@ -8,7 +8,7 @@
 // Transport base 0x26E9BD: the base call resolves via the rowed
 // HordeAIUpdate ctor 0x49A7F3, the setWakeFrame spelling resolves via the
 // Rva0026E9BDBase alias pin at 0x44DF71, and the wake frame comes from the
-// int global at 0x00DBA4E4 (g_Va00DBA4E4, shared with the cold getters).
+// int global at 0x00DBA4E4 (BfmeLogicFramesPerSecond, shared with the cold getters).
 // An eax-homed int zero covers +0x3E8/+0x3EC/+0x3F0 plus the +0x3F4 byte;
 // the +0x3E4 slot is re-stored. /GX for the EH prologue plus the single
 // mid-body state store; the base dtor stays declared-only (no link clash
@@ -31,7 +31,7 @@ class Thing;
 class ModuleData;
 class Object;
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva0026E9BDBase
 {
@@ -87,5 +87,5 @@ HordeWorkerAIUpdate::HordeWorkerAIUpdate(Thing *thing, const ModuleData *moduleD
 	m_3EC = zero;
 	m_3F0 = zero;
 	m_3F4 = zero;
-	setWakeFrame(m_object, g_Va00DBA4E4);
+	setWakeFrame(m_object, BfmeLogicFramesPerSecond);
 }

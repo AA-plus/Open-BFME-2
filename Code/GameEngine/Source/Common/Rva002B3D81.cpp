@@ -3,7 +3,7 @@
 // ?rva002B3D81@@YAHXZ @0x002B3D81 35B. Global int query: gate on
 // pinned rva002B2BAA then on ((LANGameInfo *)TheGameInfo) (pinned LANGameInfo*),
 // returning 0x7FFFFFFF on either miss, else +0x78 times
-// g_Va00DBA4E4 (FramesPerSecond, signed imul).
+// BfmeLogicFramesPerSecond (FramesPerSecond, signed imul).
 //
 // Target evidence (game.dat, read-only, capstone): frameless global
 // (no this); the two misses share one mov-eax-ret tail; pinned names
@@ -11,7 +11,7 @@
 // address-derived names.
 bool rva002B2BAA();
 // Bind to the existing data-ledger owner; keep the retail access view local.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 struct LANGameInfo
 {
@@ -30,7 +30,7 @@ int rva002B3D81()
 	LANGameInfo *p = ((LANGameInfo *)TheGameInfo);
 	if (p == 0)
 		return 0x7FFFFFFF;
-	return p->m_78 * g_Va00DBA4E4;
+	return p->m_78 * BfmeLogicFramesPerSecond;
 }
 
 class Rva002B3DB2

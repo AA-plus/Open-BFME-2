@@ -21,12 +21,12 @@ struct Rva002A8AB1Record {
 class Rva002A8F24 { public: Rva002A8AB1Record *rva002A8AB1(void *); };
 extern Rva002A8F24 *g_00DFEEF8;
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 struct EconomyPlayerMoneyView { char unknown00[0x94]; unsigned money; };
 bool AIEconomyBuilder::needMoreFarms(int *priority) {
  Rva002A8AB1Record *myAI=g_00DFEEF8->rva002A8AB1(m_14);
  unsigned elapsed=TheGameLogic->getFrame()-value20;
- if(myAI->need>0 || value20==-1 || elapsed>g_Va00DBA4E4*myAI->army->delay) {
+ if(myAI->need>0 || value20==-1 || elapsed>BfmeLogicFramesPerSecond*myAI->army->delay) {
   unsigned limit=myAI->army->limit;
   unsigned minimum=myAI->army->minimum;
   unsigned perFarm=myAI->army->perFarm;
@@ -36,7 +36,7 @@ bool AIEconomyBuilder::needMoreFarms(int *priority) {
   if(myAI->need>0 && count1c==0) {
    *priority=1;
    bool affordable=static_cast<EconomyPlayerMoneyView *>(m_14)->money+total*perFarm<=limit;
-   if(affordable || elapsed>g_Va00DBA4E4*40.0f) return true;
+   if(affordable || elapsed>BfmeLogicFramesPerSecond*40.0f) return true;
   }
  }
  return false;

@@ -29,11 +29,11 @@
 AsciiString AIReturnTheRingTactic_IsRunning("AIReturnTheRingTactic_IsRunning");
 #pragma inline_depth()
 
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
-// Half of g_009BA4E8, computed at startup (0x007B457D); no retail code reads
+// Half of BfmeClientFramesPerSecond, computed at startup (0x007B457D); no retail code reads
 // it back.
-int g_00E06414 = g_009BA4E8 / 2;
+int g_00E06414 = BfmeClientFramesPerSecond / 2;
 
 // .data 0x009BC1B8: a NULL-terminated name list {"TARGETLESS", NULL}. The
 // ring-team creation here (0x005AB4B9) and two sibling tactics (0x004ED955,

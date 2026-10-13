@@ -504,7 +504,7 @@ public:
 };
 
 extern ScriptEngine *TheScriptEngine;
-extern int g_Va00DBA4E4;	// logic frames per second
+extern int BfmeLogicFramesPerSecond;	// logic frames per second
 extern unsigned g_Va00E028C4;	// static AsciiString "<!TRUE!>"
 
 enum GameDifficulty
@@ -716,7 +716,7 @@ Bool TeamPrototype::evaluateProductionCondition()
 			return false;
 		int delaySeconds = m_productionConditionScript->getDelayEvalSeconds();
 		if (delaySeconds > 0)
-			m_productionConditionScript->setFrameToEvaluate(TheGameLogic->getFrame() + delaySeconds * g_Va00DBA4E4);
+			m_productionConditionScript->setFrameToEvaluate(TheGameLogic->getFrame() + delaySeconds * BfmeLogicFramesPerSecond);
 		return TheScriptEngine->rva0020A1D0(m_productionConditionScope, m_productionConditionScript, 0, getControllingPlayer());
 	}
 	if (((const StringBase<char> *)&m_productionCondition)->isEmpty())

@@ -189,7 +189,7 @@ struct Rva001E7389Transform
 };
 
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Locomotor
 {
@@ -235,7 +235,7 @@ bool Locomotor::moveTowardsPositionHordeOnClimbPortal(Object *obj, Waypoint *way
 		obj->rva0028B4CE((PathfindLayerEnum)((Rva001E34FA *)&result)->rva001E34FA());
 		hordeContain->slot111(&goalPos, &((Rva001E34B2 *)&result)->rva001E34B2(),
 			((Rva001E3511 *)&result)->rva001E3511(), ((Rva001E34FA *)&result)->rva001E34FA());
-		m_hordeClimbFrame = TheGameLogic->getFrame() + g_Va00DBA4E4 * 12;
+		m_hordeClimbFrame = TheGameLogic->getFrame() + BfmeLogicFramesPerSecond * 12;
 		return true;
 	}
 	if (!hordeContain->haveMembersReachedEndOfPath() && TheGameLogic->getFrame() <= m_hordeClimbFrame)

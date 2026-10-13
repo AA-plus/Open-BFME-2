@@ -9,7 +9,7 @@
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
 #include "../../../Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 float GetGameLogicRandomValueReal(float,float,char *,int);
 float Cos(float);float Sin(float);
 enum WeaponSlotType {PRIMARY_WEAPON=0};
@@ -42,7 +42,7 @@ UpdateSleepTime RainOfFireUpdate::update() {
  }
  if(elapsed>=d->startRainTime) {
   if(ramp<1.0f) {ramp+=1.0f/d->rampup;if(ramp>1.0f)ramp=1.0f;}
-  pending+=GetGameLogicRandomValueReal(d->dpsMin,d->dpsMax,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\RainOfFireUpdate.cpp",125)*scale*ramp/g_Va00DBA4E4;
+  pending+=GetGameLogicRandomValueReal(d->dpsMin,d->dpsMax,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\RainOfFireUpdate.cpp",125)*scale*ramp/BfmeLogicFramesPerSecond;
   Weapon *weapon=obj->getWeapon();
   if(weapon) {
    Coord3D center;TheTacticalView->rvaSlot70(&center);center.z=d->height;

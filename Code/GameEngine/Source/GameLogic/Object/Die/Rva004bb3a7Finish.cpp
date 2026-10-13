@@ -15,7 +15,7 @@
 // above the `or [esi+8],-1` (retail loads xmm0 first). With m_mask a member in
 // the same region the scheduler hoists the load and the body is exact. The
 // symbol is the ctor call in the byte-true CallHelpOnDamage data factory.
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 class BfmeFixedStorage0004543D
 {
 public:
@@ -58,7 +58,7 @@ private:
 CallHelpOnDamageModuleData::CallHelpOnDamageModuleData() :
 	m_mask(0xFFFFFFFF),
 	m_callRadius(100.0f),
-	m_callDelay(4 * g_009BA4E4),
+	m_callDelay(4 * BfmeLogicFramesPerSecond),
 	m_moveToAttacker(false)
 {
 	m_validObjects.applyFilter(g_009FEFA4);

@@ -8,7 +8,7 @@
 // honest address name; the two destinations AISpellBookAssistBattle.cpp
 // already reads keep its names.
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // AISpellBookAssistBattle.cpp's frame thresholds.
 extern int g_00E06650;
@@ -28,23 +28,23 @@ struct Rva007B4C70FrameScaleInits
 // 0x007B4C70 (23B): VA 0x00E06650 = (int)(LOGICFRAMES_PER_SECOND * 3.0f)
 void Rva007B4C70FrameScaleInits::rva007B4C70()
 {
-	g_00E06650 = (int)( g_Va00DBA4E4 * 3.0f );
+	g_00E06650 = (int)( BfmeLogicFramesPerSecond * 3.0f );
 }
 
 // 0x007B4C87 (23B): VA 0x00E06660 = (int)(LOGICFRAMES_PER_SECOND * 10.0f)
 void Rva007B4C70FrameScaleInits::rva007B4C87()
 {
-	g_00E06660 = (int)( g_Va00DBA4E4 * 10.0f );
+	g_00E06660 = (int)( BfmeLogicFramesPerSecond * 10.0f );
 }
 
 // 0x007B4CD5 (23B): VA 0x00E06668 = (int)(LOGICFRAMES_PER_SECOND * 15.0f)
 void Rva007B4C70FrameScaleInits::rva007B4CD5()
 {
-	g_00E06668 = (int)( g_Va00DBA4E4 * 15.0f );
+	g_00E06668 = (int)( BfmeLogicFramesPerSecond * 15.0f );
 }
 
 // 0x007B4CEC (23B): VA 0x00E0666C = (int)(LOGICFRAMES_PER_SECOND * 30.0f)
 void Rva007B4C70FrameScaleInits::rva007B4CEC()
 {
-	g_00E0666C = (int)( g_Va00DBA4E4 * 30.0f );
+	g_00E0666C = (int)( BfmeLogicFramesPerSecond * 30.0f );
 }

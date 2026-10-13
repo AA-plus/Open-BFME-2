@@ -103,7 +103,7 @@ private:
  unsigned int m_frame40;
 };
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 __forceinline bool rva0028CDEBStatusBit(const void *mask, unsigned int bit)
 {
  return (static_cast<const unsigned int *>(mask)[bit >> 5] >> (bit & 31)) & 1;
@@ -335,7 +335,7 @@ void Object::rva0028CDEB(const Rva00346BC0 &mask, bool set)
  {
   Rva004DF7DB *module = m_update228;
   if (module)
-   module->rva004DF7DB((UpdateSleepTime)(TheGameLogic->getFrame() + g_Va00DBA4E4 * 2));
+   module->rva004DF7DB((UpdateSleepTime)(TheGameLogic->getFrame() + BfmeLogicFramesPerSecond * 2));
  }
  if (rva0028CDEBStatusBit(&old, 2) != rva0028CDEBStatusBit(&m_statusMask94, 2))
   makeDirty();

@@ -155,7 +155,7 @@ class Object {public:
 };
 #include "../../Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class AIAttackMeleeHordeWaitState {public:
  virtual ~AIAttackMeleeHordeWaitState();
  virtual void slot1();
@@ -218,7 +218,7 @@ StateReturnType AIAttackMeleeHordeWaitState::onEnter()
 		}
 
 		owningHorde->setMeleeFormation(selectedMeleeFormation);
-		m_waitUntil = TheGameLogic->getFrame() + g_Va00DBA4E4*3;
+		m_waitUntil = TheGameLogic->getFrame() + BfmeLogicFramesPerSecond*3;
 		owningHorde->beginMelee(candidateVictim);
 	}
 

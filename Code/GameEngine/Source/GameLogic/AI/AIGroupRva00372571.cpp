@@ -344,7 +344,7 @@ public:
 void ScaleRect2D(Coord2D *tl, Coord2D *br, Real scaleFactor);
 Bool Coord3DInsideRect2D(const Coord3D *inputPoint, const Coord2D *tl, const Coord2D *br);
 int GetGameLogicRandomValue(int lo, int hi, char *file, int line);
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 struct ObjectListNode
 {
@@ -625,7 +625,7 @@ void AIGroup::rva00372571(Rva00372571Params *params, int cmdSource)
 					if (stealth)
 					{
 						UnsignedInt stealthFrames = stealth->getStealthDelay();
-						UnsignedInt randomFrames = GetGameLogicRandomValue(0, g_Va00DBA4E4,
+						UnsignedInt randomFrames = GetGameLogicRandomValue(0, BfmeLogicFramesPerSecond,
 							"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\AI\\AIGroup.cpp", 2156);
 						ai->rva0026304D(TheGameLogic->getFrame() + stealthFrames + randomFrames);
 					}

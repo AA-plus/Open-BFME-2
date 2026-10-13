@@ -91,8 +91,8 @@ Real normalizeAngle(Real angle);
 
 #define PATHFIND_CELL_SIZE_F 10.0f
 
-extern int g_Va00DBA4E4;
-#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 
 extern GameLogic *TheGameLogic;
 

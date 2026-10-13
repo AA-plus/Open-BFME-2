@@ -56,7 +56,7 @@
 //    standard guard range, or the area to guard (+0x44: the pinned
 //    PolygonTrigger::getCenterPoint and the radius getter of its +8 shape,
 //    pinned opaque 0x0030B719); conditions 5; then the attack sub-state and a
-//    +0x44 deadline three seconds out (g_009BA4E4 frames per second).
+//    +0x44 deadline three seconds out (BfmeLogicFramesPerSecond frames per second).
 //  - AIGuardInnerState::update, retail 0x005438D6 (284 bytes): slot 6 of
 //    0x00C69780. ZH's centre follow and attack update; BFME 2 first restarts
 //    through onEnter while the +0x40 flag is set, and re-targets (onExit, then
@@ -140,8 +140,8 @@ private:
 	unsigned char m_pad00[0x08];
 	Rva0030B719Shape m_shape; // +0x08
 };
-extern const int g_009BA4E4;
-#define LOGICFRAMES_PER_SECOND g_009BA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 class Team
 {
 public:

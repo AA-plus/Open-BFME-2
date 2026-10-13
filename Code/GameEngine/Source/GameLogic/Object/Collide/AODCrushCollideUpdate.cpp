@@ -59,7 +59,7 @@ public:
 class Rva2225E0Filter { public: bool accepts(Object *, Player *); };
 class FXList { public: static void doFXObj(const FXList *,const Object *,const Object *); };
 class ObjectCreationList { public: void create(void *,void *,void *); };
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Rva0010CConditionBits
 {
@@ -315,10 +315,10 @@ void AODCrushCollide::onCollide(Object *other,const Coord3D *,const Coord3D *)
    self->m_conditionBits.set(41);
    self->rva0028AE6D();
   }
-  TheGameLogic->friend_awakenUpdateModule(self,this,TheGameLogic->getFrame()+2*g_Va00DBA4E4);
-  m_24=TheGameLogic->getFrame()+2*g_Va00DBA4E4;
+  TheGameLogic->friend_awakenUpdateModule(self,this,TheGameLogic->getFrame()+2*BfmeLogicFramesPerSecond);
+  m_24=TheGameLogic->getFrame()+2*BfmeLogicFramesPerSecond;
  }
- m_24=TheGameLogic->getFrame()+2*g_Va00DBA4E4;
+ m_24=TheGameLogic->getFrame()+2*BfmeLogicFramesPerSecond;
  Rva00263895Member damage;
  void *data=(void *)m_moduleData;
  bool selected=((Rva2225E0Filter *)((char *)data+0x2c))->accepts(other,self->getControllingPlayer());

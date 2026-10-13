@@ -53,8 +53,8 @@ private:
     unsigned int m_frame; // +0x40
 };
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4; // logic frames per second
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond; // logic frames per second
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 class ScriptConditions
 {

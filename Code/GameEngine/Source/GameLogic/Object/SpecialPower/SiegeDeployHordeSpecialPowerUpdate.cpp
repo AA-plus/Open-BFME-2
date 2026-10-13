@@ -8,7 +8,7 @@
 // is gone or its last command came from the player (AI slot +0x23C); a dead
 // or missing target idles the AI. A target without status 0x3B is handed to
 // the AI command 0x00352ECA each frame; with it, once a logic second has
-// passed (+0x48 counter, g_Va00DBA4E4 frames) the AI idles and moves to the
+// passed (+0x48 counter, BfmeLogicFramesPerSecond frames) the AI idles and moves to the
 // stored deploy position (+0x3C, set by slot 14 0x004C63DE). Storage view: no
 // constructor or destructor, no vtable emitted.
 #include "../../../Common/GameLogicObjectLookupView.h"
@@ -31,7 +31,7 @@ enum ObjectStatusTypes
 };
 
 struct Coord3D;
-extern int g_Va00DBA4E4;	// logic frames per second
+extern int BfmeLogicFramesPerSecond;	// logic frames per second
 extern GameLogic *TheGameLogic;
 
 class AICommandInterface
@@ -251,7 +251,7 @@ UpdateSleepTime SiegeDeployHordeSpecialPower::update()
 		{
 			if (target->testStatus(OBJECT_STATUS_3B))
 			{
-				if (++m_counter < g_Va00DBA4E4)
+				if (++m_counter < BfmeLogicFramesPerSecond)
 					return UPDATE_SLEEP_NONE;
 				m_counter = 0;
 				ai->m_command.aiIdle(CMD_FROM_AI);

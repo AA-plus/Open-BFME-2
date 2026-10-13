@@ -41,7 +41,7 @@ private:
 	bool m_initialized;
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // Target Ghidra boundary: 35B at 0x0045A1B6. Both direct calls receive
 // this-0x10: 0x00459E05 on the clear-flag path and 0x00459B68 otherwise.
@@ -61,5 +61,5 @@ unsigned int Rva0045A1B6::rva0045A1B6()
 	{
 		behavior->rva00459B68();
 	}
-	return g_Va00DBA4E4;
+	return BfmeLogicFramesPerSecond;
 }

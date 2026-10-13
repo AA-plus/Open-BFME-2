@@ -6,8 +6,8 @@
 // three logic frames per second, then count +0x24 down and on expiry run
 // the pinned 0x004F46A9 tail on this plus slot-0x68 when latched, reseeding
 // +0x24 to two logic frames per second.
-extern int g_Va00DBA4E4;
-#define LogicFramesPerSecond g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LogicFramesPerSecond BfmeLogicFramesPerSecond
 
 class Rva004EF4C1C
 {

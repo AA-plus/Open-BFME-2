@@ -153,7 +153,7 @@ public:
 private:
 	static UnsignedInt SyncTime;
 };
-extern Int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 class VertexBufferClass
 {
@@ -312,7 +312,7 @@ void Rva003B0401::rva003B0869(Int unused, Int count)
 	Rva003B0869CellMap *cells = &TheTriggerManager->m_cells;
 	if (cells->size() > 0)
 	{
-		Real now = (Real)(WW3D::Get_Sync_Time() * g_009BA4E8) / 1000.0f;
+		Real now = (Real)(WW3D::Get_Sync_Time() * BfmeClientFramesPerSecond) / 1000.0f;
 		VertexBufferClass::WriteLockClass lock(m_vertexBuffer, 0);
 		Rva003B0869Vertex *verts = (Rva003B0869Vertex *)lock.Get_Vertex_Array();
 		Int localPlayer = ThePlayerList ? ThePlayerList->getLocalPlayer()->getPlayerIndex() : 0;
@@ -390,11 +390,11 @@ void GPUParticleSystemStorageModule::AddParticle(Rva003AFD22Node*p){
  DX8ThreadLock threadLock;
  rva003AFD22(p);
  int slot=slots34.top();slots34.pop();
- PrereqUnitRec rec;rec.slot=slot;rec.time=(Real)(WW3D::Get_Sync_Time()*g_009BA4E8)/1000.0f+(Real)p->life34;rec.unused=(Int)p;
+ PrereqUnitRec rec;rec.slot=slot;rec.time=(Real)(WW3D::Get_Sync_Time()*BfmeClientFramesPerSecond)/1000.0f+(Real)p->life34;rec.unused=(Int)p;
  expiry24.rva003B0412(&rec);
  VertexBufferClass::AppendLockClass lock(vb1C,slot*4,4,0);
  Rva003B0869Vertex*v=(Rva003B0869Vertex*)lock.Get_Vertex_Array();
- Real birth=(Real)(WW3D::Get_Sync_Time()*g_009BA4E8)/1000.0f;
+ Real birth=(Real)(WW3D::Get_Sync_Time()*BfmeClientFramesPerSecond)/1000.0f;
  Real life=(Real)p->life34;
  Real spin=GetGameClientRandomValueReal(0.0f,15.0f,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameClient\\System\\FXParticleSystem\\fxpsstoragemodule.cpp",286);
  writeVertex(v,p->pos,life,p->vel,birth,spin,0.0f);++v;
@@ -414,7 +414,7 @@ void GPUParticleSystemStorageModule::AddParticle(Rva003AFD22Node*p){
 // slot spill until after the particle null test, as the native body does.
 namespace FXParticleSystem {
 void GPUParticleSystemStorageModule::rva003B07B8(){
- Real now=(Real)(WW3D::Get_Sync_Time()*g_009BA4E8)/1000.0f;
+ Real now=(Real)(WW3D::Get_Sync_Time()*BfmeClientFramesPerSecond)/1000.0f;
  while(!expiry24.empty()){
   const Rva003B02F4Entry&r=expiry24.top();
   if(!(now>r.time))break;

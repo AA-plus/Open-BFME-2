@@ -12,7 +12,7 @@
 // 0x34-byte Anim2D built by the pinned constructor 0x002D6D63 from the
 // template and TheAnim2DCollection under unwind state 0 (operator delete
 // 0x0002FD60 on throw); the expire frame is TheGameLogic's frame (+0x40
-// unsigned) plus the duration times the logic frame rate g_Va00DBA4E4 via
+// unsigned) plus the duration times the logic frame rate BfmeLogicFramesPerSecond via
 // ftol2; options at +0x14 position at +4 z rise at +0x18; then the record is
 // pushed on the list at +0x8CC through the folded four-byte push_front at
 // 0x00392076, viewed as the rowed list<int> as in
@@ -72,7 +72,7 @@ private:
 
 extern Anim2DCollection *TheAnim2DCollection;
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class WorldAnimationData
 {
@@ -126,7 +126,7 @@ void InGameUI::addWorldAnimation(Anim2DTemplate *animTemplate, const Coord3D *po
 
 	// assign all data
 	wad->m_anim = anim;
-	wad->m_expireFrame = TheGameLogic->getFrame() + (durationInSeconds * g_Va00DBA4E4);
+	wad->m_expireFrame = TheGameLogic->getFrame() + (durationInSeconds * BfmeLogicFramesPerSecond);
 	wad->m_options = options;
 	wad->m_worldPos = *pos;
 	wad->m_zRisePerSecond = zRisePerSecond;

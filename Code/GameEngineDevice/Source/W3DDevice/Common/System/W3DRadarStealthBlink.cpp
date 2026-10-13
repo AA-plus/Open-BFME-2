@@ -4,7 +4,7 @@
 // Object query 0x002943B2 (null player) or is disguised (0x0028F4BC record with
 // a template at +0x3C) a foreign object that fails rva002933CD and status 0x11
 // is hidden (returns false); otherwise the colour alpha pulses between 64 and
-// 255 over 2 * g_009BA4E8 client frames (TheGameClient slot 0x7C).
+// 255 over 2 * BfmeClientFramesPerSecond client frames (TheGameClient slot 0x7C).
 // Same shape as the BFME1 W3DRadar cold path rva006C42B0 (donor f98983a7d).
 // Static helper with a private convention: its retail caller 0x00050125 (W3DRadar
 // object-list render) passes the object in EDI and the colour pointer in EBX.
@@ -57,7 +57,7 @@ public:
 	virtual UnsignedInt getFrame();
 };
 extern GameClient *TheGameClient;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 void GameGetColorComponents(Color color, UnsignedByte *red, UnsignedByte *green, UnsignedByte *blue, UnsignedByte *alpha);
 inline Color GameMakeColor(UnsignedByte r, UnsignedByte g, UnsignedByte b, UnsignedByte a)
@@ -78,7 +78,7 @@ static Bool rva0004E704(Object *object, Color *color)
 
 			UnsignedByte red, green, blue, alpha;
 			GameGetColorComponents(*color, &red, &green, &blue, &alpha);
-			const UnsignedInt halfTransition = g_009BA4E8;
+			const UnsignedInt halfTransition = BfmeClientFramesPerSecond;
 			UnsignedInt frame = TheGameClient->getFrame() % (halfTransition * 2);
 			if (frame >= halfTransition)
 				alpha = (UnsignedByte)(255 - ((frame - halfTransition) * 191) / halfTransition);

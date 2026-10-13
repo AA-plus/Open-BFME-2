@@ -260,11 +260,11 @@ public:
     float x, y, z;
     float length() const;
 };
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 void AODHordeContain::rva0047A77E()
 {
-    float scale = 1.0f / g_Va00DBA4E4;
+    float scale = 1.0f / BfmeLogicFramesPerSecond;
     float movementSpeed = scale * 100.0f;
     float movementStep = scale * 10.0f;
     Object *object = *reinterpret_cast<Object **>(

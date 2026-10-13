@@ -109,8 +109,8 @@ private:
 typedef int Int;
 typedef float Real;
 
-extern int g_Va00DBA4E4;
-#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 #define PI 3.14159265359f
 
 Real Sin(Real x);

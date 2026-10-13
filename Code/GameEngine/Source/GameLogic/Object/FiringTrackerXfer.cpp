@@ -268,7 +268,7 @@ enum
 };
 
 // Logic frame rate (5), read where Zero Hour uses LOGICFRAMES_PER_SECOND.
-extern int g_00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // class-gate: allow Coord3D the canonical header has no Coord3DBase base, which this unit's Xfer view takes; same three floats, class-key struct, and the exact equality (rowed 0x00003702) shotFired calls
 struct Coord3D : public Coord3DBase

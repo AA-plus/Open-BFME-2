@@ -15,7 +15,7 @@
 // and takes the display string from TheDisplayStringManager slot 14.
 // BFME 2 differences from ZH: the gate is TheGameLogic's byte at +0x9A
 // (getDrawIconUI) but the frame comes from TheGameClient (slot 31, unsigned);
-// the default timeout is the logic frame rate g_009BA4E8 / 3 and a configured
+// the default timeout is the logic frame rate BfmeClientFramesPerSecond / 3 and a configured
 // timeout at +0x8A4 is scaled by BfmeClientFramesPerMillisecond in floating point. The list at
 // +0x8A0 takes the record through the folded four-byte push_front 0x00392076.
 #include <list>
@@ -61,7 +61,7 @@ public:
 };
 
 extern GameLogic *TheGameLogic;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 extern float BfmeClientFramesPerMillisecond;
 
 class FloatingTextData
@@ -136,7 +136,7 @@ void InGameUI::addFloatingText( const UnicodeString &text, const Coord3D *pos, C
 		newFTD->m_dString->setText( text );
 
 		if( m_floatingTextTimeOut <= 0 )
-			newFTD->m_frameTimeOut = TheGameClient->getFrame() + g_009BA4E8 / 3;
+			newFTD->m_frameTimeOut = TheGameClient->getFrame() + BfmeClientFramesPerSecond / 3;
 		else
 			newFTD->m_frameTimeOut = TheGameClient->getFrame() + BfmeClientFramesPerMillisecond * m_floatingTextTimeOut;
 

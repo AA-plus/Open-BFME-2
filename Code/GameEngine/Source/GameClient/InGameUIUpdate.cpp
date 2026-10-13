@@ -11,7 +11,7 @@
 // Retail order: the movie stream at +0x5C4 (slot 6 frame flags & 4 then slot
 // 13; stopMovie slot 88) and the cameo stream at +0x5CC; the six UI messages
 // at +0x5D0 fade by (frame - timestamp) * 0.01 once older than the delay
-// +0x838 / g_Va00DBA4E4 / 1000 (rowed GameGetColorComponents and the rowed
+// +0x838 / BfmeLogicFramesPerSecond / 1000 (rowed GameGetColorComponents and the rowed
 // remove-at-index 0x0029B380); rowed updateMilitarySubtitle; the subsystem at
 // +0x7F4 updates; the money and power windows (function-local NameKeys behind
 // guard bits 1 and 2 at 0x00DFEEDC; rowed nameToKey 0x00148E1A) show the money
@@ -29,7 +29,7 @@
 // +0x53C is set and the local player is gone or flagged (+0x750);
 // updateLocalPhantomStructureDisplay (0x002A1158) and rowed
 // updateOrderDisplayMode; rowed 0x004E7277 on +0x9CC; and every
-// g_009BA4E8-th client frame the selected drawables whose object is
+// BfmeClientFramesPerSecond-th client frame the selected drawables whose object is
 // shrouded for the local player (rowed Object::getShroudStatusForPlayer
 // statuses 3 and 4) are deselected through TheInGameUI.
 // Facts from retail: offsets slots globals and callees; names from the
@@ -279,7 +279,7 @@ void Rva0043D15FUpdate(void);
 class InGameUI;
 
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 extern NameKeyGenerator *TheNameKeyGenerator;
 extern GameWindowManager *TheWindowManager;
 extern PlayerList *ThePlayerList;
@@ -291,7 +291,7 @@ extern float g_00DBBADC;
 extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 extern BannerUI *g_00DFE32C;
 extern GameClient *TheGameClient;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 extern InGameUI *TheInGameUI;
 
 struct UIMessage
@@ -379,7 +379,7 @@ void InGameUI::update()
 		m_cameoVideoStream->frameFlags(0);
 
 	UnsignedInt currLogicFrame = TheGameLogic->getFrame();
-	const int messageTimeout = m_messageDelayMS / g_Va00DBA4E4 / 1000;
+	const int messageTimeout = m_messageDelayMS / BfmeLogicFramesPerSecond / 1000;
 	UnsignedByte r, g, b, a;
 	Int amount;
 	for (i = 6 - 1; i >= 0; i--)
@@ -495,7 +495,7 @@ void InGameUI::update()
 	updateOrderDisplayMode();
 	m_9cc->rva004E7277();
 
-	if (TheGameClient->getFrame() % g_009BA4E8 == 0)
+	if (TheGameClient->getFrame() % BfmeClientFramesPerSecond == 0)
 	{
 		const DrawableList *selected = TheInGameUI->getAllSelectedDrawables();
 		for (DrawableListIt it = selected->begin(); it != selected->end(); )

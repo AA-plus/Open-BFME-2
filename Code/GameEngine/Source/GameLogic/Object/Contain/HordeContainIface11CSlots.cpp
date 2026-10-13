@@ -108,7 +108,7 @@ enum ModelConditionFlagType
 {
 	MODELCONDITION_INVALID = -1
 };
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 enum UpdateSleepTime
 {
 	UPDATE_SLEEP_NONE = 1
@@ -1840,7 +1840,7 @@ bool HordeContain::rva00468DCD(Object *obj)
 
 // ?rva00468D7D@HordeContain@@UAEXPAVObject@@@Z @0x00468D7D: slot 89, for the
 // argument (or the Object its rowed rva002931F5(false) hands back) recorded
-// at +0x288, sets +0x28C to the logic frame g_009BA4E4 * 3 frames from now.
+// at +0x288, sets +0x28C to the logic frame BfmeLogicFramesPerSecond * 3 frames from now.
 // Retail computes the delay (imul esi,esi,3) before the call; /G7, which this
 // unit is compiled with, is what selects that form over lea.
 void HordeContain::rva00468D7D(Object *obj)
@@ -1848,7 +1848,7 @@ void HordeContain::rva00468D7D(Object *obj)
 	if (!obj)
 		return;
 	int id = obj->m_74;
-	unsigned int delay = g_009BA4E4 * 3;
+	unsigned int delay = BfmeLogicFramesPerSecond * 3;
 	Object *other = obj->rva002931F5(false);
 	if (other)
 		id = other->m_74;

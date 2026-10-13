@@ -18,7 +18,7 @@
 // ?rva004B8AE1@Rva004B89C4@@QAE?AW4UpdateSleepTime@@XZ, retail 0x004B8AE1
 // (46 bytes): sleep forever once the Object is effectively dead (+0x438 bit
 // 0), every frame while it is of kind 0xD7, else one logic second
-// (g_Va00DBA4E4 frames).
+// (BfmeLogicFramesPerSecond frames).
 #include "GameLogicObjectLookupView.h"
 
 typedef bool Bool;
@@ -36,7 +36,7 @@ enum KindOfType
 	KINDOF_D7 = 0xD7
 };
 
-extern int g_Va00DBA4E4;	// logic frames per second
+extern int BfmeLogicFramesPerSecond;	// logic frames per second
 extern GameLogic *TheGameLogic;
 
 class Rva004B8B0F
@@ -146,7 +146,7 @@ UpdateSleepTime Rva004B89C4::rva004B8AE1()
 		return UPDATE_SLEEP_FOREVER;
 	if (m_object && m_object->isKindOf(KINDOF_D7))
 		return UPDATE_SLEEP_NONE;
-	return (UpdateSleepTime)g_Va00DBA4E4;
+	return (UpdateSleepTime)BfmeLogicFramesPerSecond;
 }
 
 UpdateSleepTime Rva004B89C4::update()

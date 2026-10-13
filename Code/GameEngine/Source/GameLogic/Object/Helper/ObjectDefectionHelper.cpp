@@ -37,8 +37,8 @@ enum ObjectStatusTypes
 };
 
 // Logic frame rate, read where Zero Hour uses LOGICFRAMES_PER_SECOND.
-extern int g_Va00DBA4E4;
-#define DEFECTION_DETECTION_TIME_MAX (10 * g_Va00DBA4E4)
+extern int BfmeLogicFramesPerSecond;
+#define DEFECTION_DETECTION_TIME_MAX (10 * BfmeLogicFramesPerSecond)
 
 #include "../../../../../Libraries/Include/Lib/RGBColor.h"
 

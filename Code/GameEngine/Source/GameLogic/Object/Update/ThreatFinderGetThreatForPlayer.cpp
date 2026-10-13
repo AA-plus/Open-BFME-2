@@ -13,7 +13,7 @@ extern PartitionManager *ThePartitionManager;
 extern "C" void *memset(void *, int, unsigned int);
 #pragma function(memset)
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Player
 {
 public:
@@ -119,7 +119,7 @@ void ThreatFinder::calculateThreatLevel()
 }
 ThreatInfo ThreatFinder::getThreatForPlayer(Player *searchingPlayer, int mode, Player *specificEnemy)
 {
- if (static_cast<float>((TheGameLogic->getFrame() - m_lastFrame) * g_Va00DBA4E4) >= 3.0f)
+ if (static_cast<float>((TheGameLogic->getFrame() - m_lastFrame) * BfmeLogicFramesPerSecond) >= 3.0f)
  {
   calculateThreatLevel();
   m_lastFrame = TheGameLogic->getFrame();

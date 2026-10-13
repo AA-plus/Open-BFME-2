@@ -156,7 +156,7 @@ struct GameLogicFrameView
 	UnsignedInt m_frame;										// +0x40
 };
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class DelayedExperienceLevelGrantSystem
 {
@@ -185,7 +185,7 @@ void DelayedExperienceLevelGrantSystem::rva00420C8E(ExperienceLevelView *level, 
 	if (grant && frame >= 10)
 	{
 		rva00420B61(level, obj);
-		obj->setSpecialModelConditionState(MODELCONDITION_D2, g_Va00DBA4E4 * 3);
+		obj->setSpecialModelConditionState(MODELCONDITION_D2, BfmeLogicFramesPerSecond * 3);
 	}
 
 	obj->m_experienceTracker->rva0039B2E6(*(const Rva0039B2E6Input *)level);

@@ -44,7 +44,7 @@ enum KindOfType
 extern unsigned char g_00E03745;
 extern "C" void *theLogicRandomLogFile;
 extern "C" int __cdecl fprintf(void *stream, const char *format, ...);
-extern Int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 extern GameLogic *TheGameLogic;
 
 #define CRITTER_TRACE(s) \
@@ -431,7 +431,7 @@ Bool AIUpdateInterface::computePath(PathfindServicesInterface *pathServices, Coo
 		if (m_path && m_blockedFrames > 0) {
 			CRITTER_TRACE("CritterDesync:  bblah7");
 			destroyPath();
-			setQueueForPathTime(g_Va00DBA4E4);
+			setQueueForPathTime(BfmeLogicFramesPerSecond);
 			Coord3D goalPos = *getObject()->getPosition();
 			Rva002EDE5B(getObject(), &goalPos);
 			setFinalPosition(&goalPos);

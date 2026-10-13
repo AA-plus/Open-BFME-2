@@ -12,7 +12,7 @@
 // 0x14C, isValidContainerFor 0x98, addToContain 0x9C), newObject with a
 // zeroed 16-byte creation mask and the controlling player's default team
 // (+0x2EC), the template's +0x354 seconds times the logic frame rate
-// (g_009BA4E4) as model condition 0xDA's frame count, and the owner's name
+// (BfmeLogicFramesPerSecond) as model condition 0xDA's frame count, and the owner's name
 // (+0x88) formatted "%s%d" onto each payload.
 
 #include <string.h>
@@ -23,7 +23,7 @@ typedef float Real;
 
 extern "C" __declspec(dllimport) int __cdecl sprintf( char *buffer, const char *format, ... );
 
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class Team;
 
@@ -215,7 +215,7 @@ void SiegeEngineContain::createPayload()
 			Object *payload = TheThingFactory->newObject( payloadTemplate, owner->getControllingPlayer()->getDefaultTeam(), &mask, false );
 			if( contain->isValidContainerFor( payload, true, false ) )
 			{
-				Int frames = (Int)( payloadTemplate->getPayloadSeconds() * (Real)g_009BA4E4 );
+				Int frames = (Int)( payloadTemplate->getPayloadSeconds() * (Real)BfmeLogicFramesPerSecond );
 				if( frames > 0 )
 					payload->setSpecialModelConditionState( MODELCONDITION_0DA, frames );
 

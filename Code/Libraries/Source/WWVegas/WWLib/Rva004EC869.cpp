@@ -119,7 +119,7 @@ class Rva004E9B46 { public: Rva004E9B46(int player); ~Rva004E9B46(); char m_data
 class Rva005990DF { public: Rva005990DF(int player); ~Rva005990DF(); char m_data[0x30]; };
 class Rva00597693 { public: Rva00597693(void *player); char m_data[0x40]; };
 class Rva005997CD { public: Rva005997CD(int player); ~Rva005997CD(); char m_data[0x14]; };
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class AIBuilder
 {
@@ -146,7 +146,7 @@ private:
 AIBuilder::AIBuilder(Player *player)
 	: m_player(player), m_base(player), m_38(player), m_90(player), m_B4(player),
 	  m_E4((int)player), m_FC((int)player), m_12C(new Rva00597693(player)),
-	  m_dozers((int)player), m_154(false), m_158(g_Va00DBA4E4 * 30)
+	  m_dozers((int)player), m_154(false), m_158(BfmeLogicFramesPerSecond * 30)
 {
 }
 

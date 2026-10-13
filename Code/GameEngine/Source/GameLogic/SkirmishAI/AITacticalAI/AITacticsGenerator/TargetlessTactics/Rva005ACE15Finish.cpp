@@ -24,7 +24,7 @@ static inline float sqr(float x)
 	return x * x;
 }
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 // AIFarmKillSquad.cpp defines these statics and owns their initializers
 // (0x007B461B, 0x007B4636, 0x007B4651, 0x007B4662, 0x007B4670).

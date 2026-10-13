@@ -145,7 +145,7 @@ public:
 	virtual UnsignedInt getFrame();
 };
 extern GameClient *TheGameClient;
-extern int g_009BA4E8;
+extern int BfmeClientFramesPerSecond;
 
 class W3DRadar {
 public:

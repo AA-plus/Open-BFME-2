@@ -10,7 +10,7 @@ typedef unsigned int UnsignedInt;
 typedef bool Bool;
 
 int GetGameLogicRandomValue(Int lo, Int hi, char *file, Int line);
-extern Int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class GameLogic
 {
@@ -146,7 +146,7 @@ void ScriptEngine::checkConditionsForTeamNames(Script *pScript, const AsciiStrin
 	Int delay = pScript->getDelayEvalSeconds();
 	if (delay > 0) {
 		if (!TheGameLogic->rva001DCD1C()) {
-			pScript->setFrameToEvaluate(GetGameLogicRandomValue(0, g_Va00DBA4E4 * 2, (char *)"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\ScriptEngine\\ScriptEngine.cpp", 0xA7C));
+			pScript->setFrameToEvaluate(GetGameLogicRandomValue(0, BfmeLogicFramesPerSecond * 2, (char *)"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\ScriptEngine\\ScriptEngine.cpp", 0xA7C));
 		} else {
 			pScript->setFrameToEvaluate(GetGameLogicRandomValue(0, delay, (char *)"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\ScriptEngine\\ScriptEngine.cpp", 0xA81));
 		}

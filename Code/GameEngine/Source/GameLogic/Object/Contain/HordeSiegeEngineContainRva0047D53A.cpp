@@ -25,7 +25,7 @@ class Object:public Thing {protected:friend class HordeSiegeEngineContain;Module
 class Pathfinder {public:void AddObjectToPathfindMap(Object*);bool adjustToPossibleDestination(Object*,const LocomotorSet&,Coord3D*);float GetWallHeight(PathfindLayerEnum,const Coord3D*,Coord3D*);};
 class AI {public:char pad[0x10];Pathfinder *pathfinder;};extern AI *TheAI;
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 class Rva004C5772CmpBoolField {public:bool get() const;};
 class Rva00463509 {public:void rva00463509(Object*,bool);};
 class HordeTransportContain {public:virtual void exitObjectViaDoor(Object*,ExitDoorType);};
@@ -49,7 +49,7 @@ void HordeSiegeEngineContain::rva0047D53A(Object *rider,ExitDoorType arg)
   TheAI->pathfinder->AddObjectToPathfindMap(rider);
   if(ai){
    ai->ignoreObstacle(0);
-   ai->ignoreUntil=TheGameLogic->getFrame()+g_Va00DBA4E4;
+   ai->ignoreUntil=TheGameLogic->getFrame()+BfmeLogicFramesPerSecond;
    Pathfinder *finder=TheAI->pathfinder;finder->adjustToPossibleDestination(rider,*ai->locomotorView(),&destination);
    _STL::vector<Coord3D> path;path.push_back(destination);path.push_back(destination);
    ((AICommandInterface*)((char*)ai+0x20))->rva0036EE16((const Rva0035149F*)&path,me,COMMAND2);
@@ -66,7 +66,7 @@ void HordeSiegeEngineContain::rva0047D53A(Object *rider,ExitDoorType arg)
    rider->rva0028B4CE(LAYER17);
    AIUpdateInterface *ai=rider->ai;
    TheAI->pathfinder->AddObjectToPathfindMap(rider);
-   if(ai){ai->ignoreObstacle(0);ai->ignoreUntil=TheGameLogic->getFrame()+g_Va00DBA4E4;((AICommandInterface*)((char*)ai+0x20))->aiHunt(COMMAND2);}
+   if(ai){ai->ignoreObstacle(0);ai->ignoreUntil=TheGameLogic->getFrame()+BfmeLogicFramesPerSecond;((AICommandInterface*)((char*)ai+0x20))->aiHunt(COMMAND2);}
   }else{
    position=me->position;
    Coord3D direction;const Coord3D *dir=me->getUnitDirectionVector2D();float radius=me->radius;direction.x=dir->x;direction.y=dir->y;
@@ -78,7 +78,7 @@ void HordeSiegeEngineContain::rva0047D53A(Object *rider,ExitDoorType arg)
    rider->setPosition(&start);rider->setPosition(&start);rider->setOrientation(angle);rider->rva0028B4CE(LAYER17);
    TheAI->pathfinder->AddObjectToPathfindMap(rider);
    AIUpdateInterface *ai=rider->ai;
-   if(ai){ai->ignoreUntil=TheGameLogic->getFrame()+3*g_Va00DBA4E4;ai->ignoreObstacle(0);((AICommandInterface*)((char*)ai+0x20))->aiHunt(COMMAND2);}
+   if(ai){ai->ignoreUntil=TheGameLogic->getFrame()+3*BfmeLogicFramesPerSecond;ai->ignoreObstacle(0);((AICommandInterface*)((char*)ai+0x20))->aiHunt(COMMAND2);}
   }
   if(*((unsigned char*)rider->type+0x115)&0x20)rider->setStatus(STATUS60,false);
  }else{

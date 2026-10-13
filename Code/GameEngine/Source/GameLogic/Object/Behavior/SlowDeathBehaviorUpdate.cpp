@@ -213,7 +213,7 @@ extern NameKeyGenerator *TheNameKeyGenerator;
 extern "C" float __cdecl atan2f(float y, float x);
 void calcRandomForceRva0045D636(Real minMag, Real maxMag, Real minPitch, Real maxPitch, Coord3D *force);
 // Logic frames per second.
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 enum KindOfType
 {
@@ -778,8 +778,8 @@ void SlowDeathBehavior::beginSlowDeath(const DamageInfo *damageInfo)
 		if (getObject()->isKindOf(KINDOF_HULK) && TheGameLogic->getHulkMaxLifetimeOverride() != -1)
 		{
 			m_sinkFrame = 1;
-			m_midpointFrame = (g_Va00DBA4E4 / 2) + 1;
-			m_destructionFrame = g_Va00DBA4E4 + 1;
+			m_midpointFrame = (BfmeLogicFramesPerSecond / 2) + 1;
+			m_destructionFrame = BfmeLogicFramesPerSecond + 1;
 			m_acceleratedTimeScale = 1.0f;
 		}
 		else

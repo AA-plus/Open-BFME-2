@@ -13,7 +13,7 @@
 extern "C" const void *const vtbl_00C4ED70[];  // folded, 9 classes; via ??_7BeaconClientUpdateModuleData@@6B@
 #pragma comment(linker, "/alternatename:_vtbl_00C4ED70=??_7BeaconClientUpdateModuleData@@6B@")
 
-extern int g_Va00DBA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 class MultiIniFieldParse;
 class INI;
@@ -68,7 +68,7 @@ CommandButtonHuntUpdateModuleData::CommandButtonHuntUpdateModuleData()
 {
 	float cap = 9999.0f;
 	*(unsigned int *)this = ((unsigned int)vtbl_00C4ED70);
-	m_08 = g_Va00DBA4E4;
+	m_08 = BfmeLogicFramesPerSecond;
 	m_cap = cap;
 }
 

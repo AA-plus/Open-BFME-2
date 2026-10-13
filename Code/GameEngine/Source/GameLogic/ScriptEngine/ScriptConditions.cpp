@@ -29,8 +29,8 @@ __forceinline long fast_float2long_round(float f)
 
 #define REAL_TO_INT_CEIL(x) (fast_float2long_round(fast_float_ceil(x)))
 
-extern Int g_Va00DBA4E4;	// logic frames per second
-#define LOGICFRAMES_PER_SECOND g_Va00DBA4E4
+extern int BfmeLogicFramesPerSecond;	// logic frames per second
+#define LOGICFRAMES_PER_SECOND BfmeLogicFramesPerSecond
 
 #include "../../Common/GameLogicObjectLookupView.h"
 

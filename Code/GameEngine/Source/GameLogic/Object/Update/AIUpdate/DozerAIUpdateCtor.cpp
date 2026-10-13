@@ -2155,7 +2155,7 @@ public:
 };
 
 // LOGICFRAMES_PER_SECOND.
-extern const int g_009BA4E4;
+extern int BfmeLogicFramesPerSecond;
 
 static const Real CONSTRUCTION_COMPLETE = -1.0f;
 
@@ -2430,7 +2430,7 @@ StateReturnType DozerActionDoActionState::update()
 					if (canHeal)
 					{
 						// figure out how much health we will restore this frame
-						Real health = body->getMaxHealth() * dozerAI->getRepairHealthPerSecond() / g_009BA4E4;
+						Real health = body->getMaxHealth() * dozerAI->getRepairHealthPerSecond() / BfmeLogicFramesPerSecond;
 
 						// try to give it a little bit-o-health
 						if (!goalObject->rva0028FEA7(health, dozer, 2)) // this frame and the next
