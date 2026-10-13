@@ -1,4 +1,8 @@
 // ?addMessage@NetCommandList@@QAEPAVNetCommandRef@@PAVNetCommandMsg@@@Z
+// partial score=0.96 date=2026-10-13
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+// ?addMessage@NetCommandList@@QAEPAVNetCommandRef@@PAVNetCommandMsg@@@Z
 // partial score=0.95 date=2026-10-13
 // ?addMessage@NetCommandList@@QAEPAVNetCommandRef@@PAVNetCommandMsg@@@Z
 // partial score=0.93 date=2026-10-09
@@ -112,6 +116,7 @@ NetCommandRef *NetCommandList::addMessage(NetCommandMsg *cmdMsg)
 				msg->setNext(m_lastMessageInserted->getNext());
 				msg->setPrev(m_lastMessageInserted);
 				m_lastMessageInserted->setNext(msg);
+				_ReadWriteBarrier();
 				m_lastMessageInserted = msg;
 				m_last = msg;
 			} else {
