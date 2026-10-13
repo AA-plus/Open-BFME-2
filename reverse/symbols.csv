@@ -17194,3 +17194,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?CreateArmyIcons@Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAEXXZ,0x005E1ED2,callee of ??0Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAE@PAX00ABUPageContext@@@Z
 ?OnPageLoaded@PlayerPageFrame@StrategicHUD@@QAEXPBD@Z,0x005F9053,WB PlayerPageFrame::OnPageLoaded identity; native constructor5F9DCB binds this member to PageLoaded; 5F9053 guards state28 and page2C then invokes factory18 and sets ready state; boundary5F9053..5F90F6; thiscall RET4
 ?Inverse@Matrix4@@QBE?AV1@XZ,0x00715EB0,callee of ?inverse@Rva007133F0MatrixInverse@@QBEXAAVMatrix3D@@@Z
+?Rva0021C12FStripName@@YA?AVAsciiString@@ABV1@@Z,0x0021C12F,strip-the-directory helper for the create-a-hero file list: called once from the 0x21F5F8 body at its 0x21C12F site where the donor/ZH builder trims each listed file name; unrowed before this pin
