@@ -1,4 +1,6 @@
-// cl: /O1 /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// stlport
+// cl: /O1 /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 // HideControlBar 0x00402960 (299B), ShowControlBar 0x00402A8B (102B) and
 // ToggleControlBar 0x00402AF1 (40B): Zero Hour ControlBar.cpp's three free
 // functions, through BFME1's ControlBarVisibility.cpp donor (Open-BFME-1
@@ -224,10 +226,10 @@ void ToggleControlBar(Bool immediate)
 	}
 }
 
-// ?Rva003BBE04@@YGX_N@Z @0x003BBE04, 46 retail bytes. It selects the
+// ?Rva003BBE04@ScriptActions@@QAEX_N@Z @0x003BBE04, 46 retail bytes. It selects the
 // existing control bar callbacks and forwards the same flag to Display slot
 // 86; the action's semantic name is not established by target evidence.
-void __stdcall Rva003BBE04(Bool immediate)
+void ScriptActions::Rva003BBE04(Bool immediate)
 {
 	if (immediate)
 	{
@@ -240,3 +242,6 @@ void __stdcall Rva003BBE04(Bool immediate)
 		TheDisplay->setSomeViewFlag(false);
 	}
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

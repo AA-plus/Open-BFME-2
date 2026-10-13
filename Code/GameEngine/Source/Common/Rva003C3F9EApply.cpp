@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ?Rva003C3F9EApply@@YGXPAVParameter@@ABVAsciiString@@H@Z @0x003C3F9E 101B: resolve unit via ScriptEngine then SpecialPowerTemplate by name query Object special-power module then slot 0x10 plus scaled frame via slot 0x20. Evidence: sibling Rva003C3EC5Apply same getUnitNamed 0x3588E7 via g_Va009FE16C findSpecialPowerTemplate 0x29B6EB via TheSpecialPowerStore Object::getSpecialPowerModule 0x28BB9E StringBase copy 0x365F0; caller 0x003CC6BD; ret 0xC stdcall.
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C3F9EApply@ScriptActions@@QAEXPAVParameter@@ABVAsciiString@@H@Z @0x003C3F9E 101B: resolve unit via ScriptEngine then SpecialPowerTemplate by name query Object special-power module then slot 0x10 plus scaled frame via slot 0x20. Evidence: sibling Rva003C3EC5Apply same getUnitNamed 0x3588E7 via g_Va009FE16C findSpecialPowerTemplate 0x29B6EB via TheSpecialPowerStore Object::getSpecialPowerModule 0x28BB9E StringBase copy 0x365F0; caller 0x003CC6BD; ret 0xC stdcall.
 #include "ascii_string.h"
 
 class SpecialPowerTemplate;
@@ -46,7 +48,7 @@ public:
 	virtual void w08(int arg);
 };
 
-void __stdcall Rva003C3F9EApply(Parameter *p, const AsciiString &name, int arg3)
+void ScriptActions::Rva003C3F9EApply(Parameter *p, const AsciiString &name, int arg3)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(p);
 	const SpecialPowerTemplate *found = TheSpecialPowerStore->findSpecialPowerTemplate(name);
@@ -60,3 +62,6 @@ void __stdcall Rva003C3F9EApply(Parameter *p, const AsciiString &name, int arg3)
 		}
 	}
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

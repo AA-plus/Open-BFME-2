@@ -1,6 +1,9 @@
-// ?Rva003BAF1D@@YGXMMMM@Z
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BAF1D@ScriptActions@@QAEXMMMM@Z
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BAF1D@@YGXMMMM@Z @0x003BAF1D 120B: free stdcall four floats normalizing
+// ?Rva003BAF1D@ScriptActions@@QAEXMMMM@Z @0x003BAF1D 120B: ScriptActions member four floats normalizing
 // deg-to-rad minus TacticalView slot 0x100 base then scaling to slot 0xcc.
 // Evidence: ret 16; mov ecx [TheTacticalView] call [eax+0x100]; fld [esp+4]
 // fmul [RADS] fsub normalizeAngle row; fmul [g_00C1FE40]; movss+mulss scales plus
@@ -88,7 +91,7 @@ public:
 };
 extern TacticalView *TheTacticalView;
 
-void __stdcall Rva003BAF1D(float a0, float a1, float a2, float a3)
+void ScriptActions::Rva003BAF1D(float a0, float a1, float a2, float a3)
 {
 	float base = TheTacticalView->s64();
 	float f3 = a3 * 1000.0f;
@@ -97,3 +100,6 @@ void __stdcall Rva003BAF1D(float a0, float a1, float a2, float a3)
 	float k = normalizeAngle(a0 * 0.017453292f - base) * 0.15915494f;
 	TheTacticalView->s51(k, i1, 0, f2, f3);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

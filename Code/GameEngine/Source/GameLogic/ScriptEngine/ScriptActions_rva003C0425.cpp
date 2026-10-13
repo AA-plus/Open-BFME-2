@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 // ?Rva003C0425Do@@YGXABVAsciiString@@_N0HV1@H@Z, retail 0x003C0425 (269 bytes,
 // EH, RET 0x18). Script audio action with a speech-style tail: finds the named
 // event (TheAudio slot 0x12C, no null guard), clamps the count to at least 1
@@ -92,7 +94,7 @@ public:
 };
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C0425Do(const AsciiString &eventName, bool allowOverlap, bool leech,
+void ScriptActions::Rva003C0425Do(const AsciiString &eventName, bool allowOverlap, bool leech,
 	int count, const AsciiString &text, int extra)
 {
 	if (count < 1 && count != -12345)
@@ -111,7 +113,7 @@ void __stdcall Rva003C0425Do(const AsciiString &eventName, bool allowOverlap, bo
 
 // 0x003C0308 (285 bytes, EH, RET 0x18): the same action with a TheAudio slot 0x8C
 // pre-call (0, extra, overlap flag inverted) and the plain addAudioEvent post.
-void __stdcall Rva003C0308Do(const AsciiString &eventName, bool allowOverlap, bool leech,
+void ScriptActions::Rva003C0308Do(const AsciiString &eventName, bool allowOverlap, bool leech,
 	int count, const AsciiString &text, int extra)
 {
 	int post = !allowOverlap;
@@ -128,3 +130,6 @@ void __stdcall Rva003C0308Do(const AsciiString &eventName, bool allowOverlap, bo
 		event.m_string84 = TheScriptEngine->rva00205CE7(text);
 	reinterpret_cast<Rva003C0425AudioView *>(TheAudio)->addAudioEvent(&event);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

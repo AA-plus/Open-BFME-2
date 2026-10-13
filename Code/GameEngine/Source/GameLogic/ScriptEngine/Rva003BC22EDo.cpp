@@ -1,5 +1,8 @@
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BC22EDo@@YGXMMM@Z @0x003BC22E 43B: script move camera via TacticalView slot 0xe4 with 3 floats.
+// ?Rva003BC22EDo@ScriptActions@@QAEXMMM@Z @0x003BC22E 43B: script move camera via TacticalView slot 0xe4 with 3 floats.
 // Evidence: fld [esp+0xc] mov ecx,[0xFEA3C]=TheTacticalView mov eax,[ecx] sub esp,0xc fstp [esp+8] fld [esp+0x14] fstp [esp+4] fld [esp+0x10] fstp [esp] call [eax+0xe4] ret 0xc; caller 0x003CC91A; sibling Rva003E7FD5 same TacticalView dummy pattern.
 class TacticalView
 {
@@ -65,7 +68,10 @@ public:
 };
 extern TacticalView *TheTacticalView;
 
-void __stdcall Rva003BC22EDo(float a, float b, float c)
+void ScriptActions::Rva003BC22EDo(float a, float b, float c)
 {
 	TheTacticalView->slot57(a, b, c);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

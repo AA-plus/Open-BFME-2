@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 // Built from the banked attempt reverse/attempts/0x003c4e28.cpp; fix: the
 // 1000.0f scale is a compiler literal (retail constant at RVA 0x007BE358), not
 // an extern global, which is what keeps retail's operand order.
@@ -114,7 +116,7 @@ public:
 extern class TerrainLogic *TheTerrainLogic;
 extern class View *TheTacticalView;
 
-void __stdcall Rva003C4E28Find(const AsciiString &name, float x, float y, float z)
+void ScriptActions::Rva003C4E28Find(const AsciiString &name, float x, float y, float z)
 {
 	Rva003C4E28Entry *p = (*(Rva003C4E28ListMgr **)&TheTerrainLogic)->GetHead();
 	goto test;
@@ -138,3 +140,6 @@ found:
 	(*(Rva003C4E28PlaceMgr **)&TheTacticalView)->Place(pos, ix, fy, fz);
 end:;
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.
