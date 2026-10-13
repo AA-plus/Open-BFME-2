@@ -1,45 +1,39 @@
 // ?rva001EFD9C@Rva001EFD9C@@QAE_NVUnicodeString@@_NPBUSelPair@@@Z
-// partial score=0.65 date=2026-10-06
+// partial score=0.204 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /D_STLP_USE_STATIC_LIB /D_CRTIMP= /DNDEBUG
 // stlport
-//
-// ?rva001EFD9C@Rva001EFD9C@@... @0x001EFD9C 554B.
-// Private-message sendChat worker on GameSpyInfo's vtable (slot 64 of the
-// 0x00C19500 vtable, directly after rowed 0x001EF90E at slot 62, range-mate
-// 0x001EF9A0 at slot 63 and the landed tag-0x15 sibling 0x001EFCF7 at slot
-// 65). Identity evidence (target facts, all read from game.dat):
-// - thiscall: entry uses ecx as this for virtual slot 12, which this same
-//   vtable resolves to the joinGroupRoom TU's neighbourhood (slot 12 target
-//   0x0008BB81); slots 22/23/29 resolve to the rowed GameSpyInfo methods
-//   rva00382CCE (0x00382CCE, find player by name), rva00382D0A (0x00382D0A,
-//   find player by profileID) and getLocalName (0x003861BC).
-// - ZH Chat.cpp sendChat donor: trim, empty-message false return, PeerRequest
-//   through TheGameSpyPeerMessageQueue slot 6, "%s" then ",%s" formats with
-//   StringBase concat, tag 2 (PEERREQUEST_MESSAGEPLAYER) for the private path
-//   and tag 3 (PEERREQUEST_MESSAGEROOM) for the room path, isAction byte from
-//   [ebp+0xC] into the record, nick assignment, true return. Enum values 2/3
-//   agree with the nat PeerThread.h donor.
-// - BFME2 divergence from the ZH donor (retail facts, kept honest): the third
-//   parameter is NOT a GameWindow listbox. Retail reads [param] and [param+4]
-//   as a begin/end int-pointer pair (elements feed the Int-taking slot 23),
-//   so it is declared here as an unproven-layout selection range; the strict
-//   pointee type is not established. Likewise the loop looks players up by
-//   profileID and seeds the name from the slot-22 hit instead of ZH's
-//   translate/compareNoCase skip.
-// Shares the BfmeOpaqueOwnedRecord492 struct, queue view and NullChr global
-// spelling with the landed sibling PeerTextRequestValidate.cpp; the union
-// gains an honest action-byte member at +8 (record +0x118) for the isAction
-// store, which no previous TU addressed.
+// Banked GameSpyInfo::sendChat reconstruction, retail 0x001EFD9C..0x001EFFC6.
+// WB 0x00B01080 (Chat.cpp:166) and retail vtable VA0x00C19500 slot64 name
+// the body. BFME1 cee35b7d8ca077d7255f1c39cb69e9fd9627aa85 donor
+// game/GameEngine/Source/GameNetwork/GameSpy/GameSpyInfoSendChat.cpp was
+// compiled with BFME2 tools (zero placements). It supplies the chat flow;
+// BFME2 replaces its listbox with begin/end profile-ID pointers.
+// Retail and WB prove trim/empty return, request tags3/2, queue slot6,
+// GameSpy slots12/22/23/29 and the format/concat loop. Returned player
+// pointers are viewed only through their first AsciiString, not a full type.
+// PeerRequest's owned constructor/destructor are 0x1EF661/0x1EF723.
+// IMPORTANT corrections to the earlier bank: the vector<bool> ends at118;
+// the action byte is the FIRST byte of the union there (not eight later).
+// Reload message.str() AFTER PeerRequest construction: retail reloads the
+// by-value argument and retains its null fallback. The old cached pointer
+// incorrectly let the compiler eliminate that reload and fallback.
+// Current body:563B vs554, allREL32 calls resolved; fixed-offset byte
+// agreement only113/554 (0.204). No claim that the old0.65 score was exact
+// byte agreement. Retail promotes the third argument to EDI and reuses its
+// stack slot for string temporaries; this still spills it and reserves4
+// extra frame bytes. Early-return variant576B, vector variant571B; sibling
+// /G7 /arch:SSE flags do not help. Nothing integrated into Code/.
 #include <string>
 #include <vector>
 
 #include "ascii_string.h"
 #include "unicode_string.h"
+template<typename T> inline bool StringBase<T>::isEmpty() const throw() { return !m_data || !m_data->length; }
 
-struct BfmeOpaqueOwnedRecord492
+struct PeerRequest
 {
-	BfmeOpaqueOwnedRecord492();
-	~BfmeOpaqueOwnedRecord492();
+	PeerRequest();
+	~PeerRequest();
 	int unknown_00;
 	std::string unknown_04;
 	std::wstring unknown_10;
@@ -68,7 +62,7 @@ struct BfmeOpaqueOwnedRecord492
 		struct { int words[26]; } payload_104;
 		struct { int words[7]; } payload_28;
 		struct { int first; int second; } payload_8c;
-		struct { int pad0; int pad1; bool action; } msgAction;
+		struct { bool action; } msgAction;
 	};
 };
 
@@ -80,14 +74,14 @@ struct PeerRequestQueue6
 	virtual void f3();
 	virtual void f4();
 	virtual void f5();
-	virtual void addRequest(BfmeOpaqueOwnedRecord492 *rec);
+	virtual void addRequest(PeerRequest *rec);
 };
 
-extern PeerRequestQueue6 *TheGameSpyPeerMessageQueue;
+class GameSpyPeerMessageQueueInterface;
+extern GameSpyPeerMessageQueueInterface *TheGameSpyPeerMessageQueue;
+#define TheGameSpyPeerMessageQueue ((PeerRequestQueue6 *)TheGameSpyPeerMessageQueue)
 
-// The wide NullChr retail falls back to: established name g_Va007BB5C4
-// (defined in Rva00579900Fetch.cpp, placed at VA 0x00BBB5C4).
-extern unsigned short g_Va007BB5C4;
+
 
 // Begin/end int-pointer pair retail threads through the third slot.
 // Strict pointee type unproven; elements are consumed as Int profileIDs.
@@ -124,23 +118,23 @@ extern Rva001EFD9C *TheGameSpyInfo;
 
 bool Rva001EFD9C::rva001EFD9C(UnicodeString message, bool isAction, const SelPair *sels)
 {
-	bool ok = false;
+	bool ok;
 	getCurrentGroupRoom();
 	message.trim();
 	const void *bits = *reinterpret_cast<const void * const *>(&message);
-	if (bits != 0
-		&& *reinterpret_cast<const unsigned short *>(reinterpret_cast<const char *>(bits) + 4) != 0)
-	{
-		BfmeOpaqueOwnedRecord492 rec;
-		rec.unknown_10 = bits
-			? (const unsigned short *)(reinterpret_cast<const char *>(bits) + 8)
-			: (const unsigned short *)&g_Va007BB5C4;
+	if (bits == 0
+		|| *reinterpret_cast<const unsigned short *>(reinterpret_cast<const char *>(bits) + 4) == 0)
+		ok = false;
+	else {
+		PeerRequest rec;
+		rec.unknown_10 = message.str();
 		if (sels == 0
 			|| (((reinterpret_cast<const char *>(sels->end) - reinterpret_cast<const char *>(sels->begin)) & ~3) == 0))
 		{
-			rec.unknown_00 = 3;
 			rec.msgAction.action = isAction;
+			rec.unknown_00 = 3;
 			TheGameSpyPeerMessageQueue->addRequest(&rec);
+			ok = false;
 		}
 		else
 		{
@@ -163,8 +157,8 @@ bool Rva001EFD9C::rva001EFD9C(UnicodeString message, bool isAction, const SelPai
 			if (!names.isEmpty())
 			{
 				rec.unknown_04 = names.str();
-				rec.unknown_00 = 2;
 				rec.msgAction.action = isAction;
+				rec.unknown_00 = 2;
 			TheGameSpyPeerMessageQueue->addRequest(&rec);
 			}
 			ok = true;
