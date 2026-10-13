@@ -6,7 +6,7 @@ public:
 	void rva0020D925(int v);
 };
 class Rva0020D959Host;
-extern Rva0020D959Host *g_00DFE1A8;
+class LargeGroupAudio; extern LargeGroupAudio *TheLargeGroupAudio;
 class GameLogic
 {
 public:
@@ -26,6 +26,6 @@ void Rva00285708Host::rva00285708()
 {
 	if (m_10 != -1)
 		return;
-	((Rva0020DXXX *)g_00DFE1A8)->rva0020D925((int)this);
+	((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->rva0020D925((int)this);
 	m_10 = TheGameLogic->m_40;
 }

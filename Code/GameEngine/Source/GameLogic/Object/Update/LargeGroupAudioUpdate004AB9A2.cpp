@@ -25,7 +25,7 @@ public:
 	void rva0020D959(int v);
 };
 
-extern Rva0020D959Host *g_00DFE1A8;
+class LargeGroupAudio; extern LargeGroupAudio *TheLargeGroupAudio;
 class UpdateModule
 {
 protected:
@@ -48,7 +48,7 @@ void LargeGroupAudioUpdate::rva004AB9A2()
 {
 	if (m_8D)
 	{
-		((Rva0020DXXX *)g_00DFE1A8)->rva0020D959((int)&m_24);
+		((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->rva0020D959((int)&m_24);
 		setWakeFrame(m_object, UPDATE_SLEEP_FOREVER);
 		m_8D = false;
 	}

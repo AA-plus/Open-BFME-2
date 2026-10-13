@@ -144,7 +144,7 @@ private:
 };
 
 // The open disconnect menu (VA 0x00E048D0; BFME 1's TheDisconnectMenu).
-extern int g_Va00E048D0;
+class DisconnectMenu; extern DisconnectMenu *TheDisconnectMenu;
 
 // Rva00512CE9Kick.cpp's view of this screen: shows or hides a slot's kick
 // button and records it at +0x286.
@@ -194,9 +194,9 @@ AptDisconnectScreen::AptDisconnectScreen(void *context)
 	  m_kickButtonsDirty(false),
 	  m_quit(false)
 {
-	if (g_Va00E048D0 != 0)
+	if ((*(int *)&TheDisconnectMenu) != 0)
 		return;
-	g_Va00E048D0 = (int)this;
+	(*(int *)&TheDisconnectMenu) = (int)this;
 	memset(m_kickButtons, 0, sizeof(m_kickButtons));
 	((Rva00222A8BTarget *)g_bfmeAptWindowManager)->rva002233A6(2);
 	{
@@ -243,9 +243,9 @@ AptDisconnectScreen::AptDisconnectScreen(void *context)
 // reference.
 AptDisconnectScreen::~AptDisconnectScreen()
 {
-	if ((AptDisconnectScreen *)g_Va00E048D0 == this)
+	if ((AptDisconnectScreen *)(*(int *)&TheDisconnectMenu) == this)
 	{
-		g_Va00E048D0 = 0;
+		(*(int *)&TheDisconnectMenu) = 0;
 		if (!m_quit)
 			((Rva00222A8BTarget *)g_bfmeAptWindowManager)->rva00222F55(false);
 		_bfme_closeAptScreen(AsciiString("DisconnectScreen::InitGadgets"));

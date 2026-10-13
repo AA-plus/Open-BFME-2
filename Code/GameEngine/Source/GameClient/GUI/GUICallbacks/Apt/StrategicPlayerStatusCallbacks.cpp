@@ -267,7 +267,7 @@ struct GlobalA04934;
 extern GlobalA04934 *g_Va00A04934;
 struct GlobalA046B4;
 extern GlobalA046B4 *g_Va00A046B4;
-extern int g_Va00E048D0;
+class DisconnectMenu; extern DisconnectMenu *TheDisconnectMenu;
 struct GlobalA04934;
 extern GlobalA04934 *g_Va00A04934;
 void Rva004E855CClose();
@@ -366,7 +366,7 @@ void StrategicPlayerStatus::rva005234AD()
 		if (TheDisplay->vslot87())
 			return;
 	}
-	if (g_Va00E048D0)
+	if ((*(int *)&TheDisconnectMenu))
 		return;
 	Rva004E855CClose();
 	TheMouse->vslot19(2);
@@ -411,7 +411,7 @@ void Rva0050EC24()
 		if (TheDisplay->vslot87())
 			return;
 	}
-	if (g_Va00E048D0)
+	if ((*(int *)&TheDisconnectMenu))
 		return;
 	Rva004E855CClose();
 	((Rva005CB265 *)TheInGameUI->rva000CF155())->Rva005CB265::rva005CB265();

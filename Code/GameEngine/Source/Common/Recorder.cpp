@@ -469,7 +469,8 @@ class Drawable0037BE15:public Thing {};
 class Client0037BE15 {public:virtual void s0();virtual void s1();virtual void s2();virtual void s3();virtual void s4();virtual void s5();virtual void s6();virtual void s7();virtual void s8();virtual void s9();virtual void s10();virtual void s11();virtual void s12();virtual void s13();virtual void s14();virtual void s15();virtual Drawable0037BE15*find(int);};
 class GameClient;extern GameClient*TheGameClient;
 class Rva00A00958Obj;extern Rva00A00958Obj*g_Rva00A00958;
-extern unsigned char g_Rva00A02D86,g_Rva00A02D87;
+extern unsigned char g_Rva00A02D86;
+extern bool TheLiteCRC;
 extern const char*TheRelationshipNames[];
 template<class T>__forceinline T&field0037BE15(const void*p,int offset){return*(T*)((char*)p+offset);}
 template<class T>__forceinline T read0037BE15(const void*p,int offset){return*(const T*)((const char*)p+offset);}
@@ -499,7 +500,7 @@ void RecorderClass::dumpCommandHistory(CommandDumpFile0037BE15* file,unsigned ma
     else text.format("\n\n========================================================\nPlayer Index: %d, Name: %S(%s), Template: %s \n=========================================================\n",playerIndex,field0037BE15<UnicodeString>(player,0x38).str(),field0037BE15<AsciiString>(player,0x4c).str(),read0037BE15<PlayerTemplate*>(player,0x34)?templateStr0037BE15(read0037BE15<PlayerTemplate*>(player,0x34)->getName()):"NULL");
     write0037BE15(file,text);
    }
-   if ((read0037BE15<int>(message,0x10)!=0x44a || (!g_Rva00A02D86 && !g_Rva00A02D87 && NET_CRC_INTERVAL!=1)) && read0037BE15<int>(message,0x10)!=0x447 && read0037BE15<int>(message,0x10)>1000 && read0037BE15<int>(message,0x10)<1999) {
+   if ((read0037BE15<int>(message,0x10)!=0x44a || (!g_Rva00A02D86 && !(*(unsigned char *)&TheLiteCRC) && NET_CRC_INTERVAL!=1)) && read0037BE15<int>(message,0x10)!=0x447 && read0037BE15<int>(message,0x10)>1000 && read0037BE15<int>(message,0x10)<1999) {
    unsigned frame=message->getArgument(read0037BE15<unsigned char>(message,0x18)-1)->timestamp;
    if (frame>maxFrame) break;
    RvaF6Ret name=((Rva003113DD*)message)->method();

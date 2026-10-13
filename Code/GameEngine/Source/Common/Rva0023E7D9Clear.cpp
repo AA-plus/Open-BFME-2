@@ -92,9 +92,9 @@ Rva00A00958Obj * g_Rva00A00958;
 extern unsigned char g_Rva00A02D86;
 // g_Rva00A02D86: matched references place it at VA 0xe02d86 (zero-filled .bss).
 unsigned char g_Rva00A02D86;
-extern unsigned char g_Rva00A02D87;
+extern bool TheLiteCRC;
 // g_Rva00A02D87: matched references place it at VA 0xe02d87 (zero-filled .bss).
-unsigned char g_Rva00A02D87;
+extern bool TheLiteCRC;
 
 struct Rva009FE758Obj
 {
@@ -114,7 +114,7 @@ void Rva0023E7D9::rva0023F88C(int dummy)
 		(*(Rva009FE758Obj **)&TheWritableGlobalData)->m_c18 = 2;
 		return;
 	}
-	if (g_Rva00A02D87 == 0)
+	if ((*(unsigned char *)&TheLiteCRC) == 0)
 		return;
 	(*(Rva009FE758Obj **)&TheWritableGlobalData)->m_c18 = 5;
 }

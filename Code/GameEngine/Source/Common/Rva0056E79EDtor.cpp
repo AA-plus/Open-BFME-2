@@ -107,7 +107,7 @@ public:
 	virtual void w16();
 };
 
-extern int g_Va00E062EC;
+class BfmeObjELB; extern BfmeObjELB *g_bfmeObjELB;
 extern GameWindowManager *TheWindowManager;
 extern IMEManager *TheIMEManager;
 
@@ -124,7 +124,7 @@ private:
 
 AptOnlineLogin::~AptOnlineLogin()
 {
-	if (g_Va00E062EC == (int)this)
+	if ((*(int *)&g_bfmeObjELB) == (int)this)
 	{
 		{
 			AsciiString tmp("AptOnlineLogin::InitGadgets");
@@ -133,6 +133,6 @@ AptOnlineLogin::~AptOnlineLogin()
 		if (TheWindowManager != 0)
 			TheWindowManager->v45();
 		TheIMEManager->w16();
-		g_Va00E062EC = 0;
+		(*(int *)&g_bfmeObjELB) = 0;
 	}
 }

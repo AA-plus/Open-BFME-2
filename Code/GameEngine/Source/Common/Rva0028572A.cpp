@@ -4,7 +4,7 @@ class Rva0020D959Host
 {
 public:
 };
-extern Rva0020D959Host *g_00DFE1A8;
+class LargeGroupAudio; extern LargeGroupAudio *TheLargeGroupAudio;
 // The ledger row at 0x0020D959 is Rva0020DXXX::rva0020D959(int).
 class Rva0020DXXX
 {
@@ -25,7 +25,7 @@ void Rva0028572AHost::rva0028572A()
 {
 	if (m_10 != -1)
 	{
-		((Rva0020DXXX *)g_00DFE1A8)->rva0020D959((int)this);
+		((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->rva0020D959((int)this);
 		m_10 = -1;
 	}
 }

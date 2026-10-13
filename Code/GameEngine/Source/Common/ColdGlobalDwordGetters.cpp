@@ -147,14 +147,15 @@ int Rva00328A65Get(void)
 	return g_Va00DBD0F0;
 }
 
-extern int g_Va00E04910;
+class AptQuitMenu;
+extern AptQuitMenu *TheAptQuitMenu;
 
 // ?Rva00376D17Get@@YAHXZ @ 0x00376d17 (6B) over 0x00E04910.
 // Follows a ret (prev C3), no .rdata vtable slot, no direct callers,
 // no branch sources. Opaque address-derived name.
 int Rva00376D17Get(void)
 {
-	return g_Va00E04910;
+	return (int)TheAptQuitMenu;
 }
 
 extern int g_Va00A04908;
@@ -201,16 +202,15 @@ int Rva00380724Get(void)
 	return g_Va00E046B8;
 }
 
-extern int g_Va00E048D0;
-// g_Va00E048D0: matched references place it at VA 0xe048d0 (zero-filled .bss).
-int g_Va00E048D0;
+class DisconnectMenu;
+extern DisconnectMenu *TheDisconnectMenu;
 
 // ?Rva0040596CGet@@YAHXZ @ 0x0040596c (6B) over 0x00E048D0.
 // Follows a ret-with-pop (prev C2), no .rdata vtable slot, no direct callers,
 // no branch sources. Opaque address-derived name.
 int Rva0040596CGet(void)
 {
-	return g_Va00E048D0;
+	return (int)TheDisconnectMenu;
 }
 extern int g_Va00E04904;
 
@@ -397,16 +397,15 @@ int Rva00174F30Get(void)
 	return g_Va00DF6FD0;
 }
 
-extern int g_Va00E062EC;
-// g_Va00E062EC: matched references place it at VA 0xe062ec (zero-filled .bss).
-int g_Va00E062EC;
+class BfmeObjELB;
+extern BfmeObjELB *g_bfmeObjELB;
 
 // ?Rva00415E90Get@@YAHXZ @ 0x00415e90 (6B) over 0x00E062EC.
 // Follows a ret (prev C3); next is a frameless fn start; no direct callers,
 // no branch sources. Opaque address-derived name.
 int Rva00415E90Get(void)
 {
-	return g_Va00E062EC;
+	return (int)g_bfmeObjELB;
 }
 
 extern int g_Va00E046B4;
@@ -423,9 +422,6 @@ int Rva0050E9CDGet(void)
 // ?g_Va00E0ABB0@@3HA: matched references place it at VA 0xe0abb0; also referenced as ?g_bfmeThingUCHead@@3PAVBfmeNodeUC@@A.
 int g_Va00E0ABB0;
 #pragma comment(linker, "/alternatename:?g_bfmeThingUCHead@@3PAVBfmeNodeUC@@A=?g_Va00E0ABB0@@3HA")
-// ?g_Va00E04910@@3HA: matched references place it at VA 0xe04910; also referenced as ?g_Va00A04910@@3PAUGlobalA04910@@A.
-int g_Va00E04910;
-#pragma comment(linker, "/alternatename:?g_Va00A04910@@3PAUGlobalA04910@@A=?g_Va00E04910@@3HA")
 // ?g_Va00E046B8@@3HA: matched references place it at VA 0xe046b8; also referenced as ?g_Va00E046B8@@3PAURva00511730State@@A.
 int g_Va00E046B8;
 #pragma comment(linker, "/alternatename:?g_Va00E046B8@@3PAURva00511730State@@A=?g_Va00E046B8@@3HA")

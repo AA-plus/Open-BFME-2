@@ -46,9 +46,9 @@ public:
 	virtual void __stdcall f2();
 };
 // g_00DEBCE0: matched references place it at VA 0xdebce0 (retail .data initial value 0).
-Rva000F0972Releasable * g_00DEBCE0 = 0;
+struct IDirect3DIndexBuffer8; extern IDirect3DIndexBuffer8 *shadowIndexBufferD3D;
 // g_00DEBCDC: matched references place it at VA 0xdebcdc (retail .data initial value 0).
-Rva000F0972Releasable * g_00DEBCDC = 0;
+struct IDirect3DVertexBuffer8; extern IDirect3DVertexBuffer8 *shadowVertexBufferD3D;
 class W3DBufferManager
 {
 public:
@@ -75,11 +75,11 @@ bool W3DVolumetricShadowManager::ReAcquireResources()
 	Rva000F09E1LockGuard guard;
 	((Rva000F0912 *)this)->rva000F0972();
 	IDirect3DDevice8 *dev = DX8Wrapper::D3DDevice;
-	if (dev->CreateIndexBuffer(0x8000, 0x208, 0x65, 0, (void **)&g_00DEBCE0, 0) < 0)
+	if (dev->CreateIndexBuffer(0x8000, 0x208, 0x65, 0, (void **)&(*(Rva000F0972Releasable * *)&shadowIndexBufferD3D), 0) < 0)
 		return false;
-	if (g_00DEBCDC == 0)
+	if ((*(Rva000F0972Releasable * *)&shadowVertexBufferD3D) == 0)
 	{
-		if (dev->CreateVertexBuffer(0x18000, 0x208, 0, 0, (void **)&g_00DEBCDC, 0) < 0)
+		if (dev->CreateVertexBuffer(0x18000, 0x208, 0, 0, (void **)&(*(Rva000F0972Releasable * *)&shadowVertexBufferD3D), 0) < 0)
 			return false;
 	}
 	W3DBufferManager *mgr = TheW3DBufferManager;

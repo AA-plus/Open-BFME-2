@@ -11,7 +11,7 @@ class Rva0020D959Host
 public:
 };
 
-extern Rva0020D959Host *g_00DFE1A8;
+class LargeGroupAudio; extern LargeGroupAudio *TheLargeGroupAudio;
 // The ledger row at 0x0020D959 is Rva0020DXXX::rva0020D959(int).
 class Rva0020DXXX
 {
@@ -51,7 +51,7 @@ void Rva004AB9A2::rva004AB9A2()
 {
 	if (m_flag == 0)
 		return;
-	((Rva0020DXXX *)g_00DFE1A8)->rva0020D959((int)&m_at24);
+	((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->rva0020D959((int)&m_at24);
 	setWakeFrame(m_obj, USLEEP_FOREVER);
 	m_flag = 0;
 }

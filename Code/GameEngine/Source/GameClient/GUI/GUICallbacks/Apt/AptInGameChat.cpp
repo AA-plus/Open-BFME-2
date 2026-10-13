@@ -290,7 +290,7 @@ public:
 extern InGameUI *TheInGameUI;
 
 // The disconnect menu (VA 0x00E048D0).
-extern int g_Va00E048D0;
+class DisconnectMenu; extern DisconnectMenu *TheDisconnectMenu;
 
 // TheGameInfo (0x00E02EEC): vslot 19 lets a chat other than the console
 // open while TheWritableGlobalData's +0xA44 flag is set.
@@ -428,7 +428,7 @@ void AptInGameChat::OpenScreen(int chatType)
 		return;
 	if (TheInGameUI->isQuitMenuVisible())
 		return;
-	if (g_Va00E048D0 != 0)
+	if ((*(int *)&TheDisconnectMenu) != 0)
 		return;
 	if (TheGameLogic != 0 && TheGameLogic->m_120 != 0)
 		return;

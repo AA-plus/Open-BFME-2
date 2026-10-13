@@ -16,7 +16,7 @@ public:
   void rva0020D925(int v);
 };
 class Rva0020D959Host;
-Rva0020D959Host *g_00DFE1A8;
+class LargeGroupAudio; extern LargeGroupAudio *TheLargeGroupAudio;
 class Player
 {
 };
@@ -83,7 +83,7 @@ void LargeGroupAudioUpdate::rva004AB90A()
 	if (((Inv20(m_object->m_94.v[1]) & 1) == 0))
 		return;
 	m_8D = true;
-	((Rva0020DXXX *)g_00DFE1A8)->rva0020D925((int)&m_24);
+	((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->rva0020D925((int)&m_24);
 	Object *obj = m_object;
 	int delay = m_04->rva004AB7C8();
 	setWakeFrame(obj, (UpdateSleepTime)delay);

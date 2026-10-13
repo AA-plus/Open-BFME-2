@@ -137,7 +137,7 @@ extern NameKeyGenerator *TheNameKeyGenerator;
 extern GameWindowManager *TheWindowManager;
 class BfmeAptWindowManager;
 extern BfmeAptWindowManager *g_bfmeAptWindowManager;
-extern int g_Va00E04910;
+class AptQuitMenu; extern AptQuitMenu *TheAptQuitMenu;
 extern int g_Va00A04908;
 
 // ?rva00376D49@GameLogic@@QAEXXZ
@@ -158,7 +158,7 @@ void GameLogic::rva00376D49(void)
 		Rva00518262Enable();
 		((GameWindowManager*)g_bfmeAptWindowManager)->vslot28();
 	}
-	if (g_Va00E04910)
+	if ((*(int *)&TheAptQuitMenu))
 	{
 		Rva0051B11CEnable();
 		((GameWindowManager*)g_bfmeAptWindowManager)->vslot28();

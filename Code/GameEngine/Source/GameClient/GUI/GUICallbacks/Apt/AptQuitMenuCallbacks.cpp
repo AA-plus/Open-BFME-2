@@ -315,7 +315,7 @@ extern Display *TheDisplay;
 // (ColdGlobalDwordGetters.cpp).
 extern int g_Va00E0492C;
 extern int g_Va00E0330C;
-extern int g_Va00E048D0;
+class DisconnectMenu; extern DisconnectMenu *TheDisconnectMenu;
 
 // TheLinearCampaignManager-like holder at 0x009FDC8C: a running campaign
 // restarts through its +0x10 member (the rowed 0x001ECEF6).
@@ -796,7 +796,7 @@ void ShowQuitMenu()
 		return;
 	if (!TheTransitionHandler->isFinished())
 		return;
-	if (g_Va00E048D0)
+	if ((*(int *)&TheDisconnectMenu))
 		return;
 	if (TheDisplay)
 	{

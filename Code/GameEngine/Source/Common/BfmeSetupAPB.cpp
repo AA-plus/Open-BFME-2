@@ -17,12 +17,12 @@ typedef unsigned int UnsignedInt;
 
 extern unsigned int BFME2CommandFlags;
 extern bool g_bfmeOnAPB;
-extern bool g_bfmeDoneAPB;
+extern bool TheLiteCRC;	// 0x00A02D87 (GameLogicInit.cpp)
 #include "Common/INIException.h"
 
 int bfmeSetupAPB(void)
 {
-	g_bfmeDoneAPB = true;
+	TheLiteCRC = true;
 	BFME2CommandFlags |= 0x20000;
 	if (g_bfmeOnAPB)
 	{
@@ -34,7 +34,6 @@ int bfmeSetupAPB(void)
 // The global(s) below are defined elsewhere under another name at the same
 // address (the census owner of that DIR32 target); bind this unit's spelling.
 #pragma comment(linker, "/alternatename:?g_bfmeOnAPB@@3_NA=?g_Rva00A02D86@@3EA")
-#pragma comment(linker, "/alternatename:?g_bfmeDoneAPB@@3_NA=?g_Rva00A02D87@@3EA")
 
 // The paired deep-CRC handler at retail 0x003B9BA1 (63 bytes).
 // The donor lite-CRC handler supplies the exception semantics; target writes
@@ -44,7 +43,7 @@ int bfmeSetupDeepCRC(void)
 {
 	g_bfmeOnAPB = true;
 	BFME2CommandFlags |= 0x10000;
-	if (g_bfmeDoneAPB)
+	if (TheLiteCRC)
 	{
 		throw INIException(3, "Do not specify both -deepCRC and -liteCRC in your commandline arguments.");
 	}

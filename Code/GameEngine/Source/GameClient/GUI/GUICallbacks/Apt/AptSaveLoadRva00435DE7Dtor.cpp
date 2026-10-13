@@ -11,7 +11,7 @@ extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
 
 extern struct Bfme939Helper *g_bfme939Helper;
 
-extern int g_Va00E04910;
+class AptQuitMenu; extern AptQuitMenu *TheAptQuitMenu;
 
 extern int g_Va00E0333C;
 
@@ -259,7 +259,7 @@ Rva00435DE7::~Rva00435DE7()
 				break;
 			case 2:
 			{
-				void *pendingWindow = *(void **)&g_Va00E04910;
+				void *pendingWindow = *(void **)&(*(int *)&TheAptQuitMenu);
 				if (pendingWindow != 0)
 					*((unsigned char *)pendingWindow + 0x27D) = 1;
 			}

@@ -629,7 +629,7 @@ public:
 extern Shell *TheShell;
 
 // The disconnect menu (VA 0x00E048D0).
-extern int g_Va00E048D0;
+class DisconnectMenu; extern DisconnectMenu *TheDisconnectMenu;
 
 // Retail 0x004E41AB, 359 bytes: opens the in-game objectives (or, in
 // multiplayer and skirmish, player status) screen unless one is up or
@@ -662,7 +662,7 @@ void Rva004E41AB()
 	GameLogic *logic = TheGameLogic;
 	if (!logic->isInMultiplayerGame() && logic->m_gameMode != 6)
 		logic->rva0023CD9E(true, 0, true);
-	if (g_Va00E048D0 != 0)
+	if ((*(int *)&TheDisconnectMenu) != 0)
 		return;
 	Rva004E855CClose();
 	((Rva005CB265 *)TheInGameUI->rva000CF155())->Rva005CB265::rva005CB265();

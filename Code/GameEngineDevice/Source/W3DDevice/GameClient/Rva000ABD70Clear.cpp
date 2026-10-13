@@ -21,18 +21,18 @@ struct Outer
 	Inner *m_ptr;
 };
 
-Outer * g_00E00940;	// retail RVA 0x00A00940 (.data, 4 bytes), defined here: nothing else owns it
+class BfmeMapObjectListHolder; extern BfmeMapObjectListHolder *BfmeTheMapObjectListHolder;
 extern Dict g_Va00E00944;
 #define g_00E00944 g_Va00E00944
 // ^ g_00E00944 is only an alias of the owned global g_Va00E00944 (ledger names column).
 
 void Rva000ABD70Clear()
 {
-	Inner *p = g_00E00940->m_ptr;
+	Inner *p = (*(Outer * *)&BfmeTheMapObjectListHolder)->m_ptr;
 	if (p) {
 		void *r = p->get(0);
 		::operator delete(r);
-		g_00E00940->m_ptr = 0;
+		(*(Outer * *)&BfmeTheMapObjectListHolder)->m_ptr = 0;
 	}
 	return g_00E00944.clear();
 }

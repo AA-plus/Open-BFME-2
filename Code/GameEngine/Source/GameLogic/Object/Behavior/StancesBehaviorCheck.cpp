@@ -54,7 +54,7 @@ public:
 	int *rva004260DE(int key);
 };
 
-Rva004260DE * g_00E031D4;	// retail RVA 0x00A031D4 (.data, 8 bytes), defined here: nothing else owns it
+class Rva00425F10; extern Rva00425F10 *TheStancesStore;
 
 class StancesBehavior
 {
@@ -79,7 +79,7 @@ bool StancesBehavior::changeStanceFromXfer(int arg)
 		int key = m_04->m_08;
 		if (key == 0)
 			return false;
-		int *found = g_00E031D4->rva004260DE(key);
+		int *found = (*(Rva004260DE * *)&TheStancesStore)->rva004260DE(key);
 		if (found == 0)
 			return false;
 		b->doIt(found[arg * 2 + 2]);

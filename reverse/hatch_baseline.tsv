@@ -22,13 +22,11 @@ address_global	Code/GameEngine/Source/Common/BfmeConv1292.cpp	g_Va00E02FF8	2
 address_global	Code/GameEngine/Source/Common/BfmeConv1292.cpp	g_Va00E0300C	2
 address_global	Code/GameEngine/Source/Common/BfmeConv1668.cpp	g_Va00E0ABB0	1
 address_global	Code/GameEngine/Source/Common/BfmeConv804.cpp	g_Va009FE958	1
-address_global	Code/GameEngine/Source/Common/BfmeConv816O1.cpp	g_Va00E062EC	1
 address_global	Code/GameEngine/Source/Common/BfmeConv982.cpp	g_Rva00F06914Transform	1
 address_global	Code/GameEngine/Source/Common/BfmeConv982.cpp	g_Rva00F0692CTransform	1
 address_global	Code/GameEngine/Source/Common/BfmeOwnVVDCtor.cpp	g_Va00DBA4E4	2
 address_global	Code/GameEngine/Source/Common/BfmeOwnerCDECount.cpp	g_Va00BBB8D8	3
 address_global	Code/GameEngine/Source/Common/BfmeSetupAPB.cpp	g_Rva00A02D86	1
-address_global	Code/GameEngine/Source/Common/BfmeSetupAPB.cpp	g_Rva00A02D87	1
 address_global	Code/GameEngine/Source/Common/BfmeThingBFGTail.cpp	g_Va00BBB8D8	2
 address_global	Code/GameEngine/Source/Common/BfmeThingBFGTail.cpp	g_Va00BC74F0	2
 address_global	Code/GameEngine/Source/Common/BfmeThingTXAFlags.cpp	g_Va00DEC3C8	3
@@ -41,7 +39,6 @@ address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00A0
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00A046B4	1
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00A04904	1
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00A04908	2
-address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00A04910	1
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00A06398	1
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00DB47EC	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00DBA4E4	3
@@ -53,7 +50,6 @@ address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00DF
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00DFE348	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00DFEFD8	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E032C8	3
-address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E032E0	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E032FC	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E0330C	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E0333C	3
@@ -62,15 +58,10 @@ address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E0
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E046B4	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E046B8	5
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E046BC	3
-address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E048D0	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E04904	3
-address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E04910	4
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E0492C	3
-address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E05FAC	3
-address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E062EC	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E06394	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E06398	4
-address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E063EC	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E06480	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E06544	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E06548	3
@@ -882,7 +873,6 @@ address_global	Code/GameEngine/Source/Common/Rva0023D30FCall.cpp	g_Rva0023D30FFl
 address_global	Code/GameEngine/Source/Common/Rva0023D339Check.cpp	g_bfmeRva42E8C1Add	2
 address_global	Code/GameEngine/Source/Common/Rva0023E7D9Clear.cpp	g_Rva00A00958	3
 address_global	Code/GameEngine/Source/Common/Rva0023E7D9Clear.cpp	g_Rva00A02D86	3
-address_global	Code/GameEngine/Source/Common/Rva0023E7D9Clear.cpp	g_Rva00A02D87	3
 address_global	Code/GameEngine/Source/Common/Rva0025C776Finish.cpp	g_Va00BBB8D8	2
 address_global	Code/GameEngine/Source/Common/Rva00262271Method.cpp	g_Va00BBB8E0	2
 address_global	Code/GameEngine/Source/Common/Rva0026228FMethod.cpp	g_Va00BBB8E0	2
@@ -1005,10 +995,7 @@ address_global	Code/GameEngine/Source/Common/Rva00516FA9Init.cpp	g_Va00A04904	2
 address_global	Code/GameEngine/Source/Common/Rva00518262Enable.cpp	g_Va00A04908	3
 address_global	Code/GameEngine/Source/Common/Rva005185D8Init.cpp	g_Va00A04908	8
 address_global	Code/GameEngine/Source/Common/Rva00518769Dtor.cpp	g_Va00A04908	3
-address_global	Code/GameEngine/Source/Common/Rva00518769Dtor.cpp	g_Va00A04910	3
 address_global	Code/GameEngine/Source/Common/Rva0051AF0BEnable.cpp	g_Va009FE4CC	2
-address_global	Code/GameEngine/Source/Common/Rva0051AF0BEnable.cpp	g_Va00A04910	4
-address_global	Code/GameEngine/Source/Common/Rva0051AF0BEnable.cpp	g_Va00E04910	1
 address_global	Code/GameEngine/Source/Common/Rva005210ECEnable.cpp	g_Va00E0492C	2
 address_global	Code/GameEngine/Source/Common/Rva00523775Dtor.cpp	g_Va00A04934	3
 address_global	Code/GameEngine/Source/Common/Rva00523775Dtor.cpp	g_Va00E046B8	3
@@ -1023,7 +1010,6 @@ address_global	Code/GameEngine/Source/Common/Rva00540E82Init.cpp	g_Va00BC74F0	3
 address_global	Code/GameEngine/Source/Common/Rva0054C742Dtor.cpp	g_Va00E05FAC	2
 address_global	Code/GameEngine/Source/Common/Rva00559A11.cpp	g_Va00BBB8D8	2
 address_global	Code/GameEngine/Source/Common/Rva0055A0DDEvaluate.cpp	g_Rva009D2398Basis	2
-address_global	Code/GameEngine/Source/Common/Rva0056E79EDtor.cpp	g_Va00E062EC	3
 address_global	Code/GameEngine/Source/Common/Rva005745D8.cpp	g_Va00BBB8D8	2
 address_global	Code/GameEngine/Source/Common/Rva005745D8.cpp	g_Va00BCF628	2
 address_global	Code/GameEngine/Source/Common/Rva005794EDDtor.cpp	g_Rva0107301CEmptyString	2
@@ -1541,12 +1527,10 @@ address_global	Code/GameEngine/Source/GameClient/GUI/ControlBar/UnitHelpSource.c
 address_global	Code/GameEngine/Source/GameClient/GUI/CountUpTransitionInit.cpp	g_Va007C9260	2
 address_global	Code/GameEngine/Source/GameClient/GUI/CountUpTransitionUpdate.cpp	g_Va007C9260	3
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptConnectionGridCallbacks.cpp	g_Va00E063F8	4
-address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptDisconnectScreen.cpp	g_Va00E048D0	5
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptDisconnectScreenShow.cpp	g_Va00A048CC	4
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptDisconnectScreenShow.cpp	g_Va00E05FAC	3
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptGuiFXCallbacks.cpp	g_Va00E022E0	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptInGameChat.cpp	g_Va00E04478	5
-address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptInGameChat.cpp	g_Va00E048D0	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptLanLobbyGameCreate.cpp	g_Va00E046B8	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptLanLobbyGetValidSelectedGameInfo.cpp	g_Va009FE958	1
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptMainMenuCallbacks.cpp	g_Va00E048DC	4
@@ -1570,7 +1554,6 @@ address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineH
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineHomeStatistics.cpp	g_Va00E064E4	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineHomeStatistics.cpp	g_Va00E06504	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineHomeStatistics.cpp	g_Va00E06524	2
-address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineLoginLocale.cpp	g_Va00E062EC	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineLoginLocale.cpp	g_Va00E062F0	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineShellCallbacks.cpp	g_Va00E04904	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineShellScreens.cpp	g_Va00DD1568	5
@@ -1579,10 +1562,8 @@ address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineS
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineShellScreens.cpp	g_Va00E06480	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineShellScreens.cpp	g_Va00E06550	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptPlayerStatusScreen.cpp	g_Va00A04450	6
-address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptPlayerStatusScreen.cpp	g_Va00E048D0	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptQuitMenuCallbacks.cpp	g_Rva0023D607Holder	4
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptQuitMenuCallbacks.cpp	g_Va00E0330C	2
-address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptQuitMenuCallbacks.cpp	g_Va00E048D0	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptQuitMenuCallbacks.cpp	g_Va00E0492C	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptSaveLoadCallbacks.cpp	g_Va00E032E0	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptSaveLoadCallbacks.cpp	g_Va00E032E8	5
@@ -1593,7 +1574,6 @@ address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptTimeLin
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/BfmeAptScreenLanLobby.cpp	g_Va00E032FC	3
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/BfmeAptScreenLanLobby.cpp	g_Va00E046B8	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/StrategicPlayerStatusCallbacks.cpp	g_Va00A04934	2
-address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/StrategicPlayerStatusCallbacks.cpp	g_Va00E048D0	2
 address_global	Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/MapSelectMenu_Rva0050D176.cpp	g_Va009FE16C	2
 address_global	Code/GameEngine/Source/GameClient/GUI/Gadget/GadgetTextEntryInput.cpp	g_Va00E032C8	3
 address_global	Code/GameEngine/Source/GameClient/GUI/Gadget/GadgetTextEntrySystem.cpp	g_Va00E032C8	2
@@ -1634,8 +1614,6 @@ address_global	Code/GameEngine/Source/GameClient/GUI/Rva00521206Dtor.cpp	g_Va00E
 address_global	Code/GameEngine/Source/GameClient/GUI/Shell/Rva00238B90Ctor.cpp	g_Va00DBA4E4	2
 address_global	Code/GameEngine/Source/GameClient/GUI/parseSpellIndex_Thunk.cpp	g_Va00E0330C	2
 address_global	Code/GameEngine/Source/GameClient/GUI/parseSpellIndex_Thunk.cpp	g_Va00E03314	3
-address_global	Code/GameEngine/Source/GameClient/GUI/parseSpellIndex_Thunk.cpp	g_Va00E048D0	2
-address_global	Code/GameEngine/Source/GameClient/GUI/parseSpellIndex_Thunk.cpp	g_Va00E04910	2
 address_global	Code/GameEngine/Source/GameClient/GameClientDrawableTOC.cpp	g_Va00DBA4E4	3
 address_global	Code/GameEngine/Source/GameClient/InGameUIUpdateAndDrawWorldAnimations.cpp	g_Va00DBA4E4	2
 address_global	Code/GameEngine/Source/GameClient/Rva0005117BFraction.cpp	g_Va00BBB8D8	1
@@ -1780,7 +1758,6 @@ address_global	Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp	g_Va00E
 address_global	Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp	g_Va00E02F3C	4
 address_global	Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldAIOrders.cpp	g_Va00E04508	2	allow=4bc790790ba6d9af45d26f5df1c074508ce2e9a6
 address_global	Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldAISupport/LivingWorldAIInformation.cpp	g_Va00E04544	2	allow=e47d11fae594f3154bb349c7af4abeb4e9feaa19
-address_global	Code/GameEngine/Source/GameNetwork/ConnectionManager_processDisconnectChat.cpp	g_Va00E048D0	3
 address_global	Code/GameEngine/Source/GameNetwork/DisconnectManagerRva004D4637.cpp	g_Va00BC2424	2
 address_global	Code/GameEngine/Source/GameNetwork/GameSpy/GameSpyStagingRoomSlotInit.cpp	g_Va00E063EC	3
 address_global	Code/GameEngine/Source/GameNetwork/GameSpy/GameSpyStagingRoomSlotInit.cpp	g_Va00E063F8	20
@@ -2255,7 +2232,6 @@ alternatename	Code/GameEngine/Source/Common/BfmeConv804.cpp	?g_bfmeObjECF@@3VBfm
 alternatename	Code/GameEngine/Source/Common/BfmeConv804.cpp	?g_bfmeObjECI@@3PAVBfmeObjECI@@A	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv812.cpp	?bfmeGetEHA@BfmeObjEHA@@QAEPAUBfmeSubEHA@@XZ	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv816O1.cpp	?g_bfmeCountELH@@3HA	1
-alternatename	Code/GameEngine/Source/Common/BfmeConv816O1.cpp	?g_bfmeObjELB@@3PAVBfmeObjELB@@A	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv881.cpp	?bfmeInitEOE@@YGXPAUBfmeThingEOE@@HHP6AXXZ1@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv908.cpp	?bfmeFind1052@BfmeI1052@@QAEHPADH@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeConv908.cpp	?bfmeFindVNC@BfmeKeyVNC@@QAEPAXPBDH@Z	1
@@ -2298,7 +2274,6 @@ alternatename	Code/GameEngine/Source/Common/BfmeOneHundredTwentyFive.cpp	?Gen008
 alternatename	Code/GameEngine/Source/Common/BfmeOneHundredTwentyFive.cpp	?Gen008B5050@@YAHPBDI@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeOneHundredTwentySix.cpp	?Gen008B8510@@YAHPBDI@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeOwnerCDECreate.cpp	??0BfmeThingCDE@@QAE@PAX00@Z	1
-alternatename	Code/GameEngine/Source/Common/BfmeSetupAPB.cpp	?g_bfmeDoneAPB@@3_NA	1
 alternatename	Code/GameEngine/Source/Common/BfmeSetupAPB.cpp	?g_bfmeOnAPB@@3_NA	1
 alternatename	Code/GameEngine/Source/Common/BfmeStrVM0Dtor.cpp	??1?$StringBase@D@@QAE@XZ	1
 alternatename	Code/GameEngine/Source/Common/BfmeStrVM0Dtor.cpp	?v01@BfmeStrVM0@@UAEXXZ	1
@@ -2347,7 +2322,6 @@ alternatename	Code/GameEngine/Source/Common/BfmeTwoHundredEightyThree.cpp	_bfmeC
 alternatename	Code/GameEngine/Source/Common/BfmeTwoHundredFiftyThree.cpp	?bfmeSearchQW@@YAPADPAD0E@Z	1
 alternatename	Code/GameEngine/Source/Common/BfmeTwoHundredFortyNine.cpp	_Rva0081B9D0	1
 alternatename	Code/GameEngine/Source/Common/BfmeTwoHundredSeventyThree.cpp	?bfmeFreeList@@3PAPAUBfmeFreeListNode@@A	1
-alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00A04910@@3PAUGlobalA04910@@A	1
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00A06398@@3PAVRva00583015Obj@@A	1
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00DEC3CC@@3HA	1
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00E04450@@3HA	1
@@ -2976,7 +2950,6 @@ alternatename	Code/GameEngine/Source/Common/Rva0050E9D3Enable.cpp	?g_Va00E046B4@
 alternatename	Code/GameEngine/Source/Common/Rva0051318EVotes.cpp	?g_Va007C9260@@3QBGB	1
 alternatename	Code/GameEngine/Source/Common/Rva005183A0Finish.cpp	??1OptionPreferences@@UAE@XZ	1
 alternatename	Code/GameEngine/Source/Common/Rva005189CFText.cpp	??1?$StringBase@D@@QAE@XZ	1
-alternatename	Code/GameEngine/Source/Common/Rva0051AF0BEnable.cpp	?g_Va00A04910@@3PAUGlobalA04910@@A	1
 alternatename	Code/GameEngine/Source/Common/Rva0051BED7Poll.cpp	?rva0051B09B@Rva0051BED7@@QAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva005279DDFinish.cpp	?rva005CB260@Rva005CB260@@QAEHH@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva00528B37Compare.cpp	_INV	1

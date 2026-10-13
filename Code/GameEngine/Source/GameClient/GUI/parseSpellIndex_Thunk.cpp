@@ -557,8 +557,8 @@ extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 // Further screens that keep the store closed while up
 // (ColdGlobalDwordGetters.cpp, AptDisconnectScreen.cpp).
 extern int g_Va00E0330C;
-extern int g_Va00E04910;
-extern int g_Va00E048D0;
+class AptQuitMenu; extern AptQuitMenu *TheAptQuitMenu;
+class DisconnectMenu; extern DisconnectMenu *TheDisconnectMenu;
 
 // TheScriptEngine (0x009FE16C): +0x1A104 is negative unless the game is ending.
 class ScriptEngine
@@ -663,7 +663,7 @@ void finishShowPurchaseScience(void)
 		return;
 	if (g_Va00E0330C)
 		return;
-	if (g_Va00E04910)
+	if ((*(int *)&TheAptQuitMenu))
 		return;
 	if ((unsigned char)((Rva0023C902 *)TheGameLogic)->rva0023C902())
 		return;
@@ -680,7 +680,7 @@ void finishShowPurchaseScience(void)
 		if (TheDisplay->slot87())
 			return;
 	}
-	if (g_Va00E048D0)
+	if ((*(int *)&TheDisconnectMenu))
 		return;
 
 	GameLogic *logic = TheGameLogic;

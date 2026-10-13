@@ -47,7 +47,7 @@ public:
 	void rva0057179D(bool flag);
 };
 
-extern int g_Va00E062EC;
+class BfmeObjELB; extern BfmeObjELB *g_bfmeObjELB;
 
 // Set when no locale is selected.
 // Retail loader-zeroed byte at VA 0x00E062F0; one owner for the flag.
@@ -95,5 +95,5 @@ void AptOnline::Login::AcceptLocale(const char *unused)
 	else
 		g_Va00E062F0 = true;
 	TheRva00222A8BTarget->invoke(m_owner->m_movie, "CallChild", 1, "DoCloseLocale", 0, 0, 0, 0);
-	((AptOnlineLogin *)g_Va00E062EC)->rva0057179D(m_d0);
+	((AptOnlineLogin *)(*(int *)&g_bfmeObjELB))->rva0057179D(m_d0);
 }

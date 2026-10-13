@@ -9,8 +9,8 @@ public:
 	virtual void f1();
 	virtual void __stdcall f2();
 };
-extern Rva000F0972Releasable *g_00DEBCE0;
-extern Rva000F0972Releasable *g_00DEBCDC;
+struct IDirect3DIndexBuffer8; extern IDirect3DIndexBuffer8 *shadowIndexBufferD3D;
+struct IDirect3DVertexBuffer8; extern IDirect3DVertexBuffer8 *shadowVertexBufferD3D;
 class W3DBufferManager
 {
 public:
@@ -31,13 +31,13 @@ struct Rva000F0972LockGuard
 void Rva000F0912::rva000F0972()
 {
 	Rva000F0972LockGuard guard;
-	if (g_00DEBCE0 != 0)
-		g_00DEBCE0->f2();
-	if (g_00DEBCDC != 0)
-		g_00DEBCDC->f2();
+	if ((*(Rva000F0972Releasable * *)&shadowIndexBufferD3D) != 0)
+		(*(Rva000F0972Releasable * *)&shadowIndexBufferD3D)->f2();
+	if ((*(Rva000F0972Releasable * *)&shadowVertexBufferD3D) != 0)
+		(*(Rva000F0972Releasable * *)&shadowVertexBufferD3D)->f2();
 	W3DBufferManager *mgr = TheW3DBufferManager;
-	g_00DEBCE0 = 0;
-	g_00DEBCDC = 0;
+	(*(Rva000F0972Releasable * *)&shadowIndexBufferD3D) = 0;
+	(*(Rva000F0972Releasable * *)&shadowVertexBufferD3D) = 0;
 	if (mgr != 0)
 	{
 		mgr->rva00115FF1();

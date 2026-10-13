@@ -10,7 +10,7 @@
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 struct GlobalA04910 { char pad[0x278]; unsigned char flag; char pad2[7]; int val; };
-extern GlobalA04910 *g_Va00A04910;
+class AptQuitMenu; extern AptQuitMenu *TheAptQuitMenu;
 struct GlobalA01E48 { char pad[0x54]; unsigned char flag; };
 class Shell;
 extern Shell *TheShell;
@@ -18,13 +18,13 @@ class Rva00222479ByteOneSetter { public: void enable(); };
 extern Rva00222479ByteOneSetter *g_Va009FE4CC;
 void __cdecl Rva0051AF0BEnable(int val)
 {
-	GlobalA04910 *p = g_Va00A04910;
+	GlobalA04910 *p = (*(GlobalA04910 * *)&TheAptQuitMenu);
 	if (!p)
 		return;
 	if (p->flag)
 		return;
 	p->flag = 1;
-	g_Va00A04910->val = val;
+	(*(GlobalA04910 * *)&TheAptQuitMenu)->val = val;
 	((GlobalA01E48 *)TheShell)->flag = 1;
 	g_Va009FE4CC->enable();
 }
@@ -136,7 +136,6 @@ void __cdecl Rva0051B09BEnable(void)
 	TheInGameUI->m_flag = 1;
 }
 // ?g_Va00A04910@@3PAUGlobalA04910@@A: the global at VA 0xe04910 is ?g_Va00E04910@@3HA.
-#pragma comment(linker, "/alternatename:?g_Va00A04910@@3PAUGlobalA04910@@A=?g_Va00E04910@@3HA")
 
 // Complete native37 boundary3E468F..3E46B4; same existing global provider.
 // Two bool vslots at 50 and 4C, short-circuited in that order; no arguments

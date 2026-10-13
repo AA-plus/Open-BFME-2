@@ -55,7 +55,7 @@ struct GlobalA04910
 	char m_pad[0x278];
 	unsigned char m_278;
 };
-extern GlobalA04910 *g_Va00A04910;
+class AptQuitMenu; extern AptQuitMenu *TheAptQuitMenu;
 
 struct GlobalA01E48
 {
@@ -112,7 +112,7 @@ AptOptions::~AptOptions()
 		{
 			((Rva00238E1B *)((ClientFrameSubsystem *)TheGameClient))->rva00238F91(m_29C, m_2A0, m_2A4);
 		}
-		if (g_Va00A04910 != 0 && g_Va00A04910->m_278 != 0)
+		if ((*(GlobalA04910 * *)&TheAptQuitMenu) != 0 && (*(GlobalA04910 * *)&TheAptQuitMenu)->m_278 != 0)
 		{
 			if (TheShell != 0)
 			{

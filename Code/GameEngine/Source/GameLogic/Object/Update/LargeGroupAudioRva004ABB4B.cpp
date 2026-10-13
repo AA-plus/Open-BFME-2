@@ -54,7 +54,7 @@ struct HostClock
 	int m_3C;
 };
 
-extern Rva0020D959Host *g_00DFE1A8;
+class LargeGroupAudio; extern LargeGroupAudio *TheLargeGroupAudio;
 
 #include "../../../Common/GameLogicObjectLookupView.h"
 
@@ -108,12 +108,12 @@ UpdateSleepTime LargeGroupAudioUpdate::update()
 		|| Rva000B3EECNotEqual(block19, &m_30)
 		|| Rva002634F8NotEqual(block4, &m_7C)
 		|| fresh != m_8C
-		|| m_90 <= ((HostClock *)g_00DFE1A8)->m_3C)
+		|| m_90 <= ((HostClock *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->m_3C)
 	{
 		LargeGroupAudioUpdate *parent =
 			this;
 		int slot = parent ? (int)((char *)this + 0x24) : 0;
-		((Rva0020DXXX *)g_00DFE1A8)->rva0020D8F1(slot);
+		((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->rva0020D8F1(slot);
 		FloatPair pair;
 		pair.x = obj->m_f38;
 		pair.y = obj->m_f3C;

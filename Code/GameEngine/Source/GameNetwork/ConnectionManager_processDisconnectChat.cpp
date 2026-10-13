@@ -44,7 +44,7 @@ public:
 };
 
 // TheDisconnectMenu.
-extern int g_Va00E048D0;
+class DisconnectMenu; extern DisconnectMenu *TheDisconnectMenu;
 
 class ConnectionManager
 {
@@ -57,10 +57,10 @@ private:
 
 void ConnectionManager::processDisconnectChat(NetDisconnectChatCommandMsg *msg)
 {
-	if (g_Va00E048D0 != 0)
+	if ((*(int *)&TheDisconnectMenu) != 0)
 	{
 		UnicodeString unitext;
 		unitext.format(L"[%ls] %ls", getPlayerName(msg->getPlayerID()).str(), msg->rva004D6119().str());
-		((Rva00513138 *)g_Va00E048D0)->rva00513138(unitext);
+		((Rva00513138 *)(*(int *)&TheDisconnectMenu))->rva00513138(unitext);
 	}
 }
