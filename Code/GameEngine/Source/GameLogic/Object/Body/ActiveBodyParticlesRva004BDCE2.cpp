@@ -3,7 +3,7 @@
 // ?updateBodyParticleSystems@Rva0020FE20ActiveBodyInterface@@UAEXXZ
 // partial score=0.97 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
-// ?updateBodyParticleSystems@Rva0020FE20ActiveBodyInterface@@UAEXXZ,
+// ?updateBodyParticleSystems@Rva0020FE20ActiveBodyInterface@@UAEXXZ
 // retail 0x004BDCE2..0x004BDECB (745 B, EH-protected, RET0).  Ported from the
 // BFME1-tree lane-20 reconstruction
 // game/GameEngine/Source/GameLogic/Object/Body/ActiveBody_updateBodyParticleSystems_Thunk.cpp
@@ -34,11 +34,16 @@ extern ParticleSystemManager *TheParticleSystemManager;
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 
+enum ObjectStatusTypes
+{
+	OBJECT_STATUS_AFLAME = 0xa
+};
+
 class Object
 {
 public:
-	unsigned char m_opaque[0x90];
-	UnsignedInt m_status;
+	bool testStatus(ObjectStatusTypes status) const;	// 0x0004E536
+	unsigned char m_opaque[0x94];
 };
 
 class BehaviorModule
@@ -138,10 +143,9 @@ struct Rva0020FE20ParticleGlobalData
 #define BFME_ACTIVE_BODY_PARTICLE_GLOBAL \
 	(*reinterpret_cast<const Rva0020FE20ParticleGlobalData *>((const void *)TheWritableGlobalData))
 
-#define BFME_OBJECT_IS_AFLAME(obj) \
-	((*(const UnsignedInt *)((const unsigned char *)(obj) + 0x90) & 0x400u) != 0)
+#define BFME_OBJECT_IS_AFLAME(obj) ((obj)->testStatus(OBJECT_STATUS_AFLAME))
 
-// ?updateBodyParticleSystems@ActiveBody@@UAEXXZ
+// ?updateBodyParticleSystems@Rva0020FE20ActiveBodyInterface@@UAEXXZ
 void Rva0020FE20ActiveBodyInterface::updateBodyParticleSystems(void)
 {
 	static const ParticleSystemTemplate *fireSmallTemplate = TheParticleSystemManager->findTemplate(BFME_ACTIVE_BODY_PARTICLE_GLOBAL.m_autoFireParticleSmallSystem);
