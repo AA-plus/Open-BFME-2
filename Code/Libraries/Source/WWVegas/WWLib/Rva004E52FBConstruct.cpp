@@ -19,3 +19,7 @@ template <> void _Construct<Rva004E5012, Rva004E5012>(
 	new ((void *)p) Rva004E5012(val);
 }
 }
+
+// Native 0x00791FC9: complete 14-byte placement-new failure cleanup.
+// The exact 45-byte parent and native EH graph bind this action to the
+// existing no-op placement delete; the original record identity stays unknown.
