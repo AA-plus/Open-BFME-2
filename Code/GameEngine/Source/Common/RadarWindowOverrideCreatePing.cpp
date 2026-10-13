@@ -17,8 +17,8 @@ class Rva002D4FDB;
 class Rva002D5333;
 typedef _STL::list<Rva002D5333*> PingList;
 typedef PingList::iterator PingIterator;
-class Rva002D3556 {public:__forceinline Rva002D3556():references(0){}virtual~Rva002D3556(){}virtual void rva002D3D2A()=0;virtual void rva002D4AEF(float,float)=0;virtual void rva002D4BA5()=0;int references;};
-class Rva002D5333:public Rva002D3556 {public:Rva002D5333(Rva002D4FDB*,PingIterator,const AsciiString&);virtual~Rva002D5333();virtual void rva002D3D2A();virtual void rva002D4AEF(float,float);virtual void rva002D4BA5();__declspec(noinline) void rva005CB265();private:Rva002D4FDB*owner;PingIterator position;AsciiString name;bool displayed,closed;int id;float x,y;};
+class Rva002D3556 {public:__forceinline Rva002D3556():references(0){}virtual~Rva002D3556(){}virtual void rva002D3D2A()=0;virtual void rva002D4AEF(float,float)=0;virtual void DoStartFade()=0;int references;};
+class Rva002D5333:public Rva002D3556 {public:Rva002D5333(Rva002D4FDB*,PingIterator,const AsciiString&);virtual~Rva002D5333();virtual void rva002D3D2A();virtual void rva002D4AEF(float,float);virtual void DoStartFade();__declspec(noinline) void rva005CB265();private:Rva002D4FDB*owner;PingIterator position;AsciiString name;bool displayed,closed;int id;float x,y;};
 class RadarEventRefSlot;
 class Rva002D4FDB {public:RadarEventRefSlot rva002D4FDB(const char*);char unknown0[0x5C];void*aptOwner;char unknown60[0x144-0x60];int nextId;PingList pings;};
 class BfmeAptWindowManager;extern BfmeAptWindowManager*g_bfmeAptWindowManager;
@@ -28,8 +28,8 @@ struct PingOwnerView {char gap[0x5C];void*aptOwner;};
 
 Rva002D5333::Rva002D5333(Rva002D4FDB*parent,PingIterator pos,const AsciiString&input):owner(parent),position(pos),name(input),displayed(false),closed(false),id(parent->nextId++),x(0),y(0){*position=this;if(parent->nextId>=0xffff)parent->nextId=0;}
 
-void Rva002D5333::rva002D4BA5(){if(closed)return;if(displayed&&owner)Rva002D4531Invoke((Rva00222A8BTarget*)g_bfmeAptWindowManager,(void*)owner->aptOwner,"FadeOutRadarPing",id);closed=true;}
-Rva002D5333::~Rva002D5333(){if(!closed)rva002D4BA5();}
+void Rva002D5333::DoStartFade(){if(closed)return;if(displayed&&owner)Rva002D4531Invoke((Rva00222A8BTarget*)g_bfmeAptWindowManager,(void*)owner->aptOwner,"FadeOutRadarPing",id);closed=true;}
+Rva002D5333::~Rva002D5333(){if(!closed)DoStartFade();}
 
 namespace _STL {
 template<> list<Rva002D5333*>::_Node *list<Rva002D5333*>::_M_create_node(Rva002D5333*const&);
@@ -85,4 +85,4 @@ void Rva002D5333::rva002D4AEF(float newX,float newY){if(PingAbs(newX-x)>=0.5f||P
 
 // Native5CB265 is the shared five-byte tail dispatch through vslot3.
 // This typed ping view uses the proven fade slot of C02C1C.
-void Rva002D5333::rva005CB265(){rva002D4BA5();}
+void Rva002D5333::rva005CB265(){DoStartFade();}

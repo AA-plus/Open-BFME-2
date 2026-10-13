@@ -421,7 +421,7 @@ public:
 	virtual ~Rva002D3556() {}
 	virtual void rva002D3D2A() = 0;
 	virtual void rva002D4AEF(float, float) = 0;
-	virtual void rva002D4BA5() = 0;
+	virtual void DoStartFade() = 0;
 	int references;
 };
 

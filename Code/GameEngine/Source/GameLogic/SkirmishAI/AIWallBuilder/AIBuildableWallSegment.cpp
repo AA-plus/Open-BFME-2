@@ -39,7 +39,7 @@ extern BuildAssistant *TheBuildAssistant;
 class Rva0055ADD8
 {
 public:
-    int rva0055ADD8(int ignored);
+    int failBuild(int ignored);
 };
 
 class AIBuildableStructure
@@ -81,7 +81,7 @@ bool AIBuildableWallSegment::build(Player *player)
         m_producedObjectID = terminalHub->m_id;
         return true;
     }
-    ((Rva0055ADD8 *)this)->rva0055ADD8((int)player);
+    ((Rva0055ADD8 *)this)->failBuild((int)player);
     return false;
 }
 

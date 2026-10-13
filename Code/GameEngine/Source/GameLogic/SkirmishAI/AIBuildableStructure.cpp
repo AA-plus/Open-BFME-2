@@ -24,7 +24,7 @@ class Object { public: char pad[0x74]; ObjectID id; char pad78[0x258-0x78]; AIUp
 class ThingFactory { public: const ThingTemplate *findTemplate(const AsciiString &name); };
 class ThingFactory;
 extern ThingFactory *TheThingFactory;
-class Rva0055ADD8 { public: int rva0055ADD8(int); };
+class Rva0055ADD8 { public: int failBuild(int); };
 class AIBuildableStructure {
 public:
 #define SLOT(n) virtual void s##n();
@@ -48,7 +48,7 @@ bool AIBuildableStructure::build(Player *player)
  AIUpdateView *ai=dozer->ai;
  Object *created=ai->buildStructure(thing,&position(),rotation(),player,0,0);
  if (created) { produced=created->id; return true; }
- ((Rva0055ADD8 *)this)->rva0055ADD8((int)player);
+ ((Rva0055ADD8 *)this)->failBuild((int)player);
  return false;
 }
 

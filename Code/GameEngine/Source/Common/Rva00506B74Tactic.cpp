@@ -199,7 +199,7 @@ public:
 	virtual void v0(); virtual void v1(); virtual void v2();
 	virtual void v3(); virtual void v4(); virtual void v5();
 	virtual void v6(void *owner, int flag);	// +0x18
-	void rva0055ADBA(void *owner);
+	void unRegisterWithBuilder(void *owner);
 	float m_04;
 	char m_pad08[0x24 - 8];
 	int m_24;
@@ -340,7 +340,7 @@ void AIBaseBuilder::notifyBuildingDestroyed(Object *obj)
 		for (Rva00506FE9Hit **h = hits.begin(); h != hits.end(); ++h) {
 			Rva00506FE9Hit *hit = *h;
 			if (hit->m_24 == ((Rva00506FE9ObjectView *)obj)->m_id) {
-				hit->rva0055ADBA(m_08);
+				hit->unRegisterWithBuilder(m_08);
 				float v = hit->m_04;
 				hit->m_04 = data->m_88 * v;
 				hit->v6(m_08, 0);

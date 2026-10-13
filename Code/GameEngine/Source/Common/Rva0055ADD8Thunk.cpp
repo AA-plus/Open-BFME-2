@@ -1,5 +1,5 @@
 // cl: /MD
-// ?rva0055ADD8@Rva0055ADD8@@QAEHH@Z @ 0x0055ADD8, 10 bytes.
+// ?failBuild@Rva0055ADD8@@QAEHH@Z @ 0x0055ADD8, 10 bytes.
 // Thunk forwarding constant 3 to vtable slot 7 ignoring its int arg.
 // Evidence: retail mov eax [ecx] push 3 call [eax+0x1C] ret 4; callers
 // 0x573CED 0x4ECCB1 pass through their own arg; vslot 7 of unknown class.
@@ -14,10 +14,10 @@ public:
 	virtual void v5();
 	virtual void v6();
 	virtual int v7(int x);
-	int rva0055ADD8(int ignored);
+	int failBuild(int ignored);
 };
 
-int Rva0055ADD8::rva0055ADD8(int ignored)
+int Rva0055ADD8::failBuild(int ignored)
 {
 	(void)ignored;
 	return v7(3);

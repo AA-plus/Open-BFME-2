@@ -229,7 +229,7 @@ public:
 };
 
 struct Rva005996FFArg;
-class Rva005996FF { public: void rva005996FF(Rva005996FFArg *, bool); };
+class Rva005996FF { public: void unRegisterDozer(Rva005996FFArg *, bool); };
 class AIDozerManager
 {
 public:
@@ -448,7 +448,7 @@ int GetGameLogicRandomValue(int lo, int hi, char *file, int line);
 class Rva00506FE9Hit
 {
 public:
-	void rva0055ADBA(void *owner);
+	void unRegisterWithBuilder(void *owner);
 };
 
 class Rva004E9378
@@ -553,7 +553,7 @@ private:
 __declspec(noinline) inline AIStructureCreepTactic::~AIStructureCreepTactic()
 {
 	if (m_order) {
-		((Rva00506FE9Hit *)m_order)->rva0055ADBA(m_owner);
+		((Rva00506FE9Hit *)m_order)->unRegisterWithBuilder(m_owner);
 		::delete m_order;
 		m_order = 0;
 	}
@@ -737,7 +737,7 @@ void AIStructureCreepTactic::run()
 					Team *team = TheTeamFactory->createTeamOnPrototype(reinterpret_cast<TeamPrototype *>(proto), false);
 					NotifyTeamCreated(team);
 					obj->setTeam(team);
-					((Rva005996FF *)&record->m_140)->rva005996FF(
+					((Rva005996FF *)&record->m_140)->unRegisterDozer(
 						reinterpret_cast<Rva005996FFArg *>(obj), false);
 					if (!team->m_5D) {
 						team->m_5E = true;

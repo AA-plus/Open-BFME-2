@@ -195,7 +195,7 @@ public:
 class Rva00506FE9Hit
 {
 public:
-	void rva0055ADBA(void *owner);
+	void unRegisterWithBuilder(void *owner);
 };
 
 class GameSlot
@@ -443,7 +443,7 @@ void AIBase::rva005ADC63()
 	Rva00573E7C *owned = m_owned;
 	if (owned) {
 		if (((Rva004E9378 *)owned)->rva004E9378()) {
-			((Rva00506FE9Hit *)owned)->rva0055ADBA(m_owner);
+			((Rva00506FE9Hit *)owned)->unRegisterWithBuilder(m_owner);
 			::delete m_owned;
 			m_owned = 0;
 		}

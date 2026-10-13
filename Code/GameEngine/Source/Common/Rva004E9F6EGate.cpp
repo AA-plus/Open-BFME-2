@@ -1,6 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /MD /EHsc
 //
-// ?rva004E9F6E@Rva004E9F6E@@QAEXXZ @0x004E9F6E 68B.
+// ?postInit@Rva004E9F6E@@QAEXXZ @0x004E9F6E 68B.
 // Empty-name gate: probe the +0x08 key through rowed 0x002A8B59 on the
 // 0x00DFEEF8 world; when the returned record's +0x28 name compares equal to
 // AsciiString::TheEmptyString, set the +0x04 flag. When the global
@@ -43,7 +43,7 @@ public:
 class Rva004E9F6E
 {
 public:
-	void rva004E9F6E();
+	void postInit();
 private:
 	char m_pad[4];
 	unsigned char m_4;
@@ -51,7 +51,7 @@ private:
 	void *m_8;
 };
 
-void Rva004E9F6E::rva004E9F6E()
+void Rva004E9F6E::postInit()
 {
 	Rva002A8B59Data *rec = ((Rva002A8F24 *)g_00DFEEF8)->rva002A8B59(m_8);
 	if (rec->m_28.compare(AsciiString::TheEmptyString) == 0)

@@ -10,7 +10,7 @@ public:
 class Rva004EC276
 {
 public:
-	void rva004EC83F(void *x);
+	void registerBuildable(void *x);
 };
 
 extern Rva002A8F24 *g_00DFEEF8;
@@ -31,7 +31,7 @@ void AIBuildable::registerWithBuilder(void *x, bool flag)
 	Rva002A8AB1Record *rec = g_00DFEEF8->rva002A8AB1(x);
 	if (!flag)
 		m_10 = 0;
-	((Rva004EC276 *)rec)->rva004EC83F(this);
+	((Rva004EC276 *)rec)->registerBuildable(this);
 }
 
 // ?registerWithBuilder@Rva00596CDF@@UAEXPAX_N@Z retail 0x00596C7C 9B: slot 6

@@ -65,7 +65,7 @@ struct Rva005996FFArg
 class Rva005996FF
 {
 public:
-	void rva005996FF(Rva005996FFArg *arg, bool flag);
+	void unRegisterDozer(Rva005996FFArg *arg, bool flag);
 };
 
 class AIDozerManager
@@ -152,7 +152,7 @@ AIBuilder::AIBuilder(Player *player)
 
 void AIBuilder::notifyDozerDead(Rva005996FFArg *arg)
 {
-	((Rva005996FF *)((char *)this + 0x140))->rva005996FF(arg, true);
+	((Rva005996FF *)((char *)this + 0x140))->unRegisterDozer(arg, true);
 	_STL::list<int>::iterator it = m_list.begin();
 	if (it == m_list.end())
 		return;

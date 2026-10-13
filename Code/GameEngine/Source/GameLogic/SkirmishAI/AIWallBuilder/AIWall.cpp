@@ -203,7 +203,7 @@ public:
 	const CommandButton *m_30;	// +0x30 the button
 };
 
-class Rva00506FE9Hit { public: void rva0055ADBA(void *); };
+class Rva00506FE9Hit { public: void unRegisterWithBuilder(void *); };
 
 // Existing owned predicate4E9378 tests order state10 for 2 or 3.
 class Rva004E9378 { public: bool rva004E9378(); };
@@ -350,7 +350,7 @@ void AIWall::updateState(bool left)
                     }
                 }
             } else {
-                reinterpret_cast<Rva00506FE9Hit *>(current)->rva0055ADBA(m_18);
+                reinterpret_cast<Rva00506FE9Hit *>(current)->unRegisterWithBuilder(m_18);
                 current->slot06(m_18, 0);
             }
         }

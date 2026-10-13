@@ -64,11 +64,11 @@ class Player;class Object{public:char pad[0x74];ObjectID id;};
 extern GameLogic*TheGameLogic;
 class Rva004E9378{public:bool rva004E9378();};
 class Rva00506B1B{public:void rva00506B2F();};
-class Rva0055ADD8{public:int rva0055ADD8(int);};
+class Rva0055ADD8{public:int failBuild(int);};
 class AIBuildable{public:int doCanMake(Player*);bool doBuild(Player*);};
 class AIUnitBuilder{public:Object*Rva005982EA(const AsciiString*,_STL::vector<ObjectID>*,bool);};
 struct Rva005996FFArg;
-class Rva005996FF{public:void rva005996FF(Rva005996FFArg*,bool);};
+class Rva005996FF{public:void unRegisterDozer(Rva005996FFArg*,bool);};
 class AIDozerManager{public:void*rva00599870(const Coord3D&,int);void rva00599EDC();char data[0x14];};
 // Existing dozer callee pin retains its opaque four-byte return spelling;
 // this caller consumes those bits as ObjectID without dereferencing them.
@@ -121,16 +121,16 @@ void AIBuilder::update(){
     if(can==0){
      if(((AIBuildable*)selected)->doBuild(owner00)){
       orders13C.push_back((const int&)selected);selected->slot07(1);
-      if(selected->slot04())((Rva005996FF*)&dozer140)->rva005996FF((Rva005996FFArg*)TheGameLogic->findObjectByID(selected->producer08),false);
+      if(selected->slot04())((Rva005996FF*)&dozer140)->unRegisterDozer((Rva005996FFArg*)TheGameLogic->findObjectByID(selected->producer08),false);
       success=true;
-     }else ((Rva0055ADD8*)selected)->rva0055ADD8((int)owner00);
+     }else ((Rva0055ADD8*)selected)->failBuild((int)owner00);
      entries130.erase(it);
     }
     if(!success&&assigned)selected->producer08=INVALID_OBJECT_ID;
     break;
    }
    if(assigned)entry->producer08=INVALID_OBJECT_ID;
-   if(can==10)((Rva0055ADD8*)entry)->rva0055ADD8((int)owner00);
+   if(can==10)((Rva0055ADD8*)entry)->failBuild((int)owner00);
   }
  }
  for(it=entries130.begin();it!=entries130.end();){

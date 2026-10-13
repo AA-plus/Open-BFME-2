@@ -139,7 +139,7 @@ public:
 class Rva00506FE9Hit
 {
 public:
-	void rva0055ADBA(void *owner);
+	void unRegisterWithBuilder(void *owner);
 };
 
 class Rva00573A00
@@ -245,7 +245,7 @@ void AISimpleExpansionTactic::cleanUp()
 	Rva00573B23 *order = m_order;
 	if (order) {
 		if (!((Rva004E9378 *)order)->rva004E9378())
-			((Rva00506FE9Hit *)order)->rva0055ADBA(m_owner);
+			((Rva00506FE9Hit *)order)->unRegisterWithBuilder(m_owner);
 		::delete m_order;
 		m_order = 0;
 	}

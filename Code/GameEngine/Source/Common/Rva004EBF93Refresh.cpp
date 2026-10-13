@@ -21,13 +21,13 @@ public:
 class Rva004E9F6E
 {
 public:
-	void rva004E9F6E();
+	void postInit();
 };
 
 class Rva00598F24
 {
 public:
-	void rva00598F24();
+	void postInit();
 };
 
 class Rva00598CBC
@@ -93,8 +93,8 @@ void Rva004EBF93::rva004EBF93()
 {
 	m_04.postInit();
 	m_B4.postInit();
-	m_E4.rva004E9F6E();
-	m_FC.rva00598F24();
+	m_E4.postInit();
+	m_FC.postInit();
 	m_38.rva00598CBC();
 	m_12C->postInit();
 	Rva004EBF93World *w = (Rva004EBF93World *)((char *)g_00DFEEF8 + 0x10);

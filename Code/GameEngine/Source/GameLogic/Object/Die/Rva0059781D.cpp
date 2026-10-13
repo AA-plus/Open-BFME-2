@@ -59,7 +59,7 @@ public:
 class Rva00506FE9Hit
 {
 public:
-	void rva0055ADBA(void *p);
+	void unRegisterWithBuilder(void *p);
 };
 
 void __cdecl operator delete(void *p);
@@ -93,7 +93,7 @@ void Rva0059781D::rva0059781D()
 		}
 		if (e->m_34 != 0)
 		{
-			((Rva00506FE9Hit *)e)->rva0055ADBA(m_14);
+			((Rva00506FE9Hit *)e)->unRegisterWithBuilder(m_14);
 		}
 		void *p = *it;
 		void *q = 0;
@@ -122,7 +122,7 @@ void Rva0059781D::rva0059781D()
 		}
 		if (e->m_2c != 0)
 		{
-			((Rva00506FE9Hit *)e)->rva0055ADBA(m_14);
+			((Rva00506FE9Hit *)e)->unRegisterWithBuilder(m_14);
 		}
 		void *p = *it2;
 		void *q = 0;

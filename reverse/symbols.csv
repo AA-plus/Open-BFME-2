@@ -11646,7 +11646,6 @@ name,address,notes
 ?rva00542067@Rva00542225@@QAEXXZ,0x00542067,no-arg thiscall member init called at the end of ctor 0x00542225; identity unproven; address-derived owner
 ?rva00542148@Rva005422CF@@QAEXXZ,0x00542148,no-arg thiscall member init called at the end of ctor 0x005422CF; identity unproven; address-derived owner
 ?rva005494A0@BfmeC986@@QAEXHH@Z,0x005494A0,two-arg step on same this in rva003724B8 at 0x37251E (REL32); return ignored; identity not recovered
-?rva0055ADBA@Rva00506FE9Hit@@QAEXPAX@Z,0x0055ADBA,hit update with the owner; REL32 at 0x00507087 in Rva00506B74::rva00506FE9
 ?rva0055B863@Rva0055B863Target@@QAEXH@Z,0x0055B863,"method a vtable-slot forwarder tail-jumps to (ret 4); opaque address name"
 ?rva005657FE@Elem0052BFE1@@QAE_NHH@Z,0x005657FE,thiscall predicate for stride search 0x0052BFE1 (REL32 at 0x0052C00F); Ghidra 103B unrecovered; address name
 ?rva005659CA@Rva005659CA@@QAEXXZ,0x005659CA,shared clear for 8B virtual overflows

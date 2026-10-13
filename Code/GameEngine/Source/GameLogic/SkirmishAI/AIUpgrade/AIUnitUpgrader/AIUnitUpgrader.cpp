@@ -62,7 +62,7 @@ void AIUnitUpgrader::Register(Object *object, void *)
 // WB 0x01528530 asserts140..154. This receiver has owner+20 and only
 // two vectors; Register/UnRegister use the distinct owner+2C view.
 // Keep its neutral address name until a complete class relationship is proven.
-class Rva00506FE9Hit { public: void rva0055ADBA(void *); };
+class Rva00506FE9Hit { public: void unRegisterWithBuilder(void *); };
 class Rva004E9378 { public: bool rva004E9378(); };
 class Rva005975C0 { public: void rva005975C0(); };
 class ModuleData;
@@ -104,7 +104,7 @@ void Rva00599264::update()
  while (i!=upgrading.end()) {
    UnitUpgradeRecordView *item=(UnitUpgradeRecordView *)*i;
    if (!TheGameLogic->findObjectByID(item->object) || ((Rva004E9378 *)item)->rva004E9378()) {
-     ((Rva00506FE9Hit *)item)->rva0055ADBA(owner);
+     ((Rva00506FE9Hit *)item)->unRegisterWithBuilder(owner);
      UnitUpgradeRecordView *gone=(UnitUpgradeRecordView *)*i;
      operator delete(gone ? gone->destroy(0) : 0);
      i=(const ModuleData **)((_STL::vector<void *> *)vec)->erase((void **)i);
@@ -135,7 +135,7 @@ void AIUnitUpgrader::UnRegister(Object *object)
  while (j!=completed.end()) {
    UnitUpgradeRecordView *item=(UnitUpgradeRecordView *)*j;
    if ((TheGameLogic?TheGameLogic:TheGameLogic)->findObjectByID(item->object)==(void *)object) {
-     ((Rva00506FE9Hit *)item)->rva0055ADBA(owner);
+     ((Rva00506FE9Hit *)item)->unRegisterWithBuilder(owner);
      operator delete(item->destroy(0));
      j=completed.erase(j);
    } else ++j;

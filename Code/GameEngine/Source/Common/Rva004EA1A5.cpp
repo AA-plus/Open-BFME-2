@@ -47,7 +47,7 @@ public:
 class Rva00506FE9Hit
 {
 public:
-	void rva0055ADBA(void *x);
+	void unRegisterWithBuilder(void *x);
 };
 
 class CreateAHeroData
@@ -110,7 +110,7 @@ void Rva004EA1A5::rva004EA1A5(void *x)
 			CreateAHeroData **found = _STL::find(vbeg, vend, t);
 			if (found != vend)
 				self->m_vec24.erase((void **)found);
-			((Rva00506FE9Hit *)t)->rva0055ADBA((self->m_14?self->m_14:self->m_14));
+			((Rva00506FE9Hit *)t)->unRegisterWithBuilder((self->m_14?self->m_14:self->m_14));
 		}
 		++t->m_6C;
 		t->m_64 = 0;

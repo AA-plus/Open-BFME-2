@@ -79,7 +79,7 @@ class ThingTemplate {public:int rva0033A69A(const Player*,int,int)const;};
 class ThingFactory {public:const ThingTemplate *findTemplate(const AsciiString &name);};
 extern ThingFactory *TheThingFactory;
 struct Rva00598961Template {char pad00[0x113];unsigned char field113;};
-class Rva00506FE9Hit {public:void rva0055ADBA(void*);};
+class Rva00506FE9Hit {public:void unRegisterWithBuilder(void*);};
 class Rva00598C3AItem
 {
 public:
@@ -260,7 +260,7 @@ void AIUnitBuilder::manageConstructingList()
   case 2: case 3:
    Rva00598961Template *thing=(Rva00598961Template*)TheThingFactory->findTemplate(item->name0C);
    if(thing->field113&4)m_34=false;
-   ((Rva00506FE9Hit*)item)->rva0055ADBA(m_30);
+   ((Rva00506FE9Hit*)item)->unRegisterWithBuilder(m_30);
    ::delete item;
    i=m_items.erase(i);
    break;
