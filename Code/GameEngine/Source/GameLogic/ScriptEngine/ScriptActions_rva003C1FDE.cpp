@@ -23,7 +23,7 @@ public:
 	virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59();
 	virtual void v60(); virtual void v61(); virtual void v62(); virtual void v63();
 	virtual void v64(); virtual void v65(); virtual void v66();
-	virtual void v67(AsciiString s, void *a2, int n);
+	virtual void v67(AsciiString s, bool a2, int n);
 	char m_pad[0x10c - 4];
 	unsigned char m_flag10c;
 };
@@ -37,10 +37,10 @@ public:
 	virtual void w08(); virtual void w09(); virtual void w10(); virtual void w11();
 	virtual void w12(); virtual void w13(); virtual void w14();
 	virtual void w15(int x);
-	void rva003C1FDE(const AsciiString &a1, void *dead);
+	void rva003C1FDE(const AsciiString &a1, bool dead);
 };
 
-void Rva003C1FDE::rva003C1FDE(const AsciiString &a1, void *dead)
+void Rva003C1FDE::rva003C1FDE(const AsciiString &a1, bool dead)
 {
 	(void)dead;
 	w15(1);

@@ -1,3 +1,6 @@
+// cl: -O1 -arch:SSE -G7 /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// stlport
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
 // ?doNamedEnableCameraFading@ScriptActions@@IAEXPAVParameter@@PAX@Z @ 0x003BBD02 (55B).
 // Free-function wrapper: looks up Object via TheScriptEngine getUnitNamed
@@ -8,7 +11,7 @@
 class Parameter;
 class Drawable {
 public:
-    void rva00273686(void *arg);
+    void rva00273686(bool arg);
 };
 class Thing {
 public:
@@ -22,13 +25,9 @@ public:
 };
 extern class ScriptEngine *TheScriptEngine;
 
-class ScriptActions
-{
-protected:
-	void doNamedEnableCameraFading(Parameter *p, void *arg);
-};
 
-void ScriptActions::doNamedEnableCameraFading(Parameter *p, void *arg)
+
+void ScriptActions::doNamedEnableCameraFading(Parameter *p, bool arg)
 {
     Object *obj = TheScriptEngine->getUnitNamed(p);
     if (!obj)

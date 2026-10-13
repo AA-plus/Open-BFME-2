@@ -150,7 +150,7 @@ public:
     void Rva003C4003Apply(Parameter *, AsciiString const &, void *);
     void Rva003C43F3Do(AsciiString const &, AsciiString const &, Object *);
     void bfmeLinkObjectsA70(void *, void *);
-    void bfmeGoFGE(void *, void *, void *);
+    void bfmeGoFGE(void *a, void *b, bool c);
     void Rva003C0DE1Do(AsciiString const &, bool);
     void Rva003C0849Do(AsciiString const &, AsciiString const &, AsciiString const &);
     void Rva003C07C1Do(AsciiString const &, AsciiString const &, AsciiString const &);
@@ -210,7 +210,7 @@ public:
     void Rva003BBEE9(void);
     void rva003BBD84(AsciiString const &);
     void rva003BBDC4(AsciiString const &);
-    void rva003BD2A6(int);
+    void rva003BD2A6(bool value);
     void rva003BD32B(int);
     void rva003BD36F(int);
     void Rva003BD062Set(void *p, const AsciiString *templateName, bool flag);
@@ -218,7 +218,7 @@ public:
     void rva003BD3CB(void *, float, int);
     void Rva003BD884Set(Parameter *, AsciiString const *);
     void Rva003BE9DBSet(AsciiString const &, float);
-    void Rva003BECCDSet(AsciiString const &, int, int);
+    void Rva003BECCDSet(const AsciiString &team, const AsciiString &key, bool state);
     void Rva003BFAC3Set(AsciiString const &, int);
     void Rva003BFD5ASet(AsciiString const &);
     void Rva003C0C3ESet(AsciiString const &);
@@ -229,7 +229,7 @@ public:
     void Rva003C075BDo(AsciiString const *, AsciiString const *);
     void Rva003C1F6CDo(AsciiString const *, int);
     void Rva003C21E5Do(AsciiString const *, int, AsciiString const *, AsciiString const *);
-    void Rva003C35AADo(AsciiString const *, void *, bool);
+    void Rva003C35AADo(const AsciiString *teamName, bool x, bool flag);
     void Rva003BBEF4(int, float);
     void Rva003BB79DDo(Parameter *, void *);
     void Rva003BB5B7Do(Parameter *, int, RGBColor *);
@@ -251,7 +251,7 @@ public:
     void Rva003BAECA(float, float, float, float);
     void Rva003BAF95(float, float, float, float);
     void Rva003BAFE8(Parameter *, float, float, float, float, float);
-    void Rva003BB05FSet(int, float, float, float, int);
+    void Rva003BB05FSet(int a1, float a2, float a3, float a4, bool a5);
     void Rva003BB0C7Set(int a1, float a2, float a3,
 	float a4, float a5, float a6, int a7);
     void Rva003BAAE4(AsciiString const &, float, float, float, float);
@@ -418,7 +418,7 @@ protected:
     void doHeroSelectButtonFlash(int, int);
     void doSelectBuilderButtonFlash(int);
     void doSellBuildingOnFoundation(Parameter *);
-    void doNamedEnableCameraFading(Parameter *, void *);
+    void doNamedEnableCameraFading(Parameter *p, bool arg);
     void doSetUnitReferenceToHomeBaseOfPlayer(AsciiString const &, AsciiString const &, bool);
     void doFlashSpellStoreButton(int);
     void changeObjectPanelFlagForSingleObject(Object *, AsciiString const &, bool);

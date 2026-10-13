@@ -1,10 +1,12 @@
-// cl: -Ireference/open-bfme-1/game/GameEngine/Source/Common
+// cl: -O1 -arch:SSE -G7 -Ireference/open-bfme-1/game/GameEngine/Source/Common /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// stlport
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
 // Open-BFME5 conversions.
 //
 // ?bfmeGoFGE@@YGXPAX00@Z, retail 0x003C38CA, 37 bytes. Both callee identities
 // come from retail's own REL32 displacements and are already rowed: the call at
 // +0x0B lands on 0x003588E7 (?getUnitNamed@ScriptEngine@@QAEPAVObject@@PAVParameter@@@Z)
-// through the global at 0x0132116C, which Rva003C4003Apply.cpp already spells
+// through the ScriptEngine singleton (0x0132116C in the donor), formerly spelled
 // g_Va009FE16C, and the call at +0x1E on 0x0023DB0E
 // (?setStatus@Object@@QAEXW4ObjectStatusTypes@@_N@Z).
 
@@ -47,7 +49,7 @@ class Parameter;
 class Object
 {
 public:
-	// LINK: rowed Object::setStatus(ObjectStatusTypes, bool) (0x0023DB0E); the old int argument stays through a member-pointer cast.
+	// Rowed Object::setStatus(ObjectStatusTypes, bool), 0x0023DB0E.
 	void setStatus(ObjectStatusTypes status, bool value);
 };
 
@@ -59,10 +61,10 @@ public:
 
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall bfmeGoFGE(void *a, void *b, void *c)
+void ScriptActions::bfmeGoFGE(void *a, void *b, bool c)
 {
 	Object *r = TheScriptEngine->getUnitNamed((Parameter *)a);
 
 	if (r)
-		(r->*reinterpret_cast<void (Object::*)(ObjectStatusTypes, int)>(&Object::setStatus))((ObjectStatusTypes)(int)b, (int)c);
+		r->setStatus((ObjectStatusTypes)(int)b, c);
 }

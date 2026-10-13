@@ -29,15 +29,15 @@ class Rva000427195 { public: void rva003A37DC(VideoPair cursor); };
 class Team
 {
 public:
- void rva003A38E9(int keyWord, int stateWord);
+ void rva003A38E9(const AsciiString &keyName, unsigned char stateWord);
 private:
  char m_beforeStates[0x48];
  Rva00056F61 m_states;
 };
 
-void Team::rva003A38E9(int keyWord, int stateWord)
+void Team::rva003A38E9(const AsciiString &keyName, unsigned char stateWord)
 {
- const AsciiString *key = (const AsciiString *)keyWord;
+ const AsciiString *key = &keyName;
  Rva0041534BIter cursor = m_states.rva0041534B(key);
  if (cursor.m_node)
  {

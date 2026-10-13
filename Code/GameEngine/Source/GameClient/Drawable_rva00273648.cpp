@@ -18,7 +18,7 @@ public:
 	virtual void dC0(); virtual void dC4(); virtual void dC8(); virtual void dCC();
 	virtual void dD0(); virtual void dD4(); virtual void dD8(); virtual void dDC();
 	virtual void dE0(); virtual void dE4();
-	virtual void slotE8(void* arg);
+	virtual void slotE8(bool arg);
 	virtual void slotEC(void* arg);
 };
 
@@ -32,7 +32,7 @@ class Drawable
 {
 public:
 	void rva00273648(void* arg);
-	void rva00273686(void* arg);
+	void rva00273686(bool arg);
 	void rva002736A8();
 	void rva0027366A();
 private:
@@ -51,7 +51,7 @@ void Drawable::rva00273648(void* arg)
 	}
 }
 
-void Drawable::rva00273686(void* arg)
+void Drawable::rva00273686(bool arg)
 {
 	DrawModule00273648** mods = m_mods;
 	while (*mods != 0) {

@@ -1,4 +1,6 @@
-// cl: -Ireference/open-bfme-1/game/GameEngine/Source/Common
+// cl: -O1 -arch:SSE -G7 -Ireference/open-bfme-1/game/GameEngine/Source/Common /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// stlport
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
 
 class BfmeMgrF07
 {
@@ -73,7 +75,7 @@ class PlayerList;
 
 extern PlayerList *ThePlayerList;	// retail [0x012ED748]
 
-void __stdcall bfmeLinkObjectsA70(void *k1, void *k2)
+void ScriptActions::bfmeLinkObjectsA70(void *k1, void *k2)
 {
 	int id2 = mgr12F076C()->findSomething(k2, 0);
 	int id1 = mgr12F076C()->findSomething(k1, 0);

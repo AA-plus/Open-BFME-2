@@ -82,7 +82,7 @@ public:
 	virtual void s50();
 	virtual void s51(float value, int milliseconds, int mode, float a, float b);
 	virtual void s52(unsigned int objectID, int a, int b, float c, float d, float e);
-	virtual void s53(void *position, int milliseconds, float a, float b, int mode);
+	virtual void s53(void *position, int milliseconds, float a, float b, bool mode);
 	virtual void s54();
 	virtual void s55();
 	virtual void s56();
@@ -308,7 +308,7 @@ void ScriptActions::Rva003BAFE8(Parameter *p, float a1, float a2,
 // Slot 34 of the rowed TerrainLogic global supplies the record. View
 // slot 53 receives record+12, scaled/truncated a2, two scaled floats and
 // the final integer unchanged. The scale literal is retail 1000.0f.
-void ScriptActions::Rva003BB05FSet(int a1, float a2, float a3, float a4, int a5)
+void ScriptActions::Rva003BB05FSet(int a1, float a2, float a3, float a4, bool a5)
 {
 	char *record = reinterpret_cast<Rva003BB05FTerrain<int> *>(TheTerrainLogic)->s34(a1);
 	if (record)

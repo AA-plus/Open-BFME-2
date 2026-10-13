@@ -1,4 +1,6 @@
-// cl: /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -DNDEBUG -MD /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// stlport
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
 //
 // Two small stdcall free functions from the 0x003BD2xx ScriptEngine/GameLogic
 // glue area (dump range 18).
@@ -24,11 +26,7 @@ public:
 class RadarWindowOverrideSource;
 extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 
-class ScriptActions
-{
-protected:
-	void doHeroSelectButtonFlash(int a, int b);
-};
+
 
 void ScriptActions::doHeroSelectButtonFlash(int a, int b)
 {
@@ -38,14 +36,14 @@ void ScriptActions::doHeroSelectButtonFlash(int a, int b)
 class GameLogic
 {
 public:
-	void rva0023D68E(int value);
+	void rva0023D68E(bool value);
 	char m_pad[0x11C];
 	unsigned char m_field11C;
 };
 
 extern GameLogic *TheGameLogic;
 
-void __stdcall rva003BD2A6(int value)
+void ScriptActions::rva003BD2A6(bool value)
 {
 	if (TheGameLogic->m_field11C != (unsigned char)value) {
 		TheGameLogic->rva0023D68E(value);
