@@ -1,4 +1,6 @@
 // ?MessageBoxOkCancel@@YAXVUnicodeString@@0P6AXXZ1@Z
+// partial score=0.87 date=2026-10-13
+// ?MessageBoxOkCancel@@YAXVUnicodeString@@0P6AXXZ1@Z
 // partial score=0.87 date=2026-10-09
 // cl: /O1 /arch:SSE /G7 /EHsc /MD /Ireference/shims/bfme2_ascii
 #include "unicode_string.h"
