@@ -129,13 +129,13 @@ void __cdecl rva007B7060()
 #include "ascii_string.h"
 
 extern unsigned g_Va00DE0878;
-extern unsigned g_Va00DDF5B4;
+extern AsciiString BfmeINICurrentFilename;
 extern unsigned g_Va00DEAF18;
 
-// ?rva007B6A5A@@YAXXZ @ 0x007B6A5A (10B). Global AsciiString dtor thunk: ecx=&g_Va00DDF5B4 then tail-jmp to rowed ??1AsciiString@@QAE@XZ (0x0048BA39). No callers. Honest address name.
+// ?rva007B6A5A@@YAXXZ @ 0x007B6A5A (10B). Global AsciiString dtor thunk: ecx=&BfmeINICurrentFilename then tail-jmp to rowed ??1AsciiString@@QAE@XZ (0x0048BA39). No callers. Honest address name.
 void __cdecl rva007B6A5A()
 {
-	AsciiString *p = (AsciiString *)&g_Va00DDF5B4;
+	AsciiString *p = (AsciiString *)&BfmeINICurrentFilename;
 	return p->~AsciiString();
 }
 
@@ -305,12 +305,12 @@ public:
 	virtual ~EvacuateDamage();
 };
 
-extern unsigned g_Va00DDF58C;
+extern unsigned BfmeINIMacroTableStorage[8];
 
-// ?rva007B6A6E@@YAXXZ @ 0x007B6A6E (10B). Global EvacuateDamage dtor thunk: ecx=&g_Va00DDF58C then tail-jmp to rowed ??1EvacuateDamage@@UAE@XZ (0x0002CD7B).
+// ?rva007B6A6E@@YAXXZ @ 0x007B6A6E (10B). Global EvacuateDamage dtor thunk: ecx=&BfmeINIMacroTableStorage then tail-jmp to rowed ??1EvacuateDamage@@UAE@XZ (0x0002CD7B).
 void __cdecl rva007B6A6E()
 {
-	EvacuateDamage *p = (EvacuateDamage *)&g_Va00DDF58C;
+	EvacuateDamage *p = (EvacuateDamage *)&BfmeINIMacroTableStorage;
 	return p->EvacuateDamage::~EvacuateDamage();
 }
 

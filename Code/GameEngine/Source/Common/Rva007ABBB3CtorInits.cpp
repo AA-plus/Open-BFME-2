@@ -130,8 +130,8 @@ void __cdecl rva007B9748();
 void __cdecl rva007B9997();
 void __cdecl rva007B9B1E();
 
-extern unsigned g_Va00DDF58C;
-extern unsigned g_Va00DDF5B4;
+extern unsigned BfmeINIMacroTableStorage[8];
+extern AsciiString BfmeINICurrentFilename;
 extern unsigned g_Va00DE0878;
 extern unsigned g_Va00DE1CCC;
 extern unsigned int g_00DE1CCD;
@@ -188,14 +188,14 @@ struct Rva007ABBB3CtorInits
 // 0x007ABBB3 (22B): ??0INIMacroTable@@QAE@XZ on VA 0x00DDF58C, atexit(0x007B6A6E)
 void Rva007ABBB3CtorInits::rva007ABBB3()
 {
-	( (INIMacroTable *)&g_Va00DDF58C )->INIMacroTable::INIMacroTable();
+	( (INIMacroTable *)&BfmeINIMacroTableStorage )->INIMacroTable::INIMacroTable();
 	atexit( rva007B6A6E );
 }
 
 // 0x007ABBC9 (22B): ??0AsciiString@@QAE@XZ on VA 0x00DDF5B4, atexit(0x007B6A5A -> AsciiString dtor 0x0048BA39)
 void Rva007ABBB3CtorInits::rva007ABBC9()
 {
-	( (AsciiString *)&g_Va00DDF5B4 )->AsciiString::AsciiString();
+	( (AsciiString *)&BfmeINICurrentFilename )->AsciiString::AsciiString();
 	atexit( rva007B6A5A );
 }
 

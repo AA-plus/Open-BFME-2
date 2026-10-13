@@ -1,13 +1,13 @@
 // cl: /Ireference/shims/bfme2_ascii /EHsc
 // ?rva0002BF4A@Rva0002BF4A@@QAEXXZ @0x0002BF4A 66B: thiscall clear with None plus empty.
-// Evidence: ret no args; lea ecx [esi+0x838] to Rva00601BBCHelper::rva00601A8D pin; AsciiString+0x4 set None row; g_00DDF5B4 set TheEmptyString row; ints +0x8 +0xc +0x10 zeroed; byte +0x430 false; g_00DDF57C zeroed; callers are Catch funclets.
+// Evidence: ret no args; lea ecx [esi+0x838] to Rva00601BBCHelper::rva00601A8D pin; AsciiString+0x4 set None row; BfmeINICurrentFilename set TheEmptyString row; ints +0x8 +0xc +0x10 zeroed; byte +0x430 false; g_00DDF57C zeroed; callers are Catch funclets.
 #include "ascii_string.h"
 class Rva00601BBCHelper
 {
 public:
 	void rva00601A8D();
 };
-extern AsciiString g_00DDF5B4;
+extern AsciiString BfmeINICurrentFilename;
 extern void *g_00DDF57C;
 class Rva0002BF4A
 {
@@ -29,7 +29,7 @@ void Rva0002BF4A::rva0002BF4A()
 {
 	m_838.rva00601A8D();
 	((StringBase<char> *)&m_04)->set("None");
-	((StringBase<char> *)&g_00DDF5B4)->set(*(const StringBase<char> *)&AsciiString::TheEmptyString);
+	((StringBase<char> *)&BfmeINICurrentFilename)->set(*(const StringBase<char> *)&AsciiString::TheEmptyString);
 	m_08 = 0;
 	m_0c = 0;
 	m_10 = 0;
