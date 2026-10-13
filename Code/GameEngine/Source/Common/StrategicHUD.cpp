@@ -1,5 +1,5 @@
 class AptPlayer { public: bool HideLevel(int); };
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: /O1 /arch:SSE /G7 /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 // StrategicHUD::HUD::Impl, the strategic HUD's Apt load/unload callbacks.
 //
 // The class is the one WorldBuilder names for the help-box callback 0x0042DB21
@@ -180,6 +180,7 @@ namespace StrategicHUD
 class Palantir
 {
 public:
+	~Palantir();
 	void rva005785A2(void *selection);
 	Palantir *rva005785BE(); // 0x005785BE
 	void rva005785CD();
@@ -287,7 +288,7 @@ class Rva0042D766
 {
 public:
 	Rva0042D766() : m_ptr(0) {}
-	~Rva0042D766() { ((Rva0042D789 *)this)->clear(); }
+	__declspec(noinline) ~Rva0042D766();
 	void reset(Rva00578C43 *p);
 
 	Rva00578C43 *m_ptr;
@@ -752,4 +753,15 @@ StrategicHUD::HUD::Impl::Impl(int owner, unsigned int level)
 Rva0042DFF5::Rva0042DFF5(const unsigned int &level)
 {
 	m_ptr = new StrategicHUD::HUD::Impl((int)this, level);
+}
+
+// Native +24 cleanup is the complete 26-byte owning body at 42D789.
+// Clear the holder before calling the rowed nonvirtual Palantir destructor
+// at 578C43, then release the allocation through global operator delete.
+void __cdecl operator delete(void *);
+Rva0042D766::~Rva0042D766()
+{
+	StrategicHUD::Palantir *old = reinterpret_cast<StrategicHUD::Palantir *>(m_ptr);
+	m_ptr = 0;
+	if (old) { old->~Palantir(); ::operator delete(old); }
 }
