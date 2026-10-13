@@ -103,9 +103,10 @@ class GlobalData
 public:
 	char m_pad000[0xDC];
 	Coord3D m_ammoPipWorldOffset;
-	char m_padE8[0x0C];
+	Coord3D m_pipWorldOffset;
 	Coord2D m_ammoPipScreenOffset;
-	char m_padFC[0x9BD - 0xFC];
+	Coord2D m_pipScreenOffset;
+	char m_pad104[0x9BD - 0x104];
 	Bool m_showObjectHealth;
 };
 extern GlobalData *TheWritableGlobalData;
@@ -204,6 +205,31 @@ public:
 	}
 };
 
+struct Rva00277669AIView
+{
+	virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+	virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+	virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+	virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+	virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49();
+	virtual void v50(); virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
+	virtual Player *slot56();
+	virtual void v57(); virtual void v58(); virtual void v59(); virtual void v60(); virtual void v61(); virtual void v62(); virtual void v63(); virtual void v64(); virtual void v65(); virtual void v66(); virtual void v67(); virtual void v68(); virtual void v69();
+	virtual void v70(); virtual void v71(); virtual void v72(); virtual void v73(); virtual void v74(); virtual void v75(); virtual void v76(); virtual void v77(); virtual void v78(); virtual void v79();
+	virtual void v80(); virtual void v81(); virtual void v82(); virtual void v83();
+	virtual Bool slot84(Int *, Int *, Int *, Int *, Int *, Int *);
+};
+struct Rva00277669ObjectView
+{
+	char m_pad000[0x250];
+	Rva00277669AIView *m_ai;
+};
+struct Rva00277669PlayerView
+{
+	char m_pad000[0x280];
+	Int m_color;
+};
+
 class Drawable
 {
 public:
@@ -211,6 +237,8 @@ public:
     void rva002736A8();
     void drawAmmo();
     void rva002739D1();
+    void rva00277669();
+    const Coord3D *getPosition() const;
 private:
     unsigned char m_pad000[0xfc];
     Object *m_object;
@@ -226,6 +254,8 @@ private:
     static Rva002D752DNode **s_animationTemplates;
     static const Image *s_fullAmmo;
     static const Image *s_emptyAmmo;
+    static const Image *s_pipImage;
+    static const Image *s_pipOverlay;
 };
 
 void Drawable::rva00273755()
@@ -354,4 +384,49 @@ void Drawable::rva002739D1()
 			killIcon(9);
 		}
 	}
+}
+
+// Native 277669..2778E1 (632B), no-argument thiscall. Same pip row as drawAmmo
+// but driven by the object's AI interface (+0x250): slot 56 is a second owner
+// check, slot 84 returns six counts (total, full, four unused). Tint is the
+// controlling player's color (+0x280) for filled pips, grey otherwise.
+static inline Int GameMakeColor(Int r, Int g, Int b, Int a) { return (a << 24) | (r << 16) | (g << 8) | b; }
+
+void Drawable::rva00277669()
+{
+    Object *obj = m_object;
+    Rva00277669AIView *ai = ((Rva00277669ObjectView *)obj)->m_ai;
+    if (!ai) return;
+    if (!TheWritableGlobalData->m_showObjectHealth) return;
+    if (!m_selected) {
+        InGameUI *ui = TheInGameUI;
+        if (!ui) return;
+        Int drawableID = m_id;
+        if (ui->getMousedOverDrawableID() != drawableID) return;
+    }
+    if (obj->getControllingPlayer() != ThePlayerList->getLocalPlayer()
+        && ai->slot56() != ThePlayerList->getLocalPlayer()) return;
+    Int numTotal, numFull, unused0, unused1, unused2, unused3;
+    if (!ai->slot84(&numTotal, &numFull, &unused0, &unused1, &unused2, &unused3)) return;
+    Real scale = 1.0f;
+    Int boxWidth = (Int)((Real)s_pipImage->getImageWidth()*scale);
+    Int boxHeight = (Int)((Real)s_pipImage->getImageHeight()*scale);
+    ICoord2D screenCenter;
+    const Coord3D *objPos = getPosition();
+    Coord3D pos = {objPos->x, objPos->y, objPos->z};
+    pos.x += TheWritableGlobalData->m_pipWorldOffset.x;
+    pos.y += TheWritableGlobalData->m_pipWorldOffset.y;
+    pos.z += TheWritableGlobalData->m_pipWorldOffset.z + obj->getGeometryInfo().getMaxHeightAbovePosition();
+    if (TheTacticalView->worldToScreen(&pos, &screenCenter) != 0) return;
+    Real bounding = obj->getGeometryInfo().m_boundingSphereRadius*scale;
+    Int posx = m_460;
+    Int posy = screenCenter.y + (Int)(TheWritableGlobalData->m_pipScreenOffset.y*bounding);
+    static const Int emptyColor = GameMakeColor(127, 127, 127, 255);
+    Player *owner = obj->getControllingPlayer();
+    Int ownerColor = owner ? ((Rva00277669PlayerView *)owner)->m_color : -1;
+    for (Int i=0; i<numTotal; ++i) {
+        TheDisplay->drawImage(s_pipImage, posx, posy, posx+boxWidth, posy+boxHeight, i<numFull ? ownerColor : emptyColor, 2);
+        TheDisplay->drawImage(s_pipOverlay, posx, posy, posx+boxWidth, posy+boxHeight, -1, 2);
+        posx += boxWidth + 1;
+    }
 }
