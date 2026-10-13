@@ -1,4 +1,14 @@
 // ?rva000E49B8@Rva000E48BC@@QAEHH@Z
+// partial score=0.986 date=2026-10-13
+// ?rva000E49B8@Rva000E48BC@@QAEHH@Z
+// W7-S2 rebank 2026-10-13: 141/143 insns exact (was 31 mismatched). Levers: (1) flag test as inline
+// BitFlagsView::test(44) = (m_bits[bit>>5] & (1<<(bit&31))) != 0 gives retail's `shr eax,0xC; test bl,al`
+// with constant 1 hoisted to EBX (xor ebx,ebx; inc ebx); (2) alias select as a conditional expression
+// `Vector3 *v = (out == &in) ? (tmp = in, &tmp) : (Vector3 *)&in;` gives retail's jne/jmp layout AND
+// its Z,Y,X / Z,X,Y matrix row order. Residue: sample-4 `y + m_extent` addss operand order (retail
+// `movss xmm0,[esi+4]; addss xmm0,[esi+0xc]`, ours ext first); 400+ spellings/orders/scopes/helpers tried.
+// Land target: Code/GameEngine/Source/Common/Rva000E48BC.cpp (class view + sibling bfme_xform live there).
+// ?rva000E49B8@Rva000E48BC@@QAEHH@Z
 // partial score=0.95 date=2026-10-09
 // ?rva000E49B8@Rva000E48BC@@QAE_NH@Z
 // partial score=0.95 date=2026-10-06
@@ -51,17 +61,10 @@ public:
 	static WWINLINE void Transform_Vector(const Matrix3D &A, const Vector3 &in, Vector3 *out)
 	{
 		Vector3 tmp;
-		Vector3 *v;
-		if (out == &in) {
-			tmp = in;
-			v = &tmp;
-		} else {
-			v = (Vector3 *)&in;
-		}
+		Vector3 *v = (out == &in) ? (tmp = in, &tmp) : (Vector3 *)&in;
 		out->X = (A[0][0] * v->X + A[0][1] * v->Y + A[0][2] * v->Z + A[0][3]);
 		out->Y = (A[1][0] * v->X + A[1][1] * v->Y + A[1][2] * v->Z + A[1][3]);
-		out->Z = (A[2][0] * v->X + A[2][1] * v->Y + A[2][2] * v->Z + A[2][3]);
-	}
+		out->Z = (A[2][0] * v->X + A[2][1] * v->Y + A[2][2] * v->Z + A[2][3]);	}
 };
 
 class Drawable
@@ -104,11 +107,18 @@ public:
 class ShroudManager;
 extern ShroudManager *TheShroudManager;
 
+struct BitFlagsView
+{
+	unsigned m_bits[4];
+	__forceinline bool test(int bit) const { return (m_bits[bit >> 5] & (1 << (bit & 31))) != 0; }
+};
+static __forceinline void SetCoord(Coord3D &c, float x, float y, float z) { c.x = x; c.y = y; c.z = z; }
+
 int Rva000E48BC::rva000E49B8(int player)
 {
 	const int visible = 1;
 	Drawable *d = m_drawable;
-	if (d && ((*(const volatile unsigned int *)((char *)d + 0x264) >> 12) & visible))
+	if (d && ((const BitFlagsView *)((char *)d + 0x260))->test(44))
 		return visible;
 	if (TheShroudManager) {
 	if (d) {
@@ -134,8 +144,7 @@ int Rva000E48BC::rva000E49B8(int player)
 	if (!reinterpret_cast<PartitionManager*>(TheShroudManager)->getShroudStatusForPlayer(player, &c))
 		return visible;
 	c.x = m_pos.X;
-	c.y = m_pos.Y;
-	c.y += m_extent;
+	c.y = m_pos.Y + m_extent;
 	c.z = m_pos.Z;
 	if (!reinterpret_cast<PartitionManager*>(TheShroudManager)->getShroudStatusForPlayer(player, &c))
 		return visible;
