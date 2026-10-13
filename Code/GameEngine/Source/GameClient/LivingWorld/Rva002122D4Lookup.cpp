@@ -11,6 +11,15 @@
 // assigned in an if/else (both arms), returned once, reproduces that layout.
 #include <map>
 
+// The find otherwise instantiates the less<int>::operator() COMDAT (one byte
+// shape per TU flags); an explicit dllimport+forceinline specialization takes
+// those calls inline so this TU emits no external copy.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+bool less<int>::operator()(const int &a, const int &b) const
+{ return a < b; }
+}
+
 class Rva002122D4
 {
 public:
