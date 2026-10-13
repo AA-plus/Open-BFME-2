@@ -1,32 +1,19 @@
 // ?countObjectsByThingTemplate@Team@@QBEXHPBQBVThingTemplate@@_NPAH1@Z
-// partial score=0.9807741935483871 date=2026-10-10
-extern "C" void _ReadWriteBarrier();
-#pragma intrinsic(_ReadWriteBarrier)
-// ?countObjectsByThingTemplate@Team@@QAEXHPAPAVThingTemplate@@_NPAH1@Z
-// partial score=0.98 date=2026-10-06
-// ?countObjectsByThingTemplate@Team@@QAEXHPAPAVThingTemplate@@_NPAH1@Z
-// partial score=0.98 date=2026-10-05
-// ?countObjectsByThingTemplate@Team@@QAEXHPAPAVThingTemplate@@_NPAH1@Z
-// partial score=0.98 date=2026-10-03
+// partial score=0.99 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
-// ?countObjectsByThingTemplate@Team@@QAEXHPAPAVThingTemplate@@_NPAH1@Z, retail 0x0039DB89, 124 bytes.
-// Team template-equivalence counter with status and flag checks via rowed
-// iterate 0x263864 advance pin 0x263526 isEquivalentTo 0x33BB04 testStatus
-// 0x4E536. Evidence: finish stash 0.96 callers 0x0039EC03 0x004F3EBF.
-
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 class Object;
 class ThingTemplate;
 enum ObjectStatusTypes
 {
 	STATUS_2 = 2
 };
-
 class ThingTemplate
 {
 public:
 	bool isEquivalentTo(const ThingTemplate *other) const;
 };
-
 class Object
 {
 public:
@@ -36,34 +23,29 @@ public:
 	unsigned char m_pad1[0x438 - 0x08];
 	unsigned char m_dead;
 };
-
 template<class OBJCLASS>
 class DLINK_ITERATOR
 {
 private:
 	OBJCLASS *m_cur;
 	unsigned char m_targetAbiState[20];
-
 public:
 	void advance();
 	bool done() const { return m_cur == 0; }
 	OBJCLASS *cur() const { return m_cur; }
 };
-
 class Team
 {
 public:
 	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
 	void countObjectsByThingTemplate(int count, const ThingTemplate *const *templates, bool flag1, int *counts, bool flag2) const;
 };
-
-// ?countObjectsByThingTemplate@Team@@QAEXHPAPAVThingTemplate@@_NPAH1@Z present-unmatched
+// ?countObjectsByThingTemplate@Team@@QBEXHPBQBVThingTemplate@@_NPAH1@Z present-unmatched
 void Team::countObjectsByThingTemplate(int count, const ThingTemplate *const *templates, bool flag1, int *counts, bool flag2) const
 {
 	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); !iter.done(); iter.advance()) {
-		const Object *obj = iter.cur();
- (obj?_ReadWriteBarrier():_ReadWriteBarrier());
-		const ThingTemplate *tmpl = obj->m_template; _ReadWriteBarrier();
+		Object *obj = iter.cur();
+		ThingTemplate *tmpl = obj->m_template;
 		for (int i = 0; i < count; i++) {
 			if (!tmpl->isEquivalentTo(templates[i]))
 				continue;
