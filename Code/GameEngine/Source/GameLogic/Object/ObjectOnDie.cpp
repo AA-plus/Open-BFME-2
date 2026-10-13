@@ -46,6 +46,13 @@ struct Rva0028F59A : public Rva00265254
 	Rva0028F59A(int unused, int bit);
 };
 
+// The Object member 0x001E42F2 that takes the bit set's words, rowed as
+// Rva001E42F2::rva001E42F2.
+struct Rva001E42F2
+{
+	void rva001E42F2(const int *x);
+};
+
 struct ObjectStatusBits
 {
 	unsigned int m_bits[4];
@@ -323,12 +330,11 @@ public:
 
 	bool rva00293926(KindOfType kind);
 	void setStatus(ObjectStatusTypes status, bool set);
-	void rva001E42F2(const Rva00265254 &mask);
 	void rva0028DAB9();
 	void rva0028AE6D();
 	void kill(DamageType damageType, DeathType deathType);
 	bool testStatus(ObjectStatusTypes status) const;
-	void rva002930A9(int arg);
+	void rva002930A9(void *arg);
 	void makeDirty();
 	Player *getControllingPlayer() const;
 	bool isKindOf(KindOfType kind) const;
@@ -377,7 +383,7 @@ void Object::onDie(DamageInfo *damageInfo)
 	if (rva00293926((KindOfType)0x45))
 	{
 		setStatus((ObjectStatusTypes)0x56, true);
-		rva001E42F2(Rva0028F59A(0, 0x45));
+		((Rva001E42F2 *)this)->rva001E42F2((const int *)Rva0028F59A(0, 0x45).m_bits);
 	}
 
 	if (getTemplate()->isKindOf(190))
@@ -422,7 +428,7 @@ void Object::onDie(DamageInfo *damageInfo)
 	if (draw)
 		draw->rva002752F8();
 
-	rva002930A9((int)damageInfo);
+	rva002930A9(damageInfo);
 	makeDirty();
 
 	DelayedLuaEventList events;

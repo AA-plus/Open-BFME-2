@@ -23,7 +23,7 @@
 // +0xEC added) through Set_Transform (slot 21) and added to that scene
 // (slot 17); the beacon gets +0x30 = 1 a unit scale at +0xA0 and
 // rva003FB9EB(30 0). The beacon is stored in the map and handed to
-// method_002BFFD4 with the layer; the beacon sound (+0x160) plays through
+// rva002BFFD4 with the layer; the beacon sound (+0x160) plays through
 // TheAudio addAudioEvent (slot 25) when set.
 // WorldBuilder evaluates the render object through an inline getter and the
 // ground point / translation through Vector3 constructors: both shapes are
@@ -104,12 +104,22 @@ public:
 	virtual void Set_Transform(const Matrix3D &m); // slot 21 (+0x54)
 };
 
-class Rva002D3627Host
+// The ground lookup 0x002BF5B0, rowed as Rva002BF4F3::rva002BF5B0.
+class Rva002BF4F3
 {
 public:
-	bool rva002BF5B0(const Coord2D *pos, Coord3D *out);
-	void method_002BFFD4(void *object, int layer, void *extra);
+	bool rva002BF5B0(const Vector3 *pos, Vector3 *out);
 };
+
+// The layer registration 0x002BFFD4, rowed as Rva002BFF5A::rva002BFFD4.
+struct Rva002BFFD4Template;
+class Rva002BFF5A
+{
+public:
+	void rva002BFFD4(Rva002BFFD4Template *object, int layer, unsigned int extra);
+};
+
+class Rva002D3627Host;
 extern Rva002D3627Host *g_00DFEF18;
 
 class Rva00213171Scene
@@ -220,7 +230,7 @@ void LivingWorldManager::CreateBeaconObject(int id, const Coord2D *pos, int type
 		{
 			Matrix3D tm(true);
 			Vector3 ground(pos->x, pos->y, 0.0f);
-			g_00DFEF18->rva002BF5B0(pos, (Coord3D *)&ground);
+			((Rva002BF4F3 *)g_00DFEF18)->rva002BF5B0((const Vector3 *)pos, &ground);
 			tm.Set_Translation(pos->x, pos->y, ground.Z + m_data.m_beaconHeight);
 			((Rva00213171RenderObj *)beacon->m_primaryRObj)->Set_Transform(tm);
 			((Rva00213171Scene *)g_00DFEF18)->addRenderObject(beacon->getRenderObject());
@@ -231,7 +241,7 @@ void LivingWorldManager::CreateBeaconObject(int id, const Coord2D *pos, int type
 			((Rva003FB9C8 *)beacon)->rva003FB9EB(30, 0);
 		}
 		m_beacons[id] = beacon;
-		g_00DFEF18->method_002BFFD4(beacon, layer, 0);
+		((Rva002BFF5A *)g_00DFEF18)->rva002BFFD4((Rva002BFFD4Template *)beacon, layer, 0);
 		if (m_data.m_beaconSound.referent != 0)
 		{
 			BfmeAudioEventPrefix136 sound(m_data.m_beaconSound, 1);

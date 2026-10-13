@@ -444,13 +444,16 @@ public:
 };
 extern LivingWorldLogic *TheLivingWorldLogic;
 
-// 0x002BF5B0 maps a world-map point to a 3D position.
-class Rva002D3627Host
+// 0x002BF5B0 maps a world-map point to a 3D position (rowed as
+// Rva002BF4F3::rva002BF5B0).
+class Rva002D3627Host;
+extern Rva002D3627Host *g_00DFEF18;
+class Vector3;
+class Rva002BF4F3
 {
 public:
-	bool rva002BF5B0(const Coord2D *in, Coord3D *out);
+	bool rva002BF5B0(const Vector3 *in, Vector3 *out);
 };
-extern Rva002D3627Host *g_00DFEF18;
 
 // EvaEventStatus::getPlayPositionForEvent, retail 0x001DCE6B (279 bytes;
 // WorldBuilder's Eva.cpp 0x00AC8E80, whose assert names both player
@@ -479,7 +482,7 @@ EvaCoord Rva001DCDAF::getPlayPositionForEvent(const Arg001DCDAF *info, Player *l
 				pos.x = center.x;
 				pos.y = center.y;
 				pos.z = 0.0f;
-				g_00DFEF18->rva002BF5B0(&center, &pos);
+				((Rva002BF4F3 *)g_00DFEF18)->rva002BF5B0((const Vector3 *)&center, (Vector3 *)&pos);
 				return EvaCoord(pos.x, pos.y, pos.z);
 			}
 		}

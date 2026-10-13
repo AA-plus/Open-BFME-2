@@ -3246,7 +3246,7 @@ int Rva002B2B66::rva002B2B66()
 }
 struct Coord3D;
 struct Rva002BB15FCoord3D {float x,y,z;};
-class Rva002D3627Host {public: bool rva002BF5B0(const Coord2D *,Coord3D *);};
+class Vector3; class Rva002BF4F3 {public: bool rva002BF5B0(const Vector3 *,Vector3 *);};
 class Eva;extern Eva *TheEva;
 class Eva {public: bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);};
 class LivingWorldRegionEffectsManager {public: void SyncRegion(int);};
@@ -3275,7 +3275,7 @@ void LivingWorldLogic::rva002BB15F()
 			pos.x = center.x;
 			pos.y = center.y;
 			pos.z = 0.0f;
-			g_00DFEF18->rva002BF5B0(&center, (Coord3D *)&pos);
+			((Rva002BF4F3 *)g_00DFEF18)->rva002BF5B0((const Vector3 *)&center, (Vector3 *)&pos);
 			TheEva->reportEvaEvent(static_cast<EvaEventID>(0x15), (const Coord3D *)&pos, 0);
 		}
 		((Rva002B37B4 *)this)->rva002B37B4((Rva002B37B4P1 *)region, (Rva002B37B4P2 *)player);

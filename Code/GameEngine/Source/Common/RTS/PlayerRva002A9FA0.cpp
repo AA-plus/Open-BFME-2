@@ -11,7 +11,8 @@
 class Player;
 class Rva00380200 {
 public:
-    bool rva0038037C(int);
+    virtual void slot0();
+    virtual bool rva0038037C(int);
 };
 class ControlBar {
 public:
@@ -39,7 +40,7 @@ public:
 bool Rva002A9FA0::rva002A9FA0(int level)
 {
     int oldPoints = points;
-    bool changed = ((Rva00380200 *)this)->rva0038037C(level);
+    bool changed = ((Rva00380200 *)this)->Rva00380200::rva0038037C(level);
     if (changed && TheControlBar) {
         if ((Player *)((char *)this - 8) == ThePlayerList->localPlayer && TheEva)
             TheEva->reportEvaEvent((EvaEventID)2, 0, 0);

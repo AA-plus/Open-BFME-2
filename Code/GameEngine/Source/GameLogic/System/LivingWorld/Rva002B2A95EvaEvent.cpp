@@ -8,12 +8,16 @@ public:
 	bool rva002E0687() const;
 };
 
-class Rva002D3627Host
+class Rva002D3627Host;
+extern Rva002D3627Host *g_00DFEF18;
+
+// The coordinate helper 0x002BF5B0, rowed as Rva002BF4F3::rva002BF5B0.
+class Vector3;
+class Rva002BF4F3
 {
 public:
-	bool rva002BF5B0(const Coord2D *input, Coord3D *output);
+	bool rva002BF5B0(const Vector3 *input, Vector3 *output);
 };
-extern Rva002D3627Host *g_00DFEF18;
 
 enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
@@ -54,7 +58,7 @@ void Rva002B2A95Callback::rva002B2A95(const Rva002E0687 *target,
 		xy.x = record->m_position.x;
 		xy.y = record->m_position.y;
 		Coord3D position = { xy.x, xy.y, 0.0f };
-		g_00DFEF18->rva002BF5B0(&xy, &position);
+		((Rva002BF4F3 *)g_00DFEF18)->rva002BF5B0((const Vector3 *)&xy, (Vector3 *)&position);
 		TheEva->reportEvaEvent((EvaEventID)record->m_event, &position, 0);
 	}
 }
