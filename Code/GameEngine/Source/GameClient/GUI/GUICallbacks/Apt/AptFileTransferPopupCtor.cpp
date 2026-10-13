@@ -94,7 +94,7 @@ public:
 	FunctorWrapperHead *m_ptr;
 };
 
-__forceinline FunctorBinding MakeBinding(FunctorMethod method, FunctorTarget *target)
+static __forceinline FunctorBinding MakeBinding(FunctorMethod method, FunctorTarget *target)
 {
 	FunctorBinding binding(method, target);
 	return binding;
