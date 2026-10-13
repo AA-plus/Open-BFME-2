@@ -256,15 +256,15 @@ struct TemplateCountKey {
  __forceinline TemplateCountKey(const ThingTemplate *p):pointer(p) {}
  __forceinline bool operator<(const TemplateCountKey &other)const {return pointer<other.pointer;}
 };
-class Rva004E3184:public Snapshot {public:
- Rva004E3184(int);virtual ~Rva004E3184();
+class SpawnArmy:public Snapshot {public:
+ SpawnArmy(int);virtual ~SpawnArmy();
  virtual void loadPostProcess();virtual const char *GetSnapshotName()const;virtual void xfer(Xfer*);
  char payload[0x54];
 };
 class Rva00319CED {public:void *rva004E23C1();};
 class Rva0040CB2CIndexedField {public:int get(int)const;};
 class Rva0037DCA5 {public:void *rva0037DC52();};
-class CountInputPrefix {public:virtual void *get();virtual void slot1();virtual void slot2();virtual void slot3();virtual bool fill(void*,Rva004E3184*);};
+class CountInputPrefix {public:virtual void *get();virtual void slot1();virtual void slot2();virtual void slot3();virtual bool fill(void*,SpawnArmy*);};
 struct CountInputObjectPrefix {char prefix[4];Rva004E06FBPtrChase32Field *type;};
 struct CountArrayEntry {int first;void *second;};
 struct CountArrayPrefix {char prefix[0x40];CountArrayEntry *begin;CountArrayEntry *end;};
@@ -272,7 +272,7 @@ struct CountEntryPrefix {char prefix[0x90];int count;};
 void LivingWorldScoreKeeper::event7_3(CountInputPrefix *input,void *arg) {
  CountInputObjectPrefix *object=(CountInputObjectPrefix*)input->get();
  if (!object || object->type->get()!=m_playerIndex) return;
- Rva004E3184 temp(0);
+ SpawnArmy temp(0);
  if (input->fill(arg,&temp)) {
   CountArrayPrefix *array=(CountArrayPrefix*)((Rva00319CED*)&temp)->rva004E23C1();
   if (array) {

@@ -6,7 +6,7 @@
 // subobject. The initializer's original method name remains unknown; retain
 // its existing address-derived ABI spelling instead of inventing a name.
 // WB12FB830 and native calls establish the building/SpawnArmy/template graph.
-// Rva004E3184 is the 88B SpawnArmy record (WB128AFA0, native virtual4E30C6).
+// SpawnArmy is the 88B SpawnArmy record (WB128AFA0, native virtual4E30C6).
 // StrengthenKey is a 16B lookup record: WB local40..34 precedes iterator30.
 // Only its minCount word is initialized/read here. The three bonus field
 // types come from the independently recovered table entry/caller3F777F and
@@ -45,9 +45,9 @@ class Rva0033A674 {public:void*rva0033A674();};
 class ThingTemplate;class ThingFactory {public:const ThingTemplate*findTemplate(const AsciiString&);};extern ThingFactory*TheThingFactory;
 struct TemplateView {char gap[0x5c4];int category;};
 struct SummaryView {char gap[0x40];_STL::vector<_STL::pair<int,int> >entries;};
-class Rva004E3184 {public:virtual ~Rva004E3184();Rva004E3184(const Rva004E3184&);char data[84];};
-class Rva00500500 {public:Rva00500500(void*&,const Rva004E3184&);Rva00500500(const Rva00500500&);void*key;Rva004E3184 value;};
-struct SpawnView {char gap[8];_STL::vector<Rva004E3184>entries;};
+class SpawnArmy {public:virtual ~SpawnArmy();SpawnArmy(const SpawnArmy&);char data[84];};
+class Rva00500500 {public:Rva00500500(void*&,const SpawnArmy&);Rva00500500(const Rva00500500&);void*key;SpawnArmy value;};
+struct SpawnView {char gap[8];_STL::vector<SpawnArmy>entries;};
 struct BfmePod88 {char body[88];};
 typedef _STL::vector<BfmePod88> PodVector;
 typedef _STL::vector<PodVector> PodVectors;
@@ -194,7 +194,7 @@ inline __declspec(noinline) Rva00500BF5Tree::Iterator Rva00500BF5Tree::insertEqu
 class Rva00501F2D {public:void rva0050247A();};class Rva005007CF {public:void rva00500AA6();};
 static __forceinline const Rva00500500&AsReference(const Rva00500500&v){return v;}
 struct PairCopy{Rva00500500 value;__forceinline PairCopy(const Rva00500500&v):value(v){} operator const Rva00500500&()const{return value;} const Rva00500500&get()const{return value;}};
-inline __declspec(noinline) Rva00500500::Rva00500500(void*&k,const Rva004E3184&v):key(k),value(v){}
+inline __declspec(noinline) Rva00500500::Rva00500500(void*&k,const SpawnArmy&v):key(k),value(v){}
 void Rva005020CCBuildRegionDistances();
 class Rva00502FE9 {public:void rva00502FE9(int);int commandBuilding,spawnBuilding,strengthBuilding,upgradeBuilding;_STL::vector<ScienceType>spawnBuildings;int commandPoints;float average;char gap24[12];int strengthenAmount,upgradeAmount;VectorMap vectors;SetMap sets;};
 void Rva00502FE9::rva00502FE9(int playerID) {
@@ -218,8 +218,8 @@ void Rva00502FE9::rva00502FE9(int playerID) {
   for(int j=0;j<8;++j)byCategory.push_back(empty);
   Rva005020AFSub ordered;
   SpawnView*spawn=(SpawnView*)((LivingWorldBuildingTemplate*)((Rva002B6498*)TheLivingWorldBuildingTemplateStore)->rva002B6498((NameKeyType)spawnBuildings[i]))->findNugget(AsciiString("SpawnArmy"));
-  if(spawn){_STL::vector<Rva004E3184>&entries=spawn->entries;for(unsigned j=0;j<entries.size();++j){
-   Rva004E3184&entry=entries[j];
+  if(spawn){_STL::vector<SpawnArmy>&entries=spawn->entries;for(unsigned j=0;j<entries.size();++j){
+   SpawnArmy&entry=entries[j];
    if(((Rva00319CED*)&entry)->rva00319CED()){
     SummaryView*summary=(SummaryView*)((Rva003B8E89*)TheCampaignManager)->rva003B8E89((char*)&entry+0x2c);
     int size=summary->entries.size();

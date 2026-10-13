@@ -144,8 +144,8 @@ void ParseLivingWorldCampaignAct(INI *ini,void *instance,void*,const void*) {
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "Common/Snapshot.h"
 class Xfer; class Image;
-class Rva004E3184:public Snapshot { public:
- Rva004E3184(int); virtual ~Rva004E3184();
+class SpawnArmy:public Snapshot { public:
+ SpawnArmy(int); virtual ~SpawnArmy();
  virtual void loadPostProcess(); virtual const char *GetSnapshotName()const; virtual void xfer(Xfer*);
  AsciiString m_04,m_08,m_0c,m_10,m_14,m_18,m_1c;
  float m_20,m_24; AsciiString m_28,m_2c,m_30,m_34;
@@ -166,8 +166,8 @@ class Rva0020E89C;
 class LivingWorldRegionManager {public:bool GetRegionCenterPoint(Rva0020E89C*,Coord2D*);};
 struct Rva002B6A04Player; struct LivingWorldArmy;
 class LivingWorldLogic {public:
- void spawnCity(Rva004E3184*);
- LivingWorldArmy *spawnArmy(Rva004E3184*,Rva002B6A04Player*,bool);
+ void spawnCity(SpawnArmy*);
+ LivingWorldArmy *spawnArmy(SpawnArmy*,Rva002B6A04Player*,bool);
  char pad[0x8c]; Rva002E2903Player **playersBegin,**playersEnd; char pad94[0xB0-0x94]; Rva002104B6 *regions;
 };
 extern LivingWorldLogic *TheLivingWorldLogic;
@@ -182,9 +182,9 @@ template<class T>struct SpawnVectorView {
 };
 
 void Rva0056616B::rva005666C5() {
- SpawnVectorView<Rva004E3184> &requests=*reinterpret_cast<SpawnVectorView<Rva004E3184> *>(&m_20);
+ SpawnVectorView<SpawnArmy> &requests=*reinterpret_cast<SpawnVectorView<SpawnArmy> *>(&m_20);
  for(unsigned int index=0;index<requests.size();++index) {
-  Rva004E3184 *request=&requests.at(index);
+  SpawnArmy *request=&requests.at(index);
   if(request->m_55) {
    if(reinterpret_cast<SpawnVectorView<AsciiString> *>(&request->m_38)->empty()) TheLivingWorldLogic->spawnCity(request);
    else { SpawnVectorView<AsciiString> &names=*reinterpret_cast<SpawnVectorView<AsciiString> *>(&request->m_38); for(unsigned int t=0;t<names.size();++t) {
@@ -199,7 +199,7 @@ void Rva0056616B::rva005666C5() {
        Rva002104B6 *regionManager=TheLivingWorldLogic->regions;
        void *region=regionManager->rva002104B6(reinterpret_cast<char*>(player)+0x2c);
        if(region) {
-        Rva004E3184 temporary(0);
+        SpawnArmy temporary(0);
         reinterpret_cast<Rva004FAFF2*>(&temporary)->rva004FAFF2(*reinterpret_cast<const Rva004FAFF2*>(request));
         Coord2D center;
         LivingWorldRegionManager *centers=reinterpret_cast<LivingWorldRegionManager*>(TheLivingWorldLogic->regions);
