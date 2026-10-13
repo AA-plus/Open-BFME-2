@@ -1,5 +1,5 @@
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
-// partial score=0.986 date=2026-10-13
+// partial score=0.996 date=2026-10-13
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
 // partial score=0.965 date=2026-10-11
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
@@ -54,15 +54,16 @@ void LinearCampaign::onCurrentMissionWon(){
  }
  used.clear();
  if(ThePlayerList){
-  Player*player=0;int mask=ThePlayerList->rva002A7D30();
-  while(!player&&mask){Player*p=ThePlayerList->getEachPlayerFromMask(mask);if(p&&p->value5C==0)player=p;}
+  Player*player=0;struct MaskStore{int mask;ScienceType s;} ms;ms.mask=ThePlayerList->rva002A7D30();
+  while(!player&&ms.mask){Player*p=ThePlayerList->getEachPlayerFromMask(ms.mask);if(p&&p->value5C==0)player=p;}
   if(player){
    value10=player->value14;sciences.clear();
    const _STL::vector<ScienceType>&ps=player->sciences;
    sciences.reserve(ps.size());
-   for(_STL::vector<ScienceType>::const_iterator it=ps.begin(),end=ps.end();it!=end;++it){ScienceType s=*it;if(TheScienceStore->isScienceGrantable(s))sciences.push_back(s);}
+   for(_STL::vector<ScienceType>::const_iterator it=ps.begin(),end=ps.end();it!=end;++it){ms.s=*it;if(TheScienceStore->isScienceGrantable(ms.s))sciences.push_back(ms.s);}
    memset(&upgrades,0,sizeof(upgrades));
-   for(int i=0;i<1024;++i){unsigned int mask=1U<<((*(volatile int*)&i)&31);unsigned int index=((unsigned)(*(volatile int*)&i)>>5)*4;if(*(unsigned int*)(&((char*)player)[0x13c+index])&mask){const UpgradeTemplate*t=TheUpgradeCenter->rva0026EEA0(i);if(t&&t->carryover)*(unsigned int*)(index+((char*)this+0x20))|=mask;}}
+   const char *pw=(char *)player+0x13c;
+   for(int i=0;i<1024;++i){unsigned int mask=1U<<((*(volatile int*)&i)&31);unsigned int index=((unsigned)(*(volatile int*)&i)>>5)*4;if(*(unsigned int*)(pw+index)&mask){const UpgradeTemplate*t=TheUpgradeCenter->rva0026EEA0(i);if(t&&t->carryover)*(unsigned int*)(index+((char*)this+0x20))|=mask;}}
    valueA0=player->value314;
   }
  }
