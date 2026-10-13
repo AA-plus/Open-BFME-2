@@ -35,7 +35,18 @@ Rva0053FDE6::Rva0053FDE6() : m_00(2), m_04(0.0f), m_08(0.0f), m_0c(0.0f), m_10(0
 
 
 class DataChunkInput { public: int readInt(); };
-class Rva0054000B { char bytes[40]; };
+// Shared 40-byte record layout from the verified outer-constructor owner.
+class Rva0054000B
+{
+public:
+ Rva0054000B();
+ int m_00;
+ Rva0053FDE6 m_04;
+};
+
+Rva0054000B::Rva0054000B() : m_00(0)
+{
+}
 struct Rva00540B48Vector {
  Rva0054000B *first,*last,*capacity;
  Rva0054000B *erase(Rva0054000B*,Rva0054000B*);

@@ -41876,7 +41876,6 @@ _piChannelMessageA,,0x006AACB0,305,Code/GameEngine/Source/GameNetwork/GameSpy/pe
 ??0FXListDieModuleData@@QAE@XZ,,0x00253A78,26,Code/GameEngine/Source/GameLogic/Object/Die/Rva00253A78Ctor.cpp,matched,leaf ctor via base Rva00253510 plus explicit vtable plus members; identity corrected 2026-10-05 from native ModuleFactory registrations; old upgrade-base and 0x50B107 parser names withdrawn where contradicted
 ?rva0033C8E8@Rva0033C8E8@@QAE_NABVAsciiString@@AAV2@@Z,,0x0033C8E8,113,Code/GameEngine/Source/Common/Thing/Rva0033C8E8Chain.cpp,matched,four vector find-erase chain via rowed 0x33C807
 ??1Rva005E8AAF@@UAE@XZ,,0x005E8AAF,48,Code/GameEngine/Source/Common/Bfme/Rva005E8AAFDtor.cpp,matched,virtual dtor member 0x005E8908 then base vtable via inline base
-??0Rva0053FDE6@@QAE@XZ,,0x0053FDE6,68,Code/Libraries/Source/WWVegas/WW3D2/Rva0053FDE6Init.cpp,matched,ctor int2 zeros shared 1.0f plus global via full init list
 ??4Rva0026F684@@QAEAAV0@ABV0@@Z,,0x0026F767,339,Code/Libraries/Source/WWVegas/WWLib/Rva0026F684Assign.cpp,matched,same vtable 0x007FABF0 class as ctor and dtor
 ??0Made002CC711@@QAE@XZ,,0x00508F51,59,Code/GameEngine/Source/GameLogic/Object/Made002CC711Ctor.cpp,matched,paralyze nugget ctor base plus pi plus zeroes
 ?rva002E8B9B@Rva002E8B9B@@QAEPAVMixFileInfoBuffer@@PAUIn002E6BA1@@@Z,,0x002E8B9B,52,Code/GameEngine/Source/Common/Rva002E8B9B.cpp,matched,chain from 0x002E8B7A global 0x00A049D0 pool init
@@ -41887,7 +41886,6 @@ _piChannelMessageA,,0x006AACB0,305,Code/GameEngine/Source/GameNetwork/GameSpy/pe
 ?rva00512CE9@Rva00512CE9@@QAEXH_N@Z,,0x00512CE9,94,Code/GameEngine/Source/Common/Rva00512CE9Kick.cpp,matched,kick button sprintf plus apt invoke via g_Va009FE4CC
 ??_GRva005E888A@@QAEPAXI@Z,,0x005E88C1,28,Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-06-5E88C1.cpp,matched,deleting dtor via rowed dtor plus rowed delete
 ??1Rva005E8EA1@@QAE@XZ,,0x005E8EA1,8,Code/GameEngine/Source/Common/Bfme/Rva005E8EA1Dtor.cpp,matched,nonvirtual dtor tail-jmp to rowed member dtor at plus8
-??0Rva0054000B@@QAE@XZ,,0x0054000B,16,Code/Libraries/Source/WWVegas/WW3D2/Rva0053FDE6Init.cpp,matched,outer ctor int0 plus inner via rowed ctor
 ??$__lower_bound@PAUBfmePod28@@U1@U?$less@UBfmePod28@@@_STL@@H@_STL@@YAPAUBfmePod28@@PAU1@0ABU1@U?$less@UBfmePod28@@@0@PAH@Z,,0x005413B0,66,Code/Libraries/Source/WWVegas/WWLib/stlport_vector_pod28_allocate_copy.cpp,matched,unlock lower bound Pod28 via less a0
 ??_GRva005E8EA1@@QAEPAXI@Z,,0x005E8EA9,28,Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-06-5E8EA9.cpp,matched,deleting dtor via rowed dtor plus rowed delete
 ?rva005092B2@Rva005092B2@@QAEXXZ,,0x005092B2,34,Code/GameEngine/Source/GameLogic/Object/Rva005092B2Resolve.cpp,matched,base resolve plus weapon template lookup
@@ -86971,3 +86969,5 @@ $L1811,,0x00797265,11,Code/GameEngine/Source/Common/System/Rva0056616BCopy.cpp,m
 $L1817,,0x007972A7,11,Code/GameEngine/Source/Common/System/Rva0056616BCopy.cpp,matched,gen-funclet;parent=??0Rva0056616B@@QAE@ABV0@@Z; Native FuncInfo94B0C8 UnwindMap94B050 and complete exact parent EH graph place this actual current local label; whole11B Ghidra boundary agrees with the next code label; every native callee resolves to a whole-byte-and-relocation verified typed destructor; direct unique local label without object-symbol alias or pin
 $L1822,,0x007972E4,14,Code/GameEngine/Source/Common/System/Rva0056616BCopy.cpp,matched,gen-funclet;parent=??0Rva0056616B@@QAE@ABV0@@Z; Native FuncInfo94B0C8 UnwindMap94B050 and complete exact parent EH graph place this actual current local label; whole14B Ghidra boundary agrees with the next code label; every native callee resolves to a whole-byte-and-relocation verified typed destructor; direct unique local label without object-symbol alias or pin
 ??0Rva003F5F89@@QAE@ABV0@@Z,,0x003F5F89,71,Code/GameEngine/Source/GameLogic/LivingWorld/LivingWorldLogicRemovePlayer.cpp,matched,
+??0Rva0053FDE6@@QAE@XZ,,0x0053FDE6,68,Code/GameEngine/Source/Common/Rva00540B48.cpp,matched,ctor int2 zeros shared 1.0f plus global via full init list; rehomed with same-TU reader to remove duplicate provider
+??0Rva0054000B@@QAE@XZ,,0x0054000B,16,Code/GameEngine/Source/Common/Rva00540B48.cpp,matched,outer ctor int0 plus inner via rowed ctor; rehomed with inner provider to preserve known registers and remove duplicate
