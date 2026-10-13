@@ -391,6 +391,12 @@ void StrategicPlayerStatus::rva00523592()
 // The extra calls use the existing pinned +0x10 InGameUI view and folded
 // slot-3 forwarder, as in the matched ShowQuitMenu; their target names remain
 // unresolved here. No donor class layout is assumed.
+class AptPlayerTribute
+{
+public:
+	static void OpenScreen();
+};
+
 void AptPlayerTribute::OpenScreen()
 {
 	if (g_Va00A046B4)
