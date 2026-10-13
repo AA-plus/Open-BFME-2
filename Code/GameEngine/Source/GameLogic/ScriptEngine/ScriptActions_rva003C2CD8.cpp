@@ -23,6 +23,11 @@ public:
 	int get(int x);
 	int rva002A7548(int x);
 };
+class Rva002A7461
+{
+public:
+	int rva002A7548(int x);
+};
 
 class Player
 {
@@ -76,7 +81,7 @@ void __stdcall Rva003C2D34Do(Parameter *a, Parameter *b)
 	Player *player = ThePlayerList->getPlayerFromMask(mask);
 	if (player == 0)
 		return;
-	int v = player->m_60.rva002A7548(1);
+	int v = ((Rva002A7461 *)&player->m_60)->rva002A7548(1);
 	ScriptCounter *c = TheScriptEngine->bfmeCounter(b->m_string);
 	c->m_value = v;
 }

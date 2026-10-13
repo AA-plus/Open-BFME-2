@@ -20,6 +20,14 @@ class Rva002CB35CObj
 public:
 	bool rva002CB35C(int p1, void *p2, void *p3, void *p4, float p5, int p6);
 };
+struct Coord3D;
+class Object;
+class Rva002C9B80Owner
+{
+public:
+	bool isWithinAttackRange(Object *source, const Coord3D *pos, Object *victim,
+		const Coord3D *victimPos, float bonus, bool checkMinimum);
+};
 
 class Object
 {
@@ -65,7 +73,7 @@ bool Rva002EC3CE::rva002EC3CE(int a1, int a2)
 			return false;
 	}
 	void *p2c = m_2C;
-	if (!m_24->rva002CB35C((int)m_28, &m_14, p2c, (char *)p2c + 0x38, 0.0f, 1))
+	if (!((Rva002C9B80Owner *)m_24)->isWithinAttackRange(m_28, (const Coord3D *)&m_14, (Object *)p2c, (const Coord3D *)((char *)p2c + 0x38), 0.0f, true))
 		return false;
 	if (!m_0->rva002EAA41((int)m_28, a1, a2, m_10, m_30, m_C))
 		return false;

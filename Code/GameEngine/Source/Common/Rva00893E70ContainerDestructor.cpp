@@ -40,13 +40,13 @@ private:
 	Rva00892640Item m_inline[2];
 };
 
-extern Rva00892640Item *Rva00893B30ResizeItems(
-	Rva00892640Item *data, int logical_count, int new_capacity);
+class AptValueNameEntry;
+AptValueNameEntry *__cdecl Rva006CDBF0Resize(AptValueNameEntry *, int, int);
 
 Gen_uw_00893e70::~Gen_uw_00893e70()
 {
 	if (m_data != m_inline)
-		Rva00893B30ResizeItems(m_data, 0, 0);
+		Rva006CDBF0Resize((AptValueNameEntry *)m_data, 0, 0);
 }
 
 // Retail's data references in this unit's matched rows land on globals defined

@@ -91,8 +91,13 @@ class Rva00DF6F94GapFillerContext { public: void rva174ba6(); };
 extern Rva00DF6F94GapFillerContext *TheMeshGapFillerContext;
 
 // The +0x87 static flush: the callee reads only the global 0x00DEC4F4 and an
-// SSE constant, so it takes no this and is __cdecl. Pinned address name.
-extern void __cdecl rva0012F190(void);
+// SSE constant, so it takes no this and is __cdecl. Rowed as the static
+// SortingRendererClass::Flush.
+class SortingRendererClass
+{
+public:
+	static void Flush();
+};
 
 class StaticSortListClass
 {
@@ -137,7 +142,7 @@ bool WW3D::Render(RenderObjClass &obj, RenderInfoClass &rinfo)
 	CurrentStaticSortLists->Render_And_Clear(rinfo);
 	AreStaticSortListsEnabled = old_enable;
 
-	rva0012F190();
+	SortingRendererClass::Flush();
 	TheDX8MeshRenderer->Clear_Pending_Delete_Lists();
 	return true;
 }
