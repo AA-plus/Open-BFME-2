@@ -87738,3 +87738,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ?append@Rva006CE660Vec@@QAEXPAVAptValueNameEntry@@@Z,,0x006CEA90,63,Code/Libraries/Source/Apt/AptValue/PlaybackBufferResize.cpp,matched,
 ?rva0032A4D7@SidesList@@QAEXAAVDataChunkOutput@@@Z,,0x0032A4D7,176,Code/GameEngine/Source/GameLogic/Map/SidesListDataChunks.cpp,matched,
 ?rva005ED385@Rva005ED385@@QAEXHPBVImage@@@Z,,0x005ED385,140,Code/GameEngine/Source/Common/AptImageKeySetters.cpp,matched,
+?rva0056C0A5@CellGrid@@QAEIABUCellPoint@@@Z,,0x0056C0A5,75,Code/GameEngine/Source/Common/BfmeCellGridCtor.cpp,matched,

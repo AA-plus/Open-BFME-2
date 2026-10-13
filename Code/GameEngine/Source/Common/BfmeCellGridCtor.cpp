@@ -71,11 +71,18 @@ public:
 
 extern Debug *theDebug;
 
+struct CellPoint
+{
+	float x;
+	float y;
+};
+
 class CellGrid
 {
 public:
 	CellGrid(int width, int height, float cellSize, float offset);
 	__declspec(noinline) void rva0056C065();
+	unsigned int rva0056C0A5(const CellPoint &point);	// 0x0056C0A5 cell index lookup
 private:
 	int m_width;
 	int m_height;
@@ -105,6 +112,26 @@ void CellGrid::rva0056C065()
 		delete[] m_cellValues;
 		m_cellValues = 0;
 	}
+}
+
+// CellGrid::rva0056C0A5, retail 0x0056C0A5 (75 bytes): point -> row-major
+// cell index, out-of-range 0x7fffffff. Identity (target): the rowed ctor's
+// layout (width+0, count+8, size+0xC, offset+0x10) and the callers in
+// VictorySystem. The double x subtraction is staged through a float local so
+// the x87 schedule matches retail (T1 x87-float-stage lever).
+unsigned int CellGrid::rva0056C0A5(const CellPoint &point)
+{
+	if (m_cellSize > 0.0f)
+	{
+		int row = (int)(((double)point.y - m_offset) / m_cellSize);
+		int index = row * m_width;
+		float r1_delta_30_11 = (double)point.x - m_offset;
+		r1_delta_30_11 /= m_cellSize;
+		index += (int)r1_delta_30_11;
+		if ((unsigned int)index < m_cellCount)
+			return index;
+	}
+	return 0x7fffffff;
 }
 
 CellGrid::CellGrid(int width, int height, float cellSize, float offset)
