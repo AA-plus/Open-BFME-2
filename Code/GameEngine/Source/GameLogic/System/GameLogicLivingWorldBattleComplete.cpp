@@ -20,7 +20,9 @@
 // g_00DFE1C8 0x00210DC9 set and g_00DFEF18 +0x18 clear: TheGameLogic
 // 0x00210C66 picks sendEndSessionMsg or g_00DFE1C8 0x00211FA8) or calls
 // 0x00376E92(1, 0) and the transition. Unestablished types keep
-// address-derived names.
+// address-derived names; the region-manager, 0x00210DC9 and 0x00376E92
+// callees are called by their rows' names (the battle through a cast of the
+// row's Rva003F468D return, 0x00376E92 with its two byte flags).
 
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
@@ -72,10 +74,12 @@ private:
 	int m_winningSide;
 };
 
+class Rva003F468D;
+
 class Rva0020E6B7RegionManager
 {
 public:
-	LivingWorldBattle *rva0020E6B7();
+	Rva003F468D *rva0020E6B7();
 };
 
 class Rva002E2903Player;
@@ -132,7 +136,7 @@ public:
 	void rva0023DA4E();
 	void LivingWorldTacticalBattleComplete();
 	Rva003F468DParticipant *GetLivingWorldTacticalVictor();
-	void rva00376E92(int a, int b);
+	void rva00376E92(bool a, bool b);
 	void TransitionFromLivingWorldTacticalBattle();
 
 private:
@@ -148,7 +152,7 @@ extern GameLogic *TheGameLogic;
 void GameLogic::LivingWorldTacticalBattleComplete()
 {
 	m_armySummarySystem.Save(m_objList);
-	LivingWorldBattle *battle = (*(Rva002BA8F1Logic **)&TheLivingWorldLogic)->getRegionManager()->rva0020E6B7();
+	LivingWorldBattle *battle = (LivingWorldBattle *)(*(Rva002BA8F1Logic **)&TheLivingWorldLogic)->getRegionManager()->rva0020E6B7();
 	int mask = 0xFFFFF;
 	while (mask) {
 		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
@@ -180,7 +184,7 @@ void GameLogic::LivingWorldTacticalBattleComplete()
 		else
 			g_00DFE1C8->rva00211FA8();
 	} else {
-		rva00376E92(1, 0);
+		rva00376E92(true, false);
 		TransitionFromLivingWorldTacticalBattle();
 	}
 }
@@ -199,7 +203,7 @@ void GameLogic::rva0023DA49()
 void GameLogic::rva0023DA4E()
 {
 	if ((*(Rva002BA8F1Logic **)&TheLivingWorldLogic) && (*(Rva002BA8F1Logic **)&TheLivingWorldLogic)->rva002B3669())
-		rva00376E92(0, 1);
+		rva00376E92(false, true);
 	else
 		LivingWorldTacticalBattleComplete();
 }

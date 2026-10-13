@@ -1,13 +1,19 @@
 // cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// stlport
 //
 // ?rva003C08CC@Rva003C08CC@@QAEXPBVAsciiString@@PAX@Z @0x003C08CC 183B.
 // Team member-flag dispatch: team-name copy, getTeamNamed, AI createGroup,
-// getTeamAsAIGroup, pinned AIGroup 0x0036FC23 member with 1, null check on
-// the extra arg, controlling player plus its +0x2EC object, member loop
-// setting +0x3BE on +0x258-linked objects, then the banked 0x003C01E2
-// thiscall (forwarded this) with the team name plus a static-or-member
-// string. String/flag identities unproven.
+// getTeamAsAIGroup, AIGroup::groupIdle (0x0036FC23) from a script, null
+// check on the extra arg, controlling player plus its +0x2EC object, member
+// loop setting +0x3BE on +0x258-linked objects, then ScriptActions'
+// doMergeTeamIntoTeam (0x003C01E2) on the forwarded this with the team name
+// plus a static-or-member string. String/flag identities unproven. Both
+// callees are called by their rows' names; the protected merge is reached
+// through a ScriptActions base.
 #include "ascii_string.h"
+#include "GameLogic/ScriptActionsBFME2.h"
+
+enum CommandSourceType { CMD_FROM_PLAYER = 0, CMD_FROM_SCRIPT = 1 };
 
 template<class OBJCLASS>
 class DLINK_ITERATOR
@@ -62,7 +68,7 @@ extern AI *TheAI;
 class AIGroup
 {
 public:
-	void rva0036FC23(int v);
+	void groupIdle(CommandSourceType cmdSource);
 };
 
 struct Rva003C08CCP2EC
@@ -78,14 +84,7 @@ public:
 	Rva003C08CCP2EC *m_p2EC; // +0x2EC
 };
 
-
-class Rva003C01E2
-{
-public:
-	void rva003C01E2(const AsciiString *a, const AsciiString *b);
-};
-
-class Rva003C08CC
+class Rva003C08CC : public ScriptActions
 {
 public:
 	void rva003C08CC(const AsciiString *teamName, bool extra);
@@ -100,7 +99,7 @@ void Rva003C08CC::rva003C08CC(const AsciiString *teamName, bool extra)
 	if (group == 0)
 		return;
 	team->getTeamAsAIGroup(group);
-	group->rva0036FC23(1);
+	group->groupIdle(CMD_FROM_SCRIPT);
 	if (extra == 0)
 		return;
 	Player *player = team->getControllingPlayer();
@@ -118,5 +117,5 @@ void Rva003C08CC::rva003C08CC(const AsciiString *teamName, bool extra)
 		s = &AsciiString::TheEmptyString;
 	else
 		s = (const AsciiString *)((const char *)e->m_p30 + 0x14);
-	((Rva003C01E2 *)this)->rva003C01E2(teamName, s);
+	doMergeTeamIntoTeam(*teamName, *s);
 }

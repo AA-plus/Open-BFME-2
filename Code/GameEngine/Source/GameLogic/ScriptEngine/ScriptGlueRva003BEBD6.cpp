@@ -4,8 +4,9 @@
 // Team-plus-position AI-group dispatch, sibling of landed 0x003BEA10:
 // same head (team-name copy, getTeamNamed, AI createGroup, getTeamAsAIGroup,
 // two flag copies off 0x00DFEFA4, member count) but the position comes from
-// the pinned Team 0x0039E9A1 out-member instead of the TerrainLogic slot,
-// then the same count>1 branch (pinned AIGroup 0x00372C22 member vs rowed
+// the rowed Team 0x0039E9A1 out-member (its returned pointer unused)
+// instead of the TerrainLogic slot, then the same count>1 branch (rowed
+// 0x00372C22 member, called as BfmeC986 like the sibling, vs rowed
 // Rva00372571Params block with source 1). Single string param, ret 4.
 #include "ascii_string.h"
 
@@ -28,7 +29,7 @@ class Team
 public:
 	void getTeamAsAIGroup(AIGroup *group);
 	int rva0039DC9E(BitFlags<116> mustBeSet, BitFlags<116> mustBeClear) const;
-	void rva0039E9A1(Coord3D *pos);
+	Coord3D *rva0039E9A1(Coord3D *pos) const;
 };
 
 struct Rva00372571Params
@@ -47,7 +48,11 @@ class AIGroup
 {
 public:
 	void rva00372571(Rva00372571Params *params, int source);
-	void rva00372C22(Coord3D *pos, int a, int b, int c);
+};
+class BfmeC986
+{
+public:
+	void rva00372C22(int pos, int a, int b, int c);
 };
 
 class AI
@@ -96,7 +101,7 @@ void __stdcall Rva003BEBD6Do(const AsciiString *teamName)
 	Coord3D pos;
 	team->rva0039E9A1(&pos);
 	if (count > 1) {
-		group->rva00372C22(&pos, 1, 0, 1);
+		((BfmeC986 *)group)->rva00372C22((int)&pos, 1, 0, 1);
 	} else {
 		Rva00372571Params params;
 		params.m_14 = -1;

@@ -67,8 +67,8 @@ struct ScriptCounter
 
 // The read-only flag lookup setFlag reaches here is the ledger's matched
 // ?rva0020881A@ScriptEngine@@QAEPAXVAsciiString@@@Z body at 0x0020881A (134
-// bytes), which the ledger also pins as bfmeFlagForRead@ScriptEngine because
-// this call site is one of its callers. The donor reaches it through an ILT
+// bytes), called by that row's name and signature so the unit links; the
+// pointer it returns is the flag. The donor reaches it through an ILT
 // thunk whose retail address does not resolve; the REL32 displacement read off
 // this body's call at 0x0020945A lands on 0x0020881A, so that is the callee
 // named here.
@@ -82,10 +82,11 @@ typedef bool *(BFMEScriptEngineFlagLookup::*FindFlagFunction)(AsciiString);
 
 class ScriptEngine
 {
+public:
+	void *rva0020881A(AsciiString name);
 protected:
 	ScriptCounter *bfmeCounter(AsciiString name);
 	bool *bfmeFlagForWrite(AsciiString name);
-	bool *bfmeFlagForRead(AsciiString name);
 	void setFlag(ScriptAction *action, bool copyFromFlag);
 };
 
@@ -96,7 +97,7 @@ void ScriptEngine::setFlag(ScriptAction *action, bool copyFromFlag)
 	bool value = false;
 	if (copyFromFlag)
 	{
-		bool *source = bfmeFlagForRead(sourceAction->getParameter(1)->m_string);
+		bool *source = (bool *)rva0020881A(sourceAction->getParameter(1)->m_string);
 		if (source)
 			value = *source;
 	}
