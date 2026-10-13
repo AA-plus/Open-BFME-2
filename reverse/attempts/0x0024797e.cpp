@@ -1,6 +1,21 @@
 // ?DoXfer@GameLogicSnapshot@@QAEXPAVXfer@@@Z
 // partial score=0.99 date=2026-10-13
+// ?DoXfer@GameLogicSnapshot@@QAEXPAVXfer@@@Z
+// partial score=0.99 date=2026-10-13
 // NOTE: needs reference/shims/bfme2_ascii/string_base.h `int compare(const StringBase<T> &str) const throw();` (not landed: shim edit = full gate) so the compare temp has no EH state.
+// With that shim: 2197 B vs 2195, 343 diffs, all from one frame wall. Retail frame
+// sub esp,0x70 puts the hash iterator `it` at [ebp-0x3c] so its second word shares
+// [ebp-0x38] with the empty FP guard (Rva0004224C, EH state 3, live to the end);
+// ours gives the guard its own slot (it at [ebp-0x40], frame 0x74), shifting every
+// slot below and swapping ebx/eax in `it=first`. No change (343 each): guard ctor
+// inline in-class (GameLogicInit.cpp model, free-places onto [ebp+8] in 0x248558,
+// but here [ebp+8] holds i/AsciiString/esp save), noinline inline, declared-only,
+// visible rva000421FD + setFPMode, /EHs, reference-bound temporary guard. Toy TUs:
+// cl 7.1 free-places the empty guard only onto an unused slot (an enregistered
+// param home), never over a live local. WB 0x00D097E0 has no guard object (inline
+// m_1b8 ++/--). Fixed here: TheGameLogic declared as the converged real global;
+// m_158 typed vector<Rva00243B52DestroyEntry *> so clear() calls retail's 0x31BD55
+// (the void* erase pin resolves to 0x27400).
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist
 // stlport
 //
@@ -19,6 +34,7 @@
 
 class Xfer;
 class Object;
+struct Rva00243B52DestroyEntry;
 class Snapshot { public: virtual void slot00(); };
 
 struct XferVersionInfo
@@ -174,13 +190,22 @@ extern DelayedExperienceLevelGrantSystem *TheDelayedExperienceLevelGrantSystem;
 // Pointer conversion to a Snapshot sub-object at +off, null-guarded as a base conversion is.
 static __forceinline Snapshot *snapshotAt(void *p, int off) { return p ? (Snapshot *)((char *)p + off) : 0; }
 
-class GameLogicView;
-extern GameLogicView *TheGameLogic;
+class GameLogic;
+extern GameLogic *TheGameLogic;
+class Rva000421FD
+{
+public:
+	void rva000421FD(void);
+};
 struct LogicFPView { char opaque[0x1B4]; int depth; };
 class Rva0004224C
 {
 public:
-	Rva0004224C(void);
+	Rva0004224C(void)
+	{
+		if (TheGameLogic)
+			((Rva000421FD *)TheGameLogic)->rva000421FD();
+	}
 	~Rva0004224C(void) { if (TheGameLogic) --((LogicFPView *)TheGameLogic)->depth; }
 };
 
@@ -280,7 +305,7 @@ private:
 	int m_10c;
 	bool m_110;
 	char m_pad111[0x158 - 0x111];
-	_STL::vector<void *> m_158;
+	_STL::vector<Rva00243B52DestroyEntry *> m_158;
 	Snapshot *m_164;
 	Snapshot *m_168;
 	Snapshot *m_16c;
