@@ -1,3 +1,5 @@
+// ??1Rva00136794@@UAE@XZ
+// partial score=0.9 date=2026-10-13
 // ?rva00136B5E@@YAXPBD0@Z
 // partial score=0.850662 date=2026-10-10
 // cl: /O1 /Ob1 /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /ICode/GameEngineDevice/Source/W3DDevice/GameClient

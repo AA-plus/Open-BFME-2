@@ -1,5 +1,7 @@
 // ?iniParseEvaEventForwardReference@Eva@@SAXPAVINI@@@Z
 // partial score=0.99 date=2026-10-13
+// ?iniParseEvaEventForwardReference@Eva@@SAXPAVINI@@@Z
+// partial score=0.99 date=2026-10-13
 // cl: /O1 /G7 /EHs /DNDEBUG /MD /arch:SSE /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/shims/eva_vector /ICode/Libraries/Include
 // stlport
 // BANK (drop-in for Code/GameEngine/Source/GameClient/Eva.cpp): with this

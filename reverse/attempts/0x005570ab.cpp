@@ -1,6 +1,8 @@
 // ?rva005570AB@Rva005570AB@@QAEHHHHHH@Z
 // partial score=0.98 date=2026-10-13
 // ?rva005570AB@Rva005570AB@@QAEHHHHHH@Z
+// partial score=0.98 date=2026-10-13
+// ?rva005570AB@Rva005570AB@@QAEHHHHHH@Z
 // partial score=0.98 date=2026-10-07
 // cl: /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_BFME_RETAIL_TREE_INSERT_LAYOUT /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE
 // PersistentStorageThread.cpp -- GameSpy persistent-stats members recovered
