@@ -6777,13 +6777,13 @@ void __cdecl rva007B3EBF()
 	g_Va00E02C4C = 0x00E02C44;
 }
 
-// Startup thunk 0x007AC022 constructs Rva0007EBFB at VA 0x00DE2008.
+// Startup thunk 0x007AC022 constructs WaterDrawFXShaderParameterSourceNamespace at VA 0x00DE2008.
 // Its verified WaterDraw destructor at 0x0007EC44 unregisters the binder
 // and destroys its two members; use that provider for the matching cleanup.
-class Rva0007EBFB
+class WaterDrawFXShaderParameterSourceNamespace
 {
 public:
-	virtual ~Rva0007EBFB();
+	virtual ~WaterDrawFXShaderParameterSourceNamespace();
 };
 
 extern unsigned g_Va00DE2008;
@@ -6792,8 +6792,8 @@ unsigned int g_Va00DE2008;
 // ?rva007B6BF5@@YAXXZ @ 0x007B6BF5 (10B). WaterDraw global cleanup registered by startup thunk 0x007AC022; tail-calls the verified destructor at 0x0007EC44.
 void __cdecl rva007B6BF5()
 {
-	Rva0007EBFB *p = (Rva0007EBFB *)&g_Va00DE2008;
-	return p->Rva0007EBFB::~Rva0007EBFB();
+	WaterDrawFXShaderParameterSourceNamespace *p = (WaterDrawFXShaderParameterSourceNamespace *)&g_Va00DE2008;
+	return p->WaterDrawFXShaderParameterSourceNamespace::~WaterDrawFXShaderParameterSourceNamespace();
 }
 
 // FrustumClass construction view for the thunk below. The rowed ctor

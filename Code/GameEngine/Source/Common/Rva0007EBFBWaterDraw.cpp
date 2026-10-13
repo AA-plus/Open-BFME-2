@@ -1,5 +1,5 @@
 // cl: /EHsc /MD /O1
-// ??0Rva0007EBFB@@QAE@XZ @0x0007EBFB 73B WaterDraw registering ctor with vtable plus two members.
+// ??0WaterDrawFXShaderParameterSourceNamespace@@QAE@XZ @0x0007EBFB 73B WaterDraw registering ctor with vtable plus two members.
 // Evidence: stores 0x007C6F80/5C/64 then Register WaterDraw; empty base arms EH state 0. Precedents Rva000E6350Ctor.cpp Rva0018BEC7Ctor.cpp.
 //
 // The "WaterDraw" FX parameter binder, the water twin of the Terrain binder
@@ -37,8 +37,8 @@
 // classes declare no dtor, so the WaterDraw dtor schedules the three base
 // vptr stores after its EH epilogue load as retail does.
 //
-// ??1Rva0007EBFB@@UAE@XZ                                             @0x0007EC44  67B
-// ?ResolveBindings@Rva0007EBFB@@UAEXPBD0PAVFXShaderParameterBinder@@@Z @0x0007FFED 233B
+// ??1WaterDrawFXShaderParameterSourceNamespace@@UAE@XZ                                             @0x0007EC44  67B
+// ?ResolveBindings@WaterDrawFXShaderParameterSourceNamespace@@UAEXPBD0PAVFXShaderParameterBinder@@@Z @0x0007FFED 233B
 // ?ResolveBindings@Rva0007EBFB_Member0@@UAEXPBD0PAVFXShaderParameterBinder@@@Z @0x000806F3 357B
 // ?ResolveBindings@Rva0007EBFB_Member1@@UAEXPBD0PAVFXShaderParameterBinder@@@Z @0x00080E30 357B
 // ?Rva000800D6BlendUsingTerrainAlpha@@YAXPAUID3DXEffect@@PBD@Z      @0x000800D6  36B
@@ -186,11 +186,11 @@ struct Rva0007EBFB_Member1 : public FXShaderParameterSourceNamespace_Struct
 	virtual void ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry);
 };
 
-class Rva0007EBFB : public Base
+class WaterDrawFXShaderParameterSourceNamespace : public Base
 {
 public:
-	Rva0007EBFB();
-	virtual ~Rva0007EBFB();
+	WaterDrawFXShaderParameterSourceNamespace();
+	virtual ~WaterDrawFXShaderParameterSourceNamespace();
 	virtual void ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry);
 
 private:
@@ -299,17 +299,17 @@ void Rva00081761Bases811X2(ID3DXEffect *effect, D3DXHANDLE handle);
 void Rva0008183ABases811Y2(ID3DXEffect *effect, D3DXHANDLE handle);
 void Rva00081913Bases811Z2(ID3DXEffect *effect, D3DXHANDLE handle);
 
-Rva0007EBFB::Rva0007EBFB()
+WaterDrawFXShaderParameterSourceNamespace::WaterDrawFXShaderParameterSourceNamespace()
 {
     Rva00153565Register("WaterDraw", this);
 }
 
-Rva0007EBFB::~Rva0007EBFB()
+WaterDrawFXShaderParameterSourceNamespace::~WaterDrawFXShaderParameterSourceNamespace()
 {
 	Rva001532E1Erase("WaterDraw");
 }
 
-void Rva0007EBFB::ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry)
+void WaterDrawFXShaderParameterSourceNamespace::ResolveBindings(const char *name, const char *handle, FXShaderParameterBinder *registry)
 {
 	Rva001530E9Path path;
 	Rva001530E9Parse(name, &path);

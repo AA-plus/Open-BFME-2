@@ -415,10 +415,10 @@ public:
 	const char * name() const;
 };
 
-class Rva0055B146
+class AIBuildable
 {
 public:
-	void rva0055B146(int a);
+	void addNeed(int a);
 };
 
 class Overridable
@@ -1115,15 +1115,15 @@ const char * Rva005FABBC::rva005FABBC() const
 	return Rva005E39E0Named::name();
 }
 
-// 0x005DAC33: tail jump to Rva0055B146::rva0055B146.
-class AIBuildableUnit : public Rva0055B146
+// 0x005DAC33: tail jump to AIBuildable::addNeed.
+class AIBuildableUnit : public AIBuildable
 {
 public:
 	void addNeed(int a);
 };
 void AIBuildableUnit::addNeed(int a)
 {
-	Rva0055B146::rva0055B146(a);
+	AIBuildable::addNeed(a);
 }
 
 // 0x005E358F: tail jump to Overridable::markAsOverride.

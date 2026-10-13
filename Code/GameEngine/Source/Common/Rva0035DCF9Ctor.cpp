@@ -1,14 +1,14 @@
-// ??0Rva0035DCF9@@QAE@XZ
+// ??0MainMenuMediumScaleUpTransition@@QAE@XZ
 // cl: /MD
 //
-// ??0Rva0035DCF9@@QAE@XZ @0x0035DE55 80B: derived ctor calling base
+// ??0MainMenuMediumScaleUpTransition@@QAE@XZ @0x0035DE55 80B: derived ctor calling base
 // ??0Rva001DBAA4 at 0x001DBAA4, the shorter sibling of the rowed
 // Rva0035E00F ctor 0x0035E206 (Rva0035E00FFinish.cpp, same three levers):
 // window +0x10..+0x44 with +0x14 = 3 and +0x28 = -1, vtable 0x00C16574
 // (the rowed destructor 0x0035DCF9 and vslots 0x0035DD08/0x0035DD9C share
 // it), then the base +4 takes +0x14, +0xC clears and +9 is set.
-extern "C" const void *const vtbl_00C16574[];  // ??_7Rva0035DCF9@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00C16574=??_7Rva0035DCF9@@6B@")
+extern "C" const void *const vtbl_00C16574[];  // ??_7MainMenuMediumScaleUpTransition@@6B@
+#pragma comment(linker, "/alternatename:_vtbl_00C16574=??_7MainMenuMediumScaleUpTransition@@6B@")
 
 class Rva001DBAA4
 {
@@ -21,11 +21,11 @@ public:
 	bool m_A;
 	int m_C;
 };
-class __declspec(novtable) Rva0035DCF9 : public Rva001DBAA4
+class __declspec(novtable) MainMenuMediumScaleUpTransition : public Rva001DBAA4
 {
 public:
-	virtual ~Rva0035DCF9();
-	Rva0035DCF9();
+	virtual ~MainMenuMediumScaleUpTransition();
+	MainMenuMediumScaleUpTransition();
 	int m_10;
 	int m_14;
 	int m_18;
@@ -41,7 +41,7 @@ public:
 	int m_40;
 	int m_44;
 };
-Rva0035DCF9::Rva0035DCF9()
+MainMenuMediumScaleUpTransition::MainMenuMediumScaleUpTransition()
 {
 	int *p28 = &m_28;
 	int *p14 = &m_14;

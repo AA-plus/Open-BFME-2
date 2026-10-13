@@ -3,10 +3,10 @@
 // restore the class vtable, and tail-call the base destructor at 0x1DBAC3.
 // Owners are unidentified, so each keeps an address name; the base is
 // declared by its pinned destructor spelling. Deleting destructors follow.
-// vslot 0x0035DD9C (?Rva0035DD9C@Rva0035DCF9@@UAEXXZ, 33B, slot 3 offset 0xC
+// vslot 0x0035DD9C (?Rva0035DD9C@MainMenuMediumScaleUpTransition@@UAEXXZ, 33B, slot 3 offset 0xC
 // of vtable 0x00816574): hide windows at +0xC and +0x44 via rowed winHide
 // 0x00313C64; clears +0x8/+0x9. Evidence: vtable 0x00816574.
-// vslot 0x0035DD08 (?Rva0035DD08@Rva0035DCF9@@UAEXH@Z, 148B, slot 2 offset 0x8
+// vslot 0x0035DD08 (?update@MainMenuMediumScaleUpTransition@@UAEXH@Z, 148B, slot 2 offset 0x8
 // of vtable 0x00816574): range-select hide via rowed winHide 0x00313C64;
 // sets +0x28 to -1 then to index in middle range. Evidence: vtable 0x00816574.
 // vslot 0x0035E0F7 (?Rva0035E0F7@Rva0035E00F@@UAEXH@Z, 142B, slot 2 offset 0x8
@@ -53,12 +53,12 @@ class Rva0035D74A : public Rva001DBAC3Base { public: virtual ~Rva0035D74A(); int
 Rva0035D74A::~Rva0035D74A() { m_field0C = 0; m_field34 = 0; }
 void famgenDelete(Rva0035D74A *p) { delete p; }
 
-class Rva0035DCF9 : public Rva001DBAC3Base
+class MainMenuMediumScaleUpTransition : public Rva001DBAC3Base
 {
 public:
-	virtual ~Rva0035DCF9();
+	virtual ~MainMenuMediumScaleUpTransition();
 	virtual void slot1();
-	virtual void Rva0035DD08(int index);
+	virtual void update(int index);
 	virtual void Rva0035DD9C();
 	virtual void slot4();
 	virtual void slot5();
@@ -77,10 +77,10 @@ private:
 	char m_pad2C[0x44 - 0x2C];
 	GameWindow *m_44;
 };
-Rva0035DCF9::~Rva0035DCF9() { m_C = 0; }
-void famgenDelete(Rva0035DCF9 *p) { delete p; }
+MainMenuMediumScaleUpTransition::~MainMenuMediumScaleUpTransition() { m_C = 0; }
+void famgenDelete(MainMenuMediumScaleUpTransition *p) { delete p; }
 
-void Rva0035DCF9::Rva0035DD9C()
+void MainMenuMediumScaleUpTransition::Rva0035DD9C()
 {
 	GameWindow *w1 = m_C;
 	m_8 = false;
@@ -89,7 +89,7 @@ void Rva0035DCF9::Rva0035DD9C()
 	m_44->winHide(true);
 }
 
-void Rva0035DCF9::Rva0035DD08(int index)
+void MainMenuMediumScaleUpTransition::update(int index)
 {
 	m_28 = -1;
 	if (index < m_10)
@@ -279,9 +279,9 @@ void famgenDelete(Rva0035FF76 *p) { delete p; }
 // Placeholder virtuals in this unit's vftables: in retail, every vftable that holds
 // each one has the same function in that slot (vftable addresses from matched vptr
 // stores). Bind them to the rows at those functions.
-#pragma comment(linker, "/alternatename:?slot1@Rva0035DCF9@@UAEXXZ=?init@MainMenuMediumScaleUpTransition@@UAEXPAVGameWindow@@@Z")
-#pragma comment(linker, "/alternatename:?slot5@Rva0035DCF9@@UAEXXZ=??1Coord2D@@QAE@XZ")
-#pragma comment(linker, "/alternatename:?slot7@Rva0035DCF9@@UAEXXZ=?ControlBarInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z")
+#pragma comment(linker, "/alternatename:?slot1@MainMenuMediumScaleUpTransition@@UAEXXZ=?init@MainMenuMediumScaleUpTransition@@UAEXPAVGameWindow@@@Z")
+#pragma comment(linker, "/alternatename:?slot5@MainMenuMediumScaleUpTransition@@UAEXXZ=??1Coord2D@@QAE@XZ")
+#pragma comment(linker, "/alternatename:?slot7@MainMenuMediumScaleUpTransition@@UAEXXZ=?ControlBarInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z")
 #pragma comment(linker, "/alternatename:?slot1@Rva0035E00F@@UAEXXZ=?init@MainMenuScaleUpTransition@@UAEXPAVGameWindow@@@Z")
 #pragma comment(linker, "/alternatename:?slot5@Rva0035E00F@@UAEXXZ=??1Coord2D@@QAE@XZ")
 #pragma comment(linker, "/alternatename:?slot7@Rva0035E00F@@UAEXXZ=?ControlBarInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z")

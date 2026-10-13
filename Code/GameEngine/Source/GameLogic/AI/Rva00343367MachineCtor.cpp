@@ -102,10 +102,10 @@ public:
 private:
 	unsigned char m_pad04[0x60 - 0x04];
 };
-class Rva0033F364 : public State
+class AIAttackMeleeHordeWaitState : public State
 {
 public:
-	Rva0033F364(StateMachine *machine);
+	AIAttackMeleeHordeWaitState(StateMachine *machine);
 private:
 	unsigned char m_pad04[0x24 - 0x04];
 };
@@ -151,7 +151,7 @@ Rva00343367::Rva00343367(Object *obj, Rva00343367Attack *att, UnsignedInt nameKe
 	{
 		defineState( 200, new AIAttackMeleeSquishState( this ), 201, 9999 );
 		defineState( 201, new Rva003429B9( this ), 203, 9999 );
-		defineState( 203, new Rva0033F364( this ), 9998, 204 );
+		defineState( 203, new AIAttackMeleeHordeWaitState( this ), 9998, 204 );
 		defineState( 204, new Rva0033F38B( this ), 9998, 201 );
 	}
 	else

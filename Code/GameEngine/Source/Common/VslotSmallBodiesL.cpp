@@ -143,15 +143,15 @@ void Rva00517364::rva00517364(Int which)
 
 // slots at VA 0x00C1AEC4, 0x00C6B90C, 0x00C6E27C and more: appends the
 // argument to the int list at +0x14 (rowed list<int>::push_back).
-class Rva0055B146
+class AIBuildable
 {
 public:
-	void rva0055B146(Int value);
+	void addNeed(Int value);
 private:
 	char m_pad00[0x14];
 	_STL::list<Int> m_14;
 };
-void Rva0055B146::rva0055B146(Int value)
+void AIBuildable::addNeed(Int value)
 {
 	m_14.push_back(value);
 }

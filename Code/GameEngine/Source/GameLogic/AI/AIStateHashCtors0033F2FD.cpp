@@ -48,17 +48,17 @@ Rva0033F320::Rva0033F320(StateMachine *machine)
 {
 }
 
-// Rva0033F364: retail 0x0033F364 (33B), hash 0xefc3d47f, vtable 0xc10f40 callers 0x0034344D
-class Rva0033F364 : public State
+// AIAttackMeleeHordeWaitState: retail 0x0033F364 (33B), hash 0xefc3d47f, vtable 0xc10f40 callers 0x0034344D
+class AIAttackMeleeHordeWaitState : public State
 {
 public:
-	Rva0033F364(StateMachine *machine);
+	AIAttackMeleeHordeWaitState(StateMachine *machine);
 
 private:
 	int m_20; // +0x20
 };
 
-Rva0033F364::Rva0033F364(StateMachine *machine)
+AIAttackMeleeHordeWaitState::AIAttackMeleeHordeWaitState(StateMachine *machine)
 	: State(machine, 0xEFC3D47Fu)
 	, m_20(0)
 {

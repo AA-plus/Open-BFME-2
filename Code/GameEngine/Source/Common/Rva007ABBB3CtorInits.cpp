@@ -74,10 +74,10 @@ public:
 	INIMacroTable();
 };
 
-class Rva0007EBFB
+class WaterDrawFXShaderParameterSourceNamespace
 {
 public:
-	Rva0007EBFB();
+	WaterDrawFXShaderParameterSourceNamespace();
 };
 
 class Rva003818F4
@@ -220,10 +220,10 @@ void Rva007ABBB3CtorInits::rva007ABCC5()
 	atexit( rva007B6ADC );
 }
 
-// 0x007AC022 (22B): ??0Rva0007EBFB@@QAE@XZ on VA 0x00DE2008, atexit(0x007B6BF5)
+// 0x007AC022 (22B): ??0WaterDrawFXShaderParameterSourceNamespace@@QAE@XZ on VA 0x00DE2008, atexit(0x007B6BF5)
 void Rva007ABBB3CtorInits::rva007AC022()
 {
-	( (Rva0007EBFB *)&g_Va00DE2008 )->Rva0007EBFB::Rva0007EBFB();
+	( (WaterDrawFXShaderParameterSourceNamespace *)&g_Va00DE2008 )->WaterDrawFXShaderParameterSourceNamespace::WaterDrawFXShaderParameterSourceNamespace();
 	atexit( rva007B6BF5 );
 }
 

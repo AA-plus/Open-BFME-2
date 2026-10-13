@@ -209,12 +209,12 @@ unsigned char Rva00466E58::rva00466E58(Int) const
 }
 
 // 0x00488988 (four tables): -2.
-class Rva00488988
+class AIGoingIdleState
 {
 public:
-	Int rva00488988();
+	Int update();
 };
-Int Rva00488988::rva00488988()
+Int AIGoingIdleState::update()
 {
 	return -2;
 }
