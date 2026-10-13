@@ -1,6 +1,10 @@
 // ??0Rva002C6234@@QAE@PBUCoord3D@@MPAVPlayer@@@Z
+// partial score=0.9817 date=2026-10-13
+// ??0Rva002C6234@@QAE@PBUCoord3D@@MPAVPlayer@@@Z
 // partial score=0.9756 date=2026-10-05
 // cl: /O1 /MD /GX /arch:SSE
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <string.h>
 
 class Object;
@@ -119,6 +123,7 @@ Rva002C6234::Rva002C6234(const Coord3D *pos, float radius, Player *player)
 	m_pos.y = pos->y;
 	m_pos.z = pos->z;
 	m_radius = radius;
+	_ReadWriteBarrier();
 	m_10 = 0;
 	m_total = 0.0f;
 	m_frame = TheGameLogic->getFrame();
