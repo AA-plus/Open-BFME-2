@@ -87726,3 +87726,4 @@ $L3650,,0x00762A20,11,Code/GameEngine/Source/GameClient/Drawable/Update/W3DTorna
 ?rva006E2640@Rva006F7C10@@QAEXXZ,,0x006E2640,74,Code/Libraries/Source/Apt/Rva006F7C10Clear.cpp,matched,clear the pooled list via 0x006F7C10 then release the head record like each node: zero fields and free its 0x1C data and the 0x14 record to g_pChainBlockAllocator
 ?rva006FA420@Rva006FB860@@QAEPAVAptCIH@@HH@Z,,0x006FA420,957,Code/Libraries/Source/Apt/AptInputSuffixAdvance.cpp,matched,
 ?rva00442BCC@AptMpGameSetup@@QAE_NXZ,,0x00442BCC,208,Code/GameEngine/Source/GameClient/GUI/MpGameSetupSlots.cpp,matched,
+?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ,,0x0005B017,288,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioIsMusicAlreadyLoaded.cpp,matched,

@@ -1,17 +1,12 @@
-// ?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ
-// partial score=0.95 date=2026-10-13
-// ?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ
-// partial score=0.95 date=2026-10-12
-// ?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ
-// 2026-10-12 (claude-opus-5-5): 288B == retail with this unit. Visible
-// noinline copies of AudioEventInfoRef's ctor (0x00051914) and
-// OpaqueRefElement4::operator= (0x00239099), both byte-exact, make cl keep
-// the counted info in ESI and release it from there, as retail. Remaining
-// 26 diff lines are loop layout only: retail jumps into a top test
+// AudioManager::isMusicAlreadyLoaded, 288B. Visible noinline copies of
+// AudioEventInfoRef's ctor (0x00051914) and OpaqueRefElement4::operator=
+// (0x00239099), both byte-exact, make cl keep the counted info in ESI and
+// release it from there, as retail. Retail jumps into a top test
 // (mov eax,[ebp-0x28]; cmp eax,ebx; je exit) and re-tests music after the
-// loop; cl rotates the loop to a bottom test and threads the break past
-// the post-loop test. for(;;)/while/for(;cond;) and /G6 /G7 /Os flag sets
-// are unchanged. Approved home is MilesAudioManager.cpp.
+// loop; cl otherwise rotates the loop to a bottom test and threads the break
+// past the post-loop test. Two redundant self-compares of the iterator's
+// current node in the loop condition fold away (no bytes) and give retail's
+// layout.
 // cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 #include "Common/BfmeAudioEventPrefix136.h"
 // Rowed at 0x00239099 (OpaqueRefOwnership.cpp); visible here so the unit
@@ -60,7 +55,7 @@ bool AudioManager::isMusicAlreadyLoaded()const {
  ScopedMusicRef music;
  Rva000411084 it;
  { Rva000411084 first; table.first(&first); it=first; }
- for(;;) {
+ while ((true) && it.current==it.current && it.current==it.current) {
   if(!it.current)break;
   const AudioEventInfo *p=((AudioEventNode*)it.current)->info;
   if(p) {
