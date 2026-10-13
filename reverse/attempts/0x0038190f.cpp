@@ -1,4 +1,6 @@
 // ?Rva0038190FSendChat@@YA_NABVUnicodeString@@ABV?$vector@IV?$allocator@I@_STL@@@_STL@@@Z
+// partial score=0.95 date=2026-10-13
+// ?Rva0038190FSendChat@@YA_NABVUnicodeString@@ABV?$vector@IV?$allocator@I@_STL@@@_STL@@@Z
 // partial score=0.8415 date=2026-10-05
 // ?Rva0038190FSendChat@@YA_NABVUnicodeString@@ABV?$vector@IV?$allocator@I@_STL@@@_STL@@@Z
 // partial score=0.90 date=2026-09-30
@@ -75,19 +77,20 @@ public:
 	int dummy;
 };
 
+enum NameKeyType
+{
+	NAMEKEY_INVALID = 0,
+	NAMEKEY_MAX = 1 << 23
+};
+
 class PlayerList
 {
 public:
-	Player *findPlayerWithNameKey(int key);
+	Player *findPlayerWithNameKey(NameKeyType key);
 private:
 	char m_pad00[0x10];
 public:
 	BfmeMemberRV *m_local10;
-};
-
-enum NameKeyType
-{
-	NAMEKEY_INVALID = 0
 };
 
 class NameKeyGenerator
@@ -198,9 +201,9 @@ bool Rva0038190FSendChat(const UnicodeString &msg, const _STL::vector<unsigned i
 	BfmeMemberRV *local = ThePlayerList->m_local10;
 	if (local == 0)
 		return false;
+	_STL::vector<unsigned int> list(selected);
 	bool notRV = !local->bfmeAskRV();
 	unsigned int mask = 0;
-	_STL::vector<unsigned int> list(selected);
 	if (list.begin() == list.end())
 	{
 		for (int i = 0; i < 8; ++i)
