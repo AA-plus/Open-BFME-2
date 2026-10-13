@@ -85,6 +85,7 @@ class Rva005D3731
 {
 public:
 	Rva005D3731(int level, const AsciiString &path);
+	~Rva005D3731();
 
 	unsigned char m_pad[0x20];
 };
@@ -376,7 +377,7 @@ class Rva00578701Holder : public Rva00578701
 {
 public:
 	Rva00578701Holder() { m_ptr = 0; }
-	~Rva00578701Holder() { ((Rva005786E7 *)this)->rva005786E7(); }
+	__declspec(noinline) ~Rva00578701Holder();
 };
 
 class Rva0057873EHolder : public Rva0057873E
@@ -698,6 +699,18 @@ Rva005786AAHolder::~Rva005786AAHolder()
 	if (p)
 	{
 		p->Rva005D32D4::~Rva005D32D4();
+		::operator delete(p);
+	}
+}
+
+// Complete 26-byte and REL32 twin of the owning-pointer clear at 0x005786E7.
+Rva00578701Holder::~Rva00578701Holder()
+{
+	Rva005D3731 *p = m_ptr;
+	m_ptr = 0;
+	if (p)
+	{
+		p->Rva005D3731::~Rva005D3731();
 		::operator delete(p);
 	}
 }
