@@ -32,10 +32,10 @@ public:
     void concat(T c) { concat(&c,1); }
 };
 
-// Existing public narrow teardown spelling resolves to the verified
-// 133-byte releaseBuffer worker at RVA 0x36410. Wide teardown is unchanged.
-template <> StringBase<char>::~StringBase();
-#pragma comment(linker, "/alternatename:??1?$StringBase@D@@QAE@XZ=?releaseBuffer@?$StringBase@D@@AAEXXZ")
+// Retail narrow cleanup calls the releaseBuffer worker directly.
+// Keep the forwarding destructor inline without emitting a competing copy.
+template <> __declspec(dllimport) __forceinline
+StringBase<char>::~StringBase() { releaseBuffer(); }
 
 class AsciiString:public StringBase<char> {
 public:
