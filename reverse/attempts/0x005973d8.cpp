@@ -1,4 +1,6 @@
 // ?rva005973D8@AIUpgrade@@QAEHXZ
+// partial score=0.99 date=2026-10-13
+// ?rva005973D8@AIUpgrade@@QAEHXZ
 // partial score=0.9230769230769231 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
 //
@@ -82,9 +84,8 @@ bool AIUpgrade::build(void *context)
 
 int AIUpgrade::rva005973D8() {
  if(m_remaining10>0) {
-  GameLogic *gl;
+  GameLogic *gl=TheGameLogic;
   ObjectID id=m_builderID;
-  gl=TheGameLogic;
   if(gl->findObjectByID(id)!=0) {
    Rva0028BC58Result *result=(Rva0028BC58Result *)gl->findObjectByID(id)->rva0028BC58(0);
    if(result->slot6(m_commandButton->getField24())) return 0;
