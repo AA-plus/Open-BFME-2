@@ -87745,3 +87745,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ?FindSafePath@Pathfinder@@QAEPAVPath@@PAVObject@@ABVLocomotorSet@@PBUCoord3D@@22M@Z,,0x002FB997,596,Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp,matched,same TU as InternalFindPath; start-cell scope trick lets farthest share start slot (retail 0x24 frame); boolArg center; erase through the ICF-shared vector erase 0x2A133B view
 ?getLoadScreen@GameLogic@@AAEPAVLoadScreen@@_N@Z,,0x0023DD48,796,Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp,matched,
 ?rva0029FFFF@Rva0029C138@@QAEHP6AHPAVDrawable@@PAX@Z1@Z,,0x0029FFFF,354,Code/GameEngine/Source/Common/Rva0029C138Reset.cpp,matched,
+?rva001E4073@Rva001E4073@@QAEMPAVObject@@PAM@Z,,0x001E4073,102,Code/GameEngine/Source/Common/Rva001E4073Ratio.cpp,matched,
