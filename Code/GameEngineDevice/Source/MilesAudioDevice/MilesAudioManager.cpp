@@ -5303,8 +5303,8 @@ class SubTitleWindow
 {
 public:
     ~SubTitleWindow();
+    bool rva00045837() const;
 };
-class Rva00260A3C { public: bool test() const; };
 
 // Zero Hour's LatchRestore: restores the latched value when the scope ends
 // (vftable 0x007C5314, ??_7?$LatchRestore@_N@@6B@).
@@ -5373,7 +5373,7 @@ void MilesAudioManager::rva00062690()
     for (int i = 0; i < 3; ++i)
         reinterpret_cast<GlobalVolumeData *>(m_volumeData[i])->rva000520C6();
     SubTitleWindow *subTitles = m_subTitleWindow;
-    if (subTitles && !((Rva00260A3C *)subTitles)->test()) {
+    if (subTitles && !subTitles->rva00045837()) {
         delete subTitles;
         m_subTitleWindow = 0;
     }

@@ -4127,7 +4127,6 @@ name,address,notes
 ??1Rva0025742CTree@@QAE@XZ,0x0025742C,TU-local spelling for the record-tree member dtor at +0x388; RETAIL REL32 in 0x33DDA1 targets the rowed 0x25742C body
 ??1Rva0025E4CD@@UAE@XZ,0x0025E4CD,"destructor the scalar deleting destructor 0x0025E51D calls (REL32 at 0x0025E520; vtable 0x00BF6040#0); opaque address name"
 ??1Rva002606AFDtor@@QAE@XZ,0x005B804E,UnicodeString dtor alias
-??1Rva00260A3C@@UAE@XZ,0x00260A3C,opaque SEH dtor (mov-eax-cookie prologue); called by scalar-deleting-dtor at 0x453F5; identity unproven, address-derived name
 ??1Rva0026E1A6@@QAE@XZ,0x0026E1A6,TU-local member dtor for the +0x3ac field of the 0x33DDA1 teardown; RETAIL REL32 in 0x33DDA1 targets 0x26E1A6 (56B EH body freeing its +0 member via 0x66DEE4 plus 0x30830)
 ??1Rva0026E7EA@@UAE@XZ,0x0026E7EA,"destructor the scalar deleting destructor 0x0026E81A calls (REL32 at 0x0026E81D; vtable 0x00BFA3A4#0); opaque address name"
 ??1Rva0026E836@@UAE@XZ,0x0026E836,opaque SEH base dtor (5 vptrs +0/+0xC/+0x10/+0x20/+0x24 plus member cleanup); 3 derived 39B dtors tail-call it; identity unproven
@@ -12287,7 +12286,6 @@ name,address,notes
 ?teamAboutToBeDeleted@TeamPrototype@@QAEXPAVTeam@@@Z,0x003A2CA5,Ghidra FUN_007a2ca5 70B: walks the prototype +0x334 team list calling 0x003A2897 with the dying team +0x34 on each; REL32 at 0x003A3060 inside TeamFactory::teamAboutToBeDeleted per prototype (ZH Team.cpp shape)
 ??1Rva006D0280@@QAE@XZ,0x006D0280,Native158B RET0 destructor with EAStringC member8 EH cleanup; old opaque teardown identity superseded by exact C++ body
 ?test@?$BitFlags@$0EF@@@QBE_NPBX@Z,0x002615C0
-?test@Rva00260A3C@@QBE_NXZ,0x00045837,"bool view of the 0x00045837 query (rowed int-typed as ?test@Rva00045837@@QBEHXZ) that MilesAudioManager slot 0x000531F6 calls on its +0xBE8 object (dtor pin 0x00260A3C) and tests in al; opaque address name"
 ?test@Rva0044F630Owner@@QBE_NPBURva0044F630Arg@@@Z,0x00300021,second name for the body rowed as ?test@Rva00300021Flags@@QBE_NPBURva00300021Argument@@@Z; both landed independently and this TU was dropped when the solo fork was squashed onto upstream
 ?test@Rva00729370BitPlane@@QBE_NHH@Z,0x0006AB49,second name for the body rowed as ?test@Rva0006AB49BitPlane@@QBE_NHH@Z; both landed independently and one definition was dropped when the solo fork was squashed onto upstream
 ?testSetAndClear@?$BitFlags@$0FG@@@QBE_NABV1@0@Z,0x0026157E,BitFlags exempt-required tester called by DieMuxData isDieApplicable
@@ -16434,7 +16432,6 @@ _D3DXLoadVolumeFromFileInMemory@36,0x0062AF8C,Native1318F0 in-image JMP IAT veri
 ?rva00215B14@PlayerAITypeSet@@QAEXPAVINI@@@Z,0x00215B14,callee of ?Rva00215C38Parse@@YAXPAVINI@@@Z
 ?InitializeFactionVariables@AptStats@@QAEXXZ,0x005DD2D3,callee of ??0AptStats@@QAE@PAX@Z
 ??0?$_Deque_base@UBfmeTrivialDequeElement8@@V?$allocator@UBfmeTrivialDequeElement8@@@_STL@@@_STL@@QAE@ABV?$allocator@UBfmeTrivialDequeElement8@@@1@I@Z,0x0054A1B7,SimpleObjectIterator neutral8-byte deque construction; fold-proof=Code/Libraries/Source/WWVegas/WWLib/Rva0054BBB5.cpp
-?addGroupRef@ScriptList@@QAEXPAURva0034F9D0Head@@PAURva0034F9D0Node@@1@Z,0x003B23DE,ScriptList::addGroupRef per WB (thiscall: retail loads ecx with the ScriptList); ICF-folds with the rowed stdcall rva0034f9d0Insert placeholder; caller ScriptGroup binding read 3B8589
 ?rva00343FB0@@YA_NPAVObject@@@Z,0x00343FB0,forward pin for the AIStates.cpp static ESI-input chase gate (body banked; register-choice wall) defined in AIAttackApproachTargetStateOnEnter.cpp; RETAIL REL32 at 0x0034CE5D and 0x0034CF01 in AIAttackApproachTargetState::onEnter with the owner in ESI; superseded when the gate lands
 ??0?$_Vector_base@VRva0037F8AC@@V?$allocator@VRva0037F8AC@@@_STL@@@_STL@@QAE@ABV?$allocator@VRva0037F8AC@@@1@@Z,0x00211E58,Native380014 typed pair storage; fold-proof=Code/GameEngine/Source/GameLogic/System/ArmyPlacerFarthestPair.cpp
 ?reserve@?$vector@VRva0037F8AC@@V?$allocator@VRva0037F8AC@@@_STL@@@_STL@@QAEXI@Z,0x0037FEA3,Native380014 typed pair storage; fold-proof=Code/GameEngine/Source/GameLogic/System/ArmyPlacerPairStorage.cpp

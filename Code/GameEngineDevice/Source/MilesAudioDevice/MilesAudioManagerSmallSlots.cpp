@@ -26,11 +26,13 @@ extern "C" __declspec(dllimport) void __stdcall AIL_serve(void);
 extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(void *section);
 extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void *section);
 
-class Rva00260A3C
+// The subtitle window (destructor row 0x00260A3C, nonvirtual) and its state
+// query 0x00045837, both rowed under these names.
+class SubTitleWindow
 {
 public:
-	virtual ~Rva00260A3C();
-	Bool test() const;
+	~SubTitleWindow();
+	Bool rva00045837() const;
 };
 
 struct Rva000517F1Settings
@@ -93,16 +95,16 @@ private:
 	Rva0005185EBlock *m_b8c;
 	Rva00053281Lock *m_b90;
 	char m_padB94[0xbe8 - 0xb94];
-	Rva00260A3C *m_be8;
+	SubTitleWindow *m_be8;
 };
 
 // vtable 0x00BC55B0#100
 void MilesAudioManager::rva000514BB()
 {
-	Rva00260A3C *obj = m_be8;
+	SubTitleWindow *obj = m_be8;
 	if (obj)
 	{
-		obj->Rva00260A3C::~Rva00260A3C();
+		obj->SubTitleWindow::~SubTitleWindow();
 		operator delete(obj);
 		m_be8 = 0;
 	}
@@ -162,7 +164,7 @@ Bool MilesAudioManager::rva000527E2(const Rva000527E2Event *event)
 // vtable 0x00BC55B0#99
 Bool MilesAudioManager::rva000531F6()
 {
-	if (m_be8 && m_be8->test())
+	if (m_be8 && m_be8->rva00045837())
 		return true;
 	return false;
 }

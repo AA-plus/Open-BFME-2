@@ -11,13 +11,17 @@ struct Rva00045837Element
 	unsigned int opaque[2];
 };
 
-class Rva00045837
+// Callers name the owner: W3DDisplay's +0x188 object and MilesAudioManager's
+// +0xBE8 window both reach this query and free the same object through the
+// SubTitleWindow destructor 0x00260A3C, and that constructor (0x00260865)
+// puts the record vector at +8/+C and the state word (initially 4) at +0x14.
+// Both callers test al, so the query returns bool; one returned expression
+// gives retail's xor eax,eax false path. Its name stays address-derived.
+class SubTitleWindow
 {
 public:
-	int test() const;
+	bool rva00045837() const;
 private:
-	// ?Rva00045837::count present-unmatched
-	unsigned int count() const { return finish - begin; }
 	unsigned int reserved[2];
 	Rva00045837Element *begin;
 	Rva00045837Element *finish;
@@ -25,10 +29,7 @@ private:
 	int control;
 };
 
-int Rva00045837::test() const
+bool SubTitleWindow::rva00045837() const
 {
-	int result = 1;
-	if (control == 1 && !(count() > 0))
-		result = 0;
-	return result;
+	return !(control == 1 && !((unsigned int)(finish - begin) > 0));
 }

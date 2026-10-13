@@ -18,11 +18,13 @@ void __cdecl operator delete(void *p);
 #define VSLOTS4(p) virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3();
 #define VSLOTS16(p) VSLOTS4(p##0) VSLOTS4(p##1) VSLOTS4(p##2) VSLOTS4(p##3)
 
-class Rva00260A3C
+// The subtitle window (destructor row 0x00260A3C, nonvirtual) and its state
+// query 0x00045837, both rowed under these names.
+class SubTitleWindow
 {
 public:
-	virtual ~Rva00260A3C();
-	Bool test() const;
+	~SubTitleWindow();
+	Bool rva00045837() const;
 };
 
 // Retail 0x00073CC0 reads its third and fourth arguments as byte values
@@ -155,7 +157,7 @@ public:
 private:
 	char m_pad00[0x184];
 	Int m_184;
-	Rva00260A3C *m_188;
+	SubTitleWindow *m_188;
 	char m_pad18C[0x2a4 - 0x18c];
 	Rva00046791Item **m_2a4;
 	Rva00046791Item **m_2a8;
@@ -226,7 +228,7 @@ void W3DDisplay::rva000453AC()
 Bool W3DDisplay::rva000466FA()
 {
 	Bool result = false;
-	if ((m_184 && m_188 && m_188->test()) || (TheAudio && TheAudio->rva0004672AQuery()))
+	if ((m_184 && m_188 && m_188->rva00045837()) || (TheAudio && TheAudio->rva0004672AQuery()))
 		result = true;
 	return result;
 }
@@ -243,12 +245,12 @@ void W3DDisplay::rva000466B9()
 {
 	if (m_184 == 0)
 		return;
-	Rva00260A3C *p = m_188;
+	SubTitleWindow *p = m_188;
 	if (p == 0)
 		return;
-	if (p->test())
+	if (p->rva00045837())
 		return;
-	p->Rva00260A3C::~Rva00260A3C();
+	p->SubTitleWindow::~SubTitleWindow();
 	operator delete(p);
 	m_188 = 0;
 	m_184 = 0;

@@ -1,5 +1,8 @@
-// Retail 0x0034F9D0, 25 bytes.  Insert a node after the requested position
-// or at the head of the singly linked list when the position is null.
+// Retail 0x003B23DE, 25 bytes (BFME 1 0x0034F9D0).  Insert a node after the
+// requested position or at the head of the singly linked list when the
+// position is null.  WorldBuilder names it ScriptList::addGroupRef; its one
+// caller, the ScriptGroup binding read 0x003B8589, loads ecx with the list.
+// The body never reads this, so the thiscall form is the stdcall one.
 
 struct Rva0034F9D0Node
 {
@@ -11,7 +14,13 @@ struct Rva0034F9D0Head
 	Rva0034F9D0Node *m_first;
 };
 
-void __stdcall rva0034f9d0Insert(
+class ScriptList
+{
+public:
+	void addGroupRef(Rva0034F9D0Head *head, Rva0034F9D0Node *node, Rva0034F9D0Node *after);
+};
+
+void ScriptList::addGroupRef(
 	Rva0034F9D0Head *head,
 	Rva0034F9D0Node *node,
 	Rva0034F9D0Node *after)
