@@ -1,6 +1,8 @@
 // ?rva00509F3A@Made002CC8A4@@QAEEPAXPAVObject@@PAVDamageInfo@@@Z
 // partial score=0.9485 date=2026-10-13
 // ?rva00509F3A@Made002CC8A4@@QAEEPAXPAVObject@@PAVDamageInfo@@@Z
+// partial score=0.9485 date=2026-10-13
+// ?rva00509F3A@Made002CC8A4@@QAEEPAXPAVObject@@PAVDamageInfo@@@Z
 // partial score=0.9485 date=2026-10-09
 // ?rva00509F3A@Made002CC8A4@@QAEEPAXPAVObject@@PAVDamageInfo@@@Z
 // partial score=0.89174 date=2026-10-09

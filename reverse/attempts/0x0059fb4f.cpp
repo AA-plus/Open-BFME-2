@@ -1,4 +1,6 @@
 // ?FillBuddyInviteGameInfo@AptOnlineCustomMatch@@QAE_NPAVRva0059EF62@@@Z
+// partial score=0.886341 date=2026-10-13
+// ?FillBuddyInviteGameInfo@AptOnlineCustomMatch@@QAE_NPAVRva0059EF62@@@Z
 // partial score=0.8863414634146342 date=2026-10-10
 // ?FillBuddyInviteGameInfo@AptOnlineCustomMatch@@QAE_NPAVRva0059EF62@@@Z
 // partial score=0.85 date=2026-10-07

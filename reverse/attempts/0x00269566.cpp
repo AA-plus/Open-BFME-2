@@ -1,6 +1,8 @@
 // ?NotifyPathHasInvalidPortals@AIUpdateInterface@@QAEXXZ
 // partial score=0.98 date=2026-10-13
 // ?NotifyPathHasInvalidPortals@AIUpdateInterface@@QAEXXZ
+// partial score=0.98 date=2026-10-13
+// ?NotifyPathHasInvalidPortals@AIUpdateInterface@@QAEXXZ
 // partial score=0.978 date=2026-10-10
 // ?NotifyPathHasInvalidPortals@AIUpdateInterface@@QAEXXZ
 // partial score=0.9248446320271678 date=2026-10-09

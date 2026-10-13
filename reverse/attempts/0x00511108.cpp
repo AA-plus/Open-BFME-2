@@ -1,4 +1,6 @@
 // ?OnPageLoaded@Rva00510D0C@@QAEXPBD@Z
+// partial score=0.9 date=2026-10-13
+// ?OnPageLoaded@Rva00510D0C@@QAEXPBD@Z
 // partial score=0.98 date=2026-10-05
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport

@@ -1,4 +1,6 @@
 // ?CreateLocalPlayerData@StrategicInGameUI@@YA?AURva005F918D@@AAVLivingWorldBattle@@HHH@Z
+// partial score=0.93 date=2026-10-13
+// ?CreateLocalPlayerData@StrategicInGameUI@@YA?AURva005F918D@@AAVLivingWorldBattle@@HHH@Z
 // partial score=0.93 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii
 #include "ascii_string.h"

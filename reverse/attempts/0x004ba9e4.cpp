@@ -1,4 +1,6 @@
 // ?rva004BA9E4@TransitionDamageFX@@UAEXH@Z
+// partial score=0.9582139148494289 date=2026-10-13
+// ?rva004BA9E4@TransitionDamageFX@@UAEXH@Z
 // partial score=0.9582139148494289 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include /ICode/GameEngine/Source
 // NEW native4BA9E4..4BAB25 RET4. Owned ctor4BA3EA installs Behavior interface+0C

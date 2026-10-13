@@ -1,4 +1,6 @@
 // ?rva00083959@Rva0082140@@QAEXPAV?$AreaSet@VRiverArea@@@@PAV?$vector@UTreeHintRef00217D4C@@V?$allocator@UTreeHintRef00217D4C@@@_STL@@@_STL@@@Z
+// partial score=0.8 date=2026-10-13
+// ?rva00083959@Rva0082140@@QAEXPAV?$AreaSet@VRiverArea@@@@PAV?$vector@UTreeHintRef00217D4C@@V?$allocator@UTreeHintRef00217D4C@@@_STL@@@_STL@@@Z
 // partial score=0.8 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // Water render object: the renderables it keeps for the map's standing water
