@@ -1,3 +1,5 @@
+// ?ExamineNeighboringCellsForSidewaysAttack@Pathfinder@@QAEHPAVPathfindCell@@PBUICoord2D@@HABVLocomotorSet@@_N3HABU3@PAVObject@@H@Z
+// partial score=0.985 date=2026-10-13
 // ?ExamineNeighboringCellsForSidewaysAttack@Pathfinder@@QAEHPAVObject@@PBUCoord3D@@@Z
 // partial score=0.985 date=2026-10-13
 // ?ExamineNeighboringCellsForSidewaysAttack@Pathfinder@@QAEHPAVObject@@PBUCoord3D@@@Z
@@ -12,7 +14,7 @@
 // void(float*,float,float,const float*) helpers as void(Vec*,Vec,const Vec&) (hidden-out slot, no eax-reuse), goalNdx materialised from gx/gy in a
 // trailing sibling scope. _ReadWriteBarrier() between the distSqr computation and the range test (plus Int reach=attackDistance+offset) fixed the ebx/edi parameter-register roles: retail keeps offset/attackDistance in edi/ebx and hadInfo in the [ebp+0xf] arg-home byte. Scratch compile: put the function in pathfinder.cpp (class decls + pin ?rva002F83F5@Pathfinder@@QAEHPAVPathfindCell@@0ABVLocomotorSet@@_N2HABUICoord2D@@PAVObject@@H@Z=0x002F83F5).
 #include <math.h>
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../../Code/Libraries/Include/Lib/Coord3D.h"
 typedef bool Bool;
 typedef int Int;
 enum PathfindLayerEnum { PATHFIND_LAYER_UNKNOWN = 0, PATHFIND_LAYER_GROUND = 1 };
