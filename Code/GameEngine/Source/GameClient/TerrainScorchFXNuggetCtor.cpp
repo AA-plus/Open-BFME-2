@@ -1,6 +1,5 @@
-// ??0TerrainScorchFXNugget@@QAE@XZ
-// partial score=0.72 date=2026-09-24
-// cl: /O1 /DNDEBUG /MD /arch:SSE
+// cl: /O1 /DNDEBUG /MD /arch:SSE /ICode/Libraries/Include
+#include "Lib/ICoord2D.h"
 //
 // ??0TerrainScorchFXNugget@@QAE@XZ 60B @0x1E08D9: no-arg ctor called by
 // TerrainScorchFXNugget::parse (0x001E171C) for the TerrainScorch FXList
@@ -28,19 +27,17 @@ public:
 private:
 	int m_scorchType; // +0x148, scorch lookup, default -1 (random)
 	float m_radius; // +0x14C
-	int m_minRange; // +0x150
-	int m_maxRange; // +0x154
+	ICoord2D m_range; // +0x150
 };
 
-// ??0TerrainScorchFXNugget@@QAE@XZ
 TerrainScorchFXNugget::TerrainScorchFXNugget()
 {
 	m_scorchType |= -1;
-	int maxRange = 3;
-	int minRange = 0;
-	m_minRange = minRange;
 	*(unsigned int *)this = 0x00BDD828;
 	m_radius = 0.0f;
 	m_nuggetType = 7;
-	m_maxRange = maxRange;
+	ICoord2D range;
+	range.x = 0;
+	range.y = 3;
+	m_range = range;
 }
