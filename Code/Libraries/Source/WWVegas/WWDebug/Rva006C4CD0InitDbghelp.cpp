@@ -218,3 +218,89 @@ unsigned int Rva006C50D0Describe(const unsigned long *addresses, unsigned int co
  }
  return current-buffer;
 }
+
+// Retail 0x006C4FA0, 297 bytes: CDECL stack capture into (out, maxFrames).
+// Ensures the dbghelp table, snapshots the current EBP/ESP/EIP into a
+// minimal CONTEXT, walks with the table's StackWalk slot into a 0xA4
+// STACKFRAME, skipping the current frame and storing at most maxFrames-1
+// addresses plus a NULL terminator; returns the stored count. The EBP/ESP
+// homes and the call-next EIP idiom have no intrinsic spelling, so they
+// use the same small inline-asm blocks the fleet's landed x87 code uses.
+extern "C" __declspec(dllimport) void *__stdcall GetCurrentThread(void);
+
+struct BfmeCaptureContext
+{
+	unsigned long ContextFlags;	// +0x00
+	unsigned char m_pad04[0xB4 - 4];
+	unsigned long Ebp;		// +0xB4
+	unsigned long Eip;		// +0xB8
+	unsigned char m_padBC[0xC4 - 0xBC];
+	unsigned long Esp;		// +0xC4
+	unsigned char m_padC8[0x2CC - 0xC8];
+};
+
+struct BfmeCaptureAddress
+{
+	unsigned long Offset;		// +0x00
+	unsigned short Segment;		// +0x04
+	unsigned short m_pad6;		// +0x06
+	unsigned long Mode;		// +0x08
+};
+
+struct BfmeCaptureFrame
+{
+	BfmeCaptureAddress m_pc;	// +0x00
+	BfmeCaptureAddress m_ret;	// +0x0C
+	BfmeCaptureAddress m_frame;	// +0x18
+	BfmeCaptureAddress m_stack;	// +0x24
+	unsigned char m_rest[0xA4 - 0x30];
+};
+
+typedef int (__stdcall *BfmeStackWalkFn)(unsigned long machine, void *process,
+	void *thread, BfmeCaptureFrame *frame, BfmeCaptureContext *context,
+	int readMemory, void *tableAccess, void *moduleBase, int translate);
+
+int rva006C4FA0Capture(void **out, unsigned int maxFrames)
+{
+	unsigned int count = 0;
+	if (g_rva006C4CD0Object.m_hLib == NULL)
+		g_rva006C4CD0Object.initDbghelp();
+	if (g_rva006C4CD0Object.m_stackWalk == NULL)
+		goto done;
+	void *process = GetCurrentProcess();
+	void *thread = GetCurrentThread();
+	BfmeCaptureContext context;
+	for (unsigned i = 0; i < sizeof(context) / sizeof(unsigned long); i++)
+		((unsigned long *)&context)[i] = 0;
+	context.ContextFlags = 0x10001;
+	__asm mov DWORD PTR [ebp-0x2c4], ebp
+	__asm mov DWORD PTR [ebp-0x2b4], esp
+	__asm call eip_next2
+	__asm eip_next2: pop DWORD PTR [ebp-0x2c0]
+	unsigned last = maxFrames;
+	BfmeCaptureFrame frame;
+	for (unsigned i = 0; i < sizeof(frame) / sizeof(unsigned long); i++)
+		((unsigned long *)&frame)[i] = 0;
+	frame.m_pc.Offset = context.Eip;
+	int skip = 0;
+	--last;
+	frame.m_pc.Mode = 3;
+	frame.m_stack.Offset = context.Esp;
+	frame.m_stack.Mode = 3;
+	frame.m_frame.Offset = context.Ebp;
+	frame.m_frame.Mode = 3;
+	if (last == 0)
+		goto done;
+	do {
+		if (!((BfmeStackWalkFn)g_rva006C4CD0Object.m_stackWalk)(0x14C, process, thread, &frame, &context, 0, g_rva006C4CD0Object.m_symFunctionTableAccess, g_rva006C4CD0Object.m_symGetModuleBase, 0))
+			goto done;
+		if (frame.m_frame.Offset == 0)
+			goto done;
+		if (skip > 0)
+			out[count++] = (void *)frame.m_pc.Offset;
+		skip++;
+	} while (count < last);
+done:
+	out[count] = 0;
+	return count;
+}
