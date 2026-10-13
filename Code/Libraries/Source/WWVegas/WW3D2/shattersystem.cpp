@@ -353,10 +353,15 @@ void VertexClass::Lerp
 	res->PassCount = v0.PassCount;
 
 	// interpolate position
-	Vector3::Lerp(v0.Position,v1.Position,lerp,&(res->Position));
+	// Keep the donor's component order without emitting another Lerp COMDAT.
+	res->Position.X = v0.Position.X + (v1.Position.X - v0.Position.X) * lerp;
+	res->Position.Y = v0.Position.Y + (v1.Position.Y - v0.Position.Y) * lerp;
+	res->Position.Z = v0.Position.Z + (v1.Position.Z - v0.Position.Z) * lerp;
 
 	// interpolate normal, renormalize
-	Vector3::Lerp(v0.Normal,v1.Normal,lerp,&(res->Normal));
+	res->Normal.X = v0.Normal.X + (v1.Normal.X - v0.Normal.X) * lerp;
+	res->Normal.Y = v0.Normal.Y + (v1.Normal.Y - v0.Normal.Y) * lerp;
+	res->Normal.Z = v0.Normal.Z + (v1.Normal.Z - v0.Normal.Z) * lerp;
 	res->Normal.Normalize();
 
 	// interpolate material properies
