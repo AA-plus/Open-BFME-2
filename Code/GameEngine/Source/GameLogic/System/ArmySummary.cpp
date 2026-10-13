@@ -42,6 +42,40 @@ void ArmySummary::rva0040DED9()
  flag14=false;
 }
 
+// Native40DF77..40DFFB/180B (WorldBuilder 0x108B2D0, unnamed) drops every
+// entry whose key is not in the four-byte word vector at +0x4C, or runs the
+// full pop-all path when that vector is empty. WorldBuilder's debug body
+// searches with a found flag (`while (!found && cur != last)`) and branches
+// on it after the loop; spelling the flag makes cl lay the keep path before
+// the removal path as retail does. The word vector's element meaning is
+// unproven (same view as the +0x4C delayed-id range above).
+static __forceinline bool Rva0040DF77Empty(const BfmeIntVecG &v) { return v.first==v.last; }
+void ArmySummary::rva0040DF77()
+{
+ if(Rva0040DF77Empty(words4C)) {
+  rva0040DED9();
+ } else {
+  int* stop=words4C.last;
+  _STL::vector<Rva004F69C3>::iterator entry=entries.begin();
+  while(entry!=entries.end()) {
+   bool found=false;
+   int* word=words4C.first;
+   while(!found && word!=stop) {
+    if(entry->key==*word) found=true;
+    else ++word;
+   }
+   if(found) ++entry;
+   else {
+    Rva0040D8D6List::forEach(&Rva0040D8D6Listener::removing,this,entry->key);
+    Rva0040DD3ARef value(entry->value);
+    entry=entries.erase(entry);
+    Rva0040D8D6List::forEach(&Rva0040D8D6Listener::removed,this,(int)value.value);
+   }
+  }
+  flag14=false;
+ }
+}
+
 // Native40E499..40E534/155B is the C394F0 slot-0 target, whose
 // name-getter40E493 returns ArmySummary. The destructor proves Snapshot
 // at +0, the listener list as a second base at +4 (nullable derived-to-base

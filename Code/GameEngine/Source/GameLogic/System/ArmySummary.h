@@ -42,6 +42,7 @@ public:
  Rva0040DD3ARef RemoveEntry(int);
  Rva0040DD3ARef rva0040E672(int);
  void rva0040DED9();
+ void rva0040DF77();
  void rva0040DE16();
  bool HasDelayedCarryoverUnitOfTypes(ObjectTypes*);
 private:
