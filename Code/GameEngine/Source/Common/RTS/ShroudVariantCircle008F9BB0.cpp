@@ -13,12 +13,12 @@
 // This corrects the old four-word BfmeArgXO declaration without renaming
 // either rowed callee or claiming the donor's class identity as target fact.
 
-class BfmePartitionGridSmallFill;
+class Gen_008F7CD0;
 class BfmeCoiSmallFill;
 
 struct BfmeArgXO
 {
-    BfmePartitionGridSmallFill *m_grid;
+    Gen_008F7CD0 *m_grid;
     BfmeCoiSmallFill *m_first;
     BfmeCoiSmallFill *m_next;
 };
@@ -27,6 +27,10 @@ class BfmeShroudVRC
 {
 public:
 	char bfmeUpdateVRC(int x, int y, int radius);
+
+	Gen_008F7CD0 *m_grid;
+	BfmeCoiSmallFill *m_first;
+	BfmeCoiSmallFill *m_next;
 };
 
 bool __cdecl bfmeCallXO(int cellX, int cellY, int cellRadius, BfmeArgXO arg)
@@ -111,14 +115,14 @@ __forceinline int bfmeFloatToIntSmallFill(Real value)
 
 class BfmeCoiSmallFill;
 
-class BfmeCellSmallFill
+class BfmeCellFD
 {
 public:
 	BfmeCoiSmallFill *m_first;
 	int m_data[41];
 };
 
-class BfmePartitionGridSmallFill
+class Gen_008F7CD0
 {
 public:
 	char m_head[4];
@@ -128,9 +132,11 @@ public:
 	Real m_scale;
 	int m_width;
 	int m_height;
-	BfmeCellSmallFill *m_cells;
+	BfmeCellFD *m_cells;
 
-	BfmeCellSmallFill *getCellAt(int x, int y)
+	void rva0073A2A0(BfmeCellFD **first, BfmeCellFD **last, int x1, int x2, int y);
+
+	BfmeCellFD *getCellAt(int x, int y)
 	{
 		if (x < 0 || x >= m_width || y < 0 || y >= m_height)
 			return 0;
@@ -141,19 +147,19 @@ public:
 class BfmeCoiSmallFill
 {
 public:
-	BfmeCellSmallFill *m_cell;
+	BfmeCellFD *m_cell;
 	void *m_module;
-	BfmeCellSmallFill *m_prev;
+	BfmeCellFD *m_prev;
 	BfmeCoiSmallFill *m_next;
 
-	__forceinline bool addCoverage(BfmeCellSmallFill *cell)
+	__forceinline bool addCoverage(BfmeCellFD *cell)
 	{
 		m_cell = cell;
 		BfmeCoiSmallFill *next = cell->m_first;
 		m_next = next;
 		if (next != 0)
-			next->m_prev = (BfmeCellSmallFill *)&m_next;
-		m_prev = (BfmeCellSmallFill *)cell;
+			next->m_prev = (BfmeCellFD *)&m_next;
+		m_prev = (BfmeCellFD *)cell;
 		cell->m_first = this;
 		return true;
 	}
@@ -164,7 +170,7 @@ class BfmeThingCDE
 private:
 	bool rva0073A9B0(Real centerX, Real centerY, Real radius);
 
-	BfmePartitionGridSmallFill *m_grid;
+	Gen_008F7CD0 *m_grid;
 	char m_prefix[0x18];
 	BfmeCoiSmallFill *m_coiArray;
 	int m_coiInUseCount;
@@ -182,7 +188,7 @@ bool BfmeThingCDE::rva0073A9B0(Real centerX, Real centerY, Real radius)
 	--cellRadius;
 	if (cellRadius < 1)
 	{
-		BfmeCellSmallFill *cell = m_grid->getCellAt(cellCenterX, cellCenterY);
+		BfmeCellFD *cell = m_grid->getCellAt(cellCenterX, cellCenterY);
 		if (cell != 0)
 		{
 			BfmeCoiSmallFill *coi = m_coiArray;
@@ -203,4 +209,32 @@ bool BfmeThingCDE::rva0073A9B0(Real centerX, Real centerY, Real radius)
 		}
 		return true;
 	}
+}
+
+template<class T> inline volatile T &__vref(T &x) { return *(volatile T *)&x; }
+
+// ?bfmeUpdateVRC@BfmeShroudVRC@@QAEDHHH@Z @0x0073A650 (115 B): the span updater
+// bfmeCallXO calls for each row of the circle. The grid's row-range helper
+// 0x0073A2A0 returns the first and last cell of the span; each cell is then
+// chained to the next free coverage record, failing when the records run out.
+// Codegen: a compiler barrier follows the range fetch and the first cell is
+// read through a volatile view (retail re-reads it for the first comparison).
+char BfmeShroudVRC::bfmeUpdateVRC(int firstX, int lastX, int y)
+{
+	BfmeCellFD *first;
+	BfmeCellFD *last;
+	m_grid->rva0073A2A0(&first, &last, firstX, lastX, y);
+	BfmeCellFD *cell = first;
+	BfmeCellFD *end = last;
+	_ReadWriteBarrier();
+	if (__vref(cell) != end)
+	{
+		do
+		{
+			if (m_first >= m_next)
+				return false;
+			(m_first++)->addCoverage(cell++);
+		} while (cell != end);
+	}
+	return true;
 }
