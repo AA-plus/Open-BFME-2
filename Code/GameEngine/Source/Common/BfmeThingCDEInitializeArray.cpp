@@ -34,6 +34,7 @@ public:
 };
 
 void *__cdecl operator new[](unsigned int);
+void __cdecl operator delete[](void*);
 
 void BfmeThingCDE::initializeArray(int count)
 {
