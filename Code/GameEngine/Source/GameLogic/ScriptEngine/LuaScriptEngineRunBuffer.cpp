@@ -1,5 +1,5 @@
-// ?run@Rva00334133Owner@@QAE?AVAsciiString@@PBDKPAURva00334133Context@@@Z
-// partial score=0.93 date=2026-10-10
+// ?rva00334133@LuaScriptEngine@@QAE?AVAsciiString@@PBDKPAURva00334133Context@@@Z
+// WB C02710 and retail334133..334212223B including catch and common continuation.
 // cl: /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7
 //
 // Retail 0x00334133, 223 bytes through the `ret 0x10` at +0xDC, including the
@@ -9,8 +9,12 @@
 // context's source template (name text at +0x64), and returns the first stack
 // result as a string. Body: Open-BFME-1 Rva002E4470LuaBufferRun.cpp (retail
 // 0x002E4470 there, donor revision 575ba2b04); BFME 2 differs in the owner
-// offsets and in reading the template without the final-override walk. Names
-// stay address-derived: the caller is unnamed.
+// offsets and in reading the template without the final-override walk.
+// Receiver is LuaScriptEngine from the shared Lua state/context fields and
+// independently owned engine/callback siblings. Original method name remains unknown.
+// Named template pointer mirrors the WB read sequence and preserves native
+// EDI context / EBX one with EAX on both template-chain loads.
+// The6B3341CD constant-getter row was actually this catch continuation and is retired.
 #include <string.h>
 #include "ascii_string.h"
 
@@ -42,10 +46,10 @@ struct Rva00334133Context
 	Rva00334133Source *m_source;
 };
 
-class Rva00334133Owner
+class LuaScriptEngine
 {
 public:
-	AsciiString run( const char *buffer, unsigned long size, Rva00334133Context *context );
+	AsciiString rva00334133( const char *buffer, unsigned long size, Rva00334133Context *context );
 private:
 	char m_unmodelled00[ 0x10 ];
 	lua_State *m_L;
@@ -53,14 +57,15 @@ private:
 	Rva00334133Context *m_context9C;
 };
 
-AsciiString Rva00334133Owner::run( const char *buffer, unsigned long size, Rva00334133Context *context )
+AsciiString LuaScriptEngine::rva00334133( const char *buffer, unsigned long size, Rva00334133Context *context )
 {
 	m_context9C = context;
 	AsciiString result;
 	try
 	{
 		lua_settop( m_L, 0 );
-		const char *name = context->m_source->m_template->m_nameText;
+		const Rva00334133Template *templ = context->m_source->m_template;
+		const char *name = templ->m_nameText;
 		int status = lua_dobuffer( m_L, buffer, size, name ? name + 8 : "" );
 		if( status == 0 && lua_gettop( m_L ) > 0 )
 		{
