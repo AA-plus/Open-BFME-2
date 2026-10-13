@@ -155,7 +155,7 @@ public:
 
 	void bfmeQuery1279(int nDepth, int name, void **ppPrev, void **ppItem);
 	void rva006F6FB0(int key, AptCIH *pNewItem);
-	void rva006F6ED0(int key,int type,void*pData);
+	AptCIH *rva006F6ED0(int key,int type,void*pData);
 	void rva006F7030(int key, AptCIH *pNewItem, AptCIH *pPrev, AptCIH *pItemAtDepth);
 	AptCIH *rva006F6D60(AptCIH *pOldItem, AptCIH *pNewItem);
 
@@ -702,7 +702,7 @@ inline __declspec(noinline) void BfmeQuery1279::bfmeQuery1279(int nDepth, int na
 	*ppPrev = keyPrevious;
 }
 
-void BfmeQuery1279::rva006F6ED0(int key, int type, void *pData)
+AptCIH *BfmeQuery1279::rva006F6ED0(int key, int type, void *pData)
 {
 	AptCIH *pOldItem;
 	void *pPrev;
@@ -716,5 +716,5 @@ void BfmeQuery1279::rva006F6ED0(int key, int type, void *pData)
 	}
 	node->m_58 = node->m_58 ^ ((node->m_58 ^ (unsigned int)key) & 0x1FFFFu);
 	node->m4C = pData;
-	rva006F6D60((AptCIH *)pPrev, (AptCIH *)node);
+	return rva006F6D60((AptCIH *)pPrev, (AptCIH *)node);
 }
