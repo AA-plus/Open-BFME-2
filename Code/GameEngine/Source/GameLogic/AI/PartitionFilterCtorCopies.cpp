@@ -47,6 +47,7 @@ class Rva00260E2AFilter : public Rva000421C8
 public:
 	Rva00260E2AFilter(const Player *player);
 	virtual bool allow(Object *obj);
+	virtual int getPlayerMask();
 	const Player *m_player;
 };
 
