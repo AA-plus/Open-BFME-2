@@ -1,21 +1,5 @@
-// ?rva000D2301@W3DBuffBuffer@@QAEXPAVMeshClass@@PAVRenderObjClass@@HPAU?$_Rb_tree_iterator@PAVTBuff@@U?$_Const_traits@PAVTBuff@@@_STL@@@_STL@@@Z
-// partial score=0.9938556107 date=2026-10-10
-// ?rva000D2301@W3DBuffBuffer@@QAEXPAVMeshClass@@PAVRenderObjClass@@HPAU?$_Rb_tree_iterator@PAVTBuff@@U?$_Const_traits@PAVTBuff@@@_STL@@@_STL@@@Z
-// partial score=0.96 date=2026-10-09
-// ?rva000D2301@W3DBuffBuffer@@QAEXPAVMeshClass@@PAVRenderObjClass@@HPAU?$_Rb_tree_iterator@PAVTBuff@@U?$_Const_traits@PAVTBuff@@@_STL@@@_STL@@@Z
-// partial score=0.96 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-// NEAR draft (not under Code/): same size as retail (1529 bytes) and every
-// instruction identical except three scheduling spots: (1) pos copy from
-// TBuff+0x48 is load/store per field where retail loads Y and X before the
-// scale spill (pos.Set(x y z) fixes this but flips the x*m00 operand order
-// in row 0 of the inlined Transform_Vector); (2) retail hoists the colors
-// null test (mov eax [ebp]/test eax eax) above the three pos adds; (3) the
-// first x87 fmul st(1) of the color tint sits two integer ops later.
-// All callees resolve to existing rows/pins; target name is a placeholder.
-//
-// ?rva000D2301@W3DBuffBuffer@@QAEXPAVMeshClass@@PAVRenderObjClass@@HPAU?$_Rb_tree_iterator@PAVTBuff@@U?$_Const_traits@PAVTBuff@@@_STL@@@_STL@@@Z
 // retail 0x000D2301..0x000D28FA (1529 bytes, ret 0x10).
 // W3DBuffBuffer: fills the dynamic vertex / index buffers with one copy of a
 // buff mesh per TBuff of one buff type. WorldBuilder's twin (va 0x0082EF10;
@@ -33,24 +17,13 @@
 
 #include <set>
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Vector3
 {
 public:
 	Vector3() {}
 	Vector3(float x, float y, float z) : X(x), Y(y), Z(z) {}
-	Vector3(const Vector3 &v)
-	{
-		X = v.X;
-		Y = v.Y;
-		Z = v.Z;
-	}
 	Vector3 &operator=(const Vector3 &v)
 	{
 		X = v.X;
@@ -86,6 +59,16 @@ public:
 };
 
 inline Vector3 operator+(const Vector3 &a, const Vector3 &b) { return Vector3(a.X + b.X, a.Y + b.Y, a.Z + b.Z); }
+
+namespace {
+// Implementation-only temporary: native copies the three fields separately.
+// Keep that shape local instead of changing the shared Vector3 copy constructor.
+class BuffVertexValue : public Vector3 {
+public:
+ BuffVertexValue(const Vector3 &v) { X=v.X; Y=v.Y; Z=v.Z; }
+ BuffVertexValue(const BuffVertexValue &v) { X=v.X; Y=v.Y; Z=v.Z; }
+};
+}
 class Vector4
 {
 public:
@@ -102,18 +85,12 @@ class Matrix3D
 {
 public:
 	Vector4 &operator[](int i) { return Row[i]; }
-	const Vector4 &operator[](int i) const { return Row[i]; }
+
 	void Get_Translation(Vector3 *set) const
 	{
 		set->X = Row[0][3];
 		set->Y = Row[1][3];
 		set->Z = Row[2][3];
-	}
-	void Set_Translation(const Vector3 &t)
-	{
-		Row[2][3] = t.Z;
-		Row[1][3] = t.Y;
-		Row[0][3] = t.X;
 	}
 	void Obj_Look_At(const Vector3 &p, const Vector3 &t, float roll);
 	static __forceinline void Transform_Vector(const Matrix3D &A, const Vector3 &in, Vector3 *out)
@@ -129,22 +106,15 @@ public:
 		{
 			v = &in;
 		}
-		out->X = (A[0][0] * v->X + A[0][1] * v->Y + A[0][2] * v->Z + A[0][3]);
-		out->Y = (A[1][0] * v->X + A[1][1] * v->Y + A[1][2] * v->Z + A[1][3]);
-		out->Z = (A[2][0] * v->X + A[2][1] * v->Y + A[2][2] * v->Z + A[2][3]);
+		out->X = (A.Row[0][0] * v->X + A.Row[0][1] * v->Y + A.Row[0][2] * v->Z + A.Row[0][3]);
+		out->Y = (A.Row[1][0] * v->X + A.Row[1][1] * v->Y + A.Row[1][2] * v->Z + A.Row[1][3]);
+		out->Z = (A.Row[2][0] * v->X + A.Row[2][1] * v->Y + A.Row[2][2] * v->Z + A.Row[2][3]);
 	}
 
 	Vector4 Row[3];
 };
 
-struct RGBColor
-{
-	int getAsInt() const;
-
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../../Libraries/Include/Lib/RGBColor.h"
 
 struct TriIndex
 {
@@ -197,7 +167,8 @@ struct IDirect3DIndexBuffer8
 	virtual long __stdcall Unlock();
 };
 
-class FVFInfoClass
+namespace {
+class BuffFVFView
 {
 public:
 	unsigned int Get_FVF_Size() const { return FVFSize; }
@@ -206,19 +177,24 @@ private:
 	char m_pad00[0xC];
 	unsigned int FVFSize;
 };
+}
 
-class DX8VertexBufferClass
+
+namespace {
+class BuffVertexBufferView
 {
 public:
-	const FVFInfoClass &FVF_Info() const { return *fvf_info; }
+	const BuffFVFView &FVF_Info() const { return *fvf_info; }
 	IDirect3DVertexBuffer8 *Get_DX8_Vertex_Buffer() { return VertexBuffer; }
 
 private:
 	char m_pad00[0x14];
-	FVFInfoClass *fvf_info;
+	BuffFVFView *fvf_info;
 	char m_pad18[4];
 	IDirect3DVertexBuffer8 *VertexBuffer;
 };
+}
+
 
 class DX8IndexBufferClass
 {
@@ -247,7 +223,9 @@ public:
 	unsigned int *Get_Color_Array(int index, bool create);
 };
 
-class MeshModelClass
+// Consumed BFME2 model fields; isolated from older shared MeshModel views.
+namespace {
+class BuffMeshModelData
 {
 public:
 	enum
@@ -274,13 +252,16 @@ private:
 	MeshMatDescClass *CurMatDesc;
 };
 
+} // namespace
+
 class VertexMaterialClass
 {
 public:
 	void Get_Emissive(Vector3 *set) const;
 };
 
-class MaterialInfoClass
+namespace {
+class BuffMaterialInfoView
 {
 public:
 	virtual void Delete_This();
@@ -304,6 +285,8 @@ private:
 	char m_pad10[8];
 	int VertexMaterialCount;
 };
+}
+
 
 #define RENDOBJ_SLOTS4(n) virtual void slot##n##a(); virtual void slot##n##b(); virtual void slot##n##c(); virtual void slot##n##d();
 
@@ -319,7 +302,7 @@ public:
 	virtual void slot82();
 	virtual void slot83();
 	virtual void slot84();
-	virtual MaterialInfoClass *Get_Material_Info(); // slot 85
+	virtual BuffMaterialInfoView *Get_Material_Info(); // slot 85
 
 	const Matrix3D &Get_Transform() const
 	{
@@ -335,13 +318,25 @@ private:
 class MeshClass : public RenderObjClass
 {
 public:
-	MeshModelClass *Peek_Model() { return Model; }
+	// Model accesses below use the target-proven +C4 view.
 
 private:
 	char m_pad48[0xC4 - 0x48];
-	MeshModelClass *Model;
+	BuffMeshModelData *Model;
 };
 
+
+namespace {
+// Native D2301 reads MeshClass model storage at +C4. The existing
+// global Peek_Model owner reads +94, so do not emit a competing copy.
+class BuffMeshModelView
+{
+public:
+	char unknown[0xC4];
+	BuffMeshModelData *model;
+	BuffMeshModelData *peekModel() { return model; }
+};
+}
 class Player
 {
 public:
@@ -427,7 +422,7 @@ public:
 	void rva000D2301(MeshClass *mesh, RenderObjClass *target, int type, TBuffSet::iterator *it);
 
 private:
-	DX8VertexBufferClass *m_vertexBuffer;
+	BuffVertexBufferView *m_vertexBuffer;
 	DX8IndexBufferClass *m_indexBuffer;
 	int m_curNumBuffVertices;
 	int m_curNumBuffIndices;
@@ -449,15 +444,15 @@ void W3DBuffBuffer::rva000D2301(MeshClass *mesh, RenderObjClass *target, int typ
 	if (*it == buffs.end())
 		return;
 
-	MeshModelClass *model = mesh->Peek_Model();
+	BuffMeshModelData *model = ((BuffMeshModelView *)mesh)->peekModel();
 	int numVertices = model->Get_Vertex_Count();
 	Vector3 *vertices = model->Get_Vertex_Array();
 	int numPolys = model->Get_Polygon_Count();
-	TriIndex *polys = mesh->Peek_Model()->Get_Polygon_Array();
-	Vector2 *uvs = mesh->Peek_Model()->Get_UV_Array_By_Index(0);
-	unsigned int *colors = mesh->Peek_Model()->Get_Color_Array(0);
+	TriIndex *polys = ((BuffMeshModelView *)mesh)->peekModel()->Get_Polygon_Array();
+	Vector2 *uvs = ((BuffMeshModelView *)mesh)->peekModel()->Get_UV_Array_By_Index(0);
+	unsigned int *colors = ((BuffMeshModelView *)mesh)->peekModel()->Get_Color_Array(0);
 	Vector3 emissive(0.0f, 0.0f, 0.0f);
-	MaterialInfoClass *info = mesh->Get_Material_Info();
+	BuffMaterialInfoView *info = mesh->Get_Material_Info();
 	if (info)
 		info->Peek_Vertex_Material(0)->Get_Emissive(&emissive);
 	if (info)
@@ -522,19 +517,21 @@ void W3DBuffBuffer::rva000D2301(MeshClass *mesh, RenderObjClass *target, int typ
 			transformed = false;
 			if (!buff->m_transformSet)
 			{
-				if (mesh->Peek_Model()->Get_Flag(MeshModelClass::ALIGNED))
+				if (((BuffMeshModelView *)mesh)->peekModel()->Get_Flag(BuffMeshModelData::ALIGNED))
 				{
 					Matrix3D mtx;
 					Vector3 targetPos;
 					target->Get_Transform().Get_Translation(&targetPos);
 					mtx.Obj_Look_At(pos, targetPos, 0.0f);
-					mtx.Set_Translation(Vector3(0.0f, 0.0f, 0.0f));
+					mtx.Row[2][3] = 0.0f;
+					mtx.Row[1][3] = 0.0f;
+					mtx.Row[0][3] = 0.0f;
 					buff->setTransform(mtx);
 					transformed = true;
 				}
 				buff->m_transformSet = true;
 			}
-			if (mesh->Peek_Model()->Get_Flag(MeshModelClass::ALIGNED))
+			if (((BuffMeshModelView *)mesh)->peekModel()->Get_Flag(BuffMeshModelData::ALIGNED))
 			{
 				if (TheGameClient->getFrame() % 10 == 0)
 				{
@@ -542,7 +539,9 @@ void W3DBuffBuffer::rva000D2301(MeshClass *mesh, RenderObjClass *target, int typ
 					Vector3 targetPos;
 					target->Get_Transform().Get_Translation(&targetPos);
 					mtx.Obj_Look_At(pos, targetPos, 0.0f);
-					mtx.Set_Translation(Vector3(0.0f, 0.0f, 0.0f));
+					mtx.Row[2][3] = 0.0f;
+					mtx.Row[1][3] = 0.0f;
+					mtx.Row[0][3] = 0.0f;
 					buff->setTransform(mtx);
 				}
 				transformed = true;
@@ -552,11 +551,13 @@ void W3DBuffBuffer::rva000D2301(MeshClass *mesh, RenderObjClass *target, int typ
 			{
 				vb->u = uvs[i].X;
 				vb->v = uvs[i].Y;
-				Vector3 vertex = vertices[i];
-				Vector3 world = vertex;
+				BuffVertexValue vertex = vertices[i];
+				BuffVertexValue world = vertex;
 				world *= scale;
 				if (transformed)
 					Matrix3D::Transform_Vector(buff->m_transform, vertex, &world);
+				// Keep the native color-pointer read before the three position adds.
+				unsigned int *vertexColors = *(unsigned int *volatile *)&colors;
 				world.X += pos.X;
 				world.Y += pos.Y;
 				world.Z += pos.Z;
@@ -564,10 +565,14 @@ void W3DBuffBuffer::rva000D2301(MeshClass *mesh, RenderObjClass *target, int typ
 				vb->y = world.Y;
 				vb->z = world.Z;
 				RGBColor color = emissiveColor;
-				if (colors && colors[i] != 0xFFFFFFFF)
+				if (vertexColors && vertexColors[i] != 0xFFFFFFFF)
 				{
-					unsigned int c = colors[i];
-					color.blue = (float)(c & 0xFF) * color.blue / 255.0f;
+					unsigned int c = vertexColors[i];
+					// Naming the conversion preserves the native x87 multiply schedule.
+					{
+						float channel = (float)(c & 0xFF);
+						color.blue = channel * color.blue / 255.0f;
+					}
 					color.green = (float)((c >> 8) & 0xFF) * color.green / 255.0f;
 					color.red = (float)((c >> 16) & 0xFF) * color.red / 255.0f;
 				}
