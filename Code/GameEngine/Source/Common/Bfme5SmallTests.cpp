@@ -11,18 +11,7 @@ private:
 	int m_bfmeItems[6];					// +0x04
 };
 
-// ?bfmePush@Gen_0015A260@@QAEXH@Z
-void Gen_0015A260::bfmePush(int value)
-{
-	int count = m_bfmeCount;
-
-	if (count < 6)
-	{
-		m_bfmeItems[count] = value;
-
-		++m_bfmeCount;
-	}
-}
+// bfmePush is defined with its formation callers in AI/AIGroupFormations.cpp.
 
 class Gen_0015E750
 {
