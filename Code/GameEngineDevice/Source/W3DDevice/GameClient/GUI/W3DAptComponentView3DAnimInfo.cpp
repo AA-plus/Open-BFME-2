@@ -16,8 +16,11 @@
 // AsciiString cleanup and the existing 20-byte pointer-set AssetList view
 // reproduce the native body and all three EH states under /O1. StringBase
 // concatenation, registry, animation lookup and SetFrame use existing owners
-// or existing pins. HTreeClass is the existing lookup ABI view, not a recovered
-// target type name. The allocator shim preserves the native null-checked free. Int mode and Rva00740AB4RefTarget preserve the observed ABI.
+// or existing pins. AnimationAsset::GetAnim returns HAnimClass; this caller's
+// existing HTreeClass field is only a pointer ABI view, made explicit by the
+// cast, and its original field type remains to be reconciled. The allocator
+// shim preserves the native null-checked free. Int mode and
+// Rva00740AB4RefTarget preserve the observed ABI.
 
 #include <set>
 
@@ -25,7 +28,7 @@
 
 class HTreeClass;
 
-HTreeClass *Rva0014CF5F_GetAnimTree(const char *name);
+#include "../../../../../Libraries/Source/WWVegas/WW3D2/AnimationAssetBFME2.h"
 
 class Rva00740AB4RefTarget
 {
@@ -91,7 +94,7 @@ bool W3DAptComponentView3D::AnimInfo::Init(const AsciiString &name, Rva00740AB4R
 		bfmeMergeReceiverKeys((int)&assets);
 	}
 
-	HTreeClass *anim = Rva0014CF5F_GetAnimTree(path.str());
+	HTreeClass *anim = reinterpret_cast<HTreeClass *>(AnimationAsset::GetAnim(path.str()));
 	m_animation = anim;
 	if (anim == 0)
 		return false;

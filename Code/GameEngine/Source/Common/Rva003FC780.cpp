@@ -12,7 +12,7 @@ public:
     int m_ref;
 };
 
-HTreeClass *Rva0014CF5F_GetAnimTree(const char *name);
+#include "../../../Libraries/Source/WWVegas/WW3D2/AnimationAssetBFME2.h"
 
 
 class Rva003FB65C
@@ -37,7 +37,7 @@ HTreeClass *Rva003FB65C::rva003FC780(const AsciiString *name, int x)
     }
     const char *t = *(const char * const *)name;
     const char *animName = t ? t + 8 : "";
-    HTreeClass *newTree = Rva0014CF5F_GetAnimTree(animName);
+    HTreeClass *newTree = reinterpret_cast<HTreeClass *>(AnimationAsset::GetAnim(animName));
     m_tree = newTree;
     rva003FB65C(x);
     return m_tree;

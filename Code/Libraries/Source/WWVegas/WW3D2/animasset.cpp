@@ -43,14 +43,23 @@ bool AnimationAsset::HasAnim(const char *name)
 class HierarchyPrototype
 {
 public:
-	void Release_Ref();
+	virtual void slot00();
+	virtual void slot01();
+	virtual void slot02();
+	virtual void slot03();
+	virtual void slot04();
+	virtual void slot05();
+	virtual void slot06();
+	virtual void slot07();
+	virtual void slot08();
+	virtual void slot09();
+	virtual int slot10();
+	virtual void slot11();
+	char m_pad[0x10]; // +0x04
+	HAnimClass *m_animation; // +0x14
 };
 
-class TextureClass
-{
-public:
-	void Release_Ref();
-};
+#include "../../../../GameEngineDevice/Source/W3DDevice/GameClient/BFME2ParticleTextureHandles.h"
 
 class HierarchyPrototypeRef
 {
@@ -73,7 +82,7 @@ public:
 	~HAnimPrototypeOwner()
 	{
 		if (m_prototype != 0)
-			m_prototype->Release_Ref();
+			((TextureClass *)m_prototype)->Release_Ref();
 	}
 
 	HierarchyPrototype *m_prototype; // +0x00
@@ -91,3 +100,37 @@ HAnimPrototypeOwner AnimationAsset::Get(const char *name)
 	}
 	return HAnimPrototypeOwner(Rva0061F230_GetPrototype(name));
 }
+
+
+// Native returned animation has a reference count at+4; no additional layout
+// is inferred here. WB9C3CB0 names GetAnim and independently shows its asset
+// ownership. Cursor and particle callers pass this object to Set_Animation.
+class HAnimClass { public: char unknown00[4]; int m_refCount; };
+// Existing registry ABI alias retained from the previous GetAnim unit.
+#pragma comment(linker, "/alternatename:?Rva0061F230_GetPrototype@@YA?AVHierarchyPrototypeRef@@PBD@Z=?Rva009EBCE0_GetPrototype@@YA?AVRva009EBCE0AssetReference@@PBD@Z")
+HAnimClass *AnimationAsset::GetAnim(const char *name)
+{
+	if (name == 0)
+		return 0;
+
+	char lookup[512];
+	_mbscpy(lookup, "a*");
+	_mbscpy(lookup + 2, name);
+	_strlwr(lookup);
+
+	HAnimPrototypeOwner owner(Rva0061F230_GetPrototype(lookup));
+	if (owner.m_prototype == 0)
+		return 0;
+
+	HierarchyPrototype *object = owner.m_prototype;
+	if ((unsigned char)object->slot10() == 0)
+		object->slot11();
+	HAnimClass *animation = object->m_animation;
+	if (animation != 0)
+		++animation->m_refCount;
+	return object->m_animation;
+}
+
+
+// Existing Get_HAnim callers share this same verified animation body.
+#pragma comment(linker, "/alternatename:?Get_HAnim@@YAPAVHAnimClass@@PBD@Z=?GetAnim@AnimationAsset@@SAPAVHAnimClass@@PBD@Z")

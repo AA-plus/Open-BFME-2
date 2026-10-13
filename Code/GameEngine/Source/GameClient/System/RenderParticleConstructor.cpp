@@ -136,7 +136,7 @@ class Rva001FC42D {public:void rva001FC42D(void*,void*);};
 class RenderObjClass;
 class HTreeClass;
 RenderObjClass*Create_Render_Obj(const char*);
-HTreeClass*Rva0014CF5F_GetAnimTree(const char*);
+#include "../../../../Libraries/Source/WWVegas/WW3D2/AnimationAssetBFME2.h"
 void rva0010E4F6(void*,bool);
 class ParticleModelModule621 {public:virtual void v00();virtual void v04();virtual void v08();virtual void v0C();virtual void v10();virtual AsciiString modelName();virtual void v18();virtual int modelValue();};
 struct ParticleSystemModel621 {char unknown00[0xC];int kind;char unknown10[0x1B4];ParticleModelModule621*module;};
@@ -317,7 +317,7 @@ Rva001FC0F1::Rva001FC0F1(const RvaSmartPtr12&system,const Rva001F376E&info)
    if(render){
     AsciiString animName;animName.format("%s.%s",name.str(),name.str());
     if(animation){RefTree621*p=(RefTree621*)animation;if(--p->refs==0)p->destroy();animation=0;}
-    animation=Rva0014CF5F_GetAnimTree(animName.str());
+    animation=reinterpret_cast<HTreeClass *>(AnimationAsset::GetAnim(animName.str()));
     if(animation)((RenderView621*)render)->animate(animation,0.0f,1);
     ((RenderView621*)render)->enabled(1);
     rva0010E4F6(render,false);W3DDisplay::m_3DScene->add(render);

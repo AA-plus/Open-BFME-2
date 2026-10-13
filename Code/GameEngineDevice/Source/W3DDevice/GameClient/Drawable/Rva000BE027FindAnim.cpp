@@ -25,7 +25,7 @@ extern const char g_Rva0107301CEmptyString[];
 AsciiString Rva000BDD6CReplace(const AsciiString &source, const AsciiString &find, const AsciiString &replace);
 AsciiString Rva000B992CBuild(const AsciiString &a1, const AsciiString &a2, int dummy, bool flag, int num);
 #include "../../../../../Libraries/Source/WWVegas/WW3D2/AnimationAssetBFME2.h"
-HTreeClass *Rva0014CF5F_GetAnimTree(const char *name);
+
 
 // The loaded animation's frame count (slot 5) and frame rate (slot 6).
 class Rva000BE027Clip
@@ -68,7 +68,7 @@ HTreeClass *Rva000BE027Anim::rva000BE027(const AsciiString &base, const AsciiStr
 			AsciiString replaced = Rva000BDD6CReplace(m_begin[i], s_modelToken, model);
 			name = Rva000B992CBuild(base, replaced, (int)&model, numbered, number);
 			if (AnimationAsset::HasAnim(name.str()))
-				tree = Rva0014CF5F_GetAnimTree(name.str());
+				tree = reinterpret_cast<HTreeClass *>(AnimationAsset::GetAnim(name.str()));
 
 			if (tree == 0 && numbered && !base.isEmpty())
 			{
@@ -77,7 +77,7 @@ HTreeClass *Rva000BE027Anim::rva000BE027(const AsciiString &base, const AsciiStr
 				((StringBase<char> &)name).concat(dot, 1);
 				name.concat(replaced);
 				if (AnimationAsset::HasAnim(name.str()))
-					tree = Rva0014CF5F_GetAnimTree(name.str());
+					tree = reinterpret_cast<HTreeClass *>(AnimationAsset::GetAnim(name.str()));
 			}
 
 			if (tree != 0 && m_duration18 < 0.0f)

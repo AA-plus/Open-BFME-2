@@ -13,7 +13,7 @@
 //   Rva0013101E (the 16-byte option block that loader copies through
 //   0x0013101E): each call site zeroes the low 31 bits and three dwords;
 // - animations come from the free lookup 0x0014CF5F (rowed as
-//   Rva0014CF5F_GetAnimTree), whose result is stored as the HAnimClass.
+//   AnimationAsset::GetAnim), whose result is stored as the HAnimClass.
 // CursorInfo is the ZH record (stride 0x54 from +0x0C): W3DModelName +0x30,
 // W3DAnimName +0x34, W3DScale +0x38, loop +0x3C; m_orthoCamera is the byte at
 // +0x12E3 and m_orthoZoom the float at +0x12E4. RenderObjClass::Set_Position
@@ -238,7 +238,7 @@ public:
 };
 
 RenderObjClass *Rva00137364CreateRenderObj( const char *name, float scale, const Rva0013101E &options = Rva0013101E() );
-HTreeClass *Rva0014CF5F_GetAnimTree( const char *name );
+#include "../../../../Libraries/Source/WWVegas/WW3D2/AnimationAssetBFME2.h"
 
 class CriticalSectionClass
 {
@@ -574,7 +574,7 @@ void W3DMouse::initW3DAssets(void)
 		{
 			if (!m_cursorInfo[i].W3DAnimName.isEmpty())
 			{
-				HAnimClass *anim = (HAnimClass *)Rva0014CF5F_GetAnimTree(m_cursorInfo[i].W3DAnimName.str());
+				HAnimClass *anim = AnimationAsset::GetAnim(m_cursorInfo[i].W3DAnimName.str());
 				cursorAnims[i] = anim;
 				if (anim && cursorModels[i])
 				{
