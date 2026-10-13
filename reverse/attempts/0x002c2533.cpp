@@ -1,4 +1,6 @@
 // ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
+// partial score=0.8886 date=2026-10-13
+// ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
 // partial score=0.94 date=2026-10-13
 // ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
 // partial score=0.94 date=2026-10-13
