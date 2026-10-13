@@ -1,19 +1,27 @@
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
 // ?applyPhysicsXform@Drawable@@QAEXPAVMatrix3D@@@Z
-// partial score=0.9977 date=2026-10-13
-// ?applyPhysicsXform@Drawable@@QAEXPAVMatrix3D@@@Z
-// partial score=0.9977 date=2026-10-11
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
-// seat13 2026-10-11: unchanged best 873/875; residue row1 sum loads [esi+0x14] then [esi+0x10] (retail 0x10 then 0x14).
-// retail 0x0027BB65..0x0027BED0 (875 bytes) thiscall RET 4; ZH Drawable::applyPhysicsXform order and guards.
-// Translation via WWMath Matrix3D::Translate(const Vector3&) with (float) casts on a Vector3(0,0,m_totalZ)
-// temporary: with all three rows 3-term it reproduces retail's zero-term factoring (Y+X, X+Y, Y+X) and every
-// rotation byte, but leaves row 1's z load after the row-0 W store. Writing row 1 as BFME1's translatePhysicsZ
-// explicit sum (X+Y)*t0 + Z*t2 hoists that z load like retail but flips row 1's sum to [esi+0x14] then
-// [esi+0x10] (retail 0x10 then 0x14): 873/875 bytes, sole residue those two displacement bytes.
-// calcPhysicsXform 0x0027BA95 has no row: landing needs a pin or its row.
-// Reference WWMath Matrix3D postMul and assignment; native BED0 proves flag43F and order.
+// retail 0x0027BB65..0x0027BED0 (875 bytes) thiscall RET 4.
+//
+// Guards: object +0xFC, disabled bit 8 unless kind-of 0x51, TheWritableGlobalData
+// +0x9B0 showPhysics (converged global 0x009FE758, one name), then TheTacticalView slots 0xD8 (isTimeFrozen) / 0x78
+// (isCameraMovementFinished), ScriptEngine 0x00424FF and 0x0203ACE byte
+// field. Then calcPhysicsXform(info) (rowed 0x0027BA95) and the four
+// Matrix3D post-multiplies Translate/Rotate_Y/Rotate_X(-roll)/Rotate_Z.
+// The offsets, the guard order and the four calls are ZH
+// Drawable::applyPhysicsXform as carried by the BFME1 donor.
+//
+// Codegen fact for the WWMath row math: the translation is
+// Translate(Vector3(0,0,info.m_totalZ)) inlined, so the t[0]/t[1] terms are
+// the constants 0 and survive as multiplies (MSVC folds X*0+Y*0 to (X+Y)*0,
+// no /fp:fast). Retail's schedule loads the row-1 z operand into xmm2 before
+// the row-0 W store and computes row 1's sum X-first while rows 0/2 are
+// Y-first; a named z local shared by rows 0/1 reproduces exactly that, row 2
+// keeps the t[2] memory operand. Every other row spelling measured 2-42
+// residual instructions (see reverse/re_attempts.log 0x0027BB65).
+//
+// The view-class helpers are __declspec(dllimport) __forceinline so the TU
+// emits only the row itself (no divergent Vector3/Matrix3D COMDATs).
 #include <math.h>
 class Vector3{public:float X,Y,Z;__declspec(dllimport) __forceinline Vector3(float x,float y,float z){X=x;Y=y;Z=z;}__forceinline float&operator[](int i){return (&X)[i];}__declspec(dllimport) __forceinline const float&operator[](int i)const{return (&X)[i];}};
 class Vector4{public:float X,Y,Z,W;__declspec(dllimport) __forceinline Vector4&operator=(const Vector4&v){X=v.X;Y=v.Y;Z=v.Z;W=v.W;return *this;}
