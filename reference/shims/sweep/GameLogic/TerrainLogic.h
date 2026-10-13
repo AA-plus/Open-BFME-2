@@ -107,7 +107,9 @@ public:
 	/// Enumerate the directed links from a waypoint using this,a nd getLink.
 	Int getNumLinks(void) const {return m_numLinks; }
 	/// Get the n'th directed link.  (May be NULL).
-	Waypoint *getLink(Int ndx) const {if (ndx>=0 && ndx <= MAX_LINKS) return m_links[ndx]; return NULL; }
+	// Units on this view call getLink out of line (rowed in WaypointLinks.cpp, 0x00085404); declared
+	// only, so they emit no ZH-layout copy that, first in link order, displaces retail's.
+	Waypoint *getLink(Int ndx) const;
 	/// Get the waypoint's name.
 	AsciiString getName(void) const {return m_name; }
 	/// Get the integer id.
