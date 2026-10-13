@@ -944,7 +944,8 @@ Bool LivingWorldLogic::CanMoveArmyMembers_internal(LivingWorldArmy *army, const 
 	Int count = entryIDs.size();
 	for (Int i = 0; i < count; ++i)
 	{
-		ArmySummaryEntryRef entry(BorrowEntryHolder(army->m_summary->GetEntry(entryIDs[i])));
+		ArmySummary *summary = army->m_summary;
+		ArmySummaryEntryRef entry(BorrowEntryHolder(summary->GetEntry(entryIDs[i])));
 		if (entry.m_entry == 0)
 			continue;
 		if (!CanMoveArmyMember_internal(army, entry.m_entry, target, false))
