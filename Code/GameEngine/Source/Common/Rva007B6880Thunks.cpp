@@ -5998,13 +5998,14 @@ void __cdecl rva007B9AD0()
 }
 
 struct Rva001D28F0Element;
-extern unsigned g_Va00E0ABB4;
-unsigned int g_Va00E0ABB4;
+// 0x00A0ABB4: defined elsewhere as ?g_bfmeVideoTableStorage@@3UBfmeVideoTableStorage@@A.
+struct BfmeVideoTableStorage;
+extern BfmeVideoTableStorage g_bfmeVideoTableStorage;
 
-// ?rva007B9BC0@@YAXXZ @ 0x007B9BC0 (10B). Global vector<Rva001D28F0Element> dtor thunk: ecx=&g_Va00E0ABB4 then tail-jmp to rowed ??1?$vector@URva001D28F0Element@@V?$allocator@URva001D28F0Element@@@_STL@@@_STL@@QAE@XZ (0x00689DB0).
+// ?rva007B9BC0@@YAXXZ @ 0x007B9BC0 (10B). Global vector<Rva001D28F0Element> dtor thunk: ecx=&g_bfmeVideoTableStorage then tail-jmp to rowed ??1?$vector@URva001D28F0Element@@V?$allocator@URva001D28F0Element@@@_STL@@@_STL@@QAE@XZ (0x00689DB0).
 void __cdecl rva007B9BC0()
 {
-	_STL::vector<Rva001D28F0Element, _STL::allocator<Rva001D28F0Element> > *p = (_STL::vector<Rva001D28F0Element, _STL::allocator<Rva001D28F0Element> > *)&g_Va00E0ABB4;
+	_STL::vector<Rva001D28F0Element, _STL::allocator<Rva001D28F0Element> > *p = (_STL::vector<Rva001D28F0Element, _STL::allocator<Rva001D28F0Element> > *)&g_bfmeVideoTableStorage;
 	return p->_STL::vector<Rva001D28F0Element, _STL::allocator<Rva001D28F0Element> >::~vector();
 }
 
@@ -6155,39 +6156,43 @@ void __cdecl rva007B7A7D()
 	return p->~basic_string();
 }
 
-extern unsigned g_Va00E02310;
-unsigned int g_Va00E02310;
+// 0x00A02310: defined elsewhere as ?g_00E02310@@3VRva003818B0List@@A.
+class Rva003818B0List;
+extern Rva003818B0List g_00E02310;
 
 void __cdecl rva007B7DC7()
 {
-	StlNarrowString *p = (StlNarrowString *)&g_Va00E02310;
+	StlNarrowString *p = (StlNarrowString *)&g_00E02310;
 	return p->~basic_string();
 }
 
-extern unsigned g_Va00E02E88;
-unsigned int g_Va00E02E88;
+// 0x00A02E88: defined elsewhere as ?g_registryAtE02E88@@3VRva002B7250@@A.
+class Rva002B7250;
+extern Rva002B7250 g_registryAtE02E88;
 
 void __cdecl rva007B8155()
 {
-	StlNarrowString *p = (StlNarrowString *)&g_Va00E02E88;
+	StlNarrowString *p = (StlNarrowString *)&g_registryAtE02E88;
 	return p->~basic_string();
 }
 
-extern unsigned g_Va00E04424;
-unsigned int g_Va00E04424;
+// 0x00A04424: defined elsewhere as ?g_00E04424@@3VRva002B7250@@A.
+class Rva002B7250;
+extern Rva002B7250 g_00E04424;
 
 void __cdecl rva007B8F08()
 {
-	StlNarrowString *p = (StlNarrowString *)&g_Va00E04424;
+	StlNarrowString *p = (StlNarrowString *)&g_00E04424;
 	return p->~basic_string();
 }
 
-extern unsigned g_Va00E04484;
-unsigned int g_Va00E04484;
+// 0x00A04484: defined elsewhere as ?g_00E04484@@3URvaVector@@A.
+struct RvaVector;
+extern RvaVector g_00E04484;
 
 void __cdecl rva007B8F9F()
 {
-	StlNarrowString *p = (StlNarrowString *)&g_Va00E04484;
+	StlNarrowString *p = (StlNarrowString *)&g_00E04484;
 	return p->~basic_string();
 }
 
@@ -6199,12 +6204,13 @@ void __cdecl rva007B8FBD()
 	return p->~basic_string();
 }
 
-extern unsigned g_Va00E044F0;
-unsigned int g_Va00E044F0;
+// 0x00A044F0: defined elsewhere as ?g_00E044F0@@3VRva002B7250@@A.
+class Rva002B7250;
+extern Rva002B7250 g_00E044F0;
 
 void __cdecl rva007B903F()
 {
-	StlNarrowString *p = (StlNarrowString *)&g_Va00E044F0;
+	StlNarrowString *p = (StlNarrowString *)&g_00E044F0;
 	return p->~basic_string();
 }
 
@@ -6343,8 +6349,9 @@ class Dict
 	DictPairData *m_data;
 };
 
-extern unsigned g_Va00E00944;
-unsigned int g_Va00E00944;
+// 0x00A00944: defined elsewhere as ?g_Va00E00944@@3VDict@@A.
+class Dict;
+extern Dict g_Va00E00944;
 
 // ?rva007B7B14@@YAXXZ @ 0x007B7B14 (10B). Global Dict teardown: ecx=&g_Va00E00944 then tail-jmp to rowed ?releaseData@Dict@@AAEXXZ (0x0031339C). No callers. Honest address name.
 void __cdecl rva007B7B14()
@@ -6427,8 +6434,9 @@ public:
 	~Rva00411453Tree();
 };
 
-extern unsigned g_Va00E02FE4;
-unsigned int g_Va00E02FE4;
+// 0x00A02FE4: defined elsewhere as ?g_Va00E02FE4@@3URva004114EFGlobalTable@@A.
+struct Rva004114EFGlobalTable;
+extern Rva004114EFGlobalTable g_Va00E02FE4;
 
 // ?rva007B821F@@YAXXZ @ 0x007B821F (10B). Tree teardown: ecx=&g_Va00E02FE4 then tail-jmp to the 0x004110B4 stub for a tree-dtor-family body (0x00410C42, same prologue as the rowed family). No callers. Honest address name.
 void __cdecl rva007B821F()
@@ -6437,8 +6445,9 @@ void __cdecl rva007B821F()
 	return p->~Rva004110B4Tree();
 }
 
-extern unsigned g_Va00E02FF8;
-unsigned int g_Va00E02FF8;
+// 0x00A02FF8: defined elsewhere as ?g_Va00E02FF8@@3URva004110DCGlobalTable@@A.
+struct Rva004110DCGlobalTable;
+extern Rva004110DCGlobalTable g_Va00E02FF8;
 
 // ?rva007B8229@@YAXXZ @ 0x007B8229 (10B). Tree teardown: ecx=&g_Va00E02FF8 then tail-jmp to the 0x004110B9 stub for the rowed dup_00410c7b body (0x00410C7B). No callers. Honest address name.
 void __cdecl rva007B8229()
@@ -6649,13 +6658,14 @@ void __cdecl rva007B9997()
 	return p->Rva005E9F7B::~Rva005E9F7B();
 }
 
-extern unsigned g_Va00E06858;
-unsigned int g_Va00E06858;
+// 0x00A06858: defined elsewhere as ?Rva00A06858@@3VRva005F0152@@A.
+class Rva005F0152;
+extern Rva005F0152 Rva00A06858;
 
-// ?rva007B99B5@@YAXXZ @ 0x007B99B5 (10B). Global Rva005F00FB dtor thunk: ecx=&g_Va00E06858 then tail-jmp to pinned ??1Rva005F00FB@@UAE@XZ (0x005F00FB; scalar deleting dtor 0x005F02C4). No callers. Honest address name.
+// ?rva007B99B5@@YAXXZ @ 0x007B99B5 (10B). Global Rva005F00FB dtor thunk: ecx=&Rva00A06858 then tail-jmp to pinned ??1Rva005F00FB@@UAE@XZ (0x005F00FB; scalar deleting dtor 0x005F02C4). No callers. Honest address name.
 void __cdecl rva007B99B5()
 {
-	Rva005F00FB *p = (Rva005F00FB *)&g_Va00E06858;
+	Rva005F00FB *p = (Rva005F00FB *)&Rva00A06858;
 	return p->Rva005F00FB::~Rva005F00FB();
 }
 
@@ -6934,8 +6944,8 @@ public:
 	~Rva00422CEETree();
 };
 
-extern unsigned g_Va00E0319C;
-unsigned int g_Va00E0319C;
+// 0x00A0319C: defined elsewhere as ?g_Va00E0319C@@3PAIA.
+extern unsigned *g_Va00E0319C;
 
 // ?rva007B82DD@@YAXXZ @ 0x007B82DD (10B). Tree teardown: ecx=&g_Va00E0319C then tail-jmp to the 0x00422CEE stub for tree dtor ??1Rva00421C24@@QAE@XZ (0x00422675). No callers. Honest address name.
 void __cdecl rva007B82DD()
@@ -7169,13 +7179,14 @@ public:
 	~Rva00301621Dtor();
 };
 
-extern unsigned g_Va00DFF14C;
-unsigned int g_Va00DFF14C;
+// 0x009FF14C: defined elsewhere as ?TheSupplyAndTechImageLocations@@3VTechAndSupplyImages@@A.
+class TechAndSupplyImages;
+extern TechAndSupplyImages TheSupplyAndTechImageLocations;
 
-// ?rva007B7A9B@@YAXXZ @ 0x007B7A9B (10B). Global dtor thunk: ecx=&g_Va00DFF14C then tail-jmp to pinned ??1Rva00301621Dtor@@QAE@XZ (0x00301621). No callers. Honest address name.
+// ?rva007B7A9B@@YAXXZ @ 0x007B7A9B (10B). Global dtor thunk: ecx=&TheSupplyAndTechImageLocations then tail-jmp to pinned ??1Rva00301621Dtor@@QAE@XZ (0x00301621). No callers. Honest address name.
 void __cdecl rva007B7A9B()
 {
-	Rva00301621Dtor *p = (Rva00301621Dtor *)&g_Va00DFF14C;
+	Rva00301621Dtor *p = (Rva00301621Dtor *)&TheSupplyAndTechImageLocations;
 	return p->~Rva00301621Dtor();
 }
 
@@ -7340,23 +7351,25 @@ void __cdecl rva007B6B73()
 	return p->~Rva002859EADtor();
 }
 
-extern unsigned g_Va00DFEC94;
-unsigned int g_Va00DFEC94;
+// 0x009FEC94: defined elsewhere as ?g_pool00286116@@3URva00065964ObjectPool@@A.
+struct Rva00065964ObjectPool;
+extern Rva00065964ObjectPool g_pool00286116;
 
-// ?rva007B781A@@YAXXZ @ 0x007B781A (10B). Global dtor thunk: ecx=&g_Va00DFEC94 then tail-jmp to pinned ??1Rva002859EADtor@@QAE@XZ (0x002859EA). No callers. Honest address name.
+// ?rva007B781A@@YAXXZ @ 0x007B781A (10B). Global dtor thunk: ecx=&g_pool00286116 then tail-jmp to pinned ??1Rva002859EADtor@@QAE@XZ (0x002859EA). No callers. Honest address name.
 void __cdecl rva007B781A()
 {
-	Rva002859EADtor *p = (Rva002859EADtor *)&g_Va00DFEC94;
+	Rva002859EADtor *p = (Rva002859EADtor *)&g_pool00286116;
 	return p->~Rva002859EADtor();
 }
 
-extern unsigned g_Va00DFECA8;
-unsigned int g_Va00DFECA8;
+// 0x009FECA8: defined elsewhere as ?g_pool00286136@@3URva00065964ObjectPool@@A.
+struct Rva00065964ObjectPool;
+extern Rva00065964ObjectPool g_pool00286136;
 
-// ?rva007B7824@@YAXXZ @ 0x007B7824 (10B). Global dtor thunk: ecx=&g_Va00DFECA8 then tail-jmp to pinned ??1Rva002859EADtor@@QAE@XZ (0x002859EA). No callers. Honest address name.
+// ?rva007B7824@@YAXXZ @ 0x007B7824 (10B). Global dtor thunk: ecx=&g_pool00286136 then tail-jmp to pinned ??1Rva002859EADtor@@QAE@XZ (0x002859EA). No callers. Honest address name.
 void __cdecl rva007B7824()
 {
-	Rva002859EADtor *p = (Rva002859EADtor *)&g_Va00DFECA8;
+	Rva002859EADtor *p = (Rva002859EADtor *)&g_pool00286136;
 	return p->~Rva002859EADtor();
 }
 
@@ -7366,13 +7379,13 @@ public:
 	~Rva003615E5Dtor();
 };
 
-extern unsigned g_Va00E01E68;
-unsigned int g_Va00E01E68;
+// 0x00A01E68: defined elsewhere as ?g_validityBegin@@3PAEA.
+extern unsigned char *g_validityBegin;
 
-// ?rva007B7CAF@@YAXXZ @ 0x007B7CAF (10B). Global dtor thunk: ecx=&g_Va00E01E68 then tail-jmp to pinned ??1Rva003615E5Dtor@@QAE@XZ (0x003615E5). No callers. Honest address name.
+// ?rva007B7CAF@@YAXXZ @ 0x007B7CAF (10B). Global dtor thunk: ecx=&g_validityBegin then tail-jmp to pinned ??1Rva003615E5Dtor@@QAE@XZ (0x003615E5). No callers. Honest address name.
 void __cdecl rva007B7CAF()
 {
-	Rva003615E5Dtor *p = (Rva003615E5Dtor *)&g_Va00E01E68;
+	Rva003615E5Dtor *p = (Rva003615E5Dtor *)&g_validityBegin;
 	return p->~Rva003615E5Dtor();
 }
 
