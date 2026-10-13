@@ -21443,10 +21443,11 @@ object_symbol	reverse/functions.csv	0x007A407A	1
 object_symbol	reverse/functions.csv	0x007A4082	1
 object_symbol	reverse/functions.csv	0x007A409F	1
 object_symbol	reverse/functions.csv	0x007A40B1	1
-object_symbol	reverse/functions.csv	0x007A40C3	1	allow=2814365c8b17d012f4bb867f1077d2c5549b54cf
+object_symbol	reverse/functions.csv	0x007A40C3	1
 object_symbol	reverse/functions.csv	0x007A40D0	1
 object_symbol	reverse/functions.csv	0x007A40E2	1
 object_symbol	reverse/functions.csv	0x007A40EA	1
+object_symbol	reverse/functions.csv	0x007A40F2	1	allow=1b8c1b7e30c25a3a5c9b22f36a7b79bca1210ade
 object_symbol	reverse/functions.csv	0x007A4107	1
 object_symbol	reverse/functions.csv	0x007A410F	1
 object_symbol	reverse/functions.csv	0x007A4117	1
