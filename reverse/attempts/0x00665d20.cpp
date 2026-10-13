@@ -1,4 +1,6 @@
 // ?rva007F97B0@Rva007FA2C0@@QAEXPAVRva007E8810Message@@PAURva007FA170Slot@@@Z
+// partial score=0.9793 date=2026-10-13
+// ?rva007F97B0@Rva007FA2C0@@QAEXPAVRva007E8810Message@@PAURva007FA170Slot@@@Z
 // partial score=0.79 date=2026-10-02
 // ?rva007F97B0@Rva007FA2C0@@QAEXPAVRva007E8810Message@@PAURva007FA170Slot@@@Z
 // Banked continuation: 414 compiled bytes, matching the full native extent.
@@ -19,7 +21,10 @@
 //
 // Names are address-derived except where BFME 2 already rows the callee.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <string.h>
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 class Rva007E8810Message
 {
@@ -150,13 +155,14 @@ void Rva007FA2C0::rva007F97B0( Rva007E8810Message *message, Rva007FA170Slot *slo
 
 	char *text = (char *)Gen007EFFC0()->alloc( message->m_14, 0 );
 	unsigned textCapacity = message->m_14;
+	_ReadWriteBarrier();
 	message->getString("data", text, (int)textCapacity);
 	unsigned length = strlen( text );
 	if( length & 3 )
 		Rva007EB810Get()->fail( "(len & 0x3) == 0",
 			"\\views\\feslbuild_main\\jabba\\fesl\\source\\transactor.cpp", 0x13b );
 	unsigned decoded = length / 4 * 3;
-	if( !rva007FF250Decode( length, text, record->m_buffer + record->m_received ) )
+	if( !rva007FF250Decode( length, text, record->m_buffer + __vref(record->m_received) ) )
 		Rva007EB810Get()->fail( "result",
 			"\\views\\feslbuild_main\\jabba\\fesl\\source\\transactor.cpp", 0x13e );
 	record->m_received += decoded;
@@ -167,7 +173,9 @@ void Rva007FA2C0::rva007F97B0( Rva007E8810Message *message, Rva007FA170Slot *slo
 		Rva00800E50Header header;
 		header.m_type = message->m_1C;
 		header.m_flags = message->m_20 & ~0x20000000;
+		_ReadWriteBarrier();
 		header.m_text = (const char *)record->m_buffer;
+		_ReadWriteBarrier();
 		header.m_textLength = record->m_total;
 		header.m_entry.m_field04 = message->m_04;
 		header.m_entry.m_field08 = message->m_08;
