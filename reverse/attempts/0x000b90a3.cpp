@@ -1,8 +1,11 @@
 // ?rva000B90A3@W3DScriptedModelDraw@@QAEXXZ
+// partial score=0.9005 date=2026-10-13
+// ?rva000B90A3@W3DScriptedModelDraw@@QAEXXZ
 // partial score=0.826 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /DWIN32 /D_WINDOWS /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/game/Libraries/Source/WWVegas
 #include <math.h>
 #include "matrix3d.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 struct B90A3Data {char pad[0x69];bool translationOnly,clientHeading;};
 class Object {char pad[0x1C0];public:float orientation;};
 class Drawable {char pad[0xFC];public:Object *object;const Matrix3D *getTransformMatrix()const;};
@@ -57,7 +60,7 @@ void W3DScriptedModelDraw::rva000B90A3()
    if(moduleData->clientHeading){
     Object *obj=drawable->object;
     float angle=TheInGameUI?TheInGameUI->rva0029B3C1(obj):obj->orientation;
-    RotateZ(mtx,angle);
+    RotateZ(mtx,__vref(angle));
    }
   }
   rva000B710D(mtx);
