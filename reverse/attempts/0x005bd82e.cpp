@@ -1,4 +1,6 @@
 // ?StartPatchCheck@@YAXXZ
+// partial score=0.9423 date=2026-10-13
+// ?StartPatchCheck@@YAXXZ
 // partial score=0.97 date=2026-10-08
 // cl: /O1 /Oa /G7 /arch:SSE /MD /EHs /DNDEBUG /Ireference/shims/bfme2_ascii /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS /ICode/GameEngine/Source/Common
 // stlport
