@@ -194,7 +194,7 @@ RvaF1Handle Rva005FB243::rva005FB243(int first, int second)
 
 // ?rva00574AD9@Rva00574AD9@@QAE?AURvaF1Handle@@PAX@Z, retail 0x00574AD9 (84B): sibling of rva005CEA92 above with a
 // 0x20-byte object built by the rowed constructor Rva005CC37C (0x005CC3C0) from the explicit pointer and receiver+8.
-// class-gate: allow Rva005CC37C proved codegen view: opaque 0x20-byte storage view; only the constructor is called
+// Constructor-only view of Rva005CC37C: opaque 0x20-byte storage view; only the constructor is called
 class Rva005CC37C
 {
 	char m_pad[0x20];
@@ -215,7 +215,7 @@ RvaF1Handle Rva00574AD9::rva00574AD9(void *argument)
 
 // ?rva00567F3D@Rva00567F3D@@QAE?AURvaF1Handle@@H@Z, retail 0x00567F3D (84B): the same factory shape with a 0x1C-byte
 // object built by the rowed constructor Rva00567960 (0x00567CCD) from the int argument and receiver+8 (an Info view).
-// class-gate: allow Rva00567960 proved codegen view: opaque 0x1C-byte storage view; only the constructor is called
+// Constructor-only view of Rva00567960: opaque 0x1C-byte storage view; only the constructor is called
 class Rva00567960
 {
 	char m_pad[0x1C];
@@ -238,7 +238,7 @@ RvaF1Handle Rva00567F3D::rva00567F3D(int argument)
 // receiver+8 forwarded to rowed-by-address constructors 0x005FB14E (0x24-byte object), 0x005FB30A and 0x005FB4DF
 // (0x20-byte objects). Target evidence: retail bodies and constructor REL32s read byte for byte; constructor
 // identities and argument meanings are unresolved and the names are address-derived.
-// class-gate: allow Rva005FB14E proved codegen view: opaque storage view of a constructor-only callee
+// Constructor-only view of Rva005FB14E: opaque storage view of a constructor-only callee
 class Rva005FB14E
 {
 	char m_pad[0x24];
