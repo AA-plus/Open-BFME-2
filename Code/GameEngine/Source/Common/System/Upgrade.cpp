@@ -199,7 +199,7 @@ AsciiString getVetUpgradeName(VeterancyLevel v)
 {
 	AsciiString tmp;
 	tmp = "Upgrade_Veterancy_";
-	tmp.concat(TheVeterancyNames[v]);
+	reinterpret_cast<StringBase<char> *>(&tmp)->concat(TheVeterancyNames[v]);
 	return tmp;
 }
 
