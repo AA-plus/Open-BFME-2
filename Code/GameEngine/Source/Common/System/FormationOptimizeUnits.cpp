@@ -12,7 +12,7 @@
 // before each run, the a+1 run check before the slot position and the
 // distance terms. Callees are rowed: _Vector_base<int> ctor 0x00211E58,
 // vector reserve 0x002B712E and push_back 0x004DFCB0 (folded pointer-vector
-// bodies), sort 0x0042549E, run end 0x004235B2 (folded name), slot position
+// bodies), sort 0x0042549E, upper_bound run end 0x004235B2, slot position
 // 0x004216A2, distance 0x004219F4 and GameLogic::findObjectByID.
 
 #define _STLP_NO_EXCEPTIONS 1
@@ -36,13 +36,11 @@ class Rva00422CA8
 {
 };
 
-struct Rva004235B2Element;
-namespace _STL { template <> struct less<Rva004235B2Element> {}; }
 
 namespace _STL
 {
 template <class _RandomAccessIter, class _Compare> void sort(_RandomAccessIter first, _RandomAccessIter last, _Compare comp);
-template <class _ForwardIter, class _Tp, class _Compare> _ForwardIter lower_bound(_ForwardIter first, _ForwardIter last, const _Tp &val, _Compare comp);
+template <class _ForwardIter, class _Tp, class _Compare> _ForwardIter upper_bound(_ForwardIter first, _ForwardIter last, const _Tp &val, _Compare comp);
 }
 
 // One formation slot (32 bytes): object ID at +4.
@@ -80,7 +78,7 @@ void Formation::optimizeUnits(const Coord3D *pos)
 	int *runEnd;
 	for (; runBegin != (int *)slots.end(); runBegin = runEnd)
 	{
-		runEnd = (int *)_STL::lower_bound((Rva004235B2Element *)runBegin, (Rva004235B2Element *)slots.end(), *(Rva004235B2Element *)runBegin, _STL::less<Rva004235B2Element>());
+		runEnd = _STL::upper_bound(runBegin, (int *)slots.end(), *runBegin, Rva00422CA8());
 		for (int *a = runBegin; a != runEnd; ++a)
 		{
 			int *other = a + 1;
@@ -117,3 +115,6 @@ void Formation::optimizeUnits(const Coord3D *pos)
 		}
 	}
 }
+
+// Canonical retail upper_bound wrapper 0x004235B2 calls __upper_bound 0x00423098.
+// The entire 455B native body and its callees must verify with these real names.
