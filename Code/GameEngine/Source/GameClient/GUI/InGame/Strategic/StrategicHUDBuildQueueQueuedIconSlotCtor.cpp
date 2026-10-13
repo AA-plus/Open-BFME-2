@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // QueuedIconSlot constructor (retail 0x005F7B25, 1020B), slot 7 of the
 // BuildQueueDetails movie clip's queued icon slots; the sibling of the
