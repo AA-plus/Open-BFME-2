@@ -1,4 +1,6 @@
 // ?moveTowardsPositionHorde@Locomotor@@QAEXPAVObject@@ABUCoord3D@@MM@Z
+// partial score=0.99 date=2026-10-13
+// ?moveTowardsPositionHorde@Locomotor@@QAEXPAVObject@@ABUCoord3D@@MM@Z
 // partial score=0.98 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/Libraries/Include
 // stlport
@@ -548,55 +550,53 @@ void Locomotor::moveTowardsPositionHorde(Object *obj, const Coord3D &goalPos, Re
 		}
 	}
 
+	Real maxSpeed = ((Rva001E46E1 *)this)->rva001E46E1(obj);
+	Real maxTurnRate = getMaxTurnRate(obj);
+	if (desiredSpeed > maxSpeed)
+		desiredSpeed = maxSpeed;
+	if (m_template->m_150 && hordeContain)
+		desiredSpeed = hordeContain->slot144(desiredSpeed);
+	Real angle = obj->getOrientation();
+	Real desiredAngle = atan2f(goalPos.y - obj->getPosition()->y, goalPos.x - obj->getPosition()->x);
+	Real relAngle = normalizeAngle(desiredAngle - angle);
+	Coord3D goal;
+	goal.x = goalPos.x;
+	goal.y = goalPos.y;
+	goal.z = goalPos.z;
+	bool reverse = false;
+	if (m_template->m_D8 && obj->isKindOf((KindOfType)0x41))
+		reverse = true;
+	if (m_40 == 0.0f)
 	{
-		Real maxSpeed = ((Rva001E46E1 *)this)->rva001E46E1(obj);
-		Real maxTurnRate = getMaxTurnRate(obj);
-		if (desiredSpeed > maxSpeed)
-			desiredSpeed = maxSpeed;
-		if (m_template->m_150 && hordeContain)
-			desiredSpeed = hordeContain->slot144(desiredSpeed);
-		Real angle = obj->getOrientation();
-		Real desiredAngle = atan2f(goalPos.y - obj->getPosition()->y, goalPos.x - obj->getPosition()->x);
-		Real relAngle = normalizeAngle(desiredAngle - angle);
-		Coord3D goal;
-		goal.x = goalPos.x;
-		goal.y = goalPos.y;
-		goal.z = goalPos.z;
-		bool reverse = false;
-		if (m_template->m_D8 && obj->isKindOf((KindOfType)0x41))
-			reverse = true;
-		if (m_40 == 0.0f)
-		{
-			setFlag(LOCO_FLAG_7, reverse);
-			m_98 = 0;
-		}
-		if (getFlag7())
-		{
-			if (!reverse)
-				m_flags &= ~0x80;
-			else
-			{
-				desiredAngle = normalizeAngle(desiredAngle - 3.14159265359f);
-				relAngle = normalizeAngle(desiredAngle - angle);
-				goal = *obj->getPosition();
-				Rva001E756DCoord::scale(&goal, 2.0f);
-				Rva001E756DCoord::sub(&goal, &goalPos);
-			}
-		}
-		Real limit = m_template->m_84;
-		if (Cos(relAngle) < Cos(limit) && !onPortal && dist > 20.0f && hordeContain)
-		{
-			hordeContain->slot15();
-			rva001E41FA(desiredAngle);
-			((Rva0030A3E4 *)obj)->rva0030A3E4((const Matrix3D *)&m_transform);
-			hordeContain->slot16();
-		}
-		if (onPortal)
-			goal.z = obj->getPosition()->z;
-		if (m_template->m_151)
-			((Rva001E46E1 *)this)->rva001E56DC(obj, &goal, maxTurnRate, &relAngle);
-		if (!((Rva001E46E1 *)this)->rva001E543F(obj) && obj->getTemplate()->isKindOf9() && hordeContain && !hordeContain->slot112(desiredAngle))
-			desiredSpeed *= 0.1f;
-		((Rva001E6007 *)this)->rva001e6007((unsigned int)obj, (unsigned int)&goal, onPathDistToGoal, desiredSpeed);
+		setFlag(LOCO_FLAG_7, reverse);
+		m_98 = 0;
 	}
+	if (getFlag7())
+	{
+		if (!reverse)
+			m_flags &= ~0x80;
+		else
+		{
+			desiredAngle = normalizeAngle(desiredAngle - 3.14159265359f);
+			relAngle = normalizeAngle(desiredAngle - angle);
+			goal = *obj->getPosition();
+			Rva001E756DCoord::scale(&goal, 2.0f);
+			Rva001E756DCoord::sub(&goal, &goalPos);
+		}
+	}
+	Real limit = m_template->m_84;
+	if (Cos(relAngle) < Cos(limit) && !onPortal && dist > 20.0f && hordeContain)
+	{
+		hordeContain->slot15();
+		rva001E41FA(desiredAngle);
+		((Rva0030A3E4 *)obj)->rva0030A3E4((const Matrix3D *)&m_transform);
+		hordeContain->slot16();
+	}
+	if (onPortal)
+		goal.z = obj->getPosition()->z;
+	if (m_template->m_151)
+		((Rva001E46E1 *)this)->rva001E56DC(obj, &goal, maxTurnRate, &relAngle);
+	if (!((Rva001E46E1 *)this)->rva001E543F(obj) && obj->getTemplate()->isKindOf9() && hordeContain && !hordeContain->slot112(desiredAngle))
+		desiredSpeed *= 0.1f;
+	((Rva001E6007 *)this)->rva001e6007((unsigned int)obj, (unsigned int)&goal, onPathDistToGoal, desiredSpeed);
 }
