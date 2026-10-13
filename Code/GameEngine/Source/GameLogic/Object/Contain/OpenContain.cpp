@@ -342,7 +342,10 @@ void OpenContain::addToContain( Object *rider )
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 // ?OpenContain::addToContainList present-unmatched
-void OpenContain::addToContainList( Object *rider )
+// Select-any: the rowed BFME2 body in OpenContainRva004638F1.cpp comes first in
+// link order, so this differing ZH-donor spelling folds without being kept.
+// The only caller is virtual, so select-any changes no call site.
+inline __declspec(noinline) void OpenContain::addToContainList( Object *rider )
 {
 	m_containList.push_back(rider);
 	m_containListSize++;

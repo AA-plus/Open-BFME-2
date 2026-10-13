@@ -81,12 +81,22 @@ private:
 	int m_48;
 };
 
-void OpenContain::addToContainList(Object *rider)
+// Select-any like the ZH-donor copy in OpenContain.cpp (that TU comes later in
+// link order with a differing body, so this retail body is the one kept); the
+// anchor keeps the body emitted.
+inline void OpenContain::addToContainList(Object *rider)
 {
 	m_list.push_back((const int &)rider);
 	++m_38;
 	if (*(unsigned char *)((char *)rider->m_template + 0x10C) & 2)
 		++m_48;
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitOpenContainAddToContainList@@YAXPAVOpenContain@@@Z absent-from-retail
+void bfmeEmitOpenContainAddToContainList(OpenContain *p)
+{
+	p->OpenContain::addToContainList((Object *)0);
 }
 
 // ?rva004632E0@OpenContain@@UAEPAVObject@@PBUCoord3D@@@Z @0x004632E0 91B (RET 4):
