@@ -24,6 +24,10 @@ public:
 	~StringBase() { releaseBuffer(); }
 };
 
+// Retail teardown calls use the rowed releaseBuffer worker at RVA 0x00036410.
+// Existing narrow teardown aliases bind this declaration to that provider;
+// emitting another forwarding destructor would override them at link time.
+template <> StringBase<char>::~StringBase();
 
 class GameLODManager
 {
