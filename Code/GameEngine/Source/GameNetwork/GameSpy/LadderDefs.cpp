@@ -479,7 +479,7 @@ void LadderList::checkLadder( AsciiString fname, Int index )
 			len = fp->read(buf, 1023);
 			buf[len] = 0;
 			buf[1023] = 0;
-			rawData.concat(buf);
+			reinterpret_cast<StringBase<char> *>(&rawData)->concat(buf);
 		}
 		fp->close();
 		fp = NULL;

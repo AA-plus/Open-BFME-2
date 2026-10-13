@@ -148,7 +148,7 @@ void AptStats::InitializeFactionVariables() {
   UnicodeString display=TheGameText->fetch(label);
   name.format("Stats:FactionName_%d",faction);
   g_bfmeAptWindowManager->bfmeSetText(name,display,false);
-  AsciiString image("AptIcon");image.concat(side);
+  AsciiString image("AptIcon");reinterpret_cast<StringBase<char> *>(&image)->concat(side);
   name.format("Stats:FactionIcon_%d",faction);
   reinterpret_cast<Rva00524306*>(static_cast<char*>(owner)+0x40)->rva00524767(name,image);
   image.format("Apt%sImage",side);
