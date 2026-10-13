@@ -31,7 +31,8 @@ public:
 };
 class ModuleData { public: char data00[0x2C]; Real radius; };
 #include "RTS/XYDistanceCallView.h"
-struct Region2D { Coord2D lo,hi; bool rva000062FD(const Coord2D&,const Coord2D&) const; };
+struct Region2D { Coord2D lo,hi; };
+class Rva000062FDRegion { public: bool rva000062FD(const Coord2D&,const Coord2D&) const; };
 class Rva0087E370 { public: void method(const Coord3D&,Real,Region2D&) const; };
 template<int N> class FilterSlots : public FilterSlots<N-1> {
 public: virtual void unused(char(*)[N]);
@@ -109,7 +110,7 @@ bool Rva00261D2EFilter::allow(Object *other)
     ((const Rva0087E370*)geometry)->method(position,angle,bounds);
     Coord2D delta; delta.x=end.x-otherPos->x; delta.y=end.y-otherPos->y;
     Coord2D start; start.x=otherPos->x; start.y=otherPos->y;
-    if(bounds.rva000062FD(start,delta)) result=true;
+    if(((const Rva000062FDRegion*)&bounds)->rva000062FD(start,delta)) result=true;
    }
   }
  }
