@@ -425,3 +425,7 @@ const char *LivingWorldScoreKeeper::GetSnapshotName()const{return "LivingWorldSc
 // Native ScoreKeeper cleanup 0x792b1a is the complete 11-byte member+0x28
 // destructor action of parent 0x4eed02; the whole parent and EH graph
 // bind this lifetime action to the existing rowed 63-byte destructor 0x004EE501.
+
+// Native ScoreKeeper observer cleanup 0x792a7a is the complete 20-byte
+// action $L9766 of the exact 310-byte destructor and its exception graph.
+// Its adjusted observer lifetime is emitted by the existing real C++ bases.
