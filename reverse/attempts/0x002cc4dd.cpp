@@ -1,6 +1,8 @@
 // ?rva002CC4DD@Weapon@@QAEXXZ
 // partial score=0.95 date=2026-10-13
 // ?rva002CC4DD@Weapon@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva002CC4DD@Weapon@@QAEXXZ
 // partial score=0.94 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD
 // stlport
