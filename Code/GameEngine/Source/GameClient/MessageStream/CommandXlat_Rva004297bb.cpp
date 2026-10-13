@@ -831,7 +831,7 @@ class TerrainLogic;extern TerrainLogic* TheTerrainLogic;
 class UpgradeCenter;extern UpgradeCenter* TheUpgradeCenter;
 enum CellShroudStatus { CONTEXT_SHROUD_NONE };
 #include "../../Common/PartitionRangeQueryCallView.h"
-extern PartitionManager*ThePartitionManager;
+extern PartitionManager*TheShroudManager;
 class ContextAIUpdate : public ContextSlots<90> { public: virtual bool active(); };
 class ContextContain : public ContextSlots<69> { public: virtual int unload(int); };
 struct ContextPoint : public Coord3D { ContextPoint(const Coord3D&c) {x=c.x;y=c.y;z=c.z;} };
@@ -1052,7 +1052,7 @@ GameMessage::Type CommandTranslator::evaluateContextCommand(Drawable*draw,const 
    if(!(reachable||(selectedObject&&contextKind(selectedObject,134))||active))goto invalidHint; {
     if(contextUI()->waypoint)msgType=0xb5;
     else if(selectedObject&&contextKind(selectedObject,191)&&contextKind(selectedObject,217)&&contextObject(selectedObject)->container) {
-     if(pos&&(((ContextAI*)TheAI)->getPathfinder()->IsWaterCell((int)pos,1)||ThePartitionManager->getShroudStatusForPlayer(((ContextPlayerIndex*)((ContextPlayers*)ThePlayerList)->getLocalPlayer())->getIndex(),pos)==2))msgType=0xb3;
+     if(pos&&(((ContextAI*)TheAI)->getPathfinder()->IsWaterCell((int)pos,1)||TheShroudManager->getShroudStatusForPlayer(((ContextPlayerIndex*)((ContextPlayers*)ThePlayerList)->getLocalPlayer())->getIndex(),pos)==2))msgType=0xb3;
      else if(pos&&((ContextContain*)contextObject(selectedObject)->container)->unload(0))msgType=0xb1;
      else goto invalidHint;
     }else msgType=0xb3;
