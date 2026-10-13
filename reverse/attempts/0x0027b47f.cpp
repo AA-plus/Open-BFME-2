@@ -1,4 +1,6 @@
 // ?calcPhysicsXformHugeFourLegs@Drawable@@QAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z
+// partial score=0.9955684545403807 date=2026-10-13
+// ?calcPhysicsXformHugeFourLegs@Drawable@@QAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z
 // partial score=0.9956 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 // stlport
@@ -16,7 +18,8 @@
 // TU-local Coord3D (name and trivial-ABI shape shared with the rowed
 // vector<Coord3D> resize body at 0x000CA2F3; user-declared ctor/copy/dtor so
 // a value temporary stays uninitialized, as retail passes it).
-struct Coord3D { Coord3D() {} Coord3D(const Coord3D &) {} ~Coord3D() {} float x; float y; float z; };
+#include "Coord3D.h"
+struct EmptyFootPoint:Coord3D{EmptyFootPoint(){}EmptyFootPoint(const EmptyFootPoint&r){x=r.x;y=r.y;z=r.z;}};
 typedef float Real; typedef int Int;typedef bool Bool;
 struct Region2D{struct Point{float x,y;}lo,hi;};
 class Rva0087E370{public:void method(const Coord3D&,float,Region2D&)const;};
@@ -154,7 +157,7 @@ bool found=false;
 for(DrawModule**mod=modules;!found&&*mod;++mod){BfmeFootDraw*draw=(*mod)->getDraw();if(draw&&draw->collectFeet(&points,0)&&points.size()>=4)found=true;}
 if(!found){const Rva0087E370*geom=(const Rva0087E370*)((const char*)obj+0xA8);Region2D&bounds=scratch.bounds;Coord3D zero;zero.x=0;zero.y=0;zero.z=0;
 geom->method(zero,0.0f,bounds);
-points.resize(4,Coord3D());
+typedef void(_STL::vector<Coord3D>::*FillValue)(unsigned int,EmptyFootPoint);(points.*reinterpret_cast<FillValue>(&_STL::vector<Coord3D>::resize))(4,EmptyFootPoint());
 Real s=Sin(direction),c=Cos(direction);
 points[1].x=bounds.hi.x*c-bounds.hi.y*s;points[1].y=bounds.hi.y*c+bounds.hi.x*s;points[1].z=pos->z;
 points[0].x=bounds.lo.x*c-bounds.hi.y*s;points[0].y=bounds.hi.y*c+bounds.lo.x*s;points[0].z=pos->z;
