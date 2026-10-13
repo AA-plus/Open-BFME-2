@@ -425,3 +425,6 @@ UnicodeString Rva00319CED::rva004E265F(int id)
 
 // Native0x791c0a complete1B action: Independent1B RET action in the whole738B help parent native EH graph. The neighbouring24B conditional cleanup branches to this named entry; disjoint extents prevent duplicate coverage.
 // Whole native parent and complete EH graph independently prove ownership.
+
+// Native0x791bf2 complete24B action: Complete24B conditional hidden-output UnicodeString cleanup in the whole738B help parent. It tests and clears mask1 atEBP-28 then tail-jumps with return bufferEBP+8 to same-object whole5B destructor5B804E or branches to independently named1B RET791C0A. Replaces the separately retired standalone assembly range.
+// Whole native parent and complete EH graph independently prove ownership.
