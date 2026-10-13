@@ -1,5 +1,7 @@
 // ?rva000BD6C2@W3DScriptedModelDraw@@QAEXXZ
 // partial score=0.95563681246625 date=2026-10-13
+// ?rva000BD6C2@W3DScriptedModelDraw@@QAEXXZ
+// partial score=0.95563681246625 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // Native BD6C2..BDA40, 894B. W3DScriptedModelDraw particle/event update.
 // WB945CC0 supplies the debug control-flow twin, not the original method name.
