@@ -1,6 +1,8 @@
 // ?rva002F3392@Pathfinder@@QAE_NPAVPathNode@@0IPAUCoord3D@@11@Z
 // partial score=0.9945212569316082 date=2026-10-13
 // ?rva002F3392@Pathfinder@@QAE_NPAVPathNode@@0IPAUCoord3D@@11@Z
+// partial score=0.9945212569316082 date=2026-10-13
+// ?rva002F3392@Pathfinder@@QAE_NPAVPathNode@@0IPAUCoord3D@@11@Z
 // partial score=0.9803031423290204 date=2026-10-10
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
