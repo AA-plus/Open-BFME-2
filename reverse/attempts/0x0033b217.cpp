@@ -1,4 +1,6 @@
 // ?rva0033B217@Rva0033B217@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva0033B217@Rva0033B217@@QAEXXZ
 // partial score=0.8481 date=2026-10-05
 // ?rva0033B217@Rva0033B217@@QAEXXZ
 // partial score=0.92 date=2026-10-05
@@ -49,31 +51,31 @@ void Rva0033B217::rva0033B217()
     {
         RawWide tmp;
         UnicodeString *ret = TheGameText->fetch((UnicodeString *)&tmp, &m_key2c, 0);
-        m_val30.set(*ret);
+        UnicodeString &dst = m_val30; dst.set(*ret);
     }
     {
         RawWide tmp;
         UnicodeString *ret = TheGameText->fetch((UnicodeString *)&tmp, &m_key34, 0);
-        m_val38.set(*ret);
+        UnicodeString &dst = m_val38; dst.set(*ret);
     }
     {
         RawWide tmp;
         UnicodeString *ret = TheGameText->fetch((UnicodeString *)&tmp, &m_key4c, 0);
-        m_val50.set(*ret);
+        UnicodeString &dst = m_val50; dst.set(*ret);
     }
     {
         RawWide tmp;
         UnicodeString *ret = TheGameText->fetch((UnicodeString *)&tmp, &m_key44, 0);
-        m_val48.set(*ret);
+        UnicodeString &dst = m_val48; dst.set(*ret);
     }
     {
         RawWide tmp;
         UnicodeString *ret = TheGameText->fetch((UnicodeString *)&tmp, &m_key54, 0);
-        m_val58.set(*ret);
+        UnicodeString &dst = m_val58; dst.set(*ret);
     }
     {
         RawWide tmp;
         UnicodeString *ret = TheGameText->fetch((UnicodeString *)&tmp, &m_key3c, 0);
-        m_val40.set(*ret);
+        UnicodeString &dst = m_val40; dst.set(*ret);
     }
 }
