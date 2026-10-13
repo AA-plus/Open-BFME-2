@@ -34,7 +34,8 @@ struct TreeHintRef00217D4C : public Rva00579E47
 };
 class Rva0054D2DDTarget { public: void method(int, const UnicodeString &, const UnicodeString &, TreeHintRef00217D4C, TreeHintRef00217D4C); };
 class AptStrategicMessageBox { private: static AptStrategicMessageBox *s_instance; public: static __forceinline AptStrategicMessageBox *get() { return s_instance; } };
-class Eva { public: void reportEvaEvent(int, const Coord3D *, int); };
+enum EvaEventID { EVA_EVENT_STUB = 0 };
+class Eva { public: bool reportEvaEvent(EvaEventID, const Coord3D *, const Coord3D *); };
 extern Eva *TheEva;
 
 class Rva004FBC02
@@ -89,7 +90,7 @@ void Rva004FBC02::rva004FBD3A()
 		box->method(getMode(), m_text, m_title, TreeHintRef00217D4C(),
 			TreeHintRef00217D4C(MakeDesc(this, &Rva004FBC02::rva004FBBEB)));
 		m_25 = true;
-		TheEva->reportEvaEvent(m_event, m_24 ? (const Coord3D *)&m_18 : 0, 0);
+		TheEva->reportEvaEvent((EvaEventID)m_event, m_24 ? (const Coord3D *)&m_18 : 0, 0);
 		slot1();
 	}
 }

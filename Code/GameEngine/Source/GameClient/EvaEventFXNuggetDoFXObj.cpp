@@ -56,10 +56,11 @@ private:
 	Team *m_team; // +0x304
 };
 
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void reportEvaEvent(int event, const Coord3D *position, int unused);
+	bool reportEvaEvent(EvaEventID event, const Coord3D *position, const Coord3D *secondPosition);
 };
 
 Eva *TheEva;
@@ -95,15 +96,15 @@ void EvaEventFXNugget::doFXObj(const Object *primary, const Object *) const
 		Player *owner = primary->getControllingPlayer();
 		if (owner && owner->isLocalPlayer())
 		{
-			TheEva->reportEvaEvent(m_evaEventOwner, primary->getPosition(), 0);
+			TheEva->reportEvaEvent((EvaEventID)m_evaEventOwner, primary->getPosition(), 0);
 		}
 		else if (ThePlayerList->getLocalPlayer() && ThePlayerList->getLocalPlayer()->getRelationship(primary->getTeam()) == ALLIES)
 		{
-			TheEva->reportEvaEvent(m_evaEventAlly, primary->getPosition(), 0);
+			TheEva->reportEvaEvent((EvaEventID)m_evaEventAlly, primary->getPosition(), 0);
 		}
 		else
 		{
-			TheEva->reportEvaEvent(m_evaEventEnemy, primary->getPosition(), 0);
+			TheEva->reportEvaEvent((EvaEventID)m_evaEventEnemy, primary->getPosition(), 0);
 		}
 	}
 }

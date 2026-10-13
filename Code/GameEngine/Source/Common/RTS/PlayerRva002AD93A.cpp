@@ -136,10 +136,11 @@ public:
 };
 extern PlayerList *ThePlayerList;
 
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void rva001DE2DA(Int eventId, const struct Coord3D *pos, Int x);
+	bool reportEvaEvent(EvaEventID eventId, const struct Coord3D *pos, const struct Coord3D *secondPos);
 };
 extern Eva *TheEva;
 
@@ -187,7 +188,7 @@ void Player::rva002AD93A(const UpgradeTemplate *upgrade, Int x)
 		else
 			eventId = upgrade->m_evaEnemy;
 	}
-	TheEva->rva001DE2DA(eventId, 0, 0);
+	TheEva->reportEvaEvent((EvaEventID)eventId, 0, 0);
 }
 
 // Target: 0x002AD9FD..0x002ADAC3, same list and iterator ABI as above.
@@ -225,5 +226,5 @@ void Player::rva002AD9FD(const UpgradeTemplate *upgrade, Int x)
 		else
 			eventId = upgrade->m_evaRemovedEnemy;
 	}
-	TheEva->rva001DE2DA(eventId, 0, 0);
+	TheEva->reportEvaEvent((EvaEventID)eventId, 0, 0);
 }

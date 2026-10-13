@@ -18,7 +18,8 @@ struct PlayerListUpdateView{char pad[0x10];Player *localPlayer;int playerCount;}
 // EvaEventID/two-position-pointer ABI. This caller ignores the return and uses
 // only a null third word, so its observed stack/receiver contract is unchanged;
 // the retained int spelling is not an assertion that the last argument is a flag.
-class Eva{public:void reportEvaEvent(int,const Coord3D*,int);};extern Eva *TheEva;
+enum EvaEventID { EVA_EVENT_STUB = 0 };
+class Eva{public:bool reportEvaEvent(EvaEventID,const Coord3D*,const Coord3D*);};extern Eva *TheEva;
 class Rva00414F5EHost{public:void run();};
 struct AnnouncerUpdateView{char pad[8];int event;unsigned threshold;char pad10[12];_STL::vector<ScoredKillTracker> trackers;Player *localPlayer;int seenPlayers;};
 struct TrackerUpdateView{char pad[0x1c];int count;Coord3D position;};
@@ -37,5 +38,5 @@ void Rva00414B0A::rva0041505B(){
   int kills=((const int*)position)[-1];total+=kills;
   if(kills>0)point=*position;
  }
- if(total>=self->threshold){Coord3D zero;zero.x=0;zero.y=0;zero.z=0;if(point==zero)TheEva->reportEvaEvent(self->event,0,0);else TheEva->reportEvaEvent(self->event,&point,0);}
+ if(total>=self->threshold){Coord3D zero;zero.x=0;zero.y=0;zero.z=0;if(point==zero)TheEva->reportEvaEvent((EvaEventID)self->event,0,0);else TheEva->reportEvaEvent((EvaEventID)self->event,&point,0);}
 }
