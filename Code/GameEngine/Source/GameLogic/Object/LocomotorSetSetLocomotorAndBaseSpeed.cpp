@@ -1,13 +1,13 @@
-// ?rva001EA2CF@Rva001EA2CFLocomotorDefinition@@QAEXPAVINI@@PAVThingTemplate@@@Z
-// partial score=0.8822966243913175 date=2026-10-13
-// ?rva001EA2CF@Rva001EA2CFLocomotorDefinition@@QAEXPAVINI@@PAVThingTemplate@@@Z
-// partial score=0.8625422133643359 date=2026-10-10
-// ?rva001EA2CF@Rva001EA2CFLocomotorDefinition@@QAEXPAVINI@@PAVThingTemplate@@@Z
-// Native1EA2CF..1EA3AE 223B RET8 proves INI and ThingTemplate arguments.
-// ZH AIUpdate.cpp parseLocomotorSet is structural and semantic guide; target owner name remains unknown.
-// Correct target ABI emits224B/frame12 versus native223B/frame8; current concrete score .86254.
 // cl: /Ireference/shims/iniexception /Ireference/shims/bfme2_ascii /O1 /EHsc /arch:SSE /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
 // stlport
+//
+// ?setLocomotorAndBaseSpeed@LocomotorSet@@QAEXPAVINI@@PAVThingTemplate@@@Z, retail 0x001EA2CF, 223 bytes.
+// Target identity: WorldBuilder names 0x00AF2420 LocomotorSet::setLocomotorAndBaseSpeed in
+// Locomotor.cpp with the same validation strings; native 1EA2CF..1EA3AE RET8 proves the INI
+// and ThingTemplate arguments and the receiver offsets +18/+1C/+20. The BFME1 donor
+// (Rva001BD0D0LocomotorBinding.cpp) supplies the body shape; BFME2's scanIndexList is a member.
+// The work after the first throw sits in an else block: that scope makes VC7.1 pack the set
+// key into the dead INI* home and share [ebp-4] between the template and the INIException.
 #include <map>
 #include <vector>
 
@@ -45,7 +45,6 @@ template<> void BfmeLocomotorTemplateVector::push_back(const value_type&);
 
 // Reference1281192f68 GeneralsMD AIUpdate.cpp parseLocomotorSet validation/assignment.
 // Target adaptation: stored name+18, set-name+1C and speed+20, method(INI*,ThingTemplate*).
-// Original receiver and method names unknown. Prefix is only a measured ABI view.
 #include "ascii_string.h"
 class INI {
 public: int scanIndexList(const char *, const char *const *);
@@ -68,20 +67,20 @@ public: LocomotorTemplate *findLocomotorTemplate(const AsciiString &);
 extern LocomotorStore *TheLocomotorStore;
 extern const char *TheLocomotorSetNames[];
 #include "Common/INIException.h"
-class Rva001EA2CFLocomotorDefinition {
-public: void rva001EA2CF(INI *ini, ThingTemplate *instance);
+class LocomotorSet {
+public: void setLocomotorAndBaseSpeed(INI *ini, ThingTemplate *instance);
 private: char unknown00[0x18]; AsciiString name; AsciiString setName; float speed;
 };
-void Rva001EA2CFLocomotorDefinition::rva001EA2CF(INI *ini, ThingTemplate *instance) {
- INI *parser=ini;
+void LocomotorSet::setLocomotorAndBaseSpeed(INI *ini, ThingTemplate *instance) {
  AIUpdateModuleData *self=instance->friend_getAIModuleInfo();
- if (!self) throw INIException(3,"Attempted to specify a locomotor for object %s without an AIUpdate	block.",instance->getName().str());
- LocomotorSetType &set=*(LocomotorSetType*)&ini; set=(LocomotorSetType)parser->scanIndexList(setName.str(),TheLocomotorSetNames);
- const LocomotorTemplate *loco=TheLocomotorStore->findLocomotorTemplate(name);
- if (!self->templates[set].empty()) {
-  if (parser->getLoadType()!=2 && parser->getLoadType()!=4)
-   throw INIException(3,"re-specifying a LocomotorSet	is no longer allowed");
+ if (!self)
+  throw INIException(3,"Attempted to specify a locomotor for object %s without an AIUpdate\tblock.",instance->getName().str());
+ else {
+  LocomotorSetType set=(LocomotorSetType)ini->scanIndexList(setName.str(),TheLocomotorSetNames);
+  const LocomotorTemplate *loco=TheLocomotorStore->findLocomotorTemplate(name);
+  if (!self->templates[set].empty() && ini->getLoadType()!=2 && ini->getLoadType()!=4)
+   throw INIException(3,"re-specifying a LocomotorSet\tis no longer allowed");
+  instance->rva0033E17D(set,loco);
+  instance->Rva0033D396StoreFloat((int)set,speed);
  }
- instance->rva0033E17D(set,loco);
- instance->Rva0033D396StoreFloat((int)set,speed);
 }
