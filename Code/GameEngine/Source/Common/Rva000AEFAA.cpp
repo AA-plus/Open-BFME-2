@@ -99,3 +99,21 @@ Rva000AF082::Rva000AF082(BfmeParserRegistryVE *registry, const AsciiString *pare
 	: BfmeParserBindingBaseVE(registry, (void *)&AsciiString("GlobalLighting"), (void *)(parentLabel ? parentLabel : &AsciiString::TheEmptyString))
 {
 }
+
+// ??0Rva000AEEDA@@QAE@PAXPAVBfmeParserRegistryVE@@PBVAsciiString@@@Z @0x000AEEDA 104B
+// Evidence: identical body to Rva000AEF42 (same rowed base pin 0x000ABB87,
+// same HeightMapData literal, same ret 12) but vtable g_00BC95B8, the entry
+// immediately before 0xAEF42; both are reached by the caller 0x000AF238.
+class Rva000AEEDA : public BfmeParserBindingBaseVE
+{
+public:
+	Rva000AEEDA(void *owner, BfmeParserRegistryVE *registry, const AsciiString *parentLabel);
+private:
+	void *m_owner;
+};
+
+Rva000AEEDA::Rva000AEEDA(void *owner, BfmeParserRegistryVE *registry, const AsciiString *parentLabel)
+	: BfmeParserBindingBaseVE(registry, (void *)&AsciiString("HeightMapData"), (void *)(parentLabel ? parentLabel : &AsciiString::TheEmptyString)),
+	m_owner(owner)
+{
+}
