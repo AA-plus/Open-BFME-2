@@ -107,9 +107,19 @@ class BfmeDynamicVB;
 extern BfmeDynamicVB *bfmeDynamicVBs[15];
 extern unsigned short bfmeDynamicVBSizes[15],bfmeDynamicVBOffsets[15];
 // bfmeDynamicFVFs: matched references place it at VA 0xbd2f04 (retail .rdata contents).
+// Entry 10 is position, normal, diffuse and four texture coordinate sets, the
+// last three of them three-component (D3DFVF_TEXCOORDSIZE3(1..3)).
+#define BFME_D3DFVF_XYZ			0x002u
+#define BFME_D3DFVF_NORMAL		0x010u
+#define BFME_D3DFVF_DIFFUSE		0x040u
+#define BFME_D3DFVF_TEX4		0x400u
+#define BFME_D3DFVF_TEXCOORDSIZE3(i)	(1u << ((i) * 2 + 16))
 unsigned bfmeDynamicFVFs[15] = {
 	2u, 0x12u, 0x112u, 0x212u, 0x152u, 0x252u, 0x142u, 0x242u,
-	0x102u, 0x202u, 0x540452u, 0xb0312u, 0x52u, 0x344u, 0x444u,
+	0x102u, 0x202u,
+	BFME_D3DFVF_XYZ | BFME_D3DFVF_NORMAL | BFME_D3DFVF_DIFFUSE | BFME_D3DFVF_TEX4 |
+		BFME_D3DFVF_TEXCOORDSIZE3(1) | BFME_D3DFVF_TEXCOORDSIZE3(2) | BFME_D3DFVF_TEXCOORDSIZE3(3),
+	0xb0312u, 0x52u, 0x344u, 0x444u,
 };
 static bool bfmeSortingVBInUse;
 static BfmeDynamicSortingVB *bfmeSortingVB;
@@ -134,7 +144,7 @@ public:
  void Allocate_Sorting_Dynamic_Buffer();
  static void _Reset(bool frame_changed);
  unsigned Get_Type() const { return type; }
- unsigned short Get_Vertex_Count() const { return vertexCount; }
+ __declspec(dllimport) __forceinline unsigned short Get_Vertex_Count() const { return vertexCount; }
  struct WriteLock {
   DynamicVBAccessClass *owner;
   BfmeSortingVertex *data;
@@ -534,7 +544,7 @@ struct VertexFormatXYZNDUV1
 // call survives: retail's Copy bodies inline it per vertex.
 struct DX8Wrapper
 {
-	static __forceinline unsigned int Convert_Color(const Vector3 &color, float alpha)
+	static __declspec(dllimport) __forceinline unsigned int Convert_Color(const Vector3 &color, float alpha)
 	{
 		const float scale = 255.0;
 		// Retail zeroes this slot before the asm block writes it back, so the
