@@ -1,7 +1,5 @@
 // ?addObject@ElvenWoodSpecialPower@@QAEPAVObject@@PBUCoord3D@@PBVAsciiString@@@Z
-// partial score=0.97 date=2026-10-13
-// ?addObject@ElvenWoodSpecialPower@@QAEPAVObject@@PBUCoord3D@@PBVAsciiString@@@Z
-// partial score=0.97 date=2026-10-13
+// partial score=0.972 date=2026-10-13
 // R5 WB EVIDENCE (wb_show 0x4C397F --gd): true ElvenWoodSpecialPower::addObject,
 // file GameLogic/Object/SpecialPower/ElvenWoodSpecialPower.cpp. Outer KINDOF gate
 // is BitFlags<218,KindOfType>::test chain via BfmeWideResult::next(tmpl+0x108,ch)
@@ -96,7 +94,7 @@ class ThingTemplate
 {
 public:
 	unsigned char prefix[0x108];
-	volatile unsigned char kinds[28];
+	unsigned char kinds[28];
 	unsigned char gap[0x4E0 - 0x124];
 	float scale;
 };
