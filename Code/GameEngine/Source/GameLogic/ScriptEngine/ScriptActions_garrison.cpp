@@ -659,7 +659,7 @@ void ScriptActions::doCreateObject(const AsciiString &objectName, const AsciiStr
 		if (pOldObj && !pOldObj->isEffectivelyDead()) {
 			AsciiString str = "WARNING - Object with name ";
 			str.concat(objectName);
-			str.concat(" already exists. Failed Create.");
+			reinterpret_cast<StringBase<char> *>(&str)->concat(" already exists. Failed Create.");
 			TheScriptEngine->AppendDebugMessage(str, false);
 			return;
 		}
@@ -697,7 +697,7 @@ void ScriptActions::createUnitOnTeamAt(const AsciiString &unitName, const AsciiS
 	if (pOldObj && !pOldObj->isEffectivelyDead()) {
 		AsciiString str = "WARNING - Object with name ";
 		str.concat(unitName);
-		str.concat(" already exists. Failed Create.");
+		reinterpret_cast<StringBase<char> *>(&str)->concat(" already exists. Failed Create.");
 		TheScriptEngine->AppendDebugMessage(str, false);
 		return;
 	}
