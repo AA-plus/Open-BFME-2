@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // ?Rva004193E5Parse@@YAXPAVINI@@@Z
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii
 // Native4193E5..4194D6 parser; registration7B00C7 names AutoResolveCombatChain.
