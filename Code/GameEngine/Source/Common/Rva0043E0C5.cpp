@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD
+// cl: /I. /O1 /DNDEBUG /MD
 //
 // ?rva0043E0C5@Rva0043E0C5@@QAE_NH@Z, retail 0x0043E0C5, 109 bytes.
 // Leaf __thiscall (reads ecx, ret 4 = one int arg) on an unproven lobby-UI
@@ -18,11 +18,32 @@ public:
 	int m_10; // +0x10 slot tag compared against the value
 	char m_pad1[0x20 - 0x14]; // +0x14..+0x1F
 	void *m_item; // +0x20 compared against combo item data
+
+	bool isAI() const;
 };
 
+class GameSlot;
+
+// Slots 12 and 13 sit where Zero Hour's GameInfo declares amIHost and
+// getLocalSlotNum; the names are carried from that donor.
 class GameInfo
 {
 public:
+	virtual void v00();
+	virtual void v01();
+	virtual void v02();
+	virtual void v03();
+	virtual void v04();
+	virtual void v05();
+	virtual void v06();
+	virtual void v07();
+	virtual void v08();
+	virtual void v09();
+	virtual void v10();
+	virtual void v11();
+	virtual bool amIHost();
+	virtual int getLocalSlotNum();
+
 	GameSlot *getSlot(int slot);
 };
 
@@ -61,16 +82,34 @@ public:
 	virtual bool v11(GameSlot *slot, int value);
 };
 
+// The object at +0x60; its rowed 0x0057CA78 answers a slot index (or a
+// negative value) for an argument.
+class Rva0057CA78
+{
+public:
+	int rva0057CA78(int value);
+};
+
+// What the callback 0x0043E6C9 is handed: the value at +0x12C is matched
+// against the slots' +0x10 tags.
+struct Rva0043E6C9Arg
+{
+	char m_pad0[0x12C];
+	int m_12c; // +0x12C
+};
+
 class Rva0043E0C5
 {
 public:
 	bool rva0043E0C5(int index);
 	bool rva0043E132(int index, int value);
+	void rva0043E6C9(Rva0043E6C9Arg *arg);
 private:
 	char m_pad0[0x58]; // +0x00..+0x57
 	Rva0043E058 *m_target; // +0x58
 	Rva0043DA65 *m_provider; // +0x5C
-	char m_pad1[0x7C - 0x60]; // +0x60..+0x7B
+	Rva0057CA78 m_60; // +0x60
+	char m_pad1[0x7C - 0x61]; // +0x61..+0x7B
 	int m_7c; // +0x7C
 	char m_pad2[0x2B9 - 0x80]; // +0x80..+0x2B8
 	bool m_2b9; // +0x2B9
@@ -134,4 +173,36 @@ bool Rva0043E0C5::rva0043E132(int index, int value)
 		m_2be = true;
 	}
 	return ok;
+}
+
+// ?rva0043E6C9@Rva0043E0C5@@QAEXPAURva0043E6C9Arg@@@Z, retail 0x0043E6C9,
+// 135 bytes. Same class (+0x5C provider, +0x60 member, the rva0043E132
+// tail); bound as a member pointer at 0x00442153 in the lobby setup
+// 0x004420xx and handed to the +0x60 member's rowed 0x0043F20C, its only
+// reference. A slot already carrying the argument's tag takes -1 when it
+// is the local one, or an AI slot while hosting; with no such slot the
+// tag goes to the slot +0x60 answers.
+void Rva0043E0C5::rva0043E6C9(Rva0043E6C9Arg *arg)
+{
+	GameInfo *info = reinterpret_cast<GameInfo *>((m_provider?m_provider:m_provider)->rva0043DA65());
+	if (info == 0 || arg == 0)
+		return;
+	int value = arg->m_12c;
+	int found = -1;
+	for (int i = 0; i < 8; ++i) {
+		GameSlot * ci_getSlot = info->getSlot(i);
+		if (ci_getSlot->m_10 == value) {
+			found = i;
+			break;
+		}
+	}
+	if (found >= 0) {
+		if (info->getLocalSlotNum() == found
+			|| (info->amIHost() && info->getSlot(found)->isAI()))
+			rva0043E132(found, -1);
+	} else {
+		int index = m_60.rva0057CA78(0);
+		if (index >= 0)
+			rva0043E132(index, value);
+	}
 }
