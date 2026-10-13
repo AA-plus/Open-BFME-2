@@ -203,8 +203,18 @@ const FieldParse Rva004E3184::m_fieldParseTable[]={
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 class Rva002B3171BumpCounter { public:int bump(); };
-struct BfmePod88;
+struct BfmePod88 { int a[22]; };
 class Rva00566AB7 { public:void rva00566AB7(const BfmePod88&); };
+// 0x004E3BD8 90B: the same record parsed straight into a vector<BfmePod88>
+// (the S3L field table's "ArmyToSpawn" callback at 0x004E3BD8, declared in
+// GapBodiesS3L.cpp). Retail appends through the out-of-line push_back, so the
+// member stays declaration-only here.
+namespace _STL { template <> void vector<BfmePod88, allocator<BfmePod88> >::push_back(const BfmePod88 &); }
+void rva004E3BD8(INI *ini,int,_STL::vector<BfmePod88> *vec) {
+ Rva004E3184 record(((Rva002B3171BumpCounter*)TheLivingWorldLogic)->bump());
+ ini->initFromINI(&record,Rva004E3184::m_fieldParseTable);
+ vec->push_back((const BfmePod88&)record);
+}
 void Rva004E324DParse(INI *ini,void *instance,void*,const void*) {
  if(!ini || !instance) throw INIException(3,"ParseArmyMoveToBlock::Invalid data passed in.");
  Rva004E3184 record(((Rva002B3171BumpCounter*)TheLivingWorldLogic)->bump());
