@@ -94,7 +94,7 @@ class Arg00261790;
 class Rva00261790 : public Rva000421C8
 {
 public:
-	Rva00261790(Arg00261790 *thing, bool flag);
+	Rva00261790(Arg00261790 *thing, bool flag);	// rowed 0x00261790
 	virtual bool allow(Object *obj);
 	float m_pos[3];
 	float m_radius;
