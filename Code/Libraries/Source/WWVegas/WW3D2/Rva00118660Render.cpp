@@ -18,8 +18,53 @@ private:
     char storage[0x148];
 };
 // Canonical global identity is established by WW3DEndRender.cpp at DEC3D4.
+class Vector3 { public: float X, Y, Z; };
+class CameraClass
+{
+public:
+    virtual void slot00(); virtual void slot04(); virtual void slot08(); virtual void slot0c();
+    virtual void slot10(); virtual void slot14(); virtual void slot18(); virtual void slot1c();
+    virtual void slot20(); virtual void slot24(); virtual void slot28(); virtual void slot2c();
+    virtual void slot30();
+    virtual void On_Frame_Update(void);
+    void Apply(void);
+};
+class SceneClass;
+// Zero Hour layer.h LayerClass on its GenericNode list base: vtable, NextNode
+// +4, PrevNode +8 (Is_Valid tests both), Clear +0xC, ClearZ +0xD, ClearColor
+// +0x10, Scene +0x1C, Camera +0x20. Offsets from the two bodies below.
+class LayerClass
+{
+public:
+    bool Is_Valid(void) const { return this != 0 && NextNode != 0 && PrevNode != 0; }
+    LayerClass *Prev(void) const { return PrevNode; }
+    void *vtable;
+    LayerClass *NextNode;
+    LayerClass *PrevNode;
+    bool Clear;
+    bool ClearZ;
+    Vector3 ClearColor;
+    SceneClass *Scene;
+    CameraClass *Camera;
+};
+// LayerListClass::Last() is the list tail sentinel's PrevNode at +0x18.
+class LayerListClass
+{
+public:
+    LayerClass *Last(void) const { return LastNodePrev; }
+    char pad[0x18];
+    LayerClass *LastNodePrev;
+};
+class DX8Wrapper
+{
+public:
+    static void Clear(bool clear_color, bool clear_z_stencil, bool clear_stencil, const Vector3 &color, float dest_alpha, float z, unsigned int stencil);
+};
+bool Rva00118660Call(void *owner, void *camera);
 class WW3D
 {
+public:
+    static bool Render(const LayerClass &layer);
     friend bool Rva00118660Call(void *owner, void *camera);
     static bool IsInitted;
 };
@@ -31,4 +76,26 @@ bool Rva00118660Call(void *owner, void *camera)
         return true;
     RenderInfoClass info(*static_cast<CameraClass *>(camera));
     return Rva001182A0(owner, info);
+}
+
+// Retail 0x00118700 (96 B) and 0x00118760 (135 B), right after this unit's
+// 0x00118660: Zero Hour ww3d.cpp WW3D::Render(const LayerClass &) and
+// WW3D::Render(const LayerListClass &). BFME2 returns bool (true = OK, as the
+// matched WW3D::Render 0x00118430) and folds the scene/camera/clear overload
+// in: it reads the layer's fields directly, skips the camera update, Apply
+// and the three-bool DX8Wrapper::Clear when the layer has no camera, then
+// renders the scene through 0x00118660. The list overload walks from the
+// last layer through Prev() while Is_Valid(), inlining the layer overload and
+// stopping on the first non-true result. Neither has a direct caller.
+bool WW3D::Render(const LayerClass &layer)
+{
+    if (!IsInitted)
+        return true;
+    if (layer.Camera) {
+        layer.Camera->On_Frame_Update();
+        layer.Camera->Apply();
+        if (layer.Clear || layer.ClearZ)
+            DX8Wrapper::Clear(layer.Clear, layer.ClearZ, layer.ClearZ, layer.ClearColor, 0.0f, 1.0f, 0);
+    }
+    return Rva00118660Call(layer.Scene, layer.Camera);
 }
