@@ -154,10 +154,7 @@ public:
 		StringBase<char>::concat(text, length);
 	}
 
-	void concat(const char *text)
-	{
-		StringBase<char>::concat(text);
-	}
+	void concat(const char *text);
 
 	void concat(char c)
 	{
@@ -494,9 +491,9 @@ void _appendMessage(const AsciiString &str, Bool isTrueMessage,
 		else
 			msg.format("%d ", TheLivingWorldLogic->getFrameFC());
 		if (isTrueMessage)
-			msg.concat("Run script - ");
+			((StringBase<char> *)&msg)->concat("Run script - ");
 		else
-			msg.concat("Run script false -");
+			((StringBase<char> *)&msg)->concat("Run script false -");
 		msg.concat(str);
 
 		HMODULE module = TheScriptDebugWindowDLL;
