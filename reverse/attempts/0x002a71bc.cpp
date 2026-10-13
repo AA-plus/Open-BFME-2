@@ -1,4 +1,6 @@
 // ?rva002A71BC@Rva002A71BC@@QAEXH_N@Z
+// partial score=0.92 date=2026-10-13
+// ?rva002A71BC@Rva002A71BC@@QAEXH_N@Z
 // partial score=0.9 date=2026-10-11
 // cl: /O1 /G7 /MD /DNDEBUG /arch:SSE
 class Player;
@@ -34,7 +36,7 @@ public:
  void rva002A71BC(int, bool);
 private:
  int unknown0, total, unknown8, unknownC, maximum, playerIndex;
- int additionalNormal, additionalHero;
+ int additionalHero, additionalNormal;
  char gap[0x2c-0x20]; bool preserved;
 };
 void Rva002A71BC::rva002A71BC(int index, bool hero) {
