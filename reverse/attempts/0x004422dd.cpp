@@ -1,5 +1,7 @@
 // ?HostValidateColors@AptMpGameSetup@@QAEXXZ
-// partial score=0.985 date=2026-10-10
+// partial score=0.96 date=2026-10-13
+// ?HostValidateColors@AptMpGameSetup@@QAEXXZ
+// partial score=0.96 date=2026-10-13
 // ?HostValidateColors@AptMpGameSetup@@QAEXXZ
 // partial score=0.96 date=2026-10-08
 // cl: /O1 /G7 /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /arch:SSE
@@ -36,7 +38,6 @@ class Rva0043EA9C {public:
 class Image;
 typedef _STL::map<unsigned, void *, _STL::less<unsigned>, _STL::allocator<_STL::pair<const unsigned, void *> > > RespawnPtrMap;
 class BFME2RespawnRuleTree {public:
-	__declspec(noinline) void *find(const unsigned &k) const { return (void *)((const RespawnPtrMap *)this)->find(k)._M_node; }
 	void *sentinel;};
 typedef _STL::map<unsigned, Image *, _STL::less<unsigned>, _STL::allocator<_STL::pair<const unsigned, Image *> > > ImageNameMap;
 class ImageSubscriptMap {public:
@@ -59,7 +60,8 @@ void AptMpGameSetup::HostValidateColors() {
  if(!info) return;
  Rva0043EA9C reserved;
  bool repair=false;
- for(unsigned i=0;i<8;++i) {
+ unsigned i;
+ for(i=0;i<8;++i) {
   GameSlot *slot=info->getSlot(i);
   if(!slot) continue;
   int color=slot->color;
@@ -67,16 +69,16 @@ void AptMpGameSetup::HostValidateColors() {
    if(!special && !slot->isObserver() && slot->state!=1) repair=true;
    continue;
   }
-  BFME2RespawnRuleTree *lookup=(BFME2RespawnRuleTree*)&reserved;
+  RespawnPtrMap *lookup=(RespawnPtrMap*)&reserved;
   ImageSubscriptMap *map=(ImageSubscriptMap*)&reserved;
-  if(lookup->find((unsigned)color)!=lookup->sentinel) {
+  if(lookup->find((unsigned)color)!=lookup->end()) {
    repair=true;
    if(((GameSlot*)((*map)[(unsigned)color]))->isHuman()) continue;
   }
   (*map)[(unsigned)color]=(Image*)slot;
  }
  if(repair) {
-  for(unsigned i=0;i<8;++i) {
+  for(i=0;i<8;++i) {
    GameSlot *slot=info->getSlot(i);
    if(!slot) continue;
    int color=slot->color;
@@ -87,8 +89,8 @@ void AptMpGameSetup::HostValidateColors() {
    else {
     int c;
     for(c=0;c<allowed.size();++c) {
-     BFME2RespawnRuleTree *lookup=(BFME2RespawnRuleTree*)&reserved;
-     if(allowed[c] && lookup->find((unsigned)c)==lookup->sentinel) {
+     RespawnPtrMap *lookup=(RespawnPtrMap*)&reserved;
+     if(allowed[c] && lookup->find((unsigned)c)==lookup->end()) {
       (*map)[(unsigned)c]=(Image*)slot;
       owner->SetColor(slot,c);
       break;
