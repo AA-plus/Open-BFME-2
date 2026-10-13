@@ -152,15 +152,15 @@ void Rva000581F5::rva000581F5()
     ((Rva00056DA2 *)this)->~Rva00056DA2();
 }
 
-class Rva00216BF0
+// Native216BF0 and BannerUI EH state1 destroy the same20B hash wrapper.
+// Its sole operation is the owned underlying table destructor216B80;
+// use a real destructor under the already-pinned wrapper owner.
+class Rva00216BF0 : public Rva00216AF6
 {
 public:
-    void rva00216BF0();
+    ~Rva00216BF0();
 };
-void Rva00216BF0::rva00216BF0()
-{
-    ((Rva00216AF6 *)this)->~Rva00216AF6();
-}
+Rva00216BF0::~Rva00216BF0() {}
 
 class Rva00289706
 {

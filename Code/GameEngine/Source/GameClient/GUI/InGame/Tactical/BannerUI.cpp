@@ -52,12 +52,23 @@ struct BannerTypeIterator
 class Rva00056F61 {
 public:
  Rva00056F61();	// 0x002171F2 (pinned): the type table's hash_map constructor
- ~Rva00056F61();
  BannerTypeIterator find(const AsciiString &name) {return BannerTypeIterator(rva00056F61(&name),this);}
  __declspec(nothrow) Rva0041534BIter rva0041534B(const AsciiString *);
  __declspec(nothrow) void *rva00056F61(const AsciiString *);
  void *unused;void **begin,**end,**capacity;unsigned count;
 };
+
+// Native ctor217211 constructs this20B table at+C through the shared
+// constructor2171F2 and FuncInfo913FFC state1 destroys it through216BF0.
+// Preserve lookup/constructor ABI names on the storage view while using
+// the existing destructor owner for this wrapper; original type unknown.
+class Rva00216BF0 : public Rva00056F61
+{
+public:
+ Rva00216BF0() {}
+ ~Rva00216BF0();
+};
+typedef char BannerTableHas20Bytes[sizeof(Rva00216BF0)==20 ? 1 : -1];
 
 // One banner on screen, the vector's 28-byte record (rowed push_back
 // 0x00216BB9 and the slot-keyed find/erase in RemoveBanner): its slot, the
@@ -152,7 +163,7 @@ public:
  void OnBannerButton(int slot);
  void rva00216735(const char *path);
 private:
- Rva00056F61 m_types;
+ Rva00216BF0 m_types;
  bool m_aptMovieInitialized;	// +0x20, WB's assert names it
  unsigned char m_pad21[3];
  int m_windowIndex;
