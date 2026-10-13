@@ -250,3 +250,6 @@ void BaseUpgrade::upgradeImplementation()
 	TheAI->m_pathfinder->AddObjectToPathfindMap(newObject);
 	player->onStructureCreated(object,newObject);
 }
+
+// The naturally emitted 10B handler 0x0078EB03 is selected by the native parent
+// prologue and names FuncInfo RVA 0x0093F694; its entire exception graph is exact.
