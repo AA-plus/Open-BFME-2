@@ -10,6 +10,9 @@
 // g_00BC6C50 was the retail address alias (RVA 0x007C6C50) of the constant -0.5f; the literal is the source.
 
 void rva005C80D1(void *p, float *tmp, float scale, int *a, int *b);
+struct Rva005C80D1Origin;
+struct Rva005C80D1Point;
+void Rva005C80D1Cell(const Rva005C80D1Origin *origin, const Rva005C80D1Point *point, float cellSize, int *cellX, int *cellY);
 
 struct Rva005688D2Base
 {
@@ -65,7 +68,7 @@ int Rva005688D2::rva00568991()
             rva005688D2(tmp, i);
             int a;
             int b;
-            rva005C80D1((char *)m_base + 0xE8, tmp, scale, &a, &b);
+            Rva005C80D1Cell((const Rva005C80D1Origin *)((char *)m_base + 0xE8), (const Rva005C80D1Point *)tmp, scale, &a, &b);
             sum += a * b;
         }
     }
