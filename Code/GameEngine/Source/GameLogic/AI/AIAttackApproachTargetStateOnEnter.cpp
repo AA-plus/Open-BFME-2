@@ -2312,3 +2312,184 @@ StateReturnType AIAttackMeleeHordeWaitPathState::onEnter()
 		m_waitUntilFrame = (now ? now : now) + LOGICFRAMES_PER_SECOND + 2;
 	return STATE_CONTINUE;
 }
+// TU-local Coord3D with retail's inline copy, scale and arithmetic: building the
+// lead point from copy-constructed coordinates keeps the scale factor in memory.
+struct ApproachCoord : Coord3D
+{
+	ApproachCoord(const Coord3D &v) { x = v.x; y = v.y; z = v.z; }
+	ApproachCoord &Scale(Real s) { x *= s; y *= s; z *= s; return *this; }
+	ApproachCoord &operator+=(const Coord3D &v) { x += v.x; y += v.y; z += v.z; return *this; }
+	ApproachCoord &operator-=(const Coord3D &v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
+	Real lengthSqr() const { return z * z + y * y + x * x; }
+};
+struct ApproachLogStatusView {unsigned char pad[0x1B4]; Int value;};
+
+StateReturnType AIAttackApproachTargetState::updateInternal()
+{
+	AIUpdateInterface *ai = getMachineOwner()->getObservedAI();
+	if (((TurretStateMachine *)getMachine())->rva004D7ADD())
+	{
+		ai->notifyVictimIsDead();
+		ai->setCurrentVictim(0);
+		return STATE_FAILURE;
+	}
+
+	m_stopIfInRange = !ai->isAttackPath();
+	if (m_waiting)
+		m_stopIfInRange = true;
+	StateReturnType code = STATE_FAILURE;
+
+	Object *source = getMachineOwner();
+	Weapon *weapon = source->getCurrentWeapon();
+	Object *victim = getMachineGoalObject();
+	if (weapon && ((const Rva002C9400ByteField *)weapon->getTemplate())->get())
+		m_stopIfInRange = false;
+
+	if (victim)
+	{
+		if (victim->testStatus(OBJECT_STATUS_33))
+			return STATE_FAILURE;
+		if (victim->rva002943B2(source->getControllingPlayer()))
+			return STATE_FAILURE;
+
+		ai->setCurrentVictim(victim);
+
+		Bool lead = rva00344EB2Gate(source, victim);
+		Bool inRange = false;
+		if (weapon)
+		{
+			if (lead)
+			{
+				ApproachCoord pos(*victim->getPosition());
+				ApproachCoord dir(*victim->getUnitDirectionVector2D());
+				dir.Scale(victim->rva0028AC7D() * 4.0f);
+				pos += dir;
+				inRange = ((Rva002C9B80Owner *)weapon)->isWithinAttackRange(source, source->getPosition(),
+					victim, &pos, 0.0f, true);
+			}
+			else
+			{
+				inRange = weapon->isWithinAttackRange((const Object *)source, victim, 0.0f, 1);
+			}
+		}
+		Bool viewBlocked = !rva003430A3(source, victim, weapon);
+
+		if (weapon && weapon->getTemplate()->isContactWeapon() && inRange)
+			return STATE_SUCCESS;
+		if (m_stopIfInRange && weapon && inRange && ai->isDoingGroundMovement() &&
+			!victim->isSignificantlyAboveTerrain() && !viewBlocked)
+			return STATE_SUCCESS;
+
+		if (m_waiting)
+			return TheGameLogic->getFrame() > m_waitFrame ? STATE_FAILURE : STATE_CONTINUE;
+
+		if (ai->getAIUpdateModuleData()->m_24 && source->rva0028B511() >= 17 && !inRange &&
+			!ai->isQuickPathAvailable(victim->getPosition()))
+		{
+			m_waiting = true;
+			m_waitFrame = TheGameLogic->getFrame() + LOGICFRAMES_PER_SECOND * 10;
+			return STATE_CONTINUE;
+		}
+
+		Bool checkRange = true;
+		Int stateID = ai->rva00260DED();
+		if (stateID == 0x11)
+			checkRange = false;
+		if (stateID == 0x10)
+			checkRange = false;
+		if (stateID == 0x23)
+			checkRange = false;
+		if (!ai->m_3c7)
+			checkRange = false;
+		Team *team = source->m_team;
+		if (team && team->m_proto->m_216 && team->getTeamTargetObject())
+			checkRange = false;
+		if (checkRange && !rva00344EB2Gate(source, victim))
+			checkRange = false;
+		if (checkRange)
+		{
+			Real range = ai->getAIUpdateModuleData()->m_20;
+			if (range > 0.0f)
+			{
+				ApproachCoord delta(*victim->getPosition());
+				delta.x -= source->getPosition()->x;
+				delta.y -= source->getPosition()->y;
+				delta.z -= source->getPosition()->z;
+				Real dist = delta.length();
+				UnsignedInt mood = ai->getMoodMatrixValue();
+				if ((mood & MM_Controller_Player) == 0)
+				{
+					switch (mood & MM_Mood_Bitmask)
+					{
+						case MM_Mood_Sleep:
+							range = 0.0f;
+							break;
+						case MM_Mood_Alert:
+							range *= TheAI->getAiData()->m_alertRangeModifier;
+							break;
+						case MM_Mood_Aggressive:
+							range *= TheAI->getAiData()->m_aggressiveRangeModifier;
+							break;
+					}
+				}
+				if (dist > range)
+					return STATE_FAILURE;
+			}
+		}
+
+		if (computePath() == false)
+		{
+			if (theLogicRandomLogFile)
+				fprintf(theLogicRandomLogFile, "%i AIAttackApproachTargetState success [3]", source->m_id);
+			return STATE_SUCCESS;
+		}
+		if (!m_waiting)
+		{
+			code = AIInternalMoveToState::update();
+			if (code != STATE_CONTINUE)
+			{
+				ApproachCoord delta(m_ownerPosition);
+				delta.x -= source->getPosition()->x;
+				delta.y -= source->getPosition()->y;
+				delta.z -= source->getPosition()->z;
+				Bool victimMoved = false;
+				ApproachCoord moved(*victim->getPosition());
+				moved -= m_prevVictimPos;
+				if (moved.lengthSqr() > 100.0f)
+					victimMoved = true;
+				Bool ownerMoved = delta.lengthSqr() > 100.0f;
+				if ((inRange && !viewBlocked) || victimMoved || ownerMoved)
+					return STATE_SUCCESS;
+				if (!TheAI->pathfinder()->CanApproachToTarget(source, victim->getPosition(), (Rva002C9B80Owner *)weapon, false))
+				{
+					m_waiting = true;
+					m_waitFrame = TheGameLogic->getFrame() + LOGICFRAMES_PER_SECOND * 10;
+					return STATE_CONTINUE;
+				}
+				return STATE_SUCCESS;
+			}
+		}
+		else
+			return STATE_CONTINUE;
+	}
+	else
+	{
+	if (((const ApproachLogStatusView*)TheGameLogic)->value > 0 && m_stopIfInRange && weapon)
+	{
+		if (theLogicRandomLogFile)
+			fprintf(theLogicRandomLogFile, "masiwar called by AIAttackApproachTargetState::updateInternal [2]");
+	}
+	if (m_stopIfInRange && weapon && weapon->isWithinAttackRange(source, &m_goalPosition, 0.0f, 1))
+	{
+		Bool viewBlocked = false;
+		if (ai->isDoingGroundMovement())
+			viewBlocked = TheAI->pathfinder()->isAttackViewBlockedByObstacle(source, source->getPosition(), 0, &m_goalPosition);
+		if (!viewBlocked)
+			return STATE_SUCCESS;
+	}
+	if (computePath() == false)
+		return STATE_FAILURE;
+	code = AIInternalMoveToState::update();
+	}
+	return code;
+}
