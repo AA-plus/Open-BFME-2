@@ -216,15 +216,15 @@ public:
 	unsigned char m_pad34[0x44 - 0x34];
 	const SpecialPowerTemplate *m_power;
 };
-// The command set UpdateCommandSet builds, rowed under the address names
-// its reset (0x00409F83, WB CommandSet::ResetCommandSet) and button setter
-// (0x00409FA0, WB CommandSet::SetCommandButton; the ledger spells the button
-// argument as an int) carry; ControlBar's 0x0031E8D5 returns it.
+// The command set UpdateCommandSet builds, rowed under the address-named
+// class its reset (0x00409F83, WB CommandSet::ResetCommandSet) and button
+// setter (0x00409FA0, WB CommandSet::SetCommandButton; the ledger spells the
+// button argument as an int) carry; ControlBar's 0x0031E8D5 returns it.
 class Rva00409FFA
 {
 public:
-	void rva00409F83();								// 0x00409F83
-	void rva00409FA0(Int button, Int index);		// 0x00409FA0
+	void ResetCommandSet();								// 0x00409F83
+	void SetCommandButton(Int button, Int index);		// 0x00409FA0
 };
 class CommandSet
 {
@@ -674,7 +674,7 @@ Bool CreateAHeroHero::UpdateCommandSet(UnsignedInt rank)
 	commandSetName.format("CommandSet_%s_%s_rank_%d", object->m_templateName.str(), m_className.str(), rank);
 	object->m_commandSetStringOverride = commandSetName;
 	Rva00409FFA *commandSet = TheControlBar->rva0031E8D5(commandSetName, 1);
-	commandSet->rva00409F83();
+	commandSet->ResetCommandSet();
 
 	const CommandSet *baseSet = (const CommandSet *)((Rva0031D5F8 *)TheControlBar)->rva0031D5F8(
 		&TheCreateAHeroManager->m_baseCommandSetName);
@@ -684,7 +684,7 @@ Bool CreateAHeroHero::UpdateCommandSet(UnsignedInt rank)
 		{
 			const CommandButton *button = baseSet->getCommandButton(i);
 			if (button)
-				commandSet->rva00409FA0((Int)button, i);
+				commandSet->SetCommandButton((Int)button, i);
 		}
 	}
 
@@ -702,14 +702,14 @@ Bool CreateAHeroHero::UpdateCommandSet(UnsignedInt rank)
 			if (!button)
 				continue;
 			found = true;
-			commandSet->rva00409FA0((Int)button, buttonSlot);
+			commandSet->SetCommandButton((Int)button, buttonSlot);
 		}
 	}
 
 	AsciiString attackMove("Command_AttackMove");
 	const CommandButton *button = TheControlBar->findCommandButton(attackMove);
 	if (button)
-		commandSet->rva00409FA0((Int)button, 0x10);
+		commandSet->SetCommandButton((Int)button, 0x10);
 	TheControlBar->m_commandSetsChanged = true;
 	return true;
 }

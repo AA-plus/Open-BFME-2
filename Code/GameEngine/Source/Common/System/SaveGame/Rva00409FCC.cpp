@@ -1,5 +1,5 @@
 // cl: /Ireference/shims/bfme2_ascii /Ob2 /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
-// ?rva00409FCC@Rva00409FFA@@QAEXXZ @0x00409FCC 46B
+// ?refreshIfStale@Rva00409FFA@@QAEXXZ @0x00409FCC 46B
 // Evidence: unlock lane; same 0x9C Rva00409FFA layout as siblings 0x409FA0
 // (landed) and 0x409FFA banked (array32 at +0x14, count +0x94, flag +0x98);
 // resolves each non-null entry with +0xC>=1 via ControlBar::findCommandButton
@@ -25,7 +25,7 @@ class Rva00409FFA : public Rva001E3624 {
     unsigned int word94;
     unsigned int word98;
 public:
-    void rva00409FCC();
+    void refreshIfStale();
     virtual ~Rva00409FFA();
 };
 class CommandButton;
@@ -35,7 +35,7 @@ public:
 };
 struct BfmeWorldRV;
 extern struct BfmeWorldRV *g_bfmeWorldRV;
-void Rva00409FFA::rva00409FCC()
+void Rva00409FFA::refreshIfStale()
 {
     for (int i = 0; i < 0x20; ++i) {
         unsigned int entry = arr14[i];

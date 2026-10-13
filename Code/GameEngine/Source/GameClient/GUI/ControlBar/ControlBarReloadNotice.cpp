@@ -101,7 +101,7 @@ private:
 class Rva00409FFA : public Rva001E3624
 {
 public:
-	void rva00409FCC();
+	void refreshIfStale();
 };
 
 // AsciiString-keyed: retail advances it with the iterator increment 0x00411084
@@ -142,7 +142,7 @@ bool Rva0031DCF0::rva0031E7F0(bool *needsRestart)
 		TheInGameUI->message(UnicodeString(L"RIF: ControlBar (CommandSet/CommandButton) reloaded. Changes effective immediately."));
 		for (Rva0031E7F0Map::iterator it = m_map30.begin(); it != m_map30.end(); ++it)
 		{
-			(*it).second->rva00409FCC();
+			(*it).second->refreshIfStale();
 		}
 		rva0031AC39();
 		m_reloaded28 = true;
