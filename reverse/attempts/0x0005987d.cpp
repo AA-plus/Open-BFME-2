@@ -1,4 +1,6 @@
 // ?friend_xferSubAudioEventRTS@MilesAudioManager@@QAEXPAVXfer@@PAVBfmePoolRef10@@@Z
+// partial score=0.995 date=2026-10-13
+// ?friend_xferSubAudioEventRTS@MilesAudioManager@@QAEXPAVXfer@@PAVBfmePoolRef10@@@Z
 // partial score=0.99 date=2026-10-13
 // ?friend_xferSubAudioEventRTS@MilesAudioManager@@QAEXPAVXfer@@PAVBfmePoolRef10@@@Z
 // partial score=0.99 date=2026-10-12
