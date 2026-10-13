@@ -510,6 +510,46 @@ int Rva00429276(Rva00429276Entry *entry, Rva00429276Holder *holder)
 	return 1;
 }
 
+// --- 0x004292A6 (80B, file-static): iterate the local player's objects with
+// Rva00429276, offering the incoming entry; repeat once with second slot empty.
+class Object;
+typedef int (*ObjectIterateFunc)(Object *, void *);
+class Player
+{
+public:
+	int iterateObjects(ObjectIterateFunc func, void *userData) const;
+};
+class PlayerList;
+extern PlayerList *ThePlayerList;
+struct Rva004292A6PlayerListView
+{
+	char m_pad[0x10];
+	Player *m_local;
+};
+
+static __declspec(noinline) Rva00429276Entry *Rva004292A6(Rva00429276Entry *second)
+{
+	Player *player = ((Rva004292A6PlayerListView *)ThePlayerList)->m_local;
+	if (!player)
+		return 0;
+	Rva00429276Holder holder;
+	holder.m_first = 0;
+	holder.m_second = second;
+	player->iterateObjects((ObjectIterateFunc)Rva00429276, &holder);
+	if (!holder.m_first && second)
+	{
+		holder.m_second = 0;
+		player->iterateObjects((ObjectIterateFunc)Rva00429276, &holder);
+	}
+	return holder.m_first;
+}
+
+// ?Rva004292A6Caller absent-from-retail
+Rva00429276Entry *Rva004292A6Caller(Rva00429276Entry *arg)
+{
+	return Rva004292A6(arg);
+}
+
 // --- 0x0042C0A2 (12B): the +0x14 base of the object (null stays null).
 struct Rva0042C0A2Head
 {

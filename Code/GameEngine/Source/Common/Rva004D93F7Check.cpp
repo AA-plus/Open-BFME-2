@@ -62,3 +62,63 @@ unsigned char __cdecl countsAsMoveIntoCamp(unsigned int a, const BfmePointFD *pt
 	int y = TheShroudManager->rva00739830(pt2, 2, a);
 	return (unsigned char)(y >= b->m_48);
 }
+
+// --- 0x004D9453 (76B, file-static): resolve enter message and attack-move predicate
+// for voice response; callers 0x004DAB48 and 0x004DAF9A preload EAX/ESI out pointers and ECX context.
+class Object;
+class DrawableList;
+class GameMessage
+{
+public:
+	enum Type {};
+};
+class ActionManager
+{
+public:
+	GameMessage::Type getEnterMessage(const Object *obj, const DrawableList *drawList);
+};
+extern ActionManager *TheActionManager;
+bool Rva004D933BIs(int messageId);
+
+struct Rva004D9453Inner
+{
+	char m_pad[0xFC];
+	const Object *m_obj;
+};
+
+struct Rva004D9453Context
+{
+	int m_pad;
+	Rva004D9453Inner *m_inner;
+};
+
+static __declspec(noinline) void rva004D9453(
+	const DrawableList *drawList,
+	int messageId,
+	bool *out_bool,
+	const Object **out_obj,
+	GameMessage::Type *out_enterMessage,
+	const Rva004D9453Context *ctx)
+{
+	*out_obj = 0;
+	if (ctx && ctx->m_inner)
+		*out_obj = ctx->m_inner->m_obj;
+
+	*out_enterMessage = (GameMessage::Type)-1;
+	if (*out_obj && messageId == 0x42c)
+		*out_enterMessage = TheActionManager->getEnterMessage(*out_obj, drawList);
+
+	*out_bool = Rva004D933BIs(messageId);
+}
+
+// ?rva004D9453Caller absent-from-retail
+void rva004D9453Caller(
+	const DrawableList *drawList,
+	int messageId,
+	bool *out_bool,
+	const Object **out_obj,
+	GameMessage::Type *out_enterMessage,
+	const Rva004D9453Context *ctx)
+{
+	rva004D9453(drawList, messageId, out_bool, out_obj, out_enterMessage, ctx);
+}
