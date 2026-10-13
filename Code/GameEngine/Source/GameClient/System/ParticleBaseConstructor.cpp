@@ -59,7 +59,8 @@ public:
 	virtual void s28(); virtual void s29(); virtual void s30();
 	virtual int s31();
 };
-extern ClientFrameSubsystem *TheGameClient;
+class GameClient;
+extern GameClient *TheGameClient;
 class ParticleSystem;
 class Rva001F4C67;
 class HelperA4
@@ -140,7 +141,7 @@ Rva001F4C67::Rva001F4C67(const RvaSmartPtr12 &a, const Rva001F376E &b)
 	m_28 = b.m_28;
 	m_34 = b.m_34;
 	m_54 = b.m_34;
-	m_58 = TheGameClient->s31();
+	m_58 = ((ClientFrameSubsystem *)TheGameClient)->s31();
 	m_75 = 0;
 	m_74 = 0;
 	m_6c = 0;

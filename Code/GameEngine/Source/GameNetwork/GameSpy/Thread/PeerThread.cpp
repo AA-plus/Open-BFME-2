@@ -3297,8 +3297,8 @@ void Rva00559F11Parse(const char *text, Int *values);
 
 // GameClient's frame counter is slot 31 (0x7C) of the BFME 2 vtable; the
 // earlier slots carry no identity claim in this TU.
-class ClientFrameSubsystem;
-extern ClientFrameSubsystem *TheGameClient;
+class GameClient;
+extern GameClient *TheGameClient;
 class BfmeClientFrameView
 {
 public:
