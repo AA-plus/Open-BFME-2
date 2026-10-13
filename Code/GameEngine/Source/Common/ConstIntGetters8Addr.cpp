@@ -1,6 +1,7 @@
 // The members of the ConstIntGetters8.cpp family whose constant is an image address
-// no unit defines yet, split out so the rest of the family links; each moves
-// back once its target has a definition to name.
+// originally had no provider to name, split out so the rest of the family
+// links. The color and skybox tables now bind to their existing providers;
+// the address returned by Rva001FF282Get still has no known provider.
 //
 // Cold-slice B8-imm32 const-int returners (twin-free TU).
 //
@@ -12,9 +13,18 @@
 
 // ?Rva001EF348Get@@YAHXZ @ 0x001ef348 (6B): returns 0x00c18f40.
 // Follows padding plus leave / ret. Opaque address-derived name.
+// Declaration-only static-data view; no instance layout is asserted.
+struct FieldParse;
+class MultiplayerColorDefinition
+{
+public:
+    static const FieldParse m_colorFieldParseTable[];
+};
+extern const FieldParse g_00C082F0[];
+
 int Rva001EF348Get(void)
 {
-	return 0x00c18f40;
+	return (int)MultiplayerColorDefinition::m_colorFieldParseTable;
 }
 
 // ?Rva001FF282Get@@YAHXZ @ 0x001ff282 (6B): returns 0x00c039e8.
@@ -28,5 +38,5 @@ int Rva001FF282Get(void)
 // Follows a ret (leave / ret 0x14). Opaque address-derived name.
 int Rva0020D4DDGet(void)
 {
-	return 0x00c082f0;
+	return (int)g_00C082F0;
 }
