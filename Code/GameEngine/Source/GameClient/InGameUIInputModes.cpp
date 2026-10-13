@@ -348,12 +348,15 @@ void InGameUI::setScrolling( bool isScrolling )
 	m_isScrolling = isScrolling;
 }
 
-bool InGameUI::isScrolling( void )
+// Select-any like the ZH-donor copy in InGameUI.cpp (this retail body comes
+// first in link order, so it is the copy the link keeps); the anchor keeps the
+// noinline body emitted.
+inline __declspec(noinline) bool InGameUI::isScrolling( void )
 {
 	return m_isScrolling;
 }
 
-void InGameUI::setSelecting( bool isSelecting )
+inline __declspec(noinline) void InGameUI::setSelecting( bool isSelecting )
 {
 	if( m_isSelecting == isSelecting )
 		return;
@@ -361,9 +364,18 @@ void InGameUI::setSelecting( bool isSelecting )
 	m_isSelecting = isSelecting;
 }
 
-bool InGameUI::isSelecting( void )
+inline __declspec(noinline) bool InGameUI::isSelecting( void )
 {
 	return m_isSelecting;
+}
+
+// Retain the inline bodies' ledger emission without changing their callers.
+// ?bfmeEmitInGameUIModeBits@@YAXPAVInGameUI@@@Z absent-from-retail
+void bfmeEmitInGameUIModeBits(InGameUI *p)
+{
+	p->InGameUI::isScrolling();
+	p->InGameUI::isSelecting();
+	p->InGameUI::setSelecting(false);
 }
 
 void InGameUI::setScrollAmount( Coord2D amt )

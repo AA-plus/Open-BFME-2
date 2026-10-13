@@ -1783,7 +1783,9 @@ DrawableID InGameUI::getMousedOverDrawableID( void ) const
 /// are we scrolling?
 //-------------------------------------------------------------------------------------------------
 // ?InGameUI::isScrolling present-unmatched
-Bool InGameUI::isScrolling( void )
+// Select-any: the rowed BFME2 body in InGameUIInputModes.cpp comes first in
+// link order, so this differing ZH-donor spelling folds without being kept.
+inline __declspec(noinline) Bool InGameUI::isScrolling( void )
 {
 	return m_isScrolling;
 }
@@ -1792,7 +1794,8 @@ Bool InGameUI::isScrolling( void )
 /// set drag select mode
 //-------------------------------------------------------------------------------------------------
 // ?InGameUI::setSelecting present-unmatched
-void InGameUI::setSelecting( Bool isSelecting )
+// Select-any, as isScrolling above.
+inline __declspec(noinline) void InGameUI::setSelecting( Bool isSelecting )
 {
 	if (m_isSelecting == isSelecting)
 	{
@@ -1807,7 +1810,8 @@ void InGameUI::setSelecting( Bool isSelecting )
 /// are we selecting?
 //-------------------------------------------------------------------------------------------------
 // ?InGameUI::isSelecting present-unmatched
-Bool InGameUI::isSelecting( void )
+// Select-any, as isScrolling above.
+inline __declspec(noinline) Bool InGameUI::isSelecting( void )
 {
 	return m_isSelecting;
 }
