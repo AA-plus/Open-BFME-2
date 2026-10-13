@@ -158,7 +158,7 @@ extern class ThingFactory *TheThingFactory;
 class SidesList
 {
 public:
-	bool rva0032BD25(NameKeyType key, int idx, BuildListInfo *info);
+	bool rva0032BD25(int key, int idx, BuildListInfo *info);
 };
 
 extern SidesList *TheSidesList;

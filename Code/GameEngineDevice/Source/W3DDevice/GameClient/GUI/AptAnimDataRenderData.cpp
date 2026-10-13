@@ -71,6 +71,7 @@ class Rva000A953B {public:Rva000A953B()throw();float data[6];};
 class Rva000A9551 {public:Rva000A9551()throw();float data[4];};
 struct Rva007882F0Value;
 class Rva007882F0PointerMap {public:Rva007882F0Value *lookup(unsigned);};
+class Rva000AB0F5 {public:void *rva000AB0F5(int);};
 class GeometryRecord00788A30 {public:
  virtual void s00();virtual void s04();virtual void s08();virtual void s0C();virtual unsigned slot10();
 };
@@ -109,7 +110,7 @@ void AptAnimData::createRenderData(const AsciiString &filename)
      &record->uv[0],&record->uv[1],&record->uv[2],&record->uv[3],&record->uv[4],&record->uv[5]);
     record->color=(((alpha<<8)|red)<<8|green)<<8|blue;
     record->wrap=wrap=='w';
-    record->texture=(unsigned)((Rva007882F0PointerMap*)this)->lookup(texture);
+    record->texture=(unsigned)((Rva000AB0F5*)this)->rva000AB0F5((int)texture);
     triangles=(_STL::vector<Rva000AB3E2Element>*)((char*)record+8);
     break;
    }

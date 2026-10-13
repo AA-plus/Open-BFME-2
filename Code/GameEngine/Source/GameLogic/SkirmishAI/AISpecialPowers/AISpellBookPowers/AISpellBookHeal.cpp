@@ -51,6 +51,11 @@ public:
 	Object *rva005EEA20(Player *player, Bool a, Bool b);
 	void getStatsInCombatRange(Rva005EE9CE *stats, Object *unit, float range);
 };
+class AISpellBookBase
+{
+public:
+	void getStatsInCombatRange(Rva005EE9CE *stats, Object *unit, float range);
+};
 
 class Rva005EE816
 {
@@ -77,7 +82,7 @@ Bool AISpellBookHeal::shouldActivate(Object *obj)
 	{
 		Rva005EE9CE stats;
 		stats.rva005EE9CE();
-		m_base.getStatsInCombatRange(&stats, unit, 350.0f);
+		((AISpellBookBase *)&m_base)->getStatsInCombatRange(&stats, unit, 350.0f);
 		if (stats.m_ratio < 0.8f)
 			return ((Rva005EE816 *)this)->rva005EE8DD(unit->getPosition(), obj);
 	}
