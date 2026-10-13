@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // LivingWorldPlayer physical owner retained as Rva002E2AAE for existing
 // callers. Native constructor calls and table C04B50's
 // LivingWorldPlayer name slot establish identity. Retail supplies all member
