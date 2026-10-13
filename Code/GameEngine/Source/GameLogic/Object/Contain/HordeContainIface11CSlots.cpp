@@ -66,6 +66,7 @@ struct Coord3D
 	void zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
 	void add(const Coord3D *a) { x += a->x; y += a->y; z += a->z; }
 	void scale(float s) { x *= s; y *= s; z *= s; }
+	float Normalize();
 	float GetLengthEstimate2D() const;
 	float x;
 	float y;
@@ -261,6 +262,7 @@ class Thing
 public:
 	void setOrientation(float angle);
 	void setPosition(const Coord3D *pos);
+	const Coord3D *getUnitDirectionVector2D() const;
 	Drawable *getDrawable() const;
 };
 class GlobalData
@@ -426,6 +428,13 @@ public:
 	unsigned char m_pad52C[0x5D8 - 0x52C];
 	short m_5D8; // +0x5D8
 };
+class Rva0028C197Slot149 : public Rva00468D11Slots<149>
+{
+public:
+	virtual bool slot149() = 0;
+};
+float Sin(float x);
+float Cos(float x);
 // The tracker's 0x0039B3D1 entry, under the owner name its pin (read from
 // ScriptActions::rva003BC93C) already carries.
 class Rva003BD306Target
@@ -798,7 +807,10 @@ struct HordeContainModuleDataFields
 	int m_234; // +0x234 (slot 30 hands it to each AI's slot 142 unless -1)
 	unsigned char m_pad238[0x254 - 0x238];
 	bool m_254; // +0x254
-	unsigned char m_pad255[0x268 - 0x255];
+	unsigned char m_pad255[0x25C - 0x255];
+	float m_25C; // +0x25C (a flank arc, degrees)
+	unsigned char m_pad260[0x264 - 0x260];
+	unsigned int m_264; // +0x264 (a frame count)
 	unsigned int m_268; // +0x268
 	float m_26C; // +0x26C
 	float m_270; // +0x270
@@ -1288,7 +1300,10 @@ private:
 	bool m_2C4; // +0x2C4
 	unsigned char m_pad2C5[0x2C8 - 0x2C5];
 	Rva00468FDCHelper *m_2C8; // +0x2C8
-	unsigned char m_pad2CC[0x2DC - 0x2CC];
+	float *m_2CCBegin; // +0x2CC (vector<float> of flank angles)
+	float *m_2CCEnd;
+	float *m_2CCCap;
+	unsigned char m_pad2D8[0x2DC - 0x2D8];
 	_STL::map<int, Rva00462D35Mapped> m_2DC; // +0x2DC
 	bool m_2E8; // +0x2E8
 	unsigned char m_pad2E9[0x2EC - 0x2E9];
