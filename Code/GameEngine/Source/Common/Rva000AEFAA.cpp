@@ -117,3 +117,38 @@ Rva000AEEDA::Rva000AEEDA(void *owner, BfmeParserRegistryVE *registry, const Asci
 	m_owner(owner)
 {
 }
+
+// ??0Rva002E3D7B@@QAE@PAXPAVBfmeParserRegistryVE@@PBVAsciiString@@@Z
+// @0x002E3D7B 104B. Same body as the other bindings in this TU (rowed base
+// 0x000ABB87, ret 12) with the TriggerAreas literal and vtable g_00C04BFC.
+class Rva002E3D7B : public BfmeParserBindingBaseVE
+{
+public:
+	Rva002E3D7B(void *owner, BfmeParserRegistryVE *registry, const AsciiString *parentLabel);
+private:
+	void *m_owner;
+};
+
+Rva002E3D7B::Rva002E3D7B(void *owner, BfmeParserRegistryVE *registry, const AsciiString *parentLabel)
+	: BfmeParserBindingBaseVE(registry, (void *)&AsciiString("TriggerAreas"), (void *)(parentLabel ? parentLabel : &AsciiString::TheEmptyString)),
+	m_owner(owner)
+{
+}
+
+// ??0Rva0030D849@@QAE@PAXPAVBfmeParserRegistryVE@@PBVAsciiString@@@Z
+// @0x0030D849 104B. Same binding body with the Object literal and vtable
+// g_00C08A1C; the earlier BfmeScopeCN naming of this address was a blocked
+// view of the same bytes.
+class Rva0030D849 : public BfmeParserBindingBaseVE
+{
+public:
+	Rva0030D849(void *owner, BfmeParserRegistryVE *registry, const AsciiString *parentLabel);
+private:
+	void *m_owner;
+};
+
+Rva0030D849::Rva0030D849(void *owner, BfmeParserRegistryVE *registry, const AsciiString *parentLabel)
+	: BfmeParserBindingBaseVE(registry, (void *)&AsciiString("Object"), (void *)(parentLabel ? parentLabel : &AsciiString::TheEmptyString)),
+	m_owner(owner)
+{
+}
