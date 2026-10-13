@@ -204,6 +204,7 @@ struct Rva0007BB16Record
 };
 
 typedef _STL::vector<Rva0007BB16Record> FXShaderParameterVector;
+namespace _STL { template<> vector<Rva0007BB16Record> &vector<Rva0007BB16Record>::operator=(const vector<Rva0007BB16Record> &); }
 
 namespace FXShader
 {

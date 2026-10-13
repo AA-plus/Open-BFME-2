@@ -41,6 +41,8 @@ inline void _Destroy<Rva0007BB16Record *>(Rva0007BB16Record *__first, Rva0007BB1
 		_Destroy(&*__first);
 }
 
+template<> vector<Rva0007BB16Record> &vector<Rva0007BB16Record>::operator=(const vector<Rva0007BB16Record> &);
+
 }
 
 template void _STL::vector<Rva0007BB16Record>::_M_clear();
