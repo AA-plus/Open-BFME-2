@@ -29,3 +29,7 @@ typedef char InnerDequeSize[sizeof(InnerDeque) == 40 ? 1 : -1];
 typedef char OuterDequeSize[sizeof(OuterDeque) == 40 ? 1 : -1];
 typedef char TripleDequeSize[sizeof(TripleDeque) == 40 ? 1 : -1];
 template void TripleDeque::push_back(const OuterDeque &);
+// bfme link decl-only begin
+namespace _STL { template <> deque<_STL::deque<BfmeWordValue4,_STL::allocator<BfmeWordValue4> >,_STL::allocator<_STL::deque<BfmeWordValue4,_STL::allocator<BfmeWordValue4> > > >::~deque(); }
+namespace _STL { template <> void deque<_STL::deque<_STL::deque<BfmeWordValue4,_STL::allocator<BfmeWordValue4> >,_STL::allocator<_STL::deque<BfmeWordValue4,_STL::allocator<BfmeWordValue4> > > >,_STL::allocator<_STL::deque<_STL::deque<BfmeWordValue4,_STL::allocator<BfmeWordValue4> >,_STL::allocator<_STL::deque<BfmeWordValue4,_STL::allocator<BfmeWordValue4> > > > > >::_M_push_back_aux_v(_STL::deque<_STL::deque<BfmeWordValue4,_STL::allocator<BfmeWordValue4> >,_STL::allocator<_STL::deque<BfmeWordValue4,_STL::allocator<BfmeWordValue4> > > > const &); }
+// bfme link decl-only end

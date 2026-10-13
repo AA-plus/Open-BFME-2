@@ -14,3 +14,9 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <queue>
 class BuddyResponse { char m_bfmeBody[0x864]; };
 template _STL::queue<BuddyResponse>::queue();
+// bfme link decl-only begin
+namespace _STL { template <> void _Deque_base<BuddyResponse,_STL::allocator<BuddyResponse> >::_M_create_nodes(BuddyResponse * *,BuddyResponse * *); }
+namespace _STL { template <> void _Deque_base<BuddyResponse,_STL::allocator<BuddyResponse> >::_M_initialize_map(unsigned int); }
+namespace _STL { template <> BuddyResponse * * allocator<BuddyResponse *>::allocate(unsigned int,void const *) const; }
+namespace _STL { template <> BuddyResponse * allocator<BuddyResponse>::allocate(unsigned int,void const *) const; }
+// bfme link decl-only end

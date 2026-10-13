@@ -57,6 +57,11 @@
 #include <locale>
 #include <cstddef>
 // bfme link decl-only begin
+namespace _STL { template <> char * _STLP_alloc_proxy<char *,char,_STL::allocator<char> >::allocate(unsigned int); }
+namespace _STL { template <> void * __node_alloc<1,0>::allocate(unsigned int); }
+namespace _STL { template <> void basic_string<char,_STL::char_traits<char>,_STL::allocator<char> >::reserve(unsigned int); }
+// bfme link decl-only end
+// bfme link decl-only begin
 namespace _STL { template <> char * _STLP_alloc_proxy<char *, char, allocator<char> >::allocate(unsigned int); }
 namespace _STL { template <> void * __node_alloc<1, 0>::allocate(unsigned int); }
 namespace _STL { template <> void basic_string<char, char_traits<char>, allocator<char> >::reserve(unsigned int); }

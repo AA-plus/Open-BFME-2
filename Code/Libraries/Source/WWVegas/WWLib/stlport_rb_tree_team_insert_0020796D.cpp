@@ -16,3 +16,6 @@ struct TeamLess0019B850 : _STL::less<TeamKey0020796D> {};
 typedef _STL::_Rb_tree<TeamKey0020796D, TeamValue0020796D, _STL::_Select1st<TeamValue0020796D>, TeamLess0019B850, _STL::allocator<TeamValue0020796D> > TeamTree0020796D;
 
 template _STL::pair<TeamTree0020796D::iterator, bool> TeamTree0020796D::insert_unique(const TeamValue0020796D &);
+// bfme link decl-only begin
+namespace _STL { template <> _STL::_Rb_tree_node<_STL::pair<_STL::pair<AsciiString,AsciiString> const,int> > * _Rb_tree<_STL::pair<AsciiString,AsciiString>,_STL::pair<_STL::pair<AsciiString,AsciiString> const,int>,_STL::_Select1st<_STL::pair<_STL::pair<AsciiString,AsciiString> const,int> >,TeamLess0019B850,_STL::allocator<_STL::pair<_STL::pair<AsciiString,AsciiString> const,int> > >::_M_create_node(_STL::pair<_STL::pair<AsciiString,AsciiString> const,int> const &); }
+// bfme link decl-only end

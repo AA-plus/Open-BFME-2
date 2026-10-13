@@ -27,6 +27,9 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <vector>
 
 #include "ascii_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> void vector<AsciiString,_STL::allocator<AsciiString> >::_M_clear(); }
+// bfme link decl-only end
 
 // A declaration-only specialization stops this TU emitting its own
 // vector<AsciiString> COMDAT copies, so the calls bind the kept rowed copies.

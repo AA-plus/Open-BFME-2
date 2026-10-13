@@ -31,3 +31,7 @@ struct Rva00439AAAMapped { int a; };
 typedef _STL::map<int, Rva00439AAAMapped, _STL::less<int>, _STL::allocator<_STL::pair<const int, Rva00439AAAMapped> > > Map00439C56;
 
 template Map00439C56::iterator Map00439C56::insert(Map00439C56::iterator, const Map00439C56::value_type &);
+// bfme link decl-only begin
+namespace _STL { template <> _STL::_Rb_tree_node<_STL::pair<int const,Rva00439AAAMapped> > * _Rb_tree<int,_STL::pair<int const,Rva00439AAAMapped>,_STL::_Select1st<_STL::pair<int const,Rva00439AAAMapped> >,_STL::less<int>,_STL::allocator<_STL::pair<int const,Rva00439AAAMapped> > >::_M_create_node(_STL::pair<int const,Rva00439AAAMapped> const &); }
+namespace _STL { template <> _STL::_Rb_tree_node<_STL::pair<int const,Rva00439AAAMapped> > * allocator<_STL::_Rb_tree_node<_STL::pair<int const,Rva00439AAAMapped> > >::allocate(unsigned int,void const *) const; }
+// bfme link decl-only end

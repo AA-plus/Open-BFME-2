@@ -11,3 +11,8 @@
 
 struct BfmeStringTailRecord156 { public: ~BfmeStringTailRecord156(); };
 template _STL::vector<BfmeStringTailRecord156>::~vector();
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<BfmeStringTailRecord156 *>(BfmeStringTailRecord156 *,BfmeStringTailRecord156 *); }
+namespace _STL { template <> void __destroy<BfmeStringTailRecord156 *,BfmeStringTailRecord156>(BfmeStringTailRecord156 *,BfmeStringTailRecord156 *,BfmeStringTailRecord156 *); }
+namespace _STL { template <> void __destroy_aux<BfmeStringTailRecord156 *>(BfmeStringTailRecord156 *,BfmeStringTailRecord156 *,_STL::__false_type const &); }
+// bfme link decl-only end

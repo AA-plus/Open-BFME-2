@@ -34,3 +34,6 @@ public:
 }
 typedef _STL::map<AsciiString,TreeHintPayload00217DE3,_STL::less<AsciiString >,_STL::allocator<TreeHintPair00217DE3> > MapInsert00218AA4;
 template TreeHintPayload00217DE3 &MapInsert00218AA4::operator[](const AsciiString &);
+// bfme link decl-only begin
+namespace _STL { template <> _STL::_Rb_tree_node<_STL::pair<AsciiString const,TreeHintPayload00217DE3> > * _Rb_tree<AsciiString,_STL::pair<AsciiString const,TreeHintPayload00217DE3>,_STL::_Select1st<_STL::pair<AsciiString const,TreeHintPayload00217DE3> >,_STL::less<AsciiString>,_STL::allocator<_STL::pair<AsciiString const,TreeHintPayload00217DE3> > >::_M_create_node(_STL::pair<AsciiString const,TreeHintPayload00217DE3> const &); }
+// bfme link decl-only end

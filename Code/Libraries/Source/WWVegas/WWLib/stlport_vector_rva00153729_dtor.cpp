@@ -9,3 +9,8 @@ struct Rva00153729
 	~Rva00153729();
 };
 template _STL::vector<Rva00153729>::~vector();
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<Rva00153729 *>(Rva00153729 *,Rva00153729 *); }
+namespace _STL { template <> void __destroy<Rva00153729 *,Rva00153729>(Rva00153729 *,Rva00153729 *,Rva00153729 *); }
+namespace _STL { template <> void __destroy_aux<Rva00153729 *>(Rva00153729 *,Rva00153729 *,_STL::__false_type const &); }
+// bfme link decl-only end

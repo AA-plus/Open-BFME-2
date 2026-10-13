@@ -28,3 +28,7 @@ public:
 };
 }
 template UBfmeStringRecord004D05B8SetTree::iterator UBfmeStringRecord004D05B8SetTree::insert_unique(UBfmeStringRecord004D05B8SetTree::iterator, const UBfmeStringRecord004D05B8SetTree::value_type &);
+// bfme link decl-only begin
+namespace _STL { template <> void _Construct<BfmeStringRecord004D05B8,BfmeStringRecord004D05B8>(BfmeStringRecord004D05B8 *,BfmeStringRecord004D05B8 const &); }
+namespace _STL { template <> _STL::_Rb_tree_node<BfmeStringRecord004D05B8> * _Rb_tree<BfmeStringRecord004D05B8,BfmeStringRecord004D05B8,_STL::_Identity<BfmeStringRecord004D05B8>,_STL::less<BfmeStringRecord004D05B8>,_STL::allocator<BfmeStringRecord004D05B8> >::_M_create_node(BfmeStringRecord004D05B8 const &); }
+// bfme link decl-only end

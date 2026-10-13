@@ -33,3 +33,6 @@ template void __pop_heap_aux<S4SortElem8 *, S4SortElem8, S4Cmp00625C10>(
 	S4SortElem8 *, S4SortElem8 *, S4SortElem8 *, S4Cmp00625C10);
 
 }
+// bfme link decl-only begin
+namespace _STL { template <> void __adjust_heap<S4SortElem8 *,int,S4SortElem8,S4Cmp00625C10>(S4SortElem8 *,int,int,S4SortElem8,S4Cmp00625C10); }
+// bfme link decl-only end

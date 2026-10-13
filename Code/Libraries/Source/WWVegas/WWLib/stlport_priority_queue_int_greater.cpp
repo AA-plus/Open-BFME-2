@@ -12,5 +12,9 @@
 #include <queue>
 #include <vector>
 #include <functional>
+// bfme link decl-only begin
+namespace _STL { template <> void vector<int,_STL::allocator<int> >::clear(); }
+namespace _STL { template <> int * vector<int,_STL::allocator<int> >::erase(int *,int *); }
+// bfme link decl-only end
 
 template void _STL::priority_queue<int, _STL::vector<int>, _STL::greater<int> >::pop();

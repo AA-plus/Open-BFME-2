@@ -17,3 +17,11 @@ template <> inline _Vector_base<ScienceType, allocator<ScienceType> >::~_Vector_
 }
 typedef _STL::vector<ScienceType,_STL::allocator<ScienceType> > SciVec;
 template SciVec *_STL::uninitialized_fill_n(SciVec*,unsigned int,const SciVec&);
+// bfme link decl-only begin
+namespace _STL { template <> void _Construct<_STL::vector<ScienceType,_STL::allocator<ScienceType> >,_STL::vector<ScienceType,_STL::allocator<ScienceType> > >(_STL::vector<ScienceType,_STL::allocator<ScienceType> > *,_STL::vector<ScienceType,_STL::allocator<ScienceType> > const &); }
+namespace _STL { template <> void _Construct<ScienceType,ScienceType>(ScienceType *,ScienceType const &); }
+namespace _STL { template <> ScienceType * __uninitialized_copy<ScienceType const *,ScienceType *>(ScienceType const *,ScienceType const *,ScienceType *,_STL::__false_type const &); }
+namespace _STL { template <> _Vector_base<ScienceType,_STL::allocator<ScienceType> >::_Vector_base(unsigned int,_STL::allocator<ScienceType> const &); }
+namespace _STL { template <> vector<ScienceType,_STL::allocator<ScienceType> >::vector(_STL::vector<ScienceType,_STL::allocator<ScienceType> > const &); }
+namespace _STL { template <> ScienceType * _STLP_alloc_proxy<ScienceType *,ScienceType,_STL::allocator<ScienceType> >::allocate(unsigned int); }
+// bfme link decl-only end

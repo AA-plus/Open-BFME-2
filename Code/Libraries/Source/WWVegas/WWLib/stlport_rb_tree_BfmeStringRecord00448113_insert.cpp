@@ -29,3 +29,7 @@ public:
 }
 // ?insert_unique@?$_Rb_tree@UBfmeStringRecord00448113@@U1@U?$_Identity@UBfmeStringRecord00448113@@@_STL@@U?$less@UBfmeStringRecord00448113@@@3@V?$allocator@UBfmeStringRecord00448113@@@3@@_STL@@QAE?AU?$pair@U?$_Rb_tree_iterator@UBfmeStringRecord00448113@@U?$_Nonconst_traits@UBfmeStringRecord00448113@@@_STL@@@_STL@@_N@2@ABUBfmeStringRecord00448113@@@Z present-unmatched
 template _STL::pair<UBfmeStringRecord00448113SetTree::iterator, bool> UBfmeStringRecord00448113SetTree::insert_unique(const UBfmeStringRecord00448113SetTree::value_type &);
+// bfme link decl-only begin
+namespace _STL { template <> void _Construct<BfmeStringRecord00448113,BfmeStringRecord00448113>(BfmeStringRecord00448113 *,BfmeStringRecord00448113 const &); }
+namespace _STL { template <> _STL::_Rb_tree_node<BfmeStringRecord00448113> * _Rb_tree<BfmeStringRecord00448113,BfmeStringRecord00448113,_STL::_Identity<BfmeStringRecord00448113>,_STL::less<BfmeStringRecord00448113>,_STL::allocator<BfmeStringRecord00448113> >::_M_create_node(BfmeStringRecord00448113 const &); }
+// bfme link decl-only end
