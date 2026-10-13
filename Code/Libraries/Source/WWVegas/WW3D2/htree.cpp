@@ -65,7 +65,11 @@
 #include "w3d_file.h"
 #include "wwmemlog.h"
 #include "hrawanim.h"
-#include "motchan.h"
+// Bind channel reads to the byte-verified HRawAnim providers at 0x00160010
+// and 0x001600A0, using their unpooled 0x20-byte channel layout.
+#define BFME_MOTION_CHANNEL_OUT_OF_LINE
+#include "../../../../../reference/shims/bfmehrawanim/motchan.h"
+#undef BFME_MOTION_CHANNEL_OUT_OF_LINE
 
 /*********************************************************************************************** 
  * HTreeClass::HTreeClass -- constructor                                                       * 

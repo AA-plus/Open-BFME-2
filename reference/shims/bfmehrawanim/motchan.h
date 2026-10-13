@@ -94,7 +94,7 @@ public:
 
 #define SPECIAL_GETVEC_AS_QUAT
 #ifdef SPECIAL_GETVEC_AS_QUAT
-	WWINLINE void Get_Vector_As_Quat(int frame, Quaternion& quat) const;
+	void Get_Vector_As_Quat(int frame, Quaternion& quat) const;
 #endif
 
 private:
@@ -110,12 +110,16 @@ private:
 	int		FirstFrame;			// first frame which was non-identity
 	int		LastFrame;			// last frame which was non-identity
 	void Free(void);
-	WWINLINE void set_identity(float * setvec) const;
+	void set_identity(float * setvec) const;
 
 //	friend class HRawAnimClass;
 
 };
 
+// Consumers that call the byte-verified HRawAnim providers must not emit
+// optimization-specific inline copies under the same names. The class ABI
+// stays identical; only those three method bodies are supplied out of line.
+#ifndef BFME_MOTION_CHANNEL_OUT_OF_LINE
 WWINLINE void MotionChannelClass::set_identity(float * setvec) const
 {
 	// BFME: the fade channel (type 15, BFME1 ANIM_CHANNEL_FADE) rests at 1.0;
@@ -167,6 +171,7 @@ WWINLINE void MotionChannelClass::Get_Vector_As_Quat(int frame, Quaternion& quat
 	}
 }
 #endif
+#endif // BFME_MOTION_CHANNEL_OUT_OF_LINE
 
 
 /******************************************************************************
