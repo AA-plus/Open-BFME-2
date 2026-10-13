@@ -1,4 +1,6 @@
 // ?Rva000B3AAB@@YA_NPBUAnimationClock@@H@Z
+// partial score=0.9999 date=2026-10-13
+// ?Rva000B3AAB@@YA_NPBUAnimationClock@@H@Z
 // partial score=1.0 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // Native BD6C2..BDA40, 894B. W3DScriptedModelDraw particle/event update.
