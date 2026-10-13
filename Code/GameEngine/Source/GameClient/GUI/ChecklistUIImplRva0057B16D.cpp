@@ -66,7 +66,7 @@ class Rva0057AC8FScrollListener
 {
 public:
 	virtual void slot00(int);
-	virtual void rva0057AC8F(int unused, float position);
+	virtual void OnScrollBarPosChanged(int unused, float position);
 };
 
 namespace StrategicHUD {

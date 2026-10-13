@@ -185,7 +185,7 @@ class Rva0057AC8FScrollListener
 {
 public:
 	virtual void slot00(int);
-	virtual void rva0057AC8F(int unused, float position);
+	virtual void OnScrollBarPosChanged(int unused, float position);
 
 	void listenTo(Rva005D4DA9 *scrollBar)
 	{
@@ -227,7 +227,7 @@ public:
 	void SetExpandButtonEnabled(bool enabled);
 	// The item list's height (unrowed 0x0057ABD0, pinned by address).
 	float rva0057ABD0() const;
-	virtual void rva0057AC8F(int unused, float position);
+	virtual void OnScrollBarPosChanged(int unused, float position);
 
 private:
 	void *m_level; // +0x0C, the movie's Apt level
@@ -316,7 +316,7 @@ void StrategicHUD::ChecklistUIImpl::OnExpandButtonClicked(const char *unused)
 // (+8 vftable 0x00C6F0F4 slot 1): scrolls the item list to the position's
 // share of its height (0x0057ABD0), scaled by the window manager's +0x40
 // pair, through the movie's "SetItemListY".
-void StrategicHUD::ChecklistUIImpl::rva0057AC8F(int unused, float position)
+void StrategicHUD::ChecklistUIImpl::OnScrollBarPosChanged(int unused, float position)
 {
 	float height = rva0057ABD0();
 	position = (0.0f - height * position) * TheRva00222A8BTarget->slot40()->y;
