@@ -100,6 +100,17 @@ template <> vector<BfmePod88, allocator<BfmePod88> >::~vector()
 }
 }
 
+struct Rva0052BFB5Elem;
+void __cdecl Rva0052C37ADestroyRange(Rva0052BFB5Elem *, Rva0052BFB5Elem *);
+
+namespace _STL {
+template <> vector<Rva0052BDE6, allocator<Rva0052BDE6> >::~vector()
+{
+ Rva0052C37ADestroyRange(reinterpret_cast<Rva0052BFB5Elem *>(m_start),
+                       reinterpret_cast<Rva0052BFB5Elem *>(m_finish));
+}
+}
+
 class Rva0056616B {
 public:
 	Rva0056616B(const Rva0056616B &other);
