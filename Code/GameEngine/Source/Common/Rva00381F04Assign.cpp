@@ -3,20 +3,9 @@
 // Copy assignment over StringBaseG at +4 ints bytes loop8 ints AsciiString
 // ints loop10 int byte Rva00235A37 at +90 ints loop16 via rowed assigns.
 // Evidence: chain lane calls just-landed 0x00235A37; unblocks 0x00382E73.
-template <typename T>
-class StringBase
-{
-public:
-	void set(const StringBase<T> &other);
-};
+#define BFME_STRINGBASE_PUBLIC_DTOR
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-class AsciiString
-{
-public:
-	AsciiString &operator=(const AsciiString &other);
-private:
-	void *m_data;
-};
 
 class Rva00235A37
 {

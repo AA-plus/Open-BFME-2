@@ -1,4 +1,4 @@
-// cl: /MD /EHs
+// cl: /MD /EHs /Ireference/shims/bfme2_ascii
 //
 // ?rva000E5F60@Rva000E5F60@@QAEPAVRva000E5EC1@@HV?$StringBase@D@@@Z
 // RVA 0x000E5F60, 86B. List-find by (id, name) over a sentinel-circular list
@@ -24,15 +24,8 @@
 // The callees are already rowed, so no pin is needed: releaseBuffer at
 // 0x00036410 and Rva000E5EC1::rva000E5EC1 at 0x000E5EC1.
 
-template <typename T> class StringBase
-{
-public:
-	__forceinline ~StringBase() { releaseBuffer(); }
-	int compare(const StringBase<T> &other) const;
-private:
-	void releaseBuffer();
-	void *m_data;
-};
+#define BFME_STRINGBASE_PUBLIC_DTOR
+#include "string_base.h"
 
 // Keep the known StringBase<char> cleanup inline. The owned releaseBuffer
 // call then resolves directly, without a linker alternate name.

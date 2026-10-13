@@ -7,15 +7,8 @@
 // Evidence: same-this calls at 0x0025D6A4/0x0025D6AB; vtable shared with ctor
 // 0x0025D489 which inits the same D0/E0/E4/C8/CC/F0 fields; base call
 // 0x001B4E74; deleting-dtor caller 0x0025DA57.
-template <typename T> class StringBase
-{
-public:
-	__forceinline ~StringBase() { releaseBuffer(); }
-	void set(const StringBase &o);
-private:
-	void releaseBuffer();
-	T *m_data;
-};
+#define BFME_STRINGBASE_PUBLIC_DTOR
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 // Inline destruction uses the owned releaseBuffer worker directly.
 
@@ -26,14 +19,6 @@ public:
 	void rva0025C0FF();
 };
 
-class AsciiString : private StringBase<char>
-{
-public:
-	__forceinline AsciiString() {}
-	__forceinline AsciiString(const AsciiString &o) : StringBase<char>(o) {}
-	__forceinline ~AsciiString() {}
-	AsciiString &operator=(const AsciiString &o);
-};
 
 class W3DDisplay
 {

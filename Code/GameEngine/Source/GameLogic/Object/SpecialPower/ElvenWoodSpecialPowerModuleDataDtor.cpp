@@ -25,23 +25,9 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
 
-template <typename T> class StringBase
-{
-public:
-	~StringBase();
+#define BFME_STRINGBASE_PUBLIC_DTOR
+#include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
-private:
-	void *m_data;
-};
-
-class AsciiString
-{
-public:
-	~AsciiString();
-
-private:
-	char *m_data;
-};
 
 struct RvaPair004C3D4C
 {

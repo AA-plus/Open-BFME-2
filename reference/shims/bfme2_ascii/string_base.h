@@ -127,11 +127,20 @@ private:
     StringBase(const StringBase<T> &src, int start, int len);
     // ??1?$StringBase@D@@AAE@XZ (0x0005E490) and ??1AsciiString@@QAE@XZ
     // (0x0005EE90) are both a bare `jmp releaseBuffer`.
+    // Per-unit switch, default off: a unit whose retail function takes a StringBase by value
+    // defines BFME_STRINGBASE_PUBLIC_DTOR to destroy it. Access only; but it changes how some
+    // units' unwind code is emitted (UnicodeFromAscii.cpp), so it is not global.
+#ifdef BFME_STRINGBASE_PUBLIC_DTOR
+public:
+#endif
     ~StringBase()
     {
         validate();
         releaseBuffer();
     }
+#ifdef BFME_STRINGBASE_PUBLIC_DTOR
+private:
+#endif
     void validate() const {}
     T *peek() const
     {

@@ -13,13 +13,8 @@
 
 extern "C" void __cdecl free(void *p);
 
-template <class T> class StringBase
-{
-	void *m_data;
-	void releaseBuffer();
-public:
-	~StringBase() { releaseBuffer(); }
-};
+#define BFME_STRINGBASE_PUBLIC_DTOR
+#include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 // Existing public narrow teardown spelling resolves to the verified
 // 133-byte releaseBuffer worker at RVA 0x36410. Wide teardown is unchanged.
@@ -27,14 +22,6 @@ template <> StringBase<char>::~StringBase();
 #pragma comment(linker, "/alternatename:??1?$StringBase@D@@QAE@XZ=?releaseBuffer@?$StringBase@D@@AAEXXZ")
 
 
-class AsciiString
-{
-public:
-	AsciiString();
-	~AsciiString();
-private:
-	void *m_data;
-};
 // Declaration-only: the rowed vector<AsciiString> members are bound, this TU emits no per-flag copy.
 namespace _STL {
 template <> vector<AsciiString, allocator<AsciiString> >::~vector();
