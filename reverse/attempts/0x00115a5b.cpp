@@ -1,4 +1,6 @@
 // ?calcBlendHeight@W3DTerrainBackground@@QAEXMHPAM@Z
+// partial score=0.974 date=2026-10-13
+// ?calcBlendHeight@W3DTerrainBackground@@QAEXMHPAM@Z
 // partial score=0.93 date=2026-10-13
 // ?calcBlendHeight@W3DTerrainBackground@@QAEXMHPAM@Z
 // partial score=0.93 date=2026-10-13
