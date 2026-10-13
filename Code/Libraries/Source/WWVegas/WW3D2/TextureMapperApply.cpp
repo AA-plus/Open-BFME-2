@@ -82,7 +82,9 @@ protected:
 
 // Only the inherited interface accessed by Apply is declared here; unused
 // derived object fields are intentionally not modelled.
-class GridTextureMapperClass : public TextureMapperClass {};
+class GridTextureMapperClass : public TextureMapperClass {
+public: virtual void Apply(int uv_array_index);
+};
 class GridWSEnvMapperClass : public GridTextureMapperClass {};
 class GridWSClassicEnvironmentMapperClass : public GridWSEnvMapperClass {
 public: virtual void Apply(int uv_array_index);
@@ -167,6 +169,19 @@ void ScaleTextureMapperClass::Apply(int uv_array_index)
 	DX8Wrapper::Set_DX8_Texture_Stage_State(Stage,D3DTSS_TEXTURETRANSFORMFLAGS,D3DTTFF_COUNT2);
 }
 
+// GridTextureMapperClass::Apply: the Grid table 0x7D57B4 holds 0x1844A0 in its Apply slot (+0x14)
+// too; the ZH body is Scale's verbatim and the linker folded the identical COMDATs (ICF).
+void GridTextureMapperClass::Apply(int uv_array_index)
+{
+	// Set up the texture matrix
+	Matrix4x4 m;
+	Calculate_Texture_Matrix(m);
+	MapperTransformAccess::SetTransform((D3DTRANSFORMSTATETYPE) (D3DTS_TEXTURE0+Stage),m);
+	// Disable Texgen
+	DX8Wrapper::Set_DX8_Texture_Stage_State(Stage,D3DTSS_TEXCOORDINDEX,D3DTSS_TCI_PASSTHRU | uv_array_index);
+	// Tell rasterizer to expect 2D texture coordinates
+	DX8Wrapper::Set_DX8_Texture_Stage_State(Stage,D3DTSS_TEXTURETRANSFORMFLAGS,D3DTTFF_COUNT2);
+}
 inline unsigned long F2DW( float f ) { return *((unsigned long*)&f); }
 
 // BumpEnvTextureMapperClass::Apply: RVA 0x186A90, 602 bytes, the Zero Hour
