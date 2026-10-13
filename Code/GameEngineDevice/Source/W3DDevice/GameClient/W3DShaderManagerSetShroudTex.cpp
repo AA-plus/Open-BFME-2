@@ -96,7 +96,7 @@ extern "C" D3DXMATRIX *__stdcall D3DXMatrixTranslation(D3DXMATRIX*,float,float,f
 extern "C" D3DXMATRIX *__stdcall D3DXMatrixScaling(D3DXMATRIX*,float,float,float);
 class StringClass {public: StringClass(int,bool); ~StringClass(){Free_String();} private: void Free_String(); char *buffer;};
 class WW3D {public: static bool Is_Snapshot_Activated(){return SnapshotActivated;} private: static bool SnapshotActivated;};
-class TextureBaseClass {public:void Release_Ref();}; class TextureClass:public TextureBaseClass{};
+class TextureBaseClass {public:void Release_Ref();}; class TextureClass:public TextureBaseClass{public:void Release_Ref();};  // rowed ICF alias of the TextureBaseClass body (0x0061ED10)
 template<class T>class RefCountPtr {public:T *ptr; ~RefCountPtr(){if(ptr)ptr->Release_Ref();}};
 class RvaTextureHandleView:public RefCountPtr<TextureClass>{};
 class Rva00072B3A {public: RvaTextureHandleView rva00072B3A()const; char pad[0x10];float cellWidth,cellHeight;char pad18[8];int textureWidth,textureHeight;char pad28[4];float drawOriginX,drawOriginY;};
