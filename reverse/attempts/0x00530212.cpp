@@ -1,21 +1,38 @@
 // ?rva00530212@Pathfinder@@QAEXPAVObject@@_N11@Z
-// partial score=0.7795442928632816 date=2026-10-10
+// partial score=0.8620093232384183 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /I.
-// Native 00530212..00530F47, RET16, 3381B. New reconstruction.
+// Native 00530212..00530F47, RET16, 3381B. UNMATCHED reconstruction.
+// 2026-10-13: full emitted body is 3380B; frame 0x164 versus retail 0x168.
+// Reference-derived fixes: CRT float floorf/ceilf wrappers and long fistp
+// conversion, -(c*STEP), ordered radius comparison, donor sphere locals.
+// Target-derived fixes: removal tests type before layer; pinching checks the
+// current layer once and counts neighboring clear types regardless of layer.
+// Object::isMobile now uses the existing canonical owner at 0x002907A1.
+// Residue: position copy folds +0x38 into its loads; box-cell CSE spills the
+// receiver instead of the type; bounding-region call has different registers;
+// stack homes differ. No proven original BFME2 member name: retain RVA name.
+// Diagnostic-only call bindings: Drawable::rva0027A018 -> 0x0027A018,
+// Pathfinder::rva0052E4C9 -> 0x0052E4C9 and rva0052F63F -> 0x0052F63F.
+// They are not admitted pins. Official permute.fitness with those bindings:
+// 0.8620093232384183; exact verification FAILS. Do not promote from length alone.
+// Reviewed donor cee35b7d8ca077d7255f1c39cb69e9fd9627aa85. Upstream 24656f4d
+// changes no relevant footprint body, ZH source, or VS2003 toolchain inputs.
 // ZH AIPathfind.cpp classifyObjectFootprint/internal_classifyObjectFootprint
 // provide the filtering/rasterization/pinching semantics. BFME-specific wall,
 // portal, multi-shape, gate and layer checks are read from target bytes and WB.
 #include "Code/Libraries/Include/Lib/Coord3D.h"
-struct ICoord2D{int x,y;};
+#include <math.h>
+#include "Code/Libraries/Include/Lib/ICoord2D.h"
+struct FootprintCoord2D{float x,y;};
 struct Region2D { float lx,ly,hx,hy; };
 struct FootprintBounds{int lx,ly,hx,hy;};
-class Rva0027C36A {public:Rva0027C36A();char bytes[0xa8];};
+class Rva0027C36A {public:Rva0027C36A();unsigned words[0xa8/4];};
 class Drawable {public:
  bool rva0027267D(int,int,int,int);bool rva002726C3(int,int,int,int);
  int rva0027257B(int);bool rva00272C1E();void rva0027A018();
 };
 class Rva00279677{public:void rva00279677();};
-struct BfmeVecVNB{float x,y,z;};
+struct BfmeVecVNB{float x,y,z; BfmeVecVNB(const float *v):x(v[0]),y(v[1]),z(v[2]){} };
 class BfmeXformVNB{public:void bfmeApplyVNB(BfmeVecVNB*,float);};
 struct BfmeShapeE15 {int type;int field4;float major,minor,offsetX,offsetY,offsetZ;bool flag1C;char pad1D[3];bool enabled;char pad21[3];};
 class BfmeObjE15{public:BfmeShapeE15 *bfmeAtE15(int);};
@@ -23,14 +40,14 @@ class Rva0087E370{public:void method(const Coord3D&,float,Region2D&)const;};
 struct FootprintTemplate {char pad[0x108];union {unsigned kinds[6];struct {unsigned kind0;unsigned pad1:28;unsigned isWall:1;unsigned isDefense:1;unsigned pad2:2;unsigned rest[4];};};unsigned words120;char pad124[0x4a0-0x124];float fenceWidth;__forceinline unsigned kind(int b)const{return kinds[b/32]&(1u<<(b%32));}};
 enum ObjectStatusTypes{Status77=77,Status88=88};
 class Object {public:
- Drawable *getDrawable()const;void rva0028AD32();void rva0028AD8C();void rva0028AD7C();bool rva002907A1();bool testStatus(ObjectStatusTypes)const;bool rva0006F039(int)const;
+ Drawable *getDrawable()const;void rva0028AD32();void rva0028AD8C();void rva0028AD7C();bool isMobile()const;bool testStatus(ObjectStatusTypes)const;bool rva0006F039(int)const;
  char pad0[4];FootprintTemplate *templ;char pad8[0x38-8];Coord3D position;float orientation;char pad48[0xac-0x48];bool small;char padAD[0xd4-0xad];BfmeShapeE15 *begin,*end;
 };
 class Thing{public:float getHeightAboveTerrain()const;};
 struct Rva0052DEEFArg;struct Rva0052DFB1Arg;struct In002E6BA1{int x,y;};
 class PathfindCell {public:
  bool SetType_Dirty(int);bool rva0052DEEF(const Rva0052DEEFArg*,bool,In002E6BA1*);bool rva0052DFB1(const Rva0052DFB1Arg*);
- __forceinline int type()const{return m_type;}__forceinline int layer()const{return m_layer;}__forceinline bool pinched()const{return m_pinched;}__forceinline void pinch(bool b){m_pinched=b;}
+ enum CellType{Clear=0,Water=1,Cliff=2,Reserved=3,Obstacle=4,Impassable=5}; __forceinline int type()const{return m_type;}__forceinline int layer()const{return m_layer;}__forceinline bool pinched()const{return m_pinched;}__forceinline void pinch(bool b){m_pinched=b;}
  __forceinline bool gate()const{return m_gate;}
  char pad[12];unsigned m_type:4;unsigned m_layer:6;unsigned m_low:6;unsigned m_pinched:1;unsigned m_gate:1;unsigned m_mid:4;unsigned m_22:1;unsigned m_23:1;unsigned m_high:8;
 };
@@ -40,12 +57,12 @@ class PathfindZoneManager{public:void MarkDirty(int,int);};
 extern "C" __declspec(dllimport)double __cdecl floor(double);
 extern "C" __declspec(dllimport)double __cdecl ceil(double);
 float Sin(float);float Cos(float);
-static __forceinline int float2long(float f){int i;__asm{
+static __forceinline long float2long(float f){long i;__asm{
  fld f
  fistp i
 }return i;}
-#define FLOOR(x) float2long((float)floor(x))
-#define CEIL(x) float2long((float)ceil(x))
+#define FLOOR(x) float2long(floorf(x))
+#define CEIL(x) float2long(ceilf(x))
 enum PathfindLayerEnum{LayerGround=1};
 class Pathfinder{public:
  void rva00530212(Object*,bool,bool,bool);void rva0052F63F(Object*,bool);void rva0052E4C9(Object*,bool);PathfindCell *getCell(PathfindLayerEnum,int,int);
@@ -59,7 +76,7 @@ void Pathfinder::rva00530212(Object*obj,bool insert,bool keepGate,bool goal)
  bool wall=obj->templ->isWall;
  if(!wall && obj->templ->fenceWidth>0.0f && !obj->templ->kind(61)){rva0052E4C9(obj,insert);return;}
  if(!insert){obj->rva0028AD32();if(!goal)obj->rva0028AD8C();}else obj->rva0028AD7C();
- if(!obj->templ->kind(7)||obj->rva002907A1()||obj->small||obj->testStatus(Status88))return;
+ if(!obj->templ->kind(7)||obj->isMobile()||obj->small||obj->testStatus(Status88))return;
  if(wall){if(obj->templ->kind(150))wall=obj->getDrawable()->rva00272C1E();else if(obj->testStatus(Status77))wall=false;}
  if(((Thing*)obj)->getHeightAboveTerrain()>10.0f&&!wall)return;
  if(wall&&drawable){float z;if(!drawable->rva0027257B((int)&z)){changedWall=true;rva0052F63F(obj,insert);return;}}
@@ -76,14 +93,14 @@ void Pathfinder::rva00530212(Object*obj,bool insert,bool keepGate,bool goal)
  for(int k=0;k<obj->end-obj->begin;++k){
   BfmeShapeE15 *shape=((BfmeObjE15*)((char*)obj+0xa8))->bfmeAtE15(k);
   if(!shape->enabled||shape->offsetZ>10.0f)continue;
-  BfmeVecVNB pos={obj->position.x,obj->position.y,obj->position.z};
+  BfmeVecVNB pos(&obj->position.x);
   float c=Cos(angle),s=Sin(angle);
   ((BfmeXformVNB*)shape)->bfmeApplyVNB(&pos,angle);
   switch(shape->type){
   case 2:{
    float halfX=shape->major,halfY=shape->minor;
-   float ydx=s*5.0f,ydy=-c*5.0f,xdx=c*5.0f,xdy=s*5.0f;
-   int nx=CEIL(halfX*0.4f),ny=CEIL(halfY*0.4f);
+   float ydx=s*5.0f,ydy=-(c*5.0f),xdx=c*5.0f,xdy=s*5.0f;
+   int nx=CEIL(2.0f*halfX/5.0f),ny=CEIL(2.0f*halfY/5.0f);
    float tlx=pos.x-halfX*c-halfY*s,tly=pos.y+halfY*c-halfX*s;
    for(int iy=0;iy<ny;++iy,tlx+=ydx,tly+=ydy){
     float x=tlx,y=tly;
@@ -110,13 +127,18 @@ void Pathfinder::rva00530212(Object*obj,bool insert,bool keepGate,bool goal)
    }
   }break;
   case 0:case 1:{
+   ICoord2D topLeft,bottomRight;
+   FootprintCoord2D center,delta;
    float radius=shape->major;
-   int left=FLOOR((pos.x-radius)*0.1f+0.5f)-1,top=FLOOR((pos.y-radius)*0.1f+0.5f)-1;
-   float size=radius*0.1f+0.4f,cx=pos.x*0.1f,cy=pos.y*0.1f,r2=size*size;
-   int right=(int)(left+2*size+2),bottom=(int)(top+2*size+2);
-   for(int j=top;j<bottom;++j)for(int i=left;i<right;++i){
-    float dx=i+0.5f-cx,dy=j+0.5f-cy;
-    if(dx*dx+dy*dy>r2||i<0||j<0||i>=extent.hx||j>=extent.hy||map[i][j].layer()!=1)continue;
+   float r2,size;
+   topLeft.x=FLOOR((pos.x-radius)*0.1f+0.5f)-1;
+   topLeft.y=FLOOR((pos.y-radius)*0.1f+0.5f)-1;
+   size=radius*0.1f;center.x=pos.x*0.1f;center.y=pos.y*0.1f;
+   size+=0.4f;r2=size*size;
+   bottomRight.x=(int)(topLeft.x+2*size+2);bottomRight.y=(int)(topLeft.y+2*size+2);
+   for(int j=topLeft.y;j<bottomRight.y;++j)for(int i=topLeft.x;i<bottomRight.x;++i){
+    delta.x=i+0.5f-center.x;delta.y=j+0.5f-center.y;
+    if(!(delta.x*delta.x+delta.y*delta.y<=r2)||i<0||j<0||i>=extent.hx||j>=extent.hy||map[i][j].layer()!=1)continue;
     bool dirty;
     if(insert){In002E6BA1 p={i,j};dirty=map[i][j].rva0052DEEF((const Rva0052DEEFArg*)obj,false,&p);}
     else dirty=map[i][j].rva0052DFB1((const Rva0052DFB1Arg*)obj);
@@ -129,23 +151,24 @@ void Pathfinder::rva00530212(Object*obj,bool insert,bool keepGate,bool goal)
  }
  Region2D world;
  ((Rva0087E370*)((char*)obj+0xa8))->method(obj->position,obj->orientation,world);
- FootprintBounds b={FLOOR(world.lx*0.1f)-1,FLOOR(world.ly*0.1f)-1,CEIL(world.hx*0.1f)+1,CEIL(world.hy*0.1f)+1};
+ FootprintBounds b; b.lx=FLOOR(world.lx*0.1f)-1; b.ly=FLOOR(world.ly*0.1f)-1; b.hx=CEIL(world.hx*0.1f)+1; b.hy=CEIL(world.hy*0.1f)+1;
  if(b.lx<extent.lx)b.lx=extent.lx;
  if(b.ly<extent.ly)b.ly=extent.ly;
  if(b.ly<extent.ly)b.ly=extent.ly;
  if(b.hx>extent.hx)b.hx=extent.hx;
  if(b.hy>extent.hy)b.hy=extent.hy;
  if(!insert)for(int j=b.ly;j<=b.hy;++j)for(int i=b.lx;i<=b.hx;++i){
-  PathfindCell *cell=&map[i][j];if(cell->layer()==1&&cell->type()==5){cell->SetType_Dirty(0);zones.MarkDirty(i,j);}
+  if(map[i][j].type()==5&&map[i][j].layer()==1){map[i][j].SetType_Dirty(0);zones.MarkDirty(i,j);}
  }
  for(int j=b.ly;j<=b.hy;++j)for(int i=b.lx;i<=b.hx;++i){
-  if(map[i][j].layer()==1)map[i][j].pinch(false);
-  if(map[i][j].layer()==1&&map[i][j].type()==0){
+  if(map[i][j].layer()!=1)continue;
+  map[i][j].pinch(false);
+  if(map[i][j].type()==0){
    int total=0,ortho=0;
    for(int k=i-1;k<i+2;++k){if(k<extent.lx||k>extent.hx)continue;
     for(int l=j-1;l<j+2;++l){if(l<extent.ly||l>extent.hy)continue;
-     if(k==i&&l==j)continue;
-     if(map[k][l].layer()==1&&map[k][l].type()==0){++total;if(k==i||l==j)++ortho;}
+     if(k==i&&j==l)continue;
+     if(map[k][l].type()==0){++total;if(k==i||l==j)++ortho;}
     }
    }
    if(ortho<2||total<4)map[i][j].pinch(true);
