@@ -4,230 +4,73 @@
 // partial score=0.96 date=2026-10-13
 // ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
 // partial score=0.96 date=2026-10-13
-// ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
-// partial score=0.9557623478883321 date=2026-10-10
+// FRAGMENT for Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp (W7-MO1 r1, 15 diffs).
+// Apply: add `class Rva002E7E26;` near other fwd decls; add the two decls below
+// to class Pathfinder; append the rest at EOF. All callees rowed (2EB4DF, 2E7DF5,
+// 2E7E26, 6BD9C0, 36410). Padding floats read retail DBD364/DBD368 (match!).
+// WALLS: (A) xmm rotation acc xmm2 vs xmm0 over 12 insns (named-const hoist,
+// single-expr, scale-temp, init-then-add all zero-delta); (B) EH or[ebp-4],-1
+// before lea+3rd-movs vs ours movs/or/lea (throw() on EB4DF, barrier move/remove
+// all zero-or-worse). Prior bank scores .942-.9557 standalone; this TU version
+// supersedes with native views + TerrainLogicWaterQuery::slot4C for isUnderwater.
+class Rva002E7E26;
+/// in class Pathfinder:
+///  Bool getClosestPointOnLand(const Coord3D *,Object *,Coord3D *);
+///  Int rva002EB4DF(const ICoord2DBase *,const ICoord2DBase *,float,Int,Rva002E7E26 *);
+
+// Native 002EE7EE..002EE96B RET12 (381 bytes); WB D644A0 (pathfinder.cpp:12323,
+// KINDOF_SHIP assert) independently names Pathfinder::getClosestPointOnLand.
+// Object geometry (+0xA8) and facing (+0x44) are target offsets; the visitor
+// layout (closest result +0x10, availability byte +0x20) is shared with the
+// rowed 49B constructor 0x002E7DF5 and the 176B callback 0x002E7E26.
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
-// ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
-// partial score=0.942393874319429 date=2026-10-10
-// cl: /I. /I. /O1 /DNDEBUG /MD /arch:SSE /G7 /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
-// stlport
-// wb-lead 2.000 callgraph: Pathfinder::SetBridgeStateRepaired at 0x002E7205.
-// Identity evidence: the GeneralsMD AIPathfind.cpp implementation
-// Pathfinder::changeBridgeState checks the selected layer, sets its destroyed
-// state to the inverse of repaired, then dirties zones with the repaired flag.
-// GeneralsMD BridgeBehavior calls that method on bridge damage and repair.
-// Target call sites resolve to rowed Rva0036666B at 0x0036666B, unrowed callee
-// 0x0036736E and rowed PathfindZoneManager::rva00531481 at 0x00531481. The unrowed
-// callee pin is supported by its selected-layer callsite and the GeneralsMD
-// PathfindLayer::setDestroyed(Bool) donor. Target arithmetic gives 64-byte
-// layers at +0x60 and the final manager-like subobject at +0x460.
-#include <vector>
-#include <new>
-#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
-typedef bool Bool;
-typedef int Int;
-enum PathfindLayerEnum
-{
-	PATHFIND_LAYER_UNKNOWN = 0,
-	PATHFIND_LAYER_GROUND = 1
-};
-typedef int LocomotorSurfaceTypeMask;
-
-class LocomotorSet
+struct _Rva002E7DF5Cell { int x, y, z; };
+class Rva002E7DF5
 {
 public:
-	LocomotorSurfaceTypeMask getValidSurfaces() const
-	{
-		return m_validLocomotorSurfaces;
+	Rva002E7DF5(int, const _Rva002E7DF5Cell &) throw();
+	int owner;
+	int sourceWords[3];
+	Coord3D closest;
+	float cost;
+	bool found;
+};
+float BfmeShipLandPaddingX = 20.0f;
+float BfmeShipLandPaddingY = 20.0f;
+Bool Pathfinder::getClosestPointOnLand(const Coord3D *position, Object *object, Coord3D *out)
+{
+	if (((TerrainLogicWaterQuery *)TheTerrainLogic)->slot4C(position->x, position->y, 0, 0, 0)) {
+		union { int alignment; char bytes[sizeof(Rva002E7DF5)]; } storage;
+		{
+			GeometryShape shape;
+			reinterpret_cast<const GeometryInfo *>((const char *)object + 0xa8)->rva006BD9C0(shape);
+			const float &minorRef = shape.minor;
+			float minorSize = minorRef;
+			minorSize += BfmeShipLandPaddingY;
+			minorSize *= 2.0f;
+			minorSize *= 0.1f;
+			int minorCells = (int)minorSize;
+			const float &majorRef = shape.major;
+			float majorSize = majorRef;
+			majorSize += BfmeShipLandPaddingX;
+			majorSize *= 2.0f;
+			majorSize *= 0.1f;
+			int majorCells = (int)majorSize;
+			ICoord2DBase diameter = { majorCells, minorCells };
+			new ((void *)&storage) Rva002E7DF5((int)this, *reinterpret_cast<const _Rva002E7DF5Cell *>(position));
+			int y = realToIntFloor(position->y * 0.1f + 0.5f);
+			int x = realToIntFloor(position->x * 0.1f + 0.5f);
+			ICoord2DBase center = { x, y };
+			rva002EB4DF(&center, &diameter, object->m_orientation, 1, reinterpret_cast<Rva002E7E26 *>(&storage));
+			*out = reinterpret_cast<Rva002E7DF5 *>(&storage)->closest;
+		}
+		_ReadWriteBarrier();
+		return reinterpret_cast<Rva002E7DF5 *>(&storage)->found;
 	}
-private:
-	char m_pad[0x10];
-	LocomotorSurfaceTypeMask m_validLocomotorSurfaces;
-	Bool m_downhillOnly;
-	Bool m_scalesWalls;
-};
-
-class Player
-{
-public:
-	char m_pad00[0x5c];
-	Int m_playerType;		// +0x5C (1: computer)
-};
-// Relationship order is established by the rowed Object::getRelationship.
-class AIUpdateInterface;
-struct PathfinderTemplateView {
-    char pad[0x64];
-    char *nameBuffer;
-    char pad68[0x108-0x68];
-    unsigned char kinds[24];
-    char pad120[0x56c-0x120];Int priority;char pad570[0x634-0x570];Bool flag;
-    __forceinline bool hasKind(int bit) const { return (kinds[bit/8] & (1<<(bit%8)))!=0; }
-    __forceinline const char *name() const { return nameBuffer ? nameBuffer+8 : ""; }
-};
-enum Relationship { ENEMIES=0, NEUTRAL=1, ALLIES=2 };
-enum ObjectStatusTypes { QuickStatus49=49 };
-class Object
-{
-public:
-	Player *getControllingPlayer() const;
- Bool testStatus(ObjectStatusTypes) const;
-	Relationship getRelationship(const Object *) const;
-    int rva0028B511() const;
-    bool rva002E6B89();
-	bool IsAtGoalPosition() const;
-	bool rva0028AFBB() const;
-	float GetGoalAngle() const;
-    __forceinline int getID() const { return *(const int *)((const char *)this+0x74); }
-	AIUpdateInterface *getAI() const { return reinterpret_cast<AIUpdateInterface *>(m_258); }
-	void *m_vtable;
-	PathfinderTemplateView *m_template;
-	char m_pad08[0x38-8];
-	float position[3];
-	float m_orientation;				// +0x44
-	char m_pad48[0x258 - 0x48];
-	char *m_258;						// +0x258 (WorldBuilder +0x260: CanApproachToTarget's gate)
-	char m_pad25C[0x274-0x25C];
-	Object *container;
-};
-#include "Code/Libraries/Include/Lib/Coord3D.h"
-class Thing
-{
-public:
-	const Coord3D *getUnitDirectionVector2D() const;
-};
-struct Rva002E7ED6Info;
-class Pathfinder;
-// Native aircraft-path node ABI agrees with the rowed ctor and prepend provider.
-class PathNode {
-public:
-    PathNode(const Coord3D *,PathfindLayerEnum) throw();
-    PathNode *next,*previous,*nextOptimized;
-    Coord3D position;
-    PathfindLayerEnum layer;
-    Bool canOptimize;
-    Int portalID;
-};
-struct Rva002EDEABArg;
-struct Rva002E93A7Info
-{
-	Pathfinder *m_00;
-	Int m_04;
-};
-class Waypoint { public: Int word0,id;void *name;Coord3D location;char pad18[0x44-0x18];Waypoint *chainNext;Int word48,linkCount; };
-class PathfindCell;
-class Path
-{
- friend class Pathfinder;
-public:
- void rva00265596(const Coord3D *,PathfindLayerEnum,Int);
-	Path();										///< matched 0x00363DC8
-	// 0x00364551 / 0x00365E98 (unrowed): Zero Hour's optimize step with a
-	// BFME facing hint, and a final pass toward a direction (unnamed).
-	void rva00364551(Object *obj, LocomotorSurfaceTypeMask surfaces, Bool blocked, const float *facing);
-	void rva00365E98(Object *obj, const Coord3D *dir, LocomotorSurfaceTypeMask surfaces, Bool blocked);
-private:
-	void *word0;PathNode *firstNode;Int word8;char wordC;Bool blockedByAlly;char padE[0x28-0xe];
-};
-
-struct Rva002E8C23Pair { Int x,y; };
-int __cdecl Rva002E8C4DCall(int,unsigned char,Rva002E8C23Pair *,int);
-bool Rva002EBBFBIsOdd(void *);
-struct ICoord2D;
-ICoord2D *Rva002E7875WorldToCell(ICoord2D *,bool,const Coord3D *);
-extern "C" double __cdecl fabs(double);
-struct PathfinderCostCellInfo { Int x,y; };
-struct PathfinderGroundInfo { PathfinderCostCellInfo position;Int parent;Waypoint *parentWaypoint;unsigned short totalCost,costSoFar;char pad14[0x2c-0x14];unsigned int flags; };
-struct In002E6BA1 { Int x,y; };
-class MixFileInfoBuffer;
-extern Int TheMixFileInfoPool;
-void Rva0052DBCDInit();
-MixFileInfoBuffer *Rva002E8B7AInit(MixFileInfoBuffer **,Int,In002E6BA1 *);
-class Rva002E6AF3 { public: Int get() const; };
-class Rva002E6B06 { public: Int rva002E6B06(); };
-class Rva002E6C79;
-struct Rva002E8BCFSrc;
-class Rva002E8BCF { public: Rva002E8BCF(const Rva002E8BCFSrc *,Bool,Int,Bool); Int surfaces;Bool field4,field5;Int maxLayer;Bool fieldC; };
-class Rva002E6DC4 { public: Bool rva002E6DC4(void *,void *); };
-
-void ji_00629952();
-struct Rva002F35AFCell;
-class Rva002E6C79
-{
-public:
-	Int rva002E6C79();
-	Rva002F35AFCell *m_00;
-	Rva002E6C79 *next() { return (Rva002E6C79 *)rva002E6C79(); }
-};
-class PathfindCell
-{
- friend class Pathfinder;
-public:
-	// The packed cell word at +0x0C: type in bits 0-3, layer in bits 4-9.
-	enum CellType
-	{
-		CELL_CLEAR = 0,
-		CELL_OBSTACLE = 4,
-		CELL_IMPASSABLE = 5
-	};
-	enum { LAYER_GROUND = 1 };
-
- Bool StartPathfind(Int);void ReleaseInfo();void SetParentCell(Int *);void PutOnClosedList(MixFileInfoBuffer **);Int CalcCostSoFar(const Rva002E6C79 *);
- __forceinline void allocateInfo(In002E6BA1 *pos) {
-  if(!m_pathInfo) { if(!TheMixFileInfoPool)Rva0052DBCDInit();m_pathInfo=(PathfinderGroundInfo *)Rva002E8B7AInit((MixFileInfoBuffer **)&TheMixFileInfoPool,(Int)this,pos); }
-  else m_pathInfo->parentWaypoint=0;
- }
-	void rva0052DAE9(Bool open);
-	unsigned short quickZone()const {return (unsigned short)word8;}
- Int getXIndex() const { return m_pathInfo->position.x; }
-	Int getYIndex() const { return m_pathInfo->position.y; }
-	// 0x0052DD75 (unrowed): an angle for the cell from a facing, a count and
-	// a weight (unnamed).
-	float rva0052DD75(float facing, Int count, float weight);
-	CellType getType() const { return (CellType)(m_info & 0xf); }
-	Int getLayer() const { return (m_info & 0x3f0) >> 4; }
- PathfindCell *getParentCell(){return (PathfindCell *)((Rva002E6C79 *)this)->rva002E6C79();}
- Waypoint *getParentWaypoint()const {return m_pathInfo?m_pathInfo->parentWaypoint:0;}
-
-private:
-	PathfinderGroundInfo *m_pathInfo;
-	Waypoint *waypoint;Int word8;
-	unsigned int m_info;			// +0x0C
-};
-
-// A locomotor's legal surfaces live in its template (+0x04) at +0x14.
-struct LocomotorTemplate
-{
-	char m_pad00[0x14];
-	LocomotorSurfaceTypeMask m_surfaces;	// +0x14
-};
-
-class Locomotor
-{
-public:
-	LocomotorSurfaceTypeMask getLegalSurfaces() const { return m_template->m_surfaces; }
-
-private:
-	void *m_vtbl;
-	const LocomotorTemplate *m_template;	// +0x04
-};
-
-// The surfaces each cell type allows, indexed by type (VA 0x00DBD33C,
-// defined in Rva002E6DC4Check.cpp).
-extern unsigned int g_00DBD33C[16];
-
-extern "C" __declspec(dllimport) double __cdecl floor(double);
-float Sin(float x);
-float Cos(float x);
-
-// REAL_TO_INT_FLOOR: the IAT floor then an x87 round-to-integer store.
-static __forceinline Int realToIntFloor(float f)
-{
-	float floored = (float)floor((double)f);
-	long i;
-	__asm {
-		fld [floored]
-		fistp [i]
+	else {
+		*out = *position;
+		return true;
 	}
 	return i;
 }
