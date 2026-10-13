@@ -24,6 +24,7 @@ public:
 private:
 	unsigned int m_layout[3];
 };
+class Rva005CBB4A { public: void rva005CBB4A(void *map, int point, int mode); }; // rowed 0x005CBB4A
 
 class Rva00574959
 {
@@ -43,6 +44,6 @@ int Rva00574959::rva00574959(int arg, int unused)
 {
 	m_58 = 1;
 	Rva00574815 local((int)this);
-	local.rva005CBB4A(m_1c, arg, m_44);
+	((Rva005CBB4A*)&local)->rva005CBB4A((void*)m_1c, arg, m_44);
 	return 0;
 }

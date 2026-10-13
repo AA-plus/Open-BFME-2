@@ -15,6 +15,7 @@ class GameMessage { public: const GameMessageArgumentType*getArgument(int)const;
 class Rva0005CB9F3DwordImmSetter { public:void apply(); };
 class Rva005E5A38 { public:Rva005E5A38(int);__forceinline ~Rva005E5A38(){((Rva0005CB9F3DwordImmSetter*)this)->apply();} private:unsigned storage[3]; };
 class Rva00574815 { public:void rva005CBB4A(int,int,int); };
+class Rva005CBB4A { public:void rva005CBB4A(void*,int,int); }; // rowed 0x005CBB4A
 class Callback { public:virtual void s00();virtual void s01();virtual void s02();virtual void s03();virtual void s04(); };
 struct Context { char pad[0x1c];int value; };
 class Rva000AD6F4 { public:void clear(); };
@@ -25,14 +26,14 @@ int Rva005E5A8B::rva005E5A8B(const IRegion2D&r,int modifiers){
  if(r.hi.x-r.lo.x<=0 && r.hi.y-r.lo.y<=0 && enabled){
  Rva005E5A38 selector((int)this);
  ICoord2D point;point.x=r.lo.x;point.y=r.lo.y;
- ((Rva00574815*)&selector)->rva005CBB4A(viewer,(int)&point,context->value);
+ ((Rva005CBB4A*)&selector)->rva005CBB4A((void*)viewer,(int)&point,context->value);
  Callback* picked=callback;
  if(picked){picked->s04();return 1;}
  }return 0;
 }
 int Rva005E5A8B::rva005E5B20(const ICoord2D&point,int modifiers){
  dirty=true;
- if(enabled){Rva005E5A38 selector((int)this);((Rva00574815*)&selector)->rva005CBB4A(viewer,(int)&point,context->value);}
+ if(enabled){Rva005E5A38 selector((int)this);((Rva005CBB4A*)&selector)->rva005CBB4A((void*)viewer,(int)&point,context->value);}
  else ((Rva000AD6F4*)&callback)->clear();
  return 0;
 }

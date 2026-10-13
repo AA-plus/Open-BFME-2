@@ -28,6 +28,7 @@ class Rva00574815
 public:
 	void rva005CBB4A(int first, int second, int third);
 };
+class Rva005CBB4A { public: void rva005CBB4A(void *map, int point, int mode); }; // rowed 0x005CBB4A
 class Rva005ED28AAddDwordField
 {
 public:
@@ -56,5 +57,5 @@ void Rva005757A5::rva005757A5(int arg)
 {
 	Rva005756B6 local((int)this);
 	Rva005757A5ResultView *result = (Rva005757A5ResultView *)m_18->m_04->get();
-	((Rva00574815 *)&local)->rva005CBB4A(m_1c, arg, result->m_1c);
+	((Rva005CBB4A *)&local)->rva005CBB4A((void*)m_1c, arg, result->m_1c);
 }
