@@ -136,7 +136,9 @@ int LuaScriptEngine::HordeBroadcastEventToMembers(lua_State *state)
 	ContainmentList members;
 	horde->getMemberIDs(&members);
 	ContainmentList::iterator end = members.end();
-	for (ContainmentList::iterator it = members.begin(); it != end; ++it) {
+	// Compare the public node identities directly, preserving the inlined walk
+	// without emitting this TU's non-retail iterator-comparison COMDAT.
+	for (ContainmentList::iterator it = members.begin(); it._M_node != end._M_node; ++it) {
 		Object *member = (Object *)containmentFirstWord(*it);
 		TheLuaScriptEngine->DispatchEvent((int *)event, member, &eventList);
 	}

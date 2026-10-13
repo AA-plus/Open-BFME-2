@@ -83,7 +83,9 @@ void AI::rva002FE799(Xfer *xfer)
 			aiData = aiData->m_next;
 		}
 
-		for (_STL::list<AIGroup *>::iterator groupIt = m_groupList.begin(); groupIt != m_groupList.end(); ++groupIt)
+		// Compare the public node identities directly, preserving the inlined walk
+		// without emitting this TU's non-retail iterator-comparison COMDAT.
+		for (_STL::list<AIGroup *>::iterator groupIt = m_groupList.begin(); groupIt._M_node != m_groupList.end()._M_node; ++groupIt)
 		{
 			if (*groupIt)
 			{

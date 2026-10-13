@@ -55,7 +55,9 @@ void HordeTransportContain::rva0047748E()
 {
     Rva0046247DPair outer;
     ((Rva0046247D*)this)->rva0046247D(outer);
-    for(IntList::iterator i=outer.objects->begin();i!=outer.objects->end();++i) {
+    // Compare the public node identities directly, preserving the inlined walk
+    // without emitting this TU's non-retail iterator-comparison COMDAT.
+    for(IntList::iterator i=outer.objects->begin();i._M_node!=outer.objects->end()._M_node;++i) {
         RiderContain *contain=(RiderContain*)((Rva0047A040Base9E0*)((char*)this+0x11D))->rva00588B8A((void*)containmentFirstWord(*i));
         if(!contain)continue;
         Rva0036AE51ListView nested=contain->s108();
