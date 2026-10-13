@@ -17,6 +17,13 @@
 #include <vector>
 #include "ascii_string.h"
 
+// as in Rva0021BC0DFind.cpp: take less<int> inline so no external COMDAT copy
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+bool less<int>::operator()(const int &a, const int &b) const
+{ return a < b; }
+}
+
 class CreateAHeroManager
 {
 public:
@@ -42,9 +49,12 @@ struct CreateAHeroManager::CreateAHeroSubClass
 
 unsigned char CreateAHeroManager::CreateAHeroSubClass::rva0021BC0D(int key, void **out)
 {
-	_STL::map<int, _STL::vector<unsigned int> >::iterator it = m_map.find(key);
+	// the home copy (Rva0021BC0DFind.cpp) sees the same tree as map<int, int>:
+	// view it so this duplicate calls the same _M_find instantiation
+	_STL::map<int, int> &tree = *(_STL::map<int, int> *)&m_map;
+	_STL::map<int, int>::iterator it = tree.find(key);
 	*out = it._M_node;
-	return it._M_node != m_map.end()._M_node;
+	return it._M_node != tree.end()._M_node;
 }
 
 int CreateAHeroManager::CreateAHeroSubClass::GetBlingIndex(int key, const AsciiString &name)
