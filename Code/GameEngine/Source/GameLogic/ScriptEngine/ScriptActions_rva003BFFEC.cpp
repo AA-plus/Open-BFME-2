@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003BFFECDo@@YGXABVAsciiString@@H@Z @0x003BFFEC 97B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// stlport
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BFFECDo@ScriptActions@@QAEXABVAsciiString@@_N@Z @0x003BFFEC 97B
 // Display fullscreen plus trigger via Display virtual 0x114 check, rowed
 // rva002B2466 0x002B2466 with 0 0 1 1, StringBase pin 0x000365F0 temp,
 // Display virtual 0x108 with AsciiString plus 0x40 -1 -1.
@@ -35,7 +37,7 @@ public:
 
 extern Display *TheDisplay;
 
-void __stdcall Rva003BFFECDo(const AsciiString &name, int unused)
+void ScriptActions::Rva003BFFECDo(const AsciiString &name, bool unused)
 {
 	(void)unused;
 	if (TheDisplay->v114())

@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// stlport
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BD062Set@@YGXPAXPBVAsciiString@@E@Z @0x003BD062 102B (dump range 18).
+// ?Rva003BD062Set@ScriptActions@@QAEXPAXPBVAsciiString@@_N@Z @0x003BD062 102B (dump range 18).
 // Template-plus-player-mask loop: resolves the template name through the
 // rowed 0x002D06CA lookup on TheThingFactory, builds the player mask from
 // the struct's +0x10 name through rowed ScriptEngine 0x00357475, then walks
@@ -40,7 +42,7 @@ public:
 	void rva002ACEDF(void *p);	// row ?rva002ACEDF@Rva002ABFA0 (Rva002ABFA0Remove.cpp)
 };
 
-void __stdcall Rva003BD062Set(void *p, const AsciiString *templateName, unsigned char flag)
+void ScriptActions::Rva003BD062Set(void *p, const AsciiString *templateName, bool flag)
 {
 	void *t = (void *)TheThingFactory->findTemplate(*templateName);
 	if (t == 0)

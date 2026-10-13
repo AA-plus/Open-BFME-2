@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
 // stlport
-#include "GameLogic/ScriptActionsBFME2.h"
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
+// stlport
+
 
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
 //
@@ -113,7 +115,7 @@ public:
     virtual void s084();
     virtual void s085();
     virtual void s086();
-    virtual void s087();
+    virtual void s087(const AsciiString &name);
     virtual void s088();
     virtual void s089(int v);
     virtual void s090();
@@ -150,10 +152,10 @@ void ScriptActions::Rva003BB141Notify(const StringBase<char> &key)
 		Rva00DFEA3C->s026(e);
 }
 
-// ?Rva003BB61E@ScriptActions@@QAEXXZ @0x003BB61E 14B free forwarder to virtual slot 0x15C via global 0xDFEDF0 caller 0x003CBBCE
-void ScriptActions::Rva003BB61E()
+// ?Rva003BB61E@ScriptActions@@QAEXABVAsciiString@@@Z @0x003BB61E 14B free forwarder to virtual slot 0x15C via global 0xDFEDF0 caller 0x003CBBCE
+void ScriptActions::Rva003BB61E(const AsciiString &name)
 {
-	Rva00DFEDF0->s087();
+	Rva00DFEDF0->s087(name);
 }
 
 class RadarWindowOverrideSource

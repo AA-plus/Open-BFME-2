@@ -1,5 +1,7 @@
-// cl: /MD
-// ?Rva0042F9DAEmit@@YAXXZ, retail 0x0042F9DA, 39 bytes.
+// cl: -O1 -arch:SSE -G7 -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva0042F9DAEmit@ScriptActions@@QAEXXZ, retail 0x0042F9DA, 39 bytes.
 // Free emit of MSG 0x3EC with bool true then tail to InGameUI slot 0x110.
 // Evidence: globals MessageStreamSubsystem TheInGameUI; rowed appendBooleanArgument 0x0030F963; slots 0x48 0x110 per ControlBarToggle0031AFDE precedent.
 class GameMessage
@@ -109,7 +111,7 @@ public:
 extern class MessageStream *TheMessageStream;
 extern InGameUI *TheInGameUI;
 
-void Rva0042F9DAEmit()
+void ScriptActions::Rva0042F9DAEmit()
 {
 	GameMessage *msg = TheMessageStream->appendType(0x3EC);
 	msg->appendBooleanArgument(true);

@@ -23,6 +23,10 @@ enum ObjectID;
 class ScriptActions : public SubsystemInterface
 {
 public:
+    void rva003BD34D(int);
+    void rva003BD391(int);
+    void Rva0042F9DAEmit();
+
     ScriptActions();
     virtual ~ScriptActions();
     virtual void init();
@@ -40,7 +44,7 @@ public:
     void Rva003C90B1Exit(Parameter *);
     void Rva003BD412Set(unsigned char);
     void Rva003BB141Notify(StringBase<char> const &);
-    void Rva003BB61E(void);
+    void Rva003BB61E(const AsciiString &name);
     void Rva003BB7E2(void);
     void Rva003BB7F0(void);
     void Rva003BBF8F(void);
@@ -58,7 +62,7 @@ public:
     void Rva003BF71EDo(AsciiString const &, AsciiString const &);
     void Rva003BF813Do(AsciiString const &, AsciiString const &, AsciiString const &);
     void Rva003BF8B4Hunt(AsciiString const &);
-    void Rva003BFFECDo(AsciiString const &, int);
+    void Rva003BFFECDo(const AsciiString &name, bool unused);
     void Rva003BFC27Do(AsciiString const &);
     void Rva003BFB8CDo(AsciiString const &, int);
     void Rva003BFCBFDo(AsciiString const &, int);
@@ -121,12 +125,12 @@ public:
     void Rva003BCAA1Set(float);
     void Rva003BC830Clear(AsciiString const &);
     void Rva003BC33DDo(Parameter *, float, float, float);
-    void Rva003BCADAForward(void);
+    void Rva003BCADAForward(const AsciiString &a, const AsciiString &b);
     void Rva003BCAE8Forward(void);
     void Rva003BCAF6Do(Parameter *, float, float, float);
     void Rva003BCC94Do(void);
-    void Rva003BCFE7Forward(void);
-    void Rva003BCFF5Forward(void);
+    void Rva003BCFE7Forward(bool value);
+    void Rva003BCFF5Forward(bool value);
     void Rva003BC4FFForward(void);
     void Rva003BC566Forward(void);
     void Rva003BC1A0Forward(void);
@@ -141,7 +145,7 @@ public:
     void Rva003BC4E8Do(int);
     void Rva003BC54FDo(int);
     void Rva003BC524Set(AsciiString const &, float);
-    void Rva003BD003Forward(void);
+    void Rva003BD003Forward(bool value);
     void Rva003C45D4Apply(Parameter *, AsciiString const &);
     void Rva003C4003Apply(Parameter *, AsciiString const &, void *);
     void Rva003C43F3Do(AsciiString const &, AsciiString const &, Object *);
@@ -160,9 +164,9 @@ public:
     void Rva003BC0A7Set(AsciiString const &, int);
     void Rva003BACCA(Parameter *);
     void Rva003C3E75Apply(Parameter *, AsciiString const &, void *);
-    void Rva003BD011Forward(void);
+    void Rva003BD011Forward(bool value);
     void Rva003BD116Set(Parameter *, void *);
-    void Rva003BD01FSet(unsigned char);
+    void Rva003BD01FSet(bool val);
     void Rva003BAD15(AsciiString const &, float, float, AsciiString const &);
     void Rva003C3EC5Apply(Parameter *, AsciiString const &, int);
     void Rva003BA9FA(float, float, float, float);
@@ -209,7 +213,7 @@ public:
     void rva003BD2A6(int);
     void rva003BD32B(int);
     void rva003BD36F(int);
-    void Rva003BD062Set(void *, AsciiString const *, unsigned char);
+    void Rva003BD062Set(void *p, const AsciiString *templateName, bool flag);
     void Rva003BD19CSet(void *, Parameter *);
     void rva003BD3CB(void *, float, int);
     void Rva003BD884Set(Parameter *, AsciiString const *);
@@ -248,7 +252,8 @@ public:
     void Rva003BAF95(float, float, float, float);
     void Rva003BAFE8(Parameter *, float, float, float, float, float);
     void Rva003BB05FSet(int, float, float, float, int);
-    void Rva003BB0C7Set(int, float, int, float, float, float, int);
+    void Rva003BB0C7Set(int a1, float a2, float a3,
+	float a4, float a5, float a6, int a7);
     void Rva003BAAE4(AsciiString const &, float, float, float, float);
     void Rva003BAA46(Parameter *, bool, float);
     void Rva003BAE04(void);

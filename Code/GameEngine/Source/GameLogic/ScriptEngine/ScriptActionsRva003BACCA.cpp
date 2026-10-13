@@ -1,12 +1,14 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
 // stlport
-#include "GameLogic/ScriptActionsBFME2.h"
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
+// stlport
+
 
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
 // ?Rva003BACCA@ScriptActions@@QAEXPAVParameter@@@Z @0x003BACCA 75B: free stdcall Parameter* (unused) doing two TacticalView slot 0x5c calls with 2-float structs from g_00BBB9B0/g_00BBB9B4.
 // Evidence: ret 4 unused arg; movss xmm0 [0xBBB9B0]/[0xBBB9B4]; mov ecx [0xDFEA3C TheTacticalView]; lea edx [ebp-8]; movss [ebp-8]/[ebp-4] xmm0; mov eax [ecx]; push edx; call [eax+0x5c] twice; caller 0x003CAD58 in ScriptActions dispatch.
 
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 
 class AsciiString;
 struct CameraMarker;
@@ -321,7 +323,7 @@ void ScriptActions::Rva003BB05FSet(int a1, float a2, float a3, float a4, int a5)
 // Terrain slot 37 returns the record; only type 6 at +0x60 is accepted.
 // View slot 25 takes that record, the scaled/truncated second argument,
 // literal 1, three scaled floats and the final integer. Argument 3 is unused.
-void ScriptActions::Rva003BB0C7Set(int a1, float a2, int a3,
+void ScriptActions::Rva003BB0C7Set(int a1, float a2, float a3,
 	float a4, float a5, float a6, int a7)
 {
 	Rva003BB0C7Record *record =

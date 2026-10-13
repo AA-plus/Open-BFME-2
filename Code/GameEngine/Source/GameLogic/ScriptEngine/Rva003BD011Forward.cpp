@@ -1,5 +1,8 @@
+// cl: -O1 -arch:SSE -G7 /I. /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// stlport
+#include "Code/GameEngine/Include/GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BD011Forward@@YAXXZ @0x003BD011 14B: script forwards to TheTacticalView slot 0x258.
+// ?Rva003BD011Forward@ScriptActions@@QAEX_N@Z @0x003BD011 14B: script forwards to TheTacticalView slot 0x258.
 // Evidence: mov ecx,[0xDFEA3C]=TheTacticalView mov eax,[ecx] jmp [eax+0x258]; caller 0x003CE6B6; sibling Rva003BD003Forward slot 0x254 same tail shape.
 class TacticalView
 {
@@ -154,11 +157,11 @@ public:
 	virtual void s147();
 	virtual void s148();
 	virtual void s149();
-	virtual void s150();
+	virtual void s150(bool value);
 };
 extern TacticalView *TheTacticalView;
 
-void __cdecl Rva003BD011Forward()
+void ScriptActions::Rva003BD011Forward(bool value)
 {
-	TheTacticalView->s150();
+	TheTacticalView->s150(value);
 }
