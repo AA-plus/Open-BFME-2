@@ -18,7 +18,13 @@ public:
 class RefCountClass
 {
 public:
-	virtual ~RefCountClass();
+	// Match the retail base constructor and donor virtual order. Its inline
+	// copies initialize one reference; Delete_This occupies slot zero.
+	RefCountClass() : NumRefs(1) {}
+	virtual void Delete_This();
+protected:
+	virtual ~RefCountClass() {}
+private:
 	int NumRefs;
 };
 
@@ -54,7 +60,6 @@ public:
 // keeps the strong copy.
 inline TextureMapperClass::TextureMapperClass(const TextureMapperClass &src)
 {
-	NumRefs = 1;
 	Stage = src.Stage;
 }
 
