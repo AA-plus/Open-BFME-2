@@ -62,6 +62,7 @@ class Thing
 {
 public:
 	Drawable *getDrawable() const;
+	void setOrientation(float);
 };
 class Player
 {
@@ -236,10 +237,12 @@ enum Relationship
 	NEUTRAL = 1,
 	ALLIES = 2
 };
+class Rva00373EC6;
 class Object : public Thing
 {
 	friend class SpecialAbilityUpdate;
 public:
+	Rva00373EC6 *rva0028F4BC();
 	Player *getControllingPlayer() const;
 	bool isLocallyControlled() const;
 	Relationship getRelationship(const Object *that) const;
@@ -273,9 +276,12 @@ public:
 	unsigned char *m_base4; // +0x04 status base (bytes +0x108/+0x114 read)
 	unsigned char m_pad008[0x38 - 8];
 	Coord3D m_position; // +0x38
-	unsigned char m_pad044[0x74 - 0x44];
+	float m_orientation44; // +0x44: native orientation used by the packing flips
+	unsigned char m_pad048[0x74 - 0x48];
 	int m_id; // +0x74
-	unsigned char m_pad078[0x10C - 0x78];
+	unsigned char m_pad078[8];
+	int m_captor80; // +0x80: native captor ID
+	unsigned char m_pad084[0x10C - 0x84];
 	ModelConditionFlags m_modelConditionFlags; // +0x10C
 	unsigned char m_pad158[0x250 - 0x158];
 	ContainModuleInterface *m_contain; // +0x250
@@ -329,6 +335,12 @@ public:
 	unsigned char m_pad78[0x84 - 0x78];
 	unsigned int m_packTime; // +0x84
 	unsigned int m_unpackTime; // +0x88
+	unsigned int m_preTriggerUnstealthFrames; // +0x8C
+	unsigned char m_pad090[0xAC - 0x90];
+	bool m_flipAfterPacking; // +0xAC
+	bool m_flipAfterUnpacking; // +0xAD
+	char m_pad0AE[2];
+	bool m_loseStealth; // +0xB0
 };
 float GetGameLogicRandomValueReal(float lo, float hi, char *file, int line);
 typedef unsigned int AudioHandle;
@@ -391,6 +403,8 @@ __forceinline void Object::clearAndSetModelConditionState(ModelConditionFlagType
 }
 class SpecialAbilityUpdate : public BehaviorModule
 {
+protected:
+	bool handlePackingProcessing();
 public:
 	void rva0044EE07();
 	void rva0044EE80();
@@ -790,4 +804,58 @@ void SpecialAbilityUpdate::startPreparation()
 	BfmeAudioEventPrefix136 sound(d->m_prepSoundLoop, 0);
 	((Rva002D9531 *)&sound)->rva002D9531(m_object->m_id);
 	m_prepSoundLoop = TheAudio->addAudioEvent(&sound);
+}
+
+
+// ZH SpecialAbilityUpdate::handlePackingProcessing supplies the transition
+// behavior and method name. Native 44F0B3..44F28E independently establishes
+// the eight-bit clear mask, target-capture handling and expanded stealth call.
+// The native finish callback is virtual slot 19; use its call-site ABI view.
+class Rva00265254 {public:Rva00265254(unsigned,unsigned,unsigned,unsigned,unsigned,unsigned,unsigned,unsigned,unsigned);unsigned bits[19];};
+class Rva001E431E {public:void rva001E431E(const int*);};
+class StealthUpdate {public:void markAsDetected(unsigned,int,Object*,bool);};
+class Rva00439E0C {public:bool rva00439E0C(Object*,Object*,int,int);};
+struct SpecialGameLogicView {char opaque[0x178];Rva00439E0C *invisibility;};
+template<int N> class SpecialPackingSlots:public SpecialPackingSlots<N-1> {public:virtual void gap(char(*)[N]);};
+template<> class SpecialPackingSlots<0>{};
+class SpecialPackingFinishView:public SpecialPackingSlots<19> {public:virtual void finish();};
+bool SpecialAbilityUpdate::handlePackingProcessing()
+{
+ const SpecialAbilityUpdateModuleData *data=(const SpecialAbilityUpdateModuleData*)m_moduleData;
+ if(m_animFrames>0) {
+  --m_animFrames;
+  if(m_animFrames==0) {
+   Object *owner=getObject();
+   ((Rva001E42F2*)owner)->rva001E42F2((const int*)&Rva00265254(0,0x60,0x61,0x62,0x63,0x249,0x24a,0x24b,0x5e));
+   if(m_packingState==2) {
+    if(data->m_flipAfterUnpacking)getObject()->setOrientation(getObject()->m_orientation44+3.14159265358979323846f);
+    m_packingState=4;
+   } else if(m_packingState==1) {
+    if(data->m_flipAfterPacking)getObject()->setOrientation(getObject()->m_orientation44+3.14159265358979323846f);
+    m_packingState=3;
+    ((SpecialPackingFinishView*)this)->finish();return true;
+   }
+   if(data->m_specialPowerTemplate->friend_getFinalOverride()->m_val1C==0x1d) {
+    ObjectID saved=m_targetID;
+    Object *target=TheGameLogic->findObjectByID(saved);
+    if(!target){((SpecialPackingFinishView*)this)->finish();return true;}
+    if(target->m_captor80 && target->m_captor80!=getObject()->m_id){((SpecialPackingFinishView*)this)->finish();return true;}
+    Object *source=getObject();
+    Object *same=TheGameLogic->findObjectByID(saved);
+    ((Rva001E42F2*)target)->rva001E42F2((const int*)&Rva0028F59A(0,0x6f));
+    target->m_captor80=getObject()->m_id;
+    if(source->getTeam()!=same->getTeam())((Rva001E42F2*)target)->rva001E42F2((const int*)&Rva0028F59A(0,0x6e));
+    ((Rva001E431E*)target)->rva001E431E((const int*)&Rva0028F59A(0,0x6e));
+    ((Rva001E431E*)source)->rva001E431E((const int*)&Rva0028F59A(0,0x70));
+   }
+   return false;
+  }
+  if(data->m_loseStealth && m_animFrames<data->m_preTriggerUnstealthFrames) {
+   StealthUpdate *stealth=(StealthUpdate*)getObject()->rva0028F4BC();
+   if(stealth)stealth->markAsDetected(0,1,0,true);
+   ((SpecialGameLogicView*)TheGameLogic)->invisibility->rva00439E0C(getObject(),0,0,1);
+  }
+  return true;
+ }
+ return false;
 }
