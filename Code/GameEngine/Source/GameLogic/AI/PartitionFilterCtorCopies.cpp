@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /GX- /MD /DNDEBUG
+// cl: /O1 /G7 /arch:SSE /GX /MD /DNDEBUG
 // Out-of-line copies of BFME2 partition-filter constructors. Each stores the
 // base's zero next link (+0x04), the filter's vftable and its members, as the
 // filters AIClosestObjectQueries.cpp, AIAreaEnemySearch.cpp,
