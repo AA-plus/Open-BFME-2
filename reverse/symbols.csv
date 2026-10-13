@@ -15458,7 +15458,6 @@ ___CxxFrameHandler,0x00629182,callee of __ehhandler$??1Rva005813E@@UAE@XZ
 ?rva00100568@?$SimpleDynVecClass@VVector3@@@@QAEXXZ,0x00100568,callee of ?rva001006f8@?$SimpleDynVecClass@VVector3@@@@QBEXABURva001006F8FrustumView@@AAV1@@Z
 ?Rva002D56C3@@YA?AVAsciiString@@ABURva005D2F96Base24@@@Z,0x002D56C3,address-derived cdecl returning AsciiString from a 24-byte concat-node view; target calls push the node address and hidden result buffer; body/call-site support the ABI but not original identity
 ?newTemplate@ParticleSystemManager@@QAEPAVParticleSystemTemplate@@ABVAsciiString@@@Z,0x001FC25A,callee of ?parseParticleSystemDefinition@INI@@SAXPAV1@@Z
-?Rva000754DEInit@@YAXXZ,0x000754DE,direct no-arg call from standalone 0x00077F80 at +0xE; address-derived callee identity; prior bank documents render-target path
 ?Rva00077C19Load@@YAJPBDPAI@Z,0x00077C19,direct call from standalone 0x00077F80 at +0x10B; target pushes path and output handle; address-derived callee identity
 ?rva0052A765@Rva0052A765Owner@@QAEXXZ,0x0052A765,callee of ?rva002D4240@RadarWindowOverrideSource@@QAEX_N@Z
 ??$__copy_ptrs@PBURva002821CFElem@@PAU1@@_STL@@YAPAURva002821CFElem@@PBU1@0PAU1@ABU__false_type@0@@Z,0x00281AB7,erase copy
