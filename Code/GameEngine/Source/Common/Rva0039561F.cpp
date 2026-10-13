@@ -2,7 +2,7 @@
 //
 // ?rva0039561F@Rva0039561F@@QAEHPAVThingTemplate@@@Z @0x0039561F (93B).
 // Guarded lookup storing unsigned float: controlling player of m_obj8 must
-// exist, then rowed rva0033A69A via pin 0x0033A69A plus rowed rva003B0CB3
+// exist, then rowed rva0033A69A via pin 0x0033A69A plus rowed withdraw
 // 0x003B0CB3 drive the value; stores (float)(unsigned)v to +0x4c (2^32 fadd
 // for negative) and returns v. Caller 0x00399CD2. Prev/next /O1.
 class Player;
@@ -22,7 +22,7 @@ class Rva0039B795;
 class Rva003B0D7C
 {
 public:
-	unsigned int rva003B0CB3(unsigned int v, Rva0039B795 *r, bool b);
+	unsigned int withdraw(unsigned int v, Rva0039B795 *r, bool b);
 };
 
 class Player
@@ -52,7 +52,7 @@ int Rva0039561F::rva0039561F(ThingTemplate *t)
 	if (pl == 0)
 		return 0;
 	int v = t->rva0033A69A((const class Player *)pl, 0, -1);
-	((Rva003B0D7C *)((char *)pl + 0x90))->rva003B0CB3(v, (Rva0039B795 *)((char *)pl + 0x3bc), true);
+	((Rva003B0D7C *)((char *)pl + 0x90))->withdraw(v, (Rva0039B795 *)((char *)pl + 0x3bc), true);
 	m_4c = (float)(unsigned int)v;
 	return v;
 }

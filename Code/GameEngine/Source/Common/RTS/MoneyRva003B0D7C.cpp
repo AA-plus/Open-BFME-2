@@ -2,7 +2,7 @@
 // ?rva003B0D7C@Rva003B0D7C@@QAEXHPAVRva0039B7AD@@_N@Z @0x003B0D7C 188B
 // Unlock lane: Money at Player+0x90 subobject, (amt,0,1) thiscall from script 0x003BC048; audio via TheAudio slots 0x138/0x64 with BfmeAudioEventPrefix136(ref+0x38,0)+set(+8)+addAudioEvent; then +4+=amt, g_00E032F8+8 cond, arg2 cond add.
 // Evidence: caller 0x003BC048 pushes (amt,0,1) with this=Player+0x90; callees ctor 0x002D97D6 dtor 0x002D9A43 set 0x0033F15D rva0039B7AD 0x0039B7AD rowed; TheAudio 0x009FE6E8 ThePlayerList 0x009FEEE8; neighbours HackInternetAIUpdate/Rva003B0E38Xfer.
-// ?rva003B0CB3@Rva003B0D7C@@QAEIIPAVRva0039B795@@_N@Z @0x003B0CB3 201B
+// ?withdraw@Rva003B0D7C@@QAEIIPAVRva0039B795@@_N@Z @0x003B0CB3 201B
 // The withdraw twin directly before it, shaped like Zero Hour's
 // Money::withdraw: clamp the request to the balance (+4, unsigned, cmova),
 // bail on zero, play the misc-audio sound at +0x3C (deposit uses +0x38) when
@@ -137,7 +137,7 @@ public:
 class Rva003B0D7C
 {
 public:
-	unsigned int rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag);
+	unsigned int withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag);
 	void rva003B0D7C(int amount, Rva0039B7AD *arg2, bool flag);
 private:
 	char m_pad00[4];
@@ -145,7 +145,7 @@ private:
 	int m_val08;
 };
 
-unsigned int Rva003B0D7C::rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag)
+unsigned int Rva003B0D7C::withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag)
 {
 	if (amount > (unsigned int)m_val04)
 		amount = m_val04;

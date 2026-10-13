@@ -360,7 +360,7 @@ class Rva0039B7AD;
 class Rva003B0D7C
 {
 public:
-	UnsignedInt rva003B0CB3(UnsignedInt amount, Rva0039B795 *tracker, bool flag); // withdraw
+	UnsignedInt withdraw(UnsignedInt amount, Rva0039B795 *tracker, bool flag); // withdraw
 	void rva003B0D7C(Int amount, Rva0039B7AD *tracker, bool flag); // deposit
 
 private:
@@ -1306,7 +1306,7 @@ Bool ProductionUpdate::queueUpgrade( const UpgradeTemplate *upgrade )
 
 	// take the cost for the build away from the player
 	production->m_cost = upgrade->rva0026EF50( player, getObject() );
-	player->getMoney()->rva003B0CB3( production->m_cost, &player->m_tracker, true );
+	player->getMoney()->withdraw( production->m_cost, &player->m_tracker, true );
 
 	Object *obj = getObject();
 	Module *castle = CastleBehavior::rva000395708( obj );

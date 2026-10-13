@@ -22,7 +22,7 @@ class Rva003B0D7C
 {
 public:
 	UnsignedInt countMoney() const { return m_money; }
-	UnsignedInt rva003B0CB3(UnsignedInt amount, Rva0039B795 *arg2, bool flag);	// 0x003B0CB3
+	UnsignedInt withdraw(UnsignedInt amount, Rva0039B795 *arg2, bool flag);	// 0x003B0CB3
 	void rva003B0D7C(Int amount, Rva0039B7AD *arg2, bool flag);			// 0x003B0D7C
 
 	void *m_vtbl;
@@ -86,7 +86,7 @@ void AIMoneyLender::update()
 		return;
 	if (amount > m_remaining)
 		amount = m_remaining;
-	lender->m_money.rva003B0CB3(amount, (Rva0039B795 *)&lender->m_moneyArg, true);
+	lender->m_money.withdraw(amount, (Rva0039B795 *)&lender->m_moneyArg, true);
 	borrower->m_money.rva003B0D7C(amount, (Rva0039B7AD *)&borrower->m_moneyArg, true);
 	m_remaining -= amount;
 	if (m_remaining == 0)

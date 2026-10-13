@@ -22,7 +22,7 @@ class Rva0039B7AD;
 class Rva003B0D7C
 {
 public:
-	unsigned int rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag);
+	unsigned int withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag);
 	void rva003B0D7C(int amount, Rva0039B7AD *arg2, bool flag);
 public:
 	char m_pad00[4];
@@ -44,7 +44,7 @@ void __stdcall Rva003BC048Set(const AsciiString &name, int amount)
 		Rva003B0D7C *money = (Rva003B0D7C *)((char *)player + 0x90);
 		if (money == 0)
 			continue;
-		money->rva003B0CB3(money->m_val04, 0, true);
+		money->withdraw(money->m_val04, 0, true);
 		money->rva003B0D7C(amount, 0, true);
 	} while (mask != 0);
 }

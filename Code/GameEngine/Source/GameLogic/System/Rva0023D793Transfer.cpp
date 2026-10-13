@@ -30,7 +30,7 @@ public:
 class Rva003B0D7C
 {
 public:
-	unsigned int rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag);
+	unsigned int withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag);
 	void rva003B0D7C(int amount, Rva0039B7AD *arg2, bool flag);
 public:
 	char m_pad00[4];
@@ -90,7 +90,7 @@ void GameLogic::CallPlayerGiveMoney(int a1, int a2, int a3)
 	unsigned int balSlot = m1->m_val04;
 	unsigned int *pmin = (balSlot < reqSlot) ? &balSlot : &reqSlot;
 	Rva0039B795 *t1 = (Rva0039B795 *)p1->m_track;
-	unsigned int got = m1->rva003B0CB3(*pmin, t1, true);
+	unsigned int got = m1->withdraw(*pmin, t1, true);
 	Rva0039B795 *t2 = (Rva0039B795 *)p2->m_track;
 	Rva003B0D7C *m2 = &p2->m_money;
 	m2->rva003B0D7C((int)got, (Rva0039B7AD *)t2, true);

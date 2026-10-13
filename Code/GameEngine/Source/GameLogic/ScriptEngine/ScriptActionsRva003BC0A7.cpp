@@ -22,7 +22,7 @@ class Rva0039B7AD;
 class Rva003B0D7C
 {
 public:
-	unsigned int rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag);
+	unsigned int withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag);
 	void rva003B0D7C(int amount, Rva0039B7AD *arg2, bool flag);
 };
 
@@ -42,7 +42,7 @@ void __stdcall Rva003BC0A7Set(const AsciiString &name, int amount)
 		if (money == 0)
 			continue;
 		if (amount < 0)
-			money->rva003B0CB3((unsigned int)-amount, 0, true);
+			money->withdraw((unsigned int)-amount, 0, true);
 		else
 			money->rva003B0D7C(amount, 0, true);
 	} while (mask != 0);

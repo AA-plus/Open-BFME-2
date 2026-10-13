@@ -15,7 +15,7 @@ class Rva0039B795 {};
 class Rva0039B7AD {};
 class Rva003B0D7C { char pad[4];public:
  unsigned balance;
- unsigned int rva003B0CB3(unsigned,Rva0039B795*,bool);
+ unsigned int withdraw(unsigned,Rva0039B795*,bool);
  void rva003B0D7C(int,Rva0039B7AD*,bool);
  unsigned countMoney()const{return balance;}
 };
@@ -196,7 +196,7 @@ void CashHackSpecialPower::doSpecialPowerAtObject(Object *victim,unsigned option
   unsigned desired=((const Rva004C31A8ScienceSelector*)this)->select();
   cash=minCash(desired,cash);
   if(cash>0){
-   targetMoney->rva003B0CB3(cash,victim->getControllingPlayer()->withdrawTracker(),true);
+   targetMoney->withdraw(cash,victim->getControllingPlayer()->withdrawTracker(),true);
    selfMoney->rva003B0D7C(cash,self->getControllingPlayer()->depositTracker(),true);
    UnicodeString moneyString;
    moneyString.format(reinterpret_cast<CashHackTextView*>(TheGameText)->fetch("GUI:AddCash",0),cash);

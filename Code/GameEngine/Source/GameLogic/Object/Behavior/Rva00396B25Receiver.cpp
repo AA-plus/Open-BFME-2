@@ -58,7 +58,7 @@ public:
 class Rva003B0D7C
 {
 public:
-	unsigned int rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag);
+	unsigned int withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag);
 };
 
 class MapHolder
@@ -102,6 +102,6 @@ void Rva00396B25::rva00396B25()
 	if (it == ((_STL::map<int, AmountAt18> *)&holder->m_map68)->end())
 		return;
 	int amount = it->second.m_amount;
-	((Rva003B0D7C *)((char *)player + 0x90))->rva003B0CB3((unsigned int)amount, (Rva0039B795 *)((char *)player + 0x3BC), true);
+	((Rva003B0D7C *)((char *)player + 0x90))->withdraw((unsigned int)amount, (Rva0039B795 *)((char *)player + 0x3BC), true);
 	m_value4C = (float)(unsigned int)amount;
 }

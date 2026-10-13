@@ -46,7 +46,7 @@ public:
 class Rva003B0D7C
 {
 public:
-	unsigned int rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag);
+	unsigned int withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag);
 	void rva003B0D7C(int amount, Rva0039B7AD *arg2, bool flag);
 private:
 	char m_pad00[4];
@@ -102,7 +102,7 @@ void Made002CCB67::rva0050B62B(const Rva0050B62BArg *arg, Object *other)
 	Player *victim = other->getControllingPlayer();
 	if (!victim)
 		return;
-	unsigned int taken = victim->m_money90.rva003B0CB3((unsigned int)m_128, &victim->m_tracker, true);
+	unsigned int taken = victim->m_money90.withdraw((unsigned int)m_128, &victim->m_tracker, true);
 	float amount = (float)taken;
 	thief->m_money90.rva003B0D7C((int)amount, (Rva0039B7AD *)&thief->m_tracker, true);
 }

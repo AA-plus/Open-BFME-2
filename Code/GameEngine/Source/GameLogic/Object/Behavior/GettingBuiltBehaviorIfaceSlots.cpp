@@ -22,7 +22,7 @@ class Rva0039B7AD;
 class Rva003B0D7C
 {
 public:
-	unsigned int rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag);
+	unsigned int withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag);
 	void rva003B0D7C(int amount, Rva0039B7AD *arg2, bool flag);
 };
 
@@ -618,10 +618,10 @@ bool GettingBuiltBehavior::rva004533B2()
 // ?rva0045318B@GettingBuiltBehavior@@QAEXXZ @0x0045318B 89B
 // __thiscall ceil-and-credit: if m_object and its controlling player exist,
 // REAL_TO_INT_CEIL slot 12 (+0x30) of the +0x20 subobject for the player into
-// Money at Player+0x90 via rowed rva003B0CB3 and store to m_38. Gap between
+// Money at Player+0x90 via rowed withdraw and store to m_38. Gap between
 // slot 7 0x0045314E and slot 22 0x004531E4; mirrors their ceil shape.
 // Evidence: neighbours prove GettingBuiltBehavior owner (+0x08/+0x38/+0x20);
-// callee rows getControllingPlayer 0x0028AFA9 plus rva003B0CB3 0x003B0CB3
+// callee rows getControllingPlayer 0x0028AFA9 plus withdraw 0x003B0CB3
 // plus ceil import; caller 0x004536B5.
 void GettingBuiltBehavior::rva0045318B()
 {
@@ -635,7 +635,7 @@ void GettingBuiltBehavior::rva0045318B()
 	int count = REAL_TO_INT_CEIL(iface->v12(player));
 	m_38 = count;
 	Rva003B0D7C *money = (Rva003B0D7C *)((char *)player + 0x90);
-	money->rva003B0CB3((unsigned int)count, (Rva0039B795 *)((char *)player + 0x3BC), true);
+	money->withdraw((unsigned int)count, (Rva0039B795 *)((char *)player + 0x3BC), true);
 }
 
 // Native 4541AB..45427E returns AL even though the existing primary-slot

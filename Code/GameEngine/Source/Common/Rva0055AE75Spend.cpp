@@ -1,6 +1,6 @@
 // cl: /DNDEBUG /MD
 // ?doCanMake@AIBuildable@@QAEHPAVPlayer@@@Z @0x0055AE75 97B unlock lane spend via RTS map Money virtual.
-// Evidence: mov ecx g_00DFEEF8 call rowed rva002A8F24 0x002A8F24 then flag +0x21 gated rowed Money rva003B0D7C 0x003B0D7C and rva003B0CB3 0x003B0CB3 on Player+0x90 plus virtual slot 0x40; caller 0x004ECC85.
+// Evidence: mov ecx g_00DFEEF8 call rowed rva002A8F24 0x002A8F24 then flag +0x21 gated rowed Money rva003B0D7C 0x003B0D7C and withdraw 0x003B0CB3 on Player+0x90 plus virtual slot 0x40; caller 0x004ECC85.
 class Player;
 class Rva0039B7AD;
 class Rva0039B795;
@@ -8,7 +8,7 @@ class Rva0039B795;
 class Rva003B0D7C
 {
 public:
-    unsigned int rva003B0CB3(unsigned int amount, Rva0039B795 *arg2, bool flag);
+    unsigned int withdraw(unsigned int amount, Rva0039B795 *arg2, bool flag);
     void rva003B0D7C(int amount, Rva0039B7AD *arg2, bool flag);
 };
 
@@ -64,7 +64,7 @@ int AIBuildable::doCanMake(Player *player)
     if (m_21)
     {
         int amount = res->m_0C->m_14;
-        ((PlayerFull *)player)->m_money.rva003B0CB3((unsigned int)amount, 0, false);
+        ((PlayerFull *)player)->m_money.withdraw((unsigned int)amount, 0, false);
     }
     return virtRes;
 }

@@ -1761,7 +1761,7 @@ class Rva0039B795 : public Rva0039BAD2
 class Rva003B0D7C
 {
 public:
-	UnsignedInt rva003B0CB3(UnsignedInt amount, Rva0039B795 *stats, Bool flag);
+	UnsignedInt withdraw(UnsignedInt amount, Rva0039B795 *stats, Bool flag);
 };
 
 enum PlayerType
@@ -1834,7 +1834,7 @@ void DozerAIUpdate::createPhantomStructure(const ThingTemplate *what, Player *ow
 	if (m_isRebuild == FALSE)
 	{
 		UnsignedInt cost = what->rva0033A69A(owningPlayer, (Int)getObject(), -1);
-		owningPlayer->getMoney()->rva003B0CB3(cost, owningPlayer->getStats(), true);
+		owningPlayer->getMoney()->withdraw(cost, owningPlayer->getStats(), true);
 		owningPlayer->getStats()->rva0039BAD2((Rva0039BAD2Input *)what, cost);
 		obj->m_buildCost = (Real)cost;
 	}

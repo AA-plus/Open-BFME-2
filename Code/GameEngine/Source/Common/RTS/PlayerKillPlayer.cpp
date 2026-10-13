@@ -132,7 +132,7 @@ class Rva003B0D7C {
   public:
     char pad[4];
     unsigned money;
-    unsigned rva003B0CB3(unsigned, Rva0039B795 *, bool);
+    unsigned withdraw(unsigned, Rva0039B795 *, bool);
 };
 class Rva002AB5C7Player {
   public:
@@ -172,7 +172,7 @@ void Rva002AB5C7Player::rva002AB44A() {
                 team->killTeam();
             }
         ThePlayerList->dispatch40();
-        money.rva003B0CB3(money.money, 0, true);
+        money.withdraw(money.money, 0, true);
     }
     if ((unsigned char)((Rva0023C666 *)TheGameLogic)->rva0023C666() && type == 1) {
         dead = false;
