@@ -7,7 +7,7 @@
 extern "C" int vp6_xprintf(void *pbi, int offset, const char *format, ...);
 
 // Retail 0x00BD8800 (76 bytes): the statistics format string.
-extern unsigned char g_rva011426A0[];
+// g_rva011426A0 was the retail address of this format string (RVA 0x007D8800); the literal itself is the source.
 
 struct ShowInfoInstance
 {
@@ -49,7 +49,7 @@ extern "C" void __cdecl vp6_showinfo2(ShowInfoInstance *pbi)
 	vp6_xprintf(
 		pbi,
 		((pbi->yStride + 1) * 3) << 4,
-		(const char *)g_rva011426A0,
+		"F:%d G:%d Q:%d S:%d B: %d W:%d H:%d V:%d Decode:%8d, Blit:%8d, PP:%8d, P:%d",
 		pbi->frameType,
 		pbi->refreshGolden,
 		*pbi->quantizer,
