@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /MD /EHsc /Ireference/shims/bfme2_ascii
 // Native9E1B4E..9E1B9A complete76B. WB15F0DD0 names PopulateIconSlots.
 // Existing42-byte Update shares this one partial class view; no class layout inferred beyond observed fields.
