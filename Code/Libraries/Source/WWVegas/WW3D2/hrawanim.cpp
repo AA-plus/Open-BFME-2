@@ -441,7 +441,9 @@ void HRawAnimClass::Get_Translation(Vector3& trans, int pividx, float frame ) co
 		motion->Z->Get_Vector((int)frame1,&(trans1[2]));
 	}
 
-	Vector3::Lerp( trans0, trans1, ratio, &trans );
+	trans.X = trans0.X + (trans1.X - trans0.X)*ratio;
+	trans.Y = trans0.Y + (trans1.Y - trans0.Y)*ratio;
+	trans.Z = trans0.Z + (trans1.Z - trans0.Z)*ratio;
 }
 
 /*********************************************************************************************** 
@@ -592,7 +594,10 @@ void HRawAnimClass::Get_Transform(Matrix3D& mtx, int pividx, float frame ) const
 	if (motion->Y != NULL) motion->Y->Get_Vector((int)frame1,&(trans1[1]));
 	if (motion->Z != NULL) motion->Z->Get_Vector((int)frame1,&(trans1[2]));
 
-	Vector3::Lerp( trans0, trans1, ratio, (Vector3 *)((char *)&mtx + 16) );
+	Vector3 *translation = (Vector3 *)((char *)&mtx + 16);
+	translation->X = trans0.X + (trans1.X - trans0.X)*ratio;
+	translation->Y = trans0.Y + (trans1.Y - trans0.Y)*ratio;
+	translation->Z = trans0.Z + (trans1.Z - trans0.Z)*ratio;
 }
 
 /***********************************************************************************************
