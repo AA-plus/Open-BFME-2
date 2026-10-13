@@ -1895,11 +1895,6 @@ int Rva004E1392Get(void)
 	return (int)"SetPlayerControlOfArmy";
 }
 
-// ?Rva004EECFCGet@@YAHXZ @ 0x004eecfc (6B): returns 0x00c62ad4.
-// Follows a ret-8 (prev C2-08-00), carried by 1 .rdata vtable slot,
-// no direct callers, no branch sources. Opaque address-derived name.
-
-
 // ?Rva004EF417Get@@YAHXZ @ 0x004ef417 (6B): returns 0x00c62b64.
 // Follows a ret-4 (prev C2-04-00), carried by 1 .rdata vtable slot,
 // no direct callers, no branch sources. Opaque address-derived name.
