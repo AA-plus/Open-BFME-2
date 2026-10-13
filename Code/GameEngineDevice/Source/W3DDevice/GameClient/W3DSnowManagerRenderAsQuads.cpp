@@ -1,50 +1,26 @@
-// ?renderAsQuads@W3DSnowManager@@QAEXAAVRenderInfoClass@@HHHH@Z
-// partial score=0.9759426844089419 date=2026-10-10
-// ?renderAsQuads@W3DSnowManager@@QAEXAAVRenderInfoClass@@HHHH@Z
-// partial score=0.948887652239699 date=2026-10-10
-// ?renderAsQuads@W3DSnowManager@@QAEXAAVRenderInfoClass@@HHHH@Z
-// partial score=0.9427427157488508 date=2026-10-10
-// ?renderAsQuads@W3DSnowManager@@QAEXAAVRenderInfoClass@@HHHH@Z
-// partial score=0.9 date=2026-10-09
-// cl: /I. /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /DWIN32 /D_WINDOWS /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/game/Libraries/Source/WWVegas
-//
-// ?renderAsQuads@W3DSnowManager@@QAEXAAVRenderInfoClass@@HHHH@Z, retail
-// 0x00093CC3 (2403 bytes, RET 0x14 with an EH frame).  Ported from
-// Open-BFME-1's W3DSnowManagerRenderAsQuads.cpp (BFME 1 retail 0x00724A20):
-// world-space quads from the camera's X axis and world up scaled by
-// m_quadSize*0.707f, the terrain transform as world transform, noise-table
-// heights, inlined WWMath::Fast_Sin sway, a grey diffuse from the random
-// gate, one filled tile redrawn once per tile of the m_tiles x m_tiles grid.
-// BFME 2 differences read from retail: the members sit 4 bytes further
-// (vtable), the tile count is +0x44, the index buffer +0x74, the snow
-// ceiling/height traveled +0x90/+0x94, m_totalRendered +0xA0 and the random
-// gate +0xAC; the height wrap is open-coded with floorf instead of fmod and
-// the wrap count drifts every flake by the +0x98/+0x9C origin minus the
-// +0x48/+0x4C wind scaled by m_boxDimensions/m_velocity.
-// NEAR (banked, not landed): 2407 of 2403 bytes, score ~0.95.  Every branch,
-// call, constant and frame object matches retail (frame 0x16C, view -0x178,
-// vb_access -0x148, the loop Matrix4 of the inlined DX8Wrapper::Set_Transform
-// at -0x130 with its rotation stores hoisted ahead of the tile loops, exactly as
-// retail).  Remaining differences are allocation only:
-//  - tile loop: retail folds the terrain X translation into
-//    `cvtsi2ss xmm1,[ebp+0x10]; addss xmm1,[ebp-0x54]` and loads tz early;
-//    this body loads tx into xmm1 and adds the converted offset later (+4 bytes);
-//  - spill-slot permutation: retail -0x18/-0x1C and -0x2C/-0x30 are swapped
-//    here (Fast_Sin temps vs verts/batchSize), and stepY/stepX/Fast_Sin
-//    spills/color/wind sit in a different order at -0x68..-0x84.
-// Shapes tried without gain: tm inside/outside the loops, Adjust_Translation,
-// Set_X/Y_Translation, Get_Translation(&pos), the real BFME 1 dx8wrapper.h
-// header (identical result), wind as Vector2/Vector3, decl-order changes.
-// Dead code inside the inlined Set_Transform switch changes the tie-breaks, so
-// keep it exactly as written here.
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
+// cl: /I. /Ireference/shims/sweep /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /DWIN32 /D_WINDOWS /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/game/Libraries/Source/WWVegas
+/*
+** Copyright 2025 Electronic Arts Inc.
+** SPDX-License-Identifier: GPL-3.0-or-later
+*/
+// BFME1 W3DSnowManagerRenderAsQuads.cpp at cee35b7d8ca077d7255f1c39cb69e9fd9627aa85
+// is the semantic donor. Retail 00093CC3..00094626 proves the 2403-byte body,
+// target member offsets, wind drift, floor-based wrapping and D3D9 buffer ABI.
+// WB 008B06C0 callgraph/algorithm supports the identity; its Vector3 assert label
+// is not a function name. The rowed render caller supplies the existing name.
+// The copied camera matrix is visible in WB. Full target Set_Transform semantics
+// come from the verified Matrix3D overload at 0006A553, including projection.
+// Keep wind together and the other locals in their natural scopes: MSVC 7.1
+// then reproduces retail's stack homes. The box reference fixes SSE scheduling.
+#include "reference/shims/bfme_matrix3d_sse_link/vector4.h"
 #include "matrix3d.h"
-#include "matrix4.h"
+#include "reference/shims/bfme_matrix4_rows_link/matrix4_bfme1_rows_link.h"
 #include "vector2.h"
 #include "vector3.h"
 #include "wwmath.h"
 #include <math.h>
+#include "winbase_shim.h"
+#include <d3d8.h>
 
 #define MAXIMUM_CAMERA_DISTANCE 100000
 #define MODPOW2(x,y) ((x) & (y-1))
@@ -149,9 +125,11 @@ private:
 };
 
 extern unsigned number_of_DX8_calls;
+struct RenderStateStruct { char pad[0x1EC]; Matrix4 world, view; };
 class DX8Wrapper
 {
-	static Matrix4 render_state_world;
+protected:
+	static RenderStateStruct render_state;
 	static unsigned render_state_changed;
 
 public:
@@ -165,29 +143,41 @@ public:
 	static void Draw_Triangles(unsigned int start_index, unsigned int polygon_count,
 		unsigned int min_vertex_index, unsigned int vertex_count);
 
-	struct Dev { virtual long __stdcall SetTransform(int, const Matrix4 *) = 0; };
-	static Dev *D3DDevice;
+	protected:
+	static IDirect3DDevice8 *D3DDevice;
 	static unsigned matrix_changes;
-	static Matrix4 render_state_view;
-	static Dev *_Get_D3D_Device8() { return D3DDevice; }
-	static __forceinline void Set_Transform(int transform, const Matrix3D &m)
+	static float ZNear, ZFar;
+	static Matrix4 ProjectionMatrix, DeviceProjectionMatrix;
+
+	static IDirect3DDevice8 *_Get_D3D_Device8() { return D3DDevice; }
+public:
+	// Inline-only view: do not emit a competing shared transform/assignment body.
+	static __declspec(dllimport) __forceinline void Set_Transform(D3DTRANSFORMSTATETYPE transform, const Matrix3D &m)
 	{
 		Matrix4 m2(m);
-		switch (transform) {
-		case 256:
-			render_state_world = m2.Transpose();
+		switch ((int)transform) {
+		case D3DTS_WORLD:
+			render_state.world = m2.Transpose();
 			render_state_changed |= (unsigned)WORLD_CHANGED;
 			render_state_changed &= ~(unsigned)WORLD_IDENTITY;
 			break;
-		case 2:
-			render_state_view = m2.Transpose();
+		case D3DTS_VIEW:
+			render_state.view = m2.Transpose();
 			render_state_changed |= (unsigned)2;
 			render_state_changed &= ~(unsigned)(1 << 19);
+			break;
+		case D3DTS_PROJECTION:
+			ProjectionMatrix = m2.Transpose();
+			DeviceProjectionMatrix = ProjectionMatrix;
+			ZFar = 0.0f;
+			ZNear = 0.0f;
+			D3DDevice->SetTransform(D3DTS_PROJECTION, (D3DMATRIX *)&DeviceProjectionMatrix);
+			number_of_DX8_calls++;
 			break;
 		default:
 			matrix_changes++;
 			m2 = m2.Transpose();
-			_Get_D3D_Device8()->SetTransform(transform, &m2);
+			_Get_D3D_Device8()->SetTransform(transform, (D3DMATRIX *)&m2);
 			number_of_DX8_calls++;
 			break;
 		}
@@ -248,7 +238,7 @@ void W3DSnowManager::renderAsQuads(RenderInfoClass &rinfo, int cubeOriginX, int 
 	CameraClass &camera = rinfo.Camera;
 	camera.Get_View_Matrix(&view);
 
-	const Matrix3D &ctm = camera.Get_Transform();
+	Matrix3D ctm = camera.Get_Transform();
 	Vector3 right;
 	right.X = ctm[0][0];
 	right.Y = ctm[1][0];
@@ -273,20 +263,20 @@ void W3DSnowManager::renderAsQuads(RenderInfoClass &rinfo, int cubeOriginX, int 
 	} while (++i < 4);
 
 	Matrix3D terrainTm = ((RenderObjClass *)TheTerrainRenderObject)->Get_Transform();
-	DX8Wrapper::Set_Transform(256, terrainTm);
+	DX8Wrapper::Set_Transform(D3DTS_WORLD, terrainTm);
 	DX8Wrapper::Set_Index_Buffer(m_indexBuffer, 0);
 
-	struct TileRenderState{float windX;float windY;unsigned int color;float height;int stepY;int stepX;};TileRenderState walk;
-int tiles = m_tiles;
+	Vector2 wind;
+	int tiles = m_tiles;
 	if (tiles < 1)
 		tiles = 1;
-	walk.stepX = (cubeDimX - cubeOriginX) / tiles;
-	walk.stepY = (cubeDimY - cubeOriginY) / tiles;
+	int stepX = (cubeDimX - cubeOriginX) / tiles;
+	int stepY = (cubeDimY - cubeOriginY) / tiles;
 	int y = cubeOriginY;
 	int cubeOriginXRemainder = cubeOriginX;
-	int endY = cubeOriginY + walk.stepY;
-	int endX = cubeOriginX + walk.stepX;
-	int totalPart = walk.stepY * walk.stepX;
+	int endY = cubeOriginY + stepY;
+	int endX = cubeOriginX + stepX;
+	int totalPart = stepY * stepX;
 	int spacing = (int)m_emitterSpacing;
 	if (spacing < 1)
 		spacing = 1;
@@ -298,11 +288,11 @@ int tiles = m_tiles;
 		gray = (int)(((Rva000932E1 *)this)->rva000932E1() * 255.0f);
 	else
 		gray = 255;
-	walk.color = gray * 0x10101 + 0xFF000000;
+	unsigned int color = gray * 0x10101 + 0xFF000000;
 
 	float windScale = m_boxDimensions / m_velocity;
-	walk.windX = m_windX * windScale;
-	walk.windY = m_windY * windScale;
+	wind.X = m_windX * windScale;
+	wind.Y = m_windY * windScale;
 
 	while (totalPart)
 	{
@@ -311,7 +301,7 @@ int tiles = m_tiles;
 			batchSize = SNOW_BATCH_SIZE;
 
 		int numberInBatch = 0;
-_ReadWriteBarrier();
+/* visibility sweep: declaration removed */
 
 		DynamicVBAccessClass vb_access(2, 5, batchSize * 4, 0);
 		{
@@ -331,17 +321,19 @@ _ReadWriteBarrier();
 						MODPOW2(y + MAXIMUM_CAMERA_DISTANCE, SNOW_NOISE_Y) * SNOW_NOISE_X;
 					if (noiseOffset > SNOW_NOISE_X * SNOW_NOISE_Y)
 						noiseOffset = 0;
-					walk.height = m_startingHeights[noiseOffset] + m_heightTraveled;
-					float cycles = floorf(walk.height / m_boxDimensions);
-					float h0 = m_snowCeiling - (walk.height - m_boxDimensions * cycles);
+					float height = m_startingHeights[noiseOffset] + m_heightTraveled;
+					float cycles = floorf(height / m_boxDimensions);
+					// Preserve the member reference across the wrap calculation.
+					const float &box = m_boxDimensions;
+					float h0 = m_snowCeiling - (height - box * cycles);
 					snowCenter = Vector3((float)x, (float)y, h0);
 					if (m_amplitude > 0.0f)
 					{
 						snowCenter.X += m_amplitude * WWMath::Fast_Sin(h0 * m_frequencyScaleX + (float)x);
 						snowCenter.Y += m_amplitude * WWMath::Fast_Sin(h0 * m_frequencyScaleY + (float)y);
 					}
-					snowCenter.X = m_originX - cycles * walk.windX + snowCenter.X;
-					snowCenter.Y = m_originY - cycles * walk.windY + snowCenter.Y;
+					snowCenter.X = m_originX - cycles * wind.X + snowCenter.X;
+					snowCenter.Y = m_originY - cycles * wind.Y + snowCenter.Y;
 					i = 0;
 					do
 					{
@@ -349,7 +341,7 @@ _ReadWriteBarrier();
 						verts->nx = 0;
 						verts->ny = 0;
 						verts->nz = 0;
-						verts->diffuse = walk.color;
+						verts->diffuse = color;
 						verts->u1 = quad_uvs[i].X;
 						verts->v1 = quad_uvs[i].Y;
 						verts->u2 = 0;
@@ -373,9 +365,9 @@ flush_particles:
 				for (int j = 0; j < tiles; j++)
 				{
 					Vector3 pos = terrainTm.Get_Translation();
-					pos += Vector3((float)(j * walk.stepX), (float)(i * walk.stepY), 0.0f);
+					pos += Vector3((float)(j * stepX), (float)(i * stepY), 0.0f);
 					tm.Set_Translation(pos);
-					DX8Wrapper::Set_Transform(256, tm);
+					DX8Wrapper::Set_Transform(D3DTS_WORLD, tm);
 					DX8Wrapper::Draw_Triangles(0, numberInBatch * 2, 0, numberInBatch * 4);
 				}
 			}
