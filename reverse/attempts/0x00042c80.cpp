@@ -2,7 +2,7 @@
 // partial score=0.94 date=2026-10-13
 // TU-formulation (QuadColor home): 573/573, 16 home-slot diffs (single-expr oolen, convertedColor order fix); packing positional-but-unsatisfiable
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
-#include "../../../../../reference/shims/wwmath/Vector2.h"
+#include "/home/levy/projects/open-bfme2-local-fleet/w6-mo2/reference/shims/wwmath/Vector2.h"
 // BFME2 target body at RVA 0x000428C7. The reference donor identifies this as
 // Render2DClass::Add_Quad(const RectClass &, unsigned long), BFME1 VA 0x006E73C0.
 // Donor revision 6583b3c1ff21db4a561285717028fdafc780b7db; source SHA256
