@@ -19,12 +19,14 @@ struct Rva005B5AC3Box
 };
 
 void Rva005B23D7Wrap(int a, int b, int c);
+class AsciiString;
+void __cdecl Rva005B23D7HeroPowersDescription(void *a, const AsciiString &b, const AsciiString &c); // rowed 0x005B23D7
 void __cdecl Rva00513866();
 
 void Rva005B5AC3Box::Run()
 {
 	if (m_24 >= 0) {
-		Rva005B23D7Wrap(0, Rva005B5AC3_K, Rva005B5AC3_K);
+		Rva005B23D7HeroPowersDescription((void*)0, *(const AsciiString*)(void*)Rva005B5AC3_K, *(const AsciiString*)(void*)Rva005B5AC3_K);
 		m_24 |= -1;
 	}
 }

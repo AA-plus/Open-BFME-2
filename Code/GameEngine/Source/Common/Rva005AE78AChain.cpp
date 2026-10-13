@@ -1,12 +1,13 @@
 // cl: -GR- -EHsc-
-int __cdecl rva005AE6F8(int a, int b, int c, char* z);
+struct Rva005AE6F8Slot;
+void *__cdecl rva005AE6F8(Rva005AE6F8Slot *a, Rva005AE6F8Slot *b, int c, void *z); // rowed 0x005AE6F8
 
 // ?rva005AE78A@@YAHHHH@Z @0x005AE78A 27B: cdecl 3-arg wrapper passing a char
 // scratch slot to the pinned cdecl callee.
 int __cdecl rva005AE78A(int a, int b, int c)
 {
 	char z;
-	return rva005AE6F8(a, b, c, &z);
+	return (int)rva005AE6F8((Rva005AE6F8Slot*)a, (Rva005AE6F8Slot*)b, c, &z);
 }
 
 struct Rva005AE7A5Class

@@ -11,6 +11,20 @@
 // with this plus three pointer-sized args, and stores the returned inner
 // object at +4. It writes the folded 0x008078DC vtable; because that table has
 // several aliases, the constructor keeps its address-derived Rva005FA7EB name.
+class AsciiString;
+struct Rva005F91F3Src;
+namespace StrategicHUD {
+class BattlePromptMovieClip
+{
+public:
+	class Impl
+	{
+	public:
+		Impl(BattlePromptMovieClip *owner, int a, const AsciiString &b, const Rva005F91F3Src &c); // rowed 0x005FA3B1
+		char m_opaque[0x64];
+	};
+};
+}
 class Rva005FA3B1Inner
 {
 public:
@@ -27,14 +41,14 @@ public:
 
 private:
 	const void *const *m_vtable;
-	Rva005FA3B1Inner *m_member04;
+	StrategicHUD::BattlePromptMovieClip::Impl *m_member04;
 };
 
 // ?Rva005FA7EB::Rva005FA7EB present-unmatched
 Rva005FA7EB::Rva005FA7EB(void *a, void *b, void *c)
 	: m_vtable(g_00C078DC)
 {
-	m_member04 = new Rva005FA3B1Inner(this, a, b, c);
+	m_member04 = new StrategicHUD::BattlePromptMovieClip::Impl((StrategicHUD::BattlePromptMovieClip*)this, (int)a, *(const AsciiString*)b, *(const Rva005F91F3Src*)c);
 }
 
 class Rva005F9877

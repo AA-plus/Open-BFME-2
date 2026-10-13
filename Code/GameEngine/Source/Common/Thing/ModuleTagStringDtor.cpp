@@ -7,13 +7,15 @@
 // through ehvec_dtor (0x00629110, pinned) with the thunked element dtor at
 // 0x004A9DF3. Both callees resolve via pins; no other TU is disturbed.
 
-struct Rva004A9DF3Element
+class Rva004A9DF3Element
 {
+public:
 	~Rva004A9DF3Element();
 	int m_value;
 };
 
 void Rva006CE3D0Cleanup(void *ptr, int first, int second);
+Rva004A9DF3Element *__cdecl Rva006CE3D0Resize(Rva004A9DF3Element *ptr, int first, int second); // rowed 0x006CE3D0
 
 class ModuleTagString
 {
@@ -30,5 +32,5 @@ private:
 ModuleTagString::~ModuleTagString()
 {
 	if (m_ptr != (void *)m_elems)
-		Rva006CE3D0Cleanup(m_ptr, 0, 0);
+		(void)Rva006CE3D0Resize((Rva004A9DF3Element*)m_ptr, 0, 0);
 }

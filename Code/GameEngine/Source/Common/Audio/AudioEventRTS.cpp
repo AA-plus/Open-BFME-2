@@ -98,6 +98,8 @@ struct Rva002B488EResult {char unknown[0x54]; int value54;};
 struct Rva002B2579Result;
 class Rva002BA8F1Logic {public: Rva002B488EResult *rva002B488E(int);Rva002B2579Result *rva002B2579(int);};
 struct Rva002BFF5AData {char unknown[0x10]; int key;};
+class LocomotorTemplate;
+template<class T> class OVERRIDE {public: const T *operator->() const; }; // rowed 0x0035C95F
 class Rva0035C95FView {public: const Rva002BFF5AData *rva0035C95F() const; void *head;};
 struct Rva002D9C7AEntry {char unknown[8]; Rva0035C95FView version; char unknown0c[4]; unsigned int key10;};
 class Rva004E06FBPtrChase32Field {public: int get() const;};
@@ -164,7 +166,7 @@ int Rva002D9C7A::rva002D9C7A() {
   if(g_00DFEF18 && TheLivingWorldLogic) {
    Rva002D9C7AEntry *entry=(Rva002D9C7AEntry *)((Rva002BFDAE *)g_00DFEF18)->rva002BFDAE((void*)m_id34);
    if(entry) {
-    switch(entry->version.rva0035C95F()->key) {
+    switch(((const Rva002BFF5AData*)((const OVERRIDE<LocomotorTemplate>*)&entry->version)->operator->())->key) {
     case 0:
      if(entry->key10) {
       Rva002B488EResult *value=(Rva002B488EResult *)Rva00318D4E(entry->key10);
