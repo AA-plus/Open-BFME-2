@@ -1,7 +1,7 @@
 // cl: /Ireference/shims/bfme2_ascii /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /EHsc
 // stlport
 // ?Rva000D06C6Parse@@YAXPAVINI@@PAX1PBX@Z @0x000D06C6 96B
-// Evidence: chain from push_back 0x000D068F; locals int at [ebp-0x14] plus AsciiString at [ebp-0x10] form 8B CameraMarker; parseIndexList with g_00DBE974 then parseAsciiString with 0 then vector push_back; EH_prolog scope.
+// Evidence: chain from push_back 0x000D068F; locals int at [ebp-0x14] plus AsciiString at [ebp-0x10] form 8B CameraMarker; parseIndexList with WeatherNames (VA 0x00DBE974) then parseAsciiString with 0 then vector push_back; EH_prolog scope.
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
 // overload takes the call instead, so this TU emits no external max COMDAT.
 #include <stl/_algobase.h>
@@ -29,12 +29,13 @@ public:
 	AsciiString m_name;
 };
 
-extern const void *const g_00DBE974[];
+// Zero Hour's GameType.cpp weather names, native VA 0x00DBE974.
+extern char *WeatherNames[];
 
 void __cdecl Rva000D06C6Parse(INI *ini, void *instance, void *store, const void * /*userData*/)
 {
 	CameraMarker marker;
-	INI::parseIndexList(ini, instance, &marker.m_index, g_00DBE974);
+	INI::parseIndexList(ini, instance, &marker.m_index, WeatherNames);
 	INI::parseAsciiString(ini, instance, &marker.m_name, 0);
 	((_STL::vector<CameraMarker> *)store)->push_back(marker);
 }
@@ -52,7 +53,7 @@ struct Rva000CF83CElement
 void __cdecl Rva000CF873Parse(INI *ini, void *instance, void *store, const void * /*userData*/)
 {
 	Rva000CF83CElement marker;
-	INI::parseIndexList(ini, instance, &marker.m_index, g_00DBE974);
+	INI::parseIndexList(ini, instance, &marker.m_index, WeatherNames);
 	INI::parseAsciiString(ini, instance, &marker.m_name, 0);
 	((_STL::vector<Rva000CF83CElement> *)store)->push_back(marker);
 }

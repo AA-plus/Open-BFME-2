@@ -9,6 +9,7 @@
 // follow the source order 00, 01, 10, 11 over the declared 00, 10, 11, 01
 // member layout. The vptr is 0x00C082E8.
 
+#include <stddef.h>
 #include "ascii_string.h"
 
 typedef int Int;
@@ -19,6 +20,23 @@ struct RGBAColorInt
 	Int red, green, blue, alpha;
 };
 
+class INI
+{
+public:
+	static void parseAsciiString( INI *ini, void *instance, void *store, const void *userData );
+	static void parseRGBAColorInt( INI *ini, void *instance, void *store, const void *userData );
+	static void parseReal( INI *ini, void *instance, void *store, const void *userData );
+	static void parseInt( INI *ini, void *instance, void *store, const void *userData );
+};
+
+struct FieldParse
+{
+	const char *token;
+	void (__cdecl *parse)( INI *ini, void *instance, void *store, const void *userData );
+	const void *userData;
+	Int offset;
+};
+
 class WaterSetting
 {
 
@@ -27,6 +45,7 @@ public:
 	WaterSetting( void );
 	virtual ~WaterSetting( void );
 
+	static const FieldParse m_waterSettingFieldParseTable[];		///< the parse table for INI definition
 	AsciiString m_skyTextureFile;
 	AsciiString m_waterTextureFile;
 	Int m_waterRepeatCount;
@@ -39,6 +58,29 @@ public:
 	RGBAColorInt m_transparentWaterDiffuse;
 	Real m_uScrollPerMs;
 	Real m_vScrollPerMs;
+
+};
+
+// The Zero Hour table, native .rdata VA C07FE0..C080B0 (twelve fields and the
+// null entry); INI::parseWaterSettingDefinition (0x00200BEB) pushes it for
+// initFromINI. Field order, callbacks and offsets are retail's and Zero Hour's.
+const FieldParse WaterSetting::m_waterSettingFieldParseTable[] =
+{
+
+	{ "SkyTexture",									INI::parseAsciiString,			NULL, offsetof( WaterSetting, m_skyTextureFile ) },
+	{ "WaterTexture",								INI::parseAsciiString,			NULL, offsetof( WaterSetting, m_waterTextureFile ) },
+	{ "Vertex00Color",							INI::parseRGBAColorInt,			NULL, offsetof( WaterSetting, m_vertex00Diffuse ) },
+	{ "Vertex10Color",							INI::parseRGBAColorInt,			NULL, offsetof( WaterSetting, m_vertex10Diffuse ) },
+	{ "Vertex01Color",							INI::parseRGBAColorInt,			NULL, offsetof( WaterSetting, m_vertex01Diffuse ) },
+	{ "Vertex11Color",							INI::parseRGBAColorInt,			NULL, offsetof( WaterSetting, m_vertex11Diffuse ) },
+	{ "DiffuseColor",								INI::parseRGBAColorInt,			NULL, offsetof( WaterSetting, m_waterDiffuseColor ) },
+	{ "TransparentDiffuseColor",		INI::parseRGBAColorInt,			NULL, offsetof( WaterSetting, m_transparentWaterDiffuse ) },
+	{ "UScrollPerMS",								INI::parseReal,							NULL, offsetof( WaterSetting, m_uScrollPerMs ) },
+	{ "VScrollPerMS",								INI::parseReal,							NULL, offsetof( WaterSetting, m_vScrollPerMs ) },
+	{ "SkyTexelsPerUnit",						INI::parseReal,							NULL, offsetof( WaterSetting, m_skyTexelsPerUnit ) },
+	{ "WaterRepeatCount",						INI::parseInt,							NULL, offsetof( WaterSetting, m_waterRepeatCount ) },
+
+	{ NULL,													NULL,												NULL, 0 },
 
 };
 
