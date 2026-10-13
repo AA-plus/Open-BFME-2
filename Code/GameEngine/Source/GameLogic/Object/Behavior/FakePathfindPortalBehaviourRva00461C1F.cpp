@@ -109,7 +109,10 @@ struct Rva004618D4AI
 
 class Rva002E6ECA { public: virtual void *destroy(unsigned); int get() const; };
 typedef Rva002E6ECA Rva0046183BWaypoint;
+// Keep the MSVC float overloads local; their inlined operations stay retail-exact.
+#define inline static inline
 #include <math.h>
+#undef inline
 class TerrainLogic { public:
  virtual void slot0();virtual void slot1();virtual void slot2();
  virtual void slot3();virtual void slot4();virtual void slot5();
