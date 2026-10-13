@@ -1,4 +1,6 @@
 // ?TrimRight@EAStringC@@QAEAAV1@PBD@Z
+// partial score=0.986718 date=2026-10-13
+// ?TrimRight@EAStringC@@QAEAAV1@PBD@Z
 // partial score=0.99 date=2026-10-07
 // cl: /O2 /DNDEBUG /MD
 // ?FreeData@EAStringC@@SAXPAVStringDataC@1@@Z, retail 0x006D2EB0 (118B).
