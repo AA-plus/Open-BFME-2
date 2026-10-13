@@ -1292,42 +1292,6 @@ PUBLIC ?rva0077a855@@YAXXZ
     jmp ??1Gen_uw_0049b47c@@QAE@XZ
 ?rva0077a855@@YAXXZ ENDP
 
-; Unwind@00b7b9ce: masked-add cleanup adds 0Ch to [ebp-16] and tail-jumps to 0x0049B47C.
-PUBLIC ?rva0077b9ce@@YAXXZ
-?rva0077b9ce@@YAXXZ PROC
-    mov ecx, DWORD PTR [ebp-16]
-    mov eax, DWORD PTR [ebp-16]
-    add eax, 0Ch
-    neg ecx
-    sbb ecx, ecx
-    and ecx, eax
-    jmp ??1Gen_uw_0049b47c@@QAE@XZ
-?rva0077b9ce@@YAXXZ ENDP
-
-PUBLIC ?rva0077BA17@@YAXXZ
-?rva0077BA17@@YAXXZ PROC
-    push 0072D4C0h
-    push 14h
-    push 60h
-    mov eax, DWORD PTR [ebp-16]
-    add eax, 40h
-    push eax
-    call ??_M@YGXPAXIHP6EX0@Z@Z
-    ret
-?rva0077BA17@@YAXXZ ENDP
-
-PUBLIC ?rva0077BAE4@@YAXXZ
-?rva0077BAE4@@YAXXZ PROC
-    push 0072D4C0h
-    push 14h
-    push 60h
-    mov eax, DWORD PTR [ebp-20]
-    add eax, 40h
-    push eax
-    call ??_M@YGXPAXIHP6EX0@Z@Z
-    ret
-?rva0077BAE4@@YAXXZ ENDP
-
 PUBLIC ?rva0077BB8F@@YAXXZ
 ?rva0077BB8F@@YAXXZ PROC
     push 0072D4C0h
