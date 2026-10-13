@@ -49524,3 +49524,4 @@ uw_007aa1a0	0x007AA1A0	8	landed	add_match verified Code/Libraries/Source/Apt/Rva
 ?rva000B348E@Rva000B348E@@QAEX_N@Z	0xB348E	74	blocked	fresh 74B void(bool) slot-24 x3 vtables; needs MI secondary-base (this-8 ptr +0x6a flag) + 122-slot virtuals (0x1e0/0x1e4 on +0x44 provider); no class evidence; t=5 model=muse-spark
 ?rva00091CA7@Rva00091CA7@@QAEXXZ	0x91ca7	102	blocked	fresh 102B void cleanup with 4 unrowed direct callees 0x4F82B 0x49A2CD 0x484002 0x482B08 + 3 virtuals; needs providers t=3 model=muse-spark
 ?rva0077EAC1@Rva0077EAC1@@QAEXXZ	0x77eac1	152	blocked	fresh 152B jump-island fragment (lea/jmp chains, dec ebp, no prologue, ebp live-in); not a standalone function t=3 model=muse-spark
+FUN_0078767a	0x78767a	46	blocked	MASM dump fragment in Code/masm_dumps/EHStateCleanupRange38.asm (EHStateCleanupRange); not C++ recoverable, anti-lift forbids naked lift t=2 model=muse-spark
