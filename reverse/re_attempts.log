@@ -51561,3 +51561,4 @@ $L872	0x00770B48	20	blocked	identity: owner ??1Rva0023A128@@QAE@XZ (Rva0023A128C
 ??0Rva005E2237@@QAE@XZ	0x005E2237	86	landed	add_match verified Code/GameEngine/Source/GameClient/Rva005E2237PageCtor.cpp 86B
 ?rva0059F9FB@Rva0059F9FB@@QAEXHH_N0@Z	0x0059F9FB	340	landed	add_match verified Code/GameEngine/Source/GameClient/Rva0059F9FBProgressLabel.cpp 340B
 ?rva0041541B@Rva0041541B@@QAEABVRva002390CB@@ABVAsciiString@@@Z	0x0041541B	97	landed	add_match verified Code/GameEngine/Source/Common/Rva0041541BLookup.cpp 97B
+??0BuddyThreadClass@@QAE@PAVMutexClass@@@Z	0x00550F01	220	landed	add_match verified Code/GameEngine/Source/GameNetwork/GameSpy/Thread/BuddyThreadClassCtor.cpp 220B
