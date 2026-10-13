@@ -17,7 +17,6 @@ name,target_rva,verdict
 ?initD3DAssets@W3DMouse@@AAEXXZ,0x00098FC1,bytes_differ
 ??0Rva000A8684@@QAE@XZ,0x000A8684,bytes_differ
 ??0DelayedLuaEventList@@QAE@XZ,0x000B6D8B,bytes_differ
-??0Rva000E6350@@QAE@XZ,0x000E6350,bytes_differ
 ??0Rva00109C27@@QAE@PBD@Z,0x00109C27,bytes_differ
 ?Record_Texture_End@@YAXXZ,0x00129E50,obj_only
 ??1SimpleSceneClass@@UAE@XZ,0x00141DF0,bytes_differ
