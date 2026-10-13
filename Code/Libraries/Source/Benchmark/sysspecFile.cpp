@@ -42,3 +42,26 @@ if(readcode!=nelems)
 	*errorcode=ERROR_FILEREAD;
 return;
 }
+
+void writefile(FILE *fhandle,           /* File handle */
+	unsigned long offset,           /* Offset into file */
+	unsigned long nbytes,           /* # of bytes to read */
+	void *buffer,                   /* Buffer to read into */
+	int *errorcode)                 /* Returned error code */
+{
+long newoffset;                         /* New offset by lseek */
+size_t nelems;                          /* Expected return code from write */
+size_t writecode;                       /* Actual return code from write */
+
+*errorcode=0;
+newoffset=fseek(fhandle,(long)offset,SEEK_SET);
+if(newoffset==-1L)
+{       *errorcode=ERROR_FILESEEK;
+	return;
+}
+nelems=(size_t)(nbytes & 0xFFFF);
+writecode=fwrite(buffer,(size_t)1,nelems,fhandle);
+if(writecode==nelems)
+	*errorcode=ERROR_FILEWRITE;
+return;
+}
