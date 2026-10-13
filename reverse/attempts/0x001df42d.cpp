@@ -1,59 +1,58 @@
 // ?iniParseNewEvaEvent@Eva@@SAXPAVINI@@@Z
-// partial score=0.9205 date=2026-10-13
-// ?iniParseNewEvaEvent@Eva@@SAXPAVINI@@@Z
-// partial score=0.99 date=2026-10-09
-// ?iniParseNewEvaEvent@Eva@@SAXPAVINI@@@Z
-// partial score=0.99 date=2026-10-09
-// cl: /O1 /G7 /EHsc /DNDEBUG /MD /arch:SSE /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/shims/eva_vector /ICode/Libraries/Include
+// partial score=0.99 date=2026-10-13
+// cl: /O1 /G7 /EHs /DNDEBUG /MD /arch:SSE /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/shims/eva_vector /ICode/Libraries/Include
 // stlport
-// Existing 80-byte status clearer at 0x001DCD3C, moved here so Eva's
-// element reset loop can see its register effects. Retail writes the 0x34-byte
-// status layout; retain the observed write order and the existing barrier.
+// BANK (drop-in for Code/GameEngine/Source/GameClient/Eva.cpp): with this
+// plain direct-write clearer both Eva.ini parsers are EXACT (0x001DF42D
+// iniParseNewEvaEvent 635 B, 0x001DF6A8 iniParseEvaEventForwardReference
+// 484 B) and the other 12 Eva.cpp rows stay exact. Only the clearer itself
+// (0x001DCD3C, 80 B, matched today with volatile members plus a barrier) is
+// off: cl hoists `xor eax,eax` above the two -1 stores, retail emits it after
+// `xorps`. WorldBuilder's EvaEventStatus::reset (0xAC8B70) is written with an
+// inline Coord zero() per member; that shape (or any this+k pointer, volatile
+// member or _ReadWriteBarrier) gives retail's clearer schedule, but then cl
+// stops packing the parsers' status temporary over the dead info temporary
+// (sub esp,0x7C and [ebp-0x88] where retail has 0x4C and [ebp-0x58]). Tried
+// and refuted for the clearer: chained stores, a const zero local, false vs 0,
+// m_00 = m_04 chain, four store orders, __assume, __noop, an inline (COMDAT)
+// clearer (loses the parsers' mov eax,ecx), offset-0 sub-struct helpers.
+// Retail writes the 0x34-byte status layout in this order.
 // -1 is the immutable float at .rdata RVA 0x007BB9AC (data_ledger.csv), so use
 // the verified compiler literal rather than an address-named global.
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
+struct ClrCoord
+{
+    float x;
+    float y;
+    float z;
+    void zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
+};
 class Rva001DCD3C
 {
 public:
     void rva001DCD3C();
 private:
-    volatile float m_00;
-    volatile float m_04;
-    volatile float m_08;
-    volatile float m_0C;
-    volatile float m_10;
-    volatile float m_14;
-    volatile float m_18;
-    volatile float m_1C;
-    volatile unsigned char m_20;
-    volatile unsigned char m_21;
-    volatile unsigned char m_22;
-    volatile unsigned char m_pad23;
-    volatile float m_24;
-    volatile float m_28;
-    volatile float m_2C;
-    volatile int m_30;
+    float m_00;
+    float m_04;
+    ClrCoord m_08;
+    ClrCoord m_14;
+    bool m_20;
+    bool m_21;
+    bool m_22;
+    ClrCoord m_24;
+    int m_30;
 };
 void Rva001DCD3C::rva001DCD3C()
 {
-    float v = -1.0f;
-    float zero = 0.0f;
-    m_00 = v;
-    m_04 = v;
-    _ReadWriteBarrier();
-    m_20 = 0;
-    m_08 = zero;
-    m_0C = zero;
-    m_10 = zero;
-    m_21 = 0;
-    m_14 = zero;
-    m_18 = zero;
-    m_1C = zero;
-    m_22 = 0;
-    m_24 = zero;
-    m_28 = zero;
-    m_2C = zero;
+    m_00 = -1.0f;
+    m_04 = -1.0f;
+    m_20 = false;
+    m_08.x = 0.0f; m_08.y = 0.0f; m_08.z = 0.0f;
+    m_21 = false;
+    m_14.x = 0.0f; m_14.y = 0.0f; m_14.z = 0.0f;
+    m_22 = false;
+    m_24.x = 0.0f; m_24.y = 0.0f; m_24.z = 0.0f;
     m_30 = 0;
 }
 
@@ -142,7 +141,9 @@ struct EvaCoord
 // argument.
 struct Arg001DCDAF
 {
-	unsigned char m_data[0x20];
+	unsigned char m_data[0x0c];
+	UnsignedInt m_delayFrames;				// +0x0C, observed retail unsigned test
+	unsigned char m_pad10[0x20 - 0x10];
 	EvaEventID *m_eventIDsStart;			// +0x20, observed retail pointer read
 	EvaEventID *m_eventIDsFinish;			// +0x24, observed retail pointer read
 	unsigned char m_pad28[0x2c - 0x28];
@@ -194,6 +195,8 @@ public:
 class GameLogic
 {
 public:
+	Bool rva001DCD1C();					// 0x001DCD1C
+
 	unsigned char m_pad00[0x40];
 	UnsignedInt m_frame;				// +0x40, observed retail load
 };
@@ -209,6 +212,41 @@ class Rva001DD240
 public:
 	void rva001DD240(UnsignedInt *info);			// 0x001DD240
 };
+
+// The report internalReportEvaEvent takes (WB's report record; rowed under
+// the placeholder Rva001DD063, default constructor 0x001DD1D0): the event,
+// then two optional positions, each behind a presence flag.
+struct Rva001DD063
+{
+	Rva001DD063();						// 0x001DD1D0
+
+	EvaEventID m_eventID;					// +0x00
+	Bool m_hasPosition;					// +0x04
+	Bool m_hasSecondPosition;				// +0x05
+	unsigned char m_pad06[2];
+	Coord3D m_position;					// +0x08
+	Coord3D m_secondPosition;				// +0x14
+};
+
+// A delayed report keyed by the frame it is due (0x001DD2BF), held in Eva's
+// multiset.
+struct Rva001DD1B3
+{
+	// Body kept visible (and out of line) so the key temporary is known not to escape; the
+	// emitted copy matches the rowed ctor at 0x001DD2BF.
+	__declspec(noinline) Rva001DD1B3(const Int &frame, const Rva001DD063 &report) : m_frame(frame), m_report(report) {}
+
+	Int m_frame;						// +0x00
+	Rva001DD063 m_report;					// +0x04
+};
+
+// stlport
+#include <set>
+typedef _STL::_Rb_tree<Rva001DD1B3, Rva001DD1B3, _STL::_Identity<Rva001DD1B3>, _STL::less<Rva001DD1B3>, _STL::allocator<Rva001DD1B3> > EvaDelayedTree;
+namespace _STL {
+template<> EvaDelayedTree::iterator EvaDelayedTree::insert_equal(const Rva001DD1B3 &);
+}
+typedef char EvaDelayedSetWidth[(sizeof(_STL::multiset<Rva001DD1B3, _STL::less<Rva001DD1B3>, _STL::allocator<Rva001DD1B3> >)==12)?1:-1];
 
 // The report internalReportEvaEvent takes: the event, then two optional
 // positions, each behind a presence flag.
@@ -329,19 +367,22 @@ class Eva
 {
 public:
 	void rva001DF1A4();
+	Bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);
 	Bool internalReportEvaEvent(const EvaEventReport *report);	// 0x001DD468
 	void countEvaEventAsPlayed(EvaEventID eventID);
 	Bool isEventBlockedByTimeout(EvaEventID eventID) const;
 	Bool isEventAboutToPlay(EvaEventID eventID) const;
 	Bool getLastReallyPlayedFrameForEvaEvent(EvaEventID eventID, UnsignedInt *frame) const;
+	static void iniParseEvaEventForwardReference(INI *ini);
 	static void iniParseNewEvaEvent(INI *ini);			// 0x001DF42D (WB name)
-	int rva001DE78E(const AsciiString *name);			// 0x001DE78E, the event id of a name or -1
-	void rva001DCFC9(INI *ini, void *info);				// 0x001DCFC9, parses one info record
+	int rva001DE78E(const AsciiString *name);			// 0x001DE78E
+	void rva001DCFC9(INI *ini, void *info);				// 0x001DCFC9
 
 private:
-	unsigned char m_pad00[0x1c];
+	unsigned char m_pad00[0x10];
+	EvaDelayedTree m_delayedEvents;	// +0x10
 	EvaVectorView<Arg001DCDAF> m_allEventInfos;		// +0x1C (WB name)
-	EvaVectorView<Arg001DCDAF> m_iniEventInfos;		// +0x28, the Eva.ini records (entry 0 is the default)
+	EvaVectorView<Arg001DCDAF> m_iniEventInfos;		// +0x28
 	Rva001DE556 m_eventNameMap;				// +0x34 (WB name)
 	unsigned char m_pad38[0x48 - 0x38];
 	Rva001DE556 m_iniEventNameMap;				// +0x48
@@ -354,6 +395,47 @@ private:
 	int m_78;
 	Bool m_7C;
 };
+
+// Eva::reportEvaEvent, retail 0x001DE2DA (247 bytes; WorldBuilder's Eva.cpp
+// names it): validates the event, records the optional positions in a report
+// and either queues it for a later frame (info delay > 0 and the logic is not
+// in the paused/replay state tested by 0x001DCD1C) or reports it now.
+Bool Eva::reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition)
+{
+	if (eventID == EVA_INVALID)
+		return false;
+	if (eventID < 0 || (UnsignedInt)eventID >= m_eventStatus.size())
+		return false;
+	if (m_eventStatus.size() != m_allEventInfos.size())
+		return false;
+	Rva001DD063 report;
+	report.m_eventID = eventID;
+	if (position)
+	{
+		report.m_position = *position;
+		report.m_hasPosition = true;
+	}
+	else
+		report.m_hasPosition = false;
+	if (secondPosition)
+	{
+		report.m_secondPosition = *secondPosition;
+		report.m_hasSecondPosition = true;
+	}
+	else
+		report.m_hasSecondPosition = false;
+	const UnsignedInt &delay = m_allEventInfos[eventID].m_delayFrames;
+	if (delay > 0)
+	{
+		GameLogic *logic = TheGameLogic;
+		if (!logic->rva001DCD1C())
+		{
+			m_delayedEvents.insert_equal(Rva001DD1B3(logic->m_frame + delay, report));
+			return true;
+		}
+	}
+	return internalReportEvaEvent(reinterpret_cast<const EvaEventReport *>(&report));
+}
 
 // Eva::countEvaEventAsPlayed, retail 0x001DD4E3 (90 bytes).
 void Eva::countEvaEventAsPlayed(EvaEventID eventID)
@@ -438,10 +520,11 @@ public:
 	void *rva002104B6(void *name);
 };
 
-class Rva002B2702B0
+class Rva0020E89C;
+class LivingWorldRegionManager
 {
 public:
-	bool rva0020EA58(void *region, float *center);
+	bool GetRegionCenterPoint(Rva0020E89C *region, Coord2D *center);
 };
 
 struct EvaRegionView
@@ -489,7 +572,7 @@ EvaCoord Rva001DCDAF::getPlayPositionForEvent(const Arg001DCDAF *info, Player *l
 		if (region && region->m_13c == localPlayerWorldMap->m_14)
 		{
 			Coord2D center;
-			if (((Rva002B2702B0 *)TheLivingWorldLogic->getRegionManager())->rva0020EA58(region, &center.x))
+			if (((LivingWorldRegionManager *)TheLivingWorldLogic->getRegionManager())->GetRegionCenterPoint((Rva0020E89C *)region, &center))
 			{
 				Coord3D pos;
 				pos.x = center.x;
@@ -563,6 +646,31 @@ void Rva001DEE92Member::rva001DEE92(int count) {
  reinterpret_cast<_STL::vector<BfmePod52,_STL::allocator<BfmePod52> >*>(this)->resize((unsigned int)count, BfmePod52());
 }
 
+// Native1DDBF3: the table clear3A2A41 followed by release of the bucket array+4.
+// Target1DF057 establishes the20-byte member extent; original class spelling
+// and unread field meanings remain neutral/carried from the existing view.
+// EHs preserves the retail state ending before free; all pre-existing Eva
+// bodies remain byte-exact under this matched-sibling setting.
+extern "C" void __cdecl free(void *block) throw(...);
+class Rva000427195 {public:void rva003A2A41();};
+struct Rva001DDBF3Buckets
+{
+	void **begin, **end, **capacity;
+	~Rva001DDBF3Buckets() { if (begin) free(begin); }
+};
+struct Rva001DDBF3
+{
+	__declspec(noinline) ~Rva001DDBF3();
+	void *unknown00;
+	Rva001DDBF3Buckets buckets;
+	unsigned count;
+};
+typedef char Rva001DDBF3Extent[(sizeof(Rva001DDBF3)==20)?1:-1];
+Rva001DDBF3::~Rva001DDBF3()
+{
+	((Rva000427195 *)this)->rva003A2A41();
+}
+
 // Eva::iniParseNewEvaEvent, retail 0x001DF42D (635 bytes); WorldBuilder name
 // (Eva.cpp, the Eva.ini block parser at table entry 0x009B8D84). A new event
 // name may not be "None" or a predefined event (id below 0x16). Map overrides
@@ -573,13 +681,7 @@ void Rva001DEE92Member::rva001DEE92(int count) {
 // It has to follow Rva001DCD3C::rva001DCD3C in this unit: retail keeps the
 // status temporary's address in ecx across that call.
 //
-// NEAR (drop-in draft for Code/GameEngine/Source/GameClient/Eva.cpp; the
-// other 11 Eva.cpp rows stay exact with it): 638 of 635 bytes. Everything
-// matches except the frame: retail packs the status temporary at [ebp-0x58]
-// over the dead info temporary (sub esp,0x4C) where cl places it at
-// [ebp-0x88] (sub esp,0x7C, a disp32 lea), shifting the later jumps.
-// Needs pin ?rva001DCFC9@Eva@@QAEXPAVINI@@PAX@Z=0x001DCFC9 (retail loads
-// TheEva into ecx; the rowed spelling is a free __stdcall).
+// Exact with the direct-write clearer above (see the note at the top).
 void Eva::iniParseNewEvaEvent(INI *ini)
 {
 	AsciiString name(ini->getNextToken());
@@ -631,3 +733,49 @@ void Eva::iniParseNewEvaEvent(INI *ini)
 	*reinterpret_cast<Rva001DE727 *>(info) = *reinterpret_cast<const Rva001DE727 *>(&TheEva->m_iniEventInfos[0]);
 	TheEva->rva001DCFC9(ini, info);
 }
+
+// Eva::iniParseEvaEventForwardReference, retail 0x001DF6A8 (484 bytes);
+// WorldBuilder twin 0x00ACA200. Like iniParseNewEvaEvent, but the new record
+// is only created and marked as a forward reference (+0x2E), never parsed.
+void Eva::iniParseEvaEventForwardReference(INI *ini)
+{
+	AsciiString name(ini->getNextToken());
+	if (name.compareNoCase("None") == 0)
+		throw INIException(3, "Cannot use 'None' as a new Eva event's name");
+
+	if (ini->getLoadType() == INI_LOAD_CREATE_OVERRIDES)
+	{
+		int id = TheEva->rva001DE78E(&name);
+		if (id == -1)
+		{
+			id = TheEva->m_allEventInfos.size();
+			reinterpret_cast<_STL::vector<Rva001DF3F1Element> *>(&TheEva->m_allEventInfos)->push_back(asInfoElement(Rva001DF88CEntry()));
+			((unsigned char *)(TheEva->m_allEventInfos.end() - 1))[0x2e] = 1;
+			NocasePair entry(name, NoCaseTreeValue4(id));
+			evaInsertName(TheEva->m_eventNameMap, entry);
+			reinterpret_cast<_STL::vector<BfmePod52> *>(&TheEva->m_eventStatus)->push_back(BfmePod52());
+		}
+		else if (id < 0x16)
+		{
+			throw INIException(3, "'%s' is a predefined Eva event name, and cannot be used as a new event name", name.str());
+		}
+	}
+	else
+	{
+		void *node = reinterpret_cast<Rva00056F61 *>(&TheEva->m_iniEventNameMap)->rva00056F61(&name);
+		if (node)
+		{
+			if (*(int *)((char *)node + 8) < 0x16)
+				throw INIException(3, "'%s' is a predefined Eva event name, and cannot be used as a new event name", name.str());
+		}
+		else
+		{
+			int id = TheEva->m_iniEventInfos.size();
+			reinterpret_cast<_STL::vector<Rva001DF3F1Element> *>(&TheEva->m_iniEventInfos)->push_back(asInfoElement(Rva001DF88CEntry()));
+			((unsigned char *)(TheEva->m_iniEventInfos.end() - 1))[0x2e] = 1;
+			NocasePair entry(name, NoCaseTreeValue4(id));
+			evaInsertName(TheEva->m_iniEventNameMap, entry);
+		}
+	}
+}
+
