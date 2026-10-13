@@ -1,3 +1,6 @@
+// Native parent prologues and their complete associative EH graphs prove
+// the five naturally emitted handlers below. Each native handler has one
+// primary owner and its complete 10-byte extent; no alias or pin is added.
 // cl: /O1 /EHsc /MD /arch:SSE /G7 /Ireference/shims/bfme2_ascii
 // stlport
 // AttributeModifierStore.cpp -- AttributeModifierStore members recovered from
