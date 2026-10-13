@@ -87736,3 +87736,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ??0BfmeStrVM0@@QAE@XZ,,0x0025D489,509,Code/GameEngine/Source/Common/Rva0025D489Ctor.cpp,matched,
 ??0ArmyHeroIcon@StrategicInGameUI@@QAE@PAX00@Z,,0x005F41D3,81,Code/GameEngine/Source/GameClient/LivingWorld/InGameUI/ArmyHeroIconCtor.cpp,matched,
 ?append@Rva006CE660Vec@@QAEXPAVAptValueNameEntry@@@Z,,0x006CEA90,63,Code/Libraries/Source/Apt/AptValue/PlaybackBufferResize.cpp,matched,
+?rva0032A4D7@SidesList@@QAEXAAVDataChunkOutput@@@Z,,0x0032A4D7,176,Code/GameEngine/Source/GameLogic/Map/SidesListDataChunks.cpp,matched,

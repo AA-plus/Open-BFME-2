@@ -473,6 +473,7 @@ public:
 	void rva0032E6F4(int key, const BfmePod128 &entry);	// 0x0032E6F4, castle build entry add
 	void rva0032ED75(int key, const _STL::vector<BfmeE8> &path);	// 0x0032ED75, castle path add
 	void rva0032C88F(int index);		// 0x0032C88F, WB 0xa86610
+	void rva0032A4D7(DataChunkOutput &chunkWriter);	// 0x0032A4D7, Teams chunk writer
 	bool rva0032D038(DataChunkInput &file, DataChunkInfo *info);
 	bool rva0032D04A(DataChunkInput &file, DataChunkInfo *info);
 	void rva0032D554();
@@ -876,6 +877,32 @@ void SidesList::rva0032C88F(int index)
 			m_teamrec.removeTeam(id);
 		id = nextID;
 	}
+}
+
+// SidesList::rva0032A4D7, retail 0x0032A4D7 (176 bytes): the "Teams" chunk,
+// version 1. Identity (target): WorldBuilder's unnamed debug twin wb 0xa81900
+// makes the same calls: one pass counting the teams without a teamLibraryMapName
+// string, the count, then the dict of each such team. Teams brought in from a
+// library map are not written back. The name keeps the address. The named
+// teamInfo/libraryKey locals fix the count loop's id register (ebx, not an
+// eax copy) and the key-call/scale order.
+void SidesList::rva0032A4D7(DataChunkOutput &chunkWriter)
+{
+	chunkWriter.openDataChunk("Teams", 1);
+	int count = 0;
+	for (int id = m_teamrec.getFirstTeamID(); id != 0; id = m_teamrec.getNextTeamID(id)) {
+		Dict *teamInfo = m_teamrec.getTeamInfo(id);
+		NameKeyType libraryKey = TheKey_teamLibraryMapName;
+		if (teamInfo->getType(libraryKey) != Dict::DICT_ASCIISTRING)
+			count++;
+	}
+	chunkWriter.writeInt(count);
+	for (int teamID = m_teamrec.getFirstTeamID(); teamID != 0; teamID = m_teamrec.getNextTeamID(teamID)) {
+		Dict *team = m_teamrec.getTeamInfo(teamID);
+		if (team->getType(TheKey_teamLibraryMapName) != Dict::DICT_ASCIISTRING)
+			chunkWriter.writeDict(*team);
+	}
+	chunkWriter.closeDataChunk();
 }
 
 // SidesList::discardOverriddenScriptsAndTeams, retail 0x0032C991 (53 bytes).
