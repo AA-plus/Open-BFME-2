@@ -1,5 +1,5 @@
 // ?rva00032160@GeneralAllocator@Allocator@EA@@QAEIPAX@Z
-// partial score=0.92 date=2026-10-13
+// partial score=0.95 date=2026-10-13
 // ?rva00032160@GeneralAllocator@Allocator@EA@@QAEIPAX@Z
 // partial score=0.45 date=2026-10-03
 // no // cl: line: base flags -O2 -GR- -EHsc-
@@ -47,8 +47,7 @@ unsigned int GeneralAllocator::rva00032160(void *block)
 	}
 
 	unsigned int result = rva00031D00(block);
-	result += (unsigned char)~(*(unsigned int *)((char *)block + 4) >> 1) & 1;
-
+	result += ((unsigned char)~(((unsigned int*)block)[1]>>1))&1&&1;
 	ListNode *sentinel = &m_sentinel;
 	ListNode *cur = m_sentinel.m_next;
 	if (cur != sentinel) {
@@ -59,13 +58,12 @@ unsigned int GeneralAllocator::rva00032160(void *block)
 			cur = cur->m_next;
 		} while (cur != sentinel);
 	}
-	result += (cur == sentinel);
-
+	unsigned int total = result + (cur == sentinel);
 	if (lock != 0) {
 		--lock->m_count;
 		LeaveCriticalSection(lock);
 	}
-	return result;
+	return total;
 }
 
 }
