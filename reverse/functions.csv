@@ -87855,3 +87855,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ??0Rva005E3BD5@@QAE@PAURva005E39F3Arg@@PAXH1@Z,,0x005E3BD5,146,Code/GameEngine/Source/GameClient/LivingWorld/InGameUI/Rva005E39F3Ctor.cpp,matched,ArmyDetailsPanel icon ctor family member 2: ArmyHeroIcon base at +0 non-virtual Rva005E39F3 at +0x10 shared virtual Rva005F4179 at +0x24 (vtordisp +0x20); ctor order Rva005F4179 ArmyHeroIcon Rva005E39F3
 ?rva001DA112@Rva001DA112@@QAEXHHPAD@Z,,0x001DA112,140,Code/Libraries/Source/WWVegas/WWLib/Rva001DA112Assign.cpp,matched,
 ??0Rva00425CE2@@QAE@XZ,,0x00421A84,154,Code/GameEngine/Source/Common/Rva00425CE2Ctor.cpp,matched,
+??0SlaughterHordeContainModuleData@@QAE@XZ,,0x0048104D,136,Code/GameEngine/Source/GameLogic/Object/Contain/SlaughterHordeContainModuleDataCtor.cpp,matched,
