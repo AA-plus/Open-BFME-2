@@ -1,3 +1,5 @@
+// ?rva0028B49B@Object@@QAEPAXPAPAV1@0@Z
+// partial score=0.99 date=2026-10-13
 // ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
 // partial score=0.9255 date=2026-10-13
 // ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
@@ -105,6 +107,7 @@ void Object::rva0028B4CE(PathfindLayerEnum layer)
 // loads+regs and tail; wall is middle reload-vs-copy + and position (4 lines).
 void Object::rva0028B49B(Object **ppTail, Object **ppHead)
 {
+	m_next = 0;
 	m_prev = *ppHead;
 	Object *front = m_prev;
 	m_next = 0;
