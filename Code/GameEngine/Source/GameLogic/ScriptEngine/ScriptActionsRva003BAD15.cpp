@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii
-// ?Rva003BAD15@@YGXABVAsciiString@@MM0@Z @0x003BAD15 239B: free two strings plus two floats resolving two Terrain coords to four TacticalView calls.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BAD15@ScriptActions@@QAEXABVAsciiString@@MM0@Z @0x003BAD15 239B: free two strings plus two floats resolving two Terrain coords to four TacticalView calls.
 // Evidence: ret 16 four args; push [ebp+8] call Terrain s34 je; movss [ebp-0xc] triple; push [ebp+0x14] call s34 je; TV s60 with 1 0 0 and zeros; lea [ebp-0x18] TV s94; fld [ebp+0x10] TV s88 with zeros; fld [ebp+0xc] TV s7c with zeros; caller 0x003CABBF.
 #include "ascii_string.h"
 
@@ -94,7 +96,7 @@ public:
 };
 extern TacticalView *TheTacticalView;
 
-void __stdcall Rva003BAD15(const AsciiString &n0, float f1, float f2, const AsciiString &n3)
+void ScriptActions::Rva003BAD15(const AsciiString &n0, float f1, float f2, const AsciiString &n3)
 {
 	TerrainLogicPos *a = TheTerrainLogic->s34(n0);
 	if (!a)

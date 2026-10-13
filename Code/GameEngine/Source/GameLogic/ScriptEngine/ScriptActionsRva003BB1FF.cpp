@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii
-// ?Rva003BB1FFAttack@@YGXPAVParameter@@ABVAsciiString@@@Z, retail 0x003BB1FF, 52 bytes.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BB1FFAttack@ScriptActions@@QAEXPAVParameter@@ABVAsciiString@@@Z, retail 0x003BB1FF, 52 bytes.
 // Set AI attack priority info for named unit.
 // Evidence: leaf lane; callees getUnitNamed getAttackInfo; caller 0x003CB30C.
 class Parameter;
@@ -24,7 +26,7 @@ public:
 	const AttackPriorityInfo *getAttackInfo(const AsciiString &name);
 };
 extern class ScriptEngine *TheScriptEngine;
-void __stdcall Rva003BB1FFAttack(Parameter *unit, const AsciiString &infoName)
+void ScriptActions::Rva003BB1FFAttack(Parameter *unit, const AsciiString &infoName)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(unit);
 	if (obj == 0)

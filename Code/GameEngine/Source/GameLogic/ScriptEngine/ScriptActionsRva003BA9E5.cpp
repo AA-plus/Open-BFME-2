@@ -1,5 +1,8 @@
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BA9E5@@YGXXZ @0x003BA9E5 21B: free stdcall no args null-guarded to AudioManager slot 0x100 with int 0.
+// ?Rva003BA9E5@ScriptActions@@QAEXXZ @0x003BA9E5 21B: ScriptActions member no args null-guarded to AudioManager slot 0x100 with int 0.
 // Evidence: ret 0 no args; mov ecx TheAudio test je; mov eax [ecx] push 0 call [eax+0x100]; caller 0x003CAABC.
 class AudioManager
 {
@@ -72,7 +75,7 @@ public:
 };
 extern AudioManager *TheAudio;
 
-void __stdcall Rva003BA9E5()
+void ScriptActions::Rva003BA9E5()
 {
 	AudioManager *p = TheAudio;
 	if (p)
