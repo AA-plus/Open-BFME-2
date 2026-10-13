@@ -19,3 +19,20 @@ void *__stdcall Rva0020D613Alloc(const NocasePair &src)
 	((NocasePairConstructFn)&dup_0020D5E6)((NocasePair *)(p + 4), src);
 	return p;
 }
+
+class Rva000427195
+{
+public:
+	void *rva0020D613(const NocasePair &src);
+};
+
+// ICF-folded twin of Rva0020D613Alloc above (same 37 bytes at 0x0020D613):
+// the member spelling ignores its receiver, so its stack frame matches the
+// stdcall spelling exactly, including the callee-cleaned return.
+void *Rva000427195::rva0020D613(const NocasePair &src)
+{
+	char *p = _STL::allocator<char>::allocate(0x0c, 0);
+	*(int *)p = 0;
+	((NocasePairConstructFn)&dup_0020D5E6)((NocasePair *)(p + 4), src);
+	return p;
+}
