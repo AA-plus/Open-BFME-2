@@ -13,6 +13,8 @@ class PolygonTrigger;
 class Rva00330C50 { public: void rva00330AA6(int); };
 
 #include "../../../../Libraries/Include/Lib/Region2D.h"
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 
 struct FloatRect0073CE30
 {
@@ -48,7 +50,7 @@ public:
 	PolygonTrigger *getNext() { return m_nextPolygonTrigger; }
 	Region2D rva0007E03A();
 	void getBounds(FloatRect0073CE30 *rect);
-	void getBounds(int *out);
+	void getBounds(IRegion2D *out);
 	void rva002E36B7(int);
 
 private:
@@ -102,20 +104,22 @@ __forceinline long fast_float2long_round(float f)
 	return i;
 }
 
-// ?getBounds@PolygonTrigger@@QAEXPAH@Z retail 0x002E3978 155B
-// PolygonTrigger int-bounds: null-checked; region via rowed rva0007E03A then
-// floor x_min/y_min and ceil x_max/y_max into 4 ints. Callers 0x003665E3
-// 0x0027F196 name PolygonTrigger this. floor/ceil come from <math.h> (the
-// CRT import declarations); a hand prototype missed retail's codegen.
-void PolygonTrigger::getBounds(int *out)
+// ?getBounds@PolygonTrigger@@QAEXPAUIRegion2D@@@Z retail 0x002E3978 155B
+// PolygonTrigger integer bounds: null-checked; region via rowed rva0007E03A
+// then floor x_min/y_min and ceil x_max/y_max into the IRegion2D (WB
+// PolygonTrigger.cpp:210 PolygonTrigger::getBounds(IRegion2D *)). Callers
+// 0x003665E3 0x0027F196 name PolygonTrigger this. floor/ceil come from
+// <math.h> (the CRT import declarations); a hand prototype missed retail's
+// codegen.
+void PolygonTrigger::getBounds(IRegion2D *out)
 {
 	if (!out)
 		return;
 	Region2D r = rva0007E03A();
-	out[0] = fast_float2long_round(floor(r.lo));
-	out[1] = fast_float2long_round(floor(r.y_min));
-	out[2] = fast_float2long_round(ceil(r.hi));
-	out[3] = fast_float2long_round(ceil(r.y_max));
+	out->lo.x = fast_float2long_round(floor(r.lo));
+	out->lo.y = fast_float2long_round(floor(r.y_min));
+	out->hi.x = fast_float2long_round(ceil(r.hi));
+	out->hi.y = fast_float2long_round(ceil(r.y_max));
 }
 
 // Native2E3E2A..2E3E51 is an owned-pointer transfer into a returned temporary.

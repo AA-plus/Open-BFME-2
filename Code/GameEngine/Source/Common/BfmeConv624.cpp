@@ -13,7 +13,7 @@ class PolygonTrigger
 {
 public:
 	void getCenterPoint(Coord3D *center) const;
-	void getBounds(int *bounds);
+	void getBounds(IRegion2D *bounds);
 };
 class Rva0027D30D
 {
@@ -104,7 +104,7 @@ int BfmeThingCME::rva0027F171(PolygonTrigger *trigger)
 	Coord3D center;
 	trigger->getCenterPoint(&center);
 	IRegion2D bounds;
-	trigger->getBounds((int *)&bounds);
+	trigger->getBounds(&bounds);
 	int height = bounds.hi.y - bounds.lo.y;
 	int width = bounds.hi.x - bounds.lo.x;
 	float radius = static_cast<float>(largerDimension(width, height));

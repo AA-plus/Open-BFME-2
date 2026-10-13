@@ -113,7 +113,9 @@ extern AI *TheAI;
 
 enum PathfindLayerEnum {GROUND_LAYER=1};
 #include "../../../../Libraries/Include/Lib/ICoord3D.h"
-class PolygonTrigger {public: void getBounds(int*); bool pointInTrigger(const ICoord3D&);};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
+class PolygonTrigger {public: void getBounds(IRegion2D*); bool pointInTrigger(const ICoord3D&);};
 class PathfindZoneManager {public: void MarkDirty(int,int);};
 class Pathfinder
 {
@@ -204,13 +206,13 @@ void Pathfinder::classifyMapCell(Int i, Int j, PathfindCell *cell)
 // getCell's layer enum and the zone manager at +0x460 follow existing rows.
 void Pathfinder::rva0052E3E6(PolygonTrigger *area,bool value)
 {
- int bounds[4];
- area->getBounds(bounds);
- bounds[0]/=10; bounds[1]/=10; bounds[2]/=10; bounds[3]/=10;
- for(int x=bounds[0];x<=bounds[2];++x) {
+ IRegion2D bounds;
+ area->getBounds(&bounds);
+ bounds.lo.x/=10; bounds.lo.y/=10; bounds.hi.x/=10; bounds.hi.y/=10;
+ for(int x=bounds.lo.x;x<=bounds.hi.x;++x) {
   ICoord3D point;
   point.x=x*10+5;
-  for(int y=bounds[1];y<=bounds[3];++y) {
+  for(int y=bounds.lo.y;y<=bounds.hi.y;++y) {
    point.y=y*10+5;
    if(area->pointInTrigger(point)) {
     PathfindCell *cell=getCell(GROUND_LAYER,x,y);
