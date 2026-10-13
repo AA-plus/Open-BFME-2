@@ -80,7 +80,9 @@ template void _STL::_Construct<BfmeStringRecord0022074B,BfmeStringRecord0022074B
 // WB MainMenuUtils and ZH DownloadManager.h establish QueuedDownload identity.
 // Rename the existing owner rather than adding another name at its address.
 class QueuedDownload { public: AsciiString server,userName,password,file,localFile,regKey; bool tryResume; QueuedDownload(const QueuedDownload &); ~QueuedDownload(); };
-QueuedDownload::QueuedDownload(const QueuedDownload &o) : server(o.server), userName(o.userName), password(o.password), file(o.file), localFile(o.localFile), regKey(o.regKey), tryResume(o.tryResume) {}
+// Select-any like the DownloadManager.cpp copy (this retail body comes first in
+// link order, so it is the copy the link keeps).
+inline QueuedDownload::QueuedDownload(const QueuedDownload &o) : server(o.server), userName(o.userName), password(o.password), file(o.file), localFile(o.localFile), regKey(o.regKey), tryResume(o.tryResume) {}
 template void _STL::_Construct<QueuedDownload,QueuedDownload>(QueuedDownload*,const QueuedDownload&);
 
 // Complete retail record copy at0x005D511F.
