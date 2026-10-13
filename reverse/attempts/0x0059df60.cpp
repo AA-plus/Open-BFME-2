@@ -1,4 +1,6 @@
 // ?rva0059DF60@Rva0059E242@@UAEXXZ
+// partial score=0.93421 date=2026-10-13
+// ?rva0059DF60@Rva0059E242@@UAEXXZ
 // partial score=0.93421 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
 #include "Common/BfmeAudioEventPrefix136.h"

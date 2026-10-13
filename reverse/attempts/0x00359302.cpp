@@ -1,6 +1,8 @@
 // ?addHotKey@HotKeyManager@@QAE?AURva00359302Result@@ABUTreeHintRef00217D4C@@ABVAsciiString@@_N@Z
 // partial score=0.99 date=2026-10-13
 // ?addHotKey@HotKeyManager@@QAE?AURva00359302Result@@ABUTreeHintRef00217D4C@@ABVAsciiString@@_N@Z
+// partial score=0.99 date=2026-10-13
+// ?addHotKey@HotKeyManager@@QAE?AURva00359302Result@@ABUTreeHintRef00217D4C@@ABVAsciiString@@_N@Z
 // partial score=0.98 date=2026-10-08
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE /G7
 // HotKey.cpp -- HotKeyManager members at their WorldBuilder home

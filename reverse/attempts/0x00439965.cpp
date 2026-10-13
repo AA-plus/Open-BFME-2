@@ -1,6 +1,8 @@
 // ?rva00439965@Rva00243177@@QAEXXZ
 // partial score=0.93 date=2026-10-13
 // ?rva00439965@Rva00243177@@QAEXXZ
+// partial score=0.93 date=2026-10-13
+// ?rva00439965@Rva00243177@@QAEXXZ
 // partial score=0.9 date=2026-10-12
 // ?rva00439E0C@Rva00439E0C@@QAE_NPAVObject@@0HH@Z, retail 0x00439E0C (307 bytes),
 // WorldBuilder's InvisibilityManager::detected (explicit WB boundary 0x00839E0C).

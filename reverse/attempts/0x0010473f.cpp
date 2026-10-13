@@ -1,4 +1,6 @@
 // ?rva0010473F@Rva001040D5@@QAEXHHHH@Z
+// partial score=0.8591948238677211 date=2026-10-13
+// ?rva0010473F@Rva001040D5@@QAEXHHHH@Z
 // partial score=0.8591948238677211 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 extern "C" double __cdecl sin(double);

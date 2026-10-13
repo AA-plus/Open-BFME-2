@@ -1,4 +1,6 @@
 // ?rva00213C6E@LivingWorldManager@@QAEXPAVRva00213D93Target@@@Z
+// partial score=0.93 date=2026-10-13
+// ?rva00213C6E@LivingWorldManager@@QAEXPAVRva00213D93Target@@@Z
 // partial score=0.9 date=2026-10-12
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -234,14 +236,18 @@ void LivingWorldManager::rva00213C6E(Rva00213D93Target *target)
 	}
 	else
 	{
+		{
 		Int count = m_tableCount;
 		xfer->xferInt(&count);
-		AudioCacheCursor it = ((Rva000427195 *)m_table)->rva00427195();
+		}
+		volatile AudioCacheCursor it = ((Rva000427195 *)m_table)->rva00427195();
 		Rva00213C6ENode *node;
 		while ((node = (Rva00213C6ENode *)it.s.first) != 0)
 		{
+			{
 			AsciiString name(node->object()->m_name);
 			xfer->xferAsciiString(&name);
+			}
 			xfer->xferSnapshot((Snapshot *)node->object());
 			((Rva000411084 *)&it)->next();
 		}

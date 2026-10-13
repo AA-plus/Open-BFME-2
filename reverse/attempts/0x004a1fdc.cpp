@@ -1,4 +1,6 @@
 // ?doGuardLogic@SlavedUpdate@@QAEXPAUCoord3D@@_N@Z
+// partial score=0.85 date=2026-10-13
+// ?doGuardLogic@SlavedUpdate@@QAEXPAUCoord3D@@_N@Z
 // partial score=0.95 date=2026-10-07
 // cl: /DNDEBUG /MD /GX
 //

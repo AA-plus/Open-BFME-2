@@ -3,6 +3,8 @@
 // ?Update@Rva002B74DE@@QAEHXZ
 // partial score=0.98674 date=2026-10-13
 // ?Update@Rva002B74DE@@QAEHXZ
+// partial score=0.98674 date=2026-10-13
+// ?Update@Rva002B74DE@@QAEHXZ
 template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 // partial score=0.979133226 date=2026-10-11
 // cl: /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP=

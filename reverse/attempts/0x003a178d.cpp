@@ -1,4 +1,6 @@
 // ?rva003A178D@Team@@QAEHPAVObjectTypes@@HPAV1@@Z
+// partial score=0.98845 date=2026-10-13
+// ?rva003A178D@Team@@QAEHPAVObjectTypes@@HPAV1@@Z
 // partial score=0.9884508740204943 date=2026-10-10
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)

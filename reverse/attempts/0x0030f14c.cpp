@@ -1,4 +1,6 @@
 // ?Rva0030F14CSelect@@YAHPAVDrawable@@PAX@Z
+// partial score=0.9114 date=2026-10-13
+// ?Rva0030F14CSelect@@YAHPAVDrawable@@PAX@Z
 // partial score=0.9114 date=2026-10-11
 // ?Rva0030F14CSelect@@YAHPAVDrawable@@PAX@Z
 // partial score=0.97 date=2026-10-09

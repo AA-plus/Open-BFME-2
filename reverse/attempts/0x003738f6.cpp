@@ -1,4 +1,6 @@
 // ?createWaypoint@MineshaftPortalBehaviour@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?createWaypoint@MineshaftPortalBehaviour@@QAEXXZ
 // partial score=0.93 date=2026-10-13
 // ?createWaypoint@MineshaftPortalBehaviour@@QAEXXZ
 // partial score=0.93 date=2026-10-10
@@ -158,8 +160,8 @@ struct Vector3 {
 	__forceinline void Rotate_Z(float s_angle, float c_angle) {
 		float tmp_x = x;
 		float tmp_y = y;
-		x = c_angle * tmp_x - s_angle * tmp_y;
 		y = s_angle * tmp_x + c_angle * tmp_y;
+		x = c_angle * tmp_x - s_angle * tmp_y;
 	}
 };
 struct Rva003738F6Terrain {

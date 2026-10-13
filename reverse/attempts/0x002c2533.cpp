@@ -1,6 +1,8 @@
 // ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
 // partial score=0.94 date=2026-10-13
 // ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
+// partial score=0.94 date=2026-10-13
+// ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
 // partial score=0.8 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /DNDEBUG /MD
 //
@@ -48,6 +50,8 @@ class GameFont;
 class GameWindow;
 class WinInstanceData;
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 
 struct Rva0047EDE0CreateInfo
@@ -199,6 +203,7 @@ public:
 GameWindow *GameWindowManager::winCreate(Rva0047EDE0CreateInfo *info)
 {
 	GameWindow *window;
+	_ReadWriteBarrier();
 
 	if (info->m_allocator)
 	{

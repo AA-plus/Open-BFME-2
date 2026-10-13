@@ -1,3 +1,5 @@
+// ?parseUserList@ConnectionManager@@QAEXXZ
+// partial score=0.95 date=2026-10-13
 // ?parseUserList@ConnectionManager@@QAEXPBVGameInfo@@@Z
 // partial score=0.95 date=2026-10-07
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc /O1 /arch:SSE /G7
