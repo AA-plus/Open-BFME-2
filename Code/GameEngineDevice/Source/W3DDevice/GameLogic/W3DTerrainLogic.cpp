@@ -384,3 +384,19 @@ AsciiString Rva000DE59C::rva000DE59C()
 {
 	return m_str;
 }
+
+// Native 00062E64..00062E6A: standalone RET0 leaf from the unattempted gap
+// audit. Read the +4 word then subtract the +0 word. The native accesses
+// establish the word widths and offsets; the original owner, signedness and
+// field meanings are unresolved. Keep the neutral member in its approved TU.
+class Rva00062E64
+{
+public:
+ unsigned rva00062E64() const;
+private:
+ unsigned word00, word04;
+};
+unsigned Rva00062E64::rva00062E64() const
+{
+ return word04-word00;
+}

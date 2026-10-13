@@ -2346,3 +2346,62 @@ void Rva002B77A2::rva002B77A2()
 {
 	m_F0.clear();
 }
+
+// Unattempted scalar leaves from the native gap audit. Each complete body
+// starts after a preceding body's RET or padding and ends in its own RET.
+// Native accesses establish the offsets and the 32-bit/byte ABI below;
+// original classes, field meanings and signedness remain unasserted. These
+// neutral views describe only the observed operations, as above.
+class Rva000EF876
+{
+public:
+ void rva000EF876();
+private:
+ char pad00[7]; unsigned char byte07;
+};
+// 000EF876..000EF87B: set bit 0 of byte +7; RET0.
+void Rva000EF876::rva000EF876()
+{
+ byte07|=1;
+}
+
+class Rva000B22A9
+{
+public:
+ void rva000B22A9(unsigned char value);
+private:
+ char pad00[0x30]; unsigned char byte30;
+};
+// 000B22A9..000B22B3: copy low argument byte to +30; RET4.
+void Rva000B22A9::rva000B22A9(unsigned char value)
+{
+ byte30=value;
+}
+
+class Rva00234288
+{
+public:
+ unsigned rva00234288() const;
+private:
+ unsigned word00, word04;
+};
+// 00234288..0023428D: return +4 word plus one without storing; RET0.
+unsigned Rva00234288::rva00234288() const
+{
+ return word04+1;
+}
+
+class Rva004EA03E
+{
+public:
+ void rva004EA03E();
+private:
+ char pad00[0x64]; unsigned char byte64;
+ char pad65[7]; unsigned word6C;
+};
+// 004EA03E..004EA046: increment word +6C then clear byte +64; RET0.
+void Rva004EA03E::rva004EA03E()
+{
+ ++word6C;
+ byte64=0;
+}
