@@ -1,26 +1,37 @@
 // ?rva00502FE9@Rva00502FE9@@QAEXH@Z
-// partial score=0.9151033207774306 date=2026-10-12
+// partial score=0.9452147542016366 date=2026-10-13
 // ?rva00502FE9@Rva00502FE9@@QAEXH@Z
 // cl: /O1 /G7 /arch:SSE /MD /EHs /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
-// Native502FE9..503554:1387B; WB12FB830 unnamed shared callgraph.
-// Complete first reconstruction of the building/army-template table pass.
-// Current body1386B/frame160 versus retail1387B/frame154. Remaining deltas:
-// stack allocation, two vector-size load sequences, copied-record address
-// materialization, and an extra saved-ESP slot around the tree hint copy.
-// AsReference prevents the compiler from eliding the required second 92B
-// record copy. Both copies and their destructors are present in the body.
-// A diagnostic comparison mapped the unlanded447B distance helper5020CC
-// and two29B _Vector_base constructors to211E58. Each constructor was
-// independently whole-body verified with all relocations there; no alias
-// row or pin was added. Ordinary resolution now verifies those folds and
-// leaves only the distance helper unresolved.
-// The original owner/method and record names remain unknown. Field offsets
-// come from this native body; existing provider spellings and the12B vector/
-// tree cleanup adapters preserve ABI without asserting original C++ types.
-// In particular pair<const int,PodVectors>::second uses the existing12B
-// cleanup provider as a storage adapter, not an upstream pair declaration.
-// Blocked-on=0x005020CC remains applicable. This is evidence, not a match.
+// Partial: native502FE9..503554, RET4, 1387B/frame154. This reconstruction
+// has the same extent and frame; local homes still differ. Not exact.
+// Same-position1220/1387; stock diagnostic fitness0.94521475. The former
+// frame15C variant scored0.934458 but had fewer same-position bytes and a
+// larger EH mismatch; it is retained as noncompiled evidence.
+// WB12FB830 explicitly binds the spawn-vector reference before indexing;
+// retaining that reference reproduces both native ECX begin-pointer loads.
+// The copy wrapper keeps both92B objects alive through the insertion and
+// reproduces the second object's LEA. The inline outer insert removes the
+// redundant saved-ESP store. Exposing both standard map hint-insert bodies
+// permits native frame154; each emitted29B insertion body independently equals
+// retail at502694/502F09 with all relocations resolved. Remaining differences
+// are stack homes, related displacement widths and distance helper5020CC.
+// The visible first92B-record constructor also matches its29B retail body
+// at500770 and restores the building-vector and SpawnArmy-string homes.
+// Native EH has16 states. This shape retains the same parent-state graph;
+// eh_verify reports22 differing text-funclet bytes, from local offsets.
+// No production, alias or pin claim is made.
+// Target owner: WB HasUnitOfType12FC460/GetUnitOfType12FC890 use this+38;
+// WB HasUnitToFightType12FC560 uses this+44. Their named class is
+// LivingWorldAIBuildingTypes and all three consume the tables initialized here.
+// Caller4FB222 initializes this subobject at LivingWorldAI+18. The original
+// initializer method spelling remains unknown, so preserve its bank symbol.
+// Rva004E3184 is independently identified as SpawnArmy by WB128AFA0 and the
+// native virtual name at4E30C6; its existing provider spelling is retained.
+// Other address-derived records and container adapters assert native ABI and
+// verified call relationships only. PairCopy is a lifetime/ABI adapter, not an
+// assertion of an original named type. Source: target retail and WB, no donor.
+// blocked-on=0x005020CC. This bank is evidence and does not count as a match.
 #include "ascii_string.h"
 #include <vector>
 #include <map>
@@ -79,17 +90,19 @@ struct Rva00502667Element {int key;Rva005020AFSub value;Rva00502667Element(const
 struct Rva00502BCDMapped {char data[12];};
 typedef _STL::map<int,Rva00502BCDMapped> SetMap;
 namespace _STL {
-template<> struct pair<const int,PodVectors> {const int first;Rva00500E3D second;pair(const int&,const PodVectors&);pair(const pair&);};
+template<> struct pair<const int,PodVectors> {typedef const int first_type;typedef PodVectors second_type;const int first;Rva00500E3D second;pair(const int&,const PodVectors&);pair(const pair&);};
 template<> void vector<ScienceType>::push_back(const ScienceType&);
 template<> void PodVector::push_back(const BfmePod88&);
 
-template<> SetMap::iterator SetMap::insert(SetMap::iterator,const SetMap::value_type&);
+template<> __declspec(noinline) SetMap::iterator SetMap::insert(SetMap::iterator p,const SetMap::value_type&v){return _M_t.insert_unique(p,v);}
 }
 typedef _STL::map<int,PodVectors> VectorMap;
-namespace _STL {template<> VectorMap::iterator VectorMap::insert(VectorMap::iterator,const VectorMap::value_type&);}
-class Rva00500BF5Tree {public:typedef _STL::_Rb_tree_iterator<Rva00500500,_STL::_Nonconst_traits<Rva00500500> >Iterator;Iterator insertEqual(Iterator,const Rva00500500&);};
+namespace _STL {template<> __declspec(noinline) VectorMap::iterator VectorMap::insert(VectorMap::iterator p,const VectorMap::value_type&v){return _M_t.insert_unique(p,v);}}
+class Rva00500BF5Tree {public:typedef _STL::_Rb_tree_iterator<Rva00500500,_STL::_Nonconst_traits<Rva00500500> >Iterator;Iterator insertEqual(Iterator,const Rva00500500&);__forceinline Iterator insert(Iterator p,const Rva00500500&v){return insertEqual(p,v);}};
 class Rva00501F2D {public:void rva0050247A();};class Rva005007CF {public:void rva00500AA6();};
 static __forceinline const Rva00500500&AsReference(const Rva00500500&v){return v;}
+struct PairCopy{Rva00500500 value;__forceinline PairCopy(const Rva00500500&v):value(v){} operator const Rva00500500&()const{return value;} const Rva00500500&get()const{return value;}};
+inline __declspec(noinline) Rva00500500::Rva00500500(void*&k,const Rva004E3184&v):key(k),value(v){}
 void Rva005020CCBuildRegionDistances();
 class Rva00502FE9 {public:void rva00502FE9(int);int commandBuilding,spawnBuilding,strengthBuilding,upgradeBuilding;_STL::vector<ScienceType>spawnBuildings;int commandPoints;float average;char gap24[12];int strengthenAmount,upgradeAmount;VectorMap vectors;SetMap sets;};
 void Rva00502FE9::rva00502FE9(int playerID) {
@@ -113,8 +126,8 @@ void Rva00502FE9::rva00502FE9(int playerID) {
   for(int j=0;j<8;++j)byCategory.push_back(empty);
   Rva005020AFSub ordered;
   SpawnView*spawn=(SpawnView*)((LivingWorldBuildingTemplate*)((Rva002B6498*)TheLivingWorldBuildingTemplateStore)->rva002B6498((NameKeyType)spawnBuildings[i]))->findNugget(AsciiString("SpawnArmy"));
-  if(spawn)for(unsigned j=0;j<spawn->entries.size();++j){
-   Rva004E3184&entry=spawn->entries[j];
+  if(spawn){_STL::vector<Rva004E3184>&entries=spawn->entries;for(unsigned j=0;j<entries.size();++j){
+   Rva004E3184&entry=entries[j];
    if(((Rva00319CED*)&entry)->rva00319CED()){
     SummaryView*summary=(SummaryView*)((Rva003B8E89*)TheCampaignManager)->rva003B8E89((char*)&entry+0x2c);
     int size=summary->entries.size();
@@ -123,10 +136,11 @@ void Rva00502FE9::rva00502FE9(int playerID) {
      const ThingTemplate*thing=TheThingFactory->findTemplate(name);
      byCategory[((TemplateView*)thing)->category].push_back((const BfmePod88&)entry);
      void*key=((Rva0033A674*)thing)->rva0033A674();
-     ((Rva00500BF5Tree*)&ordered)->insertEqual(Rva00500BF5Tree::Iterator((_STL::_Rb_tree_node<Rva00500500>*)*(void**)&ordered),Rva00500500(AsReference(Rva00500500(key,entry))));
+     ((Rva00500BF5Tree*)&ordered)->insert(Rva00500BF5Tree::Iterator((_STL::_Rb_tree_node<Rva00500500>*)*(void**)&ordered),PairCopy(Rva00500500(key,entry)).value);
     }
     average+=(float)((BfmeY1038*)summary)->bfmeVal1038();++count;
    }
+  }
   }
   _STL::pair<const int,PodVectors> vectorPair(reinterpret_cast<const int&>(spawnBuildings[i]),(const PodVectors&)byCategory);
   { _STL::pair<const int,PodVectors> copied(vectorPair);vectors.insert(vectors.begin(),copied); }
