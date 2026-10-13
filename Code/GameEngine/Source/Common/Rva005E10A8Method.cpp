@@ -217,10 +217,10 @@ class Rva005E136CList28
 {
 public:
 	Rva005E136CList28();
-	~Rva005E136CList28();
+	__declspec(noinline) ~Rva005E136CList28();
 
 private:
-	_STL::_Vector_base<AsciiString, _STL::allocator<AsciiString> > m_names;
+	_STL::vector<AsciiString, _STL::allocator<AsciiString> > m_names;
 };
 
 // ?Rva005E136CList28::Rva005E136CList28 present-unmatched (ICF-folded at 0x001F81BF; pinned)
@@ -407,4 +407,11 @@ public:
 AptTimerAdder::~AptTimerAdder()
 {
     reinterpret_cast<Rva00524021 *>(this)->rva00524056();
+}
+
+// Native 5242D7: unregister names through the independently rowed loop.
+// The member's original class name remains unknown.
+Rva005E136CList28::~Rva005E136CList28()
+{
+    reinterpret_cast<Rva00524021 *>(this)->rva00524021();
 }
