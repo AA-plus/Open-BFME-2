@@ -1,5 +1,5 @@
 // ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
-// partial score=0.9869 date=2026-10-06
+// partial score=0.98 date=2026-10-13
 // ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
 // partial score=0.95 date=2026-10-02
 // cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT /Oy-
@@ -150,7 +150,7 @@ GameFont *FontLibrary::rva0021857E(const AsciiString *namePtr, float size, bool 
 	GameFont *font;
 	for (font = m_fontList; font; font = font->next)
 	{
-		if (font->pointSize == size && (bool)font->bold == bold && font->style == style &&
+		if (font->pointSize == size && bold == (bool)font->bold && font->style == style &&
 			font->nameString == name)
 			return font;
 	}
