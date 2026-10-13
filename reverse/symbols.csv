@@ -10856,7 +10856,7 @@ name,address,notes
 ?rva001B4FE9@SubsystemInterfaceList@@QAEXXZ,0x001B4FE9,"member of the global at VA 0x00DFD940 (ledger TheSubsystemList) GameEngine slot 17 calls before answering; REL32 at 0x00225B41; identity not recovered"
 ?rva001B505F@SubsystemInterfaceList@@QAEEXZ,0x001B505F,"member of the global at VA 0x00DFD940 (ledger TheSubsystemList) returning a byte its caller normalises (test al; setne al); REL32 in GameEngine slot 16 0x00225AF4; identity not recovered"
 ?rva001B5140@SubsystemInterfaceList@@QAE_NXZ,0x001B5140,"member of the global at VA 0x00DFD940 (ledger TheSubsystemList) returning a byte; REL32 in GameEngine slot 17 0x00225B21; identity not recovered"
-?rva001D9781@Rva001D98BD@@QAEHXZ,0x001D9781,"Retail REL32 at 0x001D97AC targets this Ghidra start; function start/extent 88B. Candidate self-recursion pin; name/class remain address-derived structural labels"
+?rva001D9781@Rva001D98BD@@QAE_NXZ,0x001D9781,"Retail REL32 at 0x001D97AC targets this Ghidra start; function start/extent 88B. Candidate self-recursion pin; name/class remain address-derived structural labels"
 ?rva001DA112@Rva001DA112@@QAEXHHPAD@Z,0x001DA112,thiscall callee of the F22 ebp-frame forwarders; takes the wrapper's first two args plus (char*)&arg2+3 in a vestigial third slot; name unknown
 ?rva001DBCDC@Rva001DBCDCTarget@@QAEXXZ,0x001DBCDC,"method a vtable-slot forwarder tail-jumps to (ret 0); opaque address name"
 ?rva001DC42C@GameWindowTransitionsHandler@@QAEXVAsciiString@@_N@Z,0x001DC42C,transition remove callee of reset at 0x0031E09E; honest address-derived name

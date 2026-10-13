@@ -53,7 +53,7 @@ class GameMessageList;
 class GameMessage {public:void friend_setList(GameMessageList*);};
 class MilesMutexGuard {public:MilesMutexGuard(void*,int);~MilesMutexGuard();bool rva00041055();bool rva00041037(int);void*mutex;bool held;};
 class Rva001D9A00 {public:bool rva001D9A00();};
-class Rva001D98BD {public:int rva001D9781();};
+class Rva001D98BD {public:bool rva001D9781();};
 class AudioInfoNames {public:virtual ~AudioInfoNames();virtual const AsciiString&getAudioName()const;};
 class Weapon {public:void setLeechRangeActive(bool);};
 class FileStatus {public:virtual bool check(int);};
