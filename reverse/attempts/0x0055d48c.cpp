@@ -1,4 +1,6 @@
 // ?getPosition@SphereEmissionVolumeModule@FXParticleSystem@@UAE?AUCoord3D@@MMMM@Z
+// partial score=0.93 date=2026-10-13
+// ?getPosition@SphereEmissionVolumeModule@FXParticleSystem@@UAE?AUCoord3D@@MMMM@Z
 // partial score=0.66 date=2026-10-08
 // cl: /O1 /arch:SSE /G7
 // Sphere position callback at BFME2 RVA 0x0055D48C (129 bytes).
@@ -79,11 +81,13 @@ Coord3D SphereEmissionVolumeModule::getPosition(float, float, float, float)
 	float radius = m_is_hollow ? m_radius :
 		GetGameClientRandomValueReal(0.0f, m_radius, source, 86);
 	Coord3D randomPoint;
+	Coord3D unit = *Rva003AFA64FillUnitVector(&randomPoint);
+	volatile Coord3D &vu = unit;
+	float ux = vu.x, uy = vu.y, uz = vu.z;
 	Coord3D result;
-	result = *Rva003AFA64FillUnitVector(&randomPoint);
-	result.x *= radius;
-	result.y *= radius;
-	result.z *= radius;
+	result.x = ux * radius;
+	result.y = uy * radius;
+	result.z = uz * radius;
 	return result;
 }
 
