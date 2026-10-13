@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii
-// ?Rva003BC566Forward@@YAXXZ @0x003BC566 17B: script forwards to TheAudio slot 0xc8 with 0.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BC566Forward@ScriptActions@@QAEXXZ @0x003BC566 17B: script forwards to TheAudio slot 0xc8 with 0.
 // Evidence: mov ecx,[0xDFE6E8]=TheAudio mov eax,[ecx] push 0 call [eax+0xc8] ret; caller 0x003CD22A; sibling Rva003BC4FFForward slot 0xbc same shape.
 class AudioManager
 {
@@ -58,7 +60,7 @@ public:
 };
 extern AudioManager *TheAudio;
 
-void __cdecl Rva003BC566Forward()
+void ScriptActions::Rva003BC566Forward()
 {
 	TheAudio->s50(0);
 }

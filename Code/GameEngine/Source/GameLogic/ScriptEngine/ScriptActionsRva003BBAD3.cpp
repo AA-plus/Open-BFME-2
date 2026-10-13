@@ -1,3 +1,6 @@
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
 // ?Rva003BBAD3Set@@YAXXZ @0x003BBAD3 99B unlock callers 0x003BD5AC 0x003BE5EC 0x003BE6FC 0x003CBF32 callees setInputEnabled setVisibility appendBooleanArgument rva00405AA7 clearFlags slots 0x48 0x110
 // Evidence: InGameUI+Mouse disables then MessageStream 0x3EC boolean then InGameUI slot 0x110 and 0x8B0 clear then tail clearFlags.
@@ -158,9 +161,9 @@ void Rva003BBAD3::rva003BBAD3()
 	return ((Rva005B5440 *)g_bfmeSingletonVVD)->clearFlags();
 }
 
-// ?Rva003BBB36Enable@@YAXXZ @0x003BBB36 27B leaf caller 0x003CBF3E globals TheInGameUI TheMouse callees setInputEnabled setVisibility
+// ?Rva003BBB36Enable@ScriptActions@@QAEXXZ @0x003BBB36 27B leaf caller 0x003CBF3E globals TheInGameUI TheMouse callees setInputEnabled setVisibility
 // Evidence: mov ecx,[TheInGameUI] push 1 call setInputEnabled mov ecx,[TheMouse] push 1 call setVisibility ret.
-void Rva003BBB36Enable()
+void ScriptActions::Rva003BBB36Enable()
 {
 	TheInGameUI->setInputEnabled(true);
 	TheMouse->setVisibility(true);

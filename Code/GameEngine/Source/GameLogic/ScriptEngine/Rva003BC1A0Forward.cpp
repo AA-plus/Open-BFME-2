@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii
-// ?Rva003BC1A0Forward@@YAXXZ @0x003BC1A0 18B: script forwards TheTerrainLogic to TheRadar slot 0x10.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BC1A0Forward@ScriptActions@@QAEXXZ @0x003BC1A0 18B: script forwards TheTerrainLogic to TheRadar slot 0x10.
 // Evidence: mov ecx,[0xDFF070]=TheRadar push [0xDFEC50]=TheTerrainLogic mov eax,[ecx] call [eax+0x10] ret; caller 0x003CC86C.
 class TerrainLogic;
 class Radar
@@ -14,7 +16,7 @@ public:
 extern Radar *TheRadar;
 extern TerrainLogic *TheTerrainLogic;
 
-void __cdecl Rva003BC1A0Forward()
+void ScriptActions::Rva003BC1A0Forward()
 {
 	TheRadar->s04(TheTerrainLogic);
 }

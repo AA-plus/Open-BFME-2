@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
-// ?Rva003C1FADDestroy@@YAXXZ @0x003C1FAD 49B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C1FADDestroy@ScriptActions@@QAEXXZ @0x003C1FAD 49B
 // Destroy flagged GameLogic objects via rowed getFirstObject 0x0023CAD2
 // and destroyObject 0x00242C09. Evidence: caller 0x003CDA80;
 // neighbours 0x003C0FEA 0x003C10D8; global TheGameLogic.
@@ -19,7 +21,7 @@ public:
 
 extern GameLogic *TheGameLogic;
 
-void __cdecl Rva003C1FADDestroy(void)
+void ScriptActions::Rva003C1FADDestroy(void)
 {
 	Object *o = TheGameLogic->getFirstObject();
 	while (o != 0) {
