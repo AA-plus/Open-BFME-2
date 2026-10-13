@@ -165,3 +165,8 @@ void Impl::Update(){
  }
 }
 }}
+// ?thru@Rva00239105A@@QAEXXZ @0x0042C5BC 7B: retail places this forwarder
+// right after Impl::Update; it loads the owner's Impl pointer (first word) and
+// tail-jumps Impl::Update. Its one caller 0x239105 pins this name.
+class Rva00239105A {public:void thru();StrategicInGameUI::InGameUI::Impl *impl;};
+void Rva00239105A::thru(){impl->Update();}
