@@ -28,7 +28,8 @@ class DisconnectManager
 {
 public:
 	void processDisconnectPlayer(NetCommandMsg *msg, ConnectionManager *conMgr);
-	void rva004D41B3(Int slot, ConnectionManager *conMgr);
+protected:
+	void disconnectPlayer(Int slot, ConnectionManager *conMgr); // rowed 0x004D41B3
 };
 
 // Target evidence: 0x004D46AF dispatches command type 0x1A here with
@@ -41,7 +42,7 @@ public:
 // but its command mapping and callees differ; the target method stays RVA-named.
 void DisconnectManager::processDisconnectPlayer(NetCommandMsg *msg, ConnectionManager *conMgr)
 {
-	rva004D41B3(((NetProgressCommandMsg *)msg)->getPercentage(), conMgr);
+	disconnectPlayer(((NetProgressCommandMsg *)msg)->getPercentage(), conMgr);
 	if (!((Rva004D38D8 *)this)->rva004D38D8(g_Va00BC2424)) {
 		*(Int *)((char *)TheGameLogic + 0x2A4) = 1;
 		return;

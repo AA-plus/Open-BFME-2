@@ -50474,3 +50474,4 @@ $L2599	0x007A9D40	15	blocked	false-reject check_csv TU-local label collision: Ap
 ?isCIH@BfmeAptValue006DCD20@@QBE_N_N@Z	0x006F99D0	1292	blocked	rowed twin returns int not bool; test-eax vs test-al; t=3 model=muse-spark
 ?rva00626630@BfmeWideResult@@QAEXPAVObject@@M@Z	0x0049BCA3	1242	blocked	retail passes float 0.0 via fldz-fstp; rowed int twin emits push-0; t=10 model=muse-spark
 ??0Rva0015B110Target@@QAE@PAVRva0015B110Owner@@@Z	0x0015B110	182	blocked	new-owner vs rowed FXShaderSetup copy-ctor; t=2 model=muse-spark
+?Rva002EBBFBIsOdd@@YA_NPAX@Z	0x002EBBFB	25	blocked	link-respell wall: rowed unsigned char vs bool return needs bool normalization (test/setne) for bool local and uchar->bool for WorldToCell arg; both variants break 67B victim (68B / full mismatch); t=10 model=muse-spark

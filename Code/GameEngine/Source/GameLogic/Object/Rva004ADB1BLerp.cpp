@@ -30,12 +30,13 @@ public:
 	float m_cc;
 };
 
+class Rva004ADB1B;
+class SpecialAbilityUpdate { friend class Rva004ADB1B; protected: bool handlePackingProcessing(); }; // rowed 0x0044F0B3
 class Rva004ADB1B
 {
 public:
 	bool rva004ADB1B();
 	bool rva004B0348();
-	bool rva0044F0B3();
 
 private:
 	char m_pad0[4];
@@ -51,7 +52,7 @@ private:
 
 bool Rva004ADB1B::rva004ADB1B()
 {
-	bool ok = rva0044F0B3();
+	bool ok = ((SpecialAbilityUpdate*)this)->handlePackingProcessing();
 	if (ok == 0)
 		return ok;
 	float base;
@@ -79,7 +80,7 @@ bool Rva004ADB1B::rva004ADB1B()
 // copying it to the drawable +B0. RET0 returns the guard bool unchanged.
 bool Rva004ADB1B::rva004B0348()
 {
-	bool ok = rva0044F0B3();
+	bool ok = ((SpecialAbilityUpdate*)this)->handlePackingProcessing();
 	if (ok == 0)
 		return ok;
 	float base;

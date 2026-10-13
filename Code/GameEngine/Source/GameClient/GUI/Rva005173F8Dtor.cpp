@@ -63,7 +63,7 @@ public:
  void OnInitialized(const char*);
  void ShellLoadScreen(const char*);void ShellUnloadScreen(const char*);
  void Options(const char*);void ShellExit(const char*);
- const char *rva00517207(int);
+ void rva00517207(int query, char *value, bool set); // rowed 0x00517207 void(int,char*,bool)
 };
 
 struct Rva00416088 {

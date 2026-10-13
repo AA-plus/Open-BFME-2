@@ -11,10 +11,10 @@ struct Rva000B2361Slot
 	void *ptr;
 };
 
+class Rva000B2361 { public: int *rva000B2361(int a); }; // rowed 0x000B2361 int*(int)
 class Rva000B4653
 {
 public:
-	Rva000B2361Slot *rva000B2361(int a);
 	void *rva000B4653(int a);
 
 private:
@@ -25,6 +25,6 @@ private:
 void *Rva000B4653::rva000B4653(int a)
 {
 	if ((unsigned int)a < (unsigned int)(m_0 & 7))
-		return rva000B2361(a)->ptr;
+		return *(void**)(((Rva000B2361*)this)->rva000B2361(a));
 	return 0;
 }
