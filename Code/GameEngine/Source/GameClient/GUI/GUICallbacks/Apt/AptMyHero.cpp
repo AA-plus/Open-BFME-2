@@ -35,7 +35,8 @@ public:
  virtual void slot04();virtual void slot08();virtual void slot0C();virtual void slot10();
  CreateAHeroData &operator=(const CreateAHeroData &);
 protected:
- char pad04[0x0C-4];
+ char pad04[4];
+ UnicodeString heroName08;
  int field0C,field10;
  char pad14[0x138-0x14];
  const Image *image138;
@@ -52,7 +53,7 @@ struct Rva005B0473View {char opaque[0x60];float field60;int field64,field68;};
 struct CreateAHeroClassRecord {char opaque[0x20];};
 struct CreateAHeroClassList {unsigned int size() const {return last-first;}CreateAHeroClassRecord *first,*last,*capacity;};
 class Rva002195E6;
-class CreateAHeroManager {public: const Rva002195E6 *GetViewInfo(unsigned int,unsigned int);const AsciiString &GetBlingNameTag(int,const CreateAHeroHero *,unsigned int);unsigned int GetClassCount() const {return classes14C.size();}char pad000[0x14C];CreateAHeroClassList classes14C;char pad158[0x1E8-0x158];AsciiString field1E8;};
+class CreateAHeroManager {public: const Rva002195E6 *GetViewInfo(unsigned int,unsigned int);const AsciiString &GetClassNameTag(unsigned int);const AsciiString &GetSubClassNameTag(unsigned int,unsigned int);const AsciiString &GetBlingNameTag(int,const CreateAHeroHero *,unsigned int);unsigned int GetClassCount() const {return classes14C.size();}char pad000[0x14C];CreateAHeroClassList classes14C;char pad158[0x1E8-0x158];AsciiString field1E8,field1EC;};
 class Object;
 class Drawable {public: char pad000[0xFC];Object *object;char pad100[4];Drawable *next;};
 class GameClient {
@@ -69,6 +70,8 @@ class GameWindowTransitionsHandler {
 public:
  virtual void slot00();virtual void slot04();virtual void slot08();virtual void slot0C();virtual void slot10();
  virtual void slot14();virtual void slot18();virtual void slot1C();virtual void slot20();virtual void slot24();
+ bool isFinished();
+ void reverse(AsciiString);
  void setGroup(AsciiString groupName,bool immediate);
 };
 extern GameWindowTransitionsHandler *TheTransitionHandler;
@@ -100,6 +103,7 @@ public:
  virtual ~AptMyHero();
  virtual void slot14();
  void SwitchToPendingHero();
+ void FrameUpdate();
  void rva005B21DA(CreateAHeroData *hero,bool flag,int mode);
  void rva005B0416(int);int rva005B0E60(const Object *);void rva005B1A6C();void rva005B0446();
  bool rva005B0725();
@@ -113,7 +117,7 @@ private:
  bool flag148;
  char pad149[3];
  int field14C;
- int field150;
+ bool flag150,flag151;char pad152[2];
  int availAttribPoints154;	// WorldBuilder: m_availAttribPoints
  int maxAttribPoints158;
  BfmePod8Vector mapObjectInfo15C;
@@ -340,4 +344,62 @@ AptMyHero::~AptMyHero(){
   reinterpret_cast<Rva00223A94 *>(g_bfmeAptWindowManager)->rva00223A94(&key);
  }
  reinterpret_cast<Rva005B1830 *>(this)->rva005B1830();
+}
+
+// FrameUpdate: WB AptMyHero::FrameUpdate names the transition polling, the
+// DIK arrow-key handlers and the MyHeroName/Class/Type text refresh. Helper
+// names below stay address views. The transition guard's ctor is defined in
+// the class (retail still calls the rowed 0x0023C565 copy); its dtor inlines.
+class Keyboard {public:bool rva00232643(unsigned char);};
+extern Keyboard *TheKeyboard;
+extern int g_Va00DBA4E4;
+class Rva005B02B5 {public:void rva005B0249();void rva005B027F();void rva005B02B5();void rva005B02FD();};
+class Rva001DBAA4 {public:void unlock();};
+class Rva001DBAA4L {public:void lock();};
+class Rva0023C565 {
+public: Rva0023C565(){if(TheTransitionHandler)reinterpret_cast<Rva001DBAA4L *>(TheTransitionHandler)->lock();}
+ __forceinline ~Rva0023C565(){if(TheTransitionHandler)reinterpret_cast<Rva001DBAA4 *>(TheTransitionHandler)->unlock();}
+};
+void AptMyHero::FrameUpdate() {
+ bool changed=false;
+ switch(field14C) {
+ case 1:
+  if(TheTransitionHandler->isFinished()) {
+   if(!field18C)SwitchToPendingHero();
+   else if((unsigned)field18C >= (unsigned)(g_Va00DBA4E4+2)) {
+    Rva0023C565 guard;
+    const AsciiString &group=TheCreateAHeroManager->field1EC;
+    if(!reinterpret_cast<const StringBase<char> &>(group).isEmpty()) {
+     TheTransitionHandler->reverse(group);
+     reinterpret_cast<Rva001DBB82OneSetter *>(TheTransitionHandler)->enable();
+     TheWindowManager->slot28();
+    }
+    field14C=2;
+   }
+   ++field18C;
+  }
+  break;
+ case 2:
+  if(TheTransitionHandler->isFinished()) {
+   TheTransitionHandler->slot24();TheWindowManager->slot28();field14C=0;TheDisplay->field141=false;
+  }
+  break;
+ }
+ if(TheKeyboard->rva00232643(0xCB)){reinterpret_cast<Rva005B02B5 *>(this)->rva005B0249();changed=true;}
+ if(TheKeyboard->rva00232643(0xCD)){reinterpret_cast<Rva005B02B5 *>(this)->rva005B027F();changed=true;}
+ if(TheKeyboard->rva00232643(0xC8)){reinterpret_cast<Rva005B02B5 *>(this)->rva005B02B5();changed=true;}
+ if(TheKeyboard->rva00232643(0xD0)){reinterpret_cast<Rva005B02B5 *>(this)->rva005B02FD();changed=true;}
+ if(changed)rva005B1019();
+ if(flag150) {
+  rva005B0446();
+  if(!TheCreateAHeroManager)return;
+  unsigned classIndex=field0C;unsigned subclassIndex=field10;
+  {AsciiString key("APT:MyHeroName");g_bfmeAptWindowManager->bfmeSetText(key,heroName08,true);}
+  {AsciiString key("APT:MyHeroClass");g_bfmeAptWindowManager->bfmeSetText(key,TheGameText->fetch(TheCreateAHeroManager->GetClassNameTag(classIndex)),true);}
+  {AsciiString key("APT:MyHeroType");g_bfmeAptWindowManager->bfmeSetText(key,TheGameText->fetch(TheCreateAHeroManager->GetSubClassNameTag(classIndex,subclassIndex)),true);}
+
+  flag150=false;flag151=true;
+ }
+ flag151=true;
+ flag151=!rva005B0725();
 }
