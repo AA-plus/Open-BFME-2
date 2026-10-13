@@ -182,7 +182,6 @@ private:
 	_STL::vector<int> m_28;
 };
 
-class Rva0002BF4A { public: void rva0002BF4A(); };
 class Xfer;
 class INI
 {
@@ -372,10 +371,10 @@ unsigned char INI::loadFile(AsciiString filename, INILoadType loadType, Xfer *pX
 	}
 	catch (...)
 	{
-		((Rva0002BF4A *)this)->rva0002BF4A();
+		unPrepFile();
 		throw;
 	}
 
-	((Rva0002BF4A *)this)->rva0002BF4A();
+	unPrepFile();
 	return 1;
 }

@@ -12312,7 +12312,6 @@ name,address,notes
 ?tryToIgnite@FlammableUpdate@@QAEXXZ,0x0048CB18,callee of ?helper@Rva002EFB20@@YAXPAX_N@Z at retail 0x003BC2CC read from its REL32 displacement; body unrowed
 ?u1Call_005C7110@@YAXPAX00PAPAX@Z,0x001F82AB,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?u1Do_005C7410@@YAXPAX00PAVU1ByteFlagged@@@Z,0x001F8384,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
-?unPrepFile@INI@@IAEXXZ,0x0002BF4A,alias of rowed 0x0002BF4A (Rva0002BF4AClear.cpp) called on normal and catch(...) exits of INI load variants 0x0002DA4B/0x0002DC75/0x0002DD38 after prepFile 0x0002D2C1; name carried from BFME1 ini.cpp unPrepFile (donor)
 ?undoNamedMapReveal@ScriptEngine@@QAEXABVAsciiString@@@Z,0x0035789D,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?undoRevealMapForPlayerPermanently@PartitionManager@@QAEXH@Z,0x007397B0,8B this-adjust jmp thunk (mov ecx [ecx+0x10]; jmp 0x73D810); first shroud call in BFME1 doBorderSwitch source; B1 reveal-thunk precedent
 ?undoRevealMapForPlayerPermanently@ShroudManager@@QAEXH@Z,0x0073D810,tail-call target of PartitionManager undo thunk 0x7397B0 (mov ecx [ecx+0x10]; jmp); shroud-manager method by same-semantics forwarding
