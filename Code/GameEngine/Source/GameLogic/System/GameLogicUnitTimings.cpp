@@ -331,8 +331,12 @@ extern AI *TheAI;
 extern G00DFF080Obj *g_00DFF080;
 extern MessageStream *TheMessageStream;
 extern GlobalData *TheWritableGlobalData;
-extern float g_00DBA6D0;
-extern int g_00DFE948[3];
+// Native benchmark saves/restores this view value and normalizes three display
+// counters for its CSV output. Descriptive names; original identifiers unknown.
+// Retail initial values are 100.0f at VA 0x00DBA6D0 and twelve zero bytes at
+// VA 0x00DFE948. The benchmark owns these cells; no other provider is rowed.
+float BfmeUnitTimingSavedViewValue = 100.0f;
+int BfmeUnitTimingDisplayStats[3] = { 0, 0, 0 };
 
 class Rva002431CB
 {
@@ -411,7 +415,7 @@ void Rva002431CB::rva002431CB()
 			m_drawCallLogic = m_drawCallTotal * 0.01f;
 			m_mode = 4;
 			m_settleFrames = 2;
-			g_00DBA6D0 = TheTacticalView->slot12C();
+			BfmeUnitTimingSavedViewValue = TheTacticalView->slot12C();
 			TheTacticalView->lookAt(&thePos);
 			return;
 		}
@@ -419,10 +423,10 @@ void Rva002431CB::rva002431CB()
 		{
 			m_timeAll = timeToUpdate;
 			m_drawCallAll = m_drawCallTotal * 0.01f;
-			TheDisplay->slot178(g_00DFE948);
-			g_00DFE948[1] /= 100;
-			g_00DFE948[2] /= 100;
-			g_00DFE948[0] /= 100;
+			TheDisplay->slot178(BfmeUnitTimingDisplayStats);
+			BfmeUnitTimingDisplayStats[1] /= 100;
+			BfmeUnitTimingDisplayStats[2] /= 100;
+			BfmeUnitTimingDisplayStats[0] /= 100;
 			m_mode = 3;
 			m_settleFrames = 2;
 			TheTacticalView->slot1C(0);
@@ -438,7 +442,7 @@ void Rva002431CB::rva002431CB()
 			if (TheParticleSystemManager->m_particleCount > 1)
 				TheParticleSystemManager->reset();
 			TheTacticalView->slot128(1.0f);
-			TheTacticalView->slot130(g_00DBA6D0);
+			TheTacticalView->slot130(BfmeUnitTimingSavedViewValue);
 			TheTacticalView->lookAt(&thePos);
 			return;
 		}
@@ -510,7 +514,7 @@ void Rva002431CB::rva002431CB()
 		}
 
 		remark.format("%.1f,%d/%d/%d,%.1f,%.1f,%.1f,%.1f,%s,%s,%s,%s,%.1f,%.1f,%.1f\n",
-			m_timeAll, g_00DFE948[0], g_00DFE948[1], g_00DFE948[2],
+			m_timeAll, BfmeUnitTimingDisplayStats[0], BfmeUnitTimingDisplayStats[1], BfmeUnitTimingDisplayStats[2],
 			m_timeAllNoAnim, m_timeNoPart, m_timeNoSpawn, m_timeLogic,
 			thingName.str(), modelName.str(), type.str(), m_side.str(),
 			(double)m_drawCallAll, (double)m_drawCallNoPart, (double)m_drawCallNoSpawn);
