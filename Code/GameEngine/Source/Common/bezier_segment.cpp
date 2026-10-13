@@ -5,6 +5,10 @@
 #include <math.h>
 #pragma pop_macro("inline")
 // stlport
+// Keep the MSVC float overloads local; the matched operations still inline.
+#define inline static inline
+#include <math.h>
+#undef inline
 // Retail keeps one unsigned max, RVA 0x00013740 (the vendored STLport row). This unit's
 // flags (/G7 /arch:SSE) compile a different copy, and retail kept another unit's. This unit-local
 // overload keeps the inlined code and offers the link no second copy.
