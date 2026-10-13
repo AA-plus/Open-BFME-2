@@ -1,4 +1,6 @@
 // ?update@MissileUpdate@@UAE?AW4UpdateSleepTime@@XZ
+// partial score=0.980602 date=2026-10-13
+// ?update@MissileUpdate@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.9826050638015957 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /I. /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
 #include "Code/Libraries/Include/Lib/Coord3D.h"
@@ -23,7 +25,7 @@ void copyPosition(const Coord3D&p){previous=p;}void state0(){}void state5(){}Obj
 };
 UpdateSleepTime MissileUpdate::update(){
  MissilePoint pos(*getObject()->getPosition());
- if(remaining>0.0f&&m_state>=2){double dx=(double)pos.x-previous.x,dy=(double)pos.y-previous.y,dz=(double)pos.z-previous.z;float distance=(float)sqrt(dz*dz+dy*dy+dx*dx);float *remainder=&remaining;*remainder-=distance;copyPosition(pos);}
+ if(remaining>0.0f&&m_state>=2){double dx=(double)pos.x-previous.x,dy=(double)pos.y-previous.y,dz=(double)pos.z-previous.z;float distance=(float)sqrt(dz*dz+dy*dy+dx*dx);remaining-=distance;copyPosition(pos);}
  if(pos.z<0.0f){TheGameLogic->destroyObject(getObject());return UPDATE_SLEEP_FOREVER;}
  switch(m_state){case 0:state0();break;case 5:state5();break;case 1:rva004A7797();if(m_state!=2)break;case 2:rva004A78E1();break;case 3:rva004A7A86(0);break;case 4:rva004A7A86(1);break;case 6:rva004A7AF6();break;case 7:rva004A7767();break;}
  int oldLayer=getObject()->rva0028B511();PathfindLayerEnum layer=TheTerrainLogic->getHighestLayerForDestination(getObject()->getPosition(),false);getObject()->rva0028B4CE(layer);
