@@ -1,9 +1,6 @@
-// ?rva00261C89@Rva00261C89@@QAE_NXZ
-// partial score=0.97 date=2026-09-29
-// ?rva00261C89@Rva00261C89@@QAE_NXZ
-// partial score=0.97 date=2026-09-29
+// ?rva00261C89@Rva00261C89@@QAEHXZ
+// partial score=0.99 date=2026-10-13
 // cl: /O1 /G7 /MD
-// ?rva00261C89@Rva00261C89@@QAE_NXZ, retail 0x00261C89, 120 bytes.
 // One-time init two global 7-word flags then KindOf gate: B8 set but not 9C set.
 // Evidence: chain from 0x002618A2/0x002618FA landing; caller 0x003E603E this-plus-4 no pushes; rowed BitFlags test 0x002615C0; neighbours 0x002619A0/0x00262002.
 template <int N>
@@ -26,18 +23,17 @@ private:
 #define InitFlagsD (*(unsigned int *)0x00DFEAD4)
 #define GlobalB8Init ((Rva002618A2 *)0x00DFEAB8)
 #define Global9CInit ((Rva002618A2 *)0x00DFEA9C)
-#define GlobalB8Test ((BitFlags<0xEF> *)0x00DFEAB8)
-#define Global9CTest ((BitFlags<0xEF> *)0x00DFEA9C)
+#define GlobalB8Test ((BitFlags<69> *)0x00DFEAB8)
+#define Global9CTest ((BitFlags<69> *)0x00DFEA9C)
 class Rva00261C89
 {
 public:
-	bool rva00261C89();
+	int rva00261C89();
 private:
 	char m_pad[0x108];
 	unsigned m_kind[7];
 };
-// ?rva00261C89@Rva00261C89@@QAE_NXZ present-unmatched
-bool Rva00261C89::rva00261C89()
+int Rva00261C89::rva00261C89()
 {
 	if ((InitFlagsB & 1) == 0) {
 		InitFlagsD |= 1;
@@ -54,3 +50,6 @@ bool Rva00261C89::rva00261C89()
 	}
 	return 0;
 }
+
+// Codegen: the result is an int (retail returns 1/0 with `xor eax,eax; inc eax` / `xor eax,eax`; a bool
+// return gives inc al / xor al,al); the callers test AL only, as for any 0/1 result.
