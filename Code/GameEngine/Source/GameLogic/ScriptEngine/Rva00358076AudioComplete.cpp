@@ -1,33 +1,19 @@
-// ?rva00358076@ScriptEngine@@QAE_NABVAsciiString@@_N@Z
-// partial score=0.95 date=2026-10-13
-// ?rva00358076@ScriptEngine@@QAE_NABVAsciiString@@_N@Z
-// partial score=0.98 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/GameEngine/Include
 // stlport
 // ?rva00358076@ScriptEngine@@QAE_NABVAsciiString@@_N@Z @0x00358076 280B
-// Retail audio-complete twin of 0x00357F5E: CRC find in m_list1A25C, else OpaqueRef via TheAudio slot 0x12c,
-// BfmeAudioEventPrefix136 in inner scope so its dtor runs before Release_Ref, length via slot 0x140 / g_00DBA4F0,
-// insert via 0x357DF8, frame check at +0x40 with conditional int erase.
-// Evidence: LINK BONUS name, CRC 0x3ECA13, insert 0x357DF8, Bfme ctor 0x2D97D6, tail dtor 0x2D9A43,
-// Release_Ref 0x50ED3, list erase 0x438539, TheAudio 0x009FE6E8, TheGameLogic 0x009FE78C,
-// layout +0x1A25C from ScriptEngine_dtor, donor ZH isAudioComplete plus BFME1 IsAudioComplete, HEAD START from banked 0x00357F5E 0.93 stash.
-// 2026-10-11: slot 75 returns the handle BY VALUE (AudioRef with a releasing dtor; hidden return slot reuses
-// the name arg at [ebp+8]) - this alone fixes the EH state-0 store after the call, the ev state 1/0 pair and
-// the 280B extent. Only gap left (5 lines at +0x48): retail loads the vtable (mov eax,[ecx]) right after
-// TheAudio and stores the zeroed timer after push edx; ours schedules xor/stores before the vtable load.
-// Tried with no change: timer ctor/aggregate/pair/value-init, zeroing in arg or object comma expr, audio
-// local, /G5 /G6 /GB /G7 /arch:SSE /EHs /Oy- /Os-split; timer at function scope or after call is worse.
+// Dedicated TU: no existing owner file carried this body. The R1 member
+// visibility lever needs the visible __declspec(noinline)
+// Rva00357DF8::rva00357DF8 definition here; the rowed 0x357DF8 body in
+// ScriptEngineRva00357DF8.cpp stays untouched. Canonical GameLogic and
+// BfmeSpecialPowerTimer8 views replace the bank's private copies.
+#include "../../Common/GameLogicObjectLookupView.h"
 #include <list>
 #include "Common/BfmeAudioEventPrefix136.h"
 #include "ascii_string.h"
 
 unsigned long __cdecl Rva003ECA13Get(const AsciiString &s);
 
-struct BfmeSpecialPowerTimer8
-{
-	unsigned int m_templateID;
-	unsigned int m_readyFrame;
-};
+#include "../../Common/BfmeSpecialPowerTimer8.h"
 
 class Rva00357DF8
 {
@@ -39,12 +25,6 @@ private:
 
 extern float g_00DBA4F0;
 
-class GameLogic
-{
-public:
-	char m_pad[0x40];
-	unsigned int m_frame;
-};
 extern GameLogic *TheGameLogic;
 
 // The audio event handle slot 75 returns by value: a ref-counted pointer
@@ -109,17 +89,23 @@ bool ScriptEngine::rva00358076(const AsciiString &s, bool remove)
 			BfmeAudioEventPrefix136 ev(*(const OpaqueRefElement4 *)&ref, 0);
 			float len = ((AudioManagerView *)TheAudio)->getLength(&ev);
 			int frames = (int)(len / g_00DBA4F0);
-			timer.m_readyFrame = TheGameLogic->m_frame + frames;
+			timer.m_readyFrame = TheGameLogic->getFrame() + frames;
 			timer.m_templateID = crc;
 			((Rva00357DF8 *)&lst)->rva00357DF8(timer);
 			it = lst.begin();
 		}
 	}
-	if (TheGameLogic->m_frame >= it->m_readyFrame) {
+	if (TheGameLogic->getFrame() >= it->m_readyFrame) {
 		if (remove) {
 			((_STL::list<int, _STL::allocator<int> > *)&lst)->erase((_STL::list<int, _STL::allocator<int> >::iterator &)it);
 		}
 		return true;
 	}
 	return false;
+}
+
+// Actual rowed member ?rva00357DF8@Rva00357DF8@@QAEXABUBfmeSpecialPowerTimer8@@@Z at 0x00357DF8 from Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptEngineRva00357DF8.cpp.
+inline __declspec(noinline) void Rva00357DF8::rva00357DF8(const BfmeSpecialPowerTimer8 &rec)
+{
+	m_list.insert(m_list.begin(), rec);
 }
