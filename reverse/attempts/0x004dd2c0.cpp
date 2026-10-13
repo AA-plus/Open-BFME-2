@@ -1,4 +1,6 @@
 // ?OnDeactivation@EmotionNugget@@QAEXXZ
+// partial score=0.93 date=2026-10-13
+// ?OnDeactivation@EmotionNugget@@QAEXXZ
 // partial score=0.9 date=2026-10-09
 // Retail/WB pass 2026-10-09: reconstructed from the complete target body
 // and WorldBuilder's EmotionNugget.cpp sibling. Member offsets, vtable slots,

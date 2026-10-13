@@ -1,4 +1,6 @@
 // ?OnPanelLoaded@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBD@Z
+// partial score=0.993 date=2026-10-13
+// ?OnPanelLoaded@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBD@Z
 // partial score=0.996 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7 /MD /EHsc
 // ?SetSlotString@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBDABVUnicodeString@@@Z retail 0x005FD788 116B
@@ -365,7 +367,7 @@ void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnPanelLoaded(int which, cons
 	Rva005FD5D4UnitSlot &slot = m_slots[which];
 	Rva005F4AED *factory = 0;
 	if (slot.m_ref.m_ptr != (TargetRef00217D4C *)factory && slot.m_second.m_ptr == factory) {
-		factory = (Rva005F4AED *)slot.m_ref.m_ptr;
+		factory = *(Rva005F4AED *volatile*)&slot.m_ref.m_ptr;
 		slot.m_second = factory->rva005F4AED(AptUtils::LevelIndexFromTarget(path), AptUtils::SkipLevelN(path));
 		((Rva002BED91 *)&slot.m_ref)->clear();
 	}

@@ -1,4 +1,6 @@
 // ?playEvaEventsForCastlePacking@CastleBehavior@@QAEXXZ
+// partial score=0.83 date=2026-10-13
+// ?playEvaEventsForCastlePacking@CastleBehavior@@QAEXXZ
 // partial score=0.8357313211399947 date=2026-10-10
 // ?playEvaEventsForCastlePacking@CastleBehavior@@QAEXXZ
 // partial score=0.75 date=2026-10-08

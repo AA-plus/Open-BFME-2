@@ -1,4 +1,6 @@
 // ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
+// partial score=0.988 date=2026-10-13
+// ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
 // partial score=0.988 date=2026-10-12
 // ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
 // partial score=0.988 date=2026-10-09

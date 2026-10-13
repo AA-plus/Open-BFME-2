@@ -1,4 +1,6 @@
 // ?OnEntryAddedToArmySummary@Impl@ArmyDetailsPanel@StrategicInGameUI@@UAEXABVArmySummary@@H@Z
+// partial score=0.9 date=2026-10-13
+// ?OnEntryAddedToArmySummary@Impl@ArmyDetailsPanel@StrategicInGameUI@@UAEXABVArmySummary@@H@Z
 // partial score=0.9 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport

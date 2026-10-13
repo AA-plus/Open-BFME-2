@@ -1,4 +1,6 @@
 // ?createWaypoint@MineshaftPortalBehaviour@@QAEXXZ
+// partial score=0.93 date=2026-10-13
+// ?createWaypoint@MineshaftPortalBehaviour@@QAEXXZ
 // partial score=0.93 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O1 /Oy- /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
 //
