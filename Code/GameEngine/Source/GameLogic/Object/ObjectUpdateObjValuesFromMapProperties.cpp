@@ -42,27 +42,27 @@ public:
 	const char *m_name;
 };
 
-extern Rva00148F5ECache TheKey_objectName;
-extern Rva00148F5ECache TheKey_objectInitialHealth;
-extern Rva00148F5ECache TheKey_objectPrototypeScale;
-extern Rva00148F5ECache TheKey_objectMaxHPs;
-extern Rva00148F5ECache TheKey_objectEnabled;
-extern Rva00148F5ECache TheKey_objectIndestructible;
-extern Rva00148F5ECache TheKey_objectUnsellable;
-extern Rva00148F5ECache TheKey_objectTargetable;
-extern Rva00148F5ECache TheKey_objectPowered;
-extern Rva00148F5ECache TheKey_objectEventsList;
-extern Rva00148F5ECache TheKey_objectAggressiveness;
-extern Rva00148F5ECache TheKey_objectInitialStance;
-extern Rva00148F5ECache TheKey_objectVisualRange;
-extern Rva00148F5ECache TheKey_objectShroudClearingDistance;
-extern Rva00148F5ECache TheKey_objectRecruitableAI;
-extern Rva00148F5ECache TheKey_objectSelectable;
-extern Rva00148F5ECache TheKey_objectTime;
-extern Rva00148F5ECache TheKey_objectWeather;
-extern Rva00148F5ECache TheKey_objectStoppingDistance;
-extern Rva00148F5ECache TheKey_objectGrantUpgrade;
-extern Rva00148F5ECache TheKey_objectExperienceLevel;
+Rva00148F5ECache TheKey_objectName = { NAMEKEY_INVALID, "objectName" };	// RVA 0x009BDCC4
+Rva00148F5ECache TheKey_objectInitialHealth = { NAMEKEY_INVALID, "objectInitialHealth" };	// RVA 0x009BDCD4
+Rva00148F5ECache TheKey_objectPrototypeScale = { NAMEKEY_INVALID, "objectPrototypeScale" };	// RVA 0x009BDCDC
+Rva00148F5ECache TheKey_objectMaxHPs = { NAMEKEY_INVALID, "objectMaxHPs" };	// RVA 0x009BDCE4
+Rva00148F5ECache TheKey_objectEnabled = { NAMEKEY_INVALID, "objectEnabled" };	// RVA 0x009BDCEC
+Rva00148F5ECache TheKey_objectIndestructible = { NAMEKEY_INVALID, "objectIndestructible" };	// RVA 0x009BDCF4
+Rva00148F5ECache TheKey_objectUnsellable = { NAMEKEY_INVALID, "objectUnsellable" };	// RVA 0x009BDCFC
+Rva00148F5ECache TheKey_objectTargetable = { NAMEKEY_INVALID, "objectTargetable" };	// RVA 0x009BDD04
+Rva00148F5ECache TheKey_objectPowered = { NAMEKEY_INVALID, "objectPowered" };	// RVA 0x009BDD1C
+Rva00148F5ECache TheKey_objectEventsList = { NAMEKEY_INVALID, "objectEventsList" };	// RVA 0x009BDD24
+Rva00148F5ECache TheKey_objectAggressiveness = { NAMEKEY_INVALID, "objectAggressiveness" };	// RVA 0x009BDD2C
+Rva00148F5ECache TheKey_objectInitialStance = { NAMEKEY_INVALID, "objectInitialStance" };	// RVA 0x009BDD34
+Rva00148F5ECache TheKey_objectVisualRange = { NAMEKEY_INVALID, "objectVisualRange" };	// RVA 0x009BDD3C
+Rva00148F5ECache TheKey_objectShroudClearingDistance = { NAMEKEY_INVALID, "objectShroudClearingDistance" };	// RVA 0x009BDD44
+Rva00148F5ECache TheKey_objectRecruitableAI = { NAMEKEY_INVALID, "objectRecruitableAI" };	// RVA 0x009BDD54
+Rva00148F5ECache TheKey_objectSelectable = { NAMEKEY_INVALID, "objectSelectable" };	// RVA 0x009BDD5C
+Rva00148F5ECache TheKey_objectTime = { NAMEKEY_INVALID, "objectTime" };	// RVA 0x009BDD6C
+Rva00148F5ECache TheKey_objectWeather = { NAMEKEY_INVALID, "objectWeather" };	// RVA 0x009BDD74
+Rva00148F5ECache TheKey_objectStoppingDistance = { NAMEKEY_INVALID, "objectStoppingDistance" };	// RVA 0x009BDD9C
+Rva00148F5ECache TheKey_objectGrantUpgrade = { NAMEKEY_INVALID, "objectGrantUpgrade" };	// RVA 0x009BDDAC
+Rva00148F5ECache TheKey_objectExperienceLevel = { NAMEKEY_INVALID, "objectExperienceLevel" };	// RVA 0x009BDE0C
 
 class Dict
 {

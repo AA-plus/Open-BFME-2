@@ -49,7 +49,7 @@ public:
 };
 extern GlobalData *TheWritableGlobalData;
 
-extern int g_Va00DE1B40;
+extern int g_bfmeDisplayAnimationSyncClock;
 extern int g_Va00DB3BDC;
 
 class RenderObjClass
@@ -123,7 +123,7 @@ void W3DDisplay::reset()
 	m_isClippedEnabled = false;
 	if (TheWritableGlobalData)
 		TheWritableGlobalData->m_value98 = 0.0f;
-	g_Va00DE1B40 = 0;
+	g_bfmeDisplayAnimationSyncClock = 0;
 	g_Va00DB3BDC = -1;
 
 	BFMEDX8DeviceLock lock;
