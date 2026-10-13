@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
 // Native5CF937..5CF9AA115B. WB15B7670 gives the ctor callgraph.
 // Existing destructor5CFDA6 and scalar5CFD8A independently identify the
