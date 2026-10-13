@@ -1,3 +1,5 @@
+// ?rva00665D20@Rva00665D20@@QAEXABVAsciiString@@0@Z
+// partial score=0.95 date=2026-10-13
 // ?rva007F97B0@Rva007FA2C0@@QAEXPAVRva007E8810Message@@PAURva007FA170Slot@@@Z
 // partial score=0.9793 date=2026-10-13
 // ?rva007F97B0@Rva007FA2C0@@QAEXPAVRva007E8810Message@@PAURva007FA170Slot@@@Z
@@ -174,7 +176,7 @@ void Rva007FA2C0::rva007F97B0( Rva007E8810Message *message, Rva007FA170Slot *slo
 		header.m_type = message->m_1C;
 		header.m_flags = message->m_20 & ~0x20000000;
 		_ReadWriteBarrier();
-		header.m_text = (const char *)record->m_buffer;
+		header.m_text = (const char *)__vref(record->m_buffer);
 		_ReadWriteBarrier();
 		header.m_textLength = record->m_total;
 		header.m_entry.m_field04 = message->m_04;
