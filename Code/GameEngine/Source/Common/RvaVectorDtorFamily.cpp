@@ -782,6 +782,22 @@ struct BfmeVectorRecord00319C84
 	AsciiString text;
 	_STL::vector<AsciiString> names;
 };
+struct Rva004F9018Element;
+
+// ??1Rva004F81FC@@QAE@XZ @0x004F81FC 63B -> ??$_Destroy@PAURva004F9018Element@@@_STL@@YAXPAURva004F9018Element@@0@Z
+// The range destructor row 0x004F7E78 walks 12-byte records through the rowed
+// member destructor 0x005F8F96, so this vector's element is the same
+// Rva004F9018Element whose push_back row 0x004F9018 is landed.
+struct Rva004F81FC : RvaVectorFamilyBase<Rva004F9018Element>
+{
+	~Rva004F81FC();
+};
+
+Rva004F81FC::~Rva004F81FC()
+{
+	_STL::_Destroy(m_start, m_finish);
+}
+
 namespace _STL {
 void __cdecl _Destroy(BfmeVectorRecord00319C84 *first, BfmeVectorRecord00319C84 *last);
 }
