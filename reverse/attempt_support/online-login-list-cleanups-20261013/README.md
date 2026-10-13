@@ -37,3 +37,12 @@ No source, shared header, compiler setting, pin, alias, global or class marker
 changes. These are natural lifetime cleanups from the existing real C++
 callbacks. Run the normal whole-source build before verify.py. These checks
 do not establish a new link-census result.
+
+The normal hooks expose four pre-existing shadow identity findings elsewhere
+in the unchanged unit: the list<int> copy constructor bound at 0x00445E8B
+is divergent, MessageBoxOkCancel at 0x0044C146 and rva005AF12F at 0x005AF12F
+are unowned, and the emitted char allocator rebind definition is divergent.
+None is a finding on these three list cleanups. They remain repair work;
+no gate, baseline or identity exception was changed to hide them.
+The saved link census 6963cc017c does not include this unit, so link_check
+cannot preview its placement.
