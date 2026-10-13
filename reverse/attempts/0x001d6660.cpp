@@ -1,9 +1,11 @@
 // _IDct10
+// partial score=0.66 date=2026-10-13
+// _IDct10
 // partial score=0.135383 date=2026-10-10
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reviewed specs 001d6660, 001d65a0, 001d3f30, 001d35e0 plus retail.
 // Three-pointer cdecl ABI and signed low-32 product >>16 are native-established.
-void __cdecl Rva009C5CA0(short *,short *,int *);
+extern "C" void __cdecl dequant_slow10(short *,short *,int *);
 static __forceinline int multiply16(int value,int constant)
 {
  return (int)((unsigned)value*(unsigned)constant)>>16;
@@ -34,7 +36,7 @@ static __forceinline void rowFour(int *row)
 extern "C" void __cdecl IDct10(short *input,short *quantiser,short *output)
 {
  int block[64];
- Rva009C5CA0(quantiser,input,block);
+ dequant_slow10(quantiser,input,block);
  for(int r=0;r<4;++r) rowFour(block+r*8);
  output+=8;
  int *column=block;
