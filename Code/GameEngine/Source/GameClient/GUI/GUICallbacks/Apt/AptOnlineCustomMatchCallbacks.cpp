@@ -633,7 +633,7 @@ public:
 	GameSpyStagingRoom *GetGameToJoin();
 	bool RequestJoinGame(const char *password);
 	void OpenConnectionScreen(bool open);
-	// FillBuddyInviteGameInfo 0x0059FB4F is banked: reverse/attempts/0x0059fb4f.cpp.
+	bool FillBuddyInviteGameInfo(Rva0059EF62 *info);
 	// UpdatePings 0x0059ED8B is banked: reverse/attempts/0x0059ed8b.cpp.
 
 	// Rowed 0x005A0DC2 (339 bytes; ret 4), named by WorldBuilder.
@@ -1543,4 +1543,34 @@ void AptOnlineCustomMatch::rva005A2899()
 	}
 	TheGameSpyPeerMessageQueue->addRequest(req);
 	m_state = 5;
+}
+
+// Retail 0x0059FB4F, 246 bytes (WorldBuilder name, AptOnlineCustomMatch.cpp
+// lines 4577..4588; wb-name-unverified): while hosting in state 6 or 12,
+// fills the buddy invite from the create dialog's password and the room.
+// Plain 'return false' early exits with no result variable alive let cl keep
+// the constant 0 in ebx for every compare and the EH store (found by W7-U1);
+// the room fields are read into locals before the call.
+bool AptOnlineCustomMatch::FillBuddyInviteGameInfo(Rva0059EF62 *info)
+{
+	if (!((Rva0059ECAD *)this)->rva0059EF33())
+		return false;
+	if (!TheGameSpyInfo)
+		return false;
+	if (!TheGameSpyInfo->getCurrentStagingRoom()->amIHost())
+		return false;
+	GameSpyStagingRoom *room = TheGameSpyInfo->getCurrentStagingRoom();
+	if (!room)
+		return false;
+	AsciiString password(GadgetTextEntryGetText(m_createDialog));
+	AsciiString text = ((Rva0059F340AsciiField *)room)->get();
+	bool filled = false;
+	if (text.getLength() != 0)
+	{
+		int f5c = room->m_5c;
+		int f14 = room->m_14;
+		info->rva0059EF62(m_4a4, f14, password, text, f5c);
+		filled = true;
+	}
+	return filled;
 }
