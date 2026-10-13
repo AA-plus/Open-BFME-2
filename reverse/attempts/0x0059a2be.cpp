@@ -1,4 +1,6 @@
 // ?defineUnitsNormal_old@AITeamBuilder@@QAE_NPAVTeamPrototype@@@Z
+// partial score=0.96 date=2026-10-13
+// ?defineUnitsNormal_old@AITeamBuilder@@QAE_NPAVTeamPrototype@@@Z
 // partial score=0.95 date=2026-10-08
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_NO_EXCEPTIONS /D_STLP_USE_MALLOC /D_STLP_USE_STATIC_LIB /ICode/GameEngine/Source/Common /ICode/Libraries/Include
 // stlport
@@ -67,6 +69,7 @@ Team* AITeamBuilder::getTeamForAIPrototype(TeamPrototype* prototype) {
 
 #include "GameLogicObjectLookupView.h"
 #include "Lib/Coord3D.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 // Both rowed native query providers walk seven words. The existing
 // Thing::isAnyKindOf provider retains BitFlags<69> in its ABI spelling;
 // the actual requirement storage and any() instantiation are BitFlags<218>.
@@ -148,7 +151,7 @@ bool AITeamBuilder::defineUnitsNormal_old(TeamPrototype* prototype) {
   for(const ObjectID* id=ids.begin();id!=ids.end();++id) {
    if((unsigned)((Rva0039D5A9*)((char*)prototype+0x12c))->rva0039D5A9()>=prototype->max2d0)break;
    Object* obj=TheGameLogic->findObjectByID(*id);
-   if(obj && obj->team==owner14->defaultTeam && ((obj->objectTemplate->kind108&8)||(obj->objectTemplate->kind113&4)) && !obj->testStatus(STATUS_90)) {
+   if(obj && __vref(obj->team)==owner14->defaultTeam && ((obj->objectTemplate->kind108&8)||(obj->objectTemplate->kind113&4)) && !obj->testStatus(STATUS_90)) {
     Rva0039EA9C record;
     record.first=1; record.second=1;
     record.name10=obj->objectTemplate->name;
