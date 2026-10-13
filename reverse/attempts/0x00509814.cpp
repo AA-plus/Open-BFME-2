@@ -1,6 +1,8 @@
 // ?doEffectObject@ProjectileNugget@@UAEXPBUProjectileNuggetFireInfo@@PAVObject@@@Z
+// partial score=0.9 date=2026-10-13
+// ?doEffectObject@ProjectileNugget@@UAEXPBUProjectileNuggetFireInfo@@PAVObject@@@Z
 // partial score=0.9 date=2026-10-11
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode /I.
 //
 // ?rva00509A3C@ProjectileNugget@@UAEXPBUProjectileNuggetFireInfo@@PBUCoord3D@@@Z,
 // retail 0x00509A3C (647 bytes). Slot 6 of the ProjectileNugget vtable
@@ -40,8 +42,9 @@
 // with the victim's position (rowed addProjectile 0x0033EEE2).
 
 #include <string.h>
-#include "../../../../../Libraries/Include/Lib/Coord3D.h"
-#include "../../../Common/GameLogicObjectLookupView.h"
+#include "Libraries/Include/Lib/Coord3D.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 typedef bool Bool;
 typedef int Int;
@@ -357,7 +360,7 @@ void ProjectileNugget::doEffectObject(const ProjectileNuggetFireInfo *info, Obje
 	Coord3D worldPos;
 	CreateMask mask;
 	Object *projectile;
-	const ProjectileNuggetWeapon *weapon = info->m_weapon;
+	const ProjectileNuggetWeapon * volatile weapon = info->m_weapon;
 	if (weapon->m_filter.isValid() && source->getProjectileSource())
 	{
 		Weapon::calcProjectileLaunchPosition(source, info->m_wslot, info->m_specificBarrel, launchTransform, worldPos);
@@ -400,14 +403,15 @@ void ProjectileNugget::doEffectObject(const ProjectileNuggetFireInfo *info, Obje
 	}
 
 	GameLogic *logic = TheGameLogic;
-	Object *streamOwner = logic->findObjectByID(info->m_streamOwnerID);
-	if (streamOwner == 0)
+
+	ObjectID t_m_streamOwnerID = __vref(info->m_streamOwnerID);
+	if ((logic->findObjectByID(info->m_streamOwnerID)) == 0)
 		return;
 	Object *launcher = logic->findObjectByID(info->m_sourceID);
 	if (launcher == 0)
 		return;
 	static NameKeyType key_ProjectileStreamUpdate = NAMEKEY("ProjectileStreamUpdate");
-	ProjectileStreamUpdate *update = (ProjectileStreamUpdate *)streamOwner->findModule(key_ProjectileStreamUpdate);
+	ProjectileStreamUpdate *update = (ProjectileStreamUpdate *)(logic->findObjectByID(t_m_streamOwnerID))->findModule(key_ProjectileStreamUpdate);
 	if (update == 0)
 		return;
 	((Rva0033EEC9 *)update)->rva0033EF86(launcher->getPosition());
