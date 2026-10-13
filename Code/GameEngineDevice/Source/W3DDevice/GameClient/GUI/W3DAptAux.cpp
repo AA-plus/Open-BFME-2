@@ -49,6 +49,7 @@ void Rva00118990();					// 0x00118990
 class BfmeHub982
 {
 public:
+	void * __fastcall rva00111312(int count);
 	void rva001116E2();				// 0x001116E2
 	void bfmeBegin982C();				// 0x00111319
 	void bfmeEnd982C();				// 0x00110611
@@ -418,4 +419,14 @@ r=r*g_aptHostColorBlock0.y+g_aptHostColorBlock1.y;
 g=g*g_aptHostColorBlock0.z+g_aptHostColorBlock1.z;
 b=b*g_aptHostColorBlock0.w+g_aptHostColorBlock1.w;
 return (unsigned(a*255.0f)<<24)|(unsigned(r*255.0f)<<16)|(unsigned(g*255.0f)<<8)|unsigned(b*255.0f);
+}
+
+class W3DAptRenderer {public:void *__fastcall BeginTriangleList(int count);};
+// Native111312 is a whole7B tail wrapper. Unmatched WB979610 independently
+// shows the same ECX receiver and EDX count doubled before BeginTriangleList.
+// The purpose and original wrapper name remain unknown; this unit reuses
+// its established neutral renderer view.
+void *__fastcall BfmeHub982::rva00111312(int count)
+{
+ return reinterpret_cast<W3DAptRenderer *>(this)->BeginTriangleList(count*2);
 }
