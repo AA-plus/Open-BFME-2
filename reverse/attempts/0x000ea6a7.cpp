@@ -1,5 +1,5 @@
 // ?rva000EA6A7@W3DTreeBuffer@@QAE_NPAX@Z
-// partial score=0.85 date=2026-10-12
+// partial score=0.796 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug
 // W3DTreeBuffer method at retail 0x000EA48D (439 bytes, ret 0xC): finds the tree record of a drawable key and
 // starts a topple in the given direction at the given height. Open-BFME-1 twin:
@@ -7,7 +7,7 @@
 // (count +0x44540, changed byte +0x44545), 64 types of 0x5C at +0x44558 with the type data at +0x20, terrain
 // height override at TheTerrainLogic+0x1918; the effect is played without the BFME1 block test.
 #include "matrix3d.h"
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../Code/Libraries/Include/Lib/Coord3D.h"
 
 typedef bool Bool;
 typedef int Int;
@@ -49,7 +49,11 @@ struct Rva000EA48DRecord
     Vector3 location;
     unsigned char pad0c[0x34];
     Int type;
-    unsigned char pad44[0x14];
+    unsigned char pad44[4];
+    Real field48;
+    Real field4c;
+    Real field50;
+    Real field54;
     void *key;
     unsigned char pad5c[0x10];
     Real height6c;
@@ -60,7 +64,6 @@ struct Rva000EA48DRecord
     Int field88;
     Int field8c;
     Matrix3D matrix;
-    __forceinline Bool isToppling() const { return guard80 > 0 && !startedc4 && type != -2 && !guardc8; }
     Int framesc0;
     Bool startedc4;
     unsigned char padc5[3];
@@ -73,6 +76,7 @@ class W3DTreeBuffer
 public:
     Bool rva000EA48D(void *key, const Coord3D *direction, Real height);
     Bool rva000EA644(void *key);
+    void rva000EA2C0(void *key);
     Bool rva000EA6A7(void *key);
 
     __forceinline Rva000EA48DRecord *find(void *key)
@@ -90,7 +94,7 @@ private:
     Real frameScale5bc;
     Rva000EA48DRecord records[1200];
     Int count;
-    unsigned char pad44544[1];
+    unsigned char dirty44544;
     unsigned char changed;
     unsigned char pad44546[0x44558 - 0x44546];
     Rva000EA48DType types[64];
@@ -154,10 +158,32 @@ Bool W3DTreeBuffer::rva000EA644(void *key)
     {
         if (records[i].key == key)
         {
-            return records[i].isToppling();
+            return (records[i].guard80 > 0 && !records[i].startedc4 &&
+                records[i].type != -2 && !records[i].guardc8) ? 1 : 0;
         }
     }
     return false;
+}
+
+// Native 000EA2C0..000EA327 (103 bytes, ret 4): clears every tree record of a
+// drawable key (position, type -2, the +0x48..+0x50 floats, +0x54 = 1) and
+// marks the buffer changed: the W3DShrubBuffer rva000E70D9 twin (BFME 1
+// W3DShrubBuffer_resetMatchingRow) on the tree layout. Identity unproven.
+void W3DTreeBuffer::rva000EA2C0(void *key)
+{
+    for (Int i = 0; i < count; ++i)
+    {
+        if (records[i].key == key)
+        {
+            records[i].location.Set(0, 0, 0);
+            records[i].type = -2;
+            records[i].field48 = 0;
+            records[i].field4c = 0;
+            records[i].field50 = 0;
+            records[i].field54 = 1.0f;
+            dirty44544 = 1;
+        }
+    }
 }
 
 // Native 000EA6A7..000EA746 (159 bytes, ret 4): for a drawable key's tree
@@ -167,7 +193,15 @@ Bool W3DTreeBuffer::rva000EA6A7(void *key)
 {
     if (!key)
         return false;
-    Rva000EA48DRecord *record = find(key);
+    Rva000EA48DRecord *record = 0;
+    for (Int i = 0; i < count; ++i)
+    {
+        if (records[i].key == key)
+        {
+            record = records + i;
+            break;
+        }
+    }
     if (!record || record->type < 0 || record->type >= numTypes || record->guardc8)
         return false;
     record->framesc0 = (Int)((Real)types[record->type].data->frames40 * frameScale5bc);
