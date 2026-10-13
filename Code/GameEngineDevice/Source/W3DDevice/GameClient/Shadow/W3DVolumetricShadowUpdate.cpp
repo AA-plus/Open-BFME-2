@@ -42,11 +42,6 @@ public:
 	Real X, Y, Z;
 };
 
-__forceinline bool operator==(const Vector3 &a, const Vector3 &b)
-{
-	return ((a.X == b.X) && (a.Y == b.Y) && (a.Z == b.Z));
-}
-
 class WWMath
 {
 public:
@@ -317,7 +312,11 @@ void W3DVolumetricShadow::Update(Bool forceUpdate)
 
 	{
 		pos=m_robj->Get_Position();
-		if (pos == originCompareVector)
+		// Keep the donor's component comparison inline, without emitting a
+		// competing free Vector3 equality helper for the hash-table consumers.
+		if (pos.X == originCompareVector.X &&
+		    pos.Y == originCompareVector.Y &&
+		    pos.Z == originCompareVector.Z)
 		{	//the transform on this object was never set so we can't make any determination
 			//if it's visible or what the shadow looks like.
 			return;

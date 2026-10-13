@@ -18,7 +18,8 @@ V3_binop _sub  = operator-;
 V3_vf    _mulf = operator*;
 V3_fv    _fmul = operator*;
 V3_vf    _div  = operator/;
-V3_cmp   _eq   = operator==;
+// Equality has no ledger body here. Let its real consumers emit the helper;
+// this address-only scaffold otherwise selects a different optimization shape.
 V3_cmp   _ne   = operator!=;
 V3_eps   _eps  = Equal_Within_Epsilon;
 V3_swap  _swap = Swap;
