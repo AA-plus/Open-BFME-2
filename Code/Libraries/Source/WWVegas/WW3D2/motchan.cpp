@@ -45,6 +45,13 @@
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 
+// The compiler-generated vector constructor iterator (??_H) takes the optimization
+// state of the first function that needs it; retail links one copy, the /O1 body at
+// 0x00001423. This unemitted anchor makes this unit's copy that body.
+struct BfmeVciAnchorElem { BfmeVciAnchorElem(); };
+#pragma optimize("gsy", on)
+static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
+#pragma optimize("", on)
 #include "rendobj.h"	// the bfmerendobj shim has to win the include guard
 #include "motchan.h"
 #include "w3d_file.h"
@@ -778,16 +785,11 @@ AdaptiveDeltaMotionChannelClass::~AdaptiveDeltaMotionChannelClass(void)
 // ?AdaptiveDeltaMotionChannelClass::Free present-unmatched
 void AdaptiveDeltaMotionChannelClass::Free(void)
 {
-	if (Data) {
-		delete[] Data;
-		Data = NULL;
-	}
-
-	if (CacheData) {
-		delete CacheData;
-		CacheData = NULL;
-	}
-
+	// BFME2: retail's ~AdaptiveDeltaMotionChannelClass (0x001960E0, folded with
+	// TimeCodedMotionChannelClass::Free) deletes Data at +0x18 with no null test
+	// and frees no cache buffer.
+	delete[] Data;
+	Data = NULL;
 }	// Free
 
 
