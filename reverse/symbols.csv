@@ -17257,3 +17257,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva006C3AB0@GeneralAllocatorDebug@@QAEPAXPAXGPBXIH@Z,0x006C3AB0,callee of ?rva006C3D30@GeneralAllocatorDebug@@QAE_NPAURva006C2270Record@@PAX_N@Z
 ?calcPhysicsXformHugeFourLegs@Drawable@@IAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z,0x0027B47F,callee of ?calcPhysicsXform@Drawable@@QAE_NAAUPhysicsXformInfo@1@@Z
 ?rva00272FB6@Drawable@@IAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z,0x00272FB6,callee of ?calcPhysicsXform@Drawable@@QAE_NAAUPhysicsXformInfo@1@@Z
+?rva002814EF@TerrainLogic@@QAE_NABVVector3@@0PAV2@@Z,0x002814EF,callee of ?screenToTerrain@W3DView@@UAE_NPBUICoord2D@@PAUCoord3D@@_N@Z

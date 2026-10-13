@@ -24,6 +24,7 @@ extern Int TheW3DFrameLengthInMsec;
 #define TheAnimationMsPerStep (TheW3DFrameLengthInMsec)
 
 struct Coord3D;
+class Vector3;
 class TerrainLogic
 {
 public:
@@ -34,6 +35,46 @@ public:
     virtual void slot4();
     virtual void slot5();
     virtual float getGroundHeight(float x, float y, Coord3D *normal = 0);
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual bool isUnderwater(float x, float y, float *waterZ = 0, float *terrainZ = 0, int unused = 0);
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual void slot26();
+    virtual void slot27();
+    virtual void slot28();
+    virtual void slot29();
+    virtual void slot30();
+    virtual void slot31();
+    virtual void slot32();
+    virtual void slot33();
+    virtual void slot34();
+    virtual void slot35();
+    virtual void slot36();
+    virtual void slot37();
+    virtual void slot38();
+    virtual void slot39();
+    virtual void slot40();
+    virtual void slot41();
+    virtual void slot42();
+    virtual void slot43();
+    virtual void slot44();
+    virtual bool pickBridge(const Vector3 &from, const Vector3 &to, Vector3 *pos);
+    bool rva002814EF(const Vector3 &from, const Vector3 &to, Vector3 *hit);
 };
 
 class GlobalData
@@ -90,6 +131,39 @@ public:
 #define BFME_W3D_SLOT(n) virtual void slot##n() = 0;
 
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
+
+// W3DView's screen-pick cache (m_locationRequests, +0x23DC) as retail uses
+// it: the push_back at 0x0008DE1C and the range erase at 0x0008B4D2 are ICF
+// folds named after other element types, so this unit declares just the two
+// members under their pinned owners instead of pulling in STLport.
+struct Rva0008DE1CElement
+{
+	ICoord2D screen;
+	Coord3D world;
+	bool hit;
+};
+struct BfmeStringRecord000B9534
+{
+	int m_a[6];
+};
+namespace _STL
+{
+template <class T> class allocator;
+template <class T, class A> class vector
+{
+public:
+	void push_back(const T &);
+	T *erase(T *first, T *last);
+	T *begin() { return m_start; }
+	T *end() { return m_finish; }
+	unsigned size() const { return (unsigned)(m_finish - m_start); }
+	T &operator[](unsigned n) { return *(begin() + n); }
+	T *m_start;
+	T *m_finish;
+	T *m_endOfStorage;
+};
+}
 
 struct WaypointXY
 {
@@ -376,11 +450,13 @@ public:
 	virtual void setZoom(Real z);
 	virtual void setHeightAboveGround(Real z);
 	virtual void rva0008D218(Real value);
+	virtual Bool screenToTerrain(const ICoord2D *screen, Coord3D *world, Bool noCache);
 
 	void setZoomToDefault();
 	void rva0008D925(const Coord3D *,Int,Real,Real);
 private:
 	void rva000860AF(Coord3D *pos);
+	void getPickRay(const ICoord2D *screen, Vector3 *rayStart, Vector3 *rayEnd);
 	void setCameraTransform();
 	void buildCameraTransform(Matrix3D *);
 	char m_padding0004[0x0c - 4];
@@ -408,7 +484,11 @@ private:
 	Int m_numWaypoints;
 	char m_padding22f4[0x2354 - 0x22f4];
 	Int m_cameraMovementMode;
-	char m_padding2358[0x23f0 - 0x2358];
+	char m_padding2358[0x23d8 - 0x2358];
+	Bool m_cameraHasMovedSinceRequest;
+	char m_padding23d9[0x23dc - 0x23d9];
+	_STL::vector<Rva0008DE1CElement, _STL::allocator<Rva0008DE1CElement> > m_locationRequests;
+	char m_padding23e8[0x23f0 - 0x23e8];
 	Real m_cameraOffsetZ;
 	char m_padding23f4[0x2408 - 0x23f4];
 	Real m_groundLevel;
@@ -517,6 +597,93 @@ void W3DView::rva0008D925(const Coord3D *location,Int milliseconds,Real easeIn,R
   ((ParabolicEase *)(bytes+0x1a4))->rva0030E51F(easeIn,easeOut,(Real)milliseconds);
   *(unsigned *)(bytes+0x2358)=((Rva0008D925ClientFrame *)TheGameClient)->slot31();
  }else setCameraTransform();
+}
+
+// Native 8DE7A..8E10E (660B, RET 12), W3DView vftable slot 90: ZH
+// W3DView::screenToTerrain with BFME2's results. It returns whether the pick
+// found terrain or a bridge, a no-cache flag skips the pick cache and the
+// bridge test, and a miss yields the far end of the ray. A water hit re-casts
+// through the terrain logic's 0x002814EF. The cache (WB debug body
+// WB993F10) is cleared once the camera has moved and trimmed by ten entries
+// past 40; it is searched newest first.
+Bool W3DView::screenToTerrain(const ICoord2D *screen, Coord3D *world, Bool noCache)
+{
+	if (screen == 0 || world == 0 || TheTerrainRenderObject == 0)
+		return false;
+
+	if (!noCache)
+	{
+		typedef _STL::vector<BfmeStringRecord000B9534, _STL::allocator<BfmeStringRecord000B9534> > ErasableRequests;
+		if (m_cameraHasMovedSinceRequest)
+		{
+			ErasableRequests &requests = (ErasableRequests &)m_locationRequests;
+			requests.erase(requests.begin(), requests.end());
+			m_cameraHasMovedSinceRequest = false;
+		}
+
+		if (m_locationRequests.size() > 40)
+			((ErasableRequests *)&m_locationRequests)->erase(
+				(BfmeStringRecord000B9534 *)m_locationRequests.begin(), (BfmeStringRecord000B9534 *)m_locationRequests.begin() + 10);
+
+		for (int i = m_locationRequests.size() - 1; i >= 0; --i)
+		{
+			if (m_locationRequests[i].screen.x == screen->x && m_locationRequests[i].screen.y == screen->y)
+			{
+				*world = m_locationRequests[i].world;
+				return m_locationRequests[i].hit;
+			}
+		}
+	}
+
+	Vector3 rayStart, rayEnd;
+	LineSegClass lineseg;
+	CastResultStruct result;
+	Vector3 intersection(0, 0, 0);
+	bool hit = false;
+
+	getPickRay(screen, &rayStart, &rayEnd);
+
+	lineseg.Set(rayStart, rayEnd);
+
+	RayCollisionTestClass raytest(lineseg, &result, 2, false, false);
+
+	if (((TerrainRenderObject *)TheTerrainRenderObject)->Cast_Ray(raytest))
+	{
+		intersection = result.ContactPoint;
+		hit = true;
+		if (TheTerrainLogic->isUnderwater(result.ContactPoint.X, result.ContactPoint.Y))
+		{
+			Vector3 waterPoint(0, 0, 0);
+			if (TheTerrainLogic->rva002814EF(rayStart, intersection, &waterPoint))
+				intersection = waterPoint;
+		}
+	}
+
+	if (!noCache)
+	{
+		Vector3 bridgePoint;
+		if (TheTerrainLogic->pickBridge(rayStart, rayEnd, &bridgePoint) && (!hit || bridgePoint.Z > intersection.Z))
+		{
+			intersection = bridgePoint;
+			hit = true;
+		}
+	}
+
+	if (hit)
+		*world = *(const Coord3D *)&intersection;
+	else
+		*world = *(const Coord3D *)&rayEnd;
+
+	if (!noCache)
+	{
+		Rva0008DE1CElement req;
+		req.screen = *screen;
+		req.world = *world;
+		req.hit = hit;
+		m_locationRequests.push_back(req);
+	}
+
+	return hit;
 }
 
 // Native 8D55D..8D805: ZH W3DView::lookAt with BFME's constrain step and
