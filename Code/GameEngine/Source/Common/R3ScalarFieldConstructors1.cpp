@@ -1,8 +1,10 @@
-// Two constant-field constructors from the R3 scalar-field family.
+// Constant-field constructor and initializers from the R3 scalar-field family.
 //
 // BFME1 byte-identical donor (reference/open-bfme-1
 // Code/GameEngine/Source/Common/R3ScalarFieldConstructors.cpp); trimmed to
-// the two bodies that place in game.dat. The mov-eax-ecx opening marks a
+// bodies that place in game.dat. The companion Rva00352900 constructor
+// now lives beside its caller in ScriptListSubrecordAddRva003B7EC2.cpp.
+// The mov-eax-ecx opening marks a
 // constructor (the return value is `this`); store order is source order, so
 // the out-of-order zeros are written as listed. Identity is not recovered:
 // class names are the BFME1 constructor RVAs and fields are offsets. Each
@@ -21,15 +23,8 @@ public:
 	int m_04, m_08;
 	char m_0C, m_0D, m_0E;
 };
-Rva00352900::Rva00352900()
-{
-	m_04 = 0;
-	m_08 = 0;
-	m_00 = &Gen00C1F470;
-	m_0C = 1;
-	m_0D = 0;
-	m_0E = 0;
-}
+// Retail constructor is owned by ScriptListSubrecordAddRva003B7EC2.cpp,
+// which needs its definition ahead of the caller for VC7.1 register analysis.
 
 class Rva00489BC0
 {
