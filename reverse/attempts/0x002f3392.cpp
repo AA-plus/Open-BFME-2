@@ -1,4 +1,6 @@
 // ?rva002F3392@Pathfinder@@QAE_NPAVPathNode@@0IPAUCoord3D@@11@Z
+// partial score=0.9945212569316082 date=2026-10-13
+// ?rva002F3392@Pathfinder@@QAE_NPAVPathNode@@0IPAUCoord3D@@11@Z
 // partial score=0.9803031423290204 date=2026-10-10
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
@@ -63,11 +65,15 @@ bool Pathfinder::rva002F3392(PathNode*curNode,PathNode*nextNode,unsigned int ign
    Object*tallBuilding=info.theTallBuilding;
    _ReadWriteBarrier(); Coord3D bldgPos;Coord2D delta;float radius;
 const volatile Coord3D &src=*tallBuilding->getPosition();
-bldgPos.x=src.x;
+float tx,ty;
+tx=toPos.x;
+_ReadWriteBarrier();
+ty=toPos.y;
 radius=((const volatile Object*)tallBuilding)->radius+20.0f;
+bldgPos.x=src.x;
 bldgPos.y=src.y;
-delta.x=toPos.x-bldgPos.x;
-delta.y=toPos.y-bldgPos.y;
+delta.x=tx-bldgPos.x;
+delta.y=ty-bldgPos.y;
    if(delta.length()<=radius*0.98){
     if(delta.length()<0.1)delta.x=1;
     delta.normalize();

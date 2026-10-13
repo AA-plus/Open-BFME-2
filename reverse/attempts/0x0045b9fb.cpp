@@ -1,8 +1,10 @@
 // ?rva0045B9FB@BezierProjectileBehavior@@QAEXPAVObject@@@Z
+// partial score=0.8001640651703316 date=2026-10-13
+// ?rva0045B9FB@BezierProjectileBehavior@@QAEXPAVObject@@@Z
 // partial score=0.3709 date=2026-10-05
 // ?rva0045B9FB@BezierProjectileBehavior@@QAEXPAVObject@@@Z
 // partial score=0.92 date=2026-10-05
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD
 // ?rva0045B9FB@BezierProjectileBehavior@@QAEXPAVObject@@@Z @0x0045B9FB 336B
 // Bezier projectile path-step collision: min((end-begin)/12-1, m_70)-1 clamped,
 // dir=(point-objPos)*INV, 13 steps calling GeometryInfo::bfmeIntersects,
@@ -12,12 +14,7 @@
 // bfmeIntersects 0x006BEB80; global INV (_INV) at VA 0xbc2424; caller 0x0045CD6E.
 #include <stddef.h>
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 
 class GeometryInfo
 {
@@ -25,7 +22,7 @@ public:
 	bool bfmeIntersects(const Coord3D &, float, const GeometryInfo &, const Coord3D &, float) const;
 };
 
-extern "C" float INV;
+
 
 class Thing
 {
@@ -127,40 +124,25 @@ private:
 	int m_74;
 };
 
-// ?rva0045B9FB@BezierProjectileBehavior@@QAEXPAVObject@@@Z present-unmatched
 void BezierProjectileBehavior::rva0045B9FB(Object *other)
 {
-	if (other == 0)
-		return;
-	int n = (m_pathEnd - m_pathBegin) - 1;
-	int idx;
-	if ((unsigned int)n >= (unsigned int)m_70)
-		idx = m_70;
-	else
-		idx = (m_pathEnd - m_pathBegin) - 1;
-	idx--;
-	if (idx < 0)
-		idx = 0;
-	BezierPathPoint *p = m_pathBegin + idx;
-	Object *obj = m_object;
-	float objAngle = obj->m_orientation;
-	float dx = (p->x - obj->m_position.x) * INV;
-	float dy = (p->y - obj->m_position.y) * INV;
-	float dz = (p->z - obj->m_position.z) * INV;
-	Coord3D cur;
-	cur.x = obj->m_position.x;
-	cur.y = obj->m_position.y;
-	cur.z = obj->m_position.z;
-	for (int i = 0; i <= 12; i++)
-	{
-		cur.x += dx;
-		cur.y += dy;
-		cur.z += dz;
-		if (!obj->m_geometryInfo.bfmeIntersects(cur, objAngle, other->m_geometryInfo, other->m_position, other->m_orientation))
-			break;
-	}
-	cur.x -= dx;
-	cur.y -= dy;
-	cur.z -= dz;
-	((Thing *)obj)->setPosition(&cur);
+
+ if(!other)return;
+ int idx=(((unsigned)(m_pathEnd-m_pathBegin)-1)<0 ? 0 : ((unsigned)(m_pathEnd-m_pathBegin)-1)) < (unsigned)m_70 ? (((unsigned)(m_pathEnd-m_pathBegin)-1)<0 ? 0 : ((unsigned)(m_pathEnd-m_pathBegin)-1)) : m_70;
+ Object *obj=m_object;
+ Coord3D cur;cur.x=obj->m_position.x;cur.y=obj->m_position.y;cur.z=obj->m_position.z;
+ BezierPathPoint *p=m_pathBegin+(idx-1<0 ? 0 : idx-1);
+ Coord3D delta;
+ delta.x=p->x-cur.x;delta.y=p->y-cur.y;delta.z=p->z-cur.z;
+ delta.x*=0.1f;delta.y*=0.1f;delta.z*=0.1f;
+ float angle=obj->m_orientation;
+ GeometryInfo *geom=&obj->m_geometryInfo;
+ int i=0;
+ bool collision=true;
+ while(collision && i++<=12){
+ cur.x+=delta.x;cur.y+=delta.y;cur.z+=delta.z;
+ collision=geom->bfmeIntersects(cur,angle,other->m_geometryInfo,other->m_position,other->m_orientation);
+ }
+ cur.x-=delta.x;cur.y-=delta.y;cur.z-=delta.z;
+ ((Thing*)obj)->setPosition(&cur);
 }
