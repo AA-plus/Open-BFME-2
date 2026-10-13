@@ -109,6 +109,50 @@
 {"fitness": 0.86688, "exact": false, "class": "structural", "raw_size": 1715, "size": 1706, "diffbytes": 1484, "trial": "gather-buffer-5"}
 {"fitness": 0.86436, "exact": false, "class": "structural", "raw_size": 1715, "size": 1706, "diffbytes": 1484, "trial": "gather-buffer-6"}
 {"fitness": 0.86688, "exact": false, "class": "structural", "raw_size": 1715, "size": 1706, "diffbytes": 1484, "trial": "gather-buffer-7"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-0-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-0-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-1-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-1-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-2-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-2-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-3-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-3-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-4-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-4-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-5-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildextract-gather-base-5-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-0-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-0-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-1-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-1-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-2-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-2-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-3-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-3-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-4-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-4-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-5-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildextract-gather-scope-4-5-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildflow-0"}
+{"fitness": 0.95944, "exact": false, "class": "structural", "raw_size": 1708, "size": 1706, "diffbytes": 1289, "trial": "gather-buildflow-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildflow-2"}
+{"fitness": 0.91903, "exact": false, "class": "structural", "raw_size": 1708, "size": 1706, "diffbytes": 1297, "trial": "gather-buildflow-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildflow-4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-buildflow-5"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildflow-6"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-buildflow-7"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-0"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-1"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-10"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-11"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-2"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-3"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-4"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-5"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-6"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-7"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-8"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-buildparam-9"}
 {"fitness": 0.94878, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 69, "trial": "gather-calltemp-orig-0"}
 {"fitness": 0.94878, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 69, "trial": "gather-calltemp-orig-1"}
 {"fitness": 0.94878, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 69, "trial": "gather-calltemp-orig-2"}
@@ -134,6 +178,23 @@
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-casttemp-6"}
 {"fitness": 0.97574, "exact": false, "class": "structural", "raw_size": 1700, "size": 1700, "diffbytes": 891, "trial": "gather-casttemp-7"}
 {"fitness": 0.81646, "exact": false, "class": "structural", "raw_size": 1743, "size": 1706, "diffbytes": 1054, "trial": "gather-casttemp-8"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-checkpoint-verified"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-collector-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-collector-1"}
+{"fitness": -1.0, "exact": false, "class": "error: ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ (build/crack-a/gather-collector-10/c1.cpp): REL32 site at offset 17", "trial": "gather-collector-10"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-collector-11"}
+{"fitness": 0.95323, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 64, "trial": "gather-collector-12"}
+{"fitness": 0.95323, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 64, "trial": "gather-collector-13"}
+{"fitness": -1.0, "exact": false, "class": "error: ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ (build/crack-a/gather-collector-14/c1.cpp): REL32 site at offset 17", "trial": "gather-collector-14"}
+{"fitness": 0.95323, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 64, "trial": "gather-collector-15"}
+{"fitness": -1.0, "exact": false, "class": "error: ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ (build/crack-a/gather-collector-2/c1.cpp): REL32 site at offset 170", "trial": "gather-collector-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-collector-3"}
+{"fitness": 0.99356, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-collector-4"}
+{"fitness": 0.99356, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-collector-5"}
+{"fitness": -1.0, "exact": false, "class": "error: ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ (build/crack-a/gather-collector-6/c1.cpp): REL32 site at offset 170", "trial": "gather-collector-6"}
+{"fitness": 0.99356, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-collector-7"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-collector-8"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-collector-9"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-condition-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-condition-1"}
 {"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-condition-2"}
@@ -154,6 +215,36 @@
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-constcopywrap-5"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-constcopywrap-8"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-constcopywrap-9"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-best-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-continue-best-10"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-best-11"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-continue-best-12"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-best-13"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-continue-best-14"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-best-15"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-continue-best-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-best-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-continue-best-4"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-best-5"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-continue-best-6"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-best-7"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-continue-best-8"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-best-9"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-10"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-11"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-12"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-13"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-14"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-15"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-4"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-5"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-6"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-7"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-8"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-continue-orig-9"}
 {"fitness": 0.83008, "exact": false, "class": "structural", "size": 1705, "diffbytes": 1465, "trial": "gather-converted-0"}
 {"fitness": 0.83008, "exact": false, "class": "structural", "size": 1705, "diffbytes": 1465, "trial": "gather-converted-1"}
 {"fitness": 0.87057, "exact": false, "class": "structural", "size": 1655, "diffbytes": 1537, "trial": "gather-converted-10"}
@@ -172,6 +263,18 @@
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertpack-5"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertpack-8"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertpack-9"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-convertspec-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertspec-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-convertspec-10"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-convertspec-11"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertspec-2"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-convertspec-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-convertspec-4"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-convertspec-5"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertspec-6"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertspec-7"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertspec-8"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-convertspec-9"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertwrapper-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-convertwrapper-1"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-convertwrapper-10"}
@@ -234,6 +337,14 @@
 {"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-counter-orig-4-0"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-counter-orig-4-1"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-counter-orig-4-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-counterreuse-0"}
+{"fitness": 0.9825, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 23, "trial": "gather-counterreuse-1"}
+{"fitness": 0.93835, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 577, "trial": "gather-counterreuse-10"}
+{"fitness": 0.93224, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 581, "trial": "gather-counterreuse-11"}
+{"fitness": 0.97879, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 545, "trial": "gather-counterreuse-2"}
+{"fitness": 0.97269, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 549, "trial": "gather-counterreuse-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-counterreuse-8"}
+{"fitness": 0.94216, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 76, "trial": "gather-counterreuse-9"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "size": 1706, "diffbytes": 60, "trial": "gather-decl-army-phase"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "size": 1706, "diffbytes": 60, "trial": "gather-decl-army-top"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "size": 1706, "diffbytes": 60, "trial": "gather-decl-armyRegion-phase"}
@@ -262,6 +373,86 @@
 {"fitness": 0.95434, "exact": false, "class": "structural", "size": 1706, "diffbytes": 60, "trial": "gather-decl-summary-top"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "size": 1706, "diffbytes": 60, "trial": "gather-decl-templateID-phase"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "size": 1706, "diffbytes": 60, "trial": "gather-decl-templateID-top"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-0"}
+{"fitness": 0.95227, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 69, "trial": "gather-deepscope-gather-base-army-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-10"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-4"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-5"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-6"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-7"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-army-8"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-deepscope-gather-base-army-9"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-building-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-building-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-building-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-building-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-building-4"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-building-5"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-building-6"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-deepscope-gather-base-building-7"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-deepscope-gather-base-building-8"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-building-9"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-entry-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-entry-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-entry-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-deepscope-gather-base-entry-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-0"}
+{"fitness": 0.9926, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 17, "trial": "gather-deepscope-gather-scope-4-army-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-10"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-5"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-6"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-7"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-army-8"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-deepscope-gather-scope-4-army-9"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-building-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-building-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-building-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-building-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-building-4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-building-5"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-building-6"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-deepscope-gather-scope-4-building-7"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-deepscope-gather-scope-4-building-8"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-building-9"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-entry-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-entry-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-entry-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-deepscope-gather-scope-4-entry-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-0-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-0-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-0-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-1-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-1-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-1-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-1-3"}
+{"fitness": 0.95614, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 1500, "trial": "gather-doloop-best-2-0"}
+{"fitness": 0.95614, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 1500, "trial": "gather-doloop-best-2-1"}
+{"fitness": 0.95614, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 1500, "trial": "gather-doloop-best-2-2"}
+{"fitness": 0.95614, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 1500, "trial": "gather-doloop-best-2-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-3-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-3-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-3-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-doloop-best-3-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-0-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-0-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-0-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-1-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-1-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-1-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-1-3"}
+{"fitness": 0.91617, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 1503, "trial": "gather-doloop-orig-2-0"}
+{"fitness": 0.91617, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 1503, "trial": "gather-doloop-orig-2-1"}
+{"fitness": 0.91617, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 1503, "trial": "gather-doloop-orig-2-2"}
+{"fitness": 0.91617, "exact": false, "class": "structural", "raw_size": 1709, "size": 1706, "diffbytes": 1503, "trial": "gather-doloop-orig-2-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-3-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-3-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-3-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-doloop-orig-3-3"}
 {"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-extractforce-0"}
 {"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-extractforce-1"}
 {"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-extractforce-2"}
@@ -272,6 +463,25 @@
 {"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-extractforce-7"}
 {"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-extractforce-8"}
 {"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-extractforce-9"}
+{"fitness": 0.78143, "exact": false, "class": "structural", "raw_size": 1681, "size": 1681, "diffbytes": 1541, "trial": "gather-extraflag-0"}
+{"fitness": 0.78143, "exact": false, "class": "structural", "raw_size": 1681, "size": 1681, "diffbytes": 1541, "trial": "gather-extraflag-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-extraflag-10"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-extraflag-2"}
+{"fitness": 0.97422, "exact": false, "class": "structural", "raw_size": 1698, "size": 1698, "diffbytes": 815, "trial": "gather-extraflag-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-extraflag-4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-extraflag-5"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-extraflag-6"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-extraflag-7"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-extraflag-8"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-extraflag-9"}
+{"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-factoryeh-diagnostic-0"}
+{"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-factoryeh-diagnostic-1"}
+{"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-factoryeh-diagnostic-2"}
+{"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-factoryeh-diagnostic-3"}
+{"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-factoryeh-diagnostic-4"}
+{"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-factoryeh-diagnostic-5"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-factoryeh-diagnostic-6"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-factoryeh-diagnostic-7"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-flags-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-flags-1"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-flags-2"}
@@ -291,6 +501,22 @@
 {"fitness": 0.99368, "exact": false, "class": "structural", "size": 1706, "diffbytes": 11, "trial": "gather-forcector-5"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-forcector-6"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-forcector-7"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-inserter-0"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-inserter-1"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-inserter-10"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-inserter-11"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-inserter-12"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-inserter-13"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-inserter-14"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-inserter-15"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-inserter-2"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-inserter-3"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-inserter-4"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-inserter-5"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-inserter-6"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-inserter-7"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-inserter-8"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-inserter-9"}
 {"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-insertform-0"}
 {"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-insertform-1"}
 {"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-insertform-10"}
@@ -307,6 +533,20 @@
 {"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-insertnode-1"}
 {"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-insertnode-2"}
 {"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-insertnode-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyarray-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyarray-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyarray-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyarray-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyshape-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyshape-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyshape-2"}
+{"fitness": 0.97086, "exact": false, "class": "structural", "raw_size": 1715, "size": 1706, "diffbytes": 955, "trial": "gather-keyshape-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyshape-4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyshape-5"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyshape-6"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyshape-7"}
+{"fitness": 0.97086, "exact": false, "class": "structural", "raw_size": 1715, "size": 1706, "diffbytes": 955, "trial": "gather-keyshape-8"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-keyshape-9"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-layouttype-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-layouttype-1"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-layouttype-10"}
@@ -437,6 +677,84 @@
 {"fitness": 0.87606, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1384, "trial": "gather-metadata-Rva00501E3FElement-both"}
 {"fitness": 0.87606, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1384, "trial": "gather-metadata-Rva00501E3FElement-copy"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-metadata-Rva00501E3FElement-destructor"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedindex-best-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedindex-best-1"}
+{"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-best-10"}
+{"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-best-11"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedindex-best-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedindex-best-3"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-namedindex-best-4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedindex-best-5"}
+{"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-best-6"}
+{"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-best-7"}
+{"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-best-8"}
+{"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-best-9"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedindex-orig-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedindex-orig-1"}
+{"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-orig-10"}
+{"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-orig-11"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedindex-orig-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedindex-orig-3"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-namedindex-orig-4"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedindex-orig-5"}
+{"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-orig-6"}
+{"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-orig-7"}
+{"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-orig-8"}
+{"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-namedindex-orig-9"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-10"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-11"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-12"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-13"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-14"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-15"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-4"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-5"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-6"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-7"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-8"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-namedreturns-gather-base-9"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-10"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-11"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-12"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-13"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-14"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-15"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-5"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-6"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-7"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-8"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-namedreturns-gather-scope-4-9"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-0"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-10"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-11"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-2"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-3"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-4"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-5"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-6"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-7"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-8"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-outerflow-gather-base-9"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-10"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-11"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-3"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-5"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-6"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-7"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-8"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerflow-gather-scope-4-9"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerscope-best-0-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerscope-best-0-1"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-outerscope-best-0-2"}
@@ -483,6 +801,18 @@
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-pair-scope2"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-pair-scope3"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-pair-scope4"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-paircondition-0"}
+{"fitness": 0.96736, "exact": false, "class": "structural", "raw_size": 1721, "size": 1706, "diffbytes": 769, "trial": "gather-paircondition-1"}
+{"fitness": 0.92154, "exact": false, "class": "structural", "raw_size": 1721, "size": 1706, "diffbytes": 799, "trial": "gather-paircondition-10"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-paircondition-11"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-paircondition-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-paircondition-3"}
+{"fitness": 0.96736, "exact": false, "class": "structural", "raw_size": 1721, "size": 1706, "diffbytes": 769, "trial": "gather-paircondition-4"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-paircondition-5"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-paircondition-6"}
+{"fitness": 0.92154, "exact": false, "class": "structural", "raw_size": 1721, "size": 1706, "diffbytes": 799, "trial": "gather-paircondition-7"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-paircondition-8"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-paircondition-9"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairdefinition-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairdefinition-1"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairdefinition-10"}
@@ -495,6 +825,24 @@
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairdefinition-7"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairdefinition-8"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairdefinition-9"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-0-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-0-1"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-pairloop-exit-0-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-1-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-1-1"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-pairloop-exit-1-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-2-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-2-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-pairloop-exit-2-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-3-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-3-1"}
+{"fitness": 0.95434, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 60, "trial": "gather-pairloop-exit-3-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-4-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-4-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-4-2"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-5-0"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-5-1"}
+{"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairloop-exit-5-2"}
 {"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-pairmake-0"}
 {"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-pairmake-1"}
 {"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-pairmake-10"}
@@ -507,6 +855,22 @@
 {"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-pairmake-7"}
 {"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-pairmake-8"}
 {"fitness": 0.97462, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 888, "trial": "gather-pairmake-9"}
+{"fitness": 0.88112, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1456, "trial": "gather-pairproxy-0"}
+{"fitness": 0.88112, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1456, "trial": "gather-pairproxy-1"}
+{"fitness": 0.84863, "exact": false, "class": "structural", "raw_size": 1710, "size": 1706, "diffbytes": 1268, "trial": "gather-pairproxy-10"}
+{"fitness": 0.84863, "exact": false, "class": "structural", "raw_size": 1710, "size": 1706, "diffbytes": 1268, "trial": "gather-pairproxy-11"}
+{"fitness": 0.88348, "exact": false, "class": "structural", "raw_size": 1711, "size": 1706, "diffbytes": 1449, "trial": "gather-pairproxy-12"}
+{"fitness": 0.88348, "exact": false, "class": "structural", "raw_size": 1711, "size": 1706, "diffbytes": 1449, "trial": "gather-pairproxy-13"}
+{"fitness": 0.85777, "exact": false, "class": "structural", "raw_size": 1714, "size": 1706, "diffbytes": 1261, "trial": "gather-pairproxy-14"}
+{"fitness": 0.85777, "exact": false, "class": "structural", "raw_size": 1714, "size": 1706, "diffbytes": 1261, "trial": "gather-pairproxy-15"}
+{"fitness": 0.84863, "exact": false, "class": "structural", "raw_size": 1710, "size": 1706, "diffbytes": 1268, "trial": "gather-pairproxy-2"}
+{"fitness": 0.84863, "exact": false, "class": "structural", "raw_size": 1710, "size": 1706, "diffbytes": 1268, "trial": "gather-pairproxy-3"}
+{"fitness": 0.88348, "exact": false, "class": "structural", "raw_size": 1711, "size": 1706, "diffbytes": 1449, "trial": "gather-pairproxy-4"}
+{"fitness": 0.88348, "exact": false, "class": "structural", "raw_size": 1711, "size": 1706, "diffbytes": 1449, "trial": "gather-pairproxy-5"}
+{"fitness": 0.85777, "exact": false, "class": "structural", "raw_size": 1714, "size": 1706, "diffbytes": 1261, "trial": "gather-pairproxy-6"}
+{"fitness": 0.85777, "exact": false, "class": "structural", "raw_size": 1714, "size": 1706, "diffbytes": 1261, "trial": "gather-pairproxy-7"}
+{"fitness": 0.88112, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1456, "trial": "gather-pairproxy-8"}
+{"fitness": 0.88112, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1456, "trial": "gather-pairproxy-9"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairref-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairref-1"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-pairref-2"}
@@ -554,6 +918,14 @@
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-rename-7"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-rename-8"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-rename-9"}
+{"fitness": 0.82274, "exact": false, "class": "structural", "raw_size": 1721, "size": 1706, "diffbytes": 1013, "trial": "gather-resultplacement-0"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-resultplacement-1"}
+{"fitness": 0.82778, "exact": false, "class": "structural", "raw_size": 1725, "size": 1706, "diffbytes": 1073, "trial": "gather-resultplacement-2"}
+{"fitness": 0.91376, "exact": false, "class": "structural", "raw_size": 1710, "size": 1706, "diffbytes": 973, "trial": "gather-resultplacement-3"}
+{"fitness": 0.82967, "exact": false, "class": "structural", "raw_size": 1721, "size": 1706, "diffbytes": 1013, "trial": "gather-resultplacement-4"}
+{"fitness": 0.9541, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 62, "trial": "gather-resultplacement-5"}
+{"fitness": 0.81051, "exact": false, "class": "structural", "raw_size": 1725, "size": 1706, "diffbytes": 1089, "trial": "gather-resultplacement-6"}
+{"fitness": 0.89697, "exact": false, "class": "structural", "raw_size": 1710, "size": 1706, "diffbytes": 983, "trial": "gather-resultplacement-7"}
 {"fitness": 0.91853, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1531, "trial": "gather-returnstorage-0"}
 {"fitness": 0.91853, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1531, "trial": "gather-returnstorage-1"}
 {"fitness": 0.91853, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1531, "trial": "gather-returnstorage-2"}
@@ -561,6 +933,18 @@
 {"fitness": 0.91853, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1531, "trial": "gather-returnstorage-4"}
 {"fitness": 0.91853, "exact": false, "class": "structural", "raw_size": 1719, "size": 1706, "diffbytes": 1531, "trial": "gather-returnstorage-5"}
 {"fitness": 0.95434, "exact": false, "class": "structural", "size": 1706, "diffbytes": 60, "trial": "gather-same-vector"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-samenamed-0"}
+{"fitness": 0.91376, "exact": false, "class": "structural", "raw_size": 1710, "size": 1706, "diffbytes": 973, "trial": "gather-samenamed-1"}
+{"fitness": 0.9541, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 62, "trial": "gather-samenamed-10"}
+{"fitness": 0.9541, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 62, "trial": "gather-samenamed-11"}
+{"fitness": 0.9541, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 62, "trial": "gather-samenamed-2"}
+{"fitness": 0.89697, "exact": false, "class": "structural", "raw_size": 1710, "size": 1706, "diffbytes": 983, "trial": "gather-samenamed-3"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-samenamed-4"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-samenamed-5"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-samenamed-6"}
+{"fitness": -1.0, "exact": false, "class": "compile-error", "trial": "gather-samenamed-7"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-samenamed-8"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-samenamed-9"}
 {"fitness": 0.97574, "exact": false, "class": "structural", "raw_size": 1700, "size": 1700, "diffbytes": 891, "trial": "gather-samepair-0"}
 {"fitness": 0.97574, "exact": false, "class": "structural", "raw_size": 1700, "size": 1700, "diffbytes": 891, "trial": "gather-samepair-1"}
 {"fitness": 0.97574, "exact": false, "class": "structural", "raw_size": 1700, "size": 1700, "diffbytes": 891, "trial": "gather-samepair-2"}
@@ -638,6 +1022,22 @@
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-sizetie-4"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-sizetie-5"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-sizetie-6"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-sourcevalue-0"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-sourcevalue-1"}
+{"fitness": 0.94878, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 69, "trial": "gather-sourcevalue-10"}
+{"fitness": 0.94878, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 69, "trial": "gather-sourcevalue-11"}
+{"fitness": 0.9291, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 965, "trial": "gather-sourcevalue-12"}
+{"fitness": 0.9291, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 965, "trial": "gather-sourcevalue-13"}
+{"fitness": 0.94878, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 69, "trial": "gather-sourcevalue-14"}
+{"fitness": 0.94878, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 69, "trial": "gather-sourcevalue-15"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-sourcevalue-2"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-sourcevalue-3"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-sourcevalue-4"}
+{"fitness": 0.97401, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 939, "trial": "gather-sourcevalue-5"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-sourcevalue-6"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-sourcevalue-7"}
+{"fitness": 0.9291, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 965, "trial": "gather-sourcevalue-8"}
+{"fitness": 0.9291, "exact": false, "class": "structural", "raw_size": 1701, "size": 1701, "diffbytes": 965, "trial": "gather-sourcevalue-9"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-stlflags-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-stlflags-1"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-stlflags-2"}
@@ -735,6 +1135,22 @@
 {"fitness": 0.7884, "exact": false, "class": "structural", "size": 1706, "diffbytes": 1581, "trial": "gather-tempform-7"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-tempform-8"}
 {"fitness": 0.92412, "exact": false, "class": "structural", "size": 1706, "diffbytes": 931, "trial": "gather-tempform-9"}
+{"fitness": 0.87053, "exact": false, "class": "structural", "raw_size": 1668, "size": 1668, "diffbytes": 1537, "trial": "gather-valueinsert-0"}
+{"fitness": 0.87053, "exact": false, "class": "structural", "raw_size": 1668, "size": 1668, "diffbytes": 1537, "trial": "gather-valueinsert-1"}
+{"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-valueinsert-10"}
+{"fitness": 0.81268, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-valueinsert-11"}
+{"fitness": 0.9541, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 62, "trial": "gather-valueinsert-12"}
+{"fitness": 0.9541, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 62, "trial": "gather-valueinsert-13"}
+{"fitness": 0.9541, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 62, "trial": "gather-valueinsert-14"}
+{"fitness": 0.9541, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 62, "trial": "gather-valueinsert-15"}
+{"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-valueinsert-2"}
+{"fitness": 0.83008, "exact": false, "class": "structural", "raw_size": 1705, "size": 1705, "diffbytes": 1465, "trial": "gather-valueinsert-3"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-valueinsert-4"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-valueinsert-5"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-valueinsert-6"}
+{"fitness": 0.99368, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 11, "trial": "gather-valueinsert-7"}
+{"fitness": 0.87166, "exact": false, "class": "structural", "raw_size": 1668, "size": 1668, "diffbytes": 1539, "trial": "gather-valueinsert-8"}
+{"fitness": 0.87166, "exact": false, "class": "structural", "raw_size": 1668, "size": 1668, "diffbytes": 1539, "trial": "gather-valueinsert-9"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-vectorwrapper-best-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-vectorwrapper-best-1"}
 {"fitness": 0.80888, "exact": false, "class": "structural", "raw_size": 1694, "size": 1694, "diffbytes": 1501, "trial": "gather-vectorwrapper-best-10"}
@@ -773,6 +1189,22 @@
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-visibility-5-1"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-visibility-6-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "raw_size": 1706, "size": 1706, "diffbytes": 7, "trial": "gather-visibility-6-1"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-base-0"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-base-1"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-base-2"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-base-3"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-base-4"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-base-5"}
+{"fitness": 0.01397, "exact": false, "class": "structural", "raw_size": 8, "size": 8, "diffbytes": 1705, "trial": "gather-wholeinline-gather-base-6"}
+{"fitness": 0.01397, "exact": false, "class": "structural", "raw_size": 8, "size": 8, "diffbytes": 1705, "trial": "gather-wholeinline-gather-base-7"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-scope-4-0"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-scope-4-1"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-scope-4-2"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-scope-4-3"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-scope-4-4"}
+{"fitness": 0.00308, "exact": false, "class": "structural", "raw_size": 5, "size": 5, "diffbytes": 1705, "trial": "gather-wholeinline-gather-scope-4-5"}
+{"fitness": 0.01397, "exact": false, "class": "structural", "raw_size": 8, "size": 8, "diffbytes": 1705, "trial": "gather-wholeinline-gather-scope-4-6"}
+{"fitness": 0.01397, "exact": false, "class": "structural", "raw_size": 8, "size": 8, "diffbytes": 1705, "trial": "gather-wholeinline-gather-scope-4-7"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-wrapper-0"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-wrapper-1"}
 {"fitness": 0.99467, "exact": false, "class": "structural", "size": 1706, "diffbytes": 7, "trial": "gather-wrapper-10"}

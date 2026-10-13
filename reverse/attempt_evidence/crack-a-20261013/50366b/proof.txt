@@ -38,3 +38,34 @@ was bypassed only in the scratch search driver, never in a verifier or gate.
 
 The bank retains the simple seven-byte candidate. Its0.99467 score is the
 instruction-aware diagnostic score, not exact acceptance or linked status.
+
+Final follow-up, 2026-10-13: 1,219 named trial records, the earlier 1,258-trial
+permutation pass, 137 original-bank stack-search trials, and 600 neutral
+combinations. Counts include baseline and failed-compilation trials; they are
+search effort, not recovered functions or bytes. No exact Gather candidate.
+
+The neutral pass composed previously compiled seven-byte candidates rather than
+requiring a single mutation to improve fitness. 581 combinations reproduced the
+same exact-frame seven-byte body. Three tied the byte count with a padded 1F8
+frame and are rejected, two changed the extent to1691, and fourteen failed to
+compile. The patch pool and per-trial parent selections are retained here.
+
+Additional rejected hypotheses: inner army/building/entry scopes; named index
+pairs and discarded return values; explicit outer-loop exit forms; by-value
+source/conversion/vector parameters; constructor wrappers; whole-function
+inlining; and the independently rowed collector's visible definition. Whole
+Gather helpers remained out of line even with __forceinline. Original-bank
+stack_search retained the original60 differences after137 trials.
+
+A /GL scratch-link diagnostic could not generate code because the bundled
+linker reports C1350 missing msobj71.dll followed by LNK1257. This is not evidence
+that LTCG matches, and no verifier was changed to accept it. The bundled cl/c2
+versions are13.10.3077. Retail Rich records include build3077 and4035; those
+records do not attribute a compiler revision to this individual function.
+
+Precise remaining wall: choose the native assignment of the two live92-byte
+region pairs while preserving every low stack home and all16 unwind actions.
+No semantic, callee, branch, register or EH-state mismatch remains in the bank.
+The paired cleanup displacements independently rule out calling it exact.
+The original source name of the separately recovered distance builder remains
+unknown; its role and complete447-byte/EH recovery are recorded under5020cc.
