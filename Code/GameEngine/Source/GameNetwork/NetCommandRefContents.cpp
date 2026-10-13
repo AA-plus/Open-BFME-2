@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
 // ?rva0058B8BA@NetCommandRef@@QAE?AVAsciiString@@XZ @0x0058B8BA 142B: NetCommandRef
 // contents string, "%s, relay=0x%X" over the referenced message's contents.
