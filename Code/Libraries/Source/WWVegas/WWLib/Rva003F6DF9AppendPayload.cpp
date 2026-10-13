@@ -1,16 +1,18 @@
-// ?appendPayloadRva003F6DF9@Rva003F6D35Owner@@QAEXPAXPAURva003F6DF9Payload@@@Z
-// partial score=0.876984126984127 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
+// Dedicated TU: NestedRecordLookupRva003F6D35.cpp carries the matched
+// 0x3F6D35 row under its own /EHsc /MD flags; this body needs /O1 /G7.
+// R1 template visibility: dropping the three explicit vector/find
+// specialization declarations restores retail's base-load order. Exact 168B.
 #include <vector>
 #include <algorithm>
 class ModuleData;
 class CreateAHeroData;
 struct BfmePod104 { int data[26]; };
 namespace _STL {
-template<> void vector<const ModuleData*>::push_back(const ModuleData *const&);
-template<> void vector<BfmePod104>::push_back(const BfmePod104&);
-template<> CreateAHeroData **find(CreateAHeroData**,CreateAHeroData**,CreateAHeroData *const&);
+
+
+
 }
 struct Rva003F6DF9Child {char pad98[0x98];unsigned field98;char pad9c[0xc];bool flaga8;};
 struct Rva003F6DF9Entry {unsigned word;Rva003F6DF9Child *child;};
