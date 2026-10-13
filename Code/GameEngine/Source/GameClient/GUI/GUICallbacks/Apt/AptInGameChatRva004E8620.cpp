@@ -33,7 +33,10 @@ public:
 	virtual void s12(); virtual void s13(); virtual void s14();
 	virtual void s15();
 };
-extern IMEManagerInterface *TheIMEManager;
+// WinMain owns the global at native VA 0x00DFE728 as IMEManager *.
+// Retain this callback's slot-only view when accessing that existing owner.
+class IMEManager;
+extern IMEManager *TheIMEManager;
 
 class GameWindow
 {
@@ -66,7 +69,7 @@ int AptInGameChat::rva004E8620()
 		child->s3(0);
 		::delete child;
 		if (TheIMEManager)
-			TheIMEManager->s15();
+			((IMEManagerInterface *)TheIMEManager)->s15();
 	}
 	return 1;
 }
