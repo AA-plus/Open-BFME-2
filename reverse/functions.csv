@@ -52319,7 +52319,6 @@ _Rva00669500@8,,0x00669500,13,Code/GameEngine/Source/Common/RvaSmallLeafTransfer
 ??0Rva000A0D3A@@QAE@PAX@Z,,0x000A0D3A,24,Code/GameEngineDevice/Source/W3DDevice/GameClient/GUI/Gadget/Rva000A0D3ACtor.cpp,matched,Gadget ctor via Rva000A0CE7 base plus vtable 0x00BC8D30
 ?storeWord@Rva0023425D@@QAEPAV1@G@Z,,0x0023425D,13,Code/GameEngine/Source/Common/RvaSmallLeafTransfers.cpp,matched,BFME1 5cc75ddd whole BfmeConv1047.cpp compiled; target-address ABI word-store view only; constructor and owner identity unproven
 ?d_0001c090@@YAXXZ,,0x0001C090,132,Code/gen_asm/d_0001b3e0.asm,matched,gen-dump;ghidra=FUN_0041c090
-?d_0002c7fd@@YAXXZ,,0x0002C7FD,214,Code/gen_asm/d_0001b3e0.asm,matched,gen-dump;ghidra=FUN_0042c7fd
 ?rva007B80D3@@YAXXZ,,0x007B80D3,10,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,
 ?rva007B80DD@@YAXXZ,,0x007B80DD,10,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,
 ?rva007B80E7@@YAXXZ,,0x007B80E7,10,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,
@@ -87949,3 +87948,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?update@ProductionUpdate@@UAE?AW4UpdateSleepTime@@XZ,,0x0049E3B5,4969,Code/GameEngine/Source/GameLogic/Object/Update/ProductionUpdateQueue.cpp,matched,WB1204250 names update; native4969B full body and complete EH exact. ZH/BF1 queue and door semantics guide target revival/auxiliary branches; BFME2 offsets and calls from retail/WB. Canonical timing owners and three door tables reconciled; compiler guard replaces two synthetic clearers. No new pins or aliases; t=36 model=gpt-6-astra
 ?iniParseNewEvaEvent@Eva@@SAXPAVINI@@@Z,,0x001DF42D,635,Code/GameEngine/Source/GameClient/EvaRva001DF42D.cpp,matched,R1 generator closure: plain direct-write clearer in this TU (codegen-influencing) plus the equal-arm ternary on the name-map key; exact 635B
 ?iniParseEvaEventForwardReference@Eva@@SAXPAVINI@@@Z,,0x001DF6A8,484,Code/GameEngine/Source/GameClient/EvaRva001DF42D.cpp,matched,R1 generator closure: same TU/plain clearer as 0x1DF42D; exact 484B
+?rva0002C7FD@Rva0002C7FD@@QAEXI@Z,,0x0002C7FD,214,Code/GameEngine/Source/Common/Rva0002C7FD.cpp,matched,R1 template_visibility: dropping the explicit vector<void*> get_allocator/ctor/swap specialization declarations reproduces the retail mov order; exact 214B (replaces gen_asm d_0001b3e0 placeholder)

@@ -12,6 +12,7 @@
 // ?rva0002C7FD@Rva0002C7FD@@QAEXI@Z
 // partial score=0.92 date=2026-10-09
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_STLP_USE_MALLOC /G7
+// R1 template_visibility closure (W8-T4LEAD): dropping the three explicit vector<void*> specialization declarations removes a mov-swap wall; exact 214B. Dedicated TU.
 // stlport
 // Successive local union members reuse the native zero-value/counter home;
 // this records temporary lifetime, not a recovered class or payload type.
@@ -43,9 +44,9 @@ typedef _STL::pair<const NameKeyType, ArmorTemplate> RvaRehashPrimePair;
 typedef _STL::hashtable<RvaRehashPrimePair,NameKeyType,rts::hash<NameKeyType>,
  _STL::_Select1st<RvaRehashPrimePair>,rts::equal_to<NameKeyType>,
  _STL::allocator<RvaRehashPrimePair> > RvaRehashPrimeProvider;
-template<> _STL::vector<void*>::allocator_type _STL::vector<void*>::get_allocator() const;
-template<> _STL::vector<void*>::vector(size_type, void * const &, const allocator_type &);
-template<> void _STL::vector<void*>::swap(_STL::vector<void*> &);
+
+
+
 // Only the node prefix is viewed. This function never allocates a node,
 // computes its full size, or reads the unnamed payload following the key.
 struct Rva0002C7FDNodePrefix { Rva0002C7FDNodePrefix *next; AsciiString key; };
