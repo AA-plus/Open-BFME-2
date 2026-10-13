@@ -135,18 +135,18 @@ bool Rva0025C061::rva00596472(void *holder)
 	}
 	return false;
 }
-// ?rva00596491@Rva0025BF8C@@QAE_NPAX@Z @0x00596491 31B
+// ?rva00596491@AIStatBase@@QAE_NPAX@Z @0x00596491 31B
 // __thiscall predicate over holder: requires Rva00596446Get(holder)!=0
-// (byte test al), then calls this Rva0025BF8C::rva0025BF8C(holder) with same
+// (byte test al), then calls this AIStatBase::removeObject(holder) with same
 // ecx and returns true, else false. Same-this ECX survives because callee
 // definition is visible in this TU (shape-lever visibility).
 // Evidence: push [esp+4] call 0x596446 test al je; push [esp+4] call 0x25BF8C;
 // mov al1 jmp xor al ret4; caller at 0x004E043B; ecx pass-through.
 class CreateAHeroData;
-class Rva0025BF8C
+class AIStatBase
 {
 public:
-	bool rva0025BF8C(void *holder);
+	bool removeObject(void *holder);
 	bool rva00596491(void *holder);
 	bool rva005960E0(void *holder);
 private:
@@ -154,11 +154,11 @@ private:
 	_STL::vector<CreateAHeroData *, _STL::allocator<CreateAHeroData *> > m_vec04;
 };
 
-bool Rva0025BF8C::rva00596491(void *holder)
+bool AIStatBase::rva00596491(void *holder)
 {
 	if (((unsigned char)Rva00596446Get(holder)) != 0)
 	{
-		rva0025BF8C(holder);
+		removeObject(holder);
 		return true;
 	}
 	return false;
@@ -179,19 +179,19 @@ bool Rva0025C061::rva005960C1(void *holder)
 	}
 	return false;
 }
-// ?rva005960E0@Rva0025BF8C@@QAE_NPAX@Z @0x005960E0 31B
+// ?rva005960E0@AIStatBase@@QAE_NPAX@Z @0x005960E0 31B
 // __thiscall predicate over holder: requires Rva00596095Get(holder)!=0
-// (byte test al), then calls this Rva0025BF8C::rva0025BF8C(holder) with same
+// (byte test al), then calls this AIStatBase::removeObject(holder) with same
 // ecx and returns true, else false. Same-this ECX survives because callee
 // definition is visible in this TU (shape-lever visibility); separate TU
 // spills this to esi (prior blocked ecx save wall t=12).
 // Evidence: push [esp+4] call 0x596095 test al je; push [esp+4] call 0x25BF8C;
 // mov al1 jmp xor al ret4; caller at 0x004E048D; ecx pass-through.
-bool Rva0025BF8C::rva005960E0(void *holder)
+bool AIStatBase::rva005960E0(void *holder)
 {
 	if (((unsigned char)Rva00596095Get(holder)) != 0)
 	{
-		rva0025BF8C(holder);
+		removeObject(holder);
 		return true;
 	}
 	return false;

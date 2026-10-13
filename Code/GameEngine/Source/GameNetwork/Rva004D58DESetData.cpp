@@ -1,6 +1,6 @@
 // cl: /DNDEBUG /MD /EHsc
-// ?rva004D5925@Rva004D58DE@@QAEXPAEI@Z, retail 0x004D5925, 39 bytes.
-// Rva004D58DE setter twin of NetFileCommandMsg::setFileData 0x004D594C: stores
+// ?setData@NetHeroCommandMsg@@QAEXPAEI@Z, retail 0x004D5925, 39 bytes.
+// NetHeroCommandMsg setter twin of NetFileCommandMsg::setFileData 0x004D594C: stores
 // length at +0x28, new[]s the buffer at +0x24, memcpy via thunk 0x006291A8.
 // Identity from prev dtor 0x004D5902 layout +0x24 ptr +0x28 len, same 39B shape
 // as next setFileData, callees new[] 0x0002FDE0 and memcpy thunk 0x006291A8,
@@ -27,10 +27,10 @@ protected:
 	NetCommandType m_commandType;
 	Int m_referenceCount;
 };
-class Rva004D58DE : public NetCommandMsg
+class NetHeroCommandMsg : public NetCommandMsg
 {
 public:
-	void rva004D5925(unsigned char *data, unsigned int len);
+	void setData(unsigned char *data, unsigned int len);
 private:
 	unsigned int m_1c;
 	unsigned short m_20;
@@ -38,7 +38,7 @@ private:
 	unsigned int m_28;
 };
 
-void Rva004D58DE::rva004D5925(unsigned char *data, unsigned int len)
+void NetHeroCommandMsg::setData(unsigned char *data, unsigned int len)
 {
 	m_28 = len;
 	m_24 = new unsigned char[len];

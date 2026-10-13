@@ -462,10 +462,10 @@ public:
 	static Module *rva000395708(Object *obj);
 };
 
-class Rva00327C1B
+class ProductionEntry
 {
 public:
-	Bool rva00327C1B() const;
+	Bool getProductionObject() const;
 };
 
 // ProductionEntry.
@@ -476,7 +476,7 @@ public:
 	virtual ~Rva0049D1B1();
 
 	// type 1 or 3, the rowed out-of-line copy 0x00327C1B
-	Bool isUnit() const { return ((const Rva00327C1B *)this)->rva00327C1B(); }
+	Bool isUnit() const { return ((const ProductionEntry *)this)->getProductionObject(); }
 	ProductionType getProductionType() const { return m_type; }
 	const ThingTemplate *getProductionObject() const { return m_objectToProduce; }
 	const UpgradeTemplate *getProductionUpgrade() const { return m_upgradeToResearch; }

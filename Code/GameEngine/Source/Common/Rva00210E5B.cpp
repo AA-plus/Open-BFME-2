@@ -8,10 +8,10 @@
 class Rva002D3627Host;
 extern Rva002D3627Host *g_00DFEF18;
 
-class Rva002BFDAE
+class LivingWorld
 {
 public:
-	void *rva002BFDAE(void *key);
+	void *FindClickableObject(void *key);
 };
 
 class Rva003FA835
@@ -22,7 +22,7 @@ public:
 
 void __stdcall rva00210E5B(void *key, int value)
 {
-	void *entry = ((Rva002BFDAE *)g_00DFEF18)->rva002BFDAE(key);
+	void *entry = ((LivingWorld *)g_00DFEF18)->FindClickableObject(key);
 	if (entry)
 		((Rva003FA835 *)entry)->rva003FA781(value);
 }
@@ -38,7 +38,7 @@ public:
 // stdcall spelling exactly, including the callee-cleaned return.
 void Rva00DFE1C8Host::rva00210E5B(int key, int value)
 {
-	void *entry = ((Rva002BFDAE *)g_00DFEF18)->rva002BFDAE((void *)key);
+	void *entry = ((LivingWorld *)g_00DFEF18)->FindClickableObject((void *)key);
 	if (entry)
 		((Rva003FA835 *)entry)->rva003FA781(value);
 }

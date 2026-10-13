@@ -156,10 +156,10 @@ void Rva0020E3D6::rva0020E3D6(void *value)
 class Rva002D3627Host;
 extern Rva002D3627Host *g_00DFEF18;
 
-class Rva002BFDAE
+class LivingWorld
 {
 public:
-	void *rva002BFDAE(void *key);							// 0x002BFDAE
+	void *FindClickableObject(void *key);							// 0x002BFDAE
 };
 
 class Rva003FA835
@@ -180,7 +180,7 @@ private:
 
 void Rva00210E7C::rva00210E7C(void *key, int value)
 {
-	void *record = ((Rva002BFDAE *)g_00DFEF18)->rva002BFDAE(key);
+	void *record = ((LivingWorld *)g_00DFEF18)->FindClickableObject(key);
 	if (record)
 		((Rva003FA835 *)record)->rva003FA7D3(value);
 }

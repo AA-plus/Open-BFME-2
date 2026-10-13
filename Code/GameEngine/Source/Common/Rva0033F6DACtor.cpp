@@ -1,6 +1,6 @@
 // cl: /MD
 //
-// ??0Rva0033F6DA@@QAE@PAVStateMachine@@@Z, retail 0x0033F6DA, 33 bytes.
+// ??0AIGuardState@@QAE@PAVStateMachine@@@Z, retail 0x0033F6DA, 33 bytes.
 // State-derived ctor forwarding (machine, 0xEBE7A650) to the unsigned-hash
 // twin ??0State@@QAE@PAVStateMachine@@I@Z at 0x004D73FC then zeroing dword
 // at +0x20 then installing vtable 0x00811740. Caller is 0x00352703. Twin of
@@ -28,16 +28,16 @@ public:
 // Rva0033F6DA_vftable: matched references place it at VA 0xc11740 (retail .rdata value 37).
 extern "C" char Rva0033F6DA_vftable = 37;
 
-class __declspec(novtable) Rva0033F6DA : public State
+class __declspec(novtable) AIGuardState : public State
 {
 public:
-	Rva0033F6DA(StateMachine *machine);
+	AIGuardState(StateMachine *machine);
 
 private:
 	unsigned int m_20;
 };
 
-Rva0033F6DA::Rva0033F6DA(StateMachine *machine) : State(machine, 0xEBE7A650u)
+AIGuardState::AIGuardState(StateMachine *machine) : State(machine, 0xEBE7A650u)
 {
 	m_20 = 0;
 	*reinterpret_cast<char **>(this) = &Rva0033F6DA_vftable;

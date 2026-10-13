@@ -81,13 +81,13 @@ public:
 // The 0x2C data-carrying message: the room check at 0x0058D296 charges its
 // +0x28 payload length, rva0058EDEF serializes +0x1C/+0x20/+0x28 and the +0x24
 // buffer, and the static reader rva0058E20D rebuilds it in the same order
-// through the rowed ctor 0x004D58DE and rva004D5925(data, len). One class
+// through the rowed ctor 0x004D58DE and setData(data, len). One class
 // across the three is a structural inference from that shared layout.
-class Rva004D58DE : public NetCommandMsg
+class NetHeroCommandMsg : public NetCommandMsg
 {
 public:
-	Rva004D58DE();
-	void rva004D5925(unsigned char *data, unsigned int len);
+	NetHeroCommandMsg();
+	void setData(unsigned char *data, unsigned int len);
 	UnsignedInt get1c() { return m_1c; }
 	UnsignedShort get20() { return m_20; }
 	unsigned char *getData() { return m_24; }
@@ -500,7 +500,7 @@ protected:
 	static UnsignedInt GetType16CommandSize(NetCommandMsg *msg) { return 0xF; }
 	static UnsignedInt GetType17CommandSize(NetCommandMsg *msg) { return 0xF; }
 	static UnsignedInt GetType18CommandSize(NetCommandMsg *msg) { return 0x25; }
-	static UnsignedInt GetType20CommandSize(NetCommandMsg *msg) { return ((Rva004D58DE *)msg)->getDataLength() + 0x19; }
+	static UnsignedInt GetType20CommandSize(NetCommandMsg *msg) { return ((NetHeroCommandMsg *)msg)->getDataLength() + 0x19; }
 	static UnsignedInt GetType22CommandSize(NetCommandMsg *msg) { return 0x15; }
 	static UnsignedInt GetType23CommandSize(NetCommandMsg *msg) { return 0x17; }
 	static UnsignedInt GetType25CommandSize(NetCommandMsg *msg) { return 0xC; }
@@ -923,7 +923,7 @@ Bool NetPacket::rva0058D296(NetCommandRef *msg)
 		(needNewCommandID == true)) {
 		len += sizeof(UnsignedByte) + sizeof(UnsignedShort);
 	}
-	Int base = m_packetLen + ((Rva004D58DE *)cmdMsg)->m_28;
+	Int base = m_packetLen + ((NetHeroCommandMsg *)cmdMsg)->m_28;
 	if ((len + base + 0xB) > MAX_PACKET_SIZE) {
 		return false;
 	}
@@ -2958,12 +2958,12 @@ NetCommandMsg *NetPacket::rva0058E0B0Type17(unsigned char *data, int &readOffset
 }
 
 // ?rva0058E20D@NetPacket@@SAPAVNetCommandMsg@@PAEAAH@Z @0x0058E20D 202B.
-// Static NetPacket factory for Rva004D58DE (0x2C): new via rowed ctor 0x004D58DE,
+// Static NetPacket factory for NetHeroCommandMsg (0x2C): new via rowed ctor 0x004D58DE,
 // dword at +0x1C via 4B memcpy, word at +0x20 via 2B memcpy, dword len via 4B
 // memcpy then new[] buffer plus memcpy plus rowed SetData 0x004D5925.
 NetCommandMsg *NetPacket::rva0058E20D(unsigned char *data, int &readOffset)
 {
-	Rva004D58DE *msg = new Rva004D58DE();
+	NetHeroCommandMsg *msg = new NetHeroCommandMsg();
 	UnsignedInt v0 = 0;
 	memcpy(&v0, data + readOffset, 4);
 	readOffset += 4;
@@ -2978,7 +2978,7 @@ NetCommandMsg *NetPacket::rva0058E20D(unsigned char *data, int &readOffset)
 	unsigned char *buf = new unsigned char[len];
 	memcpy(buf, data + readOffset, len);
 	readOffset += len;
-	msg->rva004D5925(buf, len);
+	msg->setData(buf, len);
 	return (NetCommandMsg *)msg;
 }
 
@@ -3411,13 +3411,13 @@ Bool NetPacket::addDisconnectFrameCommand(NetCommandRef *msg)
 
 // ?rva0058EDEF@NetPacket@@IAE_NPAVNetCommandRef@@@Z, retail 0x0058EDEF, 649 bytes:
 // addCommand's type-20 arm, the type BFME2 inserts: room check rva0058D296,
-// T/R/S/P/C/D, then Rva004D58DE's +0x1C dword, +0x20 word, +0x28 length and
+// T/R/S/P/C/D, then NetHeroCommandMsg's +0x1C dword, +0x20 word, +0x28 length and
 // that many bytes of the +0x24 buffer.
 Bool NetPacket::rva0058EDEF(NetCommandRef *msg)
 {
 	Bool needNewCommandID = false;
 	if (rva0058D296(msg)) {
-		Rva004D58DE *cmdMsg = (Rva004D58DE *)ncrCommand(msg);
+		NetHeroCommandMsg *cmdMsg = (NetHeroCommandMsg *)ncrCommand(msg);
 		if (m_lastCommandType != cmdMsg->getNetCommandType()) {
 			m_packet[m_packetLen] = 'T';
 			++m_packetLen;

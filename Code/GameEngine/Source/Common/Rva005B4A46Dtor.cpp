@@ -24,7 +24,7 @@ class Rva00406F27 {public:bool rva00406F27(int);};
 class Rva00406F3C {public:bool rva00406F3C(int);};
 class AppearanceHeroView {public:virtual void slot00();virtual void slot04();virtual void slot08();virtual void slot0C();virtual void refresh(bool);virtual void refresh14();char unknown04[0x2C-4];unsigned hair2C,skin30,paint34;};
 class AptMyHero {public:void AdjustBling(int,int,int);void rva005B0FCD(int);void rva005B0923(int);void rva005B097F(int);};
-class Rva00407020 {public:bool rva00407020();};
+class CreateAHeroHero {public:bool SetDefaultColors();};
 class Rva005B4BDB {public:void rva005B4C3C();void rva005B4BDB();void rva005B4AD9(int);};
 class Rva005B5C02Box {public:void Run();};
 class GameWindow;
@@ -217,7 +217,7 @@ void Rva005B4A46::PrevAppearance(const char*path){int value=atoi(path);reinterpr
 void Rva005B4A46::AutoChangeBttn(const char*path) {
  if(strcmp(path,"AppearanceDefault")==0) {
   AptMyHero *hero=reinterpret_cast<AptMyHero*>(static_cast<char*>(m_04)+0x27C);
-  hero->rva005B0FCD(1);reinterpret_cast<Rva00407020*>(hero)->rva00407020();reinterpret_cast<AppearanceHeroView*>(hero)->refresh14();
+  hero->rva005B0FCD(1);reinterpret_cast<CreateAHeroHero*>(hero)->SetDefaultColors();reinterpret_cast<AppearanceHeroView*>(hero)->refresh14();
  } else if(strcmp(path,"AppearanceRandom")==0) reinterpret_cast<AptMyHero*>(static_cast<char*>(m_04)+0x27C)->rva005B0923(1);
  else if(strcmp(path,"AttribReset")==0) reinterpret_cast<AptMyHero*>(static_cast<char*>(m_04)+0x27C)->rva005B097F(0);
  else if(strcmp(path,"AttribRecommend")==0) reinterpret_cast<AptMyHero*>(static_cast<char*>(m_04)+0x27C)->rva005B0FCD(0);

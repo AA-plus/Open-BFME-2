@@ -1,5 +1,5 @@
 // cl: /O1 /DNDEBUG /MD /GX
-// ??1Rva00740242@@UAE@XZ, retail 0x00740242, 126 bytes.
+// ??1W3DAptComponentView3D@@UAE@XZ, retail 0x00740242, 126 bytes.
 // Derived dtor releasing three RefCounts then Rva0074011F at +0x20 then base Rva007401F6.
 // Evidence: vtable 0x008F1600 at +0; callees rowed 0x0074011F 0x007401F6; caller 0x00740590 deleting dtor.
 class RefCountClass
@@ -28,10 +28,10 @@ public:
 private:
 	char m_pad04[8];
 };
-class Rva00740242 : public Rva007401F6
+class W3DAptComponentView3D : public Rva007401F6
 {
 public:
-	virtual ~Rva00740242();
+	virtual ~W3DAptComponentView3D();
 private:
 	RefCountClass *m_0C;
 	RefCountClass *m_10;
@@ -45,7 +45,7 @@ Rva0074011F::~Rva0074011F()
 {
 	rva0074011F();
 }
-Rva00740242::~Rva00740242()
+W3DAptComponentView3D::~W3DAptComponentView3D()
 {
 	if (m_10)
 	{

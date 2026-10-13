@@ -8,7 +8,7 @@
 class Object;
 class Rva002A8F24;
 class Rva002A8AB1Record;
-class Rva00327C1B;
+class ProductionEntry;
 class ThingTemplate;
 class ThingFactory;
 class SuffixObj;
@@ -31,10 +31,10 @@ struct Rva002A8AB1Record
 	int m_16c; // +0x16c
 };
 
-class Rva00327C1B
+class ProductionEntry
 {
 public:
-	bool rva00327C1B() const;
+	bool getProductionObject() const;
 };
 
 class ThingFactory
@@ -67,7 +67,7 @@ public:
 	virtual void *v12();
 	virtual void *v13();
 	virtual void *v14();
-	virtual Rva00327C1B *v15(); // +0x54
+	virtual ProductionEntry *v15(); // +0x54
 };
 
 extern Rva002A8F24 *g_00DFEEF8;
@@ -93,10 +93,10 @@ void AIDozerManager::buildDozer(Object *obj)
 		SuffixObj *s = (SuffixObj *)obj->rva0028BC58(zero);
 		if (s != (SuffixObj *)zero) {
 			if (s->v11() == 1) {
-				Rva00327C1B *c = s->v15();
-				if (!c->rva00327C1B())
+				ProductionEntry *c = s->v15();
+				if (!c->getProductionObject())
 					goto docall;
-				Rva00327C1B *d = s->v15();
+				ProductionEntry *d = s->v15();
 				void *e = *(void **)((char *)d + 8);
 				if ((((unsigned char *)e)[0x113] & 4) != 0)
 					goto docall;

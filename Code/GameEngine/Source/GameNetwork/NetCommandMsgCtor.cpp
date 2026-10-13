@@ -521,13 +521,13 @@ NetAckStage2CommandMsg::NetAckStage2CommandMsg() : NetCommandMsg()
 	m_commandType = (NetCommandType)2;
 }
 
-// ??0Rva004D58DE@@QAE@XZ @0x004D58DE 36B: dword +0x1C, word +0x20, dwords
+// ??0NetHeroCommandMsg@@QAE@XZ @0x004D58DE 36B: dword +0x1C, word +0x20, dwords
 // +0x24/+0x28 zeroed, vtable 0x860264, type 0x14. Honest-address name: the
 // BFME1 donor enum has no entry for 0x14.
-class Rva004D58DE : public NetCommandMsg
+class NetHeroCommandMsg : public NetCommandMsg
 {
 public:
-	Rva004D58DE();
+	NetHeroCommandMsg();
 private:
 	unsigned int m_1c;
 	unsigned short m_20;
@@ -535,7 +535,7 @@ private:
 	unsigned int m_28;
 };
 
-Rva004D58DE::Rva004D58DE() : NetCommandMsg()
+NetHeroCommandMsg::NetHeroCommandMsg() : NetCommandMsg()
 {
 	m_1c = 0;
 	m_20 = 0;

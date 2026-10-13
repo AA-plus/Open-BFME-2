@@ -11,14 +11,14 @@
 // independently corroborate the record layout. Campaign index10/array14 and
 // cost/time scalars44/48 are native facts; named scalar temporaries preserve
 // retail x87 conversions, and a named array fixes its pointer-load order.
-class Rva004AF531 {public: int rva004AF531(int); int rva004AF5AC(unsigned);};
+class RespawnUpdateModuleData {public: int calcCostToBuild(int); int rva004AF5AC(unsigned);};
 class ModuleData {
 public:
 #define SLOT(n) virtual void slot##n();
  SLOT(0) SLOT(1) SLOT(2) SLOT(3) SLOT(4) SLOT(5) SLOT(6) SLOT(7) SLOT(8) SLOT(9) SLOT(10) SLOT(11) SLOT(12)
  virtual bool isRevival()const;
  SLOT(14) SLOT(15) SLOT(16) SLOT(17) SLOT(18) SLOT(19) SLOT(20) SLOT(21) SLOT(22) SLOT(23) SLOT(24) SLOT(25) SLOT(26) SLOT(27)
- virtual const Rva004AF531 *getRespawnData()const;
+ virtual const RespawnUpdateModuleData *getRespawnData()const;
 #undef SLOT
 };
 struct ModuleNugget { char unknown00[8]; const ModuleData *data; char unknown0C[8]; };
@@ -47,9 +47,9 @@ static __declspec(noinline) void CalcRevivalCostsForEntry(UnitRevivalEntry &entr
   const ModuleData *data=info.getNthData(i);
   if(!data) continue;
   if(data->isRevival()) {
-   const Rva004AF531 *rules=data->getRespawnData();
-   entry.cost=const_cast<Rva004AF531*>(rules)->rva004AF531(entry.rank);
-   entry.time=const_cast<Rva004AF531*>(rules)->rva004AF5AC(entry.rank);
+   const RespawnUpdateModuleData *rules=data->getRespawnData();
+   entry.cost=const_cast<RespawnUpdateModuleData*>(rules)->calcCostToBuild(entry.rank);
+   entry.time=const_cast<RespawnUpdateModuleData*>(rules)->rva004AF5AC(entry.rank);
    break;
   }
  }

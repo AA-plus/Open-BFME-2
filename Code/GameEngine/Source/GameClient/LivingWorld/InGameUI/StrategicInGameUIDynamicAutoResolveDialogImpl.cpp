@@ -81,10 +81,10 @@ struct DynamicAutoResolveBattlePlayers
 	Int size() const { return m_playerData.size(); }
 };
 
-class Rva004F6234
+class LivingWorldAutoResolveBattle
 {
 public:
-	void rva004F6234(Int side, Pred004F6234 *pred);
+	void enumerateCurrentUnits(Int side, Pred004F6234 *pred);
 };
 class Rva004F81CC
 {
@@ -135,7 +135,7 @@ static __declspec(noinline) void collectUnitCounts(DynamicAutoResolveBattlePlaye
 	_STL::vector<Int> counts(numPlayers, 0);
 	UnitCountCollector collector(counts);
 	for (Int side = 0; side < 2; ++side)
-		reinterpret_cast<Rva004F6234 *>(battle)->rva004F6234(side, &collector);
+		reinterpret_cast<LivingWorldAutoResolveBattle *>(battle)->enumerateCurrentUnits(side, &collector);
 	out.swap(counts);
 }
 
@@ -146,7 +146,7 @@ static __declspec(noinline) Real collectMaxTotalHealth(DynamicAutoResolveBattleP
 	TotalHealthCollector collector(healths);
 	for (Int side = 0; side < 2; ++side)
 	{
-		reinterpret_cast<Rva004F6234 *>(battle)->rva004F6234(side, &collector);
+		reinterpret_cast<LivingWorldAutoResolveBattle *>(battle)->enumerateCurrentUnits(side, &collector);
 		for (Int round = reinterpret_cast<Rva004F81CC *>(battle)->rva004F81CC(side); round >= 0;
 			round = reinterpret_cast<Rva004F7B42 *>(battle)->rva004F7B42(side, round))
 		{
@@ -162,7 +162,7 @@ static __declspec(noinline) void collectUnitHealths(DynamicAutoResolveBattlePlay
 	_STL::vector<Real> healths(numPlayers, 0);
 	UnitHealthCollector collector(healths);
 	for (Int side = 0; side < 2; ++side)
-		reinterpret_cast<Rva004F6234 *>(battle)->rva004F6234(side, &collector);
+		reinterpret_cast<LivingWorldAutoResolveBattle *>(battle)->enumerateCurrentUnits(side, &collector);
 	out.swap(healths);
 }
 

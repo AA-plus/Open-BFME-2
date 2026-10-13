@@ -93,7 +93,7 @@ class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 class Rva002D3627Host;
 extern Rva002D3627Host *g_00DFEF18;
-class Rva002BFDAE {public: void *rva002BFDAE(void *);};
+class LivingWorld {public: void *FindClickableObject(void *);};
 struct Rva002B488EResult {char unknown[0x54]; int value54;};
 struct Rva002B2579Result;
 class Rva002BA8F1Logic {public: Rva002B488EResult *rva002B488E(int);Rva002B2579Result *rva002B2579(int);};
@@ -143,7 +143,7 @@ bool Rva002DA318::rva002DA318() {
  switch(m_tag38) {
  case 1: return ((GameClient *)TheGameClient)->findDrawableByID(m_id34) == 0;
  case 2: return TheGameLogic->findObjectByID((ObjectID)m_id34) == 0;
- case 3: return g_00DFEF18 && ((Rva002BFDAE *)g_00DFEF18)->rva002BFDAE((void*)m_id34) ? 0 : 1;
+ case 3: return g_00DFEF18 && ((LivingWorld *)g_00DFEF18)->FindClickableObject((void*)m_id34) ? 0 : 1;
  case 4: return TheLivingWorldLogic && ((Rva002BA8F1Logic *)TheLivingWorldLogic)->rva002B488E(m_id34) ? 0 : 1;
  case 5: return TheLivingWorldLogic && ((Rva002BA8F1Logic *)TheLivingWorldLogic)->rva002B2579(m_id34) ? 0 : 1;
  }
@@ -164,7 +164,7 @@ int Rva002D9C7A::rva002D9C7A() {
  switch(m_tag38) {
  case 3:
   if(g_00DFEF18 && TheLivingWorldLogic) {
-   Rva002D9C7AEntry *entry=(Rva002D9C7AEntry *)((Rva002BFDAE *)g_00DFEF18)->rva002BFDAE((void*)m_id34);
+   Rva002D9C7AEntry *entry=(Rva002D9C7AEntry *)((LivingWorld *)g_00DFEF18)->FindClickableObject((void*)m_id34);
    if(entry) {
     switch(((const Rva002BFF5AData*)((const OVERRIDE<LocomotorTemplate>*)&entry->version)->operator->())->key) {
     case 0:

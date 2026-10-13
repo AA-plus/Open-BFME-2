@@ -9,7 +9,7 @@
 //   m_00->rva0059614B(holder) || m_04->rva005960E0(holder) -> loop(holder,4), done=1
 //   done != 0 -> key = TheNameKeyGenerator->nameToKey(*(AsciiString*)(*(void**)(holder+4)+0x64));
 //                node = map14._M_find(key); if (node) --*(int*)(node+8)
-// Members m_0C/m_04 are Rva0025BF8C (rowed 0x596491/0x5960E0), m_08 is
+// Members m_0C/m_04 are AIStatBase (rowed 0x596491/0x5960E0), m_08 is
 // AIStructureStats (rowed 0x596548). m_00 (0x59614B, 139B) and m_10 (0x4E02D7,
 // 52B) are unrowed: pinned here as honest address-derived candidates.
 // map14 is called through the rowed Armor NameKeyType _M_find spelling at
@@ -76,7 +76,7 @@ enum NameKeyType
 	FORCE_NAMEKEYTYPE_LONG = 0x7fffffff
 };
 
-class Rva0025BF8C;
+class AIStatBase;
 class ArmorTemplate
 {
 public:
@@ -129,7 +129,7 @@ private:
 
 typedef _STL::hashtable<_STL::pair<const NameKeyType, ArmorTemplate>, NameKeyType, rts::hash<NameKeyType>, _STL::_Select1st<_STL::pair<const NameKeyType, ArmorTemplate> >, rts::equal_to<NameKeyType>, _STL::allocator<_STL::pair<const NameKeyType, ArmorTemplate> > > ArmorHashtable;
 
-class Rva0025BF8C
+class AIStatBase
 {
 public:
 	bool rva00596491(void *holder);
@@ -173,9 +173,9 @@ public:
 
 private:
 	Rva0059614B *m_00;
-	Rva0025BF8C *m_04;
+	AIStatBase *m_04;
 	AIStructureStats *m_08;
-	Rva0025BF8C *m_0C;
+	AIStatBase *m_0C;
 	Rva004E02D7 *m_10;
 	// Constructor 004E030B establishes a 20-byte map, then Player* at
 	// +28 and the 12-byte listener header at +2C. These methods retain

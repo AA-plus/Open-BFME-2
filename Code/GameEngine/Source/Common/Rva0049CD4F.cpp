@@ -1,6 +1,6 @@
 // cl: /O1 /DNDEBUG /MD /arch:SSE /G7
 //
-// ?rva0049CD4F@Rva0049CD4F@@QAEHPAVRva0049CD4FArg@@@Z @0x0049CD4F 170B.
+// ?calcTotalProductionFrames@ProductionUpdate@@QAEHPAVRva0049CD4FArg@@@Z @0x0049CD4F 170B.
 // The object at +8 must have a controlling player, and the argument must be
 // non-null. Kind 1 asks the ThingTemplate at +8, kind 2 the UpgradeTemplate
 // at +0xC, kind 3 the sub-object at player+0x738. A missing kind or a
@@ -51,10 +51,10 @@ public:
 	void *m_extra;
 };
 
-class Rva0049CD4F
+class ProductionUpdate
 {
 public:
-	int rva0049CD4F(Rva0049CD4FArg *arg);
+	int calcTotalProductionFrames(Rva0049CD4FArg *arg);
 
 private:
 	int m_pad0;
@@ -62,7 +62,7 @@ private:
 	Object *m_obj;
 };
 
-int Rva0049CD4F::rva0049CD4F(Rva0049CD4FArg *arg)
+int ProductionUpdate::calcTotalProductionFrames(Rva0049CD4FArg *arg)
 {
 	if (!m_obj)
 		return 1;

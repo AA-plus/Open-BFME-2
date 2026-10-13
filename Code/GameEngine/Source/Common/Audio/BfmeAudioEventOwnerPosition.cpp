@@ -39,7 +39,7 @@ class GameClient {public:
  virtual Drawable *findDrawableByID(int);
 };
 class Rva003FA835 {public: BfmeEventPositionView rva003FA835();};
-class Rva002BFDAE {public: void *rva002BFDAE(void *);};
+class LivingWorld {public: void *FindClickableObject(void *);};
 struct Rva002B488EResult {char pad[0x44];float x,y;};
 struct Rva002B2579Position {char pad[0x18];BfmeEventPositionView position;};
 struct Rva002B2579Result {char pad[0x2c];Rva002B2579Position *data; Rva002B2579Position *get() const {return data;}};
@@ -63,7 +63,7 @@ BfmeEventPositionView BfmeAudioEventPrefix136::rva002DA1CC(bool &valid) {
  }
  case 3:
   if(g_00DFEF18) {
-   Rva003FA835 *window=(Rva003FA835*)((Rva002BFDAE *)g_00DFEF18)->rva002BFDAE((void*)m_int34);
+   Rva003FA835 *window=(Rva003FA835*)((LivingWorld *)g_00DFEF18)->FindClickableObject((void*)m_int34);
    if(window) {m_b48=1;m_position=window->rva003FA835();}
   }
   break;

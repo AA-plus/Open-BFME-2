@@ -79,4 +79,4 @@ DemoTrapUpdate::DemoTrapUpdate( Thing *thing, const ModuleData *moduleData )
 // each one has the same function in that slot (vftable addresses from matched vptr
 // stores). Bind them to the rows at those functions.
 #pragma comment(linker, "/alternatename:?behaviorAnchor@DemoTrapUpdate@@UAEXXZ=?ControlBarInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z")
-#pragma comment(linker, "/alternatename:?objectModuleAnchor@DemoTrapUpdate@@UAEXXZ=??_GRva00495916@@UAEPAXI@Z")
+#pragma comment(linker, "/alternatename:?objectModuleAnchor@DemoTrapUpdate@@UAEXXZ=??_GDemoTrapUpdate@@UAEPAXI@Z")

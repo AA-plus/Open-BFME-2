@@ -1,7 +1,7 @@
 // cl: /O1 /arch:SSE /EHsc /MD /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
 // stlport
 //
-// ?rva004AF531@Rva004AF531@@QAEHH@Z @0x004AF531 123B ret 4.
+// ?calcCostToBuild@RespawnUpdateModuleData@@QAEHH@Z @0x004AF531 123B ret 4.
 // Probe the unsigned-key map at +0x10C with the argument, then with key 1.
 // Native find357180 compares keys unsigned; the signed argument preserves
 // its 32-bit representation when constructing the lookup key.
@@ -35,7 +35,7 @@ struct RespawnRule
 // _Rb_tree<unsigned, pair<const unsigned, void *> >::_M_find<unsigned> at
 // 0x00357180 (private; reached through this TU-local declaration, as
 // RespawnUpdateParseRules.cpp does). The tree starts with its header node.
-class Rva004AF531;
+class RespawnUpdateModuleData;
 namespace _STL {
 template <class _Key, class _Mapped> struct pair;
 template <class _Pair> struct _Select1st;
@@ -46,7 +46,7 @@ template <class _Key, class _Value, class _KeyOfValue, class _Compare, class _Al
 class _Rb_tree {
 	template <class _Key_arg>
 	_Rb_tree_node<_Value> *_M_find(const _Key_arg &) const;
-	friend class ::Rva004AF531;
+	friend class ::RespawnUpdateModuleData;
 };
 }
 typedef _STL::pair<const unsigned int, void *> Rva004AF531TreeValue;
@@ -69,17 +69,17 @@ struct Rva004AF531Node
 };
 extern float g_parseDurationMsecScale;
 
-class Rva004AF531
+class RespawnUpdateModuleData
 {
 public:
-	int rva004AF531(int key);
+	int calcCostToBuild(int key);
  int rva004AF5AC(unsigned level);
 	char m_pad[0x10C];
 	Rva004AF531TreeHeader m_map;
 	const Rva004AF531Tree &tree() const { return *reinterpret_cast<const Rva004AF531Tree *>(&m_map); }
 };
 
-int Rva004AF531::rva004AF531(int key)
+int RespawnUpdateModuleData::calcCostToBuild(int key)
 {
 	Rva004AF531Rec rec(key);
 	Rva004AF531Node *it = (Rva004AF531Node *)tree()._M_find<unsigned int>(rec.m_key);
@@ -100,7 +100,7 @@ int Rva004AF531::rva004AF531(int key)
 // duration scale DBA4EC=0.005 and literal C556F0=30000 supply the miss.
 // Receiver original identity remains unknown; respawn-family relation
 // follows the shared tree at10C, rule layout and adjacent death handler.
-int Rva004AF531::rva004AF5AC(unsigned level)
+int RespawnUpdateModuleData::rva004AF5AC(unsigned level)
 {
  RespawnRule rule(level);
  RespawnRuleNode *found=(RespawnRuleNode *)tree()._M_find<unsigned int>(rule.level);

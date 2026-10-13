@@ -8,7 +8,7 @@
 // no color. Existing rowed providers and canonical globals are preserved.
 class GameWindow {public:void *winGetUserData();};
 class ThingTemplate {public:bool isEquivalentTo(const ThingTemplate*)const;};
-class Rva00327C1B {public:int unknown00; int kind; const ThingTemplate *thing; void *upgrade; bool rva00327C1B()const;};
+class ProductionEntry {public:int unknown00; int kind; const ThingTemplate *thing; void *upgrade; bool getProductionObject()const;};
 class Rva0049CBDA {public:int rva0049CBDA();};
 class ButtonProductionInterface {public:
 virtual void slot00();
@@ -32,7 +32,7 @@ virtual void slot11();
 virtual void slot12();
 virtual void slot13();
 virtual void slot14();
-virtual Rva00327C1B *first(); virtual Rva00327C1B *next(Rva00327C1B *); };
+virtual ProductionEntry *first(); virtual ProductionEntry *next(ProductionEntry *); };
 class ButtonAIInterface {public:
 virtual void slot00();
 virtual void slot01();
@@ -197,14 +197,14 @@ void Rva00328700(GameWindow *window)
  if(production) {
   if(command->command==3) {
    const ThingTemplate *thing=command->rva0035B570();
-   for(Rva00327C1B *entry=production->first();entry;entry=production->next(entry)) {
-    if(entry->rva00327C1B() && thing->isEquivalentTo(entry->thing)) {
+   for(ProductionEntry *entry=production->first();entry;entry=production->next(entry)) {
+    if(entry->getProductionObject() && thing->isEquivalentTo(entry->thing)) {
      Rva003284B9(window,((Rva0049CBDA*)entry)->rva0049CBDA(),0x80ffffff); return;
     }
    }
   } else if(command->command==6 || command->command==7 || command->command==8) {
    void *upgrade=command->upgrade;
-   for(Rva00327C1B *entry=production->first();entry;entry=production->next(entry)) {
+   for(ProductionEntry *entry=production->first();entry;entry=production->next(entry)) {
     if(entry->kind==2 && upgrade==entry->upgrade) {
      Rva003284B9(window,((Rva0049CBDA*)entry)->rva0049CBDA(),0x80ffffff); return;
     }

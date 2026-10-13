@@ -29,10 +29,10 @@ public:
 };
 extern IMEManager *TheIMEManager;
 
-class Rva00407020
+class CreateAHeroHero
 {
 public:
-	bool rva00407020();
+	bool SetDefaultColors();
 };
 
 class Rva004076EE
@@ -81,7 +81,7 @@ void Rva005B4CC6::Run()
 		m_D = 1;
 	}
 	if (m_4->m_414 == m_4->m_41C) {
-		((Rva00407020 *)((char *)m_4 + 0x27C))->rva00407020();
+		((CreateAHeroHero *)((char *)m_4 + 0x27C))->SetDefaultColors();
 		((Rva004076EE *)((char *)m_4 + 0x27C))->rva00407BC3();
 	}
 	((Rva005B4BDB *)this)->rva005B4C3C();

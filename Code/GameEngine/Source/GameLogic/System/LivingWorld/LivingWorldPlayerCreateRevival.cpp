@@ -12,14 +12,14 @@
 // Native2E3442..2E34A9 RET12 proves the caller and its three input words.
 // A normal128-byte aggregate assignment gives retail's inline repMOVSD, while
 // a memcpy call adds a call boundary. No hand-built private calling convention.
-class Rva004AF531 {public: int rva004AF531(int); int rva004AF5AC(unsigned);};
+class RespawnUpdateModuleData {public: int calcCostToBuild(int); int rva004AF5AC(unsigned);};
 class ModuleData {
 public:
 #define SLOT(n) virtual void slot##n();
  SLOT(0) SLOT(1) SLOT(2) SLOT(3) SLOT(4) SLOT(5) SLOT(6) SLOT(7) SLOT(8) SLOT(9) SLOT(10) SLOT(11) SLOT(12)
  virtual bool isRevival()const;
  SLOT(14) SLOT(15) SLOT(16) SLOT(17) SLOT(18) SLOT(19) SLOT(20) SLOT(21) SLOT(22) SLOT(23) SLOT(24) SLOT(25) SLOT(26) SLOT(27)
- virtual const Rva004AF531 *getRespawnData()const;
+ virtual const RespawnUpdateModuleData *getRespawnData()const;
 #undef SLOT
 };
 struct ModuleNugget { char unknown00[8]; const ModuleData *data; char unknown0C[8]; };
@@ -91,7 +91,7 @@ static __declspec(noinline) UnitRevivalEntry CreateRevivalEntry(LivingWorldPlaye
   for(int i=0;i<info.getCount();++i) {
    const ModuleData *module=info.getNthData(i);
    if(!module || !module->isRevival()) continue;
-   const Rva004AF531 *rules=module->getRespawnData();
+   const RespawnUpdateModuleData *rules=module->getRespawnData();
    const Image *image=0;
    if(thing->flags11F & 0x40) {
     const CreateAHeroHero *hero=(const CreateAHeroHero*)reinterpret_cast<Rva002E06B8*>(player)->rva002E06EF();
@@ -102,8 +102,8 @@ static __declspec(noinline) UnitRevivalEntry CreateRevivalEntry(LivingWorldPlaye
     else image=const_cast<ThingTemplate*>(thing)->getButtonImage();
    }
    *reinterpret_cast<const Image**>(entry.unknown00)=image;
-   entry.cost=const_cast<Rva004AF531*>(rules)->rva004AF531(entry.rank);
-   entry.time=const_cast<Rva004AF531*>(rules)->rva004AF5AC(entry.rank);
+   entry.cost=const_cast<RespawnUpdateModuleData*>(rules)->calcCostToBuild(entry.rank);
+   entry.time=const_cast<RespawnUpdateModuleData*>(rules)->rva004AF5AC(entry.rank);
   }
  }
  return entry;

@@ -1,5 +1,5 @@
 // cl: /MD
-// ?rva00407020@Rva00407020@@QAE_NXZ @0x00407020 94B: thiscall bool init reading +0xC +0x10 via TheCreateAHeroManager then conditional setters 0x406F12 0x406F27 0x406F3C then flag +0x39. Evidence: chain via 0x406F12 now ready; callees all rowed; callers 0x5B48BC 0x5B4CFB 0x5B56DC.
+// ?SetDefaultColors@CreateAHeroHero@@QAE_NXZ @0x00407020 94B: thiscall bool init reading +0xC +0x10 via TheCreateAHeroManager then conditional setters 0x406F12 0x406F27 0x406F3C then flag +0x39. Evidence: chain via 0x406F12 now ready; callees all rowed; callers 0x5B48BC 0x5B4CFB 0x5B56DC.
 class CreateAHeroManager
 {
 public:
@@ -23,7 +23,7 @@ public:
 	bool rva00406F3C(int v);
 };
 extern CreateAHeroManager *TheCreateAHeroManager;
-class Rva00407020
+class CreateAHeroHero
 {
 	int m_00[3];
 	int m_0C;
@@ -31,9 +31,9 @@ class Rva00407020
 	char m_14[0x38 - 0x14];
 	int m_38;
 public:
-	bool rva00407020();
+	bool SetDefaultColors();
 };
-bool Rva00407020::rva00407020()
+bool CreateAHeroHero::SetDefaultColors()
 {
 	if (!TheCreateAHeroManager)
 		return false;

@@ -58,7 +58,7 @@ public:
  Rva003ECA69Element *rva003ECB94(Rva003ECB52Arg *arg);
 };
 
-class Rva0025BF8C {public:bool rva0025BF8C(void*);};
+class AIStatBase {public:bool removeObject(void*);};
 
 class AIUnitStats : public Rva0025C061
 {
@@ -110,7 +110,7 @@ bool AIUnitStats::rva0059614B(void *holder) {
     }
    }
   } else {
-   if(((Rva0025BF8C*)this)->rva0025BF8C(holder))
+   if(((AIStatBase*)this)->removeObject(holder))
     ((Rva003ECA69Element*)((char*)this+0x10))->rva003ECB94((Rva003ECB52Arg*)holder);
   }
   return true;

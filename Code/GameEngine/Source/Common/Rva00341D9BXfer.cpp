@@ -1,5 +1,5 @@
 // cl: /MD
-// ?xfer@Rva0033F6DA@@MAEXPAVXfer@@@Z @0x00341D9B 97B: Rva0033F6DA xfer slot 3.
+// ?xfer@AIGuardState@@MAEXPAVXfer@@@Z @0x00341D9B 97B: AIGuardState xfer slot 3.
 // IsLightCRC early-out via slot 0x10 then Version1 via rowed 0x000053EE then bool has=(m_20!=0) via slot 0x90 then lazy create via m_machine slot 0x28 then Snapshot via slot 0x30.
 // Precedent Rva0033F33D Snapshot via slot 0x30 plus bool via slot 0x90 shape.
 // Vtable 0x00811740 slot 3.
@@ -93,14 +93,14 @@ public:
 	bool m_tail1C;
 	char m_pad1D[0x20 - 0x1D];
 };
-class Rva0033F6DA : public State
+class AIGuardState : public State
 {
 protected:
 	virtual void xfer(Xfer *xfer);
 private:
 	Snapshot *m_20;
 };
-void Rva0033F6DA::xfer(Xfer *xfer)
+void AIGuardState::xfer(Xfer *xfer)
 {
 	if (xfer->IsLightCRC())
 		return;

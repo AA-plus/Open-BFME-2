@@ -39,4 +39,4 @@ Rva00789900Init::Rva00789900Init(unsigned char flag)
 
 // Retail's data references in this unit's matched rows land on globals defined
 // under other spellings at the same addresses (addend-corrected DIR32). Bind them.
-#pragma comment(linker, "/alternatename:?g_Rva00789900Table@@3PAPAXA=??_7Rva00740242@@6B@")
+#pragma comment(linker, "/alternatename:?g_Rva00789900Table@@3PAPAXA=??_7W3DAptComponentView3D@@6B@")

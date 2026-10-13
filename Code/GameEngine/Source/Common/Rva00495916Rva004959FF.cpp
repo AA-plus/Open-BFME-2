@@ -1,7 +1,7 @@
 // cl: /DNDEBUG /MD
 //
-// Retail 0x004959FF (44 bytes): Rva00495916::rva004959FF, slot 5 of the primary
-// vtable 0x00C4ED3C that the matched Rva00495916 dtor (Rva0024A797Derived.cpp)
+// Retail 0x004959FF (44 bytes): DemoTrapUpdate::onObjectCreated, slot 5 of the primary
+// vtable 0x00C4ED3C that the matched DemoTrapUpdate dtor (Rva0024A797Derived.cpp)
 // installs; the class keeps that row's placeholder name and three-base layout
 // (module base with the ModuleData at +4 and the Object at +8, two interfaces).
 // Body: set weapon set flag 0 on the Object, then lock the weapon slot named by
@@ -58,12 +58,12 @@ public:
 	unsigned char m_pad34[0x3C - 0x34];
 	bool m_3C; // +0x3C
 };
-class Rva00495916 : public Rva0024A797, public MiBase1, public Rva00495916_B2
+class DemoTrapUpdate : public Rva0024A797, public MiBase1, public Rva00495916_B2
 {
 public:
-	virtual void rva004959FF();
+	virtual void onObjectCreated();
 };
-void Rva00495916::rva004959FF()
+void DemoTrapUpdate::onObjectCreated()
 {
 	const Rva00495916ModuleData *data = (const Rva00495916ModuleData *)m_moduleData;
 	m_object->setWeaponSetFlag((WeaponSetType)0);

@@ -3,7 +3,7 @@
 // ?rva004D6BF0@Rva004D6BF0@@QAEXPAX@Z retail 0x004D6BF0 57B.
 // Vector find-and-erase void with null check: loads CreateAHeroData* at arg+0x74 into
 // stack temp then finds it in the vector at this+4 via rowed find at 0x0020E873 and erases
-// via rowed erase at 0x0025BF5D when present. EBP frame needs /Oy- like Rva0025BF8C.
+// via rowed erase at 0x0025BF5D when present. EBP frame needs /Oy- like AIStatBase.
 #include <vector>
 #include <algorithm>
 class CreateAHeroData;

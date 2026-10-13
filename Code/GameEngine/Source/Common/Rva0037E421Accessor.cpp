@@ -89,7 +89,7 @@ void *Rva0037E421::rva0037E7A5(int index)
     return ((UnitRevivalEntry *)p)->getThingTemplate();
 }
 // ?rva0037E6E8@Rva0037E6E8@@QAEHPAX0@Z @0x0037E6E8 159B
-// Leaf body called by Rva0049CD4F::rva0049CD4F at 0x0049CD8E via Player+0x738 slot.
+// Leaf body called by ProductionUpdate::calcTotalProductionFrames at 0x0049CD8E via Player+0x738 slot.
 // Entry lookup via Rva0037E421::rva0037E451, controlling-player gate via
 // Object::getControllingPlayer plus Rva002A9BF2 == 3, PlayerList gate via
 // g_00DFEEF8 plus Rva002A8AB1, time via UnitRevivalEntry::

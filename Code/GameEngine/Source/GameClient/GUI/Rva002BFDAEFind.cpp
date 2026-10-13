@@ -1,6 +1,6 @@
 // cl: /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/shims/bfme_windowvideo /Ireference/open-bfme-1/Code/GameEngine/Source/Common/System /Ireference/open-bfme-1/Code/GameEngine/Source/GameClient /Ireference/open-bfme-1/Code/GameEngine/Include/Precompiled /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib
 // stlport
-// ?rva002BFDAE@Rva002BFDAE@@QAEPAXPAX@Z @0x002BFDAE 56B
+// ?FindClickableObject@LivingWorld@@QAEPAXPAX@Z @0x002BFDAE 56B
 // Manual WindowVideoMap walk: begin on map at +0xac, return entry whose
 // WindowVideo+0xc field equals the query, else NULL. Evidence: retail calls
 // hashtable<GameWindow*,WindowVideo*>::begin at 0x427195 then Rva000411084::next
@@ -51,16 +51,16 @@ public:
 	void *m_owner;
 };
 
-class Rva002BFDAE
+class LivingWorld
 {
 public:
-	void *rva002BFDAE(void *key);
+	void *FindClickableObject(void *key);
 private:
 	char m_pad[0xac];
 	WindowVideoMap m_map;
 };
 
-void *Rva002BFDAE::rva002BFDAE(void *key)
+void *LivingWorld::FindClickableObject(void *key)
 {
 	WindowVideoMap::iterator it = m_map.begin();
 	while (((Rva000411084 *)&it)->m_current != 0)

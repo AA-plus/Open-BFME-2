@@ -9,7 +9,7 @@ class CreateAHeroData;
 class Rva00219251 { public:
  CreateAHeroData *rva00219251(int,int,int,const UnicodeString &,int,int,int);
 };
-class Rva00407020 { public: bool rva00407020(); };
+class CreateAHeroHero { public: bool SetDefaultColors(); };
 class ModuleData;
 class Rva00423A68 { public: void rva00423A68(const ModuleData *); };
 class Rva00222A8BTarget { public:
@@ -65,7 +65,7 @@ void Rva005B566B::rva005B566B()
   for (unsigned int j=0;j<subCount;++j) {
    CreateAHeroData *hero=reinterpret_cast<Rva00219251 *>(TheCreateAHeroManager)->rva00219251(
      0,i,j,UnicodeString::TheEmptyString,-1,0xFF707070,-1);
-   reinterpret_cast<Rva00407020 *>(hero)->rva00407020();
+   reinterpret_cast<CreateAHeroHero *>(hero)->SetDefaultColors();
    heroes.rva00423A68(reinterpret_cast<const ModuleData *>(hero));
   }
   AsciiString image(TheCreateAHeroManager->GetClassImageName(i));

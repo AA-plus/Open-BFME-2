@@ -1,5 +1,5 @@
 // cl: /O1 /DNDEBUG /MD /EHsc
-// ??1Rva004D58DE@@UAE@XZ @0x004D5902 35B: dtor freeing array member +0x24 then restoring base vtable.
+// ??1NetHeroCommandMsg@@UAE@XZ @0x004D5902 35B: dtor freeing array member +0x24 then restoring base vtable.
 // Target evidence: mov eax [esi+0x24] test je; vtable 0x00860264 then delete[] 0x0002FD80 and [esi+0x24]=0 then vtable 0x00860130; caller 0x004D5B17 for its deleting dtor; donor ctor NetCommandMsgCtor.cpp.
 void __cdecl operator delete[](void *) throw();
 typedef unsigned int UnsignedInt;
@@ -21,17 +21,17 @@ protected:
 	NetCommandType m_commandType; // +0x14
 	Int m_referenceCount; // +0x18
 };
-class Rva004D58DE : public NetCommandMsg
+class NetHeroCommandMsg : public NetCommandMsg
 {
 public:
-	virtual ~Rva004D58DE();
+	virtual ~NetHeroCommandMsg();
 private:
 	unsigned int m_1c; // +0x1C
 	unsigned short m_20; // +0x20
 	char *m_24; // +0x24 array pointer
 	unsigned int m_28; // +0x28
 };
-inline Rva004D58DE::~Rva004D58DE()
+inline NetHeroCommandMsg::~NetHeroCommandMsg()
 {
 	if (m_24)
 	{
@@ -45,6 +45,6 @@ inline Rva004D58DE::~Rva004D58DE()
 // ?_bfmeRva004D58DEDtorInlineAnchor@@YAXXZ absent-from-retail
 void _bfmeRva004D58DEDtorInlineAnchor()
 {
-    static_cast<Rva004D58DE *>(0)->Rva004D58DE::~Rva004D58DE();
+    static_cast<NetHeroCommandMsg *>(0)->NetHeroCommandMsg::~NetHeroCommandMsg();
 }
 #pragma inline_depth()

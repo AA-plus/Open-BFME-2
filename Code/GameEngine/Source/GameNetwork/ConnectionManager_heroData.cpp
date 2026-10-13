@@ -154,17 +154,17 @@ protected:
 };
 
 // The type-20 command's payload.
-class Rva004D58DE : public NetCommandMsg
+class NetHeroCommandMsg : public NetCommandMsg
 {
 public:
-	Rva004D58DE();
+	NetHeroCommandMsg();
 	Int getSeed() const { return m_seed; }
 	void setSeed(Int seed) { m_seed = seed; }
 	UnsignedShort getSlot() const { return m_slot; }
 	void setSlot(UnsignedShort slot) { m_slot = slot; }
 	char *getData() { return m_data; }
 	Int getDataLength() const { return m_dataLength; }
-	void rva004D5925(unsigned char *data, unsigned int length);
+	void setData(unsigned char *data, unsigned int length);
 
 private:
 	Int m_seed;
@@ -217,7 +217,7 @@ private:
 
 void ConnectionManager::processHero(NetCommandMsg *command)
 {
-	Rva004D58DE *msg = (Rva004D58DE *)command;
+	NetHeroCommandMsg *msg = (NetHeroCommandMsg *)command;
 	if (msg == 0 || TheGameInfo == 0)
 		return;
 	if (msg->getSeed() != TheGameInfo->getSeed())
@@ -262,7 +262,7 @@ void ConnectionManager::rva004D01D5(CreateAHeroData *hero, Int seed,
 	if (hero == 0)
 		return;
 	Int relay = (1 << m_localSlot) ^ playerMask;
-	Rva004D58DE *msg = new Rva004D58DE;
+	NetHeroCommandMsg *msg = new NetHeroCommandMsg;
 	msg->setPlayerID(m_localSlot);
 	if (DoesCommandRequireACommandID(msg->getNetCommandType()) == TRUE)
 		msg->setID(GenerateNextCommandID());
@@ -283,7 +283,7 @@ void ConnectionManager::rva004D01D5(CreateAHeroData *hero, Int seed,
 	xfer.close();
 	int size;
 	unsigned char *data = (unsigned char *)stream->bfmeTakeEC(&size);
-	msg->rva004D5925(data, size);
+	msg->setData(data, size);
 	delete[] data;
 	processHero(msg);
 	sendLocalCommand(msg, relay);
