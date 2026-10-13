@@ -45,8 +45,19 @@ enum BodyDamageType
 	BODYDAMAGETYPE_COUNT
 };
 
-// "PRISTINE", "DAMAGED", "REALLYDAMAGED", "RUBBLE", NULL (retail 0x00DBCF30)
-extern const char *TheBodyDamageTypeNames[];
+// Zero Hour defines DEFINE_BODYDAMAGETYPE_NAMES before including its headers,
+// so BodyModule.h gives this unit its own static copy of the names. Retail
+// keeps one copy per defining unit: this one is at VA 0x00DBCF30, and
+// GlobalData's is at 0x00DBA444.
+static const char *TheBodyDamageTypeNames[] =
+{
+	"PRISTINE",
+	"DAMAGED",
+	"REALLYDAMAGED",
+	"RUBBLE",
+
+	0
+};
 
 enum { MAX_BRIDGE_BODY_FX = 3 };
 
