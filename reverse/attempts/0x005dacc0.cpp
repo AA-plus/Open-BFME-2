@@ -1,4 +1,6 @@
 // ?rva005DACC0@Rva005DAC85@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva005DACC0@Rva005DAC85@@QAEXXZ
 // partial score=0.93 date=2026-10-13
 // ?rva005DACC0@Rva005DAC85@@QAEXXZ
 // partial score=0.94 date=2026-10-09
@@ -9,6 +11,8 @@
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /O1 /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /arch:SSE
 // stlport
 // ?rva005DACC0@Rva005DAC85@@QAEXXZ @0x005DACC0 273B evidence: vtable slot5 of 0x008765F8 class Rva005DAC85 via dtor row; layout from base Rva0055B0CC plus m_40; callees rowed rva002A8F24 bucket_count rva002D06CA get rva002A7461 plus pin rva002A8AB1 plus virtual slot2; globals VA 0xDFEEF8 0xDFF000 0xBBB8D8 0xBC3EE8 0xC765F0
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 
 class Player;
@@ -127,6 +131,7 @@ private:
 void Rva005DAC85::rva005DACC0()
 {
 	IntMap *map = *(IntMap **)((char *)g_00DFEEF8->rva002A8F24((Player *)m_40) + 0xC);
+	_ReadWriteBarrier();
 	if (map->bucket_count() < 2)
 		return;
 	const ThingTemplate *found = TheThingFactory->findTemplate(*(const AsciiString *)&m_0C);
@@ -135,6 +140,7 @@ void Rva005DAC85::rva005DACC0()
 	if ((*(unsigned char *)((char *)found + 0x113) & 4) != 0)
 		return;
 	Rva002A8AB1Record *rec = g_00DFEEF8->rva002A8AB1(m_40);
+	_ReadWriteBarrier();
 	Rva002A7389 *sub = (Rva002A7389 *)((char *)m_40 + 0x60);
 	float fa = (float)sub->get(0);
 	float div = fa / (float)((Rva002A7461 *)sub)->rva002A7461();
