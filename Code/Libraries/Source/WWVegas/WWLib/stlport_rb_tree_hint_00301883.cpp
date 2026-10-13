@@ -7,6 +7,7 @@
 // followed by raw four-byte copies at pair offsets +4, +8 and +12.
 // Comparison reaches the established AsciiString operator< at 0x5598C.
 // Semantic donor: BFME1 RvaTreeInsertUniqueHint.cpp and STLport pair/tree.
+#define _STLP_BFME_TREE_NODE_BASE_O2  // emit retail's _Rb_tree_node_base::_S_minimum/_S_maximum (vendor/stlport/stl/_tree.h)
 #include <map>
 
 // __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU

@@ -83,6 +83,21 @@ typedef bool _Rb_tree_Color_type;
 #define _S_rb_tree_red false
 #define _S_rb_tree_black true
 
+// Retail keeps one out-of-line copy of each helper below (0x000237F0,
+// 0x00023810: 26 B, the speed-favouring shape with an aligned loop); only
+// _Rb_global<bool>::_Rebalance_for_erase calls them, every other retail body
+// expands them. An /O1 unit still emits a 16 B select-any copy the link census
+// rejects as not retail's body, and an optimize pragma alone makes /O1 callers
+// stop expanding them. Such a unit defines _STLP_BFME_TREE_NODE_BASE_O2: the
+// helpers are then compiled favouring speed and forced inline, so the copy is
+// retail's and the callers keep their bytes. Without the macro the header
+// expands as before.
+#ifdef _STLP_BFME_TREE_NODE_BASE_O2
+#  pragma optimize("t", on)
+#  define _STLP_BFME_TREE_NODE_INLINE __forceinline
+#else
+#  define _STLP_BFME_TREE_NODE_INLINE
+#endif
 struct _Rb_tree_node_base
 {
   typedef _Rb_tree_Color_type _Color_type;
@@ -93,18 +108,22 @@ struct _Rb_tree_node_base
   _Base_ptr _M_left;
   _Base_ptr _M_right;
 
-  static _Base_ptr _STLP_CALL _S_minimum(_Base_ptr __x)
+  static _STLP_BFME_TREE_NODE_INLINE _Base_ptr _STLP_CALL _S_minimum(_Base_ptr __x)
   {
     while (__x->_M_left != 0) __x = __x->_M_left;
     return __x;
   }
 
-  static _Base_ptr _STLP_CALL _S_maximum(_Base_ptr __x)
+  static _STLP_BFME_TREE_NODE_INLINE _Base_ptr _STLP_CALL _S_maximum(_Base_ptr __x)
   {
     while (__x->_M_right != 0) __x = __x->_M_right;
     return __x;
   }
 };
+#undef _STLP_BFME_TREE_NODE_INLINE
+#ifdef _STLP_BFME_TREE_NODE_BASE_O2
+#  pragma optimize("", on)
+#endif
 
 template <class _Value> struct _Rb_tree_node : public _Rb_tree_node_base
 {
