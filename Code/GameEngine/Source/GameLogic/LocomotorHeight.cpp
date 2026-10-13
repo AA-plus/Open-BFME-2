@@ -1,8 +1,5 @@
-// ?rva001E6532@Rva001E46E1@@QAEMPAVObject@@PBUCoord3D@@M@Z
-// partial score=0.9358291267987644 date=2026-10-10
-// ?rva001E6532@Rva001E46E1@@QAEMPAVObject@@PBUCoord3D@@M@Z
-// partial score=0.9101746199006473 date=2026-10-10
-// ?rva001E6532@Rva001E46E1@@QAEMPAVObject@@PBUCoord3D@@M@Z
+// ?rva001E6532@Locomotor@@QAEMPAVObject@@PBUCoord3D@@M@Z
+// ?rva001E6532@Locomotor@@QAEMPAVObject@@PBUCoord3D@@M@Z
 // Native 001E6532..001E6731 RET12; sole caller 001E7ECA at 001E836E
 // passes Object, goal Coord3D and terrain surface height on the Locomotor.
 // BF1 575ba2b04/ZH Locomotor height code supplies subsystem context only:
@@ -12,12 +9,10 @@
 // heights and +9C dispatches three states. Object+258 query slot111 and its
 // owned getCurrentWeapon/getStatus calls are target facts; original query name
 // is unknown. Model condition bit122 is directly observed.
-// Actual complete510B versus native511B. Native preload/coordinate construction,
-// frame1C, reference clamp homes and Boolean flag extraction reproduced.
-// Remaining: state2 range reused in XMM0 rather than native memory DIVSS via EDX.
-// Round8 removing the old fence closes EDX/ESI pointer and switch register roles.
-extern "C" void 
-#pragma intrinsic(_ReadWriteBarrier)
+// Whole511B now matches. The initial range read is volatile: native reloads
+// range64 for state2 DIVSS while cl otherwise carries its comparison value
+// in XMM0. This preserves both native reads without introducing a helper call.
+
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include/Lib
 #include <math.h>
 #include "Coord3D.h"
@@ -144,8 +139,8 @@ virtual void slot110();
 virtual bool query111();
 };
 class Object{public:const Weapon*getCurrentWeapon(WeaponSlotType*)const;void rva0028AE6D();char pad00[0x38];Coord3D pos38;char pad44[0xC8];ModelFlags model10C;char pad15C[0xFC];LocoHeightAI*ai258;char pad25C[0x1DC];unsigned char flags438;};
-class Rva001E46E1{public:float rva001E6532(Object*,const Coord3D*,float);char pad00[4];LocoHeightData*data4;char pad08[0x3C];unsigned flags44;float height48,min4C;char pad50[0x4C];int state9C;};
-float Rva001E46E1::rva001E6532(Object*obj,const Coord3D*goal,float surface){
+class Locomotor{public:float rva001E6532(Object*,const Coord3D*,float);char pad00[4];LocoHeightData*data4;char pad08[0x3C];unsigned flags44;float height48,min4C;char pad50[0x4C];int state9C;};
+float Locomotor::rva001E6532(Object*obj,const Coord3D*goal,float surface){
  if(min4C>0){
  LocoHeightAI*ai=obj->ai258;
  if(ai){
@@ -156,7 +151,7 @@ float Rva001E46E1::rva001E6532(Object*obj,const Coord3D*goal,float surface){
    return 0;
   }
   int zero=0;
-  if(weapon!=(const Weapon*)zero && data4->range64>0){
+  if(weapon!=(const Weapon*)zero && *(volatile const float*)&data4->range64>0){
    switch(state9C){
    case 0:if(!((bool)((flags44>>2)&1)) && data4->range64>distance && ai->query111())state9C=1;break;
    case 1:{float ratio=distance/data4->range64;float one=1;float dh=height48-min4C;float height=min4C+dh*minRef(ratio,one);
