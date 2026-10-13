@@ -99,3 +99,20 @@ void GridClassicEnvironmentMapperClass::Calculate_Texture_Matrix(Matrix4x4 &tex_
 							0.0f,	0.0f,	1.0f,	0.0f,
 							0.0f, 0.0f, 0.0f, 1.0f );		
 }
+
+// GridEnvironmentMapperClass table 0x007D3260 slot +0x24 (0x007D3284) also holds 0x00183740: the ZH
+// donor body is the GridClassic one verbatim, and the linker folded the two identical COMDATs.
+void GridEnvironmentMapperClass::Calculate_Texture_Matrix(Matrix4x4 &tex_matrix)
+{
+	update_temporal_state();
+
+	float u_offset, v_offset;
+	calculate_uv_offset(&u_offset, &v_offset);
+
+	float del = 0.5f * OOGridWidth;
+	// Set up the offset matrix
+	initMatrix(tex_matrix, 	del,	0.0f,	0.0f,	u_offset + del,
+							0.0f,	del,	0.0f,	v_offset + del,
+							0.0f,	0.0f,	1.0f,	0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f );
+}
