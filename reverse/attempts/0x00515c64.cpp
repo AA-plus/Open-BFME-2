@@ -1,8 +1,10 @@
 // ?rva00515C64@AptMainMenu@@QAEHXZ
+// partial score=0.98 date=2026-10-13
+// ?rva00515C64@AptMainMenu@@QAEHXZ
 // partial score=0.985 date=2026-10-12
 // ?rva00515C64@AptMainMenu@@QAEHXZ
 // partial score=0.97 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /Ireference/shims/bfme2_ascii
+// cl: /I. /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /Ireference/shims/bfme2_ascii
 // ?rva00515C64@AptMainMenu@@QAEHXZ
 // Retail 0x00515C64..0x00515F7B (791 bytes, followed by the 12-entry jump
 // table of the inner switch, which this build emits after the code as well).
@@ -40,7 +42,7 @@
 //   ?Rva00515C17@@YAXD@Z -> 0x00515C17
 //   ?rva00514E20@AptMainMenu@@QAEXXZ -> 0x00514E20  (called with the menu in ECX)
 #include "unicode_string.h"
-#include "../../../../Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
 class AptSaveLoad { public: static void OpenScreen(int mode, int screen, bool flag); };
 class AptOptions { public: static void OpenScreen(bool a, bool b, bool c, bool d); };
