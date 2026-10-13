@@ -1,4 +1,6 @@
 // ?Rva00559CE5@@YA?AVUnicodeString@@HH@Z
+// partial score=0.95 date=2026-10-13
+// ?Rva00559CE5@@YA?AVUnicodeString@@HH@Z
 // partial score=0.95 date=2026-10-07
 // cl: /Ireference/shims/bfme2_ascii /G7 /arch:SSE /EHsc /DNDEBUG /MD
 #include "unicode_string.h"
