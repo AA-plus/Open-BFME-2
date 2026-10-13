@@ -98,3 +98,7 @@ void bfmeAnchorRva001E72B4Dtor(Rva001E72B4 *p)
 {
 	p->Rva001E72B4::~Rva001E72B4();
 }
+
+// Native76A05E: complete11B tree-wrapper member+C destructor unwind.
+// Whole213B parent and native EH graph bind this action; the same object
+// emits the whole5B wrapper destructor1E6FE5 forwarding to native tree1E6F27.
