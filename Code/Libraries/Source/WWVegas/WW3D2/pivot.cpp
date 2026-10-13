@@ -71,35 +71,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
  * HISTORY:                                                                                    * 
  *   07/24/1997 GH  : Created.                                                                 * 
  *=============================================================================================*/
-// ?PivotClass::PivotClass present-unmatched
-PivotClass::PivotClass(const PivotClass& that) :
-	Parent(that.Parent),
-	BaseTransform(that.BaseTransform),
-	Transform(that.Transform),
-#ifdef LAZY_CAP_MTX_ALLOC
-	CapTransformPtr(NULL),
-	Index(that.Index),
-	IsVisible(that.IsVisible),
-	WorldSpaceTranslation(that.WorldSpaceTranslation)
-#else
-	CapTransform(that.CapTransform),
-	Index(that.Index),
-	IsVisible(that.IsVisible),
-	PivotFade(that.PivotFade),
-	WorldSpaceTranslation(that.WorldSpaceTranslation),
-	IsCaptured(that.IsCaptured),
-	Unused(that.Unused)
-#endif
-{
-	memcpy(Name, that.Name, sizeof(Name));
-#ifdef LAZY_CAP_MTX_ALLOC
-	if (that.CapTransformPtr != NULL)
-	{
-		CapTransformPtr = MSGW3DNEW("PivotClassCaptureBoneMtx") DynamicMatrix3D;
-		CapTransformPtr->Mat = that.CapTransformPtr->Mat;
-	}
-#endif
-}
+// The copy constructor lives under HTReePivotClass.cpp's BFME2 view (retail
+// 0x001978A0); this TU keeps only the declaration from htree.h so calls bind
+// the kept copy and this unit emits no competing COMDAT.
 
 // ?PivotClass::Capture_Update present-unmatched
 void PivotClass::Capture_Update(void)
