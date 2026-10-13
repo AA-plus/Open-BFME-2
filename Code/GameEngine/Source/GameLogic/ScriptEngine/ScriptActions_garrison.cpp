@@ -761,7 +761,8 @@ struct Rva00045411BitSet
 	Rva00045411BitSet(int unused, int bit);	// 0x00045411
 	unsigned int m_bits[7];
 };
-extern unsigned char g_00DFEFA4StoragePrototype[28];
+template<int> class BitFlags;
+extern BitFlags<116> KINDOFMASK_NONE;
 
 // vftable 0x00BC2908, allow 0x002610DE: accept what has every kind of the
 // first mask and none of the second (ZH's PartitionFilterAcceptByKindOf).
@@ -811,7 +812,7 @@ void ScriptActions::Rva003C6A0EDo(Parameter *unitParm, Parameter *wayParm, Param
 	float radius = radiusParm->m_real;
 	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(&pos, radius, 0,
 		&Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 0x3C),
-			*(BfmeFixedStorage0004543D *)g_00DFEFA4StoragePrototype), 1);
+			*(BfmeFixedStorage0004543D *)&KINDOFMASK_NONE), 1);
 	for (Object *obj = iter.next(); obj; obj = iter.next()) {
 		static NameKeyType siegeKey = TheNameKeyGenerator->nameToKey("SiegeDockingBehavior");
 		SiegeDockingModule *module = (SiegeDockingModule *)obj->findModule(siegeKey);
@@ -848,7 +849,7 @@ void ScriptActions::Rva003C6B7BDo(Parameter *teamParm, Parameter *wayParm, Param
 	float radius = radiusParm->m_real;
 	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(&pos, radius, 0,
 		Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 0x3C),
-			*(BfmeFixedStorage0004543D *)g_00DFEFA4StoragePrototype).link(&Rva0026119DFilter()), 1);
+			*(BfmeFixedStorage0004543D *)&KINDOFMASK_NONE).link(&Rva0026119DFilter()), 1);
 	for (Object *obj = iter.next(); obj; obj = iter.next()) {
 		static NameKeyType siegeKey = TheNameKeyGenerator->nameToKey("SiegeDockingBehavior");
 		SiegeDockingModule *module = (SiegeDockingModule *)obj->findModule(siegeKey);
@@ -884,7 +885,7 @@ void ScriptActions::Rva003C6D4FDo(Parameter *teamParm, Parameter *centerTeamParm
 	float radius = radiusParm->m_real;
 	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(&pos, radius, 0,
 		&Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 0x3C),
-			*(BfmeFixedStorage0004543D *)g_00DFEFA4StoragePrototype), 1);
+			*(BfmeFixedStorage0004543D *)&KINDOFMASK_NONE), 1);
 	for (Object *obj = iter.next(); obj; obj = iter.next()) {
 		static NameKeyType siegeKey = TheNameKeyGenerator->nameToKey("SiegeDockingBehavior");
 		SiegeDockingModule *module = (SiegeDockingModule *)obj->findModule(siegeKey);
