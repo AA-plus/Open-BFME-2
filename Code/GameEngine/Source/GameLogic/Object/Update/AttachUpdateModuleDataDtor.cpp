@@ -11,24 +11,11 @@
 // suppresses entry derived store retail lacks). Single tracked member gives
 // and-state-0 exactly as retail. Caller is ??_G at 0x00491A87.
 
-extern "C" const void *const vtbl_00BBB554[];  // folded, 23 classes; via ??_7BfmeBaseVUQ@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BBB554=??_7BfmeBaseVUQ@@6B@")
 
 class Xfer;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void loadPostProcess();
-	virtual void xfer(Xfer *xfer);
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-inline Snapshot::~Snapshot()
-{
-	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
-}
 
 class Rva00360D26Member
 {

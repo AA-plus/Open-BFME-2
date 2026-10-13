@@ -12,24 +12,11 @@
 // via factory 0x253940) and table 0xBF0700. Caller is the slot-0 ??_G at
 // 0x25504B (vtable 0xBF0660).
 
-extern "C" const void *const vtbl_00BBB554[];  // folded, 23 classes; via ??_7BfmeBaseVUQ@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BBB554=??_7BfmeBaseVUQ@@6B@")
 
 class Xfer;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void loadPostProcess();
-	virtual void xfer(Xfer *xfer);
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-inline Snapshot::~Snapshot()
-{
-	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
-}
 
 class Rva003623E5Filter
 {

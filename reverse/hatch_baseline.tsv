@@ -2797,7 +2797,6 @@ alternatename	Code/GameEngine/Source/Common/Rva001CA000Vp6WideAccum.cpp	?d_009b9
 alternatename	Code/GameEngine/Source/Common/Rva001DBBAD.cpp	?regainFocus@@YAXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva001DD0A0Copy.cpp	??0BfmePod52@@QAE@ABU0@@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva001DD8C9Alloc.cpp	?rva001DD8C9@Rva001DE556@@QAEPAXABU?$pair@$$CBVAsciiString@@UNoCaseTreeValue4@@@_STL@@@Z	1
-alternatename	Code/GameEngine/Source/Common/Rva001E3E43Dtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/Common/Rva001E42F2Init.cpp	?ji_006291ae@@YAPAXPAXHI@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva001E42F2Init.cpp	?rva001E42F2@Object@@QAEXPBH@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva001E431EInit.cpp	?ji_006291ae@@YAPAXPAXHI@Z	1
@@ -2844,7 +2843,6 @@ alternatename	Code/GameEngine/Source/Common/Rva0029F8B8.cpp	?TheGlobalLanguageDa
 alternatename	Code/GameEngine/Source/Common/Rva002A1316.cpp	?insert@Rva002A1B6FNativeList@@AAE?AURva002A1316Iterator@@U2@ABQAX@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva002A75DAErase.cpp	??$__copy_ptrs@PBUBfmeE12@@PAU1@@_STL@@YAPAUBfmeE12@@PBU1@0PAU1@ABU__false_type@0@@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva002ACFD6NewNode.cpp	?rva002ACFD6@Rva000427195@@QAEPAXPBX@Z	1
-alternatename	Code/GameEngine/Source/Common/Rva002AE627Dtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/Common/Rva002B29BDFire.cpp	?TheRva00222A8BTarget@@3PAVRva00222A8BTarget@@A	1
 alternatename	Code/GameEngine/Source/Common/Rva002D76C6Remove.cpp	?rva002D76C6@Radar@@QAE_NPAURva002D76C6Owner@@PAPAURva002D76C6Node@@@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva002DA153Scale.cpp	?g_00BBB9AC@@3MB	1
@@ -3212,7 +3210,6 @@ alternatename	Code/GameEngine/Source/Common/System/GeometryInfoCopyConstructor.c
 alternatename	Code/GameEngine/Source/Common/System/GeometryInfoCopyConstructor.cpp	?copyFrom@BfmeElemFC@@QAEXPAU1@@Z	1
 alternatename	Code/GameEngine/Source/Common/System/GeometryInfoCtor.cpp	_INV	1
 alternatename	Code/GameEngine/Source/Common/System/GeometryInfoDtor.cpp	??1ClearanceTestingSlowDeathBehaviorModuleDataMember@@QAE@XZ	1
-alternatename	Code/GameEngine/Source/Common/System/GeometryInfoDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/Common/System/INIMacroTableDtorO1.cpp	?freeMacroBucketStorage@@YAXPAX@Z	1
 alternatename	Code/GameEngine/Source/Common/System/INI_Rva003396D3ParseKillerScience.cpp	?g_scienceStoreLoaded@@3HA	1
 alternatename	Code/GameEngine/Source/Common/System/INI_getNextAsciiString.cpp	_strcat	1
@@ -3220,7 +3217,6 @@ alternatename	Code/GameEngine/Source/Common/System/LivingWorldRegionConnectionCo
 alternatename	Code/GameEngine/Source/Common/System/LivingWorldRegionConnectionCopy.cpp	?LoadPostProcess@LivingWorldRegionConnection@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/System/LivingWorldRegionConnectionCtor.cpp	?GetSnapshotName@LivingWorldRegionConnection@@UAEPBDXZ	1
 alternatename	Code/GameEngine/Source/Common/System/LivingWorldRegionConnectionCtor.cpp	?LoadPostProcess@LivingWorldRegionConnection@@UAEXXZ	1
-alternatename	Code/GameEngine/Source/Common/System/LivingWorldRegionConnectionDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/Common/System/LocalFile.cpp	??1Rva00605CA7@@UAE@XZ	1
 alternatename	Code/GameEngine/Source/Common/System/LocalFile.cpp	?convertToRAMFile@File@@UAEPAV1@XZ	1
 alternatename	Code/GameEngine/Source/Common/System/LocalFile.cpp	?wideOpenStub@LocalFile@@UAE_NPBGH@Z	1
@@ -3836,7 +3832,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Behavior/SlowDeathBehavior
 alternatename	Code/GameEngine/Source/GameLogic/Object/Behavior/SlowDeathBehaviorCtor.cpp	_vtbl_00C4EF80	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Behavior/SpawnBehaviorCtor.cpp	?unused@BehaviorModuleOther@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Behavior/SpawnBehaviorDtor.cpp	?unused@BehaviorModuleOther@@EAEXXZ	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Behavior/SpawnBehaviorModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Behavior/SpawnBehaviorXfer.cpp	?g_rva008ffd18ThrowInfo@@3HA	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Behavior/StancesBehaviorCtor.cpp	_vtbl_00BEFF90	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Behavior/StancesBehaviorCtor.cpp	_vtbl_00C424D0	1
@@ -4004,7 +3999,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Die/HordeTransportContainD
 alternatename	Code/GameEngine/Source/GameLogic/Object/Die/RebuildHoleExposeDie.cpp	_vtbl_00C4A650	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Die/RebuildHoleExposeDieModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Die/ReflectDamageModuleDataCtor.cpp	_vtbl_00C4ED70	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Die/RefundDieModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Die/Rva00485C86Finish.cpp	_TheUpgradeCenter	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Die/SpecialPowerCompletionDie.cpp	??0Rva0045CEBDUpdate@@QAE@PAVThing@@PBVModuleData@@@Z	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Die/SpecialPowerCompletionDieModuleDataCtor.cpp	_vtbl_00C4ED70	1
@@ -4025,7 +4019,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/PartitionFilters_allow_Thu
 alternatename	Code/GameEngine/Source/GameLogic/Object/PartitionManager.cpp	?crc@GeometryInfo@@MAEXPAVXfer@@@Z	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/PartitionManager.cpp	?loadPostProcess@GeometryInfo@@MAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/PartitionManager.cpp	?xfer@GeometryInfo@@MAEXPAVXfer@@@Z	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/PillageModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Rva000AA867ArmorFind.cpp	?find@Rva00786BD0Owner@@QAEPAXI@Z	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Rva001DBC77Dtor.cpp	??1?$StringBase@D@@QAE@XZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Rva001DC0ECDtor.cpp	??1?$StringBase@D@@QAE@XZ	1
@@ -4184,7 +4177,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Update/AssistedTargetingUp
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/AttachUpdateCtor.cpp	_vtbl_00BEFF90	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/AttachUpdateCtor.cpp	_vtbl_00C4DB14	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/AttachUpdateCtor.cpp	_vtbl_00C4DB20	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/AttachUpdateModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/AttributeModifierAuraUpdateCtor.cpp	_vtbl_00C49F78	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/AttributeModifierAuraUpdateCtor.cpp	_vtbl_00C50CD8	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/AttributeModifierAuraUpdateCtor.cpp	_vtbl_00C50D20	1
@@ -4226,7 +4218,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Update/BoneFXUpdateCtor.cp
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/BoneFXUpdateDtor.cpp	?behaviorModuleOtherAnchor@BehaviorModuleOther@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/BroadcastStealthUpdateDtor.cpp	?f3@BroadcastStealthUpdate_B3@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/BroadcastStealthUpdateUpdate.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/CivilianSpawnCollideModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/CommandButtonHuntUpdateConstructor.cpp	?TheEmptyString@AsciiString@@2V1@A	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/CommandButtonHuntUpdateModuleDataCtor.cpp	_vtbl_00C4ED70	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/CritterEmitterUpdateDtor.cpp	?behaviorModuleOtherAnchor@BehaviorModuleOther@@UAEXXZ	1
@@ -4269,9 +4260,7 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Update/DozerAIUpdateModule
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/DynamicShroudClearingRangeUpdateCtor.cpp	_vtbl_00BEFF90	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/DynamicShroudClearingRangeUpdateCtor.cpp	_vtbl_00C4BEB0	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/DynamicShroudClearingRangeUpdateCtor.cpp	_vtbl_00C4BEBC	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/DynamicShroudClearingRangeUpdateModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/EmotionTrackerUpdateModuleDataCtor.cpp	?g_00C56530@@3QBQBXB	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/EmotionTrackerUpdateModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/EntEnragedUpdateScan.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FadeAndDieOrnamentUpdateCtor.cpp	_vtbl_00BEFF90	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FadeAndDieOrnamentUpdateCtor.cpp	_vtbl_00C1AF54	1
@@ -4318,7 +4307,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Update/HordeWorkerAIUpdate
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/HordeWorkerAIUpdateCtor.cpp	_vtbl_00C508C8	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/HordeWorkerAIUpdateCtor.cpp	_vtbl_00C52F88	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/HordeWorkerAIUpdateDtor.cpp	?f1@DBaseM1@@UAEXXZ	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/InheritUpgradeCreateModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/InvisibilityUpdateDtor.cpp	?behaviorModuleOtherAnchor@BehaviorModuleOther@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/LargeGroupAudioUpdateCtor.cpp	_vtbl_00BFB698	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/LargeGroupAudioUpdateCtor.cpp	_vtbl_00C548B8	1
@@ -4354,8 +4342,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Update/MissileUpdateCtor.c
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/MissileUpdateCtor.cpp	_vtbl_00C53560	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/MissileUpdateCtor.cpp	_vtbl_00C53570	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/MissileUpdateCtor.cpp	_vtbl_00C5362C	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/MissileUpdateModuleDataDtor.cpp	_vtbl_00BBB554	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ModelConditionSoundSelectorClientBehaviorModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ModelConditionSpecialAbilityUpdateFriendNew.cpp	??0ModelConditionSpecialAbilityUpdate@@QAE@PAVThing@@PBVModuleData@@@Z	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ModelConditionSpecialAbilityUpdateModuleDataCtor2.cpp	?g_modelConditionFilterDefaults@@3VBfmeFixedStorage0004543D@@B	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ModelConditionSpecialAbilityUpdateSlots.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1
@@ -4404,11 +4390,9 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Update/PickupStuffUpdateMo
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/PickupStuffUpdateModuleDataCtor.cpp	_vfn_0047A69C	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/PickupStuffUpdateModuleDataCtor.cpp	_vfn_00491F5A	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/PickupStuffUpdateModuleDataCtor.cpp	_vfn_0050B5C6	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/PickupStuffUpdateModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ProductionExitUpdate/QueueProductionExitUpdateQueryRallyOverride.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ProductionUpdateCtor.cpp	?behaviorModuleOtherAnchor@BehaviorModuleOther@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ProductionUpdateModuleDataCtor.cpp	_vtbl_00C515F0	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ProductionUpdateModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ProjectileStreamUpdateCtor.cpp	?unused@BehaviorModuleOther@@EAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/ProneUpdateModuleDataCtor.cpp	_vtbl_00C4ED70	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/QueueProductionExitUpdateCtor.cpp	_vtbl_00C430B4	1
@@ -4425,7 +4409,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Update/RadiateFearUpdateCt
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/RadiateFearUpdateCtor.cpp	_vtbl_00C50F68	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/RadiateFearUpdateCtor.cpp	_vtbl_00C50FB0	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/RadiateFearUpdateCtor.cpp	_vtbl_00C50FBC	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/RadiateFearUpdateModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/RadiateFearUpdateUpdate.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/RainOfFireUpdateCtor.cpp	_vtbl_00C54BA0	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/RainOfFireUpdateCtor.cpp	_vtbl_00C54BA8	1
@@ -4579,7 +4562,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Upgrade/CastleUpgradeModul
 alternatename	Code/GameEngine/Source/GameLogic/Object/Upgrade/CastleUpgradeModuleDataCtor.cpp	_vfn_0047A699	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Upgrade/CastleUpgradeModuleDataCtor.cpp	_vfn_0047A69C	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Upgrade/CastleUpgradeModuleDataCtor.cpp	_vfn_0050B5C6	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Upgrade/CommandPointsUpgradeModuleDataDtor.cpp	_vtbl_00BBB554	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Upgrade/CostModifierUpgrade.cpp	?upgradeModuleInterfaceAnchor@UpgradeModuleInterface@@UAEXXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Upgrade/DoCommandUpgradeModuleDataCtor.cpp	_vtbl_00BF3840	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Upgrade/ExperienceScalarUpgradeModuleDataCtor.cpp	_vtbl_00BF2558	1

@@ -9,8 +9,6 @@
 // vtable store retail lacks; the restore to BBB554 stays explicit. The next
 // 11 bytes are a separate push-push-call-ret tail, not claimed here.
 
-extern "C" const void *const vtbl_00BBB554[];  // folded, 23 classes; via ??_7BfmeBaseVUQ@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BBB554=??_7BfmeBaseVUQ@@6B@")
 
 #include <vector>
 
@@ -29,19 +27,8 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 
 class Xfer;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void LoadPostProcess();
-	virtual const char *GetSnapshotName();
-	virtual void DoXfer(Xfer &xfer);
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-inline Snapshot::~Snapshot()
-{
-	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
-}
 
 #include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 

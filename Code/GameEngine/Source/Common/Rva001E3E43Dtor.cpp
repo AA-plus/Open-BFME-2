@@ -11,24 +11,11 @@
 // Evidence: caller copy-ctor 0x001E4641 constructs 3x0x10 array at +0x68 via
 // vector iterator then calls it; vtable/global match Rva001E3E43; unblocks 0x001E4641.
 
-extern "C" const void *const vtbl_00BBB554[];  // folded, 23 classes; via ??_7BfmeBaseVUQ@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BBB554=??_7BfmeBaseVUQ@@6B@")
 
 class Xfer;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void loadPostProcess();
-	virtual void xfer(Xfer *xfer);
-};
+#include "../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-inline Snapshot::~Snapshot()
-{
-	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
-}
 
 class Rva001E3E43 : public Snapshot
 {

@@ -13,26 +13,13 @@
 // the slot-0 ??_G at 0x004CAFC1 (vtable 0x85F098). Shape from the BFME1
 // BaikonurLaunchPower.cpp virtual dtor; target identity from the ModuleFactory
 // registration of factory 0x252C13 (see the ctor TU).
-extern "C" const void *const vtbl_00BBB554[];  // folded, 23 classes; via ??_7BfmeBaseVUQ@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BBB554=??_7BfmeBaseVUQ@@6B@")
 
 #include <vector>
 
 class Xfer;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void loadPostProcess();
-	virtual void xfer(Xfer *xfer);
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-inline Snapshot::~Snapshot()
-{
-	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
-}
 
 struct BfmeObject544
 {

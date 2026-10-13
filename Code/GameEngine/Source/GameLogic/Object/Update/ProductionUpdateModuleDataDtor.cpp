@@ -30,8 +30,6 @@
 // precedent). Members are declared in offset order so reverse destruction
 // yields states 3/2/1/0.
 
-extern "C" const void *const vtbl_00BBB554[];  // folded, 23 classes; via ??_7BfmeBaseVUQ@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BBB554=??_7BfmeBaseVUQ@@6B@")
 
 #include <list>
 
@@ -124,19 +122,8 @@ vector<QuantityModifier, allocator<QuantityModifier> >::~vector();
 // ModuleData stand-in: virtuals give the derived dtor its entry vtable
 // store; the inline dtor restores the base table 0x00BBB554 after all
 // members fall (LargeGroupBonus precedent).
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc();
-	virtual void loadPostProcess();
-	virtual void xfer();
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-inline Snapshot::~Snapshot()
-{
-	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
-}
 
 class ProductionUpdateModuleData : public Snapshot
 {
