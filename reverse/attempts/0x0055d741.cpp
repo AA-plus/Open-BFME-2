@@ -1,4 +1,6 @@
 // ?getPosition@CylinderEmissionVolumeModule@FXParticleSystem@@UAE?AUCoord3D@2@MMMM@Z
+// partial score=0.98 date=2026-10-13
+// ?getPosition@CylinderEmissionVolumeModule@FXParticleSystem@@UAE?AUCoord3D@2@MMMM@Z
 // partial score=0.98 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
 // ?getPosition@CylinderEmissionVolumeModule@FXParticleSystem@@UAE?AUCoord3D@2@MMMM@Z
