@@ -10,6 +10,11 @@ inline void *operator new(unsigned int, void *p) { return p; }
 #include "rendobj.h"
 #include "aabox.h"
 #include "scene.h"
+// Preserve the placement operators already declared above and by always.h.
+#define __PLACEMENT_NEW_INLINE
+#define __PLACEMENT_VEC_NEW_INLINE
+// stlport
+#include <slist>
 
 struct Gen_00943CF0_Node
 {
@@ -183,4 +188,24 @@ __declspec(noinline) inline BfmeSceneVector::BfmeSceneVector()
 void *bfmeAnchorBfmeSceneVectorCtor(void *where)
 {
 	return ::new (where) BfmeSceneVector();
+}
+
+// Native6FB50..6FB59 RET0 and the verified Set_Level caller establish this
+// one-head list destructor. It calls the existing erase provider6FABF with
+// the head address and a null end; no payload method is called. STLport gives
+// the reference structure; int is the existing provider's ABI carrier, not
+// evidence for the original scene-node payload type or list spelling.
+namespace _STL {
+// Existing out-of-line erase: consume its declaration, without a new copy.
+template <> _Slist_node_base *
+_Slist_base<int,allocator<int> >::_M_erase_after(_Slist_node_base*,_Slist_node_base*);
+}
+// Access-only view; no new storage, constructed object or class identity.
+struct Rva0006FB50EraseAccess : _STL::_Slist_base<int,_STL::allocator<int> > {
+ using _STL::_Slist_base<int,_STL::allocator<int> >::_M_erase_after;
+};
+typedef char SceneClearHeadSize4[sizeof(Rva0006FB50EraseAccess)==4?1:-1];
+__declspec(noinline) Rva0006FB50List::~Rva0006FB50List() throw()
+{
+ ((Rva0006FB50EraseAccess*)this)->_M_erase_after((_STL::_Slist_node_base*)this,0);
 }
