@@ -1,4 +1,4 @@
-// cl: /Ob2 /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS
+// cl: /Ob2 /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS /DWIN32 /D_WINDOWS
 // stlport
 // STLport4.5.3 bit-vector copy used by CreateAHeroData at+0x5C.
 // Retail stores two pointer/bit-offset iterators and an end-of-storage pointer.

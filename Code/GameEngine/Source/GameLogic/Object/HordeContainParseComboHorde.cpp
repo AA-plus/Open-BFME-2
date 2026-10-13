@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /D_CRTIMP= /O1 /Oy- /MD /EHs /Oi- /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS
+// cl: /Ireference/shims/bfme2_ascii /D_CRTIMP= /O1 /Oy- /MD /EHs /Oi- /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS /DWIN32 /D_WINDOWS
 // stlport
 // Native46F39E..46F542420B; ComboHorde Target/Result/InitiateVoice parser.
 // BFME1 HordeContainParseSplitResult source provides the related parser pattern;

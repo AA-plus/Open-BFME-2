@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /D_CRTIMP= /GX /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /D_STLP_NO_EXCEPTIONS
+// cl: /DNDEBUG /MD /D_CRTIMP= /GX /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /D_STLP_NO_EXCEPTIONS /DWIN32 /D_WINDOWS
 // stlport
 //
 // ??0BezierProjectileBehavior@@QAE@PAVThing@@PBVModuleData@@@Z, retail

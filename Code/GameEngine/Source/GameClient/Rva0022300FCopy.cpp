@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ob2 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS
+// cl: /Ireference/shims/bfme2_ascii /Ob2 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS /DWIN32 /D_WINDOWS
 // stlport
 // ??0Rva0022300F@@QAE@ABV0@@Z @0x00223226 61B
 // Copy ctor over vector<unsigned> at +0 via rowed 0x002CFAB9 and wide string at +0xC via rowed StringBase<ushort> 0x00037050.

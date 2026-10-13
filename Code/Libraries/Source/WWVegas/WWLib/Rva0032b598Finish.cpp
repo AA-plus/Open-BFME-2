@@ -1,4 +1,4 @@
-// cl: /Ob2 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS
+// cl: /Ob2 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS /DWIN32 /D_WINDOWS
 // stlport
 //
 // ??$_Construct@V?$vector@UBfmeE8@@V?$allocator@UBfmeE8@@@_STL@@@_STL@@V12@@_STL@@YAXPAV?$vector@UBfmeE8@@V?$allocator@UBfmeE8@@@_STL@@@0@ABV10@@Z
