@@ -4107,3 +4107,72 @@ class Rva0030A92C { public: void rva0030A92C(float); };
 //-horde teardown with Eva event, frame stamp, drawable refresh and the
 // special-unit + refill tail. Evidence: WB 0x10B3BB0 branch structure +
 // retail 563B; offsets shared with the rows above.
+
+// The WorldBuilder counterpart constructs three two-float values around Sub;
+// these local operations preserve its copy/destruction lifetimes without changing
+// the shared Coord2D contract. Retail proves the two-float layout and arithmetic.
+struct HordeDelta2D : public Coord2D {
+ HordeDelta2D(const Coord2D &p) { x=p.x; y=p.y; }
+ HordeDelta2D(const HordeDelta2D &p) { x=p.x; y=p.y; }
+ ~HordeDelta2D() {}
+ HordeDelta2D &Sub(const HordeDelta2D &p) { x-=p.x; y-=p.y; return *this; }
+ float lengthSq() const { return x*x+y*y; }
+};
+// Retail invokes slot 12 with the selected object and its new formation index.
+class HordeSlotMoveCallView : public Rva00468D11Slots<12> {
+public: virtual void moveMember(Object *, int) = 0;
+};
+inline void hordeEraseIndex(_STL::map<int,int> &map, const int &id) { ((Rva00463D9BTree *)&map)->erase(*(const Rva00463D9BElement *)&id); }
+// Primary HordeContain vtable 0x00C45050 slot 37; retail 0x00470B21..0x00470D09.
+// Fills the lowest vacant formation slot from a later eligible member, choosing
+// the closest formation position under the module-data rank bound. The original
+// method name is unresolved; WorldBuilder 0x010B54F0 corroborates the algorithm.
+bool HordeContain::rva00470B21()
+{
+    if (m_194.empty()) return false;
+    int bestIndex = ((_STL::vector<Rva00472329Record> *)&m_188Begin)->size();
+    _STL::list<int>::iterator bestSlot;
+    for (_STL::list<int>::iterator it = m_194.begin(); it != m_194.end(); ++it) {
+        if (*it < bestIndex) { bestIndex = *it; bestSlot = it; }
+    }
+    if ((unsigned)bestIndex >= (unsigned)((_STL::vector<Rva00472329Record> *)&m_188Begin)->size()) return false;
+    int key = rec188(bestIndex).m_key;
+    int limit = 99;
+    const _STL::list<int> *ranks = (const _STL::list<int> *)((const char *)m_moduleData + 0x1b4);
+    for (_STL::list<int>::const_iterator it = ranks->begin(); it != ranks->end(); ++it) {
+        if (*it >= key) { limit = *it; break; }
+    }
+    Rva0046247DPair pair;
+    ((Rva0046247D *)(UpdateModule *)this)->rva0046247D(pair);
+    int bestRank = limit;
+    float bestDistance = 99999.0f;
+    Object *best = 0;
+    for (_STL::list<Object *>::const_iterator it = pair.m04->begin(); it != pair.m04->end(); ++it) {
+        Object *obj = *it;
+        int index = m_17C[obj->getID()];
+        if (index <= bestIndex) continue;
+        int rank = rec188(index).m_key;
+        if (rank <= bestRank && rank > key) {
+            HordeDelta2D delta(*(const Coord2D *)&rec188(bestIndex).m_04);
+            HordeDelta2D other(*(const Coord2D *)&rec188(index).m_04);
+            HordeDelta2D result = delta.Sub(other);
+            float distance = result.lengthSq();
+            if (distance < bestDistance) {
+                best = obj;
+                bestRank = rank;
+                bestDistance = distance;
+            }
+        }
+    }
+    if (best) {
+        int oldIndex = m_17C[best->getID()];
+        hordeEraseIndex(m_17C, best->getID());
+        m_17C[best->getID()] = bestIndex;
+        ((HordeSlotMoveCallView *)m_2C8)->moveMember(best,bestIndex);
+        m_194.erase(bestSlot);
+        m_194.push_back(oldIndex);
+        m_120 = true;
+        return true;
+    }
+    return false;
+}
