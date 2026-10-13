@@ -1,5 +1,8 @@
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BC421Do@@YGXPAVParameter@@H@Z @0x003BC421 69B: script action on a named unit's +0x250 interface.
+// ?Rva003BC421Do@ScriptActions@@QAEXPAVParameter@@H@Z @0x003BC421 69B: script action on a named unit's +0x250 interface.
 // Evidence: rowed getUnitNamed 0x003588E7 then +0x250 null check then slot 0x114 gate with 0 then slot 0x110 with bfmeGoBGB 0x003BC40D plus 0 and 3; same TheScriptEngine and stdcall shape as Rva003BC259Remove; caller 0x003CD0EC in dispatch; second arg unused per retail.
 class Parameter;
 class Object;
@@ -43,7 +46,7 @@ public:
 
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003BC421Do(Parameter *param, int unused)
+void ScriptActions::Rva003BC421Do(Parameter *param, int unused)
 {
 	(void)unused;
 	Object *obj = TheScriptEngine->getUnitNamed(param);
@@ -56,3 +59,6 @@ void __stdcall Rva003BC421Do(Parameter *param, int unused)
 		return;
 	iface->slot68(bfmeGoBGB, 0, 3);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

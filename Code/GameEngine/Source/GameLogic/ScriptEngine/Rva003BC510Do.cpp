@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii
-// ?Rva003BC510Do@@YGXH@Z @0x003BC510 20B: script forwards int arg to TheAudio vslot 0x68 with 0.
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BC510Do@ScriptActions@@QAEXH@Z @0x003BC510 20B: script forwards int arg to TheAudio vslot 0x68 with 0.
 // Evidence: mov ecx,[0xDFE6E8]=TheAudio mov eax,[ecx] push 0 push [esp+8] call [eax+0x68] ret 4; caller 0x003CD1DE.
 class AudioManager
 {
@@ -34,7 +36,10 @@ public:
 };
 extern AudioManager *TheAudio;
 
-void __stdcall Rva003BC510Do(int v)
+void ScriptActions::Rva003BC510Do(int v)
 {
 	TheAudio->s26(v, 0);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

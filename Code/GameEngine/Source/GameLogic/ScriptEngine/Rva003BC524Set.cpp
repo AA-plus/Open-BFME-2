@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii
-// ?Rva003BC524Set@@YGXABVAsciiString@@M@Z @0x003BC524 43B: script audio slot 0xc0 with scaled float.
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BC524Set@ScriptActions@@QAEXABVAsciiString@@M@Z @0x003BC524 43B: script audio slot 0xc0 with scaled float.
 // Evidence: mov ecx,[0xFE6E8]=TheAudio movss xmm0,[esp+8] mulss xmm0,[0xBCF628]=g_Va00BCF628 mov eax,[ecx] push 0 push ecx movss [esp],xmm0 push [esp+0xc] call [eax+0xc0] ret 8; caller 0x003CD206; neighbours Rva003BC4ABSet Rva003BC5CESet same (AsciiString,*) stdcall shape.
 #include "ascii_string.h"
 
@@ -58,7 +60,10 @@ public:
 };
 extern AudioManager *TheAudio;
 
-void __stdcall Rva003BC524Set(const AsciiString &name, float val)
+void ScriptActions::Rva003BC524Set(const AsciiString &name, float val)
 {
 	TheAudio->slot48(name, val * 0.01f, 0);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.

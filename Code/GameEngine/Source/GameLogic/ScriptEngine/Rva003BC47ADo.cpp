@@ -1,5 +1,8 @@
+// stlport
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BC47ADo@@YGXH@Z @0x003BC47A 49B: script TacticalView getPos then slot 0x1ac.
+// ?Rva003BC47ADo@ScriptActions@@QAEXH@Z @0x003BC47A 49B: script TacticalView getPos then slot 0x1ac.
 // Evidence: push ebp mov ebp,esp sub esp,0xc mov ecx,[0xFEA3C]=TheTacticalView mov eax,[ecx] lea edx,[ebp-0xc] push edx call [eax+0x118]=getPos push [ebp+8] mov ecx,[TheTacticalView] mov eax,[ecx] lea edx,[ebp-0xc] push edx call [eax+0x1ac] leave ret 4; caller 0x003CD11E; sibling Rva003E7FD5 same getPos slot 0x118 pattern.
 class TacticalView
 {
@@ -115,9 +118,12 @@ public:
 };
 extern TacticalView *TheTacticalView;
 
-void __stdcall Rva003BC47ADo(int val)
+void ScriptActions::Rva003BC47ADo(int val)
 {
 	float buf[3];
 	TheTacticalView->getPos(buf);
 	TheTacticalView->slot107(buf, val);
 }
+
+// Member ABI proved at each native executeAction3CA4BE call site: ECX=this.
+// Canonical ScriptActions owner; address-derived verbs remain uncertain.
