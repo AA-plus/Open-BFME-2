@@ -1795,16 +1795,7 @@ void AIUpdateInterface::friend_endingMove()
 /**
  * This is used by the guard tunnel network state to set a target object.
  */
-// ?friend_setGoalObject@AIUpdateInterface@@ present-unmatched
-void AIUpdateInterface::friend_setGoalObject(Object *obj)
-{
-	Bool locked = getStateMachine()->isLocked();
-	getStateMachine()->unlock();
-	getStateMachine()->setGoalObject(obj);
-	if (locked) {
-		getStateMachine()->lock("Friend_setGlobalObject re-locking");
-	}
-}
+// AIUpdateInterface::friend_setGoalObject: defined in AIUpdateInterface_rva00262B0F.cpp (its row's unit).
 
 //-------------------------------------------------------------------------------------------------
 /** Is there a path at all that exists from us to the destination location */
