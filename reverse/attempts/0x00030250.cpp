@@ -1,4 +1,7 @@
 // ?_DumpFragmentation@MemoryPool@@YAXPAU_iobuf@@_NPBD@Z
+// partial score=0.925 date=2026-10-13
+// ?_DumpFragmentation@MemoryPool@@YAXPAU_iobuf@@_NPBD@Z
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 // partial score=0.908 date=2026-10-05
 // BFME 2's memory-pool entry points. `namespace MemoryPool` is retail's own
 // name: every `_`-prefixed function here is exported under it
@@ -285,7 +288,7 @@ void _DumpFragmentation(_iobuf *file, bool header, const char *label)
 					usedBytes += block->m_dataSize;
 				lastFree = 0;
 			}
-			else if (block->m_blockType == 8)
+			else if (__vref(block->m_blockType) == 8)
 			{
 				++coreCount;
 				committed += block->m_blockSize;
