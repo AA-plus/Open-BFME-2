@@ -1,4 +1,6 @@
 // ?rva004F99CC@LivingWorldAutoResolveBattle@@QAEXPA_N@Z
+// partial score=0.9688385269121813 date=2026-10-13
+// ?rva004F99CC@LivingWorldAutoResolveBattle@@QAEXPA_N@Z
 // partial score=0.969198 date=2026-10-12
 // Astra-high-d alternate: 711B versus 706B; register allocation and spill order
 // now match, but SETNE CL / TEST CL,CL add five bytes. This is not matched.
