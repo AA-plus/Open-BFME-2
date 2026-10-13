@@ -68,6 +68,12 @@ public:
 
 extern GameSpyInfoInterface *TheGameSpyInfo;
 
+class AptOnlineCustomMatch
+{
+public:
+	void PopulateGamesListBox();	// rowed 0x005A061B
+};
+
 struct Rva005A0D61
 {
 	char pad[0x450];
@@ -75,7 +81,6 @@ struct Rva005A0D61
 	char pad2[0x4AC - 0x450 - 4];
 	int m_4AC;
 
-	void rva005A061B();
 	void Run(int flag);
 };
 
@@ -96,7 +101,7 @@ void Rva005A0D61::Run(int flag)
 		}
 	}
 tail:
-	rva005A061B();
+	((AptOnlineCustomMatch *)this)->PopulateGamesListBox();
 	{
 		unsigned long t = timeGetTime();
 		m_4AC = (int)t;

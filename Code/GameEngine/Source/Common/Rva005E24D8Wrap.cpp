@@ -33,16 +33,11 @@ public:
 	void rva005E2144(bool b);
 };
 
-class Rva005E2460
-{
-public:
-	void rva005E2460();
-};
-
 class Rva005E2439
 {
 public:
 	void rva005E2439();
+	void rva005E2460();	// rowed Rva005E2439::rva005E2460
 };
 
 namespace StrategicInGameUI
@@ -81,7 +76,7 @@ second:
 	if (a < 0)
 		return;
 	m_14[a]->rva005E2144(true);
-	((Rva005E2460 *)this)->rva005E2460();
+	((Rva005E2439 *)this)->rva005E2460();
 	if (m_8->m_flag)
 		((Rva005E2439 *)this)->rva005E2439();
 }
