@@ -1,4 +1,6 @@
 // ?CollidesWith@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z
+// partial score=0.9545635403978887 date=2026-10-13
+// ?CollidesWith@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z
 // partial score=0.7 date=2026-10-12
 // cl: /O2 /Ob2 /G6 /DNDEBUG /MD /EHs-c- /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib
 #include "ascii_string.h"
@@ -12,12 +14,14 @@ struct BfmeCollisionShape;
 bool rva00880D10(Rva00880D10Subject *,Rva00880D10Info *);
 bool rva006C0630(Rva00880D10Info *,Rva00880D10Info *);
 bool bfmeSphereOverlap(const BfmeCollisionShape *,const BfmeCollisionShape *);
+struct Rva006BEB80Point:Rva0087E900Coord{Rva006BEB80Point(){} Rva006BEB80Point(const Rva0087E900Coord&r){x=r.x;y=r.y;z=r.z;} };
+struct Rva006BEB80Offset:Coord3D{Rva006BEB80Offset(){} Rva006BEB80Offset(const Rva006BEB80Offset&r){x=r.x;y=r.y;z=r.z;} };
 struct GeometryShape {
- int type; float height,major,minor; Coord3D offset; AsciiString name;
+ int type; float height,major,minor; Rva006BEB80Offset offset; AsciiString name;
  bool enabled,flag;
 };
 struct GeometryContact {
- GeometryShape shape; Rva0087E900Coord position; float angle;
+ GeometryShape shape; Rva006BEB80Point position; float angle;
  GeometryContact(const GeometryShape &s,const Rva0087E900Coord &p,float a):shape(s),position(p),angle(a){}
 };
 class GeometryInfo {
@@ -43,25 +47,25 @@ static __forceinline bool overlap(GeometryContact &a,GeometryContact &b) {
  return false;
 }
 bool GeometryInfo::CollidesWith(const Coord3D &p,float angle,const GeometryInfo &other,const Coord3D &q,float otherAngle) const {
- bool found=false;
+ unsigned char found=false;
  for(GeometryShape *s=begin;s!=end;++s) {
   if(!s->enabled) continue;
   if(found) break;
   Rva0087E900Coord temp;
-  Rva0087E900Coord ownCenter=*Rva0087E900(&temp,(const Rva0087E900Coord *)&p,(const Rva0087E900Shape *)s,angle);
+  Rva006BEB80Point ownCenter=*Rva0087E900(&temp,(const Rva0087E900Coord *)&p,(const Rva0087E900Shape *)s,angle);
   GeometryContact a(*s,ownCenter,angle);
   float h=topExtent(*s);
   for(GeometryShape *t=other.begin;t!=other.end;++t) {
    if(!t->enabled) continue;
    if(found) break;
    Rva0087E900Coord temp2;
-   Rva0087E900Coord otherCenter=*Rva0087E900(&temp2,(const Rva0087E900Coord *)&q,(const Rva0087E900Shape *)t,otherAngle);
+   Rva006BEB80Point otherCenter=*Rva0087E900(&temp2,(const Rva0087E900Coord *)&q,(const Rva0087E900Shape *)t,otherAngle);
    GeometryContact b(*t,otherCenter,otherAngle);
    float ht=topExtent(*t);
    float lower=0.0f;
    if(b.shape.type==0) lower=ht;
    if(ownCenter.z+h<q.z-lower) continue;
-   if(otherCenter.z+ht<ownCenter.z) continue;
+   if(ownCenter.z>otherCenter.z+ht) continue;
    found=overlap(a,b);
   }
  }
