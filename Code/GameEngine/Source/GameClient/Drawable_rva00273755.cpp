@@ -12,13 +12,37 @@ public:
 };
 extern GameLogic *TheGameLogic;
 
-class Anim2D
+class Anim2DTemplate;
+class Anim2DCollection;
+extern Anim2DCollection *TheAnim2DCollection;
+struct Rva002D752DNode;
+#define BFME_SNAPSHOT_NAME_SLOT
+#include "reference/shims/moduledata/Common/Snapshot.h"
+class Anim2D : public Snapshot
 {
 public:
-	unsigned int getCurrentFrameWidth() const;
-	unsigned int getCurrentFrameHeight() const;
+    Anim2D(Anim2DTemplate *animTemplate, Anim2DCollection *collectionSystem);
+    void randomizeCurrentFrame();
+    void reset();
+    unsigned int getCurrentFrameHeight() const;
+    unsigned int getCurrentFrameWidth() const;
+protected:
+    virtual ~Anim2D();
+    virtual void loadPostProcess();
+    virtual const char *GetSnapshotName() const;
+    virtual void xfer(Xfer *);
+private:
+    unsigned short m_currentFrame;
+    unsigned int m_lastUpdateFrame;
+    Anim2DTemplate *m_template;
+    unsigned char m_status;
+    unsigned short m_minFrame, m_maxFrame;
+    unsigned int m_framesBetweenUpdates;
+    float m_alpha;
+    Anim2DCollection *m_collectionSystem;
+    Anim2D *m_collectionSystemNext, *m_collectionSystemPrev;
+    unsigned int m_cachedWidth, m_cachedHeight;
 };
-
 class Rva002D7127 : public Anim2D
 {
 public:
@@ -29,6 +53,7 @@ class Rva00270025
 {
 public:
 	virtual ~Rva00270025();
+    void rva0027006C(int);
 	Rva002D7127 *m_items[14];
 	unsigned int m_vals[14];
 };
@@ -50,7 +75,16 @@ typedef bool Bool;
 
 
 
-class Player;
+class Thing;
+class Rva002AA123 {public:int rva002AA123(int);};
+class Player {
+public:
+    bool rva002AA0DE(const Thing *);
+    int getBattlePlansActiveSpecific(int n) {return ((Rva002AA123*)this)->rva002AA123(n);}
+    int getNumBattlePlansActive() const {return m_searchAndDestroy+m_holdTheLine+m_bombard;}
+    char m_pad000[0xac];
+    int m_bombard, m_holdTheLine, m_searchAndDestroy;
+};
 class Image
 {
 public:
@@ -176,6 +210,7 @@ public:
     void rva00273755();
     void rva002736A8();
     void drawAmmo();
+    void rva002739D1();
 private:
     unsigned char m_pad000[0xfc];
     Object *m_object;
@@ -186,6 +221,9 @@ private:
     bool m_selected;
     unsigned char m_pad43d[0x460-0x43d];
     int m_460, m_464, m_468, m_46c;
+    Rva00270025 *getIconInfo() { return ((Rva00270BA8 *)this)->rva00270BA8(); }
+    void killIcon(int n) { if(m_354) m_354->rva0027006C(n); }
+    static Rva002D752DNode **s_animationTemplates;
     static const Image *s_fullAmmo;
     static const Image *s_emptyAmmo;
 };
@@ -249,4 +287,71 @@ void Drawable::drawAmmo()
             posx+boxWidth, posy+1+boxHeight, -1, 2);
         posx += boxWidth + 1;
     }
+}
+
+// ZH Drawable::drawBattlePlans is the semantic guide (BF1 cee35b7d8);
+// WB CABB10 and complete native 2739D1..273C47 establish the renderer
+// relationship, target no-argument ABI, player eligibility, slots7..9,
+// and native rect members460/464. Original target spelling remains unknown.
+// A volatile player carrier preserves the witnessed reloads per plan;
+// eligibility uses the unqualified result. Snapshot-derived Anim2D is the
+// owned 52-byte class from 2D6D63, replacing the old opaque storage view.
+// Capture Y then X before getIconInfo; this retains height in EAX and width
+// in EDI and pushes arguments before the getter. For the third icon, capture
+// only the left edge and keep left+width*2 inside the call argument.
+// Native allocation, constructor, draw, kill and EH relationships all match.
+void Drawable::rva002739D1()
+{
+	Object *obj = m_object;
+	if (!obj)
+		return;
+	Player *active = obj->getControllingPlayer();
+    Player *volatile player = active;
+	if (active && active->getNumBattlePlansActive() > 0 && active->rva002AA0DE((const Thing *)obj))
+	{
+		if (player->getBattlePlansActiveSpecific(1))
+		{
+			if (!getIconInfo()->m_items[7])
+				getIconInfo()->m_items[7] = (Rva002D7127 *)new Anim2D((Anim2DTemplate *)s_animationTemplates[7], TheAnim2DCollection);
+			int frameWidth = getIconInfo()->m_items[7]->getCurrentFrameWidth();
+			int frameHeight = getIconInfo()->m_items[7]->getCurrentFrameHeight();
+			int y=m_464+frameHeight;
+            int x=m_460;
+            getIconInfo()->m_items[7]->rva002D7127(x,y,frameWidth,frameHeight);
+		}
+		else
+		{
+			killIcon(7);
+		}
+
+		if (player->getBattlePlansActiveSpecific(2))
+		{
+			if (!getIconInfo()->m_items[8])
+				getIconInfo()->m_items[8] = (Rva002D7127 *)new Anim2D((Anim2DTemplate *)s_animationTemplates[8], TheAnim2DCollection);
+			int frameWidth = getIconInfo()->m_items[8]->getCurrentFrameWidth();
+			int frameHeight = getIconInfo()->m_items[8]->getCurrentFrameHeight();
+			int y=m_464+frameHeight;
+            int x=m_460 + frameWidth;
+            getIconInfo()->m_items[8]->rva002D7127(x,y,frameWidth,frameHeight);
+		}
+		else
+		{
+			killIcon(8);
+		}
+
+		if (player->getBattlePlansActiveSpecific(3))
+		{
+			if (!getIconInfo()->m_items[9])
+				getIconInfo()->m_items[9] = (Rva002D7127 *)new Anim2D((Anim2DTemplate *)s_animationTemplates[9], TheAnim2DCollection);
+			int frameWidth = getIconInfo()->m_items[9]->getCurrentFrameWidth();
+			int frameHeight = getIconInfo()->m_items[9]->getCurrentFrameHeight();
+			int y=m_464+frameHeight;
+            int x=m_460;
+            getIconInfo()->m_items[9]->rva002D7127(x+frameWidth*2,y,frameWidth,frameHeight);
+		}
+		else
+		{
+			killIcon(9);
+		}
+	}
 }
