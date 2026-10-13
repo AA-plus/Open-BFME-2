@@ -1,4 +1,6 @@
 // ?rva00344249@AIMoveToStateSA@@QAE_NPAUCoord3D@@PAVObject@@@Z
+// partial score=0.9789 date=2026-10-13
+// ?rva00344249@AIMoveToStateSA@@QAE_NPAUCoord3D@@PAVObject@@@Z
 // partial score=0.978899 date=2026-10-10
 // ?rva00344249@AIMoveToStateSA@@QAE_NPAUCoord3D@@PAVObject@@@Z
 // partial score=0.98 date=2026-10-09
