@@ -1,15 +1,11 @@
-// ?rva0060D269@Rva0060D269@@QAEAAIABV?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@@Z
-// partial score=0.95 date=2026-10-13
-// ?rva0060D269@Rva0060D269@@QAEAAIABV?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@@Z
-// partial score=0.9467 date=2026-10-09
-// ?rva0060D2E9@XferSave@@QAEXPBD@Z
-// partial score=0.8 date=2026-10-09
 // cl: /O1 /G6 /GX /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_CSTD_FUNCTION_IMPORTS
 // stlport
-// ZH XferSave block/string transfers and BFME1 xfer_save.cpp supply the
-// semantic lead. Native60D2E9..60D434 and60D435..60D4C9 establish the
-// stream4 flag8 position-vectorC and compressed-name table18. These
-// BFME2 helpers retain address names; the writer's original names unknown.
+//
+// ?rva0060D269@Rva0060D269@@QAEAAIABV?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@@Z @ 0x0060D269, 128 bytes.
+// Dedicated TU: the XferSave owner TU carries /MD rows and a different
+// class view; the R1 member-visibility lever needs the visible
+// __declspec(noinline) Rva0060CAEA::rva0060CB61 definition here (the
+// rowed 0x60CB61 body in stlport_string_find_0060CAEA.cpp is identical).
 namespace _STL { void __cdecl free(void *); }
 #include <string>
 #include <vector>
@@ -49,4 +45,10 @@ unsigned int &Rva0060D269::rva0060D269(const _STL::string &key) {
  Rva0060CAEANode *node;
  { Rva0060CAEAIterator it=((Rva0060CAEA*)this)->rva0060CB61(key); node=it.cur; }
  return !node ? ((XferNameTable*)this)->_M_insert(XferNamePair(key,0)).second : node->value;
+}
+
+// Actual rowed member ?rva0060CB61@Rva0060CAEA@@QAE?AURva0060CAEAIterator@@ABV?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@@Z at 0x0060CB61 from Code/Libraries/Source/WWVegas/WWLib/stlport_string_find_0060CAEA.cpp.
+inline __declspec(noinline) Rva0060CAEAIterator Rva0060CAEA::rva0060CB61(const _STL::string &key)
+{
+	return Rva0060CAEAIterator(rva0060CAEA(key), this);
 }

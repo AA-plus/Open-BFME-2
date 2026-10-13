@@ -1,9 +1,11 @@
-// ?rva00466C94@Rva00466C94@@QAEHXZ
-// partial score=0.85 date=2026-10-10
-// ?rva00466C94@Rva00466C94@@QAEHXZ
-// partial score=0.85 date=2026-10-10
 // cl: /O1 /G7 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/GameEngine/Include
 // stlport
+//
+// ?rva00466C94@Rva00466C94@@QAEHXZ @ 0x00466C94, 163 bytes.
+// Dedicated TU: the owner file Rva00466C04Heal.cpp carries the /DNDEBUG /MD
+// row for 0x466C04 and must keep its flags; this body needs /O1 /G7.
+// R1/S2 equal-arm carrier on the reserve() object argument closes the
+// argument-push/register order: (obj->objectTemplate ? obj : obj).
 #include "GameLogic/ContainmentListView.h"
 namespace _STL {template<> _List_base<Rva0036ADF9Element,allocator<Rva0036ADF9Element> >::~_List_base();}
 class Object {public:void* vptr;void* objectTemplate;};
@@ -25,7 +27,7 @@ int Rva00466C94::rva00466C94(){
  while(it!=riders.end()){
   obj=reinterpret_cast<Object*>(containmentFirstWord(*it));++it;
   done=reinterpret_cast<Rva00466C04*>(owner())->rva00466C04(obj,data->frames);
-  if(done==true){int door=owner()->doors.reserve(obj->objectTemplate,obj);if(door!=-1)owner()->doors.exit(obj,door);}
+  if(done==true){int door=owner()->doors.reserve(obj->objectTemplate, (obj->objectTemplate ? obj : obj));if(door!=-1)owner()->doors.exit(obj,door);}
  }
  return 1;
 }
