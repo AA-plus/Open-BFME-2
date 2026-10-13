@@ -1,23 +1,30 @@
 // cl: /MD
 // Three tiny range-27 forwarders (24-30B).
 // ?rva0052A22C@Holder0052A22C@@QAEXPAVObj0052A22C@@@Z @0x0052A22C 24B
-// Thiscall through-call: forwards o->m_74 (or 0) to the pinned 0x529DA9
-// on the same this.
+// Thiscall through-call: forwards o->m_74 (or 0) to rowed 0x529DA9 on the
+// same this. 0x529DA9 is Holder00529E19::Rva00529DA9 (Rva00529E19Reset.cpp,
+// called on the same holder by reset 0x529E19), so the call goes through
+// that class's view of this.
 struct Obj0052A22C
 {
 	char m_pad[0x74];
 	int m_74;
 };
 
+struct Holder00529E19
+{
+	void Rva00529DA9(int value);
+	void Rva00529E19();
+};
+
 struct Holder0052A22C
 {
-	void rva00529DA9(int value);
 	void rva0052A22C(Obj0052A22C *obj);
 };
 
 void Holder0052A22C::rva0052A22C(Obj0052A22C *obj)
 {
-	rva00529DA9(obj ? obj->m_74 : 0);
+	((Holder00529E19 *)this)->Rva00529DA9(obj ? obj->m_74 : 0);
 }
 
 // ?Rva005258F8@@YGXHH@Z @0x005258F8 30B
@@ -32,14 +39,18 @@ struct Pair005258F8
 void __stdcall Rva00525407(Pair005258F8 *pair);
 
 
-// ?Rva005243FA@@YAXHHH@Z @0x005243FA 27B
-// Cdecl forwarder: passes three ints plus a temp byte to pinned 0x52408B.
-void Rva0052408B(int a, int b, int c, char *tmp);
+// ?Rva005243FA@@YAHHHH@Z @0x005243FA 27B
+// Cdecl forwarder: passes three pointers plus the address of a temp tag byte
+// to rowed find 0x52408B (Rva0052408BFind, stlport_hero_integer_vector_tree.cpp)
+// and returns its EAX result, which range dispatch 0x524477 reads
+// (Rva00524477Dispatch.cpp declares this int-returning spelling).
+struct Rva00523DB7;
+const Rva00523DB7 *Rva0052408BFind(const Rva00523DB7 *first, const Rva00523DB7 *last, const Rva00523DB7 *val, int tag);
 
-void Rva005243FA(int a, int b, int c)
+int Rva005243FA(int a, int b, int c)
 {
 	char tmp;
-	Rva0052408B(a, b, c, &tmp);
+	return (int)Rva0052408BFind((const Rva00523DB7 *)a, (const Rva00523DB7 *)b, (const Rva00523DB7 *)c, (int)&tmp);
 }
 
 // ?rva0052A287@Rva0052A287@@QAEXPAUObj0052A22C@@@Z @0x0052A287 7B
@@ -63,11 +74,6 @@ void Rva0052A287::rva0052A287(Obj0052A22C *obj)
 // to rowed 0x00529E19 with no args.
 // Evidence: unlock lane all callees rowed; caller at 0x002D66B1 in 0x002D65F6;
 // neighbours share /MD; same 7B pattern as rva0052A287 above.
-struct Holder00529E19
-{
-	void Rva00529E19();
-};
-
 struct Rva00529FB7
 {
 	Holder00529E19 *m_holder;
