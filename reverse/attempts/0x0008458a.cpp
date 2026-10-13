@@ -1,5 +1,6 @@
 // ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z
-// partial score=0.9736 date=2026-10-11
+// partial score=0.983412846822657 date=2026-10-13
+// ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z
 // cl: /O1 /arch:SSE /G7 /MD /EHsc /ICode/Libraries/Include /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
 // Reference semantic lead: GeneralsMD W3DTerrainTracks.cpp computeTrackSpacing
 // at BFME1 checkout dae380faa5f6fa536eec8d6ebbe877321d4cb51d.
@@ -16,6 +17,7 @@
 #include "vector3.h"
 #include "matrix3d.h"
 #include "Lib/Coord3D.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 struct TrackVector { float x,y,z;
  TrackVector(){} TrackVector(float a,float b,float c):x(a),y(b),z(c){}
  TrackVector(const TrackVector&a):x(a.x),y(a.y),z(a.z){}
@@ -471,15 +473,14 @@ void Rva00091A80::rva00092014()
 		((Rva00084C05System *)TheTerrainTracksRenderObjClassSystem)->setDetail();
 }
 
-inline Vector3 TransformTrackPoint(const Matrix3D&A,const Vector3&v){return Vector3(A[0][0]*v.X+A[0][1]*v.Y+A[0][2]*v.Z+A[0][3],A[1][0]*v.X+A[1][1]*v.Y+A[1][2]*v.Z+A[1][3],A[2][0]*v.X+A[2][1]*v.Y+A[2][2]*v.Z+A[2][3]);}
-// ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z present-unmatched
+inline Vector3 TransformTrackPoint(const Matrix3D&A,const Vector3&v){return Vector3(A[0][0]*__vref(v.X)+A[0][1]*v.Y+A[0][2]*v.Z+__vref(A[0][3]),A[1][0]*v.X+A[1][1]*v.Y+A[1][2]*v.Z+A[1][3],A[2][0]*v.X+A[2][1]*v.Y+A[2][2]*v.Z+A[2][3]);}
 void Rva00084206Track::addEdgeToTrack(float x, float y)
 {
 	if (owner && !owner->m_object) return;
 	if (!haveAnchor)
 	{
 		int objectLayer;
-		if (owner && (objectLayer = owner->m_object->rva0028B511()) != 1)
+		if (owner && (objectLayer = __vref(owner->m_object)->rva0028B511()) != 1)
 			lastAnchor = Vector3(x, y, TheTerrainLogic->getLayerHeight(x, y, objectLayer) + 0.25f);
 		else
 			lastAnchor = Vector3(x, y, TheTerrainLogic->getGroundHeight(x, y));
@@ -492,6 +493,7 @@ void Rva00084206Track::addEdgeToTrack(float x, float y)
 
 	haveCap = false;
 
+	{
 	Vector3 vPos;
 	Vector3 vZ;
 	Coord3D vZTmp;
@@ -501,8 +503,8 @@ void Rva00084206Track::addEdgeToTrack(float x, float y)
 	if (owner && (objectLayer = owner->m_object->rva0028B511()) != 1)
 		return;
 
-	const Matrix3D *tm = &owner->m_object->transform;
 	Vector3 transformed[2];
+	const Matrix3D *tm = &owner->m_object->transform;
 	transformed[0]=TransformTrackPoint(*tm,*(Vector3 *)&endpoints[0]);
 	transformed[1]=TransformTrackPoint(*tm,*(Vector3 *)&endpoints[1]);
 	vPos=(transformed[0]+transformed[1])*0.5f;
@@ -583,6 +585,7 @@ void Rva00084206Track::addEdgeToTrack(float x, float y)
 	airborne = false;
 
 	lastAnchor = vPos;
+	}
 	activeEdgeCount++;
 	totalEdgesAdded++;
 	topIndex++;
