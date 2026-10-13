@@ -1,5 +1,5 @@
 // ?translate@HotKeyManager@@QAE?AW4GameMessageDisposition@@PBVGameMessage@@@Z
-// partial score=0.8 date=2026-10-13
+// partial score=0.997 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc /Ireference/shims/bfme2_ascii
 // stlport
 // Native 00359556..003596AD; WB1132720 HotKeyManager::translate.
@@ -30,14 +30,15 @@ public:
 };
 // Names of these action methods are structural inferences from their use;
 // only the virtual slots and bool results are established by target evidence.
-void Rva00358A53Play();
-void Rva00358ACBPlay();
+
 class Rva003593E8 {
 public: bool rva003593E8(const AsciiString &key, bool modifier);
 };
 class HotKeyManager {
 public:
  GameMessageDisposition translate(const GameMessage *message);
+ void rva00358A53();
+ void rva00358ACB();
 private:
  char unknown[0x24];
  _STL::map<int,int> actions;
@@ -50,9 +51,9 @@ GameMessageDisposition HotKeyManager::translate(const GameMessage *message)
   int &handle = found->second;
   if (!((HotKeyActionView *)handle)->isBlocked(0)) {
    if (((HotKeyActionView *)handle)->isEnabled(0)) {
-    if (((HotKeyActionView *)handle)->execute(0)) Rva00358A53Play();
+    if (((HotKeyActionView *)handle)->execute(0)) rva00358A53();
    } else {
-    Rva00358ACBPlay();
+    rva00358ACB();
    }
    return DESTROY_MESSAGE;
   }
@@ -67,7 +68,7 @@ GameMessageDisposition HotKeyManager::translate(const GameMessage *message)
   if (modifiers != 0 && !firstModifierOnly) return KEEP_MESSAGE;
   unsigned short key = TheKeyboard->getPrintableKey(message->getArgument(0)->key, 0);
   UnicodeString unicode;
-  unicode.set(&key, 1);
+  unicode = key;
   AsciiString ascii;
   ascii.translate(unicode);
   if (((Rva003593E8 *)this)->rva003593E8(ascii, firstModifierOnly)) return DESTROY_MESSAGE;
