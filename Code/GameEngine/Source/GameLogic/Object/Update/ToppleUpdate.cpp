@@ -11,7 +11,7 @@
 #undef inline
 #include "ascii_string.h"
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
-#include "matrix3d.h"
+#include "../../../../../../reference/shims/bfme_matrix3d_copy_link/matrix3d_copy_link.h"
 #pragma function(memset)
 extern "C" void *memset(void *,int,unsigned);
 extern "C" float atan2f(float,float);

@@ -77,7 +77,7 @@
 //   data's DieMuxData at +0x08, the object's AI at +0x258 and the 32-bit
 //   all-players mask 0xFFFFF.
 
-#include "matrix3d.h"
+#include "../../../../../../reference/shims/bfme_matrix3d_copy_link/matrix3d_copy_link.h"
 #include "ascii_string.h"
 
 typedef bool Bool;
