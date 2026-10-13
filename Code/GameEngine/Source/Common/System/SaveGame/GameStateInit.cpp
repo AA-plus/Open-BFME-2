@@ -47,7 +47,8 @@ class ClientFrameSubsystem; class GameClient; extern GameClient *TheGameClient;
 class InGameUI; extern InGameUI *TheInGameUI;
 class PartitionManager; extern PartitionManager *ThePartitionManager;
 class PartitionManager; extern PartitionManager *TheShroudManager;
-extern void *g_Va00DFE754;
+class CollisionManager;
+extern CollisionManager *TheCollisionManager;
 class ParticleSystemManager; extern ParticleSystemManager *TheParticleSystemManager;
 class G00DFF080Obj; extern G00DFF080Obj *g_00DFF080;
 class GhostObjectManager; extern GhostObjectManager *TheGhostObjectManager;
@@ -83,7 +84,7 @@ void GameState::init()
     addSnapshotBlock("CHUNK_InGameUI", (Snapshot *)(SnapshotSubsystemView *)TheInGameUI, (SnapshotType)0);
     addSnapshotBlock("CHUNK_Partition", (Snapshot *)(SnapshotSubsystemView *)ThePartitionManager, (SnapshotType)0);
     addSnapshotBlock("CHUNK_Shroud", (Snapshot *)(SnapshotSubsystemView *)TheShroudManager, (SnapshotType)0);
-    addSnapshotBlock("CHUNK_Collision", (Snapshot *)(SnapshotSubsystemView *)g_Va00DFE754, (SnapshotType)0);
+    addSnapshotBlock("CHUNK_Collision", (Snapshot *)(SnapshotSubsystemView *)TheCollisionManager, (SnapshotType)0);
     addSnapshotBlock("CHUNK_ParticleSystem", (Snapshot *)(SnapshotSubsystemView *)TheParticleSystemManager, (SnapshotType)0);
     addSnapshotBlock("CHUNK_TerrainVisual", (Snapshot *)g_00DFF080, (SnapshotType)0);
     addSnapshotBlock("CHUNK_GhostObject", (Snapshot *)TheGhostObjectManager, (SnapshotType)0);
@@ -104,7 +105,7 @@ void GameState::init()
     addSnapshotBlock("CHUNK_SidesList", (Snapshot *)(SnapshotSubsystemView *)TheSidesList, (SnapshotType)1);
     addSnapshotBlock("CHUNK_Partition", (Snapshot *)(SnapshotSubsystemView *)ThePartitionManager, (SnapshotType)1);
     addSnapshotBlock("CHUNK_Shroud", (Snapshot *)(SnapshotSubsystemView *)TheShroudManager, (SnapshotType)1);
-    addSnapshotBlock("CHUNK_Collision", (Snapshot *)(SnapshotSubsystemView *)g_Va00DFE754, (SnapshotType)1);
+    addSnapshotBlock("CHUNK_Collision", (Snapshot *)(SnapshotSubsystemView *)TheCollisionManager, (SnapshotType)1);
     addSnapshotBlock("CHUNK_SkirmishAISystem", (Snapshot *)(SnapshotSubsystemView *)g_00DFEEF8, (SnapshotType)1);
     addSnapshotBlock("CHUNK_LivingWorldLogic", (Snapshot *)(SnapshotSubsystemView *)(*(Rva002BA8F1Logic **)&TheLivingWorldLogic), (SnapshotType)3);
     addSnapshotBlock("CHUNK_Audio", (Snapshot *)(SnapshotSubsystemView *)TheAudio, (SnapshotType)3);

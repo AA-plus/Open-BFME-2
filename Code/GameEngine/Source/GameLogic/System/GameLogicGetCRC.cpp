@@ -177,7 +177,7 @@ extern bool TheXLWCRC;
 extern PartitionManager *ThePartitionManager;
 extern PartitionManager *TheShroudManager;
 extern PlayerList *ThePlayerList;
-extern CollisionManager *g_00DFE754;
+extern CollisionManager *TheCollisionManager;
 class BfmeTaintManager;
 extern BfmeTaintManager *TheTaintManager;
 // g_00DFEEF8 is only an alias of the owned global g_00DFEEF8 (ledger names column); this unit reads the owner through its own view type.
@@ -213,7 +213,7 @@ unsigned int GameLogic::getCRC(int mode)
 	if (g_Rva00A02D87 != 0 || g_00E02D7D == 0)
 		xfer->xferSnapshot(ThePartitionManager);
 	if (g_Rva00A02D87 != 0 || g_00E02D7E == 0)
-		xfer->xferSnapshot(g_00DFE754);
+		xfer->xferSnapshot(TheCollisionManager);
 	if (g_Rva00A02D87 != 0 || g_00E02D7F == 0)
 		xfer->xferSnapshot(TheShroudManager);
 	if (g_Rva00A02D87 != 0 || g_00E02D80 == 0)

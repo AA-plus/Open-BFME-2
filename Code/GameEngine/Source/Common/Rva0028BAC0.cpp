@@ -39,7 +39,8 @@ public:
 class PartitionManager;
 extern PartitionManager *ThePartitionManager;
 // Bind to the existing data-ledger owner; keep the retail access view local.
-extern void *g_Va00DFE754;
+class CollisionManager;
+extern CollisionManager *TheCollisionManager;
 // Bind to the existing data-ledger owner; keep the retail access view local.
 class Rva002872BA;
 extern Rva002872BA *TheTriggerManager;
@@ -81,7 +82,7 @@ void Object::rva0028BAC0()
 	if (m_4C8 != 0)
 		((PartitionManager *)ThePartitionManager)->rva00625330(&m_6C);
 	if (m_4CC != 0)
-		((Rva00758240 *)g_Va00DFE754)->rva00758240((Rva009A36F0Param*)&m_70);
+		((Rva00758240 *)TheCollisionManager)->rva00758240((Rva009A36F0Param*)&m_70);
 	if (m_49C >= 0)
 	{
 		if (((FireLogicSystem *)TheTriggerManager) != 0)
