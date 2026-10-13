@@ -10,6 +10,8 @@
 // Caller at 0x004E0363 constructs this; unblocks 0x004E030B.
 #include <vector>
 #include "../../../Libraries/Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 class Rva0025BFE3
 {
 public:

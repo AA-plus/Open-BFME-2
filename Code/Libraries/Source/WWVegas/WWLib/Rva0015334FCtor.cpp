@@ -5,6 +5,8 @@
 // Evidence: and [esi] 0 plus lea eax [esp+7] push eax lea ecx [esi+4] call 0x211E58 plus mov eax esi; same shape as Rva004BA1B2 22B plus zeroing and Rva00506A34 voidptr plus vector; callers 0x153F49 0x215B00 0x215BEB 0x5AA28C.
 #include <vector>
 #include "../../../Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 class Rva0015334F
 {
 	int m_00;

@@ -45,6 +45,8 @@ Rva0042499E::Rva0042499E(unsigned int n)
 // that type's count constructor (the ledger's existing LightSubPoint
 // spelling; the original name is unknown).
 #include "../../../Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 
 struct LightSubPoint
 {

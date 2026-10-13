@@ -3,6 +3,8 @@
 // ??0Rva0018C54E@@QAE@XZ 0x0018C54E 46B ctor with vector<BfmeE16> at +0x14 plus zeroed header/trailer; callee Vector_base row; caller 0x001735F9 new(0x28)
 #include <vector>
 #include "../../../Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 class Rva0018C54E {
 	unsigned char m_00;
 	int m_04;

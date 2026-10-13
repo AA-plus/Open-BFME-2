@@ -5,6 +5,8 @@
 // and ebp-4 0 then lea esi+0x10 call 0x001F81BF ObjectCreationList ctor; vtable 0x008785B0 at +0; same class as dtor 0x005ECAD0.
 #include <vector>
 #include "../../../Libraries/Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 class ObjectCreationList
 {
 public:

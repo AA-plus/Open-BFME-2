@@ -4,6 +4,8 @@
 // Evidence: push ecx push esi mov esi ecx lea esp+7 push allocator call 0x00211E58 Vector_base BfmeE16 then xorps xor eax movs plus movss float 0 at +0x20; vtable g_00BDE950 at +0; callers 0x002642EE 0x0026EA4F 0x0033A5C5 0x00377164 0x004DA3FA.
 #include <vector>
 #include "../../../../Libraries/Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 class Rva001E7087
 {
 public:

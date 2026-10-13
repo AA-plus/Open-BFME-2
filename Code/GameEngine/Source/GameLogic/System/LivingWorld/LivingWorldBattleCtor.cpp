@@ -69,6 +69,8 @@ public:
 // 16-byte element stand-in whose vector base is the rowed 0x00211E58 body
 // (the slots are 0x1C bytes; this constructor never touches them).
 #include "../../../../../Libraries/Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 
 struct LivingWorldBattlePlayerView
 {

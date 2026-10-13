@@ -7,6 +7,8 @@
 class ModuleData;
 
 #include "../../../Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 
 struct BfmePod104
 {

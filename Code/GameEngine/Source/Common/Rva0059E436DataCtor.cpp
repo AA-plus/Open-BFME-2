@@ -4,6 +4,8 @@
 // Evidence: vtable 0x00C70FC8, rowed _Vector_base<BfmeE16> 0x00211E58, caller 0x0059E456 in Rva0059E436Parse.
 #include <vector>
 #include "../../../Libraries/Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

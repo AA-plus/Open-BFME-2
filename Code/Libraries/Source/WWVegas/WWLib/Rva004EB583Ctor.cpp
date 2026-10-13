@@ -4,6 +4,8 @@
 // Evidence: unlock ctor stores vtable 0x00862928 at +0; 3x BfmeE16 Vector_base via rowed 0x00211E58 at +8 +0x1C +0x28; ints +4 +0x14 +0x18 +0x34 +0x3C zeroed +0x38 +0x40 -1; id from g_00E044A0 at +0x44 with inc; arg at +0x48; callers 0x004E9AFD 0x004E9CBC.
 #include <vector>
 #include "../../../Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 extern int g_00E044A0;
 // g_00E044A0: matched references place it at VA 0xe044a0 (zero-filled .bss).
 int g_00E044A0;

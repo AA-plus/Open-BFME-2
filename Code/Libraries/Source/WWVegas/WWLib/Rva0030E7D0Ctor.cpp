@@ -17,6 +17,8 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 }
 
 #include "../../../Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 
 extern float g_Va00BBB8D8;
 

@@ -41,6 +41,8 @@ struct Rva002CD169RefSlot { unsigned address; __forceinline Rva002CD169RefSlot()
 
 
 #include "../../../Libraries/Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 
 class CashHackSpecialPowerModuleData
 {

@@ -8,6 +8,8 @@
 // trivial 16-byte elements). Unblocks 4 callers that become ready.
 #include <vector>
 #include "../../../Libraries/Include/Lib/BfmeE16.h"
+// bfme link decl-only BfmeE16
+namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 class Rva0025BFE3
 {
 public:
