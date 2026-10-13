@@ -1,4 +1,6 @@
 // ?onEnter@AIAttackMeleeHordeApproachTargetState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.97 date=2026-10-13
+// ?onEnter@AIAttackMeleeHordeApproachTargetState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.93 date=2026-10-13
 // ?onEnter@AIAttackMeleeHordeApproachTargetState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.97 date=2026-10-09
@@ -505,7 +507,7 @@ private:
 	Bool m_canPathThroughUnits; // +0x3BA
 	unsigned char m_pad3BB[0x3CC - 0x3BB];
 public:
-	Bool m_bfmeFlag3CC; // +0x3CC
+	volatile Bool m_bfmeFlag3CC;
 };
 
 class Rva0010CBits

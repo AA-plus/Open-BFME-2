@@ -1,4 +1,6 @@
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z
+// partial score=0.95 date=2026-10-13
+// ?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z
 // partial score=0.93 date=2026-10-13
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z
 // partial score=0.93 date=2026-10-13
@@ -26,6 +28,8 @@
 //   Right (landed, `>` clamp) cannot be copied (different semantics).
 //   The allocator choice is stable; needs a new lever.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "PreRTS.h"
 #include "GameClient/ProcessAnimateWindow.h"
 #include "GameClient/AnimateWindowManager.h"
@@ -72,6 +76,7 @@ Bool ProcessAnimateWindowSlideFromLeft::reverseAnimateWindow(AnimateWindow *anim
 		slowedX = -m_maxVel.x;
 	Coord2D slowedVel;
 	slowedVel.x = slowedX;
+	_ReadWriteBarrier();
 	slowedVel.y = vel.y;
 	animWin->setVel(slowedVel);
 	return FALSE;
