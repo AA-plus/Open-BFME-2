@@ -216,11 +216,13 @@ public:
 	void rva00526F80();
 };
 
+class Rva00529B34 {public:void rva00529B34();};
+
 class Rva0052A244
 {
 public:
 	Rva0052A244(void *level);
-	~Rva0052A244() { reinterpret_cast<Rva00529FABClearForward *>(this)->clear(); }
+	__declspec(noinline) ~Rva0052A244() { reinterpret_cast<Rva00529B34 *>(this)->rva00529B34(); }
 
 private:
 	void *m_0;
