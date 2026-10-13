@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /DNDEBUG /MD
+// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // List box hit testing, the Zero Hour GadgetListBox.cpp statics BFME2 keeps:
 // getListboxEntryBasedOnCoord @0x00323E95 218B (cdecl; the only body the
 // GadgetListBoxGetEntryBasedOnXY wrapper @0x00323F6F tail-jumps to) maps a
@@ -23,11 +23,25 @@
 // 0x00324B8F and GadgetListBoxSetTopVisibleEntry 0x0032544C. /G7 is what
 // spells the helper's doubling `add eax, eax`; the other bodies are
 // unchanged by it.
+//
+// GadgetListBoxInput @0x00325635 2442B: the single-select input callback
+// (Zero Hour GadgetListBox.cpp, WorldBuilder twin 0x0114ACD0). It needs
+// /EHsc (the key-search path owns a DisplayString text) and /arch:SSE.
+// Layout lessons from the WorldBuilder debug body: the key cases all end in
+// `break` (the one return TRUE sits after the message switch); WHEEL_UP is
+// `if (a) { if (a) {...; break;} } else {...; break;}` with no break after the
+// pair, so it falls into LEFT_UP, which keeps LEFT_UP's block after WHEEL_UP
+// instead of in descending case-value order; and the top-entry declaration
+// precedes the bottom-entry one, which makes the bottom call come first.
+#include "unicode_string.h"
+
 typedef int Int;
 typedef short Short;
 typedef bool Bool;
 typedef unsigned int UnsignedInt;
 typedef UnsignedInt WindowMsgData;
+typedef unsigned char UnsignedByte;
+typedef unsigned short WideChar;
 
 enum WindowMsgHandledType { MSG_IGNORED, MSG_HANDLED };
 
@@ -36,6 +50,7 @@ enum
 	GWM_LEFT_DOWN = 5,
 	GWM_LEFT_UP = 6,
 	GWM_LEFT_DRAG = 8,
+	GWM_RIGHT_DOWN = 13,
 	GWM_RIGHT_UP = 14,
 	GWM_MOUSE_ENTERING = 17,
 	GWM_MOUSE_LEAVING = 18,
@@ -51,13 +66,32 @@ enum
 	GBM_MOUSE_ENTERING = 0x4006,
 	GBM_MOUSE_LEAVING = 0x4007,
 	GLM_SELECTED = 0x4014,
+	GLM_DOUBLE_CLICKED = 0x4015,
 	GLM_RIGHT_CLICKED = 0x4016
 };
 
 enum { WIN_STATE_HILITED = 0x02 };
 enum { GWS_MOUSE_TRACK = 0x400 };
-enum { KEY_TAB = 0x0F };
-enum { KEY_STATE_DOWN = 0x02 };
+enum
+{
+	KEY_TAB = 0x0F,
+	KEY_ENTER = 0x1C,
+	KEY_SPACE = 0x39,
+	KEY_HOME = 0xC7,
+	KEY_UP = 0xC8,
+	KEY_PGUP = 0xC9,
+	KEY_END = 0xCF,
+	KEY_DOWN = 0xD0,
+	KEY_PGDN = 0xD1
+};
+enum
+{
+	KEY_STATE_UP = 0x01,
+	KEY_STATE_DOWN = 0x02,
+	KEY_STATE_CONTROL = 0x0C,
+	KEY_STATE_LSHIFT = 0x10
+};
+enum { LISTBOX_TEXT = 1 };
 
 #define BitTest(x, i) (((x) & (i)) != 0)
 #define BitSet(x, i) ((x) |= (i))
@@ -71,7 +105,19 @@ enum { KEY_STATE_DOWN = 0x02 };
 
 extern "C" void *__cdecl memcpy(void *dst, const void *src, unsigned int count);
 
-class GameFont;
+// Zero Hour inlines UnicodeString::getCharAt; WWLib keeps the out-of-line
+// copy at 0x00035760, but this unit expands it in place.
+template <> inline unsigned short StringBase<unsigned short>::getCharAt(int index) const
+{
+	return m_data ? m_data->data[index] : 0;
+}
+
+class GameFont
+{
+public:
+	unsigned char m_pad00[0x10];
+	Int height;
+};
 
 class WinInstanceData
 {
@@ -96,13 +142,34 @@ public:
 	Int winGetScreenPosition(Int *x, Int *y);
 	GameWindow *winGetOwner();
 	Int winNextTab();
+	GameFont *winGetFont();
+};
+
+// 0x003140AB, rowed by address: true when the argument is this window or
+// one of its descendants.
+class Rva003140AB { public: bool rva003140AB(Rva003140AB *window); };
+
+class DisplayString
+{
+public:
+	virtual void slot00();
+	virtual void setText(UnicodeString text);
+	virtual UnicodeString getText();
+};
+
+struct ListEntryCell
+{
+	Int cellType;
+	unsigned char m_pad04[0x0C - 0x04];
+	void *data;
+	unsigned char m_pad10[0x1C - 0x10];
 };
 
 struct ListEntryRow
 {
 	Int listHeight;
 	Int height;
-	void *cell;
+	ListEntryCell *cell;
 	Bool m_disabled;
 };
 
@@ -110,7 +177,9 @@ typedef struct _ListboxData
 {
 	Short listLength;
 	Short columns;
-	unsigned char m_pad04[0x0F - 0x04];
+	unsigned char m_pad04[0x0C - 0x04];
+	Bool forceSelect;
+	unsigned char m_pad0D[0x0F - 0x0D];
 	Bool m_noSelect;
 	Bool m_freeScroll;
 	Bool m_fixedTotalHeight;
@@ -125,10 +194,10 @@ typedef struct _ListboxData
 	Short endPos;
 	unsigned char m_pad2E[0x30 - 0x2E];
 	Int mouseOverRow;
-	unsigned char m_pad34[0x38 - 0x34];
+	Int selectPos;
 	Int *selections;
 	Short displayHeight;
-	unsigned char m_pad3E[0x44 - 0x3E];
+	UnsignedInt doubleClickTime;
 	Short displayPos;
 	unsigned char m_pad46[0x48 - 0x46];
 	Int m_field48;
@@ -143,10 +212,15 @@ public:
 	V(16) V(17) V(18) V(19) V(20) V(21) V(22) V(23)
 	V(24) V(25) V(26) V(27) V(28) V(29) V(30) V(31)
 	V(32) V(33) V(34) V(35) V(36) V(37) V(38) V(39)
-	V(40) V(41) V(42) V(43) V(44) V(45) V(46) V(47)
+	V(40) V(41)
+	virtual void winNextTab(GameWindow *window) = 0;
+	virtual void winPrevTab(GameWindow *window) = 0;
+	V(44) V(45) V(46) V(47)
 	V(48)
 	virtual Int winSetFocus(GameWindow *window) = 0;
-	V(50) V(51) V(52) V(53) V(54) V(55)
+	V(50) V(51) V(52)
+	virtual GameWindow *winGetLoneWindow() = 0;
+	V(54) V(55)
 	V(56) V(57)
 	virtual WindowMsgHandledType winSendSystemMsg(GameWindow *window,
 		UnsignedInt msg, WindowMsgData mData1, WindowMsgData mData2) = 0;
@@ -157,6 +231,19 @@ public:
 };
 
 extern GameWindowManager *TheWindowManager;
+
+class Keyboard
+{
+public:
+	enum { MAX_KEY_STATES = 3 };
+	UnsignedInt getModifierFlags() { return m_modifiers; }
+	WideChar getPrintableKey(UnsignedByte key, Int state);
+
+	unsigned char m_pad00[0x0C];
+	UnsignedInt m_modifiers;
+};
+
+extern Keyboard *TheKeyboard;
 
 static Int getListboxEntryBasedOnCoord(GameWindow *window, Int x, Int y, Int &row, Int &column)
 {
@@ -216,6 +303,9 @@ Int GadgetListBoxGetEntryBasedOnXY(GameWindow *listbox, Int x, Int y, Int &row, 
 {
 	return getListboxEntryBasedOnCoord(listbox, x, y, row, column);
 }
+
+// getListboxTopEntry 0x00323F78 (list in ECX), rowed as fastcall in GadgetListBox.cpp.
+Int __fastcall Rva0032378(_ListboxData *list);
 
 // 0x00323F9C 61B: Zero Hour's getListboxBottomEntry, the last row the
 // display area reaches. The list arrives in ECX, which the existing pin spells
@@ -513,4 +603,626 @@ void GadgetListBoxSetTopVisibleEntry(GameWindow *window, Int newPos)
 	if (!window || !window->winGetUserData())
 		return;
 	Rva00324B8FScrollTo(window, newPos, 1);
+}
+
+// adjustDisplayByDelta 0x00324B39 is rowed in its own unit.
+void Rva00324B39Add(GameWindow *window, Short delta, Bool updateSlider);
+
+// GetDoubleClickTime() captured by the dynamic initializer 0x007AE9E6.
+extern unsigned int g_00E01D48;
+
+extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
+
+// GadgetListBoxInput @0x00325635 2442B: the single-select input callback.
+WindowMsgHandledType GadgetListBoxInput(GameWindow *window, UnsignedInt msg,
+	WindowMsgData mData1, WindowMsgData mData2)
+{
+	ListboxData *list = (ListboxData *)window->winGetUserData();
+	WinInstanceData *instData = window->winGetInstanceData();
+
+	switch (msg)
+	{
+		case GWM_CHAR:
+		{
+			switch (mData1)
+			{
+				case KEY_ENTER:
+				case KEY_SPACE:
+					if (BitTest(mData2, KEY_STATE_UP))
+						if (mData2 & KEY_STATE_CONTROL)
+							return MSG_IGNORED;
+						else
+						{
+							((Rva00323E1C *)window)->rva00323E1C();
+							TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+								GLM_DOUBLE_CLICKED, (WindowMsgData)window, list->selectPos);
+							break;
+						}
+					break;
+
+				case KEY_DOWN:
+					if (BitTest(mData2, KEY_STATE_DOWN))
+					{
+						if (list->m_freeScroll)
+						{
+							Int delta = 20;
+							if (window->winGetFont())
+								delta = window->winGetFont()->height;
+							Rva00324B39Add(window, delta, TRUE);
+							break;
+						}
+
+						if (list->selectPos == -1)
+						{
+							list->selectPos = 0;
+							Rva00324AE5Update(window, 0, TRUE);
+						}
+						else if (list->selectPos < list->endPos - 1)
+						{
+							list->selectPos++;
+
+							while (1)
+							{
+								Int cellBottom = list->listData[list->selectPos].listHeight;
+								Int cellTop = cellBottom - list->listData[list->selectPos].height;
+								Int displayTop = list->displayPos;
+								Int displayBottom = list->displayPos + list->displayHeight - 1;
+
+								if (cellTop < displayTop)
+								{
+									Rva00324AE5Update(window, -1, TRUE);
+								}
+								else if (cellBottom < displayBottom)
+								{
+									Rva00324AE5Update(window, 0, TRUE);
+									break;
+								}
+								else
+								{
+									Rva00324AE5Update(window, 1, TRUE);
+								}
+							}
+						}
+
+						list->m_field48 = -1;
+						TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+							GLM_SELECTED, (WindowMsgData)window, list->selectPos);
+						break;
+					}
+					break;
+
+				case KEY_PGDN:
+					if (mData2 & KEY_STATE_DOWN)
+					{
+						if (list->m_freeScroll)
+						{
+							list->displayPos += list->displayHeight;
+							Rva00324B39Add(window, 0, TRUE);
+							break;
+						}
+						if (list->selectPos == -1)
+						{
+							list->selectPos = 0;
+							Rva00324AE5Update(window, 0, TRUE);
+						}
+						else
+						{
+							list->selectPos += Rva00323F9C(list) - Rva0032378(list);
+							if (list->selectPos >= list->endPos)
+								list->selectPos = list->endPos - 1;
+							while (1)
+							{
+								Int cellBottom = list->listData[list->selectPos].listHeight;
+								Int cellTop = cellBottom - list->listData[list->selectPos].height;
+								Int displayTop = list->displayPos;
+								Int displayBottom = list->displayPos + list->displayHeight - 1;
+
+								if (cellTop < displayTop)
+								{
+									Rva00324AE5Update(window, -1, TRUE);
+								}
+								else if (cellBottom < displayBottom)
+								{
+									Rva00324AE5Update(window, 0, TRUE);
+									break;
+								}
+								else
+								{
+									Rva00324AE5Update(window, 1, TRUE);
+								}
+							}
+						}
+						list->m_field48 = -1;
+						TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+							GLM_SELECTED, (WindowMsgData)window, list->selectPos);
+						break;
+					}
+					break;
+
+				case KEY_END:
+					if (mData2 & KEY_STATE_DOWN)
+					{
+						if (list->m_freeScroll)
+						{
+							list->displayPos = list->totalHeight - list->displayHeight;
+							Rva00324B39Add(window, 0, TRUE);
+							break;
+						}
+						list->selectPos = list->endPos - 1;
+						while (1)
+						{
+							Int cellBottom = list->listData[list->selectPos].listHeight;
+							Int cellTop = cellBottom - list->listData[list->selectPos].height;
+							Int displayTop = list->displayPos;
+							Int displayBottom = list->displayPos + list->displayHeight - 1;
+
+							if (cellTop < displayTop)
+							{
+								Rva00324AE5Update(window, -1, TRUE);
+							}
+							else if (cellBottom < displayBottom)
+							{
+								Rva00324AE5Update(window, 0, TRUE);
+								break;
+							}
+							else
+							{
+								Rva00324AE5Update(window, 1, TRUE);
+							}
+						}
+						list->m_field48 = -1;
+						TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+							GLM_SELECTED, (WindowMsgData)window, list->selectPos);
+						break;
+					}
+					break;
+
+				case KEY_UP:
+					if (BitTest(mData2, KEY_STATE_DOWN))
+					{
+						if (list->m_freeScroll)
+						{
+							Int delta = -20;
+							if (window->winGetFont())
+								delta = -window->winGetFont()->height;
+							Rva00324B39Add(window, delta, TRUE);
+							break;
+						}
+						if (list->selectPos == -1)
+						{
+							list->selectPos = 0;
+							Rva00324AE5Update(window, 0, TRUE);
+						}
+						else if (list->selectPos > 0)
+						{
+							list->selectPos--;
+
+							while (1)
+							{
+								if (list->listData[list->selectPos].listHeight -
+										list->listData[list->selectPos].height < list->displayPos)
+								{
+									list->displayPos = list->listData[list->selectPos].listHeight + 1;
+									Rva00324AE5Update(window, -1, TRUE);
+								}
+								else if (list->listData[list->selectPos].listHeight >
+										list->displayPos + list->displayHeight)
+								{
+									list->displayPos =
+										list->listData[list->selectPos].listHeight - list->displayHeight;
+									Rva00324AE5Update(window, 1, TRUE);
+								}
+								else
+								{
+									Rva00324AE5Update(window, 0, TRUE);
+									break;
+								}
+							}
+						}
+
+						list->m_field48 = -1;
+						TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+							GLM_SELECTED, (WindowMsgData)window, list->selectPos);
+						break;
+					}
+					break;
+
+				case KEY_HOME:
+					if (mData2 & KEY_STATE_DOWN)
+					{
+						if (list->m_freeScroll)
+						{
+							list->displayPos = 0;
+							Rva00324B39Add(window, 0, TRUE);
+							break;
+						}
+						list->selectPos = 0;
+						while (1)
+						{
+							if (list->listData[list->selectPos].listHeight -
+									list->listData[list->selectPos].height < list->displayPos)
+							{
+								list->displayPos = list->listData[list->selectPos].listHeight + 1;
+								Rva00324AE5Update(window, -1, TRUE);
+							}
+							else if (list->listData[list->selectPos].listHeight >
+									list->displayPos + list->displayHeight)
+							{
+								list->displayPos =
+									list->listData[list->selectPos].listHeight - list->displayHeight;
+								Rva00324AE5Update(window, 1, TRUE);
+							}
+							else
+							{
+								Rva00324AE5Update(window, 0, TRUE);
+								break;
+							}
+						}
+						list->m_field48 = -1;
+						TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+							GLM_SELECTED, (WindowMsgData)window, list->selectPos);
+						break;
+					}
+					break;
+
+				case KEY_PGUP:
+					if (mData2 & KEY_STATE_DOWN)
+					{
+						if (list->m_freeScroll)
+						{
+							list->displayPos -= list->displayHeight;
+							Rva00324B39Add(window, 0, TRUE);
+							break;
+						}
+						if (list->selectPos == -1)
+						{
+							list->selectPos = 0;
+							Rva00324AE5Update(window, 0, TRUE);
+						}
+						else
+						{
+							list->selectPos += Rva0032378(list) - Rva00323F9C(list);
+							if (list->selectPos < 0)
+								list->selectPos = 0;
+							while (1)
+							{
+								Int cellBottom = list->listData[list->selectPos].listHeight;
+								Int cellTop = cellBottom - list->listData[list->selectPos].height;
+								Int displayTop = list->displayPos;
+								Int displayBottom = list->displayPos + list->displayHeight - 1;
+
+								if (cellTop < displayTop)
+								{
+									Rva00324AE5Update(window, -1, TRUE);
+								}
+								else if (cellBottom < displayBottom)
+								{
+									Rva00324AE5Update(window, 0, TRUE);
+									break;
+								}
+								else
+								{
+									Rva00324AE5Update(window, 1, TRUE);
+								}
+							}
+						}
+						list->m_field48 = -1;
+						TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+							GLM_SELECTED, (WindowMsgData)window, list->selectPos);
+						break;
+					}
+					break;
+
+				case KEY_TAB:
+					if (mData2 & KEY_STATE_DOWN)
+					{
+						if (TheKeyboard->getModifierFlags() & KEY_STATE_LSHIFT)
+							TheWindowManager->winPrevTab(window);
+						else
+							TheWindowManager->winNextTab(window);
+					}
+					break;
+
+				default:
+				{
+					Bool foundIt = FALSE;
+					if (BitTest(mData2, KEY_STATE_DOWN))
+					{
+						if (list->m_freeScroll)
+							return MSG_IGNORED;
+						Int position = list->selectPos;
+						for (Int i = 0; i < list->endPos; ++i)
+						{
+							++position;
+							if (position >= list->endPos)
+								position = 0;
+
+							ListEntryCell *cell = NULL;
+							// go through the columns until we find a column with text
+							for (Int j = 0; j < list->columns; ++j)
+							{
+								cell = &list->listData[position].cell[j];
+								if (cell && cell->cellType == LISTBOX_TEXT && cell->data)
+								{
+									break;
+								}
+							}
+							if (!cell || cell->cellType != LISTBOX_TEXT)
+								continue;
+							DisplayString *dString = (DisplayString *)cell->data;
+							if (!dString)
+								continue;
+							for (j = 0; j < Keyboard::MAX_KEY_STATES; ++j)
+							{
+								if (dString->getText().getCharAt(0) ==
+										TheKeyboard->getPrintableKey(mData1, j))
+								{
+									list->selectPos = position;
+									Rva00324B8FScrollTo(window, position, 0);
+									list->m_field48 = -1;
+									TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+										GLM_SELECTED, (WindowMsgData)window, list->selectPos);
+									foundIt = TRUE;
+									break;
+								}
+							}
+							if (foundIt)
+							{
+								((Rva00323E1C *)window)->rva00323E1C();
+								break;
+							}
+						}
+					}
+
+					if (!foundIt)
+						return MSG_IGNORED;
+				}
+			}
+
+			break;
+		}
+
+		case GWM_WHEEL_DOWN:
+		{
+			if (list->m_freeScroll)
+			{
+				Int delta = 20;
+				if (window->winGetFont())
+					delta = window->winGetFont()->height;
+				Rva00324B39Add(window, delta, TRUE);
+				break;
+			}
+			if (list->endPos <= 0)
+				break;
+
+			if (list->listData[list->endPos - 1].listHeight >
+					list->displayHeight + list->displayPos)
+				Rva00324AE5Update(window, 1, TRUE);
+
+			break;
+		}
+
+		case GWM_WHEEL_UP:
+		{
+			// The debug body tests the flag twice (the second read cannot
+			// differ) and leaves the pair without a break, so the case falls
+			// into GWM_LEFT_UP; the optimizer drops the dead edge but the
+			// block layout keeps LEFT_UP right after this case.
+			if (list->m_freeScroll)
+			{
+				if (list->m_freeScroll)
+				{
+					Int delta = -20;
+					if (window->winGetFont())
+						delta = -window->winGetFont()->height;
+					Rva00324B39Add(window, delta, TRUE);
+					break;
+				}
+			}
+			else
+			{
+				if (list->endPos <= 0)
+					break;
+
+				Rva00324AE5Update(window, -1, TRUE);
+				break;
+			}
+		}
+
+		case GWM_LEFT_UP:
+		{
+			if (list->m_noSelect)
+				break;
+			TheWindowManager->winSetFocus(window);
+			Int mousex = mData1 & 0xFFFF;
+			Int mousey = mData1 >> 16;
+			Int x, y, i;
+			Int oldPos = list->selectPos;
+			Bool keepOldPos = FALSE;
+
+			window->winGetScreenPosition(&x, &y);
+
+			// Adjust for title if present
+			if (instData->getTextLength())
+				y += TheWindowManager->winFontHeight(instData->getFont()) + 1;
+
+			list->selectPos = -2;
+
+			for (i = 0; ; i++)
+			{
+				if (i > 0)
+					if (list->listData[i - 1].listHeight >
+							(list->displayPos + list->displayHeight))
+					{
+						list->selectPos = -1;
+						break;
+					}
+
+				if (i == list->endPos)
+				{
+					list->selectPos = -1;
+					break;
+				}
+
+				if (list->listData[i].listHeight > (mousey - y + list->displayPos))
+				{
+					if (list->listData[i].m_disabled)
+						list->selectPos = -1;
+					break;
+				}
+			}
+
+			if ((i == oldPos) && (list->forceSelect == FALSE))
+			{
+				list->selectPos = -1;
+			}
+
+			if ((list->selectPos == -2) && (i < list->endPos))
+			{
+				list->selectPos = i;
+			}
+
+			if ((list->selectPos < 0) && (list->forceSelect))
+			{
+				keepOldPos = TRUE;
+				list->selectPos = oldPos;
+			}
+
+			Int relativeX = mousex - x;
+			list->m_field48 = -1;
+			if (relativeX > 1)
+			{
+				for (Int column = 0; column < list->columns; ++column)
+				{
+					if (list->columnWidth[column] > relativeX)
+					{
+						list->m_field48 = column;
+						break;
+					}
+					relativeX -= list->columnWidth[column];
+				}
+			}
+
+			if (list->doubleClickTime + g_00E01D48 > timeGetTime() &&
+					(i == oldPos || (oldPos == -1 && (i >= 0 && i < list->endPos))))
+			{
+				Int temp;
+				list->doubleClickTime = 0;
+				if (oldPos == -1)
+					temp = i;
+				else
+					temp = oldPos;
+				TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+					GLM_DOUBLE_CLICKED, (WindowMsgData)window, temp);
+			}
+			list->doubleClickTime = timeGetTime();
+			if (!keepOldPos)
+				TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+					GLM_SELECTED, (WindowMsgData)window, list->selectPos);
+
+			break;
+		}
+
+		case GWM_RIGHT_DOWN:
+			((Rva00323E1C *)window)->rva00323E1C();
+			break;
+
+		case GWM_RIGHT_UP:
+		{
+			TheWindowManager->winSetFocus(window);
+			Int pos;
+			Int mousex = mData1 & 0xFFFF;
+			Int mousey = mData1 >> 16;
+			Int x, y, i;
+			RightClickStruct rc;
+
+			window->winGetScreenPosition(&x, &y);
+
+			// Adjust for title if present
+			if (instData->getTextLength())
+				y += TheWindowManager->winFontHeight(instData->getFont()) + 1;
+
+			pos = -2;
+
+			for (i = 0; ; i++)
+			{
+				if (i > 0)
+					if (list->listData[i - 1].listHeight >
+							(list->displayPos + list->displayHeight))
+					{
+						pos = -1;
+						break;
+					}
+
+				if (i == list->endPos)
+				{
+					pos = -1;
+					break;
+				}
+
+				if (list->listData[i].listHeight > (mousey - y + list->displayPos))
+					break;
+			}
+
+			if (pos == -2)
+				pos = i;
+
+			rc.pos = pos;
+			rc.mouseX = mousex;
+			rc.mouseY = mousey;
+			TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+				GLM_RIGHT_CLICKED, (WindowMsgData)window, (WindowMsgData)&rc);
+			break;
+		}
+
+		case GWM_MOUSE_ENTERING:
+			if (BitTest(instData->getStyle(), GWS_MOUSE_TRACK))
+			{
+				BitSet(instData->m_state, WIN_STATE_HILITED);
+				TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+					GBM_MOUSE_ENTERING, (WindowMsgData)window, 0);
+			}
+			break;
+
+		case GWM_MOUSE_LEAVING:
+			if (BitTest(instData->getStyle(), GWS_MOUSE_TRACK))
+			{
+				BitClear(instData->m_state, WIN_STATE_HILITED);
+				TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+					GBM_MOUSE_LEAVING, (WindowMsgData)window, 0);
+			}
+			break;
+
+		case GWM_MOUSE_POS:
+		{
+			GameWindow *lone = TheWindowManager->winGetLoneWindow();
+			if (lone && lone != window &&
+					!((Rva003140AB *)lone)->rva003140AB((Rva003140AB *)window))
+				return MSG_IGNORED;
+			if (list->m_trackMouseOver)
+			{
+				Int column;
+				getListboxEntryBasedOnCoord(window, mData1 & 0xFFFF, mData1 >> 16,
+					list->mouseOverRow, column);
+				TheWindowManager->winSendSystemMsg(window->winGetOwner(), msg,
+					(WindowMsgData)window, mData1);
+			}
+			break;
+		}
+
+		case GWM_LEFT_DRAG:
+			if (BitTest(instData->getStyle(), GWS_MOUSE_TRACK))
+				TheWindowManager->winSendSystemMsg(window->winGetOwner(),
+					GGM_LEFT_DRAG, (WindowMsgData)window, 0);
+			break;
+
+		case GWM_LEFT_DOWN:
+			((Rva00323E1C *)window)->rva00323E1C();
+			return MSG_HANDLED;
+
+		default:
+			return MSG_IGNORED;
+	}
+
+	return MSG_HANDLED;
 }
