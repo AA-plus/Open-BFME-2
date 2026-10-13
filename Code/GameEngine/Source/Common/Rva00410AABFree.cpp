@@ -39,3 +39,19 @@ void __stdcall Rva00410AABFree(void *p)
 	if (p != 0)
 		free(p);
 }
+
+class Rva00410AABHelper
+{
+public:
+	void rva00410AAB(void *p);
+};
+
+// ICF-folded twin of Rva00410AABFree above (same 28 bytes at 0x00410AAB):
+// the member spelling ignores its receiver, so its stack frame matches the
+// stdcall spelling exactly, including the callee-cleaned return.
+void Rva00410AABHelper::rva00410AAB(void *p)
+{
+	((Holder00410AAB *)p)->m_04.~Rva00410688();
+	if (p != 0)
+		free(p);
+}
