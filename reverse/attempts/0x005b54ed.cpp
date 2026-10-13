@@ -2,6 +2,8 @@
 // partial score=0.99 date=2026-10-13
 // ?rva005B54ED@Rva005B566B@@QAEXII_N@Z
 // partial score=0.99 date=2026-10-13
+// ?rva005B54ED@Rva005B566B@@QAEXII_N@Z
+// partial score=0.99 date=2026-10-13
 // Retail 0x005B54ED (382B). True home AptCreateAHeroClass.cpp (rowed sibling,
 // /O1) compiles 381B (-1B). Remaining wall: prologue reserves 1 home, retail
 // 2 (image/text/key/key2 homes permuted; text-direct + sibling idioms applied,

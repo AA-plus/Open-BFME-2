@@ -1,4 +1,6 @@
 // ?triggerAbilityEffect@RousingSpeechUpdate@@UAEXXZ
+// partial score=0.99 date=2026-10-13
+// ?triggerAbilityEffect@RousingSpeechUpdate@@UAEXXZ
 // partial score=0.9826 date=2026-10-12
 // RousingSpeechUpdate primary vtable slot17 identifies the trigger override.
 // WB draft supplies the class/purpose; retail independently establishes data+4,

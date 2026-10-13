@@ -1,4 +1,6 @@
 // ?rva000B51DA@W3DModelDraw@@UAEXI@Z
+// partial score=0.95 date=2026-10-13
+// ?rva000B51DA@W3DModelDraw@@UAEXI@Z
 // partial score=0.9430134237806334 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /Oy- /MD /DNDEBUG /I.
 // Complete nativeB51DA..B52CD RET4,243B. Method name remains unknown.
