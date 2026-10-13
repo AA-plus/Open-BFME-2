@@ -19,6 +19,10 @@
 #include <list>
 #include "Code/Libraries/Include/Lib/Coord3D.h"
 #include "../../../../Include/GameLogic/ContainmentListView.h"
+// bfme link decl-only begin
+namespace _STL { template <> void _STLP_alloc_proxy<_List_node<Rva0036ADF9Element> *, _List_node<Rva0036ADF9Element>, allocator<_List_node<Rva0036ADF9Element> > >::deallocate(_List_node<Rva0036ADF9Element> *, unsigned int); }
+namespace _STL { template <> void allocator<_List_node<Rva0036ADF9Element> >::deallocate(_List_node<Rva0036ADF9Element> *, unsigned int) const; }
+// bfme link decl-only end
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {

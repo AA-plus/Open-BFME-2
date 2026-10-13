@@ -13,7 +13,10 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 #include <vector>
 #include "ascii_string.h"
-
+// bfme link decl-only begin
+namespace _STL { template <> void ** __copy_ptrs<void **, void **>(void **, void **, void **, __true_type); }
+namespace _STL { template <> void ** vector<void *, allocator<void *> >::erase(void **, void **); }
+// bfme link decl-only end
 // vector<void*> begin/end otherwise instantiate per-TU COMDATs (one byte
 // shape per TU flags); explicit dllimport+forceinline specializations take
 // those calls inline so this TU emits no external copies.

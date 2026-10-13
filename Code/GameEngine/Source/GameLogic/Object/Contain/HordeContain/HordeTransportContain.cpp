@@ -96,6 +96,9 @@ void HordeTransportContain::rva004779F9()
 }
 
 #include "../../../../../../Libraries/Include/Lib/Coord3D.h"
+// bfme link decl-only begin
+namespace _STL { template <> void ** __copy_ptrs<void **, void **>(void **, void **, void **, __true_type); }
+// bfme link decl-only end
 class Thing { public: void setPosition(const Coord3D *position); };
 
 // Whole clean BF1 f98983a7 Object/Contain/HordeContainExitPosition.cpp
