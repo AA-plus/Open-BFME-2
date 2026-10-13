@@ -40,7 +40,7 @@ extern Int TheW3DFrameLengthInMsec;
 class ParabolicEase
 {
 public:
-	void setEaseTimes(Real easeInTime, Real easeOutTime, Real duration);
+	void rva0030E51F(Real easeInTime, Real easeOutTime, Real duration);	// setEaseTimes, rowed in ParabolicEase.cpp
 	Real operator()(Real param) const;
 private:
 	Real m_in;
@@ -125,7 +125,7 @@ void W3DView::rotateCamera(Real rotations, Int milliseconds, Bool flag, Real eas
 	fields->m_rcAngle.endAngle = fields->m_angle + 2*PI*rotations;
 	fields->m_startTimeMultiplier = fields->m_timeMultiplier;
 	fields->m_endTimeMultiplier = fields->m_timeMultiplier;
-	fields->m_ease.setEaseTimes(easeIn, easeOut, (Real)milliseconds);
+	fields->m_ease.rva0030E51F(easeIn, easeOut, (Real)milliseconds);
 
 	fields->m_rotateFlag = flag;
 }
@@ -150,7 +150,7 @@ void W3DView::rotateCameraTowardObject(ObjectID id, Int milliseconds, Int holdMi
 	fields->m_targetObjectID = id;
 	fields->m_startTimeMultiplier = fields->m_timeMultiplier;
 	fields->m_endTimeMultiplier = fields->m_timeMultiplier;
-	fields->m_ease.setEaseTimes(easeIn, easeOut, (Real)milliseconds);
+	fields->m_ease.rva0030E51F(easeIn, easeOut, (Real)milliseconds);
 
 	fields->m_rcTarget.pos.z = trailing;
 }
@@ -214,7 +214,7 @@ void W3DView::rotateCameraTowardPosition(const Coord3D *pLoc, Int milliseconds, 
 	fields->m_rcAngle.endAngle = angle;
 	fields->m_startTimeMultiplier = fields->m_timeMultiplier;
 	fields->m_endTimeMultiplier = fields->m_timeMultiplier;
-	fields->m_ease.setEaseTimes(easeIn, easeOut, (Real)milliseconds);
+	fields->m_ease.rva0030E51F(easeIn, easeOut, (Real)milliseconds);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -236,15 +236,15 @@ void W3DView::rotateCameraTowardPosition(const Coord3D *pLoc, Int milliseconds, 
 // path but an already-following start resets the mouse (TheMouse
 // 0x001EDE9C).
 //-------------------------------------------------------------------------------------------------
-extern float g_Va00DE2024;
-extern float g_Va00DE2028;
-extern float g_Va00DE202C;
-extern float g_Va00DE2030;
-extern float g_Va00DE2034;
-extern float g_Va00DE2038;
-extern float g_Va00DE203C;
-extern Coord3D g_Va00DE2050;
-extern Coord3D g_Va00DE205C;
+extern float BfmeFollowSavedB0;
+extern float BfmeFollowSavedAC;
+extern float BfmeFollowSaved70;
+extern float BfmeFollowSaved28;
+extern float BfmeFollowSavedPitch;
+extern float BfmeFollowSavedAngle;
+extern float BfmeFollowSaved6C;
+extern Coord3D BfmeFollowSavedPosition;
+extern Coord3D BfmeFollowSavedOffset23E8;
 
 extern GameLogic *TheGameLogic;
 
@@ -378,16 +378,16 @@ void W3DView::rva0008ADEA(Int unused, ObjectID id, Bool enable, Bool snap)
 			if (objID != view->getFollowedID()) {
 				if (!fields->m_following) {
 					Real saved6c = fields->m_6c;
-					g_Va00DE2050 = fields->m_pos;
-					g_Va00DE203C = saved6c;
-					g_Va00DE2038 = fields->m_3c;
+					BfmeFollowSavedPosition = fields->m_pos;
+					BfmeFollowSaved6C = saved6c;
+					BfmeFollowSavedAngle = fields->m_3c;
 					Real saved50 = fields->m_50;
-					g_Va00DE205C = fields->m_23e8;
-					g_Va00DE2034 = saved50;
-					g_Va00DE2030 = fields->m_angle;
-					g_Va00DE202C = fields->m_zoom;
-					g_Va00DE2028 = fields->m_ac;
-					g_Va00DE2024 = fields->m_b0;
+					BfmeFollowSavedOffset23E8 = fields->m_23e8;
+					BfmeFollowSavedPitch = saved50;
+					BfmeFollowSaved28 = fields->m_angle;
+					BfmeFollowSaved70 = fields->m_zoom;
+					BfmeFollowSavedAC = fields->m_ac;
+					BfmeFollowSavedB0 = fields->m_b0;
 				}
 				fields->m_following = true;
 				view->setFollowedID(obj->m_followID);

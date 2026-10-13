@@ -287,6 +287,20 @@ public:
 extern Int TheW3DFrameLengthInMsec; // default is 33msec/frame == 30fps. but we may change it depending on sys config.
 // Owned here: retail .data starts it at 0 (VA 0x009E204C); configured later.
 Int TheW3DFrameLengthInMsec = 0;
+// The camera an object follow saves and restores (W3DView vftable slots 116 and 119,
+// 0x0008ADEA and 0x00087642; 0x0008780A reads them too). Retail keeps them as internal
+// file statics in this unit's zero-filled data at RVA 0x009E2024..0x009E2067; the
+// original names are unknown, so the names are neutral (after the W3DView fields the
+// restore writes back) and the linkage external for the split consumer units.
+Real BfmeFollowSavedB0;	// 0x009E2024
+Real BfmeFollowSavedAC;	// 0x009E2028
+Real BfmeFollowSaved70;	// 0x009E202C
+Real BfmeFollowSaved28;	// 0x009E2030
+Real BfmeFollowSavedPitch;	// 0x009E2034
+Real BfmeFollowSavedAngle;	// 0x009E2038
+Real BfmeFollowSaved6C;	// 0x009E203C
+Coord3D BfmeFollowSavedPosition;	// 0x009E2050
+Coord3D BfmeFollowSavedOffset23E8;	// 0x009E205C
 static const Int MAX_REQUEST_CACHE_SIZE = 40;	// Any size larger than 10, or examine code below for changes. jkmcd.
 static const Real DRAWABLE_OVERSCAN = 75.0f;
 

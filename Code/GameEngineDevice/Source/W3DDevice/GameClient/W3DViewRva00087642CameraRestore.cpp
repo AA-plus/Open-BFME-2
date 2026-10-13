@@ -20,7 +20,8 @@
 // normAngle it calls.
 //
 // The statics are read and written only by those two bodies and by
-// 0x0008780A; their original names are unknown so they are address-named.
+// 0x0008780A; their original names are unknown, so W3DView.cpp (their owner) names
+// them neutrally after the fields restored here.
 // Retail's file statics are internal so cl moves their loads across the
 // stores to this; the named temporaries below reproduce that order with
 // extern declarations.
@@ -30,15 +31,15 @@ typedef float Real;
 typedef int Int;
 typedef bool Bool;
 
-extern float g_Va00DE2024;
-extern float g_Va00DE2028;
-extern float g_Va00DE202C;
-extern float g_Va00DE2030;
-extern float g_Va00DE2034;
-extern float g_Va00DE2038;
-extern float g_Va00DE203C;
-extern Coord3D g_Va00DE2050;
-extern Coord3D g_Va00DE205C;
+extern float BfmeFollowSavedB0;
+extern float BfmeFollowSavedAC;
+extern float BfmeFollowSaved70;
+extern float BfmeFollowSaved28;
+extern float BfmeFollowSavedPitch;
+extern float BfmeFollowSavedAngle;
+extern float BfmeFollowSaved6C;
+extern Coord3D BfmeFollowSavedPosition;
+extern Coord3D BfmeFollowSavedOffset23E8;
 
 class TerrainLogic
 {
@@ -175,7 +176,7 @@ void W3DView::rva00087642()
 		return;
 	getFollowedID();
 	setFollowedID(0);
-	m_6c = g_Va00DE203C;
+	m_6c = BfmeFollowSaved6C;
 	if (m_2493) {
 		Coord3D pos;
 		pos.x = m_2484;
@@ -183,17 +184,17 @@ void W3DView::rva00087642()
 		pos.z = 0.0f;
 		m_pos = pos;
 	}
-	m_pos.z = g_Va00DE2050.z;
-	m_angle = g_Va00DE2038;
-	Real pitch = g_Va00DE2034;
+	m_pos.z = BfmeFollowSavedPosition.z;
+	m_angle = BfmeFollowSavedAngle;
+	Real pitch = BfmeFollowSavedPitch;
 	m_40 = pitch;
 	m_50 = pitch;
-	Real saved28 = g_Va00DE2030;
-	m_23e8 = g_Va00DE205C;
+	Real saved28 = BfmeFollowSaved28;
+	m_23e8 = BfmeFollowSavedOffset23E8;
 	m_28 = saved28;
-	m_70 = g_Va00DE202C;
-	m_ac = g_Va00DE2028;
-	Real savedB0 = g_Va00DE2024;
+	m_70 = BfmeFollowSaved70;
+	m_ac = BfmeFollowSavedAC;
+	Real savedB0 = BfmeFollowSavedB0;
 	m_2c = m_4c;
 	m_b0 = savedB0;
 
