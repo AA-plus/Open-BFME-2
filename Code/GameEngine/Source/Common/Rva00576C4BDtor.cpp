@@ -76,10 +76,41 @@ public:
 // Native +1C/+40 cleanups call the complete29B owning-pointer destructor.
 // Use its existing real member lifetime instead of an unbound forwarding wrapper.
 typedef Rva000AD6F4 WrapClear00576C4B;
+// Native5CD7DA teardown observes the record's pointer+4 and active byte+C,
+// then invokes slots6 and1 on the resolved subscriber. The concrete member
+// identity remains unknown; this is the complete native cleanup, not a thunk.
+struct ResolveRecordCleanupView
+{
+	void *m_vtable;
+	Rva0042D6AEPtrChaseField *m_4;
+	void *m_8;
+	bool m_C;
+};
+struct Subscribable005CD7DA
+{
+	virtual void f0();
+	virtual void f1(int);
+	virtual void f2();
+	virtual void f3();
+	virtual void f4();
+	virtual void f5();
+	virtual void f6();
+};
 struct Wrap2000576C4B
 {
 	__forceinline Wrap2000576C4B(void *source,Rva005CD1A9 *owner) : m_m(source,owner) {}
-	~Wrap2000576C4B() { m_m.rva005CD7DA(); }
+	__declspec(noinline) ~Wrap2000576C4B()
+	{
+		ResolveRecordCleanupView *record = (ResolveRecordCleanupView *)&m_m;
+		if (record->m_C == 0)
+			return;
+		int v = record->m_4->get();
+		Subscribable005CD7DA *obj = (Subscribable005CD7DA *)v;
+		if (obj == 0)
+			return;
+		obj->f6();
+		obj->f1(0);
+	}
 	Rva005CD7DA m_m;
 };
 class Rva005CD651
