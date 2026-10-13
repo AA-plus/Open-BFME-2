@@ -14,6 +14,21 @@
 // not retail's shared 106-byte out-of-line Float_To_Int_Floor provider.
 #define Float_To_Int_Floor BfmePointGroupInlineFloatFloor
 #include "always.h"
+// Retail links the /O1 copies of the vector constructor iterator (??_H, 0x00001423)
+// and WWMath::Fast_Sin (WWMathO1Inlines.cpp; the scoped wwmath.h view compiles only it
+// for size), and the size-form Vector2 scalar product StreakRendererCtor.cpp emits.
+// The ??_H anchor is unemitted.
+struct BfmeVciAnchorElem { BfmeVciAnchorElem(); };
+#pragma optimize("gsy", on)
+static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
+#pragma optimize("", on)
+#include <math.h>
+#include <float.h>
+#include <assert.h>
+#include "../../../../../reference/shims/bfme_wwmath_fastsin_o1_link/wwmath.h"
+#pragma optimize("s", on)
+#include "vector2.h"
+#pragma optimize("", on)
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(CLASS)
 #define BFME_DYNAMIC_IB_UINT_CTOR_ABI
