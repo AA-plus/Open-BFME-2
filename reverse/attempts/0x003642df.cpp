@@ -1,4 +1,6 @@
 // ?rva003642DF@Path@@QAE?AURva003642DFResult@@M@Z
+// partial score=0.93 date=2026-10-13
+// ?rva003642DF@Path@@QAE?AURva003642DFResult@@M@Z
 // partial score=0.9 date=2026-10-13
 // ?rva003642DF@Path@@QAE?AURva003642DFResult@@M@Z
 // partial score=0.8836897052993261 date=2026-10-10
@@ -162,7 +164,8 @@ Rva003642DFResult Path::rva003642DF(Real distance)
  result.m_node=current;
  if(!result.m_node)result.m_node=(Rva003642DFNode*)m_path;
  float t=fraction;
- while(Rva003642DFNode *next=result.m_node->optimized) {
+ while(result.m_node->optimized) {
+  Rva003642DFNode *next=result.m_node->optimized;
   Rva003642DFNode *node=result.m_node;
   float length=(float)Rva00363CF3Distance(&next->position,&node->position);
   float scale=1.0f;
