@@ -65,23 +65,6 @@ MaterialInfoClass::MaterialInfoClass(void)
 {
 }
 
-// ??0MaterialInfoClass@@ present-unmatched
-MaterialInfoClass::MaterialInfoClass(const MaterialInfoClass & src)
-{
-	for (int mi=0; mi<src.VertexMaterials.Count(); mi++) {
-		VertexMaterialClass * vmat;
-		vmat = src.VertexMaterials[mi]->Clone();
-		VertexMaterials.Add(vmat);
-	}
-	
-	for (int ti=0; ti<src.Textures.Count(); ti++) {
-		TextureClass * tex = src.Textures[ti];
-		tex->Add_Ref();
-		Textures.Add(tex);
-	}
-}
-
-
 // ??1MaterialInfoClass@@UAE@XZ present-unmatched
 MaterialInfoClass::~MaterialInfoClass(void)
 {
