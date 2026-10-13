@@ -12645,7 +12645,6 @@ _Rva00817030,0x00682F30,address read from the REL32 displacement in DirtySock Y4
 _Rva00817100,0x00683000,address read from the REL32 displacement in DirtySock Y4CommTransportLife Rva00816E70 at 0x00682D70; call order matches BFME1 source; body not yet converted
 _Rva00817140,0x00683040,address read from the REL32 displacement in DirtySock Y4CommTransportLife Rva00816E70 at 0x00682D70; call order matches BFME1 source; body not yet converted
 _Rva00817640,0x00683540,address read from the REL32 displacement in DirtySock commudp CommUDPSend at 0x006832C0; BFME1 commudp names this callee; body not yet converted
-_Rva00817B30,0x00683A30,address read from the REL32 displacement in DirtySock Y4CommTransportLife Rva00818CB0 at 0x00684BB0; call order matches BFME1 source; body not yet converted
 _Rva00818500,0x00684400,address read from the REL32 displacements in DirtySock commudp CommUdpSetup at 0x00684300; BFME1 commudp names this callee; body not yet converted
 _Rva00818BF0,0x00684AF0,address from masked placement of the same-TU body; forward reference pending conversion; body not yet converted
 _Rva00818CB0,0x00684BB0,address from masked placement of the same-TU body; forward reference pending conversion; body not yet converted

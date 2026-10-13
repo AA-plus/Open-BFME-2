@@ -145,7 +145,6 @@ struct Rva00816BF0Comm
 struct Rva007FD4E0Socket;
 int Rva007FD3F0( struct Rva007FD4E0Socket *socket );
 
-extern char g_Rva012C4F88Name[];
 // g_Rva0130B188List: matched references place it at VA 0xe0aba0 (retail .data initial value 0).
 struct Rva00816BF0Comm *g_Rva0130B188List = 0;
 
@@ -204,7 +203,7 @@ struct Rva00816BF0Comm *Rva00816BF0( int maxPacket, int recvCount,
 	comm->m_op[ 12 ] = (void *)Rva00818BF0Op;
 	comm->m_op[ 13 ] = (void *)Rva00818D20Op;
 
-	_mbscpy( comm->m_name, g_Rva012C4F88Name );
+	_mbscpy( comm->m_name, "UDP " );
 	Rva007FEA20( comm->m_lock );
 
 	comm->m_recvRecordSize = maxPacket + 0x10;
@@ -611,6 +610,9 @@ int Rva00818D20( struct Rva00816BF0Comm *comm, void *buffer, int size,
  * pump is both installed as one and called directly.  A no-argument definition
  * compiles to identical bytes, since the body only touches globals, but it
  * would misdescribe the interface and no caller could then pass anything.
+ *
+ * The worker is CommUdpProcess (0x00817B30), the tick commudp.cpp defines
+ * and drives with the same loop from its own send path.
  */
 int CommUdpProcess( unsigned int tick );
 
