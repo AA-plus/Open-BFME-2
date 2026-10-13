@@ -224,7 +224,7 @@ public:
 protected:
     void populateUnderConstruction(Object *);
 public:
-    void rva0053E34A(int);
+    void populateOCLTimer(Object *);
 protected:
     void populateMultiSelect();
 public:
@@ -296,7 +296,7 @@ void ControlBar::switchToContext(int context,void *draw)
         break;
     case 10:
         HIDE_PARENTS(true,true,true,true,true,false,true,true);
-        rva0053E34A((int)((ContextDrawableView *)incomingDraw)->getObject());
+        populateOCLTimer(((ContextDrawableView *)incomingDraw)->getObject());
         break;
     case 7:
         HIDE_PARENTS(false,false,true,true,true,true,true,true);

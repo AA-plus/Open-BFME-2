@@ -33,8 +33,8 @@ class Module;
 class OCLUpdate
 {
 public:
-	unsigned int getRemainingFrames();
-	float getCountdownPercent();
+	unsigned int getRemainingFrames() const;
+	float getCountdownPercent() const;
 };
 
 class Object
@@ -67,7 +67,8 @@ class ControlBar
 public:
 	const CommandButton *findCommandButton(const AsciiString &name);
 	void setControlCommand(GameWindow *window, const CommandButton *button);
-	void rva0053E34A(int status);
+	void setPortraitByObject(Object *obj);
+	void populateOCLTimer(Object *creatorObject);
 
 protected:
 	void updateContextOCLTimer();
@@ -150,11 +151,6 @@ public:
 
 extern GameWindowManager *TheWindowManager;
 
-struct Gen_003bcb40
-{
-	void m(int value);
-};
-
 void ControlBar::updateContextOCLTimer()
 {
 	Object *obj = m_currentSelectedDrawable->getObject();
@@ -170,17 +166,21 @@ void ControlBar::updateContextOCLTimer()
 		updateOCLTimerTextDisplay(seconds, percent);
 }
 
-// ?rva0053E34A@ControlBar@@QAEXH@Z
-// Target evidence: arg 0 skips the body; this+0x64 and the strings
+// ?populateOCLTimer@ControlBar@@QAEXPAVObject@@@Z, retail 0x0053E34A.
+// Target evidence: a null argument skips the body; this+0x64 and the strings
 // "Command_Sell" and "ControlBar.wnd:OCLTimerSellButton" feed the rowed
 // findCommandButton, NameKeyGenerator and WindowManager paths. The returned
 // window and button are passed to address-derived helper 0x0031B641; the body
 // sets status 0x00200000, calls updateContextOCLTimer, then forwards the arg
-// to the rowed empty ret-4 body 0x0047A69C. The ControlBar association is
-// structural, from neighboring matched methods and the call relationships.
-void ControlBar::rva0053E34A(int status)
+// to the rowed empty ret-4 body 0x0047A69C (setPortraitByObject's row).
+// switchToContext (0x0031BF64, ControlBarSwitchContext.cpp) passes the
+// selected drawable's object in its OCL-timer context.
+// Donor (Zero Hour ControlBar::populateOCLTimer): the same sequence, sanity
+// check, sell button, WIN_STATUS_USE_OVERLAY_STATES, updateContextOCLTimer,
+// then setPortraitByObject(creatorObject).
+void ControlBar::populateOCLTimer(Object *creatorObject)
 {
-	if (status == 0)
+	if (creatorObject == 0)
 		return;
 	GameWindow *parent = m_contextOCLTimerParent;
 	const CommandButton *button;
@@ -194,7 +194,7 @@ void ControlBar::rva0053E34A(int status)
 	setControlCommand(sellButton, button);
 	sellButton->winSetStatus(0x00200000);
 	updateContextOCLTimer();
-	((Gen_003bcb40 *)this)->m(status);
+	setPortraitByObject(creatorObject);
 }
 
 class GameTextInterface;

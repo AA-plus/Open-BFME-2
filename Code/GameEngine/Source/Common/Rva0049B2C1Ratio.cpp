@@ -1,5 +1,8 @@
 // cl: /MD
-// ?rva0049B2C1@Rva0049B2C1@@QAEMXZ @0x0049B2C1 66B
+// ?getCountdownPercent@OCLUpdate@@QBEMXZ @0x0049B2C1 66B
+// Identity (donor, Zero Hour OCLUpdate::getCountdownPercent): one minus the
+// remaining over the whole countdown; ControlBar::updateContextOCLTimer
+// (0x0053E2B6) calls it on the object's OCLUpdate module.
 // Float progress via TheGameLogic+0x40 and +0x20/+0x24 diffs as unsigned
 // fild plus fadd 2^32 pattern via g_00BC26EC then fdivp then g_Va00BBB8D8
 // minus ratio. Evidence: rowed TheGameLogic plus float globals plus caller
@@ -14,17 +17,17 @@ public:
 extern GameLogic *TheGameLogic;
 extern float g_00BC26EC;
 
-class Rva0049B2C1
+class OCLUpdate
 {
 public:
-	float rva0049B2C1();
+	float getCountdownPercent() const;
 private:
 	char m_pad[0x20];
 	unsigned m_20;
 	unsigned m_24;
 };
 
-float Rva0049B2C1::rva0049B2C1()
+float OCLUpdate::getCountdownPercent() const
 {
 	unsigned a = m_20 - TheGameLogic->m_40;
 	unsigned b = m_20 - m_24;
