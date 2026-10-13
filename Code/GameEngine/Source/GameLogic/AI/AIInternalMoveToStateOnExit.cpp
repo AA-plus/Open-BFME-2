@@ -136,7 +136,14 @@ public:
 			rva0028AE6D();
 		}
 	}
-	void setModelConditionState(unsigned int mc);
+	__forceinline void setModelConditionState(unsigned int mc)
+	{
+		if (m_modelConditionFlags.test(mc) == 0)
+		{
+			m_modelConditionFlags.set(mc);
+			rva0028AE6D();
+		}
+	}
 	void clearAndSetModelConditionState(unsigned int clr, unsigned int set);
 private:
 	unsigned char m_pad000[0x10C];
@@ -290,13 +297,15 @@ void AIInternalMoveToState::onExit(StateExitType)
 	m_4B = false;
 }
 
-void Object::setModelConditionState(unsigned int mc)
+// Retail inlines setModelConditionState into its callers (0x003C0CEE,
+// 0x004596F9), so it is an inline member like clearModelConditionState and
+// other units emit the same 0x001E49B4 copy; an out-of-line definition here
+// was exclusive and collided with theirs (LNK2005). This makes the unit emit
+// the inline copy; not retail code.
+// ?<Object::setModelConditionState anchor> absent-from-retail
+void bfmeAnchorObjectSetModelConditionState(Object *obj, unsigned int mc)
 {
-	if (m_modelConditionFlags.test(mc) == 0)
-	{
-		m_modelConditionFlags.set(mc);
-		rva0028AE6D();
-	}
+	obj->setModelConditionState(mc);
 }
 
 void Object::clearAndSetModelConditionState(unsigned int clr, unsigned int set)

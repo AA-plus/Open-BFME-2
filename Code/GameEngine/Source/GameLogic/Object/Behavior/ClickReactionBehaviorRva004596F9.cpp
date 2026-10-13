@@ -71,6 +71,21 @@ public:
 	void rva00274176(bool flag);
 };
 
+class ModelConditionFlags
+{
+public:
+	unsigned int test(unsigned int bit) const
+	{
+		return m_words[bit >> 5] & (1U << (bit & 0x1f));
+	}
+	void set(unsigned int bit)
+	{
+		m_words[bit >> 5] |= 1U << (bit & 0x1f);
+	}
+
+	unsigned int m_words[19];
+};
+
 class Object
 {
 public:
@@ -78,19 +93,19 @@ public:
 	void rva0028AE6D();
 	bool testCondition(unsigned int bit) const
 	{
-		return testWordBit(m_conditionWords, bit);
+		return testWordBit(m_modelConditionFlags.m_words, bit);
 	}
 	__forceinline void setModelConditionState(unsigned int bit)
 	{
-		if ((m_conditionWords[bit >> 5] & (1U << (bit & 0x1f))) == 0)
+		if (m_modelConditionFlags.test(bit) == 0)
 		{
-			m_conditionWords[bit >> 5] |= 1U << (bit & 0x1f);
+			m_modelConditionFlags.set(bit);
 			rva0028AE6D();
 		}
 	}
 
 	unsigned char m_pad000[0x10C];
-	unsigned int m_conditionWords[19]; // +0x10C
+	ModelConditionFlags m_modelConditionFlags; // +0x10C
 	unsigned char m_pad158[0x258 - 0x158];
 	AIUpdateInterface *m_ai; // +0x258
 };
