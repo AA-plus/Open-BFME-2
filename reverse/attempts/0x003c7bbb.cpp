@@ -1,4 +1,15 @@
 // ?doCreateReinforcements@ScriptActions@@IAEXABVAsciiString@@0_N@Z
+// partial score=0.8998968189074485 date=2026-10-13
+// W7-ASTRA 2026-10-13: fresh baseline1833B nd169/.874142; chain3 ->1830B
+// nd127/.899897 via barriers after iter.cur in the two transport walks and
+// swapping the two solution ObjectID lookups. Native findObjectByID49DC5 and
+// its47B hash lookup2888D4 only read memory, so that swap preserves effects.
+// Frame/scheduling still differs and four REL32 names remain unresolved:
+// PartitionSolver::solve5675B3, destructor3C649E, getter2A9808, pair push539A2E.
+// Visible rowed Object28ACDC (18B exact) and iterator263526 (32B exact) each
+// leave the parent unchanged; actual experiments stay in build/w7astra.
+// WB FFC440 and ZH donor retained; no new identity/layout claim from score.
+// ?doCreateReinforcements@ScriptActions@@IAEXABVAsciiString@@0_N@Z
 // partial score=0.9 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // ScriptActions::doCreateReinforcements, retail 0x003C7BBB (1839 bytes).
@@ -11,6 +22,8 @@
 // for more visibility: DLINK_ITERATOR<Object>::advance 0x263526 and
 // Team::iterate_TeamMemberList 0x263864 (address of the iterator),
 // Thing::setPosition / 0x28ACDC (address of pos), push_back 0x539A2E.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
 
@@ -458,8 +471,8 @@ void ScriptActions::doCreateReinforcements(const AsciiString &team, const AsciiS
 		SolutionVec solution = partition.getSolution();
 		unsigned int count = solution.size();
 		for (unsigned int k = 0; k < count; ++k) {
-			Object *unit = TheGameLogic->findObjectByID((ObjectID)solution[k].a);
 			Object *trans = TheGameLogic->findObjectByID((ObjectID)solution[k].b);
+			Object *unit = TheGameLogic->findObjectByID((ObjectID)solution[k].a);
 			if (!unit || !trans)
 				continue;
 			ContainModuleInterface *contain = trans->getContain();
@@ -473,6 +486,7 @@ void ScriptActions::doCreateReinforcements(const AsciiString &team, const AsciiS
 		if (contain) {
 			for (DLINK_ITERATOR<Object> iter = theTeam->iterate_TeamMemberList(); !iter.done(); iter.advance()) {
 				Object *obj = iter.cur();
+				_ReadWriteBarrier();
 				if (!obj)
 					continue;
 				if (transport && obj->getTemplate()->isEquivalentTo(transport->getTemplate()))
@@ -505,6 +519,7 @@ void ScriptActions::doCreateReinforcements(const AsciiString &team, const AsciiS
 	if (transport) {
 		for (DLINK_ITERATOR<Object> iter = theTeam->iterate_TeamMemberList(); !iter.done(); iter.advance()) {
 			Object *obj = iter.cur();
+			_ReadWriteBarrier();
 			AIUpdateInterface *ai = obj->getAIUpdateInterface();
 			if (obj->getTemplate()->isEquivalentTo(transport->getTemplate())) {
 				if (pInfo->m_transportsExit) {
