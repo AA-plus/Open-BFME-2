@@ -187,10 +187,9 @@ struct Rva0045B936Arg
 	int m_04;
 };
 
-struct BezierPathPoint
-{
-	int a[3];
-};
+// Target path elements are three floats at offsets 0/4/8.
+// Coord3D supplies those accessed fields; the original container type is unknown.
+typedef Coord3D BezierPathPoint;
 
 // The three-pointer layout and 12-byte element stride are target facts;
 // the accessor shape is supported by the BFME 1 path-vector donor.
@@ -408,7 +407,7 @@ void BezierProjectileBehavior::rva0045B9FB(Object *other)
 	Object *obj = m_object;
 	Rva0045B9FBPoint cur(obj->m_position);
 	BezierPathPoint *p = m_path.begin() + (idx - 1 < 0 ? 0 : idx - 1);
-	Rva0045B9FBPoint delta(*(const Coord3D *)p);
+	Rva0045B9FBPoint delta(*p);
 	delta.sub(cur);
 	delta.scale(0.1f);
 	float angle = obj->m_orientation;
