@@ -12,7 +12,7 @@ class PlayerList {public:int getPlayersWithRelationship(int,unsigned,bool);};ext
 struct BfmePointFD;
 class Rva00739830 {public:int rva00739830(const BfmePointFD *,int,unsigned)const;};// Global type follows the existing FXListDoFXPos provider.
 class PartitionManager;extern PartitionManager *TheShroudManager;
-class Rva000421C8 {public:Rva000421C8():next(0){}__declspec(noinline) virtual ~Rva000421C8();virtual bool allow(Object*)=0;virtual int getPlayerMask();Rva000421C8 *next;};
+class Rva000421C8 {public:Rva000421C8():next(0){}virtual ~Rva000421C8();virtual bool allow(Object*)=0;virtual int getPlayerMask();Rva000421C8 *next;};
 class Rva004B0FEB:public Rva000421C8 {public:Rva004B0FEB(EmotionTrackerUpdate*);virtual bool allow(Object*);virtual int getPlayerMask();
  EmotionTrackerUpdate *module;Object *object;Player *player;int enemyCount,allyCount;Object *cached;bool tested;
 };
