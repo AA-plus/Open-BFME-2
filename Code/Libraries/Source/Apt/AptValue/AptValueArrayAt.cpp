@@ -27,9 +27,9 @@ public:
     BfmeAptValue006DCD20 *rva006D8A50(int nIndex);
     void rva006D8AD0(int nIndex, BfmeAptValue006DCD20 *pNewValue);
 };
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078; // 0x00A18078
+class AptValue; extern AptValue *gpUndefinedValue;
 // g_aptUndefinedAtE18078: VA 0xe18078 (zero-filled .bss).
-BfmeAptValue006DCD20 * g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 BfmeAptValue006DCD20 *BfmeAptValue006DCD20::rva006D8A50(int nIndex)
 {
     if (!(nIndex < mnLength)) {
@@ -53,7 +53,7 @@ BfmeAptValue006DCD20 *BfmeAptValue006DCD20::rva006D8A50(int nIndex)
 // global reload (not the edi local) to match retail's mov eax,[global].
 BfmeAptValue006DCD20 *__cdecl Rva006D9B50Pop(BfmeAptValue006DCD20 *pValue)
 {
-    BfmeAptValue006DCD20 *undefined = g_aptUndefinedAtE18078;
+    BfmeAptValue006DCD20 *undefined = (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
     if (static_cast<unsigned char>(pValue->isArray())) {
         BfmeAptValue006DCD20 *arr = pValue->rva006DCFA0();
         int len = arr->mnLength;
@@ -61,11 +61,11 @@ BfmeAptValue006DCD20 *__cdecl Rva006D9B50Pop(BfmeAptValue006DCD20 *pValue)
             int last = len - 1;
             BfmeAptValue006DCD20 *value;
             if (last < 0 || last >= len)
-                value = g_aptUndefinedAtE18078;
+                value = (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
             else {
                 value = arr->rva006D8A50(last);
                 if (!value)
-                    value = g_aptUndefinedAtE18078;
+                    value = (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
             }
             int newLen = arr->mnLength;
             BfmeAptValue006DCD20 **data = arr->m_data;

@@ -36,7 +36,7 @@ public:
 	int mnLength;
 };
 
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 
 bool BfmeAptValue006DCD20::rva006D9780(BfmeAptValue006DCD20 *pContext, EAStringC *pKey, BfmeAptValue006DCD20 *pValue)
 {
@@ -52,7 +52,7 @@ bool BfmeAptValue006DCD20::rva006D9780(BfmeAptValue006DCD20 *pContext, EAStringC
 	if (ok)
 	{
 		int index = atoi(pKey->rva00620090());
-		pContext->rva006DCFA0()->rva006D95E0(index, pValue ? pValue : g_aptUndefinedAtE18078);
+		pContext->rva006DCFA0()->rva006D95E0(index, pValue ? pValue : (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
 		return true;
 	}
 	return false;

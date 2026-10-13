@@ -2700,7 +2700,7 @@ public:
     bool isUndefined() const;
     int toInteger() const;
 };
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 extern AptActionInterpreter g_aptDateInterpreter;
 void __debugbreak();
 #pragma intrinsic(__debugbreak)
@@ -2713,12 +2713,12 @@ AptValue *rva006ff850(AptActionInterpreter *, int nParams)
         if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
     }
     if (nParams == 0)
-        return (AptValue *)g_aptUndefinedAtE18078;
+        return (AptValue *)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
     AptValue *value = g_aptDateInterpreter.stack.At(0);
     BfmeAptValue006DCD20 *typed = (BfmeAptValue006DCD20 *)value;
     if (value->isCIH(false) || value->isObject())
         return AptBoolean::Create(true);
-    if (value != (AptValue *)g_aptUndefinedAtE18078) {
+    if (value != (AptValue *)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue)) {
         if (value->isFloat() || value->isInteger()) {
             if (value->isBoolean())
                 return AptBoolean::Create(((AptBoolean *)typed->rva006DCEA0())->GetBool());
@@ -2749,7 +2749,7 @@ AptValue *callback006FD2D0(AptValue *, int nParams)
         if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
     }
     _ReadWriteBarrier();
-    return (AptValue *)g_aptUndefinedAtE18078;
+    return (AptValue *)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }
 
 // Native256B interval cleanup callback; pool slots34/38/A8 and32B
@@ -2775,7 +2775,7 @@ AptValue *callback006FF400(AptValue *, int)
             --g_bfmeAptPtrAtE176D0->nActiveTimers;
         }
     }
-    return (AptValue*)g_aptUndefinedAtE18078;
+    return (AptValue*)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }
 
 // Native1034B interval registration callback6FEFF0..6FF3FA. The paired
@@ -2796,7 +2796,7 @@ AptValue *callback006FEFF0(AptValue *,int nParams)
             ++g_bfmeAptPtrAtE176D0->nActiveTimers;
             TIMER_CHECK(g_bfmeAptPtrAtE176D0->nActiveTimers<=g_bfmeAptPtrAtE176D0->maxIntervalTimers,"gpPool->nIntervalTimers <= gpPool->GetMaxIntervalTimers()",0x4FD);
             g_bfmeAptPtrAtE176D0->intervalTimers[i].field0=1;
-            g_bfmeAptPtrAtE176D0->intervalTimers[i].context=(AptValue*)g_aptUndefinedAtE18078;
+            g_bfmeAptPtrAtE176D0->intervalTimers[i].context=(AptValue*)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
             if(!callback->isScriptFunction() && !callback->isNativeFunction()) {
                 TIMER_CHECK(callback->isObject() || callback->c_cih(false)->IsSpriteInst(false) || callback->c_cih(false)->IsAnimationInst(false),"pCBValue->isObject() || pCBValue->c_cih()->isSpriteInst() || pCBValue->c_cih()->isAnimationInst()",0x509);
                 AptValue *context=callback;

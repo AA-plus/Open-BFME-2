@@ -6,7 +6,7 @@
 // Callees match the ledger's exact names.
 extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char *, const char *, int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
-extern class BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 void __debugbreak();
 #pragma intrinsic(__debugbreak)
 class AsciiString;
@@ -83,7 +83,7 @@ void AptBasePtrStack::rva00700170(void *a1, void *a2)
 	} else {
 		m_0 = m_0 - 1;
 	}
-	rva006FE7B0(g_aptUndefinedAtE18078);
+	rva006FE7B0((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
 	AptNativeHash *h = v->v3();
 	while (h != 0) {
 		EAStringC *e = (EAStringC *)h->rva0070AA40();

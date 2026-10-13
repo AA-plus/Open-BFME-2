@@ -12,14 +12,15 @@
 // No direct/absolute entry reference was observed. The unsigned-word cdecl
 // spelling represents the observed stack transport, not original argument
 // types, formal count, calling-convention spelling or function identity.
-unsigned int g_rva00A176D4 = 0;
+// 0x00A176D4 is g_bfmeAptFlagAtE176D4, defined in Rva006CC950Mouse.cpp.
+extern int g_bfmeAptFlagAtE176D4;
 unsigned int g_rva00A176D8 = 0;
 unsigned int g_rva00A176DC = 0;
 unsigned int g_rva00A176E4 = 0;
 
 void __cdecl rva006CD030Store(unsigned int first, unsigned int second)
 {
-    g_rva00A176D4 = first;
+    *(unsigned int *)&g_bfmeAptFlagAtE176D4 = first;
     g_rva00A176D8 = first;
     g_rva00A176DC = second;
     g_rva00A176E4 = 0;

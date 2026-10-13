@@ -61,13 +61,13 @@ struct AptActionInterpreter
 };
 
 extern AptActionInterpreter g_aptDateInterpreter;
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 AptValue *Rva008A4EA0MakeFloat(float value);
 
 AptValue *aptMathPow(void *self, int argc)
 {
     if (argc < 2)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     BfmeAptValue006DCD20 *base = g_aptDateInterpreter.stack.At(0);
     BfmeAptValue006DCD20 *exponent = g_aptDateInterpreter.stack.At(1);
     return Rva008A4EA0MakeFloat((float)pow(base->rva006DD460(), exponent->rva006DD460()));
@@ -77,7 +77,7 @@ AptValue *aptMathPow(void *self, int argc)
 AptValue *aptMathSqrt(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)sqrt((double)value));
 }
@@ -86,7 +86,7 @@ AptValue *aptMathSqrt(void *self, int argc)
 AptValue *aptMathTan(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)tan((double)value));
 }
@@ -95,7 +95,7 @@ AptValue *aptMathTan(void *self, int argc)
 AptValue *aptMathSin(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)sin(value));
 }
@@ -104,7 +104,7 @@ AptValue *aptMathSin(void *self, int argc)
 AptValue *aptMathCos(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)cos(value));
 }
@@ -115,7 +115,7 @@ AptValue *aptMathCos(void *self, int argc)
 AptValue *aptMathAtan(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)atan((double)value));
 }
@@ -126,7 +126,7 @@ AptValue *aptMathAtan(void *self, int argc)
 AptValue *aptMathExp(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)exp((double)value));
 }
@@ -137,7 +137,7 @@ AptValue *aptMathExp(void *self, int argc)
 AptValue *aptMathLog(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)log((double)value));
 }
@@ -148,7 +148,7 @@ AptValue *aptMathLog(void *self, int argc)
 AptValue *aptMathAcos(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)acos((double)value));
 }
@@ -159,7 +159,7 @@ AptValue *aptMathAcos(void *self, int argc)
 AptValue *aptMathAsin(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)asin((double)value));
 }
@@ -168,7 +168,7 @@ AptValue *aptMathAsin(void *self, int argc)
 AptValue *aptMathFloor(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)floor((double)value));
 }
@@ -177,7 +177,7 @@ AptValue *aptMathFloor(void *self, int argc)
 AptValue *aptMathCeil(void *self, int argc)
 {
     if (argc < 1)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     return Rva008A4EA0MakeFloat((float)ceil((double)value));
 }
@@ -188,7 +188,7 @@ AptValue *aptMathCeil(void *self, int argc)
 AptValue *aptMathAtan2(void *self, int argc)
 {
     if (argc < 2)
-        return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+        return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     BfmeAptValue006DCD20 *top = g_aptDateInterpreter.stack.At(0);
     BfmeAptValue006DCD20 *second = g_aptDateInterpreter.stack.At(1);
     float x = second->rva006DD460();
@@ -202,7 +202,7 @@ class AptInteger { public: static AptValue *Create(int value); };
 // predicate and separate float factory independently establish this extension.
 AptValue *aptMathAbs(void *self, int argc)
 {
-    if (argc < 1) return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+    if (argc < 1) return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     BfmeAptValue006DCD20 *value = g_aptDateInterpreter.stack.At(0);
     if (static_cast<unsigned char>(value->isInteger()))
         return AptInteger::Create(abs(value->toInteger()));
@@ -214,7 +214,7 @@ AptValue *aptMathAbs(void *self, int argc)
 // this structure; its selection direction is not treated as target proof.
 AptValue *aptMathMin(void *self, int argc)
 {
-    if (argc < 2) return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+    if (argc < 2) return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     BfmeAptValue006DCD20 *first = g_aptDateInterpreter.stack.At(0);
     BfmeAptValue006DCD20 *second = g_aptDateInterpreter.stack.At(1);
     BfmeAptValue006DCD20 *selected = first->rva006DD460() < second->rva006DD460() ? first : second;
@@ -227,7 +227,7 @@ AptValue *aptMathMin(void *self, int argc)
 // comparison establishes the selection direction, including unordered cases.
 AptValue *aptMathMax(void *self, int argc)
 {
-    if (argc < 2) return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+    if (argc < 2) return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     BfmeAptValue006DCD20 *first = g_aptDateInterpreter.stack.At(0);
     BfmeAptValue006DCD20 *second = g_aptDateInterpreter.stack.At(1);
     BfmeAptValue006DCD20 *selected = first->rva006DD460() > second->rva006DD460() ? first : second;
@@ -240,7 +240,7 @@ AptValue *aptMathMax(void *self, int argc)
 // aptMathRound supplies the algorithm; checked stack access is target-specific.
 AptValue *aptMathRound(void *self, int argc)
 {
-    if (argc <= 0) return reinterpret_cast<AptValue *>(g_aptUndefinedAtE18078);
+    if (argc <= 0) return reinterpret_cast<AptValue *>((*(BfmeAptValue006DCD20 * *)&gpUndefinedValue));
     float value = g_aptDateInterpreter.stack.At(0)->rva006DD460();
     if (value > 0.0f) {
         value += 0.5f;
@@ -257,7 +257,7 @@ class AptCIH { public: void rva006E1DD0(void *); };
 struct Rva006FF500Rect { float xMin,yMin,xMax,yMax; };
 AptValue *Rva006FF500(AptValue *self,int nParams)
 {
-    AptValue *undefined=(AptValue*)g_aptUndefinedAtE18078;
+    AptValue *undefined=(AptValue*)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
     if(nParams==1) return undefined;
     if(nParams>1) {
         float x=g_aptDateInterpreter.stack.At(0)->rva006DD460();

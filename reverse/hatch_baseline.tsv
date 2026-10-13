@@ -67,7 +67,6 @@ address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E0
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E06548	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E06550	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E0ABB0	4
-address_global	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	g_Va00E18078	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordSetters.cpp	g_Va00DF6FD0	2
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordSetters.cpp	g_Va00E17724	3
 address_global	Code/GameEngine/Source/Common/ColdGlobalDwordSetters.cpp	g_Va00E177EC	4
@@ -1421,7 +1420,6 @@ address_global	Code/GameEngine/Source/Common/Rva007EB310Destroy.cpp	g_Va0130A588
 address_global	Code/GameEngine/Source/Common/Rva007EB310Destroy.cpp	g_Va0130A58C	2
 address_global	Code/GameEngine/Source/Common/Rva007EB310Destroy.cpp	g_Va0130A58D	2
 address_global	Code/GameEngine/Source/Common/Rva007EB830GlobalRelease.cpp	g_Va0130A5A0	6
-address_global	Code/GameEngine/Source/Common/Rva00898D60GlobalTail.cpp	g_Rva013379BC	3
 address_global	Code/GameEngine/Source/Common/Rva00898D60GlobalTail.cpp	g_Rva01337A20	3
 address_global	Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp	g_Va00E18198	4
 address_global	Code/GameEngine/Source/Common/Rva008ACAC0GlobalReleases.cpp	g_Va00E1819C	4
@@ -1907,8 +1905,6 @@ address_global	Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DRoadBuffer.c
 address_global	Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DShaderManagerRequirements.cpp	g_Va001FDE58	2
 address_global	Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DViewCameraModFinalPitchBfme.cpp	g_Va00DE204C	2
 address_global	Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DViewCameraModFinalZoomBfme.cpp	g_Va00DE204C	2
-address_global	Code/Libraries/Source/Apt/AptDateSetters.cpp	g_Rva013379BC	1
-address_global	Code/Libraries/Source/Apt/AptDateSetters.cpp	g_Va00E18078	1
 address_global	Code/Libraries/Source/Apt/AptObject/AptFactoryConstructors.cpp	g_pRva006E97A0Object	2
 address_global	Code/Libraries/Source/CRT/RtcGetErrorFunc.cpp	g_Va00E1F55C	2
 address_global	Code/Libraries/Source/DirtySock/ProtoSSLParseCertificate.c	g_Rva0112CB48	2
@@ -2328,7 +2324,6 @@ alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00E0
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00E046B4@@3HA	1
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00E046B8@@3PAURva00511730State@@A	1
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00E04904@@3HA	1
-alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00E18078@@3HA	1
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_bfmeThingUCHead@@3PAVBfmeNodeUC@@A	1
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordSetters.cpp	?G009B5FE0@@3HA	1
 alternatename	Code/GameEngine/Source/Common/CommandLineMod.cpp	??1?$StringBase@D@@QAE@XZ	1
@@ -3068,7 +3063,6 @@ alternatename	Code/GameEngine/Source/Common/Rva0087FCD0Overflow.cpp	?releaseBuff
 alternatename	Code/GameEngine/Source/Common/Rva00893E70ContainerDestructor.cpp	??1Rva00892640Item@@QAE@XZ	1
 alternatename	Code/GameEngine/Source/Common/Rva00894D80IncrementPointer.cpp	?bfmeIncVGO@@YAIPAI@Z	1
 alternatename	Code/GameEngine/Source/Common/Rva00895340InlineContainer.cpp	??1Rva00892640Item@@QAE@XZ	1
-alternatename	Code/GameEngine/Source/Common/Rva00898D60GlobalTail.cpp	?g_Rva013379BC@@3PAVRva00898D60Target@@A	1
 alternatename	Code/GameEngine/Source/Common/Rva0090C280Ctor.cpp	??1Rva0013107A@@UAE@XZ	1
 alternatename	Code/GameEngine/Source/Common/Rva0090C280Ctor.cpp	_vtbl_00BD25C8	1
 alternatename	Code/GameEngine/Source/Common/Rva0098477Ctor.cpp	_vtbl_00BC8298	1
@@ -4988,9 +4982,6 @@ alternatename	Code/Libraries/Source/Apt/AptCIHJumpToFrame.cpp	??3AptPseudoDispla
 alternatename	Code/Libraries/Source/Apt/AptCIHJumpToFrame.cpp	?Destroy@AptPseudoDisplayList@@QAEPAV1@H@Z	1
 alternatename	Code/Libraries/Source/Apt/AptCIHJumpToFrame.cpp	?IsSpriteInstBase@AptCIH@@QBE_NXZ	1
 alternatename	Code/Libraries/Source/Apt/AptCIHJumpToFrame.cpp	?queueFrameActions@AptMovie@@QAEXPAVAptCIH@@H@Z	1
-alternatename	Code/Libraries/Source/Apt/AptDateSetters.cpp	?g_Rva013379BC@@3PAVRva00898D60Target@@A	1
-alternatename	Code/Libraries/Source/Apt/AptDateSetters.cpp	?g_Va00E18078@@3HA	1
-alternatename	Code/Libraries/Source/Apt/AptDateSetters.cpp	?gpUndefinedValue@@3PAVAptValue@@A	2
 alternatename	Code/Libraries/Source/Apt/AptDisplayListRemoveClone.cpp	?findInst@AptDisplayListState@@QAEXHPBVEAStringC@@PAPAVAptCIH@@1@Z	1
 alternatename	Code/Libraries/Source/Apt/AptMathClipStack.cpp	?rva006dffa0@@YAXXZ	1
 alternatename	Code/Libraries/Source/Apt/AptMovieFrameControls.cpp	??0AptPseudoCIH_t@@QAE@PAUAptControl@@HHPAUAptCharacter@@@Z	1
@@ -5176,7 +5167,6 @@ alternatename	Code/Libraries/Source/EA/Apt/AptString/EAStringCGlobalCleanup.cpp	
 alternatename	Code/Libraries/Source/EA/Apt/AptString/EAStringCGlobalCleanup.cpp	?g_eaStringAtE18060@@3VEAStringC@@A	1
 alternatename	Code/Libraries/Source/EA/Apt/AptString/EAStringCRefCount.cpp	??1S4Mem005864A0@@QAE@XZ	1
 alternatename	Code/Libraries/Source/EA/Apt/AptString/EAStringCRefCount.cpp	??1S4Mem005879C0@@QAE@XZ	1
-alternatename	Code/Libraries/Source/EA/Apt/Rva006EE1B0Cluster.cpp	?g_rva00e18078@@3PAVAptValue@@A	1
 alternatename	Code/Libraries/Source/EA/Apt/StringPoolInitialize.cpp	?rva006CD4A0@EAStringC@@QBE_NXZ	1
 alternatename	Code/Libraries/Source/STLport/Rva008312E0StringReplace.cpp	?bfmeImplVMI@BfmeStrVMI@@QAEXHHHHPAD@Z	1
 alternatename	Code/Libraries/Source/STLport/Rva008312E0StringReplace.cpp	?bfmeInsertV54@BfmeStrV54@@QAEXPAD0000@Z	1

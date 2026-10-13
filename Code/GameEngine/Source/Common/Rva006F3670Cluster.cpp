@@ -23,7 +23,7 @@ public:
 };
 
 extern void (__cdecl *g_bfmeAptFreeAtE17784)(void *data, int size);
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 
 BfmeAptValue006DCD20 *Rva006F3670(BfmeAptValue006DCD20 *value)
 {
@@ -35,5 +35,5 @@ BfmeAptValue006DCD20 *Rva006F3670(BfmeAptValue006DCD20 *value)
 			g_bfmeAptFreeAtE17784(sound->m_data, sound->m_size);
 		}
 	}
-	return g_aptUndefinedAtE18078;
+	return (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }

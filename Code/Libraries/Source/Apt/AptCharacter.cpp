@@ -29,7 +29,7 @@ public:
 class AptBasePtrStack { public: BfmeAptValue006DCD20 *At(int); private: char bytes[12]; };
 struct AptActionInterpreter { AptBasePtrStack stack; };
 extern AptActionInterpreter g_aptDateInterpreter;
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 class AptCIH { public: void *rva006CFF40() const; void jumpToFrame(int); };
 class BfmeF1034 { public: int bfmeGo1034F(int stringAddress); private: char prefix[8]; void *table; };
 struct FrameCharacter { char pad0[8]; BfmeF1034 labels; };
@@ -44,10 +44,10 @@ struct FrameSprite {
 // character+C labels+8 come from this target and existing getter bodies.
 AptValue *aptHelper008AE3A0(void *entry, int count, int flag)
 {
- if (count < 1) return (AptValue *)g_aptUndefinedAtE18078;
+ if (count < 1) return (AptValue *)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
  BfmeAptValue006DCD20 *frame = g_aptDateInterpreter.stack.At(0);
  BfmeAptValue006DCD20 *value = (BfmeAptValue006DCD20 *)entry;
- if ((unsigned char)value->rva006DCF60(false)->rva006E03A0()) return (AptValue *)g_aptUndefinedAtE18078;
+ if ((unsigned char)value->rva006DCF60(false)->rva006E03A0()) return (AptValue *)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
  int frameIndex;
  if ((unsigned char)frame->isString()) {
   frameIndex = ((FrameSprite *)((AptCIH *)value->rva006DCF60(false))->rva006CFF40())->character->labels.bfmeGo1034F((int)((char *)frame->checkedString() + 8)) + 1;
@@ -55,12 +55,12 @@ AptValue *aptHelper008AE3A0(void *entry, int count, int flag)
   frameIndex = frame->toInteger();
  }
  --frameIndex;
- if (frameIndex < 0) return (AptValue *)g_aptUndefinedAtE18078;
+ if (frameIndex < 0) return (AptValue *)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
  ((AptCIH *)value->rva006DCF60(false))->jumpToFrame(frameIndex);
  FrameSprite *sprite = (FrameSprite *)((AptCIH *)value->rva006DCF60(false))->rva006CFF40();
  FrameFlags *flags = &sprite->flags;
  flags->play = (flag != 0);
- return (AptValue *)g_aptUndefinedAtE18078;
+ return (AptValue *)(*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }
 
 // Evidence: existing BFME2 getters prove CIH and string views, labels lookup

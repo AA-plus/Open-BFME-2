@@ -29,7 +29,7 @@ public:
 	static AptValue *Create(int nValue);
 };
 
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 int Rva006CD220Get();
 
 class AptBasePtrStack
@@ -64,7 +64,7 @@ void AptActionInterpreter::_FunctionAptActionBitAnd(AptActionInterpreter *const 
 	BfmeAptValue006DCD20 *pB = pInterpreter->stack.At(1);
 	BfmeAptValue006DCD20 *pResult;
 	if (!(Rva006CD220Get() == 7 && (pA->isUndefined() || pB->isUndefined())
-		&& (pResult = g_aptUndefinedAtE18078) != 0))
+		&& (pResult = (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue)) != 0))
 	{
 		int nA = pA->toInteger();
 		int nB = pB->toInteger();
@@ -79,7 +79,7 @@ void AptActionInterpreter::_FunctionAptActionBitOr(AptActionInterpreter *const p
 	BfmeAptValue006DCD20 *pB = pInterpreter->stack.At(1);
 	BfmeAptValue006DCD20 *pResult;
 	if (!(Rva006CD220Get() == 7 && (pA->isUndefined() || pB->isUndefined())
-		&& (pResult = g_aptUndefinedAtE18078) != 0))
+		&& (pResult = (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue)) != 0))
 	{
 		int nA = pA->toInteger();
 		int nB = pB->toInteger();
@@ -94,7 +94,7 @@ void AptActionInterpreter::_FunctionAptActionBitXor(AptActionInterpreter *const 
 	BfmeAptValue006DCD20 *pB = pInterpreter->stack.At(1);
 	BfmeAptValue006DCD20 *pResult;
 	if (!(Rva006CD220Get() == 7 && (pA->isUndefined() || pB->isUndefined())
-		&& (pResult = g_aptUndefinedAtE18078) != 0))
+		&& (pResult = (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue)) != 0))
 	{
 		int nA = pA->toInteger();
 		int nB = pB->toInteger();
@@ -109,7 +109,7 @@ void AptActionInterpreter::_FunctionAptActionBitLShift(AptActionInterpreter *con
 	BfmeAptValue006DCD20 *pB = pInterpreter->stack.At(1);
 	BfmeAptValue006DCD20 *pResult;
 	if (!(Rva006CD220Get() == 7 && (pB->isUndefined() || pA->isUndefined())
-		&& (pResult = g_aptUndefinedAtE18078) != 0))
+		&& (pResult = (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue)) != 0))
 	{
 		int nA = pA->toInteger();
 		int nB = pB->toInteger();
@@ -124,7 +124,7 @@ void AptActionInterpreter::_FunctionAptActionBitRShift(AptActionInterpreter *con
 	BfmeAptValue006DCD20 *pB = pInterpreter->stack.At(1);
 	BfmeAptValue006DCD20 *pResult;
 	if (!(Rva006CD220Get() == 7 && (pB->isUndefined() || pA->isUndefined())
-		&& (pResult = g_aptUndefinedAtE18078) != 0))
+		&& (pResult = (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue)) != 0))
 	{
 		int nA = pA->toInteger();
 		int nB = pB->toInteger();

@@ -27,7 +27,7 @@ public:
 	int mnLength;
 };
 
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 
 // ?rva006DA130@@YAPAVBfmeAptValue006DCD20@@PAV1@@Z @0x006DA130 (104 bytes).
 // In-place reversal of the array's element vector: swap element i with
@@ -51,7 +51,7 @@ BfmeAptValue006DCD20 *rva006DA130(BfmeAptValue006DCD20 *pValue)
 		return pValue;
 	}
 
-	return g_aptUndefinedAtE18078;
+	return (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }
 
 // Setter6D95E0 now lives in AptObject/AptArrayConstructor.cpp, where native

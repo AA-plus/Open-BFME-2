@@ -26,7 +26,7 @@ struct AptActionInterpreter
 // sub-object is at offset 0 (matched references already place it there).
 extern AptActionInterpreter g_aptDateInterpreter;
 // g_aptUndefinedAtE18078: the undefined-value singleton at VA 0x00E18078.
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 
 class BfmeAptValue006DCD20
 {
@@ -43,5 +43,5 @@ BfmeAptValue006DCD20 *rva006ec670(BfmeAptValue006DCD20 *pValue, int nParams)
 	int size = p1->toInteger() + 0x4000;
 	g_aptDateInterpreter.stack.rva007092F0(
 		pValue->rva006DCF60(false), 0, pValue->rva006DCF60(false), p0, size, p2);
-	return g_aptUndefinedAtE18078;
+	return (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }

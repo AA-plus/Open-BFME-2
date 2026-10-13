@@ -375,14 +375,14 @@ int Rva006891A0Get(void)
 	return g_Va00E0ABB0;
 }
 
-extern int g_Va00E18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 
 // ?Rva006F5100Get@@YAHXZ @ 0x006f5100 (6B) over 0x00E18078.
 // Follows padding (prev CC), no .rdata vtable slot, no direct callers,
 // no branch sources. Opaque address-derived name.
 int Rva006F5100Get(void)
 {
-	return g_Va00E18078;
+	return (*(int *)&gpUndefinedValue);
 }
 
 extern int g_Va00DF6FD0;
@@ -435,7 +435,6 @@ int g_Va00E06398;
 // ?g_Va00E046B4@@3HA: the global at VA 0xe046b4 is ?g_Va00A046B4@@3PAUGlobalA046B4@@A.
 #pragma comment(linker, "/alternatename:?g_Va00E046B4@@3HA=?g_Va00A046B4@@3PAUGlobalA046B4@@A")
 // ?g_Va00E18078@@3HA: the global at VA 0xe18078 is ?g_aptUndefinedAtE18078@@3PAVBfmeAptValue006DCD20@@A.
-#pragma comment(linker, "/alternatename:?g_Va00E18078@@3HA=?g_aptUndefinedAtE18078@@3PAVBfmeAptValue006DCD20@@A")
 
 // Clean BF1 9cbfb551fe Common/Rva000CBC30Get.cpp semantic donor, normal O1/SSE/G7.
 // Native 00380517..00380523 has its own complete RET boundary and establishes

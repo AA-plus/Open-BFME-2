@@ -41,7 +41,7 @@ public:
 	bool isSpriteInstBase() const;
 };
 
-extern AptValue *g_rva00e18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 
 AptValue *rva006ee1b0(BfmeAptValue006DCD20 *entry)
 {
@@ -57,7 +57,7 @@ AptValue *rva006ee1b0(BfmeAptValue006DCD20 *entry)
 		}
 		value->m_inner->m_flags &= 0xFDFFFFFF;
 	}
-	return g_rva00e18078;
+	return gpUndefinedValue;
 }
 
 AptValue *rva006ee210(BfmeAptValue006DCD20 *entry)
@@ -74,7 +74,7 @@ AptValue *rva006ee210(BfmeAptValue006DCD20 *entry)
 		}
 		value->m_inner->m_flags |= 0x02000000;
 	}
-	return g_rva00e18078;
+	return gpUndefinedValue;
 }
 
 // Two 154-byte Ghidra-unlisted siblings: step the sprite one frame forward
@@ -104,16 +104,15 @@ AptValue *rva006ee270(BfmeAptValue006DCD20 *entry)
 {
 	((AptCIH *)entry->rva006DCF60(false))->jumpToFrame(spriteInst(entry->rva006DCF60(false))->m_frame + 1);
 	spriteInst(entry->rva006DCF60(false))->m_flags &= 0xFDFFFFFF;
-	return g_rva00e18078;
+	return gpUndefinedValue;
 }
 
 AptValue *rva006ee310(BfmeAptValue006DCD20 *entry)
 {
 	((AptCIH *)entry->rva006DCF60(false))->jumpToFrame(spriteInst(entry->rva006DCF60(false))->m_frame - 1);
 	spriteInst(entry->rva006DCF60(false))->m_flags &= 0xFDFFFFFF;
-	return g_rva00e18078;
+	return gpUndefinedValue;
 }
 
 // The global(s) below are defined elsewhere under another name at the same
 // address (the census owner of that DIR32 target); bind this unit's spelling.
-#pragma comment(linker, "/alternatename:?g_rva00e18078@@3PAVAptValue@@A=?g_aptUndefinedAtE18078@@3PAVBfmeAptValue006DCD20@@A")

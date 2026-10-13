@@ -36,7 +36,7 @@ struct NumberStringView
     unsigned char pad[8];
     EAStringC text;
 };
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 float BfmeAptValue006DCD20::rva006DD460()
 {
     if (isUndefined())
@@ -54,7 +54,7 @@ float BfmeAptValue006DCD20::rva006DD460()
     case 6:
         return reinterpret_cast<const Rva00723490FloatField *>(checkedFloat())->get();
     default:
-        return this != g_aptUndefinedAtE18078 ? 1.0f : BfmeZeroRange;
+        return this != (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue) ? 1.0f : BfmeZeroRange;
     }
 }
 // Shared readonly zero at native VA BBAEAC: only declared here (MSVC keeps the memory loads);

@@ -96,7 +96,7 @@ public:
 	int mnLength;
 };
 
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 
 class EAStringC;
 
@@ -153,7 +153,7 @@ BfmeAptValue006DCD20 *rva006D9CE0(BfmeAptValue006DCD20 *pValue, int count)
 		return AptInteger::Create(array->mnLength);
 	}
 
-	return g_aptUndefinedAtE18078;
+	return (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }
 
 // _rva006D9E40Comparator @0x006D9E40 (181 bytes). Ghidra-unlisted qsort
@@ -223,7 +223,7 @@ static __forceinline BfmeAptValue006DCD20 *rva006DA0C0Element(BfmeAptValue006DCD
 		if (element)
 			return element;
 	}
-	return g_aptUndefinedAtE18078;
+	return (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }
 
 extern "C" int __cdecl rva006DA0C0Comparator(const void *a, const void *b)
@@ -284,7 +284,7 @@ BfmeAptValue006DCD20 *rva006D9F00(BfmeAptValue006DCD20 *pValue, int mode)
 		}
 	}
 
-	return g_aptUndefinedAtE18078;
+	return (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }
 
 // ?rva006DA0C0@@YAPAVBfmeAptValue006DCD20@@PAV1@H@Z @0x006DA0C0 (97 bytes).
@@ -310,7 +310,7 @@ BfmeAptValue006DCD20 *rva006DA0C0(BfmeAptValue006DCD20 *pValue, int mode)
 		}
 	}
 
-	return g_aptUndefinedAtE18078;
+	return (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
 }
 
 // ?rva006D94A0@BfmeAptValue006DCD20@@QAEXXZ @0x006D94A0 (92 bytes).

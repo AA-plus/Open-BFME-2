@@ -50,7 +50,7 @@ public:
     int toInteger() const;
 };
 
-extern BfmeAptValue006DCD20 *g_aptUndefinedAtE18078;
+class AptValue; extern AptValue *gpUndefinedValue;
 
 int BfmeAptValue006DCD20::toInteger() const
 {
@@ -78,7 +78,7 @@ int BfmeAptValue006DCD20::toInteger() const
     case 6:
         return static_cast<int>(reinterpret_cast<const Rva00723490FloatField *>(this)->get());
     default:
-        return this != g_aptUndefinedAtE18078;
+        return this != (*(BfmeAptValue006DCD20 * *)&gpUndefinedValue);
     }
 }
 
