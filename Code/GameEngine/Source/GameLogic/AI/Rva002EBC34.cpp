@@ -4,7 +4,7 @@
 // bounded WorldToCell 0x002E7964, returning the out pointer. Identity unproven.
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
-unsigned char __cdecl Rva002EBBFBIsOdd(void *p);
+bool __cdecl Rva002EBBFBIsOdd(void *p);
 class Rva002E7964
 {
 public:

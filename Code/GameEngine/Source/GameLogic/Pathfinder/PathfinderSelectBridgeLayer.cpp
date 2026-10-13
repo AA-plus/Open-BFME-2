@@ -14,7 +14,7 @@
 enum PathfindLayerEnum {UNKNOWN_LAYER=0,GROUND_LAYER=1};
 class Object;
 class Rva0028B984ByteField {public:unsigned char get()const;};
-unsigned char Rva002EBBFBIsOdd(void *);
+bool Rva002EBBFBIsOdd(void *);
 struct Rva002ED236Pos {float x,y,z;Rva002ED236Pos(const Coord3D &p){x=p.x;y=p.y;z=p.z;}~Rva002ED236Pos(){}};
 class Rva0036666B {public:char pad00[0x34];int word34,word38;bool rva0036666B();};
 struct BridgeLayerEntry {Rva0036666B check;int height;};

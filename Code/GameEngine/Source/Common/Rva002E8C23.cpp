@@ -4,7 +4,7 @@
 
 void __cdecl rva002E79A8(int a1, unsigned char a2, int a3, int a4, int a5);
 
-unsigned char __cdecl Rva002EBBFBIsOdd(void *p);
+bool __cdecl Rva002EBBFBIsOdd(void *p);
 
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 
