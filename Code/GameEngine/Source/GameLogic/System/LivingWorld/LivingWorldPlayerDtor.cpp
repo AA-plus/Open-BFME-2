@@ -18,7 +18,7 @@
 #include <string.h>
 extern "C" __declspec(nothrow) void *__cdecl memset(void*,int,unsigned int);
 void Rva00030830FreeAllocation(void*);
-struct BfmeE16{float x,y,z,w;};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 namespace _STL{
 template<>void allocator<BfmeE16>::deallocate(pointer p,size_type)const{Rva00030830FreeAllocation(p);}
 template<>__declspec(nothrow) __declspec(noinline) _Vector_base<BfmeE16,allocator<BfmeE16> >::_Vector_base(const allocator<BfmeE16>&a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0){}

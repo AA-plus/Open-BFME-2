@@ -267,7 +267,7 @@ float LivingWorldAIBuilder::rva0059D1C3(int playerId, int count,
 // types (erase 0x002BF70F on BfmePod16, push_back 0x0059D2A3 on BfmeE16).
 // The push_back instantiates here, ahead of its caller, as in retail.
 struct BfmePod16 { int a[4]; };
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 template <> BfmePod16 *_STL::vector<BfmePod16, _STL::allocator<BfmePod16> >::erase(BfmePod16 *first, BfmePod16 *last);
 
 // 16-byte order: remove flag, region id, template key, object id.

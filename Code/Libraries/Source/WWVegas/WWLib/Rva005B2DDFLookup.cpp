@@ -8,7 +8,7 @@
 // CAH Palantir/HeroPowers) deref the result as a pointer. BfmeE16 is a size
 // stand-in per stlport_vector_e16_o1.cpp; the 16B stride and sar-4 match retail.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 struct Rva005B2E09Cell { int m_00; int m_04; int m_08; };
 struct Rva005B269DRow { void* slots[4]; void rva005B269D(Rva005B2E09Cell* c, int v, unsigned idx); };
 class Rva005B2DDF {

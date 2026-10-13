@@ -33,13 +33,7 @@ template <> void vector<const ModuleData *, allocator<const ModuleData *> >::pus
     const ModuleData *const &);
 }
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva0041E875
 {

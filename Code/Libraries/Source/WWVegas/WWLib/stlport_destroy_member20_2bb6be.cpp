@@ -6,7 +6,7 @@
 // Calls the declared-only dtor pinned to rowed Member44 0x002B6B4C (same vector-destroy body).
 // Unlocks 0x002BBB57 and 0x002BBBC9. Precedent stlport_vector_rva0007bb16_destroy.cpp.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 struct Rva002BB6BE20Rec {
   int m_00;
   int m_04;

@@ -37,7 +37,7 @@ static inline bool operator!=(const _Rb_tree_iterator<_RbVal, _RbLeft> &a,
 { return a._M_node != b._M_node; }
 }
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../../Libraries/Include/Lib/BfmeE16.h"
 namespace _STL { template<> void vector<BfmeE16>::push_back(const BfmeE16 &); }
 
 class Rva002190A1DwordField

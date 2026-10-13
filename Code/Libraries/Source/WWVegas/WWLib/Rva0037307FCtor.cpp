@@ -8,7 +8,7 @@
 // unblocks 0x00373871. BfmeE16 is the 16B size stand-in.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 
 class Rva0037307F
 {

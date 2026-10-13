@@ -17,7 +17,7 @@ template <> __declspec(dllimport) __forceinline
 void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
-struct BfmeE16 { char m_data[16]; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 enum NameKeyType { NK_ZERO = 0 };
 class ModuleFactory
 {

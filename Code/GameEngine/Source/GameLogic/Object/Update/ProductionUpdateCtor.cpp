@@ -52,13 +52,7 @@ void _STLP_alloc_proxy<_List_node<int> *, _List_node<int>, allocator<_List_node<
 }
 }
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

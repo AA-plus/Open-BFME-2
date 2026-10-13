@@ -6,7 +6,7 @@
 // Stores derived vtable 0x00870A54. Layout: base 0x10 bytes, vector 12 bytes.
 // Caller at 0x004E03AC constructs this.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva0025BFE3
 {
 public:

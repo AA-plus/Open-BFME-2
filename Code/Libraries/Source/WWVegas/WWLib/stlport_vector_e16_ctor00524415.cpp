@@ -5,7 +5,7 @@
 // 0x00211E58 with dummy allocator. Unlocks 5 callers including 0x002D2C34.
 // Evidence: lea [ebp-1] push mov esi ecx call then lea ecx [esi+0xc] call.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 namespace _STL {
 template <> void _STLP_alloc_proxy<BfmeE16*, BfmeE16, allocator<BfmeE16> >::deallocate(BfmeE16*, size_t);
 }

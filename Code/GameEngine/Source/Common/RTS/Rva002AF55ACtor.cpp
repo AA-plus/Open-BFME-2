@@ -4,7 +4,7 @@
 // Evidence: and [esi],0 then lea [ebp-1] allocator temp plus ecx esi+8/si+14 calls to rowed Vector_base BfmeE16; mov eax esi ret; neighbours FamilyDeletingDtors /O1 and PlayerRva002AF614 /O1.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva002AF55A
 {

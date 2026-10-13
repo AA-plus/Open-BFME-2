@@ -313,7 +313,7 @@ struct Rva005C847BRecord
     unsigned char bytes[72];
 };
 struct Rva005C84F1Record;
-struct BfmeE16 { unsigned char bytes[16]; };
+#include "../../../Include/Lib/BfmeE16.h"
 namespace _STL {
 // Use the kept destructor provider; this unit does not instantiate another copy.
 template <> class vector<Rva005C847BRecord, allocator<Rva005C847BRecord> >

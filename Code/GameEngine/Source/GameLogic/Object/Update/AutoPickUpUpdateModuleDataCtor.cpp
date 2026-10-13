@@ -23,7 +23,7 @@ extern int g_Va00DBA4E4;
 
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

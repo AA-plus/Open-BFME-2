@@ -9,7 +9,7 @@
 // real member so the implicit destruction and SEH states fall out.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Thing;
 class ModuleData;

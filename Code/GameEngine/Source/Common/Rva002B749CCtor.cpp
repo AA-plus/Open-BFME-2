@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 extern float g_Va00BBB8D8;
 

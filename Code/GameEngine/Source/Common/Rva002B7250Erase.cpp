@@ -5,7 +5,7 @@
 
 class CreateAHeroData;
 struct BfmeE12 { float x, y, z; };
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva002B7250 {
 public:

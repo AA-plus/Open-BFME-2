@@ -14,7 +14,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 struct BfmeFloat4Record00469C61 { float x, y, z, w; };
 struct BfmeE12 { int a[3]; };
 class DataChunkInput

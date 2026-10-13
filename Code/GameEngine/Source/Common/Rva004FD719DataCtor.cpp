@@ -5,13 +5,7 @@
 // Evidence: pin ??0Rva004FD719Data@@QAE@XZ plus caller Rva004FD719Parse new; rowed _Vector_base BfmeE16 0x00211E58; vtable 0x00863558.
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva004FD719Data
 {

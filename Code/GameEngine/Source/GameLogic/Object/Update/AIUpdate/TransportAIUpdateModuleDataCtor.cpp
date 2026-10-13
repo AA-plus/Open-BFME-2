@@ -46,10 +46,7 @@ public:
 
 #include "ascii_string.h"
 
-struct BfmeE16
-{
-	unsigned char m_pad[16];
-};
+#include "../../../../../../Libraries/Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

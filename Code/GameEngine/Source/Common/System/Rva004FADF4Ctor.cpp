@@ -4,7 +4,7 @@
 // Honest Rva ctor with II args ret-8 returning this.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva0059B7CB
 {

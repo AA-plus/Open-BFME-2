@@ -6,7 +6,7 @@
 // Same 33B shape as Rva0022DE6B 0x0022DE6B; owner identity unproven, honest Rva name.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 // Base ctor 0x001B4E63 / dtor 0x001B4E74 by their row names ??0/??1SubsystemInterface (SubsystemInterface.cpp).
 class SubsystemInterface

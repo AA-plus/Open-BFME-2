@@ -25,7 +25,7 @@
 #include "Common/Snapshot.h"
 extern "C" void __cdecl free(void*);
 void Rva00030830FreeAllocation(void*);
-struct BfmeE16{float x,y,z,w;};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 namespace _STL{template<>void allocator<BfmeE16>::deallocate(pointer p,size_type)const{Rva00030830FreeAllocation(p);}template<>__declspec(nothrow) __declspec(noinline) _Vector_base<BfmeE16,allocator<BfmeE16> >::_Vector_base(const allocator<BfmeE16>&a):_M_start(0),_M_finish(0),_M_end_of_storage(a,0){}}
 struct Header:public _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> >{using _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> >::_M_start;using _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> >::_M_finish;__forceinline Header():_STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> >(_STL::allocator<BfmeE16>()){} };
 class Rva00330757Member:public Header{public:__declspec(noinline) Rva00330757Member();__forceinline ~Rva00330757Member(){}int flag;};

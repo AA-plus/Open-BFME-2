@@ -7,7 +7,7 @@
 #include <vector>
 #include "ascii_string.h"
 extern const void *const g_00C394F0[];
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva00330757Member
 {
 public:

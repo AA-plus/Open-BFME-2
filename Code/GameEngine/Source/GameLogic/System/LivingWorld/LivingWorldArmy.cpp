@@ -15,7 +15,7 @@ extern "C" void _ReadWriteBarrier();
 #include "Common/Snapshot.h"
 #include "Coord2D.h"
 void Rva00030830FreeAllocation(void*);
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva003197EEListener;
 namespace _STL {
 template<>void allocator<Rva003197EEListener*>::deallocate(pointer p,size_type)const{if(p) Rva00030830FreeAllocation(p);}

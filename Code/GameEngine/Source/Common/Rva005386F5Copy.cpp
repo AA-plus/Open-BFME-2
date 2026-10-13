@@ -2,7 +2,7 @@
 // ??0Rva005386F5@@QAE@ABV0@@Z @0x005386F5 68B
 // Vector copy ctor via rowed Vector_base E16 size get_allocator AsciiString then Float4Record uninit-copy.
 // Evidence: Vector_base 0x00421D73 row E16; get_allocator 0x0021983A row AsciiString; uninit-copy 0x005385F3 row Float4Record; caller 0x005388C2 holder copy; prev Rva005386B7Swap same layout.
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 struct BfmeFloat4Record00469C61 { float x, y, z, w; };
 class AsciiString;
 namespace _STL {

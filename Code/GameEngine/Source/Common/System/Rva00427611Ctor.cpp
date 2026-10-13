@@ -13,7 +13,7 @@
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 namespace _STL {
 // Declared only so the default construction stays an outlined call that the

@@ -7,7 +7,7 @@
 // callers 0x005ADE1D 0x005AE0AD pass 8 bytes. Honest address name.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva005DCDD9
 {

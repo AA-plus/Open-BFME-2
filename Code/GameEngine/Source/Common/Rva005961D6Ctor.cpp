@@ -9,7 +9,7 @@
 // 0x44 elements abutting (+0x10..+0x53, +0x54..+0x97), vector 12 bytes at +0x98.
 // Caller at 0x004E0363 constructs this; unblocks 0x004E030B.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva0025BFE3
 {
 public:

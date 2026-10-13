@@ -27,7 +27,7 @@ private:
 	friend struct Rva001EC311;
 };
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 
 extern int g_007ED97C;
 

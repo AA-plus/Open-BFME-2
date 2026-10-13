@@ -6,10 +6,7 @@
 
 class ModuleData;
 
-struct BfmeE16
-{
-	float x, y, z, w;
-};
+#include "../../../Include/Lib/BfmeE16.h"
 
 struct BfmePod104
 {

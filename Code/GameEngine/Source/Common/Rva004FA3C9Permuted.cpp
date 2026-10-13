@@ -8,7 +8,7 @@
 // stlport
 #include <vector>
 #include <map>
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 struct BfmePod52 {int a[13];};
 struct Rva004F6986 {char bytes[8];};
 struct Rva004F7D7FRecord {

@@ -10,10 +10,7 @@
 
 typedef unsigned char Bool;
 
-struct BfmeE16
-{
-	float words[4];
-};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 namespace _STL
 {

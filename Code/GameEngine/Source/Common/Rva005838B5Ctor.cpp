@@ -6,7 +6,7 @@
 //   0x00211E58; ret 4 single-arg ctor with vector at +8.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva005D6FCC
 {

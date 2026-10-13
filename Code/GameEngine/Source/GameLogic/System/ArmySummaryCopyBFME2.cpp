@@ -119,7 +119,7 @@ public:
 	void forEach(void (Rva0040D8D6Listener::*notify)(void *, int), void *arg, int value);
 };
 
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva00330757Member {
 public: __declspec(noinline) Rva00330757Member(); ~Rva00330757Member();
 private: _STL::vector<BfmeE16> m_items; unsigned int m_index;

@@ -6,13 +6,7 @@
 #include <vector>
 #include "unicode_string.h"
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class ModuleData;
 

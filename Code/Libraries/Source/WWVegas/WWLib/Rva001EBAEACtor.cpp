@@ -9,13 +9,7 @@
 // int zero at +0xB0 and four zero bytes at +0xC0. Callers at 0x001EBC32 and
 // 0x001ECF48. Element size only (BfmeE16 stand-in); class/param identity
 // unproven so the name is address-derived.
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Include/Lib/BfmeE16.h"
 
 namespace _STL
 {

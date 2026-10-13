@@ -4,7 +4,7 @@
 // dispatch wrappers, not STL vector resize. WB A864F0/A86590 corroborates the
 // LibraryMapCache lifetime and SidesList receiver. Method names unknown.
 #include <vector>
-struct BfmeE16 { float x,y,z,w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

@@ -3,10 +3,7 @@
 // Evidence: unlock lane caller 0x0031A156; sibling copy fill at 0x00318D75 0x00318D9B share Rva00318B5C 0x10 stride and __false_type tag; rowed allocate and pin _M_clear; three pointers at +0/+4/+8
 
 class Rva00319F5A;
-struct BfmeE16
-{
-	char _m[16];
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 struct BfmeVectorRecord00319C84
 {
 	char _m[16];

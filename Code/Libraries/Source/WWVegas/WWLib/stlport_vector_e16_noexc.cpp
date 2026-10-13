@@ -21,5 +21,5 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 template class _STL::vector<BfmeE16, _STL::allocator<BfmeE16 > >;

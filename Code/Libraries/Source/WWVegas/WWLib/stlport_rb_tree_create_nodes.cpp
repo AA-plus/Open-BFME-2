@@ -50,7 +50,7 @@ public:
 struct TreeKey00242F5E { public: unsigned char m_data[8]; };
 struct BfmeRecord001DD3BC { public: unsigned char m_data[8]; };
 struct BfmeStringRecord004071F7 { public: unsigned char m_data[12]; };
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 struct BfmePod16 { int a[4]; };
 struct BfmePod20 { int a[5]; };
 struct BfmePod24 { int a[6]; };

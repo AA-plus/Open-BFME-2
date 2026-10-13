@@ -26,13 +26,7 @@ struct BfmePod8
 	int a[2];
 };
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

@@ -6,10 +6,7 @@
 //   caller 0x0022E356 in FUN_0062e2e4.
 #include <vector>
 
-struct BfmeE16
-{
-	float x, y, z, w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva001B4FB8
 {

@@ -16,7 +16,7 @@ struct GenVec
 };
 // The 16-byte stand-in emits the rowed ICF-folded Vector_base constructor;
 // retail proves the call and three-pointer header, not the element type.
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 typedef _STL::_Vector_base<BfmeE16, _STL::allocator<BfmeE16> > BfmeE16VecBase;
 
 struct Gen_001DB2C0

@@ -10,7 +10,7 @@
 #include <vector>
 
 struct BfmeE12 { float x, y, z; };
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 void Rva00030830FreeAllocation(void *);
 namespace _STL {
  template<> inline void allocator<BfmeE12>::deallocate(BfmeE12 *p,size_type) const { if(p)Rva00030830FreeAllocation(p); }

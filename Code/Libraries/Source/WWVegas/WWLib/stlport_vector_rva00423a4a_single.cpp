@@ -44,7 +44,7 @@ Rva0042499E::Rva0042499E(unsigned int n)
 // ctor and destroys it with LightSubPoint's rowed dtor 0x004247E3, so this is
 // that type's count constructor (the ledger's existing LightSubPoint
 // spelling; the original name is unknown).
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 
 struct LightSubPoint
 {

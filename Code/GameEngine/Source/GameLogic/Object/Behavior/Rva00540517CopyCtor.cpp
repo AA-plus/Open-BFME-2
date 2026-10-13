@@ -12,12 +12,7 @@ struct Rva00540295Element {
 	unsigned char bytes[40];
 };
 
-struct BfmeE16 {
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva00330757Member
 {

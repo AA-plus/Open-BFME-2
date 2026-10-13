@@ -8,7 +8,7 @@
 #include "ascii_string.h"
 
 
-struct BfmeE16 { int a[4]; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva001ED0A9
 {

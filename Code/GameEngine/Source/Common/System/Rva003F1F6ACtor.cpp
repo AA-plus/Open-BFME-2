@@ -8,7 +8,7 @@
 // /O1 /DNDEBUG /MD /GX-; /arch:SSE for xorps/movss float zeroing.
 // Declared-only _Vector_base/erase force CALLs (LivingWorldRegionConnection
 // precedent); reinterpret shares the 12B layout for the voidptr erase.
-struct BfmeE16 { float x; float y; float z; float w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 namespace _STL
 {

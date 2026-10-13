@@ -10,7 +10,7 @@
 // Factory stub order names it; stub size 0x14 confirms the layout.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Thing;
 class ModuleData;

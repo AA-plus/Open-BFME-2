@@ -7,7 +7,7 @@
 //   from src, recomputes pitch (+0x88/+0x8C) and shots (+0x108) from template.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 enum WeaponSlotType
 {

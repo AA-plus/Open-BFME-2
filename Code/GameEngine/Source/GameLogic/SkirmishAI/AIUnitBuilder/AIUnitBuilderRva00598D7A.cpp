@@ -435,7 +435,7 @@ struct BuildableTemplateQuantityView {char pad[0x618];int quantity;};
 // The empty POD vector owns only the12-byte header; selected AsciiString
 // pointers use the independently verified4-byte pointer-storage view.
 // No BfmeE16 or ModuleData element identity is attributed to these names.
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 class ModuleData;
 
 // Identity: WB152DCA0 and native filename/assert399; names from config160,

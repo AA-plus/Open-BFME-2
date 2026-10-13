@@ -3,10 +3,7 @@
 // ??0BfmeItemERF@@QAE@XZ @0x003F609E 42B evidence: leaf pin plus caller resize 0x003F700F plus rowed Vector-base 0x00211E58 twice plus members +0 +4 +0x10
 #include <vector>
 
-struct BfmeE16
-{
-	char m_pad[16];
-};
+#include "../../../Include/Lib/BfmeE16.h"
 
 class BfmeItemERF
 {

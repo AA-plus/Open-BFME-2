@@ -3,13 +3,7 @@
 // ??0Rva00426C4D@@QAE@XZ @0x00426C4D 28B evidence: stores vtable g_00C3C458 at +0 plus vector BfmeE16 at +4 via rowed Vector_base ctor 0x211E58; callers 0x426CEB 0x426D3F prove 0x10-byte class with new 0x10 plus initFromINI wrapper 0x42666E
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva00426C4D
 {

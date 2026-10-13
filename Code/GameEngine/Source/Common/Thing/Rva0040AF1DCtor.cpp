@@ -7,13 +7,7 @@
 // 0x0024C7B3 plus caller 0x0040BC7C.
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva0024C7B3Member
 {

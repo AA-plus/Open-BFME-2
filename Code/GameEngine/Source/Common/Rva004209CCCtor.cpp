@@ -9,7 +9,7 @@
 // Vector_base 0x00211E58; vtable store 0x00C3BD40 at [esi]; caller at 0x0022F233.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

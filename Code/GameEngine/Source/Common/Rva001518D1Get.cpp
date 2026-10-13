@@ -7,7 +7,7 @@
 // row 0x006291F8. Caller 0x001526C1 proves getter shape.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Link
 {

@@ -22,13 +22,7 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva0021294A;
 class LivingWorldManager; extern LivingWorldManager *TheLivingWorldManager;

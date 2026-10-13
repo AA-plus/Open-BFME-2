@@ -40,7 +40,7 @@ struct Rva002CD169RefSlot { unsigned address; __forceinline Rva002CD169RefSlot()
 
 
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class CashHackSpecialPowerModuleData
 {

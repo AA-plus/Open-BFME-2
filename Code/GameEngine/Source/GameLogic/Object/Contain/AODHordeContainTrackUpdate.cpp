@@ -47,13 +47,7 @@ public:
 	virtual ~HordeContain();
 };
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 struct AODDtorElem16
 {

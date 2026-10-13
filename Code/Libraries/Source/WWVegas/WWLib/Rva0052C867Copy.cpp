@@ -1,6 +1,6 @@
 // cl: /MD
 // ??0Rva0052C867@@QAE@ABV0@@Z 0x0052C867 68B evidence: Vector_base 0x00421D73 row E16; get_allocator 0x0021983A row AsciiString; uninit-copy 0x0052C2A4 row Rva004E18A2; caller 0x0052D627; sibling Rva0052C8ABCopy same recipe
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 class Rva004E18A2
 {
 	char _m[0x10];

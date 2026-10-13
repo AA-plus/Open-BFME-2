@@ -10,13 +10,7 @@
 
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva0041E732
 {

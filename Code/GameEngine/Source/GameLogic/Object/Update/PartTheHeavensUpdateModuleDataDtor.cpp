@@ -17,7 +17,7 @@
 #include <vector>
 #include "Common/Snapshot.h"
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 #include "ascii_string.h"
 

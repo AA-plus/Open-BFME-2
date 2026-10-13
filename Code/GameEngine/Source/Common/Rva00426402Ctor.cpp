@@ -3,7 +3,7 @@
 // ??0Rva00426402@@QAE@XZ @0x00426402 59B evidence: baseConstruct 0x001B4E63 plus vtable 0x0083C350 plus 3x Vector_base 0x00211E58 at +0x0C +0x18 +0x24 plus caller 0x0022EF95
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

@@ -5,7 +5,7 @@
 // Evidence: callees rowed member ctor 0x00330757 and vector_base 0x00211E58; callers at 0x0028402E etc.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva00330757Member
 {

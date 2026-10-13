@@ -6,13 +6,7 @@
 #include <map>
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Include/Lib/BfmeE16.h"
 
 class Rva001DE6E1
 {

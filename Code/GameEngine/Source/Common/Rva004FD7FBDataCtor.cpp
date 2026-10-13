@@ -5,13 +5,7 @@
 // Evidence: pin ??0Rva004FD7FBData@@QAE@XZ plus caller Rva004FD7FBParse new plus record size 0x24; rowed _Vector_base BfmeE16 0x00211E58 twice; vtable 0x00863560.
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva004FD7FBData
 {

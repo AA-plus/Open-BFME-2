@@ -18,7 +18,7 @@ typedef bool Bool;
 #include <map>
 #include <list>
 #include "unicode_string.h"
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva00330757Member {public:Rva00330757Member() throw();~Rva00330757Member() throw();char storage[16];};
 class Rva002B2294DwordImmSetter{public:void apply();};class Rva0002B221ADwordImmSetter{public:void apply();};class Rva002B228DDwordImmSetter{public:void apply();};
 class LivingWorldBuildingObserver {public:~LivingWorldBuildingObserver(){((Rva002B2294DwordImmSetter*)this)->apply();}virtual void slot0(void*);virtual void slot1(void*);virtual void slot2(void*);virtual void slot3(void*,void*);};

@@ -6,7 +6,7 @@
 // callers at 0x002892AB and 0x00289B35; unblocks 0x00289ABD.
 #include "ascii_string.h"
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva00288BBA {
 public:
 _STL::vector<BfmeE16> m_vec;

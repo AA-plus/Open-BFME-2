@@ -21,13 +21,7 @@ private:
 	char m_pad[0x80];
 };
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Include/Lib/BfmeE16.h"
 
 class Rva0042526Member
 {

@@ -8,7 +8,7 @@
 // callees all rowed; callers 0x0028415C 0x004E0407.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva00283081
 {

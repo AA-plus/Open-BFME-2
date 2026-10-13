@@ -21,7 +21,7 @@ public:
 	virtual void v1();
 	bool m_04;
 };
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 #include "ascii_string.h"
 
 // Declaration-only: the rowed set<AsciiString> tree members are bound,

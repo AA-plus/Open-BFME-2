@@ -5,7 +5,7 @@
 // 0x00211E58 at +0xC with allocator temp at [esp+7] after baseConstruct
 // 0x001B4E63; dtor 0x002E1F42 frees +0xC then base; prev/next share /O1.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

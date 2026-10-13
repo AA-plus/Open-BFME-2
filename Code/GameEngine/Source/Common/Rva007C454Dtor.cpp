@@ -10,10 +10,7 @@
 // extern "C" free must be treated as possibly throwing.
 #include <vector>
 
-struct BfmeE16
-{
-	float x, y, z, w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class CamBase0
 {

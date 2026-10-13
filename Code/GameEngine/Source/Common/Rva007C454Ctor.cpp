@@ -11,10 +11,7 @@
 // BfmeE16 is the 16-byte POD from stlport_vector_e16_o1.cpp.
 #include <vector>
 
-struct BfmeE16
-{
-	float x, y, z, w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class CamBase0
 {

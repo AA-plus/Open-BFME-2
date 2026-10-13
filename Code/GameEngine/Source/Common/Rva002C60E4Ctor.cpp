@@ -9,7 +9,7 @@
 // Identity: honest-address thiscall ctor with two args.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva00506B1B
 {

@@ -21,7 +21,7 @@ template <> __declspec(dllimport) __forceinline
 bool less<int>::operator()(const int &a, const int &b) const
 { return a < b; }
 }
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../Include/Lib/BfmeE16.h"
 struct Rva004F69D6Record {char bytes[4];~Rva004F69D6Record();};
 struct Rva004F7D7FRecord {char bytes[4];~Rva004F7D7FRecord();};
 typedef _STL::vector<Rva004F69D6Record> CopyProvider;

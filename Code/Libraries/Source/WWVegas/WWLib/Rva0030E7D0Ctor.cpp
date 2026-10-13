@@ -16,13 +16,7 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Include/Lib/BfmeE16.h"
 
 extern float g_Va00BBB8D8;
 

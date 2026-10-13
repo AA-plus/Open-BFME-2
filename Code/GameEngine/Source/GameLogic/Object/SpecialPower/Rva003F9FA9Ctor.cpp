@@ -30,7 +30,7 @@ private:
 	char *m_text;
 };
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva003F9FA9
 {

@@ -4,7 +4,7 @@
 // Indices traverse first halves forward then second halves backward;16-byte
 // elements and the12-byte operator[] provider are independently rowed.
 #include <vector>
-struct BfmeE16 { float x,y,z,w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 typedef _STL::vector<BfmeE16,_STL::allocator<BfmeE16> > Rva0030BEA2Vector;
 namespace _STL { template<> BfmeE16 &Rva0030BEA2Vector::operator[](size_type); }
 struct Rva0030BEA2Point {

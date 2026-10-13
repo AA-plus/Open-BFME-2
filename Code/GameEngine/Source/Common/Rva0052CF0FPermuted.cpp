@@ -7,7 +7,7 @@
 // Evidence: vtable 0x00868780 at +0 (same as dtor 0x0052CFB1 own unit), StringBase copy 0x000365F0 from param, vector_base 0x00211E58 twice, immutable floats2.0/1.0 atC686F4/C686F8, ints 0xb4 0x1d4c 0x9c4, caller 0x0052D0CD in 0x0052D04E.
 #include "ascii_string.h"
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 #include "Common/Snapshot.h"
 struct Rva0052CA2D {

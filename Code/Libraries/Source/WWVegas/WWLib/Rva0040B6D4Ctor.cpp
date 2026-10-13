@@ -4,13 +4,7 @@
 // Evidence: retail zeroes +0 +10 +14 +18 then constructs rowed _Vector_base E16 0x00211E58 at +4 and +1C; caller 0x0040C137 in 0x0040C125; neighbours share E16 vector and ascii shims.
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

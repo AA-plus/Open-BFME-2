@@ -66,7 +66,7 @@ private:
     T *m_ptr;
 };
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 // Vector storage goes back through the game free 0x00030830 (EH states are
 // kept between the four frees, so it is not nothrow).
 void Rva00030830FreeAllocation(void *);

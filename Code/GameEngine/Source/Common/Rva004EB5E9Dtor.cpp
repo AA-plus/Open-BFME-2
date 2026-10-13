@@ -36,7 +36,7 @@ class Rva0023D661 { public: void rva0023D661(int nodeAddress); };
 class GameLogic;
 extern GameLogic *TheGameLogic;
 class Cleanup4EB5E9 { public: virtual void *releaseStorage(unsigned flags) = 0; };
-struct BfmeE16 { float x,y,z,w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva004EB5E9 {
 public: virtual ~Rva004EB5E9();
 private:

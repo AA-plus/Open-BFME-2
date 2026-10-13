@@ -40,7 +40,7 @@
 
 extern "C" const void *const vtbl_00BCF2F8[];
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 typedef _STL::_Vector_base<BfmeE16, _STL::allocator<BfmeE16> > BfmeE16VecBase;
 

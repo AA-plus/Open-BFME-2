@@ -2,7 +2,7 @@
 // stlport
 // ??0Rva0018C54E@@QAE@XZ 0x0018C54E 46B ctor with vector<BfmeE16> at +0x14 plus zeroed header/trailer; callee Vector_base row; caller 0x001735F9 new(0x28)
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 class Rva0018C54E {
 	unsigned char m_00;
 	int m_04;

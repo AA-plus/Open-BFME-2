@@ -9,7 +9,7 @@
 // Rva003F9258Siblings.cpp. Flags copied from Rva003F8ED6Ctor sibling.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva00330757Member
 {

@@ -8,7 +8,7 @@
 // Const/nonconst iterator traits fold to identical code, so no original
 // iterator type or constness is claimed: retain the target address name.
 #include <deque>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 struct Rva00419F7C : _STL::_Deque_iterator_base<BfmeE16> {
     Rva00419F7C &increment();
 };

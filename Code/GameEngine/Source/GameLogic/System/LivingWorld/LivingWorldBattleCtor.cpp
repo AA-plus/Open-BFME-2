@@ -68,7 +68,7 @@ public:
 
 // 16-byte element stand-in whose vector base is the rowed 0x00211E58 body
 // (the slots are 0x1C bytes; this constructor never touches them).
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 struct LivingWorldBattlePlayerView
 {

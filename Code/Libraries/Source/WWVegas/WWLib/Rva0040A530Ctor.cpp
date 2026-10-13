@@ -4,13 +4,7 @@
 // Evidence: unlock lane; calls rowed Vector_base<BfmeE16> 0x00211E58; copies byte to +0xC; callers 0x21FEC3 0x5B582C.
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Include/Lib/BfmeE16.h"
 
 class Rva0040A530
 {

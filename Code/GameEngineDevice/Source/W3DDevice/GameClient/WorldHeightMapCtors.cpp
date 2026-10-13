@@ -30,13 +30,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 #include <vector>
 
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class RefCountClass
 {

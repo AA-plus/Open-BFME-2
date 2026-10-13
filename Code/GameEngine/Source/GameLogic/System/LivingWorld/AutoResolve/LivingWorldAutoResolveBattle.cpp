@@ -25,7 +25,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 struct Rva0040DC56Element {int a[1];};
 typedef _STL::vector<Rva0040DC56Element> EntryVector;
 namespace _STL {template<> EntryVector::~vector();}
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../../../../Libraries/Include/Lib/BfmeE16.h"
 struct Rva004FA1F3Entries {
  unsigned start,finish,capacity;
  Rva004FA1F3Entries() {

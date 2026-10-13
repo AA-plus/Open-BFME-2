@@ -14,7 +14,7 @@
 // compiler's funclets, so no dtor rows are needed. Views copy the member TUs.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva00330757Member
 {

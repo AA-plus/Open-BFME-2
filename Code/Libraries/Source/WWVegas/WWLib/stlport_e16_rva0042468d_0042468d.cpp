@@ -4,7 +4,7 @@
 // Evidence: calls rowed ?resize@BfmeE16Vector@@QAEXIUBfmeE16@@@Z 0x000B0693; forwards ecx; zeroes 16-byte element.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 struct BfmePod16 { int a[4]; };
 
 class BfmeE16Vector : public _STL::vector<BfmeE16, _STL::allocator<BfmeE16> >

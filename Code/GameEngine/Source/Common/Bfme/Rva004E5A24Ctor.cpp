@@ -7,7 +7,7 @@
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 // 0x001B4E63 is the rowed SubsystemInterface ctor; the base construct calls it by that name.
 class SubsystemInterface { public: SubsystemInterface(); };

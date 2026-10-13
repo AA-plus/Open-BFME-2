@@ -35,7 +35,7 @@ private:
 
 // Base ctor is size-independent: use BfmeE16 stand-in to call rowed
 // 0x00211E58. Real element is Rva004E2382 32B per dtor 0x004E3C32.
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 typedef _STL::vector<BfmeE16, _STL::allocator<BfmeE16> > E16Vec;
 

@@ -9,7 +9,7 @@
 // BfmeE16 is the 16B size stand-in from stlport_vector_e16_o1.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 
 class Rva005D6FCC
 {

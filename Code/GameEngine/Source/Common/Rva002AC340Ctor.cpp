@@ -4,7 +4,7 @@
 // Evidence: stores vtable 0x007FDD6C at +0 via gate DIR32; zeroes +4 via AND; calls rowed Vector_base BfmeE16 0x00211E58 for +8; caller at 0x002B1093; pattern matches Rva0022DE6B ctor.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva002AC340
 {

@@ -2,7 +2,7 @@
 // stlport
 // ??0Rva0059E6D3Data@@QAE@XZ @0x0059E574 58B: OwnershipSet record ctor with vtable 0x00871094 plus three BfmeE16 vectors at +4/+10/+1C plus zero at +28.
 // Evidence: rowed Vector_base 0x00211E58 thrice; neighbours 0x0059E511/0x0059E6D3 in Rva003F9258Siblings.cpp; caller 0x0059E6F3; pin ??0Rva0059E6D3Data@@QAE@XZ.
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 namespace _STL {
 template <typename T> class allocator { public: allocator() {} };

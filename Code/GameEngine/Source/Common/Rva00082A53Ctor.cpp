@@ -18,7 +18,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <vector>
 
 struct BfmeE12 { float x, y, z; };
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 struct BfmePod44 { int a[11]; };
 struct BfmeWordVec : _STL::vector<unsigned short, _STL::allocator<unsigned short> >
 {

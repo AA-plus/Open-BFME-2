@@ -7,7 +7,7 @@
 // matches Rva003F1F6A ctor precedent (vector at +4 there, here at +0);
 // callee row stlport_vector_e16_o1.cpp; caller 0x003F259C unclaimed.
 // Honest address class.
-struct BfmeE16 { float x; float y; float z; float w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 namespace _STL
 {

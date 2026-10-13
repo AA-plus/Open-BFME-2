@@ -12,13 +12,7 @@ namespace _STL
 		T &operator[](unsigned i);
 	};
 }
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 // BFME1 9cbfb551 VectorClassResizeNothrowDelete.cpp emits Vector4's
 // ordered equality as a source lead. Native30BCBF..30BD08 is independently

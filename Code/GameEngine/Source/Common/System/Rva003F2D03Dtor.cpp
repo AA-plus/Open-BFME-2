@@ -34,7 +34,7 @@ public:
 	void Release_Ref();
 };
 
-struct BfmeE16{float x,y,z,w;};
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 namespace _STL {
 template<>void allocator<BfmeE16>::deallocate(pointer p,size_type)const{free(p);}
 template<>__declspec(nothrow) _Vector_base<BfmeE16,allocator<BfmeE16> >::_Vector_base(const allocator<BfmeE16>&);

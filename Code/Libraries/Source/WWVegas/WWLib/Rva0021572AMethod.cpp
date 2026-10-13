@@ -7,7 +7,7 @@
 // 0x0002DE78 with table g_00BE574C; prev/next share vector stlport flags.
 #include "ascii_string.h"
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 
 struct FieldParse;
 

@@ -7,7 +7,7 @@
 // dtor at 0x0025BFE3 in FreeMemberDeleters.cpp (which frees +4 via free for
 // trivial 16-byte elements). Unblocks 4 callers that become ready.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva0025BFE3
 {
 public:

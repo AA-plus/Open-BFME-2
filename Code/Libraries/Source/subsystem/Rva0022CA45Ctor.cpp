@@ -8,13 +8,7 @@
 // TU-local minimal _Vector_base view so the member inits emit the outlined
 // 0x00211E58 ctor (the header-inline body folds to zero stores); /GX- keeps
 // the TU frameless. Evidence: vtable VA 0x00BE25B4; address-derived.
-struct BfmeE16
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../Include/Lib/BfmeE16.h"
 
 namespace _STL
 {

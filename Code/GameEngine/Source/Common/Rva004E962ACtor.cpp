@@ -3,7 +3,7 @@
 // ??0Rva004E962A@@QAE@XZ @0x004E962A 45B ctor map<int void*> at +0 plus 2x vector<BfmeE16> at +0xc +0x18 plus bool true at +0x24 callees map-int-ptr vector-e16 caller 0x002A9476
 #include <map>
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva004E962A
 {
 public:

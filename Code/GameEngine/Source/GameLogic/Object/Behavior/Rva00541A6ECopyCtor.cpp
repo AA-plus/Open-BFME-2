@@ -7,12 +7,7 @@
 // copy ctor 0x0054147B for +0x10 then copies dword +0x1c; caller 0x00541F1F.
 #include <vector>
 
-struct BfmeE16 {
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva00330757Member
 {

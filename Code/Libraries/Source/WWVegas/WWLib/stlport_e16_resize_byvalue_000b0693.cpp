@@ -27,7 +27,7 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 struct BfmePod16 { int a[4]; };
 
 class BfmeE16Vector : public _STL::vector<BfmeE16, _STL::allocator<BfmeE16 > >

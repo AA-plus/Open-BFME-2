@@ -63,7 +63,7 @@ Bool AttributeModifierStore::getModifier(Int index, void *key, float *value, con
 // The 0x4C bulk-zero members are trivial. EH state 1 owns the name.
 // These vector views call existing owners for the native three-pointer header;
 // they do not identify the modifier vector's element type or its stride.
-struct BfmeE16 { unsigned char bytes[16]; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 struct Rva00214B22Record;
 namespace _STL
 {

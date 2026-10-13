@@ -12,7 +12,7 @@
 
 #include "Common/Snapshot.h"
 
-struct BfmeE16 { float x; float y; float z; float w; };
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 
 class __declspec(novtable) BFME2NativeNetwork
 {

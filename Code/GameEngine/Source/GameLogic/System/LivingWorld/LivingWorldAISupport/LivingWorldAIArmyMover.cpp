@@ -69,7 +69,7 @@ class LivingWorldAIArmyMover {public:char gap00[0x18];int weightA,weightB,weight
 // invokes the existing cleanup provider; it is not original inheritance.
 struct SetupPlayer;struct SetupArmy;struct SetupRecord52;struct SetupSimulation44;
 class LivingWorldLogic {public:void SetUpAutoResolveBattle(const _STL::vector<SetupPlayer*>*,SetupPlayer*,const _STL::vector<SetupArmy*>*,void*,_STL::vector<SetupRecord52>*,_STL::vector<SetupSimulation44>*);};
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../../../../Libraries/Include/Lib/BfmeE16.h"
 struct Rva002BBB96Element {char gap00[0x18];float weapon,armor,experience;void*science;void*simulation;int side,playerID;~Rva002BBB96Element();};
 typedef _STL::vector<Rva002BBB96Element> BattlePlayers;
 namespace _STL {

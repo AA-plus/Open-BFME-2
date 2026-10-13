@@ -11,7 +11,7 @@
 // STLport vector<BfmeE16> (matched _Vector_base ctor 0x00211E58, released
 // through the bfmealloc free), the EH frame covering that local.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 template <int N> class BitFlags
 {
 public:

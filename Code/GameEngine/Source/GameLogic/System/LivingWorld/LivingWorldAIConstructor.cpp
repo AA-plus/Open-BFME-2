@@ -9,7 +9,7 @@
 // iterator folds are independently verified in LivingWorldAIEmptyMembers.cpp.
 #include <vector>
 #include <deque>
-struct BfmeE16 { char bytes[16]; };
+#include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 struct Rva00063333Element { char bytes[1]; };
 // Existing admitted game allocator30830 alias is a potentially throwing C++
 // call. The plain CRT allocator would erase native teardown EH states and

@@ -17,7 +17,7 @@
 
 #include "ascii_string.h"
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 bool operator<(const AsciiString &, const AsciiString &);
 

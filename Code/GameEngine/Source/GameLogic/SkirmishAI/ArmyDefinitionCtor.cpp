@@ -20,7 +20,7 @@
 #undef _CRTIMP
 #define _CRTIMP
 #include "ascii_string.h"
-struct BfmeE16 {float x,y,z,w;};
+#include "../../../../Libraries/Include/Lib/BfmeE16.h"
 namespace _STL {
 template<class T> class allocator {public:allocator(){}};
 template<class T,class A> class _Vector_base {public:_Vector_base(const A &)throw();T *begin,*end,*capacity;};

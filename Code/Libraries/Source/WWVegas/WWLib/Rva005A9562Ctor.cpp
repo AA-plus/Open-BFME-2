@@ -7,7 +7,7 @@
 // calls Vector_base<BfmeE16> ctor, sets [esi+0x10]=0 and [esi+0x14]=-1, returns
 // this with ret 4. BfmeE16 is the 16B stand-in from stlport_vector_e16_o1.
 #include <vector>
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

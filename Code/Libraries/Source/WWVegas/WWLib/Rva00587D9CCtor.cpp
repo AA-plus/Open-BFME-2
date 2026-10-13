@@ -8,7 +8,7 @@
 // Same recipe as rowed ??0HordeMeleeFormation 0x00586D8E with flag true.
 #include <vector>
 
-struct BfmeE16 { float x, y, z, w; };
+#include "../../../Include/Lib/BfmeE16.h"
 
 class Rva005D6FCC
 {

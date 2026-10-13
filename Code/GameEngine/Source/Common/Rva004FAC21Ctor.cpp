@@ -30,10 +30,7 @@ private:
 	StringBase<char> m_s;
 };
 
-struct BfmeE16
-{
-	float x, y, z, w;
-};
+#include "../../../Libraries/Include/Lib/BfmeE16.h"
 
 class Rva004FAC21 : public Rva004FA830
 {
