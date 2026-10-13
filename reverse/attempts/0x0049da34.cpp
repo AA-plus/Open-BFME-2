@@ -1326,8 +1326,8 @@ Bool ProductionUpdate::queueCreateUnit( const ThingTemplate *unitType, Int reviv
 	else if( (unitType->freeKindWord118() & 0x20000000) == 0 )
 		cost = unitType->rva0033A69A( player, reinterpret_cast<Int>(getObject()), -1 );
 
-	Bool first = TRUE;
 	Int count = five ? 5 : 1;
+	Bool first = TRUE;
 	if (count) do
 	{
 		if (m_productionCount >= getProductionUpdateModuleData()->m_maxQueueEntries)
