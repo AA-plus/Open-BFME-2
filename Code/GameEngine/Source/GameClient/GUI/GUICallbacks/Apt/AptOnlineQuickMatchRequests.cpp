@@ -1,4 +1,4 @@
-// cl: /GX /MD
+// cl: /GX /MD /O1
 //
 // BFME2's online quick match screen Apt callbacks
 // "AptOnline::OnlineQuickMatch::WidenSearch" (0x005BAA2B) and "::Cancel"
@@ -29,6 +29,20 @@ struct Global003EF728V6
 class GameSpyPeerMessageQueueInterface;
 extern GameSpyPeerMessageQueueInterface *TheGameSpyPeerMessageQueue;
 
+class Rva00222A8BTarget
+{
+public:
+	int invoke(void *movie, const char *name, int count, const char *arg, void *a, void *b, void *c, void *d);
+};
+extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
+
+// The owner keeps its Apt movie at +0x274 (as the custom match screen's).
+struct AptOnlineQuickMatchOwnerView
+{
+	unsigned char m_pad000[0x274];
+	void *m_movie;	// +0x274
+};
+
 // Native Cancel forwards through the screen's +0x58 owner to the verified
 // AptOnline::rva00516F08 body. Represent its named nested screen as a nested
 // class so the owner uses that same AptOnline identity; no owner layout is
@@ -43,6 +57,7 @@ public:
     public:
         void WidenSearch(const char *unused);
         void Cancel(const char *unused);
+        int rva005BAECA(int window, int msg, unsigned char key, int flags);
 
     private:
         unsigned char m_pad00[0x58];
@@ -70,4 +85,35 @@ void AptOnline::OnlineQuickMatch::Cancel(const char *unused)
 	((Global003EF728V6 *)TheGameSpyPeerMessageQueue)->f6(&request);
 	m_state = 0;
 	m_owner->rva00516F08();
+}
+
+// Retail 0x005BAECA, 105 bytes (RET 0x10): the screen's keyboard handler
+// (vtable 0x00873E24 slot 4, shaped as the custom match screen's). Escape
+// pressed (message 0x15, key 1, flag 1) while searching (state 1) tells the
+// movie "CallChild" with "EscapeKeyPressed" and cancels the search; in
+// states 2 and 3 the key is swallowed. Anything else is not handled.
+int AptOnline::OnlineQuickMatch::rva005BAECA(int window, int msg, unsigned char key, int flags)
+{
+	if (msg == 0x15)
+	{
+		switch (key)
+		{
+		case 1:
+			if (flags & 1)
+			{
+				if (m_state == 1)
+				{
+					(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->invoke(((AptOnlineQuickMatchOwnerView *)m_owner)->m_movie, "CallChild", 1, "EscapeKeyPressed", 0, 0, 0, 0);
+					Cancel(0);
+					return 1;
+				}
+				if (m_state == 3)
+					return 1;
+				if (m_state == 2)
+					return 1;
+			}
+			break;
+		}
+	}
+	return 0;
 }
