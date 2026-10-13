@@ -1,4 +1,6 @@
 // ?IsValidHordeMemberRegularMovement@Pathfinder@@QAE_NPAVObject@@PBUCoord3D@@11@Z
+// partial score=0.85 date=2026-10-13
+// ?IsValidHordeMemberRegularMovement@Pathfinder@@QAE_NPAVObject@@PBUCoord3D@@11@Z
 // partial score=0.88 date=2026-10-07
 // cl: /O1 /DNDEBUG /MD /arch:SSE /G7 /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport

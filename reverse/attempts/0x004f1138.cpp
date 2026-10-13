@@ -1,4 +1,6 @@
 // ?isSupplySourceAttacked@AIPlayer@@QAE_NXZ
+// partial score=0.93 date=2026-10-13
+// ?isSupplySourceAttacked@AIPlayer@@QAE_NXZ
 // partial score=0.9 date=2026-10-08
 // ?isSupplySourceAttacked@AIPlayer@@QAE_NXZ
 // partial score=0.9 date=2026-10-08
@@ -623,15 +625,11 @@ Bool AIPlayer::isSupplySourceAttacked()
 	UnsignedInt curFrame = TheGameLogic->getFrame();
 	if (curFrame == 0) {
 		m_supplySourceAttackCheckFrame = curFrame + SCAN_RATE;
-		return false; // can't be attacked on first frame.
-	}
+		// can't be attacked on first frame.
+	} else {
 	m_attackedSupplyCenter = INVALID_ID;
-	if (curFrame < m_supplySourceAttackCheckFrame) {
-		return false;
-	}
-	if (m_player->getAttackedFrame() + SCAN_RATE < curFrame) {
-		return false; // haven't been attacked recently.
-	}
+	if (curFrame >= m_supplySourceAttackCheckFrame) {
+	if (m_player->getAttackedFrame() + SCAN_RATE >= curFrame) {
 	m_supplySourceAttackCheckFrame = curFrame + SCAN_RATE;
 
 	// Scan my units.
@@ -667,6 +665,9 @@ Bool AIPlayer::isSupplySourceAttacked()
 				}
 			}
 		}
+	}
+	}
+	}
 	}
 	return false;
 }

@@ -1,4 +1,6 @@
 // ?rva002EDFF9@Pathfinder@@QAE_NPAVObject@@PAUCoord3D@@@Z
+// partial score=0.84 date=2026-10-13
+// ?rva002EDFF9@Pathfinder@@QAE_NPAVObject@@PAUCoord3D@@@Z
 // partial score=0.838991 date=2026-10-09
 // cl: /ICode/Libraries/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE /G7 /ICode/Libraries/Include
 #include "Lib/Coord3D.h"
