@@ -1,3 +1,5 @@
+// ?rva001FAB59@@QAE_NH@Z
+// partial score=0.856 date=2026-10-13
 // ?render@WaterTracksObj@@QAEHPAVDX8VertexBufferClass@@HAAVRenderInfoClass@@@Z
 // partial score=0.762 date=2026-10-09
 // cl: /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /O1 /arch:SSE /G7 /Ireference/shims/bfmestages /Ireference/shims/sweep /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc /Ireference/open-bfme-1/inputs/reference/shims/sweep /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad
@@ -66,7 +68,7 @@ enum CellShroudStatus
 	CELLSHROUD_SHROUDED,
 };
 
-#include "../../../../../GameEngine/Source/Common/PartitionRangeQueryCallView.h"
+#include "Code/GameEngine/Source/Common/PartitionRangeQueryCallView.h"
 class ShroudManager;
 extern ShroudManager *TheShroudManager;
 
