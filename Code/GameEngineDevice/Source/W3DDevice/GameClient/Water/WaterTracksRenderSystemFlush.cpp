@@ -1,4 +1,7 @@
 // cl: /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7 /DNDEBUG /DWIN32 /MD /EHsc /DEXTENDED_STATS /Ireference/shims/bfmestages /Ireference/shims/sweep /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug
+// Link view first: Vector4(x,y,z,w) stays inline without emitting an SSE
+// copy that competes with retail's integer-move owner (0x006D8A30).
+#include "../../../../../../reference/shims/bfme_matrix3d_sse_link/vector4.h"
 // BFME1 9cbfb551fe20 WaterTracksRenderSystem_flush.cpp semantic donor.
 // Native10004D..1001D5 RET4: system slots0/8/C/10/20 and node4/30/B0
 // agree with the independently matched bindTrack/init/update/save units.

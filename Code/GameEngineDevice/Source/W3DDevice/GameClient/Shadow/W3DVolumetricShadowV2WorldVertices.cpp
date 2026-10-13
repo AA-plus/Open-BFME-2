@@ -1,4 +1,7 @@
 // cl: /O1 /DNDEBUG /MD /EHsc /G7 /arch:SSE /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug
+// Link view first: Vector4(x,y,z,w) stays inline without emitting an SSE
+// copy that competes with retail's integer-move owner (0x006D8A30).
+#include "../../../../../../reference/shims/bfme_matrix3d_sse_link/vector4.h"
 
 // BFME1 34f59164 BfmeVolumetricShadowBufferEntryUpdate.cpp semantic lead.
 // Target107961..107A50 full239 RET0; existing matched107E76 calls this

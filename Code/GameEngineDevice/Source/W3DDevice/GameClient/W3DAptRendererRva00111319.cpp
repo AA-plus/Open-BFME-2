@@ -1,4 +1,7 @@
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep
+// Link view first: Vector4(x,y,z,w) stays inline without emitting an SSE
+// copy that competes with retail's integer-move owner (0x006D8A30).
+#include "../../../../../reference/shims/bfme_matrix3d_sse_link/vector4.h"
 // ?bfmeBegin982C@BfmeHub982@@QAEXXZ retail 0x00111319..0x001116E2 (969 bytes).
 // A W3DAptRenderer state restore (placeholder pin name kept): it flushes the
 // pending batch through the pinned W3DAptRenderer 0x00110CFE (as

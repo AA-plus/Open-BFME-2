@@ -1,4 +1,7 @@
 // cl: /O2 /arch:SSE /G7 /DBFME_WWSTRING_CTOR_BUFFER_RELOAD /DBFME_WWSTRING_NATIVE_CSTR_ASSIGN /Ireference/shims/wwstring_teardown/bfme /Ireference/shims/banked_segline /DNDEBUG /MD /EHsc /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/game/Libraries/Source/Compression /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep
+// Link view first: Vector4(x,y,z,w) stays inline without emitting an SSE
+// copy that competes with retail's integer-move owner (0x006D8A30).
+#include "../../../../../reference/shims/bfme_matrix3d_sse_link/vector4.h"
 // ?rva00913AF0@PointGroupClass@@QAEXH_N@Z
 // Full body byte-exact; integration remains blocked, so this is not progress.
 // 2026-10-06 follow-up: bracketing ONLY Set_Shader's definition in
