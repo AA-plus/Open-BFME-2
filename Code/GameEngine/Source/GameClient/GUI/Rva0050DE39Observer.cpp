@@ -185,13 +185,14 @@ public:
 	unsigned char m_00[0x74];
 	Int m_totalUnitsLost;				// +0x74
 };
+// Clear the local masks directly at their use sites. A clear() definition here
+// emits a competing body for the retail-owned BitFlags<116>::clear.
 template <int N>
 class BitFlags
 {
 public:
 	__declspec(dllimport) __forceinline BitFlags() { memset(m_words, 0, sizeof(m_words)); }
 	BitFlags(const BitFlags &other);
-	void clear() { memset(m_words, 0, sizeof(m_words)); }
 	void set(int idx) { m_words[idx >> 5] |= 1u << (idx & 31); }
 	unsigned m_words[7];
 };
@@ -371,16 +372,16 @@ void ControlBar::populateObserverInfoWindow(void)
 	uString.format(L"%d", m_observerLookAtPlayer->countObjects(mask, clearmask));
 	GadgetStaticTextSetText(g_00E046A0, uString);
 	Int numBuildings = 0;
-	mask.clear();
+	memset(mask.m_words, 0, sizeof(mask.m_words));
 	mask.set(KINDOF_SCORE);
 	mask.set(KINDOF_STRUCTURE);
-	clearmask.clear();
+	memset(clearmask.m_words, 0, sizeof(clearmask.m_words));
 	numBuildings = m_observerLookAtPlayer->countObjects(mask, clearmask);
-	mask.clear();
+	memset(mask.m_words, 0, sizeof(mask.m_words));
 	mask.set(KINDOF_SCORE_CREATE);
 	mask.set(KINDOF_STRUCTURE);
 	numBuildings += m_observerLookAtPlayer->countObjects(mask, clearmask);
-	mask.clear();
+	memset(mask.m_words, 0, sizeof(mask.m_words));
 	mask.set(KINDOF_SCORE_DESTROY);
 	mask.set(KINDOF_STRUCTURE);
 	numBuildings += m_observerLookAtPlayer->countObjects(mask, clearmask);
