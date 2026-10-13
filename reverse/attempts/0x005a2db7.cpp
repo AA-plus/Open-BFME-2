@@ -1,5 +1,6 @@
 // ?ProcessGameSpyResponses@AptOnlineCustomMatch@@QAEXXZ
-// partial score=0.91 date=2026-10-11
+// partial score=0.8618820999219237 date=2026-10-13
+// ?ProcessGameSpyResponses@AptOnlineCustomMatch@@QAEXXZ
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
@@ -17,32 +18,17 @@
 // offsets and virtual slots are read from retail (they differ from the
 // WorldBuilder build).
 //
-// BANK STATUS (claude-opus-5-5, 2026-10-11, round 5): compiles with every
-// callee resolved (existing rows/pins only; compareText reuses the existing
-// 0x69B1 pin); 9246 B against 9218; 2365/2603 instructions equal (0.909).
-// Fixed this round: c_str hoisted before name[] zeroing; PN senderName
-// constructed before the find; PN name.isEmpty(); GameSlot getName()
-// accessor folds [slot+0x30] loads; stored room before the rva005A20A7 test
-// (cmp vs test); /D_CRTIMP= + CrtIAT imports so ~wstring frees through _free
-// 0x30830; nonthrowing clanID compare drops two EH state stores.
-// Remaining:
-//  1. MAIN WALL: `this` held in ESI from entry through the dispatch (reload
-//     on the back edge, duplicated entry test); retail spills it to
-//     [ebp-0x20] and gives ESI the CSE'd constant 13 (push 0xd; pop esi; cmp
-//     eax,esi; reused by the KICK GameStarted request type). Source sits on a
-//     tipping point: deleting ANY of the PLAYERLEFT body, its `if (m_state !=
-//     8)` block, its host-left block, the ROOMUTM body or the PLAYERUTM body
-//     flips to retail's exact loop head (jmp to bottom test, push 0xd/pop
-//     esi); deleting single ROOMUTM sub-branches (SL/PN/HWS/PIDS/Pings),
-//     PLAYERJOIN, or dead locals does not. Look for a PLAYERLEFT shape with
-//     fewer `this`/register candidates (e.g. host-left inside the idx>=0
-//     path, or game re-fetched) before anything else.
-//  2. PLAYERLEFT host-left box should tail-merge into the CREATESTAGINGROOM
-//     failure box at its second fetch (retail 0x5A3853); retail also places
-//     the second fetch's `mov eax,[ecx]` after the label push there.
-//  3. Slot swaps that likely cascade from 1: esp-save2 [ebp-0x38] vs
-//     REQ options [ebp-0x34]; PLAYERUTM senderName/KICK locals; SL tail
-//     layout at 0x5A46ED.
+// Round3 bank: guarded do/while is behavior-equivalent to the original decrementing
+// response loop, including its final allowedMessages decrement. It removes entry
+// receiver enregistration and permits the native host-left/common-message tail merge.
+// Current emitted9233B vs retail9218, frame17D0 both; all calls resolve, EH8 offset
+// bytes differ. Normalized instruction alignment .931670 (baseline .921189), byte
+// fitness .861882 (baseline .851255). These differ from the prior bank's score metric.
+// Remaining: wrong entry test (no initial jump to bottom), stack homes1C/48 vs20/5C,
+// missing shared13 register constant, and statement/register scheduling differences.
+// Thirty-plus loop, receiver, compiler and helper variants plus focused mechanical
+// sweep did not close this. Outlined message helper yields .989 structural but adds
+// a call absent in retail and was discarded. No Code edits or new pins.
 
 #include "ascii_string.h"
 #include "unicode_string.h"
@@ -715,7 +701,7 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 	Int allowedMessages = TheGameSpyInfo->getMaxMessagesPerUpdate();
 	PeerResponse resp;
 	Bool sawImportantMessage = FALSE;
-	while (allowedMessages-- && !sawImportantMessage)
+	if(allowedMessages-- && !sawImportantMessage) do
 	{
 		if (!TheGameSpyPeerMessageQueue->getResponse(resp))
 			break;
@@ -1626,5 +1612,5 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 			}
 			break;
 		}
-	}
+	} while(allowedMessages-- && !sawImportantMessage);
 }
