@@ -1,14 +1,11 @@
-// ?rva002E2578@Rva002E2578@@QAEXABV?$vector@W4ScienceType@@V?$allocator@W4ScienceType@@@_STL@@@_STL@@@Z
-// partial score=0.89 date=2026-09-29
-// ?rva002E2578@Rva002E2578@@QAEXABV?$vector@W4ScienceType@@V?$allocator@W4ScienceType@@@_STL@@@_STL@@@Z
-// partial score=0.89 date=2026-09-29
 // cl: /O1 /MD
 // ?rva002E2578@Rva002E2578@@QAEXABV?$vector@W4ScienceType@@V?$allocator@W4ScienceType@@@_STL@@@_STL@@@Z, retail 0x002E2578, 97 bytes.
-// Filter src sciences into vector at +0x1CC keeping only non-grantable ones:
-// erase full range via rowed erase at 0x00532803, then index loop over src
-// testing each with rowed ScienceStore::isScienceGrantable at 0x001FF432
-// through TheScienceStore at 0x00DFE0E0, pushing kept ones via rowed
-// push_back at 0x002E01C6. Evidence: callees rowed; caller 0x0040F323.
+// Filter src sciences into the vector at +0x1CC keeping only the non-grantable ones:
+// erase the whole range via the rowed erase at 0x00532803, then index loop over src
+// testing each with rowed ScienceStore::isScienceGrantable at 0x001FF432 through
+// TheScienceStore, pushing kept ones via the rowed push_back at 0x002E01C6. Caller 0x0040F323.
+// The argument of isScienceGrantable is an equal-arm conditional (late-folded ?:),
+// which reproduces retail's register order for the call (W7-R1 lever).
 enum ScienceType
 {
 	SCIENCE_INVALID = -1
@@ -37,7 +34,7 @@ public:
 	bool isScienceGrantable(ScienceType st) const;
 };
 
-#define TheScienceStore (*(ScienceStore **)0x00DFE0E0)
+extern ScienceStore *TheScienceStore;
 
 class Rva002E2578
 {
@@ -47,13 +44,12 @@ public:
 	void rva002E2578(const _STL::vector<ScienceType> &src);
 };
 
-// ?rva002E2578@Rva002E2578@@QAEXABV?$vector@W4ScienceType@@V?$allocator@W4ScienceType@@@_STL@@@_STL@@@Z present-unmatched
 void Rva002E2578::rva002E2578(const _STL::vector<ScienceType> &src)
 {
 	_STL::vector<ScienceType> *dst = &m_vec1CC;
 	dst->erase(dst->m_start, dst->m_finish);
 	for (unsigned int i = 0; i < (unsigned int)(src.m_finish - src.m_start); ++i) {
-		if (!TheScienceStore->isScienceGrantable(src.m_start[i]))
+		if (!TheScienceStore->isScienceGrantable( (dst ? src.m_start[i] : src.m_start[i])))
 			dst->push_back(src.m_start[i]);
 	}
 }
