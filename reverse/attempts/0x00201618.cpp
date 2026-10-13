@@ -1,4 +1,6 @@
 // ??0WeatherSetting@@QAE@XZ
+// partial score=0.9908623729322181 date=2026-10-13
+// ??0WeatherSetting@@QAE@XZ
 // partial score=0.99 date=2026-10-13
 // ??0WeatherSetting@@QAE@XZ
 // partial score=0.99 date=2026-10-13
@@ -108,8 +110,10 @@ WeatherSetting::WeatherSetting() : Rva00200D38(AsciiString("Weather")), m_58(0),
 	m_snowTexture = "EXSnowFlake.tga";
 	m_snowFrequencyScaleX = 0.0533f;
 	m_snowFrequencyScaleY = 0.0275f;
+	{
 	m_snowAmplitude = 5.0f;
 	m_snowPointSize = 1.0f;
+	}
 	m_snowQuadSize = 0.5f;
 	m_snowBoxDimensions = 200.0f;
 	m_snowMaxPointSize = 64.0f;
@@ -135,12 +139,12 @@ WeatherSetting::WeatherSetting() : Rva00200D38(AsciiString("Weather")), m_58(0),
 	float e20 = 20.0f;
 	p7C->y = 100.0f;
 	Coord2D *p84 = &m_84;
-	p84->x = 50.0f;
 	p84->y = e20;
+	p84->x = 50.0f;
 	m_8C.setFromInt(0x886655);
 	m_9C.x = 300.0f;
-	m_9C.y = 1500.0f;
 	m_98 = false;
+	m_9C.y = 1500.0f;
 	setWeatherPair(m_A4, 660.0f, 660.0f);
 	setWeatherPair(m_AC, -0.012f, -0.018f);
 }
