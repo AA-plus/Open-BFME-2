@@ -1,6 +1,6 @@
 // ?rva00273DCF@Drawable@@QAEXXZ
 // partial score=0.85 date=2026-10-13
-// cl: /DNDEBUG /MD /EHsc /I. /ICode/Libraries/Include
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /I. /ICode/Libraries/Include
 #include "Lib/Coord3D.h"
 #include "Lib/Coord2D.h"
 #include "Lib/ICoord2D.h"
