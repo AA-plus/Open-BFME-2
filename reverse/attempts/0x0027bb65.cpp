@@ -1,4 +1,6 @@
 // ?applyPhysicsXform@Drawable@@QAEXPAVMatrix3D@@@Z
+// partial score=0.9977 date=2026-10-13
+// ?applyPhysicsXform@Drawable@@QAEXPAVMatrix3D@@@Z
 // partial score=0.9977 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
 // seat13 2026-10-11: unchanged best 873/875; residue row1 sum loads [esi+0x14] then [esi+0x10] (retail 0x10 then 0x14).
