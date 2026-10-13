@@ -310,11 +310,7 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 	case 23:
 	case 24: // left click / double click: place the anchored building
 	{
-		// Separate pointer storage preserves the native build/builder spill homes
-		// with the complete canonical GameLogic declaration. Original syntax unknown.
-		const ThingTemplate *pendingBuildStorage[1];
-		const ThingTemplate *&pendingBuild = pendingBuildStorage[0];
-		pendingBuild = TheInGameUI->getPendingPlaceType();
+		const ThingTemplate *pendingBuild = TheInGameUI->getPendingPlaceType();
 
 		// ... and also remove any radius cursor that is active.
 		TheInGameUI->setRadiusCursorNone();
