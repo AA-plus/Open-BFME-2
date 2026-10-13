@@ -58,7 +58,7 @@ extern Rva002A8F24 *g_00DFEEF8;
 class Rva002C589B
 {
 public:
-	float rva002C5AE6();
+	float getEnemyThreat();
 };
 
 class AITeamBuilder
@@ -75,7 +75,7 @@ int AITeamBuilder::doesTeamMeetThreat(Team *team)
 	void *found = g_00DFEEF8->rva002A8B73((void *)m_14, team->m_proto30->m_2C4);
 	float vmax = 0.0f;
 	if (found != 0)
-		vmax = ((Rva002C589B *)found)->rva002C5AE6();
+		vmax = ((Rva002C589B *)found)->getEnemyThreat();
 	float sum = 0.0f;
 	for (DLINK_ITERATOR<Object> iter = team->iterate_TeamMemberList(); !iter.done(); ((DLINK_ITERATOR<Object> &)iter).advance())
 	{

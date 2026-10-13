@@ -33,7 +33,7 @@ public:
 class Rva005E4DAF
 {
 public:
-	void rva005E4DAF(int v);
+	void Deselect(int v);
 };
 class Rva005E4E1B
 {
@@ -54,7 +54,7 @@ void Rva005E4E1B::rva005E4E1B()
 	do {
 		int k = it->m_key10;
 		if (m_14->rva005F2278(k))
-			((Rva005E4DAF *)this)->rva005E4DAF(k);
+			((Rva005E4DAF *)this)->Deselect(k);
 		it = (Rva005E4E1BNode *)&*_STL::_Rb_global<bool>::_M_increment(&it->m_base);
 	} while (it != (Rva005E4E1BNode *)end);
 }

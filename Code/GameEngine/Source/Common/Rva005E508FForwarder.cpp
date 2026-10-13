@@ -1,14 +1,14 @@
 // cl: /MD
 //
 // ?rva005E508F@Rva005E508F@@QAEXH@Z @0x005E508F (8B).
-// Forwarder via +0x10 ptr to rowed Rva005E4DAF::rva005E4DE5; evidence callers
+// Forwarder via +0x10 ptr to rowed Rva005E4DAF::Select; evidence callers
 // at 0x005CDB23 and 0x005E691C push one int and tail call here.
 
 class Rva005E4DAF
 {
 public:
-	void rva005E4DE5(int v);
-	void rva005E4DAF(int v);
+	void Select(int v);
+	void Deselect(int v);
 };
 
 class Rva005E4E1B
@@ -31,12 +31,12 @@ private:
 
 void Rva005E508F::rva005E508F(int v)
 {
-	m_10->rva005E4DE5(v);
+	m_10->Select(v);
 }
 
 void Rva005E508F::rva005E5097(int v)
 {
-	m_10->rva005E4DAF(v);
+	m_10->Deselect(v);
 }
 
 // ?rva005E509F@Rva005E508F@@QAEXXZ

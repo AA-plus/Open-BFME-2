@@ -56,7 +56,7 @@ public:
 class Rva002C585A
 {
 public:
-	void rva002C585A(int count);
+	void setNumberOfRunningAI(int count);
 };
 
 class Xfer;
@@ -209,7 +209,7 @@ void AIGameTeam::update()
 				void *tmp = *(void **)((char *)q + 0x164);
 				x = (Rva002C585A *)*(void **)((char *)tmp + 0x14);
 				if (x != 0)
-					x->rva002C585A(((Rva004E93A8 *)this)->rva004E93A8());
+					x->setNumberOfRunningAI(((Rva004E93A8 *)this)->rva004E93A8());
 			}
 			else
 				m_24 = 0;

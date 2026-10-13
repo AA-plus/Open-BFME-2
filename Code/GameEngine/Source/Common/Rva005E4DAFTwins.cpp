@@ -31,8 +31,8 @@ public:
 class Rva005E4DAF
 {
 public:
-	void rva005E4DAF(int v);
-	void rva005E4DE5(int v);
+	void Deselect(int v);
+	void Select(int v);
 private:
 	char m_00[0x14];
 	void *m_14;
@@ -41,7 +41,7 @@ private:
 	char m_pad1D[0x2C - 0x1D];
 	bool m_2C;
 };
-void Rva005E4DAF::rva005E4DAF(int v)
+void Rva005E4DAF::Deselect(int v)
 {
 	if (m_2C) {
 		void *ret = &(*reinterpret_cast<Rva005E4BB7ServerMap *>(&m_1C))[v];
@@ -52,7 +52,7 @@ void Rva005E4DAF::rva005E4DAF(int v)
 	}
 	((Rva005F22D2 *)m_14)->rva005F2295(v);
 }
-void Rva005E4DAF::rva005E4DE5(int v)
+void Rva005E4DAF::Select(int v)
 {
 	if (m_2C) {
 		void *ret = &(*reinterpret_cast<Rva005E4BB7ServerMap *>(&m_1C))[v];

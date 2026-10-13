@@ -11075,7 +11075,6 @@ name,address,notes
 ?rva002C004F@Rva002D3627Host@@QAEXPBD@Z,0x002C004F,member function on 0xDFEF18 taking const char*
 ?rva002C108F@Rva0008FF12Host@@QAEXXZ,0x002C108F,"member vtable slot 0x0008FF12 tail-jumps to; opaque address name"
 ?rva002C5761@GameWindowManager@@QAEXPAVGameWindow@@@Z,0x002C5761,thiscall spelling of the 162-byte body rowed as the stdcall ?Rva002C5761Sort@@YGXPAX@Z (it ignores ECX; ret 4): the quick match InitGadgets 0x005BA94A calls it at 0x005BAA20 with TheWindowManager 0x00DFEF1C loaded in ECX and the screen's +0x58 window pushed
-?rva002C5AE6@Rva002C589B@@QAEMXZ,0x002C5AE6,entry value compared against the store threshold +0x54; REL32 at 0x00505383
 ?rva002C5CF7@Rva002C5D8B@@QAEXPBUCoord3D@@MH@Z,0x002C5CF7,"choice setter taking (position, radius, object id): REL32 at 0x005734C4 in heuristic slot 1 0x0057327E with the chosen waypoint position, the AI data +0x884 and 0; 0x002C5D8B forwards an object's +0x38 position and +0x74 id to it"
 ?rva002C5D8B@Rva002C5D8B@@QAEXPAVObject@@M@Z,0x002C5D8B,"thiscall (object, float) forwarding the object's +0x38 position, the float and its +0x74 id to 0x002C5CF7 (ret 8): REL32 at 0x005739CE in AITargetHeuristicBaseDefense slot 1 0x005737D6 with 200.0 and the picked object"
 ?rva002C5FBA@Rva002C5FBA@@QAEPAXH@Z,0x002C5FBA,thiscall pointer callee of 0x004E955F read from its REL32 displacement (this plus int); body unrowed

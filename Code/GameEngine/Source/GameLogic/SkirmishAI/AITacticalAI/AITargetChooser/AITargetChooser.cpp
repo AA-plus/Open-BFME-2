@@ -188,9 +188,9 @@ public:
 	Rva002C589B(int value, int kind, void *owner);
 	~Rva002C589B();
 	Object *rva002C5DA6();
-	void rva002C5B46(Xfer *xfer);
+	void DoXfer(Xfer *xfer);
 	int rva0030F2C7() const;
-	float rva002C5AE6();
+	float getEnemyThreat();
 	char m_pad00[4];
 	int m_04;		// +0x04
 	int m_08;		// +0x08 last rethink frame
@@ -279,7 +279,7 @@ bool AITargetChooser::isAchievableTarget(Rva002C589B *entry)
 		if (entry->m_04 == 1)
 			return true;
 		Rva0050535AStore *store = *g_00DFEEF8->rva002A8F24(m_owner);
-		if (store->m_threshold > entry->rva002C5AE6())
+		if (store->m_threshold > entry->getEnemyThreat())
 			return true;
 	}
 	return false;
@@ -404,7 +404,7 @@ void AITargetChooser::xfer(Xfer *xfer)
 	if (xfer->IsStoring()) {
 		Rva002C589B **end = m_08.end();
 		for (Rva002C589B **it = m_08.begin(); it != end; ++it)
-			(*it)->rva002C5B46(xfer);
+			(*it)->DoXfer(xfer);
 	} else if (xfer->IsLoading()) {
 		if (m_08.size() > count) {
 			Rva002C589B **it = m_08.begin() + count;
@@ -416,10 +416,10 @@ void AITargetChooser::xfer(Xfer *xfer)
 		for (unsigned int i = 0; i < count; ++i) {
 			Rva002C589B *entry = m_08[i];
 			if (entry) {
-				entry->rva002C5B46(xfer);
+				entry->DoXfer(xfer);
 			} else {
 				entry = new Rva002C589B(-1, 1, m_owner);
-				entry->rva002C5B46(xfer);
+				entry->DoXfer(xfer);
 				m_08.push_back(entry);
 			}
 		}
@@ -429,7 +429,7 @@ void AITargetChooser::xfer(Xfer *xfer)
 		*xfer == extra;
 		for (unsigned int i = 0; i < extra; ++i) {
 			Rva002C589B *entry = new Rva002C589B(-1, 1, m_owner);
-			entry->rva002C5B46(xfer);
+			entry->DoXfer(xfer);
 			m_08.insert(m_08.begin(), entry);
 		}
 	}

@@ -1,5 +1,5 @@
 // cl: /DNDEBUG /MD
-// ?rva002C5B46@Rva002C589B@@QAEXPAVXfer@@@Z @0x002C5B46 217B: Version(1,2)
+// ?DoXfer@Rva002C589B@@QAEXPAVXfer@@@Z @0x002C5B46 217B: Version(1,2)
 // via slot 0x28 then uint global g_00DFEFC0 plus members +4/+8 uint via
 // slot 0x78 Coord at +C via 0x60 bools +18/+19 via 0x90 ints +1C/+20 via
 // 0x7C uint +2C via 0x78 version>=2 float +28 via 0x70 int +30 via 0x7C
@@ -119,7 +119,7 @@ unsigned int g_00DFEFC0;
 class Rva002C589B
 {
 public:
-	void rva002C5B46(Xfer *xfer);
+	void DoXfer(Xfer *xfer);
 
 private:
 	int m_00;
@@ -139,7 +139,7 @@ private:
 	unsigned int m_38;
 };
 
-void Rva002C589B::rva002C5B46(Xfer *xfer)
+void Rva002C589B::DoXfer(Xfer *xfer)
 {
 	Xfer::Version version(1, 2);
 	*xfer == version;

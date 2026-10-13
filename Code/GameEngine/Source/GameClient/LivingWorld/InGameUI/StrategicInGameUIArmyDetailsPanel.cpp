@@ -60,22 +60,22 @@ void StrategicInGameUI::ArmyDetailsPanel::Impl::OnRemovingEntryFromArmySummary(c
 class Keyboard { public: bool isCtrl(); };
 extern Keyboard *TheKeyboard;
 class Rva005F2278 { public: bool rva005F2278(int) const; };
-class Rva005E4DAF { public: void rva005E4DAF(int); void rva005E4DE5(int); };
+class Rva005E4DAF { public: void Deselect(int); void Select(int); };
 struct ArmySelectionCountView { char unknown[0x14]; unsigned count; };
 void StrategicInGameUI::ArmyDetailsPanel::Impl::OnIconLeftClicked(int entryID) {
  Rva005E4DAF *actions=(Rva005E4DAF *)this;
  if(TheKeyboard->isCtrl()) {
-  if(((Rva005F2278 *)selected)->rva005F2278(entryID)) actions->rva005E4DAF(entryID);
-  else actions->rva005E4DE5(entryID);
+  if(((Rva005F2278 *)selected)->rva005F2278(entryID)) actions->Deselect(entryID);
+  else actions->Select(entryID);
  } else if(((Rva005F2278 *)selected)->rva005F2278(entryID) && ((ArmySelectionCountView *)selected)->count==1) {
-  actions->rva005E4DAF(entryID);
+  actions->Deselect(entryID);
  } else {
   _STL::map<int,SBServer>::iterator end=icons.end();
   for(_STL::map<int,SBServer>::iterator it=icons.begin(); it!=end; ++it) {
    int key=it->first;
-   if(((Rva005F2278 *)selected)->rva005F2278(key)) actions->rva005E4DAF(key);
+   if(((Rva005F2278 *)selected)->rva005F2278(key)) actions->Deselect(key);
   }
-  actions->rva005E4DE5(entryID);
+  actions->Select(entryID);
  }
 }
 
