@@ -58,6 +58,11 @@ for rva, (size, parent) in CLEANUPS.items():
                         'native_target_rva': hex(address)})
     cleanups.append({'rva': hex(rva), 'size': size, 'label': label,
                      'full_bytes': result['bytes'].hex(), 'relocations': targets})
+wrapper = build.compile_function({'name': '??1Rva00257464@@QAE@XZ',
+                                  'target_rva': '0x00257464', 'target_size': '5',
+                                  'source': source, 'notes': ''}, symbols, obj_path)
+assert not wrapper['unresolved'] and not wrapper['masked']
+assert wrapper['bytes'] == wrapper['target']
 thunks = []
 for entry, body in ((0x257464, 0x2572D7), (0x256641, 0x256461)):
     data = build.read_target_bytes(entry, 5)
@@ -65,4 +70,4 @@ for entry, body in ((0x257464, 0x2572D7), (0x256641, 0x256461)):
     assert entry + 5 + struct.unpack_from('<i', data, 1)[0] == body
     thunks.append({'rva': hex(entry), 'size': 5, 'target_rva': hex(body),
                    'whole_bytes': data.hex(), 'receiver_adjustment': 0})
-print(json.dumps({'parents': parents, 'cleanups': cleanups, 'native_thunks': thunks}, indent=2))
+print(json.dumps({'parents': parents, 'cleanups': cleanups, 'native_thunks': thunks, 'emitted_list_wrapper': wrapper['bytes'].hex()}, indent=2))

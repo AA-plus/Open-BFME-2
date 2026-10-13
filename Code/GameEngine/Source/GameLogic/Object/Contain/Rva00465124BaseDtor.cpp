@@ -57,6 +57,14 @@ private:
 	int m_x;
 };
 
+// The native unwind uses the already owned five-byte wrapper at 0x00257464.
+// Its empty destructor forwards to the member body without adjusting this.
+class Rva00257464 : public Rva002572D7Member
+{
+public:
+    ~Rva00257464() {}
+};
+
 class Rva00256461Member
 {
 public:
@@ -86,7 +94,7 @@ private:
 	Rva00257481RefHolder m_ref3C;		// +0x3C
 	Rva003623E5Member m_filter40;		// +0x40
 	Rva003623E5Filter m_filter44;		// +0x44
-	Rva002572D7Member m_member48;		// +0x48
+	Rva00257464 m_member48;		// +0x48
 	Rva00256461Member m_member4C;		// +0x4C
 	unsigned char m_pad50[0x88 - 0x50];
 	RvaVecAscii m_vector88;			// +0x88
