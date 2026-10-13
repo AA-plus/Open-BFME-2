@@ -1,4 +1,6 @@
 // ?rva002A4A68@Rva002A4A68@@QAEXXZ
+// partial score=0.91 date=2026-10-13
+// ?rva002A4A68@Rva002A4A68@@QAEXXZ
 // partial score=0.8952 date=2026-10-13
 // ?rva002A4A68@Rva002A4A68@@QAEXXZ
 // partial score=0.8952 date=2026-10-13
@@ -113,6 +115,7 @@ public:
     char _pad[0x910];
 };
 
+template<> __declspec(noinline) void StringBase<unsigned short>::validate() const { (void)*(volatile char *)this; }
 // ?rva002A4A68@Rva002A4A68@@QAEXXZ present-unmatched
 void Rva002A4A68::rva002A4A68()
 {

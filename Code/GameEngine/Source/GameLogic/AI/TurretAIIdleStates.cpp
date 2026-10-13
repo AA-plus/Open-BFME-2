@@ -1,4 +1,4 @@
-// cl: /ICode/Libraries/Include/Lib /DNDEBUG /MD
+// cl: /ICode/Libraries/Include/Lib /DNDEBUG /MD /Gy
 //
 // TurretAI idle and hold-turret states with their file-static
 // frameToSleepTime, ported from Zero Hour's GameEngine/Source/GameLogic/AI/
@@ -15,8 +15,9 @@
 //    TurretAIHoldTurretState::update, retail 0x004D8935 (63 bytes): Zero
 //    Hour's bodies. The turret's friend_getNextIdleMoodTargetFrame
 //    (0x004D837D) and friend_checkForIdleMoodTarget (0x004D88AC) are out of
-//    line. (The two onEnter callers, 0x004D83D1 and 0x004D84D2, are banked
-//    near-misses: their argument pushes are scheduled differently.)
+//    line. (TurretAIHoldTurretState::onEnter, 0x004D84D2, needs 0x004D837D
+//    defined ahead of it, below; the other onEnter caller, 0x004D83D1, is a
+//    banked near-miss.)
 //  - TurretAIIdleScanState::onEnter, retail 0x004D8448 (138 bytes): Zero
 //    Hour's body (idle scan angles from the turret data +0x50 / +0x54,
 //    desired angle +0x20; TurretAI.cpp lines 1381 and 1382).
@@ -438,6 +439,7 @@ public:
 class TurretAIHoldTurretState : public TurretState
 {
 public:
+	virtual StateReturnType onEnter();
 	virtual StateReturnType update();
 private:
 	unsigned char m_pad1C[0x20 - 0x1C];
@@ -466,6 +468,26 @@ static StateReturnType frameToSleepTime(
 		// ignore times that are in the past, since this can frequently happen
 		return STATE_CONTINUE;
 	}
+}
+
+//----------------------------------------------------------------------------------------------------------
+// Retail 0x004D837D (rowed in TurretAI_rva004D837D.cpp): defined here ahead of its callers so the
+// compiler knows it leaves ecx alone (see onEnter below); /Gy makes this copy a COMDAT.
+UnsignedInt TurretAI::rva004D837D()
+{
+	char *owner = *(char **)((char *)this + 0x10);
+	char *x = *(char **)(owner + 0x258);
+	if (x != 0)
+		return *(UnsignedInt *)(x + 0x21C);
+	return TheGameLogic->getFrame();
+}
+
+//----------------------------------------------------------------------------------------------------------
+StateReturnType TurretAIHoldTurretState::onEnter()
+{
+	m_timestamp = TheGameLogic->getFrame() + getTurretAI()->getRecenterTime();
+
+	return frameToSleepTime(getTurretAI()->rva004D837D(), m_timestamp);
 }
 
 //----------------------------------------------------------------------------------------------------------
