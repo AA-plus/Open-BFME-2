@@ -1,33 +1,23 @@
 // ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
-// partial score=0.8873347025104987 date=2026-10-10
+// partial score=0.89 date=2026-10-13
 // ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
-// partial score=0.8 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /ICode/GameEngine/Source /DNDEBUG /MD /EHs
-//
-// NEAR (not exact): ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
-// retail 0x00472D43..0x0047306E (811 bytes, EH, RET 4).
-//
-// Identity:
-// - It is slot 26 of ??_7HordeContain@@6BHordeContainInterface@@@ (0x00844C58),
-//   shared by HorseHordeContain and AODHordeContain.
-// - WorldBuilder 0x010C6650 is HordeContain::changeToFormation.
-// - Retail adds a LifetimeUpdate hand-over and makeDirty over WB.
-//
-// Every call, the EH states and the list erase into the free list
-// 0x009B8FF4 are in place. The whole stream is 804 bytes against 811.
-//
-// What still differs:
-// - The list allocator temporary does not land in the dead parameter slot
-//   (retail [ebp+0xB]), so the leader slot moves from -0x10 to -0x18.
-// - The AI pointer gets ebx where retail keeps newHorde in ebx and the AI
-//   pointer in memory.
-// - The list size loop keeps its iterator in a register; retail spills it to
-//   [ebp-0x1C].
-//
-// The list uses a TU-local _STL view: the pinned ctor 0x001EB984, the pinned
-// find 0x0029B694, and the rowed disposal 0x001EB769 (nothrow).
+// partial score=0.89 date=2026-10-13
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /ICode/GameEngine/Source
+// Retail 0x00472D43 (811B). Port target: Code/GameEngine/Source/GameLogic/Object/Contain/HordeContainChangeToFormation.cpp
+// (new TU: picker's Rva00472CA9Finish.cpp cannot host it - its single-vtable HordeContain collides with the MI view this body needs).
+// 804/811 in the TU. Residue: (1) newHorde pre-spill+reload around slot122 (ai takes ebx; retail keeps newHorde, homes ai); (2) size-loop iterator spilled home vs reg (and last reg vs home); (3) list-ctor alloc temp slot +0xB vs frame; (4) leader/camp homes shifted by the same global numbering. FIXED HERE vs prior bank: m_2B4 pad math (+0x2B8 -> +0x2B4, correctness, size-neutral).
+// Negatives: by-value distance params (+1B, it stays reg); ai decl split (neutral); volatile/struct home anchors reshuffle or mis-slot (see 0x27893e notes).
+// t=35 model=muse-spark (seat W7-MP6).
+// cl: /O1 /DNDEBUG /MD /EHs
+// ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z, retail 0x00472D43
+// (811B, EH, RET 4): slot 26 of the HordeContainInterface vtable (shared by
+// HorseHordeContain and AODHordeContain); WorldBuilder HordeContain.cpp
+// HordeContain::changeToFormation. Builds a new object of the formation
+// template, moves the horde over (leader/member lists, AI orders, lifetime),
+// then tears the old one down. /EHs for the LatchRestore guard, the static
+// LifetimeUpdate key and the nothrow list disposal.
 #include <string.h>
-#include "/mnt/titan_nv3/open-bfme2-agent-fleet/gemini200/writer-005/Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
 typedef int Int;
 typedef unsigned int UnsignedInt;
@@ -233,7 +223,10 @@ class Object
 public:
 	Drawable *getDrawable() const;
 	void SwapForExchange(Object *other);
-	protected:friend class HordeContain; Module *findModule(NameKeyType key) const; public:
+protected:
+	friend class HordeContain;
+	Module *findModule(NameKeyType key) const;
+public:
 	void clearModelConditionFlagsForHorde(const int *flags);
 	void makeDirty();
 	Team *getTeam() const { return m_team; }
