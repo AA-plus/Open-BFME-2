@@ -38,8 +38,7 @@ extern GlobalData *TheWritableGlobalData;
 
 // Taint hooks reached from setShroudLevel (retail 0x00073CC0 / 0x006C0840 take
 // byte arguments, see W3DDisplaySmallSlots.cpp). TheTaintManager is the
-// converged global at 0x00DFE750; declared as its real type and viewed through
-// BfmeTaintManager at the use site.
+// data-ledger global at 0x00DFE750, declared with its owned BfmeTaintManager type.
 class Rva000729CC
 {
 public:
@@ -50,8 +49,7 @@ class BfmeTaintManager
 public:
 	UnsignedByte rva006C0840(int x, int y);
 };
-class TaintManager;
-extern TaintManager *TheTaintManager;
+extern BfmeTaintManager *TheTaintManager;
 class BaseHeightMapRenderObjClass
 {
 public:
@@ -177,8 +175,8 @@ void W3DShroud::setShroudLevel(int x, int y, UnsignedByte level, bool textureOnl
 		m_shroudData[x + y * m_numCellsX] = Rva00072D5DShroudPixel(level);
 
 		Rva000729CC *taintBuffer = TheTerrainRenderObject->m_387c;
-		if (taintBuffer && *reinterpret_cast<BfmeTaintManager **>(&TheTaintManager))
+		if (taintBuffer && TheTaintManager)
 			taintBuffer->rva00073CC0(x, y,
-				(*reinterpret_cast<BfmeTaintManager **>(&TheTaintManager))->rva006C0840(x, y), true);
+				TheTaintManager->rva006C0840(x, y), true);
 	}
 }

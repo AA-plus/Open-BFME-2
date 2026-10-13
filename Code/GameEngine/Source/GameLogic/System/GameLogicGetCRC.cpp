@@ -178,7 +178,8 @@ extern PartitionManager *ThePartitionManager;
 extern PartitionManager *TheShroudManager;
 extern PlayerList *ThePlayerList;
 extern CollisionManager *g_00DFE754;
-extern TaintManager *g_00DFE750;
+class BfmeTaintManager;
+extern BfmeTaintManager *TheTaintManager;
 // g_00DFEEF8 is only an alias of the owned global g_00DFEEF8 (ledger names column); this unit reads the owner through its own view type.
 extern class Rva002A8F24 *g_00DFEEF8;
 #define g_00DFEEF8 (*(SkirmishAIManager * *)&g_00DFEEF8)
@@ -216,7 +217,7 @@ unsigned int GameLogic::getCRC(int mode)
 	if (g_Rva00A02D87 != 0 || g_00E02D7F == 0)
 		xfer->xferSnapshot(TheShroudManager);
 	if (g_Rva00A02D87 != 0 || g_00E02D80 == 0)
-		xfer->xferSnapshot(g_00DFE750);
+		xfer->xferSnapshot((TaintManager *)TheTaintManager);
 	if (g_Rva00A02D87 != 0 || g_00E02D81 == 0)
 		xfer->xferSnapshot(g_00DFEEF8);
 	if (g_Rva00A02D87 != 0 || g_00E02D83 == 0)

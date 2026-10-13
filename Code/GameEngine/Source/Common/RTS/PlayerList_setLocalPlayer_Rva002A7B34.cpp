@@ -36,7 +36,8 @@ public:
 };
 
 extern PartitionManager *TheShroudManager;	// VA 0x00DFE74C
-extern void *g_Va00DFE750;			// the taint manager, VA 0x00DFE750
+class BfmeTaintManager;
+extern BfmeTaintManager *TheTaintManager;			// the taint manager, VA 0x00DFE750
 
 void Rva002D7AE0LocalPlayerShroudCallback();
 void Rva002D7B18LocalPlayerTaintCallback();
@@ -83,6 +84,6 @@ void PlayerList::setLocalPlayer(Player *player)
 
 	if (TheShroudManager)
 		((Rva00739730 *)TheShroudManager)->rva00739730(player->getPlayerIndex(), (int)&Rva002D7AE0LocalPlayerShroudCallback);
-	if (g_Va00DFE750)
-		((Rva006C0800 *)g_Va00DFE750)->rva006C0800((PointGroupClass::PointModeEnum)(int)&Rva002D7B18LocalPlayerTaintCallback);
+	if (TheTaintManager)
+		((Rva006C0800 *)TheTaintManager)->rva006C0800((PointGroupClass::PointModeEnum)(int)&Rva002D7B18LocalPlayerTaintCallback);
 }

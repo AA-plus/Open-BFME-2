@@ -280,7 +280,7 @@ Rva0022B3F6Subsystem *TheSplineService = 0;
 // TheAttributeModifierStore is only an alias of the owned global TheAttributeModifierStore (ledger names column); this unit reads the owner through its own view type.
 extern class AttributeModifierStore *TheAttributeModifierStore;
 #define TheAttributeModifierStore (*(Rva0022B46BSubsystem * *)&TheAttributeModifierStore)
-extern void *g_Va00DFE750;
+extern BfmeTaintManager *TheTaintManager;
 extern ScriptEngine *TheScriptEngine;
 extern LuaScriptEngine *TheLuaScriptEngine;
 extern TeamFactory *TheTeamFactory;
@@ -783,7 +783,7 @@ void GameEngine::init(Int argc, char *argv[])
 		initSubsystem(TheAerialPathfinder, "TheAerialPathfinder", new AerialPathfinder, (Xfer *)&xferCRC);
 		initSubsystem(TheSplineService, "TheSplineService", new Rva0022B3F6Subsystem, (Xfer *)&xferCRC);
 		initSubsystem(TheAttributeModifierStore, "TheAttributeModifierStore", new Rva0022B46BSubsystem, (Xfer *)&xferCRC);
-		initSubsystem((reinterpret_cast<Rva0022B4E0Subsystem *&>(g_Va00DFE750)), "TheTaintManager", (Rva0022B4E0Subsystem *)new BfmeTaintManager, 0);
+		initSubsystem((reinterpret_cast<Rva0022B4E0Subsystem *&>(TheTaintManager)), "TheTaintManager", (Rva0022B4E0Subsystem *)new BfmeTaintManager, 0);
 		initSubsystem(TheScriptEngine, "TheScriptEngine", new ScriptEngine, 0);
 		initSubsystem(TheLuaScriptEngine, "TheLuaScriptEngine", new LuaScriptEngine, 0);
 		initSubsystem(TheTeamFactory, "TheTeamFactory", new TeamFactory, 0);

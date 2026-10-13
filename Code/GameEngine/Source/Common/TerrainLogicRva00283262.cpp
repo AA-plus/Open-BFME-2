@@ -54,7 +54,7 @@ public:
 	BfmeWideResult iterateObjectsInRange(const Coord3D *pos, float radius, int a, Rva000421C8 *filter, int b);
 };
 extern PartitionManager *ThePartitionManager;
-extern void *g_Va00DFE750;
+extern BfmeTaintManager *TheTaintManager;
 
 class BfmeFixedStorage0004543D
 {
@@ -92,7 +92,7 @@ void TerrainLogic::rva00283262(const Coord3D *a, float b)
 {
 	if (a == 0)
 		return;
-	if (g_Va00DFE750 == 0)
+	if (TheTaintManager == 0)
 		return;
 	if (ThePartitionManager == 0)
 		return;
@@ -135,9 +135,9 @@ extern G00DFF080Obj *g_00DFF080;
 
 void TerrainLogic::rva00282CFB(const Coord3D *pos, float radius, unsigned int mode)
 {
-	if (pos == 0 || g_Va00DFE750 == 0 || ThePartitionManager == 0 || TheGameLogic == 0)
+	if (pos == 0 || TheTaintManager == 0 || ThePartitionManager == 0 || TheGameLogic == 0)
 		return;
-	((BfmeTaintManager *)g_Va00DFE750)->bfmeApplyCircleWorld(
+	((BfmeTaintManager *)TheTaintManager)->bfmeApplyCircleWorld(
 		(const BfmePointFC *)pos, radius, 128, true, mode);
 	BfmeWideResult hits = ThePartitionManager->iterateObjectsInRange(pos, radius, 0,
 		&Rva0004584D(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 175),

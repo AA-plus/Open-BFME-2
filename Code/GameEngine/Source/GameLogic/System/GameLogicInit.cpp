@@ -713,7 +713,8 @@ public:
 
 extern PartitionManager *ThePartitionManager;
 extern PartitionManager *TheShroudManager;
-extern void *g_Va00DFE750;
+class BfmeTaintManager;
+extern BfmeTaintManager *TheTaintManager;
 extern CollisionManager *TheCollisionManager;
 extern GlobalData *TheWritableGlobalData;
 extern GhostObjectManager *TheGhostObjectManager;
@@ -783,7 +784,7 @@ void GameLogic::init(void)
 	TheShroudManager->setRegion(&extent, TheWritableGlobalData->m_d4);
 	((Rva00739720 *)TheShroudManager)->rva00739720(TheWritableGlobalData->m_bd0);
 	ThePartitionManager->rva00625310(7);
-	((Rva006C0810 *)g_Va00DFE750)->rva006C0810(&extent, TheWritableGlobalData->m_d4);
+	((Rva006C0810 *)TheTaintManager)->rva006C0810(&extent, TheWritableGlobalData->m_d4);
 
 	m_170 = new Rva00359E13;
 	m_170->rva0035AA3E();
@@ -881,7 +882,7 @@ void GameLogic::reset(void)
 	ThePartitionManager->reset();
 	TheShroudManager->reset();
 	TheCollisionManager->reset();
-	((SubsystemInterface *)g_Va00DFE750)->reset();
+	((SubsystemInterface *)TheTaintManager)->reset();
 	TheTerrainLogic->reset();
 	TheAI->reset();
 	TheScriptEngine->reset();
@@ -2766,8 +2767,8 @@ void GameLogic::rva0023F52C(bool loadingSaveGame)
 			TheControlBar->m_210 = ThePlayerList->getNthPlayer(TheRecorder->m_e6c);
 			TheRadar->forceOn(true);
 			((Rva007397D0 *)TheShroudManager)->rva007397D0();
-			if (g_Va00DFE750)
-				((Rva006C0820 *)g_Va00DFE750)->rva006C0820();
+			if (TheTaintManager)
+				((Rva006C0820 *)TheTaintManager)->rva006C0820();
 			TheControlBar->setControlBarSchemeByPlayer(ThePlayerList->getLocalPlayer());
 		} else {
 			Player *localPlayer = ThePlayerList->getLocalPlayer();
@@ -3120,9 +3121,9 @@ void GameLogic::rva002469A5(bool loadingSaveGame, int *progress)
 	ThePartitionManager->rva00625300(&extent);
 	Rva0134FAA0->slot28();
 	bfmeReleaseQueuedDeviceInterfaces();
-	if (g_Va00DFE750) {
-		((Rva006C0810 *)g_Va00DFE750)->rva006C0810(&extent, 0.0f);
-		((Rva006C0820 *)g_Va00DFE750)->rva006C0820();
+	if (TheTaintManager) {
+		((Rva006C0810 *)TheTaintManager)->rva006C0810(&extent, 0.0f);
+		((Rva006C0820 *)TheTaintManager)->rva006C0820();
 	}
 	TheDisplay->slot180(&extent);
 	TheGhostObjectManager->setLocalPlayerIndex(ThePlayerList->getLocalPlayer()->getPlayerIndex());
@@ -4588,7 +4589,7 @@ void GameLogic::update(int phase)
 
 	if (phase == 5) {
 		TheShroudManager->update();
-		((SubsystemInterface *)g_Va00DFE750)->update();
+		((SubsystemInterface *)TheTaintManager)->update();
 		g_00A027B8->update();
 		TheLargeGroupAudio->update();
 		processDestroyList();
