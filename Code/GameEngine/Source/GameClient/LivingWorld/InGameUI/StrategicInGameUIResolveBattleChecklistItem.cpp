@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 // Native5D1DCB..5D1F14 full329B RET8; WB15B6700 names ResolveBattleChecklistItem.
 // Existing87B destructor5D1D38 and scalar destructor establish neutral owner.
