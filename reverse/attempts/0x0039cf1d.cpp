@@ -1,5 +1,5 @@
-// ?rva0039CF1D@ScoreKeeper@@QAEXPAXPAVPlayer@@I@Z
-// partial score=0.7325581395 date=2026-10-10
+// ?addObjectsDestroyed@ScoreKeeper@@QAEXIPAVPlayer@@I@Z
+// partial score=0.84 date=2026-10-13
 // cl: /O1 /EHsc /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
 // stlport
 // ?addObjectLost@ScoreKeeper@@QAEXPBVObject@@@Z 0x0039CF73 392 scoring-gated lost count with killer player index
@@ -23,7 +23,6 @@
 // kind-of mask across both calls), hence the hoisted template local.
 #include <map>
 #include "GameLogicObjectLookupView.h"
-
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
 template <class T, class LeftTraits, class RightTraits>
@@ -116,13 +115,15 @@ class Object
 	char m_pad000[4];
 	const ThingTemplate *m_template;
 	char m_pad008[0x254 - 8];
+	// This owner accesses the proven Object+0x254 field directly; the public
+	// getBodyModule copies use other Object views.
+public:
 	BodyModuleInterface *m_body;
 
 public:
 	const ThingTemplate *getTemplate() const { return m_template; }
 	Bool testStatus(ObjectStatusTypes bit) const;
 	Player *getControllingPlayer() const;
-	BodyModuleInterface *getBodyModule() const { return m_body; }
 };
 
 class Rva2225E0Filter
@@ -143,11 +144,12 @@ extern GameLogic *TheGameLogic;
 typedef _STL::map<unsigned int, void *> ObjectCountMap;
 typedef ObjectCountMap::iterator ObjectCountMapIt;
 
+
 struct ScoreKeeper
 {
 	char m_pad00[0x20];
-	int m_unitsDestroyed[20];
-	char m_pad70[4];
+	int m_unitsDestroyed[20]; // +0x20
+	char m_pad70[0x74 - 0x70];
 	int m_74;
 	char m_pad01[0xcc - 0x74 - 4];
 	int m_totalBuildingsLost; // +0xCC
@@ -156,20 +158,20 @@ struct ScoreKeeper
 	int m_104;
 	int m_totalUnits; // +0x108
 	int m_totalStructures; // +0x10C
-	bool m_scoring;
-	char m_pad111[0x16c - 0x111];
+	bool m_scoring; // +0x110
+	char m_pad03[0x16c - 0x111];
 	int m_16c;
-	int m_count170[20];
-	char m_pad1c0[4];
+	int m_count170[20]; // +0x170
+	char m_pad04[0x1c4 - 0x1c0];
 	int m_1c4;
 	char m_pad05[0x1d4 - 0x1c4 - 4];
 	_STL::map<unsigned int, void *> m_map1d4;
 	char m_pad06[0x1fc - 0x1d4 - 12];
-	ObjectCountMap m_objectsDestroyed[20];
+	ObjectCountMap m_objectsDestroyed[20]; // +0x1FC
 	_STL::map<unsigned int, void *> m_map2ec;
 	void addObjectLost(const Object *o);
 	void addObjectsLost(unsigned int key, int delta);
-	void rva0039CF1D(void *key, Player *player, unsigned delta);
+	void addObjectsDestroyed(unsigned int key, Player *player, unsigned int count);
 };
 
 static KindOfMaskType scoringBuildingMask;
@@ -224,7 +226,7 @@ void ScoreKeeper::addObjectLost( const Object *o )
 			existingCount = (Int)it->second;
 		((ImageSubscriptMap *)&m_map1d4)->operator[]((unsigned int)o->getTemplate()) = (Image *)(existingCount + 1);
 
-		BodyModuleInterface *body = o->getBodyModule();
+		BodyModuleInterface *body = o->m_body;
 		if (body)
 		{
 			const DamageInfo *info = body->getLastDamageInfo();
@@ -246,6 +248,22 @@ void ScoreKeeper::addObjectLost( const Object *o )
 	}
 }
 
+void ScoreKeeper::addObjectsDestroyed(unsigned int key, Player *player, unsigned int count)
+{
+	void *oldValue = 0;
+	if (m_scoring)
+	{
+		int idx = player->getPlayerIndex();
+		m_unitsDestroyed[idx] += count;
+		m_count170[idx] += count;
+		ObjectCountMap &destroyed = m_objectsDestroyed[idx];
+		ObjectCountMapIt it = destroyed.find(key);
+		if (it != destroyed.end())
+			oldValue = it->second;
+		((ImageSubscriptMap *)&destroyed)->operator[](key) = (Image *)((char *)oldValue + count);
+	}
+}
+
 void ScoreKeeper::addObjectsLost(unsigned int key, int delta)
 {
 	m_74 += delta;
@@ -260,17 +278,4 @@ void ScoreKeeper::addObjectsLost(unsigned int key, int delta)
 	if (it2 != m_map1d4.end())
 		old2 = it2->second;
 	((ImageSubscriptMap *)&m_map1d4)->operator[](key) = (Image *)((char *)old2 + delta);
-}
-
-void ScoreKeeper::rva0039CF1D(void *key, Player *player, unsigned delta)
-{
- int oldCount=0;
- if(m_scoring) {
-  int idx=player->getPlayerIndex();
-  m_unitsDestroyed[idx]+=delta;
-  m_count170[idx]+=delta;
-  ObjectCountMapIt it=m_objectsDestroyed[idx].find(*(const unsigned*)&key);
-  if(it._M_node!=m_objectsDestroyed[idx].end()._M_node) oldCount=(int)it->second;
-  ((ImageSubscriptMap*)&m_objectsDestroyed[idx])->operator[](*(const unsigned*)&key)=(Image*)(oldCount+delta);
- }
 }
