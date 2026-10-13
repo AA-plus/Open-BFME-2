@@ -1,4 +1,6 @@
 // ?adjustCameraMovement@PolygonTrigger@@QAE_NPBUCoord3D@@0PAU2@_N@Z
+// partial score=0.9894 date=2026-10-13
+// ?adjustCameraMovement@PolygonTrigger@@QAE_NPBUCoord3D@@0PAU2@_N@Z
 // partial score=0.9893906110161907 date=2026-10-10
 // ?adjustCameraMovement@PolygonTrigger@@QAE_NPBUCoord3D@@0PAU2@_N@Z
 // partial score=0.8841387566392382 date=2026-10-09
