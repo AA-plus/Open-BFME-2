@@ -1,4 +1,6 @@
 // ?friend_xferSubAudioEventRTS@MilesAudioManager@@QAEXPAVXfer@@PAVBfmePoolRef10@@@Z
+// partial score=0.99 date=2026-10-13
+// ?friend_xferSubAudioEventRTS@MilesAudioManager@@QAEXPAVXfer@@PAVBfmePoolRef10@@@Z
 // partial score=0.99 date=2026-10-12
 // ?friend_xferSubAudioEventRTS@MilesAudioManager@@QAEXPAVXfer@@PAVBfmePoolRef10@@@Z
 // Bank for 0x0005987D (406 B, RET 8; WB 0x0079AEB0) as a diff against
