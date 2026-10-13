@@ -60,5 +60,5 @@ void AptShapeContainer::getRenderRegion(Coord2D &low,Coord2D &high)
   }
  }
  high.x-=low.x;
- high.y-=low.y;
+ __vref(high.y)-=low.y;
 }
