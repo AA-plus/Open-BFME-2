@@ -1,4 +1,6 @@
 // ?rva0048DC51@FloodUpdate@@QAEXPBUFloodMember@@PAVRva0048E16C@@@Z
+// partial score=0.8804 date=2026-10-13
+// ?rva0048DC51@FloodUpdate@@QAEXPBUFloodMember@@PAVRva0048E16C@@@Z
 // partial score=0.9 date=2026-10-07
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /GX /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfme2_ascii
 // stlport
@@ -20,6 +22,8 @@
 // dtor fold to the rowed 0x0047A6A9 / 0x000B3FD0 and drive the eh vector
 // iterators; the Bezier segment is the rowed Rva0055A246 view (copy ctor
 // 0x0055A3C5, length 0x0055A627, tessellation 0x0055A7DB).
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <string.h>
 #include <math.h>
 #include <list>
@@ -288,6 +292,7 @@ void FloodUpdate::rva0048DC51(const FloodMember *member, Rva0048E16C *record)
 	Real angle = data->m_angleOfFlow;
 	if (data->m_directionIsRelative)
 		angle = normalizeAngle(getObject()->getOrientation() + angle);
+		_ReadWriteBarrier();
 
 	Coord3D points[4];
 	Coord3D pos = *getObject()->getPosition();
@@ -295,6 +300,7 @@ void FloodUpdate::rva0048DC51(const FloodMember *member, Rva0048E16C *record)
 	placeControlPoint(points[1], member->m_controlPointOffset[1], angle, pos);
 	placeControlPoint(points[2], member->m_controlPointOffset[2], angle, pos);
 	placeControlPoint(points[3], member->m_controlPointOffset[3], angle, pos);
+	_ReadWriteBarrier();
 
 	Rva0055A246 segment(*(const Rva0055A246 *)points);
 	Real speed = member->m_speed;
