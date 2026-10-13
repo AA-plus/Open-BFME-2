@@ -1,4 +1,6 @@
 // ?rva005093C6@Made002CC774@@QAEXPAUInput005093C6@@PBUCoord3D@@@Z
+// partial score=0.9894 date=2026-10-13
+// ?rva005093C6@Made002CC774@@QAEXPAUInput005093C6@@PBUCoord3D@@@Z
 // partial score=0.995 date=2026-10-13
 // cl: /O1 /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii
 // ?rva005093C6@Made002CC774@@QAEXPAUInput005093C6@@PBUCoord3D@@@Z, retail 0x005093C6 (348B).
