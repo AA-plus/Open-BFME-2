@@ -15,9 +15,16 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #pragma optimize("", on)
 
 // BFME 2 has no W3D memory pools (see Code/Libraries/Source/WWVegas/WWLib/always.h).
+// This /Od unit emits an out-of-line copy of every inline it calls, so its
+// Matrix3D::Translate(Vector3) COMDAT is not retail's 0x0007B3C6 body and,
+// as the first copy in link order, blocks ObjectGetSingleLogicalBonePosition.
+// TU-local rename (same device as the ShaderClass setters below) keeps the
+// row's call byte-identical while no ?Translate@Matrix3D copy competes here.
+#define Translate Translate_Ringobj
 // Link view first: Matrix3D(), Matrix3D(bool) and Matrix3D(const Matrix3D&) stay inline without
 // emitting /O2 copies that compete with retail's owners (0x000423C5, 0x0004C91A, 0x0006645C).
 #include "../../../../../reference/shims/bfme_matrix3d_full_link/matrix3d_full_link.h"
+#undef Translate
 #include "always.h"
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(ARGCLASS)
@@ -916,7 +923,7 @@ void RingRenderObjClass::Special_Render(SpecialRenderInfoClass & rinfo)
 {
 	const Matrix3D & tm = Transform;
 	Matrix3D temp(1);
-	temp.Translate(Vector3(tm[0][3], tm[1][3], tm[2][3]));
+	temp.Translate_Ringobj(Vector3(tm[0][3], tm[1][3], tm[2][3]));
 	
 	if (rinfo.RenderType == SpecialRenderInfoClass::RENDER_VIS) {
 		WWASSERT(rinfo.VisRasterizer != NULL);
