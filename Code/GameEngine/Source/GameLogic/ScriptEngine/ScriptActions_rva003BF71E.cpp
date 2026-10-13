@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003BF71EDo@@YGXABVAsciiString@@0@Z @0x003BF71E 142B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BF71EDo@ScriptActions@@QAEXABVAsciiString@@0@Z @0x003BF71E 142B
 // Script team guard via TerrainLogic slot 0x88 getWaypointByName plus
 // getTeamNamed pin 0x003584E9 with false, createGroup pin 0x002FEC4B,
 // getTeamAsAIGroup pin 0x003A0F62, then rowed groupGuardPosition guard with
@@ -65,7 +67,7 @@ extern TerrainLogic *TheTerrainLogic;
 extern ScriptEngine *TheScriptEngine;
 extern AI *TheAI;
 
-void __stdcall Rva003BF71EDo(const AsciiString &teamName, const AsciiString &waypointName)
+void ScriptActions::Rva003BF71EDo(const AsciiString &teamName, const AsciiString &waypointName)
 {
 	Waypoint *way = TheTerrainLogic->getWaypointByName(waypointName);
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);

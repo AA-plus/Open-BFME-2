@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /O1 /DNDEBUG /MD /arch:SSE
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BEB01Do@@YGXPBVAsciiString@@PAX@Z @0x003BEB01 213B (dump range 18).
+// ?Rva003BEB01Do@ScriptActions@@QAEXPBVAsciiString@@PAX@Z @0x003BEB01 213B (dump range 18).
 // Team-plus-position AI-group dispatch, sibling of landed 0x003BEA10:
 // same head (team-name copy, getTeamNamed, AI createGroup, getTeamAsAIGroup,
 // two flag copies off 0x00DFEFA4, member count, TerrainLogic slot-0x88
@@ -84,7 +86,7 @@ extern TerrainLogic *TheTerrainLogic;
 
 extern BitFlags<116> KINDOFMASK_NONE;
 
-void __stdcall Rva003BEB01Do(const AsciiString *teamName, void *posSrc)
+void ScriptActions::Rva003BEB01Do(const AsciiString *teamName, void *posSrc)
 {
 	Team *team = TheScriptEngine->getTeamNamed(*teamName, false);
 	if (!team)

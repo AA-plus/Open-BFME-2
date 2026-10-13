@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BF9C8Do@@YGXABVAsciiString@@@Z @0x003BF9C8 50B.
+// ?Rva003BF9C8Do@ScriptActions@@QAEXABVAsciiString@@@Z @0x003BF9C8 50B.
 // Script team action via landed rva003570D1 prototype then handler at
 // proto+8 forwarding proto.
 // Evidence: rowed rva003570D1 rva002A9DCF copy-ctor, extern g_Va009FE16C,
@@ -29,7 +31,7 @@ public:
 
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003BF9C8Do(const AsciiString &a1)
+void ScriptActions::Rva003BF9C8Do(const AsciiString &a1)
 {
 	TeamPrototype *proto = TheScriptEngine->rva003570D1(a1);
 	if (proto == 0)

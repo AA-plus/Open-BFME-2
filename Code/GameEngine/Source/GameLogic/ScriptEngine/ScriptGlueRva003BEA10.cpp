@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BEA10Do@@YGXPBVAsciiString@@PAX@Z @0x003BEA10 241B (dump range 18).
+// ?Rva003BEA10Do@ScriptActions@@QAEXPBVAsciiString@@PAX@Z @0x003BEA10 241B (dump range 18).
 // Team-plus-position AI-group dispatch: copies the team name on the stack
 // (rowed StringBase copy 0x00365F0, leaked like the landed 0x003C4570 call
 // site), resolves the team through rowed getTeamNamed 0x003584E9, creates a
@@ -93,7 +95,7 @@ extern BitFlags<116> KINDOFMASK_NONE;
 #define g_00DFEFA4 KINDOFMASK_NONE
 // ^ g_00DFEFA4 is only an alias of the owned global KINDOFMASK_NONE (ledger names column).
 
-void __stdcall Rva003BEA10Do(const AsciiString *teamName, void *posSrc)
+void ScriptActions::Rva003BEA10Do(const AsciiString *teamName, void *posSrc)
 {
 	Team *team = TheScriptEngine->getTeamNamed(*teamName, false);
 	if (team == 0)

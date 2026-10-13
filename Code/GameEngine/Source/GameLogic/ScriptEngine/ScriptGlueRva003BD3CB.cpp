@@ -1,6 +1,8 @@
-// cl: /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?rva003BD3CB@@YGXPAXMH@Z @0x003BD3CB 58B (dump range 18).
+// ?rva003BD3CB@ScriptActions@@QAEXPAXMH@Z @0x003BD3CB 58B (dump range 18).
 // Frameless stdcall triple: queries TheTerrainLogic slot 0x88 with the
 // pointer argument, bails when null or when the 0x00DFEC68 manager is null,
 // then tail-calls the pinned SSE 0x002871A4 member on the manager with
@@ -56,7 +58,7 @@ public:
 extern class Rva002872BA *TheTriggerManager;
 #define TheRva002871A4Host (*(Rva002871A4 * *)&TheTriggerManager)
 
-void __stdcall rva003BD3CB(void *p, float f, int c)
+void ScriptActions::rva003BD3CB(void *p, float f, int c)
 {
 	void *r = TheTerrainLogic->t34(p);
 	if (r == 0)

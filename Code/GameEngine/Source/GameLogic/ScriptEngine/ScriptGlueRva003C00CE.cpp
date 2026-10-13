@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C00CEDo@@YGXPBVAsciiString@@PAX@Z @0x003C00CE 110B (dump range 18).
+// ?Rva003C00CEDo@ScriptActions@@QAEXPBVAsciiString@@PAX@Z @0x003C00CE 110B (dump range 18).
 // Team-centre dispatch: team-name copy, getTeamNamed, rowed Team kind check
 // 0x0039DEC4, team centre into a Coord3D through the pinned 0x0039E5B9
 // member, a float-4.0 call through the pinned 0x002D88A4 member on the
@@ -38,7 +40,7 @@ public:
 };
 extern class Eva *TheEva;
 
-void __stdcall Rva003C00CEDo(const AsciiString *teamName, void *extra)
+void ScriptActions::Rva003C00CEDo(const AsciiString *teamName, void *extra)
 {
 	Team *team = TheScriptEngine->getTeamNamed(*teamName, false);
 	if (!team)

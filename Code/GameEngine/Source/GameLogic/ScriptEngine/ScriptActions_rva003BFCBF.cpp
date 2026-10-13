@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ?Rva003BFCBFDo@@YGXABVAsciiString@@H@Z @0x003BFCBF 155B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BFCBFDo@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003BFCBF 155B
 // Script team priority decrease with delta via getTeamNamed pin 0x003584E9,
 // Team+0x30 TeamPrototype rowed rva0039D754 0x0039D754 with delta, format row
 // 0x00038150 Team priority decreased, rowed AppendDebugMessage 0x00205263.
@@ -42,7 +44,7 @@ public:
 };
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003BFCBFDo(const AsciiString &teamName, int delta)
+void ScriptActions::Rva003BFCBFDo(const AsciiString &teamName, int delta)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);
 	if (team == 0)

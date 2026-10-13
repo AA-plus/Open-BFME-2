@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003BF813Do@@YGXABVAsciiString@@00@Z @0x003BF813 161B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BF813Do@ScriptActions@@QAEXABVAsciiString@@00@Z @0x003BF813 161B
 // Script team trigger waypoint order via getQualifiedTriggerAreaByName pin
 // 0x0035768D plus getTeamNamed pin 0x003584E9 with false, TerrainLogic slot
 // 0x88 getWaypointByName, createGroup pin 0x002FEC4B, getTeamAsAIGroup pin
@@ -68,7 +70,7 @@ extern ScriptEngine *TheScriptEngine;
 extern TerrainLogic *TheTerrainLogic;
 extern AI *TheAI;
 
-void __stdcall Rva003BF813Do(const AsciiString &teamName, const AsciiString &areaName, const AsciiString &waypointName)
+void ScriptActions::Rva003BF813Do(const AsciiString &teamName, const AsciiString &areaName, const AsciiString &waypointName)
 {
 	PolygonTrigger *trigger = TheScriptEngine->getQualifiedTriggerAreaByName((AsciiString &)areaName);
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);

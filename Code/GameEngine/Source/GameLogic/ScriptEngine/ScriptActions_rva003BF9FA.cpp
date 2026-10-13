@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BF9FADo@@YGXABVAsciiString@@M0@Z @0x003BF9FA 125B.
+// ?Rva003BF9FADo@ScriptActions@@QAEXABVAsciiString@@M0@Z @0x003BF9FA 125B.
 // Script team action chaining landed rva003570D1: prototype via first name
 // then handler at proto+8; empty third name resolves team via getTeamNamed
 // and centroid else null.
@@ -40,7 +42,7 @@ public:
 
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003BF9FADo(const AsciiString &a1, float f, const AsciiString &a3)
+void ScriptActions::Rva003BF9FADo(const AsciiString &a1, float f, const AsciiString &a3)
 {
 	TeamPrototype *proto = TheScriptEngine->rva003570D1(a1);
 	if (proto == 0)

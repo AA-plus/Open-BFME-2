@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003BF7ACDo@@YGXABVAsciiString@@PAVParameter@@@Z @0x003BF7AC 103B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BF7ACDo@ScriptActions@@QAEXABVAsciiString@@PAVParameter@@@Z @0x003BF7AC 103B
 // Script team group order via getUnitNamed row 0x003588E7 (Parameter overload)
 // plus getTeamNamed pin 0x003584E9 with false, createGroup pin 0x002FEC4B,
 // getTeamAsAIGroup pin 0x003A0F62, then rowed rva00370410 with unit plus 0 and 1.
@@ -47,7 +49,7 @@ public:
 extern ScriptEngine *TheScriptEngine;
 extern AI *TheAI;
 
-void __stdcall Rva003BF7ACDo(const AsciiString &teamName, Parameter *param)
+void ScriptActions::Rva003BF7ACDo(const AsciiString &teamName, Parameter *param)
 {
 	Object *unit = TheScriptEngine->getUnitNamed(param);
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);

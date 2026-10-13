@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BFAC3Set@@YGXABVAsciiString@@H@Z @0x003BFAC3 49B (dump range 18).
+// ?Rva003BFAC3Set@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003BFAC3 49B (dump range 18).
 // Team int setter through the doSetTeamState argument idiom: copies the
 // name through the rowed StringBase copy ctor, resolves the team through
 // rowed ScriptEngine 0x003584E9 getTeamNamed, and applies the pinned
@@ -24,7 +26,7 @@ public:
 };
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003BFAC3Set(const AsciiString &team, int v)
+void ScriptActions::Rva003BFAC3Set(const AsciiString &team, int v)
 {
 	Team *t = TheScriptEngine->getTeamNamed(team, false);
 	if (t != 0)

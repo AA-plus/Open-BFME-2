@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BEBD6Do@@YGXPBVAsciiString@@@Z @0x003BEBD6 197B (dump range 18).
+// ?Rva003BEBD6Do@ScriptActions@@QAEXPBVAsciiString@@@Z @0x003BEBD6 197B (dump range 18).
 // Team-plus-position AI-group dispatch, sibling of landed 0x003BEA10:
 // same head (team-name copy, getTeamNamed, AI createGroup, getTeamAsAIGroup,
 // two flag copies off 0x00DFEFA4, member count) but the position comes from
@@ -87,7 +89,7 @@ extern BitFlags<116> KINDOFMASK_NONE;
 #define g_00DFEFA4 KINDOFMASK_NONE
 // ^ g_00DFEFA4 is only an alias of the owned global KINDOFMASK_NONE (ledger names column).
 
-void __stdcall Rva003BEBD6Do(const AsciiString *teamName)
+void ScriptActions::Rva003BEBD6Do(const AsciiString *teamName)
 {
 	Team *team = TheScriptEngine->getTeamNamed(*teamName, false);
 	if (team == 0)

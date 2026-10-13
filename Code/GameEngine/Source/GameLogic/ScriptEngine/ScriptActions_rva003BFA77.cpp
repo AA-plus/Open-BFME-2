@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BFA77Do@@YGXABVParameter@@H@Z @0x003BFA77 76B.
+// ?Rva003BFA77Do@ScriptActions@@QAEXABVParameter@@H@Z @0x003BFA77 76B.
 // Script unit damage via getUnitNamed then DamageInfo 0x7C with int amount
 // as float and fixed 8.
 // Evidence: rowed getUnitNamed Rva00263895Member ctor, pin attemptDamage,
@@ -47,7 +49,7 @@ public:
 
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003BFA77Do(const Parameter &p, int amount)
+void ScriptActions::Rva003BFA77Do(const Parameter &p, int amount)
 {
 	Object *obj = TheScriptEngine->getUnitNamed((Parameter *)&p);
 	if (obj == 0)

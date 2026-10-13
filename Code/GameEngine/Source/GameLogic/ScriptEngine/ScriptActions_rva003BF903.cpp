@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BF903Do@@YGXABVAsciiString@@H@Z @0x003BF903 108B.
+// ?Rva003BF903Do@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003BF903 108B.
 // Script team waypoint via getTeamNamed then TerrainLogic slot 0x88,
 // createGroup, getTeamAsAIGroup, followWaypointPathExact with 1.
 // Evidence: rowed getTeamNamed createGroup getTeamAsAIGroup groupHarvest,
@@ -49,7 +51,7 @@ extern class ScriptEngine *TheScriptEngine;
 extern TerrainLogic *TheTerrainLogic;
 extern class AI *TheAI;
 
-void __stdcall Rva003BF903Do(const AsciiString &teamName, int way)
+void ScriptActions::Rva003BF903Do(const AsciiString &teamName, int way)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);
 	if (team == 0)

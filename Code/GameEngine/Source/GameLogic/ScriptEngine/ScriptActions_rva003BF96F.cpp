@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BF96FDo@@YGXABVAsciiString@@0@Z @0x003BF96F 89B.
+// ?Rva003BF96FDo@ScriptActions@@QAEXABVAsciiString@@0@Z @0x003BF96F 89B.
 // Script unit player action via lookupUnitByValue then player mask and
 // virtual slot 7 on the masked player.
 // Evidence: rowed lookupUnitByValue rva00357475 getEachPlayerFromMask
@@ -48,7 +50,7 @@ public:
 extern class ScriptEngine *TheScriptEngine;
 extern PlayerList *ThePlayerList;
 
-void __stdcall Rva003BF96FDo(const AsciiString &a1, const AsciiString &a2)
+void ScriptActions::Rva003BF96FDo(const AsciiString &a1, const AsciiString &a2)
 {
 	Object *obj = ((Rva00358752Opaque *)TheScriptEngine)->lookupUnitByValue(a2);
 	if (obj == 0)

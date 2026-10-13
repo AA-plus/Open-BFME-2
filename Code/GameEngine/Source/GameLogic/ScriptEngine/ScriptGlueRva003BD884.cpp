@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BD884Set@@YGXPAVParameter@@PBVAsciiString@@@Z @0x003BD884 129B
+// ?Rva003BD884Set@ScriptActions@@QAEXPAVParameter@@PBVAsciiString@@@Z @0x003BD884 129B
 // (dump range 18). Unit-plus-mask team wiring: resolves the unit through
 // rowed ScriptEngine 0x003588E7 getUnitNamed, builds the mask from the name
 // through rowed 0x00357475, takes the rowed 0x002A7B91 getPlayerFromMask
@@ -56,7 +58,7 @@ extern PlayerList *ThePlayerList;
 
 int __cdecl rva003BA83F(void *p, int v);
 
-void __stdcall Rva003BD884Set(Parameter *p1, const AsciiString *name)
+void ScriptActions::Rva003BD884Set(Parameter *p1, const AsciiString *name)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(p1);
 	int mask = TheScriptEngine->rva00357475(*name, 0);
