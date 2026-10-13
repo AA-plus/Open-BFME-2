@@ -1,6 +1,8 @@
 // ?rva006C3AB0@GeneralAllocatorDebug@@QAEPAXPAXGPBXIH@Z
 // partial score=0.9 date=2026-10-13
 // ?rva006C3AB0@GeneralAllocatorDebug@@QAEPAXPAXGPBXIH@Z
+// partial score=0.9 date=2026-10-13
+// ?rva006C3AB0@GeneralAllocatorDebug@@QAEPAXPAXGPBXIH@Z
 // partial score=0.9 date=2026-10-11
 // cl: /O2 /arch:SSE /DNDEBUG /MD /EHsc
 //
