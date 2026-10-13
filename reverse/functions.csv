@@ -86950,3 +86950,4 @@ __ehhandler$??BRva002D4688@@QAE?AVAsciiString@@XZ,,0x007775C2,10,Code/GameEngine
 ?optimizeUnits@Formation@@QAEXPBUCoord3D@@@Z,,0x0042550E,455,Code/GameEngine/Source/Common/System/FormationOptimizeUnits.cpp,matched,WB twin 0x0113B070; STLport vector visible + _STL free + /EHs + less POD specialization; float cast on swap test sum
 ?Rva00419BCDCreate@@YAPAXXZ,,0x00419BCD,45,Code/GameEngine/Source/Common/Rva00419BFAInit.cpp,matched,stringbuf IO factory singleton; byte store fenced before the dword zero (cl hoists and-zero stores to the front of an unfenced tail)
 ?rva005F4710@Rva005F4710@@QAE?AUTreeHintRef00217D4C@@XZ,,0x005F4710,268,Code/GameEngine/Source/Common/Rva005F45AFPermuted.cpp,matched,
+?rva0039B315@ExperienceTracker@@QAEXM_N000@Z,,0x0039B315,188,Code/GameEngine/Source/GameLogic/Object/ExperienceTrackerRva0039B315.cpp,matched,banked partial closed by tools/permute.py; identity carried from the banked attempt

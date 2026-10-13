@@ -1,7 +1,7 @@
-// ?rva0039B315@ExperienceTracker@@QAEXM_N000@Z
-// partial score=0.96 date=2026-10-13
-// cl: /ICode/GameEngine/Source/Common /O1 /arch:SSE /DNDEBUG /MD /G7
-// ?rva0039B315@ExperienceTracker@@QAEXM_N000@Z @0x0039B315 188B (trial r3):
+// cl: /ICode/GameEngine/Source/Common /O1 /arch:SSE /DNDEBUG /MD /G6
+//
+// ?rva0039B315@ExperienceTracker@@QAEXM_N000@Z, retail 0x0039b315, 188 bytes. Banked partial (score 0.96) closed by tools/permute.py;
+// the body is the banked one up to statement/operand order and local types.
 // sink-chain LOOP (not recursion): walk m_experienceSink via findObjectByID,
 // scale per tracker, single trailing transfer 0x0039B16F on the final tracker.
 // Retail has no self-call and no loop-back before the transfer; the loop-back
@@ -72,28 +72,28 @@ private:
 
 void ExperienceTracker::rva0039B315(float amount, bool a, bool b, bool c, bool d)
 {
-	GameLogic *gameLogic = TheGameLogic;
 	ExperienceTracker *tracker = this;
 	unsigned sink;
+	GameLogic *gameLogic = TheGameLogic;
 	goto cond;
 body:
 	{
-		Object *obj = gameLogic->findObjectByID((ObjectID)sink);
-		if (!obj)
+		const Object *obj = gameLogic->findObjectByID((ObjectID)sink);
+		if ((0 == obj))
 			goto mult;
-		amount *= tracker->m_experienceScalar;
-		tracker = obj->getExperienceTracker();
 		d = false;
 		c = true;
+		amount *= tracker->m_experienceScalar;
+		tracker = obj->getExperienceTracker();
 	}
 cond:
 	if ((sink = tracker->m_experienceSink))
 		goto body;
 mult:
 	float mult = 1.0f;
-	if (reinterpret_cast<BfmeGlob939D*>(gameLogic)->bfmeCall939D())
+	if (reinterpret_cast < BfmeGlob939D*>(gameLogic)->bfmeCall939D())
 	{
-		int player = ThePlayerList->rva002A7C0B(false);
+		const long player = ThePlayerList->rva002A7C0B(false);
 		if (tracker->m_parent->getTemplate()->isStructure())
 			mult = TheWritableGlobalData->m_multiPlayMults.getBuildingXPMult(player);
 		else
