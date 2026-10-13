@@ -22,4 +22,13 @@ private:
 };
 Rva00051CA2::Rva00051CA2() : x(0.0f), y(0.0f), z(0.0f), active(false) {}
 Rva0005276C::Rva0005276C() {}
-Rva0005276C::~Rva0005276C() {}
+// Select-any like the consumer copy in MilesAudioManager.cpp so the two
+// identical 16B bodies fold instead of duplicating at link time.
+inline Rva0005276C::~Rva0005276C() {}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva0005276CDtor@@YAXPAVRva0005276C@@@Z absent-from-retail
+void bfmeEmitRva0005276CDtor(Rva0005276C *p)
+{
+	p->Rva0005276C::~Rva0005276C();
+}
