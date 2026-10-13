@@ -1,13 +1,6 @@
 // ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
-// partial score=0.94 date=2026-10-12
-// ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
-// 2026-10-12 (claude-opus-5-5): +0x90 as a small link wrapper (operator=
-// returning *this, pointer conversion) reproduces retail's lea eax,&m_prev /
-// store / mov eax,esi test and ESI/EDX roles at 51 B. Only left: retail loads
-// *ppTail before the m_next clear; reading it first (named local, inline
-// helper taking it by value) restores the order but swaps ESI/EDX. Needs the
-// region flags /O1 /arch:SSE /G7 explicitly in a new unit.
-// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
+// partial score=0.95 date=2026-10-13
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 
 // ?isInList@Object@@QBE_NPAPAV1@@Z, retail 0x0028B47C (31 bytes).
 // Object::isInList checks the intrusive list links at +0x8C/+0x90.
@@ -60,6 +53,7 @@ struct ObjectLink
 	operator Object *() const { return m_ptr; }
 	Object *m_ptr;
 };
+
 class Object
 {
 public:
@@ -103,12 +97,13 @@ void Object::rva0028B4CE(PathfindLayerEnum layer)
 
 // ?rva0028B49B@Object@@QAEXPAPAVObject@@0@Z, retail 0x0028B49B (51B):
 // tail-append to a (head, tail) pair: link after the old tail, take over
-// an empty head, become the tail. Called once, by GameLogic's awake-module
-// friend at 0x00242B19 with (&GameLogic+0xAC, &GameLogic+0xB0).
+// an empty head, become the tail.
 void Object::rva0028B49B(Object **ppHead, Object **ppTail)
 {
+	Object *oldTail;
+	oldTail = *ppTail;
 	m_next = 0;
-	m_prev = *ppTail;
+	m_prev = oldTail;
 	if (m_prev)
 		((Object *)m_prev)->m_next = this;
 	if (*ppHead == 0)
