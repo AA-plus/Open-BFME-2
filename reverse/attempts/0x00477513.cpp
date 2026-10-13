@@ -1,4 +1,6 @@
 // ?rva00477513@HordeTransportContain@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva00477513@HordeTransportContain@@QAEXXZ
 // partial score=0.93 date=2026-10-09
 // BFME1 ba7ddda7 Rva0024CAE0MaintainNestedRiders.cpp supplies the nested
 // rider-maintenance algorithm. BFME2's update at477AF3 calls4779F9 first;
@@ -15,13 +17,14 @@
 extern "C" void *__cdecl memcpy(void *,const void *,unsigned int);
 #pragma intrinsic(memcpy)
 #include "../../../../../Include/GameLogic/ContainmentListView.h"
-typedef ContainmentList IntList;
+typedef _STL::list<int> IntList;
 // Local comparison keeps this consumer from emitting a competing iterator.
 namespace _STL {
 template<class T, class Traits>
 static inline bool operator!=(const _List_iterator<T, Traits>&a,const _List_iterator<T, Traits>&b)
 { return a._M_node != b._M_node; }
-template<> _List_base<Rva0036ADF9Element,allocator<Rva0036ADF9Element> >::~_List_base();}
+template<> _List_base<Rva0036ADF9Element,allocator<Rva0036ADF9Element> >::~_List_base();
+template<> _List_base<int,allocator<int> >::~_List_base();}
 
 struct Rva0046247DPair {void *a; IntList *objects;};
 class Rva0046247D {public:void rva0046247D(Rva0046247DPair &);};
@@ -72,30 +75,6 @@ private:
     unsigned char prefix00[8];
     Rva0047727EObjectPositionView *m_object;
 };
-void HordeTransportContain::rva004779F9()
-{
-    Rva0046247DPair outer;
-    ((Rva0046247D*)this)->rva0046247D(outer);
-    for (IntList::iterator i=outer.objects->begin();i!=outer.objects->end();++i) {
-        void *outerObject;
-        memcpy(&outerObject,&*i,4);
-        RiderContain *contain=(RiderContain*)((Rva0047A040Base9E0*)((char*)this+0x11D))->rva00588B8A(outerObject);
-        if (!contain) continue;
-        IntList nested=contain->s108().rva0036AE51();
-        for(IntList::iterator j=nested.begin();j!=nested.end();++j) {
-            Object *object;
-            memcpy(&object,&*j,4);
-            Drawable *drawable=object->getDrawable();
-            if(!drawable || ((Rva00270260*)drawable)->rva00270260()) {
-                contain->sA8(object);
-                ((RemovalNotice*)((char*)this+0x20))->sA4(object,0);
-                object->kill(DeathDamage,NormalDeath);
-                if(drawable) ((Rva002716Holder*)drawable)->rva00271601(1);
-            }
-        }
-    }
-}
-
 #include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 class Thing { public: void setPosition(const Coord3D *position); };
 
@@ -145,15 +124,15 @@ void HordeTransportContain::rva00477513() {
     Rva0046247DPair outer;
     ((Rva0046247D*)this)->rva0046247D(outer);
     for (IntList::iterator i=outer.objects->begin();i!=outer.objects->end();++i) {
-        Rva0036ADF9Element element=*i;
+        int element=*i;
         Object *object;
         memcpy(&object,&element,4);
         if (object->templateView->flags115 & 0x20) {
             RiderContain *contain=(RiderContain*)((Rva0047A040Base9E0*)((char*)this+0x11D))->rva00588B8A(object);
             rva0047727E((Thing*)object);
             Rva0036AE51ListView nested=contain->s108();
-            for (IntList::iterator j=nested.b->begin();j!=nested.b->end();++j)
-                objects.push_back(*j);
+            for (ContainmentList::iterator j=nested.b->begin();j!=nested.b->end();++j)
+                objects.push_back(containmentFirstWord(*j));
         } else {
             objects.push_back(element);
         }
