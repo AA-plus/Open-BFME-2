@@ -263,11 +263,13 @@ private:
 };
 
 // +0xC0: initialized by the rowed 0x00526F46.
+class Rva00526F2C {public:void clear();};
+
 class Rva00526F46
 {
 public:
 	__forceinline Rva00526F46() { rva00526F46(); }
-	~Rva00526F46() { reinterpret_cast<Rva00526F80 *>(this)->rva00526F80(); }
+	__declspec(noinline) ~Rva00526F46() { reinterpret_cast<Rva00526F2C *>(this)->clear(); }
 	Rva00526F46 *rva00526F46();
 
 private:
