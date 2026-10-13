@@ -1,5 +1,5 @@
 // ?InternalFindPath@Pathfinder@@QAEPAVPath@@PAVObject@@ABVLocomotorSet@@PBUCoord3D@@2PAVHierarchicalPath@@PA_N@Z
-// partial score=0.95 date=2026-10-13
+// partial score=0.97 date=2026-10-13
 // ?InternalFindPath@Pathfinder@@QAEPAVPath@@PAVObject@@ABVLocomotorSet@@PBUCoord3D@@2PAVHierarchicalPath@@PA_N@Z
 // Bank: apply these class-view edits to Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp
 // (diff vs master at bank time), then append the body below. Compiles to 3443B there.
@@ -75,18 +75,15 @@ static __forceinline void pathfinderLog(const char *text) { fprintf((PathfinderL
 // Coord2D::Rotate(float) inlined: the CRT pair runs, then fsincos replaces it.
 static __forceinline void rotateOffset(float &x, float &y, float angle)
 {
-	struct { float cosine; float sine; } trig;
-	trig.sine = (float)sin(angle);
-	trig.cosine = (float)cos(angle);
+	float sine = (float)sin(angle);
+	float cosine = (float)cos(angle);
 	__asm
 	{
 		fld angle
 		fsincos
-		fstp trig.cosine
-		fstp trig.sine
+		fstp cosine
+		fstp sine
 	}
-	float &sine = trig.sine;
-	float &cosine = trig.cosine;
 	float rotated = x * cosine - y * sine;
 	y = y * cosine + x * sine;
 	x = rotated;
@@ -159,9 +156,13 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 			return NULL;
 	}
 
+	TCheckMovementInfo info;
+	Int blockers;
+	Bool destinationOk;
+	ICoord2D *startCell;
+	{
 	ICoord2D cell;
 	Rva002E7875WorldToCell(&cell, true, &adjustTo);
-	TCheckMovementInfo info;
 	((Rva002E6FDF *)&info)->rva002E6FDF();
 	info.cell = cell;
 	info.layer = destinationLayer;
@@ -171,33 +172,37 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 	if (!obj->m_template->testKindWord(90))
 		info.m_14 |= 0x10;
 	readMoverInfo(info, obj);
-	info.m_11 = true;
 	{
 		Int priority = obj->m_template->priority;
 		Bool flag = obj->m_template->flag;
 		char *ai = obj->m_258;
+		info.m_11 = true;
 		*(Rva002E8BCF *)info.m_1C = Rva002E8BCF((const Rva002E8BCFSrc *)(ai + 0x1CC), !flag, priority - 1, obj->rva0028AFBB());
 	}
-	Int blockers;
-	if (!CheckDestination(obj, cell.x, cell.y, destinationLayer, radius, centerInCell, &blockers, true)
-		|| !checkForMovement(obj, info)) {
+	destinationOk = CheckDestination(obj, cell.x, cell.y, destinationLayer, radius, centerInCell, &blockers, true)
+		&& checkForMovement(obj, info);
+	}
+	if (!destinationOk) {
 		if (obj->m_template->testKindWord(186)) {
 			adjustTo = unshiftedTo;
 			destinationLayer = TheTerrainLogic->getLayerForDestination(NULL, &adjustTo);
 			goalCell = (PathfindCell *)rva001E3647Pos(destinationLayer, &adjustTo);
 			if (goalCell == NULL)
 				return NULL;
+			{
+			ICoord2D cell;
 			cell = *Rva002E7875WorldToCell(&cell, true, &adjustTo);
 			info.cell = cell;
 			if (!CheckDestination(obj, cell.x, cell.y, destinationLayer, radius, centerInCell, &blockers, true)
 				|| !checkForMovement(obj, info))
 				goalBlocked = true;
+			}
 		} else {
 			goalBlocked = true;
 		}
 	}
 
-	Rva002E7875WorldToCell(&cell, true, &clipFrom);
+	{ ICoord2D startCellNdx; Rva002E7875WorldToCell(&startCellNdx, true, &clipFrom); startCell = &startCellNdx; }
 	PathfindLayerEnum layer = (PathfindLayerEnum)obj->rva0028B511();
 	PathfindCell *parentCell = rva002E8BF8(layer, &clipFrom);
 	if (parentCell == NULL) {
@@ -208,7 +213,8 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 
 	Bool viaMineshaft = false;
 	if (m_srcMineshaft && m_destMineshaft && m_srcMineshaft != m_destMineshaft) {
-		for (const Rva002F35AFHop *hop = m_1C1CC.begin(); hop != m_1C1CC.end(); ++hop) {
+		const Rva002F35AFHop *hopEnd = m_1C1CC.end();
+		for (const Rva002F35AFHop *hop = m_1C1CC.begin(); hop != hopEnd; ++hop) {
 			if (hop->m_zone == m_srcMineshaft->m_portal) {
 				viaMineshaft = true;
 				adjustTo = m_srcMineshaft->m_position;
@@ -221,11 +227,12 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 		}
 	}
 
-	goalCell->allocateInfo((In002E6BA1 *)Rva002E7875WorldToCell(&cell, true, &adjustTo));
+	{ ICoord2D pos2d; goalCell->allocateInfo((In002E6BA1 *)Rva002E7875WorldToCell(&pos2d, true, &adjustTo)); }
 	if (parentCell != goalCell) {
 		if (pathfinderLogOn())
 			pathfinderLog("CritterDesync:    Pathfinder::InternalFindPath() 8");
-		parentCell->allocateInfo((In002E6BA1 *)Rva002E7875WorldToCell(&cell, true, &clipFrom));
+		ICoord2D pos2d;
+		parentCell->allocateInfo((In002E6BA1 *)Rva002E7875WorldToCell(&pos2d, true, &clipFrom));
 	}
 
 	if (parentCell->getType() == PathfindCell::CELL_OBSTACLE
@@ -289,7 +296,7 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 		info.radius = radius;
 		info.m_14 = 0;
 		readMoverInfo(info, obj);
-		info.cell = *Rva002E7875WorldToCell(&cell, true, &clipFrom);
+		{ ICoord2D startCellNdx; info.cell = *Rva002E7875WorldToCell(&startCellNdx, true, &clipFrom); }
 		info.m_11 = true;
 		if (!checkForMovement(obj, info)) {
 			if (pathfinderLogOn())
@@ -314,10 +321,10 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 			m_isTunneling = false;
 			Path *path = BuildActualPath(obj, locomotorSet.getValidSurfaces(), from, goalCell, centerInCell, false, false);
 			if (viaMineshaft) {
-				path->rva002655E3(&m_srcMineshaft->m_position,
-					TheTerrainLogic->getLayerForDestination(NULL, &m_srcMineshaft->m_position), m_srcMineshaft->m_portal);
-				path->rva002655E3(&m_destMineshaft->m_position,
-					TheTerrainLogic->getLayerForDestination(NULL, &m_destMineshaft->m_position), 0x7fffffff);
+				PathfindLayerEnum srcLayer = TheTerrainLogic->getLayerForDestination(NULL, &m_srcMineshaft->m_position);
+				path->rva002655E3(&m_srcMineshaft->m_position, srcLayer, m_srcMineshaft->m_portal);
+				PathfindLayerEnum destLayer = TheTerrainLogic->getLayerForDestination(NULL, &m_destMineshaft->m_position);
+				path->rva002655E3(&m_destMineshaft->m_position, destLayer, 0x7fffffff);
 				path->SetLastNodePortal(m_destMineshaft->m_portal);
 			}
 			Coord3D direction = *((const Thing *)obj)->getUnitDirectionVector2D();
@@ -342,7 +349,7 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 			Int dist = dx*dx + dy*dy;
 			if (dist < nearestGoalDist) {
 				if (dx + dy > 25) {
-					float reach = (float)(sqrt((double)dist) + 25.0f);
+					float reach = (float)sqrt((double)dist) + 25.0f;
 					giveUpDist = (Int)(reach * reach);
 				} else {
 					giveUpDist = dist * 4;
@@ -389,7 +396,7 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 		}
 
 		CheckChangeLayers(parentCell, obj);
-		cellCount += rva002F83F5(parentCell, goalCell, locomotorSet, isHuman, centerInCell, radius, &cell, obj, 0);
+		cellCount += rva002F83F5(parentCell, goalCell, locomotorSet, isHuman, centerInCell, radius, startCell, obj, 0);
 	}
 
 	if (pathfinderLogOn())
