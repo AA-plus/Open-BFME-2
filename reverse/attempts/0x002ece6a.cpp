@@ -1,4 +1,6 @@
 // ?cellCallback@Rva002ECE6AInfo@@QAEHPAVPathfindCell@@0HH@Z
+// partial score=0.9537 date=2026-10-13
+// ?cellCallback@Rva002ECE6AInfo@@QAEHPAVPathfindCell@@0HH@Z
 // partial score=0.9536999396 date=2026-10-09
 // cl: /ICode/Libraries/Include /O1 /DNDEBUG /MD /arch:SSE /G7 /EHsc
 // Native2ECE6A..2ED01E RET16 full436. Existing init owner retained:
