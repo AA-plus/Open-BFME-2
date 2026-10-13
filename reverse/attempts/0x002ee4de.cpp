@@ -1,11 +1,14 @@
 // ?AdjustFlingDestination@Pathfinder@@QAEXPAVObject@@PBUCoord3D@@PAU3@@Z
 // partial score=0.939 date=2026-10-13
 // ?AdjustFlingDestination@Pathfinder@@QAEXPAVObject@@PBUCoord3D@@PAU3@@Z
+// partial score=0.939 date=2026-10-13
+// ?AdjustFlingDestination@Pathfinder@@QAEXPAVObject@@PBUCoord3D@@PAU3@@Z
 // partial score=0.939 date=2026-10-10
 // ?AdjustFlingDestination@Pathfinder@@QAEXPAVObject@@PBUCoord3D@@PAU3@@Z
 // partial score=0.939 date=2026-10-09
 // cl: /O1 /G7 /Oy- /arch:SSE /MD /GX- /ICode/Libraries/Include/Lib
 #include "Coord3D.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 struct FlingCoordP4 : Coord3D { __forceinline void set(const Coord3D &p) {x=p.x; y=p.y; z=p.z;} };
 enum PathfindLayerEnum { LAYER_INVALID = 0 };
 struct Rva0028AC4EQ { char pad00[0x14]; int value14; };
@@ -51,7 +54,7 @@ void Pathfinder::AdjustFlingDestination(Object *object, const Coord3D *start, Co
  FlingCoordP4 first;
  first.set(*start);
  if (!centered) {
-  first.x += 5.0f;
+  __vref(first.x) += 5.0f;
   first.y += 5.0f;
   end->x += 5.0f;
   end->y += 5.0f;
