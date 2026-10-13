@@ -1,4 +1,6 @@
 // ??0Impl@RegionDetailsStructuresMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@HH@Z
+// partial score=0.9413 date=2026-10-13
+// ??0Impl@RegionDetailsStructuresMovieClip@StrategicHUD@@QAE@PAV12@HABVAsciiString@@HH@Z
 // partial score=0.941334 date=2026-10-12
 // Astra-high-d update: 735B versus 732B. EH state7 timing now agrees; extra
 // MOV [EBP-14],EAX remains plus callback temporary home packing differences.
