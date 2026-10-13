@@ -1,7 +1,11 @@
 // ?rva0029FFFF@Rva0029C138@@QAEHP6AHPAVDrawable@@PAX@Z1@Z
+// partial score=0.96 date=2026-10-13
+// ?rva0029FFFF@Rva0029C138@@QAEHP6AHPAVDrawable@@PAX@Z1@Z
 // partial score=0.9 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfmelist /ICode/Libraries/Include/Lib
 // stlport
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <list>
 #include "Coord3D.h"
 struct ICoord2D { int x,y; };
@@ -54,6 +58,7 @@ private:
 };
 int Rva0029C138::rva0029FFFF(int (*callback)(Drawable*,void*),void* data) {
  int count=0;
+ _ReadWriteBarrier();
  bool point=false;
  if(points.size()<3 || bounds.isPoint()) point=true;
  Drawable* only=0;

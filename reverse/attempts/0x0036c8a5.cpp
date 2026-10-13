@@ -1,4 +1,6 @@
 // ?rva0036C8A5@Rva0036C6AFState@@QAE?AUFollowPosition@@PA_N_N@Z
+// partial score=0.959 date=2026-10-13
+// ?rva0036C8A5@Rva0036C6AFState@@QAE?AUFollowPosition@@PA_N_N@Z
 // partial score=0.9594732853353543 date=2026-10-10
 // cl: /O1 /arch:SSE /G7 /Oy- /DNDEBUG /MD /ICode/Libraries/Include/Lib /I.
 // Native 00368C7A..00368D12, 152B, RET12. The receiver's object at +08
