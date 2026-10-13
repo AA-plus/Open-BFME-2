@@ -23,7 +23,7 @@ extern int g_bfmeAptBreakOnAssertAtDDC01C;
 void __debugbreak();
 #pragma intrinsic(__debugbreak)
 #define INPUT_ASSERT(test,text,line) if(!(test)){g_bfmeAptAssertAtE17734(text,"C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptInput.cpp",line);if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();}
-class Rva006FB860 {public:char unknown00[8];unsigned short count,capacity;AptCIH **entries;char unknown10[0x5C];AptCIH *current;void rva006FA100(AptCIH*,int);void rva006FA340();};
+class Rva006FB860 {public:AptCIH *rva006FA420(int,int);char unknown00[8];unsigned short count,capacity;AptCIH **entries;char unknown10[0x5C];AptCIH *current;void rva006FA100(AptCIH*,int);void rva006FA340();};
 static __declspec(noinline) bool rva006F97F0Parse(EAStringC *value,int *first,int *second)
 {
  if(value->IsEmpty())return false;
@@ -120,4 +120,88 @@ AptCIH *rva006F99D0(int direction,AptCIH *current,AptCIH *reference)
  }
  empty:return 0;
  found:return bestNode;
+}
+
+// Native 6FA420..6FDDD (957B, RET8): button-instance hit test over the global
+// button pool (WB AptInput.cpp asserts 0x1F0..0x1FB): per instance, per hit
+// record, either the mesh hit test (shape type 1) or the transformed
+// rectangle test (type 2). The two redundant self-compares of nButtonInstances
+// in the first assert condition fold away (no bytes) but change cl's operand
+// orientation for the later [base+index] record addressing (the bank was three
+// commuted SIB encodings off).
+struct BfmeM1208 {float m[6];};
+void __cdecl bfmeMul1208(const BfmeM1208 *,const BfmeM1208 *,BfmeM1208 *);
+struct BfmeMesh1290;
+struct BfmeTransform2_1290;
+class BfmePicker1284 {public:bool bfmeMeshHitTest1290(BfmeMesh1290 *,const BfmeTransform2_1290 *,int,int);};
+struct AptButtonShape {int eType;int unknown04;float x0,y0,x1,y1;};
+struct AptButtonHitRecord {unsigned int flags;AptButtonShape *shape;int unknown08;BfmeM1208 matrix;char unknown24[0x44-0x24];};
+struct AptButtonHitDescriptor {char pad[0x24];int recordCount;AptButtonHitRecord *records;};
+struct AptButtonHitCharacter {int eType;char pad04[4];AptButtonHitDescriptor desc;};
+struct AptButtonHitCharInst {char pad[0xc];AptButtonHitCharacter *pCharacter;};
+class AptButtonHitCIH {
+public:
+ __forceinline bool isButtonInst() const {
+  if (!this) {
+   g_bfmeAptAssertAtE17734("this","c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h",0xB5);
+   if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+  }
+  return ((const Rva006DBB30SarDwordField*)this)->get()==0xE && !((const BfmeAptValue006DCD20*)this)->isUndefined();
+ }
+ __forceinline bool isCharacterInst() const {
+  return ((const Rva006DBB30SarDwordField*)this)->get()>=0xC && ((const Rva006DBB30SarDwordField*)this)->get()<=0x13 && !((const BfmeAptValue006DCD20*)this)->isUndefined();
+ }
+ __forceinline AptButtonHitCharInst *getCharacterInst() const {
+  if (!this) {
+   g_bfmeAptAssertAtE17734("this","c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h",0xB0);
+   if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+  }
+  if (!isCharacterInst()) {
+   g_bfmeAptAssertAtE17734("isCharacterInst()","c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h",0xA5);
+   if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+  }
+  return inst;
+ }
+ char pad[0x4c];
+ AptButtonHitCharInst *inst;
+};
+struct AptButtonInstance {AptButtonHitCIH *pCIH;BfmeM1208 matrix;};
+struct AptButtonPoolView {char pad[0x10];int nButtonInstances;AptButtonInstance *aButtonInstanceList;};
+#define gpButtonPool ((AptButtonPoolView*)g_bfmeAptPtrAtE176D0)
+AptCIH *Rva006FB860::rva006FA420(int x,int y)
+{
+ int checked=0;
+ for (int i=gpButtonPool->nButtonInstances-1;i>=0;i--) {
+  if ((gpButtonPool->aButtonInstanceList[i].pCIH==0) && gpButtonPool->nButtonInstances==gpButtonPool->nButtonInstances && gpButtonPool->nButtonInstances==gpButtonPool->nButtonInstances) {
+   g_bfmeAptAssertAtE17734("gpPool->aButtonInstanceList[i].pCIH != NULL","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptInput.cpp",0x1F0);
+   if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+  }
+  if (((BfmeAptValue006DCD20*)gpButtonPool->aButtonInstanceList[i].pCIH)->isUndefined()) continue;
+  if (!gpButtonPool->aButtonInstanceList[i].pCIH->isButtonInst()) {
+   g_bfmeAptAssertAtE17734("gpPool->aButtonInstanceList[i].pCIH->isButtonInst()","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptInput.cpp",0x1F8);
+   if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+  }
+  AptButtonHitDescriptor *desc=&gpButtonPool->aButtonInstanceList[i].pCIH->getCharacterInst()->pCharacter->desc;
+  if (gpButtonPool->aButtonInstanceList[i].pCIH->getCharacterInst()->pCharacter->eType!=4) {
+   g_bfmeAptAssertAtE17734("gpPool->aButtonInstanceList[i].pCIH->getCharacterInst()->pCharacter->eType == AptCharacterType_Button","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptInput.cpp",0x1FB);
+   if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+  }
+  for (int j=0;j<desc->recordCount;j++) {
+   if (!(desc->records[j].flags&8)) continue;
+   BfmeM1208 matrix=desc->records[j].matrix;
+   bfmeMul1208(&gpButtonPool->aButtonInstanceList[i].matrix,&matrix,&matrix);
+   AptButtonShape *shape=desc->records[j].shape;
+   if (shape->eType==1) {
+    if (((BfmePicker1284*)this)->bfmeMeshHitTest1290((BfmeMesh1290*)desc,(const BfmeTransform2_1290*)&matrix,x,y))
+     return (AptCIH*)gpButtonPool->aButtonInstanceList[i].pCIH;
+   } else if (shape->eType==2) {
+    float x0=shape->x0,x1=shape->x1,y0=shape->y0,y1=shape->y1;
+    if ((float)x>matrix.m[0]*x0+matrix.m[1]*y0+matrix.m[4] && (float)x<matrix.m[0]*x1+matrix.m[1]*y1+matrix.m[4]
+     && (float)y>matrix.m[2]*x0+matrix.m[3]*y0+matrix.m[5] && (float)y<matrix.m[2]*x1+matrix.m[3]*y1+matrix.m[5])
+     return (AptCIH*)gpButtonPool->aButtonInstanceList[i].pCIH;
+   }
+  }
+  if (++checked==gpButtonPool->nButtonInstances) break;
+ }
+ return 0;
 }
