@@ -38,9 +38,9 @@ private:
 	char m_pad00[0x08];
 	Rva006D8670 *m_next;
 };
-extern Rva006D8670 *g_rva006D8670FreeA;
-extern Rva006D8670 *g_rva006D8670FreeB;
-extern Rva006D8670 *g_rva006D8670FreeC;
+Rva006D8670 * g_rva006D8670FreeA;	// retail RVA 0x00A18020 (.data, 4 bytes), defined here: nothing else owns it
+Rva006D8670 * g_rva006D8670FreeB;	// retail RVA 0x00A18024 (.data, 4 bytes), defined here: nothing else owns it
+Rva006D8670 * g_rva006D8670FreeC;	// retail RVA 0x00A18028 (.data, 4 bytes), defined here: nothing else owns it
 void Rva006D8670::rva006D8670()
 {
 	m_next = g_rva006D8670FreeA;

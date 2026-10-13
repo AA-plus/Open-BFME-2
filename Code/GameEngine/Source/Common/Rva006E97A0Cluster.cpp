@@ -13,7 +13,7 @@ public:
 	virtual void slot1();
 };
 
-extern Rva006E97A0Object *g_pRva006E97A0Object;	// 0x00E1818C
+Rva006E97A0Object * g_pRva006E97A0Object;	// retail RVA 0x00A1818C (.data, 4 bytes), defined here: nothing else owns it
 
 // ?Rva006E97A0@@YAXXZ @ 0x006E97A0 (26B)
 void Rva006E97A0(void)

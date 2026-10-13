@@ -124,8 +124,8 @@ public:
     void rva001FF3A9(const TreeHintRef00217D4C &ref);
 };
 
-extern unsigned g_Va00E062FC;
-extern unsigned g_Va00E0630C;
+unsigned g_Va00E062FC;	// retail RVA 0x00A062FC (.data, 16 bytes), defined here: nothing else owns it
+unsigned g_Va00E0630C;	// retail RVA 0x00A0630C (.data, 16 bytes), defined here: nothing else owns it
 
 class Rva005749B7
 {

@@ -10,8 +10,8 @@ struct Rva005E8DB5Param
 	unsigned char m_34;
 };
 
-extern int g_00E06734;
-extern int g_00E06748;
+int g_00E06734;	// retail RVA 0x00A06734 (.data, 20 bytes), defined here: nothing else owns it
+int g_00E06748;	// retail RVA 0x00A06748 (.data, 20 bytes), defined here: nothing else owns it
 
 class Rva005E8DB5
 {

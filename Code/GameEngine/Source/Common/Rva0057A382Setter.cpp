@@ -1,9 +1,9 @@
 // cl: /MD
 // ?rva0057A382@Rva0057A382@@QAEXXZ @0x0057A382 39B
 // Evidence: caller 0x0057A748 sets +0x58=0 +0x5C=1; callee row ?rva005D3F6D@Rva005D3F6D@@QAEXH@Z; neighbours share /O1 /MD
-extern int g_00E06374;
-extern int g_00E06378;
-extern int g_00E0637C;
+int g_00E06374;	// retail RVA 0x00A06374 (.data, 4 bytes), defined here: nothing else owns it
+int g_00E06378;	// retail RVA 0x00A06378 (.data, 4 bytes), defined here: nothing else owns it
+int g_00E0637C;	// retail RVA 0x00A0637C (.data, 8 bytes), defined here: nothing else owns it
 
 class Rva005D3F6DInner;
 class Rva005D3F6D

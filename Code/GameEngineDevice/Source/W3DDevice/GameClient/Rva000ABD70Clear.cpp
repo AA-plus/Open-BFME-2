@@ -21,7 +21,7 @@ struct Outer
 	Inner *m_ptr;
 };
 
-extern Outer *g_00E00940;
+Outer * g_00E00940;	// retail RVA 0x00A00940 (.data, 4 bytes), defined here: nothing else owns it
 extern Dict g_Va00E00944;
 #define g_00E00944 g_Va00E00944
 // ^ g_00E00944 is only an alias of the owned global g_Va00E00944 (ledger names column).

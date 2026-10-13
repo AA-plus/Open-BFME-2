@@ -24,7 +24,7 @@ public:
 	const Rva00427157 *getDefault();
 };
 
-extern LivingWorldAutoResolveArmorStore *g_00E031F0;
+LivingWorldAutoResolveArmorStore * g_00E031F0;	// retail RVA 0x00A031F0 (.data, 4 bytes), defined here: nothing else owns it
 
 class Rva0033A9A5
 {

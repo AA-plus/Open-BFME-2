@@ -47,8 +47,8 @@ class BfmeTracker4310
 public:
 	void bfmeDrop(BfmeObj4310 *obj);
 };
-extern BfmeTracker4310 *g_00E176F8;
-extern unsigned char g_00E18348;
+BfmeTracker4310 * g_00E176F8;	// retail RVA 0x00A176F8 (.data, 4 bytes), defined here: nothing else owns it
+unsigned char g_00E18348;	// retail RVA 0x00A18348 (.data, 4 bytes), defined here: nothing else owns it
 
 class BfmeNestedBE;
 BfmeNestedBE *bfmeUnlinkNestedBE(BfmeNestedBE *node);

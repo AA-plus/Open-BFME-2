@@ -19,7 +19,7 @@ public:
 	void rva00413D46(INI *ini);
 };
 
-extern void *g_00E03064;
+void * g_00E03064;	// retail RVA 0x00A03064 (.data, 8 bytes), defined here: nothing else owns it
 
 struct INIException
 {

@@ -19,7 +19,7 @@ Int Rva005A6709::rva005A6709() const
 	return (m_0C != 8) && (m_0C == m_14);
 }
 
-extern unsigned long g_00E063FC;
+unsigned long g_00E063FC;	// retail RVA 0x00A063FC (.data, 4 bytes), defined here: nothing else owns it
 int Rva005A671DNext()
 {
 	if (!g_00E063FC)

@@ -17,8 +17,8 @@ public:
 	unsigned int m_category;
 };
 
-extern const char *rva00E0A1C0;
-extern const char *rva00E0A1B4;
+const char * rva00E0A1C0;	// retail RVA 0x00A0A1C0 (.data, 8 bytes), defined here: nothing else owns it
+const char * rva00E0A1B4;	// retail RVA 0x00A0A1B4 (.data, 8 bytes), defined here: nothing else owns it
 
 class Rva00660DD0
 {

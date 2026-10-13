@@ -8,7 +8,7 @@
 typedef int HMODULE;
 extern HMODULE g_00DFE158;
 extern unsigned char g_00DFE15C;
-extern unsigned char g_00DFE15D;
+unsigned char g_00DFE15D;	// retail RVA 0x009FE15D (.data, 3 bytes), defined here: nothing else owns it
 
 class Rva00203B08
 {

@@ -30,7 +30,7 @@ class Rva005B7FA4 : public Rva0056DC6B, public AptStats
 public:
     virtual ~Rva005B7FA4();
 };
-extern Rva005B7FA4 *g_00E06478;
+Rva005B7FA4 * g_00E06478;	// retail RVA 0x00A06478 (.data, 4 bytes), defined here: nothing else owns it
 Rva005B7FA4::~Rva005B7FA4()
 {
     if (g_00E06478 == this)

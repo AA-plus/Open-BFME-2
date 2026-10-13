@@ -5,7 +5,7 @@ class GameWindow
 public:
 	int winHide(bool hide);
 };
-extern int g_00E05E24;
+int g_00E05E24;	// retail RVA 0x00A05E24 (.data, 256 bytes), defined here: nothing else owns it
 extern int g_00E05F24;
 class Rva0053B914
 {
