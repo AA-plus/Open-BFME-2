@@ -9,7 +9,7 @@
 bool bfmeRva000387C0();
 enum ObjectStatusTypes { OBJECT_STATUS_5=5 };
 class Object { public: void setStatus(ObjectStatusTypes,bool); };
-class OpenContain { public: void rva00462FB3(Object *,bool); };
+class OpenContain { public: void privateRemoveFromContain(Object *,bool); };
 struct Rva00463509Flags {
     unsigned words[4];
     __forceinline bool test(unsigned bit) const { return (words[bit/32]>>(bit%32))&1; }
@@ -41,5 +41,5 @@ void Rva00463509::rva00463509(Object *rider,bool expose)
         return;
     }
     if (flags(rider).test(1) && !flags(rider).test(61)) rider->setStatus(OBJECT_STATUS_5,false);
-    reinterpret_cast<OpenContain *>(reinterpret_cast<char *>(this)-0x20)->rva00462FB3(rider,expose);
+    reinterpret_cast<OpenContain *>(reinterpret_cast<char *>(this)-0x20)->privateRemoveFromContain(rider,expose);
 }

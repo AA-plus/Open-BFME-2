@@ -42,7 +42,7 @@ class OpenContain : public OpenContainModuleBase, public ContainModuleInterface
 {
 public:
 	virtual void removeAllContained(bool exposeStealthUnits);
-	void rva00462FB3(Object *rider, bool exposeStealthUnits);
+	void privateRemoveFromContain(Object *rider, bool exposeStealthUnits);
 private:
 	char m_pad24[0x54 - 0x24];
 	ContainListNode *m_containList;
@@ -52,5 +52,5 @@ void OpenContain::removeAllContained(bool exposeStealthUnits)
 {
 	ContainListNode *it;
 	while ((it = m_containList->m_next) != m_containList)
-		rva00462FB3(it->m_rider, exposeStealthUnits);
+		privateRemoveFromContain(it->m_rider, exposeStealthUnits);
 }

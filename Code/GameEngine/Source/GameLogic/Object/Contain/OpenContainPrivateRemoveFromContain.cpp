@@ -36,11 +36,11 @@ public:
     virtual void slot18(); virtual void slot19(); virtual void slot20(); virtual void slot21();
     virtual void slot22(); virtual void slot23();
     virtual void slot24(Object *,bool,bool);
-    void rva00462FB3(Object *,bool);
+    void privateRemoveFromContain(Object *,bool);
     void *moduleData; Object *owner;
     char unknown0C[0x68-0x0C]; int count68;
 };
-void OpenContain::rva00462FB3(Object *rider,bool expose)
+void OpenContain::privateRemoveFromContain(Object *rider,bool expose)
 {
     if (rider->testStatus(OBJECT_STATUS_66)) owner->setStatus(OBJECT_STATUS_66,false);
     slot13(rider);
