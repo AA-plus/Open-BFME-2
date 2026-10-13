@@ -122,31 +122,6 @@ struct RulesOverrideView {
 // placeholder Rva00559FAC — the WorldBuilder twin names MpGameRules::GetDefaults
 // at EA's own MpGameRules.cpp (callgraph 4). Static-member spelling:
 // ABI-identical to the proven cdecl free function.
-void MpGameRules::GetDefaults(int mode, void *store) {
-    memset(store, 255, 40);
-    if (mode == -1)
-        return;
-
-    int comboCount = Rva00559F7EGet(mode);
-    const RuleCombo * const *combos = Rva00559F48Get(mode);
-    for (int i = 0; i < comboCount; ++i) {
-        const RuleCombo *cur = combos[i];
-        if (cur)
-            ((int *)store)[cur->id] = cur->choices[cur->defaultIndex].value;
-    }
-
-    int checkCount = Rva00559F95Get(mode);
-    const RuleCheck * const *checks = Rva00559F63Get(mode);
-    for (int j = 0; j < checkCount; ++j) {
-        const RuleCheck *cur = checks[j];
-        ((int *)store)[cur->id] = cur->value;
-    }
-
-    if (((RulesOverrideView *)TheWritableGlobalData)->bits & 3) {
-        if (((int *)store)[0] != -1)
-            ((int *)store)[0] = 0;
-    }
-}
 
 #include "unicode_string.h"
 class GameTextInterface;
@@ -187,4 +162,30 @@ public:
 UnicodeString MpGameRules::GetRuleString(int rule) {
  if((unsigned int)rule>=10)return UnicodeString((const unsigned short*)L"Invalid Rule");
  return ((RuleTextInterfaceView*)TheGameText)->fetch(ruleStringTags[rule],0);
+}
+
+void MpGameRules::GetDefaults(int mode, void *store) {
+    memset(store, 255, 40);
+    if (mode == -1)
+        return;
+
+    int comboCount = Rva00559F7EGet(mode);
+    const RuleCombo * const *combos = Rva00559F48Get(mode);
+    for (int i = 0; i < comboCount; ++i) {
+        const RuleCombo *cur = combos[i];
+        if (cur)
+            ((int *)store)[cur->id] = cur->choices[cur->defaultIndex].value;
+    }
+
+    int checkCount = Rva00559F95Get(mode);
+    const RuleCheck * const *checks = Rva00559F63Get(mode);
+    for (int j = 0; j < checkCount; ++j) {
+        const RuleCheck *cur = checks[j];
+        ((int *)store)[cur->id] = cur->value;
+    }
+
+    if (((RulesOverrideView *)TheWritableGlobalData)->bits & 3) {
+        if (((int *)store)[0] != -1)
+            ((int *)store)[0] = 0;
+    }
 }
