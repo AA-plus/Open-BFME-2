@@ -2,6 +2,8 @@
 // partial score=0.96 date=2026-10-13
 // ??0Rva0042FD9E@@QAE@XZ
 // partial score=0.96 date=2026-10-13
+// ??0Rva0042FD9E@@QAE@XZ
+// partial score=0.96 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /DNDEBUG /DWIN32 /D_WINDOWS /arch:SSE
 // stlport
 // ??0Rva0042FD9E@@QAE@XZ, retail 0x0042FD9E, 129 bytes.
@@ -47,6 +49,7 @@ Rva0042FD9E::Rva0042FD9E()
 	, m_vtable(reinterpret_cast<const void *>(g_00C3C960))
 {
 	m_i0C = -1;
+	_ReadWriteBarrier();
 	m_b04 = false;
 	m_b05 = false;
 	m_b06 = false;
