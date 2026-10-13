@@ -87962,3 +87962,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?rva004ACF1D@RousingSpeechUpdate@@QAEXXZ,,0x004ACF1D,89,Code/GameEngine/Source/GameLogic/Object/Update/RousingSpeechUpdateRva004ACF1D.cpp,matched,
 ?rva004C21A9@PorcupineFormationBodyModule@@QAEXPAVDamageInfo@@@Z,,0x004C21A9,135,Code/GameEngine/Source/GameLogic/Object/Body/PorcupineFormationBodyModuleRva004C21A9.cpp,matched,
 ?GetCollapseIndex@PathfindZoneManager@@SAHABUPathfindZoneParams@@@Z,,0x0053123A,132,Code/GameEngine/Source/GameLogic/Pathfinder/PathfindZoneManagerGetCollapseIndex.cpp,matched,
+??0Rva0010F058@@QAE@H@Z,,0x0010F058,108,Code/GameEngine/Source/Common/Rva0010F058Ctor.cpp,matched,
