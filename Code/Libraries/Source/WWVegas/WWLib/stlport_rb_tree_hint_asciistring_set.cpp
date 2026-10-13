@@ -18,6 +18,12 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
 // class-gate: allow AsciiString Retail tree erase at 0x00056CC3 calls the dtor thunk at 0x0048BA39.
+// LINK: BFME_ASCII_DTOR_DECL keeps ~AsciiString decl-only so this TU's
+// ??_GAsciiString calls the rowed out-of-line copy 0x0048BA39 (retail's
+// deleting-dtor shape) instead of expanding releaseBuffer inline; the
+// emitted copy then matches the other 113 retail copies and this first
+// unit in link order stops poisoning the family.
+#define BFME_ASCII_DTOR_DECL
 #include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 bool operator<(const AsciiString &, const AsciiString &);
 // Retail _M_create_node 0x0002C552 allocates 20 bytes: 16-byte links + AsciiString.
