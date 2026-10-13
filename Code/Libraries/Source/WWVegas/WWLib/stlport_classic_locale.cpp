@@ -82,6 +82,9 @@ namespace _STL { template <> char * __write_decimal_backward<long>(char *, long,
 namespace _STL { template <> char * __write_integer_backward<unsigned long>(char *, int, unsigned long); }
 namespace _STL { template <> basic_string<char, char_traits<char>, allocator<char> >::basic_string(basic_string<char, char_traits<char>, allocator<char> > const &); }
 namespace _STL { template <> char * basic_string<char, char_traits<char>, allocator<char> >::_M_insert_aux(char *, char); }
+namespace _STL { template <> bool __get_decimal_integer<char *, long double>(char *&, char *&, long double &); }
+namespace _STL { template <> istreambuf_iterator<char, char_traits<char> > money_get<char, istreambuf_iterator<char, char_traits<char> > >::do_get(istreambuf_iterator<char, char_traits<char> >, istreambuf_iterator<char, char_traits<char> >, bool, ios_base &, int &, long double &) const; }
+namespace _STL { template <> istreambuf_iterator<char, char_traits<char> > money_get<char, istreambuf_iterator<char, char_traits<char> > >::do_get(istreambuf_iterator<char, char_traits<char> >, istreambuf_iterator<char, char_traits<char> >, bool, ios_base &, int &, basic_string<char, char_traits<char>, allocator<char> > &) const; }
 // bfme link decl-only end
 namespace _STL {
 class _Messages {

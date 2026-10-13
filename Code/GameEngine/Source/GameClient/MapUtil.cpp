@@ -112,6 +112,12 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 #include "GameLogic/FPUControl.h"
 #include "GameNetwork/GameInfo.h"
 #include "GameNetwork/NetworkDefs.h"
+// bfme link decl-only begin
+namespace _STL { template <> list<Coord3D, allocator<Coord3D> >::list(allocator<Coord3D> const &); }
+namespace _STL { template <> pair<AsciiString const, MapMetaData>::pair(AsciiString const &, MapMetaData const &); }
+namespace _STL { template <> _List_node<Coord3D> * list<Coord3D, allocator<Coord3D> >::_M_create_node(Coord3D const &); }
+namespace _STL { template <> pair<_Rb_tree_iterator<UnicodeString, _Const_traits<UnicodeString> >, bool> set<UnicodeString, rts::less_than_nocase<UnicodeString>, allocator<UnicodeString> >::insert(UnicodeString const &); }
+// bfme link decl-only end
 
 #ifdef _INTERNAL
 // for occasional debugging...

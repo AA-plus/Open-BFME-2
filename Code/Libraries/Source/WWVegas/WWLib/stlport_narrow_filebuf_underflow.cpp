@@ -10,6 +10,7 @@
 // bfme link decl-only begin
 namespace _STL { template <> int basic_filebuf<char, char_traits<char> >::_M_input_error(); }
 namespace _STL { template <> int basic_filebuf<char, char_traits<char> >::_M_underflow_aux(); }
+namespace _STL { template <> basic_filebuf<char, char_traits<char> > * basic_filebuf<char, char_traits<char> >::open(char const *, int); }
 // bfme link decl-only end
 
 // Native allocation owner 0x00013F10 (189 bytes) supplies this helper.

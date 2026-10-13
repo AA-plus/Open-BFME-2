@@ -13,6 +13,16 @@
 // 22/26): the rowed 63B copy in stlport_narrow_string_base_dtor.cpp serves the link.
 template <> _STL::_String_base<char, _STL::allocator<char> >::~_String_base();
 #include <cstddef>
+// bfme link decl-only begin
+namespace _STL { template <> bool _M_init<char, char_traits<char> >(basic_ostream<char, char_traits<char> > &); }
+namespace _STL { template <> basic_ostream<char, char_traits<char> > & _M_put_num<char, char_traits<char>, long>(basic_ostream<char, char_traits<char> > &, long); }
+namespace _STL { template <> basic_ostream<char, char_traits<char> > & _M_put_num<char, char_traits<char>, unsigned long>(basic_ostream<char, char_traits<char> > &, unsigned long); }
+namespace _STL { template <> basic_ostream<char, char_traits<char> > & _M_put_num<char, char_traits<char>, double>(basic_ostream<char, char_traits<char> > &, double); }
+namespace _STL { template <> void basic_ostream<char, char_traits<char> >::_M_put_char(char); }
+namespace _STL { template <> void basic_ostream<char, char_traits<char> >::_M_put_nowiden(char const *); }
+namespace _STL { template <> basic_ostream<char, char_traits<char> > & basic_ostream<char, char_traits<char> >::flush(); }
+namespace _STL { template <> basic_ostream<char, char_traits<char> > & basic_ostream<char, char_traits<char> >::put(char); }
+// bfme link decl-only end
 // Suppress this TU's non-retail proxy<char> deallocate copy (family2-LK3 row 28):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

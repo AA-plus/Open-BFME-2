@@ -14,6 +14,9 @@
 // hand-declared like BfmeDX8ThreadLock.cpp's.
 
 #include <hash_map>
+// bfme link decl-only begin
+namespace _STL { template <> void hashtable<pair<int const, int>, int, hash<int>, _Select1st<pair<int const, int> >, equal_to<int>, allocator<pair<int const, int> > >::resize(unsigned int); }
+// bfme link decl-only end
 
 extern "C" {
 __declspec(dllimport) void __stdcall EnterCriticalSection(void *section);

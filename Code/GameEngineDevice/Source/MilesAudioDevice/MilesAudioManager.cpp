@@ -171,6 +171,13 @@ enum MusicSystem { MUSIC_SYSTEM_0, MUSIC_SYSTEM_1 };
 inline MusicSystem &operator--(MusicSystem &ms, int) { ms = (MusicSystem)(ms - 1); return ms; }
 
 #include "../../../GameEngine/Source/Common/GameLogicObjectLookupView.h"
+// bfme link decl-only begin
+namespace _STL { template <> UnicodeString * __uninitialized_copy<UnicodeString *, UnicodeString *>(UnicodeString *, UnicodeString *, UnicodeString *, __false_type const &); }
+namespace _STL { template <> UnicodeString * __uninitialized_fill_n<UnicodeString *, unsigned int, UnicodeString>(UnicodeString *, unsigned int, UnicodeString const &, __false_type const &); }
+namespace _STL { template <> _List_node<void *> * list<void *, allocator<void *> >::_M_create_node(void *const &); }
+namespace _STL { template <> void vector<UnicodeString, allocator<UnicodeString> >::_M_insert_overflow(UnicodeString *, UnicodeString const &, __false_type const &, unsigned int, bool); }
+namespace _STL { template <> UnicodeString * vector<UnicodeString, allocator<UnicodeString> >::erase(UnicodeString *, UnicodeString *); }
+// bfme link decl-only end
 
 // Declaration-only: the rowed set<AsciiString> tree members are bound,
 // this TU emits no per-flag copy of them or of their allocator leaves.

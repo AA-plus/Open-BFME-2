@@ -91,6 +91,15 @@ template <> SimpleDynVecClass<Vector3>::~SimpleDynVecClass();
 #include "texture.h"
 #include "dx8wrapper.h"
 #include "dx8caps.h"
+// bfme link decl-only begin
+template <> SimpleDynVecClass<Vector3>::SimpleDynVecClass(int);
+template <> SimpleVecClass<Vector3>::SimpleVecClass(int);
+template <> SimpleVecClass<Vector3>::~SimpleVecClass();
+template <> bool SimpleDynVecClass<Vector3>::Add(Vector3 const &, int);
+template <> bool SimpleDynVecClass<Vector3>::Resize(int);
+template <> bool SimpleVecClass<Vector3>::Resize(int);
+template <> bool SimpleVecClass<Vector3>::Uninitialised_Grow(int);
+// bfme link decl-only end
 
 #define DISABLE_CLIPPING	0
 

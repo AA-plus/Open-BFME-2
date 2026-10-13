@@ -75,6 +75,9 @@ template <typename T> struct BfmeStringData
 
 #include "ascii_string.h"
 #include "unicode_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> _List_node<AsciiString> * list<AsciiString, allocator<AsciiString> >::_M_create_node(AsciiString const &); }
+// bfme link decl-only end
 
 namespace _STL
 {

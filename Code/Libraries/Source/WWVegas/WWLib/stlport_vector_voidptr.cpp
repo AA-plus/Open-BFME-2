@@ -13,6 +13,12 @@ namespace _STL { template <> vector<void *, allocator<void *> >::~vector(); }
 namespace _STL { template <> void vector<void *, allocator<void *> >::_M_clear(); }
 namespace _STL { template <> void vector<void *, allocator<void *> >::_M_insert_overflow(void **, void *const &, __true_type const &, unsigned int, bool); }
 namespace _STL { template <> void vector<void *, allocator<void *> >::reserve(unsigned int); }
+namespace _STL { template <> vector<void *, allocator<void *> >::vector(vector<void *, allocator<void *> > const &); }
+namespace _STL { template <> vector<void *, allocator<void *> >::vector(unsigned int); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::_M_insert_overflow(void **, void *const &, __false_type const &, unsigned int, bool); }
+namespace _STL { template <> void ** vector<void *, allocator<void *> >::insert(void **); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::push_back(void *const &); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::push_back(); }
 // bfme link decl-only end
 
 // The native range-erase owner is the 34-byte optimized specialization

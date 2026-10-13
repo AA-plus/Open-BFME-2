@@ -13,6 +13,9 @@
 #include <vector>
 // bfme link decl-only begin
 namespace _STL { template <> vector<unsigned int, allocator<unsigned int> > & vector<unsigned int, allocator<unsigned int> >::operator=(vector<unsigned int, allocator<unsigned int> > const &); }
+namespace _STL { template <> vector<unsigned int, allocator<unsigned int> >::vector(unsigned int); }
+namespace _STL { template <> void vector<unsigned int, allocator<unsigned int> >::_M_fill_insert(unsigned int *, unsigned int, unsigned int const &); }
+namespace _STL { template <> void vector<unsigned int, allocator<unsigned int> >::push_back(unsigned int const &); }
 // bfme link decl-only end
 #undef __copy_trivial
 

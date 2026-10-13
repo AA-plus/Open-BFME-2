@@ -16,6 +16,11 @@ void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(
 #include <ostream>
 // bfme link decl-only begin
 namespace _STL { template <> char basic_ios<char, char_traits<char> >::widen(char) const; }
+namespace _STL { template <> bool _M_init<char, char_traits<char> >(basic_ostream<char, char_traits<char> > &); }
+namespace _STL { template <> void basic_ostream<char, char_traits<char> >::_M_put_char(char); }
+namespace _STL { template <> void basic_ostream<char, char_traits<char> >::_M_put_nowiden(char const *); }
+namespace _STL { template <> basic_ostream<char, char_traits<char> > & basic_ostream<char, char_traits<char> >::flush(); }
+namespace _STL { template <> basic_ostream<char, char_traits<char> > & basic_ostream<char, char_traits<char> >::put(char); }
 // bfme link decl-only end
 
 // Retail's generic-widening init is owned by stlport_basic_ios_init.cpp.

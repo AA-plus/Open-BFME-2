@@ -6,6 +6,16 @@ namespace _STL { template <> void __malloc_alloc<0>::deallocate(void *, size_t);
 #include <map>
 // bfme link decl-only begin
 namespace _STL { template <> _Rb_tree_iterator<pair<int const, int>, _Const_traits<pair<int const, int> > > _Rb_tree<int, pair<int const, int>, _Select1st<pair<int const, int> >, less<int>, allocator<pair<int const, int> > >::upper_bound(int const &) const; }
+namespace _STL { template <> _Rb_tree<int, pair<int const, int>, _Select1st<pair<int const, int> >, less<int>, allocator<pair<int const, int> > >::_Rb_tree(_Rb_tree<int, pair<int const, int>, _Select1st<pair<int const, int> >, less<int>, allocator<pair<int const, int> > > const &); }
+namespace _STL { template <> map<int, int, less<int>, allocator<pair<int const, int> > >::map(map<int, int, less<int>, allocator<pair<int const, int> > > const &); }
+namespace _STL { template <> _Rb_tree_node<pair<int const, int> > * _Rb_tree<int, pair<int const, int>, _Select1st<pair<int const, int> >, less<int>, allocator<pair<int const, int> > >::_M_copy(_Rb_tree_node<pair<int const, int> > *, _Rb_tree_node<pair<int const, int> > *); }
+namespace _STL { template <> void map<int, int, less<int>, allocator<pair<int const, int> > >::clear(); }
+namespace _STL { template <> unsigned int map<int, int, less<int>, allocator<pair<int const, int> > >::count(int const &) const; }
+namespace _STL { template <> pair<_Rb_tree_iterator<pair<int const, int>, _Nonconst_traits<pair<int const, int> > >, _Rb_tree_iterator<pair<int const, int>, _Nonconst_traits<pair<int const, int> > > > _Rb_tree<int, pair<int const, int>, _Select1st<pair<int const, int> >, less<int>, allocator<pair<int const, int> > >::equal_range(int const &); }
+namespace _STL { template <> pair<_Rb_tree_iterator<pair<int const, int>, _Nonconst_traits<pair<int const, int> > >, _Rb_tree_iterator<pair<int const, int>, _Nonconst_traits<pair<int const, int> > > > map<int, int, less<int>, allocator<pair<int const, int> > >::equal_range(int const &); }
+namespace _STL { template <> pair<_Rb_tree_iterator<pair<int const, int>, _Const_traits<pair<int const, int> > >, _Rb_tree_iterator<pair<int const, int>, _Const_traits<pair<int const, int> > > > map<int, int, less<int>, allocator<pair<int const, int> > >::equal_range(int const &) const; }
+namespace _STL { template <> _Rb_tree_iterator<pair<int const, int>, _Nonconst_traits<pair<int const, int> > > map<int, int, less<int>, allocator<pair<int const, int> > >::insert(_Rb_tree_iterator<pair<int const, int>, _Nonconst_traits<pair<int const, int> > >, pair<int const, int> const &); }
+namespace _STL { template <> void _Rb_tree<int, pair<int const, int>, _Select1st<pair<int const, int> >, less<int>, allocator<pair<int const, int> > >::swap(_Rb_tree<int, pair<int const, int>, _Select1st<pair<int const, int> >, less<int>, allocator<pair<int const, int> > > &); }
 // bfme link decl-only end
 
 // Preserve retail's inlined buffer release while using the canonical public allocator.

@@ -26,6 +26,9 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 #include "unicode_string.h"
 #include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 #include "../../../Libraries/Include/Lib/Coord3D.h"
+// bfme link decl-only begin
+namespace _STL { template <> _List_node<Coord3D> * list<Coord3D, allocator<Coord3D> >::_M_create_node(Coord3D const &); }
+// bfme link decl-only end
 struct Region3D { Coord3D lo,hi; Region3D(const Region3D &); };
 typedef _STL::list<Coord3D> Coord3DList;
 // Instantiate the reference coordinate-list copy and its typed helpers.

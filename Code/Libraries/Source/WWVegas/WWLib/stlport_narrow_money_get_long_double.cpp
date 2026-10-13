@@ -81,6 +81,8 @@ __declspec(noinline) void istreambuf_iterator<char, char_traits<char> >::_M_getc
 #include <cstddef>
 // bfme link decl-only begin
 namespace _STL { template <> char * basic_string<char, char_traits<char>, allocator<char> >::_M_insert_aux(char *, char); }
+namespace _STL { template <> bool __get_decimal_integer<char *, long double>(char *&, char *&, long double &); }
+namespace _STL { template <> istreambuf_iterator<char, char_traits<char> > money_get<char, istreambuf_iterator<char, char_traits<char> > >::do_get(istreambuf_iterator<char, char_traits<char> >, istreambuf_iterator<char, char_traits<char> >, bool, ios_base &, int &, basic_string<char, char_traits<char>, allocator<char> > &) const; }
 // bfme link decl-only end
 // Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).

@@ -19,6 +19,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include "unicode_string.h"
 // bfme link decl-only begin
 namespace _STL { template <> UnicodeString * vector<UnicodeString, allocator<UnicodeString> >::erase(UnicodeString *, UnicodeString *); }
+namespace _STL { template <> vector<UnicodeString, allocator<UnicodeString> >::~vector(); }
 // bfme link decl-only end
 namespace _STL {
 template <> void _Construct<UnicodeString, UnicodeString>(UnicodeString *, const UnicodeString &);
