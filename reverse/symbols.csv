@@ -17253,3 +17253,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??0Rva00359032Value@@QAE@ABURva00358B65@@@Z,0x00358B43,HotKey addHotKey 0x359302 pair-copy from factory temp; same 8B AsciiString+ref layout as rowed pair copy at 0x358B43; retail call site 0x35937F
 ??1Rva00359032Value@@QAE@XZ,0x00358B65,HotKey addHotKey 0x359302 pair-temp dtor folds to holder dtor 0x358B65 (57B releaseBuffer+Release); retail call site 0x35939E
 ?rva00358C60@@YA?AURva00358B65@@ABVAsciiString@@ABUTreeHintRef00217D4C@@@Z,0x00358C60,HotKey addHotKey 0x359302 factory returns 8B holder; twin of rowed pair factory 0x358C60 (27B); retail call site 0x35936F
+?rva006C39F0@Rva006C39F0Owner@@QAE_NIIIPAX@Z,0x006C39F0,callee of ?rva006C3D30@GeneralAllocatorDebug@@QAE_NPAURva006C2270Record@@PAX_N@Z
+?rva006C3AB0@GeneralAllocatorDebug@@QAEPAXPAXGPBXIH@Z,0x006C3AB0,callee of ?rva006C3D30@GeneralAllocatorDebug@@QAE_NPAURva006C2270Record@@PAX_N@Z
