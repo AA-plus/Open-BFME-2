@@ -1,4 +1,6 @@
 // ?rva0046A10D@HordeContain@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva0046A10D@HordeContain@@QAEXXZ
 // partial score=0.94 date=2026-10-08
 // cl: /DNDEBUG /MD
 //
