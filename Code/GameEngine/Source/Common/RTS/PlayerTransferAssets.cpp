@@ -255,7 +255,7 @@ class Rva0039B7AD;
 class Rva003B0D7C
 {
 public:
-	UnsignedInt rva003B0CB3(UnsignedInt amount, Rva0039B795 *source, bool flag);
+	UnsignedInt withdraw(UnsignedInt amount, Rva0039B795 *source, bool flag);
 	void rva003B0D7C(Int amount, Rva0039B7AD *source, bool flag);
 
 	Int m_pad0;
@@ -414,7 +414,7 @@ void Player::transferAssetsFromThat(Player *that, Bool flag)
 	}
 
 	UnsignedInt allMoney = that->getMoney()->m_money;
-	that->getMoney()->rva003B0CB3(allMoney, 0, true);
+	that->getMoney()->withdraw(allMoney, 0, true);
 	getMoney()->rva003B0D7C(allMoney, 0, true);
 
 	if (that->getTransferCounts())
