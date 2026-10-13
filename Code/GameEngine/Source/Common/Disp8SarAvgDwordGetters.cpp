@@ -1,4 +1,4 @@
-// cl: /O1 /arch:SSE /G7 /EHsc /MD
+// cl: /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7 /EHsc /MD
 // Disp8 sar-avg dword getters: eight-to-ten-byte __thiscall members with one shape:
 //
 //     mov eax,[ecx+<DISP1>] / sub eax,[ecx+<DISP2>] / sar eax,<IMM8> / ret
@@ -53,36 +53,24 @@ BFME_DISP8_SAR_AVG_DWORD_GETTER(Rva005D1397SarAvgField, 0x0C, 0x08, 2)
 // receiver. Reuse its existing opaque member ABI binding without a new
 // pin: native sets ECX=this before both appends. The fallback is retail's
 // actual one-byte empty string. Original driver name remains unknown.
+#include "ascii_string.h"
+
 class INI
 {
 public:
 	const char *rva0002DFE2(const char *seps, bool *substituted);
 };
 
-class Rva0033B84ETok
-{
-public:
-	Rva0033B84ETok(const char *s);
-	~Rva0033B84ETok();
-	Rva0033B84ETok() : m_data(0) {}
-	const char *str() const { return m_data ? (const char *)m_data + 8 : ""; }
-	bool nextToken(Rva0033B84ETok *out, const char *seps);
-	void reset();
-
-private:
-	void *m_data;
-};
-
-__forceinline const char *GetStr003B1017(const Rva0033B84ETok &s)
+__forceinline const char *GetStr003B1017(const AsciiString &s)
 {
 	char *t = *(char * *)(void *)&s;
 	return t ? t + 8 : "";
 }
 
-class Rva00256499
+class Rva0049B6AE
 {
 public:
-	void rva00256499Append(const char *s, Rva0033B84ETok *b);
+	void append(const char *s, StringBase<char> *b);
 };
 
 class Rva003339CE
@@ -102,9 +90,9 @@ public:
 
 void Rva003B1017::rva003B1017(INI *ini, void *extra)
 {
-	Rva0033B84ETok *accum = (Rva0033B84ETok *)extra;
+	AsciiString *accum = (AsciiString *)extra;
 	if (accum != 0)
-		accum->reset();
+		accum->clear();
 
 	bool foundNormal = false;
 	bool foundAddOrSub = false;
@@ -113,17 +101,17 @@ void Rva003B1017::rva003B1017(INI *ini, void *extra)
 	const char *token;
 	while ((token = ini->rva0002DFE2(0, &wasQuoted)) != 0) {
 		if (wasQuoted) {
-			Rva0033B84ETok tmp(token);
-			Rva0033B84ETok part;
+			AsciiString tmp(token);
+			AsciiString part;
 			while (tmp.nextToken(&part, 0)) {
 				const char *s = GetStr003B1017(part);
-				((Rva00256499 *)this)->rva00256499Append(s, accum);
+				((Rva0049B6AE *)this)->append(s, (StringBase<char> *)accum);
 				if (!rva003339CE(s, &foundNormal, &foundAddOrSub))
 					break;
 			}
 			wasQuoted = false;
 		} else {
-			((Rva00256499 *)this)->rva00256499Append(token, accum);
+			((Rva0049B6AE *)this)->append(token, (StringBase<char> *)accum);
 			if (!rva003339CE(token, &foundNormal, &foundAddOrSub))
 				break;
 		}

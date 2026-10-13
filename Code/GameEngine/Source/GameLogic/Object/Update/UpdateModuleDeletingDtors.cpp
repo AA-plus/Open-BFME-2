@@ -1,4 +1,4 @@
-// cl: /O1 /MD
+// cl: /Ireference/shims/bfme2_ascii /O1 /MD
 // The shared headers declare these members with the access/virtual spelling
 // the referring objects use; this TU emits the paired definition spelling.
 // Same function, same address: bind the header spelling here.
@@ -42,33 +42,27 @@ void EmotionTrackerUpdate_Delete(EmotionTrackerUpdate *p) { delete p; }
 // Owner evidence (audited 2026-09-26): donor ctor RVA 0x0058A290 stores this primary vptr at RVA 0x0058A2C5 and a separate interface vptr at +0x20; slot-3 xfer RVA 0x0058A410 corroborates the dock fields and member order.
 // Rowed in Rva0058A0F4Dtor.cpp, the unit of the destructor it calls.
 
+#include "ascii_string.h"
+
 // ?rva0049B8A0@Rva0049B8A0@@QAEXPAVINI@@PAX@Z @0x0049B8A0 234B
 // Bitstring-list INI driver, same shape as the KindOf driver Rva00256499
 // (System/Rva00256499Parse.cpp) and the ModelCondition twin Rva000B937E.
-// The worker is the rowed 0x0049B750 single-token worker; Append, Tok, INI
-// and the empty string mirror the prototype TU (undefined externals).
+// The worker is the rowed 0x0049B750 single-token worker.
+// The join-append is the shared Rva0049B6AE::append member (rowed, body
+// ignores ecx); the string temporaries are the canonical AsciiString.
 class INI
 {
 public:
 	const char *rva0002DFE2(const char *seps, bool *substituted);
 };
 
-class Rva0033B84ETok
+class Rva0049B6AE
 {
 public:
-	Rva0033B84ETok(const char *s);
-	~Rva0033B84ETok();
-	Rva0033B84ETok() : m_data(0) {}
-	const char *str() const { return m_data ? (const char *)m_data + 8 : ""; }
-	bool nextToken(Rva0033B84ETok *out, const char *seps);
-	void reset();
-
-private:
-	void *m_data;
+	void append(const char *s, StringBase<char> *b);
 };
 
-
-__forceinline const char *GetStr0049B8A0(const Rva0033B84ETok &s)
+__forceinline const char *GetStr0049B8A0(const AsciiString &s)
 {
 	char *t = *(char * *)(void *)&s;
 	return t ? t + 8 : "";
@@ -84,14 +78,13 @@ class Rva0049B8A0 : public Rva0049B750
 {
 public:
 	void rva0049B8A0(INI *ini, void *extra);
-	void rva0049B8A0Append(const char *s, Rva0033B84ETok *b);
 };
 
 void Rva0049B8A0::rva0049B8A0(INI *ini, void *extra)
 {
-	Rva0033B84ETok *accum = (Rva0033B84ETok *)extra;
+	AsciiString *accum = (AsciiString *)extra;
 	if (accum != 0)
-		accum->reset();
+		accum->clear();
 
 	bool foundNormal = false;
 	bool foundAddOrSub = false;
@@ -100,17 +93,17 @@ void Rva0049B8A0::rva0049B8A0(INI *ini, void *extra)
 	const char *token;
 	while ((token = ini->rva0002DFE2(0, &wasQuoted)) != 0) {
 		if (wasQuoted) {
-			Rva0033B84ETok tmp(token);
-			Rva0033B84ETok part;
+			AsciiString tmp(token);
+			AsciiString part;
 			while (tmp.nextToken(&part, 0)) {
 				const char *s = GetStr0049B8A0(part);
-				rva0049B8A0Append(s, accum);
+				((Rva0049B6AE *)this)->append(s, (StringBase<char> *)accum);
 				if (!rva0049B750(s, &foundNormal, &foundAddOrSub))
 					break;
 			}
 			wasQuoted = false;
 		} else {
-			rva0049B8A0Append(token, accum);
+			((Rva0049B6AE *)this)->append(token, (StringBase<char> *)accum);
 			if (!rva0049B750(token, &foundNormal, &foundAddOrSub))
 				break;
 		}

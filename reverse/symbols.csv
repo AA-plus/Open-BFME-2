@@ -10185,7 +10185,6 @@ name,address,notes
 ?newMap@TerrainLogic@@UAEX_N@Z,0x00284290,address read from the REL32 displacement at a placed body
 ?newObject@ThingFactory@@QAEPAVObject@@PBVThingTemplate@@PAVTeam@@PBUCreateMask@@_N@Z,0x002D0A23,4-arg factory reached by createViewObject 0x00493845 (template team zeroed 16B params 0); ret 0x10; params type opaque
 ?next@BfmeWideResult@@QAEPAVObject@@XZ,0x00045623,"range-query handle: the payload's next hit (+0x0C cursor over 8-byte entries up to +0x04) or 0; REL32 in StructureCreep slot 7 0x005AC549; the body is the matched ?bfmeGoEOF@BfmeThingEOF row"
-?nextToken@Rva0033B84ETok@@QAE_NPAV1@PBD@Z,0x00036D90,TU-local spelling for narrow StringBase nextToken; RETAIL REL32 in 0x33B84E quoted-arm split targets 0x36D90
 ?noop@Rva000B3FD0Nop@@QAEXXZ,0x000B3FD0,opaque alias: the known folded empty body shared by many rows; identity unproven
 ?normalizeAngle@@YAMM@Z,0x00238954,address read from the REL32 displacement at a placed body
 ?note@Rva00056BFESub@@QAEXH@Z,0x00056BFE,REL32 callee decoded from target call bytes of same-shape count-note-run member; identity unproven
@@ -10540,7 +10539,6 @@ name,address,notes
 ?reset@FrameDataManager@@QAEXXZ,0x0058B666,BFME2 frame-ring reset called while reinitializing the connection manager
 ?reset@Mouse@@UAEXXZ,0x001EE4DC,sole caller is Win32Mouse::reset 0x000419F5 whose Zero Hour body begins with Mouse::reset()
 ?reset@NetCommandList@@QAEXXZ,0x0058B283,BFME2 frame-command-list reset called by FrameData cleanup
-?reset@Rva0033B84ETok@@QAEXXZ,0x00036410,TU-local spelling for the accumulator reset; RETAIL REL32 at 0x33B86C targets the 0x36410 releaseBuffer fold; exact source spelling (clear/dtor/releaseBuffer) unproven
 ?reset@Rva00528F30Target@@QAEXXZ,0x00528F30,"auto-pin (permute --pins): REL32 call target read from retail in 0x00528fd9, whose banked body is byte-exact once this call resolves"
 ?reset@Rva007E8810Message@@QAEXXZ,0x00655B50
 ?reset@Rva00800290Buffer@@QAEXXZ,0x0066C730
@@ -10741,7 +10739,6 @@ name,address,notes
 ?rva000B8440@Rva000B8F5AOuter@@QAEHPAMH@Z,0xB8440,rva000BAD2B tail: address read from the REL32 at 0x000BADCD in 0x000BAD2B; fresh address-derived Outer-method name (float out, int probe) returning the final int
 ?rva000B89E9@Rva000B8F5AOuter@@QAEHHPAM@Z,0x000B89E9,rva000BADE7 tail: address read from the REL32 at 0x000BAEA5 in 0x000BADE7; fresh address-derived Outer-method name (probe, float out) for the 1393B body; push order (out then probe) proves (probe, out) against the B8440 twin guess
 ?rva000B937E@Rva000B937E@@QAEXPAVINI@@PAX@Z,0x000B937E,unrowed 234B thiscall (ini; 0) flag-set self-parse with an SEH frame and ret 8 (same shape as pinned 0x00256499); REL32 read at the OnlyInCondition FieldParse proc 0x002C886C on the 0x4C-stride per-slot array; address-named class
-?rva000B937EAppend@Rva000B937E@@QAEXPBDPAVRva0033B84ETok@@@Z,0x0049B6AE,TU-local MEMBER spelling for ModelCondition join-append caller codegen ecx edi proves worker-member call body ignores receiver YG row verifies same
 ?rva000BEE25@Rva000B8F5AOuter@@QAEXPAXMHHH@Z,0x000BEE25,rva000BFB51 refill: address read from the REL32 at 0x000BFB6E in 0x000BFB51; fresh address-derived Outer-method name (entry, float, 0, 1, 1) for the 2499B body
 ?rva000C0386@Rva000B8F5AOuter@@QAEXXZ,0x000C0386,rva000C144A probe: address read from the REL32 at 0x000C1450 in 0x000C144A; fresh address-derived Outer-method name for the 19B counter check (global 0xDE1B40 vs +0xB8, shared tail 0xBFDFE)
 ?rva000C4080@BFMEActionManager@@QAE_NPBVObject@@0W4CommandSourceType@@@Z,0x0041B94A,address read from the REL32 displacement at a placed body; the body there is held under another instantiation name and the two folded
@@ -10932,7 +10929,6 @@ name,address,notes
 ?rva0021A4E6@Rva0021A4E6@@QAEXXZ,0x0021A4E6,thiscall void() on the hero-manager global; tail callee of dump-range-18 0x003BE6CB
 ?rva0021A54A@Rva0021A54A@@QAEXXZ,0x0021A54A,thiscall void(); tail target of dump-range-18 0x003BD598 on the hero-manager global
 ?rva0021A6C8@Rva00219B9E@@QAEPAVCreateAHeroData@@H@Z,0x0021A6C8,unrowed thiscall (Ghidra; ret 4) on TheCreateAHeroManager scanning its +0x174 hero list for a side; 0x0044158C passes the player template's side and hands the result to Rva0040A3F9::findIndex; address name
-?rva0021B7B6Append@Rva0021B7B6@@QAEXPBDPAVRva0033B84ETok@@@Z,0x0049B6AE,TU-local MEMBER spelling for bitstring-list join-append caller codegen ecx edi proves worker-member call body ignores receiver YG row verifies same
 ?rva0021BD22@Rva0021BDAccess@@QAEPAXI@Z,0x0021BD22,inner entry of the 0x0021BDAB chain: REL32 read at the first call site in 0x0021BDAB; int-vector lookup at this+0x54 via 0x00388F63; owner class identity unproven
 ?rva0021BD41@Rva0021BDAccess@@QAEHIPAX@Z,0x0021BD41,inner entry of the 0x0021BDAB chain taking index then element pointer: REL32 read at the second call site in 0x0021BDAB; resolves through 0x0021BC0D and rowed 0x00219D85; owner class identity unproven
 ?rva0021F797@Rva00219B9E@@QAEPAVRva0040A3F9@@XZ,0x0021F797,unrowed 16B thiscall (Ghidra FUN_0061f797; plain ret) on TheCreateAHeroManager (0x00DFE344): runs 0x0021F47E and returns its +0x174 hero list (the Rva0040A3F9 CreateAHeroData pointer vector); called from 0x0043DD53 and 0x004414F4; address name
@@ -10965,7 +10961,6 @@ name,address,notes
 ?rva00246F8E@GameLogic@@QAE_NABVAsciiString@@HPAPBVCommandButton@@@Z,0x00246F8E,thiscall on TheGameLogic from CommandSet::getCommandButton 0x00409EE8 (call at 0x00409F05) with the set name (+0x10) the slot index and an out pointer; body builds a key from name and slot looks it up in the map at GameLogic +0x24 and writes the mapped +0x18 value then returns true (ret 0xC); name not established
 ?rva0024877A@GameLogic@@QAE_NXZ,0x0024877A,"TheGameLogic member returning a byte; REL32 in GameEngine slot 17 0x00225B30; identity not recovered"
 ?rva00256499@Rva00256499@@QAEXPAVINI@@PAX@Z,0x00256499,thiscall (ini; 0) self-parse with an SEH frame; ret 8; called on the store by the 16-byte FieldParse proc 0x002567EA
-?rva00256499Append@Rva00256499@@QAEXPBDPAVRva0033B84ETok@@@Z,0x0049B6AE,TU-local MEMBER spelling for KindOf join-append caller codegen ecx edi proves worker-member call body ignores receiver YG row verifies same
 ?rva0025F30DCallView@BfmeThingBFG@@QAEXXZ,0x0025F30D,"Address-qualified no-argument thiscall ABI view used by25F3F3; native preserved ECX forwards to rowed CameraMarkerList::clear53; linker alias binds its verified definition, no original BFG member identity claim"
 ?rva0025FCE8@BfmeItemKA@@AAEXHHH@Z,0x0025FCE8,native body start read from REL32 in 0x00260787; three integer args; ret12; same layout floats at+4C/+54/+68; no donor semantic name asserted
 ?rva0025FE30@BfmeItemKA@@AAEXMMMMHH@Z,0x0025FE30,native body start read from REL32 in 0x00260787; four float rectangle args plus color/flag; ret24; no donor semantic name asserted
@@ -11221,7 +11216,6 @@ name,address,notes
 ?rva00334634@LuaDrawableState@@QAEXPAXPAVObject@@PAUBfmeDelayedLuaEventList@@@Z,0x00334634,"dispatch an event to an object with the delayed-event argument list, on the global at VA 0x00E01DBC; REL32 in the ObjectBroadcastEventTo* Lua callbacks (0x003365F5); same body the BfmeObjectEventDispatch::invoke view pins"
 ?rva0033A69A@ThingTemplate@@QBEHPAVObject@@HH@Z,0x0033A69A,"callee of GettingBuiltBehavior +0x20 slot 12 0x0045342F at retail 0x00453442 read from its REL32 displacement (ecx the owner template, args the Object then 0 and -1, int result); body unrowed, 20 call sites"
 ?rva0033B217@Rva002CF1E2Node@@QAEXXZ,0x0033B217,"address read from retail REL32 at 0x002CF1EA in 0x002CF1E2 list walk (E8 -> 0x33B217); Ghidra 315B FUN_0073b217 factory family (mov eax-ID/call 0xA29188); thiscall no-stack-args void return per call site; opaque address name, pin candidate-not-proof"
-?rva0033B84EAppend@Rva0033AFBB@@QAEXPBDPAVRva0033B84ETok@@@Z,0x0049B6AE,TU-local MEMBER spelling for the join-append helper: caller codegen (ecx=edi receiver setup at both 0x33B84E call sites) proves a worker-member call; callee body ignores its receiver so the YG row verifies unchanged; RETAIL REL32s in 0x33B84E
 ?rva0033C247@MyRecord@@QAEXPAX@Z,0x0033C247,TU-local record fill from the 0x33E102 arg; RETAIL REL32 in 0x33E102 targets 0x33C247 (11B forwarder pushing record plus string-const into 0x2DE78)
 ?rva0033C259@ThingTemplate@@QBEMH@Z,0x0033C259,address read from the REL32 displacement at 0x00268B64 in chooseLocomotorSet 0x00268B20 with ECX = the owner's template and the new locomotor set; returns a float on the x87 stack (0.0 when the template's +0x3A4 is zero) that the caller stores at AIUpdate +0x1F8; body unrowed
 ?rva003412DB@Rva003412DB@@QAEXXZ,0x003412DB,address-derived callee of matched slot 0x00341339; retail jmp rel32 targets 0x003412DB; Ghidra FUN bounds 94 bytes; thiscall no args ret; callee body remains unclaimed; no named identity inferred
@@ -11406,7 +11400,6 @@ name,address,notes
 ?rva004152E6@Rva000427195@@QAEPAXPBX@Z,0x004152E6,ICF twin of free NewNode 0x004152E6 for table insert call with this; same 12B node and pair copy
 ?rva00415843CallView@Rva0041580E@@QAEPADABVRva0041579E@@@Z,0x00415843,Address-qualified thiscall view of verified Rva00415843Create37; native4158D7/4158F0 forwards same ECX and value address; callee ignores ECX and ret4; alternatename binds actual rowed stdcall definition; no original membership claim
 ?rva004158AFReturnView@Rva0041580E@@QAE?AURva004158AFSlot@@PAURva0041580ENode@@0ABVRva0041579E@@0@Z,0x004158AF,Typed hidden-pointer-slot result view for verified insertion136; native415AB7 supplies first stack output slot and reads [EAX] after call; actual136 writes node to that slot and EAX equals its address with ret20; same-ECX/normal args preserved; original iterator type unknown
-?rva00417DFBAppend@Rva00417DFB@@QAEXPBDPAVRva0033B84ETok@@@Z,0x0049B6AE,TU-local MEMBER spelling for bitstring-list join-append caller codegen ecx edi proves worker-member call body ignores receiver YG row verifies same
 ?rva0041E764@Rva0022BD9ASubsystem@@QAEPAVRva0041E912Template@@W4NameKeyType@@@Z,0x0041E764,TheBaseTemplateLibrary (0x00A03124) template by NameKeyType; same body as the rowed Rva0041E764 hashtable find; REL32 at 0x005AE16E in Rva005ADA40::rva005AE0AD
 ?rva0041E912@Rva0022BD9ASubsystem@@QAE_NABVAsciiString@@AAV?$vector@PAVRva0041E912Template@@V?$allocator@PAVRva0041E912Template@@@_STL@@@_STL@@@Z,0x0041E912,TheBaseTemplateLibrary (0x00A03124) templates for a side name: nameToKey then the +0x20 hashtable then push_back of each +0x0C lookup into the out vector; REL32 at 0x005AE29B in Rva005ADA40::rva005AE26A
 ?rva0041E971@Rva0022BD9ASubsystem@@QAE?AW4NameKeyType@@PAVRva0041E912Template@@@Z,0x0041E971,TheBaseTemplateLibrary (0x00A03124) template to NameKeyType reverse lookup; same body as the rowed Rva0041E971 find; REL32 at 0x005AE117 in Rva005ADA40::rva005AE0AD feeding keyToName
@@ -11500,9 +11493,7 @@ name,address,notes
 ?rva00499C46@OneRingPenaltyUpdate@@AAEXXZ,0x00499C46,"alias of the rowed ?bfmeGo987C@BfmeC987@@QAEXXZ (BFME 1 donor placement): OneRingPenaltyUpdate update 0x00499E98 calls it on the primary this when wearing stops with +0x24 set (REL32 at 0x00499F14)"
 ?rva00499C46@OneRingPenaltyUpdate@@QAEXXZ,0x00499C46,"OneRingPenaltyUpdate member (plain ret) its +0x20 slot 0 0x00499D18 runs on the primary this"
 ?rva00499D23@OneRingPenaltyUpdate@@AAEXXZ,0x00499D23,"OneRingPenaltyUpdate member on the primary this (void, no args): update 0x00499E98 calls it while wearing with +0x24 set (REL32 at 0x00499F23); body unrowed"
-?rva0049B8A0Append@Rva0049B8A0@@QAEXPBDPAVRva0033B84ETok@@@Z,0x0049B6AE,TU-local MEMBER spelling for bitstring-list join-append caller codegen ecx edi proves worker-member call body ignores receiver YG row verifies same
 ?rva0049CB57@WeaponTemplate@@QBEMXZ,0x0049CB57,"float getter of +0x14 (rowed under the folded TerrainRoadType::getRoadWidth); PorcupineFormationBodyModule slot 38 0x004C2127 reads its module data weapon's range with it"
-?rva0049DD83Append@Rva0049DD83@@QAEXPBDPAVRva0033B84ETok@@@Z,0x0049B6AE,TU-local MEMBER spelling for bitstring-list join-append caller codegen ecx edi proves worker-member call body ignores receiver YG row verifies same
 ?rva004A33EE@BroadcastStealthUpdate@@QAEXXZ,0x004A33EE,called on this from the BroadcastStealthUpdate dtor 0x004A3555 in EH state 1; second caller 0x004A35DE
 ?rva004A39D0@InvisibilityUpdate@@QAEX_N@Z,0x004A39D0,thiscall one-bool member called on the module Object::findModule returns for the cached "InvisibilityUpdate" name key (ToggleHiddenSpecialAbilityUpdate slots 23/24 at 0x004AE381 and 0x004AE497 push 0 and 1; body reads the bool at esp+8 and ret 4); wakes the module through UpdateModule::setWakeFrame and keeps a flag at +0x24
 ?rva004A4D70@RubbleRiseUpdate@@QAEXXZ,0x004A4D70,"callee of RubbleRiseUpdate +0x20 die slot 0x004A4D98 at retail 0x004A4DB5 (ecx the primary this) read from its REL32 displacement; ICF alias onto the matched ?rva004A4D70@Rva004A4D70@@QAEXXZ"

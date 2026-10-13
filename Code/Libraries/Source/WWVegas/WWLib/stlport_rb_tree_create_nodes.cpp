@@ -1,4 +1,4 @@
-// cl: /EHsc /D_STLP_NO_EXCEPTIONS /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT /O1 /arch:SSE /G7
+// cl: /Ireference/shims/bfme2_ascii /EHsc /D_STLP_NO_EXCEPTIONS /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT /O1 /arch:SSE /G7
 // stlport
 // Batch _M_create_node family recovery (generated): one explicit
 // specialization per sibling, each proven by its own retail call
@@ -243,33 +243,27 @@ template class _STL::_Rb_tree<int,_STL::pair<int const ,BfmePod24>,_STL::_Select
 // byte for byte; their calls read the tree's matched STL helpers.
 template class _STL::_Rb_tree<int,_STL::pair<int const ,BfmePod52>,_STL::_Select1st<_STL::pair<int const ,BfmePod52> >,_STL::less<int>,_STL::allocator<_STL::pair<int const ,BfmePod52> > >;
 
+#include "ascii_string.h"
+
 // ?rva00417DFB@Rva00417DFB@@QAEXPAVINI@@PAX@Z @0x00417DFB 234B
 // Bitstring-list INI driver, same shape as the KindOf driver Rva00256499
 // (System/Rva00256499Parse.cpp) and its twins. The worker is the rowed
-// 0x00417C23 single-token worker; Append, Tok, INI and the empty string
-// mirror the prototype TU (undefined externals).
+// 0x00417C23 single-token worker.
+// The join-append is the shared Rva0049B6AE::append member (rowed, body
+// ignores ecx); the string temporaries are the canonical AsciiString.
 class INI
 {
 public:
 	const char *rva0002DFE2(const char *seps, bool *substituted);
 };
 
-class Rva0033B84ETok
+class Rva0049B6AE
 {
 public:
-	Rva0033B84ETok(const char *s);
-	~Rva0033B84ETok();
-	Rva0033B84ETok() : m_data(0) {}
-	const char *str() const { return m_data ? (const char *)m_data + 8 : ""; }
-	bool nextToken(Rva0033B84ETok *out, const char *seps);
-	void reset();
-
-private:
-	void *m_data;
+	void append(const char *s, StringBase<char> *b);
 };
 
-
-__forceinline const char *GetStr00417DFB(const Rva0033B84ETok &s)
+__forceinline const char *GetStr00417DFB(const AsciiString &s)
 {
 	char *t = *(char * *)(void *)&s;
 	return t ? t + 8 : "";
@@ -285,14 +279,13 @@ class Rva00417DFB : public Rva00417C23
 {
 public:
 	void rva00417DFB(INI *ini, void *extra);
-	void rva00417DFBAppend(const char *s, Rva0033B84ETok *b);
 };
 
 void Rva00417DFB::rva00417DFB(INI *ini, void *extra)
 {
-	Rva0033B84ETok *accum = (Rva0033B84ETok *)extra;
+	AsciiString *accum = (AsciiString *)extra;
 	if (accum != 0)
-		accum->reset();
+		accum->clear();
 
 	bool foundNormal = false;
 	bool foundAddOrSub = false;
@@ -301,17 +294,17 @@ void Rva00417DFB::rva00417DFB(INI *ini, void *extra)
 	const char *token;
 	while ((token = ini->rva0002DFE2(0, &wasQuoted)) != 0) {
 		if (wasQuoted) {
-			Rva0033B84ETok tmp(token);
-			Rva0033B84ETok part;
+			AsciiString tmp(token);
+			AsciiString part;
 			while (tmp.nextToken(&part, 0)) {
 				const char *s = GetStr00417DFB(part);
-				rva00417DFBAppend(s, accum);
+				((Rva0049B6AE *)this)->append(s, (StringBase<char> *)accum);
 				if (!rva00417C23(s, &foundNormal, &foundAddOrSub))
 					break;
 			}
 			wasQuoted = false;
 		} else {
-			rva00417DFBAppend(token, accum);
+			((Rva0049B6AE *)this)->append(token, (StringBase<char> *)accum);
 			if (!rva00417C23(token, &foundNormal, &foundAddOrSub))
 				break;
 		}

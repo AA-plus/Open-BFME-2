@@ -1,6 +1,6 @@
-// cl: /EHsc /MD
+// cl: /Ireference/shims/bfme2_ascii /EHsc /MD
 //
-// ?rva0033B84E@Rva0033AFBB@@QAEXPAVINI@@PAVRva0033B84ETok@@@Z
+// ?rva0033B84E@Rva0033AFBB@@QAEXPAVINI@@PAVAsciiString@@@Z
 // @0x0033B84E 234B.
 //
 // Multi-token INI bitstring-list driver for the single-token worker in
@@ -20,54 +20,41 @@
 // plus preprocessMacro 0x0002D0A9); accumulator arg2 (flows as the string
 // arg of the join-append, whose null-guard makes the 0x0033BEE5 wrapper's
 // NULL pass legal); str()'s m_data+8-or-"" shape; __EH_prolog frame
-// 0x00629188 over two string temporaries. The join-append reads as a worker
-// member (rva0033B84EAppend): both call sites set ecx=edi immediately before
-// push/call, and only the member reading (this gains the append uses)
+// 0x00629188 over two string temporaries. The join-append is a
+// worker-side member (Rva0049B6AE::append, its row's name): both call sites
+// set ecx=edi immediately before push/call, and only the member reading
 // reproduces retail's edi=this homing -- a free-function reading homes the
-// accumulator instead. The callee body ignores its receiver either way, so
-// its YG row still verifies; the member spelling is pinned alongside it.
+// accumulator instead. The callee body ignores its receiver.
 //
-// The string locals reuse the 4-byte StringDataBase* layout; their ctor,
-// teardown, reset and nextToken ride TU-local-spelling pins, so no
-// canonical string header is redeclared here.
+// The string locals and the accumulator are the canonical AsciiString
+// (reference/shims/bfme2_ascii): its inline const-char ctor calls the
+// StringBase ctor 0x00037BA0, nextToken forwards to 0x00036D90, and its
+// teardown and clear() are the releaseBuffer worker 0x00036410.
+#include "ascii_string.h"
+
 class INI
 {
 public:
 	const char *rva0002DFE2(const char *seps, bool *substituted);
 };
 
-class Rva0033B84ETok
+class Rva0049B6AE
 {
 public:
-	Rva0033B84ETok(const char *s);
-	~Rva0033B84ETok();
-	Rva0033B84ETok() : m_data(0) {}
-	const char *str() const { return m_data ? (const char *)m_data + 8 : ""; }
-	bool nextToken(Rva0033B84ETok *out, const char *seps);
-	void reset();
-
-private:
-	void *m_data;
+	void append(const char *s, StringBase<char> *b);
 };
 
 class Rva0033AFBB
 {
 public:
 	bool rva0033AFBB(const char *token, bool *foundNormal, bool *foundAddOrSub);
-	void rva0033B84E(INI *ini, Rva0033B84ETok *accum);
-	void rva0033B84EAppend(const char *s, Rva0033B84ETok *b);
+	void rva0033B84E(INI *ini, AsciiString *accum);
 };
 
-// All five callees are byte-verified elsewhere: the StringBase const-char
-// ctor (0x00037BA0), the AsciiString teardown (0x00036410, also the folded
-// releaseBuffer spelling used for the accumulator reset), narrow nextToken
-// (0x00036D90, matched row), and the join-append helper (0x0049B6AE).
-// Each TU-local spelling above carries a reverse/symbols.csv pin to it.
-
-void Rva0033AFBB::rva0033B84E(INI *ini, Rva0033B84ETok *accum)
+void Rva0033AFBB::rva0033B84E(INI *ini, AsciiString *accum)
 {
 	if (accum != 0)
-		accum->reset();
+		accum->clear();
 
 	bool foundNormal = false;
 	bool foundAddOrSub = false;
@@ -76,17 +63,17 @@ void Rva0033AFBB::rva0033B84E(INI *ini, Rva0033B84ETok *accum)
 	const char *token;
 	while ((token = ini->rva0002DFE2(0, &wasQuoted)) != 0) {
 		if (wasQuoted) {
-			Rva0033B84ETok tmp(token);
-			Rva0033B84ETok part;
+			AsciiString tmp(token);
+			AsciiString part;
 			while (tmp.nextToken(&part, 0)) {
 				const char *s = part.str();
-				rva0033B84EAppend(s, accum);
+				((Rva0049B6AE *)this)->append(s, (StringBase<char> *)accum);
 				if (!rva0033AFBB(s, &foundNormal, &foundAddOrSub))
 					break;
 			}
 			wasQuoted = false;
 		} else {
-			rva0033B84EAppend(token, accum);
+			((Rva0049B6AE *)this)->append(token, (StringBase<char> *)accum);
 			if (!rva0033AFBB(token, &foundNormal, &foundAddOrSub))
 				break;
 		}

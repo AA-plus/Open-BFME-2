@@ -7,7 +7,7 @@
 // userData, offset) in retail .data; the token names are in each comment.
 // The forwarders stay static members of their target's class.
 class INI;
-class Rva0033B84ETok;
+class AsciiString;
 
 class Rva0021B7B6
 {
@@ -19,7 +19,7 @@ public:
 class Rva0033AFBB
 {
 public:
-	void rva0033B84E(INI *ini, Rva0033B84ETok *str);
+	void rva0033B84E(INI *ini, AsciiString *str);
 	static void parseFromINI(INI *ini, void *instance, void *store, const void *userData);
 };
 
