@@ -63622,7 +63622,7 @@ _Rva0043802B,,0x0043802B,88,Code/GameEngine/Source/Common/Rva00437EDCFinish.cpp,
 ?func@findEldest@@SAHPAVObject@@PAX@Z,,0x004859A2,72,Code/GameEngine/Source/GameLogic/Object/Die/CreateObjectDieFindEldest.cpp,matched,wb-lead 2/callgraph: WB CreateObjectDie.cpp:198 findEldest::func assert strings; filter accepts/findModule/interface slot 0xA0 order agrees
 ?AttackUnit@HordeMeleeAmoeba@@QAEXPAVObject@@0@Z,,0x00587253,74,Code/GameEngine/Source/GameLogic/Object/Contain/HordeMeleeAmoebaAttackUnit.cpp,matched,wb-lead 2/callgraph: WB HordeMeleeAmoeba.cpp:618 AttackUnit ai/weapon/isMeleeWeapon asserts; getCurrentWeapon/byte getter/0x0026D3FB/rva0028CDB6/AI slot 0x220 order agrees
 ?rva002EAC7C@Rva002EAC7CPool@@QAEPAXXZ,,0x002EAC7C,35,Code/GameEngine/Source/Common/Rva002EAC7CPool.cpp,matched,round-robin 0x200 entry pool: counter +0x800 wraps after 0x1FF then table lookup
-?rva00422CF3HasOne@@YG_NPAX@Z,,0x00422CF3,41,Code/GameEngine/Source/Common/Rva00422CF3HasOne.cpp,matched,flag 0x00DC84F5 gate then circular list node count at least one
+?rva00422CF3HasOne@Rva0022AD10Subsystem@@QAE_NPAX@Z,,0x00422CF3,41,Code/GameEngine/Source/Common/Rva00422CF3HasOne.cpp,matched,flag 0x00DC84F5 gate then circular list node count at least one
 ?showPurchaseScience@ControlBar@@QAEXXZ,,0x0031AD5A,53,Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarShowPurchaseScience.cpp,matched,wb-lead 2/callgraph: WB ControlBar.cpp ControlBar::showPurchaseScience; script engine test/local player/isPlayerActive/flag clear/0x0043CB48 order agrees
 ?init@Eva@@UAEXXZ,,0x001DF0F9,171,Code/GameEngine/Source/GameClient/EvaInit.cpp,matched,wb-lead 2/callgraph: WB Eva.cpp Eva::init Default/Eva.ini and Eva.ini literals; INI ctor/loadFile x2/three member helpers/INI dtor order agrees with ZH plus BFME2 steps
 ?createInactiveTeam@TeamFactory@@QAEPAVTeam@@ABVAsciiString@@0@Z,,0x003A3B7E,317,Code/GameEngine/Source/Common/RTS/TeamFactoryCreateInactiveTeam.cpp,matched,wb-lead 3.4/callgraph: WB Team.cpp:513 TeamFactory::createInactiveTeam; findTeamPrototype/throw/singleton/new Team/script lookup and action run order agrees with ZH
@@ -87946,3 +87946,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?rva002C61AF@Rva002C60E4@@QAEXXZ,,0x002C61AF,133,Code/GameEngine/Source/Common/Rva002C60E4Ctor.cpp,matched,
 ?rva001DDF04@Eva@@QAEXXZ,,0x001DDF04,594,Code/GameEngine/Source/GameClient/EvaRva001DDF04.cpp,matched,
 ?rva000062FD@Rva000062FDRegion@@QBE_NABVCoord2D@@0@Z,,0x000062FD,294,Code/Libraries/Source/WWVegas/WWMath/Rva000062FDSegment.cpp,matched,
+?rva00431C9D@WaitForSecondButtonDownStateHandler@FormationTranslator@@QAEHPAVGameMessage@@@Z,,0x00431C9D,445,Code/GameEngine/Source/GameClient/FormationTranslatorRva00431C9D.cpp,matched,

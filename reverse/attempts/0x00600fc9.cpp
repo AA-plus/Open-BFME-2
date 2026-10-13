@@ -1,4 +1,6 @@
 // ?getFileListInDirectory@FileSystem@@QBEXABVAsciiString@@0AAV?$set@VAsciiString@@UBfmeStringNoCaseLess@@V?$allocator@VAsciiString@@@_STL@@@_STL@@_N@Z
+// partial score=0.96 date=2026-10-13
+// ?getFileListInDirectory@FileSystem@@QBEXABVAsciiString@@0AAV?$set@VAsciiString@@UBfmeStringNoCaseLess@@V?$allocator@VAsciiString@@@_STL@@@_STL@@_N@Z
 // partial score=0.42159763313609466 date=2026-10-09
 // cl: /O1 /G6 /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB
 // stlport
@@ -33,6 +35,7 @@ class FilePathGate {public:bool allow(const char*);};
 FilePathGate *BFME2FileListGate=0;
 typedef _STL::_Rb_tree<AsciiString,AsciiString,_STL::_Identity<AsciiString>,_STL::less<AsciiString>,_STL::allocator<AsciiString> > StringEraseTree;
 namespace _STL {template<> void StringEraseTree::erase(StringEraseTree::iterator);}
+static __forceinline void eraseNoThrow2(StringEraseTree *t, StringEraseTree::iterator it) throw() { t->erase(it); }
 class FileSystem {public:void getFileListInDirectory(const AsciiString&,const AsciiString&,FilenameList&,bool)const;};
 void FileSystem::getFileListInDirectory(const AsciiString &directory,const AsciiString &searchName,FilenameList &files,bool recursive) const {
  char path[260];
@@ -56,7 +59,7 @@ void FileSystem::getFileListInDirectory(const AsciiString &directory,const Ascii
   StringEraseTree *tree=reinterpret_cast<StringEraseTree*>(&files);
   StringEraseTree::iterator it=tree->begin();
   while(it!=tree->end()) {
-   if(!BFME2FileListGate->allow(reinterpret_cast<const StringBase<char>*>(&*it)->str()))tree->erase(it++);
+   if(!BFME2FileListGate->allow(reinterpret_cast<const StringBase<char>*>(&*it)->str()))eraseNoThrow2(tree, it++);
    else ++it;
   }
  }

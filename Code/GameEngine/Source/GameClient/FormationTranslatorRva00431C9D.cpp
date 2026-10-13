@@ -1,13 +1,20 @@
+// cl: /MD /O1 /ICode/Libraries/Include/Lib
+//
 // ?rva00431C9D@WaitForSecondButtonDownStateHandler@FormationTranslator@@QAEHPAVGameMessage@@@Z
-// partial score=0.93 date=2026-10-07
-// cl: /MD
+// @0x00431C9D (445B): the formation drag-start state handler's second
+// button-down step. WorldBuilder shape (bool flags, no gotos): phase3 starts
+// true and is cleared when the in-game UI's selection slot 48 reports a state
+// other than 0/0xA, or (no such state) when the client's slot c18 does not
+// report the drawable as 0x42F; phase2 is raised only when phase3 is down and
+// the drawable's template field +0x53C is below 360. Phase 3 reads the
+// formation assistant (rowed 0x00422CF3, a thiscall that ignores ecx) before
+// converting the cursor to terrain and handing it to slot 49; phase 2 hands it
+// to 0x0029A9FF; both end in the 8-byte helper new for the stored drag state.
+// Anything else restarts the handler and returns 0.
 // FormationTranslator::WaitForSecondButtonDownStateHandler::Restart (WorldBuilder name, FormationTranslator.cpp lines 373..378: re-emits the stored pixel and ints and pushes a new 8B state).
 // ?rva00431C35@Rva00431C35@@QAEXPAX@Z @0x00431C35 104B: thiscall method emitting GameMessage via MessageStream slot 0x4c then helper new 8B with vtable 0x0083C97C plus final Rva00575674 call. Evidence: unlock lane; MessageStreamSubsystem global 0x00A00950; rowed appendPixel 0x0030F9D8 appendInteger 0x0030F936 new 0x0002FDA0 rva00575674 0x00575674; vtables g_00C3C97C; callers 0x00431CB7 0x00431E4D 0x004320A4.
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "ICoord2D.h"
+#include "Coord3D.h"
 
 class GameMessage
 {
@@ -96,12 +103,6 @@ void FormationTranslator::WaitForSecondButtonDownStateHandler::Restart(void *p)
 }
 
 // ?rva00431C9D@WaitForSecondButtonDownStateHandler@FormationTranslator@@QAEHPAVGameMessage@@@Z @0x00431C9D 445B
-struct Coord3D
-{
-	float m_x;
-	float m_y;
-	float m_z;
-};
 
 class BFMERopeDrawable
 {
@@ -209,7 +210,6 @@ extern InGameUI *TheInGameUI;
 extern View *TheTacticalView;
 extern ClientFrameSubsystem *TheGameClient;
 extern const void *const g_00C3C9A0[];
-extern void *g_00E03160;
 
 class Rva0029AA3F
 {
@@ -218,7 +218,8 @@ public:
 };
 
 unsigned int __cdecl Rva0030F099(bool v);
-bool __stdcall rva00422CF3HasOne(void *p);
+class Rva0022AD10Subsystem { public: bool rva00422CF3HasOne(void *p); };
+extern Rva0022AD10Subsystem *TheFormationAssistant;
 
 struct Rva00431C9DHelper
 {
@@ -234,66 +235,67 @@ int FormationTranslator::WaitForSecondButtonDownStateHandler::rva00431C9D(GameMe
 		return 0;
 	}
 	ICoord2D tmp = m_0C;
+	Coord3D out;
+	bool phase3 = true;
+	bool phase2 = false;
 	bool b = TheInGameUI->m_8B8;
 	unsigned int mode = Rva0030F099(b);
 	b = TheInGameUI->m_8B8;
 	BFMERopeDrawable *draw = TheTacticalView->s09(&tmp, b, mode);
 	Slot48Ret *v = TheInGameUI->slot48();
-	Coord3D out;
-	if (v != 0)
+	if (v != 0 && v->m_14 != 0 && v->m_14 != 0xA)
 	{
-		int t = v->m_14;
-		if (t != 0)
+		phase3 = false;
+	}
+	else if (draw != 0)
+	{
+		if (TheGameClient->c18(draw, draw->getPosition(), 2) != 0x42F)
+			phase3 = false;
+	}
+	if (!phase3 && draw != 0)
+	{
+		if (TheInGameUI->slot70() > 0 && draw->m_fc != 0)
 		{
-			if (t != 0xA)
-				goto phase2;
+			if (*(float *)((char *)draw->m_fc->m_04 + 0x53C) < 360.0f)
+				phase2 = true;
 		}
 	}
-	if (draw == 0)
-		goto phase3;
-	if (TheGameClient->c18(draw, draw->getPosition(), 2) == 0x42F)
-		goto phase3;
-phase2:
-	if (draw == 0)
-		goto fail;
-	if (TheInGameUI->slot70() <= 0)
-		goto fail;
-	if (draw->m_fc == 0)
-		goto fail;
-	if (!(*(float *)((char *)draw->m_fc->m_04 + 0x53C) < 360.0f))
-		goto fail;
-	TheTacticalView->screenToTerrain(&tmp, &out, false);
-	((Rva0029AA3F *)TheInGameUI)->rva0029A9FF(&out);
-make:
+	if (phase3)
 	{
-		void *mem = operator new(8);
-		Rva00431C9DHelper *h;
-		if (mem != 0)
+		if (TheInGameUI->slot70() > 0 && TheFormationAssistant->rva00422CF3HasOne(TheInGameUI->slot73()))
 		{
-			h = (Rva00431C9DHelper *)mem;
-			h->m_parent = m_04;
-			h->m_vptr = (void *)g_00C3C9A0;
+			TheTacticalView->screenToTerrain(&tmp, &out, false);
+			TheInGameUI->slot49(&out);
 		}
 		else
 		{
-			h = 0;
+			Restart(msg);
+			return 0;
 		}
-		Rva00575674 *q = (Rva00575674 *)((char *)m_04 + 8);
-		q->rva00575674((Object *)h);
-		return 1;
 	}
-phase3:
-	if (TheInGameUI->slot70() <= 0)
-		goto fail;
+	else if (phase2)
 	{
-		void *w = TheInGameUI->slot73();
-		if (!rva00422CF3HasOne(w))
-			goto fail;
+		TheTacticalView->screenToTerrain(&tmp, &out, false);
+		((Rva0029AA3F *)TheInGameUI)->rva0029A9FF(&out);
 	}
-	TheTacticalView->screenToTerrain(&tmp, &out, false);
-	TheInGameUI->slot49(&out);
-	goto make;
-fail:
-	Restart(msg);
-	return 0;
+	else
+	{
+		Restart(msg);
+		return 0;
+	}
+	void *mem = operator new(8);
+	Rva00431C9DHelper *h;
+	if (mem != 0)
+	{
+		h = (Rva00431C9DHelper *)mem;
+		h->m_parent = m_04;
+		h->m_vptr = (void *)g_00C3C9A0;
+	}
+	else
+	{
+		h = 0;
+	}
+	Rva00575674 *q = (Rva00575674 *)((char *)m_04 + 8);
+	q->rva00575674((Object *)h);
+	return 1;
 }
