@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // WB 0x015FDF40 names SelectedMemberDestPicker::IsPickable (line 350).
 // Native 0x005E575E / 68 B and vtable 0x00C77D90 slot 7 corroborate
 // the virtual member ABI. The owner +8 -> army +0x18 -> player id +0x54
