@@ -1,4 +1,6 @@
 // ??0Rva005C4B56@@QAE@ABUHelper005C4D4B@@_NPBH@Z
+// partial score=0.83 date=2026-10-13
+// ??0Rva005C4B56@@QAE@ABUHelper005C4D4B@@_NPBH@Z
 // partial score=0.828675577156744 date=2026-10-13
 // ??0Rva005C4B56@@QAE@ABUHelper005C4D4B@@HH@Z
 // partial score=0.828675577156744 date=2026-10-11
@@ -18,6 +20,8 @@
 // Node inheritance is a layout view of the existing16B concat operand, not source proof.
 // BF1 a10e4cbab8 refreshed reference lanes have no compatible clean donor for this body.
 // EH base cleanup spelling deliberately remains unresolved; do not admit this TU.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 #include <vector>
 #include "coord3d.h"
@@ -80,6 +84,7 @@ Rva005C4B56::Rva005C4B56(const Helper005C4D4B &h,bool enabled,const int *colour)
  m_ac(h.m_00),m_b0(h.m_08),m_b4(h.m_00->value1C),m_b8(0)
 {
  const_cast<Helper005C4D4B &>(h).m_0C=true;
+ _ReadWriteBarrier();
  reinterpret_cast<LivingWorldVisual *>(this)->createRenderObject(
   m_ac->name04,m_ac->names08,m_ac->shadow28,
   m_ac->colour54 ? colour : 0);
@@ -92,7 +97,7 @@ Rva005C4B56::Rva005C4B56(const Helper005C4D4B &h,bool enabled,const int *colour)
  if (!enabled)
   ((reinterpret_cast<LivingWorldVisual *>(this))->*reinterpret_cast<void (LivingWorldVisual::*)(unsigned char)>(&LivingWorldVisual::rva003FCCC9))(
    reinterpret_cast<Rva005C41C9 *>(this)->rva005C4B26());
- scaleA0=ThreeFloatBlock(1.f,1.f,1.f);
  value30=m_ac->value30;
+ scaleA0=ThreeFloatBlock(1.f,1.f,1.f);
  rva003FC82C(m_ac->angle24*0.017453292f);
 }
