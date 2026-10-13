@@ -1,93 +1,74 @@
 // ?Update@Rva002B74DE@@QAEHXZ
-// partial score=0.979133226 date=2026-10-11
-// cl: /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP=
-// Complete target623B resolver Update trial; 623B extent, still not byte-exact.
-// Native2BB7D6..2BBA45 and WB D7B800 establish purpose and control.
-// Every REL32 uses an actual provider or existing admitted pin; native
-// region-end20FB8B is still an unprovided link prerequisite. Fields below
-// reflect target accesses only and do not assert complete original types.
-typedef int Int;typedef bool Bool;
-class Rva004FA2E2;struct ResolverUnit2B74DE;
-struct Rva002B89BBInfo;struct Rva003F4E07Results;
-class LivingWorldAutoResolveBattle;
-class LivingWorldBattle {
-public:
- void ComputeBattleResultsForPlayersAfterAutoBattle(Rva003F4E07Results*);
- char pad00[0x18];struct SideRecord {char data[0x1c];} *m_sides,*m_sidesEnd;
- char pad20[0x18];int m_side;int sides()const{return m_sidesEnd-m_sides;}
-};
-class LivingWorldLogic {public:
- void OnBattleComplete(LivingWorldBattle*);
- void rva002B3833(LivingWorldBattle*,Rva002B89BBInfo*);
-};
-class LivingWorldRegionManager {public:void rva0020FB8B(LivingWorldBattle*);};
-class Rva003F468D {public:Int rva003F468D(Int,Int);Int rva003F4DAE(Int);};
-class Rva002B74DE {
-public:Int Update();
-private:LivingWorldLogic *m_logic;LivingWorldBattle *m_battle;
- ResolverUnit2B74DE *m_units;Rva004FA2E2 *m_sim;char tail10[0x18];
-};
-class Rva002B471B {public:Bool rva002B471B();};
-class Rva002B466E {public:Bool rva002B466E();};
-class Rva004FA10FOwner {public:void rva004FA10F();};
-struct ResolverSimHeader {int winner()const{return winner78;}void *players;char pad04[0x78-4];int winner78;};
-struct ResolverPlayerRecord {char pad00[0x2c];int side2c;int getSide()const{return side2c;}bool isSide(int v)const{return side2c==v;}int tail30;};
-struct ResolverUnit2B74DE {char pad00[0xc];float value0c;float getValue()const{return value0c;}char pad10[0x1c-0x10];int value1c;int getCount()const{return value1c;}char tail20[0x2c-0x20];};
-struct ResolverArmyView {char pad00[0x1c8];float value1c8;};
-class Rva004E05E9DwordField {public:int get()const;};
-class Rva002E062EDwordSlot {public:void set(int);};
-class Rva002B6126Listener {public:virtual void slot00();virtual void slot04(void*,int,int);virtual void slot08(void*,int,int);};
-class Rva002B6126List {public:void forEach(void(Rva002B6126Listener::*)(void*,int,int),void*,int,int);};
-struct ResolverTransfer {Rva004FA2E2 *p;};
-class Rva002B4349 {public:~Rva002B4349();Rva002B4349(Rva002B4349 &from){Rva004FA2E2 *p=from.m_ptr;from.m_ptr=0;m_ptr=p;} Rva002B4349(ResolverTransfer from):m_ptr(from.p){} ResolverTransfer transfer(){ResolverTransfer v={m_ptr};m_ptr=0;return v;}Rva004FA2E2 *m_ptr;};
-class Rva002B430C {public:void clear();};
-class Rva002B43E7 {public:Rva002B43E7(Rva002B4349);~Rva002B43E7(){((Rva002B430C*)this)->clear();}Rva004FA2E2 *m_ptr;};
-class Rva002B54BB {public:Rva002B4349 rva002B54BB();};
-class LivingWorldAutoResolveBattle {public:void applyResults();};
-
-Int Rva002B74DE::Update(){
- if(m_sim){
- if(!((Rva002B466E*)this)->rva002B466E())return 0;
- if(((ResolverSimHeader*)m_sim)->winner()==-1){
-  Bool fast=((Rva002B471B*)this)->rva002B471B();
-  for(;;){
-   ((Rva004FA10FOwner*)m_sim)->rva004FA10F();
-   Rva004FA2E2 *sim=m_sim;
-   ((Rva002B6126List*)((char*)m_logic+0x2c))->forEach(&Rva002B6126Listener::slot04,m_logic,(int)m_battle,(int)sim);
-   if(((ResolverSimHeader*)m_sim)->winner()!=-1)break;
-   fast=fast || ((Rva002B471B*)this)->rva002B471B();
-   if(!fast && !((Rva002B466E*)this)->rva002B466E())return 0;
-  }
- }
- Rva002B43E7 owned(((Rva002B54BB*)&m_sim)->rva002B54BB().transfer());
- ((LivingWorldAutoResolveBattle*)owned.m_ptr)->applyResults();
- ResolverSimHeader *result=(ResolverSimHeader*)owned.m_ptr;
- int index=0;
- for(int side=0;side<m_battle->sides();++side){
-  int count=((Rva003F468D*)m_battle)->rva003F4DAE(side);
-  for(int army=0;army<count;++army,++index){
-   ResolverArmyView *a=(ResolverArmyView*)((Rva003F468D*)m_battle)->rva003F468D(side,army);
-   a->value1c8=m_units[index].getValue();
-   ((Rva002E062EDwordSlot*)a)->set(m_units[index].getCount()-((Rva004E05E9DwordField*)a)->get());
-  }
- }
- index=0;
- for(int side=0;side<m_battle->sides();++side){
-  Bool found=false;
-  int count=((Rva003F468D*)m_battle)->rva003F4DAE(side);
-  for(int army=0;army<count;++army,++index){
-   if(((ResolverPlayerRecord*)result->players)[index].isSide(((ResolverSimHeader*)owned.m_ptr)->winner())){
-    if(!found){m_battle->m_side=side;found=true;}
-   }else{
-    struct Rva002B89BBInfo *a=(struct Rva002B89BBInfo*)((Rva003F468D*)m_battle)->rva003F468D(side,army);
-    m_logic->rva002B3833(m_battle,a);
-   }
-  }
- }
- m_battle->ComputeBattleResultsForPlayersAfterAutoBattle((Rva003F4E07Results*)owned.m_ptr);
- m_logic->OnBattleComplete(m_battle);
- ((Rva002B6126List*)((char*)m_logic+0x2c))->forEach(&Rva002B6126Listener::slot08,m_logic,(int)m_battle,(int)owned.m_ptr);
- ((LivingWorldRegionManager*)*(void**)((char*)m_logic+0xb0))->rva0020FB8B(m_battle);
- }
- return 1;
+// partial score=0.979 date=2026-10-13
+// ?Update@Rva002B74DE@@QAEHXZ
+// partial score=0.979 date=2026-10-13
+// Retail 0x002BB7D6 (623B). Home-ported to LivingWorldLogic.cpp (proper home:
+// rowed ctor/dtor, /EHs flags, all callees rowed, 117/117 green) compiles 580B.
+// Head exact through winner-check; walls (all allocator/scheduling):
+// (1) null-check: retail cmp [edi],0 immediate; every spelling tried pins a
+//     zero reg (holder->get/m_ptr/getRef/volatile all load+test or xor+cmp).
+//     Retail reuses edi (holder-addr, dies after transfer) as zero LATE, so
+//     null-check (early, edi live) uses immediate. Mine hoists ebx-zero early
+//     covering null-check + EH/index. Next: kill the early hoist (make later
+//     zeros use edi by freeing it sooner?) or force immediate.
+// (2) transfer 6B: retail edx=esp then null then store; mine null then eax=esp.
+// (3) SIB x2: retail base=offset/index=base ([ebx+ecx]); mine conventional.
+//     Try commuted address arithmetic.
+// (4) winner order: retail loads result-home then owned-home; mine swapped.
+// Infra KEPT in LivingWorldLogic.cpp (build-green): Rva002B6126Listener
+// slot04/slot08, Rva002B2EC7::get, LivingWorldBattle sides()/Compute...,
+// all helper views, public Rva002B4326::m_ptr. Method reverted below.
+// t=35 model=muse-spark
+Int Rva002B74DE::Update()
+{
+	if (*(Rva004FA2E2 *volatile *)&m_holder0C.m_ptr) {
+		if (!((Rva002B466E *)this)->rva002B466E())
+			return 0;
+		if (((ResolverSimHeader *)m_holder0C.get())->winner() == -1) {
+			Bool fast = ((Rva002B471B *)this)->rva002B471B();
+			for (;;) {
+				((Rva004FA10FOwner *)m_holder0C.get())->rva004FA10F();
+				Rva004FA2E2 *sim = m_holder0C.get();
+				((Rva002B6126List *)((char *)m_logic + 0x2c))->forEach(&Rva002B6126Listener::slot04, m_logic, m_battle, (int)sim);
+				if (((ResolverSimHeader *)m_holder0C.get())->winner() != -1)
+					break;
+				fast = fast || ((Rva002B471B *)this)->rva002B471B();
+				if (!fast && !((Rva002B466E *)this)->rva002B466E())
+					return 0;
+			}
+		}
+		Rva002B43E7 owned(((Rva002B54BB *)&m_holder0C)->rva002B54BB().transfer());
+		((LivingWorldAutoResolveBattle *)owned.m_ptr)->applyResults();
+		ResolverSimHeader *result = (ResolverSimHeader *)owned.m_ptr;
+		int index = 0;
+		for (int side = 0; side < ((LivingWorldBattle *)m_battle)->sides(); ++side) {
+			int count = ((Rva003F468D *)m_battle)->rva003F4DAE(side);
+			for (int army = 0; army < count; ++army, ++index) {
+				ResolverArmyView *a = (ResolverArmyView *)((Rva003F468D *)m_battle)->rva003F468D(side, army);
+				a->value1c8 = ((ResolverUnit2B74DE *)m_holder08.get())[index].getValue();
+				((Rva002E062EDwordSlot *)a)->set(((ResolverUnit2B74DE *)m_holder08.get())[index].getCount() - ((Rva004E05E9DwordField *)a)->get());
+			}
+		}
+		index = 0;
+		for (int side = 0; side < ((LivingWorldBattle *)m_battle)->sides(); ++side) {
+			Bool found = false;
+			int count = ((Rva003F468D *)m_battle)->rva003F4DAE(side);
+			for (int army = 0; army < count; ++army, ++index) {
+				if (((ResolverPlayerRecord *)result->players)[index].isSide(((ResolverSimHeader *)owned.m_ptr)->winner())) {
+					if (!found) {
+						((LivingWorldBattle *)m_battle)->m_side = side;
+						found = true;
+					}
+				} else {
+					struct Rva002B89BBInfo *a = (struct Rva002B89BBInfo *)((Rva003F468D *)m_battle)->rva003F468D(side, army);
+					m_logic->rva002B3833((LivingWorldBattle *)m_battle, a);
+				}
+			}
+		}
+		((LivingWorldBattle *)m_battle)->ComputeBattleResultsForPlayersAfterAutoBattle((Rva003F4E07Results *)owned.m_ptr);
+		m_logic->OnBattleComplete((LivingWorldBattle *)m_battle);
+		((Rva002B6126List *)((char *)m_logic + 0x2c))->forEach(&Rva002B6126Listener::slot08, m_logic, m_battle, (int)owned.m_ptr);
+		((LivingWorldRegionManager *)*(void **)((char *)m_logic + 0xb0))->rva0020FB8B((LivingWorldBattle *)m_battle);
+	}
+	return 1;
 }

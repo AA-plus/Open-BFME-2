@@ -99,6 +99,7 @@ public:
 	Rva002B2EC7() : m_p(0) {}
 	~Rva002B2EC7() { ((Rva002B2EA0 *)this)->rva002B2EA0(); }
 	void rva002B2EC7(Item002B2EC7 *v);			// 0x002B2EC7
+	Item002B2EC7 *get() const { return m_p; }
 
 private:
 	Item002B2EC7 *m_p;
@@ -113,7 +114,6 @@ public:
 	void reset(Rva004FA2E2 *p);				// 0x002B4326
 	Rva004FA2E2 *get() const { return m_ptr; }
 
-private:
 	Rva004FA2E2 *m_ptr;
 };
 class ModuleData;
@@ -347,6 +347,8 @@ class Rva002B6126Listener
 {
 public:
 	virtual void notify(void *, int, int);
+	virtual void slot04(void *, int, int);
+	virtual void slot08(void *, int, int);
 };
 
 class Rva002B6126List
@@ -2055,6 +2057,8 @@ void RetreatArmiesForPlayer(void*);bool rva003F4538();int rva003F45DF();void rva
 	unsigned char m_pad28[0x34 - 0x28];
 	Int m_field34;						// +0x34, handed to the region manager's 0x0020E63F
 	Int m_side;						// +0x38, the winning side
+	Int sides() const { return m_sidesEnd - m_sides; }
+	void ComputeBattleResultsForPlayersAfterAutoBattle(struct Rva003F4E07Results *);
 };
 class Rva003F468D
 {
@@ -3827,3 +3831,24 @@ void LivingWorldLogic::rva002B49A8(){
   }
  }
 }
+// Helpers for Rva002B74DE::Update below (names/shapes from the banked
+// standalone trial; all callees rowed, no pins).
+struct Rva003F4E07Results;
+class Rva002B471B { public: Bool rva002B471B(); };
+class Rva002B466E { public: Bool rva002B466E(); };
+class Rva004FA10FOwner { public: void rva004FA10F(); };
+struct ResolverSimHeader { int winner() const { return winner78; } void *players; char pad04[0x78 - 4]; int winner78; };
+struct ResolverPlayerRecord { char pad00[0x2c]; int side2c; int getSide() const { return side2c; } bool isSide(int v) const { return side2c == v; } int tail30; };
+struct ResolverUnit2B74DE { char pad00[0x0c]; float value0c; float getValue() const { return value0c; } char pad10[0x1c - 0x10]; int value1c; int getCount() const { return value1c; } char tail20[0x2c - 0x20]; };
+struct ResolverArmyView { char pad00[0x1c8]; float value1c8; };
+class Rva004E05E9DwordField { public: int get() const; };
+class Rva002E062EDwordSlot { public: void set(int); };
+struct ResolverTransfer { Rva004FA2E2 *p; };
+class Rva002B4349 { public: ~Rva002B4349(); Rva002B4349(Rva002B4349 &from) { Rva004FA2E2 *p = from.m_ptr; from.m_ptr = 0; m_ptr = p; } Rva002B4349(ResolverTransfer from) : m_ptr(from.p) {} ResolverTransfer transfer() { ResolverTransfer v = { m_ptr }; m_ptr = 0; return v; } Rva004FA2E2 *m_ptr; };
+class Rva002B43E7 { public: Rva002B43E7(Rva002B4349); ~Rva002B43E7() { ((Rva002B430C *)this)->clear(); } Rva004FA2E2 *m_ptr; };
+class Rva002B54BB { public: Rva002B4349 rva002B54BB(); };
+class LivingWorldAutoResolveBattle { public: void applyResults(); };
+// ?Update@Rva002B74DE@@QAEHXZ @0x002BB7D6 (623B): the auto-battle resolver
+// Update (WB LivingWorldLogic::AutoBattleResolver::Update). Evidence: WB
+// 0xD7B800 branch structure + retail 623B; holder members via get() exactly
+// where the trial read its unit/sim members.
