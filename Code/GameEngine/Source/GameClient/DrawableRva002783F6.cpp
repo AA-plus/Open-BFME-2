@@ -49,6 +49,11 @@ private:
 	unsigned char m_pad449;
 	unsigned char m_x44A;
 };
+class Rva00278341Host
+{
+public:
+	void rva00278341(int query, int v);	// 0x00278341
+};
 
 void Rva002783F6Host::rva002783F6(int v)
 {
@@ -59,6 +64,6 @@ void Rva002783F6Host::rva002783F6(int v)
 		int query = 0;
 		if (obj)
 			query = obj->m_x254->rva002783F6Query();
-		rva00278341(query, v);
+		((Rva00278341Host *)this)->rva00278341(query, v);
 	}
 }

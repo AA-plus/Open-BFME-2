@@ -24,11 +24,6 @@ public:
 };
 extern ControlBar *TheControlBar;
 extern GameLogic *TheGameLogic;
-class Rva0024792FHelper
-{
-public:
- void rva0024792F(const AsciiString &commandSet, int slot, const CommandButton *button);
-};
 
 void __stdcall Rva003BCB7A(const AsciiString &buttonName, const AsciiString &objectType, int slot)
 {
@@ -38,5 +33,5 @@ void __stdcall Rva003BCB7A(const AsciiString &buttonName, const AsciiString &obj
  if (button == 0) return;
  --slot;
  if (slot < 0 || slot >= 32) return;
- ((Rva0024792FHelper *)TheGameLogic)->rva0024792F(*(const AsciiString *)((const char *)subject + 0x70), slot, button);
+ TheGameLogic->setControlBarOverride(*(const AsciiString *)((const char *)subject + 0x70), slot, button);
 }
