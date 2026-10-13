@@ -1,4 +1,6 @@
 // ?rva00328E96@@YAXAAVDataChunkInput@@HPAURva00328E96WaterRecord@@@Z
+// partial score=0.975468809797168 date=2026-10-13
+// ?rva00328E96@@YAXAAVDataChunkInput@@HPAURva00328E96WaterRecord@@@Z
 // partial score=0.9445135265024087 date=2026-10-13
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
@@ -46,7 +48,7 @@ void rva00328E96(DataChunkInput &file,int version,Rva00328E96WaterRecord *out) {
   out->textures[1]="Noise0000.tga";out->textures[2]="TWAlphaEdge.tga";
   out->textures[3]="WaterSurfaceBubbles.tga";out->textures[4]="WaterRippleBump.tga";out->textures[5]="SkyEnv.tga";
   out->colorEnabled=false;RGBColor white={1.0f,1.0f,1.0f};out->color=white;_ReadWriteBarrier();
-  out->value3c=0.06f;_ReadWriteBarrier();out->value40=0.06f;
+  static const float defaultRippleScale=0.06f;out->value3c=*(const volatile float*)&defaultRippleScale;out->value40=*(const volatile float*)&defaultRippleScale;
   out->height=((const WaterTransparencySetting*)TheWaterTransparency)->defaultHeight;
  }
  if(version>=6)out->polygon.parse(file,1);
