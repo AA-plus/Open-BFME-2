@@ -199,15 +199,22 @@ class Matrix3D;
 
 class Rva00240000;
 
+class Object;
+enum PathfindLayerEnum { LAYER_GROUND = 1 };
+
 class TerrainLogic : public Snapshot, public SubsystemInterface
 {
 public:
 	virtual bool loadMap(const AsciiString &filename, Rva00240000 *stream, bool query,
 		bool newGame);                                                   // +0x10
 	virtual void newMap(bool loadingSaveGame);                           // +0x14
-	virtual void t06(void); virtual void t07(void);
+	virtual float getGroundHeight(float x, float y, Coord3D *normal = 0) const;
+	virtual float getLayerHeight(float x, float y, PathfindLayerEnum layer,
+	                            Coord3D *normal = 0, bool clip = true) const;
 	virtual void getExtent(Region3D *extent) const;                      // +0x20
 	void rva002817F2(const AsciiString &filename);
+	PathfindLayerEnum getLayerForDestination(Object *obj, const Coord3D *pos);
+	void rva0027D3D9(const ThingTemplate *tt, const Coord3D *pos, const Matrix3D *mtx, float scale);
 	void rva00283642(const ThingTemplate *tt, const Coord3D *pos, const Matrix3D *mtx, float scale);
 	void rva00280176(const ThingTemplate *tt, const Coord3D *pos, const Matrix3D *mtx, float scale);
 };
@@ -230,16 +237,32 @@ class Pathfinder
 public:
 	void rva002E8DAA(void);
 	void rva002F0F07(void);
+	void AddObjectToPathfindMap(Object *obj);
+};
+
+// loadAllObjects reads the three tree names at +0xDC..E4 and scale at +0xE8.
+// The field offsets are retail facts; the tree meanings follow the donor.
+class AIData
+{
+	char m_pad00[0xd8];
+public:
+	bool m_d8;
+	AsciiString m_treeName[3];
+	float m_treeScale;
+	bool m_ec;
 };
 
 class AI : public SubsystemInterface
 {
 public:
 	Pathfinder *pathfinder(void) { return m_pathfinder; }
+	const AIData *getAiData(void) const { return m_aiData; }
 
 private:
 	int m_0c;
 	Pathfinder *m_pathfinder;                                            // +0x10
+	char m_pad14[0x18 - 0x14];
+	AIData *m_aiData;
 };
 
 class AssetList;
@@ -424,6 +447,8 @@ class Dict
 public:
 	Dict(int numPairs = 0);
 	~Dict() { releaseData(); }
+	bool getBool(int key, bool *exists = 0) const;
+	float getReal(int key, bool *exists = 0) const;
 	AsciiString getAsciiString(int key, bool *exists = 0) const;
 	void setInt(int key, int value);
 	void setBool(int key, bool value);
@@ -595,7 +620,7 @@ public:
 	void setHeight(float height) { m_height = height; }
 	bool rva0023C8DA(unsigned char loadingSaveGame);
 	Object *findObjectByID(ObjectID id);
-	void rva00244D56(_STL::vector<Rva0024622FEntry> *created, const KindOfType *excludeKind,
+	void loadAllObjects(_STL::vector<Rva0024622FEntry> *created, const KindOfType *excludeKind,
 		const KindOfType *requireKind, bool dontCreate);
 	void startNewGame_OpenLoadScreen(bool loadingSaveGame, GameInfo *game);
 	bool isInMultiplayerGame(void);
@@ -1370,6 +1395,7 @@ class ThingTemplate
 public:
 	const AsciiString &getName(void) const { return m_name; }
 	void GetAssetList(int a, int b);
+	int rva000456AC(int bit) const;
 	__forceinline bool isKindOf(KindOfType t) const
 	{
 		unsigned int mask = 1u << (t & 31);
@@ -1379,8 +1405,21 @@ public:
 private:
 	char m_pad00[0x64];
 	AsciiString m_name;
-	char m_pad68[0x10c - 0x68];
+	char m_pad68[0x108 - 0x68];
+public:
+	unsigned int m_108;
 	unsigned int m_kindof[4];
+	unsigned int m_11c;
+	unsigned int m_120;
+	char m_pad124[0x4a0 - 0x124];
+	float m_fenceWidth;
+	char m_pad4A4[0x4e0 - 0x4a4];
+	float m_4e0;
+	char m_pad4E4[0x5e5 - 0x4e4];
+	bool m_5e5;
+	char m_pad5E6[0x5eb - 0x5e6];
+	bool m_5eb;
+	bool m_5ec;
 };
 
 class Dict;
@@ -1391,6 +1430,9 @@ class Thing
 {
 public:
 	Drawable *getDrawable(void) const;
+	void setTransformMatrix(const Matrix3D *mtx);
+	void setOrientation(float angle);
+	void setPosition(const Coord3D *pos);
 };
 
 // DisabledMaskType: one word; its constructors memset, so it returns
@@ -1426,6 +1468,8 @@ class Object : public Thing
 public:
 	const ThingTemplate *getTemplate(void) const { return m_template; }
 	Object *getNextObject(void) const { return m_next; }
+	void updateObjValuesFromMapProperties(Dict *properties);
+	void rva0028B4CE(PathfindLayerEnum layer);
 	void rva00293E64(Dict *properties);
 	bool testStatus(ObjectStatusTypes bit) const;
 	bool isDisabled(void) const { return m_disabledMask.any(); }
@@ -1524,6 +1568,13 @@ class AssetList
 {
 public:
 	AssetList() : m_treeLayoutPad(0), m_changed(true) {}
+	void clear(void)
+	{
+		// Pointer-set and int-map clear/erase are whole-body relocation twins
+		// at 0x6AA1C/0x692F5. Their trivial payload cleanup shares this provider.
+		((_STL::map<int, int> *)&m_prototypes)->clear();
+		m_changed = true;
+	}
 
 private:
 	Rva001408C0Set m_prototypes;
@@ -1546,6 +1597,8 @@ class MapObject
 public:
 	MapObject *getNext(void) const { return m_next; }
 	const Coord3D *getLocation(void);
+	float getAngle(void) const { return m_angle; }
+	int getFlags(void) const { return m_flags; }
 	Dict *getProperties(void) { return &m_properties; }
 	const ThingTemplate *getThingTemplate(void) const;
 
@@ -1642,6 +1695,7 @@ public:
 	Player *getNthPlayer(int index);
 	Player *findPlayerWithNameKey(NameKeyType key);
 	void setLocalPlayer(Player *player);
+	Team *validateTeam(AsciiString owner, MapObject *mapObj);
 
 private:
 	char m_pad0C[0x10 - 0x0c];
@@ -1662,21 +1716,51 @@ extern PlayerList *ThePlayerList;
 
 class Matrix3D
 {
-public:
-	// dllimport+forceinline: expanded at its one use and never emitted, so this
-	// view no longer leaves a non-retail Matrix3D(bool) copy (retail 0x0004C91A)
-	// ahead of the real one in link order.
-	__declspec(dllimport) __forceinline explicit Matrix3D(bool init)
+	// The donor's three Vector4 rows, restricted to the operations used here.
+	struct MatrixRow
 	{
-		if (init) {
-			m_row[0][0] = 1.0f; m_row[0][1] = 0.0f; m_row[0][2] = 0.0f; m_row[0][3] = 0.0f;
-			m_row[1][0] = 0.0f; m_row[1][1] = 1.0f; m_row[1][2] = 0.0f; m_row[1][3] = 0.0f;
-			m_row[2][0] = 0.0f; m_row[2][1] = 0.0f; m_row[2][2] = 1.0f; m_row[2][3] = 0.0f;
-		}
+		float X, Y, Z, W;
+		__forceinline void Set(float x, float y, float z, float w)
+		{ X = x; Y = y; Z = z; W = w; }
+		__forceinline float &operator[](int i) { return (&X)[i]; }
+	};
+
+public:
+	__forceinline Matrix3D(void) {}
+	// Retain the existing inline-only constructor view; no competing COMDAT.
+	__declspec(dllimport) __forceinline explicit Matrix3D(bool init)
+	{ if (init) Make_Identity(); }
+
+	__forceinline void Make_Identity(void)
+	{
+		Row[0].Set(1.0f, 0.0f, 0.0f, 0.0f);
+		Row[1].Set(0.0f, 1.0f, 0.0f, 0.0f);
+		Row[2].Set(0.0f, 0.0f, 1.0f, 0.0f);
+	}
+
+	__forceinline void Rotate_Z(float theta)
+	{
+		float tmp1, tmp2;
+		float cosine, s;
+		const float &c = cosine;
+		cosine = cosf(theta);
+		s = sinf(theta);
+		// The cosine reference and final product conversion preserve retail's
+		// MSVC 7.1 x87/SSE scheduling. They are codegen adaptations, not a
+		// claim that the donor used reference storage for its cosine local.
+		tmp1 = Row[0][0]; tmp2 = Row[0][1];
+		Row[0][0] = (float)(c * tmp1 + s * tmp2);
+		Row[0][1] = (float)(-s * tmp1 + c * tmp2);
+		tmp1 = Row[1][0]; tmp2 = Row[1][1];
+		Row[1][0] = (float)(c * tmp1 + s * tmp2);
+		Row[1][1] = (float)(-s * tmp1 + c * tmp2);
+		tmp1 = Row[2][0]; tmp2 = Row[2][1];
+		Row[2][0] = (float)(c * tmp1 + (float)(s * tmp2));
+		Row[2][1] = (float)(-s * tmp1 + c * tmp2);
 	}
 
 private:
-	float m_row[3][4];
+	MatrixRow Row[3];
 };
 
 // 0x00271058 compares, unregisters and re-registers the ID at +0x100 (the
@@ -1713,9 +1797,9 @@ void GameLogic::rva00246422(bool dontCreate)
 			else if (tt->isKindOf((KindOfType)63))
 				TheTerrainLogic->rva00280176(tt, &pos, &mtx, 1.0f);
 		}
-		rva00244D56(&created, kindRef((KindOfType)0x3c), 0, true);
+		loadAllObjects(&created, kindRef((KindOfType)0x3c), 0, true);
 	} else {
-		rva00244D56(&created, kindRef((KindOfType)0x3c), 0, false);
+		loadAllObjects(&created, kindRef((KindOfType)0x3c), 0, false);
 
 		Rva0134FAA0->slot28();
 		bfmeReleaseQueuedDeviceInterfaces();
@@ -1918,10 +2002,13 @@ class GameLODManager
 {
 public:
 	int getStaticLODLevel(void) const { return m_staticLODLevel; }
+	int get1774(void) const { return m_1774; }
 
 private:
 	char m_pad0000[0x1768];
 	int m_staticLODLevel;
+	char m_pad176C[0x1774 - 0x176c];
+	int m_1774;
 };
 
 void bfmeClearReceiverFlag(int value);
@@ -2689,10 +2776,13 @@ class Drawable
 public:
 	void rva00278C6B(void);
 	Drawable *getNextDrawable(void) const { return m_next; }
+	void setDrawableStatus(unsigned int bits) { m_status |= bits; }
 
 private:
 	char m_pad000[0x104];
 	Drawable *m_next;                                                    // +0x104
+	char m_pad108[0x114 - 0x108];
+	unsigned int m_status;
 };
 
 class ClientFrameSubsystem
@@ -4882,3 +4972,216 @@ if ((LS_MODE != 0 || LS_MODE == 0)) {
 }
 #undef LS_STR
 #undef LS_MODE
+
+// GameLogic::loadAllObjects, retail 0x00244D56..0x0024555A (2052 bytes).
+// WorldBuilder 0x00D00E20 names this routine and shows the same prop/object
+// split and the if(obj) scope. Retail calls validateTeam at 0x002A851D and
+// supplies the same two-pointer created-object records consumed by the callers.
+// Donor: BFME 1 GameLogic.cpp and WWMath/matrix3d.h at
+// cee35b7d8ca077d7255f1c39cb69e9fd9627aa85; target offsets and all callees are
+// established independently from the retail body. EH states own AssetList
+// at EBP-0x94 and originalOwner at EBP-0x30. The object guard must retain its
+// lexical scope even though the initial rejection guards are early continues.
+struct BfmeE8 { int a, b; };
+class GameClient { public: void rva0023B383(Dict *, ThingTemplate *, const Coord3D *); };
+extern "C" int (__cdecl * const _imp__strncmp)(const char *s1, const char *s2, unsigned int count);
+class Rva0028CBFD
+{
+public:
+	void rva0028CBFD(void);
+};
+class Rva0033A68A
+{
+public:
+	Overridable *rva0033A68A(void);
+};
+static __forceinline const ThingTemplate *finalOverride(const ThingTemplate *tt)
+{
+	return (const ThingTemplate *)((Rva0033A68A *)tt)->rva0033A68A();
+}
+class Team
+{
+public:
+	void setActive(void)
+	{
+		if (!m_active) {
+			m_created = true;
+			m_active = true;
+		}
+	}
+private:
+	char m_pad00[0x5d];
+	bool m_active;
+	bool m_created;
+};
+extern const StaticNameKey TheKey_objectName;
+extern Rva00148F5ECache TheKey_objectPrototypeScale;
+extern Rva00148F5ECache TheKey_alignToTerrain;
+extern const StaticNameKey TheKey_originalOwner;
+float normalizeAngle(float angle);
+void alignToTerrain(float angle, const Coord3D &pos, const Coord3D &normal, Matrix3D &mtx);
+void GameLogic::loadAllObjects(_STL::vector<Rva0024622FEntry> *created, const KindOfType *excludeKind,
+                               const KindOfType *requireKind, bool dontCreate)
+{
+	bool useTrees = true;
+	const ThingTemplate *treeA = TheThingFactory->findTemplate(TheAI->getAiData()->m_treeName[0]);
+	const ThingTemplate *treeB = TheThingFactory->findTemplate(TheAI->getAiData()->m_treeName[1]);
+	if (treeB == 0)
+		treeA = 0;
+	const ThingTemplate *treeC = TheThingFactory->findTemplate(TheAI->getAiData()->m_treeName[2]);
+	if (treeC == 0)
+		treeA = 0;
+	bool useOverrides = false;
+	bool multiplayer = TheRecorder->isMultiplayer();
+	if (TheGameLogic->m_110 == 2)
+		multiplayer = false;
+	if (!multiplayer) {
+		if (TheAI->getAiData()->m_d8 && TheGameLODManager->get1774() <= 0 && treeA) {
+			useOverrides = true;
+			treeA = finalOverride(treeA);
+			treeB = finalOverride(treeB);
+			treeC = finalOverride(treeC);
+		}
+		useTrees = !TheAI->getAiData()->m_ec;
+	}
+	AssetList assets;
+	int count = 0;
+	for (MapObject *pMapObj = BfmeTheMapObjectListHolder->m_head; pMapObj; pMapObj = pMapObj->getNext()) {
+		Rva0134FAA0->slot28();
+		bfmeReleaseQueuedDeviceInterfaces();
+		if (pMapObj->getFlags() & 0x36)
+			continue;
+		const ThingTemplate *thingTemplate = pMapObj->getThingTemplate();
+		if (thingTemplate == 0)
+			continue;
+		if (thingTemplate->m_5e5)
+			continue;
+		if (excludeKind && (char)thingTemplate->rva000456AC(*excludeKind))
+			continue;
+		if (requireKind && !(char)thingTemplate->rva000456AC(*requireKind))
+			continue;
+		if ((thingTemplate->m_108 & 0x40) && !useTrees)
+			continue;
+		const Coord3D *loc = pMapObj->getLocation();
+		Coord3D pos;
+		pos.x = loc->x;
+		pos.y = loc->y;
+		pos.z = loc->z;
+		pos.z += TheTerrainLogic->getGroundHeight(pos.x, pos.y);
+		float angle = normalizeAngle(pMapObj->getAngle());
+		bool isProp = (thingTemplate->m_kindof[2] >> 4) & 1;
+		if ((thingTemplate->m_kindof[0] & 0x80000) && thingTemplate->m_fenceWidth == 0.0f)
+			isProp = true;
+		bool unnamed = false;
+		if (thingTemplate->m_120 & 1) {
+			bool exists;
+			AsciiString name = pMapObj->getProperties()->getAsciiString(staticKey(TheKey_objectName), &exists);
+			if (!exists || name.isEmpty())
+				unnamed = true;
+		}
+		if (isProp || unnamed || (thingTemplate->m_kindof[1] & 0xc0000000)) {
+			Dict *props = pMapObj->getProperties();
+			bool hasScale;
+			float scale = props->getReal(TheKey_objectPrototypeScale.get(), &hasScale);
+			Matrix3D mtx(true);
+			bool align;
+			if (props->getBool(TheKey_alignToTerrain.get(), &align) && align) {
+				Coord3D normal;
+				TheTerrainLogic->getLayerHeight(pos.x, pos.y, LAYER_GROUND, &normal, true);
+				Coord3D zero;
+				zero.x = 0.0f;
+				zero.y = 0.0f;
+				zero.z = 0.0f;
+				alignToTerrain(angle, zero, normal, mtx);
+			} else {
+				mtx.Rotate_Z(pMapObj->getAngle());
+			}
+			float propScale = thingTemplate->m_4e0;
+			if (hasScale)
+				propScale *= scale;
+			AssetLoadMode mode;
+			((ThingTemplate *)thingTemplate)->GetAssetList((int)&assets, (int)&mode);
+			if (++count == 20) {
+				count = 0;
+				bfmeMergeReceiverKeys((int)&assets);
+				assets.clear();
+			}
+			if (dontCreate)
+				continue;
+			if (thingTemplate->m_kindof[1] & 0x40000000) {
+				if (treeA && useOverrides) {
+					if (thingTemplate->m_5eb && thingTemplate->m_5ec)
+						thingTemplate = treeA;
+					else if (!thingTemplate->m_5eb && thingTemplate->m_5ec)
+						thingTemplate = treeB;
+					else
+						thingTemplate = treeC;
+					propScale = TheAI->getAiData()->m_treeScale;
+				}
+				if (useTrees)
+					TheTerrainLogic->rva00283642(thingTemplate, &pos, &mtx, propScale);
+			} else if (thingTemplate->m_kindof[1] & 0x80000000) {
+				TheTerrainLogic->rva00280176(thingTemplate, &pos, &mtx, propScale);
+			} else if (unnamed) {
+				((GameClient *)TheGameClient)->rva0023B383(props, (ThingTemplate *)thingTemplate, &pos);
+			} else {
+				TheTerrainLogic->rva0027D3D9(thingTemplate, &pos, &mtx, propScale);
+			}
+		} else {
+			Dict *props = pMapObj->getProperties();
+			AsciiString originalOwner = props->getAsciiString(staticKey(TheKey_originalOwner));
+			Team *team = ThePlayerList->validateTeam(originalOwner, pMapObj);
+			if (ThePlayerList->getNeutralPlayer()->getDefaultTeam() == team
+			    && _imp__strncmp("Player_", originalOwner.str(), 7) == 0
+			    && !(thingTemplate->m_120 & 0x20000))
+				continue;
+			AssetLoadMode mode;
+			((ThingTemplate *)thingTemplate)->GetAssetList((int)&assets, (int)&mode);
+			if (++count == 20) {
+				count = 0;
+				bfmeMergeReceiverKeys((int)&assets);
+				assets.clear();
+			}
+			if (dontCreate)
+				continue;
+			CreateMask mask;
+			Object *obj = TheThingFactory->rva002D0A23(thingTemplate, team, mask, (ObjectID)0);
+			if (obj) {
+
+				if ((pMapObj->getFlags() & 1) || (obj->getTemplate()->m_108 & 0x20)) {
+					Drawable *draw = obj->getDrawable();
+					if (draw)
+						draw->setDrawableStatus(1);
+				}
+				bool align;
+				if (props->getBool(TheKey_alignToTerrain.get(), &align) && align) {
+					Coord3D zero;
+					zero.x = 0.0f;
+					zero.y = 0.0f;
+					zero.z = 0.0f;
+					Coord3D normal;
+					TheTerrainLogic->getLayerHeight(pos.x, pos.y, LAYER_GROUND, &normal, true);
+					Matrix3D mtx;
+					alignToTerrain(angle, zero, normal, mtx);
+					obj->setTransformMatrix(&mtx);
+				} else {
+					obj->setOrientation(angle);
+				}
+				obj->setPosition(&pos);
+				obj->updateObjValuesFromMapProperties(props);
+				obj->rva0028B4CE(TheTerrainLogic->getLayerForDestination(obj, &pos));
+				Rva0134FAA0->slot28();
+				bfmeReleaseQueuedDeviceInterfaces();
+				((Rva0028CBFD *)obj)->rva0028CBFD();
+				team->setActive();
+				TheAI->pathfinder()->AddObjectToPathfindMap(obj);
+				Rva0024622FEntry entry;
+				entry.obj = obj;
+				// Keep the native map-object spill at this vector insertion.
+				entry.mapObj = *(MapObject *volatile *)&pMapObj;
+				((_STL::vector<BfmeE8> *)created)->push_back(*(const BfmeE8 *)&entry);
+			}
+		}
+	}
+	bfmeMergeReceiverKeys((int)&assets);
+}
