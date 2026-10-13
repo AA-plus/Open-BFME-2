@@ -13,7 +13,15 @@
 // the pointer appended to the vector at instance + 4 (4-byte pointer
 // push_back fold 0x004DFCB0).
 
-struct FieldParse;
+class INI;
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class ModuleData;
 
@@ -21,10 +29,24 @@ class INI
 {
 public:
 	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002F11E
+	static void parseCoord3D(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002F507
+	static void parseReal(INI *ini, void *instance, void *store, const void *userData);		// rowed 0x002EFC0
 	static void Rva0041F524_ParseArmyMember(INI *ini, void *instance, void *store, const void *userData);
 };
 
-extern const FieldParse g_00C4C850[];
+// Retail's FloodMember field table at RVA 0x0084C850 (.rdata, 112 bytes = six 16-byte records and the zero
+// sentinel), transcribed from retail's own bytes; the member record is the 0x38-byte one allocated below.
+extern const FieldParse g_00C4C850[] =
+{
+	{ "MemberTemplateName", INI::parseAsciiString, 0, 0x00 },
+	{ "ControlPointOffsetOne", INI::parseCoord3D, 0, 0x04 },
+	{ "ControlPointOffsetTwo", INI::parseCoord3D, 0, 0x10 },
+	{ "ControlPointOffsetThree", INI::parseCoord3D, 0, 0x1C },
+	{ "ControlPointOffsetFour", INI::parseCoord3D, 0, 0x28 },
+	{ "MemberSpeed", INI::parseReal, 0, 0x34 },
+	{ 0, 0, 0, 0 }
+};
 extern const FieldParse g_00C3B000[];
 
 struct Rva0041F524Member
