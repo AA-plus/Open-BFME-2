@@ -10,9 +10,8 @@
 // 0x004C4940), then paint taint with TheTaintManager (0x006C0AB0): radius x
 // 1.25 at amount 0x80 for everyone, and, when the object exists, the plain
 // radius at amount 0 for its id. Radius is module data +0x80. The two
-// terrain helpers are rowed as stdcall bodies that ignore ECX while every
-// retail caller loads TheTerrainLogic into ECX first, so they are called
-// here through thiscall placeholder spellings pinned to the same bodies.
+// terrain helpers are TerrainLogic members, rowed by address
+// (Rva0027F28E.cpp, Rva0027D1A4Forward.cpp).
 
 typedef float Real;
 
@@ -44,14 +43,13 @@ public:
 	int m_id;
 };
 
-class Rva004C49AETerrain
+class TerrainLogic
 {
 public:
 	void rva0027F28E( const Coord3D *loc, Real radius, int flag );
 	void rva0027D1A4( const Coord3D *loc, Real radius, int flag );
 };
 
-class TerrainLogic;
 extern TerrainLogic *TheTerrainLogic;
 
 class BfmeTaintManager
@@ -88,8 +86,8 @@ void TaintSpecialPower::rva004C49AE( const Coord3D *loc )
 	Real radius = data->m_radius;
 	Object *owner = m_object;
 
-	((Rva004C49AETerrain *)TheTerrainLogic)->rva0027F28E( loc, radius, 1 );
-	((Rva004C49AETerrain *)TheTerrainLogic)->rva0027D1A4( loc, radius + 50.0f, 1 );
+	TheTerrainLogic->rva0027F28E( loc, radius, 1 );
+	TheTerrainLogic->rva0027D1A4( loc, radius + 50.0f, 1 );
 
 	if( data->m_taintFX )
 		FXList::doFXPos( data->m_taintFX, loc );

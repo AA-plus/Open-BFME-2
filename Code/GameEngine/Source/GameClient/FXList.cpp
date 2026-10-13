@@ -84,7 +84,10 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 FXListStore *TheFXListStore = NULL;					///< the FXList store definition
 
 //-------------------------------------------------------------------------------------------------
-static void adjustVector(Coord3D *vec, const Matrix3D* mtx)
+// Zero Hour's helper is static; here it has external linkage because
+// DynamicDecalFXNugget::doFXPos, its other caller, is built in its own unit
+// (DynamicDecalFXNuggetDoFXPos.cpp).
+void adjustVector(Coord3D *vec, const Matrix3D* mtx)
 {
 	if (mtx)
 	{

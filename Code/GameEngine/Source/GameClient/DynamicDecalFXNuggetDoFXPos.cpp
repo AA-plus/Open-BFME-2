@@ -16,8 +16,9 @@
 // rowed 0x00079514 ctor / 0x000793FA dtor).
 // The fade setter's frame counts are converted as UnsignedInt (retail goes
 // through x87 and __ftol2, which only an unsigned target produces under
-// /arch:SSE); its placeholder row 0x00330A37 is spelled with int parameters,
-// so this call needs the pin ?rva00330A37@Rva00330A37@@QAEXIIIIIIII@Z.
+// /arch:SSE) and handed to the int parameters of its row 0x00330A37; the
+// call goes through an unsigned-typed member pointer, since cl folds an
+// unsigned cast into an int argument back into cvttss2si.
 #include "ascii_string.h"
 #include "../../../Libraries/Include/Lib/Coord2D.h"
 #include "../../../Libraries/Include/Lib/Coord3D.h"
@@ -82,8 +83,8 @@ public:
 class Rva00330A37
 {
 public:
-	void rva00330A37(UnsignedInt delay, UnsignedInt lifetime, UnsignedInt opacityStart, UnsignedInt fadeOne,
-		UnsignedInt opacityPeak, UnsignedInt peakTime, UnsignedInt fadeTwo, UnsignedInt opacityEnd);	// 0x00330A37	// opacity fade frames
+	void rva00330A37(Int delay, Int lifetime, Int opacityStart, Int fadeOne,
+		Int opacityPeak, Int peakTime, Int fadeTwo, Int opacityEnd);	// 0x00330A37	// opacity fade frames
 };
 
 class TerrainLogic
@@ -184,7 +185,9 @@ void DynamicDecalFXNugget::doFXPos(const Coord3D *primary, const Matrix3D *prima
 
 		Real initialOpacity = (m_startingDelay > 0.0f) ? 0.0f : (Real)m_opacityStart;
 		shadow->setOpacity((Int)initialOpacity);
-		((Rva00330A37 *)shadow)->rva00330A37(
+		typedef void (Rva00330A37::*FadeFrames)(UnsignedInt, UnsignedInt, UnsignedInt, UnsignedInt,
+			UnsignedInt, UnsignedInt, UnsignedInt, UnsignedInt);
+		(((Rva00330A37 *)shadow)->*(FadeFrames)&Rva00330A37::rva00330A37)(
 			(UnsignedInt)(m_startingDelay * g_00DBA500),
 			(UnsignedInt)(m_lifetime * g_00DBA500),
 			m_opacityStart,

@@ -7,8 +7,9 @@
 // through 0x002B0E55 with the target sub-int at +0x68, then returns.
 // Flag clear: same player removes through 0x002ADC03 with the target int
 // at +0x74, then falls into vfunc09(0). Player identity via the rowed
-// Object::getControllingPlayer at 0x0028AFA9; the two Player workers are
-// unrowed pins. Names stay address-derived.
+// Object::getControllingPlayer at 0x0028AFA9; the Player workers are called
+// under their rows' address-derived names (0x002B0E55 and 0x002B212A take
+// the target sub-int's address as their string argument).
 
 class Rva004B5A65Owner;
 class Player;
@@ -40,10 +41,22 @@ public:
 class Player
 {
 public:
-	void rva002B0E55(Rva004B5A65Owner *owner, int value);
 	void rva002ADC03(Rva004B5A65Owner *owner, int value);
-	void rva002B212A(Rva004B5A65Owner *owner, int value);
-	void rva002ACD09(Rva004B5A65Owner *owner, int value);
+	void rva002ACD09(void *owner, int value);
+};
+
+class AsciiString;
+struct Other002B0E55;
+class Rva002B0E55
+{
+public:
+	void rva002B0E55(const Other002B0E55 *other, const AsciiString *name);
+};
+struct Rva002B212AArg;
+class Rva002B212A
+{
+public:
+	void rva002B212A(Rva002B212AArg *arg, const AsciiString &name);
 };
 class Rva004B5A65_Secondary
 {
@@ -75,7 +88,7 @@ void Rva004B5A65_Secondary::rva004B5A65()
 		if (player != 0)
 		{
 			Object *target2 = *(Object * *)((char *)this - 8);
-			player->rva002B0E55(owner, (int)&target2->m_sub->m_64);
+			((Rva002B0E55 *)player)->rva002B0E55((const Other002B0E55 *)owner, (const AsciiString *)&target2->m_sub->m_64);
 		}
 		return;
 	}
@@ -98,7 +111,7 @@ void Rva004B5A65_Secondary::rva004B5B4C()
 	if (owner->m_128 != 0)
 	{
 		Object *target2 = *(Object * *)((char *)this - 8);
-		player->rva002B212A(owner, (int)&target2->m_sub->m_64);
+		((Rva002B212A *)player)->rva002B212A((Rva002B212AArg *)owner, *(const AsciiString *)&target2->m_sub->m_64);
 	}
 	else
 	{
@@ -125,12 +138,12 @@ void __fastcall Rva004B5AC0_Primary::rva004B5AC0(int /*unused*/, Player *player1
 		if (player1 != 0)
 		{
 			Object *target = *(Object * *)((char *)this + 8);
-			player1->rva002B0E55(owner, (int)&target->m_sub->m_64);
+			((Rva002B0E55 *)player1)->rva002B0E55((const Other002B0E55 *)owner, (const AsciiString *)&target->m_sub->m_64);
 		}
 		if (player2 != 0)
 		{
 			Object *target = *(Object * *)((char *)this + 8);
-			player2->rva002B212A(owner, (int)&target->m_sub->m_64);
+			((Rva002B212A *)player2)->rva002B212A((Rva002B212AArg *)owner, *(const AsciiString *)&target->m_sub->m_64);
 		}
 		return;
 	}
