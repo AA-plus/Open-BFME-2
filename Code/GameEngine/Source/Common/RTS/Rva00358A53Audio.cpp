@@ -1,10 +1,15 @@
 // cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /EHsc /MD /DNDEBUG
-// ?Rva00358A53Play@@YAXXZ @ 0x00358A53 120B
-// Evidence: honest free-function name; TheAudio null gate plus getMiscAudio slot 0x138 null gate,
+// ?rva00358A53@HotKeyManager@@QAEXXZ @ 0x00358A53 120B
+// Evidence: caller-proven HotKeyManager members; TheAudio null gate plus getMiscAudio slot 0x138 null gate,
 // then BfmeAudioEventPrefix136 event from Misc+0x80 with value30 0, posted via addAudioEvent slot 0x64.
 // Slots match Player_Radar (addAudioEvent at 0x64, getMiscAudio at 0x138) and GameWindowCursorSearch
 // Misc layout (element at +0x80 vs +0x88 there); callers at 0x003593E8/0x00359556.
 #include "Common/BfmeAudioEventPrefix136.h"
+
+// Both native3593E8 and359556 reload their manager receiver into ECX
+// immediately before these calls. The bodies do not access the receiver.
+// Original method names remain unknown; names reflect native addresses.
+class HotKeyManager { public: void rva00358A53(); void rva00358ACB(); };
 
 class AudioManager;
 extern AudioManager *TheAudio;
@@ -99,7 +104,7 @@ public:
     virtual const Rva00358A53MiscView *getMiscAudio();
 };
 
-void Rva00358A53Play()
+void HotKeyManager::rva00358A53()
 {
     if (TheAudio == 0)
         return;
@@ -199,7 +204,7 @@ public:
     virtual const Rva00358ACBMiscView *getMiscAudio();
 };
 
-void Rva00358ACBPlay()
+void HotKeyManager::rva00358ACB()
 {
     if (TheAudio == 0)
         return;
