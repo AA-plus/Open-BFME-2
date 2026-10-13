@@ -1,4 +1,8 @@
 // ??0W3DDisplay@@QAE@XZ
+// partial score=0.978 date=2026-10-13
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+// ??0W3DDisplay@@QAE@XZ
 // partial score=0.97 date=2026-10-13
 // ??0W3DDisplay@@QAE@XZ
 // partial score=0.97 date=2026-10-09
@@ -123,6 +127,7 @@ W3DDisplay::W3DDisplay()
 	for (int i = 0; i < 17; i++)
 		m_arr234[i] = 0;
 	m_1cc = 0;
+	_ReadWriteBarrier();
 	m_278 = 0;
 	m_27c = 0;
 	TheRva0065CA4List = new Rva0065CA4;
