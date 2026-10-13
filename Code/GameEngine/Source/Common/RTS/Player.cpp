@@ -1705,49 +1705,8 @@ void Player::friend_setSkillset(Int skillSet)
 }
 
 //=============================================================================
-// ?setUnitsShouldHunt@Player@@QAEX_NW4CommandSourceType@@@Z present-unmatched
-void Player::setUnitsShouldHunt(Bool unitsShouldHunt, CommandSourceType source)
-{
-	m_unitsShouldHunt = unitsShouldHunt;
-
-	Coord3D pos;
-	ThePartitionManager->getMostValuableLocation(m_playerIndex, ALLOW_ENEMIES, VOT_CashValue, &pos);
-	for (PlayerTeamList::iterator it = m_playerTeamPrototypes.begin(); 
-			 it != m_playerTeamPrototypes.end(); ++it) {
-		for (BfmeTeamIter iter = bfmeTeamInstances(*it); !iter.done(); iter.advance()) {
-			Team *team = iter.cur();
-			if (!team) {
-				continue;
-			}
-			
-			for (BfmePlayerIter iterObj = bfmePlayerMembers(team); !iterObj.done(); iterObj.advance()) {
-				Object *obj = iterObj.cur();
-				if (!obj) {
-					continue;
-				}
-
-				KindOfMaskType disqualifyingKindofs;
-				disqualifyingKindofs.set(KINDOF_DOZER);
-				disqualifyingKindofs.set(KINDOF_HARVESTER);
-				disqualifyingKindofs.set(KINDOF_IGNORES_SELECT_ALL);
-
-				if (obj->isAnyKindOf( disqualifyingKindofs )) {
-					continue;	// Harvesters, dozers etc.
-				}
-
-				obj->leaveGroup();
-				AIUpdateInterface *ai = obj->getAIUpdateInterface();
-				if (ai) {
-					if (unitsShouldHunt) {	
-						ai->aiHunt(source);
-					} else {
-						ai->aiIdle(source);
-					}
-				}
-			}
-		}
-	}
-}
+// Player::setUnitsShouldHunt is retail's 0x002AE9B8 row in
+// PlayerHuntCommands.cpp; this donor copy would be a second definition.
 
 //=============================================================================
 // byte-exact reconstruction: Code/GameEngine/Source/Common/Player_killPlayer_Thunk.cpp
