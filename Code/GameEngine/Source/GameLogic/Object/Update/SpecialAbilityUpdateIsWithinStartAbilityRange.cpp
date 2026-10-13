@@ -140,14 +140,20 @@ public:
 };
 
 // The line-of-sight partition filter (vtable 0x00C07150).
-class Rva002619C1FilterBase
+// Native C07150 slot0 uses395A19 and resets the BC26E0 base vptr at49C38A.
+// The base has a next-filter pointer at+4 and three virtual slots; the owner
+// remains at+8. This is the same base used by the exact2FD66B-family provider.
+class Rva000421C8
 {
 public:
-	Rva002619C1FilterBase() : m_zero(0) {}
-	Int m_zero;
+	Rva000421C8() : m_next(0) {}
+	virtual ~Rva000421C8() {}
+	virtual Bool allow(Object *other) = 0;
+	virtual int getPlayerMask();
+	Rva000421C8 *m_next;
 };
 
-class Rva002619C1Filter : public Rva002619C1FilterBase
+class Rva002619C1Filter : public Rva000421C8
 {
 public:
 	Rva002619C1Filter(Object *owner) : m_owner(owner) {}
