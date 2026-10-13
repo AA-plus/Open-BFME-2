@@ -1,6 +1,8 @@
 // ?ackCommand@ConnectionManager@@AAEXPAVNetCommandRef@@PBUBfmeNetAddress@@@Z
+// partial score=0.85 date=2026-10-13
+// ?ackCommand@ConnectionManager@@AAEXPAVNetCommandRef@@PBUBfmeNetAddress@@@Z
 // partial score=0.8 date=2026-10-07
-// cl: /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc
 // ConnectionManager::ackCommand, retail 0x004D2F04's sibling 0x004CF40E,
 // 362 bytes.
 //
