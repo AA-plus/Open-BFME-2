@@ -736,7 +736,7 @@ AsciiString GameInfoToAsciiString(const GameInfo *game, bool withNames)
 	{
 		AsciiString rules("GR=");
 		Rva0055A087Format(const_cast<Int *>(game->m_60), &rules);
-		rules.concat(";");
+		reinterpret_cast<StringBase<char> *>(&rules)->concat(";");
 		optionsString.concat(rules);
 	}
 
