@@ -130,3 +130,7 @@ void bfmeAnchorSidesListDtor(SidesList *p)
 // Native SidesList action 0x77bad9 is a complete 11-byte map-member cleanup
 // of parent 0x32ee24; the exact parent and EH graph bind its
 // standard template destructor through the independently proved wrapper fold.
+
+// Native 0x0077BAC3 is the complete 11-byte constructor list-member action.
+// The whole 254-byte parent and its exact EH graph bind the +0x20 lifetime
+// and existing list destructor; the next actual action starts at 0x0077BACE.
