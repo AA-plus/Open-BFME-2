@@ -129,3 +129,14 @@ void W3DVolumetricShadowManagerV2::drawAndRelease(int frontFace)
 	}
 }
 
+
+// ?rva001076EE@Rva001076EE@@QAE_NXZ @0x001076EE 8B: the W3DShadowManager
+// re-acquire helper (callee of rva0009A254, pinned) re-acquires the projected
+// shadow manager it sits on with the same this and always succeeds.
+class W3DProjectedShadowManager { public: bool ReAcquireResources(); };
+class Rva001076EE { public: bool rva001076EE(); };
+bool Rva001076EE::rva001076EE()
+{
+	((W3DProjectedShadowManager *)this)->ReAcquireResources();
+	return true;
+}
