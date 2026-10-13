@@ -60,6 +60,15 @@ public:
 	void Release_Ref();
 };
 
+// The pin proves HierarchyPrototype::Release_Ref is the rowed
+// TextureClass::Release_Ref body (0x0061ED10); call it by the rowed
+// spelling so this TU's releasing dtor matches the linked copy.
+class TextureClass
+{
+public:
+	void Release_Ref();
+};
+
 // Counted registry reference returned by value from the asset registry.
 // Non-trivial inline releasing destructor (GetHTree idiom): it forces the
 // hidden-return slot, emits the guarded release inline after the owner copy,
@@ -71,7 +80,7 @@ public:
 	~HierarchyPrototypeRef()
 	{
 		if (m_object != 0)
-			m_object->Release_Ref();
+			((TextureClass *)m_object)->Release_Ref();
 	}
 
 private:
