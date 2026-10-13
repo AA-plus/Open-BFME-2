@@ -1,4 +1,5 @@
-// cl: /O1 /G7 /DNDEBUG /MD /EHsc
+// cl: /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB  /O1 /G7 /DNDEBUG /MD /EHsc
+// stlport
 //
 // StrategicInGameUI::Checklist (WorldBuilder StrategicInGameUIChecklist.cpp).
 // Target facts for AddItem 0x005CD0C2 (thiscall, ret 4): hands the new
@@ -18,13 +19,11 @@ public:
 // unknown, so this view keeps the retail constructor's address.
 class Rva005CCC74Record;
 class Rva005CD018Obj;
+#include <list>
+// These adjacent matched calls remain out of line; erase below uses its verified
+// STL definition so the compiler sees the by-value iterator return lifetime.
 namespace _STL {
-template<class T> class allocator;
-template<class T, class A> class list {
-public:
-	void push_back(const T &);
-	void pop_back();
-};
+template<> void list<Rva005CD018Obj*,allocator<Rva005CD018Obj*> >::push_back(Rva005CD018Obj*const&);
 }
 typedef _STL::list<Rva005CD018Obj *,
 	_STL::allocator<Rva005CD018Obj *> > Rva005CD018ListView;
@@ -98,9 +97,13 @@ public:
 struct ChecklistItemRef
 {
 	ChecklistItem *m_ptr;
-	// Counted reference: returned by value through a hidden pointer (native
-	// 5CCF47/5CCFF3 RET8), so the type is not a POD; destructor declared only.
-	~ChecklistItemRef();
+	ChecklistItemRef() : m_ptr(0) {}
+	explicit ChecklistItemRef(ChecklistItem *p) : m_ptr(p)
+	{ if (m_ptr) ++reinterpret_cast<int *>(m_ptr)[1]; }
+	ChecklistItemRef(const ChecklistItemRef &other) : m_ptr(other.m_ptr)
+	{ if (m_ptr) ++reinterpret_cast<int *>(m_ptr)[1]; }
+	~ChecklistItemRef()
+	{ if (m_ptr) ReleaseTreeHintRef00217D4C(reinterpret_cast<TargetRef00217D4C *>(m_ptr)); }
 };
 
 class Checklist
@@ -257,7 +260,11 @@ void StrategicInGameUI::ChecklistItem::Impl::rva005CCA57()
 // pop_back 5CCEBE (an ICF-shared list body, hence its element name).
 // Native rereads the list head in the body; a head view taken per pass
 // (not one hoisted reference) keeps that reload.
-struct Rva005F8F96;
+// Same eight-byte element view as rowed stlport_list_rva005F8F96_clear.cpp.
+struct Rva005F8F96 { ~Rva005F8F96(); TargetRef00217D4C *m_00; int m_04; };
+namespace _STL {
+template<> void list<Rva005F8F96,allocator<Rva005F8F96> >::pop_back();
+}
 typedef _STL::list<Rva005F8F96, _STL::allocator<Rva005F8F96> > Rva005CCFD1ListView;
 struct Rva005CCFD1ListHead { ChecklistNode *node; bool empty() const { return node->next==node; } ChecklistNode *back() const { return node->prev; } Rva005CCC74Record *rva005CCC8F() const; };
 void StrategicInGameUI::Checklist::Impl::rva005CCFD1()
@@ -308,4 +315,25 @@ StrategicInGameUI::ChecklistItemRef Rva005CCFF3::rva005CCFF3(StrategicInGameUI::
 Rva005CCC74Record *Rva005CCFD1ListHead::rva005CCC8F() const
 {
     return reinterpret_cast<Rva005CCC74Record *>(&node->prev->item);
+}
+
+// Native5CCF47..5CCFD1 RET8: acquire item, detach implementation, erase its
+// list node, return counted reference. WB checklist call graph confirms purpose.
+// Actual rowed STL erase visibility moves the outgoing iterator home store;
+// a declaration-only erase restores the prior 138-byte nd2 residue.
+StrategicInGameUI::ChecklistItemRef
+StrategicInGameUI::Checklist::Impl::rva005CCF47(ChecklistItem *item)
+{
+	ChecklistNode *end = *reinterpret_cast<ChecklistNode **>(m_records);
+	for (ChecklistNode *node = end->next; node != end; node = node->next) {
+		if (node->item == item) {
+			ChecklistItemRef result(node->item);
+			node->impl->rva005CCA57();
+			typedef _STL::_List_iterator<Rva005F8F96,
+				_STL::_Nonconst_traits<Rva005F8F96> > Iterator;
+			reinterpret_cast<Rva005CCFD1ListView *>(m_records)->erase(Iterator(reinterpret_cast<_STL::_List_node<Rva005F8F96>*>(node)));
+			return result;
+		}
+	}
+	return ChecklistItemRef();
 }
