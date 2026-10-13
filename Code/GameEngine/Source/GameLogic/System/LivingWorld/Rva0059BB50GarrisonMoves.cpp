@@ -21,6 +21,26 @@
 // the names GetGarrisonArmies/findArmy/GetID/GetRegionInfo. The class and
 // method identity are unproven, so the placeholder names stay; field and
 // argument names are inferred.
+//
+// ?rva0059B8FD@Rva0059BB50@@... retail 0x0059B8FD..0x0059BB50 (595 bytes)
+// thiscall RET 0x14, EH frame.
+//
+// Target facts: called by 0x0059BB50 with the move vector, the player
+// id, the garrison record, its candidate records and the channel table. It
+// takes the territory army count from 0x00500659 (the returned int vector is
+// freed at once) and copies the candidates (0x00500DA0, dtor 0x005011DA) and
+// the garrison's link multimap (copy ctor 0x004FFFF9, dtor 0x004FF5F3). For
+// keys 0..7, while the copy still holds the key, it picks a candidate (with
+// more than three armies: the one with the fewest links, ties broken by the
+// fewest links on that key; otherwise the first), appends a move
+// {garrison id, false, candidate id, link value, -1} through 0x0059B8C6,
+// inserts (key, value) into the candidate's links (insert_equal 0x004FF876)
+// and erases the key from the copy (_M_find 0x00388F63, erase 0x005530A8).
+// The WB twin 0x01500100 shares the statement order. The element links are
+// read through a multimap<int,int> view: its inline count/insert wrappers
+// give retail's this-before-argument order. The erase goes through the
+// map<int,void*> inline erase, which copies the iterator into the argument
+// slot. The folded STL names are the ledger's own.
 #include <map>
 #include <vector>
 
@@ -42,6 +62,7 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 extern unsigned int g_Va00E04544;
 
 typedef _STL::map<int, int> Rva0059BB50IntMap;
+typedef _STL::multimap<int, int> Rva0059B8FDLinkMap;
 typedef _STL::pair<const int, int> Rva0059BB50IntValue;
 typedef _STL::_Rb_tree<int, Rva0059BB50IntValue, _STL::_Select1st<Rva0059BB50IntValue>,
 	_STL::less<int>, _STL::allocator<Rva0059BB50IntValue> > Rva0059BB50IntTree;
@@ -59,9 +80,6 @@ struct BfmePod20
 	int m_step;
 };
 
-namespace _STL {
-template <> void vector<BfmePod20>::push_back(const BfmePod20 &);
-}
 
 class Rva002BA8F1Logic
 {
@@ -95,13 +113,47 @@ struct Rva00501E3FElement
 	int id;
 	char map[12];
 	void *opaque;
+	Rva0059B8FDLinkMap &links() { return *(Rva0059B8FDLinkMap *)map; }
 };
 typedef _STL::vector<Rva00501E3FElement> Rva0059BB50Records;
 
+namespace _STL {
+template <> vector<Rva00501E3FElement>::vector(const vector<Rva00501E3FElement> &);
+}
+
 struct Rva005011DA : Rva0059BB50Records
 {
+	Rva005011DA() {}
+	Rva005011DA(const Rva0059BB50Records &src) : Rva0059BB50Records(src) {}
 	~Rva005011DA();
 };
+
+struct Rva004FFFF9Element
+{
+	int m_00;
+};
+typedef _STL::_Rb_tree<Rva004FFFF9Element, Rva004FFFF9Element, _STL::_Identity<Rva004FFFF9Element>,
+	_STL::less<Rva004FFFF9Element>, _STL::allocator<Rva004FFFF9Element> > Rva004FFFF9Tree;
+struct Rva00501875Count;
+typedef _STL::pair<const int, Rva00501875Count> Rva0059B8FDCountValue;
+typedef _STL::pair<const int, void *> Rva0059B8FDPtrValue;
+typedef _STL::_Rb_tree<int, Rva0059B8FDPtrValue, _STL::_Select1st<Rva0059B8FDPtrValue>,
+	_STL::less<int>, _STL::allocator<Rva0059B8FDPtrValue> > Rva0059B8FDPtrTree;
+typedef _STL::map<int, void *> Rva0059B8FDPtrMap;
+
+namespace _STL {
+template <> Rva004FFFF9Tree::_Rb_tree(const Rva004FFFF9Tree &);
+template <> void Rva0059B8FDPtrTree::erase(Rva0059B8FDPtrTree::iterator);
+template <> class _Rb_tree<int, Rva0059B8FDCountValue, _Select1st<Rva0059B8FDCountValue>,
+	less<int>, allocator<Rva0059B8FDCountValue> > : public Rva004FFFF9Tree
+{
+public:
+	_Rb_tree(const Rva004FFFF9Tree &src) : Rva004FFFF9Tree(src) {}
+	~_Rb_tree();
+};
+}
+typedef _STL::_Rb_tree<int, Rva0059B8FDCountValue, _STL::_Select1st<Rva0059B8FDCountValue>,
+	_STL::less<int>, _STL::allocator<Rva0059B8FDCountValue> > Rva0059B8FDLinks;
 
 class Rva0050055D
 {
@@ -149,6 +201,7 @@ struct Rva004FFB00Hero
 class Rva0059CFAACallee
 {
 public:
+	_STL::vector<int> rva00500659(int playerId, int *territory, int *count);
 	Rva004FFB00Hero *rva004FFB00(int playerId, int *territory, int *distance);
 };
 
@@ -226,6 +279,70 @@ void Rva0059BB50::rva0059BB50(int moves, int playerId, int unused, int armies)
 				move.m_step = region.m_ptr->m_14;
 				((_STL::vector<BfmePod20> *)moves)->push_back(move);
 				break;
+			}
+		}
+	}
+}
+
+void Rva0059BB50::rva0059B8FD(_STL::vector<BfmePod20> *moves, int playerId,
+	Rva00501E3FElement *garrison, Rva0059BB50Records *candidates, int armies)
+{
+	int count = 0;
+	int *territory = (int *)garrison->opaque;
+	((Rva0059CFAACallee *)armies)->rva00500659(playerId, territory, &count);
+	Rva005011DA records(*candidates);
+	if (count > 3)
+	{
+		Rva0059B8FDLinks links(*(const Rva004FFFF9Tree *)garrison->map);
+		for (int i = 0; i < 8; ++i)
+		{
+			int key = i;
+			while (((Rva0059BB50IntTree *)&links)->count(key) > 0)
+			{
+				Rva00501E3FElement *best = &records[0];
+				unsigned int bestCount = best->links().count(key);
+				for (unsigned int j = 1; j < records.size(); ++j)
+				{
+					if (records[j].links().size() < best->links().size()
+						|| (records[j].links().size() == best->links().size()
+							&& records[j].links().count(key) < bestCount))
+					{
+						bestCount = records[j].links().count(key);
+						best = &records[j];
+					}
+				}
+				BfmePod20 move;
+				move.m_id = garrison->id;
+				move.m_flag = false;
+				move.m_08 = best->id;
+				move.m_step = -1;
+				move.m_0c = (*((Rva0059BB50IntTree *)&links)->find(key)).second;
+				moves->push_back(move);
+				best->links().insert(Rva0059BB50IntValue(key, move.m_0c));
+				((Rva0059B8FDPtrMap *)&links)->erase(Rva0059B8FDPtrTree::iterator(
+					(Rva0059B8FDPtrTree::_Link_type)((Rva0059BB50IntTree *)&links)->find(key)._M_node));
+			}
+		}
+	}
+	else
+	{
+		Rva0059B8FDLinks links(*(const Rva004FFFF9Tree *)garrison->map);
+		for (int i = 0; i < 8; ++i)
+		{
+			int key = i;
+			while (((Rva0059BB50IntTree *)&links)->count(key) > 0)
+			{
+				Rva00501E3FElement *best = &records[0];
+				BfmePod20 move;
+				move.m_id = garrison->id;
+				move.m_flag = false;
+				move.m_08 = best->id;
+				move.m_step = -1;
+				move.m_0c = (*((Rva0059BB50IntTree *)&links)->find(key)).second;
+				moves->push_back(move);
+				best->links().insert(Rva0059BB50IntValue(key, move.m_0c));
+				((Rva0059B8FDPtrMap *)&links)->erase(Rva0059B8FDPtrTree::iterator(
+					(Rva0059B8FDPtrTree::_Link_type)((Rva0059BB50IntTree *)&links)->find(key)._M_node));
 			}
 		}
 	}
