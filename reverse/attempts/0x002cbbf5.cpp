@@ -1,5 +1,7 @@
 // ?rva002CBBF5@WeaponTemplate@@QAEXPAVObject@@HHH0HPBUCoord3D@@H_NPAVWeapon@@H@Z
 // partial score=0.9973962532548357 date=2026-10-13
+// ?rva002CBBF5@WeaponTemplate@@QAEXPAVObject@@HHH0HPBUCoord3D@@H_NPAVWeapon@@H@Z
+// partial score=0.9973962532548357 date=2026-10-13
 // W7-ASTRA bank, 2026-10-13: WeaponTemplate fire body, native 0x002CBBF5..0x002CC20E RET44.
 // Identity lead: WorldBuilder 0xBB0E40 WeaponTemplate::fireWeaponTemplate;
 // target evidence fixes the eleven-word ABI, fields/calls, and the differences from ZH Weapon.cpp.
