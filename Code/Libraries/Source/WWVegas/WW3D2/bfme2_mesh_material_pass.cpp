@@ -26,7 +26,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 // Complete1130-byte RET8 body; original math and list templates retain codegen.
 // Root reconstructed the body; independent Astra review restored the switch
 // and audited the call/data identities before landing.
-#include "matrix3d.h"
+// Link view: Matrix3D(), Matrix3D(bool) and Matrix3D(const Matrix3D&) stay inline without
+// emitting /O2 copies that compete with retail's owners (0x000423C5, 0x0004C91A, 0x0006645C).
+#include "../../../../../reference/shims/bfme_matrix3d_full_link/matrix3d_full_link.h"
 // Link view: Matrix4(Vector4 x4), Transpose and the Matrix3D overloads stay inline without emitting
 // copies that lose to retail's /O1 owners (0x0006A34E, 0x0006A3D1).
 #include "../../../../../reference/shims/bfme_matrix4_rows_link/matrix4_bfme1_rows_link.h"
