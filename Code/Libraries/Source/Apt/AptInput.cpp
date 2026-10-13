@@ -24,13 +24,17 @@ class BfmeAptValue006DCD20 {
 public:
     bool isString() const;
     int isScriptFunction() const;
+    BfmeAptValue006DCD20 *rva006DCEE0();
+    void setGCRootCount(unsigned int);
     bool isCIH(bool) const;
     bool rva006DCC60(bool) const;
     BfmeAptValue006DCD20 *rva006DCF60(bool);
     BfmeAptValue006DCD20 *checkedString();
 };
-class AptCIH {public:bool rva006CFCD0()const;void *rva006E1170()const;};
-class AptValue {public:virtual void AddRef();virtual void Release();};
+class AptCIH {public:bool rva006CFCD0()const;void *rva006E1170()const;int rva006E1F90(int);};
+struct AptNativeHash;
+class AptValue {public:virtual void AddRef();virtual void Release();virtual void ForceDelete();virtual AptNativeHash *GetNativeHashVirtual();virtual bool ContainsNativeHashVirtual() const;AptValue *findChild(const EAStringC *,AptValue *);};
+struct AptNativeHash {int mnTotalSize;void *mpData;AptValue *mp__proto__;AptValue *mpPrototype;unsigned int nEventHandlers;};
 class Rva0070B380 {public:void *lookup(const EAStringC&);};
 class AptBasePtrStack {public:BfmeAptValue006DCD20 *At(int);void rva006FE920();};
 struct AptActionSetup {AptValue *context,*value;const char *name;int action;};
@@ -43,7 +47,7 @@ void __debugbreak();
 #pragma intrinsic(__debugbreak)
 EAStringC *__cdecl Rva0070B4F0GetString(int);
 unsigned char __cdecl rva006FEC00(int,int,EAStringC*,int*,EAStringC*);
-class Rva006FB860 {public:char pad[0x6C];AptCIH *current;bool rva006FACA0(int,int,void**);};
+class Rva006FB860 {public:char pad[0x6C];AptCIH *current;bool rva006FACA0(int,int,void**);void rva006FAB40(BfmeAptValue006DCD20 *,int,int);};
 bool Rva006FB860::rva006FACA0(int event,int transition,void **out)
 {
  if (!out) {
@@ -92,4 +96,59 @@ bool Rva006FB860::rva006FACA0(int event,int transition,void **out)
   if(!((Rva006E3710*)g_bfmeAptPtrAtE176D0)->rva006E3710((Rva006E3710Node*)value->rva006DCF60(false))) *out=value->rva006DCF60(false);
  }
  ((AptValue*)value)->Release();return false;
+}
+
+struct AptInputEventName {unsigned int mask;int stringId;};
+extern AptInputEventName g_00DDC8EC[6];
+extern int g_00DDC2E8[];
+class Rva006E0D40 {public:void rva006E0D40();};
+class Rva006F97B0 {public:void rva006F97B0();};
+class Rva006DBB60ShrNAndField {public:bool get() const;};
+class AptActionQueueC {public:void rva006E3740(AptValue *,AptValue *,AptValue *,int,int);};
+class AptInputScriptFunction {
+public:
+ virtual void slot00();virtual void slot04();virtual void slot08();virtual void slot0C();
+ virtual void slot10();virtual void slot14();virtual void slot18();virtual void slot1C();
+ virtual void slot20();virtual void slot24();virtual void slot28();virtual void slot2C();
+ virtual void slot30();virtual void slot34();virtual void slot38();
+ virtual AptInputScriptFunction *Duplicate(AptValue *);
+ virtual void slot40();
+ virtual AptValue *GetNumArguments();
+ char pad04[0x20-4];
+ AptCIH *owner;
+ AptCIH *parent;
+};
+struct AptInputPoolView {
+ char pad[0xA0];
+ AptActionQueueC *queue;
+ void AddActionToQueue(AptValue *ctx,AptValue *fn,AptValue *res,int code,int arg){queue->rva006E3740(ctx,fn,res,code,arg);}
+};
+void Rva006FB860::rva006FAB40(BfmeAptValue006DCD20 *value,int mask,int arg)
+{
+ AptValue *pValue=(AptValue*)value;
+ if(!pValue->ContainsNativeHashVirtual()) {
+  g_bfmeAptAssertAtE17734("pValue->ContainsNativeHashVirtual()","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptInput.cpp",0x483);
+  if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+ }
+ if(value->isCIH(false) && !((AptCIH*)value->rva006DCF60(false))->rva006E1F90(mask)) return;
+ if(!value->isCIH(false) && !(pValue->GetNativeHashVirtual()->nEventHandlers&mask) && !(pValue->GetNativeHashVirtual()->mp__proto__->GetNativeHashVirtual()->nEventHandlers&mask)) return;
+ for(int i=0;i<6;i++) {
+  if(g_00DDC8EC[i].mask&mask) {
+   BfmeAptValue006DCD20 *child=(BfmeAptValue006DCD20*)pValue->findChild(Rva0070B4F0GetString(g_00DDC8EC[i].stringId),0);
+   if(child && ((Rva006DBB60ShrNAndField*)child)->get() && (unsigned char)child->isScriptFunction()) {
+    AptInputScriptFunction *fn=(AptInputScriptFunction*)child->rva006DCEE0();
+    AptCIH *oldOwner=fn->owner;
+    if(oldOwner!=(AptCIH*)pValue) {
+     fn=fn->Duplicate(pValue);
+     ((Rva006E0D40*)fn->parent)->rva006E0D40();
+     ((AptValue*)fn->parent)->Release();
+     fn->parent=oldOwner;
+     ((Rva006F97B0*)oldOwner)->rva006F97B0();
+     ((AptValue*)fn->parent)->AddRef();
+     ((BfmeAptValue006DCD20*)fn)->setGCRootCount(1);
+    }
+    ((AptInputPoolView*)g_bfmeAptPtrAtE176D0)->AddActionToQueue(pValue,(AptValue*)fn,fn->GetNumArguments(),g_00DDC2E8[i*2],arg);
+   }
+  }
+ }
 }
