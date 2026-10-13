@@ -202,6 +202,7 @@ private:
 class SelectionDetailsUIImpl
 {
 public:
+	~SelectionDetailsUIImpl();
 	void rva0057BBBB();
 };
 }
@@ -337,7 +338,7 @@ class Rva0042D85A
 {
 public:
 	Rva0042D85A() : m_ptr(0) {}
-	~Rva0042D85A() { ((Rva0042D87D *)this)->clear(); }
+	__declspec(noinline) ~Rva0042D85A();
 	void reset(Rva0057BD01 *p);
 
 	Rva0057BD01 *m_ptr;
@@ -764,4 +765,13 @@ Rva0042D766::~Rva0042D766()
 	StrategicHUD::Palantir *old = reinterpret_cast<StrategicHUD::Palantir *>(m_ptr);
 	m_ptr = 0;
 	if (old) { old->~Palantir(); ::operator delete(old); }
+}
+
+// Native +34 cleanup has the same ownership order at 42D87D, with the
+// independently rowed nonvirtual SelectionDetailsUIImpl destructor 57BD01.
+Rva0042D85A::~Rva0042D85A()
+{
+	StrategicHUD::SelectionDetailsUIImpl *old = reinterpret_cast<StrategicHUD::SelectionDetailsUIImpl *>(m_ptr);
+	m_ptr = 0;
+	if (old) { old->~SelectionDetailsUIImpl(); ::operator delete(old); }
 }
