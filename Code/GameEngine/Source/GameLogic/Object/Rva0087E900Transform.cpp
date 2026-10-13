@@ -1,10 +1,14 @@
 // cl: /O2 /Ob2 /G6 /DNDEBUG /MD /EHs-c-
 
+// Native 006BE190/132 returns the output-coordinate address in EAX.
+// The rowed 006BE220 consumer copies through that returned address.
+// This neutral pointer-return ABI view reconciles provider and consumer;
+// pointer return versus hidden aggregate return in the original source is unproved.
 extern "C" double __cdecl sin(double angle);
 extern "C" double __cdecl cos(double angle);
 struct Rva0087E900Coord { float x; float y; float z; };
 struct Rva0087E900Shape { char pad[0x10]; Rva0087E900Coord m_field0x10; };
-void Rva0087E900(Rva0087E900Coord *out,
+Rva0087E900Coord *Rva0087E900(Rva0087E900Coord *out,
     const Rva0087E900Coord *position,
     const Rva0087E900Shape *shape,
     float angle)
@@ -33,4 +37,5 @@ void Rva0087E900(Rva0087E900Coord *out,
     out->x = scratch[3];
     out->y = outputY;
     out->z = outputZ;
+    return out;
 }
