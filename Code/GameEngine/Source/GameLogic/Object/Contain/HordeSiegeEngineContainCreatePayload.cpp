@@ -188,7 +188,7 @@ struct Iface20
 	SLOT08(g24,g25,g26,g27,g28,g29,g30,g31)
 	virtual void g32(); virtual void g33(); virtual void g34(); virtual void g35();
 	virtual void g36(); virtual void g37(); virtual void g38();
-	virtual void rva00464830(Object *obj) = 0;
+	virtual void addToContain(Object *obj) = 0;
 };
 struct Iface24 { virtual void f24(); };
 struct Iface28 { virtual void f28(); };
@@ -208,7 +208,7 @@ class OpenContain
 	, public Iface34
 {
 public:
-	virtual void rva00464830(Object *obj);
+	virtual void addToContain(Object *obj);
 };
 
 
@@ -260,7 +260,7 @@ void HordeSiegeEngineContain::createPayload()
 					payload->m_name = AsciiString( name );
 				}
 
-				OpenContain::rva00464830( payload );
+				OpenContain::addToContain( payload );
 			}
 		}
 		contain->enableLoadSounds( true );

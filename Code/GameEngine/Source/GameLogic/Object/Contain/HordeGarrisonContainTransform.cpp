@@ -46,7 +46,7 @@ struct Iface20
 	SLOT08(g24,g25,g26,g27,g28,g29,g30,g31)
 	virtual void g32(); virtual void g33(); virtual void g34(); virtual void g35();
 	virtual void g36(); virtual void g37(); virtual void g38();
-	virtual void rva00464830(Object *obj) = 0;
+	virtual void addToContain(Object *obj) = 0;
 	SLOT08(g40,g41,g42,g43,g44,g45,g46,g47)
 	SLOT08(g48,g49,g50,g51,g52,g53,g54,g55)
 	SLOT08(g56,g57,g58,g59,g60,g61,g62,g63)
@@ -76,7 +76,7 @@ class OpenContain
 	, public Iface34
 {
 public:
-	virtual void rva00464830(Object *obj);
+	virtual void addToContain(Object *obj);
 };
 
 class GarrisonContain : public OpenContain

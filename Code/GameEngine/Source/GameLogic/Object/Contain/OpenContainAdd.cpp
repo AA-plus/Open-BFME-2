@@ -35,14 +35,14 @@ public:
     virtual void addList(Object *);
     virtual void gap41(); virtual void gap42(); virtual void gap43();
     virtual Rva00464830Mask status(int);
-    virtual void rva00464830(Object *);
+    virtual void addToContain(Object *);
     char unknown04[0x58-4]; unsigned playerMask58;
     char unknown5C[0xD0-0x5C]; Rva00464830Tree timesD0;
     Object *object() const { return *reinterpret_cast<Object *const *>(reinterpret_cast<const char *>(this)-0x18); }
     Rva00464830Data *data() const { return *reinterpret_cast<Rva00464830Data *const *>(reinterpret_cast<const char *>(this)-0x1C); }
     Rva00464830Primary *primary() { return reinterpret_cast<Rva00464830Primary *>(reinterpret_cast<char *>(this)-0x20); }
 };
-void OpenContain::rva00464830(Object *rider)
+void OpenContain::addToContain(Object *rider)
 {
     if (!rider) return;
     Drawable *draw = rider->getDrawable();

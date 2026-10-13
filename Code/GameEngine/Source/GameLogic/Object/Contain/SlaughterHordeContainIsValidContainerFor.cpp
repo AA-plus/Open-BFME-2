@@ -91,7 +91,7 @@ struct Iface20
 	virtual void g33(); virtual void g34(); virtual void g35();
 	virtual void g36(); virtual void g37();
 	virtual bool isValidContainerFor(Object *obj, bool checkCapacity, bool testPath);
-	virtual void rva00464830(Object *obj);
+	virtual void addToContain(Object *obj);
 };
 struct Iface24 { virtual void f24(); };
 struct Iface28 { virtual void f28(); };
@@ -143,7 +143,7 @@ class SlaughterHordeContain : public HordeGarrisonContain
 {
 public:
 	virtual bool isValidContainerFor(Object *obj, bool checkCapacity, bool testPath);
-	virtual void rva00464830(Object *obj);
+	virtual void addToContain(Object *obj);
 };
 
 // ?isValidContainerFor@SlaughterHordeContain@@UAE_NPAVObject@@_N1@Z @0x00480661
@@ -164,13 +164,13 @@ bool SlaughterHordeContain::isValidContainerFor(Object *obj, bool checkCapacity,
 	return HordeGarrisonContain::isValidContainerFor(obj, checkCapacity, testPath);
 }
 
-// ?rva00464830@SlaughterHordeContain@@UAEXPAVObject@@@Z, retail 0x00480471, 108 bytes:
+// ?addToContain@SlaughterHordeContain@@UAEXPAVObject@@@Z, retail 0x00480471, 108 bytes:
 // slot 39 after the override above. HordeGarrisonContain's 0x00479D6D, except
 // that a rider which starts no horde member still goes to primary slot 0x74
 // only when its template has kind-of bit 0x20 at +0x115. The two slot 0x78
 // arms are written separately as in the base: retail tail-merges them, and the
 // merged call keeps its `mov ecx,esi` ahead of the argument push.
-void SlaughterHordeContain::rva00464830(Object *obj)
+void SlaughterHordeContain::addToContain(Object *obj)
 {
 	if (obj->m_containedBy)
 		return;

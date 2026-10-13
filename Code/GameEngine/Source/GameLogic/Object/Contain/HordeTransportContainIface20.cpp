@@ -112,7 +112,7 @@ struct Iface20 : public Rva00468657
 	virtual void rva00465011(Object *obj) = 0;
 	virtual void g33(); virtual void g34(); virtual void g35();
 	virtual void g36(); virtual void g37(); virtual void g38();
-	virtual void rva00464830(Object *obj) = 0;
+	virtual void addToContain(Object *obj) = 0;
 	virtual void g40(); virtual void g41(); virtual void g42(); virtual void g43();
 	SLOT08(g44,g45,g46,g47,g48,g49,g50,g51)
 	SLOT08(g52,g53,g54,g55,g56,g57,g58,g59)
@@ -148,7 +148,7 @@ struct OIface20o
 	SLOT08(h16,h17,h18,h19,h20,h21,h22,h23)
 	SLOT08(h24,h25,h26,h27,h28,h29,h30,h31)
 	SLOT08(h32,h33,h34,h35,h36,h37,h38,h39)
-	virtual void rva00464830(Object *obj) = 0;
+	virtual void addToContain(Object *obj) = 0;
 };
 struct OIface24 { virtual void f24(); };
 struct OIface28 { virtual void f28(); };
@@ -168,7 +168,7 @@ class OpenContain
 	, public OIface34
 {
 public:
-	virtual void rva00464830(Object *obj);
+	virtual void addToContain(Object *obj);
 };
 
 class HordeTransportContain : public TransportContain
@@ -178,7 +178,7 @@ public:
 	virtual void rva00465011(Object *obj);
 	virtual void rva004632E0(Object *obj);
 	virtual void rva004770A6(Object *obj);
-	virtual void rva00464830(Object *obj);
+	virtual void addToContain(Object *obj);
 private:
 	unsigned char m_11C;
 	Rva0047A040Base9E0 m_helper; // +0x11D
@@ -205,20 +205,20 @@ void HordeTransportContain::rva00465011(Object *obj)
 
 void HordeTransportContain::rva004770A6(Object *obj)
 {
-	((OpenContain *)this)->OpenContain::rva00464830(obj);
+	((OpenContain *)this)->OpenContain::addToContain(obj);
 	m_helper.rva00588D99(obj);
 	if (obj->rva0029091E(0x14))
 		obj->setWeaponSetFlag((WeaponSetType)0x14);
 }
 
-// ?rva00464830@HordeTransportContain@@UAEXPAVObject@@@Z, retail 0x004773D6,
+// ?addToContain@HordeTransportContain@@UAEXPAVObject@@@Z, retail 0x004773D6,
 // 92 bytes. Slot 39 of the +0x20 vftable (OpenContain's pinned 0x00464830 in
 // its own table): for an Object no longer contained (+0x274 clear) the
 // helper's entry for it is told it left (slot 73) and the object goes
 // through 0x004770A6 above; without an entry an object with status 0x26 is
 // handled by the rowed 0x00477305 instead. Either way the contain then
 // refreshes through primary slot 18.
-void HordeTransportContain::rva00464830(Object *obj)
+void HordeTransportContain::addToContain(Object *obj)
 {
 	if (obj->m_containedBy)
 		return;

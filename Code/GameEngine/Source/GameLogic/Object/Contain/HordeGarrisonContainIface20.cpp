@@ -128,7 +128,7 @@ struct Iface20 : public SlaughterHordeContain
 	virtual void rva00465011(Object *obj) = 0;
 	virtual void g33(); virtual void g34(); virtual void g35();
 	virtual void g36();virtual void g37();virtual bool isValidContainerFor(Object*,bool,bool);
- virtual void rva00464830(Object *obj) = 0; virtual void g40();virtual void g41();virtual void g42();virtual void g43();
+ virtual void addToContain(Object *obj) = 0; virtual void g40();virtual void g41();virtual void g42();virtual void g43();
 	SLOT08(g44,g45,g46,g47,g48,g49,g50,g51)
 	SLOT08(g52,g53,g54,g55,g56,g57,g58,g59)
 	virtual void g60();
@@ -224,7 +224,7 @@ public:
 	virtual void rva00465011(Object *obj);
 	virtual void rva004632E0(Object *obj);
  virtual bool isValidContainerFor(Object*,bool,bool);
-	virtual void rva00464830(Object *obj);
+	virtual void addToContain(Object *obj);
 	virtual const Coord3D *rva004626CA();
 	virtual const Coord3D *rva004626AF();
 	virtual const Coord3D *rva00464829();
@@ -301,14 +301,14 @@ bool HordeGarrisonContain::isValidContainerFor(Object *obj,bool checkCapacity,bo
  return rvaPrimary70(obj);
 }
 
-// ?rva00464830@HordeGarrisonContain@@UAEXPAVObject@@@Z, retail 0x00479D6D, 96 bytes.
+// ?addToContain@HordeGarrisonContain@@UAEXPAVObject@@@Z, retail 0x00479D6D, 96 bytes.
 // Slot 39 (OpenContain's 0x00464830): a rider that is not already contained
 // joins the horde member the +0x9E0 base finds for it (0x00588B8A, notified
 // through its slot 0x124) and goes to primary slot 0x74; otherwise the base
 // tries to start a member (0x00588BF3): success goes to primary slot 0x78,
 // failure to slot 0x74. Primary slot 0x48 runs last.
 struct HordeRiderStatusView { char opaque00[0x274]; Object *containedBy; };
-void HordeGarrisonContain::rva00464830(Object *obj)
+void HordeGarrisonContain::addToContain(Object *obj)
 {
  if(reinterpret_cast<HordeRiderStatusView*>(obj)->containedBy)return;
  Rva00588B8AMember *member=(Rva00588B8AMember*)rva00588B8A(obj);
