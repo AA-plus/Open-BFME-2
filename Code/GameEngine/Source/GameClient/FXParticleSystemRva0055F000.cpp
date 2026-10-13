@@ -1,10 +1,7 @@
-// ?rva0055F000@Rva0055F218@@QAEXXZ
-// partial score=0.993 date=2026-10-13
-// ?rva0055F000@Rva0055F218@@QAEXXZ
-// partial score=0.993 date=2026-10-13
-// ?rva0055F000@Rva0055F218@@QAEXXZ
-// partial score=0.97 date=2026-10-11
-// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /ICode/Libraries/Include/Lib
+// ?rva0055F000@Rva0055F218@@QAEXXZ @0x0055F000 (407B). Particle-system spawn step
+// (see the bank notes in the body). The equal-arm receiver on the m_b15 gate
+// keeps retail's scheduling of the flag load (W7-S2 r4 sweepthis).
 // ??0Rva0055F218@@QAE@IAAUSrc0055F218@@@Z, retail 0x0055F218, 120 bytes.
 // UInt-plus-template ctor: forwards the dword to the rowed base
 // ??0Rva0055EFE1@@QAE@I@Z at 0x0055EFE1, subobject defaults at +0xC/+0x10/+0x14/+0x15,
@@ -12,7 +9,6 @@
 // float via rowed GameClientRandomVariable::getValue 0x002341A1, flag bytes
 // from +0x3C/+0x3D. Same shape as sibling 0x005646BC. Caller at 0x003ACF96.
 //
-// ?rva0055F000@Rva0055F218@@QAEXXZ, retail 0x0055F000, 407 bytes: slot 1 of
 // that vtable 0x00C1D1D4 (after ??_G 0x003AE270; also slot 1 of 0x00C1CE20)
 // - the particle physics step. Holding a copy of the particle's system handle
 // (+0x3C, BfmeParticleSystemHandle idiom of ParticleSystemManagerFindByID.cpp),
@@ -50,12 +46,7 @@ protected:
 	void *m_v8;
 };
 
-struct RGBColor
-{
-	float r;
-	float g;
-	float b;
-};
+#include "RGBColor.h"
 
 // Rowed ParticleSystem methods under address-derived classes.
 class Rva001F385A { public: void rva001F385A(void *p); };
@@ -163,7 +154,7 @@ Rva0055F218::Rva0055F218(unsigned int a, struct Src0055F218 &src)
 void Rva0055F218::rva0055F000()
 {
 	BfmeParticleSystemHandle system(((Rva0055F000Particle *)m_arg4)->m_system);
-	if (m_b15)
+	if ((this ? this : this)->m_b15)
 	{
 		system->rva001F385A(&((Rva0055F000Particle *)m_arg4)->m_position);
 		return;
@@ -181,9 +172,9 @@ void Rva0055F218::rva0055F000()
 	const RGBColor *drift = system->drift();
 	if (drift)
 	{
-		position->x += velocity->x + drift->r;
-		position->y += velocity->y + drift->g;
-		position->z += velocity->z + drift->b;
+		position->x += velocity->x + drift->red;
+		position->y += velocity->y + drift->green;
+		position->z += velocity->z + drift->blue;
 		if (m_b14)
 		{
 			Coord3D normal;
@@ -201,6 +192,5 @@ void Rva0055F218::rva0055F000()
 	force->z = 0.0f;
 }
 
-// Retail's data references in this unit's matched rows land on globals defined
-// under other spellings at the same addresses (addend-corrected DIR32). Bind them.
-#pragma comment(linker, "/alternatename:?g_00C1D1F4@@3QBQBXB=??_7Rva003ADE98@@6B@")
+// The vtable-tag externs above are the data ledger's accepted g_00C1D1xx spellings;
+// binding g_00C1D1F4 to its class vtable name is left to the link pass (no /alternatename).
