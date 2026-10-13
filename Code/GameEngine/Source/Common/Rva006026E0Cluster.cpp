@@ -33,6 +33,9 @@ public:
 	int rva006027B0();
 	int get();
 	int rva00602870();
+	void rva00602680(unsigned char value);
+	void rva006027D0(unsigned char value);
+	void rva00602830(unsigned char value);
 };
 
 void *Rva006026E0::alloc(unsigned n)
@@ -91,4 +94,29 @@ int Rva006026E0::rva00602870()
 		return *(int *)((char *)m_p10 + 8);
 	}
 	return *(int *)((char *)m_p10 + 8);
+}
+
+// Native complete 26B leaves at 602680, 6027D0 and 602830, each RET4.
+// The first was a whole unattempted body in the gap audit; a narrow native
+// byte search found the other two with only the witnessed flag offset changed.
+// Their +5C/+60/+68 bytes are already read by the paired rowed getters above.
+// If bit0 is set, copy the low argument bit into bit1, preserving all other
+// bits. The original owner, flag meanings and argument typedef are unknown;
+// the unsigned-byte member ABI and this receiver view remain neutral.
+void Rva006026E0::rva00602680(unsigned char value)
+{
+	if (m_flags5c & 1)
+		m_flags5c = (m_flags5c & ~2) | ((value << 1) & 2);
+}
+
+void Rva006026E0::rva006027D0(unsigned char value)
+{
+	if (m_flags60 & 1)
+		m_flags60 = (m_flags60 & ~2) | ((value << 1) & 2);
+}
+
+void Rva006026E0::rva00602830(unsigned char value)
+{
+	if (m_flags68 & 1)
+		m_flags68 = (m_flags68 & ~2) | ((value << 1) & 2);
 }
