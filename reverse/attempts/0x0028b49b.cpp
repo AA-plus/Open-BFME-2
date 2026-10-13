@@ -112,8 +112,7 @@ void Object::rva0028B49B(Object **ppTail, Object **ppHead)
 	m_next = 0;
 	m_prev = *ppHead;
 	Object *front = m_prev;
-	m_next = 0;
-	if ((m_prev) && (m_prev != 0 || m_prev == 0))
+	if (m_prev)
 		front->m_next = this;
 	if (*ppTail == 0)
 		*ppTail = this;
