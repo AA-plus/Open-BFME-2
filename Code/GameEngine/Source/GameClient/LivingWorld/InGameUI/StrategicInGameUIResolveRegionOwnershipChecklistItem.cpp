@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 // Native5D1BA1..5D1CAF full270B RET12, WB15B ownership checklist ctor.
 // Preserve the established Rva005D1ADE owner used by its rowed11B dtor
