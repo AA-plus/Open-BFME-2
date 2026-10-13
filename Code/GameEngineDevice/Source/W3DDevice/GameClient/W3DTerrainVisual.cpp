@@ -642,41 +642,9 @@ void W3DTerrainVisual::enableWaterGrid( Bool enable )
 /** intersect the ray with the terrain, if a hit occurs TRUE is returned
 	* and the result point on the terrain is returned in "result" */
 //-------------------------------------------------------------------------------------------------
-// ?W3DTerrainVisual::intersectTerrain present-unmatched
-Bool W3DTerrainVisual::intersectTerrain( Coord3D *rayStart, 
-																				 Coord3D *rayEnd, 
-																				 Coord3D *result )
-{
-	Bool hit = FALSE;
-
-	// sanity
-	if( rayStart == NULL || rayEnd == NULL )
-		return hit;
-
-	if( m_terrainRenderObject )
-	{
-		CastResultStruct res;
-		LineSegClass lineSeg( Vector3( rayStart->x, rayStart->y, rayStart->z ),
-													Vector3( rayEnd->x, rayEnd->y, rayEnd->z ) );
-		RayCollisionTestClass rayTest( lineSeg, &res );
-
-		hit = m_terrainRenderObject->Cast_Ray( rayTest );
-		if( hit && result )
-		{
-			Vector3 point = rayTest.Result->ContactPoint;
-
-			result->x = point.X;
-			result->y = point.Y;
-			result->z = point.Z;	
-
-		}  // end if
-		
-	}  // end if
-
-	// return hit result
-	return hit;
-
-}  // end intersectTerrain
+// The intersectTerrain body lives under W3DTerrainVisualIntersectTerrain.cpp
+// (retail row); this TU keeps only the class declaration so callers bind the
+// kept copy and this unit emits no competing COMDAT.
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
