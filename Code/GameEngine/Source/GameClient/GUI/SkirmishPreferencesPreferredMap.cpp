@@ -38,4 +38,4 @@ AsciiString SkirmishPreferences::getPreferredMap() {
  return ret;
 }
 
-inline __declspec(noinline) AsciiString SkirmishPreferences::buildProfileKey(const char*name){return formatProfileKey(&currentUserName,name);}
+// The verified 30-byte provider at 0x43BB6A lives in Common/SkirmishPreferences.cpp.
