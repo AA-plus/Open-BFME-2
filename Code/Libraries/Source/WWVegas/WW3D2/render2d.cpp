@@ -209,10 +209,8 @@ void Render2DClass::Enable_Additive(bool b)
 
 // Screen globals read by the coordinate bias below. The resolution words are
 // unsigned ints (retail converts them with fild plus the 2^32 fixup); the flag
-// byte is WW3D::IsScreenUVBiased (ww3d.cpp). All three addresses are already
-// bound by the matched getter rows over them (GlobalByteGetters.cpp and
-// Rva0011009AGetters.cpp), so these reuse the established spellings.
-extern unsigned char g_Va00DEC3D7;
+// byte is WW3D::IsScreenUVBiased (ww3d.cpp), reached through its inline
+// accessor so the coordinate bias and getter share the same defined datum.
 // Matched DIR32 sites place these screen globals at VA 0x00DB5FD4 and
 // 0x00DB5FD8. Retail stores 0x00000280 (640) and 0x000001E0 (480).
 int BfmeRenderWidth = 640;
@@ -229,7 +227,7 @@ void	Render2DClass::Set_Coordinate_Range( const RectClass & range )
 	// Retail folds the UV-bias straight into CoordinateOffset: no Biased copy
 	// and no call. BFME1 derives the same shape for its own retail
 	// (Render2DSetCoordinateRangeThunk.cpp over lotrbfme.exe 0x00933A50).
-	if ( g_Va00DEC3D7 ) {	// Global bias setting
+	if ( WW3D::Is_Screen_UV_Biased() ) {	// Global bias setting
 		Vector2 bais_add( -0.5f ,-0.5f );	// offset by -0.5,-0.5 in pixels
 
 		// Convert from pixels to (-1,1)-(1,-1) units

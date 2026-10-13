@@ -73,13 +73,17 @@ unsigned char Rva0006E1A1GetByte(void)
 
 // ?Rva00110094GetByte@@YAEXZ @ 0x00110094 (6B) over 0x00DEC3D7.
 
-extern unsigned char g_Va00DEC3D7;
-// g_Va00DEC3D7: matched references place it at VA 0xdec3d7 (zero-filled .bss).
-unsigned char g_Va00DEC3D7;
+// Reuse ww3d.cpp's private static byte at VA 0x00DEC3D7. The friend
+// keeps its existing private-member decoration without a second datum.
+class WW3D
+{
+	friend unsigned char Rva00110094GetByte(void);
+	static bool IsScreenUVBiased;
+};
 
 unsigned char Rva00110094GetByte(void)
 {
-	return g_Va00DEC3D7;
+	return WW3D::IsScreenUVBiased;
 }
 
 // ?Rva000308D0GetByte@@YAEXZ @ 0x000308D0 (6B) over 0x00DE0818.
