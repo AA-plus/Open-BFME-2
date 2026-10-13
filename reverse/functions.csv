@@ -87844,3 +87844,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ?rva000533CB@MilesAudioManager@@UAEXXZ,,0x000533CB,125,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,
 ?Rva00212118@@YGXVAsciiString@@@Z,,0x00212118,107,Code/GameEngine/Source/Common/INI/INIBfmeSettingsParsers.cpp,matched,
 ?rva001FD4E1@PlayerTemplateStore@@QAE_NW4NameKeyType@@PAH@Z,,0x001FD4E1,153,Code/GameEngine/Source/Common/RTS/Rva001FD4E1Find.cpp,matched,
+??1?$vector@URva004F77E0Element@@V?$allocator@URva004F77E0Element@@@_STL@@@_STL@@QAE@XZ,,0x005EC919,63,Code/Libraries/Source/WWVegas/WWLib/stlport_vector_rva004f77e0_dtor.cpp,matched,
