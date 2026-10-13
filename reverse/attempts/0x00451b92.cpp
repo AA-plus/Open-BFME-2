@@ -1,4 +1,6 @@
 // ?finishAbility@SpecialAbilityUpdate@@UAEXXZ
+// partial score=0.8652393 date=2026-10-13
+// ?finishAbility@SpecialAbilityUpdate@@UAEXXZ
 // partial score=0.874 date=2026-10-10
 // ?finishAbility@SpecialAbilityUpdate@@UAEXXZ
 // partial score=0.848677 date=2026-10-09
@@ -225,7 +227,7 @@ public:
 	bool isKindOf(KindOfType kindOf) const;
 	// rowed 0x0028CFB2: clears the first mask's conditions, sets the second's
 	void rva0028CFB2(const int *clearMask, const int *setMask);
-	void doCommandButton(const CommandButton *button, int flag, int source);
+	void doCommandButton(const CommandButton *button, int flag, bool source);
 	void setStatus(ObjectStatusTypes status, bool set);
 	void rva0028AE6D();
 	void setSpecialModelConditionState(ModelConditionFlagType mc, unsigned int frames);
