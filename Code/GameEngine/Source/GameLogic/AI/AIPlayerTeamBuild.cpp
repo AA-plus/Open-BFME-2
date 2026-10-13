@@ -1479,7 +1479,7 @@ Bool AIPlayer::startTraining(WorkOrder *order, Bool busyOK, AsciiString teamName
 				{
 					AsciiString teamStr = "Queuing ";
 					teamStr.concat(order->m_thing->getName());
-					teamStr.concat(" for ");
+					reinterpret_cast<StringBase<char> *>(&teamStr)->concat(" for ");
 					teamStr.concat(teamName);
 					TheScriptEngine->AppendDebugMessage(teamStr, false);
 				}
@@ -1536,11 +1536,11 @@ void AIPlayer::queueUnits()
 
 					AsciiString teamStr = "Team '";
 					teamStr.concat(team->m_team->getPrototype()->getName());
-					teamStr.concat("' recruits ");
+					reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' recruits ");
 					teamStr.concat(order->m_thing->getName());
-					teamStr.concat(" from team '");
+					reinterpret_cast<StringBase<char> *>(&teamStr)->concat(" from team '");
 					teamStr.concat(unit->m_team->getPrototype()->getName());
-					teamStr.concat("'");
+					reinterpret_cast<StringBase<char> *>(&teamStr)->concat("'");
 					TheScriptEngine->AppendDebugMessage(teamStr, false);
 
 					unit->setTeam(team->m_team);
@@ -1803,11 +1803,11 @@ void AIPlayer::doUpgradesAndSkills()
 				if (m_player->attemptToPurchaseScience(science))
 				{
 					AsciiString msg = TheNameKeyGenerator->keyToName(m_player->getPlayerNameKey());
-					msg.concat(" purchases from SkillSet");
+					reinterpret_cast<StringBase<char> *>(&msg)->concat(" purchases from SkillSet");
 					concatChar(msg, (char)('1' + m_skillsetSelector));
 					concatChar(msg, ' ');
 					msg.concat(TheScienceStore->rva001FF5F2(science));
-					msg.concat(".");
+					reinterpret_cast<StringBase<char> *>(&msg)->concat(".");
 					TheScriptEngine->AppendDebugMessage(msg, false);
 				}
 			}
@@ -1871,7 +1871,7 @@ Bool AIPlayer::selectTeamToBuild()
 		{
 			AsciiString teamStr = "Error : team '";
 			teamStr.concat(teamProto->getName());
-			teamStr.concat("' has no Home Position (or Origin).");
+			reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' has no Home Position (or Origin).");
 			TheScriptEngine->AppendDebugMessage(teamStr, false);
 		}
 		buildSpecificAITeam(teamProto, false);
@@ -1940,7 +1940,7 @@ void AIPlayer::checkReadyTeams()
 					if (TheWritableGlobalData->m_debugAI)
 					{
 						AsciiString teamName = team->m_team->getPrototype()->getName();
-						teamName.concat(" - team activated.");
+						reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - team activated.");
 						TheScriptEngine->AppendDebugMessage(teamName, false);
 					}
 				}
@@ -2081,7 +2081,7 @@ void AIPlayer::onStructureProduced(Object *factory, Object *bldg)
 		if (TheWritableGlobalData->m_debugAI)
 		{
 			AsciiString bldgName = bldg->getTemplate()->getName();
-			bldgName.concat(" - Building completed.");
+			reinterpret_cast<StringBase<char> *>(&bldgName)->concat(" - Building completed.");
 			TheScriptEngine->AppendDebugMessage(bldgName, false);
 		}
 		checkForSupplyCenter(info, bldg);
@@ -2106,7 +2106,7 @@ void AIPlayer::buildSpecificAITeam(TeamPrototype *teamProto, Bool priorityBuild)
 		{
 			AsciiString teamStr = "Can't build team '";
 			teamStr.concat(teamProto->getName());
-			teamStr.concat("' because build units is disabled.");
+			reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' because build units is disabled.");
 			TheScriptEngine->AppendDebugMessage(teamStr, false);
 			return;
 		}
@@ -2116,7 +2116,7 @@ void AIPlayer::buildSpecificAITeam(TeamPrototype *teamProto, Bool priorityBuild)
 			if (singletonTeam && singletonTeam->hasAnyObjects(false))
 			{
 				AsciiString teamStr = "Unable to build singleton team '";
-				teamStr.concat("' because team already exists.");
+				reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' because team already exists.");
 				TheScriptEngine->AppendDebugMessage(teamStr, false);
 				return;
 			}
@@ -2128,14 +2128,14 @@ void AIPlayer::buildSpecificAITeam(TeamPrototype *teamProto, Bool priorityBuild)
 			{
 				AsciiString teamStr = "Note - queueing team '";
 				teamStr.concat(teamProto->getName());
-				teamStr.concat("' but there is enough money.");
+				reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' but there is enough money.");
 				TheScriptEngine->AppendDebugMessage(teamStr, false);
 			}
 			else
 			{
 				AsciiString teamStr = "Unable to build team '";
 				teamStr.concat(teamProto->getName());
-				teamStr.concat("' because required factories/tech don't exist.");
+				reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' because required factories/tech don't exist.");
 				TheScriptEngine->AppendDebugMessage(teamStr, false);
 				return;
 			}
@@ -2207,7 +2207,7 @@ void AIPlayer::buildSpecificAITeam(TeamPrototype *teamProto, Bool priorityBuild)
 			team->m_frameStarted = TheGameLogic->getFrame();
 			team->m_team = TheTeamFactory->createInactiveTeam(teamProto->getOwnerName(), teamProto->getName());
 			AsciiString teamName = teamProto->getName();
-			teamName.concat(" - starting team build.");
+			reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - starting team build.");
 			TheScriptEngine->AppendDebugMessage(teamName, false);
 			m_teamDelay = 0;
 			team->m_team->rva0039D889(true);
@@ -2228,7 +2228,7 @@ void AIPlayer::buildSpecificAITeam(TeamPrototype *teamProto, Bool priorityBuild)
 			if (TheWritableGlobalData->m_debugAI)
 			{
 				AsciiString teamName = teamProto->getName();
-				teamName.concat(" - contains 0 buildable units.");
+				reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - contains 0 buildable units.");
 				TheScriptEngine->AppendDebugMessage(teamName, false);
 			}
 		}
@@ -2247,14 +2247,14 @@ void AIPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recruitRadiu
 			if (singletonTeam && singletonTeam->hasAnyObjects(false))
 			{
 				AsciiString teamStr = "Unable to recruit singleton team '";
-				teamStr.concat("' because team already exists.");
+				reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' because team already exists.");
 				TheScriptEngine->AppendDebugMessage(teamStr, false);
 				return;
 			}
 		}
 		Team *theTeam = TheTeamFactory->createInactiveTeam(teamProto->getOwnerName(), teamProto->getName());
 		AsciiString teamName = teamProto->getName();
-		teamName.concat(" - Recruiting.");
+		reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - Recruiting.");
 		TheScriptEngine->AppendDebugMessage(teamName, false);
 		const TCreateUnitsInfo *unitInfo = &teamProto->m_unitsInfo[0];
 		Int i;
@@ -2278,11 +2278,11 @@ void AIPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recruitRadiu
 
 						AsciiString teamStr = "Team '";
 						teamStr.concat(theTeam->getPrototype()->getName());
-						teamStr.concat("' recruits ");
+						reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' recruits ");
 						teamStr.concat(thing->getName());
-						teamStr.concat(" from team '");
+						reinterpret_cast<StringBase<char> *>(&teamStr)->concat(" from team '");
 						teamStr.concat(unit->m_team->getPrototype()->getName());
-						teamStr.concat("'");
+						reinterpret_cast<StringBase<char> *>(&teamStr)->concat("'");
 						TheScriptEngine->AppendDebugMessage(teamStr, false);
 
 						unit->setTeam(theTeam);
@@ -2319,7 +2319,7 @@ void AIPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recruitRadiu
 			team->m_frameStarted = TheGameLogic->getFrame();
 			team->m_team = theTeam;
 			teamName = teamProto->getName();
-			teamName.concat(" - Finished recruiting.");
+			reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - Finished recruiting.");
 			TheScriptEngine->AppendDebugMessage(teamName, false);
 		}
 		else
@@ -2330,7 +2330,7 @@ void AIPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recruitRadiu
 				theTeam = NULL;
 			}
 			teamName = teamProto->getName();
-			teamName.concat(" - Recruited 0 units, disbanding.");
+			reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - Recruited 0 units, disbanding.");
 			TheScriptEngine->AppendDebugMessage(teamName, false);
 		}
 	}
