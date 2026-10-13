@@ -343,8 +343,8 @@ void ManTheWallsSpecialPower::rva004C7734(Rva004C7621Range *range,BfmeWideResult
  }
 }
 
-// Native entry constructor22 and Object-vector base29 are visible but
-// out of line; the whole bodies match their existing providers. This keeps
+// Native entry constructor22 is owned here by its retail caller; the
+// Object-vector base29 also matches its existing retail provider. This keeps
 // the allocator temporary from escaping and retains native EH transitions.
 inline __declspec(noinline) Rva004BA1B2::Rva004BA1B2() {}
 
