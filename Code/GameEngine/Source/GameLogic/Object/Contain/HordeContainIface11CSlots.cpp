@@ -256,6 +256,7 @@ public:
 	void rva00272BE7();
 	void rva00272BAB(int a1, int a2);
 	void rva00274176(bool a1);
+	void rva00272945(int a);
 };
 class Thing
 {
@@ -4073,3 +4074,17 @@ void HordeContain::rva0046AA85()
 	for (_STL::list<Object *>::const_iterator it = items->begin(); it != items->end(); ++it)
 		rva00469F3A(*it);
 }
+// Helpers for HordeContain::notifyOfMemberDeath below (slot views and the
+// death-notification callees; all callees rowed, no pins).
+class HordeDeathDrawable { public: void rva00272945(unsigned); char pad[0x43c]; bool refresh; };
+class HordeDeathControl : public Rva00468D11Slots<6> { public: virtual void slot6(Object *) = 0; };
+class HordeDeathBody : public Rva00468D11Slots<15> { public: virtual const unsigned *slot15() = 0; };
+class HordeDeathInterface : public Rva00468D11Slots<96> { public: virtual unsigned slot96(int) = 0; };
+class HordeDeathHeight : public Rva00468D11Slots<7> { public: virtual float height(float, float, int, bool, bool) = 0; };
+struct HordeDeathDataView { char prefix[0x248]; int deathEvent; };
+enum HordeDeathKind { HORDE_DEATH_KIND = 0x1bb };
+class Eva { public: void reportEvaEvent(int, const Coord3D *, int); };
+extern Eva *TheEva;
+class Rva00265254 { public: Rva00265254(unsigned, unsigned, unsigned, unsigned); int words[19]; };
+class Rva001E42F2 { public: void rva001E42F2(const int *); };
+class Rva0030A92C { public: void rva0030A92C(float); };
