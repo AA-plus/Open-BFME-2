@@ -223,12 +223,25 @@ void LivingWorldCampaign::CreatePlayers()
  TheLivingWorldLogic->ValidatePlayers();
 }
 
-struct FieldParse;
+class INI;
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
 public:
 	const char *getNextToken(const char *seps);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002F11E
+	static void parseInt(INI *ini, void *instance, void *store, const void *userData);		// rowed 0x002EF56
+	static void parseBool(INI *ini, void *instance, void *store, const void *userData);		// rowed 0x002E850
+	static void parseUnsignedInt(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002EF72
+	static void parseReal(INI *ini, void *instance, void *store, const void *userData);		// rowed 0x002EFC0
 	void initFromINI(void *what, const FieldParse *parseTable);
 };
 
@@ -253,7 +266,33 @@ public:
 class Rva00E02D6C;
 extern Rva00E02D6C *TheCampaignManager;
 
-extern const FieldParse LivingWorldCampaignFields[];
+// Retail's campaign block field table at RVA 0x008688A8 (.rdata, 240 bytes = fourteen 16-byte records and a zero
+// sentinel), transcribed from retail's own bytes; every procedure is rowed. Records whose parser takes fewer
+// arguments than the FieldParse callback (the cdecl caller cleans the stack) are stored through a cast.
+class ScenarioOwnerView;
+class Rva003F7BE9;
+class LivingWorldPlayer { public: static void ParseLivingWorldPlayer(INI *ini, void *instance); };	// rowed 0x002E1D22
+namespace LivingWorldScenario { class Scenario { public: static void ParseINI(INI *ini, ScenarioOwnerView *owner); }; }	// rowed 0x004FD94E
+void ParseLivingWorldCampaignAct(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x00566D83
+void Rva003F9258Parse(INI *ini, Rva003F7BE9 *holder);	// rowed 0x003F9258
+extern const FieldParse LivingWorldCampaignFields[] =
+{
+	{ "AddPlayer", (INIFieldParseProc)LivingWorldPlayer::ParseLivingWorldPlayer, 0, 0 },
+	{ "LocalPlayer", INI::parseAsciiString, 0, 0x30 },
+	{ "Act", ParseLivingWorldCampaignAct, 0, 0 },
+	{ "SecondsPerReinforcement", INI::parseInt, 0, 0x38 },
+	{ "IsScriptedCampaign", INI::parseBool, 0, 0x4C },
+	{ "IsEvilCampaign", INI::parseBool, 0, 0x4D },
+	{ "ForceAdvanceTurnPhase", INI::parseBool, 0, 0x4E },
+	{ "ScriptHolder", INI::parseAsciiString, 0, 0x34 },
+	{ "Scenario", (INIFieldParseProc)LivingWorldScenario::Scenario::ParseINI, 0, 0 },
+	{ "Tutorial", (INIFieldParseProc)Rva003F9258Parse, 0, 0 },
+	{ "StartingCashRTS", INI::parseUnsignedInt, 0, 0x3C },
+	{ "StartingCashRTSWithFort", INI::parseUnsignedInt, 0, 0x40 },
+	{ "InitialRevivalCostMultiplier", INI::parseReal, 0, 0x44 },
+	{ "InitialRevivalTimeMultiplier", INI::parseReal, 0, 0x48 },
+	{ 0, 0, 0, 0 }
+};
 
 
 // ?ParseLivingWorldCampaignBlock@LivingWorldCampaign@@SAXPAVINI@@@Z
