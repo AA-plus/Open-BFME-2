@@ -4,7 +4,10 @@
 // allocate the 0x310-byte helper (rowed ctor 0x00278869, taking the
 // Drawable) into +0x45C, then forward both arguments to its 0x00276952
 // query; false without the kind bit or the helper. Names address-derived;
-// argument types beyond their dword size are unproven.
+// public wrapper spelling keeps its original raw dword carrier ABI. The
+// now-recovered helper interprets those carriers as point/direction addresses.
+
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 typedef int Int;
 typedef bool Bool;
@@ -15,7 +18,7 @@ class Rva002768AC
 {
 public:
 	Rva002768AC(Drawable *drawable);
-	Bool rva00276952(Int a, Int b);
+	Bool rva00276952(const Coord3D *point, Coord3D *direction);
 private:
 	unsigned char m_bytes[0x310];
 };
@@ -45,5 +48,5 @@ Bool Drawable::rva002788C7(Int a, Int b)
 		m_helper = new Rva002768AC(this);
 	if (m_helper == 0)
 		return false;
-	return m_helper->rva00276952(a, b);
+	return m_helper->rva00276952(reinterpret_cast<const Coord3D *>(a), reinterpret_cast<Coord3D *>(b));
 }
