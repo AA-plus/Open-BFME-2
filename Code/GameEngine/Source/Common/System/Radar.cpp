@@ -1,7 +1,7 @@
 // cl: /O1 /DNDEBUG /MD /arch:SSE
 // Radar.cpp: Radar bodies retail links from this TU (tu_map approved), folded
-// from six split units that shared these exact flags. One non-virtual Radar
-// view carries every offset the folded bodies were byte-verified against:
+// from six split units that shared these exact flags. The canonical Snapshot
+// base and retained field view preserve every verified Radar offset:
 //   +0x24/+0x28 x/y sample, +0x1430 radar window, +0x1434 draw extent,
 //   +0x144C draw rect, +0x145C dirty byte, +0x1460 cleared dword.
 // Bodies that reach Radar through its second base (the frame tick at
@@ -265,9 +265,57 @@ inline RadarObject::RadarObject()
 	m_color=-1;
 }
 
+// Native terrain vslots 6/9/19: height, extent and underwater query.
+// The full 326-byte consumer proves these calls and offsets; the declarations
+// retain the banked ABI view rather than asserting the original method names.
+class TerrainLogic
+{
+public:
+	virtual void t00();
+	virtual void t01();
+	virtual void t02();
+	virtual void t03();
+	virtual void t04();
+	virtual void t05();
+	virtual float getGroundHeight(float x, float y, int unk);
+	virtual void t07();
+	virtual void t08();
+	virtual void getMapExtent(RadarExtent *extent);
+	virtual void t10();
+	virtual void t11();
+	virtual void t12();
+	virtual void t13();
+	virtual void t14();
+	virtual void t15();
+	virtual void t16();
+	virtual void t17();
+	virtual void t18();
+	virtual bool queryWater(float x, float y, int *out, int a, int b);
+};
+
+// Secondary Radar interface at this+4; native dispatches its slot 9.
+class RadarSecond
+{
+public:
+	virtual void s00();
+	virtual void s01();
+	virtual void s02();
+	virtual void s03();
+	virtual void s04();
+	virtual void s05();
+	virtual void s06();
+	virtual void s07();
+	virtual void s08();
+	virtual void refresh();
+};
+
+
 class Radar : public Snapshot
 {
 public:
+	void newMap();
+	bool radarToWorld(const ICoord2D *, Coord3D *);
+	void rva002D7E68(void *);
 	bool isPriorityVisible(RadarPriorityType priority) const;
 	void addObject(Object *object);
 	bool worldToRadar(const Coord3D *world, ICoord2D *radar);
@@ -288,8 +336,8 @@ private:
 	char m_pad12[2];
 	RadarObject *m_head14;
 	RadarObject *m_head18;
-	float m_viewWidth;
-	float m_viewHeight;
+	float m_averageTerrainZ; // +0x1C: native ground sample accumulator
+	float m_averageWaterZ; // +0x20: native underwater sample accumulator
 	float m_xSample; // +0x24
 	float m_ySample; // +0x28
 	struct Event { int type; bool active; unsigned int createFrame; unsigned int dieFrame; unsigned int fadeFrame; char color1[16]; char color2[16]; char world[12]; int radar[2]; bool soundPlayed; void *ref; };
@@ -660,10 +708,63 @@ void Radar::xfer(Xfer*xfer) {
  }while(i<count);
  *xfer==m_nextFree;
  if(version.m_minimum<3){int oldIndex=0;*xfer==oldIndex;}
- *xfer==m_viewWidth;
- *xfer==m_viewHeight;
+ *xfer==m_averageTerrainZ;
+ *xfer==m_averageWaterZ;
  *xfer==m_xSample;
  *xfer==m_ySample;
  *xfer==*reinterpret_cast<IRegion2D*>(&m_rect);*xfer==*reinterpret_cast<bool*>(&m_dirty);*xfer==*reinterpret_cast<IRegion2D*>(&m_rect);*xfer==*reinterpret_cast<unsigned int*>(&m_1460);
  if(version.m_minimum==2){int old;unsigned int old2;*xfer==old;*xfer==old2;}
+}
+
+// Native 2D7E68..2D7FAE RET4, 326 bytes; WB1107E00 unnamed twin.
+// ZH/BF1 Radar::newMap supplies terrain sampling and average semantics.
+// Reviewed BFME1 donor cee35b7d8ca077d7255f1c39cb69e9fd9627aa85.
+// BF2 uses the existing no-argument window reset, second interface+4, extent
+// +1434 and 128x128 samples; native integer ground heights feed the averages.
+// The witnessed Y store occurs once per row, after inner X initialization;
+// counter zeros precede accumulator zeros. Original target method name unknown.
+void Radar::rva002D7E68(void *terrainParam)
+{
+	newMap();
+	reinterpret_cast<RadarSecond *>((char *)this+4)->refresh();
+	TerrainLogic *terrain = (TerrainLogic *)terrainParam;
+	RadarExtent *ext = &m_extent;
+	terrain->getMapExtent(ext);
+	m_xSample = (ext->maxX - ext->minX) / 128.0f;
+	m_ySample = (ext->maxY - ext->minY) / 128.0f;
+	int countTerrain = 0;
+	int countWater = 0;
+	m_averageTerrainZ = 0.0f;
+	m_averageWaterZ = 0.0f;
+	ICoord2D cell;
+	Coord3D world;
+	for (int y = 0; y < 128; ++y)
+	{
+		int x = 0;
+		cell.y = y;
+		for (; x < 128; ++x)
+		{
+			cell.x = x;
+			radarToWorld(&cell, &world);
+			int hi = (int)terrain->getGroundHeight(world.x, world.y, 0);
+			int tmp;
+			bool water = terrain->queryWater(world.x, world.y, &tmp, 0, 0);
+			if (water)
+			{
+				m_averageWaterZ += (float)hi;
+				++countWater;
+			}
+			else
+			{
+				m_averageTerrainZ += (float)hi;
+				++countTerrain;
+			}
+		}
+	}
+	if (countTerrain == 0)
+		countTerrain = 1;
+	if (countWater == 0)
+		countWater = 1;
+	m_averageTerrainZ /= (float)countTerrain;
+	m_averageWaterZ /= (float)countWater;
 }
