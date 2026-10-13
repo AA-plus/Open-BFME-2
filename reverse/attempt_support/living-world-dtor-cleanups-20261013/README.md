@@ -23,6 +23,18 @@ No source reconstruction, synthetic parent, assembly or new pin is used. Member
 roles and offsets are retained from the already verified source; this adds no
 original class identity, full layout or linker claim.
 
+Native cleanup destinations include existing five-byte unadjusted tail
+thunks: 0x002B905D goes to 0x00433BD7; 0x002B64BD to 0x002B5FF1;
+0x002B64C2 to 0x002B602E. The latter two destinations already have real
+destructor rows, while their thunks have separate neutral wrapper owners.
+Replay asserts these complete native jumps. No second name is added there.
+
+The normal shadow identity check still flags the source's pre-existing map
+and multimap destructor bindings to those thunks and a divergent existing
+LivingWorldBuildingObserver destructor. Those findings remain visible;
+their broader identity/linking repairs are separate from the complete
+real-parent cleanup proof.
+
 ```
 ./build.sh Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldLogicDtorRva002B964F.cpp
 python3 reverse/attempt_support/living-world-dtor-cleanups-20261013/verify.py

@@ -27,6 +27,13 @@ class identity, complete layout, record payload and audio member type remain
 unproven, as the existing source and parent rows document. No new type identity
 or link-census progress is claimed.
 
+Normal identity checking still reports three divergent existing vector/base
+specializations and six duplicate existing definitions: KillSummaryEntry,
+TakeUnitFromArmy_Internal, UseArmySummary, XferOwningLivingWorldArmyVec,
+rva00319EA3 and rva00319EF9. This addition does not alter their source,
+bindings or verification rules. Full native parent/cleanup and exception-data
+matches are not proof that the whole unit links correctly.
+
 Replay after the normal whole-file build:
 
 ```

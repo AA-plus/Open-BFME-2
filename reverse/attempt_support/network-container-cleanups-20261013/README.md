@@ -23,6 +23,16 @@ They are emitted by the existing real destructor; no synthetic parent,
 assembly, new pin or callable alias is introduced. Existing donor identity
 uncertainties are preserved. No new linking result is claimed.
 
+The native destinations are existing five-byte unadjusted tail thunks:
+0x0054FF9B and 0x0054FFA0 both go to 0x0054FF17; 0x0038A5D1 goes to
+the rowed tree destructor 0x0038A48B. Replay checks all three complete
+native jumps. Their existing neutral wrapper identities are retained.
+
+Normal shadow identity checking still reports a divergent existing
+Rva006609D0LockHolder inline destructor and its binding to 0x0009990D.
+This addition leaves that source and binding intact and does not weaken
+the check. Exact cleanup/parent bytes do not resolve that independent debt.
+
 ```
 ./build.sh Code/GameEngine/Source/GameNetwork/GameSpy/Thread/Rva006609D0Destructor_Rva0054ffa5.cpp
 python3 reverse/attempt_support/network-container-cleanups-20261013/verify.py

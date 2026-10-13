@@ -21,6 +21,11 @@ obj, image = eh_verify.Obj(obj_path), eh_verify.Image()
 assert eh_verify.verify_row(image, obj, PARENT, 0x2B964F) == ('EXACT', '')
 locations = eh_verify.verified_funclet_locations(image, obj, PARENT, 0x2B964F)
 symbols = build.load_symbol_map()
+for thunk, destination in ((0x2B905D, 0x433BD7), (0x2B64BD, 0x2B5FF1),
+                           (0x2B64C2, 0x2B602E)):
+    body = build.read_target_bytes(thunk, 5)
+    assert body[0] == 0xE9
+    assert thunk + 5 + struct.unpack_from('<i', body, 1)[0] == destination
 source = SOURCE.relative_to(ROOT).as_posix()
 parent = build.compile_function({'name': PARENT, 'target_rva': '0x002B964F',
                                 'target_size': '606', 'source': source, 'notes': ''},

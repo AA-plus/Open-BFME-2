@@ -27,6 +27,13 @@ The hash/vector/map roles and partial views are carried from the existing
 verified source. This adds no original application type, hidden member layout
 or link-census claim.
 
+The normal identity check remains in shadow mode and reports unowned existing
+constructor/teardown bindings at 0x00212AEF, 0x002130CA and 0x00212379.
+These declarations and bindings predate this ledger addition; no new source
+definition, pin, baseline exemption or verifier change suppresses them.
+Exact parent/cleanup bytes and exception data do not settle those callee
+identity or linking debts.
+
 Replay after the normal whole-source build:
 
 ```
