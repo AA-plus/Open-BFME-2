@@ -5,6 +5,9 @@
 // Rva005D061E, return copy with releaseBuffer via tmp dtor. Evidence: callees
 // rowed 0x005D0507 0x000370A0 0x005D061E 0x00037050 0x00036E70; caller 0x005D09FA.
 // Honest address name; owner unproven.
+// Native unwind-map references and the complete exact parent EH graph
+// establish the naturally emitted return-object cleanup at 0x007A1B98.
+// Its 25-byte extent excludes the interior return label.
 #include "unicode_string.h"
 
 class Rva005D0507
