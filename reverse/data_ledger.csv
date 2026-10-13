@@ -18957,7 +18957,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009FEFA4,28,.data,global,?KINDOFMASK_NONE@@3V?$BitFlags@$0HE@@@A,Code/GameEngine/Source/Common/ThingIsAnyKindOf.cpp,provisional,?KINDOFMASK_NONE@@3V?$BitFlags@$0HE@@@A;?g_009FEFA4@@3VBfmeFixedStorage0004543D@@B;?g_00DFEFA4@@3V?$BitFlags@$0HE@@@A;?g_00DFEFA4StoragePrototype@@3PAEA;?g_defaultStorage009FEFA4@@3V?$BitFlags@$0HE@@@B;?g_defaultStorage009FEFA4@@3VBfmeFixedStorage0004543D@@B;?g_dominateFilterDefaults@@3VBfmeFixedStorage0004543D@@B;?g_modelConditionFilterDefaults@@3VBfmeFixedStorage0004543D@@B,2,103
 0x009FEFC0,4,.data,global,?g_00DFEFC0@@3IA,Code/GameEngine/Source/Common/Rva002C589BXfer.cpp,owned,,1,3
 0x009FEFC4,4,.data,global,?g_AITargetThreatFinderSerial@@3IA,Code/GameEngine/Source/Common/Rva002C589BDtor.cpp,owned,,1,2
-0x009FEFC8,4,.data,global,?g_00DFEFC8@@3IA,Code/GameEngine/Source/Common/Rva002C5EF0Xfer.cpp,owned,,1,2
+0x009FEFC8,4,.data,global,?BfmeTacticalInterestZoneSerial@@3IA,Code/GameEngine/Source/Common/Rva002C5EF0Xfer.cpp,owned,,1,6
 0x009FEFCC,4,.data,global,?g_00DFEFCC@@3HA,,unowned,,0,1
 0x009FEFD0,4,.data,global,_s_rva007AE2BE,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
 0x009FEFD4,4,.data,global,_s_rva007AE2CE,Code/GameEngine/Source/Common/Rva007ABC6FFrameRateInits.cpp,owned,,1,1

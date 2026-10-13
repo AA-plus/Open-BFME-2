@@ -77,7 +77,7 @@ template<> inline __declspec(noinline) ParticleSystemID* __copy_ptrs<ParticleSys
 template<> inline __declspec(noinline) vector<ParticleSystemID>::iterator vector<ParticleSystemID>::erase(iterator first,iterator last){_TrivialAss tag;iterator i=__copy_ptrs(last,this->_M_finish,first,tag);_Destroy(i,this->_M_finish);this->_M_finish=i;return first;}}
 class RvaVector {public:void**erase(void**,void**) throw();};
 class Rva00601941 {public:void rva00601941() throw();};
-extern unsigned g_00DFEFC8;
+extern unsigned BfmeTacticalInterestZoneSerial;
 unsigned BfmeSkirmishAIResetState1;
 extern int Rva00A03D80;
 extern unsigned g_00DFEFC0,g_AITargetThreatFinderSerial;
@@ -96,7 +96,7 @@ void Rva002A8F24::reset(){
  reinterpret_cast<Rva00601941*>(owned940)->rva00601941();
  _STL::vector<void*>& cached=*reinterpret_cast<_STL::vector<void*>*>(reinterpret_cast<char*>(this)+0x864);
  reinterpret_cast<RvaVector*>(&cached)->erase(cached.begin(),cached.end());
- g_00DFEFC8=0;BfmeSkirmishAIResetState1=0;g_00DFEFC0=0;g_AITargetThreatFinderSerial=0;Rva00A03D80=0;
+ BfmeTacticalInterestZoneSerial=0;BfmeSkirmishAIResetState1=0;g_00DFEFC0=0;g_AITargetThreatFinderSerial=0;Rva00A03D80=0;
 }
 
 // Compatibility receiver inherits the established layout without another
@@ -117,5 +117,5 @@ void Rva002A921B::reset(){
  reinterpret_cast<Rva00601941*>(owned940)->rva00601941();
  _STL::vector<void*>& cached=*reinterpret_cast<_STL::vector<void*>*>(reinterpret_cast<char*>(this)+0x864);
  reinterpret_cast<RvaVector*>(&cached)->erase(cached.begin(),cached.end());
- g_00DFEFC8=0;BfmeSkirmishAIResetState1=0;g_00DFEFC0=0;g_AITargetThreatFinderSerial=0;Rva00A03D80=0;
+ BfmeTacticalInterestZoneSerial=0;BfmeSkirmishAIResetState1=0;g_00DFEFC0=0;g_AITargetThreatFinderSerial=0;Rva00A03D80=0;
 }
