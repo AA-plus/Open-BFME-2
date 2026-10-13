@@ -30,20 +30,5 @@ void ModelConditionFlags::rva000B3FA5(int bit, int value)
 	m_words[bit] = old ^ (((0 - (unsigned)value) ^ old) & m);
 }
 
-// ICF twin: the weapon-template set header's flag word reaches the same body.
-class WeaponTemplateSetHead
-{
-public:
-	void rva000B3FA5(int bit, int value);
-
-private:
-	unsigned int m_words[19];
-};
-
-void WeaponTemplateSetHead::rva000B3FA5(int bit, int value)
-{
-	unsigned int m = 1u << (bit & 31);
-	bit >>= 5;
-	unsigned int old = m_words[bit];
-	m_words[bit] = old ^ (((0 - (unsigned)value) ^ old) & m);
-}
+// WeaponTemplateSetHead ICF twin is owned alongside its caller in
+// Audio/DynamicAudioEventInfoXferNoName.cpp; its verified43B body stays visible.
