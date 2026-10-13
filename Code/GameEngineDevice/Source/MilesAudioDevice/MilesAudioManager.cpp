@@ -402,7 +402,7 @@ struct PlayingAudio {
 // Retain-and-replace setter rowed at 0x000A8CE5 under its address-derived owner.
 class Rva000A8C9B {
 public:
-    // Rowed at 0x000A8C9B (Rva000A8C9BClear.cpp); visible here so the unit
+    // Rowed here at 0x000A8C9B; visible here so the unit
     // knows it keeps no pointer to the holder it clears.
     __declspec(noinline) void clear(void)
     {
