@@ -1,0 +1,2 @@
+Code/GameEngine/Source/GameLogic/AI/AISkirmishPlayer.cpp
+Code/Libraries/Source/WWVegas/WWLib/string_base.cpp

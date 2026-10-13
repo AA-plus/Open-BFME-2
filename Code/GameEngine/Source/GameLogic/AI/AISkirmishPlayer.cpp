@@ -707,7 +707,7 @@ void AISkirmishPlayer::acquireEnemy()
 	{
 		m_currentEnemy = bestEnemy;
 		AsciiString msg = TheNameKeyGenerator->keyToName(m_player->getPlayerNameKey());
-		msg.concat(" acquiring target enemy player: ");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" acquiring target enemy player: ");
 		msg.concat(TheNameKeyGenerator->keyToName(m_currentEnemy->getPlayerNameKey()));
 		TheScriptEngine->AppendDebugMessage(msg, false);
 	}
@@ -902,7 +902,7 @@ void AISkirmishPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recr
 			if (singletonTeam && singletonTeam->hasAnyObjects(false))
 			{
 				AsciiString teamStr = "Unable to recruit singleton team '";
-				teamStr.concat("' because team already exists.");
+				reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' because team already exists.");
 				TheScriptEngine->AppendDebugMessage(teamStr, false);
 				return;
 			}
@@ -911,12 +911,12 @@ void AISkirmishPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recr
 		{
 			AsciiString teamStr = "Error : team '";
 			teamStr.concat(teamProto->getName());
-			teamStr.concat("' has no Home Position (or Origin).");
+			reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' has no Home Position (or Origin).");
 			TheScriptEngine->AppendDebugMessage(teamStr, false);
 		}
 		Team *theTeam = TheTeamFactory->createInactiveTeam(teamProto->getOwnerName(), teamProto->getName());
 		AsciiString teamName = teamProto->getName();
-		teamName.concat(" - Recruiting.");
+		reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - Recruiting.");
 		TheScriptEngine->AppendDebugMessage(teamName, false);
 		const TCreateUnitsInfo *unitInfo = &teamProto->m_unitsInfo[0];
 		Int i;
@@ -940,11 +940,11 @@ void AISkirmishPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recr
 
 						AsciiString teamStr = "Team '";
 						teamStr.concat(theTeam->getPrototype()->getName());
-						teamStr.concat("' recruits ");
+						reinterpret_cast<StringBase<char> *>(&teamStr)->concat("' recruits ");
 						teamStr.concat(thing->getName());
-						teamStr.concat(" from team '");
+						reinterpret_cast<StringBase<char> *>(&teamStr)->concat(" from team '");
 						teamStr.concat(unit->getTeam()->getPrototype()->getName());
-						teamStr.concat("'");
+						reinterpret_cast<StringBase<char> *>(&teamStr)->concat("'");
 						TheScriptEngine->AppendDebugMessage(teamStr, false);
 
 						unit->setTeam(theTeam);
@@ -970,7 +970,7 @@ void AISkirmishPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recr
 			team->m_frameStarted = TheGameLogic->getFrame();
 			team->m_team = theTeam;
 			teamName = teamProto->getName();
-			teamName.concat(" - Finished recruiting.");
+			reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - Finished recruiting.");
 			TheScriptEngine->AppendDebugMessage(teamName, false);
 		}
 		else
@@ -981,7 +981,7 @@ void AISkirmishPlayer::recruitSpecificAITeam(TeamPrototype *teamProto, Real recr
 				theTeam = NULL;
 			}
 			teamName = teamProto->getName();
-			teamName.concat(" - Recruited 0 units, disbanding.");
+			reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - Recruited 0 units, disbanding.");
 			TheScriptEngine->AppendDebugMessage(teamName, false);
 		}
 	}
