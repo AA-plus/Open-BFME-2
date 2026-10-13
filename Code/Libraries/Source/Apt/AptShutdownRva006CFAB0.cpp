@@ -57,7 +57,7 @@ class Rva006E6060Root {public:~Rva006E6060Root();};
 class Rva006E6430Delete {public:~Rva006E6430Delete(){((Rva006E6060Root *)this)->~Rva006E6060Root();}POOL_DELETE char pad[0xb4];};
 
 void AptValueShutdown(int);
-void rva008B8B80ReleaseAll();
+class AptArray { public: static void CleanNativeFunctions(void); };
 class AptDate {public:static void CleanNativeFunctions();};
 void rva008A4630ReleaseGlobals();
 void rva008A47B0ReleaseGlobals();
@@ -100,7 +100,7 @@ void Rva006CFAB0(int arg)
 	delete (Rva006D1090 *)g_rva00893030Manager;
 	delete (Rva006CEA60Delete *)g_aptPlaybackCheckpoints;
 	AptValueShutdown(arg);
-	rva008B8B80ReleaseAll();
+	AptArray::CleanNativeFunctions();
 	AptDate::CleanNativeFunctions();
 	rva008A4630ReleaseGlobals();
 	rva008A47B0ReleaseGlobals();

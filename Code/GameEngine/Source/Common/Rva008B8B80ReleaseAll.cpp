@@ -1,4 +1,13 @@
 // Open-BFME5 conversion.
+// AptArray::CleanNativeFunctions at retail 0x006D92E0 (236 bytes): WorldBuilder
+// 178EA20 names it in its asserts (AptArray.cpp lines 95..105) and releases the
+// same eleven native-function slots in the same order.
+
+class AptArray
+{
+public:
+	static void CleanNativeFunctions(void);
+};
 
 class Rva008B8B80Releasable
 {
@@ -41,7 +50,7 @@ extern Rva008B8B80Releasable *g_rva008B8B80_10;
 // g_rva008B8B80_10: matched references place it at VA 0xe18050 (zero-filled .bss).
 Rva008B8B80Releasable * g_rva008B8B80_10;
 
-void rva008B8B80ReleaseAll(void)
+void AptArray::CleanNativeFunctions(void)
 {
 	if (g_rva008B8B80_0 != 0)
 	{
