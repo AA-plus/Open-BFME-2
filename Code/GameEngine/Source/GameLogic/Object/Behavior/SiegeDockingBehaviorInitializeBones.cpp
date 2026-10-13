@@ -124,3 +124,7 @@ void SiegeDockingBehavior::rva00459E05()
 
 	m_initialized = true;
 }
+
+// Native 0x0078A31A: complete 22-byte directions[10] cleanup.
+// The exact 554-byte parent and complete native EH graph bind this action;
+// its 12-byte lifetime adapter uses the existing empty destructor and EH iterator.
