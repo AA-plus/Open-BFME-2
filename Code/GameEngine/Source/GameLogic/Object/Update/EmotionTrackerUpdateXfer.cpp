@@ -6,9 +6,9 @@
 // "EmotionTrackerUpdate"; the rowed dtor 0x004B1322 installs it). The rowed
 // UpdateModule::xfer 0x0044DF9F, Version(1,2), twelve (bool, uint, ObjectID)
 // triples from the parallel arrays at +0x24/+0x30/+0x60, each element of the
-// pointer vector at +0x90 through its pinned xfer 0x004DD489 (remembering
-// the index of the one at +0x9C when saving into +0xC4), ints at +0xC4 and
-// +0xA0, before version 2 the ObjectID set at +0xA4 (rowed set<int>::insert
+// pointer vector at +0x90 by a direct call to its slot-3 xfer 0x004DD489
+// (remembering the index of the one at +0x9C when saving into +0xC4), ints
+// at +0xC4 and +0xA0, before version 2 the ObjectID set at +0xA4 (rowed set<int>::insert
 // on load), four raw bytes at +0xB0, an int at +0xB4, an ObjectID at +0xB8
 // and from version 2 a uint at +0xBC and a bool at +0xC0. Member names not
 // recovered.
@@ -158,7 +158,7 @@ void XferObjectID(Xfer *xfer, ObjectID *id);
 class Rva004DD489
 {
 public:
-	void xfer(Xfer *xfer);
+	virtual void xfer(Xfer *xfer);
 };
 
 class UpdateModule
@@ -214,7 +214,7 @@ void EmotionTrackerUpdate::xfer(Xfer *xfer)
 		Rva004DD489 *entry = m_90[j];
 		if (xfer->IsStoring() && entry == m_9C)
 			m_C4 = j;
-		entry->xfer(xfer);
+		entry->Rva004DD489::xfer(xfer);
 	}
 
 	*xfer == m_C4;
