@@ -157,4 +157,3 @@ void _Init()
 }
 }
 
-#pragma comment(linker, "/alternatename:?g_heapTlsIndex@MemoryPool@@3KA=?g_Va00DB35A4@@3KA")

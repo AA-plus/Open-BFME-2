@@ -5,9 +5,9 @@
 // TlsSetValue at 0x00BBA198, TLS index 0x00DB35A4 holding the calling
 // thread's heap id, callers at 0x0062265B 0x0062214F load ecx then call.
 // Honest address-derived name: owner unproven. No STL.
-extern unsigned long g_Va00DB35A4;
-// g_Va00DB35A4: matched references place it at VA 0xdb35a4 (retail .data initial value 0xffffffffu).
-unsigned long g_Va00DB35A4 = 0xffffffffu;
+// MemoryPool::g_heapTlsIndex: the TLS slot index at VA 0xdb35a4 (retail .data initial value 0xffffffffu),
+// set by MemoryPool init via TlsAlloc; the name is retail's own namespace MemoryPool spelling.
+namespace MemoryPool { unsigned long g_heapTlsIndex = 0xffffffffu; }
 extern "C" __declspec(dllimport) int __stdcall TlsSetValue(unsigned long index, void *value);
 extern "C" __declspec(dllimport) void *__stdcall TlsGetValue(unsigned long index);
 
@@ -22,7 +22,7 @@ private:
 
 void Rva000309B0::rva000309B0()
 {
-	unsigned long index = g_Va00DB35A4;
+	unsigned long index = MemoryPool::g_heapTlsIndex;
 	if (index != (unsigned long)-1)
 		TlsSetValue(index, m_value);
 }
@@ -35,9 +35,9 @@ void Rva000309B0::rva000309B0()
 // Honest address-derived method of Rva000309B0.
 Rva000309B0 *Rva000309B0::rva00030980(void *newValue)
 {
-	if (g_Va00DB35A4 != (unsigned long)-1) {
-		m_value = TlsGetValue(g_Va00DB35A4);
-		TlsSetValue(g_Va00DB35A4, newValue);
+	if (MemoryPool::g_heapTlsIndex != (unsigned long)-1) {
+		m_value = TlsGetValue(MemoryPool::g_heapTlsIndex);
+		TlsSetValue(MemoryPool::g_heapTlsIndex, newValue);
 	}
 	return this;
 }

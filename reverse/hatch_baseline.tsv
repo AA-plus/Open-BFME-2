@@ -844,7 +844,6 @@ address_global	Code/GameEngine/Source/Common/ReloadIniFileNotices.cpp	g_Va00DFE1
 address_global	Code/GameEngine/Source/Common/ReloadIniFileNotices.cpp	g_Va00DFEB64	5
 address_global	Code/GameEngine/Source/Common/ReloadIniFileNotices.cpp	g_Va00DFEFE0	5
 address_global	Code/GameEngine/Source/Common/Rva000308E0AddHeap.cpp	g_Va00DE03E8	2
-address_global	Code/GameEngine/Source/Common/Rva000309B0TlsSet.cpp	g_Va00DB35A4	6
 address_global	Code/GameEngine/Source/Common/Rva00042F67Get.cpp	g_Va00DEDA34	3
 address_global	Code/GameEngine/Source/Common/Rva00042F6DGet.cpp	g_Va00DEDA7C	3
 address_global	Code/GameEngine/Source/Common/Rva00062B17Init.cpp	g_Va00BBB8D8	2
@@ -1511,7 +1510,6 @@ address_global	Code/GameEngine/Source/Common/System/GeometryInfoRva006BD9C0.cpp	
 address_global	Code/GameEngine/Source/Common/System/INI_VeterancyLevelToken.cpp	g_Va00DC17CCNames	4
 address_global	Code/GameEngine/Source/Common/System/INI_VeterancyLevelToken.cpp	g_Va00DC85C4Names	4
 address_global	Code/GameEngine/Source/Common/System/INI_VeterancyLevelToken.cpp	g_Va00DD263CNames	4
-address_global	Code/GameEngine/Source/Common/System/MemoryPoolInit.cpp	g_Va00DB35A4	1
 address_global	Code/GameEngine/Source/Common/System/RadarFrameTick.cpp	g_Va00DBA4E4	2
 address_global	Code/GameEngine/Source/Common/System/Rva00030730Init.cpp	g_Va00DE03E8	2
 address_global	Code/GameEngine/Source/Common/System/Rva0005CE32Method.cpp	g_Va00BBB8D8	2
@@ -1534,7 +1532,6 @@ address_global	Code/GameEngine/Source/Common/System/SaveGame/GameStateInit.cpp	g
 address_global	Code/GameEngine/Source/Common/System/SnapshotXfersBfme.cpp	g_Va00E01E74	3
 address_global	Code/GameEngine/Source/Common/System/UpgradeRva0026EE30.cpp	g_Va00BBB8D8	2
 address_global	Code/GameEngine/Source/Common/System/UpgradeRva0026EE30.cpp	g_Va00DBA4E4	3
-address_global	Code/GameEngine/Source/Common/System/memory_pool.cpp	g_Va00DB35A4	1
 address_global	Code/GameEngine/Source/Common/TerrainLogicRva00283262.cpp	g_Va00DFE750	2
 address_global	Code/GameEngine/Source/Common/Thing/ThingTemplateGetCurrentLivingWorldAutoResolveWeapon.cpp	g_Va00E030C0	2
 address_global	Code/GameEngine/Source/Common/U2FixedSlotSearches.cpp	g_Rva0081C5C0Begin	2
@@ -3228,7 +3225,6 @@ alternatename	Code/GameEngine/Source/Common/System/LivingWorldRegionConnectionDt
 alternatename	Code/GameEngine/Source/Common/System/LocalFile.cpp	??1Rva00605CA7@@UAE@XZ	1
 alternatename	Code/GameEngine/Source/Common/System/LocalFile.cpp	?convertToRAMFile@File@@UAEPAV1@XZ	1
 alternatename	Code/GameEngine/Source/Common/System/LocalFile.cpp	?wideOpenStub@LocalFile@@UAE_NPBGH@Z	1
-alternatename	Code/GameEngine/Source/Common/System/MemoryPoolInit.cpp	?g_heapTlsIndex@MemoryPool@@3KA	1
 alternatename	Code/GameEngine/Source/Common/System/RadarNewMap.cpp	?theRadarWindowOverrideSource@@3PAVRadarWindowOverrideSource@@A	1
 alternatename	Code/GameEngine/Source/Common/System/Radar_radarToWorld.cpp	?TheTerrainLogic@@3PAVBfmeTerrainHeightView@@A	1
 alternatename	Code/GameEngine/Source/Common/System/RegistryRva00238CC2.cpp	?g_00BBE09C@@3QBDB	1
@@ -3273,7 +3269,6 @@ alternatename	Code/GameEngine/Source/Common/System/Xfer.cpp	?Is_Procedural@?$Ref
 alternatename	Code/GameEngine/Source/Common/System/Xfer.cpp	?Use_Alpha_Shader@BFME2ParticleTextureHandle@@QBE_NXZ	1
 alternatename	Code/GameEngine/Source/Common/System/Xfer.cpp	?bfmeReset@Gen009D6E10@@QAEXPAVBfmePeer@@@Z	1
 alternatename	Code/GameEngine/Source/Common/System/XferException.cpp	_strcpy	1
-alternatename	Code/GameEngine/Source/Common/System/memory_pool.cpp	?g_heapTlsIndex@MemoryPool@@3KA	1
 alternatename	Code/GameEngine/Source/Common/T4VtableSetCtors.cpp	_vtbl_00C1C780	1
 alternatename	Code/GameEngine/Source/Common/T4VtableSetCtors.cpp	_vtbl_00C1C780_again	1
 alternatename	Code/GameEngine/Source/Common/T4VtableSetCtors.cpp	_vtbl_00C1D2C0	1
