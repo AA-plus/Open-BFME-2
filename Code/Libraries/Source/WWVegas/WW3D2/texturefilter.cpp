@@ -11,8 +11,11 @@
 // reads the caps filter bits through DX8Wrapper::CurrentCaps (VA 0x00DEDA7C)
 // and writes D3DTSS_MAXANISOTROPY = 2 for every stage straight through the
 // device (VA 0x00DEDA34, vtable slot 0x114) with the two call counters.
-// BFME 2 delta against the donor: stage 0's DEFAULT entries are seeded with
-// the NONE values before the caps tests, and the stage index is unsigned (the
+// BFME 2 deltas against the donor: a fifth filter type sits before DEFAULT
+// (DEFAULT is column 4, as the constructor and the _Set_Default_* setters
+// write it); _Init_Filters seeds stage 0's column 3 with the NONE values where
+// Zero Hour seeds DEFAULT, and its final loop copies BEST into DEFAULT
+// (column 4, min before mag); stage indices are unsigned (the
 // loops close on unsigned compares). The constant 1 stays in a register for
 // the whole body (/G7 adds it to the counters and the stage index).
 
@@ -132,9 +135,10 @@ public:
 		FILTER_TYPE_NONE,
 		FILTER_TYPE_FAST,
 		FILTER_TYPE_BEST,
-		FILTER_TYPE_DEFAULT,
-		FILTER_TYPE_4,		// BFME 2's fifth column (20-byte stage rows): every filter starts
-					// here (constructor 0x0013EA00); its name is in neither binary
+		FILTER_TYPE_3,		// BFME 2 inserts a type before DEFAULT (20-byte stage rows);
+					// _Init_Filters seeds stage 0's entry where Zero Hour seeds
+					// DEFAULT. Its name is in neither binary.
+		FILTER_TYPE_DEFAULT,	// 4: the constructor's and the _Set_Default_* column
 		FILTER_TYPE_COUNT
 	};
 	enum TextureFilterMode
@@ -157,6 +161,9 @@ public:
 	__declspec(dllimport) __forceinline TxtAddrMode Get_V_Addr_Mode(void) const { return VAddressMode; }
 
 	static void _Init_Filters(TextureFilterMode texture_filter);
+	static void _Set_Default_Min_Filter(FilterType filter);
+	static void _Set_Default_Mag_Filter(FilterType filter);
+	static void _Set_Default_Mip_Filter(FilterType filter);
 
 private:
 	FilterType TextureMinFilter;
@@ -173,14 +180,14 @@ unsigned _MipMapFilters[MAX_TEXTURE_STAGES][TextureFilterClass::FILTER_TYPE_COUN
 // Retail 0x0013EA00, 43 bytes. Called by the texture constructors and the
 // shared fallback filter of TextureClass::Get_Filter.
 TextureFilterClass::TextureFilterClass(MipCountType mip_level_count)
-:	TextureMinFilter(FILTER_TYPE_4),
-	TextureMagFilter(FILTER_TYPE_4),
+:	TextureMinFilter(FILTER_TYPE_DEFAULT),
+	TextureMagFilter(FILTER_TYPE_DEFAULT),
 	UAddressMode(TEXTURE_ADDRESS_REPEAT),
 	VAddressMode(TEXTURE_ADDRESS_REPEAT)
 {
 	if (mip_level_count!=MIP_LEVELS_1)
 	{
-		MipMapFilter=FILTER_TYPE_4;
+		MipMapFilter=FILTER_TYPE_DEFAULT;
 	}
 	else
 	{
@@ -235,9 +242,9 @@ void TextureFilterClass::_Init_Filters(TextureFilterMode filter_type)
 	_MinTextureFilters[0][FILTER_TYPE_BEST]=D3DTEXF_POINT;
 	_MipMapFilters[0][FILTER_TYPE_BEST]=D3DTEXF_POINT;
 
-	_MinTextureFilters[0][FILTER_TYPE_DEFAULT]=D3DTEXF_POINT;
-	_MagTextureFilters[0][FILTER_TYPE_DEFAULT]=D3DTEXF_POINT;
-	_MipMapFilters[0][FILTER_TYPE_DEFAULT]=D3DTEXF_NONE;
+	_MinTextureFilters[0][FILTER_TYPE_3]=D3DTEXF_POINT;
+	_MagTextureFilters[0][FILTER_TYPE_3]=D3DTEXF_POINT;
+	_MipMapFilters[0][FILTER_TYPE_3]=D3DTEXF_NONE;
 
 	if (dx8caps.TextureFilterCaps&D3DPTFILTERCAPS_MAGFLINEAR) _MagTextureFilters[0][FILTER_TYPE_BEST]=D3DTEXF_LINEAR;
 	if (dx8caps.TextureFilterCaps&D3DPTFILTERCAPS_MINFLINEAR) _MinTextureFilters[0][FILTER_TYPE_BEST]=D3DTEXF_LINEAR;
@@ -281,12 +288,12 @@ void TextureFilterClass::_Init_Filters(TextureFilterMode filter_type)
 	}
 
 	// Set default to best. The level of best filter mode is controlled by the input parameter.
-	// Retail copies BEST into the fifth column (+0x10, the column every filter
-	// starts in), min before mag; byte masking hid the DEFAULT column here.
 	for (i=0;i<MAX_TEXTURE_STAGES;++i) {
-		_MinTextureFilters[i][FILTER_TYPE_4]=_MinTextureFilters[i][FILTER_TYPE_BEST];
-		_MagTextureFilters[i][FILTER_TYPE_4]=_MagTextureFilters[i][FILTER_TYPE_BEST];
-		_MipMapFilters[i][FILTER_TYPE_4]=_MipMapFilters[i][FILTER_TYPE_BEST];
+		// Retail copies BEST into the DEFAULT column (+0x10, the column every filter
+		// starts in), min before mag.
+		_MinTextureFilters[i][FILTER_TYPE_DEFAULT]=_MinTextureFilters[i][FILTER_TYPE_BEST];
+		_MagTextureFilters[i][FILTER_TYPE_DEFAULT]=_MagTextureFilters[i][FILTER_TYPE_BEST];
+		_MipMapFilters[i][FILTER_TYPE_DEFAULT]=_MipMapFilters[i][FILTER_TYPE_BEST];
 
 		DX8Wrapper::Set_DX8_Sampler_State(i,D3DSAMP_MAXANISOTROPY,2);
 	}
@@ -297,4 +304,30 @@ void TextureFilterClass::_Init_Filters(TextureFilterMode filter_type)
 void TextureFilterClass::Set_Mip_Mapping(FilterType mipmap)
 {
 	MipMapFilter=mipmap;
+}
+
+// Retail 0x0013ED20, 0x0013ED50 and 0x0013ED80, 38 bytes each: copy one filter
+// type into every stage's DEFAULT column.
+void TextureFilterClass::_Set_Default_Min_Filter(FilterType filter)
+{
+	for (unsigned int i=0;i<MAX_TEXTURE_STAGES;++i)
+	{
+		_MinTextureFilters[i][FILTER_TYPE_DEFAULT]=_MinTextureFilters[i][filter];
+	}
+}
+
+void TextureFilterClass::_Set_Default_Mag_Filter(FilterType filter)
+{
+	for (unsigned int i=0;i<MAX_TEXTURE_STAGES;++i)
+	{
+		_MagTextureFilters[i][FILTER_TYPE_DEFAULT]=_MagTextureFilters[i][filter];
+	}
+}
+
+void TextureFilterClass::_Set_Default_Mip_Filter(FilterType filter)
+{
+	for (unsigned int i=0;i<MAX_TEXTURE_STAGES;++i)
+	{
+		_MipMapFilters[i][FILTER_TYPE_DEFAULT]=_MipMapFilters[i][filter];
+	}
 }
