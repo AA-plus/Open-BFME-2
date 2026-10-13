@@ -1,4 +1,6 @@
 // ?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ
+// partial score=0.95 date=2026-10-13
+// ?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ
 // partial score=0.95 date=2026-10-12
 // ?isMusicAlreadyLoaded@AudioManager@@UBE_NXZ
 // 2026-10-12 (claude-opus-5-5): 288B == retail with this unit. Visible
