@@ -9,7 +9,7 @@
 // Target DamageInfo type is +10, output floats +70/+74, noEffect +78.
 // Damage type 7 is healing, type 8 is unresistable in donor and target.
 // Only the accessed class/interface prefixes are declared; no vtable emitted.
-struct DamageInfo {
+class DamageInfo { public:
  char prefix[0x10]; int damageType;
  char middle[0x70-0x14];
  float actualDamageDealt, actualDamageClipped;

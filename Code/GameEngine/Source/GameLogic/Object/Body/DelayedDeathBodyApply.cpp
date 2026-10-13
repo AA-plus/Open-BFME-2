@@ -1,11 +1,11 @@
 // cl: /MD
-// ?internalChangeHealth@DelayedDeathBody@@QAEXMPAUDamageInfo@@@Z
+// ?internalChangeHealth@DelayedDeathBody@@QAEXMPAVDamageInfo@@@Z
 // RVA 004C167E, DelayedDeathBody secondary BodyModule interface slot +0x80.
 // Negative offsets address the primary module data and object through the
 // unchanged interface receiver; the qualified owner preserves that provenance.
 // Both upgrade predicates are evaluated. A transition clears the incoming
 // damage flag and zeroes the amount according to module flag70.
-class UpgradeTemplate; class Module; struct DamageInfo { unsigned char before24[0x24]; unsigned char flag24; };
+class UpgradeTemplate; class Module; class DamageInfo { public: unsigned char before24[0x24]; unsigned char flag24; };
 enum NameKeyType;
 // Native Player predicate 0x2AB87D is the rowed const UpgradeTemplate bit test.
 // NameKeyGenerator 0x148E1A returns the same 32-bit NameKeyType enum.

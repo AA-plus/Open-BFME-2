@@ -13,10 +13,10 @@ class Module;
 enum NameKeyType;
 enum ObjectStatusTypes;
 enum ObjectID;
-struct DamageInfo { unsigned char before08[8]; ObjectID source; };
+class DamageInfo { public: unsigned char before08[8]; ObjectID source; };
 class GameLogic { public: Object *findObjectByID(ObjectID); };
 extern GameLogic *TheGameLogic;
-class NameKeyGenerator { public: unsigned int nameToKey(const char *); };
+class NameKeyGenerator { public: NameKeyType nameToKey(const char *); };
 extern NameKeyGenerator *TheNameKeyGenerator;
 class Object {
 public:
@@ -41,7 +41,7 @@ public:
     void rva004AF182();
     void triggerDeathBeforeRespawn();
 };
-struct Rva004BF005Owner { void apply(float, DamageInfo *); };
+class ActiveBody { public: virtual void internalChangeHealth(float, DamageInfo *); };
 struct Rva004C1395Owner {
     // Only the health slot is used; other signatures carry no identity claim.
     virtual void slot00(); virtual void slot04();
@@ -67,9 +67,9 @@ void Rva004C1395Owner::apply(float amount, DamageInfo *info)
                     permanent = true;
             }
         }
-        ((Rva004BF005Owner *)this)->apply(amount, info);
-        static unsigned int respawnKey = TheNameKeyGenerator->nameToKey("RespawnUpdate");
-        RespawnUpdate *respawn = (RespawnUpdate *)obj->findModule((NameKeyType)respawnKey);
+        ((ActiveBody *)this)->ActiveBody::internalChangeHealth(amount, info);
+        static NameKeyType respawnKey = TheNameKeyGenerator->nameToKey("RespawnUpdate");
+        RespawnUpdate *respawn = (RespawnUpdate *)obj->findModule(respawnKey);
         if (!permanent) {
             if (lethal && respawn) {
                 if (obj->testStatus((ObjectStatusTypes)62))

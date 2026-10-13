@@ -20552,7 +20552,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A04144,4,.data,global,_s_rva007B27B8,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
 0x00A04148,4,.data,global,?TheRespawnBodyPoolKey@?1??rva004C1334@RespawnBody@@SA?AW4NameKeyType@@XZ@4W43@A,Code/GameEngine/Source/GameLogic/Object/Body/RespawnBodyPoolKey.cpp,owned,,1,2
 0x00A0414C,4,.data,global,?g_Va00E0414C@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E041xx.cpp,provisional,?$S1@?1??rva004C1334@RespawnBody@@SA?AW4NameKeyType@@XZ@4IA@Code/GameEngine/Source/GameLogic/Object/Body/RespawnBodyPoolKey.cpp;?g_Va00E0414C@@3IA,2,4
-0x00A04150,4,.data,global,?respawnKey@?BB@??apply@Rva004C1395Owner@@QAEXMPAUDamageInfo@@@Z@4IA,Code/GameEngine/Source/GameLogic/Object/Body/RespawnBodyApply.cpp,owned,,1,2
+0x00A04150,4,.data,global,?respawnKey@?BB@??apply@Rva004C1395Owner@@QAEXMPAVDamageInfo@@@Z@4W4NameKeyType@@A,Code/GameEngine/Source/GameLogic/Object/Body/RespawnBodyApply.cpp,owned,,1,2
 0x00A04154,4,.data,global,?g_Va00E04154@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E041xx.cpp,provisional,?$S1@?BB@??apply@Rva004C1395Owner@@QAEXMPAUDamageInfo@@@Z@4IA@Code/GameEngine/Source/GameLogic/Object/Body/RespawnBodyApply.cpp;?g_Va00E04154@@3IA,2,4
 0x00A04158,4,.data,global,?TheDelayedDeathBodyPoolKey@?1??rva004C161D@DelayedDeathBody@@SA?AW4NameKeyType@@XZ@4W43@A,Code/GameEngine/Source/GameLogic/Object/Body/DelayedDeathBodyPoolKey.cpp,owned,,1,2
 0x00A0415C,4,.data,global,?g_Va00E0415C@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E041xx.cpp,provisional,?$S1@?1??rva004C161D@DelayedDeathBody@@SA?AW4NameKeyType@@XZ@4IA@Code/GameEngine/Source/GameLogic/Object/Body/DelayedDeathBodyPoolKey.cpp;?g_Va00E0415C@@3IA,2,4

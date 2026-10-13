@@ -9,7 +9,7 @@
 class UpgradeTemplate;
 enum ObjectID;
 enum ModelConditionFlagType;
-struct DamageInfo { unsigned char before08[8]; ObjectID source; };
+class DamageInfo { public: unsigned char before08[8]; ObjectID source; };
 class Player { public: bool hasUpgradeComplete(const UpgradeTemplate *); };
 class Object {
 public:

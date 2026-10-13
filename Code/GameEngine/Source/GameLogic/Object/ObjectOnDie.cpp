@@ -1,6 +1,6 @@
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 //
-// ?onDie@Object@@QAEXPAUDamageInfo@@@Z -- retail 0x00298517..0x00298835 (798 bytes).
+// ?onDie@Object@@QAEXPAVDamageInfo@@@Z -- retail 0x00298517..0x00298835 (798 bytes).
 // Object level events run when an object dies. Identity: the WorldBuilder twin
 // Object::onDie (Object.cpp; jkmcd onDie assertion) has the same call graph in
 // the same order: hero unbind (template kind bit 190) / selfInflicted from the
@@ -27,8 +27,9 @@ enum Relationship { REL_ENEMIES = 0, REL_NEUTRAL = 1, REL_ALLIES = 2 };
 class Object;
 class Team;
 
-struct DamageInfo
+class DamageInfo
 {
+public:
 	char pad00[0x08];
 	ObjectID m_sourceID;	// +0x08
 	char pad0C[0x1C - 0x0C];

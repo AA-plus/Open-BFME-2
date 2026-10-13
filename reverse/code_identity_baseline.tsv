@@ -1752,7 +1752,6 @@ Code/GameEngine/Source/GameLogic/Object/Body/OathbreakerBodyAttemptDamage.cpp	?a
 Code/GameEngine/Source/GameLogic/Object/Body/PorcupineFormationBodyModuleSlots.cpp	?attemptDamage@PorcupineFormationBodyModule@@UAEXPAVDamageInfo@@@Z	?attemptDamage@ActiveBody@@UAEXPAVDamageInfo@@@Z	0x004BFE07	unowned
 Code/GameEngine/Source/GameLogic/Object/Body/PorcupineFormationBodyModuleSlots.cpp	?attemptDamage@PorcupineFormationBodyModule@@UAEXPAVDamageInfo@@@Z	?rva004C21A9@PorcupineFormationBodyModule@@QAEXPAVDamageInfo@@@Z	0x004C21A9	unowned
 Code/GameEngine/Source/GameLogic/Object/Body/PorcupineFormationBodyModuleSlots.cpp	?rva004C2127@PorcupineFormationBodyModule@@UAE_NPAVObject@@@Z	?rva00294815@Object@@QAEDXZ	0x00294815	unowned
-Code/GameEngine/Source/GameLogic/Object/Body/RespawnBodyApply.cpp	?apply@Rva004C1395Owner@@QAEXMPAUDamageInfo@@@Z	?rva0029A12B@Object@@QAEXXZ	0x0029A12B	unowned
 Code/GameEngine/Source/GameLogic/Object/Body/SymbioticStructuresBodySlots.cpp	?rva004C121B@SymbioticStructuresBody@@UAEXPAX@Z	?bfmeCallFCB@BfmeSubFCB@@QAEXPAXH@Z	0x0028FCD9	unowned
 Code/GameEngine/Source/GameLogic/Object/Collide/CrateCollide/SalvageCrateCollide.cpp	?isValidToExecute@SalvageCrateCollide@@MBE_NPBVObject@@@Z	?isValidToExecute@CrateCollide@@MBE_NPBVObject@@@Z	0x004BC6C2	unowned
 Code/GameEngine/Source/GameLogic/Object/Collide/CrateCollide/SalvageCrateCollideModuleDataDtor.cpp	??1SalvageCrateCollideModuleData@@UAE@XZ	??1CrateCollideModuleData@@UAE@XZ	0x00255A42	wrong
