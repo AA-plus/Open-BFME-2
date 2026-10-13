@@ -21039,8 +21039,9 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A06584,4,.data,global,?g_00E06584@@3HA,Code/GameEngine/Source/GameNetwork/Rva005BC4CEFinish.cpp,owned,,1,4
 0x00A06588,28,.data,global,?structures@?5??CollectPlayerData@AptTimeLineStats@@QAEXHPAVLivingWorldPlayer@@@Z@4URva00045411BitSet@@B,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptTimeLineStats.cpp,owned,,1,4
 0x00A065A4,4,.data,global,?$S1@?5??CollectPlayerData@AptTimeLineStats@@QAEXHPAVLivingWorldPlayer@@@Z@4IA,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptTimeLineStats.cpp,owned,,1,2
-0x00A065A8,8,.data,global,_s_rva007B47BF,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
-0x00A065B0,4,.data,global,?g_Va00E065B0@@3IA,Code/GameEngine/Source/Common/GlobalFlagClearers_E06x.cpp,owned,,1,2
+0x00A065A8,4,.data,global,_s_rva007B47BF,Code/GameEngine/Source/Common/Rva007AB7F0HalfRateInits.cpp,owned,,1,1
+0x00A065AC,4,.data,global,?key@?CE@??Update@Impl@ParasiticInGameCommandButton@@QAEXXZ@4W4NameKeyType@@A,Code/GameEngine/Source/GameClient/GUI/Rva005C33DDWindowNotification.cpp,owned,,1,2
+0x00A065B0,4,.data,global,?$S1@?CE@??Update@Impl@ParasiticInGameCommandButton@@QAEXXZ@4IA,Code/GameEngine/Source/GameClient/GUI/Rva005C33DDWindowNotification.cpp,owned,,1,4
 0x00A065B4,4,.data,global,?g_Va00E065B4@@3IA,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,owned,,1,1
 0x00A065B8,4,.data,global,?g_Va00E065B8@@3IA,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,owned,,1,1
 0x00A065BC,4,.data,global,?g_Va00E065BC@@3IA,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,owned,,1,1
