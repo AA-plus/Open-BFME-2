@@ -64,9 +64,8 @@ public:
 };
 class BFME2FileSystemFacade { public: bool doesWideFileExist(const Wide*); };
 extern GlobalData *TheWritableGlobalData;
-// ?BFME2FileFacade@@3PAVBFME2FileSystemFacade@@A: the global at this VA is ?TheFileSystem@@3PAVFileSystem@@A; this name is an alias for it.
-extern BFME2FileSystemFacade * BFME2FileFacade;
-#pragma comment(linker, "/alternatename:?BFME2FileFacade@@3PAVBFME2FileSystemFacade@@A=?TheFileSystem@@3PAVFileSystem@@A")
+class FileSystem;
+extern FileSystem *TheFileSystem;
 extern bool BFME2PreferLocalFiles;
 int parseMod(char *args[],int num) {
     BFME2PreferLocalFiles=true;
@@ -76,7 +75,7 @@ int parseMod(char *args[],int num) {
         } else {
             modPath.set(TheWritableGlobalData->rva002360FC()+modPath);
         }
-        if(!BFME2FileFacade->doesWideFileExist(modPath.str())) return 2;
+        if(!((BFME2FileSystemFacade *)TheFileSystem)->doesWideFileExist(modPath.str())) return 2;
         struct _stat statBuf;
         if(_wstat(modPath.str(),&statBuf)!=0) return 2;
         if(statBuf.st_mode & _S_IFDIR) {

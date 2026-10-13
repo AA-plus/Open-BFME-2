@@ -2314,7 +2314,6 @@ alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_Va00E0
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp	?g_bfmeThingUCHead@@3PAVBfmeNodeUC@@A	1
 alternatename	Code/GameEngine/Source/Common/ColdGlobalDwordSetters.cpp	?G009B5FE0@@3HA	1
 alternatename	Code/GameEngine/Source/Common/CommandLineMod.cpp	??1?$StringBase@D@@QAE@XZ	1
-alternatename	Code/GameEngine/Source/Common/CommandLineMod.cpp	?BFME2FileFacade@@3PAVBFME2FileSystemFacade@@A	1
 alternatename	Code/GameEngine/Source/Common/ConnectionManagerInit.cpp	?g_007ED97C@@3HA	1
 alternatename	Code/GameEngine/Source/Common/ConstGlobalGetters.cpp	?G009B5F9C@@3HA	2
 alternatename	Code/GameEngine/Source/Common/ConstGlobalGetters.cpp	?G009EDA30@@3HA	1
