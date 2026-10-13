@@ -87524,3 +87524,4 @@ __ehhandler$?rva0004F580@W3DRadar@@UAEXXZ,,0x0075D584,10,Code/GameEngineDevice/S
 ??0TextureFilterClass@@QAE@W4MipCountType@@@Z,,0x0013EA00,43,Code/Libraries/Source/WWVegas/WW3D2/texturefilter.cpp,matched,ZH texturefilter.cpp ctor; same body as the address-named Gen_00920A20 ctor ShroudTexture getFilter calls; filters start at type 4 (BFME2 fifth column)
 ?Set_Mip_Mapping@TextureFilterClass@@QAEXW4FilterType@1@@Z,,0x0013ED10,10,Code/Libraries/Source/WWVegas/WW3D2/texturefilter.cpp,matched,ZH texturefilter.cpp Set_Mip_Mapping; the function after _Init_Filters; ICF with the rowed +8 setters
 ?updateLoadProgress@ConnectionManager@@QAEXH@Z,,0x004CF940,141,Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp,matched,
+??1LivingWorldManager@@UAE@XZ,,0x00214405,691,Code/GameEngine/Source/Common/LivingWorldManagerDtor.cpp,matched,

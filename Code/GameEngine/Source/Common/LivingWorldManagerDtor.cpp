@@ -1,11 +1,6 @@
 // ??1LivingWorldManager@@UAE@XZ
-// partial score=0.9999 date=2026-10-13
-// ??1LivingWorldManager@@UAE@XZ
-// partial score=0.9916720881 date=2026-10-12
-// ??1LivingWorldManager@@UAE@XZ
-// partial score=0.99 date=2026-10-11
-// ??1LivingWorldManager@@UAE@XZ
-// partial score=0.99 date=2026-10-11
+// ??1LivingWorldManager@@UAE@XZ, retail 0x00214405..0x002146B8 (691 bytes).
+// Exact body ported from the W7-FARM bank (Lab2 f 1.0 nd 0 exact, chk.py).
 // Remaining: retail packs the second hash-loop cursor (+0x204 table) into the
 // first cursor's slot (frame 0xC); this compiles it to its own slot (frame
 // 0x14). Bracing, renaming, while forms, a shared variable, the tree loop's
