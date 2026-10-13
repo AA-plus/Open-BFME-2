@@ -87966,3 +87966,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?rva0056D983@Rva0056D983@@QAEHPAX@Z,,0x0056D983,62,Code/GameEngine/Source/GameClient/GUI/Rva0056D983Ensure.cpp,matched,
 ?rva00273F74@Drawable@@QAEXXZ,,0x00273F74,427,Code/GameEngine/Source/GameClient/DrawableRva00273F74.cpp,matched,
 ?rva00492BEB@SpecialAbilityUpdate@@QAE?AW4UpdateSleepTime@@XZ,,0x00492BEB,110,Code/GameEngine/Source/GameLogic/Object/Update/Rva00492BEBSpecialAbilityUpdate.cpp,matched,
+?rva00397756@Rva00397756@@QAEXPAUIdRange@@H@Z,,0x00397756,59,Code/GameEngine/Source/GameLogic/Object/Behavior/Rva00397756IdSweep.cpp,matched,
