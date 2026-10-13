@@ -1,4 +1,6 @@
 // ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
+// partial score=0.9628988525194682 date=2026-10-13
+// ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
 // partial score=0.96 date=2026-10-13
 // ?getClosestPointOnLand@Pathfinder@@QAE_NPBUCoord3D@@PAVObject@@PAU2@@Z
 // partial score=0.96 date=2026-10-13
@@ -692,6 +694,7 @@ Bool Pathfinder::getClosestPointOnLand(const Coord3D *position,Object *object,Co
 union{int alignment;char bytes[sizeof(Rva002E7DF5)];} storage;
  {GeometryShape shape;
  reinterpret_cast<const GeometryInfo *>((const char *)object+0xa8)->rva006BD9C0(shape);
+ _ReadWriteBarrier();
  const float &minorRef=shape.minor;float minorSize=minorRef+BfmeShipLandPaddingY;minorSize*=2.0f;minorSize*=0.1f;int minorCells=(int)minorSize;const float &majorRef=shape.major;float majorSize=majorRef+BfmeShipLandPaddingX;majorSize*=2.0f;majorSize*=0.1f;int majorCells=(int)majorSize;ICoord2DBase diameter={majorCells,minorCells};
  new ((void *)&storage) Rva002E7DF5((int)this,*reinterpret_cast<const _Rva002E7DF5Cell *>(position));
  int y=realToIntFloor(position->y*0.1f+0.5f);
