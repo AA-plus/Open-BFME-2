@@ -1,4 +1,6 @@
 // ?calcCostToBuild@UpgradeTemplate@@QBEIPAVPlayer@@I@Z
+// partial score=0.9013 date=2026-10-13
+// ?calcCostToBuild@UpgradeTemplate@@QBEIPAVPlayer@@I@Z
 // partial score=0.96 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /MD /DNDEBUG /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
 //
@@ -18,6 +20,7 @@
 // second argument is the requesting Object, spelled as the pinned unsigned
 // the rowed caller 0x00597476 passes it as.
 #include "ascii_string.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 class Player;
 class Object;
@@ -116,7 +119,7 @@ unsigned int UpgradeTemplate::calcCostToBuild(Player *player, unsigned int reque
 	int cost = m_cost;
 
 	Object *object = (Object *)requester;
-	if (m_prerequisitesBegin != m_prerequisitesEnd)
+	if (m_prerequisitesBegin != __vref(m_prerequisitesEnd))
 	{
 		cost = 0;
 		for (UpgradeTemplate **it = m_prerequisitesBegin; it != m_prerequisitesEnd; ++it)
@@ -136,7 +139,7 @@ unsigned int UpgradeTemplate::calcCostToBuild(Player *player, unsigned int reque
 	if ((int)((Rva002A9BF2 *)player)->rva002A9BF2() == 3 && g_00DFEEF8->rva002A8AB1(player))
 	{
 		float change = 1.0f;
-		if (change > g_00DFEEF8->m_850)
+		if (change > __vref(g_00DFEEF8->m_850))
 			change = g_00DFEEF8->m_850;
 		return (int)((1.0f - change) * (float)scaled);
 	}
