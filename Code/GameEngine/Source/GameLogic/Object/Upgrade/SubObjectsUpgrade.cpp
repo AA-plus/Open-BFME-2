@@ -174,6 +174,12 @@ private:
 	unsigned char m_20;
 };
 
+// bfme link decl-only begin
+namespace _STL { template <> _Vector_base<Rva00B6CF1,_STL::allocator<Rva00B6CF1> >::~_Vector_base(); }
+namespace _STL { template <> vector<Rva00B6CF1,_STL::allocator<Rva00B6CF1> >::~vector(); }
+namespace _STL { template <> void _STLP_alloc_proxy<Rva00B6CF1 *,Rva00B6CF1,_STL::allocator<Rva00B6CF1> >::deallocate(Rva00B6CF1 *,unsigned int); }
+namespace _STL { template <> void allocator<Rva00B6CF1>::deallocate(Rva00B6CF1 *,unsigned int) const; }
+// bfme link decl-only end
 // ?swapTextures@SubObjectsUpgrade@@QAE_NPAVDrawable@@H@Z
 bool SubObjectsUpgrade::swapTextures(Drawable *drawable, int mode)
 {

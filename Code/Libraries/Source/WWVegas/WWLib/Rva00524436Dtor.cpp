@@ -35,6 +35,12 @@ private:
 	_STL::vector<CameraMarker, _STL::allocator<CameraMarker> > m_0c;
 };
 
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<CameraMarker *>(CameraMarker *,CameraMarker *); }
+namespace _STL { template <> void __destroy<CameraMarker *,CameraMarker>(CameraMarker *,CameraMarker *,CameraMarker *); }
+namespace _STL { template <> void __destroy_aux<CameraMarker *>(CameraMarker *,CameraMarker *,_STL::__false_type const &); }
+namespace _STL { template <> vector<CameraMarker,_STL::allocator<CameraMarker> >::~vector(); }
+// bfme link decl-only end
 Rva00524436::~Rva00524436()
 {
 	((Rva00524021 *)this)->rva00523F8C();

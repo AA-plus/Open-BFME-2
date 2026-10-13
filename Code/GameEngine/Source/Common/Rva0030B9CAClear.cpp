@@ -14,6 +14,9 @@ struct Rva0030B9CA
 	bool m_flag;
 };
 
+// bfme link decl-only begin
+namespace _STL { template <> BfmePod8 * vector<BfmePod8,_STL::allocator<BfmePod8> >::erase(BfmePod8 *,BfmePod8 *); }
+// bfme link decl-only end
 void Rva0030B9CA::rva0030B9CA()
 {
 	m_vec.erase(m_vec.begin(), m_vec.end());

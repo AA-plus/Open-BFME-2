@@ -25,6 +25,12 @@ private:
 	Rva00568FE4Tree m_tree;
 };
 
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree<Rva00568FE4Key,Rva00568FE4Key,_STL::_Identity<Rva00568FE4Key>,Rva00568FE4Less,_STL::allocator<Rva00568FE4Key> >::~_Rb_tree(); }
+namespace _STL { template <> _Rb_tree_base<Rva00568FE4Key,_STL::allocator<Rva00568FE4Key> >::~_Rb_tree_base(); }
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_Rb_tree_node<Rva00568FE4Key> *,_STL::_Rb_tree_node<Rva00568FE4Key>,_STL::allocator<_STL::_Rb_tree_node<Rva00568FE4Key> > >::deallocate(_STL::_Rb_tree_node<Rva00568FE4Key> *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_Rb_tree_node<Rva00568FE4Key> >::deallocate(_STL::_Rb_tree_node<Rva00568FE4Key> *,unsigned int) const; }
+// bfme link decl-only end
 Rva005694C8::~Rva005694C8()
 {
 }

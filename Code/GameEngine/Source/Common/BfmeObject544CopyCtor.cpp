@@ -45,6 +45,11 @@ private:
 	char m_tail[3];
 };
 
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<BfmeStringRecord002CF550>(BfmeStringRecord002CF550 *); }
+namespace _STL { template <> _Rb_tree<BfmeStringRecord002CF550,BfmeStringRecord002CF550,_STL::_Identity<BfmeStringRecord002CF550>,_STL::less<BfmeStringRecord002CF550>,_STL::allocator<BfmeStringRecord002CF550> >::~_Rb_tree(); }
+namespace _STL { template <> void _Rb_tree<BfmeStringRecord002CF550,BfmeStringRecord002CF550,_STL::_Identity<BfmeStringRecord002CF550>,_STL::less<BfmeStringRecord002CF550>,_STL::allocator<BfmeStringRecord002CF550> >::_M_erase(_STL::_Rb_tree_node<BfmeStringRecord002CF550> *); }
+// bfme link decl-only end
 BfmeObject544::BfmeObject544(const BfmeObject544 &that)
 	: m_00(that.m_00),
 	  m_4C(that.m_4C),

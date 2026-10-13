@@ -31,6 +31,9 @@ public:
   void clear();
 };
 
+// bfme link decl-only begin
+namespace _STL { template <> BfmePod8 * vector<BfmePod8,_STL::allocator<BfmePod8> >::erase(BfmePod8 *,BfmePod8 *); }
+// bfme link decl-only end
 void Rva003FA5B9::clear()
 {
   BfmePod8* last = m_vec.end();

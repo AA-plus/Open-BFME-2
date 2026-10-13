@@ -17,6 +17,9 @@ struct AreaPolygonBase
 	unsigned char m_24;
 	void deletePoint(int i);
 };
+// bfme link decl-only begin
+namespace _STL { template <> BfmePod8 * vector<BfmePod8,_STL::allocator<BfmePod8> >::erase(BfmePod8 *); }
+// bfme link decl-only end
 void AreaPolygonBase::deletePoint(int i)
 {
 	m_vec.erase(m_vec.begin() + i);

@@ -19,6 +19,9 @@ private:
 	_STL::vector<ObjectID> m_items;
 };
 
+// bfme link decl-only begin
+namespace _STL { template <> ObjectID * vector<ObjectID,_STL::allocator<ObjectID> >::erase(ObjectID *); }
+// bfme link decl-only end
 void Rva003F15A1::rva003F15A1(void *object)
 {
 	_STL::vector<ObjectID>::iterator it = m_items.begin();
