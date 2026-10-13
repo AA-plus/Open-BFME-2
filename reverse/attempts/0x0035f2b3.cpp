@@ -1,4 +1,6 @@
 // ??0FullFadeTransition@@QAE@XZ
+// partial score=0.96 date=2026-10-13
+// ??0FullFadeTransition@@QAE@XZ
 // partial score=0.97 date=2026-10-13
 // cl: /O1 /G7 /DNDEBUG /MD /arch:SSE
 // ??0FullFadeTransition@@QAE@XZ @ 0x0035F2B3 67B: derived ctor calling base
@@ -51,16 +53,17 @@ public:
 };
 
 FullFadeTransition::FullFadeTransition()
-	: m_startFrame(0), m_endFrame(30)
 {
+	m_startFrame = 0;
+	m_endFrame = 30;
 	m_posX = 0;
 	m_posY = 0;
 	m_sizeX = 0;
 	m_sizeY = 0;
 	_ReadWriteBarrier();
+	m_percent = 0.0f;
 	m_frameLength = m_endFrame;
+	m_isForward = TRUE;
 	m_drawState = -1;
 	m_win = 0;
-	m_percent = 0.0f;
-	m_isForward = TRUE;
 }
