@@ -1,6 +1,10 @@
 // cl: /MD
-// ?Rva0041C9C4Check@@YG_NPAVObject@@PBUCoord3D@@PBVOverridable@@@Z, retail 0x0041C9C4, 52 bytes.
-// Evidence: free stdcall 3 args ret 0xC; a3 via rowed Overridable::friend_getFinalOverride 0x00288609 tests bit6 of +0x18; AI global TheAI +0x10 Pathfinder pinned QuickDoesPathExist with obj a1 pos+0x38 coord a2 zero.
+// ?rva0041C9C4@ActionManager@@QAE_NPBVObject@@PBUCoord3D@@PBVSpecialPowerTemplate@@@Z, retail 0x0041C9C4, 52 bytes.
+// Caller evidence: canDoSpecialPowerAtLocation at RVA 0x0041D6ED loads
+// ECX=ActionManager before passing (object, location, special-power template).
+// The implementation ignores its this pointer; RET 0xC alone did not prove
+// the former free-stdcall declaration. The original helper name is unknown.
+// The template override's flag bit 6 gates Pathfinder::QuickDoesPathExist.
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class Overridable
@@ -38,11 +42,18 @@ public:
 	bool QuickDoesPathExist(Object *obj, const Coord3D *a, const Coord3D *b, int c);
 };
 
-bool __stdcall Rva0041C9C4Check(Object *obj, const Coord3D *coord, const Overridable *over)
+class SpecialPowerTemplate : public Overridable {};
+class ActionManager
+{
+public:
+	bool rva0041C9C4(const Object *, const Coord3D *, const SpecialPowerTemplate *);
+};
+
+bool ActionManager::rva0041C9C4(const Object *obj, const Coord3D *coord, const SpecialPowerTemplate *over)
 {
 	const Overridable *final = over->friend_getFinalOverride();
 	if ((((unsigned char)(final->m_18 >> 6)) & 1) == 0)
 		return true;
 	Pathfinder *pf = TheAI->m_path10;
-	return pf->QuickDoesPathExist(obj, &obj->m_pos38, coord, 0);
+	return pf->QuickDoesPathExist((Object *)obj, &obj->m_pos38, coord, 0);
 }
