@@ -1,4 +1,6 @@
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/shims/sweep
+// Link view first: Matrix3D copy ctor stays inline without emitting a copy that competes with retail's owner (0x0006645C).
+#include "../../../../../../reference/shims/bfme_matrix3d_copy_link/matrix3d_copy_link.h"
 //
 // ?updateSway@SwayClientUpdate@@IAEXXZ, retail 0x004C9125, 278 bytes.
 // ?clientUpdate@SwayClientUpdate@@UAEXXZ, retail 0x004C923B, 714 bytes.
