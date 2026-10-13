@@ -31,7 +31,9 @@ static bool Rva0028867DCheck(const void *p)
 }
 
 // absent-from-retail: keeps the static alive with the ESI argument convention.
-bool Rva0028867DCaller(const void *p)
+// TU-local: the identical global copy in ExperienceLevelSystem.cpp provides the
+// linked definition, so this one stays out of the link entirely.
+static bool Rva0028867DCaller(const void *p)
 {
 	if (p)
 		return Rva0028867DCheck(p);
