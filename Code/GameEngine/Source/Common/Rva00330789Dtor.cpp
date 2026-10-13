@@ -2,7 +2,8 @@
 // after the rowed clear 0x0033073C. It removes every CreateAHeroData in the
 // vector at +0x10 through the rowed remove 0x003306B0, notifies the listener
 // list at +0 through the rowed forEach 0x0033066D with the virtual listener
-// callback (vcall thunk 0x005CB265), then lets the two member destructors free
+// callback (retail's slot +0x0C vcall thunk 0x005CB265), then lets the two
+// member destructors free
 // the vector storage and the list's pointer array. The compiler's
 // member-destruction states (vector alive = 1, list only = 0) come out of the
 // member declarations, so the body itself carries no explicit state handling.
@@ -28,9 +29,15 @@ public:
 class CreateAHeroData : public Rva0053FA0A {
 };
 
+// Retail's member-pointer call goes through the slot +0x0C vcall thunk
+// (0x005CB265, jmp [eax+0xC]), so the listener's vtable puts notify fourth;
+// the three leading slots are the class's other callbacks, unnamed here.
 class Rva0033066DListener
 {
 public:
+	virtual void notify00(void *);
+	virtual void notify04(void *);
+	virtual void notify08(void *);
 	virtual void notify(void *);
 };
 
