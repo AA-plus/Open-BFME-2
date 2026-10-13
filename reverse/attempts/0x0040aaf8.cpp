@@ -1,4 +1,6 @@
 // ?rva0040AAF8@Rva0040BAD0@@QAEHH@Z
+// partial score=0.88 date=2026-10-13
+// ?rva0040AAF8@Rva0040BAD0@@QAEHH@Z
 // partial score=0.85 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O2 /EHsc /DNDEBUG /MD
 //
@@ -223,3 +225,27 @@ BfmePod104 *Rva0040AAF8::rva0040AAF8(NameKeyType key)
 	}
 	return 0;
 }
+
+// ================= W6-MP4 r4 HOME-TU TRIAL (2026-10-13, /O1, UNION VIEW) =================
+// Ported the Oct-10 best body into the home TU Code/GameEngine/Source/Common/
+// Rva0040BAD0.cpp (flags /O1 /MD, rowed caller rva0040BAD0 39B stays exact
+// under a union{vector m_vec18; struct{volatile m_begin,m_end;}} view).
+// Results (llvm-objdump section sizes): WITH head `first` temp = 193B
+// (+20 over retail 173); WITHOUT `first` = 150B (-23). So the head temp is
+// ~43B and retail 173 sits between: retail HAS head content (~23B) that is
+// neither the full copy-constructed `first` nor nothing.
+// The /O1 build DID fix the prior wall's core: loop index lands in ebx,
+// byte offset in edi, loop temp reuses dead arg slot +8, idiv via
+// push-0x68/cdq/pop-ecx shape, homes s1@[ebp-0x10]. Remaining is the head
+// ~23B + prologue double-push (push ecx x2 vs retail single).
+// Leads: (a) head temp that costs ~23B (keyToName call without temp ~8B is
+// not enough; full copy-construct ~43B too much; try default-constructed
+// or assigned forms); (b) single-push prologue (fewer callee-saved regs -
+// follows automatically if the temp form changes). Full /O1 formulation
+// (union view + volatile members + placement-new temp + unsigned idx/off):
+// --- begin home-TU formulation ---
+// class Rva0040BAD0 { public: bool rva0040BAD0(Rva0040AF66 *arg); int rva0040AAF8(int key); private: char m_pad00[0x18]; union { _STL::vector<Rva0040AF66,_STL::allocator<Rva0040AF66>> m_vec18; struct { volatile int m_begin; volatile int m_end; }; }; };
+// + AsciiString friend-view, NameKeyGenerator, TheNameKeyGenerator,
+//   Rva00080A8C decl (pin exists: 3B xor-ret cdecl fragment 0x80A8C),
+//   body = Oct-10 best above. Needs --pin NAME=Rva00080A8C at land time.
+// --- end home-TU formulation ---
