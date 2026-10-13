@@ -20,8 +20,17 @@ public:
 	~Rva0023C565();
 };
 
-Rva0023C565::Rva0023C565()
+// Select-any like the AptMyHero.cpp copy (this retail body comes first in link
+// order, so it is the copy the link keeps); the anchor keeps the noinline body emitted.
+inline __declspec(noinline) Rva0023C565::Rva0023C565()
 {
 	if ((*(Rva001DBAA4 **)&TheTransitionHandler))
 		(*(Rva001DBAA4 **)&TheTransitionHandler)->lock();
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva0023C565Lock@@YAXPAVRva0023C565@@@Z absent-from-retail
+void bfmeEmitRva0023C565Lock(Rva0023C565 *p)
+{
+	p->Rva0023C565::Rva0023C565();
 }
