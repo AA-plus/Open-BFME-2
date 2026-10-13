@@ -1,5 +1,7 @@
 // ?rva006E44F0@Rva006E3FF0Owner@@QAEXPAVAptCIH@@@Z
-// partial score=0.95 date=2026-10-07
+// partial score=0.95 date=2026-10-13
+// ?rva006E44F0@Rva006E3FF0Owner@@QAEXPAVAptCIH@@@Z
+// partial score=0.95 date=2026-10-13
 // cl: /O2 /Ob1 /arch:SSE /MD /DNDEBUG /EHs-c-
 // Native6E44F0..6E4604 complete276 RET4. Same pool/timer layout as newly
 // recovered cleanup6E3FF0; target independently proves all fields used here.
