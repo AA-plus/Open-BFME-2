@@ -10727,7 +10727,6 @@ name,address,notes
 ?rva000B3FD0@Rva003FDD05Host@@QAEXXZ,0x000B3FD0,"member vtable slot 0x003FDD05 tail-jumps to; opaque address name"
 ?rva000B3FD0CallView@Rva005E6894@@QAEXXZ,0x000B3FD0,"auto-pin (permute --pins): REL32 call target read from retail in 0x005e6894, whose banked body is byte-exact once this call resolves"
 ?rva000B3FD0Empty@Rva000B3FD0Empty@@QAEXXZ,0x000B3FD0,empty for 0x005E51D3 lea pattern; address-derived pin
-?rva000B5FE6@Rva000B7C18@@QAEXXZ,0x000B5FE6,callee of ?rva000B7C18@Rva000B7C18@@QAEXXZ at retail 0x000B7C1E read from its REL32 displacement; argument count from the callee ret
 ?rva000B8440@Rva000B8F5AOuter@@QAEHPAMH@Z,0xB8440,rva000BAD2B tail: address read from the REL32 at 0x000BADCD in 0x000BAD2B; fresh address-derived Outer-method name (float out, int probe) returning the final int
 ?rva000B89E9@Rva000B8F5AOuter@@QAEHHPAM@Z,0x000B89E9,rva000BADE7 tail: address read from the REL32 at 0x000BAEA5 in 0x000BADE7; fresh address-derived Outer-method name (probe, float out) for the 1393B body; push order (out then probe) proves (probe, out) against the B8440 twin guess
 ?rva000B937E@Rva000B937E@@QAEXPAVINI@@PAX@Z,0x000B937E,unrowed 234B thiscall (ini; 0) flag-set self-parse with an SEH frame and ret 8 (same shape as pinned 0x00256499); REL32 read at the OnlyInCondition FieldParse proc 0x002C886C on the 0x4C-stride per-slot array; address-named class

@@ -46,7 +46,7 @@ void Rva0004E3A6::rva0004E3A6(Int value)
 }
 
 // vtable 0x00BCBC40#7: 0x000B5FE6 on this when the field at +0x50 is set.
-class Rva000B7C18
+class W3DScriptedModelDraw
 {
 public:
 	void rva000B7C18();
@@ -55,7 +55,7 @@ private:
 	char m_pad00[0x50];
 	void *m_50;
 };
-void Rva000B7C18::rva000B7C18()
+void W3DScriptedModelDraw::rva000B7C18()
 {
 	if (m_50)
 		rva000B5FE6();
