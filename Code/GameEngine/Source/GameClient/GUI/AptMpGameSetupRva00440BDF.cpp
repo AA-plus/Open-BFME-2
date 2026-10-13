@@ -1014,7 +1014,12 @@ class GlobalData { public: unsigned char pad[0x9d4]; int factionRestrictions; ch
 extern GlobalData* TheWritableGlobalData;
 namespace _STL {
 template<> set<int>::set();
-template<> set<int>::~set();
+// Keep the canonical tree teardown provider instead of instantiating this
+// unit's differently compiled tree destructor and recursive erase COMDATs.
+template<> _Rb_tree<int, int, _Identity<int>, less<int>, allocator<int> >::~_Rb_tree();
+// Let STLport emit its real set destructor: the complete five-byte wrapper
+// and its tree-destructor relocation fold onto native 0x00073116. The host
+// start body's exact EH graph calls this spelling from cleanup 0x00788AB4.
 template<> pair<set<int>::iterator,bool> set<int>::insert(const int&);
 }
 bool AptMpGameSetup::rva00440BDF(bool countdown)
