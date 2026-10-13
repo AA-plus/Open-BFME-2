@@ -188,6 +188,8 @@ public:
 };
 class TextureClass : public TextureBaseClass
 {
+public:
+	void Release_Ref();	// rowed ICF alias of the TextureBaseClass body (0x0061ED10)
 };
 
 template <class T> class RefCountPtr
@@ -211,7 +213,7 @@ public:
 class AssetReference
 {
 public:
-	AssetReference() : m_object(0) {}
+	__declspec(dllimport) __forceinline AssetReference() : m_object(0) {}
 	AssetReference(const AssetReference &other);
 	~AssetReference()
 	{
