@@ -146,7 +146,7 @@ public:
 	virtual void DoHaltAlertFlash() = 0;
 	virtual void vslot4() = 0;
 	virtual void vslot5() = 0;
-	virtual void vslot6() = 0;
+	virtual void rva00579542() = 0;
 };
 
 // ??1Rva005794EDBase@@UAE@XZ present-unmatched (register key kept; the dtor is non-virtual)
@@ -164,10 +164,21 @@ public:
 	TargetRef00217D4C *m_ptr;
 };
 
-struct Rva005794EDHolder18 : BfmeA1042N
+struct TreeHintRef00217D4C : BfmeA1042N
 {
-	Rva005794EDHolder18() { m_ptr = 0; }
-	__forceinline ~Rva005794EDHolder18() { if (m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
+	TreeHintRef00217D4C() { m_ptr = 0; }
+	__declspec(noinline) TreeHintRef00217D4C &operator=(const TreeHintRef00217D4C &other)
+	{
+		if (this != &other) {
+			if (other.m_ptr)
+				++other.m_ptr->references;
+			if (m_ptr)
+				ReleaseTreeHintRef00217D4C(m_ptr);
+			m_ptr = other.m_ptr;
+		}
+		return *this;
+	}
+	__forceinline ~TreeHintRef00217D4C() { if (m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
 };
 
 // StrategicHUD::EndTurnButtonImpl per WorldBuilder, which names its slots
@@ -184,11 +195,12 @@ public:
 	virtual void DoPlayAlertFlash();
 	virtual void DoHaltAlertFlash();
 	void OnClicked(const char *path);
+	virtual void rva00579542();
 private:
 	int m_04;
 	AsciiString m_08;
 	AptCommandMapAdder m_0C;
-	Rva005794EDHolder18 m_18;
+	TreeHintRef00217D4C m_18;
 	bool m_1C;
 };
 }
@@ -244,4 +256,14 @@ void StrategicHUD::EndTurnButtonImpl::DoPlayAlertFlash()
 void StrategicHUD::EndTurnButtonImpl::DoHaltAlertFlash()
 {
 	Rva00524EF4AptCall(TheRva00222A8BTarget, (void *)m_04, Rva005794EDGetStr(m_08), "HaltAlertFlash");
+}
+
+// 0x00579542 (43 B), slot 6 of the table 0x00C6ECBC: drops the click target.
+// The reference binding and the separate temporary keep cl's receiver setup
+// (add ecx,0x18) ahead of the argument push, as retail emits it.
+void StrategicHUD::EndTurnButtonImpl::rva00579542()
+{
+	TreeHintRef00217D4C tmp;
+	TreeHintRef00217D4C &r = m_18;
+	r = tmp;
 }

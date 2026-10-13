@@ -87984,3 +87984,4 @@ _Rva001118ECResampleRgb555,,0x001118EC,281,Code/GameEngineDevice/Source/W3DDevic
 ?bfmeHas985C@BfmeArg985@@QAEDH@Z,,0x002940B9,305,Code/GameEngine/Source/GameLogic/Object/ObjectAffectedByUpgrade.cpp,matched,Object::affectedByUpgrade (WB CD8C10; 1024-bit UpgradeID mask; row keeps the BfmeArg985 pin name for its callers); wave7 S1 r3 R1 equal-arm ternary on the OR argument
 ?rva00577634@Rva005765D1@@QAEXH@Z,,0x00577634,115,Code/GameEngine/Source/Common/Rva00577634Retarget.cpp,matched,slot 63 of Rva005765D1 vtable (holder retarget; ctor 0x5774E3 pinned); wave7 S1 r3 T1 vrefvar + equal-arm id + vref entry id lever
 ?setString@PooledString@@AAEXPBD@Z,0x006CB7C0,0x006CB7C0,492,Code/Libraries/Source/WWVegas/WWLib/PooledStringSetString.cpp,matched,
+?rva00579542@EndTurnButtonImpl@StrategicHUD@@UAEXXZ,,0x00579542,43,Code/GameEngine/Source/Common/Rva005794EDDtor.cpp,matched,
