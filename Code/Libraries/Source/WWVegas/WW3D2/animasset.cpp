@@ -1,9 +1,13 @@
 // cl: /MD /DNDEBUG /DWIN32 /D_WINDOWS
 //
-// ?Rva0014CE16_AnimExists@@YA_NPBD@Z @ 0x0014CE16 (81 bytes).
+// ?HasAnim@AnimationAsset@@SA_NPBD@Z @ 0x0014CE16 (81 bytes).
+// WB9C3BF0 animasset.cpp identifies AnimationAsset::HasAnim. Native a*
+// prefix, lowercasing and registry membership independently confirm its role.
 // Animation-asset existence check: builds the "a*"+name key lowercased in
 // a 512-byte buffer and returns the registry contains-check. No SEH (no
 // object lifetimes); the checker address is pinned.
+
+#include "AnimationAssetBFME2.h"
 
 extern "C" char *_mbscpy(char *destination, const char *source);
 extern "C" __declspec(dllimport) char *__cdecl _strlwr(char *string);
@@ -12,8 +16,8 @@ extern "C" __declspec(dllimport) char *__cdecl _strlwr(char *string);
 // registry answers false, else tail-calls the registry lookup 0xA21170.
 extern bool __cdecl Render_Obj_Exists(const char *name);
 
-// ?Rva0014CE16_AnimExists@@YA_NPBD@Z
-bool Rva0014CE16_AnimExists(const char *name)
+// ?HasAnim@AnimationAsset@@SA_NPBD@Z
+bool AnimationAsset::HasAnim(const char *name)
 {
 	if (name == 0)
 		return false;
