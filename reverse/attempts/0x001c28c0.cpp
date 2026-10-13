@@ -1,3 +1,5 @@
+// DeringBlock
+// partial score=0.75 date=2026-10-13
 // _DeringBlock
 // partial score=0.7908 date=2026-10-13
 // _DeringBlock
@@ -18,8 +20,8 @@ extern "C" void DeringBlock(Vp6DeringPostProc *pp, const unsigned char *source, 
 	const unsigned char *src = source;
 	unsigned char *dst = dest;
 	int strength = scaleTable[qIndex];
-	int sharpen = Vp6FilterEdgeTagTable[qIndex];
 	int factor = 4;
+	int sharpen = Vp6FilterEdgeTagTable[qIndex];
 	int cap;
 	int row;
 	unsigned int col, k;
@@ -47,8 +49,8 @@ extern "C" void DeringBlock(Vp6DeringPostProc *pp, const unsigned char *source, 
 			neighbours[5] = src[col + pitch - 1];
 			neighbours[6] = src[col + pitch];
 			neighbours[7] = src[col + pitch + 1];
-			center = src[col];
 			centerWeight = 256;
+			center = src[col];
 			sum = 128;
 			for (k = 0; k < 8; k++) {
 				int diff = center - neighbours[k];
