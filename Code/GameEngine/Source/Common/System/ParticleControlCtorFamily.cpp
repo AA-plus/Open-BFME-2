@@ -333,7 +333,7 @@ bool Rva003FD849::rva003FD849()
  if (visual->m_primary) {
  reinterpret_cast<BfmeRenderSceneView *>(g_00DFEF18)->insertObject(reinterpret_cast<RenderObjClass *>(visual->m_primary));
  if (animate) {
-  AsciiString animationName(model); animationName.concat("."); animationName.concat(model);
+  AsciiString animationName(model); reinterpret_cast<StringBase<char> *>(&animationName)->concat("."); animationName.concat(model);
   HAnimClass *animation=Get_HAnim(animationName.str());
   if(animation) {
    float frame=animation->frameCount()*phase;
