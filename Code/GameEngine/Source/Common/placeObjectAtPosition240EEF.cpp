@@ -195,20 +195,23 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 class LivingWorldBattle {public:void *rva003F4FBD(void*);};
 struct LivingArmy {char pad[0x20];int id;};
 struct LivingBuildingTemplate {char pad[0xC];AsciiString name;};
-class LivingWorldBuilding {public:char pad[0x18];int id;char pad1C[0xC];LivingBuildingTemplate *definition;};
-class LivingWorldRegion {public:char pad[0x13C];int owner;int rva003F05CE();LivingWorldBuilding *GetBuildingByIndex(int)const;};
+class LivingWorldBuilding {public:char pad[0x18];int id;char pad1C[0xC];const AsciiString &getName()const {const LivingBuildingTemplate &d=*definition;return d.name;} LivingBuildingTemplate *definition;};
+class LivingWorldRegion {public:char pad[0x13C];int owner;int GetOwner()const{return owner;} int rva003F05CE();LivingWorldBuilding *GetBuildingByIndex(int)const;};
 class Waypoint {public:Waypoint(unsigned,AsciiString,const Coord3D*,AsciiString,AsciiString,AsciiString,bool,int,AsciiString);virtual ~Waypoint();char pad[8];Coord3D position;char rest[0xC0-0x18];};
 Waypoint *Rva00506CC3FindWaypoint(const AsciiString&);
 void ValidateLivingWorldBuildPlotWaypoints(Waypoint*,int);
 class Rva0040D280Sub {public:void method(Object*,int);};
 class PlayerTemplate;
+// WB 0x00CFC810 identifies this GameLogic.cpp placement pass. Retail
+// 0x0024104A..0x00241230 reads Player +0x3AC and region owner +0x13C;
+// only the Player argument survives the optimized calling convention.
+// Keep the inline owner and building-name accessors: their compiler lifetimes
+// reproduce the saved player ID and retail register allocation without volatile.
 void PlaceLivingWorldObjectsForPlayer(Player *player) {
  if(TheGameLogic->m_114==3) return;
  LivingWorldRegion *region; int armyId;
  {
  int livingId=player->livingId;
- int savedLivingId;
- *(volatile int*)&savedLivingId=livingId;
  if(livingId==-1) return;
  LivingWorldBattle *battle=(LivingWorldBattle*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->regions->rva0020E6B7();
  if(!battle) return;
@@ -217,17 +220,21 @@ void PlaceLivingWorldObjectsForPlayer(Player *player) {
  LivingArmy *army=(LivingArmy*)battle->rva003F4FBD(worldPlayer);
  armyId=army?army->id:0;
  if(!armyId) return;
+
  int currentRegion=((Rva002BA8F1Logic*)TheLivingWorldLogic)->currentRegion;
- region=(LivingWorldRegion*)((Rva0020EAF6View*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->regions)->rva0020EAF6(currentRegion);
- if(!region || region->owner!=savedLivingId) return;
+ Rva0020EAF6View *manager=(Rva0020EAF6View*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->regions;
+ region=(LivingWorldRegion*)manager->rva0020EAF6(currentRegion);
+ if(!region) return;
+ if(region->GetOwner()!=livingId) return;
  }
+ {
  AsciiString waypointName("Player_1_Start");
  Waypoint *start=Rva00506CC3FindWaypoint(waypointName);
  if(!start) return;
  ValidateLivingWorldBuildPlotWaypoints(start,region->rva003F05CE());
  for(int i=0;i<region->rva003F05CE();++i){
   LivingWorldBuilding *building=region->GetBuildingByIndex(i);
-  const AsciiString &name=building->definition->name;
+  const AsciiString &name=building->getName();
   if(name.isEmpty()) continue;
   waypointName.format("Player_1_BuildPlot_%d",i+1);
   Waypoint *waypoint=Rva00506CC3FindWaypoint(waypointName);
@@ -240,4 +247,6 @@ void PlaceLivingWorldObjectsForPlayer(Player *player) {
   ((Rva0040D280Sub*)((char*)TheGameLogic+0x184))->method(obj,armyId);
   *(int*)((char*)obj+0x464)=building->id;
  }
+}
+
 }
