@@ -62,12 +62,12 @@ void *Rva001FF547::rva001FF6EB(unsigned int n, const void *hint)
 
 // --- 0x00201D34 / 0x00201D3E (10B each): store the 0x00DB5FA0 word / the
 // 0x00DEC410 byte.
-extern int g_Va00DB5FA0;
+extern int LODTextureReduction;
 extern unsigned char g_Va00DEC410;
 
 void rva00201D34(int value)
 {
-	g_Va00DB5FA0 = value;
+	LODTextureReduction = value;
 }
 
 void rva00201D3E(unsigned char value)

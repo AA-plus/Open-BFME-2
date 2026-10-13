@@ -6,7 +6,7 @@
 // for BFME (game/.../W3DScene.cpp: three light environments, the infantry
 // lights feeding the third, the scratch light carrying fogged copies), with
 // BFME 2's additions read from retail: below static LOD 2 (the owned
-// g_Va00DB5FA0) every light's diffuse is scaled by the global data's
+// LODTextureReduction) every light's diffuse is scaled by the global data's
 // low-LOD light scale (+0x944) while it is added and then restored, the
 // fogged copies take the scaled diffuse, and each environment's ambient
 // (+0x164) is scaled afterwards. BFME 2's scene keeps the lights at
@@ -136,7 +136,7 @@ struct SceneLightGlobalView
 	unsigned char m_fogAlpha;				// +0xBE8
 	unsigned char m_clearAlpha;				// +0xBE9
 };
-extern int g_Va00DB5FA0;
+extern int LODTextureReduction;
 
 class RTS3DScene
 {
@@ -167,7 +167,7 @@ void RTS3DScene::updateFixedLightEnvironments(RenderInfoClass &rinfo)
 	const SceneLightGlobalView *global = reinterpret_cast<const SceneLightGlobalView *>(TheWritableGlobalData);
 	Real foggedLightFrac = (Real)global->m_clearAlpha / (Real)global->m_fogAlpha;
 	Vector3 lodScale(1.0f, 1.0f, 1.0f);
-	if (g_Va00DB5FA0 < 2)
+	if (LODTextureReduction < 2)
 	{
 		lodScale.X = global->m_lowLODLightScaleRed;
 		lodScale.Y = global->m_lowLODLightScaleGreen;
