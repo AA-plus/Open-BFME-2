@@ -1,25 +1,17 @@
-// cl: /Oy-
-// Four top-byte forwards (25B each): push ebp, mov ebp, esp,
-// lea eax, [ebp+0x13], push eax, push [ebp+0x10], push [ebp+0x0C],
-// push [ebp+8], call <worker>, pop ebp, ret N. Each forwards (a, b, c)
-// plus the address of c's top byte to a stdcall worker; /O1 keeps the
-// pushes on the stack slots and /Oy- keeps the ebp frame. Members with
-// ret 0x10 take an ignored fourth dword; ret 0x0C members take three.
-// 0x001ECB78 (-> 0x001EC1B4, 4 params), 0x001ECD19 (-> 0x001EC1B4,
-// 3 params), 0x004F83F2 (-> 0x004F7EE9, 4 params), 0x004F8B89 (->
-// 0x004F7EE9, 3 params). The top-byte address purpose is unrecovered;
-// callee identities unproven (opaque pins); names address-derived.
-// One ledger row per forward.
-
-void __stdcall Rva001EC1B4Worker(int a, int b, int c, char *topByte);
-void __stdcall Rva004F7EE9Worker(int a, int b, int c, char *topByte);
-
-void __stdcall Rva001ECB78(int a, int b, int c, int ignored)
-{
-	Rva001EC1B4Worker(a, b, c, (char *)&c + 3);
-}
-
-void __stdcall Rva001ECD19(int a, int b, int c)
-{
-	Rva001EC1B4Worker(a, b, c, (char *)&c + 3);
-}
+// cl: /O1 /arch:SSE /G7 /Oy-
+// Native25B wrappers at 0x001ECD19 and0x001ECB78 forward a vector receiver
+// unchanged in ECX to0x001EC1B4. The old free stdcall declarations lost that ABI.
+// Caller1ECE98 passes its +A4 vector; worker1EC1B4 reads start/finish/end at0/4/8
+// and divides distances by172 before calling the owned record copy helpers.
+// Thus the old basic_string<char> worker pin is refuted. Placeholder owner
+// spellings remain: the original template/tag identity is not claimed here.
+// The fourth worker argument is the existing address of the last pointer's
+// high byte; its original empty-tag type remains unreconstructed.
+struct BfmeAssignRecord172;
+class Rva001EC1B4 { public: void rva001EC1B4(BfmeAssignRecord172 *,BfmeAssignRecord172 *,BfmeAssignRecord172 *,char *); };
+class Rva001ECD19 { public: void rva001ECD19(BfmeAssignRecord172 *,BfmeAssignRecord172 *,BfmeAssignRecord172 *); };
+class Rva001ECB78 { public: void rva001ECB78(BfmeAssignRecord172 *,BfmeAssignRecord172 *,BfmeAssignRecord172 *,int); };
+void Rva001ECD19::rva001ECD19(BfmeAssignRecord172 *pos,BfmeAssignRecord172 *first,BfmeAssignRecord172 *last)
+{ ((Rva001EC1B4 *)this)->rva001EC1B4(pos,first,last,(char *)&last+3); }
+void Rva001ECB78::rva001ECB78(BfmeAssignRecord172 *pos,BfmeAssignRecord172 *first,BfmeAssignRecord172 *last,int ignored)
+{ ((Rva001EC1B4 *)this)->rva001EC1B4(pos,first,last,(char *)&last+3); }
