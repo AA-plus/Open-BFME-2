@@ -1,6 +1,8 @@
 // ??0WeatherSetting@@QAE@XZ
 // partial score=0.9908623729322181 date=2026-10-13
 // ??0WeatherSetting@@QAE@XZ
+// partial score=0.9908623729322181 date=2026-10-13
+// ??0WeatherSetting@@QAE@XZ
 // partial score=0.99 date=2026-10-13
 // ??0WeatherSetting@@QAE@XZ
 // partial score=0.99 date=2026-10-13
