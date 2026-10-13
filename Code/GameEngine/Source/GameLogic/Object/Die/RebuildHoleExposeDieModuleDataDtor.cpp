@@ -20,14 +20,13 @@ class Snapshot
 {
 public:
 	virtual ~Snapshot();
-	virtual void crc();
-	virtual void loadPostProcess();
-	virtual void xfer();
+	virtual void crc() = 0;
+	virtual void loadPostProcess() = 0;
+	virtual void xfer() = 0;
 };
 
 inline Snapshot::~Snapshot()
 {
-	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
 }
 
 class AsciiStringMember

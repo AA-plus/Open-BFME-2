@@ -51,7 +51,6 @@ public:
 
 inline Snapshot::~Snapshot()
 {
-	*(const void **)this = (const void *)g_00BBB554;
 }
 
 class Rva002B644A : public Snapshot

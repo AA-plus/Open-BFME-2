@@ -12,15 +12,11 @@ class Snapshot
 {
 public:
 	virtual ~Snapshot();
-	virtual void crc();
-	virtual void loadPostProcess();
-	virtual void xfer();
 };
 
 // ??1Snapshot@@UAE@XZ present-unmatched
 inline Snapshot::~Snapshot()
 {
-	*(const void **)this = g_00BBB554;
 }
 
 class Rva004FBCBE

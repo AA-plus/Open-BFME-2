@@ -23,9 +23,9 @@ class Snapshot
 {
 public:
 	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void loadPostProcess();
-	virtual void xfer(Xfer *xfer);
+	virtual void crc(Xfer *xfer) = 0;
+	virtual void loadPostProcess() = 0;
+	virtual void xfer(Xfer *xfer) = 0;
 
 private:
 	unsigned char m_pad[0x118 - 4];
@@ -33,7 +33,6 @@ private:
 
 inline Snapshot::~Snapshot()
 {
-	*(const void **)this = reinterpret_cast<const void *>(((unsigned int)vtbl_00BBB554));
 }
 
 #include "ascii_string.h"
