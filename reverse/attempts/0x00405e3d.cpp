@@ -1,7 +1,17 @@
 // ?createContent@OldSchoolHelpBoxContentSource@@UAE?AUTreeHintRef00217D4C@@XZ
-// partial score=0.93 date=2026-10-13
+// partial score=0.9543031778078934 date=2026-10-13
+// W7-ASTRA next lead: starting from this size-exact body, hoisting the two
+// argument values fixes independent native spill/load sites: declare bool
+// requireAll and pass (requireAll=m_commandButton->m_requireAll) through the
+// allRequiredUpgradesComplete call; declare Player *payer and assign
+// payer=ThePlayerList->m_local before the UpgradeCenter call. Converting the
+// guarded sciences for-loop to do/while removes its entry jump. Combined body
+// is 3291B: normalized residue only upgrade-load reload and science begin
+// reload instead of mov ebx,eax. Caching begin before the empty test instead
+// makes 3284B: begin uses EBX too early and the 128-byte conditional becomes
+// short. Neither variant is byte-exact. This bank retains best full score.
 // ?createContent@OldSchoolHelpBoxContentSource@@UAE?AUTreeHintRef00217D4C@@XZ
-// partial score=0.9 date=2026-10-09
+// ?createContent@OldSchoolHelpBoxContentSource@@UAE?AUTreeHintRef00217D4C@@XZ
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
 // ?createContent@OldSchoolHelpBoxContentSource@@UAE?AUTreeHintRef00217D4C@@XZ
@@ -81,8 +91,8 @@ class Module;
 class CreateAHeroData;
 struct UpgradeRange
 {
-	void *m_begin;
-	void *m_end;
+	UpgradeTemplate **m_begin;
+	UpgradeTemplate **m_end;
 };
 
 #define HELP_SLOTS4(p) virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3();
@@ -170,6 +180,7 @@ class UpgradeTemplate
 {
 public:
 	unsigned int rva0026EF50(Player *player, Object *obj) const;
+ void *m_0; int m_4;
 };
 
 class Rva002D371DAddImm32Field
@@ -244,7 +255,10 @@ public:
 	void *rva0028BC58(int which);
 	bool rva00290D2B(const UpgradeTemplate *upgrade) const;
 	bool rva002940B9(const UpgradeTemplate *upgrade);
-	Module *findModule(NameKeyType key) const;
+	protected:
+ Module *findModule(NameKeyType key) const;
+public:
+ __forceinline Module *helpFindModule(NameKeyType key) const { return findModule(key); }
 
 	char m_pad000[0x254];
 	BodyModule *m_body;             // +0x254
@@ -269,16 +283,17 @@ public:
 class ThingTemplate
 {
 public:
-	int rva0033A69A(const Player *player, int obj, int which) const;
+	int getPrereqCount() const {return m_prereqInfo.size();}
+ const ProductionPrerequisite *getNthPrereq(int i) const {return &m_prereqInfo[i];}
+ int rva0033A69A(const Player *player, int obj, int which) const;
 
 	char m_pad000[0x30];
 	UnicodeString m_displayName;    // +0x30
 	char m_pad034[0x11B - 0x34];
 	unsigned char m_flags11B;       // +0x11B
 	char m_pad11C[0x324 - 0x11C];
-	ProductionPrerequisite *m_prereqBegin; // +0x324
-	ProductionPrerequisite *m_prereqEnd;   // +0x328
-	char m_pad32C[0x618 - 0x32C];
+	_STL::vector<ProductionPrerequisite> m_prereqInfo;
+	char m_pad330[0x618-0x330];
 	int m_buildPoints;              // +0x618
 };
 
@@ -342,7 +357,7 @@ public:
 class Rva0056D3FD
 {
 public:
-	Rva0056D3FD(const AsciiString &title, const AsciiString &cost, const AsciiString &time, const AsciiString &description, const AsciiString &extra);
+	Rva0056D3FD(const UnicodeString &title, const UnicodeString &cost, const UnicodeString &time, const UnicodeString &description, const AsciiString &extra);
 
 	char m_data[12];
 };
@@ -435,9 +450,12 @@ _ReadWriteBarrier();
 
 		description.clear();
 
-		if (localPlayer && m_commandButton->m_commandType == 0x26 && m_commandButton->m_createAHero)
+		Rva0029FCB4 *hero;
+ if (localPlayer && m_commandButton->m_commandType == 0x26 && (hero=m_commandButton->m_createAHero))
 		{
-			_STL::vector<ScienceType> sciences = m_commandButton->m_createAHero->rva0029FCB4();
+			_STL::vector<ScienceType> sciences = hero->rva0029FCB4();
+			if (sciences.begin()!=sciences.end()) {
+_ReadWriteBarrier();
 			ScienceType heroScience = SCIENCE_INVALID;
 			for (_STL::vector<ScienceType>::iterator it = sciences.begin(); it != sciences.end(); ++it)
 			{
@@ -455,6 +473,7 @@ _ReadWriteBarrier();
 				{
 					description = TheGameText->fetchC("TOOLTIP:ScienceDisabled", 0);
 				}
+			}
 			}
 		}
 
@@ -491,9 +510,10 @@ _ReadWriteBarrier();
 			if (buildPoints > 0)
 				time.format(TheGameText->fetchPtrC("TOOLTIP:CommandPoints", 0), buildPoints);
 
-			for (int p = 0; p < thing->m_prereqEnd - thing->m_prereqBegin; ++p)
+			for (int p = 0; p < thing->getPrereqCount(); ++p)
 			{
-				requiresString = thing->m_prereqBegin[p].getRequiresList(player);
+				const ProductionPrerequisite *prereq;prereq = thing->getNthPrereq(p);
+ requiresString = prereq->getRequiresList(player);
 				if (requiresString.compare(UnicodeString::TheEmptyString) != 0)
 				{
 					if (firstRequirement)
@@ -644,7 +664,7 @@ _ReadWriteBarrier();
 		}
 		else if (m_commandButton->m_commandType == 0x21 && obj)
 		{
-			Module *castle = obj->findModule(CastleBehavior::rva0003955DA());
+			Module *castle = obj->helpFindModule(CastleBehavior::rva0003955DA());
 			if (castle && ((Rva00395F57 *)castle)->canUnpack(false))
 				cost.format(TheGameText->fetchPtrC("TOOLTIP:Cost", 0), ((Rva0039718B *)castle)->rva003970E7(player));
 		}
@@ -655,7 +675,35 @@ _ReadWriteBarrier();
 		extra = *(const AsciiString *)((Rva002D371DAddImm32Field *)theRadarWindowOverrideSource)->get();
 
 	TreeHintRef00217D4C help((TargetRef00217D4C *)new Rva0056D3FD(
-		reinterpret_cast<const AsciiString &>(title), reinterpret_cast<const AsciiString &>(cost),
-		reinterpret_cast<const AsciiString &>(time), reinterpret_cast<const AsciiString &>(description), extra));
+		title, cost, time, description, extra));
 	return static_cast<const TreeHintRef00217D4C &>(help);
+}
+
+bool OldSchoolHelpBoxContentSource::allRequiredUpgradesComplete(Object *obj, UpgradeRange *range, bool flag)
+{
+	for (unsigned int i = 0; i < (unsigned int)(range->m_end - range->m_begin); ++i)
+	{
+		UpgradeTemplate *tmpl = range->m_begin[i];
+		if (!tmpl)
+			continue;
+		int v = tmpl->m_4;
+		bool r;
+		if (v == 1)
+			r = obj->rva00290D2B(tmpl);
+		else if (v == 0)
+			r = obj->getControllingPlayer()->rva002AB87D(tmpl);
+		else
+			return false;
+		if (flag)
+		{
+			if (r)
+				return true;
+		}
+		else
+		{
+			if (!r)
+				return false;
+		}
+	}
+	return flag == 0;
 }
