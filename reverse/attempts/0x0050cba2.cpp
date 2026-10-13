@@ -1,4 +1,6 @@
 // ?rva0050CBA2@Rva0050CBA2@@QAE_NPAX@Z
+// partial score=0.9497 date=2026-10-13
+// ?rva0050CBA2@Rva0050CBA2@@QAE_NPAX@Z
 // partial score=0.956 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7 /EHsc /MD /D_CRTIMP=
 // Open-BFME5 conversions.
