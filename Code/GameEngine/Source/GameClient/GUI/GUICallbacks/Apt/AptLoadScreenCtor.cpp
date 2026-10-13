@@ -149,7 +149,7 @@ extern GameTextInterface *TheGameText;
 
 class GameInfo;
 class GameSpyInfoInterface;
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 extern GameSpyInfoInterface *TheGameSpyInfo;
 
 class GameSpyStagingRoom
@@ -228,7 +228,7 @@ AptLoadScreen::AptLoadScreen(void *owner)
 	m_level = AptPlayer::GetLevelIndex(win);
 	TheAptPlayer->slot19(0);
 
-	if (!TheSkirmishGameInfo && !TheGameSpyInfo)
+	if (!(*(GameInfo * *)&TheSkirmishGameInfo) && !TheGameSpyInfo)
 	{
 		UnicodeString blank(L" ");
 		AsciiString key("GUI:Level");

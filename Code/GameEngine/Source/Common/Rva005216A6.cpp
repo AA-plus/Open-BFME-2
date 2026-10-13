@@ -3,7 +3,7 @@
 // __thiscall bool check plus GameInfo-gated bool at +0x288 subobject.
 // Evidence: rowed 0x00442C9C plus rowed 0x00443C6E (AptMpGameSetup::Init) plus TheSkirmishGameInfo 0x00A02EF0; caller 0x00522290; prev 0x00521623 next 0x0052180E same dir.
 class GameInfo;
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 
 class AptMpGameSetup
 {
@@ -25,5 +25,5 @@ bool Rva005216A6::rva005216A6()
 {
 	if (!m_sub.rva00442C9C())
 		return false;
-	return m_sub.Init(TheSkirmishGameInfo, 1);
+	return m_sub.Init((*(GameInfo * *)&TheSkirmishGameInfo), 1);
 }

@@ -165,7 +165,7 @@ class Rva00210C66CmpBoolField { public: bool get() const; };
 struct LANGameInfo; extern class GameInfo *TheGameInfo;
 #define g_Rva00E02EEC (*(LANGameInfo * *)&TheGameInfo)
 // ^ g_Rva00E02EEC is only an alias of the owned global TheGameInfo (ledger names column).
-class GameInfo { public: void setMap(AsciiString); }; extern GameInfo *TheSkirmishGameInfo;
+class GameInfo { public: void setMap(AsciiString); }; class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 void InitGameLogicRandom(unsigned);
@@ -196,7 +196,7 @@ void Rva0021237E::rva0021246D(Rva0021246DInput *input)
  map.format("maps\\%s\\%s.map",base,base);
  ((AsciiString*)((char*)TheWritableGlobalData+0xAC0))->format(&map);
  if(!g_Rva00E02EEC || !((Rva00210C66CmpBoolField*)TheGameLogic)->get())
-  { if(TheSkirmishGameInfo) InitGameLogicRandom(timeGetTime()); else InitGameLogicRandom(0); }
+  { if((*(GameInfo **)&TheSkirmishGameInfo)) InitGameLogicRandom(timeGetTime()); else InitGameLogicRandom(0); }
  GameMessage *message=TheMessageStream->append(30);
  TheGameLogic->rva0023CD9E(true,1,false);
  TheGameLogic->rva0023CD9E(false,1,false);
@@ -208,7 +208,7 @@ void Rva0021237E::rva0021246D(Rva0021246DInput *input)
  if(g_Rva00E02EEC && TheGameLogic->m_114==1) message->appendIntegerArgument(1);
  else if(g_Rva00E02EEC && TheGameLogic->m_114==2) message->appendIntegerArgument(5);
  else {
-  if(TheSkirmishGameInfo) {TheSkirmishGameInfo->setMap(map);message->appendIntegerArgument(2);}
+  if((*(GameInfo **)&TheSkirmishGameInfo)) {(*(GameInfo **)&TheSkirmishGameInfo)->setMap(map);message->appendIntegerArgument(2);}
   else message->appendIntegerArgument(0);
   message->appendIntegerArgument(((LogicMissionView*)TheLivingWorldLogic)->mission);
   message->appendIntegerArgument(0);

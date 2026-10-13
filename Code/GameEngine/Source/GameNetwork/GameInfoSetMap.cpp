@@ -79,7 +79,7 @@ private:
 	int m_mapMask;
 };
 
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 
 void GameInfo::setMap(AsciiString mapName)
 {
@@ -202,11 +202,11 @@ void GameInfo::setMap(AsciiString mapName)
 // only the behavior and direct target evidence.
 bool __stdcall rva00521C5A(const AsciiString &mapName)
 {
-	TheSkirmishGameInfo->setMap(mapName);
+	(*(GameInfo * *)&TheSkirmishGameInfo)->setMap(mapName);
 	const MapMetaData *mapData = TheMapCache->findMap(mapName);
 	if (mapData) {
-		TheSkirmishGameInfo->setMapCRC(*(const unsigned int *)((const char *)mapData + 0x2C));
-		TheSkirmishGameInfo->setMapSize(*(const unsigned int *)((const char *)mapData + 0x28));
+		(*(GameInfo * *)&TheSkirmishGameInfo)->setMapCRC(*(const unsigned int *)((const char *)mapData + 0x2C));
+		(*(GameInfo * *)&TheSkirmishGameInfo)->setMapSize(*(const unsigned int *)((const char *)mapData + 0x28));
 	}
 	return true;
 }

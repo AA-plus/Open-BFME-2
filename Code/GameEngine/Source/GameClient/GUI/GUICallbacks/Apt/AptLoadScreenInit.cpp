@@ -102,7 +102,7 @@ public:
 };
 
 extern GameInfo *TheGameInfo;
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 
 class GameSpyStagingRoom
 {
@@ -372,7 +372,7 @@ void AptLoadScreen::init(GameInfo *game)
 		const Image *rankImage = 0;
 		AsciiString armyText(armyName);
 		int side = Rva0033A3F4Lookup(armyText);
-		if (slot->isAI() && (TheSkirmishGameInfo || TheGameSpyInfo) && !isRanked)
+		if (slot->isAI() && ((*(GameInfo * *)&TheSkirmishGameInfo) || TheGameSpyInfo) && !isRanked)
 		{
 			switch (slot->m_state)
 			{
@@ -414,7 +414,7 @@ void AptLoadScreen::init(GameInfo *game)
 			rankKey.format("LoadingScreen::Rank%d", i);
 			g_bfmeAptWindowManager->bfmeSetText(rankKey, UnicodeString(rankText), false);
 		}
-		else if (TheSkirmishGameInfo)
+		else if ((*(GameInfo * *)&TheSkirmishGameInfo))
 		{
 			const PlayerTemplate *pt = ThePlayerTemplateStore->getNthPlayerTemplate(slot->m_playerTemplate);
 			if (pt)

@@ -356,7 +356,7 @@ class GameSlot;
 class GameInfo { public: GameSlot *getSlot(int); };
 // PrepareSkirmishOpponents reads native VA E02EF0, the existing owned
 // TheSkirmishGameInfo global. TheGameInfo is a different pointer at E02EEC.
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 struct RegionGameSlotPrefix {
     char before4C[0x4c];
     int armyID;
@@ -368,12 +368,12 @@ struct Rva003EFDDBOut;
 class Rva003EFDDBHolder { public: void rva003EFDDB(int,Rva003EFDDBOut *); };
 void LivingWorldRegion::PrepareSkirmishOpponents(LivingWorldBattle *battle)
 {
-    if (!battle || m_reservedA9 || !TheSkirmishGameInfo) return;
+    if (!battle || m_reservedA9 || !(*(GameInfo * *)&TheSkirmishGameInfo)) return;
     Gen_00528EC0 i(0);
     while (true) {
         Gen_00528EC0 end(8);
         if (!i.bfmeDiffers(end)) break;
-        GameSlot *slot=TheSkirmishGameInfo->getSlot(i.index());
+        GameSlot *slot=(*(GameInfo * *)&TheSkirmishGameInfo)->getSlot(i.index());
         RegionGameSlotPrefix *fields=reinterpret_cast<RegionGameSlotPrefix *>(slot);
         int id=fields->armyID;
         fields->participating=battle->rva003F486C(id);

@@ -29,7 +29,7 @@ public:AsciiString buildProfileKey(const char*);bool rva0043BC0A();
 };
 class GameSlot;
 class GameInfo {public:GameSlot *getSlot(int);};
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 class Rva003FF0E7DwordSlot {public:void set(int);};
 bool ParseAsciiStringToGameInfo(GameInfo*,AsciiString,bool);
 struct SkirmishStringDataView{char header[8];char text[1];};
@@ -37,18 +37,18 @@ __forceinline const char *skirmishText(const AsciiString&s){
  const SkirmishStringDataView *data=*(const SkirmishStringDataView *const*)&s;return data?data->text:"";
 }
 bool SkirmishPreferences::rva0043BC0A(){
- if(!TheSkirmishGameInfo)return false;
+ if(!(*(GameInfo * *)&TheSkirmishGameInfo))return false;
  AsciiString value=getAsciiString(buildProfileKey("HeroIndexes"),AsciiString::TheEmptyString);
  const char *p=skirmishText(value);
  for(unsigned i=0;i<8;++i){
  if(!p)break;
   ++p;
-  GameSlot *slot=TheSkirmishGameInfo->getSlot(i);
+  GameSlot *slot=(*(GameInfo * *)&TheSkirmishGameInfo)->getSlot(i);
   if(!slot)break;
   ((Rva003FF0E7DwordSlot*)slot)->set(atoi(p));
   p=strchr(p,':');
 
  }
  value=getAsciiString(buildProfileKey("GameInfo"),AsciiString::TheEmptyString);
- return ParseAsciiStringToGameInfo(TheSkirmishGameInfo,value,true);
+ return ParseAsciiStringToGameInfo((*(GameInfo * *)&TheSkirmishGameInfo),value,true);
 }

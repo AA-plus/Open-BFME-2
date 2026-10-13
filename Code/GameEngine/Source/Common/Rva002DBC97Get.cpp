@@ -154,7 +154,7 @@ public:
 	GameSlot *getSlot(int slotNum);
 };
 extern GameInfo *TheGameInfo;
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 
 class BfmeDfe6e4
 {
@@ -322,7 +322,7 @@ int GameState::saveGame(UnicodeString filename, const UnicodeString &desc, int w
 	m_heroName.clear();
 	m_playerNames.clear();
 
-	GameInfo *game = TheSkirmishGameInfo;
+	GameInfo *game = (*(GameInfo * *)&TheSkirmishGameInfo);
 	if (mode == 6)
 		game = TheGameInfo;
 	if (game)

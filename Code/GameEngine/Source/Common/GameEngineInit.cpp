@@ -533,7 +533,7 @@ public:
 	Int m_3C;					// +0x3C
 };
 class SkirmishGameInfo : public GameInfo { public: SkirmishGameInfo(); char m_data[0xE3C - sizeof(GameInfo)]; };
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 
 class RecorderClass { public: Bool playbackFile(UnicodeString filename); };
 
@@ -855,25 +855,25 @@ void GameEngine::init(Int argc, char *argv[])
 					GameMessage *msg = MessageStreamSubsystem->appendMessage(0x1E);
 					if (md && md->m_isMultiplayer)
 					{
-						if (!TheSkirmishGameInfo)
-							TheSkirmishGameInfo = new SkirmishGameInfo;
-						TheSkirmishGameInfo->init();
-						GameSlot *first = TheSkirmishGameInfo->getSlot(0);
-						TheSkirmishGameInfo->m_38 = first->m_38;
-						TheSkirmishGameInfo->m_3C = first->m_3C;
-						TheSkirmishGameInfo->reset();
-						TheSkirmishGameInfo->enterGame();
-						TheSkirmishGameInfo->setSeed(time(0));
-						TheSkirmishGameInfo->setMap(TheGlobalData->m_initialFile);
-						TheSkirmishGameInfo->setMapCRC(md->m_CRC);
-						TheSkirmishGameInfo->setMapSize(md->m_filesize);
+						if (!(*(GameInfo * *)&TheSkirmishGameInfo))
+							(*(GameInfo * *)&TheSkirmishGameInfo) = new SkirmishGameInfo;
+						(*(GameInfo * *)&TheSkirmishGameInfo)->init();
+						GameSlot *first = (*(GameInfo * *)&TheSkirmishGameInfo)->getSlot(0);
+						(*(GameInfo * *)&TheSkirmishGameInfo)->m_38 = first->m_38;
+						(*(GameInfo * *)&TheSkirmishGameInfo)->m_3C = first->m_3C;
+						(*(GameInfo * *)&TheSkirmishGameInfo)->reset();
+						(*(GameInfo * *)&TheSkirmishGameInfo)->enterGame();
+						(*(GameInfo * *)&TheSkirmishGameInfo)->setSeed(time(0));
+						(*(GameInfo * *)&TheSkirmishGameInfo)->setMap(TheGlobalData->m_initialFile);
+						(*(GameInfo * *)&TheSkirmishGameInfo)->setMapCRC(md->m_CRC);
+						(*(GameInfo * *)&TheSkirmishGameInfo)->setMapSize(md->m_filesize);
 						GameSlot slot;
 						slot.m_name = UnicodeString(L"Test");
 						GameSlotConnectInfo info;
 						info.m_a = 0;
 						info.m_b = 0;
 						slot.setState(SLOT_PLAYER, UnicodeString(L"Test"), &info);
-						TheSkirmishGameInfo->setSlot(0, slot);
+						(*(GameInfo * *)&TheSkirmishGameInfo)->setSlot(0, slot);
 						msg->appendIntegerArgument(2);
 					}
 					else

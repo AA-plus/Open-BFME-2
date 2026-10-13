@@ -20,7 +20,7 @@ class Rva005C1A36 { public: virtual ~Rva005C1A36(); private: char storage[0x30-4
 class SkirmishPreferences { public: virtual ~SkirmishPreferences(); private: char storage[0x20-4]; };
 class Rva0031455E { public: virtual ~Rva0031455E(); private: char storage[0x10-4]; };
 class GameInfo { public: virtual void* deleteObject(int); };
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 extern GameInfo *TheGameInfo;
 extern int g_00E04930;
 class AptPlayer { public: void RemoveOverButtonHandler(const AsciiString&); };
@@ -40,10 +40,10 @@ private:
 };
 Rva00521977::~Rva00521977() {
  if ((void*)g_00E04930 == this) {
-  GameInfo *info=TheSkirmishGameInfo;
+  GameInfo *info=(*(GameInfo * *)&TheSkirmishGameInfo);
   void *dead=info ? info->deleteObject(0) : 0;
   ::operator delete(dead);
-  TheSkirmishGameInfo=0;
+  (*(GameInfo * *)&TheSkirmishGameInfo)=0;
   TheGameInfo=0;
   if (g_bfmeAptWindowManager) {
    AsciiString name("Skirmish/tooltipPlayerLevelIcon");

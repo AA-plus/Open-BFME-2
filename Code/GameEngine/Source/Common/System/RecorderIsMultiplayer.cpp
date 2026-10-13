@@ -45,9 +45,8 @@ extern GameLogic *TheGameLogic;
 class NetworkInterface;
 extern NetworkInterface *TheNetwork;
 
-extern GameInfo *TheSkirmishGameInfo;
-// TheSkirmishGameInfo: matched references place it at VA 0xe02ef0 (zero-filled .bss).
-GameInfo * TheSkirmishGameInfo;
+// 0x00A02EF0 is TheSkirmishGameInfo, defined in SkirmishGameOptionsMenu.cpp.
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 
 class RecorderClass
 {
@@ -80,7 +79,7 @@ Bool RecorderClass::isMultiplayer(void)
 		return false;
 	if (game->m_unk114 != 3)
 		return true;
-	if (TheNetwork || TheSkirmishGameInfo)
+	if (TheNetwork || (*(GameInfo * *)&TheSkirmishGameInfo))
 		return true;
 	return false;
 }

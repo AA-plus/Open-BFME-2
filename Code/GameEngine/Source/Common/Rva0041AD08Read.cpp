@@ -259,7 +259,7 @@ class SkirmishGameInfo:public GameInfo {
 public:SkirmishGameInfo();virtual~SkirmishGameInfo();
  char rest[0xE3C-sizeof(GameInfo)];
 };
-extern GameInfo*TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 extern GameInfo*TheGameInfo;
 void XferObjectID(Xfer*,ObjectID*);
 void XferDrawableID(Xfer*,int*);
@@ -343,15 +343,15 @@ void GameStateMap::DoXfer(Xfer*xfer) {
  int highDrawableID=TheGameClient->drawableCounter;
  XferDrawableID(xfer,&highDrawableID);TheGameClient->drawableCounter=highDrawableID;
  if(TheGameLogic->m_110==2 || TheGameLogic->m_114==0) {
-  if(!TheSkirmishGameInfo) {
-   TheSkirmishGameInfo=new SkirmishGameInfo;
-   TheGameInfo=TheSkirmishGameInfo;
-   TheSkirmishGameInfo->init();TheSkirmishGameInfo->clearSlotList();TheSkirmishGameInfo->reset();
+  if(!(*(GameInfo* *)&TheSkirmishGameInfo)) {
+   (*(GameInfo* *)&TheSkirmishGameInfo)=new SkirmishGameInfo;
+   TheGameInfo=(*(GameInfo* *)&TheSkirmishGameInfo);
+   (*(GameInfo* *)&TheSkirmishGameInfo)->init();(*(GameInfo* *)&TheSkirmishGameInfo)->clearSlotList();(*(GameInfo* *)&TheSkirmishGameInfo)->reset();
   }
-  xfer->xferSnapshot(TheSkirmishGameInfo);
- } else if(TheSkirmishGameInfo) {
-  if(TheGameInfo==TheSkirmishGameInfo)TheGameInfo=0;
-  ::delete TheSkirmishGameInfo;TheSkirmishGameInfo=0;
+  xfer->xferSnapshot((*(GameInfo* *)&TheSkirmishGameInfo));
+ } else if((*(GameInfo* *)&TheSkirmishGameInfo)) {
+  if(TheGameInfo==(*(GameInfo* *)&TheSkirmishGameInfo))TheGameInfo=0;
+  ::delete (*(GameInfo* *)&TheSkirmishGameInfo);(*(GameInfo* *)&TheSkirmishGameInfo)=0;
  }
  if(xfer->isLoading()) {
   if(TheGameLogic->m_110!=9 && saveGameInfo->saveType!=6 && saveGameInfo->saveType!=4)TheGameLogic->rva00248558(true);

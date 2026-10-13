@@ -284,7 +284,7 @@ class LANAPI : public VSlots<56>
 public:
 	virtual LANGameInfo *GetMyGame() = 0;
 };
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 extern LANAPI *TheLAN;
 extern GameSpyStagingRoom *TheGameSpyGame;
 extern GameInfo *TheGameInfo;
@@ -418,7 +418,7 @@ void BfmeSubobject0022CE19::xfer(Xfer *xfer)
 		GameInfo *game;
 		int mode = ((BfmeSaveGameMode *)TheGameLogic)->m_mode;
 		if (mode == 0)
-			game = TheSkirmishGameInfo;
+			game = (*(GameInfo * *)&TheSkirmishGameInfo);
 		else if (mode == 1)
 			game = TheLAN->GetMyGame();
 		else if (mode == 2)

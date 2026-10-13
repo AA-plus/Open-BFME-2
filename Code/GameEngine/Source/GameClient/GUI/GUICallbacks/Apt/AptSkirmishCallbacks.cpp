@@ -93,7 +93,7 @@ public:
 };
 
 class GameInfo;
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 
 // Target Apt screen base handler; the existing matched implementation is
 // _bfme_AptGameWindow::rva0051274F.
@@ -257,7 +257,7 @@ public:
 	GameSlot *getSlot(int index);
  AsciiString getMap() const;
 };
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 extern int g_Va00E0333C;
 void __cdecl operator delete(void *p);
 class Panel00E0333C
@@ -288,14 +288,14 @@ void AptSkirmish::OnProfilePopupCancel(const char *unused)
 		if (prefs->Rva0043B9E8())
 			return;
 		prefs->v3slotC();
-		GameInfo *g = TheSkirmishGameInfo;
+		GameInfo *g = (*(GameInfo * *)&TheSkirmishGameInfo);
 		void *toFree;
 		if (g != 0)
 			toFree = g->v0slot0(0);
 		else
 			toFree = 0;
 		operator delete(toFree);
-		TheSkirmishGameInfo = 0;
+		(*(GameInfo * *)&TheSkirmishGameInfo) = 0;
 		Panel00E0333C *panel = (Panel00E0333C *)(void *)g_Va00E0333C;
 		if (panel != 0)
 			panel->p1slot4();
@@ -497,7 +497,7 @@ void AptSkirmish::OnAddProfileAccept(const char *unused)
 // when the skirmish game info exists and is the one asked about.
 bool AptSkirmish::MPOwnerValidatGameInfo(GameInfo *gameInfo)
 {
-	if (TheSkirmishGameInfo && TheSkirmishGameInfo == gameInfo)
+	if ((*(GameInfo * *)&TheSkirmishGameInfo) && (*(GameInfo * *)&TheSkirmishGameInfo) == gameInfo)
 		return true;
 	return false;
 }
@@ -583,7 +583,7 @@ int AptSkirmish::rva005231B0(int message, unsigned int data1, unsigned int data2
 {
 	int result = ((_bfme_AptGameWindow *)this)->rva0051274F(
 		message, data1, data2);
-	if (TheSkirmishGameInfo)
+	if ((*(GameInfo * *)&TheSkirmishGameInfo))
 		result = ((AptMpGameSetup *)((char *)this + 0x288))->rva00442CB3(
 			message, data1, data2);
 
@@ -666,7 +666,7 @@ void AptSkirmish::rva00523303()
 
 void AptSkirmish::InitCreateAHeroOnStartGame()
 {
-	GameInfo *gameInfo = TheSkirmishGameInfo;
+	GameInfo *gameInfo = (*(GameInfo * *)&TheSkirmishGameInfo);
 	if (gameInfo == 0)
 		return;
 
@@ -738,8 +738,8 @@ int AptSkirmish::OnUpdateData() {
 // separately rowed OnInitialized at521741 establish its33B boundary. The
 // first game slot has a UnicodeString at+30; assignment calls rowed37150.
 void AptSkirmish::MpOwnerGetLocalPlayerName(UnicodeString *out) {
- if(TheSkirmishGameInfo)
-  reinterpret_cast<StringBase<unsigned short>*>(out)->set(*reinterpret_cast<StringBase<unsigned short>*>((char*)TheSkirmishGameInfo->getSlot(0)+0x30));
+ if((*(GameInfo * *)&TheSkirmishGameInfo))
+  reinterpret_cast<StringBase<unsigned short>*>(out)->set(*reinterpret_cast<StringBase<unsigned short>*>((char*)(*(GameInfo * *)&TheSkirmishGameInfo)->getSlot(0)+0x30));
 }
 
 #include "GameLogicObjectLookupView.h"
@@ -782,9 +782,9 @@ extern MessageStream *TheMessageStream;
 // emitted helper and its allocArg relocation are verified before binding it.
 void AptSkirmish::rva00521CFF() {
  TheGameLogic->rva00376E92(false,false);
- TheWritableGlobalData->map=TheSkirmishGameInfo->getMap();
- ((StartGameSetupView *)TheSkirmishGameInfo)->start(0);
- InitGameLogicRandom(((StartGameInfoView *)TheSkirmishGameInfo)->seed);
+ TheWritableGlobalData->map=(*(GameInfo * *)&TheSkirmishGameInfo)->getMap();
+ ((StartGameSetupView *)(*(GameInfo * *)&TheSkirmishGameInfo))->start(0);
+ InitGameLogicRandom(((StartGameInfoView *)(*(GameInfo * *)&TheSkirmishGameInfo))->seed);
  if(g_00E04930) {
   if(*(int *)(g_00E04930+0x304)==1) {
    ((AptPlayer *)TheRva00222A8BTarget)->PopFocus((AptFocusTarget *)-1);
@@ -795,10 +795,10 @@ void AptSkirmish::rva00521CFF() {
    TheGameLogic->rva00376E92(false,false);
    g_00DFEF18->enable(true);
    GameMessage *msg=TheMessageStream->append(31);
-   if(msg) {msg->appendIntegerArgument(((StartGameInfoView *)TheSkirmishGameInfo)->scenario);msg->wb00EC9680(0);}
+   if(msg) {msg->appendIntegerArgument(((StartGameInfoView *)(*(GameInfo * *)&TheSkirmishGameInfo))->scenario);msg->wb00EC9680(0);}
   } else {
    bool official=true;
-   const MapMetaData *map=TheMapCache->findMap(TheSkirmishGameInfo->getMap());
+   const MapMetaData *map=TheMapCache->findMap((*(GameInfo * *)&TheSkirmishGameInfo)->getMap());
    if(map) official=map->official;
    GameMessage *msg=TheMessageStream->append(30);
    msg->appendIntegerArgument(official ? 2 : 0);
@@ -828,7 +828,7 @@ struct ScenarioSlotView {char pad[0x10];int start,original;void setStart(int n){
 class Rva005223D7Owner {public:bool rva005223D7(int);char pad[0x88];int mode;int getMode() const {return mode;}};
 bool Rva005223D7Owner::rva005223D7(int index) {
  if(getMode()!=1) return true;
- if(TheSkirmishGameInfo && g_00E02D6C && index>=0 && index<((Rva0004582DSarAvgField *)g_00E02D6C)->get()) {
+ if((*(GameInfo * *)&TheSkirmishGameInfo) && g_00E02D6C && index>=0 && index<((Rva0004582DSarAvgField *)g_00E02D6C)->get()) {
  void *campaign=g_00E02D6C->rva003B8BF9(index);
  if(!(unsigned char)((Rva003B8B2A *)campaign)->rva003B8B2A()) return false;
  LivingWorldScenario::Scenario *scenario=((ScenarioCampaignView *)campaign)->scenario;
@@ -839,7 +839,7 @@ bool Rva005223D7Owner::rva005223D7(int index) {
    unsigned pos=0;
    for(int i=0;i<8;++i) {
     if(pos>=spots.size()) break;
-    GameSlot *slot=TheSkirmishGameInfo->getSlot(i);
+    GameSlot *slot=(*(GameInfo * *)&TheSkirmishGameInfo)->getSlot(i);
     if(slot && slot->isOccupied()) { ((ScenarioSlotView *)slot)->setStart(spots[pos]);++pos; }
    }
   }

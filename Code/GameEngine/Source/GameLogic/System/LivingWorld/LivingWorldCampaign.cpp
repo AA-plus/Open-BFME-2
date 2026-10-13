@@ -78,7 +78,8 @@ public:
  virtual int getLocalSlotNum() const; // Same existing GameLogicInit pointer view; native vslot 0x34.
  GameSlot *getSlot(int);
 };
-extern GameInfo *TheGameInfo,*TheSkirmishGameInfo;
+extern GameInfo *TheGameInfo;
+class SkirmishGameInfo; extern SkirmishGameInfo *TheSkirmishGameInfo;
 #include "Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 class Rva00210C66CmpBoolField {public: bool get() const;};
@@ -161,8 +162,8 @@ void LivingWorldCampaign::CreatePlayers()
    if(!TheGameInfo)return;
    gameInfo=TheGameInfo;
   } else if(logic->m_114!=3) {
-   if(!TheSkirmishGameInfo)return;
-   gameInfo=TheSkirmishGameInfo;
+   if(!(*(GameInfo **)&TheSkirmishGameInfo))return;
+   gameInfo=(*(GameInfo **)&TheSkirmishGameInfo);
   }
  }
  if(gameInfo) {

@@ -3008,7 +3008,8 @@ public:
 };
 
 extern int g_00DFE158;
-extern GameInfo *TheSkirmishGameInfo;
+class SkirmishGameInfo;
+extern SkirmishGameInfo *TheSkirmishGameInfo;
 extern LuaScriptEngine *TheLuaScriptEngine;
 extern GameEngine *TheGameEngine;
 // g_00E03138 is only an alias of the owned global g_00E03138 (ledger names column); this unit reads the owner through its own view type.
@@ -3037,9 +3038,9 @@ void GameLogic::rva002469A5(bool loadingSaveGame, int *progress)
 				isSkirmish = true;
 		}
 	} else if (m_110 == 0 || m_110 == 6) {
-		if (TheSkirmishGameInfo) {
-			::delete TheSkirmishGameInfo;
-			TheSkirmishGameInfo = 0;
+		if ((*(GameInfo **)&TheSkirmishGameInfo)) {
+			::delete (*(GameInfo **)&TheSkirmishGameInfo);
+			(*(GameInfo **)&TheSkirmishGameInfo) = 0;
 		}
 	}
 
