@@ -1,13 +1,56 @@
 // ?adjustTargetPositionOnVictim@WeaponTemplate@@QAE?AUTargetCoord@@PAVObject@@0_N@Z
-// partial score=0.98 date=2026-10-13
-// ?adjustTargetPositionOnVictim (W7-MO1 r1, 5B merge wall)
-// FRAGMENT for WeaponTemplateTargetPositions.cpp + Object decls (see log).
-// Native 002CAB3A..002CAC6E RET16 (308B); WB BB2780 (Weapon.cpp:1736..1749)
-// identifies WeaponTemplate::adjustTargetPositionOnVictim.
+// partial score=0.99 date=2026-10-13
+// cl: /O1 /G7 /arch:SSE /MD /DNDEBUG /Ireference/shims/bfme2_ascii
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "ascii_string.h"
+class Matrix3D;
+
+enum ObjectStatusTypes
+{
+	TARGET_CONTACT_STATUS_55 = 0x55
+};
+
+class ThingTemplate
+{
+public:
+	char m_pad00[0x108];
+	unsigned char flag108;
+	unsigned char flag109;
+};
+
+class Object
+{
+public:
+	bool getSingleLogicalBonePosition(const char*,Coord3D*,Matrix3D*)const;
+	bool testStatus(ObjectStatusTypes) const;
+	bool getWorldspaceBestContactPoint(Coord3D*,const Coord3D*,const char*,int,int,bool) const;
+};
+
+class Rva0073A1C0FloatField
+{
+public:
+	float get() const;
+};
+
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 struct TargetHeightCapView { char unknown00[0x11c4]; float heightCap; };
 int GetGameLogicRandomValue(int, int, char *, int);
+class Rva002CAAFA {
+public:bool rva002CAAFA(Object *victim,Coord3D *out);
+private:char unknown00[0x90];AsciiString bone;
+};
+// Target002CAAFA..002CAB3A: the WeaponTemplate caller supplies this and
+// victim/output; native +90 StringBase and logical-bone query fix the layout.
+// The old neutral ABI view name is preserved; original helper name unknown.
+// ?rva002CAAFA@Rva002CAAFA@@QAE_NPAVObject@@PAUCoord3D@@@Z
+bool Rva002CAAFA::rva002CAAFA(Object *victim,Coord3D *out)
+{
+ if(!bone.isEmpty()){
+  if(victim->getSingleLogicalBonePosition(bone.str(),out,0))return true;
+ }
+ return false;
+}
 struct TargetCoord : Coord3D
 {
 	__forceinline TargetCoord() {}
@@ -40,8 +83,7 @@ TargetCoord WeaponTemplate::adjustTargetPositionOnVictim(Object *source, Object 
 		if ((victimT->flag108 & 0x80) && !(sourceT->flag109 & 8) && !source->testStatus(TARGET_CONTACT_STATUS_55) && victim->testStatus(TARGET_CONTACT_STATUS_55)) {
 			const float &cap = reinterpret_cast<const TargetHeightCapView *>(TheWritableGlobalData)->heightCap;
 			if (height > cap) {
-				float c = cap;
-				pos.z = c + pos.z;
+				pos.z = cap + pos.z;
 			}
 			else {
 				float z = pos.z;
