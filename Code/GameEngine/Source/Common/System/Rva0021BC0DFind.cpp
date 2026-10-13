@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /EHsc /MD
+// cl: /Ireference/shims/bfme2_ascii /EHsc /MD /Gy
 // stlport
 // CreateAHeroManager::CreateAHeroSubClass::rva0021BC0D @ 0x0021BC0D 31B (unnamed
 // in WB; called by WB CreateAHeroSubClass::GetBling/GetBlingIndex on their this)
