@@ -9,6 +9,16 @@
 // Object plus +0x40 ID plus +0x89 flag for chain caller 0x0049C8FC below
 // which tail-jmps here with the same this; noinline keeps that tail as a
 // jmp instead of inlining this 10B body.
+//
+// ?rva0049CA2F@Rva0044E6AE@@QAEXXZ @0x0049CA2F 296B (RF-1296-49CA2F)
+// A set byte at +0x88 returns. Otherwise the base slot runs, the +0x40 id is
+// resolved, and a rejected target is told to idle. An accepted target clears
+// +0x89, applies the upgrade at object+0x284 through the provider slot 0x46
+// or the arg-985 tint path, deselects, then runs the rowed +0x49C67E finish.
+// Evidence: rowed chain caller 0x0049C8FC uses the same class view (m_obj08
+// +0x40 id +0x88 +0x89); retail 0x0049CA2F..0x0049CB57 ends before the fld
+// getter at 0x0049CB57; the upgrade pointer keeps a volatile home tested in
+// the register, which the pair (up, upgrade) reproduces.
 enum ObjectID
 {
 	INVALID_ID = 0
@@ -35,20 +45,103 @@ struct AIUpdateInterface
 	AICommandInterface m_cmd20;
 };
 
+class ThingTemplate
+{
+public:
+	char m_pad[0x115];
+	unsigned char m_115;		// +0x115
+};
+
+#include "../../../Libraries/Include/Lib/RGBColor.h"
+
+class Drawable
+{
+public:
+	void rva0027541E(const RGBColor *color, unsigned int a, unsigned int b, unsigned int c);
+};
+
 class Object
 {
 public:
-	char m_pad00[0x258];
-	AIUpdateInterface *m_ai258;
+	void *rva0028C197() const;
+	void rva00293077(const void *upgrade);
+	Drawable *getDrawable() const;
+
+	char m_pad00[4];
+	ThingTemplate *m_tmpl;		// +0x04
+	char m_pad08[0x258 - 0x08];
+	AIUpdateInterface *m_ai258;	// +0x258
+	char m_pad25C[0x284 - 0x25C];
+	int m_284;			// +0x284
+	char m_pad288[0x438 - 0x288];
+	unsigned char m_privateStatus;	// +0x438
 };
 
 class GameLogic
 {
 public:
 	Object *findObjectByID(ObjectID id);
+	void deselectObject(Object *obj, unsigned int mask, int mode);
 };
 
 extern GameLogic *TheGameLogic;
+
+class Rva0026F0F0
+{
+public:
+	void *rva0026F0F0(const void *mask);
+};
+
+class UpgradeCenter;
+extern UpgradeCenter *TheUpgradeCenter;
+
+class Rva0049C5F4
+{
+public:
+	void *rva0049C5F4(Object *arg);
+};
+
+class Rva0049C6E1
+{
+public:
+	bool rva0049C6E1(Object *arg);
+};
+
+class Rva0049C67E
+{
+public:
+	void rva0049C67E(Object *obj);
+};
+
+class BfmeArg985
+{
+public:
+	char bfmeHas985C(int upgrade);
+};
+
+class Prov46
+{
+public:
+	virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+	virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+	virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+	virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+	virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+	virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+	virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+	virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+	virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+	virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+	virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+	virtual void v44(); virtual void v45();
+	virtual void slot46(void *upgrade, int zero);
+};
+
+class SpecialAbilityUpdate
+{
+public:
+	virtual void rva0045108D();
+};
 
 class Rva0044E6AE
 {
@@ -60,12 +153,14 @@ public:
 	virtual void virt34(int a, int b);
 	__declspec(noinline) void rva0044E6AE();
 	void rva0049C8FC();
+	void rva0049CA2F();
 	char m_pad04[4];
-	Object *m_obj08;
+	Object *m_obj08;		// +0x08
 	char m_pad0C[0x40 - 0x0C];
-	ObjectID m_id40;
-	char m_pad44[0x89 - 0x44];
-	unsigned char m_flag89;
+	ObjectID m_id40;		// +0x40
+	char m_pad44[0x88 - 0x44];
+	unsigned char m_flag88;		// +0x88
+	unsigned char m_flag89;		// +0x89
 };
 
 void Rva0044E6AE::rva0044E6AE()
@@ -90,4 +185,47 @@ void Rva0044E6AE::rva0049C8FC()
 	m_obj08->m_ai258->m_cmd20.aiIdle(CMD_FROM_AI);
 	m_flag89 = 0;
 	return rva0044E6AE();
+}
+
+// ?rva0049CA2F@Rva0044E6AE@@QAEXXZ @0x0049CA2F 296B
+void Rva0044E6AE::rva0049CA2F()
+{
+	if (m_flag88 != 0)
+		return;
+
+	((SpecialAbilityUpdate *)this)->SpecialAbilityUpdate::rva0045108D();
+	Object *obj = m_obj08;
+	Object *found = TheGameLogic->findObjectByID(m_id40);
+	if (found == 0 || (found->m_privateStatus & 1) != 0
+		|| ((Rva0049C6E1 *)this)->rva0049C6E1(found) == 0)
+	{
+		obj->m_ai258->m_cmd20.aiIdle(CMD_FROM_AI);
+		return;
+	}
+
+	m_flag89 = 0;
+	void *up = ((Rva0026F0F0 *)TheUpgradeCenter)->rva0026F0F0(&obj->m_284);
+	void * volatile upgrade = up;
+	if (up != 0)
+	{
+		void *prov = (found->m_tmpl->m_115 & 0x20) != 0
+			? found->rva0028C197()
+			: ((Rva0049C5F4 *)this)->rva0049C5F4(found);
+		if (prov != 0)
+			((Prov46 *)prov)->slot46(upgrade, 0);
+		else if (((BfmeArg985 *)found)->bfmeHas985C((int)upgrade) != 0)
+		{
+			float shade = 0.99f;
+			RGBColor color;
+			color.red = shade;
+			color.green = shade;
+			color.blue = shade;
+			found->rva00293077(upgrade);
+			Drawable *draw = found->getDrawable();
+			if (draw != 0)
+				draw->rva0027541E(&color, 4, 4, 0x0F);
+		}
+		TheGameLogic->deselectObject(obj, 0xFFFFF, 1);
+	}
+	((Rva0049C67E *)this)->rva0049C67E(obj);
 }
