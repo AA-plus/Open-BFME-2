@@ -80,3 +80,6 @@ GroupOrder::GroupOrder(const GroupOrder &other)
 	if (m_unused10 == 0)
 		m_unused10 = reinterpret_cast<void *>(++g_Va00E05F74);
 }
+// bfme link decl-only begin
+namespace _STL { template <> ScienceType * allocator<ScienceType>::allocate(unsigned int,void const *) const; }
+// bfme link decl-only end

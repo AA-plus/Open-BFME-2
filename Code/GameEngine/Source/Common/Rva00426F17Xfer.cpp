@@ -105,3 +105,6 @@ Xfer *Rva00426F17Xfer(Xfer *xfer, BfmeVec *vec)
 	}
 	return xfer;
 }
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<BfmeStringRecord00426A5B *>(BfmeStringRecord00426A5B *,BfmeStringRecord00426A5B *); }
+// bfme link decl-only end

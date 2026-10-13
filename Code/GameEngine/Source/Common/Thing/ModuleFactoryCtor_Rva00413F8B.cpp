@@ -43,3 +43,7 @@ private:
 Rva00413F8B::Rva00413F8B()
 {
 }
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree_base<_STL::pair<NameKeyType const,ModuleFactory::ModuleTemplate>,_STL::allocator<_STL::pair<NameKeyType const,ModuleFactory::ModuleTemplate> > >::_Rb_tree_base(_STL::allocator<_STL::pair<NameKeyType const,ModuleFactory::ModuleTemplate> > const &); }
+namespace _STL { template <> _STL::_Rb_tree_node<_STL::pair<NameKeyType const,ModuleFactory::ModuleTemplate> > * allocator<_STL::_Rb_tree_node<_STL::pair<NameKeyType const,ModuleFactory::ModuleTemplate> > >::allocate(unsigned int,void const *) const; }
+// bfme link decl-only end

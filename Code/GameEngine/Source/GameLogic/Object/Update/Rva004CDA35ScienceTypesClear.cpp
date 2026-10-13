@@ -20,3 +20,6 @@ void Rva004CDA35::rva004CDA35()
 {
 	m_scienceTypes.clear();
 }
+// bfme link decl-only begin
+namespace _STL { template <> ScienceType * vector<ScienceType,_STL::allocator<ScienceType> >::erase(ScienceType *,ScienceType *); }
+// bfme link decl-only end

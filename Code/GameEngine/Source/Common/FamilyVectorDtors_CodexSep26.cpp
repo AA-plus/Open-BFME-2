@@ -11,3 +11,8 @@
 // ??1?$vector@VRva00297360Element@@V?$allocator@VRva00297360Element@@@_STL@@@_STL@@QAE@XZ @0x403960
 class Rva00297360Element { public: ~Rva00297360Element(); };
 template _STL::vector<Rva00297360Element>::~vector();
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<Rva00297360Element *>(Rva00297360Element *,Rva00297360Element *); }
+namespace _STL { template <> void __destroy<Rva00297360Element *,Rva00297360Element>(Rva00297360Element *,Rva00297360Element *,Rva00297360Element *); }
+namespace _STL { template <> void __destroy_aux<Rva00297360Element *>(Rva00297360Element *,Rva00297360Element *,_STL::__false_type const &); }
+// bfme link decl-only end

@@ -70,3 +70,7 @@ void StrategicInGameUI::ArmyDetailsPanel::Impl::OnDestroyingArmySummary(int dumm
 	m_flag = 0;
 	outer->m_ptr->m_holder.rva002B7250((CreateAHeroData *)this);
 }
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<_STL::pair<int const,SBServer> >(_STL::pair<int const,SBServer> *); }
+namespace _STL { template <> void _Rb_tree<int,_STL::pair<int const,SBServer>,_STL::_Select1st<_STL::pair<int const,SBServer> >,_STL::less<int>,_STL::allocator<_STL::pair<int const,SBServer> > >::_M_erase(_STL::_Rb_tree_node<_STL::pair<int const,SBServer> > *); }
+// bfme link decl-only end

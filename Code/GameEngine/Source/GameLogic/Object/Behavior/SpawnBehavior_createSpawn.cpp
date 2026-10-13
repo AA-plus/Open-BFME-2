@@ -403,3 +403,8 @@ Bool SpawnBehavior::createSpawn()
 
 	return true;
 }
+// bfme link decl-only begin
+namespace _STL { template <> _STL::_List_node<ObjectID> * list<ObjectID,_STL::allocator<ObjectID> >::_M_create_node(ObjectID const &); }
+namespace _STL { template <> _STL::_List_node<ObjectID> * allocator<_STL::_List_node<ObjectID> >::allocate(unsigned int,void const *) const; }
+namespace _STL { template <> _STL::_List_iterator<ObjectID,_STL::_Nonconst_traits<ObjectID> > list<ObjectID,_STL::allocator<ObjectID> >::insert(_STL::_List_iterator<ObjectID,_STL::_Nonconst_traits<ObjectID> >,ObjectID const &); }
+// bfme link decl-only end

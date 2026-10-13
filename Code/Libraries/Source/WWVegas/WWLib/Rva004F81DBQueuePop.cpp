@@ -51,3 +51,8 @@ void Rva004F81DBQueue::pop()
 	_STL::pop_heap(m_c.begin(), m_c.end(), m_comp);
 	m_c.pop_back();
 }
+// bfme link decl-only begin
+namespace _STL { template <> void __adjust_heap<Rva004F6966 *,int,Rva004F6966,Rva004F81DBGreater>(Rva004F6966 *,int,int,Rva004F6966,Rva004F81DBGreater); }
+namespace _STL { template <> void __pop_heap<Rva004F6966 *,Rva004F6966,Rva004F81DBGreater,int>(Rva004F6966 *,Rva004F6966 *,Rva004F6966 *,Rva004F6966,Rva004F81DBGreater,int *); }
+namespace _STL { template <> void __push_heap<Rva004F6966 *,int,Rva004F6966,Rva004F81DBGreater>(Rva004F6966 *,int,int,Rva004F6966,Rva004F81DBGreater); }
+// bfme link decl-only end

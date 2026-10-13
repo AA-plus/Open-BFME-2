@@ -65,3 +65,7 @@ void iniParseFXListVec(INI *ini,void*,void*store,const void*) {
    !bfmeRva000387C0() || (_bfme_debugRecordCallsite(1),theDebug->SkipNext(),(theDebug->CrashBegin(0,0,0)<<"Unknown FX list "<<token<<" requested near line "<<static_cast<unsigned int>(ini->getLineNum())<<" of "<<reinterpret_cast<const StringBase<char>&>(ini->getFilename())).CrashDone(2));
  }
 }
+// bfme link decl-only begin
+namespace _STL { template <> void _STLP_alloc_proxy<FXList const * *,FXList const *,_STL::allocator<FXList const *> >::deallocate(FXList const * *,unsigned int); }
+namespace _STL { template <> void allocator<FXList const *>::deallocate(FXList const * *,unsigned int) const; }
+// bfme link decl-only end

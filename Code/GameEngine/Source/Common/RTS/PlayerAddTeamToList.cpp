@@ -45,3 +45,9 @@ void Player::addTeamToList(TeamPrototype *team)
 	}
 	m_playerTeamPrototypes.push_back(team);
 }
+// bfme link decl-only begin
+namespace _STL { template <> _STL::_List_node<TeamPrototype *> * list<TeamPrototype *,_STL::allocator<TeamPrototype *> >::_M_create_node(TeamPrototype * const &); }
+namespace _STL { template <> _STL::_List_node<TeamPrototype *> * allocator<_STL::_List_node<TeamPrototype *> >::allocate(unsigned int,void const *) const; }
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_List_node<TeamPrototype *> *,_STL::_List_node<TeamPrototype *>,_STL::allocator<_STL::_List_node<TeamPrototype *> > >::deallocate(_STL::_List_node<TeamPrototype *> *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_List_node<TeamPrototype *> >::deallocate(_STL::_List_node<TeamPrototype *> *,unsigned int) const; }
+// bfme link decl-only end

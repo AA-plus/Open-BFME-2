@@ -38,3 +38,6 @@ WindowVideoPairDeleter Rva000AACE4ForEach(WindowVideoMap::iterator first, Window
 		f(*first);
 	return f;
 }
+// bfme link decl-only begin
+namespace _STL { template <> _STL::_Hashtable_node<_STL::pair<GameWindow const * const,WindowVideo *> > * _Hashtable_iterator<_STL::pair<GameWindow const * const,WindowVideo *>,GameWindow const *,WindowVideoManager::hashConstGameWindowPtr,_STL::_Select1st<_STL::pair<GameWindow const * const,WindowVideo *> >,_STL::equal_to<GameWindow const *>,_STL::allocator<_STL::pair<GameWindow const * const,WindowVideo *> > >::_M_skip_to_next(); }
+// bfme link decl-only end

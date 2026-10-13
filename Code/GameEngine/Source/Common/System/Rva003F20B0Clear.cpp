@@ -39,3 +39,6 @@ void Rva003F20B0::rva003F20B0()
 	m_1A0 = false;
 	m_1A1 = false;
 }
+// bfme link decl-only begin
+namespace _STL { template <> ScienceType * vector<ScienceType,_STL::allocator<ScienceType> >::erase(ScienceType *,ScienceType *); }
+// bfme link decl-only end

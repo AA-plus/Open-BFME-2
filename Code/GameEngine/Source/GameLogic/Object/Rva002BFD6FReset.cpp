@@ -94,3 +94,9 @@ void Rva002BFD6F::rva002BFD6F()
 	m_19 = 0;
 	m_7C = 0.0f;
 }
+// bfme link decl-only begin
+namespace _STL { template <> void hashtable<_STL::pair<NameKeyType const,ArmorTemplate>,NameKeyType,rts::hash<NameKeyType>,_STL::_Select1st<_STL::pair<NameKeyType const,ArmorTemplate> >,_STL::equal_to<NameKeyType>,_STL::allocator<_STL::pair<NameKeyType const,ArmorTemplate> > >::clear(); }
+namespace _STL { template <> void _STLP_alloc_proxy<unsigned int,_STL::_Hashtable_node<_STL::pair<NameKeyType const,ArmorTemplate> >,_STL::allocator<_STL::_Hashtable_node<_STL::pair<NameKeyType const,ArmorTemplate> > > >::deallocate(_STL::_Hashtable_node<_STL::pair<NameKeyType const,ArmorTemplate> > *,unsigned int); }
+namespace _STL { template <> void __malloc_alloc<0>::deallocate(void *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_Hashtable_node<_STL::pair<NameKeyType const,ArmorTemplate> > >::deallocate(_STL::_Hashtable_node<_STL::pair<NameKeyType const,ArmorTemplate> > *,unsigned int) const; }
+// bfme link decl-only end

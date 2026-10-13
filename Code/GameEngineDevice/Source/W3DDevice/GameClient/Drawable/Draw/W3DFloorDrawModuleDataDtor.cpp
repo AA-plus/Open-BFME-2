@@ -48,3 +48,8 @@ private:
 W3DFloorDrawModuleData::~W3DFloorDrawModuleData()
 {
 }
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<CameraMarker *>(CameraMarker *,CameraMarker *); }
+namespace _STL { template <> void __destroy<CameraMarker *,CameraMarker>(CameraMarker *,CameraMarker *,CameraMarker *); }
+namespace _STL { template <> void __destroy_aux<CameraMarker *>(CameraMarker *,CameraMarker *,_STL::__false_type const &); }
+// bfme link decl-only end
