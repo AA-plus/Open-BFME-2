@@ -26,3 +26,19 @@ void __stdcall rva00210E5B(void *key, int value)
 	if (entry)
 		((Rva003FA835 *)entry)->rva003FA781(value);
 }
+
+class Rva00DFE1C8Host
+{
+public:
+	void rva00210E5B(int key, int value);
+};
+
+// ICF-folded twin of rva00210E5B above (same 33 bytes at 0x00210E5B): the
+// member spelling ignores its receiver, so its stack frame matches the
+// stdcall spelling exactly, including the callee-cleaned return.
+void Rva00DFE1C8Host::rva00210E5B(int key, int value)
+{
+	void *entry = ((Rva002BFDAE *)g_00DFEF18)->rva002BFDAE((void *)key);
+	if (entry)
+		((Rva003FA835 *)entry)->rva003FA781(value);
+}
