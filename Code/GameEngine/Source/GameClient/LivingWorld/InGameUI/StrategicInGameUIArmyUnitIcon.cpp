@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD /EHsc
 // AddUpgradeIcons: WB 1627540 names ArmyUnitIcon and this source (line189).
 // Native5F4917..5F49F0 is the complete217-byte RET0 body. Unit+8,
