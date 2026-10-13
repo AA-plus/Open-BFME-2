@@ -51,7 +51,7 @@ public:
 		: Rva0004D729(surface, &bits, pitch, left, top, right, bottom) {}
 };
 
-struct Region3D { Coord3D lo, hi; Real width() const { return hi.x - lo.x; } Real height() const { return hi.y - lo.y; } };
+#include "../../../../../Libraries/Include/Lib/Region3D.h"
 
 class GeometryInfo {
 public:

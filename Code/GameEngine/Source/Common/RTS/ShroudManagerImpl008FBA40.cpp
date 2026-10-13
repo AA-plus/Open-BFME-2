@@ -59,28 +59,7 @@ void operator delete[](void *pointer);
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include/Lib/BaseType.h
-struct Region3D
-{
-	__forceinline Region3D() {}
-
-	__forceinline Region3D(const Region3D &other)
-	{
-		lo.x = other.lo.x;
-		lo.y = other.lo.y;
-		lo.z = other.lo.z;
-		hi.x = other.hi.x;
-		hi.y = other.hi.y;
-		hi.z = other.hi.z;
-	}
-
-	__forceinline ~Region3D() {}
-
-	Real width() const { return hi.x - lo.x; }
-	Real height() const { return hi.y - lo.y; }
-
-	Coord3D lo;
-	Coord3D hi;
-};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 
 // Opaque target32-byte queue element; its fields are not used in this unit.
 // ProcessPending record stride and the rowed E32 map helper prove the size.

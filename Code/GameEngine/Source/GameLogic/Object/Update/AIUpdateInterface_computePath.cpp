@@ -60,14 +60,7 @@ extern GameLogic *TheGameLogic;
 #define CRITTER_TRACENEW(s) \
 	if (g_00E03745 && theLogicRandomLogFile) { fprintf(theLogicRandomLogFile, s); CRITTER_NEWDETAIL(); }
 
-struct Region3D
-{
-	Coord3D lo, hi;
-	Bool isInRegionNoZ(const Coord3D *p) const
-	{
-		return lo.x < p->x && p->x < hi.x && lo.y < p->y && p->y < hi.y;
-	}
-};
+#include "../../../../../Libraries/Include/Lib/Region3D.h"
 
 class ThingTemplate
 {

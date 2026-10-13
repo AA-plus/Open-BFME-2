@@ -21,13 +21,7 @@ struct BfmeRadarMapPoint : Coord2D {
 	~BfmeRadarMapPoint();
 };
 
-struct Region3D
-{
-	Coord3D lo;
-	Coord3D hi;
-	float width() const { return hi.x - lo.x; }
-	float height() const { return hi.y - lo.y; }
-};
+#include "../../../../../Libraries/Include/Lib/Region3D.h"
 
 #define BFME_PAD_VIRTUAL(n) virtual void pad##n();
 #define BFME_PAD_VIRTUAL8(n) BFME_PAD_VIRTUAL(n##0) BFME_PAD_VIRTUAL(n##1) \

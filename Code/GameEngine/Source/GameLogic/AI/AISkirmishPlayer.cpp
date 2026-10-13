@@ -222,13 +222,7 @@ public:
 };
 extern ThingFactory *TheThingFactory;
 
-struct Region3D
-{
-	Coord3D lo;
-	Coord3D hi;
-	Real width() const { return hi.x - lo.x; }
-	Real height() const { return hi.y - lo.y; }
-};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 
 class Waypoint
 {

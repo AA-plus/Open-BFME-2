@@ -22,7 +22,7 @@ typedef bool Bool;
 #include "subsystem_interface.h"
 #include "../../../../../Libraries/Include/Lib/ICoord2D.h"
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
-struct Region3D{Coord3D lo,hi;float width()const{return hi.x-lo.x;}float height()const{return hi.y-lo.y;}};
+#include "../../../../../Libraries/Include/Lib/Region3D.h"
 class Image;class RadarObject;
 class Player{public:bool hasRadar()const;};
 class PlayerList{public:char pad[0x10];Player*local;};extern PlayerList*ThePlayerList;

@@ -44,17 +44,7 @@ enum StateID
 
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
 
-struct Region3D
-{
-	Coord3D lo;
-	Coord3D hi;
-
-	Bool isInRegionNoZ(const Coord3D *query) const
-	{
-		return (lo.x < query->x) && (query->x < hi.x)
-			&& (lo.y < query->y) && (query->y < hi.y);
-	}
-};
+#include "../../../../../Libraries/Include/Lib/Region3D.h"
 
 class Overridable
 {

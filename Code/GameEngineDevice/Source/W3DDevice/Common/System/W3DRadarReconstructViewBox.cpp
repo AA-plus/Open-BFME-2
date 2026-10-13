@@ -5,7 +5,7 @@
 #include "Coord2D.h"
 struct BfmeRadarWorldPoint:Coord3D{BfmeRadarWorldPoint();~BfmeRadarWorldPoint();};
 struct BfmeRadarMapPoint:Coord2D{BfmeRadarMapPoint();~BfmeRadarMapPoint();};
-struct Region3D{Coord3D lo,hi;float width()const{return hi.x-lo.x;}float height()const{return hi.y-lo.y;}};
+#include "../../../../../Libraries/Include/Lib/Region3D.h"
 class View{public:
 virtual void slot0();
 virtual void slot1();

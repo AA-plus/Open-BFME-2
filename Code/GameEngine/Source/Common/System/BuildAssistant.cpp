@@ -211,16 +211,7 @@ enum { MAX_COMMANDS_PER_SET = 32 };
 class Player;
 class Object;
 
-struct Region3D
-{
-	Coord3D lo, hi;
-
-	Bool isInRegionNoZ( const Coord3D *query ) const
-	{
-		return (lo.x < query->x) && (query->x < hi.x)
-				&& (lo.y < query->y) && (query->y < hi.y);
-	}
-};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 class Team;
 struct Rva002A7557In;
 

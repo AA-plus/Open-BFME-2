@@ -150,16 +150,7 @@ typedef int Int;
 typedef unsigned int UnsignedInt;
 // class-gate: allow Coord3D the canonical data-only header cannot declare BFME 2's out-of-line length (rowed 0x00003571) and GetLengthEstimate (rowed 0x00003ACE) that the updates below call; same three floats
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
-struct Region3D
-{
-	Coord3D lo, hi;
-
-	Bool isInRegionNoZ(const Coord3D *query) const
-	{
-		return (lo.x < query->x) && (query->x < hi.x)
-			&& (lo.y < query->y) && (query->y < hi.y);
-	}
-};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 // TheTerrainLogic's getGroundHeight is virtual slot 6 (+0x18) and
 // getMaximumPathfindExtent slot 12 (+0x30) at the computeGoal call sites.
 class TerrainLogic
