@@ -9,12 +9,14 @@
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2/texture.h
 class TextureBaseClass
 {
-public:
-	void Release_Ref(void);
 };
 
+// Released through TextureClass's spelling, like W3DBridgeCtor.cpp, so both
+// units emit the same inline TextureRef teardown.
 class TextureClass : public TextureBaseClass
 {
+public:
+	void Release_Ref(void);
 };
 
 class TextureRef
