@@ -1,4 +1,4 @@
-// cl: /vmg /vmm /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /DBFME_ASCII_DTOR_DECL /vmg /vmm /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // BF1 donor2f243e26d AptOnlineQuickMatch.cpp rva0055A240 semantic guide.
 // Target5BB5F6..5BBDAC: two response drains, NAT failure prompt, native all-stats1348.

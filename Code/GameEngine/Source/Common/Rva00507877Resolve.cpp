@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /GX- /Oi-
+// cl: /DBFME_ASCII_DTOR_DECL /DNDEBUG /MD /GX- /Oi-
 // stlport
 //
 // ?rva00507877@Rva00507823@@UAEXXZ retail 0x00507877 163B
