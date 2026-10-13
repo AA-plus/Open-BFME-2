@@ -1,4 +1,6 @@
 // ?Add_Line@Render2DClass@@QAEXABVVector2@@0MK@Z
+// partial score=0.96 date=2026-10-13
+// ?Add_Line@Render2DClass@@QAEXABVVector2@@0MK@Z
 // partial score=0.9 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // Render2DClass::Add_Line overloads (retail 0x00042A4D 563B, 0x00042C80 573B).
@@ -91,9 +93,7 @@ void Render2DClass::Add_Line(const Vector2 &a, const Vector2 &b, float width, Bf
 	if (len2 == 0.0f)
 		return;
 
-	float oolen = WWMath::Inv_Sqrt(len2);
-	oolen *= width;
-	oolen *= 0.5f;
+	float oolen = WWMath::Inv_Sqrt(len2) * width * 0.5f;
 	corner_offset.X *= oolen;
 	corner_offset.Y = corner_offset.Y * oolen;
 
@@ -126,9 +126,7 @@ void Render2DClass::Add_Line(const Vector2 &a, const Vector2 &b, float width, Bf
 	if (len2 == 0.0f)
 		return;
 
-	float oolen = WWMath::Inv_Sqrt(len2);
-	oolen *= width;
-	oolen *= 0.5f;
+	float oolen = WWMath::Inv_Sqrt(len2) * width * 0.5f;
 	corner_offset.X *= oolen;
 	corner_offset.Y = corner_offset.Y * oolen;
 
