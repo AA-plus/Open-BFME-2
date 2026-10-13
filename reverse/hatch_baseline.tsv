@@ -4194,9 +4194,6 @@ alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FadeAndDieOrnamentU
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FadeAndDieOrnamentUpdateCtor.cpp	_vtbl_00C1AF60	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FireSpreadUpdateModuleDataCtor.cpp	_vtbl_00C4ED70	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FireSpreadUpdateUpdate.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FireWeaponUpdateBehaviorDtor.cpp	_vtbl_00BEFF90	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FireWeaponUpdateCtor.cpp	_vtbl_00BEFF90	1
-alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FireWeaponUpdateCtor.cpp	_vtbl_00C4C198	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FireWeaponUpdateModuleDataCtor.cpp	_vtbl_00C4C110	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FlammableUpdateCtor.cpp	_vtbl_00BE2B78	1
 alternatename	Code/GameEngine/Source/GameLogic/Object/Update/FlammableUpdateCtor.cpp	_vtbl_00C49800	1
