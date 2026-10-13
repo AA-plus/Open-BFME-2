@@ -1,7 +1,7 @@
 // cl: /DNDEBUG /MD
+class AptSaveLoad { public: static AptSaveLoad *s_instance; };
 // ?rva002B8860@Rva002B8860@@QAEXXZ @0x002B8860 140B. guard +0x168, globals, vector erase, clear, singleton fwd, forEach, tail endgame.
 // Evidence: caller 0x002B9DC7, callees rowed/pinned, vtable slot 0x28, push 0x9CB260.
-extern int g_Va00E032E0;
 void Rva00433D27Enable();
 void Rva00437E9C(int);
 void Rva002B29BDFire();
@@ -114,7 +114,7 @@ void Rva002B8860::rva002B8860()
 {
 	if (m_168)
 		return;
-	if (g_Va00E032E0)
+	if (AptSaveLoad::s_instance)
 	{
 		Rva00433D27Enable();
 		(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->v10();

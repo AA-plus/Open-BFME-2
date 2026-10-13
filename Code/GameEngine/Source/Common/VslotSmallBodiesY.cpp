@@ -1,4 +1,5 @@
 // cl: /DNDEBUG /MD
+class AptSaveLoad { public: static AptSaveLoad *s_instance; };
 //
 // Small vtable-slot bodies with no ledger owner and no Ghidra entry (sized
 // from their bytes), batch Y. As in VslotSmallBodiesA-X, each class and
@@ -163,7 +164,6 @@ bool Rva00513838::rva00513838()
 // 0x00E032E0 and 0x00E04908 are clear answers 1, running the rowed
 // 0x0051AF0B with 0 when bit 0 of the third argument is set; else 0.
 void Rva0051AF0BEnable(Int a);
-extern Int g_Va00E032E0;
 extern Int g_Va00A04908;
 class Rva0051B125
 {
@@ -177,7 +177,7 @@ Int Rva0051B125::rva0051B125(Int msg, unsigned char b, Int c)
 		switch (b)
 		{
 		case 1:
-			if (g_Va00E032E0 == 0 && g_Va00A04908 == 0)
+			if (AptSaveLoad::s_instance == 0 && g_Va00A04908 == 0)
 			{
 				if (c & 1)
 					Rva0051AF0BEnable(0);

@@ -3,7 +3,7 @@
 //
 // Saved-game prompt binding. Retail 0x00434EFA..0x00435107; its caller at
 // 0x00435160 reaches it when the save prompt is not already open. With the
-// save/load screen (g_Va00E032E0) up it opens the two-button message box
+// save/load screen (AptSaveLoad::s_instance) up it opens the two-button message box
 // (0x00438083 when 0x00437EDC says so, else 0x00437FB3) with the member
 // callbacks AptSaveLoad 0x00433D71 and 0x00434337 bound through the functor
 // holder 0x0057BC63 and sets the screen state +0x27C to 9; otherwise it opens
@@ -48,7 +48,8 @@ extern GameTextInterface *TheGameText;
 // dwords; the final two are an address and this-adjustment word.
 class __multiple_inheritance FunctorTarget;
 typedef void (FunctorTarget::*FunctorMethod)();
-class AptSaveLoad {public:void rva00433D71(int);};
+class AptSaveLoad {public:
+	static AptSaveLoad *s_instance;void rva00433D71(int);};
 class Rva00434337 {public:void rva00434337(int);};
 struct FunctorBinding { FunctorBinding(){}
  template<class T> FunctorBinding(T*t,void(T::*f)(int)):m_target(reinterpret_cast<FunctorTarget*>(t)),m_method(reinterpret_cast<FunctorMethod>(f)){}
@@ -125,7 +126,6 @@ struct AptSaveLoadPromptScreen
 	int m_state;
 };
 
-extern int g_Va00E032E0;
 
 bool Rva00437EDCGet();
 extern "C" void __cdecl Rva00437F61(int type,
@@ -157,17 +157,17 @@ typedef void (__cdecl *SaveCallback)(int);
 template <class T> __forceinline const T *addressOf(const T &value) { return &value; }
 void __cdecl Rva00434EFA()
 {
-	if (g_Va00E032E0)
+	if (AptSaveLoad::s_instance)
 	{
 		if (Rva00437EDCGet())
 			Rva00438083(2, TheGameText->fetch("APT:SaveGameProgress", 0), TheGameText->fetch("APT:MultiplayerGameSaved", 0),
-				ScopedFunctor(MakeBinding(reinterpret_cast<FunctorTarget *>(g_Va00E032E0), reinterpret_cast<FunctorMethod>(&AptSaveLoad::rva00433D71))),
-				ScopedFunctor(MakeBinding(reinterpret_cast<FunctorTarget *>(g_Va00E032E0), reinterpret_cast<FunctorMethod>(&Rva00434337::rva00434337))));
+				ScopedFunctor(MakeBinding(reinterpret_cast<FunctorTarget *>(AptSaveLoad::s_instance), reinterpret_cast<FunctorMethod>(&AptSaveLoad::rva00433D71))),
+				ScopedFunctor(MakeBinding(reinterpret_cast<FunctorTarget *>(AptSaveLoad::s_instance), reinterpret_cast<FunctorMethod>(&Rva00434337::rva00434337))));
 		else
 			Rva00437FB3(2, TheGameText->fetch("APT:SaveGameProgress", 0), TheGameText->fetch("APT:MultiplayerGameSaved", 0),
-				ScopedFunctor(MakeBinding(reinterpret_cast<FunctorTarget *>(g_Va00E032E0), reinterpret_cast<FunctorMethod>(&AptSaveLoad::rva00433D71))),
-				ScopedFunctor(MakeBinding(reinterpret_cast<FunctorTarget *>(g_Va00E032E0), reinterpret_cast<FunctorMethod>(&Rva00434337::rva00434337))));
-		((AptSaveLoadPromptScreen *)g_Va00E032E0)->m_state = 9;
+				ScopedFunctor(MakeBinding(reinterpret_cast<FunctorTarget *>(AptSaveLoad::s_instance), reinterpret_cast<FunctorMethod>(&AptSaveLoad::rva00433D71))),
+				ScopedFunctor(MakeBinding(reinterpret_cast<FunctorTarget *>(AptSaveLoad::s_instance), reinterpret_cast<FunctorMethod>(&Rva00434337::rva00434337))));
+		((AptSaveLoadPromptScreen *)AptSaveLoad::s_instance)->m_state = 9;
 	}
 	else
 	{

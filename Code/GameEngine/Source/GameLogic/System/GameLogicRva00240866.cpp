@@ -107,6 +107,7 @@ public:
 class AptSaveLoad
 {
 public:
+	static AptSaveLoad *s_instance;
 	void MultiplayerSaveGameDenied(int reason);
 };
 
@@ -116,7 +117,6 @@ public:
 	void rva00433D96(void);
 };
 
-extern int g_Va00E032E0;
 // VA 0x00E02EAC is a typo in the symbol name: the object is at VA
 // 0x00E032E8 (RVA 0x00A032E8), in .data's zero-filled tail past the raw end
 // at RVA 0x009DE008, so retail loads it an empty UnicodeString. Rva007ABBB3CtorInits.cpp
@@ -207,8 +207,8 @@ void GameLogic::rva00240866(Rva0023E928 *msg, bool frozen)
 					--*(unsigned int *)((char *)this + 0x40);
 				break;
 			}
-			if (g_Va00E032E0)
-				((Rva00433FDD *)g_Va00E032E0)->rva00433D96();
+			if (AptSaveLoad::s_instance)
+				((Rva00433FDD *)AptSaveLoad::s_instance)->rva00433D96();
 		}
 		*(bool *)((char *)TheGameLogic + 0x11D) = true;
 		if (player == TheNetwork->slotB8() || !TheGameState)
@@ -245,8 +245,8 @@ void GameLogic::rva00240866(Rva0023E928 *msg, bool frozen)
 		*(bool *)((char *)TheGameLogic + 0x11D) = false;
 		break;
 	case 2:
-		if (player != TheNetwork->slotB8() && g_Va00E032E0)
-			((AptSaveLoad *)g_Va00E032E0)->MultiplayerSaveGameDenied(msg->m_20);
+		if (player != TheNetwork->slotB8() && AptSaveLoad::s_instance)
+			((AptSaveLoad *)AptSaveLoad::s_instance)->MultiplayerSaveGameDenied(msg->m_20);
 		*(bool *)((char *)TheGameLogic + 0x11D) = false;
 		break;
 	}

@@ -1,16 +1,15 @@
 // ?PromptAddFriend@AptSaveLoad@@SA_NXZ
-// partial score=1.0 date=2026-10-13
 // Target: WB12AD250 names static AptSaveLoad::PromptAddFriend; native
 // 4354F3..43566A and caller435CCC prove375B and bool-in-AL return.
 // Slot name/profile offsets and callback relationship are native evidence.
 // Friend-map value identity is unresolved: this is a key-only layout view;
 // the owned map<int,int> search body reproduces the native key lookup.
-// g_Va00E032E0 is the existing owned4B canonical datum, reused without alias.
+// AptSaveLoad::s_instance is the existing owned4B canonical datum, reused without alias.
 // Shallow prompt holder matches the independently owned refcounted callback.
 // Codegen: declare profiles before slot, read the profile once through a
 // volatile scalar view, and keep message at function scope. Full375B/EH exact.
 // WB12AD250 PromptAddFriend and native4354F3..43566A establish static bool ABI.
-// Complete375B and EH now exact; coordinated canonical-global naming blocks landing.
+// Complete375B and EH exact; all save-screen references share the renamed ledger owner.
 // Both branches bind named AddFriendConfirmationHandler; native53B Rva holder copy
 // has its proven +4 reference lifetime. Four-byte one-member callback view restores
 // stack-save order. EHs preserves C-linkage prompt cleanup states4/7.
@@ -92,11 +91,11 @@ public:
 };
 
 extern GameSpyInfoInterface *TheGameSpyInfo;
-extern int g_Va00E032E0;
 
 class AptSaveLoad
 {
 public:
+	static AptSaveLoad *s_instance;
 	static GameSpyGameSlot *GetOpponentSlotData();
 	static void AddFriendConfirmationHandler(int);
 	static bool PromptAddFriend();
@@ -157,13 +156,13 @@ show_prompt:
 		UnicodeString message;
 			message.format(TheGameText->fetch("APT:AddFriendOnSaveDescription",0).str(), slot->getName().str());
 
-		if (g_Va00E032E0 != 0)
+		if (AptSaveLoad::s_instance != 0)
 		{
 			void (__cdecl *callback)(int) = AptSaveLoad::AddFriendConfirmationHandler;
 			Rva0043802B(2, TheGameText->fetch("APT:AddFriendOnSaveTitle", 0),
 				message,
 				CallbackStorage(&callback));
-			((AptSaveLoad *)g_Va00E032E0)->m_state = 0x0C;
+			((AptSaveLoad *)AptSaveLoad::s_instance)->m_state = 0x0C;
 		}
 		else
 		{

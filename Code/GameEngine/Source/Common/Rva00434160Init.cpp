@@ -1,7 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /MD
 #include "ascii_string.h"
-// ?OpenScreen@AptSaveLoad@@SAXHH_N@Z @0x00434160 120B: AptSaveLoad::OpenScreen (WorldBuilder AptSaveLoad.cpp:559 s_instance assert, same "SaveLoad.apt" push); static init storing 3 args into struct at g_Va00E032E0 after Shell::push("SaveLoad.apt",false); evidence packet callees Shell::push pin and StringBase row, callers 0x00446443 0x00515C64, globals g_Va00E032E0 g_Va00A01E48.
-extern int g_Va00E032E0;
+// ?OpenScreen@AptSaveLoad@@SAXHH_N@Z @0x00434160 120B: AptSaveLoad::OpenScreen (WorldBuilder AptSaveLoad.cpp:559 s_instance assert, same "SaveLoad.apt" push); static init storing 3 args into struct at AptSaveLoad::s_instance after Shell::push("SaveLoad.apt",false); evidence packet callees Shell::push pin and StringBase row, callers 0x00446443 0x00515C64, globals AptSaveLoad::s_instance g_Va00A01E48.
 struct GlobalA01E48;
 extern class Shell *TheShell;
 class Shell {
@@ -19,27 +18,28 @@ struct State00434160 {
 class AptSaveLoad
 {
 public:
+	static AptSaveLoad *s_instance;
     static void OpenScreen(int a1, int a2, bool a3);
 };
 void AptSaveLoad::OpenScreen(int a1, int a2, bool a3)
 {
-    if (g_Va00E032E0 != 0)
+    if (AptSaveLoad::s_instance != 0)
         return;
     ((Shell *)(*(GlobalA01E48 **)&TheShell))->push(AsciiString("SaveLoad.apt"), false);
-    ((State00434160 *)g_Va00E032E0)->f294 = a1;
-    ((State00434160 *)g_Va00E032E0)->f298 = a2;
+    ((State00434160 *)AptSaveLoad::s_instance)->f294 = a1;
+    ((State00434160 *)AptSaveLoad::s_instance)->f298 = a2;
     int c = 1;
     if (a2 & c)
-        ((State00434160 *)g_Va00E032E0)->f2a0 = c;
+        ((State00434160 *)AptSaveLoad::s_instance)->f2a0 = c;
     else {
         c = 2;
         if (a2 & c)
-            ((State00434160 *)g_Va00E032E0)->f2a0 = c;
+            ((State00434160 *)AptSaveLoad::s_instance)->f2a0 = c;
         else {
             c = 4;
             if (a2 & c)
-                ((State00434160 *)g_Va00E032E0)->f2a0 = c;
+                ((State00434160 *)AptSaveLoad::s_instance)->f2a0 = c;
         }
     }
-    ((State00434160 *)g_Va00E032E0)->f29c = a3;
+    ((State00434160 *)AptSaveLoad::s_instance)->f29c = a3;
 }

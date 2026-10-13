@@ -1,4 +1,5 @@
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /DNDEBUG /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /O1 /G7 /arch:SSE /I.
+class AptSaveLoad { public: static AptSaveLoad *s_instance; };
 // stlport
 // Target evidence: vptr pair 0x00C3CDC8/0x00C3CDC4 at this/+0x218, AptSaveLoad
 // strings and neighboring callbacks, pending kind at +0x28, and the fields
@@ -14,7 +15,6 @@ extern int g_Va00E04910;
 
 extern int g_Va00E0333C;
 
-extern int g_Va00E032E0;
 
 extern class GameWindowManager *TheWindowManager;
 
@@ -239,7 +239,7 @@ Rva00435DE7::~Rva00435DE7()
 
 		GameLogic *logic = (GameLogic *)*(void **)&TheGameLogic;
 		int one = 1;
-		*(int *)&g_Va00E032E0 = 0;
+		*(int *)&AptSaveLoad::s_instance = 0;
 		if (logic != 0)
 			logic->rva0023CD9E(m_pausedOnEntry, 2, one);
 

@@ -52,6 +52,7 @@ class GameSpyGameSlot;
 class AptSaveLoad
 {
 public:
+	static AptSaveLoad *s_instance;
 	static void __cdecl AddFriendConfirmationHandler(int button);
 	static GameSpyGameSlot *GetOpponentSlotData();
 	void OnClosed(const char *unused);
@@ -209,7 +210,6 @@ void __cdecl Rva004178C1(int profileID, const AsciiString &name);
 void __cdecl Rva00434EFA();
 
 // Set while the saved-game prompt is up (0x00E032E0).
-extern int g_Va00E032E0;
 
 // Retail 0x00435107, 107 bytes. Named WB12AD800/371 and assertions755/757
 // identify AptSaveLoad::AddFriendConfirmationHandler. The complete WB/native
@@ -226,7 +226,7 @@ void __cdecl AptSaveLoad::AddFriendConfirmationHandler(int button)
 			return;
 		Rva004178C1(slot->getProfileID(), AsciiString(slot->m_name));
 	}
-	if (!g_Va00E032E0)
+	if (!AptSaveLoad::s_instance)
 		Rva00434EFA();
 }
 

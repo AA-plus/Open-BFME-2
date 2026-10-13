@@ -53,16 +53,18 @@ int Rva0021913AGet(void)
 	return g_Va00DFE348;
 }
 
-extern int g_Va00E032E0;
-// g_Va00E032E0: matched references place it at VA 0xe032e0 (zero-filled .bss).
-int g_Va00E032E0;
+// AptSaveLoad::s_instance: matched references place it at VA 0xe032e0 (zero-filled .bss).
+class AptSaveLoad { public: static AptSaveLoad *s_instance; };
+// Named WB OpenScreen assertions559/560 and retail save-screen lifecycle
+// identify this one pointer; public access is a reconstruction choice.
+AptSaveLoad *AptSaveLoad::s_instance;
 
 // ?Rva0023C54CGet@@YAHXZ @ 0x0023c54c (6B) over 0x00E032E0.
 // Follows a ret (prev C3), no .rdata vtable slot, no direct callers,
 // no branch sources. Opaque address-derived name.
 int Rva0023C54CGet(void)
 {
-	return g_Va00E032E0;
+	return (int)AptSaveLoad::s_instance;
 }
 
 extern int g_Va00E0333C;
