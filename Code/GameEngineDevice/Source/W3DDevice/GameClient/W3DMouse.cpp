@@ -58,6 +58,8 @@
 #endif
 
 //Since there can't be more than 1 mouse, might as well keep these static.
+// W3DMouseCtor.cpp and W3DMouseInitW3DAssets.cpp, split out of this unit, name the
+// thread and the world-cursor tables, so those have C linkage here.
 static CriticalSectionClass mutex;
 static MutexClass threadMutex;
 static Bool isThread;
@@ -66,8 +68,8 @@ static TextureClass *cursorTextures[Mouse::NUM_MOUSE_CURSORS][MAX_2D_CURSOR_ANIM
 enum { RETAIL_WORLD_CURSOR_COUNT = 56 };
 static const Image *cursorImages[RETAIL_WORLD_CURSOR_COUNT];			///<Images for use with the RM_POLYGON method.
 // Retail freeW3DAssets traverses 0xE0 bytes in each of these tables.
-static RenderObjClass *cursorModels[RETAIL_WORLD_CURSOR_COUNT];	///< W3D models for each cursor type
-static HAnimClass			*cursorAnims[RETAIL_WORLD_CURSOR_COUNT];		///< W3D animations for each cursor type
+extern "C" { RenderObjClass *cursorModels[RETAIL_WORLD_CURSOR_COUNT]; }	///< W3D models for each cursor type
+extern "C" { HAnimClass			*cursorAnims[RETAIL_WORLD_CURSOR_COUNT]; }		///< W3D animations for each cursor type
 
 ///Mouse polling/update thread function
 // Retail reaches Mouse::draw through [eax+0x30]; the reference Mouse header
@@ -82,7 +84,7 @@ public:
 	virtual void slot08(); virtual void slot09(); virtual void slot0A(); virtual void slot0B();
 	virtual void draw();
 };
-static class MouseThreadClass : public ThreadClass
+class MouseThreadClass : public ThreadClass
 {
 
 public:
@@ -91,7 +93,8 @@ public:
 
 	void Thread_Function();
 
-} thread;
+};
+extern "C" { MouseThreadClass thread; }
 
 void MouseThreadClass::Thread_Function()
 {
