@@ -87944,3 +87944,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?rva001DDAE1@Rva001DDAE1@@QAEXPAUCoord3D@@@Z,,0x001DDAE1,173,Code/GameEngine/Source/GameClient/EvaLocationQueueRva001DDAE1.cpp,matched,
 ?rva0046C71E@HordeContain@@UAE_NXZ,,0x0046C71E,134,Code/GameEngine/Source/GameLogic/Object/Contain/HordeContainIface11CSlots.cpp,matched,
 ?rva002C61AF@Rva002C60E4@@QAEXXZ,,0x002C61AF,133,Code/GameEngine/Source/Common/Rva002C60E4Ctor.cpp,matched,
+?rva001DDF04@Eva@@QAEXXZ,,0x001DDF04,594,Code/GameEngine/Source/GameClient/EvaRva001DDF04.cpp,matched,
