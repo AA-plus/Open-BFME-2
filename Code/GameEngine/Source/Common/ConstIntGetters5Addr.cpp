@@ -13,6 +13,23 @@
 // the frameless 6-byte shape).
 
 
+// These declarations name existing field tables without asserting instance
+// layouts. Native six-byte getters independently supply each table address.
+struct FieldParse;
+class LivingWorldRegionEffectsManager {
+public:
+    static const FieldParse s_parseTable[];
+};
+class RingEffect {
+public:
+    static const FieldParse m_fieldParseTable[];
+};
+class CreditsManager {
+public:
+    static const FieldParse m_creditsFieldParseTable[];
+};
+extern const FieldParse AIDozerAssignmentFields[];
+
 // ?Rva001DB686Get@@YAHXZ @ 0x001db686 (6B): returns 0x00c0cd88.
 // Follows a ret-4 (prev C2-04-00), no .rdata vtable slot, no direct callers,
 // no branch sources. Opaque address-derived name.
@@ -58,7 +75,7 @@ int Rva003B0FA0Get(void)
 // no branch sources. Opaque address-derived name.
 int Rva003EE72EGet(void)
 {
-	return 0x00dc14c8;
+	return reinterpret_cast<int>(LivingWorldRegionEffectsManager::s_parseTable);
 }
 
 // ?Rva0041E6B8Get@@YAHXZ @ 0x0041e6b8 (6B): returns 0x00c3af18.
@@ -126,7 +143,7 @@ int Rva002A88BBGet(void)
 // 0xBFD7xx family as the tuning table.
 int Rva002A88C1Get(void)
 {
-	return 0x00bfd7c0;
+	return reinterpret_cast<int>(AIDozerAssignmentFields);
 }
 
 // ?Rva00016AC0Get@@YAHXZ @ 0x00016ac0 (6B): returns 0x00bbbddc.
@@ -298,7 +315,7 @@ int Rva00309E1EGet(void)
 // address-derived name.
 int Rva00309E24Get(void)
 {
-	return 0x00c08400;
+	return reinterpret_cast<int>(RingEffect::m_fieldParseTable);
 }
 
 // ?Rva0033A507Get@@YAHXZ @ 0x0033a507 (6B): returns 0x00c1045c.
@@ -399,7 +416,7 @@ int Rva00509DA5Get(void)
 // address-derived name.
 int Rva005B729FGet(void)
 {
-	return 0x00c737e8;
+	return reinterpret_cast<int>(CreditsManager::m_creditsFieldParseTable);
 }
 
 // ?Rva00611030Get@@YAHXZ @ 0x00611030 (6B): returns 0x00e08c58.
