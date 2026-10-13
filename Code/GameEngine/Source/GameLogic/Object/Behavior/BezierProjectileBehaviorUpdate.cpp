@@ -1,13 +1,12 @@
 // ?update@BezierProjectileBehavior@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.95 date=2026-10-11
 // cl: /I. /O1 /Ob2 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB
 // stlport
-// Round 4: body restructured from the WB debug twin (scoped BFME2 Coord3D
-// locals with ctor/dtor, Vector3 dir/temp + inline Normalize, inline
-// setNextPosition, weapon at +0x3C). Every instruction now matches retail
-// except stack slots: retail packs filterC at -0x40 above the -0x4C group
-// (newPos/prevPos/targetPos/filterA) and the aim temp at -0x2C; cl puts
-// filterC/aim below that group, matrix at -0x88, frame 0x7C vs 0x70.
+// Recovered native update at RVA 0x0045C226; the aim output and following
+// delta share one Coord3D buffer. That storage reuse restores the native
+// 0x70 frame and all 1516 body bytes with the scalar-copy BezCoord view.
+// Donor BFME1 cee35b7d8 supplies related projectile semantics; target bytes
+// and WB supply the actual identity and offsets. The original local types
+// and spelling of the storage reuse remain unknown.
 // WorldBuilder 1181E80 names BezierProjectileBehavior::update; native
 // 45C226..45C812. ZH DumbProjectileBehavior::update supplies path retargeting,
 // orientation and bridge transitions. BFME1 BezierProjectileBehavior path
@@ -67,9 +66,11 @@ class BezierDebugDisplay { public:
  virtual void s6();virtual void s7();virtual void s8();virtual void s9();virtual void s10();virtual void s11();
  virtual void drawCircle(const Coord3D*,float,unsigned);
 };
-extern BezierDebugDisplay *TheDisplay;
+class Display;
+extern Display *TheDisplay;
 struct BezierGlobalData { char pad[0xE9C]; bool debug; };
-extern BezierGlobalData *TheGlobalData;
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
 class Rva000421C8 { public:
  Rva000421C8():m_next(0){} virtual ~Rva000421C8(){} virtual bool allow(Object*)=0;
  virtual int getPlayerMask(); Rva000421C8 *link(Rva000421C8*); Rva000421C8 *m_next;
@@ -127,11 +128,11 @@ UpdateSleepTime BezierProjectileBehavior::update()
 			if (d->includeAllies)
 				relation = 6;
 			relation |= 1;
-			if (TheGlobalData->debug)
+			if (((BezierGlobalData *)TheWritableGlobalData)->debug)
 			{
 				BezCoord pos(end);
 				pos.z = TheTerrainLogic->getGroundHeight(pos.x, pos.y, 0);
-				TheDisplay->drawCircle(&pos, d->effectRadius, 0xffff00ff);
+				((BezierDebugDisplay *)TheDisplay)->drawCircle(&pos, d->effectRadius, 0xffff00ff);
 			}
 			BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(&end, d->effectRadius, 1,
 				Rva00260EB1Filter(obj, relation, false).link(Rva0026119DFilter().link(&Rva002611BFFilter(obj))), 1);
@@ -150,9 +151,8 @@ UpdateSleepTime BezierProjectileBehavior::update()
 		if (target)
 		{
 			BezCoord newPos;
-			Coord3D aim;
-			newPos = *weapon->getAimPosition(&aim, obj, target, 1);
 			Coord3D delta;
+			newPos = *weapon->getAimPosition(&delta, obj, target, 1);
 			delta.x = newPos.x - end.x;
 			delta.y = newPos.y - end.y;
 			delta.z = newPos.z - end.z;
