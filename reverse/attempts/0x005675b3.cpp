@@ -1,4 +1,6 @@
 // ?solve@PartitionSolver@@QAEXXZ
+// partial score=0.8402 date=2026-10-13
+// ?solve@PartitionSolver@@QAEXXZ
 // partial score=0.93 date=2026-10-13
 // ?solve@PartitionSolver@@QAEXXZ
 // partial score=0.9
@@ -60,9 +62,10 @@ void PartitionSolver::solve(void)
 
 	if (m_howToSolve == PREFER_FAST_SOLUTION)
 	{
+		unsigned n = spacesStillAvailable.size();
 		for (i = 0; i < m_data.size(); ++i)
 		{
-			for (j = 0; j < spacesStillAvailable.size(); ++j)
+			for (j = 0; j < (Int)n; ++j)
 			{
 				if (m_data[i].second <= (unsigned)sb[j].b) {
 					sb[j].b -= m_data[i].second;

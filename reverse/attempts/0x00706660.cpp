@@ -1,4 +1,6 @@
 // ?callFunction@AptActionInterpreter@@QAEXPAVAptValue@@0H@Z
+// partial score=0.9549 date=2026-10-13
+// ?callFunction@AptActionInterpreter@@QAEXPAVAptValue@@0H@Z
 // partial score=0.9528 date=2026-10-13
 // ?callFunction@AptActionInterpreter@@QAEXPAVAptValue@@0H@Z
 // partial score=0.96 date=2026-10-13
@@ -27,7 +29,7 @@ struct AptActionInterpreter {
  void callFunction(AptValue *,AptValue *,int);
 };
 void AptActionInterpreter::callFunction(AptValue *context,AptValue *function,int nParams) {
- int before=stack.count-nParams;function=*(AptValue*volatile*)&function;
+ int before=stack.count-nParams;
  if(function && (unsigned char)((BfmeAptValue006DCD20 *)function)->isNativeFunction()) {
   AptConstantPool old=constantPool;
   NativeFunctionView *fn=(NativeFunctionView *)((BfmeAptValue006DCD20 *)function)->rva006DCF20();
