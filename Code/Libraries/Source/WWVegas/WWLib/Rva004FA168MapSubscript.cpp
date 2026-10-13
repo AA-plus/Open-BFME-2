@@ -40,7 +40,9 @@ public:
  __forceinline Rva004FA168Storage(const Rva004FA168Storage &source) {
   ((CopyProvider*)this)->CopyProvider::vector(*(const CopyProvider*)&source);
  }
- __forceinline ~Rva004FA168Storage(){((DestroyProvider*)this)->DestroyProvider::~DestroyProvider();}
+ // The battle home owns the complete native 63B destructor at 4F7D7F.
+ // Refer to that provider instead of emitting a competing five-byte wrapper.
+ ~Rva004FA168Storage();
 };
 struct Rva004F90FFMapped {int a;};
 typedef _STL::map<int,int> BoundProvider;

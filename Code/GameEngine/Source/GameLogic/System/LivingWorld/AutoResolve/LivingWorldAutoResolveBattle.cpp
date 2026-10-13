@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /O1 /G7 /arch:SSE /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // Target identity: WB12EB4A0 names LivingWorldAutoResolveBattle's
 // buildReinforcementMaps at its source home lines331..337. Native
@@ -34,7 +34,8 @@ struct Rva004FA1F3Entries {
  }
  ~Rva004FA1F3Entries() {reinterpret_cast<EntryVector*>(this)->EntryVector::~EntryVector();}
 };
-class ArmySummary {public: void GetEntries(EntryVector &);};
+struct ArmyPair {int a[2];};
+class ArmySummary {public: void GetEntries(EntryVector &); char prefix[0x40]; _STL::vector<ArmyPair> entries;};
 
 struct TargetRef00217D4C {virtual void *destroy(unsigned); int references;};
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
@@ -143,7 +144,42 @@ public:
  void *thing;
  unsigned unknown30;
 };
-class Rva004FA168Storage {public: Rva004F87BCElement *start,*finish,*capacity;};
+struct BfmePod52 {int a[13];};
+struct Rva004F6986 {char bytes[8];};
+class ModuleData;
+typedef _STL::vector<BfmePod52> PlayerCopy;
+typedef _STL::vector<Rva004F6986> PairReserve;
+typedef _STL::vector<const ModuleData*> PointerProvider;
+namespace _STL {
+template<> PlayerCopy::vector(const PlayerCopy&);
+template<> void PairReserve::reserve(unsigned);
+template<> void PointerProvider::reserve(unsigned);
+template<> inline __declspec(noinline) void PointerProvider::push_back(const ModuleData *const&x) {
+ if(this->_M_finish != this->_M_end_of_storage._M_data) {
+  _Construct(this->_M_finish,x); ++this->_M_finish;
+ } else _M_insert_overflow(this->_M_finish,x,_IsPODType(),1UL,true);
+}
+}
+class Rva004F5FD8 {
+public:__declspec(nothrow) Rva004F5FD8(const Rva004F5FD8&);virtual ~Rva004F5FD8();
+private:int words[10];
+};
+namespace _STL {template<> void _Destroy<TreeHintRef00217D4C *>(TreeHintRef00217D4C *,TreeHintRef00217D4C *);}
+extern "C" void __cdecl free(void *);
+struct BattleUnitStorageBase {
+ Rva004F87BCElement *start,*finish,*capacity;
+ ~BattleUnitStorageBase(){if(start) free(start);}
+};
+class Rva004FA168Storage : public BattleUnitStorageBase {public:
+ Rva004FA168Storage(const _STL::allocator<TreeHintRef00217D4C> &a = _STL::allocator<TreeHintRef00217D4C>()) {
+ typedef _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> > H;
+ ((H*)this)->H::_Vector_base(reinterpret_cast<const _STL::allocator<BfmeE16>&>(a));
+ }
+ ~Rva004FA168Storage();
+};
+Rva004FA168Storage::~Rva004FA168Storage(){_STL::_Destroy(reinterpret_cast<TreeHintRef00217D4C*>(start),reinterpret_cast<TreeHintRef00217D4C*>(finish));}
+
+
 
 
 struct BfmeE12 {float a,b,c;};
@@ -170,24 +206,62 @@ struct Rva004F8C16Element {char opaque[4];};
 struct Rva004F9185Cmp {};
 void rva004F904F(Rva004F8C16Element *,Rva004F8C16Element *,Rva004F8C16Element *,Rva004F9185Cmp);
 
+typedef _STL::pair<const int,Rva004FA168Storage> RoundMapPair;
+typedef _STL::allocator<RoundMapPair> RoundMapAllocator;
+typedef _STL::_Rb_tree<int,RoundMapPair,_STL::_Select1st<RoundMapPair>,_STL::less<int>,RoundMapAllocator> RoundMapTree;
 class Rva004FA168Map {
-public: ~Rva004FA168Map();
+public: Rva004FA168Map(); ~Rva004FA168Map();
  Rva004FA168Storage &subscript(const int &);
  void rva004F88BB(Rva004F88BBIterator);
  void erase(const Rva004F88BBIterator &p){rva004F88BB(p);}
 private: unsigned header,count,unknown8;
 };
+Rva004FA168Map::Rva004FA168Map() {
+ ((RoundMapTree*)this)->RoundMapTree::_Rb_tree(_STL::less<int>(),RoundMapAllocator());
+}
+struct HeaderStorage {
+ unsigned start,finish,capacity;
+ __forceinline HeaderStorage() {
+ typedef _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> > H;
+ ((H*)this)->H::_Vector_base(_STL::allocator<BfmeE16>());
+ }
+ __declspec(noinline) ~HeaderStorage(){if(start) free((void *)start);}
+ void push(Rva004F5FD8 *const&p) {((PointerProvider*)this)->push_back((const ModuleData *const&)p);}
+};
+struct Rva002BBB96Element {char opaque[52];};
+namespace _STL {template<> vector<Rva002BBB96Element>::~vector();}
+struct Rva004F87F3 {
+ unsigned start,finish,capacity;
+ __forceinline Rva004F87F3() {
+  typedef _STL::_Vector_base<BfmeE16,_STL::allocator<BfmeE16> > H;
+  ((H*)this)->H::_Vector_base(_STL::allocator<BfmeE16>());
+ }
+ ~Rva004F87F3();
+};
 class LivingWorldAutoResolveResourceBonusSchedule {public:int *getBonusForResourceAmount(int);};
 struct Rva004F68B8Entry {char pad[0x1C];int amount;};
 struct Rva004FA1F3Player {
  _STL::map<int,ArmySummary*> reinforcements;
- char unknown0C[0x18];
+ EntryVector entries; int unknown18[3];
  LivingWorldAutoResolveResourceBonusSchedule *schedule;
- int unknown28;
+ Rva004F5FD8 *bonusInput;
  int side,unknown30;
 };
+struct PlayerStorage {
+ Rva004FA1F3Player *start,*finish,*capacity;
+ PlayerStorage(const PlayerStorage&p){((PlayerCopy*)this)->PlayerCopy::vector(*(const PlayerCopy*)&p);}
+ ~PlayerStorage() {
+  typedef _STL::vector<Rva002BBB96Element> P;
+  ((P*)this)->P::~vector();
+ }
+ Rva004FA1F3Player *begin(){return start;} Rva004FA1F3Player &operator[](unsigned i){return *(begin()+i);}
+ unsigned size()const{return finish-start;}
+};
+namespace _STL {template<> vector<Rva004F69C3>::~vector();}
+class Rva004F6187 {public:void rva004F61B1();};
 class LivingWorldAutoResolveBattle {
 public:
+ LivingWorldAutoResolveBattle(const PlayerStorage&);
  void rva004F9C8E(TreeHintRef00217D4C *,int);
  void rva004F68B8(unsigned,bool);
  void buildReinforcementMaps();
@@ -195,12 +269,12 @@ public:
  void addUnitsForCurrentRound(int);
  void rva004F9635(Rva004F9635Rec *);
  void rva004F9658(Rva004FA168Storage &,EntryVector &,ArmySummary *,unsigned,bool);
- _STL::vector<Rva004FA1F3Player> players;
+ PlayerStorage players;
  Rva004FA168Storage currentUnits[2];
  Rva004FA168Map maps[2];
- char unknown3C[0x24];
+ Rva004F87F3 combined; HeaderStorage bonusInputs,bonuses;
  _STL::vector<ObjectID> m_deadIDs;
- _STL::vector<Rva0040CB11Entry> m_entries;
+ _STL::vector<Rva004F69C3> m_entries;
  int winner,roundNumber;
 };
 void LivingWorldAutoResolveBattle::buildReinforcementMaps()
@@ -288,7 +362,7 @@ void LivingWorldAutoResolveBattle::rva004F9C8E(TreeHintRef00217D4C *pos, int sid
 		{
 			int word = record->m_word;
 			Rva004F6093Holder holder(object);
-			m_entries.push_back((const Rva0040CB11Entry &)Rva004F6A1A(&word, holder));
+			reinterpret_cast<_STL::vector<Rva0040CB11Entry> *>(&m_entries)->push_back((const Rva0040CB11Entry &)Rva004F6A1A(&word, holder));
 		}
 	}
 	reinterpret_cast<Rva004F70D1 *>(&currentUnits[side])->rva004F70D1(pos);
@@ -348,4 +422,39 @@ class Rva004F9378 {public:~Rva004F9378();};
 Rva004FA168Map::~Rva004FA168Map()
 {
  reinterpret_cast<Rva004F9378 *>(this)->~Rva004F9378();
+}
+
+// WB12E96E0 names this constructor; native4FA3C9..4FA5B8 is495B RET4.
+// Retail proves52B player records, side vectors0C/18, round maps24/30,
+// combined3C, skill copies48, bonus pointers54, ObjectIDs60, entries6C,
+// winner78 and round7C. All member callbacks and EH cleanup targets are
+// whole-body verified, including the63B side-vector destructor under /EHs.
+// BfmePod52/BfmeE16/ModuleData and local owning wrappers are ABI views;
+// their spellings do not establish original target element/class names.
+LivingWorldAutoResolveBattle::LivingWorldAutoResolveBattle(const PlayerStorage&input):players(input) {
+ roundNumber=0;
+ ((PointerProvider*)&bonusInputs)->reserve(players.size());
+ unsigned counts[2];
+ for(int side=0;side<2;++side)counts[side]=0;
+ for(unsigned index=0;index<players.size();++index) {
+  Rva004FA1F3Player &player=players.start[index];
+  if(player.bonusInput)bonusInputs.push(new Rva004F5FD8(*player.bonusInput));
+  else bonusInputs.push(0);
+  bonuses.push(0);
+  rva004F68B8(index,true);
+  rva004F9658(currentUnits[player.side],player.entries,0,index,true);
+  counts[player.side]+=player.entries.size();
+  _STL::map<int,ArmySummary*>::iterator end=player.reinforcements.end();
+  for(_STL::map<int,ArmySummary*>::iterator p=player.reinforcements.begin();p!=end;++p) {
+   ArmySummary *army=p->second;
+   counts[player.side]+=army->entries.size();
+  }
+ }
+ unsigned total=0;
+ for(int side=0;side<2;++side) {
+  total+=counts[side];((Rva004F7DF9Vector*)&currentUnits[side])->reserve(counts[side]);
+ }
+ ((PairReserve*)&combined)->reserve(total);
+ buildReinforcementMaps();addUnitsForCurrentRound(1);
+ winner=-1;((Rva004F6187*)this)->rva004F61B1();
 }
