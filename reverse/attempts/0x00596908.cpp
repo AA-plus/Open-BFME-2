@@ -1,4 +1,6 @@
 // ?rva00596908@FadeInTextRender@@UAEXPAVText004721F0@@PBUICoord2D@@I@Z
+// partial score=0.9305 date=2026-10-13
+// ?rva00596908@FadeInTextRender@@UAEXPAVText004721F0@@PBUICoord2D@@I@Z
 // partial score=0.9 date=2026-10-13
 // Target Ghidra5967B3+341; same 54-byte owner as constructor/dtor5966DD/59675A.
 // BF1 9cbfb551fe20 FadeInTextRender.cpp initialize is the primary source lead:
