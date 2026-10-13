@@ -166,7 +166,7 @@ private:
 void Rva00419BB8::rva00419BB8(int, int, const char *text)
 {
 	if (m_enabled)
-		m_text.concat(text);
+		((StringBase<char> *)&m_text)->concat(text);
 }
 
 // --- 0x004FA5B8 (28B): a module data's field-parse builder: the base's
