@@ -57,3 +57,13 @@ Rva005F501E::~Rva005F501E(){
  ((Rva002B7250*)&selected)->rva002B7250((CreateAHeroData*)this);
  ((Rva002B7250*)((char*)((Rva005FArmyContext*)context)->getObserved()+4))->rva002B7250((CreateAHeroData*)(Rva005FSecondaryCallbacks*)this);
 }
+// ??0Rva005F501E@@QAE@PAVRva005F54DA@@HPAX1@Z @0x005F523F 129B: late
+// secondary local keeps the selected address in EDI (native) instead of
+// hoisting the secondary lea into EDI early.
+Rva005F501E::Rva005F501E(Rva005F54DA *o,int s,void *c,void *sel)
+ :owner(o),side(s),context(c),selected(*(const Rva005F24F0 *)sel),changed(false)
+{
+ Rva005FSecondaryCallbacks *sec = (Rva005FSecondaryCallbacks *)this;
+ ((Rva005A0B4CList *)((char *)((Rva005FArmyContext *)context)->getObserved() + 4))->append((Rva002BA8F1Listener *)sec);
+ ((Rva005A0B4CList *)&selected)->append((Rva002BA8F1Listener *)this);
+}
