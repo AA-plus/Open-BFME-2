@@ -30,7 +30,9 @@ Rva00148F5ECache MapGenericAIObjectIDCache = { NAMEKEY_INVALID, "GenericAIObject
 Rva00148F5ECache g_00DBDC84 = { NAMEKEY_INVALID, "GenericAIObjectType" };
 Rva00148F5ECache g_00DBDC8C = { NAMEKEY_INVALID, "GenericAIObjectWallHubNumber" };
 Rva00148F5ECache g_00DBDC74 = { NAMEKEY_INVALID, "waypointID" };
-extern Rva00148F5ECache g_00DBDC64;
+Rva00148F5ECache g_00DBDC64 = { NAMEKEY_INVALID, "waypointName" };	// RVA 0x009BDC64
+Rva00148F5ECache g_00DBDC6C = { NAMEKEY_INVALID, "GenericAIObjectName" };	// RVA 0x009BDC6C
+Rva00148F5ECache g_objectThreatFinderRadiusKey = { NAMEKEY_INVALID, "objectThreatFinderRadius" };	// RVA 0x009BDE1C
 extern Rva00148F5ECache g_00DBDC6C;
 
 class Dict
