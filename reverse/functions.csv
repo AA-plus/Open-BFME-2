@@ -87448,3 +87448,4 @@ $L16612,,0x0077F0C8,14,Code/GameEngine/Source/Common/RTS/UnitRevivalTracker.cpp,
 ?rva0060D594@@YAXPAUBfmeRva0060D594Stream@@PBDZZ,,0x0060D594,68,Code/Libraries/Source/xfer/xfer_crc.cpp,matched,file-static printf-style text writer: vsnprintf into a 1 KB buffer then stream slot 4 write; stream in ESI; source-only caller
 ?rva005CB46A@@YAXPAVRegionUI@@PAX@Z,,0x005CB46A,93,Code/GameEngine/Source/Common/VslotSmallBodiesW5SN4.cpp,matched,file-static RegionUI image/text/visibility updater; ui in ESI from same-TU caller 0x005CB723
 ?rva005CB723@Rva005CB723@@QAEXPAX@Z,,0x005CB723,37,Code/GameEngine/Source/Common/VslotSmallBodiesW5SN4.cpp,matched,item change: updates the RegionUI through static 0x005CB46A when present then stores the item
+?rva00219005@@YAXPAVINI@@@Z,,0x00219005,144,Code/Libraries/Source/WWVegas/WWLib/MixFileCreatorParse.cpp,matched,FontDefaultSettings INI block: named font table then Size field parse via Rva00218E96Parse then sort

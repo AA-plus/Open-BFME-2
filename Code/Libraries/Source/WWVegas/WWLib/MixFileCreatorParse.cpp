@@ -43,8 +43,47 @@ public:
 	const char *getNextToken(const char *delimiters);
 	int scanInt(const char *token);
 	AsciiString getNextAsciiString();
+	AsciiString getNextQuotedAsciiString();
+	void initFromINI(void *instance, const struct FieldParse *fields);
 };
 
+struct Rva00218FC2Record
+{
+	Rva00218FC2Record();
+	Rva00218FC2Record(const Rva00218FC2Record &);
+	~Rva00218FC2Record();
+	Rva00218FC2Record &operator=(const Rva00218FC2Record &);
+	char bytes[16];
+	bool Less(const Rva00218FC2Record &) const;
+};
+
+struct Rva00218FC2RecordCompare
+{
+	bool operator()(const Rva00218FC2Record &a, const Rva00218FC2Record &b) const { return a.Less(b); }
+};
+
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
+
+class FontLibrary
+{
+public:
+	_STL::vector<Rva00218FC2Record> *rva00218C2B(const AsciiString &name);
+};
+
+extern FontLibrary *TheFontLibrary;
+
+namespace _STL
+{
+template <class I, class C> void sort(I first, I last, C comp);
+}
 void Rva00218E96Parse(INI *ini, int unused, _STL::vector<FileInfoStruct> *out)
 {
 	int crc = ini->scanInt(ini->getNextToken(0));
@@ -70,4 +109,15 @@ void Rva00218E96Parse(INI *ini, int unused, _STL::vector<FileInfoStruct> *out)
 	}
 	if (info.Filename.getLength() > 0)
 		out->push_back(info);
+}
+
+void rva00219005(INI *ini)
+{
+	(void)&ini;
+	AsciiString name = ini->getNextQuotedAsciiString();
+	_STL::vector<Rva00218FC2Record> *table = TheFontLibrary->rva00218C2B(name);
+	FieldParse fields[2] = {{"Size", (INIFieldParseProc)Rva00218E96Parse, 0, 0}, {0, 0, 0, 0}};
+	ini->initFromINI(table, fields);
+	Rva00218FC2RecordCompare compare = {};
+	_STL::sort(table->begin(), table->end(), compare);
 }
