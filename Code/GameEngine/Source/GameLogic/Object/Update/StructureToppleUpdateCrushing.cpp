@@ -323,7 +323,7 @@ public:
 	AIUpdateInterface *getAIUpdateInterface() const { return m_ai; }
 	Drawable *getDrawable() const;
 	Module *findUpdateModule(NameKeyType key) const { return findModule(key); }
-	void setTransformMatrix(const Matrix3D *mx);
+	void rva0028D412(const Matrix3D *mx);
 	void rva0028AE6D();
 	__forceinline void setModelConditionState(ModelConditionFlagType flag)
 	{
@@ -833,7 +833,7 @@ void StructureToppleUpdate::doToppleDoneStuff()
 
 	Matrix3D xfrm = *building->getTransformMatrix();
 	xfrm.In_Place_Pre_Rotate_Z(toppleAngle-origAngle);
-	building->setTransformMatrix(&xfrm);
+	building->rva0028D412(&xfrm);
 }
 
 // ?update@StructureToppleUpdate@@UAE?AW4UpdateSleepTime@@XZ

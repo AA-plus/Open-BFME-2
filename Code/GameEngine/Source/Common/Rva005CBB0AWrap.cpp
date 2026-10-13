@@ -16,14 +16,14 @@ public:
 class Rva005CBB0A
 {
 public:
-	void rva002BFDE6(int arg, void *obj);
+	void *rva002BFDE6(void *arg, void *obj);
 	void rva005CBB0A(int arg, const int *src);
 	void rva002C00E0(int arg, const int *src);
 };
 void Rva005CBB0A::rva005CBB0A(int arg, const int *src)
 {
 	Rva005CBB0AObj obj(src);
-	rva002BFDE6(arg, &obj);
+	rva002BFDE6((void *)arg, &obj);
 }
 
 // Twin at 0x002C00E0: byte-identical shape with the 12-byte object's vtable
@@ -39,5 +39,5 @@ public:
 void Rva005CBB0A::rva002C00E0(int arg, const int *src)
 {
 	Rva002C00E0Obj obj(src);
-	rva002BFDE6(arg, &obj);
+	rva002BFDE6((void *)arg, &obj);
 }
