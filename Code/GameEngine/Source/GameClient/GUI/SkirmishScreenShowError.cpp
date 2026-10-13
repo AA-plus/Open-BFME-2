@@ -43,3 +43,36 @@ void BfmeAptScreenSkirmish::showError(const UnicodeString &message, int show)
 		MessageBoxOk(UnicodeString((const unsigned short *)L""),
 			message, 0);
 }
+
+enum SlotState
+{
+	SLOT_OPEN = 0,
+	SLOT_CLOSED = 1,
+	SLOT_EASY_AI = 2,
+	SLOT_MED_AI = 3,
+	SLOT_BRUTAL_AI = 4,
+	SLOT_AI_5 = 5,
+	SLOT_PLAYER = 6
+};
+
+struct GameSlotConnectInfo
+{
+	unsigned int m_nat;
+	unsigned short m_port;
+};
+
+class GameSlot
+{
+public:
+	void setState(SlotState state, UnicodeString name, const GameSlotConnectInfo *connectInfo);
+};
+
+// ?Rva00521B16@@YG_NPAVGameSlot@@W4SlotState@@ABVUnicodeString@@@Z @0x00521B16 (50B)
+bool __stdcall Rva00521B16(GameSlot *slot, SlotState state, const UnicodeString &name)
+{
+	GameSlotConnectInfo info;
+	info.m_nat = 0;
+	info.m_port = 0;
+	slot->setState(state, name, &info);
+	return true;
+}
