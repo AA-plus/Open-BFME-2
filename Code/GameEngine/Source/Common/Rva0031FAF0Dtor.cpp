@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /EHsc /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -EHsc -MD
 // stlport
 // ??1Rva0031FAF0@@QAE@XZ, retail 0x0032002C, 105 bytes. Dtor of Rva0031FAF0: body calls clear 0x31FAF0 then destroys list at +0x170 and array at +0x158 and two AsciiStrings at +0xC/+0x0.
 // Evidence: deleting-dtor caller at 0x0032013C; offsets match Rva0031FAF0 clear TU; callees rowed List_base 0x004EC395 vector-dtor 0x00629110 releaseBuffer 0x00036410.
@@ -20,7 +20,7 @@ namespace _STL
 class Rva00200667 : public _STL::_List_base<int, _STL::allocator<int> >
 {
 public:
-	~Rva00200667();
+	~Rva00200667() {}
 };
 
 class Rva0031FAF0
@@ -64,7 +64,10 @@ private:
 	int m_150;
 	int m_154;
 	Rva00200667 m_lists[6];
-	_STL::ListBaseInt m_list170;
+	// Native EH calls the complete five-byte list wrapper at200667;
+	// the normal path inlines it and calls the23-byte base at4EC395.
+	// The node payload is not established by these destruction paths.
+	Rva00200667 m_list170;
 };
 
 Rva0031FAF0::~Rva0031FAF0()
