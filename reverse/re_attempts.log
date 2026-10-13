@@ -49881,3 +49881,6 @@ _AnyRatioFrameScale	0x001BAF30	606	blocked	Clean-room spec001baf30 and complete 
 ??0Rva005EF92D@@QAE@IPBXH@Z	0x005EFDDB	86	blocked	rowed Impl ctor needs AsciiString-ref, site has void*; t=2 model=muse-spark
 ??MRva00288874Record@@QBE_NABU0@@Z	0x00288874	96	blocked	same explicit-instantiation wall as Rva00525951 sibling; t=2 model=muse-spark
 ?rva0020F2F1@Rva0020F2F1Helper@@QAEXPAX0@Z	0x002B37B4	75	blocked	member 2-void* vs rowed stdcall free; t=2 model=muse-spark
+?rva00078c0@Rva00029F80@@AAEXPBD0PAX@Z	0x00029F80	77	blocked	rowed twin is STL basic_string _M_range_initialize; needs fake-STL instantiation spelling plus dubious string receiver cast; t=6 model=muse-spark
+?init@Rva00224C95Table@@QAEXXZ	0x00224C95	71	blocked	rowed hash_map-ctor twin needs full instantiation spelling; 20B POD size mismatch makes pin suspect; t=4 model=muse-spark
+?rva00410AAB@Rva00410AABHelper@@QAEXPAX@Z	0x00410D96	73	blocked	file documents member-shape requirement (mov ecx,this present in retail); free stdcall twin drops it; t=3 model=muse-spark
