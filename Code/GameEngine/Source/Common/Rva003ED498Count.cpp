@@ -67,6 +67,11 @@ void __cdecl Rva003ED498Count(void const *arg)
 // The donor supplies the audio-key interpretation and source provenance.
 // The donor's inline char argument occupies a four-byte stack home.
 // Keep that argument shape while calling canonical StringBase directly.
+// The complete native EH graph also places the compiler's returned-AsciiString
+// cleanup at 0x007836E8: test and clear ownership bit 0 at [ebp-0x18],
+// destroy the hidden return object at [ebp+8], or return if it is not owned.
+// All 25 bytes and the AsciiString destructor relocation are exact. This
+// cleanup comes from the real return-by-value body below, not a separate stub.
 // ?appendAudioKeySeparator absent-from-retail
 static __forceinline void appendAudioKeySeparator(AsciiString &result, char separator)
 {
