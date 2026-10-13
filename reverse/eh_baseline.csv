@@ -57,7 +57,6 @@ name,target_rva,verdict
 ??0Rva005C663C@@QAE@XZ,0x005C663C,bytes_differ
 ??0Rva005CD651@@QAE@H@Z,0x005CD651,bytes_differ
 ??0Rva005CF8A1@@QAE@PAX@Z,0x005CF8A1,bytes_differ
-??1Rva005D4C61@@UAE@XZ,0x005D4C61,bytes_differ
 ??0Rva005E9FC1@@QAE@PAX@Z,0x005E9FC1,bytes_differ
 ?Increase_Table_Size@?$IndexClass@HPAUINISection@@@@AAE_NH@Z,0x00616190,bytes_differ
 ??0Rva006DE480@@QAE@XZ,0x006DE480,bytes_differ
