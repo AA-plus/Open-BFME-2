@@ -145,7 +145,7 @@ struct SceneLightGlobalView
 	char m_pad000[0x944];
 	Real m_lowLODLightScaleRed, m_lowLODLightScaleGreen, m_lowLODLightScaleBlue; // +0x944
 };
-extern int g_Va00DB5FA0;
+extern int LODTextureReduction;
 extern void *W3DGCData00DE2000;
 extern class GameClient *TheGameClient;
 struct WaterView { char pad[0x25c]; bool flag25c; };
@@ -211,7 +211,7 @@ void RTS3DScene::Flush(RenderInfoClass &rinfo)
 			const Rva0027070CData *p = g_00DFE1E4->slot48(&tmp);
 			lodScale = Vector3(1.0f - p->a, 1.0f - p->b, 1.0f - p->c);
 		}
-		if (g_Va00DB5FA0 <= 1)
+		if (LODTextureReduction <= 1)
 		{
 			const SceneLightGlobalView *global = (const SceneLightGlobalView *)TheWritableGlobalData;
 			lodScale.X = global->m_lowLODLightScaleRed * lodScale.X;

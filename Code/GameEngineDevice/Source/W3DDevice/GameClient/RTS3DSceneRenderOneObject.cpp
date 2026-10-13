@@ -18,7 +18,7 @@
 //   Drawable::isKindOf, and picks the infantry ambient (+0x144);
 // - drawable tinting sums three colours (rowed 0x00272C74 / 0x00272C89 and
 //   the +0x9C colour) and scales by one minus a fourth (rowed 0x0027070C)
-//   and by the GlobalData +0x944 colour when g_Va00DB5FA0 is below 2;
+//   and by the GlobalData +0x944 colour when LODTextureReduction is below 2;
 // - lights are added to a private environment only when needed: otherwise
 //   one of the scene's precomputed environments (+0x164 / +0x5B4) is used;
 // - dynamic lights are always considered; the alpha reference override is
@@ -324,7 +324,7 @@ private:
 extern GameLogic *TheGameLogic;
 
 extern Int g_Va00DBA4E4;	// logic frames per second
-extern Int g_Va00DB5FA0;
+extern Int LODTextureReduction;
 
 // Rowed Drawable helpers under placeholder names.
 class Rva00270260 { public: bool rva00270260(void); };
@@ -517,7 +517,7 @@ void RTS3DScene::renderOneObject(RenderInfoClass &rinfo, RenderObjClass *robj, I
 		tintColor = draw->getTintColor();
 		selectionColor = draw->getSelectionColor();
 
-		if (tintColor || selectionColor || baseColor || lightColor || g_Va00DB5FA0 < 2)
+		if (tintColor || selectionColor || baseColor || lightColor || LODTextureReduction < 2)
 		{
 			Vector3 sumTint, temp, restore;
 
@@ -537,7 +537,7 @@ void RTS3DScene::renderOneObject(RenderInfoClass &rinfo, RenderObjClass *robj, I
 				scale.Y = 1.0f - lightColor->Y;
 				scale.Z = 1.0f - lightColor->Z;
 			}
-			if (g_Va00DB5FA0 < 2)
+			if (LODTextureReduction < 2)
 			{
 				scale.X *= TheWritableGlobalData->m_lightScale[0];
 				scale.Y *= TheWritableGlobalData->m_lightScale[1];
@@ -623,7 +623,7 @@ void RTS3DScene::renderOneObject(RenderInfoClass &rinfo, RenderObjClass *robj, I
 			}
 
 			lightEnv.Reset(sph.Center, ambient);
-			if (g_Va00DB5FA0 < 2)
+			if (LODTextureReduction < 2)
 			{
 				Vector3 lightScale(TheWritableGlobalData->m_lightScale[0], TheWritableGlobalData->m_lightScale[1], TheWritableGlobalData->m_lightScale[2]);
 				for (Int globalLightIndex = 0; globalLightIndex < m_numGlobalLights; globalLightIndex++)
