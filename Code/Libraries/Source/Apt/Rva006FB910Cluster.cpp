@@ -88,7 +88,12 @@ public:
     void Rva006F9EF0();
     void rva006FB910();
     void rva006FAA20();
-    void rva006FAF80(AptCIH *candidate, int eventCode, int transition);
+    // ?HandleAutoNav@Rva006FB860@@QAEXPAVAptCIH@@HH@Z @0x006FAF80 416B:
+    // renamed from placeholder rva006FAF80 — the WorldBuilder twin names
+    // AptAnimationPoolData::HandleAutoNav at EA's own AptInput.cpp
+    // (callgraph 3); the receiver keeps the guessed class view pending the
+    // family rename.
+    void HandleAutoNav(AptCIH *candidate, int eventCode, int transition);
 };
 
 // 0x006F9EF0 is an unnamed sibling of the same class, called thiscall on
@@ -161,7 +166,7 @@ void Rva006FB860::rva006FAA20()
 // argument is tested by the rowed AptCIH predicate at 0x006CFCD0. Ownership by
 // Rva006FB860 is inferred from the same fields and direct sibling calls; the
 // original method name and caller-level semantic labels remain unknown.
-void Rva006FB860::rva006FAF80(AptCIH *candidate, int eventCode,
+void Rva006FB860::HandleAutoNav(AptCIH *candidate, int eventCode,
                               int transition)
 {
     switch (eventCode) {
@@ -255,7 +260,7 @@ void Rva006FB860::rva006FB860(int value, char isFirst)
     rva006FB120(x, y, value, field, isFirst);
     rva006FB5B0(x, y, value, field);
     if (!rva006FACA0(x, y, &candidate))
-        rva006FAF80((AptCIH *)candidate, x, y);
+        HandleAutoNav((AptCIH *)candidate, x, y);
 }
 
 typedef char PoolCountOffset[(sizeof(Rva006FB860) >= 0x44 + sizeof(BfmeAptValue006DCD20)) ? 1 : -1];
