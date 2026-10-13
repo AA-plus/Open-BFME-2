@@ -7,6 +7,16 @@
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(ARGCLASS)
 #include "rendobj.h"	// the bfmerendobj shim has to win the include guard
+// Retail's OBBoxClass::Compute_Axis_Aligned_Extent is the speed-optimized copy
+// gridcull.cpp emits; this /O1 unit compiles obbox.h for speed so its copy agrees.
+#include "vector3.h"
+#include "matrix3.h"
+#include "matrix3d.h"
+#include "wwmath.h"
+#include "castres.h"
+#pragma optimize("gty", on)
+#include "obbox.h"
+#pragma optimize("", on)
 /*
 **	Command & Conquer Generals Zero Hour(tm)
 **	Copyright 2025 Electronic Arts Inc.

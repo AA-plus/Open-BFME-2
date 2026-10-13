@@ -7,6 +7,15 @@
 //
 #define Matrix4x4 Matrix4  // BFME renamed it
 #define __PLACEMENT_VEC_NEW_INLINE  // always.h/GameMemory.h define array placement-new themselves
+// cullsys.h for speed (its dependencies first, unchanged): the CullLinkClass scalar
+// deleting destructor this unit emits must be retail's /O2 copy at 0x00719CD0.
+#include "wwdebug.h"
+#include "stdlib.h"
+#include "refcount.h"
+#include "aabox.h"
+#pragma optimize("gty", on)
+#include "cullsys.h"
+#pragma optimize("", on)
 #include "aabtreecull.h"
 #include "chunkio.h"
 #include "iostruct.h"

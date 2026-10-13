@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfmerendobj /Ob2 /arch:SSE /G7 /DNDEBUG /MD /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep
+// cl: /Ireference/shims/bfmepool /Ireference/shims/bfmerendobj /Ob2 /arch:SSE /G7 /DNDEBUG /MD /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep
 // The compiler-generated vector constructor iterator (??_H) takes the
 // optimization state of the first function that needs it. Retail links one
 // copy, the /O1 body at 0x00001423; this unemitted anchor makes this unit's
@@ -12,6 +12,18 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #pragma optimize("", on)
 
 
+// Retail links the size-form copies of these header inlines (RefCountClass
+// Release_Ref 0x005D1A7D, the CRT floorf, WWMath::Fabs as vector3.cpp emits it).
+// The spin-locked BFME object pool (as multilist.cpp): mempool.h first, by -I, so the
+// submodule copy multilist.h reaches from its own directory loses the include guard.
+#include "mempool.h"
+#pragma optimize("s", on)
+#include "refcount.h"
+#pragma optimize("", on)
+#pragma optimize("gsy", on)
+#include <math.h>
+#include "wwmath.h"
+#pragma optimize("", on)
 #include "rendobj.h"	// the bfmerendobj shim has to win the include guard
 #include "gridcull.h"
 #include "chunkio.h"
