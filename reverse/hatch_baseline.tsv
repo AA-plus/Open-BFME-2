@@ -781,15 +781,11 @@ address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DA718
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DA718C	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DB3BDC	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DB5F90	3
-address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DB5FA0	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DB5FC8	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DC908C	3
-address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DDF578	3
-address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DE1B40	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DEC40C	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DED5C0	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DEDA24	3
-address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00DFEC54	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00E03314	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00E048DC	3
 address_global	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	g_Va00E063A4	3
@@ -800,7 +796,6 @@ address_global	Code/GameEngine/Source/Common/GlobalWordGetters.cpp	g_Va00DB62D4	
 address_global	Code/GameEngine/Source/Common/GlobalWordGetters.cpp	g_Va00DFA2E6	3
 address_global	Code/GameEngine/Source/Common/INI/FormationSelectionCriteriaRva00424185.cpp	g_Va00E0319C	2
 address_global	Code/GameEngine/Source/Common/INI/FormationSelectionCriteriaRva00424185.cpp	g_Va00E031A8	2
-address_global	Code/GameEngine/Source/Common/INI/INIO1Bodies.cpp	g_Va00DDF578	1
 address_global	Code/GameEngine/Source/Common/INI/LivingWorldConnectionParserRva003F348F.cpp	g_Va00C36FD4	3
 address_global	Code/GameEngine/Source/Common/NetworkInterfaceFrameAdvance.cpp	g_Va00DBA4E4	2
 address_global	Code/GameEngine/Source/Common/NetworkInterfaceFramePacing.cpp	g_Va00DBA4E4	2
@@ -2612,7 +2607,6 @@ alternatename	Code/GameEngine/Source/Common/GlobalGetterSingles.cpp	?g_Va00E09FA
 alternatename	Code/GameEngine/Source/Common/INI/FormationSelectionCriteriaRva00424185.cpp	?append@Rva00424185Deque@@QAEXABURva00424185Criteria@@@Z	1
 alternatename	Code/GameEngine/Source/Common/INI/INIExceptionCtor.cpp	_rva002f681_fill	1
 alternatename	Code/GameEngine/Source/Common/INI/INIExceptionCtor.cpp	_strcpy	1
-alternatename	Code/GameEngine/Source/Common/INI/INIO1Bodies.cpp	?theBlockParseList@@3PAUBlockParse@@A	1
 alternatename	Code/GameEngine/Source/Common/INI/LivingWorldConnectionParserRva003F348F.cpp	?append@Rva003F309AVector@@QAEXABVLivingWorldRegionConnection@@@Z	1
 alternatename	Code/GameEngine/Source/Common/INI/Rva0006AF00FunctionCurveParse_Rva005051da.cpp	?finish@Rva0006AB90FunctionCurve@@QAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/INI/Rva004DD206TwoTreeConstructor.cpp	??0Rva004DD206TreeView@@QAE@XZ	1

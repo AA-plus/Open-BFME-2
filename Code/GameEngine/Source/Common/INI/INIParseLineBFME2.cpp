@@ -32,8 +32,7 @@ struct BlockParse
 	INIBlockParse parse;
 };
 
-extern int g_Va00DDF578;
-#define theBlockParseList (*(BlockParse **)&g_Va00DDF578)
+struct BlockParse; extern BlockParse *theBlockParseList;
 
 class INIException
 {

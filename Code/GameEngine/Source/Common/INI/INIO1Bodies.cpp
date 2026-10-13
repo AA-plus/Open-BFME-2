@@ -401,7 +401,6 @@ Bool INI::isEndOfBlock( char *bufferToCheck )
 
 // The global(s) below are defined elsewhere under another name at the same
 // address (the census owner of that DIR32 target); bind this unit's spelling.
-#pragma comment(linker, "/alternatename:?theBlockParseList@@3PAUBlockParse@@A=?g_Va00DDF578@@3HA")
 
 // ZH INI.cpp parseArmorTemplate is the semantic guide (reference pointer
 // ba7ddda7e8f261163972ddbe23c7e7a12ac5b84f). Target3394FB retains the

@@ -40,13 +40,13 @@ int Rva00020E90Get(void)
 
 // ?Rva0002BACFGet@@YAHXZ @ 0x0002BACF (6B) over 0x00DDF578.
 
-extern int g_Va00DDF578;
+struct BlockParse; extern BlockParse *theBlockParseList;
 // g_Va00DDF578: matched references place it at VA 0xddf578 (zero-filled .bss).
-int g_Va00DDF578;
+struct BlockParse; extern BlockParse *theBlockParseList;
 
 int Rva0002BACFGet(void)
 {
-	return g_Va00DDF578;
+	return (*(int *)&theBlockParseList);
 }
 
 // ?Rva0006E16FGet@@YAHXZ @ 0x0006E16F (6B) over 0x00DB5FA0.
