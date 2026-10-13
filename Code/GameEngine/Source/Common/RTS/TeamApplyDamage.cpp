@@ -1,9 +1,11 @@
 // cl: /O1 /DNDEBUG /MD /arch:SSE
-// Native 0039E76C..0039E7F2 /134B. Team member damage dispatch: live
+// Native 0039E76C..0039E7F2 /134B. Team::damageTeamMembers: the
+// byte-verified TeamPrototype::damageTeamMembers calls this address for
+// each team instance (REL32 at 0x0039F021), and the body is ZH's: live
 // members without status94 bit0 are killed with damage-kind8 if f<0;
-// otherwise the existing7C damage record is built and submitted. The
-// original method name and field labels remain unresolved. The loop uses
-// the existing24B Team cursor and owned Object advance provider263526.
+// otherwise the existing7C damage record is built and submitted; returns
+// false. The record field labels remain unresolved. The loop uses the
+// existing24B Team cursor and owned Object advance provider263526.
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 typedef unsigned int UnsignedInt;
@@ -84,9 +86,9 @@ public:
 class Team {
 public:
  DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
- bool rva0039E76C(float);
+ bool damageTeamMembers(float);
 };
-bool Team::rva0039E76C(float f)
+bool Team::damageTeamMembers(float f)
 {
 	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); ; iter.advance()) {
 		Object *cur = iter.cur();
