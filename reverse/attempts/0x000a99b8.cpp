@@ -1,4 +1,6 @@
 // ?getRenderRegion@AptShapeContainer@@QAEXAAVCoord2D@@0@Z
+// partial score=0.95 date=2026-10-13
+// ?getRenderRegion@AptShapeContainer@@QAEXAAVCoord2D@@0@Z
 // partial score=0.9451 date=2026-10-13
 // ?getRenderRegion@AptShapeContainer@@QAEXAAVCoord2D@@0@Z
 // partial score=0.97 date=2026-10-10
@@ -12,7 +14,12 @@ class AptShape { public:
  virtual void slot00(); virtual int slot04(); virtual void slot08();
  virtual AptSolidShape *slot0C(); virtual AptLineShape *slot10();
 };
-struct AptRenderTransform { float a,b,c,d,tx,ty; };
+struct AptRenderTransform { float a,b,c,d,tx,ty;
+ __forceinline void mul(Coord2D &out,const Coord2D &point) const {
+  out.x=point.x*a+point.y*c+tx;
+  out.y=point.x*b+point.y*d+ty;
+ }
+};
 static void rva000A94F9(Coord2D &low,Coord2D &high,const Coord2D &point)
 {
  if (point.x < low.x) low.x = point.x;
@@ -42,9 +49,9 @@ void AptShapeContainer::getRenderRegion(Coord2D &low,Coord2D &high)
    AptSolidShape *solid=shape->slot0C();
    if(!solid) break;
    for(AptTriangle *triangle=solid->first;triangle!=solid->last;++triangle) {
-    aptMatrixMul(point,triangle->point[0],matrix); rva000A94F9(low,high,point);
-    aptMatrixMul(point,triangle->point[2],matrix); rva000A94F9(low,high,point);
-    aptMatrixMul(point,triangle->point[1],matrix); rva000A94F9(low,high,point);
+    matrix.mul(point,triangle->point[0]); rva000A94F9(low,high,point);
+    matrix.mul(point,triangle->point[2]); rva000A94F9(low,high,point);
+    matrix.mul(point,triangle->point[1]); rva000A94F9(low,high,point);
    }
    break;
   }
@@ -52,8 +59,8 @@ void AptShapeContainer::getRenderRegion(Coord2D &low,Coord2D &high)
    AptLineShape *lineShape=shape->slot10();
    if(!lineShape) break;
    for(AptLine *line=lineShape->first;line!=lineShape->last;++line) {
-    aptMatrixMul(point,line->point[1],matrix); rva000A94F9(low,high,point);
-    aptMatrixMul(point,line->point[0],matrix); rva000A94F9(low,high,point);
+    matrix.mul(point,line->point[1]); rva000A94F9(low,high,point);
+    matrix.mul(point,line->point[0]); rva000A94F9(low,high,point);
    }
    break;
   }
