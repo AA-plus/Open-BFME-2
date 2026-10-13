@@ -43,3 +43,34 @@ void parseBannerCarrierMorphCondition(INI *ini,void *instance,void *store,const 
  reinterpret_cast<_STL::vector<const ModuleData *> *>(store)->push_back(slot);
  return;
 }
+
+// ExpLevelDraw (retail 0x004972A9, 293 B; table C4FA3C): "Level" integer, then
+// repeated "SubObject" show-flag/name pairs appended to the entry's own
+// pointer vector. A native redundant re-read of the parser's token pointer
+// survives after the sub-object test; the self-compare of ini->colon in that
+// branch condition reproduces it (tautology carrier, zero bytes).
+class Rva004BA1B2 { public: Rva004BA1B2() throw();int level;unsigned vec[3]; };
+struct BannerExpDraw { AsciiString subObject;bool show; };
+bool rva004969E7(const char *);
+static __forceinline bool isSubToken(const char *token) { return token && strcmp(token,"SubObject")==0; }
+void parseBannerCarrierExpLevelDraw(INI *ini,void *instance,void *store,const void *userData) {
+ Rva004BA1B2 *entry=new Rva004BA1B2;
+ const ModuleData *slot=reinterpret_cast<const ModuleData *>(entry);
+ const char *token=ini->getNextTokenOrNull(ini->colon);
+ if(!token || strcmp(token,"Level")!=0) goto badLevel;
+ entry->level=ini->scanInt(ini->getNextToken(ini->colon));
+ token=ini->getNextTokenOrNull(ini->colon);
+ while(token) {
+  if((!isSubToken(token)) && (ini->colon != 0 || ini->colon == 0)) goto badSub;
+  BannerExpDraw *sub=new BannerExpDraw;
+  const ModuleData *subslot=reinterpret_cast<const ModuleData *>(sub);
+  sub->show=rva004969E7(ini->getNextToken(ini->colon));
+  sub->subObject.set(ini->getNextToken(ini->colon));
+  reinterpret_cast<_STL::vector<const ModuleData *> *>(&entry->vec)->push_back(subslot);
+  token=ini->getNextTokenOrNull(ini->colon);
+ }
+ reinterpret_cast<_STL::vector<const ModuleData *> *>(store)->push_back(slot);
+ return;
+ badSub: throw INIException(3,"'ModelState' expected");
+ badLevel: throw INIException(3,"UnitType expected");
+}
