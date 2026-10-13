@@ -27,4 +27,6 @@ private:
 	void *m_4;
 };
 
-static Rva0030D346 s_rva0030D346;
+// AF238 passes this object to the ObjectsList binding30D8B1; expose that
+// established singleton identity. Descriptive name; original spelling unknown.
+Rva0030D346 WorldMapObjects;

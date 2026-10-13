@@ -419,7 +419,8 @@ extern bool TheDeepCRC;
 extern bool g_bfmeDoneAPB;
 
 class Rva0033076E { public: Rva0033076E(); char m_data[0x1C]; };
-extern Rva0033076E *g_Va00E01DB0;
+class CameraAnimationList;
+extern CameraAnimationList *TheCameraAnimationList;
 
 // Scoped object retail builds around TheThingFactory's init with the
 // four-character code 'init' (ctor 0x00030980, dtor 0x000309B0).
@@ -744,7 +745,7 @@ void GameEngine::init(Int argc, char *argv[])
 		initSubsystem(TheRankInfoStore, "TheRankInfoStore", new RankInfoStore, (Xfer *)&xferCRC);
 		initSubsystem(ThePlayerAITypeSet, "ThePlayerAITypeSet", new PlayerAITypeSet, 0);
 		initSubsystem(ThePlayerTemplateStore, "ThePlayerTemplateStore", new PlayerTemplateStore, (Xfer *)&xferCRC);
-		g_Va00E01DB0 = new Rva0033076E;
+		TheCameraAnimationList = (CameraAnimationList *)new Rva0033076E;
 		initSubsystem(TheParticleSystemManager, "TheFXParticleSystemManager", createParticleSystemManager(), 0);
 		initSubsystem(TheFXListStore, "TheFXListStore", new FXListStore, (Xfer *)&xferCRC);
 		initSubsystem(TheWeaponStore, "TheWeaponStore", new WeaponStore, (Xfer *)&xferCRC);

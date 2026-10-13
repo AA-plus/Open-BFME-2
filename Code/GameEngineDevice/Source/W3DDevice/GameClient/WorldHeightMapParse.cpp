@@ -1,9 +1,12 @@
 // ?parse@WorldHeightMap@@QAEXAAVDataChunkInput@@PAX11@Z
-// partial score=0.82535958 date=2026-10-10
 // ?parse@WorldHeightMap@@QAEXAAVDataChunkInput@@PAX11@Z
-// partial score=0.8 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 //
+// WB76B780: two-word callback constants; binding AD73D stores owner +8-byte
+// member pointer. The SidesList multiple-inheritance ABI matches its rowed loaders.
+// Implicit AsciiString conversion for Teams/SidesList/LibraryMapLists keeps the
+// zero adjustor in EBX; explicit temporaries add an XOR at each call. The extra
+// registration's nested scope frees its home for the final terrain-pass records.
 // WorldHeightMap::parse, retail 0x000AF238 (1545B, ret 0x10). WorldBuilder's
 // debug build names it; BFME 1's matched WorldHeightMapRva0074ACB0Load.cpp
 // (WorldHeightMap::parse, 0x0074ACB0) and Zero Hour's WorldHeightMap::parse
@@ -106,6 +109,7 @@ public:
 	Rva0032A082(void *sides, BfmeParserRegistryVE *registry, const AsciiString *label);
 };
 
+#pragma pointers_to_members(full_generality, multiple_inheritance)
 class SidesList
 {
 public:
@@ -127,7 +131,6 @@ public:
 private:
 	SidesList *m_owner;
 	SidesListChunkParser m_callback;
-	Int m_14;
 };
 
 class Rva003306B0
@@ -135,13 +138,14 @@ class Rva003306B0
 public:
 	void rva0033073C();
 };
-extern Rva003306B0 *g_Va00E01DB0;
+// Descriptive recovered identity, not a claim about original global spelling:
+// AF238 passes this singleton to the CameraAnimationList binding330528;
+// writer3304A4 emits the same chunk and GameEngine::init allocates its 0x1C view.
+class CameraAnimationList;
+CameraAnimationList *TheCameraAnimationList = 0;
 
-class LivingWorldLogic
-{
-public:
-	Bool rva0004253A() const;
-};
+class LivingWorldLogic;
+class BfmeSelectionState { public: Bool isSelectionLocked() const; };
 extern LivingWorldLogic *TheLivingWorldLogic;
 
 class GameLogic;
@@ -156,11 +160,8 @@ public:
 };
 extern View *TheTacticalView;
 
-class MapObject
-{
-public:
-	static MapObject *TheMapObjectListPtr;
-};
+class Rva0030D346;
+extern Rva0030D346 WorldMapObjects;
 
 class GlobalData
 {
@@ -221,7 +222,7 @@ void WorldHeightMap::parse(DataChunkInput &file, void *polygonOwner, void *owner
 		m_drawHeightY = 65;
 	}
 	Bool selectionLocked = false;
-	if (TheGameLogic && TheLivingWorldLogic && TheLivingWorldLogic->rva0004253A())
+	if (TheGameLogic && TheLivingWorldLogic && ((BfmeSelectionState *)TheLivingWorldLogic)->isSelectionLocked())
 		selectionLocked = true;
 
 	if (polygonOwner)
@@ -230,7 +231,7 @@ void WorldHeightMap::parse(DataChunkInput &file, void *polygonOwner, void *owner
 		file.registerParser(AsciiString("WorldInfo"), AsciiString::TheEmptyString, ParseWorldDictDataChunk, 0);
 		Rva000AD6F4 objectsList;
 		if (!selectionLocked)
-			objectsList.reset(new Rva0030D8B1(&MapObject::TheMapObjectListPtr, BFME_REG(file), 0));
+			objectsList.reset(new Rva0030D8B1(&WorldMapObjects, BFME_REG(file), 0));
 		Rva000ABD70Clear();
 		Rva000AF146 polygonTriggers;
 		if (!selectionLocked)
@@ -245,19 +246,21 @@ void WorldHeightMap::parse(DataChunkInput &file, void *polygonOwner, void *owner
 		}
 		TheSidesList->emptySides();
 		BfmeParserBindingVE teams(TheSidesList, reinterpret_cast<SidesListChunkParser>(&SidesList::rva0032F0AA),
-			&file, AsciiString("Teams"), AsciiString::TheEmptyString);
+			&file, "Teams", AsciiString::TheEmptyString);
 		Rva0032A082 lists(TheSidesList, BFME_REG(file), 0);
 		BfmeParserBindingVE sides(TheSidesList, &SidesList::parseSidesDataChunk,
-			&file, AsciiString("SidesList"), AsciiString::TheEmptyString);
+			&file, "SidesList", AsciiString::TheEmptyString);
 		BfmeParserBindingVE libraries(TheSidesList, &SidesList::parseLibraryMapListsChunk,
-			&file, AsciiString("LibraryMapLists"), AsciiString::TheEmptyString);
-		g_Va00E01DB0->rva0033073C();
+			&file, "LibraryMapLists", AsciiString::TheEmptyString);
+		((Rva003306B0 *)TheCameraAnimationList)->rva0033073C();
+		{
 		Rva000AD6F4 extra;
 		if (!selectionLocked)
-			extra.reset(new Rva00330528(g_Va00E01DB0, BFME_REG(file), 0));
+			extra.reset(new Rva00330528(TheCameraAnimationList, BFME_REG(file), 0));
 		if (!file.parse(this))
 			throw ERROR_CORRUPT_FILE_FORMAT;
 		TheSidesList->rva0032FEF5();
+		}
 	}
 	else
 	{
