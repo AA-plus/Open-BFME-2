@@ -15,7 +15,7 @@
 // 0x00575674 / 0x00528FE6 (address-named views here).
 #include "ascii_string.h"
 
-bool __cdecl Rva005D2505Get(const char *params, int *out); // StrategicHUD::ParseButtonSlotIndex in WorldBuilder
+namespace StrategicHUD { bool __cdecl ParseButtonSlotIndex(const char *params, int *out); }
 bool __cdecl Rva004128F0GetParam(const char *params, const char *key, AsciiString &value);
 namespace AptUtils { const char *__cdecl SkipLevelN(const char *path); }
 namespace AptUtils { int __cdecl LevelIndexFromTarget(const char *path); }
@@ -161,7 +161,7 @@ void StrategicHUD::CommandUIImpl::OnSubMenuLoaded(const char *path)
 {
 	AsciiString name;
 	int slot;
-	if (!Rva005D2505Get(path, &slot) || !Rva004128F0GetParam(path, "name", name))
+	if (!StrategicHUD::ParseButtonSlotIndex(path, &slot) || !Rva004128F0GetParam(path, "name", name))
 		return;
 	ButtonSlot &button = m_slots[slot];
 	if (*(void **)&button.m_subMenu)
@@ -175,7 +175,7 @@ void StrategicHUD::CommandUIImpl::OnToggleFlashLoaded(const char *path)
 	ButtonSlot *button;
 	{
 		int slot;
-		if (!Rva005D2505Get(path, &slot))
+		if (!StrategicHUD::ParseButtonSlotIndex(path, &slot))
 			return;
 		if (!Rva004128F0GetParam(path, "name", name))
 			return;

@@ -24,22 +24,22 @@ private:
 	char m_header00[0x1C];
 };
 
-bool __cdecl Rva005D2505Get(const char *params, int *out);
+namespace StrategicHUD { bool __cdecl ParseButtonSlotIndex(const char *params, int *out); }
 
 void Rva005D2664::rva005D27BE(const char *params)
 {
-	if (Rva005D2505Get(params, (int *)&params))
+	if (StrategicHUD::ParseButtonSlotIndex(params, (int *)&params))
 		rva005D2664((int)params);
 }
 
 void Rva005D2664::rva005D28F4(const char *params)
 {
-	if (Rva005D2505Get(params, (int *)&params))
+	if (StrategicHUD::ParseButtonSlotIndex(params, (int *)&params))
 		((Rva000AD6F4 *)((char *)this + (int)params * 0x1C + 0x20))->clear();
 }
 
 void Rva005D2664::rva005D2A27(const char *params)
 {
-	if (Rva005D2505Get(params, (int *)&params))
+	if (StrategicHUD::ParseButtonSlotIndex(params, (int *)&params))
 		((Rva00528FE6 *)((char *)this + (int)params * 0x1C + 0x24))->rva00529009();
 }

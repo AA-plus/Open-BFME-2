@@ -9,7 +9,7 @@
 // declare the use as seen (addresses as ints) for byte truth.
 #include "ascii_string.h"
 
-bool __cdecl Rva005D2505Get(const char *params, int *out);
+namespace StrategicHUD { bool __cdecl ParseButtonSlotIndex(const char *params, int *out); }
 bool __cdecl Rva004128F0GetParam(const char *params, const char *key, AsciiString &out);
 namespace AptUtils { const char *__cdecl SkipLevelN(const char *path); }
 namespace AptUtils { int __cdecl LevelIndexFromTarget(const char *path); }
@@ -49,7 +49,7 @@ void Rva005D2664::rva005D26B2(const char *params)
 	Rva00575674 *elem;
 	{
 		int idx;
-		if (!Rva005D2505Get(params, &idx) || !Rva004128F0GetParam(params, "name", name))
+		if (!StrategicHUD::ParseButtonSlotIndex(params, &idx) || !Rva004128F0GetParam(params, "name", name))
 			return;
 		elem = (Rva00575674 *)((char *)this + (idx + 1) * 0x1C);
 		if (*(void **)elem)
