@@ -1,5 +1,7 @@
 // ?newTemplate@ParticleSystemManager@@QAEPAVParticleSystemTemplate@@ABVAsciiString@@@Z
 // partial score=0.995 date=2026-10-13
+// ?newTemplate@ParticleSystemManager@@QAEPAVParticleSystemTemplate@@ABVAsciiString@@@Z
+// partial score=0.995 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // ?findTemplate@ParticleSystemManager@@QBEPAVParticleSystemTemplate@@ABVAsciiString@@@Z
 // retail 0x001F90DA (43B). Zero Hour ParticleSys.cpp:
