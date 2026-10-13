@@ -98,7 +98,12 @@ public:
  Rva005D40A6(int,const AsciiString &,const ChecklistFontDesc &);
  void OnClicked(const char *); void OnRollOver(const char *); void OnRollOut(const char *);
  void RenderText(const FloatPair &,const FloatPair &,unsigned int,unsigned int);
- void rva005D4395(); void Update(); void rva005D46E3(const UnicodeString &); void rva005D472C();
+ // ?UpdateHeight@Rva005D40A6@@QAEXXZ @0x005D4395 158B: renamed from
+ // placeholder rva005D4395 — the WorldBuilder twin names
+ // ChecklistUIItemMovieClip::UpdateHeight at EA's own file (strings); the
+ // receiver class stays the guessed view until its family reconciles with the
+ // landed Flash spelling.
+ void UpdateHeight(); void Update(); void rva005D46E3(const UnicodeString &); void rva005D472C();
  virtual ~Rva005D40A6();
  virtual void rva0047A69C(float);
  virtual void rva000B3FD0Slot08(); virtual void rva000B3FD0Slot0C();
@@ -273,7 +278,7 @@ static __declspec(noinline) bool Rva005D4287(const AsciiString &path,int level,f
  return result;
 }
 int __cdecl Rva00527925Fire(void *,void *,const char *,const char *,const float *);
-void Rva005D40A6::rva005D4395() {
+void Rva005D40A6::UpdateHeight() {
  struct { int width; float value; int height; } local;
  m_24->getSize(&local.width,&local.height);
  local.value=local.height*g_bfmeAptWindowManager->getInverseScale().y;
@@ -285,13 +290,13 @@ void Rva005D40A6::rva005D4395() {
 }
 void Rva005D40A6::rva005D46E3(const UnicodeString &text) {
  if(text.compare(m_28)) {
-  m_24->setText(text); m_28=text; flag5=false; rva005D4395();
+  m_24->setText(text); m_28=text; flag5=false; UpdateHeight();
  }
 }
 void Rva005D40A6::rva005D472C() {
  int width;
  if(StrategicHUD::RetrieveTextWidth(m_08,m_04,&width)) {
-  m_word34=width; m_24->setWordWrap(width); flag5=false; rva005D4395(); flag6=true;
+  m_word34=width; m_24->setWordWrap(width); flag5=false; UpdateHeight(); flag6=true;
  }
 }
 
