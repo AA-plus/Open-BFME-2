@@ -1,10 +1,11 @@
 // ?canSelectedObjectsDoSpecialPower@InGameUI@@QBE_NPBVCommandButton@@PBVObject@@PBUCoord3D@@W4SelectionRules@1@IPAV3@@Z
-// partial score=0.85 date=2026-10-09
-// cl: /O1 /arch:SSE /G7 /MD /EHsc /Ob2
+// cl: /O1 /arch:SSE /G7 /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// stlport
 //
 // ?canSelectedObjectsDoSpecialPower@InGameUI@@QBE_NPBVCommandButton@@PBVObject@@PBUCoord3D@@W4SelectionRules@1@IPAV3@@Z,
 // retail 0x002A395C..0x002A3AFA (414B), thiscall ret 0x18.
 //
+// Donor checkout: BFME1 cee35b7d8ca077d7255f1c39cb69e9fd9627aa85.
 // Donor: Zero Hour InGameUI.cpp InGameUI::canSelectedObjectsDoSpecialPower
 // (special power template +0x44 and options +0x1C of the command button;
 // object-target bits 0x7 and NEED_TARGET_POS 0x20; the ignored selection
@@ -18,9 +19,9 @@
 //     given) and then the position check (when a position is given), each
 //     counted separately;
 //   * the three ActionManager checks take a trailing bool (true).
-// Callees at the retail REL32s: pinned Object::getDrawable 0x005508E2,
-// DrawableList construction through _List_base 0x00239BB0, pinned
-// list::insert 0x00239D02 (push_back), pinned ~DrawableList 0x00239AF4,
+// Callees at the retail REL32s: Object::getDrawable 0x005508E2,
+// DrawableList construction through _List_base 0x00239BB0,
+// list::insert 0x00239D02 (push_back), ~DrawableList 0x00239AF4,
 // ActionManager::canDoSpecialPower 0x0041CCD5 / canDoSpecialPowerAtObject
 // 0x0041CFCC / pinned canDoSpecialPowerAtLocation 0x0041D60B. Callers
 // 0x0042A1DE and 0x0042A2A8. WorldBuilder twin 0xDBAA80 (callgraph lead).
@@ -75,70 +76,8 @@ public:
 };
 extern ActionManager *TheActionManager;
 
-struct DrawableListNode
-{
-	DrawableListNode *next;
-	DrawableListNode *prev;
-	Drawable *value;
-};
-
-namespace _STL
-{
-template <class T> class allocator
-{
-public:
-	allocator() {}
-};
-template <class T> struct _Nonconst_traits
-{
-};
-template <class T, class Traits> struct _List_iterator
-{
-	_List_iterator(DrawableListNode *n) : _M_node(n) {}
-	_List_iterator(const _List_iterator &x) : _M_node(x._M_node) {}
-	DrawableListNode *_M_node;
-};
-template <class T, class A> class _List_base
-{
-public:
-	_List_base(const A &a);
-	DrawableListNode *_M_node;
-};
-template <class T, class A> class list : public _List_base<T, A>
-{
-public:
-	typedef _List_iterator<T, _Nonconst_traits<T> > iterator;
-	list(const A &a = A()) : _List_base<T, A>(a) {}
-	iterator insert(iterator pos, const T &x);
-	void push_back(const T &x) { insert(iterator(this->_M_node), x); }
-};
-}
-
-class DrawableList : public _STL::list<Drawable *, _STL::allocator<Drawable *> >
-{
-public:
-	__declspec(nothrow) ~DrawableList();
-
-	class const_iterator
-	{
-	public:
-		const_iterator(DrawableListNode *n) : node(n) {}
-		bool operator!=(const const_iterator &b) const { return node != b.node; }
-		Drawable *operator*() const { return node->value; }
-		const_iterator &operator++() { node = node->next; return *this; }
-	private:
-		DrawableListNode *node;
-	};
-	const_iterator begin() const { return const_iterator(_M_node->next); }
-	const_iterator end() const { return const_iterator(_M_node); }
-	UnsignedInt size() const
-	{
-		UnsignedInt n = 0;
-		for (DrawableListNode *p = _M_node->next; p != _M_node; p = p->next)
-			++n;
-		return n;
-	}
-};
+#include <list>
+class DrawableList : public _STL::list<Drawable *> { public: ~DrawableList() throw(); };
 
 #define PAD_VIRTUALS10(p) \
 	virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3(); virtual void p##4(); \
@@ -174,14 +113,17 @@ Bool InGameUI::canSelectedObjectsDoSpecialPower(const CommandButton *command, co
 	if (doAtPosition && !position && !doAtObject)
 		return false;
 
-	Bool result = false;
+	// Each exit below assigns the result; no live false value spans list setup.
+	Bool result;
 	Drawable *ignoreSelDraw = ignoreSelObj ? ignoreSelObj->getDrawable() : 0;
 
 	DrawableList tmpList;
+	// Insertion keeps the sentinel stable; retain it for the size walk.
+	DrawableList::iterator tmpEnd = tmpList.end();
 	if (ignoreSelDraw)
 		tmpList.push_back(ignoreSelDraw);
 
-	const DrawableList *selected = (tmpList.size() > 0) ? &tmpList : TheInGameUI->getAllSelectedDrawables();
+	const DrawableList *selected = ((UnsignedInt)_STL::distance(DrawableList::iterator((_STL::_List_node<Drawable *> *)tmpEnd._M_node->_M_next), tmpEnd) > 0) ? &tmpList : TheInGameUI->getAllSelectedDrawables();
 
 	Int count = 0;
 	Int qualify = 0;
@@ -222,6 +164,7 @@ Bool InGameUI::canSelectedObjectsDoSpecialPower(const CommandButton *command, co
 			}
 		}
 	}
+	result = false;
 	if (rule == SELECTION_ALL && count > 0 && qualify == count)
 		result = true;
 done:
