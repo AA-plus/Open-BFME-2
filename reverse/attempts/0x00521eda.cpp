@@ -1,4 +1,6 @@
 // ?InitTheGame@AptSkirmish@@QAE_NXZ
+// partial score=0.93 date=2026-10-13
+// ?InitTheGame@AptSkirmish@@QAE_NXZ
 // partial score=0.93 date=2026-10-08
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB
 // stlport

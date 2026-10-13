@@ -1,4 +1,6 @@
 // ?CheckChangeLayers@Pathfinder@@QAEXPAVPathfindCell@@PAVObject@@@Z
+// partial score=0.9382 date=2026-10-13
+// ?CheckChangeLayers@Pathfinder@@QAEXPAVPathfindCell@@PAVObject@@@Z
 // partial score=0.9 date=2026-10-13
 // ?CheckChangeLayers@Pathfinder@@QAEXPAVPathfindCell@@PAVObject@@@Z
 // partial score=0.9382 date=2026-10-09
