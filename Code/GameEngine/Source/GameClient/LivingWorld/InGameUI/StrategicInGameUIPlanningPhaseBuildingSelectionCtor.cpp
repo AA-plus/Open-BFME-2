@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD
 // ??0PlanningPhaseBuildingSelection@StrategicInGameUI@@QAE@PAX0PAVPlanningUI@1@0PAVLivingWorldRegion@@@Z
 // Retail 0x005CE5B3..0x005CE7A3 (496 bytes).
