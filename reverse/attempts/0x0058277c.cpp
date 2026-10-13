@@ -1,4 +1,6 @@
 // ?handleRequestJoin@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@@Z
+// partial score=0.99 date=2026-10-13
+// ?handleRequestJoin@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@@Z
 // partial score=0.97 date=2026-10-07
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /O1
 //
@@ -1167,7 +1169,10 @@ void LANAPI::handleRequestJoin( LANMessage *msg, const BfmeNetAddress *sender )
 
 			// check for a duplicate serial
 			AsciiString s;
-			for( player = 0; canJoin && player < MAX_SLOTS; ++player )
+			player = 0;
+			if( canJoin )
+			{
+			for( ; player < MAX_SLOTS; ++player )
 			{
 				GameSlot *slot = (GameSlot *)m_currentGame->rva00447773( player );
 				s.clear();
@@ -1200,6 +1205,7 @@ void LANAPI::handleRequestJoin( LANMessage *msg, const BfmeNetAddress *sender )
 						break;
 					}
 				}
+			}
 			}
 
 			// We're the host, so see if he has a duplicate name
