@@ -60,13 +60,17 @@ public: virtual ~_bfme_AptGameWindow();
 private: AsciiString filename270;
 };
 
-class Rva00514EABResourceView {
-public: ~Rva00514EABResourceView(); void close();
+// The two established providers consume the same +290 resource: its array
+// destructor reads pointers0/4, while close reads status0C and COM pointer10.
+// Use their existing names directly; the original resource type remains unknown.
+class Rva005B7010 { public: void rva005B7010(); };
+class Rva005B6EFEArrayPair {
+public: ~Rva005B6EFEArrayPair();
 private: void* first;void* second;unsigned int unknown08;int status0C;void* com10;
 };
 class AptMainMenu : public _bfme_AptGameWindow {
 public: AptMainMenu(EmitVtableTag*);virtual ~AptMainMenu();
-private: unsigned char unknown274[0x1c];Rva00514EABResourceView resource290;AsciiString str2A4;
+private: unsigned char unknown274[0x1c];Rva005B6EFEArrayPair resource290;AsciiString str2A4;
 };
 // ?<AptMainMenu::AptMainMenu> absent-from-retail
 AptMainMenu::AptMainMenu(EmitVtableTag *)
@@ -361,9 +365,5 @@ Rva00574338::Rva00574338(EmitVtableTag *)
 // callbacks test; WorldBuilder's twin asserts the same s_instance.
 extern int g_Va00E048DC;
 AptMainMenu::~AptMainMenu() {
- if(g_Va00E048DC==reinterpret_cast<int>(this)) {resource290.close();g_Va00E048DC=0;}
+ if(g_Va00E048DC==reinterpret_cast<int>(this)) {reinterpret_cast<Rva005B7010 *>(&resource290)->rva005B7010();g_Va00E048DC=0;}
 }
-
-#pragma comment(linker, "/alternatename:??1Rva00514EABResourceView@@QAE@XZ=??1Rva005B6EFEArrayPair@@QAE@XZ")
-
-#pragma comment(linker, "/alternatename:?close@Rva00514EABResourceView@@QAEXXZ=?rva005B7010@Rva005B7010@@QAEXXZ")
