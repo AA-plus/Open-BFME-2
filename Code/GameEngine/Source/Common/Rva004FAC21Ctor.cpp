@@ -47,3 +47,13 @@ private:
 Rva004FAC21::Rva004FAC21(const StringBase<char> &s) : Rva004FA830(s), m_v(), m_x(10)
 {
 }
+
+// Retail 0x004FAC99 (55B RET4): allocates the 0x18-byte Rva004FAC21 through the
+// rowed operator new 0x2FDA0 and forwards its StringBase argument to the rowed
+// ctor 0x004FAC21; the null path returns the zeroed EAX. The original factory
+// name is unknown, so the row keeps an address-derived spelling; the RET4
+// epilogue proves the static/stdcall convention.
+Rva004FAC21 *__stdcall Rva004FAC99Create(const StringBase<char> &s)
+{
+	return new Rva004FAC21(s);
+}
