@@ -355,3 +355,51 @@ AptValue *Rva006EC3E0LoadMovie(AptValue *self,int nParams){
  }
  return gpUndefinedValue;
 }
+
+// 006EC900 (356 B): the startDrag native. It calls the receiver's first
+// virtual slot, makes it the drag target of the drag context at 0xE176D0,
+// clears the drag offset and sets the four bounds to -9999.0f. Unless the
+// first argument (lock centre) is true, the offset is the context's mouse
+// position (+0x74/+0x78, ints) minus the target's x/y (+0x1C/+0x20 of its
+// character instance). A second..fifth argument set left/top/right/bottom,
+// tested against count > 0..3 as retail does (the lock-centre slot shifts
+// the indices); the first bound clears the other three. Returns undefined.
+// Names of the context type, its fields and the native are not proved.
+class BfmeAptValue006DCD20 {public:BfmeAptValue006DCD20 *rva006DCEA0();};
+class Rva006E34D0
+{
+public:
+ char m_pad0[0x44];
+ AptValue *m_dragTarget;
+ float m_left,m_top,m_right,m_bottom;
+ float m_offsetX,m_offsetY;
+ char m_pad60[0x14];
+ int m_mouseX,m_mouseY;
+};
+extern Rva006E34D0 *g_bfmeAptPtrAtE176D0;
+class BfmeAptSlot0Target {public:virtual void slot00();};
+AptValue *__cdecl Rva006EC900StartDrag(AptValue *self,int count)
+{
+ ((BfmeAptSlot0Target*)self)->slot00();
+ g_bfmeAptPtrAtE176D0->m_dragTarget=self;
+ g_bfmeAptPtrAtE176D0->m_offsetX=0;
+ g_bfmeAptPtrAtE176D0->m_offsetY=0;
+ g_bfmeAptPtrAtE176D0->m_left=-9999.0f;
+ g_bfmeAptPtrAtE176D0->m_top=-9999.0f;
+ g_bfmeAptPtrAtE176D0->m_right=-9999.0f;
+ g_bfmeAptPtrAtE176D0->m_bottom=-9999.0f;
+ if(count==0||!((AptValue*)((BfmeAptValue006DCD20*)g_aptDateInterpreter.stack.At(0))->rva006DCEA0())->toInteger()){
+  g_bfmeAptPtrAtE176D0->m_offsetX=(float)g_bfmeAptPtrAtE176D0->m_mouseX-((float*)self->c_cih(false))[7];
+  g_bfmeAptPtrAtE176D0->m_offsetY=(float)g_bfmeAptPtrAtE176D0->m_mouseY-((float*)self->c_cih(false))[8];
+ }
+ if(count>0){
+  g_bfmeAptPtrAtE176D0->m_left=g_aptDateInterpreter.stack.At(1)->toFloat();
+  g_bfmeAptPtrAtE176D0->m_top=0;
+  g_bfmeAptPtrAtE176D0->m_right=0;
+  g_bfmeAptPtrAtE176D0->m_bottom=0;
+ }
+ if(count>1)g_bfmeAptPtrAtE176D0->m_top=g_aptDateInterpreter.stack.At(2)->toFloat();
+ if(count>2)g_bfmeAptPtrAtE176D0->m_right=g_aptDateInterpreter.stack.At(3)->toFloat();
+ if(count>3)g_bfmeAptPtrAtE176D0->m_bottom=g_aptDateInterpreter.stack.At(4)->toFloat();
+ return gpUndefinedValue;
+}
