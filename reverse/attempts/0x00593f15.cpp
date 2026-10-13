@@ -1,4 +1,8 @@
 // ?getCommandList@NetPacket@@QAEPAVNetCommandList@@XZ
+// partial score=0.9857064040652715 date=2026-10-13
+// W7-ASTRA r2: full extent1475 includes124-byte switch table; ends0x005944D8.
+// WB0x154E140: all three explicit early returns restore local frame packing.
+// ?getCommandList@NetPacket@@QAEPAVNetCommandList@@XZ
 // partial score=0.975 date=2026-10-13
 // ?getCommandList@NetPacket@@QAEPAVNetCommandList@@XZ
 // partial score=0.92 date=2026-10-10
@@ -937,7 +941,7 @@ NetCommandList *NetPacket::getCommandList()
 			}
 
 			if (msg == 0) {
-				break;
+				if (lastCommand != 0) {delete lastCommand; lastCommand = 0;} return retval;
 			}
 
 			msg->setTiming(timestamp, frame);
@@ -966,7 +970,7 @@ NetCommandList *NetPacket::getCommandList()
 			++i;
 			offset = i;
 			if (lastCommand == 0) {
-				break;
+				return retval;
 			}
 			NetCommandMsg *msg = 0;
 			if (commandType == 1) {
@@ -993,7 +997,7 @@ _ReadWriteBarrier();
 _ReadWriteBarrier();
 				((NetAckBothCommandMsg *)msg)->m_24 = last->m_24;
 			} else {
-				break;
+				if (lastCommand != 0) {delete lastCommand; lastCommand = 0;} return retval;
 			}
 
 			msg->setTiming(timestamp, frame);
