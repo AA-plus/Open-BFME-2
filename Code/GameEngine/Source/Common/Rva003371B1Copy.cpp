@@ -28,3 +28,7 @@ Rva003371B1::Rva003371B1(const Rva003371B1 &other)
 {
 }
 template void _STL::_Construct<Rva003371B1, Rva003371B1>(Rva003371B1 *, const Rva003371B1 &);
+
+// Native 0x0077C2D2: complete 14-byte placement-new failure cleanup.
+// The exact 45-byte parent and native EH graph bind this action to the
+// existing no-op placement delete; the original record identity stays unknown.
