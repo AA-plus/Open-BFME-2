@@ -1,4 +1,6 @@
 // ?rva0039A270Move@Rva0039A270MoveOwner@@QAEXPAVObject@@@Z
+// partial score=0.96 date=2026-10-13
+// ?rva0039A270Move@Rva0039A270MoveOwner@@QAEXPAVObject@@@Z
 // partial score=0.94 date=2026-10-09
 // ?rva0039A270Move@Rva0039A270MoveOwner@@QAEXPAVObject@@@Z
 // partial score=0.92 date=2026-10-08
@@ -11,6 +13,7 @@
 // iterateObjectsInRange BfmeWideResult next AI aiMove normalize GetLength
 // slot114 rva0029439D, floats 1.1 1.5 1.0, kinds at template +0x108.
 #include "Lib/Coord3D.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 inline void setCoord(Coord3D*r,const Coord3D*a){r->x=a->x;r->y=a->y;r->z=a->z;}
 inline void subCoord(Coord3D*r,const Coord3D*a){r->x-=a->x;r->y-=a->y;r->z-=a->z;}
 inline void addCoord(Coord3D*r,const Coord3D*a){r->x+=a->x;r->y+=a->y;r->z+=a->z;}
@@ -204,7 +207,7 @@ void Rva0039A270MoveOwner::rva0039A270Move(Object *src)
 		Real len = ((Coord2D *)&delta)->GetLength();
 		delta.z=0.0f;
 		if(len>0.0f) delta.normalize();
-		else {delta.x=1.0f;delta.y=0.0f;}
+		else {delta.x=1.0f;__vref(delta.y)=0.0f;}
 		Real step=radius*1.5f;
 		Coord3D dest;setCoord(&dest,&delta);scaleCoord(&dest,step);addCoord(&dest,&pos);
 		holder->m_cmd.aiMoveToPositionEvenIfSleeping(&dest, (CommandSourceType)2);

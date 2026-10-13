@@ -1,4 +1,6 @@
 // ?rva005AC294@Rva005AB7E5@@QAE_NXZ
+// partial score=0.9 date=2026-10-13
+// ?rva005AC294@Rva005AB7E5@@QAE_NXZ
 // partial score=0.85 date=2026-10-12
 // ?rva005AC294@Rva005AB7E5@@QAE_NXZ
 // partial score=0.85 date=2026-10-09
@@ -27,6 +29,7 @@
 //   0x005ABA59  the next creep structure name: a random one first, then
 //               round-robin
 #include "ascii_string.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 extern int g_Va00DBA4E4;
 
@@ -384,8 +387,8 @@ void Rva005AB7E5::v2()
 bool Rva005AB7E5::rva005AC294()
 {
 	AsciiString name(AsciiString::TheEmptyString);
-	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(m_owner);
-	for (unsigned int i = 0; i < record->m_160->m_names.size(); ++i) {
+
+	for (unsigned int i = 0; i < (g_00DFEEF8->rva002A8AB1(m_owner))->m_160->m_names.size(); ++i) {
 		if (name != AsciiString::TheEmptyString)
 			break;
 		AsciiString candidate = rva005ABA59();
@@ -402,7 +405,7 @@ bool Rva005AB7E5::rva005AC294()
 	m_order->m_21 = true;
 	m_order->m_20 = false;
 	m_order->m_name = name;
-	m_order->m_08 = m_58;
+	m_order->m_08 = __vref(m_58);
 	m_order->m_28 = false;
 	((Rva00573A00 *)m_order)->rva00573A00((const Coord3D *)&pos);
 	m_order->start(m_owner, 0);

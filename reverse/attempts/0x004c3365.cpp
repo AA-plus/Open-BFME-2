@@ -1,9 +1,13 @@
 // ?doSpecialPowerAtLocation@OCLSpecialPower@@UAEXPBUCoord3D@@I@Z
+// partial score=0.85 date=2026-10-13
+// ?doSpecialPowerAtLocation@OCLSpecialPower@@UAEXPBUCoord3D@@I@Z
 // partial score=0.798152 date=2026-10-10
 // ?doSpecialPowerAtLocation@OCLSpecialPower@@UAEXPBUCoord3D@@I@Z
 // partial score=0.7981522575551262 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /ICode/Libraries/Include /ICode/GameEngine/Source
 // stlport
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <vector>
 #include <float.h>
 #include "ascii_string.h"
@@ -63,11 +67,13 @@ void OCLSpecialPower::doSpecialPowerAtLocation(const Coord3D *location,unsigned 
  switch(modData->location) {
  case 0:
   creation=TheTerrainLogic->findClosestEdgePoint(&object->pos);
+  _ReadWriteBarrier();
   TheAI->pathfinder->AdjustToNearestValidCell(&creation);
   ObjectCreationList::create(ocl,object,&creation,location,0);
   break;
  case 1:
   creation=TheTerrainLogic->findClosestEdgePoint(location);
+  _ReadWriteBarrier();
   TheAI->pathfinder->AdjustToNearestValidCell(&creation);
   ObjectCreationList::create(ocl,object,&creation,0,0);
   break;
@@ -89,8 +95,8 @@ void OCLSpecialPower::doSpecialPowerAtLocation(const Coord3D *location,unsigned 
   ObjectCreationList::create(ocl,object,&creation,0,0);
   break;
  case 6:
-  creation=TheTerrainLogic->findFarthestEdgePoint(location);creation.z+=300.0f;
   TheAI->pathfinder->AdjustToNearestValidCell(&creation);
+  creation=TheTerrainLogic->findFarthestEdgePoint(location);creation.z+=300.0f;
   ObjectCreationList::create(ocl,object,&creation,location,0);
   break;
  case 7: {
@@ -102,6 +108,7 @@ void OCLSpecialPower::doSpecialPowerAtLocation(const Coord3D *location,unsigned 
   int nearest=-1;float distance=99999.0f;
   for(int i=0;i<4;++i){Waypoint *point=points[i];if(point) {
     Coord3D diff;diff.x=point->pos.x-location->x;diff.y=point->pos.y-location->y;diff.z=point->pos.z-location->z;
+    _ReadWriteBarrier();
     float d=diff.GetLengthEstimate2D();if(d<distance){distance=d;nearest=i;}}
   }
   if(nearest>=0){creation=points[nearest]->pos;creation.z+=300.0f;ObjectCreationList::create(ocl,object,&creation,location,0);}

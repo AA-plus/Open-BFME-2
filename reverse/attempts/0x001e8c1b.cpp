@@ -1,4 +1,6 @@
 // ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z
+// partial score=0.97 date=2026-10-13
+// ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z
 // partial score=0.960424398134932 date=2026-10-10
 // ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z
 // partial score=0.9021734413423984 date=2026-10-10
@@ -32,7 +34,7 @@ extern "C" void _ReadWriteBarrier();
 
 struct SteeringCoord:Coord3D { SteeringCoord(){} void copy(const Coord3D&r){x=r.x;y=r.y;z=r.z;} SteeringCoord(const Coord3D&r){copy(r);} void subtract(const Coord3D&r){x-=r.x;y-=r.y;z-=r.z;} };
 extern "C" float __cdecl atan2f(float y, float x);
-extern "C" double __cdecl fabs(double x);
+#include <math.h>
 Real normalizeAngle(Real angle);
 Real Cos(Real angle);
 Real Sin(Real angle);
@@ -180,6 +182,7 @@ void Rva001E8C1B::rva001E8C1B(int objArg, int goalArg, Real onPathDistToGoal, Re
 	if (maxSpeed > 0.0f)
 	{
 		Real angleCoeff = (Real)fabs(relAngle) / (3.1415927f / 4.0f);
+		_ReadWriteBarrier();
 		if (angleCoeff > 1.0f)
 			angleCoeff = 1.0f;
 		Real goalSpeed;
