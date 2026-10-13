@@ -10,8 +10,10 @@
 // vector<Object*> owners and native field/virtual/call evidence guide this.
 // Keep helper and real caller in this TU: private noinline static helper
 // uses native ESI object and EDI context under MSVC internal convention.
-// All container methods retain slot names. Native RET8 establishes parent
-// stdcall. All300B and parent EH exact; no new pins/headers/flag overrides.
+// All container methods retain slot names. WB 0x1207EF0 saves ECX as this;
+// retail update 0x49E3B5 passes its primary ProductionUpdate pointer in ECX.
+// The parent is a member even though its optimized body does not use this.
+// Native RET8 establishes two stack arguments, not a free stdcall identity.
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
 // overload takes the call instead, so this TU emits no external max COMDAT.
 namespace _STL {
@@ -108,7 +110,8 @@ static __declspec(noinline) void Rva0049D07A(Object *obj,const Rva0049DF81Contex
 void __cdecl Rva0049DF72(Object *object,void *context){((_STL::vector<Object*>*)context)->push_back(object);}
 struct Rva0049DF81Input {char pad[0x3C];ObjectID id;};
 extern GameLogic *TheGameLogic;
-void __stdcall Rva0049DF81(Rva0049DF81Input *input,Object *other){
+class ProductionUpdate {public:void rva0049DF81(Rva0049DF81Input *,Object *);};
+void ProductionUpdate::rva0049DF81(Rva0049DF81Input *input,Object *other){
  if(!input->id)return;
  Object *object=TheGameLogic->findObjectByID(input->id);
  Rva0049DF81Context context={object->holder,other};
