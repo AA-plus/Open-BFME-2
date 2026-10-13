@@ -64,3 +64,7 @@ struct Rva00501E3FElement
 template _STL::pair<const int, Rva00501656>::pair(const _STL::pair<int, Rva00501656> &);
 template _STL::pair<const int, Rva00501776>::pair(const _STL::pair<int, Rva00501776> &);
 template _STL::pair<const int, Rva00501E3FElement>::pair(const _STL::pair<int, Rva00501E3FElement> &);
+
+// Native 0x0078671B: complete 14-byte placement-new failure cleanup.
+// The exact 45-byte parent and native EH graph bind this action to the
+// existing no-op placement delete; the original record identity stays unknown.
