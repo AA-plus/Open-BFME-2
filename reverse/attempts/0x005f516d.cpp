@@ -1,7 +1,14 @@
 // ?CanSwapArmyMembers@StrategicInGameUI@@QAE_NPAVRva002DCE90@@0@Z
 // partial score=0.9 date=2026-10-13
+// W7-MP6 r3 (2026-10-13): after 0x2B6D18 landed the helper compiles size-exact 210B nd20 with NO unresolved
+// symbols (scored as ?Rva005F516DCanSwapArmyMembers@@...). Remaining nd20 = the private input ABI: retail
+// ENTERS with the first selection already in ECX (saved to ESI) and the result marker is the native 0x0D
+// flavour; the anchor caller (N4CanSwapAnchor) cannot reproduce it. Retail callers of 0x5F516D: 0x5F53C5 and
+// 0x5F55B5. 0x5F55B5 is inside the unrowed 159B 0x5F5537 (WB 1628ED0, this+0xC/+0x10 list helpers, this+0x14
+// count, this+0x18 flag). 0x5F53C5 sits in the gap 0x5F53A2..0x5F53E6 (no inventory row) - the swapper-dialog
+// caller is still unrowed. Next: row 0x5F5537 (and the 0x5F53A2 caller), then this helper emits with the real
+// caller convention and the anchor can go.
 // ?Rva005F516DCanSwapArmyMembers@@YA_NPAVRva005FArmyView@@PBURva005FSelectionView@@01@Z
-template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 // partial score=0.92 date=2026-10-09
 // stlport
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
