@@ -12,10 +12,10 @@ public:
 	void postInit();
 };
 
-class Rva005975F7
+class AIEconomyBuilder
 {
 public:
-	void rva005975F7();
+	void postInit();
 };
 
 class Rva004E9F6E
@@ -74,7 +74,7 @@ private:
 	char m_pad3D[0x94 - 0x3D];
 	unsigned char m_94;
 	char m_pad95[0xB4 - 0x95];
-	Rva005975F7 m_B4;
+	AIEconomyBuilder m_B4;
 	char m_padB5[0xC4 - 0xB5];
 	unsigned char m_C4;
 	char m_padC5[0xE4 - 0xC5];
@@ -86,17 +86,17 @@ private:
 	char m_padFD[0x10C - 0xFD];
 	unsigned char m_10C;
 	char m_pad10D[0x12C - 0x10D];
-	Rva005975F7 *m_12C;
+	AIEconomyBuilder *m_12C;
 };
 
 void Rva004EBF93::rva004EBF93()
 {
 	m_04.postInit();
-	m_B4.rva005975F7();
+	m_B4.postInit();
 	m_E4.rva004E9F6E();
 	m_FC.rva00598F24();
 	m_38.rva00598CBC();
-	m_12C->rva005975F7();
+	m_12C->postInit();
 	Rva004EBF93World *w = (Rva004EBF93World *)((char *)g_00DFEEF8 + 0x10);
 	if (w->m_848 != 0)
 		m_8 = 1;

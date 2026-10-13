@@ -100,14 +100,14 @@ public:
 extern "C" __declspec(dllimport) unsigned int __stdcall timeGetTime();
 extern "C" __declspec(dllimport) void __stdcall Sleep(unsigned long ms);
 
-class Gen_004902A0
+class ProgressIndicator
 {
 public:
-	virtual ~Gen_004902A0();
-	Gen_004902A0 *m_next;
+	virtual ~ProgressIndicator();
+	ProgressIndicator *m_next;
 };
 
-class Rva00355D66 : public Gen_004902A0
+class Rva00355D66 : public ProgressIndicator
 {
 public:
 	virtual ~Rva00355D66();

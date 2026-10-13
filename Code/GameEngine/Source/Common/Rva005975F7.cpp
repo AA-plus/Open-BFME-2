@@ -1,6 +1,6 @@
 // cl: /MD
 //
-// ?rva005975F7@Rva005975F7@@QAEXXZ 27B @0x005975F7: pushes Player* at +0x14
+// ?postInit@AIEconomyBuilder@@QAEXXZ 27B @0x005975F7: pushes Player* at +0x14
 // into global g_00DFEEF8's rowed rva002A8F24, then passes the returned
 // pointer as this into rowed addInfoReceiver with this (as ModuleData) as arg.
 // Evidence: two E8 callees with row names in packet, global VA 0x00DFEEF8,
@@ -24,16 +24,16 @@ public:
 	void addInfoReceiver(const ModuleData *m);
 };
 
-class Rva005975F7
+class AIEconomyBuilder
 {
 public:
-	void rva005975F7();
+	void postInit();
 private:
 	char m_pad[0x14];
 	Player *m_14;
 };
 
-void Rva005975F7::rva005975F7()
+void AIEconomyBuilder::postInit()
 {
 	void *p = g_00DFEEF8->rva002A8F24(m_14);
 	((AIStatCollector *)p)->addInfoReceiver((const ModuleData *)this);

@@ -1,5 +1,5 @@
 // cl: /MD /EHsc
-// ??1Rva0043283C@@QAE@XZ, retail 0x0043283C, 28 bytes.
+// ??1AptTranslator@@QAE@XZ, retail 0x0043283C, 28 bytes.
 // Dtor stores derived vtable 0x00C3CA28, clears singleton 0x00E032C8 if it holds this, stores base vtable 0x00BDBA74. Evidence: caller 0x00432A1F deleting dtor, base vtable RVA 0x007DBA74 matches BfmeOwnVVD base, singleton matches g_Va00E032C8.
 class Rva0043283CBase
 {
@@ -23,11 +23,11 @@ struct Rva0043283CEntry
 	unsigned char m_flag14 : 1;
 };
 
-class Rva0043283C : public Rva0043283CBase
+class AptTranslator : public Rva0043283CBase
 {
 public:
-	Rva0043283C();
-	~Rva0043283C();
+	AptTranslator();
+	~AptTranslator();
 private:
 	int m_04;
 	Rva0043283CEntry m_entries08[0x14];		// +0x08
@@ -43,13 +43,13 @@ private:
 extern int g_Va00E032C8;
 extern "C" void *__cdecl memset(void *dst, int value, unsigned int count);
 
-// ??0Rva0043283C@@QAE@XZ, retail 0x00432987..0x00432A1F (152 bytes, EH):
+// ??0AptTranslator@@QAE@XZ, retail 0x00432987..0x00432A1F (152 bytes, EH):
 // WorldBuilder's AptTranslator::AptTranslator (AptTranslator.cpp, which asserts
 // "This is a singleton, why are you creating more?"). The base (EH state 0),
 // vtable 0x00C3CA28, twenty entries through the vector constructor iterator,
 // the scalar fields, and -- only when no instance exists yet -- the singleton
 // 0x00E032C8 takes this and +0x04 and the entries are zeroed.
-Rva0043283C::Rva0043283C()
+AptTranslator::AptTranslator()
 {
 	m_1e8 = 0;
 	m_1ec = false;
@@ -66,7 +66,7 @@ Rva0043283C::Rva0043283C()
 	}
 }
 
-Rva0043283C::~Rva0043283C()
+AptTranslator::~AptTranslator()
 {
 	if (g_Va00E032C8 == (int)this)
 		g_Va00E032C8 = 0;

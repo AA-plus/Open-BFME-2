@@ -1,5 +1,5 @@
 // cl: /MD
-// ??0Rva00432FA7@@QAE@XZ, retail 0x00432FA7, 72 bytes.
+// ??0AnimationSoundModuleManager@@QAE@XZ, retail 0x00432FA7, 72 bytes.
 // Ctor: baseConstruct 0x001B4E63 then vtable g_00C3CA30 then five ints at
 // +0xC/+0x10/+0x14/+0x18/+0x1C zeroed then three FLT_MAX floats at
 // +0x20/+0x24/+0x28 from pool 0x007BB8E0 then singleton g_00E032D0 set if zero.
@@ -20,12 +20,12 @@ private:
 };
 
 extern const void *const g_00C3CA30[];
-class Rva00432FA7;
-// ?g_00E032D0@@3PAVRva00432FA7@@A: the global at this VA is ?g_004C9DC9Container@@3PAVRva00432F23@@A; this name is an alias for it.
+class AnimationSoundModuleManager;
+// ?g_00E032D0@@3PAVAnimationSoundModuleManager@@A: the global at this VA is ?g_004C9DC9Container@@3PAVRva00432F23@@A; this name is an alias for it.
 extern class Rva00432F23 *g_004C9DC9Container;
-#pragma comment(linker, "/alternatename:?g_00E032D0@@3PAVRva00432FA7@@A=?g_004C9DC9Container@@3PAVRva00432F23@@A")
+#pragma comment(linker, "/alternatename:?g_00E032D0@@3PAVAnimationSoundModuleManager@@A=?g_004C9DC9Container@@3PAVRva00432F23@@A")
 
-class Rva00432FA7 : public SubsystemInterface
+class AnimationSoundModuleManager : public SubsystemInterface
 {
 	int m_0C;
 	int m_10;
@@ -36,10 +36,10 @@ class Rva00432FA7 : public SubsystemInterface
 	float m_24;
 	float m_28;
 public:
-	Rva00432FA7();
+	AnimationSoundModuleManager();
 };
 
-Rva00432FA7::Rva00432FA7()
+AnimationSoundModuleManager::AnimationSoundModuleManager()
 {
 	*(const void **)this = g_00C3CA30;
 	m_0C = 0;
@@ -50,10 +50,10 @@ Rva00432FA7::Rva00432FA7()
 	m_20 = FLT_MAX;
 	m_24 = FLT_MAX;
 	m_28 = FLT_MAX;
-	if ((*(Rva00432FA7 **)&g_004C9DC9Container) == 0)
-		(*(Rva00432FA7 **)&g_004C9DC9Container) = this;
+	if ((*(AnimationSoundModuleManager **)&g_004C9DC9Container) == 0)
+		(*(AnimationSoundModuleManager **)&g_004C9DC9Container) = this;
 }
 
 // Retail's data references in this unit's matched rows land on globals defined
 // under other spellings at the same addresses (addend-corrected DIR32). Bind them.
-#pragma comment(linker, "/alternatename:?g_00C3CA30@@3QBQBXB=??_7Rva00432FA7@@6B@")
+#pragma comment(linker, "/alternatename:?g_00C3CA30@@3QBQBXB=??_7AnimationSoundModuleManager@@6B@")

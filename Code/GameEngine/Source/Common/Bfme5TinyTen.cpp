@@ -7,29 +7,29 @@
 // game.dat keeps the list head at 0x00E01E1C (BFME1: 0x012F3350), read from the
 // two DIR32 slots of the retail body.
 
-class Gen_004902A0;
+class ProgressIndicator;
 
-#define g_bfmeHeadCA (*(Gen_004902A0 **)0x00E01E1C)
+#define g_bfmeHeadCA (*(ProgressIndicator **)0x00E01E1C)
 
-class Gen_004902A0
+class ProgressIndicator
 {
 public:
-	Gen_004902A0(void);
-	virtual ~Gen_004902A0(void);				// slot +0x00
+	ProgressIndicator(void);
+	virtual ~ProgressIndicator(void);				// slot +0x00
 
-	Gen_004902A0 *m_bfmeNext;				// +0x04
+	ProgressIndicator *m_bfmeNext;				// +0x04
 };
 
-extern Gen_004902A0 *g_00E01E1C;
+extern ProgressIndicator *g_00E01E1C;
 
-Gen_004902A0::Gen_004902A0(void)
+ProgressIndicator::ProgressIndicator(void)
 {
 	m_bfmeNext = g_00E01E1C;
 	g_00E01E1C = this;
 }
 
-// ??1Gen_004902A0@@UAE@XZ
-Gen_004902A0::~Gen_004902A0(void)
+// ??1ProgressIndicator@@UAE@XZ
+ProgressIndicator::~ProgressIndicator(void)
 {
 	if (g_bfmeHeadCA == this)
 		g_bfmeHeadCA = m_bfmeNext;

@@ -780,14 +780,14 @@ public:
 	void rva000B3FD0();
 };
 
-// TheAnimationSoundModuleManager: Rva00432F23 and Rva00432FA7 (the 0x2C-byte
+// TheAnimationSoundModuleManager: Rva00432F23 and AnimationSoundModuleManager (the 0x2C-byte
 // ctor) are two placeholder names of the one class.
 class Rva00432F23 : public SubsystemInterface { public: virtual ~Rva00432F23(); };
 
-class Rva00432FA7 : public SubsystemInterface
+class AnimationSoundModuleManager : public SubsystemInterface
 {
 public:
-	Rva00432FA7();
+	AnimationSoundModuleManager();
 	virtual void init();
 	virtual void reset();
 	virtual void update();
@@ -1509,7 +1509,7 @@ void GameClient::init()
 	TheAnim2DCollection->init();
 	TheAnim2DCollection->setName(AsciiString("TheAnim2DCollection"));
 
-	g_004C9DC9Container = (Rva00432F23 *)new Rva00432FA7;
+	g_004C9DC9Container = (Rva00432F23 *)new AnimationSoundModuleManager;
 	g_004C9DC9Container->init();
 	g_004C9DC9Container->setName(AsciiString("TheAnimationSoundModuleManager"));
 

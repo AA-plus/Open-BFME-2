@@ -4,10 +4,10 @@
 // Homogeneous vector-clear loops via inner at *(this+8), bounds idiom gives
 // retail add esi,0x2C prolog.
 
-class Rva003F300A
+class LivingWorldRegion
 {
 public:
-	void rva003F300A();
+	void SetupRegionOwnership();
 };
 
 // Element: the class whose rowed member 0x003F3708 is ?rva003F3708@Rva003F332E@@QAEPAUElem003B2540@@H@Z
@@ -22,8 +22,8 @@ public:
 struct Rva0020E9F2Inner
 {
 	char m_pad[0x2C];
-	Rva003F300A **m_begin;
-	Rva003F300A **m_end;
+	LivingWorldRegion **m_begin;
+	LivingWorldRegion **m_end;
 };
 
 struct Rva0020EA22Inner
@@ -54,9 +54,9 @@ private:
 void Rva0020E9F2Outer::rva0020E9F2()
 {
 	Rva0020E9F2Inner *inner = m_inner;
-	Rva003F300A ***bounds = (Rva003F300A ***)&inner->m_begin;
+	LivingWorldRegion ***bounds = (LivingWorldRegion ***)&inner->m_begin;
 	for (unsigned i = 0; i < (unsigned)(((char *)bounds[1] - (char *)bounds[0]) >> 2); ++i)
-		bounds[0][i]->rva003F300A();
+		bounds[0][i]->SetupRegionOwnership();
 }
 
 void Rva0020EA22Outer::rva0020EA22(int v)

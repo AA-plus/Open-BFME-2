@@ -45,13 +45,13 @@ Rva00572ED8::~Rva00572ED8()
 {
 }
 
-class Rva00573117 : public Rva005CB23C
+class AITargetHeuristicExpansionBase : public Rva005CB23C
 {
 public:
-	virtual ~Rva00573117();
+	virtual ~AITargetHeuristicExpansionBase();
 };
 
-inline Rva00573117::~Rva00573117()
+inline AITargetHeuristicExpansionBase::~AITargetHeuristicExpansionBase()
 {
 }
 
@@ -80,10 +80,10 @@ inline AITargetHeuristicBaseDefense::~AITargetHeuristicBaseDefense()
 // build. This anchor only makes this unit emit its copies for the ledger rows;
 // it is not retail code.
 #pragma inline_depth(0)
-// ?bfmeEmitRva005CB23CDerived@@YAXPAVRva00573117@@PAVRva005734EB@@PAVAITargetHeuristicBaseDefense@@@Z present-unmatched
-void bfmeEmitRva005CB23CDerived(Rva00573117 *a, Rva005734EB *b, AITargetHeuristicBaseDefense *c)
+// ?bfmeEmitRva005CB23CDerived@@YAXPAVAITargetHeuristicExpansionBase@@PAVRva005734EB@@PAVAITargetHeuristicBaseDefense@@@Z present-unmatched
+void bfmeEmitRva005CB23CDerived(AITargetHeuristicExpansionBase *a, Rva005734EB *b, AITargetHeuristicBaseDefense *c)
 {
-    a->Rva00573117::~Rva00573117();
+    a->AITargetHeuristicExpansionBase::~AITargetHeuristicExpansionBase();
     b->Rva005734EB::~Rva005734EB();
     c->AITargetHeuristicBaseDefense::~AITargetHeuristicBaseDefense();
 }

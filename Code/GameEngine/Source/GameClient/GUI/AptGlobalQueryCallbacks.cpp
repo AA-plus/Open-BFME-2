@@ -51,7 +51,7 @@ Rva00432931Entry *Rva00432931Pick(Rva00432931Entry *,Rva00432931Entry *);
 struct Rva004328D8Payload;
 void __stdcall Rva004328D8Emit(Rva004328D8Payload *);
 
-class Rva0043283C
+class AptTranslator
 {
 public:
 	void rva00432AA2();
@@ -119,13 +119,13 @@ void __cdecl PlaySound(const char *eventName)
 // Retail 0x004127D3, 11 bytes: "OnClickThroughPress".
 void __cdecl OnClickThroughPress(const char *unused)
 {
-	((Rva0043283C *)g_Va00E032C8)->rva00432AA2();
+	((AptTranslator *)g_Va00E032C8)->rva00432AA2();
 }
 
 // Retail 0x004127DE, 11 bytes: "OnClickThroughRelease".
 void __cdecl OnClickThroughRelease(const char *unused)
 {
-	((Rva0043283C *)g_Va00E032C8)->rva00432AC5();
+	((AptTranslator *)g_Va00E032C8)->rva00432AC5();
 }
 
 // Retail 0x0041273C, 75 bytes: bound as "InBetaDemo" (query 1) and
@@ -166,25 +166,25 @@ void __cdecl DoTrace(int query, char *result, bool skip)
 // 4/14 and6/16, then emit once. The existing emitter ignores the incoming
 // ECX and pops one payload word. This projection retains native's receiver
 // load and reuses that complete row without asserting a second identity.
-void Rva0043283C::rva00432AA2()
+void AptTranslator::rva00432AA2()
 {
  Rva00432931Entry *entry=Rva00432931Pick(&m_entries08[4],&m_entries08[14]);
  if(entry) {
   union {
    void (__stdcall *provider)(Rva004328D8Payload *);
-   void (Rva0043283C::*caller)(Rva004328D8Payload *);
+   void (AptTranslator::*caller)(Rva004328D8Payload *);
   } emit;
   emit.provider=&Rva004328D8Emit;
   (this->*emit.caller)(reinterpret_cast<Rva004328D8Payload *>(entry));
  }
 }
-void Rva0043283C::rva00432AC5()
+void AptTranslator::rva00432AC5()
 {
  Rva00432931Entry *entry=Rva00432931Pick(&m_entries08[6],&m_entries08[16]);
  if(entry) {
   union {
    void (__stdcall *provider)(Rva004328D8Payload *);
-   void (Rva0043283C::*caller)(Rva004328D8Payload *);
+   void (AptTranslator::*caller)(Rva004328D8Payload *);
   } emit;
   emit.provider=&Rva004328D8Emit;
   (this->*emit.caller)(reinterpret_cast<Rva004328D8Payload *>(entry));

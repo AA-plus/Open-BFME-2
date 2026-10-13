@@ -1,18 +1,18 @@
 // cl: /MD /EHsc
 // ??1Rva00355CD8@@UAE@XZ @0x00355CD8 62B. Dtor storing vtable 0x00814E54,
 // conditional virtual slot1 on base+4 (Gen m_next) with arg +0xC, then base
-// ??1Gen_004902A0@@UAE@XZ. Evidence: deleting dtor at 0x00355FC1 calls here,
+// ??1ProgressIndicator@@UAE@XZ. Evidence: deleting dtor at 0x00355FC1 calls here,
 // shared EH scope 0x00B7D529 with sibling 0x00355D66, same flags.
-class Gen_004902A0
+class ProgressIndicator
 {
 public:
-	Gen_004902A0();
-	virtual ~Gen_004902A0() throw();
+	ProgressIndicator();
+	virtual ~ProgressIndicator() throw();
 	virtual void slot1(int x);
-	Gen_004902A0 *m_next; // +4
+	ProgressIndicator *m_next; // +4
 };
 
-class Rva00355CD8 : public Gen_004902A0
+class Rva00355CD8 : public ProgressIndicator
 {
 public:
 	Rva00355CD8(int minimum, int maximum);
@@ -30,7 +30,7 @@ private:
 // forwards the lower endpoint through the inherited link's slot 1. Original
 // application class name remains unknown; retain the actual target owner.
 Rva00355CD8::Rva00355CD8(int minimum, int maximum)
-    : Gen_004902A0(), m_minimum(minimum), m_argC(maximum)
+    : ProgressIndicator(), m_minimum(minimum), m_argC(maximum)
 {
     if (m_next)
         m_next->slot1(minimum);
@@ -51,7 +51,7 @@ Rva00355CD8::~Rva00355CD8()
 // retain this class's target-address identity and existing slot name.
 void Rva00355CD8::slot1(int value)
 {
-    Gen_004902A0 *target = m_next;
+    ProgressIndicator *target = m_next;
     if (target)
     {
         int low = m_minimum;

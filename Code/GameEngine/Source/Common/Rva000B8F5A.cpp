@@ -236,7 +236,7 @@ struct Rva000C14BDTarget
 	virtual int v05();
 };
 
-class Rva000B8F5A
+class W3DScriptedModelDraw
 {
 public:
 	bool rva000B57A7(int,int,const FXList*,float,const Coord3D*);
@@ -248,7 +248,7 @@ public:
 	int rva000C144A();
 	int rva000B82F9();
 	int rva000B83A7();
-	void *rva000C14BD(int i);
+	void *getPlayingAnimationNameKey(int i);
 	int rva000B5766(int slot);
 	bool rva000B82C2(int index, struct CameraMarker *out);
 
@@ -272,8 +272,8 @@ private:
 	bool m_flag280;
 };
 
-// ?rva000B8F5A@Rva000B8F5A@@QAEXPADVAsciiString@@@Z @0x000B8F5A 71B
-void Rva000B8F5A::rva000B8F5A(char *a, AsciiString b)
+// ?rva000B8F5A@W3DScriptedModelDraw@@QAEXPADVAsciiString@@@Z @0x000B8F5A 71B
+void W3DScriptedModelDraw::rva000B8F5A(char *a, AsciiString b)
 {
 	m_98 = a;
 	m_94 = false;
@@ -293,10 +293,10 @@ void Rva000B8F5AOuter::rva000BFB51(float value)
 	}
 }
 
-// ?rva000BFD77@Rva000B8F5A@@QAEXXZ @0x000BFD77 40B
+// ?rva000BFD77@W3DScriptedModelDraw@@QAEXXZ @0x000BFD77 40B
 // Table-probe refill: looks the +0x0C entry up in the outer table; on a hit
 // raises the +0x280 flag first and refills through the outer 0xBF9FC body.
-void Rva000B8F5A::rva000BFD77()
+void W3DScriptedModelDraw::rva000BFD77()
 {
 	void *e = (*(Rva000B4BED **)((char *)this - 8))->rva000B4C9D(m_ptr0C);
 	if (e != 0)
@@ -306,9 +306,9 @@ void Rva000B8F5A::rva000BFD77()
 	}
 }
 
-// ?rva000BFD9F@Rva000B8F5A@@QAEXXZ @0x000BFD9F 40B
+// ?rva000BFD9F@W3DScriptedModelDraw@@QAEXXZ @0x000BFD9F 40B
 // Twin of 0xBFD77 through the get-next sibling probe (0xB4CBE).
-void Rva000B8F5A::rva000BFD9F()
+void W3DScriptedModelDraw::rva000BFD9F()
 {
 	void *e = (*(Rva000B4BED **)((char *)this - 8))->rva000B4CBE(m_ptr0C);
 	if (e != 0)
@@ -318,10 +318,10 @@ void Rva000B8F5A::rva000BFD9F()
 	}
 }
 
-// ?rva000C144A@Rva000B8F5A@@QAEHXZ @0x000C144A 35B
+// ?rva000C144A@W3DScriptedModelDraw@@QAEHXZ @0x000C144A 35B
 // Leading-live counter: runs the outer 0xC0386 probe, then counts the
 // leading non-null +0x104 entries (3 x 0x1C, testing the first pointer).
-int Rva000B8F5A::rva000C144A()
+int W3DScriptedModelDraw::rva000C144A()
 {
 	((Rva000B8F5AOuter *)((char *)this - 12))->rva000C0386();
 	unsigned n = 0;
@@ -336,11 +336,11 @@ int Rva000B8F5A::rva000C144A()
 	return n;
 }
 
-// ?rva000C14BD@Rva000B8F5A@@QAEPAXH@Z @0x000C14BD 56B
+// ?getPlayingAnimationNameKey@W3DScriptedModelDraw@@QAEPAXH@Z @0x000C14BD 56B
 // Indexed entry fetch: runs the outer 0xC0386 probe, bounds-checks the
 // index against the 3 x 0x1C +0x104 entries, and returns the entry target's
 // slot-3 virtual (or null when out of range or empty).
-void *Rva000B8F5A::rva000C14BD(int i)
+void *W3DScriptedModelDraw::getPlayingAnimationNameKey(int i)
 {
 	((Rva000B8F5AOuter *)((char *)this - 12))->rva000C0386();
 	if (i < 0 || (unsigned)i >= 3)
@@ -354,12 +354,12 @@ void *Rva000B8F5A::rva000C14BD(int i)
 	return ((Rva000C14BDTarget *)ve->m_ptr00)->v03();
 }
 
-// ?rva000C146D@Rva000B8F5A@@QAE?AVAsciiString@@H@Z @0x000C146D 80B
+// ?rva000C146D@W3DScriptedModelDraw@@QAE?AVAsciiString@@H@Z @0x000C146D 80B
 // Returns a string by value: runs the outer 0xC0386 probe; when the index hits
 // a live +0x104 entry, builds it from the entry target's slot-2 text (0x37BA0),
 // otherwise returns an empty string. The return-object flag at [ebp-4] is the
 // by-value return; indexing the entry twice keeps retail's test-then-reload.
-AsciiString Rva000B8F5A::rva000C146D(int i)
+AsciiString W3DScriptedModelDraw::rva000C146D(int i)
 {
 	((Rva000B8F5AOuter *)((char *)this - 12))->rva000C0386();
 	if (i >= 0 && (unsigned)i < 3)
@@ -476,8 +476,8 @@ struct ProbeStateB83A7 {
     AsciiString name10C,name110;
 };
 
-// ?rva000B82F9@Rva000B8F5A@@QAEHXZ
-int Rva000B8F5A::rva000B82F9()
+// ?rva000B82F9@W3DScriptedModelDraw@@QAEHXZ
+int W3DScriptedModelDraw::rva000B82F9()
 {
     ProbeProviderB83A7 *provider=reinterpret_cast<ProbeOuterB83A7 *>((char *)this-12)->get();
     int result=0;
@@ -491,11 +491,11 @@ int Rva000B8F5A::rva000B82F9()
     return result;
 }
 
-// ?rva000B83A7@Rva000B8F5A@@QAEHXZ
+// ?rva000B83A7@W3DScriptedModelDraw@@QAEHXZ
 // Retail B83A7..B8440 uses the same secondary receiver and probe slots as
 // B82F9 but always selects state+110. Reassigning the typed address view
 // preserves the native source pointer in ESI. The result role is unproven.
-int Rva000B8F5A::rva000B83A7()
+int W3DScriptedModelDraw::rva000B83A7()
 {
     ProbeProviderB83A7 *provider=reinterpret_cast<ProbeOuterB83A7 *>((char *)this-12)->get();
     int result=0;
@@ -593,13 +593,13 @@ void Rva000BFB76Interface::rva000BFB76(const ModelConditionFlags&conditions,bool
 // existing indexed getters and native B5D7F blending. Field roles inferred
 // only from accesses: mode10, direction14, active18; no full record identity.
 struct Rva000C15F1Range {float first,second;};
-void Rva000B8F5A::rva000C15F1(int i,float*first,float*second){
+void W3DScriptedModelDraw::rva000C15F1(int i,float*first,float*second){
  ((Rva000B8F5AOuter*)((char*)this-12))->rva000C0386();
  if(i<0 || (unsigned)i>=3 || !m_entries104[i].m_ptr00){
   first[0]=0.0f;first[1]=0.0f;
   *(Rva000C15F1Range*)second=*(const Rva000C15F1Range*)first;return;
  }
- Rva000B8F5A*slot=(Rva000B8F5A*)((char*)this+i*0x1C);
+ W3DScriptedModelDraw*slot=(W3DScriptedModelDraw*)((char*)this+i*0x1C);
  if(slot->m_entries104[0].active18){
   switch(slot->m_entries104[0].mode10){
   case 1:
@@ -638,7 +638,7 @@ void Rva000B8F5A::rva000C15F1(int i,float*first,float*second){
 // local view names retain uncertainty about original target types.
 // Slot51 passes a return buffer and bone index in retail; the donor returns
 // a matrix reference, so its return convention is not copied here.
-bool Rva000B8F5A::rva000B57A7(int slot,int barrel,const FXList*fx,float speed,const Coord3D*victim){
+bool W3DScriptedModelDraw::rva000B57A7(int slot,int barrel,const FXList*fx,float speed,const Coord3D*victim){
  StateView367*state=(StateView367*)m_ptr0C;
  if(!state || !(state->validF4&8))return false;
  const BarrelVector367&vec=state->barrels[slot];
@@ -670,11 +670,11 @@ bool Rva000B8F5A::rva000B57A7(int slot,int barrel,const FXList*fx,float speed,co
  return handled;
 }
 
-// ?rva000B5766@Rva000B8F5A@@QAEHH@Z, retail 0x000B5766 (65 bytes, RET 4), slot 23 of the
+// ?rva000B5766@W3DScriptedModelDraw@@QAEHH@Z, retail 0x000B5766 (65 bytes, RET 4), slot 23 of the
 // table 0x007CC588 beside rva000B57A7: the barrel count of the given slot in the active
 // state record (the +0x1C0 override while the +0x1BF flag is set, else +0x0C), or zero
 // when there is no record or its +0xF4 bit 3 is clear.
-int Rva000B8F5A::rva000B5766(int slot)
+int W3DScriptedModelDraw::rva000B5766(int slot)
 {
 	const StateView367 *state = m_useState1C0 ? m_state1C0 : (const StateView367 *)m_ptr0C;
 	if (state && (state->validF4 & 8))
@@ -685,7 +685,7 @@ int Rva000B8F5A::rva000B5766(int slot)
 	return 0;
 }
 
-// ?rva000B82C2@Rva000B8F5A@@QAE_NHPAUCameraMarker@@@Z, retail 0x000B82C2 (55 bytes, RET 8),
+// ?rva000B82C2@W3DScriptedModelDraw@@QAE_NHPAUCameraMarker@@@Z, retail 0x000B82C2 (55 bytes, RET 8),
 // table 0x007CC588 neighbour of the probe slots: copies entry [index] of the module data's
 // 8-byte marker vector (+0x11C of the record at this-8) into out through the rowed
 // CameraMarker::operator=, false when index is outside the vector.
@@ -709,7 +709,7 @@ struct MarkerDataB82C2
 	MarkerVectorB82C2 markers;
 };
 
-bool Rva000B8F5A::rva000B82C2(int index, CameraMarker *out)
+bool W3DScriptedModelDraw::rva000B82C2(int index, CameraMarker *out)
 {
 	const MarkerDataB82C2 *data = *reinterpret_cast<MarkerDataB82C2 *const *>((char *)this - 8);
 	if (index >= 0 && index < data->markers.size())

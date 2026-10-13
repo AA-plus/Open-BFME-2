@@ -1,17 +1,17 @@
 // cl: /MD /EHsc
 // ??1Rva00355D66@@UAE@XZ @0x00355D66 73B
-// Intermediate dtor in the Gen_004902A0 family (base dtor rowed at 0x00355C77,
+// Intermediate dtor in the ProgressIndicator family (base dtor rowed at 0x00355C77,
 // base ctor unrowed at 0x00355C60, own ctor at 0x00355D4E with vtable 0x00814E5C).
 // Evidence: stores vtable 0x00814E5C at [this], releases member +8 via
 // TheWindowManager (0x00DFEF1C) slot 0x8C when non-null, clears +8, then calls
 // base dtor; deleting dtor at 0x00355FDD calls here; EH prolog with scope
 // 0x00B7D529 shared with sibling 0x00355CD8.
 
-class Gen_004902A0
+class ProgressIndicator
 {
 public:
-	virtual ~Gen_004902A0() throw();
-	Gen_004902A0 *m_next;
+	virtual ~ProgressIndicator() throw();
+	ProgressIndicator *m_next;
 };
 
 class GameWindow;
@@ -59,7 +59,7 @@ public:
 
 extern GameWindowManager *TheWindowManager;
 
-class Rva00355D66 : public Gen_004902A0
+class Rva00355D66 : public ProgressIndicator
 {
 public:
 	Rva00355D66();

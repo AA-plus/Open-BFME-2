@@ -1,7 +1,7 @@
 // cl: /O1 /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
-// ?rva004E9823@Rva004E9823@@QAEXPBVModuleData@@@Z @ 0x004E9823, 137 bytes.
+// ?addPlayer@AIGameTeam@@QAEXPBVModuleData@@@Z @ 0x004E9823, 137 bytes.
 // Armor-gated registry fill: look up parent's armor name through the ArmorStore
 // at g_00E0312C via rowed find 0x0041F474, new a 0x188-byte SkirmishAI with
 // (parent, armor, map-empty) via rowed ctor 0x002C6EE0, file it under the
@@ -54,10 +54,10 @@ private:
 	char m_pad[0x188];
 };
 
-class Rva004E9823
+class AIGameTeam
 {
 public:
-	void rva004E9823(const ModuleData *parent);
+	void addPlayer(const ModuleData *parent);
 
 private:
 	_STL::map<int, int> m_map; // +0x0
@@ -66,7 +66,7 @@ private:
 	bool m_24; // +0x24
 };
 
-void Rva004E9823::rva004E9823(const ModuleData *parent)
+void AIGameTeam::addPlayer(const ModuleData *parent)
 {
 	const AsciiString *name = (const AsciiString *)((const char *)parent + 0x58);
 	const ArmorTemplate *armor = g_00E0312C->rva0041F474(*name);

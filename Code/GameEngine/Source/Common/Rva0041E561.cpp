@@ -58,10 +58,10 @@ private:
 	int m_pad;
 };
 
-class Rva00573117 : public ModuleData
+class AITargetHeuristicExpansionBase : public ModuleData
 {
 public:
-	Rva00573117();
+	AITargetHeuristicExpansionBase();
 private:
 	int m_pad[2];
 };
@@ -94,7 +94,7 @@ void Rva0041E4A3::rva0041E561()
 {
 	m_vec.push_back(new AITargetHeuristicBaseDefense);
 	m_vec.push_back(new Rva005734EB);
-	m_vec.push_back(new Rva00573117);
+	m_vec.push_back(new AITargetHeuristicExpansionBase);
 	m_vec.push_back(new Rva00572ED8);
 	m_vec.push_back(new Rva00572DE8);
 	m_vec.push_back(new Rva00572C6E);

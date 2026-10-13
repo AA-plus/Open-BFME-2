@@ -37,10 +37,10 @@ public:
 	void scheduleNullable(Refresh0023FA80AI *ai, Refresh0023FA80Object *object);
 };
 
-class Rva003F300A
+class LivingWorldRegion
 {
 public:
-	void rva003F300A();
+	void SetupRegionOwnership();
 
 private:
 	unsigned char m_pad00[0xE0];
@@ -53,9 +53,9 @@ static __forceinline int rva003F300ANameLength(const AsciiString *key)
 	return text ? *(const unsigned short *)(text + 4) : 0;
 }
 
-void Rva003F300A::rva003F300A()
+void LivingWorldRegion::SetupRegionOwnership()
 {
-	Rva003F300A *region = this;
+	LivingWorldRegion *region = this;
 	AsciiString *key = (AsciiString *)((char *)region + 0xE0);
 	if (rva003F300ANameLength(key) <= 0)
 		return;

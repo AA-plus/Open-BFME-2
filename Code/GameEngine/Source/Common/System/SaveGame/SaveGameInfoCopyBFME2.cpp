@@ -314,12 +314,12 @@ private:
 	void *m_ctx;
 	unsigned char m_done;
 };
-class Rva0052B53C : public Rva0052B497
+class XferMD5CRC : public Rva0052B497
 {
 public:
-	Rva0052B53C(unsigned char v);
+	XferMD5CRC(unsigned char v);
 	void rva0052B53C();
-	unsigned char *rva0052B559();
+	unsigned char *GetCRC();
 };
 class BFMECRCWriter : public XferSave
 {
@@ -432,10 +432,10 @@ void BfmeSubobject0022CE19::xfer(Xfer *xfer)
 		if (TheLivingWorldLogic != 0)
 		{
 			memset(&object44.blockD64, 0, sizeof(object44.blockD64));
-			Rva0052B53C digest(0);
+			XferMD5CRC digest(0);
 			(*(Rva002BA8F1Logic **)&TheLivingWorldLogic)->xfer((Xfer *)&digest);
 			digest.rva0052B53C();
-			memcpy(&object44.blockD64, digest.rva0052B559(), 16);
+			memcpy(&object44.blockD64, digest.GetCRC(), 16);
 			BFMECRCWriter crc(TheLiteCRC);
 			Xfer *writer = &crc;
 			writer->xferSnapshot(*(Rva002BA8F1Logic **)&TheLivingWorldLogic);

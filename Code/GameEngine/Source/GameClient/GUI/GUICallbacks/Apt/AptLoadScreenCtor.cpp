@@ -27,7 +27,7 @@ typedef bool Bool;
 class GameWindow;
 class Rva0043DA65;
 
-// The window base: Gen_004902A0 (vptr, list link) then the window (+0x08)
+// The window base: ProgressIndicator (vptr, list link) then the window (+0x08)
 // and a flag (+0x0C); rowed constructor 0x00355D4E.
 class Rva00355D66
 {

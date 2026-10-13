@@ -23,14 +23,14 @@ struct Rva000E10C0View
 	int m_d;
 };
 
-class Gen_004902A0
+class ProgressIndicator
 {
 public:
 	virtual void v0();
 	virtual void apply(int value);
 };
 
-extern Gen_004902A0 *g_00E01E1C;
+extern ProgressIndicator *g_00E01E1C;
 
 class Rva009EB960
 {
