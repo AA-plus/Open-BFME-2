@@ -1,6 +1,8 @@
 // ?OnDeactivation@EmotionNugget@@QAEXXZ
 // partial score=0.93 date=2026-10-13
 // ?OnDeactivation@EmotionNugget@@QAEXXZ
+// partial score=0.93 date=2026-10-13
+// ?OnDeactivation@EmotionNugget@@QAEXXZ
 // partial score=0.9 date=2026-10-09
 // Retail/WB pass 2026-10-09: reconstructed from the complete target body
 // and WorldBuilder's EmotionNugget.cpp sibling. Member offsets, vtable slots,
@@ -112,7 +114,7 @@ public:
 	bool addAttributeModifierToPool(const AsciiString &name, int value);
 public:
 	char m_pad00[0x124];
-	unsigned int m_conditionWord124;
+	volatile unsigned int m_conditionWord124;
 	char m_pad128[0x258 - 0x128];
 	AIUpdateInterface *m_ai258;
 };
@@ -166,15 +168,15 @@ void EmotionNugget::OnDeactivation()
 		m_frame10 = TheGameLogic->m_frame + m_entry->m_10;
 	if (m_entry->m_14 && m_id08)
 	{
-		int duration = m_entry->m_14;
 		unsigned frame = TheGameLogic->m_frame;
+		int duration = m_entry->m_14;
 		m_map14[m_id08] = frame + duration;
 	}
 	if (m_entry->m_18 && m_key0C)
 	{
 		int duration = m_entry->m_18;
-		unsigned frame = TheGameLogic->m_frame;
-		m_map20[m_key0C] = frame + duration;
+
+		m_map20[m_key0C] = (TheGameLogic->m_frame) + duration;
 	}
 	if (m_entry->m_fx38)
 	{
