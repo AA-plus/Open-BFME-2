@@ -1,6 +1,8 @@
 // ?rva0051DE3D@AptScoreScreen@@QAEXXZ
+// partial score=0.8733459357 date=2026-10-13
+// ?rva0051DE3D@AptScoreScreen@@QAEXXZ
 // partial score=0.98 date=2026-10-11
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /O1 /G7 /arch:SSE
 // stlport
 //
 // BFME2's score screen Apt callbacks, 0x0051BF75 onward, bound by these
@@ -262,6 +264,11 @@ struct Rva0051DE3DHero
 	bool upgraded;
 	const Image *image;
 };
+
+// Existing byte-verified 12-byte vector and signed-key sort providers.
+struct PrereqUnitRec { unsigned int m_data[3]; ~PrereqUnitRec() {} };
+struct BfmeE12Key;
+
 
 // AptHeroPowerText.cpp: one region bonus row, numbered through *index.
 class Rva0051C2E2
@@ -758,11 +765,11 @@ void AptScoreScreen::rva0051DE3D()
 				hero.order = thing->m_638;
 				hero.upgraded = unit->m_upgraded;
 				hero.image = thing->getButtonImage();
-				heroes.push_back(hero);
+				((_STL::vector<PrereqUnitRec> *)&heroes)->push_back(*(const PrereqUnitRec *)&hero);
 			}
 		}
 	}
-	_STL::sort(heroes.begin(), heroes.end());
+	_STL::sort<BfmeE12Key *>((BfmeE12Key *)heroes.begin(), (BfmeE12Key *)heroes.end());
 	m_heroUpgrades.clear();
 	for (unsigned int k = 0; k < heroes.size(); ++k)
 	{
