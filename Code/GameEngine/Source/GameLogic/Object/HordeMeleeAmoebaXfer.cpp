@@ -111,7 +111,9 @@ bool HordeMeleeAmoeba::rva005879C8(Object *victim)
  Rva0046247DPair pair;
  ((Rva00587204*)this)->rva00587204(pair);
  bool found=false;
- for(_STL::list<Object*>::iterator i=pair.second->begin();i!=pair.second->end();++i) {
+ // Compare the public node identities directly, preserving the inlined walk
+ // without emitting this TU's non-retail iterator-comparison COMDAT.
+ for(_STL::list<Object*>::iterator i=pair.second->begin();i._M_node!=pair.second->end()._M_node;++i) {
   HmaUnitAIView *unit=(*i)->ai;
   if(!unit)continue;
   if(unit->engaged()) {
