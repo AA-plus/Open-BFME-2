@@ -15,3 +15,7 @@ void __cdecl Rva0041826BConstruct(Rva004181F5 *dst, const Rva004181F5 *src)
 {
     new (dst) Rva004181F5(*src);
 }
+
+// Native 0x007865C9: complete 14-byte placement-new failure cleanup.
+// The exact 45-byte parent and native EH graph bind this action to the
+// existing no-op placement delete; the original opaque record identity stays unknown.
