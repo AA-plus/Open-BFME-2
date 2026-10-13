@@ -1,6 +1,10 @@
 // ??0Rva0050F909@@QAE@HABVAsciiString@@HH@Z
+// partial score=0.9265 date=2026-10-13
+// ??0Rva0050F909@@QAE@HABVAsciiString@@HH@Z
 // partial score=0.9300901688984591 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 // Native0050F85D..0050F909 RET8; target color callback0050E7EB reads58.
 // WorldBuilder AptPlayerTribute.cpp binds the same _level%u.%s_color query.
@@ -212,6 +216,7 @@ Rva0050F909::Rva0050F909(int level,const AsciiString&path,int slotIndex,int stat
  if(!TheNetwork->connected(slotIndex))goto Gone;
 Active:
  if(alive)text="GUI:PlayerAlive";else if(observer)text="GUI:PlayerObserver";else text="GUI:PlayerDead";
+ _ReadWriteBarrier();
  goto Status;
 Gone:
  if(observer)text="GUI:PlayerObserverGone";else text="GUI:PlayerGone";
