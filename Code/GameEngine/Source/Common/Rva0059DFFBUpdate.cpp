@@ -1,6 +1,10 @@
-// ?rva0059DFFB@Rva0059E242@@UAEXXZ
-// partial score=0.91503 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
+// stlport
+//
+// ?rva0059DFFB@Rva0059E242@@UAEXXZ @0x0059DFFB (148B): the sibling of 0x0059DF60
+// that plays the second stored sound (source +0x14, sound at +0x14) and returns
+// without the trailing call. Same equal-arm receiver on the event argument, plus
+// one on the sequence pointer so cl reuses ESI for m_38->m_1c (W7-S2 r4).
 #include "Common/BfmeAudioEventPrefix136.h"
 
 struct Rva0059DF60EventSource { char pad[0x10]; OpaqueRefElement4 m_10,m_14; };
@@ -40,9 +44,9 @@ void Rva0059E242::rva0059DFFB()
         position.x = m_18;
         position.y = m_1c;
         position.z = m_20;
-        BfmeAudioEventPrefix136 event(m_14->m_14, position, 1);
+        BfmeAudioEventPrefix136 event((m_14 ? m_14 : m_14)->m_14, position, 1);
         if (m_38 != 0)
-            event.m_int70 = m_38->m_1c->m_13c;
+            event.m_int70 = (m_38->m_1c ? m_38->m_1c : m_38->m_1c)->m_13c;
         reinterpret_cast<Rva0059DF60AudioView *>(TheAudio)->addAudioEvent(&event);
     }
 

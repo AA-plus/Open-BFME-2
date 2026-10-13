@@ -87990,3 +87990,4 @@ _Rva001118ECResampleRgb555,,0x001118EC,281,Code/GameEngineDevice/Source/W3DDevic
 ?rva000B348E@Rva000B348E@@QAEX_N@Z,,0x000B348E,74,Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DScriptedModelDrawNukeRender.cpp,matched,render-slot provider refresh: secondary base at this-8 plus +0x6A guard; volatile parameter read keeps retail branchful bool; slot120 bit4 set/clear then slot121(v1)
 ??0W3DDisplay@@QAE@XZ,,0x00049DEA,293,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplayCtorRva00049DEA.cpp,matched,
 ?rva0059DF60@Rva0059E242@@UAEXXZ,,0x0059DF60,155,Code/GameEngine/Source/Common/Rva0059DF60Update.cpp,matched,
+?rva0059DFFB@Rva0059E242@@UAEXXZ,,0x0059DFFB,148,Code/GameEngine/Source/Common/Rva0059DFFBUpdate.cpp,matched,
