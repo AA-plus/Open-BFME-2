@@ -1,5 +1,3 @@
-// ?v7@Rva005AAB91@@UAEXXZ
-// partial score=0.9 date=2026-10-04
 // cl: /O1 /MD /GX /DNDEBUG /Ireference/shims/bfme2_ascii
 //
 // The "AIRoamingDefenseTactic" skirmish-AI tactic (vtable 0x008720E8; ctor
@@ -19,8 +17,12 @@
 //   0x005AAB9C  slot 6: start and mark roaming
 //   0x005AB085  slot 7: while roaming, send the first idle, unbusy (status
 //               0x5A clear) owner unit of the owner's player to roam
-//               (0x005AAE3F), then finish
+//               (0x005AAE3F), then finish. The owner argument of the
+//               0x002A8F24 lookup is an equal-arm conditional (late-folded
+//               ?:), which reproduces retail's register order (W7-R1 lever).
+//   The other slots are rowed in their own units; only slot 7 is defined here.
 #include "ascii_string.h"
+#include "../../Common/GameLogicObjectLookupView.h"
 
 // BFME2's Xfer: operator== overloads, grouped by cl at the first overload
 // slot in reverse declaration order (Rva004E0513Xfer.cpp has the same view).
@@ -102,11 +104,6 @@ public:
 
 	unsigned char m_current;
 	unsigned char m_minimum;
-};
-
-enum ObjectID
-{
-	INVALID_ID = 0
 };
 
 enum ObjectStatusTypes
@@ -240,15 +237,7 @@ public:
 	int m_304;			// +0x304
 };
 
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-	char m_pad000[0x40];
-	unsigned int m_40;		// +0x40, the frame
-};
 extern GameLogic *TheGameLogic;
-extern int g_Va00DBA4E4;
 
 struct Rva002A8AB1Record
 {
@@ -356,53 +345,11 @@ private:
 	bool m_roaming;		// +0x58
 };
 
-bool Rva005AAB91::appliesTo(void *)
-{
-	if (!((Rva002A9BF2 *)m_owner)->rva002A9BF2()) {
-		Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(m_owner);
-		int running = record->rva002C7196(AsciiString("AIRoamingDefenseTactic_IsRunning"));
-		unsigned int next = record->rva002C7196(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"));
-		if (!next) {
-			record->rva002C717E(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"),
-				g_Va00DBA4E4 * 5 + TheGameLogic->m_40);
-		} else if (!running && TheGameLogic->m_40 >= next) {
-			return true;
-		}
-	}
-	return false;
-}
-
-void Rva005AAB91::v2()
-{
-	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(m_owner);
-	record->rva002C717E(AsciiString("AIRoamingDefenseTactic_IsRunning"), 0);
-	record->rva002C717E(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"), 0);
-}
-
-bool Rva005AAB91::v3(void *unit, int count)
-{
-	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(m_owner);
-	record->rva002C717E(AsciiString("AIRoamingDefenseTactic_IsRunning"), 1);
-	return Rva004ECECD::v3(unit, count);
-}
-
-void Rva005AAB91::xfer(Xfer *xfer)
-{
-	Rva004ECECD::xfer(xfer);
-	*xfer == m_roaming;
-}
-
-void Rva005AAB91::v6()
-{
-	m_running = true;
-	m_roaming = true;
-}
-
 void Rva005AAB91::v7()
 {
 	if (!m_roaming)
 		return;
-	IntMap *objects = *(IntMap **)g_00DFEEF8->rva002A8F24(m_owner);
+	IntMap *objects = *(IntMap **)g_00DFEEF8->rva002A8F24( (m_roaming ? m_owner : m_owner));
 	for (unsigned int i = 0; i < objects->bucket_count(); ++i) {
 		Rva005AAB91IDs *ids = (Rva005AAB91IDs *)((Rva005C4AD1LeaField *)objects)->get();
 		Object *obj = TheGameLogic->findObjectByID(ids->m_begin[i]);

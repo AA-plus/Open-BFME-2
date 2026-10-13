@@ -1,9 +1,6 @@
-// ?update@DelayedExperienceLevelGrantSystem@@UAEXXZ
-// partial score=0.94 date=2026-10-12
-// ?update@DelayedExperienceLevelGrantSystem@@UAEXXZ
-// partial score=0.94 date=2026-10-12
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /Ireference/shims/moduledata /O1 /G7 /arch:SSE /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
+// Update slot of the delayed experience-level grant queue (xfer lives in DelayedExperienceLevelGrantXfer.cpp).
 // Retail 0x00420F3F..0x00421084 (325 bytes), secondary Snapshot transfer.
 // WB 0x01292D20 names DelayedExperienceLevelGrantSystem::DoXfer and asserts
 // entry.experienceLevel != NULL. Retail's 0x00420E67 destructor proves the
@@ -97,47 +94,16 @@ private:
     _STL::list<BfmePod12> entries;
     bool loading;
 };
-void DelayedExperienceLevelGrantSystem::xfer(Xfer *xfer) {
-    GrantVersion version(1,1);
-    xfer->xferVersion(&version);
-    if (xfer->IsLoading()) {
-        // Retail uses the already-owned folded int list clear at 0x0023DAA5.
-        reinterpret_cast<_STL::_List_base<int,_STL::allocator<int> > *>(&entries)->clear();
-        loading = true;
-        int count;
-        xfer->xferInt(&count);
-        while (count > 0) {
-            BfmePod12 entry;
-            XferObjectID(xfer,&entry.object);
-            xfer->xferBool(&entry.grant);
-            AsciiString name;
-            xfer->xferAsciiString(&name);
-            entry.level = reinterpret_cast<Rva0028951F *>(TheExperienceLevelSystem)->rva0028951F(TheNameKeyGenerator->nameToKey(name));
-            if (entry.level) entries.push_back(entry);
-            --count;
-        }
-    } else {
-        int count = entries.size();
-        xfer->xferInt(&count);
-        _STL::list<BfmePod12>::iterator end=entries.end();
-        for (_STL::list<BfmePod12>::iterator it=entries.begin();it._M_node!=end._M_node;) {
-            XferObjectID(xfer,&it->object);
-            xfer->xferBool(&it->grant);
-            AsciiString name(reinterpret_cast<const GrantLevelNameView *>(it->level)->name);
-            xfer->xferAsciiString(&name);
-            ++it;
-        }
-    }
-}
-
 // Retail 0x00420EB3..0x00420F0E (91 bytes), slot 10 (update) of the primary
 // table 0x00C3BDC4 beside reset 0x00420B55: each queued entry whose object
 // still exists, and is not effectively dead unless it carries status 0x58,
 // gets its level applied by 0x00420C8E (unrowed, pinned from this call);
 // then the queue is emptied through the same folded list clear xfer uses.
+// The GameLogic receiver as an equal-arm conditional (late-folded ?:) reproduces retail's
+// register order for the findObjectByID call (W7-R1 lever).
 void DelayedExperienceLevelGrantSystem::update() {
     for (_STL::list<BfmePod12>::iterator it=entries.begin(); it!=entries.end(); ++it) {
-        Object *obj = TheGameLogic->findObjectByID(it->object);
+        Object *obj = (TheGameLogic ? TheGameLogic : TheGameLogic)->findObjectByID(it->object);
         if (obj && !(obj->isEffectivelyDead() && !obj->testStatus(OBJECT_STATUS_58)))
             rva00420C8E((ExperienceLevelView *)it->level, obj, it->grant);
     }

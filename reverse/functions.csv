@@ -87930,3 +87930,5 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?IniParseEmotionType@EmotionNuggetTemplate@@SAXPAVINI@@PAX1PBX@Z,,0x004DC702,66,Code/GameEngine/Source/Common/System/EmotionNuggetTemplateIniParseEmotionType.cpp,matched,WB identity: EmotionNuggetTemplate::IniParseEmotionType strings at EA own EmotionNugget.cpp; renamed placeholder INI::Rva004DC702_ParseEmotionType to the real static-member scope; bytes unchanged
 ?Rva006C4E90VtableName@@YA_NPAPAPAXIPADI@Z,,0x006C4E90,261,Code/Libraries/Source/WWVegas/WWDebug/Rva006C4CD0InitDbghelp.cpp,matched,
 ?rva00373158@Rva0037381C@@QAEXPAVRva00373373Portal@@H@Z,,0x00373158,115,Code/GameEngine/Source/GameLogic/Object/Behavior/MineshaftPortalBehaviourLinkStep.cpp,matched,
+?update@DelayedExperienceLevelGrantSystem@@UAEXXZ,,0x00420EB3,91,Code/GameEngine/Source/GameLogic/System/DelayedExperienceLevelGrantUpdate.cpp,matched,
+?v7@Rva005AAB91@@UAEXXZ,,0x005AB085,160,Code/GameEngine/Source/GameLogic/SkirmishAI/Rva005AAB91RoamSlot7.cpp,matched,
