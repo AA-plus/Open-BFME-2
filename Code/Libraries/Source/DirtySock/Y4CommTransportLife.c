@@ -612,7 +612,7 @@ int Rva00818D20( struct Rva00816BF0Comm *comm, void *buffer, int size,
  * compiles to identical bytes, since the body only touches globals, but it
  * would misdescribe the interface and no caller could then pass anything.
  */
-int Rva00817B30( unsigned int tick );
+int CommUdpProcess( unsigned int tick );
 
 int Rva00818CB0( unsigned int socket, int flags,
 	struct Rva00816BF0Comm *ref )
@@ -623,7 +623,7 @@ int Rva00818CB0( unsigned int socket, int flags,
 	{
 		uTick = Rva007FEA00();
 
-		while ( Rva00817B30( uTick ) > 0 )
+		while ( CommUdpProcess( uTick ) > 0 )
 		{
 			/* the work is the condition */
 		}
