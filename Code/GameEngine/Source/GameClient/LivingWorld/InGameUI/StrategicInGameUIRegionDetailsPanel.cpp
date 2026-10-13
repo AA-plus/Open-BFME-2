@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /DNDEBUG /MD /EHsc
 // Retail5CC81F/237 and WB15BF010/936 establish the three page branches.
 // Constructor arguments remain opaque pointer-sized ABI values. PageContext
