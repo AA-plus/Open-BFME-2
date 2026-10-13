@@ -10,7 +10,16 @@ public:
 	int m_value;
 };
 
-void Rva0056FCDB::rva0056FCDB(short value)
+// Select-any like the AptOnlineLogin.cpp copy (this retail body comes first in
+// link order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline void Rva0056FCDB::rva0056FCDB(short value)
 {
 	m_value = Rva0056F690Hook(value, value);
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva0056FCDBSetter@@YAXPAVRva0056FCDB@@F@Z absent-from-retail
+void bfmeEmitRva0056FCDBSetter(Rva0056FCDB *p, short value)
+{
+	p->Rva0056FCDB::rva0056FCDB(value);
 }

@@ -82,7 +82,9 @@ bool Gen_00528EC0::bfmeDiffers(const Gen_00528EC0 &other) const
 }
 
 // ?bfmeDiffers@Gen_0054EC50@@QBE_NABV1@@Z		34B @0x0056FA0C
-bool Gen_0054EC50::bfmeDiffers(const Gen_0054EC50 &other) const
+// Select-any like the AptOnlineLogin.cpp copy (this retail body comes first in
+// link order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline bool Gen_0054EC50::bfmeDiffers(const Gen_0054EC50 &other) const
 {
 	unsigned int theirs = other.m_bfmeValue;
 	unsigned int mine = m_bfmeValue;
@@ -91,7 +93,8 @@ bool Gen_0054EC50::bfmeDiffers(const Gen_0054EC50 &other) const
 }
 
 // ?bfmeDiffers@Gen_0054EC80@@QBE_NABV1@@Z		34B @0x0056FA2E
-bool Gen_0054EC80::bfmeDiffers(const Gen_0054EC80 &other) const
+// Select-any, as Gen_0054EC50::bfmeDiffers above.
+inline bool Gen_0054EC80::bfmeDiffers(const Gen_0054EC80 &other) const
 {
 	unsigned int theirs = other.m_bfmeValue;
 	unsigned int mine = m_bfmeValue;
@@ -212,7 +215,8 @@ Rva00435B82 *Rva00435B82::rva004361F2(Rva00435B82 *dst, int unused)
 	return dst;
 }
 
-bool Rva0056FA50::rva0056FA50(const Rva0056FA50 &other) const
+// Select-any, as Gen_0054EC50::bfmeDiffers above.
+inline bool Rva0056FA50::rva0056FA50(const Rva0056FA50 &other) const
 {
 	int theirs = other.m_val;
 	int mine = m_val;
@@ -236,10 +240,27 @@ private:
 	int m_val; // +0x04
 };
 
-bool Rva0056FA72::rva0056FA72(const Rva0056FA72 &other) const
+// Select-any, as Gen_0054EC50::bfmeDiffers above.
+inline bool Rva0056FA72::rva0056FA72(const Rva0056FA72 &other) const
 {
 	int theirs = other.m_val;
 	int mine = m_val;
 
 	return Rva0056F637Hook(mine, theirs) != (int)0xAA37ACC2;
+}
+
+// Select-any copies of the four AptOnlineLogin.cpp-duplicated bodies above
+// (each retail body comes first in link order, so it is the copy the link
+// keeps); the anchor keeps the bodies emitted.
+// ?bfmeEmitS5HandleCompares@@YAXXZ absent-from-retail
+void bfmeEmitS5HandleCompares()
+{
+	const Gen_0054EC50 *a = 0;
+	const Gen_0054EC80 *b = 0;
+	const Rva0056FA50 *c = 0;
+	const Rva0056FA72 *d = 0;
+	a->Gen_0054EC50::bfmeDiffers(*a);
+	b->Gen_0054EC80::bfmeDiffers(*b);
+	c->Rva0056FA50::rva0056FA50(*c);
+	d->Rva0056FA72::rva0056FA72(*d);
 }
