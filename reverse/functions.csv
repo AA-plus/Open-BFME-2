@@ -87542,3 +87542,4 @@ uw_00796842,,0x00796842,22,Code/Libraries/Source/WWVegas/WWLib/Rva00525951ListMe
 ?rva0041541B@Rva0041541B@@QAEABVRva002390CB@@ABVAsciiString@@@Z,,0x0041541B,97,Code/GameEngine/Source/Common/Rva0041541BLookup.cpp,matched,
 ??0BuddyThreadClass@@QAE@PAVMutexClass@@@Z,,0x00550F01,220,Code/GameEngine/Source/GameNetwork/GameSpy/Thread/BuddyThreadClassCtor.cpp,matched,
 ??0PartTheHeavensUpdateModuleData@@QAE@XZ,,0x004ACBF8,185,Code/GameEngine/Source/GameLogic/Object/Update/PartTheHeavensUpdateModuleDataCtor.cpp,matched,
+?rva006F9350@AptDisplayList@@QAEXPAVAptNativeHash@@PAVAptCIH@@PAUAptPseudoCIH_t@@1@Z,,0x006F9350,186,Code/Libraries/Source/Apt/AptDisplayListMergeHelpers.cpp,matched,

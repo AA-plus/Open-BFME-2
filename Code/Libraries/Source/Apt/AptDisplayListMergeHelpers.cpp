@@ -13,10 +13,11 @@ class AptCharacterAnimation {public:void ExecuteInitActions(AptCIH*,int);};
 struct AptPlaceControl {int flags,depth,character;float matrix[6];int cxform[2];float ratio;const char *name;int clip;void *actions;};
 struct AptControl {int type;AptPlaceControl place;};
 struct AptControlInfo {int character;const float *matrix;const unsigned int *cxform;int actions;int ratio;int flags;short created,clip;};
+struct BfmeMatrix6 { int v[6]; };
 struct AptPseudoCIH_t {AptControl *control;AptControlInfo *info;AptPseudoCIH_t *next,*prev;int depth;};
-class AptCIH:public AptValue {public:char unknown04[4];EAStringC name;int matrix[6];float colors[8];int unknown44;AptCIH *parent;AptCharacterInst *inst;AptCIH *prev,*next;int depth:17;int created:14;unsigned top:1;short unknown5c;unsigned char changed;};
+class AptCIH:public AptValue {public:char unknown04[4];EAStringC name;int matrix[6];float colors[8];int unknown44;AptCIH *parent;AptCharacterInst *inst;AptCIH *prev,*next;int depth:17;int created:14;unsigned top:1;short unknown5c;unsigned char changed;int GetDepth()const{return depth;}};
 class BfmeSubmitter1283 {public:void bfmeSubmitColors1283(int,int,int,int,int,int,int,const unsigned int*,int,int,int);};
-class AptDisplayList {public:AptCIH *rva006F91F0(AptPseudoCIH_t*,AptCIH*);__declspec(noinline) AptCIH *rva006F92D0(AptNativeHash*,AptPseudoCIH_t*,AptCIH*);};
+class AptDisplayList {public:AptCIH *rva006F91F0(AptPseudoCIH_t*,AptCIH*);__declspec(noinline) AptCIH *rva006F92D0(AptNativeHash*,AptPseudoCIH_t*,AptCIH*);void bfmeProcess1279(void*);void rva006F9350(AptNativeHash*,AptCIH*,AptPseudoCIH_t*,AptCIH*);};
 AptCIH *AptDisplayList::rva006F91F0(AptPseudoCIH_t *item,AptCIH *parent)
 {
  EAStringC name;
@@ -46,5 +47,35 @@ AptCIH *AptDisplayList::rva006F92D0(AptNativeHash *hash,AptPseudoCIH_t *item,Apt
  g_bfmeAptPtrAtE176D0->data[g_bfmeAptPtrAtE176D0->count]->AddRef();
  ++g_bfmeAptPtrAtE176D0->count;
  return result;
+}
+
+extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char*,const char*,int);
+extern int g_bfmeAptBreakOnAssertAtDDC01C;
+void __debugbreak();
+#pragma intrinsic(__debugbreak)
+void bfmeUnpackTwoColors1280(float*,const unsigned int*);
+// Native6F9350..6F940A replaces a pseudo item, unless an unchanged-character
+// placement can update the original CIH's colors/matrix in place.
+void AptDisplayList::rva006F9350(AptNativeHash *hash,AptCIH *original,AptPseudoCIH_t *item,AptCIH *parent)
+{
+ if(item->depth!=original->GetDepth())
+ {
+  g_bfmeAptAssertAtE17734("pNewItem->nDepth == pOriginalItem->nDepth","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptDisplayList.cpp",0x67D);
+  if(g_bfmeAptBreakOnAssertAtDDC01C)__debugbreak();
+ }
+ if(item->info->character)
+ {
+  bfmeProcess1279(original);
+  rva006F92D0(hash,item,parent);
+  return;
+ }
+ if(!(original->changed&1))
+ {
+  if(item->info->flags&8)bfmeUnpackTwoColors1280(original->colors,item->info->cxform);
+  if(item->info->flags&4)
+  {
+   *(BfmeMatrix6 *)(void *)original->matrix = *(const BfmeMatrix6 *)(const void *)item->info->matrix;
+  }
+ }
 }
 

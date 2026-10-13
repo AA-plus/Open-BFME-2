@@ -51563,3 +51563,4 @@ $L872	0x00770B48	20	blocked	identity: owner ??1Rva0023A128@@QAE@XZ (Rva0023A128C
 ?rva0041541B@Rva0041541B@@QAEABVRva002390CB@@ABVAsciiString@@@Z	0x0041541B	97	landed	add_match verified Code/GameEngine/Source/Common/Rva0041541BLookup.cpp 97B
 ??0BuddyThreadClass@@QAE@PAVMutexClass@@@Z	0x00550F01	220	landed	add_match verified Code/GameEngine/Source/GameNetwork/GameSpy/Thread/BuddyThreadClassCtor.cpp 220B
 ??0PartTheHeavensUpdateModuleData@@QAE@XZ	0x004ACBF8	185	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Update/PartTheHeavensUpdateModuleDataCtor.cpp 185B
+?rva006F9350@AptDisplayList@@QAEXPAVAptNativeHash@@PAVAptCIH@@PAUAptPseudoCIH_t@@1@Z	0x006F9350	186	landed	add_match verified Code/Libraries/Source/Apt/AptDisplayListMergeHelpers.cpp 186B
