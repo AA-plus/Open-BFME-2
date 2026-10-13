@@ -1,4 +1,6 @@
 // ?rva0044E85E@SpecialAbilityUpdate@@QAE_NPAUCoord3D@@M@Z
+// partial score=0.985 date=2026-10-13
+// ?rva0044E85E@SpecialAbilityUpdate@@QAE_NPAUCoord3D@@M@Z
 // partial score=0.985 date=2026-10-12
 // ?rva0044E85E@SpecialAbilityUpdate@@QAE_NPAUCoord3D@@M@Z
 // partial score=0.949253 date=2026-10-09

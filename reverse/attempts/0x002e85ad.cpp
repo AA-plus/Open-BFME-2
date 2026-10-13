@@ -1,4 +1,6 @@
 // ?iterateCellsAlongLine@Pathfinder@@AAEHPBUICoord2D@@0W4PathfindLayerEnum@@PAURva002E85ADInfo@@@Z
+// partial score=0.93 date=2026-10-13
+// ?iterateCellsAlongLine@Pathfinder@@AAEHPBUICoord2D@@0W4PathfindLayerEnum@@PAURva002E85ADInfo@@@Z
 // partial score=0.93 date=2026-10-05
 // cl: /O1 /G7 /DNDEBUG /MD /arch:SSE
 //

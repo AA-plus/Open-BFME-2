@@ -1,4 +1,6 @@
 // ?canCreate@GenericObjectCreationNugget@@UAE_NPAVObject@@PBUCoord3D@@@Z
+// partial score=0.936760408824693 date=2026-10-13
+// ?canCreate@GenericObjectCreationNugget@@UAE_NPAVObject@@PBUCoord3D@@@Z
 // partial score=0.936760408824693 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O1 /MD /EHsc /arch:SSE /G7 /Op /D_CRTIMP=
 // Native1F1010..1F12DF,719B RET8; WB B04A00 explicitly names canCreate

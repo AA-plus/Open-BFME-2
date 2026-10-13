@@ -1,4 +1,6 @@
 // ?beginSlowDeath@GiantBirdSlowDeathBehavior@@UAEXPBVDamageInfo@@@Z
+// partial score=0.97 date=2026-10-13
+// ?beginSlowDeath@GiantBirdSlowDeathBehavior@@UAEXPBVDamageInfo@@@Z
 // partial score=0.97 date=2026-10-11
 // cl: /O1 /G7 /MD /EHsc /arch:SSE
 #include <math.h>

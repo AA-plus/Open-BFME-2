@@ -1,3 +1,5 @@
+// ?Rva006D47F0Replace@EAStringC@@QAEHPBD0@Z
+// partial score=0.9404652742 date=2026-10-13
 // ?rva006D47F0@EAStringC@@QAEHPBD0@Z
 // partial score=0.9404652742 date=2026-10-09
 // cl: /O2 /DNDEBUG /MD /EHsc

@@ -3,6 +3,8 @@
 // ?parseHordeContainRankInfo@@YAXPAVINI@@PAX1PBX@Z
 // partial score=0.99 date=2026-10-13
 // ?parseHordeContainRankInfo@@YAXPAVINI@@PAX1PBX@Z
+// partial score=0.99 date=2026-10-13
+// ?parseHordeContainRankInfo@@YAXPAVINI@@PAX1PBX@Z
 // partial score=0.991031439602868 date=2026-10-11
 // cl: /O1 /arch:SSE /G7 /Oy- /DNDEBUG /MD /GX- /Oi- /D_STLP_USE_STATIC_LIB
 // stlport

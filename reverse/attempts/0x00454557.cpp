@@ -1,4 +1,6 @@
 // ?xfer@GettingBuiltBehavior@@MAEXPAVXfer@@@Z
+// partial score=0.9564 date=2026-10-13
+// ?xfer@GettingBuiltBehavior@@MAEXPAVXfer@@@Z
 // partial score=0.9564 date=2026-10-12
 // ?xfer@GettingBuiltBehavior@@MAEXPAVXfer@@@Z
 // partial score=0.95 date=2026-10-09

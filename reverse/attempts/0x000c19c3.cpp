@@ -1,4 +1,6 @@
 // ?rva000C19C3@Rva000C19C3@@QAEXPAVAssetList@@PAX@Z
+// partial score=0.96125 date=2026-10-13
+// ?rva000C19C3@Rva000C19C3@@QAEXPAVAssetList@@PAX@Z
 // partial score=0.96125 date=2026-10-10
 // cl: /O1 /Oy- /G7 /arch:SSE /Ireference/shims/bfme2_ascii /MD /EHsc /D_STLP_USE_STATIC_LIB
 // stlport

@@ -1,4 +1,6 @@
 // ?rva002E916A@Rva002E7388Owner@@QAE_NHH@Z
+// partial score=0.9424238913 date=2026-10-13
+// ?rva002E916A@Rva002E7388Owner@@QAE_NHH@Z
 // partial score=0.9424238913 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
 // Native 2E916A..2E931F owns a 0x30-byte destination-check functor.

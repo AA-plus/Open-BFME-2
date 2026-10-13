@@ -1,10 +1,12 @@
+// ?Add_Line@Render2DClass@@QAEXABVVector2@@0MKK@Z
+// partial score=0.96 date=2026-10-13
 // ?Add_Line@Render2DClass@@QAEXABVVector2@@0MK@Z
 // partial score=0.96 date=2026-10-13
 // ?Add_Line@Render2DClass@@QAEXABVVector2@@0MK@Z
 // partial score=0.96 date=2026-10-13
 // ?Add_Line@Render2DClass@@QAEXABVVector2@@0MK@Z
 // partial score=0.9 date=2026-10-12
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // Render2DClass::Add_Line overloads (retail 0x00042A4D 563B, 0x00042C80 573B).
 // Clean BFME1 donor 0bef414 AddLine.cpp: same 44-byte batch layout and owned
 // 11BD80 allocator as the landed Add_Tri/Add_Quad siblings; native 563/573
@@ -14,7 +16,7 @@
 // in the two-color overload, indices packed as dword pairs.
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
-#include "/home/levy/projects/open-bfme2-local-fleet/w6-mo2/reference/shims/wwmath/Vector2.h"
+#include "reference/shims/wwmath/Vector2.h"
 
 typedef unsigned long BfmeUInt32;
 

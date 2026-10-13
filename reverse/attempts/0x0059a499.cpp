@@ -1,4 +1,6 @@
 // ?recruitPreDefined@AITeamBuilder@@QAEXPAVTeam@@PAHPAVTeamPrototype@@@Z
+// partial score=0.91 date=2026-10-13
+// ?recruitPreDefined@AITeamBuilder@@QAEXPAVTeam@@PAHPAVTeamPrototype@@@Z
 // partial score=0.91 date=2026-10-08
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_NO_EXCEPTIONS /D_STLP_USE_MALLOC /D_STLP_USE_STATIC_LIB /ICode/GameEngine/Source/Common /ICode/Libraries/Include
 // stlport

@@ -1,4 +1,6 @@
 // ??0ScriptEngine@@QAE@XZ
+// partial score=0.987 date=2026-10-13
+// ??0ScriptEngine@@QAE@XZ
 // partial score=0.9865894 date=2026-10-10
 // BANK ONLY: native208343..2086B7 and owned ScriptEngine destructor prove
 // the target offsets,20-player arrays,599/202 templates and256 attack slots.

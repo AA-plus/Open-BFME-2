@@ -1,5 +1,7 @@
 // ?rva00343DD8@@YA_NPAVRva00343F8A@@PAX@Z
 // partial score=0.98513 date=2026-10-13
+// ?rva00343DD8@@YA_NPAVRva00343F8A@@PAX@Z
+// partial score=0.98513 date=2026-10-13
 // Fresh target-backed corrections: invert owned3430A3 result; unsigned byte
 // projection after a logical shift reproduces the native full-word flag read.
 // Original entry-point name and flag meanings remain unproved.
