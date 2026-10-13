@@ -1,6 +1,6 @@
 // ?Add_Line@Render2DClass@@QAEXABVVector2@@0MKK@Z
 // partial score=0.94 date=2026-10-13
-// TU-formulation (QuadColor home): 573/573, 16 home-slot diffs (single-expr oolen); packing proven positional-but-unsatisfiable
+// TU-formulation (QuadColor home): 573/573, 16 home-slot diffs (single-expr oolen, convertedColor order fix); packing positional-but-unsatisfiable
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc
 #include "../../../../../reference/shims/wwmath/Vector2.h"
 // BFME2 target body at RVA 0x000428C7. The reference donor identifies this as
@@ -202,8 +202,10 @@ void Render2DClass::Add_Line(const Vector2 &a, const Vector2 &b, float width, Bf
 	vertices[3].v = 1.0f;
 	vertices[2].u = vertices[3].u = vertices[1].v = 1.0f;
 
-	vertices[0].color = vertices[1].color = (*(BfmeColorConverter *)&g_Va00DB5FC8)(color);
-	vertices[2].color = vertices[3].color = (*(BfmeColorConverter *)&g_Va00DB5FC8)(color2);
+	BfmeUInt32 convertedColor = (*(BfmeColorConverter *)&g_Va00DB5FC8)(color);
+	vertices[0].color = vertices[1].color = convertedColor;
+	BfmeUInt32 convertedColor2 = (*(BfmeColorConverter *)&g_Va00DB5FC8)(color2);
+	vertices[2].color = vertices[3].color = convertedColor2;
 
 	output.indices[0] = output.base + 0x00010000;
 	output.indices[1] = output.base + 0x00020002;
