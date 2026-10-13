@@ -1,16 +1,27 @@
 // ?rva004B65E4@Rva004B65E4@@SAXPAVINI@@PAX1PBX@Z
-// partial score=0.95 date=2026-10-08
 // cl: /O1 /Oy- /DNDEBUG /MD /GX- /Oi-
 // Retail 0x004B65E4..0x004B6691: ModelConditionUpgrade's
 // RemoveConditionFlagsInRange parser (field table at VA 0x00C58730).
 // The native calls establish a 19-dword (591-bit) model-condition set.
 // The established copy/intersection providers retain their opaque set name;
 // no original spelling for this parser is asserted.
+// WB 0x0123DA50 independently exposes BitFlags::test/SetBit assertions;
+// the indexed helpers preserve their operation without claiming a class layout
+// beyond the native 19-word storage. Stop after filling the second endpoint.
+// All callees resolve through existing matched rows; no new address pins.
 class INI;
 class WeaponTemplateSetHead
 {
 public:
     unsigned int bits[19];
+    __forceinline bool test(int bit) const
+    {
+        return (bits[(unsigned int)bit >> 5] & (1u << (bit & 31))) != 0;
+    }
+    __forceinline void set(int bit)
+    {
+        bits[(unsigned int)bit >> 5] |= 1u << (bit & 31);
+    }
     WeaponTemplateSetHead(const WeaponTemplateSetHead &);
     void rva000B3ED3(const WeaponTemplateSetHead &);
 };
@@ -54,20 +65,16 @@ void Rva004B65E4::rva004B65E4(INI *ini, void *, void *store, const void *)
     }
     bool first = false;
     bool last = false;
-    for (; bit < 591; ++bit)
+    for (; !last && bit < 591; ++bit)
     {
-        unsigned int word = (unsigned int)bit >> 5;
-        unsigned int mask = 1u << (bit & 31);
         if (!first)
         {
-            if (!(added.bits[word] & mask))
+            if (!added.test(bit))
                 continue;
             first = true;
         }
-        else if (added.bits[word] & mask)
+        else if (added.test(bit))
             last = true;
-        dest->bits[word] |= mask;
-        if (last)
-            break;
+        dest->set(bit);
     }
 }
