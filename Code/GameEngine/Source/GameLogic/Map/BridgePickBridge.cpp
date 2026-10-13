@@ -10,13 +10,7 @@
 #include "../../../../../reference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath/plane.h"
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include/Lib/BaseType.h
-struct Region2D
-{
-	float loX;
-	float loY;
-	float hiX;
-	float hiY;
-};
+#include "../../../../Libraries/Include/Lib/Region2D.h"
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include/Lib/BaseType.h
 #include "../../../../Libraries/Include/Lib/ICoord3D.h"
@@ -60,13 +54,13 @@ private:
 
 bool Bridge::isPointOnBridge(const Coord3D *point)
 {
-	if (point->x < m_bounds.loX)
+	if (point->x < m_bounds.lo)
 		return false;
-	if (point->x > m_bounds.hiX)
+	if (point->x > m_bounds.hi)
 		return false;
-	if (point->y < m_bounds.loY)
+	if (point->y < m_bounds.y_min)
 		return false;
-	if (point->y > m_bounds.hiY)
+	if (point->y > m_bounds.y_max)
 		return false;
 
 	PolygonTrigger *extra = m_extra;

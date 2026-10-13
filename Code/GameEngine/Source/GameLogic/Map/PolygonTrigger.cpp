@@ -12,14 +12,7 @@
 class PolygonTrigger;
 class Rva00330C50 { public: void rva00330AA6(int); };
 
-struct Region2D
-{
-	Region2D(const Region2D &that);
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../../Libraries/Include/Lib/Region2D.h"
 
 struct FloatRect0073CE30
 {
@@ -119,9 +112,9 @@ void PolygonTrigger::getBounds(int *out)
 	if (!out)
 		return;
 	Region2D r = rva0007E03A();
-	out[0] = fast_float2long_round(floor(r.x_min));
+	out[0] = fast_float2long_round(floor(r.lo));
 	out[1] = fast_float2long_round(floor(r.y_min));
-	out[2] = fast_float2long_round(ceil(r.x_max));
+	out[2] = fast_float2long_round(ceil(r.hi));
 	out[3] = fast_float2long_round(ceil(r.y_max));
 }
 

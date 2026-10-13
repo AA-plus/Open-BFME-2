@@ -137,14 +137,7 @@ struct FireCoord3D : public Coord3D
 };
 // The area's shape (PolygonTrigger +8): its bounds come back through
 // 0x0030B6E3 and 0x00285B66 tests a cell centre against it.
-struct Region2D
-{
-	Region2D(const Region2D &that);
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../../Libraries/Include/Lib/Region2D.h"
 class Rva0030B719Shape
 {
 public:
@@ -581,9 +574,9 @@ void FireLogicSystem::rva002872BA(const PolygonTrigger *area, Int delta, bool on
 		return;
 	Rva0030B719Shape *shape = (Rva0030B719Shape *)((char *)area + 8);
 	Region2D bounds = shape->rva0030B6E3();
-	float f = (float)floor(bounds.x_min * 0.1f + 0.5);
+	float f = (float)floor(bounds.lo * 0.1f + 0.5);
 	Int x0 = FloatToLong(f);
-	f = (float)floor(bounds.x_max * 0.1f + 0.5);
+	f = (float)floor(bounds.hi * 0.1f + 0.5);
 	Int x1 = FloatToLong(f);
 	f = (float)floor(bounds.y_min * 0.1f + 0.5);
 	Int y0 = FloatToLong(f);
@@ -680,7 +673,7 @@ bool FireLogicSystem::rva00286772(const PolygonTrigger *area, Int minBurn)
 		node = (Rva00286214Node *)_STL::_Rb_global<bool>::_M_increment((_STL::_Rb_tree_node_base *)node))
 	{
 		float x = (float)node->m_key.x;
-		if (bounds.x_min > x || x > bounds.x_max)
+		if (bounds.lo > x || x > bounds.hi)
 			continue;
 		float y = (float)node->m_key.y;
 		if (bounds.y_min > y || y > bounds.y_max)

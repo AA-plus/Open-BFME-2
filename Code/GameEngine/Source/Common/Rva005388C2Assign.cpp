@@ -13,13 +13,7 @@ public:
 private:
 	char m_bfmeBody[0x10];
 };
-struct Region2D
-{
-	float x_min;
-	float y_min;
-	float x_max;
-	float y_max;
-};
+#include "../../../Libraries/Include/Lib/Region2D.h"
 namespace _STL {
 template <class T> class allocator
 {
@@ -138,9 +132,9 @@ void QuadStrip2D::rva00538383(float scale)
 	}
 	if (m_20 != 0)
 		return;
-	m_region.x_min *= scale;
+	m_region.lo *= scale;
 	m_region.y_min *= scale;
-	m_region.x_max *= scale;
+	m_region.hi *= scale;
 	m_region.y_max *= scale;
 	m_1c *= scale;
 }
@@ -165,8 +159,8 @@ void QuadStrip2D::rva005382F4(const BfmeE8 &delta)
 	if (m_20 != 0)
 		return;
 	float &ry0 = m_region.y_min;
-	(m_region.x_min) += delta.x;
+	(m_region.lo) += delta.x;
 	ry0 += delta.y;
-	m_region.x_max += delta.x;
+	m_region.hi += delta.x;
 	m_region.y_max += delta.y;
 }
