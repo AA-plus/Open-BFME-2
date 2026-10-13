@@ -1,4 +1,6 @@
 // ?getCommandAvailability@ControlBar@@QBE?AW4CommandAvailability@@PBVCommandButton@@PAVGameWindow@@PAVObject@@PAM_N@Z
+// partial score=0.99 date=2026-10-13
+// ?getCommandAvailability@ControlBar@@QBE?AW4CommandAvailability@@PBVCommandButton@@PAVGameWindow@@PAVObject@@PAM_N@Z
 // partial score=0.98 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common
 // stlport
@@ -507,6 +509,8 @@ public:
 struct LandPoint : public Coord3D { ~LandPoint() {} };
 struct RappelCheckData { Object *obj; Bool found; };
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 CommandAvailability ControlBar::getCommandAvailability(const CommandButton *command, GameWindow *win, Object *obj, Real *percent, Bool forceDisabledEvaluation) const
 {
 	*percent = 1.0f;
@@ -518,6 +522,7 @@ CommandAvailability ControlBar::getCommandAvailability(const CommandButton *comm
 	{
 		case 0x20:
 			obj = player ? player->findNaturalCommandCenter() : 0;
+_ReadWriteBarrier();
 			break;
 		case 0x26:
 			obj = player ? player->rva002AC629() : 0;

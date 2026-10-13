@@ -1,4 +1,6 @@
 // ?buildCastleStructure@CastleBehavior@@QAEPAVObject@@PAVBuildListInfo@@_N@Z
+// partial score=0.87 date=2026-10-13
+// ?buildCastleStructure@CastleBehavior@@QAEPAVObject@@PAVBuildListInfo@@_N@Z
 // partial score=0.86 date=2026-10-09
 // ?buildCastleStructure@CastleBehavior@@QAEPAVObject@@PAVBuildListInfo@@_N@Z
 // partial score=0.85 date=2026-10-08
@@ -67,6 +69,8 @@ float normalizeAngle(float);
 class Rva003955AFData { public: int query(int,int,float,int,int); };
 class CastleBehavior { public: Object* getOwner() const { return *(Object*const*)((const char*)this+8); }
  void* getData() const { return *(void*const*)((const char*)this+4); } Object* buildCastleStructure(BuildListInfo*,bool); };
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 Object* CastleBehavior::buildCastleStructure(BuildListInfo* record,bool instant) {
  Object* created=0;
  void* data=field<void*>(this,4);
@@ -134,6 +138,7 @@ Object* CastleBehavior::buildCastleStructure(BuildListInfo* record,bool instant)
    }
   }
   if(instant) ((Rva0028CBFD*)created)->rva0028CBFD();
+_ReadWriteBarrier();
  }
  return created;
 }
