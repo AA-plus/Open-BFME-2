@@ -1,5 +1,5 @@
 // cl: /MD
-// ?init@Rva0035D53C@@UAEXPAVGameWindow@@@Z @0x0035D54B 121B: vslot init slot 1 offset 0x4 of vtable 0x00816510 (class of ??1Rva0035D53C) and 0x008165D0. Evidence: same vtable slot as rowed init pattern plus rowed winGetSize 0x00313BC6 plus rowed winGetScreenPosition 0x00313B3C plus virtual update slot 2 plus size/2 center plus size/6.
+// ?init@ScoreScaleUpTransition@@UAEXPAVGameWindow@@@Z @0x0035D54B 121B: vslot init slot 1 offset 0x4 of vtable 0x00816510 (class of ??1Rva0035D53C) and 0x008165D0. Evidence: same vtable slot as rowed init pattern plus rowed winGetSize 0x00313BC6 plus rowed winGetScreenPosition 0x00313B3C plus virtual update slot 2 plus size/2 center plus size/6.
 
 typedef int Int;
 typedef unsigned char Bool;
@@ -26,7 +26,7 @@ public:
 	GameWindow *m_win;	// +0x0C
 };
 
-class Rva0035D53C : public Rva001DBAA4
+class ScoreScaleUpTransition : public Rva001DBAA4
 {
 public:
 	virtual void init(GameWindow *win);
@@ -40,7 +40,7 @@ public:
 	Int m_30;		// +0x30
 };
 
-void Rva0035D53C::init(GameWindow *win)
+void ScoreScaleUpTransition::init(GameWindow *win)
 {
 	if (win) {
 		m_win = win;

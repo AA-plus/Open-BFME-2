@@ -20,7 +20,7 @@
 // ?draw@MainMenuScaleUpTransition@@UAEXXZ @ 0x0035E185 (129B): vtable
 // 0x00816594 slot 4 beside the rowed init 0x0035E01E (same layout).
 //
-// ?update@Rva0035D53C@@UAEXH@Z @ 0x0035D5C4 (106B): vtable 0x00816510 and
+// ?update@ScoreScaleUpTransition@@UAEXH@Z @ 0x0035D5C4 (106B): vtable 0x00816510 and
 // 0x008165D0 slot 2 beside the rowed init 0x0035D54B and draw 0x0035D62E.
 // Flash-style frames 0..6 without the background frames; the draw state is
 // recorded even with no window.
@@ -472,7 +472,7 @@ void MainMenuScaleUpTransition::draw()
 
 //-----------------------------------------------------------------------------
 
-class Rva0035D53C : public Transition
+class ScoreScaleUpTransition : public Transition
 {
 public:
 	virtual void update(Int frame);
@@ -482,7 +482,7 @@ public:
 	Int m_drawState;	// +0x20
 };
 
-void Rva0035D53C::update(Int frame)
+void ScoreScaleUpTransition::update(Int frame)
 {
 	m_drawState = -1;
 	if (frame < 0 || frame > 6)

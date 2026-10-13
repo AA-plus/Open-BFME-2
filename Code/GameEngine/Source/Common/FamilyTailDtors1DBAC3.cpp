@@ -33,9 +33,9 @@ class Rva0035D47B : public Rva001DBAC3Base { public: virtual ~Rva0035D47B(); int
 Rva0035D47B::~Rva0035D47B() { m_field = 0; }
 void famgenDelete(Rva0035D47B *p) { delete p; }
 
-class Rva0035D53C : public Rva001DBAC3Base { public: virtual ~Rva0035D53C(); int m_pad[2]; int m_field; };
-Rva0035D53C::~Rva0035D53C() { m_field = 0; }
-void famgenDelete(Rva0035D53C *p) { delete p; }
+class ScoreScaleUpTransition : public Rva001DBAC3Base { public: virtual ~ScoreScaleUpTransition(); int m_pad[2]; int m_field; };
+ScoreScaleUpTransition::~ScoreScaleUpTransition() { m_field = 0; }
+void famgenDelete(ScoreScaleUpTransition *p) { delete p; }
 
 class Rva0035DA01 : public Rva001DBAC3Base { public: virtual ~Rva0035DA01(); int m_pad[2]; int m_field; };
 // Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
