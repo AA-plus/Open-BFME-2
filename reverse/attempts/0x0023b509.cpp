@@ -1,6 +1,11 @@
 // ?xfer@GameClient@@MAEXPAVXfer@@@Z
+// partial score=0.9 date=2026-10-13
+// W7-SOL6 owner-port reproduced 1805B; all three stale callee names now use current ledger providers.
+// Port into current home TU requires preserving visible recursive getFinalOverride and NULL-preserving Snapshot side casts;
+// declaration-only override getter grows frame4B and changes first loop allocation; arithmetic-only Snapshot casts omit22B.
+// ?xfer@GameClient@@MAEXPAVXfer@@@Z
 // partial score=0.9 date=2026-10-08
-// cl: /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata
+// cl: /ICode/GameEngine/Source/GameClient /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata
 // stlport
 //
 // GameClient's drawable table of contents, after ZH GameClient.cpp
@@ -193,11 +198,7 @@ private:
 
 // The thing factory's findTemplate (0x002D06CA) and newDrawable
 // (0x002CF21B), still rowed under their address-named classes.
-class Rva002D06CA
-{
-public:
-	void *rva002D06CA(const AsciiString *key);
-};
+class ThingFactory { public: const ThingTemplate *findTemplate(const AsciiString &key); void *newDrawable(void *, int, int); };
 
 class Rva002CF21B
 {
@@ -205,7 +206,7 @@ public:
 	void *rva002CF21B(void *tmplate, int status, int random);
 };
 
-extern Rva002D06CA *TheThingFactory;
+extern ThingFactory *TheThingFactory;
 extern GameLogic *TheGameLogic;
 
 class SubsystemInterface
@@ -345,8 +346,10 @@ struct Rva000B56F0Object
 	unsigned char m_externalStorage[1];
 
 	void *selectStorage();
-	void rva004331C6(Xfer *xfer);
+	
 };
+
+class DynamicAudioEventInfo { public: void xferNoName(Xfer *xfer); };
 
 #define V(n) virtual void pad##n();
 class AudioManager
@@ -620,7 +623,7 @@ void GameClient::xfer(Xfer *xfer)
 			if (tocEntry == 0)
 				throw XferException(5, 0);
 
-			thingTemplate = (const ThingTemplate *)TheThingFactory->rva002D06CA(&tocEntry->name);
+			thingTemplate = (const ThingTemplate *)TheThingFactory->findTemplate(tocEntry->name);
 			if (thingTemplate == 0)
 			{
 				xfer->skip("Drawable");
@@ -643,13 +646,13 @@ void GameClient::xfer(Xfer *xfer)
 				if (drawTemplate->getFinalOverride() != thingTemplate->getFinalOverride())
 				{
 					TheGameClient->destroyDrawable(draw);
-					draw = (Drawable *)((Rva002CF21B *)TheThingFactory)->rva002CF21B((void *)thingTemplate, 0, -1);
+					draw = (Drawable *)TheThingFactory->newDrawable((void *)thingTemplate, 0, -1);
 					TheGameLogic->bindObjectAndDrawable(object, draw);
 				}
 			}
 			else
 			{
-				draw = (Drawable *)((Rva002CF21B *)TheThingFactory)->rva002CF21B((void *)thingTemplate, 0, -1);
+				draw = (Drawable *)TheThingFactory->newDrawable((void *)thingTemplate, 0, -1);
 				if (draw == 0)
 					throw XferException(5, 0);
 			}
@@ -730,7 +733,7 @@ void GameClient::xfer(Xfer *xfer)
 				*xfer == name;
 				OpaqueRefCounted *p = event.m_ptr;
 				((Rva004EC166 *)p)->rva00433403(name);
-				((Rva000B56F0Object *)p)->rva004331C6(xfer);
+				((DynamicAudioEventInfo *)p)->xferNoName(xfer);
 				TheAudio->vslot74(p);
 				((Rva0023AD91Vector *)&m_audioEvents)->push_back(event);
 			}
@@ -754,7 +757,7 @@ void GameClient::xfer(Xfer *xfer)
 				*xfer == eventName;
 				AsciiString name = *(AsciiString *)((char *)m_audioEvents[i].m_ptr + 8);
 				*xfer == name;
-				((Rva000B56F0Object *)m_audioEvents[i].m_ptr)->rva004331C6(xfer);
+				((DynamicAudioEventInfo *)m_audioEvents[i].m_ptr)->xferNoName(xfer);
 			}
 
 			count = m_audioHandles.size();
