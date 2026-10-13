@@ -1,4 +1,6 @@
 // ?updateBodyParticleSystems@Rva0020FE20ActiveBodyInterface@@UAEXXZ
+// partial score=0.985 date=2026-10-13
+// ?updateBodyParticleSystems@Rva0020FE20ActiveBodyInterface@@UAEXXZ
 // partial score=0.97 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // ?updateBodyParticleSystems@Rva0020FE20ActiveBodyInterface@@UAEXXZ,
@@ -58,6 +60,12 @@ public:
 	virtual void behaviorModuleSlot13();
 	virtual void behaviorModuleSlot14();
 	virtual void behaviorModuleSlot15();
+	// The primary base contributes the first 19 slots: retail calls
+	// createParticleSystems at 0x4C (slot 19) and deleteAllParticleSystems at
+	// 0x50, so three further primary-base slots precede them.
+	virtual void behaviorModuleSlot16();
+	virtual void behaviorModuleSlot17();
+	virtual void behaviorModuleSlot18();
 
 protected:
 	unsigned char m_beforeObject[4];
