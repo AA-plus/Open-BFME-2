@@ -1,4 +1,6 @@
 // _DeringBlock
+// partial score=0.7908 date=2026-10-13
+// _DeringBlock
 // partial score=0.6 date=2026-10-10
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001c28c0.md plus retail only.
