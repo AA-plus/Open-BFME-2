@@ -1,4 +1,6 @@
 // ??1LivingWorldManager@@UAE@XZ
+// partial score=0.9999 date=2026-10-13
+// ??1LivingWorldManager@@UAE@XZ
 // partial score=0.9916720881 date=2026-10-12
 // ??1LivingWorldManager@@UAE@XZ
 // partial score=0.99 date=2026-10-11
@@ -357,5 +359,6 @@ LivingWorldManager::~LivingWorldManager()
 		for (Rva0021119B::iterator mit = m_2B4.begin(); mit != m_2B4.end(); ++mit)
 			::delete (OwnedObject *)mit.m_node->m_value;
 	}
+ if (0) { Rva0021119B t1_dead; }
 	m_2B4.rva00211DD2();
 }
