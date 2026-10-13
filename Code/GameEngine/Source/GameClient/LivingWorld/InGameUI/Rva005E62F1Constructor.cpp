@@ -1,13 +1,20 @@
-// ??0Rva005E62F1@@QAE@PAXHH0PAVRva005CB84A@@0PAVDetailsPanelFactoryFactory@PlanningPhaseArmySelection@StrategicInGameUI@@@Z
-// partial score=0.94 date=2026-10-10
-// ??0Rva005E62F1@@QAE@PAXHH0PAVRva005CB84A@@0PAVDetailsPanelFactoryFactory@PlanningPhaseArmySelection@StrategicInGameUI@@@Z
-// partial score=0.90576 date=2026-10-10
-// cl: /O1 /Oy- /G7 /MD /EHsc /arch:SSE
+// cl: /O1 /G7 /MD /EHsc /arch:SSE
 // Native5E62F1..5E652E. Address-derived five-slot interface, nonvirtual
 // base cleanup, six stored inputs and seventh factory receiver. Native
-// ownership states0..3 are base,record1C,ref38,owned40. No application
+// ownership states0..3 are base,record1C,owned38,owned40. No application
 // identity inferred from the related PlanningPhaseArmySelection factory.
-class Rva0005E57C9DwordImmSetter {public:void apply();};
+// Native vtable C77DF0 is the callback11, empty RET8, then three pure slots.
+// Its nine-state unwind map independently identifies base cleanup3F3F7C,
+// record cleanup5F23B2, two owning clearAD6F4 calls and five reference
+// temporary releases5F8F96. The member at3C is the flag between the owners.
+// The visible existing53-byte Rva005773DB constructor is essential even
+// though it stays out of line: without its definition MSVC reuses argument
+// home8 for the image vtable; retail reserves that home for the reference
+// temporary and spills the vtable at10. The inline value-payload constructors
+// likewise evaluate info before the owner store. No original class name is
+// inferred from byte equality. See reverse/attempt_evidence/0x005e62f1_crack_i.txt.
+class Rva003F3F7CDwordImmSetter {public:void apply();};
+class Rva000AD6F4 {public:void clear();};
 struct Rva002BA8F1Listener;
 class Rva005A0B4CList {public:void append(Rva002BA8F1Listener*);};
 class Rva00319B0AOwner {public:void rva00319B0A();};
@@ -17,12 +24,12 @@ class Rva00318FBE {public:int rva00318FBE();};
 class Rva005CB84A {public:void rva005CB84A(int);};
 struct TargetRef00217D4C {void*vt;int refs;};
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C*);
-struct Ref {TargetRef00217D4C*pointer;Ref():pointer(0){} ~Ref(){if(pointer)ReleaseTreeHintRef00217D4C(pointer);}};
+struct Ref {void*pointer;Ref():pointer(0){} ~Ref(){reinterpret_cast<Rva000AD6F4*>(this)->clear();}};
 class Rva005773DB {public:Rva005773DB(const int*);__forceinline ~Rva005773DB(){if(pointer)ReleaseTreeHintRef00217D4C(pointer);}private:TargetRef00217D4C*pointer;};
-class Rva005F2381 {public:Rva005F2381();~Rva005F2381();private:char storage[28];};
-class Rva005E6253 {public:void clear();};
-struct Owned {void*p;Owned():p(0){}~Owned(){reinterpret_cast<Rva005E6253*>(this)->clear();}};
-class __declspec(novtable) Base {public:__forceinline Base(){} __forceinline ~Base(){reinterpret_cast<Rva0005E57C9DwordImmSetter*>(this)->apply();}virtual void first(int)=0;virtual void second(void*,unsigned)=0;virtual void third()=0;virtual void fourth()=0;virtual void fifth()=0;};
+class Rva005F23B2 {public:~Rva005F23B2();};
+class Rva005F2381 {public:Rva005F2381();~Rva005F2381(){reinterpret_cast<Rva005F23B2*>(this)->~Rva005F23B2();}private:char storage[28];};
+struct Owned {void*p;Owned():p(0){}~Owned(){reinterpret_cast<Rva000AD6F4*>(this)->clear();}};
+class __declspec(novtable) Rva005E62F1ListenerBase {public:__forceinline Rva005E62F1ListenerBase(){} __forceinline ~Rva005E62F1ListenerBase(){reinterpret_cast<Rva003F3F7CDwordImmSetter*>(this)->apply();}virtual int rva005E57A2(void*)=0;virtual void rva0050B238(void*,unsigned)=0;virtual void third()=0;virtual void fourth()=0;virtual void fifth()=0;};
 class Widget {public:virtual void s0();virtual void image(const void*);virtual void s2();virtual void range(int,int);virtual void s4();virtual void s5();virtual void ref(const Rva005773DB&);virtual void s7();virtual void refresh();};
 class PanelWidget {public:virtual void s0();virtual void entry(int,const void*);virtual void s2();virtual void factory(const void*);};
 class Rva0042D703PtrChaseField {public:int get()const;};
@@ -33,22 +40,19 @@ struct Rva005D2355In;class Image;
 namespace StrategicInGameUI {class PlanningPhaseArmySelection {public:class DetailsPanelFactoryFactory;}; const Image*GetSelectionPortrait(Rva005D2355In*);}
 class PanelFactoryResultView {public:~PanelFactoryResultView(){if(pointer)ReleaseTreeHintRef00217D4C(pointer);}private:TargetRef00217D4C*pointer;};
 class StrategicInGameUI::PlanningPhaseArmySelection::DetailsPanelFactoryFactory {public:PanelFactoryResultView CreatePanelFactory(void*);};
-namespace StrategicInGameUIFns {}
-// Full existing free-function identity below is introduced by its established class.
-class StrategicInGameUI2 {};
-namespace StrategicInGameUIAlias {const Image*GetSelectionPortrait(Rva005D2355In*);}
 int GetMaxCommandPoints(void*);
 template<class T>class RvaCloneResult {public:~RvaCloneResult(){if(pointer)ReleaseTreeHintRef00217D4C(reinterpret_cast<TargetRef00217D4C*>(pointer));}private:T*pointer;};
-class Rva005E59A5 {public:struct Payload{int v[3];};};
-class Rva005E59C2 {public:struct Payload{int v[3];};};
-class Rva005E59DF {public:struct Payload{int v[3];};};
+class Rva005E59A5 {public:struct Payload{int v[3];Payload(int i,int o,int r){v[0]=i;v[1]=o;v[2]=r;}};};
+class Rva005E59C2 {public:struct Payload{int v[3];Payload(int i,int o,int r){v[0]=i;v[1]=o;v[2]=r;}};};
+class Rva005E59DF {public:struct Payload{int v[3];Payload(int i,int o,int r){v[0]=i;v[1]=o;v[2]=r;}};};
 RvaCloneResult<Rva005E59A5>Rva005E5C63Create(const Rva005E59A5::Payload*);
 RvaCloneResult<Rva005E59C2>Rva005E5C95Create(const Rva005E59C2::Payload*);
 RvaCloneResult<Rva005E59DF>Rva005E5CC7Create(const Rva005E59DF::Payload*);
 struct Context{int info,owner;void*record;bool enabled;};
-class Rva005E62F1:public Base {
+class Rva005E57A2Callback {public:int invoke();};
+class Rva005E62F1:public Rva005E62F1ListenerBase {
 public:Rva005E62F1(void*,int,int,void*,Rva005CB84A*,void*,StrategicInGameUI::PlanningPhaseArmySelection::DetailsPanelFactoryFactory*);~Rva005E62F1();
-virtual void first(int);virtual void second(void*,unsigned);virtual void third()=0;virtual void fourth()=0;virtual void fifth()=0;
+virtual int rva005E57A2(void*);virtual void rva0050B238(void*,unsigned);virtual void third()=0;virtual void fourth()=0;virtual void fifth()=0;
 private:void*a4;int a8,aC;void*a10;Rva005CB84A*a14;void*a18;Rva005F2381 record;Ref ref38;bool flag;Owned owned;
 };
 Rva005E62F1::Rva005E62F1(void*p4,int p8,int pC,void*p10,Rva005CB84A*p14,void*p18,StrategicInGameUI::PlanningPhaseArmySelection::DetailsPanelFactoryFactory*factory):a4(p4),a8(p8),aC(pC),a10(p10),a14(p14),a18(p18),flag(false) {
@@ -67,9 +71,17 @@ Rva005E62F1::Rva005E62F1(void*p4,int p8,int pC,void*p10,Rva005CB84A*p14,void*p18
   if(detail) {Context c={info,reinterpret_cast<int>(p18),&record,true};detail->factory(&factory->CreatePanelFactory(&c));}
   PanelWidget*entries=reinterpret_cast<PanelWidget*>(reinterpret_cast<Rva0042D69DPtrChaseField*>(a10)->get());
   if(entries) {
-   {Rva005E59A5::Payload p1;p1.v[1]=reinterpret_cast<int>(a18);p1.v[0]=info;p1.v[2]=reinterpret_cast<int>(&record);entries->entry(1,&Rva005E5C63Create(&p1));}
-   {Rva005E59C2::Payload p2;p2.v[1]=reinterpret_cast<int>(a18);p2.v[0]=info;p2.v[2]=reinterpret_cast<int>(&record);entries->entry(2,&Rva005E5C95Create(&p2));}
-   {Rva005E59DF::Payload p5;p5.v[1]=reinterpret_cast<int>(a18);p5.v[0]=info;p5.v[2]=reinterpret_cast<int>(&record);entries->entry(5,&Rva005E5CC7Create(&p5));}
+   {Rva005E59A5::Payload p1(info,reinterpret_cast<int>(a18),reinterpret_cast<int>(&record));entries->entry(1,&Rva005E5C63Create(&p1));}
+   {Rva005E59C2::Payload p2(info,reinterpret_cast<int>(a18),reinterpret_cast<int>(&record));entries->entry(2,&Rva005E5C95Create(&p2));}
+   {Rva005E59DF::Payload p5(info,reinterpret_cast<int>(a18),reinterpret_cast<int>(&record));entries->entry(5,&Rva005E5CC7Create(&p5));}
   }
  }
 }
+
+
+struct Rva00080221RefImpl {virtual ~Rva00080221RefImpl(){} int refs;Rva00080221RefImpl():refs(0){}};
+struct Impl005773DB: Rva00080221RefImpl {int value;Impl005773DB(const int &v):value(v){}};
+inline Rva005773DB::Rva005773DB(const int *arg){Impl005773DB *p=new Impl005773DB(*arg);pointer=(TargetRef00217D4C*)p;if(p)++p->refs;}
+
+int Rva005E62F1::rva005E57A2(void*){return reinterpret_cast<Rva005E57A2Callback*>(a4)->invoke();}
+void Rva005E62F1::rva0050B238(void*,unsigned){}
