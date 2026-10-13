@@ -1,9 +1,3 @@
-// ?renderOneObject@RTS3DScene@@IAEXAAVRenderInfoClass@@PAVRenderObjClass@@HH@Z
-// partial score=0.888305375382092 date=2026-10-10
-// ?renderOneObject@RTS3DScene@@IAEXAAVRenderInfoClass@@PAVRenderObjClass@@HH@Z
-// partial score=0.85864696 date=2026-10-10
-// ?renderOneObject@RTS3DScene@@IAEXAAVRenderInfoClass@@PAVRenderObjClass@@HH@Z
-// partial score=0.91 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /DWIN32 /MD /EHsc
 //
 // ?renderOneObject@RTS3DScene@@IAEXAAVRenderInfoClass@@PAVRenderObjClass@@HH@Z
@@ -31,6 +25,15 @@
 //   taken from the drawable (+0xE4 / +0xF0); partially-cleared objects render
 //   under the shroud rendering method (pinned W3DShroud 0x0006F1FE).
 // Callers: 0x0007076A 0x000707D7 0x00070B96 0x00070BBE 0x00070C8F and others.
+//
+// Same-TU context (retail W3DScene.obj): the light.h inline
+// LightClass::Get_Diffuse (out-of-line copy 0x0006922E) and the sphere.h
+// inline Spheres_Intersect (copy 0x0006F05E, inside this object's range) are
+// visible here, as they were to retail, so the diffuse temporaries and light
+// spheres they receive stay unescaped; retail still calls both out of line.
+// The no-drawable path assigns sceneLights in both infantry arms (WB
+// 0x00731F1D / 0x00731F2E), and the lightmap sample is a Vector3 copied
+// field by field (WB 0x0072F438).
 
 typedef int Int;
 typedef unsigned int UnsignedInt;
@@ -50,6 +53,7 @@ public:
 	void Set(Real x, Real y, Real z) { X = x; Y = y; Z = z; }
 	Vector3 &operator+=(const Vector3 &v) { X += v.X; Y += v.Y; Z += v.Z; return *this; }
 	void Scale(const Vector3 &s) { X *= s.X; Y *= s.Y; Z *= s.Z; }
+	static float Dot_Product(const Vector3 &a, const Vector3 &b) { return a.X*b.X + a.Y*b.Y + a.Z*b.Z; }
 	static void Add(const Vector3 &a, const Vector3 &b, Vector3 *c) { c->X = a.X + b.X; c->Y = a.Y + b.Y; c->Z = a.Z + b.Z; }
 	Real X, Y, Z;
 };
@@ -66,7 +70,17 @@ public:
 	Real Radius;
 };
 
-bool Spheres_Intersect(const SphereClass &s0, const SphereClass &s1);
+inline Vector3 operator-(const Vector3 &a, const Vector3 &b) { return Vector3(a.X - b.X, a.Y - b.Y, a.Z - b.Z); }
+inline bool Spheres_Intersect(const SphereClass &s0, const SphereClass &s1)
+{
+	Vector3 delta = s0.Center - s1.Center;
+	float dist2 = Vector3::Dot_Product(delta, delta);
+	if (dist2 < (s0.Radius + s1.Radius) * (s0.Radius + s1.Radius)) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 class Matrix3D
 {
@@ -185,7 +199,7 @@ class LightClass : public RenderObjClass
 public:
 	enum LightType { POINT = 0, DIRECTIONAL, SPOT };
 	LightType Get_Type(void) { return Type; }
-	void Get_Diffuse(Vector3 *set_c) const;
+	void Get_Diffuse(Vector3 *set_c) const { if (set_c) { *set_c = Diffuse; } }
 	void Set_Diffuse(const Vector3 &color) { Diffuse = color; }
 private:
 	char m_pad48[0xC4 - 0x48];
@@ -295,7 +309,7 @@ enum CellShroudStatus
 	OBJECTSHROUD_SHROUDED
 };
 
-enum ObjectID { INVALID_ID = 0 };
+#include "../../../../GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
 class Object
 {
@@ -307,15 +321,6 @@ private:
 	unsigned char m_privateStatus;										// +0x438
 };
 
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-	UnsignedInt getFrame(void) { return m_frame; }
-private:
-	char m_pad000[0x40];
-	UnsignedInt m_frame;												// +0x40
-};
 extern GameLogic *TheGameLogic;
 
 extern Int g_Va00DBA4E4;	// logic frames per second
@@ -453,11 +458,11 @@ void RTS3DScene::renderOneObject(RenderInfoClass &rinfo, RenderObjClass *robj, I
 	Bool hasLightmap = FALSE;
 	if (TheTerrainLogic)
 	{
-		float sample[3];
+		Vector3 sample;
 		if (reinterpret_cast<Rva0062AF7 *>(TheTerrainLogic)->rva0027DA6A((const float*)&robj->Get_Position(), (float*)&sample))
 		{
 			hasLightmap = TRUE;
-			lightmapColor.X=sample[0];lightmapColor.Y=sample[1];lightmapColor.Z=sample[2];
+			lightmapColor.X=sample.X;lightmapColor.Y=sample.Y;lightmapColor.Z=sample.Z;
 			ambient += lightmapColor;
 		}
 	}
@@ -486,7 +491,7 @@ void RTS3DScene::renderOneObject(RenderInfoClass &rinfo, RenderObjClass *robj, I
 		else
 		{
 			ss = OBJECTSHROUD_CLEAR;
-			if (drawInfo->m_shroudStatusObjectID != INVALID_ID)
+			if (drawInfo->m_shroudStatusObjectID != INVALID_OBJECT_ID)
 			{
 				Object *shroudObject = TheGameLogic->findObjectByID(drawInfo->m_shroudStatusObjectID);
 				if (shroudObject && shroudObject->getShroudStatusForPlayer(localPlayerIndex) >= OBJECTSHROUD_FOGGED)
@@ -611,6 +616,10 @@ void RTS3DScene::renderOneObject(RenderInfoClass &rinfo, RenderObjClass *robj, I
 				if (hasLightmap)
 					ambient += lightmapColor;
 				sceneLights = m_infantryLight;
+			}
+			else
+			{
+				sceneLights = m_globalLight;
 			}
 
 			lightEnv.Reset(sph.Center, ambient);

@@ -11,7 +11,7 @@
 // drawable through render-object user data (vtable +0x15C, DrawableInfo +4),
 // split on the render-object byte +0xBC (first pass: zero, second: non-zero),
 // set RenderInfo +0x1C from the matched drawable opacity getter 0x00272C9E,
-// draw with the pinned scene helper 0x0006FB59, then flush the mesh renderer
+// draw with RTS3DScene::renderOneObject (0x0006FB59), then flush the mesh renderer
 // (0x001173F0) and the static sort lists, restore +0x1C to 1.0f and finally set
 // D3DRS_AMBIENT (139) from the scene's ambient (vtable +0x1C) packed with 0
 // alpha. Only the second pass clears the count.
@@ -224,7 +224,10 @@ public:
 	virtual void slot006();
 	virtual const Vector3 &Get_Ambient_Light(); // +0x1C
 
-	void rva0006FB59(RenderInfoClass &, RenderObjClass *, int, bool);
+protected:
+	void renderOneObject(RenderInfoClass &rinfo, RenderObjClass *robj, int localPlayerIndex, int unused); // 0x0006FB59
+
+public:
 	void rva00070F80(RenderInfoClass &rinfo);
 	void rva000710D6(RenderInfoClass &rinfo);
 
@@ -247,7 +250,7 @@ void RTS3DScene::rva00070F80(RenderInfoClass &rinfo)
 			if (robj->flagBC)
 				continue;
 			rinfo.alphaOverride = draw->rva00272C9E((int)robj);
-			rva0006FB59(rinfo, robj, localPlayerIndex, false);
+			renderOneObject(rinfo, robj, localPlayerIndex, 0);
 		}
 
 		rva001173f0((unsigned int)&rinfo);
@@ -272,7 +275,7 @@ void RTS3DScene::rva000710D6(RenderInfoClass &rinfo)
 			if (!robj->flagBC)
 				continue;
 			rinfo.alphaOverride = draw->rva00272C9E((int)robj);
-			rva0006FB59(rinfo, robj, localPlayerIndex, false);
+			renderOneObject(rinfo, robj, localPlayerIndex, 0);
 		}
 
 		rva001173f0((unsigned int)&rinfo);

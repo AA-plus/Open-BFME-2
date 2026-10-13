@@ -8,8 +8,8 @@
 // render-object slots1C0/1C8/1D0 and global shader override. No ZH layout
 // is asserted as a target fact. Iterator Current_Object wrapper retains the
 // donor null-adjustment shape; common mode7/mode0 call must follow both guards.
-// Render helper6FB59 is separately bounded2550B, four stack arguments; original
-// helper name remains unknown and its fourth argument is unused in retail.
+// Render helper 0x0006FB59 is RTS3DScene::renderOneObject (2550 B, ZH donor
+// name), four stack arguments; its fourth argument is unused in retail.
 class Vector3{public:float X,Y,Z;Vector3(){}Vector3(const Vector3&v):X(v.X),Y(v.Y),Z(v.Z){}Vector3&operator=(const Vector3&v){X=v.X;Y=v.Y;Z=v.Z;return *this;}};
 class RenderObjClass;
 class RenderInfoClass{public:RenderObjClass*camera;char gap4[4];Vector3 FogColor;char gap14[0x14];void*light_environment;};
@@ -175,7 +175,7 @@ virtual void slot024();
 virtual void slot025();
 virtual void slot026();
 virtual void Visibility_Check(RenderObjClass*);
-void rva0006FB59(RenderInfoClass&,RenderObjClass*,int,bool);char gap4[0x14];int polygonMode;char gap1C[4];Vector3 FogColor;char gap2C[0x48];GenericMultiListClass UpdateList;char gap8C[0x60];GenericMultiListClass RenderList;char gap104[0x28];bool drawTerrainOnly;char gap12D[0x7EC-0x12D];int customPassMode;int translucentCount;char gap7F4[4];int occludedCount;};
+protected:void renderOneObject(RenderInfoClass&,RenderObjClass*,int,int);public:char gap4[0x14];int polygonMode;char gap1C[4];Vector3 FogColor;char gap2C[0x48];GenericMultiListClass UpdateList;char gap8C[0x60];GenericMultiListClass RenderList;char gap104[0x28];bool drawTerrainOnly;char gap12D[0x7EC-0x12D];int customPassMode;int translucentCount;char gap7F4[4];int occludedCount;};
 void RTS3DScene::rva0007054F(RenderInfoClass&rinfo)
 {
  RenderObjClass*terrainObject=0,*robj;
@@ -205,9 +205,9 @@ void RTS3DScene::rva0007054F(RenderInfoClass&rinfo)
   if(customPassMode==3||customPassMode==5||customPassMode==6){
    if(((SceneGlobalView*)TheWritableGlobalData)->modeD34){
     bool infantry=robj->Is_Infantry()!=0;if(customPassMode==6&&!infantry)continue;if(customPassMode==5&&infantry)continue;
-    rva0006FB59(rinfo,robj,localPlayerIndex,false);
+    renderOneObject(rinfo,robj,localPlayerIndex,0);
    }else if(robj->TerrainMode()){
-    bfmeOnlyEmissiveDraws=robj->OnlyEmissive()!=0;rva0006FB59(rinfo,robj,localPlayerIndex,false);bfmeOnlyEmissiveDraws=false;
+    bfmeOnlyEmissiveDraws=robj->OnlyEmissive()!=0;renderOneObject(rinfo,robj,localPlayerIndex,0);bfmeOnlyEmissiveDraws=false;
    }
    continue;
   }
@@ -216,7 +216,7 @@ void RTS3DScene::rva0007054F(RenderInfoClass&rinfo)
   }else if(customPassMode==0){
    DrawableInfo*info=(DrawableInfo*)robj->Get_User_Data();if(info&&info->drawable&&(info->flags&0x1e))continue;
   }else{robj->Render(rinfo);continue;}
-  rva0006FB59(rinfo,robj,localPlayerIndex,false);
+  renderOneObject(rinfo,robj,localPlayerIndex,0);
  }
  if(TheW3DShadowManager){if(!terrainObject)return;if(!bfmeCameraProjectionOverride&&polygonMode==0&&customPassMode==0)((SceneShadowView*)TheW3DShadowManager)->update=true;}
  if(terrainObject&&TheParticleSystemManager&&polygonMode==0&&customPassMode==0)((SceneParticlesView*)TheParticleSystemManager)->v18();
