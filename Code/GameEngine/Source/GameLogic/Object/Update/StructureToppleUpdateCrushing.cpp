@@ -262,12 +262,14 @@ public:
 class GeometryInfo
 {
 public:
-	__declspec(dllimport) __forceinline Real getMajorRadius() const { return m_majorRadius; }
-	__declspec(dllimport) __forceinline Real getMinorRadius() const { return m_minorRadius; }
+	__declspec(dllimport) __forceinline Real getMajorRadius() const { return m_extent24; }
+	__declspec(dllimport) __forceinline Real getMinorRadius() const { return m_extent28; }
 
 private:
-	Real m_majorRadius; // Object+0xCC
-	Real m_minorRadius; // Object+0xD0
+	// Snapshot vptr, small flag, bounding radii and centre (calcBoundingStuff).
+	unsigned char m_unmodelled_000[0x24];
+	Real m_extent24; // +0x24, Object+0xCC
+	Real m_extent28; // +0x28, Object+0xD0
 };
 
 class Module;
@@ -346,8 +348,8 @@ protected:
 	Module *findModule(NameKeyType key) const;
 
 private:
-	unsigned char m_pad048[0xCC - 0x48];
-	GeometryInfo m_geometryInfo; // +0xCC
+	unsigned char m_pad048[0xA8 - 0x48];
+	GeometryInfo m_geometryInfo; // +0xA8 (Object ctor copies it there)
 	unsigned char m_pad0d4[0x10C - 0xD4];
 	ModelConditionFlags m_modelConditionFlags; // +0x10C
 	unsigned char m_pad158[0x254 - 0x158];
