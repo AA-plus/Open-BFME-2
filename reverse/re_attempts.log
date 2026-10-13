@@ -51521,3 +51521,5 @@ __ehhandler$?rva0004F580@W3DRadar@@UAEXXZ	0x0075D584	10	landed	add_match verifie
 ?rva005377B6@UserPreferences@@QAE?AVAsciiString@@XZ	0x005377B6	228	landed	add_match verified Code/GameEngine/Source/Common/UserPreferencesWinsLossesVs.cpp 228B
 ?rva006CDE50@Rva00893030Manager@@QAEXPAVRva004A9DF3Element@@H@Z	0x006cde50	261	blocked	r9 re-check: chain.py 5 rounds no improvement (base nd7, size-exact 261). Residue unchanged (7 differing register bytes per the prior seat). t=6 model=muse
 onLivingWorldBuildingNuggetSpawnArmyUnitQueued	0x005e868f	337	blocked	r9 re-check: chain.py base compile fail (bank fragment / owner-include path); no new score. Bank untouched. t=5 model=muse
+??0Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAE@PAX00ABUPageContext@@@Z	0x005E1FF7	175	landed	add_match verified Code/GameEngine/Source/Common/Rva005E1FF7PageCtor.cpp 175B
+??0Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAE@PAX00ABUPageContext@@@Z	0x005E1FF7	175	landed	add_match verified Code/GameEngine/Source/Common/Rva005E1FF7PageCtor.cpp 175B

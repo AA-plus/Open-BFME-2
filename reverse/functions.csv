@@ -87528,3 +87528,4 @@ __ehhandler$?rva0004F580@W3DRadar@@UAEXXZ,,0x0075D584,10,Code/GameEngineDevice/S
 ??0GameSpyInfo@@QAE@XZ,,0x00385FE1,270,Code/GameEngine/Source/GameNetwork/GameSpy/GameSpyInfoCtor.cpp,matched,
 ?rva005376D2@UserPreferences@@QAE?AVAsciiString@@XZ,,0x005376D2,228,Code/GameEngine/Source/Common/UserPreferencesWinsLossesVs.cpp,matched,
 ?rva005377B6@UserPreferences@@QAE?AVAsciiString@@XZ,,0x005377B6,228,Code/GameEngine/Source/Common/UserPreferencesWinsLossesVs.cpp,matched,
+??0Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAE@PAX00ABUPageContext@@@Z,,0x005E1FF7,175,Code/GameEngine/Source/Common/Rva005E1FF7PageCtor.cpp,matched,
