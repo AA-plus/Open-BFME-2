@@ -1,4 +1,6 @@
 // ?addScience@Player@@AAE_NW4ScienceType@@@Z
+// partial score=0.9389 date=2026-10-13
+// ?addScience@Player@@AAE_NW4ScienceType@@@Z
 // partial score=0.95 date=2026-10-13
 // cl: /O1 /EHsc /MD /DNDEBUG /D_STLP_NO_EXCEPTIONS /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /Ireference/shims/moduledata /I. /Ireference/shims/bfmealloc
 // stlport
