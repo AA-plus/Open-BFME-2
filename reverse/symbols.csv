@@ -10183,8 +10183,6 @@ name,address,notes
 ?notify@T_007ea120@@QAEXPAX@Z,0x00657050
 ?notifyOther@BfmeLinkedObjBE@@QAEXPAV1@PAX@Z,0x002ADF9C,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?notifyScriptEngine@SpecialPowerCompletionDie@@QAEXXZ,0x00486B01,address read from the REL32 displacement at a placed body
-?notifyX@Rva003197EEListener@@QAEXPAX@Z,0x005CC208,forwarder same 5B ICF twin call site 0x00319B22 via forEach 0x003197EE
-?notifyY@Rva003197EEListener@@QAEXPAX@Z,0x005CB265,forwarder same 5B ICF twin call site 0x00319B49 via forEach 0x003197EE
 ?nstrdup@@YAPADPBD@Z,0x00619880,address read from the REL32 displacement at a placed body; stlport 4.5.3
 ?okToPlayRadarEdgeSound@Player@@QAE_NXZ,0x002AA04C,Reference Player radar-edge predicate inferred from native notification callers and matching five-clause chain; bool-interface66B trial exact; linker alias binds rowed address-derived normalized0/1 provider
 ?onBusy@Rva007FA2C0@@QAEHPAX@Z,0x00665F20,int-returning FESL busy op called by onAccept (retail +0x144); donor declares int onBusy(void*); BFME1 twin calls the same shape
@@ -16998,7 +16996,6 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ??1Rva00212379@@QAE@XZ,0x00212379,placeholder: 5-byte jmp thunk to 0x0021231B that the 0x00214405 unwind funclet 0x0076DFBB reaches (hash_map wrapper out-of-line destructor)
 ??1Rva0014DC76@@UAE@XZ,0x0014DC76,placeholder: the four-interface member destructor (stores 0x00BC6F24 at +0xC/+8/+4/+0; no own table) that the 0x001505CD unwind funclet 0x00766A6A reaches; same body as the rowed ?rva0014DC76@Rva0014DC76
 ??1Rva003089CFList@@QAE@XZ,0x0007FAB3,placeholder: the +0x68 listener-list base destructor of 0x0030902E (free first pointer when non-null); its unwind funclet 0x00779E1C reaches the shared free-first-pointer body
-??0Rva003A59C3@@QAE@IAAURva003A59C3Src@@@Z,0x003A59C3,callee of ?rva003AD03B@Rva003AD03BTemplate@@UAEPAVRva003AD03BModule@@I@Z
 ?Rva0053FE64Get@@YA?AVRva0053FDE6@@MPAV1@H0H0H0H@Z,0x0053FE64,callee of ?getFrameData@?$CameraAnimationTrack@VRva0053FDE6@@@@QAE?AVRva0053FDE6@@M@Z
 ??1Rva00242E71@@QAE@XZ,0x00242E71,placeholder view of the +0x10 table destructor of 0x00243BA0 (gen-alias row ?dup_00242e71); REL32 at 0x00243EBA
 ??1Rva00243B48@@QAE@XZ,0x00243B48,placeholder: 5-byte jmp thunk to 0x00242E71 that the 0x00243BA0 unwind funclet 0x0077143B reaches (+0x10 wrapper out-of-line destructor)

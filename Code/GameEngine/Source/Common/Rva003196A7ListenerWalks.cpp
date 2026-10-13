@@ -39,12 +39,16 @@ public:
 };
 
 // ---- forEach 0x003197EE, walk 0x003196A7
+// The owners pass member pointers to the listener's virtual slots +0x08 and
+// +0x0C; retail pushes the shared MSVC vcall thunks for them (0x005CC208 and
+// 0x005CB265, pinned as ??_9@$B7AE and ??_9@$BM@AE).
 class Rva003197EEListener
 {
 public:
-	virtual void notify(void *);
-	void notifyX(void *);
-	void notifyY(void *);
+	virtual void notify00(void *);
+	virtual void notify04(void *);
+	virtual void notify08(void *);
+	virtual void notify0C(void *);
 };
 
 struct Rva003196A7Call
@@ -158,12 +162,12 @@ void Rva00319B0AOwner::rva00319B0A()
 {
 	if (m_ptr)
 		m_ptr->v1();
-	m_list.forEach((void (Rva003197EEListener::*)(void *))&Rva003197EEListener::notifyX, this);
+	m_list.forEach(&Rva003197EEListener::notify08, this);
 }
 
 void Rva00319B0AOwner::rva00319B31()
 {
 	if (m_ptr)
 		m_ptr->v2();
-	m_list.forEach((void (Rva003197EEListener::*)(void *))&Rva003197EEListener::notifyY, this);
+	m_list.forEach(&Rva003197EEListener::notify0C, this);
 }

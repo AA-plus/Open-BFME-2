@@ -18,9 +18,8 @@
 // 0x003ACA24 (89 bytes): 0x20-byte module over the rowed 0x0056413D,
 // vtables at +0/+8/+0x10.
 // ?rva003AD03B@Rva003AD03BTemplate@@UAEPAVRva003AD03BModule@@I@Z, retail
-// 0x003AD03B (89 bytes): 0x14-byte module over 0x003A59C3 (pinned by
-// address; its own boundary is unproven), vtables 0x00C1CED8/0x00C1BFB4/
-// 0x00C1CEC8.
+// 0x003AD03B (89 bytes): 0x14-byte module over the rowed 0x003A59C3
+// (Rva003A59C3Ctor.cpp), vtables 0x00C1CED8/0x00C1BFB4/0x00C1CEC8.
 struct Src0055F840;
 
 static int s_vtable00;

@@ -1,13 +1,16 @@
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
-// ??0Rva003A59C3@@QAE@II@Z, retail 0x003A59C3, 127 bytes, EH thiscall RET 8.
+// ??0Rva003A59C3@@QAE@IAAURva003A59C3Src@@@Z, retail 0x003A59C3, 127 bytes,
+// EH thiscall RET 8.
 // Identified by the rowed module factory 0x003AD03B (Rva003AC9AFCreate.cpp),
 // the rowed base ctor 0x0055EFE1 and the copy ctor 0x003AE03D: the complete
 // class has vfptrs at +0 and +8 (the Rva0055EFE1 base object, 12 bytes) plus
 // a second base at +0x0C whose transient vtable is 0x00C1B568, i.e. the rowed
 // Rva003AE07D (default ctor 0x003A5773, Real at +4). The class then installs
 // 0x00C1B5E0 (+0), 0x00C1C780 (+8) and 0x00C1B5D0 (+0x0C). The second ctor
-// argument is unread. Class and method names remain address-derived.
+// argument is unread; the factory passes its template there by reference, as
+// the sibling factories do for their module ctors (0x0055F840, 0x0056413D).
+// Class and method names remain address-derived.
 //
 // The Rva0055EFE1 base is modelled as an MI pair so the +8 secondary vfptr
 // exists in this TU; its out-of-line ctor at 0x0055EFE1 owns the construction
@@ -16,6 +19,8 @@
 // random-value call whose result is assigned to the base's Real.
 
 float GetGameClientRandomValueReal(float lo, float hi, char *file, int line);
+
+struct Rva003A59C3Src;
 
 class Rva003A59C3B0A
 {
@@ -57,15 +62,14 @@ public:
 class Rva003A59C3 : public Rva0055EFE1, public Rva003A59C3B3
 {
 public:
-	Rva003A59C3(unsigned int arg, unsigned int arg2);
+	Rva003A59C3(unsigned int arg, Rva003A59C3Src &src);
 	virtual void s0() {}
 	virtual void s1() {}
 };
 
-Rva003A59C3::Rva003A59C3(unsigned int arg, unsigned int arg2)
+Rva003A59C3::Rva003A59C3(unsigned int arg, Rva003A59C3Src &)
 	: Rva0055EFE1(arg)
 {
-	(void)arg2;
 	m_real04 = GetGameClientRandomValueReal(
 		0.7f, 1.3f,
 		"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameClient\\System\\FXParticleSystem\\fxpswindmodule.cpp",
