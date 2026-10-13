@@ -1,4 +1,8 @@
 // ?append@?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@QAEAAV12@ID@Z
+// partial score=0.96 date=2026-10-13
+// ?append@?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@QAEAAV12@ID@Z
+// partial score=0.96 date=2026-10-13
+// ?append@?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@QAEAAV12@ID@Z
 // partial score=0.96 date=2026-10-06
 // cl: /Od /Ob1 /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Oy-
 // stlport

@@ -1,4 +1,6 @@
 // ?rva0042481E@FormationAssistant@@QAE_NPAVFormationRowList@@PBVFormationTemplateRows@@PAVFormationObjectList@@@Z
+// partial score=0.98 date=2026-10-13
+// ?rva0042481E@FormationAssistant@@QAE_NPAVFormationRowList@@PBVFormationTemplateRows@@PAVFormationObjectList@@@Z
 // partial score=0.97 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP=
 // FormationAssistant formation build (WB twins 0x0113B990 and 0x0113C210 in
