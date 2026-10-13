@@ -1,4 +1,6 @@
 // ?Rva00304744Populate@@YAHPAVGameWindow@@IABVAsciiString@@@Z
+// partial score=0.979 date=2026-10-13
+// ?Rva00304744Populate@@YAHPAVGameWindow@@IABVAsciiString@@@Z
 // partial score=0.994 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
 // 2026-10-11 claude-opus-5-5: callee 0x325388 renamed GadgetListBoxSetItemData(GameWindow*,void*,int,int)
