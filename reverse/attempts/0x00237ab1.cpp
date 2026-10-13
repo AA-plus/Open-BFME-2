@@ -12,6 +12,9 @@
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include <vector>
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 
 typedef bool Bool;
 // Canonical BFME2 subsystem layout: flag4 and name8,12B total.
@@ -1244,6 +1247,7 @@ void GlobalData::parseGameDataDefinition(INI *ini) {
    AsciiString name=TheWritableGlobalData->m_000C;
    bool enabled=false;
    if(TheWritableGlobalData->m_0098!=0.0f)enabled=true;
+   _ReadWriteBarrier();
    ini->initFromINI(TheWritableGlobalData,(const FieldParse*)TheWritableGlobalData->GlobalData::vslot06());
    TheWritableGlobalData->m_000C=name;
    TheWritableGlobalData->m_0098=(float)enabled;
