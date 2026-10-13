@@ -69,7 +69,6 @@ private:
 class Object
 {
 public:
-	BehaviorModule **getBehaviorModules() const { return m_behaviors; }
 	unsigned char m_pad000[0x244];
 	BehaviorModule **m_behaviors; // +0x244
 	unsigned char m_pad248[0x438 - 0x248];
@@ -109,7 +108,7 @@ public:
 
 static inline Bool rva004CE0D9Free(Object *slaver)
 {
-	for (BehaviorModule **m = slaver->getBehaviorModules(); *m; ++m)
+	for (BehaviorModule **m = slaver->m_behaviors; *m; ++m)
 	{
 		Rva004CE0D9Answer *answer = (*m)->getInterface()->rva004CE0D9Slot26();
 		if (answer && answer->rva004CE0D9Slot7())
