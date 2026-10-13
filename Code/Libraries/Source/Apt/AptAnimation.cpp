@@ -34,6 +34,10 @@ public:
 class BfmeAptValue006DCD20 {
 public:
     bool isUndefined() const;
+    int isScriptFunction() const;
+    int isNativeFunction() const;
+    int rva006E03A0() const;
+    BfmeAptValue006DCD20 *rva006DCEE0();
 };
 class Rva006DBB30SarDwordField {
 public:
@@ -73,6 +77,7 @@ public:
     BfmeAptValue006DCD20 **elements;
     void Push(BfmeAptValue006DCD20 *);
     void rva006FE920();
+    void rva006E3AA0(int);
     void pop()
     {
         if (count <= 0) {
@@ -113,6 +118,9 @@ class Rva006E34D0 {
 public:
     char unknown[0x68];
     AptValue *value68;
+    char unknown6C[0xa8 - 0x6c];
+    int maxIntervalTimers;
+    int getMaxIntervalTimers() const { return maxIntervalTimers; }
 };
 extern Rva006E34D0 *g_bfmeAptPtrAtE176D0;
 
@@ -151,10 +159,40 @@ public:
 
 bool _AptValidate();
 
+extern AptValue *gpUndefinedValue;
+
+struct AptIntervalTimerParams {
+    int m_nElements, m_nCapacity;
+    AptValue **m_aElements;
+    int size() const { return m_nElements; }
+    AptValue *peek(int nPos) const
+    {
+        PCHECK(m_nElements - nPos > 0, 0x89, "m_nElements - nPos > 0");
+        return m_aElements[m_nElements - nPos - 1];
+    }
+};
+struct AptScriptFunctionView {
+    char unknown[0x20];
+    BfmeAptValue006DCD20 *scope;
+};
+struct AptIntervalTimer {
+    int active;
+    BfmeAptValue006DCD20 *func;
+    float interval;
+    float remaining;
+    AptValue *target;
+    AptIntervalTimerParams params;
+    void cleanParams();
+};
+
 class AptAnimationPoolData {
 public:
-    char unknown[0xa0];
+    char unknown[0x34];
+    AptIntervalTimer *timers;
+    int activeTimers;
+    char unknown3C[0xa0 - 0x3c];
     AptActionQueueC *queue;
+    void tickIntervalTimers(int);
     void _tickNewInsts();
     bool validateBIL();
     void rva006E6540();
@@ -218,4 +256,49 @@ void AptAnimationPoolData::rva006E6540()
     ACHECK(validateBIL(), 0x3ff, "validateBIL()");
     _tickNewInsts();
     q->ClearActions();
+}
+
+// ?tickIntervalTimers@AptAnimationPoolData@@QAEXH@Z @0x006E4150 562B (RET4).
+// WorldBuilder 0x17582E0 names it (AptAnimation.cpp, asserts 852..863) and
+// gives the loop shape; retail keeps only the 0x354 stack-size assertion.
+// Target: 32-byte timers at +0x34, active count +0x38, the limit read through
+// E176D0+0xA8 every iteration, the timer's parameter stack at +0x14 peeked
+// from the top (_AptValuePtrStack.h 0x89), the script scope at +0x20 of the
+// checked cast (WB's debug layout has +0x24).
+void AptAnimationPoolData::tickIntervalTimers(int interval)
+{
+    int left = activeTimers;
+    for (int i = 0; i < g_bfmeAptPtrAtE176D0->getMaxIntervalTimers(); i++) {
+        if (!timers[i].active)
+            continue;
+        timers[i].remaining -= interval;
+        if (timers[i].remaining < 0.0f) {
+            BfmeAptValue006DCD20 *func = timers[i].func;
+            BfmeAptValue006DCD20 *scope = (unsigned char)func->isScriptFunction() ? ((AptScriptFunctionView *)func->rva006DCEE0())->scope : 0;
+            if (func && ((unsigned char)func->isNativeFunction() || scope && !scope->isUndefined() && !(unsigned char)scope->rva006E03A0())) {
+                AptValue *target = timers[i].target != gpUndefinedValue ? timers[i].target : (AptValue *)scope;
+                int nParams = timers[i].params.size();
+                AptActionSetup setup;
+                setup.context = target;
+                setup.value = (AptValue *)func;
+                setup.name = "AptTimerFunc";
+                setup.action = 0x80000;
+                void *saved = g_aptDateInterpreter.PrepareForExecution(&setup);
+                for (int j = 0; j < nParams; j++)
+                    g_aptDateInterpreter.stack.Push((BfmeAptValue006DCD20 *)timers[i].params.peek(j));
+                g_aptDateInterpreter.callFunction(target, (AptValue *)func, nParams);
+                g_aptDateInterpreter.CleanupAfterExecution(saved, &setup);
+                ACHECK(g_aptDateInterpreter.stack.count == 1, 0x354, "gAptActionInterpreter.stack.GetSize() == 1");
+                g_aptDateInterpreter.stack.rva006E3AA0(g_aptDateInterpreter.stack.count);
+                timers[i].remaining += timers[i].interval;
+            } else {
+                ((AptValue *)timers[i].func)->Release();
+                timers[i].cleanParams();
+                timers[i].active = 0;
+                activeTimers--;
+            }
+        }
+        if (--left == 0)
+            break;
+    }
 }
