@@ -91,7 +91,7 @@ class LivingWorldBattle {
 public:
  int rva003F4752(void *player);
  int rva003F4FAA(int side,void *player);
- int rva003F4FD4();
+ int GetResolutionOptions();
  int getSideCount() const { return m_sidesEnd-m_sidesBegin; }
  char prefix[0x18];
  LivingWorldBattleSide28 *m_sidesBegin,*m_sidesEnd; // +0x18 / +0x1C
@@ -172,7 +172,7 @@ void StrategicInGameUI::BattlePromptDialog::Impl::OnClipLoaded(int level,const A
  ((Rva005E971F *)&clip)->rva005E971F(new Rva005E9625(this,level,name));
  Rva0020E89C *region=battle->region;
  ((Rva005F9775 *)clip)->rva005F9775(region->rva0020E89C());
- unsigned options=(unsigned)battle->rva003F4FD4();
+ unsigned options=(unsigned)battle->GetResolutionOptions();
  ((Rva005F93CB *)clip)->rva005F93CB(((options>>1)&1)!=0);
  ((Rva005F93D3 *)clip)->rva005F93D3(((options>>3)&1)!=0);
  ((Rva005F93DB *)clip)->rva005F93DB(((options>>2)&1)!=0);

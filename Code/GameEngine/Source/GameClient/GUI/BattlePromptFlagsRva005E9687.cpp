@@ -10,7 +10,7 @@
 class LivingWorldBattle
 {
 public:
-    int rva003F4FD4();
+    int GetResolutionOptions();
 };
 
 class Rva005F93CB
@@ -49,7 +49,7 @@ void Rva005E9687::rva005E9687()
 {
     if (prompt)
     {
-        unsigned int flags = battle->rva003F4FD4();
+        unsigned int flags = battle->GetResolutionOptions();
         reinterpret_cast<Rva005F93CB *>(prompt)->rva005F93CB((flags >> 1) & 1);
         reinterpret_cast<Rva005F93D3 *>(prompt)->rva005F93D3((flags >> 3) & 1);
         reinterpret_cast<Rva005F93DB *>(prompt)->rva005F93DB((flags >> 2) & 1);
