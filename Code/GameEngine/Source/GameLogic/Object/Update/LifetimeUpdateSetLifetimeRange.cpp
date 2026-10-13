@@ -169,10 +169,10 @@ public:
 	bool m_enabled110;
 };
 
-class Rva0039CBCE
+class ScoreKeeper
 {
 public:
-	void rva0039CBCE(Object *obj, int amount);
+	void addObjectBuilt(Object *obj, int amount);
 };
 
 class Player
@@ -215,7 +215,7 @@ UpdateSleepTime LifetimeUpdate::update()
 		W3DBridge *record = &me->getControllingPlayer()->m_record3BC;
 		bool saved = record->m_enabled110;
 		record->setEnabled(false);
-		reinterpret_cast<Rva0039CBCE *>(record)->rva0039CBCE(me, -1);
+		reinterpret_cast<ScoreKeeper *>(record)->addObjectBuilt(me, -1);
 		record->setEnabled(saved);
 	}
 	me->kill(DAMAGE_8, (DeathType)data->m_deathType);

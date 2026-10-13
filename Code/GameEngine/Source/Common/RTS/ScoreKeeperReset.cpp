@@ -7,15 +7,15 @@
 #include <map>
 #include <vector>
 
-// vector<void*> begin/end otherwise instantiate per-TU COMDATs (one byte
+// vector<long> begin/end otherwise instantiate per-TU COMDATs (one byte
 // shape per TU flags); explicit dllimport+forceinline specializations take
 // those calls inline so this TU emits no external copies.
 namespace _STL {
 template <> __declspec(dllimport) __forceinline
-void **vector<void*>::begin()
+long *vector<long>::begin()
 { return _M_start; }
 template <> __declspec(dllimport) __forceinline
-void **vector<void*>::end()
+long *vector<long>::end()
 { return _M_finish; }
 }
 template <int Bits> class ScoreMask {
@@ -32,17 +32,20 @@ static ScoreMask<223> scoringMask17;
 typedef _STL::map<unsigned,void*> ScoreCountMap;
 namespace _STL {
 template<> void _Rb_tree<unsigned,pair<const unsigned,void*>,_Select1st<pair<const unsigned,void*> >,less<unsigned>,allocator<pair<const unsigned,void*> > >::clear();
-template<> void **vector<void*,allocator<void*> >::erase(void**,void**);
+template<> long *vector<long,allocator<long> >::erase(long*,long*);
+template<> void vector<long,allocator<long> >::push_back(const long&);
 }
-class Rva0039B893;
+class Rva0039B893{char bytes[0x14];};
 class Rva0039C190 { public:
  Rva0039B893*rva0039C190(Rva0039B893*,Rva0039B893*);
  void clear(){rva0039C190(begin,end);}
+ int size()const{return end-begin;}
  Rva0039B893 *begin,*end,*capacity;
 };
 class ScoreKeeper {
 public:
  void reset(int);
+ void addObjectBuilt(class Object*,int);
  void addObjectDestroyed(const class Object*);
  void unhookAllScoredKillTrackers();
  void*vtable;
@@ -63,7 +66,7 @@ public:
  _STL::vector<unsigned> trackedKills;
  char padding310[0xC];
  Rva0039C190 frameStats;
- _STL::vector<void*> field328;
+ _STL::vector<long> field328;
 };
 void ScoreKeeper::reset(int playerIdx){
  scoringBuildingMask.set(7);scoringBuildingMask.set(39);
@@ -90,12 +93,13 @@ void ScoreKeeper::reset(int playerIdx){
  field108=0;field10C=0;field110=false;
 }
 
-
 #include "../GameLogicObjectLookupView.h"
 #include "../ScoredKillTrackerView.h"
 class Player {public:char pad[0x54];int index;int getPlayerIndex()const{return index;}};
 class Image;class ImageSubscriptMap{public:Image*&operator[](const unsigned&);};
-template<int N> class BitFlags {public:unsigned words[7];bool testSetAndClear(const BitFlags&,const BitFlags&)const;};
+template<int N> class BitFlags {public:unsigned words[7];BitFlags(int,int);
+ __forceinline bool test(int i)const{return (((const unsigned char*)words)[i>>3]&(1<<(i&7)))!=0;}
+ bool testSetAndClear(const BitFlags&,const BitFlags&)const;};
 // ?BitFlags<116>::testSetAndClear present-unmatched
 // Visible existing66B COMDAT makes MSVC cache the two template queries
 // without replacing the object register; its bytes are verified separately.
@@ -113,6 +117,58 @@ class Object {public:void*vtable;const ThingTemplate*m_template;char pad08[0x38-
 class Rva2225E0Filter {public:bool accepts(Object*,Player*);};
 class GlobalData {public:char pad[0x1168];Rva2225E0Filter filter;};extern GlobalData*TheWritableGlobalData;
 extern GameLogic*TheGameLogic;
+// BFME1 ScoreKeeperCounters addObjectBuilt(Object*,Int) supplies the
+// category totals and clamped per-template counts. Native39CBCE..39CDF0 (546B)
+// independently adds the second totals, completion gating, two further
+// count maps and the frame-stat index bookkeeping. WB FA2290 confirms one
+// template local supplies the keys. Rejoin that value after each count block
+// before storing its result, so the register value and key share one home.
+// These tree operations do not change the key or return its local address.
+void ScoreKeeper::addObjectBuilt(Object*o,int amount){
+ if(!TheGameLogic->isScoringEnabled())return;
+ if(o->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))return;
+ const ThingTemplate*tmpl=o->getTemplate();
+ unsigned key=(unsigned)tmpl;
+ bool addToCount=false;
+ if(tmpl->kind.testSetAndClear(*(const KindOfMaskType*)&scoringBuildingMask,KINDOFMASK_NONE)){
+  field10C+=amount;
+  if(field110){buildingsBuilt+=amount;field168+=amount;addToCount=true;}
+ }else if(tmpl->kind.testSetAndClear(*(const KindOfMaskType*)&scoringBuildingCreateMask,KINDOFMASK_NONE)){
+  field10C+=amount;
+  if(field110){buildingsBuilt+=amount;field168+=amount;addToCount=true;}
+ }else if(TheWritableGlobalData->filter.accepts(o,0)){
+  field108+=amount;
+  if(field110){unitsBuilt+=amount;field1C0+=amount;addToCount=true;}
+ }
+ if(addToCount){
+  int existingCount=0;
+  ScoreCountMap::iterator it=objectsBuilt.find(key);
+  if(it._M_node!=objectsBuilt.end()._M_node)existingCount=(int)it->second;
+  int newCount=0>existingCount+amount?0:existingCount+amount;
+  ((ImageSubscriptMap*)&objectsBuilt)->operator[](key)=(Image*)newCount;
+  existingCount=0;
+  it=map1C8.find(key);
+  if(it._M_node!=map1C8.end()._M_node)existingCount=(int)it->second;
+  newCount=0>existingCount+amount?0:existingCount+amount;
+  Image *&destination=((ImageSubscriptMap*)&map1C8)->operator[](key);
+  tmpl=(const ThingTemplate*)key;
+  destination=(Image*)newCount;
+ }
+ if(o->getTemplate()->kind.test(109)){
+  int existingCount=0;
+  ScoreCountMap::iterator it=map1E4.find(key);
+  if(it._M_node!=map1E4.end()._M_node)existingCount=(int)it->second;
+  int newCount=0>existingCount+amount?0:existingCount+amount;
+  Image *&destination=((ImageSubscriptMap*)&map1E4)->operator[](key);
+  tmpl=(const ThingTemplate*)key;
+  destination=(Image*)newCount;
+ }
+ if(field110&&tmpl->kind.testSetAndClear(*(const KindOfMaskType*)&scoringMask17,KindOfMaskType(0,179)))
+  field328.push_back(frameStats.size());
+ if(field110&&fieldF4==0&&tmpl->kind.test(90)&&!tmpl->kind.test(179))
+  fieldF4=frameStats.size();
+}
+
 // ZH addObjectDestroyed supplies category and per-player count semantics.
 // Native39CDF0..39CF1D301B independently adds completion gating, the
 // second totals and tracked-kill predicate/position notifications.

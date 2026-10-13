@@ -133,10 +133,10 @@ class BehaviorModule : public ObjectModuleView, public BehaviorModuleInterface
 {
 };
 
-class Rva0039CBCE
+class ScoreKeeper
 {
 public:
-	void rva0039CBCE(Object *obj, Int flag);
+	void addObjectBuilt(Object *obj, Int flag);
 };
 
 class Player
@@ -156,7 +156,7 @@ public:
 	char m_pad280[0x3AC - 0x280];
 	Int m_3ac;
 	char m_pad3B0[0x3BC - 0x3B0];
-	Rva0039CBCE m_3bc;
+	ScoreKeeper m_3bc;
 };
 
 class GameLogic
@@ -481,5 +481,5 @@ void Object::initObject()
 	}
 
 	Player *owner = getControllingPlayer();
-	owner->m_3bc.rva0039CBCE(this, 1);
+	owner->m_3bc.addObjectBuilt(this, 1);
 }

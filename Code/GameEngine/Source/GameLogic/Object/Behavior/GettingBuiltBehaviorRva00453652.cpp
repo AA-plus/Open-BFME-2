@@ -100,10 +100,10 @@ public:
 };
 
 // The controlling player's +0x3BC list.
-class Rva0039CBCE
+class ScoreKeeper
 {
 public:
-	void rva0039CBCE(class Object *obj, Int a2);	// 0x0039CBCE
+	void addObjectBuilt(class Object *obj, Int a2);	// 0x0039CBCE
 };
 
 class Object
@@ -122,7 +122,7 @@ public:
 	Real getOrientation() const { return m_orientation; }
 	ObjectID getID() const { return m_id; }
 	Rva00453652Body *getBodyModule() const { return m_body; }
-	Rva0039CBCE *rva00453652PlayerList(Player *player) const { return (Rva0039CBCE *)((char *)player + 0x3BC); }
+	ScoreKeeper *rva00453652PlayerList(Player *player) const { return (ScoreKeeper *)((char *)player + 0x3BC); }
 	__forceinline void clearModelConditionState(int mc)
 	{
 		if (m_conditionBits.test(mc))
@@ -282,7 +282,7 @@ void GettingBuiltBehavior::rva00453652(bool forced)
 	m_35 = obj->m_438 & 1;
 	if (m_35)
 	{
-		obj->rva00453652PlayerList(obj->getControllingPlayer())->rva0039CBCE(obj, 1);
+		obj->rva00453652PlayerList(obj->getControllingPlayer())->addObjectBuilt(obj, 1);
 		obj->m_436 = false;
 		TheBuildAssistant->moveObjectsForConstruction(obj->getTemplate(), obj->getPosition(), obj->getOrientation(), player);
 	}
