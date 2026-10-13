@@ -18,7 +18,14 @@ struct Vector3
 	float Z;
 };
 
+// LINK: hide math.h's float fabs overloads (the Rva0055A246Ctor recipe): the
+// unit emitted ?fabs@@YAMM@Z and _fabsf copies that lose to the first copies
+// in link order; /Oi expands fabs inline either way, so the float arguments
+// promote to the intrinsic directly.
+#define fabs bfme_hidden_fabs
 #include <math.h>
+#undef fabs
+extern "C" double __cdecl fabs(double x);
 
 class CollisionObject
 {

@@ -125,6 +125,9 @@ extern LivingWorldLogic* TheLivingWorldLogic;
 // Separate const elapsed snapshots preserve both actual SSE reloads and
 // the native stack lifetimes before double cos/fabs. The first bank assigned
 // the reload back to elapsed, causing the three later float homes to rotate.
+// LINK: spelled cosf, which is what math.h's cos(float) returns, so the unit
+// no longer emits that overload (its retail copy is fld/fcos/ret, not this
+// unit's call to _cosf); the calls keep their bytes.
 void Rva003FA835::rva003FA878()
 {
 	void *target = m_target;
@@ -140,7 +143,7 @@ void Rva003FA835::rva003FA878()
 			Real base = getTemplate()->value;
 			Real amplitude = getTemplate()->amplitude;
 			const Real copy = *reinterpret_cast<volatile Real *>(&elapsed);
-		Real value = base + fabs(cos(copy)) * amplitude;
+		Real value = base + fabs(cosf(copy)) * amplitude;
 			rva003FA705(m_target, value);
 		}
 		else
@@ -158,7 +161,7 @@ void Rva003FA835::rva003FA878()
 		base = getTemplate()->value;
 		amplitude = getTemplate()->amplitude;
 		const Real copy = *reinterpret_cast<volatile Real *>(&elapsed);
-		Real value = base + fabs(cos(copy)) * amplitude;
+		Real value = base + fabs(cosf(copy)) * amplitude;
 		rva003FA705(m_target, value);
 	}
 	else

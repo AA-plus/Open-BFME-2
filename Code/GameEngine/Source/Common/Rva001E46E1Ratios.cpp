@@ -14,6 +14,16 @@
 //               clamp it to [0, worker]
 // Retail compares with fcompi, which MSVC 7.1 emits only under /arch:SSE.
 // Class and member names are unknown, hence address-derived.
+// LINK: hide math.h's inline atan2f (the MouseCursorDirection recipe): under
+// /Oi- this unit emitted an _atan2f copy that loses to the retail one
+// (Rva000422A0's adapter shape); the bodies call _atan2f out of line, so the
+// calls keep their bytes and bind the kept copy. The float trig calls below
+// spell cosf/sinf, which is what math.h's cos(float)/sin(float) return, so
+// the unit no longer emits those overloads (their retail copies are
+// fcos/fsin, not this /Oi- shape).
+#define atan2f bfme_hidden_atan2f
+#include <math.h>
+#undef atan2f
 #include "Lib/Coord3D.h"
 #include "matrix3d.h"
 extern "C" float atan2f(float,float);
@@ -437,7 +447,7 @@ void Rva001E46E1::rva001E546B(Object *obj)
     Obj254V *body=obj->m_254;
     if(!body) return;
     float baseline=m_48;
-    int id=obj->getID();unsigned frame=((const Rva001E46E1FrameView*)TheGameLogic)->m_frame;float wave=(float)sin((int)(frame+id)*0.1f);
+    int id=obj->getID();unsigned frame=((const Rva001E46E1FrameView*)TheGameLogic)->m_frame;float wave=sinf((int)(frame+id)*0.1f);
     wave*=amplitude;
     wave*=0.2f;
     float desired=wave+baseline;
@@ -574,7 +584,7 @@ void Rva001E46E1::rva001E56DC(Object *obj,const Coord3D *goal,float maxTurnRate,
         if(amount>0.0f){if(amount>turnRate)m_A8=1;if(amount>maxTurnRate)amount=maxTurnRate;}
         else {if(amount< -turnRate)m_A8=-1;if(amount< -maxTurnRate)amount=-maxTurnRate;}
         if(slow)amount*=0.5f;
-        float c=(float)cos(amount),s=(float)sin(amount);preRotateZ(m_matrix68,s,c);
+        float c=cosf(amount),s=sinf(amount);preRotateZ(m_matrix68,s,c);
     }
     float speed=m_40;
     value.speed=rva001E46E1(obj);bool animate=true;float half=reinterpret_cast<const volatile float&>(value.speed)*0.5f;
