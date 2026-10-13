@@ -135,6 +135,12 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "matrix4.h"
 #include "rinfo.h"
 #include "camera.h"
+// bfme link decl-only begin
+template <> ShareBufferClass<char>::~ShareBufferClass();
+template <> ShareBufferClass<unsigned short>::~ShareBufferClass();
+template <> ShareBufferClass<unsigned long>::~ShareBufferClass();
+template <> bool SimpleVecClass<Vector4>::Resize(int);
+// bfme link decl-only end
 
 
 #if (OPTIMIZE_PLANEEQ_RAM)

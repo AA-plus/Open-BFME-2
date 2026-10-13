@@ -11,6 +11,9 @@
 // existing declaration. The vendor's copy/destroy tag temporaries remain.
 #define __copy_trivial uintInlineCopyTrivial
 #include <vector>
+// bfme link decl-only begin
+namespace _STL { template <> vector<unsigned int, allocator<unsigned int> > & vector<unsigned int, allocator<unsigned int> >::operator=(vector<unsigned int, allocator<unsigned int> > const &); }
+// bfme link decl-only end
 #undef __copy_trivial
 
 namespace _STL

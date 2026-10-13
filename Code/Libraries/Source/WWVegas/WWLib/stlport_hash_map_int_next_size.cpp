@@ -14,6 +14,10 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 
 #include <hash_map>
 #include <cstddef>
+// bfme link decl-only begin
+namespace _STL { template <> hash_map<int, int, hash<int>, equal_to<int>, allocator<pair<int const, int> > >::hash_map(); }
+namespace _STL { template <> hashtable<pair<int const, int>, int, hash<int>, _Select1st<pair<int const, int> >, equal_to<int>, allocator<pair<int const, int> > >::~hashtable(); }
+// bfme link decl-only end
 // Suppress this TU's non-retail vector<void*> operator[] copy (family2-LK3 row 25):
 // the retail copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

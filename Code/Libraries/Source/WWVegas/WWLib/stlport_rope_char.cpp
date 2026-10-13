@@ -2,6 +2,9 @@
 // stlport
 
 #include <rope>
+// bfme link decl-only begin
+namespace _STL { template <> void allocator<char>::deallocate(char *, unsigned int) const; }
+// bfme link decl-only end
 
 template class _STL::rope<char, _STL::allocator<char> >;
 

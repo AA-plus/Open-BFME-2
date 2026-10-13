@@ -22,6 +22,9 @@ template <> bool less<unsigned int>::operator()(const unsigned int &a, const uns
 #include <map>
 #include <set>
 #include "ascii_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree<int, pair<int const, void *>, _Select1st<pair<int const, void *> >, less<int>, allocator<pair<int const, void *> > >::~_Rb_tree(); }
+// bfme link decl-only end
 
 // map/set<unsigned> internals otherwise instantiate the less<unsigned>::operator()
 // COMDAT (one byte shape per TU flags); a declaration-only specialization

@@ -24,6 +24,9 @@ typedef float Real;
 typedef int Int;
 
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
+// bfme link decl-only begin
+namespace _STL { template <> _List_node<Coord3D> * list<Coord3D, allocator<Coord3D> >::_M_create_node(Coord3D const &); }
+// bfme link decl-only end
 
 typedef _STL::list<Coord3D> Coord3DList;
 

@@ -69,6 +69,9 @@ public:
 #include <assert.h>
 #include <chunkio.h>
 #include "ffactory.h"
+// bfme link decl-only begin
+namespace _STL { template <> void _Construct<basic_string<char, char_traits<char>, allocator<char> >, basic_string<char, char_traits<char>, allocator<char> > >(basic_string<char, char_traits<char>, allocator<char> > *, basic_string<char, char_traits<char>, allocator<char> > const &); }
+// bfme link decl-only end
 
 
 /*

@@ -23,4 +23,7 @@ private:
 	char m_pad[0x18];
 };
 #include <vector>
+// bfme link decl-only begin
+namespace _STL { template <> vector<Rva000BB4AC, allocator<Rva000BB4AC> > & vector<Rva000BB4AC, allocator<Rva000BB4AC> >::operator=(vector<Rva000BB4AC, allocator<Rva000BB4AC> > const &); }
+// bfme link decl-only end
 template class _STL::vector<Rva000BB4AC, _STL::allocator<Rva000BB4AC> >;

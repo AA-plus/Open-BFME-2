@@ -7,6 +7,13 @@
 // route the int and pair vectors here already use.
 
 #include <vector>
+// bfme link decl-only begin
+namespace _STL { template <> _Vector_base<void *, allocator<void *> >::~_Vector_base(); }
+namespace _STL { template <> vector<void *, allocator<void *> >::~vector(); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::_M_clear(); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::_M_insert_overflow(void **, void *const &, __true_type const &, unsigned int, bool); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::reserve(unsigned int); }
+// bfme link decl-only end
 
 // The native range-erase owner is the 34-byte optimized specialization
 // in stlport_vector_voidptr_opt.cpp, not this unit's /Od instantiation.

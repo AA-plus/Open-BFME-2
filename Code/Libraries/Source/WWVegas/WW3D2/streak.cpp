@@ -71,6 +71,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "vp.h"
 #include "vector3i.h"
 #include "sortingrenderer.h"
+// bfme link decl-only begin
+template <> SimpleDynVecClass<Vector4>::~SimpleDynVecClass();
+// bfme link decl-only end
 
 static SegLineRendererClass _LineRenderer;
 

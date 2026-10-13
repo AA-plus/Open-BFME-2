@@ -63,7 +63,9 @@
 #include "vp.h"
 #include "meshmatdesc.h"
 #include <stdlib.h>
-
+// bfme link decl-only begin
+template <> bool SimpleVecClass<Vector3>::Resize(int);
+// bfme link decl-only end
 /*
 ** Debug logging for the shatter system
 */

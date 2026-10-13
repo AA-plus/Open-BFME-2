@@ -2,6 +2,15 @@
 // stlport
 
 #include <hash_map>
+// bfme link decl-only begin
+namespace _STL { template <> void ** __uninitialized_fill_n<void **, unsigned int, void *>(void **, unsigned int, void *const &, __true_type const &); }
+namespace _STL { template <> hash_map<int, int, hash<int>, equal_to<int>, allocator<pair<int const, int> > >::hash_map(); }
+namespace _STL { template <> _Vector_base<void *, allocator<void *> >::~_Vector_base(); }
+namespace _STL { template <> hashtable<pair<int const, int>, int, hash<int>, _Select1st<pair<int const, int> >, equal_to<int>, allocator<pair<int const, int> > >::~hashtable(); }
+namespace _STL { template <> vector<void *, allocator<void *> >::~vector(); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::_M_clear(); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::_M_insert_overflow(void **, void *const &, __true_type const &, unsigned int, bool); }
+// bfme link decl-only end
 
 namespace _STL
 {

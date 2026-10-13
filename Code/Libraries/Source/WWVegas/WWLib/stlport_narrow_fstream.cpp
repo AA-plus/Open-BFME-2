@@ -2,6 +2,9 @@
 // stlport
 
 #include <fstream>
+// bfme link decl-only begin
+namespace _STL { template <> int basic_filebuf<char, char_traits<char> >::overflow(int); }
+// bfme link decl-only end
 
 // Native allocation owner 0x00013F10 (189 bytes) supplies this helper.
 // BFME 1 FilebufInstantiations at f98983a7d3 likewise defers allocation.

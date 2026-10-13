@@ -28,4 +28,7 @@ __declspec(nothrow) BfmeContainerRecord005FDEC7 &BfmeContainerRecord005FDEC7::op
     return *this;
 }
 #include <vector>
+// bfme link decl-only begin
+namespace _STL { template <> void vector<BfmeContainerRecord005FDEC7, allocator<BfmeContainerRecord005FDEC7> >::_M_fill_insert(BfmeContainerRecord005FDEC7 *, unsigned int, BfmeContainerRecord005FDEC7 const &); }
+// bfme link decl-only end
 template class _STL::vector<BfmeContainerRecord005FDEC7, _STL::allocator<BfmeContainerRecord005FDEC7> >;

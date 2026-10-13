@@ -119,6 +119,9 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 #include "GameLogic/GhostObject.h"
 #include "GameLogic/Object.h"
 #include "GameLogic/ScriptEngine.h"		// For TheScriptEngine - jkmcd
+// bfme link decl-only begin
+namespace _STL { template <> _List_node<Drawable *> * list<Drawable *, allocator<Drawable *> >::_M_create_node(Drawable *const &); }
+// bfme link decl-only end
 
 // ?erase@?$vector@VAsciiString@@V?$allocator@VAsciiString@@@_STL@@@_STL@@QAEPAVAsciiString@@PAV3@0@Z
 // is owned by VectorAsciiStringErase.cpp (row at 0x0002CCFC): declare the

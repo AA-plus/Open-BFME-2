@@ -61,6 +61,12 @@
 #include "texture.h"
 #include "dx8wrapper.h"
 #include "vector3.h"
+// bfme link decl-only begin
+template <> ShareBufferClass<Vector3>::~ShareBufferClass();
+template <> SimpleDynVecClass<Vector4>::~SimpleDynVecClass();
+template <> void SimpleDynVecClass<Vector4>::Delete_All(bool);
+template <> bool SimpleVecClass<Vector4>::Resize(int);
+// bfme link decl-only end
 
 // These specializations are rowed in their canonical defining units. Keep
 // this TU a client so it does not emit conflicting inline destructor copies.

@@ -7,6 +7,10 @@
 // into it at the default level.
 
 #include <fstream>
+// bfme link decl-only begin
+namespace _STL { template <> int basic_filebuf<char, char_traits<char> >::_M_input_error(); }
+namespace _STL { template <> int basic_filebuf<char, char_traits<char> >::_M_underflow_aux(); }
+// bfme link decl-only end
 
 // Native allocation owner 0x00013F10 (189 bytes) supplies this helper.
 // BFME 1 FilebufInstantiations at f98983a7d3 likewise defers allocation.

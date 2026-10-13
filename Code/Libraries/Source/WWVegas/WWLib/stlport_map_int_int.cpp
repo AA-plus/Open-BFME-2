@@ -4,6 +4,9 @@
 #include <stl/_alloc.h>
 namespace _STL { template <> void __malloc_alloc<0>::deallocate(void *, size_t); }
 #include <map>
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree_iterator<pair<int const, int>, _Const_traits<pair<int const, int> > > _Rb_tree<int, pair<int const, int>, _Select1st<pair<int const, int> >, less<int>, allocator<pair<int const, int> > >::upper_bound(int const &) const; }
+// bfme link decl-only end
 
 // Preserve retail's inlined buffer release while using the canonical public allocator.
 namespace _STL {

@@ -195,6 +195,9 @@ EMPTY_DTOR(Squad)
 #include "GameLogic/VictoryConditions.h"
 
 #include "GameNetwork/GameInfo.h"
+// bfme link decl-only begin
+namespace _STL { template <> vector<ObjectID, allocator<ObjectID> >::vector(vector<ObjectID, allocator<ObjectID> > const &); }
+// bfme link decl-only end
 
 // _Rb_tree_iterator comparisons otherwise instantiate the base-class
 // operator!= COMDAT (one byte shape per TU flags); exact-match free

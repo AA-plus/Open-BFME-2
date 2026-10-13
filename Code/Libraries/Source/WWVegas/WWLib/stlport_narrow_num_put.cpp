@@ -30,6 +30,12 @@ void _STLP_alloc_proxy<char*, char, allocator<char> >::deallocate(
 }
 
 #include <locale>
+// bfme link decl-only begin
+namespace _STL { template <> ostreambuf_iterator<char, char_traits<char> > __copy_float_and_fill<char, ostreambuf_iterator<char, char_traits<char> > >(char const *, char const *, ostreambuf_iterator<char, char_traits<char> >, int, int, char, char, char); }
+namespace _STL { template <> char * __write_decimal_backward<long>(char *, long, int, __true_type const &); }
+namespace _STL { template <> char * __write_integer_backward<long>(char *, int, long); }
+namespace _STL { template <> char * __write_integer_backward<unsigned long>(char *, int, unsigned long); }
+// bfme link decl-only end
 // basic_string<char>::reserve is retail's 116-byte body at 0x0000C390, owned by
 // stlport_narrow_string_reserve.cpp; this unit's header copy is not retail's and
 // came before it in link order, so only declare its instantiation here.

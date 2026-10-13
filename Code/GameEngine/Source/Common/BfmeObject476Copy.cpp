@@ -119,6 +119,9 @@ protected:
 
 #define BFME_SNAPSHOT_NAME_SLOT
 #include "../../../../reference/shims/moduledata/Common/Snapshot.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree<int, pair<int const, void *>, _Select1st<pair<int const, void *> >, less<int>, allocator<pair<int const, void *> > >::~_Rb_tree(); }
+// bfme link decl-only end
 
 // A declaration-only specialization stops this TU emitting its own
 // vector<AsciiString> dtor COMDAT, so the call binds the kept copy.

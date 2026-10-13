@@ -6,4 +6,7 @@
 // unlanded functions; the suffix says which optimisation level, because for
 // these containers different bodies survive the link from different units.
 #include <deque>
+// bfme link decl-only begin
+namespace _STL { template <> void _Construct<void *, void *>(void **, void *const &); }
+// bfme link decl-only end
 template class _STL::deque<void *, _STL::allocator<void *> >;

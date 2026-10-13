@@ -2,6 +2,10 @@
 // stlport
 
 #include <string>
+// bfme link decl-only begin
+namespace _STL { template <> basic_string<char, char_traits<char>, allocator<char> >::basic_string(basic_string<char, char_traits<char>, allocator<char> > const &); }
+namespace _STL { template <> basic_string<char, char_traits<char>, allocator<char> >::basic_string(char const *, allocator<char> const &); }
+// bfme link decl-only end
 
 // Native base cleanup is supplied by the independently verified B3C0 owner.
 namespace _STL { template <> _String_base<char, allocator<char> >::~_String_base(); }
