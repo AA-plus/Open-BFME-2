@@ -86,3 +86,13 @@ unsigned int Rva00023A30(unsigned int n)
 	return (n + 7) & ~7;
 }
 
+// Target bytes at 0x00023B80: empty member function taking one pointer.
+struct Rva00023B80
+{
+	void apply(void *p);
+};
+
+void Rva00023B80::apply(void *p)
+{
+}
+

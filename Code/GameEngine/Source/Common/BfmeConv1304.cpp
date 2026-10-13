@@ -11,3 +11,10 @@ void bfmeGoSXA(int a, int b, int c, int d)
 	bfmeWriteSXA(g_bfmeTableSXA[2], c, d, g_bfmeTableSXA[b], c, d, a);
 	bfmeFlushSXA();
 }
+
+extern "C" __declspec(dllimport) void __cdecl abort(void);
+
+void Rva00023D70Abort(void)
+{
+	abort();
+}

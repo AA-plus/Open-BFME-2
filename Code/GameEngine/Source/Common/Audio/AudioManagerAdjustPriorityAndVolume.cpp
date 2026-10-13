@@ -140,3 +140,28 @@ void Rva00059259::rva00059259()
 {
 	((Rva000588DA *)this)->~Rva000588DA();
 }
+
+struct Rva00058A86Record;
+namespace _STL {
+	template <class A, class B, class C, class D, class E, class F> class hashtable {
+	public:
+		~hashtable();
+	};
+	template <class> struct hash;
+	template <class> struct _Identity;
+	template <class> struct equal_to;
+	template <class> class allocator;
+
+	typedef hashtable<Rva00058A86Record, Rva00058A86Record, hash<Rva00058A86Record>, _Identity<Rva00058A86Record>, equal_to<Rva00058A86Record>, allocator<Rva00058A86Record> > Rva00058A86Table;
+}
+
+class Rva000592B3
+{
+public:
+	void rva000592B3();
+};
+
+void Rva000592B3::rva000592B3()
+{
+	((_STL::Rva00058A86Table *)this)->~hashtable();
+}
