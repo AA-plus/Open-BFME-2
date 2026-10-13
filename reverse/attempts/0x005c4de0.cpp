@@ -1,3 +1,5 @@
+// ??0Rva005C4B56@@QAE@ABUHelper005C4D4B@@_NPBH@Z
+// partial score=0.828675577156744 date=2026-10-13
 // ??0Rva005C4B56@@QAE@ABUHelper005C4D4B@@HH@Z
 // partial score=0.828675577156744 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath
@@ -68,26 +70,26 @@ class Rva002D3627Host {public:
 extern Rva002D3627Host *g_00DFEF18;
 struct ScalarFloat { float value; ScalarFloat(float v):value(v) {} };
 class Rva005C4B56 : public Rva003FD14DBase {public:
- Rva005C4B56(const Helper005C4D4B &,int,int);
+ Rva005C4B56(const Helper005C4D4B &,bool,const int *);
  virtual void derivedSlot();
  SubAC005C4B56 *m_ac; int m_b0; ScalarFloat m_b4; int m_b8;
 };
 typedef char BaseExtent[(sizeof(Rva003FD14DBase)==0xAC)?1:-1];
-Rva005C4B56::Rva005C4B56(const Helper005C4D4B &h,int enabled,int colour)
+Rva005C4B56::Rva005C4B56(const Helper005C4D4B &h,bool enabled,const int *colour)
  : Rva003FD14DBase(reinterpret_cast<int>(&h.m_str)),
  m_ac(h.m_00),m_b0(h.m_08),m_b4(h.m_00->value1C),m_b8(0)
 {
  const_cast<Helper005C4D4B &>(h).m_0C=true;
  reinterpret_cast<LivingWorldVisual *>(this)->createRenderObject(
   m_ac->name04,m_ac->names08,m_ac->shadow28,
-  m_ac->colour54 ? reinterpret_cast<const int *>(colour) : 0);
+  m_ac->colour54 ? colour : 0);
  reinterpret_cast<LivingWorldVisual *>(this)->createPickboxObject(&m_ac->pick14);
  rva0010E4F6(primary08,false);
  reinterpret_cast<LivingWorldVisual *>(this)->rva003FC291(m_ac->scale20);
  AsciiString animation=Rva005F17C6Build(m_ac->name04+".",reinterpret_cast<int>(&m_ac->name04));
  reinterpret_cast<Rva003FB65C *>(this)->rva003FC780(&animation,m_ac->animation2C);
  g_00DFEF18->insert(primary08);
- if (!static_cast<unsigned char>(enabled))
+ if (!enabled)
   ((reinterpret_cast<LivingWorldVisual *>(this))->*reinterpret_cast<void (LivingWorldVisual::*)(unsigned char)>(&LivingWorldVisual::rva003FCCC9))(
    reinterpret_cast<Rva005C41C9 *>(this)->rva005C4B26());
  scaleA0=ThreeFloatBlock(1.f,1.f,1.f);
