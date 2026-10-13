@@ -1,4 +1,6 @@
 // ?putPlayingMusicOnStack@MilesAudioManager@@QAEXHH@Z
+// partial score=0.95 date=2026-10-13
+// ?putPlayingMusicOnStack@MilesAudioManager@@QAEXHH@Z
 // partial score=0.93 date=2026-10-13
 // ?putPlayingMusicOnStack@MilesAudioManager@@QAEXHH@Z
 // partial score=0.93 date=2026-10-09
@@ -14,6 +16,7 @@
 // zero, stopped and taken off the playing streams. The stacked copy is the
 // counted Rva0036CA00Str form: out-of-line copy 0x000A8C7C and an
 // unconditional release (no null test) at scope end.
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 void MilesAudioManager::putPlayingMusicOnStack(int viewType, int arg)
 {
     MusicSystem activeMusicSystem = m_activeMusicSystem[viewType];
@@ -36,7 +39,7 @@ void MilesAudioManager::putPlayingMusicOnStack(int viewType, int arg)
         } else {
             playing->m_at44 = false;
             ((MilesStreamRef *)&playing->m_at0C)->rva000A8AC0();
-            playing->m_at30 = (float)m_audioSettings->m_at78;
+            playing->m_at30 = (float)__vref(m_audioSettings->m_at78);
             reinterpret_cast<OpaqueRefList &>(m_playingStreams).erase(
                 OpaqueRefList::iterator((OpaqueRefList::_Node *)it._M_node));
         }

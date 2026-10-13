@@ -1,4 +1,6 @@
 // ?rva000953B3@Gen006E2310@@QAEXXZ
+// partial score=0.998 date=2026-10-13
+// ?rva000953B3@Gen006E2310@@QAEXXZ
 // partial score=0.9920634921 date=2026-10-13
 // ?rva000953B3@Gen006E2310@@QAEXXZ
 // partial score=0.97 date=2026-10-12
@@ -422,7 +424,7 @@ void Gen006E2310::rva000953B3()
 		m_D4.Y = color.green;
 		m_D4.Z = color.blue;
 	} else {
-		volatile float fade = (float)(1.0 - m_C4 * (1.0 / 255.0));
+		float fade = (float)(1.0 - m_C4 * (1.0 / 255.0));
 		if (m_BC == 2)
 			color = m_3C;
 		m_D4.X = ((volatile RGBColor &)color).red * fade;

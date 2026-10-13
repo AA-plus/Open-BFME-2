@@ -1,4 +1,6 @@
 // ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z
+// partial score=0.987 date=2026-10-13
+// ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z
 // partial score=0.983412846822657 date=2026-10-13
 // ?addEdgeToTrack@Rva00084206Track@@QAEXMM@Z
 // cl: /O1 /arch:SSE /G7 /MD /EHsc /ICode/Libraries/Include /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
@@ -481,7 +483,7 @@ void Rva00084206Track::addEdgeToTrack(float x, float y)
 	{
 		int objectLayer;
 		if (owner && (objectLayer = __vref(owner->m_object)->rva0028B511()) != 1)
-			lastAnchor = Vector3(x, y, TheTerrainLogic->getLayerHeight(x, y, objectLayer) + 0.25f);
+			lastAnchor = Vector3(__vref(x), y, TheTerrainLogic->getLayerHeight(x, y, objectLayer) + 0.25f);
 		else
 			lastAnchor = Vector3(x, y, TheTerrainLogic->getGroundHeight(x, y));
 
