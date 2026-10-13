@@ -1,4 +1,4 @@
-// cl: /O1 /arch:SSE /G7 /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /O1 /arch:SSE /G7 /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc- /D_STLP_NO_EXCEPTIONS /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // ??0Rva000C38F8@@QAE@XZ @0x000C47F4 231B
 // Retail ctor: base Rva0042526Member 0x42526 then 10x Vector_base PlayerAITypeEntry 0x211E58,
@@ -23,6 +23,11 @@ struct PlayerAITypeEntry
 	AsciiString name;
 	char unknown[12];
 };
+
+// Native C1C20/BD28D independently establish memberC4 vector cleanup:
+// 24-byte element stride and the existing B9AC2 destructor. Other vector
+// element views retain their earlier inference; no new bindings for them.
+struct Rva00B9AC2 { ~Rva00B9AC2(); unsigned char unknown[24]; };
 
 struct BfmePod32
 {
@@ -49,7 +54,7 @@ private:
 	_STL::vector<PlayerAITypeEntry> m_a8;
 	_STL::list<BfmePod32> m_b4;
 	_STL::vector<PlayerAITypeEntry> m_b8;
-	_STL::vector<PlayerAITypeEntry> m_c4;
+	_STL::vector<Rva00B9AC2> m_c4;
 	_STL::vector<PlayerAITypeEntry> m_d0;
 };
 
