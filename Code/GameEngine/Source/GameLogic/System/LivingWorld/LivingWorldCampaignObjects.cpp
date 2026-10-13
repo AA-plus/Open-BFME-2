@@ -428,3 +428,6 @@ UnicodeString Rva00319CED::rva004E265F(int id)
 
 // Native0x791bf2 complete24B action: Complete24B conditional hidden-output UnicodeString cleanup in the whole738B help parent. It tests and clears mask1 atEBP-28 then tail-jumps with return bufferEBP+8 to same-object whole5B destructor5B804E or branches to independently named1B RET791C0A. Replaces the separately retired standalone assembly range.
 // Whole native parent and complete EH graph independently prove ownership.
+
+// Native0x791b4f complete13B action: Complete13B static-image initialization failure guard cleanup in the whole208B GetButtonImage parent. Both DIR32 relocations bind the same actual compiler-owned guard atVA E04438. Clear bit0 and preserve remaining bits; no callee or address-named global added.
+// Whole native parent and complete EH graph independently prove ownership.
