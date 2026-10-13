@@ -107,9 +107,13 @@ class MilesAudioManager
 {
 public:
 	virtual const _STL::vector<const char *> &rva00058314(void);
+	void internalSetReverbRoomType(int type);
+	void rva0005522C(const AsciiString &name);
 private:
 	char at04[0x9D4 - 0x04];
 	void *m_mutex;
+	char at9D8[0xBE4 - 0x9D8];
+	int m_atBE4;
 };
 
 // Native 00058314..000583BA, vftable slot 92 (+0x170, entry 0x007C5720).
@@ -129,4 +133,35 @@ const _STL::vector<const char *> &MilesAudioManager::rva00058314(void)
 		}
 	}
 	return s_names;
+}
+
+// ?rva0005522C@MilesAudioManager@@QAEXABVAsciiString@@@Z @0x0005522C 153B.
+// Reverb-room setter: Hanger special-cased to 10, else a case-insensitive
+// table lookup (same shape as the rowed getEnvironmentTypeFromName above),
+// -1 falling back to vtable slot 91 (+0x16C), otherwise storing the type at
+// +0xBE4 and calling the rowed internalSetReverbRoomType 0x000512C4.
+// Slot 91 is reached through an explicit vtable fetch so this TU emits no
+// new vtable entries.
+static inline int milesEnvironmentType(const AsciiString &name)
+{
+	const StringBase<char> &text = reinterpret_cast<const StringBase<char> &>(name);
+	unsigned i = 0;
+	if (text.compareNoCase("Hanger") == 0)
+		return 10;
+	for (; i < 26; ++i)
+		if (text.compareNoCase(s_environmentNames[i].name) == 0)
+			return s_environmentNames[i].environmentType;
+	return -1;
+}
+
+void MilesAudioManager::rva0005522C(const AsciiString &name)
+{
+	MilesMutexGuard guard(&m_mutex, 0);
+	int type = milesEnvironmentType(name);
+	if (type == -1) {
+		typedef void (__fastcall *Slot91Fn)(MilesAudioManager *);
+		((Slot91Fn)(*(void ***)this)[91])(this);
+	}
+	else
+		internalSetReverbRoomType(m_atBE4 = type);
 }
