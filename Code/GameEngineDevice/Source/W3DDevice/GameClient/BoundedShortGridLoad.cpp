@@ -20,7 +20,10 @@ private:
 	short *m_data;
 };
 
-short BoundedShortGrid::rva00062A58(int a, int b)
+// Select-any like the BaseHeightMapInitHeightData.cpp copy (this retail body
+// comes first in link order, so it is the copy the link keeps); the anchor
+// keeps the noinline body emitted.
+inline __declspec(noinline) short BoundedShortGrid::rva00062A58(int a, int b)
 {
 	int idx = m_stride * b + a;
 	if (idx < 0)
@@ -30,4 +33,11 @@ short BoundedShortGrid::rva00062A58(int a, int b)
 	if (m_data)
 		return m_data[idx];
 	return 0;
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitBoundedShortGridLoad@@YAXPAVBoundedShortGrid@@HH@Z absent-from-retail
+void bfmeEmitBoundedShortGridLoad(BoundedShortGrid *p, int a, int b)
+{
+	p->BoundedShortGrid::rva00062A58(a, b);
 }
