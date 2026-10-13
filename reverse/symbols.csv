@@ -11602,7 +11602,7 @@ name,address,notes
 ?rva004FD37F@Rva004FD37F@@QAEXPBVModuleData@@@Z,0x004FD37F,"holder append reached by Rva004FD719Parse at 0x004FD719; abuts rowed Rva004FD448 0x004FD448"
 ?rva00500659@Rva0059CFAACallee@@QAGXPAXHH0@Z,0x00500659,address-derived __stdcall callee of 0x0059CFAA (4 stack args, callee cleanup); target REL32 from retail call at 0x0059CFF5
 ?rva005016C3@Rva005016C3@@QAEXXZ,0x005016C3,tail jmp target of 8B forwarder 0x0050174A (ret 0); original name unknown
-?rva005045E0@Rva005045E0@@QAEXPAVXfer@@@Z,0x005045E0,address-derived callee of matched slot 0x003FD321; retail REL32 targets 0x005045E0; Ghidra FUN bounds 162 bytes; thiscall on the +0x0C member (Xfer*) ret 4; callee body remains unclaimed; no named identity inferred
+?DoXfer@ControlPointBlock@@QAEXPAVXfer@@@Z,0x005045E0,address-derived callee of matched slot 0x003FD321; retail REL32 targets 0x005045E0; Ghidra FUN bounds 162 bytes; thiscall on the +0x0C member (Xfer*) ret 4; callee body remains unclaimed; no named identity inferred
 ?rva005055DE@Rva0050542B@@AAEXXZ,0x005055DE,append the global +0x0C list to +0x14 (rowed under Rva005055DE); tail jmp at 0x0050590C
 ?rva00505E5D@Rva00506909@@AAEXXZ,0x00505E5D,first setup member called by the Rva00506909 ctor (REL32 at 0x00506989)
 ?rva00505F80@Rva00506909@@AAEXXZ,0x00505F80,second setup member called by the Rva00506909 ctor (REL32 at 0x00506990)

@@ -99,10 +99,10 @@ public:
 	virtual void xferUnsignedInt(UnsignedInt *value);
 };
 void Rva0030662AXfer(Xfer *xfer, void *value);
-class Rva005045E0
+class ControlPointBlock
 {
 public:
-	void rva005045E0(Xfer *xfer);
+	void DoXfer(Xfer *xfer);
 };
 class Rva003FD1C5
 {
@@ -131,14 +131,14 @@ class Rva003FD321 : public Rva003FD1C5
 protected:
 	virtual void rva003FD1C5(Xfer *xfer);
 private:
-	Rva005045E0 m_0C;
+	ControlPointBlock m_0C;
 	char m_pad0D[0x0B];
 	UnsignedInt m_18;
 };
 void Rva003FD321::rva003FD1C5(Xfer *xfer)
 {
 	Rva003FD1C5::rva003FD1C5(xfer);
-	m_0C.rva005045E0(xfer);
+	m_0C.DoXfer(xfer);
 	xfer->xferUnsignedInt(&m_18);
 }
 

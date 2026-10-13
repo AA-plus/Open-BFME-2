@@ -86,15 +86,15 @@ public:
 
  virtual void xferCount(int *) = 0; // retail slot 0x7C
 };
-class Rva005045E0 {
+class ControlPointBlock {
 public:
- void rva005045E0(Xfer *xfer);
+ void DoXfer(Xfer *xfer);
 private:
  Rva00064640Set m_controlPoints;
 };
 // WB ControlPoint.cpp names ControlPointBlock::DoXfer. The existing
 // address-derived owner preserves its established caller ABI.
-void Rva005045E0::rva005045E0(Xfer *xfer) {
+void ControlPointBlock::DoXfer(Xfer *xfer) {
  if(xfer->isSaving()) {
   int count = m_controlPoints.size();
   xfer->xferCount(&count);
