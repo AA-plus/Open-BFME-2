@@ -1,32 +1,147 @@
-// ?GetClosestObject@PartitionManagerImpl@@QAEPAXHHHHH@Z
-// partial score=0.85 date=2026-10-09
-// cl: /O2 /G6 /DNDEBUG /DWIN32 /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// ?GetClosestObject@PartitionManagerImpl@@QAEPAXHMHHH@Z
+// partial score=0.9918032787 date=2026-10-13
+// Native628040..628766 includes RET14:1830B. WB16816C0 names GetClosestObject.
+// Size-exact .9918032787 current-owner bank; all calls resolved through existing providers.
+// Remaining child-cursor reload/schedule gap and E09DBC ownership repair are in re_attempts.log.
+// cl: /O2 /G6 /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /I. /ICode/Libraries/Source/partitionmanager
 // stlport
-
-// Open-BFME: retail 0x009F5C00, 1995 bytes, ret 0x14 at +0x7C8.
-//
-// Identity: the matched wrappers in BfmeConv1050.cpp (0x009F26A0, 0x009F26D0,
-// bfmeGo1050C) call this body as PartitionManagerImpl::GetClosestObject with five stack
-// arguments. Retail loads the chosen pointer into EAX before ret, so the
-// method returns a pointer; no caller reads it.
-//
-// Behaviour the bytes prove: a best-first walk over seventeen quadtrees kept
-// in 8-byte node vectors at +0x18. A filter mask (bit 0 always set) selects
-// the trees. Candidates are ordered by squared cell distance in a 24-byte
-// STL heap. The distance callback comes from the table at retail 0x00EDBD60,
-// which PartitionManager_bfmeDistanceBoundary3D.cpp also indexes. Each
-// accepted candidate lowers the float distance bound and the integer
-// cell-radius bound that prunes the heap. The owner class and every member
-// name stay address-scoped, because nothing proves the BFME class name.
-//
-// Shape notes: one Rva009F56C0Element local serves both as the seed element
-// and as the popped heap entry. The X cell index is an inline copy of the
-// indexer, with count scaling before the cell scale; the Y index calls the
-// out-of-line indexer.
-
-#define _STLP_NO_EXCEPTIONS 1
-#include <algorithm>
+#include <stdlib.h>
+namespace _STL { void __cdecl free(void *); }
+#define free _STL::free
+// The target calls the ordinary STLport copy dispatch rather than force-inlining
+// the BFME allocator shim's by-value copy dispatch into vector assignment.
+#include "reference/open-bfme-1/inputs/vendor/stlport/stl/_algobase.h"
 #include <vector>
+#include <algorithm>
+#undef free
+
+// BFME1 9cbfb551 SetTreeDepth donor (reviewed at575ba2b04) supplies
+// the quadtree-count algorithm and representation-compatible vector transfer.
+// Target WB1681440 independently names SetTreeDepth. Native627E40..627F4A
+// includes its RET4 (Ghidra omits the final3 bytes); native627AA0..627AD9
+// ends in RET4 followed by padding and proves the57B zero-fill constructor.
+// Retail uses the existing8B allocation and pair<int,int> assignment providers
+// (6278F0/627CC0). These two-word views adapt those verified providers; they
+// do not establish original tree-element typedefs or an ObjectID payload.
+enum ObjectID;
+typedef _STL::pair<ObjectID,unsigned int> PartitionRawPair;
+typedef _STL::pair<int,int> PartitionAssignPair;
+
+
+// PartitionManagerImpl::_ClearNumObjBelow and RemoveAllObjects.
+// Target identity: WB167FEC0/WB1680940 name both methods and this source.
+// Native626AA0..626AE8 and 627600..6276A3 prove their complete 72/163-byte
+// boundaries. The count is quartered for each of four child quadrants.
+// Native tree vectors begin at +0x18; there are 21; the master list is +0x114.
+// BFME 1 9cbfb551 Rva009F40E0Recursive.cpp supplies the recovered recursion;
+// its body was already byte-exact here. Target WB and native evidence supply
+// the parent list reset and the 21-tree walk. Preserve existing linker names
+// used by recovered providers and consumers while consolidating these bodies.
+// Retail inlines the first recursion level in RemoveAllObjects; keeping the
+// recursive definition in this TU also preserves its witnessed register use.
+// ?_ClearNumObjBelow@PartitionManagerImpl@@QAEXPAPAXI@Z @0x00626AA0 72B:
+// renamed from placeholder Rva009F40E0Owner::run — the WorldBuilder twin names
+// PartitionManagerImpl::_ClearNumObjBelow at EA's own partitionmanager_impl.cpp
+// line 180; the class and file are corroborated by the landed DoSmallFill
+// (strings evidence, same file).
+struct PartitionTreeCounter {
+    int count;
+    void *head;
+    PartitionTreeCounter() : count(0), head(0) {}
+};
+struct PartitionNode {
+    char pad00[0xc];
+    PartitionNode *next;
+    PartitionNode **prevInLeaf;
+};
+
+// The legacy receiver spelling remains an ABI adapter over the one shared
+// storage view; this inheritance is reconstruction scaffolding, not a retail
+// class-hierarchy assertion. WB names the owner PartitionManagerImpl.
+class PartitionManagerImpl {
+public:
+ void SetTreeDepth(unsigned);
+ void *GetClosestObject(int,float,int,int,int);
+ void _ClearNumObjBelow(void **slot, unsigned count);
+ int prefix[6];
+ _STL::vector<PartitionTreeCounter> trees[21];
+ PartitionNode *head;
+ float scale;
+ int mask;
+};
+void PartitionManagerImpl::_ClearNumObjBelow(void **slot, unsigned count)
+{
+    if (*slot == 0) return;
+    *slot = 0;
+    unsigned childCount = count;
+    slot += 2;
+    childCount >>= 2;
+    unsigned stride = count * 8;
+    unsigned remaining = 4;
+    while (remaining != 0) {
+        _ClearNumObjBelow(slot, childCount);
+        slot = (void **)((char *)slot + stride);
+        --remaining;
+    }
+}
+
+class Gen_dtor_009f2600 : public PartitionManagerImpl {
+public:
+ __declspec(noinline) void cleanup();
+};
+
+void Gen_dtor_009f2600::cleanup()
+{
+    for (PartitionNode *node = head; node; node = node->next) {
+        *node->prevInLeaf = 0;
+        node->prevInLeaf = 0;
+    }
+    if (trees[0].size() != 0) {
+        for (int i = 0; i < 21; ++i)
+            ((PartitionManagerImpl *)this)->_ClearNumObjBelow((void **)trees[i].begin(), trees[0].size() / 4);
+    }
+}
+
+struct Gen009F5040Node;
+class Gen009F5040 {public:void linkNode(Gen009F5040Node*);};
+class Rva00627AA0TreeVector : public _STL::_Vector_base<PartitionRawPair,_STL::allocator<PartitionRawPair> > {
+ typedef _STL::_Vector_base<PartitionRawPair,_STL::allocator<PartitionRawPair> > Base;
+public:
+ Rva00627AA0TreeVector(unsigned n):Base(n,_STL::allocator<PartitionRawPair>()) {
+  _M_finish=reinterpret_cast<PartitionRawPair*>(_STL::uninitialized_fill_n(reinterpret_cast<PartitionTreeCounter*>(_M_start),n,PartitionTreeCounter()));
+ }
+};
+
+void PartitionManagerImpl::SetTreeDepth(unsigned depth)
+{
+    if (depth > 11) return;
+    int value = 1 << depth;
+    if (value == mask) return;
+    mask = value;
+    unsigned count = 1;
+    while (depth != 0) {
+        --depth;
+        count = count * 4 + 1;
+    }
+    ((Gen_dtor_009f2600 *)this)->cleanup();
+    for (int i = 0; i < 21; ++i) {
+        Rva00627AA0TreeVector fresh(count);
+        *reinterpret_cast<_STL::vector<PartitionAssignPair>*>(&trees[i]) = *reinterpret_cast<const _STL::vector<PartitionAssignPair>*>(&fresh);
+    }
+    for (PartitionNode *node = head; node; node = node->next)
+        ((Gen009F5040 *)this)->linkNode((Gen009F5040Node *)node);
+}
+
+// Native helper ignores receiver and allocates/copies8-byte elements. The
+// application record identity and field types remain unknown; words are ABI
+// carriers. STLport vector allocate/copy supplies the reference structure.
+struct Rva00627960Element { unsigned word0,word1; };
+class Rva00627960Vector {public:Rva00627960Element*allocateCopy(unsigned,const Rva00627960Element*,const Rva00627960Element*);};
+Rva00627960Element*Rva00627960Vector::allocateCopy(unsigned n,const Rva00627960Element*first,const Rva00627960Element*last){
+ Rva00627960Element*result=n?(Rva00627960Element*)_STL::allocator<char>::allocate(n*sizeof(Rva00627960Element),0):0;
+ for(const Rva00627960Element*p=first;p!=last;++p){Rva00627960Element*dest=(Rva00627960Element*)((char*)result+((const char*)p-(const char*)first));if(dest)*dest=*p;}
+ return result;
+}
 
 extern "C" __declspec(dllimport) double __cdecl ceil(double value);
 extern "C" __declspec(dllimport) double __cdecl floor(double value);
@@ -147,32 +262,45 @@ __forceinline int bfmeFloatToInt1050(float value)
 	return result;
 }
 
-class PartitionManagerImpl
-{
-public:
-	void *GetClosestObject(int position, int maxDistance, int bounds,
-		int distanceType, int filters);
-
-	float m_originX;
-	float m_originY;
-	unsigned char m_bfmePad08[0x10];
-	BfmeNodeVec1050 m_trees[21];
-	unsigned char m_bfmePadE4[0x4];
-	float m_cellScale;
-	unsigned int m_cellCount;
-};
-
 __forceinline unsigned int bfmeInlineCellX1050(PartitionManagerImpl *manager, float value)
 {
-	float t = (float)floor((double)((value - manager->m_originX) *
-		(float)manager->m_cellCount * manager->m_cellScale));
+	float t = (float)floor((double)((value - *(const float *)&manager->prefix[0]) *
+		(float)(unsigned int)manager->mask * manager->scale));
 	int i = bfmeFloatToInt1050(t);
 	if (i < 0)
 		return 0;
-	return (unsigned int)i >= manager->m_cellCount ? manager->m_cellCount - 1 : i;
+	return (unsigned int)i >= (unsigned int)manager->mask ? (unsigned int)manager->mask - 1 : i;
 }
 
-void *PartitionManagerImpl::GetClosestObject(int position, int maxDistance, int bounds,
+
+// Exact rowed 24-byte copy and vector-growth providers; their historical
+// element names describe provider storage, not this query's element identity.
+struct Rva00626EF0Element { int words[6]; };
+#include "../../Include/Lib/Coord3D.h"
+enum ObjectID;
+class FlightDeckBehavior { public: struct FlightDeckInfo { Coord3D m_prep; float m_orientation; int m_runway; ObjectID m_objectInSpace; }; };
+class ClosestFlightVector : public _STL::vector<FlightDeckBehavior::FlightDeckInfo> {
+public: using _STL::vector<FlightDeckBehavior::FlightDeckInfo>::_M_insert_overflow;
+};
+namespace _STL {
+template<class RandomAccessIterator,class Distance,class Tp,class Compare>
+void __pop_heap(RandomAccessIterator,RandomAccessIterator,RandomAccessIterator,Tp,Compare,Distance *);
+}
+class ClosestWorkView : public _STL::vector<Rva009F56C0Element> {
+public:
+ __forceinline void clearExact() {
+  _M_finish=(Rva009F56C0Element *)_STL::__copy((Rva00626EF0Element *)_M_finish,(Rva00626EF0Element *)_M_finish,(Rva00626EF0Element *)_M_start,_STL::random_access_iterator_tag(),(int*)0);
+ }
+ __forceinline void appendExact(const Rva009F56C0Element &value) {
+  if(_M_finish != _M_end_of_storage._M_data) {
+   _STL::_Construct(_M_finish,value);
+   ++_M_finish;
+  } else {
+   ((ClosestFlightVector *)this)->_M_insert_overflow((FlightDeckBehavior::FlightDeckInfo *)_M_finish,*(const FlightDeckBehavior::FlightDeckInfo *)&value,_STL::__false_type(),1,true);
+  }
+ }
+};
+void *PartitionManagerImpl::GetClosestObject(int position, float maxDistance, int bounds,
 	int distanceType, int filters)
 {
 	unsigned int filterMask;
@@ -188,38 +316,38 @@ void *PartitionManagerImpl::GetClosestObject(int position, int maxDistance, int 
 
 	Rva009F56C0Element current;
 	static _STL::vector<Rva009F56C0Element> work;
-    work.clear();
-	BfmeNodeVec1050 *tree = m_trees;
+    ((ClosestWorkView *)&work)->clearExact();
+	BfmeNodeVec1050 *tree = reinterpret_cast<BfmeNodeVec1050 *>(trees);
 
 	for (int treeCount = 21; treeCount; --treeCount)
 	{
 		if (filterMask & 1)
 		{
-			current.m_key = 0;
-			current.m_node = tree->begin();
-			current.m_stride = m_trees[0].size() / 4;
-			current.m_y = 0;
-			current.m_x = 0;
-			current.m_size = m_cellCount;
-			work.push_back(current);
+            Rva009F56C0Element seed;
+			seed.m_key = 0;
+			seed.m_node = tree->begin();
+			seed.m_stride = ((BfmeNodeVec1050 *)trees)[0].size() / 4;
+			seed.m_y = 0;
+			seed.m_x = 0;
+			seed.m_size = (unsigned int)mask;
+			((ClosestWorkView *)&work)->appendExact(seed);
 		}
 		++tree;
 		filterMask >>= 1;
 	}
 
-	float &maxDistanceReal = *(float *)&maxDistance;
+	float &maxDistanceReal = maxDistance;
 
 	if (maxDistanceReal < 0.00001f)
 		return 0;
 
-	float cellExtent = m_cellCount * m_cellScale;
+	float cellExtent = (unsigned int)mask * scale;
 	if (maxDistanceReal * cellExtent > 32766.0f)
 		maxDistanceReal = 32766.0f / cellExtent;
 
 	float maxDistanceSquared = maxDistanceReal * maxDistanceReal;
 	void *closestObject = 0;
-	cellExtent *= maxDistanceReal;
-	int maxRadius = bfmeFloatToInt1050((float)ceil(cellExtent));
+	int maxRadius = bfmeFloatToInt1050((float)ceil(cellExtent * maxDistanceReal));
 	int maxRadiusSquared = (maxRadius + 1) * (maxRadius + 1);
 
 	BfmeCoord3D1050 *source = (BfmeCoord3D1050 *)position;
@@ -244,7 +372,7 @@ void *PartitionManagerImpl::GetClosestObject(int position, int maxDistance, int 
 		if (work.front().m_key > maxRadiusSquared)
 			break;
 
-		_STL::pop_heap((S4SortElem24 *)work.begin(), (S4SortElem24 *)work.end(), S4Cmp009F4BF0());
+		_STL::__pop_heap<S4SortElem24 *, int, S4SortElem24, S4Cmp009F4BF0>((S4SortElem24 *)work.begin(), (S4SortElem24 *)work.end()-1, (S4SortElem24 *)work.end()-1, *((S4SortElem24 *)work.end()-1), S4Cmp009F4BF0(), (int *)0);
 		current = work.back();
 		work.pop_back();
 
@@ -342,7 +470,7 @@ void *PartitionManagerImpl::GetClosestObject(int position, int maxDistance, int 
 						child.m_node = group;
 						child.m_size = half;
 						child.m_stride = current.m_stride / 4;
-						work.push_back(child);
+						((ClosestWorkView *)&work)->appendExact(child);
 						_STL::push_heap((S4SortElem24 *)work.begin(), (S4SortElem24 *)work.end(), S4Cmp009F4BF0());
 					}
 				}
