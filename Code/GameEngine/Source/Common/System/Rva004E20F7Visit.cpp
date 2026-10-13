@@ -8,32 +8,9 @@
 // Original class, container type, and member names remain unknown.
 #include "ascii_string.h"
 
-class CreateAHeroData;
-class Rva002B7250 {
-public:
-    void rva002B7250(CreateAHeroData *);
-};
-// g_registryAtE02E88: matched references place it at VA 0xe02e88 (zero-filled; a plain-data view).
-Rva002B7250 g_registryAtE02E88;
-extern const void *const g_vtableAtBFDF68[];
-const void *const g_vtableAtBFDF68[1] = { 0 };
 
-class Rva003EF14ABase {
-public:
-    virtual void slot0();
-    // ?Rva003EF14ABase::~Rva003EF14ABase present-unmatched
-    ~Rva003EF14ABase() { *(const void **)this = g_vtableAtBFDF68; }
-};
 
 class Rva004E2E58Value;
-struct Rva004E2E58Node {
-    unsigned unknown00;
-    Rva004E2E58Node *parent04;
-    Rva004E2E58Node *left08;
-    Rva004E2E58Node *right0C;
-    void *unknown10;
-    Rva004E2E58Value *value14;
-};
 namespace _STL {
     struct _Rb_tree_node_base;
     template <class T> class _Rb_global {
@@ -43,47 +20,9 @@ namespace _STL {
 }
 
 namespace _STL { void __cdecl free(void *); }
-struct Rva004E21FE {
-    void rva004E21FE();
-};
-// Local ownership view, not a recovered donor type. Retail frees the
-// header after clearing its nodes; the intermediate EH state proves
-// that ownership must remain live while the clear call can unwind.
-struct Rva004E2990HeaderOwner {
-    Rva004E2E58Node *header00;
-    // ?Rva004E2990HeaderOwner::~Rva004E2990HeaderOwner present-unmatched
-    ~Rva004E2990HeaderOwner() {
-        if (header00)
-            _STL::free(header00);
-    }
-};
-class Rva004E2990 {
-protected:
-    Rva004E2990HeaderOwner owner;
-    unsigned count04;
-public:
-    ~Rva004E2990();
-};
 
-class Rva004E2E58 : public Rva004E2990 {
-public:
-    // Opaque span between the independently observed member at +8 and
-    // string at +18. Its exact container extent is not yet established.
-    // Second word is cleared by 0x003EF1B8 (and [esi+0x14],0 under /O1).
-    unsigned unknown08[2];
-    ~Rva004E2E58();
-    void rva004E21D5();
-};
 
-class Rva003EF14ASecondary {
-public:
-    virtual void slot0();
-    // ?Rva003EF14ASecondary::~Rva003EF14ASecondary present-unmatched
-    ~Rva003EF14ASecondary() {}
-};
 
-// ?slot0@Rva003EF14ASecondary@@UAEXXZ present-unmatched
-void Rva003EF14ASecondary::slot0() { }
 
 // Only the two called vslots and reference word are recovered. The names
 // and signatures of unused slots remain opaque in this local call view.
@@ -192,11 +131,6 @@ public:
     virtual void slot190() = 0;
     virtual void slot194(int value) = 0;
     unsigned references;
-    // ?Rva003EE9F1Ref::dropReference present-unmatched
-    void dropReference() {
-        if (--references == 0)
-            slot00();
-    }
 };
 
 struct Rva00072F7CNode {
@@ -234,23 +168,7 @@ private:
     bool flag21;
 };
 
-class Rva003EF14A : public Rva003EF14ABase {
-    Rva003EE9F1Ref *ref04;
-    Rva004E2E58 container08;
-    AsciiString string18;
-    AsciiString string1C;
-    char unknown20[0x28];
-    Rva003EF14ASecondary *link48;
-    Rva003EF14ASecondary secondary4C;
-public:
-    virtual void slot0();
-    ~Rva003EF14A();
-    void rva003EE9F1();
-    void rva003EF1B8();
-};
 
-// ?slot0@Rva003EF14A@@UAEXXZ present-unmatched
-void Rva003EF14A::slot0() { }
 // Native4E20F7..4E2199, 162-byte complete method. The +14/+18 range
 // and 32-byte records are independently shared with rowed cleanup4E2199.
 // Word payload+10 is passed into record ref's virtual slot78; returned
@@ -270,7 +188,8 @@ void Rva004E2E58Value::rva004E20F7(bool force)
                 Rva003EE9F1Ref *value=begin14[i].ref04->slot78(node->value10);
                 if(value) {
                     value->slot194(1);
-                    value->dropReference();
+                    if (--value->references == 0)
+                        value->slot00();
                 }
                 node=(Rva00072F7CNode*)::_STL::_Rb_global<bool>::_M_increment((::_STL::_Rb_tree_node_base*)node);
             }
