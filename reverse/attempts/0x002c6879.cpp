@@ -1,10 +1,12 @@
 // ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
+// partial score=0.995 date=2026-10-13
+// ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
 // partial score=0.988 date=2026-10-13
 // ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
 // partial score=0.988 date=2026-10-12
 // ?doSpecialSlaveAIUpdate@SkirmishAI@@QAEXXZ
 // partial score=0.988 date=2026-10-09
-// cl: /O1 /EHsc /MD /arch:SSE /Ireference/shims/bfme2_ascii /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /I. /O1 /EHsc /MD /arch:SSE /Ireference/shims/bfme2_ascii /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // SkirmishAI.cpp -- SkirmishAI members recovered from WorldBuilder leads
 // (reverse/wb_name_leads.csv): WB's debug build names the function and its
@@ -17,7 +19,7 @@
 #include <map>
 #include <new>
 #include "ascii_string.h"
-#include "../../Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 
 typedef int Int;

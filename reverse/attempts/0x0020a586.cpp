@@ -1,6 +1,8 @@
 // ?rva0020A586@ScriptEngine@@QAEXPAX0@Z
+// partial score=0.9 date=2026-10-13
+// ?rva0020A586@ScriptEngine@@QAEXPAX0@Z
 // partial score=0.9 date=2026-10-10
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
 // ?rva0020A586@ScriptEngine@@QAEXPAX0@Z at 0x0020A586 121 bytes RET 8.
 // Called by the rowed walkNamed (0x0020A775) with a script record and its
@@ -25,7 +27,7 @@
 // without the game argument); __forceinline GameLogic member view; operand
 // orders; /G5 /G6 /G7 /arch:SSE /EHs /Os. class_gate silent.
 
-#include "../../Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
 class Script;
 class AsciiString;
