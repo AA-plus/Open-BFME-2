@@ -23,3 +23,37 @@ void Rva004D64F5::rva004D65F9(AsciiString s)
 	AsciiString &slot = m_str1c;
 	slot = s;
 }
+
+class Rva004D62A9
+{
+public:
+	void rva00590F13(AsciiString s);
+private:
+	char m_pad00[0x1c];
+	AsciiString m_str1c;
+};
+
+// ICF-folded twin of rva004D65F9 above (same 52 bytes at 0x00590F13): the
+// NetCommandMsg message keeps its string at the same +0x1c member, so the
+// copy-in plus parameter-destroy sequence matches exactly.
+void Rva004D62A9::rva00590F13(AsciiString s)
+{
+	AsciiString &slot = m_str1c;
+	slot = s;
+}
+
+class Rva004D6208
+{
+public:
+	void rva00590F13(AsciiString s);
+private:
+	char m_pad00[0x1c];
+	AsciiString m_str1c;
+};
+
+// Same twin for the NetFileCommandMsg message spelling at 0x00590F13.
+void Rva004D6208::rva00590F13(AsciiString s)
+{
+	AsciiString &slot = m_str1c;
+	slot = s;
+}
