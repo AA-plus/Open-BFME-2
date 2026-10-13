@@ -1,5 +1,3 @@
-// ?rva0004353C@Rva00043511@@QAEXXZ
-// partial score=0.99 date=2026-10-13
 // cl: /O1 /arch:SSE /G7 /MD /DNDEBUG /EHsc
 // ?rva0004353C@Rva00043511@@QAEXXZ, retail 0x0004353C, 593 bytes.
 // Time-of-day lighting fade step on the Rva00043511 record (mode, start frame,
@@ -11,9 +9,14 @@
 // through vtable slots 0xC4 / 0xC8 and the 0x140 blend stored at +0x8FC.
 // Mode 1 swaps the two weights. The terrain render object is told afterwards.
 // Evidence (target): Display slots 0xC4/0xC8 are the rowed Rva0004443E
-// 4450E/44545 setDiffuse-by-value pair (W3DDisplayLightingScale.cpp); the
-// game-client slot 0x7C is getFrame (Win32Mouse.cpp); 0x009BA508 is the rowed
-// logic step float. Donor (structure only): WorldBuilder 0x00966810 debug twin.
+// 4450E/44545 setDiffuse pair (W3DDisplayLightingScale.cpp, RET 0x10 = index
+// plus three floats, so they are declared with float arguments: the call site
+// pushes them through fld/fstp like retail); the game-client slot 0x7C is
+// getFrame (Win32Mouse.cpp); 0x009BA508 is the rowed logic step float. Donor
+// (structure only): WorldBuilder 0x00966810 debug twin (names unavailable).
+// Codegen: the three blends are computed in z, x, y order into struct locals
+// before the calls; the loop condition is spelled 3 > i (found by mutation
+// walk; it moves the object z load past the argument store).
 struct Rva0004353CRow
 {
 	float ambient[3];
@@ -178,7 +181,7 @@ void Rva00043511::rva0004353C()
 	const Rva0004353CRow *fade = TheWritableGlobalData->m_fadeRows[tod];
 	const Rva0004353CRow *terrain = TheWritableGlobalData->m_terrainRows[tod];
 	const Rva0004353CRow *object = TheWritableGlobalData->m_objectRows[tod];
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; 3 > i; ++i)
 	{
 		Rva0004353CColor blended;
 		blended.z = toWeight * fade[i].diffuse[2] + fromWeight * m_color[2];
