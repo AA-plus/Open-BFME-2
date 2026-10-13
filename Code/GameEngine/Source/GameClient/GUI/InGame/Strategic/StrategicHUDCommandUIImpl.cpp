@@ -14,6 +14,34 @@
 // and hand it to the slot's owning holder, whose reset is the folded
 // 0x00575674 / 0x00528FE6 (address-named views here).
 #include "ascii_string.h"
+extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime();
+struct TargetRef00217D4C {virtual void*destroy(unsigned);virtual void slot1();int references;};
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C*);
+struct TreeHintRef00217D4C {TargetRef00217D4C*m_ptr;TreeHintRef00217D4C(const TreeHintRef00217D4C&);TreeHintRef00217D4C&operator=(const TreeHintRef00217D4C&);~TreeHintRef00217D4C(){if(m_ptr)ReleaseTreeHintRef00217D4C(m_ptr);}};
+class Rva005C39C4 {public:TreeHintRef00217D4C rva005C39C4(int);};
+class Rva002BED91 {public:void clear();TargetRef00217D4C*ptr;};
+
+class BfmeAptWindowManager;extern BfmeAptWindowManager*g_bfmeAptWindowManager;
+AsciiString __cdecl Rva00222834Get(int val);
+
+class Rva00222A8BTarget
+{
+public:
+	int rva00222B19(void *level, const char *prefix, const char *function, int argc, const char *a0, void *a1, void *a2, void *a3, void *a4);
+};
+
+static __forceinline const char *GetStr(const AsciiString &s)
+{
+	char *t = *(char **)(void *)&s;
+	return t ? t + 8 : "";
+}
+
+inline __declspec(noinline) int __cdecl Rva00525338Fire(void *a1, void *a2, const char *a3, const char *a4, int *a5, void *a6)
+{
+	return ((Rva00222A8BTarget *)a1)->rva00222B19(a2, a3, a4, 2, GetStr(Rva00222834Get(*a5)), a6, 0, 0, 0);
+}
+
+
 
 namespace StrategicHUD { bool __cdecl ParseButtonSlotIndex(const char *params, int *out); }
 bool __cdecl Rva004128F0GetParam(const char *params, const char *key, AsciiString &value);
@@ -53,6 +81,7 @@ class Rva005C3F02
 public:
 	Rva005C3F02(void *level, void *name);
 	virtual ~Rva005C3F02();
+	void rva005C3E81();
 
 private:
 	void *m_impl; // +0x04
@@ -93,6 +122,7 @@ public:
 		int m_slot; // +0x0C
 	};
 
+	void Update();
 	void OnSubMenuLoaded(const char *path);
 	void OnToggleFlashLoaded(const char *path);
 
@@ -102,10 +132,15 @@ private:
 		int m_00;
 		Rva00575674 m_subMenu; // +0x04
 		Rva00528FE6 m_toggleFlash; // +0x08
-		char m_pad0C[0x1C - 0x0C];
+		Rva002BED91 queued;
+		TreeHintRef00217D4C active;
+		unsigned startTime,timeout;
 	};
 
-	char m_pad00[0x18];
+	char m_pad00[4];
+	void *level;
+	AsciiString name;
+	char m_pad0C[0x18 - 0x0C];
 	int m_currentSubMenu; // +0x18: slot whose sub-menu is shown, or -1
 	ButtonSlot m_slots[6]; // +0x1C
 };
@@ -184,4 +219,34 @@ void StrategicHUD::CommandUIImpl::OnToggleFlashLoaded(const char *path)
 	if (*(void **)&button->m_toggleFlash)
 		return;
 	button->m_toggleFlash.rva00528FE6((CameraMarker *)new Rva005C3932(AptUtils::LevelIndexFromTarget(name.str()), AsciiString(AptUtils::SkipLevelN(name.str()))));
+}
+
+// WB15AD7B0: per-slot help/submenu updates and flash expiry. The visible
+// Apt forwarder above restores retail's owner stack home without volatile.
+void StrategicHUD::CommandUIImpl::Update()
+{
+    CommandUIImpl *self = this;
+    for (int i = 0; i < 6; ++i)
+    {
+        ButtonSlot *slot = &self->m_slots[i];
+        if (slot->m_00)
+        {
+            if (slot->queued.ptr)
+            {
+                slot->active = ((Rva005C39C4 *)slot->queued.ptr)->rva005C39C4(slot->m_00);
+                slot->queued.clear();
+            }
+            if (slot->active.m_ptr)
+                slot->active.m_ptr->slot1();
+        }
+        if (slot->m_subMenu.get())
+            ((Rva005C3F02 *)slot->m_subMenu.get())->rva005C3E81();
+        if (slot->timeout && timeGetTime() - slot->startTime >= slot->timeout)
+        {
+            CommandUIImpl *owner = self;
+            Rva00525338Fire(g_bfmeAptWindowManager, owner->level,
+                owner->name.str(), "SetFlashEffectState", &i, (void *)"_hide");
+            slot->timeout = 0;
+        }
+    }
 }
