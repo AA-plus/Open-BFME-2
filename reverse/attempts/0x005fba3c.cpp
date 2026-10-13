@@ -1,5 +1,7 @@
 // ?ShowBanner@Impl@DynamicAutoResolvePlayerPanelMovieClip@StrategicHUD@@QAEXHPBVImage@@@Z
-// partial score=0.995 date=2026-10-09
+// partial score=0.995 date=2026-10-13
+// ?ShowBanner@Impl@DynamicAutoResolvePlayerPanelMovieClip@StrategicHUD@@QAEXHPBVImage@@@Z
+// partial score=0.995 date=2026-10-13
 // cl: /O1 /arch:SSE /G7 /MD /EHsc /Ireference/shims/bfme2_ascii
 #include "ascii_string.h"
 
