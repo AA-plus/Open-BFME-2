@@ -21,7 +21,9 @@ public:
 	float X, Y, Z, W;
 };
 
-Vector3 Quaternion::Rotate_Vector(const Vector3 &v) const
+// Select-any like the header copies other TUs emit (a strong definition would
+// duplicate theirs at link time); the anchor keeps the noinline body emitted.
+inline __declspec(noinline) Vector3 Quaternion::Rotate_Vector(const Vector3 &v) const
 {
 	float x = W*v.X + (Y*v.Z - v.Y*Z);
 	float y = W*v.Y - (X*v.Z - v.X*Z);
@@ -46,4 +48,11 @@ void Quaternion::Rotate_Vector(const Vector3 &v, Vector3 *result) const
 	result->X = W*x - w*X + (Y*z - y*Z);
 	result->Y = W*y - w*Y - (X*z - x*Z);
 	result->Z = W*z - w*Z + (X*y - Y*x);
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitQuaternionRotateVector@@YAXPBVQuaternion@@ABVVector3@@@Z absent-from-retail
+void bfmeEmitQuaternionRotateVector(const Quaternion *q, const Vector3 &v)
+{
+	q->Quaternion::Rotate_Vector(v);
 }
