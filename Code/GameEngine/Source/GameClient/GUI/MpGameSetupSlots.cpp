@@ -698,6 +698,10 @@ int Rva00322E19Add(GameWindow *comboBox, UnicodeString text, int color);
 void GadgetComboBoxSetText(GameWindow *comboBox, UnicodeString text);
 void GadgetComboBoxHideList(GameWindow *comboBox);
 
+// Rowed 0x003F1E2E (BigObfHookWrappers.cpp): the two-int hook the slot
+// loop decodes the encoded index with.
+int __cdecl Rva003F1E2EHook(int a, int b);
+
 // The S5 encoded small integer of S5HandleHashCompares.cpp: a four-byte
 // head and the encoded value at +0x04 (0x003F2330 compares two). The
 // unrowed 0x00442BCC walks the slots with one.
@@ -706,6 +710,13 @@ class Gen_00528EC0
 public:
 	Gen_00528EC0() {}
 	Gen_00528EC0(const Gen_00528EC0 &other) { m_value = other.m_value; }
+	// 0x003F2968 (rowed; encodes the short at +0x04) through the short
+	// constructor, the LivingWorldRegion idiom.
+	void rva003F2968(short value);
+	Gen_00528EC0(short value) { rva003F2968(value); }
+	Gen_00528EC0(unsigned int encoded, int) { m_value = encoded; }
+	// 0x003F2330 (rowed, S5HandleHashCompares.cpp).
+	bool bfmeDiffers(const Gen_00528EC0 &other) const;
 	// Unrowed 0x003F3133 (36 bytes; adds the encoded 1 and returns the new
 	// value by hidden pointer), pinned.
 	Gen_00528EC0 rva003F3133();
@@ -1574,6 +1585,43 @@ Gen_00528EC0 Gen_00528EC0::operator++(int)
 	Gen_00528EC0 old(*this);
 	rva003F3133();
 	return old;
+}
+
+// Retail 0x00442BCC, 208 bytes. Name unknown. True when every slot has all
+// six of its widgets (+0x2D4, +0x2F4, +0x314, +0x334, +0x354, +0x374),
+// walking the slots with the S5 encoded index (end 0xB9DC8031). BFME1's
+// SkirmishScreenState::shouldRefresh (0x00529BE0) runs the same loop over
+// four arrays with the encoding inlined. Tail-jumped from 0x00442C9C.
+// The loop condition carries two redundant self-compares of the end handle:
+// they fold away (no bytes) but make cl test the loop at the top and jump
+// back, as retail does, instead of rotating the test to the bottom (212 vs
+// 208 bytes).
+bool AptMpGameSetup::rva00442BCC()
+{
+	Gen_00528EC0 slot(0);
+	Gen_00528EC0 end;
+	end.m_value = 0xB9DC8031;
+	while ((true) && end.m_value == end.m_value && end.m_value == end.m_value)
+	{
+		if (!slot.bfmeDiffers(end))
+			break;
+		unsigned int key = slot.m_value;
+		if (!m_player[(short)Rva003F1E2EHook((int)key, (int)key)])
+			return false;
+		MpGameSetupComboRef *color = &m_colorCombo[(short)Rva003F1E2EHook((int)key, (int)key)];
+		if (!color->m_window)
+			return false;
+		if (!m_team[(short)Rva003F1E2EHook((int)key, (int)key)])
+			return false;
+		if (!m_playerTemplate[(short)Rva003F1E2EHook((int)key, (int)key)])
+			return false;
+		if (!m_handicap[(short)Rva003F1E2EHook((int)key, (int)key)])
+			return false;
+		if (!m_hero[(short)Rva003F1E2EHook((int)key, (int)key)])
+			return false;
+		slot.rva003F3133();
+	}
+	return true;
 }
 
 // Retail 0x0043FC1F, 482 bytes. Name unknown. A rule changed: marks the

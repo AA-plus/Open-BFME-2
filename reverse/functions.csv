@@ -87725,3 +87725,4 @@ $L3650,,0x00762A20,11,Code/GameEngine/Source/GameClient/Drawable/Update/W3DTorna
 ?hasName@Rva006FBE10Scope@@QAE_NPBVEAStringC@@@Z,,0x006FBE10,65,Code/Libraries/Source/Apt/Rva006FBE10HasName.cpp,matched,name-in-scope test: no active spFrameStack then AptNativeHash::Lookup on the +0x28 object's +8 hash (false without one) else Lookup on the frame's +8 hash; returns found as bool; names address-derived
 ?rva006E2640@Rva006F7C10@@QAEXXZ,,0x006E2640,74,Code/Libraries/Source/Apt/Rva006F7C10Clear.cpp,matched,clear the pooled list via 0x006F7C10 then release the head record like each node: zero fields and free its 0x1C data and the 0x14 record to g_pChainBlockAllocator
 ?rva006FA420@Rva006FB860@@QAEPAVAptCIH@@HH@Z,,0x006FA420,957,Code/Libraries/Source/Apt/AptInputSuffixAdvance.cpp,matched,
+?rva00442BCC@AptMpGameSetup@@QAE_NXZ,,0x00442BCC,208,Code/GameEngine/Source/GameClient/GUI/MpGameSetupSlots.cpp,matched,
