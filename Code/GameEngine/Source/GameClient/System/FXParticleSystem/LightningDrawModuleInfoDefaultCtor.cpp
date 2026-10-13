@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /EHsc /Ob2
+// cl: /DNDEBUG /MD /EHsc /Ob2 /Ireference/shims/moduledata
 
 // LightningDrawModuleInfo default constructor.
 //
@@ -26,20 +26,22 @@ private:
 	float m_high;
 };
 
+// Use the existing BFME2 Snapshot ABI and destructor provider.
+#define BFME_SNAPSHOT_NAME_SLOT
+#define BFME_SNAPSHOT_NONCONST_NAME_SLOT
+#include "Common/Snapshot.h"
+
 namespace FXParticleSystem
 {
 
-class LightningDrawModuleInfoBase
-{
-public:
-	virtual ~LightningDrawModuleInfoBase();
-};
-
-class LightningDrawModuleInfo : public LightningDrawModuleInfoBase
+class LightningDrawModuleInfo : public Snapshot
 {
 public:
 	LightningDrawModuleInfo();
 	virtual ~LightningDrawModuleInfo();
+	virtual const char *GetSnapshotName();
+protected:
+	virtual void xfer(Xfer *xfer);
 
 private:
 	GameClientRandomVariable m_var0;

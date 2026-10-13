@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /EHsc /Ob2
+// cl: /DNDEBUG /MD /EHsc /Ob2 /Ireference/shims/moduledata
 // ?xfer@LightningDrawModuleInfo@FXParticleSystem@@MAEXPAVXfer@@@Z @0x005614D9 78B evidence: slot 3 per vtable 0x0081BE80 slot7 and 0x0081BD80 slot3; Version1 then 3x xferRandomVariable 0x00306183 at +4/+0x10/+0x1c then float +0x28 via Xfer slot 0x70 then flag +0x2c via slot 0x90; Ghidra DoXfer.
 // Snapshot slot-3 xfer via 4.7 recipe.
 class AsciiString;
@@ -93,20 +93,20 @@ private:
 
 Xfer &xferRandomVariable(Xfer &xfer, GameClientRandomVariable &var);
 
+// Use the existing BFME2 Snapshot ABI and destructor provider.
+#define BFME_SNAPSHOT_NAME_SLOT
+#define BFME_SNAPSHOT_NONCONST_NAME_SLOT
+#include "Common/Snapshot.h"
+
 namespace FXParticleSystem
 {
 
-class LightningDrawModuleInfoBase
-{
-public:
-	virtual ~LightningDrawModuleInfoBase();
-};
-
-class LightningDrawModuleInfo : public LightningDrawModuleInfoBase
+class LightningDrawModuleInfo : public Snapshot
 {
 public:
 	LightningDrawModuleInfo();
 	virtual ~LightningDrawModuleInfo();
+	virtual const char *GetSnapshotName();
 protected:
 	virtual void xfer(Xfer *xfer);
 
