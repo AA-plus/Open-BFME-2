@@ -1,4 +1,6 @@
 // ?rva003B7C47@Rva003B573E@@QAEHABV?$StringBase@D@@@Z
+// partial score=0.87 date=2026-10-13
+// ?rva003B7C47@Rva003B573E@@QAEHABV?$StringBase@D@@@Z
 // partial score=0.85 date=2026-10-13
 // ?rva003B7C47@Rva003B573E@@QAEHABV?$StringBase@D@@@Z
 // partial score=0.85 date=2026-10-08
@@ -44,7 +46,8 @@ int Rva003B573E::rva003B7C47(const StringBase<char>&key)
  if(position < m_sorted.size() && ((const StringBase<char>&)m_records[(int)m_sorted[position]].text).compare(key)==0) {
   index=(int)m_sorted[position];
   offset=index*20;
-  if(!m_records[index].flag) return -1;
+  BfmeStringRecord003B3F78 *rec=(BfmeStringRecord003B3F78*)((char*)&m_records[0]+offset);
+  if(!rec->flag) return -1;
  } else {
   unsigned int wanted=m_sorted.size()+1;
   if(wanted>m_sorted.capacity()) m_sorted.reserve(wanted+(wanted>>1)+8);

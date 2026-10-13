@@ -1,10 +1,12 @@
 // ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
+// partial score=0.997 date=2026-10-13
+// ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
 // partial score=0.98 date=2026-10-13
 // ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
 // partial score=0.98 date=2026-10-13
 // ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
 // partial score=0.95 date=2026-10-02
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT /Oy-
+// cl: /G7 /O1 /arch:SSE /Ireference/shims/bfme2_ascii /EHsc /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT /Oy-
 // stlport
 //
 // ?rva002186A6@FontLibrary@@QAEPAXPBVAsciiString@@M@Z, retail 0x002186A6, 69 bytes.
@@ -96,7 +98,7 @@ public:
 	void *rva002186A6(const AsciiString *name, float size);
 	GameFont *getFont(const AsciiString *name, float size, bool bold);
 	GameFont *rva0021857E(const AsciiString *name, float size, bool bold, int style);
-	void rva00218468(AsciiString *name, float *size, bool *bold);
+	void rva00218468(const AsciiString *name, float *size, bool *bold);
 
 	virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
 	virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
