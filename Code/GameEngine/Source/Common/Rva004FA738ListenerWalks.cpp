@@ -343,15 +343,34 @@ private:
 
 typedef void (Rva004FA953Listener::*Rva004FA953Notify)(void *, int);
 
+// Existing whole-body owners of the slot-1 and slot-2 forwarding thunks.
+// Only their addresses enter the call record; the listener supplies the
+// receiver and the two arguments when the record is invoked. These casts
+// preserve that call-record ABI without assigning the owners' semantics
+// to this unrelated listener interface.
+class Rva005CB260
+{
+public:
+	virtual void rva005CB260_slot0();
+	virtual void rva005CB260_slot1();
+	void rva005CB260();
+};
+class GameMessage;
+struct Rva0042C083Param;
+class Rva0042C0DBDelegate
+{
+public:
+	virtual void slot0();
+	virtual void slot1();
+	virtual int slot2(GameMessage *);
+	virtual int slot3(const Rva0042C083Param *, int);
+	__declspec(noinline) int invokeMessage(GameMessage *);
+	__declspec(noinline) int invokePoint(const Rva0042C083Param *, int);
+};
+
 void Rva004FA992Owner::rva004FA9B1(int index)
 {
-	// Hardcoded dispatch-table channel: the value 0x009CB260 (a runtime-filled
-	// .data table of code addresses, called through by the 0x004FA7A5 walk)
-	// flows into the member-pointer slot. MSVC has no int-to-member-pointer
-	// conversion, so the constant is punned through the local and propagated
-	// into the push.
-	Rva004FA953Notify notify;
-	*(int *)&notify = 0x009CB260;
+	Rva004FA953Notify notify = reinterpret_cast<Rva004FA953Notify>(&Rva005CB260::rva005CB260);
 	if (index < 0)
 		return;
 	if ((unsigned int)index >= m_ids.size())
@@ -395,8 +414,7 @@ struct Rva004FAEAASeen
 
 bool Rva004FA992Owner::rva004FAEAA(ScienceType p)
 {
-	Rva004FA953Notify notify;
-	*(int *)&notify = 0x009CC208;
+	Rva004FA953Notify notify = reinterpret_cast<Rva004FA953Notify>(&Rva0042C0DBDelegate::invokeMessage);
 	if (!v07(p))
 		return false;
 	_STL::vector<ObjectID> *ids = &m_ids;
