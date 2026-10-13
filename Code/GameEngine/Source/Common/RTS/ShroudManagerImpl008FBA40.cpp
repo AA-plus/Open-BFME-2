@@ -1,6 +1,9 @@
 // cl: /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /DBFME_STLP_NODE_ALLOC /D_STLP_NO_EXCEPTIONS /Ireference/shims/stlp_nodealloc
 // stlport
+// Keep MSVC's float math overloads local; the matched operations inline.
+#define inline static inline
 #include <math.h>
+#undef inline
 #pragma intrinsic(sin,cos)
 
 #include <deque>
