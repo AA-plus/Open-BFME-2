@@ -1,19 +1,14 @@
 // ?doDrawModule@W3DModelDraw@@UAEXPBVMatrix3D@@@Z
-// partial score=0.99 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /DWIN32 /D_WINDOWS /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/game/Libraries/Source/WWVegas
-// W3DModelDraw::doDrawModule @0x000C7BC4 1563B (vtable slot of W3DModelDraw).
-// Banked near miss: compiles to 1563 B, 4 of 438 instructions differ, all in
-// the +0x6A branch's inlined Matrix3D::Rotate_Z right after the sinf call
-// (0xC7F45..0xC7F4E). Retail evaluates c*Row[0][0] first
-// (fld [ebp+8]; fmul [ebp-0x50]; fld [ebp-0x4c]; fmul st(2)); this compile
-// evaluates Row[0][1]*s first like the KINDOF (template dword +0x120 bit 16)
-// branch does. The tail from 0xC7F50 is cross-jumped with that branch.
-// Not fixing it: ternary angle, Rotate_Z(s,c) with locals, a helper inline,
-// swapping the branch order, moving angle's scope, Make_Identity (several
-// switch both sites to the SSE-first schedule seen in reactToTransformChange).
-// Unresolved callees to pin when landing: rva000C6E1A (0xC6E1A) and
-// rva000BD6C2 (0xBD6C2). Landing also removes the ZH definition and its
-// present-unmatched marker in W3DModelDraw.cpp.
+// W3DModelDraw::doDrawModule, retail 0x000C7BC4 (1563 B, vtable slot of W3DModelDraw).
+// Zero Hour W3DModelDraw::doDrawModule reshaped onto the BFME 2 layout (class views
+// below); the Zero Hour definition in W3DModelDraw.cpp is removed with this row.
+// The two unrowed per-frame helpers are pinned: rva000C6E1A (0xC6E1A) and
+// rva000BD6C2 (0xBD6C2).
+// The dead BfmeParticleSystemHandle block before the closing calls stands for
+// retail's compiled-out debug code: it carries the hidden temp numbering that
+// makes the +0x6A branch's inlined Rotate_Z evaluate c*Row00 first (wave7 T1
+// gen_eh_if0; its content is unrecovered).
 #include <math.h>
 #include "ascii_string.h"
 #include "Coord3D.h"
@@ -508,6 +503,10 @@ void W3DModelDraw::doDrawModule(const Matrix3D *transformMtx)
 	if ((!m_vec74.empty() && m_b1C9) || (!m_vec68.empty() && m_b1C8))
 		ifaceSlot29();
 
+	if (0)
+	{
+		BfmeParticleSystemHandle debugHandle;
+	}
 	((Rva000B3B2B *)this)->rva000B3B2B((Rva000B3B2BArg *)m_renderObject);
 	m_radiusDecal.update();
 	handleClientRecoil();
