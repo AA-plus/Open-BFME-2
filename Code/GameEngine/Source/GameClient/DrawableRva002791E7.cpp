@@ -46,13 +46,17 @@ public:
 		bool immediate, unsigned int effect) = 0;
 };
 
+class Rva002784AFHost
+{
+public:
+	void rva002784AF();
+};
 class Drawable
 {
 public:
 	void rva002791E7(const ModelConditionFlags &flags, unsigned int forceReplace,
 		unsigned int effect);
 	void rva002784EB();
-	void rva002784AF();
 
 private:
 	char m_pad000[0x158];
@@ -107,5 +111,5 @@ void Drawable::rva002791E7(const ModelConditionFlags &flags,
 	}
 
 	if (changed)
-		rva002784AF();
+		((Rva002784AFHost *)this)->rva002784AF();
 }

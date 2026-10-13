@@ -257,8 +257,7 @@ class LODPostSlots {public:
  virtual void slot8();
  virtual void slot9();
 };
-class Shell;extern Shell *TheShell;
-class Rva0035C194 {public: bool rva0035C194(bool,bool);};
+class Shell {public: bool showShellMap(bool,bool);};extern Shell *TheShell;
 extern int LODTextureReduction;
 extern unsigned char LODMeshCacheSetting;
 void Rva00117BB0SetOption(int);void rva00117120();
@@ -297,5 +296,5 @@ void Rva00DFE144Globals::rva002022E9(int level)
  if(TheTerrainRenderObject){LODRenderLock lock;((LODTerrainSlots*)TheTerrainRenderObject)->slot129();((LODTerrainSlots*)TheTerrainRenderObject)->slot130();}
  if(g_00DFF080)((LODPostSlots*)g_00DFF080)->slot9();
  GD->fieldAF0=controlProcessor>1&&!GD->fieldAF1;
- if(TheShell)((Rva0035C194*)TheShell)->rva0035C194(true,true);
+ if(TheShell)TheShell->showShellMap(true,true);
 }

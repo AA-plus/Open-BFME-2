@@ -65,11 +65,15 @@ struct Rva000E89BDTree
 	int shroudState;
 };
 
+class Rva000E6406SwayView
+{
+public:
+	void rva000E6406(const BreezeInfo &info);
+};
 class W3DShrubBuffer
 {
 public:
 	void rva000E89BD(int arg);
-	void rva000E6406(const BreezeInfo &info);
 	void rva000E7DF3(void);
 	void rva000E8365(void);
 
@@ -121,7 +125,7 @@ void W3DShrubBuffer::rva000E89BD(int arg)
 	if (TheGameLogic && TheGameLogic->isGamePaused())
 		pause = true;
 	if (!pause)
-		rva000E6406(*info);
+		((Rva000E6406SwayView *)this)->rva000E6406(*info);
 
 	m_updateAllKeys = false;
 	if (m_needToUpdateTexture) {

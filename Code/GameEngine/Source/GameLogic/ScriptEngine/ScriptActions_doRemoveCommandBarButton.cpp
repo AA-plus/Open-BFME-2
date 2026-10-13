@@ -91,6 +91,11 @@ public:
 };
 extern ThingFactory *TheThingFactory;
 
+class Rva0031D5F8
+{
+public:
+	void *rva0031D5F8(const AsciiString *name);
+};
 class ControlBar
 {
 public:
@@ -108,7 +113,7 @@ protected:
 
 static __forceinline void removeCommandSetButton(const AsciiString &commandSetName, const AsciiString &buttonName)
 {
-	const CommandSet *cs = TheControlBar->findCommandSet(commandSetName);
+	const CommandSet *cs = (const CommandSet *)((Rva0031D5F8 *)TheControlBar)->rva0031D5F8(&commandSetName);
 	for (Int i = 0; i < MAX_COMMANDS_PER_SET; ++i)
 	{
 		if (cs && cs->getCommandButton(i) && cs->getCommandButton(i)->getName() == buttonName)

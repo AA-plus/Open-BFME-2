@@ -58,7 +58,7 @@ private:
 // byte-pointer arithmetic written in the body, while a typed member access
 // or an inline accessor gives lea from another register instead.
 
-class Rva00285D34
+class Rva00287519Host
 {
 public:
 	void rva00287519(int value);	// 0x00287519
@@ -171,7 +171,7 @@ void DarknessSpecialPower::doSpecialPowerAtLocation(const Coord3D *loc, unsigned
 		return;
 	SpecialPowerModule::doSpecialPowerAtLocation(loc, options);
 	rva004C4E93(loc);
-	((Rva00285D34 *)TheTriggerManager)->clear98();
+	((Rva00287519Host *)TheTriggerManager)->clear98();
 }
 
 void TaintSpecialPower::doSpecialPowerAtLocation(const Coord3D *loc, unsigned int options)
@@ -200,7 +200,7 @@ void FreezingRainSpecialPower::doSpecialPowerAtLocation(const Coord3D *loc, unsi
 		return;
 	SpecialPowerModule::doSpecialPowerAtLocation(loc, options);
 	rva004C4C99(loc);
-	((Rva00285D34 *)TheTriggerManager)->rva00287519(getData()->m_84);
+	((Rva00287519Host *)TheTriggerManager)->rva00287519(getData()->m_84);
 }
 
 void CloudBreakSpecialPower::doSpecialPowerAtLocation(const Coord3D *loc, unsigned int options)
@@ -214,7 +214,7 @@ void CloudBreakSpecialPower::doSpecialPowerAtLocation(const Coord3D *loc, unsign
 	SpecialPowerModule::doSpecialPowerAtLocation(loc, options);
 	rva004C4621(loc);
 	rva004C4582();
-	((Rva00285D34 *)TheTriggerManager)->clear98();
+	((Rva00287519Host *)TheTriggerManager)->clear98();
 }
 
 void ElvenWoodSpecialPower::doSpecialPower(unsigned int options)
