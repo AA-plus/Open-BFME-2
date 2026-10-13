@@ -174,9 +174,9 @@ Team::Team(TeamPrototype *proto, int id) :
 		}
 
 		AsciiString teamName = proto->getName();
-		teamName.concat("/");
+		reinterpret_cast<StringBase<char> *>(&teamName)->concat("/");
 		teamName.concat(proto->m_14);
-		teamName.concat(" - creating team instance.");
+		reinterpret_cast<StringBase<char> *>(&teamName)->concat(" - creating team instance.");
 		TheScriptEngine->AppendDebugMessage(teamName, false);
 	}
 

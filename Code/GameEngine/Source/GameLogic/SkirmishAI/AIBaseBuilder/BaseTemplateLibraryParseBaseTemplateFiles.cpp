@@ -140,9 +140,9 @@ void BaseTemplateLibrary::parseBaseTemplateFiles()
 			return;
 		AsciiString path("Bases\\");
 		path.concat(name);
-		path.concat("\\");
+		reinterpret_cast<StringBase<char> *>(&path)->concat("\\");
 		path.concat(name);
-		path.concat(".bse");
+		reinterpret_cast<StringBase<char> *>(&path)->concat(".bse");
 		AsciiString fileName = path;
 		Rva00240000 stream;
 		if (!stream.rva00308050(fileName))
