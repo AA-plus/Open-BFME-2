@@ -39,7 +39,7 @@ class Gen0003AC38
 public:
 	void rva0009A338();
 };
-extern Gen0003AC38 *g_shadowManager;
+class W3DShadowManager; extern W3DShadowManager *TheW3DShadowManager;
 
 // ?rva00091D0D@Rva00091D0D@@QAEXXZ
 void Rva00091D0D::rva00091D0D()
@@ -47,7 +47,7 @@ void Rva00091D0D::rva00091D0D()
 	((Rva000B3FD0 *)this)->rva000B3FD0();
 	if (m_14)
 		m_14->rva0010082F();
-	if (g_shadowManager)
-		g_shadowManager->rva0009A338();
+	if ((*(Gen0003AC38 * *)&TheW3DShadowManager))
+		(*(Gen0003AC38 * *)&TheW3DShadowManager)->rva0009A338();
 }
 

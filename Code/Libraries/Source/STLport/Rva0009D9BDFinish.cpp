@@ -30,7 +30,8 @@ public:
 	void handle(void *p);
 };
 
-extern class Gen0003AC38 *g_shadowManager;
+class Gen0003AC38;
+class W3DShadowManager; extern W3DShadowManager *TheW3DShadowManager;
 
 class Rva0009D9BD
 {
@@ -51,7 +52,7 @@ void Rva0009D9BD::rva0009D9BD()
 	int *span = (int *)&m_vec;
 	_STL::vector<void *> &vec = m_vec;
 	for (unsigned int i = 0; i < (unsigned)((span[1] - span[0]) >> 2); ++i)
-		g_shadowManager->handle(vec[i]);
+		(*(Gen0003AC38 * *)&TheW3DShadowManager)->handle(vec[i]);
 	vec.erase(vec.begin(), vec.end());
 }
 
@@ -63,7 +64,7 @@ void Rva0009D9BD::rva0009D9FD()
 {
 	void *slot = m_19C;
 	if (slot) {
-		g_shadowManager->handle(slot);
+		(*(Gen0003AC38 * *)&TheW3DShadowManager)->handle(slot);
 		m_19C = 0;
 		rva0009D9BD();
 	}

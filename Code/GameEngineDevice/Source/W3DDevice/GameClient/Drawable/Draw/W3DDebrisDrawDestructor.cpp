@@ -59,9 +59,9 @@ public:
 // ?g_scene@@3PAVSceneClass@@A: the global at this VA is ?m_3DScene@W3DDisplay@@2PAVRTS3DScene@@A; this name is an alias for it.
 extern SceneClass * g_scene;
 #pragma comment(linker, "/alternatename:?g_scene@@3PAVSceneClass@@A=?m_3DScene@W3DDisplay@@2PAVRTS3DScene@@A")
-extern Gen0003AC38 *g_shadowManager;
+class W3DShadowManager; extern W3DShadowManager *TheW3DShadowManager;
 // g_shadowManager: VA 0xde5dfc (zero-filled .bss).
-Gen0003AC38 * g_shadowManager;
+class W3DShadowManager; extern W3DShadowManager *TheW3DShadowManager;
 
 class W3DDebrisDraw : public DrawableModuleLayoutBase,
 	public DebrisDrawInterface
@@ -88,12 +88,12 @@ private:
 W3DDebrisDraw::~W3DDebrisDraw()
 {
 	register int zero = 0;
-	if ((void *)g_shadowManager != (void *)zero)
+	if ((void *)(*(Gen0003AC38 * *)&TheW3DShadowManager) != (void *)zero)
 	{
 		void *shadow = m_shadow;
 		if (shadow != (void *)zero)
 		{
-			g_shadowManager->handle(shadow);
+			(*(Gen0003AC38 * *)&TheW3DShadowManager)->handle(shadow);
 			*(volatile int *)&m_shadow = zero;
 		}
 	}

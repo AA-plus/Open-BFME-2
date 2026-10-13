@@ -30,7 +30,8 @@ public:
 	void rva000F0912();
 };
 
-extern class Gen0003AC38 *g_shadowManager;
+class Gen0003AC38;
+class W3DShadowManager; extern W3DShadowManager *TheW3DShadowManager;
 extern class W3DVolumetricShadowManager *TheW3DVolumetricShadowManager;
 
 class RTS3DScene
@@ -41,7 +42,7 @@ public:
 
 void RTS3DScene::rva0006E5C8(Vector3 *src)
 {
-	W3DGameClientShadowShim *shadow = (W3DGameClientShadowShim *)(*(void **)&g_shadowManager);
+	W3DGameClientShadowShim *shadow = (W3DGameClientShadowShim *)(*(void **)&(*(Gen0003AC38 * *)&TheW3DShadowManager));
 	if (shadow == 0)
 		return;
 	shadow->setLightPosition(0, src->X, src->Y, src->Z);

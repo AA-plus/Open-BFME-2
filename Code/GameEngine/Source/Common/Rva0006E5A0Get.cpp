@@ -24,7 +24,8 @@ public:
 	Vector3 &getLightPosWorld(int lightIndex);
 };
 
-extern class Gen0003AC38 *g_shadowManager;
+class Gen0003AC38;
+class W3DShadowManager; extern W3DShadowManager *TheW3DShadowManager;
 
 class RTS3DScene
 {
@@ -34,7 +35,7 @@ public:
 
 void RTS3DScene::rva0006E5A0(Vector3 *dest)
 {
-	W3DShadowManager *shadow = (W3DShadowManager *)(*(void **)&g_shadowManager);
+	W3DShadowManager *shadow = (W3DShadowManager *)(*(void **)&(*(Gen0003AC38 * *)&TheW3DShadowManager));
 	if (!shadow)
 		return;
 	Vector3 &src = shadow->getLightPosWorld(0);

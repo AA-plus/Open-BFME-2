@@ -61,7 +61,7 @@ public:
 	void handle(void *object);
 };
 
-extern Gen0003AC38 *g_shadowManager;
+class W3DShadowManager; extern W3DShadowManager *TheW3DShadowManager;
 
 class Rva003FB640
 {
@@ -77,7 +77,7 @@ void Rva003FB640::rva003FB640()
 	void *p = m_ptr0C;
 	if (p)
 	{
-		g_shadowManager->handle(p);
+		(*(Gen0003AC38 * *)&TheW3DShadowManager)->handle(p);
 		m_ptr0C = 0;
 	}
 }
