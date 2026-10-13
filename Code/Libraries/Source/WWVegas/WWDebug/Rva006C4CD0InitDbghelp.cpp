@@ -226,6 +226,48 @@ unsigned int Rva006C50D0Describe(const unsigned long *addresses, unsigned int co
 // addresses plus a NULL terminator; returns the stored count. The EBP/ESP
 // homes and the call-next EIP idiom have no intrinsic spelling, so they
 // use the same small inline-asm blocks the fleet's landed x87 code uses.
+// Native 6C4E90..6C4F94 vtable class-name recovery: VirtualQuery protect 2 on the
+// vtable pointer then protect 0x30 on its first slot, the rowed getSymbolName on
+// this TU's dbghelp object, a ??_7 strncmp, then strtok @ and strncpy. The second
+// VirtualQuery's arguments sit in swapped registers unless the first-slot read is
+// spelled as an equal-arm conditional (the late-folded ?: tie breaker).
+struct DbgMemoryInfo
+{
+	void *baseAddress, *allocationBase;
+	unsigned long allocationProtect, regionSize, state, protect, type;
+};
+extern "C" __declspec(dllimport) unsigned long __stdcall VirtualQuery(const void *, DbgMemoryInfo *, unsigned long);
+extern "C" __declspec(dllimport) int __cdecl strncmp(const char *, const char *, unsigned int);
+extern "C" __declspec(dllimport) char *__cdecl strtok(char *, const char *);
+bool Rva006C4E90VtableName(void ***object, unsigned int size, char *out, unsigned int outSize)
+{
+	if (size >= 4)
+	{
+		void **vtable = (void **)**object;
+		if (((unsigned long)vtable & 3) == 0)
+		{
+			DbgMemoryInfo info;
+			if (VirtualQuery(vtable, &info, sizeof(info)) >= sizeof(info) && (info.protect & 2)
+				&& VirtualQuery(object ? *vtable : *vtable, &info, sizeof(info)) >= sizeof(info) && (info.protect & 0x30))
+			{
+				char name[0x200];
+				if (g_rva006C4CD0Object.getSymbolName((unsigned long)vtable, name, sizeof(name))
+					&& strlen(name) > 4 && strncmp(name, "??_7", 4) == 0)
+				{
+					char *token = strtok(name + 4, "@");
+					if (token)
+					{
+						*token = 0;
+						strncpy(out, name + 4, outSize);
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
 extern "C" __declspec(dllimport) void *__stdcall GetCurrentThread(void);
 
 struct BfmeCaptureContext
