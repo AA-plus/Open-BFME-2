@@ -20,7 +20,8 @@ class InGameUI;
 class Rva00E01E28Owner;
 extern GameWindowManager *TheWindowManager;
 extern InGameUI *TheInGameUI;
-extern Rva00E01E28Owner *g_00E01E28;
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 extern int g_Va00E04478;
 extern Drawable *g_00E01D14; // Native previous-selection pointer; original name unknown.
 extern GameLogic *TheGameLogic;
@@ -246,7 +247,7 @@ void ControlBar::switchToContext(int context,void *draw)
             ((Rva002D368E *)theRadarWindowOverrideSource)->rva002D368E();
     }
     Object *drawObject=incomingDraw ? ((ContextDrawableView *)incomingDraw)->getObject() : 0;
-    if (g_00E01E28) ((ContextResetView *)g_00E01E28)->reset();
+    if (TheHotKeyManager) ((ContextResetView *)TheHotKeyManager)->reset();
     ((ContextRadiusView *)TheInGameUI)->clearRadius();
     if (incomingDraw!=g_00E01D14 && incomingDraw!=self->selected)
         self->overlay->reset();

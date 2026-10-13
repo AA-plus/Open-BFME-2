@@ -51,12 +51,13 @@ struct Rva00359302Result
 class HotKeyManager
 {
 public:
-	AsciiString rva00358CCD(const AsciiString &name);
+	AsciiString searchHotKey(const AsciiString &name);
 	Rva00359302Result addHotKey(const TreeHintRef00217D4C &action, const AsciiString &key, bool flag);
 };
 
 class Rva00E01E28Owner;
-extern Rva00E01E28Owner *g_00E01E28;
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 
 class Rva00222A8BTarget;
 extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
@@ -113,17 +114,17 @@ void InGameHeroSelectInterface::Impl::ShowSelectAllHeroesBttn()
 {
 	if (m_selectAllHeroesShown)
 		return;
-	if (g_00E01E28)
+	if (TheHotKeyManager)
 	{
 		static AsciiString s_buttonName("NonCommand_SelectAllHeroes");
 		const CommandButton *button = TheControlBar->findCommandButton(s_buttonName);
 		if (button)
 		{
-			AsciiString hotKey = ((HotKeyManager *)g_00E01E28)->rva00358CCD(button->rva0035B1E9());
+			AsciiString hotKey = TheHotKeyManager->searchHotKey(button->rva0035B1E9());
 			if (!hotKey.isEmpty())
 			{
 				TreeHintRef00217D4C action(new SelectAllHeroesHotKeyAction(this));
-				m_selectAllHotKey = ((HotKeyManager *)g_00E01E28)->addHotKey(action, hotKey, true);
+				m_selectAllHotKey = TheHotKeyManager->addHotKey(action, hotKey, true);
 				m_selectAllHotKeyAdded = true;
 			}
 		}

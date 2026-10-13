@@ -297,7 +297,7 @@ public:
 class HotKeyManager
 {
 public:
-	AsciiString rva00358CCD(const AsciiString &name);
+	AsciiString searchHotKey(const AsciiString &name);
 	Rva00359302Result addHotKey(const TreeHintRef00217D4C &action, const AsciiString &key, bool flag);
 };
 
@@ -396,7 +396,7 @@ Rva00527378Payload::Rva00527378Payload(void *owner, int level, const AsciiString
 		const CommandButton *button = TheControlBar->findCommandButton(s_selectNearestBuilder);
 		if (button)
 		{
-			AsciiString hotKey = ((HotKeyManager *)TheHotKeyManager)->rva00358CCD(button->rva0035B1E9());
+			AsciiString hotKey = ((HotKeyManager *)TheHotKeyManager)->searchHotKey(button->rva0035B1E9());
 			if (!hotKey.isEmpty())
 			{
 				Rva005F8F96 action(new SelectNearestBuilderAction(this));

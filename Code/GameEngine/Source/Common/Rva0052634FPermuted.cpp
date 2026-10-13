@@ -17,7 +17,8 @@ class Rva00E01E28Owner
 public:
     void rva003591F4(Rva003591F4Arg arg);
 };
-extern Rva00E01E28Owner *g_00E01E28;
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 
 class CreateAHeroData;
 class Rva002B7250
@@ -75,13 +76,13 @@ Rva0052634F::~Rva0052634F()
 {
     if (m_hasC8)
     {
-        if (g_00E01E28)
-            g_00E01E28->rva003591F4(m_recC8);
+        if (TheHotKeyManager)
+            ((Rva00E01E28Owner *)TheHotKeyManager)->rva003591F4(m_recC8);
     }
     if (m_hasD0)
     {
-        if (g_00E01E28)
-            g_00E01E28->rva003591F4(m_recD0);
+        if (TheHotKeyManager)
+            ((Rva00E01E28Owner *)TheHotKeyManager)->rva003591F4(m_recD0);
     }
     m_ptr10->rva002B7250((CreateAHeroData *)this);
 }

@@ -53,8 +53,9 @@ class Rva00200667 : public _STL::list<int> {public:~Rva00200667();};
 Rva00200667 *Rva005680F9GetInstances();
 void *GadgetButtonGetData(GameWindow *);
 void GadgetButtonSetEnabledImage_Rva002C0433(GameWindow *,const Image *);
-class HotKeyManager {public:AsciiString rva00358CCD(const AsciiString &);};
-class Rva00E01E28Owner;extern Rva00E01E28Owner *g_00E01E28;
+class HotKeyManager {public:AsciiString searchHotKey(const AsciiString &);};
+class Rva00E01E28Owner;class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 struct Rva003597C3Element {char bytes[8];};
 class Rva00359811 {public:unsigned rva00359811(const Rva003597C3Element &,bool);};
 enum NameKeyType {NK_UNKNOWN=0};
@@ -99,9 +100,9 @@ class Object {friend class InGameToggleStanceCommandButton::Impl;protected:Modul
 InGameToggleStanceCommandButton::Impl::Impl(Rva00005C357FPtrChaseField *owner,StanceMenuFactory *factory,GameWindow *window)
  :listPosition(Rva005680F9GetInstances()->insert(Rva005680F9GetInstances()->end(),reinterpret_cast<int>(this))),owner08(owner),factory0C(factory),window10(window),button14(static_cast<CommandButton *>(GadgetButtonGetData(window))),behavior18(0),hotKeys(button14->stances.size())
 {
- if(g_00E01E28){
-  AsciiString hotkey=reinterpret_cast<HotKeyManager *>(g_00E01E28)->rva00358CCD(button14->rva0035B1E9());
-  if(!hotkey.isEmpty())reinterpret_cast<Rva00359811 *>(g_00E01E28)->rva00359811(reinterpret_cast<const Rva003597C3Element &>(hotkey),false);
+ if(TheHotKeyManager){
+  AsciiString hotkey=TheHotKeyManager->searchHotKey(button14->rva0035B1E9());
+  if(!hotkey.isEmpty())reinterpret_cast<Rva00359811 *>(TheHotKeyManager)->rva00359811(reinterpret_cast<const Rva003597C3Element &>(hotkey),false);
  }
  int stance=0;
  static NameKeyType key=TheNameKeyGenerator->nameToKey("StancesBehavior");

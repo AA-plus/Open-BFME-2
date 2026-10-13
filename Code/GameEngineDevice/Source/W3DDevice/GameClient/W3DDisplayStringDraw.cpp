@@ -213,7 +213,8 @@ class Rva00E01E28Owner
 public:
 	AsciiString searchHotKey( const UnicodeString &uStr );
 };
-extern Rva00E01E28Owner *g_00E01E28;
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 
 // The colour callback slot shared with W3DAptAux.cpp (retail [0x00DB5FC8]).
 extern int g_Va00DB5FC8;
@@ -241,7 +242,7 @@ Bool W3DDisplayString::rva00106277( void )
 		{
 			m_textRenderer.Set_Hot_Key_Parse( TRUE );
 			m_textRenderer.Build_Sentence( getText().str(), &m_hotKeyPos.x, &m_hotKeyPos.y );
-			m_hotkey.translate( g_00E01E28->searchHotKey( getText() ) );
+			m_hotkey.translate( ((Rva00E01E28Owner *)TheHotKeyManager)->searchHotKey( getText() ) );
 			if( !m_hotkey.isEmpty() )
 				m_textRendererHotKey.Build_Sentence( m_hotkey.str(), NULL, NULL );
 			else

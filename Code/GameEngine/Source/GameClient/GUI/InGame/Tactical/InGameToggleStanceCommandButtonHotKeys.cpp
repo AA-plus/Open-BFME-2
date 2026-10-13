@@ -3,7 +3,7 @@
 // ?rva00567DA6@Impl@InGameToggleStanceCommandButton@@QAEXXZ
 // Retail 0x00567DA6..0x00567ECD (295 bytes).
 // Registers one hotkey record per stance of the button: when the hotkey
-// manager (g_00E01E28) exists it gives each 16-byte record of the vector at
+// manager (TheHotKeyManager) exists it gives each 16-byte record of the vector at
 // Impl +0x1C a new set-stance action (this and the button's stance i) through
 // the record's reference setter; looks up the stance's hotkey string and when
 // it is not empty stores addHotKey's handle and marks the record active; and
@@ -18,7 +18,7 @@
 // Rva002BED91::set 0x003F8396 Rva0035B232::rva0035B232 0x0035B232
 // GetAssociatedMessageType 0x00567700 HotKeyManager::addMessageAction
 // 0x003597A8 StringBase<char>::releaseBuffer 0x00036410; pinned
-// HotKeyManager::rva00358CCD 0x00358CCD and addHotKey 0x00359302 (views as
+// HotKeyManager::searchHotKey 0x00358CCD and addHotKey 0x00359302 (views as
 // in ControlBarSetCommandWindow.cpp). The method name is address-derived.
 #include <vector>
 #include "ascii_string.h"
@@ -56,13 +56,14 @@ struct Rva00359302Result
 class HotKeyManager
 {
 public:
-	AsciiString rva00358CCD(const AsciiString &name);
+	AsciiString searchHotKey(const AsciiString &name);
 	Rva00359302Result addHotKey(const TreeHintRef00217D4C &action, const AsciiString &key, bool flag);
 	void addMessageAction(const TreeHintRef00217D4C &action, int messageType);
 };
 
 class Rva00E01E28Owner;
-extern Rva00E01E28Owner *g_00E01E28;
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 
 int GetAssociatedMessageType(int stance);
 
@@ -106,7 +107,7 @@ public:
 
 void InGameToggleStanceCommandButton::Impl::rva00567DA6()
 {
-	if (!g_00E01E28)
+	if (!TheHotKeyManager)
 		return;
 	int count = (int)m_button14->stances.size();
 	for (int i = 0; i < count; ++i)
@@ -114,14 +115,14 @@ void InGameToggleStanceCommandButton::Impl::rva00567DA6()
 		StanceHotKeyRecord &key = m_hotKeys[i];
 		key.ref.set(reinterpret_cast<TargetRef00217D4C *>(new Rva0056773E((int)this, m_button14->getStance(i))));
 		const TreeHintRef00217D4C &action = *reinterpret_cast<const TreeHintRef00217D4C *>(&key.ref);
-		AsciiString hotKey = reinterpret_cast<HotKeyManager *>(g_00E01E28)->rva00358CCD(*reinterpret_cast<Rva0035B232 *>(m_button14)->rva0035B232(i));
+		AsciiString hotKey = TheHotKeyManager->searchHotKey(*reinterpret_cast<Rva0035B232 *>(m_button14)->rva0035B232(i));
 		if (!hotKey.isEmpty())
 		{
-			key.action = reinterpret_cast<HotKeyManager *>(g_00E01E28)->addHotKey(action, hotKey, true);
+			key.action = TheHotKeyManager->addHotKey(action, hotKey, true);
 			key.active = true;
 		}
 		int message = GetAssociatedMessageType(m_button14->getStance(i));
 		if (message)
-			reinterpret_cast<HotKeyManager *>(g_00E01E28)->addMessageAction(action, message);
+			TheHotKeyManager->addMessageAction(action, message);
 	}
 }

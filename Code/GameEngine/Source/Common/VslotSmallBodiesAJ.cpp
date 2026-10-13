@@ -59,7 +59,8 @@ struct StanceHotKeyRecord : Rva004F691E { bool active; };
 struct Rva005681CE : _STL::vector<StanceHotKeyRecord> { ~Rva005681CE(); };
 class Rva005C3E79 { public: void rva005C3E79(); };
 class Rva00E01E28Owner { public: void rva003591F4(Rva003591F4Arg); };
-extern Rva00E01E28Owner *g_00E01E28;
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 class Rva003593D8 { public: unsigned int rva003593D8(int); };
 int GetAssociatedMessageType(int);
 class InGameToggleStanceCommandButton {
@@ -1821,13 +1822,13 @@ InGameToggleStanceCommandButton::Impl::~Impl()
  Rva005C3F02 *menu=factory0C->getMenu();
  if(menu && reinterpret_cast<Rva0057C22FByteChaseField*>(menu)->get())
   reinterpret_cast<Rva005C3E79*>(menu)->rva005C3E79();
- if(g_00E01E28) {
+ if(TheHotKeyManager) {
   int count=(int)button14->stances.size();
   for(int i=0;i<count;++i) {
    StanceHotKeyRecord &key=hotKeys[i];
-   if(key.active) g_00E01E28->rva003591F4(key.action);
+   if(key.active) ((Rva00E01E28Owner *)TheHotKeyManager)->rva003591F4(key.action);
    int message=GetAssociatedMessageType(button14->getStance(i));
-   if(message) reinterpret_cast<Rva003593D8*>(g_00E01E28)->rva003593D8(message);
+   if(message) reinterpret_cast<Rva003593D8*>(TheHotKeyManager)->rva003593D8(message);
    key.ref.clear();
   }
  }

@@ -1277,7 +1277,8 @@ public:
 
 extern DrawGroupInfo *TheDrawGroupInfo;
 extern RayEffectSystem *TheRayEffects;
-extern Rva00E01E28Owner *g_00E01E28;                    // TheHotKeyManager
+class HotKeyManager;
+extern HotKeyManager *TheHotKeyManager;
 extern InGameUI *TheInGameUI;
 extern Shell *TheShell;
 extern IMEManager *TheIMEManager;
@@ -1392,8 +1393,8 @@ GameClient::~GameClient()
 	::delete TheRayEffects;
 	TheRayEffects = 0;
 
-	::delete g_00E01E28;
-	g_00E01E28 = 0;
+	::delete ((Rva00E01E28Owner *)TheHotKeyManager);
+	TheHotKeyManager = 0;
 
 	::delete TheInGameUI;
 	TheInGameUI = 0;
@@ -1592,11 +1593,11 @@ void GameClient::init()
 		TheInGameUI->setName(AsciiString("TheInGameUI"));
 	}
 
-	g_00E01E28 = new Rva00E01E28Owner;
-	if (g_00E01E28)
+	TheHotKeyManager = (HotKeyManager *)new Rva00E01E28Owner;
+	if (TheHotKeyManager)
 	{
-		g_00E01E28->init();
-		g_00E01E28->setName(AsciiString("TheHotKeyManager"));
+		((Rva00E01E28Owner *)TheHotKeyManager)->init();
+		((Rva00E01E28Owner *)TheHotKeyManager)->setName(AsciiString("TheHotKeyManager"));
 	}
 
 	// create the terrain visual

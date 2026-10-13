@@ -88,7 +88,7 @@ struct Rva00359302Result
 class HotKeyManager
 {
 public:
-    AsciiString rva00358CCD(const AsciiString &);
+    AsciiString searchHotKey(const AsciiString &);
     Rva00359302Result addHotKey(const TreeHintRef00217D4C &,const AsciiString &,bool);
 };
 extern HotKeyManager *TheHotKeyManager;
@@ -134,7 +134,7 @@ void ControlBar::setControlCommand(GameWindow *button,const CommandButton *comma
     Rva00327D86Update(button,command->productionCount());
     if (TheHotKeyManager)
     {
-        AsciiString hotKey=TheHotKeyManager->rva00358CCD(commandButton->rva0035B1E9());
+        AsciiString hotKey=TheHotKeyManager->searchHotKey(commandButton->rva0035B1E9());
         if (!hotKey.isEmpty())
             TheHotKeyManager->addHotKey(
                 TreeHintRef00217D4C(new Rva0053DAD0((int)button)),hotKey,false);
