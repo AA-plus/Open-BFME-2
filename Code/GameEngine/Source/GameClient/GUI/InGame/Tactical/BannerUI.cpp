@@ -207,7 +207,6 @@ const AsciiString &BannerUI::GetBannerIconImageName(const AsciiString &key) {
 // Native216F91..217031 constructs a12-byte three-string default value and
 // a16-byte key/value record. Existing21613D copy and2160C4/216108 cleanup
 // prove those layouts independently; application field names remain unknown.
-class Rva00216108 {public:~Rva00216108();};
 // Existing copy21613D independently proves this three-string12B value.
 // Unwind216F91 destroys the same temporary via2160C4. Reconcile its
 // destructor under the existing copy-owner type and retain the donor RVA
@@ -223,9 +222,14 @@ namespace _STL {
 template<class A,class B>struct pair;
 template<>struct pair<const AsciiString,Gen_003A8BE0> {
  pair(const AsciiString &,const Gen_003A8BE0 &);
- __forceinline ~pair(){((Rva00216108*)this)->~Rva00216108();}
- union {unsigned int m_alignment;unsigned char m_native[16];};
+ ~pair();
+ const AsciiString first;
+ Gen_003A8BE0 second;
 };
+// Native216108 destroys the value at+4 and the key string at0. The typed
+// pair emits that complete53B body, including the same EH ownership graph;
+// its constructor keeps the already-established key/value ABI.
+pair<const AsciiString,Gen_003A8BE0>::~pair() {}
 }
 typedef _STL::pair<const AsciiString,Gen_003A8BE0> BannerTypePair;
 class Rva000427195 {public:BannerTypePair *rva00216D5C(const BannerTypePair &);};
