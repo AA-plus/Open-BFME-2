@@ -10,6 +10,7 @@
 // options and objectives buttons are the +0x04/+0x18 subobjects whose
 // listener lists sit at +0x08/+0x1C. The class name is unknown.
 #include "ascii_string.h"
+void __cdecl operator delete(void *p);
 
 class Rva00578A60Listener
 {
@@ -64,6 +65,7 @@ class Rva005D25F2
 {
 public:
 	Rva005D25F2(int level, const AsciiString &path);
+	~Rva005D25F2();
 	// Unrowed 0x005D2A53 (its per-frame update), pinned by address.
 	void rva005D2A53();
 
@@ -359,7 +361,7 @@ class Rva0057866DHolder : public Rva0057866D
 {
 public:
 	Rva0057866DHolder() { m_ptr = 0; }
-	~Rva0057866DHolder() { ((Rva00578690 *)this)->rva00578690(); }
+	__declspec(noinline) ~Rva0057866DHolder();
 };
 
 class Rva005786AAHolder : public Rva005786AA
@@ -670,4 +672,18 @@ StrategicHUD::Palantir::~Palantir()
 {
 	PalantirButton<1>::m_listeners.forEach(&Rva00578A60Listener::notify, static_cast<PalantirButton<1> *>(this));
 	PalantirButton<0>::m_listeners.forEach(&Rva00578A60Listener::notify, static_cast<PalantirButton<0> *>(this));
+}
+
+// Native owning-pointer clear: null before explicit destruction and deallocation.
+// The complete 26-byte body and both REL32 relocations equal the rowed clear
+// at 0x00578690. The holder's original source name remains unknown.
+Rva0057866DHolder::~Rva0057866DHolder()
+{
+	Rva005D25F2 *p = m_ptr;
+	m_ptr = 0;
+	if (p)
+	{
+		p->Rva005D25F2::~Rva005D25F2();
+		::operator delete(p);
+	}
 }
