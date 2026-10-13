@@ -277,11 +277,19 @@ private:
 };
 
 // The three Apt sub-movie holders (rowed clears) and two more owned pointers.
+void __cdecl operator delete(void *pointer);
+class Rva0052710C {public: ~Rva0052710C();};
+
 class Rva002D3894
 {
 public:
 	Rva002D3894() : m_movie(0) {}
-	~Rva002D3894() { clear(); }
+	__declspec(noinline) ~Rva002D3894()
+	{
+		Rva0052710C *p = (Rva0052710C *)m_movie;
+		m_movie = 0;
+		if (p) { p->Rva0052710C::~Rva0052710C(); ::operator delete(p); }
+	}
 	void clear();
 
 	void *m_movie;
