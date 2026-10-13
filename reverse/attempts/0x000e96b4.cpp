@@ -234,3 +234,14 @@ void W3DShrubBuffer::DoXfer(Xfer *xfer)
   }
  }
 }
+
+// ---- W6-MP1 r6 prologue-wall diagnosis (2026-10-13, 1261/1272 in clean TU, 417 diffs) ----
+// TWO systemics, both register/home allocation (no size/structure/EH/calls diffs at head):
+// (1) prologue roles SWAPPED: retail xfer->esi + this->ebx (push esi; mov esi,[ebp+8]; push edi;
+//     push esi; mov ebx,ecx); ours xfer->ebx + this->esi (mov ebx,[ebp+8] first) plus a redundant
+//     `mov [ebp-0x38],esi` this-spill retail lacks. Frame 0xDC vs 0xD8 (+4B).
+// (2) tail pos-copy: retail movss-stores + earlier rva000E91CE call; ours movs-copy + later call.
+// Tail fix (restructure pos to movss stores) grows ~11B toward retail AND may re-birth temps;
+// prologue needs a this-first allocation flip (untried: version-scope invalid (live later),
+// named self (frame+), counter split). Layouts agree with landed siblings (+0x1958/+0x4FB58/+0x4FB70).
+// Verdict's findTemplate/Coord3D advice already incorporated. t=20 model=muse-spark.

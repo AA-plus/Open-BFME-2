@@ -744,3 +744,24 @@ void W3DVolumetricShadow::updateMeshVolume(Int meshIndex, Int lightIndex, const 
 			m_shadowVolume[ lightIndex ][meshIndex]->setVisibleState(Geometry::STATE_UNKNOWN);
 	}
 }
+
+// ---- W6-MP1 r6 commute analysis (2026-10-13, 3369/3369 size-exact, 70 diffs, baseline re-measured) ----
+// Two systematic operand-order walls (both evaluate-swap flips, no size/structure/EH/calls diffs):
+// (1) x87 FMUL pair (~0xF3121): retail fld [ebp-0x48]; fmul [edi+0x14]; fld [ebp-0x44]; fmul [edi+0x18]
+//     (A*B first, then C*D); ours reverse (C*D then A*B). Swap the two products in source.
+// (2) scalar ADDSS (~0xF3494): retail movss xmm0,[ebp+0x10]; addss xmm0,[ebp+0x4] (X+Y);
+//     ours movss xmm0,[ebp+0x4]; addss xmm0,[ebp+0x10] (Y+X). Swap the addends in source.
+// Flipping evaluation order should also re-birth temps in retail order and may close the
+// home-slot diffs ([ebp-0x14/0x18/0x1C] vs [ebp+0x30/0x34/0x38]) as a cascade. The FMUL pair
+// uses two DISTINCT locals x two DISTINCT struct fields (not X*X+Y*Y); find the A*B+C*D
+// expression (candidates: Transform_Vector inlining, 2-term partial dots). t=20 model=muse-spark.
+
+// ---- W6-MP1 r6 row-1-dot refinement (2026-10-13) ----
+// The FMUL wall is specifically the MIDDLE of three sequential inlined Dots (cosAngle rows 0/1/2):
+// row 0 (f30f0: [ebp-0x54]*[edi+0x8] + [ebp-0x58]*[edi+0x4] + [ebp-0x5C]*[edi]) EXACT,
+// row 1 (f3121: [ebp-0x48]*[edi+0x14] + [ebp-0x44]*[edi+0x18] + [ebp-0x4C]*[edi+0x10]) has first
+// two products SWAPPED vs ours, row 2 (f3153+: [ebp-0x34]*[edi+0x28] ...) EXACT. Each dot is
+// followed by fabs-call/compare/jb (cosAngle<ToCare early-outs). So only row 1's two products
+// need evaluation-order flip (its homes/temps follow); rows 0/2 must NOT be touched. Candidate:
+// rewrite row 1's Dot_Product(prev[1],obj[1]) as manual Y-then-X partial sums, or swap its two
+// product statements if already manual. t=15 model=muse-spark.

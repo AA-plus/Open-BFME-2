@@ -244,3 +244,12 @@ restart:
 	}
 	return modified;
 }
+
+// ---- W6-MP1 r6 fold negatives (2026-10-13, 1097/1097 baseline re-measured, 68 diffs) ----
+// The +0x374 SIB-vs-fold wall (retail [ecx+eax+6]/lea [ecx+eax+0xC], ours add/fold) resists:
+// base-hoist to entryBase local (worse: 1106B, diffs from +0x2DF), begin()[i] mix for one
+// access (worse: 1087B, diffs from +0x5E), /O2 for the TU (far worse: 1223B), unsigned loop
+// var j (neutral-worse: diffs from +0x370), explicit (char*)m_start+n*16 scale in raw()
+// (neutral: identical 68). Diffs run +0x374 to end (epilogue shifted 1B, size exact): one
+// systematic; needs a CSE-defeating formulation that keeps base+index separate (not tried:
+// volatile index, double indexing, helper taking base+index). t=25 model=muse-spark.
