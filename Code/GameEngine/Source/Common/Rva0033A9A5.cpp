@@ -1,5 +1,5 @@
 // cl: /MD
-// ?rva0033A9A5@Rva0033A9A5@@QAEPBVRva00427157@@PBX@Z @0x0033A9A5 61B.
+// ?getCurrentLivingWorldAutoResolveArmor@Rva0033A9A5@@QAEPBVRva00427157@@PBX@Z @0x0033A9A5 61B.
 // Array scan over 0x104 entries from +0x3EC to +0x3F0 via rowed
 // Rva0033A8D9 tester; on match return entry armor else rowed
 // LivingWorldAutoResolveArmorStore::getDefault via g_00E031F0.
@@ -29,7 +29,7 @@ class LivingWorldAutoResolveArmorStore; extern LivingWorldAutoResolveArmorStore 
 class Rva0033A9A5
 {
 public:
-	const Rva00427157 *rva0033A9A5(const void *arg);
+	const Rva00427157 *getCurrentLivingWorldAutoResolveArmor(const void *arg);
 
 private:
 	char m_pad[0x3EC];
@@ -37,7 +37,7 @@ private:
 	Rva0033A9A5Entry *m_end;
 };
 
-const Rva00427157 *Rva0033A9A5::rva0033A9A5(const void *arg)
+const Rva00427157 *Rva0033A9A5::getCurrentLivingWorldAutoResolveArmor(const void *arg)
 {
 	Rva0033A9A5Entry *begin = m_begin;
 	Rva0033A9A5Entry *end = m_end;

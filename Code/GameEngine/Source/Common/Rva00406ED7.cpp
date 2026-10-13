@@ -1,5 +1,5 @@
 // cl: /Ireference/shims/bfme2_ascii /MD
-// ?rva00406ED7@Rva00406ED7@@QAEPBVCommandButton@@H@Z @0x00406ED7 38B
+// ?GetButtonForLevel@Rva00406ED7@@QAEPBVCommandButton@@H@Z @0x00406ED7 38B
 // Unlock lane: bounds-checked (unsigned idx < 15) lookup of AsciiString at
 // this+0x80 stride 12 via ControlBar::findCommandButton row 0x0031BE3C on
 // g_bfmeWorldRV; callers 0x005B041D 0x005B2D23 0x005B4818 0x005B5B75.
@@ -26,9 +26,9 @@ class Rva00406ED7
 {
     char m_pad[0x80];
 public:
-    const CommandButton *rva00406ED7(int idx);
+    const CommandButton *GetButtonForLevel(int idx);
 };
-const CommandButton *Rva00406ED7::rva00406ED7(int idx)
+const CommandButton *Rva00406ED7::GetButtonForLevel(int idx)
 {
     if ((unsigned int)idx >= 15)
         return 0;

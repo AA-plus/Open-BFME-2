@@ -12,7 +12,7 @@ typedef unsigned char UnsignedByte;
 typedef int Int;
 typedef bool Bool;
 class ThingTemplate; class ModuleData;
-class Rva0033C8E8 {public: bool rva0033C8E8(const AsciiString &,AsciiString &);};
+class Rva0033C8E8 {public: bool removeModuleInfo(const AsciiString &,AsciiString &);};
 struct BfmeStringRecord002CF4C6 {
  AsciiString text0,text1; unsigned int word0,word1; unsigned char flag0,flag1;
  BfmeStringRecord002CF4C6(const AsciiString &,const AsciiString &,unsigned int,unsigned int,unsigned char);
@@ -46,7 +46,7 @@ void ModuleInfo::addModuleInfo(ThingTemplate *thingTemplate,
 		{
 			{
 				AsciiString clearedModuleName;
-            reinterpret_cast<Rva0033C8E8 *>(thingTemplate)->rva0033C8E8(moduleTag, clearedModuleName);
+            reinterpret_cast<Rva0033C8E8 *>(thingTemplate)->removeModuleInfo(moduleTag, clearedModuleName);
 			}
 		}
 		else
@@ -70,7 +70,7 @@ void ModuleInfo::addModuleInfo(ThingTemplate *thingTemplate,
 		}
 		{
 			AsciiString clearedModuleName;
-        reinterpret_cast<Rva0033C8E8 *>(thingTemplate)->rva0033C8E8(moduleTag, clearedModuleName);
+        reinterpret_cast<Rva0033C8E8 *>(thingTemplate)->removeModuleInfo(moduleTag, clearedModuleName);
 		}
 	}
 
@@ -81,7 +81,7 @@ void ModuleInfo::addModuleInfo(ThingTemplate *thingTemplate,
 		{
 			{
 				AsciiString clearedModuleName;
-            reinterpret_cast<Rva0033C8E8 *>(thingTemplate)->rva0033C8E8(moduleTag, clearedModuleName);
+            reinterpret_cast<Rva0033C8E8 *>(thingTemplate)->removeModuleInfo(moduleTag, clearedModuleName);
 			}
 		}
 		else
@@ -100,7 +100,7 @@ void ModuleInfo::addModuleInfo(ThingTemplate *thingTemplate,
 		{
 			{
 				AsciiString clearedModuleName;
-            reinterpret_cast<Rva0033C8E8 *>(thingTemplate)->rva0033C8E8(moduleTag, clearedModuleName);
+            reinterpret_cast<Rva0033C8E8 *>(thingTemplate)->removeModuleInfo(moduleTag, clearedModuleName);
 			}
 		}
 		else

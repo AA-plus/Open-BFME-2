@@ -100,10 +100,10 @@ class Rva002CA9CA
 public:
 	bool rva002CA9CA(int id, const void *arg);
 	bool rva002CAA59(int a1, const void *a2);
-	void rva002CA942();
+	void postProcessLoad();
 	void rva002CA970(int a1, int a2, const void *a3, int a4);
 	void rva002CAA9D(int a1, const void *a2, const void *a3, int a4);
-	float rva002CACD7(const void *arg);
+	float getProjectileNuggetRadiusIfAlliesAffected(const void *arg);
 	bool rva002CAD8B();
 	void rva002CAC6E(int a, int b);
 private:
@@ -233,7 +233,7 @@ void Rva002CA9CA::rva002CAA9D(int a1, const void *a2, const void *a3, int a4)
 	}
 }
 
-float Rva002CA9CA::rva002CACD7(const void *arg)
+float Rva002CA9CA::getProjectileNuggetRadiusIfAlliesAffected(const void *arg)
 {
 	if (arg == 0)
 		return 0.0f;
@@ -281,7 +281,7 @@ bool Rva002CA9CA::rva002CAD8B()
 	return false;
 }
 
-void Rva002CA9CA::rva002CA942()
+void Rva002CA9CA::postProcessLoad()
 {
 	if (TheThingFactory == 0)
 		return;

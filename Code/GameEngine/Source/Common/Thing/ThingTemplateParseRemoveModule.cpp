@@ -61,7 +61,7 @@ private:
 	static const FieldParse *getFieldParse(void) { return s_objectFieldParseTable; }
 };
 
-class Rva0033C8E8 { public: bool rva0033C8E8(const AsciiString &,AsciiString &); };
+class Rva0033C8E8 { public: bool removeModuleInfo(const AsciiString &,AsciiString &); };
 // ?parseRemoveModule@ThingTemplate@@KAXPAVINI@@PAX1PBX@Z
 void __cdecl ThingTemplate::parseRemoveModule(INI *ini, void *instance, void *store, const void *userData)
 {
@@ -73,7 +73,7 @@ void __cdecl ThingTemplate::parseRemoveModule(INI *ini, void *instance, void *st
 	self->m_moduleParsingMode = 1;
 	const char *modToRemove = ini->getNextToken();
 	AsciiString removedModuleName;
-	Bool removed = ((Rva0033C8E8 *)self)->rva0033C8E8(modToRemove, removedModuleName);
+	Bool removed = ((Rva0033C8E8 *)self)->removeModuleInfo(modToRemove, removedModuleName);
 	if (!removed)
 	{
 		throw INIException(3, "RemoveModule %s was not found for %s.", modToRemove, self->getName().str());

@@ -100,7 +100,7 @@ public:
 class Rva00406ED7
 {
 public:
-	const CommandButton *rva00406ED7(int idx);
+	const CommandButton *GetButtonForLevel(int idx);
 };
 
 struct Rva005B4653Owner
@@ -216,7 +216,7 @@ void Rva005B486DOwner::rva005B4653()
 	m_numPowers = 0;
 	for (;;)
 	{
-		const CommandButton *button = ((Rva00406ED7 *)&m_owner->m_hero)->rva00406ED7(m_numPowers);
+		const CommandButton *button = ((Rva00406ED7 *)&m_owner->m_hero)->GetButtonForLevel(m_numPowers);
 		if (!button)
 			break;
 		PowerMap::iterator it = m_powersNameMap.find(*(const AsciiString *)((const char *)button + 0x10));

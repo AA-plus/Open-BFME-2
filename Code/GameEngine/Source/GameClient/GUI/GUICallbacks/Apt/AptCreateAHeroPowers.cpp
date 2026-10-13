@@ -598,7 +598,7 @@ AptCreateAHero::Powers::~Powers()
     m_groupCurrent = 0;
 }
 
-class Rva004072D2 {public: bool rva004072D2(int);};
+class Rva004072D2 {public: bool ClearSpecialPower(int);};
 // Native virtual slot2 C72F3C+8, 5B455D..5B4610; WB1574990.
 // The current selection is a cell pointer; 24 is the requested retained count.
 void AptCreateAHero::Powers::rva005B455D(bool active)
@@ -616,7 +616,7 @@ void AptCreateAHero::Powers::rva005B455D(bool active)
        cell->m_powerIndex=-1;
        cell->m_owned=false;
        m_cells[m_numPowers]=0;
-       ((Rva004072D2*)&m_owner->m_hero)->rva004072D2(m_numPowers);
+       ((Rva004072D2*)&m_owner->m_hero)->ClearSpecialPower(m_numPowers);
        if (!FindPrereq(cell)) --m_numPalantir;
      }
    }

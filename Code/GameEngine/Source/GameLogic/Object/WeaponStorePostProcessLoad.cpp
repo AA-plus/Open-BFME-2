@@ -6,14 +6,14 @@
 // TheThingFactory is inited"), a virtual by its vtable pairing. Retail
 // bytes: with TheThingFactory set, every non-null template in the vector at
 // +0x0C gets its own postProcessLoad (retail 0x002CA942, WB-named
-// WeaponTemplate::postProcessLoad; kept under its ledger placeholder name).
+// WeaponTemplate::postProcessLoad; rowed on its address-named class view).
 // The retail assert is compiled out.
 #include <vector>
 
 class Rva002CA9CA
 {
 public:
-	void rva002CA942();
+	void postProcessLoad();
 };
 
 class ThingFactory;
@@ -37,6 +37,6 @@ void WeaponStore::postProcessLoad()
 	{
 		Rva002CA9CA *weaponTemplate = m_weaponTemplateVector[i];
 		if (weaponTemplate)
-			weaponTemplate->rva002CA942();
+			weaponTemplate->postProcessLoad();
 	}
 }

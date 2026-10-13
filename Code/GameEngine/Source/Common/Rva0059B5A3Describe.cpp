@@ -43,7 +43,7 @@ class Rva00427157;
 class Rva0033A9A5
 {
 public:
-	const Rva00427157 *rva0033A9A5(const void *upgrades);	// current auto-resolve armor
+	const Rva00427157 *getCurrentLivingWorldAutoResolveArmor(const void *upgrades);	// current auto-resolve armor
 };
 class ThingTemplate
 {
@@ -121,7 +121,7 @@ AsciiString Rva0059B5A3::rva0059B5A3()
 	str.concat("/");
 	str.concat(_gcvt(((Rva0059AEBC *)this)->rva0059AEBC(), 4, buffer));
 
-	const Rva00427157 *armor = ((Rva0033A9A5 *)m_template)->rva0033A9A5(&m_unit->m_upgrades);
+	const Rva00427157 *armor = ((Rva0033A9A5 *)m_template)->getCurrentLivingWorldAutoResolveArmor(&m_unit->m_upgrades);
 	const AsciiString *weapon = (const AsciiString *)m_template->getCurrentLivingWorldAutoResolveWeapon(&m_unit->m_upgrades);
 	Rva0059AFC2Out weaponPart;
 	Rva0059B036Out armorPart;

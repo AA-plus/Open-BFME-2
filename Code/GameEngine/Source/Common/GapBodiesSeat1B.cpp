@@ -683,7 +683,7 @@ void *Rva002EEA5A::rva002EEA72(unsigned int count, const void *)
 class Rva002CA9CA
 {
 public:
-	float rva002CACD7(const void *other);					// 0x002CACD7
+	float getProjectileNuggetRadiusIfAlliesAffected(const void *other);					// 0x002CACD7
 };
 
 class Rva002FD661
@@ -697,7 +697,7 @@ private:
 
 float Rva002FD661::rva002FD661()
 {
-	return m_04->rva002CACD7(this);
+	return m_04->getProjectileNuggetRadiusIfAlliesAffected(this);
 }
 
 // --- 0x002FD7DC (19B): the +0x10 pathfinder's rowed 0x002F0F07, then

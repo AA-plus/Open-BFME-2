@@ -61,7 +61,7 @@ private:
 	static const FieldParse *getFieldParse(void) { return s_objectFieldParseTable; }
 };
 
-class Rva0033C8E8 { public: bool rva0033C8E8(const AsciiString &,AsciiString &); };
+class Rva0033C8E8 { public: bool removeModuleInfo(const AsciiString &,AsciiString &); };
 
 
 // ?parseReplaceModule@ThingTemplate@@KAXPAVINI@@PAX1PBX@Z
@@ -80,7 +80,7 @@ void ThingTemplate::parseReplaceModule(INI *ini, void *instance, void *store, co
 
 	const char *modToRemove = ini->getNextToken();
 	AsciiString removedModuleName;
-	Bool removed = ((Rva0033C8E8 *)self)->rva0033C8E8(modToRemove, removedModuleName);
+	Bool removed = ((Rva0033C8E8 *)self)->removeModuleInfo(modToRemove, removedModuleName);
 	if (!removed)
 		throw INIException(3, "ReplaceModule %s was not found for %s, cannot continue.", modToRemove, self->getName().str());
 

@@ -282,7 +282,7 @@ enum ObjectStatusTypes { STATUS23 = 23, STATUS37 = 37, STATUS38 = 38, STATUS79 =
 enum Relationship { ENEMY = 0, NEUTRAL = 1, ALLY = 2 };
 enum WeaponSlotType { PRIMARY = 0 };
 enum NameKeyType { NAMEKEY_INVALID = 0 };
-class Rva002CA9CA { public: float rva002CACD7(const void *); };
+class Rva002CA9CA { public: float getProjectileNuggetRadiusIfAlliesAffected(const void *); };
 class Rva002C9400ByteField { public: unsigned char get() const; bool rva0047A699() const; };
 class Weapon { public: char pad0[4]; Rva002CA9CA *info; };
 class BodyModuleInterface : public QuerySlots<6> { public: virtual float getHealth() const = 0; };
@@ -507,7 +507,7 @@ void *Rva002FFFCA::rva002FF07B(Object *me, const Coord3D *pos, float range, unsi
 			continue;
 		if (weapon)
 		{
-			float radius = weapon->info->rva002CACD7(weapon);
+			float radius = weapon->info->getProjectileNuggetRadiusIfAlliesAffected(weapon);
 			if (radius > 0.0f)
 			{
 				BfmeWideResult splash = ThePartitionManager->rva006255D0(enemy->getPosition(), radius, 4, 0);

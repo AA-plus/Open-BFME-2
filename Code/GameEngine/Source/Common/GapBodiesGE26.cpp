@@ -254,7 +254,7 @@ class Rva00427157;
 class Rva0033A9A5
 {
 public:
-	const Rva00427157 *rva0033A9A5(const void *key);		// 0x0033A9A5
+	const Rva00427157 *getCurrentLivingWorldAutoResolveArmor(const void *key);		// 0x0033A9A5
 };
 
 class ThingTemplate
@@ -284,7 +284,7 @@ private:
 
 const Rva00427157 *Rva004F613B::rva004F613B()
 {
-	return ((Rva0033A9A5 *)m_template)->rva0033A9A5(&m_object->m_10);
+	return ((Rva0033A9A5 *)m_template)->getCurrentLivingWorldAutoResolveArmor(&m_object->m_10);
 }
 
 void *Rva004F613B::rva004F6155()

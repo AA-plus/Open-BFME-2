@@ -484,7 +484,7 @@ class Rva00380200 {public:bool rva003805BB(float,bool);};
 class ThingTemplate {public:void *getCurrentLivingWorldAutoResolveWeapon(const void*) const;};
 class Rva004194D6 {public:float rva00419561(int,float,float,int);};
 class Rva00427157 {public:float rva004270FA(int);};
-class Rva0033A9A5 {public:const Rva00427157 *rva0033A9A5(const void*);};
+class Rva0033A9A5 {public:const Rva00427157 *getCurrentLivingWorldAutoResolveArmor(const void*);};
 class Rva0033A65E {public:void *rva0033A65E();};
 class LivingWorldAutoResolveBodyTemplate {public:float getHitpointsForLevel(int);};
 int GetGameLogicRandomValue(int,int,char*,int);
@@ -523,7 +523,7 @@ void LivingWorldAutoResolveBattle::rva004F99CC(bool *allActed)
     if(GetGameLogicRandomValue(1,100,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\System\\LivingWorld\\AutoResolve\\LivingWorldAutoResolveBattle.cpp",817)<=missChance)goto acted;
    }
    {
-    const Rva00427157 *armor=reinterpret_cast<Rva0033A9A5 *>((*target)->thing)->rva0033A9A5((*target)->entry->mask);
+    const Rva00427157 *armor=reinterpret_cast<Rva0033A9A5 *>((*target)->thing)->getCurrentLivingWorldAutoResolveArmor((*target)->entry->mask);
     float baseDamage=weapon->rva00419561(unit->getLevel(),unit->getTotalHealth(),reinterpret_cast<LivingWorldAutoResolveBodyTemplate *>(reinterpret_cast<Rva0033A65E *>(unit->thing)->rva0033A65E())->getHitpointsForLevel(unit->getLevel()),(*target)->thing->getTargetType());
     unsigned attacker=unit->player;
     unsigned defender=(*target)->player;

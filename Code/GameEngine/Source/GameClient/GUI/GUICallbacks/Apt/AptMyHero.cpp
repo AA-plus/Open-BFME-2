@@ -99,7 +99,7 @@ extern "C" __declspec(dllimport) int __cdecl atoi(const char *);
 // The Object fields the location map reads; offsets are retail's.
 class Object {public: char pad00[0x44];float field44;char pad48[0x74-0x48];int field74;char pad78[0x88-0x78];AsciiString name88;};
 class CommandButton;
-class Rva00406ED7 {public: const CommandButton *rva00406ED7(int);};
+class Rva00406ED7 {public: const CommandButton *GetButtonForLevel(int);};
 void __cdecl Rva005B24CDHeroPowerText(void *,const char *,int);
 bool __cdecl rva005B2295(const CommandButton *button,const char *prefix,int index,int page);
 class Rva00223A94 {public: int rva00223A94(const AsciiString *);};
@@ -290,7 +290,7 @@ void AptMyHero::rva005B1288(){rva005B0487();slot14();rva005B1019();}
 // the hero's level button lookup 0x00406ED7; that button then labels the
 // "MyPowerLevel" text and the "MyPowerIcon" icon for the level.
 void AptMyHero::rva005B0416(int level){
- const CommandButton *button=reinterpret_cast<Rva00406ED7 *>(this)->rva00406ED7(level);
+ const CommandButton *button=reinterpret_cast<Rva00406ED7 *>(this)->GetButtonForLevel(level);
  Rva005B24CDHeroPowerText((void *)button,"MyPowerLevel",level);
  rva005B2295(button,"MyPowerIcon",level,-1);
 }

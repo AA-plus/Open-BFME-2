@@ -21,7 +21,7 @@ class CommandButton;
 class Rva00406ED7
 {
 public:
-	const CommandButton *rva00406ED7(int index);
+	const CommandButton *GetButtonForLevel(int index);
 };
 
 class AptCreateAHero
@@ -78,7 +78,7 @@ void AptCreateAHero::Powers::MyPowerToolTip(const char *path)
 	if (sscanf(path, "%d", &index) != 1)
 		return;
 	--index;
-	const CommandButton *button = m_owner->m_buttons.rva00406ED7(index);
+	const CommandButton *button = m_owner->m_buttons.GetButtonForLevel(index);
 	if (m_owner->m_current == this)
 	{
 		AsciiString noCurrent("TOOLTIP:CAH_NO_CURRENT_POWER");
