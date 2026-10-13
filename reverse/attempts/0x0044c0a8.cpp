@@ -1,4 +1,6 @@
 // ?MessageBoxOk@@YAXVUnicodeString@@0P6AXXZ@Z
+// partial score=0.95 date=2026-10-13
+// ?MessageBoxOk@@YAXVUnicodeString@@0P6AXXZ@Z
 // partial score=0.88 date=2026-10-09
 // cl: /O1 /arch:SSE /G7 /EHsc /MD /Ireference/shims/bfme2_ascii
 #include "unicode_string.h"
@@ -11,6 +13,7 @@ public:
 };
 struct Rva004F6986Member {
     TargetRef00217D4C *m_ptr;
+    __forceinline Rva004F6986Member() : m_ptr(0) {}
     __forceinline Rva004F6986Member(const int *fn) : m_ptr(Rva0044BC76(fn).m_ptr) {}
     __forceinline Rva004F6986Member(const Rva004F6986Member &other) : m_ptr(other.m_ptr) {
         if (m_ptr) ++m_ptr->references;
@@ -33,12 +36,11 @@ struct Rva0044BA4E {
 };
 struct Rva0051732A {
     TargetRef00217D4C *m_ptr;
-    Rva0051732A *rva0051732A(TargetRef00217D4C *);
+    Rva0051732A(Rva004F6986Member value);
     __forceinline Rva0051732A(const Rva0051732A &other) : m_ptr(other.m_ptr) {
         if(m_ptr) ++m_ptr->references;
     }
     __forceinline ~Rva0051732A() { if(m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
-    __forceinline Rva0051732A(const int *fn) { rva0051732A(Rva0044BC76(fn).m_ptr); }
 };
 struct Rva0044BF40 { void *m_ptr; Rva0044BF40 *rva0044BF40(Rva0044BA4E); };
 struct Rva0044BFB2 { void *m_ptr; Rva0044BFB2 *rva0044BFB2(Rva0044BA4E); };
@@ -60,7 +62,10 @@ public:
 };
 extern "C" void __cdecl Rva00437F61(int,const UnicodeString &,const UnicodeString &,Rva0023E8D8);
 typedef void(*GameWinMsgBoxFunc)();
-__declspec(noinline) void MessageBoxNullCallback() {}
+class DebugDisplayInterface;
+struct _iobuf;
+void __cdecl rva000B3FD0DebugDisplay(DebugDisplayInterface *, void *, _iobuf *);
+#define MessageBoxNullCallback ((GameWinMsgBoxFunc)rva000B3FD0DebugDisplay)
 void MessageBoxYesNo(UnicodeString title,UnicodeString message,GameWinMsgBoxFunc yes,GameWinMsgBoxFunc no) {
     if(!yes)yes=MessageBoxNullCallback;
     if(!no)no=MessageBoxNullCallback;
@@ -75,6 +80,9 @@ void MessageBoxOkCancel(UnicodeString title,UnicodeString message,GameWinMsgBoxF
 }
 void MessageBoxOk(UnicodeString title,UnicodeString message,GameWinMsgBoxFunc ok) {
     if(!ok)ok=MessageBoxNullCallback;
-    Rva0051732A single((const int*)&ok);
-    Rva00437F61(0,title,message,Rva0023E8D8(single));
+    {
+        Rva004F6986Member member((const int*)&ok);
+        Rva0051732A single(member);
+        Rva00437F61(0,title,message,Rva0023E8D8(single));
+    }
 }
