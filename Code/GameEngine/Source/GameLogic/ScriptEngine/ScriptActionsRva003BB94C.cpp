@@ -1,5 +1,8 @@
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BB94CReveal@@YGXABVAsciiString@@@Z @0x003BB94C 122B: free stdcall revealing shroud for a player-name mask, all players when mask is zero.
+// ?Rva003BB94CReveal@ScriptActions@@QAEXABVAsciiString@@@Z @0x003BB94C 122B: ScriptActions member revealing shroud for a player-name mask, all players when mask is zero.
 // Target evidence: calls ScriptEngine::rva00357475 (0x00357475) once, then getNthPlayer (0x002A7A29) loop over PlayerList count +0x14 checking Player +0x5c or getEachPlayerFromMask (0x002A7BC9) loop reading Player +0x54, both reaching rva00739780 (0x00739780) via TheShroudManager (0x009FE74C); globals g_Va009FE16C (0x009FE16C) and ThePlayerList (0x009FEEE8); ret 4; caller 0x003CBE76.
 class AsciiString;
 class Player
@@ -32,7 +35,7 @@ class Rva00739780
 public:
 	void rva00739780(int value);
 };
-void __stdcall Rva003BB94CReveal(const AsciiString &name)
+void ScriptActions::Rva003BB94CReveal(const AsciiString &name)
 {
 	int mask = TheScriptEngine->rva00357475(name, 0);
 	if (mask == 0) {

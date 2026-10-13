@@ -1,4 +1,6 @@
-// cl: /O1 /MD /EHsc /DNDEBUG
+// cl: -O1 -arch:SSE -G7 -MD -EHsc -DNDEBUG -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // ZH doCameraFollowNamed supplies lock/snap/follow semantics. Retail3BC1B2
 // adds Drawable ID through neutral getter55A88B and a float play argument.
 // Its dispatcher at3CC8D3 and RET12 prove Parameter*, Bool, float free ABI.
@@ -68,7 +70,7 @@ public:
 class View;
 extern View *TheTacticalView;
 
-void __stdcall Rva003BC1B2Do(Parameter *p, bool flag, float v)
+void ScriptActions::Rva003BC1B2Do(Parameter *p, bool flag, float v)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(p);
 	if (obj == 0)

@@ -1,5 +1,8 @@
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BB8EDReveal@@YGXABVAsciiString@@M0@Z, retail 0x003BB8ED, 95 bytes.
+// ?Rva003BB8EDReveal@ScriptActions@@QAEXABVAsciiString@@M0@Z, retail 0x003BB8ED, 95 bytes.
 // Reveal/shroud circle at waypoint for player mask.
 // Evidence: leaf lane; callees TerrainLogic slot 0x88 ScriptEngine rva00357475 ShroudManager rva00739A30 rva00739BE0; caller 0x003CBE39.
 class AsciiString;
@@ -44,7 +47,7 @@ class Rva00739BE0
 public:
 	void rva00739BE0(Pair00739BE0 *p, float f, int mask);
 };
-void __stdcall Rva003BB8EDReveal(const AsciiString &where, float radius, const AsciiString &playerName)
+void ScriptActions::Rva003BB8EDReveal(const AsciiString &where, float radius, const AsciiString &playerName)
 {
 	TerrainLogicResult *loc = TheTerrainLogic->slot88(where);
 	if (loc == 0)

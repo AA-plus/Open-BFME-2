@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /MD
-// ?Rva003BC048Set@@YGXABVAsciiString@@H@Z @0x003BC048 95B leaf caller 0x003CC558 globals 0x009FE16C 0x009FEEE8
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003BC048Set@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003BC048 95B leaf caller 0x003CC558 globals 0x009FE16C 0x009FEEE8
 // Evidence: ScriptEngine::rva00357475 mask-from-name then PlayerList::getEachPlayerFromMask loop with Money withdraw-all then deposit arg at Player+0x90.
 #include "ascii_string.h"
 
@@ -32,7 +34,7 @@ public:
 extern class ScriptEngine *TheScriptEngine;
 extern PlayerList *ThePlayerList;
 
-void __stdcall Rva003BC048Set(const AsciiString &name, int amount)
+void ScriptActions::Rva003BC048Set(const AsciiString &name, int amount)
 {
 	int mask = TheScriptEngine->rva00357475(name, 0);
 	if (mask == 0)

@@ -1,5 +1,8 @@
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BBC61Set@@YGX_N@Z @0x003BBC61 32B leaf caller 0x003CBF60 globals TheAudio slots 0x40 0x44 args 0x10 1 1
+// ?Rva003BBC61Set@ScriptActions@@QAEX_N@Z @0x003BBC61 32B leaf caller 0x003CBF60 globals TheAudio slots 0x40 0x44 args 0x10 1 1
 // Evidence: cmp [esp+4],0 mov ecx,[TheAudio] mov eax,[ecx] push 1 push 1 push 0x10 je slot 0x44 else slot 0x40 ret 4.
 class AudioManager
 {
@@ -24,7 +27,7 @@ public:
 	virtual void s17(int, int, int);
 };
 extern AudioManager *TheAudio;
-void __stdcall Rva003BBC61Set(bool b)
+void ScriptActions::Rva003BBC61Set(bool b)
 {
 	if (b)
 		TheAudio->s16(0x10, 1, 1);

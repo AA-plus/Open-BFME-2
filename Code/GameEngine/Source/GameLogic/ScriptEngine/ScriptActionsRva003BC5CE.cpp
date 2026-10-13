@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BC5CESet@@YGXABVAsciiString@@H@Z @0x003BC5CE 88B: free stdcall mask loop adding Player+0x1c to second arg.
+// ?Rva003BC5CESet@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003BC5CE 88B: ScriptActions member mask loop adding Player+0x1c to second arg.
 // Evidence: mov ecx,[0xDFE16C] call ScriptEngine::rva00357475 0x00357475 with (name,0) test mask je; loop ThePlayerList 0x009FEEE8 getEachPlayerFromMask 0x002A7BC9 then virtual slot1 on Player+8 with Player+0x1c plus second arg then GameSlot::setTeamNumber 0x002E6A93 with Player+0x1c; cmp mask jne loop ret 8; sibling 0x003BC626 same shape without the add.
 
 #include "ascii_string.h"
@@ -42,7 +44,7 @@ public:
 	void setTeamNumber(int val);
 };
 
-void __stdcall Rva003BC5CESet(const AsciiString &name, int val)
+void ScriptActions::Rva003BC5CESet(const AsciiString &name, int val)
 {
 	int mask = TheScriptEngine->rva00357475(name, 0);
 	if (mask == 0)
