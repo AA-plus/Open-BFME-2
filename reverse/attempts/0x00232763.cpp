@@ -2,7 +2,9 @@
 // partial score=0.9 date=2026-10-13
 // ?translateKey@Keyboard@@QAEGG@Z
 // partial score=0.9 date=2026-10-13
-// cl: /DNDEBUG /MD /EHsc
+// ?translateKey@Keyboard@@QAEGG@Z
+// partial score=0.9 date=2026-10-13
+// cl: /DNDEBUG /MD /EHsc /O1 /G7
 //
 // Two Keyboard key-table accessors (formerly rowed as AIPlayer::rva002326AE
 // and AIPlayer::rva00232643; the class is Keyboard, see Keyboard.cpp):
