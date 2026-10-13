@@ -250,38 +250,6 @@ Rva005C8787::Rva005C8787() : m_00(0), m_04(0), m_08(1.0f)
 {
 }
 
-// --- 0x005F8E0D / 0x005F8E22 (21B each): state 2 -> 3 with virtual slot 1,
-// state 4 -> 1 with virtual slot 2 (state at +0x28; the argument is unused).
-class Rva005F8E0D
-{
-public:
-	virtual void s0();
-	virtual void s1();
-	virtual void s2();
-	void rva005F8E0D(int unused);
-	void rva005F8E22(int unused);
-private:
-	char m_pad[0x28 - 4];
-	int m_state;											// +0x28
-};
-
-void Rva005F8E0D::rva005F8E0D(int)
-{
-	if (m_state == 2)
-	{
-		m_state = 3;
-		s1();
-	}
-}
-
-void Rva005F8E0D::rva005F8E22(int)
-{
-	if (m_state == 4)
-	{
-		m_state = 1;
-		s2();
-	}
-}
 
 template <class T> struct GapClassVector
 {

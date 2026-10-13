@@ -14194,7 +14194,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00879CF0,8,.rdata,vtable,??_7Rva005F8CB0@@6BRva005F8CB0Base0@@@,,literal,,0,1
 0x00879CF8,20,.rdata,global,_vtbl_00C79CF8,,unowned,,0,1
 0x00879D0C,20,.rdata,global,_vtbl_00C79D0C,,unowned,,0,1
-0x00879D20,12,.rdata,vtable,??_7Rva005F8FEE@@6B@,,literal,,0,1
+0x00879D20,12,.rdata,vtable,??_7PlayerPageFrame@StrategicHUD@@6B@,,literal,,0,1
 0x00879D2C,12,.rdata,string,??_C@_0M@LNLOJMJI@AutoResolve?$AA@,,literal,,0,1
 0x00879D38,12,.rdata,string,??_C@_08FMJGLCBN@RealTime?$AA@,,literal,,0,1
 0x00879D44,236,.rdata,string,??_C@_07EJEPFBMD@Retreat?$AA@,,literal,,0,1

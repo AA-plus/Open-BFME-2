@@ -42,13 +42,15 @@ Rva005F8F7B::~Rva005F8F7B()
 {
 }
 
-class Rva005F8FEE
+namespace StrategicHUD {
+class PlayerPageFrame
 {
 public:
-	virtual ~Rva005F8FEE();
+	virtual ~PlayerPageFrame();
 };
+}
 
-class __declspec(novtable) Rva005FA141 : public Rva005F8FEE
+class __declspec(novtable) Rva005FA141 : public StrategicHUD::PlayerPageFrame
 {
 public:
 	virtual ~Rva005FA141();

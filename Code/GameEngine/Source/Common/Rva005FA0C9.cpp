@@ -22,16 +22,19 @@ public:
 	char m_pad[4];
 };
 
-class Rva005F8FEE
+namespace StrategicHUD {
+class PlayerPageFrame
 {
 public:
-	Rva005F8FEE(int level, const AsciiString &name, const char *side,
+	PlayerPageFrame(int level, const AsciiString &name, const char *side,
 		int index, const Rva005F91F3Src &record);
 };
+}
+
 
 Rva005FA0C9 *__fastcall rva005FA0C9Init(Rva005FA0C9 *o, int fwd, Rva005FA0C9A *a, int b, int c)
 {
-	((Rva005F8FEE *)o)->Rva005F8FEE::Rva005F8FEE(a->m_04, *(const AsciiString *)&a->m_08,
+	((StrategicHUD::PlayerPageFrame *)o)->StrategicHUD::PlayerPageFrame::PlayerPageFrame(a->m_04, *(const AsciiString *)&a->m_08,
 		"Ally", b, *(const Rva005F91F3Src *)c);
 	((int *)o)[0] = 0x00C79D78;
 	return o;
