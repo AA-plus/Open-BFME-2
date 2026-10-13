@@ -1,4 +1,6 @@
 // ?rva003642DF@Path@@QAE?AURva003642DFResult@@M@Z
+// partial score=0.88 date=2026-10-13
+// ?rva003642DF@Path@@QAE?AURva003642DFResult@@M@Z
 // partial score=0.8836897052993261 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /I.
 // ?rva003649B1@Path@@QAEXPBVPathNode@@@Z @0x003649B1 134B via Path append donor
@@ -20,12 +22,17 @@ enum PathfindLayerEnum
 struct Rva003642DFNode {
  Rva003642DFNode *next,*previous,*optimized;Coord3D position;int layer;bool canOptimize;int portal;
 };
-struct Rva003642DFResult
+class Region2D
 {
-	Rva003642DFResult();
- __declspec(noinline) Rva003642DFResult(const Rva003642DFResult &);
+public:
+	Region2D() {}
+	Region2D(const Region2D &);
 	Rva003642DFNode *m_node;
 	Coord3D m_pos;
+};
+struct Rva003642DFResult : Region2D
+{
+	Rva003642DFResult();
 };
 
 class Rva0008BB38FloatField
@@ -140,7 +147,6 @@ virtual void slot33();
 virtual void slot34();
 virtual PathPeekPortal *getPortal(int);};
 extern PathPeekTerrain *TheTerrainLogic;
-__declspec(noinline) Rva003642DFResult::Rva003642DFResult(const Rva003642DFResult &v) { m_node=v.m_node;m_pos.x=v.m_pos.x;m_pos.y=v.m_pos.y;m_pos.z=v.m_pos.z; }
 static __forceinline void peekSub(Coord3D &a,const Coord3D &b){a.x-=b.x;a.y-=b.y;a.z-=b.z;}
 static __forceinline void peekAdd(Coord3D &a,const Coord3D &b){a.x+=b.x;a.y+=b.y;a.z+=b.z;}
 static __forceinline void peekScale(Coord3D &a,float f){a.x*=f;a.y*=f;a.z*=f;}
