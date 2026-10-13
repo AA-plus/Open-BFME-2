@@ -16,8 +16,17 @@
 // change nothing else in this unit, but if a function added later that builds
 // an array will not match, try it without this block.
 struct BfmeVciAnchorElem { BfmeVciAnchorElem(); };
+// Matrix3D's inline helpers are defined in the same /O1-like state, so the
+// out-of-line copies this unit emits (copy constructor, Rotate_Vector,
+// Transform_Vector) are retail's /O1 bodies (0x0006645C copy) instead of /O2
+// ones that, first in link order, displace them. Calls inline as before.
+#include "always.h"
+#include <assert.h>
+#include "../../../../../reference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath/vector2.h"
+#include "../../../../../reference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath/vector3.h"
 #pragma optimize("gsy", on)
 static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
+#include "../../../../../reference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath/matrix3d.h"
 #pragma optimize("", on)
 #define Matrix3x3 Matrix3
 #define Matrix4x4 Matrix4  // BFME renamed it

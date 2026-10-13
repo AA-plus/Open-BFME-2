@@ -10,11 +10,17 @@
 // change nothing else in this unit, but if a function added later that builds
 // an array will not match, try it without this block.
 struct BfmeVciAnchorElem { BfmeVciAnchorElem(); };
+// Matrix3D's inline helpers are defined in the same /O1-like state, so the
+// out-of-line copies this unit emits (default and copy constructors) are
+// retail's /O1 bodies (0x0006645C copy) instead of /O2 ones. Calls inline as before.
+#include "always.h"
+#include <assert.h>
+#include "vector2.h"
+#include "vector3.h"
 #pragma optimize("gsy", on)
 static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
-#pragma optimize("", on)
-
 #include "matrix3d.h"
+#pragma optimize("", on)
 
 // BFME 2's pivot keeps its current transform as a rotation quaternion at +0x30
 // and a translation at +0x40 (HTreePivotClass.cpp's constructor and assignment
