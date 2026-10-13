@@ -68,10 +68,23 @@ inline __declspec(noinline) int __cdecl Rva00577AE9AptCall(Rva00222A8BTarget *ta
 }
 
 
-class Rva00577CC5
+// ?Move@ButtonShell@Impl@AptRadialMenu@@QAEXHHHH@Z @0x00577CC5 206B: renamed
+// from placeholder Rva00577CC5 — the WorldBuilder twin asserts
+// AptRadialMenu::Impl::ButtonShell::Move at EA's own AptRadialMenu.cpp.
+class AptRadialMenu
 {
 public:
-	void rva00577CC5(int a0, int a1, int a2, int a3);
+	class Impl
+	{
+	public:
+		class ButtonShell;
+	};
+};
+
+class AptRadialMenu::Impl::ButtonShell
+{
+public:
+	void Move(int a0, int a1, int a2, int a3);
 private:
 	char _p0[8];
 	OuterBox *m_8;
@@ -84,8 +97,7 @@ private:
 	int m_24;
 };
 
-// ?rva00577CC5@Rva00577CC5@@QAEXHHHH@Z
-void Rva00577CC5::rva00577CC5(int a0, int a1, int a2, int a3)
+void AptRadialMenu::Impl::ButtonShell::Move(int a0, int a1, int a2, int a3)
 {
 	if (a0 != m_18 || a1 != m_1c || a2 != m_20 || a3 != m_24) {
 		float *scale = TheRva00222A8BTarget->getScale();
