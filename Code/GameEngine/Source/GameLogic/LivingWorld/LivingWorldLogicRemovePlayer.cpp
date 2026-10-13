@@ -80,3 +80,26 @@ void LivingWorldLogic::RemovePlayer(LivingWorldPlayer*player){
  int i=armies.size();while(--i>=0){if(armies[i]->owner==player->id){((_STL::vector<void*>*)&armies)->erase(((_STL::vector<void*>*)&armies)->begin()+i);}}
  ((Rva002E21D1*)player)->rva002E21D1();((Rva002B4E83*)this)->rva002B4E83((Rva002E0687*)player);
 }
+
+// ?rva003F5F89@Rva003F5F89@@QAE@ABV0@@Z @0x003F5F89 71B.
+// Copy constructor over an int plus a 48-byte-record vector (rowed copy
+// 0x003F5B5B) plus an ArmyID vector (rowed copy 0x0054878E, instantiated by
+// the ids copy above). The Pod48 copy stays an explicit specialization so
+// this TU emits no second copy. Evidence: retail int/vector/vector member
+// order, SEH prologue with FuncInfo 0x00B8404A, this-return.
+struct BfmePod48 { int a[12]; };
+namespace _STL {
+template<> vector<BfmePod48, allocator<BfmePod48> >::vector(const vector<BfmePod48, allocator<BfmePod48> > &);
+}
+class Rva003F5F89 {
+public:
+	Rva003F5F89(const Rva003F5F89 &other);
+private:
+	int m_0;
+	_STL::vector<BfmePod48> m_vec4;
+	_STL::vector<Rva002B7DE6ArmyID> m_vec10;
+};
+Rva003F5F89::Rva003F5F89(const Rva003F5F89 &other)
+	: m_0(other.m_0), m_vec4(other.m_vec4), m_vec10(other.m_vec10)
+{
+}
