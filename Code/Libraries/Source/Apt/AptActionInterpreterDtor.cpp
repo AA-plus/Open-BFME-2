@@ -8,7 +8,9 @@
 // provenance carried by that provider; target independently proves offsets.
 // Base stack layout is12B at0. Constructor6FE980 proves value-stack
 // boundaries+C/+18/+24 and current-function pointer+30.
-// Buffer element identities remain opaque4B slots. Target _AptValuePtrStack.h
+// With-stack+C is AptValuePtrStack<AptValue>: native7084D3 passes this+C
+// to the WB175A800-named push6E0D60; native708469 calls top6DE160 there.
+// Other buffer element identities remain opaque4B slots. Target _AptValuePtrStack.h
 // assertion and sized pool frees prove count0/capacity4/storage8; destructor
 // neither releases entries nor zeros fields. C++ member lifetime supplies the
 // native3/2/1/0/-1 EH states, not explicit cleanup-label aliases.
@@ -37,6 +39,20 @@ public:
   }
  }
 };
+class AptValue;
+template<class T> class AptValuePtrStack {
+public:
+ int count,capacity;T **storage;
+ ~AptValuePtrStack() {
+  if(storage) {
+   if(!g_bfmeAptFreeSizeAtE17730) {
+    g_bfmeAptAssertAtE17734("gAptFuncs.pfnMemFreeSize","c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\_AptValuePtrStack.h",82);
+    if(g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+   }
+   g_pChainBlockAllocator->freeBlock(storage,capacity*4);
+  }
+ }
+};
 template<class T> class AptDebugStack {
 public:
  ~AptDebugStack();
@@ -47,7 +63,9 @@ public:
  struct DebugCallStackInfo_t;
  ~AptActionInterpreter();
  AptBasePtrStack stack;
- AptOwnedValueSlots12 withStack,setTargetStack,thisStack;
+ AptValuePtrStack<AptValue> withStack;
+ AptOwnedValueSlots12 setTargetStack;
+ AptOwnedValueSlots12 thisStack;
  void *currentFunction;
  AptDebugStack<DebugCallStackInfo_t> debug34;
 };
