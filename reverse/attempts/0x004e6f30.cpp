@@ -1,5 +1,5 @@
 // ?rva004E6F30@InGameNotificationBoxMovieClip@@QAEXABVUnicodeString@@ABVRva002217EA@@H_NH@Z
-// partial score=0.9891416309012876 date=2026-10-09
+// partial score=0.987124463519313 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /O1 /Oy /G7 /arch:SSE /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/inputs/reference/shims/sweep /ICode/Libraries/Include/Lib /ICode/GameEngine/Include
 // Notification ctor: native4E6C34..4E6F30 RET0 and WB1321690 source43..47.
 // Target stores and the rowed157B destructor establish fields4..51;
@@ -130,14 +130,14 @@ virtual int load(AsciiString,AsciiString,int,int);
 };
 class Rva002224FE {public:bool rva002224FE(int);};
 class Rva004E67B3 {public:void rva004E67B3(unsigned);};
-class Rva002217EA {public:
- __declspec(noinline) const UnicodeString&rva0047A6A9()const{return text;}
- __declspec(noinline) const OpaqueRefElement4&rva005C4AD1()const{return sound;}
- __declspec(noinline) const Image*rva0030F45F()const{return image;}
- __declspec(noinline) void*rva001DB0A8()const{return font;}
- __declspec(noinline) unsigned rva001DB09D()const{return color;}
- UnicodeString text;OpaqueRefElement4 sound;const Image*image;void*font;unsigned color;
-};
+class Rva002217EA;
+class Rva005045DBTree {public:Rva005045DBTree&self();};
+class Rva005C4AD1LeaField {public:void*get()const;};
+class NetCommandList;
+class FrameData {public:NetCommandList*getCommandList();};
+class UpgradeTemplate;
+class UpgradeCenter {public:const UpgradeTemplate*rva001DB0A8()const;};
+class Rva001DB09DDwordField {public:int get()const;};
 class Rva004E6A9BBase {public:virtual unsigned char rva00578522()const;virtual void rva004E6B7D(bool);virtual void DoOpen(const UnicodeString&,const Rva002217EA&,int);virtual void DoClose();~Rva004E6A9BBase(){}};
 class InGameNotificationBoxMovieClip:public Rva004E6A9BBase {public:
  InGameNotificationBoxMovieClip();
@@ -173,12 +173,12 @@ void InGameNotificationBoxMovieClip::rva004E6F30(const UnicodeString&message,con
  if(!flag50)return;
  Rva004E6A1D value(new Rva004E6935);
  Rva004E6935*descriptor=value.operator->();
- descriptor->text=spec.rva0047A6A9();
- descriptor->sound=spec.rva005C4AD1();
- descriptor->icon=spec.rva0030F45F();
+ descriptor->text=reinterpret_cast<const UnicodeString&>(reinterpret_cast<Rva005045DBTree&>(const_cast<Rva002217EA&>(spec)).self());
+ descriptor->sound=*reinterpret_cast<const OpaqueRefElement4*>(reinterpret_cast<const Rva005C4AD1LeaField&>(spec).get());
+ descriptor->icon=reinterpret_cast<const Image*>(reinterpret_cast<FrameData&>(const_cast<Rva002217EA&>(spec)).getCommandList());
  descriptor->fontName=message;
- descriptor->font=spec.rva001DB0A8();
- descriptor->color=spec.rva001DB09D();
+ descriptor->font=const_cast<UpgradeTemplate*>(reinterpret_cast<const UpgradeCenter&>(spec).rva001DB0A8());
+ descriptor->color=reinterpret_cast<const Rva001DB09DDwordField&>(spec).get();
  descriptor->timeout=timeout;descriptor->show=show;descriptor->context=location;
  ((Rva004E6A37*)&pending)->operator=(noticeHold(value.rva004E6BF6()));
 }
