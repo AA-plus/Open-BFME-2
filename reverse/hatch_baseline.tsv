@@ -9960,12 +9960,13 @@ object_symbol	reverse/functions.csv	0x0076DE53	1
 object_symbol	reverse/functions.csv	0x0076DE5B	1
 object_symbol	reverse/functions.csv	0x0076DE66	1
 object_symbol	reverse/functions.csv	0x0076DE7C	1
-object_symbol	reverse/functions.csv	0x0076DE8A	1	allow=132e81319f25a55c38e31f41d98cf9e8b66f23d0
+object_symbol	reverse/functions.csv	0x0076DE8A	1
 object_symbol	reverse/functions.csv	0x0076DE98	1
 object_symbol	reverse/functions.csv	0x0076DEA6	1
 object_symbol	reverse/functions.csv	0x0076DEB4	1
 object_symbol	reverse/functions.csv	0x0076DEC2	1
 object_symbol	reverse/functions.csv	0x0076DED0	1
+object_symbol	reverse/functions.csv	0x0076DEFA	1	allow=d39a427933560aa96905d5a91505d7e74dc993a8
 object_symbol	reverse/functions.csv	0x0076DF24	1
 object_symbol	reverse/functions.csv	0x0076DF46	1
 object_symbol	reverse/functions.csv	0x0076DF58	1
