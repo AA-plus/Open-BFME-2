@@ -15,7 +15,10 @@
 #define width width_RV
 #define height height_RV
 #include "ascii_string.h"
+// The matched trig operations inline; keep surplus CRT float wrappers local.
+#define inline static inline
 #include <math.h>
+#undef inline
 typedef bool Bool;
 typedef int Int;
 typedef float Real;
