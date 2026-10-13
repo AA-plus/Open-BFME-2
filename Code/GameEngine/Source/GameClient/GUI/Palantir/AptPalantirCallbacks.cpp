@@ -326,7 +326,7 @@ extern PlayerList *ThePlayerList;
 // 0x0051B4F7), 0x0050EC24 and 0x004E41AB (objectives), 0x005117DF
 // (messenger; its argument is unused).
 void Rva0051B8EA();
-void Rva0050EC24();
+class AptPlayerTribute { public: static void OpenScreen(); };
 void Rva004E41AB();
 void __cdecl Rva005117DF(const char *unused);
 
@@ -403,7 +403,7 @@ void AptPalantir::OnBttnOptions(const char *unused)
 void AptPalantir::OnBttnObjectives(const char *unused)
 {
 	if (((BfmeGlob939D *)TheGameLogic)->bfmeCall939D())
-		Rva0050EC24();
+		AptPlayerTribute::OpenScreen();
 	else
 		Rva004E41AB();
 	m_e5 = false;
