@@ -31,6 +31,14 @@ size_t vector<void*>::size() const
 template <> __declspec(dllimport) __forceinline
 void *&vector<void*>::operator[](size_t __n)
 { return *(begin() + __n); }
+// Retail calls the shared out-of-line erase (0x0031BD55, rowed in
+// stlport_vector_voidptr_opt.cpp) and inlines clear; declare the former and
+// keep the latter inline so no competing erase/clear/__copy_trivial copies.
+template <>
+void **vector<void*>::erase(void **__first, void **__last);
+template <> __declspec(dllimport) __forceinline
+void vector<void*>::clear()
+{ erase(begin(), end()); }
 }
 
 void __cdecl BFME_DX8_Thread_Lock();
