@@ -1,7 +1,9 @@
 // cl: /O1 /DNDEBUG /MD
 // ?PartitionGetPlayerIndex@Object@@UBEHXZ, retail 0x0028E7F8 (82 bytes).
-// Its vtable neighbour Object::ShroudHideIfFogged (0x0028E775) is declared
-// here for the class shape; its body is banked, not yet byte-exact.
+// Its vtable neighbour Object::ShroudHideIfFogged (0x0028E775, 131 bytes) is
+// defined here too; the WorldBuilder debug body gives its shape: the two
+// early false returns are separate ifs (not one ||), the neutral and the
+// non-neutral arm each return true on their test, and one final return false.
 // Identity (target): WorldBuilder's debug Object.cpp names both
 // (Object::PartitionGetPlayerIndex: Object::getControllingPlayer, a kind-of
 // test and two Team queries; Object::ShroudHideIfFogged:
@@ -131,4 +133,25 @@ int Object::PartitionGetPlayerIndex() const
 			return player->getPlayerIndex();
 	}
 	return -1;
+}
+
+bool Object::ShroudHideIfFogged(int playerIndex) const
+{
+	if (!m_shroudData)
+		return false;
+	if (isKindOf(KINDOF_213))
+		return false;
+	Player *player = ThePlayerList->getNthPlayer(playerIndex);
+	if (player->getRelationship(m_team) == NEUTRAL)
+	{
+		const ThingTemplate *tmpl = getTemplate();
+		if (!tmpl->isKindOf(KINDOF_2) || tmpl->isKindOf(KINDOF_180))
+			return true;
+	}
+	else
+	{
+		if (!isKindOf(KINDOF_2) || !m_shroudData->get(playerIndex) || isKindOf(KINDOF_180))
+			return true;
+	}
+	return false;
 }
