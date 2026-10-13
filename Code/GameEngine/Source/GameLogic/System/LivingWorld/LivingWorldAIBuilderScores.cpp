@@ -145,7 +145,7 @@ private:
 // the builder's +0x0C weight scaled by the closest hero's distance falloff.
 extern float g_Va007C26F0;
 extern float g_00BC7508;
-extern float g_00BC8980;
+// g_00BC8980 was the retail address alias (RVA 0x007C8980) of the constant 1.5f; the literal is the source.
 float Rva0059CEE4::rva0059CEE4(int a1, void *a2, void **a3)
 {
 	int out = 0;
@@ -153,7 +153,7 @@ float Rva0059CEE4::rva0059CEE4(int a1, void *a2, void **a3)
 	int *info = (int *)((char *)*a3 + 0x14);
 	((Rva0059CFAACallee *)a2)->rva004FFB00(a1, info, &out);
 	float x = (float)out * g_Va007C26F0;
-	return (g_00BC7508 - x * x) * (*(const volatile float *)&y * g_00BC8980);
+	return (g_00BC7508 - x * x) * (*(const volatile float *)&y * 1.5f);
 }
 
 // ?rva0059CF34@LivingWorldAIBuilder@@QAEMHHPAVRva0059CFAACallee@@ABQAURva0059CFAARegion@@@Z

@@ -7,7 +7,7 @@
 // five-arg helper on (base+0xE8, tmp, scale, &a, &b) and add a*b. The
 // scale fld sits before the rva005688D2 call, which MSVC only keeps in
 // ST(0) across the call for a same-TU (visible) callee.
-extern float g_00BC6C50;
+// g_00BC6C50 was the retail address alias (RVA 0x007C6C50) of the constant -0.5f; the literal is the source.
 
 void rva005C80D1(void *p, float *tmp, float scale, int *a, int *b);
 
@@ -41,11 +41,11 @@ void Rva005688D2::rva005688D2(float *out, int mode)
     if (mode == 0 || mode == 2)
         first = 0.0f;
     else
-        first = m_base->m_scale * g_00BC6C50;
+        first = m_base->m_scale * -0.5f;
     if (mode == 0 || mode == 1)
         second = 0.0f;
     else
-        second = m_base->m_scale * g_00BC6C50;
+        second = m_base->m_scale * -0.5f;
     out[0] = first;
     out[1] = second;
 }

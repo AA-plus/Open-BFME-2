@@ -23,7 +23,7 @@ public:
 	void rva002D3772(int a, float b);
 };
 extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
-extern float g_00BCEAFC;
+// g_00BCEAFC was the retail address alias (RVA 0x007CEAFC) of the constant 7.0f; the literal is the source.
 
 void Rva002BA8F1Logic::rva002B35F7()
 {
@@ -33,5 +33,5 @@ void Rva002BA8F1Logic::rva002B35F7()
 	int v = item->m_98;
 	if (v <= 0)
 		return;
-	theRadarWindowOverrideSource->rva002D3772(v, g_00BCEAFC);
+	theRadarWindowOverrideSource->rva002D3772(v, 7.0f);
 }

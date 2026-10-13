@@ -5,7 +5,7 @@
 // Callers 0x27F0DF/0x27F114, same Common family as Rva0027D244Init
 // whose init returns this (mov eax,ecx early then stores via eax).
 // No donor: honest address name. Returns this to hold base in eax.
-extern float g_00BC876C;
+// g_00BC876C was the retail address alias (RVA 0x007C876C) of the constant 1e+07f; the literal is the source.
 
 class Rva0027D1C6
 {
@@ -22,7 +22,7 @@ private:
 
 Rva0027D1C6 *Rva0027D1C6::rva0027D1C6()
 {
-	float t = g_00BC876C;
+	float t = 1e+07f;
 	Rva0027D1C6 *s = this;
 	s->m_0C = 0;
 	s->m_14 = 0;

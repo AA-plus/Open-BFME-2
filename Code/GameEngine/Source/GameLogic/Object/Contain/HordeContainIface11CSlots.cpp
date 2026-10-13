@@ -3590,9 +3590,9 @@ void HordeContain::rva00468B24(float value)
 {
 	if (value > m_2EC)
 		m_2EC = value;
-	extern float g_00BC5CD4;
-	if (m_2EC > g_00BC5CD4)
-		m_2EC = g_00BC5CD4;
+// g_00BC5CD4 was the retail address alias (RVA 0x007C5CD4) of the constant 90.0f; the literal is the source.
+	if (m_2EC > 90.0f)
+		m_2EC = 90.0f;
 }
 
 // ?rva0046966C@Rva0046966C@@QAEXXZ 0x0046966C 29B StringBase-G validate then outer +0x1D8 test to +0x291. Callers none. Same // cl: as neighbours.

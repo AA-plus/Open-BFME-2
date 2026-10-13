@@ -38,7 +38,7 @@ public:
 	void Set_Points(unsigned int n, Vector3 *p);
 };
 
-extern float g_00BC2918;
+// g_00BC2918 was the retail address alias (RVA 0x007C2918) of the constant 4.0f; the literal is the source.
 
 class Rva000E04CE
 {
@@ -56,7 +56,7 @@ void Rva000E04CE::rva000E04CE(SegmentedLineClass *line)
 	if (m_vec.size() <= 1) {
 		return;
 	}
-	line->Set_Texture_Tile_Factor(g_00BC2918);
+	line->Set_Texture_Tile_Factor(4.0f);
 	line->Set_Points(m_vec.size(), (Vector3 *)&m_vec[0]);
 	line->v12(m_1c);
 	m_vec.erase(m_vec.begin(), m_vec.end() - 1);

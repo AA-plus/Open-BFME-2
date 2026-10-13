@@ -25,8 +25,8 @@ public:
   float scanReal(const char *token);
   unsigned int scanUnsignedInt(const char *token);
 };
-extern const char g_00BBE3C8[];
-extern const char g_00BBE3C4[];
+// g_00BBE3C8 was the retail address alias (RVA 0x007BE3C8) of the constant "X"; the literal is the source.
+// g_00BBE3C4 was the retail address alias (RVA 0x007BE3C4) of the constant "Y"; the literal is the source.
 extern const char g_00C02174[];
 struct Rva002CE849Holder {
   char m_pad[0x4C];
@@ -35,8 +35,8 @@ struct Rva002CE849Holder {
 void Rva002CE849Parse(INI *ini, void *instance)
 {
   Coord3D tmp;
-  tmp.x = ini->scanReal(ini->getNextSubToken(g_00BBE3C8));
-  tmp.y = ini->scanReal(ini->getNextSubToken(g_00BBE3C4));
+  tmp.x = ini->scanReal(ini->getNextSubToken("X"));
+  tmp.y = ini->scanReal(ini->getNextSubToken("Y"));
   *(unsigned int *)&tmp.z = ini->scanUnsignedInt(ini->getNextSubToken(g_00C02174));
   ((Rva002CE849Holder *)instance)->m_vec.push_back(tmp);
 }

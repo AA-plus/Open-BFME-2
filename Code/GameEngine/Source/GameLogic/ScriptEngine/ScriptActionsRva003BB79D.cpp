@@ -29,7 +29,7 @@ public:
 	void rva001DDAE1(Coord3D *pos);
 };
 extern class Eva *TheEva;
-extern float g_00BC2918;
+// g_00BC2918 was the retail address alias (RVA 0x007C2918) of the constant 4.0f; the literal is the source.
 void __stdcall Rva003BB79DDo(Parameter *p, void *extra)
 {
 	Object *o = TheScriptEngine->getUnitNamed(p);
@@ -38,6 +38,6 @@ void __stdcall Rva003BB79DDo(Parameter *p, void *extra)
 	const Coord3D *pos = o->getPosition();
 	if (!pos)
 		return;
-	((Rva002D88A4 *)TheRadar)->rva002D88A4((Coord3D *)pos, extra, g_00BC2918);
+	((Rva002D88A4 *)TheRadar)->rva002D88A4((Coord3D *)pos, extra, 4.0f);
 	(*(Rva001DDAE1 **)&TheEva)->rva001DDAE1((Coord3D *)pos);
 }

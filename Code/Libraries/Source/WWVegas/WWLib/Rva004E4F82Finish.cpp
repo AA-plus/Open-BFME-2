@@ -49,7 +49,7 @@ inline bool operator<(const BfmePod8 &x, const BfmePod8 &y) { return x.a[0] < y.
 
 extern float g_Va00BBB8D8;
 extern const float g_bfmeClearA;
-extern float g_00BC6258;
+// g_00BC6258 was the retail address alias (RVA 0x007C6258) of the constant 60.0f; the literal is the source.
 
 class Rva004E4F82
 {
@@ -72,7 +72,7 @@ public:
     _STL::list<BfmePod8, _STL::allocator<BfmePod8> > m_38;
 };
 
-Rva004E4F82::Rva004E4F82() : m_30(-1), m_18(0.0f), m_24(g_Va00BBB8D8), m_28(g_bfmeClearA), m_2C(g_00BC6258)
+Rva004E4F82::Rva004E4F82() : m_30(-1), m_18(0.0f), m_24(g_Va00BBB8D8), m_28(g_bfmeClearA), m_2C(60.0f)
 {
     m_00 = 0.0f;
     m_04 = 0.0f;

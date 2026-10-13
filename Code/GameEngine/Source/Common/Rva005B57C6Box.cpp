@@ -7,7 +7,7 @@
 // precedent.
 #include <stdio.h>
 
-extern char g_rva005B57C6Fmt[];
+// g_rva005B57C6Fmt was the retail address alias (RVA 0x007E3878) of the constant "%d %d"; the literal is the source.
 
 struct Rva005B57C6Box
 {
@@ -18,6 +18,6 @@ struct Rva005B57C6Box
 void Rva005B57C6Box::Run(char *s)
 {
 	int local;
-	sscanf(s, g_rva005B57C6Fmt, &local, &s);
+	sscanf(s, "%d %d", &local, &s);
 	M54ed(local, s, 1);
 }

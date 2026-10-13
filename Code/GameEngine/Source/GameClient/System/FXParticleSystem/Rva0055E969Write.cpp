@@ -39,9 +39,9 @@ extern "C" void __cdecl free(void *p);
 void Rva0055E891WriteVelocityHeader(const void *self, File *file, unsigned int *flags);
 void Rva003AFC6BWrite(File *file, unsigned int *flags);
 
-extern const char g_00BBE3C8[];
-extern const char g_00BBE3C4[];
-extern const char g_00BBE3C0[];
+// g_00BBE3C8 was the retail address alias (RVA 0x007BE3C8) of the constant "X"; the literal is the source.
+// g_00BBE3C4 was the retail address alias (RVA 0x007BE3C4) of the constant "Y"; the literal is the source.
+// g_00BBE3C0 was the retail address alias (RVA 0x007BE3C0) of the constant "Z"; the literal is the source.
 
 struct S001F87D5 {
     char _0[4];
@@ -77,11 +77,11 @@ void OrthoEmissionVelocityModuleTemplate::rva0055E969(File *file, unsigned int f
     Rva0055E891WriteVelocityHeader(this, file, &flags);
     _STL::basic_ostringstream<char, _STL::char_traits<char>, _STL::allocator<char> > oss(16);
     if (!Rva001F3744IsZero((const S001F3744 *)&m_field0C))
-        Rva001F8B5FWrite(oss, flags, g_00BBE3C8, m_field0C);
+        Rva001F8B5FWrite(oss, flags, "X", m_field0C);
     if (!Rva001F3744IsZero((const S001F3744 *)&m_field18))
-        Rva001F8B5FWrite(oss, flags, g_00BBE3C4, m_field18);
+        Rva001F8B5FWrite(oss, flags, "Y", m_field18);
     if (!Rva001F3744IsZero((const S001F3744 *)&m_field24))
-        Rva001F8B5FWrite(oss, flags, g_00BBE3C0, m_field24);
+        Rva001F8B5FWrite(oss, flags, "Z", m_field24);
     Rva001F458BWrite(*file, (const Rva001F458BText &)oss.str());
     Rva003AFC6BWrite(file, &flags);
 }

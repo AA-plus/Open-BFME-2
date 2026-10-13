@@ -42,12 +42,12 @@ public:
 	virtual void s31(void *a, float b, float c, int d);
 };
 extern TerrainLogic *TheTerrainLogic;
-extern float g_00C1FE44;
+// g_00C1FE44 was the retail address alias (RVA 0x0081FE44) of the constant 999999.9f; the literal is the source.
 
 void __stdcall Rva003BC306Do(Parameter *param, float f)
 {
 	void *res = TheTerrainLogic->s29(param);
 	if (res == 0)
 		return;
-	TheTerrainLogic->s31(res, f, g_00C1FE44, 1);
+	TheTerrainLogic->s31(res, f, 999999.9f, 1);
 }

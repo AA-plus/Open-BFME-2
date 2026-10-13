@@ -9,7 +9,7 @@ class Rva00222A8BTarget;
 extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime();
 int __cdecl Rva00524EF4AptCall(Rva00222A8BTarget *t, void *a1, const char *a2, const char *a3);
-extern const char g_rva005A5B38Const[];
+// g_rva005A5B38Const was the retail address alias (RVA 0x008711C8) of the constant "ClosePassword"; the literal is the source.
 
 struct Rva005A5B38Helper
 {
@@ -54,7 +54,7 @@ bool Rva005A5B38Box::Run()
 	if (m_4A0 != 0) {
 		m_4A0 = 0;
 		void *key = *(void **)((char *)obj + 0x274);
-		Rva00524EF4AptCall((*(Rva00222A8BTarget **)&g_bfmeAptWindowManager), key, GetName(), g_rva005A5B38Const);
+		Rva00524EF4AptCall((*(Rva00222A8BTarget **)&g_bfmeAptWindowManager), key, GetName(), "ClosePassword");
 		return false;
 	}
 	Rva005A5B38Helper *h = (Rva005A5B38Helper *)((char *)m_58 + 0x298);

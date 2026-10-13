@@ -84,7 +84,7 @@ public:
 };
 
 extern AI *TheAI;
-extern Real BfmeGlobalBC2428;
+// BfmeGlobalBC2428 was the retail address alias (RVA 0x007C2428) of the constant 10.0f; the literal is the source.
 
 class Rva00369FDFGuardMachine
 {
@@ -157,7 +157,7 @@ int Rva0036A88AOwner::rva0036A88A()
 	delta.x = dx;
 	delta.y = dy;
 	delta.z = dz;
-	if (delta.GetLengthEstimate() > BfmeGlobalBC2428) {
+	if (delta.GetLengthEstimate() > 10.0f) {
 		m_pos = target;
 		((StateMachine *)m_machine)->setGoalPosition(&m_pos);
 		rva00369217(0);
