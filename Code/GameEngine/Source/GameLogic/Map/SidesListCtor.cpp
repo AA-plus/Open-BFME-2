@@ -134,3 +134,7 @@ void bfmeAnchorSidesListDtor(SidesList *p)
 // Native 0x0077BAC3 is the complete 11-byte constructor list-member action.
 // The whole 254-byte parent and its exact EH graph bind the +0x20 lifetime
 // and existing list destructor; the next actual action starts at 0x0077BACE.
+
+// Native SidesList action 0x77b9ce is the complete 20-byte C++
+// lifetime action of parent 0x32ec63, bound by the whole native
+// exception graph; its separately retired assembly copy is no longer needed.
