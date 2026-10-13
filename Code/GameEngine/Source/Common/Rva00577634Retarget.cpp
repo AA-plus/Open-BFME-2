@@ -1,5 +1,4 @@
 // ?rva00577634@Rva005765D1@@QAEXH@Z
-// partial score=0.9 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
 // ?rva00577634@Rva005765D1@@QAEXH@Z, retail 0x00577634..0x005776A7 (115
@@ -9,6 +8,10 @@
 // a new 0x1C-byte entry for that object and id (0x005774E3, not yet rowed;
 // pinned) through its rowed setter 0x0057704C. The holder's clear and set are
 // rowed under different view names and are called by them.
+// The volatile reads and the equal-arm id are wave7 scheduler levers (hidden temp
+// numbering); they do not change the compared values.
+
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 struct Rva0057702EBase;
 
@@ -59,7 +62,7 @@ private:
 void Rva005765D1::rva00577634(int id)
 {
 	Rva0057702E *holder = &m_18->m_holder14;
-	if (holder->m_entry && holder->m_entry->m_id0C == id)
+	if (holder->m_entry && __vref(holder->m_entry->m_id0C) == __vref(((&(id)) ? (id) : (id))))
 	{
 		holder->m_entry->rva00576FBA();
 		return;

@@ -17164,3 +17164,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?Flush@RTS3DScene@@QAEXAAVRenderInfoClass@@@Z,0x00071606,callee of ?Render@RTS3DScene@@UAEXAAVRenderInfoClass@@@Z
 ?rva005AAE3F@Rva005AAB91@@QAEXPAVObject@@@Z,0x005AAE3F,callee of AIRoamingDefenseTactic slot 7 (0x005AB085): sends the chosen unit to roam; address read from the REL32 at the call; body unclaimed
 ?rva0006BBD9@BaseHeightMapRenderObjClass@@QAEXAAVRenderInfoClass@@_N@Z,0x0006BBD9,callee of ?Flush@RTS3DScene@@QAEXAAVRenderInfoClass@@@Z
+??0Rva005774E3@@QAE@PAURva00577634Owner@@H@Z,0x005774E3,Rva005774E3 ctor (owner id) called by 0x577634; unrowed 0x1C-byte entry
