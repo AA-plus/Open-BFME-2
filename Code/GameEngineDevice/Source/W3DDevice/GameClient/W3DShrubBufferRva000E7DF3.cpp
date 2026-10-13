@@ -87,7 +87,9 @@ public:
 	unsigned char m_head[0x0c];
 	int m_uvSourceCount;
 	Rva000E7DF3ArrayHolder *m_uv0;
-	__forceinline Vector2 *Get_UV_Array_By_Index(int index, bool create)
+	// Only the existing-buffer path used by this unit. The full create-gated
+	// MeshMatDescClass accessor is supplied by its verified 0xD1F40 owner.
+	__forceinline Vector2 *Get_Existing_UV_Array_By_Index(int index)
 	{
 		if (m_uvSourceCount != 0)
 			return Get_UV_Array(0, index);
@@ -130,7 +132,7 @@ struct Rva000E7DF3Model : public MeshGeometryClass
 	unsigned char m_gap34[0x94 - 0x34];
 	MeshMatDescClass *m_matDesc;
 
-	__forceinline const Vector2 *Get_UV_Array_By_Index(int index) { return m_matDesc->Get_UV_Array_By_Index(index, false); }
+	__forceinline const Vector2 *Get_UV_Array_By_Index(int index) { return m_matDesc->Get_Existing_UV_Array_By_Index(index); }
 	__forceinline const unsigned *Get_Color_Array0(void) const { return m_matDesc->m_color0 ? (const unsigned *)m_matDesc->m_color0->m_array : 0; }
 };
 
