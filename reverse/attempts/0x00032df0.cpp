@@ -1,4 +1,6 @@
 // ?rva00032DF0@GeneralAllocator@Allocator@EA@@QAEPAXI@Z
+// partial score=0.999 date=2026-10-13
+// ?rva00032DF0@GeneralAllocator@Allocator@EA@@QAEPAXI@Z
 // partial score=0.995 date=2026-10-12
 // cl: /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 extern "C" __declspec(dllimport) void *__stdcall VirtualAlloc(void *address, unsigned int size, unsigned long type, unsigned long protect);
