@@ -129,10 +129,10 @@ class Rva00506909
 {
 public:
     void xfer(Xfer *);
-    void rva005059A1(Team *);
-    void rva00505A56(Team *);
+    void Register(Team *);
+    void UnRegister(Team *);
     void rva005069B4();
-    bool rva005069CE(struct Rva00506909Request*,void*);
+    bool activateTactic(struct Rva00506909Request*,void*);
 };
 class Rva002C5FE8 { public: void rva002C60A9(unsigned int); };
 
@@ -187,12 +187,12 @@ void TacticalAI::DoXfer(Xfer *xfer)
 // Complete eight-byte generator forwarding tails, formerly in SkirmishAI.cpp.
 void TacticalAI::Register(Team *team)
 {
-    generator->rva005059A1(team);
+    generator->Register(team);
 }
 
 void TacticalAI::UnRegister(Team *team)
 {
-    generator->rva00505A56(team);
+    generator->UnRegister(team);
 }
 
 // Complete native 002C64D0..002C65EB, 283 bytes. Caller 002C677E uses an
@@ -247,7 +247,7 @@ void TacticalAI::rva002C6779() {
  Rva002C589B *request;
  if(chooser) target=request=chooser->getBestTarget();
  else request=fallback;
- if(request) generator->rva005069CE((Rva00506909Request*)request,player);
+ if(request) generator->activateTactic((Rva00506909Request*)request,player);
  tail->rva00506AFA();
 }
 

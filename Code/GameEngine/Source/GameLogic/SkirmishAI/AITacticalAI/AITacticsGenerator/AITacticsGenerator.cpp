@@ -213,13 +213,13 @@ public:
 class Rva00506909
 {
 public:
-	void rva005059A1(Team *unit);
-	void rva00505A56(Team *unit);
+	void Register(Team *unit);
+	void UnRegister(Team *unit);
 	Rva00506909(void *owner);
 	~Rva00506909();
 	void xfer(Xfer *xfer);
 	void rva005069B4();
-	bool rva005069CE(Rva00506909Request *request, void *arg);
+	bool activateTactic(Rva00506909Request *request, void *arg);
 private:
 	Rva00506909Item *rva00505D91(const AsciiString &name);
 	Rva00506909Item *rva00505DC4(const AsciiString &name);
@@ -228,7 +228,7 @@ private:
 	void rva00505E5D();
 	void rva00505F80();
 	void rva00505FD0();
-	void rva00505924();
+	void updateTactics();
 	void rva00506020();
 	void rva00505AF1();
 	bool rva00506411(void *owner);
@@ -259,11 +259,11 @@ Rva00506909::Rva00506909(void *owner)
 void Rva00506909::rva005069B4()
 {
 	rva00505AF1();
-	rva00505924();
+	updateTactics();
 	rva00506411(m_owner);
 }
 
-bool Rva00506909::rva005069CE(Rva00506909Request *request, void *arg)
+bool Rva00506909::activateTactic(Rva00506909Request *request, void *arg)
 {
 	switch (request->m_kind) {
 	case 0:
@@ -277,7 +277,7 @@ bool Rva00506909::rva005069CE(Rva00506909Request *request, void *arg)
 	return false;
 }
 
-void Rva00506909::rva00505924()
+void Rva00506909::updateTactics()
 {
 	Rva00506909Item **it;
 	for (it = m_10.begin(); it != m_10.end(); ++it) {
@@ -443,7 +443,7 @@ bool Rva00506909::rva00506411(void *owner)
 
 // 0x005059A1 / 0x00505A56: hand the unit to the item, in any of the four
 // item lists, that belongs to its team.
-void Rva00506909::rva005059A1(Team *unit)
+void Rva00506909::Register(Team *unit)
 {
 	if (unit == unit->getControllingPlayer()->m_unit)
 		return;
@@ -479,7 +479,7 @@ void Rva00506909::rva005059A1(Team *unit)
 	unit->disband();
 }
 
-void Rva00506909::rva00505A56(Team *unit)
+void Rva00506909::UnRegister(Team *unit)
 {
 	Rva00506909Item **it;
 	for (it = m_10.begin(); it != m_10.end(); ++it) {

@@ -243,8 +243,8 @@ class Rva00506B1B { public: void rva00506B2F(); };
 class Rva00506909
 {
 public:
-    void rva005059A1(Team *team);
-    void rva00505A56(Team *team);
+    void Register(Team *team);
+    void UnRegister(Team *team);
 };
 
 class TacticalAI
