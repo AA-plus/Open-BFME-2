@@ -1,9 +1,13 @@
 // ?rva002CC4DD@Weapon@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva002CC4DD@Weapon@@QAEXXZ
 // partial score=0.94 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD
 // stlport
 // ?rva002CC4DD@Weapon@@QAEXXZ @0x002CC4DD 155B trial r3: declaration-order
 // variant (logic first) to force EDI-cached GameLogic + homed tmplName/owner.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 #pragma function(memset)
 extern "C" void *memset(void *dst, int value, unsigned int size);
@@ -86,6 +90,7 @@ void Weapon::rva002CC4DD()
 		return;
 	}
 	Object *spawned = logic->findObjectByID(m_spawned5C);
+	_ReadWriteBarrier();
 	if (spawned)
 		return;
 	m_spawned5C = INVALID_OBJECT_ID;
