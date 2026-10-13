@@ -1,289 +1,190 @@
 // ?rva0052E914@Pathfinder@@QAEXHHPAVPathfindCell@@PAVBridge@@_N0M@Z
-// partial score=0.91 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
-//
-// ?rva0052E914@Pathfinder@@QAEXHHPAVPathfindCell@@PAVBridge@@_N1M@Z
-// @0x0052E914 1120B, BFME2's bridge-cell classification (Zero Hour
-// PathfindLayer::classifyLayerMapCell moved onto the Pathfinder: the
-// zone manager +0x460 MarkDirty 0x00531431, the map +0x10 and extent
-// +0x14..+0x20 are the Pathfinder's). Called once from 0x0052F13D.
-// Target evidence: the four corner tests through Bridge::isPointOnBridge
-// 0x0027EEAD; with the flag set an obstacle cell (type 4) hands its
-// obstacle object (GameLogic::findObjectByID) to the rowed 0x0052DFB1, the
-// bit-17 setter 0x0052E001, then a full bridge cell or a far bridge height
-// becomes a clear layer-0x10 cell (setters 0x0052E0A1 0x00366500
-// 0x0036652D SetType_Dirty 0x0052DA1C, pinched bit cleared), the bridge
-// end (isCellOnEnd 0x0027C79C) connects to the given ground cell when the
-// bridge height (0x0027FD2A) is within 15 of the given height and keeps
-// the wall height (GetWallHeight 0x002EF68C) test otherwise, and a side
-// cell is marked type 5; with the flag clear the bridge layer is graded by
-// the count of neighbouring cells above layer 0x10. Name unknown.
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
-#include <math.h>
-
-typedef bool Bool;
-typedef int Int;
-typedef float Real;
-
-#define PATHFIND_CELL_SIZE 10
-#define PATHFIND_CELL_SIZE_F 10.0f
-
-enum ObjectID { INVALID_ID = 0 };
-enum PathfindLayerEnum { LAYER_INVALID = 0 };
-
+// partial score=0.98 date=2026-10-13
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include
+// Native 0052ED74..0052F294, 1312B, RET8. Neutral shared receiver and
+// existing int-word ABI come from rowed 0052F294; retail tests the flag byte.
+// WB12DD670 corroborates the bridge-bounds removal and raised-wall endpoint
+// handling. ZH AIPathfind.cpp bridge routines are semantic leads; BFME2's
+// receiver +10 map, +5C bridge chain, +60 stride40 layers, +460 zones and
+// +1BEB4 dirty flag are independently measured in retail and matched neighbours.
+// Bridge record +C uses rowed A8 constructor/assignment; bounds are at +B4.
+// The existing Rva002ED236Pos argument view preserves the callee-destroyed
+// by-value float copy. Explicit float subtraction restores native fabs-call
+// scheduling without changing the mathematical operation.
+// Full neighbor arrays are read independently from retail DD1A3C/DD1A5C;
+// original identifiers are unknown. Data rows verify all 32 bytes of each.
+#include "Lib/Coord3D.h"
+static __forceinline float bridgeDelta(float a,float b){return (float)(a-b);}
+extern "C" double __cdecl fabs(double);
+extern "C" __declspec(dllimport) double __cdecl floor(double);
+extern "C" __declspec(dllimport) double __cdecl ceil(double);
+static __forceinline int float2long(float f){int i;__asm{fld f
+ fistp i}return i;}
+#define FLOOR(x) float2long((float)floor(x))
+#define CEIL(x) float2long((float)ceil(x))
+struct BridgeBounds {struct {float x,y;}lo,hi;BridgeBounds(const BridgeBounds &r){lo.x=r.lo.x;lo.y=r.lo.y;hi.x=r.hi.x;hi.y=r.hi.y;}~BridgeBounds(){}};
+class Rva0027C36A {public:Rva0027C36A();Rva0027C36A &operator=(const Rva0027C36A &);Coord3D from,to;char rest[0xA8-24];};
+class Bridge {public:virtual ~Bridge();Bridge *next;int word8;Rva0027C36A info;BridgeBounds bounds;bool isPointOnBridge(const Coord3D *loc);float getBridgeHeight(const Coord3D *loc,Coord3D *normal);bool isCellOnEnd(const void *cellBounds);};
+struct CellOwnerInfo{char pad[0x28];int owner;};
+class Rva0052DFB1Arg;
+class PathfindCell {public:int getOwner()const{return info?info->owner:0;}int getType()const{return type;}int getLayer()const{return layer;}int getObstacleID()const{return info?info->owner:0;}void setPinched(bool p){pinched=p?1:0;}bool rva0052DFB1(const void *arg);bool SetType_Dirty(int);CellOwnerInfo *info;char pad[8];unsigned int type:4,layer:6,unused:6,pinched:1,rest:15;};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
+ICoord2D *Rva002E7875WorldToCell(ICoord2D *,bool,const Coord3D *);
+bool Rva001E3679(int);
+class PathfindLayer {public:PathfindCell *getCell(int,int);void AddWallConnectCell(const ICoord2D *);char pad[0x3C];int height;};
+class PathfindZoneManager{public:void MarkDirty(int,int);char pad[4];};
+class Rva0052E001{public:bool rva0052E001(bool v);};
+class Rva0052E0A1{public:bool rva0052E0A1(int v);};
+class Rva00366500{public:bool rva00366500(int v);bool rva0036652D(int v);};
 class Object;
-
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-};
-extern GameLogic *TheGameLogic;
-
-struct Region2D
-{
-	struct { Real x, y; } lo, hi;
-};
-
-class Bridge
-{
-public:
-	Bool isPointOnBridge(const Coord3D *loc);
-	Real getBridgeHeight(const Coord3D *loc, Coord3D *normal);
-	Bool isCellOnEnd(const Region2D *cell);
-};
-
-struct PathfindCellInfo
-{
-	unsigned char m_pad[0x28];
-	ObjectID m_obstacleID; // +0x28
-};
-
-struct Rva0052DFB1Arg;
-
-class PathfindCell
-{
-public:
-	Int getType() const { return m_bits & 0xF; }
-	Int getLayer() const { return (m_bits >> 4) & 0x3F; }
-	ObjectID getObstacleID() const { return m_info ? m_info->m_obstacleID : INVALID_ID; }
-	void setPinched(Bool pinch) { m_pinched = pinch; }
-	Bool rva0052DFB1(const Rva0052DFB1Arg *arg);
-	Bool SetType_Dirty(Int type);
-
-	PathfindCellInfo *m_info; // +0x00
-	unsigned char m_pad04[0x8];
-	union
-	{
-		struct
-		{
-			unsigned int m_low : 16;
-			unsigned int m_pinched : 1;
-			unsigned int m_high : 15;
-		};
-		unsigned int m_bits; // +0x0C
-	};
-};
-
-class Rva0052E001
-{
-public:
-	Bool rva0052E001(Bool value);
-};
-
-class Rva0052E0A1
-{
-public:
-	Bool rva0052E0A1(Int value);
-};
-
-class Rva00366500
-{
-public:
-	Bool rva00366500(Int v);
-	Bool rva0036652D(Int v);
-};
-
-class PathfindZoneManager
-{
-public:
-	void MarkDirty(Int x, Int y);
-};
-
-class Pathfinder
-{
-public:
-	Real GetWallHeight(PathfindLayerEnum layer, const Coord3D *pos, Coord3D *normal);
-	void rva0052E914(Int i, Int j, PathfindCell *cell, Bridge *theBridge, Bool flag, PathfindCell *otherCell, Real height);
-
+struct Rva002ED236Pos {float x,y,z;Rva002ED236Pos(const Coord3D &p){x=p.x;y=p.y;z=p.z;}~Rva002ED236Pos(){}};
+enum PathfindLayerEnum {GROUND=1};
+class Pathfinder {public:PathfindLayerEnum rva002ED236(Object *,Rva002ED236Pos);void rva0052E914(int,int,PathfindCell *,Bridge *,bool,PathfindCell *,float);float GetWallHeight(int,const Coord3D *,Coord3D *);
 private:
-	unsigned char m_pad00[0x10];
-	PathfindCell **m_map; // +0x10
-	struct { Int x, y; } m_lo, m_hi; // +0x14 extent
-	unsigned char m_pad24[0x460 - 0x24];
-	PathfindZoneManager m_zoneManager; // +0x460
-};
-
-#define SET_LAYER(c, v) ((Rva00366500 *)(c))->rva00366500(v)
-#define SET_CONNECT_LAYER(c, v) ((Rva00366500 *)(c))->rva0036652D(v)
-#define SET_E0A1(c, v) ((Rva0052E0A1 *)(c))->rva0052E0A1(v)
-#define SET_E001(c, v) ((Rva0052E001 *)(c))->rva0052E001(v)
-
-void Pathfinder::rva0052E914(Int i, Int j, PathfindCell *cell, Bridge *theBridge, Bool flag, PathfindCell *otherCell, Real height)
+ char m_pad00[0x10];PathfindCell **m_map;int m_loX,m_loY,m_hiX,m_hiY;char m_pad24[0x460-0x24];PathfindZoneManager m_zoneManager;};
+class GameLogic{public:Object *findObjectByID(int id);};
+extern GameLogic *TheGameLogic;
+void Pathfinder::rva0052E914(int i,int j,PathfindCell *cell,Bridge *theBridge,bool flag,PathfindCell *otherCell,float height)
 {
 	Coord3D topLeftCorner, bottomRightCorner;
-
-	topLeftCorner.y = (Real)(j * PATHFIND_CELL_SIZE);
-	bottomRightCorner.y = topLeftCorner.y + PATHFIND_CELL_SIZE_F;
-
-	topLeftCorner.x = (Real)(i * PATHFIND_CELL_SIZE);
-	bottomRightCorner.x = topLeftCorner.x + PATHFIND_CELL_SIZE_F;
-
-	topLeftCorner.z = 0;
-	bottomRightCorner.z = 0;
-
-	Int bridgeCount = 0;
-	Coord3D pt;
-	if (theBridge->isPointOnBridge(&topLeftCorner))
-		bridgeCount++;
-	pt = topLeftCorner;
-	pt.y = bottomRightCorner.y;
-	if (theBridge->isPointOnBridge(&pt))
-		bridgeCount++;
-	if (theBridge->isPointOnBridge(&bottomRightCorner))
-		bridgeCount++;
-	pt = topLeftCorner;
-	pt.x = bottomRightCorner.x;
-	if (theBridge->isPointOnBridge(&pt))
-		bridgeCount++;
-
-	if (flag)
-	{
-		if (bridgeCount != 0 && cell->getType() == 4)
-		{
-			Object *obj = TheGameLogic->findObjectByID(cell->getObstacleID());
-			if (obj)
-			{
-				cell->rva0052DFB1((const Rva0052DFB1Arg *)obj);
-				m_zoneManager.MarkDirty(i, j);
-			}
+	topLeftCorner.y=(float)(j*10);bottomRightCorner.y=topLeftCorner.y+10.0f;
+	topLeftCorner.x=(float)(i*10);bottomRightCorner.x=topLeftCorner.x+10.0f;
+	topLeftCorner.z=0;bottomRightCorner.z=0;
+	int bridgeCount=0;Coord3D pt;
+	if(theBridge->isPointOnBridge(&topLeftCorner))bridgeCount++;
+	pt=topLeftCorner;pt.y=bottomRightCorner.y;
+	if(theBridge->isPointOnBridge(&pt))bridgeCount++;
+	if(theBridge->isPointOnBridge(&bottomRightCorner))bridgeCount++;
+	pt=topLeftCorner;pt.x=bottomRightCorner.x;
+	if(theBridge->isPointOnBridge(&pt))bridgeCount++;
+	if(flag){
+		if(bridgeCount!=0&&cell->getType()==4){
+			Object *obj=TheGameLogic->findObjectByID(cell->getObstacleID());
+			if(obj){cell->rva0052DFB1((const Rva0052DFB1Arg*)obj);m_zoneManager.MarkDirty(i,j);}
 		}
-		if (bridgeCount > 0)
-		{
-			if (SET_E001(cell, true))
-				m_zoneManager.MarkDirty(i, j);
-		}
-		if (bridgeCount == 4)
-		{
-			Bool changed = SET_E0A1(cell, 0);
-			changed |= SET_LAYER(cell, 0x10);
-			changed |= SET_CONNECT_LAYER(cell, 0);
-			changed |= cell->SetType_Dirty(0);
-			if (changed)
-				m_zoneManager.MarkDirty(i, j);
+		if(bridgeCount>0){if(((Rva0052E001*)cell)->rva0052E001(true))m_zoneManager.MarkDirty(i,j);}
+		if(bridgeCount==4){
+			bool changed=((Rva0052E0A1*)cell)->rva0052E0A1(0);
+			changed|=((Rva00366500*)cell)->rva00366500(0x10);
+			changed|=((Rva00366500*)cell)->rva0036652D(0);
+			changed|=cell->SetType_Dirty(0);
+			if(changed)m_zoneManager.MarkDirty(i,j);
 			cell->setPinched(false);
 			return;
 		}
-		if (bridgeCount == 0)
-			return;
-
-		Region2D cellBounds;
-		cellBounds.lo.x = topLeftCorner.x;
-		cellBounds.lo.y = topLeftCorner.y;
-		cellBounds.hi.x = bottomRightCorner.x;
-		cellBounds.hi.y = bottomRightCorner.y;
-
-		Real wallHeight = GetWallHeight((PathfindLayerEnum)cell->getLayer(), &topLeftCorner, 0);
-		Real bridgeHeight = theBridge->getBridgeHeight(&topLeftCorner, 0);
-		if (theBridge->isCellOnEnd(&cellBounds))
-		{
-			if (otherCell && fabs(bridgeHeight - height) < 15.0f)
-			{
-				if (SET_CONNECT_LAYER(cell, otherCell->getLayer()) | SET_E0A1(cell, 0) | SET_LAYER(cell, 0x10) | cell->SetType_Dirty(0))
-					m_zoneManager.MarkDirty(i, j);
-				SET_CONNECT_LAYER(otherCell, cell->getLayer());
+		if(bridgeCount==0)return;
+		struct {float lox,loy,hix,hiy;} cellBounds;
+		cellBounds.lox=topLeftCorner.x;cellBounds.loy=topLeftCorner.y;
+		cellBounds.hix=bottomRightCorner.x;cellBounds.hiy=bottomRightCorner.y;
+		float wallHeight=GetWallHeight(cell->getLayer(),&topLeftCorner,0);
+		float bridgeHeight=theBridge->getBridgeHeight(&topLeftCorner,0);
+		if(theBridge->isCellOnEnd(&cellBounds)){
+			if(otherCell&&fabs(bridgeHeight-height)<15.0f){
+				if(((Rva00366500*)cell)->rva0036652D(otherCell->getLayer())|((Rva0052E0A1*)cell)->rva0052E0A1(0)|((Rva00366500*)cell)->rva00366500(0x10)|cell->SetType_Dirty(0)|((Rva00366500*)otherCell)->rva0036652D(cell->getLayer()))m_zoneManager.MarkDirty(i,j);
 				otherCell->SetType_Dirty(0);
 				return;
 			}
-			if (fabs(wallHeight - bridgeHeight) < 15.0f)
-			{
-				Bool changed = SET_E0A1(cell, 0);
-				changed |= SET_CONNECT_LAYER(cell, 0x10);
-				changed |= cell->SetType_Dirty(0);
-				if (changed)
-					m_zoneManager.MarkDirty(i, j);
-			}
-			else
-			{
-				Bool changed = SET_E0A1(cell, 0);
-				changed |= SET_LAYER(cell, 0x10);
-				changed |= SET_CONNECT_LAYER(cell, 0);
-				changed |= cell->SetType_Dirty(0);
-				if (changed)
-					m_zoneManager.MarkDirty(i, j);
+			if(fabs(wallHeight-bridgeHeight)<15.0f){
+				bool changed=((Rva0052E0A1*)cell)->rva0052E0A1(0);
+				changed|=((Rva00366500*)cell)->rva0036652D(0x10);
+				changed|=cell->SetType_Dirty(0);
+				if(changed)m_zoneManager.MarkDirty(i,j);
+			}else{
+				bool changed=((Rva0052E0A1*)cell)->rva0052E0A1(0);
+				changed|=((Rva00366500*)cell)->rva00366500(0x10);
+				changed|=((Rva00366500*)cell)->rva0036652D(0);
+				changed|=cell->SetType_Dirty(0);
+				if(changed)m_zoneManager.MarkDirty(i,j);
 				cell->setPinched(false);
 			}
-		}
-		else
-		{
-			Bool changed = SET_LAYER(cell, 0x10);
-			changed |= cell->SetType_Dirty(5);
-			changed |= SET_CONNECT_LAYER(cell, 0);
-			if (changed)
-				m_zoneManager.MarkDirty(i, j);
+		}else{
+			bool changed=((Rva00366500*)cell)->rva00366500(0x10);
+			changed|=cell->SetType_Dirty(5);
+			changed|=((Rva00366500*)cell)->rva0036652D(0);
+			if(changed)m_zoneManager.MarkDirty(i,j);
 		}
 		return;
 	}
-
-	if (bridgeCount != 0)
-	{
-		if (SET_E001(cell, false))
-			m_zoneManager.MarkDirty(i, j);
-		Int count = 0;
-		Int maxLayer = 1;
-		for (Int x = i - 1; x < i + 2; x++)
-		{
-			if (x < m_lo.x || x > m_hi.x)
-				continue;
-			for (Int y = j - 1; y < j + 2; y++)
-			{
-				if (y < m_lo.y || y > m_hi.y)
-					continue;
-				if (x == i && j == y)
-					continue;
-				Int layer = m_map[x][y].getLayer();
-				if (layer > 0x10)
-				{
-					count++;
-					maxLayer = layer;
-				}
+	if(bridgeCount!=0){
+		if(((Rva0052E001*)cell)->rva0052E001(false))m_zoneManager.MarkDirty(i,j);
+		int count=0;int maxLayer=1;
+		for(int x=i-1;x<i+2;x++){
+			if(x<m_loX||x>m_hiX)continue;
+			for(int y=j-1;y<j+2;y++){
+				if(y<m_loY||y>m_hiY)continue;
+				if(x==i&&j==y)continue;
+				int layer=m_map[x][y].getLayer();
+				if(layer>0x10){count++;maxLayer=layer;}
 			}
 		}
-		Int layer = cell->getLayer();
-		if (layer == 0x10)
-		{
-			if (bridgeCount != 4 && count >= 3)
-			{
-				SET_LAYER(cell, maxLayer);
-			}
-			else
-			{
-				SET_LAYER(cell, 1);
-				cell->SetType_Dirty(0);
-			}
-			m_zoneManager.MarkDirty(i, j);
+		int layer=cell->getLayer();
+		if(layer==0x10){
+			if(bridgeCount!=4&&count>=3) ((Rva00366500*)cell)->rva00366500(maxLayer);
+			else{((Rva00366500*)cell)->rva00366500(1);cell->SetType_Dirty(0);}
+			m_zoneManager.MarkDirty(i,j);
+		}else if(layer!=1){
+			if(cell->SetType_Dirty(5))m_zoneManager.MarkDirty(i,j);
 		}
-		else if (layer != 1)
-		{
-			if (cell->SetType_Dirty(5))
-				m_zoneManager.MarkDirty(i, j);
-		}
-		if (SET_CONNECT_LAYER(cell, 0))
-			m_zoneManager.MarkDirty(i, j);
-	}
-	else if (cell->getType() == 2)
-	{
+		if(((Rva00366500*)cell)->rva0036652D(0))m_zoneManager.MarkDirty(i,j);
+	}else if(cell->getType()==2){
 		cell->SetType_Dirty(0);
-		m_zoneManager.MarkDirty(i, j);
+		m_zoneManager.MarkDirty(i,j);
 	}
+}
+int BridgeUpdateNeighborX[8]={-1,1,0,0,-1,1,-1,1};
+int BridgeUpdateNeighborY[8]={0,0,-1,1,-1,-1,1,1};
+class Rva002E713FOwner {public:
+ void rva0052ED74(void *,int);
+ char pad00[0x10];PathfindCell **map;int loX,loY,hiX,hiY;char pad24[0x5C-0x24];Bridge *bridges;
+ PathfindLayer layers[16];PathfindZoneManager zones;char pad464[0x1BEB4-0x464];bool changed;
+};
+void Rva002E713FOwner::rva0052ED74(void *opaque,int flags)
+{
+ Bridge *bridge=(Bridge *)opaque;
+#define update (*(bool *)&flags)
+ BridgeBounds bounds=bridge->bounds;
+ if(!update){
+  Bridge *previous=0;
+  for(Bridge *node=bridges;node;){
+   Bridge *next=node->next;BridgeBounds other=node->bounds;
+   if(fabs(bridgeDelta(other.lo.x,bounds.lo.x))<1.0f && fabs(bridgeDelta(other.lo.y,bounds.lo.y))<1.0f && fabs(bridgeDelta(other.hi.x,bounds.hi.x))<1.0f && fabs(bridgeDelta(other.hi.y,bounds.hi.y))<1.0f){
+    if(previous)previous->next=next;else bridges=next;
+    node->next=0;::delete node;
+   }else previous=node;
+   node=next;
+  }
+ }
+ int first=1,second=1,actualFirst=1,actualSecond=1;
+ if(update){
+  Rva0027C36A info;info=bridge->info;
+  actualFirst=first=((Pathfinder *)this)->rva002ED236(0,info.from);
+  if(Rva001E3679(first)){ICoord2D cell;layers[first].AddWallConnectCell(Rva002E7875WorldToCell(&cell,true,&info.from));}else first=1;
+  actualSecond=second=((Pathfinder *)this)->rva002ED236(0,info.to);
+  if(Rva001E3679(second)){ICoord2D cell;layers[second].AddWallConnectCell(Rva002E7875WorldToCell(&cell,true,&info.to));}else second=1;
+ }
+ int lx=FLOOR((bounds.lo.x-.1f)*.1f),ly=FLOOR((bounds.lo.y-.1f)*.1f);
+ int hx=CEIL((bounds.hi.x+.1f)*.1f),hy=CEIL((bounds.hi.y+.1f)*.1f);
+ lx-=2;ly-=2;hx+=2;hy+=2;
+ if(lx<loX)lx=loX;if(ly<loY)ly=loY;if(hx>hiX)hx=hiX;if(hy>hiY)hy=hiY;
+ if(changed || !update || Rva001E3679(first) || Rva001E3679(second)){
+  for(int i=lx;i<=hx;++i)for(int j=ly;j<=hy;++j){
+   PathfindCell *other=0;float height=0;
+   if(first!=1){other=layers[first].getCell(i,j);height=(float)layers[first].height;}
+   if(!other && second!=1){other=layers[second].getCell(i,j);height=(float)layers[second].height;}
+   ((Pathfinder *)this)->rva0052E914(i,j,&map[i][j],bridge,update,other,height);
+  }
+ }
+ if(update && (first!=1||second!=1) && actualFirst!=1 && actualSecond!=1){
+  for(int i=lx+1;i<=hx-1;++i)for(int j=ly+1;j<=hy-1;++j){
+   PathfindCell *cell=&map[i][j];
+   if(cell->layer==16 && cell->type!=5){
+    for(int n=0;n<8;++n){
+     PathfindCell *near=&map[i+BridgeUpdateNeighborX[n]][j+BridgeUpdateNeighborY[n]];
+     if(near->layer!=16 && near->type!=5 && near->layer==1 && near->getOwner()==0){
+      if(near->SetType_Dirty(2))zones.MarkDirty(i+BridgeUpdateNeighborX[n],j+BridgeUpdateNeighborY[n]);
+     }
+    }
+   }
+  }
+ }
 }
