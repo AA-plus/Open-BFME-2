@@ -39700,7 +39700,7 @@ _Rva00020AC0,,0x00020AC0,39,Code/Libraries/Source/WWVegas/WWLib/Rva0084D890CodeP
 ??_GRva00410688@@QAEPAXI@Z,,0x00410792,28,Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-06.cpp,matched,deleting dtor via rowed dtor
 ??1Rva004F6986@@QAE@XZ,,0x004F6986,61,Code/GameEngine/Source/Common/Rva004F6986Dtor.cpp,matched,8B holder two inline member dtors via rowed Release destroy loop stride 8
 ?Rva00248D84Enable@@YAXXZ,,0x00248D84,25,Code/GameEngine/Source/Common/Rva00446A77Enable.cpp,matched,unlock null-checked global plus outer288 enable else fallback
-?Rva001FF725Get@@YG?AW4ScienceType@@ABVAsciiString@@@Z,,0x001FF725,30,Code/GameEngine/Source/Common/Rva001FF725Get.cpp,matched,unlock science lookup via rowed isEmpty 0x00001E2F and nameToKey 0x0009FA65
+?getScienceFromInternalName@ScienceStore@@QBE?AW4ScienceType@@ABVAsciiString@@@Z,,0x001FF725,30,Code/GameEngine/Source/Common/Rva001FF725Get.cpp,matched,unlock science lookup via rowed isEmpty 0x00001E2F and nameToKey 0x0009FA65; renamed to ZH ScienceStore::getScienceFromInternalName: all five retail callers load TheScienceStore into ecx
 ??4Rva000C24EA@@QAEAAV0@ABV0@@Z,,0x000C24EA,51,Code/Libraries/Source/WWVegas/WWLib/Rva000C24EAAssign.cpp,matched,record assign string plus triple plus dwords
 ?Rva005EC594Clear@@YAXPAURva005EC594@@0@Z,,0x005EC594,25,Code/Libraries/Source/WWVegas/WWLib/stlport_rva005ec594_clear.cpp,matched,unlock range clear via string clear
 ??_GRva004F6986@@QAEPAXI@Z,,0x004F6E2B,28,Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-02.cpp,matched,chain deleting dtor via rowed dtor plus delete

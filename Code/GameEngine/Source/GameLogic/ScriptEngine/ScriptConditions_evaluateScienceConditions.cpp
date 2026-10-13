@@ -26,17 +26,9 @@ enum ObjectID
 class ScienceStore
 {
 public:
+    ScienceType getScienceFromInternalName(const AsciiString &name) const;
 };
 extern ScienceStore *TheScienceStore;
-ScienceType __stdcall Rva001FF725Get(const AsciiString &);
-// Native 1FF725 consumes only its stack argument and replaces ECX before
-// the name lookup. A checked four-byte member-pointer view retains the
-// callers' observed receiver load without asserting a second callee identity.
-union NativeScienceCall {
- ScienceType (__stdcall *target)(const AsciiString &);
- ScienceType (ScienceStore::*member)(const AsciiString &) const;
-};
-typedef char SciencePointerWidth[sizeof(NativeScienceCall)==4 ? 1 : -1];
 class Player
 {
 public:
@@ -68,8 +60,7 @@ protected:
 
 bool ScriptConditions::evaluateScienceAcquired(Parameter *pPlayerParm, Parameter *pScienceParm)
 {
-    NativeScienceCall call={&Rva001FF725Get};
-    ScienceType science = (TheScienceStore->*call.member)(pScienceParm->getString());
+    ScienceType science = TheScienceStore->getScienceFromInternalName(pScienceParm->getString());
     if (science == SCIENCE_INVALID)
         return false;
     PlayerMaskType mask = TheScriptEngine->rva00357B82(pPlayerParm);
@@ -84,8 +75,7 @@ bool ScriptConditions::evaluateScienceAcquired(Parameter *pPlayerParm, Parameter
 
 bool ScriptConditions::evaluateCanPurchaseScience(Parameter *pPlayerParm, Parameter *pScienceParm)
 {
-    NativeScienceCall call={&Rva001FF725Get};
-    ScienceType science = (TheScienceStore->*call.member)(pScienceParm->getString());
+    ScienceType science = TheScienceStore->getScienceFromInternalName(pScienceParm->getString());
     if (science == SCIENCE_INVALID)
         return false;
     PlayerMaskType mask = TheScriptEngine->rva00357B82(pPlayerParm);

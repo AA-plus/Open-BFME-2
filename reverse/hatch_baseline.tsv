@@ -4540,8 +4540,6 @@ alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/Rva0020453CHolderBas
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/Rva0020561CCtor.cpp	??1?$StringBase@D@@QAE@XZ	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/Rva003BCC94Do.cpp	?g_00DFEF18@@3PAVRva003BCC94Host@@A	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActionsRva003BBFFB.cpp	?g_Va00BCF628@@3MA	1
-alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActionsRva003BC6D9.cpp	?rva001FF725@ScienceStore@@QBE?AW4ScienceType@@ABVAsciiString@@@Z	1
-alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActionsRva003BC785.cpp	?rva001FF725@ScienceStore@@QBE?AW4ScienceType@@ABVAsciiString@@@Z	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_Rva003BC392.cpp	?TheTerrainLogic@@3PAUTerrainLogicMirror@@A	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_Rva003C951B.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1
 alternatename	Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions_Rva003C97D2.cpp	?getPlayerMask@Rva000421C8@@UAEHXZ	1

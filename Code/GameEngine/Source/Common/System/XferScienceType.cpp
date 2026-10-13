@@ -14,6 +14,7 @@
 #include "ascii_string.h"
 
 enum ScienceType { SCIENCE_0 = 0 };
+enum NameKeyType { NAMEKEY_INVALID = -1 };
 class Xfer {
 public:
  virtual ~Xfer();
@@ -37,7 +38,7 @@ public:
 };
 class ScienceStore {
 public:
- AsciiString rva001FF5F2(ScienceType science) const;
+ AsciiString rva001FF5F2(NameKeyType key);
  ScienceType getScienceFromInternalName(const AsciiString &name) const;
 };
 extern ScienceStore *TheScienceStore;
@@ -57,7 +58,7 @@ Xfer *Rva00306232XferScience(Xfer *xfer, ScienceType *science)
  if (xfer->IsLightCRC()) {
   xfer->XferEnum("ScienceType", science, 4);
  } else if (xfer->IsStoring()) {
-  AsciiString scienceName = TheScienceStore->rva001FF5F2(*science);
+  AsciiString scienceName = TheScienceStore->rva001FF5F2((NameKeyType)*science);
   xfer->xferAsciiString(scienceName);
  } else {
   AsciiString scienceName;
