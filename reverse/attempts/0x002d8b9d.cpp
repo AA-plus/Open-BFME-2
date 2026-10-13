@@ -1,6 +1,5 @@
 // ?tryUnderAttackEvent@Radar@@QAEXPBVObject@@@Z
-// partial score=0.96 date=2026-10-12
-// volatile-getter splits kind8/9 into folded mem-tests (no add, no mask-3 merge): 553B (-1B), first-diff +0x19 (branches). test8 matches; test9 base in edi (want eax). Next: base-reg steering + branch layout without tail-merge.
+// partial score=0.96 date=2026-10-13
 // cl: /I. /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
 // ?createEvent@Radar@@QAEXPBUCoord3D@@W4RadarEventType@@M@Z, retail
 // 0x002D88A4 (151 bytes).
@@ -362,8 +361,9 @@ void Radar::tryUnderAttackEvent(const Object *object)
  if(!tryEvent((RadarEventType)3,(const Coord3D *)((const char *)object+0x38))) return;
  TheControlBar->rva0031AEC9();
  RadarInfiltrationPlayer *player=((RadarAttackPlayerList *)ThePlayerList)->localPlayer;
- if(radarObjectKind(object,8)) goto isUnit;
- if((getVolTemplate(object)->kind[1] & 2)) goto isUnit;
+ const RadarAttackTemplate *kindBase=((const RadarAttackObject *)object)->objectTemplate;
+ if((*(const volatile unsigned char *)((const char *)kindBase+0x109)&1)!=0) goto isUnit;
+ if((*(const volatile unsigned int *)((const char *)kindBase+0x108)&0x200)!=0) goto isUnit;
  goto checkStructure;
 isUnit:
  {
