@@ -27,6 +27,8 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <set>
 #include <vector>
 #include <math.h>
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "../../../Common/PartitionRangeQueryCallView.h"
 
 // vector<int> fill/insert otherwise instantiates the _Construct<int,int>
@@ -1235,6 +1237,7 @@ public:
 	virtual bool slot38(Object *obj, int a2, int a3);
 	virtual bool rva0046B9DC(int a1);
 	virtual bool rva0046B95E(int a1);
+	virtual void rva00468CA3(const Rva00468CA3Arg *arg);
 	virtual bool rva0046AAB8();
 	virtual void rva0046DB6D(const AsciiString &name, Rva2225E0Filter *filter, int a3);
 	virtual void rva0046DC92(const AsciiString &name, Rva2225E0Filter *filter);
@@ -1448,6 +1451,16 @@ bool HordeContain::rva00468D2C()
 	if (!ai)
 		return false;
 	return ai->rva00468D2CSlot115();
+}
+
+// ?rva00468CA3@HordeContain@@UAEXPBURva00468CA3Arg@@@Z @0x00468CA3 (19 B): slot 45,
+// forwards the argument's +0x38 word to slot 44 (rva0046B95E). Codegen: a compiler
+// barrier between the argument read and the call keeps retail's load order.
+void HordeContain::rva00468CA3(const Rva00468CA3Arg *arg)
+{
+	void *value = arg->m_38;
+	_ReadWriteBarrier();
+	rva0046B95E((int)value);
 }
 
 // ?rva0046F8A5@HordeContain@@UAE_NXZ @0x0046F8A5: slot 59, module data +0x1D8.
