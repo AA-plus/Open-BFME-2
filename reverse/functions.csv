@@ -87716,3 +87716,5 @@ $L3650,,0x00762A20,11,Code/GameEngine/Source/GameClient/Drawable/Update/W3DTorna
 ?Rva00023D70Abort@@YAXXZ,,0x00023D70,11,Code/GameEngine/Source/Common/BfmeConv1304.cpp,matched,BFME1 donor Rva0082B390Abort transfer; calls MSVCR71 abort import
 ?Rva000249A0@@YAXXZ,,0x000249A0,5,Code/GameEngine/Source/Common/BfmeConv1432.cpp,matched,Target bytes at 0x000249A0: 5-byte framed empty function
 ?rva000592B3@Rva000592B3@@QAEXXZ,,0x000592B3,5,Code/GameEngine/Source/Common/Audio/AudioManagerAdjustPriorityAndVolume.cpp,matched,Unadjusted thiscall tail jump to rowed destructor 0x00058A86
+?rva002B3638@Rva002B5BBA@@QAE?AUTreeHintRef00217D4C@@XZ,,0x002B3638,49,Code/GameEngine/Source/Common/Rva002B5BBA.cpp,matched,first queued message reference by value or null; queue at +0x154; empty/front form closes the result-pointer hoist
+?rva002B5BBA@Rva002B5BBA@@QAEXXZ,,0x002B5BBA,99,Code/GameEngine/Source/Common/Rva002B5BBA.cpp,matched,take queued message 0x2B3638 then show 0x4FBD3A make current 0x2174A4 and pop 0x4F70D1; visible getter and operator= keep ref in EDI; WB 0xD81E30
