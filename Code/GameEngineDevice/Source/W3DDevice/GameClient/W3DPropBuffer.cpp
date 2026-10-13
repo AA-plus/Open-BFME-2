@@ -241,32 +241,10 @@ void W3DPropBuffer::addProp(Int id, Coord3D location, Real angle,Real scale, con
 //=============================================================================
 // W3DPropBuffer::updatePropPosition
 //=============================================================================
-/** Updates a prop's position */
-//=============================================================================
-// ?updatePropPosition@W3DPropBuffer@@ present-unmatched
-Bool W3DPropBuffer::updatePropPosition(Int id, const Coord3D &location, Real angle, Real scale)
-{
-	Int i;
-	for (i=0; i<m_numProps; i++) {
-		if (m_props[i].id == id) {
-			Matrix3D mtx(true);
-			mtx.Rotate_Z(angle);
-			mtx.Scale(scale);
-			mtx.Set_Translation(Vector3(location.x, location.y, location.z));
-			m_props[i].location = location;
-			m_props[i].m_robj->Set_Transform(mtx);
-			m_props[i].m_robj->Set_ObjectScale(scale);
-			// Translate the bounding sphere of the model.
-			m_props[i].bounds = m_propTypes[m_props[i].propType].m_bounds;
-			m_props[i].bounds.Center += Vector3(location.x, location.y, location.z);
-			m_anythingChanged = true;
-			return true;
-		}
-	}
-	return false;
-}
+// The position-update body lives under W3DPropBufferUpdatePropPosition.cpp
+// (retail row); this TU keeps only the class declaration so callers bind the
+// kept copy and this unit emits no competing COMDAT.
 
-//=============================================================================
 // W3DPropBuffer::removeProp
 //=============================================================================
 /** Removes a prop.  */
@@ -392,17 +370,9 @@ void W3DPropBuffer::crc( Xfer *xfer )
 	* Version Info:
 	* 1: Initial version */
 // ------------------------------------------------------------------------------------------------
-// ?xfer@W3DPropBuffer@@ present-unmatched
-void W3DPropBuffer::xfer( Xfer *xfer )
-{
-
-	// version
-	XferVersion currentVersion = 1;
-	XferVersion version = currentVersion;
-	xfer->xferVersion( &version, currentVersion );
-
-
-}  // end xfer
+// The xfer body lives under W3DPropBufferRva000EE901.cpp (retail row); this TU
+// keeps only the class declaration so callers bind the kept copy and this
+// unit emits no competing COMDAT.
 
 // ------------------------------------------------------------------------------------------------
 /** Load post process */
