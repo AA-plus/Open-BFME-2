@@ -332,6 +332,19 @@ void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnBottomPanelLoaded(const cha
 	OnPanelLoaded(1, path);
 }
 
+// R5 WB EVIDENCE (wb_show 0x5FD7FC --gd): true file
+// C:\Projects\bfme2\Code\GameEngine\Source\GameClient\Gui\InGame\Strategic\StrategicHUDArmyUnitSwapperMovieClip.cpp.
+// Guard names slotStuff.panelFactory.IsBound() / slotStuff.panel.IsBound()
+// (assert !(!panelFactory.IsBound() || panel.IsBound()) @306..309, compiled
+// out in retail NDEBUG). Body: leaf=SkipLevelN(path); AsciiString temp via
+// StringBase::StringBase(leaf) at [ebp+8] (arg-slot reuse); LevelIndexFromTarget
+// takes TWO args (path, temp); rva005F4AED(sret-10, level) this=factory, leaf
+// NOT passed to it; then operator=(this=&m_second,sret), ~Rva005F4AD7 on sret,
+// releaseBuffer on temp, ReleaseTreeHintRef+null on m_ref. Retail guard is
+// xor-edi + 2x cmp-mem,edi (zero must live in reg: BOTH compares name the same
+// zero var, yet single- AND double-naming of factory=0 both fold to
+// mov-ebx+test-ebx / cmp-imm in this TU -> const-prop wall stands; needs a
+// spelling whose zero is unprovable at the guard with zero extra bytes).
 // ?OnPanelLoaded@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBD@Z,
 // RVA 0x005FD7FC, 145B (trial: implicit leaf temporary).
 namespace AptUtils { const char *SkipLevelN(const char *path); int LevelIndexFromTarget(const char *path); }
@@ -351,7 +364,7 @@ void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnPanelLoaded(int which, cons
 {
 	Rva005FD5D4UnitSlot &slot = m_slots[which];
 	Rva005F4AED *factory = 0;
-	if (slot.m_ref.m_ptr && !slot.m_second.m_ptr) {
+	if (slot.m_ref.m_ptr != (TargetRef00217D4C *)factory && slot.m_second.m_ptr == factory) {
 		factory = (Rva005F4AED *)slot.m_ref.m_ptr;
 		slot.m_second = factory->rva005F4AED(AptUtils::LevelIndexFromTarget(path), AptUtils::SkipLevelN(path));
 		((Rva002BED91 *)&slot.m_ref)->clear();

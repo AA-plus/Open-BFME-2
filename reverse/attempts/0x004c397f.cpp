@@ -1,5 +1,17 @@
 // ?addObject@ElvenWoodSpecialPower@@QAEPAVObject@@PBUCoord3D@@PBVAsciiString@@@Z
 // partial score=0.97 date=2026-10-13
+// R5 WB EVIDENCE (wb_show 0x4C397F --gd): true ElvenWoodSpecialPower::addObject,
+// file GameLogic/Object/SpecialPower/ElvenWoodSpecialPower.cpp. Outer KINDOF gate
+// is BitFlags<218,KindOfType>::test chain via BfmeWideResult::next(tmpl+0x108,ch)
+// with 'd'(0x64)/'^'(0x5e)/'_'(0x5f): next(d)||next(^)||next(_) == our inlined
+// (kinds[12]&0x10)||(kinds[11]&0xC0) since bit100=byte12.10, bits94-95=byte11.C0.
+// Inner dispatch next(0x5e)->addTree / next(0x5f)->rva00280176 / else rva0027D3D9
+// == our (kind@0x110&0x40000000(bit94)) / (kind<0:bit95) / else. Matrix zeros are a
+// SOURCE LOOP in debug (ptr-walk) + if(1)-identity; retail unrolls to our 9+3 stores.
+// DEBUG() string on !templ @:302 (dropped in retail). setTeam arg: this+8->+0x310.
+// R5 TRIAL: volatile-zero stores (9x) NEUTRAL (24 diffs unchanged): MSVC hoists the
+// kind int-load+test above volatile stores freely; zeros-vol does not pin. Untried:
+// source-loop zeros (unroll scheduling), TinTin-style split of kind test.
 // cl: /O1 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 #include "ascii_string.h"
 
@@ -135,15 +147,15 @@ Object *ElvenWoodSpecialPower::addObject(const Coord3D *position, const AsciiStr
 	if (templ) {
 		if ((templ->kinds[12] & 0x10) || (templ->kinds[11] & 0xC0)) {
 			Matrix3D matrix;
-			matrix.row[0][1] = 0.0f;
-			matrix.row[0][2] = 0.0f;
-			matrix.row[0][3] = 0.0f;
-			matrix.row[1][0] = 0.0f;
-			matrix.row[1][2] = 0.0f;
-			matrix.row[1][3] = 0.0f;
-			matrix.row[2][0] = 0.0f;
-			matrix.row[2][1] = 0.0f;
-			matrix.row[2][3] = 0.0f;
+			*(volatile float *)&matrix.row[0][1] = 0.0f;
+			*(volatile float *)&matrix.row[0][2] = 0.0f;
+			*(volatile float *)&matrix.row[0][3] = 0.0f;
+			*(volatile float *)&matrix.row[1][0] = 0.0f;
+			*(volatile float *)&matrix.row[1][2] = 0.0f;
+			*(volatile float *)&matrix.row[1][3] = 0.0f;
+			*(volatile float *)&matrix.row[2][0] = 0.0f;
+			*(volatile float *)&matrix.row[2][1] = 0.0f;
+			*(volatile float *)&matrix.row[2][3] = 0.0f;
 			float scale = templ->scale;
 			matrix.row[0][0] = 1.0f;
 			matrix.row[1][1] = 1.0f;

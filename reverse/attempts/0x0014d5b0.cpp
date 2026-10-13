@@ -1,5 +1,5 @@
 // ?rva0014D5B0@SourceNamespace_AmbientLight@FXShaderParameterSourceNamespaceSAS@@QAEXPAUID3DXEffect@@PBD@Z
-// partial score=0.96 date=2026-10-12
+// partial score=0.92 date=2026-10-13
 // cl: /O1 /arch:SSE /G7 /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
 //
@@ -112,7 +112,7 @@ class Vector4
 {
 public:
 	__forceinline Vector4() {}
-	__forceinline Vector4(float x, float y, float z, float w) { X = x; Y = y; Z = z; W = w; }
+	__declspec(dllimport) __forceinline Vector4(float x, float y, float z, float w) { X = x; Y = y; Z = z; W = w; }
 	float &operator[](int i) { return (&X)[i]; }
 	const float &operator[](int i) const { return (&X)[i]; }
 	__forceinline Vector4 &operator=(const Vector4 &v) { X = v.X; Y = v.Y; Z = v.Z; W = v.W; return *this; }
@@ -947,31 +947,35 @@ void FXShaderParameterSourceNamespaceSAS::SourceNamespace_AmbientLight::ResolveB
 	}
 }
 
-// Retail 0x0014D5B0, 156 bytes: ambient light equivalent-ambient color.
+// Retail 0x0014D5B0, 156 bytes: the ambient light's color (index 0 only).
 void FXShaderParameterSourceNamespaceSAS::SourceNamespace_AmbientLight::rva0014D5B0(ID3DXEffect *effect, D3DXHANDLE parameter)
 {
 	float color[4];
 	Rva0013F6F0LightEnv *env = (Rva0013F6F0LightEnv *)DX8Wrapper::Get_Light_Environment();
 	if (env != 0 && m_index == 0)
 	{
-		Rva0013F6F0LightEnv::Vector3 ambient = env->Get_Equivalent_Ambient();
-		color[2] = ambient.Z;
-		color[1] = ambient.Y;
-		color[0] = ambient.X;
-		if (ShaderOverbrightEnabled != 0)
+		const Rva0013F6F0LightEnv::Vector3 &ambient = env->Get_Equivalent_Ambient();
+		float ax = ambient.X;
+		float ay = ambient.Y;
+		float az = ambient.Z;
+		color[0] = ax;
+		color[1] = ay;
+		color[2] = az;
+		if (ShaderOverbrightEnabled)
 		{
 			color[0] *= 2.0f;
 			color[1] *= 2.0f;
 			color[2] *= 2.0f;
 		}
 		color[3] = 0.0f;
-		effect->SetVector(parameter, color);
-		return;
 	}
-	color[0] = 0.0f;
-	color[1] = 0.0f;
-	color[2] = 0.0f;
-	color[3] = 0.0f;
+	else
+	{
+		color[0] = 0.0f;
+		color[1] = 0.0f;
+		color[2] = 0.0f;
+		color[3] = 0.0f;
+	}
 	effect->SetVector(parameter, color);
 }
 
@@ -1354,14 +1358,3 @@ void FXShaderParameterSourceNamespaceSAS::SourceNamespace_Skeleton::ResolveBindi
 		binder->PopDynamicSetStack();
 	}
 }
-
-// --- 2026-10-13 w6-mo1 in-owner-TU confirmation ---
-// Inserting the bank body into fxshadernamespacesas.cpp (owner TU) builds
-// clean (68/68 existing rows intact) and reproduces 156/156 bytes with 11
-// diff lines, ALL xmm numbering (retail Y->xmm2 Z->xmm3 X->xmm1 scale->xmm0;
-// ours Y->xmm1 Z->xmm3 X->xmm0 scale->xmm2); first diff +0x18 (0x90 vs 0x88).
-// Control flow, frame, call, stores all exact. The +1 shift stands with zero
-// live floats before the first load; named-cond/volatile/fence/PHI/cmp-form
-// variants all pre-tried. Needs a new allocation lever (a real second live
-// float in retail's source?). TU edit reverted; body == bank above.
-// t=35 model=muse-spark-1.3-contributor.
