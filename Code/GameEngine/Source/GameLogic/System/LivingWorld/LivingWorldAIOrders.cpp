@@ -18,10 +18,10 @@ template<> BfmePod8 *vector<BfmePod8>::erase(BfmePod8*,BfmePod8*);
 template<> BfmePod16 *vector<BfmePod16>::erase(BfmePod16*,BfmePod16*);
 }
 class Rva005B129FVector {public: Rva005B09D8Record *erase(Rva005B09D8Record*,Rva005B09D8Record*); __forceinline void clear() {erase(first,finish);} Rva005B09D8Record *first,*finish,*limit;};
-class Rva004E3184 {public: Rva004E3184(const Rva004E3184&);virtual ~Rva004E3184();char bytes[0x58-4];};
+class SpawnArmy {public: SpawnArmy(const SpawnArmy&);virtual ~SpawnArmy();char bytes[0x58-4];};
 class Rva004E0625 {public:int rva004E0625() const;};
 class ArmySpawnerOrderView {public:
- virtual void slot0();virtual void slot4();virtual void slot8();virtual void slotC();virtual void slot10();virtual void slot14();virtual void spawn(const Rva004E3184*);
+ virtual void slot0();virtual void slot4();virtual void slot8();virtual void slotC();virtual void slot10();virtual void slot14();virtual void spawn(const SpawnArmy*);
 };
 class Rva0020EEF4Outer {public:int rva0020EEF4(int);};
 class Rva0020E89C;
@@ -61,7 +61,7 @@ void LivingWorldAI::SubmitOrders() {
   Rva004E0625 *region=(Rva004E0625*)TheLivingWorldLogic->getSpawnerRegions()->rva0020EEF4(orders68[i].a[0]);
   if(region) {
    ArmySpawnerOrderView *spawner=(ArmySpawnerOrderView*)region->rva004E0625();
-   Rva004E3184 spawn(*(Rva004E3184*)orders68[i].a[1]);spawner->spawn(&spawn);
+   SpawnArmy spawn(*(SpawnArmy*)orders68[i].a[1]);spawner->spawn(&spawn);
   }
  }
  clearOrderVector(orders68);

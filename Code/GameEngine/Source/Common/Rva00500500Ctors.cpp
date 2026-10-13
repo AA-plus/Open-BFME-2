@@ -2,11 +2,11 @@
 // stlport
 //
 // ??0Rva00500500@@QAE@ABV0@@Z @ 0x00500500 (29B).
-// ??0Rva00500500@@QAE@AAPAXABVRva004E3184@@@Z @ 0x00500770 (29B).
+// ??0Rva00500500@@QAE@AAPAXABVSpawnArmy@@@Z @ 0x00500770 (29B).
 // ??$_Construct@VRva00500500@@V1@@_STL@@YAXPAVRva00500500@@ABV1@@Z @ 0x0050097D (45B).
 // ?Rva00500BA6Create@@YGPAU?$_Rb_tree_node@VRva00500500@@@_STL@@ABVRva00500500@@@Z @ 0x00500BA6 (34B).
 // Copy and pointer-plus-Rva ctors of the 92-byte wrapper holding a pointer
-// at +0 and the ModuleData Rva004E3184 at +4 via its rowed copy at
+// at +0 and the ModuleData SpawnArmy at +4 via its rowed copy at
 // 0x004E2F9F. Caller 0x00503355 builds a temp with the two-arg ctor then
 // copies it with the copy ctor. Frameless: the pointer is trivial and the
 // Rva is last so no EH unwind is needed.
@@ -34,10 +34,10 @@ inline Snapshot::~Snapshot()
 	*(const void **)this = reinterpret_cast<const void *>(vtbl_00BBB554);
 }
 
-class Rva004E3184 : public Snapshot {
+class SpawnArmy : public Snapshot {
 public:
-    virtual ~Rva004E3184();
-    Rva004E3184(const Rva004E3184 &o);
+    virtual ~SpawnArmy();
+    SpawnArmy(const SpawnArmy &o);
 private:
     AsciiString m_04;
     AsciiString m_08;
@@ -64,10 +64,10 @@ private:
 class Rva00500500 {
 public:
     Rva00500500(const Rva00500500 &o);
-    Rva00500500(void *&p, const Rva004E3184 &r);
+    Rva00500500(void *&p, const SpawnArmy &r);
 private:
     void *m_ptr;
-    Rva004E3184 m_rva;
+    SpawnArmy m_rva;
 };
 
 Rva00500500::Rva00500500(const Rva00500500 &o)
@@ -75,7 +75,7 @@ Rva00500500::Rva00500500(const Rva00500500 &o)
 {
 }
 
-Rva00500500::Rva00500500(void *&p, const Rva004E3184 &r)
+Rva00500500::Rva00500500(void *&p, const SpawnArmy &r)
     : m_ptr(p), m_rva(r)
 {
 }

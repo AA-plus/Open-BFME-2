@@ -1,7 +1,7 @@
 // cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /MD /EHsc /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/moduledata
 // stlport
 //
-// ??0Rva004E3184@@QAE@ABV0@@Z @ 0x004E2F9F (295B).
+// ??0SpawnArmy@@QAE@ABV0@@Z @ 0x004E2F9F (295B).
 // Copy ctor of the ModuleData class with vtable 0x00861F28 whose dtor is
 // rowed at 0x004E3184. Same temp is built here and torn down by that dtor
 // in caller 0x004FB924. _Construct wrapper at 0x004E3706 treats it as
@@ -27,13 +27,13 @@ template <> vector<AsciiString, allocator<AsciiString> >::vector(const vector<As
 template <> AsciiString *__uninitialized_copy(const AsciiString*, const AsciiString*, AsciiString*, const __false_type&);
 }
 
-class Rva004E3184 : public Snapshot {
+class SpawnArmy : public Snapshot {
 public:
-    virtual ~Rva004E3184();
+    virtual ~SpawnArmy();
     virtual void loadPostProcess();
     virtual const char *GetSnapshotName() const;
     virtual void xfer(Xfer*);
-    Rva004E3184(const Rva004E3184 &o);
+    SpawnArmy(const SpawnArmy &o);
 private:
     AsciiString m_04;
     AsciiString m_08;
@@ -57,7 +57,7 @@ private:
     bool m_55;
 };
 
-Rva004E3184::Rva004E3184(const Rva004E3184 &o)
+SpawnArmy::SpawnArmy(const SpawnArmy &o)
     : m_04(o.m_04), m_08(o.m_08), m_0c(o.m_0c), m_10(o.m_10),
       m_14(o.m_14), m_18(o.m_18), m_1c(o.m_1c),
       m_20(o.m_20), m_24(o.m_24),
@@ -70,4 +70,4 @@ Rva004E3184::Rva004E3184(const Rva004E3184 &o)
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
 // call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:??0BfmePod88@@QAE@ABU0@@Z=??0Rva004E3184@@QAE@ABV0@@Z")
+#pragma comment(linker, "/alternatename:??0BfmePod88@@QAE@ABU0@@Z=??0SpawnArmy@@QAE@ABV0@@Z")

@@ -46,7 +46,7 @@ public:
 	const Image *findImageByName(const AsciiString &name);
 };
 extern ImageCollection *TheMappedImageCollection;
-class Rva004E3184
+class SpawnArmy
 {
 public:
 	const Image *GetButtonImage(int playerID);
@@ -119,7 +119,7 @@ namespace StrategicInGameUI
 // image-provider receiver. Its EH states prove a dynamic local-static
 // initializer with temporary AsciiString; retain that native lifetime.
 // Receiver spelling remains the existing address-derived access view.
-const Image *GetButtonImage(int playerID, Rva004E3184 *army)
+const Image *GetButtonImage(int playerID, SpawnArmy *army)
 {
 	static const Image *noArtImage = TheMappedImageCollection->findImageByName(AsciiString("BuildingNoArt"));
 	const Image *image = army->GetButtonImage(playerID);
@@ -159,7 +159,7 @@ struct Rva005F8C48
 
 Rva005F8C48::Rva005F8C48(int value, int playerID, Rva00319CED *unit)
 	: m_value(value), m_playerID(playerID),
-	  m_image(StrategicInGameUI::GetButtonImage(playerID, (Rva004E3184 *)unit)),
+	  m_image(StrategicInGameUI::GetButtonImage(playerID, (SpawnArmy *)unit)),
 	  m_0c(unit->m_4c), m_10(unit->m_48),
 	  m_title(unit->rva004E25AF(playerID)), m_description(unit->rva004E265F(playerID))
 {

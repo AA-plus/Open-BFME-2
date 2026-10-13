@@ -65,7 +65,7 @@ template <> void _List_base<UnicodeString, allocator<UnicodeString> >::clear();
 
 struct LivingWorldArmy;
 struct LivingWorldRevivalUnitDataView;
-class Rva004E3184;
+class SpawnArmy;
 class Rva00319CED;
 class Rva002E112A { public: Bool rva002E112A(Rva00319CED *); };
 class LivingWorldPlayer { public:
@@ -293,7 +293,7 @@ public:
 	ArmySummaryEntryRef GetEntry(Int entryID);		// 0x0040CBD7
 };
 
-class Rva004E3184;
+class SpawnArmy;
 struct Rva002B6A04Player;
 // Existing native setter318D14, rowed in Disp8ByteFieldSetters.cpp.
 class Rva00318D14ByteSlot {public:void set(unsigned char);};
@@ -301,7 +301,7 @@ struct LivingWorldArmy
 {
  // Native543B constructor31A372/WB1029DF0: caller pushes ID/spawn/player.
  // The reference parameter names remain the existing provisional views.
- LivingWorldArmy(Int,Rva004E3184 *,Rva002B6A04Player *);
+ LivingWorldArmy(Int,SpawnArmy *,Rva002B6A04Player *);
 	// WorldBuilder LivingWorldArmy::initiateMove (0x0031A591, pinned): starts
 	// the army toward the region and position.
 	Int ownerID()const{return m_ownerPlayer;}
@@ -522,7 +522,7 @@ int __cdecl Rva002B24F0Get(Rva002B24F0Obj *obj, void *out);	// 0x002B24F0, "Livi
 // CreateEmptyGarrisonArmy's collaborators: the narrow string copy (rowed
 // StringBase<char>::set 0x000366F0); the spawn description (WorldBuilder
 // SpawnArmy; ctor pinned at 0x004E30D5 and virtual dtor rowed 0x004E3184
-// under the address name Rva004E3184) with its name at +0x04, position at
+// under the address name SpawnArmy) with its name at +0x04, position at
 // +0x20 and flag at +0x54; the player's template strings at +0x24 and
 // +0x34 (player +0x40); the region's garrison spot (rowed
 // LivingWorldRegion::GetGarrisonArmyPlacementSpot 0x003F0F13); and the
@@ -549,11 +549,11 @@ struct LivingWorldBuildPlot*rva003F088C(int)const;void BuildBuilding(class Rva00
 	unsigned char m_pad000[0x13c];
 	Int m_ownerPlayer;					// +0x13C
 };
-class Rva004E3184
+class SpawnArmy
 {
 public:
-	Rva004E3184(void *arg);					// 0x004E30D5
-	virtual ~Rva004E3184();					// 0x004E3184
+	SpawnArmy(void *arg);					// 0x004E30D5
+	virtual ~SpawnArmy();					// 0x004E3184
 
 	StringBase<char> m_name;				// +0x04
 	unsigned char m_pad08[0x20 - 0x8];
@@ -706,8 +706,8 @@ void logicMessageDispatcher(GameMessage*,void*);
 	void XferDelayedRegionVictories(Xfer *xfer);
 	void XferPlayers(Xfer *xfer);
 	void AwardOwnershipSetsToPlayers();
-	void spawnCity(Rva004E3184 *city);
-	LivingWorldArmy *spawnArmy(Rva004E3184 *spawn, Rva002B6A04Player *player, Bool flag);	// 0x002B65B7, pinned
+	void spawnCity(SpawnArmy *city);
+	LivingWorldArmy *spawnArmy(SpawnArmy *spawn, Rva002B6A04Player *player, Bool flag);	// 0x002B65B7, pinned
 	LivingWorldArmy *CreateEmptyGarrisonArmy(Rva002B6A04Player *player, LivingWorldRegion *region);
 	void *rva002B4948(void *player, LivingWorldRegion *region, Int arg);	// 0x002B4948 (rowed as the stdcall Rva002B4948Find)
 	void spawnBuilding(const struct Rva002B99F8Request *request);
@@ -1361,7 +1361,7 @@ public:
 	virtual void slot04();
 	virtual void slot08();
 	virtual void slot0C();
-	virtual Bool build(Int token, Rva004E3184 *spawn);	// +0x10
+	virtual Bool build(Int token, SpawnArmy *spawn);	// +0x10
 };
 class Rva002B3325Campaign
 {
@@ -1426,7 +1426,7 @@ Bool LivingWorldLogic::canBuildUnit(LivingWorldBuildingNuggetSpawnArmy *nugget, 
 	GameSlot *slot = ((Rva002E06B8 *)player)->rva002E06B8();
 	if (slot != 0 && slot->GetPlayerData() == 0)
 	{
-		Rva004E3184 spawn(0);
+		SpawnArmy spawn(0);
 		if (!((Rva002B3325BuildInterface *)((char *)nugget + 0x0c))->build(token, &spawn))
 			return false;
 		Rva002B3325Summary *summary = (Rva002B3325Summary *)((Rva00319CED *)&spawn)->rva004E23C1();
@@ -1827,7 +1827,7 @@ LivingWorldArmy *LivingWorldLogic::CreateEmptyGarrisonArmy(Rva002B6A04Player *pl
 	LivingWorldArmy *army = (LivingWorldArmy *)rva002B4948(player, region, 0);
 	if (army == 0)
 	{
-		Rva004E3184 spawn(0);
+		SpawnArmy spawn(0);
 		spawn.m_flag54 = false;
 		spawn.m_name.set(player->m_template->m_name24);
 		Rva003F0F13Elem spot;
@@ -2660,7 +2660,7 @@ bool LivingWorldLogic::rva002B4B83()
 // Native118B2B86F1..2B8767: city flag54, ID9C and pointer-vector124.
 // Constructor declaration/pin and98B storage tail are included prerequisites;
 // no unrelated removed turn-phase or army methods are restored here.
-void LivingWorldLogic::spawnCity(Rva004E3184 *city)
+void LivingWorldLogic::spawnCity(SpawnArmy *city)
 {
  if(!city->flagged())return;
  LivingWorldArmy *army=::new LivingWorldArmy(++m_field9C,city,0);
@@ -2953,7 +2953,7 @@ void LivingWorldLogic::rva002BD9B4(){
 // separately recovered body. Direct KindOf bit90 testing preserves retail's
 // byte113 mask; converting through a Boolean helper adds four bytes.
 class Rva00319AA0 {public:void rva00319AA0(const Coord2D *);};
-LivingWorldArmy *LivingWorldLogic::spawnArmy(Rva004E3184 *spawn,Rva002B6A04Player *player,Bool bypass)
+LivingWorldArmy *LivingWorldLogic::spawnArmy(SpawnArmy *spawn,Rva002B6A04Player *player,Bool bypass)
 {
  if(spawn->flagged())return 0;
  if(!bypass && !((Rva002E112A*)player)->rva002E112A((Rva00319CED*)spawn))return 0;

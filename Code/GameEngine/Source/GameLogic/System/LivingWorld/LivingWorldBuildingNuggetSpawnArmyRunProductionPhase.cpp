@@ -7,7 +7,7 @@
 // at lines 416..455) whose callee sequence and control flow agree with retail.
 // The front of the production queue (vector<ObjectID> at +0x20, the second
 // base's +0x14) is tested through the second base's slot 4 against a
-// SpawnArmy temporary (Rva004E3184, int-ctor 0x004E30D5, dtor 0x004E3184);
+// SpawnArmy temporary (SpawnArmy, int-ctor 0x004E30D5, dtor 0x004E3184);
 // an unproducible entry is dropped, otherwise the build counter at +0x2C runs
 // up to the temporary's +0x48 before the army is placed at the region's
 // garrison spot and spawned.  Callee owners keep their ledger spellings, so
@@ -40,11 +40,11 @@ struct Rva003F0F13Elem
 	float b;
 };
 
-class Rva004E3184
+class SpawnArmy
 {
 public:
-	Rva004E3184(int v);
-	virtual ~Rva004E3184();
+	SpawnArmy(int v);
+	virtual ~SpawnArmy();
 
 	char m_pad04[0x1C];
 	Rva003F0F13Elem m_pos;	// +0x20 placement spot
@@ -82,7 +82,7 @@ public:
 class LivingWorldLogic
 {
 public:
-	LivingWorldArmy *spawnArmy(Rva004E3184 *desc, Rva002B6A04Player *player, bool b);
+	LivingWorldArmy *spawnArmy(SpawnArmy *desc, Rva002B6A04Player *player, bool b);
 };
 
 extern LivingWorldLogic *TheLivingWorldLogic;
@@ -178,7 +178,7 @@ public:
 	virtual void v01();
 	virtual void v02();
 	virtual void v03();
-	virtual bool canProduce(ObjectID id, Rva004E3184 *desc);	// slot 4
+	virtual bool canProduce(ObjectID id, SpawnArmy *desc);	// slot 4
 	virtual void v05();
 	virtual void v06();
 	virtual bool canQueueUnit(ObjectID id);	// slot 7
@@ -203,7 +203,7 @@ void LivingWorldBuildingNuggetSpawnArmy::runProductionPhase()
 	if (m_queue.size() <= 0)
 		return;
 	ObjectID id = m_queue[0];
-	Rva004E3184 army(0);
+	SpawnArmy army(0);
 	if (!canProduce(id, &army))
 	{
 		m_queue.erase(m_queue.begin());
@@ -245,7 +245,7 @@ bool LivingWorldBuildingNuggetSpawnArmy::canQueueUnit(ObjectID id)
 	unsigned int maxQueue = m_data->m_maxQueue;
 	if (m_queue.size() >= maxQueue)
 		return false;
-	Rva004E3184 army(0);
+	SpawnArmy army(0);
 	LivingWorldPlayer *owner;
 	void *summary;
 	Rva004FA83ETemplate *tmpl;

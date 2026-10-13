@@ -37,10 +37,10 @@ struct LivingWorldArmy;
 struct Rva002B6A04Player;
 struct Rva003F0F13Elem {float a,b;};
 class LivingWorldRegion {public:void GetGarrisonArmyPlacementSpot(Rva003F0F13Elem *);};
-class Rva004E3184 {
+class SpawnArmy {
 public:
- Rva004E3184(int);
- virtual ~Rva004E3184();
+ SpawnArmy(int);
+ virtual ~SpawnArmy();
  unsigned char beforePos[0x20-4];
  Rva003F0F13Elem pos;
  unsigned char afterPos[0x58-0x28];
@@ -48,7 +48,7 @@ public:
 struct Rva004FAFF2 {Rva004FAFF2 &rva004FAFF2(const Rva004FAFF2 &);};
 class LivingWorldLogic {public:
  Rva002B8660Army *UseGenericSpawnArmyForPlayer(int,Rva002B8660Player *);
- LivingWorldArmy *spawnArmy(Rva004E3184 *,Rva002B6A04Player *,bool);
+ LivingWorldArmy *spawnArmy(SpawnArmy *,Rva002B6A04Player *,bool);
  char unknown00[0xb0]; Rva002104B6 *regions;
 };
 extern LivingWorldLogic *TheLivingWorldLogic;
@@ -134,7 +134,7 @@ void LivingWorldScenario::OwnershipSet::spawnArmiesInRegionsForPlayer(Rva0059E64
    for(;token!=last;++token) {
     Rva002B8660Army *found=TheLivingWorldLogic->UseGenericSpawnArmyForPlayer((int)token,(Rva002B8660Player *)player);
     if(found) {
-     Rva004E3184 army(0);
+     SpawnArmy army(0);
      ((Rva004FAFF2 *)&army)->rva004FAFF2(*(const Rva004FAFF2 *)found);
      army.pos=spot;
      TheLivingWorldLogic->spawnArmy(&army,(Rva002B6A04Player *)player,true);

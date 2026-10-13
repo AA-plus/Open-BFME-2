@@ -112,8 +112,8 @@ void Rva0057A260::rva0057A260(INI *ini)
 
 // --- 0x004E12C4 / 0x004E12EF / 0x004E1342 (19B each): field-parse callbacks
 // parsing a nested block into their store through the rowed tables 0x00C616C0
-// (LivingWorldCampaignObjects' Rva004E3184 table), 0x00C61830 and 0x00C61884.
-class Rva004E3184
+// (LivingWorldCampaignObjects' SpawnArmy table), 0x00C61830 and 0x00C61884.
+class SpawnArmy
 {
 public:
 	static const FieldParse m_fieldParseTable[];			// 0x00C616C0
@@ -124,7 +124,7 @@ extern const FieldParse g_00C61884;
 
 void rva004E12C4(INI *ini, void *instance, void *store, const void *userData)
 {
-	ini->initFromINI(store, Rva004E3184::m_fieldParseTable);
+	ini->initFromINI(store, SpawnArmy::m_fieldParseTable);
 }
 
 void rva004E12EF(INI *ini, void *instance, void *store, const void *userData)

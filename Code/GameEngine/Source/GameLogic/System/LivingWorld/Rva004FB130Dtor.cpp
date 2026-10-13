@@ -47,11 +47,11 @@ public:
 };
 
 // SpawnArmy: 88-byte record (LivingWorldCampaignObjects.cpp).
-class Rva004E3184
+class SpawnArmy
 {
 public:
-	Rva004E3184(int index);
-	virtual ~Rva004E3184();
+	SpawnArmy(int index);
+	virtual ~SpawnArmy();
 
 	char m_pad04[0x58 - 0x04];
 };
@@ -99,7 +99,7 @@ Rva004FB130::~Rva004FB130()
 	Rva002E2903Player *owner = ((LivingWorldBuildingNuggetSpawnArmy *)this)->getOwningPlayer();
 	if (owner)
 	{
-		Rva004E3184 army(0);
+		SpawnArmy army(0);
 		for (unsigned int i = 0; i < m_ids.size(); ++i)
 		{
 			int id = m_ids[i];

@@ -199,7 +199,7 @@ template <> void vector<ScienceType, allocator<ScienceType> >::reserve(unsigned 
 template <> void vector<ScienceType, allocator<ScienceType> >::push_back(const ScienceType &);
 }
 
-class Rva004E3184;
+class SpawnArmy;
 struct Arg54;
 
 class Rva002B2672
@@ -238,7 +238,7 @@ public:
 	virtual void v01();	// slot 1 (unrecovered; declared only)
 	virtual void v02();	// slot 2 (unrecovered; declared only)
 	virtual void v03();	// slot 3 (unrecovered; declared only)
-	virtual bool checkId(ObjectID id, Rva004E3184 *ctx);	// slot 4 (name unrecovered; declared only)
+	virtual bool checkId(ObjectID id, SpawnArmy *ctx);	// slot 4 (name unrecovered; declared only)
 	virtual void v05();	// slot 5 (unrecovered; declared only)
 	virtual void v06();	// slot 6 (unrecovered; declared only)
 	virtual bool v07(int p);	// slot 7: gate on the int param (name unrecovered; declared only)
@@ -260,17 +260,17 @@ private:
 // Bind to the existing data-ledger owner; keep the retail access view local.
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
-class Rva004E3184
+class SpawnArmy
 {
 	friend class Rva004FAA81Owner;
 public:
-	Rva004E3184(int v);
-	virtual ~Rva004E3184();
+	SpawnArmy(int v);
+	virtual ~SpawnArmy();
 
 private:
 	// Mostly size-only view (0x58B total with the vptr): the real layout
 	// (Snapshot base plus AsciiStrings plus vector) is owned by
-	// Rva004E3184Dtor.cpp, whose view stops at m_50, but the int-ctor
+	// SpawnArmyDtor.cpp, whose view stops at m_50, but the int-ctor
 	// 0x004E30D5 stores through +0x55. Only +0x48 is named: the int-ctor
 	// sets it to 1 and 0x004FAA81 uses it as its retry loop bound.
 	char m_pad44[0x44];
@@ -281,9 +281,9 @@ private:
 class Rva002E2903Player
 {
 public:
-	void rva002E0764(Rva004E3184 *ctx);
-	bool rva002E112A(Rva004E3184 *ctx);
-	void rva002E074E(Rva004E3184 *ctx);
+	void rva002E0764(SpawnArmy *ctx);
+	bool rva002E112A(SpawnArmy *ctx);
+	void rva002E074E(SpawnArmy *ctx);
 };
 
 // 0x002E0764 is rowed as LivingWorldPlayer::OnUnitDequeued (27B,
@@ -307,14 +307,14 @@ class Rva003F0F13
 {
 public:
 	void rva003F0F13(Rva003F0F13Elem *out);
-	bool rva003F0259(Rva004E3184 *ctx);
+	bool rva003F0259(SpawnArmy *ctx);
 };
 
 class Rva002BA8F1Logic
 {
 public:
 	Rva002E2903Player *find(int id, unsigned int *index);
-	int rva002B65B7(Rva004E3184 *ctx, Rva002E2903Player *player, int v);
+	int rva002B65B7(SpawnArmy *ctx, Rva002E2903Player *player, int v);
 };
 
 struct Rva004FAA81Target
@@ -383,7 +383,7 @@ void Rva004FA992Owner::rva004FA9B1(int index)
 	Rva002E2903Player *player = ((LivingWorldBuildingNuggetSpawnArmy *)((char *)this - 12))->getOwningPlayer();
 	if (player)
 	{
-		Rva004E3184 tmp(0);
+		SpawnArmy tmp(0);
 		if (checkId(*elem, &tmp))
 			((LivingWorldPlayer *)player)->OnUnitDequeued((Rva00319CED *)&tmp);
 	}
@@ -428,7 +428,7 @@ bool Rva004FA992Owner::rva004FAEAA(ScienceType p)
 	Rva002E2903Player *player = ((LivingWorldBuildingNuggetSpawnArmy *)((char *)this - 12))->getOwningPlayer();
 	if (player)
 	{
-		Rva004E3184 tmp(0);
+		SpawnArmy tmp(0);
 		if (checkId((ObjectID)p, &tmp))
 			((Rva002E074E *)player)->rva002E074E((Rva00319CED *)&tmp);
 	}

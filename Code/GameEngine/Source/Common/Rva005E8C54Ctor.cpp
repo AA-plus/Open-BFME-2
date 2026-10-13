@@ -98,15 +98,15 @@ private:
 // 0x005E8B66 (238 bytes, EH, RET 4) fills the member list: the source's
 // +0x18 id resolves (rowed 0x005F88D6, then 0x004E0625) to an object that
 // lists its unit ids (slot 3) and describes each into a scratch unit
-// (slot 4, the rowed Rva004E3184 at 0x004E30D5 / 0x004E3184); every
+// (slot 4, the rowed SpawnArmy at 0x004E30D5 / 0x004E3184); every
 // described unit becomes a button record (rowed 0x005F8C48, destructor
 // 0x005E8908) that the rowed helper 0x005E8ADF adds to the list. The
 // record view binds the record's two rowed spellings.
-class Rva004E3184
+class SpawnArmy
 {
 public:
-	Rva004E3184(int playerID);
-	virtual ~Rva004E3184();
+	SpawnArmy(int playerID);
+	virtual ~SpawnArmy();
 private:
 	unsigned char m_data[0x58 - 4];
 };
@@ -117,7 +117,7 @@ class Rva005E8B66Source
 public:
 	virtual void v0(); virtual void v1(); virtual void v2();
 	virtual void listUnits(_STL::vector<int> *ids);					// +0x0C
-	virtual bool describe(int id, Rva004E3184 *unit);					// +0x10
+	virtual bool describe(int id, SpawnArmy *unit);					// +0x10
 };
 class Rva00319CED;
 class Rva005E8908
@@ -136,7 +136,7 @@ void Rva005E8C54::rva005E8B66(int b)
 	Rva005E8B66Source *source = found ? (Rva005E8B66Source *)((Rva004E0625 *)found)->rva004E0625() : 0;
 	if (!source)
 		return;
-	Rva004E3184 unit(0);
+	SpawnArmy unit(0);
 	_STL::vector<int> ids;
 	source->listUnits(&ids);
 	for (int *it = ids.begin(), *end = ids.end(); it != end; ++it)

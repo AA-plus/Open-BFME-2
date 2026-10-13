@@ -25,8 +25,8 @@ struct SpawnManagerCostView{unsigned char opaque[0xf0];float revivalCost;};
 extern LivingWorldManager *TheLivingWorldManager;
 struct FieldParse;
 class Image;
-class Rva004E3184:public Snapshot{public:Rva004E3184(int);virtual ~Rva004E3184();
- Rva004E3184(const Rva004E3184&);
+class SpawnArmy:public Snapshot{public:SpawnArmy(int);virtual ~SpawnArmy();
+ SpawnArmy(const SpawnArmy&);
  const Image *GetButtonImage(int);
  const Image *GetPortraitImage(int);
  static const FieldParse m_fieldParseTable[];
@@ -39,14 +39,14 @@ class Rva004E3184:public Snapshot{public:Rva004E3184(int);virtual ~Rva004E3184()
  _STL::vector<AsciiString> m_38;
  float m_44;int m_48,m_4c;AsciiString m_50;bool m_54,m_55;
 };
-Rva004E3184::Rva004E3184(int index):m_20(0.0f),m_24(0.0f),m_2c(AsciiString::TheEmptyString),m_48(1),m_4c(index),m_54(false),m_55(true){
+SpawnArmy::SpawnArmy(int index):m_20(0.0f),m_24(0.0f),m_2c(AsciiString::TheEmptyString),m_48(1),m_4c(index),m_54(false),m_55(true){
  if(TheLivingWorldManager) m_44=((const SpawnManagerCostView *)TheLivingWorldManager)->revivalCost;
  else m_44=5.0f;
 }
 
-Rva004E3184::~Rva004E3184() {}
-void Rva004E3184::loadPostProcess() {}
-const char *Rva004E3184::GetSnapshotName()const{return "SpawnArmy";}
+SpawnArmy::~SpawnArmy() {}
+void SpawnArmy::loadPostProcess() {}
+const char *SpawnArmy::GetSnapshotName()const{return "SpawnArmy";}
 class UnicodeString;
 class PooledString;
 struct XferUnknown11;
@@ -134,7 +134,7 @@ public:
 void Rva004E12D7Parse(void *a, void *b);
 Xfer *xferAsciiStringVector(Xfer *xfer, _STL::vector<AsciiString> *vec);
 
-void Rva004E3184::xfer(Xfer *stream)
+void SpawnArmy::xfer(Xfer *stream)
 {
  Xfer &xfer=*stream;
 	Xfer::Version version(1, 3);
@@ -178,7 +178,7 @@ class INI { public:
  static void parseInt(INI*,void*,void*,const void*);
 };
 struct FieldParse { const char *name; void (*parse)(INI*,void*,void*,const void*); const void *userData; int offset; };
-const FieldParse Rva004E3184::m_fieldParseTable[]={
+const FieldParse SpawnArmy::m_fieldParseTable[]={
  {"Icon",INI::parseAsciiString,0,0x04},
  {"Banner",INI::parseAsciiString,0,0x08},
  {"Position",INI::parseCoord2D,0,0x20},
@@ -217,8 +217,8 @@ void rva004E3BD8(INI *ini,int,_STL::vector<BfmePod88> *vec) {
 }
 void Rva004E324DParse(INI *ini,void *instance,void*,const void*) {
  if(!ini || !instance) throw INIException(3,"ParseArmyMoveToBlock::Invalid data passed in.");
- Rva004E3184 record(((Rva002B3171BumpCounter*)TheLivingWorldLogic)->bump());
- ini->initFromINI(&record,Rva004E3184::m_fieldParseTable);
+ SpawnArmy record(((Rva002B3171BumpCounter*)TheLivingWorldLogic)->bump());
+ ini->initFromINI(&record,SpawnArmy::m_fieldParseTable);
  ((Rva00566AB7*)instance)->rva00566AB7((const BfmePod88&)record);
 }
 
@@ -235,7 +235,7 @@ class Rva004E0705 { public:Rva002E2903Player *rva004E0705(); };
 class Rva002E06B8 { public:void *rva002E06EF(); };
 
 // Complete native body and associated EH graph verified against retail.
-const Image *Rva004E3184::GetButtonImage(int id) {
+const Image *SpawnArmy::GetButtonImage(int id) {
  static const Image *missing=TheMappedImageCollection->findImageByName(AsciiString("BuildingNoArt"));
  void *thing=((Rva00319CED*)this)->rva004E23E2();
  if(!thing)return missing;
@@ -255,7 +255,7 @@ const Image *Rva004E3184::GetButtonImage(int id) {
 class ThingTemplate { public:const Image *getButtonImage(); };
 
 // Complete native body and associated EH graph verified against retail.
-const Image *Rva004E3184::GetPortraitImage(int id) {
+const Image *SpawnArmy::GetPortraitImage(int id) {
  static const Image *missing=TheMappedImageCollection->findImageByName(AsciiString("BuildingNoArt"));
  void *thing=((Rva00319CED*)this)->rva004E23E2();
  if(!thing)return missing;
@@ -289,7 +289,7 @@ class GameTextInterface { public:
 };
 extern GameTextInterface *TheGameText;
 UnicodeString Rva00319CED::rva004E25AF(int id) {
- UnicodeString title=TheGameText->fetch(((Rva004E3184*)this)->m_10);
+ UnicodeString title=TheGameText->fetch(((SpawnArmy*)this)->m_10);
  void *thing=rva004E23E2();
  if(thing && (*((unsigned char*)thing+0x11f)&0x40)) {
   Rva002B2579Result *building=((Rva002BA8F1Logic*)TheLivingWorldLogic)->rva002B2579(id);

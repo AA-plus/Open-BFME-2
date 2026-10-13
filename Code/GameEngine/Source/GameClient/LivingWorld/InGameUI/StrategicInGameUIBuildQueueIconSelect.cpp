@@ -205,7 +205,7 @@ void StrategicInGameUI::BuildQueueDetailsPanel::Impl::SelectQueueIndex(int queue
 // independently supplies the operation and call relationships; retail supplies
 // every layout and ABI used here. The generic queue interface's original class
 // and the summary's entry types remain unknown, so their views are address-named.
-// Rva004E3184 is the existing 88B SpawnArmy temporary view, ctor pin4E30D5 and
+// SpawnArmy is the existing 88B SpawnArmy temporary view, ctor pin4E30D5 and
 // matched dtor4E3184. Its name+2C and integer+48 are native accesses. Summary
 // entries at+40/+44 have stride8; queue slots4/12/13 fill a temporary, return
 // elapsed time and the production vector. Ordinary file-static C++ helpers
@@ -216,9 +216,9 @@ void StrategicInGameUI::BuildQueueDetailsPanel::Impl::SelectQueueIndex(int queue
 // implicit in the old standalone wrapper. Each new helper is rowed separately.
 #include "ascii_string.h"
 #include "unicode_string.h"
-class Rva004E3184 { public:
- Rva004E3184(void *);
- virtual ~Rva004E3184();
+class SpawnArmy { public:
+ SpawnArmy(void *);
+ virtual ~SpawnArmy();
  char pad04[0x2c-4]; AsciiString name; char pad30[0x48-0x30]; int m_48; char pad4C[0x58-0x4c];
 };
 class Rva003B8E89 { public: void *rva003B8E89(void *); };
@@ -226,7 +226,7 @@ class Rva00E02D6C; extern Rva00E02D6C *TheCampaignManager;
 struct Rva005E72B4Production { int *begin,*end,*capacity; };
 class Rva005E72B4Queue { public:
  virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
- virtual bool slot4(int,Rva004E3184 *);
+ virtual bool slot4(int,SpawnArmy *);
 virtual void slot5();
 virtual void slot6();
 virtual void slot7();
@@ -241,7 +241,7 @@ struct Rva005E72B4Entry { char bytes[8]; };
 struct Rva005E72B4Summary { char pad0[0x40]; Rva005E72B4Entry *begin,*end; };
 __declspec(noinline) static void *rva005E72B4Get(Rva005E72B4Queue *queue,int id)
 {
- Rva004E3184 army(0);
+ SpawnArmy army(0);
  queue->slot4(id,&army);
  Rva005E72B4Summary *summary=(Rva005E72B4Summary *)((Rva003B8E89 *)TheCampaignManager)->rva003B8E89(&army.name);
  if(!summary) return 0;
@@ -268,7 +268,7 @@ __declspec(noinline) static void *rva005E7322Get(Rva005E72B4Queue *queue,int id)
 __declspec(noinline) static int rva005E7582Get(Rva005E72B4Queue *queue,int index)
 {
  int id=queue->slot13()->begin[index];
- Rva004E3184 army(0);
+ SpawnArmy army(0);
  queue->slot4(id,&army);
  int time=army.m_48;
  if(index==0) time-=queue->slot12();
@@ -276,7 +276,7 @@ __declspec(noinline) static int rva005E7582Get(Rva005E72B4Queue *queue,int index
 }
 __declspec(noinline) static UnicodeString rva005E76AEGet(Rva005E76AEContext *context,Rva005E72B4Queue *queue,int id)
 {
- Rva004E3184 army(0);
+ SpawnArmy army(0);
  if(queue->slot4(id,&army)) return ((Rva00319CED *)&army)->rva004E25AF(context->m_id);
  return UnicodeString::TheEmptyString;
 }
@@ -311,7 +311,7 @@ void StrategicInGameUI::BuildQueueDetailsPanel::Impl::ShowUnitStats(int index)
 // Preserve both temporary UnicodeString lifetimes across constructor and set.
 __declspec(noinline) static UnicodeString rva005E774FGet(Rva005E76AEContext *context,Rva005E72B4Queue *queue,int id)
 {
- Rva004E3184 army(0);
+ SpawnArmy army(0);
  if(queue->slot4(id,&army)) return ((Rva00319CED *)&army)->rva004E265F(context->m_id);
  return UnicodeString::TheEmptyString;
 }
@@ -353,7 +353,7 @@ void StrategicInGameUI::BuildQueueDetailsPanel::Impl::Icon::rva005E789A()
 // native5E7EBB/5E7EB3, with the compiler's weak vector-to-scalar fallback.
 __declspec(noinline) static const Image *rva005E704EGet(Rva005E76AEContext *context,Rva005E72B4Queue *queue,int id)
 {
- Rva004E3184 army(0);
+ SpawnArmy army(0);
  if(queue->slot4(id,&army)) return ((Rva00319CED *)&army)->rva004E24DC(context->m_id);
  return 0;
 }
@@ -496,7 +496,7 @@ void StrategicInGameUI::BuildQueueDetailsPanel::Impl::Icon::Update()
 // retail performs that reload after slot13. Progress uses virtual slot12.
 inline static const Image *rva005E704EInline(Rva005E76AEContext *context,Rva005E72B4Queue *queue,int id)
 {
- Rva004E3184 army(0);
+ SpawnArmy army(0);
  if(queue->slot4(id,&army)) return ((Rva00319CED *)&army)->rva004E24DC(context->m_id);
  return 0;
 }
@@ -523,9 +523,9 @@ void StrategicInGameUI::BuildQueueDetailsPanel::Impl::InProgressIcon::Init(bool 
  ((Rva005E70C6 *)this)->rva005E70C6((int)rva005E7625Get(m_owner->m_queue,0));
  ((Rva005E70DF *)this)->rva005E70DF(rva005E77F0Get(m_owner->m_queue,0));
  if(selected) Select(); else Deselect();
- Rva004E3184 army(0);
+ SpawnArmy army(0);
  int *ids=m_owner->m_queue->slot13()->begin;
- Rva004E3184 *armyPtr=&army;
+ SpawnArmy *armyPtr=&army;
  m_owner->m_queue->slot4(ids[0],armyPtr);
  int total=army.m_48;
  int remaining=total-m_owner->m_queue->slot12();
