@@ -87942,3 +87942,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?getPivotPoint@Rva0015334F@@QAE?AURva005AA05APoint@@PAURva005AA55DRecord@@PBUCoord3D@@1@Z,,0x005AA05A,112,Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/OffensiveTactics/Rva005AA05APivotPoint.cpp,matched,
 ?update@MineshaftPortalNetworkManager@@UAEXXZ,,0x003734FD,670,Code/GameEngine/Source/GameLogic/Object/Behavior/MineshaftPortalBehaviourUpdate.cpp,matched,
 ?rva001DDAE1@Rva001DDAE1@@QAEXPAUCoord3D@@@Z,,0x001DDAE1,173,Code/GameEngine/Source/GameClient/EvaLocationQueueRva001DDAE1.cpp,matched,
+?rva0046C71E@HordeContain@@UAE_NXZ,,0x0046C71E,134,Code/GameEngine/Source/GameLogic/Object/Contain/HordeContainIface11CSlots.cpp,matched,

@@ -1170,6 +1170,7 @@ public:
 	virtual float rva0046F8DA();
 	virtual float rva0046F8E7();
 	virtual bool rva0046C65C();
+	virtual bool rva0046C71E();
 	virtual bool rva0046C6E7();
 	virtual void rva00468FDC();
 	virtual bool rva0046A46F();
@@ -1701,6 +1702,41 @@ bool HordeContain::rva0046C6E7()
 			return true;
 	}
 	return false;
+}
+
+// ?rva0046C71E@HordeContain@@UAE_NXZ @0x0046C71E: slot 40, true when a contained
+// Object carries status 0x5A or when none exists at all. Native 0046C71E..0046C7A4
+// and WB 0x010C4A90: the contained list first, then the +0x170 key tree walked from
+// begin() up to begin() again (a loop the original source kept and cl keeps because
+// the bound is a separate begin() evaluation, so its body never runs); the result is
+// !any with the early `return true` paths sharing one epilogue (ternary form).
+bool HordeContain::rva0046C71E()
+{
+	bool any = false;
+	const _STL::list<Object *> *items = containedItems();
+	_STL::list<Object *>::const_iterator end = items->end();
+	for (_STL::list<Object *>::const_iterator it = items->begin(); it != end; ++it)
+	{
+		Object *obj = *it;
+		if (obj)
+		{
+			any = true;
+			if (obj->testStatus((ObjectStatusTypes)0x5A))
+				return true;
+		}
+	}
+	_STL::set<int>::iterator bound = m_170.begin();
+	for (_STL::set<int>::iterator k = m_170.begin(); k != bound; ++k)
+	{
+		Object *obj = TheGameLogic->findObjectByID((ObjectID)*k);
+		if (obj)
+		{
+			any = true;
+			if (obj->testStatus((ObjectStatusTypes)0x5A))
+				return true;
+		}
+	}
+	return any ? false : true;
 }
 
 // ?rva00468FDC@HordeContain@@UAEXXZ @0x00468FDC: slot 78, clears +0x2A0, +0x288

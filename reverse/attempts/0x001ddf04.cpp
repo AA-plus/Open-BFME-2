@@ -1,4 +1,6 @@
 // ?rva001DDF04@Eva@@QAEXXZ
+// partial score=0.93 date=2026-10-13
+// ?rva001DDF04@Eva@@QAEXXZ
 // partial score=0.97 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
@@ -183,13 +185,13 @@ void Eva::rva001DDF04()
 		{
 			if (m_eventStatus[i].m_aboutToPlayTime >= 0.0f)
 			{
-				UnsignedInt priority = m_allEventInfos[i].m_priority;
+
 				Real time = m_eventStatus[i].rva001DCE4C(&m_allEventInfos[i]);
-				if (bestIndex == -1 || priority > bestPriority || (priority == bestPriority && time < bestTime))
+				if (bestIndex == -1 || (m_allEventInfos[i].m_priority) > bestPriority || ((m_allEventInfos[i].m_priority) == bestPriority && time < bestTime))
 				{
 					bestIndex = i;
 					bestTime = time;
-					bestPriority = priority;
+					bestPriority = (m_allEventInfos[i].m_priority);
 				}
 			}
 		}
