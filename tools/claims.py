@@ -69,6 +69,8 @@ header, draining a source file, re-homing split rows - is claimed by scope:
 
   python3 tools/claims.py claim file:Code/.../Unit.cpp   # refs/claims/file/<hash>
   python3 tools/claims.py claim class:RenderObjClass     # refs/claims/class/<name>
+  (lease:master, refs/claims/lease/master, is the push window tools/push_lease.py
+  and the pre-push hook take around a full-gate push to master)
 
 Same refs, same TTL, same compare-and-swap; `list` shows them with the path
 or class. Body pickers only consult RVA claims, so a scope claim is a
@@ -277,16 +279,24 @@ def current_lease(rva, who=None, root=None):
 
 
 def key_of(text):
-    """A claim key: an int RVA, or a scope string 'file/<hash>' / 'class/<name>' (BFME2)."""
+    """A claim key: an int RVA, or a scope string 'file/<hash>' / 'class/<name>' /
+    'lease/<name>' (BFME2; a lease is a push window, see tools/push_lease.py)."""
     if isinstance(text, int):
         return text
-    if text.startswith(("file/", "class/")):    # a key already (ClaimResult.tokens, renew)
+    if text.startswith(("file/", "class/", "lease/")):    # a key already (ClaimResult.tokens, renew)
         kind, rest = text.split("/", 1)
         if kind == "file" and len(rest) == 16 and all(c in "0123456789abcdef" for c in rest):
             return text
         if kind == "class" and key_of("class:" + rest.replace("%3A%3A", "::")) == text:
             return text
+        if kind == "lease" and key_of("lease:" + rest) == text:
+            return text
         raise ValueError(f"bad claim key {text!r}")
+    if text.startswith("lease:"):
+        name = text[6:]
+        if not name or not all(c in "abcdefghijklmnopqrstuvwxyz0123456789-" for c in name):
+            raise ValueError(f"bad lease name {name!r}")
+        return "lease/" + name
     if text.startswith("file:"):
         path = text[5:].replace("\\", "/")
         return "file/" + hashlib.sha1(path.encode("utf-8")).hexdigest()[:16]
@@ -372,7 +382,7 @@ def _read_local(root=None, seen=SEEN):
         rest = name[len(seen):]
         try:
             info = json.loads(subject)
-            rva = rest if rest.startswith(("file/", "class/")) else int(rest, 16)
+            rva = rest if rest.startswith(("file/", "class/", "lease/")) else int(rest, 16)
         except ValueError:
             continue
         # Two spellings of one address (e.g. a hand-made lowercase ref) must

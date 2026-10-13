@@ -99,6 +99,32 @@ def test_toolchain_or_vendor_change_needs_the_full_gate(repo, capsys):
     assert run(repo, capsys, "--staged")[0] == 2
 
 
+MACRO_INCLUDER = '#define H "x.h"\n#include H\nvoid d() {}\n'
+
+
+def test_a_game_unit_named_stlport_is_not_vendored(repo, capsys):
+    # A macro include anywhere makes every changed unit a root; a game unit that
+    # merely carries STLport in its NAME must still get the bounded scope.
+    base(repo)
+    put(repo, "Code/Lib/StlportVectorThing.cpp", "void s() {}\n")
+    put(repo, "Code/D.cpp", MACRO_INCLUDER)
+    ledger(repo, "Code/A.cpp", "Code/B.cpp", "Code/C.cpp", "Code/D.cpp", "Code/Lib/StlportVectorThing.cpp")
+    git(repo, "commit", "-qm", "named")
+    put(repo, "Code/Lib/StlportVectorThing.cpp", "void s2() {}\n")
+    assert run(repo, capsys, "--staged")[0] == 0
+
+
+def test_a_change_inside_an_stlport_directory_needs_the_full_gate(repo, capsys):
+    base(repo)
+    put(repo, "Code/D.cpp", MACRO_INCLUDER)
+    put(repo, "Code/Libraries/Source/STLport/IosBase.cpp", "void i() {}\n")
+    ledger(repo, "Code/A.cpp", "Code/B.cpp", "Code/C.cpp", "Code/D.cpp",
+           "Code/Libraries/Source/STLport/IosBase.cpp")
+    git(repo, "commit", "-qm", "lib")
+    put(repo, "Code/Libraries/Source/STLport/IosBase.cpp", "void i2() {}\n")
+    assert run(repo, capsys, "--staged")[0] == 2
+
+
 def test_limit_falls_back_to_the_full_gate(repo, capsys):
     base(repo)
     put(repo, "Code/Inc/Low.h", "int low4;\n")

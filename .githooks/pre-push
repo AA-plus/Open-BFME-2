@@ -43,6 +43,39 @@ capture() {
     printf -v "$1" '%s' "$captured"
 }
 
+# Master push window (tools/push_lease.py). A full gate takes ~13 minutes, and
+# scoped pushes landing meanwhile rejected full-gate pushes indefinitely (one
+# batch passed the gate ten times on 2026-10-12 and never landed). A full-gate
+# push to master takes the shared window refs/claims/lease/master for its gate;
+# every other push to master waits for it at the end of this hook. The window
+# expires on its own (default 23 min), is released when this hook exits, and
+# fails open: unreachable claims never block a push. BFME_PUSH_LEASE=off skips it.
+PUSH_LEASE_TOKEN=""
+release_push_window() {
+    if [ -n "$PUSH_LEASE_TOKEN" ]; then
+        python3 tools/push_lease.py release "$PUSH_LEASE_TOKEN" >/dev/null 2>&1 || true
+        PUSH_LEASE_TOKEN=""
+    fi
+}
+trap release_push_window EXIT
+push_window_enabled() {
+    [ "${BFME_PUSH_LEASE:-on}" != "off" ] && [ -f tools/push_lease.py ]
+}
+# fast_forward_or_fail REV: the full gate only pays off if REV still fast-forwards
+# origin/master; an unreachable origin is left for the push itself to report.
+fast_forward_or_fail() {
+    git fetch -q origin master 2>/dev/null || return 0
+    git merge-base --is-ancestor FETCH_HEAD "$1"         || fail "origin/master moved past this push's base; pull --rebase before running the full gate"
+}
+take_push_window() {
+    fast_forward_or_fail "$1"
+    PUSH_LEASE_TOKEN="$(python3 tools/push_lease.py acquire)" || PUSH_LEASE_TOKEN=""
+    if [ -n "$PUSH_LEASE_TOKEN" ]; then
+        echo "pre-push: holding the master push window (tools/push_lease.py) for this full gate"
+    fi
+    fast_forward_or_fail "$1"    # master may have moved while this push waited its turn
+}
+
 run_build() {
     case "$(uname -s)" in
         MINGW*|MSYS*|CYGWIN*) py -3 tools/build.py "$@" ;;
@@ -383,6 +416,9 @@ PY
     if [ "$full_scope" -ne 0 ]; then
         git diff --quiet "$local_sha" -- Code \
             || fail "a tracked source differs from the pushed commit $local_sha in the working tree: check it out or stash first"
+        if [ "${_remote_ref:-}" = "refs/heads/master" ] && [ -z "$PUSH_LEASE_TOKEN" ] && push_window_enabled; then
+            take_push_window "$local_sha"
+        fi
         echo "pre-push: full provider scope required; running the ordinary full gate once"
         BUILD_POOL="${BUILD_POOL:-4}" run_build \
             || fail "full byte-verify of outgoing sources (see above)"
@@ -420,5 +456,10 @@ PY
         || echo "pre-push: replay_check shadow check failed to run (ignored)" >&2
     echo "PRE-PUSH OK (${#verify[@]} outgoing source(s) byte-verified)"
 done <<< "$refs"
+# A push to master that is not running its own full gate waits while another
+# contributor's full gate holds the master push window (tools/push_lease.py).
+if [ -z "$PUSH_LEASE_TOKEN" ] && push_window_enabled && grep -q ' refs/heads/master ' <<< "$refs"; then
+    python3 tools/push_lease.py wait || true
+fi
 # Publisher rollout (tools/publisher_hook.py; mode in reverse/publisher_mode): shadow submits the landed range as a unit in the background and never fails the push; enforce queues it and refuses (exit 3).
 [ ! -f tools/publisher_hook.py ] || [ -n "${CHECKER_DIGEST:-}" ] || python3 tools/publisher_hook.py pre-push "${1:-origin}" <<< "$refs" || [ $? != 3 ] || exit 1

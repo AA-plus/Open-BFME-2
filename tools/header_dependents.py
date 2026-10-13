@@ -28,8 +28,8 @@ Under-counting would let a broken TU through, so every doubt widens the set:
     includers are still found;
   - a changed .cpp, .c or table that a scanned file #includes by name compiles
     inside that file, so it reaches its includers like a header does;
-  - toolchain, vendored-library and STLport changes, or a set larger than
-    --limit sources, exit 2: the caller runs the full gate.
+  - toolchain, vendored-library and STLport-directory changes, or a set larger
+    than --limit sources, exit 2: the caller runs the full gate.
 
   python3 tools/header_dependents.py --staged           # pre-commit
   python3 tools/header_dependents.py --range OLD NEW    # pre-push
@@ -102,6 +102,14 @@ def snapshot(args):
 
 def is_wide(path):
     return path.lower().endswith(HEADER_SUFFIXES) or path.startswith(("reference/shims/", "build/toolchains/"))
+
+
+def in_stlport(path):
+    """Whether `path` lies inside an STLport directory (vendor/stlport/,
+    Code/Libraries/Source/STLport/). Matching the file NAME instead sent every
+    edit of the ~1,200 game units named Stlport*.cpp / stlport_*.cpp to the
+    full gate, since a macro include anywhere makes every changed unit a root."""
+    return any(part.lower() == "stlport" for part in path.replace("\\", "/").split("/")[:-1])
 
 
 def name(path):
@@ -316,7 +324,7 @@ def select(args):
     roots = wide + included
     if not roots:
         return 0, [], 0
-    blocked = [p for p in roots if p.startswith(FULL_GATE_ROOTS) or "stlport" in p.lower()]
+    blocked = [p for p in roots if p.startswith(FULL_GATE_ROOTS) or in_stlport(p)]
     if blocked:
         raise Widen(f"{blocked[0]} is toolchain/vendored/STLport")
     rows = ledger_sources(snap)
