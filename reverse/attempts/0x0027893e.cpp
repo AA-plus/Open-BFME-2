@@ -2,6 +2,8 @@
 // partial score=0.87 date=2026-10-13
 // ?onComingOutOfShroud@Drawable@@AAEXXZ
 // partial score=0.87 date=2026-10-13
+// ?onComingOutOfShroud@Drawable@@AAEXXZ
+// partial score=0.87 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // ?onComingOutOfShroud@Drawable@@AAEXXZ, retail 0x0027893E..0x00278C29 (747 bytes).
 // Owner TU: Code/GameEngine/Source/GameClient/DrawableLazyHelper.cpp

@@ -1,4 +1,6 @@
 // ?getPortTransform@BuildAssistant@@QAE_NPBUCoord3D@@PBVThingTemplate@@MPAMPAU2@@Z
+// partial score=0.97 date=2026-10-13
+// ?getPortTransform@BuildAssistant@@QAE_NPBUCoord3D@@PBVThingTemplate@@MPAMPAU2@@Z
 // partial score=0.97 date=2026-10-12
 // ?getPortTransform@BuildAssistant@@QAE_NPBUCoord3D@@PBVThingTemplate@@MPAMPAU2@@Z @0x00392802 (725B)
 // FRAGMENT for Code/GameEngine/Source/Common/System/BuildAssistant.cpp (production TU, /O1 /EHs /MD /arch:SSE).

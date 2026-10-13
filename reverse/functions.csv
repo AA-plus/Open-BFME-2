@@ -87740,3 +87740,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ?rva005ED385@Rva005ED385@@QAEXHPBVImage@@@Z,,0x005ED385,140,Code/GameEngine/Source/Common/AptImageKeySetters.cpp,matched,
 ?rva0056C0A5@CellGrid@@QAEIABUCellPoint@@@Z,,0x0056C0A5,75,Code/GameEngine/Source/Common/BfmeCellGridCtor.cpp,matched,
 ?OnStatRollOver@StatsDisplayImpl@StrategicHUD@@QAEXPBD@Z,,0x00579B81,127,Code/GameEngine/Source/Common/Rva00579676Parse.cpp,matched,
+?rva00524AE7@Rva00524B7A@@UAEXXZ,,0x00524AE7,147,Code/GameEngine/Source/Common/Rva00524B7AVslot10.cpp,matched,

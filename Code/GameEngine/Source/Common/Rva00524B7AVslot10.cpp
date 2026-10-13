@@ -1,13 +1,23 @@
-// ?rva00524AE7@Rva00524B7A@@UAEXXZ
-// partial score=0.93 date=2026-10-05
-// cl: /O1 /MD
-// ?rva00524AE7@Rva00524B7A@@UAEXXZ @ 0x00524AE7 (147B):
-// vtable slot 10 (offset 0x28) of 0x00867DFC, class of ??0Rva00524B7A@@QAE@XZ.
-// Layout carried from Code/GameEngine/Source/Common/Rva00524B7ACtor.cpp:
-// vtable at +0, base pad 8, m_0C at +0xC, ints +0x10..+0x1C, m_20 at +0x20,
-// flags m_24, color m_28, times m_2C/m_30, functor m_34 plus arg m_38.
-// Evidence: timeGetTime IAT, rowed FunctorRef invoke 0x0057CC15, tail to
-// slot 9 at [eax+0x24], virtual check on +0x0C object at [eax+0x18].
+// cl: /O1 /MD /arch:SSE
+//
+// ?rva00524AE7@Rva00524B7A@@UAEXXZ @ 0x00524AE7 (147B).
+// Virtual slot 10 (offset 0x28) of the MovieWindowPlayback vtable at
+// 0x00867DFC. The class is spelled with an address-derived name because the
+// owner TU (Rva00524B7ACtor.cpp) keeps a non-polymorphic explicit-vptr view
+// for its matched ctor 0x00524B7A and OpenMovie 0x00524D01; declaring these
+// virtuals there would insert the compiler vptr and shift every field.
+//
+// Layout carried from that owner TU: vtable +0, base pad 8, m_0C at +0xC,
+// ints +0x10..+0x1C, m_20 at +0x20, flags m_24, color m_28, times m_2C/m_30,
+// functor m_34 plus arg m_38. Evidence: timeGetTime IAT, rowed FunctorRef
+// invoke 0x0057CC15, tail to slot 9 at [eax+0x24], virtual check on the +0x0C
+// object at [eax+0x18]. Identity is address-derived; the class/fields remain
+// structural views of the vtable owner. The two volatile members are a
+// measured scheduling qualifier (they make the compiler emit the target's
+// add-then-sub form of the remaining-time sum), not a target layout fact.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime();
 
 class Rva0057CC15Ref
@@ -45,7 +55,7 @@ public:
 private:
 	char m_basePad[8];
 	Rva00524B7A_0C *m_0C;
-	int m_10;
+	volatile int m_10;
 	int m_14;
 	int m_18;
 	int m_1C;
@@ -54,12 +64,11 @@ private:
 	char m_pad25[3];
 	int m_28;
 	int m_2C;
-	int m_30;
+	volatile int m_30;
 	Rva0057CC15Ref m_34;
 	int m_38;
 };
 
-// ?rva00524AE7@Rva00524B7A@@UAEXXZ present-unmatched
 void Rva00524B7A::rva00524AE7()
 {
 	if (m_0C == 0)
@@ -69,12 +78,15 @@ void Rva00524B7A::rva00524AE7()
 		int *pTotal = &m_2C;
 		unsigned long now = timeGetTime();
 		unsigned int total = (unsigned int)*pTotal;
-		int remain = (int)(total + (unsigned int)m_30 - now);
+		_ReadWriteBarrier();
+		int remain = (int)(total + (unsigned int)m_30);
+		remain = remain - (int)now;
 		unsigned int v;
-		if (remain <= 0)
-			v = 0;
-		else
+		if (remain > 0)
 			v = (unsigned int)remain;
+		else
+			v = 0;
+		_ReadWriteBarrier();
 		v = v > total ? total : v;
 		unsigned int alpha = (v * 255u) / total;
 		unsigned char b = (unsigned char)alpha;

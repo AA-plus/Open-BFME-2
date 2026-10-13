@@ -1,4 +1,6 @@
 // ?rva004E6F30@InGameNotificationBoxMovieClip@@QAEXABVUnicodeString@@ABVRva002217EA@@H_NH@Z
+// partial score=0.9891 date=2026-10-13
+// ?rva004E6F30@InGameNotificationBoxMovieClip@@QAEXABVUnicodeString@@ABVRva002217EA@@H_NH@Z
 // partial score=0.987124463519313 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /O1 /Oy /G7 /arch:SSE /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/inputs/reference/shims/sweep /ICode/Libraries/Include/Lib /ICode/GameEngine/Include
 // Notification ctor: native4E6C34..4E6F30 RET0 and WB1321690 source43..47.
