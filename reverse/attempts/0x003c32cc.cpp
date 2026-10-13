@@ -1,4 +1,6 @@
 // ?rva003C32CC@ScriptActions@@IAEXABVAsciiString@@0_N@Z
+// partial score=0.9043 date=2026-10-13
+// ?rva003C32CC@ScriptActions@@IAEXABVAsciiString@@0_N@Z
 // partial score=0.93 date=2026-10-06
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE
 // WB ScriptActions::doFlashSpellStoreButton; target is the guarded index-0
@@ -1732,7 +1734,7 @@ void ScriptActions::rva003C32CC(const AsciiString &teamName, const AsciiString &
 	if (!team)
 		return;
 	static NameKeyType key = TheNameKeyGenerator->nameToKey("AutoAbilityBehavior");
-	const CommandButton *button = TheControlBar->findCommandButton(buttonName);
+	const CommandButton * volatile button = TheControlBar->findCommandButton(buttonName);
 	if (!button || !button->m_10C)
 		return;
 	for (DLINK_ITERATOR<Object> iter = team->iterate_TeamMemberList(); !iter.done();
