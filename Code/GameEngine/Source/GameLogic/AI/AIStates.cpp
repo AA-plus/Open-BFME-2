@@ -289,7 +289,7 @@ public:
 	Bool isKindOfProjectile() const { return (m_kindOf[3] & 2) != 0; }
 	UnsignedInt kindOfWord(Int i) const { return ((const UnsignedInt *)m_kindOf)[i]; }
 	unsigned char m_pad00[0x108];
-	unsigned char m_kindOf[0x14]; // +0x108
+	volatile unsigned char m_kindOf[0x14]; // +0x108
 	unsigned char m_pad11C[0x122 - 0x11C];
 	unsigned char m_122; // +0x122
 	unsigned char m_pad123[0x53C - 0x123];
@@ -910,6 +910,7 @@ public:
 };
 
 Bool Rva0034311ECheck(Object *obj);
+Bool rva003430A3(Object *source, Object *victim, Weapon *weapon);
 
 // Retail 0x003497E6, 1308 bytes (vtable 0x00C12150's update helper; its CRC
 // literal names it). Ported from Open-BFME-1's
@@ -1240,4 +1241,79 @@ Bool AIFollowPathAsTeamState::canMoveToNextFormationPathPoint()
 StateReturnType AIAttackPositionAimAtTargetState::update()
 {
 	return updateInternal(false);
+}
+
+StateReturnType AIAttackFireWeaponState::onEnter()
+{
+	Object *obj = getMachineOwner();
+	AIUpdateInterface *ai = obj->getObservedAI();
+	m_waitOddFrame = false;
+	obj->setStatus(OBJECT_STATUS_52, false);
+	if ((ai->getMoodMatrixActionAdjustment(MM_Action_Attack) & 1) == 0)
+		return STATE_FAILURE;
+
+	Object *victim = getObservedMachineGoalObject();
+	if (victim)
+	{
+		if (!obj->testStatus(OBJECT_STATUS_41) && !obj->isKindOf(KINDOF_CE) &&
+			!(victim->getTemplate()->m_kindOf[6] & 0x80) && !(victim->getTemplate()->m_kindOf[0x13] & 8) &&
+			!(victim->getTemplate()->m_kindOf[0xB] & 0x40) &&
+			victim->getControllingPlayer() == obj->getControllingPlayer())
+		{
+			ai->friend_setGoalObject(0);
+			getMachine()->setGoalObject(0);
+			return STATE_FAILURE;
+		}
+		if ((victim->m_physics && ((Rva00390533 *)victim->m_physics)->rva00390533()) ||
+			(!(obj->getTemplate()->kindOfWord(3) & 0x2000) && (victim->getTemplate()->kindOfWord(3) & 0x2000)))
+		{
+			getMachine()->setGoalObject(0);
+			return STATE_FAILURE;
+		}
+	}
+
+	Weapon *weapon = obj->getCurrentWeapon();
+ Weapon *volatile savedWeapon=weapon;
+	if (!weapon)
+		return STATE_FAILURE;
+	if (!obj->isKindOfImmobile() && !((const Rva002C940EByteField *)weapon->getTemplate())->get() &&
+		!((const Rva002C9400ByteField *)weapon->getTemplate())->get() && ai->isMoving())
+		return STATE_FAILURE;
+
+	char inRange;
+	if (victim)
+	{
+		Team *&team = obj->m_team;
+		if (team->m_proto->m_216 && !team->getTeamTargetObject())
+			team->rva0039D84A(victim);
+		inRange = savedWeapon->isWithinAttackRange((const Object *)obj, victim, 0.0f, 1);
+ weapon=savedWeapon;
+	}
+	else
+	{
+		inRange = weapon->isWithinAttackRange(obj, (void *)getMachineGoalPosition(), 0.0f, 1);
+	}
+	if (!inRange)
+		return STATE_FAILURE;
+	if (victim)
+	{
+		if (Rva0034311ECheck(victim))
+			return STATE_FAILURE;
+		if (!victim->isSignificantlyAboveTerrain() && ai->isDoingGroundMovement() &&
+			!rva003430A3(obj, victim, weapon))
+			return STATE_FAILURE;
+	}
+
+	if (weapon->getStatus() != READY_TO_FIRE)
+		return STATE_SUCCESS;
+	if (obj->testStatus(OBJECT_STATUS_26) && (TheGameLogic->getFrame() & 1))
+	{
+		m_waitOddFrame = true;
+		return STATE_CONTINUE;
+	}
+	obj->setStatus(OBJECT_STATUS_0D, true);
+	obj->preFireCurrentWeapon(getObservedMachineGoalObject(), getMachineGoalPosition());
+	if (weapon->getTemplate()->m_16b && victim)
+		getMachine()->setGoalPosition(victim->getPosition());
+	return STATE_CONTINUE;
 }
