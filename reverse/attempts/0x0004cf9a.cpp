@@ -1,20 +1,27 @@
 // ?rva0004CF9A@Rva0004CA4C@@QAEXAAVRenderInfoClass@@@Z
-// partial score=0.5 date=2026-10-10
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
-// NEAR (draft for Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DFXParticleSystemManagerRva0004CF9A.cpp):
-// statement structure and callees line up; the frame is 4 bytes larger and the EH
-// state layout differs: retail keeps state 0 alive for the whole body (its loop
-// handles unwind to 0 not -1) and zeroes an otherwise unused local at [ebp-0x54]
-// (likely a scoped profiler object with an empty inline dtor; the WorldBuilder twin
-// calls PerfGather) and keeps EBX=0 / EDI=this with a [ebp-0x14] this spill.
-// Rva0004CABDSevenEight::get is tested with AL: needs a bool pin
-// ?get@Rva0004CABDSevenEight@@QBE_NXZ=0x0004CABD (the row spells int).
-//
+// partial score=0.875175 date=2026-10-13
 // ?rva0004CF9A@Rva0004CA4C@@QAEXAAVRenderInfoClass@@@Z
+// partial score=0.5 date=2026-10-10
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
+// W7-SOL5: WB7FA1B0 full body establishes the previously omitted null
+// asset reference (local2C); its conditional ReleaseRef goes to WB1673DF0,
+// independently mapped to the existing TextureBaseClass::Release_Ref61ED10.
+// Restore that lifetime before m_current=0. Canonical AsciiString/RGBColor.
+// Getter4CABD uses the existing int symbol through a low-AL bool call view.
+// Strongest body1250/1251/frame78. Remains: this/psize/fabs/spread/set/iterator
+// home cycle, first-walk tracking-pointer cleanup, and second-walk index
+// spill vs EDI. Barrier must follow the raw null test (before test adds cleanup).
+// Null-reference holder fixes EDI=this/EBX=0; assignment throw() fixes transient
+// EH state and camera scheduling; scalar setter method restores Z/Y/X loads.
 // retail 0x0004CF9A..0x0004D47D (1251 bytes) thiscall RET 4 with __EH_prolog.
 // Slot 36 of vftable 0x007C4C20 (Rva0004CA4C). The W3DFXParticleSystem.cpp
 // counterpart of Zero Hour's W3DParticleSystemManager::doParticles.
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "Lib/Coord3D.h"
+#include "Lib/RGBColor.h"
+#include "ascii_string.h"
+
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef int Int;
 typedef unsigned int UnsignedInt;
@@ -77,9 +84,11 @@ public:
 		}
 	}
 	void attach();					// 0x0004CB9A
-	RvaSmartPtr12(const RvaSmartPtr12 &that);	// 0x0004CC19
-	~RvaSmartPtr12() { if (m_ptr) rva0004CBC0(); }
-	RvaSmartPtr12 &operator=(const RvaSmartPtr12 &that);	// 0x0004CC3D
+	__declspec(noinline) RvaSmartPtr12(const RvaSmartPtr12 &that)
+	{m_ptr=that.m_ptr; if(m_ptr)attach(); else {m_pad08=0; m_pad04=0;}}	// 0x0004CC19
+	~RvaSmartPtr12() throw() { if (m_ptr) rva0004CBC0(); }
+	__declspec(noinline) RvaSmartPtr12 &operator=(const RvaSmartPtr12 &that) throw()
+	{if(this!=&that) {if(m_ptr)rva0004CBC0(); m_ptr=that.m_ptr; if(m_ptr)attach();} return *this;}	// 0x0004CC3D
 	void rva0004CBC0();				// 0x0004CBC0
 	ParticleSystem *get() const { return m_ptr; }
 	ParticleSystem *operator->() const { return m_ptr ? m_ptr : Make001FCBD7(); }
@@ -102,8 +111,8 @@ namespace _STL
 		T *erase(T *first, T *last);
 		T *begin() { return _M_start; }
 		T *end() { return _M_finish; }
-		Int size() const { return _M_finish - _M_start; }
-		T &operator[](Int i) { return _M_start[i]; }
+		UnsignedInt size() const { return _M_finish - _M_start; }
+		T &operator[](UnsignedInt i) { return _M_start[i]; }
 		void clear() { erase(begin(), end()); }
 
 	private:
@@ -127,12 +136,6 @@ namespace _STL
 		_List_node<T> *_M_node;
 	};
 }
-
-struct RGBColor
-{
-	Real red, green, blue;
-	Int getAsInt() const;				// 0x00004EA7
-};
 
 class Rva001F4D2D { public: Real rva001F4D2D(); };		// 0x001F4D2D
 class Rva001F4E1BSlot { public: const RGBColor *get() const; };	// 0x001F4E1B
@@ -168,30 +171,17 @@ public:
 	virtual Int doParticles(RenderInfoClass &rinfo, void *box, Int *count);	// slot 4 (+0x10)
 };
 
-class AsciiStringData;
-
-class AsciiString
-{
-public:
-	const char *str() const
-	{
-		return m_data ? reinterpret_cast<const char *>(m_data) + 8 : "";
-	}
-
-private:
-	AsciiStringData *m_data;
-};
-
 class Rva0004CABDSevenEight
 {
 public:
-	bool get() const;				// 0x0004CABD
+	int get() const;				// 0x0004CABD
 };
 
 class ParticleSystem
 {
 public:
-	Bool isSevenOrEight() const { return reinterpret_cast<const Rva0004CABDSevenEight *>(this)->get(); }
+	Bool isSevenOrEight() const { typedef bool (Rva0004CABDSevenEight::*BoolGet)() const;
+		return (reinterpret_cast<const Rva0004CABDSevenEight *>(this)->*reinterpret_cast<BoolGet>(&Rva0004CABDSevenEight::get))(); }
 	const AsciiString &getParticleTypeName() const { return m_particleTypeName; }
 
 	unsigned char m_pad00[0x0C];
@@ -220,6 +210,7 @@ public:
 
 struct Smudge
 {
+	__forceinline void setPosition(float x,float y,float z) {m_pos.x=x;m_pos.y=y;m_pos.z=z;}
 	unsigned char m_pad00[0x0C];
 	Coord3D m_pos;					// +0x0C
 	Real m_offsetX;					// +0x18
@@ -306,6 +297,13 @@ private:
 	_STL::vector<RvaSmartPtr12> m_sortLists[2];	// +0xAC
 };
 
+class TextureBaseClass { public: void Release_Ref(); };
+struct Rva0004CF9AAssetRef {
+ TextureBaseClass *m_ptr;
+ Rva0004CF9AAssetRef():m_ptr(0) {}
+ ~Rva0004CF9AAssetRef() {if(m_ptr)m_ptr->Release_Ref();}
+};
+
 void Rva0004CA4C::rva0004CF9A(RenderInfoClass &rinfo)
 {
 	if (!m_readyToRender)
@@ -331,31 +329,34 @@ void Rva0004CA4C::rva0004CF9A(RenderInfoClass &rinfo)
 	if (g_bfmeB991)
 		set = reinterpret_cast<SmudgeManager *>(g_bfmeB991)->addSmudgeSet();
 
+	Rva0004CF9AAssetRef assetRef;
 	m_current = 0;
 
 	_STL::list<RvaSmartPtr12> &particleSysList = TheParticleSystemManager->m_allParticleSystems;
 	for (_STL::_List_node<RvaSmartPtr12> *it = particleSysList._M_node->_M_next; it != particleSysList._M_node; it = it->_M_next)
 	{
 		RvaSmartPtr12 sys(it->_M_data);
-		if (!sys.get())
+		ParticleSystem *raw = sys.get();
+		if (!raw)
 			continue;
-		if (sys->m_0C == 6)
+		_ReadWriteBarrier();
+		if (raw->m_0C == 6)
 			continue;
 
-		if (WW3D::AreStaticSortListsEnabled && sys->m_sortList > 0 && sys->m_sortList < 2)
+		if (WW3D::AreStaticSortListsEnabled && raw->m_sortList > 0 && raw->m_sortList < 2)
 		{
-			m_sortLists[sys->m_sortList].push_back(sys);
+			m_sortLists[raw->m_sortList].push_back(sys);
 			continue;
 		}
 
-		if (*((UnsignedInt *)sys->getParticleTypeName().str()) == 0x44554D53)
+		if (*((UnsignedInt *)raw->getParticleTypeName().str()) == 0x44554D53)
 		{
 			if (g_bfmeB991 && g_bfmeB991->m_04 != 1 && TheWritableGlobalData->m_useHeatEffects)
 			{
 				Bool colorSet = false;
-				if (!sys->isSevenOrEight())
+				if (!raw->isSevenOrEight())
 				{
-					for (Particle *p = sys->m_storage->getFirstParticle(); p; p = p->m_next)
+					for (Particle *p = raw->m_storage->getFirstParticle(); p; p = p->m_next)
 					{
 						Real psize = p->getSize();
 						if (Fabs(p->m_pos.x - bcX) > psize + beX)
@@ -371,9 +372,7 @@ void Rva0004CA4C::rva0004CF9A(RenderInfoClass &rinfo)
 						}
 						Smudge *smudge = set->addSmudgeToSet();
 						Real spread = p->getSpread();
-						smudge->m_pos.x = p->m_pos.x;
-						smudge->m_pos.y = p->m_pos.y;
-						smudge->m_pos.z = p->m_pos.z;
+						smudge->setPosition(p->m_pos.x,p->m_pos.y,p->m_pos.z);
 						Real offsetY = GetGameClientRandomValueReal(-spread, spread,
 							"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngineDevice\\Source\\W3DDevice\\GameClient\\W3DFXParticleSystem.cpp", 195);
 						smudge->m_offsetX = GetGameClientRandomValueReal(spread * -2.0f, spread * 2.0f,
