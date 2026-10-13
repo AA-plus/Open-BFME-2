@@ -23,15 +23,11 @@ struct Rva00368C7AObject
 	char unknown44[0xBC - 0x44];
 	float valueBC;
 };
-class Rva0030A92C
-{
-public:
-	void rva0030A92C(float z);
-};
 class Thing
 {
 public:
 	float getHeightAboveTerrain() const;
+	void setPositionZ(float z);
 };
 class Object;
 struct Rva00375A73Coord { float x, y, z; };
@@ -85,10 +81,10 @@ void Rva00368C7A::rva00368C7A(float amount, const Coord3D *position, bool argume
 		else
 			point = previous;
 		if (state == 1) {
-			reinterpret_cast<Rva0030A92C *>(object)->rva0030A92C(object->position.z + 5.0f);
+			reinterpret_cast<Thing *>(object)->setPositionZ(object->position.z + 5.0f);
 			rva003681F2(&point, g_00E01EC4, 0, argument);
 		} else if (state == 2) {
-			reinterpret_cast<Rva0030A92C *>(object)->rva0030A92C(object->position.z - 1.0f);
+			reinterpret_cast<Thing *>(object)->setPositionZ(object->position.z - 1.0f);
 			rva003681F2(&point, g_00E01EC0, 0, argument);
 		}
 	}

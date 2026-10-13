@@ -265,8 +265,7 @@ struct Rva001E546BFlags {
     __forceinline void set(unsigned i){m_bits[i>>5]|=1u<<(i&31);}
     __forceinline void reset(unsigned i){m_bits[i>>5]&=~(1u<<(i&31));}
 };
-class Thing { public: float getHeightAboveTerrainOrWater()const; void setOrientation(float); const Coord3D *getUnitDirectionVector2D()const; };
-class Rva0030A92C { public: void rva0030A92C(float); };
+class Thing { public: float getHeightAboveTerrainOrWater()const; void setOrientation(float); const Coord3D *getUnitDirectionVector2D()const; void setPositionZ(float); };
 extern "C" double __cdecl sin(double);
 float normalizeAngle(float);
 float GetGameLogicRandomValueReal(float,float,char*,int);
@@ -470,7 +469,7 @@ void Rva001E46E1::rva001E546B(Object *obj)
             obj->rva0028AE6D();
         }
     }
-    ((Rva0030A92C*)obj)->rva0030A92C(obj->m_40+m_A0);
+    ((Thing*)obj)->setPositionZ(obj->m_40+m_A0);
     if(obj->m_flags10C.test(155)) {
         obj->m_flags10C.reset(155);
         obj->rva0028AE6D();

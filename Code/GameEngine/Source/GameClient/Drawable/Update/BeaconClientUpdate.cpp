@@ -117,10 +117,10 @@ class Rva00270260
   public:
     bool rva00270260();
 };
-class Rva0030A92C
+class Thing
 {
   public:
-    void rva0030A92C(float);
+    void setPositionZ(float);
 };
 class InGameUI;
 extern InGameUI *TheInGameUI;
@@ -322,6 +322,6 @@ void BeaconClientUpdate::clientUpdate()
     {
         drawable->setSelectable(false);
         ((BeaconUIView *)TheInGameUI)->deselectDrawable(drawable);
-        ((Rva0030A92C *)drawable)->rva0030A92C(-100.0f);
+        ((Thing *)drawable)->setPositionZ(-100.0f);
     }
 }

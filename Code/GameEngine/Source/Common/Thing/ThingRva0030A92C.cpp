@@ -51,8 +51,8 @@ public:
 	virtual Bool isUnderwater(Real x, Real y, Real *waterZ, Real *terrainZ) = 0;
 };
 
-// Owner unknown: TU-local layout matching Thing offsets for setZ-like update.
-class Rva0030A92C
+// TU-local view of the Thing fields Thing::setPositionZ touches.
+class ThingPositionZView
 {
 public:
 	void *m_vptr;
@@ -64,30 +64,31 @@ public:
 	Real m_54;
 	Real m_58;
 	int m_cacheFlags;
-	void rva0030A92C(Real z);
 };
 
-void Rva0030A92C::rva0030A92C(Real z)
+// Thing::setPositionZ (WorldBuilder: Thing.cpp:151).
+void Thing::setPositionZ(Real z)
 {
-	if (!((reinterpret_cast<const unsigned char *>(m_template)[0x108]) & 0x10))
+	ThingPositionZView *self = reinterpret_cast<ThingPositionZView *>(this);
+	if (!((reinterpret_cast<const unsigned char *>(self->m_template)[0x108]) & 0x10))
 	{
-		Real oldAngle = m_cachedAngle;
-		const Coord3D &cachedPos = m_cachedPos;
+		Real oldAngle = self->m_cachedAngle;
+		const Coord3D &cachedPos = self->m_cachedPos;
 		Coord3D oldPos;
 		oldPos.x = cachedPos.x;
 		oldPos.y = cachedPos.y;
 		oldPos.z = cachedPos.z;
 		unsigned char oldMtx_buf[sizeof(Matrix3D)];
 		Matrix3D &oldMtx = reinterpret_cast<Matrix3D &>(oldMtx_buf);
-		oldMtx = m_transform;
+		oldMtx = self->m_transform;
 
-		m_transform.Set_Z_Translation(z);
-		m_cachedPos.z = z;
+		self->m_transform.Set_Z_Translation(z);
+		self->m_cachedPos.z = z;
 
-		if (m_cacheFlags & 2)
-			m_54 += (z - oldPos.z);
-		if (m_cacheFlags & 4)
-			m_58 += (z - oldPos.z);
+		if (self->m_cacheFlags & 2)
+			self->m_54 += (z - oldPos.z);
+		if (self->m_cacheFlags & 4)
+			self->m_58 += (z - oldPos.z);
 
 		reinterpret_cast<BFMERetailThingVTable *>(this)->reactToTransformChange(&oldMtx, &oldPos, oldAngle);
 	}
@@ -96,11 +97,11 @@ void Rva0030A92C::rva0030A92C(Real z)
 		unsigned char mtx_buf[sizeof(Matrix3D)];
 		Matrix3D &mtx = reinterpret_cast<Matrix3D &>(mtx_buf);
 		Coord3D pos;
-		pos.x = m_cachedPos.x;
-		pos.y = m_cachedPos.y;
+		pos.x = self->m_cachedPos.x;
+		pos.y = self->m_cachedPos.y;
 		pos.z = z;
 		const Bool stickToGround = true;
-		reinterpret_cast<BFMERetailTerrainLogicVTable *>(TheTerrainLogic)->alignOnTerrain(m_cachedAngle, pos, stickToGround, mtx);
+		reinterpret_cast<BFMERetailTerrainLogicVTable *>(TheTerrainLogic)->alignOnTerrain(self->m_cachedAngle, pos, stickToGround, mtx);
 		reinterpret_cast<Thing *>(this)->setTransformMatrix(&mtx);
 	}
 }

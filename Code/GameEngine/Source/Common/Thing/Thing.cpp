@@ -180,42 +180,7 @@ static void CopyThingMatrix3D(Matrix3D &dst, const Matrix3D &src)
 
 //=============================================================================
 // the nice thing about this is that we don't have to recalc out cached terrain stuff.
-// ?setPositionZ@Thing@@QAEXM@Z present-unmatched
-void Thing::setPositionZ( Real z )
-{
-	//USE_PERF_TIMER(ThingMatrixStuff)
-	if( !m_template->isKindOf( KINDOF_STICK_TO_TERRAIN_SLOPE) )
-	{
-		Real oldAngle = m_cachedAngle;
-		Coord3D oldPos = m_cachedPos;
-		Matrix3D oldMtx;
-		CopyThingMatrix3D(oldMtx, m_transform);
-
-		m_transform.Set_Z_Translation( z );
-		m_cachedPos.z = z;
-
-		if (m_cacheFlags & VALID_ALTITUDE_TERRAIN)
-		{
-			m_cachedAltitudeAboveTerrain += (z - oldPos.z);
-		}
-		if (m_cacheFlags & VALID_ALTITUDE_SEALEVEL)
-		{
-			m_cachedAltitudeAboveTerrainOrWater += (z - oldPos.z);
-		}
-
-		reactToTransformChange(&oldMtx, &oldPos, oldAngle);
-	}
-	else
-	{
-		Matrix3D mtx;
-		const Bool stickToGround = true;	// yes, set the "z" pos		
-		Coord3D pos = m_cachedPos;
-		pos.z = z;
-		TheTerrainLogic->alignOnTerrain(getOrientation(), pos, stickToGround, mtx );
-		setTransformMatrix(&mtx);
-	}
-	DEBUG_ASSERTCRASH(!(_isnan(getPosition()->x) || _isnan(getPosition()->y) || _isnan(getPosition()->z)), ("Drawable/Object position NAN! '%s'\n", m_template->getName().str() ));
-}
+// Thing::setPositionZ: retail 0x0030A92C, matched in ThingRva0030A92C.cpp.
 
 //=============================================================================
 // byte-exact reconstruction: Code/GameEngine/Source/Common/Thing/ThingSetPosition.cpp
