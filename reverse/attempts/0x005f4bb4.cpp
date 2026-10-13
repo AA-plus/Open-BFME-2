@@ -1,6 +1,11 @@
 // ?InitMovieClipSlot@Impl@ArmyUnitSwapperDialog@StrategicInGameUI@@QAEXABUArmySwapSlotInput@@@Z
-// partial score=0.9257311217808817 date=2026-10-10
+// partial score=0.93 date=2026-10-13
 // cl: /O1 /G7 /MD /EHsc /Ireference/shims/bfme2_ascii
+// StrategicInGameUI::ArmyUnitSwapperDialog::Impl::InitMovieClipSlot,
+// retail 0x005F4BB4 (158 bytes). WorldBuilder
+// StrategicInGameUIArmyUnitSwapperDialog.cpp:486 (m_movieClip.IsBound()
+// assert) establishes identity; native 9F4BB4..9F4C52 plus EH BA5274 fix
+// the full extent.
 #include "unicode_string.h"
 class Rva00318C32Ret;
 class Rva00318C79Owner {public:Rva00318C32Ret *rva00318C32();};
@@ -16,11 +21,12 @@ class ArmyUnitSwapperDialog {public:class Impl;};
 class ArmyUnitSwapperDialog::Impl {public:char unknown[0x14];Rva005FD956 *movieClip;void InitMovieClipSlot(const ArmySwapSlotInput&);};
 void ArmyUnitSwapperDialog::Impl::InitMovieClipSlot(const ArmySwapSlotInput& input)
 {
- Rva00318C79Owner *army=input.army;int index=input.index;
- Rva00318C32Ret *region=army->rva00318C32();
- if(region)movieClip->rva005FDA0D(index,((Rva0020E89C*)region)->rva0020E89C());
- movieClip->rva005FDA15(index,GetDisplayName(army));
+ const volatile ArmySwapSlotInput *vin=&input;
+ int armyBits=(int)vin->army;void *indexBits=(void*)vin->index;
+ Rva00318C32Ret *region=((Rva00318C79Owner*)armyBits)->rva00318C32();
+ if(region)movieClip->rva005FDA0D((int)indexBits,((Rva0020E89C*)region)->rva0020E89C());
+ movieClip->rva005FDA15((int)indexBits,GetDisplayName((void*)armyBits));
  Rva005FD956 *pointsClip=movieClip;
- pointsClip->rva005FD956(index,((Rva00318FBE*)army)->rva00318FBE(),GetMaxCommandPoints(army));
+ pointsClip->rva005FD956((int)indexBits,((Rva00318FBE*)armyBits)->rva00318FBE(),GetMaxCommandPoints((void*)armyBits));
 }
 }
