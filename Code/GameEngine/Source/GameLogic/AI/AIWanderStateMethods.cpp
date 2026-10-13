@@ -117,7 +117,7 @@ private:
 class Locomotor
 {
 public:
-	Real getWanderWidthFactor() const { return m_template->getWanderWidthFactor(); }
+	__declspec(dllimport) __forceinline Real getWanderWidthFactor() const { return m_template->getWanderWidthFactor(); }
 	Real getWanderAboutPointRadius() const { return m_template->getWanderAboutPointRadius(); }
 private:
 	unsigned char m_pad00[0x04];
