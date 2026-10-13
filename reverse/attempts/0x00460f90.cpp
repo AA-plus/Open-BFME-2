@@ -1,4 +1,6 @@
 // ?rva00460F90@Rva00460F90@@QAEXXZ
+// partial score=0.9711 date=2026-10-13
+// ?rva00460F90@Rva00460F90@@QAEXXZ
 // partial score=0.9218171367574 date=2026-10-11
 // ?rva00460F90@Rva00460F90@@QAEXXZ
 // partial score=0.85 date=2026-10-09
@@ -29,6 +31,8 @@
 // and in the Link loop where retail keeps the copied vector's start in ESI
 // across addLink/AddPortal and frees it with no null test (this draft
 // reloads it from the frame and keeps the STLport null test).
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 #include <vector>
 #include "GameEngine/Source/Common/GameLogicObjectLookupView.h"
@@ -164,10 +168,13 @@ void Rva00460F90::rva00460F90()
 	for (const DynamicPortalLinkList *lit = data->m_link.begin(); lit != data->m_link.end(); ++lit)
 	{
 		DynamicPortalLinkList link = *lit;
+		_ReadWriteBarrier();
 		const unsigned int *start = link.begin();
 		int count = link.size();
+		_ReadWriteBarrier();
 		unsigned int first = start[0];
 		unsigned int last = start[count - 1];
+		_ReadWriteBarrier();
 		if (!alreadyCreated)
 			m_waypoints[first]->addLink(m_waypoints[last]);
 		TheAI->m_pathfinder->rva002E8FE5(m_waypoints[first]);

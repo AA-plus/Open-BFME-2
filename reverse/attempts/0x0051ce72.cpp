@@ -1,4 +1,6 @@
 // ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
+// partial score=0.9732 date=2026-10-13
+// ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
 // partial score=0.99 date=2026-10-13
 // ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
 // partial score=0.99 date=2026-10-13
@@ -24,6 +26,8 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
     return a < b ? b : a;
 }
 }
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <vector>
 #include "unicode_string.h"
 #include "ascii_string.h"
@@ -500,6 +504,7 @@ void AptScoreScreen::Externs(int query, char *value, bool set)
 		if (!set && m_objectives) sprintf(value, "%d", m_objectives->m_count);
 	} else if (query == 5) {
 		if (!set) sprintf(value, "%d", reinterpret_cast<AptScoreOptionView *>(TheGlobalData)->objectivesPerScore);
+		_ReadWriteBarrier();
 	} else if (query == 6) {
 		if (set) m_2b0.set(value);
 		else {
