@@ -10,10 +10,10 @@ sys.path.insert(0, str(ROOT / 'tools'))
 import build
 import eh_verify
 
-SOURCE = ROOT / 'Code/GameEngine/Source/GameLogic/System/LivingWorld/Rva0031A257DefaultCtor.cpp'
+SOURCE = ROOT / 'Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldArmy.cpp'
 PARENTS = {
-    'default': ('??0Rva0031A257@@QAE@XZ', 0x31A257, 283),
-    'arguments': ('??0Rva0031A257@@QAE@HPAVRva004E3184@@PAURva002B6A04Player@@@Z', 0x31A372, 543),
+    'default': ('??0LivingWorldArmy@@QAE@XZ', 0x31A257, 283),
+    'arguments': ('??0LivingWorldArmy@@QAE@HPAVRva004E3184@@PAURva002B6A04Player@@@Z', 0x31A372, 543),
 }
 CLEANUPS = {0x77AA4A: (11, 'default'), 0x77AA55: (14, 'default'),
             0x77AA63: (10, 'default'), 0x77AAE2: (11, 'arguments'),

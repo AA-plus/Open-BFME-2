@@ -1,6 +1,6 @@
 # Army constructor cleanups
 
-The real neutral constructor views at 0x0031A257 (283 bytes) and 0x0031A372
+The real constructors at 0x0031A257 (283 bytes) and 0x0031A372
 (543 bytes) match their whole native bodies and complete associative exception
 graphs. Those graphs independently locate these six previously unclaimed
 compiler-generated bodies, each also bounded by the Ghidra inventory:
@@ -22,22 +22,27 @@ between constructors and are proved separately, not inferred from adjacency.
 Each body is banked in its own commit. The local `$L` names are object locators
 whose native identity comes from their real parent and exception graph. No
 synthetic parent, assembly, new pin or callable alias is introduced. The existing
-army roles and measured member offsets are retained; the receiver's original
-class identity, complete layout, record payload and audio member type remain
-unproven, as the existing source and parent rows document. No new type identity
-or link-census progress is claimed.
+army roles and measured member offsets are retained. The original isolated
+receiver was neutral; upstream commit 2f6344cc5e replaced it with the canonical
+LivingWorldArmy owner using independent WorldBuilder constructor/destructor
+witnesses and reconciled base lifetimes. After rebase, these six rows were
+reverified and rehomed to that exact owner. Record payload and audio member
+types remain unproven. This cleanup addition claims no new type identity or
+link-census progress beyond the upstream evidence.
 
-Normal identity checking still reports three divergent existing vector/base
+The original isolated source's normal identity check reported three divergent vector/base
 specializations and six duplicate existing definitions: KillSummaryEntry,
 TakeUnitFromArmy_Internal, UseArmySummary, XferOwningLivingWorldArmyVec,
-rva00319EA3 and rva00319EF9. This addition does not alter their source,
-bindings or verification rules. Full native parent/cleanup and exception-data
-matches are not proof that the whole unit links correctly.
+rva00319EA3 and rva00319EF9. Upstream's canonical owner replaces that deleted
+source; its own remaining findings must be reported independently. The old
+private source is not restored, and no verification rule is weakened.
+Full native parent/cleanup and exception-data matches are not proof that
+the whole unit links correctly.
 
 Replay after the normal whole-file build:
 
 ```
-./build.sh Code/GameEngine/Source/GameLogic/System/LivingWorld/Rva0031A257DefaultCtor.cpp
+./build.sh Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldArmy.cpp
 python3 reverse/attempt_support/army-constructor-cleanups-20261013/verify.py
 python3 reverse/attempt_support/army-constructor-cleanups-20261013/verify.py --rva 0x0077AA63
 ```
