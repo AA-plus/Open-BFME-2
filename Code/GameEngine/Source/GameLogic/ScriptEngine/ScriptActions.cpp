@@ -8,6 +8,8 @@
 // doSetCounterToThreatFinderThreat, doCreateUnitRevivalEntry and the two
 // sequential-script starters) and members
 // not yet matched (doTransferTeamToPlayer, 0x003C4751).
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 #include "Common/Snapshot.h"
 #include "Common/BfmeAudioEventPrefix136.h"
@@ -1087,4 +1089,124 @@ void ScriptActions::rva003C0D90(const AsciiString &teamName, int which, bool on)
 		if (obj)
 			rva003C0CEE(obj, which, on);
 	}
+}
+
+// WB 0x010147A0 unnamed ScriptActions member @0x003C4751 (605B): the giving
+// team's first KindOf-0x33 member fires SpecialAbilityGiveUpgrade at the
+// nearest unit, nominated by a horde (KindOf 0x6D) member's 0x0028C197 module
+// (slot 0x110) that lacks the upgrade (slot 0xB4), in any other team of the
+// same player that accepts the upgrade. As in WorldBuilder the offset is
+// built from a Coord3D compared (not assigned) with the giver's position.
+class ScriptActionsHordeModuleView
+
+{
+ public:
+#define HM_SLOT(n) virtual void slot##n();
+ HM_SLOT(0) HM_SLOT(1) HM_SLOT(2) HM_SLOT(3) HM_SLOT(4) HM_SLOT(5) HM_SLOT(6)
+ HM_SLOT(7) HM_SLOT(8) HM_SLOT(9) HM_SLOT(10) HM_SLOT(11) HM_SLOT(12) HM_SLOT(13)
+ HM_SLOT(14) HM_SLOT(15) HM_SLOT(16) HM_SLOT(17) HM_SLOT(18) HM_SLOT(19) HM_SLOT(20)
+ HM_SLOT(21) HM_SLOT(22) HM_SLOT(23) HM_SLOT(24) HM_SLOT(25) HM_SLOT(26) HM_SLOT(27)
+ HM_SLOT(28) HM_SLOT(29) HM_SLOT(30) HM_SLOT(31) HM_SLOT(32) HM_SLOT(33) HM_SLOT(34)
+ HM_SLOT(35) HM_SLOT(36) HM_SLOT(37) HM_SLOT(38) HM_SLOT(39) HM_SLOT(40) HM_SLOT(41)
+ HM_SLOT(42) HM_SLOT(43) HM_SLOT(44)
+ virtual bool hasUpgrade(const void *upgrade);
+// 0xB4
+ HM_SLOT(46) HM_SLOT(47) HM_SLOT(48) HM_SLOT(49) HM_SLOT(50) HM_SLOT(51) HM_SLOT(52)
+ HM_SLOT(53) HM_SLOT(54) HM_SLOT(55) HM_SLOT(56) HM_SLOT(57) HM_SLOT(58) HM_SLOT(59)
+ HM_SLOT(60) HM_SLOT(61) HM_SLOT(62) HM_SLOT(63) HM_SLOT(64) HM_SLOT(65) HM_SLOT(66)
+ HM_SLOT(67)
+#undef HM_SLOT
+ virtual Object *getTarget();
+// 0x110
+ 
+}
+;
+void ScriptActions::rva003C4751(Parameter *teamParam)
+
+{
+ Team *theTeam = TheScriptEngine->getTeamNamed(teamParam->getString(), false);
+ if (!theTeam)
+ return;
+ const SpecialPowerTemplate *power = TheSpecialPowerStore->findSpecialPowerTemplate("SpecialAbilityGiveUpgrade");
+ if (!power)
+ return;
+ Object *giver = theTeam->rva0039E968(0x33);
+ if (!giver)
+ return;
+ void *upgrade = ((Rva0026F0F0 *)TheUpgradeCenter)->rva0026F0F0((unsigned char *)giver + 0x284);
+ if (!upgrade)
+ return;
+ Player *player = giver->getControllingPlayer();
+ if (!player)
+ return;
+ 
+ {
+  Object *best = 0;
+  float bestDist = 3.4028235e+38f;
+  // Keep the initial node value separate from the loop iterator: the
+  // native copy completes giverPos before spilling the iterator home.
+  PlayerTeamNode *first = player->m_playerTeamPrototypes->m_next;
+  Coord3D giverPos;
+  giverPos.x = giver->getPosition()->x;
+  giverPos.y = giver->getPosition()->y;
+  giverPos.z = giver->getPosition()->z;
+  PlayerTeamNode *it = first;
+  Coord3D diff;
+  for (; it != player->m_playerTeamPrototypes; it = it->m_next) 
+  {
+   for (DLINK_ITERATOR<Team> teams = it->m_value->iterate_TeamInstanceList();
+   !teams.done(); teams.advance()) 
+   {
+    Team *team = teams.cur();
+    if (!team || theTeam == team)
+    continue;
+    if (!team->rva0039E8FF((int)upgrade))
+    continue;
+    Object *obj;
+    for (DLINK_ITERATOR<Object> members = team->iterate_TeamMemberList(); (obj = members.cur()) != 0;
+    members.advance()) 
+    {
+     _ReadWriteBarrier();
+     if (!obj->isKindOf(0x6D))
+     continue;
+     ScriptActionsHordeModuleView *module = (ScriptActionsHordeModuleView *)obj->rva0028C197();
+     if (!module || module->hasUpgrade(upgrade))
+     continue;
+     Coord3D memberPos;
+     memberPos.x = obj->getPosition()->x;
+     memberPos.y = obj->getPosition()->y;
+     memberPos.z = obj->getPosition()->z;
+     diff == giverPos;
+     diff.x -= memberPos.x;
+     diff.y -= memberPos.y;
+     diff.z -= memberPos.z;
+     float dist = diff.length();
+     Object *target = module->getTarget();
+     if (target) 
+     {
+      if (!best) 
+      {
+       best = target;
+       bestDist = dist;
+       
+      }
+      else if (dist < bestDist) 
+      {
+       best = target;
+       bestDist = dist;
+       
+      }
+      
+     }
+     
+    }
+    
+   }
+   
+  }
+  if (best)
+  giver->doSpecialPowerAtObject(power, best, 0x40000, false);
+  
+ }
+ 
 }
