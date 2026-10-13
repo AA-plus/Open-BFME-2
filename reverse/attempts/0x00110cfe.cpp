@@ -1,4 +1,6 @@
 // ?rva00110CFE@W3DAptRenderer@@QAEXXZ
+// partial score=0.99 date=2026-10-13
+// ?rva00110CFE@W3DAptRenderer@@QAEXXZ
 // partial score=0.99 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep
 // W3DAptRenderer::BeginTriangleList, retail 0x00111224 (238 bytes). Identity:
@@ -73,7 +75,7 @@ void W3DAptRenderer::rva00110CFE() {
   shader.Set_Fog_Func(ShaderClass::FOG_DISABLE);
   shader.Set_Primary_Gradient((ShaderClass::PriGradientType)6);
   if(texture.Ptr) { _ReadWriteBarrier(); shader.Set_Texturing(ShaderClass::TEXTURING_ENABLE); }
-  else { _ReadWriteBarrier(); shader.Set_Texturing(ShaderClass::TEXTURING_DISABLE); }
+  else { shader.Set_Texturing(ShaderClass::TEXTURING_DISABLE); }
   shader.Set_Cull_Mode(ShaderClass::CULL_MODE_DISABLE);
   if(DX8Wrapper::Has_Stencil()) {
    if(mode==0) {
