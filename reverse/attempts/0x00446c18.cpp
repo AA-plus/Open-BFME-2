@@ -1,4 +1,6 @@
 // ?PopulateTeamComboBox@@YAXHQAPAVGameWindow@@PAVGameInfo@@_N@Z
+// partial score=0.9898 date=2026-10-13
+// ?PopulateTeamComboBox@@YAXHQAPAVGameWindow@@PAVGameInfo@@_N@Z
 // partial score=0.99 date=2026-10-13
 // ?PopulateTeamComboBox@@YAXHQAPAVGameWindow@@PAVGameInfo@@_N@Z
 // partial score=0.99 date=2026-10-09
