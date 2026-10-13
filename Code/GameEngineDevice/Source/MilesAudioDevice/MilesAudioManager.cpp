@@ -1794,6 +1794,27 @@ void MilesAudioManager::processAudioCompletion(PlayingAudioRef &completedAudio)
     completedAudio->m_status = 1;
 }
 
+// Native 0005E0A4..0005E13C (WorldBuilder twin 0x0079C930, unnamed), called
+// by the per-frame update after the request and playing passes: drains the
+// +0xB94 completion list that the end-of-sample handlers fill. Each entry is
+// taken off the list under the Miles mutex (the scope ends before the call),
+// then handed to processAudioCompletion unlocked; the list is re-tested with
+// the mutex held again. Name stays address-derived.
+void MilesAudioManager::rva0005E0A4(void)
+{
+    for (;;) {
+        PlayingAudioRef playing;
+        {
+            AILMutexScope lock;
+            if (m_completedAudio.empty())
+                break;
+            playing = m_completedAudio.front();
+            reinterpret_cast<OpaqueRefList &>(m_completedAudio).pop_front();
+        }
+        processAudioCompletion(playing);
+    }
+}
+
 class Rva0036CA00Str;
 class Rva00058B90 { public: void rva00058B90(const Rva0036CA00Str &t); };
 class Rva00050D6C { public: int rva00050D6C(void); };
