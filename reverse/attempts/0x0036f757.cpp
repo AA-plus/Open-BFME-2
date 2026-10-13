@@ -1,4 +1,6 @@
 // ?groupScatter@AIGroup@@QAEXW4CommandSourceType@@@Z
+// partial score=0.91 date=2026-10-13
+// ?groupScatter@AIGroup@@QAEXW4CommandSourceType@@@Z
 // partial score=0.9 date=2026-10-13
 // ?groupScatter@AIGroup@@QAEXW4CommandSourceType@@@Z
 // partial score=0.8950822553 date=2026-10-09
@@ -20,6 +22,7 @@
 #include <list>
 #include "Coord3D.h"
 #include "Coord2D.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 typedef bool Bool;
 typedef int Int;
@@ -473,7 +476,7 @@ void AIGroup::groupScatter(CommandSourceType cmdSource)
 	Object *theUnit;
 	for (theUnit = iter->first(); theUnit; theUnit = iter->next())
 	{
-		center.x -= 0.01f;
+		__vref(center.x) -= 0.01f;
 		AIUpdateInterface *ai = theUnit->getAI();
 		Coord3DCopy unitPos = *theUnit->getPosition();
 		Coord2D delta;
