@@ -89,6 +89,17 @@ template <> vector<BfmePod40, allocator<BfmePod40> >::~vector()
 }
 }
 
+struct Rva004E1AD5Item;
+void __cdecl Rva004E1FCCGet(Rva004E1AD5Item *, Rva004E1AD5Item *);
+
+namespace _STL {
+template <> vector<BfmePod88, allocator<BfmePod88> >::~vector()
+{
+ Rva004E1FCCGet(reinterpret_cast<Rva004E1AD5Item *>(m_start),
+                       reinterpret_cast<Rva004E1AD5Item *>(m_finish));
+}
+}
+
 class Rva0056616B {
 public:
 	Rva0056616B(const Rva0056616B &other);
