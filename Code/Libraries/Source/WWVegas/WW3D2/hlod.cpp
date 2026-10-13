@@ -4,7 +4,15 @@
 #include "../../../../../reference/shims/bfme_vector3_full_link/vector3_full_link.h"
 // Link view first: Matrix3D(bool) stays inline without emitting an /O2 copy
 // that competes with retail's owner (0x0004C91A).
+// Retail links the /O1 copies of Matrix3D's default constructor, operator== and the
+// vector constructor iterator it uses: the view compiles for size (its vector headers
+// first, unchanged).
+#include <assert.h>
+#include "vector2.h"
+#include "vector4.h"
+#pragma optimize("gsy", on)
 #include "../../../../../reference/shims/bfme_matrix3d_bool_link/matrix3d.h"
+#pragma optimize("", on)
 
 // rendobj.h: this unit inlines RenderObjClass::Set_Hidden (a qualified or
 // in-constructor call), so it needs the bit setters' bodies.
