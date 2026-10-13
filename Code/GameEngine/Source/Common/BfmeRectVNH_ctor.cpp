@@ -58,7 +58,7 @@ extern InGameUI *TheInGameUI;
 class Rva0029B16A
 {
 public:
-    void rva0029B16A(int, int);
+    void setMissionHelpText(int, int);
 };
 
 // WB 105D300 names DelayedWorldTextEventModule::Activate.
@@ -71,6 +71,6 @@ bool BfmeRectVNH::rva003FD522()
     UnicodeString text = TheGameText->fetch(m_name, &exists);
     if (!exists)
         return false;
-    ((Rva0029B16A *)TheInGameUI)->rva0029B16A((int)&text, 0);
+    ((Rva0029B16A *)TheInGameUI)->setMissionHelpText((int)&text, 0);
     return true;
 }

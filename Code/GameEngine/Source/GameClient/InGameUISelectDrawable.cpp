@@ -87,7 +87,7 @@ public:
 	ObjectID m_objectID; // +0x24
 };
 
-class Rva0029ACA0 { public: void rva0029ACC7(int); };
+class Rva0029ACA0 { public: void expireAllHints(int); };
 class InGameUI;
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameLogic/Object.h
@@ -196,7 +196,7 @@ void InGameUI::selectDrawable( Drawable *draw )
 	// the control needs to update its context sensitive display now
 	((BfmeWorldRV *)TheControlBar)->rva0031AA34((int)draw);
 
-	((Rva0029ACA0 *)this)->rva0029ACC7(0);
+	((Rva0029ACA0 *)this)->expireAllHints(0);
 }
 
 // ZH InGameUI::evaluateSoloNexus (same source in the BFME 1 donor 6583b3c1):

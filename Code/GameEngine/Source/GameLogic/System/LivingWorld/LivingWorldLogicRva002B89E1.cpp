@@ -61,7 +61,7 @@ extern InGameUI *TheInGameUI;
 class Rva0029B17C
 {
 public:
-	void rva0029B17C();	// 0x0029B17C, WB InGameUI::clearMissionHelpText
+	void clearMissionHelpText();	// 0x0029B17C, WB InGameUI::clearMissionHelpText
 };
 
 extern GameLogic *TheGameLogic;
@@ -127,7 +127,7 @@ bool LivingWorldLogic::rva002B89E1(int battleArg)
 	LivingWorldRegion *region = battle->m_region;
 	TheAudio->slot190();
 	m_fieldB8 = region->m_field12C;
-	((Rva0029B17C *)TheInGameUI)->rva0029B17C();
+	((Rva0029B17C *)TheInGameUI)->clearMissionHelpText();
 	((Rva002B7C74 *)this)->rva002B7C74();
 	PrepareBattleForLoading(battle);
 	int mode = TheGameLogic->m_114;

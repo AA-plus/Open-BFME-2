@@ -61,7 +61,7 @@ extern InGameUI *TheInGameUI;
 class Rva0029B17C
 {
 public:
-	void rva0029B17C();
+	void clearMissionHelpText();
 };
 
 void HideControlBar(bool visible);
@@ -163,7 +163,7 @@ void Rva00213A85::rva00213AFC(void *value)
 		((Rva003FAC83 *)*(void **)((char *)iterator.m_node + 8))->rva003FACE9(value);
 		iterator.next();
 	}
-	((Rva0029B17C *)TheInGameUI)->rva0029B17C();
+	((Rva0029B17C *)TheInGameUI)->clearMissionHelpText();
 }
 
 void Rva00213A85::rva00213B44()

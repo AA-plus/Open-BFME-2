@@ -46,7 +46,7 @@ private:
 
 extern GameLogic *TheGameLogic;
 
-class Rva0029ACA0 { public: void rva0029ACC7(int); };
+class Rva0029ACA0 { public: void expireAllHints(int); };
 
 typedef _STL::list<Drawable *> BfmeDrawableList;
 
@@ -85,5 +85,5 @@ void InGameUI::deselectDrawable(Drawable *draw)
 	--m_selectCount;
 	evaluateSoloNexus(0);
 	((BfmeWorldRV *)TheControlBar)->rva0031AA4B((int)draw);
-	((Rva0029ACA0 *)this)->rva0029ACC7(0);
+	((Rva0029ACA0 *)this)->expireAllHints(0);
 }

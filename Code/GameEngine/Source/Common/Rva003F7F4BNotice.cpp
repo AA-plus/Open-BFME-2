@@ -15,8 +15,8 @@ class LivingWorldLogic; extern LivingWorldLogic *TheLivingWorldLogic;
 class InGameUI; extern InGameUI *TheInGameUI;
 class GameTextInterface; extern GameTextInterface *TheGameText;
 class Rva002B2B66 {public:int rva002B2B66();};
-class Rva0029B17C {public:void rva0029B17C();};
-class Rva0029B16A {public:void rva0029B16A(int,int);};
+class Rva0029B17C {public:void clearMissionHelpText();};
+class Rva0029B16A {public:void setMissionHelpText(int,int);};
 class Rva003F7F4BAudioView {public:
  virtual void v0();
  virtual void v1();
@@ -77,9 +77,9 @@ void Rva003F7F4B::rva003F7F4B() {
  event.m_int70=((Rva002B2B66*)TheLivingWorldLogic)->rva002B2B66();
  id=((Rva003F7F4BAudioView*)TheAudio)->add(&event);
  }
- if(flag19) ((Rva0029B17C*)TheInGameUI)->rva0029B17C();
+ if(flag19) ((Rva0029B17C*)TheInGameUI)->clearMissionHelpText();
  if(!label.isEmpty()) {
  UnicodeString text=((Rva003F7F4BTextView*)TheGameText)->fetch(label,0);
- ((Rva0029B16A*)TheInGameUI)->rva0029B16A((int)&text,1000000);
+ ((Rva0029B16A*)TheInGameUI)->setMissionHelpText((int)&text,1000000);
  }
 }

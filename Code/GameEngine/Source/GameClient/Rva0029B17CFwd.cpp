@@ -1,5 +1,5 @@
 // cl: /DNDEBUG /MD /EHsc
-// ?rva0029B17C@Rva0029B17C@@QAEXXZ @0x0029B17C 11B.
+// ?clearMissionHelpText@Rva0029B17C@@QAEXXZ @0x0029B17C 11B.
 // Forwarder: loads member at +0x7F4 then tail-jumps to its vtable slot 9
 // (0x24). Callers at 0x00213B3B 0x002B8A27 0x003F7FD2 pass singleton in ecx
 // with no stack args and ignore return; same 11B shape as other disp8
@@ -18,12 +18,12 @@ struct Helper0029B17C {
 };
 class Rva0029B17C {
 public:
-	void rva0029B17C();
+	void clearMissionHelpText();
 private:
 	char m_pad[0x7F4];
 	Helper0029B17C *m_7F4;
 };
-void Rva0029B17C::rva0029B17C()
+void Rva0029B17C::clearMissionHelpText()
 {
 	m_7F4->slot9();
 }

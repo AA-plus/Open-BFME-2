@@ -81,13 +81,13 @@ class Rva002A3DD3
 	char gap[8];
 	InGameUI::FormationPreviewPoolObject *slots[4];
 public:
-	__declspec(noinline) void rva002A3DD3();
+	__declspec(noinline) void clearFormationPreviewDrawables();
 	void rva002A3E24();
 	InGameUI::FormationPreviewPoolObject *rva002A3E5A(ThingTemplate *type);
 	void rva002A470F(ThingTemplate *type, const ICoord2D *position, RGBColor color);
 };
 
-void Rva002A3DD3::rva002A3DD3()
+void Rva002A3DD3::clearFormationPreviewDrawables()
 {
 	InGameUI::FormationPreviewPoolObject **p = slots;
 	for (int n = 4; n != 0; --n, ++p) {
@@ -110,7 +110,7 @@ void Rva002A3DD3::rva002A3DD3()
 // The iterator and tree clear both resolve to independently rowed providers.
 void Rva002A3DD3::rva002A3E24()
 {
-	rva002A3DD3();
+	clearFormationPreviewDrawables();
 	Rva0029B63A &pool = tree;
 	for (_STL::_Rb_tree_node_base *it = pool.head->_M_left; it != pool.head;
 		it = _STL::_Rb_global<bool>::_M_increment(it)) {

@@ -431,13 +431,13 @@ public:
 class Rva0029B16A
 {
 public:
-	void rva0029B16A(int a, int b);
+	void setMissionHelpText(int a, int b);
 private:
 	unsigned char m_pad00[0x7F4];
 	IngameNoticeDisplay *m_7F4;
 };
 
-void Rva0029B16A::rva0029B16A(int a, int b)
+void Rva0029B16A::setMissionHelpText(int a, int b)
 {
 	if (m_7F4)
 		m_7F4->Start(*reinterpret_cast<const UnicodeString *>(a), b);
