@@ -110,6 +110,8 @@ public:
 	void concat(const T *text);				// 0x00005629
 	void concat(const StringBase<T> &other);		// 0x00006987
 	Bool startsWith(const T *text, Int length) const;	// 0x008875A0
+	// Retail 0x00035FB0 is the recovered StringBase-to-StringBase overload.
+	Bool startsWith(const StringBase<T> &other) const;
 
 	Data *m_data;
 };
@@ -175,11 +177,6 @@ public:
 	{
 		StringBase<char>::concat(other);
 		return *this;
-	}
-
-	Bool startsWith(const AsciiString &other) const
-	{
-		return StringBase<char>::startsWith(other.str(), other.getLength());
 	}
 
 	const char *str() const
@@ -485,7 +482,7 @@ void _appendMessage(const AsciiString &str, Bool isTrueMessage,
 		 name != TheWritableGlobalData->m_stringVec10F4.end();
 		 ++name)
 	{
-		if (str.startsWith(*name))
+		if (((const StringBase<char> &)str).startsWith((const StringBase<char> &)*name))
 			return;
 	}
 
@@ -544,7 +541,7 @@ static void _adjustVariable(const AsciiString &str, Int value,
 		 name != TheWritableGlobalData->m_stringVec10F4.end();
 		 ++name)
 	{
-		if (str.startsWith(*name))
+		if (((const StringBase<char> &)str).startsWith((const StringBase<char> &)*name))
 			return;
 	}
 
