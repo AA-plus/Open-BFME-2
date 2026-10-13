@@ -1,13 +1,15 @@
-// ?xfer@Rva004DD489@@UAEXPAVXfer@@@Z
-// partial score=0.995 date=2026-10-06
-// ?xfer@Rva004DD489@@UAEXPAVXfer@@@Z
-// partial score=0.98 date=2026-10-06
-// cl: /O1 /DNDEBUG /MD /EHs-c- /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
+// cl: /O1 /G7 /DNDEBUG /MD /EHs-c- /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
 // stlport
 // ?xfer@Rva004DD489@@UAEXPAVXfer@@@Z @0x004DD489 400B.
-// Slot 3 xfer, called by EmotionTrackerUpdate::xfer 0x004B1ECB for entries in
-// m_90. ObjectID at +0x08 via XferObjectID; maps int-int at +0x14 and
-// ushort-int at +0x20. Reference: Open-BFME / EmotionTracker.
+// Slot 3 xfer of the EmotionTracker entry objects listed at 0x004B1ECB (m_90):
+// ObjectID at +0x08 via XferObjectID, int-int map at +0x14, unsigned-short/int
+// map at +0x20 (loader inserts, saver copies each key by word before the
+// value). Evidence: same-this caller 0x004B1ECB serializes the entry list;
+// map pair types and offsets from the loader's insert and the saver's word
+// copy. /G7 is load-bearing: the natural unsigned-short key copy emits
+// `mov ax,[mem]` only under /G7; without it cl uses the P4 xor+mov idiom and
+// the body is 402B (the previous bank's int-cast trick forced movzx, 7 ops).
+// Reference: Open-BFME / EmotionTracker.
 #include <map>
 #include <set>
 #include <vector>
@@ -143,9 +145,9 @@ void Rva004DD489::xfer(Xfer *xfer)
 		}
 	} else {
 		for (_STL::map<unsigned short, int, Gen_lt_00940b40>::iterator jt = m_20.begin(); jt != m_20.end(); ++jt) {
-			int key2 = (int)(unsigned short)(*jt).first;
+			unsigned short key2 = (*jt).first;
 			unsigned int val2 = (unsigned int)(*jt).second;
-			*xfer == (unsigned short &)*(unsigned short *)&key2;
+			*xfer == key2;
 			*xfer == val2;
 		}
 	}
