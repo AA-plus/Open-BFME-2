@@ -36,13 +36,17 @@ namespace _STL {
 template<> void vector<Rva003F64B2Element>::reserve(unsigned);
 template<> void vector<Rva003F64B2Element>::push_back(const Rva003F64B2Element&);
 }
-struct Rva003F64B2Outer {
+// ?_ClearNumObjBelow-style family note: the WorldBuilder twin names
+// LivingWorldBattle::BattleSide at EA's own LivingWorldBattle.cpp
+// (callgraph 2); ctors renamed from placeholder Rva003F64B2Outer.
+class LivingWorldBattle { public: class BattleSide; };
+class LivingWorldBattle::BattleSide {
  int key;
  _STL::vector<Rva003F64B2Element> elements;
  _STL::vector<int> words;
- Rva003F64B2Outer(Rva003F64B2Input*); Rva003F64B2Outer(Rva003F64B2Input*,const void*);
+ BattleSide(Rva003F64B2Input*); BattleSide(Rva003F64B2Input*,const void*);
 };
-Rva003F64B2Outer::Rva003F64B2Outer(Rva003F64B2Input *p)
+LivingWorldBattle::BattleSide::BattleSide(Rva003F64B2Input *p)
  :key(p->key),elements(_STL::allocator<Rva003F64B2Element>()),words(_STL::allocator<int>()) {
  elements.reserve(6);
  elements.push_back(Rva003F64B2Element(reinterpret_cast<int>(p)));
@@ -62,7 +66,7 @@ Rva003F64B2Outer::Rva003F64B2Outer(Rva003F64B2Input *p)
 // full142B inner constructor3F5970. That provider is separately verified;
 // its ModuleData spelling is a linker identity rather than an assertion
 // about the original application payload type at this caller.
-Rva003F64B2Outer::Rva003F64B2Outer(Rva003F64B2Input *p,const void *payload)
+LivingWorldBattle::BattleSide::BattleSide(Rva003F64B2Input *p,const void *payload)
  :key(p->key),elements(_STL::allocator<Rva003F64B2Element>()),words(_STL::allocator<int>()) {
  elements.reserve(6);
  elements.push_back(Rva003F64B2Element(reinterpret_cast<int>(p),payload));

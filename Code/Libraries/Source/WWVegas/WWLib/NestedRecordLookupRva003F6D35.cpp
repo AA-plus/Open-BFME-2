@@ -51,7 +51,7 @@ Rva003F6D35Inner *Rva003F6D35Owner::findOrCreateRva003F6D35(void *p){
 
 #pragma comment(linker, "/alternatename:??0Rva003F6D35Inner@@QAE@H@Z=??0Rva003F610FElement@@QAE@H@Z")
 
-#pragma comment(linker, "/alternatename:??0Rva003F6D35Outer@@QAE@PAX@Z=??0Rva003F64B2Outer@@QAE@PAURva003F64B2Input@@@Z")
+#pragma comment(linker, "/alternatename:??0Rva003F6D35Outer@@QAE@PAX@Z=??0BattleSide@LivingWorldBattle@@QAE@PAURva003F64B2Input@@@Z")
 
 #pragma comment(linker, "/alternatename:??1Rva003F6D35Inner@@QAE@XZ=??1Rva003F610FElement@@QAE@XZ")
 
