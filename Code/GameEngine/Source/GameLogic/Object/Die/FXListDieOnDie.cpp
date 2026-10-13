@@ -22,6 +22,12 @@ public:
 	ObjectID m_sourceID;
 };
 
+class DieMuxData
+{
+public:
+	Bool isDieApplicable(const Object *object, const DamageInfo *damageInfo) const;
+};
+
 class FXList
 {
 public:
@@ -46,6 +52,11 @@ struct FXListDieModuleData
 	unsigned char m_pad00[0x38];
 	const FXList *m_defaultDeathFX;
 	Bool m_orientToObject;
+	Bool isDieApplicable(const Object *object, const DamageInfo *damageInfo) const
+	{
+		return ((const DieMuxData *)((const unsigned char *)this + 8))
+			->isDieApplicable(object, damageInfo);
+	}
 };
 
 class BehaviorModule
@@ -70,7 +81,13 @@ public:
 class DieModule : public BehaviorModule, public DieModuleInterface
 {
 protected:
-	Bool isDieApplicable( const DamageInfo *damageInfo ) const;
+	// The ZH DieModule helper uses the module-data DieMuxData at +8.
+	// Retail 0x0045CEA7 confirms that offset and the owner Object at +8.
+	// Keep its SELECT_ANY body here with the retail onDie consumer.
+	__declspec(noinline) Bool isDieApplicable( const DamageInfo *damageInfo ) const
+	{
+		return getFXListDieModuleData()->isDieApplicable(getObject(), damageInfo);
+	}
 };
 
 class FXListDie : public DieModule
