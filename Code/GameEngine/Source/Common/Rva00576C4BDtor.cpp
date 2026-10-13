@@ -58,6 +58,7 @@ class Rva000AD6F4
 {
 public:
 	Rva000AD6F4() : m_ptr(0) {}
+	~Rva000AD6F4();
 	void clear();
 	void *m_ptr;
 };
@@ -72,11 +73,9 @@ public:
 	void rva005CD7DA();
 	Rva005CD7BD data;
 };
-struct WrapClear00576C4B
-{
-	~WrapClear00576C4B() { m_c.clear(); }
-	Rva000AD6F4 m_c;
-};
+// Native +1C/+40 cleanups call the complete29B owning-pointer destructor.
+// Use its existing real member lifetime instead of an unbound forwarding wrapper.
+typedef Rva000AD6F4 WrapClear00576C4B;
 struct Wrap2000576C4B
 {
 	__forceinline Wrap2000576C4B(void *source,Rva005CD1A9 *owner) : m_m(source,owner) {}
