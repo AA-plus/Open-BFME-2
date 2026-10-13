@@ -1,4 +1,6 @@
 // ?HandleOverButtons@AptPlayer@@QAEXXZ
+// partial score=0.949 date=2026-10-13
+// ?HandleOverButtons@AptPlayer@@QAEXXZ
 // partial score=0.92 date=2026-10-09
 // cl: /O1 /G7 /GX /MD /arch:SSE /DNDEBUG /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB /D_CRTIMP=
 // stlport
