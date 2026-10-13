@@ -1,4 +1,6 @@
 // ?rva00392DC0@BuildAssistant@@QAE_NPAVObject@@PBVThingTemplate@@PBUCoord3D@@PAVPlayer@@IPAPAV2@@Z
+// partial score=0.8931 date=2026-10-13
+// ?rva00392DC0@BuildAssistant@@QAE_NPAVObject@@PBVThingTemplate@@PBUCoord3D@@PAVPlayer@@IPAPAV2@@Z
 // partial score=0.8931489049261417 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /I.
 // Bank: complete native392DC0..39321C RET24; six words and low-byte result.
@@ -57,6 +59,15 @@ class Rva001E4912 {public:Rva001E4912 *rva001E4912(int,unsigned,unsigned);int bi
 class Rva001E431E {public:void rva001E431E(const int*);};
 extern GameLogic *TheGameLogic;
 extern PartitionManager *ThePartitionManager;
+// TU-scoped call view: the native +0x10 facade query is a member of the
+// manager (ECX=ThePartitionManager). Declaring it here keeps the shared
+// PartitionRangeQueryCallView.h untouched (its addition swaps guard369FDF
+// spill homes); the mangled callee name is irrelevant to the byte gate.
+class PartitionRangeQueryCallView : public PartitionManager
+{
+public:
+	Object *rva00625340(const Coord3D *pos, float radius, int distType);
+};
 class BuildAssistant {public:
  virtual void s0();virtual void s1();virtual void s2();virtual void s3();virtual void s4();virtual void s5();virtual void s6();virtual void s7();virtual void s8();virtual void s9();virtual void s10();virtual void s11();virtual void s12();virtual void s13();
  virtual Object *buildObjectNow(Object*,const ThingTemplate*,const Coord3D*,float,Player*);
@@ -74,7 +85,7 @@ bool BuildAssistant::rva00392DC0(Object *builder,const ThingTemplate *what,const
  for(unsigned i=0;i<tiles.count;++i) {
   if(tiles.rva00392D71(i)==10) {
    float radius=tiles.rva00392CC5(i)?((NativeBuildRadiusView*)tiles.rva00392CC5(i))->radius:20.0f;
-   Object *old=ThePartitionManager->rva00625340((const Coord3D*)tiles.rva00392CF9(i),radius*0.25f,1);
+   Object *old=((PartitionRangeQueryCallView*)ThePartitionManager)->rva00625340((const Coord3D*)tiles.rva00392CF9(i),radius*0.25f,1);
    if(old && (((NativeBuildObjectView*)old)->dead&1)) {
     const ThingTemplate *oldTemplate=((NativeBuildObjectView*)old)->thing;
     if(oldTemplate->isEquivalentTo((const ThingTemplate*)tiles.rva00392CC5(i))) {
