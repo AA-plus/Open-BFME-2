@@ -4,20 +4,8 @@
 // Layout: SubsystemInterface at +0 plus Snapshot at +0xC plus member at +0xB0 plus count. Evidence: unlock packet EH prolog plus singleton clear plus unblocks deleting dtor 0x003A398B; next Rva003A4322 dtor shares UAE pattern.
 class Xfer;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void loadPostProcess();
-	virtual void xfer(Xfer *xfer);
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-extern const void *const g_00BBB554[];
-inline Snapshot::~Snapshot()
-{
-	*(const void **)this = g_00BBB554;
-}
 
 class SubsystemInterface
 {

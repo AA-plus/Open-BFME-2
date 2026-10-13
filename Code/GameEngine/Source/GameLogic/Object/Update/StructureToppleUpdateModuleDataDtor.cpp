@@ -10,16 +10,7 @@
 #include <vector>
 struct BfmeStringHeadRecord160 { public: ~BfmeStringHeadRecord160(); };
 class Xfer;
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void loadPostProcess();
-	virtual void xfer(Xfer *xfer);
-};
-extern const void *const g_00BBB554[];
-inline Snapshot::~Snapshot() { *(const void **)this = g_00BBB554; }
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 class __declspec(novtable) StructureToppleUpdateModuleData : public Snapshot
 {
 public:

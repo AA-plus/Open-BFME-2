@@ -27,17 +27,8 @@ public:
 	char m_pad04[8];
 };
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc();
-	virtual void loadPostProcess();
-	virtual void xfer();
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
-extern const void *const g_00BBB554[];
-inline Snapshot::~Snapshot() { *(const void **)this = g_00BBB554; }
 
 class Rva00420E67 : public Rva00420E67Base, public Snapshot
 {
