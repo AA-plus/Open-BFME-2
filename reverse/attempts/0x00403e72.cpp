@@ -1,4 +1,11 @@
 // ?addModifierToPool@AttributeModifierPoolUpdate@@QAE_NABVAsciiString@@H@Z
+// partial score=0.94 date=2026-10-13
+// W7-SOL2 r1 (2026-10-13): WB debug body shows max(0, duration<0 ? category->duration : duration) with
+// a temp zero and a bool category->exclusive local; named-local levers cut the normalised edit distance
+// vs retail from 75 to 22 instructions (size 1019 exact). Open: allocator/float temps sit in the dead
+// arg slots [ebp+0xb]/[ebp+8] in retail (ours +0xf/+0xc), edx vs ecx in the exclusive loop,
+// esi/edi swap in the final body-interface section, cmp-before-load order in the fx select.
+// ?addModifierToPool@AttributeModifierPoolUpdate@@QAE_NABVAsciiString@@H@Z
 // partial score=0.85 date=2026-10-09
 // BFME1 0bef414b applyAttributeModifier is the semantic/structural donor.
 // Native403E72..40426D RET8 and WB E916C0 independently name addModifierToPool.
@@ -154,14 +161,16 @@ bool AttributeModifierPoolUpdate::addModifierToPool(const AsciiString &name,int 
     ModifierCategoryView *category=(ModifierCategoryView *)TheAttributeModifierStore->GetCategoryContainer(index);
     if(!category) return false;
     if(category->enforceFrames && isCategoryDisabled(category->index)) return false;
+    int dur=duration;
     unsigned frame=((ModifierFrameView *)TheGameLogic)->frame;
-    
-    if(duration<0) duration=category->duration;
     int zero=0;
+    if(dur<0) dur=category->duration;
+    duration=dur;
     unsigned length=modifierMax(zero,duration);
     unsigned expiration=length?frame+length:0x3fffffff;
     ModifierPendingNames pending;
-    if(category->exclusive) {
+    bool exclusive=category->exclusive;
+    if(exclusive) {
         for(Rva00297360Element *it=modifiers.begin();it!=modifiers.end();++it) {
             ModifierCategoryView *other=(ModifierCategoryView *)TheAttributeModifierStore->GetCategoryContainer(it->index);
             if(it->index!=index && category->index==other->index) {
@@ -179,8 +188,10 @@ bool AttributeModifierPoolUpdate::addModifierToPool(const AsciiString &name,int 
             setWakeFrame(getObject(),(UpdateSleepTime)length);
         }
         const FXList *fx;
-        if(frame<it->expiration) fx=(const FXList *)TheAttributeModifierStore->rva002147A1(it->index,(Object *)object);
-        else fx=(const FXList *)TheAttributeModifierStore->getEndFX(it->index,(Object *)object);
+        int fxIndex=it->index;
+        Object *fxObj=(Object *)object;
+        if(frame<it->expiration) fx=(const FXList *)TheAttributeModifierStore->rva002147A1(fxIndex,fxObj);
+        else fx=(const FXList *)TheAttributeModifierStore->getEndFX(fxIndex,fxObj);
         if(fx) { Object *obj=(Object *)object; FXList::doFXObj(fx,obj,0); }
         return true;
     }
@@ -204,7 +215,8 @@ bool AttributeModifierPoolUpdate::addModifierToPool(const AsciiString &name,int 
         setWakeFrame(getObject(),(UpdateSleepTime)length);
     }
     if(((ModifierFrameView *)TheGameLogic)->frame<entry.expiration) {
-        if(((const Thing *)object)->getDrawable()) {
+        Drawable *drawable=((const Thing *)object)->getDrawable();
+        if(drawable) {
             const FXList *fx=(const FXList *)TheAttributeModifierStore->rva002147A1(entry.index,(Object *)object);
             if(fx) { Object *obj=(Object *)object; FXList::doFXObj(fx,obj,0); }
         }
