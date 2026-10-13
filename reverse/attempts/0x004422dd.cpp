@@ -1,11 +1,5 @@
 // ?HostValidateColors@AptMpGameSetup@@QAEXXZ
-// partial score=0.96 date=2026-10-13
-// ?HostValidateColors@AptMpGameSetup@@QAEXXZ
-// partial score=0.96 date=2026-10-13
-// ?HostValidateColors@AptMpGameSetup@@QAEXXZ
-// partial score=0.96 date=2026-10-13
-// ?HostValidateColors@AptMpGameSetup@@QAEXXZ
-// partial score=0.96 date=2026-10-08
+// partial score=0.75 date=2026-10-13
 // cl: /O1 /G7 /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /arch:SSE /Op
 // stlport
 // Near-exact 0x004422DD..0x004424E7 (522B), WB HostValidateColors lead.
@@ -19,9 +13,12 @@
 // BFME1 ba7ddda7e8f261163972ddbe23c7e7a12ac5b84f MpGameSetup and
 // SkirmishScreenState reference units provided semantic leads; native WB and
 // retail accesses, calls and control flow establish the target deltas above.
-// Current 522B output has every instruction and call aligned, but reserves
-// 0x2C vs 0x28 bytes and swaps saved-this / loop-index stack slots. Bit reference
-// and map storage are each four bytes too low; no padding/asm/pins were added.
+// Corrected Oct13 attempt: assignment and SetColor execute before exiting the
+// available-color search, as retail 0x0044249E..0x004424BC proves. The previous
+// bank had an unreachable assignment after break and its 0.96 score was stale.
+// This unsigned search emits507B with native0x28 frame; receiver/slot registers,
+// saved-pointer/key homes and success-block placement still differ from522B.
+// No matched source, global owner, pin or compiler escape hatch was changed.
 #define _BFME_RETAIL_TREE_INSERT_LAYOUT
 #include <map>
 #include <vector>
@@ -89,15 +86,17 @@ void AptMpGameSetup::HostValidateColors() {
     if((GameSlot*)(*map)[(unsigned)color]==slot) continue;
    if(special) owner->SetColor(slot,-1);
    else {
-    int c;
-    for(c=0;c<allowed.size();c++) {
+    unsigned c=0;
+    while(c<allowed.size()) {
      RespawnPtrMap *lookup=(RespawnPtrMap*)&reserved;
-     if(allowed[c] && lookup->find((unsigned)c)==lookup->end()) {
-      break;
-      (*map)[(unsigned)c]=(Image*)slot;
-      owner->SetColor(slot,c);
-     }
+     if(allowed[c] && lookup->find(c)==lookup->end()) goto colorFound;
+     ++c;
     }
+    goto colorDone;
+colorFound:
+    (*map)[c]=(Image*)slot;
+    owner->SetColor(slot,c);
+colorDone:;
    }
   }
  }
