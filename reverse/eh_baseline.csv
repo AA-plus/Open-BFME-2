@@ -23,7 +23,6 @@ name,target_rva,verdict
 ?Resize@?$VectorClass@U_ENUM_VALUE@EnumParameterClass@@@@UAE_NHPBU_ENUM_VALUE@EnumParameterClass@@@Z,0x00155690,obj_only
 ?Resize@?$VectorClass@VVector4@@@@UAE_NHPBVVector4@@@Z,0x001793A0,obj_only
 ??0Rva0017FF77@@QAE@PBDHH@Z,0x0017FF77,bytes_differ
-??0Rva0018BEC7@@QAE@XZ,0x0018BEC7,bytes_differ
 ?Rva001F949DConvert@@YA?AV?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@ABV?$basic_string@GV?$char_traits@G@_STL@@V?$allocator@G@2@@2@D@Z,0x001F949D,bytes_differ
 ?init@ScriptEngine@@UAEXXZ,0x00205AFD,bytes_differ
 ??0Rva002186EB@@QAE@XZ,0x002186EB,bytes_differ
