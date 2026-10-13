@@ -7557,3 +7557,48 @@ bool Rva005F8417::rva005F8417() const
 	return m_member->rva00577958();
 }
 
+// Rva0033A674 view for the thunk below. The method is declared only and
+// resolves to the rowed ?rva0033A674@Rva0033A674@@QAEPAXXZ (0x0033A674, 22B
+// fallback getter in Rva0033A674Getter.cpp); declared here (not defined) so
+// the tailcall is preserved.
+class Rva0033A674
+{
+public:
+	void *rva0033A674();
+};
+
+// ?rva004F5FB4@Rva004F5FB4@@QAEPAXXZ @0x004F5FB4 8B member forwarder to rowed
+// ?rva0033A674@Rva0033A674@@QAEPAXXZ (0x0033A674; sibling of the rowed
+// 0x004F5FAC thunk to 0x0033A65E). No callers. Honest address name.
+class Rva004F5FB4
+{
+public:
+	void *rva004F5FB4();
+private:
+	char m_pad[0x2C];
+	Rva0033A674 *m_member;
+};
+void *Rva004F5FB4::rva004F5FB4()
+{
+	return m_member->rva0033A674();
+}
+
+// Rva004DD73B view for the thunk below. The method is declared only and
+// resolves to the rowed ?rva004DD73B@Rva004DD73B@@QAEPAXXZ (0x004DD73B, 137B
+// pool allocate in Rva004DD73BObjectPoolAllocate.cpp).
+class Rva004DD73B
+{
+public:
+	void *rva004DD73B();
+};
+
+// ?rva004DD886@@YAPAXXZ @0x004DD886 10B pool-allocate thunk:
+// ecx=&g_Va00E049D8 then tail-jmp to rowed
+// ?rva004DD73B@Rva004DD73B@@QAEPAXXZ (0x004DD73B). No callers. Honest address
+// name.
+void *rva004DD886()
+{
+	Rva004DD73B *p = (Rva004DD73B *)&g_Va00E049D8;
+	return p->rva004DD73B();
+}
+
