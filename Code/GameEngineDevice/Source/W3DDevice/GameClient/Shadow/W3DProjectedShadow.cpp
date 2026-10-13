@@ -135,7 +135,9 @@ void W3DShadowTexture::setTexture(const RefCountPtr<TextureClass> &texture)
 	m_texture = texture;
 }
 
-void W3DShadowTexture::setLightPosHistory(Vector3 &pos)
+// Select-any like the inline copies in W3DProjectedShadowUpdateTexture.cpp
+// (identical retail bytes); this TU never calls them, so they fold away.
+inline __declspec(noinline) void W3DShadowTexture::setLightPosHistory(Vector3 &pos)
 {
 	m_lastLightPosition = pos;
 }
@@ -145,9 +147,16 @@ SphereClass &W3DShadowTexture::getBoundingSphere(void)
 	return m_areaEffectSphere;
 }
 
-void W3DShadowTexture::setBoundingSphere(SphereClass &sphere)
+inline __declspec(noinline) void W3DShadowTexture::setBoundingSphere(SphereClass &sphere)
 {
 	m_areaEffectSphere = sphere;
+}
+
+// ?bfmeAnchorW3DShadowTextureSetters absent-from-retail
+void bfmeAnchorW3DShadowTextureSetters(W3DShadowTexture *t, Vector3 &pos, SphereClass &sphere)
+{
+	t->W3DShadowTexture::setLightPosHistory(pos);
+	t->W3DShadowTexture::setBoundingSphere(sphere);
 }
 
 void W3DShadowTexture::setDecalUVAxis(Vector3 &u, Vector3 &v)
