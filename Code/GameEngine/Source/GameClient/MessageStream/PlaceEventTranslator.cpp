@@ -25,6 +25,16 @@ struct Rva001EDD80Pair
 	int x, y;
 };
 typedef Rva001EDD80Pair ICoord2D;
+// Give local pixel coordinates a lexical lifetime just as PlaceCoord does.
+// The empty destructor emits no work. It preserves retail's overlapping
+// mouse/anchor and build/builder spill homes with the canonical GameLogic API.
+// Message union storage retains the plain two-int layout above.
+struct PlacePixel : ICoord2D
+{
+    PlacePixel() {}
+    PlacePixel(const ICoord2D &p) { x = p.x; y = p.y; }
+    ~PlacePixel() {}
+};
 
 // Mouse::rva001EDD80 (0x001EDD80): the drag-distance test against the button-down position.
 class Mouse
@@ -257,7 +267,7 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 		const ThingTemplate *build = TheInGameUI->getPendingPlaceType();
 		if (build && TheInGameUI->isPlacementAnchored() == false)
 		{
-			ICoord2D mouse = msg->getArgument(0)->pixel;
+			PlacePixel mouse = msg->getArgument(0)->pixel;
 			PlaceCoord world;
 
 			TheTacticalView->screenToTerrain(&mouse, &world, false);
@@ -322,7 +332,7 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 			GameMessage *placeMsg;
 			PlaceCoord world;
 			float angle;
-			ICoord2D anchorStart, anchorEnd;
+			PlacePixel anchorStart, anchorEnd;
 
 			angle = TheInGameUI->getPlacementAngle();
 			TheInGameUI->getPlacementPoints(&anchorStart, &anchorEnd);
@@ -463,7 +473,7 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 
 	case 3: // raw mouse position
 	{
-		ICoord2D mouse = msg->getArgument(0)->pixel;
+		PlacePixel mouse = msg->getArgument(0)->pixel;
 		if (m_isDown && TheMouse->rva001EDD80(&m_downPos, &mouse))
 			m_isDragging = true;
 

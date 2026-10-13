@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB
+// cl: /ICode/GameEngine/Include /ICode/GameEngine/Source/Common /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB
 // stlport
 //
 // BFME2's time line (post-game graph) screen Apt callbacks
@@ -16,6 +16,8 @@ extern "C" char *__cdecl strcpy(char *destination, const char *source);
 
 #include "ascii_string.h"
 #include "unicode_string.h"
+#include "Common/BfmeAudioEventPrefix136.h"
+#include "GameLogicObjectLookupView.h"
 
 // An award (0x40 bytes): its name and description labels and image name.
 struct BfmePod40
@@ -109,6 +111,140 @@ public:
 };
 void Rva00433D3CClear();
 
+// TheAudio: vslot 35 stops the given audio kinds, vslot 25 plays an
+// event and vslot 78 answers the misc audio (the continue click is its
+// +0x9C reference), as AptMainMenuCallbacks.cpp's view.
+struct AptTimeLineMiscAudio
+{
+	unsigned char m_pad00[0x9C];
+	OpaqueRefElement4 m_continue; // +0x9C
+};
+
+class AptTimeLineAudioView
+{
+public:
+#define V(n) virtual void pad##n();
+	V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9)
+	V(10) V(11) V(12) V(13) V(14) V(15) V(16) V(17) V(18) V(19)
+	V(20) V(21) V(22) V(23) V(24)
+	virtual void addAudioEvent(const BfmeAudioEventPrefix136 *event);
+	V(26) V(27) V(28) V(29)
+	V(30) V(31) V(32) V(33) V(34)
+	virtual void stopAudio(int a, int b, int c);
+	V(36) V(37) V(38) V(39)
+	V(40) V(41) V(42) V(43) V(44) V(45) V(46) V(47) V(48) V(49)
+	V(50) V(51) V(52) V(53) V(54) V(55) V(56) V(57) V(58) V(59)
+	V(60) V(61) V(62) V(63) V(64) V(65) V(66) V(67) V(68) V(69)
+	V(70) V(71) V(72) V(73) V(74) V(75) V(76) V(77)
+#undef V
+	virtual AptTimeLineMiscAudio *getMiscAudio();
+};
+
+class AudioManager;
+extern AudioManager *TheAudio;
+
+// The event's +0x49 flag is set through the rowed Weapon::setLeechRangeActive
+// body it folds with (as Rva0043A278Slot2.cpp's Weapon-cast).
+class Weapon
+{
+public:
+	void setLeechRangeActive(bool value);
+};
+
+// The score screen the time line belongs to (0x00E0491C); its +0x284 says
+// how the game ended.
+struct AptTimeLineScoreScreen
+{
+	unsigned char m_pad000[0x284];
+	int m_mode; // +0x284
+};
+
+class Rva005202C8 { public: static Rva005202C8 *s_instance; };
+
+// TheLivingWorldLogic (0x00DFEF10): the pinned 0x002B3740 and rowed
+// 0x002B3753 queries.
+class Rva002BA8F1Logic
+{
+public:
+	bool rva002B3740();
+};
+
+class Rva002B3753
+{
+public:
+	int rva002B3753();
+};
+
+class LivingWorldLogic;
+extern LivingWorldLogic *TheLivingWorldLogic;
+
+// The main menu (OpaqueScalarDeletingDtorsB12.cpp's g_Va00E048DC); its
+// verified 0x005158A7 picks the credits menu.
+class AptMainMenu
+{
+public:
+	void rva005158A7();
+};
+
+extern int g_Va00E048DC;
+
+extern GameLogic *TheGameLogic;
+
+// TheShell (the ledger's g_Va00A01E48): +0x54.
+struct AptTimeLineShell
+{
+	unsigned char m_pad00[0x54];
+	bool m_54; // +0x54
+};
+
+class Shell;
+extern Shell *TheShell;
+
+class Rva00222479ByteOneSetter
+{
+public:
+	void enable();
+};
+
+class Rva00222A8BTarget
+{
+public:
+	void rva00222F55(bool value);
+};
+
+
+
+class Mouse
+{
+private:
+	void commitPendingCursor();
+    friend class AptTimeLine;
+};
+
+extern Mouse *TheMouse;
+
+// A counted callback holder (Rva00080221Ctor.cpp's view); the verified
+// 0x003FE7E6 registers one and answers its id through the pointer, and
+// 0x003FEC05 is the callback registered here (both pinned by address).
+struct TargetRef00217D4C { virtual void *destroy(unsigned flags); int references; };
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
+class Rva00211E75
+{
+public:
+	Rva00211E75(const int *arg);
+    Rva00211E75(const Rva00211E75 &other) : m_impl(other.m_impl) { if(m_impl) ++m_impl->references; }
+    ~Rva00211E75() { if(m_impl) ReleaseTreeHintRef00217D4C(m_impl); }
+
+private:
+	TargetRef00217D4C *m_impl;
+};
+
+class Rva00211E75Callback : public Rva00211E75 { public: Rva00211E75Callback(const int*p) : Rva00211E75(p) {} };
+bool __cdecl Rva003FE7E6(Rva00211E75Callback callback, int *id);
+int __cdecl Rva003FEC05FadeScreenRegionToMapBlack(int,bool);
+
+extern int g_00E02EC4;
+
 class AptTimeLine
 {
 public:
@@ -121,7 +257,7 @@ public:
 	void CaHAwardNumber(const char *value);
  void rva0051FA13();
 
-	// Unrowed 0x0051ED7E (345 bytes), pinned by address.
+	// Retail 0x0051ED7E (345 bytes), the continue action shared by two callbacks.
 	void rva0051ED7E();
 
 private:
@@ -222,4 +358,54 @@ void AptTimeLine::rva0051FA13() {
   key.format("TimeLine:PlayerFactionIcon:%d",row-m_players.begin());
   m_images.rva00524767(key,"AptIcon"+row->m_faction);
  }
+}
+
+// Retail 0x0051ED7E..0x0051EED7, 345 bytes. WB 0x013DB7C0 supplies
+// the menu/transition/score-mode structure; retail decides branch polarity.
+// Keep both Living World predicates positive and the enable calls in their
+// own branches: MSVC shares the early enable block before the transition.
+void AptTimeLine::rva0051ED7E()
+{
+    if (Rva005202C8::s_instance)
+    {
+        ((AptTimeLineAudioView *)TheAudio)->stopAudio(2, 1, 0);
+        if (((AptTimeLineScoreScreen *)Rva005202C8::s_instance)->m_mode == 8)
+        {
+            if (((Rva002BA8F1Logic *)TheLivingWorldLogic)->rva002B3740())
+            {
+                if (g_Va00E048DC)
+                    ((AptMainMenu *)g_Va00E048DC)->rva005158A7();
+                ((Rva00222479ByteOneSetter *)g_bfmeAptWindowManager)->enable();
+            }
+            else
+            {
+                if ((char)((Rva002B3753 *)TheLivingWorldLogic)->rva002B3753())
+                {
+                    ((Rva00222479ByteOneSetter *)g_bfmeAptWindowManager)->enable();
+                }
+                else
+                {
+                    TheGameLogic->TransitionFromLivingWorldTacticalBattle();
+                    ((AptTimeLineShell *)TheShell)->m_54 = true;
+                    ((Rva00222479ByteOneSetter *)g_bfmeAptWindowManager)->enable();
+                    TheMouse->commitPendingCursor();
+                    ((Rva00222A8BTarget *)g_bfmeAptWindowManager)->rva00222F55(true);
+                    int callback = (int)Rva003FEC05FadeScreenRegionToMapBlack;
+                    Rva003FE7E6(Rva00211E75Callback(&callback), &g_00E02EC4);
+                }
+            }
+        }
+        else if (((AptTimeLineScoreScreen *)Rva005202C8::s_instance)->m_mode == 1)
+        {
+            ((AptTimeLineShell *)TheShell)->m_54 = true;
+            ((Rva00222479ByteOneSetter *)g_bfmeAptWindowManager)->enable();
+        }
+        else
+        {
+            BfmeAudioEventPrefix136 click(((AptTimeLineAudioView *)TheAudio)->getMiscAudio()->m_continue, 2);
+            ((Weapon *)&click)->setLeechRangeActive(true);
+            ((AptTimeLineAudioView *)TheAudio)->addAudioEvent(&click);
+            ((Rva00222479ByteOneSetter *)g_bfmeAptWindowManager)->enable();
+        }
+    }
 }

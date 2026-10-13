@@ -102,6 +102,7 @@ public:
 	const AsciiString *rva0023D06A(int value);	// 0x0023D06A, +0x184 army banner name by id
 	int rva0023D08B(int value);	// 0x0023D08B, existing +0x184 forwarder
 	void rva0023D0C2(Object *obj, int handle);	// 0x0023D0C2
+	void TransitionFromLivingWorldTacticalBattle(); // 0x0023D0CD; timeline continue callback
 	Object *getFirstObject();	// 0x0023CAD2
 	int rva0023CAD9();	// 0x0023CAD9, next ObjectID for Object::Object 0x00298EA9
 	void registerObject(Object *obj);	// 0x00242AE9, called by Object::Object 0x00298EA9
