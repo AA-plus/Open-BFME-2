@@ -1,4 +1,6 @@
 // _AnyRatioFrameScale
+// partial score=0.97 date=2026-10-13
+// _AnyRatioFrameScale
 // partial score=0.96 date=2026-10-13
 // _AnyRatioFrameScale
 // partial score=0.96 date=2026-10-12
@@ -6,6 +8,7 @@
 // Clean room: reverse/vp6_cleanroom/specs/001baf30.md plus retail only.
 // No decoder source was consulted.
 #include <string.h>
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 struct Rva009AA260Context;
 extern "C" int __cdecl AnyRatio_2D_Scale(Rva009AA260Context *, const unsigned char *, int, unsigned, unsigned, unsigned char *, unsigned, unsigned, unsigned);
 
@@ -37,7 +40,7 @@ struct Vp6AnyRatioYUVConfig
 extern "C" int AnyRatioFrameScale(Vp6AnyRatioPostProc *pp, unsigned char *frame, Vp6AnyRatioYUVConfig *config, int yOffset, int uvOffset)
 {
 	int destWidth = pp->expandedWidth;
-	int sourceWidth = (pp->expandedWidth * pp->hRatio + (pp->hScale - 1)) / pp->hScale;
+	int sourceWidth = (pp->expandedWidth * __vref(pp->hRatio) + (pp->hScale - 1)) / pp->hScale;
 	int destHeight = pp->expandedHeight;
 	int sourceHeight = (pp->expandedHeight * pp->vRatio + (pp->vScale - 1)) / pp->vScale;
 	int paddedWidth;
