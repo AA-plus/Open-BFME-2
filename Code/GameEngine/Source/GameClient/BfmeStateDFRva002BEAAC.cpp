@@ -1,11 +1,11 @@
 // cl: /O1 /arch:SSE /G7
 // ?rva002BEAAC@BfmeStateDF@@QAEMMMM@Z, retail 0x002BEAAC, 33 bytes.
 // Evidence: unlock caller 0x002BECBA, pin callee Curve 0x00504BA9
-// ?rva00504BA9@Rva00504BA9Curve@@QAEMM@Z, same BfmeStateDF curve +0x28
+// ?rva00504BA9@FCurve@@QAEMM@Z, same BfmeStateDF curve +0x28
 // and single-lerp x87 shape as BfmeStateDF::interpolate in
 // LivingWorldPairInterpolate.cpp (which needs /Oy- for its EBP frame;
 // this frameless 33B leaf needs no /Oy-).
-class Rva00504BA9Curve
+class FCurve
 {
 public:
     float rva00504BA9(float progress);
@@ -24,7 +24,7 @@ public:
                     BfmeStateDFVector3 *result, float progress);
 private:
     unsigned char prefix28[0x28];
-    Rva00504BA9Curve curve;
+    FCurve curve;
 };
 
 // ?rva002BEAAC@BfmeStateDF@@QAEMMMM@Z
@@ -44,7 +44,7 @@ void BfmeStateDF::rva002BEACD(BfmeStateDFVector3 *from, BfmeStateDFVector3 *to,
                              BfmeStateDFVector3 *result, float progress)
 {
     float factor;
-    Rva00504BA9Curve *c = &curve;
+    FCurve *c = &curve;
     factor = c->rva00504BA9(progress);
     float start = from->x;
     result->x = (to->x - start) * factor + start;

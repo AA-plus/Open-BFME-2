@@ -7,7 +7,7 @@
 // curve receiver +28 and two calls to 00504BA9 (RET 4, x87 float result).
 struct Gen0060CBB0Pair { float first; float second; };
 
-class Rva00504BA9Curve
+class FCurve
 {
 public:
     float rva00504BA9(float progress);
@@ -20,14 +20,14 @@ public:
         Gen0060CBB0Pair *current, float progress);
 private:
     unsigned char prefix28[0x28];
-    Rva00504BA9Curve curve;
+    FCurve curve;
 };
 
 // ?interpolate@BfmeStateDF@@QAEXPAUGen0060CBB0Pair@@00M@Z
 void BfmeStateDF::interpolate(Gen0060CBB0Pair *from, Gen0060CBB0Pair *to,
     Gen0060CBB0Pair *current, float progress)
 {
-    Rva00504BA9Curve *c = &curve;
+    FCurve *c = &curve;
     float factor = c->rva00504BA9(progress);
     float start = from->first;
     current->first = (to->first - start) * factor + start;

@@ -12,7 +12,7 @@
 
 
 
-class Rva00504BA9Curve
+class FCurve
 {
 public:
 	float rva00504BA9(float v);
@@ -61,7 +61,7 @@ public:
 	int m_unused04;
 	AsciiString m_str08;
 	int m_color0C;
-	Rva00504BA9Curve m_curve10;
+	FCurve m_curve10;
 };
 
 class AudioManager0029E159

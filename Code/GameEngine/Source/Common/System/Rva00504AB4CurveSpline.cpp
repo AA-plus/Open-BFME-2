@@ -28,10 +28,10 @@ public:
     char unknown0E[2];
 };
 
-class Rva00504BA9Curve
+class FCurve
 {
 public:
-    float rva00504AB4(float time) const;
+    float eval(float time) const;
     float rva00504BA9(float time);
 private:
     int unknown00, unknown04;
@@ -40,7 +40,7 @@ private:
     mutable float coefficientA, coefficientB, coefficientC, coefficientD;
 };
 
-float Rva00504BA9Curve::rva00504AB4(float time) const
+float FCurve::eval(float time) const
 {
     Rva00504AB4Key *end = keys.end;
     Rva00504AB4Key *next = current + 1;
@@ -77,7 +77,7 @@ static __forceinline int curveRound(float value) {
     return rounded;
 }
 
-float Rva00504BA9Curve::rva00504BA9(float time)
+float FCurve::rva00504BA9(float time)
 {
     Rva00504AB4Key *first=keys.begin;
     Rva00504AB4Key *end=keys.end;
@@ -101,31 +101,31 @@ float Rva00504BA9Curve::rva00504BA9(float time)
             switch (unknown00) {
             case 0:return first->value;
             case 1:return (time+cycles*period-firstTime)*first->tangentIn+first->value;
-            case 2:return rva00504AB4(time);
+            case 2:return eval(time);
             case 3: {
                 float firstValue=first->value;
                 float delta=last->value-firstValue;
-                return rva00504AB4(time)+cycles*delta+firstValue;
+                return eval(time)+cycles*delta+firstValue;
             }
             case 4:
-                if (time!=firstTime && (cycles&1)) return rva00504AB4(lastTime-time);
-                return rva00504AB4(time);
+                if (time!=firstTime && (cycles&1)) return eval(lastTime-time);
+                return eval(time);
             }
         } else if (cycles>0) {
             switch (unknown04) {
             case 0:return last->value;
             case 1:return (time+(cycles-1)*period-firstTime)*last->tangentOut+last->value;
-            case 2:return rva00504AB4(time);
+            case 2:return eval(time);
             case 3: {
                 float lastValue=last->value;
                 float delta=lastValue-first->value;
-                return rva00504AB4(time)+cycles*delta+lastValue;
+                return eval(time)+cycles*delta+lastValue;
             }
             case 4:
-                if (time!=firstTime && (cycles&1)) return rva00504AB4(lastTime-time);
-                return rva00504AB4(time);
+                if (time!=firstTime && (cycles&1)) return eval(lastTime-time);
+                return eval(time);
             }
         }
     }
-    return rva00504AB4(time);
+    return eval(time);
 }
