@@ -1,5 +1,9 @@
 // ?rva001E4015@Rva001E46E1@@QAE_NPAVObject@@PBUCoord3D@@@Z
-// partial score=0.8788606726 date=2026-10-09
+// partial score=0.88 date=2026-10-09
+// W7-MP5 r3: swapping the two multiply statements improves nd9->8; the XMM0/XMM1
+// numbering of the whole dot chain stays inverted (retail first temp xmm0, ours
+// xmm1); named x/y, swapped decls, accumulator, compound-assign and reference
+// forms all inert at nd9.
 // cl: /ICode/Libraries/Include /O1 /DNDEBUG /MD /arch:SSE /G7
 // Native1E4015..1E4073 RET8 complete94; Path365E98 call proves entry
 // receiver plus Object*/destination pointer and AL Bool. Only settings mode74
@@ -23,7 +27,7 @@ Bool Rva001E46E1::rva001E4015(Object *obj,const Coord3D *dest)
   if(entry->settings->flagD8) {
    Coord3D direction;((const Thing *)obj)->getUnitDirectionVector2D(direction);
    const Coord3D *pos=&((const Direction4015Object *)obj)->pos;
-   float x=dest->x-pos->x;float y=dest->y-pos->y;direction.x*=x;direction.y*=y;float dot=direction.y+direction.x;
+   float x=dest->x-pos->x;float y=dest->y-pos->y;direction.y*=y;direction.x*=x;float dot=direction.y+direction.x;
    if(dot<0.0f)return true;
   }
  }

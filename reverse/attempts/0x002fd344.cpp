@@ -1,5 +1,7 @@
 // ?FindPath@Pathfinder@@QAEPAVPath@@PAVObject@@ABVLocomotorSet@@PBUCoord3D@@2PA_N@Z
 // partial score=0.99 date=2026-10-13
+// ?FindPath@Pathfinder@@QAEPAVPath@@PAVObject@@ABVLocomotorSet@@PBUCoord3D@@2PA_N@Z
+// partial score=0.99 date=2026-10-13
 // Home TU: Code/GameEngine/Source/GameLogic/Pathfinder/pathfinder.cpp (its own
 // // cl: line). This bank is a patch fragment against master 506dfa240e, not a
 // standalone TU (the full TU exceeds the 64 KiB stash limit). Apply:
@@ -10,15 +12,22 @@
 //  3. class Pathfinder, after InternalFindPath:
 //       Path *FindPath(Object *,const LocomotorSet &,const Coord3D *,const Coord3D *,Bool *);
 //  4. Insert the code below right after Pathfinder::InternalFindPath's body.
-// Result under explain_mismatch: 781 bytes, 3 diffs left:
+// W7-MP5 r3: the erase no longer needs a pin. Replacing the inlined
+// m_1C1CC.clear() with a call through a distinct 12-byte view type
+// `struct Gen_p12pod { int words[3]; }` makes _STL::vector<Gen_p12pod>::erase
+// compile in this unit (same 3-pointer layout) and the REL32 resolves by that
+// mangled name to the rowed ICF body 0x002A133B. Add the Gen_p12pod struct at
+// file scope in the inserted block and clear via:
+//   { _STL::vector<Gen_p12pod> *hops = reinterpret_cast<_STL::vector<Gen_p12pod> *>(&m_1C1CC);
+//     hops->erase(hops->begin(), hops->end()); }
+// Result under explain_mismatch: 781 bytes, 2 diffs left:
 //  - 2fd505/2fd50a loop-latch reloads of the scaled delta: retail reloads
 //    y (xmm2,[ebp-0x20]) before x (xmm1,[ebp-0x24]); ours x then y. Tried and
 //    no better: explicit sub/scale, while loop, Bool local, scale local, delta
 //    at function scope, derived Coord3D with inline set/sub/scale, every sub and
-//    scale permutation (9..13 diffs), direct GetLength, explicit delta init.
-//  - 2fd568 erase of the 12-byte Rva002F35AFHop vector resolves to retail's
-//    ICF-shared 0x002A133B only through a fold-proof pin (see the 0x002DF89B
-//    push_back precedent in reverse/symbols.csv; tools/pin_admission.py --add).
+//    scale permutation (9..13 diffs), direct GetLength, explicit delta init,
+//    loop-body y-first explicit subs, S2 carriers on the loop/break conditions
+//    (add bytes), step/increment forms. The latch load order is the scheduler's.
 // Key fix (20 -> 3 diffs): the in-TU noinline inline Coord3D::length,
 // GetLength and Normalize. Without their bodies cl 7.1 under /EHsc keeps
 // delta's and destination's slots apart (frame 0x24, not 0x18) and swaps
@@ -26,6 +35,9 @@
 // packs the slots but breaks EH-state order (61 diffs). The inner block
 // around the handle packs it into the dead rawTo slot [ebp+0x14] (45 without).
 // Coord3D::sub and Coord3D::scale as Zero Hour's header defines them inline.
+// The 12-byte hop record view whose erase mangles to the ICF-shared
+// vector<Gen_p12pod>::erase body at 0x002A133B.
+struct Gen_p12pod { int words[3]; };
 static __forceinline void subCoord3D(Coord3D *dst, const Coord3D *a)
 {
 	dst->x -= a->x;
@@ -96,7 +108,10 @@ Path *Pathfinder::FindPath(Object *obj, const LocomotorSet &locos, const Coord3D
 			if (QuickDoesPathExist(obj, from, &adjusted, 0)) break;
 		}
 	}
-	m_1C1CC.clear(); m_zoneManager.rva005312BE();
+	{
+		_STL::vector<Gen_p12pod> *hops = reinterpret_cast<_STL::vector<Gen_p12pod> *>(&m_1C1CC);
+		hops->erase(hops->begin(), hops->end());
+	} m_zoneManager.rva005312BE();
 	m_srcMineshaft = 0; m_destMineshaft = 0;
 	{
 	Coord3D destination; copyCoord3D(&destination, &adjusted);
