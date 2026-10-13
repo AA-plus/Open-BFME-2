@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /MD /EHsc
 // Native5CFB35..5CFB81/76B, WB15B9FF0. The existing48B destructor
 // and C752EC scalar deleting destructor establish the address-derived
