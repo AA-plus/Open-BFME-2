@@ -21,6 +21,9 @@
 #include "StringInline.h"
 #include "Common/LatchRestore.h"
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 typedef float Real;
 
 extern "C" float __cdecl sinf(float);
@@ -383,38 +386,36 @@ void ScriptEngine::setFade(ScriptAction *pAction)
     m_fadeActive = true;
 }
 
-// ?updateFades@ScriptEngine@@IAEXXZ present-unmatched
+// ZH updateFades semantics; retail 2036CC..203777 adds the fadeActive clear.
+// Codegen: the increase-frames member is read through a volatile view right
+// after the frame counter is bumped (before it is read back), a compiler barrier
+// follows the first factor, and the fade endpoints go through a base pointer so
+// the interpolation reads the endpoint once.
 void ScriptEngine::updateFades(void)
 {
-	int *frame = &m_curFadeFrame;
-	int increase = m_fadeFramesIncrease;
-	++*frame;
-	int fade = *frame;
-	m_fadeActive = false;
-	float factor;
-	if (fade <= increase)
-	{
-		factor = (float)fade / increase;
-		m_curFadeValue = m_minFade + factor * (m_maxFade - m_minFade);
-		return;
-	}
-	fade -= increase;
-	if (fade <= m_fadeFramesHold)
-	{
-		m_curFadeValue = m_maxFade;
-		return;
-	}
-	fade -= m_fadeFramesHold;
-	if (fade <= m_fadeFramesDecrease)
-	{
-		int divisor = m_fadeFramesDecrease + 1;
-		if (divisor == 0)
-			divisor = 1;
-		factor = (float)fade / divisor;
-		m_curFadeValue = m_maxFade + factor * (m_minFade - m_maxFade);
-		return;
-	}
-	m_fade = FADE_NONE;
+ ++m_curFadeFrame;
+ int increase=*(const volatile int*)&m_fadeFramesIncrease;
+ int fade=m_curFadeFrame;
+ m_fadeActive=false;
+ if(fade<=increase){
+  float factor=(float)fade/increase;
+  _ReadWriteBarrier();
+  float *base=&m_minFade;
+  m_curFadeValue=*base+factor*(m_maxFade-*base);
+  return;
+ }
+ fade-=increase;
+ if(fade<=m_fadeFramesHold){m_curFadeValue=m_maxFade;return;}
+ fade-=m_fadeFramesHold;
+ if(fade<=m_fadeFramesDecrease){
+  int divisor=m_fadeFramesDecrease+1;
+  if(!divisor)divisor=1;
+  float factor=(float)fade/divisor;
+  float *base=&m_maxFade;
+  m_curFadeValue=*base+factor*(m_minFade-*base);
+  return;
+ }
+ m_fade=FADE_NONE;
 }
 
 // Retail 207557..2075EE, 151B including its post-RET chain append block.
