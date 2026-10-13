@@ -1,4 +1,6 @@
 // ?mapLogicalHandleToPhysicalHandle@MilesAudioManager@@QAEXII@Z
+// partial score=0.7831 date=2026-10-13
+// ?mapLogicalHandleToPhysicalHandle@MilesAudioManager@@QAEXII@Z
 // partial score=0.94 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
