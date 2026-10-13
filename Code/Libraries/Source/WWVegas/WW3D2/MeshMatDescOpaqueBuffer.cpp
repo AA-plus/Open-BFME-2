@@ -11,6 +11,10 @@ inline void *operator new(unsigned int, void *p) { return p; }
 // independently establishes the 24-byte layout and vtables 0xBD3C8C/0xBD3CA4.
 #include "always.h"
 #include <string.h>
+// Retail's RefCountClass inline copies are the size form: compile refcount.h for size.
+#pragma optimize("s", on)
+#include <refcount.h>
+#pragma optimize("", on)
 #include <sharebuf.h>
 extern void __cdecl operator delete[](void *) throw();
 
@@ -20,6 +24,11 @@ ShareBufferClass<RefCountClass *>::~ShareBufferClass()
 {
     ::operator delete[](RawBuffer);
 }
+
+// The base copy constructor is rowed in sharebuf_refcount_pointer_copy_ctor.cpp (0x0015ACB0);
+// declared here so this unit calls that body instead of emitting a differing copy.
+template <>
+ShareBufferClass<RefCountClass *>::ShareBufferClass(const ShareBufferClass<RefCountClass *> &that);
 
 class OpaqueRefBuffer : public ShareBufferClass<RefCountClass *> {
 public:
