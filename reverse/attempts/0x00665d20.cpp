@@ -1,5 +1,3 @@
-// ?rva00665D20@Rva00665D20@@QAEXABVAsciiString@@0@Z
-// partial score=0.95 date=2026-10-13
 // ?rva007F97B0@Rva007FA2C0@@QAEXPAVRva007E8810Message@@PAURva007FA170Slot@@@Z
 // partial score=0.9812 date=2026-10-13
 // ?rva007F97B0@Rva007FA2C0@@QAEXPAVRva007E8810Message@@PAURva007FA170Slot@@@Z
@@ -196,42 +194,45 @@ class Rva007FA2C0
 void Rva007FA2C0::rva007F97B0( Rva007E8810Message *message, Rva007FA170Slot *slot )
 
 {
-	Gen007F0130 *record = slot->m_18;
-	if( record == 0 )
-	{
-		record = new Gen007F0130;
-		slot->m_18 = record;
-		record->m_total = m_hub->totalSize( message );
-		record->m_buffer = (unsigned char *)Gen007EFFC0()->alloc( record->m_total + 4, 1 );
-	}
-
-	char *text = (char *)Gen007EFFC0()->alloc( message->m_14, 0 );
-	unsigned textCapacity = message->m_14;
-	_ReadWriteBarrier();
-	message->getString("data", text, (int)textCapacity);
-	unsigned length = strlen( text );
-	if( length & 3 )
-		Rva007EB810Get()->fail( "(len & 0x3) == 0",
-			"\\views\\feslbuild_main\\jabba\\fesl\\source\\transactor.cpp", 0x13b );
-	unsigned decoded = length / 4 * 3;
-	if( !rva007FF250Decode( length, text, record->m_buffer + __vref(record->m_received) ) )
-		Rva007EB810Get()->fail( "result",
-			"\\views\\feslbuild_main\\jabba\\fesl\\source\\transactor.cpp", 0x13e );
-	record->m_received += decoded;
-	Gen007EFFC0()->release( text, 0 );
-
-	if( record->m_received >= record->m_total )
-	{
-		Rva00800E50Header header;
-		header.m_type = message->m_1C;
-		header.m_flags = message->m_20 & ~0x20000000;
-		_ReadWriteBarrier();
-		header.m_text = (const char *)__vref(record->m_buffer);
-		_ReadWriteBarrier();
-		header.m_textLength = record->m_total;
-		header.m_entry.m_field04 = message->m_04;
-		header.m_entry.m_field08 = message->m_08;
-		header.m_entry.m_field0c = message->m_0C;
-		((Rva007F9D00Handler *)((char *)this + 4))->receive( &header );
-	}
+ Gen007F0130 *record = slot->m_18;
+ if( record == 0 )
+ 
+ {
+  record = new Gen007F0130;
+  slot->m_18 = record;
+  record->m_total = m_hub->totalSize( message );
+  record->m_buffer = (unsigned char *)Gen007EFFC0()->alloc( record->m_total + 4, 1 );
+  
+ }
+ char *text = (char *)Gen007EFFC0()->alloc( message->m_14, 0 );
+ unsigned textCapacity = message->m_14;
+ _ReadWriteBarrier();
+ message->getString("data", text, (int)textCapacity);
+ unsigned length = strlen( text );
+ if( length & 3 )
+ Rva007EB810Get()->fail( "(len & 0x3) == 0",
+"\\views\\feslbuild_main\\jabba\\fesl\\source\\transactor.cpp", 0x13b );
+ unsigned decoded = length / 4 * 3;
+ if( !rva007FF250Decode( length, text, record->m_buffer + __vref(record->m_received) ) )
+ Rva007EB810Get()->fail( "result",
+"\\views\\feslbuild_main\\jabba\\fesl\\source\\transactor.cpp", 0x13e );
+ record->m_received += decoded;
+ Gen007EFFC0()->release( text, 0 );
+ if( record->m_received >= record->m_total )
+ 
+ {
+  Rva00800E50Header header;
+  header.m_type = message->m_1C;
+  header.m_flags = message->m_20 & ~0x20000000;
+  _ReadWriteBarrier();
+  header.m_text = (const char *)record->m_buffer;
+  _ReadWriteBarrier();
+  header.m_textLength = record->m_total;
+  header.m_entry.m_field04 = message->m_04;
+  header.m_entry.m_field08 = message->m_08;
+  header.m_entry.m_field0c = message->m_0C;
+  ((Rva007F9D00Handler *)((char *)this + 4))->receive( &header );
+  
+ }
+ 
 }
