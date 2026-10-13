@@ -39,12 +39,20 @@ public:
 	const char *separators;
 	static void Rva004B6481_ParseAnim(INI *, void *, void *, const void *);
 	const char *getNextToken(const char *seps);
-	static void Rva004DC702_ParseEmotionType(INI *ini, void *instance, void *store, const void *userData);
 	static void Rva004DC745_ParseAIState(INI *ini, void *instance, void *store, const void *userData);
 };
 
-// ?Rva004DC702_ParseEmotionType@INI@@SAXPAV1@PAX1PBX@Z
-void INI::Rva004DC702_ParseEmotionType(INI *ini, void *instance, void *store, const void *userData)
+// ?IniParseEmotionType@EmotionNuggetTemplate@@SAXPAVINI@@PAX1PBX@Z @0x004DC702 66B:
+// renamed from placeholder INI::Rva004DC702_ParseEmotionType — the WorldBuilder
+// twin names EmotionNuggetTemplate::IniParseEmotionType at EA's own
+// EmotionNugget.cpp (strings).
+class EmotionNuggetTemplate
+{
+public:
+	static void IniParseEmotionType(INI *ini, void *instance, void *store, const void *userData);
+};
+
+void EmotionNuggetTemplate::IniParseEmotionType(INI *ini, void *instance, void *store, const void *userData)
 {
 	const char *token = ini->getNextToken(0);
 	if (token != 0) {
