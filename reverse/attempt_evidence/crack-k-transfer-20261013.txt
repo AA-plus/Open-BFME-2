@@ -1,4 +1,24 @@
-Seat crack-k, 2026-10-13. Continuing partial; no matched row or production body.
+Seat crack-k, 2026-10-13. EXACT: 1032/1032 bytes, rowed in PlayerTransferAssets.cpp.
+
+Closure:
+- Visible Player::getTemplate() AND PlayerTemplateView::getTransferCategoryFlag()
+  together restore the entire frame/register allocation. Either alone does not.
+- Reload *itObjs after testStatus in the notification loop. Retaining the local
+  pointer adds a three-byte spill; the reload gives the native 1032-byte body.
+- Full raw COFF extent is 1032, all relocations resolved. Normal add_match gate
+  passes 3/3 plus all thirteen string literals. The typed const-Object list
+  node factory29B and insertion37B are verified ICF aliases of their existing
+  integer owners, with every relocation; they add zero unique bytes. This
+  closes the initial code-identity warning for insertion's unrecorded callee.
+  Frozen-source and new COMDAT
+  variant checks pass; placement finds no additional bodies.
+- link_check cannot preview this new unit in census 2c46f084e1. No LINKED claim.
+- BfmeConv831.cpp still names the old harvested BfmeLinkedObj::link pin for this
+  body. That file is held by w7-g1; no change to its source or existing pin.
+  Its eventual repair should call Player::transferAssetsFromThat(Player*, bool).
+  The new provider uses the native/WB identity and adds no pin.
+
+The following records the earlier partial and rejected hypotheses.
 
 Target facts:
 - Ghidra raw bytes and wb_show agree on 002AEA9F..002AEEA7, 1032 B, RET 8.

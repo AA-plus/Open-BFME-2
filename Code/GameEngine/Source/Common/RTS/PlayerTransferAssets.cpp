@@ -1,5 +1,3 @@
-// ?transferAssetsFromThat@Player@@QAEXPAV1@_N@Z
-// partial score=0.8538312106454437 date=2026-10-13
 // cl: /I. /ICode/GameEngine/Source/Common/RTS /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
@@ -17,17 +15,23 @@
 // kind-of 0x6D container takes the team instead; otherwise contain slots
 // 0x10/0x08/0x54 then setTeam and TheRadar remove/add) between a save and
 // restore of the +0x3BC member's +0x110 flag (setter 0x0039B780) with the
-// rowed 0x0039CBCE per object; the second list runs the rowed 0x0029A12B
+// verified ScoreKeeper::addObjectBuilt 0x0039CBCE per object; the second list runs the rowed 0x0029A12B
 // unless status 0x26; that player's completed upgrade mask (+0x13C) is
 // copied (0x0004548B) and every set bit but the thirteen faction and hero
 // choice upgrades is granted through the rowed addUpgrade 0x002AE329 with
 // status 2; then that player's money (+0x90) is withdrawn (0x003B0CB3) and
-// deposited here (0x003B0D7C); then the +0x60 score block's +0x18/+0x1C
+// deposited here (0x003B0D7C); then the +0x60 count view's +0x18/+0x1C
 // counts are added here with one bumped by that player's +0x34 +0x1BC flag.
 // Donor (Zero Hour Player::transferAssetsFromThat): the team walk, the
 // collect-then-setTeam split and the money transfer. The caller 0x003BB667
 // (pinned ?bfmeLinkObjectsA70) is ScriptActions' transfer-assets action.
 
+// Exact 1032B including EH prologue and RET8. WB C19050 supplies
+// condition order and scopes; BF1 donor cee35b7d8c supplies the ZH lead.
+// Visible template-plus-flag accessors restore the whole-function register
+// allocation. Reload the notification iterator after testStatus, as retail
+// does; retaining the pre-call pointer adds a spill. The +60 count-view
+// identity and +1BC category semantics remain structural inferences.
 #include "ascii_string.h"
 #include "PlayerUpgradeStatus.h"
 #include <list>
@@ -152,6 +156,9 @@ public:
 	virtual void slot21(Team *team); // slot 0x54
 };
 
+// Object::rva00290DBB's two player views.
+struct Rva002A9B58;
+
 class Object
 {
 public:
@@ -260,6 +267,7 @@ class PlayerTemplateView
 public:
 	unsigned char m_pad[0x1BC];
 	Bool m_1BC;
+	Bool getTransferCategoryFlag() const { return m_1BC; }
 };
 
 class PlayerTransferCountsView
@@ -287,15 +295,16 @@ class Player
 public:
 	void transferAssetsFromThat(Player *that, Bool flag);
 	Upgrade *rva002AE329(const UpgradeTemplate *upgradeTemplate, UpgradeStatusType status, Int x);
+	PlayerTemplateView *getTemplate() const { return m_playerTemplate; }
 	Team *getDefaultTeam() const { return m_defaultTeam; }
-	PlayerTransferCountsView *getTransferCounts() { return &m_scoreKeeper; }
+	PlayerTransferCountsView *getTransferCounts() { return &m_transferCounts; }
 	Rva003B0D7C *getMoney() { return &m_money; }
 
 private:
 	unsigned char m_pad00[0x34];
 	PlayerTemplateView *m_playerTemplate; // +0x34
 	unsigned char m_pad38[0x60 - 0x38];
-	PlayerTransferCountsView m_scoreKeeper; // +0x60
+	PlayerTransferCountsView m_transferCounts; // +0x60
 	unsigned char m_pad80[0x90 - 0x80];
 	Rva003B0D7C m_money; // +0x90
 	unsigned char m_pad98[0x13C - 0x98];
@@ -340,8 +349,8 @@ void Player::transferAssetsFromThat(Player *that, Bool flag)
 		}
 	}
 
-	ScoreKeeper*scoring=&m_3BC;
- Bool wasEnabled=scoring->isEnabled();
+	ScoreKeeper *scoring = &m_3BC;
+	Bool wasEnabled = scoring->isEnabled();
 	scoring->setEnabled(false);
 	for (_STL::list<const Object *>::iterator itObjs = objsToTransfer.begin(); itObjs != objsToTransfer.end(); ++itObjs)
 	{
@@ -372,10 +381,10 @@ void Player::transferAssetsFromThat(Player *that, Bool flag)
 
 	for (itObjs = objsToNotify.begin(); itObjs != objsToNotify.end(); ++itObjs)
 	{
-		Object*obj=const_cast<Object*>(*itObjs);
-		if(!obj)continue;
-		if(obj->testStatus((ObjectStatusTypes)0x26))continue;
-		obj->rva0029A12B();
+		const Object *obj = *itObjs;
+		if (!obj) continue;
+		if (obj->testStatus((ObjectStatusTypes)0x26)) continue;
+		const_cast<Object *>(*itObjs)->rva0029A12B();
 	}
 
 	BfmeFixedStorage128 upgrades(that->m_upgradesCompleted);
@@ -415,7 +424,7 @@ void Player::transferAssetsFromThat(Player *that, Bool flag)
 		{
 			Int a = that->getTransferCounts()->m_18;
 			Int b = that->getTransferCounts()->m_1C;
-			if (that->m_playerTemplate->m_1BC)
+			if (that->getTemplate()->getTransferCategoryFlag())
 				++b;
 			else
 				++a;
