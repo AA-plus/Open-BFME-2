@@ -87393,3 +87393,4 @@ __ehhandler$?rva00278190@Drawable@@QAE?AVRva0036CA00Str@@XZ,,0x00773516,10,Code/
 ?compareRva005803C0@Rva000795C1Record@@QBE_NPAX0@Z,,0x005803C0,619,Code/GameEngine/Source/GameClient/GUI/Rva005803C0Compare.cpp,matched,
 ?rva004467AC@AptLanLobby@@AAE_NXZ,,0x004467AC,549,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptLanLobbyRva004467AC.cpp,matched,
 ?rva000E49B8@Rva000E48BC@@QAEHH@Z,,0x000E49B8,541,Code/GameEngine/Source/Common/Rva000E48BC.cpp,matched,
+?Rva006D1520@@YAXVRva006D07E0Key@@@Z,,0x006D1520,144,Code/Libraries/Source/Apt/Rva006D1680.cpp,matched,Apt counted-owner publish 6D1520: linker lookup 6D1450 (pinned) then playback 6D0930 when E176D4; string arg is a named local so the lea lands between the 3 and 1 pushes

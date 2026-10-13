@@ -54,3 +54,19 @@ void __stdcall Rva006D1600(Rva006D07E0Key key)
 {
  Rva006D1520(key);
 }
+
+// Native6D1520..6D15B0 RET0 consumes the four-byte counted owner and publishes
+// it to the Apt linker global E176F8 through the rowed lookup 6D1450; when the
+// E176D4 flag is set, the playback cell E176EC records (name,1,3,2) through the
+// rowed 6D0930 (row spelled under its Rva006CE660Vec owner). Retail materialises
+// the string argument's lea between the 3 and 1 argument pushes, so the address
+// is a named local.
+class AptLinker {public:void *rva006D1450(Rva006D07E0Key);};
+extern AptLinker *g_bfmeAptLinkerAtE176F8;
+extern int g_bfmeAptFlagAtE176D4;
+class Rva006CE660Vec {public:void rva006D0930(const EAStringC *,int,int,int);};
+extern Rva006CE660Vec *g_aptPlaybackCheckpoints;
+void Rva006D1520(Rva006D07E0Key key){
+ g_bfmeAptLinkerAtE176F8->rva006D1450(key);
+ if(g_bfmeAptFlagAtE176D4){const EAStringC *name8=&key.m_object->name8;((Rva006CE660Vec *)g_aptPlaybackCheckpoints)->rva006D0930(name8,1,3,2);}
+}

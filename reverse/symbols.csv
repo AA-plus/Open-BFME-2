@@ -17240,3 +17240,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva00272FB6@Drawable@@IAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z,0x00272FB6,callee of ?calcPhysicsXform@Drawable@@QAE_NAAUPhysicsXformInfo@1@@Z
 ?rva002814EF@TerrainLogic@@QAE_NABVVector3@@0PAV2@@Z,0x002814EF,callee of ?screenToTerrain@W3DView@@UAE_NPBUICoord2D@@PAUCoord3D@@_N@Z
 ?rva004693D9@Rva004693D9@@QAEXXZ,0x004693D9,callee of ?rva00474519@Rva00474431@@QAEXH@Z
+?rva006D1450@AptLinker@@QAEPAXVRva006D07E0Key@@@Z,0x006D1450,callee of ?Rva006D1520@@YAXVRva006D07E0Key@@@Z
