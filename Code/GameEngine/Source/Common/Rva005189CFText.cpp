@@ -86,7 +86,7 @@ class Rva00222A8BTarget
 {
 };
 extern Rva00222A8BTarget *TheRva00222A8BTarget;
-extern const char *g_00DB95F4[];
+extern const char *rva00202B6CNames[];
 class Rva005189CF
 {
 	char m_pad[0x310];
@@ -98,7 +98,7 @@ void Rva005189CF::rva005189CF()
 {
 	AsciiString key;
 	if (m_310 >= 0 && m_310 <= 5)
-		key.format("APT:MasterOption_%s", g_00DB95F4[m_310]);
+		key.format("APT:MasterOption_%s", rva00202B6CNames[m_310]);
 	UnicodeString u;
 	if (((StringBase<char> &)key).m_data != 0 && ((StringBase<char> &)key).m_data->length != 0)
 	{
@@ -109,5 +109,3 @@ void Rva005189CF::rva005189CF()
 	((StringBase<unsigned short> &)u).concat(TheGameText->fetch("APT:CannotChangeGraphics", 0));
 	((BfmeAptWindowManager *)TheRva00222A8BTarget)->bfmeSetText(AsciiString("APT:CannotChangeGraphics"), u, false);
 }
-// ?g_00DB95F4@@3PAPBDA: the global at VA 0xdb95f4 is ?rva00202B6CNames@@3PAPBDA.
-#pragma comment(linker, "/alternatename:?g_00DB95F4@@3PAPBDA=?rva00202B6CNames@@3PAPBDA")

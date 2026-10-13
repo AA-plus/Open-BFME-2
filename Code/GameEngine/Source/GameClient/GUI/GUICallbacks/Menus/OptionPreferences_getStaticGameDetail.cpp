@@ -50,7 +50,7 @@ typedef _STL::map<AsciiString, AsciiString> AsciiPreferenceMap;
 // Retail LOD level-name table (VeryLow, Low, Medium, High, UltraHigh,
 // Custom) at 0xDB95F4. COMMON merges across TUs; the address patches
 // from retail.
-extern const char *BfmeLODLevelNames[7];  // defined in OptionPreferences_setStaticGameLOD.cpp
+extern const char *rva00202B6CNames[7];  // defined in OptionPreferences_setStaticGameLOD.cpp
 
 struct Rva00DFE144Globals
 {
@@ -82,12 +82,12 @@ public:
 // ?getIdealStaticGameDetail@OptionPreferences@@QAEHXZ
 Int OptionPreferences::getIdealStaticGameDetail(void)
 {
-	return GetEnumValue("IdealStaticGameLOD", BfmeLODLevelNames, 6, -1);
+	return GetEnumValue("IdealStaticGameLOD", rva00202B6CNames, 6, -1);
 }
 
 // ?getStaticGameDetail@OptionPreferences@@QAEHXZ
 Int OptionPreferences::getStaticGameDetail(void)
 {
 	Int level = (*(Rva00DFE144Globals **)&TheGameLODManager)->m_staticLODLevel;
-	return GetEnumValue("StaticGameLOD", BfmeLODLevelNames, 6, level);
+	return GetEnumValue("StaticGameLOD", rva00202B6CNames, 6, level);
 }

@@ -75,7 +75,7 @@ void rva00201D3E(unsigned char value)
 	LODMeshCacheSetting = value;
 }
 
-// --- 0x00201DAA (26B): an INI field parser indexing BfmeLODLevelNames
+// --- 0x00201DAA (26B): an INI field parser indexing rva00202B6CNames
 // through the rowed INI::parseIndexList.
 class INI
 {
@@ -83,11 +83,11 @@ public:
 	static void parseIndexList(INI *ini, void *instance, void *store, const void *userData);
 };
 
-extern const char *BfmeLODLevelNames[];
+extern const char *rva00202B6CNames[];
 
 void rva00201DAA(INI *ini, void *instance, void *store, const void *userData)
 {
-	INI::parseIndexList(ini, instance, store, BfmeLODLevelNames);
+	INI::parseIndexList(ini, instance, store, rva00202B6CNames);
 }
 
 // --- 0x0020E312 (17B): the negation of the rowed 0x002E071E test.

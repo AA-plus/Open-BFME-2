@@ -248,7 +248,7 @@ extern int g_Va00A04908;
 extern const char *g_Va00DD15E0[];
 
 // The static LOD level names (VeryLow..Custom).
-extern const char *BfmeLODLevelNames[];
+extern const char *rva00202B6CNames[];
 
 struct BfmeEnumTableEntry
 {
@@ -459,7 +459,7 @@ AptOptions::AptOptions(void *context)
 			label = "APT:MasterOption0_Custom";
 		else
 			label.format("APT:MasterOption0_%d", level);
-		text.format("APT:MasterOption_%s", BfmeLODLevelNames[level]);
+		text.format("APT:MasterOption_%s", rva00202B6CNames[level]);
 		g_bfmeAptWindowManager->bfmeSetText(label, TheGameText->fetch(text, 0), false);
 	}
 	for (i = 0; i < 9; ++i)

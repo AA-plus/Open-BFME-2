@@ -5,7 +5,7 @@
 // 127 bytes. Dedicated TU.
 //
 // IdealStaticGameLOD twin of rva002E52FC: -1 erases the key via rowed
-// string-tree erase 0x002E4ED1, else writes BfmeLODLevelNames[val] through
+// string-tree erase 0x002E4ED1, else writes rva00202B6CNames[val] through
 // base-map subscript 0x002031FB plus StringBase::set 0x000055F5; key at
 // 0x804D1C, table at 0xDB95F4 shared with getStaticGameDetail.
 
@@ -41,7 +41,7 @@ template <> unsigned int _Rb_tree<AsciiString, pair<const AsciiString, AsciiStri
 
 // Retail LOD level-name table at 0xDB95F4, defined in
 // OptionPreferences_getStaticGameDetail.cpp; this TU only references it.
-extern const char *BfmeLODLevelNames[];
+extern const char *rva00202B6CNames[];
 
 class OptionPreferences : public AsciiPreferenceMap
 {
@@ -55,7 +55,7 @@ void OptionPreferences::rva002E537B(Int val)
 	if (val != -1) {
 		AsciiString key("IdealStaticGameLOD");
 		// Retail loads the name before the map call and retains it in EDI.
-		const char *levelName = BfmeLODLevelNames[val];
+		const char *levelName = rva00202B6CNames[val];
 		AsciiString &value = (*this)[key];
 		value.set(levelName);
 	} else {

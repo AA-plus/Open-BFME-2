@@ -99,7 +99,6 @@ address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00E030C0	2
 address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00E030D8	2
 address_global	Code/GameEngine/Source/Common/Glo012F1024Entry_bfmeStep_Rva005669c2.cpp	g_Rva0060D5E0	1
 address_global	Code/GameEngine/Source/Common/Glo012F1024Entry_bfmeStep_Rva005669c2.cpp	g_Rva0060D620	1
-address_global	Code/GameEngine/Source/Common/GlobalArrayIndexGetters.cpp	g_Va00DB5F30	2
 address_global	Code/GameEngine/Source/Common/GlobalByteFlagSetters.cpp	g_Va00E0302C	2
 address_global	Code/GameEngine/Source/Common/GlobalByteFlagSetters.cpp	g_Va00E1770C	2
 address_global	Code/GameEngine/Source/Common/GlobalByteGetters.cpp	g_Va00DB5F7D	3
@@ -2993,7 +2992,6 @@ alternatename	Code/GameEngine/Source/Common/Rva0050E9D3Enable.cpp	?g_Va00E046B4@
 alternatename	Code/GameEngine/Source/Common/Rva0051318EVotes.cpp	?g_Va007C9260@@3QBGB	1
 alternatename	Code/GameEngine/Source/Common/Rva005183A0Finish.cpp	??1OptionPreferences@@UAE@XZ	1
 alternatename	Code/GameEngine/Source/Common/Rva005189CFText.cpp	??1?$StringBase@D@@QAE@XZ	1
-alternatename	Code/GameEngine/Source/Common/Rva005189CFText.cpp	?g_00DB95F4@@3PAPBDA	1
 alternatename	Code/GameEngine/Source/Common/Rva0051AF0BEnable.cpp	?g_Va00A04910@@3PAUGlobalA04910@@A	1
 alternatename	Code/GameEngine/Source/Common/Rva0051BED7Poll.cpp	?rva0051B09B@Rva0051BED7@@QAEXXZ	1
 alternatename	Code/GameEngine/Source/Common/Rva005279DDFinish.cpp	?rva005CB260@Rva005CB260@@QAEHH@Z	1

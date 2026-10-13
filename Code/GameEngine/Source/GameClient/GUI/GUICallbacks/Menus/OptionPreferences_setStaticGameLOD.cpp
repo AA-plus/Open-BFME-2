@@ -41,7 +41,8 @@ template <> AsciiString &map<AsciiString, AsciiString, less<AsciiString>, alloca
 template <> unsigned int _Rb_tree<AsciiString, pair<const AsciiString, AsciiString>, _Select1st<pair<const AsciiString, AsciiString> >, less<AsciiString>, allocator<pair<const AsciiString, AsciiString> > >::erase(const AsciiString &key);
 }
 
-const char *BfmeLODLevelNames[7];
+// 0x009B95F4 is the LOD name table defined in Rva00202B6CGet.cpp.
+extern const char *rva00202B6CNames[];
 
 class OptionPreferences : public AsciiPreferenceMap
 {
@@ -55,7 +56,7 @@ void OptionPreferences::rva002E52FC(int index)
 	if (index != -1) {
 		AsciiString key("StaticGameLOD");
 		// Retail retains the name in EDI across the map lookup.
-		const char *levelName = BfmeLODLevelNames[index];
+		const char *levelName = rva00202B6CNames[index];
 		AsciiString &value = (*this)[key];
 		value.set(levelName);
 	} else {
