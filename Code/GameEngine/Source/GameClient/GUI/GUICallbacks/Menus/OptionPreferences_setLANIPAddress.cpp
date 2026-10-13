@@ -59,9 +59,21 @@ public:
 // ?setLANIPAddress@OptionPreferences@@QAEXVAsciiString@@@Z, retail
 // 0x002E505A (97 bytes), directly before the unsigned overload: ZH's
 // string overload, verbatim.
-void OptionPreferences::setLANIPAddress(AsciiString IP)
+// Select-any like the OptionsMenu.cpp copy (this retail body comes first in
+// link order, so it is the copy the link keeps); the anchor keeps the noinline
+// body emitted.
+inline __declspec(noinline) void OptionPreferences::setLANIPAddress(AsciiString IP)
 {
 	(*this)["IPAddress"] = IP;
+}
+
+// Retain the inline bodies' ledger emission without changing their callers.
+// ?bfmeEmitOptionPreferencesSetIP@@YAXPAVOptionPreferences@@@Z absent-from-retail
+void bfmeEmitOptionPreferencesSetIP(OptionPreferences *p)
+{
+	AsciiString empty;
+	p->OptionPreferences::setLANIPAddress(empty);
+	p->OptionPreferences::setOnlineIPAddress(empty);
 }
 
 // ?setLANIPAddress@OptionPreferences@@QAEXI@Z
@@ -78,7 +90,8 @@ void OptionPreferences::setLANIPAddress(unsigned int ip)
 // ?setOnlineIPAddress@OptionPreferences@@QAEXVAsciiString@@@Z, retail
 // 0x002E520C (97 bytes), directly before the unsigned overload: ZH's
 // string overload, verbatim.
-void OptionPreferences::setOnlineIPAddress(AsciiString IP)
+// Select-any, as setLANIPAddress above.
+inline __declspec(noinline) void OptionPreferences::setOnlineIPAddress(AsciiString IP)
 {
 	(*this)["GameSpyIPAddress"] = IP;
 }

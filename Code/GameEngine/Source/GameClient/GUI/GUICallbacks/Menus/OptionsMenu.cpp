@@ -256,7 +256,10 @@ enum Detail
 
 // OptionPreferences::getLANIPAddress: defined in OptionPreferences_getLANIPAddress.cpp (its row's unit).
 
-void OptionPreferences::setLANIPAddress( AsciiString IP )
+// Select-any: the identical retail body in
+// OptionPreferences_setLANIPAddress.cpp comes first in link order, so it is
+// the copy the link keeps.
+inline __declspec(noinline) void OptionPreferences::setLANIPAddress( AsciiString IP )
 {
 	(*this)["IPAddress"] = IP;
 }
@@ -280,7 +283,8 @@ UnsignedInt OptionPreferences::getOnlineIPAddress(void)
 	return TheGlobalData->m_defaultIP;
 }
 
-void OptionPreferences::setOnlineIPAddress( AsciiString IP )
+// Select-any, as setLANIPAddress above.
+inline __declspec(noinline) void OptionPreferences::setOnlineIPAddress( AsciiString IP )
 {
 	(*this)["GameSpyIPAddress"] = IP;
 }
