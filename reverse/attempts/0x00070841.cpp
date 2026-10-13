@@ -1,4 +1,8 @@
 // ?flushOccludedObjectsIntoStencil@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
+// partial score=0.9969 date=2026-10-13
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+// ?flushOccludedObjectsIntoStencil@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
 // partial score=0.9968 date=2026-10-10
 // ?flushOccludedObjectsIntoStencil@RTS3DScene@@IAEXAAVRenderInfoClass@@@Z
 // partial score=0.99 date=2026-10-10
@@ -309,6 +313,7 @@ void RTS3DScene::flushOccludedObjectsIntoStencil(RenderInfoClass &rinfo)
 				Int color = object->getControllingPlayer()->getPlayerColor();
 				RGB_To_HSV(hsv, Vector3(((color >> 16) & 0xff) / 255.0f, ((color >> 8) & 0xff) / 255.0f, (color & 0xff) / 255.0f));
 				hsv.Z *= TheWritableGlobalData->m_occludedLuminanceScale;
+				_ReadWriteBarrier();
 				HSV_To_RGB(rgb, hsv);
 				visiblePlayerColors[numVisiblePlayerColors++] = DX8Wrapper::Convert_Color(rgb, 0.5f);
 			}
