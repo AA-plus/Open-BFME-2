@@ -168,7 +168,23 @@ private:
     bool flag21;
 };
 
+class Rva003EF14A : public Rva003EF14ABase {
+    Rva003EE9F1Ref *ref04;
+    Rva004E2E58 container08;
+    AsciiString string18;
+    AsciiString string1C;
+    char unknown20[0x28];
+    Rva003EF14ASecondary *link48;
+    Rva003EF14ASecondary secondary4C;
+public:
+    virtual void slot0();
+    ~Rva003EF14A();
+    void rva003EE9F1();
+    void rva003EF1B8();
+};
 
+// ?slot0@Rva003EF14A@@UAEXXZ present-unmatched
+void Rva003EF14A::slot0() { }
 // Native4E20F7..4E2199, 162-byte complete method. The +14/+18 range
 // and 32-byte records are independently shared with rowed cleanup4E2199.
 // Word payload+10 is passed into record ref's virtual slot78; returned
