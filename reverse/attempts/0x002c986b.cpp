@@ -1,4 +1,6 @@
 // ?Get2DBorderVectorTo@Object@@QBEXPAUCoord3D@@PBU2@@Z
+// partial score=0.86 date=2026-10-13
+// ?Get2DBorderVectorTo@Object@@QBEXPAUCoord3D@@PBU2@@Z
 // partial score=0.8 date=2026-10-13
 // Corrected bank for Object::Get2DBorderVectorTo, native 0x002C986B..0x002C98E2.
 // Full owning GapBodiesSeat1B.cpp plus the candidate. The explicit output pointer
@@ -1443,6 +1445,6 @@ void Object::Get2DBorderVectorTo(Coord3D *out,const Coord3D *pos) const {
  float len=temp.length();
  float radius=*(const float*)((const char*)this+0xb8);
  float ox,oy,oz;
- if(radius>=len) { ox=oy=oz=0.0f; } else { float f=(len-radius)/len; ox=temp.x*f;oy=temp.y*f;oz=temp.z*f; }
+ if(radius>=len) { ox=oy=oz=0.0f; } else { float f=(len-radius)/len; oy=temp.y*f;oz=temp.z*f;ox=temp.x*f; }
  out->x=ox;out->y=oy;out->z=oz;
 }
