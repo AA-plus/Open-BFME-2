@@ -1,4 +1,6 @@
 // ?rva00032C60@GeneralAllocator@Allocator@EA@@QAEII@Z
+// partial score=0.99308 date=2026-10-13
+// ?rva00032C60@GeneralAllocator@Allocator@EA@@QAEII@Z
 // partial score=0.99 date=2026-10-12
 // cl: /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // ?rva00032C60@GeneralAllocator@Allocator@EA@@QAEII@Z
