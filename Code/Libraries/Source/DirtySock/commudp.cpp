@@ -250,7 +250,10 @@ int CommUdpProcess(unsigned int tick)
 			{
 				lastSocket = cur->m_socket;
 				len = 0x10;
-				len = Rva007FDA50(lastSocket, (char *)g_commUdpPacket.m_data,
+				// The packet header overlays the receive buffer: retail passes
+				// the buffer head at +0x10 (native 0x683AD7 pushes VA 0xe0a730),
+				// and m_type/m_typeExtra are the packet's first two dwords.
+				len = Rva007FDA50(lastSocket, (char *)&g_commUdpPacket.m_type,
 				                  0x220, 0, sin, &len);
 				if (len > 0)
 				{
