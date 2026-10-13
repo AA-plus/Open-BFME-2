@@ -1,17 +1,14 @@
 // ?rva005B54ED@Rva005B566B@@QAEXII_N@Z
-// partial score=0.985 date=2026-10-13
+// partial score=0.99 date=2026-10-13
 // ?rva005B54ED@Rva005B566B@@QAEXII_N@Z
-// partial score=0.985 date=2026-10-13
-// Retail 0x005B54ED (382B). True home AptCreateAHeroClass.cpp (rowed sibling
-// rva005B566B, /O1 flags) compiles 381B (-1B, was 379B in wrong TU).
-// Remaining wall: prologue reserves 1 home, retail 2 (image/text/key/key2
-// homes permuted; text-direct passing helped 385->381). True home confirmed
-// by rowed sibling idioms. Infra KEPT (manager/view/class ext, green).
-// t=30 model=muse-spark
+// partial score=0.99 date=2026-10-13
+// Retail 0x005B54ED (382B). True home AptCreateAHeroClass.cpp (rowed sibling,
+// /O1) compiles 381B (-1B). Remaining wall: prologue reserves 1 home, retail
+// 2 (image/text/key/key2 homes permuted; text-direct + sibling idioms applied,
+// copy-init neutral, pointer-hoist worse). Infra KEPT (manager/view/class).
+// t=35 model=muse-spark
 // ?rva005B54ED@Rva005B566B@@QAEXII_N@Z @0x005B54ED (382B): hero select with
-// per-type icons plus class/type description texts. Evidence: WB 0x157C3E0
-// branch structure + retail 382B; loop and description idioms shared with
-// the rowed rva005B566B above; both descriptions pass fetchLabel directly.
+// per-type icons plus class/type description texts.
 void Rva005B566B::rva005B54ED(unsigned major, unsigned minor, bool animate)
 {
     CreateAHeroData *hero = reinterpret_cast<Rva0040A3D2 *>(&heroes)->rva0040A3D2(major, minor);
@@ -30,7 +27,7 @@ void Rva005B566B::rva005B54ED(unsigned major, unsigned minor, bool animate)
         g_bfmeAptWindowManager->bfmeSetText(key, TheGameText->fetchLabel(TheCreateAHeroManager->GetClassDescTag(major)), true);
     }
     {
-        AsciiString key = "APT:CahTypeDescription";
+        AsciiString key("APT:CahTypeDescription");
         g_bfmeAptWindowManager->bfmeSetText(key, TheGameText->fetchLabel(TheCreateAHeroManager->GetSubClassDescTag(major, minor)), true);
     }
 }
