@@ -63,9 +63,27 @@ public:
 extern TerrainLogic *TheTerrainLogic;
 struct Rva00373158Group : public _STL::vector<ObjectID> { bool changed; };
 struct Rva00373158Node { char pad[0x14]; Rva00373158Group *group; };
-class Rva00388F63Map {
+class Rva0037381C;
+namespace _STL {
+template <class T1, class T2> struct pair;
+template <class T> struct _Select1st;
+template <class T> struct less;
+template <class T> class allocator;
+template <class _Value> struct _Rb_tree_node;
+template <class _Key, class _Value, class _KeyOfValue, class _Compare, class _Alloc>
+class _Rb_tree {
+    friend class ::Rva0037381C;
 public:
-    void *find(int *key);
+    ~_Rb_tree();
+private:
+    template <class _KT> _Rb_tree_node<_Value> *_M_find(const _KT &) const;
+};
+}
+// The player-keyed map's lookup is the rowed STLport map<int,int> _M_find<int> 0x00388F63.
+typedef _STL::pair<const int, int> IntIntPair;
+typedef _STL::_Rb_tree<int, IntIntPair, _STL::_Select1st<IntIntPair>, _STL::less<int>, _STL::allocator<IntIntPair> > MapIntIntTree;
+class Rva0037381CMap {
+public:
     void *header;
     unsigned int count;
 };
@@ -75,13 +93,13 @@ public:
     void rva00373158(Rva00373373Portal *portal, int key);
     void rva003731CB(Rva00373373Portal *portal, Player *player);
 private:
-    char pad[0x10]; Rva00388F63Map map;
+    char pad[0x10]; Rva0037381CMap map;
 };
 // Manager map10/count14 and group vector0/changedC are target facts.
 // Terrain slot8C and reciprocal372CA8 removal establish portal-network maintenance.
 void Rva0037381C::rva00373158(Rva00373373Portal *portal, int key)
 {
-    Rva00373158Group *group = ((Rva00373158Node *)map.find(&key))->group;
+    Rva00373158Group *group = ((Rva00373158Node *)((MapIntIntTree *)&map)->_M_find(key))->group;
     Rva00373373Portal &current=*portal;
     ObjectID *end = group->end();
     for (ObjectID *it=group->begin(); it!=end; ++it) {
