@@ -32,7 +32,7 @@ extern const StaticNameKey TheKey_teamName;
 extern const StaticNameKey TheKey_teamOwner;
 extern Rva00148F5ECache TheKey_teamIsSingleton;
 extern Rva00148F5ECache g_00DBDE24;
-extern Rva00148F5ECache g_00DBDE44;
+extern Rva00148F5ECache TheKey_playerFaction;
 
 // Native initializers are eight-byte {0, name} caches. Their strings and
 // each code reference are independently verified in reverse/data_rows.csv.
@@ -111,7 +111,7 @@ int SidesList::rva0032DE04(const AsciiString &playerTemplate)
 	d.setAsciiString(g_00DBDE24.get(), playerName);
 	d.setBool(TheKey_playerIsHuman.get(), isHuman);
 	d.setUnicodeString(TheKey_playerDisplayName.get(), playerDisplayName);
-	d.setAsciiString(g_00DBDE44.get(), playerTemplate);
+	d.setAsciiString(TheKey_playerFaction.get(), playerTemplate);
 	d.setAsciiString(TheKey_playerAllies.get(), AsciiString::TheEmptyString);
 	d.setAsciiString(TheKey_playerEnemies.get(), AsciiString::TheEmptyString);
 

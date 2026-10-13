@@ -27,7 +27,7 @@ private:
 	const char *m_name;
 };
 
-extern Rva00148F5ECache g_00DBDE44;
+extern Rva00148F5ECache TheKey_playerFaction;
 
 class Dict
 {
@@ -102,7 +102,7 @@ bool Player::rva002AC4D4(int *index)
 		SidesInfo *info = TheSidesList->getSkirmishSideInfo(i);
 		Dict *dict = (Dict *)info;
 		dict = (Dict *)((char *)dict + 4);
-		AsciiString faction = dict->getAsciiString(g_00DBDE44.get());
+		AsciiString faction = dict->getAsciiString(TheKey_playerFaction.get());
 		NameKeyType key = TheNameKeyGenerator->nameToKey(faction);
 		const PlayerTemplate *pt = ThePlayerTemplateStore->findPlayerTemplate(key);
 		if (pt && pt->m_18.compare(side) == 0) {

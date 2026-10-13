@@ -33,7 +33,11 @@ Rva00148F5ECache g_00DBDC74 = { NAMEKEY_INVALID, "waypointID" };
 Rva00148F5ECache g_00DBDC64 = { NAMEKEY_INVALID, "waypointName" };	// RVA 0x009BDC64
 Rva00148F5ECache g_00DBDC6C = { NAMEKEY_INVALID, "GenericAIObjectName" };	// RVA 0x009BDC6C
 Rva00148F5ECache g_objectThreatFinderRadiusKey = { NAMEKEY_INVALID, "objectThreatFinderRadius" };	// RVA 0x009BDE1C
-Rva00148F5ECache g_00DBDE44 = { NAMEKEY_INVALID, "playerFaction" };	// RVA 0x009BDE44 (TheKey_playerFaction)
+// Retail RVA 0x009BDE44 is an eight-byte cache: zero key and the full
+// "playerFaction" literal pointer. Descriptive spelling follows the BFME 1
+// SidesList/Player donor; native initializer and all three consumers prove
+// the target address and cache use independently of that donor spelling.
+Rva00148F5ECache TheKey_playerFaction = { NAMEKEY_INVALID, "playerFaction" };	// RVA 0x009BDE44 (TheKey_playerFaction)
 extern Rva00148F5ECache g_00DBDC6C;
 
 class Dict

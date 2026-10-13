@@ -42,7 +42,7 @@ private:
 	const char *m_name;
 };
 
-extern Rva00148F5ECache g_00DBDE44;
+extern Rva00148F5ECache TheKey_playerFaction;
 
 class Dict
 {
@@ -210,7 +210,7 @@ void SidesList::rva0032A5FC(DataChunkOutput &chunkWriter)
 		// the returned pointer after the key lookup rather than folding it
 		// into an lea, which only this spelling reproduces.
 		Dict *dict = (Dict *)((char *)getSideInfo(i) + 4);
-		AsciiString faction = dict->getAsciiString(g_00DBDE44.get());
+		AsciiString faction = dict->getAsciiString(TheKey_playerFaction.get());
 		const PlayerTemplate *player = ThePlayerTemplateStore->findPlayerTemplate(
 			TheNameKeyGenerator->nameToKey(faction));
 		if (player)
