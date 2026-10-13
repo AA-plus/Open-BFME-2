@@ -3,8 +3,10 @@
 // ?HostValidateColors@AptMpGameSetup@@QAEXXZ
 // partial score=0.96 date=2026-10-13
 // ?HostValidateColors@AptMpGameSetup@@QAEXXZ
+// partial score=0.96 date=2026-10-13
+// ?HostValidateColors@AptMpGameSetup@@QAEXXZ
 // partial score=0.96 date=2026-10-08
-// cl: /O1 /G7 /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /arch:SSE
+// cl: /O1 /G7 /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /arch:SSE /Op
 // stlport
 // Near-exact 0x004422DD..0x004424E7 (522B), WB HostValidateColors lead.
 // Native facts: host gate at owner vslot +4, GameInfo pointer via +5C;
@@ -57,20 +59,20 @@ class AptMpGameSetup {public: void HostValidateColors();
 void AptMpGameSetup::HostValidateColors() {
  if(!owner->amIHost()) return;
  GameInfo *info=(GameInfo*)game->rva0043DA65();
- if(!info) return;
- Rva0043EA9C reserved;
- bool repair=false;
+ if((info == 0)) return;
  unsigned i;
- for(i=0;i<8;++i) {
+ Rva0043EA9C reserved;
+ unsigned char repair=false;
+ for(i=0;i<8;i++) {
   GameSlot *slot=info->getSlot(i);
   if(!slot) continue;
   int color=slot->color;
   if(color<0) {
-   if(!special && !slot->isObserver() && slot->state!=1) repair=true;
+   if(!special && !slot->isObserver() && slot->state != 1) repair=true;
    continue;
   }
-  RespawnPtrMap *lookup=(RespawnPtrMap*)&reserved;
   ImageSubscriptMap *map=(ImageSubscriptMap*)&reserved;
+  const RespawnPtrMap *lookup=(RespawnPtrMap*)&reserved;
   if(lookup->find((unsigned)color)!=lookup->end()) {
    repair=true;
    if(((GameSlot*)((*map)[(unsigned)color]))->isHuman()) continue;
@@ -78,22 +80,22 @@ void AptMpGameSetup::HostValidateColors() {
   (*map)[(unsigned)color]=(Image*)slot;
  }
  if(repair) {
-  for(i=0;i<8;++i) {
+  for(i=0;8 > i;++i) {
    GameSlot *slot=info->getSlot(i);
-   if(!slot) continue;
+   if((0 == slot)) continue;
+   ImageSubscriptMap *map=(ImageSubscriptMap*)&reserved;
    int color=slot->color;
    if(color<0 && (special || slot->isObserver() || slot->state==1)) continue;
-   ImageSubscriptMap *map=(ImageSubscriptMap*)&reserved;
     if((GameSlot*)(*map)[(unsigned)color]==slot) continue;
    if(special) owner->SetColor(slot,-1);
    else {
     int c;
-    for(c=0;c<allowed.size();++c) {
+    for(c=0;c<allowed.size();c++) {
      RespawnPtrMap *lookup=(RespawnPtrMap*)&reserved;
      if(allowed[c] && lookup->find((unsigned)c)==lookup->end()) {
+      break;
       (*map)[(unsigned)c]=(Image*)slot;
       owner->SetColor(slot,c);
-      break;
      }
     }
    }

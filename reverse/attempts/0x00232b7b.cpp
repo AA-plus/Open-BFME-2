@@ -2,7 +2,9 @@
 // partial score=0.93 date=2026-10-13
 // ?rva00232B7B@Keyboard@@QAEXXZ
 // partial score=0.93 date=2026-10-13
-// cl: /DNDEBUG /MD /EHsc /O1 /G7 /arch:SSE
+// ?rva00232B7B@Keyboard@@QAEXXZ
+// partial score=0.93 date=2026-10-13
+// cl: /DNDEBUG /MD /EHsc /O1 /G7 /arch:SSE /Oy-
 // stlport
 // ?rva00232AE8@Keyboard@@AAEXXZ @0x00232AE8 147B. Clears key vector then re-adds flagged slots.
 // Evidence: erase row 0x003FA4DB plus push_back row 0x00539A2E plus rva00232A42 pin plus slot 0x3c virtual plus LINK BONUS.
@@ -76,8 +78,8 @@ void Keyboard::rva00232AE8()
 // the entry, as retail lays it out.
 void Keyboard::rva00232B7B()
 {
-	BfmeE8 e;
 	_STL::vector<BfmeE8, _STL::allocator<BfmeE8> > *keys = &m_keys;
+	BfmeE8 e;
 	_STL::vector<BfmePod8, _STL::allocator<BfmePod8> > *pod =
 		(_STL::vector<BfmePod8, _STL::allocator<BfmePod8> > *)keys;
 	pod->erase(pod->begin(), pod->end());
@@ -86,9 +88,9 @@ void Keyboard::rva00232B7B()
 		slot40(&e);
 		if (e.m0 == 0xff)
 		{
-			rva00232AE8();
 			pod->erase(pod->begin(), pod->end());
 			continue;
+			rva00232AE8();
 		}
 		if (e.m0 == 0)
 			return;
