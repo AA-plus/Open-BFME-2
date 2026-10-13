@@ -130,6 +130,7 @@ class ArmySummaryEntry : public Rva0040F454Target
 {
 public:
 	ArmySummaryEntry();
+	ArmySummaryEntry(const ArmySummaryEntry &other);
 	void Parse(INI *ini);
 
 private:
@@ -140,6 +141,7 @@ class ArmySummary
 {
 public:
 	int AddArmyEntry(const Rva004F6093Holder &holder);
+	int AddArmyEntry(const ArmySummaryEntry &entry);
 	void MergeUnitsFromArmy(ArmySummary &other);
 	static void parseArmyEntry(INI *ini, void *instance, void *store, const void *userData);
 
@@ -163,6 +165,16 @@ int ArmySummary::AddArmyEntry(const Rva004F6093Holder &holder)
 	}
 	m_list.forEach(&Rva0040D8D6Listener::notify2, this, old);
 	return old;
+}
+
+// ?AddArmyEntry@ArmySummary@@QAEHABVArmySummaryEntry@@@Z @0x0040F3D9 (123B, EH,
+// RET 4), an EH-prolog start Ghidra never listed: copies the entry (rowed
+// copy constructor 0x0040D688 into a 0xC8-byte block), holds it by
+// reference and adds it through the holder overload above.
+int ArmySummary::AddArmyEntry(const ArmySummaryEntry &entry)
+{
+	Rva004F6093Holder holder(new ArmySummaryEntry(entry));
+	return AddArmyEntry(holder);
 }
 
 void ArmySummary::MergeUnitsFromArmy(ArmySummary &other)
