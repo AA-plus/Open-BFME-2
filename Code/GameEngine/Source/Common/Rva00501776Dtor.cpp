@@ -38,3 +38,8 @@ struct Rva005017AC
 Rva005017AC::~Rva005017AC()
 {
 }
+
+// Native793C7C: complete11B member+14 vector unwind. Whole54B parent
+// and complete native EH graph prove ownership; actual63B provider5011DA exact.
+// Native793C87: complete10B handler installed by the same native parent;
+// FuncInfo9469F0 and both relocations exact. Original identities remain unknown.
