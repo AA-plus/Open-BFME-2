@@ -122,6 +122,17 @@ template <> vector<BfmePod32, allocator<BfmePod32> >::~vector()
 }
 }
 
+class LivingWorldRegionConnection;
+void __cdecl Rva003F0CA1_DestroyRange(LivingWorldRegionConnection *, LivingWorldRegionConnection *);
+
+namespace _STL {
+template <> vector<Rva004E32F2, allocator<Rva004E32F2> >::~vector()
+{
+ Rva003F0CA1_DestroyRange(reinterpret_cast<LivingWorldRegionConnection *>(m_start),
+                       reinterpret_cast<LivingWorldRegionConnection *>(m_finish));
+}
+}
+
 class Rva0056616B {
 public:
 	Rva0056616B(const Rva0056616B &other);
