@@ -113,7 +113,7 @@ void Rva002722F4NullForwarder::rva002722F4(Int a0)
 class Rva001EC63DNullTarget
 {
 public:
-	void rva001EC63D();
+	void addCarryoverStuffToMap();
 };
 
 class Rva0023D6D5Callee
@@ -128,7 +128,7 @@ private:
 void Rva0023D6D5Callee::thru()
 {
 	if (m_member)
-		m_member->rva001EC63D();
+		m_member->addCarryoverStuffToMap();
 }
 
 class Rva000E7734NullTarget

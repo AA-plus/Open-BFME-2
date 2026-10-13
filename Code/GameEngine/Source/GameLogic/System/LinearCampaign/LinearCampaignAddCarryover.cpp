@@ -1,6 +1,10 @@
 // cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-// ?rva001EC63D@Rva001EC63DNullTarget@@QAEXXZ retail 0x001EC63D..0x001EC859 540 B.
+// ?addCarryoverStuffToMap@LinearCampaign@@QAEXXZ @0x001EC63D 540B.
+// Renamed from placeholder Rva001EC63DNullTarget::rva001EC63D — the
+// WorldBuilder twin names LinearCampaign::addCarryoverStuffToMap in EA's own
+// LinearCampaignManager.cpp (callgraph 1); the class is corroborated by the
+// landed fillCampaignMenuContent siblings.
 // Null-checked target of forwarder 0x001EC98E. WorldBuilder twin 0x00AF7270
 // is LinearCampaign::addCarryoverStuffToMap (LinearCampaignManager.cpp) at
 // match score 1.0: look the mission template up (0x001EB3A6 on +4 with +0xC)
@@ -147,7 +151,7 @@ class Rva0037FE3D { public: void rva0037FE3D(const Rva0037FE3DList &list, int va
 class Rva001EC63DNullTarget
 {
 public:
-	void rva001EC63D();
+	void addCarryoverStuffToMap();
 
 	char pad00[4];
 	Rva001EB3A6 *m_missions;
@@ -165,7 +169,7 @@ public:
 	_STL::vector<BfmeAssignRecord172> m_used;
 };
 
-void Rva001EC63DNullTarget::rva001EC63D()
+void LinearCampaign::addCarryoverStuffToMap()
 {
 	BfmeAssignRecord36 *mission = (_ReadWriteBarrier(),m_missions)->rva001EB3A6(m_missionIndex);
 	if (mission) {
