@@ -7,7 +7,9 @@
 // return pointer is [esp+4]), which tells it from the vector-first
 // operator * (0x00191070) of the same size. The anchor below only makes
 // this unit emit the copy; it is not retail code.
-#include "vector4.h"
+// Keep the donor algorithm, but suppress the SSE constructor COMDAT: retail's
+// four-float constructor is the integer-move body owned by matrix3d.cpp.
+#include "../../../../../reference/shims/bfme_vp_math/vector4.h"
 
 #pragma inline_depth(0)
 // ?_bfmeVector4ScaleAnchor@@YAXAAVVector4@@ABV1@@Z absent-from-retail
