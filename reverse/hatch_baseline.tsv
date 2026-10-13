@@ -20009,8 +20009,9 @@ object_symbol	reverse/functions.csv	0x0079E2F7	1
 object_symbol	reverse/functions.csv	0x0079E2FF	1
 object_symbol	reverse/functions.csv	0x0079E307	1
 object_symbol	reverse/functions.csv	0x0079E30F	1
-object_symbol	reverse/functions.csv	0x0079E395	1	allow=f253c4b53fa5c16cb58c09e122275d790e508a81
+object_symbol	reverse/functions.csv	0x0079E395	1
 object_symbol	reverse/functions.csv	0x0079E3A0	1
+object_symbol	reverse/functions.csv	0x0079E3AB	1	allow=b42c26c0c279a49fb406cb84b0f41e91661f8997
 object_symbol	reverse/functions.csv	0x0079E3B6	1
 object_symbol	reverse/functions.csv	0x0079E3C4	1
 object_symbol	reverse/functions.csv	0x0079E3D2	1
