@@ -7,12 +7,13 @@ enum ObjectID
 };
 enum ObjectStatusTypes;
 class Player;
+class Team;
 class Object
 {
 public:
 	Player *getControllingPlayer() const;
 	bool testStatus(ObjectStatusTypes bit) const;
-	void rva00298AAD(unsigned int value);
+	void rva00298AAD(Team *value);
 	void *m_vptr00;
 	void *m_04;
 	char m_pad08[0x74 - 8];
@@ -103,7 +104,7 @@ void Rva004CC829::rva004CC795(Object *other, unsigned int wakeFrame)
 
 	Rva004CC795ModuleData *moduleData = m_moduleData;
 	m_28 = (ObjectID)other->m_74;
-	m_object->rva00298AAD(other->m_304);
+	m_object->rva00298AAD((Team *)other->m_304);
 	if ((((ObjectPlus4 *)other->m_04)->m_117 & 8) != 0)
 	{
 		setWakeFrame(m_object, UPDATE_SLEEP_FOREVER);

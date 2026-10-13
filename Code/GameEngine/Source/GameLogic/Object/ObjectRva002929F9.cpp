@@ -129,7 +129,7 @@ class Object
 public:
 	void rva002929F9(Object *other);
 	Real GetRelativeAngle(const Coord3D *pos) const;
-	void rva00291A8C(Real angle, Real a, Real b, Int name);
+	void rva00291A8C(Real angle, Real a, Real b, const AsciiString &name);
 	const Rva0028AC4EEntry *rva0028AC4E() const;
 
 	const ThingTemplate *getTemplate() const { return m_template; }
@@ -189,7 +189,7 @@ void Object::rva002929F9(Object *other)
 			angle = 1.5707964f;
 		Real dir = 0.3f * angle + m_angle;
 		AsciiString empty("");
-		other->rva00291A8C(dir * 180.0f / 3.1415927f, a, b, (Int)&empty);
+		other->rva00291A8C(dir * 180.0f / 3.1415927f, a, b, empty);
 	}
 
 	Rva002627E8 *ai = m_ai;
