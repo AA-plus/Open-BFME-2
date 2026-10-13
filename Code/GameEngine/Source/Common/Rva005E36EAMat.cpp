@@ -1,6 +1,9 @@
 // cl: /EHsc
 //
-// ?rva005E36EA@Rva005E36C5@@QAE?AV?$StringBase@D@@XZ retail 0x005E36EA 105B.
+// ??BRva005E36C5@@QAE?AV?$StringBase@D@@XZ retail 0x005E36EA 105B.
+// The native caller 0x005E3753 requires an implicit conversion to the base
+// string before its AsciiString copy; a named-method call loses the LEA and
+// changes temporary homes. The existing whole105B provider and EH stay exact.
 // Five-part materializer: length via rowed 0x00513E03 plus tail len at +0x1C
 // then getBufferForRead then rowed write 0x005E36C5 then copy ctor 0x000365F0
 // then releaseBuffer, EH frame, ret 4.
@@ -74,7 +77,7 @@ class Rva005E36C5
 {
 public:
 	int rva005E36C5(char *dst);
-	StringBase<char> rva005E36EA();
+	operator StringBase<char>();
 private:
 	Rva005E36A0 m_head;
 	Rva000B3F84Pair m_tail;
@@ -88,7 +91,7 @@ struct Rva00513E03
 	const AsciiString *m_fourth;
 };
 
-StringBase<char> Rva005E36C5::rva005E36EA()
+Rva005E36C5::operator StringBase<char>()
 {
 	StringBase<char> tmp;
 	int extra = m_tail.m_len;
