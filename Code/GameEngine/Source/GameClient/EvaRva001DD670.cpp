@@ -1,7 +1,3 @@
-// ?rva001DD670@Eva@@QBE_NW4EvaEventID@@PAUVec001DCDAF@@@Z
-// partial score=0.93 date=2026-10-13
-// ?rva001DD670@Eva@@QBE_NW4EvaEventID@@PAUVec001DCDAF@@@Z
-// partial score=0.93 date=2026-10-13
 // cl: /O1 /G7 /EHsc /DNDEBUG /MD /arch:SSE /Oy- /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
 // ?rva001DD670@Eva@@QBE_NW4EvaEventID@@PAUVec001DCDAF@@@Z @0x001DD670 125B.
@@ -94,8 +90,9 @@ Bool Eva::rva001DD670(EvaEventID eventID, Vec001DCDAF *position) const
 		return false;
 	if (m_eventStatus.size() != m_allEventInfos.size())
 		return false;
-	if (!m_eventStatus[eventID].m_hasPlayed)
+	if (!(m_eventStatus.begin() + eventID)->m_hasPlayed)
 		return false;
-	*position = m_eventStatus[eventID].m_lastPlayedPosition;
+	Rva001DCDAF *s = m_eventStatus.begin();
+	*position = s[eventID].m_lastPlayedPosition;
 	return true;
 }
