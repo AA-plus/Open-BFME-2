@@ -21,6 +21,7 @@ struct BfmeVciAnchorElem { BfmeVciAnchorElem(); };
 #pragma optimize("gsy", on)
 static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #pragma optimize("", on)
+#include "../../../../../reference/shims/bfme_lineseg_recalc_o1_link/lineseg.h"	// /O1 recalculate link copy
 
 #include "rendobj.h"
 #include "colmath.h"
