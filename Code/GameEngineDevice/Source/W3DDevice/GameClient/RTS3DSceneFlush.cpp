@@ -1,8 +1,13 @@
-// ?Flush@RTS3DScene@@QAEXAAVRenderInfoClass@@@Z
-// partial score=0.97 date=2026-10-12
-// ?Flush@RTS3DScene@@QAEXAAVRenderInfoClass@@@Z
-// partial score=0.98 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+//
+// ?Flush@RTS3DScene@@QAEXAAVRenderInfoClass@@@Z, retail 0x00071606..0x00071E40
+// (2106 bytes, RET 4, EH). Zero Hour's RTS3DScene::Flush with BFME 2's render
+// events, inline stencil states and the trees light environment. Two levers
+// from retail's same-TU codegen: the stencil states go through an inline
+// Set_DX8_Render_State-shaped function (its early return gives retail's frame
+// weights), and the global lights are walked through a local LightClass **
+// (as Zero Hour's renderOneObject does with sceneLights), which keeps cl from
+// strength-reducing the index.
 typedef float Real;
 class Vector3
 {
@@ -75,6 +80,7 @@ extern unsigned number_of_DX8_calls;
 class WW3D
 {
 	friend class RTS3DScene;
+	friend void bfmeSetRS(unsigned long, unsigned);
 	static bool SnapshotActivated;
 public:
 	static void Render_And_Clear_Static_Sort_Lists(RenderInfoClass &rinfo);
@@ -82,6 +88,7 @@ public:
 class DX8Wrapper
 {
 	friend class RTS3DScene;
+	friend void bfmeSetRS(unsigned long, unsigned);
 protected:
 	static unsigned render_state_changes, RenderStates[256];
 	static IDirect3DDevice8 *D3DDevice;
@@ -92,18 +99,19 @@ public:
 class SortingRendererClass { public: static void Flush(); };
 class DX8MeshRendererClass { public: void Clear_Pending_Delete_Lists(); };
 extern DX8MeshRendererClass *TheDX8MeshRenderer;
-#define BFME_SET_RS(state_, value_) do { \
-	if (DX8Wrapper::RenderStates[(state_)] != (unsigned)(value_)) { \
-		if (WW3D::SnapshotActivated) { \
-			StringClass valueName(0, true); \
-			DX8Wrapper::Get_DX8_Render_State_Value_Name(valueName, (state_), (value_)); \
-		} \
-		DX8Wrapper::RenderStates[(state_)] = (value_); \
-		DX8Wrapper::D3DDevice->v->SetRenderState(DX8Wrapper::D3DDevice, (state_), (value_)); \
-		++number_of_DX8_calls; \
-		++DX8Wrapper::render_state_changes; \
-	} \
-} while (0)
+__forceinline void bfmeSetRS(unsigned long state, unsigned value)
+{
+	if (DX8Wrapper::RenderStates[state] == value) return;
+	if (WW3D::SnapshotActivated) {
+		StringClass valueName(0, true);
+		DX8Wrapper::Get_DX8_Render_State_Value_Name(valueName, state, value);
+	}
+	DX8Wrapper::RenderStates[state] = value;
+	DX8Wrapper::D3DDevice->v->SetRenderState(DX8Wrapper::D3DDevice, state, value);
+	++number_of_DX8_calls;
+	++DX8Wrapper::render_state_changes;
+}
+#define BFME_SET_RS(s_, v_) bfmeSetRS((s_), (v_))
 void rva001173f0(unsigned renderArgument);
 void Rva0004CB1E(int arg);
 void bfmeGo991B(int arg);
@@ -210,15 +218,16 @@ void RTS3DScene::Flush(RenderInfoClass &rinfo)
 			lodScale.Y = global->m_lowLODLightScaleGreen * lodScale.Y;
 			lodScale.Z = global->m_lowLODLightScaleBlue * lodScale.Z;
 		}
+		LightClass **lights = m_globalLight;
 		for (int i = 0; i < m_numGlobalLights; i++)
 		{
 			Vector3 diffuse;
-			m_globalLight[i]->Get_Diffuse(&diffuse);
+			lights[i]->Get_Diffuse(&diffuse);
 			Vector3 saved = diffuse;
 			diffuse.Scale(lodScale);
-			m_globalLight[i]->Set_Diffuse(diffuse);
-			lightEnv.Add_Light(*m_globalLight[i]);
-			m_globalLight[i]->Set_Diffuse(saved);
+			lights[i]->Set_Diffuse(diffuse);
+			lightEnv.Add_Light(*lights[i]);
+			lights[i]->Set_Diffuse(saved);
 		}
 		Vector3 outAmbient = lightEnv.Get_Output_Ambient();
 		outAmbient.Scale(lodScale);
@@ -239,16 +248,13 @@ void RTS3DScene::Flush(RenderInfoClass &rinfo)
 		BFME2ScopedRenderEvent event("RenderStaticSortLists", "Frame", 0);
 		WW3D::Render_And_Clear_Static_Sort_Lists(rinfo);
 	}
-	if (m_customPassMode == 0)
+	if (m_customPassMode == 0 && TheTerrainRenderObject)
 	{
-		if (TheTerrainRenderObject)
-		{
-			TheTerrainRenderObject->rva0006BBD9(rinfo, true);
-			TheTerrainRenderObject->rva0006BBD9(rinfo, false);
-		}
-		if (m_polygonMode == 0)
-			rva00070F80(rinfo);
+		TheTerrainRenderObject->rva0006BBD9(rinfo, true);
+		TheTerrainRenderObject->rva0006BBD9(rinfo, false);
 	}
+	if (m_customPassMode == 0 && m_polygonMode == 0)
+		rva00070F80(rinfo);
 	{
 		BFME2ScopedRenderEvent particles("RenderParticles", "Frame", 0);
 		if (m_customPassMode == 0 && m_polygonMode == 0)
