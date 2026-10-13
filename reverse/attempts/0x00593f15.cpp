@@ -1,9 +1,11 @@
 // ?getCommandList@NetPacket@@QAEPAVNetCommandList@@XZ
+// partial score=0.975 date=2026-10-13
+// ?getCommandList@NetPacket@@QAEPAVNetCommandList@@XZ
 // partial score=0.92 date=2026-10-10
 // ?getCommandList@NetPacket@@QAEPAVNetCommandList@@XZ
 // partial score=0.95395 date=2026-10-09
 // ?getCommandList@NetPacket@@QAEPAVNetCommandList@@XZ
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc
+// cl: /ICode/Libraries/Include /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc
 // NetPacket.cpp: the NetPacket bodies retail links from this TU (tu_map approved),
 // folded from 24 one-function split units that shared these exact flags.
 // One NetPacket view replaces the per-unit ones; every field offset below is the
@@ -38,7 +40,7 @@ static inline char npCharAt(const AsciiString &s, int i)
 	const char *data = *(const char *const *)&s;
 	return data ? data[8 + i] : 0;
 }
-#include "/mnt/titan_nv3/open-bfme2-agent-fleet/gemini200/writer-006/Code/Libraries/Include/Lib/Coord3D.h"
+#include "Lib/Coord3D.h"
 
 extern "C" void *__cdecl memcpy(void *dest, const void *src, unsigned int count);
 extern "C" unsigned char *__cdecl _mbscpy(unsigned char *dest, const unsigned char *src);
@@ -972,6 +974,7 @@ NetCommandList *NetPacket::getCommandList()
 				NetAckStage1CommandMsg *last = (NetAckStage1CommandMsg *)ncrCommand(lastCommand);
 				((Rva004D59ACWordSlot *)msg)->set(((Rva004D5767WordField *)last)->get() + 1);
 				((Rva004D576CByteSlot *)msg)->set(((Rva004543C6ByteField *)last)->get());
+_ReadWriteBarrier();
 				((NetAckStage1CommandMsg *)msg)->m_20 = last->m_20;
 				((NetAckStage1CommandMsg *)msg)->m_24 = last->m_24;
 			} else if (commandType == 2) {
@@ -987,6 +990,7 @@ NetCommandList *NetPacket::getCommandList()
 				((Rva004D59ACWordSlot *)msg)->set(((Rva004D5767WordField *)last)->get() + 1);
 				((Rva004D576CByteSlot *)msg)->set(((Rva004543C6ByteField *)last)->get());
 				((NetAckBothCommandMsg *)msg)->m_20 = last->m_20;
+_ReadWriteBarrier();
 				((NetAckBothCommandMsg *)msg)->m_24 = last->m_24;
 			} else {
 				break;
