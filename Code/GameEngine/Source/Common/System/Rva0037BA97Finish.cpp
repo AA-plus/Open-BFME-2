@@ -21,11 +21,20 @@ struct Triple12
 	int c;
 };
 
-Triple12 __cdecl Rva0037BA97Init(const Pair8 *src, int c)
+// Select-any like the Rva0037D96B.cpp copy (this retail body comes first in link
+// order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline Triple12 __cdecl Rva0037BA97Init(const Pair8 *src, int c)
 {
 	Triple12 tmp;
 	tmp.a = src->a;
 	tmp.b = src->b;
 	tmp.c = c;
 	return tmp;
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva0037BA97Init@@YAXPBUPair8@@H@Z absent-from-retail
+void bfmeEmitRva0037BA97Init(const Pair8 *src, int c)
+{
+	Rva0037BA97Init(src, c);
 }

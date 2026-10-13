@@ -62,7 +62,9 @@ struct AODDtorElem16
 };
 
 // ??1AODDtorElem16@@QAE@XZ present-unmatched
-AODDtorElem16::~AODDtorElem16()
+// Select-any: the identical copy in AODHordeContainDtor.cpp folds instead of
+// duplicating at link time.
+inline AODDtorElem16::~AODDtorElem16()
 {
 }
 
@@ -75,7 +77,8 @@ struct AODDtorElem24
 };
 
 // ??1AODDtorElem24@@QAE@XZ present-unmatched
-AODDtorElem24::~AODDtorElem24()
+// Select-any, as AODDtorElem16 above.
+inline AODDtorElem24::~AODDtorElem24()
 {
 }
 
