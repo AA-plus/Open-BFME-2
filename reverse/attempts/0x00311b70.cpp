@@ -1,3 +1,5 @@
+// ?rva00311B70@Rva00311B70@@QAEXXZ
+// partial score=0.898497359258445 date=2026-10-13
 // 0x00311B70
 // partial score=0.86 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include/Lib
@@ -20,7 +22,7 @@ typedef int Int;
 
 static __forceinline void coordSet(Coord3D &c, const Coord3D *a) { c.x = a->x; c.y = a->y; c.z = a->z; }
 static __forceinline void coordSub(Coord3D &c, const Coord3D *a) { c.x -= a->x; c.y -= a->y; c.z -= a->z; }
-static __forceinline void coordScale(Coord3D &c, Real s) { c.x *= s; c.y *= s; c.z *= s; }
+static __forceinline void coordScale(Coord3D &c, Real s) {float z=*(volatile float*)&c.z;float x=*(volatile float*)&c.x;float y=*(volatile float*)&c.y;c.x=x*s;c.y=y*s;c.z=z*s;}
 
 struct Rva00311B70Point
 {
