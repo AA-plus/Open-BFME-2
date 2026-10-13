@@ -183,11 +183,20 @@ public:
 	Int m_field0C;
 };
 
-Rva00318B5C::Rva00318B5C(const Rva00318B5C &other)
+// Select-any like the other TU's copy (this retail body comes first in link
+// order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline Rva00318B5C::Rva00318B5C(const Rva00318B5C &other)
 {
 	m_field04 = other.m_field04;
 	m_field08 = other.m_field08;
 	m_field0C = other.m_field0C;
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva00318B5CCopy@@YAXPAVRva00318B5C@@ABV1@@@Z absent-from-retail
+void bfmeEmitRva00318B5CCopy(Rva00318B5C *p, const Rva00318B5C &o)
+{
+	p->Rva00318B5C::Rva00318B5C(o);
 }
 
 // Retail 0x00318D63 (18B): null-guarded copy-construct of one Rva00318B5C
@@ -436,12 +445,21 @@ Rva0015E640::Rva0015E640(const Rva0015E640 &other)
 }
 
 // Retail 0x0015E670 (27 bytes), the matching assignment: the three fields after the vptr.
-Rva0015E640 &Rva0015E640::operator=(const Rva0015E640 &other)
+// Select-any like the copy in Rva001684D6Assign.cpp (this retail body comes first
+// in link order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline Rva0015E640 &Rva0015E640::operator=(const Rva0015E640 &other)
 {
 	m_field04 = other.m_field04;
 	m_field08 = other.m_field08;
 	m_field0C = other.m_field0C;
 	return *this;
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva0015E640Assign@@YAXPAVRva0015E640@@ABV1@@@Z absent-from-retail
+void bfmeEmitRva0015E640Assign(Rva0015E640 *p, const Rva0015E640 &o)
+{
+	p->Rva0015E640::operator=(o);
 }
 
 // ---- vptr + two ints base plus derived vptr and third int (retail 0x00168040)

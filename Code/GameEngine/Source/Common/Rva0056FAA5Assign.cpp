@@ -38,7 +38,9 @@ Rva0056FAA5 *Rva0056FAA5::rva0056FCF3(Rva0056FAA5 *src)
 // uses esi for this; callers 0x0056FE21 0x00570474 0x0057085E
 int Rva0056F7F4Hook(int left, int right);
 
-void Rva0056FAA5::rva0056FD46(short v)
+// Select-any like the AptOnlineLogin.cpp copies (this retail body comes first
+// in link order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline __declspec(noinline) void Rva0056FAA5::rva0056FD46(short v)
 {
 	m_04 = Rva0056F7F4Hook(v, v);
 }
@@ -48,7 +50,8 @@ void Rva0056FAA5::rva0056FD46(short v)
 // esi holds this; callers 0x0056FDCF 0x00570424 0x005707CE
 int Rva0056F742Hook(int left, int right);
 
-void Rva0056FAA5::rva0056FD14(int v)
+// Select-any, as rva0056FD46 above.
+inline __declspec(noinline) void Rva0056FAA5::rva0056FD14(int v)
 {
 	m_04 = Rva0056F742Hook(v, v);
 }
@@ -58,9 +61,19 @@ void Rva0056FAA5::rva0056FD14(int v)
 // esi holds this; callers 0x0056FDF8 0x0057045E 0x0057081F
 int Rva0056F79BHook(int left, int right);
 
-void Rva0056FAA5::rva0056FD2D(int v)
+// Select-any, as rva0056FD46 above.
+inline __declspec(noinline) void Rva0056FAA5::rva0056FD2D(int v)
 {
 	m_04 = Rva0056F79BHook(v, v);
+}
+
+// Retain the inline bodies' ledger emission without changing their callers.
+// ?bfmeEmitRva0056FAA5Setters@@YAXPAVRva0056FAA5@@@Z absent-from-retail
+void bfmeEmitRva0056FAA5Setters(Rva0056FAA5 *p)
+{
+	p->Rva0056FAA5::rva0056FD46(0);
+	p->Rva0056FAA5::rva0056FD14(0);
+	p->Rva0056FAA5::rva0056FD2D(0);
 }
 
 // Native 57042F..570455: update through the existing 56FCF3 worker,

@@ -17,9 +17,18 @@ private:
 	char m_pad1[0x118 - 0x68];
 };
 
-bool MeshMatDescClass::Has_Color_Array(int array)
+// Select-any like the meshmdlio.cpp copy (this retail body comes first in link
+// order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline bool MeshMatDescClass::Has_Color_Array(int array)
 {
 	return ColorArray[array] != 0;
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitMeshMatDescHasColorArray@@YAXPAVMeshMatDescClass@@H@Z absent-from-retail
+void bfmeEmitMeshMatDescHasColorArray(MeshMatDescClass *p, int array)
+{
+	p->MeshMatDescClass::Has_Color_Array(array);
 }
 
 // ?rva00188010@MeshMatDescClass@@QAEXHH@Z, retail 0x00188010 (15 bytes, RET 8), the inline
