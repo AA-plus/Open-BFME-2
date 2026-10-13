@@ -21,9 +21,18 @@ static __forceinline int invokeFormatted(Rva00222A8BTarget *target,void *owner,c
  return target->invoke(owner,method,3,number.str(),value,const_cast<char*>(place),0,0);
 }
 
-int Rva004E697DCall(Rva00222A8BTarget *target,void *owner,const char *method,
+// Match the consumer's select-any copy in InGameNotificationBoxUpdateNotice.cpp
+// so the two identical 132B bodies fold instead of duplicating at link time.
+inline int Rva004E697DCall(Rva00222A8BTarget *target,void *owner,const char *method,
  const float *height,const bool *flag,const char *const *location)
 {
  char *flagText;
  return invokeFormatted(target,owner,method,Rva002228E8Get(*height),flag,location,&flagText);
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva004E697DCall@@YAXPAVRva00222A8BTarget@@PAXPBD@Z absent-from-retail
+void bfmeEmitRva004E697DCall(Rva00222A8BTarget *target,void *owner,const char *method)
+{
+ Rva004E697DCall(target,owner,method,0,0,0);
 }
