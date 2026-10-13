@@ -1,5 +1,9 @@
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// stlport
+#include "GameLogic/ScriptActionsBFME2.h"
+
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
-// ?Rva003BACCA@@YGXPAVParameter@@@Z @0x003BACCA 75B: free stdcall Parameter* (unused) doing two TacticalView slot 0x5c calls with 2-float structs from g_00BBB9B0/g_00BBB9B4.
+// ?Rva003BACCA@ScriptActions@@QAEXPAVParameter@@@Z @0x003BACCA 75B: free stdcall Parameter* (unused) doing two TacticalView slot 0x5c calls with 2-float structs from g_00BBB9B0/g_00BBB9B4.
 // Evidence: ret 4 unused arg; movss xmm0 [0xBBB9B0]/[0xBBB9B4]; mov ecx [0xDFEA3C TheTacticalView]; lea edx [ebp-8]; movss [ebp-8]/[ebp-4] xmm0; mov eax [ecx]; push edx; call [eax+0x5c] twice; caller 0x003CAD58 in ScriptActions dispatch.
 
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
@@ -223,7 +227,7 @@ struct Rva003BAFE8Object
 	unsigned int objectID;
 };
 
-void __stdcall Rva003BACCA(Parameter *p)
+void ScriptActions::Rva003BACCA(Parameter *p)
 {
 	Rva003BACCAPoint v;
 	v.x = g_00BBB9B0;
@@ -239,7 +243,7 @@ void __stdcall Rva003BACCA(Parameter *p)
 // value, one truncated integer and two floats. Retail constants at
 // 0x00BBE358 and 0x00BBB8D0 are 1000.0f and float bits 0x3C8EFA35.
 // The original action and virtual-method names remain unresolved.
-void __stdcall Rva003BAC6D(float a0, float a1, float a2, float a3)
+void ScriptActions::Rva003BAC6D(float a0, float a1, float a2, float a3)
 {
 	reinterpret_cast<TacticalView *>(TheTacticalView)->s62(
 		a0 * 0.01745329238474369f, (int)(a1 * 1000.0f),
@@ -251,31 +255,31 @@ void __stdcall Rva003BAC6D(float a0, float a1, float a2, float a3)
 // and truncates the second argument to an integer. Slots and the extra
 // mode argument below are read separately from each bounded retail body.
 // The original action and virtual-method names remain unresolved.
-void __stdcall Rva003BAB7A(float a0, float a1, float a2, float a3)
+void ScriptActions::Rva003BAB7A(float a0, float a1, float a2, float a3)
 {
 	reinterpret_cast<TacticalView *>(TheTacticalView)->s59(
 		a0, (int)(a1 * 1000.0f), a2 * 1000.0f, a3 * 1000.0f);
 }
 
-void __stdcall Rva003BABCB(float a0, float a1, float a2, float a3)
+void ScriptActions::Rva003BABCB(float a0, float a1, float a2, float a3)
 {
 	reinterpret_cast<TacticalView *>(TheTacticalView)->s60(
 		a0, (int)(a1 * 1000.0f), a2 * 1000.0f, a3 * 1000.0f);
 }
 
-void __stdcall Rva003BAC1C(float a0, float a1, float a2, float a3)
+void ScriptActions::Rva003BAC1C(float a0, float a1, float a2, float a3)
 {
 	reinterpret_cast<TacticalView *>(TheTacticalView)->s61(
 		a0, (int)(a1 * 1000.0f), a2 * 1000.0f, a3 * 1000.0f);
 }
 
-void __stdcall Rva003BAECA(float a0, float a1, float a2, float a3)
+void ScriptActions::Rva003BAECA(float a0, float a1, float a2, float a3)
 {
 	reinterpret_cast<TacticalView *>(TheTacticalView)->s51(
 		a0, (int)(a1 * 1000.0f), 0, a2 * 1000.0f, a3 * 1000.0f);
 }
 
-void __stdcall Rva003BAF95(float a0, float a1, float a2, float a3)
+void ScriptActions::Rva003BAF95(float a0, float a1, float a2, float a3)
 {
 	reinterpret_cast<TacticalView *>(TheTacticalView)->s51(
 		a0, (int)(a1 * 1000.0f), 1, a2 * 1000.0f, a3 * 1000.0f);
@@ -285,7 +289,7 @@ void __stdcall Rva003BAF95(float a0, float a1, float a2, float a3)
 // The rowed Parameter lookup is 0x003588E7. A missing object returns;
 // otherwise slot 52 receives Object+0x74, two truncated scaled floats,
 // two scaled floats and the last input unchanged. Original names unknown.
-void __stdcall Rva003BAFE8(Parameter *p, float a1, float a2,
+void ScriptActions::Rva003BAFE8(Parameter *p, float a1, float a2,
 	float a3, float a4, float a5)
 {
 	Object *object = TheScriptEngine->getUnitNamed(p);
@@ -302,7 +306,7 @@ void __stdcall Rva003BAFE8(Parameter *p, float a1, float a2,
 // Slot 34 of the rowed TerrainLogic global supplies the record. View
 // slot 53 receives record+12, scaled/truncated a2, two scaled floats and
 // the final integer unchanged. The scale literal is retail 1000.0f.
-void __stdcall Rva003BB05FSet(int a1, float a2, float a3, float a4, int a5)
+void ScriptActions::Rva003BB05FSet(int a1, float a2, float a3, float a4, int a5)
 {
 	char *record = reinterpret_cast<Rva003BB05FTerrain<int> *>(TheTerrainLogic)->s34(a1);
 	if (record)
@@ -317,7 +321,7 @@ void __stdcall Rva003BB05FSet(int a1, float a2, float a3, float a4, int a5)
 // Terrain slot 37 returns the record; only type 6 at +0x60 is accepted.
 // View slot 25 takes that record, the scaled/truncated second argument,
 // literal 1, three scaled floats and the final integer. Argument 3 is unused.
-void __stdcall Rva003BB0C7Set(int a1, float a2, int a3,
+void ScriptActions::Rva003BB0C7Set(int a1, float a2, int a3,
 	float a4, float a5, float a6, int a7)
 {
 	Rva003BB0C7Record *record =
@@ -335,7 +339,7 @@ void __stdcall Rva003BB0C7Set(int a1, float a2, int a3,
 // resolve that same name. A marker's +8 position overrides terrain's +12
 // position; View slot 24 takes the copy, marker and scaled arguments.
 // Argument a2 is unused. Original action and virtual-method names unknown.
-void __stdcall Rva003BAAE4(const AsciiString &name,
+void ScriptActions::Rva003BAAE4(const AsciiString &name,
 	float a1, float a2, float a3, float a4)
 {
 	char *terrain =
@@ -399,7 +403,7 @@ public:
 };
 extern class GameClient *TheGameClient;
 
-void Rva003BAE04()
+void ScriptActions::Rva003BAE04()
 {
     int count = 0;
     Coord3D destination;
@@ -444,7 +448,7 @@ public:
 // ZH doCameraTetherNamed supplies the lock/snap/tether workflow. Native
 // 0x003BAA46 adds Drawable-ID slot103 before snap and uses slots97/98/100/99;
 // dispatcher0x003CAD35 and RET12 prove Parameter*, bool, float free ABI.
-void __stdcall Rva003BAA46(Parameter *p, bool snap, float play)
+void ScriptActions::Rva003BAA46(Parameter *p, bool snap, float play)
 {
     Object *object = TheScriptEngine->getUnitNamed(p);
     if (object)
@@ -464,7 +468,7 @@ void __stdcall Rva003BAA46(Parameter *p, bool snap, float play)
 // ZH doCameraMotionBlurJump is the semantic/control-flow guide. Native
 // 0x003BB7FE..0x003BB898/RET8 separately proves slot34 lookup and slots
 // 47/45/46/21 with filter2, saturate8 or alpha7, and fallback filter0.
-void __stdcall Rva003BB7FESet(int waypoint, bool saturate)
+void ScriptActions::Rva003BB7FESet(int waypoint, bool saturate)
 {
     char *way = reinterpret_cast<Rva003BB05FTerrain<int> *>(TheTerrainLogic)->s34(waypoint);
     if (!way)

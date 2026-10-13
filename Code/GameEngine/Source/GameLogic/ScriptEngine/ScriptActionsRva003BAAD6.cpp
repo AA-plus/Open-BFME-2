@@ -1,6 +1,10 @@
+// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// stlport
+#include "GameLogic/ScriptActionsBFME2.h"
+
 // flags: region default (reverse/retail_inventory/flag_regions.csv)
 //
-// ?Rva003BAAD6@@YAXXZ @0x003BAAD6 14B: free forwarder to virtual slot 0x1A0 via global 0xDFEA3C.
+// ?Rva003BAAD6@ScriptActions@@QAEXXZ @0x003BAAD6 14B: free forwarder to virtual slot 0x1A0 via global 0xDFEA3C.
 // Evidence: mov ecx,[0xDFEA3C] mov eax,[ecx] jmp [eax+0x1A0]; callers 0x3CAD41 0x3CC8DF in ScriptActions dispatch with mov ecx,edi no pushes.
 
 extern class AudioManager *TheAudio;
@@ -133,21 +137,21 @@ public:
 #define Rva00DFEDF0 (*(Rva003BAAD6Holder **)&TheInGameUI)
 #define Rva00DFE6E8 (*(Rva003BAAD6Holder **)&TheAudio)
 
-void Rva003BAAD6()
+void ScriptActions::Rva003BAAD6()
 {
     Rva00DFEA3C->target();
 }
 
-// ?Rva003BB141Notify@@YGXABV?$StringBase@D@@@Z @0x003BB141 34B chain via 0x0033070E caller 0x003CAE0D globals 0xE01DB0 0xDFEA3C slot 0x68
-void __stdcall Rva003BB141Notify(const StringBase<char> &key)
+// ?Rva003BB141Notify@ScriptActions@@QAEXABV?$StringBase@D@@@Z @0x003BB141 34B chain via 0x0033070E caller 0x003CAE0D globals 0xE01DB0 0xDFEA3C slot 0x68
+void ScriptActions::Rva003BB141Notify(const StringBase<char> &key)
 {
 	Rva0033070EEntry *e = Rva00E01DB0->rva0033070E(key);
 	if (e)
 		Rva00DFEA3C->s026(e);
 }
 
-// ?Rva003BB61E@@YAXXZ @0x003BB61E 14B free forwarder to virtual slot 0x15C via global 0xDFEDF0 caller 0x003CBBCE
-void Rva003BB61E()
+// ?Rva003BB61E@ScriptActions@@QAEXXZ @0x003BB61E 14B free forwarder to virtual slot 0x15C via global 0xDFEDF0 caller 0x003CBBCE
+void ScriptActions::Rva003BB61E()
 {
 	Rva00DFEDF0->s087();
 }
@@ -160,55 +164,55 @@ public:
 
 #define Rva00DFF028 theRadarWindowOverrideSource
 
-// ?Rva003BB7E2@@YAXXZ @0x003BB7E2 14B free caller of 0x002D3615 with false via global 0xDFF028 caller 0x003CBD39
-void Rva003BB7E2()
+// ?Rva003BB7E2@ScriptActions@@QAEXXZ @0x003BB7E2 14B free caller of 0x002D3615 with false via global 0xDFF028 caller 0x003CBD39
+void ScriptActions::Rva003BB7E2()
 {
 	Rva00DFF028->rva002D3615(false);
 }
 
-// ?Rva003BB7F0@@YAXXZ @0x003BB7F0 14B free caller of 0x002D3615 with true via global 0xDFF028 caller 0x003CBD45
-void Rva003BB7F0()
+// ?Rva003BB7F0@ScriptActions@@QAEXXZ @0x003BB7F0 14B free caller of 0x002D3615 with true via global 0xDFF028 caller 0x003CBD45
+void ScriptActions::Rva003BB7F0()
 {
 	Rva00DFF028->rva002D3615(true);
 }
 
-// ?Rva003BBF8F@@YAXXZ @0x003BBF8F 17B free caller of vslot 0x94 with false via global 0xDFEDF0 caller 0x003CC44C
-void Rva003BBF8F()
+// ?Rva003BBF8F@ScriptActions@@QAEXXZ @0x003BBF8F 17B free caller of vslot 0x94 with false via global 0xDFEDF0 caller 0x003CC44C
+void ScriptActions::Rva003BBF8F()
 {
 	Rva00DFEDF0->s037(false);
 }
 
-// ?Rva003BBFA0@@YAXXZ @0x003BBFA0 17B free caller of vslot 0x94 with true via global 0xDFEDF0 caller 0x003CC458
-void Rva003BBFA0()
+// ?Rva003BBFA0@ScriptActions@@QAEXXZ @0x003BBFA0 17B free caller of vslot 0x94 with true via global 0xDFEDF0 caller 0x003CC458
+void ScriptActions::Rva003BBFA0()
 {
 	Rva00DFEDF0->s037(true);
 }
 
-// ?Rva003BB641@@YAXXZ @0x003BB641 19B null-guarded forwarder to vslot 0x16C via global 0xDFE6E8 caller 0x003CE42B
-void Rva003BB641()
+// ?Rva003BB641@ScriptActions@@QAEXXZ @0x003BB641 19B null-guarded forwarder to vslot 0x16C via global 0xDFE6E8 caller 0x003CE42B
+void ScriptActions::Rva003BB641()
 {
 	Rva003BAAD6Holder *p = Rva00DFE6E8;
 	if (p)
 		p->s091();
 }
 
-// ?Rva003BB62C@@YGXH@Z @0x003BB62C 21B null-guarded forwarder to vslot 0x164 via global 0xDFE6E8 caller 0x003CE41F forwards stdcall int
-void __stdcall Rva003BB62C(int v)
+// ?Rva003BB62C@ScriptActions@@QAEXH@Z @0x003BB62C 21B null-guarded forwarder to vslot 0x164 via global 0xDFE6E8 caller 0x003CE41F forwards stdcall int
+void ScriptActions::Rva003BB62C(int v)
 {
 	Rva003BAAD6Holder *p = Rva00DFE6E8;
 	if (p)
 		p->s089(v);
 }
 
-// ?Rva003BB654@@YAXXZ @0x003BB654 19B null-guarded forwarder to vslot 0x17C via global 0xDFE6E8 caller 0x003CE477
-void Rva003BB654()
+// ?Rva003BB654@ScriptActions@@QAEXXZ @0x003BB654 19B null-guarded forwarder to vslot 0x17C via global 0xDFE6E8 caller 0x003CE477
+void ScriptActions::Rva003BB654()
 {
 	Rva003BAAD6Holder *p = Rva00DFE6E8;
 	if (p)
 		p->s095();
 }
 
-// ?Rva003BBFB1Select@@YGXPAVParameter@@@Z @0x003BBFB1 37B leaf caller 0x003CC46D globals 0xDFE16C 0xDFEDF0 slots getUnitNamed 0x9C
+// ?Rva003BBFB1Select@ScriptActions@@QAEXPAVParameter@@@Z @0x003BBFB1 37B leaf caller 0x003CC46D globals 0xDFE16C 0xDFEDF0 slots getUnitNamed 0x9C
 // Evidence: push [esp+4] mov ecx,[0xDFE16C] call ?getUnitNamed@ScriptEngine@@QAEPAVObject@@PAVParameter@@@Z test eax je then TheInGameUI vslot 0x9C with Object*.
 class Object;
 class Parameter;
@@ -263,14 +267,14 @@ public:
 	virtual void s39(Object *);
 };
 #define Rva00DFEDF0_BFB1 (*(Rva003BBFB1Holder **)&TheInGameUI)
-void __stdcall Rva003BBFB1Select(Parameter *p)
+void ScriptActions::Rva003BBFB1Select(Parameter *p)
 {
 	Object *o = TheScriptEngine->getUnitNamed(p);
 	if (o)
 		Rva00DFEDF0_BFB1->s39(o);
 }
 
-// ?Rva003BBFD6Select@@YGXPAVParameter@@@Z @0x003BBFD6 37B leaf caller 0x003CC482 globals 0xDFE16C 0xDFEDF0 slots getUnitNamed 0xA0
+// ?Rva003BBFD6Select@ScriptActions@@QAEXPAVParameter@@@Z @0x003BBFD6 37B leaf caller 0x003CC482 globals 0xDFE16C 0xDFEDF0 slots getUnitNamed 0xA0
 // Evidence: same shape as 0x003BBFB1 but InGameUI vslot 0xA0 with Object*.
 class Rva003BBFD6Holder
 {
@@ -318,21 +322,21 @@ public:
 	virtual void s40(Object *);
 };
 #define Rva00DFEDF0_BFD6 (*(Rva003BBFD6Holder **)&TheInGameUI)
-void __stdcall Rva003BBFD6Select(Parameter *p)
+void ScriptActions::Rva003BBFD6Select(Parameter *p)
 {
 	Object *o = TheScriptEngine->getUnitNamed(p);
 	if (o)
 		Rva00DFEDF0_BFD6->s40(o);
 }
 
-// ?Rva003BB274Ai@@YGXPAVParameter@@H@Z @0x003BB274 41B leaf caller 0x003CB376 globals 0xDFE16C callees getUnitNamed rva0026DE3B
+// ?Rva003BB274Ai@ScriptActions@@QAEXPAVParameter@@H@Z @0x003BB274 41B leaf caller 0x003CB376 globals 0xDFE16C callees getUnitNamed rva0026DE3B
 // Evidence: push [esp+4] ScriptEngine getUnitNamed test je then [eax+0x258] test je then push [esp+8] AIUpdateInterface::rva0026DE3B ret 8.
 class AIUpdateInterface
 {
 public:
 	void rva0026DE3B(int);
 };
-void __stdcall Rva003BB274Ai(Parameter *p, int v)
+void ScriptActions::Rva003BB274Ai(Parameter *p, int v)
 {
 	Object *o = TheScriptEngine->getUnitNamed(p);
 	if (!o)
@@ -343,7 +347,7 @@ void __stdcall Rva003BB274Ai(Parameter *p, int v)
 	ai->rva0026DE3B(v);
 }
 
-// ?Rva003BBF23Disable@@YGXPAVParameter@@_N@Z @0x003BBF23 46B leaf caller 0x003CC4CC globals 0xDFE16C callees getUnitNamed setDisabledUntil
+// ?Rva003BBF23Disable@ScriptActions@@QAEXPAVParameter@@_N@Z @0x003BBF23 46B leaf caller 0x003CC4CC globals 0xDFE16C callees getUnitNamed setDisabledUntil
 // Evidence: push [esp+4] getUnitNamed test je then mov cl,[esp+8] neg cl sbb ecx,ecx and ecx,0x3FFFFFFF push ecx push 3 mov ecx,eax call setDisabledUntil ret 8.
 enum DisabledType
 {
@@ -354,7 +358,7 @@ class Object
 public:
 	void setDisabledUntil(DisabledType, unsigned int);
 };
-void __stdcall Rva003BBF23Disable(Parameter *p, bool b)
+void ScriptActions::Rva003BBF23Disable(Parameter *p, bool b)
 {
 	Object *o = TheScriptEngine->getUnitNamed(p);
 	if (!o)
@@ -362,7 +366,7 @@ void __stdcall Rva003BBF23Disable(Parameter *p, bool b)
 	o->setDisabledUntil(DISABLED_TYPE_3, b ? 0x3FFFFFFF : 0);
 }
 
-// ?Rva003BBEF4@@YGXHM@Z @0x003BBEF4 47B leaf caller 0x003CC3CC globals g_00BBE358 TheInGameUI slot 0x5c ceil ftol2 x87
+// ?Rva003BBEF4@ScriptActions@@QAEXHM@Z @0x003BBEF4 47B leaf caller 0x003CC3CC globals g_00BBE358 TheInGameUI slot 0x5c ceil ftol2 x87
 // Evidence: fld [esp+8] fmul g_00BBE358 fstp call ceil call ftol2 then TheInGameUI vslot 0x5c with first arg and int result ret 8.
 // Shape lever x87-operand-order: extern float puts const first; literal loads local first like retail. Trying 1000.0f (msec scale).
 extern "C" __declspec(dllimport) double __cdecl ceil(double);
@@ -395,7 +399,7 @@ public:
 	virtual void s23(int a1, int a2);
 };
 #define Rva00DFEDF0_BBEF4 (*(Rva003BBEF4Holder **)&TheInGameUI)
-void __stdcall Rva003BBEF4(int a1, float a2)
+void ScriptActions::Rva003BBEF4(int a1, float a2)
 {
 	int v = (int)ceil(a2 * 1000.0f);
 	Rva00DFEDF0_BBEF4->s23(a1, v);
