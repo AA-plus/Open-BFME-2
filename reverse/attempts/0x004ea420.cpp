@@ -1,46 +1,77 @@
-// ?rva004EA420@Rva004EA3B8@@QAEXXZ
-// partial score=0.98 date=2026-10-09
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Source/Common /ICode/GameEngine/Source/GameLogic/SkirmishAI/AIEconomyBuilder /ICode/Libraries/Include/Lib
+// ?rva004EA420@Rva004EA420@@QAEXXZ
+// partial score=0.9836 date=2026-10-13
+// ?rva004EA420@Rva004EA420@@QAEXXZ
+// cl: /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /O1 /G7 /arch:SSE /DNDEBUG /EHsc /MD /D_STLP_USE_STATIC_LIB
+// stlport
+// Native 0x004EA420..0x004EA4E4 (197B). If the global pointer vector at
+// 0x00E04494 is empty and Rva004EA2C5Get()>0, reserves it, walks GameLogic
+// objects (getFirstObject 0x0023CAD2) and for each whose +4 record has an
+// AsciiString at +0x64 equal to the global AsciiString 0x00E04490
+// (StringBase compare 0x000069D6) creates an Rva00596F18 (rowed ctor
+// 0x00596EEF), sets its Coord3D from object+0x38 (rowed 0x00573A00), copies
+// object+0x44 to item+0x3C and push_backs it (rowed 0x004DFCB0); next at
+// object+0x8C.
+#include <vector>
 #include "ascii_string.h"
-#include "GameLogicObjectLookupView.h"
-#include "AIEconomyBuilderFarmLibrary.h"
 #include "Coord3D.h"
-void *__cdecl operator new(unsigned);
-class ModuleData;
-namespace _STL { template<class T> class allocator {}; template<class T,class A=allocator<T> > class vector { public: void reserve(unsigned); void push_back(const T &); }; }
+
+class Object;
+class GameLogic
+{
+public:
+	Object *getFirstObject();
+};
 extern GameLogic *TheGameLogic;
-extern unsigned g_Va00E04490;
+
 int Rva004EA2C5Get();
-struct EconomyObjectTemplate { char unknown00[0x64]; StringBase<char> name; };
-struct EconomyObjectView {
- EconomyObjectTemplate *getTemplate() const { return type; } char unknown00[4]; EconomyObjectTemplate *type;
- char unknown08[0x38-8]; Coord3D position; float orientation;
- char unknown48[0x8C-0x48]; Object *next;
+
+class ModuleData;
+
+class Rva00573A00
+{
+public:
+	void rva00573A00(const Coord3D *pos);
 };
-class Rva00573A00 { public: void rva00573A00(const Coord3D *); };
-class Rva00596F18 {
-public: Rva00596F18(void *); virtual ~Rva00596F18();
- char unknown04[0x3C-4]; float orientation; char unknown40[0x74-0x40];
+
+class Rva00596F18 : public Rva00573A00
+{
+public:
+	Rva00596F18(void *arg);
+private:
+	char m_pad[0x74];
 };
-struct EconomyFarmView { char unknown00[0x3C]; float orientation; };
-class Rva004EA3B8 { public: void rva004EA420(); };
-void Rva004EA3B8::rva004EA420() {
- if(AIEconomyBuilder::m_farmList.first==AIEconomyBuilder::m_farmList.finish) {
-  int count=Rva004EA2C5Get();
-  if(count>0) {
-   _STL::vector<const ModuleData *> &farms=reinterpret_cast<_STL::vector<const ModuleData *> &>(AIEconomyBuilder::m_farmList);
-   farms.reserve(count);
-   int index=0;
-   for(Object *obj=TheGameLogic->getFirstObject();obj;obj=reinterpret_cast<EconomyObjectView *>(obj)->next) {
-    EconomyObjectView *view=reinterpret_cast<EconomyObjectView *>(obj);
-    if(!view->getTemplate()->name.compare(reinterpret_cast<const StringBase<char> &>(g_Va00E04490))) {
-     Rva00596F18 *selected=new Rva00596F18(reinterpret_cast<void *>(index++));
-     EconomyFarmView *farm=reinterpret_cast<EconomyFarmView *>(selected);
-     reinterpret_cast<Rva00573A00 *>(farm)->rva00573A00(&view->position);
-     farm->orientation=view->orientation;
-     farms.push_back(reinterpret_cast<const ModuleData *const &>(selected));
-    }
-   }
-  }
- }
+
+extern _STL::vector<const ModuleData *> g_00E04494;
+extern AsciiString g_00E04490;
+
+class Rva004EA420
+{
+public:
+	void rva004EA420();
+};
+
+void Rva004EA420::rva004EA420()
+{
+	if (!g_00E04494.empty())
+		return;
+	int count = Rva004EA2C5Get();
+	if (count <= 0)
+		return;
+	g_00E04494.reserve(count);
+	int index = 0;
+	Object *obj = TheGameLogic->getFirstObject();
+	if (!obj)
+		return;
+	do
+	{
+		char *record = *(char **)((char *)obj + 4);
+		if (((const StringBase<char> *)(record + 0x64))->compare(*(const StringBase<char> *)&g_00E04490) == 0)
+		{
+			Rva00596F18 *item = new Rva00596F18((void *)index++);
+			item->rva00573A00((const Coord3D *)((char *)obj + 0x38));
+			*(int *)((char *)item + 0x3C) = *(int *)((char *)obj + 0x44);
+			g_00E04494.push_back((const ModuleData *)item);
+		}
+		obj = *(Object **)((char *)obj + 0x8C);
+	} while (obj);
 }

@@ -52452,3 +52452,4 @@ _DeringBlockStrong_C	0x001C1AD0	2030	partial	vp6-cleanroom 001c1ad0: first compl
 ??0SlaughterHordeContainModuleData@@QAE@XZ	0x0048104D	136	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Contain/SlaughterHordeContainModuleDataCtor.cpp 136B
 ??0Rva0073F4F3@@QAE@PAX@Z	0x0073F468	139	landed	add_match verified Code/GameEngine/Source/Common/Rva0073F4F3Ctor.cpp 139B
 ?rva004D0E93@Rva004D0E93@@QAEXHHABVUnicodeString@@@Z	0x004D0E93	148	landed	add_match verified Code/GameEngine/Source/GameNetwork/Rva004D0E93CommandBuild.cpp 148B
+?rva004EA420@Rva004EA420@@QAEXXZ	0x004EA420	197	partial	Fresh reconstruction size-exact nd2: retail materializes the new item pointer at [ebp-0x14] before the rva00573A00 call, ours after the +0x3C store (EDI stays live); index zero moved before getFirstObject fixed one pair; volatile/order/view variants worse score=0.9836 stash=reverse/attempts/0x004ea420.cpp
