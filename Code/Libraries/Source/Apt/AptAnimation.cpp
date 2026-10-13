@@ -36,6 +36,7 @@ public:
     bool isUndefined() const;
     int isScriptFunction() const;
     int isNativeFunction() const;
+    int isCharacterInst() const;
     int rva006E03A0() const;
     BfmeAptValue006DCD20 *rva006DCEE0();
 };
@@ -48,7 +49,9 @@ public:
     bool isSpriteInstBase() const;
 };
 struct AptCharacterInst {
-    char unknown[0x18];
+    char unknown[0xc];
+    void *unknown0C;
+    char unknown10[0x18 - 0x10];
     int frame;
 };
 class AptCIH {
@@ -58,6 +61,8 @@ public:
     char unknown4[0x4c - 4];
     AptCharacterInst *inst;
     const AptCIH *rva006E0CB0() const;
+    void *rva006E1170() const;
+    AptCharacterInst *CharacterInst() const { HCHECK((unsigned char)((const BfmeAptValue006DCD20 *)this)->isCharacterInst(), 0xa5, "isCharacterInst()"); return inst; }
     AptCharacterInst *Sprite() { HCHECK(((Rva006CFCD0 *)this)->isSpriteInstBase(), 0x7d, "isSpriteInstBase()"); return inst; }
     bool isUndefined() const { return ((const BfmeAptValue006DCD20 *)this)->isUndefined(); }
     int type() const { HCHECK(this, 0xd8, "this"); return ((const Rva006DBB30SarDwordField *)this)->get(); }
@@ -175,6 +180,10 @@ struct AptScriptFunctionView {
     char unknown[0x20];
     BfmeAptValue006DCD20 *scope;
 };
+struct AptScriptFunctionOwnerView {
+    char unknown[0x20];
+    AptCIH *owner;
+};
 struct AptIntervalTimer {
     int active;
     BfmeAptValue006DCD20 *func;
@@ -193,6 +202,7 @@ public:
     char unknown3C[0xa0 - 0x3c];
     AptActionQueueC *queue;
     void tickIntervalTimers(int);
+    void removeTimerFunctions(AptCIH *);
     void _tickNewInsts();
     bool validateBIL();
     void rva006E6540();
@@ -292,6 +302,32 @@ void AptAnimationPoolData::tickIntervalTimers(int interval)
                 g_aptDateInterpreter.stack.rva006E3AA0(g_aptDateInterpreter.stack.count);
                 timers[i].remaining += timers[i].interval;
             } else {
+                ((AptValue *)timers[i].func)->Release();
+                timers[i].cleanParams();
+                timers[i].active = 0;
+                activeTimers--;
+            }
+        }
+        if (--left == 0)
+            break;
+    }
+}
+
+// ?removeTimerFunctions@AptAnimationPoolData@@QAEXPAVAptCIH@@@Z @0x006E44F0
+// 276B (RET4). WorldBuilder 0x17590C0 names it (AptAnimation.cpp 0x4AC):
+// releases every live script-function timer whose owner has no character
+// instance or shares the given instance's +0x0C root. The first character
+// instance read expands inline (AptCIH.h 0xA5); later ones call 0x006E1170.
+void AptAnimationPoolData::removeTimerFunctions(AptCIH *cih)
+{
+    int left = activeTimers;
+    if (left == 0)
+        return;
+    for (int i = 0; i < g_bfmeAptPtrAtE176D0->getMaxIntervalTimers(); i++) {
+        if (!timers[i].active)
+            continue;
+        if (cih->CharacterInst() && (unsigned char)timers[i].func->isScriptFunction()) {
+            if (!((AptScriptFunctionOwnerView *)timers[i].func->rva006DCEE0())->owner->inst || ((AptCharacterInst *)((AptScriptFunctionOwnerView *)timers[i].func->rva006DCEE0())->owner->rva006E1170())->unknown0C == ((AptCharacterInst *)cih->rva006E1170())->unknown0C) {
                 ((AptValue *)timers[i].func)->Release();
                 timers[i].cleanParams();
                 timers[i].active = 0;
