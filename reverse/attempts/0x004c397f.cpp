@@ -1,29 +1,13 @@
 // ?addObject@ElvenWoodSpecialPower@@QAEPAVObject@@PBUCoord3D@@PBVAsciiString@@@Z
-// partial score=0.9 date=2026-10-08
-// cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
-
-#include "../Code/Libraries/Include/Lib/Coord3D.h"
+// partial score=0.97 date=2026-10-13
+// cl: /O1 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 #include "ascii_string.h"
-#include <string.h>
-class Team;
-class Thing { public: void setPosition(const Coord3D*); };
-class Object : public Thing {public: unsigned char prefix[0x304]; Team *team; void setTeam(Team*);};
-struct CreateMask { unsigned words[4]; };
-class ThingTemplate {public: unsigned char prefix[0x108]; unsigned char kinds[28]; unsigned char gap[0x4e0-0x124]; float scale;};
-class Rva002D06CA {public: void *rva002D06CA(const AsciiString*);};
-extern Rva002D06CA *TheThingFactory;
-class ThingFactory {public: Object *newObject(const ThingTemplate*,Team*,const CreateMask*,bool);};
-class Matrix3D {public:
- float row[3][4];
- explicit Matrix3D(bool init) { if(init) { row[0][0]=1;row[0][1]=0;row[0][2]=0;row[0][3]=0;row[1][0]=0;row[1][1]=1;row[1][2]=0;row[1][3]=0;row[2][0]=0;row[2][1]=0;row[2][2]=1;row[2][3]=0;} }
-};
-class TerrainLogic {public:
- void rva00283642(const ThingTemplate*,const Coord3D*,const Matrix3D*,float);
- void rva00280176(const ThingTemplate*,const Coord3D*,const Matrix3D*,float);
- void rva0027D3D9(const ThingTemplate*,const Coord3D*,const Matrix3D*,float);
-};
-extern TerrainLogic *TheTerrainLogic;
+
+class Thing;
 class ModuleData;
+struct Coord3D;
+class Object;
+class Team;
 
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameLogic/Module/BehaviorModule.h
 class BehaviorModule
@@ -65,7 +49,7 @@ class ElvenWoodSpecialPower : public SpecialPowerModule
 {
 public:
 	ElvenWoodSpecialPower( Thing *thing, const ModuleData *moduleData );
-	Object *addObject(const Coord3D*,const AsciiString*);
+	Object *addObject(const Coord3D *position, const AsciiString *name);
 
 protected:
 	virtual ~ElvenWoodSpecialPower();
@@ -86,23 +70,102 @@ ElvenWoodSpecialPower::~ElvenWoodSpecialPower()
 // stores). Bind them to the rows at those functions.
 #pragma comment(linker, "/alternatename:?specialPowerModuleInterfaceAnchor@SpecialPowerModuleInterface@@UAEXXZ=?ControlBarInput@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z")
 
-Object *ElvenWoodSpecialPower::addObject(const Coord3D *position,const AsciiString *name)
+// ?addObject@ElvenWoodSpecialPower@@QAEPAVObject@@PBUCoord3D@@PBVAsciiString@@@Z
+// @0x004C397F 288B (WB125EB20 addObject): template lookup, KINDOF-gated
+// terrain stamp through a retail-ordered identity Matrix3D, else masked
+// object creation. The matrix is built with explicit stores (zeros,
+// scale load, diagonals) so the compiler keeps retail's schedule.
+#pragma function(memset)
+extern "C" void *memset(void *dst, int value, unsigned int size);
+
+class ThingTemplate
 {
- const ThingTemplate *templ=static_cast<const ThingTemplate*>(TheThingFactory->rva002D06CA(name));
- if (templ) {
-  if ((templ->kinds[12]&0x10)||(templ->kinds[11]&0xc0)) {
-   Matrix3D matrix(true);
-   float scale=templ->scale;
-   unsigned kind=*reinterpret_cast<const unsigned*>(templ->kinds+8);
-   if(kind&0x40000000) TheTerrainLogic->rva00283642(templ,position,&matrix,scale);
-   else if(kind&0x80000000) TheTerrainLogic->rva00280176(templ,position,&matrix,scale);
-   else TheTerrainLogic->rva0027D3D9(templ,position,&matrix,scale);
-  } else {
-   CreateMask mask;
-   memset(&mask,0,sizeof(mask));
-   Object *object=reinterpret_cast<ThingFactory*>(TheThingFactory)->newObject(templ,0,&mask,false);
-   if(object) { object->setTeam(m_object->team);object->setPosition(position);return object; }
-  }
- }
- return 0;
+public:
+	unsigned char prefix[0x108];
+	unsigned char kinds[28];
+	unsigned char gap[0x4E0 - 0x124];
+	float scale;
+};
+
+class Matrix3D
+{
+public:
+	float row[3][4];
+};
+
+class TerrainLogic
+{
+public:
+	void rva00283642(const ThingTemplate *, const Coord3D *, const Matrix3D *, float);
+	void rva00280176(const ThingTemplate *, const Coord3D *, const Matrix3D *, float);
+	void rva0027D3D9(const ThingTemplate *, const Coord3D *, const Matrix3D *, float);
+};
+extern TerrainLogic *TheTerrainLogic;
+
+struct CreateMask
+{
+	unsigned words[4];
+};
+
+class Thing
+{
+public:
+	void setPosition(const Coord3D *);
+};
+
+class Object : public Thing
+{
+public:
+	void setTeam(Team *);
+	char pad[0x304];
+	Team *team;
+};
+
+class ThingFactory
+{
+public:
+	const ThingTemplate *findTemplate(const AsciiString &name);
+	Object *newObject(const ThingTemplate *tmpl, Team *team, const CreateMask *mask, bool flag);
+};
+extern ThingFactory *TheThingFactory;
+
+Object *ElvenWoodSpecialPower::addObject(const Coord3D *position, const AsciiString *name)
+{
+	const ThingTemplate *templ = TheThingFactory->findTemplate(*name);
+	if (templ) {
+		if ((templ->kinds[12] & 0x10) || (templ->kinds[11] & 0xC0)) {
+			Matrix3D matrix;
+			matrix.row[0][1] = 0.0f;
+			matrix.row[0][2] = 0.0f;
+			matrix.row[0][3] = 0.0f;
+			matrix.row[1][0] = 0.0f;
+			matrix.row[1][2] = 0.0f;
+			matrix.row[1][3] = 0.0f;
+			matrix.row[2][0] = 0.0f;
+			matrix.row[2][1] = 0.0f;
+			matrix.row[2][3] = 0.0f;
+			float scale = templ->scale;
+			matrix.row[0][0] = 1.0f;
+			matrix.row[1][1] = 1.0f;
+			matrix.row[2][2] = 1.0f;
+			int kind;
+			if ((kind = *(int *)(templ->kinds + 8)) & 0x40000000)
+				TheTerrainLogic->rva00283642(templ, position, &matrix, scale);
+			else if (kind < 0)
+				TheTerrainLogic->rva00280176(templ, position, &matrix, scale);
+			else
+				TheTerrainLogic->rva0027D3D9(templ, position, &matrix, scale);
+		}
+		else {
+			CreateMask mask;
+			memset(&mask, 0, sizeof(mask));
+			Object *object = TheThingFactory->newObject(templ, 0, &mask, false);
+			if (object) {
+				object->setTeam(m_object->team);
+				object->setPosition(position);
+				return object;
+			}
+		}
+	}
+	return 0;
 }
