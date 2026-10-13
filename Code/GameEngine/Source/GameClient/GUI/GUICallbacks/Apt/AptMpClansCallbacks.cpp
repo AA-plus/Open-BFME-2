@@ -297,7 +297,8 @@ void GadgetComboBoxSetIsEditable(GameWindow *, bool);
 int GadgetComboBoxAddEntry(GameWindow *, UnicodeString, int);
 void GadgetComboBoxSetSelectedPos(GameWindow *, int, bool);
 void GadgetComboBoxSetText(GameWindow *, UnicodeString);
-extern int g_00DB9198;
+// Chat.cpp owns the colour array at VA 0x00DB9198; index/addend unchanged.
+extern int GameSpyColor[];
 
 // Retail 0x0057F7AC..0x0057F920, 372 bytes, RET4. WorldBuilder's named
 // PopulateMyClans at 0x015A1630 independently identifies the callback and
@@ -312,12 +313,12 @@ void AptMpClans::PopulateMyClans(const UnicodeString &name)
     GadgetComboBoxSetValidationFlags(m_clanName, 4);
     GadgetComboBoxSetIsEditable(m_clanName, true);
     _STL::list<AsciiString> clans(m_prefs.rva005CA211(m_clan));
-    GadgetComboBoxAddEntry(m_clanName, UnicodeString::TheEmptyString, g_00DB9198);
+    GadgetComboBoxAddEntry(m_clanName, UnicodeString::TheEmptyString, GameSpyColor[0]);
     int selected = 0;
     for (_STL::list<AsciiString>::iterator i = clans.begin(); i != clans.end(); ++i)
     {
         UnicodeString text(*i);
-        int index = GadgetComboBoxAddEntry(m_clanName, text, g_00DB9198);
+        int index = GadgetComboBoxAddEntry(m_clanName, text, GameSpyColor[0]);
         if (name.compare(text) == 0)
             selected = index;
     }

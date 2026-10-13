@@ -181,7 +181,8 @@ void HandleBuddyResponses()
  if(g_Va00A03094&&timeGetTime()>g_Va00A03098)Rva00415EF8Close();
 }
 
-extern int g_00DB9198;
+// Chat.cpp owns the colour array at VA 0x00DB9198; index/addend unchanged.
+extern int GameSpyColor[];
 extern int g_Va00E046B8;
 void Rva00381C82AddChatText(int,const UnicodeString &,int);
 // ?Rva00416589@@YAXUBfmeStringRecord00415F34@@@Z retail416589338B
@@ -190,7 +191,7 @@ void Rva00416589(BfmeStringRecord00415F34 record)
 {
  BuddyMessage &message=record.message;
  UnicodeString text;text.format(L"[%hs] %s",message.senderNick.str(),message.message.str());
- Rva00381C82AddChatText(0,text,(&g_00DB9198)[8]);
+ Rva00381C82AddChatText(0,text,GameSpyColor[8]);
  if(!g_Va00E046B8){
   UnicodeString snippet=message.message;
   while(snippet.getLength()>11)snippet.removeLastChar();

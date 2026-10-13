@@ -260,7 +260,8 @@ extern GameSpyInfoInterface *TheGameSpyInfo;
 
 // The online chat colors: 0x009B9198 and, inside the 148-byte table
 // 0x009B91B4, the dword at +0x44 (0x009B91F8).
-extern int g_00DB9198;
+// Chat.cpp owns the colour array at VA 0x00DB9198; index/addend unchanged.
+extern int GameSpyColor[];
 extern unsigned int g_00DB91B4;
 
 // Unrowed 0x0044C0A8 (pinned; as AptLanLobby::MpOwnerPrintMessage uses it)
@@ -955,7 +956,7 @@ void AptOnlineCustomMatch::MpOwnerPrintMessage(const UnicodeString &text, int ki
 	switch (kind)
 	{
 	case 0:
-		TheGameSpyInfo->v61(text, g_00DB9198);
+		TheGameSpyInfo->v61(text, GameSpyColor[0]);
 		break;
 	case 1:
 		if (!g_Va00E046B8)

@@ -2,7 +2,7 @@
 // ?rva005BA6EE@Rva005BA6EE@@QAE_NXZ, retail 0x005BA6EE, 277 bytes.
 // BFME1 donor game/GameEngine/Source/GameClient/GUI/OnlineQuickMatchPopulateMaxPing.cpp
 // BfmeAptScreenOnlineQuickMatch::rva00558A30Ready: same reset/compute/loop/ANY/select
-// shape. BFME2 deltas from retail: color from g_00DB9198, timeout via TheGameSpyConfig
+// shape. BFME2 deltas from retail: color from GameSpyColor[0], timeout via TheGameSpyConfig
 // slot 0xc, entries stored to g_00E0654C, format string via TheGameText slot 0x44
 // (pointer) with ping vararg, ANY via fetch slot 0x3c by value, prefs at +0x64 via
 // getMaxPing row, combo at +0x8c, selected clamp then SetSelectedPos(combo, sel, false).
@@ -49,7 +49,8 @@ public:
 };
 extern GameSpyConfigInterface *TheGameSpyConfig;
 
-extern int g_00DB9198;
+// Chat.cpp owns the colour array at VA 0x00DB9198; index/addend unchanged.
+extern int GameSpyColor[];
 extern int g_00E0654C;
 
 class QuickMatchPreferences
@@ -69,7 +70,7 @@ bool Rva005BA6EE::rva005BA6EE()
 {
 	if (*(GameWindow **)((char *)this + 0x8c) == 0)
 		return false;
-	int color = g_00DB9198;
+	int color = GameSpyColor[0];
 	UnicodeString text;
 	GadgetComboBoxReset(*(GameWindow **)((char *)this + 0x8c));
 	int maxPingEntries = (TheGameSpyConfig->getPingTimeoutInMs() - 1) / 100;
