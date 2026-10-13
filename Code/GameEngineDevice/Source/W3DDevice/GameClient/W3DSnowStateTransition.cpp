@@ -10,7 +10,7 @@
 // Existing reset93349, override1E35DF and named weather globals bind the rest.
 class Overridable { public: void *vtable; const Overridable *m_nextOverride; const Overridable *getFinalOverride() const; };
 class WeatherSetting : public Overridable { public: char pad08[0x6c-8]; bool enabled; char pad6d[3]; int duration; };
-template<class T> struct OVERRIDE { const T *ptr; };
+template<class T> class OVERRIDE { public: const T *ptr; };
 extern OVERRIDE<WeatherSetting> TheWeatherSetting;
 class GlobalWeatherSystem { public: char pad00[0x10]; int state; };
 extern GlobalWeatherSystem *TheGlobalWeatherSystem;
