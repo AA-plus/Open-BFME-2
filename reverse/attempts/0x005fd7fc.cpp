@@ -1,48 +1,376 @@
 // ?OnPanelLoaded@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBD@Z
-// partial score=0.98 date=2026-10-10
-// ?OnPanelLoaded@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBD@Z
-// partial score=0.98 date=2026-10-08
-// cl: /O1 /G7 /arch:SSE /GX /MD /DNDEBUG /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// partial score=0.993 date=2026-10-13
+// cl: /Ireference/shims/bfme2_ascii /O1 /MD /EHsc
+// ?SetSlotString@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBDABVUnicodeString@@@Z retail 0x005FD788 116B
+// Evidence: format APT:_level%u.%s_%s%s via 0x00038150; bfmeSetText via pin 0x00225301; releaseBuffer 0x00036410; globals 0x009FE4CC 0x007BAC1C 0x0087A290; callers 0x005FD92E 0x005FD9A6 0x005FD9E9; sibling APT precedent Rva005FDF1C
+template <typename T> struct BfmeStringData
+{
+	int refCount;
+	unsigned short length;
+	unsigned short capacity;
+	T text[1];
+};
+
 #include "ascii_string.h"
-struct Rva005F4AD7Inner;
-struct Rva005F4AD7 {
- Rva005F4AD7Inner *m_ptr;
- Rva005F4AD7(const Rva005F4AD7 &) throw();
- ~Rva005F4AD7();
- Rva005F4AD7 &operator=(const Rva005F4AD7 &);
+
+
+#include "unicode_string.h"
+
+struct Rva005FD788Inner
+{
+	char m_pad8[8];
+	char m_name[1];
 };
-class Rva005F4AED {
+
+struct Rva005FD788Outer
+{
+	Rva005FD788Inner *m_ptr;
+};
+
+class BfmeAptWindowManager
+{
 public:
- virtual void slot00() = 0;
- virtual Rva005F4AD7 createPanel(int level,const AsciiString &leaf) = 0;
- Rva005F4AD7 rva005F4AED(int level,const AsciiString &leaf);
+	void bfmeSetText(const AsciiString &, const UnicodeString &, bool);
 };
-Rva005F4AD7 Rva005F4AED::rva005F4AED(int level,const AsciiString &leaf) {
- const Rva005F4AD7 panel=createPanel(level,leaf);
- return panel;
+
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
+extern const char *g_Va0087A290[];
+
+struct TargetRef00217D4C;
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *ref); // 0x0007DEEF
+
+class AptCommandTarget
+{
+};
+
+struct DelegateDesc
+{
+	template <class T> DelegateDesc(T *object, void (T::*method)(const char *path))
+		: m_object(reinterpret_cast<AptCommandTarget *>(object)), m_method(reinterpret_cast<void (AptCommandTarget::*)(const char *path)>(method)) {}
+
+	AptCommandTarget *m_object;
+	void (AptCommandTarget::*m_method)(const char *path);
+};
+
+class AptCommandMap
+{
+public:
+	void *m_vtbl;
+	int m_refCount;
+};
+
+// 0x00579E47 is rowed as the delegate-wrapper constructor ??0Rva00579E47@@QAE@ABUDelegateDesc@@@Z
+// (built in place as the by-value AddCommandMap argument); AptRef<T> builds through it.
+class Rva00579E47
+{
+public:
+	Rva00579E47(const DelegateDesc &desc); // 0x00579E47
+protected:
+	Rva00579E47() {}
+};
+
+template <class T> class AptRef : public Rva00579E47
+{
+public:
+	AptRef(const DelegateDesc *desc) : Rva00579E47(*desc) {}
+	AptRef(const AptRef &that) : m_ptr(that.m_ptr)
+	{
+		if (m_ptr)
+			m_ptr->m_refCount++;
+	}
+	~AptRef()
+	{
+		if (m_ptr)
+			ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)m_ptr);
+	}
+
+private:
+	T *m_ptr;
+};
+
+// The 12-byte command-map name list: ctor 0x001F81BF (ICF fold, pinned),
+// AddCommandMap 0x0052458E, dtor 0x0052413E (pinned).
+class AptCommandMapAdder
+{
+public:
+	AptCommandMapAdder();
+	~AptCommandMapAdder();
+	void AddCommandMap(const AsciiString &name, AptRef<AptCommandMap> map);
+
+	__forceinline void AddCommandMapDelegate(const AsciiString &name, DelegateDesc desc)
+	{
+		AddCommandMap(name, &desc);
+	}
+
+private:
+	char m_pad[0xC];
+};
+
+// "prefix + name + text" concat nodes (layout as in System/RegistryAsciiPath.cpp).
+class Rva000B3F84Pair
+{
+public:
+	Rva000B3F84Pair() {}
+	Rva000B3F84Pair *init(const char *src); // 0x000B3F84
+
+	const char *m_ptr;
+	int m_len;
+};
+
+struct AsciiStringRef
+{
+	const AsciiString *m_string;
+};
+
+struct AsciiStringPlusString : AsciiStringRef
+{
+	AsciiStringRef m_second;
+};
+
+struct AsciiStringPlusStringText : AsciiStringPlusString
+{
+	operator AsciiString(); // 0x0050F74B
+
+	Rva000B3F84Pair m_right;
+};
+
+static __forceinline AsciiStringPlusString operator+(const AsciiString &left, const AsciiString &right)
+{
+	AsciiStringPlusString result;
+	result.m_string = &left;
+	result.m_second.m_string = &right;
+	return result;
 }
-namespace AptUtils { const char* SkipLevelN(const char*); int LevelIndexFromTarget(const char*); }
-struct Rva002BED91 { Rva005F4AED *m_ptr; Rva005F4AED *operator->() const { return m_ptr; } void clear(); };
+
+// ?operator+(AsciiStringPlusString, text) present-unmatched (inline, emitted out of line; ICF-folded at 0x00109CFD; pinned)
+inline AsciiStringPlusStringText operator+(const AsciiStringPlusString &left, const char *right)
+{
+	Rva000B3F84Pair text;
+	text.init(right);
+	AsciiStringPlusStringText result;
+	static_cast<AsciiStringPlusString &>(result) = left;
+	result.m_right = text;
+	return result;
+}
+
+// The rowed TreeHintRef assignment (0x002174A4).
+struct TreeHintRef00217D4C
+{
+	__forceinline TreeHintRef00217D4C() : m_ptr(0) {}
+	TreeHintRef00217D4C &operator=(const TreeHintRef00217D4C &other);
+	__forceinline ~TreeHintRef00217D4C() { if (m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
+
+	TargetRef00217D4C *m_ptr;
+};
+
+// The 24-byte HUD slot has two reference handles and two Unicode strings.
+// Its zeroing constructor folds with 0x00286297; its distinct destructor is
+// 0x005FD5D4 (84 bytes including the native EH frame).
+struct Rva005F4AD7
+{
+	__forceinline Rva005F4AD7() : m_ptr(0) {}
+	~Rva005F4AD7();
+	Rva005F4AD7 &operator=(const Rva005F4AD7 &other);
+	void *m_ptr;
+};
+
+class Rva005FD5D4UnitSlot
+{
+public:
+	Rva005FD5D4UnitSlot();
+	~Rva005FD5D4UnitSlot();
+	TreeHintRef00217D4C m_ref; // +0x00
+	Rva005F4AD7 m_second; // +0x04
+	UnicodeString m_text8, m_textC;
+	int m_unknown10, m_unknown14;
+};
+
+Rva005FD5D4UnitSlot::Rva005FD5D4UnitSlot()
+	: m_ref(), m_second(), m_text8(), m_textC(), m_unknown10(0), m_unknown14(0)
+{
+}
+
+Rva005FD5D4UnitSlot::~Rva005FD5D4UnitSlot()
+{
+}
+
+// The Apt window manager's +0x318 mode (0: idle).
+struct Rva00578A7EAptMode
+{
+	unsigned char m_pad000[0x318];
+	int m_mode; // +0x318
+};
+
 namespace StrategicHUD {
-class ArmyUnitSwapperMovieClip {
+class ArmyUnitSwapperMovieClip
+{
 public:
- class Impl {
- public:
-  void OnPanelLoaded(int slotIndex,const char *path);
- private:
-  struct Slot { Rva002BED91 factory; Rva005F4AD7 panel; char remainder[0x10]; };
-  char padding[0x1c];
-  Slot slots[2];
- };
+	class Impl;
+
+	// The owner's notification slots the callbacks fire (vtable +4..+0x14).
+	ArmyUnitSwapperMovieClip(int level, const AsciiString &name, const TreeHintRef00217D4C &top, const TreeHintRef00217D4C &bottom);
+	virtual void v0();
+	virtual void notifyClosed();
+	virtual void notifyExit();
+	virtual void notifyMoveDown();
+	virtual void notifyMoveUp();
+	virtual void notifySwap();
+
+private:
+	Impl *m_impl; // +0x04
 };
-void ArmyUnitSwapperMovieClip::Impl::OnPanelLoaded(int slotIndex,const char *path) {
- Slot &slot=slots[slotIndex];
- if(slot.factory.m_ptr && !slot.panel.m_ptr) {
-  {
-   AsciiString leaf(AptUtils::SkipLevelN(path));
-   slot.panel=slot.factory->rva005F4AED(AptUtils::LevelIndexFromTarget(path),leaf);
-  }
-  slot.factory.clear();
- }
 }
+
+class StrategicHUD::ArmyUnitSwapperMovieClip::Impl
+{
+public:
+	Impl(ArmyUnitSwapperMovieClip *owner, int level, const AsciiString &name, const TreeHintRef00217D4C &top, const TreeHintRef00217D4C &bottom);
+	~Impl();
+	void SetSlotString(int index, const char *suffix, const UnicodeString &text);
+	void OnOpen(const char *path); // 0x005FD3EF
+	void OnClosed(const char *path); // 0x005FD3FF
+	void OnExitButtonClicked(const char *path); // 0x005FD416
+	void OnMoveDownButtonClicked(const char *path); // 0x005FD434
+	void OnMoveUpButtonClicked(const char *path); // 0x005FD452
+	void OnSwapButtonClicked(const char *path); // 0x005FD470
+	void OnTopPanelLoaded(const char *path); // 0x005FD88D
+	void OnBottomPanelLoaded(const char *path); // 0x005FD89B
+	void OnPanelLoaded(int which, const char *path); // 0x005FD7FC
+
+	ArmyUnitSwapperMovieClip *m_owner; // +0x00
+	int m_level4;
+	AsciiString m_name; // +0x08
+	AptCommandMapAdder m_commandMaps; // +0x0C
+	int m_state; // +0x18 (0 closed, 1 open, 2/3 closing)
+	Rva005FD5D4UnitSlot m_slots[2]; // +0x1C
+	bool m_4c;
+	bool m_4d;
+	bool m_4e;
+};
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::SetSlotString(int index, const char *suffix, const UnicodeString &text)
+{
+	const char *table = g_Va0087A290[index];
+	AsciiString key;
+	Rva005FD788Inner *inner = *(Rva005FD788Inner **)&m_name;
+	const char *mid = inner ? inner->m_name : "";
+	key.format("APT:_level%u.%s_%s%s", m_level4, mid, table, suffix);
+	g_bfmeAptWindowManager->bfmeSetText(key, text, true);
 }
+
+StrategicHUD::ArmyUnitSwapperMovieClip::Impl::Impl(ArmyUnitSwapperMovieClip *owner, int level, const AsciiString &name, const TreeHintRef00217D4C &top, const TreeHintRef00217D4C &bottom)
+	: m_owner(owner), m_level4(level), m_name(name), m_state(0), m_4c(false), m_4d(false), m_4e(false)
+{
+	m_slots[0].m_ref = top;
+	m_slots[1].m_ref = bottom;
+
+	AsciiString prefix;
+	prefix.format("_level%u.", m_level4);
+	m_commandMaps.AddCommandMapDelegate(prefix + m_name + "_OnOpen", DelegateDesc(this, &Impl::OnOpen));
+	m_commandMaps.AddCommandMapDelegate(prefix + m_name + "_OnClosed", DelegateDesc(this, &Impl::OnClosed));
+	m_commandMaps.AddCommandMapDelegate(prefix + m_name + "_OnExitButtonClicked", DelegateDesc(this, &Impl::OnExitButtonClicked));
+	m_commandMaps.AddCommandMapDelegate(prefix + m_name + "_OnMoveDownButtonClicked", DelegateDesc(this, &Impl::OnMoveDownButtonClicked));
+	m_commandMaps.AddCommandMapDelegate(prefix + m_name + "_OnMoveUpButtonClicked", DelegateDesc(this, &Impl::OnMoveUpButtonClicked));
+	m_commandMaps.AddCommandMapDelegate(prefix + m_name + "_OnSwapButtonClicked", DelegateDesc(this, &Impl::OnSwapButtonClicked));
+	m_commandMaps.AddCommandMapDelegate(prefix + m_name + "_OnTopPanelLoaded", DelegateDesc(this, &Impl::OnTopPanelLoaded));
+	m_commandMaps.AddCommandMapDelegate(prefix + m_name + "_OnBottomPanelLoaded", DelegateDesc(this, &Impl::OnBottomPanelLoaded));
+
+	for (int slot = 0; slot < 2; ++slot)
+	{
+		SetSlotString(slot, "RegionName", UnicodeString::TheEmptyString);
+		SetSlotString(slot, "ArmyName", UnicodeString::TheEmptyString);
+		SetSlotString(slot, "CP", UnicodeString::TheEmptyString);
+	}
+}
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnOpen(const char *path)
+{
+	if (m_state == 0)
+		m_state = 1;
+}
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnClosed(const char *path)
+{
+	if (m_state == 2)
+	{
+		m_state = 3;
+		m_owner->notifyClosed();
+	}
+}
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnExitButtonClicked(const char *path)
+{
+	if (m_state == 1 && ((Rva00578A7EAptMode *)g_bfmeAptWindowManager)->m_mode == 0)
+		m_owner->notifyExit();
+}
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnMoveDownButtonClicked(const char *path)
+{
+	if (m_state == 1 && ((Rva00578A7EAptMode *)g_bfmeAptWindowManager)->m_mode == 0)
+		m_owner->notifyMoveDown();
+}
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnMoveUpButtonClicked(const char *path)
+{
+	if (m_state == 1 && ((Rva00578A7EAptMode *)g_bfmeAptWindowManager)->m_mode == 0)
+		m_owner->notifyMoveUp();
+}
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnSwapButtonClicked(const char *path)
+{
+	if (m_state == 1 && ((Rva00578A7EAptMode *)g_bfmeAptWindowManager)->m_mode == 0)
+		m_owner->notifySwap();
+}
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnTopPanelLoaded(const char *path)
+{
+	OnPanelLoaded(0, path);
+}
+
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnBottomPanelLoaded(const char *path)
+{
+	OnPanelLoaded(1, path);
+}
+
+// ?OnPanelLoaded@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBD@Z,
+// RVA 0x005FD7FC, 145B. Slot panel loader: if the slot's factory handle is
+// set and no panel is built yet, derive the leaf name (SkipLevelN) and level
+// index from the Apt path, build the panel through the rowed factory
+// forwarder 0x005F4AED, then release the factory handle (rowed clear
+// 0x002BED91). Member layout from the UnitSlot view above (stride 0x18);
+// the factory handle shares slot+0's {ptr} layout with TreeHintRef, so the
+// rowed clear is reached through a TU-local view cast.
+namespace AptUtils { const char *SkipLevelN(const char *path); int LevelIndexFromTarget(const char *path); }
+class Rva005F4AED
+{
+public:
+	Rva005F4AD7 rva005F4AED(int level, const AsciiString &leaf);
+};
+struct Rva002BED91
+{
+	TargetRef00217D4C *m_ptr;
+	void clear();
+};
+// ?clear@Rva002BED91@@QAEXXZ must resolve to the rowed 19B body: reuse its
+// exact class name through a TU-local redeclaration (same {ptr} layout as
+// TreeHintRef00217D4C, whose release semantics it shares).
+void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnPanelLoaded(int which, const char *path)
+{
+	Rva005FD5D4UnitSlot &slot = m_slots[which];
+	Rva005F4AED *factory = 0;
+	if (slot.m_ref.m_ptr && !slot.m_second.m_ptr) {
+		factory = (Rva005F4AED *)slot.m_ref.m_ptr;
+		AsciiString leaf(AptUtils::SkipLevelN(path));
+		slot.m_second = factory->rva005F4AED(AptUtils::LevelIndexFromTarget(path), leaf);
+		((Rva002BED91 *)&slot.m_ref)->clear();
+	}
+}
+
+// The owner's ctor 0x005FDE24 (ret 0x10): vtable 0x0087A2E8 and its Impl
+// (new 0x50) built with this and the four arguments.
+StrategicHUD::ArmyUnitSwapperMovieClip::ArmyUnitSwapperMovieClip(int level, const AsciiString &name, const TreeHintRef00217D4C &top, const TreeHintRef00217D4C &bottom)
+	: m_impl(new Impl(this, level, name, top, bottom))
+{
+}
+
+StrategicHUD::ArmyUnitSwapperMovieClip::Impl::~Impl() {}
