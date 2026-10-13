@@ -1,4 +1,16 @@
 // ?rva001DE9C4@Eva@@QAEHPBD@Z
+// partial score=0.9633 date=2026-10-13
+// ?rva001DE9C4@Eva@@QAEHPBD@Z
+// partial score=0.9633 date=2026-10-13 W7-MP6 r3
+// nd 28 -> 6 SIZE-EXACT 161B. The decisive shape (from the WB D91920 body) is ONE shared `int id`
+// assigned in both m_flag44 paths and a SINGLE trailing `if (id == -1) throw`, not per-path
+// early returns: cl then merges the node/id web into EDI like retail (key=EBX, this=ESI) and the
+// iterator-temp table field survives as mov [ebp-4],esi. The iterator must be built as
+// `it = Rva0041534BIter(m_table48.rva00056F61(&tmp), &m_table48)` (assignment from a ctor-built
+// iterator) or the dead table field is folded out and the shape reverts to 159B/nd28.
+// REMAINING nd6 = ONE shrink-wrapped `push edi`: retail saves EDI in the entry prologue (before
+// _strcmpi), ours saves it after the None early-out (still on both live paths). Tried inert:
+// flag grid (O2/Os/Ot/Oy/G6/G7/EHsc), id=-1 init, cmp local, it hoisted before the check.
 // partial score=0.93 date=2026-09-28
 // ?rva001DE9C4@Eva@@QAEHPBD@Z
 // partial score=0.93 date=2026-09-28
@@ -44,6 +56,7 @@ struct Rva0041534BIter
 {
 	void *m_node;
 	Rva00056F61 *m_table;
+	Rva0041534BIter(void *n, Rva00056F61 *t) : m_node(n), m_table(t) {}
 };
 struct Rva00056F61Node
 {
@@ -96,31 +109,28 @@ int Eva::rva001DE9C4(const char *key)
 {
 	if (_strcmpi("None", key) == 0)
 		return -1;
+	int id;
 	if (m_flag44 == 0)
 	{
-		void *node;
+		Rva0041534BIter it(0, &m_table48);
 		{
 			AsciiString tmp(key);
-			node = m_table48.rva00056F61(&tmp);
+			it = Rva0041534BIter(m_table48.rva00056F61(&tmp), &m_table48);
 			((StringBase<char> *)&tmp)->releaseBuffer();
 		}
-		if (node == 0)
+		if (it.m_node == 0)
 			throw INIException(3, "Expected a recognized Eva event name or 'None'; got '%s'", key);
-		int id = *(int *)((char *)node + 8);
-		if (id == -1)
-			throw INIException(3, "Expected a recognized Eva event name or 'None'; got '%s'", key);
-		return id;
+		id = *(int *)((char *)it.m_node + 8);
 	}
 	else
 	{
-		int id;
 		{
 			AsciiString tmp(key);
 			id = rva001DE78E(&tmp);
 			((StringBase<char> *)&tmp)->releaseBuffer();
 		}
-		if (id == -1)
-			throw INIException(3, "Expected a recognized Eva event name or 'None'; got '%s'", key);
-		return id;
 	}
+	if (id == -1)
+		throw INIException(3, "Expected a recognized Eva event name or 'None'; got '%s'", key);
+	return id;
 }
