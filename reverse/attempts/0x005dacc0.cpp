@@ -1,4 +1,6 @@
 // ?rva005DACC0@Rva005DAC85@@QAEXXZ
+// partial score=0.93 date=2026-10-13
+// ?rva005DACC0@Rva005DAC85@@QAEXXZ
 // partial score=0.94 date=2026-10-09
 // ?rva005DACC0@Rva005DAC85@@QAEXXZ
 // Revised bank: native005DACC0..005DADD1; WB AIBuildableUnit::updatePriority is a strong lead.
@@ -45,12 +47,13 @@ public:
 };
 extern Rva002A8F24 *g_00DFEEF8;
 
-class Rva002D06CA
+class ThingTemplate;
+class ThingFactory
 {
 public:
-	void *rva002D06CA(const AsciiString *key);
+	const ThingTemplate *findTemplate(const AsciiString &name);
 };
-extern Rva002D06CA *TheThingFactory;
+extern ThingFactory *TheThingFactory;
 
 
 
@@ -126,7 +129,7 @@ void Rva005DAC85::rva005DACC0()
 	IntMap *map = *(IntMap **)((char *)g_00DFEEF8->rva002A8F24((Player *)m_40) + 0xC);
 	if (map->bucket_count() < 2)
 		return;
-	void *found = TheThingFactory->rva002D06CA((const AsciiString *)&m_0C);
+	const ThingTemplate *found = TheThingFactory->findTemplate(*(const AsciiString *)&m_0C);
 	if ((*(unsigned char *)((char *)found + 0x11F) & 0x80) != 0)
 		return;
 	if ((*(unsigned char *)((char *)found + 0x113) & 4) != 0)
