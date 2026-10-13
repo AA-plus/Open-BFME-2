@@ -458,7 +458,6 @@ public:
 	float getRadius() const { return m_10; }
 	bool rva005D874A(Object *source);
 	bool rva005D9E12(Object *source);
-	bool rva005DA109(Object *source);
 private:
 	char m_pad04[0x0C];
 	float m_10;		// +0x10
@@ -560,7 +559,25 @@ bool Rva005EEDB5Picker::rva005D9E12(Object *source)
 // within 200 of the source that passes the relationship filter (flags 0xC),
 // has kinds 7 and 49 and no +0x80 becomes the target when no alive object
 // allied (flags 4) to the source of kind 3 or 90 stands within 200 of it.
-bool Rva005EEDB5Picker::rva005DA109(Object *source)
+// WB159C230 explicitly names AISpecialPowerCaptureBuilding::shouldActivate.
+// Its two 200-unit partition scans, masks 7/49 then 3/90, relationship
+// flags C then 4, victim checks and target setter correspond to the entire
+// native568B body. Retail C764BC independently places it at virtual slot6.
+// Only that virtual prefix is declared here; the base setter's existing
+// address-derived view is retained rather than claiming a full class layout.
+class AISpecialPowerCaptureBuilding
+{
+public:
+	virtual void v0();
+	virtual void v1();
+	virtual void v2();
+	virtual void v3();
+	virtual void v4();
+	virtual void v5();
+	virtual bool shouldActivate(Object *source);
+};
+
+bool AISpecialPowerCaptureBuilding::shouldActivate(Object *source)
 {
 	if (!source->isKindOf(KINDOF_70)
 		&& (!source->m_258->getCurrentVictim() || source->m_258->getCurrentVictim()->m_80 == 0)) {
@@ -586,7 +603,7 @@ bool Rva005EEDB5Picker::rva005DA109(Object *source)
 				Rva0026119DFilter().link(Rva00261409Filter(source->getControllingPlayer(), true, 4)
 					.link(&Rva003959FA(*(BfmeFixedStorage0004543D *)&kinds))), 0);
 			if (!hits.next()) {
-				rva005EEDB5(target);
+				((Rva005EEDB5Picker *)this)->rva005EEDB5(target);
 				return true;
 			}
 		}
