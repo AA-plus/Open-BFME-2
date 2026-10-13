@@ -1,4 +1,6 @@
 // ?adjustToPossibleDestination@Pathfinder@@QAE_NPAVObject@@ABVLocomotorSet@@PAUCoord3D@@@Z
+// partial score=0.8916 date=2026-10-13
+// ?adjustToPossibleDestination@Pathfinder@@QAE_NPAVObject@@ABVLocomotorSet@@PAUCoord3D@@@Z
 // partial score=0.8863953608199133 date=2026-10-10
 // ?adjustToPossibleDestination@Pathfinder@@QAE_NPAVObject@@ABVLocomotorSet@@PAUCoord3D@@@Z
 // partial score=0.65 date=2026-10-09
@@ -44,25 +46,25 @@ bool Pathfinder::adjustToPossibleDestination(Object *object,const LocomotorSet &
  reinterpret_cast<Rva002E7964 *>(this)->rva002E7964(&goal,center,destination);
  if(goal.x<0) return false;
  layer=TheTerrainLogic->getLayerForDestination(object,destination);
- PathfindCell *goalCell=getCell(layer,goal.x,goal.y);
  Coord3D from;
+ const PathfindCell *goalCell=getCell(layer,goal.x,goal.y);
  from.x=object->position[0];from.y=object->position[1];from.z=object->position[2];
  ICoord2D start;
  Rva002E7875WorldToCell(&start,true,&from);
- PathfindLayerEnum startLayer=(PathfindLayerEnum)object->rva0028B511();
+ const PathfindLayerEnum startLayer=(PathfindLayerEnum)object->rva0028B511();
  PathfindCell *parent=rva002E8BF8(startLayer,&from);
- if(!parent) return false;
+ if((parent == 0)) return false;
  int maxLayer=object->definition->maxLayer;
  unsigned char aircraftFlag=object->definition->aircraftFlag;
  
- Rva002E8BCF profile(reinterpret_cast<const Rva002E8BCFSrc *>(&set),aircraftFlag==0,maxLayer-1,object->rva0028AFBB());
  Rva002E99F9Sub460 *zones=reinterpret_cast<Rva002E99F9Sub460 *>((char *)this+0x460);
+ Rva002E8BCF profile(reinterpret_cast<const Rva002E8BCFSrc *>(&set),aircraftFlag==0,maxLayer-1,object->rva0028AFBB());
  zone=zones->rva0053241F(&profile,parent->zone);
  obstacle=false;
  if((parent->info&15)==4) { obstacle=true;zone=zones->rva00531FD4(&profile,zone);zone=zones->rva0053241F(&profile,zone); }
  if(zone==zones->rva0053241F(&profile,goalCell->zone) && possibleFootprint(this,object,goal.x,goal.y,layer,radius,center)) return true;
- i=goal.x;j=goal.y;
  int limit=*(int *)((char *)TheWritableGlobalData+0x11fc);
+ i=goal.x;j=goal.y;
  int delta=1;
  while(limit>0) {
   for(int count=delta;count>0;--count) {
