@@ -1291,36 +1291,15 @@ FontCharsClass::Store_GDI_Char (WCHAR ch)
 //	Update_Current_Buffer
 //
 ////////////////////////////////////////////////////////////////////////////////////
-void
-// ?Update_Current_Buffer@FontCharsClass@@AAEXH@Z present-unmatched
-FontCharsClass::Update_Current_Buffer (int char_width)
-{
-	//
-	//	Check to see if we need to allocate a new buffer
-	//
-	bool needs_new_buffer = (BufferList.Count () == 0);
-	if (needs_new_buffer == false) {
-		
-		//
-		//	Would we extend past this buffer?
-		//
-		if ( (CurrPixelOffset + (char_width * CharHeight)) > CHAR_BUFFER_LEN ) {
-			needs_new_buffer = true;
-		}
-	}
-
-	//
-	//	Do we need to create a new surface?
-	//
-	if (needs_new_buffer) 
-	{
-		FontCharsBuffer* new_buffer = W3DNEW FontCharsBuffer;
-		BufferList.Add( new_buffer );
-		CurrPixelOffset = 0;
-	}
-
-	return ;
-}
+// The buffer-update body lives under FontCharsClass_Update_Current_Buffer.cpp
+// (retail 0x00156490); this TU keeps only the class declaration so callers
+// bind the kept copy and this unit emits no competing COMDAT.
+//
+// ?bfmeEmitFontCharsBufferAdd@@YAXPAV?$DynamicVectorClass@PAVFontCharsBuffer@@@@PAVFontCharsBuffer@@@Z present-unmatched
+// Emit-anchor: the deleted Update_Current_Buffer was the only referrer of the
+// rowed DynamicVectorClass<FontCharsBuffer*>::Add (0x001A3A60); this anchor
+// keeps emitting it. It is not retail code.
+void bfmeEmitFontCharsBufferAdd(DynamicVectorClass<FontCharsBuffer *> *v, FontCharsBuffer *b) { v->Add(b); }
 
 
 ////////////////////////////////////////////////////////////////////////////////////
