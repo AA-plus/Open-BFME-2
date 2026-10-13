@@ -1,4 +1,6 @@
 // ?Rva0030F14CSelect@@YAHPAVDrawable@@PAX@Z
+// partial score=0.985185 date=2026-10-13
+// ?Rva0030F14CSelect@@YAHPAVDrawable@@PAX@Z
 // partial score=0.9114 date=2026-10-13
 // ?Rva0030F14CSelect@@YAHPAVDrawable@@PAX@Z
 // partial score=0.9114 date=2026-10-11
@@ -27,190 +29,269 @@
 // (+0x40) clears the list (rowed 0x00239380) and returns 1 after the push
 // (rowed list push_back 0x00239E0B). WorldBuilder twin 0x00EB6700 (unnamed)
 // has the same tests behind a debug-only shortcut.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "Common/GameLogicObjectLookupView.h"
-
 typedef int Int;
-
 enum KindOfType
-{
-	KINDOF_73 = 0x49
-};
 
+{
+ KINDOF_73 = 0x49
+ 
+}
+;
 enum CellShroudStatus
-{
-	CELLSHROUD_CLEAR = 0
-};
 
+{
+ CELLSHROUD_CLEAR = 0
+ 
+}
+;
 enum ObjectStatusTypes
-{
-	OBJECT_STATUS_3 = 3
-};
 
+{
+ OBJECT_STATUS_3 = 3
+ 
+}
+;
 template <int N> class BitFlags
+
 {
-public:
-	bool test(const void *other) const;
-
-private:
-	unsigned int m_bits[7];
-};
-
+ public:
+ bool test(const void *other) const;
+ private:
+ unsigned int m_bits[7];
+ 
+}
+;
 struct ThingTemplateView
+
 {
-	__forceinline bool hasKindBit(int bit) const { return (m_kindOf[bit >> 3] & (1 << (bit & 7))) != 0; }
-
-	unsigned char m_pad000[0x108];
-	unsigned char m_kindOf[0x63C - 0x108]; // +0x108
-	Int m_selectionPriority; // +0x63C
-};
-
+ __forceinline bool hasKindBit(int bit) const 
+ 
+ {
+  return (m_kindOf[bit >> 3] & (1 << (bit & 7))) != 0;
+  
+ }
+ unsigned char m_pad000[0x108];
+ unsigned char m_kindOf[0x63C - 0x108];
+// +0x108
+ Int m_selectionPriority;
+// +0x63C
+ 
+}
+;
 class Player
+
 {
-public:
-	Int getPlayerIndex() const { return m_playerIndex; }
-
-private:
-	unsigned char m_pad00[0x54];
-	Int m_playerIndex; // +0x54
-};
-
+ public:
+ Int getPlayerIndex() const 
+ 
+ {
+  return m_playerIndex;
+  
+ }
+ private:
+ unsigned char m_pad00[0x54];
+ Int m_playerIndex;
+// +0x54
+ 
+}
+;
 class PlayerList
+
 {
-public:
-	Player *getLocalPlayer() { return m_local; }
-
-private:
-	unsigned char m_pad00[0x10];
-	Player *m_local; // +0x10
-};
-
+ public:
+ Player *getLocalPlayer() 
+ 
+ {
+  return m_local;
+  
+ }
+ private:
+ unsigned char m_pad00[0x10];
+ Player *m_local;
+// +0x10
+ 
+}
+;
 extern PlayerList *ThePlayerList;
 extern GameLogic *TheGameLogic;
-
 class Drawable
+
 {
-public:
-	const ThingTemplateView *getTemplate() const { return m_template; }
-	Object *getObject() const { return m_object; }
-	Int rva00271745() const;
-
-	void *m_vtable;
-	const ThingTemplateView *m_template; // +0x04
-	unsigned char m_pad08[0xFC - 0x08];
-	Object *m_object; // +0xFC
-	unsigned char m_pad100[0x164 - 0x100];
-	Int m_state; // +0x164
-};
-
-class Object
-{
-public:
-	const ThingTemplateView *getTemplate() const { return m_template; }
-	bool isKindOf(KindOfType kind) const;
-	CellShroudStatus getShroudStatusForPlayer(Int playerIndex) const;
-	Object *rva002931F5(bool flag);
-	Drawable *getDrawable() const;
-	bool testStatus(ObjectStatusTypes status) const;
-	Int getSelectionPriority() const
-	{
-		const ThingTemplateView *tmpl = getTemplate();
-		if (tmpl == 0)
-			return -1;
-		return tmpl->m_selectionPriority;
-	}
-
-	void *m_vtable;
-	const ThingTemplateView *m_template; // +0x04
-	unsigned char m_pad08[0x78 - 0x08];
-	ObjectID m_containerID; // +0x78
-};
-
-namespace _STL
-{
-template <class T> class allocator
-{
-};
-
-template <class T, class A = allocator<T> > class list
-{
-public:
-	void push_back(const T &value);
-
-private:
-	void *m_node;
-};
+ public:
+ const ThingTemplateView *getTemplate() const 
+ 
+ {
+  return m_template;
+  
+ }
+ Object *getObject() const 
+ 
+ {
+  return m_object;
+  
+ }
+ Int rva00271745() const;
+ void *m_vtable;
+ const ThingTemplateView *m_template;
+// +0x04
+ unsigned char m_pad08[0xFC - 0x08];
+ Object *m_object;
+// +0xFC
+ unsigned char m_pad100[0x164 - 0x100];
+ Int m_state;
+// +0x164
+ 
 }
+;
+class Object
 
+{
+ public:
+ const ThingTemplateView *getTemplate() const 
+ 
+ {
+  return m_template;
+  
+ }
+ bool isKindOf(KindOfType kind) const;
+ CellShroudStatus getShroudStatusForPlayer(Int playerIndex) const;
+ Object *rva002931F5(bool flag);
+ Drawable *getDrawable() const;
+ bool testStatus(ObjectStatusTypes status) const;
+ Int getSelectionPriority() const
+ 
+ {
+  const ThingTemplateView *tmpl = getTemplate();
+  if (tmpl == 0)
+  return -1;
+  return tmpl->m_selectionPriority;
+  
+ }
+ void *m_vtable;
+ const ThingTemplateView *m_template;
+// +0x04
+ unsigned char m_pad08[0x78 - 0x08];
+ ObjectID m_containerID;
+// +0x78
+ 
+}
+;
+namespace _STL
+
+{
+ template <class T> class allocator
+ 
+ {
+  
+ }
+ ;
+ template <class T, class A = allocator<T> > class list
+ 
+ {
+  public:
+  void push_back(const T &value);
+  private:
+  void *m_node;
+  
+ }
+ ;
+ 
+}
 class Rva00239380Holder
-{
-public:
-	void rva00239380();
-};
 
+{
+ public:
+ void rva00239380();
+ 
+}
+;
 struct Rva0030F14CSelectInfo
-{
-	_STL::list<Drawable *> *m_list; // +0x00
-	char m_pad04;
-	bool m_checkKind73; // +0x05
-	char m_pad06[2];
-	BitFlags<69> m_mustBe; // +0x08
-	BitFlags<69> m_mustNotBe; // +0x24
-	Int m_bestPriority; // +0x40
-};
 
-Int Rva0030F14CSelect(Drawable *draw, void *userData)
 {
-	Rva0030F14CSelectInfo *info = (Rva0030F14CSelectInfo *)userData;
-	if (info->m_list == 0)
-		return 2;
-	Drawable *current = draw;
-	const ThingTemplateView *tmpl = current->getTemplate();
-	if (!info->m_mustBe.test(tmpl->m_kindOf))
-		return 2;
-	if (info->m_mustNotBe.test(tmpl->m_kindOf))
-		return 2;
-	Object *obj = current->getObject();
-	if (info->m_checkKind73 && obj && obj->isKindOf(KINDOF_73) && obj->getTemplate()->hasKindBit(14))
-		return 2;
-	if (!(unsigned char)current->rva00271745())
-		return 2;
-	Int minPriority = -1;
-	bool changed = false;
-	if (obj)
-	{
-		Player *localPlayer = ThePlayerList->getLocalPlayer();
-		if (localPlayer && obj->getShroudStatusForPlayer(localPlayer->getPlayerIndex()) > 2)
-			return 2;
-		if (current->m_state == 5)
-			return 2;
-		Object *other = obj->rva002931F5(false);
-		if (other && other != obj)
-		{
-			Drawable *otherDraw = other->getDrawable();
-			if (otherDraw && otherDraw->m_state == 5)
-				return 2;
-		}
-		if (obj->m_containerID)
-		{
-			Object *container = TheGameLogic->findObjectByID(obj->m_containerID);
-			if (container && container->getTemplate()->hasKindBit(0x6D))
-			{
-				if (container->testStatus(OBJECT_STATUS_3))
-					return 2;
-				obj = container;
-				draw = container->getDrawable();
-			}
-		}
-		Int priority = obj->getSelectionPriority();
-		if (priority < minPriority)
-			return 2;
-		if (priority > info->m_bestPriority)
-		{
-			((Rva00239380Holder *)info->m_list)->rva00239380();
-			info->m_bestPriority = priority;
-			changed = true;
-		}
-	}
-	info->m_list->push_back(draw);
-	return changed ? 1 : 0;
+ _STL::list<Drawable *> *m_list;
+// +0x00
+ char m_pad04;
+ bool m_checkKind73;
+// +0x05
+ char m_pad06[2];
+ BitFlags<69> m_mustBe;
+// +0x08
+ BitFlags<69> m_mustNotBe;
+// +0x24
+ Int m_bestPriority;
+// +0x40
+ 
+}
+;
+Int Rva0030F14CSelect(Drawable *draw, void *userData)
+
+{
+ Rva0030F14CSelectInfo *info = (Rva0030F14CSelectInfo *)userData;
+ if (info->m_list == 0)
+ return 2;
+ Drawable *current = draw;
+ _ReadWriteBarrier();
+ const ThingTemplateView *tmpl = current->getTemplate();
+ if (!info->m_mustBe.test(tmpl->m_kindOf))
+ return 2;
+ if (((&(info->m_mustNotBe)) ? (info->m_mustNotBe) : (info->m_mustNotBe)).test(tmpl->m_kindOf))
+ return 2;
+ Object *obj = current->getObject();
+ if (info->m_checkKind73 && obj && obj->isKindOf(KINDOF_73) && obj->getTemplate()->hasKindBit(14))
+ return 2;
+ if (!(unsigned char)current->rva00271745())
+ return 2;
+ Int minPriority = -1;
+ bool changed = false;
+ if (obj)
+ 
+ {
+  Player *localPlayer = ThePlayerList->getLocalPlayer();
+  if (localPlayer && obj->getShroudStatusForPlayer(localPlayer->getPlayerIndex()) > 2)
+  return 2;
+  if (current->m_state == 5)
+  return 2;
+  Object *other = obj->rva002931F5(false);
+  if (other && other != obj)
+  
+  {
+   Drawable *otherDraw = other->getDrawable();
+   if (otherDraw && otherDraw->m_state == 5)
+   return 2;
+   
+  }
+  if (obj->m_containerID)
+  
+  {
+   Object *container = TheGameLogic->findObjectByID(obj->m_containerID);
+   if (container && container->getTemplate()->hasKindBit(0x6D))
+   
+   {
+    if (container->testStatus(OBJECT_STATUS_3))
+    return 2;
+    obj = container;
+    draw = container->getDrawable();
+    
+   }
+   
+  }
+  Int priority = obj->getSelectionPriority();
+  if (priority < minPriority)
+  return 2;
+  if (priority > info->m_bestPriority)
+  
+  {
+   ((Rva00239380Holder *)info->m_list)->rva00239380();
+   info->m_bestPriority = priority;
+   changed = true;
+   
+  }
+  
+ }
+ info->m_list->push_back(draw);
+ return changed ? 1 : 0;
+ 
 }
