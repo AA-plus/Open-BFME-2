@@ -217,6 +217,13 @@ public:
 	virtual void slot20(); virtual void slot24(); virtual void slot28(); virtual void slot2C();
 	virtual void slot30(); virtual void slot34();
 	virtual void slot38();
+	virtual void slot3C();
+	virtual void slot40();
+
+	unsigned char m_pad04[0x1c];
+	unsigned char m_active;		// +0x20
+	unsigned char m_pad21[0x97];
+	void *m_stateB8;		// +0xB8
 };
 
 extern Rva00214E02 TheCloudEffectSettings;
@@ -277,3 +284,28 @@ void Rva009519B::rva002150BE()
 	TheCloudEffectSettings = TheCloudEffectSettingsSaved;
 }
 
+
+// Retail 0x00212118 (107B EH __stdcall, by-value AsciiString): the BFME 1
+// twin is Rva00612560BfmeState.cpp (lotrbfme 0x00612560). Tests the shared
+// cloud/weather manager, calls slot 14, compares the by-value string with
+// the data literal "ACTIVE" (BFME 2 VA 0x00BE51BC) through the rowed
+// StringBase<char>::compare 0x000069B1, sets the manager's +0x20 flag, and
+// calls slot 16 when +0xB8 is clear. BFME 2 shifts BFME 1's +0x1C/+0xA8 to
+// +0x20/+0xB8 and slots 9/11 to 14/16.
+void __stdcall Rva00212118(AsciiString text)
+{
+	if (g_00DFE1E4 != 0)
+	{
+		g_00DFE1E4->slot38();
+		if (((const StringBase<char> *)&text)->compare("ACTIVE") == 0)
+		{
+			g_00DFE1E4->m_active = 1;
+			if (g_00DFE1E4->m_stateB8 == 0)
+				g_00DFE1E4->slot40();
+		}
+		else
+		{
+			g_00DFE1E4->m_active = 0;
+		}
+	}
+}
