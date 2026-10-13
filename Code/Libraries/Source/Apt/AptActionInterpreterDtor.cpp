@@ -10,7 +10,10 @@
 // boundaries+C/+18/+24 and current-function pointer+30.
 // With-stack+C is AptValuePtrStack<AptValue>: native7084D3 passes this+C
 // to the WB175A800-named push6E0D60; native708469 calls top6DE160 there.
-// Other buffer element identities remain opaque4B slots. Target _AptValuePtrStack.h
+// This-stack+24 calls the same at6DCC10 helper at708591: saved receiver
+// is this+24 from7081CA/7081D1. Native push/pop uses AptValue AddRef/Release;
+// May2006 APT donor member spelling is carried by AptInterpreterCtor.cpp.
+// The middle buffer element identity remains opaque4B slots. Target _AptValuePtrStack.h
 // assertion and sized pool frees prove count0/capacity4/storage8; destructor
 // neither releases entries nor zeros fields. C++ member lifetime supplies the
 // native3/2/1/0/-1 EH states, not explicit cleanup-label aliases.
@@ -65,7 +68,7 @@ public:
  AptBasePtrStack stack;
  AptValuePtrStack<AptValue> withStack;
  AptOwnedValueSlots12 setTargetStack;
- AptOwnedValueSlots12 thisStack;
+ AptValuePtrStack<AptValue> thisStack;
  void *currentFunction;
  AptDebugStack<DebugCallStackInfo_t> debug34;
 };
