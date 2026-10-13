@@ -1,5 +1,7 @@
 // ?Rva009B5530Prepare@@YAXPAURva009B5830State@@PAXH@Z
-// partial score=0.87 date=2026-10-10
+// partial score=0.9398 date=2026-10-13
+// ?Rva009B5530Prepare@@YAXPAURva009B5830State@@PAXH@Z
+// partial score=0.9398 date=2026-10-13
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001c5e30.md plus retail only.
 // No decoder source was consulted.
@@ -68,37 +70,37 @@ typedef void (__cdecl *Rva009B5530Unpack)(unsigned char *, void *, int);
 extern void *g_bfmeSlotB50;
 extern void *g_bfmeSlotB54;
 extern unsigned char g_bfmeVp6SelectorMap[40];
-void Rva009C84D0Vp6Filter(Rva009C84D0Vp6Context *, void *, int, int);
-int rva009C8130(const unsigned char *, int);
+extern "C" void __cdecl VP6_PredictFiltered(void *, void *, int, int);
+extern "C" unsigned int __cdecl Var16Point(const unsigned char *, int);
 
 void __cdecl Rva009B5530Prepare(Rva009B5830State *pbi, void *output, int block)
 {
-	unsigned char *source;
 	unsigned char *base;
 	int stride;
-	int offset1;
-	int offset2;
-	int xPhase;
+	unsigned char *source;
+	unsigned int offset2;
 	int yPhase;
+	unsigned int xPhase;
+	int offset1;
 	short mvx;
-	short mvy;
-	int x;
 	int y;
-	unsigned int limit;
+	unsigned long limit;
+	int x;
 	int mask;
+	short mvy;
 
 	source = pbi->lastFrame;
 	mask = pbi->vectorMask;
 	if (((const int *)g_bfmeVp6SelectorMap)[pbi->mode] == 2)
 		source = pbi->goldenFrame;
 
-	if (pbi->profile != 0 && pbi->loopFilterMode != 0) {
-		Rva009C84D0Vp6Filter((Rva009C84D0Vp6Context *)pbi, source + pbi->reconIndex,
+	if (0 != pbi->profile && pbi->loopFilterMode != 0) {
+		VP6_PredictFiltered(pbi, source + pbi->reconIndex,
 			pbi->vectors[block].x, pbi->vectors[block].y);
 		mvx = pbi->vectors[block].x;
 		mvy = pbi->vectors[block].y;
-		x = mvx;
 		y = mvy;
+		x = mvx;
 		xPhase = x & pbi->vectorMask;
 		yPhase = y & pbi->vectorMask;
 		base = pbi->loopFilteredBlock;
@@ -106,30 +108,30 @@ void __cdecl Rva009B5530Prepare(Rva009B5830State *pbi, void *output, int block)
 		offset1 = 34;
 		offset2 = 34;
 	} else {
-		mvx = pbi->vectors[block].x;
-		mvy = pbi->vectors[block].y;
-		x = mvx;
-		y = mvy;
-		xPhase = x & mask;
 		yPhase = y & mask;
+		mvy = pbi->vectors[block].y;
+		mvx = pbi->vectors[block].x;
+		y = mvy;
+		x = mvx;
+		xPhase = x & mask;
 		base = source + pbi->reconIndex
 			+ pbi->frameStride * ((y + ((y >> 31) & mask)) >> pbi->vectorShift)
 			+ ((x + ((x >> 31) & mask)) >> pbi->vectorShift);
 		stride = pbi->reconStride;
-		offset1 = 0;
 		offset2 = 0;
+		offset1 = 0;
 	}
 
 	if (xPhase != 0)
-		offset2 += (mvx > 0) * 2 - 1;
+		offset2 += (0 < mvx) * 2 - 1;
 	if (yPhase != 0)
 		offset2 += ((mvy > 0) * 2 - 1) * stride;
 
 	if (offset1 != offset2) {
-		if (block < 4) {
+		if (4 > block) {
 			xPhase <<= 1;
 			yPhase <<= 1;
-			if (pbi->profile == 0) {
+			if (0 == pbi->profile) {
 				((Rva009B5530Filter)g_bfmeSlotB54)(base + offset1, base + offset2,
 					output, stride, xPhase, yPhase, 0);
 			} else if (pbi->filterMode == 2) {
@@ -137,19 +139,19 @@ void __cdecl Rva009B5530Prepare(Rva009B5830State *pbi, void *output, int block)
 					limit = (1 << (pbi->sizeThreshold - 1)) << 2;
 				else
 					limit = 128;
-				if (pbi->sizeThreshold != 0 && (abs(x) > limit || abs(y) > limit)) {
+				if (0 != pbi->sizeThreshold && (abs(x) > limit || abs(y) > limit)) {
 					((Rva009B5530Filter)g_bfmeSlotB54)(base + offset1, base + offset2,
 						output, stride, xPhase, yPhase, 0);
 				} else if (pbi->varianceThreshold != 0) {
 					((Rva009B5530Filter)g_bfmeSlotB54)(base + offset1, base + offset2,
 						output, stride, xPhase, yPhase,
-						rva009C8130(base + offset1, stride) >= pbi->varianceThreshold);
+						Var16Point(base + offset1, stride) >= pbi->varianceThreshold);
 				} else {
-					((Rva009B5530Filter)g_bfmeSlotB54)(base + offset1, base + offset2,
+					((Rva009B5530Filter)g_bfmeSlotB54)(offset1 + base, base + offset2,
 						output, stride, xPhase, yPhase, 1);
 				}
 			} else {
-				((Rva009B5530Filter)g_bfmeSlotB54)(base + offset1, base + offset2,
+				((Rva009B5530Filter)g_bfmeSlotB54)(offset1 + base, base + offset2,
 					output, stride, xPhase, yPhase, pbi->filterMode == 1);
 			}
 		} else {
@@ -157,6 +159,6 @@ void __cdecl Rva009B5530Prepare(Rva009B5830State *pbi, void *output, int block)
 				output, stride, xPhase, yPhase, 0);
 		}
 	} else {
-		((Rva009B5530Unpack)g_bfmeSlotB50)(base + offset1, output, stride);
+		((Rva009B5530Unpack)g_bfmeSlotB50)(offset1 + base, output, stride);
 	}
 }
