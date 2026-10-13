@@ -9,6 +9,8 @@ class Rva0043FC20
 {
 public:
 	Rva0043FC20(const Rva0043FC20 &other);
+	// Its implicit destructor folds to native 0x0048BA39: the whole 5-byte
+	// tail jump releases the sole AsciiString member; remaining fields are scalar.
 
 	AsciiString m_00;
 	int m_04;
@@ -27,8 +29,9 @@ struct Rva0029F8B8FontOverride
 	unsigned char m_08;
 };
 
-struct GlobalLanguage
+class GlobalLanguage
 {
+public:
 	char _pad[0x104];
 	Rva0029F8B8FontOverride m_104;
 	Rva0029F8B8FontOverride m_110;
@@ -114,8 +117,7 @@ Rva0043FC20 Rva0029F8B8::rva0029D948()
 	}
 	return tmp;
 }
-// ?TheGlobalLanguageData@@3PAUGlobalLanguage@@A: the global at VA 0xdfdc84 is ?TheGlobalLanguageData@@3PAVGlobalLanguage@@A.
-#pragma comment(linker, "/alternatename:?TheGlobalLanguageData@@3PAUGlobalLanguage@@A=?TheGlobalLanguageData@@3PAVGlobalLanguage@@A")
+// The native global uses the class spelling; bind it directly without a linker alias.
 
 // Native29D844..29D8C6,29D8C6..29D948,29D948..29D9CA:
 // three complete130B RET4 getters using the same rowed39B copy ctor29D81D.
