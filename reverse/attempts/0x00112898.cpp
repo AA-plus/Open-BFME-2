@@ -1,4 +1,6 @@
 // ?setFlipRecursive@W3DTerrainBackground@@QAEXHHH@Z
+// partial score=0.95302 date=2026-10-13
+// ?setFlipRecursive@W3DTerrainBackground@@QAEXHHH@Z
 // partial score=0.939191 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /Oy- /MD /DNDEBUG
 class BoundedShortGrid {public:short rva00062A58(int,int);};
@@ -34,11 +36,11 @@ void W3DTerrainBackground::setFlipRecursive(int xOffset,int yOffset,int width) {
  if(match) {
   int maxX=minX+width;maxX=maxX<limitX?maxX:limitX;
   int maxY=minY+width;maxY=maxY<limitY?maxY:limitY;
-  int x0=minX-m_xOrigin,y1=maxY-m_yOrigin;
+  int x0=minX;int y1=maxY-m_yOrigin;*(volatile int*)&x0-=m_xOrigin;
   bool c0=isEdgeAligned(x0,y1,width);
   int x1=maxX-m_xOrigin;
   bool c1=isEdgeAligned(x1,y1,width);
-  int y0=minY-m_yOrigin;
+  int y0=minY;*(volatile int*)&y0-=m_yOrigin;
   bool c2=isEdgeAligned(x1,y0,width);
   bool c3=isEdgeAligned(x0,y0,width);
   if(c3)m_map->setFlipState(minX,minY,true);
