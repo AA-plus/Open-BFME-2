@@ -96,7 +96,9 @@ public:
 	W3DDISPLAY_SLOT(44) W3DDISPLAY_SLOT(45) W3DDISPLAY_SLOT(46) W3DDISPLAY_SLOT(47)
 	W3DDISPLAY_SLOT(48) W3DDISPLAY_SLOT(49) W3DDISPLAY_SLOT(50) W3DDISPLAY_SLOT(51)
 	W3DDISPLAY_SLOT(52) W3DDISPLAY_SLOT(53) W3DDISPLAY_SLOT(54) W3DDISPLAY_SLOT(55)
-	W3DDISPLAY_SLOT(56) W3DDISPLAY_SLOT(57) W3DDISPLAY_SLOT(58)
+	W3DDISPLAY_SLOT(56) W3DDISPLAY_SLOT(57)
+	// +0xE8 (retail 0x00045990).
+	virtual void rva00045990(Real startX, Real startY, Real width, Real height, UnsignedInt color);
 	// +0xEC (retail 0x00045B45).
 	virtual void drawRectClock(Real startX, Real startY, Real width, Real height, Real percent, UnsignedInt color);
 	// +0xF0 (retail 0x000463B5).
@@ -106,6 +108,57 @@ private:
 	char m_pad004[0x168 - 0x004];
 	Render2DClass *m_2DRender;			// +0x168
 };
+
+// ?rva00045990@W3DDisplay@@UAEXMMMMI@Z, retail 0x00045990 (437 bytes), RET 0x14.
+// W3DDisplay vtable slot +0xE8, between the fill-rect slot (+0xE4, 0x00044C9A) and
+// drawRectClock (+0xEC). BFME 2 only: a filled ellipse drawn as a triangle fan
+// about the box centre, ceil(max(halfWidth, halfHeight) * 4) segments of 2pi / n
+// (the whole-circle sibling of drawRemainingRectClock below, which carries its
+// shape from the exact BFME 1 body); the closing triangle returns to (halfWidth, 0)
+// instead of recomputing cos/sin. Target evidence: slot position and the shared
+// Render2D +0x168 / +0x48 texturing flag, Add_Tri 0x00045708, the _cos/_sin
+// thunks, __imp__ceil and the 0.5/4.0/2pi constants. The name stays address-derived.
+void W3DDisplay::rva00045990(Real startX, Real startY, Real width, Real height, UnsignedInt color)
+{
+	Int i = 0;
+	Real halfWidth = width * 0.5f;
+	Real halfHeight = height * 0.5f;
+	Real centerX = halfWidth + startX;
+	Real centerY = halfHeight + startY;
+	m_2DRender->Enable_Texturing(false);
+	Vector2 prev(halfWidth, 0.0f);
+	Real radius = (halfWidth > halfHeight) ? halfWidth : halfHeight;
+	Int segments = WWMath::Float_To_Long(ceil(radius * 4.0f));
+	Real step = WWMATH_TWO_PI / (Real)segments;
+	Real angle = 0.0f;
+
+	if (segments > 0)
+	{
+		Vector2 uv2(0, 0);
+		Vector2 uv1(0, 0);
+		Vector2 uv0(0, 0);
+		Vector2 center(centerX, centerY);
+
+		do
+		{
+			++i;
+			Vector2 cur;
+			if (i < segments)
+			{
+				angle += step;
+				cur.X = cos(angle) * halfWidth;
+				cur.Y = sin(angle) * halfHeight;
+			}
+			else
+			{
+				cur.X = halfWidth;
+				cur.Y = 0.0f;
+			}
+			m_2DRender->Add_Tri(center, Vector2(centerX + prev.X, centerY + prev.Y), Vector2(centerX + cur.X, centerY + cur.Y), uv0, uv1, uv2, color);
+			prev = cur;
+		} while (i < segments);
+	}
+}
 
 void W3DDisplay::drawRectClock(Real startX, Real startY, Real width, Real height, Real percent, UnsignedInt color)
 {
