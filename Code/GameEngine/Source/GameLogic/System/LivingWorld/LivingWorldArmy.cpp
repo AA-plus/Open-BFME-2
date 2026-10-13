@@ -292,7 +292,7 @@ struct CtorArmyMinusOneWord { int word; __forceinline CtorArmyMinusOneWord(int v
 struct CtorArmyPair {float x,y; __forceinline CtorArmyPair():x(0),y(0){} };
 struct CtorArmyLastPair {float x,y; __forceinline CtorArmyLastPair():x(0),y(0){_ReadWriteBarrier();} };
 
-class Rva004E3184 {public: char pad00[4]; AsciiString a04,a08; char pad0C[12]; AsciiString a18; char pad1C[12]; AsciiString a28; char pad2C[24]; float f44; char pad48[8]; AsciiString a50; bool b54;};
+class SpawnArmy {public: char pad00[4]; AsciiString a04,a08; char pad0C[12]; AsciiString a18; char pad1C[12]; AsciiString a28; char pad2C[24]; float f44; char pad48[8]; AsciiString a50; bool b54;};
 struct Rva002B6A04Player {char pad00[20];int id14;};
 class LivingWorldArmyLine {public:void rva00539141();};
 class Rva0031934BOwner {public:void rva0031934B(const AsciiString*);};
@@ -317,7 +317,7 @@ class Rva005392C2 {public:void rva005392C2();};
 class LivingWorldArmy : public Snapshot, public Rva003197EEList, public Rva00319D01ObserverBase {
 public:
     LivingWorldArmy();
- LivingWorldArmy(int,Rva004E3184*,Rva002B6A04Player*);
+ LivingWorldArmy(int,SpawnArmy*,Rva002B6A04Player*);
  __declspec(noinline) virtual ~LivingWorldArmy();
     virtual void rva003191E2(int,int);
     // Native primary table C0C82C has four slots: deleting dtor,
@@ -354,7 +354,7 @@ LivingWorldArmy::LivingWorldArmy(): v2C(-1),v30(0),owner54(-1),b58(true),b59(fal
  ((Rva005A0B4CList*)((char*)TheLivingWorldLogic+0x1C))->append((Rva002BA8F1Listener*)(Rva00319D01ObserverBase*)this);
 }
 
-LivingWorldArmy::LivingWorldArmy(int owner,Rva004E3184 *desc,Rva002B6A04Player *player):name18(desc->a50),name1C(desc->a18),name24(desc->a04),name28(desc->a08),v2C(-1),v30(0),owner54(-1),b58(true),b59(false),f5C(desc->f44),v60(1),b64(false),b65(false),v70(-1),b74(desc->b54),b75(false),status88(0),v8C(0) {
+LivingWorldArmy::LivingWorldArmy(int owner,SpawnArmy *desc,Rva002B6A04Player *player):name18(desc->a50),name1C(desc->a18),name24(desc->a04),name28(desc->a08),v2C(-1),v30(0),owner54(-1),b58(true),b59(false),f5C(desc->f44),v60(1),b64(false),b65(false),v70(-1),b74(desc->b54),b75(false),status88(0),v8C(0) {
  _ReadWriteBarrier();
  owner20=owner;
  if(player)owner54=player->id14;
