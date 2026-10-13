@@ -1,4 +1,6 @@
 // ?addMessage@NetCommandList@@QAEPAVNetCommandRef@@PAVNetCommandMsg@@@Z
+// partial score=0.95 date=2026-10-13
+// ?addMessage@NetCommandList@@QAEPAVNetCommandRef@@PAVNetCommandMsg@@@Z
 // partial score=0.93 date=2026-10-09
 // ?addMessage@NetCommandList@@QAEPAVNetCommandRef@@PAVNetCommandMsg@@@Z
 // Corrected bank 2026-10-09: native 58B3F0 and WB153A52E load m_first
