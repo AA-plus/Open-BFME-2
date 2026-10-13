@@ -5,6 +5,10 @@
 // different shape, so this body lives here under /O1. Donor-verbatim home
 // transcription (matches BFME1 update shape); getVel is out-of-line (call)
 // and setVel/setCurPos inline to stores.
+// The matched trig operations inline; keep the CRT float overloads local.
+#define inline static inline
+#include <math.h>
+#undef inline
 #include "PreRTS.h"
 #include "GameClient/ProcessAnimateWindow.h"
 #pragma optimize("y", off)
