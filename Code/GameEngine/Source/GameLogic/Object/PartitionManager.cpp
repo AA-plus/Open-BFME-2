@@ -105,6 +105,25 @@ namespace _STL { template <> _Bit_iter<_Bit_reference, _Bit_reference *> & _Bit_
 namespace _STL { template <> bool bitset<45>::_Unchecked_test(unsigned int) const; }
 namespace _STL { template <> unsigned int * allocator<unsigned int>::allocate(unsigned int, void const *) const; }
 namespace _STL { template <> void vector<bool, allocator<bool> >::resize(unsigned int, bool); }
+namespace _STL { template <> _Bit_iter<_Bit_reference, _Bit_reference *> & _Bit_iter<_Bit_reference, _Bit_reference *>::operator+=(int); }
+namespace _STL { template <> int _Bit_iter<bool, bool const *>::operator-(_Bit_iter<bool, bool const *> const &) const; }
+namespace _STL { template <> bool bitset<13>::_Unchecked_test(unsigned int) const; }
+namespace _STL { template <> _Bit_iter<_Bit_reference, _Bit_reference *>::_Bit_iter(unsigned int *, unsigned int); }
+namespace _STL { template <> _Bit_iter<bool, bool const *>::_Bit_iter(unsigned int *, unsigned int); }
+namespace _STL { template <> void allocator<unsigned int>::deallocate(unsigned int *, unsigned int) const; }
+namespace _STL { template <> unsigned char * __copy_ptrs<unsigned char *, unsigned char *>(unsigned char *, unsigned char *, unsigned char *, __true_type); }
+namespace _STL { template <> int _Bit_iter<_Bit_reference, _Bit_reference *>::operator-(_Bit_iter<_Bit_reference, _Bit_reference *> const &) const; }
+namespace _STL { template <> __false_type _BothPtrType<_Bit_iter<_Bit_reference, _Bit_reference *>, _Bit_iter<_Bit_reference, _Bit_reference *> >::_Ret(); }
+namespace _STL { template <> bool bitset<13>::test(unsigned int) const; }
+namespace _STL { template <> ICoord2D * _STLP_alloc_proxy<ICoord2D *, ICoord2D, allocator<ICoord2D> >::allocate(unsigned int); }
+namespace _STL { template <> void _STLP_alloc_proxy<unsigned int *, unsigned int, allocator<unsigned int> >::deallocate(unsigned int *, unsigned int); }
+namespace _STL { template <> unsigned int * _STLP_alloc_proxy<unsigned int *, unsigned int, allocator<unsigned int> >::allocate(unsigned int); }
+namespace _STL { template <> _Bit_iter<_Bit_reference, _Bit_reference *> __copy_aux<_Bit_iter<_Bit_reference, _Bit_reference *>, _Bit_iter<_Bit_reference, _Bit_reference *> >(_Bit_iter<_Bit_reference, _Bit_reference *>, _Bit_iter<_Bit_reference, _Bit_reference *>, _Bit_iter<_Bit_reference, _Bit_reference *>, __false_type); }
+namespace _STL { template <> bitset<116> & bitset<116>::_Unchecked_set(unsigned int); }
+namespace _STL { template <> unsigned int * _Bvector_base<allocator<bool> >::_M_bit_alloc(unsigned int); }
+namespace _STL { template <> bitset<116> & bitset<116>::set(unsigned int); }
+namespace _STL { template <> bool bitset<45>::test(unsigned int) const; }
+template <> BitFlags<116>::BitFlags(BitFlags<116>::BogusInitType, int);
 // bfme link decl-only end
 
 // BFME 2's Object keeps its behavior list at +0x244 (the matched
