@@ -28558,7 +28558,6 @@ uw_007987c2,,0x007987C2,8,Code/gen_small/uw_gen_007.cpp,matched,gen-funclet;obje
 uw_007987ca,,0x007987CA,8,Code/gen_small/uw_gen_006.cpp,matched,gen-funclet;object-symbol=$L3196
 uw_007987dc,,0x007987DC,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L4565
 uw_00798806,,0x00798806,8,Code/gen_small/uw_gen_013.cpp,matched,gen-funclet;object-symbol=$L4555
-uw_0079880e,,0x0079880E,11,Code/gen_small/uw_gen_014.cpp,matched,gen-funclet;object-symbol=$L5008
 uw_00798819,,0x00798819,11,Code/gen_small/uw_gen_014.cpp,matched,gen-funclet;object-symbol=$L5009
 uw_00798824,,0x00798824,11,Code/gen_small/uw_gen_014.cpp,matched,gen-funclet;object-symbol=$L5010
 uw_00798850,,0x00798850,14,Code/gen_small/uw_gen_014.cpp,matched,gen-funclet;object-symbol=$L5016
@@ -88050,3 +88049,4 @@ $L2106,,0x0079431C,13,Code/GameEngine/Source/GameLogic/Object/WeaponEffects/Proj
 ?Rva00797B0FClearFlag@@YAIXZ,,0x00797B0F,13,Code/GameEngine/Source/GameClient/GUI/ControlBar/ControlBarRappellerCount.cpp,matched,gen-funclet;object-symbol=$L7415;parent=?getCommandAvailability@ControlBar@@QBE?AW4CommandAvailability@@PBVCommandButton@@PAVGameWindow@@PAVObject@@PAM_N@Z;native parent EH map proves static key guard cleanup; replaces separately reconstructed clearer and uses the parent guard
 ?rva004F5FB4@Rva004F5FB4@@QAEPAXXZ,,0x004F5FB4,8,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,Member forwarder to rowed 0x0033A674 sibling of 0x004F5FAC; honest address name
 ?rva004DD886@@YAPAXXZ,,0x004DD886,10,Code/GameEngine/Source/Common/Rva007B6880Thunks.cpp,matched,Pool-allocate thunk ecx=&g_Va00E049D8 to rowed 0x004DD73B; honest address name
+uw_0079880e,,0x0079880E,11,Code/GameEngine/Source/GameNetwork/GameSpy/Thread/Rva006609D0Destructor_Rva0054ffa5.cpp,matched,gen-funclet;parent=??1Rva006609D0@@UAE@XZ;object-symbol=$L447
