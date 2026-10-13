@@ -158,4 +158,35 @@ template <> inline void vector<void *>::_M_fill_insert(iterator __position, size
 }
 }
 
+// Native 0x00027BA0 (407 B): vector<void *>::operator=, STLport 4.5.3's
+// 4.5.x form (see vendor _vector.c): grow with allocate_and_copy and clear,
+// else copy over the front and destroy the tail, else copy the head and
+// uninitialized_copy the rest; every path ends in finish = start + xlen.
+namespace _STL {
+static __forceinline void *copyPointers(const void *first, const void *last, void *result, const __true_type &)
+{
+    return __copy_trivial(first, last, result);
+}
+template <> vector<void *> &vector<void *>::operator=(const vector<void *> &x)
+{
+    if (&x != this) {
+        const size_type xlen = x.size();
+        if (xlen > capacity()) {
+            pointer tmp = _M_allocate_and_copy(xlen, (const_pointer)x._M_start + 0, (const_pointer)x._M_finish + 0);
+            _M_clear();
+            this->_M_start = tmp;
+            this->_M_end_of_storage._M_data = this->_M_start + xlen;
+        } else if (size() >= xlen) {
+            pointer i = (pointer)copyPointers((const_pointer)x._M_start + 0, (const_pointer)x._M_finish + 0, (pointer)this->_M_start, _TrivialAss());
+            _Destroy(i, this->_M_finish);
+        } else {
+            copyPointers((const_pointer)x._M_start, (const_pointer)x._M_start + size(), (pointer)this->_M_start, _TrivialAss());
+            __uninitialized_copy((const_pointer)x._M_start + size(), (const_pointer)x._M_finish + 0, this->_M_finish, _IsPODType());
+        }
+        this->_M_finish = this->_M_start + xlen;
+    }
+    return *this;
+}
+}
+
 template class _STL::vector<void *, _STL::allocator<void *> >;
