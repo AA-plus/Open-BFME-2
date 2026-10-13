@@ -1,3 +1,5 @@
+// ?iterateCellsAlongLine@Pathfinder@@AAEHPBUICoord2D@@0W4PathfindLayerEnum@@PAVRva003EA570@@PBVRva003EABB@@@Z
+// partial score=0.9541 date=2026-10-13
 // ?iterateCellsAlongLine@Pathfinder@@AAEHPBUICoord2D@@0W4PathfindLayerEnum@@PAURva002E85ADInfo@@@Z
 // partial score=0.93 date=2026-10-13
 // ?iterateCellsAlongLine@Pathfinder@@AAEHPBUICoord2D@@0W4PathfindLayerEnum@@PAURva002E85ADInfo@@@Z
