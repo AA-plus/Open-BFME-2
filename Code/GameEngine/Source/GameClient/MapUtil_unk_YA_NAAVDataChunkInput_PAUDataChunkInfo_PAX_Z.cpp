@@ -136,11 +136,6 @@ class BfmePod8Vector : public _STL::vector<BfmePod8, _STL::allocator<BfmePod8> >
 {
 public:
 	void resize(unsigned int n, BfmePod8 x);
-	__forceinline void resize(unsigned int n)
-	{
-		BfmePod8 x;
-		resize(n, x);
-	}
 };
 static BfmePod8Vector m_boundaries;	///< All the boundaries we use for the map
 static Int m_dataSize = 0;				///< size of m_data.
@@ -173,7 +168,8 @@ static __declspec(noinline) Bool ParseSizeOnly(DataChunkInput &file, DataChunkIn
 
 	if (info->version >= K_HEIGHT_MAP_VERSION_4) {
 		Int numBorders = file.readInt();
-		m_boundaries.resize(numBorders);
+		BfmePod8 fill;
+		m_boundaries.resize(numBorders, fill);
 		for (int i = 0; i < numBorders; ++i) {
 			m_boundaries[i].a[0] = file.readInt();
 			m_boundaries[i].a[1] = file.readInt();
