@@ -7532,3 +7532,28 @@ void Rva0020F774::rva0020F774()
 	return m_member->rva0020F5B3();
 }
 
+// Rva005F83B9 view for the thunk below. The method is declared only and
+// resolves to the rowed ?rva00577958@Rva005F83B9@@QBE_NXZ (0x00577958, bool
+// getter in Rva00577944.cpp); declared here (not defined) so the tailcall is
+// preserved and the bool result passes through AL.
+class Rva005F83B9
+{
+public:
+	bool rva00577958() const;
+};
+
+// ?rva005F8417@Rva005F8417@@QBE_NXZ @0x005F8417 8B member forwarder to rowed
+// ?rva00577958@Rva005F83B9@@QBE_NXZ (0x00577958). No callers. Honest address name.
+class Rva005F8417
+{
+public:
+	bool rva005F8417() const;
+private:
+	char m_pad[4];
+	Rva005F83B9 *m_member;
+};
+bool Rva005F8417::rva005F8417() const
+{
+	return m_member->rva00577958();
+}
+

@@ -299,3 +299,18 @@ void Rva005F8820::rva005F8820()
 {
 	m_elements.clear();
 }
+
+// ?rva005F8845@Rva005F8845@@QAEXXZ @0x005F8845 8B member forwarder to rowed
+// ?rva005F8820@Rva005F8820@@QAEXXZ (0x005F8820). No callers. Honest address name.
+class Rva005F8845
+{
+public:
+	void rva005F8845();
+private:
+	char m_pad[4];
+	Rva005F8820 *m_member;
+};
+void Rva005F8845::rva005F8845()
+{
+	return m_member->rva005F8820();
+}
