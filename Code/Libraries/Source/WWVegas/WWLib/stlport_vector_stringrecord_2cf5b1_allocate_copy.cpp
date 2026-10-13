@@ -21,4 +21,10 @@ struct BfmeStringRecord002CF5B1 {
 #include <memory>
 template void _STL::_Construct<BfmeStringRecord002CF5B1,BfmeStringRecord002CF5B1>(BfmeStringRecord002CF5B1*,const BfmeStringRecord002CF5B1&);
 #include <vector>
-template class _STL::vector<BfmeStringRecord002CF5B1, _STL::allocator<BfmeStringRecord002CF5B1> >;
+namespace _STL { template<> vector<BfmeStringRecord002CF5B1> &vector<BfmeStringRecord002CF5B1>::operator=(const vector<BfmeStringRecord002CF5B1> &); }
+template BfmeStringRecord002CF5B1* _STL::vector<BfmeStringRecord002CF5B1,_STL::allocator<BfmeStringRecord002CF5B1> >::_M_allocate_and_copy<const BfmeStringRecord002CF5B1*>(unsigned int,const BfmeStringRecord002CF5B1*,const BfmeStringRecord002CF5B1*);
+// ?bfmeEmitstlport_vector_2cf5b1_uninitialized_fill_n@@YAXPAUBfmeStringRecord002CF5B1@@@Z present-unmatched
+void bfmeEmitstlport_vector_2cf5b1_uninitialized_fill_n(const BfmeStringRecord002CF5B1 *p)
+{
+	_STL::__uninitialized_fill_n((BfmeStringRecord002CF5B1 *)0, 0u, *p, _STL::__false_type());
+}
