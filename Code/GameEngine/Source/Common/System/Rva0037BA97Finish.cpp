@@ -38,3 +38,38 @@ void bfmeEmitRva0037BA97Init(const Pair8 *src, int c)
 {
 	Rva0037BA97Init(src, c);
 }
+
+class AsciiString;
+struct AsciiStringRef
+{
+	const AsciiString *m_string;
+};
+struct AsciiStringRefWithChar : AsciiStringRef
+{
+	char m_char;
+};
+// Aggregate like Triple12 above (no user constructor), so the operator
+// below builds it with plain stores and no EH registration.
+struct Rva0002C9C2
+{
+	AsciiStringRefWithChar m_first;
+	AsciiStringRef m_second;
+};
+
+// ICF-folded twin of Rva0037BA97Init above (same 43 bytes at 0x0037BA97):
+// the narrow string+char concat node stores the same three dwords (two
+// from the ref-with-char source, one from the string side) through the
+// hidden return pointer with the same shape.
+inline Rva0002C9C2 __cdecl operator+(const AsciiStringRefWithChar &left, const AsciiString &right)
+{
+	Rva0002C9C2 tmp;
+	tmp.m_first = left;
+	tmp.m_second.m_string = &right;
+	return tmp;
+}
+
+// ?bfmeEmitRva0002C9C2Add@@YAXABUAsciiStringRefWithChar@@ABVAsciiString@@@Z absent-from-retail
+void bfmeEmitRva0002C9C2Add(const AsciiStringRefWithChar &left, const AsciiString &right)
+{
+	operator+(left, right);
+}
