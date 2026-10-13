@@ -35,7 +35,8 @@ class WorldHeightMap;
 class BaseHeightMapRenderObjClass
 {
 public:
-	WorldHeightMap *getMap() { return m_map; }
+	// Inline like retail, without emitting a competing getMap copy.
+	__declspec(dllimport) __forceinline WorldHeightMap *getMap() { return m_map; }
 private:
 	unsigned char m_unknown0000[0x37C0];
 	WorldHeightMap *m_map; // +0x37C0
