@@ -1,5 +1,5 @@
 // stlport
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /Ireference/shims/bfmealloc  /O1 /G7 /EHsc /MD /arch:SSE /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /Ireference/shims/bfmealloc  /O1 /G7 /EHs /MD /arch:SSE /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
 // InGameHeroSelectInterface.cpp -- InGameHeroSelectInterface::Impl members
 // recovered from WorldBuilder leads (reverse/wb_name_leads.csv): WB's debug
 // build names the function and asserts a valid hero id and template; retail
@@ -12,6 +12,10 @@
 #undef _CRTIMP
 #define _CRTIMP __declspec(dllimport)
 #include "ascii_string.h"
+#include "unicode_string.h"
+#include <stdlib.h>
+// Retail containers call the CRT free thunk; the UI parsers below use imports.
+extern "C" void __cdecl free(void *);
 #include <list>
 #include "Rva00525119.h"
 #include "Coord3D.h"
@@ -20,6 +24,8 @@
 // operator!= COMDAT (one byte shape per TU flags); exact-match free
 // overloads take those calls instead so this TU emits no external copy.
 namespace _STL {
+static inline const int &max(const int &a,const int &b){return a<b?b:a;}
+
 template <class _IterTp, class _LeftTraits, class _RightTraits>
 static inline bool operator!=(const _List_iterator<_IterTp, _LeftTraits> &a,
                               const _List_iterator<_IterTp, _RightTraits> &b)
@@ -31,7 +37,7 @@ struct Rva00525951Less
 };
 namespace _STL
 {
- template<> _List_base<Rva00525119,allocator<Rva00525119> >::~_List_base();
+
 	template<> void _S_sort(list<Rva00525119, allocator<Rva00525119> > &, Rva00525951Less);
 }
 
@@ -65,7 +71,8 @@ public:
 	unsigned char m_pad08[0x38 - 8];
 	Coord3D m_pos; // +0x38
  char pad44[0x74-0x44]; ObjectID id;
- char pad78[0x274-0x78];Object *containerOwner;char pad278[0x438-0x278]; unsigned char flags438;
+ char pad78[0x254-0x78];class BodyModuleInterface *m_body;
+ char pad258[0x274-0x258];Object *containerOwner;char pad278[0x438-0x278]; unsigned char flags438;
 };
 
 class GameLogic
@@ -129,7 +136,7 @@ struct HeroContainer {char pad00[0x274]; Object *owner;};
 struct HeroButtonInfo
 {
 	ObjectID m_heroID;				// +0x00
-	Int m_unknown04;
+	Int m_rank;					// +0x04, last rank seen by Update
 	Int m_flashFrames;				// +0x08
 };
 
@@ -145,6 +152,7 @@ struct HeroButtonList
 {
 	HeroButtonNode *begin() const { return m_header->m_next; }
 	HeroButtonNode *end() const { return m_header; }
+ HeroButtonNode *headerNode() const {const HeroButtonNode*const*p=(const HeroButtonNode*const*)this;return (HeroButtonNode*)*p;}
 
 	HeroButtonNode *m_header;
 };
@@ -153,7 +161,8 @@ struct HeroSelectData
 {
 	unsigned char m_pad00[0x10];
 	HeroButtonList m_heroButtons;
- HeroButtonList m_builders;			// +0x10
+ HeroButtonList m_builders;			// +0x14
+ Int m_builderFlashFrames; // +0x18
 };
 
 struct BuilderSelectionData;
@@ -178,6 +187,114 @@ class BuilderUISelectionView {public:
  char padVptr[0x8BA-4];bool additiveSelection;
 };
 unsigned char __stdcall Rva00524FEDCheck(Object *);
+unsigned char __stdcall Rva00525162Check(Object *);
+class Image;
+bool ComputeObjectRankValues(const Object &obj, Int &rank, Real &progress);
+const Image *getButtonImage(ThingTemplate *thing, Object *obj);
+
+class BodyModuleInterface
+{
+public:
+	virtual void slot00();
+	virtual void slot01();
+	virtual void slot02();
+	virtual void slot03();
+	virtual void slot04();
+	virtual Real getHealthRatio() const; // +0x14
+};
+
+AsciiString __cdecl Rva00222834Get(int val);
+
+class Rva00222A8BTarget
+{
+public:
+	int rva00222B19(void *level, const char *prefix, const char *function, int argc, const char *a0, void *a1, void *a2, void *a3, void *a4);
+};
+
+__forceinline const char *GetStr(const AsciiString &s)
+{
+	char *t = *(char **)(void *)&s;
+	return t ? t + 8 : "";
+}
+
+
+class BfmeAptWindowManager
+{
+public:
+	void bfmeSetText(const AsciiString &name, const UnicodeString &text, bool flag);
+};
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
+
+int __cdecl Rva00524EF4AptCall(Rva00222A8BTarget *target, void *level, const char *prefix, const char *function);
+__declspec(noinline) inline int __cdecl Rva0052519DFire(void *a1, void *a2, const char *a3, const char *a4, int *a5)
+{
+	return ((Rva00222A8BTarget *)a1)->rva00222B19(a2, a3, a4, 1, GetStr(Rva00222834Get(*a5)), 0, 0, 0, 0);
+}
+
+__declspec(noinline) inline int __cdecl Rva00525235Fire(void *a1, void *a2, const char *a3, const char *a4, int *a5, int *a6)
+{
+	return ((Rva00222A8BTarget *)a1)->rva00222B19(a2, a3, a4, 2, GetStr(Rva00222834Get(*a5)), (void *)GetStr(Rva00222834Get(*a6)), 0, 0, 0);
+}
+
+int __cdecl Rva005252CDInvoke(Rva00222A8BTarget *target, void *level, const char *prefix, const char *function, const int &a0, const char *const &a1);
+__declspec(noinline) inline int __cdecl Rva00525338Fire(void *a1, void *a2, const char *a3, const char *a4, int *a5, void *a6)
+{
+	return ((Rva00222A8BTarget *)a1)->rva00222B19(a2, a3, a4, 2, GetStr(Rva00222834Get(*a5)), a6, 0, 0, 0);
+}
+
+
+// The Impl's button image registry at +0x38.
+class Rva00524306
+{
+public:
+	void rva00524306(const StringBase<char> &name);
+	void rva00524725(const AsciiString &name, const Image *image);
+};
+
+class Rva00525783
+{
+public:
+	void rva00525783();
+};
+
+extern "C" __declspec(dllimport) double __cdecl floor(double);
+
+static __forceinline long fast_float2long_round(float f)
+{
+	long i;
+	__asm fld f
+	__asm fistp i
+	return i;
+}
+
+static __forceinline float fast_float_floor(float f)
+{
+	return (float)floor(f);
+}
+
+#define REAL_TO_INT_FLOOR(x) (fast_float2long_round(fast_float_floor(x)))
+
+static __forceinline Int getHeroHealth(Object *obj)
+{
+	BodyModuleInterface *body = obj->m_body;
+	if (body)
+	{
+		Int health = (Int)(body->getHealthRatio() * 100.0f + 0.5f);
+		if (health > 100)
+			return 100;
+		if (health < 0)
+			return 0;
+		return health;
+	}
+	return 100;
+}
+
+// The Apt wrappers receive their scalar arguments by address; retail passes
+// compiler temporaries, as a by-reference wrapper parameter would.
+template <class T> static __forceinline T *aptArg(const T &value)
+{
+	return const_cast<T *>(&value);
+}
 class InGameHeroSelectInterface
 {
 public:
@@ -193,12 +310,41 @@ public:
 		Bool IsBuilderOnScreen(const Object *builder);
 		void rva00526E8B(_STL::list<Rva00525119> *list);
 		BuilderSelectionData *FindReadyLocalBuilder(_STL::list<Rva00525119> *list);
+		void Update();
+		void ShowSelectAllHeroesBttn();
 
 	private:
-		unsigned char m_pad00[0x10];
+		Bool isSelectableHero(Object *obj)
+		{
+			union
+			{
+				unsigned char (__stdcall *fn)(Object *);
+				unsigned char (Impl::*method)(Object *);
+			} check = { Rva00525162Check };
+			return (this->*check.method)(obj) != 0;
+		}
+		const char *name() const { return m_name.str(); }
+
+		unsigned char m_pad00[0x08];
+		void *m_level;				// +0x08, Apt level
+		AsciiString m_name;			// +0x0C, Apt movie name
 		HeroSelectData *m_data;			// +0x10
- char pad14[0x48-0x14];
- struct HeroSlot {HeroButtonNode *node;char unknown[18];bool builderSlot;char pad;};
+ char pad14[0x38-0x14];
+ Rva00524306 m_images;			// +0x38, button image registry
+ char pad39[0x44-0x39];
+ Bool m_shown;				// +0x44
+ // 16 slots of 24 bytes at +0x48: slot 0 holds the builders when any exist.
+ struct HeroSlot
+ {
+  HeroButtonNode *node;			// +0x00
+  const Image *image;			// +0x04
+  Int rank;				// +0x08
+  Int rankProgress;			// +0x0C
+  Int health;				// +0x10
+  Bool selected;			// +0x14
+  Bool flash;				// +0x15
+  Bool builderSlot;			// +0x16
+ };
  HeroSlot slots[16];
  char pad1C8[0x1DA-0x1C8];bool builderUsed;
  char pad1DB;unsigned int builderDeadline;
@@ -504,4 +650,228 @@ void InGameHeroSelectInterface::Impl::OnButtonPressed(const char *params) {
   }
 
  }
+}
+
+// WB13BF0C0 and native5264F5..526E8B establish Update and2454B extent.
+// Visible exact Apt wrappers preserve independent scalar result homes.
+// /EHs retains the target list-cleanup state store; no union result alias.
+void InGameHeroSelectInterface::Impl::Update()
+{
+	_STL::list<Rva00525119> builders;
+	BuildLocalBuilderList(&builders, 1);
+
+	if (!m_shown)
+	{
+		HeroButtonList *heroes = &m_data->m_heroButtons;
+		for (HeroButtonNode *it = heroes->begin(); it != heroes->headerNode(); it = it->m_next)
+		{
+			Object *hero = TheGameLogic->findObjectByID(it->m_data.m_heroID);
+			if (hero && isSelectableHero(hero))
+			{
+				Rva00524EF4AptCall((Rva00222A8BTarget *)g_bfmeAptWindowManager, m_level, name(), "Show");
+				m_shown = true;
+			}
+		}
+		if (!m_shown && !builders.empty())
+		{
+			Rva00524EF4AptCall((Rva00222A8BTarget *)g_bfmeAptWindowManager, m_level, name(), "Show");
+			m_shown = true;
+		}
+		return;
+	}
+
+	Int slotIndex = 0;
+	if (!builders.empty())
+	{
+		HeroSlot *slot = &slots[slotIndex];
+		if (slot->builderSlot != 1)
+		{
+			if (slot->node != m_data->m_heroButtons.headerNode())
+			{
+				Rva0052519DFire(g_bfmeAptWindowManager, m_level, name(), "KillButtonEffects", aptArg(slotIndex + 1));
+				slot->node = m_data->m_heroButtons.headerNode();
+			}
+			slot->builderSlot = 1;
+
+			Object *localBuilder = TheGameLogic->findObjectByID(((HeroButtonNode *)builders.front().m_ptr)->m_data.m_heroID);
+			const Image *image = getButtonImage(const_cast<ThingTemplate *>(localBuilder->getTemplate()), localBuilder);
+			if (slot->image == 0)
+			{
+				Rva00525338Fire(g_bfmeAptWindowManager, m_level, name(), "SetButtonState", aptArg(slotIndex + 1), (void *)"_up");
+			}
+			AsciiString imageName;
+			imageName.format("_level%d.%s_Hero%dImage", m_level, name(), slotIndex + 1);
+			m_images.rva00524725(imageName, image);
+			slot->image = image;
+
+			Rva00525235Fire(g_bfmeAptWindowManager, m_level, name(), "SetButtonRankProgress", aptArg(slotIndex + 1), aptArg(1));
+			slot->rankProgress = 1;
+
+			Rva00525235Fire(g_bfmeAptWindowManager, m_level, name(), "SetButtonHealthBar", aptArg(slotIndex + 1), aptArg(100));
+			slot->health = 100;
+		}
+
+		Int count = builders.size();
+		if (slot->rank != count)
+		{
+			AsciiString rankName;
+			rankName.format("APT:_level%d.%s_Hero%dRank", m_level, name(), slotIndex + 1);
+			UnicodeString rankText;
+			rankText.format((const unsigned short *)L"%d", count);
+			g_bfmeAptWindowManager->bfmeSetText(rankName, rankText, false);
+			slot->rank = count;
+		}
+
+		Bool selected = false;
+		for (_STL::list<Rva00525119>::iterator b = builders.begin(); b != builders.end(); ++b)
+		{
+			Object *builder = TheGameLogic->findObjectByID(((HeroButtonNode *)b->m_ptr)->m_data.m_heroID);
+			if (builder->getDrawable()->selected)
+			{
+				selected = true;
+				break;
+			}
+		}
+		if (selected != slot->selected)
+		{
+			Rva005252CDInvoke((Rva00222A8BTarget *)g_bfmeAptWindowManager, m_level, name(), "SetButtonSelectedHighlightState", slotIndex + 1, selected ? "_show" : "_hide");
+			slot->selected = selected;
+		}
+
+		Bool flash = m_data->m_builderFlashFrames > 0;
+		if (flash != slot->flash)
+		{
+			Rva005252CDInvoke((Rva00222A8BTarget *)g_bfmeAptWindowManager, m_level, name(), "SetButtonFlashEffectState", slotIndex + 1, flash ? "_show" : "_hide");
+			slot->flash = flash;
+		}
+		++slotIndex;
+	}
+	else
+	{
+		slots[slotIndex].builderSlot = 0;
+	}
+
+	Bool anyHero = false;
+	HeroButtonList *heroes = &m_data->m_heroButtons;
+	for (HeroButtonNode *it = heroes->begin(); it != heroes->headerNode(); it = it->m_next)
+	{
+		Object *hero = TheGameLogic->findObjectByID(it->m_data.m_heroID);
+		if (hero == 0)
+			continue;
+
+		Real progress;
+		Int rank = 0;
+		progress = 0.0f;
+		ComputeObjectRankValues(*hero, rank, progress);
+		Bool levelUp = it->m_data.m_rank > 0 && rank > it->m_data.m_rank;
+		it->m_data.m_rank = rank;
+
+		if (isSelectableHero(hero) && slotIndex < 16)
+		{
+			HeroSlot *slot = &slots[slotIndex];
+			if (it != slot->node)
+			{
+				Rva0052519DFire(g_bfmeAptWindowManager, m_level, name(), "KillButtonEffects", aptArg(slotIndex + 1));
+				slot->node = it;
+			}
+
+			const Image *image = getButtonImage(const_cast<ThingTemplate *>(hero->getTemplate()), hero);
+			if (image != slot->image)
+			{
+				if (slot->image == 0)
+				{
+					Rva00525338Fire(g_bfmeAptWindowManager, m_level, name(), "SetButtonState", aptArg(slotIndex + 1), (void *)"_up");
+				}
+				AsciiString imageName;
+				imageName.format("_level%d.%s_Hero%dImage", m_level, name(), slotIndex + 1);
+				m_images.rva00524725(imageName, image);
+				slot->image = image;
+			}
+
+			if (rank != slot->rank)
+			{
+				AsciiString rankName;
+				rankName.format("APT:_level%d.%s_Hero%dRank", m_level, name(), slotIndex + 1);
+				UnicodeString rankText;
+				rankText.format((const unsigned short *)L"%d", rank);
+				g_bfmeAptWindowManager->bfmeSetText(rankName, rankText, false);
+				slot->rank = rank;
+			}
+
+			Int rankProgress = progress >= 0.0f ? _STL::max(REAL_TO_INT_FLOOR(progress * 100.0f + 0.5f), 1L) : 1;
+			if (rankProgress != slot->rankProgress)
+			{
+				Rva00525235Fire(g_bfmeAptWindowManager, m_level, name(), "SetButtonRankProgress", aptArg(slotIndex + 1), aptArg(rankProgress));
+				slot->rankProgress = rankProgress;
+			}
+
+			Int health = _STL::max(getHeroHealth(hero), 1);
+			if (health != slot->health)
+			{
+				Rva00525235Fire(g_bfmeAptWindowManager, m_level, name(), "SetButtonHealthBar", aptArg(slotIndex + 1), aptArg(health));
+				slot->health = health;
+			}
+
+			Drawable *draw = hero->getDrawable();
+			Bool selected = draw && draw->selected;
+			if (selected != slot->selected)
+			{
+				Rva005252CDInvoke((Rva00222A8BTarget *)g_bfmeAptWindowManager, m_level, name(), "SetButtonSelectedHighlightState", slotIndex + 1, selected ? "_show" : "_hide");
+				slot->selected = selected;
+			}
+
+			Bool flash = it->m_data.m_flashFrames > 0;
+			if (flash != slot->flash)
+			{
+				Rva005252CDInvoke((Rva00222A8BTarget *)g_bfmeAptWindowManager, m_level, name(), "SetButtonFlashEffectState", slotIndex + 1, flash ? "_show" : "_hide");
+				slot->flash = flash;
+			}
+
+			if (levelUp)
+			{
+				Rva0052519DFire(g_bfmeAptWindowManager, m_level, name(), "PlayButtonLevelUpEffect", aptArg(slotIndex + 1));
+			}
+
+			++slotIndex;
+			anyHero = true;
+		}
+
+		if (it->m_data.m_flashFrames > 0)
+			--it->m_data.m_flashFrames;
+	}
+
+	for (; slotIndex < 16; ++slotIndex)
+	{
+		HeroSlot *slot = &slots[slotIndex];
+		if (slot->node != heroes->headerNode())
+		{
+			Rva0052519DFire(g_bfmeAptWindowManager, m_level, name(), "KillButtonEffects", aptArg(slotIndex + 1));
+			slot->node = heroes->headerNode();
+		}
+		if (slot->image != 0)
+		{
+			Rva00525338Fire(g_bfmeAptWindowManager, m_level, name(), "SetButtonState", aptArg(slotIndex + 1), (void *)"_unused");
+			AsciiString imageName;
+			imageName.format("_level%d.%s_Hero%dImage", m_level, name(), slotIndex + 1);
+			m_images.rva00524306(*(const StringBase<char> *)&imageName);
+			slot->image = 0;
+		}
+		slot->rank = -1;
+		slot->rankProgress = -1;
+		slot->health = -1;
+		slot->selected = false;
+		if (slot->flash)
+		{
+			Rva00525338Fire(g_bfmeAptWindowManager, m_level, name(), "SetButtonFlashEffectState", aptArg(slotIndex + 1), (void *)"_hide");
+			slot->flash = false;
+		}
+	}
+
+	if (anyHero)
+		ShowSelectAllHeroesBttn();
+	else
+		reinterpret_cast<Rva00525783 *>(this)->rva00525783();
+
+	if (m_data->m_builderFlashFrames > 0)
+		--m_data->m_builderFlashFrames;
 }
