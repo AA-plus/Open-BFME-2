@@ -87843,3 +87843,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ?rva0032C2FF@Rva0032C2FF@@QAEXABVAsciiString@@@Z,,0x0032C2FF,103,Code/GameEngine/Source/GameLogic/Map/Rva0032C2FFTeamsInfo.cpp,matched,
 ?rva000533CB@MilesAudioManager@@UAEXXZ,,0x000533CB,125,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManager.cpp,matched,
 ?Rva00212118@@YGXVAsciiString@@@Z,,0x00212118,107,Code/GameEngine/Source/Common/INI/INIBfmeSettingsParsers.cpp,matched,
+?rva001FD4E1@PlayerTemplateStore@@QAE_NW4NameKeyType@@PAH@Z,,0x001FD4E1,153,Code/GameEngine/Source/Common/RTS/Rva001FD4E1Find.cpp,matched,
