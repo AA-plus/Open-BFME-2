@@ -1,4 +1,6 @@
 // ?rva00515FAB@AptMainMenu@@QAEXPBD@Z
+// partial score=0.99 date=2026-10-13
+// ?rva00515FAB@AptMainMenu@@QAEXPBD@Z
 // partial score=0.99 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /vmg /vmm /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD /ICode/GameEngine/Source
 //
@@ -941,3 +943,19 @@ void AptMainMenu::rva005160DE(const char *unused) {
     Rva004F6986Member(MenuBinding(reinterpret_cast<FunctorMethod>(&AptMainMenu::rva00514BB5),reinterpret_cast<FunctorTarget *>(this))))));
  } else {m_state=9;m_next=10;}
 }
+
+// ---- W6-MP1 r6 split-TU trial (2026-10-13, 307/307 size-exact, 4 diff lines) ----
+// Standalone formulation: build/mp1_515fab_split.cpp (Code/.../AptMainMenuFirewallCallbacks.cpp,
+// UNCOMMITTED scratch -- new-file gate needs a landed row). // cl: mirrors the bank (no /EHsc)
+// plus /EHsc omitted deliberately: porting into AptMainMenuCallbacks.cpp (/EHsc) regressed EH
+// states (6 vs 4 before the 0x437F61 call); without /EHsc all EH states match and only these
+// 4 scheduling lines remain (twin 0x5160DE identical wall, same fix lands both = 614B):
+//   retail mov esi,esp THEN mov [ebp-0x1c],esp / mov ecx,esp THEN mov [ebp-0x18],esp
+//   ours   spill first, reg-save second (both pairs).
+// Tried: FunctorBinding init-order swap (neutral); named m1/m2 locals (pairs match but +2B:
+// an extra ReleaseTreeHintRef call at offset 305, size 309 overlapping the twin -- reverted);
+// _ReadWriteBarrier in MenuBinding (far worse: frame 0x40->0x38, homes shift -- reverted).
+// /vmg /vmm REQUIRED on the // cl: line (else C2440 reinterpret_cast member-pointer error);
+// safe: no other member-pointer uses in a split TU (home file untouched, 32/32 rows exact).
+// Next: a zero-byte scheduling fence for the esp-save order, or finding which temp the
+// reg-saves serve and pinning it to esi/ecx earlier (declare-first-live-local-first).

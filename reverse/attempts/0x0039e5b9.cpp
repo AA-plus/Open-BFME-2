@@ -1,4 +1,6 @@
 // ?rva0039E5B9@Team@@QAEXPAUCoord3D@@@Z
+// partial score=0.93 date=2026-10-13
+// ?rva0039E5B9@Team@@QAEXPAUCoord3D@@@Z
 // partial score=0.90 date=2026-10-12
 // MP3: restored Oct10 0.995 bank (hierarchy-drift fixed) but toolchain/headers drifted it to 176B (+9B, esp-frame) or 153B (-14B, /Oy- ebp-frame); 0.995 not reproducible now.
 extern "C" void _ReadWriteBarrier();
@@ -110,3 +112,37 @@ void Team::rva0039E5B9(Coord3D *pos)
     sum.z *= inv;
     *pos = sum;
 }
+
+// ---- W6-MP1 r6 variant (2026-10-13, 167/167 size-exact, single push-edi shift) ----
+// Home TU Code/GameEngine/Source/Common/RTS/TeamRva0039DA2A.cpp (/DNDEBUG /MD,
+// same flags as exact neighbour 0x39DA2A): plain sum{x,y,z}+=pos loop, unconditional
+// 1.0f/count, in-place scale, struct copy *pos=sum. No barrier, no volatile.
+// Delta vs retail is ONLY push-edi timing (ours at entry 56 57, retail 56 ... 57
+// after divss); every later insn identical modulo 1B shift; tail movs x3 exact.
+// Tried: _ReadWriteBarrier before scale (neutral), volatile dst (worse, 170B with
+// extra mov [ebp+8],edi spill). Push wall needs a scheduling trigger; 280 shape
+// trials + 2899 permutes (prior seats) never moved it. Formulation below drops
+// into TeamRva0039DA2A.cpp after rva0039E9A1 with decl
+// `void rva0039E5B9(Coord3D *pos);` in class Team (non-const).
+/*
+void Team::rva0039E5B9(Coord3D *pos)
+{
+    Coord3D sum;
+    sum.x = 0.0f;
+    sum.y = 0.0f;
+    sum.z = 0.0f;
+    int count = 0;
+    for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); !iter.done(); iter.advance()) {
+        Object *cur = iter.cur();
+        sum.x = sum.x + cur->m_position.x;
+        sum.y = sum.y + cur->m_position.y;
+        sum.z = sum.z + cur->m_position.z;
+        ++count;
+    }
+    float inv = 1.0f / (float)count;
+    sum.x *= inv;
+    sum.y *= inv;
+    sum.z *= inv;
+    *pos = sum;
+}
+*/
