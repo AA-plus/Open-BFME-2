@@ -9,6 +9,14 @@
 // stlport
 #include <list>
 #include <map>
+// map<int,int> find otherwise instantiates the less<int>::operator() COMDAT
+// (one byte shape per TU flags); an explicit dllimport+forceinline
+// specialization takes those calls inline so this TU emits no external copy.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+bool less<int>::operator()(const int &a, const int &b) const
+{ return a < b; }
+}
 #include "Code/Libraries/Include/Lib/Coord3D.h"
 enum Relationship { ENEMIES,NEUTRAL,ALLIES };class Team;
 class Player {public:Relationship getRelationship(const Team*)const;char pad[0x2EC];const Team *team;};
@@ -20,7 +28,9 @@ class Rva00438FA7:public Rva00438FC5 {public:Rva00438FA7();};
 struct Rva004393D6:public _STL::list<BfmePod196> {int a,b,c;Rva004393D6();~Rva004393D6();Rva004393D6 &operator=(const Rva004393D6&);};
 typedef _STL::map<int,Rva004393D6,_STL::less<int>,_STL::allocator<_STL::pair<const int,Rva004393D6> > > InvisibilityRecordMap;
 template<> Rva004393D6 &InvisibilityRecordMap::operator[](const int&);
-class Rva00388F63Map {public:void *find(int*);};
+typedef _STL::pair<const int,int> IntIntPair;
+typedef _STL::_Rb_tree<int,IntIntPair,_STL::_Select1st<IntIntPair>,_STL::less<int>,_STL::allocator<IntIntPair> > MapIntIntTree;
+// The int-keyed lookup ICF-folds onto the rowed map<int,int> _M_find 0x00388F63.
 struct DetectionTreeNode {unsigned color;void *parent,*left,*right;int key;Rva004393D6 record;};
 struct Rva004389DBInfo;
 class Rva00438389 {public:Object *detector;unsigned char allied;char pad5[31];Rva00438389 &rva00438389();};
@@ -39,11 +49,11 @@ bool Rva00439E0C::rva00439E0C(Object *object,Object *volatile detectorInput,int 
  if(!(object->objectTemplate->kind&0x20) && object->rva002931F5(false))return false;
  union RecordScratch {int id;Rva004393D6 *record;} scratch;
  scratch.id=object->id;
- DetectionTreeNode *node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find(&scratch.id);
+ DetectionTreeNode *node=(DetectionTreeNode*)((MapIntIntTree*)&records)->find(scratch.id)._M_node;
  if(node==*(DetectionTreeNode**)&records) {
   Rva00438FA7 empty;
   records[scratch.id]=(const Rva004393D6&)empty;
-  node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find(&scratch.id);
+  node=(DetectionTreeNode*)((MapIntIntTree*)&records)->find(scratch.id)._M_node;
  }
  Object *detector=detectorInput;
  scratch.record=&node->record;
@@ -135,12 +145,12 @@ void Rva00439E0C::rva00439F3F(Xfer *xfer)
 		--count;
 		ObjectID id;
 		XferObjectID(xfer,&id);
-		DetectionTreeNode *node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find((int*)&id);
+		DetectionTreeNode *node=(DetectionTreeNode*)((MapIntIntTree*)&records)->find((int&)id)._M_node;
 		if (node == *(DetectionTreeNode**)&records)
 		{
 			Rva00438FA7 empty;
 			records[(int&)id]=(const Rva004393D6&)empty;
-			node=(DetectionTreeNode*)((Rva00388F63Map*)&records)->find((int*)&id);
+			node=(DetectionTreeNode*)((MapIntIntTree*)&records)->find((int&)id)._M_node;
 		}
 		Rva004393D6 *record=&node->record;
 		xfer->xferInt(&record->a);

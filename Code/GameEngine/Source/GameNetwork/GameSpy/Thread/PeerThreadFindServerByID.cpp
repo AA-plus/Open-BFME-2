@@ -26,12 +26,31 @@ struct Rva003896BDNode
 	SBServer second;	// +0x14
 };
 
-// The int-keyed map's find (pinned view 0x00388F63, the folded STLport
-// _M_find<int>): it takes the key's address and returns the node or the
+class PeerThreadClass;
+
+// The int-keyed map's lookup is the rowed STLport map<int,int> _M_find<int>
+// 0x00388F63: it takes the key's address and returns the node or the
 // header, which is end().
-struct Rva00388F63Map
+namespace _STL {
+template <class T1, class T2> struct pair { T1 first; T2 second; };
+template <class P> struct _Select1st {};
+template <class T> struct less {};
+template <class T> class allocator {};
+template <class V> struct _Rb_tree_node;
+template <class K, class V, class KOV, class Cmp, class Alloc> class _Rb_tree
 {
-	void *find(int *key);
+	friend class ::PeerThreadClass;
+	typedef _Rb_tree_node<V> *_Link_type;
+private:
+	template <class KT> _Link_type _M_find(const KT &) const;
+};
+}
+
+typedef _STL::pair<const int, int> IntIntPair;
+typedef _STL::_Rb_tree<int, IntIntPair, _STL::_Select1st<IntIntPair>, _STL::less<int>, _STL::allocator<IntIntPair> > MapIntIntTree;
+
+struct Rva003896BDServerMap
+{
 	Rva003896BDNode *end() { return m_header; }
 	Rva003896BDNode *m_header;
 };
@@ -43,12 +62,12 @@ public:
 
 private:
 	char m_pad00[0x278];
-	Rva00388F63Map m_stagingServers; // +0x278
+	Rva003896BDServerMap m_stagingServers; // +0x278
 };
 
 SBServer PeerThreadClass::findServerByID(int id)
 {
-	Rva003896BDNode *it = (Rva003896BDNode *)m_stagingServers.find(&id);
+	Rva003896BDNode *it = (Rva003896BDNode *)((MapIntIntTree *)&m_stagingServers)->_M_find(id);
 	if (it != m_stagingServers.end())
 	{
 		SBServer server = it->second;

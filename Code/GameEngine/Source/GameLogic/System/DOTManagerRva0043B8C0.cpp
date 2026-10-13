@@ -103,7 +103,24 @@ public:
     void *head;
     int flag;
 };
-class Rva00388F63Map { public: void *find(int *key); };
+class DOTManager;
+// The +4 tree's lookup is the rowed STLport map<int,int> _M_find<int> 0x00388F63.
+namespace _STL {
+template <class T1, class T2> struct pair { T1 first; T2 second; };
+template <class P> struct _Select1st {};
+template <class T> struct less {};
+template <class T> class allocator {};
+template <class V> struct _Rb_tree_node;
+template <class K, class V, class KOV, class Cmp, class Alloc> class _Rb_tree
+{
+    friend class ::DOTManager;
+    typedef _Rb_tree_node<V> *_Link_type;
+private:
+    template <class KT> _Link_type _M_find(const KT &) const;
+};
+}
+typedef _STL::pair<const int, int> IntIntPair;
+typedef _STL::_Rb_tree<int, IntIntPair, _STL::_Select1st<IntIntPair>, _STL::less<int>, _STL::allocator<IntIntPair> > MapIntIntTree;
 class Rva0043B8C0 { public: bool rva0043B0EA(void *current, void *incoming); };
 class DOTManager
 {
@@ -117,7 +134,7 @@ private:
 
 void DOTManager::rva0043B8C0(int key, const Rva0043B163 *incoming)
 {
-    void *node = reinterpret_cast<Rva00388F63Map *>(&tree)->find(&key);
+    void *node = reinterpret_cast<MapIntIntTree *>(&tree)->_M_find(key);
     if (node != tree.head)
     {
         Rva0043B163 *current = reinterpret_cast<Rva0043B163 *>(

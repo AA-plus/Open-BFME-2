@@ -22,6 +22,14 @@
 #include "Coord3D.h"
 #include <list>
 #include <map>
+// map<int,int> find otherwise instantiates the less<int>::operator() COMDAT
+// (one byte shape per TU flags); an explicit dllimport+forceinline
+// specialization takes those calls inline so this TU emits no external copy.
+namespace _STL {
+template <> __declspec(dllimport) __forceinline
+bool less<int>::operator()(const int &a, const int &b) const
+{ return a < b; }
+}
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include "Common/BfmeAudioEventPrefix136.h"
@@ -278,7 +286,9 @@ struct Rva004393D6 : public _STL::list<BfmePod196> {
 typedef _STL::map<int,Rva004393D6,_STL::less<int>,
  _STL::allocator<_STL::pair<const int,Rva004393D6> > > InvisibilityRecordMap;
 template<> Rva004393D6& InvisibilityRecordMap::operator[](const int&);
-class Rva00388F63Map { public: void *find(int*); };
+typedef _STL::pair<const int,int> IntIntPair;
+typedef _STL::_Rb_tree<int,IntIntPair,_STL::_Select1st<IntIntPair>,_STL::less<int>,_STL::allocator<IntIntPair> > MapIntIntTree;
+// The int-keyed lookup ICF-folds onto the rowed map<int,int> _M_find 0x00388F63.
 // The existing push wrapper only forwards this value address to insert.
 // No value of its old unconstrained element view is constructed here.
 struct Rva004390F7Element;
@@ -299,11 +309,11 @@ void Rva00439CF7::rva00439CF7(Object *object,int duration,const void *data) {
  const Rva002542F3Member &nugget=*(const Rva002542F3Member*)data;
  if(nugget.m_kind>=2) return;
  int id=(int)object->getID();
- InvisibilityTreeNode *node=(InvisibilityTreeNode*)((Rva00388F63Map*)&m_records)->find(&id);
+ InvisibilityTreeNode *node=(InvisibilityTreeNode*)((MapIntIntTree*)&m_records)->find(id)._M_node;
  if(node==*(InvisibilityTreeNode**)&m_records) {
   Rva004393D6 empty;
   m_records[id]=empty;
-  node=(InvisibilityTreeNode*)((Rva00388F63Map*)&m_records)->find(&id);
+  node=(InvisibilityTreeNode*)((MapIntIntTree*)&m_records)->find(id)._M_node;
  }
  Rva004393D6 *record=&node->record;
  InvisibilityNode *head=*(InvisibilityNode**)record;
