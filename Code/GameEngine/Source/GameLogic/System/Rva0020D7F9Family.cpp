@@ -62,8 +62,8 @@ class Rva0020DXXX : public Rva001E3624
 public:
 	void rva0020D7F9();
 	void rva0020D834();
-	void rva0020D8F1(int x);
-	void rva0020D925(int x);
+	void updateSubject(int x);
+	void registerSubject(int x);
 	void rva0020D959(int x);
 private:
 	Rva003ED94FDtor m_vec10;
@@ -102,7 +102,7 @@ void Rva0020DXXX::rva0020D834()
 		m_3C = 0;
 }
 
-void Rva0020DXXX::rva0020D8F1(int x)
+void Rva0020DXXX::updateSubject(int x)
 {
 	if (m_38 != 0)
 		return;
@@ -113,7 +113,7 @@ void Rva0020DXXX::rva0020D8F1(int x)
 		((Rva0020DXXXElem *)*i)->rva003EDE44(x);
 }
 
-void Rva0020DXXX::rva0020D925(int x)
+void Rva0020DXXX::registerSubject(int x)
 {
 	if (m_38 != 0)
 		return;

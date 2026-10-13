@@ -40,7 +40,7 @@ public:
 class BfmeC986
 {
 public:
-	void rva00372C74(int a, int b, int c, int d);
+	void groupGatherAndAttackInFormationToPosition(int a, int b, int c, int d);
 };
 
 enum CommandSourceType
@@ -105,7 +105,7 @@ void ScriptActions::Rva003BEB01Do(const AsciiString *teamName, void *posSrc)
 	pos.y = ((const Coord3D *)((const char *)base + 0xC))->y;
 	pos.z = ((const Coord3D *)((const char *)base + 0xC))->z;
 	if (count > 1) {
-		((BfmeC986 *)group)->rva00372C74((int)&pos, 1, 0, 1);
+		((BfmeC986 *)group)->groupGatherAndAttackInFormationToPosition((int)&pos, 1, 0, 1);
 	} else {
 		group->groupAttackMoveToPosition(&pos, 0x7FFFFFFF, CMD_FROM_SCRIPT);
 	}

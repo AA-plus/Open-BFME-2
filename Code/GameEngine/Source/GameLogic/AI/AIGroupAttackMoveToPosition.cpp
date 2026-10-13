@@ -74,7 +74,7 @@ extern AI *TheAI;
 class BfmeC986
 {
 public:
-	char rva003724B8(int pos, int a, int b, int c, int d);
+	char privateGatherAndMoveInFormationToPosition(int pos, int a, int b, int c, int d);
 };
 
 struct ObjectListNode
@@ -107,7 +107,7 @@ void AIGroup::groupAttackMoveToPosition(const Coord3D *pos, Int maxShotsToFire, 
 	if ((Real)size() > 1.0f && TheAI->getAiData()->m_flagBA && cmdSource == CMD_FROM_PLAYER
 		&& TheAI->getAiData()->m_flagBD)
 	{
-		if (((BfmeC986 *)this)->rva003724B8((int)pos, 0, 1, 0, 1))
+		if (((BfmeC986 *)this)->privateGatherAndMoveInFormationToPosition((int)pos, 0, 1, 0, 1))
 			return;
 	}
 

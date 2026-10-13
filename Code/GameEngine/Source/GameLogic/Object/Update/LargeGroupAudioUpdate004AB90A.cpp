@@ -13,7 +13,7 @@ enum UpdateSleepTime
 class Rva0020DXXX
 {
 public:
-  void rva0020D925(int v);
+  void registerSubject(int v);
 };
 class Rva0020D959Host;
 class LargeGroupAudio; extern LargeGroupAudio *TheLargeGroupAudio;
@@ -83,7 +83,7 @@ void LargeGroupAudioUpdate::rva004AB90A()
 	if (((Inv20(m_object->m_94.v[1]) & 1) == 0))
 		return;
 	m_8D = true;
-	((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->rva0020D925((int)&m_24);
+	((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->registerSubject((int)&m_24);
 	Object *obj = m_object;
 	int delay = m_04->rva004AB7C8();
 	setWakeFrame(obj, (UpdateSleepTime)delay);

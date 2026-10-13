@@ -1,6 +1,6 @@
 // cl: -Ireference/open-bfme-1/game/GameEngine/Source/Common
 // Open-BFME5 conversions.
-// ?rva003724B8@BfmeC986@@QAEDHHHHH@Z, retail 0x003724B8, 137 bytes.
+// ?privateGatherAndMoveInFormationToPosition@BfmeC986@@QAEDHHHHH@Z, retail 0x003724B8, 137 bytes.
 // BfmeC986-family guarded dispatch (same callee trio as rowed bfmeGo986C
 // at 0x00372541: bfmeReady986C 0x36E357, bfmePrep986C 0x36D6B4,
 // bfmeSend986C 0x371166): after the ready check, walk the member list at
@@ -64,9 +64,9 @@ public:
 	char rva0036D3A3(int a, int b);
 	void rva005494A0(int a, int b);
 	void bfmeSend986C(int a, int b, int c, int d, int e);
-	char rva003724B8(int a, int b, int c, int, int e);
-	void rva00372C22(int a, int b, int c, int d);
-	void rva00372C74(int a, int b, int c, int d);
+	char privateGatherAndMoveInFormationToPosition(int a, int b, int c, int, int e);
+	void groupGatherAndMoveInFormationToPosition(int a, int b, int c, int d);
+	void groupGatherAndAttackInFormationToPosition(int a, int b, int c, int d);
 	void rva00372B09(int a, int b, int c);
 
 private:
@@ -83,7 +83,7 @@ void BfmeC986::bfmeGo986C(int a, int b, int c, int d)
 	bfmeSend986C(a, b, 0, c, d);
 }
 
-char BfmeC986::rva003724B8(int a, int b, int c, int, int e)
+char BfmeC986::privateGatherAndMoveInFormationToPosition(int a, int b, int c, int, int e)
 {
 	if (bfmeReady986C()) {
 		char any = 0;
@@ -109,9 +109,9 @@ char BfmeC986::rva003724B8(int a, int b, int c, int, int e)
 	return 1;
 }
 
-void BfmeC986::rva00372C22(int a, int b, int c, int d)
+void BfmeC986::groupGatherAndMoveInFormationToPosition(int a, int b, int c, int d)
 {
-	if (rva003724B8(a, b, 0, c, d))
+	if (privateGatherAndMoveInFormationToPosition(a, b, 0, c, d))
 		return;
 	Rva00372571Params params;
 	params.m_14 |= -1;
@@ -125,9 +125,9 @@ void BfmeC986::rva00372C22(int a, int b, int c, int d)
 	((AIGroup *)this)->rva00372571(&params, b);
 }
 
-void BfmeC986::rva00372C74(int a, int b, int c, int d)
+void BfmeC986::groupGatherAndAttackInFormationToPosition(int a, int b, int c, int d)
 {
-	if (rva003724B8(a, b, 1, c, d))
+	if (privateGatherAndMoveInFormationToPosition(a, b, 1, c, d))
 		return;
 	rva00372B09(a, 0x7FFFFFFF, b);
 }

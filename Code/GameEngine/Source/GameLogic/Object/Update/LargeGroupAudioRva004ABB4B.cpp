@@ -45,7 +45,7 @@ public:
 class Rva0020DXXX
 {
 public:
-	void rva0020D8F1(int slot);
+	void updateSubject(int slot);
 };
 
 struct HostClock
@@ -113,7 +113,7 @@ UpdateSleepTime LargeGroupAudioUpdate::update()
 		LargeGroupAudioUpdate *parent =
 			this;
 		int slot = parent ? (int)((char *)this + 0x24) : 0;
-		((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->rva0020D8F1(slot);
+		((Rva0020DXXX *)(*(Rva0020D959Host * *)&TheLargeGroupAudio))->updateSubject(slot);
 		FloatPair pair;
 		pair.x = obj->m_f38;
 		pair.y = obj->m_f3C;

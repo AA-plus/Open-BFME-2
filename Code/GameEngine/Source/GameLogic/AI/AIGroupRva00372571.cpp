@@ -338,7 +338,7 @@ struct Rva0036D7A6Outer;
 class BfmeC986
 {
 public:
-	char rva003724B8(int pos, int cmdSource, int a, int ignore, int b);
+	char privateGatherAndMoveInFormationToPosition(int pos, int cmdSource, int a, int ignore, int b);
 };
 
 void ScaleRect2D(Coord2D *tl, Coord2D *br, Real scaleFactor);
@@ -481,7 +481,7 @@ void AIGroup::rva00372571(Rva00372571Params *params, int cmdSource)
 	if (numUnits > 1.0f && !tightenGroup && !params->m_addWaypoint && params->m_target == 0
 		&& cmdSource == CMD_FROM_PLAYER && params->m_formationType == -1 && TheAI->getAiData()->m_flagBD)
 	{
-		if (((BfmeC986 *)this)->rva003724B8((int)params->m_pos, cmdSource, 0, (int)params->m_ignoreObstacle, 1))
+		if (((BfmeC986 *)this)->privateGatherAndMoveInFormationToPosition((int)params->m_pos, cmdSource, 0, (int)params->m_ignoreObstacle, 1))
 			return;
 	}
 

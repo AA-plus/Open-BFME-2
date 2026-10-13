@@ -54,7 +54,7 @@ public:
 class BfmeC986
 {
 public:
-	void rva00372C22(int pos, int a, int b, int c);
+	void groupGatherAndMoveInFormationToPosition(int pos, int a, int b, int c);
 };
 
 class AI
@@ -103,7 +103,7 @@ void ScriptActions::Rva003BEBD6Do(const AsciiString *teamName)
 	Coord3D pos;
 	team->rva0039E9A1(&pos);
 	if (count > 1) {
-		((BfmeC986 *)group)->rva00372C22((int)&pos, 1, 0, 1);
+		((BfmeC986 *)group)->groupGatherAndMoveInFormationToPosition((int)&pos, 1, 0, 1);
 	} else {
 		Rva00372571Params params;
 		params.m_14 = -1;

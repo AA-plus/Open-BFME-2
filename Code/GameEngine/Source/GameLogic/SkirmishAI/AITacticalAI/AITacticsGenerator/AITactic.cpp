@@ -149,7 +149,7 @@ namespace _STL { template<> void vector<Object *>::push_back(Object *const &); }
 extern BitFlags<116> KINDOFMASK_NONE;
 enum CommandSourceType { CMD_FROM_PLAYER = 0, CMD_FROM_SCRIPT = 1 };
 class AIGroup { public: void groupAttackMoveToPosition(const Coord3D *, int, CommandSourceType); };
-class BfmeC986 { public: void rva00372C74(int, int, int, int); };
+class BfmeC986 { public: void groupGatherAndAttackInFormationToPosition(int, int, int, int); };
 class AI { public: AIGroup *createGroup(); void destroyGroup(AIGroup *); };
 extern AI *TheAI;
 class Rva0025BFF8 { public: Object *rva0025BFF8(int); };
@@ -631,7 +631,7 @@ bool AITactic::sendTeamToAssistAnotherHorde(Team *team)
             int members = team->rva0039DC9E(KINDOFMASK_NONE, KINDOFMASK_NONE);
             if (members > 1) {
                 Object *victim = selected->rva0028ACA0();
-                ((BfmeC986 *)group)->rva00372C74((int)&victim->position, 0, 0, 1);
+                ((BfmeC986 *)group)->groupGatherAndAttackInFormationToPosition((int)&victim->position, 0, 0, 1);
             } else {
                 Object *victim = selected->rva0028ACA0();
                 group->groupAttackMoveToPosition(&victim->position, 0x7FFFFFFF, CMD_FROM_PLAYER);
