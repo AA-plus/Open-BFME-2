@@ -1,4 +1,6 @@
 // ?rva005B95B8@OnlineHome@AptOnline@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva005B95B8@OnlineHome@AptOnline@@QAEXXZ
 // partial score=0.99 date=2026-10-08
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD
 // Copy extents and source-pointer ABI are target facts; OnlineHome singleton

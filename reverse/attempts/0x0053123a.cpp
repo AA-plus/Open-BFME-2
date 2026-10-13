@@ -1,4 +1,6 @@
 // ?GetCollapseIndex@PathfindZoneManager@@SAHABUPathfindZoneParams@@@Z
+// partial score=0.95 date=2026-10-13
+// ?GetCollapseIndex@PathfindZoneManager@@SAHABUPathfindZoneParams@@@Z
 // partial score=0.95 date=2026-10-07
 // cl: /O1 /DNDEBUG /MD
 //

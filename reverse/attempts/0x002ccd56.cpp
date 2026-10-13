@@ -1,4 +1,6 @@
 // ??1Rva002CC20E@@UAE@XZ
+// partial score=0.8397814207650274 date=2026-10-13
+// ??1Rva002CC20E@@UAE@XZ
 // partial score=0.8397814207650274 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc /Ireference/shims/subsystem_bfme2 /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /Ireference/open-bfme-1/game/GameEngine/Include /Ireference/open-bfme-1/game/GameEngine/Include/Precompiled
 // New complete teardown lead for native2CCD56..2CCE37 (225B).

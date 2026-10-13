@@ -1,4 +1,6 @@
 // ?addArchiveFile@Win32BIGFileSystem@@QAE_NPBD_N@Z
+// partial score=0.99 date=2026-10-13
+// ?addArchiveFile@Win32BIGFileSystem@@QAE_NPBD_N@Z
 // partial score=0.99 date=2026-10-12
 // ?addArchiveFile@Win32BIGFileSystem@@QAE_NPBD_N@Z
 // partial score=0.99 date=2026-10-09

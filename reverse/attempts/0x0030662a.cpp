@@ -1,4 +1,6 @@
 // ?Rva0030662AXfer@@YAXPAVXfer@@ABVRva0036CA00Str@@@Z
+// partial score=0.96 date=2026-10-13
+// ?Rva0030662AXfer@@YAXPAVXfer@@ABVRva0036CA00Str@@@Z
 // partial score=0.96 date=2026-10-03
 // cl: /Ireference/shims/bfme2_ascii /O1 /EHsc
 // ?Rva0030662AXfer@@YAXPAVXfer@@ABVRva0036CA00Str@@@Z present-unmatched
