@@ -81,16 +81,86 @@ template <class T> Debug &operator<<(Debug &debug, const StringBase<T> &string);
 bool bfmeRva000387C0();
 void _bfme_debugRecordCallsite(int kind);
 
+// Retail's debug-message locals: the ctor/dtor are the out-of-line
+// StringBase(const char *) and releaseBuffer, so the view declares them only.
+class BFMERetailAsciiString
+{
+public:
+	BFMERetailAsciiString(const char *string);
+	~BFMERetailAsciiString();
+
+private:
+	void releaseBuffer();
+	char *m_data;
+};
+
+class Parameter
+{
+public:
+	int getInt(void) const { return m_integer; }
+	const AsciiString &getString(void) const { return m_string; }
+
+private:
+	char m_unknown[8];
+	int m_integer;
+	float m_real;
+	AsciiString m_string;
+};
+
+class ScriptAction
+{
+public:
+	Parameter *getParameter(int index)
+	{
+		if (index >= 0 && index < m_parameterCount)
+			return m_parameters[index];
+		return 0;
+	}
+
+private:
+	char m_unknown[8];
+	int m_parameterCount;
+	Parameter *m_parameters[12];
+};
+
+// 0x002041AC: bounds-checked name getter over the vector at +8/+0xC.
+class Rva002041AC
+{
+public:
+	AsciiString rva002041AC(unsigned int index) const;
+};
+
+class ObjectTypes
+{
+public:
+	unsigned int getListSize(void) const { return m_end - m_begin; }
+
+private:
+	void *m_vptr;
+	AsciiString m_listName;
+	AsciiString *m_begin;
+	AsciiString *m_end;
+	AsciiString *m_capacity;
+};
+
 class ScriptEngine
 {
 public:
 	Rva00205D5DEntry *rva00205D5D(const AsciiString &s, bool create);
 	const AttackPriorityInfo *getAttackInfo(const AsciiString &name);
+	ObjectTypes *getObjectTypes(const AsciiString &objectTypeList);
+	void AppendDebugMessage(const AsciiString &message, bool forcePause);
+
+protected:
+	void setPriorityThing(ScriptAction *action);
+
 private:
 	char m_pad[0x19100];
 	Rva00205D5DEntry m_table[256];
 	int m_count;
 };
+
+extern ScriptEngine *TheScriptEngine;
 
 Rva00205D5DEntry *ScriptEngine::rva00205D5D(const AsciiString &s, bool create)
 {
@@ -152,4 +222,66 @@ const AttackPriorityInfo *ScriptEngine::getAttackInfo(const AsciiString &name)
 		(dbg << "Attempting to use an undefined attack priority - '" << (const StringBase<char> &)name << "'\n").CrashDone(2);
 	}
 	return reinterpret_cast<const AttackPriorityInfo *>(&m_table[0]);
+}
+
+// ?setPriorityThing@ScriptEngine@@IAEXPAVScriptAction@@@Z, retail 0x00205EEC,
+// 561 bytes. Zero Hour's ScriptEngineSetPriorityThing.cpp is the semantic
+// donor; the BFME 2 body differs only in the table lookups (rva00205D5D and
+// the 0x002041AC name getter) and in the outer-branch message spellings, which
+// the bytes fix: the "invalid thing" message is a call temporary (its release
+// is emitted between the two AppendDebugMessage calls) and the "error
+// allocating" message is a named AsciiString local. The two inner message
+// sites keep the donor's scoped BFMERetailAsciiString, whose declared-only
+// ctor/dtor are retail's out-of-line StringBase and releaseBuffer.
+void ScriptEngine::setPriorityThing(ScriptAction *action)
+{
+	AsciiString typeArgument = action->getParameter(1)->getString();
+	ObjectTypes *types = TheScriptEngine->getObjectTypes(typeArgument);
+	if (!types)
+	{
+		Overridable *thingTemplate = (Overridable *)TheThingFactory->findTemplate(typeArgument);
+		if (!thingTemplate)
+		{
+			AppendDebugMessage(AsciiString("***Attempting to set attack priority on an invalid thing:***"), false);
+			AppendDebugMessage(action->getParameter(0)->getString(), false);
+			return;
+		}
+
+		Rva00205D5DEntry *info = rva00205D5D(action->getParameter(0)->getString(), true);
+		if (!info)
+		{
+			AsciiString message("***Error allocating attack priority set - fix or raise limit. ***");
+			AppendDebugMessage(message, false);
+			return;
+		}
+		reinterpret_cast<Rva0034C5E0 *>(info)->rva00358333(thingTemplate, (Image *)action->getParameter(2)->getInt());
+		return;
+	}
+	else
+	{
+		for (unsigned int typeIndex = 0; typeIndex < types->getListSize(); typeIndex++)
+		{
+			AsciiString thisTypeName = ((const Rva002041AC *)types)->rva002041AC(typeIndex);
+			Overridable *thisType = (Overridable *)TheThingFactory->findTemplate(thisTypeName);
+			if (!thisType)
+			{
+				{
+					BFMERetailAsciiString message("***Attempting to set attack priority on an invalid thing:***");
+					AppendDebugMessage(*(const AsciiString *)&message, false);
+				}
+				AppendDebugMessage(action->getParameter(0)->getString(), false);
+				return;
+			}
+
+			Rva00205D5DEntry *info = rva00205D5D(action->getParameter(0)->getString(), true);
+			if (!info)
+			{
+				BFMERetailAsciiString message("***Error allocating attack priority set - fix or raise limit. ***");
+				AppendDebugMessage(*(const AsciiString *)&message, false);
+				return;
+			}
+			reinterpret_cast<Rva0034C5E0 *>(info)->rva00358333(thisType, (Image *)action->getParameter(2)->getInt());
+		}
+		return;
+	}
 }
