@@ -13,10 +13,6 @@ address_global	Code/GameEngine/Source/Common/Bfme/Rva004E65CFLeaf.cpp	g_Va00BC28
 address_global	Code/GameEngine/Source/Common/Bfme5FactoryStubs.cpp	g_bfmeRva0112B3ACVt	2
 address_global	Code/GameEngine/Source/Common/Bfme5FactoryStubs.cpp	g_bfmeRva0112B3F0Vt	2
 address_global	Code/GameEngine/Source/Common/Bfme5FactoryStubs.cpp	g_bfmeRva0112B3FCVt	2
-address_global	Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	g_Va00E1F8E0	2
-address_global	Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	g_Va00E20DA0	2
-address_global	Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	g_Va00E20FC0	2
-address_global	Code/GameEngine/Source/Common/Bfme5SeventySeven.cpp	g_Va00E21220	2
 address_global	Code/GameEngine/Source/Common/BfmeConv1292.cpp	g_Va00E02FE4	2
 address_global	Code/GameEngine/Source/Common/BfmeConv1292.cpp	g_Va00E02FF8	2
 address_global	Code/GameEngine/Source/Common/BfmeConv1292.cpp	g_Va00E0300C	2
