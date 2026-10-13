@@ -489,15 +489,7 @@ public:
 	};
 };
 
-class Vector2
-{
-public:
-	float X;
-	float Y;
-
-	float &operator[](int i) { return (&X)[i]; }
-	const float &operator[](int i) const { return (&X)[i]; }
-};
+#include "../../../../../reference/shims/wwmath/Vector2.h"
 
 class Vector3
 {

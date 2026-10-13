@@ -12,7 +12,7 @@
 // WB 0x00DB6570 has the same checks and wrapped list iteration, but no name.
 // Original class and method names remain unasserted.
 #include <list>
-struct ICoord2D { int x, y; };
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 namespace _STL {
 template<> void _List_base<int,allocator<int> >::clear();
 template <class T, class L, class R>

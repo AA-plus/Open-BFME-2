@@ -115,7 +115,7 @@ class Rva00DFE1C8Host {public:char pad[0x268];PositionQueryCampaign *campaign;};
 class LivingWorldManager;
 extern LivingWorldManager *TheLivingWorldManager;
 class Rva0020E89C;
-class Coord2D {public:float x,y;};
+#include "../../../../../Libraries/Include/Lib/Coord2D.h"
 // ?GetRegionCenterPoint@LivingWorldRegionManager@@QAE_NPAVRva0020E89C@@PAVCoord2D@@@Z
 // @0x0020EA58 158B: renamed from placeholder Rva002B2702B0::rva0020EA58 — the
 // WorldBuilder pin carries the real name and signature (region overload with

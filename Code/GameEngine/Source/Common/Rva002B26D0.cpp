@@ -35,7 +35,7 @@ public:
 #include "ArmyMoveCoordinateView.h"
 
 class Rva0020E89C;
-class Coord2D { public: float x, y; };
+#include "../../../Libraries/Include/Lib/Coord2D.h"
 class LivingWorldRegionManager
 {
 public:
