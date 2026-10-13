@@ -1,4 +1,6 @@
 // ??0W3DDisplay@@QAE@XZ
+// partial score=0.97 date=2026-10-13
+// ??0W3DDisplay@@QAE@XZ
 // partial score=0.97 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // ?0W3DDisplay@@QAE@XZ, retail 0x00049DEA, 293 bytes.
