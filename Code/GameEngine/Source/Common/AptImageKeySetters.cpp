@@ -683,3 +683,52 @@ void InGameCommandButtonMovieClip::Impl::SetState(int index)
     Rva0050E9FEAptCall(TheRva00222A8BTarget, (void *)m_level, teamName, "SetState", &g_00C74A98[index]);
     m_state = index;
 }
+
+// ?rva005ED385@Rva005ED385@@QAEXHPBVImage@@@Z, retail 0x005ED385 (140 bytes):
+// the PlayerIcon%d member of the same Apt image-setter family, one record per
+// icon index. Identity (target): the format string "_level%u.%s_PlayerIcon%d"
+// and the rowed set/clear 0x00524725/0x00524306; the record is a 20-byte entry
+// of the icon vector at +0x44 with the image at +8. The named begin pointer
+// keeps the base load separate from the index scale (retail mov eax,[edi+0x44]
+// / add esi,eax) and the /G7 region default selects the imul stride.
+struct Rva005ED385Icon
+{
+	char m_pad00[8];
+	const Image *m_image;		// +0x08
+	char m_pad0C[8];
+};
+
+struct Rva005ED385IconVector
+{
+	Rva005ED385Icon &operator[](unsigned int n) { return *(m_begin + n); }
+	Rva005ED385Icon *m_begin;
+};
+
+class Rva005ED385
+{
+public:
+	void rva005ED385(int index, const Image *image);
+private:
+	char m_pad00[4];
+	unsigned int m_level;		// +0x04
+	StringBase<char> m_name;	// +0x08
+	char m_pad0C[0x0C];
+	Rva00524306 m_images;		// +0x18
+	char m_pad19[0x2B];
+	Rva005ED385IconVector m_icons;	// +0x44
+};
+
+void Rva005ED385::rva005ED385(int index, const Image *image)
+{
+	Rva005ED385Icon *icons = m_icons.m_begin;
+	Rva005ED385Icon &icon = icons[index];
+	if (image == icon.m_image)
+		return;
+	AsciiString key;
+	key.format("_level%u.%s_PlayerIcon%d", m_level, m_name.str(), index);
+	if (image)
+		m_images.rva00524725(key, image);
+	else
+		m_images.rva00524306(*(const StringBase<char> *)&key);
+	icon.m_image = image;
+}
