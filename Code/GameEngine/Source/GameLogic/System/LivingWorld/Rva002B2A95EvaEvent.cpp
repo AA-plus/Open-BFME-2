@@ -15,10 +15,11 @@ public:
 };
 extern Rva002D3627Host *g_00DFEF18;
 
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void reportEvaEvent(int event, const Coord3D *position, int flag);
+	bool reportEvaEvent(EvaEventID event, const Coord3D *position, const Coord3D *secondPosition);
 };
 extern Eva *TheEva;
 
@@ -54,6 +55,6 @@ void Rva002B2A95Callback::rva002B2A95(const Rva002E0687 *target,
 		xy.y = record->m_position.y;
 		Coord3D position = { xy.x, xy.y, 0.0f };
 		g_00DFEF18->rva002BF5B0(&xy, &position);
-		TheEva->reportEvaEvent(record->m_event, &position, 0);
+		TheEva->reportEvaEvent((EvaEventID)record->m_event, &position, 0);
 	}
 }

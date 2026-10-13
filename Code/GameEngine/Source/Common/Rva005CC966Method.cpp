@@ -1,10 +1,11 @@
 // cl: /O1 /DNDEBUG /MD
 // ?rva005CC966@Rva005CC966@@QAEXXZ @0x005CC966 30B evidence: Eva reportEvaEvent pin event pos 0; caller jmp 0x005CCB6B; global TheEva
 #include "../../../Libraries/Include/Lib/Coord3D.h"
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void reportEvaEvent(int ev, const Coord3D *pos, int unused);
+	bool reportEvaEvent(EvaEventID ev, const Coord3D *pos, const Coord3D *secondPos);
 };
 extern Eva *TheEva;
 class Rva005CC966
@@ -19,5 +20,5 @@ public:
 void Rva005CC966::rva005CC966()
 {
 	const Coord3D *pos = m_flag ? &m_pos : 0;
-	TheEva->reportEvaEvent(m_event, pos, 0);
+	TheEva->reportEvaEvent((EvaEventID)m_event, pos, 0);
 }

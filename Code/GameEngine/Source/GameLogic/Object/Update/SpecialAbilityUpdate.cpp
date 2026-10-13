@@ -70,10 +70,11 @@ class Player
 public:
 	bool isLocalPlayer() const;
 };
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void reportEvaEvent(int event, const Coord3D *position, int flag);
+	bool reportEvaEvent(EvaEventID event, const Coord3D *position, const Coord3D *secondPosition);
 };
 extern Eva *TheEva;
 // The one-Drawable list the voice responses hand out; its destructor is the
@@ -687,7 +688,7 @@ void SpecialAbilityUpdate::startPacking(bool success)
 		if (player && player->isLocalPlayer())
 		{
 			int evaEvent = d->m_specialPowerTemplate->friend_getFinalOverride()->m_evaEvent44;
-			TheEva->reportEvaEvent(evaEvent, &self->m_position, 0);
+			TheEva->reportEvaEvent((EvaEventID)evaEvent, &self->m_position, 0);
 		}
 	}
 }
@@ -758,7 +759,7 @@ void SpecialAbilityUpdate::startPreparation()
 		if (draw)
 			draw->rva002723C0(d->m_preparationFrames);
 		if (target && target->isLocallyControlled())
-			TheEva->reportEvaEvent(0x10, &target->m_position, 0);
+			TheEva->reportEvaEvent((EvaEventID)0x10, &target->m_position, 0);
 	}
 	else if (type == 0x1a)
 	{
@@ -775,7 +776,7 @@ void SpecialAbilityUpdate::startPreparation()
 				m_object->clearAndSetModelConditionState((ModelConditionFlagType)0x60, (ModelConditionFlagType)0x29);
 			}
 			if (target->isLocallyControlled())
-				TheEva->reportEvaEvent(0x10, &target->m_position, 0);
+				TheEva->reportEvaEvent((EvaEventID)0x10, &target->m_position, 0);
 		}
 	}
 	SpecialPowerModuleInterface *module = (SpecialPowerModuleInterface *)((Rva0044E633 *)this)->rva0044E633();

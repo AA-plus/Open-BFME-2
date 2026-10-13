@@ -17,9 +17,10 @@ class ControlBar {
 public:
     void rva0031B5A3(const Player *);
 };
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva {
 public:
-    void rva001DE2DA(int, const Coord3D *, int);
+    bool reportEvaEvent(EvaEventID, const Coord3D *, const Coord3D *);
 };
 class PlayerList {
 public:
@@ -41,7 +42,7 @@ bool Rva002A9FA0::rva002A9FA0(int level)
     bool changed = ((Rva00380200 *)this)->rva0038037C(level);
     if (changed && TheControlBar) {
         if ((Player *)((char *)this - 8) == ThePlayerList->localPlayer && TheEva)
-            TheEva->rva001DE2DA(2, 0, 0);
+            TheEva->reportEvaEvent((EvaEventID)2, 0, 0);
         const Player *player = (const Player *)((const char *)this - 8);
         TheControlBar->rva0031B5A3(player);
         if (oldPoints != points)

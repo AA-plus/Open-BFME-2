@@ -49,10 +49,11 @@ enum DeathType
 	DEATH_NORMAL = 0
 };
 
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void reportEvaEvent(int event, const Coord3D *pos, int flag);	// 0x001DE2DA
+	bool reportEvaEvent(EvaEventID event, const Coord3D *pos, const Coord3D *secondPos);	// 0x001DE2DA
 };
 extern Eva *TheEva;
 
@@ -136,7 +137,7 @@ UpdateSleepTime AttachUpdate::update()
 		Object *obj = m_object;
 		if (!parent || (parent->m_438 & 1)) {
 			m_parentID = INVALID_ID;
-			TheEva->reportEvaEvent(m_diedEvaEvent, obj->getPosition(), 0);
+			TheEva->reportEvaEvent((EvaEventID)m_diedEvaEvent, obj->getPosition(), 0);
 			obj->kill(DAMAGE_RVA00491D2F_8, DEATH_NORMAL);
 			return UPDATE_SLEEP_FOREVER;
 		}

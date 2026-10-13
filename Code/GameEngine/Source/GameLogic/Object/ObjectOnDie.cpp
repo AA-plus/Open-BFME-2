@@ -240,10 +240,11 @@ public:
 	bool rva0042638E(const SearchArg0042638E *arg);
 };
 
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void rva001DE2DA(int eventType, const Coord3D *pos, int playerIndex);
+	bool reportEvaEvent(EvaEventID eventType, const Coord3D *pos, const Coord3D *secondPos);
 };
 
 class InGameUI
@@ -448,7 +449,7 @@ void Object::onDie(DamageInfo *damageInfo)
 			else
 				evaEvent = tmpl->m_evaEnemyUnitLost;
 			if (evaEvent != -1)
-				TheEva->rva001DE2DA(evaEvent, getPosition(), 0);
+				TheEva->reportEvaEvent((EvaEventID)evaEvent, getPosition(), 0);
 		}
 	}
 

@@ -520,10 +520,11 @@ public:
 	void set(int value);
 };
 
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void reportEvaEvent(Int event, const Coord3D *pos, Int flag); // 0x001DE2DA
+	bool reportEvaEvent(EvaEventID event, const Coord3D *pos, const Coord3D *secondPos); // 0x001DE2DA
 };
 extern Eva *TheEva;
 
@@ -1311,7 +1312,7 @@ void StealthUpdate::markAsDetected(UnsignedInt numFrames, Int feedback, Object *
 					((Rva0033F15DDwordSlot *)&neutralizedSound)->set(ThePlayerList->getLocalPlayer()->getPlayerIndex());
 					TheAudio->addAudioEvent(&neutralizedSound);
 					TheInGameUI->message(TheGameText->fetch("MESSAGE:StealthNeutralized"));
-					TheEva->reportEvaEvent(data->m_evaEventDetectedOwner, self->getPosition(), 0);
+					TheEva->reportEvaEvent((EvaEventID)data->m_evaEventDetectedOwner, self->getPosition(), 0);
 				}
 			}
 			else if (ThePlayerList->getLocalPlayer()->getRelationship(self) != ALLIES)
@@ -1325,7 +1326,7 @@ void StealthUpdate::markAsDetected(UnsignedInt numFrames, Int feedback, Object *
 						((Rva0033F15DDwordSlot *)&discoveredSound)->set(ThePlayerList->getLocalPlayer()->getPlayerIndex());
 						TheAudio->addAudioEvent(&discoveredSound);
 						TheInGameUI->message(TheGameText->fetch("MESSAGE:StealthDiscovered"));
-						TheEva->reportEvaEvent(data->m_evaEventDetectedEnemy, detector->getPosition(), (Int)self->getPosition());
+						TheEva->reportEvaEvent((EvaEventID)data->m_evaEventDetectedEnemy, detector->getPosition(), self->getPosition());
 					}
 				}
 			}
@@ -1334,7 +1335,7 @@ void StealthUpdate::markAsDetected(UnsignedInt numFrames, Int feedback, Object *
 				BfmeAudioEventPrefix136 discoveredSound(TheAudio->getMiscAudio()->m_stealthDiscoveredSound, self->getID());
 				((Rva0033F15DDwordSlot *)&discoveredSound)->set(ThePlayerList->getLocalPlayer()->getPlayerIndex());
 				TheAudio->addAudioEvent(&discoveredSound);
-				TheEva->reportEvaEvent(data->m_evaEventDetectedAlly, self->getPosition(), 0);
+				TheEva->reportEvaEvent((EvaEventID)data->m_evaEventDetectedAlly, self->getPosition(), 0);
 			}
 		}
 	}

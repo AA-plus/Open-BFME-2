@@ -115,10 +115,11 @@ public:
 	void set(int value);
 };
 
+enum EvaEventID { EVA_EVENT_STUB = 0 };
 class Eva
 {
 public:
-	void reportEvaEvent(Int event, const Coord3D *pos, Int flag);	// 0x001DE2DA
+	bool reportEvaEvent(EvaEventID event, const Coord3D *pos, const Coord3D *secondPos);	// 0x001DE2DA
 };
 extern Eva *TheEva;
 
@@ -226,7 +227,7 @@ void Rva00439E0C::rva004389DB(Object *obj, Rva004389DBInfo *info, Int feedback)
 			TheAudio->addAudioEvent(&neutralizedSound);
 			TheInGameUI->message(TheGameText->fetch("MESSAGE:StealthNeutralized"));
 			Int message = obj->getTemplate()->m_evaEventDetectedOwner;
-			TheEva->reportEvaEvent(message, obj->getPosition(), 0);
+			TheEva->reportEvaEvent((EvaEventID)message, obj->getPosition(), 0);
 		}
 	}
 	else if (localPlayer->getRelationship(obj) != ALLIES)
@@ -241,7 +242,7 @@ void Rva00439E0C::rva004389DB(Object *obj, Rva004389DBInfo *info, Int feedback)
 				TheAudio->addAudioEvent(&discoveredSound);
 				TheInGameUI->message(TheGameText->fetch("MESSAGE:StealthDiscovered"));
 				Int message = obj->getTemplate()->m_evaEventDetectedEnemy;
-				TheEva->reportEvaEvent(message, info->m_detector->getPosition(), (Int)obj->getPosition());
+				TheEva->reportEvaEvent((EvaEventID)message, info->m_detector->getPosition(), obj->getPosition());
 			}
 		}
 	}
@@ -251,7 +252,7 @@ void Rva00439E0C::rva004389DB(Object *obj, Rva004389DBInfo *info, Int feedback)
 		((Rva0033F15DDwordSlot *)&discoveredSound)->set(localPlayer->getPlayerIndex());
 		TheAudio->addAudioEvent(&discoveredSound);
 		Int message = obj->getTemplate()->m_evaEventDetectedAlly;
-		TheEva->reportEvaEvent(message, obj->getPosition(), 0);
+		TheEva->reportEvaEvent((EvaEventID)message, obj->getPosition(), 0);
 	}
 }
 
