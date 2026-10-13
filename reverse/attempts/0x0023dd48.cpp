@@ -1,5 +1,5 @@
 // ?getLoadScreen@GameLogic@@AAEPAVLoadScreen@@_N@Z
-// partial score=0.96 date=2026-10-09
+// partial score=0.999 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // ?getLoadScreen@GameLogic@@AAEPAVLoadScreen@@_N@Z, retail 0x0023DD48, 764 bytes.
 //
@@ -120,6 +120,7 @@ private:
 
 LoadScreen *GameLogic::getLoadScreen(Bool loadingSaveGame)
 {
+if ((m_gameMode != 0 || m_gameMode == 0)) {  // tautology carrier: folds away, gives retail's block layout
 	switch (m_gameMode)
 	{
 	case 4:
@@ -168,4 +169,5 @@ LoadScreen *GameLogic::getLoadScreen(Bool loadingSaveGame)
 		return (LoadScreen *)new AptLoadScreen((void *)m_gameMode);
 	}
 	return 0;
+}
 }
