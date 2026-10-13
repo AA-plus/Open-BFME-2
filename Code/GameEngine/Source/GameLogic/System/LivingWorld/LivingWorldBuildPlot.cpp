@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/Libraries/Include /O1 /DNDEBUG /MD /EHsc
+// cl: /Ireference/shims/bfme2_ascii /ICode/Libraries/Include /O1 /DNDEBUG /MD /D_CRTIMP= /EHsc
 // WorldBuilder 0x01311550 names LivingWorldBuildPlot::CreateIcon and
 // 0x014D96C0 names its icon constructor. Retail 0x004FC185..0x004FC207
 // proves the lookup, 0x3C allocation, position reference at +0x28, owning

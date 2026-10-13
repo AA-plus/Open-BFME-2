@@ -1,4 +1,4 @@
-// cl: /GX /MD /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /EHsc /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
+// cl: /GX /MD /D_CRTIMP= /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /EHsc /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
 // stlport
 // BFME1 ActiveBody_Constructor.cpp and Zero Hour ActiveBody.cpp guide the
 // health, damage-info, armor-validation, and damage-state sequence. BFME2

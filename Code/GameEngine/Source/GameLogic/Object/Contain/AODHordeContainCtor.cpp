@@ -1,4 +1,4 @@
-// cl: /O1 /DNDEBUG /MD /EHsc /arch:SSE /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /O1 /DNDEBUG /MD /D_CRTIMP= /EHsc /arch:SSE /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
 // ??0AODHordeContain@@QAE@PAVThing@@PBVModuleData@@@Z, retail 0x0047B3DB, 317 bytes.

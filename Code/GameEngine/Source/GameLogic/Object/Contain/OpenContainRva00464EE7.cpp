@@ -1,4 +1,4 @@
-// cl: /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
+// cl: /O1 /DNDEBUG /MD /D_CRTIMP= /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
 // stlport
 //
 // Target facts: retail body 0x00464EE7..0x00464FC7 is 224 bytes. VA 0x00C435E8
