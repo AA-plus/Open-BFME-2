@@ -14,7 +14,15 @@ namespace _STL { template <> bool operator==<int const, int>(pair<int const, int
 namespace _STL { template <> _Vector_base<void *, allocator<void *> >::_Vector_base(unsigned int, allocator<void *> const &); }
 namespace _STL { template <> vector<void *, allocator<void *> >::vector(unsigned int, void *const &, allocator<void *> const &); }
 namespace _STL { template <> void hashtable<pair<int const, int>, int, hash<int>, _Select1st<pair<int const, int> >, equal_to<int>, allocator<pair<int const, int> > >::resize(unsigned int); }
+namespace _STL { template <> _STLP_alloc_proxy<void **, void *, allocator<void *> >::~_STLP_alloc_proxy(); }
+namespace _STL { template <> allocator<void *>::~allocator(); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::_M_fill_insert(void **, unsigned int, void *const &); }
+namespace _STL { template <> void hashtable<pair<int const, int>, int, hash<int>, _Select1st<pair<int const, int> >, equal_to<int>, allocator<pair<int const, int> > >::erase(_Ht_iterator<pair<int const, int>, _Const_traits<pair<int const, int> >, int, hash<int>, _Select1st<pair<int const, int> >, equal_to<int>, allocator<pair<int const, int> > > const &); }
+namespace _STL { template <> void vector<void *, allocator<void *> >::reserve(unsigned int); }
 // bfme link decl-only end
+// reserve is declared only above; its callees are rowed here and no longer emitted as a side effect, so anchor them.
+template void _STL::vector<void *, _STL::allocator<void *> >::_M_set(void **, void **, void **);
+template void **_STL::allocator<void *>::allocate(unsigned int, const void *) const;
 
 namespace _STL
 {
@@ -27,6 +35,14 @@ template <>
 __declspec(dllimport) __forceinline
 vector<void*, allocator<void*> >::iterator
 vector<void*, allocator<void*> >::begin()
+{
+    return this->_M_start;
+}
+
+template <>
+__declspec(dllimport) __forceinline
+vector<void*, allocator<void*> >::const_iterator
+vector<void*, allocator<void*> >::begin() const
 {
     return this->_M_start;
 }

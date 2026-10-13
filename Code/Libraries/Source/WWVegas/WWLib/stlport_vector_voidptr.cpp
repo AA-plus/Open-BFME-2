@@ -19,7 +19,11 @@ namespace _STL { template <> void vector<void *, allocator<void *> >::_M_insert_
 namespace _STL { template <> void ** vector<void *, allocator<void *> >::insert(void **); }
 namespace _STL { template <> void vector<void *, allocator<void *> >::push_back(void *const &); }
 namespace _STL { template <> void vector<void *, allocator<void *> >::push_back(); }
+namespace _STL { template <> vector<void *, allocator<void *> >::vector(unsigned int, void *const &, allocator<void *> const &); }
+namespace _STL { template <> _Vector_base<void *, allocator<void *> >::_Vector_base(unsigned int, allocator<void *> const &); }
 // bfme link decl-only end
+// ~_STLP_alloc_proxy is rowed here (retail 1-instruction body); the declared-only constructors above no longer emit it, so anchor it.
+template _STL::_STLP_alloc_proxy<void **, void *, _STL::allocator<void *> >::~_STLP_alloc_proxy();
 
 // The native range-erase owner is the 34-byte optimized specialization
 // in stlport_vector_voidptr_opt.cpp, not this unit's /Od instantiation.
