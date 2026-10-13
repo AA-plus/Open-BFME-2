@@ -1,4 +1,6 @@
 // ?scanClosestTarget@CommandButtonHuntUpdate@@IAEPAVObject@@XZ
+// partial score=0.9813 date=2026-10-13
+// ?scanClosestTarget@CommandButtonHuntUpdate@@IAEPAVObject@@XZ
 // partial score=0.98 date=2026-10-13
 // ?scanClosestTarget@CommandButtonHuntUpdate@@IAEPAVObject@@XZ
 // partial score=0.9813254042140862 date=2026-10-10
