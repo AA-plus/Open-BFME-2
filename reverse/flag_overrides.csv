@@ -718,6 +718,7 @@ Code/Libraries/Source/WWVegas/WWMath/GridLinkPoolAllocateObjectMemory.cpp,-G7,2,
 Code/Libraries/Source/WWVegas/WWMath/Matrix3DTransformAABox.cpp,-O2 -G7 -arch:SSE,2,2,region default loses rows
 Code/Libraries/Source/WWVegas/WWMath/Matrix3DUnmatchedSSE.cpp,-O2 -G7 -arch:SSE,17,1,region default loses rows
 Code/Libraries/Source/WWVegas/WWMath/Rva00168AD0MatrixPairTransform.cpp,-O2 -G7 -arch:SSE,1,1,region default loses rows
+Code/Libraries/Source/WWVegas/WWMath/Rva00168C40QuatTransformArrays.cpp,-O2 -G7 -arch:SSE,1,1,region default loses rows
 Code/Libraries/Source/WWVegas/WWMath/Rva0071CD60MatrixArrayRotate.cpp,-O2 -G7 -arch:SSE,2,2,region default loses rows
 Code/Libraries/Source/WWVegas/WWMath/WWMathInit.cpp,-G7 -arch:SSE,2,2,region default loses rows
 Code/Libraries/Source/WWVegas/WWMath/aabtreecull.cpp,-G7 -arch:SSE2,16,2,region default loses rows
