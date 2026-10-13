@@ -1,4 +1,6 @@
 // ?rva0039A270Move@Rva0039A270MoveOwner@@QAEXPAVObject@@@Z
+// partial score=0.9316 date=2026-10-13
+// ?rva0039A270Move@Rva0039A270MoveOwner@@QAEXPAVObject@@@Z
 // partial score=0.96 date=2026-10-13
 // ?rva0039A270Move@Rva0039A270MoveOwner@@QAEXPAVObject@@@Z
 // partial score=0.94 date=2026-10-09
