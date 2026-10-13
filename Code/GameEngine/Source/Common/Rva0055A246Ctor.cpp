@@ -1,4 +1,6 @@
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
+// Link view first: Vector3::Length stays inline without emitting a copy that competes with retail's owner (0x000692B3).
+#include "../../../../reference/shims/bfme_vector3_lenfull_link/vector3_lenfull_link.h"
 // stlport
 // New constructor family from clean BFME1 6d9434269164392c5ba62aaa7c15a86b5b020d76,
 // game/GameEngine/Source/Common/Bezier/BezierSegmentConstructionAndLength.cpp.

@@ -1,4 +1,6 @@
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /DWIN32 /D_WINDOWS /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/game/Libraries/Source/WWVegas
+// Link view first: Vector3::Length stays inline without emitting a copy that competes with retail's owner (0x000692B3).
+#include "../../../../../../../reference/shims/bfme_vector3_lenfull_link/vector3_lenfull_link.h"
 //
 // ?getRamp@W3DScriptedModelDraw@@QAE_NPAVBridgeInfo@@VAsciiString@@PAPAVPolygonTrigger@@PAPAVRenderObjClass@@_N@Z
 // retail 0x000B9EC2..0x000BAC53 (3473 bytes), thiscall ret 0x14, EH frame

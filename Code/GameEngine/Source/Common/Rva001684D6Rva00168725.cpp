@@ -1,4 +1,6 @@
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2renderobj /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep
+// Link view first: Vector3::Length stays inline without emitting a copy that competes with retail's owner (0x000692B3).
+#include "../../../../reference/shims/bfme_vector3_lenfull_link/vector3_lenfull_link.h"
 //
 // ?Cast_Ray@Rva001684D6@@UAE_NAAVRayCollisionTestClass@@@Z, retail 0x00168725, 474 bytes. Banked partial (score 0.9756) closed by tools/permute.py;
 // the body is the banked one up to statement/operand order and local types.

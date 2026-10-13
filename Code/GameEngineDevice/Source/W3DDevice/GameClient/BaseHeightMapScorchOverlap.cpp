@@ -23,7 +23,7 @@ class Vector3
 public:
     float X, Y, Z;
     Vector3(float x, float y, float z) : X(x), Y(y), Z(z) {}
-    __forceinline float Length() const { return scorchSqrt(Z*Z + Y*Y + X*X); }
+    __declspec(dllimport) __forceinline float Length() const { return scorchSqrt(Z*Z + Y*Y + X*X); }
 };
 __forceinline Vector3 operator-(const Vector3 &a,
                                            const Vector3 &b)

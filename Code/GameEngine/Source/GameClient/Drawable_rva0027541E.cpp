@@ -1,4 +1,6 @@
 // cl: /DNDEBUG /MD /EHs-c- /Ireference/shims/bfme2_vector3 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
+// Link view first: Vector3::Length stays inline without emitting a copy that competes with retail's owner (0x000692B3).
+#include "../../../../reference/shims/bfme_vector3_lenfull_link/vector3_lenfull_link.h"
 // ?rva0027541E@Drawable@@QAEXPBURGBColor@@III@Z @0x0027541E 114B evidence: lazy TintEnvelope at +0x68 via rowed new 0x2FDA0 and ctor 0x271826, TintEnvelope::play 0x2744F2 row, float 1.0f via g_Va00BBB8D8, clears bit 2 at +0x114; neighbours Rva00275376/Drawable_rva00275545 same flags.
 // BFME1 34f59164 Rva00415790EnvelopeUpdate.cpp and Drawable.cpp provide the
 // envelope algorithm. Target play2744F2, attack27192B, decay2719C0 and

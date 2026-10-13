@@ -1,4 +1,6 @@
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /Ireference/shims/bfme2_vector3 /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
+// Link view first: Vector3::Length stays inline without emitting a copy that competes with retail's owner (0x000692B3).
+#include "../../../../reference/shims/bfme_vector3_lenfull_link/vector3_lenfull_link.h"
 //
 // ?rva00275598@Drawable@@QAEXXZ, retail 0x00275598..0x0027566B (211 bytes):
 // the Drawable's tint-status refresh (Zero Hour's updateDrawable block that
