@@ -1,4 +1,6 @@
 // ?update@ScreenGridRva000F83FA@@QAEXPAVDynamicIBAccessClass@@HPAVDynamicVBAccessClass@@HHHMMMMPAVCoord2D@@@Z
+// partial score=0.943006 date=2026-10-13
+// ?update@ScreenGridRva000F83FA@@QAEXPAVDynamicIBAccessClass@@HPAVDynamicVBAccessClass@@HHHMMMMPAVCoord2D@@@Z
 // partial score=0.93 date=2026-10-13
 // ?update@ScreenGridRva000F83FA@@QAEXPAVDynamicIBAccessClass@@HPAVDynamicVBAccessClass@@HHHMMMMPAVCoord2D@@@Z
 // partial score=0.9158154896386458 date=2026-10-10
@@ -28,6 +30,7 @@ extern "C" void _ReadWriteBarrier();
 // The twin 0x000F6DB0 differs in its scale getter (0x00309E7F) and statics.
 #include <math.h>
 #include "Lib/Coord2D.h"
+template<class T> __forceinline volatile T &r1_vwrite(T &value) { return *(volatile T *)&value; }
 class DynamicIBAccessClass
 
 {
@@ -116,8 +119,10 @@ int columns, int rows, float left, float top, float width, float height, Coord2D
   DynamicIBAccessClass::WriteLockClass lock(ib);
   unsigned short *p = lock.indices;
   for (int y = 0; y < rows - 1; ++y) 
+  
   {
    for (int x = 0; x < columns - 1; ++x) 
+   
    {
     p[0] = y * columns + x;
     p[1] = (y + 1) * columns + x + 1;
@@ -141,11 +146,13 @@ int columns, int rows, float left, float top, float width, float height, Coord2D
   float invRows = 1.0f / (rows - 1);
   float invColumns = 1.0f / (columns - 1);
   for (int y = 0; y < rows; ++y) 
+  
   {
    float fy = y * invRows;
    float py = fy * height + top;
    float screenY = py - 0.5f;
    for (int x = 0; x < columns; ++x) 
+   
    {
     float fx = x * invColumns;
     float px = fx * width + left;
@@ -161,9 +168,9 @@ int columns, int rows, float left, float top, float width, float height, Coord2D
     p->u1 = u;
     _ReadWriteBarrier();
     p->v2 = (columns?(v + spread):(v + spread));
-    p->v1 = v;
+    r1_vwrite(p->v1) = v;
     _ReadWriteBarrier();
-    p->u2 = u - spread;
+    r1_vwrite(p->u2) = u - spread;
     p->u1 = u + spread;
     p->u3 = (0.5f - 0.5f * (float)sin((fx + fy) * GridWave0Frequency + GridWave0Phase * GridPhase0)) * GridWave0Amplitude;
     float wave = (0.5f - 0.5f * (float)sin((fx + fy) * GridWave1Frequency + GridWave1Phase * GridPhase1)) * GridWave1Amplitude;
