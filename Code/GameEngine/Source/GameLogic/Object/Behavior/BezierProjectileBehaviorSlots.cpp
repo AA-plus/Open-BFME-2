@@ -35,10 +35,7 @@
 
 class ModuleData;
 
-enum ObjectID
-{
-	INVALID_ID = 0
-};
+#include "../../../Common/GameLogicObjectLookupView.h"
 
 enum DamageType
 {
@@ -158,11 +155,6 @@ struct Rva0045B9FBPoint : Coord3D
 	void scale(float k) { x *= k; y *= k; z *= k; }
 };
 
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-};
 extern GameLogic *TheGameLogic;
 
 // LINK: 0x002CBA7C is rowed as WeaponTemplate::shouldProjectileCollideWith (WeaponTemplateShouldProjectileCollideWith.cpp)
@@ -309,9 +301,9 @@ void BezierProjectileBehavior::rva0045B4E2(int)
 void BezierProjectileBehavior::projectileLaunchAtObjectOrPosition(Object *victim, const Coord3D *victimPos, Object *launcher, int wslot,
 	int specificBarrel, const Rva0045B936Arg *arg6, Rva002CBA7C *helper, const Matrix3D *mtx)
 {
-	m_28 = launcher ? launcher->getID() : INVALID_ID;
+	m_28 = launcher ? launcher->getID() : INVALID_OBJECT_ID;
 	m_74 = launcher ? launcher->bfme_getWeaponBonusCondition_a1a45() : 0;
-	m_38 = victim ? victim->getID() : INVALID_ID;
+	m_38 = victim ? victim->getID() : INVALID_OBJECT_ID;
 	m_3C = arg6->m_04;
 	m_78 = 0;
 	m_helper = helper;
