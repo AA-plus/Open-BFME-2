@@ -61,10 +61,17 @@ struct Guard
 	Rva00030DD0Lock *lock;
 };
 
+class Rva000353B0
+{
+public:
+	void *rva00034d10(int a, int b, int c, int d);
+};
+
 class Rva006C1F60 : public GeneralAllocatorDebug
 {
 public:
 	void rva006C33D0(int policy, int limit);
+	void *rva006C3810(int a, int b, int c, int d);
 
 	char unknown0[0x4e4];
 	Rva00030DD0Lock *lock;
@@ -126,4 +133,14 @@ void Rva006C1F60::rva006C33D0(int policy, int limit)
 		}
 	}
 	--depth;
+}
+
+// Retail 0x006C3810 (43 B, ret 0x10): purge the whole delayed-free list
+// (policy 0) and then forward the four arguments to the allocator body at
+// 0x00034D10, returning its result. Its twin 0x006C37E0 does the same in
+// front of 0x000353F0. Names address-derived.
+void *Rva006C1F60::rva006C3810(int a, int b, int c, int d)
+{
+	rva006C33D0(0, 0);
+	return ((Rva000353B0 *)this)->rva00034d10(a, b, c, d);
 }
