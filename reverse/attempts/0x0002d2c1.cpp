@@ -1,32 +1,22 @@
 // ?prepFile@INI@@IAE_NABVAsciiString@@W4INILoadType@@@Z
-// partial score=0.9 date=2026-10-12
+// partial score=1.0 date=2026-10-13
+// ?prepFile@INI@@IAE_NABVAsciiString@@W4INILoadType@@@Z
 // cl: /O1 /arch:SSE /G7 /Ireference/shims/iniexception /Ireference/shims/bfme2_ascii /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // ?prepFile@INI@@IAE_NABVAsciiString@@W4INILoadType@@@Z @0x0002D2C1, 936B.
 //
-// Bank repair 2026-10-12: use the matched INI region's /O1 /arch:SSE /G7
-// explicitly because bank/scratch paths do not receive Code/ region defaults.
-// The old default-/O2 scratch result was 1182B; the corrected bank emits 933B
-// against the native 936B body and first differs at the early throw-tail JMP
-// (+0x47). This remains a partial, not a matched ledger body.
+// W7-ASTRA recovery: native 0x0002D2C1..0x0002D669 RET8, 936 bytes.
+// WB 0x6D0530 INI::prepFile preserves the character scan as a guarded loop.
+// Putting *p in the for condition (rather than an infinite loop + break)
+// reproduces the shared exception tail at the duplicate-name path and all
+// late-error block ordering. The helper receives File*, the record loop ends
+// on the first non-define, and the macro counter stores saved-start+1.
+// The insertion record is {node,table,flag} (12B), corroborated by its rowed
+// provider. Canonical INIException is 8B. The local insertion adapter keeps
+// target pair-copy, insertion, pair destruction and factory destruction order.
+// Integrated beside the existing 195B loadFile caller, whose access-level
+// declarations and layout remain the verified target forms.
 //
-// Target corrections: helper call at 0x2D39E pushes the just-opened File*, not
-// the INI receiver; startsWith false at 0x2D3F6 exits the record loop; update
-// 0x2D578..0x2D57C stores saved macroCount+1 without updating that saved local.
-// The insertion wrapper's output starts at EBP-0x40 and its inserted flag is
-// at EBP-0x38: the old eight-byte view was undersized. The rowed insertion
-// provider also writes {node, table, byte flag}; that corroborates a 12B view.
-// Exception storage is the canonical 8B {message pointer, argument count};
-// retail ThrowInfo/CatchableType and the matched constructor/copy/destructor
-// independently support it. The inline insertion helper preserves native
-// copy-pair-before-insert and pair/factory destruction order; it is a local
-// reconstruction, not an established original helper identity.
-//
-// Remaining mismatch: duplicate/common exception tail placement, two late
-// error-block ordering differences and their branch displacements. Whole-byte,
-// callee/data identity, literal and EH gates have NOT passed for this bank.
-// Donor name and layout uncertainties documented below are preserved.
-
 // Name/signature are carried from the clean BFME1 INI.cpp prepFile donor;
 // this target body is substantially different. Target evidence: all three
 // matched INI load entries pass (&filename, loadType) and branch on AL; the
@@ -95,7 +85,7 @@ public:
 };
 
 extern FileSystem *TheFileSystem;
-extern AsciiString g_00DDF5B4;
+extern unsigned g_Va00DDF5B4;
 extern int g_00DDF5AC;
 extern int g_00DDF5B0;
 extern unsigned g_Va00DDF58C;
@@ -191,9 +181,16 @@ private:
 	_STL::vector<int> m_28;
 };
 
+class Rva0002BF4A { public: void rva0002BF4A(); };
+class Xfer;
 class INI
 {
+public:
+	unsigned char loadFile(AsciiString filename, INILoadType loadType, Xfer *pXfer);
+	void parseLine(AsciiString &filename);
 	protected:
+	void unPrepFile();
+	void readLine();
 	bool prepFile(const AsciiString &filename, INILoadType loadType);
 
 	private:
@@ -202,8 +199,13 @@ class INI
 	INILoadType m_loadType;
 	int m_0C;
 	int m_10;
-	char m_pad14[0x838 - 0x14];
+	char m_buffer[0x418 - 0x14];
+	const char *m_seps;
+	char m_pad41C[0x430 - 0x41C];
+	bool m_endOfFile;
+	char m_pad431[0x838 - 0x431];
 	Rva00601BBCHelper m_helper;
+	char m_tail86C[0x87C - 0x86C];
 };
 
 #include "Common/INIException.h"
@@ -220,13 +222,15 @@ class BfmeWordEL
 {
 	void *m_stringStorage;
 };
-struct BfmePairEL : MacroPair
+// Eight-byte local cleanup adapter; the factory keeps its established return spelling.
+struct BfmePairEL;
+struct INIMacroPairTemporary : MacroPair
 {
-	__forceinline ~BfmePairEL() {}
+	__forceinline ~INIMacroPairTemporary() {}
 };
 BfmePairEL __cdecl bfmeMakePairEL(const BfmeWordEL &first, const BfmeWordEL &second);
 
-static __forceinline void insertMacroPair(Out0002CA72 *inserted, const BfmePairEL &factoryPair)
+static __forceinline void insertMacroPair(Out0002CA72 *inserted, const INIMacroPairTemporary &factoryPair)
 {
 	MacroPair pair((const MacroPair &)factoryPair);
 	((Rva0002CD2F *)&g_Va00DDF58C)->rva0002CD2F(inserted, (const Pair0002CA72 *)&pair);
@@ -255,7 +259,7 @@ bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
 	}
 
 	m_file = TheFileSystem->openFile(filename.str(), 1, 0);
-	g_00DDF5B4 = filename;
+	*(AsciiString *)&g_Va00DDF5B4 = filename;
 	if (m_file == 0)
 	{
 		throw INIException(7, "INI::load, cannot open file '%s'\n", filename.str());
@@ -286,10 +290,9 @@ bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
 					"%s:\nMACROs not allowed in map.ini.\n%s.", filename.str(), name.str());
 			}
 
-			for (const char *p = name.str(); ; ++p)
+			for (const char *p = name.str(); *p; ++p)
 			{
 				char ch = *p;
-				if (ch == 0) break;
 				if (ch > 'a' && ch < 'z')
 				{
 					throw INIException(8,
@@ -311,7 +314,9 @@ bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
 			}
 
 			Out0002CA72 inserted;
-			insertMacroPair(&inserted, bfmeMakePairEL(
+			typedef INIMacroPairTemporary (__cdecl *MakeMacroPair)(const BfmeWordEL &, const BfmeWordEL &);
+			MakeMacroPair makePair=reinterpret_cast<MakeMacroPair>(&bfmeMakePairEL);
+			insertMacroPair(&inserted, makePair(
 				(const BfmeWordEL &)name, (const BfmeWordEL &)value));
 
 
@@ -341,4 +346,35 @@ bool INI::prepFile(const AsciiString &filename, INILoadType loadType)
 	m_filename = filename;
 	m_loadType = loadType;
 	return true;
+}
+
+extern void setFPMode();
+extern void *g_00DDF57C;
+unsigned char INI::loadFile(AsciiString filename, INILoadType loadType, Xfer *pXfer)
+{
+	setFPMode();
+	g_00DDF57C = pXfer;
+	if (!prepFile(filename, loadType))
+		return 0;
+
+	try
+	{
+		while (m_endOfFile == false)
+		{
+			readLine();
+			parseLine(filename);
+		}
+	}
+	catch (INIException &e)
+	{
+		throw INIException(e.m_argCount, e.mFailureMessage);
+	}
+	catch (...)
+	{
+		((Rva0002BF4A *)this)->rva0002BF4A();
+		throw;
+	}
+
+	((Rva0002BF4A *)this)->rva0002BF4A();
+	return 1;
 }
