@@ -1,3 +1,5 @@
+// ?rva004BBA65@Rva004BBA65@@QAEXXZ
+// partial score=0.844 date=2026-10-13
 // ?onCollide@SquishCollide@@UAEXPAVObject@@PBUCoord3D@@1@Z
 // partial score=0.8258513473497188 date=2026-10-10
 // ?onCollide@SquishCollide@@UAEXPAVObject@@PBUCoord3D@@1@Z
@@ -17,33 +19,94 @@
 // pointers atEBP-14/-10 and saves ESI/EDI after the level comparison.
 // Hierarchy/getter relocation, condition splitting, const, aggregate
 // context and O1/O2/G6/Ob1/Op trials do not close that allocation wall.
-struct Coord3D { float x,y,z;void normalize(); };
+struct Coord3D 
+{
+ float x,y,z;
+ void normalize();
+ 
+}
+;
 class Object;
-class GeometryInfo {
-public: GeometryInfo(const GeometryInfo&);virtual ~GeometryInfo();
- void rva004BBA15(float);void rva004BBA3D(float);
+class GeometryInfo 
+{
+ public: GeometryInfo(const GeometryInfo&);
+ virtual ~GeometryInfo();
+ void rva004BBA15(float);
+ void rva004BBA3D(float);
  bool bfmeIntersects(const Coord3D&,float,const GeometryInfo&,const Coord3D&,float)const;
-private: char unknown04[0x58];
-};
-class DamageInfo {
-public: DamageInfo();
- char unknown00[8];int sourceID;int unknown0C;int damageType;char unknown14[8];int deathType;float amount;
- char unknown24[0x10];Coord3D direction;float magnitude;float unknown44;float unknown48;float unknown4C;char unknown50[0x2C];
-};
-class Weapon {
-public: bool rva002C969D(const void*,int);bool rva002CE6C5(const Object*,int,const Object*,int*);
-};
-enum ObjectStatusTypes {STATUS32=0x32,STATUS39=0x39};
-enum KindOfType {KIND84=0x84};
-enum Relationship {ENEMIES=0,NEUTRAL=1,ALLIES=2};
-enum NameKeyType {NK_UNKNOWN=0};
-enum WeaponSlotType {SLOT_PRIMARY=0};
-class NameKeyGenerator{public:NameKeyType nameToKey(const char*);};
+ private: char unknown04[0x58];
+ 
+}
+;
+class DamageInfo 
+{
+ public: DamageInfo();
+ char unknown00[8];
+ int sourceID;
+ int unknown0C;
+ int damageType;
+ char unknown14[8];
+ int deathType;
+ float amount;
+ char unknown24[0x10];
+ Coord3D direction;
+ float magnitude;
+ float unknown44;
+ float unknown48;
+ float unknown4C;
+ char unknown50[0x2C];
+ 
+}
+;
+class Weapon 
+{
+ public: bool rva002C969D(const void*,int);
+ bool rva002CE6C5(const Object*,int,const Object*,int*);
+ 
+}
+;
+enum ObjectStatusTypes 
+{
+ STATUS32=0x32,STATUS39=0x39
+}
+;
+enum KindOfType 
+{
+ KIND84=0x84
+}
+;
+enum Relationship 
+{
+ ENEMIES=0,NEUTRAL=1,ALLIES=2
+}
+;
+enum NameKeyType 
+{
+ NK_UNKNOWN=0
+}
+;
+enum WeaponSlotType 
+{
+ SLOT_PRIMARY=0
+}
+;
+class NameKeyGenerator
+{
+ public:NameKeyType nameToKey(const char*);
+ 
+}
+;
 extern NameKeyGenerator *TheNameKeyGenerator;
 class Module;
-class StateMachine {public:Object* getGoalObject();};
-class AIUpdateInterface {
-public:
+class StateMachine 
+{
+ public:Object* getGoalObject();
+ 
+}
+;
+class AIUpdateInterface 
+{
+ public:
  virtual void unknown00();
  virtual void unknown01();
  virtual void unknown02();
@@ -143,10 +206,14 @@ public:
  virtual void unknown60();
  virtual void unknown61();
  virtual Object* targetObject();
- char pad04[0x2C];StateMachine *machine;
-};
-class BodyModuleInterface {
-public:
+ char pad04[0x2C];
+ StateMachine *machine;
+ 
+}
+;
+class BodyModuleInterface 
+{
+ public:
  virtual void unknown00();
  virtual void unknown01();
  virtual void unknown02();
@@ -186,22 +253,68 @@ public:
  virtual void unknown24();
  virtual void unknown25();
  virtual bool permitsCrushing(Object*);
-};
-class ActiveAbilityView {public:virtual void unknown0();virtual void unknown4();virtual bool isActive();};
-class SpecialAbilityUpdate {public:char unknown00[0x20];ActiveAbilityView active;};
-class ExperienceView {public:char unknown00[0x5C];bool dead;};
-class ThingTemplate {
-public:char unknown00[0x114];unsigned int flags;char unknown118[0x608-0x118];float crushMagnitude;float crushExtra;char unknown610[4];bool crushAllies;
-};
-class Thing {
-public:
+ 
+}
+;
+class ActiveAbilityView 
+{
+ public:virtual void unknown0();
+ virtual void unknown4();
+ virtual bool isActive();
+ 
+}
+;
+class SpecialAbilityUpdate 
+{
+ public:char unknown00[0x20];
+ ActiveAbilityView active;
+ 
+}
+;
+class ExperienceView 
+{
+ public:char unknown00[0x5C];
+ bool dead;
+ 
+}
+;
+class ThingTemplate 
+{
+ public:char unknown00[0x114];
+ unsigned int flags;
+ char unknown118[0x608-0x118];
+ float crushMagnitude;
+ float crushExtra;
+ char unknown610[4];
+ bool crushAllies;
+ 
+}
+;
+class Thing 
+{
+ public:
  void getUnitDirectionVector2D(Coord3D&)const;
- const Coord3D*getPosition()const{return &position;}
- float getOrientation()const{return orientation;}
- char unknown00[4];ThingTemplate *tmplate;char unknown08[0x30];Coord3D position;float orientation;
-};
-class Object: public Thing {
-public:
+ const Coord3D*getPosition()const
+ {
+  return &position;
+  
+ }
+ float getOrientation()const
+ {
+  return orientation;
+  
+ }
+ char unknown00[4];
+ ThingTemplate *tmplate;
+ char unknown08[0x30];
+ Coord3D position;
+ float orientation;
+ 
+}
+;
+class Object: public Thing 
+{
+ public:
  signed char rva0028CE7B()const;
  char rva00294815();
  const Weapon*getCurrentWeapon(WeaponSlotType*)const;
@@ -215,30 +328,100 @@ public:
  bool rva0028F44C(Object*);
  void attemptDamage(DamageInfo*);
  void rva0028AC34(bool);
- GeometryInfo const&getGeometryInfo()const{return geometry;}
- int getID()const{return id;}
- bool destroyed()const{return (flags438&1)!=0;}
- char unknown48[0x2C];int id;char unknown78[0x30];GeometryInfo geometry;
- char unknown104[0x150];BodyModuleInterface *body;AIUpdateInterface *ai;ExperienceView *experience;
- char unknown260[0x13C];Weapon*crushWeapon;Weapon*crushedWeapon;char unknown3A4[0x94];unsigned char flags438;
- char unknown439[0x87];int targetID4C0;
-};
-class Rva0028E8D4 {public:void rva0028E8D4(float*)const;};
-class Rva0028CECFOwner {public:bool rva0028CECF();};
+ GeometryInfo const&getGeometryInfo()const
+ {
+  return geometry;
+  
+ }
+ int getID()const
+ {
+  return id;
+  
+ }
+ bool destroyed()const
+ {
+  return (flags438&1)!=0;
+  
+ }
+ char unknown48[0x2C];
+ int id;
+ char unknown78[0x30];
+ GeometryInfo geometry;
+ char unknown104[0x150];
+ BodyModuleInterface *body;
+ AIUpdateInterface *ai;
+ ExperienceView *experience;
+ char unknown260[0x13C];
+ Weapon*crushWeapon;
+ Weapon*crushedWeapon;
+ char unknown3A4[0x94];
+ unsigned char flags438;
+ char unknown439[0x87];
+ int targetID4C0;
+ 
+}
+;
+class Rva0028E8D4 
+{
+ public:void rva0028E8D4(float*)const;
+ 
+}
+;
+class Rva0028CECFOwner 
+{
+ public:bool rva0028CECF();
+ 
+}
+;
 class ModuleData;
-class Module {public:virtual ~Module();protected:const ModuleData*m_data;};
-class ObjectModule:public Module {protected:Object*m_object;Object*getObject()const{return m_object;}};
-class BehaviorModule:public ObjectModule {};
-class BehaviorModuleInterface {public:virtual void anchor();};
-class CollideModuleInterface {public:virtual void onCollide(Object*,const Coord3D*,const Coord3D*)=0;};
-class CollideModule:public BehaviorModule,public BehaviorModuleInterface,public CollideModuleInterface {
-
-};
-class SquishCollide: public CollideModule {
-public:virtual void onCollide(Object*,const Coord3D*,const Coord3D*);
-};
-
+class Module 
+{
+ public:virtual ~Module();
+ protected:const ModuleData*m_data;
+ 
+}
+;
+class ObjectModule:public Module 
+{
+ protected:Object*m_object;
+ Object*getObject()const
+ {
+  return m_object;
+  
+ }
+ 
+}
+;
+class BehaviorModule:public ObjectModule 
+{
+ 
+}
+;
+class BehaviorModuleInterface 
+{
+ public:virtual void anchor();
+ 
+}
+;
+class CollideModuleInterface 
+{
+ public:virtual void onCollide(Object*,const Coord3D*,const Coord3D*)=0;
+ 
+}
+;
+class CollideModule:public BehaviorModule,public BehaviorModuleInterface,public CollideModuleInterface 
+{
+ 
+}
+;
+class SquishCollide: public CollideModule 
+{
+ public:virtual void onCollide(Object*,const Coord3D*,const Coord3D*);
+ 
+}
+;
 void SquishCollide::onCollide(Object *other,const Coord3D *loc,const Coord3D *normal)
+
 {
  if(!other || other->destroyed() || (other->tmplate->flags&0x2000))return;
  Object*self=getObject();
@@ -246,41 +429,60 @@ void SquishCollide::onCollide(Object *other,const Coord3D *loc,const Coord3D *no
  signed char crushable=self->rva0028CE7B();
  if(other->rva00294815()<=crushable)return;
  AIUpdateInterface*otherAI=other->ai;
- if(otherAI){
+ if(otherAI)
+ {
   Object*target=otherAI->targetObject();
-  if(target){if(target->targetID4C0==self->getID())return;}
+  if(target)
+  {
+   if(target->targetID4C0==self->getID())return;
+   
+  }
   else if(otherAI->machine->getGoalObject()==self && other->getCurrentWeapon(0) && ((Weapon*)other->getCurrentWeapon(0))->rva002C969D(other,(int)self))return;
+  
  }
- Coord3D direction;other->getUnitDirectionVector2D(direction);
- Coord3D actualPosition;((Rva0028E8D4*)other)->rva0028E8D4(&actualPosition.x);
+ Coord3D direction;
+ other->getUnitDirectionVector2D(direction);
+ Coord3D actualPosition;
+ ((Rva0028E8D4*)other)->rva0028E8D4(&actualPosition.x);
  const Coord3D*myPos=getObject()->getPosition();
  Coord3D to;
  to.x=myPos->x-other->getPosition()->x;
  to.y=myPos->y-other->getPosition()->y;
- if(to.x*direction.x+to.y*direction.y<0.0f){
+ if(to.x*direction.x+to.y*direction.y<0.0f)
+ {
   to=*myPos;
-  to.x-=actualPosition.x;to.y-=actualPosition.y;
+  to.x-=actualPosition.x;
+  to.y-=actualPosition.y;
   if(to.x*direction.x+to.y*direction.y<0.0f)return;
+  
  }
  if(!other->testStatus(STATUS39) && !other->testStatus(STATUS32) && !other->isKindOf(KIND84) && !other->tmplate->crushAllies && other->getRelationship(getObject())!=ENEMIES)return;
  AIUpdateInterface *ai=self->ai;
- if(ai && ai->machine->getGoalObject()==other){
+ if(ai && ai->machine->getGoalObject()==other)
+ {
   static NameKeyType key_HijackerUpdate=TheNameKeyGenerator->nameToKey("HijackerUpdate");
-  if(self->findModule(key_HijackerUpdate))return;
+  if (!(self->findModule(key_HijackerUpdate))) {
   SpecialAbilityUpdate *ability=(SpecialAbilityUpdate*)self->rva0028BD92(0x19);
   if(ability && ability->active.isActive())return;
+  
+  }
  }
  GeometryInfo myGeom=self->getGeometryInfo();
- myGeom.rva004BBA15(5.0f);myGeom.rva004BBA3D(5.0f);
+ myGeom.rva004BBA15(5.0f);
+ myGeom.rva004BBA3D(5.0f);
  if(!other->getGeometryInfo().bfmeIntersects(*other->getPosition(),other->getOrientation(),myGeom,*self->getPosition(),self->getOrientation()))return;
- if(!((Rva0028CECFOwner*)other)->rva0028CECF()){
-  other->rva00295FA9(getObject());return;
+ if(!((Rva0028CECFOwner*)other)->rva0028CECF())
+ {
+  other->rva00295FA9(getObject());
+  return;
+  
  }
  BodyModuleInterface *body=getObject()->body;
  if(body && !body->permitsCrushing(other))return;
  DamageInfo damageInfo;
  other->rva002929F9(getObject());
- if(other->tmplate->crushMagnitude>0.0f){
+ if(other->tmplate->crushMagnitude>0.0f)
+ {
   to.x=self->getPosition()->x-other->getPosition()->x;
   to.y=self->getPosition()->y-other->getPosition()->y;
   to.z=self->getPosition()->z-other->getPosition()->z;
@@ -295,15 +497,24 @@ void SquishCollide::onCollide(Object *other,const Coord3D *loc,const Coord3D *no
   damageInfo.damageType=1;
   damageInfo.amount=0.0f;
   self->attemptDamage(&damageInfo);
+  
  }
- if(!(other->tmplate->flags&0x2000)){
+ if(!(other->tmplate->flags&0x2000))
+ {
   if(other->crushWeapon)other->crushWeapon->rva002CE6C5(other,getObject()->getID(),getObject(),0);
-  else {
-   damageInfo.sourceID=other->getID();damageInfo.damageType=1;damageInfo.deathType=2;damageInfo.amount=999999.0f;
+  else 
+  {
+   damageInfo.sourceID=other->getID();
+   damageInfo.damageType=1;
+   damageInfo.deathType=2;
+   damageInfo.amount=999999.0f;
    getObject()->attemptDamage(&damageInfo);
+   
   }
   Weapon *crushedWeapon=getObject()->crushedWeapon;
   if(crushedWeapon && !getObject()->rva0028F44C(other))crushedWeapon->rva002CE6C5(getObject(),other->getID(),other,0);
+  
  }
  other->rva0028AC34(false);
+ 
 }
