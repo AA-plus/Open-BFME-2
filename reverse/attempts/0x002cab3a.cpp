@@ -1,19 +1,9 @@
 // ?adjustTargetPositionOnVictim@WeaponTemplate@@QAE?AUTargetCoord@@PAVObject@@0_N@Z
 // partial score=0.98 date=2026-10-13
-// ?adjustTargetPositionOnVictim@WeaponTemplate@@QAE?AUTargetCoord@@PAVObject@@0_N@Z
-// FRAGMENT for Code/GameEngine/Source/GameLogic/Object/WeaponTemplateTargetPositions.cpp
-// (W7-MO1 r1, 5 line-diffs at cap/ordinary merge + cascade).
-// 1. Extend class Object with: testStatus/getWorldspaceBestContactPoint decls,
-//    ObjectStatusTypes/ThingTemplate/Rva0073A1C0FloatField views (see body).
-// 2. Append the block below at EOF. All callees rowed incl 2CAAFA in-TU.
-// WALL: merge commutation (retail cap-load+pos.z-add / pos.z-load+height-add;
-// cl emits the mirror; source order, per-branch duplication, pinned temps all
-// neutral). NEXT: non-commuting formulation of the two adds.
-
+// ?adjustTargetPositionOnVictim (W7-MO1 r1, 5B merge wall)
+// FRAGMENT for WeaponTemplateTargetPositions.cpp + Object decls (see log).
 // Native 002CAB3A..002CAC6E RET16 (308B); WB BB2780 (Weapon.cpp:1736..1749)
-// identifies WeaponTemplate::adjustTargetPositionOnVictim. By-value TargetCoord
-// result via hidden pointer; the float cap at +0x11C4 is observed global data;
-// neutral names preserve the unproven original vocabulary.
+// identifies WeaponTemplate::adjustTargetPositionOnVictim.
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
 struct TargetHeightCapView { char unknown00[0x11c4]; float heightCap; };
