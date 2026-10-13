@@ -251,10 +251,9 @@ Rva003FAFB9::Rva003FAFB9(const AsciiString &name) : m_name(name), m_zoom(g_00E02
 }
 
 // The recovered flag family shares this sound home and its region declarations.
-// Flag refreshers on the map-node payload whose pinned callers sit at
-// 0x00213AA1..0x00213C4C. Each sets the +0x32 byte, then tail-calls the
-// 0x003FAC83 dispatcher. The bit0/bit2 siblings 0x003FACB4 and 0x003FAD2B
-// are checked independently against their native bodies.
+// Flag helpers on the map-node payload whose pinned callers sit at
+// 0x00213AA1..0x00213C4C, with their shared 0x003FAC83 dispatcher.
+// Each body is independently byte-verified.
 // Names are address-derived (see the symbols.csv pins).
 
 class Rva003FAB93 { public: void rva003FAB93(); };
@@ -266,14 +265,16 @@ public:
 	void rva003FAC83();
 	void rva003FAD9A();
 	void rva003FAD2B();
+	void rva003FACB4();
 	void rva003FACE9(void *position);
 	void rva003FAD4A(void *position);
 	void rva003FADA3();
 
 private:
 	// WB 0x0105FE70 carries BitFlags<7>::test at the two call sites.
-	// Keeping the index as an inline parameter preserves retail's shifts.
-	bool test(int bit) const { return ((m_state >> bit) & 1) != 0; }
+	// Its indexed mask preserves the distinct bit-zero byte read and higher shifts.
+	__forceinline bool test(int bit) const
+	{ return ((&m_state)[bit >> 5] & (1u << (bit & 31))) != 0; }
 	char m_pad00[0x18];
 	unsigned int m_state;
 	char m_pad1c[0x14];
@@ -316,7 +317,7 @@ void Rva003FAC83::rva003FADA3()
 // from the indexed word test. This is a read of the same little-endian flags.
 void Rva003FAC83::rva003FAD2B()
 {
- if ((*(const unsigned char *)&m_state & 1) != 0 || test(2))
+ if (test(0) || test(2))
   m_31 = false;
  else
   m_31 = true;
@@ -329,7 +330,7 @@ void Rva003FAC83::rva003FACE9(void *position)
 {
  if (test(1))
   m_31 = false;
- else if ((*(const unsigned char *)&m_state & 1) != 0 || test(2))
+ else if (test(0) || test(2))
   m_31 = ((const Region2D *)((const char *)this + 0x1c))->isInside(*(const Coord2D *)position);
  else
   m_31 = true;
@@ -342,11 +343,24 @@ void Rva003FAC83::rva003FAD4A(void *position)
 {
  if (test(1))
   m_31 = false;
- else if ((*(const unsigned char *)&m_state & 1) != 0 || test(2)) {
+ else if (test(0) || test(2)) {
   m_31 = ((const Region2D *)((const char *)this + 0x1c))->isInside(*(const Coord2D *)position);
   if (m_31 && test(2))
    return;
  } else
   m_31 = true;
+ rva003FAC83();
+}
+
+// Native 0x003FACB4..0x003FACE4; WB 0x0105FFE0 initializes all
+// three state bytes before dispatching. The indexed mask helper is inlined.
+void Rva003FAC83::rva003FACB4()
+{
+ m_30 = false;
+ if (test(0) || test(2))
+  m_31 = false;
+ else
+  m_31 = true;
+ m_32 = !test(3);
  rva003FAC83();
 }
