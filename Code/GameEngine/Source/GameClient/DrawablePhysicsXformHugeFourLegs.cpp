@@ -1,9 +1,3 @@
-// ?calcPhysicsXformHugeFourLegs@Drawable@@QAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z
-// partial score=0.9977842272701903 date=2026-10-13
-// ?calcPhysicsXformHugeFourLegs@Drawable@@QAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z
-// partial score=0.9955684545403807 date=2026-10-13
-// ?calcPhysicsXformHugeFourLegs@Drawable@@QAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z
-// partial score=0.9956 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 // stlport
 //
@@ -19,13 +13,13 @@
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 #include <stl/_alloc.h>
-// TU-local Coord3D (name and trivial-ABI shape shared with the rowed
-// vector<Coord3D> resize body at 0x000CA2F3; user-declared ctor/copy/dtor so
-// a value temporary stays uninitialized, as retail passes it).
+// The resize provider takes a 12-byte point value. EmptyFootPoint preserves
+// the target uninitialized default temporary and explicit scalar copy ABI.
+// Coord3D and Region2D use their canonical declarations.
 #include "Coord3D.h"
 struct EmptyFootPoint:Coord3D{EmptyFootPoint(){}EmptyFootPoint(const EmptyFootPoint&r){x=r.x;y=r.y;z=r.z;}};
 typedef float Real; typedef int Int;typedef bool Bool;
-struct Region2D{struct Point{float x,y;}lo,hi;};
+#include "Region2D.h"
 class Rva0087E370{public:void method(const Coord3D&,float,Region2D&)const;};
 void Rva00030830FreeAllocation(void*);
 namespace _STL {
@@ -146,56 +140,132 @@ char pad00[0x44];float angle;char pad48[0xFC-0x48];Object*m_object;char pad100[0
 };
 void Drawable::calcPhysicsXformHugeFourLegs(const Locomotor*locomotor,PhysicsXformInfo&info){
 if(!m_locoInfo)m_locoInfo=new DrawableLocoInfo;
+
 const Real ACCEL_PITCH_LIMIT=locomotor->getAccelPitchLimit();
+
 const Real PITCH_STIFFNESS=locomotor->getPitchStiffness();
+
 const Real ROLL_STIFFNESS=locomotor->getRollStiffness();
+
 const Real PITCH_DAMPING=locomotor->getPitchDamping();
+
 const Real ROLL_DAMPING=locomotor->getRollDamping();
+
 const Real UNIFORM_AXIAL_DAMPING=locomotor->getUniformAxialDamping();
-const Object*obj=m_object;if(!obj||!obj->physics)return;
+
+const Object*obj=m_object;
+if(!obj||!obj->physics)return;
+
 const Coord3D*pos=getPosition();
+
 Real direction=angle;
+
 _STL::vector<Coord3D> points;
-union{Region2D bounds;float heights[4];}scratch;
+
+// Bounds and the later four heights occupy the same native 16-byte home.
+Region2D scratch;
+
 bool found=false;
-for(DrawModule**mod=modules;!found&&*mod;++mod){BfmeFootDraw*draw=(*mod)->getDraw();if(draw&&draw->collectFeet(&points,0)&&points.size()>=4)found=true;}
-if(!found){const Rva0087E370*geom=(const Rva0087E370*)((const char*)obj+0xA8);Region2D&bounds=scratch.bounds;Coord3D zero;zero.x=0;zero.y=0;zero.z=0;
-geom->method(zero,0.0f,bounds);_ReadWriteBarrier();
-typedef void(_STL::vector<Coord3D>::*FillValue)(unsigned int,EmptyFootPoint);(points.*reinterpret_cast<FillValue>(&_STL::vector<Coord3D>::resize))(4,EmptyFootPoint());
-Real s=Sin(direction),c=Cos(direction);
-points[1].x=bounds.hi.x*c-bounds.hi.y*s;points[1].y=bounds.hi.y*c+bounds.hi.x*s;points[1].z=pos->z;
-points[0].x=bounds.lo.x*c-bounds.hi.y*s;points[0].y=bounds.hi.y*c+bounds.lo.x*s;points[0].z=pos->z;
-points[3].x=bounds.hi.x*c-bounds.lo.y*s;points[3].y=bounds.lo.y*c+bounds.hi.x*s;points[3].z=pos->z;
-points[2].x=bounds.lo.x*c-bounds.lo.y*s;points[2].y=bounds.lo.y*c+bounds.lo.x*s;points[2].z=pos->z;
+
+for(DrawModule**mod=modules;!found&&*mod;++mod){BfmeFootDraw*draw=(*mod)->getDraw();
+if(draw&&draw->collectFeet(&points,0)&&points.size()>=4)found=true;
 }
-Real*heights=scratch.heights;
-for(Int i=0;i<4;++i){if(i==0||points[i].x!=points[i-1].x||points[i].y!=points[i-1].y)heights[i]=TheTerrainLogic->getLayerHeight(points[i].x,points[i].y,obj->rva0028B511(),0,true);else heights[i]=heights[i-1];}
+if(!found){const Rva0087E370*geom=(const Rva0087E370*)((const char*)obj+0xA8);
+Region2D&bounds=scratch;
+Coord3D zero;
+zero.x=0;
+zero.y=0;
+zero.z=0;
+
+geom->method(zero,0.0f,bounds);
+// Both barriers are required for the native x87 schedule at corner 3.
+_ReadWriteBarrier();
+_ReadWriteBarrier();
+
+typedef void(_STL::vector<Coord3D>::*FillValue)(unsigned int,EmptyFootPoint);
+(points.*reinterpret_cast<FillValue>(&_STL::vector<Coord3D>::resize))(4,EmptyFootPoint());
+
+Real s=Sin(direction),c=Cos(direction);
+
+points[1].x=bounds.hi*c-bounds.y_max*s;
+points[1].y=bounds.y_max*c+bounds.hi*s;
+points[1].z=pos->z;
+
+points[0].x=bounds.lo*c-bounds.y_max*s;
+points[0].y=bounds.y_max*c+bounds.lo*s;
+points[0].z=pos->z;
+
+points[3].x=bounds.hi*c-bounds.y_min*s;
+_ReadWriteBarrier();
+points[3].y=bounds.y_min*c+bounds.hi*s;
+points[3].z=pos->z;
+
+points[2].x=bounds.lo*c-bounds.y_min*s;
+points[2].y=bounds.y_min*c+bounds.lo*s;
+points[2].z=pos->z;
+
+}
+Real*heights=&scratch.lo;
+
+for(Int i=0;i<4;++i){if(i==0||points[i].x!=points[i-1].x||points[i].y!=points[i-1].y)heights[i]=TheTerrainLogic->getLayerHeight(points[i].x,points[i].y,obj->rva0028B511(),0,true);
+else heights[i]=heights[i-1];
+}
 Real front=(heights[0]+heights[1])/2,back=(heights[2]+heights[3])/2;
+
 Real frontX=(points[0].x+points[1].x)/2,frontY=(points[0].y+points[1].y)/2;
+
 Real backX=(points[2].x+points[3].x)/2,backY=(points[2].y+points[3].y)/2;
+
 Real dx=frontX-backX,dy=frontY-backY;
+
 Real dist=(Real)sqrt(dx*dx+dy*dy);
+
 Real pitch=atan2f(back-front,dist);
+
 m_locoInfo->m_pitchRate+=(-PITCH_STIFFNESS*(m_locoInfo->m_pitch-pitch))+(-PITCH_DAMPING*m_locoInfo->m_pitchRate);
+
 if(m_locoInfo->m_pitchRate>0)m_locoInfo->m_pitchRate*=0.5f;
+
 m_locoInfo->m_pitch+=UNIFORM_AXIAL_DAMPING*m_locoInfo->m_pitchRate;
+
 m_locoInfo->m_roll+=UNIFORM_AXIAL_DAMPING*m_locoInfo->m_rollRate;
+
 m_locoInfo->m_accelerationPitchRate+=(-PITCH_STIFFNESS*m_locoInfo->m_accelerationPitch)+(-PITCH_DAMPING*m_locoInfo->m_accelerationPitchRate);
+
 m_locoInfo->m_accelerationPitch+=m_locoInfo->m_accelerationPitchRate;
+
 m_locoInfo->m_accelerationRollRate+=(-ROLL_STIFFNESS*m_locoInfo->m_accelerationRoll)+(-ROLL_DAMPING*m_locoInfo->m_accelerationRollRate);
+
 m_locoInfo->m_accelerationRoll+=m_locoInfo->m_accelerationRollRate;
+
 info.m_totalPitch=m_locoInfo->m_accelerationPitch+m_locoInfo->m_pitch;
+
 info.m_totalRoll=m_locoInfo->m_accelerationRoll+m_locoInfo->m_roll;
+
 if(m_locoInfo->m_accelerationPitch>ACCEL_PITCH_LIMIT)m_locoInfo->m_accelerationPitch=ACCEL_PITCH_LIMIT;
+
 else if(m_locoInfo->m_accelerationPitch<-ACCEL_PITCH_LIMIT)m_locoInfo->m_accelerationPitch=-ACCEL_PITCH_LIMIT;
+
 if(m_locoInfo->m_accelerationRoll>ACCEL_PITCH_LIMIT)m_locoInfo->m_accelerationRoll=ACCEL_PITCH_LIMIT;
+
 else if(m_locoInfo->m_accelerationRoll<-ACCEL_PITCH_LIMIT)m_locoInfo->m_accelerationRoll=-ACCEL_PITCH_LIMIT;
+
 Real old=m_locoInfo->m_overlapZ;
+
 Real wanted=(front+back)/2-pos->z;
+
 m_locoInfo->m_overlapZ+=m_locoInfo->m_overlapZVel;
-if(wanted>=old&&wanted<=m_locoInfo->m_overlapZ||wanted<=old&&wanted>=m_locoInfo->m_overlapZ){m_locoInfo->m_overlapZ=wanted;m_locoInfo->m_overlapZVel=0.0f;}
-else if(wanted>m_locoInfo->m_overlapZ&&m_locoInfo->m_overlapZVel<0||wanted<m_locoInfo->m_overlapZ&&m_locoInfo->m_overlapZVel>0){m_locoInfo->m_overlapZ-=m_locoInfo->m_overlapZVel;m_locoInfo->m_overlapZVel=0.0f;}
+
+if(wanted>=old&&wanted<=m_locoInfo->m_overlapZ||wanted<=old&&wanted>=m_locoInfo->m_overlapZ){m_locoInfo->m_overlapZ=wanted;
+m_locoInfo->m_overlapZVel=0.0f;
+}
+else if(wanted>m_locoInfo->m_overlapZ&&m_locoInfo->m_overlapZVel<0||wanted<m_locoInfo->m_overlapZ&&m_locoInfo->m_overlapZVel>0){m_locoInfo->m_overlapZ-=m_locoInfo->m_overlapZVel;
+m_locoInfo->m_overlapZVel=0.0f;
+}
 else if(wanted>m_locoInfo->m_overlapZ)m_locoInfo->m_overlapZVel+=1.5f;
+
 else m_locoInfo->m_overlapZVel-=0.5f;
+
 info.m_totalZ=m_locoInfo->m_overlapZ;
+
 }
