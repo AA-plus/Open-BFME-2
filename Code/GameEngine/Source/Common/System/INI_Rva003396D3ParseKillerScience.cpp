@@ -22,6 +22,7 @@ public:
 	const char *getNextToken(const char *seps);
 	static ScienceType scanScience(const char *token);
 	static void Rva003396D3_ParseKillerScience(INI *ini, void *instance, void *store, const void *userData);
+	static void parseScience(INI *ini, void *instance, void *store, const void *userData);
 };
 
 // Zero Hour's Common/Errors.h; retail's ErrorCode throw info is at 0x00CFEEE4.
@@ -33,6 +34,18 @@ enum ErrorCode
 
 // ?Rva003396D3_ParseKillerScience@INI@@SAXPAV1@PAX1PBX@Z
 void INI::Rva003396D3_ParseKillerScience(INI *ini, void *instance, void *store, const void *userData)
+{
+	const char *token = ini->getNextToken(0);
+	if (g_scienceStoreLoaded == 0) {
+		throw ERROR_BUG;
+	}
+	*(int *)store = INI::scanScience(token);
+}
+
+// ICF-folded twin of Rva003396D3_ParseKillerScience above (same 58 bytes at
+// 0x003396D3): static member functions take no receiver, so the same
+// statements under a different name compile to the identical body.
+void INI::parseScience(INI *ini, void *instance, void *store, const void *userData)
 {
 	const char *token = ini->getNextToken(0);
 	if (g_scienceStoreLoaded == 0) {
