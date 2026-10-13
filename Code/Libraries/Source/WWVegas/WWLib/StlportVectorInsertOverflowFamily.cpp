@@ -304,6 +304,10 @@ template void _STL::vector<Rva004F8D92Element>::_M_insert_overflow(
 // Retail 0x004F8A35.
 template void _STL::vector<Rva004F9018Element>::_M_insert_overflow(
     Rva004F9018Element *, const Rva004F9018Element &, const _STL::__false_type &, unsigned int, bool);
+// Retail 0x004F81FC 63B: out-of-line destructor of the same vector (destroy the
+// 12-byte element range through rowed _Destroy 0x004F7E78, then the allocator's
+// _free through rowed 0x00030830).
+template _STL::vector<Rva004F9018Element>::~vector();
 // Retail 0x00501A7C.
 template void _STL::vector<Rva00501E3FElement>::_M_insert_overflow(
     Rva00501E3FElement *, const Rva00501E3FElement &, const _STL::__false_type &, unsigned int, bool);
