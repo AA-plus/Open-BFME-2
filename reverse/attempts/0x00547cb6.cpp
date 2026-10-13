@@ -1,4 +1,6 @@
 // ?rva00547CB6@MoveToFormationGroupOrder@@QAEXXZ
+// partial score=0.85 date=2026-10-13
+// ?rva00547CB6@MoveToFormationGroupOrder@@QAEXXZ
 // partial score=0.8183079482499636 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /I.
 // stlport
