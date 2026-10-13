@@ -177,14 +177,14 @@ public:
 };
 
 // ?forceRva00958DA0@@YAJPAVRva00958D30@@VBfmeBstrVGP@@1@Z absent-from-retail
-__declspec(noinline) long forceRva00958DA0(Rva00958D30 *self,
+static __declspec(noinline) long forceRva00958DA0(Rva00958D30 *self,
 	BfmeBstrVGP first, BfmeBstrVGP second)
 {
 	return self->invoke(first, second);
 }
 
 // Emission host for the single-string overload (slot +0x28).
-__declspec(noinline) long forceRva00958D30(Rva00958D30 *self,
+static __declspec(noinline) long forceRva00958D30(Rva00958D30 *self,
 	BfmeBstrVGP arg)
 {
 	return self->invoke(arg);
@@ -192,14 +192,14 @@ __declspec(noinline) long forceRva00958D30(Rva00958D30 *self,
 
 // forceRva00958EB0 absent-from-retail: emission host for the string-plus-pointer
 // overload (slot +0x44).
-__declspec(noinline) long forceRva00958EB0(Rva00958D30 *self,
+static __declspec(noinline) long forceRva00958EB0(Rva00958D30 *self,
 	BfmeBstrVGP arg, void *value)
 {
 	return self->invoke(arg, value);
 }
 
 // ?forceRva00958C80@@YAJPAVRva00958C80@@VBfmeBstrVGP@@1JJJJJJJPAX@Z absent-from-retail
-__declspec(noinline) long forceRva00958C80(Rva00958C80 *self,
+static __declspec(noinline) long forceRva00958C80(Rva00958C80 *self,
 	BfmeBstrVGP first, BfmeBstrVGP second, long hwnd, long x, long y,
 	long w, long h, long options, void *gamedispatch)
 {
@@ -246,7 +246,7 @@ public:
 };
 
 // forceRva00958E30 absent-from-retail: emission host for the _bstr_t wrapper.
-__declspec(noinline) long forceRva00958E30(Rva00958E30 *self, _bstr_t arg)
+static __declspec(noinline) long forceRva00958E30(Rva00958E30 *self, _bstr_t arg)
 {
 	return self->invoke(arg);
 }
