@@ -345,7 +345,7 @@ void HRawAnimClass::add_bit_channel(BitChannelClass * newchan)
 // BFME per-pivot fade (vtable 0x007D5D24 slot 11, retail 0x0018D540): the
 // fade channel at NodeMotion[pividx].Fade blended like Get_Translation's
 // components, 1.0 when the pivot has none. BFME1 hrawanim.cpp donor.
-float HRawAnimClass::_bfme_hanim_fade(int pividx,float frame)
+float HRawAnimClass::Get_VisibilityF(int pividx,float frame)
 {
 	struct NodeMotionStruct * node = Get_Node_Motion_Array() + pividx;
 	float value0;

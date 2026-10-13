@@ -105,7 +105,7 @@ public:
 	bool							Get_Visibility(int pividx,float frame);
 	// BFME: per-pivot fade blend, vtable slot 11 after Get_Visibility (retail
 	// 0x0018D540); BFME1's hrawanim.h declares the same virtual.
-	virtual float				_bfme_hanim_fade(int pividx,float frame);
+	virtual float				Get_VisibilityF(int pividx,float frame);
 
 	bool							Is_Node_Motion_Present(int pividx);
 	int							Get_Num_Pivots(void) const { return NumNodes; }
