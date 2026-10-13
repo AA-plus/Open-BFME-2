@@ -1,4 +1,6 @@
 // ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
+// partial score=0.97 date=2026-10-13
+// ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
 // partial score=0.95 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 
@@ -59,7 +61,7 @@ class Object
 public:
 	Bool isInList(Object **pListHead) const;
 	void rva0028B4CE(PathfindLayerEnum layer);
-	void rva0028B49B(Object **ppHead, Object **ppTail);
+	void rva0028B49B(Object **ppTail, Object **ppHead);
 
 private:
 	unsigned char m_pre[0x8C];
@@ -96,17 +98,17 @@ void Object::rva0028B4CE(PathfindLayerEnum layer)
 }
 
 // ?rva0028B49B@Object@@QAEXPAPAVObject@@0@Z, retail 0x0028B49B (51B):
-// tail-append to a (head, tail) pair: link after the old tail, take over
-// an empty head, become the tail.
-void Object::rva0028B49B(Object **ppHead, Object **ppTail)
+// BFME1 donor BfmeLinkXN::bfmeInsertXN (last, first) proves (tail, head)
+// order and front shape; BFME2 offsets +0x8c/+0x90. Store-first matches head
+// loads+regs and tail; wall is middle reload-vs-copy + and position (4 lines).
+void Object::rva0028B49B(Object **ppTail, Object **ppHead)
 {
-	Object *oldTail;
-	oldTail = *ppTail;
+	m_prev = *ppHead;
+	Object *front = m_prev;
 	m_next = 0;
-	m_prev = oldTail;
 	if (m_prev)
-		((Object *)m_prev)->m_next = this;
-	if (*ppHead == 0)
-		*ppHead = this;
-	*ppTail = this;
+		front->m_next = this;
+	if (*ppTail == 0)
+		*ppTail = this;
+	*ppHead = this;
 }
