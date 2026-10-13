@@ -1,4 +1,6 @@
 // ?rva0009C422@Rva0009D55BProduct@@UAEX_N@Z
+// partial score=0.95 date=2026-10-13
+// ?rva0009C422@Rva0009D55BProduct@@UAEX_N@Z
 // partial score=0.94 date=2026-10-12
 // ?rva0009C422@Rva0009D55BProduct@@UAEX_N@Z
 // partial score=0.94 date=2026-10-11
@@ -343,9 +345,9 @@ void Rva0009D55BProduct::rva0009C422(bool active)
 		return;
 	}
 	Rva0009C422ManagerView *manager = (Rva0009C422ManagerView *)TheLivingWorldManager;
-	Rva0009C422ManagerPart &part = manager->part();
+
 	m_134 = manager->m_34;
-	m_F8.x = part.m_18;
-	m_F8.y = part.m_1C;
+	m_F8.x = (manager->part()).m_18;
+	m_F8.y = (manager->part()).m_1C;
 	((Rva0009C134Host *)this)->rva0009BAA4();
 }
