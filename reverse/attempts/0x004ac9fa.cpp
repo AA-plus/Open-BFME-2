@@ -1,4 +1,7 @@
 // ?rva004AC9FA@PartTheHeavensUpdate@@AAEXH@Z
+// partial score=0.9647 date=2026-10-13
+// ?rva004AC9FA@PartTheHeavensUpdate@@AAEXH@Z
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 // partial score=0.97 date=2026-10-06
 // cl: /O1 /DNDEBUG /MD
 //
@@ -68,8 +71,8 @@ void PartTheHeavensUpdate::rva004AC9FA(int elapsed)
 	float t = (float)(unsigned)elapsed;
 	float doubled = data->m_10.rva00504BA9(t);
 	doubled = doubled + doubled;
-	float rads = data->m_68.rva00504BA9(t) * RADS_PER_DEGREE;
-	ShadowChild *first = m_shadow->m_58;
+	volatile float rads = data->m_68.rva00504BA9(t) * RADS_PER_DEGREE;
+	ShadowChild *first = __vref(m_shadow->m_58);
 	first->m_58 = doubled;
 	first->m_5c = doubled;
 	ShadowChild *second = m_shadow->m_5c;

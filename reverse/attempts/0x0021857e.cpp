@@ -1,6 +1,8 @@
 // ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
 // partial score=0.997 date=2026-10-13
 // ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
+// partial score=0.997 date=2026-10-13
+// ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
 // partial score=0.98 date=2026-10-13
 // ?rva0021857E@FontLibrary@@QAEPAVGameFont@@PBVAsciiString@@M_NH@Z
 // partial score=0.98 date=2026-10-13

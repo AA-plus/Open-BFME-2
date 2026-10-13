@@ -1,4 +1,6 @@
 // ?rva000FF5E6@Rva0007E90ECallee@@QAEXH@Z
+// partial score=0.7719 date=2026-10-13
+// ?rva000FF5E6@Rva0007E90ECallee@@QAEXH@Z
 // partial score=0.592 date=2026-10-09
 // stlport
 // cl: /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib

@@ -1,4 +1,6 @@
 // ?rva0045108D@StoreObjectsSpecialPower@@UAEXXZ
+// partial score=0.9688 date=2026-10-13
+// ?rva0045108D@StoreObjectsSpecialPower@@UAEXXZ
 // partial score=0.9688265931372548 date=2026-10-10
 // ?rva0045108D@StoreObjectsSpecialPower@@UAEXXZ
 // partial score=0.9645 date=2026-10-05

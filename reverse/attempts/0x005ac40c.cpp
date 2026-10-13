@@ -1,5 +1,7 @@
 // ?moveDozerAway@AIStructureCreepTactic@@QAEXXZ
 // partial score=0.82 date=2026-10-13
+// ?moveDozerAway@AIStructureCreepTactic@@QAEXXZ
+// partial score=0.82 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DBFME_ASCII_DTOR_DECL /MD /GX /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
 //

@@ -1,6 +1,8 @@
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
 // partial score=0.996 date=2026-10-13
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
+// partial score=0.996 date=2026-10-13
+// ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
 // partial score=0.965 date=2026-10-11
 // ?onCurrentMissionWon@LinearCampaign@@QAEXXZ
 // cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
