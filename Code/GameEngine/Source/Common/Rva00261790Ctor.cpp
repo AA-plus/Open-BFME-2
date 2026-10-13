@@ -20,6 +20,7 @@ class Rva00261790
 {
 public:
 	Rva00261790(Arg00261790 *arg, bool flag);
+	Rva00261790(class Drawable *arg, bool flag);
 	virtual void dummy();
 private:
 	int m_04;
@@ -34,6 +35,33 @@ Rva00261790::Rva00261790(Arg00261790 *arg, bool flag) : m_04(0)
 	m_08 = arg->m_38;
 	m_0C = arg->m_3C;
 	m_10 = arg->m_40;
+	m_18 = flag;
+	float base = arg->m_B8;
+	m_14 = base;
+	float g = *(float *)((char *)TheGlobalData758 + 0xD4);
+	m_14 = g * TheConst7F8FFC + base;
+}
+
+// ICF-folded twin of the constructor above (same 88 bytes at 0x00261790):
+// the Drawable spelling reads the same position/radius words at the same
+// offsets (+0x38/+0x3C/+0x40/+0xB8) as integer bits, so every store,
+// float expression and vtable setup matches exactly.
+class Drawable
+{
+public:
+	char m_pad00[0x38];
+	float m_38;
+	float m_3C;
+	float m_40;
+	char m_pad44[0xB8 - 0x44];
+	float m_B8;
+};
+
+Rva00261790::Rva00261790(Drawable *arg, bool flag) : m_04(0)
+{
+	m_08 = *(int *)&arg->m_38;
+	m_0C = *(int *)&arg->m_3C;
+	m_10 = *(int *)&arg->m_40;
 	m_18 = flag;
 	float base = arg->m_B8;
 	m_14 = base;
