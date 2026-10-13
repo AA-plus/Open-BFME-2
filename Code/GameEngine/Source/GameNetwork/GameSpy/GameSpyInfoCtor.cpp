@@ -493,11 +493,11 @@ void Rva00556FB8(const PSPlayerStats &stats);
 void Rva003B3371Call(Int hook);		// SignalUIInteraction
 void Rva00415EF8Close(void);		// deleteNotificationBox
 
-extern const void *const g_00C19230[];
+extern "C" const void *const __identifier("??_7Rva00381D78@@6B@")[];
 class Rva00386374Base
 {
 public:
-    virtual ~Rva00386374Base() { *(const void **)this = g_00C19230; }
+    virtual ~Rva00386374Base() { *(const void **)this = __identifier("??_7Rva00381D78@@6B@"); }
 };
 class GameSpyInfo : public Rva00386374Base
 {
