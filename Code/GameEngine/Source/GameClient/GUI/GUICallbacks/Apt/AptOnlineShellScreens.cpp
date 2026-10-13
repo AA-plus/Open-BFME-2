@@ -75,8 +75,8 @@ struct AptOnlineScreenEntry
 extern AptOnlineScreenEntry g_Va00DD1568[];
 
 
-// The sub-screens the shell's table makes, each by its unrowed constructor
-// taking the shell (pinned by address; the classes keep those addresses).
+// The sub-screens the shell's table makes, each by its constructor taking
+// the shell. Unrecovered screen identities keep their address names.
 // The guards are the screens' instances: a factory makes nothing while
 // its screen is up.
 class Rva005B8F69
@@ -90,16 +90,19 @@ private:
 
 extern void *g_Va00E06478;
 
-class Rva00572885
+class AptOnlineLogin
 {
 public:
-	Rva00572885(AptOnline *shell);
+	AptOnlineLogin(AptOnline *shell);
+	static AptOnlineSubScreen *Create(AptOnline *shell);
 
 private:
 	unsigned char m_pad[0xE0];
 };
 
-extern void *g_Va00E062EC;
+// The constructor's existing singleton owner, also used by AptOnlineLogin.cpp.
+class BfmeObjELB;
+extern BfmeObjELB *g_bfmeObjELB;
 
 class Rva005B9BBC
 {
@@ -269,12 +272,14 @@ AptOnlineSubScreen *__cdecl Rva00516D09(AptOnline *shell)
 	return (AptOnlineSubScreen *)new Rva005B8F69(shell);
 }
 
-// Retail 0x00516D4D, 68 bytes: the shell table's factory for a new "OnlineLogin" sub-screen unless one is up (0x00E062EC).
-AptOnlineSubScreen *__cdecl Rva00516D4D(AptOnline *shell)
+// Retail 0x00516D4D, 68 bytes. WB 0x0145ADC0 names AptOnlineLogin::Create
+// in AptOnlineLogin.h; the shell table's OnlineLogin entry and the call to
+// the recovered constructor 0x00572885 independently establish its role.
+AptOnlineSubScreen *AptOnlineLogin::Create(AptOnline *shell)
 {
-	if (g_Va00E062EC)
+	if (g_bfmeObjELB)
 		return 0;
-	return (AptOnlineSubScreen *)new Rva00572885(shell);
+	return (AptOnlineSubScreen *)new AptOnlineLogin(shell);
 }
 
 // Retail 0x00516D91, 65 bytes: the shell table's factory for a new "OnlineHome" sub-screen unless one is up (0x00E06480).
