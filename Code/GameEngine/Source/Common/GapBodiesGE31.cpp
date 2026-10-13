@@ -9,18 +9,20 @@
 // --- 0x00072882 (16B): RefCountClass's inline constructor (vtable 0x00BC650C,
 // one reference); 0x000728B6 (16B): a class deriving from it (vtable
 // 0x00BC6514), the base's vtable store folded away.
+// Match donor refcount.h and the existing consumer declarations: Delete_This
+// is slot zero, followed by the protected destructor. Keep the constructor
+// inline so byte-identical consumer copies remain interchangeable COMDATs;
+// leave Delete_This to its existing providers rather than emitting a helper.
 class RefCountClass
 {
 public:
-	RefCountClass();
+	RefCountClass() : NumRefs(1) {}
+	virtual void Delete_This();
+protected:
 	virtual ~RefCountClass() {}
 private:
 	int NumRefs;
 };
-
-RefCountClass::RefCountClass() : NumRefs(1)
-{
-}
 
 class Rva000728B6 : public RefCountClass
 {
