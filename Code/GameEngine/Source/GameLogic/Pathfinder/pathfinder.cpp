@@ -484,6 +484,7 @@ private:
 class PathfindZoneManager
 {
 public:
+	void rva00531300();
 	void rva00531481();
 	void rva005314C6(Int x, Int y, unsigned char flag);
 };
@@ -586,6 +587,7 @@ public:
  Bool rva002F4115(Object *,Int,Int,LocomotorSet *);
  Bool rva002F4AC1(const ICoord2D *,Int,Int,Object *,PathfindLayerEnum,Int,Rva002E7261Info *,void *,void *);
  PathfindCell *rva002F068F();
+ Path *FindSafePath(Object *,const LocomotorSet &,const Coord3D *,const Coord3D *,const Coord3D *,float);
     Path *GetAircraftPath(const Object *,const Coord3D *);
     int _GetOverlapUnits(Object *,const Coord3D *,int *);
     int GetOverlapGoalUnits(Object *,const Coord3D *,int *);
@@ -3004,6 +3006,39 @@ static __forceinline void readMoverInfo(TCheckMovementInfo &info, Object *obj)
 {
 	char *ai = obj->m_258;
 	info.m_18 = ai ? (ObjectID)((const Rva0006E009DwordField *)ai)->get() : (ObjectID)0;
+}
+struct Gen_p12pod {Int a[3];};
+Path *Pathfinder::FindSafePath(Object *obj,const LocomotorSet &loco,const Coord3D *from,
+const Coord3D *repulsor1,const Coord3D *repulsor2,float radius)
+{
+if(!m_isMapReady)return 0;
+Bool center;Int cellRadius;Rva002EBCA7Split(obj,&cellRadius,(unsigned char *)&center);
+float repulsorDistance=radius*radius;Int count=0;Bool human=true;
+if(obj->getControllingPlayer() && obj->getControllingPlayer()->m_playerType==1)human=false;
+_STL::vector<Gen_p12pod> *hops=(_STL::vector<Gen_p12pod> *)&m_1C1CC;hops->erase(hops->begin(),hops->end());m_zoneManager.rva00531300();
+PathfindCell *parent=rva002E8BF8((PathfindLayerEnum)obj->rva0028B511(),(Coord3D *)obj->position);
+if(!parent || !obj->m_258)return 0;
+ICoord2D *startCell;{ICoord2D start;Rva002E7875WorldToCell(&start,true,(Coord3D *)obj->position);
+parent->allocateInfo((In002E6BA1 *)&start);startCell=&start;}parent->StartPathfind(0);AddToOpenList(parent);
+PathfinderSearchCellsVisited=0;float farthest=0;
+while((parent=rva002F36E5())!=0) {
+Coord3D cellCenter;Rva002E8C23Call((Int)&cellCenter,center,(Rva002E8C23Param *)parent);
+float dx=cellCenter.x-repulsor1->x,dy=cellCenter.y-repulsor1->y;
+float distance=dx*dx+dy*dy;
+dx=cellCenter.x-repulsor2->x;dy=cellCenter.y-repulsor2->y;
+float distance2=dx*dx+dy*dy;Bool ok=false;
+if(distance>distance2)distance=distance2;
+if(distance>repulsorDistance)ok=true;
+if(!rva002F068F() && count>0)ok=true;
+if(distance>farthest){farthest=distance;if(count>2000)ok=true;}
+if(ok && bfmeWrapE6E90(obj,(void *)parent->getXIndex(),(void *)parent->getYIndex(),(void *)parent->getLayer(),(void *)cellRadius,boolArg(center))) {
+Path *path=BuildActualPath(obj,loco.getValidSurfaces(),(Coord3D *)obj->position,parent,center,false,true);
+rva002F40E7();parent->ReleaseInfo();return path;
+}
+parent->PutOnClosedList(&m_closedList);CheckChangeLayers(parent,obj);
+count+=rva002F83F5(parent,0,loco,human,center,cellRadius,startCell,obj,0);
+}
+m_isTunneling=false;rva002F40E7();return 0;
 }
 Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet, const Coord3D *from,
 	const Coord3D *rawTo, HierarchicalPath *hierarchicalPath, Bool *destinationAdjusted)
