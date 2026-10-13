@@ -1,5 +1,7 @@
 // ?moveTowardsPositionHorde@Locomotor@@QAEXPAVObject@@ABUCoord3D@@MM@Z
-// partial score=0.99 date=2026-10-13
+// partial score=0.993 date=2026-10-13
+// ?moveTowardsPositionHorde@Locomotor@@QAEXPAVObject@@ABUCoord3D@@MM@Z
+// partial score=0.993 date=2026-10-13 (W7-S4: whole normal path wrapped in a block)
 // ?moveTowardsPositionHorde@Locomotor@@QAEXPAVObject@@ABUCoord3D@@MM@Z
 // partial score=0.98 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /ICode/Libraries/Include
@@ -550,6 +552,7 @@ void Locomotor::moveTowardsPositionHorde(Object *obj, const Coord3D &goalPos, Re
 		}
 	}
 
+	{
 	Real maxSpeed = ((Rva001E46E1 *)this)->rva001E46E1(obj);
 	Real maxTurnRate = getMaxTurnRate(obj);
 	if (desiredSpeed > maxSpeed)
@@ -599,4 +602,5 @@ void Locomotor::moveTowardsPositionHorde(Object *obj, const Coord3D &goalPos, Re
 	if (!((Rva001E46E1 *)this)->rva001E543F(obj) && obj->getTemplate()->isKindOf9() && hordeContain && !hordeContain->slot112(desiredAngle))
 		desiredSpeed *= 0.1f;
 	((Rva001E6007 *)this)->rva001e6007((unsigned int)obj, (unsigned int)&goal, onPathDistToGoal, desiredSpeed);
+	}
 }
