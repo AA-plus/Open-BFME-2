@@ -1,12 +1,16 @@
 // ?getSpawnPositions@ArmySummary@@QAE_NHPAUCoord3D@@0_N@Z
-// partial score=0.96 date=2026-10-09
+// Native 40CCC6..40CF36, 624 bytes, RET16; WB10896A0 names this method.
+// Target access +1C is the campaign army ID. Other field/view purposes remain
+// those supported by the existing ArmySummary and Living World providers.
+// WB1089D3C spells the owner-friendly branch as !reinforcement; WB1089E64
+// spells the at-home branch as reinforcement. This asymmetry reproduces
+// retail's out-of-line defender arm at 40CEFB without a codegen workaround.
 // cl: /O1 /G7 /arch:SSE /GX /MD /DNDEBUG /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/GameLogic/System /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/shims/sweep
 // stlport
 #include "ArmyPlacerWaypoints.h"
 #include <vector>
 #define _OPERATOR_NEW_DEFINED_
 #include "vector3.h"
-#include <vector>
 #include "ascii_string.h"
 #define BFME_SNAPSHOT_NAME_SLOT 1
 #include "Common/Snapshot.h"
@@ -41,15 +45,7 @@ struct Rva0040DD3ARef {
  Rva0040DD3ARef(const Rva0040DD3ARef& x):value(x.value){if(value)++value->ref.references;}
  ~Rva0040DD3ARef(){if(value)ReleaseTreeHintRef00217D4C(&value->ref);}
 };
-// Existing 532803 provider view: twelve-byte vector of opaque four-byte
-// words, with the same observed range-erasure ABI. Element purpose unknown.
-class BfmeIntVecG {
-public:
- void bfmeErase(int*,int*);
- __forceinline void clear() { bfmeErase(begin,end); }
- ~BfmeIntVecG() { if(begin) free(begin); }
- int *begin,*end,*limit;
-};
+#include "../../Common/BfmeIntVecG.h"
 class Rva0040CB3AIndexedField { public: int find(int key) const; };
 class ArmySummary : public Snapshot, public Rva0040D8D6List {
 public:
@@ -136,8 +132,8 @@ bool ArmySummary::getSpawnPositions(int playerId, Coord3D *spawn, Coord3D *gathe
    else result=placer->GetDefenderReinforcementWaypointLocations(spawn,gather);
   } else result=placer->GetFarthestSpawnPointFromPlayerStart(reinterpret_cast<Rva0037F90FInput*>(played),0,spawn,gather);
  } else if(atHome) {
-  if(!reinforcement){result=placer->GetStartPosWaypointLocations(0,spawn,gather);usedStart=true;}
-  else result=placer->GetDefenderReinforcementWaypointLocations(spawn,gather);
+  if(reinforcement)result=placer->GetDefenderReinforcementWaypointLocations(spawn,gather);
+  else {result=placer->GetStartPosWaypointLocations(0,spawn,gather);usedStart=true;}
  } else result=placer->GetWalkOnWaypointLocations(reinterpret_cast<Rva0037F7B6Record*>(armyRegion),spawn,gather);
  if(result && !reinforcement && !usedStart) {
   Vector3 direction(gather->x-spawn->x,gather->y-spawn->y,gather->z-spawn->z);
