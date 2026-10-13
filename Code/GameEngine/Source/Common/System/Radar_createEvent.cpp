@@ -99,6 +99,7 @@ class Radar
 {
 public:
 	bool tryEvent(RadarEventType type, const Coord3D *world);
+	void tryUnderAttackEvent(const Object *object);
 	void tryInfiltrationEvent(const Object *object);
 	void createEvent(const Coord3D *world, RadarEventType type, Real secondsToLive);
 	void rva002D893B(const Rva002D893BColorSource *source, const Coord3D *world, RadarEventType type, Real scale);
@@ -218,7 +219,8 @@ public:
 };
 struct RadarInfiltrationMiscAudio
 {
-    char opaque00[8];
+    OpaqueRefElement4 harvesterSound;    // +0x00, the under-attack event's harvester case
+    OpaqueRefElement4 underAttackSound;  // +0x04, its unit, structure and default cases
     OpaqueRefElement4 sound;
 };
 class RadarInfiltrationAudio
@@ -360,4 +362,62 @@ bool Radar::tryEvent(RadarEventType type, const Coord3D *world)
     }
     createEvent(world, type, 4.0f);
     return true;
+}
+
+// Zero Hour Radar::tryUnderAttackEvent is the semantic guide. Target
+// 002D8B9D..002D8DC7 (WB 11096E0 twin): after tryEvent(3, position) succeeds
+// it refreshes the control bar (0x0031AEC9), then picks the message and sound
+// from the object's template kind bits 8/9 (unit, with bit 16 the harvester
+// case), 7 and 37 (structure), else the generic message, and plays the sound
+// for the local player. Retail tests every kind bit as its own byte test;
+// the early-return spelling of the test keeps MSVC from merging bits 8 and 9.
+class ControlBar {public: void rva0031AEC9();};
+extern ControlBar *TheControlBar;
+struct RadarAttackTemplate {char opaque[0x108];unsigned char kind[16];};
+struct RadarAttackObject {void *vtable;const RadarAttackTemplate *objectTemplate;};
+struct RadarAttackPlayerList {char opaque[0x10];RadarInfiltrationPlayer *localPlayer;};
+__forceinline bool radarObjectKind(const Object *object,int kind) {
+ const unsigned char *k=((const RadarAttackObject *)object)->objectTemplate->kind;
+ if (k[kind>>3] & (1<<(kind&7))) return true;
+ return false;
+}
+struct RadarAttackRef : OpaqueRefElement4 {
+ RadarAttackRef() {referent=0;}
+ ~RadarAttackRef() {if(referent)referent->Release_Ref();}
+};
+void Radar::tryUnderAttackEvent(const Object *object)
+{
+ if(object==0) return;
+ if(tryEvent((RadarEventType)3,(const Coord3D *)((const char *)object+0x38))) {
+  TheControlBar->rva0031AEC9();
+  RadarInfiltrationPlayer *player=((RadarAttackPlayerList *)ThePlayerList)->localPlayer;
+  if(radarObjectKind(object,8)||radarObjectKind(object,9))
+  {
+   RadarAttackRef ref;
+   if(radarObjectKind(object,16)) {
+    ((RadarInfiltrationUI *)TheInGameUI)->message("RADAR:HarvesterUnderAttack");
+    ref.OpaqueRefElement4::operator=(((RadarInfiltrationAudio *)TheAudio)->getMiscAudio()->harvesterSound);
+   } else {
+    ((RadarInfiltrationUI *)TheInGameUI)->message("RADAR:UnitUnderAttack");
+    ref.OpaqueRefElement4::operator=(((RadarInfiltrationAudio *)TheAudio)->getMiscAudio()->underAttackSound);
+   }
+   BfmeAudioEventPrefix136 sound(ref,0);
+   ((Rva0033F15DDwordSlot *)&sound)->set(player->index);
+   ((RadarInfiltrationAudio *)TheAudio)->addAudioEvent(&sound);
+  }
+  else if(radarObjectKind(object,7)&&radarObjectKind(object,37))
+  {
+   ((RadarInfiltrationUI *)TheInGameUI)->message("RADAR:StructureUnderAttack");
+   BfmeAudioEventPrefix136 sound(((RadarInfiltrationAudio *)TheAudio)->getMiscAudio()->underAttackSound,0);
+   ((Rva0033F15DDwordSlot *)&sound)->set(player->index);
+   ((RadarInfiltrationAudio *)TheAudio)->addAudioEvent(&sound);
+  }
+  else
+  {
+   ((RadarInfiltrationUI *)TheInGameUI)->message("RADAR:UnderAttack");
+   BfmeAudioEventPrefix136 sound(((RadarInfiltrationAudio *)TheAudio)->getMiscAudio()->underAttackSound,0);
+   ((Rva0033F15DDwordSlot *)&sound)->set(player->index);
+   ((RadarInfiltrationAudio *)TheAudio)->addAudioEvent(&sound);
+  }
+ }
 }
