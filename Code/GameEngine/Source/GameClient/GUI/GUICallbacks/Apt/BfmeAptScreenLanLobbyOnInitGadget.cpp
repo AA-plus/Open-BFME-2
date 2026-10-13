@@ -211,23 +211,18 @@ public:
 	void enable();
 };
 
-// The +0x288 panel (destroyed by ??1Rva004421E1); 0x0043DE19 (265 bytes) is
-// unrowed and pinned by address.
-class Rva004421E1
+// The +0x288 MpGameSetup panel (destroyed by ??1AptMpGameSetup); its
+// methods are rowed in MpGameSetupSlots.cpp and AptMpGameSetupRva00440BDF.cpp.
+class AptMpGameSetup
 {
 public:
 	void rva0043DE19();
-	// Unrowed panel methods, pinned by address: 0x0043FFCF (8 bytes),
-	// 0x00440BDF (1693 bytes), 0x0044127C (544 bytes), 0x00443EA8 (358 bytes).
 	void rva0043FFCF();
 	bool rva00440BDF(bool flag);
-	bool rva0044127C();
-	void rva00443EA8();
-	// And its message handler 0x00442CB3 (690 bytes) and 0x0043FA68 (244
-	// bytes), likewise unrowed and pinned.
-	int rva00442CB3(int msg, unsigned int data1, unsigned int data2);
-	void rva0043FA68(int game);
-	// MpGameSetupSlots.cpp's rva004422B4 (the game mode), pinned by address.
+	bool WaitStartGame();
+	bool OnUpdate();
+	int rva00442CB3(unsigned int msg, unsigned int data1, unsigned int data2);
+	void rva0043FA68(GameInfo *game);
 	void rva004422B4(int mode);
 };
 
@@ -432,7 +427,7 @@ private:
 	unsigned char m_pad04[0x274 - 4];
 	void *m_owner; // +0x274
 	unsigned char m_pad278[0x288 - 0x278];
-	Rva004421E1 m_panel; // +0x288
+	AptMpGameSetup m_panel; // +0x288
 	unsigned char m_pad289[0x304 - 0x289];
 	int m_304; // +0x304
 	unsigned char m_pad308[0x538 - 0x308];
@@ -661,7 +656,7 @@ int AptLanLobby::OnUpdateData()
 {
 	if (m_6c0)
 	{
-		m_panel.rva00443EA8();
+		m_panel.OnUpdate();
 		return 0;
 	}
 	{
@@ -711,7 +706,7 @@ int AptLanLobby::OnUpdateData()
 			}
 			break;
 		case 6:
-			if (!m_panel.rva0044127C())
+			if (!m_panel.WaitStartGame())
 			{
 				m_6a4 = 4;
 				{
@@ -764,7 +759,7 @@ int AptLanLobby::OnUpdateData()
 			Rva00444040Enable();
 		}
 	}
-	m_panel.rva00443EA8();
+	m_panel.OnUpdate();
 	return 1;
 }
 
@@ -794,7 +789,7 @@ int AptLanLobby::rva00444826(int msg, unsigned int data1, unsigned int data2)
 		break;
 	case 0x4014:
 		if ((GameWindow *)data1 == m_customGamesList)
-			m_panel.rva0043FA68(GetValidSelectedGameInfo());
+			m_panel.rva0043FA68((GameInfo *)GetValidSelectedGameInfo());
 		break;
 	case 0x4015:
 		if ((GameWindow *)data1 == m_customGamesList && GetValidSelectedGameInfo())

@@ -70,20 +70,17 @@ public:
 	virtual ~Rva0059EB41() {}
 };
 
-class Rva004421E1
-{
-public:
-	Rva004421E1(Rva004444D2 *owner, int mask);
-	virtual ~Rva004421E1();
-private:
-	unsigned char m_pad04[0x450 - 0x70 - 4];
-};
+class MpGameSetupOwner;
 
 class AptMpGameSetup
 {
 public:
+	AptMpGameSetup(MpGameSetupOwner *owner, int mask);
+	virtual ~AptMpGameSetup();
 	void rva004422B4(int);
 	void rva0044303D();
+private:
+	unsigned char m_pad04[0x450 - 0x70 - 4];
 };
 
 class GameSorter
@@ -231,7 +228,7 @@ public:
 
 private:
 	AptCommandMapAdder *commandMaps() { return (AptCommandMapAdder *)((char *)this + 4); }
-	Rva004421E1 m_setup; // +0x70
+	AptMpGameSetup m_setup; // +0x70
 	GameSorter m_sorter; // +0x450
 	Rva0054F508 m_prefs; // +0x46C
 	int m_state; // +0x488
@@ -269,14 +266,14 @@ private:
 	}
 
 Rva005BA1FDBase::Rva005BA1FDBase(int shell, int profile)
-	: Rva0056DC6B((void *)shell), m_setup(this, 0x200001F0), m_sorter(this), m_prefs(profile),
+	: Rva0056DC6B((void *)shell), m_setup((MpGameSetupOwner *)static_cast<Rva004444D2 *>(this), 0x200001F0), m_sorter(this), m_prefs(profile),
 	  m_state(0), m_48C(0), m_490(0), m_498(0), m_49C(0), m_4A0(false), m_4A4(0), m_4A8(-1),
 	  m_4AC(0), m_4B0(0), m_4B4(false), m_4B8(0), m_4BC(0), m_4C0(false), m_4C1(true), m_4C2(true),
 	  m_4C4(0), m_4C8(0), m_4CC(0), m_4D0("APT:NULL"), m_4D4(0), m_4D8(false), m_4DC(0)
 {
 	++g_Va00E063F0;
 	g_currentAptOnlineCustomMatch = (int)this;
-	reinterpret_cast<AptMpGameSetup *>(&m_setup)->rva004422B4(profile);
+	m_setup.rva004422B4(profile);
 	CM_BIND("AptOnline::CustomMatch::CancelPopUpJoin", &Rva0059ECD2::rva0059ECD2, CustomMatchPopUp)
 	CM_BIND("AptOnline::CustomMatch::CreateGame", &Rva0059ECD2::rva0059EC72, CustomMatchPopUp)
 	CM_BIND("AptOnline::CustomMatch::JoinGame", &Rva0059ECAD::rva0059ECAD, CustomMatchJoin)
@@ -296,7 +293,7 @@ Rva005BA1FDBase::Rva005BA1FDBase(int shell, int profile)
 		_bfme_setAptScreenRef(name,
 			AptRef<AptScreenInitGadgets>(FunctorBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
-	reinterpret_cast<AptMpGameSetup *>(&m_setup)->rva0044303D();
+	m_setup.rva0044303D();
 	reinterpret_cast<Rva00580316 *>(&m_sorter)->rva00580263(&m_prefs);
 	if (TheGameSpyGame) {
 		TheGameSpyGame->clearFF4();

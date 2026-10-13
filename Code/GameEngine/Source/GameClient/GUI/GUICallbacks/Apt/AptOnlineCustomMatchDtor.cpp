@@ -59,10 +59,10 @@ public:
 	virtual ~Rva0059EB41() {}
 };
 
-class Rva004421E1
+class AptMpGameSetup
 {
 public:
-	virtual ~Rva004421E1();
+	virtual ~AptMpGameSetup();
 
 private:
 	char m_pad[0x450 - 0x70 - 4];
@@ -113,7 +113,7 @@ public:
 	virtual ~AptOnlineCustomMatch();
 
 private:
-	Rva004421E1 m_70; // +0x70
+	AptMpGameSetup m_70; // +0x70
 	Rva0035A18D m_450; // +0x450
 	Rva0054F508 m_46C; // +0x46C
 	AsciiString m_4D0; // +0x4D0

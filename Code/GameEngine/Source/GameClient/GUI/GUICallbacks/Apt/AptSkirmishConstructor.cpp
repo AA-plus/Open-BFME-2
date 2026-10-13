@@ -182,10 +182,10 @@ class AptMpGameSetup
 {
 public:
 	AptMpGameSetup(MpGameSetupOwner *owner, int flags);
-	~AptMpGameSetup();
+	virtual ~AptMpGameSetup();
 	void rva004422B4(int arg);
 private:
-	unsigned char m_pad[0x668 - 0x288];
+	unsigned char m_pad[0x668 - 0x288 - 4];
 };
 
 class Rva005C19B6

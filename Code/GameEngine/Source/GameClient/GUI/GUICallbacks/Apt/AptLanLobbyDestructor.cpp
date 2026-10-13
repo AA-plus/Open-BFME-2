@@ -101,7 +101,8 @@ public: _bfme_AptGameWindow(void *context); virtual ~_bfme_AptGameWindow();
 private: AsciiString filename270; void *owner274; int tail278;
 };
 class Rva004444D2 { public: Rva004444D2(); virtual ~Rva004444D2(); private: char storage[8]; };
-class Rva004421E1 { public: Rva004421E1(Rva004444D2*,int); virtual ~Rva004421E1(); private: char storage[0x3E0-4]; };
+class MpGameSetupOwner;
+class AptMpGameSetup { public: AptMpGameSetup(MpGameSetupOwner*,int); virtual ~AptMpGameSetup(); private: char storage[0x3E0-4]; };
 class LANPreferences { public: LANPreferences(int); virtual ~LANPreferences(); private: char storage[0x1C-4]; };
 class Rva0031455E { public: Rva0031455E(); virtual ~Rva0031455E(); private: char storage[8]; };
 class AptLanLobbyNameEntry : public Rva0031455E {
@@ -198,7 +199,7 @@ public: virtual ~AptLanLobby(); void rva004443E7();
  void OnJoinGameBttn(const char*);
 
 private:
- Rva004421E1 panel;
+ AptMpGameSetup panel;
  GameSorter sorter;
  LANPreferences preferences;
  UnicodeString name;
@@ -243,7 +244,7 @@ void Rva00512069Register();
 // an explicit empty destructor adds a non-retail table store to teardown.
 #pragma pointers_to_members(full_generality, multiple_inheritance)
 AptLanLobby::AptLanLobby(void *context)
- :_bfme_AptGameWindow(context),panel((Rva004444D2*)this,0x400001A0),
+ :_bfme_AptGameWindow(context),panel((MpGameSetupOwner*)static_cast<Rva004444D2*>(this),0x400001A0),
  sorter((Rva005248D0*)this),preferences(-1),state(0),games(0) {
  entry.flag0=0;entry.flag1=0;entry.active=0;entry.flag3=0;entry.kind=2;entry.flag4=0;
  if (!g_Va00A03354) {

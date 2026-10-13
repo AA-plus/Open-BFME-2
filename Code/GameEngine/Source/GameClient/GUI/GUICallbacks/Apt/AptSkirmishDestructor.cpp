@@ -15,7 +15,7 @@
 class _bfme_AptGameWindow { public: virtual ~_bfme_AptGameWindow(); private: char storage[0x218-4]; };
 class AptSkirmishSecondaryView { public: virtual void marker()=0; private: char storage[0x64-4]; };
 class Rva004444D2 { public: virtual ~Rva004444D2(); private: char storage[8]; };
-class Rva004421E1 { public: virtual ~Rva004421E1(); private: char storage[0x3E0-4]; };
+class AptMpGameSetup { public: virtual ~AptMpGameSetup(); private: char storage[0x3E0-4]; };
 class Rva005C1A36 { public: virtual ~Rva005C1A36(); private: char storage[0x30-4]; };
 class SkirmishPreferences { public: virtual ~SkirmishPreferences(); private: char storage[0x20-4]; };
 class Rva0031455E { public: virtual ~Rva0031455E(); private: char storage[0x10-4]; };
@@ -31,7 +31,7 @@ void __cdecl operator delete(void*);
 class Rva00521977 : public _bfme_AptGameWindow, public AptSkirmishSecondaryView, public Rva004444D2 {
 public: virtual ~Rva00521977();
 private:
- Rva004421E1 panel;
+ AptMpGameSetup panel;
  Rva005C1A36 honors;
  SkirmishPreferences preferences;
  char gap[0x10];
