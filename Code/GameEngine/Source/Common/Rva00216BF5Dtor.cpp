@@ -18,7 +18,10 @@ public:
 	void RemoveOverButtonHandler(const AsciiString &name);
 };
 
-extern "C" AptPlayer *g_pRva00224BC9;
+class BfmeAptWindowManager;
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
+// g_pRva00224BC9 is only an alias of the owned g_bfmeAptWindowManager (ledger names column); read it through this unit's view.
+#define g_pRva00224BC9 (*(AptPlayer **)&g_bfmeAptWindowManager)
 
 class Rva00224455
 {
