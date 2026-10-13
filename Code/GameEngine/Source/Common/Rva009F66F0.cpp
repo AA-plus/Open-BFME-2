@@ -3,7 +3,11 @@
 // Retail 009F66F0..009F67EC. INT3 before entry. Three cdecl arguments;
 // the data xref at VA012DBD70 points to this entry. The following function
 // starts at 009F67ED with an independent SEH prologue.
+// Keep MSVC's float math overloads local; the matched sqrt operation inlines.
+#pragma push_macro("inline")
+#define inline static inline
 #include <math.h>
+#pragma pop_macro("inline")
 #include <float.h>
 #include "coord.h"
 

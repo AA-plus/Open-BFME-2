@@ -10,7 +10,15 @@
 // No assembly, new pins or invented original method identity.
 #include "Coord3D.h"
 
+// Keep MSVC's float overloads local. Retail calls the external atan2f adapter;
+// give only the header's unused inline helper a private name.
+#pragma push_macro("inline")
+#pragma push_macro("atan2f")
+#define inline static inline
+#define atan2f eyeTowerInlineAtan2f
 #include <math.h>
+#pragma pop_macro("atan2f")
+#pragma pop_macro("inline")
 extern "C" float __cdecl atan2f(float y, float x);
 
 class Rva003F962FVector3
