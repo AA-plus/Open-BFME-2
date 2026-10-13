@@ -1256,39 +1256,15 @@ bool HCompressedAnimClass::Get_Orientation(Quaternion& q, int pividx,float frame
  * HISTORY:                                                                                    * 
  *   08/11/1997 GH  : Created.                                                                 * 
  *=============================================================================================*/
-// ?HCompressedAnimClass::Get_Transform present-unmatched
-void HCompressedAnimClass::Get_Transform( Matrix3D& mtx, int pividx, float frame ) const
+// HCompressedAnimClass::Get_Transform is owned by HCompressedAnimTransform.cpp
+// (rowed 0x0018F3F0); this TU links against that copy.
+// The rowed Matrix3D subscript accessor below was emitted only by that body;
+// address-taking keeps its retail copy emitted here.
+// ?bfmeAnchorMatrix3DSubscript absent-from-retail
+Vector4 &bfmeAnchorMatrix3DSubscript(Matrix3D &m, int i)
 {
-	struct NodeCompressedMotionStruct * motion = &NodeMotion[pividx];
-	  
-	switch(Flavor) {
-		case ANIM_FLAVOR_TIMECODED:
-			if (NodeMotion[pividx].tc.Q) {
-				Quaternion q;
-				q = NodeMotion[pividx].tc.Q->Get_QuatVector(frame);
-				::Build_Matrix3D(q,mtx);
-			}
-			else mtx.Make_Identity();
-			if (motion->tc.X) motion->tc.X->Get_Vector(frame, &(mtx[0][3]));
-			if (motion->tc.Y) motion->tc.Y->Get_Vector(frame, &(mtx[1][3]));
-			if (motion->tc.Z) motion->tc.Z->Get_Vector(frame, &(mtx[2][3]));
-			break;
-		case ANIM_FLAVOR_ADAPTIVE_DELTA:
-			if (NodeMotion[pividx].ad.Q) {
-				Quaternion q;
-				q = NodeMotion[pividx].ad.Q->Get_QuatVector(frame);
-				::Build_Matrix3D(q,mtx);
-			}
-			else mtx.Make_Identity();
-
-			if (motion->ad.X) motion->ad.X->Get_Vector(frame, &(mtx[0][3]));
-			if (motion->ad.Y) motion->ad.Y->Get_Vector(frame, &(mtx[1][3]));
-			if (motion->ad.Z) motion->ad.Z->Get_Vector(frame, &(mtx[2][3]));
-			break;
-		default:
-			WWASSERT(0);	// unknown flavor
-			break;
-	}
+	static Vector4 &(Matrix3D::* const pfn)(int) = &Matrix3D::operator[];
+	return (m.*pfn)(i);
 }
 
 /***********************************************************************************************
