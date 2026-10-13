@@ -1,4 +1,6 @@
 // ?rva0049CA2F@Rva0049CA2F@@QAEXXZ
+// partial score=0.92 date=2026-10-13
+// ?rva0049CA2F@Rva0049CA2F@@QAEXXZ
 // partial score=0.72 date=2026-10-06
 // cl: /O1 /arch:SSE /DNDEBUG /MD
 //
@@ -156,8 +158,8 @@ void Rva0049CA2F::rva0049CA2F()
 		return;
 
 	((SpecialAbilityUpdate *)this)->SpecialAbilityUpdate::rva0045108D();
-	Object *found = TheGameLogic->findObjectByID(m_40);
 	Object *obj = m_obj;
+	Object *found = TheGameLogic->findObjectByID(m_40);
 	if (found == 0 || (found->m_privateStatus & 1) != 0
 		|| ((Rva0049C6E1 *)this)->rva0049C6E1(found) == 0)
 	{
@@ -166,7 +168,7 @@ void Rva0049CA2F::rva0049CA2F()
 	}
 
 	m_89 = 0;
-	void *upgrade = ((Rva0026F0F0 *)TheUpgradeCenter)->rva0026F0F0(&obj->m_284);
+	void * volatile upgrade = ((Rva0026F0F0 *)TheUpgradeCenter)->rva0026F0F0(&obj->m_284);
 	if (upgrade != 0)
 	{
 		void *prov = (found->m_tmpl->m_115 & 0x20) != 0
