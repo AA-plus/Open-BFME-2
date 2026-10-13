@@ -761,7 +761,7 @@ public:
 public:
 	void Rva003BCA43Do(AsciiString const &);
 public:
-	void Rva003BCA5DSet(bool);
+	void Rva003BCA5DSet(unsigned char);
 public:
 	void Rva003BCA68Set(bool);
 public:
@@ -819,7 +819,7 @@ public:
 public:
 	void Rva003BD062Set(void *, AsciiString const *, bool);
 public:
-	void Rva003BD0C8Set(AsciiString const &, bool);
+	void Rva003BD0C8Set(AsciiString const &, unsigned char);
 public:
 	void Rva003BD108SetGamePaused();
 public:

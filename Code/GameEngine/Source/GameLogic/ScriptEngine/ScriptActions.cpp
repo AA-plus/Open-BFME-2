@@ -20,12 +20,17 @@ enum EmotionType
 };
 
 class Parameter;
+class CommandButton;
+class Object;
+struct Coord3D;
 class UpgradeTemplate;
 
 class ScriptActions
 {
 public:
  void doSetBorderShroud(bool setting);
+ Object *rva003C24F0(const Coord3D *, class ObjectTypes *, class Player *, bool);
+ void rva003C42B9(Parameter *, const AsciiString &, const AsciiString &);
  void rva003C739D(Parameter *, Parameter *, Parameter *, Parameter *, Parameter *);
 protected:
 	void doFlashSpellStoreButton(int seconds);
@@ -301,6 +306,9 @@ public:
 class Object : public Thing
 {
 public:
+ bool rva002922D9(const CommandButton *);
+ void rva00297000(const CommandButton *, Object *, int, int);
+ void rva00297149(const CommandButton *, const Coord3D *, int, int);
  bool rva002940B9(const UpgradeTemplate *);
  bool rva00290D2B(const UpgradeTemplate *) const;
  void rva00293077(const void *);
@@ -469,6 +477,7 @@ private:
 class ThingTemplate
 {
 public:
+ bool rva003BE11C94() const { return (((const unsigned char *)this)[0x113] & 0x40) != 0; }
  bool isEquivalentTo(const ThingTemplate *) const;
 	int rva0033B479() const;
 };
@@ -1440,3 +1449,121 @@ void ScriptActions::doSetBorderShroud(bool setting)
  else
   ((ScriptShroudDisplayView *)TheDisplay)->setBorderShroudLevel(((ScriptShroudAlphaView *)TheWritableGlobalData)->clearAlpha);
 }
+
+// WB100B3C0 proves branch-local filter temporaries and the fallback return.
+// Keeping the static helper and its callers together reproduces the native
+// private object-in-ESI convention without a two-argument declaration.
+// vftable 0x00C1FDEC, allow 0x00261750: +0x08 a thing template, +0x0C whether a match allows.
+class Rva00261750Filter : public Rva000421C8
+{
+public:
+	Rva00261750Filter(const ThingTemplate *tmpl, bool match) : m_template(tmpl), m_match(match) {}
+	virtual bool allow(Object *obj);
+	const ThingTemplate *m_template;
+	bool m_match;
+};
+
+// vftable 0x00BF91BC, allow 0x002611BF.
+class Rva002611BFFilter : public Rva000421C8
+{
+public:
+	Rva002611BFFilter(const Object *obj) : m_obj(obj) {}
+	virtual bool allow(Object *obj);
+	const Object *m_obj;
+};
+
+// vftable 0x00C1FE34, allow 0x002614BC: +0x08 the source object, +0x0C the command button,
+// +0x10 whether a valid target allows, +0x14 the command source.
+class Rva002614BCFilter : public Rva000421C8
+{
+public:
+	Rva002614BCFilter(Object *source, const CommandButton *button, bool match, int cmdSource)
+		: m_source(source), m_button(button), m_match(match), m_cmdSource(cmdSource) {}
+	virtual bool allow(Object *obj);
+	Object *m_source;
+	const CommandButton *m_button;
+	bool m_match;
+	int m_cmdSource;
+};
+
+class CommandButton
+{
+public:
+	bool isReady(const Object *obj) const;	// 0x0035B069
+	bool rva003BDCCA() const { return (m_options >> 5) & 1; }
+	char m_pad00[0x1C];
+	unsigned int m_options;	// +0x1C
+};
+
+class ControlBar
+{
+public:
+	const CommandButton *findCommandButton(const AsciiString &name);	// 0x0031BE3C
+};
+extern ControlBar *TheControlBar;
+
+// Native 0x27F108 takes four 32-bit argument slots and returns a result word the caller only
+// tests for zero (see Rva004389AENearbyCheck.cpp).
+class BfmeThingCME
+{
+public:
+	int rva0027F108(void *position, float radius, int flag, int unused);
+};
+class TerrainLogic;
+extern TerrainLogic *TheTerrainLogic;
+
+
+#define REALLY_FAR (100000 * 10.0f)
+static __declspec(noinline) void rva003BE11C(Object *obj, const ThingTemplate *tmpl, const CommandButton *button)
+{
+	if (button->rva003BDCCA()) {
+		Object *target = ThePartitionManager->getClosestObject(obj->getPosition(), REALLY_FAR, 0,
+			Rva00261750Filter(tmpl, true).link(&Rva002611BFFilter(obj)));
+		if (target)
+			obj->rva00297149(button, target->getPosition(), 1, 0);
+	} else {
+		Object *target = ThePartitionManager->getClosestObject(obj->getPosition(), REALLY_FAR, 0,
+			Rva00261750Filter(tmpl, true).link(Rva002614BCFilter(obj, button, true, 1).link(&Rva002611BFFilter(obj))));
+		if (!target) {
+			if (tmpl->rva003BE11C94()) {
+				int where = reinterpret_cast<BfmeThingCME *>(TheTerrainLogic)->rva0027F108(
+					const_cast<Coord3D *>(obj->getPosition()), 10000000.0f, 1, 1);
+				if (where)
+					obj->rva00297149(button, (const Coord3D *)where, 1, 0);
+			}
+			return;
+		} else {
+			obj->rva00297000(button, target, 1, 0);
+		}
+	}
+}
+
+void ScriptActions::rva003C42B9(Parameter *param, const AsciiString &a, const AsciiString &b)
+{
+	Object *unit = TheScriptEngine->getUnitNamed(param);
+	if (unit == 0)
+		return;
+	ObjectTypes *types = TheScriptEngine->getObjectTypes(b);
+	const ThingTemplate *tmpl;
+	if (types != 0) {
+		Object *obj = rva003C24F0(unit->getPosition(), types, 0, false);
+		if (obj == 0)
+			return;
+		tmpl = obj->m_template;
+	} else {
+		tmpl = TheThingFactory->findTemplate(b);
+	}
+	if (tmpl == 0)
+		return;
+	const CommandButton *button = TheControlBar->findCommandButton(a);
+	if (button == 0)
+		return;
+	if (!button->isReady(unit))
+		return;
+	if (!unit->rva002922D9(button))
+		return;
+	rva003BE11C(unit, tmpl, button);
+}
+
+
+#undef REALLY_FAR
