@@ -1,4 +1,6 @@
 // ?newTemplate@ParticleSystemManager@@QAEPAVParticleSystemTemplate@@ABVAsciiString@@@Z
+// partial score=0.99 date=2026-10-13
+// ?newTemplate@ParticleSystemManager@@QAEPAVParticleSystemTemplate@@ABVAsciiString@@@Z
 // partial score=0.995 date=2026-10-13
 // ?newTemplate@ParticleSystemManager@@QAEPAVParticleSystemTemplate@@ABVAsciiString@@@Z
 // partial score=0.995 date=2026-10-13
@@ -76,7 +78,7 @@ namespace FXParticleSystem {
 class ParticleSystemTemplate {
 public:
 	ParticleSystemTemplate(const AsciiString &name);
-	virtual ~ParticleSystemTemplate();
+	virtual FXParticleSystem::ParticleSystemTemplate *rva001FC25ADelete(int flags);
 	AsciiString getName() const;
 	char m_rest[0xD4 - 4];
 };
@@ -180,9 +182,7 @@ ParticleSystemTemplate *ParticleSystemManager::newTemplate(const AsciiString &na
 		{
 			FXParticleSystem::ParticleSystemTemplate *fx =
 				(FXParticleSystem::ParticleSystemTemplate *)sysTemplate;
-			if (fx)
-				fx->~ParticleSystemTemplate();
-			operator delete(fx);
+			operator delete(fx ? fx->rva001FC25ADelete(0) : 0);
 			sysTemplate = 0;
 		}
 	}
