@@ -1,8 +1,8 @@
 // ?rva00244D56@GameLogic@@QAEXPAV?$vector@URva0024622FEntry@@V?$allocator@URva0024622FEntry@@@_STL@@@_STL@@PBW4KindOfType@@1_N@Z
-// partial score=0.7939006394 date=2026-10-13
+// partial score=0.85618 date=2026-10-13
 // Native244D56..24555A 2052B; WorldBuilder D00E20 names loadAllObjects.
-// Current owner GameLogicInit.cpp validated70/70; scoped bank emits2014B and reproduces
-// the owner raw body/relocations. Source revisions and residue are recorded in re_attempts.log.
+// Scoped draft from GameLogicInit.cpp: 2045B/frame108; remaining scalar homes,
+// final x87 sine lifetime, and unresolved tree-clear calls are in re_attempts.log.
 // cl: /O1 /G7 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /ICode/GameEngine/Source/GameLogic/System
 // stlport
 // Scoped loadAllObjects bank from the verified current owner; other GameLogic bodies omitted.
@@ -1030,7 +1030,7 @@ Player *getLocalPlayer(void) const { return m_local; }
 Player *getNthPlayer(int index);
 Player *findPlayerWithNameKey(NameKeyType key);
 void setLocalPlayer(Player *player);
-Team *rva002A851D(AsciiString owner, MapObject *mapObj);
+Team *validateTeam(AsciiString owner, MapObject *mapObj);
 private:
 char m_pad0C[0x10 - 0x0c];
 Player *m_local;
@@ -1045,6 +1045,12 @@ const ThingTemplate *findTemplate(const AsciiString &name);
 };
 extern ThingFactory *TheThingFactory;
 extern PlayerList *ThePlayerList;
+static __forceinline void rotatePair(float &x, float &y, float s, float c)
+{
+float x0 = x, y0 = y;
+x = c*x0 + s*y0;
+y = c*y0 - s*x0;
+}
 class Matrix3D
 {
 public:
@@ -1060,18 +1066,12 @@ m_row[2][0] = 0.0f; m_row[2][1] = 0.0f; m_row[2][2] = 1.0f; m_row[2][3] = 0.0f;
 __forceinline void Rotate_Z(float theta)
 {
 float tmp1, tmp2;
-float c, s;
+float c;float sine[1];float&s=sine[0];
 c = (float)cos(theta);
 s = (float)sin(theta);
-tmp1 = m_row[0][0]; tmp2 = m_row[0][1];
-m_row[0][0] = (float)(c * tmp1 + s * tmp2);
-m_row[0][1] = (float)(-s * tmp1 + c * tmp2);
-tmp1 = m_row[1][0]; tmp2 = m_row[1][1];
-m_row[1][0] = (float)(c * tmp1 + s * tmp2);
-m_row[1][1] = (float)(-s * tmp1 + c * tmp2);
-tmp1 = m_row[2][0]; tmp2 = m_row[2][1];
-m_row[2][0] = (float)(c * tmp1 + s * tmp2);
-m_row[2][1] = (float)(-s * tmp1 + c * tmp2);
+rotatePair(m_row[0][0],m_row[0][1],s,c);
+rotatePair(m_row[1][0],m_row[1][1],s,c);
+rotatePair(m_row[2][0],m_row[2][1],s,c);
 }
 private:
 float m_row[3][4];
@@ -2264,7 +2264,7 @@ TheTerrainLogic->rva0027D3D9(thingTemplate, &pos, &mtx, propScale);
 } else {
 Dict *props = pMapObj->getProperties();
 AsciiString originalOwner = props->getAsciiString(TheKey_originalOwner.get());
-Team *team = ThePlayerList->rva002A851D(originalOwner, pMapObj);
+Team *team = ThePlayerList->validateTeam(originalOwner, pMapObj);
 if (ThePlayerList->getNeutralPlayer()->getDefaultTeam() == team
 && _imp__strncmp("Player_", originalOwner.str(), 7) == 0
 && !(thingTemplate->m_120 & 0x20000))
@@ -2311,7 +2311,7 @@ team->setActive();
 TheAI->pathfinder()->AddObjectToPathfindMap(obj);
 Rva0024622FEntry entry;
 entry.obj = obj;
-entry.mapObj = pMapObj;
+entry.mapObj = *(MapObject*volatile*)&pMapObj;
 ((_STL::vector<BfmeE8> *)created)->push_back(*(const BfmeE8 *)&entry);
 }
 }
