@@ -22,7 +22,7 @@ extern GameLogic *TheGameLogic;
 extern float g_Va00BC2424;
 // The data ledger records VA 0x00BBB8D4 as the pooled 0.25f literal; its
 // existing C alias is used here only for the target threshold value.
-extern "C" const float length_estimate_factor;
+// length_estimate_factor was the retail address alias (RVA 0x007BB8D4) of the pooled constant 0.25f; the literal is the source.
 
 class DisconnectManager
 {
@@ -46,7 +46,7 @@ void DisconnectManager::processDisconnectPlayer(NetCommandMsg *msg, ConnectionMa
 		*(Int *)((char *)TheGameLogic + 0x2A4) = 1;
 		return;
 	}
-	if (!((Rva004D38D8 *)this)->rva004D38D8(length_estimate_factor)
+	if (!((Rva004D38D8 *)this)->rva004D38D8(0.25f)
 		&& (*(Int *)((char *)TheGameLogic + 0x2A4) != 1)) {
 		*(Int *)((char *)TheGameLogic + 0x2A4) = 0;
 	}

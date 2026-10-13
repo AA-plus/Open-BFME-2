@@ -17,7 +17,7 @@ public:
 	int rva002A7461();
 };
 extern float g_Va00BBB8D8;
-extern "C" const float length_estimate_factor;
+// length_estimate_factor was the retail address alias (RVA 0x007BB8D4) of the pooled constant 0.25f; the literal is the source.
 bool __stdcall Rva005D7860Check(Object *obj)
 {
 	Player *player = obj->getControllingPlayer();
@@ -31,7 +31,7 @@ bool __stdcall Rva005D7860Check(Object *obj)
 		return false;
 	float ratio = f / totalF;
 	float diff = g_Va00BBB8D8 - ratio;
-	if (diff > length_estimate_factor)
+	if (diff > 0.25f)
 		return true;
 	return false;
 }
