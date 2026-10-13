@@ -190,7 +190,7 @@ void Rva000910E1::rva000910EE(void *block, Int) { operator delete[](block); }
 class Rva00261C89
 {
 public:
-	void rva00261C89();
+	bool rva00261C89();
 };
 struct Rva00261D01Holder
 {

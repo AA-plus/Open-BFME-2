@@ -10961,8 +10961,6 @@ name,address,notes
 ?rva002602DA@BfmeItemKA@@AAE_NXZ,0x002602DA,native body start read from REL32 in 0x00260787; bool AL and thiscall ret0; subtitle-state diagnostic; no donor semantic name asserted
 ?rva002606E6@BfmeItemKA@@AAEXXZ,0x002606E6,native body start read from REL32 in 0x00260787; thiscall ret0; refreshes text ring at+34/+3C; no donor semantic name asserted
 ?rva002615E3@Object@@QBEMPBUCoord3D@@@Z,0x002615E3,"Object member returning the squared 2D distance from its +0x38 position to a Coord3D (ret 4; the matched Rva000CBA20::distSq body): REL32 at 0x004903E9 in LargeGroupBonusUpdate::update 0x00490225 with ECX = the module object and the hit position +0x38 pushed"
-?rva00261C89@Rva00261C89@@QAEXXZ,0x00261C89,callee of ?rva00261D01@Rva00261D01@@QAEXPAURva00261D01Holder@@@Z at retail 0x00261D08 read from its REL32 displacement; argument count from the callee ret
-?rva00261C89@Rva00261C89@@QAE_NXZ,0x00261C89,retail 0x004EE4A0 tests al so bool return; twin of void pin at same addr
 ?rva00262176@Rva003638BA@@QAE_NXZ,0x00262176,pinned for AIUpdateInterface
 ?rva00262FEB@AIUpdateInterface@@QAEXH@Z,0x00262FEB,out-of-line AIUpdateInterface setter of +0x164 (mov [ecx+0x164] arg; body ICF-shared with the ParticleEmitterDefClass::Set_Burst_Size alias row); REL32 with 0 from AIFollowPathState::onExit 0x00349DBA with ECX the owner AI
 ?rva002676EA@Rva00362862Item@@QAEXH@Z,0x003626EA,"retail REL32 at 0x00362874 in notify 0x00362862 targets 0x003626EA (ecx=esi thiscall 1 int arg; 24B 9-countdown loop into 0x362675); opaque same-this method candidate not identity"

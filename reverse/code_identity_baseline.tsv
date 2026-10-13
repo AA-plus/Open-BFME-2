@@ -734,9 +734,6 @@ Code/GameEngine/Source/Common/Rva004E6745Factory.cpp	?rva004E6745@Rva004E6745@@Q
 Code/GameEngine/Source/Common/Rva004E6745Factory.cpp	?rva004E7F43@Rva004E7F43@@QAEPAV1@XZ	??0Rva004E7D72@@QAE@PAX@Z	0x004E7D72	unowned
 Code/GameEngine/Source/Common/Rva004E9B70Assign.cpp	??4Rva004E9B70@@QAEAAV0@ABV0@@Z	??4Rva0036CA00Str@@QAEAAV0@ABV0@@Z	0x000366F0	wrong
 Code/GameEngine/Source/Common/Rva004E9F6EGate.cpp	?rva004E9F6E@Rva004E9F6E@@QAEXXZ	?rva004E9C13@Rva004E9C13@@QAEXXZ	0x004E9C13	unowned
-Code/GameEngine/Source/Common/Rva004EE3F9.cpp	?rva004EE447@Rva004EE447@@QAEHXZ	?rva00261C89@Rva00261C89@@QAE_NXZ	0x00261C89	unowned
-Code/GameEngine/Source/Common/Rva004EE3F9.cpp	?rva004EE485@Rva004EE485@@QAEHXZ	?rva00261C89@Rva00261C89@@QAE_NXZ	0x00261C89	unowned
-Code/GameEngine/Source/Common/Rva004EE3F9.cpp	?rva004EE4C3@Rva004EE4C3@@QAEHXZ	?rva00261C89@Rva00261C89@@QAE_NXZ	0x00261C89	unowned
 Code/GameEngine/Source/Common/Rva004F8B89Fwd.cpp	?rva004E99D6@@YAXHHH@Z	?rva004E98F7@@YAXHHHPAX@Z	0x004E98F7	unowned
 Code/GameEngine/Source/Common/Rva004F8B89Stub.cpp	?rva004F83F2@@YGXHHHH@Z	?rva004F7EE9@@YGXHHHPAX@Z	0x004F7EE9	unowned
 Code/GameEngine/Source/Common/Rva004F8B89Stub.cpp	?rva004F8B89@@YGXHHH@Z	?rva004F7EE9@@YGXHHHPAX@Z	0x004F7EE9	unowned
@@ -1266,7 +1263,6 @@ Code/GameEngine/Source/Common/VslotSmallBodiesAS.cpp	??_GRva005EB095@@QAEPAXI@Z	
 Code/GameEngine/Source/Common/VslotSmallBodiesB.cpp	?rva0004E3A6@Rva0004E3A6@@QAEXH@Z	?rva002D7E68@Rva0004E3A6@@QAEXH@Z	0x002D7E68	unowned
 Code/GameEngine/Source/Common/VslotSmallBodiesB.cpp	?rva00062A1C@Rva00062A1C@@QAEXH@Z	?Rva000A90B0@@YAXH@Z	0x000A90B0	unowned
 Code/GameEngine/Source/Common/VslotSmallBodiesB.cpp	?rva000B7C18@Rva000B7C18@@QAEXXZ	?rva000B5FE6@Rva000B7C18@@QAEXXZ	0x000B5FE6	unowned
-Code/GameEngine/Source/Common/VslotSmallBodiesB.cpp	?rva00261D01@Rva00261D01@@QAEXPAURva00261D01Holder@@@Z	?rva00261C89@Rva00261C89@@QAEXXZ	0x00261C89	unowned
 Code/GameEngine/Source/Common/VslotSmallBodiesS.cpp	?rva0044FC52@Rva00490628@@UAE_NXZ	?rva0044FC52@SpecialAbilityUpdate@@UAE_NXZ	0x0044FC52	unowned
 Code/GameEngine/Source/Common/VslotSmallBodiesS.cpp	?rva0050B95B@Rva0050B95B@@QAEXHH@Z	?notify@Rva0020AA00Target@@QAEXHH@Z	0x0033CF34	unowned
 Code/GameEngine/Source/Common/VslotSmallBodiesT.cpp	?rva005EE2CF@Rva005EE2CF@@QAEXPAVObject@@@Z	?rva00297149@Object@@QAEXPBVCommandButton@@PBUCoord3D@@HH@Z	0x00297149	unowned

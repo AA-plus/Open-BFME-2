@@ -30,12 +30,12 @@ extern Rva002618A2 g_00DFEA9C;
 class Rva00261C89
 {
 public:
-	int rva00261C89();
+	bool rva00261C89();
 private:
 	char m_pad[0x108];
 	unsigned m_kind[7];
 };
-int Rva00261C89::rva00261C89()
+bool Rva00261C89::rva00261C89()
 {
 	if ((InitFlagsB & 1) == 0) {
 		InitFlagsD |= 1;
@@ -46,17 +46,12 @@ int Rva00261C89::rva00261C89()
 		Global9CInit->rva002618A2(0, 0x6d, 7, 0x59);
 	}
 	void *kind = m_kind;
-	if (GlobalB8Test->test(kind)) {
-		if (!Global9CTest->test(kind))
-			return 1;
-	}
-	return 0;
+	return GlobalB8Test->test(kind) && !Global9CTest->test(kind);
 }
 
-// Codegen: the result is an int (retail returns 1/0 with `xor eax,eax; inc eax` / `xor eax,eax`; a bool
-// return gives inc al / xor al,al); the callers test AL only, as for any 0/1 result.
-// Codegen: the result is an int (retail returns 1/0 with `xor eax,eax; inc eax` / `xor eax,eax`; a
-// bool return gives inc al / xor al,al); callers test AL only. The two flag objects are named
+// Codegen: the bool result is the && expression itself, which cl materialises as an int 1/0
+// (`xor eax,eax; inc eax` / `xor eax,eax`, as retail); an if/return true/false shape gives
+// inc al / xor al,al instead. Callers test AL. The two flag objects are named
 // externs at retail's addresses; every address is spelled from a different base symbol per use
 // (init vs test) because the same symbol twice makes cl hoist both addresses into EBX/EDI where
 // retail rematerialises `mov ecx, imm32` before each call.
