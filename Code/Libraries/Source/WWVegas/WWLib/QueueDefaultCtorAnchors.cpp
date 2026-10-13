@@ -29,6 +29,10 @@
 
 #include <queue>
 #include <new>
+// bfme link decl-only begin
+namespace _STL { template <> void * __node_alloc<1,0>::allocate(unsigned int); }
+namespace _STL { template <> void __node_alloc<1,0>::deallocate(void *,unsigned int); }
+// bfme link decl-only end
 
 struct QueueElem4A
 {

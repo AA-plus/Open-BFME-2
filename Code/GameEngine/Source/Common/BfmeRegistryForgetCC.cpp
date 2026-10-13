@@ -7,6 +7,10 @@
 // caller 0x00072838 in BfmeOwnerCC dtor passes this; pin names BfmeRegistryCC.
 #include <vector>
 #include <algorithm>
+// bfme link decl-only begin
+namespace _STL { template <> void * * __copy_ptrs<void * *,void * *>(void * *,void * *,void * *,_STL::__true_type); }
+namespace _STL { template <> void * * vector<void *,_STL::allocator<void *> >::erase(void * *); }
+// bfme link decl-only end
 // Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
 // the retail copies serve the link. Plain declaration-only form (no __imp_).
 namespace _STL {

@@ -17,6 +17,16 @@
 typedef int Bool;
 
 #include "ascii_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree_base<_STL::pair<AsciiString const,int>,_STL::allocator<_STL::pair<AsciiString const,int> > >::_Rb_tree_base(_STL::allocator<_STL::pair<AsciiString const,int> > const &); }
+namespace _STL { template <> _Rb_tree<AsciiString,_STL::pair<AsciiString const,int>,_STL::_Select1st<_STL::pair<AsciiString const,int> >,_STL::less<AsciiString>,_STL::allocator<_STL::pair<AsciiString const,int> > >::~_Rb_tree(); }
+namespace _STL { template <> _Rb_tree_base<_STL::pair<AsciiString const,int>,_STL::allocator<_STL::pair<AsciiString const,int> > >::~_Rb_tree_base(); }
+namespace _STL { template <> void _Rb_tree<AsciiString,_STL::pair<AsciiString const,int>,_STL::_Select1st<_STL::pair<AsciiString const,int> >,_STL::less<AsciiString>,_STL::allocator<_STL::pair<AsciiString const,int> > >::_M_erase(_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > *); }
+namespace _STL { template <> _STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > * _STLP_alloc_proxy<_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > *,_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> >,_STL::allocator<_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > > >::allocate(unsigned int); }
+namespace _STL { template <> _STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > * allocator<_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > >::allocate(unsigned int,void const *) const; }
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > *,_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> >,_STL::allocator<_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > > >::deallocate(_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > >::deallocate(_STL::_Rb_tree_node<_STL::pair<AsciiString const,int> > *,unsigned int) const; }
+// bfme link decl-only end
 
 // Declaration-only: the rowed set<AsciiString> tree members are bound,
 // this TU emits no per-flag copy of them or of their allocator leaves.

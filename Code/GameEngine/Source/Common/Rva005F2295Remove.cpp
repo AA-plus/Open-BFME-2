@@ -6,6 +6,11 @@
 // if found forEach via 0x005F224E with forwarder 0x005CC208 then erase via 0x005530A8.
 // Evidence: same list+map layout as Clear 0x005F22D2; callers 0x005E4B93 0x005E4DDC.
 #include <map>
+// bfme link decl-only begin
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,_STL::_Rb_tree_node<_STL::pair<int const,void *> >,_STL::allocator<_STL::_Rb_tree_node<_STL::pair<int const,void *> > > >::deallocate(_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_Rb_tree_node<_STL::pair<int const,void *> > >::deallocate(_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,unsigned int) const; }
+namespace _STL { template <> void _Rb_tree<int,_STL::pair<int const,void *>,_STL::_Select1st<_STL::pair<int const,void *> >,_STL::less<int>,_STL::allocator<_STL::pair<int const,void *> > >::erase(_STL::_Rb_tree_iterator<_STL::pair<int const,void *>,_STL::_Nonconst_traits<_STL::pair<int const,void *> > >); }
+// bfme link decl-only end
 
 // map/set<int> internals otherwise instantiate the less<int>::operator()
 // COMDAT (one byte shape per TU flags); an explicit dllimport+forceinline

@@ -7,6 +7,10 @@
 // BFME1 f989 SlaughterHordeContain class hierarchy is a provenance lead;
 // target table slots and template kind bit109 establish the actual views.
 #include "../../../../Include/GameLogic/ContainmentListView.h"
+// bfme link decl-only begin
+namespace _STL { template <> _List_base<Rva0036ADF9Element,_STL::allocator<Rva0036ADF9Element> >::_List_base(_STL::allocator<Rva0036ADF9Element> const &); }
+namespace _STL { template <> _STL::_List_node<Rva0036ADF9Element> * allocator<_STL::_List_node<Rva0036ADF9Element> >::allocate(unsigned int,void const *) const; }
+// bfme link decl-only end
 namespace _STL {
 template<class T,class Traits> static inline bool operator!=(const _List_iterator<T,Traits>&a,const _List_iterator<T,Traits>&b)
 { return a._M_node!=b._M_node; }

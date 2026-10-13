@@ -5,6 +5,10 @@
 // Same recipe as GateOpenBehaviorList::rva004E908C; rowed vector<void*>::erase at 0x001FF51F.
 // Callers at 0x0056A096 0x0056916B unclaimed; neighbours 0x00568EE6 0x00568F2E give flags.
 #include <vector>
+// bfme link decl-only begin
+namespace _STL { template <> void * * __copy_ptrs<void * *,void * *>(void * *,void * *,void * *,_STL::__true_type); }
+namespace _STL { template <> void * * vector<void *,_STL::allocator<void *> >::erase(void * *); }
+// bfme link decl-only end
 // Suppress this TU's non-retail vector<void*> begin/end copies (family2-LK3 rows 6/9):
 // the retail copies serve the link. Plain declaration-only form (no __imp_).
 namespace _STL {

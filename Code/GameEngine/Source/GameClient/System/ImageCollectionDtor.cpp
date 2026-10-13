@@ -51,6 +51,13 @@ typedef _STL::map<unsigned int, Image *> ImageNameMap;
 // subsystem shim, so this unit emits the retail 14-slot ImageCollection vtable.
 typedef bool Bool;
 #include "subsystem_interface.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree<unsigned int,_STL::pair<unsigned int const,Image *>,_STL::_Select1st<_STL::pair<unsigned int const,Image *> >,_STL::less<unsigned int>,_STL::allocator<_STL::pair<unsigned int const,Image *> > >::~_Rb_tree(); }
+namespace _STL { template <> _Rb_tree_base<_STL::pair<unsigned int const,Image *>,_STL::allocator<_STL::pair<unsigned int const,Image *> > >::~_Rb_tree_base(); }
+namespace _STL { template <> void _Rb_tree<unsigned int,_STL::pair<unsigned int const,Image *>,_STL::_Select1st<_STL::pair<unsigned int const,Image *> >,_STL::less<unsigned int>,_STL::allocator<_STL::pair<unsigned int const,Image *> > >::_M_erase(_STL::_Rb_tree_node<_STL::pair<unsigned int const,Image *> > *); }
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_Rb_tree_node<_STL::pair<unsigned int const,Image *> > *,_STL::_Rb_tree_node<_STL::pair<unsigned int const,Image *> >,_STL::allocator<_STL::_Rb_tree_node<_STL::pair<unsigned int const,Image *> > > >::deallocate(_STL::_Rb_tree_node<_STL::pair<unsigned int const,Image *> > *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_Rb_tree_node<_STL::pair<unsigned int const,Image *> > >::deallocate(_STL::_Rb_tree_node<_STL::pair<unsigned int const,Image *> > *,unsigned int) const; }
+// bfme link decl-only end
 
 class ImageCollection : public SubsystemInterface
 {

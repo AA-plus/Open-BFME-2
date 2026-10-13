@@ -5,6 +5,11 @@
 // List at +0x00 with map<int void*> at +0x10; clears map notifying via forEach 0x005F224E.
 // Evidence: callees rowed forEach 0x005F224E erase 0x005530A8 forwarder 0x005CC208; callers unclaimed.
 #include <map>
+// bfme link decl-only begin
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,_STL::_Rb_tree_node<_STL::pair<int const,void *> >,_STL::allocator<_STL::_Rb_tree_node<_STL::pair<int const,void *> > > >::deallocate(_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_Rb_tree_node<_STL::pair<int const,void *> > >::deallocate(_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,unsigned int) const; }
+namespace _STL { template <> void _Rb_tree<int,_STL::pair<int const,void *>,_STL::_Select1st<_STL::pair<int const,void *> >,_STL::less<int>,_STL::allocator<_STL::pair<int const,void *> > >::erase(_STL::_Rb_tree_iterator<_STL::pair<int const,void *>,_STL::_Nonconst_traits<_STL::pair<int const,void *> > >); }
+// bfme link decl-only end
 
 class Rva005F224EListener
 {

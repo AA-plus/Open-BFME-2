@@ -27,6 +27,9 @@ static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
 }
 
 #include "ascii_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree_base<AsciiString,_STL::allocator<AsciiString> >::_Rb_tree_base(_STL::allocator<AsciiString> const &); }
+// bfme link decl-only end
 
 struct BfmeStringNoCaseLess
 {

@@ -8,6 +8,10 @@
 #include <vector>
 
 #include "../../../Libraries/Include/Lib/BfmeE16.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Vector_base<BfmeE16,_STL::allocator<BfmeE16> >::~_Vector_base(); }
+namespace _STL { template <> vector<BfmeE16,_STL::allocator<BfmeE16> >::~vector(); }
+// bfme link decl-only end
 // bfme link decl-only BfmeE16
 namespace _STL { template <> vector<BfmeE16, allocator<BfmeE16> >::~vector(); }
 // Suppress this TU's non-retail BfmeE16 proxy deallocate copy (family2-LK3 row 34):

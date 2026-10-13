@@ -5,6 +5,12 @@
 // RVO forward to the inner receiver at +0x184 calling rowed Rva0040DBA9 0x0040DBA9.
 // Same thunk shape as rva00389081 (0x00389081, +0x130 receiver).
 #include <vector>
+// bfme link decl-only begin
+namespace _STL { template <> _Vector_base<unsigned int,_STL::allocator<unsigned int> >::~_Vector_base(); }
+namespace _STL { template <> vector<unsigned int,_STL::allocator<unsigned int> >::~vector(); }
+namespace _STL { template <> void _STLP_alloc_proxy<unsigned int *,unsigned int,_STL::allocator<unsigned int> >::deallocate(unsigned int *,unsigned int); }
+namespace _STL { template <> void allocator<unsigned int>::deallocate(unsigned int *,unsigned int) const; }
+// bfme link decl-only end
 
 class Rva0040DBA9
 {

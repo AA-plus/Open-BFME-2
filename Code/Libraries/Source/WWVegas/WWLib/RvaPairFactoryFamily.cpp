@@ -9,6 +9,13 @@
 // stlport_sort_rva0040cb11entry.cpp provider. No new type name or callee pin.
 // Constructor definitions remain with their independently verified home units.
 #include <map>
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree<unsigned int,_STL::pair<unsigned int const,void *>,_STL::_Select1st<_STL::pair<unsigned int const,void *> >,_STL::less<unsigned int>,_STL::allocator<_STL::pair<unsigned int const,void *> > >::~_Rb_tree(); }
+namespace _STL { template <> _Rb_tree_base<_STL::pair<unsigned int const,void *>,_STL::allocator<_STL::pair<unsigned int const,void *> > >::~_Rb_tree_base(); }
+namespace _STL { template <> void _Rb_tree<unsigned int,_STL::pair<unsigned int const,void *>,_STL::_Select1st<_STL::pair<unsigned int const,void *> >,_STL::less<unsigned int>,_STL::allocator<_STL::pair<unsigned int const,void *> > >::_M_erase(_STL::_Rb_tree_node<_STL::pair<unsigned int const,void *> > *); }
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_Rb_tree_node<_STL::pair<unsigned int const,void *> > *,_STL::_Rb_tree_node<_STL::pair<unsigned int const,void *> >,_STL::allocator<_STL::_Rb_tree_node<_STL::pair<unsigned int const,void *> > > >::deallocate(_STL::_Rb_tree_node<_STL::pair<unsigned int const,void *> > *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_Rb_tree_node<_STL::pair<unsigned int const,void *> > >::deallocate(_STL::_Rb_tree_node<_STL::pair<unsigned int const,void *> > *,unsigned int) const; }
+// bfme link decl-only end
 typedef _STL::pair<const unsigned,void*> PairIntPtr00603FD2;
 typedef _STL::_Rb_tree<unsigned,PairIntPtr00603FD2,_STL::_Select1st<PairIntPtr00603FD2>,_STL::less<unsigned>,_STL::allocator<PairIntPtr00603FD2> > TreeIntPtr00603FD2;
 class Rva00603FD2 {public:Rva00603FD2(const unsigned*,const TreeIntPtr00603FD2&);private:unsigned key;TreeIntPtr00603FD2 value;};

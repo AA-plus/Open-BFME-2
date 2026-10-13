@@ -25,6 +25,9 @@ typedef unsigned int UnsignedInt;
 typedef bool Bool;
 
 #include "ascii_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> void vector<AsciiString,_STL::allocator<AsciiString> >::reserve(unsigned int); }
+// bfme link decl-only end
 
 
 struct XferVersion

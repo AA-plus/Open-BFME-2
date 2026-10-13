@@ -8,6 +8,13 @@
 // contained list this+2C, module damage fraction +6C and branch flag +82.
 #include "../../../../Include/GameLogic/ContainmentListView.h"
 #include "../../../Common/GameLogicObjectLookupView.h"
+// bfme link decl-only begin
+namespace _STL { template <> _List_base<Rva0036ADF9Element,_STL::allocator<Rva0036ADF9Element> >::_List_base(_STL::allocator<Rva0036ADF9Element> const &); }
+namespace _STL { template <> _STL::_List_node<Rva0036ADF9Element> * list<Rva0036ADF9Element,_STL::allocator<Rva0036ADF9Element> >::_M_create_node(Rva0036ADF9Element const &); }
+namespace _STL { template <> _STL::_List_node<Rva0036ADF9Element> * allocator<_STL::_List_node<Rva0036ADF9Element> >::allocate(unsigned int,void const *) const; }
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_List_node<Rva0036ADF9Element> *,_STL::_List_node<Rva0036ADF9Element>,_STL::allocator<_STL::_List_node<Rva0036ADF9Element> > >::deallocate(_STL::_List_node<Rva0036ADF9Element> *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_List_node<Rva0036ADF9Element> >::deallocate(_STL::_List_node<Rva0036ADF9Element> *,unsigned int) const; }
+// bfme link decl-only end
 namespace _STL {
 template<class T, class Traits> static inline bool operator!=(const _List_iterator<T,Traits>& a,const _List_iterator<T,Traits>& b)
 { return a._M_node != b._M_node; }
