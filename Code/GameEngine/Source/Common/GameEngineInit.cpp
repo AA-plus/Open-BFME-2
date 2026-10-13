@@ -416,7 +416,7 @@ extern GameLODManager *TheGameLODManager;
 class Rva002CEC0A { public: Rva002CEC0A(); char m_data[0x10]; };
 extern "C" void *theLogicRandomLogFile;
 extern bool TheDeepCRC;
-extern bool g_bfmeDoneAPB;
+extern bool TheLiteCRC;
 
 class Rva0033076E { public: Rva0033076E(); char m_data[0x1C]; };
 class CameraAnimationList;
@@ -715,7 +715,7 @@ void GameEngine::init(Int argc, char *argv[])
 		ini.loadFile("Data\\INI\\Default\\SubsystemLegend.ini", INI_LOAD_OVERWRITE, 0);
 		initSubsystem(TheWritableGlobalData, "TheWritableGlobalData", new GlobalData, 0);
 		parseCommandLine(argc, argv);
-		if ((reinterpret_cast<unsigned char&>(TheDeepCRC)) || (reinterpret_cast<unsigned char&>(g_bfmeDoneAPB)))
+		if ((reinterpret_cast<unsigned char&>(TheDeepCRC)) || (reinterpret_cast<unsigned char&>(TheLiteCRC)))
 			theLogicRandomLogFile = new Rva002CEC0A;
 		TheGameLODManager = new GameLODManager;
 		TheGameLODManager->init(-1);

@@ -74,10 +74,7 @@ address_global	Code/GameEngine/Source/Common/GameEngine.cpp	g_Va00DBA2F8	2
 address_global	Code/GameEngine/Source/Common/GameEngineFrameTiming.cpp	g_Va00DBA4E4	2
 address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Rva00A00958	3
 address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00DBA4E4	2
-address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00DFE750	2
-address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00E01DB0	2
 address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00E01EDC	2
-address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00E02F3C	2
 address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00E030A8	2
 address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00E030B0	2
 address_global	Code/GameEngine/Source/Common/GameEngineInit.cpp	g_Va00E030B8	2

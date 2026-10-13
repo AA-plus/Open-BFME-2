@@ -11,7 +11,7 @@ struct _iobuf;
 typedef struct _iobuf FILE;
 extern "C" int __cdecl fprintf(FILE *stream, const char *format, ...);
 
-extern unsigned char g_00E03CA8;
+extern bool g_bfmeDockingTraceActive;
 extern void *g_00DFEFF0;
 
 enum ObjectID
@@ -79,7 +79,7 @@ public:
 
 Object *Rva004AABB4::rva004AABB4(Object *me, Object *target, Coord3D *out)
 {
-	if (g_00E03CA8 && g_00DFEFF0)
+	if ((*(unsigned char *)&g_bfmeDockingTraceActive) && g_00DFEFF0)
 	{
 		int targetId;
 		const char *targetName;
@@ -101,13 +101,13 @@ Object *Rva004AABB4::rva004AABB4(Object *me, Object *target, Coord3D *out)
 	Object *result = target;
 	if ((target->m_info->m_bits & 0x40) != 0)
 	{
-		if (g_00E03CA8 && g_00DFEFF0)
+		if ((*(unsigned char *)&g_bfmeDockingTraceActive) && g_00DFEFF0)
 			fprintf((FILE *)g_00DFEFF0, "  target is a bridge case");
 		BridgeBehaviorInterface *bridge =
 			BridgeBehavior::getBridgeBehaviorInterfaceFromObject(target);
 		if (bridge != 0)
 		{
-			if (g_00E03CA8 && g_00DFEFF0)
+			if ((*(unsigned char *)&g_bfmeDockingTraceActive) && g_00DFEFF0)
 				fprintf((FILE *)g_00DFEFF0, "  target has a bridge behavior");
 			AIUpdateInterface *checker = me->m_checker;
 			float best = 10000000000.0f;

@@ -104,8 +104,8 @@ extern bool g_flag12ED4DA;								///< retail [0x012ED4DA]
 extern bool g_flag12ED4E8;								///< retail [0x012ED4E8]
 extern bool g_flag12D6DA8;								///< retail [0x012D6DA8]
 
-extern Int g_value12A6F30;								///< retail [0x012A6F30]
-extern Int g_value12A6F34;								///< retail [0x012A6F34]
+extern int TheDebugCRCFromFrame;
+extern int TheDebugCRCUntilFrame;
 extern Int g_value12A6F38;								///< retail [0x012A6F38]
 extern Int g_value12A6FA8;								///< retail [0x012A6FA8]
 extern Int g_value12A6FB0;								///< retail [0x012A6FB0]
@@ -118,7 +118,7 @@ Int Rva00061260_parse(char *args[], int num)
 	if (num > 1)
 	{
 		Int value = atoi(args[1]);
-		g_value12A6F30 = value;
+		(*(Int *)&TheDebugCRCFromFrame) = value;
 		BFME2CommandFlags |= 0x2000;
 		g_value12A6FA8 = value;
 	}
@@ -131,7 +131,7 @@ Int Rva000612B0_parse(char *args[], int num)
 	if (num > 1)
 	{
 		Int value = atoi(args[1]);
-		g_value12A6F34 = value;
+		(*(Int *)&TheDebugCRCUntilFrame) = value;
 		BFME2CommandFlags |= 0x4000;
 		g_value12A6FA8 = value;
 	}

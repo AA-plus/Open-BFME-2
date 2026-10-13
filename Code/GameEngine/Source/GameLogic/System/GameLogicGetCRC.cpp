@@ -148,7 +148,7 @@ public:
 
 extern "C" void *theLogicRandomLogFile;
 extern bool TheLiteCRC;
-extern bool g_bfmeDoneAPB;
+extern bool TheLiteCRC;
 // g_00E02D7C is only an alias of the owned global TheXObjectCRC (ledger names column); this unit reads the owner through its own view type.
 extern bool TheXObjectCRC;
 #define g_00E02D7C (*(unsigned char *)&TheXObjectCRC)
@@ -197,7 +197,7 @@ private:
 unsigned int GameLogic::getCRC(int mode)
 {
 	setFPMode();
-	BFMECRCWriter writer(g_bfmeDoneAPB);
+	BFMECRCWriter writer(TheLiteCRC);
 	BFMECRCWriter *xfer = &writer;
 	if (mode != 0)
 		((Rva0060D4C9 *)&writer)->rva0060D4C9((Xfer *)mode);
