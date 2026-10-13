@@ -7,7 +7,7 @@
 extern "C" void *s_slot3E4first;
 extern "C" const void *const __identifier("??_7Rva003AF7FE@@6BModuleInfoHeadBase@@@")[];
 extern "C" const void *const __identifier("??_7Rva003AF7FE@@6BLineEmissionVolumeInfo@FXParticleSystem@@@")[];
-extern const void *const g_00C1C7E8[];
+extern "C" const void *const __identifier("??_7Rva003AF7D1@@6BIntermediate3AFC6FC@@@")[];
 namespace FXParticleSystem
 {
 template <int N> class DefaultParticleModule
@@ -42,5 +42,5 @@ Rva003AC0DA::Rva003AC0DA(void *a, void *b)
 	*(void **)&m_1C = (void *)__identifier("??_7Rva003AF7FE@@6BLineEmissionVolumeInfo@FXParticleSystem@@@");
 	*(void **)this = (void *)__identifier("??_7Rva003AF7FE@@6BModuleInfoHeadBase@@@");
 	m_14 = (void *)&s_slot3E4first;
-	m_18 = (void *)g_00C1C7E8;
+	m_18 = (void *)__identifier("??_7Rva003AF7D1@@6BIntermediate3AFC6FC@@@");
 }

@@ -42,9 +42,9 @@ public:
 };
 }
 
-extern const void *const g_00BD3854[];
-extern const void *const g_00BD385C[];
-extern const void *const g_00BD3864[];
+extern "C" const void *const __identifier("??_7Rva0014F480@@6B@")[];
+extern "C" const void *const __identifier("??_7Rva0014F4A1@@6B@")[];
+extern "C" const void *const __identifier("??_7Rva0014F4C2@@6B@")[];
 extern const void *const g_00BD3A3C[];
 extern const void *const g_00BD3A44[];
 extern const void *const g_00BD3A4C[];

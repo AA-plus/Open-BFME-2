@@ -5,7 +5,7 @@
 // order vtable s_slot g_00C1C7E8 g_00C1CBD4; caller at 0x003AD360.
 extern const void *const g_00C1CBE4[];
 extern "C" void *s_slot3E4first;
-extern const void *const g_00C1C7E8[];
+extern "C" const void *const __identifier("??_7Rva003AF7D1@@6BIntermediate3AFC6FC@@@")[];
 extern "C" const void *const __identifier("??_7Rva003AF7D1@@6BLineEmissionVolumeInfo@FXParticleSystem@@@")[];
 class Rva003AC0DA
 {
@@ -22,6 +22,6 @@ Rva003ACD0F::Rva003ACD0F(void *a, void *b)
 {
 	*(void **)this = (void *)g_00C1CBE4;
 	*(void **)((char *)this + 0x14) = (void *)&s_slot3E4first;
-	*(void **)((char *)this + 0x18) = (void *)g_00C1C7E8;
+	*(void **)((char *)this + 0x18) = (void *)__identifier("??_7Rva003AF7D1@@6BIntermediate3AFC6FC@@@");
 	*(void **)((char *)this + 0x1C) = (void *)__identifier("??_7Rva003AF7D1@@6BLineEmissionVolumeInfo@FXParticleSystem@@@");
 }

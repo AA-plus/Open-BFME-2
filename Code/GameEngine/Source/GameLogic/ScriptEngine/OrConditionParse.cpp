@@ -5,14 +5,14 @@
 
 // Retail vtable VA 0x00C1F3F4 (data 0x0081F3F4): OrCondition list node.
 // Packet annotates: no name yet, so use g_ stopgap per linking rules.
-extern const void *const g_00C1F3F4[];
+extern "C" const void *const __identifier("??_7OrCondition@@6B@")[];
 
 class OrConditionAllocation
 {
 public:
 	__forceinline OrConditionAllocation()
 	{
-		m_vtable = (unsigned int)g_00C1F3F4;
+		m_vtable = (unsigned int)__identifier("??_7OrCondition@@6B@");
 		m_next = 0;
 		m_first = 0;
 	}

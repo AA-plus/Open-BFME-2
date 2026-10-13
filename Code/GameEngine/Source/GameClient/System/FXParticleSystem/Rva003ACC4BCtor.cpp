@@ -5,7 +5,7 @@
 // vtable s_slot g_00C1C72C g_00C1CB24; caller at 0x003AD283.
 extern const void *const g_00C1CB34[];
 extern "C" void *s_slot3E4first;
-extern const void *const g_00C1C72C[];
+extern "C" const void *const __identifier("??_7Rva003AF47D@@6BIntermediate3AFC6FC@@@")[];
 extern "C" const void *const __identifier("??_7Rva003AF47D@@6BEmissionVolumeInfo4AA@FXParticleSystem@@@")[];
 namespace FXParticleSystem
 {
@@ -30,6 +30,6 @@ Rva003ACC4B::Rva003ACC4B(FXParticleSystem::TrackingPtr<FXParticleSystem::Particl
 {
 	*(void **)this = (void *)g_00C1CB34;
 	*(void **)((char *)this + 0x14) = (void *)&s_slot3E4first;
-	*(void **)((char *)this + 0x18) = (void *)g_00C1C72C;
+	*(void **)((char *)this + 0x18) = (void *)__identifier("??_7Rva003AF47D@@6BIntermediate3AFC6FC@@@");
 	*(void **)((char *)this + 0x1C) = (void *)__identifier("??_7Rva003AF47D@@6BEmissionVolumeInfo4AA@FXParticleSystem@@@");
 }

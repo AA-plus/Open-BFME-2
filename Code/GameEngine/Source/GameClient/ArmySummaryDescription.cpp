@@ -13,7 +13,7 @@
 // rowed Drawable resize 0x000E6D39, holder g_00DFE490.
 #include <vector>
 #include "ascii_string.h"
-extern const void *const g_00C1C780[];
+extern "C" const void *const __identifier("??_7?$CategoryModuleTemplate@$05@FXParticleSystem@@6B?$CategoryModuleInfo@$05@1@@")[];
 
 
 class Drawable;
@@ -42,7 +42,7 @@ struct Pointed10 {
 class EmptyBase220B04 {
 public:
 	EmptyBase220B04() {}
-	~EmptyBase220B04() { *(unsigned *)this = (unsigned)g_00C1C780; }
+	~EmptyBase220B04() { *(unsigned *)this = (unsigned)__identifier("??_7?$CategoryModuleTemplate@$05@FXParticleSystem@@6B?$CategoryModuleInfo@$05@1@@"); }
 };
 
 struct Root220B04 {

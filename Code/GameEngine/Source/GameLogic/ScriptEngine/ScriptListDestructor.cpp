@@ -136,13 +136,13 @@ bool Rva003B793A::read(DataChunkInput &file, DataChunkInfo *info)
 
 class BfmeParserRegistryVE;
 class Q1Forwardee0000871A { public: void handle(int); };
-extern const void *const g_00BC9574[];
+extern "C" const void *const __identifier("??_7BfmeParserBindingBaseVE@@6B@")[];
 class BfmeParserBindingBaseVE {
  const void *const *table;
  Q1Forwardee0000871A *registry;
  int token;
 public:
- ~BfmeParserBindingBaseVE() { table=g_00BC9574; registry->handle(token); }
+ ~BfmeParserBindingBaseVE() { table=__identifier("??_7BfmeParserBindingBaseVE@@6B@"); registry->handle(token); }
 };
 class Rva003B3485 : public BfmeParserBindingBaseVE {
  void *a; void *b;

@@ -158,7 +158,7 @@ struct ScriptGroupRecordView
 
 class BfmeParserRegistryVE;
 class Q1Forwardee0000871A { public: void handle(int); };
-extern const void *const g_00BC9574[];
+extern "C" const void *const __identifier("??_7BfmeParserBindingBaseVE@@6B@")[];
 
 class BfmeParserBindingBaseVE
 {
@@ -166,7 +166,7 @@ class BfmeParserBindingBaseVE
     Q1Forwardee0000871A *registry;
     int token;
 public:
-    ~BfmeParserBindingBaseVE() { table = g_00BC9574; registry->handle(token); }
+    ~BfmeParserBindingBaseVE() { table = __identifier("??_7BfmeParserBindingBaseVE@@6B@"); registry->handle(token); }
 };
 
 class Rva003B37C8 : public BfmeParserBindingBaseVE

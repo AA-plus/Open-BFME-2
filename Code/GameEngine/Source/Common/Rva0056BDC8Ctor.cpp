@@ -6,7 +6,7 @@ public:
 	void rva0056B7E4(void *arg);
 };
 
-extern const void *const g_00C37898[];
+extern "C" const void *const __identifier("??_7Rva003F9FE6@@6B@")[];
 
 class Rva0056BDC8
 {
@@ -30,7 +30,7 @@ Rva0056BDC8::Rva0056BDC8(void *arg)
 	m_61 = 0;
 	m_62 = 0;
 	m_63 = 0;
-	*(unsigned int *)this = (unsigned int)g_00C37898;
+	*(unsigned int *)this = (unsigned int)__identifier("??_7Rva003F9FE6@@6B@");
 	m_58 = 1;
 	m_5C = 2;
 }

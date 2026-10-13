@@ -2874,7 +2874,7 @@ public:
 
 // The map file stream: 0x00240000 builds it, 0x00308050 opens a path and
 // 0x0023F4F0 tears it down.
-extern const void *const g_00C4EF80[];
+extern "C" const void *const __identifier("??_7Rva00527827Base@@6B@")[];
 
 class Rva0084EF80Base
 {
@@ -2885,7 +2885,7 @@ public:
 	virtual void rva0084EF80_slot3() {}
 	~Rva0084EF80Base()
 	{
-		*(const void **)this = g_00C4EF80;
+		*(const void **)this = __identifier("??_7Rva00527827Base@@6B@");
 	}
 };
 

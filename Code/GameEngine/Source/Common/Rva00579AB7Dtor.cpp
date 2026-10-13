@@ -147,7 +147,7 @@ public:
 	void rva005796B3(void *newObj);
 };
 
-extern const void *const g_00BFBC9C[];
+extern "C" const void *const __identifier("??_7Rva005EEF2FBase0@@6B@")[];
 
 class Rva00579AB7Base
 {
@@ -158,7 +158,7 @@ public:
 // ??1Rva00579AB7Base@@UAE@XZ present-unmatched
 inline Rva00579AB7Base::~Rva00579AB7Base()
 {
-	*(const void **)this = g_00BFBC9C;
+	*(const void **)this = __identifier("??_7Rva005EEF2FBase0@@6B@");
 }
 
 struct Rva00579AB7Holder1C

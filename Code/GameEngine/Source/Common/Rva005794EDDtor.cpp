@@ -130,7 +130,7 @@ inline AsciiStringPlusStringText operator+(const AsciiStringPlusString &left, co
 }
 
 extern const void *const g_00C6ECBC[];
-extern const void *const g_00C6EE28[];
+extern "C" const void *const __identifier("??_7Rva00330C50Interface@@6B@")[];
 
 // The base table 0x00C6EE28 is seven __purecall slots and no deleting
 // destructor. Slots 1-3 take the names of the EndTurnButtonImpl overrides
@@ -152,7 +152,7 @@ public:
 // ??1Rva005794EDBase@@UAE@XZ present-unmatched (register key kept; the dtor is non-virtual)
 inline Rva005794EDBase::~Rva005794EDBase()
 {
-	*(const void **)this = g_00C6EE28;
+	*(const void **)this = __identifier("??_7Rva00330C50Interface@@6B@");
 }
 
 // Click callback holder; invoking it is the rowed 0x0044BD79.

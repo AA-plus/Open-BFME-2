@@ -6,7 +6,7 @@
 // Evidence: vtable 0x007E5838; rowed releaseBuffer 0x00036E70; caller
 // deleting dtor 0x00406CB7 (slot 0 of 0x00838BA4); donor copy ctor TU
 // Rva00406BB0CopyCtor.cpp layout (string +4).
-extern const void *const g_00BE5838[];
+extern "C" const void *const __identifier("??_7Rva00215E42@@6B@")[];
 template <typename T> class StringBase
 {
 public:
@@ -19,7 +19,7 @@ private:
 class Rva00216094Base
 {
 public:
-	virtual ~Rva00216094Base() { *(const void **)this = g_00BE5838; }
+	virtual ~Rva00216094Base() { *(const void **)this = __identifier("??_7Rva00215E42@@6B@"); }
 };
 class __declspec(novtable) Rva00216094 : public Rva00216094Base
 {

@@ -7,7 +7,7 @@
 // inline base restoring g_00BC0990, empty body).
 #include "ascii_string.h"
 
-extern const void *const g_00BC0990[];
+extern "C" const void *const __identifier("??_7DebugIOConBase@@6B@")[];
 
 class DebugIOInterfaceBase
 {
@@ -23,7 +23,7 @@ public:
 // ??1DebugIOInterfaceBase@@UAE@XZ present-unmatched
 inline DebugIOInterfaceBase::~DebugIOInterfaceBase()
 {
-	*(const void * *)this = g_00BC0990;
+	*(const void * *)this = __identifier("??_7DebugIOConBase@@6B@");
 }
 
 class __declspec(novtable) Rva00419C7F : public DebugIOInterfaceBase

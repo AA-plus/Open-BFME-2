@@ -2,8 +2,8 @@
 // stlport
 #include <vector>
 extern "C" const unsigned char __identifier("??_7Base@@6B@")[];
-extern const void* const g_00BC6F2C[];
-extern const void* const g_00BD385C[];
+extern "C" const void* const __identifier("??_7Rva0007E04D@@6B@")[];
+extern "C" const void* const __identifier("??_7Rva0014F4A1@@6B@")[];
 class __declspec(novtable) Rva00BC6F24Base {
 public:
  // ?Rva00BC6F24Base::Rva00BC6F24Base present-unmatched
@@ -14,17 +14,17 @@ public:
 class __declspec(novtable) Rva00BC6F2CBase:public Rva00BC6F24Base {
 public:
  // ?Rva00BC6F2CBase::Rva00BC6F2CBase present-unmatched
- Rva00BC6F2CBase() { *(const void**)this=g_00BC6F2C; }
+ Rva00BC6F2CBase() { *(const void**)this=__identifier("??_7Rva0007E04D@@6B@"); }
  // ?Rva00BC6F2CBase::~Rva00BC6F2CBase present-unmatched
- virtual ~Rva00BC6F2CBase() { *(const void**)this=g_00BC6F2C; }
+ virtual ~Rva00BC6F2CBase() { *(const void**)this=__identifier("??_7Rva0007E04D@@6B@"); }
  int index;
 };
 struct __declspec(novtable) Rva00150CD0Entry:public Rva00BC6F2CBase {
 public:
  // ?Rva00150CD0Entry::Rva00150CD0Entry present-unmatched
- Rva00150CD0Entry() { *(const void**)this=g_00BD385C; }
+ Rva00150CD0Entry() { *(const void**)this=__identifier("??_7Rva0014F4A1@@6B@"); }
  // ?Rva00150CD0Entry::~Rva00150CD0Entry present-unmatched
- virtual ~Rva00150CD0Entry() { *(const void**)this=g_00BD385C; }
+ virtual ~Rva00150CD0Entry() { *(const void**)this=__identifier("??_7Rva0014F4A1@@6B@"); }
 };
 class Rva00150C22Vector {
  Rva00150CD0Entry *start,*finish,*end;

@@ -5,7 +5,7 @@
 // 0x00C1BD10/0x00C1C780(s_slot3E4first)/0x00C1D430 at +0/+0x14/+0x18.
 // Base size 0x14 proven by derived offsets; +0x18 stored twice like retail
 // (first overwritten). Flags mirror Rva00560135Ctor.cpp. Caller 0x003ABACE.
-extern const void *const g_00C1BD10[];
+extern "C" const void *const __identifier("??_7ModuleInfoThirdBD10@@6B@")[];
 extern "C" const void *const __identifier("??_7Rva003AE50B@@6BModuleInfoHeadBase@@@")[];
 extern "C" const void *const __identifier("??_7Rva003AE50B@@6B@")[];
 extern "C" int s_slot3E4first;
@@ -32,7 +32,7 @@ private:
 Rva003AE50B::Rva003AE50B(void *a, void *b)
 	: ParticleModule005F2CA0(a, b)
 {
-	m_18 = (void *)g_00C1BD10;
+	m_18 = (void *)__identifier("??_7ModuleInfoThirdBD10@@6B@");
 	*(const void **)this = __identifier("??_7Rva003AE50B@@6BModuleInfoHeadBase@@@");
 	m_14 = (void *)&s_slot3E4first;
 	m_18 = (void *)__identifier("??_7Rva003AE50B@@6B@");
@@ -42,7 +42,7 @@ Rva003AE50B::Rva003AE50B(void *a, void *b)
 // same pinned base: vtable VA 0x00C1D47C plus data VAs 0x00C1BD30 and
 // 0x00C1D46C at +0x18 (twice) with s_slot3E4first at +0x14. Same volatile
 // +0x18 recipe and flags.
-extern const void *const g_00C1BD30[];
+extern "C" const void *const __identifier("??_7ModuleInfoThirdBD30@@6B@")[];
 extern "C" const void *const __identifier("??_7Rva003AE595@@6BModuleInfoHeadBase@@@")[];
 extern "C" const void *const __identifier("??_7Rva003AE595@@6B@")[];
 
@@ -59,7 +59,7 @@ private:
 Rva00560A1B::Rva00560A1B(void *a, void *b)
 	: ParticleModule005F2CA0(a, b)
 {
-	m_18 = (void *)g_00C1BD30;
+	m_18 = (void *)__identifier("??_7ModuleInfoThirdBD30@@6B@");
 	*(const void **)this = __identifier("??_7Rva003AE595@@6BModuleInfoHeadBase@@@");
 	m_14 = (void *)&s_slot3E4first;
 	m_18 = (void *)__identifier("??_7Rva003AE595@@6B@");
@@ -71,7 +71,7 @@ Rva00560A1B::Rva00560A1B(void *a, void *b)
 // Evidence: push esi push [esp+0xc] mov esi ecx push [esp+0xc] call 0x0055C86D
 // then stores at +0x18/+0/+0x14/+0x18; caller at 0x003ABB2E; naming stores
 // vtable 0x0081D4B8 at [this] proving Rva003AE61F.
-extern const void *const g_00C1BD50[];
+extern "C" const void *const __identifier("??_7ModuleInfoThirdBD50@@6B@")[];
 extern "C" const void *const __identifier("??_7Rva003AE61F@@6BModuleInfoHeadBase@@@")[];
 extern "C" const void *const __identifier("??_7Rva003AE61F@@6B@")[];
 
@@ -88,7 +88,7 @@ private:
 Rva003AE61F::Rva003AE61F(void *a, void *b)
 	: ParticleModule005F2CA0(a, b)
 {
-	m_18 = (void *)g_00C1BD50;
+	m_18 = (void *)__identifier("??_7ModuleInfoThirdBD50@@6B@");
 	*(const void **)this = __identifier("??_7Rva003AE61F@@6BModuleInfoHeadBase@@@");
 	m_14 = (void *)&s_slot3E4first;
 	m_18 = (void *)__identifier("??_7Rva003AE61F@@6B@");

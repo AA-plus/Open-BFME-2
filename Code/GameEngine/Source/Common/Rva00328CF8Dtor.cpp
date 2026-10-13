@@ -11,7 +11,7 @@ public:
 	void handle(int node);
 };
 
-extern int g_00BC9574;
+extern "C" int __identifier("??_7BfmeParserBindingBaseVE@@6B@");
 
 struct Base00328CF8A
 {
@@ -20,7 +20,7 @@ struct Base00328CF8A
 	int m_node;
 	~Base00328CF8A()
 	{
-		m_head = &g_00BC9574;
+		m_head = &__identifier("??_7BfmeParserBindingBaseVE@@6B@");
 		m_fw->handle(m_node);
 	}
 };
@@ -32,7 +32,7 @@ struct Base00328CF8B
 	int m_node;
 	~Base00328CF8B()
 	{
-		m_head = &g_00BC9574;
+		m_head = &__identifier("??_7BfmeParserBindingBaseVE@@6B@");
 		m_fw->handle(m_node);
 	}
 };

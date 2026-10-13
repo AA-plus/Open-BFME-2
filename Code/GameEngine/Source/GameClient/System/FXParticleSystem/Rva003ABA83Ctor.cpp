@@ -6,7 +6,7 @@
 // s_slot3E4first extern C; neighbours /O1 /EHsc; ret 8 frameless.
 extern "C" void *s_slot3E4first;
 extern const void *const g_00C1C334[];
-extern const void *const g_00C1C780[];
+extern "C" const void *const __identifier("??_7?$CategoryModuleTemplate@$05@FXParticleSystem@@6B?$CategoryModuleInfo@$05@1@@")[];
 extern "C" const void *const __identifier("??_7Rva003AE43F@@6B@")[];
 class T1Base_005F3750
 {
