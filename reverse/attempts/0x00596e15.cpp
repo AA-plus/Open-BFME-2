@@ -1,4 +1,6 @@
 // ?canMake@AIBuildableWallSegment@@UAEHPAVPlayer@@@Z
+// partial score=0.97 date=2026-10-13
+// ?canMake@AIBuildableWallSegment@@UAEHPAVPlayer@@@Z
 // partial score=0.88 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /MD /EHsc
 // WorldBuilder names 0x1538510 AIBuildableWallSegment::build. The paired
@@ -28,15 +30,33 @@ public:
 };
 extern GameLogic *TheGameLogic;
 
+class Rva004D9A3C;
+// Canonical layout from the matched 0x0039225E ctor row (Rva0039225ECtor.cpp):
+// the ctor body order m_20=-1; m_unk00=0; m_array08=0; m_1C=0; m_1D=0; m_pad04=0; m_24=0
+// is exactly retail's six ebx zero stores plus or [ebp-0x28],-1, and it makes cl
+// hoist 0 into EBX for the whole body (push ebx first, cmp eax,ebx, mov [ebp-4],ebx).
 class Rva0039205C
 {
 public:
-	Rva0039205C() : m_count(0), m_cost(0), m_status(-1) {}
+	Rva0039205C()
+	{
+		m_20 = -1;
+		m_unk00 = 0;
+		m_array08 = 0;
+		m_1C = 0;
+		m_1D = 0;
+		m_pad04 = 0;
+		m_24 = 0;
+	}
 	~Rva0039205C();
-	int m_count;
-	unsigned int m_cost;
-	char m_pad08[8];
-	int m_status;
+public:
+	int m_unk00; // +0
+	int m_pad04; // +4
+	Rva004D9A3C *m_array08; // +8
+	unsigned char m_1C; // +0xC
+	unsigned char m_1D; // +0xD
+	int m_20; // +0x10
+	int m_24; // +0x14
 };
 class BuildAssistant
 {
@@ -125,10 +145,14 @@ float AIBuildableWallSegment::getTotalCost(Player *player)
 }
 
 // 0x00596E15 (218B, RET4): AIBuildableWallSegment::canMake (WB 0x15386C0).
-// Start-node lookup, BuildAssistant quoteWall (slot 20) into result
-// (+0x10 status, +0x04 cost), funds check at +0x94, cached cost at +0x54.
-// Success path holds a dummy AsciiString so its result cleanup stays
-// separate from the failure cleanups (retail 218B vs merged 202B).
+// W7-MP5 r3: canonical Rva0039205C makes every retail instruction shape match
+// (push ebx/esi, xor ebx,ebx, six ebx stores, mov [ebp-4],ebx, cmp eax,ebx).
+// Without the dummy the success/failure dtors tail-merge to 202B (one shared
+// call 0x39205C, return value in EBX); retail keeps TWO dtor sites and returns
+// 0 via xor eax,eax / 9 via push 9+pop esi. AsciiString dummy keeps the paths
+// separate (213B, nd~5): default-ctor form costs 11B (lea+mov [ebp-0x18],ebx+
+// call 0x36410) + 4B frame; retail's extra 16B is its own failure-path dtor.
+// Remaining lever: force the dtor duplication without the dummy (cl tail-merge).
 int AIBuildableWallSegment::canMake(Player *player)
 {
     register int zero = 0;
@@ -140,14 +164,14 @@ int AIBuildableWallSegment::canMake(Player *player)
         &result, startNode, &startNode->m_position, getWorldPosition(), false);
     if (failed)
         return 9;
-    if (result.m_status != 0) {
-        if (result.m_status == 7)
+    if (result.m_20 != 0) {
+        if (result.m_20 == 7)
             return 2;
         return 9;
     }
-    if (player->m_money < result.m_cost)
+    if (player->m_money < result.m_pad04)
         return 2;
-    m_totalCost = result.m_cost;
-    AsciiString dummy("x");
+    m_totalCost = result.m_pad04;
+    AsciiString dummy;
     return zero;
 }
