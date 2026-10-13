@@ -1,13 +1,19 @@
+// The comparator carries the army context at +0 (native 5E4300); keep
+// its four-byte state and class spelling consistent through the sort family.
 // cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 
-// ??$__pop_heap@PAHHURva005E4300Cmp@@@_STL@@YAXPAH00HURva005E4300Cmp@@@Z @0x005E4A5F 41B
+// ??$__pop_heap@PAHHVRva005E4300Cmp@@@_STL@@YAXPAH00HVRva005E4300Cmp@@@Z @0x005E4A5F 41B
 // STL heap pop over int sort keys with the pinned thiscall comparator
 // Rva005E4300Cmp at 0x005E4300; calls the rowed __adjust_heap 0x005E48C2.
 // Evidence: same 41B shape as 0x00423EF7 and 0x002074D4 precedents; callees rowed.
-struct Rva005E4300Cmp
+struct Rva005E4300Context;
+class Rva005E4300Cmp
 {
-	bool operator()(int a, int b) const;
+public:
+ char operator()(int a, int b) const;
+private:
+ Rva005E4300Context *m_context;
 };
 
 namespace _STL
@@ -28,7 +34,7 @@ void __pop_heap(RandomAccessIter first, RandomAccessIter last,
 template void __pop_heap<int *, int,
 	Rva005E4300Cmp>(int *, int *, int *, int, Rva005E4300Cmp);
 
-// ??$__pop_heap_aux@PAHHURva005E4300Cmp@@@_STL@@YAXPAH00URva005E4300Cmp@@@Z @0x005E4AC4 30B
+// ??$__pop_heap_aux@PAHHVRva005E4300Cmp@@@_STL@@YAXPAH00VRva005E4300Cmp@@@Z @0x005E4AC4 30B
 // Calls the 6-arg __pop_heap overload (ICF twin of rowed 5-arg 0x005E4A5F) with
 // (first, last-1, last-1, *(last-1), comp, (int*)0). Evidence: chain (calls just-landed 0x005E4A5F); same 30B shape as 0x00423F9F precedent.
 // The call goes to the rowed 5-arg body with the sixth (dummy) argument, as in
@@ -47,7 +53,7 @@ void __pop_heap_aux(RandomAccessIter first, RandomAccessIter last,
 template void __pop_heap_aux<int *, int,
 	Rva005E4300Cmp>(int *, int *, int *, Rva005E4300Cmp);
 
-// ??$pop_heap@PAHURva005E4300Cmp@@@_STL@@YAXPAH0URva005E4300Cmp@@@Z @0x005E4C8C 23B
+// ??$pop_heap@PAHVRva005E4300Cmp@@@_STL@@YAXPAH0VRva005E4300Cmp@@@Z @0x005E4C8C 23B
 // Public pop_heap wrapper calling __pop_heap_aux with (int*)0 dummy.
 // Evidence: chain (calls just-landed 0x005E4AC4); same 23B shape as 0x00424637 precedent.
 template <class RandomAccessIter, class Compare>

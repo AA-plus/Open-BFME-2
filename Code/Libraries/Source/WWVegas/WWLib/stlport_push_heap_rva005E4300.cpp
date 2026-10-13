@@ -1,15 +1,21 @@
+// The comparator carries the army context at +0 (native 5E4300); keep
+// its four-byte state and class spelling consistent through the sort family.
 // cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-// ??$__push_heap@PAHHHURva005E4300Cmp@@@_STL@@YAXPAHHHHURva005E4300Cmp@@@Z @0x005E4617 76B
+// ??$__push_heap@PAHHHVRva005E4300Cmp@@@_STL@@YAXPAHHHHVRva005E4300Cmp@@@Z @0x005E4617 76B
 // Heap sift-up over int sort keys with the pinned thiscall comparator
 // Rva005E4300Cmp (member operator()(int,int) at 0x005E4300): parent =
 // (hole-1)/2, then while the hole is above top and comp(*parent, value)
 // holds, move the parent down. Evidence: caller 0x005E4913 in rowed
 // __adjust_heap 0x005E48C2; callee pinned 0x005E4300; same 76B shape as
 // stlport_push_heap_rva00204bb8.cpp 0x002059CF.
-struct Rva005E4300Cmp
+struct Rva005E4300Context;
+class Rva005E4300Cmp
 {
-	char operator()(int a, int b) const;
+public:
+ char operator()(int a, int b) const;
+private:
+ Rva005E4300Context *m_context;
 };
 
 namespace _STL

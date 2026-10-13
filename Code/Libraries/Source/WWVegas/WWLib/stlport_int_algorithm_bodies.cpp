@@ -23,7 +23,8 @@ void bfmeEmitIntSortHelpers(int *first, int *last)
 	_STL::sort(first, last);
 	_STL::make_heap(first, last);
 	_STL::sort_heap(first, last);
-	_STL::sort(first, last, _STL::greater<int>());
+	_STL::make_heap(first, last, _STL::greater<int>());
+	_STL::sort_heap(first, last, _STL::greater<int>());
 }
 
 int *bfmeEmitIntLowerBound(int *first, int *last, const int &value)

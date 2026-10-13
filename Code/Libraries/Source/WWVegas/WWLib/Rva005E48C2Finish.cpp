@@ -1,4 +1,6 @@
-// ??$__adjust_heap@PAHHHURva005E4300Cmp@@@_STL@@YAXPAHHHHURva005E4300Cmp@@@Z
+// The comparator carries the army context at +0 (native 5E4300); keep
+// its four-byte state and class spelling consistent through the sort family.
+// ??$__adjust_heap@PAHHHVRva005E4300Cmp@@@_STL@@YAXPAHHHHVRva005E4300Cmp@@@Z
 // cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 //
@@ -27,9 +29,13 @@
 #include <algorithm>
 #include <functional>
 
-struct Rva005E4300Cmp
+struct Rva005E4300Context;
+class Rva005E4300Cmp
 {
-	char operator()(int a, int b) const;
+public:
+ char operator()(int a, int b) const;
+private:
+ Rva005E4300Context *m_context;
 };
 
 void bfmeEmitAdjustHeapGreater(int *first, int *last)

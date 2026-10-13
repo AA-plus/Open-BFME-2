@@ -1,7 +1,13 @@
+// The comparator carries the army context at +0 (native 5E4300); keep
+// its four-byte state and class spelling consistent through the sort family.
 // cl: /MD
-struct Rva005E4300Cmp
+struct Rva005E4300Context;
+class Rva005E4300Cmp
 {
-	bool operator()(int a, int b) const;
+public:
+ char operator()(int a, int b) const;
+private:
+ Rva005E4300Context *m_context;
 };
 namespace _STL
 {
