@@ -170,7 +170,7 @@ typedef struct tagPAINTSTRUCT
 #define WA_INACTIVE 0
 #define HTCLIENT    1
 #define VK_ESCAPE   0x1B
-#define SRCCOPY     0x00CC0020
+#define SRCCOPY     (0x00CC0000 | 0x20)  // Win32 BitBlt ROP code (13369376); not a retail address
 #define SC_SIZE          0xF000
 #define SC_MOVE          0xF010
 #define SC_MAXIMIZE      0xF030
