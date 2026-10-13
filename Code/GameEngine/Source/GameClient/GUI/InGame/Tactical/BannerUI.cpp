@@ -207,14 +207,17 @@ const AsciiString &BannerUI::GetBannerIconImageName(const AsciiString &key) {
 // Native216F91..217031 constructs a12-byte three-string default value and
 // a16-byte key/value record. Existing21613D copy and2160C4/216108 cleanup
 // prove those layouts independently; application field names remain unknown.
-class Rva002160C4 {public:~Rva002160C4();};
 class Rva00216108 {public:~Rva00216108();};
+// Existing copy21613D independently proves this three-string12B value.
+// Unwind216F91 destroys the same temporary via2160C4. Reconcile its
+// destructor under the existing copy-owner type and retain the donor RVA
+// spelling as a neutral ABI identity, not the original application name.
 class Gen_003A8BE0 {
- unsigned int m_words[3];
 public:
- __forceinline Gen_003A8BE0(){m_words[0]=0;m_words[1]=0;m_words[2]=0;}
+ __forceinline Gen_003A8BE0() {}
  Gen_003A8BE0(const Gen_003A8BE0 &);
- __forceinline ~Gen_003A8BE0(){((Rva002160C4*)this)->~Rva002160C4();}
+ ~Gen_003A8BE0();
+ AsciiString first,second,third;
 };
 namespace _STL {
 template<class A,class B>struct pair;
