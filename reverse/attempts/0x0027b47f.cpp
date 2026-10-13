@@ -1,4 +1,6 @@
 // ?calcPhysicsXformHugeFourLegs@Drawable@@QAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z
+// partial score=0.9977842272701903 date=2026-10-13
+// ?calcPhysicsXformHugeFourLegs@Drawable@@QAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z
 // partial score=0.9955684545403807 date=2026-10-13
 // ?calcPhysicsXformHugeFourLegs@Drawable@@QAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z
 // partial score=0.9956 date=2026-10-11
@@ -14,6 +16,8 @@
 // TheTerrainLogic slot 7. Identity: WB 0x00CA8750; ZH/BFME1 wheel/tread
 // donors guide the shared equations.
 #include <math.h>
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 #include <stl/_alloc.h>
 // TU-local Coord3D (name and trivial-ABI shape shared with the rowed
 // vector<Coord3D> resize body at 0x000CA2F3; user-declared ctor/copy/dtor so
@@ -156,7 +160,7 @@ union{Region2D bounds;float heights[4];}scratch;
 bool found=false;
 for(DrawModule**mod=modules;!found&&*mod;++mod){BfmeFootDraw*draw=(*mod)->getDraw();if(draw&&draw->collectFeet(&points,0)&&points.size()>=4)found=true;}
 if(!found){const Rva0087E370*geom=(const Rva0087E370*)((const char*)obj+0xA8);Region2D&bounds=scratch.bounds;Coord3D zero;zero.x=0;zero.y=0;zero.z=0;
-geom->method(zero,0.0f,bounds);
+geom->method(zero,0.0f,bounds);_ReadWriteBarrier();
 typedef void(_STL::vector<Coord3D>::*FillValue)(unsigned int,EmptyFootPoint);(points.*reinterpret_cast<FillValue>(&_STL::vector<Coord3D>::resize))(4,EmptyFootPoint());
 Real s=Sin(direction),c=Cos(direction);
 points[1].x=bounds.hi.x*c-bounds.hi.y*s;points[1].y=bounds.hi.y*c+bounds.hi.x*s;points[1].z=pos->z;
