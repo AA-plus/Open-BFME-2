@@ -1,6 +1,8 @@
-// cl: /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C91D1Idle@@YGXPAVParameter@@@Z, retail 0x003C91D1 53 bytes.
+// ?Rva003C91D1Idle@ScriptActions@@QAEXPAVParameter@@@Z, retail 0x003C91D1 53 bytes.
 // Free stdcall helper resolving a unit via rowed getUnitNamed 0x003588E7
 // then releasing weapon lock via rowed releaseWeaponLock 0x0028D8B6 with
 // TEMPORARILY and issuing rowed aiIdle 0x001E8A38 with script source.
@@ -39,7 +41,7 @@ public:
 };
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C91D1Idle(Parameter *param)
+void ScriptActions::Rva003C91D1Idle(Parameter *param)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(param);
 	if (!obj)

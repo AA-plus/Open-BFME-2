@@ -1,5 +1,7 @@
-// cl: /O1 /DNDEBUG /MD /GX /arch:SSE
-// ?Rva003C7A30Do@@YGXPAVParameter@@H@Z @0x003C7A30 195B
+// cl: -O1 -arch:SSE -G7 -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C7A30Do@ScriptActions@@QAEXPAVParameter@@H@Z @0x003C7A30 195B
 // Script command: move a named unit (plain move, amphibious when position test passes) to the waypoint indexed by the second argument.
 // Target evidence: getUnitNamed 0x003588E7; TerrainLogic vslot +0x88;
 // AIUpdate 0x0026295E; leaveGroup 0x0028C01F; position test 0x0028ECDB;
@@ -93,7 +95,7 @@ public:
 	int m_320;
 };
 
-void __stdcall Rva003C7A30Do(Parameter *p, int id)
+void ScriptActions::Rva003C7A30Do(Parameter *p, int id)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(p);
 	if (obj == 0)

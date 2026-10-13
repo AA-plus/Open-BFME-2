@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
-// ?Rva003C5825Do@@YGXPAVParameter@@ABVAsciiString@@1@Z @0x003C5825 164B: unit command-button with two-object lookup via getUnitNamed plus by-value lookupUnitByValue then CommandSet loop 32 compare then rva00297000. Evidence: rowed getUnitNamed 0x3588E7 StringBase copy 0x365F0 lookupUnitByValue 0x358752 rva00290E67 0x290E67 rva0031D5F8 0x31D5F8 getCommandButton 0x409EE8 isEmpty 0x1E2F compare 0x69D6 pin rva00297000 0x297000 g_Va009FE16C g_bfmeWorldRV; caller 0x003CCAA7; ret 0xC stdcall.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C5825Do@ScriptActions@@QAEXPAVParameter@@ABVAsciiString@@1@Z @0x003C5825 164B: unit command-button with two-object lookup via getUnitNamed plus by-value lookupUnitByValue then CommandSet loop 32 compare then rva00297000. Evidence: rowed getUnitNamed 0x3588E7 StringBase copy 0x365F0 lookupUnitByValue 0x358752 rva00290E67 0x290E67 rva0031D5F8 0x31D5F8 getCommandButton 0x409EE8 isEmpty 0x1E2F compare 0x69D6 pin rva00297000 0x297000 g_Va009FE16C g_bfmeWorldRV; caller 0x003CCAA7; ret 0xC stdcall.
 #include "ascii_string.h"
 
 class Parameter;
@@ -48,7 +50,7 @@ public:
 	void rva00297000(const CommandButton *b, Object *o, int a, int c);
 };
 
-void __stdcall Rva003C5825Do(Parameter *p, const AsciiString &name, const AsciiString &lookupName)
+void ScriptActions::Rva003C5825Do(Parameter *p, const AsciiString &name, const AsciiString &lookupName)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(p);
 	Object *obj2 = ((Rva00358752Opaque *)TheScriptEngine)->lookupUnitByValue(lookupName);

@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE
-// ?Rva003C8E2BExit@@YGXABVAsciiString@@@Z retail 0x003C8E2B 94B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C8E2BExit@ScriptActions@@QAEXABVAsciiString@@@Z retail 0x003C8E2B 94B
 // Team exit-all action (ZH doTeamExitAllBuildings shape).
 // Evidence: between Rva003C89D1Guard and Rva003C90B1Exit; caller 0x003CC1A3;
 // rowed getTeamNamed 0x003584E9 plus iterate 0x00263864 plus advance 0x00263526
@@ -58,7 +60,7 @@ public:
 
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C8E2BExit(const AsciiString &teamName)
+void ScriptActions::Rva003C8E2BExit(const AsciiString &teamName)
 {
 	Team *theTeam = TheScriptEngine->getTeamNamed(teamName, false);
 	if (!theTeam) {

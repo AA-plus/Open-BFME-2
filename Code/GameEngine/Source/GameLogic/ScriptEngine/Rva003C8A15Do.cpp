@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C8A15Do@@YGXPAVParameter@@ABVAsciiString@@1@Z @0x003C8A15 (128B).
+// ?Rva003C8A15Do@ScriptActions@@QAEXPAVParameter@@ABVAsciiString@@1@Z @0x003C8A15 (128B).
 // Unit guard in trigger area via getQualifiedTriggerAreaByName plus
 // getUnitNamed plus waypoint 0x88 plus aiGuardAreaFromPosition else rva0036F5BB.
 // Evidence: callees rowed 0x0035768D 0x003588E7, caller 0x003CB6CD 0x003CB708.
@@ -67,7 +69,7 @@ public:
 
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C8A15Do(Parameter *unitParam, const AsciiString &areaName, const AsciiString &wayName)
+void ScriptActions::Rva003C8A15Do(Parameter *unitParam, const AsciiString &areaName, const AsciiString &wayName)
 {
 	PolygonTrigger *area = TheScriptEngine->getQualifiedTriggerAreaByName(areaName);
 	Object *obj = TheScriptEngine->getUnitNamed(unitParam);

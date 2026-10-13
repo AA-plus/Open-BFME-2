@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C8C6EDo@@YGXABVAsciiString@@@Z @0x003C8C6E (95B).
+// ?Rva003C8C6EDo@ScriptActions@@QAEXABVAsciiString@@@Z @0x003C8C6E (95B).
 // Unit evacuate via lookupUnitByValue plus kind flag 0x108/0x80 plus AI
 // evacuate plus contain slot 0xA8. Evidence: callees rowed lookup 0x00358752
 // aiEvacuate 0x002AE6B3, caller 0x003CC173. Precedent doNamedExitAll.
@@ -63,7 +65,7 @@ public:
 class ScriptEngine;
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C8C6EDo(const AsciiString &unitName)
+void ScriptActions::Rva003C8C6EDo(const AsciiString &unitName)
 {
 	Object *obj = ((Rva00358752Opaque *)TheScriptEngine)->lookupUnitByValue(unitName);
 	if (!obj)
