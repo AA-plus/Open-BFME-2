@@ -147,7 +147,7 @@ public:
 };
 
 extern "C" void *theLogicRandomLogFile;
-extern unsigned char g_Rva00A02D87;
+extern bool TheLiteCRC;
 extern bool g_bfmeDoneAPB;
 // g_00E02D7C is only an alias of the owned global TheXObjectCRC (ledger names column); this unit reads the owner through its own view type.
 extern bool TheXObjectCRC;
@@ -203,28 +203,28 @@ unsigned int GameLogic::getCRC(int mode)
 		((Rva0060D4C9 *)&writer)->rva0060D4C9((Xfer *)mode);
 	if (theLogicRandomLogFile != 0)
 		((Rva002CEC0A *)theLogicRandomLogFile)->rva002CED26((Xfer *)&writer);
-	if (g_Rva00A02D87 != 0 || g_00E02D7C == 0)
+	if (TheLiteCRC != 0 || g_00E02D7C == 0)
 	{
 		for (Object *obj = m_first; obj != 0; obj = obj->getNextObject())
 			xfer->xferSnapshot(obj);
 	}
 	unsigned int seed = GetGameLogicRandomSeedCRC();
 	xfer->xferUnsignedInt(&seed);
-	if (g_Rva00A02D87 != 0 || g_00E02D7D == 0)
+	if (TheLiteCRC != 0 || g_00E02D7D == 0)
 		xfer->xferSnapshot(ThePartitionManager);
-	if (g_Rva00A02D87 != 0 || g_00E02D7E == 0)
+	if (TheLiteCRC != 0 || g_00E02D7E == 0)
 		xfer->xferSnapshot(TheCollisionManager);
-	if (g_Rva00A02D87 != 0 || g_00E02D7F == 0)
+	if (TheLiteCRC != 0 || g_00E02D7F == 0)
 		xfer->xferSnapshot(TheShroudManager);
-	if (g_Rva00A02D87 != 0 || g_00E02D80 == 0)
+	if (TheLiteCRC != 0 || g_00E02D80 == 0)
 		xfer->xferSnapshot((TaintManager *)TheTaintManager);
-	if (g_Rva00A02D87 != 0 || g_00E02D81 == 0)
+	if (TheLiteCRC != 0 || g_00E02D81 == 0)
 		xfer->xferSnapshot(g_00DFEEF8);
-	if (g_Rva00A02D87 != 0 || g_00E02D83 == 0)
+	if (TheLiteCRC != 0 || g_00E02D83 == 0)
 		xfer->xferSnapshot(ThePlayerList);
-	if (g_Rva00A02D87 != 0 || g_00E02D84 == 0)
+	if (TheLiteCRC != 0 || g_00E02D84 == 0)
 		xfer->xferSnapshot(TheAI);
-	if ((g_Rva00A02D87 != 0 || g_00E02D88 == 0) && ((Rva00210C66CmpBoolField *)this)->get())
+	if ((TheLiteCRC != 0 || g_00E02D88 == 0) && ((Rva00210C66CmpBoolField *)this)->get())
 		xfer->xferSnapshot((*(Rva002BA8F1Logic **)&TheLivingWorldLogic));
 	((Gen009D6DD0 *)&writer)->bfmeClose();
 	return writer.m_crc;

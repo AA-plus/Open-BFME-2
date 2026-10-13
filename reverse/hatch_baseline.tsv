@@ -1797,7 +1797,6 @@ address_global	Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITactic
 address_global	Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/TargetlessTactics/AIStructureCreepTactic.cpp	g_Va00DBA4E4	5
 address_global	Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITacticsGenerator/TargetlessTactics/Rva005ACE15Finish.cpp	g_Va00DBA4E4	3
 address_global	Code/GameEngine/Source/GameLogic/SkirmishAI/AITacticalAI/AITargetChooser/AITargetChooser.cpp	g_Va00DBA4E4	2
-address_global	Code/GameEngine/Source/GameLogic/System/GameLogicGetCRC.cpp	g_Rva00A02D87	10
 address_global	Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp	g_Va00DFE750	9
 address_global	Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp	g_Va00DFE7A8	5
 address_global	Code/GameEngine/Source/GameLogic/System/GameLogicInit.cpp	g_Va00DFE840	2
