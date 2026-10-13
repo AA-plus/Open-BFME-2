@@ -168,6 +168,10 @@ def coff_symbol_names(data, *, include_local=True):
 
 def bare_identifier(name):
     """The unqualified function identifier of a mangled or C name, or None."""
+    if name.startswith("__ehhandler$"):
+        # A function's EH handler is emitted only by the TU defining the
+        # function, so it is found wherever the function's own name is.
+        return bare_identifier(name[len("__ehhandler$"):])
     match = re.match(r"\?([A-Za-z_][A-Za-z0-9_]*)@", name)
     if match:
         return match.group(1)

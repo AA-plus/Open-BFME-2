@@ -316,7 +316,10 @@ def test_a_source_with_uncommitted_edits_is_judged_on_the_committed_text(tmp_pat
     # Templates: a function template names itself, a template class its members.
     ("??$distance@PAH@_STL@@YAHPAH0@Z", "distance"), ("??0?$vector@H@_STL@@QAE@XZ", "vector"),
     ("??1?$basic_string@D@_STL@@QAE@XZ", "basic_string"),
-    ("??$?8DV?$char_traits@D@_STL@@@_STL@@YA_NPBD0@Z", None)])
+    ("??$?8DV?$char_traits@D@_STL@@@_STL@@YA_NPBD0@Z", None),
+    # An EH handler is named by the function it unwinds.
+    ("__ehhandler$?rva0059EB90@@YAXPAVINI@@PAUGen_00489270@@@Z", "rva0059EB90"),
+    ("__ehhandler$??1AptMpGameSetup@@UAE@XZ", "AptMpGameSetup")])
 def test_bare_identifier(name, word):
     assert nd.bare_identifier(name) == word
 
