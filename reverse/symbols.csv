@@ -11879,8 +11879,6 @@ name,address,notes
 ?rva005F1B51@Rva005F1B51@@QAEXXZ,0x005F1B51,jump target of 17B forwarder 0x005E35C9; original name unknown
 ?rva005F3F9A@Rva005F3F9A@@QAEXXZ,0x005F3F9A,address-derived callee of matched slot 0x005F3FF4; retail jmp rel32 targets 0x005F3F9A; Ghidra FUN bounds 90 bytes; thiscall on the +0x08 object 0 arg(s) ret; callee body remains unclaimed; no named identity inferred
 ?rva005F40B0@Rva005F40B0@@QAEXXZ,0x005F40B0,address-derived callee of matched slot 0x005F41AF; retail jmp rel32 targets 0x005F40B0; Ghidra FUN bounds 123 bytes; thiscall on the +0x08 object 0 arg(s) ret; callee body remains unclaimed; no named identity inferred
-?rva005F422C@Rva005F422C@@QAEXXZ,0x005F422C,read from REL32 at 0x005E4232 in rva005E4202 0x005E4202 (thiscall no-arg: lea ecx plus no pushes); Ghidra FUN_009f422c bounds 40 bytes; callee body unclaimed
-?rva005F4891@Rva005F4891@@QAEXXZ,0x005F4891,read from REL32 at 0x005E429F in rva005E426F 0x005E426F (thiscall no-arg: lea ecx plus no pushes); Ghidra FUN_009f4891 bounds 91 bytes; callee body unclaimed
 ?rva005F4F74@Rva005F4F74@@QAEXHHPAD@Z,0x005F4F74,thiscall callee of the F22 ebp-frame forwarders; takes the wrapper's first two args plus (char*)&arg2+3 in a vestigial third slot; name unknown
 ?rva005F6B0B@SpecialAbilityUpdate@@QBEPBVSpecialPowerTemplate@@XZ,0x005F6B0B,"the module data +0x38 special power template (the matched disp8 pointer-chase getter row); REL32 in CurseSpecialPower 0x004CCF20, followed by friend_getFinalOverride and the +0x54 radius"
 ?rva005F8F31@Rva005F963AElem@@QAEXXZ,0x005F8F31,thiscall-0 on m_40/m_50 elements called from 0x005F96D4 loops; identity unproven
