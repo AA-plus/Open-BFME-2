@@ -39,6 +39,13 @@ static inline void translateBounds(Vector3 &center, const Vector3 &position)
  center.Y=position.Y+center.Y;
  center.Z=position.Z+center.Z;
 }
+// The donor's component operations, without an out-of-line Vector3 operator.
+static inline void scaleBounds(Vector3 &center, float scale)
+{
+ center.X=center.X*scale;
+ center.Y=center.Y*scale;
+ center.Z=center.Z*scale;
+}
 class W3DTreeBuffer {
 public:
  int addTreeType(const AsciiString&, const AsciiString&, const void*,int,const AsciiString&,const AsciiString&);
@@ -76,7 +83,7 @@ void W3DTreeBuffer::rva000ECF79(unsigned int id,Rva000ECF79Coord location,float 
  trees[numTrees].typecc=type;
  trees[numTrees].fieldd0=types[type].field58;
  trees[numTrees].bounds=types[type].bounds;
- trees[numTrees].bounds.Center*=trees[numTrees].scale;
+ scaleBounds(trees[numTrees].bounds.Center,trees[numTrees].scale);
  trees[numTrees].bounds.Radius*=trees[numTrees].scale;
  translateBounds(trees[numTrees].bounds.Center,trees[numTrees].location);
  trees[numTrees].visible=false;
