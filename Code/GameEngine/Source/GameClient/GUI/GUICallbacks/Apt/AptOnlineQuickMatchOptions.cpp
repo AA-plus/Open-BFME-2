@@ -535,3 +535,61 @@ void Rva005BB5F6::rva005BAF35(PeerResponse &resp){
  if(TheGameSpyGame->localSlot()>=0){TheNAT=(NAT*)new Rva005A734B;GameSlotConnectInfo address;address.ip=TheGameSpyInfo->getLocalIP();address.port=TheGameSpyInfo->getLocalPort();*(unsigned*)((char*)TheGameSpyGame+0x38)=address.ip;*(unsigned*)((char*)TheGameSpyGame+0x3c)=*(const volatile unsigned*)&address.port;
  unsigned &transportIP=*(unsigned*)((char*)TheGameSpyGame+0x38);((NAT*)TheNAT)->attachSlotList(TheGameSpyGame,TheGameSpyGame->localSlot(),transportIP,30000,TheGameSpyGame->localSlot()==0);}
 }
+
+// Post-include free redeclare drops dllimport for the metadata vector's
+// deallocate call only: retail calls the engine _free directly at 0x30830
+// (same recipe as stlport_vector_int_insert_overflow.cpp).
+extern "C" void __cdecl free(void *);
+
+// Native5BBDAC..5BBF15 RET4 (361B): quick-match map-selection vector builder.
+// WB1589500 shows the request map-selection walk; BF1 donor rva0055A240 and
+// ZH WOLQuickMatchMenu are the semantic guides. The local view classes below
+// supply the partition predicate and comparator the native call site uses;
+// the loop body holds *m in a named local, which reproduces retail's iterator
+// register roles (EDI first-arg / ESI iterator) exactly.
+class Rva005BA36D {public:Rva0054D8D8 *rva005BA36D();};
+struct Rva0030145CCmp {bool operator()(MapMetaData *,MapMetaData *)const;};
+struct Rva00450B90Item
+{
+	char m_beforeFlags[0x24];
+	bool m_flag24;
+	bool m_flag25;
+	bool m_flag26;
+};
+
+class Rva00450B90Predicate
+{
+public:
+	bool operator()(const Rva00450B90Item *item) const
+	{
+		if ((m_mask & 0x01) != 0 && item->m_flag26)
+			goto selected26;
+		if ((m_mask & 0x02) == 0 || item->m_flag26)
+			return false;
+
+	selected26:
+		if ((item->m_flag24 && (m_mask & 0x04) != 0)
+				|| (!item->m_flag24 && (m_mask & 0x08) != 0))
+			return false;
+
+		return !((item->m_flag25 && (m_mask & 0x10) != 0)
+			|| (!item->m_flag25 && (m_mask & 0x20) != 0));
+	}
+
+	unsigned int m_mask;
+};
+
+void Rva005BB5F6::rva005BBDAC(BfmeOpaqueOwnedRecord492 &request){
+ _STL::vector<bool> &result=request.unknown_104;result.clear();
+ _STL::list<AsciiString> maps;int players=0;
+ Rva0054D8D8 *ladder=((Rva005BA36D*)this)->rva005BA36D();
+ if(ladder){players=ladder->players*2;maps=ladder->maps;}
+ else{int selected=0;GadgetComboBoxGetSelectedPos(*(GameWindow**)((char*)this+0x84),&selected);if(selected<0)selected=0;players=(selected+1)*2;maps=TheGameSpyConfig->getQMMaps();}
+ _STL::vector<MapMetaData*> metadata;
+ for(_STL::list<AsciiString>::const_iterator i=maps.begin();i!=maps.end();++i){MapMetaData *m=(MapMetaData*)TheMapCache->findMap(*i);if(m)metadata.push_back(m);}
+ Rva00450B90Predicate predicate;predicate.m_mask=25;
+ MapMetaData **end=(MapMetaData**)_STL::partition((Rva00450B90Item**)metadata.begin(),(Rva00450B90Item**)metadata.end(),predicate);
+ metadata.erase(end,metadata.end());
+ _STL::sort(metadata.begin(),metadata.end(),Rva0030145CCmp());
+ for(_STL::vector<MapMetaData*>::iterator m=metadata.begin();m!=metadata.end();++m){MapMetaData *md=*m;if(md->players==players)result.push_back(true);}
+}
