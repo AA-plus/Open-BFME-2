@@ -1,4 +1,6 @@
 // ?translateGameMessage@CommandTranslator@@UAE?AW4GameMessageDisposition@@PBVGameMessage@@@Z
+// partial score=0.8967685965134321 date=2026-10-13
+// ?translateGameMessage@CommandTranslator@@UAE?AW4GameMessageDisposition@@PBVGameMessage@@@Z
 // partial score=0.8217136310573507 date=2026-10-13
 // ?translateGameMessage@CommandTranslator@@UAE?AW4GameMessageDisposition@@PBVGameMessage@@@Z
 // partial score=0.821261372492925 date=2026-10-13
@@ -8,6 +10,8 @@
 // Copyright 2025 Electronic Arts Inc.; GPL-3.0-or-later, as in the vendored source.
 // BFME layout/call witnesses: build/gap_005ade0d/LAYOUTS.md and region_{a,b}.asm.
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 #include <list>
@@ -890,9 +894,21 @@ static __declspec(noinline) Rva00429276Entry* Rva004292A6(Rva00429276Entry*secon
  player->iterateObjects((int(*)(Object*,void*))Rva00429276,&holder);
  if(!holder.first&&second){holder.second=0;player->iterateObjects((int(*)(Object*,void*))Rva00429276,&holder);}return holder.first;
 }
+extern void *DrawableListFreeNodes;
 namespace _STL {
 template<> list<Drawable*,allocator<Drawable*> >::list(const list<Drawable*,allocator<Drawable*> >&);
-template<> _List_base<Drawable*,allocator<Drawable*> >::~_List_base();
+template<> _List_base<Drawable*,allocator<Drawable*> >::~_List_base() throw();
+template<> __forceinline list<Drawable*,allocator<Drawable*> >::iterator list<Drawable*,allocator<Drawable*> >::erase(iterator pos) {
+ _List_node_base *next=pos._M_node->_M_next;
+ _List_node_base *prev=pos._M_node->_M_prev;
+ _Node *node=(_Node*)pos._M_node;
+ prev->_M_next=next;next->_M_prev=prev;
+ _Destroy(&node->_M_data);
+ node->_M_next=(_List_node_base*)DrawableListFreeNodes;
+ DrawableListFreeNodes=node;
+ return iterator((_Node*)next);
+}
+
 }
 
 // ZH/BF1 CommandXlat::translateGameMessage is the semantic guide.
@@ -936,25 +952,27 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
  case 0x97:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x469);m->appendIntegerArgument(1);m->appendIntegerArgument(0);disp=DESTROY_MESSAGE;break;}
  case 0x96:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x469);m->appendIntegerArgument(0);m->appendIntegerArgument(1);disp=DESTROY_MESSAGE;break;}
  case 0x98:TheMessageStream->appendMessage((GameMessage::Type)0x470);disp=DESTROY_MESSAGE;break;
- case 0x90:{GameLogic*logic=TheGameLogic;if(logic->isInMultiplayerGame()&&!((TranslateLogicFields*)logic)->isReplay()&&((BfmeMemberRV*)((ContextPlayers*)ThePlayerList)->getLocalPlayer())->bfmeAskRV()&&(!translateGlobals()->netMinPlayers||((TranslateGameInfo*)TheGameInfo)->multiplayer())){int count;Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();const ThingTemplate*thing=TheThingFactory->findTemplate(*(AsciiString*)((char*)(*(PlayerTemplate**)((char*)local+0x34))+0x17c));((ContextPlayers*)ThePlayerList)->getLocalPlayer()->countObjectsByThingTemplate(1,&thing,false,&count,true);if(count<*(int*)((char*)TheMultiplayerSettings+0x18)){const CommandButton*c=TheControlBar->findCommandButton(AsciiString("Command_PlaceBeacon"));contextUI()->setCommand(c);}}disp=DESTROY_MESSAGE;break;}
+ case 0x90:{GameLogic*logic=TheGameLogic;if(logic->isInMultiplayerGame()&&!((TranslateLogicFields*)logic)->isReplay()&&((BfmeMemberRV*)((ContextPlayers*)ThePlayerList)->getLocalPlayer())->bfmeAskRV()&&(!translateGlobals()->netMinPlayers||((TranslateGameInfo*)TheGameInfo)->multiplayer())){int count;Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();const ThingTemplate*thing=TheThingFactory->findTemplate(*(AsciiString*)((char*)(*(PlayerTemplate**)((char*)local+0x34))+0x17c));((ContextPlayers*)ThePlayerList)->getLocalPlayer()->countObjectsByThingTemplate(1,&thing,false,&count,true);int limit=*(int*)((char*)TheMultiplayerSettings+0x18);_ReadWriteBarrier();if(count<limit){const CommandButton*c=TheControlBar->findCommandButton(AsciiString("Command_PlaceBeacon"));contextUI()->setCommand(c);}}disp=DESTROY_MESSAGE;break;}
  case 0x91:disp=DESTROY_MESSAGE;break;
  case 0x70:{TranslateTransition*c=(TranslateTransition*)TheTransitionHandler;if(c&&(c->first||c->second))c->flag=true;else Rva0051B8EA();disp=DESTROY_MESSAGE;break;}
  case 0x71: {
-  if(*(bool*)((char*)TheShell+0x5c)){WindowLayout*w=TheShell->top();if(w)w->hide(!w->m_hidden);}
+  Shell*shell=TheShell;bool shellMap=*(bool*)((char*)shell+0x5c);_ReadWriteBarrier();if(shellMap){WindowLayout*w=shell->top();if(w)w->hide(!w->m_hidden);}
   else if(!(TheRecorder&&((Bfme939Helper*)TheRecorder)->get()==1)) {
    bool hide=false;if(TheWindowManager){int id=TheNameKeyGenerator->nameToKey(AsciiString("ControlBar.wnd:ControlBarParent"));GameWindow*w=((TranslateWindowManager*)TheWindowManager)->window(0,id);if(w)hide=!w->winIsHidden();}ToggleControlBar(true);
   }disp=DESTROY_MESSAGE;break;
  }
+ case 127:((ContextUI*)initialUI)->rotateLeft=true;break;
+ case 128:((ContextUI*)initialUI)->rotateLeft=false;break;
+ case 129:((ContextUI*)initialUI)->rotateRight=true;break;
  case 118:((ContextUI*)initialUI)->forceMove=true;break;
  case 119:((ContextUI*)initialUI)->forceMove=false;break;
  case 120:((ContextUI*)initialUI)->waypoint=true;break;
  case 122:((ContextUI*)initialUI)->preferSelection=true;break;
  case 123:((ContextUI*)initialUI)->preferSelection=false;break;
  case 121:((ContextUI*)initialUI)->waypoint=false;break;
- case 127:((ContextUI*)initialUI)->rotateLeft=true;break;
- case 128:((ContextUI*)initialUI)->rotateLeft=false;break;
- case 129:((ContextUI*)initialUI)->rotateRight=true;break;
  case 130:((ContextUI*)initialUI)->rotateRight=false;break;
+ case 0x9d:if(TheWritableGlobalData&&translateGlobals()->timeControls)((TranslateGameEngine*)TheGameEngine)->increase();break;
+ case 0x9e:if(TheWritableGlobalData&&translateGlobals()->timeControls)((TranslateGameEngine*)TheGameEngine)->decrease();break;
  case 131:((ContextUI*)initialUI)->zoomIn=true;break;
  case 132:((ContextUI*)initialUI)->zoomIn=false;break;
  case 133:((ContextUI*)initialUI)->zoomOut=true;break;
@@ -968,6 +986,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
  case 141:((ContextUI*)initialUI)->extra8c1=false;break;
  case 142:((ContextUI*)initialUI)->extra8c2=true;break;
  case 143:((ContextUI*)initialUI)->extra8c2=false;break;
+ case 0x9a:TheMessageStream->appendMessage((GameMessage::Type)0x41c);break;
  case 0x7d:if(TheGameLogic->isInMultiplayerGame()){BfmeAudioEventPrefix136 event(*(const OpaqueRefElement4*)(((TranslateAudio*)TheAudio)->misc()+0x28),0);((TranslateAudio*)TheAudio)->add(&event);disp=DESTROY_MESSAGE;TheMessageStream->appendMessage((GameMessage::Type)0x438);}break;
  case 0x7c:if(TheDisplay)((TranslateDisplay*)TheDisplay)->screenshot(0);disp=DESTROY_MESSAGE;break;
  case 0x3e9:case 0x3eb:case 0x3f8:case 0x3f9:case 0x3fa:case 0x3fb:case 0x3fc:case 0x3fd:case 0x3fe:case 0x3ff:case 0x400:case 0x401:case 0x461:{
@@ -989,7 +1008,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
   const CommandButton*command=contextUI()->command();int commandType=command?contextButton(command)->type:0;
   if(command&&commandType!=10)break;
   if(translateGlobals()->alternate&&isPoint){if(!TheTacticalView)break;Coord3D pos;((ContextView*)TheTacticalView)->screenToTerrain(&msg->getArgument(0)->pixel,&pos,0);bool controllable=TheInGameUI->areSelectedObjectsControllable();if(!controllable&&command&&(commandType==32||commandType==38))controllable=true;
-   if(controllable){int pickType=Rva0030F099(contextUI()->forceAttackMode());Drawable*d=TheTacticalView->pickDrawable(&msg->getArgument(0)->pixelRegion.lo,contextUI()->forceAttackMode(),pickType);if(contextUI()->forceAttackMode())evaluateForceAttack(d,&pos,DO_COMMAND);else {int result=evaluateContextCommand(d,&pos,CONTEXT_COMMAND);if(commandType==24&&result==0xa5)contextUI()->setCommand(0);}disp=DESTROY_MESSAGE;}
+   if(controllable){int pickType=Rva0030F099(contextUI()->forceAttackMode());Drawable*d=TheTacticalView->pickDrawable(&msg->getArgument(0)->pixelRegion.lo,contextUI()->forceAttackMode(),pickType);if(contextUI()->forceAttackMode())evaluateForceAttack(d,&pos,DO_COMMAND);else {int result=evaluateContextCommand(d,&pos,CONTEXT_COMMAND);bool special=commandType==24;_ReadWriteBarrier();if(special&&result==0xa5)contextUI()->setCommand(0);}disp=DESTROY_MESSAGE;}
   }break;
  }
  case 0x17:{
@@ -1012,9 +1031,6 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
  }break;
  case 0x92:if(!TheLivingWorldLogic||!((BfmeSelectionState*)TheLivingWorldLogic)->isSelectionLocked())if(TheControlBar)TheControlBar->rva0031AD94();disp=DESTROY_MESSAGE;break;
  case 0x99:if(theRadarWindowOverrideSource&&((BfmeMemberRV*)((ContextPlayers*)ThePlayerList)->getLocalPlayer())->bfmeAskRV())((Rva002D3861*)theRadarWindowOverrideSource)->rva002D3861();disp=DESTROY_MESSAGE;break;
- case 0x9a:TheMessageStream->appendMessage((GameMessage::Type)0x41c);break;
- case 0x9d:if(TheWritableGlobalData&&translateGlobals()->timeControls)((TranslateGameEngine*)TheGameEngine)->increase();break;
- case 0x9e:if(TheWritableGlobalData&&translateGlobals()->timeControls)((TranslateGameEngine*)TheGameEngine)->decrease();break;
  }
  return disp;
 }
