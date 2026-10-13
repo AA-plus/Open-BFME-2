@@ -1253,7 +1253,7 @@ protected:
 protected:
 	void rva003BA943(Parameter *, bool);
 public:
-	void rva003BBB51(bool);
+	void doSetBorderShroud(bool);
 protected:
 	void rva003BBD61(AsciiString const &, bool);
 public:

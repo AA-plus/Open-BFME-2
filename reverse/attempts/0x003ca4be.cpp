@@ -901,12 +901,12 @@ return;
 }
 case 321:
 {
-rva003BBB51(false);
+doSetBorderShroud(false);
 return;
 }
 case 322:
 {
-rva003BBB51(true);
+doSetBorderShroud(true);
 return;
 }
 case 100:
