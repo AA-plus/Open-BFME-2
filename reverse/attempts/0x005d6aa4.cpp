@@ -1,4 +1,6 @@
 // ?PopulatePlayerList@ChatWindowsOnlineRoom@@UAE_NXZ
+// partial score=0.79 date=2026-10-13
+// ?PopulatePlayerList@ChatWindowsOnlineRoom@@UAE_NXZ
 // partial score=0.7 date=2026-10-11
 // cl: /ICode/GameEngine/Include /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /O1 /G7 /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC
 // stlport
