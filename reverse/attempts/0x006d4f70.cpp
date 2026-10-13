@@ -1,4 +1,8 @@
 // ??HEAStringC@@QBE?AV0@PBD@Z
+// partial score=0.998 date=2026-10-13
+#include <string.h>
+#include <stdlib.h>
+// ??HEAStringC@@QBE?AV0@PBD@Z
 // partial score=0.98 date=2026-10-13
 // ??HEAStringC@@QBE?AV0@PBD@Z
 // partial score=0.98 date=2026-10-13
@@ -25,7 +29,7 @@ public:
 
 	static void FreeData(StringDataC *data);
 
-	StringDataC *m_pData;
+	StringDataC *volatile m_pData;
 
 	EAStringC(const EAStringC &other);
 	EAStringC(unsigned int nSize);
