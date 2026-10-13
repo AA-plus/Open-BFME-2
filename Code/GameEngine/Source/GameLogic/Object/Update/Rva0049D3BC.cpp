@@ -30,24 +30,24 @@ struct Rva0049D3BCEntry
 	char _pad[3];
 };
 
-// g_00C51304: matched references place it at VA 0xc51304; retail contents, sized to the
+// ProductionDoorOpeningFlags: matched references place it at VA 0xc51304; retail contents, sized to the
 // 0x10-byte gap before the next known global there.
-unsigned int g_00C51304[4] = {
+unsigned int ProductionDoorOpeningFlags[4] = {
 	21, 25, 29, 33,
 };
-// g_00C51314: matched references place it at VA 0xc51314; retail contents, sized to the
+// ProductionDoorClosingFlags: matched references place it at VA 0xc51314; retail contents, sized to the
 // 0x10-byte gap before the next known global there.
-unsigned int g_00C51314[4] = {
+unsigned int ProductionDoorClosingFlags[4] = {
 	22, 26, 30, 34,
 };
-// g_00C51324: the third of the three consecutive 16-byte bit-index tables at
+// ProductionDoorWaitingOpenFlags: the third of the three consecutive 16-byte bit-index tables at
 // VA 0xc51304 / 0xc51314 / 0xc51324 (RVA 0x00851324, .rdata, file offset
 // 0x00850724): 17 1b 1f 23. The two siblings hold 20..32 in steps of five; this
 // one continues the run, and the strings that follow it (HeroRevive,
 // HeroPurchase, TimeMultiplier, CostMultiplier, ModifierFilter) are a separate
 // record block, so the object the rowed body indexes is these four words.
-extern unsigned int g_00C51324[];
-unsigned int g_00C51324[4] = {
+extern unsigned int ProductionDoorWaitingOpenFlags[];
+unsigned int ProductionDoorWaitingOpenFlags[4] = {
 	0x17, 0x1b, 0x1f, 0x23,
 };
 
@@ -78,9 +78,9 @@ void Rva0049D3BC::rva0049D3BC()
 			{
 				m_entries[i].m_00 = 0;
 				m_entries[i].m_04 = cur;
-				m_7C[g_00C51304[i] >> 5] |= (1u << (g_00C51304[i] & 31));
-				m_C8[g_00C51304[i] >> 5] &= ~(1u << (g_00C51304[i] & 31));
-				m_C8[g_00C51324[i] >> 5] |= (1u << (g_00C51324[i] & 31));
+				m_7C[ProductionDoorOpeningFlags[i] >> 5] |= (1u << (ProductionDoorOpeningFlags[i] & 31));
+				m_C8[ProductionDoorOpeningFlags[i] >> 5] &= ~(1u << (ProductionDoorOpeningFlags[i] & 31));
+				m_C8[ProductionDoorWaitingOpenFlags[i] >> 5] |= (1u << (ProductionDoorWaitingOpenFlags[i] & 31));
 				m_114 = 1;
 			}
 		}
@@ -90,9 +90,9 @@ void Rva0049D3BC::rva0049D3BC()
 			{
 				m_entries[i].m_04 = 0;
 				m_entries[i].m_08 = cur;
-				m_7C[g_00C51324[i] >> 5] |= (1u << (g_00C51324[i] & 31));
-				m_C8[g_00C51324[i] >> 5] &= ~(1u << (g_00C51324[i] & 31));
-				m_C8[g_00C51314[i] >> 5] |= (1u << (g_00C51314[i] & 31));
+				m_7C[ProductionDoorWaitingOpenFlags[i] >> 5] |= (1u << (ProductionDoorWaitingOpenFlags[i] & 31));
+				m_C8[ProductionDoorWaitingOpenFlags[i] >> 5] &= ~(1u << (ProductionDoorWaitingOpenFlags[i] & 31));
+				m_C8[ProductionDoorClosingFlags[i] >> 5] |= (1u << (ProductionDoorClosingFlags[i] & 31));
 				m_114 = 1;
 			}
 		}
@@ -101,8 +101,8 @@ void Rva0049D3BC::rva0049D3BC()
 			if (m_entries[i].m_flag == 0 && cur - m_entries[i].m_08 > data->m_14)
 			{
 				m_entries[i].m_08 = 0;
-				m_7C[g_00C51314[i] >> 5] |= (1u << (g_00C51314[i] & 31));
-				m_C8[g_00C51314[i] >> 5] &= ~(1u << (g_00C51314[i] & 31));
+				m_7C[ProductionDoorClosingFlags[i] >> 5] |= (1u << (ProductionDoorClosingFlags[i] & 31));
+				m_C8[ProductionDoorClosingFlags[i] >> 5] &= ~(1u << (ProductionDoorClosingFlags[i] & 31));
 				m_114 = 1;
 			}
 		}
