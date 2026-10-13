@@ -33,6 +33,11 @@ struct BfmeVectorRecord000BDF17 {
     unsigned char flag3C;
     BfmeVectorRecord000BDF17();
     BfmeVectorRecord000BDF17(const BfmeVectorRecord000BDF17 &);
+    // Declared, never defined here: the assignment body lives under
+    // StringVectorRecordAssignBFME2.cpp (retail 0x000BDFAC). Declaring the
+    // implicit copy-assignment suppresses this TU's competing COMDAT so
+    // vector helpers call the kept copy; their bytes are unchanged.
+    BfmeVectorRecord000BDF17 &operator=(const BfmeVectorRecord000BDF17 &);
 };
 namespace _STL {
 template <> void _Construct<BfmeVectorRecord000BDF17, BfmeVectorRecord000BDF17>(BfmeVectorRecord000BDF17 *, const BfmeVectorRecord000BDF17 &);
