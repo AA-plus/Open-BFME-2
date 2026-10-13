@@ -1,5 +1,10 @@
 // ??0Rva0042FD9E@@QAE@XZ
-// partial score=0.96 date=2026-10-13
+// partial score=0.98 date=2026-10-13
+// R2 evidence: WB SelectionTranslator constructor and canonical singleton identify
+// this bank, but its provisional map/vtable spellings need owner reconciliation.
+// Full129B/EH EXACT; nd4->2 via paired bool stores + equal-arm call composition.
+// Remaining: EH state1 store and MOV ECX,EDI exchange order. 252 followup
+// member lifetime, store and receiver variants did not close; no Code edit.
 // ??0Rva0042FD9E@@QAE@XZ
 // partial score=0.96 date=2026-10-13
 // ??0Rva0042FD9E@@QAE@XZ
@@ -13,58 +18,75 @@
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 #include <map>
+template<class T> __forceinline volatile T &r1_vwrite(T &value) 
+
+{
+ return *(volatile T *)&value;
+ 
+}
 extern const void *const g_00C3C960[];
 extern void *g_00E03220;
 class Rva0042FD9EBase
+
 {
-public:
-	Rva0042FD9EBase() {}
-	~Rva0042FD9EBase();
-};
+ public:
+ Rva0042FD9EBase() 
+ 
+ {
+  
+ }
+ ~Rva0042FD9EBase();
+ 
+}
+;
 class Rva0042FD9E : public Rva0042FD9EBase
+
 {
-public:
-	Rva0042FD9E();
-private:
-	const void *m_vtable;
-	bool m_b04;
-	bool m_b05;
-	bool m_b06;
-	bool m_b07;
-	int m_i08;
-	int m_i0C;
-	int m_i10;
-	int m_i14;
-	int m_i18;
-	int m_i1C;
-	bool m_b20;
-	int m_i24;
-	_STL::map<int, void *> m_map28;
-	float m_f34;
-	float m_f38;
-	float m_f3C;
-};
+ public:
+ Rva0042FD9E();
+ private:
+ const void *m_vtable;
+ bool m_b04;
+ bool m_b05;
+ bool m_b06;
+ bool m_b07;
+ int m_i08;
+ int m_i0C;
+ int m_i10;
+ int m_i14;
+ int m_i18;
+ int m_i1C;
+ bool m_b20;
+ int m_i24;
+ _STL::map<int, void *> m_map28;
+ float m_f34;
+ float m_f38;
+ float m_f3C;
+ 
+}
+;
 Rva0042FD9E::Rva0042FD9E()
-	: Rva0042FD9EBase()
-	, m_vtable(reinterpret_cast<const void *>(g_00C3C960))
+: Rva0042FD9EBase()
+, m_vtable(reinterpret_cast<const void *>(g_00C3C960))
+
 {
-	m_i0C = -1;
-	_ReadWriteBarrier();
-	m_b04 = false;
-	m_b05 = false;
-	m_b06 = false;
-	m_b07 = false;
-	m_i08 = 0;
-	m_i10 = 0;
-	m_i14 = 0;
-	m_i18 = 0;
-	m_i1C = 0;
-	m_i24 = 0;
-	m_f34 = 0.0f;
-	m_f38 = 0.0f;
-	m_f3C = 0.0f;
-	_ReadWriteBarrier();
-	m_b20 = false;
-	reinterpret_cast<_STL::map<unsigned int, void *> &>(m_map28).clear();
-	g_00E03220 = this;
+ m_i0C = -1;
+ r1_vwrite(((&(m_b04)) ? (m_b04) : (m_b04))) = false;
+ m_b05 = false;
+ m_b06 = false;
+ r1_vwrite(((&(m_b07)) ? (m_b07) : (m_b07))) = false;
+ m_i08 = 0;
+ m_i10 = 0;
+ m_i14 = 0;
+ m_i18 = 0;
+ m_i1C = 0;
+ m_i24 = 0;
+ m_f34 = 0.0f;
+ m_f38 = 0.0f;
+ m_f3C = 0.0f;
+ _ReadWriteBarrier();
+ m_b20 = false;
+ reinterpret_cast<_STL::map<unsigned int, void *> &>(m_map28).clear();
+ g_00E03220 = this;
+ 
 }
