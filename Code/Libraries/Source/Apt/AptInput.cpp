@@ -100,7 +100,8 @@ bool Rva006FB860::rva006FACA0(int event,int transition,void **out)
 
 struct AptInputEventName {unsigned int mask;int stringId;};
 extern AptInputEventName g_00DDC8EC[6];
-extern int g_00DDC2E8[];
+struct Rva006E0AC0Entry {int m_mask;int m_str;};
+extern Rva006E0AC0Entry g_00DDC2E8[];
 class Rva006E0D40 {public:void rva006E0D40();};
 class Rva006F97B0 {public:void rva006F97B0();};
 class Rva006DBB60ShrNAndField {public:bool get() const;};
@@ -147,7 +148,7 @@ void Rva006FB860::rva006FAB40(BfmeAptValue006DCD20 *value,int mask,int arg)
      ((AptValue*)fn->parent)->AddRef();
      ((BfmeAptValue006DCD20*)fn)->setGCRootCount(1);
     }
-    ((AptInputPoolView*)g_bfmeAptPtrAtE176D0)->AddActionToQueue(pValue,(AptValue*)fn,fn->GetNumArguments(),g_00DDC2E8[i*2],arg);
+    ((AptInputPoolView*)g_bfmeAptPtrAtE176D0)->AddActionToQueue(pValue,(AptValue*)fn,fn->GetNumArguments(),g_00DDC2E8[i].m_mask,arg);
    }
   }
  }
