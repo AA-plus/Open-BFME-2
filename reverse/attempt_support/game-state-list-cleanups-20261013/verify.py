@@ -21,6 +21,9 @@ args = parser.parse_args()
 obj_path = build.obj_path(SOURCE)
 obj, image = eh_verify.Obj(obj_path), eh_verify.Image()
 symbols = build.load_symbol_map()
+thunk = build.read_target_bytes(0x200667, 5)
+assert thunk[0] == 0xE9
+assert 0x200667 + 5 + struct.unpack_from('<i', thunk, 1)[0] == 0x4EC395
 source = SOURCE.relative_to(ROOT).as_posix()
 locations, parents, cleanups = {}, [], []
 for parent, (rva, size) in PARENTS.items():

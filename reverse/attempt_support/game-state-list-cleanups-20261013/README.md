@@ -24,6 +24,14 @@ new pin or callable alias is introduced. Existing partial member/base views
 and their identity uncertainties remain unchanged. Complete cleanup matches
 are not a new link-census result.
 
+Native 0x00200667 is an existing five-byte unadjusted tail jump to the
+list-base body at 0x004EC395; replay checks that entire native thunk.
+Normal shadow identity checking still reports the source's existing camera
+list destructor binding at 0x00295983 and the integer-list-base spelling
+bound to 0x00200667. The two new cleanup rows expose that existing integer
+binding too. No source definition, pin, baseline or verifier is changed to
+hide these findings, and complete native cleanup bytes do not settle them.
+
 ```
 ./build.sh Code/GameEngine/Source/Common/System/SaveGame/GameStateDtor.cpp
 python3 reverse/attempt_support/game-state-list-cleanups-20261013/verify.py
