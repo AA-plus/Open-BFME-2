@@ -1,6 +1,4 @@
-// ?update@WeaponModeSpecialPowerUpdate@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.95 date=2026-10-04
-// cl: /O1 /DNDEBUG /MD
+// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD
 //
 // WeaponModeSpecialPowerUpdate::update, retail 0x00494C18 (105 bytes): slot
 // 0 of the class's +0x10 update-module interface table 0x00C4E988, so `this`
@@ -10,6 +8,9 @@
 // set, handed to Object 0x0028EB42 (the pinned removal twin of
 // rva0028EA91), the active byte (+0x38) cleared and the executed flag of the
 // upgrade mux at +0x24 cleared (its slot 9); then the module sleeps forever.
+// Codegen: the module data pointer is a named local (not a reference to the
+// name and not getData() twice), which keeps the Object pointer in EDI and the
+// weapon-set index in EBX as retail does.
 typedef bool Bool;
 enum UpdateSleepTime
 {
@@ -25,20 +26,13 @@ enum WeaponSetType
 	WEAPONSET_NONE = 0,
 	WEAPONSET_COUNT = 0x68
 };
-class StringBase;
-class AsciiString
-{
-public:
-	Bool isEmpty() const;
-private:
-	void *m_data;
-};
+#include "ascii_string.h"
 class Object
 {
 public:
 	void releaseWeaponLock(WeaponLockType type);
 	void clearWeaponSetFlag(WeaponSetType type);
-	void rva0028EB42(const AsciiString &name);
+	void removeAttributeModifierFromPool(const AsciiString &name);
 };
 template <int N> class BitFlags
 {
@@ -107,9 +101,9 @@ UpdateSleepTime WeaponModeSpecialPowerUpdate::update()
 		if (getData()->m_weaponSetFlags.test(i))
 			obj->clearWeaponSetFlag((WeaponSetType)i);
 	}
-	const AsciiString &name = getData()->m_name;
-	if (!name.isEmpty())
-		obj->rva0028EB42(name);
+	const WeaponModeSpecialPowerUpdateModuleData *data = getData();
+	if (!data->m_name.isEmpty())
+		obj->removeAttributeModifierFromPool(data->m_name);
 	m_active = false;
 	setUpgradeExecuted(false);
 	return UPDATE_SLEEP_FOREVER;
