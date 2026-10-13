@@ -87933,3 +87933,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?update@DelayedExperienceLevelGrantSystem@@UAEXXZ,,0x00420EB3,91,Code/GameEngine/Source/GameLogic/System/DelayedExperienceLevelGrantUpdate.cpp,matched,
 ?v7@Rva005AAB91@@UAEXXZ,,0x005AB085,160,Code/GameEngine/Source/GameLogic/SkirmishAI/Rva005AAB91RoamSlot7.cpp,matched,
 ?rva002E2578@Rva002E2578@@QAEXABV?$vector@W4ScienceType@@V?$allocator@W4ScienceType@@@_STL@@@_STL@@@Z,,0x002E2578,97,Code/GameEngine/Source/Common/Rva002E2578FilterSciences.cpp,matched,
+?triggerAbilityEffect@RousingSpeechUpdate@@UAEXXZ,,0x004AD399,345,Code/GameEngine/Source/GameLogic/Object/Update/RousingSpeechUpdateTrigger.cpp,matched,

@@ -1,8 +1,6 @@
-// ?triggerAbilityEffect@RousingSpeechUpdate@@UAEXXZ
-// partial score=0.99 date=2026-10-13
-// ?triggerAbilityEffect@RousingSpeechUpdate@@UAEXXZ
-// partial score=0.9826 date=2026-10-12
 // RousingSpeechUpdate primary vtable slot17 identifies the trigger override.
+// The GameLogic receiver of the leader lookup is an equal-arm conditional (late-folded ?:),
+// which reproduces retail's register order for findObjectByID (W7-R1 lever).
 // WB draft supplies the class/purpose; retail independently establishes data+4,
 // owner+8, affected list+88, MD FX+D8/modifiers+E4/levelUp+F0, Object
 // condition-word+124, contain+250, XP+264 and leader ID+44C. Model words
@@ -82,7 +80,7 @@ void RousingSpeechUpdate::triggerAbilityEffect()
    bool levelUp = md->levelUp;
    if(levelUp) {
      for(_STL::list<ObjectID>::iterator id=affected.begin();id!=affected.end();++id) {
-       Object *target=TheGameLogic->findObjectByID(*id);
+       Object *target=(TheGameLogic ? TheGameLogic : TheGameLogic)->findObjectByID(*id);
        if(target)target->experience264->rva0039B4EC(1,true,false);
        SpeechContainedCallView *contained=target->contained250;
        if(contained)contained->iterateContained(reinterpret_cast<void(*)(Object*,void*)>(&rva004ACD8E),0,1);

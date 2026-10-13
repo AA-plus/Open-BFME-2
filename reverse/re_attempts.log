@@ -52636,3 +52636,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ	0x0075EF58	10	landed	add_match verified Code
 ?update@DelayedExperienceLevelGrantSystem@@UAEXXZ	0x00420EB3	91	landed	add_match verified Code/GameEngine/Source/GameLogic/System/DelayedExperienceLevelGrantUpdate.cpp 91B
 ?v7@Rva005AAB91@@UAEXXZ	0x005AB085	160	landed	add_match verified Code/GameEngine/Source/GameLogic/SkirmishAI/Rva005AAB91RoamSlot7.cpp 160B
 ?rva002E2578@Rva002E2578@@QAEXABV?$vector@W4ScienceType@@V?$allocator@W4ScienceType@@@_STL@@@_STL@@@Z	0x002E2578	97	landed	add_match verified Code/GameEngine/Source/Common/Rva002E2578FilterSciences.cpp 97B
+?triggerAbilityEffect@RousingSpeechUpdate@@UAEXXZ	0x004AD399	345	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/Update/RousingSpeechUpdateTrigger.cpp 345B
