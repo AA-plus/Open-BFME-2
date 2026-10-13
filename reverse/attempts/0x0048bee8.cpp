@@ -1,4 +1,6 @@
 // ?update@FireWeaponUpdate@@UAE?AW4UpdateSleepTime@@XZ
+// partial score=0.9614777777777778 date=2026-10-13
+// ?update@FireWeaponUpdate@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.9614777777777778 date=2026-10-09
 // ?update@FireWeaponUpdate@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.92 date=2026-10-07
