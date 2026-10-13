@@ -9,7 +9,7 @@ class Rva00507823
 {
 public:
 	Rva00507823();
-	virtual void __pad();
+	virtual ~Rva00507823();	// rowed 0x00507823 (was __pad placeholder)
 private:
 	char m_pad[0x128 - 4];
 };

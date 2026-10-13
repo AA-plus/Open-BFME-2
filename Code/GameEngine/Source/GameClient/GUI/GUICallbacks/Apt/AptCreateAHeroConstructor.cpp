@@ -25,6 +25,8 @@ private:
 	unsigned char m_pad004[0x218 - 4];
 };
 
+class Coord2D;
+
 class __multiple_inheritance FunctorTarget;
 typedef void (FunctorTarget::*FunctorMethod)(void);
 
@@ -243,7 +245,7 @@ public:
 	void RenderPictureGuard(const void *origin, const void *extent, void *unused3, void *unused4);
 	void CreateAHeroDemo(int query, char *result, bool skip);
 	void rva00513AF4(const char *value);
-	void rva00514070(void *a, void *b, void *c, void *d);
+	void DrawMapComponent(const Coord2D *a, const Coord2D *b, void *c, void *d);	// rowed 0x00514070
 private:
 	AptMyHero m_myHero; // +0x27C
 	int m_mode; // +0x40C
@@ -321,7 +323,7 @@ AptCreateAHero::AptCreateAHero(void *context)
 		((Rva005248D0CustomRenders *)static_cast<Rva005248D0 *>(this))->m_customRenders.AddCustomRender(name, AptRef<AptCustomRender>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
 	{
-		FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptCreateAHero::rva00514070);
+		FunctorMethod method = reinterpret_cast<FunctorMethod>(&AptCreateAHero::DrawMapComponent);
 		AsciiString name("CreateAHero::DrawMapComponent");
 		reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager)->AddCustomRender(name, AptRef<AptCustomRender>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}

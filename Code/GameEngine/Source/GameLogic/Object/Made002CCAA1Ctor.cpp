@@ -19,7 +19,7 @@ class Rva00507823
 {
 public:
 	Rva00507823();
-	virtual void __pad();
+	virtual ~Rva00507823();	// rowed 0x00507823 (was __pad placeholder)
 virtual bool accepts(void *,Object *)=0;
 virtual void s08()=0;virtual void s0C()=0;virtual void s10()=0;
 virtual void rva0050B32D(void *,Object *)=0;

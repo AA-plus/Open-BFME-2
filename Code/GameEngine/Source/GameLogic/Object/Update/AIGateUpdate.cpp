@@ -9,7 +9,7 @@
 class Object;
 class GateOpener;
 
-GateOpener *rva00498725(Object *gate);			// 0x00498725
+void *Rva00498725Find(void *gate);			// 0x00498725 rowed
 
 class AIGateUpdate
 {
@@ -28,6 +28,6 @@ private:
 GateOpener *AIGateUpdate::getOpener()
 {
 	if (m_opener == 0)
-		m_opener = rva00498725(m_object);
+		m_opener = (GateOpener *)Rva00498725Find(m_object);
 	return m_opener;
 }
