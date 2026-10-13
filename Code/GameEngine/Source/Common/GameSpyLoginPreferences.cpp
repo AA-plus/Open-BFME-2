@@ -511,3 +511,7 @@ _STL::list<AsciiString> GameSpyLoginPreferences::rva005CA07D()
     }
     return emails;
 }
+
+// Native cleanup 0x007A0FF9 is the complete 25B state-guarded lifetime cleanup
+// of the returned email list. Its internal RET label belongs to this body;
+// the full 237B getter and exact native exception graph prove ownership.
