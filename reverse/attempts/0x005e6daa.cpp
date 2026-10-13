@@ -1,4 +1,6 @@
 // ??0Rva005E6D0D@@QAE@PAXPAUHeroDetailsInput@@@Z
+// partial score=0.9808 date=2026-10-13
+// ??0Rva005E6D0D@@QAE@PAXPAUHeroDetailsInput@@@Z
 // partial score=0.98 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /DNDEBUG /EHsc
 // Native005E4300..005E4389 low-byte comparator of selected hero keys;
