@@ -7,7 +7,7 @@
 // No donor: honest address name.
 //
 // ?rva0027D1EF@Rva0027D244@@QAEXPAV1@0@Z, retail 0x0027D1EF, 85 bytes, the
-// method right before it in the same TU: "keep the nearer of two" -- squared
+// method now homed with the grid queries in Rva0027DF9DGridQueries.cpp: "keep the nearer of two" -- squared
 // 2D distance from b's position to a's; unless this record is already taken
 // (+0xC) and its stored distance (+0x10) is not greater, copy a's slot, its
 // position (three movsd), the distance and a itself (+0x14). Retail loads both
@@ -76,19 +76,6 @@ Rva0027D244 *Rva0027D244::rva0027D244(int v)
 	return s;
 }
 
-void Rva0027D244::rva0027D1EF(Rva0027D244 *a, Rva0027D244 *b)
-{
-	Vec12 p = b->m_pos00;
-	float dx = p.x - a->m_pos00.x;
-	float dy = p.y - a->m_pos00.y;
-	float d2 = dx * dx + dy * dy;
-	if (m_0C != 0 && !(m_10 > d2))
-		return;
-	m_0C = a->m_0C;
-	m_pos00 = a->m_pos00;
-	m_10 = d2;
-	m_14 = (int)a;
-}
 
 void Rva0027D244::rva0027D276(Rva0027D244 *a, Rva0027D244 *b)
 {

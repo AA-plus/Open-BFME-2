@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /MD /ICode/Libraries/Include/Lib
+// cl: /EHsc /O1 /G7 /arch:SSE /MD /ICode/Libraries/Include/Lib
 //
 // Five byte-twin grid queries of one owner class (683 bytes each):
 //   ?rva0027DCF2@Rva0027DCF2@@QAEXPAUCoord3D@@MPAVRva0027D244@@_NH@Z  0x0027DCF2..0x0027DF9D
@@ -54,9 +54,36 @@ struct GridEntry
 class Rva0027D244
 {
 public:
+	struct Vec12
+	{
+		Vec12() {}
+		Vec12(const Vec12 &o) : x(o.x), y(o.y), z(o.z) {}
+		float x, y, z;
+	};
+	Rva0027D244 *rva0027D244(int v);
 	void rva0027D1EF(Rva0027D244 *a, Rva0027D244 *b);
 	void rva0027D276(Rva0027D244 *a, Rva0027D244 *b);
+private:
+	Vec12 m_pos00;
+	int m_0C;
+	float m_10;
+	int m_14;
+	int m_18;
 };
+void Rva0027D244::rva0027D1EF(Rva0027D244 *a, Rva0027D244 *b)
+{
+	Vec12 p = b->m_pos00;
+	float dx = p.x - a->m_pos00.x;
+	float dy = p.y - a->m_pos00.y;
+	float d2 = dx * dx + dy * dy;
+	if (m_0C != 0 && !(m_10 > d2))
+		return;
+	m_0C = a->m_0C;
+	m_pos00 = a->m_pos00;
+	m_10 = d2;
+	m_14 = (int)a;
+}
+
 
 class Rva0027D30D
 {
@@ -529,5 +556,193 @@ void Rva0027E79E::rva0027E79E(Coord3D *center, float radius, Rva0027D35F *out, b
 			}
 			cell += 50;
 		} while (--remaining != 0);
+	}
+}
+
+// Native283D70..283E97 / WB C478B0: materialize the nearest tree record
+// as a neutral-player object, consume its record, or find an alive kind86
+// object within10. The original method name is not established.
+// The real query and85-byte callback must both be visible: their nonescaping
+// result lets MSVC reuse its24-byte stack slot for the16-byte CreateMask.
+// Reset27D098 stays visible to preserve the record ID in EDX across its call.
+// The mask is initialized before reading the player chain, as WB shows.
+#include <string.h>
+
+class Object;
+class Player;
+class Team;
+class ThingTemplate;
+
+class Rva000421C8
+{
+public:
+	Rva000421C8() : m_next(0) {}
+	virtual ~Rva000421C8() {}
+	virtual bool allow(Object *obj) = 0;
+	virtual int getPlayerMask();
+	Rva000421C8 *link(Rva000421C8 *next);	// 0x00625790
+	Rva000421C8 *m_next;
+};
+
+class Rva0026119DFilter : public Rva000421C8
+{
+public:
+	virtual bool allow(Object *obj);
+};
+
+class BfmeFixedStorage0004543D
+{
+public:
+	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other) throw();
+private:
+	unsigned char m_bytes[28];
+};
+
+class Rva0004584D : public Rva000421C8
+{
+public:
+	Rva0004584D(const BfmeFixedStorage0004543D &a, const BfmeFixedStorage0004543D &b) throw();
+	virtual bool allow(Object *obj);
+	BfmeFixedStorage0004543D m_08;
+	BfmeFixedStorage0004543D m_24;
+};
+
+struct Rva00045411BitSet
+{
+	Rva00045411BitSet(int unused, int bit) throw();	// 0x00045411
+	unsigned int m_bits[7];
+};
+template<int N> class BitFlags;
+extern BitFlags<116> KINDOFMASK_NONE;
+
+
+
+
+#include "PartitionRangeQueryCallView.h"
+extern PartitionManager *ThePartitionManager;
+
+class Rva0027D098
+{
+public:
+	void rva0027D098();	// 0x0027D098
+	float m_00;
+	float m_04;
+	float m_08;
+	int m_0C;
+	int m_10;
+	const ThingTemplate *m_14;
+	unsigned char m_18;
+	float m_1C;
+	float m_20;
+	float m_24;
+	int m_28;
+	unsigned char m_2C;
+	unsigned char m_2D;
+};
+
+void Rva0027D098::rva0027D098()
+{
+	m_00 = 0.0f;
+	m_04 = 0.0f;
+	m_08 = 0.0f;
+	m_0C = 0;
+	m_10 = 0;
+	m_14 = 0;
+	m_18 = 0;
+	m_1C = 0.0f;
+	m_20 = 0.0f;
+	m_24 = 0.0f;
+	m_28 = 1;
+	m_2C = 1;
+	m_2D = 1;
+}
+
+struct Rva001A62D0TerrainQueryResult
+{
+	Rva001A62D0TerrainQueryResult() : m_0C(0), m_10(10000000.0f), m_14(0)
+	{
+		m_pos.x = 0.0f;
+		m_pos.y = 0.0f;
+		m_pos.z = 0.0f;
+	}
+	Coord3D m_pos;
+	int m_0C;
+	float m_10;
+	Rva0027D098 *m_14;
+};
+
+struct CreateMask
+{
+	CreateMask() { memset(this, 0, sizeof(*this)); }
+	unsigned int m_bits[4];
+};
+
+class Object
+{
+public:
+	void teleportTo(const Coord3D *, bool);	// 0x0029660C
+};
+
+class Player
+{
+public:
+	char m_pad000[0x2EC];
+	Team *m_2EC;		// +0x2EC
+};
+
+class PlayerList
+{
+public:
+	char m_pad00[0x18];
+	Player *m_18;		// +0x18
+};
+extern PlayerList *ThePlayerList;
+
+class ThingFactory
+{
+public:
+	Object *newObject(const ThingTemplate *tmpl, Team *team, const CreateMask *, bool);	// 0x002D0A23
+
+};
+extern ThingFactory *TheThingFactory;
+
+class TerrainLogic
+{
+public:
+
+	void rva00283CE7(unsigned int id);	// 0x00283CE7
+	Object *rva00283D70(const Coord3D *pos);
+
+
+};
+extern TerrainLogic *TheTerrainLogic;
+
+Object *TerrainLogic::rva00283D70(const Coord3D *pos)
+{
+	Rva0027D098 *rec;
+	{
+		Rva001A62D0TerrainQueryResult res;
+		((Rva0027DCF2 *)this)->rva0027DCF2(const_cast<Coord3D *>(pos), 10.0f, (Rva0027D244 *)&res, false, 0);
+		rec = res.m_14;
+	}
+	Object *obj = 0;
+	if (rec) {
+		const ThingTemplate *tmpl = rec->m_14;
+		if (tmpl) {
+			CreateMask mask;
+			Team *team = ThePlayerList->m_18->m_2EC;
+			obj = TheThingFactory->newObject(tmpl, team, &mask, false);
+			obj->teleportTo(reinterpret_cast<const Coord3D *>(rec), false);
+		}
+		unsigned int id = rec->m_0C;
+		rec->rva0027D098();
+		TheTerrainLogic->rva00283CE7(id);
+		return obj;
+	} else {
+		Rva0004584D kindFilter(*(BfmeFixedStorage0004543D *)&Rva00045411BitSet(0, 86),
+			*(const BfmeFixedStorage0004543D *)&KINDOFMASK_NONE);
+		Rva0026119DFilter aliveFilter;
+		kindFilter.link(&aliveFilter);
+		return ThePartitionManager->getClosestObject(pos, 10.0f, 1, &kindFilter);
 	}
 }
