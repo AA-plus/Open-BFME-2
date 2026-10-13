@@ -195,7 +195,10 @@ struct AITargetHeuristicExpansionBase : Rva005CB22A
 	AITargetHeuristicExpansionBase();
 	virtual ~AITargetHeuristicExpansionBase();
 	virtual void findBestTarget(AITarget *choice, Player *player, int unused);
-	bool rva00573122(Player *player);	// 0x00573122
+	// ?wantsToExpand@AITargetHeuristicExpansionBase@@QAE_NPAVPlayer@@@Z @0x00573122 237B:
+	// renamed from placeholder rva00573122 — the WorldBuilder twin names
+	// AITargetHeuristicExpansionBase::wantsToExpand at EA's own file (strings).
+	bool wantsToExpand(Player *player);	// 0x00573122
 	void *m_04;
 	unsigned int m_08;	// +0x08 frames since the gate last passed
 };
@@ -215,11 +218,11 @@ extern int g_00E062F4;
 extern "C" int __cdecl fprintf(void *file, const char *format, ...);
 float GetGameLogicRandomValueReal(float lo, float hi, char *file, int line);
 
-// ?rva00573122@AITargetHeuristicExpansionBase@@QAE_NPAVPlayer@@@Z @0x00573122 237B: the expansion
+// (the expansion
 // gate (retail __FILE__ AITargetHeuristicExpansionBase.cpp, line 63): the
 // player-list check and enough frames since it last passed, then 3000 money,
 // a record count of at least 1 and a coin flip; each step logs.
-bool AITargetHeuristicExpansionBase::rva00573122(Player *player)
+bool AITargetHeuristicExpansionBase::wantsToExpand(Player *player)
 {
 	if (g_00DFEFF0)
 		fprintf(g_00DFEFF0, "pos 1: p1=%d, p2= %d", ((const Rva002A7EA0CmpBoolField *)ThePlayerList)->get(), m_08);
@@ -244,7 +247,7 @@ bool AITargetHeuristicExpansionBase::rva00573122(Player *player)
 
 void AITargetHeuristicExpansionBase::findBestTarget(AITarget *choice, Player *player, int unused)
 {
-	if (!rva00573122(player))
+	if (!wantsToExpand(player))
 		return;
 	Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(player);
 	Coord3D base = record->rva004EBF4B();
