@@ -1,4 +1,6 @@
 // ?friend_checkForSleepTransitions@State@@QAE?AW4StateReturnType@@W42@@Z
+// partial score=0.52 date=2026-10-13
+// ?friend_checkForSleepTransitions@State@@QAE?AW4StateReturnType@@W42@@Z
 // partial score=0.52 date=2026-10-12
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /GX-
 // ?friend_checkForSleepTransitions@State@@QAE?AW4StateReturnType@@W42@@Z @0x004D722A 115B ret 4.
