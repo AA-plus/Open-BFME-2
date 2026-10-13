@@ -240,11 +240,13 @@ private:
 	void *m_0;
 };
 
+class Rva0052A76C {public:void clear();};
+
 class Rva0052AF1C
 {
 public:
 	Rva0052AF1C(void *level);
-	~Rva0052AF1C() { reinterpret_cast<Rva0052AC0A *>(this)->rva0052AC0A(); }
+	__declspec(noinline) ~Rva0052AF1C() { reinterpret_cast<Rva0052A76C *>(this)->clear(); }
 
 private:
 	void *m_0;
