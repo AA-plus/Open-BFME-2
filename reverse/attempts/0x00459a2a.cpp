@@ -1,4 +1,6 @@
 // ?rva00459A2A@SiegeDockingBehavior@@UAE_NW4ObjectID@@PAUCoord3D@@@Z
+// partial score=0.98 date=2026-10-13
+// ?rva00459A2A@SiegeDockingBehavior@@UAE_NW4ObjectID@@PAUCoord3D@@@Z
 // partial score=0.9556813417190775 date=2026-10-10
 // ?rva00459A2A@SiegeDockingBehavior@@UAE_NW4ObjectID@@PAUCoord3D@@@Z
 // cl: /O1 /ICode/Libraries/Include /ICode/GameEngine/Source /arch:SSE /G7 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB
