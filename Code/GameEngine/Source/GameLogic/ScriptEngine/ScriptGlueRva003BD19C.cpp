@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BD19CSet@@YGXPAXPAVParameter@@@Z @0x003BD19C 212B (dump range 18).
+// ?Rva003BD19CSet@ScriptActions@@QAEXPAXPAVParameter@@@Z @0x003BD19C 212B (dump range 18).
 // Unit-named-plus-player-mask loop: resolves the unit through rowed
 // ScriptEngine 0x003588E7 getUnitNamed, builds the player mask from the
 // struct's +0x10 name through rowed 0x00357475, then walks rowed 0x002A7BC9.
@@ -163,7 +165,7 @@ public:
 };
 extern InGameUI *TheInGameUI;
 
-void __stdcall Rva003BD19CSet(void *p, Parameter *param)
+void ScriptActions::Rva003BD19CSet(void *p, Parameter *param)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(param);
 	if (obj == 0)

@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /arch:SSE /G7 /MD /Oy-
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -MD -Oy- -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // Native 003BCB7A..003BCBC7 RET0C. BFME1 donor 7dff0a4a9e937818d2731f9861ade1815663b9db,
 // game/GameEngine/Source/GameLogic/ScriptEngine/ScriptActions.cpp,
 // ScriptActions::doAddCommandBarButton supplies the semantic lead. Target
@@ -25,7 +27,7 @@ public:
 extern ControlBar *TheControlBar;
 extern GameLogic *TheGameLogic;
 
-void __stdcall Rva003BCB7A(const AsciiString &buttonName, const AsciiString &objectType, int slot)
+void ScriptActions::Rva003BCB7A(const AsciiString &buttonName, const AsciiString &objectType, int slot)
 {
  void *subject = (void *)TheThingFactory->findTemplate(objectType);
  if (subject == 0) return;
