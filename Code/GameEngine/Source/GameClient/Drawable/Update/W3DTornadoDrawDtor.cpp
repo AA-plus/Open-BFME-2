@@ -53,3 +53,7 @@ W3DTornadoDraw::~W3DTornadoDraw()
 {
 	rva000D1743();
 }
+
+// Native762A20: complete11B list member+C destruction unwind. The whole
+// named77B parent and native EH graph prove ownership; same-object list
+// destructor200667 is whole5B exact. Element and intermediate base identities stay uncertain.
