@@ -12,16 +12,7 @@
 #include "ascii_string.h"
 #include "unicode_string.h"
 class Xfer;
-class Snapshot {
-public:
-    Snapshot() {}
-    Snapshot(const Snapshot &o) {}
-    virtual ~Snapshot();
-protected:
-    virtual void crc(Xfer *xfer) = 0;
-    virtual void xfer(Xfer *xfer) = 0;
-    virtual void loadPostProcess() = 0;
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 struct TreeHintPayload001F8ACB { unsigned int value; };
 bool operator<(const AsciiString &, const AsciiString &);
 // Scalar-vector copy is supplied by the complete retail 0x002CFAB9 provider.

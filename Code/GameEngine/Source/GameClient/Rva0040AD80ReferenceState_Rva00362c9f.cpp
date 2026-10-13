@@ -126,16 +126,7 @@ public:
 // PE exports identify the Snapshot base; only its used lifetime interface is declared here.
 // class-gate: allow Snapshot releaseReferences reads only +0x04/+0x08; the base supplies the +0x00 vptr and its slots are unused.
 class Xfer;
-class Snapshot
-{
-public:
-    virtual ~Snapshot() {}
-
-protected:
-	virtual void crc(Xfer *xfer) = 0;
-	virtual void xfer(Xfer *xfer) = 0;
-	virtual void loadPostProcess(void) = 0;
-};
+#include "../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class Rva0040AD80ReferenceState : public Snapshot
 {

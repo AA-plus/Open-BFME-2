@@ -94,14 +94,7 @@ public:
 
 extern GameState *TheGameState;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer) = 0;
-	virtual void loadPostProcess() = 0;
-	virtual void xfer(Xfer *xfer) = 0;
-};
+#include "../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class Xfer
 {

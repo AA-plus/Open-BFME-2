@@ -74,19 +74,7 @@ private:
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/Snapshot.h
 class Xfer;
 
-class Snapshot
-{
-public:
-	Snapshot() {}
-	// Defined inline for the same reason the constructor is: retail's
-	// ~TeamFactory @0x000F7512 restores this subobject's vtable and then calls
-	// only ~SubsystemInterface, so Snapshot's destructor is folded away too.
-	virtual ~Snapshot() {}
-
-	virtual void crc(Xfer *) = 0;
-	virtual void xfer(Xfer *) = 0;
-	virtual void loadPostProcess() = 0;
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 // The map's value is anonymous in retail; the ledger already carries its
 // _Rb_tree instantiation under the generated payload name gen_dump.py minted

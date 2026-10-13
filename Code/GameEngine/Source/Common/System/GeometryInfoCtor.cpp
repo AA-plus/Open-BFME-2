@@ -61,14 +61,7 @@ struct GeometryRecord
 
 class Xfer;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void LoadPostProcess();
-	virtual const char *GetSnapshotName();
-	virtual void DoXfer(Xfer &xfer);
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 
 class GeometryInfo : public Snapshot

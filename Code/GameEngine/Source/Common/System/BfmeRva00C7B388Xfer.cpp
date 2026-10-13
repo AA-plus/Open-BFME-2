@@ -88,14 +88,7 @@ struct RGBAColorInt
 
 class Xfer;
 
-class Snapshot
-{
-public:
-    virtual ~Snapshot();
-    virtual void crc(Xfer *xfer) = 0;
-    virtual void loadPostProcess() = 0;
-    virtual void xfer(Xfer *xfer) = 0;
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 // The string types are reduced to what their transfers read: a pointer to a
 // data block whose text starts eight bytes in.  ASCII and Unicode fall back to

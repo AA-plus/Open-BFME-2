@@ -30,14 +30,7 @@ namespace FXParticleSystem
 
 class Xfer;
 
-class Snapshot
-{
-public:
-	Snapshot() {}
-	Snapshot(const Snapshot &that);
-
-	virtual ~Snapshot();
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class TerrainCollisionModuleInfo : public Snapshot
 {

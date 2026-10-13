@@ -95,14 +95,7 @@ public:
 	void xfer(Xfer *xfer);
 };
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void xfer(Xfer *xfer);
-	virtual void loadPostProcess();
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class ObjectModule
 {

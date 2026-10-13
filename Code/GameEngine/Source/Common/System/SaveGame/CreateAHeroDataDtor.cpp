@@ -21,7 +21,7 @@ static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
 #include "unicode_string.h"
 #include "../../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 class Xfer;
-class Snapshot { public: __forceinline virtual ~Snapshot() {} virtual void crc(Xfer *); virtual const char *typeName() const; virtual void xfer(Xfer *); };
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 typedef _STL::map<int,int> IntegerMap;
 struct TreeHintPayload001F8ACB { unsigned int value; };
 bool operator<(const AsciiString &, const AsciiString &);

@@ -6,17 +6,7 @@
 // 0x0081D1A4; EH prolog 0x00629188; prev DefaultColorModuleInfo ctor 82B.
 class Xfer;
 
-class Snapshot
-{
-public:
-	Snapshot() {}
-	Snapshot(const Snapshot &that) {}
-
-	virtual ~Snapshot() {}
-	virtual void crc(Xfer *xfer) = 0;
-	virtual void xfer(Xfer *xfer) = 0;
-	virtual void loadPostProcess() = 0;
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 namespace FXParticleSystem
 {

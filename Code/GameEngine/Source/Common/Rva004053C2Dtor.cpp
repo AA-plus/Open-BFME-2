@@ -4,7 +4,7 @@ struct Rva00405350 { ~Rva00405350(); };
 // Retail base vtable BD77A0 and destructor 1B4E74 prove the canonical 12-byte subsystem base.
 typedef bool Bool;
 #include "subsystem_interface.h"
-class Snapshot { public: virtual ~Snapshot() {} };
+#include "../../../../reference/shims/moduledata/Common/Snapshot.h"
 class Rva004053C2 : public SubsystemInterface, public Snapshot {
 public: virtual ~Rva004053C2();
 private: char m_pad10[272]; Rva00405350 m_vec120;

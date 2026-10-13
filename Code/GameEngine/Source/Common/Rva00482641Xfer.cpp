@@ -86,11 +86,7 @@ protected:
 	virtual void XferData(unsigned int type, void *data, unsigned int size) = 0;
 };
 
-class Snapshot
-{
-public:
-	virtual void snapshotSlot();
-};
+#include "../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class Weapon : public Snapshot
 {

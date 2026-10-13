@@ -11,14 +11,7 @@ class Xfer;
 // ParticleSystemInfo has twelve bytes of scalar state before its first
 // StringBase member, so the prefix keeps that member at the constructor-proven
 // +0x10 while retaining Snapshot's real identity.
-class Snapshot
-{
-public:
-	virtual ~Snapshot() {}
-	virtual void crc(Xfer *xfer) = 0;
-	virtual void loadPostProcess() = 0;
-	virtual void xfer(Xfer *xfer) = 0;
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 namespace FXParticleSystem
 {

@@ -34,14 +34,7 @@ struct TreeHintPayload001F8ACB
 typedef _STL::map<AsciiString, TreeHintPayload001F8ACB> StringPayloadMap;
 
 class Xfer;
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *);
-	virtual const char *typeName() const;
-	virtual void xfer(Xfer *);
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 enum NameKeyType;
 

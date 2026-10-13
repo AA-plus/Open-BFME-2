@@ -38,15 +38,7 @@ private:
 	int m_value;
 };
 
-class __declspec(novtable) Snapshot
-{
-public:
-	__declspec(dllimport) __forceinline Snapshot() { *(const void **)this = g_00BBB554; }
-	virtual ~Snapshot();
-	virtual void crc();
-	virtual void loadPostProcess();
-	virtual void xfer();
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class Rva00427611 : public BFME2NativeNetwork, public Snapshot
 {

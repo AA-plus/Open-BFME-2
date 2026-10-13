@@ -40,12 +40,7 @@ private:
 	int  m_subsystemValue; // +0x08
 };
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot() {}
-	virtual void crc() = 0;
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 // STLport vector storage released with free(); element type trivially destroyed.
 class FreeVector

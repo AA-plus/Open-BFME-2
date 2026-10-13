@@ -60,15 +60,7 @@ private:
 	OpaqueRefCounted *m_ptr;
 };
 
-class Snapshot
-{
-public:
-	__declspec(dllimport) __forceinline Snapshot() {}
-	~Snapshot()
-	{
-		*(const void **)this = g_00BBB554;
-	}
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class GateOpenAndCloseBehaviorModuleData : public Snapshot
 {

@@ -107,14 +107,7 @@ public:
 
 Xfer &xferRandomVariable(Xfer &xfer, GameClientRandomVariable &v);
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot() {}
-	virtual const char *GetSnapshotName() = 0;
-	virtual void LoadPostProcess() = 0;
-	virtual void DoXfer(Xfer &xfer) = 0;
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 namespace FXParticleSystem
 {

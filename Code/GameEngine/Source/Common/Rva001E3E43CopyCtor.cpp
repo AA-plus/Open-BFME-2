@@ -22,14 +22,7 @@ private:
 
 class Xfer;
 
-class Snapshot
-{
-public:
-	virtual ~Snapshot();
-	virtual void crc(Xfer *xfer);
-	virtual void loadPostProcess();
-	virtual void xfer(Xfer *xfer);
-};
+#include "../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class Rva001E3E43 : public Snapshot
 {

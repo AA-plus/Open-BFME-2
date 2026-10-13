@@ -7,13 +7,7 @@
 #include <memory>
 #include "ascii_string.h"
 class Xfer;
-class Snapshot {
-public:
-    __forceinline virtual ~Snapshot() {}
-    virtual void crc(Xfer *);
-    virtual const char *typeName() const;
-    virtual void xfer(Xfer *);
-};
+#include "../../../../../../reference/shims/moduledata/Common/Snapshot.h"
 class Rva00409FFA {
     unsigned int word04;
     unsigned char flag08;

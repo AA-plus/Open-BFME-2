@@ -99,14 +99,7 @@ struct BfmeE8
 };
 Xfer *Rva003F2C0CXfer(Xfer *xfer, _STL::vector<BfmeE8> *vec);
 
-class Snapshot
-{
-public:
-    virtual ~Snapshot();
-    virtual void LoadPostProcess();
-    virtual const char *GetSnapshotName();
-    virtual void DoXfer(Xfer &xfer);
-};
+#include "../../../../../reference/shims/moduledata/Common/Snapshot.h"
 
 class LivingWorldRegionConnection : public Snapshot
 {
