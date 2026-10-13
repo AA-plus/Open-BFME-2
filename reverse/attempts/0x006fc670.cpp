@@ -1,31 +1,142 @@
 // _BfmeAux006FC670
-// partial score=0.91 date=2026-10-09
+// partial score=0.91 date=2026-10-13
 // cl: /O2 /G6 /arch:SSE /DNDEBUG /MD /EHs
-//
-// _BfmeAux006FC670 (pinned C name) retail 0x006FC670..0x006FD040 (2512 bytes:
-// the 2398-byte body through RET at 0x006FCFCD, two pad bytes, the 14-entry
-// jump table at 0x006FCFD0 and its 56-entry byte index at 0x006FD008).
-//
-// Apt action-stream relocation from AptActionInterpreter.cpp (every assert
-// passes that file name; texts and lines copied from retail). It walks the
-// action stream checking each action against
-// AptActionInterpreter::sGlobalTable[eAction].mCheckAlignment (line 0x13E)
-// and stops at action 0. With a constant file it turns the stream's
-// pBase-relative string and table offsets into pointers (each asserted below
-// 0xFFFFF first) and replaces each ConstantPool/Push item index (checked
-// against *pnCurrentConstantIndex and counted) by its atom: a pooled string
-// (rowed StringPool intern 0x0070DBB0 with the constant string temporarily
-// rebased on the constant file) or a float / integer / boolean / two pooled
-// 12-byte value types / the undefined value, add-ref'ing every non-string.
-// Without a constant file (the NULL-argument forwarder 0x006FD040) it undoes
-// that: strings leave the pool (rowed RemoveFromPool 0x0070DDC0), other atoms
-// are released, the indices are renumbered from *pnCurrentConstantIndex and
-// the pointers go back to offsets; DefineFunction bodies get the
-// 0x98765432/0x12345678 markers. Every 16 items and after each action the
-// release vector (rowed AptValueVector::ReleaseValues 0x006E6D90) is drained.
-// Callers: the asserting forwarder 0x006FD060 (aActionStream pBase
-// aConstantFile) and 0x006FD040.
+// Target evidence: the 762-byte Ghidra body calls the matched AptValue
+// predicates at 0x006DC170, 0x006DC210, 0x006DC0D0, 0x006DC010 and 0x006DBFA0;
+// its string path constructs an EAStringC, calls the matched toString body at
+// 0x006DD6C0, then uses the matched EAStringC accessors and the target imports
+// strtol (0x00629ABA) and isdigit (0x00629982). Its caller at 0x006FF5D0 passes
+// the top Apt stack value. The address-derived pin records that call path.
+// Structural inference: the body is a numeric-string predicate; no named
+// source identity is claimed. The grammar and exceptional type path below
+// follow the retail branch structure, including its edge cases.
 
+class EAStringC
+{
+    unsigned int m_data;
+
+public:
+    EAStringC();
+    ~EAStringC();
+    unsigned int rva006D3750() const;
+    int GetAt(int index) const;
+    const char *rva00620090() const;
+};
+
+class AptString;
+class AptValue
+{
+public:
+    virtual void AddRef();
+    virtual void Release();
+    AptString *c_string() const;
+    bool isInteger() const;
+    bool isFloat() const;
+    bool isString() const;
+    bool isUndefined() const;
+    bool isNone() const;
+    void toString(EAStringC &out) const;
+protected:
+    unsigned int m_valueFlags;
+};
+
+int Rva006CD220Get();
+extern "C" long __cdecl strtol(const char *, char **, int);
+
+// Retail calls the six-byte target import thunk at 0x00629982. Its existing
+// ledger pin uses the generated no-argument wrapper name, so call that pinned
+// symbol through the typed ABI the target call site establishes.
+void ji_00629982();
+typedef int (__cdecl *Rva00629982Digit)(int);
+#define digitAt00629982(value) \
+    (reinterpret_cast<Rva00629982Digit>(&ji_00629982)(value))
+
+bool rva006fc370(AptValue *value)
+{
+    if (value->isInteger())
+        return false;
+    if (value->isFloat())
+        return false;
+
+    if (value->isString()) {
+        EAStringC string;
+        value->toString(string);
+
+        if (string.rva006D3750() == 0)
+            return true;
+
+        if (string.GetAt(0) == '0' &&
+            static_cast<int>(string.rva006D3750()) > 2 &&
+            string.GetAt(1) == 'x') {
+            char *end;
+            strtol(string.rva00620090(), &end, 16);
+            if (*end == '\0')
+                return false;
+        }
+
+        bool decimalPointSeen = false;
+        char last = static_cast<char>(
+            string.GetAt(static_cast<int>(string.rva006D3750()) - 1));
+        if (last != '-' && last != '+' && last != 'e' && last != '.' &&
+            !digitAt00629982(last))
+            return true;
+
+        if (string.GetAt(0) != '.' && string.GetAt(0) != '-' &&
+            string.GetAt(0) != '+' &&
+            !digitAt00629982(string.GetAt(0)))
+            return true;
+
+        for (int index = 1;
+             index < static_cast<int>(string.rva006D3750()); ++index) {
+            if (string.GetAt(index) == '.') {
+                if (!decimalPointSeen) {
+                    decimalPointSeen = true;
+                    continue;
+                }
+            }
+
+            if (string.GetAt(index) == 'e' && index != 1) {
+                if (index == 2) {
+                    if (string.GetAt(0) == '+')
+                        goto invalid_string;
+                    if (string.GetAt(0) == '-')
+                        goto invalid_string;
+                }
+
+                int next = index + 1;
+                if (next < static_cast<int>(string.rva006D3750())) {
+                    char exponent = static_cast<char>(string.GetAt(next));
+                    if (exponent == '-' || exponent == '+') {
+                        index = next;
+                    } else {
+                        if (!digitAt00629982(exponent))
+                            goto invalid_string;
+                        index = next;
+                    }
+                }
+                continue;
+            }
+
+            if (!digitAt00629982(string.GetAt(index))) {
+                goto invalid_string;
+            }
+        }
+
+        return false;
+
+    invalid_string:
+        return true;
+    } else if (value->isUndefined() || value->isNone()) {
+        int version = Rva006CD220Get();
+        if (version == 7)
+            return true;
+        return false;
+    }
+
+    return true;
+}
+
+// Native parser extent includes its jump table and byte-index table (2512B).
 extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char *, const char *, int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
 void __debugbreak();
@@ -41,17 +152,6 @@ void __debugbreak();
 	} while (0)
 
 class AptString;
-
-class AptValue
-{
-public:
-	virtual void AddRef();
-	virtual void Release();
-	bool isString() const;
-	AptString *c_string() const;
-protected:
-	unsigned int m_valueFlags;
-};
 
 class AptValueVector
 {
@@ -164,9 +264,10 @@ struct ActionWithData { int nOffset; };
 #define RELOCATE(field) if (field) *(int *)&(field) += pBase
 #define UNRELOCATE(field) if (field) *(int *)&(field) -= pBase
 
-extern "C" void BfmeAux006FC670(const unsigned char *aActionStream, int pBase, AptConstantFile *aConstantFile, int *pnCurrentConstantIndex)
+extern "C" void BfmeAux006FC670(const unsigned char *incomingActionStream, int pBase, AptConstantFile *aConstantFile, int *pnCurrentConstantIndex)
 {
 	int bUnrelocate = (aConstantFile == 0);
+    const unsigned char *aActionStream=incomingActionStream;
 	g_releaseVectorAtE17710->ReleaseValues();
 	for (;;)
 	{
@@ -215,28 +316,31 @@ extern "C" void BfmeAux006FC670(const unsigned char *aActionStream, int pBase, A
 				{
 					int nConstTableIndex = (int)pData->items.apItems[i];
 					RUNTIME_ASSERT(nConstTableIndex == *pnCurrentConstantIndex, 0x1D7, "nConstTableIndex == *pnCurrentConstantIndex");
-					(*pnCurrentConstantIndex)++;
+					int nextIndex=*pnCurrentConstantIndex+1;
+                    *pnCurrentConstantIndex=nextIndex;
+                    int constantType=aConstantFile->aConstants[nConstTableIndex].type;
 					AptValue *pAtom = 0;
-					if (aConstantFile->aConstants[nConstTableIndex].type == 1)
+					if (constantType == 1)
 					{
+                        AptConstantFile *constantBase=aConstantFile;
 						RUNTIME_ASSERT((unsigned)aConstantFile->aConstants[nConstTableIndex].szString < 0xfffff, 0x1E5, "(unsigned)aConstantFile->aConstants[nConstTableIndex].szString < 0xfffff");
 						if (aConstantFile->aConstants[nConstTableIndex].szString)
-							*(int *)&aConstantFile->aConstants[nConstTableIndex].szString += (int)aConstantFile;
+							*(int *)&aConstantFile->aConstants[nConstTableIndex].szString += (int)constantBase;
 						pAtom = (AptValue *)Rva0070DBB0Intern(aConstantFile->aConstants[nConstTableIndex].szString);
 						if (aConstantFile->aConstants[nConstTableIndex].szString)
-							*(int *)&aConstantFile->aConstants[nConstTableIndex].szString -= (int)aConstantFile;
+							*(int *)&aConstantFile->aConstants[nConstTableIndex].szString -= (int)constantBase;
 					}
-					else if (aConstantFile->aConstants[nConstTableIndex].type == 6)
+					else if (constantType == 6)
 						pAtom = Rva008A4EA0MakeFloat(aConstantFile->aConstants[nConstTableIndex].fValue);
-					else if (aConstantFile->aConstants[nConstTableIndex].type == 7)
+					else if (constantType == 7)
 						pAtom = AptInteger::Create(aConstantFile->aConstants[nConstTableIndex].nValue);
-					else if (aConstantFile->aConstants[nConstTableIndex].type == 8)
+					else if (constantType == 8)
 						pAtom = new Rva006FB9C0(aConstantFile->aConstants[nConstTableIndex].nValue);
-					else if (aConstantFile->aConstants[nConstTableIndex].type == 5)
+					else if (constantType == 5)
 						pAtom = AptBoolean::Create(aConstantFile->aConstants[nConstTableIndex].nValue != 0);
-					else if (aConstantFile->aConstants[nConstTableIndex].type == 4)
+					else if (constantType == 4)
 						pAtom = new Rva006FB960(aConstantFile->aConstants[nConstTableIndex].nValue);
-					else if (aConstantFile->aConstants[nConstTableIndex].type == 3)
+					else if (constantType == 3)
 						pAtom = gpUndefinedValue;
 					RUNTIME_ASSERT(pAtom, 0x20B, "pAtom");
 					pData->items.apItems[i] = pAtom;
