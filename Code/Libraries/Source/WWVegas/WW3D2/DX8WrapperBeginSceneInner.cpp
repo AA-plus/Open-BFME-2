@@ -2,10 +2,35 @@
 // Retail 0x00904230: DX8CALL(BeginScene()) wrapped by a matching enter/leave helper.
 
 struct IDirect3DDevice8;
+struct IDirect3DSurface8;
+
+struct D3DLOCKED_RECT
+{
+	int Pitch;
+	void *pBits;
+};
+
+struct IDirect3DSurface8Vtbl
+{
+	void *reserved0[2];
+	unsigned long (__stdcall *Release)(IDirect3DSurface8 *self);
+	void *reserved1[10];
+	long (__stdcall *LockRect)(IDirect3DSurface8 *self, D3DLOCKED_RECT *locked,
+		const void *rect, unsigned long flags);
+	long (__stdcall *UnlockRect)(IDirect3DSurface8 *self);
+};
+
+struct IDirect3DSurface8
+{
+	IDirect3DSurface8Vtbl *lpVtbl;
+};
 
 struct IDirect3DDevice8Vtbl
 {
-	void *reserved[41];
+	void *reserved0[18];
+	long (__stdcall *GetBackBuffer)(IDirect3DDevice8 *self, unsigned int swap_chain,
+		unsigned int back_buffer, int type, IDirect3DSurface8 **surface);
+	void *reserved1[22];
 	long (__stdcall *BeginScene)(IDirect3DDevice8 *self);
 };
 
@@ -90,6 +115,7 @@ class DX8Wrapper
 {
 public:
 	static void Begin_Scene_Inner(void);
+	static void Rva0011D2D0WaitForBackBuffer(void);
 
 private:
 protected:
@@ -105,6 +131,27 @@ void DX8Wrapper::Begin_Scene_Inner(void)
 	D3DDevice->lpVtbl->BeginScene(D3DDevice);
 	++D3DCallCount;
 	bfmeDebugTouch009588e0();
+}
+
+// Retail 0x0011D2D0 (87 B), between Begin_Scene_Inner and Clear: when a
+// device exists, fetch back buffer 0 (GetBackBuffer, vtable +0x48), lock it
+// read-only (LockRect +0x34, flags 0x800 = D3DLOCK_READONLY), unlock it if the
+// lock succeeded (+0x38) and release the surface (+0x08). A lock of the back
+// buffer stalls until the GPU has drained, so this reads as a frame sync.
+// It has no direct caller or data reference and no Zero Hour counterpart:
+// the name is address-derived.
+void DX8Wrapper::Rva0011D2D0WaitForBackBuffer(void)
+{
+	if (D3DDevice) {
+		IDirect3DSurface8 *surface = 0;
+		if (D3DDevice->lpVtbl->GetBackBuffer(D3DDevice, 0, 0, 0, &surface) >= 0) {
+			D3DLOCKED_RECT locked;
+			if (surface->lpVtbl->LockRect(surface, &locked, 0, 0x800) >= 0) {
+				surface->lpVtbl->UnlockRect(surface);
+			}
+			surface->lpVtbl->Release(surface);
+		}
+	}
 }
 // ?Rva00959410Dispatch@@3URva00959410Ptr@@A: the global at VA 0xdf7040 is ?g_bfmeObjECF@@3PAUBfmeObjECF@@A.
 #pragma comment(linker, "/alternatename:?Rva00959410Dispatch@@3URva00959410Ptr@@A=?g_bfmeObjECF@@3PAUBfmeObjECF@@A")
