@@ -422,3 +422,6 @@ UnicodeString Rva00319CED::rva004E265F(int id)
      }
  return help;
 }
+
+// Native0x791c0a complete1B action: Independent1B RET action in the whole738B help parent native EH graph. The neighbouring24B conditional cleanup branches to this named entry; disjoint extents prevent duplicate coverage.
+// Whole native parent and complete EH graph independently prove ownership.
