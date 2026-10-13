@@ -82,3 +82,6 @@ private:
 Render2DClass::~Render2DClass()
 {
 }
+
+// Native unwind 0x00764CC6 destroys Batches (+0x34) through the rowed
+// vector destructor; the complete parent EH graph independently binds this 11B body.
