@@ -40,6 +40,16 @@ public:
 	virtual ~Rva00109610();
 };
 
-Rva00109610::Rva00109610()
+// Select-any like the W3DProjectedShadowInit.cpp copy (this retail body comes
+// first in link order, so it is the copy the link keeps); the anchor keeps the
+// body emitted.
+inline Rva00109610::Rva00109610()
 {
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva00109610Ctor@@YAXPAVRva00109610@@@Z absent-from-retail
+void bfmeEmitRva00109610Ctor(Rva00109610 *p)
+{
+	p->Rva00109610::Rva00109610();
 }

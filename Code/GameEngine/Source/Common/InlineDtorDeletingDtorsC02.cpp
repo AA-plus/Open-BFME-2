@@ -45,8 +45,17 @@ Rva00108475::Rva00108475(EmitVtableTag *)
 
 // ??1Rva00108475@@UAE@XZ @0x0010846E 7B: the empty dtor, restoring the vtable;
 // the deleting dtor still expands it inline.
-Rva00108475::~Rva00108475()
+// Select-any like the Rva0010C785Lifecycle.cpp copy (this retail body comes first
+// in link order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline Rva00108475::~Rva00108475()
 {
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva00108475Dtor@@YAXPAVRva00108475@@@Z absent-from-retail
+void bfmeEmitRva00108475Dtor(Rva00108475 *p)
+{
+	p->Rva00108475::~Rva00108475();
 }
 
 // Clean BF1 9cbfb551fe Common/Rva007AE420Table.cpp semantic donor, normal O1/SSE/G7.
