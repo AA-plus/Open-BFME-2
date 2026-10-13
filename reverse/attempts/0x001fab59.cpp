@@ -1,4 +1,6 @@
 // ?update@Rva001FAB59@@QAE_NH@Z
+// partial score=0.956 date=2026-10-13
+// ?update@Rva001FAB59@@QAE_NH@Z
 // partial score=0.9614 date=2026-10-11
 // cl: /O1 /Ob2 /Oy- /MD /arch:SSE /G7 /DNDEBUG /Ireference/shims/bfme2_ascii
 // ?update@Rva001FAB59@@QAE_NH@Z  retail 0x001FAB59..0x001FB201 (1704 B) RET 4
@@ -13,8 +15,8 @@
 // terms; Bool transformSet declared before parentXfrm (ZH order) matters.
 // Object transform is at +0x8. Canonical Coord3D only, no dead throw block.
 #include "ascii_string.h"
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
-#include "../../Common/GameLogicObjectLookupView.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
 typedef float Real;
 typedef bool Bool;

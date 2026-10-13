@@ -1,4 +1,6 @@
 // ?rva001E9083@Rva001E46E1@@QAEXPAVObject@@PBUCoord3D@@MM@Z
+// partial score=0.61 date=2026-10-13
+// ?rva001E9083@Rva001E46E1@@QAEXPAVObject@@PBUCoord3D@@MM@Z
 // partial score=0.44809 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Oi- /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWDebug /ICode/Libraries/Include
 // ZH Locomotor::locoUpdate_moveTowardsPosition is the primary movement guide.
@@ -7,7 +9,7 @@
 // Original target member name is not established; existing neutral ABI retained.
 #include "matrix3d.h"
 #include "Lib/Coord3D.h"
-#include "../../Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 #include <math.h>
 extern GameLogic*TheGameLogic;
 #define __min(a,b) (((a)<(b))?(a):(b))
