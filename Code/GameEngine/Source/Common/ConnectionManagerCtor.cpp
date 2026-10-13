@@ -55,6 +55,26 @@ struct Unknown12050
 	Unknown12050() : m_12050(0), m_12054(0) {}
 };
 
+// Preserve the verified set constructor while naming the target-specific
+// tree destruction: retail4D1D2D tail-calls the rowed tree dtor4D1AC3.
+// The original comparator/container spelling remains unasserted.
+class Rva004D0545 {public:~Rva004D0545();};
+struct ConnectionAsciiSet
+{
+	unsigned storage[3];
+	__forceinline ConnectionAsciiSet()
+	{
+		typedef _STL::set<AsciiString> Native;
+		((Native *)this)->Native::set();
+	}
+	__declspec(noinline) ~ConnectionAsciiSet();
+};
+ConnectionAsciiSet::~ConnectionAsciiSet()
+{
+	((Rva004D0545 *)this)->Rva004D0545::~Rva004D0545();
+}
+typedef char ConnectionAsciiSetExtent[(sizeof(ConnectionAsciiSet)==12)?1:-1];
+
 class ConnectionManager
 {
 public:
@@ -86,7 +106,7 @@ public:
 	bool m_12135;
 	char m_12136pad[2];
 	_STL::map<int, void *> m_12138;
-	_STL::set<AsciiString> m_12144;
+	ConnectionAsciiSet m_12144;
 	_STL::map<int, void *> m_12150[8];
 };
 
