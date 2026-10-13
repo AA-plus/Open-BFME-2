@@ -1,5 +1,7 @@
 // ?rva00544C62@Rva00544C62@@QAEHXZ
 // partial score=0.5 date=2026-10-13
+// ?rva00544C62@Rva00544C62@@QAEHXZ
+// partial score=0.5 date=2026-10-13
 // cl: /ICode/GameEngine/Source/Common /ICode/Libraries/Include/Lib /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // stlport
 // ?rva00544C62@Rva00544C62@@QAEHXZ, retail 0x00544C62 (473 bytes). WorldBuilder
