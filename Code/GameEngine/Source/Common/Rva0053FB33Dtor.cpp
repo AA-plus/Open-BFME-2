@@ -25,19 +25,22 @@ template <> StringBase<char>::~StringBase();
 #pragma comment(linker, "/alternatename:??1?$StringBase@D@@QAE@XZ=?releaseBuffer@?$StringBase@D@@AAEXXZ")
 
 
+// Native20B cleanup guards null before adjusting to the base at +4.
+// Sibling constructor53FAB7 calls the16B storage constructor330757 before
+// installing this same C694DC vptr; opaque words retain their measured extent.
 struct Rva0053FB33Holder
 {
 	~Rva0053FB33Holder() { if (m_ptr != 0) free(m_ptr); }
 	void *m_ptr;
+	char m_opaque04[0xC];
 };
 
-class Rva0053FB33
+class Rva0053FB33 : private Rva0053FB33Holder
 {
 public:
 	virtual ~Rva0053FB33();
 private:
-	Rva0053FB33Holder m_holder04;
-	char m_pad08[0x18 - 0x08];
+	char m_pad14[0x18 - 0x14];
 	StringBase<char> m_str18;
 };
 
