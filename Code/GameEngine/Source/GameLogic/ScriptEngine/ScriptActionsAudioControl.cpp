@@ -1,4 +1,6 @@
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// stlport
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+#include "GameLogic/ScriptActionsBFME2.h"
 // ZH audio pause actions guide the purpose; target slots and integer ABI
 // are measured independently at 0x003BBCB3 and its caller.
 template<int N> class Rva003BBCB3Slots : public Rva003BBCB3Slots<N - 1>
@@ -17,14 +19,14 @@ public:
 };
 class AudioManager;
 extern AudioManager *TheAudio;
-void __stdcall Rva003BBCB3Set(bool enabled)
+void ScriptActions::Rva003BBCB3Set(bool enabled)
 {
     int pause = !enabled;
     int *pausePtr = &pause;
     ((Rva003BBCB3Audio *)TheAudio)->pauseMusic(0, 1, *pausePtr);
 }
 
-void __stdcall Rva003BBCD2Set(bool enabled, bool otherEnabled)
+void ScriptActions::Rva003BBCD2Set(bool enabled, bool otherEnabled)
 {
     int pause = !enabled;
     int otherPause = !otherEnabled;
@@ -32,7 +34,7 @@ void __stdcall Rva003BBCD2Set(bool enabled, bool otherEnabled)
     int *otherPausePtr = &otherPause;
     ((Rva003BBCB3Audio *)TheAudio)->pauseSpeech(0, 1, *pausePtr, *otherPausePtr);
 }
-void __stdcall Rva003BBC81Set(bool enabled, bool otherEnabled, int kind)
+void ScriptActions::Rva003BBC81Set(bool enabled, bool otherEnabled, int kind)
 {
     int pause = !enabled;
     int otherPause = !otherEnabled;
@@ -40,3 +42,6 @@ void __stdcall Rva003BBC81Set(bool enabled, bool otherEnabled, int kind)
     int *otherPausePtr = &otherPause;
     ((Rva003BBCB3Audio *)TheAudio)->pauseSound(0, kind, *pausePtr, *otherPausePtr);
 }
+
+// Member ABI: executeAction3CA4BE supplies its ScriptActions receiver in ECX.
+// Canonical class declares these methods; original action verbs remain uncertain.
