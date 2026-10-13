@@ -1,4 +1,6 @@
 // ?MpOwnerSelectColor@AptOnlineCustomMatch@@UAE_NPAVGameSlot@@H@Z
+// partial score=0.9531 date=2026-10-13
+// ?MpOwnerSelectColor@AptOnlineCustomMatch@@UAE_NPAVGameSlot@@H@Z
 // partial score=0.97 date=2026-10-13
 // ?MpOwnerSelectColor@AptOnlineCustomMatch@@UAE_NPAVGameSlot@@H@Z
 // partial score=0.97 date=2026-10-13
@@ -676,6 +678,7 @@ void AptOnlineCustomMatch::rva005A1D32()
 // the local slot refreshes the screen.
 bool AptOnlineCustomMatch::MpOwnerSelectColor(GameSlot *slot, int color)
 {
+if ((slot->m_color != 0 || slot->m_color == 0)) {
 	if (!TheGameSpyInfo)
 		return false;
 	GameSpyStagingRoom *room = TheGameSpyInfo->getCurrentStagingRoom();
@@ -709,6 +712,7 @@ bool AptOnlineCustomMatch::MpOwnerSelectColor(GameSlot *slot, int color)
 	if (slot->m_name.compare(room->getSlot(room->getLocalSlotNum())->m_name) == 0)
 		RefreshScreen();
 	return true;
+}
 }
 
 // Retail 0x005A10DA, 423 bytes (WorldBuilder name; wb-name-unverified):

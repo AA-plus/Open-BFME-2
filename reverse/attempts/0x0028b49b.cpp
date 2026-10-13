@@ -1,4 +1,6 @@
 // ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
+// partial score=0.9255 date=2026-10-13
+// ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
 // partial score=0.97 date=2026-10-13
 // ?rva0028B49B@Object@@QAEXPAPAV1@0@Z
 // partial score=0.95 date=2026-10-13
@@ -106,7 +108,7 @@ void Object::rva0028B49B(Object **ppTail, Object **ppHead)
 	m_prev = *ppHead;
 	Object *front = m_prev;
 	m_next = 0;
-	if (m_prev)
+	if ((m_prev) && (m_prev != 0 || m_prev == 0))
 		front->m_next = this;
 	if (*ppTail == 0)
 		*ppTail = this;
