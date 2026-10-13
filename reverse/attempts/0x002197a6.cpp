@@ -1,4 +1,9 @@
 // ?rva002197A6@Rva002197A6@@QAEPAVRva002197A6Entry@@H@Z
+// partial score=0.97 date=2026-10-13
+// W7-SOL2 r1 (chain.py seed): _ReadWriteBarrier after the end read + begin inlined into its two uses => size-exact 116 (was 117), residue 6 instr: retail loads end->ecx then begin->eax (a1 form) and keeps count in ecx; ours end->eax, begin->ecx.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+// ?rva002197A6@Rva002197A6@@QAEPAVRva002197A6Entry@@H@Z
 // partial score=0.96 date=2026-10-01
 // ?rva002197A6@Rva002197A6@@QAEPAVRva002197A6Entry@@H@Z retail 0x002197A6 116B:
 // find an entry by id in the 8 GameInfo slots when the game info exists, else
@@ -11,7 +16,7 @@
 // locals, count-less compare, branch order or a single return.
 // ?rva002197A6@Rva002197A6@@QAEPAVRva002197A6Entry@@H@Z
 // partial score=0.95 date=2026-09-28
-// cl: /O1 /MD /arch:SSE
+// cl: /O1 /G7 /MD /arch:SSE
 class Rva002197A6Entry
 {
 public:
@@ -57,11 +62,12 @@ Rva002197A6Entry *Rva002197A6::rva002197A6(int id)
         }
         return result;
     } else {
-        Rva002197A6Entry **begin = g_Rva009FE358;
+
         Rva002197A6Entry **end = g_Rva009FE35C;
-        unsigned int count = (unsigned int)(end - begin);
+        _ReadWriteBarrier();
+        unsigned int count = (unsigned int)(end - (g_Rva009FE358));
         for (; result == 0 && i < count; ++i) {
-            Rva002197A6Entry *obj = begin[i];
+            Rva002197A6Entry *obj = (g_Rva009FE358)[i];
             result = (id == obj->m_id) ? obj : result;
         }
         return result;

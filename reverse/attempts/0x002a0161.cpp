@@ -21,6 +21,8 @@
 // Both look like retail treating listIt as a memory variable. Everything else
 // (EH states, stack slots, all calls and constants) lines up; the shared
 // function-scope startY is what puts both timer blocks' y at [ebp-0x14].
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <stdlib.h>
 namespace _STL { void __cdecl free(void *block); }
 #define free _STL::free
@@ -356,6 +358,7 @@ protected:
 void InGameUI::postDraw()
 {
 	Int startY;
+	_ReadWriteBarrier();
 	if (m_messagesOn) {
 		ICoord2D pos = (g_00DFEF18 && g_00DFEF18->m_18) ? m_messagePositionAlt : m_messagePosition;
 		Int y = fast_float2long_round(floor((Real)TheDisplay->getHeight() * pos.y * (1.0f / 768.0f) + 0.5f));
@@ -483,8 +486,8 @@ void InGameUI::postDraw()
 			AsciiString timerName = mapIt->first;
 			NamedTimerInfo *info = mapIt->second;
 			if (info) {
-				UnicodeString line;
 				Int framesLeft = 0;
+				UnicodeString line;
 				ScriptCounter *counter = TheScriptEngine->getCounter(timerName);
 				if (counter)
 					framesLeft = counter->value;

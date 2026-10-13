@@ -1,4 +1,6 @@
 // ?ParseAction@ScriptAction@@KAPAV1@AAVDataChunkInput@@PAUDataChunkInfo@@PAX@Z
+// partial score=0.965 date=2026-10-13
+// ?ParseAction@ScriptAction@@KAPAV1@AAVDataChunkInput@@PAUDataChunkInfo@@PAX@Z
 // partial score=0.96 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD
 // BANK (partial 0.96, 2026-10-11, claude-opus-5-5): ParseAction in its Scripts.cpp
@@ -42,6 +44,8 @@
 // retail's Scripts.cpp. ScriptAction caller 0x003B5413 is its ctor (vtable
 // 0x0081F3FC).
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 
 // Retail registers no unwind state for the copied key name: its literal
@@ -289,6 +293,7 @@ ScriptAction *ScriptAction::ParseAction(DataChunkInput &file, DataChunkInfo *inf
 	}
 
 	pScriptAction->m_numParms = file.readInt();
+	_ReadWriteBarrier();
 	Int i;
 	for (i = 0; i < pScriptAction->m_numParms; i++) {
 		Parameter *parameter = Parameter::ReadParameter(file);
