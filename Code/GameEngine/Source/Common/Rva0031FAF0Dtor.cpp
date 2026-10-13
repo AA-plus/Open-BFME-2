@@ -1,7 +1,7 @@
 // cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -EHsc -MD
 // stlport
-// ??1Rva0031FAF0@@QAE@XZ, retail 0x0032002C, 105 bytes. Dtor of Rva0031FAF0: body calls clear 0x31FAF0 then destroys list at +0x170 and array at +0x158 and two AsciiStrings at +0xC/+0x0.
-// Evidence: deleting-dtor caller at 0x0032013C; offsets match Rva0031FAF0 clear TU; callees rowed List_base 0x004EC395 vector-dtor 0x00629110 releaseBuffer 0x00036410.
+// ??1ControlBarScheme@@QAE@XZ, retail 0x0032002C, 105 bytes. Dtor of ControlBarScheme: body calls reset 0x31FAF0 then destroys list at +0x170 and array at +0x158 and two AsciiStrings at +0xC/+0x0.
+// Evidence: deleting-dtor caller at 0x0032013C; offsets match the ControlBarScheme reset TU (Rva0031FAF0.cpp); callees rowed List_base 0x004EC395 vector-dtor 0x00629110 releaseBuffer 0x00036410.
 #include "ascii_string.h"
 
 namespace _STL
@@ -23,11 +23,11 @@ public:
 	~Rva00200667() {}
 };
 
-class Rva0031FAF0
+class ControlBarScheme
 {
 public:
-	void rva0031FAF0();
-	~Rva0031FAF0();
+	void reset();
+	~ControlBarScheme();
 private:
 	AsciiString m_s0;
 	int m_4;
@@ -70,7 +70,7 @@ private:
 	Rva00200667 m_list170;
 };
 
-Rva0031FAF0::~Rva0031FAF0()
+ControlBarScheme::~ControlBarScheme()
 {
-	rva0031FAF0();
+	reset();
 }

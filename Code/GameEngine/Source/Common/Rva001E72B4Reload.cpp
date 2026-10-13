@@ -137,7 +137,7 @@ class Rva001E3955 { public: Rva001E3955() throw(); char storage[0x154]; };
 class Rva001E520C { public: Rva001E3955 *rva001E520C(Rva001E3955 *); };
 class Rva001E6731 { public: unsigned rva001E71FA(const int &); };
 class LocomotorTemplate { public: void validate(); };
-struct LocomotorParserView { void *vtable; Overridable *next; bool overrideFlag; char pad9[3]; int retired; AsciiString name; __forceinline void setName(const AsciiString &value) { name.set(value); } };
+struct LocomotorParserView { void *vtable; Overridable *next; bool overrideFlag; char pad9[3]; int retired; AsciiString name; __forceinline void setName(const AsciiString &value) { name.setCopyInline(value); } };
 class LocomotorStore {
 public:
  LocomotorTemplate *findLocomotorTemplate(int);
@@ -178,7 +178,7 @@ void LocomotorStore::parseLocomotorTemplateDefinition(INI *ini) {
  }
  }
  if(loco) {
-  { AsciiString name(token); AsciiString *dest=&((LocomotorParserView *)loco)->name; dest->set(name); }
+  { AsciiString name(token); AsciiString *dest=&((LocomotorParserView *)loco)->name; dest->setCopyInline(name); }
  // Diagnostic lifetime inferred from native EH; original local spelling unknown.
  if(0){AsciiString diagnostic;}
   ini->initFromINI(loco,&LocomotorTemplateFields);

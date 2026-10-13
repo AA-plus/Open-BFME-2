@@ -104,8 +104,8 @@ void Rva00218E96Parse(INI *ini, int unused, _STL::vector<FileInfoStruct> *out)
 		else if (((const StringBase<char> &)(cur)).compareNoCase("normal") == 0)
 			info.Size = 0;
 		else
-			info.Filename.set(cur);
-		cur.set(ini->getNextAsciiString());
+			info.Filename.setCopyInline(cur);
+		cur.setCopyInline(ini->getNextAsciiString());
 	}
 	if (info.Filename.getLength() > 0)
 		out->push_back(info);

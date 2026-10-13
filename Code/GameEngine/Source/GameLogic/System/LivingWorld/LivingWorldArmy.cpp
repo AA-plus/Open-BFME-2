@@ -362,7 +362,7 @@ LivingWorldArmy::LivingWorldArmy(int owner,Rva004E3184 *desc,Rva002B6A04Player *
  ((Rva00575674*)&summary78)->rva00575674((Object*)new ArmySummary);
  if(((Rva00319CED*)desc)->rva00319CED())((LivingWorldArmy*)this)->UseArmySummary((Rva00319CED*)desc);
  ((ArmySummaryView*)summary78.m_summary)->owner1C=owner;
- ((AsciiString*)((char*)summary78.m_summary+0x20))->set(name28);
+ ((AsciiString*)((char*)summary78.m_summary+0x20))->setCopyInline(name28);
  ((Rva0031934BOwner*)this)->rva0031934B(&desc->a04);
  ((Rva003193EC*)this)->rva003190E7(false);
  if(desc->a28.isEmpty()) {

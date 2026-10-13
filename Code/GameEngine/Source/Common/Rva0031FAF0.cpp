@@ -1,6 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /EHsc /MD
 // stlport
-// ?rva0031FAF0@Rva0031FAF0@@QAEXXZ @0x0031FAF0 280B chain: clears 6 lists at +0x158 plus one at +0x170 then releases two strings and zeroes ints.
+// ?reset@ControlBarScheme@@QAEXXZ @0x0031FAF0 280B chain: clears 6 lists at +0x158 plus one at +0x170 then releases two strings and zeroes ints.
 // Evidence: calls rowed dtors 0x2004FD and 0x31F831 plus delete 0x2FD60 and List_base clear 0x23DAA5 and releaseBuffer 0x36410; callers at 0x320044 and 0x32056F; prev/next flags /O1 /EHsc /MD.
 #include "ascii_string.h"
 
@@ -54,10 +54,12 @@ struct ListB
 	NodeB *m_header;
 };
 
-class Rva0031FAF0
+// ControlBarScheme::reset: ZH's newControlBarScheme (0x0032053E) calls it at 0x0032056F, and
+// the scheme destructor 0x0032002C calls it first, as ZH's ~ControlBarScheme does.
+class ControlBarScheme
 {
 public:
-	void rva0031FAF0();
+	void reset();
 private:
 	AsciiString m_s0;
 	int m_4;
@@ -97,7 +99,7 @@ private:
 	ListB m_list170;
 };
 
-void Rva0031FAF0::rva0031FAF0()
+void ControlBarScheme::reset()
 {
 	ListA *p = m_lists;
 	int n = 6;

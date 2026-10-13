@@ -801,7 +801,7 @@ class Rva00396B25 { public: void rva00396B25(); };
 class Rva00395CEB { public: void rva0039611E(); };
 void CastleBehavior::initiateUnpack(bool instant,const ThingTemplate* type) {
  Object* owner=field<Object*>(this,8);
- if(type) field<AsciiString>(this,0x98).set(field<AsciiString>((void*)type,0x64));
+ if(type) field<AsciiString>(this,0x98).setCopyInline(field<AsciiString>((void*)type,0x64));
  field<float>(this,0x4c)=0.0f;
  if(instant) {
   ((Rva00399959*)this)->unpack(true);

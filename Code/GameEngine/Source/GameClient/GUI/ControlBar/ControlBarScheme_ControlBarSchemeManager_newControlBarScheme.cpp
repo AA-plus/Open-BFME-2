@@ -228,7 +228,7 @@ ControlBarScheme *ControlBarSchemeManager::newControlBarScheme( AsciiString name
 	{
 		DEBUG_ASSERTCRASH(false,("We're overwriting a previous control bar scheme %s",name.str()));
 		cbScheme->reset();
-		cbScheme->m_name.set( name );
+		cbScheme->m_name.setCopyInline( name );
 		((StringBase<char> &)(cbScheme->m_name)).toLower();
 		return cbScheme;		
 	}
@@ -241,7 +241,7 @@ ControlBarScheme *ControlBarSchemeManager::newControlBarScheme( AsciiString name
 		return NULL;
 	}
 
-	cbScheme->m_name.set( name );
+	cbScheme->m_name.setCopyInline( name );
 	((StringBase<char> &)(cbScheme->m_name)).toLower();
 
 	m_schemeList.push_back(cbScheme);

@@ -3110,7 +3110,6 @@ name,address,notes
 ??1ClearanceTestingSlowDeathBehaviorModuleDataMember@@QAE@XZ,0x00050B2A,callee of 1GhostObject (0x00305B5E) at the site its BFME1 donor calls it; may be an ICF alias
 ??1CloudBreakSpecialPowerModuleData@@UAE@XZ,0x004C47F3,dtor called by audited wrapper RVA 0x004C47D7; retail registration CloudBreakSpecialPower -> data factory RVA 0x00251E58 -> ctor RVA 0x004C479A; primary vptr store RVA 0x004C47AA
 ??1CollideModule@@UAE@XZ,0x004BB68E,twin of rowed Rva004BB68E dtor for FireWeaponCollide dtor at 0xBB6A7
-??1ControlBarScheme@@QAE@XZ,0x0032002C,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ??1ControlBarSchemeAnimation@@QAE@XZ,0x0031F831,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ??1ControlBarSchemeImage@@QAE@XZ,0x002004FD,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ??1CostModifierUpgradeModuleData@@UAE@XZ,0x004B5C80,dtor called by audited wrapper RVA 0x004B5C64; retail registration CostModifierUpgrade -> data factory RVA 0x00250316 -> ctor RVA 0x004B5BAC; primary vptr store RVA 0x004B5BD0
@@ -10526,7 +10525,6 @@ name,address,notes
 ?reserve@?$vector@URva003F6D35Inner@@V?$allocator@URva003F6D35Inner@@@_STL@@@_STL@@QAEXI@Z,0x003F5F15,Native196B nestedlookup scopedABI; consumed fullprovider116B independentlyverified; targettemporary28/48 and owner18vector; applicationnames unproved
 ?reserve@?$vector@URva003F6D35Outer@@V?$allocator@URva003F6D35Outer@@@_STL@@@_STL@@QAEXI@Z,0x003F69C6,Native196B nestedlookup scopedABI; consumed fullprovider116B independentlyverified; targettemporary28/48 and owner18vector; applicationnames unproved
 ?reserve@?$vector@VRva004F6093Holder@@V?$allocator@VRva004F6093Holder@@@_STL@@@_STL@@QAEXI@Z,0x0040DC89,alias pin: retail REL32 at 0x0040ED9C in 0x0040ED4F targets the rowed Rva0040DC56Element reserve; Rva0040ECCF.cpp compiles this holder view to the same 104B shape
-?reset@ControlBarScheme@@QAEXXZ,0x0031FAF0,callee of ?newControlBarScheme@ControlBarSchemeManager@@QAEPAVControlB at retail 0x0032053E read from its REL32 displacement; ICF alias onto ?rva0031FAF0@Rva0031FAF0@@QAEXXZ (matched)
 ?reset@DisplayString@@UAEXXZ,0x00358946,DisplayString reset base of W3DDisplayString reset donor clear plus null matches 17B body
 ?reset@FrameDataManager@@QAEXXZ,0x0058B666,BFME2 frame-ring reset called while reinitializing the connection manager
 ?reset@Mouse@@UAEXXZ,0x001EE4DC,sole caller is Win32Mouse::reset 0x000419F5 whose Zero Hour body begins with Mouse::reset()

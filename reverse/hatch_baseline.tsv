@@ -27787,9 +27787,7 @@ pin	reverse/symbols.csv	0x0031F7AB	1
 pin	reverse/symbols.csv	0x0031F831	1
 pin	reverse/symbols.csv	0x0031F89E	1
 pin	reverse/symbols.csv	0x0031F96F	1
-pin	reverse/symbols.csv	0x0031FAF0	1
 pin	reverse/symbols.csv	0x0031FC08	1
-pin	reverse/symbols.csv	0x0032002C	1
 pin	reverse/symbols.csv	0x00320641	1
 pin	reverse/symbols.csv	0x003207F5	1
 pin	reverse/symbols.csv	0x00320B3C	1
@@ -35949,9 +35947,6 @@ pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/BfmeStringRecord00111ACFAssi
 pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/CameraMarkerParse.cpp	"",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/CameraMarkerParse.cpp	"s",off	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/CameraMarkerParse.cpp	"t",on	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/MixFileCreatorParse.cpp	"",on	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/MixFileCreatorParse.cpp	"s",off	1
-pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/MixFileCreatorParse.cpp	"t",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/PAUTreeHintRef00217D4CRva004F9565.cpp	"",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/PAUTreeHintRef00217D4CRva004F9565.cpp	"t",on	1
 pragma_optimize	Code/Libraries/Source/WWVegas/WWLib/Rva00056da2Finish.cpp	"",on	1
@@ -37331,7 +37326,6 @@ present_unmatched	Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-08-5B73
 present_unmatched	Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-12-3F1180.cpp	famgenDelete003F0C6C@@YAXPAVRva003F0C6C@@@Z	1
 present_unmatched	Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-14-2004FD.cpp	famgenDelete002004FD@@YAXPAVRva002004FD@@@Z	1
 present_unmatched	Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-14-31AA18.cpp	famgenDelete0031AA18@@YAXPAVControlBarSchemeManager@@@Z	1
-present_unmatched	Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-14-32013C.cpp	famgenDelete0032013C@@YAXPAVRva0031FAF0@@@Z	1
 present_unmatched	Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-19-57AAD5.cpp	famgenDelete0057AAD5@@YAXPAVRva0057A4E7@@@Z	1
 present_unmatched	Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-2335.cpp	1ActiveBodyModuleData@@UAE@XZ	1
 present_unmatched	Code/GameEngine/Source/Common/FamilyDeletingDtors_muse-2335.cpp	1RandomSoundSelectorClientBehaviorModuleData@@UAE@XZ	1

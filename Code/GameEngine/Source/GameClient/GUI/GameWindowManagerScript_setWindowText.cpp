@@ -229,10 +229,10 @@ static GameWindow *createWindow(char *type, Int id, void *data, GadgetCreateView
 		GameWindowEditData *editData = (GameWindowEditData *)window->getRva0031450A();
 		if (editData)
 		{
-			editData->systemCallbackString.set(g_systemCallbackName);
-			editData->inputCallbackString.set(g_inputCallbackName);
-			editData->tooltipCallbackString.set(g_tooltipCallbackName);
-			editData->drawCallbackString.set(g_drawCallbackName);
+			editData->systemCallbackString.setCopyInline(g_systemCallbackName);
+			editData->inputCallbackString.setCopyInline(g_inputCallbackName);
+			editData->tooltipCallbackString.setCopyInline(g_tooltipCallbackName);
+			editData->drawCallbackString.setCopyInline(g_drawCallbackName);
 		}
 	}
 
