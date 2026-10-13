@@ -178,13 +178,22 @@ protected:
 	T *_M_finish;
 	T *_M_end_of_storage;
 };
+
+// Native adders own the same twelve-byte AsciiString vector as AddTimer.
+// Keep the established base constructor and call the rowed complete vector destructor.
+template <class T, class A> class vector : public _Vector_base<T, A>
+{
+public:
+    __forceinline vector(const A &alloc) : _Vector_base<T, A>(alloc) {}
+    ~vector();
+};
 }
 
 class AptTimerAdder
 {
 public:
 	AptTimerAdder();
-	~AptTimerAdder();
+	__declspec(noinline) ~AptTimerAdder();
 	void AddTimer(const AsciiString &name, AptRef<AptTimer> timer);
 
 	__forceinline void AddTimerBinding(const AsciiString &name, Init005E1260 init)
@@ -193,7 +202,7 @@ public:
 	}
 
 private:
-	_STL::_Vector_base<AsciiString, _STL::allocator<AsciiString> > m_names;
+	_STL::vector<AsciiString, _STL::allocator<AsciiString> > m_names;
 };
 
 // ?AptTimerAdder::AptTimerAdder present-unmatched (ICF-folded at 0x001F81BF; pinned)
@@ -385,4 +394,17 @@ void StrategicHUD::CommandButtonMovieClipWithHelp::OnRollOver()
 	if (!m_help.m_ptr)
 		m_help = vslot7();
 	m_helpBox->rva001FF3A9(m_help);
+}
+
+class Rva00524021
+{
+public:
+    void rva00524021();
+    void rva00524056();
+};
+
+// Native 524349: unregister timer names, then destroy the owning string vector.
+AptTimerAdder::~AptTimerAdder()
+{
+    reinterpret_cast<Rva00524021 *>(this)->rva00524056();
 }
