@@ -133,10 +133,12 @@ public:
 	void *rva002104B6(void *key);
 };
 
-class Rva002B2702B0
+class Rva0020E89C;
+class Coord2D;
+class LivingWorldRegionManager
 {
 public:
-	bool rva0020EA58(void *region, float *center);
+	bool GetRegionCenterPoint(Rva0020E89C *region, Coord2D *center);
 };
 
 class Rva004FBCBE
@@ -260,7 +262,7 @@ void LivingWorldLogic::rva002BA3F2(const Rva002E0687 *player)
 			float center[2];
 			center[0] = 0.0f;
 			center[1] = 0.0f;
-			found = ((Rva002B2702B0 *)getRegions())->rva0020EA58(region, center);
+			found = ((LivingWorldRegionManager *)getRegions())->GetRegionCenterPoint((Rva0020E89C *)region, (Coord2D *)center);
 			if (found)
 			{
 				pos.x = center[0];

@@ -417,12 +417,6 @@ struct Pair8
 	float y;
 };
 
-class Rva002B2702B0
-{
-public:
-	bool rva0020EA58(void *key, float *buf);
-};
-
 class Pair8Vector
 {
 public:
@@ -454,7 +448,7 @@ bool Rva003F0E8A::rva003F0E8A(int index, Pair8 *out)
 	if (regions && regions->GetDefaultArmyPlacementPos(index, out))
 	{
 		Pair8 offset;
-		((Rva002B2702B0 *)regions)->rva0020EA58(this, &offset.x);
+		regions->GetRegionCenterPoint(reinterpret_cast<Rva0020E89C *>(this), reinterpret_cast<Coord2D *>(&offset));
 		const Pair8 &ref = offset;
 		out->x += ref.x;
 		out->y = ref.y + out->y;

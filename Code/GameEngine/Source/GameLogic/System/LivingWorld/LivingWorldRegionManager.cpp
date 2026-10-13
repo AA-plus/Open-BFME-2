@@ -545,7 +545,6 @@ struct RegionBattleView
 struct RegionCampaignView { char pad00[0x2C]; _STL::vector<RegionBattleView *> regions; };
 struct RegionBattlePoint { float x,y; };
 class RegionSlotsAccess : public RegionSlots { public: Rva002E071E *get(unsigned int index) const { return reinterpret_cast<Rva002E071E *>(const_cast<ModuleData *>((*this)[index])); } };
-class Rva002B2702B0 { public: bool rva0020EA58(void *, float *); };
 class Rva0020FDDFHost
 {
 public:
@@ -590,7 +589,7 @@ void Rva0020FDDFHost::rva0020FDDF()
                     if (owner) {
                         players.push_back(reinterpret_cast<const ModuleData *const &>(owner));
                         RegionBattlePoint point;
-                        reinterpret_cast<Rva002B2702B0 *>(this)->rva0020EA58(region,&point.x);
+                        reinterpret_cast<LivingWorldRegionManager *>(this)->GetRegionCenterPoint(reinterpret_cast<Rva0020E89C *>(region),reinterpret_cast<Coord2D *>(&point));
                         reinterpret_cast<LivingWorldRegionManager *>(this)->AddBattle(region,armies,players,point);
                     }
                 } else {
@@ -614,7 +613,7 @@ void Rva0020FDDFHost::rva0020FDDF()
             }
             if (hostile) {
                 RegionBattlePoint point;
-                reinterpret_cast<Rva002B2702B0 *>(this)->rva0020EA58(region,&point.x);
+                reinterpret_cast<LivingWorldRegionManager *>(this)->GetRegionCenterPoint(reinterpret_cast<Rva0020E89C *>(region),reinterpret_cast<Coord2D *>(&point));
                 reinterpret_cast<LivingWorldRegionManager *>(this)->AddBattle(region,armies,players,point);
             } else if (region->owner13C==-1 || !(unsigned char)reinterpret_cast<const RegionSlotsAccess *>(&players)->get(0)->rva002E0BC0(region->getOwner())) {
                 bool human=false;
