@@ -1,5 +1,7 @@
 // ?postDraw@InGameUI@@UAEXXZ
 // partial score=0.99 date=2026-10-13
+// ?postDraw@InGameUI@@UAEXXZ
+// partial score=0.99 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
 //
