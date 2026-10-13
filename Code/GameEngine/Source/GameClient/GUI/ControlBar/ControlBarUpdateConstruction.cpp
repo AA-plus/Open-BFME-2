@@ -167,8 +167,8 @@ public:
 };
 // Reuse the existing lookup provider's eight-byte table-cell ABI. Native
 // inventory callbacks store a window word followed by its contained ObjectID.
-struct Rva0053E754Entry { int m_id, m_mapped; };
-extern Rva0053E754Entry g_00E05E20[32];
+struct ControlBarInventoryEntry { GameWindow *window; int objectID; };
+extern ControlBarInventoryEntry ControlBarInventoryEntries[32];
 struct PopulateButtonInfo {
     Object *source;
     int buttonIndex;
@@ -637,8 +637,8 @@ __declspec(noinline) const Image *ControlBar::calculateVeterancyOverlayForObject
 void ControlBar::populateButtonProc(Object *obj, void *userData)
 {
     PopulateButtonInfo *info = (PopulateButtonInfo *)userData;
-    g_00E05E20[info->buttonIndex].m_id = (int)info->inventoryButtons[info->buttonIndex];
-    g_00E05E20[info->buttonIndex].m_mapped = (int)obj->getID();
+    ControlBarInventoryEntries[info->buttonIndex].window = info->inventoryButtons[info->buttonIndex];
+    ControlBarInventoryEntries[info->buttonIndex].objectID = (int)obj->getID();
     ThingTemplate *thingTemplate = *(ThingTemplate **)((char *)obj + 4);
     const Image *image = getButtonImage(thingTemplate, obj);
     GadgetButtonSetEnabledImage_Rva002C0433(info->inventoryButtons[info->buttonIndex], image);

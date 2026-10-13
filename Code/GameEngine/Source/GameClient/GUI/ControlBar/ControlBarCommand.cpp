@@ -389,21 +389,10 @@ int __cdecl Rva0053B946(Object *object,CommandCastleKindFilter *filter)
 class Image;
 const Image *__cdecl getButtonImage(ThingTemplate *, Object *);
 void __cdecl GadgetButtonSetEnabledImage_Rva002C0433(GameWindow *, const Image *);
-struct Rva0053E754Entry
-{
-	GameWindow *win;
-	int unk;
-};
-// Retail's own 32-entry window/id array at RVA 0x00A05E20: past .data's raw end
-// (file offset 0x009DCC08), so the image loads it zero and the two rowed bodies
-// below fill it as buttons are registered (this unit's writer and the rowed
-// ControlBar reader that scans it). A tentative definition: the slots are store
-// targets, so zero is the initial value both bodies are written against. MSVC
-// mangles a namespace-scope array through its decayed pointer, so this is the
-// symbol the reader's `g_00E05E20[i].m_window == window` scan already names.
-// Symbol ?g_00E05E20@@3PAURva0053E754Entry@@A, defined below.
-extern Rva0053E754Entry g_00E05E20[];
-Rva0053E754Entry g_00E05E20[32];
+struct ControlBarInventoryEntry { GameWindow *window; int objectID; };
+// Native32-slot window/ObjectID array atVA E05E20; zero-filled image storage.
+// Shared by population, construction update, lookup, command processing and reset.
+ControlBarInventoryEntry ControlBarInventoryEntries[32];
 
 
 // ?populateInvDataCallback@ControlBar@@KAXPAVObject@@PAX@Z
@@ -420,8 +409,8 @@ void __cdecl ControlBar::populateInvDataCallback(Object *obj, void *infoParam)
 		return;
 	do {
 		GameWindow *w = info->windows[info->current];
-		g_00E05E20[info->current].win = w;
-		g_00E05E20[info->current].unk = *(int *)((char *)obj + 0x74);
+		ControlBarInventoryEntries[info->current].window = w;
+		ControlBarInventoryEntries[info->current].objectID = *(int *)((char *)obj + 0x74);
 		info->current++;
 		GadgetButtonSetEnabledImage_Rva002C0433(w, img);
 		Rva003284ED(w, 0);

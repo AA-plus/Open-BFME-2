@@ -8,14 +8,14 @@ class GameWindow;
 enum ObjectID { INVALID_OBJECT_ID=0 };
 class GameLogic {public:Object *findObjectByID(ObjectID);};
 extern GameLogic *TheGameLogic;
-struct Rva0053E754Entry { GameWindow *m_window; int m_mapped; };
-extern Rva0053E754Entry g_00E05E20[32];
+struct ControlBarInventoryEntry { GameWindow *window; int objectID; };
+extern ControlBarInventoryEntry ControlBarInventoryEntries[32];
 class ControlBar {public:Object *rva0053E754(GameWindow *);};
 Object *ControlBar::rva0053E754(GameWindow *window)
 {
  int mapped=0;
  for(int i=0;i<32;++i) {
-  if(g_00E05E20[i].m_window==window) { mapped=g_00E05E20[i].m_mapped;break; }
+  if(ControlBarInventoryEntries[i].window==window) { mapped=ControlBarInventoryEntries[i].objectID;break; }
  }
  return TheGameLogic->findObjectByID((ObjectID)mapped);
 }

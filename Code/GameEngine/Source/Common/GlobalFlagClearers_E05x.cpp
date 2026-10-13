@@ -1,5 +1,5 @@
-// Twelve B2-native flag-word clearers on seven .data flag words
-// (0x00E05E14-0x00E05F64):
+// Nine B2-native flag-word clearers on six .data flag words
+// (0x00E05F38-0x00E05F64):
 //
 //     mov eax,[<address>] / and al,<mask8> / mov [<address>],eax / ret
 //
@@ -9,9 +9,6 @@
 // following GlobalFlagClearers_E049xx.cpp.
 // cl: /G7 /MD /EHsc /DNDEBUG
 
-extern unsigned int g_Va00E05E14;
-// g_Va00E05E14: matched references place it at VA 0xe05e14 (zero-filled .bss).
-unsigned int g_Va00E05E14;
 extern unsigned int g_Va00E05F38;
 // g_Va00E05F38: matched references place it at VA 0xe05f38 (zero-filled .bss).
 unsigned int g_Va00E05F38;
@@ -27,21 +24,6 @@ unsigned int g_Va00E05F58;
 extern unsigned int g_Va00E05F64;
 // g_Va00E05F64: matched references place it at VA 0xe05f64 (zero-filled .bss).
 unsigned int g_Va00E05F64;
-
-unsigned int Rva007979F5ClearFlag(void)
-{
-	return g_Va00E05E14 &= 0xFFFFFFFEu;
-}
-
-unsigned int Rva00797A02ClearFlag(void)
-{
-	return g_Va00E05E14 &= 0xFFFFFFFDu;
-}
-
-unsigned int Rva00797A0FClearFlag(void)
-{
-	return g_Va00E05E14 &= 0xFFFFFFFBu;
-}
 
 unsigned int Rva00797AE0ClearFlag(void)
 {
@@ -88,3 +70,6 @@ unsigned int Rva00797BDCClearFlag(void)
 	return g_Va00E05F64 &= 0xFFFFFFFEu;
 }
 
+
+// Former7979F5/797A02/797A0F rows are the three static-key unwind
+// handlers emitted by ControlBar::processCommandUI; its guard ownsE05E14.
