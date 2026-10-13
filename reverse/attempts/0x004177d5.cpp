@@ -1,5 +1,5 @@
-// ?Rva004177D5AcceptBuddy@@YAXH@Z
-// partial score=0.95 date=2026-10-11
+// ?Rva004177D5@@YAXH@Z
+// partial score=0.97 date=2026-10-13
 // cl: /Oa /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // Native416C69..4177B5 RET +32B eight-case table4177B5..4177D5.
@@ -183,7 +183,8 @@ void HandleBuddyResponses()
  if(g_Va00A03094&&timeGetTime()>g_Va00A03098)Rva00415EF8Close();
 }
 
-extern int g_00DB9198;
+// Chat.cpp owns the colour array at VA 0x00DB9198; index/addend unchanged.
+extern int GameSpyColor[];
 extern int g_Va00E046B8;
 void Rva00381C82AddChatText(int,const UnicodeString &,int);
 // ?Rva00416589@@YAXUBfmeStringRecord00415F34@@@Z retail416589338B
@@ -192,7 +193,7 @@ void Rva00416589(BfmeStringRecord00415F34 record)
 {
  BuddyMessage &message=record.message;
  UnicodeString text;text.format(L"[%hs] %s",message.senderNick.str(),message.message.str());
- Rva00381C82AddChatText(0,text,(&g_00DB9198)[8]);
+ Rva00381C82AddChatText(0,text,GameSpyColor[8]);
  if(!g_Va00E046B8){
   UnicodeString snippet=message.message;
   while(snippet.getLength()>11)snippet.removeLastChar();
@@ -203,33 +204,27 @@ void Rva00416589(BfmeStringRecord00415F34 record)
  }
 }
 
-// Retail 0x004177D5 (236 bytes): accept a buddy request from the given
-// profile (Zero Hour's WOLBuddyOverlay "ok the request" path, followed by
-// RequestBuddyAdd's request): an OK-add request, the profile leaves the
-// request map, then an add-buddy request carrying "GUI:BuddyAddReq".
-extern "C" __declspec(dllimport) unsigned short *__cdecl wcsncpy(unsigned short *dst, const unsigned short *src, unsigned int count);
-class Rva004177D5GameText {public:
-#define V(n) virtual void slot##n();
-V(0)V(1)V(2)V(3)V(4)V(5)V(6)V(7)V(8)V(9)V(10)V(11)V(12)V(13)V(14)
-#undef V
-virtual UnicodeString fetchLabel(const char *label,bool *exists);};
-struct Rva004177D5AddBuddy {int type,profile;unsigned short text[128];};
-void Rva004177D5AcceptBuddy(int profile)
+// ?Rva004177D5@@YAXH@Z retail 0x004177D5 (236B EH): the accept path
+// RequestBuddyAdd 0x004178C1 hands over to. Queues the type-7 OK request,
+// erases the profile from the buddy request map through the rowed
+// _Rb_tree erase 0x00385CBA, then queues the type-5 add request carrying
+// GUI:BuddyAddReq. The fetched UnicodeString temporary reuses the dead
+// argument slot in retail, so the argument must stay the only live local
+// besides the request records.
+void Rva004177D5(int profile)
 {
- const int id=profile;
+ UnicodeString text;
  BuddyRequest req;
  req.type=7;
- req.profile=id;
+ req.profile=profile;
  TheGameSpyBuddyMessageQueue->addRequest(req);
  RequestEraseTree *requests=(RequestEraseTree *)TheGameSpyInfo->getBuddyRequestMap();
  requests->erase(*(const Rva00385CBAElement *)&profile);
  BuddyRequest add;
- Rva004177D5AddBuddy *addBuddy=(Rva004177D5AddBuddy *)&add;
- addBuddy->type=5;
- addBuddy->profile=id;
- UnicodeString text;
- text=((Rva004177D5GameText *)TheGameText)->fetchLabel("GUI:BuddyAddReq",0);
- wcsncpy(addBuddy->text,text.str(),128);
- addBuddy->text[127]=0;
+ add.type=5;
+ add.profile=profile;
+ text=TheGameText->fetch("GUI:BuddyAddReq");
+ wcsncpy((unsigned short *)add.unknown,text.str(),128);
+ ((unsigned short *)add.unknown)[127]=0;
  TheGameSpyBuddyMessageQueue->addRequest(add);
 }
