@@ -1,6 +1,9 @@
 // ?update@GarrisonContain@@UAE?AW4UpdateSleepTime@@XZ
 // partial score=0.97 date=2026-10-11
-// cl: /O1 /arch:SSE /G7 /MD /EHsc /DNDEBUG /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /O1 /arch:SSE /G7 /MD /EHs /DNDEBUG /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 // stlport
 // GarrisonContain::update (0x00479643, 217 bytes), after the BFME1/ZH
 // GarrisonContain.cpp body: slot 0 of the +0x10 UpdateModuleInterface vftable
@@ -154,7 +157,9 @@ UpdateSleepTime GarrisonContain::update()
 			removeFromContain(contained, false);
 
 			// set the safe occlusion frame to way way way in the future so we never see it during death
-			contained->setSafeOcclusionFrame(((GameLogicFrameView *)TheGameLogic)->m_frame + g_Va00DBA4E4 * 1000);
+			unsigned int frame = ((GameLogicFrameView *)TheGameLogic)->m_frame;
+			_ReadWriteBarrier();
+			contained->setSafeOcclusionFrame(frame + g_Va00DBA4E4 * 1000);
 		}
 	}
 
