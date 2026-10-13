@@ -12,6 +12,11 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #pragma optimize("", on)
 
 
+// Keep MSVC's float overloads local; the inlined fabs operations remain exact.
+#define inline static inline
+#include <math.h>
+#undef inline
+
 #include "rendobj.h"	// the bfmerendobj shim has to win the include guard
 #include "mapper.h"
 #include "ini.h"

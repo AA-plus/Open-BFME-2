@@ -7,8 +7,11 @@
 // offset rate per second, Grid (0x00187AD0) the animation FPS, row width, last frame and frame
 // offset. Stage reads go through the WW3D Get_Stage accessor, which decides the register
 // choice of the second parameter block. The conversion's original name is not recovered.
-#include "ascii_string.h"
+// Keep MSVC's float overloads local; the inlined fabs operations remain exact.
+#define inline static inline
 #include <math.h>
+#undef inline
+#include "ascii_string.h"
 
 bool bfmeRva000387C0();
 void _bfme_debugRecordCallsite(int kind);

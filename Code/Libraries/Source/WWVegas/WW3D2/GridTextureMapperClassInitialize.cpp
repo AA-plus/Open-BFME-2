@@ -4,7 +4,10 @@
 // Dedicated TU so mapper.cpp keeps its matched bodies.
 // Extra BFME dword at +0xC is the fps value stored by movss.
 
+// Keep MSVC's float overloads local; the inlined fabs operations remain exact.
+#define inline static inline
 #include <math.h>
+#undef inline
 
 class WW3D
 {
@@ -81,4 +84,3 @@ void bfmeAnchorGridTextureMapperInitialize(GridTextureMapperClass *p, float fps,
 {
 	p->initialize(fps, gridwidth_log2);
 }
-
