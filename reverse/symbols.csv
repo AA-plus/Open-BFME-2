@@ -17223,3 +17223,4 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva002F83F5@Pathfinder@@QAEHPAVPathfindCell@@0ABVLocomotorSet@@_N2HPAUICoord2D@@PAVObject@@H@Z,0x002F83F5,callee of ?InternalFindPath@Pathfinder@@QAEPAVPath@@PAVObject@@ABVLocomotorSet@@PBUCoord3D@@2PAVHierarchicalPath@@PA_N@Z
 ?CreateArmyIcons@Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAEXXZ,0x005E1ED2,callee of ??0Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAE@PAX00ABUPageContext@@@Z
 ?OnPageLoaded@PlayerPageFrame@StrategicHUD@@QAEXPBD@Z,0x005F9053,WB PlayerPageFrame::OnPageLoaded identity; native constructor5F9DCB binds this member to PageLoaded; 5F9053 guards state28 and page2C then invokes factory18 and sets ready state; boundary5F9053..5F90F6; thiscall RET4
+?Inverse@Matrix4@@QBE?AV1@XZ,0x00715EB0,callee of ?inverse@Rva007133F0MatrixInverse@@QBEXAAVMatrix3D@@@Z
