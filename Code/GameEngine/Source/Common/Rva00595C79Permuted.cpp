@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /Ireference/shims/bfme2_ascii /GX /MD /D_CRTIMP=
 //
 // ?Rva00595C79FormatAddress@@YA?AVAsciiString@@PBURva00595C79Address@@@Z, retail 0x00595c79, 34 bytes. Banked partial (score 0.9) closed by tools/permute.py;
