@@ -5987,16 +5987,6 @@ void __cdecl rva007B6AD2()
 	return p->rva00007670();
 }
 
-extern unsigned g_Va00E09DBC;
-unsigned int g_Va00E09DBC;
-
-// ?rva007B9AD0@@YAXXZ @ 0x007B9AD0 (10B). Global string dtor thunk: ecx=&g_Va00E09DBC then tail-jmp to rowed ??1?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@_STL@@QAE@XZ (0x00142D70).
-void __cdecl rva007B9AD0()
-{
-	StlNarrowString *p = (StlNarrowString *)&g_Va00E09DBC;
-	return p->~basic_string();
-}
-
 struct Rva001D28F0Element;
 // 0x00A0ABB4: defined elsewhere as ?g_bfmeVideoTableStorage@@3UBfmeVideoTableStorage@@A.
 struct BfmeVideoTableStorage;

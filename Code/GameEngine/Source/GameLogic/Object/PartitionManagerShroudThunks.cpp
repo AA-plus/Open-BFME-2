@@ -36,12 +36,6 @@ public:
 	void bfmeDropYQ(BfmeThingYQ *t);
 };
 
-class BfmeP1050
-{
-public:
-	void bfmeFwd1050(int a, int b, int c, int d, int e);
-};
-
 class ShroudManagerImpl;
 
 class ShroudManager
@@ -70,10 +64,10 @@ private:
 class CDEProvider;
 class Object;
 class Rva000421C8;
-class Rva00628040Impl
+class PartitionManagerImpl
 {
 public:
- Object *rva00628040(const Coord3D *, float, int, int, Rva000421C8 *);
+ void *GetClosestObject(int, float, int, int, int);
 };
 
 class ShroudManagerImpl
@@ -165,7 +159,7 @@ void PartitionManager::rva00625330(void *ptr)
 // Its already-admitted typed provider is reused; no new pin or ABI adapter.
 Object *PartitionManager::rva00625340(const Coord3D *pos, float radius, int distType)
 {
- return reinterpret_cast<Rva00628040Impl *>(m_shroudManager)->rva00628040(pos,radius,0,distType,0);
+ return (Object *)reinterpret_cast<PartitionManagerImpl *>(m_shroudManager)->GetClosestObject((int)pos,radius,0,distType,0);
 }
 
 // ?rva007397A0@PartitionManager@@QAEX_N@Z

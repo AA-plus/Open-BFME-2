@@ -7,6 +7,7 @@ namespace _STL { void __cdecl free(void *); }
 // the BFME allocator shim's by-value copy dispatch into vector assignment.
 #include "reference/open-bfme-1/inputs/vendor/stlport/stl/_algobase.h"
 #include <vector>
+#include <algorithm>
 #undef free
 
 // BFME1 9cbfb551 SetTreeDepth donor (reviewed at575ba2b04) supplies
@@ -55,6 +56,7 @@ struct PartitionNode {
 class PartitionManagerImpl {
 public:
  void SetTreeDepth(unsigned);
+ void *GetClosestObject(int,float,int,int,int);
  void _ClearNumObjBelow(void **slot, unsigned count);
  int prefix[6];
  _STL::vector<PartitionTreeCounter> trees[21];
@@ -134,4 +136,359 @@ Rva00627960Element*Rva00627960Vector::allocateCopy(unsigned n,const Rva00627960E
  Rva00627960Element*result=n?(Rva00627960Element*)_STL::allocator<char>::allocate(n*sizeof(Rva00627960Element),0):0;
  for(const Rva00627960Element*p=first;p!=last;++p){Rva00627960Element*dest=(Rva00627960Element*)((char*)result+((const char*)p-(const char*)first));if(dest)*dest=*p;}
  return result;
+}
+
+// GetClosestObject: native 00628040..00628766 is 1830 bytes including RET14.
+// WB 016816C0 names this method; BFME1 9cbfb551 supplies the quadtree algorithm.
+// Target evidence gives 21 tree roots, 24-byte heap records, radius as float
+// (caller 00625360), and a lazily initialized three-pointer vector at E09DBC.
+// Record field names are structural inferences; provider names below retain
+// their established storage identities. Advance the child cursor before the
+// half-size calculation to preserve the native preheader and reload schedule.
+extern "C" __declspec(dllimport) double __cdecl ceil(double value);
+extern "C" __declspec(dllimport) double __cdecl floor(double value);
+
+struct BfmeCoord3D1050
+{
+	float m_x;
+	float m_y;
+	float m_z;
+};
+
+struct BfmeGeometry1050
+{
+	unsigned char m_bfmePad00[0x10];
+	float m_radius;
+};
+
+class BfmeCandidate1050;
+
+struct BfmeNode1050
+{
+	int m_hasChildren;
+	class BfmeLink1050 *m_firstLink;
+};
+
+class BfmeLink1050
+{
+public:
+	int m_bfmePad00;
+	BfmeCandidate1050 *m_candidate;
+	int m_bfmePad08[3];
+	BfmeLink1050 *m_next;
+};
+
+class BfmeCandidate1050
+{
+public:
+	virtual BfmeGeometry1050 *getGeometry(void) = 0;
+	virtual BfmeCoord3D1050 *getPosition(void) = 0;
+	virtual int getUnused(void) = 0;
+	virtual void *getObject(void) = 0;
+};
+
+struct BfmeRegion1050
+{
+	float m_x0;
+	float m_y0;
+	float m_bfmePad08;
+	float m_x1;
+	float m_y1;
+};
+
+struct Rva009F56C0Element
+{
+	int m_key;
+	struct BfmeNode1050 *m_node;
+	unsigned int m_stride;
+	int m_x;
+	int m_y;
+	int m_size;
+};
+
+class BfmeHostER
+{
+public:
+	unsigned int bfmeIndexER(float value);
+};
+
+class BfmeHostES
+{
+public:
+	unsigned int bfmeIndexES(float value);
+};
+
+class Rva009F2AB0Mask
+{
+public:
+	int getMask(void);
+};
+
+class BfmeThingEQ
+{
+public:
+	unsigned char bfmeAskEQ(void *object);
+};
+
+struct S4SortElem24
+{
+	int m_key;
+	int m_values[5];
+};
+
+struct S4Cmp009F4BF0
+{
+	char m_bfmeUnused;
+
+	S4Cmp009F4BF0(void) : m_bfmeUnused(0) {}
+
+	bool operator()(const S4SortElem24 &left, const S4SortElem24 &right) const
+	{
+		return left.m_key < right.m_key;
+	}
+};
+
+typedef float (__cdecl *BfmeDistanceProc1050)(void *, void *, float);
+extern BfmeDistanceProc1050 g_partitionDistance[];
+
+typedef _STL::vector<BfmeNode1050> BfmeNodeVec1050;
+
+// Native uses x87 FISTP here. An ordinary C++ cast changes the complete
+// caller to 1780 bytes; retain this two-instruction donor conversion only.
+__forceinline int bfmeFloatToInt1050(float value)
+{
+	int result;
+	__asm
+	{
+		fld [value]
+		fistp [result]
+	}
+	return result;
+}
+
+__forceinline unsigned int bfmeInlineCellX1050(PartitionManagerImpl *manager, float value)
+{
+	float t = (float)floor((double)((value - *(const float *)&manager->prefix[0]) *
+		(float)(unsigned int)manager->mask * manager->scale));
+	int i = bfmeFloatToInt1050(t);
+	if (i < 0)
+		return 0;
+	return (unsigned int)i >= (unsigned int)manager->mask ? (unsigned int)manager->mask - 1 : i;
+}
+
+
+// Exact rowed 24-byte copy and vector-growth providers; their historical
+// element names describe provider storage, not this query's element identity.
+struct Rva00626EF0Element { int words[6]; };
+#include "../../Include/Lib/Coord3D.h"
+enum ObjectID;
+class FlightDeckBehavior { public: struct FlightDeckInfo { Coord3D m_prep; float m_orientation; int m_runway; ObjectID m_objectInSpace; }; };
+// Match the existing FlightDeckInfo growth provider's malloc/free allocator.
+// This preserves its inline release semantics and its three emitted helpers.
+namespace _STL {
+template<> inline void allocator<FlightDeckBehavior::FlightDeckInfo>::deallocate(
+    FlightDeckBehavior::FlightDeckInfo *p, unsigned int) const
+{
+    if (p) ::free(p);
+}
+}
+class ClosestFlightVector : public _STL::vector<FlightDeckBehavior::FlightDeckInfo> {
+public: using _STL::vector<FlightDeckBehavior::FlightDeckInfo>::_M_insert_overflow;
+};
+namespace _STL {
+template<class RandomAccessIterator,class Distance,class Tp,class Compare>
+void __pop_heap(RandomAccessIterator,RandomAccessIterator,RandomAccessIterator,Tp,Compare,Distance *);
+}
+class ClosestWorkView : public _STL::vector<Rva009F56C0Element> {
+public:
+ __forceinline void clearExact() {
+  _M_finish=(Rva009F56C0Element *)_STL::__copy((Rva00626EF0Element *)_M_finish,(Rva00626EF0Element *)_M_finish,(Rva00626EF0Element *)_M_start,_STL::random_access_iterator_tag(),(int*)0);
+ }
+ __forceinline void appendExact(const Rva009F56C0Element &value) {
+  if(_M_finish != _M_end_of_storage._M_data) {
+   _STL::_Construct(_M_finish,value);
+   ++_M_finish;
+  } else {
+   ((ClosestFlightVector *)this)->_M_insert_overflow((FlightDeckBehavior::FlightDeckInfo *)_M_finish,*(const FlightDeckBehavior::FlightDeckInfo *)&value,_STL::__false_type(),1,true);
+  }
+ }
+};
+void *PartitionManagerImpl::GetClosestObject(int position, float maxDistance, int bounds,
+	int distanceType, int filters)
+{
+	unsigned int filterMask;
+	if (distanceType != 0 && distanceType != 2 &&
+		distanceType != 1 && distanceType != 3)
+		distanceType = 0;
+	BfmeDistanceProc1050 distanceProc = g_partitionDistance[distanceType];
+
+	if (filters)
+		filterMask = ((Rva009F2AB0Mask *)filters)->getMask() * 2 + 1;
+	else
+		filterMask = 0xffffffff;
+
+	Rva009F56C0Element current;
+	static _STL::vector<Rva009F56C0Element> work;
+    ((ClosestWorkView *)&work)->clearExact();
+	BfmeNodeVec1050 *tree = reinterpret_cast<BfmeNodeVec1050 *>(trees);
+
+	for (int treeCount = 21; treeCount; --treeCount)
+	{
+		if (filterMask & 1)
+		{
+            Rva009F56C0Element seed;
+			seed.m_key = 0;
+			seed.m_node = tree->begin();
+			seed.m_stride = ((BfmeNodeVec1050 *)trees)[0].size() / 4;
+			seed.m_y = 0;
+			seed.m_x = 0;
+			seed.m_size = (unsigned int)mask;
+			((ClosestWorkView *)&work)->appendExact(seed);
+		}
+		++tree;
+		filterMask >>= 1;
+	}
+
+	float &maxDistanceReal = maxDistance;
+
+	if (maxDistanceReal < 0.00001f)
+		return 0;
+
+	float cellExtent = (unsigned int)mask * scale;
+	if (maxDistanceReal * cellExtent > 32766.0f)
+		maxDistanceReal = 32766.0f / cellExtent;
+
+	float maxDistanceSquared = maxDistanceReal * maxDistanceReal;
+	void *closestObject = 0;
+	int maxRadius = bfmeFloatToInt1050((float)ceil(cellExtent * maxDistanceReal));
+	int maxRadiusSquared = (maxRadius + 1) * (maxRadius + 1);
+
+	BfmeCoord3D1050 *source = (BfmeCoord3D1050 *)position;
+	int cellCenterX = ((BfmeHostER *)this)->bfmeIndexER(source->m_x);
+	int cellCenterY = ((BfmeHostES *)this)->bfmeIndexES(source->m_y);
+
+	BfmeRegion1050 *region = (BfmeRegion1050 *)bounds;
+	int regionX0;
+	int regionX1;
+	int regionY0;
+	int regionY1;
+	if (region)
+	{
+		regionX0 = ((BfmeHostER *)this)->bfmeIndexER(region->m_x0);
+		regionX1 = ((BfmeHostER *)this)->bfmeIndexER(region->m_x1);
+		regionY0 = ((BfmeHostES *)this)->bfmeIndexES(region->m_y0);
+		regionY1 = ((BfmeHostES *)this)->bfmeIndexES(region->m_y1);
+	}
+
+	while (!work.empty())
+	{
+		if (work.front().m_key > maxRadiusSquared)
+			break;
+
+		_STL::__pop_heap<S4SortElem24 *, int, S4SortElem24, S4Cmp009F4BF0>((S4SortElem24 *)work.begin(), (S4SortElem24 *)work.end()-1, (S4SortElem24 *)work.end()-1, *((S4SortElem24 *)work.end()-1), S4Cmp009F4BF0(), (int *)0);
+		current = work.back();
+		work.pop_back();
+
+		for (BfmeLink1050 *link = current.m_node->m_firstLink; link;
+			link = link->m_next)
+		{
+			float distance = distanceProc(source, link->m_candidate, 0);
+			if (distance > maxDistanceSquared)
+				continue;
+
+			if (region)
+			{
+				BfmeCoord3D1050 *where = link->m_candidate->getPosition();
+				if (where->m_x < region->m_x0)
+					continue;
+				if (where->m_y < region->m_y0)
+					continue;
+				if (where->m_x > region->m_x1)
+					continue;
+				if (where->m_y > region->m_y1)
+					continue;
+			}
+
+			void *object = link->m_candidate->getObject();
+			if (!object)
+				continue;
+			if (filters && !((BfmeThingEQ *)filters)->bfmeAskEQ(object))
+				continue;
+
+			maxDistanceSquared = distance;
+			closestObject = object;
+			BfmeGeometry1050 *geometry = link->m_candidate->getGeometry();
+			BfmeCoord3D1050 *candidatePosition = link->m_candidate->getPosition();
+			float radiusValue = geometry->m_radius;
+
+			unsigned int xDistance =
+				bfmeInlineCellX1050(this, candidatePosition->m_x - radiusValue) - cellCenterX;
+			unsigned int xDistanceMaximum =
+				bfmeInlineCellX1050(this, candidatePosition->m_x + radiusValue) - cellCenterX;
+			unsigned int yDistance = ((BfmeHostES *)this)->bfmeIndexES(
+				candidatePosition->m_y - radiusValue) - cellCenterY;
+			unsigned int yDistanceMaximum = ((BfmeHostES *)this)->bfmeIndexES(
+				candidatePosition->m_y + radiusValue) - cellCenterY;
+
+			if (xDistanceMaximum > xDistance)
+				xDistance = xDistanceMaximum;
+			if (yDistanceMaximum > yDistance)
+				yDistance = yDistanceMaximum;
+			maxRadiusSquared = yDistance * yDistance + xDistance * xDistance;
+		}
+
+		if (!current.m_node->m_hasChildren)
+			continue;
+
+		current.m_node = current.m_node + 1;
+		int half = current.m_size / 2;
+		for (unsigned int groupIndex = 0; groupIndex < 4;
+			++groupIndex, current.m_node += current.m_stride)
+		{
+			BfmeNode1050 *group = current.m_node;
+			if (group->m_firstLink || group->m_hasChildren)
+			{
+				Rva009F56C0Element child;
+				child.m_x = ((groupIndex & 1) ? half : 0) + current.m_x;
+				child.m_y = current.m_y + ((groupIndex & 2) ? half : 0);
+
+				int xDistance;
+				if (cellCenterX < child.m_x)
+				{
+					int delta = child.m_x - cellCenterX - 1;
+					xDistance = delta * delta;
+				}
+				else if (cellCenterX >= child.m_x + half)
+				{
+					int delta = cellCenterX - child.m_x - half;
+					xDistance = delta * delta;
+				}
+				else
+					xDistance = 0;
+
+				int yDistance;
+				if (cellCenterY < child.m_y)
+					yDistance = (child.m_y - cellCenterY - 1) * (child.m_y - cellCenterY - 1);
+				else if (cellCenterY >= child.m_y + half)
+					yDistance = (cellCenterY - child.m_y - half) * (cellCenterY - child.m_y - half);
+				else
+					yDistance = 0;
+
+				child.m_key = yDistance + xDistance;
+				if (child.m_key <= maxRadiusSquared)
+				{
+					if (!region || (child.m_x <= regionX1 && child.m_y <= regionY1 &&
+						child.m_x + half >= regionX0 && child.m_y + half >= regionY0))
+					{
+						child.m_node = group;
+						child.m_size = half;
+						child.m_stride = current.m_stride / 4;
+						((ClosestWorkView *)&work)->appendExact(child);
+						_STL::__push_heap_aux((S4SortElem24 *)work.begin(), (S4SortElem24 *)work.end(), S4Cmp009F4BF0(), (int *)0, (S4SortElem24 *)0);
+					}
+				}
+			}
+		}
+	}
+	return closestObject;
 }

@@ -55,10 +55,10 @@ BfmeB1050 *BfmeB1050::bfmeGo1050B(void)
 	return this;
 }
 
-class BfmeP1050
+class PartitionManagerImpl
 {
 public:
-	void bfmeFwd1050(int a, int b, int c, int d, int e);
+	void *GetClosestObject(int position, float radius, int bounds, int distType, int filters);
 };
 
 class BfmeC1050
@@ -68,27 +68,17 @@ public:
 	void bfmeGo009F26D0(int a, int b, int c, int d);
 
 	char m_bfmePad[0x10]; // BFME2 target at 0x625390 loads this pointer at +0x10.
-	BfmeP1050 *m_bfmeP;
+	PartitionManagerImpl *m_bfmeP;
 };
 
 void BfmeC1050::bfmeGo1050C(int a, int b, int c, int d, int e)
 {
-	m_bfmeP->bfmeFwd1050(a, c, b, d, e);
+	m_bfmeP->GetClosestObject(a, *(const float *)&c, b, d, e);
 }
 
 struct Coord3D;
 class Object;
 class Rva000421C8;	// the partition filter base (ctor 0x000421C8)
-
-// The partition manager's closest-object implementation behind +0x10
-// (0x00628040, the bfmeFwd1050 callee): position, radius, 0, distance
-// type, filter chain.
-class Rva00628040Impl
-{
-public:
-	Object *rva00628040(const Coord3D *pos, float radius, int zero, int distType,
-		Rva000421C8 *filters);
-};
 
 // ThePartitionManager (0x00DFE748): 26 matched callers reference this
 // method by name. BFME1 retail 0x009F26A0 is the same four-argument
@@ -96,7 +86,7 @@ public:
 class PartitionManager
 {
 	char m_pad[0x10];
-	Rva00628040Impl *m_impl;
+	PartitionManagerImpl *m_impl;
 
 public:
 	Object *getClosestObject(const Coord3D *pos, float radius, int distType,
@@ -106,12 +96,12 @@ public:
 Object *PartitionManager::getClosestObject(const Coord3D *pos, float radius, int distType,
 	Rva000421C8 *filters)
 {
-	return m_impl->rva00628040(pos, radius, 0, distType, filters);
+	return (Object *)m_impl->GetClosestObject((int)pos, radius, 0, distType, (int)filters);
 }
 
 void BfmeC1050::bfmeGo009F26D0(int a, int b, int c, int d)
 {
-	m_bfmeP->bfmeFwd1050(a, c, b, d, 0);
+	m_bfmeP->GetClosestObject(a, *(const float *)&c, b, d, 0);
 }
 
 extern "C" void *bfmeVft1050F[];
