@@ -93,3 +93,7 @@ Rva000E59D3::Rva000E59D3() : Rva000E59D3Base(), m14(0)
     m20 = 1;
     m22 = 1;
 }
+
+// Native763401: complete11B list<int> member+18 constructor unwind.
+// Whole102B parent and native EH graph bind this action; the same object
+// emits the whole5B list destructor200667 forwarding to native list-base4EC395.
