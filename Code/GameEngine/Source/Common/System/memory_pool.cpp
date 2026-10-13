@@ -863,3 +863,48 @@ void _AddHeap(unsigned int id, unsigned int size)
 	*bucket = record;
 }
 }
+
+// Retail 0x006C1BE0 (219 B, __stdcall ret 0x14), beside the allocator's
+// 0x006C1AA0 and GeneralAllocator 0x006C1D10: formats a source location into
+// a bounded buffer. It writes the file's base name (after the last '\\' or
+// '/'), then ", " and the line through sprintf("%d"), then, when a function
+// name is given, ", " and the name, copied up to the buffer end without a NUL
+// test as retail does; returns the characters written. Name address-derived.
+extern "C" __declspec(dllimport) int __cdecl sprintf(char *, const char *, ...);
+
+unsigned int __stdcall Rva006C1BE0FormatLocation(char *buffer, unsigned int size, const char *file, int line, const char *function)
+{
+	char *p = buffer;
+	char *end = buffer + size - 1;
+	*buffer = 0;
+	if (file)
+	{
+		const char *name = file + strlen(file);
+		while (name >= file && *name != '\\' && *name != '/')
+			--name;
+		++name;
+		while (p < end && *name)
+			*p++ = *name++;
+		if (p + 2 < end)
+		{
+			*p++ = ',';
+			*p++ = ' ';
+		}
+		char number[32];
+		sprintf(number, "%d", line);
+		for (const char *n = number; p < end && *n; )
+			*p++ = *n++;
+	}
+	if (function)
+	{
+		if (file && p + 2 < end)
+		{
+			*p++ = ',';
+			*p++ = ' ';
+		}
+		while (p < end)
+			*p++ = *function++;
+	}
+	*p = 0;
+	return p - buffer;
+}
