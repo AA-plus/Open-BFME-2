@@ -19,10 +19,20 @@ public:
 	Rva0023E8D8(void *p);
 };
 
-Rva0023E8D8::Rva0023E8D8(void *p)
+// Select-any like the four identical consumer copies (this retail body comes
+// first in link order, so it is the copy the link keeps); the anchor keeps the
+// body emitted.
+inline Rva0023E8D8::Rva0023E8D8(void *p)
 {
 	Rva0023E8D8Impl *q = new Rva0023E8D8Impl(p);
 	m_ptr = q;
 	if (q)
 		++q->m_ref;
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva0023E8D8Ctor@@YAXPAVRva0023E8D8@@PAX@Z absent-from-retail
+void bfmeEmitRva0023E8D8Ctor(Rva0023E8D8 *p, void *q)
+{
+	new (p) Rva0023E8D8(q);
 }
