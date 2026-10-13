@@ -154,3 +154,7 @@ Rva0036CA00Str Drawable::rva00278190()
 {
  return rva0027682F().choice;
 }
+
+// Native 0x00773515: complete 1-byte compiler entry of the 74-byte getter.
+// Its exact native EH graph gives independent entry points and disjoint extents;
+// original getter and audio-pointee identities remain unknown.
