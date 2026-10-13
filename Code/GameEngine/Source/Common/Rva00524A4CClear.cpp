@@ -9,6 +9,7 @@
 // +0x30. Same Rva00524A4C owner proven by shared +0x24/+0x28/+0x2C/+0x30
 // offsets with the ctor/dtor family; caller 0x002D3603. Honest address method.
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
+extern const float BfmeZeroRange;
 class Rva00524A4CInterface
 {
 public:
@@ -20,6 +21,15 @@ public:
 	virtual void f5();
 	virtual void f6();
 	virtual void slot7();
+	virtual int slot8();
+	virtual int slot9();
+	virtual void s10();
+	virtual void s11();
+	virtual void s12();
+	virtual bool slot13();
+	virtual void s14();
+	virtual void s15();
+	virtual int slot16();
 };
 
 class Rva00524A4C
@@ -27,6 +37,7 @@ class Rva00524A4C
 public:
 	void clear();
 	void Rva00524A65(int arg);
+	float rva00524A84();
 
 private:
 	char m_pad00[0x0C];
@@ -55,4 +66,20 @@ void Rva00524A4C::Rva00524A65(int arg)
 	unsigned long t = timeGetTime();
 	m_28 = -1;
 	m_30 = (int)t;
+}
+
+// ?rva00524A84@Rva00524A4C@@QAEMXZ @0x00524A84 (94B): while flag bit0 is set and
+// the +0x0C interface exists and its slot-13 predicate is false, the progress
+// ratio (slot9 - slot8) / slot16 as float; otherwise the zero range literal.
+// Codegen: the interface pointer is read through the member at each use (no named
+// local), which keeps retail's reload after the slot-8 call.
+float Rva00524A4C::rva00524A84()
+{
+	if ((m_flags & 1) != 0 && m_ptr != 0 && !m_ptr->slot13()) {
+		int diff = (m_ptr)->slot9() - (m_ptr)->slot8();
+		float f = (float)diff;
+		int c = m_ptr->slot16();
+		return f / (float)c;
+	}
+	return BfmeZeroRange;
 }
