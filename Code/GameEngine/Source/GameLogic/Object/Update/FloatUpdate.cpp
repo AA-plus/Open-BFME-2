@@ -32,6 +32,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 // INCLUDES ///////////////////////////////////////////////////////////////////////////////////////
+// Keep unused MSVC float math wrappers local; the existing operations inline.
+#define inline static inline
+#include <math.h>
+#undef inline
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 
 // dockupdate shim has to win the UpdateModule.h include guard before
