@@ -1,9 +1,11 @@
 // ?rva000953B3@Gen006E2310@@QAEXXZ
+// partial score=0.9920634921 date=2026-10-13
+// ?rva000953B3@Gen006E2310@@QAEXXZ
 // partial score=0.97 date=2026-10-12
 // ?rva000953B3@Gen006E2310@@QAEXXZ
 // partial score=0.97 date=2026-10-11
 // ?rva000953B3@Gen006E2310@@QAEXXZ (bank: whole Gen006E2310Update.cpp unit; the landed 0x982F9 shares it)
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE /G7 /ICode/GameEngine/Source/Common
 // ?rva000982F9@Gen006E2310@@QAEXXZ retail 0x000982F9, 382 bytes: slot 10 of
 // Gen006E2310's vtable 0x00BC8208 (slot 0 is its scalar deleting dtor
 // 0x000982DD), the object the game client factory 0x0004C62D builds over
@@ -82,12 +84,7 @@ public:
 	void rva0006E605(Vector3 *src, bool flag);
 };
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 struct Region3D
 {
@@ -180,12 +177,7 @@ private:
 };
 
 // The record's colour triples, as the CloudEffect constructor zeroes them.
-struct RGBColor
-{
-	float red;
-	float green;
-	float blue;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 // Address-derived helpers of the record, rowed under their own owners.
 class Rva002153C7
@@ -430,12 +422,12 @@ void Gen006E2310::rva000953B3()
 		m_D4.Y = color.green;
 		m_D4.Z = color.blue;
 	} else {
-		float fade = (float)(1.0 - m_C4 * (1.0 / 255.0));
+		volatile float fade = (float)(1.0 - m_C4 * (1.0 / 255.0));
 		if (m_BC == 2)
 			color = m_3C;
-		m_D4.X = color.red * fade;
-		m_D4.Y = color.green * fade;
-		m_D4.Z = color.blue * fade;
+		m_D4.X = ((volatile RGBColor &)color).red * fade;
+		m_D4.Y = ((volatile RGBColor &)color).green * fade;
+		m_D4.Z = ((volatile RGBColor &)color).blue * fade;
 		if (TheGameClient->getFrame() % 10 == 0)
 			TheTerrainRenderObject->slot137(0);
 	}
