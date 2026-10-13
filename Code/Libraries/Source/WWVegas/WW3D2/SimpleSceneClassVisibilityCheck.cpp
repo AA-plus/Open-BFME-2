@@ -1,9 +1,3 @@
-// ?Visibility_Check@SimpleSceneClass@@UAEXPAVCameraClass@@@Z
-// partial score=0.9947 date=2026-10-14
-// ?Visibility_Check@SimpleSceneClass@@UAEXPAVCameraClass@@@Z
-// partial score=0.99061 date=2026-10-13
-// ?Visibility_Check@SimpleSceneClass@@UAEXPAVCameraClass@@@Z
-// partial score=0.99 date=2026-10-12
 // cl: /Ireference/shims/bfme2ray /Ireference/shims/bfme2scene /Ireference/shims/bfme2renderobj /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/shims/sweep /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/sweep /O2 /G7 /arch:SSE
 // ?Visibility_Check@SimpleSceneClass@@UAEXPAVCameraClass@@@Z, retail 0x001426D0, 523 bytes.
 // Native SimpleScene constructor 142960 stores vftable BD33D0; slot27 points
@@ -75,10 +69,9 @@ public:
 };
 typedef char SceneVisibilityCameraSize[(sizeof(SceneVisibilityCamera) == sizeof(CameraClass)) ? 1 : -1];
 
-struct VisIter : public MultiListIterator<RenderObjClass> { VisIter(MultiListClass<RenderObjClass> *l) : MultiListIterator<RenderObjClass>(l) {} MultiListObjectClass *cur() { return Current_Object(); } };
 void SimpleSceneClass::Visibility_Check(CameraClass *camera)
 {
-	VisIter changed(&_bfme_changed_objects);
+	MultiListIterator<RenderObjClass> changed(&_bfme_changed_objects);
 	for (; !changed.Is_Done(); changed.Next()) {
 		RenderObjClass *obj = changed.Peek_Obj();
 		volatile int outY, outX, outLevel;
@@ -101,16 +94,16 @@ void SimpleSceneClass::Visibility_Check(CameraClass *camera)
 	visible->Reset_List();
 	Rva00943FF0List objects = {0};
 	((BfmeSceneVector *)&_bfme_spatial_index)->rva00142410(&objects.head, camera, 0);
-	for (Gen_00943CF0_Node *node = objects.head; node; node = node->m_next) {
+	for (Gen_00943CF0_Node *node = objects.head; node; node = (node->m_next ? node->m_next : node->m_next)) {
 		RenderObjClass *obj = (RenderObjClass *)node->m_value;
 		if (obj->Is_Force_Visible() || !((SceneVisibilityCamera *)camera)->rva001426D0Cull(obj->Get_Bounding_Sphere())) {
 			visible->Add(obj);
 			obj->Set_Visible((int)this, _bfme_visibility_token);
 		}
 	}
-	VisIter forced(&_bfme_forced_objects);
+	MultiListIterator<RenderObjClass> forced(&_bfme_forced_objects);
 	for (; !forced.Is_Done(); forced.Next()) {
-		char *fc = (char *)forced.cur(); fc = fc ? fc + -8 : 0; RenderObjClass *forcedObj = (RenderObjClass *)fc;
+		RenderObjClass *forcedObj = forced.Peek_Obj();
 		visible->Add(forcedObj);
 	}
 }
