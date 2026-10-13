@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE /Ireference/shims/subsystem_bfme2
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /O1 /EHs /MD /arch:SSE /Ireference/shims/subsystem_bfme2
+// The +15C/+168 vector destructors require the retail free-backed allocator
+// and /EHs: both complete 63-byte bodies retain the unwind state through free.
 // Constructor421B and EH15-state section structure match; EH callee identities need repair.
 // Storage is established by rowed32B class record copy/dtor and16/20B bling records.
 // Native state5 calls40A603 after constructor40A530 on the pointer vector at174.
