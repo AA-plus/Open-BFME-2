@@ -25,6 +25,26 @@ inline void *operator new(unsigned int, void *storage)
     return storage;
 }
 
+class UpgradeTemplate;
+
+// ICF-folded twin of the CategoryModuleClass getNext bodies below (same 4
+// bytes at 0x001DB0A8): UpgradeCenter keeps its template pointer at the
+// same +0xC head offset, so this getter is the same single load.
+// (Global scope: the rest of this TU lives in namespace FXParticleSystem.)
+class UpgradeCenter
+{
+public:
+	const UpgradeTemplate *rva001DB0A8() const;
+private:
+	char m_pad00[0xC];
+	const UpgradeTemplate *m_0C;
+};
+
+const UpgradeTemplate *UpgradeCenter::rva001DB0A8() const
+{
+	return m_0C;
+}
+
 namespace FXParticleSystem
 {
 
