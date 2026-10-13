@@ -9707,7 +9707,6 @@ name,address,notes
 ?grouping@?$numpunct@G@_STL@@QBE?AV?$basic_string@DV?$char_traits@D@_STL@@V?$allocator@D@2@@2@XZ,0x00015E50,STLport numpunct<wchar_t>::grouping; read from the REL32 in the byte-true basic_ios<wchar_t>::imbue body at 0x00016200; ICF-folded with the matched narrow numpunct<char>::grouping getter
 ?grow@?$Rva00584A7DVector@URva00584A7DEntry@@@@QAEXI@Z,0x00584A3D,address-derived callee of matched slot 0x00584A7D; retail REL32 targets 0x00584A3D; Ghidra FUN bounds 56 bytes; thiscall on the +0x08 vector (0x1C-byte entries) one arg ret 4; tail-jumped; callee body remains unclaimed; no named identity inferred
 ?grow@?$Rva00584A7DVector@URva00587057Entry@@@@QAEXI@Z,0x0058702C,address-derived callee of matched slot 0x00587057; retail REL32 targets 0x0058702C; Ghidra FUN bounds 35 bytes; thiscall on the +0x08 vector (0x54-byte entries) one arg ret 4; tail-jumped; callee body remains unclaimed; no named identity inferred
-?grow@?$Rva00588A9DVector@URva00588A9DEntry@@@@QAEXI@Z,0x00588A72,address-derived callee of matched slot 0x00588A9D; retail REL32 targets 0x00588A72; Ghidra FUN bounds 35 bytes; thiscall on the +0x08 vector one arg ret 4; callee body remains unclaimed; no named identity inferred
 ?grow@FreelistPool@@AAE_NHH@Z,0x001EAEF9,pool grow with retry called by freelist pop 0x2393E2 with 0 0; bool return in al with ret 8; int int params descriptive
 ?grow@Rva0082C300Buf@@AAEXXZ,0x00023A40
 ?grow@Rva0082C330Buf@@AAEXXZ,0x00023A40

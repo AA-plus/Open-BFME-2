@@ -191,21 +191,10 @@ void Rva005E1B41Primary::rva005E1AB6(Int a)
 	}
 }
 
-// 0x00588A9D: the pinned 0x00588A72 on the +0x08 vector (0x3C-byte
-// entries) with the count when it holds fewer.
-template <class T>
-struct Rva00588A9DVector
-{
-	T *_M_start;
-	T *_M_finish;
-	T *_M_end_of_storage;
-	UnsignedInt size() const { return _M_finish - _M_start; }
-	void grow(UnsignedInt count);
-};
-struct Rva00588A9DEntry
-{
-	char m_pad00[0x3C];
-};
+// 0x00588A9D: grow the actual 60-byte STLport vector through its owned
+// one-argument resize at 0x00588A72. The record identity remains provisional.
+struct BfmePod60 { unsigned char opaque[0x3C]; };
+namespace _STL { template<> void vector<BfmePod60>::resize(size_type); }
 class Rva00588A9D
 {
 public:
@@ -213,12 +202,12 @@ public:
 private:
 	Int m_00;
 	Int m_04;
-	Rva00588A9DVector<Rva00588A9DEntry> m_08;
+	_STL::vector<BfmePod60> m_08;
 };
 void Rva00588A9D::rva00588A9D(UnsignedInt count)
 {
 	if (m_08.size() < count)
-		m_08.grow(count);
+		m_08.resize(count);
 }
 
 // 0x0006EE46 (interface at +0x108): the pinned cdecl 0x00118660 with the
