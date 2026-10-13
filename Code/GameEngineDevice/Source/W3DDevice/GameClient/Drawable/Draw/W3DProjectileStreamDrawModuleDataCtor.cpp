@@ -18,8 +18,8 @@
 // arms state 1. Field identity is the own table at 0x00BCDFB0. The rowed
 // factory at 0x650E8 news 0x1C. Row supersedes the ctor pin.
 
-extern "C" const void *const vtbl_00BCDF18[];  // ??_7W3DProjectileStreamDrawModuleData@@6B@
-#pragma comment(linker, "/alternatename:_vtbl_00BCDF18=??_7W3DProjectileStreamDrawModuleData@@6B@")
+// The matched destructor defines this vtable at retail VA 0x00BCDF18.
+extern "C" const void *const __identifier("??_7W3DProjectileStreamDrawModuleData@@6B@")[];
 
 #include "ascii_string.h"
 
@@ -89,7 +89,7 @@ void W3DProjectileStreamDrawModuleData::buildFieldParse(MultiIniFieldParse &pars
 
 // ??0W3DProjectileStreamDrawModuleData@@QAE@XZ @0x000D11D2
 W3DProjectileStreamDrawModuleData::W3DProjectileStreamDrawModuleData()
-	: m_vtable(reinterpret_cast<const void *>(((unsigned int)vtbl_00BCDF18)))
+	: m_vtable(reinterpret_cast<const void *>(((unsigned int)__identifier("??_7W3DProjectileStreamDrawModuleData@@6B@"))))
 	, m_texture()
 {
 	m_texture.set("");

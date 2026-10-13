@@ -4837,7 +4837,6 @@ alternatename	Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3
 alternatename	Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DModelDrawModuleDataBuildFieldParseChained.cpp	?W3DTankDrawModuleDataParse@@YAXAAVMultiIniFieldParse@@@Z	1
 alternatename	Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DModelDrawModuleDataBuildFieldParseChained.cpp	?W3DTruckDrawModuleDataParse@@YAXAAVMultiIniFieldParse@@@Z	1
 alternatename	Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DModelDrawParticleCleanup.cpp	?findParticleSystemByID@ParticleSystemManager@@AAE?AUBfmeW3DParticleHandle@@W4ParticleSystemID@@@Z	1
-alternatename	Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DProjectileStreamDrawModuleDataCtor.cpp	_vtbl_00BCDF18	1
 alternatename	Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DQuadrupedDrawCtor.cpp	_vtbl_00BCA08C	1
 alternatename	Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DQuadrupedDrawCtor.cpp	_vtbl_00BCBB78	1
 alternatename	Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/Draw/W3DQuadrupedDrawCtor.cpp	_vtbl_00BCBC40	1
