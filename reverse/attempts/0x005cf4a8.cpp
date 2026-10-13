@@ -1,3 +1,5 @@
+// ?rva005CF4A8@StrategicInGameUI@@QAEXXZ
+// partial score=0.97 date=2026-10-13
 // ??0Rva005CEF2F@@QAE@PAURva005CF22CBig@@H@Z
 // partial score=0.9443093203093204 date=2026-10-13
 // ??0Rva005CEF2F@@QAE@PAURva005CF22CBig@@H@Z
@@ -243,8 +245,8 @@ Rva005CEF2F::Rva005CEF2F(Rva005CF22CBig*b,int value):Rva005CE8F5(b),selection(va
   if(button){
    _STL::vector<ScienceType> keys;
    void *player=((LivingWorldActivePlayerView*)TheLivingWorldLogic)->player;
-   ((Rva002E02F0*)TheLivingWorldBuildingTemplateStore)->rva002E02F0(((LivingWorldPlayerKeyView*)player)->key,&keys);
    int slot=1;
+   ((Rva002E02F0*)TheLivingWorldBuildingTemplateStore)->rva002E02F0(((LivingWorldPlayerKeyView*)player)->key,&keys);
    _STL::vector<ScienceType>::iterator end=keys.end();
    for(_STL::vector<ScienceType>::iterator it=keys.begin();it!=end;++it){
     ArmorTemplate *building=((Rva002B6498*)TheLivingWorldBuildingTemplateStore)->rva002B6498((NameKeyType)*it);
