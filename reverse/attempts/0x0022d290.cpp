@@ -1,4 +1,6 @@
 // ?rva0022D290@GameEngine@@QAEXXZ
+// partial score=0.9685 date=2026-10-13
+// ?rva0022D290@GameEngine@@QAEXXZ
 // partial score=0.986 date=2026-10-10
 // ?rva0022D290@GameEngine@@QAEXXZ  NEAR (helper cv 2026-10-10): improves reverse/attempts/0x0022d290.cpp
 // change: limit numerator 1000.0f/(float)((double)m_maxFPS*LOGIC_SCALE) gives retail fdivr dword [1000.0f] (was qword)
