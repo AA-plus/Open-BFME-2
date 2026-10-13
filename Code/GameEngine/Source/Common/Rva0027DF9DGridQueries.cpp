@@ -673,7 +673,6 @@ struct Rva001A62D0TerrainQueryResult
 
 struct CreateMask
 {
-	CreateMask() { memset(words, 0, sizeof(words)); }
 	unsigned int words[4];
 };
 
@@ -730,6 +729,7 @@ Object *TerrainLogic::rva00283D70(const Coord3D *pos)
 		const ThingTemplate *tmpl = rec->m_14;
 		if (tmpl) {
 			CreateMask mask;
+			memset(&mask, 0, sizeof(mask));
 			Team *team = ThePlayerList->m_18->m_2EC;
 			obj = TheThingFactory->newObject(tmpl, team, &mask, false);
 			obj->teleportTo(reinterpret_cast<const Coord3D *>(rec), false);
