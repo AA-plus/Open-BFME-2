@@ -1852,22 +1852,38 @@ void BFMEConnectionManager::sendDisconnectFrameCommand() {
  msg->detach();
 }
 
-#pragma optimize("", on)
-
-// ?updateLoadProgress@ConnectionManager@@ present-unmatched
+// ?updateLoadProgress@ConnectionManager@@QAEXH@Z native 0x004CF940..0x004CF9CD 141B.
+// Retail allocates with the plain global operator new (0x0002FDA0, push 0x20) and
+// calls the 0x004D582B ctor directly, so this is ::new, not the pooled newInstance.
+// 0x004D582B is BFME's NetProgressCommandMsg (base ctor, vtable, type 15 at +0x14,
+// byte 0 at +0x1C); its ledger row carries the address-derived class name
+// Rva004D582B, so the new-expression is spelled through that view and the result
+// cast back. setPercentage folds into the 10-byte +0x1C byte setter at 0x0006EDE3
+// whose row is an ICF gen-alias; the only resolvable byte-setter spelling at that
+// address is the already pinned setDisconnectSlot view (same fold, same store).
+class Rva004D582B : public NetCommandMsg {
+public:
+	Rva004D582B();
+private:
+	UnsignedByte m_percent;
+};
 void ConnectionManager::updateLoadProgress( Int progress )
 {
-	NetProgressCommandMsg *msg = newInstance(NetProgressCommandMsg);
-	msg->setPercentage( progress );
-	msg->setPlayerID( m_localSlot );
+	ConnectionManagerSendLayout *layout = (ConnectionManagerSendLayout *)this;
+	Rva004D582B *raw = ::new Rva004D582B();
+	NetProgressCommandMsg *msg = (NetProgressCommandMsg *)raw;
+	((NetDisconnectPlayerCommandMsg *)msg)->setDisconnectSlot((UnsignedByte)progress);
+	msg->setPlayerID( layout->localSlot );
 	if (DoesCommandRequireACommandID(msg->getNetCommandType()) == TRUE) {
 		msg->setID(GenerateNextCommandID());
 	}
 	processProgress(msg);
-	sendLocalCommand(msg, 0xff ^ (1 << m_localSlot));
+	sendLocalCommandDirect(msg, (unsigned char)~(unsigned char)(1 << layout->localSlot));
 
 	msg->detach();
 }
+
+#pragma optimize("", on)
 
 // ?loadProgressComplete@ConnectionManager@@ present-unmatched
 void ConnectionManager::loadProgressComplete()
