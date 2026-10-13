@@ -21,12 +21,15 @@ struct Rva002ED15AInfo
 	char storage[0x5B];
 };
 
+class Object;
+class Pathfinder;
+
 struct Rva002ECE6AInfo
 {
 	Int cellCallback(void *previousCell, void *currentCell, Int cellX, Int cellY);
 	// 0x002ECD63 builds a 0x60-byte query here (writes up to [ebx+0x5D], ret 0x1c).
-	Rva002ECE6AInfo *init(void *a, void *b, void *c, void *d, Int e, Int f, Int g);
-	char storage[0x5F];
+	Rva002ECE6AInfo(Pathfinder *pathfinder, const Object *obj, Int surfaces, Bool a, Bool b, Bool c, Bool d);
+	char storage[0x60];
 };
 
 struct Rva002ED01EInfo
@@ -128,8 +131,7 @@ Int Pathfinder::iterateCellsAlongLine(const Coord3D *start, const Coord3D *desti
 // 0x002F1AF4 62B: 8-arg wrapper, helper1 0x002ECD63 with trailing imm 0, !logic.
 Int Pathfinder::IsLinePassable(void *a8, void *ac, PathfindLayerEnum a10, const Coord3D *a14, const Coord3D *a18, void *a1c, Int a20, Int a24)
 {
-	Rva002ECE6AInfo info;
-	return !iterateCellsAlongLine(a14, a18, a10, info.init(this, a8, ac, a1c, a20, a24, 0));
+	return !iterateCellsAlongLine(a14, a18, a10, &Rva002ECE6AInfo(this, (const Object *)a8, (Int)ac, *(Bool *)&a1c, *(Bool *)&a20, *(Bool *)&a24, false));
 }
 
 // 0x002F1B32 52B: 5-arg wrapper, helper1 0x002E931F, !!logic.
@@ -142,8 +144,7 @@ Bool Pathfinder::IsLineBlocked(void *a8, void *ac, PathfindLayerEnum a10, const 
 // 0x002F1B66 60B: 6-arg wrapper, helper1 0x002ECD63 with imms 0,1,1, !logic.
 Int Pathfinder::IsLinePassableForOptimize(void *a8, void *ac, PathfindLayerEnum a10, const Coord3D *a14, const Coord3D *a18, void *a1c)
 {
-	Rva002ECE6AInfo info;
-	return !iterateCellsAlongLine(a14, a18, a10, info.init(this, a8, ac, a1c, 0, 1, 1));
+	return !iterateCellsAlongLine(a14, a18, a10, &Rva002ECE6AInfo(this, (const Object *)a8, (Int)ac, *(Bool *)&a1c, false, true, true));
 }
 
 // 0x002F1BA2 51B: 5-arg wrapper, helper1 0x002ED0CC, !logic.
