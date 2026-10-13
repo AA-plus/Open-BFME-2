@@ -29,6 +29,7 @@ public:
 	virtual void rva00086B2C(int, int, Real, Real, int, int) = 0;
 protected:
 	friend class Rva00086761CameraMove;
+	friend class W3DView;
 	int m_04;
 	int m_08;
 	int m_0C;
@@ -56,6 +57,7 @@ public:
  ~Rva00089894ArrayElement();
 private:
  friend class Rva00086761CameraMove;
+ friend class W3DView;
  Rva00089894Point m_position;
  AsciiString m_0C;
  int m_10;
@@ -74,11 +76,17 @@ public:
  virtual void rva00086B2C(int, int, Real, Real, int, int);
 private:
  friend class Rva00086761CameraMove;
+ friend class W3DView;
  Rva00089894ArrayElement m_arr255[255];
  Rva00089894ArrayElement m_arr4[4];
- char m_padding1468[0x1864-0x1468];
- int m_values[257];
- char m_padding1C68[12];
+ // moveAlongWaypointPath (0x00086F56) reads these as floats: per-waypoint
+ // angles at +1468, segment lengths at +1864, the total distance at +1C68
+ // and the eased ground endpoints at +1C6C/+1C70.
+ float m_cameraAngles[255];
+ float m_values[257];
+ float m_totalDistance;
+ float m_groundStart;
+ float m_groundEnd;
  int m_filled[255];
  int m_numValues;
 };
