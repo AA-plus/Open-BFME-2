@@ -52736,3 +52736,4 @@ IDct10	0x001D6660	1528	partial	vp6-spec 001d6660/001d3f30: best bank (nd 538, wa
 ?rva005852DF@Rva005852DF@@QAEXXZ	0x005852DF	1556	partial	lab beam 420s improved nd135->134 at unchanged 1549B (f .8944->.8957); no unresolved, EH exact score=0.8957 stash=reverse/attempts/0x005852df.cpp
 ?rva00473212@Rva00473212@@QAEXXZ	0x00473212	1415	partial	lab beam 420s improved nd150->131 (f .8543->.8675); clen 1408->1420 (target 1415); no unresolved; EH still differs score=0.8675 stash=reverse/attempts/0x00473212.cpp
 ?rva0047AC8F@AODHordeContain@@QAEXXZ	0x0047AC8F	1563	partial	lab beam 420s improved nd172->133 (f .8538->.8684); clen 1572->1577 (target 1563); no unresolved, EH exact score=0.8684 stash=reverse/attempts/0x0047ac8f.cpp
+?rva001321A7@BfmeThing937B@@QAEXPAX@Z	0x001321A7	1347	partial	lab beam 300s improved nd178->145 (f .8359->.8597); clen 1342->1345 (target 1347); no unresolved, EH exact score=0.8597 stash=reverse/attempts/0x001321a7.cpp
