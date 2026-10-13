@@ -8,7 +8,9 @@ void __cdecl Rva00153565Register(const char *name, void *obj);
 // Both native cleanup states reach the complete7B namespace-base dtorE14BD.
 // The primary namespace interface comes from the verified binder/namespace
 // units; member ctor18BE7E and tableBD5BD4 establish its primary vptr at4.
-// Original leaf/member application names and unused leaf slots remain unknown.
+// Native member slot1 names SourceNamespace_Fog::ResolveBindings18BFCE.
+// This narrow member view remains neutral pending full header reconciliation;
+// other unused leaf slots remain unspecified.
 class FXShaderParameterBinder;
 typedef const char *D3DXHANDLE;
 class FXShaderParameterSourceNamespace {
