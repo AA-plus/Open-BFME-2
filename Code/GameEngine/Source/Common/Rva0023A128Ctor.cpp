@@ -156,7 +156,7 @@ class Rva0023932BMember : public Rva0023932BPtr
 {
 public:
 	Rva0023932BMember() { m_ptr = 0; }
-	~Rva0023932BMember() { rva0023932B(); }
+	__declspec(noinline) ~Rva0023932BMember();
 };
 class Rva0023A128Listener
 {
@@ -261,4 +261,19 @@ void Rva0023A128::rva00239B94(int)
 {
 	m_10->rva0042CC1B();
 	rva00239457();
+}
+
+// Native23932B clears the owner before calling the rowed42C1B7 pointee
+// destructor and global delete. The full26B body and both REL32 bindings
+// equal the existing clear; the holder's original spelling is not inferred.
+void __cdecl operator delete(void *);
+Rva0023932BMember::~Rva0023932BMember()
+{
+	Rva0042C1B7Item *p=m_ptr;
+	m_ptr=0;
+	if(p)
+	{
+		p->Rva0042C1B7Item::~Rva0042C1B7Item();
+		::operator delete(p);
+	}
 }
