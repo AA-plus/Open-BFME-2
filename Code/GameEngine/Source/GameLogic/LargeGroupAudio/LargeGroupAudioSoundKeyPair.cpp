@@ -29,6 +29,7 @@
 // The first twelve bytes remain an opaque owning container: its destructor
 // is the existing 0x003ED94F provider. Automatic member destruction preserves
 // all eight retail EH states, including the throwing allocation free.
+// BFME1 donor revision reviewed: cee35b7d8 (semantic/reference search only).
 void __cdecl Rva00030830FreeAllocation(void *);
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
 // overload takes the call instead, so this TU emits no external max COMDAT.
@@ -42,6 +43,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #define free Rva00030830FreeAllocation
 #include <set>
 #include <vector>
+#include <algorithm>
 #undef free
 #include "ascii_string.h"
 
@@ -75,9 +77,12 @@ struct Rva00568FE4Less {
 typedef _STL::multiset<Rva00568FE4Key, Rva00568FE4Less, _STL::allocator<Rva00568FE4Key> > Rva00568FE4Multi;
 
 class Rva005C8176 { public: void *rva005C8176(FloatPair p); };
+struct Rva005C8876Position;struct Rva005C8876Grid;
 class LargeGroupAudioGridCell
 {
 public:
+ Rva005C8876Position getPreferredAudioPosition(Rva005C8876Grid*);
+ void update(Rva005C8876Grid*);
 	void addToWeight(unsigned short weight);
 	void subtractFromWeight(unsigned short weight);
 };
@@ -238,6 +243,7 @@ public:
  void rva0056A378(Rva0056A378Source arg);
  void rva00569BBC(Xfer *, VersionPair *);
  void allocateGrids();
+ void update(bool*);
  void setupAllDuckingTargets();
  void xferGridCellVector(Xfer *, void *, VersionPair *);
  void rva0056979A(const FloatPair &pos, unsigned short weight);
@@ -251,7 +257,7 @@ private:
  _STL::vector<BfmeStringRecord00568CE0> m_subjects;
  Rva00568FE4Multi m_pendingAdds;
  Rva005C8176 *m_grids[4];
- int unknown3C;
+ Rva005C8876Grid *m_grid;
  _STL::vector<const ModuleData *> m_v40;
  _STL::vector<const ModuleData *> m_v4C;
  _STL::vector<const ModuleData *> m_v58;
@@ -349,7 +355,7 @@ void LargeGroupAudioSoundKeyPair::allocateGrids()
 {
  for(int i=0;i<4;++i){
   if(m_grids[i]){reinterpret_cast<Rva00569393 *>(this)->rva005694CD();i=0;}
-  m_grids[i]=reinterpret_cast<Rva005C8176 *>(new Rva005C865B(reinterpret_cast<void *>(unknown3C),reinterpret_cast<Rva005688D2 *>(this)->rva005688D2(i)));
+  m_grids[i]=reinterpret_cast<Rva005C8176 *>(new Rva005C865B(reinterpret_cast<void *>(m_grid),reinterpret_cast<Rva005688D2 *>(this)->rva005688D2(i)));
  }
  reinterpret_cast<Rva005C81D8 *>(m_grids[0])->rva005C81D8(m_grids[1],m_grids[2],m_grids[3]);
  reinterpret_cast<Rva005C81D8 *>(m_grids[1])->rva005C81D8(m_grids[0],m_grids[3],m_grids[2]);
@@ -428,7 +434,7 @@ void LargeGroupAudioSoundKeyPair::unregisterSubject(LargeGroupAudioSubject *subj
 	}
 }
 
-LargeGroupAudioSoundKeyPair::LargeGroupAudioSoundKeyPair(LargeGroupAudioAudioMap *owner, const char *name):m_owner(),unknown3C((int)owner),m_totalWeight(0){
+LargeGroupAudioSoundKeyPair::LargeGroupAudioSoundKeyPair(LargeGroupAudioAudioMap *owner, const char *name):m_owner(),m_grid(reinterpret_cast<Rva005C8876Grid*>(owner)),m_totalWeight(0){
  for(int i=0;i<4;++i)m_grids[i]=0;
  m_v4C.reserve(40);m_v40.reserve(40);
  if(name)m_name.set(name);
@@ -516,5 +522,174 @@ void LargeGroupAudioSoundKeyPair::xferGridCellVector(Xfer *xfer, void *storage, 
     }
    }
   }
+ }
+}
+// Native 56A4AA..56A83B is the 913-byte RET4 update. WorldBuilder
+// 1440080 names LargeGroupAudioSoundKeyPair::update; no clean BF1/ZH
+// source for this BFME-specific method was found. The existing owner
+// independently establishes +3C configuration, +40 active/+4C candidates,
+// and +64 total weight. Target bytes supply the thresholds at E0/E2,
+// displaced 12-byte records, neighbor weights/flags, and full queue clear.
+// push_back receives the existing neighbor/best/iterator pointer references:
+// that preserves their native homes and the live candidate-vector base.
+// The raw pool-ref constructor only increments the witnessed +8C counter
+// and cannot throw; retail keeps the allocation EH state across that call.
+// Capture the pool target before the audio callback writes through &holder.
+// friend_setList is a proven whole-body fold of the native setter, not a
+// claim that an audio target is a GameMessage. Address-derived views remain
+// provisional; the original event/player and payload names are unresolved.
+
+
+struct BfmePoolHolder88
+{
+	unsigned char m_pad[0x88];
+	OpaqueRefCounted m_ref;
+};
+
+class BfmePoolRef10
+{
+public:
+	BfmePoolHolder88 *m_target;
+	__forceinline BfmePoolRef10() : m_target(0) {}
+	BfmePoolRef10(const BfmePoolRef10 &other);
+	BfmePoolRef10 &operator=(const BfmePoolRef10 &other);
+	BfmePoolRef10(BfmePoolHolder88 *) throw();
+ void rva000519BD();
+	__forceinline ~BfmePoolRef10() { if (m_target != 0) m_target->m_ref.Release_Ref(); }
+};
+
+
+
+class HostClass005C8E0A
+{
+public:
+	void method_005C8E0A();
+	BfmePoolRef10 rva005C8E2C();
+	char m_pad00[8];
+	BfmePoolRef10 m_pool08;
+	HostClass005C8E0A *neighbors[8];
+ char pad2C[0x18];
+ unsigned short weight;
+ unsigned char m_byte46;
+ union { unsigned char flags;struct { unsigned char lowNibble:4;unsigned char highNibble:4; }; };
+ void method_005C908B(BfmePoolRef10,unsigned char);
+};
+
+class Rva00568A20
+{
+public:
+	BfmePoolRef10 m_ref;
+	HostClass005C8E0A *m_host;
+	unsigned char m_byte;
+	char m_pad[3];
+	Rva00568A20() : m_ref(), m_host(0) {}
+};
+
+
+class ModuleData;
+
+
+
+
+class Rva0056A3FF {public:void rva0056A3FF(HostClass005C8E0A*,_STL::vector<Rva00568A20>*);};
+struct Rva00568721Cmp {bool operator()(const void*,const void*)const;};
+struct BfmeEventPositionView {float x,y,z;};
+struct Rva005C8876Position {float x,y,z;Rva005C8876Position(){} Rva005C8876Position(const Rva005C8876Position&p):x(p.x),y(p.y),z(p.z){} };
+struct Rva005C8876Grid {char pad[0xE0];unsigned short startWeight,continueWeight;unsigned char mode;};
+
+class Rva0051D93 {public:Rva0051D93(const OpaqueRefElement4&,const BfmeEventPositionView&,int);char data[0x90];};
+class GameMessageList;
+class GameMessage {public:void friend_setList(GameMessageList*);};
+class AudioManager;
+extern AudioManager *TheAudio;
+class AudioCalls {
+public:
+ virtual void s00();virtual void s01();virtual void s02();virtual void s03();
+ virtual void s04();virtual void s05();virtual void s06();virtual void s07();
+ virtual void s08();virtual void s09();virtual void s10();virtual void s11();
+ virtual void s12();virtual void s13();virtual void s14();virtual void s15();
+ virtual void s16();virtual void s17();virtual void s18();virtual void s19();
+ virtual void s20();virtual void s21();virtual void s22();virtual void s23();
+ virtual GameMessageList *start(BfmePoolRef10*);
+ virtual void s25();virtual void s26();virtual void stop(int);
+};
+extern class GameLogic *TheGameLogic;
+struct LogicFrame {char pad[0x40];unsigned frame;};
+namespace _STL {
+template<> void vector<Rva00568A20>::reserve(unsigned);
+template<> vector<BfmePoolRef10>::~vector();
+template<> void sort<void**,Rva00568721Cmp>(void**,void**,Rva00568721Cmp);
+
+template<> _Vector_base<int,allocator<int> >::_Vector_base(const allocator<int>&);
+}
+void LargeGroupAudioSoundKeyPair::update(bool *flag)
+{
+ int startWeight=m_grid->startWeight,continueWeight=m_grid->continueWeight;
+ if(!reinterpret_cast<Rva00568920*>(this)->rva00568920() && m_totalWeight>=startWeight){
+  if(!*flag || reinterpret_cast<LogicFrame*>(TheGameLogic)->frame<=1){
+   reinterpret_cast<LargeGroupAudioSoundKeyPair*>(this)->allocateGrids();*flag=true;
+  }
+ }else if(reinterpret_cast<Rva00568920*>(this)->rva00568920() && m_totalWeight<=0){
+  reinterpret_cast<Rva00569393*>(this)->rva005694CD();
+ }
+ if(reinterpret_cast<Rva00568920*>(this)->rva00568920()){
+  if(!m_v4C.empty()){
+   _STL::vector<Rva00568A20> displaced;displaced.reserve(m_v40.size());
+   for(unsigned i=0;i<m_v4C.size();++i){
+    HostClass005C8E0A *cell=reinterpret_cast<HostClass005C8E0A*>(const_cast<ModuleData*>(m_v4C[i]));
+    if(cell->m_pool08.m_target){
+     if(cell->weight<continueWeight)reinterpret_cast<Rva0056A3FF*>(this)->rva0056A3FF(cell,reinterpret_cast<_STL::vector<Rva00568A20>*>(&displaced));
+     else {HostClass005C8E0A **p=cell->neighbors;
+     for(int left=8;left;--left,++p){
+      HostClass005C8E0A *neighbor=*p;
+      if(neighbor && neighbor->weight>cell->weight)reinterpret_cast<Rva0056A3FF*>(this)->rva0056A3FF(cell,reinterpret_cast<_STL::vector<Rva00568A20>*>(&displaced));
+     }}
+    }else if(cell->lowNibble>0){
+     HostClass005C8E0A **p=cell->neighbors;
+     for(int left=8;left;--left,++p){
+      HostClass005C8E0A *neighbor=*p;
+      if(neighbor && neighbor->m_pool08.m_target && neighbor->weight<cell->weight){
+       reinterpret_cast<Rva0056A3FF*>(this)->rva0056A3FF(neighbor,reinterpret_cast<_STL::vector<Rva00568A20>*>(&displaced));
+       m_v4C.push_back(reinterpret_cast<const ModuleData* const&>(neighbor));
+      }
+     }
+    }
+   }
+   for(Rva00568A20 *e=displaced.begin();e!=displaced.end();++e){
+    HostClass005C8E0A *best=0;
+    for(int n=0;n<=8;++n){
+     HostClass005C8E0A *cell=n==8?e->m_host:e->m_host->neighbors[n];
+     if(cell && cell->weight>=startWeight && cell->lowNibble<=0){
+      if(best){
+       if(cell->weight>best->weight || (cell->weight==best->weight && cell->highNibble<best->highNibble)){
+        reinterpret_cast<Rva00569543*>(this)->rva005695F2(reinterpret_cast<const ModuleData*>(best));best=cell;
+       }else reinterpret_cast<Rva00569543*>(this)->rva005695F2(reinterpret_cast<const ModuleData*>(cell));
+      }else best=cell;
+     }
+    }
+    if(best){
+     unsigned char mode=e->m_host==best?e->m_byte:m_grid->mode;
+     best->method_005C908B(e->m_ref,mode);
+     m_v40.push_back(reinterpret_cast<const ModuleData* const&>(best));
+    }else {int handle=*reinterpret_cast<int*>(reinterpret_cast<char*>(e->m_ref.m_target)+0xC); reinterpret_cast<AudioCalls*>(TheAudio)->stop(handle);}
+   }
+   _STL::sort(reinterpret_cast<void**>(const_cast<ModuleData**>(m_v4C.begin())),reinterpret_cast<void**>(const_cast<ModuleData**>(m_v4C.end())),Rva00568721Cmp());
+   const ModuleData **i=m_v4C.begin();
+   for(;i!=m_v4C.end();++i){
+    HostClass005C8E0A* const &cell=*reinterpret_cast<HostClass005C8E0A**>(const_cast<ModuleData**>(i));
+    if(cell->weight<startWeight)break;
+    if(cell->lowNibble<=0){
+     Rva005C8876Position position=reinterpret_cast<LargeGroupAudioGridCell*>(cell)->getPreferredAudioPosition(m_grid);
+     BfmePoolRef10 holder(reinterpret_cast<BfmePoolHolder88*>(new Rva0051D93(reinterpret_cast<const OpaqueRefElement4&>(m_owner),reinterpret_cast<const BfmeEventPositionView&>(position),0)));
+     GameMessage *message=reinterpret_cast<GameMessage*>(holder.m_target);
+     GameMessageList *handle=reinterpret_cast<AudioCalls*>(TheAudio)->start(&holder);
+     message->friend_setList(handle);
+     cell->method_005C908B(holder,0);
+     m_v40.push_back(*i);
+    }
+   }
+   m_v4C.clear();
+  }
+  for(const ModuleData **p=m_v40.begin();p!=m_v40.end();++p)reinterpret_cast<LargeGroupAudioGridCell*>(const_cast<ModuleData*>(*p))->update(m_grid);
  }
 }
