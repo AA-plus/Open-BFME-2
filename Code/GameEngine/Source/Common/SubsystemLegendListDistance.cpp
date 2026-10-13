@@ -37,16 +37,18 @@
 // address and is NOT claimed here.  The element type only fixes the shift, not
 // the byte sequence.
 //
-// Includes are ordered the way SubsystemLegend.cpp orders them, and the
-// reason is load-bearing: `<list>` must come before PreRTS.h so STLport's
-// node_alloc is used rather than NEWALLOC.  The struct below is a standalone
+// Only STLport is included.  PreRTS.h (which the donor TU includes after
+// `<list>`) contributes nothing to the bodies below, but its Zero Hour
+// GlobalData.h, with an AsciiString array member, makes an /O1 unit emit the
+// compiler's `vector destructor iterator' (??_I) in an ebp-framed form; that
+// copy came first in link order and displaced retail's /O2 one (0x00663240,
+// BfmeThingDGDDestructor.cpp).  The struct below is a standalone
 // declaration of the element type rather than the donor's real
 // subsystem_legend.h, because including that header would drag the BFME-native
 // ascii_string/subsystem_interface interfaces into a TU whose only definition
 // must be the one below, and the element type is never dereferenced here.
 
-#define __PLACEMENT_VEC_NEW_INLINE
-#include <list> // before PreRTS.h so STLport node_alloc is used (not NEWALLOC)
+#include <list>
 
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
@@ -56,7 +58,6 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 { return a._M_node != b._M_node; }
 }
 #include <vector>
-#include "PreRTS.h"
 
 // The retail element type.  Only its SIZE reaches the emitted code -- the
 // node divide -- so a forward declaration would instantiate the same way;
