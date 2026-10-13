@@ -2,18 +2,26 @@
 // partial score=0.85 date=2026-10-13
 // ?notifyOfMemberDeath@HordeContain@@UAEXPAVObject@@@Z
 // partial score=0.85 date=2026-10-13
-// Retail 0x004704E4 (563B). Owner-embedded port in HordeContainIface11CSlots.cpp
-// compiles 579B (+16B). Head exact through EH prolog. Walls:
-// (1) prologue: retail sub-0x54 + and-mem scratch-zero + test-edi, no ebx;
-//     mine sub-0x58 + push-ebx + xor-ebx + cmp-reg (extra dword home + pinned
-//     ebx-zero for null-check). Same ebx-zero family as SidesList/CrashSite.
-// (2) real callee Drawable::rva00272945(int) identified (rowed 0x00272945)
-//     and wired via owner Drawable decl (resolves now).
-// Infra KEPT in owner file (build-green 134/134): gap13->notifyOfMemberDeath
-// REVERTED (link hazard), override decl REVERTED; helper views + owner
-// Drawable::rva00272945 decl KEPT. Method reverted below.
-// t=30 model=muse-spark
-// ?notifyOfMemberDeath@HordeContain@@UAEXPAVObject@@@Z @0x004704E4 (563B,
+// Retail 0x004704E4 (563B). Owner-embedded port compiles 579B (+16B).
+// Tried: bank logic, resolved Drawable callee, UpdateModule-this cached in
+// update local (takes a home, not ebx), public m_ptr direct test, volatile.
+// Persistent wall: prologue frame + hoisted ebx-zero; retail tests edi and
+// reuses edi as zero late, keeps UpdateModule-this in ebx. Infra KEPT
+// (helpers + Drawable decl, green). t=35 model=muse-spark
+// Helpers for HordeContain::notifyOfMemberDeath below (slot views and the
+// death-notification callees; all callees rowed, no pins).
+class HordeDeathDrawable { public: void rva00272945(unsigned); char pad[0x43c]; bool refresh; };
+class HordeDeathControl : public Rva00468D11Slots<6> { public: virtual void slot6(Object *) = 0; };
+class HordeDeathBody : public Rva00468D11Slots<15> { public: virtual const unsigned *slot15() = 0; };
+class HordeDeathInterface : public Rva00468D11Slots<96> { public: virtual unsigned slot96(int) = 0; };
+class HordeDeathHeight : public Rva00468D11Slots<7> { public: virtual float height(float, float, int, bool, bool) = 0; };
+struct HordeDeathDataView { char prefix[0x248]; int deathEvent; };
+enum HordeDeathKind { HORDE_DEATH_KIND = 0x1bb };
+class Eva { public: void reportEvaEvent(int, const Coord3D *, int); };
+extern Eva *TheEva;
+class Rva00265254 { public: Rva00265254(unsigned, unsigned, unsigned, unsigned); int words[19]; };
+class Rva001E42F2 { public: void rva001E42F2(const int *); };
+class Rva0030A92C { public: void rva0030A92C(float); };
 // slot after rva00469F2F of the +0x11C vtable 0x00C44C58). Death cleanup:
 // special-unit/producer removal, flank/kind gates, map/list erasure, empty
 //-horde teardown with Eva event, frame stamp, drawable refresh and the
@@ -26,7 +34,8 @@ void HordeContain::notifyOfMemberDeath(Object *obj)
 	if (!obj)
 		return;
 	((HordeDeathControl *)m_2C8)->slot6(obj);
-	if (!((Rva004693AD *)(UpdateModule *)this)->rva004693AD((Rva004693ADArg *)obj)) {
+	UpdateModule *update = (UpdateModule *)((char *)this - 0x11C);
+	if (!((Rva004693AD *)update)->rva004693AD((Rva004693ADArg *)obj)) {
 		scratch.words.id = obj->getID();
 		m_194.push_front(m_17C[scratch.words.id]);
 	}
@@ -49,9 +58,9 @@ void HordeContain::notifyOfMemberDeath(Object *obj)
 	((Rva00463D9BTree *)&m_17C)->erase(*(const Rva00463D9BElement *)&scratch.words.id);
 	scratch.words.id = obj->getID();
 	m_170.erase(scratch.words.id);
-	while (((UpdateModule *)this)->rva00470B21()) {
+	while (update->rva00470B21()) {
 	}
-	const _STL::list<Object *> *items = ((Rva0046247DPair *)((Rva0046247D *)(UpdateModule *)this)->rva0046247D(scratch.pair))->m04;
+	const _STL::list<Object *> *items = ((Rva0046247DPair *)((Rva0046247D *)update)->rva0046247D(scratch.pair))->m04;
 	if (items->empty() && m_170.empty()) {
 		TheEva->reportEvaEvent(((HordeDeathDataView *)m_moduleData)->deathEvent, &obj->m_position, 0);
 		TheGameLogic->destroyObject(m_object);

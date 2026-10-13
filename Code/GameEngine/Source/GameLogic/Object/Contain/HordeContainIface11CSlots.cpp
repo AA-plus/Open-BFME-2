@@ -4088,3 +4088,8 @@ extern Eva *TheEva;
 class Rva00265254 { public: Rva00265254(unsigned, unsigned, unsigned, unsigned); int words[19]; };
 class Rva001E42F2 { public: void rva001E42F2(const int *); };
 class Rva0030A92C { public: void rva0030A92C(float); };
+// slot after rva00469F2F of the +0x11C vtable 0x00C44C58). Death cleanup:
+// special-unit/producer removal, flank/kind gates, map/list erasure, empty
+//-horde teardown with Eva event, frame stamp, drawable refresh and the
+// special-unit + refill tail. Evidence: WB 0x10B3BB0 branch structure +
+// retail 563B; offsets shared with the rows above.
