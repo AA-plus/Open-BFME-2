@@ -54,15 +54,31 @@ Rva00545393::Rva00545393() : m_04(0), m_18(0)
 // --- 0x005E7026 (17B): clamp the second argument at zero and forward both to
 // virtual slot 12; 0x005E7037 (18B): parse this from INI with the field
 // table at VA 0x00C77E98; 0x005E7049 (5B): forward to the rowed 0x004E0625.
-struct FieldParse;
+class INI;
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
 public:
+	static void parseColorInt(INI *ini, void *instance, void *store, const void *userData);
+	static void parseAsciiString(INI *ini, void *instance, void *store, const void *userData);
 	void initFromINI(void *what, const FieldParse *parseTable);	// 0x0002DE78
 };
 
-extern const FieldParse s_Rva005E7037FieldParse[];		// VA 0x00C77E98
+// Retail's field table at VA 0x00C77E98 (RVA 0x00877E98, .rdata, two records and the zero sentinel), transcribed from retail's bytes.
+extern const FieldParse s_Rva005E7037FieldParse[] =
+{
+	{ "ProgressOverlayColor", INI::parseColorInt, 0, 0x8 },
+	{ "BackButtonTooltip", INI::parseAsciiString, 0, 0xC },
+	{ 0, 0, 0, 0 }
+};
 
 class Rva004E0625
 {

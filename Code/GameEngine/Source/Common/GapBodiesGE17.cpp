@@ -51,7 +51,15 @@ int Rva00595020::rva0059505B(unsigned char flags)
 
 // --- vtable 0x00C4ED70 over a zero +0x08 and a cleared +0x0C; 0x002534B1 (17B): its field table (VA 0x00BF00A0) for the parser;
 // 0x002534C2 (60B): the INI factory building one with that table.
-struct FieldParse;
+class INI;
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class MultiIniFieldParse
 {
@@ -62,10 +70,18 @@ public:
 class INI
 {
 public:
+	static void parsePercentToReal(INI *ini, void *instance, void *store, const void *userData);
+	static void parseInt(INI *ini, void *instance, void *store, const void *userData);
 	void initFromINIMultiProc(void *what, void (*proc)(MultiIniFieldParse &p));	// 0x0002DEB5
 };
 
-extern const FieldParse s_Rva002534B1FieldParse[];			// VA 0x00BF00A0
+// Retail's field table at VA 0x00BF00A0 (RVA 0x007F00A0, .rdata, two records and the zero sentinel), transcribed from retail's bytes.
+extern const FieldParse s_Rva002534B1FieldParse[] =
+{
+	{ "RepairHealthPercentPerSecond", INI::parsePercentToReal, 0, 0x8 },
+	{ "BuildVariation", INI::parseInt, 0, 0xC },
+	{ 0, 0, 0, 0 }
+};
 
 class Rva0025349C
 {

@@ -9,16 +9,36 @@
 
 extern "C" int __cdecl strcmp(const char *, const char *);
 
-struct FieldParse;
+class INI;
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
 public:
+	static void parseBool(INI *ini, void *instance, void *store, const void *userData);
+	static void parseInt(INI *ini, void *instance, void *store, const void *userData);
+	static void parseReal(INI *ini, void *instance, void *store, const void *userData);
 	AsciiString getNextAsciiString();
 	void initFromINI(void *store, const FieldParse *fields);
 };
 
-extern const FieldParse TheLodOptionsFieldParse[];
+// Retail's LOD-options table at RVA 0x007C6B00 (.rdata, five records and the zero sentinel), transcribed from retail's bytes.
+extern const FieldParse TheLodOptionsFieldParse[] =
+{
+	{ "AllowMultipleModels", INI::parseBool, 0, 0x0 },
+	{ "MaxRandomTextures", INI::parseInt, 0, 0x4 },
+	{ "MaxRandomAnimations", INI::parseInt, 0, 0x8 },
+	{ "MaxAnimFrameDelta", INI::parseReal, 0, 0xC },
+	{ "RandomStartFramePercent", INI::parseInt, 0, 0x10 },
+	{ 0, 0, 0, 0 }
+};
 
 class W3DModelDrawModuleData
 {
