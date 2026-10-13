@@ -773,7 +773,9 @@ EMPTY_DTOR(FXListAtBonePosFXNugget)
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 
-static const FieldParse TheFXListFieldParse[] =
+// Retain the donor nugget helper emissions. This unreferenced reference table
+// is removed by link-time /OPT:REF; FXListStoreParse.cpp owns the native table.
+extern const FieldParse BfmeReferenceFXListFieldParse[] =
 {
 	{ "Sound",											SoundFXNugget::parse, 0, 0},		
 	{ "RayEffect",									RayEffectFXNugget::parse, 0, 0},		
@@ -867,15 +869,11 @@ FXListStore::~FXListStore()
 // FXListStore::findFXList: defined in FXListStoreFindFXList.cpp (its row's unit).
 
 //-------------------------------------------------------------------------------------------------
-/*static */ void FXListStore::parseFXListDefinition(INI *ini)
-{
-	// read the FXList name
-	const char *c = ini->getNextToken();
-	NameKeyType key = TheNameKeyGenerator->nameToKey(c);
-	FXList& fxl = TheFXListStore->m_fxmap[key];
-	fxl.clear();
-	ini->initFromINI(&fxl, TheFXListFieldParse);
-}
+// The native parser and its table are owned by FXListStoreParse.cpp.
+// Explicitly retain the already-matched implicit FXList copy constructor;
+// the removed reference parser formerly instantiated this value-map member.
+template FXList &std::hash_map<NameKeyType, FXList, rts::hash<NameKeyType>,
+    rts::equal_to<NameKeyType> >::operator[](const NameKeyType &);
 
 //-------------------------------------------------------------------------------------------------
 /*static*/ void INI::parseFXListDefinition(INI *ini)
