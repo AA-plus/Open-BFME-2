@@ -88,7 +88,9 @@ void expandRange(int *low, int value, int *high)
     }
 }
 
-ICoord3D::ICoord3D(int x, int y, int z)
+// A header inline elsewhere too (AIGuardMachineGuardPosition.cpp emits a select-any
+// copy), so it is select-any here as well; the anchor at the end emits it.
+inline ICoord3D::ICoord3D(int x, int y, int z)
 {
     this->x = x;
     this->y = y;
@@ -236,5 +238,14 @@ void bfmeEmitICoord2DCtor(ICoord2D *p)
 void bfmeEmitICoord3DCtor(ICoord3D *p)
 {
     p->ICoord3D::ICoord3D();
+}
+#pragma inline_depth()
+// ICoord3D component ctor anchor, same recipe as the default constructors above;
+// it is not retail code.
+#pragma inline_depth(0)
+// ?bfmeEmitICoord3DComponentCtor@@YAXPAUICoord3D@@HHH@Z present-unmatched
+void bfmeEmitICoord3DComponentCtor(ICoord3D *p, int x, int y, int z)
+{
+    p->ICoord3D::ICoord3D(x, y, z);
 }
 #pragma inline_depth()
