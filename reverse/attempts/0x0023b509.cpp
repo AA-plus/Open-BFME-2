@@ -25,9 +25,10 @@
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include "Common/Snapshot.h"
-#include "../Common/GameLogicObjectLookupView.h"
+#include "GameLogicObjectLookupView.h"
 
 class Xfer;
+class DynamicAudioEventInfo {public:void xferNoName(Xfer*);};
 class PooledString;
 struct XferUnknown11;
 class Coord3DBase;
@@ -729,6 +730,7 @@ void GameClient::xfer(Xfer *xfer)
 				event.rva000A8CE5(info.m_info == 0
 					? (OpaqueRefCounted *)new Rva00433390(0)
 					: (OpaqueRefCounted *)new Rva004333C0(*(const Rva001DA2D5 *)info.m_info, 0));
+				{
 				AsciiString name;
 				*xfer == name;
 				OpaqueRefCounted *p = event.m_ptr;
@@ -736,6 +738,7 @@ void GameClient::xfer(Xfer *xfer)
 				((DynamicAudioEventInfo *)p)->xferNoName(xfer);
 				TheAudio->vslot74(p);
 				((Rva0023AD91Vector *)&m_audioEvents)->push_back(event);
+				}
 			}
 
 			*xfer == count;
