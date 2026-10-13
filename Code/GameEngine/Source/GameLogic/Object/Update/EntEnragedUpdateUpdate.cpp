@@ -1,20 +1,27 @@
-// ?update@EntEnragedUpdate@@UAE?AW4UpdateSleepTime@@XZ
-// partial score=0.99 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /GX
 //
-// ?update@EntEnragedUpdate@@UAE?AW4UpdateSleepTime@@XZ, retail 0x004B2761
-// (599 B; slot 0 of the UpdateModuleInterface vftable, this = the +0x10
-// base, like the rowed FlammableUpdate::update). The enrage state machine of
-// the EntEnragedUpdate module (ctor layout in EntEnragedUpdateCtorThunk.cpp:
-// +0x24 next-rage frame, +0x28 cooldown frame, flags +0x2C enraged, +0x2D
-// suppressed, +0x2E was-in-kind, +0x2F forced, +0x30 one-shot-force).
+// ?update@EntEnragedUpdate@@UAE?AW4UpdateSleepTime@@XZ
+// Retail 0x004B2761..0x004B2987 (550 bytes; the 599-byte inventory extent
+// runs into the next body), slot 0 of the UpdateModuleInterface vftable, this
+// = the +0x10 base, like the rowed FlammableUpdate::update. The enrage state
+// machine of the EntEnragedUpdate module (ctor layout in
+// EntEnragedUpdateCtorThunk.cpp: +0x24 next-rage frame, +0x28 cooldown
+// frame, flags +0x2C enraged, +0x2D suppressed, +0x2E was-in-kind, +0x2F
+// forced, +0x30 one-shot-force).
 // Target facts: both scan members are the rowed 0x004B25C9 / 0x004B266D, the
 // statuses/flags/kind-ofs are the rowed Object methods and every FX goes
 // through the rowed static doFXObj. Module data +0x0C / +0x10 are the enraged
 // and re-rage times, +0x20 the stun time and +0x24 / +0x28 / +0x2C the three
-// FX lists (data layout: EnragedUpdateModuleDataCtor.cpp). WB1233650 gives
-// the statement order; names for the status / kind-of / weapon-set indices
-// and the +0x438 object bit stay offset names.
+// FX lists (data layout: EnragedUpdateModuleDataCtor.cpp). WorldBuilder twin
+// 0x01233650 (callgraph lead) gives the statement order, including one
+// isKindOf call in each arm of the was-in-kind test. Names for the status /
+// kind-of / weapon-set indices and the +0x438 object bit stay offset names.
+//
+// Object::isKindOf (retail 0x0006F039, rowed in Object.cpp; same bytes here)
+// is out of line in retail but visible to this unit: cl then knows it writes
+// no memory, merges the two arms' calls ahead of the +0x2E test (MOV ECX
+// before PUSH 0x4E at 0x004B2888) and parks the last FX list in the dying
+// module-data register (EBP at 0x004B296B).
 
 enum UpdateSleepTime
 {
@@ -51,7 +58,6 @@ enum DisabledType
 
 class Thing;
 class ModuleData;
-class Object;
 class FXList;
 
 // Slot filler: one distinct pure virtual per vtable index, so a view class
@@ -85,14 +91,18 @@ class Object
 {
 public:
 	bool testStatus(ObjectStatusTypes status) const;
-	bool isKindOf(KindOfType kind) const;
+	__declspec(noinline) bool isKindOf(KindOfType kind) const
+	{
+		return (m_kindOfBits[(unsigned)kind >> 5] & (1 << (kind & 31))) != 0;
+	}
 	void setStatus(ObjectStatusTypes status, bool set);
 	void clearWeaponSetFlag(WeaponSetType set);
 	void setWeaponSetFlag(WeaponSetType set);
 	void setSpecialModelConditionState(ModelConditionFlagType type, unsigned frames);
 	void setDisabledUntil(DisabledType type, unsigned frame);
 
-	char m_unknown00[0x254];
+	char m_unknown00[0x10C];
+	unsigned m_kindOfBits[(0x254 - 0x10C) / 4];	// +0x10C
 	BodyView *m_body;	// +0x254
 	AIView *m_ai;		// +0x258
 	char m_unknown25C[0x438 - 0x25C];
@@ -105,14 +115,7 @@ public:
 	static void doFXObj(const FXList *fx, const Object *primary, const Object *secondary = 0);
 };
 
-class GameLogic
-{
-public:
-	unsigned getFrame() const { return m_frame; }
-private:
-	char m_unknown00[0x40];
-	unsigned m_frame;
-};
+#include "../../../Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 
 class EntEnragedUpdateModuleData
@@ -218,14 +221,16 @@ UpdateSleepTime EntEnragedUpdate::update()
 		if (body && body->getHealthFraction() < 0.5)
 			wantRage = true;
 
-		bool inKind = me->isKindOf(KINDOF_KIND_4E);
 		if (m_field2E)
 		{
-			if (!inKind)
+			if (!me->isKindOf(KINDOF_KIND_4E))
 				wantRage = true;
 		}
-		else if (inKind)
-			m_field2E = true;
+		else
+		{
+			if (me->isKindOf(KINDOF_KIND_4E))
+				m_field2E = true;
+		}
 
 		if (me->testStatus(OBJECT_STATUS_AFLAME))
 			wantRage = false;
