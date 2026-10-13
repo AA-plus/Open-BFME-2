@@ -1,44 +1,26 @@
-// ?getUnitsIntendedPosition@AODHordeContain@@UAE?AUCoord3D@@PAVObject@@H@Z
-// partial score=0.76 date=2026-10-10
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD
-// ?getUnitsIntendedPosition@AODHordeContain@@UAE?AUCoord3D@@PAVObject@@H@Z
-// retail 0x0047AC8F..0x0047B2AA (1563 bytes), slot 7 of the AODHordeContain
-// +0x11C interface vftable 0x00846930 (HordeContain's slot 7 is 0x00474B51).
-// WorldBuilder twin 0x01161040 AODHordeContain::getUnitsIntendedPosition
-// (AODHordeContain.cpp asserts 392..521).
-// class-gate: allow Coord3D proved codegen view: BFME 2 copies Coord3D through a user copy constructor (as in BaseHeightMapAddTree.cpp); retail returns the position field by field where the shared header's trivial Coord3D would be copied with a block move
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-	Coord3D() {}
-	Coord3D(const Coord3D &c) { x = c.x; y = c.y; z = c.z; }
-	~Coord3D() {}
+// ?rva0047AC8F@AODHordeContain@@UAEPAUCoord3D@@PAU2@PAVObject@@H@Z
+// partial score=0.84325016 date=2026-10-13
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include
+// Native 47AC8F..47B2AA: AOD interface at +11C, output-pointer/RET12 ABI.
+// WB1161040 names getUnitsIntendedPosition; original hidden-result shape is
+// represented explicitly to use canonical Coord3D without a private class.
+// Banked semantic reconstruction retained; physical fields are target accesses.
+#include "Lib/Coord3D.h"
+#include "Lib/Coord2D.h"
+#include <math.h>
+float Cos(float); float Sin(float);
+struct AODSway : Coord2D {
+    AODSway() {}
+    AODSway(const Coord2D &v) { x=v.x; y=v.y; }
+    AODSway(const AODSway &v) { x=v.x; y=v.y; }
+    ~AODSway() {}
 };
-
-extern "C" double __cdecl sin(double);
-extern "C" double __cdecl cos(double);
-extern "C" double __cdecl fabs(double);
-extern "C" double __cdecl sqrt(double);
-float Cos(float);
-float Sin(float);
-
-// class-gate: allow Coord2D the canonical data-only header cannot declare BFME 2's out-of-line toAngle (rowed 0x00005923); same two floats
-class Coord2D
-{
-public:
-	float x;
-	float y;
-	void normalize();
-	float length() const;
-	float toAngle() const;
-	Coord2D() {}
-	Coord2D(const Coord2D &c) { x = c.x; y = c.y; }
-	~Coord2D() {}
+class Rva00468E98Point {
+public: float x,y;
+    Rva00468E98Point(const Rva00468E98Point &,float);
+    Rva00468E98Point(const Rva00468E98Point &p) { x=p.x; y=p.y; }
 };
-
-
+class Rva00468E98 { public: Rva00468E98Point rotate(Rva00468E98Point); };
 enum KindOfType
 {
 	KINDOF_INVALID = -1
@@ -73,14 +55,21 @@ public:
 	const Coord3D *getUnitDirectionVector2D() const;
 };
 
+class GeometryInfo { public: float getMaxHeightAbovePosition() const; };
+
+enum ObjectID { INVALID_ID=0 };
 class Object : public Thing
 {
 public:
 	bool isKindOf(KindOfType t) const;
 	int rva0028B511() const;
-	char m_pad00[0x74];
+	char m_pad00[0x38];
+    Coord3D m_position;
+    char m_pad44[0x74-0x44];
 	int m_id;			// +0x74
-	char m_pad78[0x258 - 0x78];
+	char m_pad78[0xA8-0x78];
+    GeometryInfo m_geometry;
+    char m_padA9[0x258-0xA9];
 	AIUpdateInterface *m_ai;	// +0x258
 };
 
@@ -106,7 +95,8 @@ extern TerrainLogic *TheTerrainLogic;
 class GameLogic
 {
 public:
-	unsigned int getFrame() const { return m_frame; }
+	Object *findObjectByID(ObjectID id);
+    unsigned int getFrame() const { return m_frame; }
 private:
 	char m_pad00[0x40];
 	unsigned int m_frame;
@@ -176,7 +166,7 @@ class HordeContainIface
 public:
 	virtual void i00(); virtual void i01(); virtual void i02(); virtual void i03();
 	virtual void i04(); virtual void i05(); virtual void i06();
-	virtual Coord3D getUnitsIntendedPosition(Object *obj, int word) = 0;
+	virtual Coord3D *rva0047AC8F(Coord3D *out,Object *obj, int word) = 0;
 	bool m_04;				// +0x04
 	char m_pad05[0x6C - 0x05];
 	AODOffsetRecord *m_records;		// +0x6C
@@ -188,12 +178,12 @@ public:
 	AODWave *m_wavesBegin;			// +0x1F0
 	AODWave *m_wavesEnd;			// +0x1F4
 	char m_pad1F8[0x1FC - 0x1F8];
-	int m_1FC;				// +0x1FC
+	ObjectID m_trackedLargeUnit;				// +0x1FC
 	unsigned int m_200;			// +0x200
-	Coord2D m_204;				// +0x204
-	char m_pad20C[0x210 - 0x20C];
-	float m_210;				// +0x210
-	float m_214;				// +0x214
+	Coord3D m_trackedPosition;				// +0x204
+	
+	float m_largeUnitHeightFactor;				// +0x210
+	float m_largeUnitHeight;				// +0x214
 	float m_218;				// +0x218
 	char m_pad21C[0x5E0 - 0x21C];
 	AODFormationSlot m_slots[20];		// +0x5E0
@@ -204,21 +194,21 @@ public:
 class Rva00474B51
 {
 public:
-	Coord3D rva00474B51(Object *obj, int word);
+	Coord3D *rva00474B51(Coord3D *out,Object *obj, int word);
 };
 
 class HordeContain : public HordeContainPrimary, public HordeContainIface
 {
 public:
-	virtual Coord3D getUnitsIntendedPosition(Object *obj, int word);
+	virtual Coord3D *rva0047AC8F(Coord3D *out,Object *obj, int word);
 	Coord2D *rva0046A5B1(Coord2D *out, int index);
 };
 
 class AODHordeContain : public HordeContain
 {
 public:
-	virtual Coord3D getUnitsIntendedPosition(Object *obj, int word);
-	Coord2D rva00468E98(Coord2D offset);
+	virtual Coord3D *rva0047AC8F(Coord3D *out,Object *obj, int word);
+	void refreshTrackedLargeUnit();
 };
 
 static __forceinline float AODHeightFalloff(float x)
@@ -229,13 +219,16 @@ static __forceinline float AODHeightFalloff(float x)
 	return a + b;
 }
 
-Coord3D AODHordeContain::getUnitsIntendedPosition(Object *obj, int word)
+Coord3D *AODHordeContain::rva0047AC8F(Coord3D *out,Object *obj,int word)
 {
 	if (m_184)
-		return HordeContain::getUnitsIntendedPosition(obj, word);
+		{
+        ((Rva00474B51 *)((char *)this+0x11C))->rva00474B51(out,obj,word);
+        return out;
+    }
 
 	int index = reinterpret_cast<Rva0046ACF6 *>(this)->rva0046ACF6(obj->m_id);
-	Coord2D offset = m_records[index].m_offset;
+	AODSway offset(m_records[index].m_offset);
 	int i;
 	for (i = m_slotCount - 1; i > 0; --i)
 	{
@@ -252,7 +245,7 @@ Coord3D AODHordeContain::getUnitsIntendedPosition(Object *obj, int word)
 
 	const AODHordeContainModuleData *md = m_moduleData;
 	if (!m_7C || (unsigned int)index >= (unsigned int)(m_wavesEnd - m_wavesBegin))
-		return pos;
+		{ out->x=pos.x; out->y=pos.y; out->z=pos.z; return out; }
 
 	Object *me = m_object;
 	float speedRatio = 0.0f;
@@ -271,11 +264,11 @@ Coord3D AODHordeContain::getUnitsIntendedPosition(Object *obj, int word)
 		m_04 = true;
 	float speedFactor = (1.0f - t) * speedRatio + t;
 	AODWave *wave = &m_wavesBegin[index];
-	Coord2D sway;
+	AODSway sway;
 	sway.y = (float)sin(wave->m_00 + wave->m_08 * ((float)TheGameLogic->getFrame() * md->m_274)) * wave->m_04;
 	sway.y = speedFactor * md->m_27C * sway.y;
 	sway.x = 0.0f;
-	Coord2D dir = rva00468E98(sway);
+	Rva00468E98Point dir=((Rva00468E98 *)this)->rotate(reinterpret_cast<const Rva00468E98Point &>(sway));
 	float len = sway.length();
 	angle = sway.toAngle() + angle;
 	dir.x = Cos(angle);
@@ -296,7 +289,8 @@ Coord3D AODHordeContain::getUnitsIntendedPosition(Object *obj, int word)
 
 	if (obj->isKindOf((KindOfType)0xD7))
 	{
-		Coord2D spread = *rva0046A5B1(&spread, index);
+		Coord2D temporary;
+        Coord2D spread = *rva0046A5B1(&temporary, index);
 		spread.normalize();
 		float s = md->m_2B4 * m_218;
 		s = (float)(index % 5) * md->m_2B8 * m_218 * 0.25f + s;
@@ -315,9 +309,9 @@ Coord3D AODHordeContain::getUnitsIntendedPosition(Object *obj, int word)
 		pos.z = TheTerrainLogic->getLayerHeight(pos.x, pos.y, (PathfindLayerEnum)me->rva0028B511(), 0, true);
 	pos.z += bob;
 
-	if (m_1FC)
+	if (m_trackedLargeUnit)
 	{
-		float maxHeight = md->m_2A0 * m_214;
+		float maxHeight = md->m_2A0 * m_largeUnitHeight;
 		if (maxHeight > md->m_2A8)
 			maxHeight = md->m_2A8;
 		if (maxHeight < md->m_2A4)
@@ -325,27 +319,27 @@ Coord3D AODHordeContain::getUnitsIntendedPosition(Object *obj, int word)
 		unsigned int elapsed = TheGameLogic->getFrame() - m_200;
 		if (elapsed >= md->m_2AC)
 		{
-			m_1FC = 0;
-			return pos;
+			m_trackedLargeUnit = INVALID_ID;
+			{ out->x=pos.x; out->y=pos.y; out->z=pos.z; return out; }
 		}
 		float falloff = 1.0f;
 		int half = md->m_2AC / 2;
 		if (elapsed > (unsigned int)half)
 			falloff = 1.0f - (float)(elapsed - half) / half;
 		Coord3D delta;
-		const Coord2D *origin = &m_204;
+		const Coord3D *origin = &m_trackedPosition;
 		delta.x = pos.x - origin->x;
 		delta.y = pos.y - origin->y;
 		const Coord3D *facing = me->getUnitDirectionVector2D();
 		Coord3D forward;
-		forward.x = facing->x;
-		forward.y = facing->y;
+        forward.x=facing->x;
+        forward.y=facing->y;
 		Coord3D side;
 		side.x = -forward.y;
 		side.y = forward.x;
 		float along = (float)fabs(delta.x * forward.x + delta.y * forward.y);
 		float across = (float)fabs(delta.x * side.x + delta.y * side.y);
-		across -= m_210;
+		across -= m_largeUnitHeightFactor;
 		if (across < 0.0f)
 			across = 0.0f;
 		float dist = along + across;
@@ -364,5 +358,19 @@ Coord3D AODHordeContain::getUnitsIntendedPosition(Object *obj, int word)
 		rank = (float)((index + 2) % 5) * md->m_2B8 * md->m_29C * m_218 * 0.25f + rank;
 		pos.z += rank;
 	}
-	return pos;
+	{ out->x=pos.x; out->y=pos.y; out->z=pos.z; return out; }
+}
+
+void AODHordeContain::refreshTrackedLargeUnit()
+{
+	Object *unit = TheGameLogic->findObjectByID(m_trackedLargeUnit);
+	if (unit == 0)
+	{
+		m_trackedLargeUnit = INVALID_ID;
+		return;
+	}
+
+	m_trackedPosition = unit->m_position;
+	m_largeUnitHeightFactor = 17.0f;
+	m_largeUnitHeight = unit->m_geometry.getMaxHeightAbovePosition();
 }
