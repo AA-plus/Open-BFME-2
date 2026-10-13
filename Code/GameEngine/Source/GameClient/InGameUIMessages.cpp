@@ -59,7 +59,9 @@
 #include "../Common/GameLogicObjectLookupView.h"
 
 // The gated label formatter expands isEmpty in place, as retail does here.
-template <> inline bool StringBase<unsigned short>::isEmpty() const { return m_data == 0 || m_data->length == 0; }
+// Link-suppressed (dllimport forceinline, no COMDAT) so this TU emits no copy
+// competing with the rowed body in string_base_inline.cpp (0x00035740).
+template <> __declspec(dllimport) __forceinline bool StringBase<unsigned short>::isEmpty() const { return m_data == 0 || m_data->length == 0; }
 
 typedef unsigned short WideChar;
 typedef int Color;

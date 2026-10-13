@@ -15,7 +15,9 @@
 #include <stdio.h>
 #include "unicode_string.h"
 // The reference isEmpty body is header-defined; compare performs only bounded C-runtime comparison.
-template<> __forceinline bool StringBase<unsigned short>::isEmpty()const{return m_data==0||m_data->length==0;}
+// Link-suppressed (dllimport, no COMDAT) so this TU emits no copy competing
+// with the rowed body in string_base_inline.cpp (0x00035740).
+template<> __declspec(dllimport) __forceinline bool StringBase<unsigned short>::isEmpty()const{return m_data==0||m_data->length==0;}
 template<> int StringBase<unsigned short>::compare(const StringBase<unsigned short>&)const throw();
 class Rva00406F12 {public:bool rva00406F12(int);};
 class Rva00406F27 {public:bool rva00406F27(int);};

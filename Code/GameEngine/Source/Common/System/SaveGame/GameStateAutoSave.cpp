@@ -25,7 +25,9 @@
 #include "unicode_string.h"
 #include "Common/Snapshot.h"
 // Retail expands this header test inline here; the shim keeps it out of line.
-template<> inline bool StringBase<unsigned short>::isEmpty() const { return !m_data || m_data->length == 0; }
+// Link-suppressed (dllimport forceinline, no COMDAT) so this TU emits no copy
+// competing with the rowed body in string_base_inline.cpp (0x00035740).
+template<> __declspec(dllimport) __forceinline bool StringBase<unsigned short>::isEmpty() const { return !m_data || m_data->length == 0; }
 
 typedef unsigned short WideChar;
 

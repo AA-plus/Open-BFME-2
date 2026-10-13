@@ -25,7 +25,9 @@
 #include "../Common/PartitionRangeQueryCallView.h"
 
 // Retail tests the display string inline (null buffer or zero length).
-template<> inline bool StringBase<unsigned short>::isEmpty() const { return !m_data || m_data->length==0; }
+// Link-suppressed (dllimport forceinline, no COMDAT) so this TU emits no copy
+// competing with the rowed body in string_base_inline.cpp (0x00035740).
+template<> __declspec(dllimport) __forceinline bool StringBase<unsigned short>::isEmpty() const { return !m_data || m_data->length==0; }
 // Retail's wide str() takes the buffer pointer, steps it past the 8-byte
 // header in place and falls back to the shared null character only on null.
 template<> inline const unsigned short *StringBase<unsigned short>::str() const
