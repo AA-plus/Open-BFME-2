@@ -31,7 +31,7 @@ public:
     virtual void vtableSlot0();
     virtual void vtableSlot1();
     bool isUndefined() const;
-    int isCIH(bool) const;
+    bool isCIH(bool) const;
     BfmeAptValue006DCD20 *rva006DCF60(bool);
     int rva006E02B0() const; // rowed, 0x006DC010
 };

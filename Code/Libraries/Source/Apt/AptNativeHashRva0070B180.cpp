@@ -11,7 +11,7 @@ void __debugbreak();
 
 class BfmeAptValue006DCD20 {
 public:
-    int isCIH(bool bUndefOK) const;
+    bool isCIH(bool bUndefOK) const;
 };
 
 class EAStringC {

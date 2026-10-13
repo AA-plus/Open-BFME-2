@@ -1088,7 +1088,7 @@ void AptActionInterpreter::_FunctionAptActionSetMember(AptActionInterpreter *con
 
 #pragma comment(linker, "/alternatename:?PopAndPush@AptBasePtrStack@@QAEXHPAVAptValue@@@Z=?rva006FE880@AptBasePtrStack@@QAEXHPAVBfmeAptValue006DCD20@@@Z")
 
-#pragma comment(linker, "/alternatename:?isCIH@AptValue@@QBE_N_N@Z=?isCIH@BfmeAptValue006DCD20@@QBEH_N@Z")
+#pragma comment(linker, "/alternatename:?isCIH@AptValue@@QBE_N_N@Z=?isCIH@BfmeAptValue006DCD20@@QBE_N_N@Z")
 
 // The native UTF-8 substring overloads return EAStringC by value. Preserve
 // their temporary lifetimes and the clamped one-based ActionScript index.

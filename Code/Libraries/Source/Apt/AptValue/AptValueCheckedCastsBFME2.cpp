@@ -39,7 +39,7 @@ public:
     int isSound() const;
     int isNativeFunction() const;
     int isScriptFunction() const;
-    int isCIH(bool bUndefOK) const;
+    bool isCIH(bool bUndefOK) const;
     BfmeAptValue006DCD20 *rva006DCEA0();
     BfmeAptValue006DCD20 *rva006DCEE0();
     BfmeAptValue006DCD20 *rva006DCF20();

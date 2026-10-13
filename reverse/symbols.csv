@@ -9920,7 +9920,6 @@ name,address,notes
 ?isAttackViewBlockedByObstacle@Pathfinder@@QAE_NPBVObject@@PBUCoord3D@@01@Z,0x002F314A,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?isBoolean@AptValue@@QBE_NXZ,0x006DC120,Native TypeOf7029A0 direct call target; source headers and existing byte-verified provider confirm predicate ABI; alternatename binds provider
 ?isCIH@AptValue@@QBE_N_N@Z,0x006DC580,Original APT ABI and native709870 call or unwind target; existing providers aliased where recovered
-?isCIH@BfmeAptValue006DCD20@@QBE_N_N@Z,0x006DC580,bool-return alias of the matched ?isCIH row at the same address; the 0x7065E0 call site tests al not eax so this spelling is the retail one; alias pin only
 ?isClearLineOfSight@BaseHeightMapRenderObjClass@@QBE_NABUCoord3D@@0@Z,0x00066AD1,address read from the REL32 displacement at a placed body
 ?isCliffCell@BaseHeightMapRenderObjClass@@QAE_NMM@Z,0x000671B2,retail REL32 at 0x00062DAB in W3DTerrainLogic vtable slot 0x007C58E0 (after isUnderwater; ZH order isUnderwater then isCliffCell); body 115B null m_map check then border-adjusted clamped cell query 0x000AE13E bit plane like ZH BaseHeightMapRenderObjClass::isCliffCell
 ?isContactWeapon@WeaponTemplate@@QBE_NXZ,0x0047A699,address read from the REL32 displacement at 0x0026DC3F in privateAttackPosition 0x0026DB1A with ECX = Weapon+0x04 (the template) where Zero Hour asks weapon->isContactWeapon(); the body is the shared xor al/al ret stub (ICF fold with the other false predicates pinned here); name donor-carried
