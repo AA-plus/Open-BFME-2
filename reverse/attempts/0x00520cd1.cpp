@@ -1,4 +1,6 @@
 // ?rva00520CD1@AptTimeLine@@QAEXXZ
+// partial score=0.94614 date=2026-10-13
+// ?rva00520CD1@AptTimeLine@@QAEXXZ
 // partial score=0.82 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /I. /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
@@ -55,7 +57,7 @@ void AptTimeLine::rva00520CD1()
   if(game) {
    for(int i=0;i<(int)TheLivingWorldLogic->m_players.size();++i) {
     LivingWorldPlayer *player=reinterpret_cast<LivingWorldPlayer*>(TheLivingWorldLogic->rva002B52A8(i));
-    GameSlot *slot=0;
+    GameSlot * volatile slot = 0;
     for(int j=0;j<8;++j) {
      if(game->getSlot(j)->m_template==player->m_template) {slot=game->getSlot(j);break;}
     }
