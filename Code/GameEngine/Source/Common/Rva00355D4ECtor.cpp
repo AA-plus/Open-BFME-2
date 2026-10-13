@@ -14,12 +14,12 @@ public:
 	ProgressIndicator *m_next;
 };
 
-extern ProgressIndicator *g_00E01E1C;
+extern ProgressIndicator *BfmeProgressIndicatorHead;
 
 __declspec(noinline) ProgressIndicator::ProgressIndicator()
 {
-	m_next = g_00E01E1C;
-	g_00E01E1C = this;
+	m_next = BfmeProgressIndicatorHead;
+	BfmeProgressIndicatorHead = this;
 }
 
 class GameWindow;

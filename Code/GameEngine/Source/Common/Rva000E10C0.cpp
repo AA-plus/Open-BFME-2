@@ -30,7 +30,7 @@ public:
 	virtual void apply(int value);
 };
 
-extern ProgressIndicator *g_00E01E1C;
+extern ProgressIndicator *BfmeProgressIndicatorHead;
 
 class Rva009EB960
 {
@@ -83,8 +83,8 @@ void Rva000E10C0::rva000E10C0()
 	{
 		for (; x < m_at3890; ++x)
 		{
-			if (g_00E01E1C != 0)
-				g_00E01E1C->apply(50 - (int)((float)x * -45.0f / (float)m_at3890));
+			if (BfmeProgressIndicatorHead != 0)
+				BfmeProgressIndicatorHead->apply(50 - (int)((float)x * -45.0f / (float)m_at3890));
 			for (int y = 0; y < m_at3894; ++y)
 			{
 				Rva00115044El *el =
