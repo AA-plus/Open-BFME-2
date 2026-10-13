@@ -204,6 +204,7 @@ public:
 	// Rva0020EE29::rva0020FAEA; this spelling returns the region).
 	Bool GetRegionCenterPoint(class Rva0020E89C *region, Coord2D *out);
 	class Rva00318C32Ret *rva0020FAEA(const Coord2D *pos, class Rva00318C32Ret *hint);
+	void SetActiveBattleID(Int a, Int b);			// 0x0020E63F
 	void rva0020FB8B(class LivingWorldBattle *battle);	// 0x0020FB8B, ends the battle (pinned)
 	Bool rva0020E4C8();
 	void UpdateBattleMarkers();				// 0x0020EBA0 (WorldBuilder name, pinned)
@@ -2168,11 +2169,6 @@ private:
 // auto-resolve object (ctor 0x004FA3C9, pinned; dtor 0x004FA2E2); its list
 // dtor 0x002BBB18 is rowed in StlportVectorDtorFamily.cpp.
 struct Rva002BBB96Element { public: ~Rva002BBB96Element(); };
-class LivingWorldRegionManager
-{
-public:
-	void SetActiveBattleID(Int a, Int b);			// 0x0020E63F
-};
 class Rva004FA2E2
 {
 public:

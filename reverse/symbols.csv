@@ -10637,7 +10637,7 @@ name,address,notes
 ?run@Rva007EB6C0Cleanup@@QAEXXZ,0x00658650,shared cleanup of the VptrCleanup ??_G bodies; rowed ??1BfmeDirtyBase lives here
 ?run@Rva007FA650Cleanup@@QAEXXZ,0x00666BA0
 ?run@Rva009EDD30Cleanup@@QAEXXZ,0x00620870
-?run@Rva009F40E0Owner@@QAEXPAPAXI@Z,0x00626AA0
+?_ClearNumObjBelow@PartitionManagerImpl@@QAEXPAPAXI@Z,0x00626AA0
 ?runFrameActions@AptMovie@@QAEXPAVAptCIH@@H@Z,0x0070F5C0,alias rowed frame-action runner; CallFrame native REL32 movie-this currentCIH frame arguments; donor role and target iteration; alternatename provider
 ?runStream@AptActionInterpreter@@QAEPBEPBEPAVAptCIH@@HPAUAptCharacterInst@@@Z,0x007002C0,Original Godfather Jan26 MAP signature; PC Try 706070 calls native action runner with stream context signed length parent; unrowed provider backlog
 ?rva000053EE@Rva002DBCCAArg@@QAEXXZ,0x000053EE,pin for 0x2DBCCA thiscall void () on arg
@@ -10891,7 +10891,7 @@ name,address,notes
 ?rva001EB68A@Rva001EB68ANullTarget@@QAEXXZ,0x001EB68A,null-checked tail jmp target of 13B forwarder 0x001EB72F; original name unknown
 ?rva001EB6FE@Rva001EB6FE@@QAEXXZ,0x001EB6FE,tail-call target of the byte-verified Rva001EB75C::rva001EB75C 0x001EB75C on its +0x10 member read from its REL32 displacement; name unknown
 ?rva001EB6FE@Rva001EB6FENullTarget@@QAEXXZ,0x001EB6FE,null-checked tail jmp target of 13B forwarder 0x001EB75C; original name unknown
-?rva001EC63D@Rva001EC63DNullTarget@@QAEXXZ,0x001EC63D,null-checked tail jmp target of forwarder 0x001EC98E; original name unknown
+?addCarryoverStuffToMap@LinearCampaign@@QAEXXZ,0x001EC63D,null-checked tail jmp target of forwarder 0x001EC98E; original name unknown
 ?rva001ECE98@Rva001ECE98@@QAEXXZ,0x001ECE98,tail-call target of the byte-verified Rva0023D607Holder::rva001ECEF6 0x001ECEF6 on its +0x10 member read from its REL32 displacement; name unknown
 ?rva001ECEF6@Rva0023D607Holder@@QAEXXZ,0x001ECEF6,unrowed 13B thiscall on TheLinearCampaignManager (g_Rva0023D607Holder 0x00DFDC8C): tail-jumps its +0x10 member's 0x001ECE98 when set; REL32 read at AptCampaignMenu::OnBttnLastMission 0x005211A9; address name
 ?rva001EF83A@Rva001EF83A@@QAEXHHPAD@Z,0x001EF83A,thiscall callee of the F22 ebp-frame forwarder 0x001EFC42; takes the wrapper's first two args plus (char*)&arg2+3 in a vestigial third slot; name unknown

@@ -12,7 +12,7 @@
 //   0x00068373 +0x3858 -> W3DPropBuffer::removeProp (1 arg)
 //   0x000682FA +0x3874 -> Rva000D3A17::rva000D3A17 (0 arg)
 //   0x002722F4 +0x354 -> Rva00270025::rva0027006C (1 arg)
-//   0x001EC98E +0x10 -> Rva001EC63DNullTarget::rva001EC63D (0 arg)
+//   0x001EC98E +0x10 -> LinearCampaign::addCarryoverStuffToMap (0 arg)
 //   0x00068061 +0x3854 -> Rva000E7734NullTarget::rva000E7734 (1 arg)
 //   0x00068283 +0x3850 -> Rva000EA2C0NullTarget::rva000EA2C0 (1 arg)
 //   0x00068395 +0x3860 -> Rva000E6005NullTarget::rva000E6005 (5 arg)
@@ -110,7 +110,7 @@ void Rva002722F4NullForwarder::rva002722F4(Int a0)
 		m_member->rva0027006C(a0);
 }
 
-class Rva001EC63DNullTarget
+class LinearCampaign
 {
 public:
 	void addCarryoverStuffToMap();
@@ -122,7 +122,7 @@ public:
 	void thru();
 private:
 	char m_lead[0x10];
-	Rva001EC63DNullTarget *m_member;
+	LinearCampaign *m_member;
 };
 
 void Rva0023D6D5Callee::thru()

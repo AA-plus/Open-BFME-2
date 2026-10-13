@@ -13,7 +13,6 @@ struct Rva002B2DADMessageView { char pad[0x18]; unsigned char count; };
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 class LivingWorldPendingBattle;
-class LivingWorldRegionManager { public: LivingWorldPendingBattle *rva0020E5BB(int key); };
 // The independently recovered20E5BB provider now supplies the lookup.
 // This declaration binds the existing receiver/return ABI without another pin.
 // ?SetActiveBattleID@LivingWorldRegionManager@@QAEXHH@Z @0x0020E63F 110B:
@@ -24,6 +23,7 @@ class LivingWorldRegionManager { public: LivingWorldPendingBattle *rva0020E5BB(i
 class LivingWorldRegionManager
 {
 public:
+ LivingWorldPendingBattle *rva0020E5BB(int key);
  void SetActiveBattleID(int key, int field3c);
  void rva0020E6AD();
 private:
@@ -31,7 +31,7 @@ private:
  int currentKey;
  int lastNonzeroKey;
 };
-struct Rva002B2DADLogicView { char pad[0xB0]; Rva0020E5BB *manager; };
+struct Rva002B2DADLogicView { char pad[0xB0]; LivingWorldRegionManager *manager; };
 
 // ?getBattleFromMessage@@YA_NPAVGameMessage@@PAPAXH@Z @0x002B2DAD 65B: renamed
 // from placeholder rva002B2DAD (WorldBuilder callgraph lead in EA's own
@@ -43,7 +43,7 @@ static __declspec(noinline) bool getBattleFromMessage(GameMessage *message, void
   const GameMessageArgumentType *argument = message->getArgument(index);
   // Native explicitly reads the word before loading the singleton.
   int key = ((const volatile GameMessageArgumentType *)argument)->integer;
- Rva0020E5BB *manager = ((Rva002B2DADLogicView *)TheLivingWorldLogic)->manager;
+ LivingWorldRegionManager *manager = ((Rva002B2DADLogicView *)TheLivingWorldLogic)->manager;
   void *result = ((LivingWorldRegionManager *)manager)->rva0020E5BB(key);
   *out = result;
   return result != 0;
@@ -92,9 +92,12 @@ void LivingWorldRegionManager::SetActiveBattleID(int key, int field3c)
 }
 
 // Native20E6AD..20E6B7 RET0: reset the same manager with zero arguments.
+// The 10B reset keeps its rowed placeholder receiver; it forwards to the
+// renamed SetActiveBattleID on the same object.
+class Rva0020E5BB { public: void rva0020E6AD(); };
 void Rva0020E5BB::rva0020E6AD()
 {
- rva0020E63F(0,0);
+ ((LivingWorldRegionManager *)this)->SetActiveBattleID(0,0);
 }
 // Native20E6B7..20E6C0 RET0: pass manager word0C to the34-key lookup.
 // The receiver and result spellings already used by the rowed callers are

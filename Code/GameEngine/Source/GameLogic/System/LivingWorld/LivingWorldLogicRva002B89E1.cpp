@@ -84,10 +84,10 @@ public:
 	int m_id;						// +0x34
 };
 
-class Rva0020E5BB
+class LivingWorldRegionManager
 {
 public:
-	void rva0020E63F(int battleID, int value);	// 0x0020E63F, WB LivingWorldRegionManager::SetActiveBattleID
+	void SetActiveBattleID(int battleID, int value);	// 0x0020E63F
 };
 
 class LivingWorld
@@ -113,7 +113,7 @@ public:
 	unsigned char m_pad00[0x3C];
 	Rva002B616FList m_battleListeners;			// +0x3C
 	unsigned char m_pad4C[0xB0 - 0x4C];
-	Rva0020E5BB *m_regionManager;				// +0xB0
+	LivingWorldRegionManager *m_regionManager;				// +0xB0
 	unsigned char m_padB4[0xB8 - 0xB4];
 	int m_fieldB8;						// +0xB8
 };
@@ -137,7 +137,7 @@ bool LivingWorldLogic::rva002B89E1(int battleArg)
 		TheGameSpyGame->rva004FDEFF(battle);
 	else
 		region->PrepareSkirmishOpponents(battle);
-	m_regionManager->rva0020E63F(battle->m_id, 2);
+	m_regionManager->SetActiveBattleID(battle->m_id, 2);
 	((LivingWorld *)g_00DFEF18)->ZoomInTo((char *)g_00DFEF18 + 0x8C);
 	return true;
 }

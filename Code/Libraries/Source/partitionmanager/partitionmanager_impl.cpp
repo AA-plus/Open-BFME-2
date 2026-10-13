@@ -38,27 +38,6 @@ typedef _STL::pair<int,int> PartitionAssignPair;
 // PartitionManagerImpl::_ClearNumObjBelow at EA's own partitionmanager_impl.cpp
 // line 180; the class and file are corroborated by the landed DoSmallFill
 // (strings evidence, same file).
-class PartitionManagerImpl {
-public:
-    void run(void **slot, unsigned count);
-};
-
-void PartitionManagerImpl::_ClearNumObjBelow(void **slot, unsigned count)
-{
-    if (*slot == 0) return;
-    *slot = 0;
-    unsigned childCount = count;
-    slot += 2;
-    childCount >>= 2;
-    unsigned stride = count * 8;
-    unsigned remaining = 4;
-    while (remaining != 0) {
-        run(slot, childCount);
-        slot = (void **)((char *)slot + stride);
-        --remaining;
-    }
-}
-
 struct PartitionTreeCounter {
     int count;
     void *head;
@@ -76,12 +55,29 @@ struct PartitionNode {
 class PartitionManagerImpl {
 public:
  void SetTreeDepth(unsigned);
+ void _ClearNumObjBelow(void **slot, unsigned count);
  int prefix[6];
  _STL::vector<PartitionTreeCounter> trees[21];
  PartitionNode *head;
  float scale;
  int mask;
 };
+void PartitionManagerImpl::_ClearNumObjBelow(void **slot, unsigned count)
+{
+    if (*slot == 0) return;
+    *slot = 0;
+    unsigned childCount = count;
+    slot += 2;
+    childCount >>= 2;
+    unsigned stride = count * 8;
+    unsigned remaining = 4;
+    while (remaining != 0) {
+        _ClearNumObjBelow(slot, childCount);
+        slot = (void **)((char *)slot + stride);
+        --remaining;
+    }
+}
+
 class Gen_dtor_009f2600 : public PartitionManagerImpl {
 public:
  __declspec(noinline) void cleanup();

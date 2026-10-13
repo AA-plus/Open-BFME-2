@@ -148,7 +148,7 @@ public:
 struct Rva0037FE3DList;
 class Rva0037FE3D { public: void rva0037FE3D(const Rva0037FE3DList &list, int value); };
 
-class Rva001EC63DNullTarget
+class LinearCampaign
 {
 public:
 	void addCarryoverStuffToMap();

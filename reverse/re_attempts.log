@@ -49429,3 +49429,7 @@ d_0042481e	0x42481e	384	blocked	CORRECTION: prior no-boundary used wrong offset;
 ?copyFrom2@Rva000A9851PairTable3@@QAEXPBURva000A9851Pair@@@Z	0xa987d	44	blocked	same mirror-coloring wall as twin 0xA9851 bank (count 2); see 0xA9851 partial t=2 model=muse-spark-1.3
 ?rva0052C72B@Rva0052BFE1@@QAE_NABVAsciiString@@@Z	0x0052C72B	119	landed	add_match verified Code/GameEngine/Source/GameLogic/System/LivingWorld/Rva0052C119CurrentEntry.cpp 119B
 ??0Rva0022141E@@QAE@ABVAsciiString@@@Z	0x22141e	136	partial	vvtbl-init-list + m_04-body-zero + named NoCaseVal temp: 135B vs 136B, all 4 callees + EH + tails exact; residue is prologue m_04 zero form/order (and-mem-then-push vs push-then-mov-imm); vtbl-init/body/init-both + volatile-off trials unchanged or worse t=25 model=muse-spark-1.3 score=0.96 stash=reverse/attempts/0x0022141e.cpp
+?_ClearNumObjBelow@PartitionManagerImpl@@QAEXPAPAXI@Z	0x00626AA0	72	landed	add_match verified Code/Libraries/Source/partitionmanager/partitionmanager_impl.cpp 72B
+?SetActiveBattleID@LivingWorldRegionManager@@QAEXHH@Z	0x0020E63F	110	landed	add_match verified Code/GameEngine/Source/GameLogic/LivingWorld/Rva002B2DAD.cpp 110B
+?addCarryoverStuffToMap@LinearCampaign@@QAEXXZ	0x001EC63D	540	landed	add_match verified Code/GameEngine/Source/GameLogic/System/LinearCampaign/LinearCampaignAddCarryover.cpp 540B
+?getMaxSpeed@Locomotor@@QAEMPAVObject@@@Z	0x001E46E1	356	landed	add_match verified Code/GameEngine/Source/Common/Rva001E46E1Ratios.cpp 356B
