@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_NO_EXCEPTIONS /D_STLP_USE_STATIC_LIB
+// cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_NO_EXCEPTIONS /D_STLP_USE_STATIC_LIB /DBFME_ASCII_DTOR_DECL
 // stlport
 // BF1 clean SubObjectVisibility00775C70 donor rev9cbfb551.
 // Target C445D..C4657 independently gives5 args RET20 and two24B record
