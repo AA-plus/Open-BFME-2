@@ -277,6 +277,7 @@ Code/GameEngine/Source/Common/S3PolymorphicArrayClear.cpp,,6,6,region default lo
 Code/GameEngine/Source/Common/S3PolymorphicArrayClear128.cpp,,1,1,region default loses rows
 Code/GameEngine/Source/Common/S3SmallAccessorFamilies.cpp,,4,1,region default loses rows
 Code/GameEngine/Source/Common/SListTagBlockIndexRemoveAllThunk.cpp,,3,1,region default loses rows
+Code/GameEngine/Source/Common/SmallGaps/Rva00664EC0Method.cpp,-O2 -G5,1,1,region default loses rows
 Code/GameEngine/Source/Common/SmallGaps/Rva007F6A10AllocSlot.cpp,,1,1,region default loses rows
 Code/GameEngine/Source/Common/SmallGaps/Rva007F9A40GetOrCreateSlot.cpp,,2,1,region default loses rows
 Code/GameEngine/Source/Common/SmallGaps/Rva0087DBA0BaseValue.cpp,,1,1,region default loses rows
