@@ -17456,7 +17456,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009D1568,320,.data,global,?g_Va00DD1568@@3PAUAptOnlineScreenEntry@@A,,unowned,,0,4
 0x009D16A8,28,.data,global,_s_externNames,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptScoreScreenCallbacks.cpp,owned,,1,1
 0x009D16C4,100,.data,global,?g_00DD16C4@@3HA,,unowned,,0,2
-0x009D1728,116,.data,global,?g_00DD1728@@3PAPBDA,,unowned,,0,1
+0x009D1728,116,.data,global,?BfmeCampaignMenuQueryNames@@3PAPBDA,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptCampaignMenuCtor.cpp,owned,,1,1
 0x009D179C,44,.data,global,?g_00DD179C@@3HA,Code/GameEngine/Source/Common/Rva0052192DInit.cpp,owned,,1,1
 0x009D17C8,472,.data,global,_s_statusNames,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptStrategicPlayerStatus.cpp,owned,,1,1
 0x009D19A0,144,.data,global,?theLivingWorldCampaignBlockParse@@3UBlockParse@@A,,unowned,,0,2
