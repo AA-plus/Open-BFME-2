@@ -23,3 +23,25 @@ void __stdcall Rva004C45CFCreate(const Coord3D *pos, const AsciiString *name)
         return;
     ((Thing *)obj)->setPosition(pos);
 }
+
+class CloudBreakSpecialPower
+{
+public:
+	void rva004C45CF(const Coord3D *pos, const AsciiString *name);
+};
+
+// ICF-folded twin of Rva004C45CFCreate above (same 82 bytes at 0x004C45CF):
+// the member spelling ignores its receiver, so its stack frame matches the
+// stdcall spelling exactly, including the callee-cleaned return.
+void CloudBreakSpecialPower::rva004C45CF(const Coord3D *pos, const AsciiString *name)
+{
+    void *tmpl = (void *)TheThingFactory->findTemplate(*name);
+    if (tmpl == 0)
+        return;
+    CreateMask mask;
+    ((void (__cdecl *)(void *, int, unsigned int))&ji_006291ae)(&mask, 0, 0x10);
+    Object *obj = TheThingFactory->newObject((const ThingTemplate *)tmpl, 0, &mask, false);
+    if (obj == 0)
+        return;
+    ((Thing *)obj)->setPosition(pos);
+}
