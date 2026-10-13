@@ -82,3 +82,19 @@ void StrategicHUD::DynamicAutoResolvePlayerPanelMovieClip::Impl::ShowBanner(int 
         banner->visible=true;
     }
 }
+
+// ?rva005FBB96@Rva005FBB96@@QAEXHPBVImage@@@Z @0x005FBB96 8B clip forwarder
+// to m_impl (+4) ShowBanner 0x005FBA3C (mov ecx [ecx+4]; jmp; int and Image*
+// args pass through the shared stack slots). No callers. Honest address name.
+class Rva005FBB96
+{
+public:
+	void rva005FBB96(int slot, const Image *image);
+private:
+	char m_pad[4];
+	StrategicHUD::DynamicAutoResolvePlayerPanelMovieClip::Impl *m_impl;
+};
+void Rva005FBB96::rva005FBB96(int slot, const Image *image)
+{
+	return m_impl->ShowBanner(slot, image);
+}
