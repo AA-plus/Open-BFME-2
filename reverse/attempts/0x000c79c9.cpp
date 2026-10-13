@@ -1,4 +1,6 @@
 // ??1W3DScriptedModelDraw@@UAE@XZ
+// partial score=0.9908 date=2026-10-13
+// ??1W3DScriptedModelDraw@@UAE@XZ
 // partial score=0.995 date=2026-10-10
 // ??1W3DScriptedModelDraw@@UAE@XZ
 // partial score=0.9907873709670453 date=2026-10-10
