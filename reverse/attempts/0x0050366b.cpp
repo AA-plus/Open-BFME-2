@@ -1,4 +1,8 @@
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
+// partial score=0.9543393929 date=2026-10-13
+// W7-SOL6 full WB4200B reread, proper AI owner source trial. Typed CountMap initialization removes Init link-only debt.
+// Visible92B building helper changes caller to1700B/frame1DC (worse); retained declaration-only receiver.
+// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
 // partial score=0.9543393929026057 date=2026-10-12
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
@@ -8,8 +12,8 @@
 // Exposing the ordinary PlayerInfoMap/ArmyInfoMap/IntIntMap insert bodies
 // permits native-size allocation without the old placement experiments.
 // Both discarded insert results are now ordinary C++ expressions.
-// This is a bank, not a verified recovery. Existing Rva004FFE72Part::Init
-// remains link-only debt; target identities/layout evidence is below.
+// This is a bank, not a verified recovery. ArmyUnitTree now uses existing rowed CountMap ctor/dtor
+// rather than the unresolved Init view; same1706B/frame1D8/60 stack differences.
 //
 // Identity: the WorldBuilder twin 0x012FDB20 is
 // LWAIWorldInformation::GatherWorldInformation in
@@ -51,15 +55,7 @@ typedef _STL::pair<const int, int> IntIntPair;
 typedef _STL::_Rb_tree<int, IntIntPair, _STL::_Select1st<IntIntPair>, _STL::less<int>, _STL::allocator<IntIntPair> > IntIntTree;
 typedef _STL::map<int, int> IntIntMap;
 
-// +4 tree of the army record. The ledger names its default ctor body
-// 0x0033C432 Rva004FFE72Part::Init and its dtor 0x004FF5F3 with the
-// LocomotorSet map spelling; insert_equal 0x004FF876 is the int/int one.
-class Rva004FFE72Part
-{
-public:
-	void Init();
-};
-
+// Unit-count storage uses the existing typed 12-byte scalar-count map ctor33C432/dtor4FF5F3 providers.
 class LocomotorTemplate;
 enum LocomotorSetType
 {
@@ -75,12 +71,18 @@ template <> LocoTree::~_Rb_tree();
 
 struct Rva00501656;
 
-struct ArmyUnitTree
+struct Rva00501875Count { int value; };
+typedef _STL::pair<const int,Rva00501875Count> CountPair;
+typedef _STL::_Rb_tree<int,CountPair,_STL::_Select1st<CountPair>,_STL::less<int>,_STL::allocator<CountPair> > CountTree;
+namespace _STL {
+ template<> map<int,Rva00501875Count>::map();
+ template<> CountTree::~_Rb_tree();
+}
+struct ArmyUnitTree : private _STL::map<int,Rva00501875Count>
 {
-	char m_tree[12];
-	ArmyUnitTree() { ((Rva004FFE72Part *)this)->Init(); }
-	~ArmyUnitTree() { ((LocoTree *)this)->~LocoTree(); }
-	void insert(const IntIntPair &v) { ((IntIntTree *)this)->insert_equal(v); }
+ ArmyUnitTree() {}
+ ~ArmyUnitTree() {}
+ void insert(const IntIntPair &v) { ((IntIntTree *)this)->insert_equal(v); }
 };
 
 // 0x14 army record.
