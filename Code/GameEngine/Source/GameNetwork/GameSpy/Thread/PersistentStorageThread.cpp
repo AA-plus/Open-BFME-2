@@ -1041,6 +1041,9 @@ void getPreorderCallback(int localid, int profileid, persisttype_t type, int ind
 // The save-side Xfer: constructor 0x0060D1F7, open 0x0060D10A, close
 // 0x0060C8CD and virtual destructor 0x0060D0B3; 0x40 bytes on the frame.
 class Xfer;
+// Bind the close calls to the existing whole 45-byte provider at RVA 0x0060C8CD.
+class Gen009D6DD0 { public: void bfmeClose(); };
+
 class XferSave : public XferStub
 {
 public:
@@ -1089,7 +1092,7 @@ char *rva0055686A(const PSPlayerAllStats *stats, int *len)
 	stats->rva00556508().rva005550A0(&xfer);
 	stats->rva00389DF1().rva005550A0(&xfer);
 	stats->rva00389E0F().rva005550A0(&xfer);
-	xfer.close();
+	((Gen009D6DD0 *)&xfer)->bfmeClose();
 	return (char *)((BfmeThingEC *)stream)->bfmeTakeEC(len);
 }
 
@@ -1119,7 +1122,7 @@ char *rva00556B3C(const PSPlayerAllStats *stats, int *len)
 	stats->rva00556508().rva00555109(&xfer);
 	stats->rva00389DF1().rva00555109(&xfer);
 	stats->rva00389E0F().rva00555109(&xfer);
-	xfer.close();
+	((Gen009D6DD0 *)&xfer)->bfmeClose();
 	return (char *)((BfmeThingEC *)stream)->bfmeTakeEC(len);
 }
 

@@ -64,6 +64,9 @@ extern int NET_CRC_INTERVAL;
 AsciiString GameInfoToAsciiString(const GameInfo *, bool=true);
 
 class Xfer { public: virtual ~Xfer();};
+// Bind the close calls to the existing whole 45-byte provider at RVA 0x0060C8CD.
+class Gen009D6DD0 { public: void bfmeClose(); };
+
 class XferSave { public:XferSave();virtual ~XferSave(); unsigned char Open(Xfer*,int,bool);void close();char tail[0x3c];};
 class CreateAHeroData {public:virtual void s0();virtual void s1();virtual void s2();virtual void xfer(Xfer*);CreateAHeroData&operator=(const CreateAHeroData&);};
 class Rva00219251 {public:CreateAHeroData *rva00219251(int,int,int,const UnicodeString&,int,int,int);void rva0021929D(CreateAHeroData**);};
@@ -168,7 +171,7 @@ void RecorderClass::startRecording(int difficulty, int gameMode, int rankPoints,
        try {writer.Open((Xfer*)memory,1,false);}catch(...) {
         _bfme_debugRecordCallsite(1);theDebug->SkipNext();(theDebug->CrashBegin(0,0,0)<<"ERROR: Could not open Hero Memory file, in Replay!!!").CrashDone(1);return;
        }
-       hero->xfer((Xfer*)&writer);writer.close();int length;int data=((BfmeThingEC*)memory)->bfmeTakeEC(&length);
+       hero->xfer((Xfer*)&writer);((Gen009D6DD0 *)&writer)->bfmeClose();int length;int data=((BfmeThingEC*)memory)->bfmeTakeEC(&length);
        fwrite(&length,4,1,m_file);fwrite((void*)data,length,1,m_file);
        // The released buffer uses the game's array deallocator2FD80.
        // MSVC's delete[] expression on char* selected scalar delete2FD60.

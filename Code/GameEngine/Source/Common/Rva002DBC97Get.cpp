@@ -63,6 +63,9 @@ public:
 	virtual ~Xfer();
 };
 
+// Bind the close calls to the existing whole 45-byte provider at RVA 0x0060C8CD.
+class Gen009D6DD0 { public: void bfmeClose(); };
+
 class XferSave : public Xfer
 {
 public:
@@ -360,11 +363,11 @@ int GameState::saveGame(UnicodeString filename, const UnicodeString &desc, int w
 			UnicodeString msg;
 			msg.format(TheGameText->fetchPointer("GUI:ErrorSavingGame", 0), wideText(filepath));
 			MessageBoxOk(TheGameText->fetch("GUI:Error"), msg, 0);
-			xferSave.close();
+			((Gen009D6DD0 *)&xferSave)->bfmeClose();
 			file->close();
 			return 3;
 		}
-		xferSave.close();
+		((Gen009D6DD0 *)&xferSave)->bfmeClose();
 		file->close();
 
 		if (showMessage)
