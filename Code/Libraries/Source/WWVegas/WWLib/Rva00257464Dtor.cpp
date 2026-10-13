@@ -11,6 +11,16 @@ struct __declspec(novtable) Rva00257464 : public Rva002572D7Member
 {
 	~Rva00257464();
 };
-Rva00257464::~Rva00257464()
+// Select-any like the OpenContainModuleDataConstructor.cpp copy (this retail
+// body comes first in link order, so it is the copy the link keeps); the anchor
+// keeps the body emitted.
+inline Rva00257464::~Rva00257464()
 {
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva00257464Dtor@@YAXPAVRva00257464@@@Z absent-from-retail
+void bfmeEmitRva00257464Dtor(Rva00257464 *p)
+{
+	p->Rva00257464::~Rva00257464();
 }

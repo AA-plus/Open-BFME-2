@@ -139,7 +139,9 @@ Rva00229487::~Rva00229487()
 {
 }
 
-Rva0023863E::~Rva0023863E()
+// Select-any: the identical copy in RvaMemberDtorForwarders.cpp folds instead
+// of duplicating at link time.
+inline Rva0023863E::~Rva0023863E()
 {
 }
 

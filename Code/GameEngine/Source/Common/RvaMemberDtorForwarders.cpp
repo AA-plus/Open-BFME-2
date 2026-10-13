@@ -35,6 +35,16 @@ public:
 	int m_00;
 	VersionBlockParserInner m_04;
 };
-Rva0023863E::~Rva0023863E()
+// Select-any like the copy in RvaAdjustorDtorFamily.cpp; the two identical 8B
+// bodies fold instead of duplicating at link time. The anchor keeps this retail
+// body's ledger emission.
+inline Rva0023863E::~Rva0023863E()
 {
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva0023863EDtor@@YAXPAVRva0023863E@@@Z absent-from-retail
+void bfmeEmitRva0023863EDtor(Rva0023863E *p)
+{
+	p->Rva0023863E::~Rva0023863E();
 }

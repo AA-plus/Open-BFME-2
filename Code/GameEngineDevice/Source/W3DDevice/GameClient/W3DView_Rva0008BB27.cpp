@@ -18,7 +18,16 @@ private:
 	Coord3D m_pos;
 };
 
-void View::getPosition( Coord3D *pos )
+// Select-any like the GameClient/View.cpp copy (this retail body comes first in
+// link order, so it is the copy the link keeps); the anchor keeps the body emitted.
+inline void View::getPosition( Coord3D *pos )
 {
 	*pos = m_pos;
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitViewGetPosition@@YAXPAVView@@PAUCoord3D@@@Z absent-from-retail
+void bfmeEmitViewGetPosition(View *p, Coord3D *pos)
+{
+	p->View::getPosition(pos);
 }
