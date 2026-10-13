@@ -72,6 +72,8 @@ class Rva006C1F60 : public GeneralAllocatorDebug
 {
 public:
 	void rva006C33D0(int policy, int limit);
+	void *rva00033ED0(unsigned int size, int flags);
+	void *rva006C1CC0(unsigned int size, int flags);
 	void *rva006C37E0(int a, int b, int c, int d);
 	void *rva006C3810(int a, int b, int c, int d);
 
@@ -151,4 +153,27 @@ void *Rva006C1F60::rva006C37E0(int a, int b, int c, int d)
 {
 	rva006C33D0(0, 0);
 	return ((Rva000353B0 *)this)->rva000353F0(a, b, c, d);
+}
+
+// Retail 0x006C1CC0 (71 B, ret 8), next to the location formatter: allocate
+// through 0x00033ED0 (two extra bytes when the flags' sign bit is set) and,
+// on success, clear the 16-bit word 10 bytes before the end of the block's
+// usable size (header +4 masked 0x7FFFFFF8, plus 4 unless bit 1 is set).
+// Name address-derived.
+void *Rva006C1F60::rva006C1CC0(unsigned int size, int flags)
+{
+	if (flags & 0x80000000)
+		size += 2;
+	void *block = rva00033ED0(size, flags);
+	if (block)
+	{
+		unsigned int header = ((unsigned int *)block)[-1];
+		unsigned int usable;
+		if ((header & 2) == 0)
+			usable = (header & 0x7FFFFFF8) + 4;
+		else
+			usable = header & 0x7FFFFFF8;
+		*(unsigned short *)((char *)block + usable - 0xA) = 0;
+	}
+	return block;
 }
