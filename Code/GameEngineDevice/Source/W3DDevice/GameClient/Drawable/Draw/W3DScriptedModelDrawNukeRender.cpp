@@ -146,3 +146,84 @@ class Rva000B3348 {public:void rva000B3348(Matrix3D*);private:char pad0[8];Drawa
 void Rva000B3348::rva000B3348(Matrix3D*out){paused=false;if(shadow)shadow->release();shadow=0;if(decal)decal->release();decal=0;
 if(render){DX8Scope lock;if(out)*out=render->Get_Transform();if(render->Is_In_Scene()){RTS3DScene*scene=W3DDisplay::m_3DScene;scene->Remove_Render_Object(render);}if(render){render->Release_Ref();render=0;}render=0;}
 else if(out){*out=*drawable->getTransformMatrix();}}
+
+// ?rva000B348E@Rva000B348E@@QAEX_N@Z retail 0x000B348E, 74 bytes RET4: the
+// render-slot provider refresh this unit's 0xB3348 body belongs to. The
+// secondary-base pointer at this-8 supplies the +0x6A guard flag; retail
+// computes the boolean through its byte branch, then sets/clears bit 4 of the
+// provider slot-120 word and hands it to slot 121 with a 1. The volatile read
+// of the by-value parameter is what keeps the branchful guard. Identity
+// address-derived; provider slot signatures from the two call offsets.
+class Rva000B348EProvider
+{
+public:
+	virtual void vslot000(); virtual void vslot001(); virtual void vslot002(); virtual void vslot003();
+	virtual void vslot004(); virtual void vslot005(); virtual void vslot006(); virtual void vslot007();
+	virtual void vslot008(); virtual void vslot009(); virtual void vslot010(); virtual void vslot011();
+	virtual void vslot012(); virtual void vslot013(); virtual void vslot014(); virtual void vslot015();
+	virtual void vslot016(); virtual void vslot017(); virtual void vslot018(); virtual void vslot019();
+	virtual void vslot020(); virtual void vslot021(); virtual void vslot022(); virtual void vslot023();
+	virtual void vslot024(); virtual void vslot025(); virtual void vslot026(); virtual void vslot027();
+	virtual void vslot028(); virtual void vslot029(); virtual void vslot030(); virtual void vslot031();
+	virtual void vslot032(); virtual void vslot033(); virtual void vslot034(); virtual void vslot035();
+	virtual void vslot036(); virtual void vslot037(); virtual void vslot038(); virtual void vslot039();
+	virtual void vslot040(); virtual void vslot041(); virtual void vslot042(); virtual void vslot043();
+	virtual void vslot044(); virtual void vslot045(); virtual void vslot046(); virtual void vslot047();
+	virtual void vslot048(); virtual void vslot049(); virtual void vslot050(); virtual void vslot051();
+	virtual void vslot052(); virtual void vslot053(); virtual void vslot054(); virtual void vslot055();
+	virtual void vslot056(); virtual void vslot057(); virtual void vslot058(); virtual void vslot059();
+	virtual void vslot060(); virtual void vslot061(); virtual void vslot062(); virtual void vslot063();
+	virtual void vslot064(); virtual void vslot065(); virtual void vslot066(); virtual void vslot067();
+	virtual void vslot068(); virtual void vslot069(); virtual void vslot070(); virtual void vslot071();
+	virtual void vslot072(); virtual void vslot073(); virtual void vslot074(); virtual void vslot075();
+	virtual void vslot076(); virtual void vslot077(); virtual void vslot078(); virtual void vslot079();
+	virtual void vslot080(); virtual void vslot081(); virtual void vslot082(); virtual void vslot083();
+	virtual void vslot084(); virtual void vslot085(); virtual void vslot086(); virtual void vslot087();
+	virtual void vslot088(); virtual void vslot089(); virtual void vslot090(); virtual void vslot091();
+	virtual void vslot092(); virtual void vslot093(); virtual void vslot094(); virtual void vslot095();
+	virtual void vslot096(); virtual void vslot097(); virtual void vslot098(); virtual void vslot099();
+	virtual void vslot100(); virtual void vslot101(); virtual void vslot102(); virtual void vslot103();
+	virtual void vslot104(); virtual void vslot105(); virtual void vslot106(); virtual void vslot107();
+	virtual void vslot108(); virtual void vslot109(); virtual void vslot110(); virtual void vslot111();
+	virtual void vslot112(); virtual void vslot113(); virtual void vslot114(); virtual void vslot115();
+	virtual void vslot116(); virtual void vslot117(); virtual void vslot118(); virtual void vslot119();
+	virtual unsigned int vslot120();
+	virtual void vslot121(unsigned int v, int w);
+};
+
+class Rva000B348EO
+{
+public:
+	char p[0x6A];
+	bool f;
+};
+
+class Rva000B348E
+{
+public:
+	void rva000B348E(bool b);
+private:
+	char a[0x44];
+	Rva000B348EProvider *m;
+	char c[0x208 - 0x48];
+	int d;
+};
+
+void Rva000B348E::rva000B348E(bool b)
+{
+	Rva000B348EO *o = *(Rva000B348EO **)((char *)this - 8);
+	bool u;
+	if (o->f)
+		u = false;
+	else
+		u = *(volatile bool *)&b;
+	d = u;
+	if (!m)
+		return;
+	unsigned int v = m->vslot120();
+	if (u)
+		v |= 4;
+	else
+		v &= ~4u;
+	m->vslot121(v, 1);
+}
