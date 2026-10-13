@@ -1,7 +1,7 @@
 // cl: /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc
 // Address-derived recovery of 0x0015B110 (136B), a ref-counted object factory.
-// Retail: operator new(0x34) 0x002FDA0, construct with this via the unrowed
-// ctor 0x00152DE9 (vtable 0x00BD3B1C, refcount at +4), store into the hidden
+// Retail: operator new(0x34) 0x002FDA0, copy-construct this via FXShaderSetup's
+// copy ctor 0x00152DE9 (vtable 0x00BD3B1C, refcount at +4), store into the hidden
 // return pointer, then the smart pointer's copy AddRef ([p+4]+=1) and
 // temporary Release ([p+4]-=1, deleting through vtable[0] on zero). The
 // hidden-pointer ret 4 and AssetReference-style temp match the rowed
@@ -17,12 +17,12 @@ public:
     int Release() { return --m_refCount; }
 };
 
-class Rva0015B110Owner;
-
-class Rva0015B110Target : public RefCountClass
+// The constructor at 0x00152DE9 is FXShaderSetup's copy constructor (rowed in
+// fxshadersetup.cpp): the factory copies its own object.
+class FXShaderSetup : public RefCountClass
 {
 public:
-    Rva0015B110Target(Rva0015B110Owner *owner);
+    FXShaderSetup(const FXShaderSetup &that);
 
     char m_pad[0x2C];
 };
@@ -53,6 +53,6 @@ public:
 
 RefPtr Rva0015B110Owner::rva0015b110()
 {
-    RefPtr temp(new Rva0015B110Target(this));
+    RefPtr temp(new FXShaderSetup(*reinterpret_cast<const FXShaderSetup *>(this)));
     return temp;
 }
