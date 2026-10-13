@@ -1,4 +1,4 @@
-// Nine B2-native flag-word clearers across seven .data flag words of one
+// Eight B2-native flag-word clearers across six .data flag words of one
 // contiguous run (0x0076929D-0x0076B9FF):
 //
 //     mov eax,[<address>] / and al,<mask8> / mov [<address>],eax / ret
@@ -22,9 +22,6 @@ unsigned int g_Va00DFDCD8;
 extern unsigned int g_Va00DFDCF4;
 // g_Va00DFDCF4: matched references place it at VA 0xdfdcf4 (zero-filled .bss).
 unsigned int g_Va00DFDCF4;
-extern unsigned int g_Va00DFDCFC;
-// g_Va00DFDCFC: matched references place it at VA 0xdfdcfc (zero-filled .bss).
-unsigned int g_Va00DFDCFC;
 extern unsigned int g_Va00DFE014;
 // g_Va00DFE014: matched references place it at VA 0xdfe014 (zero-filled .bss).
 unsigned int g_Va00DFE014;
@@ -64,10 +61,8 @@ unsigned int Rva0076B229ClearFlag(void)
 	return g_Va00DFDCF4 &= 0xFFFFFFF7u;
 }
 
-unsigned int Rva0076B248ClearFlag(void)
-{
-	return g_Va00DFDCFC &= 0xFFFFFFFEu;
-}
+// The76B248 action belongs to positional GenericObjectCreationNugget::create.
+// Its native parent now emits the guard cleanup and owns the sole guard datum.
 
 unsigned int Rva0076B9FFClearFlag(void)
 {
