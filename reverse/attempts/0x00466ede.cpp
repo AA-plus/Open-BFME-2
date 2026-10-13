@@ -1,4 +1,6 @@
 // ?slot38@TransportContain@@UAE_NPAVObject@@HH@Z
+// partial score=0.85 date=2026-10-13
+// ?slot38@TransportContain@@UAE_NPAVObject@@HH@Z
 // partial score=0.85 date=2026-10-09
 // cl: /O1 /G7 /MD /DNDEBUG /Oy-
 // ZH TransportContain.cpp admission supplies the fake-container and capacity
@@ -61,7 +63,7 @@ failed:
     register unsigned slots=static_cast<unsigned>(rider->rva0028FBBE());
     if (!slots) goto failed;
     if (*reinterpret_cast<const unsigned char *>(&checkCapacity)) {
-        unsigned used=count();
+        volatile unsigned used = count();
         used+=extraSlots();
         used+=slots;
         return maximum()>=used;
