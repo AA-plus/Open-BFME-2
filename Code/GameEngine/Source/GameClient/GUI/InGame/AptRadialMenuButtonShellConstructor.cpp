@@ -160,7 +160,7 @@ class Rva00577FE2Base
 {
 public:
 	Rva00577FE2Base() : m_references(0) {}
-	virtual ~Rva00577FE2Base();
+	virtual ~Rva00577FE2Base() {}
 	int m_references;
 };
 

@@ -1,6 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /O1 /G7 /arch:SSE
 // AptRadialMenu::Impl::ButtonShell::~ButtonShell, retail 0x00578189 (363 bytes,
-// EH; the opaque pin ??1Rva00578189 stays). Destructor of the shell
+// EH). Destructor of the shell
 // AptRadialMenuButtonShellConstructor.cpp builds (vftable 0x00C6EA80, scalar
 // deleting dtor 0x00578409). When TheAptPlayer exists it unbinds the
 // "<movie>_OnButtonFrameUnloaded_<n>" and "..._OnButtonFrameLoaded_<n>"

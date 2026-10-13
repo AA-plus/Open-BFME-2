@@ -15,7 +15,6 @@
 // (docs/reconstruction/deleting-destructor-identity-audit.md).
 //
 //   wrapper     dtor        vtable#slot
-//   0x0041456E  0x00414520  0x00C3A08C#0
 //   0x00415E6E  0x00415CAB  0x00C3A288#0
 //   0x00419E1C  0x00419E38  0x00C3AD60#0, 0x00C6AB40#0
 //   0x0041A7DB  0x0041A644  0x00C3AD70#0
@@ -29,7 +28,6 @@
 //   0x00432151  0x00431FB5  0x00C3C9AC#4
 //   0x00436197  0x00435DE7  0x00C3CDC8#0
 //   0x0043AE0C  0x0043A351  0x00C3D478#0
-//   0x0043AE28  0x0043A396  0x00C3D50C#0
 //   0x0043B709  0x0043B660  0x00C3D5F0#0
 //   0x0043D3BE  0x0043D1C9  0x00C3D7F8#0
 //   0x00444067  0x0052163E  0x00C3DFA8#0, 0x00C67840#0
@@ -60,19 +58,6 @@ private:
 }
 
 struct EmitVtableTag;
-
-class Rva00414520
-{
-public:
-	Rva00414520(EmitVtableTag *);
-public:
-	virtual ~Rva00414520();
-};
-
-// ?<Rva00414520::Rva00414520> absent-from-retail
-Rva00414520::Rva00414520(EmitVtableTag *)
-{
-}
 
 class Rva00415CAB
 {
@@ -248,23 +233,11 @@ Rva0043A351::Rva0043A351(EmitVtableTag *)
 {
 }
 
-class Rva0043A396
-{
-public:
-	Rva0043A396(EmitVtableTag *);
-public:
-	virtual ~Rva0043A396();
-};
-
-// ?<Rva0043A396::Rva0043A396> absent-from-retail
-Rva0043A396::Rva0043A396(EmitVtableTag *)
-{
-}
-
 // Target facts: Rva0043B660 constructs a member at +4 through the rowed
 // set constructor 0x0043B69C and destroys it through
-// 0x0043B4B4. The set element spelling/layout is carried from the verified
-// STLport transfer and remains donor inference.
+// 0x0043B4B4, the destructor rowed as Rva0043B2E2's in RvaTreeDtorFamily.cpp
+// (named after its owner's erase 0x0043B2E2). The set element spelling/layout
+// is carried from the verified STLport transfer and remains donor inference.
 struct Rva0043B69CElement {
 	Rva0043B69CElement();
 	Rva0043B69CElement(const Rva0043B69CElement &);
@@ -274,10 +247,10 @@ struct Rva0043B69CElement {
 };
 bool operator<(const Rva0043B69CElement &, const Rva0043B69CElement &);
 
-class Rva0043B4B4
+class Rva0043B2E2
 {
 public:
-	~Rva0043B4B4();
+	~Rva0043B2E2();
 private:
 	_STL::set<Rva0043B69CElement> m_tree;
 };
@@ -289,7 +262,7 @@ public:
 public:
 	virtual ~Rva0043B660();
 private:
-	Rva0043B4B4 m_member04;
+	Rva0043B2E2 m_member04;
 };
 
 // Target evidence: this vptr is the same one used by the rowed deleting

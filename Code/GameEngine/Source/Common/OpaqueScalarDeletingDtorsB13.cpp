@@ -29,7 +29,6 @@
 //   0x00577356  0x005770F7  0x00C6E8F8#1
 //   0x00577372  0x005772BF  0x00C6E960#0
 //   0x00577891  0x00577838  0x00C6E978#0
-//   0x00578409  0x00578189  0x00C6EA80#0
 //   0x00583092  0x00582FC1  0x00C6FA9C#0
 //   0x00597FA9  0x00597BD4  0x00C70C24#2
 //   0x005993B1  0x005990DF  0x00C70D44#2
@@ -328,19 +327,6 @@ Rva00577838::Rva00577838(EmitVtableTag *)
 {
 }
 
-class Rva00578189
-{
-public:
-	Rva00578189(EmitVtableTag *);
-public:
-	virtual ~Rva00578189();
-};
-
-// ?<Rva00578189::Rva00578189> absent-from-retail
-Rva00578189::Rva00578189(EmitVtableTag *)
-{
-}
-
 class Rva00582FC1
 {
 public:
@@ -397,21 +383,17 @@ private:
 };
 class Rva0052B23D { public: void rva0052B23D(); };
 
+// No tag constructor: the rowed destructor below stores this vptr, so the
+// unit emits the vftable and its deleting destructor without inlining the
+// base's implicit constructor (whose vftable Rva0053947DDtor.cpp owns).
 class Rva0059E242 : public Rva0053947D
 {
-public:
-	Rva0059E242(EmitVtableTag *);
 public:
 	virtual ~Rva0059E242();
 private:
     char m_unmodelled[24];
     Rva0059E242Buffer m_buffer;
 };
-
-// ?<Rva0059E242::Rva0059E242> absent-from-retail
-Rva0059E242::Rva0059E242(EmitVtableTag *)
-{
-}
 
 Rva0059E242::~Rva0059E242()
 {

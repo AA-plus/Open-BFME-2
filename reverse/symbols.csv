@@ -4337,7 +4337,6 @@ name,address,notes
 ??1Rva004110BETree@@QAE@XZ,0x004110BE,tree teardown dtor for Rva007B6880Thunks.cpp 0x007B823D; jmp stub to the rowed tree dtor 0x00410CB9
 ??1Rva00411453Tree@@QAE@XZ,0x00411453,tree teardown dtor for Rva007B6880Thunks.cpp 0x007B8247; jmp stub to tree-dtor-family body 0x004111CC
 ??1Rva00413A24@@UAE@XZ,0x00413A24,"destructor the scalar deleting destructor 0x0022DE4F calls (REL32 at 0x0022DE52; vtable 0x00BE7660#0); opaque address name"
-??1Rva00414520@@UAE@XZ,0x00414520,opaque dtor called by the scalar deleting dtor at 0x0041456E (vtable 0x00C3A08C#0); identity unproven; address-derived name
 ??1Rva00414BDBElement@@QAE@XZ,0x001DDEC3,callee REL32 read by locate.py from a unique masked-byte placement emitted by StlportVectorInsertOverflowRva00414BDB.cpp
 ??1Rva00415AE0@@QAE@XZ,0x00415AE0,destructor called by the unreferenced scalar deleting dtor 0x00415C68 (REL32 at +4 of its 28B delete-flag wrapper); identity unproven; address-derived name
 ??1Rva00415CAB@@UAE@XZ,0x00415CAB,opaque dtor called by the scalar deleting dtor at 0x00415E6E (vtable 0x00C3A288#0); identity unproven; address-derived name
@@ -4368,7 +4367,6 @@ name,address,notes
 ??1Rva00435CDBDtor@@QAE@XZ,0x00435CDB,dtor thunk stub at 0x00435CDB to 0x00435B00 (target of thunk 0x007B83B9)
 ??1Rva00435DE7@@UAE@XZ,0x00435DE7,opaque dtor called by the scalar deleting dtor at 0x00436197 (vtable 0x00C3CDC8#0); identity unproven; address-derived name
 ??1Rva0043A351@@UAE@XZ,0x0043A351,opaque dtor called by the scalar deleting dtor at 0x0043AE0C (vtable 0x00C3D478#0); identity unproven; address-derived name
-??1Rva0043A396@@UAE@XZ,0x0043A396,opaque dtor called by the scalar deleting dtor at 0x0043AE28 (vtable 0x00C3D50C#0); identity unproven; address-derived name
 ??1Rva0043B660@@UAE@XZ,0x0043B660,opaque dtor called by the scalar deleting dtor at 0x0043B709 (vtable 0x00C3D5F0#0); identity unproven; address-derived name
 ??1Rva0043D1C9@@UAE@XZ,0x0043D1C9,opaque dtor called by the scalar deleting dtor at 0x0043D3BE (vtable 0x00C3D7F8#0); identity unproven; address-derived name
 ??1Rva0044BE85@@QAE@XZ,0x0044BE85,destructor called by the vtable-referenced scalar deleting dtor 0x0044BE69 (REL32 at +4 of its 28B delete-flag wrapper); identity unproven; address-derived name
@@ -4516,7 +4514,6 @@ name,address,notes
 ??1Rva00577838@@UAE@XZ,0x00577838,opaque dtor called by the scalar deleting dtor at 0x00577891 (vtable 0x00C6E978#0); identity unproven; address-derived name
 ??1Rva00577EB2@@QAE@XZ,0x00577EB2,member destructor at +0x44 called by the destructor 0x00577FA7 (byte-exact modulo relocs in MemberBaseDtorsB01.cpp); identity unproven; address-derived name
 ??1Rva00577F77@@UAE@XZ,0x00577FA7,dtor installs its own vftable 0x00C6EA28 (bytes at +19) and is the REL32 callee of the slot-0 ??_G at 0x005783ED
-??1Rva00578189@@UAE@XZ,0x00578189,opaque dtor called by the scalar deleting dtor at 0x00578409 (vtable 0x00C6EA80#0); identity unproven; address-derived name
 ??1Rva00578C43@@QAE@XZ,0x00578C43,pointee destructor called by the owning-pointer reset 0x0042D789 (byte-exact modulo relocs in OwnedPointerResets.cpp); identity unproven; address-derived name
 ??1Rva0057BD01@@QAE@XZ,0x0057BD01,pointee destructor called by the owning-pointer reset 0x0042D87D (byte-exact modulo relocs in OwnedPointerResets.cpp); identity unproven; address-derived name
 ??1Rva0057C03BModule@@QAE@XZ,0x0057C03B,CategoryModuleClass dtor teardown for the Rva007B6880Thunks.cpp thunks (0x007B9400/0x007B940A/0x007B9414/0x007B941E/0x007B9428/0x007B9432); folded CategoryModuleClass<$N> family at this address
@@ -14547,7 +14544,6 @@ rva009C7380WeightPairs,0x009B84E0
 ?findGoodBuildOrRepairPosition@DozerAIUpdate@@IAE_NPBVObject@@0AAUCoord3D@@@Z,0x00489039,"called twice from the rowed DozerAIUpdate::findGoodBuildOrRepairPositionAndTarget 0x00489913 (REL32 at 0x00489989 and 0x004899FB; its only callers) with dozer and target and an out position, bool result, exactly where the Worker twin 0x004AABB4 calls the pinned WorkerAIUpdate::findGoodBuildOrRepairPosition 0x004AA4FE; same body as that twin without the docking-trace lines (Inv_Sqrt then isUsingAirborneLocomotor twice then 0x0026872B and 0x00285202)"
 ?findNearestLabeledContactPointOnTarget@AIUpdateInterface@@QAE_NPAVObject@@PAUCoord3D@@PBU3@_N@Z,0x0026872B,"its own docking-trace BEGIN line (.rdata 0x00BF9C78) names AIUpdateInterface::findNearestLabeledContactPointOnTarget and prints target and workingPos and skipCollideTest; called from the rowed DozerAIUpdate::findGoodBuildOrRepairPosition 0x00489039 (REL32 at 0x004891AA; ecx the AI; target then result then working position then true) at the place BFME 1's donor calls it; also from the rowed Worker twin 0x004AA4FE (REL32 at 0x004AA813); BFME 1 spelling (its 0x00272800)"
 ?rva00438592@Rva002542F3Member@@QAEXPAVRva00438758Interface@@@Z,0x00438592,direct callee at 0x00438779 with ECX on the wrapper +0 member view and one interface pointer; target Ghidra extent 454B writes the same +0..+0xA8 layout; owner identity remains a structural inference
-??1Rva0043B4B4@@QAE@XZ,0x0043B4B4,direct call at 0x0043B67E with ECX=this+4 from the vtable-slot dtor; target helper reads and releases a pointer; helper owner remains address-derived
 ??1Rva00112291@@UAE@XZ,0x00112291,callee of ??_ERva00112291@@UAEPAXI@Z
 ?rva000E56AF@Rva006F8700Owner@@QAEHPAXHH0@Z,0x000E56AF,callee of ?rva000E585F@Rva006F8700Owner@@QAEXPAX0PAH1@Z
 ?rva0052B17F@Rva0052B17F@@QAEXXZ,0x0052B17F,callee of ?rva004E0CA3@Rva004E0B60@@QAEXXZ
