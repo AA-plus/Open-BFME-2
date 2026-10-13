@@ -1,6 +1,6 @@
 // cl: /MD /EHsc /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS /DBFME_MODULE_NO_MPO /DZH_EMIT_POOL_GLUE /Ireference/shims/bfmerendobj /Ireference/shims/debugvtable /Ireference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/debug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/bfmeanimobj /Ireference/shims/indexbuffercount /Ireference/shims/bfmecaps /Ireference/shims/bfmehcanim /Ireference/shims/bfmevector /Ireference/shims/bfmemapper /Ireference/shims/meshmatdesclayout /Ireference/shims/bfmeshader /Ireference/shims/bfmecpudetect /Ireference/shims/bfmepool /Ireference/open-bfme-1/Code/GameEngine/Include/Precompiled /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameNetwork /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWAudio /Ireference/shims/bfmealloc /Ireference/shims/bfmehashtable /Ireference/shims/bfmelist /Ireference/shims/asciistring_downloadmanager /Ireference/shims/stlp_nodealloc /Ireference/shims/asciistring_thin /ICode/GameEngine/Source/Common /Ireference/shims/w3droadbuffer /Ireference/shims/bfmeterraintracks /ICode/Libraries/Include/Lib /Ireference/shims/bfme_namekey /Ireference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/shims -ICode/Libraries/Source/Compression/LZHCompress/CompLibHeader /Ireference/shims/bfme2htree /Ireference/shims/bfme2renderobj /Ireference/shims/bfmecamera /Ireference/shims/bfmelight /Ireference/shims/bfmeparticlehandle /Ireference/shims/bfmeparticleload /Ireference/shims/bfmeparticlequat /Ireference/shims/bfmeparticlesave /Ireference/shims/bfmeparticleline /Ireference/shims/bfme2ray /Ireference/shims/bfme2scene -D_STLP_USE_STATIC_LIB -DNDEBUG -DWIN32 -D_WINDOWS /Ireference/shims/bfmefrustum
 // stlport
-// Ported verbatim from the Generals Zero Hour reference
+// Ported from the Generals Zero Hour reference
 // (Libraries/Source/WWVegas/WWMath/frustum.cpp); this unit had no counterpart under Code/.
 /*
 **	Command & Conquer Generals Zero Hour(tm)
@@ -40,6 +40,21 @@
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 #include "frustum.h"
+
+// Keep the donor arithmetic local: these operations are inlined here, and
+// emitting independent operator/getter copies conflicts with their providers.
+static inline Vector3 &scaleFrustumCorner(Vector3 &corner, float scale)
+{
+	corner.X = corner.X * scale;
+	corner.Y = corner.Y * scale;
+	corner.Z = corner.Z * scale;
+	return corner;
+}
+
+static inline Vector3 frustumZVector(const Matrix3D &matrix)
+{
+	return Vector3(matrix[0][2], matrix[1][2], matrix[2][2]);
+}
 
 
 /***********************************************************************************************
@@ -100,43 +115,43 @@ void FrustumClass::Init
 
 	//compare correct z-vector with the one in the camera matrix.  If they point in
 	//opposite directions, we have a reflected camera matrix.
-	if (Vector3::Dot_Product(CameraTransform.Get_Z_Vector(),zv) < 0)
+	if (Vector3::Dot_Product(frustumZVector(CameraTransform),zv) < 0)
 	{	//flip the frustum corners horizontally for a reflected matrix
 	  Corners[1].Set(vpmin.X, vpmax.Y, 1.0);
 	  Corners[5] = Corners[1];
-		Corners[1] *= znear;
-		Corners[5] *= zfar;
+		scaleFrustumCorner(Corners[1], znear);
+		scaleFrustumCorner(Corners[5], zfar);
 		Corners[0].Set(vpmax.X, vpmax.Y, 1.0);
 		Corners[4] = Corners[0];
-		Corners[0] *= znear;
-		Corners[4] *= zfar;
+		scaleFrustumCorner(Corners[0], znear);
+		scaleFrustumCorner(Corners[4], zfar);
 		Corners[3].Set(vpmin.X, vpmin.Y, 1.0);
 		Corners[7] = Corners[3];
-		Corners[3] *= znear;
-		Corners[7] *= zfar;
+		scaleFrustumCorner(Corners[3], znear);
+		scaleFrustumCorner(Corners[7], zfar);
 		Corners[2].Set(vpmax.X, vpmin.Y, 1.0);
 		Corners[6] = Corners[2];
-		Corners[2] *= znear;
-		Corners[6] *= zfar; 
+		scaleFrustumCorner(Corners[2], znear);
+		scaleFrustumCorner(Corners[6], zfar);
 	}
 	else
 	{	//normal camera
 		Corners[0].Set(vpmin.X, vpmax.Y, 1.0);
 		Corners[4] = Corners[0];
-		Corners[0] *= znear;
-		Corners[4] *= zfar;
+		scaleFrustumCorner(Corners[0], znear);
+		scaleFrustumCorner(Corners[4], zfar);
 		Corners[1].Set(vpmax.X, vpmax.Y, 1.0);
 		Corners[5] = Corners[1];
-		Corners[1] *= znear;
-		Corners[5] *= zfar;
+		scaleFrustumCorner(Corners[1], znear);
+		scaleFrustumCorner(Corners[5], zfar);
 		Corners[2].Set(vpmin.X, vpmin.Y, 1.0);
 		Corners[6] = Corners[2];
-		Corners[2] *= znear;
-		Corners[6] *= zfar;
+		scaleFrustumCorner(Corners[2], znear);
+		scaleFrustumCorner(Corners[6], zfar);
 		Corners[3].Set(vpmax.X, vpmin.Y, 1.0);
 		Corners[7] = Corners[3];
-		Corners[3] *= znear;
-		Corners[7] *= zfar; 
+		scaleFrustumCorner(Corners[3], znear);
+		scaleFrustumCorner(Corners[7], zfar);
 	}
 
 
