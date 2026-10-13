@@ -1,4 +1,9 @@
 // cl: /O2 /MD /EHsc
+// Keep MSVC math.h float overloads local; matched operations already inline.
+#pragma push_macro("inline")
+#define inline static inline
+#include <math.h>
+#pragma pop_macro("inline")
 // Factory706A40 calls identify Sound/StringObject/Error constructor branches.
 // Original Redwood6 PDB gives AptObject bases and sizes44/36/40, including
 // members at20/24/28. Original Godfather MAP corroborates all three signatures.
