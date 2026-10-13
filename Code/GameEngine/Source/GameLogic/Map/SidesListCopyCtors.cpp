@@ -36,3 +36,23 @@ Rva0032C19D &Rva0032C19D::operator=(const Rva0032C19D &that)
 	m_second = that.m_second;
 	return *this;
 }
+
+// ICF-folded twin of the assignment above (same 43 bytes at 0x0032C602):
+// the record holds the same scalar plus two vector control blocks, so the
+// memberwise sequence matches exactly (struct tag per the pin spelling).
+struct Rva0032CD3BRecord
+{
+	Rva0032CD3BRecord &operator=(const Rva0032CD3BRecord &that);
+private:
+	int m_value;
+	std::vector<Rva0032C0E3Element> m_first;
+	std::vector<Rva0032C0E3Element> m_second;
+};
+
+Rva0032CD3BRecord &Rva0032CD3BRecord::operator=(const Rva0032CD3BRecord &that)
+{
+	m_value = that.m_value;
+	m_first = that.m_first;
+	m_second = that.m_second;
+	return *this;
+}
