@@ -281,10 +281,12 @@ void TextureFilterClass::_Init_Filters(TextureFilterMode filter_type)
 	}
 
 	// Set default to best. The level of best filter mode is controlled by the input parameter.
+	// Retail copies BEST into the fifth column (+0x10, the column every filter
+	// starts in), min before mag; byte masking hid the DEFAULT column here.
 	for (i=0;i<MAX_TEXTURE_STAGES;++i) {
-		_MagTextureFilters[i][FILTER_TYPE_DEFAULT]=_MagTextureFilters[i][FILTER_TYPE_BEST];
-		_MinTextureFilters[i][FILTER_TYPE_DEFAULT]=_MinTextureFilters[i][FILTER_TYPE_BEST];
-		_MipMapFilters[i][FILTER_TYPE_DEFAULT]=_MipMapFilters[i][FILTER_TYPE_BEST];
+		_MinTextureFilters[i][FILTER_TYPE_4]=_MinTextureFilters[i][FILTER_TYPE_BEST];
+		_MagTextureFilters[i][FILTER_TYPE_4]=_MagTextureFilters[i][FILTER_TYPE_BEST];
+		_MipMapFilters[i][FILTER_TYPE_4]=_MipMapFilters[i][FILTER_TYPE_BEST];
 
 		DX8Wrapper::Set_DX8_Sampler_State(i,D3DSAMP_MAXANISOTROPY,2);
 	}
