@@ -49847,3 +49847,6 @@ Unwind@00b972d6	0x007972D6	14	blocked	false-reject add_match local-label namespa
 ??1SecondaryBase@@UAE@XZ	0x005C48E5	95	blocked	implicit base-dtor call in derived dtor; cannot respell to free rowed twin; t=2 model=muse-spark
 ??0Rva005EB481Inner@@QAE@PAX000@Z	0x005EB706	91	blocked	rowed Impl far larger than 0x48 view; new-size differs; t=4 model=muse-spark
 ?init@CondStore@@QAEXXZ	0x004B6428	89	blocked	retail callee null-checks this (test-je); rowed ctor twin impossible; pin/row identity suspect; t=8 model=muse-spark
+?rva00210E5B@Rva00DFE1C8Host@@QAEXHH@Z	0x005C4C69	88	blocked	member call loads global ptr into ECX; rowed stdcall free twin drops it; t=3 model=muse-spark
+?rva004099CA@Rva004099CAHelper@@QAE_NPAXH@Z	0x0021A492	84	blocked	rowed twin returns StringBase-ptr not bool; test-eax vs test-al; t=3 model=muse-spark
+??$__copy_ptrs@PAURva004F69C3@@PAU1@@_STL@@YAPAURva004F69C3@@PAU1@00ABU__false_type@0@@Z	0x0040DC1F	83	blocked	rowed twin takes tag by value, our site pushes tag address (by-ref); t=6 model=muse-spark
