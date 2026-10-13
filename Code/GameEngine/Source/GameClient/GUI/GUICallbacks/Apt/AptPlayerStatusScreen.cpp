@@ -328,7 +328,7 @@ AptPlayerStatus::AptPlayerStatus(void *context)
 		{
 			name.format("Objective%d", index + 1);
 			m_externHandlers.AddExternHandler(name, index, AptRef<AptExternHandler>(text));
-			name.concat("Status");
+			reinterpret_cast<StringBase<char> *>(&name)->concat("Status");
 			m_externHandlers.AddExternHandler(name, index, AptRef<AptExternHandler>(status));
 		}
 	}

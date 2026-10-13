@@ -82,7 +82,7 @@ void MilesAudioManager::rva0005B708()
   if(fileName.getLength()>260) {AsciiString truncated(fileName,0,260);reinterpret_cast<StringBase<char> *>(&fileName)->swap(*reinterpret_cast<StringBase<char> *>(&truncated));}
   char fileBase[261];
   _splitpath(fileName.str(),0,0,fileBase,0);
-  AsciiString label("DIALOGEVENT:");label.concat(fileBase);label.concat("SubTitle");
+  AsciiString label("DIALOGEVENT:");reinterpret_cast<StringBase<char> *>(&label)->concat(fileBase);reinterpret_cast<StringBase<char> *>(&label)->concat("SubTitle");
   bool exists=false;
   UnicodeString subtitle=TheGameText==0?UnicodeString::TheEmptyString:TheGameText->fetch(label,&exists);
   if(!exists)subtitle.clear();
