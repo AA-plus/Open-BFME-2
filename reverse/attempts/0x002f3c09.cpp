@@ -1,4 +1,6 @@
 // ?MoveAllies@Pathfinder@@QAE_NPAVObject@@PAVPath@@_N@Z
+// partial score=0.8918 date=2026-10-13
+// ?MoveAllies@Pathfinder@@QAE_NPAVObject@@PAVPath@@_N@Z
 // partial score=0.8918205238299699 date=2026-10-10
 // ?MoveAllies@Pathfinder@@QAE_NPAVObject@@PAVPath@@_N@Z
 // partial score=0.8785282557717079 date=2026-10-10

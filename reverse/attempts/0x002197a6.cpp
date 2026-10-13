@@ -1,5 +1,7 @@
 // ?rva002197A6@Rva002197A6@@QAEPAVRva002197A6Entry@@H@Z
 // partial score=0.97 date=2026-10-13
+// ?rva002197A6@Rva002197A6@@QAEPAVRva002197A6Entry@@H@Z
+// partial score=0.97 date=2026-10-13
 // W7-SOL2 r1 (chain.py seed): _ReadWriteBarrier after the end read + begin inlined into its two uses => size-exact 116 (was 117), residue 6 instr: retail loads end->ecx then begin->eax (a1 form) and keeps count in ecx; ours end->eax, begin->ecx.
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
