@@ -28,7 +28,7 @@ Rva006CDD50Item *__cdecl Rva006CDE00Copy(Rva006CDD50Iterator,Rva006CDD50Iterator
 // and two8B entries at+0C. Original container name is unresolved.
 class AptValueNameEntry {public:EAStringC name;int value;AptValueNameEntry(const EAStringC&n,int v):name(n),value(v){} __forceinline AptValueNameEntry(){value=0;}};
 AptValueNameEntry *__cdecl Rva006CDBF0Resize(AptValueNameEntry *,int,int);
-class Rva006CE660Vec {public:void rva006CEB10(const EAStringC &);void rva006D0930(const EAStringC *,int,int,int);void rva006CE660(int); void insert(AptValueNameEntry *const &,AptValueNameEntry *const &,const Rva006CDD50Iterator &);int count,capacity;AptValueNameEntry *data;AptValueNameEntry inlineItems[2];
+class Rva006CE660Vec {public:void rva006CEB10(const EAStringC &);void rva006D0930(const EAStringC *,int,int,int);void rva006CE660(int); void insert(AptValueNameEntry *const &,AptValueNameEntry *const &,const Rva006CDD50Iterator &);void append(AptValueNameEntry *);int count,capacity;AptValueNameEntry *data;AptValueNameEntry inlineItems[2];
  Rva006CDD50Iterator begin(){Rva006CDD50Item *p=reinterpret_cast<Rva006CDD50Item *>(data);return Rva006CDD50Iterator(p,p,p+count);}
  Rva006CDD50Iterator end(){return Rva006CDD50Iterator(reinterpret_cast<Rva006CDD50Item *>(data+count),reinterpret_cast<Rva006CDD50Item *>(data),reinterpret_cast<Rva006CDD50Item *>(data+count));}};
 void Rva006CE660Vec::rva006CE660(int want){
@@ -133,3 +133,7 @@ void Rva006CE660Vec::rva006D0930(const EAStringC *key,int expected,int replaceme
  Rva006CDD50Iterator position;
  appendPlaybackItem(*this,AptValueNameEntry(*key,initial),position);
 }
+
+// Native 0x006CEA90..0x006CEACF: append one entry; last must be computed before first (retail
+// lea value+8 into the spilled home before the container loads).
+void Rva006CE660Vec::append(AptValueNameEntry *value){AptValueNameEntry *last=value+1,*first=value;insert(first,last,end());}
