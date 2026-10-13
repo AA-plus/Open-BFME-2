@@ -7155,7 +7155,7 @@ object_symbol	reverse/functions.csv	0x0075F38A	1
 object_symbol	reverse/functions.csv	0x0075F395	1
 object_symbol	reverse/functions.csv	0x0075F3A7	1
 object_symbol	reverse/functions.csv	0x0075F3AF	1
-object_symbol	reverse/functions.csv	0x0075F3B7	1	allow=0fa26538e875e8bb3b9003a740eb9a84281e009f
+object_symbol	reverse/functions.csv	0x0075F3B7	1
 object_symbol	reverse/functions.csv	0x0075F3BF	1
 object_symbol	reverse/functions.csv	0x0075F3C7	1
 object_symbol	reverse/functions.csv	0x0075F3CF	1
@@ -12301,6 +12301,7 @@ object_symbol	reverse/functions.csv	0x00778D97	1
 object_symbol	reverse/functions.csv	0x00778DD4	1
 object_symbol	reverse/functions.csv	0x00778DE6	1
 object_symbol	reverse/functions.csv	0x00778DF8	1
+object_symbol	reverse/functions.csv	0x00778E2E	1	allow=0bbdf8ac15909ccf8d240971d55d01fe881826ab
 object_symbol	reverse/functions.csv	0x00778E8C	1
 object_symbol	reverse/functions.csv	0x00778F0B	1
 object_symbol	reverse/functions.csv	0x00778F60	1
