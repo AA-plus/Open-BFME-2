@@ -12,10 +12,11 @@
 // restore() member, reproduces that slot; a bare HFONT local, a volatile local
 // and declaration reordering do not. The struct name is ours; retail names are
 // not recovered.
-// Retail links the size-form CRT floorf/floor(float) copies: compile math.h for size.
-#pragma optimize("gsy", on)
+// Keep the CRT float wrappers local; the font body uses their inline operations.
+#pragma push_macro("inline")
+#define inline static inline
 #include <math.h>
-#pragma optimize("", on)
+#pragma pop_macro("inline")
 #include <string.h>
 #include "windows.h"
 
