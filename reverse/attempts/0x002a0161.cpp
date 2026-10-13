@@ -1,7 +1,5 @@
 // ?postDraw@InGameUI@@UAEXXZ
-// partial score=0.99 date=2026-10-11
-// ?postDraw@InGameUI@@UAEXXZ
-// partial score=0.99 date=2026-10-09
+// partial score=0.99 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
 //
@@ -30,6 +28,7 @@ namespace _STL { void __cdecl free(void *block); }
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include "../Common/GameLogicObjectLookupView.h"
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 typedef int Int;
 typedef unsigned int UnsignedInt;
@@ -62,11 +61,6 @@ inline Color GameMakeColor(UnsignedByte red, UnsignedByte green, UnsignedByte bl
 
 void GameGetColorComponents(Color color, UnsignedByte *red, UnsignedByte *green, UnsignedByte *blue, UnsignedByte *alpha);
 
-struct ICoord2D
-{
-	Int x;
-	Int y;
-};
 
 class GameFont
 {
@@ -399,6 +393,8 @@ void InGameUI::postDraw()
 					break;
 				AsciiString templateName = mapIt->first;
 				for (SuperweaponList::iterator listIt = mapIt->second.begin(); listIt != mapIt->second.end(); ++listIt) {
+					if (marginExceeded)
+						break;
 					SuperweaponInfo *info = *listIt;
 					if (info && !info->m_hiddenByScript && !info->m_hiddenByScience) {
 						if (startY >= bottomMargin) {
