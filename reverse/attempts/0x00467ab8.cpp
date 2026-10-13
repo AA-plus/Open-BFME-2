@@ -1,4 +1,6 @@
 // ?rva00467AB8@Rva00467AB8@@QAEXPAVObject@@@Z
+// partial score=0.95 date=2026-10-13
+// ?rva00467AB8@Rva00467AB8@@QAEXPAVObject@@@Z
 // partial score=0.94 date=2026-10-13
 // ?rva00467AB8@Rva00467AB8@@QAEXPAVObject@@@Z
 // partial score=0.94 date=2026-10-09
@@ -97,8 +99,8 @@ private:
 };
 void Rva00467AB8::rva00467AB8(Object *rider)
 {
-    reinterpret_cast<OpenContain *>(this)->OpenContain::onRemoving(rider);
     rider->clearDisabled(DISABLED_HELD);
+    reinterpret_cast<OpenContain *>(this)->OpenContain::onRemoving(rider);
     rider->clearCondition(89);
     const Rva00467AB8Data *module=data();
     const AsciiString &bone=module->exitBone();
