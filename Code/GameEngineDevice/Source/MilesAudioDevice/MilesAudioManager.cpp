@@ -388,7 +388,7 @@ struct PlayingAudio {
     bool m_at44;                         // +0x44, tested with +0x46 by checkForNaturalSoundCompletion
     bool m_at45;                         // +0x45, set when a pushed track resumes
     bool m_at46;                         // +0x46
-    char at47;
+    bool m_at47;                         // +0x47, fade-up-from-shroud flag (processFade)
     bool m_at48;                         // +0x48, overrides +0x44/+0x46 in that test
     bool m_at49;                         // +0x49
     bool m_at4A;                         // +0x4A
@@ -1151,6 +1151,7 @@ public:
     void rva000603ED(void);
     void rva000544EB(void);
     void startPendingMusicTracks(void);
+    bool processFade(PlayingAudioRef &playing);
     void openDevice(void);
     void removeCurrentlyPlayingMusic(int viewType, int arg);
     void rva00057151(int viewType, int musicSystem, int resume);
@@ -5636,3 +5637,62 @@ void MilesAudioManager::recalculateMicrophone(void)
     }
 }
 
+// MilesAudioManager::processFade (WorldBuilder twin 0x7A0EB0, asserts at
+// MilesAudioManager.cpp lines 11651..11740; retail 0x00053448, 350 B): advances
+// the volume fade toward m_at3C and the fade-down / fade-up time in m_at30 by
+// this frame's step (m_at90, or g_00DBA4FC for a view-type-2 event on the
+// tactical view while the step is below 1); true while a fade is in progress.
+class Rva00050D86 { public: bool rva00050D86(unsigned char mask); };
+
+bool MilesAudioManager::processFade(PlayingAudioRef &playing)
+{
+    PlayingAudio *audio = playing.get();
+    if (((Rva00050D86 *)audio)->rva00050D86(4))
+        return false;
+    const float &frame = m_at90;
+    float elapsed = frame;
+    // A named condition keeps the step in its spill slot (retail stores it
+    // right after the load); the inline && chain keeps it in a register.
+    bool alt = m_at678 == 0 && frame < 1.0f && audio->m_event->m_viewType == 2;
+    if (alt)
+        elapsed = g_00DBA4FC;
+    bool fading = false;
+    if (audio->m_at40 > 0.0f) {
+        float remaining = audio->m_at40;
+        audio->m_at40 -= elapsed;
+        if (playing->m_at40 <= 0.0f) {
+            playing->m_at40 = 0.0f;
+            ((Rva00481FAFFloatSlot *)playing->m_event.operator->())->store(playing->m_at3C);
+        } else {
+            float volume = playing->m_event->m_at2C;
+            float delta = volume - playing->m_at3C;
+            if (remaining == 0.0f)
+                remaining = 1.0f;
+            ((Rva00481FAFFloatSlot *)playing->m_event.operator->())->store(volume - delta * (elapsed / remaining));
+        }
+        fading = true;
+    }
+    if (playing->m_at44 || playing->m_at46) {
+        playing->m_at30 += elapsed;
+        if (playing->m_at30 >= (float)m_audioSettings->m_at78) {
+            playing->m_at30 = (float)m_audioSettings->m_at78;
+            if (!playing->m_at44)
+                playing->m_at48 = true;
+            playing->m_at44 = false;
+            playing->m_at46 = false;
+            playing->m_at45 = false;
+            playing->m_at47 = false;
+        }
+        return true;
+    }
+    if (playing->m_at45 || playing->m_at47) {
+        playing->m_at30 -= elapsed;
+        if (playing->m_at30 <= 0.0f) {
+            playing->m_at30 = 0.0f;
+            playing->m_at45 = false;
+            playing->m_at47 = false;
+        }
+        return true;
+    }
+    return fading;
+}
