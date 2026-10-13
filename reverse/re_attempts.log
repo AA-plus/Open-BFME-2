@@ -53030,3 +53030,4 @@ __ehhandler$?objectAuraUpdate@@YAXPAVObject@@PAX@Z	0x78d708	10	solved	Repair sta
 ?rva003F3B28@Rva003F3AB5@@QAEXI@Z	0x003F3B28	39	landed	add_match verified Code/GameEngine/Source/Common/Rva003F3B28Resize.cpp 39B
 ?resize@?$vector@V?$vector@W4ScienceType@@V?$allocator@W4ScienceType@@@_STL@@@_STL@@V?$allocator@V?$vector@W4ScienceType@@V?$allocator@W4ScienceType@@@_STL@@@_STL@@@2@@_STL@@QAEXI@Z	0x0033A2E9	39	landed	add_match verified Code/GameEngine/Source/Common/Rva0033A2E9Resize.cpp 39B
 ?iniParseScienceVectorVector@@YAXPAVINI@@PAX1PBX@Z	0x0033A310	222	landed	add_match verified Code/GameEngine/Source/Common/Rva0033A310ScienceVectorVector.cpp 222B
+?Rva00559CE5@@YA?AVUnicodeString@@HH@Z	0x00559CE5	39	landed	add_match verified Code/GameEngine/Source/GameNetwork/Rva00559CE5Wrapper.cpp 39B
