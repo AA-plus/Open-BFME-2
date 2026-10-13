@@ -1,5 +1,5 @@
 // ?doGuardLogic@SlavedUpdate@@QAEXPAUCoord3D@@_N@Z
-// partial score=0.85 date=2026-10-13
+// partial score=0.97 date=2026-10-13
 // ?doGuardLogic@SlavedUpdate@@QAEXPAUCoord3D@@_N@Z
 // partial score=0.95 date=2026-10-07
 // cl: /DNDEBUG /MD /GX
@@ -71,7 +71,7 @@ struct Coord3D
 	void normalize();
 };
 
-template <class NUM> inline NUM sqr(NUM x)
+template <class NUM> inline NUM sqr(const NUM &x)
 {
 	return x * x;
 }
@@ -597,7 +597,9 @@ void SlavedUpdate::doGuardLogic(Coord3D *pinnedPosition, Bool idle)
 
 	if (me->testStatus(OBJECT_STATUS_SLAVE_RETURNING))
 	{
-		if (me->getDistanceSquared(pinnedPosition) <= sqr(data->m_guardWanderRange))
+		int limit = sqr(data->m_guardWanderRange);
+		Real dist = me->getDistanceSquared(pinnedPosition);
+		if (dist <= limit)
 		{
 			me->setStatus(OBJECT_STATUS_SLAVE_RETURNING, false);
 			me->clearModelConditionState(MODELCONDITION_SLAVE_RETURNING);
