@@ -18,6 +18,8 @@ extern "C" const void *const vtbl_00BCA08C[];  // folded, 5 classes; via ??_7Rva
 extern "C" const void *const vtbl_00BCC588[];  // folded, 3 classes; via ??_7W3DTankDraw@@6BDrawInterfaceA@@@
 #pragma comment(linker, "/alternatename:_vtbl_00BCC588=??_7W3DTankDraw@@6BDrawInterfaceA@@@")
 
+extern "C" const unsigned char __identifier("??_7W3DSailModelDraw@@6B@")[];
+
 class Thing;
 class ModuleData;
 
@@ -44,7 +46,7 @@ private:
 W3DSailModelDraw::W3DSailModelDraw(Thing *thing, const ModuleData *moduleData) :
 	W3DScriptedModelDraw(thing, moduleData)
 {
-	*(unsigned int *)this = 0x00BCDC60;
+	*(unsigned int *)this = (unsigned int)__identifier("??_7W3DSailModelDraw@@6B@");
 	*(unsigned int *)((char *)this + 0x0C) = ((unsigned int)vtbl_00BCC588);
 	*(unsigned int *)((char *)this + 0x10) = ((unsigned int)vtbl_00BCA08C);
 	m_2E8 = 0.0f;

@@ -14,6 +14,8 @@
 // xorps+movss). Class size 0x18 proven by the W3DBoatWakeModelDraw data
 // factory (news 0x18, sole caller at 0x65080). Row supersedes the ctor pin.
 
+extern "C" const unsigned char __identifier("??_7W3DBoatWakeModelDrawModuleData@@6B@")[];
+
 class MultiIniFieldParse;
 class INI;
 typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
@@ -68,7 +70,7 @@ private:
 inline W3DBoatWakeModelDrawModuleData::W3DBoatWakeModelDrawModuleData()
 {
 	unsigned int *modelName = &m_modelName;
-	*(unsigned int *)this = 0x00BCDE68;
+	*(unsigned int *)this = (unsigned int)__identifier("??_7W3DBoatWakeModelDrawModuleData@@6B@");
 	*modelName &= 0;
 	m_offsetX = 0.0f;
 	m_offsetY = 0.0f;
