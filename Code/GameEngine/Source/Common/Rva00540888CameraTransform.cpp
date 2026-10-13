@@ -30,10 +30,13 @@ struct Rva00540888Transform
 	float m_fov;	// +0x30
 };
 
-class Rva0054034A
+// The camera track: CameraAnimationTrack<T>::getFrameData is rowed for this frame type
+// in CameraAnimationTrackLookAtCamera.cpp (0x00540559).
+template <class T>
+class CameraAnimationTrack
 {
 public:
-	Rva0053FDE6 rva00540559(float time);
+	T getFrameData(float frameNum);
 };
 
 class Rva00540845
@@ -42,12 +45,12 @@ public:
 	void rva00540888(const float &time, Rva00540888Transform *out);
 private:
 	char m_pad00[0x24];
-	Rva0054034A m_track;	// +0x24
+	CameraAnimationTrack<Rva0053FDE6> m_track;	// +0x24
 };
 
 void Rva00540845::rva00540888(const float &time, Rva00540888Transform *out)
 {
-	Rva0053FDE6 frame = m_track.rva00540559(time);
+	Rva0053FDE6 frame = m_track.getFrameData(time);
 	const Quaternion &q = frame.m_orientation;
 	Matrix3D &m = out->m_transform;
 	Build_Matrix3D(q, m);
