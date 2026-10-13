@@ -270,7 +270,9 @@ public:
 	Int getMoveTarget() const { return m_moveTarget; }
 
 	unsigned char m_pad00[0xac];
-	unsigned char m_padAC[0xb8 - 0xac];
+	unsigned char m_padAC[4];					// +0xAC
+	Int m_referenceCount;					// +0xB0
+	unsigned char m_padB4[4];
 	Int m_moveTarget;					// +0xB8
 	unsigned char m_padBC[0xc4 - 0xbc];
 	Bool m_disbanded;					// +0xC4, set by DisbandArmyMember
@@ -278,6 +280,12 @@ public:
 
 struct ArmySummaryEntryRef
 {
+	ArmySummaryEntryRef(const ArmySummaryEntryRef &that) : m_entry(that.m_entry)
+	{
+		if (m_entry)
+			++m_entry->m_referenceCount;
+	}
+
 	~ArmySummaryEntryRef()
 	{
 		if (m_entry)
@@ -316,6 +324,7 @@ struct LivingWorldArmy
 	Bool m_field74;						// +0x74, set: left alone by EnforceArmyRegionOwnership
 	unsigned char m_pad75[0x78 - 0x75];
 	ArmySummary *m_summary;					// +0x78
+	__forceinline ArmySummary *getSummary() { return m_summary; }
  // Native spawnCity allocates98B; opaque tail preserves the existing prefix.
  unsigned char m_pad7C[0x98-0x7C];
 };
@@ -695,6 +704,7 @@ void logicMessageDispatcher(GameMessage*,void*);
 	void LetAIResolveRegionAwardDispute(Int regionID, const _STL::vector<Int> &players, UnsignedInt flags);
 	Rva002B8660Army *UseGenericSpawnArmyForPlayer(Int a, Rva002B8660Player *player);
 	Bool CanMoveArmyMember_internal(LivingWorldArmy *army, ArmySummaryEntry *entry, LivingWorldArmy *target, Bool checkRoom);
+	Bool CanMoveArmyMembers_internal(LivingWorldArmy *army, const _STL::vector<Int> &entryIDs, LivingWorldArmy *target, Int *commandPoints);
 	Bool canBuildUnit(LivingWorldBuildingNuggetSpawnArmy *nugget, Int token);
 	Int rva002B2C12(LivingWorldArmy *army, LivingWorldArmy *target);
 	void GetNumUpgradeableTroopsInRegionForPlayer(Rva003F287F *region, Int player, Int *countA, Int *countB);
@@ -1056,6 +1066,7 @@ public:
 class Rva0037DCA5
 {
 public:
+	Int rva0037DCA5();					// 0x0037DCA5
 	void *rva0037DC52();					// 0x0037DC52, template lookup
 };
 class Rva003193EC
@@ -1343,6 +1354,29 @@ Bool LivingWorldLogic::CanMoveArmyMember_internal(LivingWorldArmy *army, ArmySum
 	}
 	if (checkRoom && !((Rva003193EC *)target)->rva00319413((Rva0037DCA5 *)entry))
 		return false;
+	return true;
+}
+
+// ?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z
+// Retail 0x002B6BCF (208B, RET16; WB D90320 asserts 7906/7909). Gates a whole
+// entry-id list: each entry must both resolve (GetEntry) and pass the single
+// entry gate; the running command-point total accumulates entry +0xB0 through
+// 0x0037DCA5. The const-reference borrow defers the holder copy so the copy
+// ctor's counter increment lands on the same live holder retail uses.
+__forceinline const ArmySummaryEntryRef &BorrowEntryHolder(const ArmySummaryEntryRef &entry) { return entry; }
+Bool LivingWorldLogic::CanMoveArmyMembers_internal(LivingWorldArmy *army, const _STL::vector<Int> &entryIDs, LivingWorldArmy *target, Int *commandPoints)
+{
+	*commandPoints = 0;
+	Int count = entryIDs.size();
+	for (Int i = 0; i < count; ++i)
+	{
+		ArmySummaryEntryRef entry(BorrowEntryHolder(army->getSummary()->GetEntry(entryIDs[i])));
+		if (entry.m_entry == 0)
+			continue;
+		if (!CanMoveArmyMember_internal(army, entry.m_entry, target, false))
+			return false;
+		*commandPoints += ((Rva0037DCA5 *)entry.m_entry)->rva0037DCA5();
+	}
 	return true;
 }
 
