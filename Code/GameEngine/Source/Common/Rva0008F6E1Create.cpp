@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /DNDEBUG /MD /EHsc
 //
 // ?Rva0008F6E1Create@@YGPAVRva000A0891@@PAX@Z @0x0008F6E1 58B: factory creating Rva000A0891.
