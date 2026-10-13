@@ -34,11 +34,20 @@ struct BfmeResetAnyRef
 	TextureBaseClass *pointer;
 };
 
+// The pin proves BfmeResetResource::Release_Ref is the rowed
+// TextureBaseClass::Release_Ref body (0x0061ED10); call it by the linked
+// spelling so this TU's releasing dtor matches the kept copy.
+class BfmeResetResource
+{
+public:
+	void Release_Ref();
+};
+
 struct BfmeResetShaderRef
 {
 	TextureBaseClass *pointer;
 	__declspec(dllimport) __forceinline BfmeResetShaderRef() : pointer(0) {}
-	~BfmeResetShaderRef() { if (pointer) pointer->Release_Ref(); }
+	~BfmeResetShaderRef() { if (pointer) ((BfmeResetResource *)pointer)->Release_Ref(); }
 	BfmeResetShaderRef &operator=(const BfmeResetAnyRef &rhs);
 };
 
