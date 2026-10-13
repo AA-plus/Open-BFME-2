@@ -65,6 +65,7 @@ class WW3D
 {
 public:
     static bool Render(const LayerClass &layer);
+    static bool Render(const LayerListClass &layer_list);
     friend bool Rva00118660Call(void *owner, void *camera);
     static bool IsInitted;
 };
@@ -98,4 +99,18 @@ bool WW3D::Render(const LayerClass &layer)
             DX8Wrapper::Clear(layer.Clear, layer.ClearZ, layer.ClearZ, layer.ClearColor, 0.0f, 1.0f, 0);
     }
     return Rva00118660Call(layer.Scene, layer.Camera);
+}
+
+bool WW3D::Render(const LayerListClass &layer_list)
+{
+    if (!IsInitted)
+        return true;
+    LayerClass *layer = layer_list.Last();
+    while (layer->Is_Valid()) {
+        bool result = Render(*layer);
+        if (result != true)
+            return result;
+        layer = layer->Prev();
+    }
+    return true;
 }
