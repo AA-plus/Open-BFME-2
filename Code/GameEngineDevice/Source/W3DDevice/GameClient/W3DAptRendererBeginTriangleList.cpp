@@ -2,9 +2,13 @@
 // W3DAptRenderer::BeginTriangleList, retail 0x00111224 (238 bytes). Identity:
 // the BFME2 WorldBuilder build's BeginTriangleList (0x979290; asserts 125..144)
 // has the same vertex-budget/flush/lock sequence. 0x00110CFE (the batch flush,
-// 705 bytes, banked separately) is called through its address-derived pin.
+// 705 bytes) follows below. Codegen: a compiler barrier after the mode-dependent
+// matrix[2][3] store (the stencil-less depth bias) reproduces retail's schedule of
+// that store against the shader writes; found by a one-barrier-per-statement sweep.
 #include "matrix4.h"
 #include "shader.h"
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 struct BFME2TextureResource;
 struct BFME2TextureRef { BFME2TextureResource* Ptr; };
 void BFME2Set_Texture(unsigned,const BFME2TextureRef&);
@@ -48,4 +52,67 @@ void* __fastcall W3DAptRenderer::BeginTriangleList(int triangles) {
  end=(char*)memory+vertices*32;
  pending+=vertices;
  return memory;
+}
+
+void W3DAptRenderer::rva00110CFE() {
+ if(pending>0) {
+  DX8Wrapper::bfmeRva00120650(used,pending/3);
+  used+=pending; pending=0;
+ }
+ if(stateDirty) {
+  ShaderClass shader;
+  shader.Set_Depth_Mask(ShaderClass::DEPTH_WRITE_DISABLE);
+  shader.Set_Depth_Compare(ShaderClass::PASS_ALWAYS);
+  if(mode==2) {
+   shader.Set_Src_Blend_Func(ShaderClass::SRCBLEND_ZERO);
+   shader.Set_Dst_Blend_Func(ShaderClass::DSTBLEND_ONE);
+  } else {
+   shader.Set_Src_Blend_Func(ShaderClass::SRCBLEND_SRC_ALPHA);
+   shader.Set_Dst_Blend_Func(ShaderClass::DSTBLEND_ONE_MINUS_SRC_ALPHA);
+  }
+  shader.Set_Fog_Func(ShaderClass::FOG_DISABLE);
+  shader.Set_Primary_Gradient((ShaderClass::PriGradientType)6);
+  if(texture.Ptr) { _ReadWriteBarrier(); shader.Set_Texturing(ShaderClass::TEXTURING_ENABLE); }
+  else { shader.Set_Texturing(ShaderClass::TEXTURING_DISABLE); }
+  shader.Set_Cull_Mode(ShaderClass::CULL_MODE_DISABLE);
+  if(DX8Wrapper::Has_Stencil()) {
+   if(mode==0) {
+    shader.Set_Alpha_Test(ShaderClass::ALPHATEST_DISABLE);
+    DX8Wrapper::Set_DX8_Render_State(0x34,0);
+   } else {
+    DX8Wrapper::Set_DX8_Render_State(0x34,1);
+    DX8Wrapper::Set_DX8_Render_State(0x39,stencilRef);
+    DX8Wrapper::Set_DX8_Render_State(0x3a,-1);
+    DX8Wrapper::Set_DX8_Render_State(0x3b,-1);
+    DX8Wrapper::Set_DX8_Render_State(0x36,1);
+    DX8Wrapper::Set_DX8_Render_State(0x35,1);
+    if(mode==2) {
+     shader.Set_Alpha_Test(ShaderClass::ALPHATEST_ENABLE);
+     DX8Wrapper::Set_DX8_Render_State(0x38,8);
+     DX8Wrapper::Set_DX8_Render_State(0x37,3);
+    } else if(mode==1) {
+     shader.Set_Alpha_Test(ShaderClass::ALPHATEST_DISABLE);
+     DX8Wrapper::Set_DX8_Render_State(0x38,3);
+     DX8Wrapper::Set_DX8_Render_State(0x37,1);
+    }
+   }
+   shader.Set_Alpha_Test(ShaderClass::ALPHATEST_DISABLE);
+  } else {
+   float z=.5f;
+   if(mode==0) shader.Set_Alpha_Test(ShaderClass::ALPHATEST_DISABLE);
+   else if(mode==2) {
+    shader.Set_Alpha_Test(ShaderClass::ALPHATEST_ENABLE); shader.Set_Depth_Compare(ShaderClass::PASS_ALWAYS); shader.Set_Depth_Mask(ShaderClass::DEPTH_WRITE_ENABLE); z=.9f;
+   } else if(mode==1) { shader.Set_Alpha_Test(ShaderClass::ALPHATEST_DISABLE); shader.Set_Depth_Compare(ShaderClass::PASS_LEQUAL); shader.Set_Depth_Mask(ShaderClass::DEPTH_WRITE_DISABLE); }
+   matrix[2][3]=z;
+   _ReadWriteBarrier();
+   shader.Set_Alpha_Test(ShaderClass::ALPHATEST_DISABLE);
+   BFME2World=matrix.Transpose();
+   DX8Wrapper::render_state_changed=(DX8Wrapper::render_state_changed&0xfffbffff)|1;
+  }
+  DX8Wrapper::Set_Shader(shader);
+  stateDirty=false;
+ }
+ if(textureDirty) {
+  BFME2Set_Texture(0,texture); textureDirty=false;
+ }
 }
