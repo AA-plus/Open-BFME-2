@@ -124,3 +124,15 @@ void rva00166110Use(const BfmeRva00166110 &a, const BfmeRva00166110 &b)
     BfmeRva00166110 tmp(a);
     new (&tmp) BfmeRva00166110(b);
 }
+
+// --- 2026-10-13 w6-mo1 scratch sweep (variant.py vs retail 0x166110, 175B) ---
+// A=bank verbatim: 175B/33 diffs anchor+0x14 (lea ecx,[edi+0x14]/eax,[esi+0x14],
+// edx=[eax-0x10]); retail anchors +0x1C (lea edx,[eax-0x18]) walking DOWN.
+// L=body-form decl order: 33 (init-vs-body irrelevant). M=byte-before-t2: 35.
+// B=t2-first body: 61. K=Tail8{t2,by}@0x1C struct: holds 175B but 61, anchor
+// still +0x14 (last-struct rule refuted). C=reverse / D=flatten-mid /
+// E=hi-split-2xPod8 / G=tail8@0x18 all collapse to 146B (Pod16+Pod8+int+byte
+// decomposition is load-bearing for the 175B shape). N=indexed for-loop: 207B
+// (imul). Conclusion stands: anchor is not steered by copy order/form/
+// grouping within the 175B shape; needs a new lever (loop-pointer setup?).
+// Scratch TUs: build/scratch166110{a,b,c,d,e,g,k,l,m,n}.cpp (untracked).

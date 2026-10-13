@@ -1354,3 +1354,14 @@ void FXShaderParameterSourceNamespaceSAS::SourceNamespace_Skeleton::ResolveBindi
 		binder->PopDynamicSetStack();
 	}
 }
+
+// --- 2026-10-13 w6-mo1 in-owner-TU confirmation ---
+// Inserting the bank body into fxshadernamespacesas.cpp (owner TU) builds
+// clean (68/68 existing rows intact) and reproduces 156/156 bytes with 11
+// diff lines, ALL xmm numbering (retail Y->xmm2 Z->xmm3 X->xmm1 scale->xmm0;
+// ours Y->xmm1 Z->xmm3 X->xmm0 scale->xmm2); first diff +0x18 (0x90 vs 0x88).
+// Control flow, frame, call, stores all exact. The +1 shift stands with zero
+// live floats before the first load; named-cond/volatile/fence/PHI/cmp-form
+// variants all pre-tried. Needs a new allocation lever (a real second live
+// float in retail's source?). TU edit reverted; body == bank above.
+// t=35 model=muse-spark-1.3-contributor.

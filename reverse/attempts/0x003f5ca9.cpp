@@ -337,3 +337,62 @@ void LivingWorldBattle::BattlePlayer::DoXfer(Xfer*xfer)
   }
  }
 }
+// ?DoXfer@BattlePlayer@LivingWorldBattle@@QAEXPAVXfer@@@Z @0x003F5CA9 276B
+// BASELINE (in-TU, builds clean, 11/11 existing rows intact): 274/276B.
+// Wall = pure register role: retail this->ESI (+destructive `add esi,0x10`
+// merging this into &vec at v4 entry); ours this->EBX (+`push esi` lazy save
+// +`lea esi,[ebx+0x10]`). All calls resolve (find/0x2B8D06/XferPlayerID/
+// 0x3F3FFE/0x3F5729/erase/0x3F5C4F); frame/slots/cmp-forms/loop/idivs match.
+// Scratch sweep (build/scratch3f5ca9*.cpp, variant.py): T1 full vec-local
+// flips mapping to this=ESI (v4 add EXACT) but costs vec->EBX+home (+9B,
+// 285B); T2 named-elem/T7 reference identical to T1; E2/E3 short-lived vec,
+// T8 n-copy, T9 int-count, T10 self/xf refs, N1 i++/off= all stay in the
+// 274B/this=EBX bucket. So the flip needs a loop-live vec, but any C++ vec
+// local costs a home/reg. Missing lever: kill `this` at v4 without a local
+// (all post-v4 uses already vec-expressible). 11 data points; t=100.
+// Requires decls: ModuleData fwd, XferLivingWorldPlayerID, find+rva002B8D06
+// on Rva002BA8F1Logic, Rva003F5A06::rva003F5C4F, Rva003F3FFE::rva003F3FFE,
+// BfmeAssignRecord104-erase, Rva003F5CA9Elem slot-3 view, DoXfer decl.
+// Home: LivingWorldBattle.cpp (0x3F5CA9 between 0x3F5729-end and 0x3F5DBD).
+// LivingWorldBattle::BattlePlayer::DoXfer, retail 0x003F5CA9, 276 bytes.
+// WB 1049300 names it. Version (1,4) gates the results transfer (>=2, rowed
+// 0x003F3FFE), the legacy ArmySummary vector transfer (==3, rowed 0x003F5729
+// above) and the per-record transfer loop (>=4, erase rowed 0x003B908A,
+// resize rowed 0x003F5C4F, element slot-3 transfer on the 104-byte records).
+void LivingWorldBattle::BattlePlayer::DoXfer(Xfer *xfer)
+{
+	XferVersion version;
+	version.m_version = 1;
+	version.m_currentVersion = 4;
+	xfer->xferVersion(version);
+	int playerID;
+	if (xfer->isLoading()) {
+		XferLivingWorldPlayerID(xfer, &playerID);
+		m_player = (Rva003F4E07Player *)((Rva002BA8F1Logic *)TheLivingWorldLogic)->find(playerID, 0);
+	} else {
+		playerID = m_player->id;
+		XferLivingWorldPlayerID(xfer, &playerID);
+	}
+	((Rva002BA8F1Logic *)TheLivingWorldLogic)->rva002B8D06(xfer, (_STL::vector<const ModuleData *> *)&m_armies);
+	if (version.m_currentVersion >= 2)
+		((Rva003F3FFE *)counters)->rva003F3FFE(*xfer);
+	if (version.m_currentVersion == 3)
+		Rva003F5729Xfer(xfer, (std::vector<ArmySummary> *)&m_records);
+	else if (version.m_currentVersion >= 4) {
+		UnsignedInt count = (UnsignedInt)m_records.size();
+		xfer->xferUnsignedInt(count);
+		if (xfer->isLoading()) {
+			((_STL::vector<BfmeAssignRecord104> *)&m_records)->erase((BfmeAssignRecord104 *)m_records.begin(), (BfmeAssignRecord104 *)m_records.end());
+			((Rva003F5A06 *)&m_records)->rva003F5C4F(count);
+		}
+		int i = 0;
+		if (m_records.size() > 0) {
+			int off = 0;
+			do {
+				((Rva003F5CA9Elem *)((char *)m_records.begin() + off))->v3(xfer);
+				++i;
+				off += sizeof(BattleArmyRecord);
+			} while (i < m_records.size());
+		}
+	}
+}
