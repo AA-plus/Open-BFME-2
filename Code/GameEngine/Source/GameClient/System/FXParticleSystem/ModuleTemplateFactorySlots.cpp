@@ -9,6 +9,14 @@
 
 class Rva003AD6DFTemplate;
 
+class Rva003ACD71
+{
+public:
+	Rva003ACD71(void *a, void *b);	// rowed 0x003ACD71
+private:
+	char m_unmodelled[0x1C];
+};
+
 class Rva003ACD71Module
 {
 public:
@@ -25,7 +33,7 @@ public:
 
 Rva003ACD71Module *Rva003AD6DFTemplate::rva003AD6DF(void *owner)
 {
-	return new Rva003ACD71Module(owner, this);
+	return (Rva003ACD71Module *)new Rva003ACD71(owner, this);
 }
 
 class Rva003AD71BTemplate;
