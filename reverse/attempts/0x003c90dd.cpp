@@ -1,15 +1,11 @@
 // ?doTransferTeamToPlayer@ScriptActions@@IAEXABVAsciiString@@0@Z
-// partial score=0.9877 date=2026-10-13
-// cl: /I. /G7 /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE
-// ScriptActions members recovered from WorldBuilder leads
-// (reverse/wb_name_leads.csv) and Zero Hour's ScriptActions.cpp; retail
-// supplies the bytes. Only declared here: members other units row
-// (doFlashSpellStoreButton, doPlayerForceEmotion,
-// doSetUnitReferenceToHomeBaseOfPlayer, doCreateObject, 0x003C0E87), members
-// recovered in other units (createUnitOnTeamAt,
-// doSetCounterToThreatFinderThreat, doCreateUnitRevivalEntry and the two
-// sequential-script starters) and members
-// not yet matched (doTransferTeamToPlayer, 0x003C4751).
+// partial score=0.98 date=2026-10-13
+// ?doTransferTeamToPlayer@ScriptActions@@IAEXABVAsciiString@@0@Z
+// partial score=0.97 date=2026-10-06
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// WB ScriptActions::doFlashSpellStoreButton; target is the guarded index-0
+// forwarding sibling of matched index-1 and index-2 wrappers at 0x003BD444
+// and 0x003BD459.
 #include "ascii_string.h"
 #include "Common/Snapshot.h"
 #include "Common/BfmeAudioEventPrefix136.h"
@@ -23,8 +19,9 @@ class Parameter;
 
 class ScriptActions
 {
-protected:
+public:
 	void doFlashSpellStoreButton(int seconds);
+protected:
 	void doPlaySoundEffect(const AsciiString &sound);
 	void doPlaySoundEffectAt(const AsciiString &sound, const AsciiString &waypoint);
 	void doSoundPlayFromNamed(const AsciiString &sound, const AsciiString &unitName);
@@ -54,22 +51,25 @@ protected:
 	void doTeamMoveToSkirmishApproachPath(const AsciiString &teamName,
 		const AsciiString &waypointPathLabel);
 	void doTransferTeamToPlayer(const AsciiString &teamName, const AsciiString &playerName);
-	void doTeamStartSequentialScript(const AsciiString &teamName,
-		const AsciiString &scriptName, int loopVal);
-	void rva003C20CA(const AsciiString &reference, Parameter *team, bool byName);
-	void rva003C606C(Parameter *playerParam, bool flag);
-	void rva003C0D6A(const AsciiString &unitName, int which, bool on);
-	void rva003C0D90(const AsciiString &teamName, int which, bool on);
-	void rva003C0E87(const AsciiString &unitName, int value);
-	void doUnitStartSequentialScript(const AsciiString &unitName,
-		const AsciiString &scriptName, int loopVal);
-	void rva003C49AE(Parameter *srcTeamParam, Parameter *dstTeamParam);
-	void rva003C4751(Parameter *teamParam);
 	void doSetUnitReferenceToHomeBaseOfPlayer(const AsciiString &playerName,
 		const AsciiString &unitReference, bool flag);
-	void doEnablePlanningMode(unsigned char enable);
 };
 
+class Rva002D381D
+{
+public:
+	void rva002D381D(int seconds);
+};
+
+extern class Rva002D3627Host *TheRva002D3627Host;
+
+#define TheSpellStoreTimer (*(Rva002D381D **)&TheRva002D3627Host)
+
+void ScriptActions::doFlashSpellStoreButton(int seconds)
+{
+	if (seconds >= 0)
+		TheSpellStoreTimer->rva002D381D(seconds);
+}
 
 // WB ScriptActions::doPlaySoundEffect @0x003BD5E0 (153B): look up the named
 // event, create it only when found, assign the local player's index, and post it.
@@ -138,22 +138,10 @@ public:
 	unsigned char rva002AA00C(class ThingTemplate *tmpl, int arg);
 	bool rva00339() const { return ((const unsigned char *)this)[0x339] != 0; }
 	int getPlayerType() const { return m_playerType; }
-	void rva002ABA9B();
-	const AsciiString &getSide() const { return *(const AsciiString *)((const unsigned char *)this + 0x58); }
-	int getPlayerIndex() const { return m_playerIndex; }
 	int getMpStartIndex() const { return *(const int *)((const unsigned char *)this + 0x2E0); }
 	void setUnitsShouldIdleOrResume(bool idle);
 };
 
-// 0x002ACEDF is rowed as Rva002ABFA0::rva002ACEDF (35B Player short-list
-// append from Rva002ABFA0Remove.cpp); this TU calls it through a TU-local
-// view so it resolves to the rowed body instead of the unrowed Player
-// spelling (U on ScriptActions' unit).
-class Rva002ABFA0
-{
-public:
-	void rva002ACEDF(void *p);
-};
 class PlayerList
 {
 public:
@@ -164,7 +152,6 @@ public:
 	Player *getNthPlayer(int i);
 	Player *getEachPlayerFromMask(int &mask);
 	Player *getPlayerFromMask(int mask);
-	int getPlayersWithRelationship(int srcPlayerIndex, unsigned int allowedRelationships, bool flag);
 };
 extern PlayerList *ThePlayerList;
 
@@ -235,6 +222,11 @@ void ScriptActions::doSpeechPlay(const AsciiString &speechName, bool allowOverla
 	reinterpret_cast<ScriptActionsAudioView *>(TheAudio)->addAudioEvent(&speech);
 }
 
+// WB ScriptActions::doPlayerForceEmotion @0x003C37C0 (206B), matched to
+// WorldBuilder's 409B body. The WB body bounds the emotion to [0, 12), gets a
+// player mask from Parameter's +0x10 string, and walks each selected player's
+// team prototypes, team instances, and team members. Retail uses the rowed
+// mask, team-member iterator, and Object emotion forwarders.
 class Parameter
 {
 public:
@@ -256,12 +248,7 @@ public:
 	class Object *getUnitNamed(Parameter *unit);
 	Player *getCurrentPlayer();
 	Player *getSkirmishEnemyPlayer();
-	class Script *rva00357130(const AsciiString &scriptName, AsciiString *objectName);
-	void appendSequentialScript(const class SequentialScript *seqScript);
 	void rva00208A09(const AsciiString &reference, AsciiString name);
-	void rva00208BCD(const AsciiString &reference, AsciiString name);
-	void rva00208B2C(const AsciiString &reference, class Team *team);
-	class ObjectTypes *getObjectTypes(const AsciiString &objectTypeList);
 	class Team *getTeamNamed(AsciiString name, bool b);
 	bool didUnitExist(const AsciiString &name);
 	void rva00357960(const AsciiString &name, class Object *obj);
@@ -269,20 +256,17 @@ protected:
 	friend class ScriptActions;
 	struct ScriptCounter *bfmeCounter(AsciiString name);
 };
-extern ScriptEngine *TheScriptEngine;
+extern ScriptEngine *g_Va009FE16C;
 
 enum ObjectID { INVALID_OBJECT_ID = 0 };
 
-#include "Code/Libraries/Include/Lib/Coord3D.h"
-
-// BFME 2 copies a position field by field here (the fork's view gave Coord3D
-// a member-wise copy constructor; the canonical header is data-only).
-static __forceinline void copyCoord3D(Coord3D &to, const Coord3D *from)
+struct Coord3D
 {
-	to.x = from->x;
-	to.y = from->y;
-	to.z = from->z;
-}
+	Coord3D() {}
+	Coord3D(const Coord3D &that) : x(that.x), y(that.y), z(that.z) {}
+
+	float x, y, z;
+};
 
 class Drawable;
 
@@ -305,16 +289,7 @@ public:
 	ObjectID m_objectID;
 	unsigned char m_pad78[0x88 - 0x78];
 	AsciiString m_name;
-	unsigned char m_pad8C[0x80];
-	class ModelConditionFlags {
-	public:
-		unsigned int test(unsigned int bit) const { return m_words[bit >> 5] & (1U << (bit & 0x1f)); }
-		void set(unsigned int bit) { m_words[bit >> 5] |= 1U << (bit & 0x1f); }
-		void clear(unsigned int bit) { m_words[bit >> 5] &= ~(1U << (bit & 0x1f)); }
-	private:
-		unsigned int m_words[19];
-	} m_modelConditionFlags;
-	unsigned char m_pad158[0x250 - 0x158];
+	unsigned char m_pad8C[0x250 - 0x8C];
 	class ScriptActionsContainView *m_contain;
 	unsigned char m_pad254[0x438 - 0x254];
 	unsigned char m_privateStatus;
@@ -327,30 +302,11 @@ public:
 	ScriptActionsContainView *getContain() const { return m_contain; }
 	void rva0028FC18();
 	void *rva0028BCF4() const;
-	void *rva0028C197() const;
 	void updateUpgradeModules();
-	void doSpecialPowerAtObject(const class SpecialPowerTemplate *power, Object *target, unsigned flags, bool arg);
 	int getIndicatorColor() const;
 	int getNightIndicatorColor() const;
 	void rva0028BAC0();
 	void rva0028DCC4();
-	void rva0028AE6D();
-	__forceinline void setModelConditionState(unsigned int bit) {
-		if (m_modelConditionFlags.test(bit) == 0) {
-			m_modelConditionFlags.set(bit);
-			rva0028AE6D();
-		}
-	}
-	__forceinline void clearModelConditionState(unsigned int bit) {
-		if (m_modelConditionFlags.test(bit) != 0) {
-			m_modelConditionFlags.clear(bit);
-			rva0028AE6D();
-		}
-	}
-protected:
-	friend class ScriptActions;
-	class Module *findModule(enum NameKeyType key) const;
-public:
 	Object *getContainedBy() const { return *(Object *const *)((const unsigned char *)this + 0x274); }
 	class AIUpdateInterface *getAIUpdateInterface() const { return *(AIUpdateInterface *const *)((const unsigned char *)this + 0x258); }
 };
@@ -358,7 +314,7 @@ public:
 void ScriptActions::doSoundPlayFromNamed(const AsciiString &sound,
 	const AsciiString &unitName)
 {
-	Object *unit = TheScriptEngine->getUnitNamed(unitName);
+	Object *unit = g_Va009FE16C->getUnitNamed(unitName);
 	if (!unit)
 		return;
 	AudioEventInfoRef info = reinterpret_cast<ScriptActionsAudioView *>(TheAudio)->findAudioEvent(sound);
@@ -407,9 +363,9 @@ private:
 	unsigned char m_targetAbiState[20];
 
 public:
-	void advance();	// rowed 0x00263526 (virtual-inheritance GetNextFunc)
 	bool done() const { return m_cur == 0; }
 	Object *cur() const { return m_cur; }
+	void advance();
 };
 
 struct PlayerTeamNode
@@ -437,11 +393,6 @@ public:
 	class Object *rva0039E8EB();
 	void setControllingPlayer(Player *newController);
 	int rva0039DD12(int (*func)(class Object *, void *), void *userData) const;
-	bool hasAnyObjects(bool ignoreBuildings);
-	class Object *rva0039E968(int kindOf);
-	bool rva0039E8FF(int val);
-	Player *getControllingPlayer() const;
-	void rva003A1AA3(const class ThingTemplate *tmpl, class ObjectTypes *types, int count, float radius);
 };
 
 class TeamPrototype
@@ -458,6 +409,137 @@ private:
 	Team *m_dlinkhead_TeamInstanceList;
 };
 
+void ScriptActions::doPlayerForceEmotion(Parameter *player,
+	EmotionType emotion, float duration)
+{
+	if (emotion < 0 || emotion >= 12)
+		return;
+
+	int mask = g_Va009FE16C->rva00357475(player->getString(), 0);
+	while (mask != 0) {
+		Player *thePlayer = ThePlayerList->getEachPlayerFromMask(mask);
+		if (!thePlayer)
+			continue;
+
+		for (PlayerTeamNode *it = thePlayer->m_playerTeamPrototypes->m_next;
+			it != thePlayer->m_playerTeamPrototypes; it = it->m_next) {
+			TeamPrototype *prototype = it->m_value;
+			for (DLINK_ITERATOR<Team> teams = prototype->iterate_TeamInstanceList();
+				!teams.done(); teams.advance()) {
+				Team *team = teams.cur();
+				if (!team)
+					continue;
+
+				DLINK_ITERATOR<Object> members = team->iterate_TeamMemberList();
+				for (; !members.done();
+					((DLINK_ITERATOR<Object> *)&members)->advance()) {
+					Object *obj = members.cur();
+					if (!obj)
+						continue;
+					obj->rva0028ECA8(emotion, duration, 0);
+				}
+			}
+		}
+	}
+}
+
+// WB ScriptActions::doSetUnitReferenceToHomeBaseOfPlayer @0x003BCE69 (146B):
+// over every player the name selects, take each player's candidate object
+// and keep the one the unnamed comparator 0x002AA497 ranks first, then bind
+// the unit reference to it.
+int __cdecl rva002AA497(int a, int b);
+
+void ScriptActions::doSetUnitReferenceToHomeBaseOfPlayer(const AsciiString &playerName,
+	const AsciiString &unitReference, bool flag)
+{
+	int mask = g_Va009FE16C->rva00357475(playerName, 0);
+	Object *best = 0;
+	int bestKey = 0;
+	while (mask) {
+		Player *player = ThePlayerList->getEachPlayerFromMask(mask);
+		if (!player)
+			continue;
+		int key;
+		Object *candidate = (Object *)player->rva002ABCF0(flag, &key);
+		if (!key)
+			continue;
+		if (!bestKey || rva002AA497(bestKey, key) < 0) {
+			bestKey = key;
+			best = candidate;
+		}
+	}
+	if (best) {
+		g_Va009FE16C->rva00208968(unitReference, best);
+		g_Va009FE16C->addObjectToCache(best, unitReference);
+	}
+}
+
+// WB ScriptActions::doSetCounterToThreatFinderThreat @0x003C5E10 (267B):
+// set the named counter to the named threat finder's threat level for the
+// player's enemies or allies, or log a script warning if no such finder.
+struct ScriptCounter
+{
+	int value;
+};
+
+struct ThreatInfo
+{
+	ThreatInfo();
+	float m_threat;
+	unsigned char m_rest[0x40];
+};
+
+class ThreatFinder
+{
+public:
+	ThreatInfo getThreatForPlayer(Player *player, int relation, Player *other);
+};
+
+// ThreatFinderManager's by-name lookup is ICF-folded with ArmorStore's
+// (0x0041F474): both are a NameKey hash_map find.
+class ArmorStore
+{
+public:
+	const class ArmorTemplate *rva0041F474(const AsciiString &name) const;
+};
+class ThreatFinderManager;
+extern ThreatFinderManager *TheThreatFinderManager;
+
+void ScriptActions::doSetCounterToThreatFinderThreat(const AsciiString &counterName,
+	const AsciiString &threatFinderName, const AsciiString &relation,
+	const AsciiString &playerName)
+{
+	ScriptCounter *counter = g_Va009FE16C->bfmeCounter(counterName);
+	if (!counter)
+		return;
+	int mask = g_Va009FE16C->rva00357475(playerName, 0);
+	if (!mask)
+		return;
+	Player *player = ThePlayerList->getPlayerFromMask(mask);
+	if (!player)
+		return;
+	int relationType;
+	if (relation.compare("Enemies") == 0)
+		relationType = 0;
+	else if (relation.compare("Allies") == 0)
+		relationType = 1;
+	else
+		return;
+	ThreatFinder *finder = (ThreatFinder *)((const ArmorStore *)TheThreatFinderManager)->rva0041F474(threatFinderName);
+	if (finder) {
+		counter->value = (int)finder->getThreatForPlayer(player, relationType, 0).m_threat;
+	} else {
+		AsciiString msg = "WARNING - Threat Finder not found during script execution: ";
+		msg.concat(threatFinderName);
+		msg.concat(".");
+		g_Va009FE16C->AppendDebugMessage(msg, false);
+	}
+}
+
+// WB ScriptActions::doCreateUnitRevivalEntry @0x003C62F4 (323B): build a
+// revival record for the named template, take its experience values from
+// the requested level (or the template default with level -1 or no such
+// level) and hand it to the player's revival tracker (Player +0x738).
 class ThingTemplate
 {
 public:
@@ -473,6 +555,71 @@ public:
 };
 extern ThingFactory *TheThingFactory;
 
+struct ExperienceLevelHandle
+{
+	ExperienceLevelHandle() {}
+	ExperienceLevelHandle(const ExperienceLevelHandle &that) : m_list(that.m_list), m_iter(that.m_iter) {}
+
+	void *m_list;
+	void *m_iter;
+};
+
+class ExperienceLevelStore
+{
+public:
+	ExperienceLevelHandle rva00288E21(const ThingTemplate *tmpl, int level) const;
+	int GetRequiredExperience(ExperienceLevelHandle level) const;
+	int GetLevelRank(ExperienceLevelHandle level) const;
+};
+extern ExperienceLevelStore *TheExperienceLevelStore;
+
+struct Rva002E2D10Record
+{
+	Rva002E2D10Record(const ThingTemplate *tmpl);
+	~Rva002E2D10Record();
+
+	unsigned char m_pad00[8];
+	float m_requiredExperience;
+	int m_rank;
+	int m_rank2;
+	unsigned char m_pad14[0xD8 - 0x14];
+};
+
+class UnitRevivalTracker
+{
+public:
+	void addRevivableUnit(const Rva002E2D10Record &item, Player *player);
+};
+
+void ScriptActions::doCreateUnitRevivalEntry(const AsciiString &templateName,
+	const AsciiString &playerName, int level)
+{
+	const ThingTemplate *tmpl = TheThingFactory->findTemplate(templateName);
+	if (!tmpl)
+		return;
+	int mask = g_Va009FE16C->rva00357475(playerName, 0);
+	Player *player = ThePlayerList->getEachPlayerFromMask(mask);
+	if (!player)
+		return;
+	UnitRevivalTracker *tracker = player->getUnitRevivalTracker();
+	if (!tracker)
+		return;
+	Rva002E2D10Record entry(tmpl);
+	if (level != -1) {
+		ExperienceLevelHandle handle = TheExperienceLevelStore->rva00288E21(tmpl, level);
+		if (handle.m_list) {
+			entry.m_requiredExperience = (float)TheExperienceLevelStore->GetRequiredExperience(handle);
+			entry.m_rank = TheExperienceLevelStore->GetLevelRank(handle);
+			entry.m_rank2 = TheExperienceLevelStore->GetLevelRank(handle);
+		} else {
+			entry.m_rank = tmpl->rva0033B479();
+		}
+	} else {
+		entry.m_rank = tmpl->rva0033B479();
+	}
+	tracker->addRevivableUnit(entry, player);
+}
+
 // WB/ZH ScriptActions::doIdleAllPlayerUnits @0x003BBB7E (114B) and
 // doResumeSupplyTruckingForIdleUnits @0x003BBBF0 (113B), identified by their
 // WorldBuilder DEBUG_LOG strings. BFME2 resolves the name to a player mask
@@ -482,7 +629,7 @@ enum { PLAYER_HUMAN = 0 };
 
 void ScriptActions::doIdleAllPlayerUnits(const AsciiString &playerName)
 {
-	int mask = TheScriptEngine->rva00357475(playerName, 0);
+	int mask = g_Va009FE16C->rva00357475(playerName, 0);
 	if (!mask) {
 		for (int i = 0; i < ThePlayerList->getPlayerCount(); ++i) {
 			Player *player = ThePlayerList->getNthPlayer(i);
@@ -500,7 +647,7 @@ void ScriptActions::doIdleAllPlayerUnits(const AsciiString &playerName)
 
 void ScriptActions::doResumeSupplyTruckingForIdleUnits(const AsciiString &playerName)
 {
-	int mask = TheScriptEngine->rva00357475(playerName, 0);
+	int mask = g_Va009FE16C->rva00357475(playerName, 0);
 	if (!mask) {
 		for (int i = 0; i < ThePlayerList->getPlayerCount(); ++i) {
 			Player *player = ThePlayerList->getNthPlayer(i);
@@ -516,6 +663,99 @@ void ScriptActions::doResumeSupplyTruckingForIdleUnits(const AsciiString &player
 	}
 }
 
+// WB/ZH ScriptActions::doCreateObject @0x003C4EC3 (479B). BFME2 differs from
+// Zero Hour in looking up the old unit by value (0x00358752), creating no
+// missing team, passing a zeroed create mask to the four-argument newObject,
+// naming the cache entry with an empty string, and ending with the object
+// member 0x0028FC18 instead of the blast-crater footprint.
+class Team;
+#include <string.h>
+
+struct CreateMask
+{
+	CreateMask() { memset(m_bits, 0, sizeof(m_bits)); }
+
+	unsigned int m_bits[4];
+};
+
+
+class Rva00358752Opaque
+{
+public:
+	Object *lookupUnitByValue(AsciiString name);
+};
+
+void ScriptActions::doCreateObject(const AsciiString &objectName, const AsciiString &thingName,
+	const AsciiString &teamName, Coord3D *pos, float angle)
+{
+	Object *pOldObj = 0;
+	if (objectName != AsciiString::TheEmptyString) {
+		pOldObj = ((Rva00358752Opaque *)g_Va009FE16C)->lookupUnitByValue(objectName);
+		if (pOldObj && !pOldObj->isEffectivelyDead()) {
+			AsciiString str = "WARNING - Object with name ";
+			str.concat(objectName);
+			str.concat(" already exists. Failed Create.");
+			g_Va009FE16C->AppendDebugMessage(str, false);
+			return;
+		}
+	}
+	Team *theTeam = g_Va009FE16C->getTeamNamed(teamName, true);
+	if (!theTeam) {
+		g_Va009FE16C->AppendDebugMessage("***WARNING - Team not found:***", false);
+		g_Va009FE16C->AppendDebugMessage(teamName, true);
+		return;
+	}
+	const ThingTemplate *thingTemplate = TheThingFactory->findTemplate(thingName);
+	if (thingTemplate) {
+		Object *obj = TheThingFactory->newObject(thingTemplate, theTeam, &CreateMask(), false);
+		if (obj) {
+			if (objectName != AsciiString::TheEmptyString) {
+				obj->setName(objectName);
+				if (pOldObj || g_Va009FE16C->didUnitExist(objectName))
+					g_Va009FE16C->rva00357960(objectName, obj);
+				else
+					g_Va009FE16C->addObjectToCache(obj, "");
+			}
+			obj->setOrientation(angle);
+			obj->setPosition(pos);
+			obj->rva0028FC18();
+		}
+	}
+}
+
+// WB/ZH ScriptActions::createUnitOnTeamAt @0x003C50A2 (658B). BFME2 accepts
+// an object type as the location as well as a waypoint: with no such
+// waypoint, the closest object of that template to the team's centre
+// (Team 0x0039E5B9, PartitionManager::getClosestObject over a template
+// filter) is used. As in doCreateObject the old unit is looked up by value,
+// a missing team is not created and the object ends with 0x0028FC18.
+class Rva000421C8
+{
+public:
+	Rva000421C8() : m_next(0) {}
+	virtual ~Rva000421C8() {}
+	virtual bool allow(Object *obj) = 0;
+	virtual int getPlayerMask();
+	Rva000421C8 *m_next;
+};
+#pragma comment(linker, "/alternatename:?getPlayerMask@Rva000421C8@@UAEHXZ=?Get_File_Handle@FileClass@@UAEPAXXZ")
+
+// vftable 0x00C1FDEC, allow 0x00261750 (Zero Hour's PartitionFilterThing).
+class Rva00261750Filter : public Rva000421C8
+{
+public:
+	Rva00261750Filter(const ThingTemplate *tmpl, bool match) : m_template(tmpl), m_match(match) {}
+	virtual bool allow(Object *obj);
+	const ThingTemplate *m_template;
+	bool m_match;
+};
+
+class PartitionManager
+{
+public:
+	Object *getClosestObject(const Coord3D *pos, float maxDist, int dc, Rva000421C8 *filters);
+};
+extern PartitionManager *ThePartitionManager;
 
 struct ScriptWaypointView
 {
@@ -524,18 +764,74 @@ struct ScriptWaypointView
 	const Coord3D *getLocation() const { return &m_location; }
 };
 
+void ScriptActions::createUnitOnTeamAt(const AsciiString &unitName, const AsciiString &objType,
+	const AsciiString &teamName, const AsciiString &waypoint)
+{
+	Object *pOldObj = ((Rva00358752Opaque *)g_Va009FE16C)->lookupUnitByValue(unitName);
+	if (pOldObj && !pOldObj->isEffectivelyDead()) {
+		AsciiString str = "WARNING - Object with name ";
+		str.concat(unitName);
+		str.concat(" already exists. Failed Create.");
+		g_Va009FE16C->AppendDebugMessage(str, false);
+		return;
+	}
+	Team *theTeam = g_Va009FE16C->getTeamNamed(teamName, true);
+	if (!theTeam) {
+		g_Va009FE16C->AppendDebugMessage("***WARNING - Team not found:***", false);
+		g_Va009FE16C->AppendDebugMessage(teamName, true);
+		return;
+	}
+	ScriptWaypointView *way = (ScriptWaypointView *)
+		reinterpret_cast<ScriptActionsTerrainView *>(TheTerrainLogic)->getWaypointByName(waypoint);
+	Object *foundObject = 0;
+	if (!way) {
+		const ThingTemplate *objectTemplate = TheThingFactory->findTemplate(waypoint);
+		if (objectTemplate) {
+			Coord3D pos;
+			theTeam->rva0039E5B9(&pos);
+			Rva00261750Filter thingFilter(objectTemplate, true);
+			foundObject = ThePartitionManager->getClosestObject(&pos, 1000000.0f, 0, &thingFilter);
+		}
+	}
+	if (!way && !foundObject) {
+		g_Va009FE16C->AppendDebugMessage("***WARNING - Waypoint/Object type not found:***", false);
+		g_Va009FE16C->AppendDebugMessage(waypoint, true);
+		return;
+	}
+	const ThingTemplate *thingTemplate = TheThingFactory->findTemplate(objType);
+	if (!thingTemplate)
+		return;
+	Object *obj = TheThingFactory->newObject(thingTemplate, theTeam, &CreateMask(), false);
+	if (!obj)
+		return;
+	if (unitName != AsciiString::TheEmptyString) {
+		obj->setName(unitName);
+		if (pOldObj || g_Va009FE16C->didUnitExist(unitName))
+			g_Va009FE16C->rva00357960(unitName, obj);
+		else
+			g_Va009FE16C->addObjectToCache(obj, "");
+	}
+	const Coord3D *pos;
+	if (way)
+		pos = way->getLocation();
+	else if (foundObject)
+		pos = foundObject->getPosition();
+	obj->setPosition(pos);
+	obj->rva0028FC18();
+}
+
 // WB ScriptActions::doSetUnitReference @0x003C2019 (99B): either hand the
 // parameter's string to the script engine's reference setter 0x00208A09, or
 // resolve the parameter to a unit and bind the reference to it.
 void ScriptActions::doSetUnitReference(const AsciiString &reference, Parameter *unit, bool byName)
 {
 	if (byName) {
-		TheScriptEngine->rva00208A09(reference, unit->getString());
+		g_Va009FE16C->rva00208A09(reference, unit->getString());
 	} else {
-		Object *theObj = TheScriptEngine->getUnitNamed(unit);
+		Object *theObj = g_Va009FE16C->getUnitNamed(unit);
 		if (theObj) {
-			TheScriptEngine->rva00208968(reference, theObj);
-			TheScriptEngine->addObjectToCache(theObj, reference);
+			g_Va009FE16C->rva00208968(reference, theObj);
+			g_Va009FE16C->addObjectToCache(theObj, reference);
 		}
 	}
 }
@@ -561,9 +857,6 @@ class AIGroup
 {
 public:
 	void rva00372571(Rva00372571Params *params, int source);
-	void groupIdle(CommandSourceType cmdSource);
-	bool getCenter(Coord3D *pos);
-	void groupAttackMoveToPosition(const Coord3D *pos, int maxShots, CommandSourceType cmdSource);
 	void rva0036F9FE(const Waypoint *way, CommandSourceType cmdSource, int mode);
 	void rva0036FB57(const Waypoint *way, CommandSourceType cmdSource, int mode);
 };
@@ -574,28 +867,17 @@ public:
 	void rva0036FAF8(const Waypoint *way, CommandSourceType cmdSource, int mode);
 };
 
-struct ScriptActionsAIData
-{
-	unsigned char m_pad[0x5C];
-	float m_5C;
-};
-
 class AI
 {
 public:
 	AIGroup *createGroup();
-	const ScriptActionsAIData *getAiData() const { return m_aiData; }
-
-private:
-	unsigned char m_pad00[0x18];
-	ScriptActionsAIData *m_aiData;
 };
 extern AI *TheAI;
 
 void ScriptActions::doTeamFollowWaypoints(const AsciiString &teamName,
 	const AsciiString &waypointPathLabel, bool asTeam, bool flag)
 {
-	Team *theTeam = TheScriptEngine->getTeamNamed(teamName, false);
+	Team *theTeam = g_Va009FE16C->getTeamNamed(teamName, false);
 	if (!theTeam)
 		return;
 	AIGroup *theGroup = TheAI->createGroup();
@@ -606,10 +888,9 @@ void ScriptActions::doTeamFollowWaypoints(const AsciiString &teamName,
 	Coord3D pos;
 	pos.x = pos.y = pos.z = 0;
 	for (DLINK_ITERATOR<Object> iter = theTeam->iterate_TeamMemberList(); !iter.done();
-		iter.advance()) {
+		((DLINK_ITERATOR<Object> *)&iter)->advance()) {
 		Object *obj = iter.cur();
-		Coord3D objPos;
-		copyCoord3D(objPos, obj->getPosition());
+		Coord3D objPos = *obj->getPosition();
 		pos.x += objPos.x;
 		pos.y += objPos.y;
 		pos.z += objPos.z;
@@ -637,7 +918,7 @@ void ScriptActions::doTeamFollowWaypoints(const AsciiString &teamName,
 void ScriptActions::doTeamAttackMoveFollowWaypoints(const AsciiString &teamName,
 	const AsciiString &waypointPathLabel, bool asTeam, bool flag)
 {
-	Team *theTeam = TheScriptEngine->getTeamNamed(teamName, false);
+	Team *theTeam = g_Va009FE16C->getTeamNamed(teamName, false);
 	if (!theTeam)
 		return;
 	AIGroup *theGroup = TheAI->createGroup();
@@ -648,10 +929,9 @@ void ScriptActions::doTeamAttackMoveFollowWaypoints(const AsciiString &teamName,
 	Coord3D pos;
 	pos.x = pos.y = pos.z = 0;
 	for (DLINK_ITERATOR<Object> iter = theTeam->iterate_TeamMemberList(); !iter.done();
-		iter.advance()) {
+		((DLINK_ITERATOR<Object> *)&iter)->advance()) {
 		Object *obj = iter.cur();
-		Coord3D objPos;
-		copyCoord3D(objPos, obj->getPosition());
+		Coord3D objPos = *obj->getPosition();
 		pos.x += objPos.x;
 		pos.y += objPos.y;
 		pos.z += objPos.z;
@@ -730,7 +1010,7 @@ public:
 
 void ScriptActions::doPlaySoundEffectAtTeam(const AsciiString &sound, const AsciiString &teamName)
 {
-	Team *theTeam = TheScriptEngine->getTeamNamed(teamName, false);
+	Team *theTeam = g_Va009FE16C->getTeamNamed(teamName, false);
 	if (!theTeam)
 		return;
 	Object *obj = theTeam->rva0039E8EB();
@@ -824,12 +1104,12 @@ struct ScriptActionsTemplateNameView
 void ScriptActions::doForceObjectSelection(const AsciiString &teamName, const AsciiString &objectType,
 	bool centerInView, const AsciiString &audioToPlay)
 {
-	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
+	Team *team = g_Va009FE16C->getTeamNamed(teamName, false);
 	if (!team)
 		return;
 	Object *bestGuess = 0;
 	for (DLINK_ITERATOR<Object> iter = team->iterate_TeamMemberList(); !iter.done();
-		iter.advance()) {
+		((DLINK_ITERATOR<Object> *)&iter)->advance()) {
 		Object *obj = iter.cur();
 		const ScriptActionsTemplateNameView *tmpl = (const ScriptActionsTemplateNameView *)obj->m_template;
 		if (tmpl && tmpl->getName() == objectType) {
@@ -851,8 +1131,7 @@ void ScriptActions::doForceObjectSelection(const AsciiString &teamName, const As
 	reinterpret_cast<Rva0033F15DDwordSlot *>(&audioEvent)->set(ThePlayerList->m_localPlayer->m_playerIndex);
 	reinterpret_cast<ScriptActionsAudioView *>(TheAudio)->addAudioEvent(&audioEvent);
 	if (centerInView) {
-		Coord3D pos;
-		copyCoord3D(pos, bestGuess->getPosition());
+		Coord3D pos = *bestGuess->getPosition();
 		TheTacticalView->moveCameraTo(&pos, 0, 0, false, 0.0f, 0.0f);
 	}
 }
@@ -873,13 +1152,13 @@ public:
 
 void ScriptActions::doBuildBuildingOnFoundation(const AsciiString &templateName, const AsciiString &unitName)
 {
-	Object *theUnit = TheScriptEngine->getUnitNamed(unitName);
+	Object *theUnit = g_Va009FE16C->getUnitNamed(unitName);
 	if (!theUnit)
 		return;
 	Player *player = theUnit->getControllingPlayer();
 	if (!player || !player->rva00339())
 		return;
-	if (player != TheScriptEngine->getCurrentPlayer())
+	if (player != g_Va009FE16C->getCurrentPlayer())
 		return;
 	const ThingTemplate *tmpl = TheThingFactory->findTemplate(templateName);
 	if (!tmpl)
@@ -898,7 +1177,7 @@ void ScriptActions::doBuildBuildingOnFoundation(const AsciiString &templateName,
 void ScriptActions::doTeamMoveToSkirmishApproachPath(const AsciiString &teamName,
 	const AsciiString &waypointPathLabel)
 {
-	Team *theTeam = TheScriptEngine->getTeamNamed(teamName, false);
+	Team *theTeam = g_Va009FE16C->getTeamNamed(teamName, false);
 	if (!theTeam)
 		return;
 	AIGroup *theGroup = TheAI->createGroup();
@@ -909,10 +1188,9 @@ void ScriptActions::doTeamMoveToSkirmishApproachPath(const AsciiString &teamName
 	Coord3D pos;
 	pos.x = pos.y = pos.z = 0;
 	for (DLINK_ITERATOR<Object> iter = theTeam->iterate_TeamMemberList(); !iter.done();
-		iter.advance()) {
+		((DLINK_ITERATOR<Object> *)&iter)->advance()) {
 		Object *obj = iter.cur();
-		Coord3D objPos;
-		copyCoord3D(objPos, obj->getPosition());
+		Coord3D objPos = *obj->getPosition();
 		pos.x += objPos.x;
 		pos.y += objPos.y;
 		pos.z += objPos.z;
@@ -923,7 +1201,7 @@ void ScriptActions::doTeamMoveToSkirmishApproachPath(const AsciiString &teamName
 	pos.x /= count;
 	pos.y /= count;
 	pos.z /= count;
-	Player *enemyPlayer = TheScriptEngine->getSkirmishEnemyPlayer();
+	Player *enemyPlayer = g_Va009FE16C->getSkirmishEnemyPlayer();
 	if (!enemyPlayer)
 		return;
 	int mpNdx = enemyPlayer->getMpStartIndex() + 1;
@@ -944,171 +1222,97 @@ void ScriptActions::doTeamMoveToSkirmishApproachPath(const AsciiString &teamName
 	theGroup->rva00372571(&params, CMD_FROM_SCRIPT);
 }
 
-// WB 0x01014560 unnamed ScriptActions member @0x003C20CA (85B), the team
-// sibling of doSetUnitReference: set a team reference either by the
-// parameter's name (0x00208BCD) or to the team it names (0x00208B2C).
-void ScriptActions::rva003C20CA(const AsciiString &reference, Parameter *team, bool byName)
+// Zero Hour's updateTeamAndPlayerStuff @0x003BA83F (91B): BFME2 first lets
+// the radar (0x002D7FAE) refresh the object, and redraws the drawable
+// (vtable slot 0x34) after recolouring it. It answers 1 to the team walk.
+class Drawable
 {
-	if (byName)
-		TheScriptEngine->rva00208BCD(reference, team->getString());
-	else
-		TheScriptEngine->rva00208B2C(reference, TheScriptEngine->getTeamNamed(team->getString(), false));
-}
-
-// WB 0x010181A0 unnamed ScriptActions member @0x003C606C (124B): for the
-// player a parameter names, run Player 0x002ABA9B; without the flag, also
-// hand Player 0x002ACEDF every KindOf-7 template (TheThingFactory list at
-// +0x0C, linked through +0x484) whose side (+0x6C) is the player's (+0x58).
-struct ScriptActionsTemplateListView
-{
-	unsigned char m_pad000[0x6C];
-	AsciiString m_side;
-	unsigned char m_pad070[0x108 - 0x70];
-	unsigned char m_kindOf[0x484 - 0x108];
-	ScriptActionsTemplateListView *m_next;
-	__forceinline bool isKindOf(int t) const { return (m_kindOf[t >> 3] & (1 << (t & 7))) != 0; }
+public:
+	void setIndicatorColor(int color);
+#define DRAW_SLOT(n) virtual void slot##n();
+	DRAW_SLOT(0) DRAW_SLOT(1) DRAW_SLOT(2) DRAW_SLOT(3) DRAW_SLOT(4) DRAW_SLOT(5)
+	DRAW_SLOT(6) DRAW_SLOT(7) DRAW_SLOT(8) DRAW_SLOT(9) DRAW_SLOT(10) DRAW_SLOT(11)
+	DRAW_SLOT(12)
+#undef DRAW_SLOT
+	virtual void slot13(); // 0x34
 };
 
-void ScriptActions::rva003C606C(Parameter *playerParam, bool flag)
+class Radar
 {
-	int mask = TheScriptEngine->rva00357475(playerParam->getString(), 0);
-	if (!mask)
-		return;
-	Player *player = ThePlayerList->getPlayerFromMask(mask);
-	if (!player)
-		return;
-	if (flag) {
-		player->rva002ABA9B();
-	} else {
-		ScriptActionsTemplateListView *tmpl = *(ScriptActionsTemplateListView **)((unsigned char *)TheThingFactory + 0x0C);
-		player->rva002ABA9B();
-		for (; tmpl; tmpl = tmpl->m_next) {
-			if (tmpl->isKindOf(7) && tmpl->m_side == player->getSide())
-				((Rva002ABFA0 *)player)->rva002ACEDF((void *)tmpl);
+public:
+	void rva002D7FAE(Object *obj);
+};
+extern Radar *TheRadar;
+
+struct GlobalData
+{
+	unsigned char m_pad[0x134];
+	int m_timeOfDay;
+};
+extern GlobalData *TheGlobalData;
+
+enum { TIME_OF_DAY_NIGHT = 4 };
+
+static int updateTeamAndPlayerStuff(Object *obj, void *userData)
+{
+	if (obj) {
+		TheRadar->rva002D7FAE(obj);
+		obj->updateUpgradeModules();
+		Drawable *draw = obj->getDrawable();
+		if (draw) {
+			if (TheGlobalData->m_timeOfDay == TIME_OF_DAY_NIGHT)
+				draw->setIndicatorColor(obj->getNightIndicatorColor());
+			else
+				draw->setIndicatorColor(obj->getIndicatorColor());
+			draw->slot13();
 		}
 	}
+	return 1;
 }
 
-// WB 0x01014BA0 unnamed ScriptActions member @0x003C49AE (194B): when the
-// first KindOf-0x33 member of one team has an upgrade (TheUpgradeCenter
-// 0x0026F0F0 on its +0x284) the other team accepts (0x0039E8FF), fire the
-// SpecialAbilityGiveUpgrade power from it at the other team's first member.
-class SpecialPowerTemplate;
-
-class SpecialPowerStore
+// WB/ZH ScriptActions::doTransferTeamToPlayer @0x003C90DD (244B). BFME2
+// resolves the player through a name mask, and after the transfer refreshes
+// every member and the horde holding it (0x0028BAC0, 0x0028DCC4) and idles
+// them (CMD_FROM_AI) before the script engine notes the frame (0x002039B6).
+class AICommandInterface
 {
 public:
-	const SpecialPowerTemplate *findSpecialPowerTemplate(AsciiString name);
+	void aiIdle(CommandSourceType cmdSource);
 };
-extern SpecialPowerStore *TheSpecialPowerStore;
 
-class Rva0026F0F0
+class AIUpdateInterface
 {
 public:
-	void *rva0026F0F0(const void *key);
+	unsigned char m_pad[0x20];
+	AICommandInterface m_command;
 };
-class UpgradeCenter;
-extern UpgradeCenter *TheUpgradeCenter;
 
-void ScriptActions::rva003C49AE(Parameter *srcTeamParam, Parameter *dstTeamParam)
-{
-	Team *srcTeam = TheScriptEngine->getTeamNamed(srcTeamParam->getString(), false);
-	Team *dstTeam = TheScriptEngine->getTeamNamed(dstTeamParam->getString(), false);
-	if (!srcTeam || !dstTeam)
-		return;
-	Object *giver = srcTeam->rva0039E968(0x33);
-	if (!giver)
-		return;
-	void *upgrade = ((Rva0026F0F0 *)TheUpgradeCenter)->rva0026F0F0((const void *)((char *)giver + 0x284));
-	if (!upgrade)
-		return;
-	if (!dstTeam->rva0039E8FF((int)upgrade))
-		return;
-	const SpecialPowerTemplate *power = TheSpecialPowerStore->findSpecialPowerTemplate("SpecialAbilityGiveUpgrade");
-	if (!power)
-		return;
-	giver->doSpecialPowerAtObject(power, dstTeam->rva0039E8EB(), 0x40000, 0);
-}
-
-// WB ScriptActions::doEnablePlanningMode @0x003BD424 (11B): forward the flag to
-// the Palantir (WB asserts ThePalantir != NULL; the global at 0x009FF028 is the
-// Palantir by that assert and the call into its SetPlanningModeEnabled).
-class Palantir
+class Rva002039B6Host
 {
 public:
-	void SetPlanningModeEnabled(unsigned char enabled);
+	void rva002039B6();
 };
-class RadarWindowOverrideSource;
-extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 
-void ScriptActions::doEnablePlanningMode(unsigned char enable)
+static __forceinline void refreshTransferredObject(Object *obj)
 {
-	((Palantir *)theRadarWindowOverrideSource)->SetPlanningModeEnabled(enable);
+	obj->rva0028BAC0();
+	obj->rva0028DCC4();
+	AIUpdateInterface *ai = obj->getAIUpdateInterface();
+	if (ai)
+		ai->m_command.aiIdle((CommandSourceType)2);
 }
 
-static __declspec(noinline) void rva003C0CEE(Object *obj, int which, bool on)
-{
-	unsigned int bit;
-	switch (which) {
-	case 1:
-		bit = 0xB8;
-		break;
-	case 2:
-		bit = 0xB9;
-		break;
-	case 3:
-		bit = 0xBA;
-		break;
-	case 4:
-		bit = 0xBB;
-		break;
-	default:
-		bit = 0xB8;
-		break;
-	}
-	if (on)
-		obj->setModelConditionState(bit);
-	else
-		obj->clearModelConditionState(bit);
-}
-
-void ScriptActions::rva003C0D6A(const AsciiString &unitName, int which, bool on)
-{
-	Object *obj = TheScriptEngine->getUnitNamed(unitName);
-	if (obj)
-		rva003C0CEE(obj, which, on);
-}
-
-void ScriptActions::rva003C0D90(const AsciiString &teamName, int which, bool on)
-{
-	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
-	if (!team)
-		return;
-	for (DLINK_ITERATOR<Object> iter = team->iterate_TeamMemberList(); !iter.done(); iter.advance()) {
-		Object *obj = iter.cur();
-		if (obj)
-			rva003C0CEE(obj, which, on);
-	}
-}
-
-// WB10087D0 and native3C90DD..3C91D1 establish a two-string team transfer,
-// unlike the stale one-Parameter free spelling in the old verdict.
-// The existing callback row uses a neutral two-word ABI; retain its name.
-int __cdecl rva003BA83F(void *obj, int userData);
-class AICommandInterface { public: void aiIdle(CommandSourceType source); };
-class AIUpdateInterface { public: unsigned char m_pad00[0x20]; AICommandInterface m_command; };
-class Rva002039B6Host { public: void rva002039B6(); };
 void ScriptActions::doTransferTeamToPlayer(const AsciiString &teamName, const AsciiString &playerName)
 {
-	Team *theTeam = TheScriptEngine->getTeamNamed(teamName, false);
-	int mask = TheScriptEngine->rva00357475(playerName, 0);
+	Team *theTeam = g_Va009FE16C->getTeamNamed(teamName, false);
+	int mask = g_Va009FE16C->rva00357475(playerName, 0);
 	Player *playerDest = ThePlayerList->getEachPlayerFromMask(mask);
 	if (!(theTeam && playerDest))
 		return;
 	theTeam->setControllingPlayer(playerDest);
-	theTeam->rva0039DD12(reinterpret_cast<int (__cdecl *)(Object *, void *)>(rva003BA83F), 0);
+	theTeam->rva0039DD12(updateTeamAndPlayerStuff, 0);
 	for (DLINK_ITERATOR<Object> iter = theTeam->iterate_TeamMemberList(); !iter.done();
-		iter.advance()) {
+		((DLINK_ITERATOR<Object> *)&iter)->advance()) {
 		Object *obj = iter.cur();
 		AIUpdateInterface *ai;
 		Object *horde = obj->getContainedBy();
@@ -1125,5 +1329,5 @@ void ScriptActions::doTransferTeamToPlayer(const AsciiString &teamName, const As
 		if (ai)
 			ai->m_command.aiIdle((CommandSourceType)2);
 	}
-	((Rva002039B6Host *)TheScriptEngine)->rva002039B6();
+	((Rva002039B6Host *)g_Va009FE16C)->rva002039B6();
 }
