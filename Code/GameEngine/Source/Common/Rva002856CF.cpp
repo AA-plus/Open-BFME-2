@@ -5,6 +5,7 @@ class Rva0020D8F1Host
 public:
 	void rva0020D8F1(Rva002856CFHost *o);
 };
+class Rva0020DXXX { public: void rva0020D8F1(int v); }; // rowed 0x0020D8F1 void(int)
 struct Rva00DFE1A8
 {
 	unsigned char m_pad[0x3C];
@@ -34,6 +35,6 @@ void Rva002856CFHost::rva002856CF()
 		return;
 	if (((Rva00DFE1A8 *)g_00DFE1A8)->m_3C < -1)
 		return;
-	((Rva0020D8F1Host *)g_00DFE1A8)->rva0020D8F1(this);
+	((Rva0020DXXX *)g_00DFE1A8)->rva0020D8F1((int)this);
 	m_10 = (*(Rva002DFE78C **)&TheGameLogic)->m_40;
 }
