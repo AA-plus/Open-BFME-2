@@ -2,10 +2,15 @@
 // ??0Rva0030B0E3@@QAE@XZ, retail 0x0030B0E3, 54 bytes.
 // Ctor stores vtable 0x00808830 then zeroes +0xC/+0x10 and calls 0x0030B055 method.
 // Evidence: caller chain from 0x0030B055 row; vtable store at [this].
-class EmptyBase
+// Native cleanup77A02F keeps this at offset0 and calls the full7B
+// polymorphic base destructor7461F. The existing deleting-dtor unit
+// independently proves this same base and slot0 relationship. Only its
+// primary vptr is modelled here; other base fields and unused slots remain
+// unspecified. The old empty nonpolymorphic base incorrectly moved to +4.
+class Rva00074626
 {
 public:
-	~EmptyBase();
+	virtual ~Rva00074626();
 };
 
 class Rva0030B055
@@ -24,10 +29,10 @@ public:
 	void rva0030B055();
 };
 
-class Rva0030B0E3 : public EmptyBase
+class Rva0030B0E3 : public Rva00074626
 {
 public:
-	virtual void s0();
+	virtual ~Rva0030B0E3();
 	virtual void s1();
 	virtual void s2();
 	virtual void v3(int a, int b);
