@@ -385,7 +385,7 @@ void AptOnlineLogin::OnBttnRegisterFESL(const char *)
     if(g_bfmeObjELB) {
         AsciiString path("");
         if(GetStringFromRegistry("","InstallPath",path) && !path.isEmpty()) {
-            path.concat("\\SUPPORT\\EREG.EXE");
+            ((StringBase<char> *)&path)->concat("\\SUPPORT\\EREG.EXE");
             int result=(int)ShellExecuteW(0,L"open",UnicodeString(path).str(),L"",0,5);
             if(result<=31)
                 GSMessageBoxOk(TheGameText->fetch("GUI:GSErrorTitle"),TheGameText->fetch("GUI:EREGError"),0);
