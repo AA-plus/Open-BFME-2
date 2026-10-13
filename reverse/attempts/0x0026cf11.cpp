@@ -1,4 +1,6 @@
 // ?rva0026CF11@AIUpdateInterface@@QAE_NPAVObject@@@Z
+// partial score=0.995 date=2026-10-13
+// ?rva0026CF11@AIUpdateInterface@@QAE_NPAVObject@@@Z
 // partial score=0.9949072454397704 date=2026-10-09
 // cl: /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common /O1 /G7 /arch:SSE /DNDEBUG /MD
 #include "Coord3D.h"
