@@ -1,0 +1,1 @@
+{'before': {('alternatename', 'Code/Libraries/Source/WWVegas/WW3D2/MaterialInfoDtor.cpp', '_VectorClassVertexMaterialPtrVtable'): 1}, 'after': {}}
