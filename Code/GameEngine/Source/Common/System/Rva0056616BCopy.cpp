@@ -60,7 +60,7 @@ public:
 }
 
 namespace _STL {
-template <> vector<Rva0052BE33, allocator<Rva0052BE33> >::~vector()
+template <> inline __declspec(noinline) vector<Rva0052BE33, allocator<Rva0052BE33> >::~vector()
 {
  Rva0022C8E3DestroyRange(reinterpret_cast<Rva0052BF9BElem *>(m_start),
                        reinterpret_cast<Rva0052BF9BElem *>(m_finish));
@@ -71,7 +71,7 @@ struct Rva0052BF33Elem;
 void __cdecl Rva005A6EDADestroyRange(Rva0052BF33Elem *, Rva0052BF33Elem *);
 
 namespace _STL {
-template <> vector<FXList, allocator<FXList> >::~vector()
+template <> inline __declspec(noinline) vector<FXList, allocator<FXList> >::~vector()
 {
  Rva005A6EDADestroyRange(reinterpret_cast<Rva0052BF33Elem *>(m_start),
                        reinterpret_cast<Rva0052BF33Elem *>(m_finish));
@@ -82,7 +82,7 @@ struct Rva0052BF4DElem;
 void __cdecl Rva0052C266DestroyRange(Rva0052BF4DElem *, Rva0052BF4DElem *);
 
 namespace _STL {
-template <> vector<BfmePod40, allocator<BfmePod40> >::~vector()
+template <> inline __declspec(noinline) vector<BfmePod40, allocator<BfmePod40> >::~vector()
 {
  Rva0052C266DestroyRange(reinterpret_cast<Rva0052BF4DElem *>(m_start),
                        reinterpret_cast<Rva0052BF4DElem *>(m_finish));
@@ -93,7 +93,7 @@ struct Rva004E1AD5Item;
 void __cdecl Rva004E1FCCGet(Rva004E1AD5Item *, Rva004E1AD5Item *);
 
 namespace _STL {
-template <> vector<BfmePod88, allocator<BfmePod88> >::~vector()
+template <> inline __declspec(noinline) vector<BfmePod88, allocator<BfmePod88> >::~vector()
 {
  Rva004E1FCCGet(reinterpret_cast<Rva004E1AD5Item *>(m_start),
                        reinterpret_cast<Rva004E1AD5Item *>(m_finish));
@@ -104,7 +104,7 @@ struct Rva0052BFB5Elem;
 void __cdecl Rva0052C37ADestroyRange(Rva0052BFB5Elem *, Rva0052BFB5Elem *);
 
 namespace _STL {
-template <> vector<Rva0052BDE6, allocator<Rva0052BDE6> >::~vector()
+template <> inline __declspec(noinline) vector<Rva0052BDE6, allocator<Rva0052BDE6> >::~vector()
 {
  Rva0052C37ADestroyRange(reinterpret_cast<Rva0052BFB5Elem *>(m_start),
                        reinterpret_cast<Rva0052BFB5Elem *>(m_finish));
@@ -115,7 +115,7 @@ struct Rva0052BF67Elem;
 void __cdecl Rva0052C3BFDestroyRange(Rva0052BF67Elem *, Rva0052BF67Elem *);
 
 namespace _STL {
-template <> vector<BfmePod32, allocator<BfmePod32> >::~vector()
+template <> inline __declspec(noinline) vector<BfmePod32, allocator<BfmePod32> >::~vector()
 {
  Rva0052C3BFDestroyRange(reinterpret_cast<Rva0052BF67Elem *>(m_start),
                        reinterpret_cast<Rva0052BF67Elem *>(m_finish));
@@ -126,7 +126,7 @@ class LivingWorldRegionConnection;
 void __cdecl Rva003F0CA1_DestroyRange(LivingWorldRegionConnection *, LivingWorldRegionConnection *);
 
 namespace _STL {
-template <> vector<Rva004E32F2, allocator<Rva004E32F2> >::~vector()
+template <> inline __declspec(noinline) vector<Rva004E32F2, allocator<Rva004E32F2> >::~vector()
 {
  Rva003F0CA1_DestroyRange(reinterpret_cast<LivingWorldRegionConnection *>(m_start),
                        reinterpret_cast<LivingWorldRegionConnection *>(m_finish));
@@ -137,7 +137,7 @@ class Rva004E1A04;
 void __cdecl Rva0052CEDDClear(Rva004E1A04 *, Rva004E1A04 *);
 
 namespace _STL {
-template <> vector<BfmeE16, allocator<BfmeE16> >::~vector()
+template <> inline __declspec(noinline) vector<BfmeE16, allocator<BfmeE16> >::~vector()
 {
  Rva0052CEDDClear(reinterpret_cast<Rva004E1A04 *>(m_start),
                        reinterpret_cast<Rva004E1A04 *>(m_finish));
@@ -148,7 +148,7 @@ class Rva004E366E;
 void __cdecl Rva0052CEF6Clear(Rva004E366E *, Rva004E366E *);
 
 namespace _STL {
-template <> vector<Rva005668E9Element, allocator<Rva005668E9Element> >::~vector()
+template <> inline __declspec(noinline) vector<Rva005668E9Element, allocator<Rva005668E9Element> >::~vector()
 {
  Rva0052CEF6Clear(reinterpret_cast<Rva004E366E *>(m_start),
                        reinterpret_cast<Rva004E366E *>(m_finish));
