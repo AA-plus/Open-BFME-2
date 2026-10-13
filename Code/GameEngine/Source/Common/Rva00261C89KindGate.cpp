@@ -1,5 +1,3 @@
-// ?rva00261C89@Rva00261C89@@QAEHXZ
-// partial score=0.99 date=2026-10-13
 // cl: /O1 /G7 /MD
 // One-time init two global 7-word flags then KindOf gate: B8 set but not 9C set.
 // Evidence: chain from 0x002618A2/0x002618FA landing; caller 0x003E603E this-plus-4 no pushes; rowed BitFlags test 0x002615C0; neighbours 0x002619A0/0x00262002.
@@ -19,12 +17,16 @@ public:
 private:
 	unsigned m_words[7];
 };
-#define InitFlagsB (*(unsigned char *)0x00DFEAD4)
-#define InitFlagsD (*(unsigned int *)0x00DFEAD4)
-#define GlobalB8Init ((Rva002618A2 *)0x00DFEAB8)
-#define Global9CInit ((Rva002618A2 *)0x00DFEA9C)
-#define GlobalB8Test ((BitFlags<69> *)0x00DFEAB8)
-#define Global9CTest ((BitFlags<69> *)0x00DFEA9C)
+extern unsigned g_00DFEAD4;
+extern char g_00DFEA98;		// anchor only: 0x00DFEA98 + 4 spells the 9C object
+extern Rva002618A2 g_00DFEAB8;
+extern Rva002618A2 g_00DFEA9C;
+#define InitFlagsB (*(unsigned char *)&g_00DFEAD4)
+#define InitFlagsD g_00DFEAD4
+#define GlobalB8Init (&g_00DFEAB8)
+#define Global9CInit (&g_00DFEA9C)
+#define GlobalB8Test ((BitFlags<69> *)((char *)&g_00DFEA9C + 0x1C))
+#define Global9CTest ((BitFlags<69> *)(&g_00DFEA98 + 4))
 class Rva00261C89
 {
 public:
@@ -53,3 +55,8 @@ int Rva00261C89::rva00261C89()
 
 // Codegen: the result is an int (retail returns 1/0 with `xor eax,eax; inc eax` / `xor eax,eax`; a bool
 // return gives inc al / xor al,al); the callers test AL only, as for any 0/1 result.
+// Codegen: the result is an int (retail returns 1/0 with `xor eax,eax; inc eax` / `xor eax,eax`; a
+// bool return gives inc al / xor al,al); callers test AL only. The two flag objects are named
+// externs at retail's addresses; every address is spelled from a different base symbol per use
+// (init vs test) because the same symbol twice makes cl hoist both addresses into EBX/EDI where
+// retail rematerialises `mov ecx, imm32` before each call.
