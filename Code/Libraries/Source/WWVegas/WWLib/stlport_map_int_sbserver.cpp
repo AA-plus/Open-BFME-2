@@ -15,14 +15,16 @@ struct SBServer
 {
     void *m_handle;
     SBServer();
-    __declspec(noinline) SBServer(const SBServer &src);
-    __declspec(noinline) ~SBServer();
+    // Select-any like the copy in StlportMapSBServerSubscript.cpp (this retail
+    // body comes first in link order, so it is the copy the link keeps).
+    inline __declspec(noinline) SBServer(const SBServer &src);
+    inline __declspec(noinline) ~SBServer();
     SBServer &operator=(const SBServer &src);
     void Rva005E3B9E();
     void Rva005E3E8A(void *newHandle);
 };
 
-__declspec(noinline) SBServer::SBServer(const SBServer &src)
+inline __declspec(noinline) SBServer::SBServer(const SBServer &src)
 {
     void *handle = src.m_handle;
     m_handle = handle;
@@ -59,7 +61,7 @@ static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
 struct TargetRef00217D4C { virtual void *destroy(unsigned flags); int references; };
 extern void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *p);
 
-__declspec(noinline) SBServer::~SBServer()
+inline __declspec(noinline) SBServer::~SBServer()
 {
     void *handle = m_handle;
     if (handle != 0) {
