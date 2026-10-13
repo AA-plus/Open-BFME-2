@@ -66,20 +66,7 @@ public:
 // payload at +0x08.  This TU only needs that proven view for the encoder; the
 // destructor remains the existing WWLib ABI call emitted by the compiler.
 // upstream layout: reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/Common/UnicodeString.h
-class UnicodeString
-{
-	void *m_data;
-public:
-	UnicodeString();
-	UnicodeString(const unsigned short *);
-	UnicodeString(const UnicodeString &);
-	const unsigned short *str() const
-	{
-		return m_data ? (const unsigned short *)((const char *)m_data + 8)
-		              : (const unsigned short *)0x0107388C;
-	}
-	~UnicodeString();
-};
+#include "../../../../../reference/shims/bfme2_ascii/unicode_string.h"
 
 #include "quoted_printable.h"
 

@@ -27,27 +27,7 @@ template <typename T> struct StringInlineData
 #include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 
-class UnicodeString : private StringBase<unsigned short>
-{
-public:
-	UnicodeString() : StringBase<unsigned short>() {}
-	UnicodeString( const unsigned short *text ) : StringBase<unsigned short>( text ) {}
-	UnicodeString( const UnicodeString &other ) : StringBase<unsigned short>( other ) {}
-	__declspec(dllimport) __forceinline ~UnicodeString() {}
-	void format(UnicodeString pattern, ...);
-	const unsigned short *str( void ) const;
-
-	// The empty UnicodeString every retail client copies from.  Retail exports
-	// exactly one name for the datum at 0x01336E54,
-	// ?TheEmptyString@UnicodeString@@2V1@B (exports.csv:1340), which is what
-	// WWLib's UnicodeString::TheEmptyString mangles to when it is const
-	// (unicode_string.h:12); MSVC writes the trailing A only for a non-const
-	// static member (measured: 'static C M' -> ?M@C@@2VC@@A, 'static const C M'
-	// -> ?M@C@@2VC@@B), so the const here is what names retail's symbol and
-	// drops the TU-local ?BFMEEmptyPlayerName alias from
-	// ConnectionManager::getPlayerName.
-	static const UnicodeString TheEmptyString;
-};
+#include "../../../../reference/shims/bfme2_ascii/unicode_string.h"
 
 // Retail string headers store ushort length/capacity before the text at +8.
 // StringInline supplies the owning ABI; this local view supplies comparison.

@@ -8,29 +8,7 @@
 // StringBase compareNoCase with throw; two sort keys 0=name asc 1=name desc
 // 2=players asc 3=players desc 4=F4 asc 5=F4 desc plus ascending tie break.
 typedef unsigned short WideChar;
-template <typename T> class StringBase
-{
-	friend class UnicodeString;
-	friend class MapMetaData;
-	friend class Rva0043FE9A;
-public:
-	int compareNoCase(const StringBase<T> &other) const throw();
-private:
-	StringBase() { m_data = 0; }
-	StringBase(const StringBase<T> &other);
-	~StringBase() { releaseBuffer(); }
-	void releaseBuffer();
-	void *m_data;
-};
-class UnicodeString : private StringBase<unsigned short>
-{
-	friend class MapMetaData;
-	friend class Rva0043FE9A;
-public:
-	UnicodeString() {}
-	UnicodeString(const UnicodeString &other) : StringBase<unsigned short>(other) {}
-	~UnicodeString() {}
-};
+#include "../../../../../reference/shims/bfme2_ascii/unicode_string.h"
 class MapMetaData
 {
 	friend class Rva0043FE9A;

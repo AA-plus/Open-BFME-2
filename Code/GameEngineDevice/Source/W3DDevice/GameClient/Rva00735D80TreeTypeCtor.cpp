@@ -19,20 +19,7 @@ template <typename T> struct StringInlineData
 #include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 
 
-class UnicodeString : private StringBase<unsigned short>
-{
-public:
-	UnicodeString() : StringBase<unsigned short>() {}
-	UnicodeString( const unsigned short *text ) : StringBase<unsigned short>( text ) {}
-	UnicodeString( const UnicodeString &other ) : StringBase<unsigned short>( other ) {}
-	~UnicodeString() {}
-	UnicodeString &operator=( const UnicodeString &other );
-	void __cdecl format( UnicodeString format, ... );
-	const unsigned short *str( void ) const;
-	static UnicodeString TheEmptyString;
-	int getLength( void ) const;
-	int compareNoCase( const UnicodeString &other ) const;
-};
+#include "../../../../../reference/shims/bfme2_ascii/unicode_string.h"
 
 class Rva00735D80TreeType
 {

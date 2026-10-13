@@ -22,26 +22,8 @@ void __malloc_alloc<0>::deallocate(void *__p, size_t)
 { free((char *)__p); }
 }
 
-template<class T>
-class StringBase
-{
-    void *m_data;
-    friend class UnicodeString;
-    StringBase(const StringBase &other);
-    __forceinline ~StringBase() { releaseBuffer(); }
-    void releaseBuffer();
-public:
-    int compareNoCase(const StringBase &other) const throw();
-};
+#include "../../../../reference/shims/bfme2_ascii/unicode_string.h"
 
-class UnicodeString : private StringBase<unsigned short>
-{
-    friend struct UnicodeStringLessThan;
-public:
-    __forceinline UnicodeString(const UnicodeString &other)
-        : StringBase<unsigned short>(static_cast<const StringBase<unsigned short>&>(other)) {}
-    __forceinline ~UnicodeString() {}
-};
 
 struct UnicodeStringLessThan
 {

@@ -3,16 +3,7 @@
 // Ctor vtable 0x7FD028: two newDisplayStrings via 0xDFEAD8 slot 0x38 with empty UnicodeString text then SuperweaponInfo::setFont. Callers 0x002A6AC2 0x002A70AE.
 #include "ascii_string.h"
 
-class UnicodeString {
-public:
-	UnicodeString(const UnicodeString &o)
-	{
-		((StringBase<unsigned short> *)this)->StringBase<unsigned short>::StringBase(*(const StringBase<unsigned short> *)&o);
-	}
-	static const UnicodeString TheEmptyString;
-private:
-	unsigned short *m_text;
-};
+#include "../../../../reference/shims/bfme2_ascii/unicode_string.h"
 
 class DisplayString {
 public:

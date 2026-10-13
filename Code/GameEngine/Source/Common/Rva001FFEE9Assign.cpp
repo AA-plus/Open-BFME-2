@@ -9,16 +9,7 @@ public:
 };
 // UnicodeString is StringBase<WideChar>; its set is the inherited
 // StringBase<unsigned short>::set, the row at 0x00037150 the calls land on.
-template <class T> class StringBase
-{
-public:
-	void set(const StringBase<T> &that);
-private:
-	void *m_data;
-};
-class UnicodeString : public StringBase<unsigned short>
-{
-};
+#include "../../../../reference/shims/bfme2_ascii/unicode_string.h"
 class Rva001FFD6B
 {
 public:

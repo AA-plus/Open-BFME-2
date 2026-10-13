@@ -18,22 +18,8 @@
 // instantiations below.
 #include <algorithm>
 
-template <class T>
-class StringBase
-{
-public:
-	~StringBase() { releaseBuffer(); }
-	int compareNoCase(const StringBase &that) const throw();
+#include "../../../../../reference/shims/bfme2_ascii/unicode_string.h"
 
-private:
-	void releaseBuffer();
-
-	void *m_data;
-};
-
-class UnicodeString : public StringBase<unsigned short>
-{
-};
 
 class MapMetaData
 {

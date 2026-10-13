@@ -35,40 +35,7 @@
 typedef int Int;
 typedef unsigned short WideChar;
 #define NULL 0
-template <typename T>
-class StringBase
-{
-	friend class UnicodeString;
-	StringBase(const T *text);
-	StringBase(const StringBase<T> &other);
-	void releaseBuffer();
-public:
-	StringBase() : m_data(0) {}
-	bool isEmpty() const throw();
-	void set(const StringBase<T> &other);
-protected:
-	struct Header
-	{
-		int ref_count;
-		unsigned short length;
-		unsigned short capacity;
-		T data[1];
-	};
-	Header *m_data;
-};
-class UnicodeString : public StringBase<WideChar>
-{
-public:
-	UnicodeString() {}
-	__forceinline UnicodeString(const UnicodeString &other) : StringBase<WideChar>(other) {}
-	__forceinline UnicodeString(const WideChar *s) : StringBase<WideChar>(s) {}
-	__forceinline ~UnicodeString() { releaseBuffer(); }
-	const WideChar *str() const
-	{
-		static const WideChar TheNullChr = 0;
-		return m_data ? &m_data->data[0] : &TheNullChr;
-	}
-};
+#include "../../../../../../reference/shims/bfme2_ascii/unicode_string.h"
 
 extern const WideChar g_00C03F94[];
 
