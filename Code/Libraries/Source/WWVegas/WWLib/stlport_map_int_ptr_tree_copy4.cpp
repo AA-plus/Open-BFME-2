@@ -1,4 +1,4 @@
-// cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
 //
 // ??0?$_Rb_tree@HU?$pair@$$CBHPAX@_STL@@U?$_Select1st@U?$pair@$$CBHPAX@_STL@@@2@URva004FFF54Less@@V?$allocator@U?$pair@$$CBHPAX@_STL@@@2@@_STL@@QAE@ABV01@@Z,
@@ -8,6 +8,7 @@
 // never called by this body so codegen is identical; the address-scoped
 // comparator name keeps the ledger row unique. Base ctor and get_allocator
 // resolve through the existing HPAX pins.
+#define _STLP_BFME_TREE_NODE_BASE_O2  // emit retail's _Rb_tree_node_base::_S_minimum/_S_maximum (vendor/stlport/stl/_tree.h)
 #include <map>
 
 struct Rva004FFF54Less

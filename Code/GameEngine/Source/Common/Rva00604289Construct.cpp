@@ -1,6 +1,7 @@
-// cl: /EHs /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
+// cl: /EHs /MD /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT
 // stlport
 // ??0Rva0060426C@@QAE@ABV0@@Z @0x0060426C 29B: copy ctor copies dword +0 then map<unsigned void*> at +4 via rowed Rb_tree copy 0x00603EEB. Evidence: callers 0x00604289 0x006045A2; callee rowed.
+#define _STLP_BFME_TREE_NODE_BASE_O2  // emit retail's _Rb_tree_node_base::_S_minimum/_S_maximum (vendor/stlport/stl/_tree.h)
 #include <map>
 
 // __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
