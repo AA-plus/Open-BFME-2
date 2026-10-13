@@ -38,10 +38,12 @@ public:
 };
 extern GameLogic *TheGameLogic;
 
+class Anim2DTemplate;
+class Anim2DCollection;
 class Anim2D
 {
 public:
-	Anim2D(Rva002D752DNode *tmpl, Rva002D752D *coll);
+	Anim2D(Anim2DTemplate *tmpl, Anim2DCollection *coll);
 private:
 	unsigned char m_pad[0x34];
 };
@@ -58,7 +60,6 @@ public:
 // ?rva002736A8@Drawable@@QAEXXZ present-unmatched
 // ?rva002D752D@Rva002D752D@@QAEPAURva002D752DNode@@ABV?$StringBase@D@@@Z present-unmatched
 // ?rva00270BA8@Rva00270BA8@@QAEPAVRva00270025@@XZ present-unmatched
-// ??0Anim2D@@QAE@PAURva002D752DNode@@PAVRva002D752D@@@Z present-unmatched
 void Drawable::setEmoticon(const StringBase<char> &name, int val)
 {
 	rva002736A8();
@@ -67,7 +68,7 @@ void Drawable::setEmoticon(const StringBase<char> &name, int val)
 		return;
 	if (((Rva00270BA8 *)this)->rva00270BA8()->m_items[10] != 0)
 		return;
-	Anim2D *anim = new Anim2D(found, g_00DFF068);
+	Anim2D *anim = new Anim2D((Anim2DTemplate *)found, (Anim2DCollection *)g_00DFF068);
 	((Rva00270BA8 *)this)->rva00270BA8()->m_items[10] = anim;
 	int v;
 	if (val >= 0)

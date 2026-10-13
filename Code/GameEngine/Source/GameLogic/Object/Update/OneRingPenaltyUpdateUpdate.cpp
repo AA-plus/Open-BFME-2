@@ -29,6 +29,12 @@ enum UpdateSleepTime
 
 extern const int g_009BA4E4;
 
+class BfmeC987
+{
+public:
+	void bfmeGo987C();
+};
+
 class Rva00373EC6
 {
 public:
@@ -131,7 +137,7 @@ UpdateSleepTime OneRingPenaltyUpdate::update()
 	{
 		m_28 = 0;
 		if (m_24)
-			rva00499C46();
+			((BfmeC987 *)this)->bfmeGo987C();
 	}
 	else if (m_24)
 		rva00499D23();

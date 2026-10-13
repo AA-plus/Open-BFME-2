@@ -40,13 +40,14 @@ extern AptNativeHash *g_bfmeAptHashAtE180E4;
 // g_bfmeAptHashAtE180E4: matched references place it at VA 0xe180e4 (zero-filled .bss).
 
 // Address-derived: unnamed recursive path builder at 0x006CD230.
-void __cdecl Rva006CD230Append(void *node, void *cursor);
+struct Rva006CD230Node;
+void __cdecl Rva006CD230Path(const Rva006CD230Node *node, char **cursor);
 
 void Rva006CD2A0(char *buffer)
 {
 	void *node = *(void **)((char *)g_bfmeAptPtrAtE176D0 + 0x6c);
 	if (node)
-		Rva006CD230Append(node, &buffer);
+		Rva006CD230Path((const Rva006CD230Node *)node, &buffer);
 }
 
 void Rva006CD330()
