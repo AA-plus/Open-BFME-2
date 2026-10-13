@@ -1,4 +1,6 @@
 // ?createEmbeddedPortals@Drawable@@UAEXXZ
+// partial score=0.67 date=2026-10-13
+// ?createEmbeddedPortals@Drawable@@UAEXXZ
 // partial score=0.7 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
 //
