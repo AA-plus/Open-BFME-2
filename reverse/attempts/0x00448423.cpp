@@ -1,4 +1,9 @@
 // ?Rva00448423@@YA_NPAVLANGameInfo@@PADH@Z
+// partial score=0.9701098901 date=2026-10-13
+// W7-SOL6 current GenerateGameOptionsString.cpp owner port reproduces2275B/718 instructions/68 stack-home deltas.
+// WB14A8BF0 full33386B read. Constructor-wrapped counter/field5c are packing-neutral; team wrapper grows2284B.
+// WB dead debug string loop in if(0) emits2279B and disturbs save/prologue order, rejected.
+// ?Rva00448423@@YA_NPAVLANGameInfo@@PADH@Z
 // partial score=0.97011 date=2026-10-12
 // ?Rva00448423@@YA_NPAVLANGameInfo@@PADH@Z
 // partial score=0.97011 date=2026-10-11
@@ -10,7 +15,7 @@
 // partial score=0.966 date=2026-10-09
 // ?Rva00448423@@YA_NPAVLANGameInfo@@PADH@Z
 // partial score=0.96967 date=2026-10-08
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /O1 /EHsc /G7
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /O1 /EHsc /G7 /arch:SSE
 //
 // GenerateGameOptionsString, retail 0x00447C46 (99 bytes): the host's game
 // options string, empty unless TheLAN has a current game that this machine
