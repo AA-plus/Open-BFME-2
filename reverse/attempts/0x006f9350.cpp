@@ -1,4 +1,8 @@
 // ?rva006F9350@AptDisplayList@@QAEXPAVAptNativeHash@@PAVAptCIH@@PAUAptPseudoCIH_t@@1@Z
+// partial score=0.85 date=2026-10-13
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+// ?rva006F9350@AptDisplayList@@QAEXPAVAptNativeHash@@PAVAptCIH@@PAUAptPseudoCIH_t@@1@Z
 // partial score=0.8 date=2026-10-09
 // cl: /O2 /MD /EHsc
 // Native6F91F0..6F92D0 materializes a pseudo display-list item. Existing
@@ -71,8 +75,9 @@ void AptDisplayList::rva006F9350(AptNativeHash *hash,AptCIH *original,AptPseudoC
  if(!(original->changed&1)) {
   if(item->info->flags&8)bfmeUnpackTwoColors1280(original->colors,item->info->cxform);
   if(item->info->flags&4) {
-   const int *matrix=reinterpret_cast<const int*>(item->info->matrix);
+   const int * volatile matrix = reinterpret_cast<const int*>(item->info->matrix);
    original->matrix[0]=matrix[0];original->matrix[1]=matrix[1];
+   _ReadWriteBarrier();
    original->matrix[2]=matrix[2];original->matrix[3]=matrix[3];
    original->matrix[4]=matrix[4];original->matrix[5]=matrix[5];
   }

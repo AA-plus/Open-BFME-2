@@ -51523,3 +51523,4 @@ __ehhandler$?rva0004F580@W3DRadar@@UAEXXZ	0x0075D584	10	landed	add_match verifie
 onLivingWorldBuildingNuggetSpawnArmyUnitQueued	0x005e868f	337	blocked	r9 re-check: chain.py base compile fail (bank fragment / owner-include path); no new score. Bank untouched. t=5 model=muse
 ??0Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAE@PAX00ABUPageContext@@@Z	0x005E1FF7	175	landed	add_match verified Code/GameEngine/Source/Common/Rva005E1FF7PageCtor.cpp 175B
 ??0Impl@RegionDetailsArmiesPage@StrategicInGameUI@@QAE@PAX00ABUPageContext@@@Z	0x005E1FF7	175	landed	add_match verified Code/GameEngine/Source/Common/Rva005E1FF7PageCtor.cpp 175B
+?rva006F9350@AptDisplayList@@QAEXPAVAptNativeHash@@PAVAptCIH@@PAUAptPseudoCIH_t@@1@Z	0x006f9350	186	partial	r9: chain.py vollocal@73:matrix + bar@74 -> size-exact 186, Lab2 nd improved (bank 0.8). Remaining 32-diff residue. Bank upgraded for the next pass. t=8 model=muse score=0.85 stash=reverse/attempts/0x006f9350.cpp
