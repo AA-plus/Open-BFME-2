@@ -1,6 +1,8 @@
 // ?canDoSpecialPowerAtLocation@ActionManager@@QAE_NPBVObject@@PBUCoord3D@@W4CommandSourceType@@PBVSpecialPowerTemplate@@0I_N@Z
-// partial score=0.954804 date=2026-10-13
-// cl: /O1 /arch:SSE /G7 /MD /GX /ICode/Libraries/Include/Lib
+// partial score=0.955263981926797 date=2026-10-13
+// ?canDoSpecialPowerAtLocation@ActionManager@@QAE_NPBVObject@@PBUCoord3D@@W4CommandSourceType@@PBVSpecialPowerTemplate@@0I_N@Z
+// partial score=0.955263981926797 date=2026-10-13
+// cl: /O1 /arch:SSE /G7 /MD /GX /ICode/Libraries/Include/Lib /ICode/GameEngine/Source/Common
 // PARTIAL, NOT BYTE-EXACT. Retail RVA 41D60B; WB 110D180.
 // Extent: 3521 instruction bytes through41E3CC, then188 switch bytes through41E488.
 // Native RET1C and callers establish thiscall with seven arguments.
@@ -14,6 +16,7 @@
 // This version has the native1035-instruction sequence and branch/call/table
 // relationships, but its stack homes differ: frame2C4 instead of2B4. A long
 // LEA for the healing mask adds3B. Do not add a matched row from this bank.
+// Updated canonical handle/query declarations; see crack-j-0041d60b.json.
 // See reverse/attempt_support/crack-e-0041d60b.json for the audited
 // instructions, switch entries, EH states, stack homes and rejected trials.
 // Helper41C9C4 must use the corrected member owner from commit5f1baada20.
@@ -60,18 +63,7 @@ public:
  const Object *object; int relationship; bool match;
 };
 class BfmeRefCF { public: BfmeRefCF *bfmeAssignCF(const BfmeRefCF &); void *data; };
-struct BfmeWideResult {
- void *data;
- ~BfmeWideResult();
- Object *next();
- BfmeWideResult &operator=(const BfmeWideResult &r) { ((BfmeRefCF *)this)->bfmeAssignCF((const BfmeRefCF &)r); return *this; }
-};
-class PartitionManager {
-public:
- Object *getClosestObject(const Coord3D *,float,int,Rva000421C8 *);
- BfmeWideResult iterateObjectsInRange(const Coord3D *,float,int,Rva000421C8 *,int);
- CellShroudStatus getShroudStatusForPlayer(int,const Coord3D *) const;
-};
+#include "PartitionRangeQueryCallView.h"
 extern PartitionManager *ThePartitionManager;
 extern PartitionManager *TheShroudManager;
 class GeometryInfo {
@@ -220,7 +212,7 @@ bool ActionManager::canDoSpecialPowerAtLocation(const Object *obj,const Coord3D 
     }
     if(*(const float *)(target->objectTemplate()+0x610)>100.0f) return false;
    }
-   iter=ThePartitionManager->iterateObjectsInRange(loc,radius+500.0f,0,&FILTER(0x78),0);
+   ((BfmeRefCF *)&iter)->bfmeAssignCF((const BfmeRefCF &)ThePartitionManager->iterateObjectsInRange(loc,radius+500.0f,0,&FILTER(0x78),0));
    while((target=iter.next())!=0) {
     Module *castle=target->findModule(castleKey);
     if(castle) {
