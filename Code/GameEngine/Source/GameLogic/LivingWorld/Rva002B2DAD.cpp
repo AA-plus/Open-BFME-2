@@ -16,10 +16,15 @@ class LivingWorldPendingBattle;
 class LivingWorldRegionManager { public: LivingWorldPendingBattle *rva0020E5BB(int key); };
 // The independently recovered20E5BB provider now supplies the lookup.
 // This declaration binds the existing receiver/return ABI without another pin.
-class Rva0020E5BB
+// ?SetActiveBattleID@LivingWorldRegionManager@@QAEXHH@Z @0x0020E63F 110B:
+// renamed from placeholder LivingWorldRegionManager::SetActiveBattleID — the WorldBuilder twin
+// names LivingWorldRegionManager::SetActiveBattleID in EA's own
+// LivingWorldRegionManager.cpp (callgraph 3); the real class is landed in
+// LivingWorldRegionManager.cpp.
+class LivingWorldRegionManager
 {
 public:
- void rva0020E63F(int key, int field3c);
+ void SetActiveBattleID(int key, int field3c);
  void rva0020E6AD();
 private:
  char pad[0x0c];
@@ -72,7 +77,7 @@ public:
 enum AnimTypes;
 class AnimateWindow { public: void setAnimType(AnimTypes); };
 
-void Rva0020E5BB::rva0020E63F(int key, int field3c)
+void LivingWorldRegionManager::SetActiveBattleID(int key, int field3c)
 {
  currentKey = key;
  if (key) lastNonzeroKey = key;

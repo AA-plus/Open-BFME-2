@@ -2168,10 +2168,10 @@ private:
 // auto-resolve object (ctor 0x004FA3C9, pinned; dtor 0x004FA2E2); its list
 // dtor 0x002BBB18 is rowed in StlportVectorDtorFamily.cpp.
 struct Rva002BBB96Element { public: ~Rva002BBB96Element(); };
-class Rva0020E5BB
+class LivingWorldRegionManager
 {
 public:
-	void rva0020E63F(Int a, Int b);				// 0x0020E63F
+	void SetActiveBattleID(Int a, Int b);			// 0x0020E63F
 };
 class Rva004FA2E2
 {
@@ -2194,7 +2194,7 @@ Rva002B74DE::Rva002B74DE(LivingWorldLogic *logic, Int battle)
 {
 	LivingWorldBattle *b = (LivingWorldBattle *)battle;
 	Int field34 = b->m_field34;
-	((Rva0020E5BB *)m_logic->m_field0B0)->rva0020E63F(field34, 1);
+	((LivingWorldRegionManager *)m_logic->m_field0B0)->SetActiveBattleID(field34, 1);
 	Int count = b->rva003F459A();
 	_STL::vector<Rva002BBB96Element> results;
 	m_holder08.rva002B2EC7((Item002B2EC7 *)new Rva002B2508[count]);
