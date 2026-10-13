@@ -217,7 +217,7 @@ extern ImageCollection *TheMappedImageCollection;
 class CreateAHeroHero;
 class CreateAHeroManager { public:const AsciiString &GetButtonImageName(const CreateAHeroHero*); };
 extern CreateAHeroManager *TheCreateAHeroManager;
-class Rva00319CED { public:void *rva004E23E2(); UnicodeString rva004E25AF(int); };
+class Rva00319CED { public:void *rva004E23E2(); UnicodeString rva004E25AF(int); UnicodeString rva004E265F(int); int rva004E1755(); bool rva00319CED(); };
 struct Rva002B2579Result;
 class Rva002BA8F1Logic { public:Rva002B2579Result *rva002B2579(int); };
 class Rva002E2903Player;
@@ -350,4 +350,65 @@ void Rva004E141DParse(INI *ini,void *instance,void*,const void*) {
  Rva004E13EB record;
  ini->initFromINI(&record,Rva004E13EB::m_fieldParseTable);
  ((Rva00566547Owner*)instance)->append((const Rva003A6F70&)record);
+}
+
+class LivingWorldPlayer { public:
+ bool HasArmyQueuedInAnyBuilding(void *,int *,int);
+ bool rva002E12F3(int);
+ void *FindArmyWithHero(void *,int);
+};
+class Rva0020E89C { public:UnicodeString rva0020E89C(); };
+class Rva00318C32Ret;
+class Rva00318C79Owner { public:Rva00318C32Ret *rva00318C32(); };
+struct ArmyHelpBuildingView { unsigned char pad[0x24]; Rva0020E89C *region; };
+
+// 0x004E265F 738B: the hero-unit help text of the army spawn record: the
+// build time and cost line, then the already-queued or already-built notice.
+// Layout lessons from the WB debug shape: every early exit is its own `return
+// help` site (the null army and null region tests are two ifs, not one ||) and
+// the queued-building counter sits in its own block, which lets cl share its
+// slot with the fetch return temporary like retail.
+UnicodeString Rva00319CED::rva004E265F(int id)
+{
+ Rva004E3184 *spawn=(Rva004E3184 *)this;
+ UnicodeString help=TheGameText->fetch(spawn->m_14);
+ static AsciiString singular("CONTROLBAR:LW_Unit_BuildTimeAndCostSingular");
+ static AsciiString plural("CONTROLBAR:LW_Unit_BuildTimeAndCostPlural");
+ bool found=false;
+ UnicodeString cost;
+ if(spawn->m_48==1)cost=TheGameText->fetch(singular,&found);
+ else cost=TheGameText->fetch(plural,&found);
+ if(!found)return help;
+ int duration=spawn->m_48;
+ cost.format(&cost,duration,rva004E1755());
+ help+=cost;
+ if(!rva00319CED())return help;
+ void *thing=rva004E23E2();
+ if(!thing || !(*((unsigned char*)thing+0x113)&4))return help;
+ Rva002B2579Result *building=((Rva002BA8F1Logic*)TheLivingWorldLogic)->rva002B2579(id);
+ if(!building)return help;
+ LivingWorldPlayer *player=(LivingWorldPlayer *)((Rva004E0705*)building)->rva004E0705();
+ if(!player)return help;
+     {
+     int queuedBuilding=0;
+     if(player->HasArmyQueuedInAnyBuilding((void*)spawn->m_4c,&queuedBuilding,id)) {
+      UnicodeString msg=TheGameText->fetch("CONTROLBAR:LW_HeroUnitAlreadyBeingTrained");
+      ArmyHelpBuildingView *queued=(ArmyHelpBuildingView*)((Rva002BA8F1Logic*)TheLivingWorldLogic)->rva002B2579(queuedBuilding);
+      if(queued && queued->region) {
+       msg.format(&msg,queued->region->rva0020E89C().str());
+      }
+      help+=msg;
+     } else if(!player->rva002E12F3(spawn->m_4c)) {
+      UnicodeString msg=TheGameText->fetch("CONTROLBAR:LW_HeroUnitAlreadyBuilt");
+      Rva00318C79Owner *army=(Rva00318C79Owner*)player->FindArmyWithHero(thing,spawn->m_4c);
+      Rva00318C32Ret *region;
+      if(!army)return help;
+      if(!(region=army->rva00318C32()))return help;
+      {
+       msg.format(&msg,((Rva0020E89C*)region)->rva0020E89C().str());
+      }
+      help+=msg;
+     }
+     }
+ return help;
 }
