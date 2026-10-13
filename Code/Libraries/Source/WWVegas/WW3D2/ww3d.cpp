@@ -1987,7 +1987,6 @@ void WW3D::Render_And_Clear_Static_Sort_Lists(RenderInfoClass & rinfo)
 
 // WW3D::Enable_Sorting: defined in WW3D_EnableSorting.cpp (its row's unit).
 
-// ?Override_Current_Static_Sort_Lists@WW3D@@ present-unmatched
 void WW3D::Override_Current_Static_Sort_Lists(StaticSortListClass * sort_list)
 {
 	if (sort_list) {
