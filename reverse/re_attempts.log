@@ -52070,3 +52070,4 @@ $L2551	0x0075D34A	8	landed	add_match verified Code/GameEngineDevice/Source/W3DDe
 ?rva005E6DAA@Rva005E6D0D@@QAE@PAXPAUHeroDetailsInp	0x005E6DAA	300	blocked	R2 W7-MO4 audit rescan: size-exact 300B nd3; volsweep2 (26 variants) inert. t=8 model=deepseek-v4.1-flash
 ?doTransferTeamToPlayer@ScriptActions@@I	0x003C90DD	244	blocked	R2 W7-MO4 audit rescan: size-exact 244B nd3; volsweep2 (60 variants) inert. t=10 model=deepseek-v4.1-flash
 ?rva005570AB@Rva005570AB@@QAEHHHHHH@Z	0x005570AB	337	blocked	R2 W7-MO4 audit rescan: size-exact 337B rawnd3/normnd2; volsweep2 (122 comma-declarator volatile variants) inert. Residue: mov eax,[eax+0x14] scheduled 6 slots later in retail. t=12 model=deepseek-v4.1-flash
+??0BfmeStrVM0@@QAE@XZ	0x0025D489	509	landed	add_match verified Code/GameEngine/Source/Common/Rva0025D489Ctor.cpp 509B

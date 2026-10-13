@@ -221,7 +221,8 @@ extern "C" __declspec(dllimport) unsigned long __stdcall GetCurrentThreadId();
 struct DisplayCriticalSection {char data[24];};
 // PE import identity at IAT 0xBBA2E4 is kernel32!QueryPerformanceFrequency (retail)
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceFrequency(DisplayCriticalSection*);
-extern DisplayCriticalSection DisplayMovieCriticalSection;
+// 0x00DFE9E0 has no tree name; declared here as an address-derived global so the row links
+DisplayCriticalSection g_00DFE9E0;
 struct DisplayVideoConfig {
  int pointer3c,pointer40,pointer44;bool flag48;char gap49[3];
  __forceinline DisplayVideoConfig():pointer3c(0),pointer40(0),pointer44(0),flag48(false){}
@@ -365,7 +366,7 @@ word124(0),
  f128(0),f12c(0),f130(0),f134(0),word138(0),word13c(0),flag140(true),flag141(false)
 {
  m_sD0.clear();
- QueryPerformanceFrequency(&DisplayMovieCriticalSection);
+ QueryPerformanceFrequency(&g_00DFE9E0);
  ((W3DDisplay*)this)->rva0025D2F6();
  word124=0;word138=0;f128=0;f12c=0;f130=0;f134=0;
 }
