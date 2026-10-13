@@ -51,3 +51,61 @@ static __declspec(noinline) void appendUpgradeList(UnicodeString &out,const Upgr
  }
 }
 void useUpgradeList(UnicodeString &out,const UpgradeRecordView *record){appendUpgradeList(out,record);}
+
+// Retail 0x005F4710, 268 bytes: help factory abutting appendUpgradeList.
+// Same receiver family as rowed Rva005F4254::rva005F4254 (entry-18,
+// owner-1C, fallback receiver-20 instead of -0xC/-0x10/-0x14), plus a
+// description tail: GetArmySummaryEntryDescription result, newline plus the
+// template text at +0x40 when non-empty, then the same-TU appendUpgradeList.
+class Rva0037DCA5 {
+public:
+ void *rva0040C65D(int index);
+};
+UnicodeString GetArmySummaryEntryDescription(Rva0037DCA5 *entry,int rule);
+class InGameSimpleHelp {
+public:
+ InGameSimpleHelp(const UnicodeString &title,const UnicodeString &text);
+private:
+ char m_opaque[12];
+};
+struct EntryNameView4710 { int unknown; AsciiString name; };
+class ThingTemplate;
+class ThingFactory { public: const ThingTemplate *findTemplate(const AsciiString &); };
+extern ThingFactory *TheThingFactory;
+struct TargetRef00217D4C { void *vtable; int references; };
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
+struct TreeHintRef00217D4C {
+ __forceinline TreeHintRef00217D4C(TargetRef00217D4C *p):m_ptr(p) { if(m_ptr) ++m_ptr->references; }
+ __forceinline TreeHintRef00217D4C(const TreeHintRef00217D4C &other):m_ptr(other.m_ptr) { if(m_ptr) ++m_ptr->references; }
+ ~TreeHintRef00217D4C() { if(m_ptr) ReleaseTreeHintRef00217D4C(m_ptr); }
+ TargetRef00217D4C *m_ptr;
+};
+class Rva001524CA { public: TreeHintRef00217D4C rva001524CA(); };
+class Rva005F4710 {
+public:
+ TreeHintRef00217D4C rva005F4710();
+ __forceinline const AsciiString &getName() const { return (*(EntryNameView4710 **)((char *)this-0x18))->name; }
+};
+TreeHintRef00217D4C Rva005F4710::rva005F4710()
+{
+ const AsciiString *key=&getName();
+ if(!((const StringBase<char> *)key)->isEmpty()) {
+  const ThingTemplate *found=TheThingFactory->findTemplate(*key);
+  if(found) {
+   void *owner=*(void **)((char *)this-0x1c);
+   UnicodeString *title=(UnicodeString *)(*(Rva0037DCA5 **)((char *)this-0x18))->rva0040C65D(*(int *)((char *)owner+0x54));
+   if(!title->isEmpty()) {
+    UnicodeString desc=GetArmySummaryEntryDescription(*(Rva0037DCA5 **)((char *)this-0x18),0);
+    const UnicodeString &text=*(const UnicodeString *)((char *)found+0x40);
+    if(!text.isEmpty()) {
+     desc.concat((const unsigned short *)L"\n");
+     desc.concat(text);
+    }
+    appendUpgradeList(desc,(const UpgradeRecordView *)*(void **)((char *)this-0x18));
+    return TreeHintRef00217D4C((TargetRef00217D4C *)new InGameSimpleHelp(*title,desc));
+   }
+  }
+ }
+ int offset=(*(int **)((char *)this-0x20))[1];
+ return ((Rva001524CA *)((char *)this+offset-0x20))->rva001524CA();
+}
