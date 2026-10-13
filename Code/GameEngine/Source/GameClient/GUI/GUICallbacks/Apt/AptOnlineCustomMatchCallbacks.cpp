@@ -8,6 +8,8 @@
 // "AptOnlineCustomMatch::InitGadgets"; the "AptOnline::CustomMatch::" names
 // are Apt binding strings, not the C++ scope). +0x488 is the screen's state.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "ascii_string.h"
 #include "unicode_string.h"
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
@@ -610,8 +612,7 @@ public:
 
 	virtual bool rva0059EBDE();
 	virtual bool MpOwnerOnReadyChecked(bool ready);
-	// MpOwnerSelectColor 0x005A0F4B (slot 4) is banked:
-	// reverse/attempts/0x005a0f4b.cpp.
+	virtual bool MpOwnerSelectColor(GameSlot *slot, int color);
 	virtual bool MpOwnerSelectHandicap(GameSlot *slot, int handicap);
 	virtual bool MpOwnerSelectHero(GameSlot *slot);
 	virtual bool MpOwnerSelectMap(const AsciiString &mapName);
@@ -1020,6 +1021,56 @@ void AptOnlineCustomMatch::rva005A1D32()
 		req.id = "EUI/";
 		req.options = "true";
 		TheGameSpyPeerMessageQueue->addRequest(req);
+	}
+}
+
+// Retail 0x005A0F4B, 399 bytes (WorldBuilder name; wb-name-unverified):
+// "Color=%d"; the host applies the color and publishes the options, a guest
+// must own the slot and sends the request to the host.
+// Codegen: the failure return is ONE block hosted after the isPlayer test in
+// retail (the null-info and null-room tests jump forward to it): the first two
+// failures are gotos to the label inside the isPlayer arm. The always-true
+// color test carries the slot into its register role; the barrier keeps the
+// staging room load ahead of its test.
+bool AptOnlineCustomMatch::MpOwnerSelectColor(GameSlot *slot, int color)
+{
+	if ((slot->m_color != 0 || slot->m_color == 0)) {
+		if (!TheGameSpyInfo)
+			goto fail;
+		GameSpyStagingRoom *room = TheGameSpyInfo->getCurrentStagingRoom();
+		_ReadWriteBarrier();
+		if (!room)
+			goto fail;
+
+		slot->m_color = color;
+		if (TheGameSpyInfo->amIHost())
+		{
+			TheGameSpyInfo->setGameOptions();
+		}
+		else
+		{
+			if (!slot->isPlayer(TheGameSpyInfo->getLocalName()))
+			{
+fail:
+				return false;
+			}
+
+			AsciiString options;
+			options.format("Color=%d", color);
+			AsciiString hostName;
+			hostName.translate(room->getSlot(0)->m_name);
+
+			PeerRequest req;
+			req.peerRequestType = 0xD;
+			req.isStagingRoom = true;
+			req.id = "REQ/";
+			req.nick = hostName.str();
+			req.options = options.str();
+			TheGameSpyPeerMessageQueue->addRequest(req);
+		}
+		if (slot->m_name.compare(room->getSlot(room->getLocalSlotNum())->m_name) == 0)
+			RefreshScreen();
+		return true;
 	}
 }
 
