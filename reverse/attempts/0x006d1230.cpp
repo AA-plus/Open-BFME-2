@@ -1,3 +1,5 @@
+// ?rva006D1230@Rva006D1130@@QAEXPAPAVBfmeRefVGO
+// partial score=0.9462 date=2026-10-13
 // ?rva006D1230@Rva006D1130@@QAEXPAPAVBfmeRefVGO@@0PAURva006D1130Iterator@@@Z
 // partial score=0.9461719071478711 date=2026-10-13
 // ?rva006D1230@Rva006D1130@@QAEXPAPAVBfmeRefVGO@@0PAURva006D1130Iterator@@@Z
@@ -30,9 +32,11 @@ void Rva006D1130::rva006D1230(BfmeRefVGO**first,BfmeRefVGO**last,Rva006D1130Iter
    Rva006D1130Iterator oldLast={oldEnd,data,oldEnd};
    Rva006D04D0CopyBackward(*dest,oldLast,data+(dest->position-data)+added);
    Rva006D0540Copy(*first,*last,*dest);
+   {
    const Rva006D1130Item empty;
    data[total].bfmeAssignVGO(empty);
    __assume(empty.m_bfmeP==0);
+   }
    count=total;
   }
  }else{
