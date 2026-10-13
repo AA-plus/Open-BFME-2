@@ -1,4 +1,6 @@
 // ?EvaluateCondition@@YAHPAUlua_State@@@Z
+// partial score=0.97 date=2026-10-13
+// ?EvaluateCondition@@YAHPAUlua_State@@@Z
 // partial score=0.97 date=2026-10-06
 // cl: /Ireference/shims/bfme2_ascii /O1 /MD /EHsc
 #include <string.h>
