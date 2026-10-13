@@ -303,7 +303,7 @@ void Rva005D40A6::rva005D472C() {
 void __cdecl Rva005277D9Fire(Rva00222A8BTarget *,void *,const char *,const char *,bool *);
 void Rva005D40A6::Update() {
  if(!flag6) { rva005D472C(); if(!flag6)return; }
- if(!flag5) { rva005D4395(); if(!flag5)return; }
+ if(!flag5) { UpdateHeight(); if(!flag5)return; }
  if(!flag1) {
   bool value=flag0;
   Rva005277D9Fire(reinterpret_cast<Rva00222A8BTarget *>(g_bfmeAptWindowManager),reinterpret_cast<void *>(m_04),m_08.str(),"SetChecked",&value);
