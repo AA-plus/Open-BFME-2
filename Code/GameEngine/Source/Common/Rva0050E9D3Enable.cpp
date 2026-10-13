@@ -14,7 +14,8 @@ extern InGameUI *TheInGameUI;
 struct GlobalA046B4 { char pad[0x278]; unsigned char flag; };
 extern GlobalA046B4 *g_Va00A046B4;
 struct GlobalA01E48 { char pad[0x54]; unsigned char flag; };
-extern GlobalA01E48 *g_Va00A01E48;
+class Shell;
+extern Shell *TheShell;
 class Rva00222479ByteOneSetter { public: void enable(); };
 extern Rva00222479ByteOneSetter *g_Va009FE4CC;
 class AptPlayerTribute
@@ -30,7 +31,7 @@ void AptPlayerTribute::CloseScreen(void)
 	if (p->flag)
 		return;
 	p->flag = 1;
-	g_Va00A01E48->flag = 1;
+	((GlobalA01E48 *)TheShell)->flag = 1;
 	g_Va009FE4CC->enable();
 }
 
@@ -50,7 +51,7 @@ void Rva004E400DEnable(void)
 	if (p->flag)
 		return;
 	p->flag = 1;
-	g_Va00A01E48->flag = 1;
+	((GlobalA01E48 *)TheShell)->flag = 1;
 	g_Va009FE4CC->enable();
 }
 
@@ -162,7 +163,7 @@ void Rva0052340DEnable(void)
 	if (p->flag)
 		return;
 	p->flag = 1;
-	g_Va00A01E48->flag = 1;
+	((GlobalA01E48 *)TheShell)->flag = 1;
 	g_Va009FE4CC->enable();
 }
 
@@ -182,7 +183,7 @@ void Rva0043C96FEnable(void)
 	if (p->flag)
 		return;
 	p->flag = 1;
-	g_Va00A01E48->flag = 1;
+	((GlobalA01E48 *)TheShell)->flag = 1;
 	g_Va009FE4CC->enable();
 }
 

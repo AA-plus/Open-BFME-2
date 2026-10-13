@@ -29,7 +29,8 @@ public:
 void _bfme_closeAptScreen(const AsciiString &name);
 
 struct GlobalA01E48;
-extern struct GlobalA01E48 *g_Va00A01E48;
+class Shell;
+extern Shell *TheShell;
 int g_00E04914;
 extern "C" void __cdecl free(void *ptr);
 
@@ -69,7 +70,7 @@ private:
 Rva0051CBC6::~Rva0051CBC6()
 {
 	_bfme_closeAptScreen(AsciiString("AptScoreScreen::InitGadgets"));
-	if (m_280 == 0 && g_Va00A01E48 != 0)
-		((Shell *)g_Va00A01E48)->hide(false);
+	if (m_280 == 0 && TheShell != 0)
+		((Shell *)TheShell)->hide(false);
 	g_00E04914 = 0;
 }

@@ -23,7 +23,8 @@ struct GlobalA04934;
 extern GlobalA04934 *g_Va00A04934;
 
 struct GlobalA01E48;
-extern GlobalA01E48 *g_Va00A01E48;
+class Shell;
+extern Shell *TheShell;
 
 class InGameUI
 {
@@ -87,8 +88,8 @@ AptStrategicPlayerStatus::~AptStrategicPlayerStatus()
 		g_Va00A04934 = (GlobalA04934 *)0;
 		if (TheInGameUI)
 			TheInGameUI->rva0178(0);
-		if (g_Va00A01E48)
-			((Shell *)g_Va00A01E48)->hide(false);
+		if (TheShell)
+			((Shell *)TheShell)->hide(false);
 	}
 }
 

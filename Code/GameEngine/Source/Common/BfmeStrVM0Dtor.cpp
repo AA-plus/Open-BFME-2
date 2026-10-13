@@ -209,8 +209,8 @@ struct GlobalA01E48
 	unsigned char flag;
 };
 // ?g_Va00A01E48@@3PAUGlobalA01E48@@A: the global at this VA is ?TheShell@@3PAVShell@@A; this name is an alias for it.
-extern GlobalA01E48 * g_Va00A01E48;
-#pragma comment(linker, "/alternatename:?g_Va00A01E48@@3PAUGlobalA01E48@@A=?TheShell@@3PAVShell@@A")
+class Shell;
+extern Shell *TheShell;
 
 struct Rva0025C18BCoord
 {
@@ -372,7 +372,7 @@ void BfmeStrVM0::rva0025C14D()
 {
 	if (TheGameLogic->rva00085124())
 	{
-		if (g_Va00A01E48->flag != 0)
+		if (((GlobalA01E48 *)TheShell)->flag != 0)
 			return;
 	}
 	ListNode0025D9E3 *node = m_head1C;

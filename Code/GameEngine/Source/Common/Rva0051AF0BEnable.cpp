@@ -12,7 +12,8 @@ extern LivingWorldLogic *TheLivingWorldLogic;
 struct GlobalA04910 { char pad[0x278]; unsigned char flag; char pad2[7]; int val; };
 extern GlobalA04910 *g_Va00A04910;
 struct GlobalA01E48 { char pad[0x54]; unsigned char flag; };
-extern GlobalA01E48 *g_Va00A01E48;
+class Shell;
+extern Shell *TheShell;
 class Rva00222479ByteOneSetter { public: void enable(); };
 extern Rva00222479ByteOneSetter *g_Va009FE4CC;
 void __cdecl Rva0051AF0BEnable(int val)
@@ -24,7 +25,7 @@ void __cdecl Rva0051AF0BEnable(int val)
 		return;
 	p->flag = 1;
 	g_Va00A04910->val = val;
-	g_Va00A01E48->flag = 1;
+	((GlobalA01E48 *)TheShell)->flag = 1;
 	g_Va009FE4CC->enable();
 }
 

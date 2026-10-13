@@ -62,7 +62,8 @@ struct GlobalA01E48
 	char m_pad[0x54];
 	unsigned char m_54;
 };
-extern GlobalA01E48 *g_Va00A01E48;
+class Shell;
+extern Shell *TheShell;
 
 extern int g_Va00A04908;
 void __cdecl free(void *p);
@@ -113,10 +114,10 @@ AptOptions::~AptOptions()
 		}
 		if (g_Va00A04910 != 0 && g_Va00A04910->m_278 != 0)
 		{
-			if (g_Va00A01E48 != 0)
+			if (TheShell != 0)
 			{
-				g_Va00A01E48->m_54 = 1;
-				((Shell *)g_Va00A01E48)->rva0035BEC7();
+				((GlobalA01E48 *)TheShell)->m_54 = 1;
+				((Shell *)TheShell)->rva0035BEC7();
 			}
 		}
 	}

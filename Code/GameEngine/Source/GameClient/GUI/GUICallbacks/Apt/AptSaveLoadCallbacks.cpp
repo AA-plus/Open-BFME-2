@@ -39,7 +39,8 @@ struct GlobalA01E48
 	bool m_5d; // +0x5D
 };
 
-extern struct GlobalA01E48 *g_Va00A01E48;
+class Shell;
+extern Shell *TheShell;
 
 // The pending confirmation at +0x280 keeps its kind at +0x28.
 struct AptSaveLoadPending
@@ -244,10 +245,10 @@ void AptSaveLoad::rva00433D71(int button)
 // unless a kind 6 confirmation closed it in state 6.
 void AptSaveLoad::OnClosed(const char *unused)
 {
-	if (g_Va00A01E48)
+	if (TheShell)
 	{
 		if (m_state != 6 || !m_pending || m_pending->m_kind != 6)
-			g_Va00A01E48->m_54 = true;
+			((GlobalA01E48 *)TheShell)->m_54 = true;
 	}
 	Rva00433D27Enable();
 }
