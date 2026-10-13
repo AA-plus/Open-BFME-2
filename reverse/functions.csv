@@ -87959,3 +87959,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?rva002BC5D3@Rva002BC5D3@@QAEXXZ,,0x002BC5D3,128,Code/GameEngine/Source/GameLogic/System/LivingWorld/Rva002BC5D3Reset.cpp,matched,
 ?update@GarrisonContain@@UAE?AW4UpdateSleepTime@@XZ,,0x00479643,217,Code/GameEngine/Source/GameLogic/Object/Contain/GarrisonContainUpdate.cpp,matched,
 ?rva00032C60@GeneralAllocator@Allocator@EA@@QAEII@Z,,0x00032C60,386,Code/GameEngine/Source/Common/System/Rva00032C60Purge.cpp,matched,
+?update@MissileUpdate@@UAE?AW4UpdateSleepTime@@XZ,,0x004A7B48,498,Code/GameEngine/Source/GameLogic/Object/Update/MissileUpdateRva004A7B48.cpp,matched,
