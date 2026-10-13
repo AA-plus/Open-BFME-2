@@ -1,7 +1,6 @@
-// ?ExecuteAction@@YAHPAUlua_State@@@Z
-// partial score=0.9164 date=2026-10-13
-// ?ExecuteAction@@YAHPAUlua_State@@@Z
-// partial score=0.9164 date=2026-10-05
+// LuaScriptEngine::ExecuteScriptAction (0x0033436F, 407B): the Lua action dispatcher.
+// The two redundant self-compares of TheScriptEngine in the loop condition fold
+// away (no bytes) and give retail's top-test loop layout.
 // cl: /Ireference/shims/bfme2_ascii /O1 /MD /EHsc
 #include <string.h>
 
@@ -25,12 +24,7 @@ unsigned Rva00990210Lookup(Rva00990210Range*,int);
 struct BfmeQ1039;
 void bfmeGo1039E(BfmeQ1039 *queue, int value);
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class ObjectStatusMask
 {
@@ -125,7 +119,7 @@ int ExecuteAction(lua_State *state)
 	int actionType = 0;
 	const ActionTemplate *actionTemplate;
 
-	for (;;)
+	while ((true) && TheScriptEngine==TheScriptEngine && TheScriptEngine==TheScriptEngine)  // tautology carrier: folds away, gives retail's loop-test layout
 	{
 		actionTemplate = TheScriptEngine->getActionTemplate((ScriptAction::ScriptActionType)actionType);
 		if (strcmp(name, actionTemplate->m_internalName.str()) == 0)
