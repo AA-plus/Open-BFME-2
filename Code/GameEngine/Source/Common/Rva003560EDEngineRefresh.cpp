@@ -70,7 +70,7 @@ extern GameTextInterface *TheGameText;
 class BfmeStrVM0
 {
 public:
-	void rva0025C6E2(int image, int layer, float x0, float y0, float x1, float y1);
+	void SetMovieImage(int image, int layer, float x0, float y0, float x1, float y1);
 	void rva0025D358(UnicodeString text, float x, float y, int font, int color, int flags);
 };
 class GlobalData
@@ -213,12 +213,12 @@ void Rva003561BE::rva00356889(GameInfo *)
 	AsciiString foregroundName("LoadScreenForeground");
 	const Image *foreground = TheMappedImageCollection->findImageByName(foregroundName);
 	if (foreground)
-		((BfmeStrVM0 *)TheDisplay)->rva0025C6E2((int)foreground, 2, 0.0f, 0.0f, 1.0f, 1.0f);
+		((BfmeStrVM0 *)TheDisplay)->SetMovieImage((int)foreground, 2, 0.0f, 0.0f, 1.0f, 1.0f);
 	if (!((const StringBase<char> *)&m_image)->isEmpty())
 	{
 		const Image *image = TheMappedImageCollection->findImageByName(m_image);
 		if (image)
-			((BfmeStrVM0 *)TheDisplay)->rva0025C6E2((int)image, 0, 0.0f, 0.1640625f, 1.0f,
+			((BfmeStrVM0 *)TheDisplay)->SetMovieImage((int)image, 0, 0.0f, 0.1640625f, 1.0f,
 				image->m_28 / 768.0f + 0.1640625f);
 	}
 	setGameLogicFlag78();
@@ -258,7 +258,7 @@ void Rva003560ED::rva00356724(GameInfo *)
 		TheAudio->slot10();
 	}
 	if (!((const StringBase<char> *)&m_image)->isEmpty())
-		((BfmeStrVM0 *)TheDisplay)->rva0025C6E2((int)TheMappedImageCollection->findImageByName(m_image), 2, 0.0f, 0.0f, 1.0f, 1.0f);
+		((BfmeStrVM0 *)TheDisplay)->SetMovieImage((int)TheMappedImageCollection->findImageByName(m_image), 2, 0.0f, 0.0f, 1.0f, 1.0f);
 	setGameLogicFlag78();
 	if (!((const StringBase<char> *)&m_movieOverlay)->isEmpty())
 	{

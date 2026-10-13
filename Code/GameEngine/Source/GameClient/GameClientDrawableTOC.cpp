@@ -863,7 +863,7 @@ public:
 class BfmeStrVM0
 {
 public:
-	void rva0025C72C(int image, int arg, float x0, float y0, float x1, float y1);
+	void SetStaticImage(int image, int arg, float x0, float y0, float x1, float y1);
 	void rva0025C776(int image, float x0, float y0, float x1, float y1, int a, int b);
 };
 class LanguageFilter : public SubsystemInterface { public: virtual ~LanguageFilter(); };
@@ -2231,7 +2231,7 @@ int rva0023958B(void *, bool allowLegal)
 		const Image *image = TheMappedImageCollection->findImageByName(name);
 		if (image)
 		{
-			((BfmeStrVM0 *)TheDisplay)->rva0025C72C((int)image, 2, 0.0f, 0.0f, 1.0f, 1.0f);
+			((BfmeStrVM0 *)TheDisplay)->SetStaticImage((int)image, 2, 0.0f, 0.0f, 1.0f, 1.0f);
 			TheTransitionHandler->reverse(AsciiString("FadeInGameMovie"));
 			TheTransitionHandler->rva001DC5EC();
 			int beginTime = timeGetTime();

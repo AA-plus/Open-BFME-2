@@ -2,7 +2,7 @@
 // Near-miss donor from Open-BFME-1 BfmeConv1435.cpp
 // (?bfmeTickVM0@BfmeStrVM0@@QAEXXZ @0x0040FE40):
 // retail predicate virtual is at slot +0x114 (not +0xF0).
-// ?bfmeGoVM0@BfmeStrVM0@@QAEXH@Z @0x0025D904 (199B):
+// ?StartRenderThread@BfmeStrVM0@@QAEXH@Z @0x0025D904 (199B):
 // BFME2-only watchdog arming. A 64-bit timing base is divided by
 // (timer - 2) through __alldiv and a frequency ratio is scaled on the x87
 // unit; then two mutexes plus a worker thread are created and the first
@@ -14,7 +14,7 @@ extern "C" __declspec(dllimport) unsigned long __stdcall WaitForSingleObject(voi
 extern "C" __declspec(dllimport) int __stdcall ReleaseMutex(void *handle);
 extern "C" __declspec(dllimport) void __stdcall Sleep(unsigned long ms);
 
-// Watcher thread armed by bfmeGoVM0. Retail's body returns with a plain
+// Watcher thread armed by StartRenderThread. Retail's body returns with a plain
 // ret: it is cdecl, cast to CreateThread's stdcall start type.
 unsigned long __cdecl bfmeVM0WorkerThread(void *param);
 
@@ -126,7 +126,7 @@ public:
 	virtual int v71();
 	virtual int v72();
 	virtual void bfmeKickVM0(int value);
-	void bfmeGoVM0(int);
+	void StartRenderThread(int);
 	void bfmeTickVM0();
 	void rva0025C46E();
 	void rva0025D9CB(bool flag);
@@ -144,7 +144,7 @@ public:
 };
 
 // ?bfmeVM0WorkerThread@@YAKPAX@Z retail 0x0025D128 (118B), the CreateThread
-// start bfmeGoVM0 pushes. It holds the first mutex while it runs and
+// start StartRenderThread pushes. It holds the first mutex while it runs and
 // polls the second, which the arming thread owns, at the mode's period:
 // mode 5 drives rva0025C4A4(1) every 33ms; any other mode probes through
 // slot +0x118 until it succeeds (kicking slot +0x124 and retrying after 1ms)
@@ -177,11 +177,11 @@ unsigned long __cdecl bfmeVM0WorkerThread(void *param)
 void BfmeStrVM0::bfmeTickVM0()
 {
 	if (bfmePredVM0())
-		bfmeGoVM0(3);
+		StartRenderThread(3);
 }
 
-// ?bfmeGoVM0@BfmeStrVM0@@QAEXH@Z
-void BfmeStrVM0::bfmeGoVM0(int mode)
+// ?StartRenderThread@BfmeStrVM0@@QAEXH@Z
+void BfmeStrVM0::StartRenderThread(int mode)
 {
 	if (m_firstMutex == 0 && m_secondMutex == 0) {
 		if (mode != 5) {
@@ -223,12 +223,12 @@ void BfmeStrVM0::rva0025C46E()
 }
 
 // ?rva0025D9CB@BfmeStrVM0@@QAEX_N@Z retail 0x0025D9CB 24B.
-// Flag selects watchdog arm (bfmeGoVM0 mode 5) versus mutex release
+// Flag selects watchdog arm (StartRenderThread mode 5) versus mutex release
 // (rva0025C46E), forwarding this. Callers at 0x0043A30B/0x0043A326 push 0/1.
 void BfmeStrVM0::rva0025D9CB(bool flag)
 {
 	if (flag)
-		bfmeGoVM0(5);
+		StartRenderThread(5);
 	else
 		rva0025C46E();
 }

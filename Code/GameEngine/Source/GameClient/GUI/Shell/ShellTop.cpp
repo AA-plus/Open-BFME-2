@@ -237,7 +237,7 @@ extern ImageCollection *TheMappedImageCollection;
 class BfmeStrVM0
 {
 public:
-	void rva0025C72C(int image, int arg, float x0, float y0, float x1, float y1);
+	void SetStaticImage(int image, int arg, float x0, float y0, float x1, float y1);
 };
 struct ShellDisplayView
 {
@@ -306,7 +306,7 @@ void Shell::update()
 		if( image )
 		{
 			((ShellDisplayView *)TheDisplay)->m_byte114 = true;
-			((BfmeStrVM0 *)TheDisplay)->rva0025C72C( (int)image, 0, 0.0f, 0.0f, 1.0f, 1.0f );
+			((BfmeStrVM0 *)TheDisplay)->SetStaticImage( (int)image, 0, 0.0f, 0.0f, 1.0f, 1.0f );
 			TheTransitionHandler->reverse( AsciiString( "FadeInGameMovie_NoAudio" ) );
 			TheTransitionHandler->slot0A();
 		}

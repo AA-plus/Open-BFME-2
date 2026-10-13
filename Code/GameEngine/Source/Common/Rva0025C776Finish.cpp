@@ -1,6 +1,6 @@
 // cl: /Ob0
 // ?rva0025C776@BfmeStrVM0@@QAEXHMMMMHH@Z @0x0025C776 131B
-// Third BfmeStrVM0 block setter, sibling of rva0025C6E2/rva0025C72C in
+// Third BfmeStrVM0 block setter, sibling of SetMovieImage/SetStaticImage in
 // Rva0025C6E2.cpp: same object model, the +0x110/+0x124/+0x138 scalar block.
 // Seven stack args (ret 0x1c); the reciprocal stores
 // 1.0f / (float)a20 at +0x11c and the same literal at +0x120, both read from
@@ -25,8 +25,8 @@ class BfmeStrVM0
 {
 public:
 	virtual ~BfmeStrVM0();
-	void rva0025C6E2(int v0, int idx, float f0, float f1, float f2, float f3);
-	void rva0025C72C(int v0, int idx, float f0, float f1, float f2, float f3);
+	void SetMovieImage(int v0, int idx, float f0, float f1, float f2, float f3);
+	void SetStaticImage(int v0, int idx, float f0, float f1, float f2, float f3);
 	void rva0025C776(int a8, float fc, float f10, float f14, float f18, int a1c, int a20);
 private:
 	char m_pad04[0x64];
