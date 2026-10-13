@@ -788,13 +788,16 @@ class Rva0059B1A2 {
 public:
 	int rva0059B1A2(char *dst);
 };
+// operator AsciiString(): the matched caller 0x0059B5A3 copy-initialises its
+// string from this node and only a conversion function reproduces retail's
+// kept temporary (its address re-derived for the copy constructor).
 class Rva0059B2EC {
 	char m_prefix[0x10];
 	int m_extra10;
 public:
-	AsciiString rva0059B2EC();
+	operator AsciiString();
 };
-AsciiString Rva0059B2EC::rva0059B2EC()
+Rva0059B2EC::operator AsciiString()
 {
 	AsciiString tmp;
 	int extra = m_extra10;
