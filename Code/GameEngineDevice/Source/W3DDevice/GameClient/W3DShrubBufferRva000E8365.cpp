@@ -10,6 +10,14 @@
 #include "vector3.h"
 #include "matrix3d.h"
 
+// Component arithmetic from the donor, with no external scalar operator copy.
+static inline void scaleShrubVertex(Vector3 &vertex, float scale)
+{
+	vertex.X = vertex.X * scale;
+	vertex.Y = vertex.Y * scale;
+	vertex.Z = vertex.Z * scale;
+}
+
 class VertexBufferClass
 {
 public:
@@ -170,7 +178,7 @@ void W3DShrubBuffer::rva000E8365(void)
 				vert += m_treeTypes[type].m_offset;
 				Vector3 vLoc;
 				Matrix3D::Transform_Vector(m_trees[curTree].transform, vert, &vLoc);
-				vLoc *= scale;
+				scaleShrubVertex(vLoc, scale);
 
 				if (m_trees[curTree].pushAside > 0.0f) {
 					vLoc.X += pVert[i].Z * m_trees[curTree].pushAside * m_trees[curTree].pushAsideCos * m_treeTypes[type].m_data->m_maxOutwardMovement;
