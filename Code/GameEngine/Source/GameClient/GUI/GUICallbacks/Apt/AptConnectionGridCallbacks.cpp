@@ -7,20 +7,22 @@
 // class keeps the name the ledger gives the grid's rowed per-player setter
 // 0x005DB3B3 (Rva005DB3B3Method.cpp).
 
-// The global at 0x00E063F8 (name unknown) the grid registers in; its
-// unrowed 0x005A6D47 retries the connections and +0x28 is the state the
-// grid draws.
+// TheNAT (0x00E063F8), the global the grid registers in: its rowed
+// 0x005A6D47 (Rva005A69C0Box.cpp) retries the connections and +0x28 is the
+// state the grid draws.
 class Rva005A6D47
 {
 public:
-	void rva005A6D47();
-
 	unsigned char m_pad00[0x28];
 	unsigned char m_28; // +0x28
 };
 
-// Bind the existing NAT datum; retain this unit's access view at use sites.
-struct NAT;
+// Bind the existing NAT datum and its retry pass; retain this unit's access
+// view for the grid state.
+struct NAT
+{
+	void rva005A6D47();
+};
 extern NAT *TheNAT;
 struct NAT { void rva005A6D47(); };
 

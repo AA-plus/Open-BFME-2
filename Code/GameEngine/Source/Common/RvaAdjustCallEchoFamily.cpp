@@ -7,7 +7,8 @@
 // 0x0030BEE6 (-0x28 -> 0x0053863E), 0x0030BEF9 (-0x28 -> 0x00538674),
 // 0x00330C0F (-0x3C -> 0x0007E03A), 0x00330C22 (-0x3C -> 0x002E3876).
 // Callee identities unproven (opaque pins); owner names address-derived.
-// One ledger row per member.
+// One ledger row per member. 0x00330C22's echo is its hidden return slot:
+// it forwards the rowed PolygonTrigger::getCenterPoint2D's point return.
 #include <math.h>
 
 #include <new>
@@ -74,10 +75,23 @@ public:
 	void run(int value);
 };
 
-class Rva002E3876Sub
+// The point type PolygonTrigger::getCenterPoint2D 0x002E3876 returns, by
+// its rowed name (Map/PolygonTriggerCenter.cpp, Common/PinnedForwarders1830.cpp).
+struct Rva0030B72CPoint
+{
+	Rva0030B72CPoint() {}
+	__forceinline Rva0030B72CPoint(const Rva0030B72CPoint &that)
+	{
+		x = that.x;
+		y = that.y;
+	}
+	float x, y;
+};
+
+class PolygonTrigger
 {
 public:
-	void run(int value);
+	Rva0030B72CPoint getCenterPoint2D(void) const;
 };
 
 class Rva0030BEE6Owner
@@ -101,7 +115,7 @@ public:
 class Rva00330C22Owner
 {
 public:
-	int fwd(int value);
+	Rva0030B72CPoint rva00330C22() const;
 };
 
 int Rva0030BEE6Owner::fwd(int value)
@@ -133,10 +147,10 @@ Rva00538674Point *Rva00538674Sub::run(Rva00538674Point *output)
 }
 
 
-int Rva00330C22Owner::fwd(int value)
+// 0x00330C22 hands its return slot to the PolygonTrigger at this-0x3C.
+Rva0030B72CPoint Rva00330C22Owner::rva00330C22() const
 {
-	((Rva002E3876Sub *)((char *)this - 0x3C))->run(value);
-	return value;
+	return ((const PolygonTrigger *)((const char *)this - 0x3C))->getCenterPoint2D();
 }
 
 // Target evidence: 0x00538661 is a 19B Ghidra function. It checks the byte at

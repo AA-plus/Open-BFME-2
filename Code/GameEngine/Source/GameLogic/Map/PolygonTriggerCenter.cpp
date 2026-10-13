@@ -7,11 +7,14 @@
 // at PolygonTrigger +8 (target evidence: bounds lo +0x0C, hi +0x14, radius
 // +0x20 behind the pinned getRadius 0x0030B719, dirty flag +0x24, refresh
 // 0x0030B3D1); the class name is not established.
-//  - Rva0030B719Shape::getCenterPoint, retail 0x0030B72C (67 bytes, pinned):
-//    Zero Hour's bounds midpoint, returned as a Coord2D.
+//  - Rva0030B719Shape::rva0030B72C, retail 0x0030B72C (67 bytes, rowed in
+//    Common/PinnedForwarders1830.cpp): Zero Hour's bounds midpoint.
 //  - PolygonTrigger::getCenterPoint2D, retail 0x002E3876 (19 bytes): the
 //    shape's center; also reached through the this-adjusting forwarder
-//    0x00330C22 (this - 0x3C), so it is likely a virtual of a base.
+//    0x00330C22 (this - 0x3C), so it is likely a virtual of a base. It hands
+//    its own return slot to 0x0030B72C unchanged, so both return the same
+//    point type; that type stores its fields one by one when copied, unlike
+//    the plain canonical Coord2D, and keeps the provider's address name.
 //  - PolygonTrigger::getCenterPoint, retail 0x002E38F3 (97 bytes): Zero
 //    Hour's body over the center above; the height is
 //    TheTerrainLogic->getGroundHeight (vslot 6) when there is a terrain logic,
@@ -39,10 +42,21 @@ public:
 };
 extern TerrainLogic *TheTerrainLogic;
 
+struct Rva0030B72CPoint
+{
+	Rva0030B72CPoint() {}
+	__forceinline Rva0030B72CPoint(const Rva0030B72CPoint &that)
+	{
+		x = that.x;
+		y = that.y;
+	}
+	float x, y;
+};
+
 class Rva0030B719Shape
 {
 public:
-	Coord2D getCenterPoint(void) const;
+	Rva0030B72CPoint rva0030B72C(void) const;
 private:
 	unsigned char m_pad00[0x28];
 };
@@ -59,7 +73,7 @@ public:
 	virtual void slot18(Int height);
 	virtual void slot1C();
 	virtual void slot20(const Coord2D *offset);
-	Coord2D getCenterPoint2D(void) const;
+	Rva0030B72CPoint getCenterPoint2D(void) const;
 	void getCenterPoint(Coord3D *pOutCoord) const;
 	void rva002E38AF(const Coord3D *offset);
 private:
@@ -68,9 +82,9 @@ private:
 	Int m_defaultHeight; // +0x30
 };
 
-Coord2D PolygonTrigger::getCenterPoint2D(void) const
+Rva0030B72CPoint PolygonTrigger::getCenterPoint2D(void) const
 {
-	return m_shape.getCenterPoint();
+	return m_shape.rva0030B72C();
 }
 
 void PolygonTrigger::getCenterPoint(Coord3D* pOutCoord)	const
@@ -79,7 +93,7 @@ void PolygonTrigger::getCenterPoint(Coord3D* pOutCoord)	const
 		return;
 	}
 
-	Coord2D center = getCenterPoint2D();
+	Rva0030B72CPoint center = getCenterPoint2D();
 	(*pOutCoord).x = center.x;
 	(*pOutCoord).y = center.y;
 
