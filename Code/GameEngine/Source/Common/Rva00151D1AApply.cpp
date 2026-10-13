@@ -2,7 +2,7 @@
 //
 // Dump-lane range 5: holder-gated render-state applier.
 //
-// ?rva00151D1A@Rva00151D1A@@QAEXH@Z, retail 0x00151D1A (69 bytes).
+// ?UpdateDynamicParameterSet@FXShaderSetup@@QAEXH@Z, retail 0x00151D1A (69 bytes).
 // Frameless thiscall: gates on the +8 holder's pointer, revalidates through
 // the rowed 0x15148D getter, skips on zero +0x20, applies the rowed DX8
 // render-state changes, forwards (arg, +0x20) to the rowed 0x1514B2 chain,
@@ -103,18 +103,18 @@ public:
 	virtual void __stdcall v65() = 0;
 };
 
-class Rva00151D1A
+class FXShaderSetup
 {
 public:
-	void rva00151D1A(int a);
+	void UpdateDynamicParameterSet(int a);
 private:
 	char m_pad[8];
 	Rva001514B2 m_chain;
 	int m_20;
 };
 
-// ?rva00151D1A@Rva00151D1A@@QAEXH@Z
-void Rva00151D1A::rva00151D1A(int a)
+// ?UpdateDynamicParameterSet@FXShaderSetup@@QAEXH@Z
+void FXShaderSetup::UpdateDynamicParameterSet(int a)
 {
 	Rva0015148D *holder = (Rva0015148D *)&m_chain;
 	if (holder->m_ptr == 0) {

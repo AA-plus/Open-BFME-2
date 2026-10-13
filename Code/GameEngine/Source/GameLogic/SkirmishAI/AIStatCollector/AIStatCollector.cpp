@@ -74,7 +74,7 @@ namespace _STL { template <> void vector<const ModuleData *>::push_back(const Mo
 class Rva005961D6 { public: Rva005961D6(); private: char bytes[0xa4]; };
 class Rva00596069 { public: Rva00596069(); private: char bytes[0x10]; };
 class Rva005965A5 { public: Rva005965A5(); private: char bytes[0x1c]; };
-class Rva00596389 { public: Rva00596389(int); private: char bytes[0x1c]; };
+class AIEconomyStats { public: AIEconomyStats(int); private: char bytes[0x1c]; };
 class Rva00283081 { public: Rva00283081(float,int) throw(); private: char bytes[0x24]; };
 class Rva002A8F24;
 extern Rva002A8F24 *g_00DFEEF8;
@@ -88,7 +88,7 @@ private:
  Rva005961D6 *units;
  Rva00596069 *otherUnits;
  Rva005965A5 *structures;
- Rva00596389 *resources;
+ AIEconomyStats *resources;
  Rva00283081 *positions;
  _STL::hash_map<int,int> counts;
  Player *player;
@@ -104,7 +104,7 @@ AIStatCollector::AIStatCollector(Player *owner)
  units=new Rva005961D6;
  otherUnits=new Rva00596069;
  structures=new Rva005965A5;
- resources=new Rva00596389(reinterpret_cast<int>(player));
+ resources=new AIEconomyStats(reinterpret_cast<int>(player));
  positions=new Rva00283081(reinterpret_cast<CollectorManagerView *>(g_00DFEEF8)->interval,
                           reinterpret_cast<int>(&Rva004DF983Field));
 }

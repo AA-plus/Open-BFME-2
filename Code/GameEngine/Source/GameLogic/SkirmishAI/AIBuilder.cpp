@@ -189,7 +189,7 @@ public:
     unsigned char prefix00[0x94];
     unsigned int money94;
 };
-class Rva00596389
+class AIEconomyStats
 {
 public:
     void rva005963A1(int amount);
@@ -200,7 +200,7 @@ public:
 struct AIBuilderSavingsStore
 {
     unsigned char prefix00[0x0c];
-    Rva00596389 *saver0c;
+    AIEconomyStats *saver0c;
 };
 struct Rva002A8AB1Record
 {
@@ -345,7 +345,7 @@ void AIBuilder::moneySaverUpdate()
     if (value158 <= frame)
     {
         AIBuilderSavingsStore *store = static_cast<AIBuilderSavingsStore *>(g_00DFEEF8->rva002A8F24(owner00));
-        Rva00596389 *saver = store->saver0c;
+        AIEconomyStats *saver = store->saver0c;
         saver->limit18 = component38.savingsLimit48;
         if (saver->limit18 == -1 || saver->saved14 < static_cast<unsigned int>(saver->limit18))
         {

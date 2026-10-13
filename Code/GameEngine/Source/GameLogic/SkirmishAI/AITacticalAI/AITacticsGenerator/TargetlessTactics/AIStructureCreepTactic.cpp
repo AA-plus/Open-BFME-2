@@ -237,7 +237,7 @@ public:
 	void *rva00599870(const Coord3D &point, int a);
 };
 
-class Rva00596389
+class AIEconomyStats
 {
 public:
 	int rva00596394() const;
@@ -246,7 +246,7 @@ public:
 struct Rva005AB7E5Objects
 {
 	char m_pad00[0x0C];
-	Rva00596389 *m_0C;		// +0x0C
+	AIEconomyStats *m_0C;		// +0x0C
 };
 
 struct Rva005AB7E5NameList
@@ -631,7 +631,7 @@ bool AIStructureCreepTactic::canRun(void *request)
 		if (record->rva002C7196(AIStructureCreep_IsRunning) == 0
 			&& !record->m_160->m_names.empty()
 			&& record->m_140.rva00599870(((Rva004EBF4B *)record)->rva004EBF4B(), 0) != 0) {
-			Rva00596389 *stats = ((Rva005AB7E5Objects *)g_00DFEEF8->rva002A8F24(m_owner))->m_0C;
+			AIEconomyStats *stats = ((Rva005AB7E5Objects *)g_00DFEEF8->rva002A8F24(m_owner))->m_0C;
 			if (stats->rva00596394() >= 700u && findBestInterestZone())
 				return true;
 		}

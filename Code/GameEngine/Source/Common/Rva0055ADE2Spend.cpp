@@ -24,10 +24,10 @@ public:
 };
 extern Rva002A8F24 *g_00DFEEF8;
 
-class Rva00596389
+class AIEconomyStats
 {
 public:
-	void rva005963C8(int amount);
+	void withdrawSavedAmount(int amount);
 };
 
 class AIBuildable
@@ -63,9 +63,9 @@ bool AIBuildable::doBuild(Player *player)
 	if (m_flag21) {
 		unsigned int c2 = (unsigned int)player->m_cost94;
 		if (v09(player) > (float)c2) {
-			Rva00596389 *spender = *(Rva00596389 **)((char *)store + 0xc);
+			AIEconomyStats *spender = *(AIEconomyStats **)((char *)store + 0xc);
 			if (*(unsigned int *)((char *)spender + 0x14) >= (unsigned int)amount) {
-				spender->rva005963C8(amount);
+				spender->withdrawSavedAmount(amount);
 			}
 		}
 	}

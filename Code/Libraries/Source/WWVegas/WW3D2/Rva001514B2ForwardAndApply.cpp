@@ -11,7 +11,7 @@ void Rva001514B2::apply(unsigned n,void*p) {
  if(root && root->inner && root->inner->target) root->inner->target->apply(n,p);
 }
 class DX8Wrapper { public: static void Apply_Render_State_Changes(); };
-class Rva00151D1A {
+class FXShaderSetup {
  unsigned head[2];
  Rva001514B2 handle;
  unsigned middle[5];
@@ -19,7 +19,7 @@ class Rva00151D1A {
  public: void apply(unsigned);
 };
 
-void Rva00151D1A::apply(unsigned n) {
+void FXShaderSetup::apply(unsigned n) {
  if(handle.root && handle.get() && extra) {
   DX8Wrapper::Apply_Render_State_Changes();
   handle.apply(n,extra);

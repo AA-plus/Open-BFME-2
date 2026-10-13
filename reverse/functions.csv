@@ -7401,7 +7401,7 @@ _Rva008118C0,,0x0067D7C0,5,Code/Libraries/Source/DirtySock/Y5SmallHelpers.c,matc
 ??1Rva004BAB36@@UAE@XZ,,0x004BAB36,25,Code/GameEngine/Source/Common/Rva004B96CCDerived.cpp,matched,opaque MI dtor
 ??1Rva004BB0CC@@UAE@XZ,,0x004BB0CC,25,Code/GameEngine/Source/Common/Rva004B96CCDerived.cpp,matched,opaque MI dtor
 ??1Rva00596069@@UAE@XZ,,0x00596069,11,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,opaque derived dtor tail-jmp row base
-??1Rva00596389@@UAE@XZ,,0x00596389,11,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,opaque derived dtor
+??1AIEconomyStats@@UAE@XZ,,0x00596389,11,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,opaque derived dtor
 ??1Rva005D8723@@UAE@XZ,,0x005D8723,11,Code/GameEngine/Source/Common/Rva005EEDAADerived.cpp,matched,opaque derived dtor tail-jmp row base
 ??1Rva005D9DC1@@UAE@XZ,,0x005D9DC1,11,Code/GameEngine/Source/Common/Rva005EEDAADerived.cpp,matched,opaque derived dtor
 ??1Rva005DA0E2@@UAE@XZ,,0x005DA0E2,11,Code/GameEngine/Source/Common/Rva005EEDAADerived.cpp,matched,opaque derived dtor
@@ -11144,7 +11144,7 @@ _math_max,,0x00748880,113,Code/Libraries/Source/Lua/lmathlib.c,matched,Lua math.
 ??_GRva0035D0D1@@UAEPAXI@Z,,0x0035D1F0,28,Code/GameEngine/Source/Common/Rva001DBAC3Derived.cpp,matched,scalar deleting-dtor thunk emitted via TU vtable; byte-exact
 ??_GRva0035D352@@UAEPAXI@Z,,0x0035D43E,28,Code/GameEngine/Source/Common/Rva001DBAC3Derived.cpp,matched,scalar deleting-dtor thunk emitted via TU vtable; byte-exact
 ??_GRva00596069@@UAEPAXI@Z,,0x00596079,28,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,scalar deleting-dtor thunk emitted via TU vtable; byte-exact
-??_GRva00596389@@UAEPAXI@Z,,0x005963F0,28,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,scalar deleting-dtor thunk emitted via TU vtable; byte-exact
+??_GAIEconomyStats@@UAEPAXI@Z,,0x005963F0,28,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,scalar deleting-dtor thunk emitted via TU vtable; byte-exact
 ??_GRva00535776@@UAEPAXI@Z,,0x00537E60,28,Code/GameEngine/Source/Common/Rva003B1F65Derived.cpp,matched,scalar deleting-dtor thunk emitted via TU vtable; byte-exact
 ??_GRva0045EA3F@@UAEPAXI@Z,,0x0045ED2F,28,Code/GameEngine/Source/Common/Rva0045D39EDerived.cpp,matched,scalar deleting-dtor thunk emitted via TU vtable; byte-exact
 ??_GRva00461EEB@@UAEPAXI@Z,,0x00461FF2,28,Code/GameEngine/Source/Common/Rva0045D39EDerived.cpp,matched,scalar deleting-dtor thunk emitted via TU vtable; byte-exact
@@ -38360,7 +38360,7 @@ _FilterBlockBil_8_wmt,,0x001D7C80,204,Code/Libraries/Source/VP6/FilterBlockBil8W
 ??0Rva005961D6@@QAE@XZ,,0x005961D6,79,Code/GameEngine/Source/Common/Rva005961D6Ctor.cpp,matched,Derived ctor via base plus elements plus vector
 ??0Rva00596069@@QAE@XZ,,0x00596057,18,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,Rva00596069 ctor via base plus vtable
 ??0Rva005965A5@@QAE@XZ,,0x005965A5,33,Code/GameEngine/Source/Common/Rva005965A5Ctor.cpp,matched,Derived ctor via base plus vector
-??0Rva00596389@@QAE@H@Z,,0x00596366,35,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,Rva00596389 ctor via base plus ints
+??0AIEconomyStats@@QAE@H@Z,,0x00596366,35,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,Rva00596389 ctor via base plus ints
 ?Rva00596095Get@@YGHPAX@Z,,0x00596095,44,Code/GameEngine/Source/Common/Rva00596095Bits.cpp,matched,Bit predicate via three status bytes
 ??0Rva002D22CA@@QAE@XZ,,0x002D22AC,30,Code/GameEngine/Source/Common/Rva002D22CACtor.cpp,matched,vtable 0x00802A20 names Rva002D22CA ctor; base 12B via Dtor.cpp; unblocks 0x4CA3A; loop keeps lea-xor order
 ?rva002D2D13@Rva002D2D13@@QAEXPAXH@Z,,0x002D2D13,32,Code/GameEngine/Source/Common/Rva002D2D13Calls.cpp,matched,virtual slot 31 twice with this and this+4; caller 0x2D649B; O1 gives eax
@@ -39039,7 +39039,7 @@ _Rva00020AC0,,0x00020AC0,39,Code/Libraries/Source/WWVegas/WWLib/Rva0084D890CodeP
 ??4Rva0039D769@@QAEAAV0@ABV0@@Z,,0x0039D769,61,Code/GameEngine/Source/Common/Rva0039D769Assign.cpp,matched,0x18 element assign via 3 dwords plus 2 AsciiStrings plus tail
 ?Rva00153425Copy@@YAPAVRva00468520@@PAV1@00ABUTag@@@Z,,0x00153425,38,Code/Libraries/Source/WWVegas/WWLib/Rva00153425Copy.cpp,matched,copy via rowed Init 0x4F6B7B callers 0x1534A7 0x15353B 0x153873
 ?DrawPixel@SurfaceClass@@QAEXIII@Z,,0x00116C30,210,Code/Libraries/Source/WWVegas/WW3D2/SurfaceByteSize.cpp,matched,BFME1 DrawPixel donor unlock unblocks 9
-?rva00596394@Rva00596389@@QBEHXZ,,0x00596394,13,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,neighbours prove Rva00596389 owner plus caller 0x005AC092
+?rva00596394@AIEconomyStats@@QBEHXZ,,0x00596394,13,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,neighbours prove Rva00596389 owner plus caller 0x005AC092
 ??0Path@@QAE@XZ,,0x00363DC8,49,Code/GameEngine/Source/GameLogic/AI/PathCtor.cpp,matched,Path ctor via BFME1 donor and new-0x28 callers 2657CE and 2EDEAB
 ?rva000B304B@Rva000B304B@@QAEXPAX_N@Z,,0x000B304B,73,Code/GameEngine/Source/Common/Rva000B304B.cpp,matched,unlock lane callers 0x000B4EF4 0x000B51C0 0x000B5903 slots 0x88 0x194 refcount plus4
 ?Rva00363CF3Distance@@YANPBUCoord3D@@0@Z,,0x00363CF3,45,Code/GameEngine/Source/GameLogic/AI/PathDistance.cpp,matched,2D distance via sqrt for PathNode positions callers 363D74 and 3642DF
@@ -40364,7 +40364,7 @@ _Rva00020AC0,,0x00020AC0,39,Code/Libraries/Source/WWVegas/WWLib/Rva0084D890CodeP
 ?rva00596472@Rva0025C061@@QAE_NPAX@Z,,0x00596472,31,Code/GameEngine/Source/Common/Rva00596095Bits.cpp,matched,thiscall predicate plus base Science push via visible callee
 ?rva00596491@AIStatBase@@QAE_NPAX@Z,,0x00596491,31,Code/GameEngine/Source/Common/Rva00596095Bits.cpp,matched,thiscall predicate plus hero remover via visible callee
 ??0Rva005AFE86@@QAE@PAX@Z,,0x005AFE86,85,Code/GameEngine/Source/Common/Rva005AFE86Ctor.cpp,matched,chain ctor vtable append via Get
-?rva0059640C@Rva00596389@@QAEXPAX@Z,,0x0059640C,58,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,triple virtual dispatch with TwoBytes local
+?rva0059640C@AIEconomyStats@@QAEXPAX@Z,,0x0059640C,58,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,triple virtual dispatch with TwoBytes local
 ?rva005960C1@Rva0025C061@@QAE_NPAX@Z,,0x005960C1,31,Code/GameEngine/Source/Common/Rva00596095Bits.cpp,matched,thiscall predicate plus base Science push via visible callee
 ?Rva003F1F06Copy@@YAPADPAD00@Z,,0x003F1F06,50,Code/Libraries/Source/WWVegas/WWLib/Rva003F1F06Copy.cpp,matched,counted copy stride 12 via vector uint assign 0x0026F4F4 caller 0x003F2460
 ?Rva003F1F38CopyBackward@@YAPADPAD00@Z,,0x003F1F38,50,Code/Libraries/Source/WWVegas/WWLib/Rva003F1F38CopyBackward.cpp,matched,counted copy-backward stride 12 via vector uint assign 0x0026F4F4 caller 0x003F24D6
@@ -49523,7 +49523,7 @@ _Rva008143F0,,0x006802F0,5,Code/Libraries/Source/DirtySock/Y4CommTickIdle.c,matc
 ??0Rva0010EF61@@QAE@ABVRva0036CA00Str@@MH@Z,,0x0010EF61,42,Code/GameEngine/Source/Common/Rva0010EF61Ctor.cpp,matched,float plus int ctor same base vtable 0xBCFA94 callers 0x0010FEB6 0x00110056
 ??0Rva0010EF14@@QAE@ABVRva0036CA00Str@@MM@Z,,0x0010EF14,46,Code/GameEngine/Source/Common/Rva0010EF14Ctor.cpp,matched,same base 0x001164D3 as siblings 0x0010EEF1 0x0010EF61 caller 0x0010FDAC vtable 0x00BCFA84
 ??1Rva004D99FF@@QAE@XZ,,0x004D99FF,54,Code/GameEngine/Source/Common/Rva004D99FFDtor.cpp,matched,dtor releases AsciiStrings at 0x18 and 0x1C via releaseBuffer
-?rva005963C8@Rva00596389@@QAEXH@Z,,0x005963C8,40,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,chain from 0x003B0D7C via caller 0x0055ADE2 neighbours prove Rva00596389 owner
+?withdrawSavedAmount@AIEconomyStats@@QAEXH@Z,,0x005963C8,40,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,chain from 0x003B0D7C via caller 0x0055ADE2 neighbours prove Rva00596389 owner
 ?rva004A8DDE@DelayedLuaEventList@@QAEAAV1@ABV1@@Z,,0x004A8DDE,44,Code/GameEngine/Source/GameLogic/ScriptEngine/DelayedLuaEventListCopy.cpp,matched,unlock lane copy 3x0x18 via rowed Rva0028BC20 copy ctor explicit call check-free
 ?rva004A8F0B@DelayedLuaEventUpdate@@QAEXIABVDelayedLuaEventList@@W4UpdateSleepTime@@M_N2@Z,,0x004A8F0B,71,Code/GameEngine/Source/GameLogic/Object/Update/DelayedLuaEventUpdateInit.cpp,matched,chain lane init 6 args via landed copy and setWakeFrame clamp
 ?Rva004A82BAAttemptDamage@@YAXPAVObject@@@Z,,0x004A82BA,59,Code/GameEngine/Source/Common/Rva004A82BADamage.cpp,matched,leaf free damageinfo via rowed ctor and pinned attemptDamage
@@ -53519,7 +53519,7 @@ _VP6_GetPbParam,,0x001B58F0,25,Code/Libraries/Source/VP6/PbAccessors.cpp,matched
 ??1Rva005E2DEB@@QAE@XZ,,0x005E2DEB,79,Code/GameEngine/Source/Common/Rva005E2DEBDtor.cpp,matched,unlock dtor via caller 0x005E30CE delete pattern plus rowed member dtors
 ?rva005E30CE@Rva005E30CE@@QAEXXZ,,0x005E30CE,26,Code/GameEngine/Source/Common/Rva005E30CEClear.cpp,matched,chain free via just landed dtor plus rowed delete
 ?rva00140BE0@@YAPAURva00140BE0WordCell@@PAU1@0@Z,,0x00140BE0,15,Code/GameEngine/Source/Common/Bfme5SmallTests.cpp,matched,Whole BF1 game/GameEngine/Source/Common/Small03iListPush.cpp @5cc75ddda6455c338a5068307e587a793f96d6b3 blob b773c5ec535cb3fc2896f6d796b12b78f7158f19 no headers; source-only discovery /O1 /Ob1 and unchanged home flags exact15; INT3 bounded native entry returns second argument after pointer-word prepend; raw minimum WordCell ABI only with original name owner and complete extent unresolved
-?rva005963A1@Rva00596389@@QAEXH@Z,,0x005963A1,39,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,gap credit via rowed rva003B0CB3 plus m_zero14 add plus caller 0x004EC14A
+?rva005963A1@AIEconomyStats@@QAEXH@Z,,0x005963A1,39,Code/GameEngine/Source/Common/Rva0025BFE3Derived.cpp,matched,gap credit via rowed rva003B0CB3 plus m_zero14 add plus caller 0x004EC14A
 ?Rva002D0D5ECopy@@YAPADPAD00H@Z,,0x002D0D5E,29,Code/Libraries/Source/WWVegas/WWLib/StlportCopyRva002D0D5E.cpp,matched,wrapper over counted copy 0x002D0BB8 stride 92
 ?rva0053DB02@Rva0053DB02@@QAEXXZ,,0x0053DB02,43,Code/GameEngine/Source/GameClient/GUI/ControlBar/Rva0053DB02Clear.cpp,matched,unlock 32-slot window clear via rowed user-data helper
 ?Rva002ABC22Compare@@YAHHHH@Z,,0x002ABC22,84,Code/GameEngine/Source/Common/Rva002ABC22Compare.cpp,matched,unlock via two Reader adaptors and Compare
@@ -61412,7 +61412,7 @@ _FilterBlockBil_8_mmx,,0x001D7200,204,Code/Libraries/Source/VP6/FilterBlockBil8M
 ?read_chunks@MeshModelClass@@IAE_NAAVChunkLoadClass@@PAVMeshLoadContextClass@@@Z,,0x0018B790,636,Code/Libraries/Source/WWVegas/WW3D2/MeshModelReadChunks.cpp,matched,
 ?rva00151248@Rva00151248@@QAEXXZ,,0x00151248,64,Code/GameEngine/Source/Common/Rva00151248Init.cpp,matched,
 ?rva001514B2@Rva001514B2@@QAEPAXHH@Z,,0x001514B2,30,Code/GameEngine/Source/Common/Rva001514B2Chain.cpp,matched,
-?rva00151D1A@Rva00151D1A@@QAEXH@Z,,0x00151D1A,69,Code/GameEngine/Source/Common/Rva00151D1AApply.cpp,matched,
+?UpdateDynamicParameterSet@FXShaderSetup@@QAEXH@Z,,0x00151D1A,69,Code/GameEngine/Source/Common/Rva00151D1AApply.cpp,matched,
 ?rva00150C97@Rva00150C97@@QAEXH@Z,,0x00150C97,57,Code/GameEngine/Source/Common/Rva00150B8DFamily.cpp,matched,dump range 5 resize over 8B elems via 0x150BF9 grow wrapper
 ?rva00150CD0@Rva00150CD0@@QAEXH@Z,,0x00150CD0,57,Code/GameEngine/Source/Common/Rva00150B8DFamily.cpp,matched,dump range 5 resize over 8B elems via 0x150C22 grow wrapper
 ?rva00150D09@Rva00150D09@@QAEXH@Z,,0x00150D09,57,Code/GameEngine/Source/Common/Rva00150B8DFamily.cpp,matched,dump range 5 resize over 8B elems via 0x150C4B grow wrapper
@@ -65003,7 +65003,7 @@ _Rva00850560,,0x000236F0,159,Code/Libraries/Source/WWVegas/WWLib/stlport_LocaleC
 ?_M_fill_insert@?$vector@URva00153729@@V?$allocator@URva00153729@@@_STL@@@_STL@@QAEXPAURva00153729@@IABU3@@Z,,0x00153D5E,268,Code/Libraries/Source/WWVegas/WWLib/Rva00153E6FArrayVectorResize.cpp,matched,STLport4.5.3 pristine fill_insert; native ret0C boundary; independently verified entry6 vectors plus4 stride76; native helpers decoded; pristine wrapper ABI; full byte gate
 ?reset@Rva00151248@@QAEXXZ,,0x00151248,64,Code/Libraries/Source/WWVegas/WWLib/Rva00151248Reset.cpp,matched,Native ret boundary; clear4B handles at0/8 via verified narrow StringBase provider; memset blocks C/16 1C/4 20/1; full byte gate
 ?apply@Rva001514B2@@QAEXIPAX@Z,,0x001514B2,30,Code/Libraries/Source/WWVegas/WW3D2/Rva001514B2ForwardAndApply.cpp,matched,Native ret8; guarded +0/+14/+8 pointer path; stack-word forwarding to decoded15326D; original identity unknown; full byte gate
-?apply@Rva00151D1A@@QAEXI@Z,,0x00151D1A,69,Code/Libraries/Source/WWVegas/WW3D2/Rva001514B2ForwardAndApply.cpp,matched,Native ret4; handle+8 extra+20; rowed getter15148D and render-state115D930; stdcall vtable104 with one stack arg; full byte gate
+?apply@FXShaderSetup@@QAEXI@Z,,0x00151D1A,69,Code/Libraries/Source/WWVegas/WW3D2/Rva001514B2ForwardAndApply.cpp,matched,Native ret4; handle+8 extra+20; rowed getter15148D and render-state115D930; stdcall vtable104 with one stack arg; full byte gate
 ?setBound@Rva00167EFields@@QAEXM@Z,,0x00167ED8,32,Code/Libraries/Source/WWVegas/WW3D2/Rva00167EFieldUpdates.cpp,matched,Native ret4 boundary; SSE ordered-positive float clamp else+0 including NaN; clear byte+12 bit1; store float+EC; full byte gate
 ?setWords@Rva00167EFields@@QAEXABURva00167EWords@@@Z,,0x00167EF8,29,Code/Libraries/Source/WWVegas/WW3D2/Rva00167EFieldUpdates.cpp,matched,Native ret4 boundary; raw three-dword transfer to F0/F4/F8; inline scalar assignment matches register copy; identity unknown; full byte gate
 ?apply@Rva0015326DTarget@@QAEXIPAX@Z,,0x0015326D,116,Code/Libraries/Source/WWVegas/WW3D2/Rva001514B2ForwardAndApply.cpp,matched,Native ret8 extent116; owner0 records4/8 stride76; six12B ranges at4; 8B entry invoke1531F2 rowed; selectorFFFF all else signed bounds; G7 IMUL12; full byte gate
