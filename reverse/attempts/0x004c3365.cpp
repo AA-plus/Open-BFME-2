@@ -1,6 +1,8 @@
 // ?doSpecialPowerAtLocation@OCLSpecialPower@@UAEXPBUCoord3D@@I@Z
 // partial score=0.85 date=2026-10-13
 // ?doSpecialPowerAtLocation@OCLSpecialPower@@UAEXPBUCoord3D@@I@Z
+// partial score=0.85 date=2026-10-13
+// ?doSpecialPowerAtLocation@OCLSpecialPower@@UAEXPBUCoord3D@@I@Z
 // partial score=0.798152 date=2026-10-10
 // ?doSpecialPowerAtLocation@OCLSpecialPower@@UAEXPBUCoord3D@@I@Z
 // partial score=0.7981522575551262 date=2026-10-10
