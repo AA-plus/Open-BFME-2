@@ -12,14 +12,20 @@
 // The base doSpecialPower 0x0049490F is the Zero Hour body (script-fired
 // commands skip the paused and disabled tests), pinned on that evidence.
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
-
+#include "../../../Common/PartitionRangeQueryCallView.h"
+class Player;
+template<int N> class BitFlags { public: bool any() const; };
 class Object
 {
 public:
+	Player *getControllingPlayer() const;
 	const Coord3D *getPosition() const { return &m_position; }
 private:
 	unsigned char m_pad00[0x38];
 	Coord3D m_position;		// +0x38
+public:
+	unsigned char pad44[0x1C8-0x44];
+	BitFlags<11> m_disabledMask;
 };
 
 class ModuleData;
@@ -65,6 +71,17 @@ public:
 	virtual void doSpecialPowerAtLocation(const Coord3D *loc, unsigned int options);	// 0x004949D8
 };
 
+class ObjectCreationList;
+
+// Module data offsets read by the heal: radius +0x84, dispatch OCL +0xA8.
+struct PlayerHealSpecialPowerModuleData
+{
+	unsigned char m_pad00[0x84];
+	float m_healRadius;
+	unsigned char m_pad88[0xA8 - 0x88];
+	ObjectCreationList *m_dispatchList;
+};
+
 class PlayerHealSpecialPower : public SpecialPowerModule
 {
 public:
@@ -72,6 +89,10 @@ public:
 	virtual void doSpecialPowerAtObject(Object *obj, unsigned int options);
 	virtual void doSpecialPowerAtLocation(const Coord3D *loc, unsigned int options);
 	void rva004C8095(const Coord3D *loc);
+	const PlayerHealSpecialPowerModuleData *getPlayerHealSpecialPowerModuleData() const
+	{
+		return (const PlayerHealSpecialPowerModuleData *)m_moduleData;
+	}
 };
 
 void PlayerHealSpecialPower::doSpecialPower(unsigned int options)
@@ -90,4 +111,62 @@ void PlayerHealSpecialPower::doSpecialPowerAtLocation(const Coord3D *loc, unsign
 {
 	SpecialPowerModule::doSpecialPowerAtLocation(loc, options);
 	rva004C8095(loc);
+}
+
+class Rva000421C8
+{
+public:
+	Rva000421C8() : m_next(0) {}
+	virtual ~Rva000421C8() {}
+	virtual bool allow(Object *obj) = 0;
+	virtual int getPlayerMask();
+	Rva000421C8 *m_next;
+};
+
+// vftable 0x00BFAD10, allow 0x0026119D.
+class Rva0026119DFilter : public Rva000421C8
+{
+public:
+	virtual bool allow(Object *obj);
+};
+
+
+class ObjectCreationList
+{
+public:
+	void create(void *primaryObj, void *primary, void *secondary, int createOwner);
+	static void create(ObjectCreationList *ocl, Object *primaryObj, const Coord3D *primary, const Coord3D *secondary, int createOwner)
+	{
+		if (ocl)
+			ocl->create(primaryObj, (void *)primary, (void *)secondary, createOwner);
+	}
+};
+
+
+// The per-object heal, address-named as rowed.
+class Rva004C7F5C
+{
+public:
+	void rva004C7F5C(Object *obj);
+};
+
+
+extern PartitionManager *ThePartitionManager;
+
+void PlayerHealSpecialPower::rva004C8095(const Coord3D *loc)
+{
+	Object *obj = m_object;
+	if (obj->m_disabledMask.any())
+		return;
+	Player *player = obj->getControllingPlayer();
+	if (player == 0)
+		return;
+
+	const PlayerHealSpecialPowerModuleData *data = getPlayerHealSpecialPowerModuleData();
+	ObjectCreationList::create(data->m_dispatchList, m_object, loc, 0, 0);
+
+	BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(loc, getPlayerHealSpecialPowerModuleData()->m_healRadius, 0, &Rva0026119DFilter(), 0);
+	Object *other;
+	while ((other = iter.next()) != 0)
+		((Rva004C7F5C *)this)->rva004C7F5C(other);
 }
