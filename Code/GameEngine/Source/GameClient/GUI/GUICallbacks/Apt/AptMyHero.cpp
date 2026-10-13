@@ -9,6 +9,7 @@
 // No constructor, destructor or vtable layout beyond the used slots is claimed.
 #include "ascii_string.h"
 #include "unicode_string.h"
+#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
 class Image;
 class ImageCollection {public: const Image *findImageByName(const AsciiString &);};
 extern ImageCollection *TheMappedImageCollection;
@@ -105,6 +106,97 @@ class Rva00223A94 {public: int rva00223A94(const AsciiString *);};
 class Rva005241DF {public: void rva005241DF(const StringBase<char> &);};
 class Rva005B1830 {public: void rva005B1830();};
 class Rva005B1A07 {public: void rva005B1B26(unsigned int);};
+// Sun-direction helper views (retail 0x005B0A95): the WWMath Vector3/Vector4/
+// Matrix3D inlines are carried from ZH's vector3.h/vector4.h/matrix3d.h shapes
+// (axis-angle Set with cosf/sinf locals, mul via submul); Rotate_Vector is the
+// out-of-line 0x00712030 row. View slots 0x78/0x100/0x108 and Display slot
+// 0xB8 are the retail vtable offsets the body calls; GlobalData +0x920 is
+// m_terrainLightPos[0].
+extern "C" double __cdecl sin(double);
+extern "C" double __cdecl cos(double);
+inline float cosf(float _X){return ((float)cos((double)_X));}
+inline float sinf(float _X){return ((float)sin((double)_X));}
+class Vector3 {
+public:
+ float X,Y,Z;
+ __forceinline Vector3(){}
+ __forceinline Vector3(float x,float y,float z){X=x;Y=y;Z=z;}
+ __forceinline Vector3(const Vector3 &v){X=v.X;Y=v.Y;Z=v.Z;}
+ __forceinline Vector3 &operator=(const Vector3 &v){X=v.X;Y=v.Y;Z=v.Z;return *this;}
+ __forceinline float &operator[](int i){return (&X)[i];}
+ __forceinline const float &operator[](int i) const{return (&X)[i];}
+ __forceinline Vector3 &operator*=(float k){X*=k;Y*=k;Z*=k;return *this;}
+};
+__forceinline Vector3 operator-(const Vector3 &a){return Vector3(-a.X,-a.Y,-a.Z);}
+class Vector4 {
+public:
+ float X,Y,Z,W;
+ __forceinline Vector4(){}
+ __forceinline void Set(float x,float y,float z,float w){X=x;Y=y;Z=z;W=w;}
+};
+__forceinline float submul(const Vector4 &row,float tmp1,float tmp2,float tmp3){return row.X*tmp1+row.Y*tmp2+row.Z*tmp3;}
+class Matrix3D {
+public:
+ __forceinline Matrix3D(){}
+ __forceinline Matrix3D(const Vector3 &axis,float angle){Set(axis,angle);}
+ __forceinline void Set(const Vector3 &axis,float angle){float c=cosf(angle);float s=sinf(angle);Set(axis,s,c);}
+ void Set(const Vector3 &axis,float s,float c);
+ void mul(const Matrix3D &A,const Matrix3D &B);
+ Vector3 Rotate_Vector(const Vector3 &vect) const;
+ Vector4 Row[3];
+};
+__forceinline void Matrix3D::Set(const Vector3 &axis,float s,float c){
+ Row[0].Set((float)(axis[0]*axis[0]+c*(1.0f-axis[0]*axis[0])),(float)(axis[0]*axis[1]*(1.0f-c)-axis[2]*s),(float)(axis[2]*axis[0]*(1.0f-c)+axis[1]*s),0.0f);
+ Row[1].Set((float)(axis[0]*axis[1]*(1.0f-c)+axis[2]*s),(float)(axis[1]*axis[1]+c*(1.0f-axis[1]*axis[1])),(float)(axis[1]*axis[2]*(1.0f-c)-axis[0]*s),0.0f);
+ Row[2].Set((float)(axis[2]*axis[0]*(1.0f-c)-axis[1]*s),(float)(axis[1]*axis[2]*(1.0f-c)+axis[0]*s),(float)(axis[2]*axis[2]+c*(1-axis[2]*axis[2])),0.0f);
+}
+__forceinline void Matrix3D::mul(const Matrix3D &A,const Matrix3D &B){
+ float tmp1,tmp2,tmp3;
+ tmp1=B.Row[0].X;tmp2=B.Row[1].X;tmp3=B.Row[2].X;
+ Row[0].X=submul(A.Row[0],tmp1,tmp2,tmp3);Row[1].X=submul(A.Row[1],tmp1,tmp2,tmp3);Row[2].X=submul(A.Row[2],tmp1,tmp2,tmp3);
+ tmp1=B.Row[0].Y;tmp2=B.Row[1].Y;tmp3=B.Row[2].Y;
+ Row[0].Y=submul(A.Row[0],tmp1,tmp2,tmp3);Row[1].Y=submul(A.Row[1],tmp1,tmp2,tmp3);Row[2].Y=submul(A.Row[2],tmp1,tmp2,tmp3);
+ tmp1=B.Row[0].Z;tmp2=B.Row[1].Z;tmp3=B.Row[2].Z;
+ Row[0].Z=submul(A.Row[0],tmp1,tmp2,tmp3);Row[1].Z=submul(A.Row[1],tmp1,tmp2,tmp3);Row[2].Z=submul(A.Row[2],tmp1,tmp2,tmp3);
+ tmp1=B.Row[0].W;tmp2=B.Row[1].W;tmp3=B.Row[2].W;
+ Row[0].W=submul(A.Row[0],tmp1,tmp2,tmp3)+A.Row[0].W;Row[1].W=submul(A.Row[1],tmp1,tmp2,tmp3)+A.Row[1].W;Row[2].W=submul(A.Row[2],tmp1,tmp2,tmp3)+A.Row[2].W;
+}
+class View {
+public:
+ virtual void slot00();virtual void slot04();virtual void slot08();virtual void slot0C();virtual void slot10();virtual void slot14();virtual void slot18();virtual void slot1C();
+ virtual void slot20();virtual void slot24();virtual void slot28();virtual void slot2C();virtual void slot30();virtual void slot34();virtual void slot38();virtual void slot3C();
+ virtual void slot40();virtual void slot44();virtual void slot48();virtual void slot4C();virtual void slot50();virtual void slot54();virtual void slot58();virtual void slot5C();
+ virtual void slot60();virtual void slot64();virtual void slot68();virtual void slot6C();virtual void slot70();virtual void slot74();
+ virtual bool slot78();
+ virtual void slot7C();
+ virtual void slot80();virtual void slot84();virtual void slot88();virtual void slot8C();virtual void slot90();virtual void slot94();virtual void slot98();virtual void slot9C();
+ virtual void slotA0();virtual void slotA4();virtual void slotA8();virtual void slotAC();virtual void slotB0();virtual void slotB4();virtual void slotB8();virtual void slotBC();
+ virtual void slotC0();virtual void slotC4();virtual void slotC8();virtual void slotCC();virtual void slotD0();virtual void slotD4();virtual void slotD8();virtual void slotDC();
+ virtual void slotE0();virtual void slotE4();virtual void slotE8();virtual void slotEC();virtual void slotF0();virtual void slotF4();virtual void slotF8();
+ virtual void setAngle(float);
+ virtual float getAngle();
+ virtual void setPitch(float);
+ virtual float getPitch();
+};
+extern View *TheTacticalView;
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+struct GlobalDataLightView {char pad000[0x920];Coord3D terrainLightPos0;};
+// Coord3D::set is out of line in the canonical header; retail inlines the three stores.
+__forceinline void SetLightPos(Coord3D *pos,float x,float y,float z){pos->x=x;pos->y=y;pos->z=z;}
+class DisplayLightView {
+public:
+ virtual void slot00();virtual void slot04();virtual void slot08();virtual void slot0C();virtual void slot10();virtual void slot14();virtual void slot18();virtual void slot1C();
+ virtual void slot20();virtual void slot24();virtual void slot28();virtual void slot2C();virtual void slot30();virtual void slot34();virtual void slot38();virtual void slot3C();
+ virtual void slot40();virtual void slot44();virtual void slot48();virtual void slot4C();virtual void slot50();virtual void slot54();virtual void slot58();virtual void slot5C();
+ virtual void slot60();virtual void slot64();virtual void slot68();virtual void slot6C();virtual void slot70();virtual void slot74();virtual void slot78();virtual void slot7C();
+ virtual void slot80();virtual void slot84();virtual void slot88();virtual void slot8C();virtual void slot90();virtual void slot94();virtual void slot98();virtual void slot9C();
+ virtual void slotA0();virtual void slotA4();virtual void slotA8();virtual void slotAC();virtual void slotB0();virtual void slotB4();
+ virtual void setLightDirection(const Vector3 *dir);
+};
+class W3DShadowManager;
+extern W3DShadowManager *TheW3DShadowManager;
+class W3DGameClientShadowShim {public:void setLightPosition(int,float,float,float);};
 const AsciiString &rva005B0A53(const char *kind,int index);
 class AptMyHero : public CreateAHeroData {
 public:
@@ -119,6 +211,7 @@ public:
  Rva005B0473View *rva005B0473();
  void BuildBlingData();
  void rva005B0487();void rva005B1019();void rva005B1288();void rva005B097F(int);void rva005B0FCD(int);
+ int rva005B0A95(int,int);
 private:
  void *holder140;
  CreateAHeroData *pending144;
@@ -334,6 +427,30 @@ const AsciiString &rva005B0A53(const char *kind,int index){
  static AsciiString key;
  key.format("MyHero::%sAttrib_%d",kind,index);
  return key;
+}
+
+// WB-unnamed AptMyHero member, retail 0x005B0A95..0x005B0E60 (971 bytes,
+// thiscall, two unused dword arguments): aims the sun from the tactical
+// camera. The light direction is the +Y axis rotated by (pitch - 1.013417)
+// about X and (angle - 0.62831855) about Z; it is stored as the terrain light
+// position, handed to the display, and its negation scaled by 10000 becomes
+// shadow light 0's position. Returns 2 when view slot 0x78 is set, else 1.
+// AptMyHero membership is a structural inference from the TU's address range
+// (WB 0x0156F4E0 has the same structure); the name stays an address view.
+int AptMyHero::rva005B0A95(int,int){
+ Vector3 xAxis(1.0f,0.0f,0.0f);
+ Matrix3D pitchRot(xAxis,TheTacticalView->getPitch()-1.013417f);
+ Vector3 zAxis(0.0f,0.0f,1.0f);
+ Matrix3D yawRot(zAxis,TheTacticalView->getAngle()-0.62831855f);
+ Matrix3D rot;
+ rot.mul(yawRot,pitchRot);
+ Vector3 dir=rot.Rotate_Vector(Vector3(0.0f,1.0f,0.0f));
+ SetLightPos(&((GlobalDataLightView *)TheWritableGlobalData)->terrainLightPos0,dir.X,dir.Y,dir.Z);
+ ((DisplayLightView *)TheDisplay)->setLightDirection(&dir);
+ dir=-dir;
+ dir*=10000.0f;
+ ((W3DGameClientShadowShim *)TheW3DShadowManager)->setLightPosition(0,dir.X,dir.Y,dir.Z);
+ return TheTacticalView->slot78()?2:1;
 }
 
 // AptMyHero::~AptMyHero, retail 0x005B190D..0x005B1A07 (250 bytes): drops
