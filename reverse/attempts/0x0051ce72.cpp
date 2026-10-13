@@ -1,6 +1,8 @@
 // ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
 // partial score=0.9732 date=2026-10-13
 // ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
+// partial score=0.9732 date=2026-10-13
+// ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
 // partial score=0.99 date=2026-10-13
 // ?Externs@AptScoreScreen@@QAEXHPAD_N@Z
 // partial score=0.99 date=2026-10-13
