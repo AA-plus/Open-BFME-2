@@ -51,3 +51,29 @@ void Rva00149002Parse(INI *ini,void *,void *keyStorage,const void *userData) {
  }
 }
 
+class Rva0014921EVector;
+// ICF-folded twin of Rva00149002Parse above (same 255 bytes at 0x00149002):
+// the (int, int, vector *, int) spelling passes the same four words, so the
+// body reuses every callee and home with identical codegen.
+void rva00149002(int ini,int,Rva0014921EVector *keyStorage,int userData) {
+ _STL::vector<NameKeyType> *keys=(_STL::vector<NameKeyType>*)keyStorage;
+ bool unique=userData ? *(const bool*)userData : false;
+ const char *token=((INI*)ini)->getNextTokenOrNull(0);
+ if(token) {
+  do {
+   const char *expanded=rva0002D145(token);
+   if(expanded!=token) {
+    AsciiString text(expanded);AsciiString item;
+    while(text.nextToken(&item,0)) {
+     NameKeyType key=TheNameKeyGenerator->nameToKey(item);
+     if(!unique || !Rva00148AC4Contains(reinterpret_cast<Rva00148AC4Range *>(keys), reinterpret_cast<CreateAHeroData *>(key)))keys->push_back(key);
+    }
+   } else {
+    NameKeyType key=TheNameKeyGenerator->nameToKey(token);
+    if(!unique || !Rva00148AC4Contains(reinterpret_cast<Rva00148AC4Range *>(keys), reinterpret_cast<CreateAHeroData *>(key)))keys->push_back(key);
+   }
+   token=((INI*)ini)->getNextTokenOrNull(0);
+  } while(token);
+ }
+}
+
