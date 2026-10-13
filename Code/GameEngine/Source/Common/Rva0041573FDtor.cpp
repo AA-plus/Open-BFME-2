@@ -38,12 +38,17 @@ template <> struct less<BfmeStringRecord002CF550>
 
 typedef _STL::_Rb_tree<BfmeStringRecord002CF550, BfmeStringRecord002CF550, _STL::_Identity<BfmeStringRecord002CF550>, _STL::less<BfmeStringRecord002CF550>, _STL::allocator<BfmeStringRecord002CF550> > Tree900;
 
+// Native state0 at78619C invokes the complete16B array cleanup254B72.
+// Its stride8/count56/callback4C9F38 prove this storage grouping; the
+// original application element and containing-class names remain unknown.
+struct Rva0041573FArray { Rva002390CB items[56]; };
+
 class Rva0041573F
 {
 public:
 	~Rva0041573F();
 private:
-	Rva002390CB m_arr[56];
+	Rva0041573FArray m_arr;
 	Tree900 m_tree;
 };
 
