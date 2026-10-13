@@ -68,7 +68,6 @@ public:
 };
 
 // ?getLength@WideStrLenSource@@UBEHXZ present-unmatched
-// ??0WideStrLenSource@@QAE@PBGH@Z present-unmatched
 // ??1WideStrLenSource@@QAE@XZ present-unmatched
 template <>
 void StringBase<wchar_t>::set(const wchar_t *str, int len)
