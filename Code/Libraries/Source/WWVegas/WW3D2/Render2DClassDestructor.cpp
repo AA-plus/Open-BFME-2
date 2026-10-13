@@ -85,3 +85,6 @@ Render2DClass::~Render2DClass()
 
 // Native unwind 0x00764CC6 destroys Batches (+0x34) through the rowed
 // vector destructor; the complete parent EH graph independently binds this 11B body.
+
+// The naturally emitted 10B handler at 0x00764CD1 names FuncInfo RVA 0x00909010
+// and CxxFrameHandler; native destructor prologue and exact EH data prove ownership.
