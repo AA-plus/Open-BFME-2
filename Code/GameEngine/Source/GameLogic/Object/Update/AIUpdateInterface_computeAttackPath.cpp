@@ -91,10 +91,22 @@ private:
 
 class Weapon;
 enum WeaponSlotType { SLOT=0 };
+// Target model-condition words begin at Object+0x10C. The indexed accessor
+// preserves the shared mask calculation used by the retail setter.
+class FacingConditionBits {
+public:
+ unsigned int test(int bit) const { return words[bit>>5] & (1U<<(bit&31)); }
+ void set(int bit) { words[bit>>5] |= 1U<<(bit&31); }
+ unsigned int words[19];
+};
+
 class Object : public Thing
 {
 public:
 	Int rva0028B511() const;
+ void rva0028AE6D();
+ __forceinline unsigned int hasFacingMask(unsigned int bit) const { return m_conditions.test(bit); }
+ __forceinline void addFacingMask(unsigned int bit) { m_conditions.set(bit); }
  const Weapon *getCurrentWeapon(WeaponSlotType *) const;
  Bool isSignificantlyAboveTerrain() const;
  Real rva002637E2(const Coord3D*,const Coord3D*)const;
@@ -107,6 +119,8 @@ public:
 private:
 	unsigned char m_pad44[0x74 - 0x44];
 	UnsignedInt m_id; // +0x74
+ unsigned char m_pad078[0x10c - 0x78];
+ FacingConditionBits m_conditions; // +0x10c
 };
 
 class Locomotor
@@ -254,6 +268,7 @@ public:
 
 	Bool computePath(PathfindServicesInterface *pathServices, Coord3D *destination);
  Bool computeAttackPath(PathfindServicesInterface*,const Object*,const Coord3D*);
+ void rva0026717B();
 	Bool computeQuickPath(const Coord3D *destination);
 	Bool canComputeQuickPath();
 	void destroyPath();
@@ -400,4 +415,45 @@ Bool AIUpdateInterface::computeAttackPath(PathfindServicesInterface *services,co
   }
  }
  m_pathTimestamp=TheGameLogic->getFrame();m_blockedFrames=0;m_isBlockedAndStuck=false;if(m_path)return true;return false;
+}
+
+class Rva00265254 {
+public:
+ Rva00265254(unsigned int,unsigned int,unsigned int,unsigned int);
+ int bits[19];
+};
+class Rva001E42F2 { public: void rva001E42F2(const int *); };
+
+struct FacingDirection : Coord3D {
+ FacingDirection(float a,float b,float c) { x=a;y=b;z=c; }
+ ~FacingDirection() {}
+};
+
+static __forceinline void setFacingCondition(Object *obj,unsigned int bit) {
+ if(obj->hasFacingMask(bit)==0) { obj->addFacingMask(bit);obj->rva0028AE6D(); }
+}
+
+// Retail 0x0026717B..0x00267266, 235 bytes, RET 0. Direct callers in
+// AIUpdateInterface::doLocomotor establish the owner and no-argument ABI.
+// WorldBuilder 0x00E4B180 supplies the model-condition bit indices and object
+// relationships; its assertion labels do not establish this helper's original
+// name. Native reads prove module+8, template+0x11F bit7, matrix+0xC/+0x1C/+0x2C,
+// and Object condition word+0x134. The static direction at 0x00DFEB40 has a
+// guarded constructor and a registered empty cleanup at 0x007B77CD; the derived
+// FacingDirection is a local lifetime view, not a claim about its original type.
+// The canonical Coord3D Normalize and existing bitset/reset/notifier providers
+// preserve all call identities. Dot-product order is Z+Y+X, including NaNs.
+void AIUpdateInterface::rva0026717B()
+{
+ Object *obj=getObject();
+ if(obj->getTemplate()->isKindOfByte(0x17,0x80)) {
+  static FacingDirection direction(0.5f,0.5f,0.0f);
+  direction.Normalize();
+  ((Rva001E42F2*)obj)->rva001E42F2(Rva00265254(0,0x151,0x152,0x153).bits);
+  const float *matrix=(const float*)((const char*)obj+0x0c);
+  Coord3D axis;
+  axis.x=matrix[0];axis.y=matrix[4];axis.z=matrix[8];
+  float dot=direction.z*axis.z+direction.y*axis.y+direction.x*axis.x;
+  if(dot>0.0f) setFacingCondition(obj,0x153); else setFacingCondition(obj,0x152);
+ }
 }
