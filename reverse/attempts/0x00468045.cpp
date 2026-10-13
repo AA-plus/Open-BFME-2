@@ -1,4 +1,6 @@
 // ?UpdateUpgradeCreationTriggers@TransportContain@@QAEXXZ
+// partial score=0.98 date=2026-10-13
+// ?UpdateUpgradeCreationTriggers@TransportContain@@QAEXXZ
 // partial score=0.98 date=2026-10-12
 // ?UpdateUpgradeCreationTriggers@TransportContain@@QAEXXZ
 // partial score=0.96 date=2026-10-10
