@@ -6,6 +6,7 @@
 // rowed _snprintf 0xff. Callers none; chain via 0x00219D52.
 // Honest-address method on AptCreateAHero::Class with +4 outer pointer.
 #include "ascii_string.h"
+#include "unicode_string.h"
 extern "C" __declspec(dllimport) int __cdecl _snprintf(char *buffer, unsigned int count, const char *fmt, ...);
 struct OuterElem32 { char m_00[32]; };
 struct Vec32 { OuterElem32 *m_start; OuterElem32 *m_finish; OuterElem32 *m_end; };
@@ -14,6 +15,9 @@ class CreateAHeroManager {
 public:
     Vec32 m_outer;
     int rva00219D52(unsigned int o);
+    const AsciiString &GetButtonImageName(unsigned, unsigned);
+    const AsciiString &GetClassDescTag(unsigned);
+    const AsciiString &GetSubClassDescTag(unsigned, unsigned);
 };
 extern CreateAHeroManager *TheCreateAHeroManager;
 class Rva005B045D {
@@ -59,3 +63,28 @@ void AptCreateAHero::Class::ExternFunc(int sel, char *buf, bool flag)
         break;
     }
 }
+// Views for Rva005B566B::rva005B54ED below (shapes from the banked standalone
+// trial; all callees rowed, no pins).
+class CreateAHeroData;
+class Rva0040A3D2 { public: CreateAHeroData *rva0040A3D2(int, int); };
+class AptMyHero { public: void rva005B21DA(CreateAHeroData *, bool, int); };
+struct ClassScreenPrefix { char prefix[0x27C]; AptMyHero hero; };
+class ModuleData;
+class Rva00423A68 { public: void rva00423A68(const ModuleData *); };
+class Rva00222A8BTarget { public: void rva002239FA(const AsciiString &, const AsciiString &); };
+class BfmeAptWindowManager { public: void bfmeSetText(const AsciiString &, const UnicodeString &, bool); };
+extern BfmeAptWindowManager *g_bfmeAptWindowManager;
+class GameTextInterface {
+public:
+    virtual UnicodeString fetchLabel(const AsciiString &, bool *exists = 0);
+};
+extern GameTextInterface *TheGameText;
+class Rva005B566B {
+public:
+    void rva005B54ED(unsigned, unsigned, bool);
+private:
+    char pad[4];
+    ClassScreenPrefix *screen;
+    char gap[0x1C - 8];
+    Rva00423A68 heroes;
+};
