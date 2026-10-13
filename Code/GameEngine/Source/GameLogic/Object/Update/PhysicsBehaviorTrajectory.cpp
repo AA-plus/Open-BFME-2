@@ -122,7 +122,10 @@ extern GlobalData *TheWritableGlobalData;
 class Pathfinder { public: void rva002EF2A6(Object *); };
 class AI { public: char pad00[0x10]; Pathfinder *pathfinder; };
 extern AI *TheAI;
-UpdateSleepTime PhysicsBehavior::update()
+// Select-any like the PhysicsUpdate.cpp donor copy (this retail body comes
+// first in link order, so it is the copy the link keeps); the anchor keeps the
+// body emitted.
+inline UpdateSleepTime PhysicsBehavior::update()
 {
  const PhysicsTrajectoryConfig *d=data;
  Object *obj=object;
@@ -174,4 +177,11 @@ UpdateSleepTime PhysicsBehavior::update()
  TheAI->pathfinder->rva002EF2A6(object);
  ++index;
  return rva00390601();
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitPhysicsBehaviorUpdate@@YAXPAVPhysicsBehavior@@@Z absent-from-retail
+void bfmeEmitPhysicsBehaviorUpdate(PhysicsBehavior *p)
+{
+	p->PhysicsBehavior::update();
 }

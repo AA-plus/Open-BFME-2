@@ -551,7 +551,9 @@ void PhysicsBehavior::setBounceSound(const AudioEventRTS* bounceSound)
 
 DECLARE_PERF_TIMER(PhysicsBehavior)
 // ?PhysicsBehavior::update present-unmatched
-UpdateSleepTime PhysicsBehavior::update()
+// Select-any: the retail body in PhysicsBehaviorTrajectory.cpp comes
+// first in link order, so this differing donor spelling folds without being kept.
+inline UpdateSleepTime PhysicsBehavior::update()
 {
 	USE_PERF_TIMER(PhysicsBehavior)
 
