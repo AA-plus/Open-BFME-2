@@ -40,6 +40,7 @@ class ThingTemplate
 {
 public:
 	int rva000456AC(int kind) const;
+	bool isEquivalentTo(const ThingTemplate *tt) const;
 };
 
 class Object
@@ -61,6 +62,7 @@ class Team
 public:
 	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
 	int rva0039DC05(int kind, bool ignoreDead, bool ignoreUnderConstruction) const;
+	void countObjectsByThingTemplate(int numTmplates, const ThingTemplate *const *things, bool ignoreDead, int *counts, bool ignoreUnderConstruction) const;
 };
 
 int Team::rva0039DC05(int kind, bool ignoreDead, bool ignoreUnderConstruction) const
@@ -85,3 +87,32 @@ int Team::rva0039DC05(int kind, bool ignoreDead, bool ignoreUnderConstruction) c
 // preserves native owner/template/flag load scheduling under O1G7SSE.
 // ZH countObjectsByThingTemplate supplies the filter semantics only; the
 // original kind-counter method name remains unknown and keeps its RVA.
+
+// ?countObjectsByThingTemplate@Team@@QBEXHPBQBVThingTemplate@@_NPAH1@Z
+// Retail 0x0039DB89..0x0039DC05 (124 bytes, RET 0x14), directly before the
+// kind counter above; caller 0x0039EC03. Zero Hour's
+// Team::countObjectsByThingTemplate: for each member, the first template in
+// the list its template is equivalent to (rowed ThingTemplate::isEquivalentTo
+// 0x0033BB04) counts it, unless dead or under construction when asked. The
+// member walk and barrier are the kind counter's; with them retail keeps the
+// member in EDI and its template in EBX.
+void Team::countObjectsByThingTemplate(int numTmplates, const ThingTemplate *const *things, bool ignoreDead, int *counts, bool ignoreUnderConstruction) const
+{
+	DLINK_ITERATOR<Object> iter = iterate_TeamMemberList();
+	for (Object *obj; (obj = iter.cur()) != 0; iter.advance())
+	{
+		_ReadWriteBarrier();
+		const ThingTemplate *objtmpl = obj->getTemplate();
+		for (int i = 0; i < numTmplates; ++i)
+		{
+			if (!objtmpl->isEquivalentTo(things[i]))
+				continue;
+			if (ignoreDead && obj->isEffectivelyDead())
+				continue;
+			if (ignoreUnderConstruction && obj->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
+				continue;
+			counts[i] += 1;
+			break;
+		}
+	}
+}
