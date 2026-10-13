@@ -15,8 +15,9 @@ public:
  virtual void Delete_This();
  void Add_Ref() { refs++; }
  void Release_Ref() { refs--; if (refs == 0) Delete_This(); }
- int getXExtent(void) {return xExtent;}
- int getYExtent(void) {return yExtent;}
+ // Keep prefix accessors inline without competing canonical getter copies.
+ __declspec(dllimport) __forceinline int getXExtent(void) {return xExtent;}
+ __declspec(dllimport) __forceinline int getYExtent(void) {return yExtent;}
  int getBorderSize(void) {return border;}
  int refs,xExtent,yExtent,border;
  char pad14[0x24-0x14]; unsigned short *data;
