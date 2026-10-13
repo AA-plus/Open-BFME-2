@@ -1,3 +1,6 @@
+// The complete native parents and every EH code/data relocation prove
+// the naturally emitted handler at 0x007775C2. One primary owner covers
+// the shared native body; no second name or pin is introduced.
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 // ?rva002D4688@Rva002D4688@@QAEHPAD@Z @ 0x002D4688 (37B).
 // Writes buffer via WinMainTitlePair at +0 then Rva000B3F84Pair at +0x10
