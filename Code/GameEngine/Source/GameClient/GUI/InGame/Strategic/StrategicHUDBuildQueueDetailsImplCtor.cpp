@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /MD /EHsc /DNDEBUG /ICode/GameEngine/Source/Common
 // Native5F7F21..5F830A RET20 is1001B. WB162FDE0 names
 // StrategicHUD::BuildQueueDetailsMovieClip::Impl::Impl and the source file.
