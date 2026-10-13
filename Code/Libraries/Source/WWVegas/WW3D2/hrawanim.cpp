@@ -636,3 +636,8 @@ bool HRawAnimClass::Has_Visibility (int pividx)
 }
 
 
+
+// The WeightInfoStruct vector deleting destructor (??_E) this unit emits takes the
+// optimization state at the end of the unit: retail links the size-optimized copy
+// (htree.cpp emits it), so the unit ends in that state.
+#pragma optimize("gsy", on)
