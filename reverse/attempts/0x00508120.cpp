@@ -1,10 +1,6 @@
-// ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
-// partial score=0.996 date=2026-10-13
-// ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
-// partial score=0.989 date=2026-10-12
-// ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
-// partial score=0.989 date=2026-10-12
-// cl: /O1 /DNDEBUG /MD /I. /ICode/Libraries/Include /ICode/GameEngine/Include /ICode/GameEngine/Source/Common /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfmelist
+// ?rva00508120@Made002CC5E1@@AAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
+// partial score=0.993050658076125 date=2026-10-13
+// cl: /O1 /DNDEBUG /MD /I. /ICode/Libraries/Include /ICode/Libraries/Include/Lib /ICode/GameEngine/Include /ICode/GameEngine/Source/Common /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfmelist
 // stlport
 //
 // Retail 0x00508120 (988B): DamageNugget damage-info fill helper, called by
@@ -13,32 +9,11 @@
 #include <math.h>
 #include <list>
 #include <vector>
-// ContainmentListView.h (inlined for the bank)
-#include <list>
-struct Rva0036ADF9Element {
-    int rawWords[1];
-    bool operator<(const Rva0036ADF9Element &) const;
-    bool operator==(const Rva0036ADF9Element &) const;
-};
-typedef _STL::list<Rva0036ADF9Element> ContainmentList;
-// Consumers read the first dword as an object pointer or identifier. Preserve
-// its bits without treating the opaque element as a different C++ object type.
-inline const int &containmentFirstWord(const Rva0036ADF9Element &element)
-{
-    return element.rawWords[0];
-}
-class Rva0036AE51ListView {
-public:
-    void *a;
-    ContainmentList *b;
-    ContainmentList rva0036AE51();
-};
-struct Coord3D
-{
- float x, y, z;
- void set(const Coord3D *other) { x = other->x; y = other->y; z = other->z; }
- void sub(const Coord3D *other) { x -= other->x; y -= other->y; z -= other->z; }
- float length() const;
+#include "GameLogic/ContainmentListView.h"
+#include "Coord3D.h"
+struct DamageOffset : Coord3D {
+ void set(const Coord3D *other){ x=other->x; y=other->y; z=other->z; }
+ void sub(const Coord3D *other){ x-=other->x; y-=other->y; z-=other->z; }
 };
 class DamageInfo
 {
@@ -158,6 +133,8 @@ public:
 class Made002CC5E1 : public Rva00507823
 {
 public:
+ bool rva005084FC(void *weapon, Object *target, const Coord3D *position);
+private:
  bool rva00508120(void *weapon, Object *target, DamageInfo *info, bool flag, const Coord3D *position);
 private:
  unsigned char pad04[0x128 - 4];
@@ -255,7 +232,7 @@ _ReadWriteBarrier();
  {
   if (speed174 > 0.0f)
   {
-   Coord3D offset;
+   DamageOffset offset;
    offset.set(&target->position38);
    offset.sub(&source->position38);
    delay += offset.length() / speed174;
@@ -284,4 +261,31 @@ _ReadWriteBarrier();
  info->value2C = view->template04->value10;
  info->flag25 = view->template04->flag16D;
  return true;
+}
+
+bool Made002CC5E1::rva005084FC(void *weapon, Object *target, const Coord3D *position)
+{
+ DamageInfo info;
+ if (rva00508120(weapon, target, &info, false, position) == true)
+ {
+  if (info.damageType10 == 7)
+   target->attemptHealing(info.amount20, target);
+  else
+  {
+   target->attemptDamage(&info);
+   float factor = value198 * info.value70;
+   if (flag194)
+   {
+    if (factor != 0.0f)
+    {
+     Object *source = TheGameLogic->findObjectByID((ObjectID)static_cast<Rva005084FCWeaponView *>(weapon)->sourceID08);
+     if (source && !(source->module04->flags10B & 2))
+      source->attemptHealing(factor, 0);
+    }
+   }
+  }
+ }
+ if (info.value74 > 0.0f)
+  return true;
+ return false;
 }
