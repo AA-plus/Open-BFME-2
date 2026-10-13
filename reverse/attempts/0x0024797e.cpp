@@ -1,7 +1,21 @@
 // ?DoXfer@GameLogicSnapshot@@QAEXPAVXfer@@@Z
+// partial score=0.99 date=2026-10-14
+// ?DoXfer@GameLogicSnapshot@@QAEXPAVXfer@@@Z
 // partial score=0.99 date=2026-10-13
 // ?DoXfer@GameLogicSnapshot@@QAEXPAVXfer@@@Z
 // partial score=0.99 date=2026-10-13
+// r6 2026-10-14: the AsciiString::compare(const char*) throw() shim that landed
+// for 0x32B1E1 does not touch this body; the needed declaration is
+// StringBase<T>::compare(const StringBase<T>&) throw() in string_base.h. With it
+// the body is 2197 B (was 2208) and the ONLY residue is still the frame: retail
+// sub esp,0x70 puts it at [ebp-0x3c]/[ebp-0x38] where the empty Rva0004224C guard
+// (ctor out-of-line 0x4224c, this=[ebp-0x38], inlined dtor) shares [ebp-0x38];
+// ours reserves the guard slot and puts it at [ebp-0x40]/[ebp-0x3c], 349-350
+// diffs. Re-tested declaration order (it before/after guard, it at top, it in
+// branch, guard after it): no change. Dropping the `first` temp (first(&it)
+// directly) gives frame 0x70 but loses retail's -0x34/-0x30 copy and moves the
+// guard to -0x34 (350 diffs). cl 7.1 free-places this empty guard only onto an
+// unused slot, never over a live local; not reproducible from source shape.
 // NOTE: needs reference/shims/bfme2_ascii/string_base.h `int compare(const StringBase<T> &str) const throw();` (not landed: shim edit = full gate) so the compare temp has no EH state.
 // With that shim: 2197 B vs 2195, 343 diffs, all from one frame wall. Retail frame
 // sub esp,0x70 puts the hash iterator `it` at [ebp-0x3c] so its second word shares
