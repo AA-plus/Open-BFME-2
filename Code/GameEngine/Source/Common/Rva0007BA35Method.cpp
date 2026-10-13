@@ -22,16 +22,39 @@ struct Db12
 	int v1;
 	int v2;
 };
-extern Db12 g_00DB4470;
-extern Db12 g_00DB447C;
+// Native configuration snapshots at VA DB4470 and DB447C, each 12 bytes.
+// Keep the established dword storage view: +0 is MapSize (int), +4 is
+// MaxViewDistance (float bits 1000.0f), and +8 is MinShadowedTerrainHeight
+// (float bits 0.0f), as independently witnessed by the field parse table.
+Db12 g_00DB4470 = { 1024, 0x447A0000, 0 };
+Db12 g_00DB447C = { 1024, 0x447A0000, 0 };
 
-struct FieldParse;
-extern const FieldParse g_shadowMapFieldParseTable[];
+class INI;
+typedef void (*INIFieldParseProc)(INI *, void *, void *, const void *);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
 public:
 	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseInt(INI *, void *, void *, const void *);
+	static void parseReal(INI *, void *, void *, const void *);
+};
+
+// Complete native .rdata table VA BC6BA8..BC6BE8; the next word is an
+// independent float constant. Tokens, callbacks and field offsets are target
+// facts; the existing table name describes its witnessed ShadowMap use.
+extern const FieldParse g_shadowMapFieldParseTable[] = {
+	{ "MapSize", &INI::parseInt, 0, 0 },
+	{ "MaxViewDistance", &INI::parseReal, 0, 4 },
+	{ "MinShadowedTerrainHeight", &INI::parseReal, 0, 8 },
+	{ 0, 0, 0, 0 }
 };
 
 class GlobalData;
