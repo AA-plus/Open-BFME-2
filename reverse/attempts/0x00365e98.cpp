@@ -1,6 +1,8 @@
 // ?rva00365E98@Path@@QAEXPAVObject@@PBUCoord3D@@H_N@Z
 // partial score=0.98 date=2026-10-13
 // ?rva00365E98@Path@@QAEXPAVObject@@PBUCoord3D@@H_N@Z
+// partial score=0.98 date=2026-10-13
+// ?rva00365E98@Path@@QAEXPAVObject@@PBUCoord3D@@H_N@Z
 // partial score=0.98 date=2026-10-11
 // ?rva00365E98@Path@@QAEXPAVObject@@PBUCoord3D@@H_N@Z
 // partial date=2026-10-11 round5: non-call diffs 17 -> 4. Scoping only the Coord2D delta
