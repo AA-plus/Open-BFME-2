@@ -289,6 +289,7 @@ Code/GameEngine/Source/Common/SmallLeaves02TargetViews.cpp,-O1,4,2,region defaul
 Code/GameEngine/Source/Common/StaticTagInitializerC6D010.cpp,-O2,1,1,region default loses rows
 Code/GameEngine/Source/Common/StaticTagInitializers.cpp,-O2,63,63,region default loses rows
 Code/GameEngine/Source/Common/System/GeometryInfoCalcBoundingStuff.cpp,-O2 -G6,4,4,region default loses rows
+Code/GameEngine/Source/Common/System/GeometryInfoCollidesWith.cpp,-O2 -G6,1,1,region default loses rows
 Code/GameEngine/Source/Common/System/GeometryInfoExpandFootprint.cpp,-O2,1,1,region default loses rows
 Code/GameEngine/Source/Common/System/GeometryInfoRva006BD9C0.cpp,-Ox -G6,1,1,region default loses rows
 Code/GameEngine/Source/Common/System/GeometryInfoRva0087E370.cpp,-O2 -G6,1,1,region default loses rows
