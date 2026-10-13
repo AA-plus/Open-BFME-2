@@ -31,9 +31,16 @@ public:
  virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23();
  virtual void slot24(); virtual int addAudioEvent(const BfmeAudioEventPrefix136 *);
 };
+// Retail 0x00210FC6 (72B, EH, RET 8), an EH-prolog start Ghidra never listed,
+// stores a sound reference (passed by value, released by this body) and its
+// owner. The value parameter's own spelling is unknown (address name).
+struct Rva00210FC6Ref : OpaqueRefElement4 {
+ ~Rva00210FC6Ref() { if(referent) referent->Release_Ref(); }
+};
 class LivingWorldManager {
 public:
  void rva0021100E();
+ void rva00210FC6(Rva00210FC6Ref sound,int owner);
 private:
  char opaque00[0x22c]; OpaqueRefElement4 sound22c; int owner230;
 };
@@ -44,4 +51,9 @@ void LivingWorldManager::rva0021100E() {
   ((Audio21100EView*)TheAudio)->addAudioEvent((const BfmeAudioEventPrefix136*)&event.storage);
   ((Rva000A8C9B*)&sound)->clear();
  }
+}
+
+void LivingWorldManager::rva00210FC6(Rva00210FC6Ref sound,int owner) {
+ sound22c=sound;
+ owner230=owner;
 }
