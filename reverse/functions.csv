@@ -87925,3 +87925,4 @@ __ehhandler$?rva000741C0@W3DTaint@@QAEXPAUtagRECT@@@Z,,0x0075EEC7,10,Code/GameEn
 ?rva0045A447@AutoAbilityBehavior@@QAEPAVObject@@PAUBfmeWideResult@@PBVCommandButton@@@Z,,0x0045A447,180,Code/GameEngine/Source/GameLogic/Object/Behavior/AutoAbilityBehaviorRva0045A447.cpp,matched,
 ?Show@Impl@AptRadialMenu@@UAEXH@Z,,0x0057845C,183,Code/GameEngine/Source/GameClient/GUI/InGame/AptRadialMenu.cpp,matched,
 ?FillBuddyInviteGameInfo@AptOnlineCustomMatch@@QAE_NPAVRva0059EF62@@@Z,,0x0059FB4F,246,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Apt/AptOnlineCustomMatchCallbacks.cpp,matched,
+?rva0039E5B9@Team@@QAEXPAUCoord3D@@@Z,,0x0039E5B9,167,Code/GameEngine/Source/Common/RTS/TeamDidPartialEnter.cpp,matched,

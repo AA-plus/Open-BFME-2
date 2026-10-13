@@ -28,8 +28,19 @@
 // ?transferKindOfUnitsTo@Team@@QAEXPAV1@ABV?$BitFlags@$0EF@@@@Z @0x0039E6D1 (155B): the
 // kind-filtered twin (Thing::isAnyKindOf on each member, advance otherwise),
 // notifying unless the rowed Team::rva0039DEC4 scan is true; caller 0x002C6B6D.
+// ?rva0039E5B9@Team@@QAEXPAUCoord3D@@@Z @0x0039E5B9 (167B): the team centre,
+// the mean of the members' positions (Object+0x38) written to *center. Target
+// evidence: retail body (SSE sums, 1.0f literal at 0x00BBB8D8 over the member
+// count), callers ScriptActions 0x003C2A9F and AITactic::calcLastTeamPos
+// 0x004EDDD3. The unnamed WB twin 0x00EF81A0 has the same walk with a NULL
+// member test that returns before the store; retail folds that test into the
+// loop condition, and keeping it in the source is what places retail's late
+// push edi before the copy. ZH has no averaging counterpart (its
+// getEstimateTeamPosition returns the first member's position).
 
 typedef unsigned int UnsignedInt;
+
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 
 class PolygonTrigger;
 
@@ -81,7 +92,9 @@ public:
 public:
 	unsigned char m_pad0[4];
 	ThingTemplate *m_template;
-	unsigned char m_pad1[0x258 - 0x8];
+	unsigned char m_pad1[0x38 - 0x8];
+	Coord3D m_pos;
+	unsigned char m_pad1b[0x258 - 0x44];
 	AIUpdateInterface *m_ai;
 	unsigned char m_pad2[0x438 - 0x25c];
 	unsigned char m_dead;
@@ -121,6 +134,7 @@ public:
 	bool someInsideSomeOutside(PolygonTrigger *pTrigger, UnsignedInt whichToConsider);
 	bool allInside(PolygonTrigger *pTrigger, UnsignedInt whichToConsider);
 	bool noneInside(PolygonTrigger *pTrigger, UnsignedInt whichToConsider);
+	void rva0039E5B9(Coord3D *center);
 	void rva0039E7F2(float a, float b, float c);
 	void transferUnitsTo(Team *newTeam);
 	void transferKindOfUnitsTo(Team *newTeam, const BitFlags<69> &kinds);
@@ -282,6 +296,30 @@ bool Team::noneInside(PolygonTrigger *pTrigger, UnsignedInt whichToConsider)
 		anyConsidered = true;
 	}
 	return anyConsidered && !anyInside;
+}
+
+void Team::rva0039E5B9(Coord3D *center)
+{
+	Coord3D sum;
+	sum.x = 0.0f;
+	sum.y = 0.0f;
+	sum.z = 0.0f;
+	int count = 0;
+	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); !iter.done(); iter.advance()) {
+		Object *obj = iter.cur();
+		if (!obj)
+			return;
+		const Coord3D *pos = &obj->m_pos;
+		sum.x = pos->x + sum.x;
+		sum.y = pos->y + sum.y;
+		sum.z = pos->z + sum.z;
+		++count;
+	}
+	float inv = 1.0f / count;
+	sum.x *= inv;
+	sum.y *= inv;
+	sum.z *= inv;
+	*center = sum;
 }
 
 void Team::rva0039E7F2(float a, float b, float c)

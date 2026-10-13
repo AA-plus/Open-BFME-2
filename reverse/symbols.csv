@@ -11284,7 +11284,6 @@ name,address,notes
 ?rva0039D97E@Team@@QAEXPAVPlayer@@@Z,0x0039D97E,Team member taking a Player; REL32 callee of dump-range-18 0x003C01E2 joining two teams players; identity unproven
 ?rva0039DA2A@Team@@QBE?AUCoord3D@@XZ,0x0039DA2A,"by-value spelling of the matched team centroid row (?rva0039DA2A@Team@@QBEXPAUCoord3D@@@Z): the body writes the result through its one stack argument and returns it in EAX, which script action 0x003C9DA4 passes straight on as the range-query position"
 ?rva0039DA2A@Team@@QBEPAUCoord3D@@PAU2@@Z,0x0039DA2A,pointer-return spelling of the matched team centroid row (?rva0039DA2A@Team@@QBEXPAUCoord3D@@@Z): the body leaves its stack argument in EAX on exit (mov eax [ebp+8] with no later eax write) so callers can pass the filled position straight on; script action 0x003C449C nests it inside the 0x003C24F0 argument list
-?rva0039E5B9@Team@@QAEXPAUCoord3D@@@Z,0x0039E5B9,Team centre into a Coord3D; REL32 at 0x005AB5EC in ReturnTheRing 0x005AB5B7
 ?rva0039E9A1@Team@@QAEXPAUCoord3D@@@Z,0x0039E9A1,Team member taking a Coord3D out-pointer; REL32 callee of dump-range-18 0x003BEBD6 alongside rowed 0x0039DC9E; identity unproven
 ?rva003A0CD1@TeamPrototype@@QAEXXZ,0x003A0CD1,Ghidra FUN_007a0cd1 57B out-of-line owner/factory removal (m_owningPlayer->removeTeamFromList 0x002ABD48 then m_factory 0x0039FE11); REL32 at 0x003A33FA in ~TeamPrototype
 ?rva003A10FE@Team@@QAEXH@Z,0x003A10FE,thiscall (int) on the getTeamNamed team; callee of dump-range-18 0x003BFAC3
