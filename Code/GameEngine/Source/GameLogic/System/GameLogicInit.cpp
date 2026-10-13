@@ -1764,11 +1764,11 @@ private:
 };
 
 // 0x00271058 compares, unregisters and re-registers the ID at +0x100 (the
-// ZH Drawable::setID shape); the row keeps its address name.
+// ZH Drawable::setID shape; WB names it Drawable::setID).
 class Rva00271058
 {
 public:
-	void rva00271058(void *p);
+	void setID(void *p);
 };
 
 // Binds the kind to a temporary for the loader's pointer argument.
@@ -1816,7 +1816,7 @@ void GameLogic::rva00246422(bool dontCreate)
 				Team *team = ThePlayerList->getNeutralPlayer()->getDefaultTeam();
 				m_154 = TheThingFactory->rva002D0A23(tt, team, CreateMask(), (ObjectID)99999999);
 				if (m_154)
-					((Rva00271058 *)m_154->getDrawable())->rva00271058((void *)99999999);
+					((Rva00271058 *)m_154->getDrawable())->setID((void *)99999999);
 			}
 		}
 
@@ -1835,7 +1835,7 @@ void GameLogic::rva00246422(bool dontCreate)
 				Team *team = ThePlayerList->getNeutralPlayer()->getDefaultTeam();
 				m_158 = TheThingFactory->rva002D0A23(tt, team, CreateMask(), (ObjectID)99999998);
 				if (m_158)
-					((Rva00271058 *)m_158->getDrawable())->rva00271058((void *)99999998);
+					((Rva00271058 *)m_158->getDrawable())->setID((void *)99999998);
 			}
 		}
 
@@ -1852,7 +1852,7 @@ void GameLogic::rva00246422(bool dontCreate)
 				Team *team = ThePlayerList->getNeutralPlayer()->getDefaultTeam();
 				m_15c = TheThingFactory->rva002D0A23(tt, team, CreateMask(), (ObjectID)99999996);
 				if (m_15c)
-					((Rva00271058 *)m_15c->getDrawable())->rva00271058((void *)99999996);
+					((Rva00271058 *)m_15c->getDrawable())->setID((void *)99999996);
 			}
 		}
 
@@ -1871,7 +1871,7 @@ void GameLogic::rva00246422(bool dontCreate)
 				Team *team = ThePlayerList->getNeutralPlayer()->getDefaultTeam();
 				m_160 = TheThingFactory->rva002D0A23(tt, team, CreateMask(), (ObjectID)99999997);
 				if (m_160)
-					((Rva00271058 *)m_160->getDrawable())->rva00271058((void *)99999997);
+					((Rva00271058 *)m_160->getDrawable())->setID((void *)99999997);
 			}
 		}
 

@@ -3,7 +3,7 @@
 // ?rva00514DDA@Rva00514DDA@@QAEXH@Z @0x00514DDA, 70B.
 // Gate on this+0x288==8 and arg==3, then TheGameClient branch on this+0x282,
 // TheMouse engine visibility false, clear 0x288.
-// Evidence: __thiscall ret 4 void(int); callees rowed rva0023C322 rva00238FC0
+// Evidence: __thiscall ret 4 void(int); callees rowed rva0023C322 restorePriorDisplayMode
 // and Mouse::_bfme_setEngineVisibility; globals TheGameClient TheMouse in use;
 // and [m],0 and push esi shape indicate /O1 like next sibling.
 
@@ -24,7 +24,7 @@ public:
 class Rva00238E1B
 {
 public:
-	void rva00238FC0();
+	void restorePriorDisplayMode();
 };
 
 class Mouse
@@ -54,7 +54,7 @@ void Rva00514DDA::rva00514DDA(int arg)
 	if (m_0282 != 0)
 		((Rva0023C322 *)((ClientFrameSubsystem *)TheGameClient))->rva0023C322();
 	else
-		((Rva00238E1B *)((ClientFrameSubsystem *)TheGameClient))->rva00238FC0();
+		((Rva00238E1B *)((ClientFrameSubsystem *)TheGameClient))->restorePriorDisplayMode();
 	TheMouse->_bfme_setEngineVisibility(false);
 	m_0288 = 0;
 }

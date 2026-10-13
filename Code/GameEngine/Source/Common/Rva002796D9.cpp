@@ -53,10 +53,10 @@ void __cdecl rva002778E1();
 class Rva002796D9Host
 {
 public:
-	void rva002796D9(int v);
+	void drawIconLayer(int v);
 };
-// ?rva002796D9@Rva002796D9Host@@QAEXH@Z
-void Rva002796D9Host::rva002796D9(int v)
+// ?drawIconLayer@Rva002796D9Host@@QAEXH@Z
+void Rva002796D9Host::drawIconLayer(int v)
 {
 	switch (v)
 	{

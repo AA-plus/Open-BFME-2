@@ -457,7 +457,7 @@ class Object:public Thing {public:Player*getControllingPlayer()const;};
 extern GameLogic*TheGameLogic;
 class ThingFactory;extern ThingFactory*TheThingFactory;
 struct Rva002CF1FBNode {char pad[0x64];AsciiString name;};
-struct Rva002CF1FB {Rva002CF1FBNode*rva002CF1FB(unsigned short);};
+struct Rva002CF1FB {Rva002CF1FBNode*findByTemplateID(unsigned short);};
 class Overridable {public:const Overridable*friend_getFinalOverride()const;};
 class SpecialPowerTemplate:public Overridable {public:char pad0[0x10];AsciiString name;const AsciiString&getName()const{return ((const SpecialPowerTemplate*)friend_getFinalOverride())->name;} };
 class SpecialPowerStore {public:const SpecialPowerTemplate*findSpecialPowerTemplateByID(unsigned);};extern SpecialPowerStore*TheSpecialPowerStore;
@@ -520,7 +520,7 @@ void RecorderClass::dumpCommandHistory(CommandDumpFile0037BE15* file,unsigned ma
       if (i==0) text.format("    %02d: Integer:%d (PlayerIndex)",i,message->getArgument(i)->integer);
       else if (i==1) text.format("    %02d: Integer:%d (Science:%s)",i,message->getArgument(i)->integer,TheScienceStore->rva001FF5F2((NameKeyType)message->getArgument(i)->integer).str());
      } else if (i==0 && read0037BE15<int>(message,0x10)==0x419) {
-      const Rva002CF1FBNode* thing=((Rva002CF1FB*)TheThingFactory)->rva002CF1FB((unsigned short)message->getArgument(i)->integer);
+      const Rva002CF1FBNode* thing=((Rva002CF1FB*)TheThingFactory)->findByTemplateID((unsigned short)message->getArgument(i)->integer);
       text.format("    %02d: Integer:%d (ThingTemplate:%s)",i,message->getArgument(i)->integer,thing?thing->name.str():"UNKNOWN");
      } else if (i==0 && (read0037BE15<int>(message,0x10)==0x411 || read0037BE15<int>(message,0x10)==0x412 || read0037BE15<int>(message,0x10)==0x410 || read0037BE15<int>(message,0x10)==0x456)) {
       unsigned id=message->getArgument(0)->integer;

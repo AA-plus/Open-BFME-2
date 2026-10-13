@@ -296,7 +296,7 @@ public:
 class Rva00271058
 {
 public:
-	void rva00271058(void *id);
+	void setID(void *id);
 };
 
 class BodyModule
@@ -697,7 +697,7 @@ void Object::xfer(Xfer *xfer)
 	{
 		if (draw == 0)
 			throw XferException(0, 0);
-		((Rva00271058 *)draw)->rva00271058((void *)drawableID);
+		((Rva00271058 *)draw)->setID((void *)drawableID);
 	}
 
 	*xfer == m_name;

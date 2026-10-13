@@ -29,7 +29,7 @@ class Rva00279354Host
 {
 public:
 	void rva00279354(bool v);
-	void rva00279797(const OpaqueRefElement4 &v);
+	void setCustomSoundAmbientInfo(const OpaqueRefElement4 &v);
 private:
 	unsigned char m_pad[0x10C];
 	Rva000A8C9B m_10C;
@@ -42,7 +42,7 @@ void Rva00279354Host::rva00279354(bool v)
 	if (v != 0)
 		((Rva002783F6Host *)this)->rva002783F6(0);
 }
-void Rva00279354Host::rva00279797(const OpaqueRefElement4 &v)
+void Rva00279354Host::setCustomSoundAmbientInfo(const OpaqueRefElement4 &v)
 {
 	rva00279354(false);
 	*(OpaqueRefElement4 *)((char *)this + 0x10C) = v;

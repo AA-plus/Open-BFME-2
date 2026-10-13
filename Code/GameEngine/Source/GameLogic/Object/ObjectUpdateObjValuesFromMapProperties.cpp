@@ -130,7 +130,7 @@ class ThingTemplate;
 class Rva00279354Host
 {
 public:
-	void rva00279797(const OpaqueRefElement4 &info);
+	void setCustomSoundAmbientInfo(const OpaqueRefElement4 &info);
 };
 
 class Drawable
@@ -503,7 +503,7 @@ void Object::updateObjValuesFromMapProperties(Dict *properties)
 			{
 				drawable->rva002781DA(info);
 				TheAudio->rva_slot74(info.referent);
-				reinterpret_cast<Rva00279354Host *>(drawable)->rva00279797(
+				reinterpret_cast<Rva00279354Host *>(drawable)->setCustomSoundAmbientInfo(
 					*reinterpret_cast<const OpaqueRefElement4 *>(&info));
 			}
 			if (enabled && !drawable->m_448)

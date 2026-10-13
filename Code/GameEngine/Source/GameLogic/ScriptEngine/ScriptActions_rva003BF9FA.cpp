@@ -7,7 +7,7 @@
 // then handler at proto+8; empty third name resolves team via getTeamNamed
 // and centroid else null.
 // Evidence: rowed rva003570D1 getTeamNamed isEmpty copy-ctor centroid
-// rva002A9DFE, extern g_Va009FE16C, caller 0x003CA9CD, ret 0xc.
+// recruitSpecificTeam, extern g_Va009FE16C, caller 0x003CA9CD, ret 0xc.
 #include "ascii_string.h"
 
 class TeamPrototype;
@@ -17,7 +17,7 @@ class Team;
 class Rva002A9DFE
 {
 public:
-	void rva002A9DFE(void *a1, float a2, void *a3);
+	void recruitSpecificTeam(void *a1, float a2, void *a3);
 };
 
 class ScriptEngine
@@ -56,8 +56,8 @@ void ScriptActions::Rva003BF9FADo(const AsciiString &a1, float f, const AsciiStr
 			return;
 		Coord3D pos;
 		team->rva0039DA2A(&pos);
-		handler->rva002A9DFE(proto, f, &pos);
+		handler->recruitSpecificTeam(proto, f, &pos);
 	} else {
-		handler->rva002A9DFE(proto, f, 0);
+		handler->recruitSpecificTeam(proto, f, 0);
 	}
 }

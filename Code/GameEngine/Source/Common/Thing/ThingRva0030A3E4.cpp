@@ -1,6 +1,6 @@
 // cl: /FIzh_ascii.h /Ireference/shims/bfme2_ascii_zh /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /Ireference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/sweep
 // stlport
-// ?rva0030A3E4@Rva0030A3E4@@QAEXPBVMatrix3D@@@Z 0x0030A3E4 200B evidence: Thing layout +8 m_transform +38 cachedPos +44 angle +5c flags; Get_Z_Rotation and Coord3D equals rowed; vslot 0x18 conditional; callers UNCLAIMED
+// ?_setTransformMatrix@Rva0030A3E4@@QAEXPBVMatrix3D@@@Z 0x0030A3E4 200B evidence: Thing layout +8 m_transform +38 cachedPos +44 angle +5c flags; Get_Z_Rotation and Coord3D equals rowed; vslot 0x18 conditional; callers UNCLAIMED
 #define Coord3D ZH_Coord3D
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 #undef Coord3D
@@ -40,10 +40,10 @@ public:
 	Real m_cachedAngle;
 	unsigned char m_pad1[0x5c - 0x48];
 	int m_cacheFlags;
-	void rva0030A3E4(const Matrix3D *mx);
+	void _setTransformMatrix(const Matrix3D *mx);
 };
 
-void Rva0030A3E4::rva0030A3E4(const Matrix3D *mx)
+void Rva0030A3E4::_setTransformMatrix(const Matrix3D *mx)
 {
 	Real oldAngle = m_cachedAngle;
 	const Coord3D &cachedPos = m_cachedPos;

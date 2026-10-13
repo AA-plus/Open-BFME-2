@@ -6,7 +6,7 @@
 class Rva00271058
 {
 public:
-	void rva00271058(void *p);
+	void setID(void *p);
 };
 
 class Rva002714E6
@@ -21,7 +21,7 @@ public:
 	int rva00238E1B();
 	void rva00238E25(Rva002714E6 *node);
 	void rva00238F91(int a, int b, int c);
-	void rva00238FC0();
+	void restorePriorDisplayMode();
 private:
 	int m_pad[5];
 	Rva002714E6 *m_head;
@@ -49,7 +49,7 @@ void Rva00238E1B::rva00238E25(Rva002714E6 *node)
 {
 	int old = m_counter;
 	m_counter = old + 1;
-	((Rva00271058 *)node)->rva00271058((void *)old);
+	((Rva00271058 *)node)->setID((void *)old);
 	node->rva002714E6(&m_head);
 }
 
@@ -62,7 +62,7 @@ void Rva00238E1B::rva00238F91(int a, int b, int c)
 	m_D4 = c;
 }
 
-void Rva00238E1B::rva00238FC0()
+void Rva00238E1B::restorePriorDisplayMode()
 {
 	m_CC = m_D8;
 	m_D0 = m_DC;

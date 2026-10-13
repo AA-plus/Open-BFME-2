@@ -8,7 +8,7 @@
 class Rva002796D9Host
 {
 public:
-	void rva002796D9(int slot);
+	void drawIconLayer(int slot);
 };
 
 struct Rva0023998EListNode
@@ -82,7 +82,7 @@ void Drawable::rva0023998E(int slot)
 	TheDisplay->beginImageDraw();
 	for (register Rva0023998EListNode *node = holder->m_head->m_next;
 		node != holder->m_head; node = node->m_next)
-		node->m_callback->rva002796D9(slotIndex);
+		node->m_callback->drawIconLayer(slotIndex);
 	TheDisplay->endImageDraw();
 	holder->rva00239380();
 }

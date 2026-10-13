@@ -162,7 +162,7 @@ public:
 class Rva0030A3E4
 {
 public:
-	void rva0030A3E4(const Matrix3D *mtx);
+	void _setTransformMatrix(const Matrix3D *mtx);
 };
 
 class Thing
@@ -308,7 +308,7 @@ Bool Locomotor::rva001E9A00(Object *obj, Real goalSpeed, Real *pathDistance, Rva
 		Real count = 0.0f;
 		Real pitch = 0.0f;
 		if (m_template->m_1C)
-			((Rva0030A3E4 *)obj)->rva0030A3E4(&m_transform);
+			((Rva0030A3E4 *)obj)->_setTransformMatrix(&m_transform);
 		Coord3D behind;
 		if (TheAerialPathfinder->rva00375A73(path, *pathDistance - lookAhead, (Rva00375A73Coord *)&behind))
 		{
