@@ -1,112 +1,95 @@
-// _UpdateUMVBorder
-// partial score=0.8 date=2026-10-12
+// UpdateUMVBorder
+// partial score=0.75 date=2026-10-13
 // cl: /O2 /G6 /DNDEBUG /MD
 // Clean room: reverse/vp6_cleanroom/specs/001b96a0.md plus retail only.
-// NEAR (not exact): UpdateUMVBorder retail 0x001B96A0..0x001B9AB6 (1047
-// bytes). Same block structure (inlined memset/memcpy rep stos/movs; the
-// border copy loops address the bottom rows as top + invariant difference;
-// halved border via shr; UV stride and UV rows kept for V) but this body
-// compiles to 1055 bytes: MSVC loads the buffer argument first into ECX
-// and keeps the border in EDX where retail keeps the buffer in EAX and the
-// border in ECX (and the left source pointer in ESI) so registers rotate
-// throughout. Tried: increment orders / declaration orders / separate
-// halved border / width local / single row pointer / unsigned border /
-// local buffer copy / flag variants (/G5 /G7 /Ox /O1 /Oy-).
-struct Vp6BorderInstance {
-	unsigned char unknown0[0x78];
-	int ReconYDataOffset;
-	int ReconUDataOffset;
-	int ReconVDataOffset;
-	unsigned char unknown84[0x90 - 0x84];
-	int HFragments;
-	int VFragments;
-	int YStride;
-	int UVStride;
-	unsigned char unknownA0[0xb4 - 0xa0];
-	int MVBorder;
-};
-extern "C" void *memset(void *, int, unsigned);
-extern "C" void *memcpy(void *, const void *, unsigned);
-#pragma intrinsic(memset, memcpy)
-extern "C" void UpdateUMVBorder(Vp6BorderInstance *pbi, unsigned char *buffer)
+// No decoder source was consulted.
+// UpdateUMVBorder retail 0x001B96A0..0x001B9AB6 (1047 bytes), cdecl
+// (post-processor instance, frame buffer base): replicates the edge pixels of
+// the Y, U and V planes into the surrounding border so motion vectors may
+// point outside the picture. Each plane runs the same two static helpers: the
+// side borders fill and the top/bottom row copies, both of which the compiler
+// inlines (byte fills to rep stos, row copies to rep movs).
+struct Rva009AF200Context
 {
+	int m_mode;
+	unsigned char m_pad04[0x78 - 0x04];
+	unsigned char *m_planeY;
+	unsigned char *m_planeU;
+	unsigned char *m_planeV;
+	unsigned int m_fragmentsY;
+	unsigned int m_fragmentsUV;
+	unsigned int m_scratchCount;
+	int m_width;
+	int m_height;
+	int m_strideY;
+	int m_strideUV;
+	unsigned char m_padA0[0xB4 - 0xA0];
+	int m_border;
+};
+
+static __forceinline void FillBytes(unsigned char *destination, unsigned char value, int count)
+{
+	int k;
+	for (k = 0; k < count; k++)
+		destination[k] = value;
+}
+
+static __forceinline void CopyBytes(unsigned char *destination, const unsigned char *source, int count)
+{
+	int k;
+	for (k = 0; k < count; k++)
+		destination[k] = source[k];
+}
+
+static __forceinline void PlaneSides(unsigned char *row, int width, int rows, int border, int stride)
+{
+	unsigned char *last = row + width - 1;
+	unsigned char *left = row - border;
+	unsigned char *right = last + 1;
 	int i;
-	int rows;
-	int border = pbi->MVBorder;
-	int stride = pbi->YStride;
-	unsigned char *srcLeft, *srcRight, *dstLeft, *dstRight;
-	unsigned char *src, *last, *dstTop, *dstBottom;
 
-	rows = pbi->VFragments * 8;
-	srcLeft = buffer + pbi->ReconYDataOffset;
-	srcRight = srcLeft + pbi->HFragments * 8 - 1;
-	dstLeft = srcLeft - border;
-	dstRight = srcRight + 1;
-	for (i = 0; i < rows; i++) {
-		memset(dstLeft, srcLeft[0], border);
-		memset(dstRight, srcRight[0], border);
-		srcLeft += stride;
-		srcRight += stride;
-		dstLeft += stride;
-		dstRight += stride;
+	for (i = 0; i < rows; i++)
+	{
+		FillBytes(left, row[0], border);
+		FillBytes(right, *last, border);
+		row += stride;
+		left += stride;
+		right += stride;
+		last += stride;
 	}
-	src = buffer + border * stride;
-	last = src + (pbi->VFragments * 8 - 1) * stride;
-	dstTop = buffer;
-	dstBottom = last + stride;
-	for (i = 0; i < border; i++) {
-		memcpy(dstTop, src, stride);
-		memcpy(dstBottom, last, stride);
-		dstTop += stride;
-		dstBottom += stride;
-	}
+}
 
-	stride = pbi->UVStride;
-	rows = pbi->VFragments * 4;
-	border = (unsigned)border / 2;
-	srcLeft = buffer + pbi->ReconUDataOffset;
-	srcRight = srcLeft + pbi->HFragments * 4 - 1;
-	dstLeft = srcLeft - border;
-	dstRight = srcRight + 1;
-	for (i = 0; i < rows; i++) {
-		memset(dstLeft, srcLeft[0], border);
-		memset(dstRight, srcRight[0], border);
-		srcLeft += stride;
-		srcRight += stride;
-		dstLeft += stride;
-		dstRight += stride;
-	}
-	src = buffer + pbi->ReconUDataOffset - border;
-	last = src + (pbi->VFragments * 4 - 1) * stride;
-	dstTop = src - border * stride;
-	dstBottom = last + stride;
-	for (i = 0; i < border; i++) {
-		memcpy(dstTop, src, stride);
-		memcpy(dstBottom, last, stride);
-		dstTop += stride;
-		dstBottom += stride;
-	}
+static __forceinline void PlaneRows(unsigned char *source, int rows, int border, int stride)
+{
+	unsigned char *lastRow = source + (rows - 1) * stride;
+	unsigned char *top = source - border * stride;
+	unsigned char *bottom = lastRow + stride;
+	int i;
 
-	srcLeft = buffer + pbi->ReconVDataOffset;
-	srcRight = srcLeft + pbi->HFragments * 4 - 1;
-	dstLeft = srcLeft - border;
-	dstRight = srcRight + 1;
-	for (i = 0; i < rows; i++) {
-		memset(dstLeft, srcLeft[0], border);
-		memset(dstRight, srcRight[0], border);
-		srcLeft += stride;
-		srcRight += stride;
-		dstLeft += stride;
-		dstRight += stride;
+	for (i = 0; i < border; i++)
+	{
+		CopyBytes(top, source, stride);
+		CopyBytes(bottom, lastRow, stride);
+		top += stride;
+		bottom += stride;
 	}
-	src = buffer + pbi->ReconVDataOffset - border;
-	last = src + (pbi->VFragments * 4 - 1) * stride;
-	dstTop = src - border * stride;
-	dstBottom = last + stride;
-	for (i = 0; i < border; i++) {
-		memcpy(dstTop, src, stride);
-		memcpy(dstBottom, last, stride);
-		dstTop += stride;
-		dstBottom += stride;
-	}
+}
+
+extern "C" void __cdecl UpdateUMVBorder(Rva009AF200Context *pbi, unsigned char *buffer)
+{
+	int border = pbi->m_border;
+
+	PlaneSides(buffer + (int)pbi->m_planeY, pbi->m_width << 3, pbi->m_height << 3,
+		pbi->m_border, pbi->m_strideY);
+	PlaneRows(buffer + pbi->m_border * pbi->m_strideY, pbi->m_height << 3,
+		pbi->m_border, pbi->m_strideY);
+	PlaneSides(buffer + (int)pbi->m_planeU, pbi->m_width << 2, pbi->m_height << 2,
+		pbi->m_border >> 1, pbi->m_strideUV);
+	PlaneRows(buffer + (int)pbi->m_planeU - (pbi->m_border >> 1), pbi->m_height << 2,
+		pbi->m_border >> 1, pbi->m_strideUV);
+	PlaneSides(buffer + (int)pbi->m_planeV, pbi->m_width << 2, pbi->m_height << 2,
+		pbi->m_border >> 1, pbi->m_strideUV);
+	PlaneRows(buffer + (int)pbi->m_planeV - (pbi->m_border >> 1), pbi->m_height << 2,
+		pbi->m_border >> 1, pbi->m_strideUV);
+	(void)border;
 }
