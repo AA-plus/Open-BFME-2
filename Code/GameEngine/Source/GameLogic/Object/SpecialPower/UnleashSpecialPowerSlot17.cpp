@@ -94,8 +94,6 @@ private:
 class Object
 {
 public:
-	BehaviorModule **getBehaviorModules() const { return m_behaviors; }
-	AIUpdateInterface *getAI() const { return m_ai; }
 	unsigned char m_pad000[0x244];
 	BehaviorModule **m_behaviors; // +0x244
 	unsigned char m_pad248[0x258 - 0x248];
@@ -148,13 +146,13 @@ void UnleashSpecialPower::triggerAbilityEffect()
 	Object *slaver = TheGameLogic->findObjectByID(watcher->rva0030D377());
 	if (slaver == 0)
 		return;
-	for (BehaviorModule **m = slaver->getBehaviorModules(); *m; ++m)
+	for (BehaviorModule **m = slaver->m_behaviors; *m; ++m)
 	{
 		Rva004CE18AAnswer *answer = (*m)->getInterface()->rva004CE18ASlot26();
 		if (answer)
 		{
 			answer->rva004CE18ASlot6();
-			AIUpdateInterface *ai = slaver->getAI();
+			AIUpdateInterface *ai = slaver->m_ai;
 			if (ai)
 				ai->m_commands.aiHunt(CMD_FROM_AI);
 		}
