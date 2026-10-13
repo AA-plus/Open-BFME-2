@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /arch:SSE /EHs /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii
 // stlport
 // ?getPreferredMap@SkirmishPreferences@@QAE?AVAsciiString@@XZ, retail 0x0043C384 (306 bytes): Zero Hour's body with the invalid-map
