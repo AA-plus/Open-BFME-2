@@ -59,3 +59,7 @@ Rva004E013B::~Rva004E013B(){
         ::operator delete(child);
     }
 }
+
+// Native 0x00791841 is the complete 11-byte table-member cleanup at +0x14.
+// The exact 168-byte parent and EH graph select the rowed five-byte wrapper
+// and complete 57-byte bucket-table destructor; original type identities stay unknown.
