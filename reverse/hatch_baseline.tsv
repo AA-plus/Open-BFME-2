@@ -41829,7 +41829,6 @@ present_unmatched	Code/Libraries/Source/WWVegas/WW3D2/ringobj.cpp	animate@RingRe
 present_unmatched	Code/Libraries/Source/WWVegas/WW3D2/ringobj.cpp	calculate_value_array@RingRenderObjClass@@IBEXMPAM@Z	1
 present_unmatched	Code/Libraries/Source/WWVegas/WW3D2/ringobj.cpp	render_ring@RingRenderObjClass@@IAEXAAVRenderInfoClass@@ABVVector3@@1@Z	1
 present_unmatched	Code/Libraries/Source/WWVegas/WW3D2/ringobj.cpp	update_cached_box@RingRenderObjClass@@MAEXXZ	1
-present_unmatched	Code/Libraries/Source/WWVegas/WW3D2/scene.cpp	0SimpleSceneClass@@QAE@XZ	1
 present_unmatched	Code/Libraries/Source/WWVegas/WW3D2/scene.cpp	0SimpleSceneIterator@@IAE@PAV?$RefMultiListClass@VRenderObjClass@@@@_N@Z	1
 present_unmatched	Code/Libraries/Source/WWVegas/WW3D2/scene.cpp	1SceneClass@@UAE@XZ	1
 present_unmatched	Code/Libraries/Source/WWVegas/WW3D2/scene.cpp	1SimpleSceneClass@@UAE@XZ	1

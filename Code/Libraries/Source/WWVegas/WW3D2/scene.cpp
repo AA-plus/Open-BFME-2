@@ -296,12 +296,8 @@ void SceneClass::Load(ChunkLoadClass & cload)
  *   3/24/98    GTH : Created.                                                                 *
  *   9/10/99    GTH : Created.                                                                 *
  *=============================================================================================*/
-// ??0SimpleSceneClass@@QAE@XZ present-unmatched
-SimpleSceneClass::SimpleSceneClass(void) :
-   Visibility_Checked(false)
-{
-
-}
+// SimpleSceneClass::SimpleSceneClass is defined byte-exact in
+// SimpleSceneClassConstructorBFME2.cpp (0x00142960).
 
 /***********************************************************************************************
  * SimpleSceneClass::~SimpleSceneClass -- destructor                                           *
