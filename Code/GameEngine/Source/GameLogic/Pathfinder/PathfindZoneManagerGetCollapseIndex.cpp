@@ -1,7 +1,4 @@
 // ?GetCollapseIndex@PathfindZoneManager@@SAHABUPathfindZoneParams@@@Z
-// partial score=0.95 date=2026-10-13
-// ?GetCollapseIndex@PathfindZoneManager@@SAHABUPathfindZoneParams@@@Z
-// partial score=0.95 date=2026-10-07
 // cl: /O1 /DNDEBUG /MD
 //
 // pathfinder_zonemanager.cpp -- PathfindZoneManager members at their
@@ -30,34 +27,26 @@ public:
 int PathfindZoneManager::GetCollapseIndex(const PathfindZoneParams &par)
 {
 	int surfaces = par.m_acceptableSurfaces;
+	// One result variable and a case order that places retail's shared
+	// "pop eax; ret" tail (cross-jumped push-immediate returns).
+	int r;
 	if ((surfaces & 0x01) && (surfaces & 0x10) && (surfaces & 0x02) && (surfaces & 0x80) && (surfaces & 0x20) && (surfaces & 0x40))
 		return 5;
-
 	switch (surfaces & 0x87)
 	{
-	case 0x00:
-		return -666;
+	case 0x00: r = -666; break;
+	case 0x04: r = 0; break;
+	case 0x82: r = 4; break;
+	case 0x02: r = 0; break;
+	default: r = -666; break;
+	case 0x87: r = -1; break;
+	case 0x05: r = 1; break;
+	case 0x80: r = 0; break;
+	case 0x83: r = 2; break;
+	case 0x06: r = -666; break;
 	case 0x01:
-		if (par.m_0C)
-			return 6;
-		return (surfaces & 0x10) ? 3 : 0;
-	case 0x02:
-		return 0;
-	case 0x04:
-		return 0;
-	case 0x05:
-		return 1;
-	case 0x06:
-		return -666;
-	case 0x80:
-		return 0;
-	case 0x82:
-		return 4;
-	case 0x83:
-		return 2;
-	case 0x87:
-		return -1;
-	default:
-		return -666;
+		if (par.m_0C) { r = 6; break; }
+		r = (surfaces & 0x10) ? 3 : 0; break;
 	}
+	return r;
 }
