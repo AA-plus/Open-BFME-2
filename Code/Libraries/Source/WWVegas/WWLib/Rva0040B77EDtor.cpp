@@ -13,27 +13,25 @@ struct Rva0040B560
 	~Rva0040B560();
 };
 
-struct Base0040B77E
+// Native state0 receives this+4 before its14B pointer cleanup. The old
+//16B outer-base lifetime passed this+0 and could not reproduce that graph.
+// Keep words0/8/C opaque; target evidence proves the owned pointer at4,
+// not their purpose or an original base/element identity.
+struct Rva0040B77EFreePtr
 {
-	int m_00;
-	void *m_04;
-	int m_08;
-	int m_0C;
-	inline ~Base0040B77E();
+    void *m_ptr;
+    ~Rva0040B77EFreePtr() { if (m_ptr) free(m_ptr); }
 };
 
-// ??1Base0040B77E@@QAE@XZ present-unmatched
-inline Base0040B77E::~Base0040B77E()
-{
-	if (m_04)
-		free(m_04);
-}
-
-class Rva0040B77E : public Base0040B77E
+class Rva0040B77E
 {
 public:
 	~Rva0040B77E();
 private:
+    int m_00;
+    Rva0040B77EFreePtr m_04;
+    int m_08;
+    int m_0C;
 	AsciiString m_10;
 	AsciiString m_14;
 	AsciiString m_18;

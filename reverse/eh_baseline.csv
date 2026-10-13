@@ -40,7 +40,6 @@ name,target_rva,verdict
 ??1Rva0035A9C1@@UAE@XZ,0x0035A9C1,bytes_differ
 ??0Rva00382FA7@@QAE@ABU0@@Z,0x00382FA7,bytes_differ
 ??0GameInfo@@QAE@XZ,0x00400A07,bytes_differ
-??1Rva0040B77E@@QAE@XZ,0x0040B77E,bytes_differ
 ??0Rva004147CF@@QAE@ABV0@@Z,0x004147CF,bytes_differ
 ??0GettingBuiltBehaviorModuleData@@QAE@XZ,0x0045324E,bytes_differ
 ??1StancesBehavior@@UAE@XZ,0x0045F001,bytes_differ
