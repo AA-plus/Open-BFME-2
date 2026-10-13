@@ -6138,7 +6138,6 @@ name,address,notes
 ?Rva002EBEF0Intro@@YAXPAUS4SortElem20@@00HUS4Cmp002EB8E0@@@Z,0x00337D21,callee read from the retail REL32 in placed BFME1-donor body ?Rva002EBEF0@@YAXPAUS4SortElem20@@0US4Cmp002EB8E0@@@Z (0x00337DA9)
 ?Rva002EF27DPop@@YAXPAPAU_Rva002EBB53Wrap@@00PAU1@HPAX@Z,0x002EF27D,"__pop_heap worker called by the 0x2f0ee4 __pop_heap_aux; *result=*first then __adjust_heap(first,0,(last-first)/4,val,comp); 41B at 0x2ef27d; address-derived name"
 ?Rva002F1F02Wrap@@YAXPAPAU_Rva002EBB53Wrap@@0E@Z,0x002F1F02,"auto-pin (permute --pins): REL32 call target read from retail in 0x002f301f, whose banked body is byte-exact once this call resolves"
-?Rva00300E42@@YA_NPAVGameInfo@@@Z,0x00300E42,unrowed cdecl (Ghidra FUN_00700e42; returns bl) testing GameInfo::getMap startsWithNoCase the map cache folder name from 0x00300D7A; MpGameSetup 0x00441BB1 passes its result to 0x00441685; address name
 ?Rva003063A9XferThingTemplate@@YAXPAVXfer@@PAPBVThingTemplate@@@Z,0x003063A9,"cdecl ThingTemplate* transfer: copies template name (+0x64) or the empty string, xfers it as AsciiString, and on load looks it up via the factory at 0xDFF000 (0x002D06CA); callers WorkOrder::xfer 0x4F073B and 0x468FC5"
 ?Rva0030662AXfer@@YAXPAVXfer@@PAX@Z,0x0030662A,address-derived callee of matched slot 0x003FD1FA; retail REL32 targets 0x0030662A; Ghidra FUN bounds 217 bytes; cdecl (Xfer*; member address) ret; caller pops 8; callee body remains unclaimed; no named identity inferred
 ?Rva003207F5System@@YA?AW4WindowMsgHandledType@@PAVGameWindow@@III@Z,0x003207F5,"gadget system callback (cdecl window, msg, data1, data2) slot 2 of gadget vtable 0x00BC8C54 calls (REL32 at 0x0009FDB3); identity not recovered"
@@ -6227,7 +6226,6 @@ name,address,notes
 ?Rva0050EC24@@YAXXZ,0x0050EC24,unrowed 251B cdecl (Ghidra FUN_0090ec24; plain ret); REL32 read at AptPalantir::OnBttnObjectives 0x002D30E1 (no arguments and no ECX setup); address name
 ?Rva0050ED3@PoolMember@@QAEXXZ,0x0050ED3,opaque pool-member method (refcounted-deleter shape: InterlockedDecrement at +4 then dtor+free); called on +8 member-pointer with null check from vptr-body 0x4E18A2; member type opaque; identity unproven
 ?Rva005117DF@@YAXPBD@Z,0x005117DF,unrowed 23B cdecl (Ghidra FUN_009117df; plain ret; the argument unused) opening or closing the messenger; REL32 read at AptPalantir::OnBttnMessenger 0x002D311C which passes its own argument; address name
-?Rva00513866Free@@YAXXZ,0x00513866,free-function spelling for the 0x5B5B0C tail callee (no ecx or stack setup at the site); target REL32 from retail call at 0x005B5B30
 ?Rva0051ED7ETail@@YAXXZ,0x0051ED7E,tail jmp from 0x0051BF47 free no this same address as AptTimeLine pin
 ?Rva00523EC8@C00524477@@QAEXH@Z,0x00523EC8,thiscall int sink of range dispatch 0x00524477 on this+0xC (REL32 at 0x005244D0); body unrecovered; address name
 ?Rva0052408B@@YAXHHHPAD@Z,0x0052408B,free callee of forwarder 0x005243FA (REL32 at 0x0052440B); Ghidra 179B body unrecovered; address name
@@ -6417,7 +6415,6 @@ name,address,notes
 ?Rva009ADAA0@@YAXPAURva009AF200Context@@PAE1IIHPBI@Z,0x001BE490
 ?Rva009B4390CodecCall@@YAXPAXH0HHHHHHHHHHHH@Z,0x001C4C90
 ?Rva009B5530Prepare@@YAXPAURva009B5830State@@PAXH@Z,0x001C5E30
-?Rva009EBAC0@@YAXH@Z,0x0061F010,callee of ??0T1Base_005F3750@@QAE@PAX0@Z at retail 0x0055C903 read from its REL32 displacement; donor ABI view of the rowed ?bfmeMergeReceiverKeys@@YAXH@Z body at this address
 ?Rva009EEC60_FindAsset@Rva009EEC60Registry@@QAE?AVRva009EBCE0AssetReference@@PBD@Z,0x00621220
 ?Rva009F3F80@@YAXPAUQ3SortElem8@@0UQ3SortCompare@@@Z,0x00626940
 ?Rva009F3FD0@@YAXPAUQ3SortElem8@@0UQ3SortCompare@@@Z,0x00626990
@@ -8410,7 +8407,6 @@ name,address,notes
 ?bfmeStep2_250@@YAXPAX@Z,0x006A41C0,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?bfmeStep3_250@@YAXPAX@Z,0x006A3710,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?bfmeStep4_250@@YAXPAX@Z,0x006A5150,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
-?bfmeStep982C@@YAXXZ,0x000AA5E1,address read from the REL32 displacement at a placed body
 ?bfmeStepBQA@BfmeThingBQA@@QAEXXZ,0x00459E05,callee read from the retail REL32 in placed BFME1-donor body ?bfmeGoBQA@BfmeThingBQA@@QAEHXZ (0x0045A199)
 ?bfmeStepBQC@BfmeSubBQC@@QAEXXZ,0x002934A8,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?bfmeStepBVA@BfmeThingBVA@@QAEXPAV1@@Z,0x002CF742
@@ -14788,8 +14784,6 @@ _D3DXCreateEffectFromFileA@32,0x0062AFAA,callee of ?Load@Impl@FXShaderAsset@@QAE
 ?rva0048DC51@FloodUpdate@@QAEXPBUFloodMember@@PAVRva0048E16C@@@Z,0x0048DC51,FloodUpdate path builder (unrowed; banked partial in reverse/attempts); REL32 from the creator rva0048E189 at 0x0048E22B
 ?push_back@?$list@PAVRva0048E16C@@V?$allocator@PAVRva0048E16C@@@_STL@@@_STL@@QAEXABQAVRva0048E16C@@@Z,0x0005548F,ICF twin of the four-byte list push_back; REL32 at 0x0048E312 in FloodUpdate member creation 0x0048E189 on +0x20
 ?rva001F5BBE@ParticleSystemManager@@QAEXPAVObject@@@Z,0x001F5BBE,ZH destroyAttachedSystems(Object*) on TheParticleSystemManager (0x00DFDD04): REL32 at 0x0048FF56 in HeightDieUpdate::update 0x0048FD1B; the rowed body destroys every system whose +0xB4 attached ID is the object's +0x74 ID
-?rva00416C69@@YAXXZ,0x00416C69,address-derived no-argument callee from retail call at 0x00517EBC; body identity remains unknown
-?rva005BDAC1@@YAXXZ,0x005BDAC1,address-derived no-argument callee from retail call at 0x00517EC1; body identity remains unknown
 ?rva005AF12F@@YAXPAX@Z,0x005AF12F,address-derived one-pointer callee from retail call at 0x00517F05; body identity remains unknown
 ?rva003FACB4@Rva003FAC83@@QAEXXZ,0x003FACB4,Direct call at 0x00213AA1 on the map node's +8 payload; thiscall with no stack args. Shares target fields +0x18/+0x30..+0x32 and common tail with adjacent 0x003FAD4A/0x003FADA3 methods; operation and concrete type unresolved.
 ?rva003FAD4A@Rva003FAC83@@QAEXPAX@Z,0x003FAD4A,Direct call at 0x00213BA7 on the map node's +8 payload after forwarding one pointer argument; callee cleans 4 bytes. Target shares fields +0x18/+0x31 with adjacent Rva003FAC83-addressed state methods; payload meaning unresolved.
@@ -15470,7 +15464,6 @@ ___CxxFrameHandler,0x00629182,callee of __ehhandler$??1Rva005813E@@UAE@XZ
 ??0Rva00432987@@QAE@XZ,0x00432987,callee of ?init@GameClient@@UAEXXZ: new(0x204) translator attached at priority 5
 ??0Rva00E01E28Owner@@QAE@XZ,0x0035973D,callee of ?init@GameClient@@UAEXXZ: new(0x30) stored to 0x00E01E28 and named TheHotKeyManager
 ??0SelectionTranslator@@QAE@XZ,0x0042FD9E,callee of ?init@GameClient@@UAEXXZ: new(0x40) attached at ZH's priority 50; abuts pinned ?selectFriends@SelectionTranslator 0x0042FE7F
-?Rva002210CFInit@@YAXXZ,0x002210CF,callee of ?init@GameClient@@UAEXXZ: free call after the Apt window manager setup
 ?Rva00380B0CInit@@YAXXZ,0x00380B0C,callee of ?init@GameClient@@UAEXXZ: free call after the Apt window manager setup
 ?rva00276470@Rva00276470Drawable@@QBEPBUCoord3D@@XZ,0x00276470,callee of GameClient slot 26 (0x002391AA) read from its REL32 at 0x002391FC: thiscall on the drawable returning a Coord3D pointer (+0x38 without an object; else lerp +0x418 toward +0x424); body unrowed
 ??0Rva00239CC9DrawableHash@@QAE@XZ,0x0023BC17,callee of ??0GameClient@@QAE@XZ
@@ -15536,7 +15529,6 @@ ___CxxFrameHandler,0x00629182,callee of __ehhandler$??1Rva005813E@@UAE@XZ
 ?rva00100568@?$SimpleDynVecClass@VVector3@@@@QAEXXZ,0x00100568,callee of ?rva001006f8@?$SimpleDynVecClass@VVector3@@@@QBEXABURva001006F8FrustumView@@AAV1@@Z
 ?Rva002D56C3@@YA?AVAsciiString@@ABURva005D2F96Base24@@@Z,0x002D56C3,address-derived cdecl returning AsciiString from a 24-byte concat-node view; target calls push the node address and hidden result buffer; body/call-site support the ABI but not original identity
 ?newTemplate@ParticleSystemManager@@QAEPAVParticleSystemTemplate@@ABVAsciiString@@@Z,0x001FC25A,callee of ?parseParticleSystemDefinition@INI@@SAXPAV1@@Z
-?Rva00075E42Init@@YAXXZ,0x00075E42,direct no-arg call from standalone 0x00077F80 at +0x9; address-derived callee identity
 ?Rva000754DEInit@@YAXXZ,0x000754DE,direct no-arg call from standalone 0x00077F80 at +0xE; address-derived callee identity; prior bank documents render-target path
 ?Rva00077C19Load@@YAJPBDPAI@Z,0x00077C19,direct call from standalone 0x00077F80 at +0x10B; target pushes path and output handle; address-derived callee identity
 ?rva0052A765@Rva0052A765Owner@@QAEXXZ,0x0052A765,callee of ?rva002D4240@RadarWindowOverrideSource@@QAEX_N@Z
@@ -16483,7 +16475,6 @@ _D3DXLoadVolumeFromFileInMemory@36,0x0062AF8C,Native1318F0 in-image JMP IAT veri
 ?renderBridge@W3DBridge@@QAEXPAVRenderingMethod@FXShader@@@Z,0x000DDAB7,REL32 callee of W3DBridgeBuffer::drawBridges 0x000DF982/0x000DFA6B: per enabled and visible bridge as in Zero Hour renderBridge; BFME 2 passes the active FX rendering method (NULL when untextured)
 ?rva00056FD9@MilesAudioManager@@QAEXI@Z,0x00056FD9,REL32 callee of MilesAudioManager 0x00061C87 (with viewMask after 0x00060123): walks the +0x98 audio request list by view type; 239B body unrowed
 ?rva0006F1FE@W3DShroud@@QAE?AV?$RefCountPtr@VRenderingMethod@FXShader@@@@XZ,0x0006F1FE,REL32 callee of W3DPropBuffer::drawProps 0x000EE7A9 on TheTerrainRenderObject +0x3878 (the shroud): returns the rendering method pushed for shrouded props; unrowed
-?Rva000ABBEF@@YAXPAM00H@Z,0x000ABBEF,REL32 callee of ScreenHilightFilter::postRender 0x000FAE45: cdecl (float* float* float* -1) filling the colour whose components less one become pixel-shader constant 0; identity unknown
 ?Rva00077392@@YAXMPAXHPAUIDirect3DBaseTexture8@@01PAUIDirect3DSurface8@@@Z,0x00077392,REL32 callee of ScreenHilightFilter::postRender 0x000FAF1E: cdecl blur pass (strength from Rva00309E4BGet +0x08 then the filter kernel size result texture surface source texture target); identity unknown
 ?rva00291A8C@Object@@QAEXMMMH@Z,0x00291A8C,callee of ?Rva003BB4BDApply@@YGXPAVParameter@@MMMH@Z
 ?rva00564EC0@Glo012F1024Item@@QAEXXZ,0x00564EC0,callee of ?bfmeEnter@Glo012F1024Item@@QAEXXZ
@@ -16924,7 +16915,6 @@ _VP6_ReadTokens,0x001BC3D0,callee of _VP6_DecodeBlock
 ?CreateLocalPlayerData@StrategicInGameUI@@YA?AURva005F918D@@AAVLivingWorldBattle@@HHH@Z,0x005E9A5E,"callee of the battle-prompt clip ctor 0x005E9CC3 read from REL32 (cdecl, hidden 16B record return, ADD ESP 0x14); WB15E01F0 assertions 49..62 name CreateLocalPlayerData; native 236B body unrowed (banked: frame-slot packing)"
 ??0Rva005F918D@@QAE@XZ,0x00063333,"callee of PopulateMovieClip 0x005E9B4A read from REL32: the 16B player record's default ctor (zeroes holder, image, colour, name); ICF-folded 16B nulling body; fold-proof=Code/GameEngine/Source/GameClient/LivingWorld/InGameUI/StrategicInGameUIBattlePromptDialog.cpp"
 ??4Rva005F918DHolder00@@QAEAAU0@ABU0@@Z,0x002174A4,"callee of PopulateMovieClip 0x005E9B4A read from REL32: the record's page-factory reference assignment (addref other, release own via 0x0007DEEF); ICF-folded 43B refcounted-pointer assignment; fold-proof=Code/GameEngine/Source/GameClient/LivingWorld/InGameUI/StrategicInGameUIBattlePromptDialog.cpp"
-?Rva006C4FA0@@YAHPAPAXI@Z,0x006C4FA0,"callee of GeneralAllocatorDebug::rva006C2270 (flag 128 call-stack capture: fills the 24 word stack buffer and returns the entry count) read from the REL32 at the slot-7 initialiser; 297B native body unrowed; parameter types inferred from the call"
 ?rva00529B6E@Rva00529B6E@@QAEXPAVObject@@@Z,0x00529B6E,"callee of PalantirCommandInterface::Impl::rva00529E3B 0x00529E3B read from REL32 (thiscall on the +0x38 rank/timer panel with the selected Object; RET 4); native 571B body unrowed (banked .85 with the selection walkers)"
 ?computeApproachPoint@SiegeDeploySpecialPower@@QAE?AURva004598F2Point@@PAVObject@@PAU2@PA_N@Z,0x004C5877,callee of SiegeDeploySpecialPower::initiateIntentToDoSpecialPower 0x004C6133 read from its REL32 call; ZH SiegeDeploySpecialPower computeApproachPoint returns the approach point by hidden pointer
 ?rva00424E77@FormationAssistant@@QAEPAVFormation@@HPAVRva001EB130Holder@@PBUCoord3D@@@Z,0x00424E77,callee of AIGroup formation move 0x00372571 read from the REL32 at 0x00372767: TheFormationAssistant builds a Formation for formation type params+0x14 from the valid-object list and pos; native body unrowed; address name

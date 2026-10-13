@@ -1601,7 +1601,7 @@ private:
     unsigned int m_treeLayoutPad;
     bool m_changed;
 };
-extern void Rva009EBAC0(int value);
+extern void bfmeMergeReceiverKeys(int value);
 class Rva009EB960;
 extern Rva009EB960 *Rva0134FAA0;
 
@@ -1647,7 +1647,7 @@ void W3DRoadBuffer::addMapObjects()
 			if (Rva0134FAA0 != 0) {
 				AssetList assets;
 				assets << pMapObj->getName();
-				Rva009EBAC0((int)&assets);
+				bfmeMergeReceiverKeys((int)&assets);
 			}
 			curRoad.m_pt1.loc = loc1;
 			curRoad.m_pt1.isAngled = pMapObj->getFlag(FLAG_ROAD_CORNER_ANGLED);

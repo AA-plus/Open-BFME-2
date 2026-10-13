@@ -83,7 +83,7 @@ private:
 
 class ParticleSystemZA;
 extern ParticleSystemZA *bfmeNullSystemZA();
-extern void Rva009EBAC0(int value);
+extern void bfmeMergeReceiverKeys(int value);
 class Rva009EB960;
 extern Rva009EB960 *Rva0134FAA0;
 #define Rva0134FAA0 ((void *)::Rva0134FAA0)
@@ -108,6 +108,6 @@ T1Base_005F3750::T1Base_005F3750(
         if (systemObject == 0)
             systemObject = bfmeNullSystemZA();
         assets << *(const AsciiString *)((unsigned char *)systemObject + 0x10);
-        Rva009EBAC0((int)&assets);
+        bfmeMergeReceiverKeys((int)&assets);
     }
 }

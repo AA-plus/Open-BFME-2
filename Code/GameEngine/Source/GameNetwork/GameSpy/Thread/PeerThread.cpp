@@ -3531,8 +3531,8 @@ static void listingGamesCallback(PEER peer, PEERBool success, const char * name,
 
 // Address-derived callees read directly from the retail body at 0x00517EA2.
 // Their bodies and semantic names are outside this recovered response pump.
-extern void __cdecl rva00416C69(void);
-extern void __cdecl rva005BDAC1(void);
+extern void __cdecl HandleBuddyResponses(void);
+extern void __cdecl HandlePersistentStorageResponses(void);
 extern void __cdecl rva005AF12F(void *response);
 
 // The native call uses GameSpyInfo vtable slot 0x5D. Earlier slots have no
@@ -3648,8 +3648,8 @@ void Rva00517EA2::rva00517EA2()
 {
 	if (TheGameSpyPeerMessageQueue)
 	{
-		rva00416C69();
-		rva005BDAC1();
+		HandleBuddyResponses();
+		HandlePersistentStorageResponses();
 		Int responsesLeft = reinterpret_cast<Rva00517EA2InfoView *>(TheGameSpyInfo)->responseLimit();
 		PeerResponse response;
 		while (responsesLeft)

@@ -101,14 +101,14 @@ struct Rva00077F80Device
 };
 
 extern unsigned g_fvfShader;
-extern void __cdecl Rva00075E42Init();
+extern void __cdecl rva00075E42();
 extern void __cdecl Rva000754DEInit();
 extern long __cdecl Rva00077C19Load(const char *path, unsigned *shader);
 extern long __cdecl Rva00077D0FLoad(const char *path, unsigned long *shader);
 
 void Rva00066A9AHost::headA()
 {
-	Rva00075E42Init();
+	rva00075E42();
 	Rva000754DEInit();
 
 	int i, j;

@@ -112,14 +112,14 @@ public:
 
 extern BfmeHub982 *g_bfmeHub982;
 
-void bfmeStep982C(void);
+void rebuildMask(void);
 
 void bfmeGo982C(BfmeT982 *t)
 {
 	if (!t)
 		return;
 
-	bfmeStep982C();
+	rebuildMask();
 
 	if (!g_bfmeHub982)
 		return;

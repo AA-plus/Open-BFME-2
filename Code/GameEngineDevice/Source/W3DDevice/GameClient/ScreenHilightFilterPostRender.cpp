@@ -264,7 +264,7 @@ int Rva00309E4BGet();
 // Rowless helpers called only from here: the colour read (0x000ABBEF), the
 // square quad draw (rowed 0x00075A23) and the gaussian blur pass
 // (0x00077392).
-void Rva000ABBEF(float *r, float *g, float *b, int index);
+void rva000ABBEF(float *r, float *g, float *b, int index);
 void Rva00075A23Draw(int width, int height);
 void Rva00077392(float strength, void *kernel, int size, IDirect3DBaseTexture8 *result,
 	void *surface, IDirect3DBaseTexture8 *source, IDirect3DSurface8 *target);
@@ -343,7 +343,7 @@ bool ScreenHilightFilter::postRender(int mode, Coord2D &scrollDelta, bool &doExt
 		number_of_DX8_calls++;
 		{
 			float r, g, b;
-			Rva000ABBEF(&r, &g, &b, -1);
+			rva000ABBEF(&r, &g, &b, -1);
 			Vector4 constant(r - 1.0f, g - 1.0f, b - 1.0f, 0.0f);
 			DX8Wrapper::Set_Pixel_Shader_Constant(0, &constant, 1);
 		}

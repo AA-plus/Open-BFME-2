@@ -8,7 +8,7 @@ extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 #pragma intrinsic(strlen)
 class Rva006C1F60 {public:int rva006C1F60(unsigned);};
-int Rva006C4FA0(void **,unsigned);
+int rva006C4FA0Capture(void **,unsigned);
 struct Rva006C2270Slot {unsigned total,length,mode;};
 struct Rva006C2270Record {
  unsigned initial;Rva006C2270Slot slots[14];
@@ -31,7 +31,7 @@ void GeneralAllocatorDebug::rva006C2270(Rva006C2270Record*r,unsigned size,unsign
  if(flags&16){unsigned length=arg3?(arg4?8:4):0;initSlot(r->slots[4],length,mode67C);r->arg4=arg4;r->arg3=arg3;}
  if(text51C)initSlot(r->slots[5],strlen(text51C)+1,mode67C);
  if(word520){initSlot(r->slots[6],8,mode67C);r->word520=word520;r->word524=word524;}
- if(flags&128)initSlot(r->slots[7],Rva006C4FA0(r->stack,24)*4,mode67C);
+ if(flags&128)initSlot(r->slots[7],rva006C4FA0Capture(r->stack,24)*4,mode67C);
  if(flags&256)initSlot(r->slots[8],4,mode67C);
  if(flags&512)initSlot(r->slots[9],8,mode67C);
  if(flags&1024)initSlot(r->slots[10],4,mode67C);

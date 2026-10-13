@@ -258,8 +258,8 @@ public:
 	void rva0035BEC7();	// ZH Shell::pop
 };
 extern Shell *TheShell;
-void rva00416C69();			// ZH HandleBuddyResponses (pinned)
-void rva005BDAC1();			// ZH HandlePersistentStorageResponses (pinned)
+void HandleBuddyResponses();			// ZH HandleBuddyResponses (pinned)
+void HandlePersistentStorageResponses();			// ZH HandlePersistentStorageResponses (pinned)
 void rva005AF12F(void *resp);	// shared peer-response hook (pinned)
 void Rva00548C1ACleanup();	// ZH GameSpyCloseAllOverlays
 void GSMessageBoxOk(UnicodeString title, UnicodeString message, void (*okFunc)());
@@ -270,8 +270,8 @@ void Rva005B9378::rva005BA02B()
 	if (!TheGameSpyPeerMessageQueue)
 		return;
 
-	rva00416C69();
-	rva005BDAC1();
+	HandleBuddyResponses();
+	HandlePersistentStorageResponses();
 
 	int allowedMessages = TheGameSpyInfo->getMaxMessagesPerUpdate();
 	bool sawImportantMessage = false;

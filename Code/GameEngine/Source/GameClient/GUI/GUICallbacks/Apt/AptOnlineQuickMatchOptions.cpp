@@ -112,7 +112,7 @@ extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 extern int g_Va00E06550;
 static __forceinline void *movieLevel(){return *(void **)((char *)*(void **)((char *)g_Va00E06550+0x58)+0x274);}
 class Shell {public:void rva0035BEC7();};extern Shell *TheShell;
-void HandleBuddyResponses();void rva005BDAC1();void rva005AF12F(void *);void Rva00511730(int);void Rva00548C1ACleanup();void GSMessageBoxOk(UnicodeString,UnicodeString,void(*)()=0);void TearDownGameSpy();
+void HandleBuddyResponses();void HandlePersistentStorageResponses();void rva005AF12F(void *);void Rva00511730(int);void Rva00548C1ACleanup();void GSMessageBoxOk(UnicodeString,UnicodeString,void(*)()=0);void TearDownGameSpy();
 struct TargetRef00217D4C {void *vtbl;int references;};void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
 class __multiple_inheritance FunctorTarget;typedef void(FunctorTarget::*FunctorMethod)(int);
 struct FunctorBinding {FunctorTarget *target;unsigned pad;FunctorMethod method;FunctorBinding(FunctorMethod m,FunctorTarget*t):target(t),method(m){}};
@@ -124,7 +124,7 @@ struct BfmeOpaqueOwnedRecord492;
 struct Rva005BB5F6 {char prefix[0x60];int state;char at64[0x16];bool matched;char at7b[0x21];int mode;void rva005BB5F6();void rva005BBDAC(BfmeOpaqueOwnedRecord492 &);void rva005BBF15();void rva005BA39F(int);void rva005BAF35(PeerResponse &);};
 #undef V
 void Rva005BB5F6::rva005BB5F6(){
- HandleBuddyResponses();rva005BDAC1();
+ HandleBuddyResponses();HandlePersistentStorageResponses();
  if(TheGameSpyGame&&TheGameSpyGame->inProgress){
   if(TheGameSpyInfo->isDisconnectedAfterGameStart(0))return;
   int allowed=TheGameSpyInfo->getMaxMessagesPerUpdate();bool important=false;PeerResponse r;

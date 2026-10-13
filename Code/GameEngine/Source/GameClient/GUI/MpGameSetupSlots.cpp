@@ -165,7 +165,7 @@ public:
 // Unrowed 0x00300E42 (cdecl; whether the game's map starts with the map
 // cache's 0x00300D7A folder name, through startsWithNoCase), pinned by
 // address.
-bool Rva00300E42(GameInfo *game);
+bool Rva00300E42Check(GameInfo *game);
 
 // A saved game (the panel's +0x2B0): eight GameSlot copies at +0x4C, the
 // digest it is filed under at +0xDAC, the rules at +0xDBC and the +0xDE8
@@ -2499,7 +2499,7 @@ void AptMpGameSetup::UpdateSlot(int slot)
 		else if (gameSlot->m_hasMap)
 			rva004404AC(true, -1);
 		else
-			rva00441685(Rva00300E42(game));
+			rva00441685(Rva00300E42Check(game));
 	}
 	else if (game->v12())
 		rva004404AC(false, slot);

@@ -1321,7 +1321,7 @@ IMEManager *CreateIMEManagerInterface();
 LanguageFilter *createLanguageFilter();
 void Rva00380B0CInit();
 void Rva00220DCDInit();
-void Rva002210CFInit();
+void rva002210CF();
 void Rva002220DCInit();
 void bfmeReset();
 // Unrowed 0x0041267F (10 bytes: two calls), pinned by address.
@@ -1677,7 +1677,7 @@ void GameClient::init()
 	((Rva002227DF *)g_bfmeAptWindowManager)->rva002227DF();
 	Rva00380B0CInit();
 	Rva00220DCDInit();
-	Rva002210CFInit();
+	rva002210CF();
 	Rva002220DCInit();
 }
 
