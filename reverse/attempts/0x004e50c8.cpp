@@ -1,4 +1,6 @@
 // ?rva004E50C8@Rva004E50C8@@QAEXXZ
+// partial score=0.995 date=2026-10-13
+// ?rva004E50C8@Rva004E50C8@@QAEXXZ
 // partial score=0.981314023313317 date=2026-10-10
 // ?rva004E50C8@Rva004E50C8@@QAEXXZ
 // partial score=0.9761593581268607 date=2026-10-10
@@ -38,10 +40,10 @@ void Rva004E50C8::rva004E50C8(){
   int byMaximum=(int)(length/maxLength);
   int count=byMaximum;if(count<byAngle)count=byAngle;_ReadWriteBarrier();int byMinimum=(int)(length/minLength);count=count>byMinimum?byMinimum:count;
   float pieceLength=length/(float)count;
-  float step=difference/(float)count;
   info.m_floatC=info.m_float10=pieceLength;
-  end-=step*0.100000001f;
+  float step=difference/(float)count;
   float angle=begin;
+  end-=step*0.100000001f;
   if(angle<end){
    float halfStep=step*0.5f,halfLength=pieceLength*0.5f;
    do{

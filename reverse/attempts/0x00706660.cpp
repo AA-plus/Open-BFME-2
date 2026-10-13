@@ -1,4 +1,6 @@
 // ?callFunction@AptActionInterpreter@@QAEXPAVAptValue@@0H@Z
+// partial score=0.96 date=2026-10-13
+// ?callFunction@AptActionInterpreter@@QAEXPAVAptValue@@0H@Z
 // partial score=0.9568449696701077 date=2026-10-10
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
@@ -6,7 +8,7 @@ extern "C" void _ReadWriteBarrier();
 // partial score=0.949378714 date=2026-10-10
 // ?callFunction@AptActionInterpreter@@QAEXPAVAptValue@@0H@Z
 // partial score=0.926 date=2026-10-06
-// cl: /O2 /MD /EHsc /ICode/Libraries/Source/Apt/AptObject
+// cl: /O2 /MD /EHsc /arch:SSE /G6 /ICode/Libraries/Source/Apt/AptObject
 #include "AptScriptFunction.h"
 class BfmeAptValue006DCD20 { public: int isNativeFunction() const; int isScriptFunction() const; bool isUndefined() const;int rva006E03A0() const; BfmeAptValue006DCD20 *rva006DCF20(); BfmeAptValue006DCD20 *rva006DCEE0(); };
 class Rva006CD650{public:void*rva006CD650();};
