@@ -1,4 +1,6 @@
 // ?RenderStreak@StreakRendererClass@@QAEXAAVRenderInfoClass@@ABVMatrix3D@@IPAVVector3@@PAVVector4@@PAMABVSphereClass@@PAI@Z
+// partial score=0.8570294835295316 date=2026-10-13
+// ?RenderStreak@StreakRendererClass@@QAEXAAVRenderInfoClass@@ABVMatrix3D@@IPAVVector3@@PAVVector4@@PAMABVSphereClass@@PAI@Z
 // partial score=0.8076875017814811 date=2026-10-10
 // cl: /I. /DBFME_WWSTRING_NATIVE_CSTR_ASSIGN /Ireference/shims/wwstring_teardown/zhmd /arch:SSE /G7 /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc /Ireference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/sweep
 // stlport
@@ -199,6 +201,7 @@ class FVFInfoClass : public W3DMPO
 	unsigned							location_offset;
 	unsigned							normal_offset;
 	unsigned							blend_offset;
+ unsigned target_unknown_1c_20[2];
 	unsigned							texcoord_offset[D3DDP_MAXTEXCOORD];
 	unsigned							diffuse_offset;
 	unsigned							specular_offset;
@@ -1155,8 +1158,43 @@ void StreakRendererClass::RenderStreak
 #ifdef ALLOW_TEMPORARIES
 		Matrix3D modelview=view2*transform;
 #else
-		Matrix3D modelview=transform;
-		modelview.preMul(view2);
+		Matrix3D modelview;
+const float a00=view2[0][0];
+const float a01=view2[0][1];
+const float a02=view2[0][2];
+const float a03=view2[0][3];
+{
+float b1=transform[1][0];
+float b2=transform[2][0];
+float b0=transform[0][0];
+modelview[0][0] = a02 * b2 + a01 * b1 + a00 * b0;
+modelview[1][0] = view2[1][2] * b2 + view2[1][1] * b1 + view2[1][0] * b0;
+modelview[2][0] = view2[2][2] * b2 + view2[2][1] * b1 + view2[2][0] * b0;
+}
+{
+float b1=transform[1][1];
+float b2=transform[2][1];
+float b0=transform[0][1];
+modelview[0][1] = a02 * b2 + a01 * b1 + a00 * b0;
+modelview[1][1] = view2[1][2] * b2 + view2[1][1] * b1 + view2[1][0] * b0;
+modelview[2][1] = view2[2][2] * b2 + view2[2][1] * b1 + view2[2][0] * b0;
+}
+{
+float b1=transform[1][2];
+float b2=transform[2][2];
+float b0=transform[0][2];
+modelview[0][2] = a02 * b2 + a01 * b1 + a00 * b0;
+modelview[1][2] = view2[1][2] * b2 + view2[1][1] * b1 + view2[1][0] * b0;
+modelview[2][2] = view2[2][2] * b2 + view2[2][1] * b1 + view2[2][0] * b0;
+}
+{
+float b1=transform[1][3];
+float b2=transform[2][3];
+float b0=transform[0][3];
+modelview[0][3] = a02 * b2 + a01 * b1 + a00 * b0 + a03;
+modelview[1][3] = view2[1][2] * b2 + view2[1][1] * b1 + view2[1][0] * b0 + view2[1][3];
+modelview[2][3] = view2[2][2] * b2 + view2[2][1] * b1 + view2[2][0] * b0 + view2[2][3];
+}
 #endif
 		VectorProcessorClass::Transform(&xformed_pts[0],
 			&points[chunkIndex], modelview, point_cnt);
@@ -1788,10 +1826,3 @@ VertexFormatXYZUV1 *StreakRendererClass::getVertexBuffer(unsigned int number)
 #endif
 	return m_vertexBuffer;
 }
-#pragma comment(linker, "/alternatename:??1MaterialPassStage@@QAE@XZ=??1?$RefCountPtr@VTextureClass@@@@QAE@XZ")
-#pragma comment(linker, "/alternatename:??1TextureClassPtr@@QAE@XZ=??1?$RefCountPtr@VTextureClass@@@@QAE@XZ")
-#pragma comment(linker, "/alternatename:??1BfmeElemBY@@QAE@XZ=??1?$RefCountPtr@VTextureClass@@@@QAE@XZ")
-#pragma comment(linker, "/alternatename:??1BfmeElemVVE@@QAE@XZ=??1?$RefCountPtr@VTextureClass@@@@QAE@XZ")
-#pragma comment(linker, "/alternatename:?rva00906340CellDtor@@YAXPAX@Z=??1?$RefCountPtr@VTextureClass@@@@QAE@XZ")
-#pragma comment(linker, "/alternatename:??1BfmeElementA@@QAE@XZ=??1?$RefCountPtr@VTextureClass@@@@QAE@XZ")
-#pragma comment(linker, "/alternatename:?bfmeElem936B@@YGXPAX@Z=??1?$RefCountPtr@VTextureClass@@@@QAE@XZ")
