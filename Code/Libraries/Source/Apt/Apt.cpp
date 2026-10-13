@@ -736,3 +736,24 @@ void Rva006CCD90CallFunction(const char *function,char *result,const char *targe
  }
  g_aptDateInterpreter.stack.rva006FE920();
 }
+
+// Retail 0x006CDB70 (46 B): constructor of an owner with a two-handle inline
+// buffer. It zeroes the count and used fields, points the items pointer at
+// the inline storage at +0xC, and builds the two Rva004A9DF3Element handles
+// there through the EH vector constructor iterator (constructor 0x00013260,
+// destructor 0x000A9DF3), as the 96-handle table above does. Owner and field
+// names are address-derived.
+class Rva006CDB70Owner
+{
+public:
+	Rva006CDB70Owner();
+private:
+	int m_count;
+	int m_used;
+	Rva004A9DF3Element *m_items;
+	Rva004A9DF3Element m_inline[2];
+};
+
+Rva006CDB70Owner::Rva006CDB70Owner() : m_count(0), m_used(0), m_items(m_inline)
+{
+}
