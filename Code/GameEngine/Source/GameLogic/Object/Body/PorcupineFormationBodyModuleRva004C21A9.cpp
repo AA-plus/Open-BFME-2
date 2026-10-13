@@ -1,6 +1,7 @@
 // ?rva004C21A9@PorcupineFormationBodyModule@@QAEXPAVDamageInfo@@@Z
 // partial score=0.95 date=2026-10-07
-// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD
+// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
+// stlport
 //
 // PorcupineFormationBodyModule's +0x10 body-interface overrides (table
 // 0x00C5C318) and the formation test they share, all names but
@@ -20,27 +21,30 @@
 // weapon's range (its +0x14 float; the getter folds with the rowed
 // TerrainRoadType::getRoadWidth and is pinned for WeaponTemplate) by the rowed
 // 0x004C20D5 distance test (reached as a member; pinned for this class).
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../../Common/GameLogicObjectLookupView.h"
+#define _STLP_NO_EXCEPTIONS 1
+#include <hash_map>
 class WeaponTemplate
 {
 public:
 	float rva0049CB57() const;
 };
 class Object;
-enum ObjectID
+namespace {
+typedef _STL::hash_map<ObjectID, Object *, _STL::hash<int>, _STL::equal_to<ObjectID> > ObjectPtrHashVF;
+}
+inline Object *GameLogic::findObjectByID(ObjectID id)
 {
-	INVALID_ID = 0
-};
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
-};
+	if (id == 0)
+		return 0;
+	ObjectPtrHashVF &m = *(ObjectPtrHashVF *)((char *)this + 0xB4);
+	ObjectPtrHashVF::iterator it = m.find(id);
+	if (it == m.end())
+		return 0;
+	return (*it).second;
+}
+
 extern GameLogic *TheGameLogic;
 class ThingTemplate
 {
