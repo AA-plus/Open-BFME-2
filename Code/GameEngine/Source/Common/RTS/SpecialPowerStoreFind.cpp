@@ -1,12 +1,11 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
 // stlport
 //
 // SpecialPowerStore lookups, ported from Zero Hour's GameEngine/Source/Common/
 // RTS/SpecialPower.cpp (GeneralsMD tree vendored under
 // reference/open-bfme-1/inputs/reference):
 //  - findSpecialPowerTemplatePrivate, retail 0x003B11D2 (114 bytes).
-// (findSpecialPowerTemplateByID 0x003B0FD0 is a banked near-miss: retail
-// strength-reduces the element pointer.)
+//  - findSpecialPowerTemplateByID, retail 0x003B0FD0 (71 bytes).
 // BFME 2 layout (target evidence): the template vector at SpecialPowerStore
 // +0x0C; the templates are Overridables (friend_getFinalOverride 0x00288609)
 // with the name at +0x10 and the id at +0x14 of the final override.
@@ -20,16 +19,33 @@ typedef int Int;
 class Overridable
 {
 public:
-	const Overridable *friend_getFinalOverride() const;
+	virtual ~Overridable();
+	Overridable *friend_getFinalOverride()
+	{
+		if (m_nextOverride)
+			return m_nextOverride->friend_getFinalOverride();
+		return this;
+	}
+	const Overridable *friend_getFinalOverride() const
+	{
+		if (m_nextOverride)
+			return m_nextOverride->friend_getFinalOverride();
+		return this;
+	}
+
+private:
+	Overridable *m_nextOverride; // +0x04, native override walkers
+	bool m_isOverride; // +0x08, donor layout
 };
 
 class SpecialPowerTemplate : public Overridable
 {
 public:
-	const AsciiString &getName() const { return ((const SpecialPowerTemplate *)friend_getFinalOverride())->m_name; }
+	const AsciiString &getName() const { return getFO()->m_name; }
+	UnsignedInt getID() const { return ((const SpecialPowerTemplate *)friend_getFinalOverride())->m_id; }
 private:
-	const SpecialPowerTemplate *getFO() const;
-	unsigned char m_pad00[0x10];
+	const SpecialPowerTemplate *getFO() const { return (const SpecialPowerTemplate *)friend_getFinalOverride(); }
+	unsigned char m_pad0C[4];
 	AsciiString m_name; // +0x10
 	UnsignedInt m_id; // +0x14
 };
@@ -37,6 +53,7 @@ private:
 class SpecialPowerStore
 {
 public:
+	const SpecialPowerTemplate *findSpecialPowerTemplateByID( UnsignedInt id );
 protected:
 	SpecialPowerTemplate *findSpecialPowerTemplatePrivate( AsciiString name );
 private:
@@ -60,4 +77,17 @@ SpecialPowerTemplate* SpecialPowerStore::findSpecialPowerTemplatePrivate( AsciiS
 
 	return NULL;  // not found
 
+}
+
+// Native 003B0FD0..003B1017 and WB C0F050 retain the donor's indexed loop.
+// Both override bodies must remain visible: the compiler then emits retail's
+// EBX pointer induction, EBP index and EDI cached begin. Their emitted copies
+// independently match the existing 24-byte const and 14-byte mutable owners.
+const SpecialPowerTemplate *SpecialPowerStore::findSpecialPowerTemplateByID( UnsignedInt id )
+{
+	for (Int i = 0; i < m_specialPowerTemplates.size(); ++i)
+		if (m_specialPowerTemplates[i]->getID() == id)
+			return m_specialPowerTemplates[i];
+
+	return NULL;
 }
