@@ -38,3 +38,17 @@ No source, header, flag, pin, alias, global or marker is added. These are
 natural cleanups emitted by the real C++ bodies. place_bodies reports zero
 additional bodies or pins. Byte proof does not assert a new linking result.
 Run the normal whole-file build before verify.py.
+
+Normal commit hooks finish at 14/14 verified rows and five EXACT EH graphs.
+The shadow identity pass reports 17 existing findings in the unchanged source;
+none names the three new cleanup rows. Eleven are bindings: AsciiString
+destructors at 0x0002FD60/0x00036410 (five occurrences), AsciiString list-base
+construction at 0x004EC36C (two), LadderInfo destruction at 0x0054D8D8 (two),
+getFileListInDirectory at 0x00600FC9 and getAllSideStrings at 0x001FDD7D.
+Six concern emitted definitions: wide-character allocator rebind, the
+AsciiString const-list-iterator converting constructor, the no-case AsciiString
+tree destructor and erase, list-iterator equality, and AsciiString scalar
+deletion. These are retained diagnostics, not suppressed or declared false
+rejects. Existing source/interface debt needs separate evidence-led repairs.
+The saved local census at 6963cc017c does not contain this source, so
+link_check cannot preview it; no linking gain is asserted.
