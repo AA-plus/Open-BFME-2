@@ -8,7 +8,7 @@ extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 // ??0BfmeStrVM0@@QAE@XZ
 // partial score=0.925 date=2026-10-09
-// cl:    /Oy- /DNDEBUG /MD /GX /O1 /G7 /arch:SSE
+// cl: /Ireference/shims/bfme2_ascii /I. /Oy- /DNDEBUG /MD /GX /O1 /G7 /arch:SSE
 // ??1BfmeStrVM0@@UAE@XZ, retail 0x0025D686, 111 bytes.
 // Destructor of BfmeStrVM0: stores vtable 0x7F5DA0 then runs the field-reset
 // helper rva0025D19E and the list-clear rva0025C0FF on the same this, then
@@ -17,37 +17,14 @@ extern "C" void _ReadWriteBarrier();
 // Evidence: same-this calls at 0x0025D6A4/0x0025D6AB; vtable shared with ctor
 // 0x0025D489 which inits the same D0/E0/E4/C8/CC/F0 fields; base call
 // 0x001B4E74; deleting-dtor caller 0x0025DA57.
-template <typename T> class StringBase
-{
-public:
- StringBase():m_data(0){}
- void clear(){releaseBuffer();}
-	~StringBase() { releaseBuffer(); }
-	void set(const StringBase &o);
-private:
-	void releaseBuffer();
-	T *m_data;
-};
-
-// Existing public narrow teardown spelling resolves to the verified
-// 133-byte releaseBuffer worker at RVA 0x36410. Wide teardown is unchanged.
-template <> StringBase<char>::~StringBase();
-#pragma comment(linker, "/alternatename:??1?$StringBase@D@@QAE@XZ=?releaseBuffer@?$StringBase@D@@AAEXXZ")
-
+#include "ascii_string.h"
+#include "unicode_string.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
 class Rva0025C0FF
 {
 public:
 	void rva0025C0FF();
-};
-
-class AsciiString : private StringBase<char>
-{
-public:
-	__forceinline AsciiString() {}
-	__forceinline AsciiString(const AsciiString &o) : StringBase<char>(o) {}
-	__forceinline ~AsciiString() {}
-	AsciiString &operator=(const AsciiString &o);
 };
 
 class W3DDisplay
@@ -223,11 +200,6 @@ private:
 	char m_pad[8];
 };
 
-class GameLogic
-{
-public:
-	bool rva00085124();
-};
 extern GameLogic *TheGameLogic;
 
 struct GlobalA01E48
@@ -236,8 +208,6 @@ struct GlobalA01E48
 	unsigned char flag;
 };
 // ?g_Va00A01E48@@3PAUGlobalA01E48@@A: the global at this VA is ?TheShell@@3PAVShell@@A; this name is an alias for it.
-extern GlobalA01E48 * g_Va00A01E48;
-#pragma comment(linker, "/alternatename:?g_Va00A01E48@@3PAUGlobalA01E48@@A=?TheShell@@3PAVShell@@A")
 
 struct Rva0025C18BCoord
 {
@@ -246,9 +216,11 @@ struct Rva0025C18BCoord
 };
 
 class Rva0025C09E {public: Rva0025C09E(); char data[24];};
-extern "C" __declspec(dllimport) unsigned long __stdcall GetTickCount();
+// PE import identity at IAT 0xBBA220 is kernel32!GetCurrentThreadId (retail)
+extern "C" __declspec(dllimport) unsigned long __stdcall GetCurrentThreadId();
 struct DisplayCriticalSection {char data[24];};
-extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSection(DisplayCriticalSection*);
+// PE import identity at IAT 0xBBA2E4 is kernel32!QueryPerformanceFrequency (retail)
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceFrequency(DisplayCriticalSection*);
 extern DisplayCriticalSection DisplayMovieCriticalSection;
 struct DisplayVideoConfig {
  int pointer3c,pointer40,pointer44;bool flag48;char gap49[3];
@@ -256,10 +228,10 @@ struct DisplayVideoConfig {
 };
 struct DisplayTick50 {
  int tick50,word54,word58;volatile bool flag5c,flag5d;char gap5e[2];int word60;bool flag64;char gap65[3];
- __forceinline DisplayTick50():tick50(GetTickCount()),flag5d(false){word54=0;word58=0;flag5c=false;word60=0;flag64=false;}
+ __forceinline DisplayTick50():tick50(GetCurrentThreadId()),flag5d(false){word54=0;word58=0;flag5c=false;word60=0;flag64=false;}
 };
 struct DisplayTextF0 {
- StringBase<char> text;
+ AsciiString text;
  int wordF4,wordF8;float fFC,f100,f104,f108;bool flag10c;char gap10d[3];
  int word110;bool m_b114,flag115;char gap116[2];int word118;
  float f11c,m_f120;
@@ -340,7 +312,7 @@ public:
 	virtual void v67();
 	virtual void v68();
 	void rva0025D19E();
-	void rva0025D358(StringBase<unsigned short> s, float fC0, float fC4, int iB4, int iB8, int iBC);
+	void rva0025D358(UnicodeString s, float fC0, float fC4, int iB4, int iB8, int iBC);
 	void rva0025D9E3();
 	void rva00049F94(AsciiString s);
 private:
@@ -350,135 +322,15 @@ int widthC,height10,bitDepth14; bool window18; char gap19[3];
  int pointer2c,pointer30,pointer34,pointer38;
  DisplayVideoConfig video;int word4c;DisplayTick50 tick;
  Rva0025C09E records[3];
- StringBase<unsigned short> m_sB0;
+ UnicodeString m_sB0;
  int m_iB4,m_iB8,m_iBC;
  float m_fC0,m_fC4,m_fC8,m_fCC;
- StringBase<char> m_sD0;
+ AsciiString m_sD0;
  float m_fD4;bool m_bD8;char gapD9[3];int wordDC,wordE0,wordE4,wordE8,wordEC;
  DisplayTextF0 textF0; int word124;float f128,f12c,f130,f134;
  int word138,word13c;bool flag140,flag141;char gap142[2];
 };
 
-BfmeStrVM0::~BfmeStrVM0()
-{
-	rva0025D19E();
-	((Rva0025C0FF *)this)->rva0025C0FF();
-}
-
-// ?rva0025D358@BfmeStrVM0@@QAEXV?$StringBase@G@@MMHHH@Z, retail 0x0025D358, 112 bytes.
-// Sets the +0xB0 display block: Unicode string via set plus ints at +0xB4/+0xB8/+0xBC
-// and floats at +0xC0/+0xC4; by-value string temp released at the end.
-// Evidence: same +0xB0/+0xD0/+0xF0 layout as the dtor in this TU and ctor 0x0025D489;
-// callees rowed/pinned set 0x00037150 plus releaseBuffer 0x00036E70; caller 0x00356AC1.
-void BfmeStrVM0::rva0025D358(StringBase<unsigned short> s, float fC0, float fC4, int iB4, int iB8, int iBC)
-{
-	StringBase<unsigned short> &dst = m_sB0;
-	dst.set(s);
-	m_iB4 = iB4;
-	m_iB8 = iB8;
-	m_iBC = iBC;
-	m_fC0 = fC0;
-	m_fC4 = fC4;
-}
-
-// ?rva0025D9E3@BfmeStrVM0@@QAEXXZ, retail 0x0025D9E3, 116 bytes.
-// Slot-9 virtual of BfmeStrVM0: when +0x114 is clear, zeroes +0xD4/+0xD8, runs
-// the slot-68 virtual plus the W3DDisplay clear helper; then always clears
-// +0x114/+0x120, walks the +0x1C list via slot-5 plus getNext, and zeroes
-// +0xC8/+0xCC.
-// Evidence: vtable slot 9 of 0x7F5DA0; same +0xB0/+0xC8/+0xD0/+0x114/+0x120
-// layout as this TU and ctor 0x0025D489; callees slot-68 plus rowed
-// rva0025D2F6 plus node slots 5/152; caller 0x00043427.
-void BfmeStrVM0::rva0025D9E3()
-{
-	if (textF0.m_b114 == 0)
-	{
-		m_fD4 = 0.0f;
-		m_bD8 = 0;
-		v68();
-		((W3DDisplay *)this)->rva0025D2F6();
-	}
-	ListNode0025D9E3 *cur = m_head1C;
-	textF0.m_b114 = 0;
-	textF0.m_f120 = 0.0f;
-	if (cur != 0)
-	{
-		ListNode0025D9E3 *next;
-		do
-		{
-			cur->v005();
-			next = cur->getNext();
-			cur = next;
-		} while (next != 0);
-	}
-	m_fC8 = 0.0f;
-	m_fCC = 0.0f;
-}
-
-// ?rva0025C14D@BfmeStrVM0@@UAEXXZ, retail 0x0025C14D, 62 bytes.
-// Slot-38 virtual of BfmeStrVM0: unless the GameLogic mode predicate says
-// otherwise with the global 0xA01E48 byte at +0x5D set, walks the +0x1C
-// node list calling slot-94 on each node and advancing via getNext.
-// Evidence: vtable slot 38 of 0x7F5DA0; same +0x1C list as rva0025D9E3 and
-// rva0025C18B in this TU; callees rowed rva00085124 0x00085124 plus node
-// slots 94/152 predeclared in this TU; no callers.
-void BfmeStrVM0::rva0025C14D()
-{
-	if (TheGameLogic->rva00085124())
-	{
-		if (g_Va00A01E48->flag != 0)
-			return;
-	}
-	ListNode0025D9E3 *node = m_head1C;
-	while (node != 0)
-	{
-		node->s094();
-		node = node->getNext();
-	}
-}
-
-// ?rva0025C18B@BfmeStrVM0@@UAEXPAURva0025C18BCoord@@0@Z, retail 0x0025C18B, 173 bytes.
-// Slot-39 virtual of BfmeStrVM0: walks the +0x1C node list; per node it takes
-// two no-arg ints plus an out-pair, converts both float args to int for the
-// first round of node slots, then replays the saved values through the same
-// slots and advances via getNext.
-// Evidence: vtable slot 39 of 0x7F5DA0; same +0x1C list as rva0025D9E3 in this
-// TU; node slots 14-19/94/152 predeclared in this TU; no callers.
-void BfmeStrVM0::rva0025C18B(Rva0025C18BCoord *a, Rva0025C18BCoord *b)
-{
-	ListNode0025D9E3 *node = m_head1C;
-	while (node != 0)
-	{
-		int t15 = node->s015();
-		int t17 = node->s017();
-		int t8;
-		int t4;
-		node->s019(&t8, &t4);
-		node->s014((int)b->x);
-		node->s016((int)b->y);
-		node->s018((int)a->x, (int)a->y);
-		node->s094();
-		node->s014(t15);
-		node->s016(t17);
-		node->s018(t8, t4);
-		node = node->getNext();
-	}
-}
-
-// ?rva00049F94@BfmeStrVM0@@QAEXVAsciiString@@@Z, retail 0x00049F94, 55 bytes.
-// Slot-89 virtual of BfmeStrVM0: sets the +0xF0 AsciiString from a by-value
-// string arg; the by-value temp is released at the end under EH.
-// Evidence: vtable slot 89 of 0x7F5DA0; same +0xF0 layout as the dtor in this
-// TU; callees AsciiString::operator= 0x000366F0 plus releaseBuffer 0x00036410.
-void BfmeStrVM0::rva00049F94(AsciiString s)
-{
-	AsciiString &dst = *(AsciiString *)&textF0.text;
-	dst = s;
-}
-
-// Placeholder virtuals in this unit's vftables: in retail, every vftable that holds
-// each one has the same function in that slot (vftable addresses from matched vptr
-// stores). Bind them to the rows at those functions.
 #pragma comment(linker, "/alternatename:?v01@BfmeStrVM0@@UAEXXZ=??1Coord2D@@QAE@XZ")
 #pragma comment(linker, "/alternatename:?v03@BfmeStrVM0@@UAEXXZ=??1Coord2D@@QAE@XZ")
 #pragma comment(linker, "/alternatename:?v04@BfmeStrVM0@@UAEXXZ=?rva005CB9FF@Rva005CB9FF@@QAE_NH@Z")
@@ -513,7 +365,7 @@ word124(0),
  f128(0),f12c(0),f130(0),f134(0),word138(0),word13c(0),flag140(true),flag141(false)
 {
  m_sD0.clear();
- InitializeCriticalSection(&DisplayMovieCriticalSection);
+ QueryPerformanceFrequency(&DisplayMovieCriticalSection);
  ((W3DDisplay*)this)->rva0025D2F6();
  word124=0;word138=0;f128=0;f12c=0;f130=0;f134=0;
 }
