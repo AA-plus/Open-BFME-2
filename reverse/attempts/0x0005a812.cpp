@@ -1,4 +1,6 @@
 // ?putPlayingMusicOnStack@MilesAudioManager@@QAEXHH@Z
+// partial score=0.93 date=2026-10-13
+// ?putPlayingMusicOnStack@MilesAudioManager@@QAEXHH@Z
 // partial score=0.93 date=2026-10-09
 // cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -30,9 +32,9 @@ void MilesAudioManager::putPlayingMusicOnStack(int viewType, int arg)
         PlayingAudio *playing = ref.get();
         playing->m_at45 = false;
         if (!arg) {
-            playing->at44[0] = 1;
+            playing->m_at44 = true;
         } else {
-            playing->at44[0] = 0;
+            playing->m_at44 = false;
             ((MilesStreamRef *)&playing->m_at0C)->rva000A8AC0();
             playing->m_at30 = (float)m_audioSettings->m_at78;
             reinterpret_cast<OpaqueRefList &>(m_playingStreams).erase(
