@@ -921,3 +921,6 @@ void FireLogicSystem::xfer(Xfer *xfer)
 
 // Native action 0x773f36: complete14B burning-cell tree constructor unwind at member+84; actual5B forwarder28691C and whole56B tree destructor28681A.
 // Whole owning parent and native EH graph prove ownership and every relocation.
+
+// Native action 0x773f56: complete20B conditional secondary Snapshot base destructor unwind at member+C; same-object whole7B49B47C with exact BBB554 vptr.
+// Whole owning parent and native EH graph prove ownership and every relocation.
