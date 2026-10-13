@@ -15,11 +15,7 @@
 
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct IRegion2D
-{
-	ICoord2D lo;
-	ICoord2D hi;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 
 struct Rva001EDD80Pair
 {

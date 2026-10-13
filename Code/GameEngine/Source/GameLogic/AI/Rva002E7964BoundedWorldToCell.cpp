@@ -6,7 +6,7 @@
 // that carrier across the bool callee ABI rather than normalizing it here.
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
 #include "Coord3D.h"
-struct IRegion2D {ICoord2D lo,hi;};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 ICoord2D *Rva002E7875WorldToCell(ICoord2D*,bool,const Coord3D*);
 class Rva002E7964 {
 public:

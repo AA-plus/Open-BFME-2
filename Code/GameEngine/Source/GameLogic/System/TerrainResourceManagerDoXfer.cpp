@@ -24,7 +24,7 @@ template<class T,class Traits> static inline bool operator!=(const _List_iterato
 #include <vector>
 enum ObjectID { INVALID_ID = 0 };
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
-struct Region3D { Coord3D lo, hi; };
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 struct XferVersion { XferVersion(unsigned char low,unsigned char high):version(low),current(high){} unsigned char version,current; };
 class Xfer {
 public:

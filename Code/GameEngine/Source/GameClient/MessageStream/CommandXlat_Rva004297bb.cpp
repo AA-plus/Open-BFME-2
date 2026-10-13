@@ -21,7 +21,7 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 inline UnicodeString::~UnicodeString() { ((StringBase<wchar_t>*)this)->releaseBuffer(); }
 #include "Lib/Coord3D.h"
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct IRegion2D { ICoord2D lo,hi; int width() const { return hi.x-lo.x; } int height() const { return hi.y-lo.y; } };
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 class Drawable; class Object; class Player; class ThingTemplate; class CommandButton;
 class PickAndPlayInfo;
 class Rva004D92FE { public:

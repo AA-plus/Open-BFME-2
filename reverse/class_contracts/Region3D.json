@@ -4,6 +4,7 @@
  "class": "Region3D",
  "evidence": {
   "census": 74,
+  "resolution": "straddle@4/8/0x10/0x14 resolved: retail reads each 4-byte word of lo/hi through float-field views; ZH BaseType.h Region3D is Coord3D lo, hi (24 B), which covers all six offsets; the six-float spellings are views of the same words",
   "retail_access": {
    "0x0": {
     "4": 6
@@ -28,10 +29,10 @@
   "retail_vtables": {},
   "view_errors": 0,
   "view_sizes": {
-   "8": 1,
    "12": 3,
    "16": 4,
-   "24": 66
+   "24": 66,
+   "8": 1
   },
   "views": 74,
   "witness_offsets": [],
@@ -55,34 +56,6 @@
    "witness": null
   },
   {
-   "decided_by": "majority",
-   "kind": "f4",
-   "name": "y_min",
-   "name_by": "majority",
-   "offset": 4,
-   "retail_widths": {
-    "4": 4
-   },
-   "size": 4,
-   "type": "float",
-   "views": 13,
-   "witness": null
-  },
-  {
-   "decided_by": "majority",
-   "kind": "f4",
-   "name": "z_min",
-   "name_by": "majority",
-   "offset": 8,
-   "retail_widths": {
-    "4": 3
-   },
-   "size": 4,
-   "type": "float",
-   "views": 12,
-   "witness": null
-  },
-  {
    "decided_by": "zh",
    "kind": "S:Coord3D",
    "name": "hi",
@@ -95,34 +68,6 @@
    "type": "Coord3D",
    "views": 68,
    "witness": null
-  },
-  {
-   "decided_by": "bytes",
-   "kind": "f4",
-   "name": "y_max",
-   "name_by": "majority",
-   "offset": 16,
-   "retail_widths": {
-    "4": 4
-   },
-   "size": 4,
-   "type": "float",
-   "views": 7,
-   "witness": null
-  },
-  {
-   "decided_by": "bytes",
-   "kind": "f4",
-   "name": "z_max",
-   "name_by": "majority",
-   "offset": 20,
-   "retail_widths": {
-    "4": 3
-   },
-   "size": 4,
-   "type": "float",
-   "views": 7,
-   "witness": null
   }
  ],
  "key": "struct",
@@ -131,28 +76,7 @@
   "struct": 24
  },
  "outliers": [],
- "queue": [
-  {
-   "attribute": "straddle@0x4",
-   "candidates": {},
-   "class": "Region3D"
-  },
-  {
-   "attribute": "straddle@0x8",
-   "candidates": {},
-   "class": "Region3D"
-  },
-  {
-   "attribute": "straddle@0x10",
-   "candidates": {},
-   "class": "Region3D"
-  },
-  {
-   "attribute": "straddle@0x14",
-   "candidates": {},
-   "class": "Region3D"
-  }
- ],
+ "queue": [],
  "size": 24,
  "size_by": "zh",
  "vslots": {}

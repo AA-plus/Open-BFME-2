@@ -7,13 +7,7 @@ enum ObjectID;
 enum DrawableID;
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct IRegion2D
-{
-	int loX;
-	int loY;
-	int hiX;
-	int hiY;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 class GameMessage
 {
 public:

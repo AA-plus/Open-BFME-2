@@ -91,11 +91,7 @@ extern MessageStream *TheMessageStream;
 // WB calls IRegion2D::width/height here; retail inlines both (the region.cpp
 // rows 0x00004D4B/0x00004D51 are the out-of-line copies), so the extents are
 // spelled out below rather than defining second copies of those members.
-struct IRegion2D
-{
-	ICoord2D lo;
-	ICoord2D hi;
-};
+#include "../../../../../Libraries/Include/Lib/IRegion2D.h"
 
 struct ResolveClickObject
 {

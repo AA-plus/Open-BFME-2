@@ -72,11 +72,7 @@ class PooledString;
 struct XferUnknown11;
 class Coord3DBase;
 class ICoord3D;
-struct Region3D
-{
-	Coord3D lo;
-	Coord3D hi;
-};
+#include "../../../Libraries/Include/Lib/Region3D.h"
 class IRegion3D;
 class Coord2D;
 // BFME 2's ICoord2D has an out-of-line default constructor (0x0047A6A9, a

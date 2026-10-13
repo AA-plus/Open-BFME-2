@@ -30,9 +30,9 @@ __forceinline long fast_float2long_round(float f)
 	return i;
 }
 #define REAL_TO_INT_FLOOR(x) (fast_float2long_round(floorf(x)))
-struct Region3D {Coord3D lo,hi;};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct IRegion2D {ICoord2D lo,hi;};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 struct RGBColor00271779;
 void Rva002EBD99(Object *,const RGBColor00271779 *);
 class Pathfinder;

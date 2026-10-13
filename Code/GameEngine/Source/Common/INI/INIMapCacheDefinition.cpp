@@ -20,7 +20,7 @@ static inline bool operator!=(const _List_iterator<_IterTp, _LeftTraits> &a,
 { return a._M_node != b._M_node; }
 }
 bool operator<(const AsciiString&,const AsciiString&);
-struct Region3D {Coord3D lo,hi;};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 struct PlayerPosition {unsigned char human,computer,loadAIScripts;int forceTeam;_STL::set<AsciiString> factions;};
 struct MapPlayers {PlayerPosition items[8];MapPlayers&operator=(const MapPlayers&);};
 class WaypointMap:public _STL::map<AsciiString,Coord3D> {public:int numStartSpots;};

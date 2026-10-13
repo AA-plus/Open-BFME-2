@@ -117,11 +117,7 @@ namespace _STL
 template<> void _List_base<ObjectTOCEntry, Rva00245F79Allocator<ObjectTOCEntry> >::clear();
 }
 
-struct Region3D
-{
-	Coord3D lo;
-	Coord3D hi;
-};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 
 void setFPMode(void);
 

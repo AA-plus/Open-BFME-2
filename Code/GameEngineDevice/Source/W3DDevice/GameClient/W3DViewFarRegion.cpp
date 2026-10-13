@@ -16,11 +16,7 @@
 typedef float Real;
 typedef int Int;
 
-struct Region3D
-{
-	Coord3D lo;
-	Coord3D hi;
-};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 
 struct Vector3
 {

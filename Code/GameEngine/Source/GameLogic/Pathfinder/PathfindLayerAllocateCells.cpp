@@ -26,10 +26,7 @@ typedef float Real;
 typedef unsigned short UnsignedShort;
 
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct IRegion2D
-{
-	ICoord2D lo, hi;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 struct Coord2DView
 {
 	Real x, y;

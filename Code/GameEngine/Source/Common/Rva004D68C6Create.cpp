@@ -66,13 +66,7 @@ enum DrawableID
 
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct IRegion2D
-{
-	int x;
-	int y;
-	int w;
-	int h;
-};
+#include "../../../Libraries/Include/Lib/IRegion2D.h"
 
 class GameMessage
 {

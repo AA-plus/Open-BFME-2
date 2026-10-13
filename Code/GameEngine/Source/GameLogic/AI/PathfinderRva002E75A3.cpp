@@ -10,11 +10,7 @@ typedef float Real;
 
 #include "Coord3D.h"
 
-struct IRegion2D
-{
-	ICoord2D lo;
-	ICoord2D hi;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 
 const float INV=0.1f;
 extern float g_00BC7838;

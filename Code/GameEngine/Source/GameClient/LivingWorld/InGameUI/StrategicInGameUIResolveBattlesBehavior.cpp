@@ -29,11 +29,7 @@ class GameMessage;
 // (the region.cpp rows 0x00004D4B/0x00004D51 are the out-of-line copies), so
 // the extents are spelled out in the handler rather than defining second
 // copies of those members.
-struct IRegion2D
-{
-	ICoord2D lo;
-	ICoord2D hi;
-};
+#include "../../../../../Libraries/Include/Lib/IRegion2D.h"
 
 // The translator base (WB UserInputTranslator.cpp): translateGameMessage in
 // slot 0, a deleting dtor in slot 1, then the input handlers, whose

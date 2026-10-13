@@ -9,7 +9,7 @@
 // pin5CBB4A establish the lifetime and calls. Original UI owner/method names
 // remain unresolved; callback and field labels are structural descriptions.
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
-struct IRegion2D { ICoord2D lo,hi; };
+#include "../../../Libraries/Include/Lib/IRegion2D.h"
 union GameMessageArgumentType { int integer;ICoord2D point;IRegion2D region; };
 class GameMessage { public: const GameMessageArgumentType*getArgument(int)const;char prefix[0x10];int type; };
 class Rva0005CB9F3DwordImmSetter { public:void apply(); };

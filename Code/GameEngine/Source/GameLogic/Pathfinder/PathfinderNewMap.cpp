@@ -32,14 +32,8 @@ typedef int Int;
 typedef float Real;
 
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct IRegion2D
-{
-	ICoord2D lo, hi;
-};
-struct Region3D
-{
-	Coord3D lo, hi;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 
 #define PATHFIND_CELL_SIZE_F 10.0f
 

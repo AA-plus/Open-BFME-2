@@ -23,11 +23,7 @@ typedef int Int;
 
 #include "Lib/Coord3D.h"
 
-struct Region3D
-{
-    Coord3D lo;
-    Coord3D hi;
-};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 
 typedef _STL::vector<ICoord2D> BoundaryVector;
 

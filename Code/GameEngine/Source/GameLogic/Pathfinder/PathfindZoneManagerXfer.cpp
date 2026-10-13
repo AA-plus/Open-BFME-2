@@ -22,10 +22,7 @@ struct ICoord2D
  __forceinline void zero() {x=0;y=0;}
 	int x, y;
 };
-struct IRegion2D
-{
-	ICoord2D lo, hi;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 class Xfer
 {
 public:

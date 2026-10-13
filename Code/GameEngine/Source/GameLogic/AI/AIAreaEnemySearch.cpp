@@ -135,17 +135,9 @@ public:
 
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct IRegion2D
-{
-	ICoord2D lo;
-	ICoord2D hi;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 
-struct Region3D
-{
-	Coord3D lo;
-	Coord3D hi;
-};
+#include "../../../../Libraries/Include/Lib/Region3D.h"
 
 class PolygonTrigger
 {

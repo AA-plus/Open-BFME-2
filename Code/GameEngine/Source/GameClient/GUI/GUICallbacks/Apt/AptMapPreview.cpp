@@ -497,11 +497,7 @@ struct Rva0057DA21Waypoint
 };
 
 // ZH Region3D: the map extent.
-struct Region3D
-{
-	Coord3D lo;
-	Coord3D hi;
-};
+#include "../../../../../../Libraries/Include/Lib/Region3D.h"
 
 class MapMetaData
 {

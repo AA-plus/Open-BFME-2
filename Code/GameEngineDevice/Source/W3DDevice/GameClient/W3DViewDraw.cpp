@@ -22,7 +22,7 @@ typedef float Real;
 typedef bool Bool;
 typedef unsigned int UnsignedInt;
 
-struct IRegion2D { ICoord2D lo; ICoord2D hi; };
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 
 class Vector3 { public: float X, Y, Z; Vector3(float x, float y, float z) { X = x; Y = y; Z = z; } };
 class DX8Wrapper { public: static void Clear(bool clear_color, bool clear_z, bool clear_stencil, const Vector3 &color, float dest_alpha, float z = 1.0f, unsigned int stencil = 0); };

@@ -10,7 +10,7 @@
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include "../../../Libraries/Include/Lib/Coord3D.h"
-struct Region3D {Coord3D lo,hi;};
+#include "../../../Libraries/Include/Lib/Region3D.h"
 class Rva0029B63A {public:Rva0029B63A();private:char header[12];};
 class WaypointMap:private Rva0029B63A {public:
  __declspec(dllimport) __forceinline WaypointMap():numStartSpots(0){}

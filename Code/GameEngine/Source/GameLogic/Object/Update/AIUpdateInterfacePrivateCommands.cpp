@@ -171,16 +171,7 @@ struct Coord3D
 namespace _STL { template<> void vector<Coord3D>::push_back(const Coord3D&); }
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include/Lib/BaseType.h
-struct Region3D
-{
-	Coord3D lo, hi;
-
-	__forceinline Bool isInRegionNoZ(const Coord3D *query) const
-	{
-		return (lo.x < query->x) && (query->x < hi.x)
-			&& (lo.y < query->y) && (query->y < hi.y);
-	}
-};
+#include "../../../../../Libraries/Include/Lib/Region3D.h"
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameLogic/TerrainLogic.h
 // The three native calls target the rowed predicate in Rva0028ECDB.cpp

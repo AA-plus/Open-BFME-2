@@ -35,11 +35,7 @@ struct Region2D
     Coord2D hi;
 };
 
-struct IRegion2D
-{
-    ICoord2D lo;
-    ICoord2D hi;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 
 struct RealRange
 {

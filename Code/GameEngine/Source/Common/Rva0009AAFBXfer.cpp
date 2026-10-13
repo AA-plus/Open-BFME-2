@@ -30,11 +30,7 @@ struct IRegion3D
 #include "../../../Libraries/Include/Lib/Coord2D.h"
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 #include "../../../Libraries/Include/Lib/Region2D.h"
-struct IRegion2D
-{
-    ICoord2D lo;
-    ICoord2D hi;
-};
+#include "../../../Libraries/Include/Lib/IRegion2D.h"
 struct RealRange
 {
     float lo;

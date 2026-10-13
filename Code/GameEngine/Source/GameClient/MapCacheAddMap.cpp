@@ -44,7 +44,7 @@ template<class T,class L,class R> static inline bool operator!=(const _Rb_tree_i
 bool operator<(const AsciiString &,const AsciiString &);
 namespace _STL {template<> struct less<AsciiString> { bool operator()(const AsciiString&a,const AsciiString&b)const{return a<b;} };}
 
-struct Region3D {Coord3D lo,hi;};
+#include "../../../Libraries/Include/Lib/Region3D.h"
 class WaypointMap : public _STL::map<AsciiString,Coord3D> {public: void update(); int numStartSpots;};
 struct PlayerPosition { unsigned char human,computer,loadAIScripts; int forceTeam; _STL::set<AsciiString> factions; };
 struct MapPlayers { PlayerPosition items[8]; };

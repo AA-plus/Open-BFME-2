@@ -170,10 +170,7 @@ enum GameMessageArgumentDataType
 
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct IRegion2D
-{
-	ICoord2D lo, hi;
-};
+#include "../../../Libraries/Include/Lib/IRegion2D.h"
 
 union GameMessageArgumentType
 {

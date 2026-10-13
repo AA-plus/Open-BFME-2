@@ -24,11 +24,7 @@ struct ICoord2D
 	ICoord2D() {}
 };
 
-struct IRegion2D
-{
-	ICoord2D lo;
-	ICoord2D hi;
-};
+#include "../../../../../../Libraries/Include/Lib/IRegion2D.h"
 
 // Image height at +0x28; the rest of Image stays opaque.
 inline Int imageHeight(const Image *image)

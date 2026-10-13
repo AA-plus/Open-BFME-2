@@ -18,10 +18,7 @@ typedef unsigned int UnsignedInt;
 extern "C" int __cdecl abs(int);
 
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct IRegion2D
-{
-	ICoord2D lo, hi;
-};
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 void buildRegion(const ICoord2D *anchor, const ICoord2D *dest, IRegion2D *region);
 
 union GameMessageArgumentType

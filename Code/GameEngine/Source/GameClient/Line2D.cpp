@@ -81,10 +81,7 @@ inline NUM sqr(NUM x)
 
 #include "../../../Libraries/Include/Lib/ICoord2D.h"
 
-struct IRegion2D
-{
-	ICoord2D lo, hi;					// bounds of 2D rectangular region
-};
+#include "../../../Libraries/Include/Lib/IRegion2D.h"
 
 // GameClient/Line2D.h prototypes
 extern Bool ClipLine2D( ICoord2D *p1, ICoord2D *p2, ICoord2D *c1, ICoord2D *c2,

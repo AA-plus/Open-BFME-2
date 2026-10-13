@@ -11,7 +11,7 @@
 typedef unsigned long uint32;
 
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
-struct IRegion2D { ICoord2D lo,hi; };
+#include "../../../../Libraries/Include/Lib/IRegion2D.h"
 bool ClipLine2D(ICoord2D *start,ICoord2D *end,ICoord2D *returnStart,ICoord2D *returnEnd,IRegion2D *region);
 
 #include "../../../../../reference/shims/wwmath/Vector2.h"
