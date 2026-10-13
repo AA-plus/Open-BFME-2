@@ -1,4 +1,6 @@
 // ?rva0021F5F8@CreateAHeroManager@@QAEXXZ
+// partial score=0.9662 date=2026-10-13
+// ?rva0021F5F8@CreateAHeroManager@@QAEXXZ
 // partial score=0.98 date=2026-10-11
 // cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
