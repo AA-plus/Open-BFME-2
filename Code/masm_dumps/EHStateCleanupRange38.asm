@@ -2030,21 +2030,6 @@ cleanup_done_00791b95:
     ret
 ?rva00791b95@@YAXXZ ENDP
 
-; Unwind@00b91bf2 at RVA 0x00791BF2; 25-byte state-bit cleanup ends at RET.
-; Retail tests and clears bit 0 at [ebp-28]; loads ECX with MOV from [ebp+8] only when set.
-; The tail-jump target is a matched function at RVA 0x005B804E; parent identity/layout remain unproven.
-PUBLIC ?rva00791bf2@@YAXXZ
-?rva00791bf2@@YAXXZ PROC
-    mov eax, DWORD PTR [ebp-28]
-    and eax, 1
-    jz NEAR PTR cleanup_done_00791bf2
-    and DWORD PTR [ebp-28], -2
-    mov ecx, DWORD PTR [ebp+8]
-    jmp ??1UnicodeString@@QAE@XZ
-cleanup_done_00791bf2:
-    ret
-?rva00791bf2@@YAXXZ ENDP
-
 ; Unwind@00b91c6c at RVA 0x00791C6C; 25-byte state-bit cleanup ends at RET.
 ; Retail tests and clears bit 0 at [ebp-20]; loads ECX with MOV from [ebp+8] only when set.
 ; The tail-jump target is a matched function at RVA 0x0048BA39; parent identity/layout remain unproven.
