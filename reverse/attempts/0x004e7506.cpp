@@ -1,4 +1,6 @@
 // ?rva004E7506@Rva004E7506@@QAE?AUTreeHintRef00217D4C@@XZ
+// partial score=0.9577777777777777 date=2026-10-13
+// ?rva004E7506@Rva004E7506@@QAE?AUTreeHintRef00217D4C@@XZ
 // partial score=0.9444444444444444 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Source/Common /D_STLP_USE_STATIC_LIB
 // stlport
@@ -185,7 +187,7 @@ public:
  V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9) V(10) V(11) V(12) V(13)
  virtual UnicodeString fetch(const AsciiString &, bool *);
  V(15) V(16)
- virtual const unsigned short *formatText(const char *, bool *);
+ virtual const UnicodeString *formatText(const char *, bool *);
 #undef V
 };
 extern GameTextInterface *TheGameText;
@@ -229,7 +231,7 @@ TreeHintRef00217D4C Rva004E7506::rva004E7506()
      const UnicodeString &ownerName=owner->name();
      if(!ownerName.isEmpty()) {
       UnicodeString combined;
-      combined.format(TheGameText->formatText("TOOLTIP:VerteranHordeMemberName",0),titleHeader?titleHeader->data:(const unsigned short *)L"",ownerName.str());
+      combined.format(TheGameText->formatText("TOOLTIP:VerteranHordeMemberName",0),title.str(),ownerName.str());
       title.swap(combined);
      }
     }
