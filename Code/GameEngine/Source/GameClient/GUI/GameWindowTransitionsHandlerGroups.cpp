@@ -124,7 +124,15 @@ public:
 };
 typedef _STL::list<TransitionGroup *> TransitionGroupList;
 
-struct FieldParse;
+class INI;
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
@@ -132,6 +140,7 @@ public:
 	const char *getNextToken(const char *seps = 0);
 	void initFromINI(void *what, const FieldParse *parseTable);
 	static void parseWindowTransitions( INI* ini );
+	static void parseBool(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002E850
 };
 
 class GameWindowTransitionsHandler
@@ -141,6 +150,7 @@ public:
 	void setGroup( AsciiString groupName, Bool immidiate );
 	void reverse( AsciiString groupName );
 	int rva001DC1FD( AsciiString groupName );
+	static void parseWindow(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x001DCB2F
 	TransitionGroup *getNewGroup( AsciiString name );
 private:
 	static const FieldParse m_gameWindowTransitionsFieldParseTable[];
@@ -156,6 +166,15 @@ private:
 	int m_58;
 	int m_5C;
 	int m_60;
+};
+
+// Retail's field table at RVA 0x007DBBCC (.rdata): "Window" -> parseWindow and "FireOnce" -> parseBool at
+// +0x10 (TransitionGroup::m_fireOnce), then the zero sentinel; transcribed from retail's own bytes.
+const FieldParse GameWindowTransitionsHandler::m_gameWindowTransitionsFieldParseTable[] =
+{
+	{ "Window", GameWindowTransitionsHandler::parseWindow, 0, 0 },
+	{ "FireOnce", INI::parseBool, 0, 0x10 },
+	{ 0, 0, 0, 0 }
 };
 
 TransitionGroup *GameWindowTransitionsHandler::getNewGroup( AsciiString name )
