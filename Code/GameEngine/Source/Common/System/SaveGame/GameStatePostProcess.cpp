@@ -28,6 +28,31 @@ public:
 private:struct LogicFPView {char opaque[0x1B4];int depth;};
 };
 struct GameStatePostRecord {Snapshot *snapshot;unsigned sequence;};
+// These pointer/POD insertion paths keep native node creation out of line.
+// This is the same STL algorithm as the existing int/timer owners; typed
+// instances are admitted only after full recursive byte/relocation fold proof.
+namespace _STL {
+template<> inline __declspec(noinline)
+_List_node<Snapshot *> *list<Snapshot *, allocator<Snapshot *> >::_M_create_node(Snapshot *const &value)
+{
+    _Node *node = this->_M_node.allocate(1);
+    new (&node->_M_data) Snapshot *(value);
+    return node;
+}
+template<> inline __declspec(noinline)
+void _Construct<GameStatePostRecord, GameStatePostRecord>(GameStatePostRecord *target, const GameStatePostRecord &value)
+{
+    new (target) GameStatePostRecord(value);
+}
+template<> inline __declspec(noinline)
+_List_node<GameStatePostRecord> *list<GameStatePostRecord, allocator<GameStatePostRecord> >::_M_create_node(const GameStatePostRecord &value)
+{
+    _Node *node = this->_M_node.allocate(1);
+    _Construct(&node->_M_data, value);
+    return node;
+}
+}
+
 class GameState {
  char opaque[0xE0C];
  _STL::list<Snapshot*> m_post;
@@ -67,6 +92,28 @@ void Rva002DC66F(void *unused,GameState *state,unsigned sequence)
 // Native DD908..DD91A is the matching append callback. Dispatcher DD91A
 // supplies this state as its second captured argument. The callee's RET8,
 // Snapshot name slot, and paired list accesses establish the declaration;
-// its complete130-byte implementation remains banked and unmatched.
+// its complete130-byte implementation below retains those list semantics.
 void Rva002DD908(Snapshot *snapshot,GameState *state,unsigned sequence)
 {state->rva002DCF6C(snapshot,sequence);}
+
+// Native 2DCF6C..2DCFEE appends non-Weapon snapshots to the post-process list
+// (Object goes first), then records the snapshot and sequence in the marks list.
+// An equal-arm pointer selection preserves the late-folded source expression
+// that schedules the receiver LEA ahead of the outgoing argument PUSH.
+void GameState::rva002DCF6C(Snapshot *snapshot,unsigned sequence)
+{
+ if(!snapshot)return;
+ const char *name=snapshot->GetSnapshotName();
+ Snapshot *postCopy=snapshot;
+ if(name && !strcmp(name,"Object"))m_post.push_front(postCopy);
+ else {
+  if(name && !strcmp(name,"Weapon"))return;
+  m_post.push_back(postCopy);
+ }
+ GameStatePostRecord record;
+ GameStatePostRecord *rp=&record;
+ rp->snapshot=snapshot;
+ rp->sequence=sequence;
+ _STL::list<GameStatePostRecord> *mp=&m_marks;
+ mp->push_back(rp ? *rp : *rp);
+}

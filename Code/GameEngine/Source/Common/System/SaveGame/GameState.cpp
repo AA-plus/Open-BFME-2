@@ -35,6 +35,19 @@
 #include "PreRTS.h"
 #include <list>
 
+// The native Snapshot-pointer list bodies are owned by GameStatePostProcess.
+// Keep this unmatched ZH donor from supplying competing COMDAT definitions.
+class Snapshot;
+namespace _STL {
+template<> void _List_base<Snapshot *, allocator<Snapshot *> >::clear();
+template<> _List_base<Snapshot *, allocator<Snapshot *> >::~_List_base();
+template<> void list<Snapshot *>::push_front(Snapshot *const &);
+template<> void list<Snapshot *>::push_back(Snapshot *const &);
+template<> list<Snapshot *>::iterator list<Snapshot *>::insert(iterator, Snapshot *const &);
+template<> void allocator<_List_node<Snapshot *> >::deallocate(_List_node<Snapshot *> *, size_t) const;
+template<> void _STLP_alloc_proxy<_List_node<Snapshot *> *, _List_node<Snapshot *>, allocator<_List_node<Snapshot *> > >::deallocate(_List_node<Snapshot *> *, size_t);
+}
+
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
 template <class T, class LeftTraits, class RightTraits>

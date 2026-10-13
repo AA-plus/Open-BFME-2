@@ -72,6 +72,12 @@ void Rva002B212A::rva002B212A(Rva002B212AArg *arg,const AsciiString &name) {
 // marks TheControlBar dirty (+0x28). Address-derived names; the list is
 // spelled with the element type its folded erase carries.
 class Snapshot;
+// Bind the existing Snapshot-pointer erase owner; this donor's allocator
+// settings otherwise emit a different COMDAT with the same name.
+namespace _STL {
+template<> list<Snapshot *>::iterator list<Snapshot *>::erase(iterator);
+}
+
 enum LocomotorSetType { LOCOMOTORSET_INVALID = -1 };
 class LocomotorTemplate;
 typedef _STL::pair<const LocomotorSetType, _STL::vector<const LocomotorTemplate *> > Rva002ADC03Pair;
