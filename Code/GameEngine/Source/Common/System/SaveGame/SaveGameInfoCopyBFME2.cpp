@@ -500,3 +500,36 @@ void Rva0022958D::init()
 #pragma comment(linker, "/alternatename:?xfer@BfmeSubobject00229875@@UAEXPAVXfer@@@Z=?rva002DBDB4@Rva002DBDB4@@QAEXPAVRva002DBD05@@@Z")
 #pragma comment(linker, "/alternatename:?crc@BfmeSubobject0022CE19@@UAEXPAVXfer@@@Z=??1Coord2D@@QAE@XZ")
 #pragma comment(linker, "/alternatename:?typeName@BfmeSubobject0022CE19@@UBEPBDXZ=?name@Rva0022CEF1Named@@QBEPBDXZ")
+
+// ?rva002DE311@Rva002DE311Owner@@QAEXXZ, retail 0x002DE311, 58 bytes.
+// Drains the intrusive node list headed at +0xE14: each node links through
+// its +0xDEC word slot (the trailing word of TreeHintOpaque0043671B, whose
+// rowed non-virtual dtor 0x00229840 and scalar delete 0x0002FD60 retail
+// calls here). The redundant null test of the just-loaded head and the
+// per-iteration head store are retail facts. The owner's identity beyond
+// this list head is unresolved, so it keeps an address-derived name.
+struct TreeHintOpaque0043671B
+{
+	~TreeHintOpaque0043671B();
+	unsigned char m_pad00[0xDEC];
+	TreeHintOpaque0043671B *m_nextDEC;
+};
+class Rva002DE311Owner
+{
+public:
+	void rva002DE311();
+private:
+	unsigned char m_pad00[0xE14];
+	TreeHintOpaque0043671B *m_listE14;
+};
+void Rva002DE311Owner::rva002DE311()
+{
+	while (m_listE14 != 0)
+	{
+		TreeHintOpaque0043671B *node = m_listE14;
+		TreeHintOpaque0043671B *next = node->m_nextDEC;
+		if (m_listE14 != 0)
+			delete node;
+		m_listE14 = next;
+	}
+}

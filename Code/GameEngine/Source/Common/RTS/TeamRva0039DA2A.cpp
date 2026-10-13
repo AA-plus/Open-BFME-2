@@ -37,11 +37,22 @@ public:
     unsigned char m_dead;
 };
 
+struct Rva0039E9A1Slot
+{
+    unsigned char m_padB0[0xB0];
+    Coord3D m_pos;
+    unsigned char m_flagBC;
+};
+
 class Team
 {
 public:
     DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
     void rva0039DA2A(Coord3D *out) const;
+    Coord3D *rva0039E9A1(Coord3D *out) const;
+private:
+    unsigned char m_pad00[0x30];
+    int m_slotBase30;
 };
 
 void Team::rva0039DA2A(Coord3D *out) const
@@ -79,4 +90,27 @@ void Team::rva0039DA2A(Coord3D *out) const
     out->x = ox;
     out->y = oy;
     out->z = oz;
+}
+
+// ?rva0039E9A1@Team@@QBEPAUCoord3D@@PAU2@@Z, retail 0x0039E9A1, 63 bytes.
+// Flagged position slot at (m_slotBase30 + 0x12C): when the slot pointer
+// is set and its +0xBC flag is nonzero, its +0xB0 Coord3D is the answer;
+// otherwise the live-member centroid rva0039DA2A fills it in. Both paths
+// hand the output pointer back (retail keeps out in eax at the shared
+// return), so the call is a real call, not a tail jump. The +0x30 base
+// plus 0x12C add and the two early-outs are retail facts; the slot
+// owner's identity beyond this relation is unresolved.
+Coord3D *Team::rva0039E9A1(Coord3D *out) const
+{
+    const Rva0039E9A1Slot *slot = (const Rva0039E9A1Slot *)(m_slotBase30 + 0x12C);
+    if (slot != 0 && slot->m_flagBC != 0)
+    {
+        const Coord3D *pos = &slot->m_pos;
+        out->x = pos->x;
+        out->y = pos->y;
+        out->z = pos->z;
+        return out;
+    }
+    rva0039DA2A(out);
+    return out;
 }

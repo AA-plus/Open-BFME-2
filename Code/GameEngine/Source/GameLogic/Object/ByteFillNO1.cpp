@@ -45,3 +45,22 @@
 
 extern unsigned char *(*const g_bfmeByteFillNAnchor)(unsigned char *, unsigned int, const unsigned char &);
 unsigned char *(*const g_bfmeByteFillNAnchor)(unsigned char *, unsigned int, const unsigned char &) = &_STL::fill_n<unsigned int>;
+
+// ?rva000ABBEF@@YAXPAM00H@Z, retail 0x000ABBEF, 54 bytes.
+// Indexed triple fetch from the global 16-byte lighting-vector table at
+// VA 0x00DBD788. The table is owned and proven as GlobalLightingChunkVectors
+// in GlobalLightingDataChunk.cpp (three {Coord3D,float} slots); this TU
+// mirrors its name and 16-byte shape so the reference binds the same bytes.
+// Index -1 selects the current screen-filter pass at VA 0x00DFF490.
+extern int g_00DFF490;
+struct Rva000ABBEFVecCoord { float x, y, z; };
+struct LightingChunkVectorStorage { Rva000ABBEFVecCoord components; float reserved; };
+extern LightingChunkVectorStorage GlobalLightingChunkVectors[3];
+void rva000ABBEF(float *x, float *y, float *z, int index)
+{
+	if (index == -1)
+		index = g_00DFF490;
+	*x = GlobalLightingChunkVectors[index].components.x;
+	*y = GlobalLightingChunkVectors[index].components.y;
+	*z = GlobalLightingChunkVectors[index].components.z;
+}
