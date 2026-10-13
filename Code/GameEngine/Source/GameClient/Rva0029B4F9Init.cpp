@@ -1,7 +1,8 @@
 // cl: /MD
-// ?Rva0029B4F9Init@@YAXXZ @0x0029B4F9 67B.
+// ?resetCamera@InGameUI@@QAEXXZ @0x0029B4F9 67B.
 // Chain from 0x0029B2E7: local 0x20 zeroed via that row, then two virtuals on global 0xDFEA3C slots 0x170 and 0xC8.
-// Caller at 0x0042BBF9. Free function void().
+// Native translator case87 carries TheInGameUI inECX; WB E7CBE0 agrees.
+// ZH InGameUI.cpp4163 resetCamera has the same location/get/reset calls.
 extern class View *TheTacticalView;
 
 class Rva0029B2E7 {
@@ -113,7 +114,8 @@ public:
 	virtual void s091();
 	virtual void s092(Rva0029B2E7 *p);
 };
-void Rva0029B4F9Init()
+class InGameUI {public:void resetCamera();};
+void InGameUI::resetCamera()
 {
 	Rva0029B2E7 tmp;
 	tmp.rva0029B2E7();

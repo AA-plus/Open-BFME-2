@@ -1,4 +1,6 @@
 // ?translateGameMessage@CommandTranslator@@UAE?AW4GameMessageDisposition@@PBVGameMessage@@@Z
+// partial score=0.8217136310573507 date=2026-10-13
+// ?translateGameMessage@CommandTranslator@@UAE?AW4GameMessageDisposition@@PBVGameMessage@@@Z
 // partial score=0.821261372492925 date=2026-10-13
 // cl: /I. -MD -EHsc -D_STLP_USE_STATIC_LIB -Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib -Ireference/open-bfme-1/inputs/reference/shims/stringbaseunicode /O1 /G7 /arch:SSE /ICode/Libraries/Include -Ireference/open-bfme-1/game/GameEngine/Source/GameClient/MessageStream
 // stlport
@@ -133,7 +135,7 @@ class MultiplayerSettings { public: char pad00[0x14]; int m_maxBeaconsPerPlayer;
 
 struct Rva0029AEF9Item;
 enum SpecialPowerType { CONTEXT_POWER_NONE };
-class InGameUI {
+class InGameUI {public:void resetCamera();
 public:
  bool areSelectedObjectsControllable() const;
  bool rva0029AEF9(Rva0029AEF9Item*,int,int,int,int,int) const;
@@ -664,7 +666,7 @@ int rva005A9B00(Object*,void*);
 class DrawableList;
 void pickAndPlayUnitVoiceResponse(const DrawableList*,GameMessage::Type,PickAndPlayInfo* = 0);
 
-class CommandTranslator { public:
+class CommandTranslator {public:void rva0042AF97(GameMessage*); public:
  virtual GameMessageDisposition translateGameMessage(const GameMessage*);
  virtual ~CommandTranslator();
 private:
@@ -866,7 +868,7 @@ virtual void slotAudio26();virtual void slotAudio27();virtual void slotAudio28()
 class TranslateMessages : public ContextSlots<16> {public:virtual void __cdecl message(UnicodeString,...);};
 class TranslateGameEngine : public ContextSlots<16> {public:virtual void increase();virtual void decrease();};
 class GameEngine;extern GameEngine*TheGameEngine;
-class Eva;extern Eva*TheEva;class Rva001DD3DD {public:void update();};
+class Eva {public:void rva001DD3DD();};extern Eva*TheEva;
 class BfmeMemberRV {public:bool bfmeAskRV();};
 class Bfme939Helper {public:int get()const;};
 class BfmeSelectionState {public:bool isSelectionLocked() const;};
@@ -877,8 +879,8 @@ class GameSpyBuddyMessageQueueInterface;extern GameSpyBuddyMessageQueueInterface
 // reconcile its owner before landing this parent. No alias is defined here.
 extern void* ContextMessengerWindow;
 class AptMessenger {public:static void OpenScreen();};class AptInGameChat {public:static void OpenScreen(int);};
-void Rva00511730(int);void Rva004E41AB();void Rva0050EC24();void Rva0051B8EA();void ToggleControlBar(bool);void Rva0029B4F9Init();
-unsigned Rva0030F099(bool);void __stdcall Rva0042AF97Handle(GameMessage*);
+void Rva00511730(int);void Rva004E41AB();void Rva0050EC24();void Rva0051B8EA();void ToggleControlBar(bool);
+unsigned Rva0030F099(bool);
 struct Rva00429276Entry;
 struct Rva00429276Holder {Rva00429276Entry*first;Rva00429276Entry*second;};
 int Rva00429276(Rva00429276Entry*,Rva00429276Holder*);
@@ -916,7 +918,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
   contextUI()->deselect();GameMessage*team=TheMessageStream->appendMessage(GameMessage::MSG_CREATE_SELECTED_GROUP);team->appendBooleanArgument(true);team->appendObjectIDArgument(hero->getID());contextUI()->selectDrawable(heroDraw);TheTacticalView->lookAt(heroDraw->getPosition());disp=DESTROY_MESSAGE;break;
  }
  case 0x61:{Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();if(local){Object*o=(Object*)local->rva002ABCF0(1,0);if(o)TheTacticalView->lookAt(o->getPosition());}disp=DESTROY_MESSAGE;break;}
- case 0x62:if(TheEva)((Rva001DD3DD*)TheEva)->update();disp=DESTROY_MESSAGE;break;
+ case 0x62:if(TheEva)TheEva->rva001DD3DD();disp=DESTROY_MESSAGE;break;
  case 0x64:((ContextUI*)initialUI)->selectAll(0,((ContextPlayers*)ThePlayerList)->getLocalPlayer());disp=DESTROY_MESSAGE;break;
  case 0x65:TheMessageStream->appendMessage((GameMessage::Type)0x436);disp=DESTROY_MESSAGE;break;
  case 0x66:TheMessageStream->appendMessage((GameMessage::Type)0x435);disp=DESTROY_MESSAGE;break;
@@ -957,7 +959,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
  case 132:((ContextUI*)initialUI)->zoomIn=false;break;
  case 133:((ContextUI*)initialUI)->zoomOut=true;break;
  case 134:((ContextUI*)initialUI)->zoomOut=false;break;
- case 0x87:Rva0029B4F9Init();break;
+ case 0x87:TheInGameUI->resetCamera();break;
  case 136:((ContextUI*)initialUI)->extra8bf=true;break;
  case 137:((ContextUI*)initialUI)->extra8bf=false;break;
  case 138:((ContextUI*)initialUI)->extra8c0=true;break;
@@ -1001,7 +1003,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
   if(isPoint&&controllable){int pickType=Rva0030F099(contextUI()->forceAttackMode());Drawable*d=TheTacticalView->pickDrawable(&msg->getArgument(0)->pixelRegion.lo,contextUI()->forceAttackMode(),pickType);if(contextUI()->forceAttackMode())evaluateForceAttack(d,&pos,DO_COMMAND);else{int result=evaluateContextCommand(d,&pos,CONTEXT_COMMAND);if(commandType==24&&result==0xa5)contextUI()->setCommand(0);}disp=DESTROY_MESSAGE;}
   break;
  }
- case 0x18:Rva0042AF97Handle((GameMessage*)msg);break;
+ case 0x18:rva0042AF97((GameMessage*)msg);break;
  case 0x9c:if(((TranslateLogicFields*)TheGameLogic)->isReplay()){
   if(TheWritableGlobalData){translateGlobals()->fastMode=1-translateGlobals()->fastMode;((TranslateMessages*)TheInGameUI)->message(UnicodeString(L">> %s"),translateGlobals()->fastMode?L"ON":L"OFF");
    if(translateGlobals()->fastMode){BfmeAudioEventPrefix136 event(*(const OpaqueRefElement4*)(((TranslateAudio*)TheAudio)->misc()+0xd0),0);((TranslateAudio*)TheAudio)->add(&event);}

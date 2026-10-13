@@ -36,7 +36,11 @@ class TacticalView {public:
 extern InGameUI*TheInGameUI;extern TacticalView*TheTacticalView;extern GameLogic*TheGameLogic;
 class ControlBar {public:int rva005399D0Check(Object*);};
 extern ControlBar*TheControlBar;
-void __stdcall Rva0042AF97Handle(GameMessage*msg){
+// Native82B3EA pushes msg then MOV ECX,EDI (CommandTranslator receiver);
+// WB E7CBE0 case18 confirms receiver. Body never reads this, so old stdcall
+// owner reproduced bytes while removing the caller receiver load.
+class CommandTranslator {public:void rva0042AF97(GameMessage*);};
+void CommandTranslator::rva0042AF97(GameMessage*msg){
  if(TheInGameUI->forceAttack)return;
  const IRegion2D&r=msg->getArgument(0)->pixelRegion;
  if(r.height()!=0||r.width()!=0)return;
