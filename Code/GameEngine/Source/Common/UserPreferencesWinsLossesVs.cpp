@@ -60,6 +60,8 @@ public:
 	void rva0053740C(AsciiString a, const AsciiString &b, Int v);
 	AsciiString rva0053755A(AsciiString a);
 	AsciiString rva00537616(AsciiString a);
+	AsciiString rva005376D2();
+	AsciiString rva005377B6();
 };
 
 Int UserPreferences::rva00537505(AsciiString a, const AsciiString &b)
@@ -121,5 +123,53 @@ AsciiString UserPreferences::rva00537616(AsciiString a)
 			max = v;
 		}
 	}
+	return best;
+}
+
+AsciiString UserPreferences::rva005376D2()
+{
+	AsciiString best;
+	AsciiString outer;
+	AsciiString inner;
+	Int max = 0;
+	const char ** volatile a = kFactions;
+	do {
+		((StringBase<char> *)&outer)->set(*a);
+		const char **b = kFactions;
+		do {
+			((StringBase<char> *)&inner)->set(*b);
+			Int v = rva0053745E(outer, inner);
+			if (v > max) {
+				best = inner;
+				max = v;
+			}
+			++b;
+		} while ((Int)b < (Int)(kFactions + 6));
+		++a;
+	} while ((Int)a < (Int)(kFactions + 6));
+	return best;
+}
+
+AsciiString UserPreferences::rva005377B6()
+{
+	AsciiString best;
+	AsciiString outer;
+	AsciiString inner;
+	Int max = 0;
+	const char ** volatile a = kFactions;
+	do {
+		((StringBase<char> *)&outer)->set(*a);
+		const char **b = kFactions;
+		do {
+			((StringBase<char> *)&inner)->set(*b);
+			Int v = rva00537505(outer, inner);
+			if (v > max) {
+				best = inner;
+				max = v;
+			}
+			++b;
+		} while ((Int)b < (Int)(kFactions + 6));
+		++a;
+	} while ((Int)a < (Int)(kFactions + 6));
 	return best;
 }

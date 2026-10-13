@@ -87526,3 +87526,5 @@ __ehhandler$?rva0004F580@W3DRadar@@UAEXXZ,,0x0075D584,10,Code/GameEngineDevice/S
 ?updateLoadProgress@ConnectionManager@@QAEXH@Z,,0x004CF940,141,Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp,matched,
 ??1LivingWorldManager@@UAE@XZ,,0x00214405,691,Code/GameEngine/Source/Common/LivingWorldManagerDtor.cpp,matched,
 ??0GameSpyInfo@@QAE@XZ,,0x00385FE1,270,Code/GameEngine/Source/GameNetwork/GameSpy/GameSpyInfoCtor.cpp,matched,
+?rva005376D2@UserPreferences@@QAE?AVAsciiString@@XZ,,0x005376D2,228,Code/GameEngine/Source/Common/UserPreferencesWinsLossesVs.cpp,matched,
+?rva005377B6@UserPreferences@@QAE?AVAsciiString@@XZ,,0x005377B6,228,Code/GameEngine/Source/Common/UserPreferencesWinsLossesVs.cpp,matched,
