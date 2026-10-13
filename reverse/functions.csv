@@ -87964,3 +87964,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?GetCollapseIndex@PathfindZoneManager@@SAHABUPathfindZoneParams@@@Z,,0x0053123A,132,Code/GameEngine/Source/GameLogic/Pathfinder/PathfindZoneManagerGetCollapseIndex.cpp,matched,
 ??0Rva0010F058@@QAE@H@Z,,0x0010F058,108,Code/GameEngine/Source/Common/Rva0010F058Ctor.cpp,matched,
 ?rva0056D983@Rva0056D983@@QAEHPAX@Z,,0x0056D983,62,Code/GameEngine/Source/GameClient/GUI/Rva0056D983Ensure.cpp,matched,
+?rva00273F74@Drawable@@QAEXXZ,,0x00273F74,427,Code/GameEngine/Source/GameClient/DrawableRva00273F74.cpp,matched,

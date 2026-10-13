@@ -1,9 +1,3 @@
-// ?rva00273F74@Drawable@@QAEXXZ
-// partial score=0.98 date=2026-10-13
-// ?rva00273F74@Drawable@@QAEXXZ
-// partial score=0.985 date=2026-10-13
-// ?rva00273F74@Drawable@@QAEXXZ
-// partial score=0.985 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /I. /ICode/Libraries/Include
 #include "Lib/Coord3D.h"
 #include "Lib/Coord2D.h"
@@ -12,12 +6,7 @@
 #include "reference/shims/moduledata/Common/Snapshot.h"
 // ?rva00273755@Drawable@@QAEXXZ @0x00273755 179B: Drawable anim draw with verified retail literal 0.5f via rowed getter 0x00270BA8 and Anim2D width/height plus draw 0x002D7127; tail to 0x002736A8 on stale frame.
 // Evidence: offsets +0x354/+0x2C/+0x64 match Rva00270025 layout, TheGameLogic+0x40 frame check, m_460/m_468/m_46C rect math, callers 0x00279734, neighbours Drawable_rva00273648.
-class GameLogic
-{
-public:
-	unsigned char m_pad[0x40];
-	unsigned int m_frame;
-};
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 
 class Anim2DTemplate;
@@ -214,7 +203,7 @@ private:
     Object *m_object;
     int m_id;
     unsigned char m_pad104[0x354-0x104];
-    Rva00270025 *volatile m_354;
+    Rva00270025 *m_354;
     unsigned char m_pad358[0x43c-0x358];
     bool m_selected;
     unsigned char m_pad43d[0x460-0x43d];
@@ -232,7 +221,7 @@ void Drawable::rva00273755()
 		return;
 	if (((Rva00270BA8 *)this)->rva00270BA8()->m_items[10] == 0)
 		return;
-	unsigned int cur = TheGameLogic->m_frame;
+	unsigned int cur = TheGameLogic->getFrame();
 	unsigned int v = ((Rva00270BA8 *)this)->rva00270BA8()->m_vals[10];
 	if (v >= cur) {
 		int dw = m_468 - m_460;
@@ -303,7 +292,7 @@ void Drawable::rva00273F74()
             int barWidth = m_468-m_460;
             unsigned kind = ((const DrawableKindWordView*)m_template)->bits;
             Real scale;
-            if ((signed char)kind < 0 || (kind&0x2000)) scale=1.0f;
+            if ((kind&0x80) || (kind&0x2000)) scale=1.0f;
             else if (kind&0x200) scale=0.75f;
             else scale=0.5f;
             int frameWidth=(int)(getIconInfo()->m_items[icon]->getCurrentFrameWidth()*scale);

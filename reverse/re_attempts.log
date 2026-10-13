@@ -52772,3 +52772,4 @@ IDct10	0x001D6660	1528	partial	vp6-spec 001d6660/001d3f30: best bank (nd 538, wa
 ?GetCollapseIndex@PathfindZoneManager@@SAHABUPathfindZoneParams@@@Z	0x0053123A	132	landed	add_match verified Code/GameEngine/Source/GameLogic/Pathfinder/PathfindZoneManagerGetCollapseIndex.cpp 132B
 ??0Rva0010F058@@QAE@H@Z	0x0010F058	108	landed	add_match verified Code/GameEngine/Source/Common/Rva0010F058Ctor.cpp 108B
 ?rva0056D983@Rva0056D983@@QAEHPAX@Z	0x0056D983	62	landed	add_match verified Code/GameEngine/Source/GameClient/GUI/Rva0056D983Ensure.cpp 62B
+?rva00273F74@Drawable@@QAEXXZ	0x00273F74	427	landed	add_match verified Code/GameEngine/Source/GameClient/DrawableRva00273F74.cpp 427B
