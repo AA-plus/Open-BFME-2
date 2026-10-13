@@ -11,6 +11,12 @@
 struct Coord3D;
 enum ObjectStatusTypes;
 class Object { public: bool rva0028B35B(const Object *) const; bool testStatus(ObjectStatusTypes) const; };
+struct Rva0028E84ATemplatePrefix {
+ char pad00[0x108]; unsigned char kinds108;
+};
+struct Rva0028E84AObjectPrefix {
+ unsigned word00; const Rva0028E84ATemplatePrefix *objectTemplate;
+};
 struct Rva0028E868OtherPrefix {
  char pad00[0x74]; unsigned word74;
  char pad78[0x484-0x78]; unsigned word484;
@@ -25,14 +31,32 @@ struct Rva0028E868BehaviorInterface {
 class Rva0028C0E3Receiver {
 public:
  bool geometryTest(const Object *,unsigned,unsigned) const;
+ unsigned rva0028E84A() const;
  void collisionDispatch(Object *,const Coord3D *,const Coord3D *);
 private:
  char pad00[4]; unsigned word04;
  char pad08[0x1d4-8]; void **behaviors;
- char pad1d8[0x414-0x1d8]; unsigned word414;
+ char pad1d8[0x204-0x1d8]; unsigned word204;
+ char pad208[0x414-0x208]; unsigned word414;
 };
 bool Rva0028C0E3Receiver::geometryTest(const Object *other,unsigned,unsigned) const {
  return ((const Object *)((const char *)this-0x70))->rva0028B35B(other);
+}
+
+// Native 28E84A..28E868, both RET0 exits included. BFC290 slot +14 and
+// WorldBuilder CE1860 (same slot, primary receiver adjustment -78 there)
+// independently establish this geometry-interface operation. Both builds test
+// template kind bit 2, return 1 for that bit, otherwise return the nonzero
+// receiver+204 word or the primary Object address. Retail independently fixes
+// the template at primary+4 and the interface at primary+70. The original
+// method name and meaning of the 32-bit result remain unresolved; this is an
+// address-derived method, not a claimed original collision identifier name.
+unsigned Rva0028C0E3Receiver::rva0028E84A() const {
+ const Rva0028E84ATemplatePrefix *data=
+  ((const Rva0028E84AObjectPrefix *)((const char *)this-0x70))->objectTemplate;
+ if(data->kinds108 & 4)return 1;
+ if(word204)return word204;
+ return reinterpret_cast<unsigned>(this)-0x70;
 }
 
 // Native 28E868..28E8D4 ends RET12. The same BFC290 table's slot +24
