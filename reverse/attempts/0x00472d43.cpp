@@ -1,8 +1,10 @@
 // ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
+// partial score=0.9 date=2026-10-13
+// ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
 // partial score=0.89 date=2026-10-13
 // ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
 // partial score=0.89 date=2026-10-13
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /ICode/GameEngine/Source
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /ICode/GameEngine/Source /ICode /I.
 // Retail 0x00472D43 (811B). Port target: Code/GameEngine/Source/GameLogic/Object/Contain/HordeContainChangeToFormation.cpp
 // (new TU: picker's Rva00472CA9Finish.cpp cannot host it - its single-vtable HordeContain collides with the MI view this body needs).
 // 804/811 in the TU. Residue: (1) newHorde pre-spill+reload around slot122 (ai takes ebx; retail keeps newHorde, homes ai); (2) size-loop iterator spilled home vs reg (and last reg vs home); (3) list-ctor alloc temp slot +0xB vs frame; (4) leader/camp homes shifted by the same global numbering. FIXED HERE vs prior bank: m_2B4 pad math (+0x2B8 -> +0x2B4, correctness, size-neutral).
@@ -347,8 +349,8 @@ void HordeContain::changeToFormation(const ThingTemplate *newTemplate)
 		AIUpdateInterface *ai = getObject()->getAI();
 		if (ai)
 		{
-			TheAiOrdersManager->clearOrders(3, getObject()->getID());
 			ai->m_commandInterface.aiIdle(CMD_FROM_PLAYER);
+			TheAiOrdersManager->clearOrders(3, getObject()->getID());
 		}
 	}
 	getObject()->SwapForExchange(newObj);
@@ -371,7 +373,7 @@ void HordeContain::changeToFormation(const ThingTemplate *newTemplate)
 		{
 			static NameKeyType s_lifetimeKey = TheNameKeyGenerator->nameToKey("LifetimeUpdate");
 			LifetimeUpdate *newLife = (LifetimeUpdate *)newLeader->findModule(s_lifetimeKey);
-			LifetimeUpdate *oldLife = (LifetimeUpdate *)leader->findModule(s_lifetimeKey);
+			LifetimeUpdate * volatile oldLife = (LifetimeUpdate *)leader->findModule(s_lifetimeKey);
 			if (newLife != 0 && oldLife != 0)
 			{
 				UnsignedInt dieFrame = oldLife->m_dieFrame;
