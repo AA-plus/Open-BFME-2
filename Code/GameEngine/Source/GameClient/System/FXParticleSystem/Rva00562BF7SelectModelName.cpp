@@ -18,11 +18,6 @@
 #pragma intrinsic(strlen)
 
 
-template<> inline void StringBase<char>::concat(const char *str)
-{
-    concat(str, str ? strlen(str) : 0);
-}
-
 class ParticleSystemZA
 {
 public:
@@ -67,8 +62,8 @@ AsciiString Rva00562BF7Owner::rva00562BF7()
             float variantCount = (float)choices[0].count;
             char suffix[4];
             sprintf(suffix, "%02d", (int)(WWMath::Random_Float() * (variantCount - 1.0f) + 1.5f));
-            name.concat(suffix);
-            name.concat(".w3d");
+            ((StringBase<char> *)&name)->concat(suffix);
+            ((StringBase<char> *)&name)->concat(".w3d");
             return name;
         } else if (chance <= choices[1].threshold) {
             field58 = choices[1].field0C;
@@ -78,8 +73,8 @@ AsciiString Rva00562BF7Owner::rva00562BF7()
             float variantCount = (float)choices[1].count;
             char suffix[4];
             sprintf(suffix, "%02d", (int)(WWMath::Random_Float() * (variantCount - 1.0f) + 1.5f));
-            name.concat(suffix);
-            name.concat(".w3d");
+            ((StringBase<char> *)&name)->concat(suffix);
+            ((StringBase<char> *)&name)->concat(".w3d");
             return name;
         } else {
             field58 = choices[2].field0C;
@@ -89,8 +84,8 @@ AsciiString Rva00562BF7Owner::rva00562BF7()
             float variantCount = (float)choices[2].count;
             char suffix[4];
             sprintf(suffix, "%02d", (int)(WWMath::Random_Float() * (variantCount - 1.0f) + 1.5f));
-            name.concat(suffix);
-            name.concat(".w3d");
+            ((StringBase<char> *)&name)->concat(suffix);
+            ((StringBase<char> *)&name)->concat(".w3d");
             return name;
         }
     }
