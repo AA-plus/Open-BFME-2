@@ -1,4 +1,6 @@
 // ?GetAssetList@GenericObjectCreationNugget@@UBEXAAVAssetList@@PAX@Z
+// partial score=0.9885 date=2026-10-13
+// ?GetAssetList@GenericObjectCreationNugget@@UBEXAAVAssetList@@PAX@Z
 // partial score=0.9885 date=2026-10-12
 // ?GetAssetList@GenericObjectCreationNugget@@UBEXAAVAssetList@@PAX@Z
 // partial score=0.9885244652686512 date=2026-10-10
