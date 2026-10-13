@@ -1,4 +1,6 @@
 // ??0BfmeStrVM0@@QAE@XZ
+// partial score=1.0 date=2026-10-13
+// ??0BfmeStrVM0@@QAE@XZ
 // partial score=0.9919880250725045 date=2026-10-13
 // ??0BfmeStrVM0@@QAE@XZ
 // partial score=0.9919880250725045 date=2026-10-10
@@ -253,7 +255,7 @@ struct DisplayVideoConfig {
  __forceinline DisplayVideoConfig():pointer3c(0),pointer40(0),pointer44(0),flag48(false){}
 };
 struct DisplayTick50 {
- int tick50,word54,word58;bool flag5c,flag5d;char gap5e[2];int word60;bool flag64;char gap65[3];
+ int tick50,word54,word58;volatile bool flag5c,flag5d;char gap5e[2];int word60;bool flag64;char gap65[3];
  __forceinline DisplayTick50():tick50(GetTickCount()),flag5d(false){word54=0;word58=0;flag5c=false;word60=0;flag64=false;}
 };
 struct DisplayTextF0 {
