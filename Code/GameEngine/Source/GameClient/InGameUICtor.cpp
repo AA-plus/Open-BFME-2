@@ -128,6 +128,25 @@ extern GameWindow *m_replayWindow;
 // constructor (0x00239BB0) takes its nodes from a pool of their own.
 class Drawable;
 
+// Retail 239AF4 clears through 239380 and returns its sentinel to the
+// existing Drawable node freelist at DBA5E8; only this element type differs
+// from generic STLport deallocation. Whole29B and all owner relocations exact.
+class Rva00239380Holder { public: void rva00239380(); };
+extern void *g_freeList00239380;
+namespace _STL {
+template <> __declspec(noinline)
+_List_base<Drawable *, allocator<Drawable *> >::~_List_base()
+{
+    ((Rva00239380Holder *)this)->rva00239380();
+    _Node *head = _M_node._M_data;
+    if (head != 0) {
+        void *freeHead = g_freeList00239380;
+        head->_M_next = (_List_node_base *)freeHead;
+        g_freeList00239380 = head;
+    }
+}
+}
+
 typedef _STL::list<Drawable *> DrawableList;
 
 enum { MAX_PLAYER_COUNT = 20, MAX_MOVE_HINTS = 25, MAX_BUILD_PROGRESS = 64, MAX_UI_MESSAGES = 6 };
