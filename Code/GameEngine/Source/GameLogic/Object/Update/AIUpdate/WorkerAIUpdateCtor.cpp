@@ -638,7 +638,10 @@ public:
 	virtual Int canMakeUnit(Object *builder, const ThingTemplate *whatToBuild, Int quantity); // +0x60
 };
 
-extern Rva00A027B8 *g_00A027B8;
+// The named singleton is defined in Common/System/BuildAssistant.cpp.
+// Keep only this unit's witnessed virtual-call view at the use sites.
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 
 class TerrainLogic
 {
@@ -1230,7 +1233,7 @@ Object *WorkerAIUpdate::construct(const ThingTemplate *what, const Coord3D *pos,
 		if (dozerIsAI)
 		{
 			// validate the the position to build at is valid
-			if (g_00A027B8->isLocationLegalToBuild(pos, what, angle,
+			if (((Rva00A027B8 *)TheBuildAssistant)->isLocationLegalToBuild(pos, what, angle,
 					Rva00A027B8::CLEAR_PATH |
 					Rva00A027B8::NO_OBJECT_OVERLAP,
 					getObject(), 0) != LBC_OK)
@@ -1239,11 +1242,11 @@ Object *WorkerAIUpdate::construct(const ThingTemplate *what, const Coord3D *pos,
 		else
 		{
 			// make sure the player is capable of building this
-			if (g_00A027B8->canMakeUnit(getObject(), what, -1) != CANMAKE_OK)
+			if (((Rva00A027B8 *)TheBuildAssistant)->canMakeUnit(getObject(), what, -1) != CANMAKE_OK)
 				return 0;
 
 			// validate the the position to build at is valid
-			if (g_00A027B8->isLocationLegalToBuild(pos, what, angle,
+			if (((Rva00A027B8 *)TheBuildAssistant)->isLocationLegalToBuild(pos, what, angle,
 					Rva00A027B8::TERRAIN_RESTRICTIONS |
 					Rva00A027B8::CLEAR_PATH |
 					Rva00A027B8::NO_OBJECT_OVERLAP |
