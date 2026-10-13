@@ -1,4 +1,6 @@
 // ?rva002238E6@Rva00224CDC@@QAEXVAsciiString@@@Z
+// partial score=0.9671041776044401 date=2026-10-13
+// ?rva002238E6@Rva00224CDC@@QAEXVAsciiString@@@Z
 // partial score=0.9671041776044401 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 #include "ascii_string.h"
