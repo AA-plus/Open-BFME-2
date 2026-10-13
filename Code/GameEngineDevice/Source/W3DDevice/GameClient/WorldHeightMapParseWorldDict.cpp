@@ -18,7 +18,7 @@ class StaticNameKey
 {
 public:
 	NameKeyType key() const;
-private:
+	// public so the retail static initialiser below is plain data
 	mutable NameKeyType m_key;
 	const char *m_name;
 };
@@ -51,7 +51,7 @@ struct GlobalDataWeatherView
 };
 
 extern Dict g_Va00E00944;								// the world dict
-extern StaticNameKey TheKey_weather;					// VA 0x00DBDEB4
+StaticNameKey TheKey_weather = { NAMEKEY_INVALID, "weather" };	// VA 0x00DBDEB4, retail .data {0, "weather"}
 
 class WorldHeightMap
 {
