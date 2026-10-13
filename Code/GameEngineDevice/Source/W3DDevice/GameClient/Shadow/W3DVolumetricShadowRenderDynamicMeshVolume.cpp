@@ -210,7 +210,7 @@ class Vector4
 {
 public:
 	Vector4(void) {}
-	__forceinline Vector4(Real x, Real y, Real z, Real w) { X = x; Y = y; Z = z; W = w; }
+	__declspec(dllimport) __forceinline Vector4(Real x, Real y, Real z, Real w) { X = x; Y = y; Z = z; W = w; }
 	__forceinline Vector4(const Vector4 &v) { X = v.X; Y = v.Y; Z = v.Z; W = v.W; }
 	__forceinline Vector4 &operator=(const Vector4 &v) { X = v.X; Y = v.Y; Z = v.Z; W = v.W; return *this; }
 	Real &operator[](int i) { return (&X)[i]; }
