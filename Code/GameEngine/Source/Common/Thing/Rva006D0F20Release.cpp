@@ -7,11 +7,17 @@
 // it sized (block, 28) through the shared deallocator. Callee 0x006D0280
 // resolves via pin, freeBlock via row; the allocator global is a TU-local
 // extern (DIR32 auto-patches). No // cl: line (defaults match).
+void __cdecl Rva006D8680Free(void*,int);
 struct Rva006D0280
 {
 	~Rva006D0280();
+	__forceinline static void operator delete(void*p,unsigned int n){Rva006D8680Free(p,n);}
 
 	int m_useCount; // +0, dropped by release above
+	// Retail frees 0x1C-byte blocks (freeBlock(target, 0x1C) below); the rest
+	// of the layout is unobserved here. Pad to the full size so this TU's
+	// vector deleting dtor passes 28 like the linked copy.
+	char m_pad04[0x1C - 4];
 };
 
 class Rva006DB270
