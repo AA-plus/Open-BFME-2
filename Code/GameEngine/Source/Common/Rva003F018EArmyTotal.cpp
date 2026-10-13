@@ -1,5 +1,3 @@
-// ?rva003F018E@Rva003F012F@@QAEHPAURva003F018EPlayer@@@Z
-// partial score=0.9 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 // Rva003F012F::rva003F018E, retail 0x003F018E (115 B): for a living-world
@@ -8,6 +6,8 @@
 // and are not flagged (+0x34), each entry resolved through the rowed
 // 0x004E0625; 0 for any other player. Names are structural (the region
 // class keeps its ledger placeholder 0x003F012F).
+// Codegen: the army pointer is NOT kept in a local; each use reads the vector element
+// again (m_armies[i]) as retail does between its virtual calls.
 #include <vector>
 
 class Rva003F018EValue
@@ -60,10 +60,9 @@ int Rva003F012F::rva003F018E(Rva003F018EPlayer *player)
 	int total = 0;
 	for (unsigned int i = 0; i < m_armies.size(); ++i)
 	{
-		Rva003F018EArmy *army = m_armies[i];
-		if (army->isActive())
+		if ((m_armies[i])->isActive())
 		{
-			Rva003F018EValue *value = (Rva003F018EValue *)army->getEntry()->rva004E0625();
+			Rva003F018EValue *value = (Rva003F018EValue *)(m_armies[i])->getEntry()->rva004E0625();
 			if (value)
 				total += value->value();
 		}
