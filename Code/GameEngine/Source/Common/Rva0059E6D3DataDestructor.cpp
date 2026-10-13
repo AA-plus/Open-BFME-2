@@ -16,7 +16,13 @@ void Rva00030830FreeAllocation(void *);
 #include <vector>
 #undef free
 #include "ascii_string.h"
-
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<AsciiString>(AsciiString *); }
+namespace _STL { template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base(); }
+namespace _STL { template <> vector<AsciiString, allocator<AsciiString> >::~vector(); }
+namespace _STL { template <> void _STLP_alloc_proxy<AsciiString *, AsciiString, allocator<AsciiString> >::deallocate(AsciiString *, unsigned int); }
+namespace _STL { template <> void allocator<AsciiString>::deallocate(AsciiString *, unsigned int) const; }
+// bfme link decl-only end
 enum ObjectID { INVALID_ID = 0 };
 
 class FileClass;

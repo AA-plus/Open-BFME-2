@@ -14,7 +14,13 @@ typedef bool Bool;
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include "subsystem_interface.h"
-
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<AsciiString>(AsciiString *); }
+namespace _STL { template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base(); }
+namespace _STL { template <> vector<AsciiString, allocator<AsciiString> >::~vector(); }
+namespace _STL { template <> void _STLP_alloc_proxy<AsciiString *, AsciiString, allocator<AsciiString> >::deallocate(AsciiString *, unsigned int); }
+namespace _STL { template <> void allocator<AsciiString>::deallocate(AsciiString *, unsigned int) const; }
+// bfme link decl-only end
 extern "C" __declspec(dllimport) char *__cdecl strchr(const char *, int);
 extern "C" __declspec(dllimport) int __cdecl isspace(int);
 extern "C" __declspec(dllimport) char *__cdecl strncpy(char *, const char *, unsigned int);

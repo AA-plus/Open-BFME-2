@@ -10,6 +10,11 @@
 #define _CRTIMP
 #include <vector>
 #include "ascii_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base(); }
+namespace _STL { template <> void _STLP_alloc_proxy<AsciiString *, AsciiString, allocator<AsciiString> >::deallocate(AsciiString *, unsigned int); }
+namespace _STL { template <> void allocator<AsciiString>::deallocate(AsciiString *, unsigned int) const; }
+// bfme link decl-only end
 namespace _STL {
 template<> vector<AsciiString>::iterator vector<AsciiString>::erase(iterator,iterator);
 template<> void vector<AsciiString>::push_back(const AsciiString &);

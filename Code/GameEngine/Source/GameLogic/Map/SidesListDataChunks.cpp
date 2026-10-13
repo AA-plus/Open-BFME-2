@@ -36,6 +36,17 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 #undef free
 
 #include "ascii_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<AsciiString>(AsciiString *); }
+namespace _STL { template <> _Rb_tree_base<AsciiString, allocator<AsciiString> >::~_Rb_tree_base(); }
+namespace _STL { template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base(); }
+namespace _STL { template <> vector<AsciiString, allocator<AsciiString> >::~vector(); }
+namespace _STL { template <> _Rb_tree_node<AsciiString> * allocator<_Rb_tree_node<AsciiString> >::allocate(unsigned int, void const *) const; }
+namespace _STL { template <> void _STLP_alloc_proxy<_Rb_tree_node<AsciiString> *, _Rb_tree_node<AsciiString>, allocator<_Rb_tree_node<AsciiString> > >::deallocate(_Rb_tree_node<AsciiString> *, unsigned int); }
+namespace _STL { template <> void _STLP_alloc_proxy<AsciiString *, AsciiString, allocator<AsciiString> >::deallocate(AsciiString *, unsigned int); }
+namespace _STL { template <> void allocator<_Rb_tree_node<AsciiString> >::deallocate(_Rb_tree_node<AsciiString> *, unsigned int) const; }
+namespace _STL { template <> void allocator<AsciiString>::deallocate(AsciiString *, unsigned int) const; }
+// bfme link decl-only end
 
 enum NameKeyType { NAMEKEY_INVALID = 0 };
 

@@ -9,8 +9,17 @@
 #include <list>
 #include <vector>
 #include "ascii_string.h"
-
-
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<AsciiString>(AsciiString *); }
+namespace _STL { template <> _List_base<int, allocator<int> >::~_List_base(); }
+namespace _STL { template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base(); }
+namespace _STL { template <> vector<AsciiString, allocator<AsciiString> >::~vector(); }
+namespace _STL { template <> void _List_base<int, allocator<int> >::clear(); }
+namespace _STL { template <> void _STLP_alloc_proxy<_List_node<int> *, _List_node<int>, allocator<_List_node<int> > >::deallocate(_List_node<int> *, unsigned int); }
+namespace _STL { template <> void _STLP_alloc_proxy<AsciiString *, AsciiString, allocator<AsciiString> >::deallocate(AsciiString *, unsigned int); }
+namespace _STL { template <> void allocator<_List_node<int> >::deallocate(_List_node<int> *, unsigned int) const; }
+namespace _STL { template <> void allocator<AsciiString>::deallocate(AsciiString *, unsigned int) const; }
+// bfme link decl-only end
 class Rva0049B47CFold
 {
 public:

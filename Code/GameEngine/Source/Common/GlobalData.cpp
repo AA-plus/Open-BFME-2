@@ -14,6 +14,15 @@
 typedef bool Bool;
 // Canonical BFME2 subsystem layout: flag4 and name8,12B total.
 #include "subsystem_interface.h"
+// bfme link decl-only begin
+namespace _STL { template <> void _Destroy<AsciiString>(AsciiString *); }
+namespace _STL { template <> _Vector_base<AsciiString, allocator<AsciiString> >::~_Vector_base(); }
+namespace _STL { template <> void _STLP_alloc_proxy<AsciiString *, AsciiString, allocator<AsciiString> >::deallocate(AsciiString *, unsigned int); }
+namespace _STL { template <> void allocator<AsciiString>::deallocate(AsciiString *, unsigned int) const; }
+namespace _STL { template <> void _Destroy<AsciiString *>(AsciiString *, AsciiString *); }
+namespace _STL { template <> void __destroy<AsciiString *, AsciiString>(AsciiString *, AsciiString *, AsciiString *); }
+namespace _STL { template <> void __destroy_aux<AsciiString *>(AsciiString *, AsciiString *, __false_type const &); }
+// bfme link decl-only end
 namespace _STL { template<> vector<AsciiString>::~vector(); }
 class Rva00360D26Member { unsigned handle; public: Rva00360D26Member(); ~Rva00360D26Member(); };
 // MultiPlayMults() (0x002358A2), Rva00236285() (0x00236285) and
