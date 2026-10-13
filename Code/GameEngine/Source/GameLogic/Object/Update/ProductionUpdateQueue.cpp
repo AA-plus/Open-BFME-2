@@ -350,9 +350,11 @@ public:
 	char m_unknown00[0x14];
 };
 
+class Rva002A7461;
 class Player
 {
 public:
+ Rva002A7461 *revivalGate() { return reinterpret_cast<Rva002A7461 *>(reinterpret_cast<char *>(this)+0x60); }
 	Rva003B0D7C *getMoney() { return &m_money; }
 	Bool rva002AB87D(const UpgradeTemplate *upgrade) const; // hasUpgradeComplete
 	Bool rva002AA8EF(const UpgradeTemplate *upgrade) const; // hasUpgradeInProduction
@@ -478,6 +480,7 @@ public:
 	// type 1 or 3, the rowed out-of-line copy 0x00327C1B
 	Bool isUnit() const { return ((const ProductionEntry *)this)->getProductionObject(); }
 	ProductionType getProductionType() const { return m_type; }
+ Int getProductionID() const { return m_productionID; }
 	const ThingTemplate *getProductionObject() const { return m_objectToProduce; }
 	const UpgradeTemplate *getProductionUpgrade() const { return m_upgradeToResearch; }
 
@@ -630,9 +633,15 @@ struct DoorInfo
 	Bool m_holdOpen;
 };
 
+struct Rva002A7557In;
+class Rva002A7461 { public: bool rva002A7557(Rva002A7557In *,int); };
+class Rva0037E421 { public: void *rva0037E421(int); };
+struct ProductionRevivalCount { char m_pad[0x98]; int m_98; };
+
 class ProductionUpdate : public UpdateModule, public ProductionUpdateInterface, public DieModuleInterface
 {
 public:
+ void rva0049CF25();
 	virtual CanMakeType rva0049CFCD() const;
 	virtual CanMakeType canQueueUpgrade(const UpgradeTemplate *upgrade) const;
 	virtual ProductionID requestUniqueUnitID();
@@ -1262,3 +1271,23 @@ void ProductionUpdate::xfer( Xfer *xfer )
 		*xfer == m_bfme13C;
 
 }  // end xfer
+
+// Native49CF25..49CF9E primary-this revival counter. WB validates entry+98.
+// Retaining both equivalent call arms gives the native receiver-before-argument
+// schedule for the nextProduction virtual call; no behavior or ABI change.
+void ProductionUpdate::rva0049CF25()
+{
+ for (const Rva0049D1B1 *entry=m_productionQueue;entry;entry=(m_productionQueue ? nextProduction(entry) : nextProduction(entry))) {
+  if (entry->m_type!=PRODUCTION_HORDE_UNIT) continue;
+  Object *obj=getObject();
+  if (!obj) continue;
+  Player *player=obj->getControllingPlayer();
+  if (!player) continue;
+  if (player->revivalGate()->rva002A7557(reinterpret_cast<Rva002A7557In *>(const_cast<ThingTemplate *>(entry->getProductionObject())),1)) continue;
+  Rva0037EE4C *tracker=&player->m_revivalTracker;
+  if (!tracker) continue;
+  int index=tracker->rva0037EE4C(entry->getProductionObject(),entry->getProductionID(),0);
+  ProductionRevivalCount *item=reinterpret_cast<ProductionRevivalCount *>(reinterpret_cast<Rva0037E421 *>(tracker)->rva0037E421(index));
+  if (item) ++item->m_98;
+ }
+}
