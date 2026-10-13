@@ -9719,7 +9719,6 @@ name,address,notes
 ?hasRadar@Player@@QBE_NXZ,0x002AA08E,BFME1 Player::hasRadar matched 28B; our 35B shares the 3-flag head (+0xA8/+0xA4); call site in InGameUI::handleRadiusCursor (0x29A661) passes PlayerList+0x10 localPlayer as this and tests the bool result for radarOn
 ?hasSpecialPower@Object@@QBE_NW4SpecialPowerType@@@Z,0x0028D8EB,"same body as the rowed placeholder Rva0028D8EB::rva0028D8EB (bit test forward); matched evaluateSkirmishCommandButtonIsReady 0x003E73E7 calls it on the team member with the final special power type (+0x1C), BFME1/ZH donor pObj->hasSpecialPower"
 ?hasUpgradeComplete@Player@@QAE_NPBVUpgradeTemplate@@@Z,0x002AB87D,callee of ?isSatisfied@ProductionPrerequisite@@QBE_NPBVPlayer@@@Z at retail 0x004F4CE5 read from its REL32 displacement; ICF alias onto ?rva002AB87D@Player@@QBE_NPBVUpgradeTemplate@@@Z (matched)
-?headA@Rva00066A9AHost@@QAEXXZ,0x00077F80,pin for 0x66A9A head call
 ?headB@Rva00066A9ASub@@QAEXXZ,0x0007E89C,pin for 0x66A9A global call
 ?helper00109D64@Rva0010BA61@@AAEXXZ,0x00109D64,unrowed no-arg helper called by wrapper 0x0010BA61 read from its REL32
 ?helper001DA770@@YAXPAVINI@@HPAVAsciiString@@PBD@Z,0x001DA770,shared cdecl audio-block parser called by the five Default-name wrappers 0x001DA980..0x001DAAA8 read from their REL32

@@ -1,7 +1,7 @@
 // cl: /DNDEBUG /MD
 //
 // Dump range 1 (0x00066A9A 55B): head calls plus dual guarded tail.
-// Head calls the pinned 0x00077F80 on this, then the pinned 0x0007E89C
+// Head calls W3DShaderManager::init (0x00077F80), then the pinned 0x0007E89C
 // through the retail global at 0x00DE2000 when non-null. Tail reuses the
 // proven 0x680B3 pattern: +0x3850 call plus +0x3854 tail jmp into pinned
 // 0x000EA1F3/0x000E6FC8. Honest address-derived names.
@@ -16,11 +16,23 @@ public:
 	void tailB();
 };
 
+// GeneralsMD's W3DShaderManager (W3DShaderManager.h); retail 0x00077F80 is
+// its static init (the W3DDisplay::init callee pinned at 0x00046F3B), which
+// this host calls first.
+struct ShaderComResourceRef;
+class W3DShaderManager
+{
+public:
+	static void init(void);
+protected:
+	static ShaderComResourceRef *m_resource012F9D14;
+	static ShaderComResourceRef *m_resource012F9D18;
+};
+
 class Rva00066A9AHost
 {
 public:
 	void rva00066A9A();
-	void headA();
 
 	char m_pad[0x3850];
 	Rva00066A9ASub *m_3850; // +0x3850
@@ -29,7 +41,7 @@ public:
 
 void Rva00066A9AHost::rva00066A9A()
 {
-	headA();
+	W3DShaderManager::init();
 	Rva00066A9ASub *g = (Rva00066A9ASub *)W3DGCData00DE2000;
 	if (g)
 		g->headB();
@@ -42,7 +54,7 @@ void Rva00066A9AHost::rva00066A9A()
 // W3DShaderManager::init in GeneralsMD walks the master shader and filter
 // lists. Retail's 0x77F80 does the same, then creates the Glow declaration and
 // loads its vertex and pixel shaders. The two list roots and shader handles
-// below are target addresses; the caller-proven method name remains headA.
+// below are target addresses.
 class Rva00077F80Shader
 {
 public:
@@ -74,17 +86,8 @@ struct IDirect3DDevice8;
 class DX8Wrapper
 {
 protected:
-	friend void Rva00066A9AHost::headA();
+	friend void W3DShaderManager::init(void);
 	static IDirect3DDevice8 *D3DDevice;
-};
-
-struct ShaderComResourceRef;
-class W3DShaderManager
-{
-	friend void Rva00066A9AHost::headA();
-	protected:
-	static ShaderComResourceRef *m_resource012F9D14;
-	static ShaderComResourceRef *m_resource012F9D18;
 };
 
 struct Rva00077F80Device;
@@ -106,7 +109,7 @@ extern void __cdecl Rva000754DEInit();
 extern long __cdecl Rva00077C19Load(const char *path, unsigned *shader);
 extern long __cdecl Rva00077D0FLoad(const char *path, unsigned long *shader);
 
-void Rva00066A9AHost::headA()
+void W3DShaderManager::init(void)
 {
 	rva00075E42();
 	Rva000754DEInit();
