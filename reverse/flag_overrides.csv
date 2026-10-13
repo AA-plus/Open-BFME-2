@@ -261,6 +261,7 @@ Code/GameEngine/Source/Common/Rva0082C360Pop.cpp,-Od,1,1,region default loses ro
 Code/GameEngine/Source/Common/Rva0082C6E0VectorErase.cpp,-Od,1,1,region default loses rows
 Code/GameEngine/Source/Common/Rva0082C740Find.cpp,-Od,1,1,region default loses rows
 Code/GameEngine/Source/Common/Rva0082D9D0Add.cpp,-Od,1,1,region default loses rows
+Code/GameEngine/Source/Common/Rva0087EB30EffectParam.cpp,-O2,1,1,region default loses rows
 Code/GameEngine/Source/Common/Rva0087EBB0Max.cpp,-O2 -G6,1,1,region default loses rows
 Code/GameEngine/Source/Common/Rva0087F9C0Flag.cpp,-O2 -G6,1,1,region default loses rows
 Code/GameEngine/Source/Common/Rva0087FA50UpdateFlags.cpp,-O2 -G6,1,1,region default loses rows
