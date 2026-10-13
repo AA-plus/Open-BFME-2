@@ -33,7 +33,7 @@ class Rva002BA8F1Logic;
 class AudioManager; extern AudioManager *TheAudio;
 class GameState; extern GameState *TheGameState;
 struct Rva0023D607Holder; class LinearCampaignManager; extern LinearCampaignManager *TheLinearCampaignManager;
-class Rva002D3627Host; extern Rva002D3627Host *TheRva002D3627Host;
+class RadarWindowOverrideSource; extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 void *g_Va00E030D8 = 0;
 class TerrainLogic; extern TerrainLogic *TheTerrainLogic;
 class TeamFactory; extern TeamFactory *TheTeamFactory;
@@ -69,7 +69,7 @@ void GameState::init()
     addSnapshotBlock("CHUNK_Audio", (Snapshot *)(SnapshotSubsystemView *)TheAudio, (SnapshotType)0);
     addSnapshotBlock("CHUNK_GameState", (Snapshot *)(SnapshotSubsystemView *)TheGameState, (SnapshotType)0);
     addSnapshotBlock("CHUNK_Campaign", (Snapshot *)TheLinearCampaignManager, (SnapshotType)0);
-    addSnapshotBlock("CHUNK_Palantir", (Snapshot *)(SnapshotSubsystemView *)TheRva002D3627Host, (SnapshotType)0);
+    addSnapshotBlock("CHUNK_Palantir", (Snapshot *)(SnapshotSubsystemView *)theRadarWindowOverrideSource, (SnapshotType)0);
     addSnapshotBlock("CHUNK_GameStateMap", (Snapshot *)(SnapshotSubsystemView *)g_Va00E030D8, (SnapshotType)0);
     addSnapshotBlock("CHUNK_TerrainLogic", (Snapshot *)TheTerrainLogic, (SnapshotType)0);
     addSnapshotBlock("CHUNK_TeamFactory", (Snapshot *)(SnapshotSubsystemView *)TheTeamFactory, (SnapshotType)0);
@@ -110,7 +110,7 @@ void GameState::init()
     addSnapshotBlock("CHUNK_Audio", (Snapshot *)(SnapshotSubsystemView *)TheAudio, (SnapshotType)3);
     addSnapshotBlock("CHUNK_GameState", (Snapshot *)(SnapshotSubsystemView *)TheGameState, (SnapshotType)3);
     addSnapshotBlock("CHUNK_Campaign", (Snapshot *)TheLinearCampaignManager, (SnapshotType)3);
-    addSnapshotBlock("CHUNK_Palantir", (Snapshot *)(SnapshotSubsystemView *)TheRva002D3627Host, (SnapshotType)3);
+    addSnapshotBlock("CHUNK_Palantir", (Snapshot *)(SnapshotSubsystemView *)theRadarWindowOverrideSource, (SnapshotType)3);
     addSnapshotBlock("CHUNK_GameStateMap", (Snapshot *)(SnapshotSubsystemView *)g_Va00E030D8, (SnapshotType)3);
     addSnapshotBlock("CHUNK_GameLogic", (Snapshot *)(SnapshotSubsystemView *)TheGameLogic, (SnapshotType)3);
     addSnapshotBlock("CHUNK_LivingWorldLogic", (Snapshot *)(SnapshotSubsystemView *)(*(Rva002BA8F1Logic **)&TheLivingWorldLogic), (SnapshotType)4);

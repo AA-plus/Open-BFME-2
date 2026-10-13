@@ -89,11 +89,12 @@ public:
 	bool check();
 };
 
-extern Rva002D3627Host *TheRva002D3627Host;
+class RadarWindowOverrideSource;
+extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 
 void setHideScroll()
 {
-	(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->invoke(TheRva009C1A0COwner, "HideScroll", 1, TheRva002D3627Host->check() ? "0" : "1", 0, 0, 0, 0);
+	(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->invoke(TheRva009C1A0COwner, "HideScroll", 1, ((Rva002D3627Host *)theRadarWindowOverrideSource)->check() ? "0" : "1", 0, 0, 0, 0);
 }
 
 void hideSpellBook()
@@ -151,6 +152,6 @@ void hideButtonFlash(const Rva003FEE0FName &name)
 	(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->invoke(TheRva009C1A0COwner, "HideButtonFlash", 1, name.str(), 0, 0, 0, 0);
 }
 
-// ?TheRva002D3627Host@@3PAVRva002D3627Host@@A: matched references place it at VA 0xdff028; also referenced as ?theRadarWindowOverrideSource@@3PAVRadarWindowOverrideSource@@A.
-Rva002D3627Host * TheRva002D3627Host = 0;
-#pragma comment(linker, "/alternatename:?theRadarWindowOverrideSource@@3PAVRadarWindowOverrideSource@@A=?TheRva002D3627Host@@3PAVRva002D3627Host@@A")
+// Single provider for retail VA 0x00DFF028 (RVA 0x009FF028), using the
+// data ledger name. The check() call retains its proven local call view.
+RadarWindowOverrideSource *theRadarWindowOverrideSource = 0;

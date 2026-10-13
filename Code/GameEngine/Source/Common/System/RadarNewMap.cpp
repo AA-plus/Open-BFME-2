@@ -135,5 +135,3 @@ void Radar::newMap( void )
 		m_radarWindow = TheWindowManager->winGetWindowFromId( NULL, id );
 	}
 }
-// ?theRadarWindowOverrideSource@@3PAVRadarWindowOverrideSource@@A: the global at VA 0xdff028 is ?TheRva002D3627Host@@3PAVRva002D3627Host@@A.
-#pragma comment(linker, "/alternatename:?theRadarWindowOverrideSource@@3PAVRadarWindowOverrideSource@@A=?TheRva002D3627Host@@3PAVRva002D3627Host@@A")

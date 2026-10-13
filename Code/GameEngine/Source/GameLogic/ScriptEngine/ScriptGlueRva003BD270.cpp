@@ -21,7 +21,8 @@ public:
 	void rva002D36AE(int a, int b);
 };
 
-extern Rva002D36AEHost *g_00DFF028;
+class RadarWindowOverrideSource;
+extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 
 class ScriptActions
 {
@@ -31,7 +32,7 @@ protected:
 
 void ScriptActions::doHeroSelectButtonFlash(int a, int b)
 {
-	g_00DFF028->rva002D36AE(a, g_009BA4E8 * b);
+	((Rva002D36AEHost *)theRadarWindowOverrideSource)->rva002D36AE(a, g_009BA4E8 * b);
 }
 
 class GameLogic

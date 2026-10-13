@@ -5,7 +5,7 @@
 // shroud thunk void(bool); slot 0xDFE74C is TheShroudManager (PartitionManager*
 // view per W3DPropBuffer); caller 0x003CE614 in ScriptActions dispatch.
 
-extern class Rva002D3627Host *TheRva002D3627Host;
+extern class RadarWindowOverrideSource *theRadarWindowOverrideSource;
 
 class PartitionManager
 {
@@ -50,7 +50,7 @@ public:
 	void rva002D382E(int seconds);
 };
 
-#define TheRva002D382E (*(Rva002D382E **)&TheRva002D3627Host)
+#define TheRva002D382E ((Rva002D382E *)theRadarWindowOverrideSource)
 
 class ScriptActions
 {
@@ -76,7 +76,7 @@ public:
 	void rva002D383F(int seconds);
 };
 
-#define TheRva002D383F (*(Rva002D383F **)&TheRva002D3627Host)
+#define TheRva002D383F ((Rva002D383F *)theRadarWindowOverrideSource)
 
 void ScriptActions::doFlashPlanningModeButton(int value)
 {
@@ -93,5 +93,5 @@ class Rva002D381D {public:void rva002D381D(int seconds);};
 void ScriptActions::doFlashSpellStoreButton(int seconds)
 {
 	if (seconds >= 0)
-		((Rva002D381D *)TheRva002D3627Host)->rva002D381D(seconds);
+		((Rva002D381D *)theRadarWindowOverrideSource)->rva002D381D(seconds);
 }

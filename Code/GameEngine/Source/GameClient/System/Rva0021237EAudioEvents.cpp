@@ -116,9 +116,12 @@ class LivingWorldLogic; extern LivingWorldLogic *TheLivingWorldLogic;
 // the old Rva002D3627Host spelling named an unresolved symbol. The global keeps
 // its pointer type, the call binds the rowed member through a cast.
 class Rva002D3627Host;
-class Rva002BFF5A { public: void rva002C004F(const char *name); }; extern Rva002D3627Host *g_00DFEF18; extern Rva002D3627Host *TheRva002D3627Host;
+class Rva002BFF5A { public: void rva002C004F(const char *name); }; extern Rva002D3627Host *g_00DFEF18;
+class RadarWindowOverrideSource;
+extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 struct SingletonView21123 { char pad14[0x14];int mode; };
-struct RadarWindowOverrideSource {
+class RadarWindowOverrideSource {
+public:
  virtual void v00();virtual void v04();virtual void v08();virtual void v0C();virtual void v10();virtual void v14();virtual void v18();virtual void v1C();virtual void v20();virtual void v24();virtual void v28();
  bool rva002D35E6() const;
  void rva002D4240(bool);
@@ -145,9 +148,9 @@ void Rva0021237E::rva002123BE()
  if(view->tower2C4) view->tower2C4->updateState();
  for(UpdateMapView::iterator it=view->map218.begin();it!=view->map218.end();++it)
   ((UpdateSlot21123*)it->second)->v0C();
- if(!view->hidden2C0 && ((SingletonView21123*)g_00DFEF18)->mode==1 && ((RadarWindowOverrideSource*)TheRva002D3627Host)->rva002D35E6() && !((Rva002B5073*)TheLivingWorldLogic)->rva002B5073(8) && TheMouse)
+ if(!view->hidden2C0 && ((SingletonView21123*)g_00DFEF18)->mode==1 && theRadarWindowOverrideSource->rva002D35E6() && !((Rva002B5073*)TheLivingWorldLogic)->rva002B5073(8) && TheMouse)
   TheMouse->_bfme_setEngineVisibility(true);
- ((RadarWindowOverrideSource*)TheRva002D3627Host)->v28();
+ theRadarWindowOverrideSource->v28();
 }
 
 // Native 61246D..612653 (488B); WB B5FF00 confirms mission-start setup,
@@ -178,7 +181,6 @@ class Rva0053B8E5LeaField { public:void *get()const; };
 struct OpaqueRefElement4;
 class Rva0023DC8E {public:void rva0023DC8E(const AsciiString&);};
 class Rva0023DCCE {public:void rva0023DCCE(const AsciiString&,const OpaqueRefElement4&,const OpaqueRefElement4&);};
-class Rva002D3627Host; extern Rva002D3627Host *TheRva002D3627Host;
 class InGameUI {public:virtual void v00();virtual void v04();virtual void v08();virtual void v0C();virtual void v10();virtual void v14();virtual void v18();virtual void v1C();virtual void v20();virtual void v24();};extern InGameUI *TheInGameUI;
 class LivingWorldLogic; extern LivingWorldLogic *TheLivingWorldLogic;
 struct LogicMissionView {char pad[0xEC];int mission;};
@@ -200,7 +202,7 @@ void Rva0021237E::rva0021246D(Rva0021246DInput *input)
  TheGameLogic->rva0023CD9E(false,1,false);
  ((Rva0023DC8E*)TheGameLogic)->rva0023DC8E(*(const AsciiString*)((Rva0049CB86LeaField*)input)->get());
  ((Rva0023DCCE*)TheGameLogic)->rva0023DCCE(*(const AsciiString*)((Rva0053B8E5LeaField*)input)->get(),*(const OpaqueRefElement4*)((Rva003EFDD7LeaField*)input)->get(),*(const OpaqueRefElement4*)((Rva001D96ECLeaField*)input)->get());
- ((RadarWindowOverrideSource*)TheRva002D3627Host)->rva002D4240(true);
+ theRadarWindowOverrideSource->rva002D4240(true);
  TheInGameUI->v24();
  TheMouse->rva001EEA6D(UnicodeString::TheEmptyString,-1,0,1.0f);
  if(g_Rva00E02EEC && TheGameLogic->m_114==1) message->appendIntegerArgument(1);

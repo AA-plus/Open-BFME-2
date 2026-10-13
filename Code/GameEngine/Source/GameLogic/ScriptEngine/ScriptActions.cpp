@@ -1012,9 +1012,10 @@ class Palantir
 public:
 	void SetPlanningModeEnabled(unsigned char enabled);
 };
-extern Palantir *ThePalantir;
+class RadarWindowOverrideSource;
+extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 
 void ScriptActions::doEnablePlanningMode(unsigned char enable)
 {
-	ThePalantir->SetPlanningModeEnabled(enable);
+	((Palantir *)theRadarWindowOverrideSource)->SetPlanningModeEnabled(enable);
 }

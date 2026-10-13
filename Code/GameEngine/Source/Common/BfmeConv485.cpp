@@ -11,15 +11,12 @@ public:
 	void bfmeDoBLD(void *what, int flag);
 };
 
-extern BfmeSinkBLD *g_bfmeSinkBLD;
+class RadarWindowOverrideSource;
+extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 
 void __stdcall bfmeGoBLD(void *what)
 {
-	BfmeSinkBLD *sink = g_bfmeSinkBLD;
+	BfmeSinkBLD *sink = (BfmeSinkBLD *)theRadarWindowOverrideSource;
 	if (sink != 0)
 		sink->bfmeDoBLD(what, 0);
 }
-
-// The global(s) below are defined elsewhere under another name at the same
-// address (the census owner of that DIR32 target); bind this unit's spelling.
-#pragma comment(linker, "/alternatename:?g_bfmeSinkBLD@@3PAVBfmeSinkBLD@@A=?TheRva002D3627Host@@3PAVRva002D3627Host@@A")
