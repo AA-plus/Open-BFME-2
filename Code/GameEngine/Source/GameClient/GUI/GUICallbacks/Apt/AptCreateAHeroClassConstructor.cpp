@@ -74,7 +74,10 @@ extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 struct Rva005B3676Owner
 {
 	char m_pad00[0x21C];
-	char m_commands[0x228 - 0x21C];
+	union {
+		char m_commands[0x228 - 0x21C];
+		AptCommandMapAdder m_adder;
+	};
 	char m_externs[1];
 };
 class Rva005B566B
@@ -114,6 +117,9 @@ class Class : public Rva005B5420Base
 public:
 	Class(Rva005B3676Owner *owner);
 	virtual ~Class();
+	void rva005B59FD();
+	void rva005B5418(const char *);
+	void rva0047A69C(const char *);
 	void rva000D1407(const char *, void *, GameWindow *);
 	void ExternFunc(int, char *, bool);
 private:
