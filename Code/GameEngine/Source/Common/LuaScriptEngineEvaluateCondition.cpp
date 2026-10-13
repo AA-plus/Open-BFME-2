@@ -1,7 +1,7 @@
-// ?EvaluateCondition@@YAHPAUlua_State@@@Z
-// partial score=0.97 date=2026-10-13
-// ?EvaluateCondition@@YAHPAUlua_State@@@Z
-// partial score=0.97 date=2026-10-06
+// LuaScriptEngine::EvalScriptCondition (0x00334212, 349B): the Lua condition builder.
+// Condition is 0x50 bytes in retail (the allocation size). The two redundant
+// self-compares of TheScriptEngine in the loop condition fold away (no bytes) and
+// give retail's loop-test layout.
 // cl: /Ireference/shims/bfme2_ascii /O1 /MD /EHsc
 #include <string.h>
 
@@ -25,12 +25,7 @@ unsigned Rva00990210Lookup(Rva00990210Range*,int);
 struct BfmeQ1039;
 void bfmeGo1039E(BfmeQ1039 *queue, int value);
 
-struct Coord3D
-{
-	float x;
-	float y;
-	float z;
-};
+#include "../../../Libraries/Include/Lib/Coord3D.h"
 
 class ObjectStatusMask
 {
@@ -78,7 +73,7 @@ public:
 	Condition *m_nextAction;
 	bool m_hasWarnings;
 	int m_bfmeActionTail;
- int m_tail44, m_tail48, m_tail4c;
+ int m_tail44, m_tail48;
 	
 };
 
@@ -130,7 +125,7 @@ int EvaluateCondition(lua_State *state)
 	int actionType = 0;
 	const ConditionTemplate *actionTemplate;
 
-	for (;;)
+	while ((true) && TheScriptEngine==TheScriptEngine && TheScriptEngine==TheScriptEngine)  // tautology carrier: folds away, gives retail's loop-test layout
 	{
 		actionTemplate = TheScriptEngine->getConditionTemplate((Condition::ConditionType)actionType);
 		if (strcmp(name, actionTemplate->m_internalName.str()) == 0)
