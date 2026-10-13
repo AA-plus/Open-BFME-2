@@ -1,11 +1,13 @@
 // ?Rva00328DE4Add@@YAXPAXPAPAX@Z
+// partial score=0.85 date=2026-10-13
+// ?Rva00328DE4Add@@YAXPAXPAPAX@Z
 // partial score=0.85 date=2026-10-08
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /I.
 // WorldBuilder names parseWaterAreasChunkImpl in OldPolygonTrigger.cpp at
 // 0x00BE2810. Its call graph maps to retail 0x003295B4. Retail proves the
 // two area-set pointers at +0x20/+0x24 and the parsed holder's point vector
 // at +0x48. The helper and holder names remain opaque where WB supplies none.
-#include "../../../../Libraries/Include/Lib/Coord2D.h"
+#include "Code/Libraries/Include/Lib/Coord2D.h"
 #include "ascii_string.h"
 class DataChunkInput
 {
