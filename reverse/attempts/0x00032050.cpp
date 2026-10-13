@@ -1,5 +1,5 @@
 // ?rva00032050@GeneralAllocator@Allocator@EA@@QAEIPAXI@Z
-// partial score=0.8 date=2026-10-13
+// partial score=0.81 date=2026-10-13
 // ?rva00032050@GeneralAllocator@Allocator@EA@@QAEIPAXI@Z
 // partial score=0.55 date=2026-10-03
 // no // cl: line: base flags -O2 -GR- -EHsc-
@@ -50,9 +50,9 @@ unsigned int GeneralAllocator::rva00032050(void *block, unsigned int flags)
 	unsigned int size = *(unsigned int *)((char *)block + 4) & 0x7FFFFFF8;
 	int result = rva00031F90(block);
 	_ReadWriteBarrier();
-	result += (((unsigned char)size) & 7) != 0;
 	result += size < 0x10;
 	result += (((unsigned char)(unsigned int)block) & 7) != 0;
+	result += (((unsigned char)size) & 7) != 0;
 	result += size < 8;
 	result += size >= flags + 0x10;
 
