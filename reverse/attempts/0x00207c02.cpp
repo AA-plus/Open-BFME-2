@@ -1,4 +1,6 @@
 // ?newMap@ScriptEngine@@QAEXXZ
+// partial score=0.9817 date=2026-10-13
+// ?newMap@ScriptEngine@@QAEXXZ
 // partial score=0.98169166 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /Ireference/shims/bfme2_ascii
 // stlport
