@@ -1,4 +1,6 @@
 // ?Rva004DA57A@@YAXHPAURva004DA57ATarget@@_NPAHPAVRva004D97B0@@2@Z
+// partial score=0.9999 date=2026-10-13
+// ?Rva004DA57A@@YAXHPAURva004DA57ATarget@@_NPAHPAVRva004D97B0@@2@Z
 // partial score=0.99 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include/Lib
 // DRAFT (not landable as is): PickAndPlayUnitVoiceResponse.cpp statics.
