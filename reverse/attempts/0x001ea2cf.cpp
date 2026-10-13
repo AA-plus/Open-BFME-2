@@ -1,4 +1,6 @@
 // ?rva001EA2CF@Rva001EA2CFLocomotorDefinition@@QAEXPAVINI@@PAVThingTemplate@@@Z
+// partial score=0.8822966243913175 date=2026-10-13
+// ?rva001EA2CF@Rva001EA2CFLocomotorDefinition@@QAEXPAVINI@@PAVThingTemplate@@@Z
 // partial score=0.8625422133643359 date=2026-10-10
 // ?rva001EA2CF@Rva001EA2CFLocomotorDefinition@@QAEXPAVINI@@PAVThingTemplate@@@Z
 // Native1EA2CF..1EA3AE 223B RET8 proves INI and ThingTemplate arguments.
@@ -71,12 +73,13 @@ public: void rva001EA2CF(INI *ini, ThingTemplate *instance);
 private: char unknown00[0x18]; AsciiString name; AsciiString setName; float speed;
 };
 void Rva001EA2CFLocomotorDefinition::rva001EA2CF(INI *ini, ThingTemplate *instance) {
+ INI *parser=ini;
  AIUpdateModuleData *self=instance->friend_getAIModuleInfo();
  if (!self) throw INIException(3,"Attempted to specify a locomotor for object %s without an AIUpdate	block.",instance->getName().str());
- LocomotorSetType set=(LocomotorSetType)ini->scanIndexList(setName.str(),TheLocomotorSetNames);
+ LocomotorSetType &set=*(LocomotorSetType*)&ini; set=(LocomotorSetType)parser->scanIndexList(setName.str(),TheLocomotorSetNames);
  const LocomotorTemplate *loco=TheLocomotorStore->findLocomotorTemplate(name);
  if (!self->templates[set].empty()) {
-  if (ini->getLoadType()!=2 && ini->getLoadType()!=4)
+  if (parser->getLoadType()!=2 && parser->getLoadType()!=4)
    throw INIException(3,"re-specifying a LocomotorSet	is no longer allowed");
  }
  instance->rva0033E17D(set,loco);
