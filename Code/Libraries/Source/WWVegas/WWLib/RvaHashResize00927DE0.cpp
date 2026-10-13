@@ -17,6 +17,30 @@
 #define _STLP_NO_EXCEPTIONS 1
 #include <hash_map>
 #include <cstddef>
+// bfme link decl-only begin
+namespace _STL { template <> void __advance<unsigned int const *,int>(unsigned int const * &,int,_STL::random_access_iterator_tag const &); }
+namespace _STL { template <> unsigned int const * __lower_bound<unsigned int const *,unsigned int,_STL::less<unsigned int>,int>(unsigned int const *,unsigned int const *,unsigned int const &,_STL::less<unsigned int>,int *); }
+namespace _STL { template <> void * * __uninitialized_fill_n<void * *,unsigned int,void *>(void * *,unsigned int,void * const &,_STL::__true_type const &); }
+namespace _STL { template <> void advance<unsigned int const *,int>(unsigned int const * &,int); }
+namespace _STL { template <> void * * fill_n<void * *,unsigned int,void *>(void * *,unsigned int,void * const &); }
+namespace _STL { template <> void swap<_STL::_STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> > >(_STL::_STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> > &,_STL::_STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> > &); }
+namespace _STL { template <> void * * uninitialized_fill_n<void * *,unsigned int,void *>(void * *,unsigned int,void * const &); }
+namespace _STL { template <> _STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> >::_STLP_alloc_proxy(_STL::_STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> > const &); }
+namespace _STL { template <> _Vector_base<void *,_STL::allocator<void *> >::_Vector_base(unsigned int,_STL::allocator<void *> const &); }
+namespace _STL { template <> vector<void *,_STL::allocator<void *> >::vector(unsigned int,void * const &,_STL::allocator<void *> const &); }
+namespace _STL { template <> _STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> >::~_STLP_alloc_proxy(); }
+namespace _STL { template <> _Vector_base<void *,_STL::allocator<void *> >::~_Vector_base(); }
+namespace _STL { template <> allocator<void *>::~allocator(); }
+namespace _STL { template <> vector<void *,_STL::allocator<void *> >::~vector(); }
+namespace _STL { template <> void * * _STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> >::allocate(unsigned int); }
+namespace _STL { template <> void * __node_alloc<1,0>::allocate(unsigned int); }
+namespace _STL { template <> void * * allocator<void *>::allocate(unsigned int,void const *) const; }
+namespace _STL { template <> void _STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> >::deallocate(void * *,unsigned int); }
+namespace _STL { template <> void __node_alloc<1,0>::deallocate(void *,unsigned int); }
+namespace _STL { template <> void allocator<void *>::deallocate(void * *,unsigned int) const; }
+namespace _STL { template <> _STL::allocator<void *> vector<void *,_STL::allocator<void *> >::get_allocator() const; }
+namespace _STL { template <> void vector<void *,_STL::allocator<void *> >::swap(_STL::vector<void *,_STL::allocator<void *> > &); }
+// bfme link decl-only end
 // Suppress this TU's non-retail vector<void*> operator[] copy (family2-LK3 row 25):
 // the retail copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

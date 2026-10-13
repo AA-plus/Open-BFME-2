@@ -9,6 +9,15 @@
 // /O1 /MD) and next 0x004E3733 (stlport pod vector bodies) share no TU,
 // so new file beside them copying prev flags.
 #include <map>
+// bfme link decl-only begin
+namespace _STL { template <> _Rb_tree_base<_STL::pair<int const,void *>,_STL::allocator<_STL::pair<int const,void *> > >::_Rb_tree_base(_STL::allocator<_STL::pair<int const,void *> > const &); }
+namespace _STL { template <> _Rb_tree<int,_STL::pair<int const,void *>,_STL::_Select1st<_STL::pair<int const,void *> >,_STL::less<int>,_STL::allocator<_STL::pair<int const,void *> > >::~_Rb_tree(); }
+namespace _STL { template <> _Rb_tree_base<_STL::pair<int const,void *>,_STL::allocator<_STL::pair<int const,void *> > >::~_Rb_tree_base(); }
+namespace _STL { template <> void _Rb_tree<int,_STL::pair<int const,void *>,_STL::_Select1st<_STL::pair<int const,void *> >,_STL::less<int>,_STL::allocator<_STL::pair<int const,void *> > >::_M_erase(_STL::_Rb_tree_node<_STL::pair<int const,void *> > *); }
+namespace _STL { template <> _STL::_Rb_tree_node<_STL::pair<int const,void *> > * allocator<_STL::_Rb_tree_node<_STL::pair<int const,void *> > >::allocate(unsigned int,void const *) const; }
+namespace _STL { template <> void _STLP_alloc_proxy<_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,_STL::_Rb_tree_node<_STL::pair<int const,void *> >,_STL::allocator<_STL::_Rb_tree_node<_STL::pair<int const,void *> > > >::deallocate(_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,unsigned int); }
+namespace _STL { template <> void allocator<_STL::_Rb_tree_node<_STL::pair<int const,void *> > >::deallocate(_STL::_Rb_tree_node<_STL::pair<int const,void *> > *,unsigned int) const; }
+// bfme link decl-only end
 
 class Rva004E35A3
 {

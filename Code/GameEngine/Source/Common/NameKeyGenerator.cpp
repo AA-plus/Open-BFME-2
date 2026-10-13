@@ -92,6 +92,9 @@ NameKeyType NameKeyGenerator::nameToKey(const char* nameString)
 // ?freeSockets@NameKeyGenerator@@AAEXXZ 0x00148B42 66B donor ZH NameKeyGenerator.cpp freeSockets plus BFME aux KeyToBucketMap clear; callers 0x00148BFB 0x00148C6B; tail clear at this+0x2bf4c rowed as Armor hashtable clear via ICF fold
 #include "GameLogic/Armor.h"
 // bfme link decl-only begin
+namespace _STL { template <> void hashtable<_STL::pair<NameKeyType const,ArmorTemplate>,NameKeyType,rts::hash<NameKeyType>,_STL::_Select1st<_STL::pair<NameKeyType const,ArmorTemplate> >,rts::equal_to<NameKeyType>,_STL::allocator<_STL::pair<NameKeyType const,ArmorTemplate> > >::clear(); }
+// bfme link decl-only end
+// bfme link decl-only begin
 namespace _STL { template <> void hashtable<pair<NameKeyType const, ArmorTemplate>, NameKeyType, rts::hash<NameKeyType>, _Select1st<pair<NameKeyType const, ArmorTemplate> >, rts::equal_to<NameKeyType>, allocator<pair<NameKeyType const, ArmorTemplate> > >::_M_delete_node(_Hashtable_node<pair<NameKeyType const, ArmorTemplate> > *); }
 // bfme link decl-only end
 

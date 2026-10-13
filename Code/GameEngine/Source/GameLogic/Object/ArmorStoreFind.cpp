@@ -41,6 +41,9 @@ public:
 };
 
 #include "ascii_string.h"
+// bfme link decl-only begin
+namespace _STL { template <> void * const & vector<void *,_STL::allocator<void *> >::operator[](unsigned int) const; }
+// bfme link decl-only end
 
 class NameKeyGenerator
 {

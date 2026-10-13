@@ -87,6 +87,14 @@ private:
 	Rva002D0C71 m_thing;
 };
 
+// bfme link decl-only begin
+namespace _STL { template <> _STLP_alloc_proxy<void * *,void *,_STL::allocator<void *> >::~_STLP_alloc_proxy(); }
+namespace _STL { template <> _Vector_base<void *,_STL::allocator<void *> >::~_Vector_base(); }
+namespace _STL { template <> allocator<void *>::~allocator(); }
+namespace _STL { template <> hashtable<_STL::pair<NameKeyType const,ArmorTemplate>,NameKeyType,rts::hash<NameKeyType>,_STL::_Select1st<_STL::pair<NameKeyType const,ArmorTemplate> >,Rva002D0C71Twin::equal_to<NameKeyType>,_STL::allocator<_STL::pair<NameKeyType const,ArmorTemplate> > >::~hashtable(); }
+namespace _STL { template <> vector<void *,_STL::allocator<void *> >::~vector(); }
+namespace _STL { template <> void hashtable<_STL::pair<NameKeyType const,ArmorTemplate>,NameKeyType,rts::hash<NameKeyType>,_STL::_Select1st<_STL::pair<NameKeyType const,ArmorTemplate> >,Rva002D0C71Twin::equal_to<NameKeyType>,_STL::allocator<_STL::pair<NameKeyType const,ArmorTemplate> > >::clear(); }
+// bfme link decl-only end
 Rva002D0E14::Rva002D0E14()
 {
 	m_unk0C = 0;

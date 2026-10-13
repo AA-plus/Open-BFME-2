@@ -147,4 +147,6 @@ void Rva001F8922::rva001F8922()
 {
 	((Rva001F81EC *)this)->rva001F81EC();
 }
-
+// bfme link decl-only begin
+namespace _STL { template <> void _List_base<RvaSmartPtr12,_STL::allocator<RvaSmartPtr12> >::clear(); }
+// bfme link decl-only end

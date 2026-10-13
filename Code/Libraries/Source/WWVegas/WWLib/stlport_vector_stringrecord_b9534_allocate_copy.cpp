@@ -26,4 +26,7 @@ struct BfmeStringRecord000B9534 {
 #include <memory>
 template void _STL::_Construct<BfmeStringRecord000B9534,BfmeStringRecord000B9534>(BfmeStringRecord000B9534*,const BfmeStringRecord000B9534&);
 #include <vector>
+// bfme link decl-only begin
+namespace _STL { template <> BfmeStringRecord000B9534 * vector<BfmeStringRecord000B9534,_STL::allocator<BfmeStringRecord000B9534> >::erase(BfmeStringRecord000B9534 *,BfmeStringRecord000B9534 *); }
+// bfme link decl-only end
 template class _STL::vector<BfmeStringRecord000B9534, _STL::allocator<BfmeStringRecord000B9534> >;

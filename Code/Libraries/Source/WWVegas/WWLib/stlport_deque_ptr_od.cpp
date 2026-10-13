@@ -7,6 +7,15 @@
 // these containers different bodies survive the link from different units.
 #include <deque>
 // bfme link decl-only begin
+namespace _STL { template <> _Deque_base<void *,_STL::allocator<void *> >::~_Deque_base(); }
+namespace _STL { template <> deque<void *,_STL::allocator<void *> >::~deque(); }
+namespace _STL { template <> void _Deque_base<void *,_STL::allocator<void *> >::_M_destroy_nodes(void * * *,void * * *); }
+namespace _STL { template <> void deque<void *,_STL::allocator<void *> >::_M_pop_back_aux(); }
+namespace _STL { template <> void deque<void *,_STL::allocator<void *> >::_M_push_back_aux_v(void * const &); }
+namespace _STL { template <> void deque<void *,_STL::allocator<void *> >::_M_reserve_map_at_back(unsigned int); }
+namespace _STL { template <> void deque<void *,_STL::allocator<void *> >::push_back(void * const &); }
+// bfme link decl-only end
+// bfme link decl-only begin
 namespace _STL { template <> void _Construct<void *, void *>(void **, void *const &); }
 namespace _STL { template <> void _Deque_iterator_base<void *>::_M_advance(int); }
 namespace _STL { template <> void _Deque_iterator_base<void *>::_M_increment(); }
