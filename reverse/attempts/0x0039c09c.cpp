@@ -1,4 +1,6 @@
 // ?unhookAllScoredKillTrackers@ScoreKeeper@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?unhookAllScoredKillTrackers@ScoreKeeper@@QAEXXZ
 // partial score=0.7 date=2026-10-09
 // ?unhookAllScoredKillTrackers@ScoreKeeper@@QAEXXZ
 // partial score=0.93 date=2026-10-06
