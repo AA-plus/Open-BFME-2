@@ -42,3 +42,20 @@ void *__stdcall Rva00410997NewNode(const void *src)
 	_STL::_Construct(&node->m_val, *(const NewNodePair *)src);
 	return node;
 }
+
+class Rva000427195
+{
+public:
+	void *rva00410997(const void *src);
+};
+
+// ICF-folded twin of Rva00410997NewNode above (same 37 bytes at 0x00410997):
+// the member spelling ignores its receiver, so its stack frame matches the
+// stdcall spelling exactly, including the callee-cleaned return.
+void *Rva000427195::rva00410997(const void *src)
+{
+	HashNode *node = (HashNode *)_STL::allocator<char>::allocate(12, 0);
+	node->m_next = 0;
+	_STL::_Construct(&node->m_val, *(const NewNodePair *)src);
+	return node;
+}
