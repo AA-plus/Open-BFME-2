@@ -58,3 +58,7 @@ BfmeThingSJ::BfmeThingSJ(int what)
 	  m_bfme38(0)
 {
 }
+
+// Native765831: complete11B StringClass member+18 constructor cleanup.
+// Whole89B parent and complete EH graph bind the action to actual65F5B
+// destructor forwarding to pooled release; enclosing donor identity stays provisional.
