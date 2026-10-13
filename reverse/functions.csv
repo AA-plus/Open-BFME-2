@@ -87993,3 +87993,4 @@ _Rva001118ECResampleRgb555,,0x001118EC,281,Code/GameEngineDevice/Source/W3DDevic
 ?rva0059DFFB@Rva0059E242@@UAEXXZ,,0x0059DFFB,148,Code/GameEngine/Source/Common/Rva0059DFFBUpdate.cpp,matched,
 ?CheckChangeLayers@Pathfinder@@QAEXPAVPathfindCell@@PAVObject@@@Z,,0x002F4E54,462,Code/GameEngine/Source/GameLogic/Pathfinder/PathfinderCheckChangeLayers.cpp,matched,
 ?rva0055F000@Rva0055F218@@QAEXXZ,,0x0055F000,407,Code/GameEngine/Source/GameClient/FXParticleSystemRva0055F000.cpp,matched,
+?removeScaffolding@BridgeBehavior@@UAEXXZ,,0x0045733E,150,Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeBehaviorRemoveScaffolding.cpp,matched,
