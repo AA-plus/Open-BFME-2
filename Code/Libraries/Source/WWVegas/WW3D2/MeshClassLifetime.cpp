@@ -59,6 +59,7 @@ class MeshClass : public RenderObjClass
 public:
 	MeshClass(void);
 	MeshClass(const MeshClass &src);
+	MeshClass &operator = (const MeshClass &that);
 	virtual ~MeshClass(void);
 
 	virtual RenderObjClass *Clone(void) const;
@@ -119,6 +120,32 @@ MeshClass::MeshClass(const MeshClass &that) :
 	_bfme_unk_320(that._bfme_unk_320)
 {
 	REF_PTR_SET(Model, that.Model);
+}
+
+// Retail 0x001497A0 (263B, ret 4), right after the copy constructor: the
+// Zero Hour mesh.cpp assignment (base assignment, shared Model, vertex
+// offset, decal mesh dropped, light environment left alone) with BFME2's
+// clearing of DecalMesh by plain store and its copies of the remaining
+// members, including the ref-counted +0x304 pointer and the appended
+// +0x314..+0x320 fields.
+MeshClass &MeshClass::operator = (const MeshClass &that)
+{
+	if (this != &that) {
+		RenderObjClass::operator = (that);
+		REF_PTR_SET(Model, that.Model);
+		BaseVertexOffset = that.BaseVertexOffset;
+		DecalMesh = NULL;
+		IsDisabledByDebugger = that.IsDisabledByDebugger;
+		MeshDebugId = that.MeshDebugId;
+		REF_PTR_SET(NextVisibleSkin, that.NextVisibleSkin);
+		AlphaOverride = that.AlphaOverride;
+		MaterialPassAlphaOverride = that.MaterialPassAlphaOverride;
+		MaterialPassEmissiveOverride = that.MaterialPassEmissiveOverride;
+		RuntimeData = that.RuntimeData;
+		_bfme_unk_314 = that._bfme_unk_314;
+		_bfme_unk_320 = that._bfme_unk_320;
+	}
+	return *this;
 }
 
 MeshClass::~MeshClass(void)
