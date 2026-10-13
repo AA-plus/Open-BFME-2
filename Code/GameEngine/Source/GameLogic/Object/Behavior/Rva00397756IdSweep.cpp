@@ -14,12 +14,7 @@
 #define _STLP_NO_EXCEPTIONS 1
 #include <hash_map>
 
-enum ObjectID
-{
-	INVALID_ID = 0
-};
-
-class Object;
+#include "../../../Common/GameLogicObjectLookupView.h"
 
 struct IdRange
 {
@@ -29,25 +24,18 @@ struct IdRange
 
 typedef _STL::hash_map<ObjectID, Object *, _STL::hash<int>, _STL::equal_to<ObjectID> > ObjectPtrHash;
 
-// class-gate: allow GameLogic retail keeps TheGameLogic in a register only when the hash_map findObjectByID is an inline over the map at +0xB4 (SpawnBehavior walks use the same view)
-class GameLogic
+// The canonical GameLogic view declares findObjectByID (rowed 0x00049DC5); this
+// unit defines it inline over the map at +0xB4, as the SpawnBehavior walks do.
+inline Object *GameLogic::findObjectByID(ObjectID id)
 {
-public:
-	Object *findObjectByID(ObjectID id)
-	{
-		if (id == INVALID_ID)
-			return 0;
-		ObjectPtrHash::iterator it = m_objHash.find(id);
-		if (it == m_objHash.end())
-			return 0;
-		return (*it).second;
-	}
-	void rva0023D0C2(Object *obj, int arg);
-
-private:
-	char m_pad000[0xB4];
-	ObjectPtrHash m_objHash;
-};
+	if (id == INVALID_OBJECT_ID)
+		return 0;
+	ObjectPtrHash &map = *reinterpret_cast<ObjectPtrHash *>(reinterpret_cast<char *>(this) + 0xB4);
+	ObjectPtrHash::iterator it = map.find(id);
+	if (it == map.end())
+		return 0;
+	return (*it).second;
+}
 
 extern GameLogic *TheGameLogic;
 
