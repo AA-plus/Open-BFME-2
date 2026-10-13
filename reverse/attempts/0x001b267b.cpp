@@ -1,4 +1,6 @@
 // ?rva001B267B@BFME2Encoding2MotionChannel@@QAEXPAIIIPAVVector3@@1@Z
+// partial score=0.85 date=2026-10-13
+// ?rva001B267B@BFME2Encoding2MotionChannel@@QAEXPAIIIPAVVector3@@1@Z
 // partial score=0.8 date=2026-10-13
 // TU-formulation in 2599-TU context (2599 row landed); 293B frame-1c, role wall mapped
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /Oy-
@@ -77,8 +79,7 @@ void BFME2Encoding2MotionChannel::rva001B2599(unsigned int *state,unsigned int f
 void BFME2Encoding2MotionChannel::rva001B267B(unsigned int *state, unsigned int from, unsigned int frame, Vector3 *value0, Vector3 *value1)
 {
     Vector3 last;
-    float scale = Scale;
-    int count = Count;
+    float filter;
     if (from > frame) {
         from = 0;
         last = *(const Vector3 *)Initial;
@@ -87,7 +88,7 @@ void BFME2Encoding2MotionChannel::rva001B267B(unsigned int *state, unsigned int 
     unsigned char *packet = Data + (from >> 4) * 51;
     unsigned int fi0;
     while (from <= frame + 1) {
-        if (from >= (unsigned int)count) {
+        if (from >= (unsigned int)Count) {
             if (value0)
                 *value0 = last;
             *value1 = last;
@@ -96,8 +97,8 @@ void BFME2Encoding2MotionChannel::rva001B267B(unsigned int *state, unsigned int 
         fi0 = from & 0xF;
         from &= ~0xFu;
         for (int vi = 0; vi < 3; ++vi, packet += 17) {
-            float filter = filtertable[*(packet ? packet : packet)] * scale * 0.0625;
-            unsigned int fi = fi0;
+            filter = filtertable[*(packet ? packet : packet)] * Scale * 0.0625;
+            volatile unsigned int fi = fi0;
             for (; fi < 16; ++fi) {
                 unsigned int f = from + fi;
                 if (f == frame)
