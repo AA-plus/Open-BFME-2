@@ -1,4 +1,4 @@
-// Fourteen B2-native flag-word clearers on 10 .data flag words
+// Thirteen B2-native flag-word clearers on nine .data flag words
 // (0x00E04554-0x00E045FC):
 //
 //     mov eax,[<address>] / and al,<mask8> / mov [<address>],eax / ret
@@ -15,9 +15,6 @@ unsigned int g_Va00E04554;
 extern unsigned int g_Va00E0456C;
 // g_Va00E0456C: matched references place it at VA 0xe0456c (zero-filled .bss).
 unsigned int g_Va00E0456C;
-extern unsigned int g_Va00E04578;
-// g_Va00E04578: matched references place it at VA 0xe04578 (zero-filled .bss).
-unsigned int g_Va00E04578;
 extern unsigned int g_Va00E04584;
 // g_Va00E04584: matched references place it at VA 0xe04584 (zero-filled .bss).
 unsigned int g_Va00E04584;
@@ -55,10 +52,8 @@ unsigned int Rva007942E1ClearFlag(void)
 	return g_Va00E0456C &= 0xFFFFFFFDu;
 }
 
-unsigned int Rva0079431CClearFlag(void)
-{
-	return g_Va00E04578 &= 0xFFFFFFFEu;
-}
+// Native79431C belongs to ProjectileNugget::doEffectObject. Its parent
+// emits the guard cleanup and owns the only ProjectileStreamUpdate name guard.
 
 unsigned int Rva007943B0ClearFlag(void)
 {
