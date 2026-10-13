@@ -12,7 +12,10 @@
 // restore() member, reproduces that slot; a bare HFONT local, a volatile local
 // and declaration reordering do not. The struct name is ours; retail names are
 // not recovered.
+// Retail links the size-form CRT floorf/floor(float) copies: compile math.h for size.
+#pragma optimize("gsy", on)
 #include <math.h>
+#pragma optimize("", on)
 #include <string.h>
 #include "windows.h"
 
