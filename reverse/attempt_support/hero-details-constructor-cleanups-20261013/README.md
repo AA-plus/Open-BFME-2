@@ -30,6 +30,12 @@ No synthetic parent, assembly, new pin or callable alias is introduced.
 Existing neutral identities and partial layout evidence are preserved;
 this adds no original type or link-census claim.
 
+Normal shadow identity checking still reports the existing unowned listener
+constructor binding at 0x005E6DAA and divergent scalar-deleting wrappers for
+Rva0007DF07 and Rva005CC5E5. This ledger addition changes none of their
+source definitions or bindings and adds no baseline exemption. Complete
+cleanup/parent byte and exception-data matches do not resolve those debts.
+
 ```
 ./build.sh Code/GameEngine/Source/Common/Rva005E4F6DConstructor.cpp
 python3 reverse/attempt_support/hero-details-constructor-cleanups-20261013/verify.py
