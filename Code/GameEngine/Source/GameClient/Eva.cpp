@@ -135,7 +135,9 @@ struct EvaCoord
 // argument.
 struct Arg001DCDAF
 {
-	unsigned char m_data[0x20];
+	unsigned char m_data[0x0c];
+	UnsignedInt m_delayFrames;				// +0x0C, observed retail unsigned test
+	unsigned char m_pad10[0x20 - 0x10];
 	EvaEventID *m_eventIDsStart;			// +0x20, observed retail pointer read
 	EvaEventID *m_eventIDsFinish;			// +0x24, observed retail pointer read
 	unsigned char m_pad28[0x2c - 0x28];
@@ -187,6 +189,8 @@ public:
 class GameLogic
 {
 public:
+	Bool rva001DCD1C();					// 0x001DCD1C
+
 	unsigned char m_pad00[0x40];
 	UnsignedInt m_frame;				// +0x40, observed retail load
 };
@@ -202,6 +206,41 @@ class Rva001DD240
 public:
 	void rva001DD240(UnsignedInt *info);			// 0x001DD240
 };
+
+// The report internalReportEvaEvent takes (WB's report record; rowed under
+// the placeholder Rva001DD063, default constructor 0x001DD1D0): the event,
+// then two optional positions, each behind a presence flag.
+struct Rva001DD063
+{
+	Rva001DD063();						// 0x001DD1D0
+
+	EvaEventID m_eventID;					// +0x00
+	Bool m_hasPosition;					// +0x04
+	Bool m_hasSecondPosition;				// +0x05
+	unsigned char m_pad06[2];
+	Coord3D m_position;					// +0x08
+	Coord3D m_secondPosition;				// +0x14
+};
+
+// A delayed report keyed by the frame it is due (0x001DD2BF), held in Eva's
+// multiset.
+struct Rva001DD1B3
+{
+	// Body kept visible (and out of line) so the key temporary is known not to escape; the
+	// emitted copy matches the rowed ctor at 0x001DD2BF.
+	__declspec(noinline) Rva001DD1B3(const Int &frame, const Rva001DD063 &report) : m_frame(frame), m_report(report) {}
+
+	Int m_frame;						// +0x00
+	Rva001DD063 m_report;					// +0x04
+};
+
+// stlport
+#include <set>
+typedef _STL::_Rb_tree<Rva001DD1B3, Rva001DD1B3, _STL::_Identity<Rva001DD1B3>, _STL::less<Rva001DD1B3>, _STL::allocator<Rva001DD1B3> > EvaDelayedTree;
+namespace _STL {
+template<> EvaDelayedTree::iterator EvaDelayedTree::insert_equal(const Rva001DD1B3 &);
+}
+typedef char EvaDelayedSetWidth[(sizeof(_STL::multiset<Rva001DD1B3, _STL::less<Rva001DD1B3>, _STL::allocator<Rva001DD1B3> >)==12)?1:-1];
 
 // The report internalReportEvaEvent takes: the event, then two optional
 // positions, each behind a presence flag.
@@ -237,6 +276,7 @@ class Eva
 {
 public:
 	void rva001DF1A4();
+	Bool reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition);
 	Bool internalReportEvaEvent(const EvaEventReport *report);	// 0x001DD468
 	void countEvaEventAsPlayed(EvaEventID eventID);
 	Bool isEventBlockedByTimeout(EvaEventID eventID) const;
@@ -244,7 +284,8 @@ public:
 	Bool getLastReallyPlayedFrameForEvaEvent(EvaEventID eventID, UnsignedInt *frame) const;
 
 private:
-	unsigned char m_pad00[0x1c];
+	unsigned char m_pad00[0x10];
+	EvaDelayedTree m_delayedEvents;	// +0x10
 	EvaVectorView<Arg001DCDAF> m_allEventInfos;		// +0x1C (WB name)
 	unsigned char m_pad28[0x5c - 0x28];
 	EvaVectorView<Rva001DCDAF> m_eventStatus;		// +0x5C
@@ -255,6 +296,47 @@ private:
 	int m_78;
 	Bool m_7C;
 };
+
+// Eva::reportEvaEvent, retail 0x001DE2DA (247 bytes; WorldBuilder's Eva.cpp
+// names it): validates the event, records the optional positions in a report
+// and either queues it for a later frame (info delay > 0 and the logic is not
+// in the paused/replay state tested by 0x001DCD1C) or reports it now.
+Bool Eva::reportEvaEvent(EvaEventID eventID, const Coord3D *position, const Coord3D *secondPosition)
+{
+	if (eventID == EVA_INVALID)
+		return false;
+	if (eventID < 0 || (UnsignedInt)eventID >= m_eventStatus.size())
+		return false;
+	if (m_eventStatus.size() != m_allEventInfos.size())
+		return false;
+	Rva001DD063 report;
+	report.m_eventID = eventID;
+	if (position)
+	{
+		report.m_position = *position;
+		report.m_hasPosition = true;
+	}
+	else
+		report.m_hasPosition = false;
+	if (secondPosition)
+	{
+		report.m_secondPosition = *secondPosition;
+		report.m_hasSecondPosition = true;
+	}
+	else
+		report.m_hasSecondPosition = false;
+	const UnsignedInt &delay = m_allEventInfos[eventID].m_delayFrames;
+	if (delay > 0)
+	{
+		GameLogic *logic = TheGameLogic;
+		if (!logic->rva001DCD1C())
+		{
+			m_delayedEvents.insert_equal(Rva001DD1B3(logic->m_frame + delay, report));
+			return true;
+		}
+	}
+	return internalReportEvaEvent(reinterpret_cast<const EvaEventReport *>(&report));
+}
 
 // Eva::countEvaEventAsPlayed, retail 0x001DD4E3 (90 bytes).
 void Eva::countEvaEventAsPlayed(EvaEventID eventID)
