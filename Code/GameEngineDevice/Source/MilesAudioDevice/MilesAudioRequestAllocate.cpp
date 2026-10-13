@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG
 // Native 0x51107..0x51139; allocator called by MilesAudioManager request sites.
 // Target allocates 24B and calls the already rowed address-derived ctor A8684.
