@@ -1,4 +1,6 @@
 // ?rva00507D84@Made002CC5E1@@UAEXPAXPBUCoord3D@@@Z
+// partial score=0.975 date=2026-10-13
+// ?rva00507D84@Made002CC5E1@@UAEXPAXPBUCoord3D@@@Z
 // partial score=0.9 date=2026-10-12
 // ?rva00507D84@Made002CC5E1@@UAEXPAXPBUCoord3D@@@Z
 // partial score=0.9 date=2026-10-09
@@ -27,6 +29,8 @@ struct Coord3D
 {
 	Real x, y, z;
 	Real length() const;
+	void set(const Coord3D &a){x=a.x;y=a.y;z=a.z;}
+	void sub(const Coord3D &p){x-=p.x;y-=p.y;z-=p.z;}
 };
 
 class Vector3
@@ -194,6 +198,8 @@ private:
 	Bool m_flag1A0;
 };
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 void Made002CC5E1::rva00507D84(void *weapon, const Coord3D *position)
 {
 	Real radius = m_radius130;
@@ -215,14 +221,8 @@ void Made002CC5E1::rva00507D84(void *weapon, const Coord3D *position)
 	{
 		if (m_coneAngle138 < 3.14159265359f)
 		{
-			Coord3D toObj;
-			toObj.x = obj->m_position.x - position->x;
-			toObj.y = obj->m_position.y - position->y;
-			toObj.z = obj->m_position.z - position->z;
-			Coord3D delta;
-			delta.x = position->x - source->m_position.x;
-			delta.y = position->y - source->m_position.y;
-			delta.z = position->z - source->m_position.z;
+			Coord3D toObj; toObj.set(obj->m_position); toObj.sub(*position);
+			Coord3D delta; delta.set(*position); delta.sub(source->m_position);
 			Vector3 facing(delta.x, delta.y, delta.z);
 			if (delta.length() == 0.0f)
 				facing = Vector3(source->m_transform[0][0], source->m_transform[1][0], source->m_transform[2][0]);
@@ -243,6 +243,7 @@ void Made002CC5E1::rva00507D84(void *weapon, const Coord3D *position)
 		if (m_maxHeightAbove140 != -1.0f)
 		{
 			Real sourceZ = source->getPosition()->z;
+_ReadWriteBarrier();
 			if (obj->getPosition()->z - sourceZ > m_maxHeightAbove140)
 				continue;
 		}

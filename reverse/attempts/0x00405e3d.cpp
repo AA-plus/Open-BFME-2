@@ -1,4 +1,6 @@
 // ?createContent@OldSchoolHelpBoxContentSource@@UAE?AUTreeHintRef00217D4C@@XZ
+// partial score=0.93 date=2026-10-13
+// ?createContent@OldSchoolHelpBoxContentSource@@UAE?AUTreeHintRef00217D4C@@XZ
 // partial score=0.9 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/shims/bfme2_ascii
 // stlport
@@ -361,6 +363,8 @@ public:
 	CommandButton *m_commandButton; // +0x0C
 };
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 TreeHintRef00217D4C OldSchoolHelpBoxContentSource::createContent()
 {
 	UnicodeString title;
@@ -383,6 +387,7 @@ TreeHintRef00217D4C OldSchoolHelpBoxContentSource::createContent()
 		const ThingTemplate *thing = m_commandButton->rva0035B570();
 		ScienceType science = SCIENCE_INVALID;
 		const UpgradeTemplate *upgrade = m_commandButton->m_upgrade;
+_ReadWriteBarrier();
 
 		if (m_commandButton->m_sciences.size() > 1)
 		{

@@ -1,4 +1,6 @@
 // ?AddHordeMember@SlaughterHordeContain@@QAEXPAVObject@@@Z
+// partial score=0.94 date=2026-10-13
+// ?AddHordeMember@SlaughterHordeContain@@QAEXPAVObject@@@Z
 // partial score=0.9113924798525276 date=2026-10-10
 // ?AddHordeMember@SlaughterHordeContain@@QAEXPAVObject@@@Z
 // partial score=0.95 date=2026-10-10
@@ -67,7 +69,7 @@ class SlaughterHordeContain:public SlaughterAddSlots<32>{public:
 namespace _STL{template<>void _Base_bitset<32>::_M_do_or(const _Base_bitset<32>&);}
 __forceinline long fast_float2long_round(float f)
 {
- long i;
+ volatile long i;
  __asm {
   fld [f]
   fistp [i]

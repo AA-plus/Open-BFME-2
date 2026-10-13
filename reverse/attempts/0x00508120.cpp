@@ -1,4 +1,6 @@
 // ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
+// partial score=0.996 date=2026-10-13
+// ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
 // partial score=0.989 date=2026-10-12
 // ?rva00508120@Made002CC5E1@@QAE_NPAXPAVObject@@PAVDamageInfo@@_NPBUCoord3D@@@Z
 // partial score=0.989 date=2026-10-12
@@ -192,6 +194,8 @@ private:
 // distance +0x134..+0x130, the 0x0028F44C mutual bonus/scale block skipped by
 // the flag argument, the +0x19C filter that sets DamageInfo +0x24 and the
 // 32-bit player mask.
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 bool Made002CC5E1::rva00508120(void *weapon, Object *target, DamageInfo *info, bool flag, const Coord3D *position)
 {
  Rva00508120WeaponView *view = static_cast<Rva00508120WeaponView *>(weapon);
@@ -201,6 +205,7 @@ bool Made002CC5E1::rva00508120(void *weapon, Object *target, DamageInfo *info, b
  if (minDamage12C != -1.0f && position)
  {
   float distance = (float)sqrt(target->rva002615E3(position));
+_ReadWriteBarrier();
   float damage = damage128;
   info->amount20 = damage - (damage - minDamage12C) * ((clamp(minRadius134, distance, maxRadius130) - minRadius134) / (maxRadius130 - minRadius134));
  }
