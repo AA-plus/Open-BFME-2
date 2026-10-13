@@ -1041,32 +1041,32 @@ void AIPlayer::buildUpgrade(const AsciiString &upgrade)
 	if (curUpgrade == 0) {
 		AsciiString msg = "Upgrade ";
 		msg.concat(upgrade);
-		msg.concat(" does not exist.  Ignoring request.");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" does not exist.  Ignoring request.");
 		TheScriptEngine->AppendDebugMessage(msg, false);
 		return;
 	}
 	if (curUpgrade->getUpgradeType() == UPGRADE_TYPE_OBJECT) {
 		AsciiString msg = "Player build upgrade: Upgrade ";
 		msg.concat(upgrade);
-		msg.concat(" is an object, not a player upgrade.  Ignoring request.");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" is an object, not a player upgrade.  Ignoring request.");
 		TheScriptEngine->AppendDebugMessage(msg, false);
 		return;
 	}
 	// See if it is in progress.
 	if (m_player->rva002AA8EF(curUpgrade)) {
 		AsciiString msg = TheNameKeyGenerator->keyToName(m_player->getPlayerNameKey());
-		msg.concat(" already has upgrade ");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" already has upgrade ");
 		msg.concat(upgrade);
-		msg.concat(" queued.  Ignoring request.");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" queued.  Ignoring request.");
 		TheScriptEngine->AppendDebugMessage(msg, false);
 		return;
 	}
 	// See if it is in progress.
 	if (m_player->rva002AB87D(curUpgrade)) {
 		AsciiString msg = TheNameKeyGenerator->keyToName(m_player->getPlayerNameKey());
-		msg.concat(" already has upgrade ");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" already has upgrade ");
 		msg.concat(upgrade);
-		msg.concat(" completed.  Ignoring request.");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" completed.  Ignoring request.");
 		TheScriptEngine->AppendDebugMessage(msg, false);
 		return;
 	}
@@ -1074,9 +1074,9 @@ void AIPlayer::buildUpgrade(const AsciiString &upgrade)
 	// No money.
 	if (TheUpgradeCenter->rva0026F11A(m_player, curUpgrade, 0, false) == false) {
 		AsciiString msg = TheNameKeyGenerator->keyToName(m_player->getPlayerNameKey());
-		msg.concat(" lacks money to build upgrade ");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" lacks money to build upgrade ");
 		msg.concat(upgrade);
-		msg.concat(" at this time.  Ignoring request.");
+		reinterpret_cast<StringBase<char> *>(&msg)->concat(" at this time.  Ignoring request.");
 		TheScriptEngine->AppendDebugMessage(msg, false);
 		return;
 	}
@@ -1110,9 +1110,9 @@ void AIPlayer::buildUpgrade(const AsciiString &upgrade)
 		// Try to queue it.
 		if (pu->queueUpgrade(curUpgrade)) {
 			AsciiString msg = TheNameKeyGenerator->keyToName(m_player->getPlayerNameKey());
-			msg.concat(" queues ");
+			reinterpret_cast<StringBase<char> *>(&msg)->concat(" queues ");
 			msg.concat(curUpgrade->getUpgradeName());
-			msg.concat(" at ");
+			reinterpret_cast<StringBase<char> *>(&msg)->concat(" at ");
 			msg.concat(factory->getTemplate()->getName());
 			TheScriptEngine->AppendDebugMessage(msg, false);
 			return;
@@ -1120,8 +1120,8 @@ void AIPlayer::buildUpgrade(const AsciiString &upgrade)
 	}
 
 	AsciiString msg = TheNameKeyGenerator->keyToName(m_player->getPlayerNameKey());
-	msg.concat(" lacks factory to build upgrade ");
+	reinterpret_cast<StringBase<char> *>(&msg)->concat(" lacks factory to build upgrade ");
 	msg.concat(upgrade);
-	msg.concat(" at this time.  Ignoring request.");
+	reinterpret_cast<StringBase<char> *>(&msg)->concat(" at this time.  Ignoring request.");
 	TheScriptEngine->AppendDebugMessage(msg, false);
 }
