@@ -326,6 +326,11 @@ private:
 	Object *m_object;	// +0x08
 };
 
+// ?objectModuleAnchor@ObjectModule@@UAEXXZ present-unmatched
+void ObjectModule::objectModuleAnchor()
+{
+}
+
 class BehaviorModuleInterface
 {
 public:
