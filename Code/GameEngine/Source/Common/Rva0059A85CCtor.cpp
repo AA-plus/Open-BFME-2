@@ -7,7 +7,7 @@
 // ??0Rva0059A85C@@QAE@PAX@Z @0x0059A85C (123B)
 // Derived ctor calls base Rva00506B1B then vector BfmeE16 at +8 then sets
 // vtable g_00C70DE4 then set AsciiString at +0x18. Stores void arg to +0x14
-// then walks circular list at arg+0x32c calling rowed rva0059A71C on each
+// then walks circular list at arg+0x32c calling rowed registerTeamPrototype on each
 // node+8 value. Ret 4. Caller 0x004EC430. Evidence chain lane calls just
 // landed 0x0059A71C plus EH prolog plus vector_base set rows.
 #include <vector>
@@ -34,10 +34,10 @@ template <> Lk6AsciiSetTree::~_Rb_tree();
 template <> set<AsciiString, less<AsciiString>, allocator<AsciiString> >::set();
 }
 struct Arg;
-class Rva0059A71C
+class AITeamBuilder
 {
 public:
-	void rva0059A71C(Arg *arg);
+	void registerTeamPrototype(Arg *arg);
 };
 struct Node
 {
@@ -68,7 +68,7 @@ Rva0059A85C::Rva0059A85C(void *outer) : m_vec(), m_outer(outer), m_set()
 	if (cur == sent)
 		return;
 	do {
-		((Rva0059A71C *)this)->rva0059A71C(cur->m_val);
+		((AITeamBuilder *)this)->registerTeamPrototype(cur->m_val);
 		cur = cur->m_next;
 	} while (cur != ((OuterLayout *)m_outer)->m_head);
 }

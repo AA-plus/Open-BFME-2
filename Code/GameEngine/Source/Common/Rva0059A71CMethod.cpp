@@ -1,6 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /GX- /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS /DWIN32 /D_WINDOWS
 // stlport
-// ?rva0059A71C@Rva0059A71C@@QAEXPAUArg@@@Z @0x0059A71C (90B)
+// ?registerTeamPrototype@AITeamBuilder@@QAEXPAUArg@@@Z @0x0059A71C (90B)
 // Thiscall takes one pointer arg with AsciiString at +0x14. Loads chain
 // [this+0x14]->+0x2ec->+0x30 for other string or TheEmptyString then
 // arg+0x14 compare via rowed StringBase compare. If equal return. Else
@@ -43,16 +43,16 @@ struct Arg
 	char m_pad[0x14];
 	StringBase<char> m_name;
 };
-class Rva0059A71C
+class AITeamBuilder
 {
 public:
-	void rva0059A71C(Arg *arg);
+	void registerTeamPrototype(Arg *arg);
 private:
 	char m_pad0[8];
 	_STL::vector<const ModuleData *> m_vec;
 	Mid1 *m_obj;
 };
-void Rva0059A71C::rva0059A71C(Arg *arg)
+void AITeamBuilder::registerTeamPrototype(Arg *arg)
 {
 	Mid2 *mid = m_obj->m_mid;
 	Leaf *leaf = mid->m_leaf;

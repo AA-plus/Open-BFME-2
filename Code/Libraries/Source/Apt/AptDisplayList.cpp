@@ -149,7 +149,7 @@ void Rva006F6AC0::rva006F6AC0(int nDepth, void **ppPrev, void **ppItem)
 	*ppPrev = prev;
 }
 
-// ?rva006F6D30@Rva006F6D30@@QAEXPAX@Z, retail 0x006F6D30 (45 bytes).
+// ?DisplayListItem@AptDisplayListState@@QAEXPAX@Z, retail 0x006F6D30 (45 bytes).
 // GC-mark walk over the m_next chain (next at +0x54, same as BfmeQueryNode1279):
 // get/setGCMark(true)/virtual 0x34 triple per node. Takes one ignored dword
 // (ret 4) like the AptNativeHashMark precedent.
@@ -179,16 +179,16 @@ public:
 	void setGCMark(bool value);
 };
 
-class Rva006F6D30
+class AptDisplayListState
 {
 public:
-	void rva006F6D30(void *arg);
+	void DisplayListItem(void *arg);
 
 private:
 	BfmeQueryNode1279 *m_root;
 };
 
-void Rva006F6D30::rva006F6D30(void *arg)
+void AptDisplayListState::DisplayListItem(void *arg)
 {
 	(void)arg;
 	BfmeQueryNode1279 *node = m_root;

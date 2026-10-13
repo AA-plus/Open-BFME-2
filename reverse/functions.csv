@@ -42159,7 +42159,7 @@ _piRemoveXpingRva00862EF0,,0x006A3DE0,17,Code/GameEngine/Source/GameNetwork/Game
 ?Rva0073C350Raster@@YADHHHHVRva0073BAA0@@@Z,,0x0073C350,83,Code/GameEngine/Source/Common/RTS/Rva0073C350Raster.cpp,matched,rect raster via rowed 0x0073BAA0 caller 0x0073CCB4
 ?rva00180815@BfmeResetTextureRef@@QAEAAU1@ABUBfmeResetAnyRef@@@Z,,0x00180815,50,Code/Libraries/Source/WWVegas/WW3D2/Rva001805AEAssign.cpp,matched,twin of 0x001805AE with BOX not TRAP via rowed clear assign
 ?rva001F58D4@Rva001F58D4@@QAEXXZ,,0x001F58D4,79,Code/GameEngine/Source/Common/Rva001F58D4.cpp,matched,list drain via rowed rva001F4206 plus zeroing proven by callers
-?rva0059A71C@Rva0059A71C@@QAEXPAUArg@@@Z,,0x0059A71C,90,Code/GameEngine/Source/Common/Rva0059A71CMethod.cpp,matched,unlock lane compare find pushback EmptyString caller 0x0059A85C ret4 thiscall
+?registerTeamPrototype@AITeamBuilder@@QAEXPAUArg@@@Z,,0x0059A71C,90,Code/GameEngine/Source/Common/Rva0059A71CMethod.cpp,matched,unlock lane compare find pushback EmptyString caller 0x0059A85C ret4 thiscall
 ?rva0031AC39@Rva0031AC39@@QAEXXZ,,0x0031AC39,22,Code/GameEngine/Source/GameClient/GUI/ControlBar/Rva0031AC39Loop.cpp,matched,22B chain walk via rowed 0x0035B77D plus 0x18 next
 ?rva000E6135@Rva000E6135@@QAEXPBVRva0055A88BDwordField@@ABV?$StringBase@D@@M@Z,,0x000E6135,81,Code/GameEngine/Source/Common/Rva000E6135Method.cpp,matched,list-update via rowed get plus rva000E5EC1 float to 0x88
 ?rva000AE18D@BfmeGridWM@@QAEEHH@Z,,0x000AE18D,79,Code/GameEngine/Source/Common/BfmeGrokGrid.cpp,matched,grid bit test via walk TU barrier for CSE
@@ -43391,7 +43391,7 @@ _FreeGame,,0x00606EE0,101,Code/GameEngine/Source/GameNetwork/GameSpy/gstats/gsta
 ??$copy@PAVRva00403927@@PAV1@@_STL@@YAPAVRva00403927@@PAV1@00@Z,,0x00403BD2,29,Code/Libraries/Source/WWVegas/WWLib/Rva00403927CopyWrapper.cpp,matched,chain via rowed __copy 0x004039E0 tag plus NULL
 ?rva0005168C@MilesAudioManager@@QAEXEE@Z,,0x0005168C,99,Code/GameEngineDevice/Source/MilesAudioDevice/MilesAudioManagerRva0005168C.cpp,matched,guarded flag gated byte stores
 ?rva006F6AC0@Rva006F6AC0@@QAEXHPAPAX0@Z,,0x006F6AC0,188,Code/Libraries/Source/Apt/AptDisplayList.cpp,matched,AptDisplayList depth lookup ppPrev ppItem nDepth
-?rva006F6D30@Rva006F6D30@@QAEXPAX@Z,,0x006F6D30,45,Code/Libraries/Source/Apt/AptDisplayList.cpp,matched,GC mark walk next 0x54 triple get setGCMark slot34
+?DisplayListItem@AptDisplayListState@@QAEXPAX@Z,,0x006F6D30,45,Code/Libraries/Source/Apt/AptDisplayList.cpp,matched,GC mark walk next 0x54 triple get setGCMark slot34
 ?updateVotes@DisconnectMenu@@QAEXHH@Z,,0x0051318E,140,Code/GameEngine/Source/Common/Rva0051318EVotes.cpp,matched,DisconnectMenu::updateVotes: votes update via Apt format and bfmeSetText; callers load TheDisconnectMenu 0x00E048D0 into ecx (ZH donor updateVotes slot votes); was Rva0051318ESet
 ??$_Construct@VRva004E32F2@@V1@@_STL@@YAXPAVRva004E32F2@@ABV1@@Z,,0x0052D4A2,45,Code/Libraries/Source/WWVegas/WWLib/stlport_construct_rva004e32f2.cpp,matched,chain calls 0x0052D477 same 45B EH shape as rowed Construct
 ??$__uninitialized_copy@PAVRva004E32F2@@PAV1@@_STL@@YAPAVRva004E32F2@@PAV1@00ABU__false_type@0@@Z,,0x0052D4CF,38,Code/Libraries/Source/WWVegas/WWLib/Rva004E32F2UninitCopy.cpp,matched,chain calls 0x0052D4A2 stride 0x18 same 38B shape
@@ -61389,7 +61389,7 @@ _FilterBlockBil_8_mmx,,0x001D7200,204,Code/Libraries/Source/VP6/FilterBlockBil8M
 ?Run@Rva005B5C02Box@@QAEXXZ,,0x005B5C02,110,Code/GameEngine/Source/Common/Rva005B5C02Box.cpp,matched,list-entry apply with rowed getters and pinned use plus add
 ?Run@Rva005B5C70Box@@QAEXH@Z,,0x005B5C70,132,Code/GameEngine/Source/Common/Rva005B5C70Box.cpp,matched,flagged entry apply with rowed getters and pinned consumer plus UI fire
 ?Run@Rva005B692FBox@@QAEXXZ,,0x005B692F,56,Code/GameEngine/Source/Common/Rva005B692FBox.cpp,matched,conditional sub-object poke with pinned helper and manager plus setter
-??0Rva005BA1FDBox@@QAE@H@Z,,0x005BA1FD,55,Code/GameEngine/Source/Common/Rva005BA1FDCtor.cpp,matched,composing constructor with pinned base and three tables plus global publish
+??0AptOnlineOpenPlay@@QAE@H@Z,,0x005BA1FD,55,Code/GameEngine/Source/Common/Rva005BA1FDCtor.cpp,matched,composing constructor with pinned base and three tables plus global publish
 ?Run@Rva005BC474Box@@QAEXXZ,,0x005BC474,33,Code/GameEngine/Source/Common/Rva005BC474Box.cpp,matched,two-flag clearer with pinned callees
 ?Run@Rva005C38EFBox@@QAEXXZ,,0x005C38EF,59,Code/GameEngine/Source/Common/Rva005C38EFBox.cpp,matched,guarded triple dispatch with pinned finder checker and exec
 ?Run@Rva005B7DC3Box@@QAEXXZ,,0x005B7DC3,54,Code/GameEngine/Source/Common/Rva005B7DC3Box.cpp,matched,allocate-transform-consume with pinned alloc and consumer
@@ -62335,7 +62335,7 @@ _peerIsConnected,,0x006987C0,8,Code/GameEngine/Source/GameNetwork/GameSpy/peer/p
 ?rva00464923@Rva00464923@@QAEAAVWeaponTemplateSetHead@@ABI@Z,,0x00464923,97,Code/GameEngine/Source/Common/Thing/WeaponTemplateSetHeadMapLookupRva00464923.cpp,matched,unsigned-key lookup-or-create for 0x4C WeaponTemplateSetHead; target call sites identify lower_bound pair construction and hinted insertion; owner name unproven
 ?rva004B15E6@Rva004B15E6@@QAEXXZ,,0x004B15E6,77,Code/GameEngine/Source/Common/Rva004B15E6Clear.cpp,matched,clear the slot at +0x7C then destroy the vector at +0x70
 ?rva0014D9F3@Rva0014D9F3This@@QAEXPAVRva0014D9F3Outer@@PAX@Z,,0x0014D9F3,159,Code/GameEngine/Source/Common/Rva0014D9F3Init.cpp,matched,
-?rva001F4A90@Rva001F4A90Host@@QAEXPBDHH@Z,,0x001F4A90,113,Code/Libraries/Source/WWVegas/WWLib/Rva001F4A90Select.cpp,matched,Draw Physics Update dispatch via rowed 0x1530E9 plus import strcmp; lea selects embedded members; slot1 with ext-a2-a3
+?ResolveBindings@ParticleFXShaderParameterSourceNamespace@@QAEXPBDHH@Z,,0x001F4A90,113,Code/Libraries/Source/WWVegas/WWLib/Rva001F4A90Select.cpp,matched,Draw Physics Update dispatch via rowed 0x1530E9 plus import strcmp; lea selects embedded members; slot1 with ext-a2-a3
 ?rva0020EEF4@Rva0020EEF4Outer@@QAEHH@Z,,0x0020EEF4,74,Code/Libraries/Source/WWVegas/WWLib/Rva0020EEF4Search.cpp,matched,Predicate search via inner plus8 vector calling pinned 0x3F08D7; int preserves eax; reload count idiom
 ?rva0020EB4E@Rva0020EB4EOuter@@QAEXPAX@Z,,0x0020EB4E,82,Code/Libraries/Source/WWVegas/WWLib/Rva0020EB4ESearch.cpp,matched,Gated vector search via bounds calling rowed 0x3F7954 then pinned 0x3F2150 on match
 ?SetRegionReinforcements@LivingWorldRegionManager@@QAEXHHHHHHH@Z,,0x0020EEC8,44,Code/Libraries/Source/WWVegas/WWLib/Rva0020EEC8Lookup.cpp,matched,Index lookup via rowed 0xEAF6 then pinned 0x3F1AB9 6-arg forward; wb-lead 1.0/align: WB LivingWorldRegionManager::SetRegionReinforcements (LivingWorldRegionManager.cpp:2139 assert) shares 2 callees with retail in the same order (Rva0020EAF6View::rva0020EAF6 / Rva003F1AB9Owner::rva003F1AB9); both pop 0x1c; wb-name-unverified

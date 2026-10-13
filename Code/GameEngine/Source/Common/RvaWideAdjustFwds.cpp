@@ -12,7 +12,7 @@
 // void(Object*,int) pin), 0x0028BC4D (+0x330 -> rowed rva002C7474, no pin;
 // row keeps the peer Object pin), 0x002E2F39 (+0x1A8 -> 0x002E2D10, opaque
 // pin), 0x004EC072 (+0x90 -> 0x0059A71C, opaque thiscall-view alias pin;
-// same body as the rowed Rva0059A71C::rva).
+// same body as the rowed AITeamBuilder::rva).
 // Wrapper arities follow the peer pins where present, else the callee body
 // evidence (all five 0x40Dxxx callees read one stack arg; 0x40D3FF and the
 // pins show the rest). New names are address-derived.

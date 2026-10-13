@@ -3,7 +3,7 @@
 // ?ResolveBindings@Rva001F4A90Host_Draw@@UAEXPBD0PAVFXShaderParameterBinder@@@Z
 // @0x001F69B1 328B: vtable slot 1 of the "Draw" sub-binder (vtable 0x00BE16E8,
 // slot 0 0x001F45C3) that the rowed particle binder select 0x001F4A90 reaches
-// at Rva001F4A90Host+4. Defers to the rowed default binder 0x00153664, then
+// at ParticleFXShaderParameterSourceNamespace+4. Defers to the rowed default binder 0x00153664, then
 // splits the name through the rowed Rva001530E9Parse 0x001530E9 and binds nine
 // callbacks through the rowed FXShaderParameterBinder::AddBinding, the
 // WaterDraw member dispatcher's pattern (Rva0007EBFBWaterDraw.cpp). The arm

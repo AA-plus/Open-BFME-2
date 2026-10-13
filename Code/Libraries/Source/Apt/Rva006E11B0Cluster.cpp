@@ -60,10 +60,10 @@ public:
     void rva0070B220(void *value);
 };
 
-class Rva006F6D30
+class AptDisplayListState
 {
 public:
-    void rva006F6D30(void *value);
+    void DisplayListItem(void *value);
 };
 
 class AptCIH
@@ -108,7 +108,7 @@ void AptCIH::rva006E11B0()
                 if (g_bfmeAptBreakOnAssertAtDDC01C)
                     __debugbreak();
             }
-            ((Rva006F6D30 *)pDisp)->rva006F6D30(this);
+            ((AptDisplayListState *)pDisp)->DisplayListItem(this);
         }
     }
 }

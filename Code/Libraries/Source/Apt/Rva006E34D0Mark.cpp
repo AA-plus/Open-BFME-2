@@ -7,7 +7,7 @@
 // stride table at +0x34 whose +0x14 stack is an AptValuePtrStack drained via
 // At() (assert m_nElements-nPos>0 at _AptValuePtrStack.h:0x89).
 // Evidence: leaf lane, caller 0x006CD330, pin Rva006E34D0, callees rowed
-// get 0x006DBB40 setGCMark 0x006DBC50 slot-0x34 rva006E39A0 rva006F6D30,
+// get 0x006DBB40 setGCMark 0x006DBC50 slot-0x34 rva006E39A0 DisplayListItem,
 // layout read from retail offsets.
 extern void (__cdecl *g_bfmeAptAssertAtE17734)(const char *, const char *, int);
 extern int g_bfmeAptBreakOnAssertAtDDC01C;
@@ -41,10 +41,10 @@ public:
     void setGCMark(bool value);
 };
 
-class Rva006F6D30
+class AptDisplayListState
 {
 public:
-    void rva006F6D30(void *arg);
+    void DisplayListItem(void *arg);
 };
 
 class AptActionQueueC
@@ -105,7 +105,7 @@ private:
     char _pad28[2];
     unsigned short m_nCount2C;
     AptValue **m_pArray2C;
-    Rva006F6D30 *m_pDisp;
+    AptDisplayListState *m_pDisp;
     Entry20 *m_pArray34;
     char _pad38[0x6c - 0x38];
     AptValue *m_pValue6C;
@@ -187,7 +187,7 @@ void Rva006E34D0::rva006E47C0()
         }
     }
     if (m_pDisp != 0) {
-        m_pDisp->rva006F6D30(0);
+        m_pDisp->DisplayListItem(0);
     }
     m_pActionPool->rva006E39A0();
     for (int i = 0; i < m_nCountA8; ++i) {

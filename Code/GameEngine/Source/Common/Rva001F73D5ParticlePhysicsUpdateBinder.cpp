@@ -5,7 +5,7 @@
 // ?ResolveBindings@Rva001F4A90Host_Update@@UAEXPBD0PAVFXShaderParameterBinder@@@Z
 // @0x001F7740 328B: vtable slot 1 of the "Physics" (vtable 0x00BE16F0) and
 // "Update" (vtable 0x00BE16F8) sub-binders that the rowed particle binder
-// select 0x001F4A90 reaches at Rva001F4A90Host+8 and +0xC; the "Draw"
+// select 0x001F4A90 reaches at ParticleFXShaderParameterSourceNamespace+8 and +0xC; the "Draw"
 // sibling 0x001F69B1 lives in Rva001F69B1ParticleDrawBinder.cpp. Both defer
 // to the rowed default binder 0x00153664, split the name through the rowed
 // Rva001530E9Parse 0x001530E9 and bind callbacks through the rowed
@@ -35,7 +35,7 @@
 //
 // ??1Rva001F4B01@@UAE@XZ @0x001F4B01 70B: destructor of the "Particle" binder
 // that owns the three sub-binders (vtable 0x00BE171C = { ??_G 0x001F4B47
-// (rowed), select 0x001F4A90 (rowed as Rva001F4A90Host) }). Like the
+// (rowed), select 0x001F4A90 (rowed as ParticleFXShaderParameterSourceNamespace) }). Like the
 // WaterDraw dtor 0x0007EC44 it erases its registration (0x001532E1,
 // "Particle") and leaves all four vptrs at the base vtable 0x00BC6F24; the
 // sub-binders declare no dtor.
