@@ -1,19 +1,17 @@
-// ??0Rva001DA19EBase@@QAE@XZ
-// partial score=1.0 date=2026-10-13
-// ??0Rva001DA19EBase@@QAE@XZ
-// partial score=0.85 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-// ??0Rva001DA19EBase@@QAE@XZ, retail 0x001DA19E..0x001DA2D5 (311 bytes, no EH
-// frame, ret 0): the default constructor of the 0xC4-byte base the rowed
-// Rva00433390 constructor (and 0x0005AD2A) builds first (pinned under this
-// address name). It installs table 0x00BDA270 and initializes, in offset
-// order: three cleared words, a 100.0f limit and seven cleared floats, 1.0f,
-// two cleared words, 25, -1, 2, two cleared words, four zero-initialized
-// vectors each followed by a cleared count word (+0x50..+0x8C), a float block
-// (0, 100, 1000, 1, 1, 0, 1, 1), 2, -1 and a last vector at +0xB8. Retail
-// builds this unit without exception handling (no frame for the vector
-// members). Field meanings are not established.
+// ??0Rva001DA2D5@@QAE@XZ, retail 0x001DA19E..0x001DA2D5 (311 bytes, no EH
+// frame, ret 0): the default constructor of the 0xC4-byte class whose dtor
+// 0x001DA2D5 is rowed in Rva001DA2D5Finish.cpp and whose copying ctor
+// 0x004335BC is rowed under the same class name; the rowed Rva00433390
+// constructor (and 0x0005AD2A) builds this base first. It installs table
+// 0x00BDA270 and initializes, in offset order: three cleared words, a 100.0f
+// limit and seven cleared floats, 1.0f, two cleared words, 25, -1, 2, two
+// cleared words, four zero-initialized vectors each followed by a cleared
+// count word (+0x50..+0x8C), a float block (0, 100, 1000, 1, 1, 0, 1, 1),
+// 2, -1 and a last vector at +0xB8. Retail builds this unit without exception
+// handling (no frame for the vector members). Field meanings are not
+// established.
 #include <vector>
 #include "ascii_string.h"
 
@@ -23,18 +21,20 @@ struct AudioInfoDelay { int lo, hi; AudioInfoDelay() : lo(0), hi(0) {} };
 struct RvaPair001D9F62 { AsciiString m_key; int m_value; ~RvaPair001D9F62(); };
 class BfmeStringTailRecord156 { public: char m_data[8]; ~BfmeStringTailRecord156(); };
 struct BfmeE8 { int a,b; };
-class Rva001DA19EBase : public AudioInfoRefCountBase
+class Rva001DA2D5 : public AudioInfoRefCountBase
 {
 public:
-	Rva001DA19EBase();
-	virtual ~Rva001DA19EBase();
+	Rva001DA2D5();
+	virtual ~Rva001DA2D5();
 	virtual const AsciiString& getAudioName() const;
 
 private:
 	AsciiString m_08;
 	AsciiString m_0C;
 	float m_10;
-	float m_14, m_18, m_1C; AudioInfoRange m_20; AudioInfoRange m_28;
+	float m_14, m_18, m_1C;
+	AudioInfoRange m_20;
+	AudioInfoRange m_28;
 	float m_30;
 	AudioInfoDelay m_34;
 	int m_3C;
@@ -56,7 +56,7 @@ private:
 	_STL::vector<BfmeE8> m_B8;
 };
 
-Rva001DA19EBase::Rva001DA19EBase()
+Rva001DA2D5::Rva001DA2D5()
 	: AudioInfoRefCountBase(), m_08(), m_0C(),
 	  m_10(100.0f),
 	  m_14(0.0f), m_18(0.0f), m_1C(0.0f), m_20(), m_28(),

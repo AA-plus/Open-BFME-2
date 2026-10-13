@@ -87395,3 +87395,4 @@ __ehhandler$?rva00278190@Drawable@@QAE?AVRva0036CA00Str@@XZ,,0x00773516,10,Code/
 ?rva000E49B8@Rva000E48BC@@QAEHH@Z,,0x000E49B8,541,Code/GameEngine/Source/Common/Rva000E48BC.cpp,matched,
 ?Rva006D1520@@YAXVRva006D07E0Key@@@Z,,0x006D1520,144,Code/Libraries/Source/Apt/Rva006D1680.cpp,matched,Apt counted-owner publish 6D1520: linker lookup 6D1450 (pinned) then playback 6D0930 when E176D4; string arg is a named local so the lea lands between the 3 and 1 pushes
 ?rva003E8785@ScriptConditions@@IAE_NPAVParameter@@00@Z,,0x003E8785,222,Code/GameEngine/Source/GameLogic/ScriptEngine/ScriptConditionsPlayerUnitCounts.cpp,matched,
+??0Rva001DA2D5@@QAE@XZ,,0x001DA19E,311,Code/Libraries/Source/WWVegas/WWLib/Rva001DA2D5Ctor.cpp,matched,
