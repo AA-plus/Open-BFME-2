@@ -567,6 +567,12 @@ extern unsigned char g_00E03745;
 extern void *g_00DFEFF0;
 
 #include "../../../../Libraries/Include/Lib/ICoord2D.h"
+// A cell index returned by value (hidden pointer): ICoord2D with a field-wise
+// copy constructor, like PathfinderCellPoint below.
+struct PathfinderCellIndex : ICoord2D {
+	__forceinline PathfinderCellIndex() {}
+	__forceinline PathfinderCellIndex(const PathfinderCellIndex &o) { x = o.x; y = o.y; }
+};
 class Rva002F6F90Context { public: Bool rva002F6F90(unsigned int,Int); };
 class Rva002F70E5Context { public: Bool rva002F70E5(unsigned int,Int); };
 class Rva002E7440 { public: Bool rva002E7440(Int,Int); };
@@ -611,6 +617,7 @@ public:
  PathfindCell *rva002F36E5();Int rva002F40E7();void CheckChangeLayers(PathfindCell *,Object *);
 	Path *InternalFindPath(Object *,const LocomotorSet &,const Coord3D *,const Coord3D *,HierarchicalPath *,Bool *);
 	Int rva002F83F5(PathfindCell *,PathfindCell *,const LocomotorSet &,Bool,Bool,Int,ICoord2D *,Object *,Int);
+	Int ExamineNeighboringCellsForSidewaysAttack(PathfindCell *,const ICoord2D *,Int,const LocomotorSet &,Bool,Bool,Int,ICoord2D *,Object *,Int);
 	Bool checkForMovement(Object *,TCheckMovementInfo &);
 	Bool rva002EDFF9(Object *,Coord3D *);
 	void rva002E75A3(Coord3D *,Coord3D *);
@@ -638,7 +645,7 @@ public:
 	int CalcExtraCosts(Object *,PathfindCell *,Rva002EBC7FPair *,int,int,bool);
 	int CalcCollisionFreeExtraCosts(Object *,PathfindCell *,Rva002EBC7FPair *,PathfindLayerEnum,int,int,bool);
 	PathfindCell *getCell(PathfindLayerEnum layer, Int x, Int y);	// 0x002E6D62
-	void Rva002E7917(ICoord2D *out, bool center, const Coord3D *pos);	// 0x002E7917 clamp wrapper
+	PathfinderCellIndex Rva002E7917(bool center, const Coord3D *pos);	// 0x002E7917 clamp wrapper
 	Bool IsValidMovementTerrain(PathfindLayerEnum layer, const Locomotor *locomotor, const Coord3D *pos);
 	Int AdjustGroundPathPosition(const Coord3D &source, Coord3D &destination);
 	unsigned char bfmeWrapE6E90(void *a1, void *a2, void *a3, void *a4, void *a5, void *a6);
@@ -2149,7 +2156,9 @@ Path *Pathfinder::GetHordeUnitPath(Object *obj, const Coord3D *destination)
 		from.x = objPos->x;
 		from.y = objPos->y;
 		from.z = objPos->z;
-		Rva002E7917(&startCellNdx, centerInCell, &from);
+		// 0x002E7917 through its hidden-result ABI, writing startCellNdx in place.
+		typedef void (Pathfinder::*CellOut)(ICoord2D *, bool, const Coord3D *);
+		(this->*reinterpret_cast<CellOut>(&Pathfinder::Rva002E7917))(&startCellNdx, centerInCell, &from);
 	}
 	ICoord2D goalCellNdx;
 	Rva002E7875WorldToCell(&goalCellNdx, centerInCell, destination);
@@ -3704,9 +3713,9 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 }
 
 // 0x002E7917: Rva002E7875WorldToCell clamped to the cell extent at +0x14.
-void Pathfinder::Rva002E7917(ICoord2D *out, bool center, const Coord3D *pos)
+PathfinderCellIndex Pathfinder::Rva002E7917(bool center, const Coord3D *pos)
 {
-	ICoord2D tmp;
+	PathfinderCellIndex tmp;
 	Rva002E7875WorldToCell(&tmp, center, pos);
 	if (tmp.x < m_clampLo.x)
 		tmp.x = m_clampLo.x;
@@ -3716,13 +3725,12 @@ void Pathfinder::Rva002E7917(ICoord2D *out, bool center, const Coord3D *pos)
 		tmp.x = m_clampHi.x;
 	if (tmp.y > m_clampHi.y)
 		tmp.y = m_clampHi.y;
-	*out = tmp;
+	return tmp;
 }
 // 0x002E8BF8: world position to cell through the clamp wrapper.
 PathfindCell *Pathfinder::rva002E8BF8(PathfindLayerEnum layer, const Coord3D *pos)
 {
-	ICoord2D cell;
-	Rva002E7917(&cell, true, pos);
+	PathfinderCellIndex cell = Rva002E7917(true, pos);
 	return getCell(layer, cell.x, cell.y);
 }
 
@@ -3733,4 +3741,89 @@ void __cdecl Rva002EBCA7Split(void *p, int *outHalf, unsigned char *outOdd)
 	*outHalf = v;
 	*outOdd = (v % 2 == 1);
 	*outHalf /= 2;
+}
+
+// WorldBuilder's MathCoord2D.h Coord2D (asserts compiled out): a 2-float
+// vector with a user copy constructor, so by-value arguments and results go
+// through memory. Its inline operator- and operator+ are not inlined at /O1
+// and their COMDATs are retail 0x001040AE and 0x0007DEC8.
+class MathCoord2D
+{
+public:
+	MathCoord2D() {}
+	MathCoord2D(const MathCoord2D &that) : x(that.x), y(that.y) {}
+	MathCoord2D(float ix, float iy) : x(ix), y(iy) {}
+	MathCoord2D(Int ix, Int iy) : x((float)ix), y((float)iy) {}
+	~MathCoord2D() {}
+	float dot(const MathCoord2D &c) const { return y * c.y + x * c.x; }
+	MathCoord2D &operator*=(float s) { x *= s; y *= s; return *this; }
+	MathCoord2D &operator-=(const MathCoord2D &c) { x -= c.x; y -= c.y; return *this; }
+	MathCoord2D &operator+=(const MathCoord2D &c) { x += c.x; y += c.y; return *this; }
+	__forceinline float GetLengthEstimate() const { return fabs(x) > fabs(y) ? fabs(x) + fabs(y) * 0.25f : fabs(y) + fabs(x) * 0.25f; }
+	__forceinline float GetLength() const { return (float)sqrt(x * x + y * y); }
+	__forceinline void Normalize() { float inv = 1.0f / GetLength(); x *= inv; y *= inv; }
+	float x;
+	float y;
+};
+inline MathCoord2D operator-(MathCoord2D left, const MathCoord2D &right)
+{
+	left -= right;
+	return left;
+}
+inline MathCoord2D operator+(MathCoord2D left, const MathCoord2D &right)
+{
+	left += right;
+	return left;
+}
+// Pathfinder::ExamineNeighboringCellsForSidewaysAttack, retail 0x002F8B00 (813 B),
+// WorldBuilder D66060. The goal is the target cell, or, when the parent is
+// within attack range, the point offset cells off the parent's facing line
+// beside the target. The goal cell gets path info for the examination at
+// 0x002F83F5 and drops it again when nothing else holds it.
+Int Pathfinder::ExamineNeighboringCellsForSidewaysAttack(PathfindCell *parentCell,const ICoord2D *targetNdx,Int offset,const LocomotorSet &locomotorSet,Bool isHuman,Bool centerInCell,Int radius,ICoord2D *startCellNdx,Object *obj,Int attackDistance)
+{
+	ICoord2D goalNdx;
+	Int px1=parentCell->getXIndex();
+	Int px2=parentCell->getXIndex();
+	Int py1=parentCell->getYIndex();
+	Int py2=parentCell->getYIndex();
+	Int distSqr=(px1-targetNdx->x)*(px2-targetNdx->x)+(py1-targetNdx->y)*(py2-targetNdx->y);
+	if(distSqr*5*5<(offset+attackDistance)*(offset+attackDistance)){
+		float orientation=obj->m_orientation;
+		float angle=parentCell->rva0052DD75(orientation,10,0.5f);
+		MathCoord2D parentWorld(parentCell->getXIndex()*10,parentCell->getYIndex()*10);
+		float s=Sin(angle);
+		MathCoord2D dir;
+		dir.x=Cos(angle);
+		dir.y=s;
+		MathCoord2D targetWorld(targetNdx->x*10,targetNdx->y*10);
+		if(centerInCell){
+			parentWorld.x+=5.0f;
+			parentWorld.y+=5.0f;
+		}
+		MathCoord2D delta=targetWorld-parentWorld;
+		float dot=dir.dot(delta);
+		dir*=dot;
+		MathCoord2D p=parentWorld+dir;
+		p-=targetWorld;
+		if(p.GetLengthEstimate()<0.0001f){
+			p.x=dir.y;
+			p.y=-dir.x;
+		}
+		p.Normalize();
+		p*=(float)offset;
+		p+=targetWorld;
+		goalNdx=Rva002E7917(centerInCell,(const Coord3D *)&p);
+	}else{
+		goalNdx=*targetNdx;
+	}
+	PathfindCell *goalCell=getCell(PATHFIND_LAYER_GROUND,goalNdx.x,goalNdx.y);
+	if(!goalCell)return 0;
+	Bool hadInfo=goalCell->m_pathInfo!=0;
+	if(!hadInfo)goalCell->allocateInfo((In002E6BA1 *)&goalNdx);
+	Int count=rva002F83F5(parentCell,goalCell,locomotorSet,isHuman,centerInCell,radius,startCellNdx,obj,attackDistance);
+	if(!hadInfo){
+		if(!(unsigned char)((Rva002E6AF3 *)goalCell)->get()&&!(unsigned char)((Rva002E6B06 *)goalCell)->rva002E6B06())goalCell->ReleaseInfo();
+	}
+	return count;
 }
