@@ -37,6 +37,7 @@ class Rva00704980 {public:
  __declspec(noinline) Rva00704980();
  int m_00,m_04,m_08,m_0C,m_10,m_14,m_18;char m_1C,m_1D,m_1E,m_1F;
 };
+// ?Rva00704980::Rva00704980 present-unmatched
 inline Rva00704980::Rva00704980(){m_00=0;m_04=0;m_08=0;m_0C=0;m_10=0;m_14=0;m_18=0;m_1C=0;m_1D=0;m_1E=0;m_1F=0;}
 struct ParticleEvent32:public Rva00704980 {
  ~ParticleEvent32(){reinterpret_cast<StringBase<char>*>(this)->clear();}
@@ -75,6 +76,7 @@ public:
 class Rva001F3852ByteOneSetter {public:void enable();};
 class ParticleSystem {public:void destroy();};
 ParticleSystem *Make001FCBD7();
+// ?BfmeParticleSystemHandle::operator-> present-unmatched
 inline ParticleSystem*BfmeParticleSystemHandle::operator->()const {return system?system:Make001FCBD7();}
 enum ParticleSystemID {INVALID_PARTICLE_SYSTEM_ID=0};
 class ParticleSystemManager {private:BfmeParticleSystemHandle findParticleSystemByID(ParticleSystemID);friend class W3DScriptedModelDraw;};
@@ -135,6 +137,7 @@ static __declspec(noinline) bool Rva000B3AAB(const AnimationClock *clock,int fra
  }
  return false;
 }
+// ?W3DScriptedModelDraw::rva000BD6C2 present-unmatched  // banked 894B partial retained because it fixes the private ECX/EDI call ABI of the 0x000B3AAB helper
 void W3DScriptedModelDraw::rva000BD6C2()
 {
  if(state){
@@ -197,6 +200,7 @@ void W3DScriptedModelDraw::rva000BD6C2()
   for(Rva000BB491*it=defaults->fx.begin();it!=defaults->fx.end();++it)rva000BB3E6(*it);
 }
 
+// ?W3DScriptedModelDraw::rva000BB3E6 present-unmatched
 void W3DScriptedModelDraw::rva000BB3E6(Rva000BB491 event)
 {
  if(!event.fx)return;
