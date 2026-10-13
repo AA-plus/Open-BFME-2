@@ -1,4 +1,6 @@
 // ?rva00517CC9@Rva00517048@@QAEXABVBuddyInviteGameInfo@@@Z
+// partial score=0.9945 date=2026-10-13
+// ?rva00517CC9@Rva00517048@@QAEXABVBuddyInviteGameInfo@@@Z
 // partial score=0.99154 date=2026-10-13
 // ?rva00517CC9@Rva00517048@@QAEXABVBuddyInviteGameInfo@@@Z
 // partial score=0.99154 date=2026-10-10
