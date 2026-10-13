@@ -14,11 +14,13 @@
 // terrain object's map member are neutral RVA names only, pending a real header.
 #define Matrix4x4 Matrix4  // BFME renamed it
 
+// BFME 2's getStaticDiffuse (0x0006B4CC) takes a trailing flag; adapt the
+// Zero Hour declaration for this unit only.
+#define getStaticDiffuse(x, y) getStaticDiffuse(x, y, Bool skipFirstLight)
 #include "W3DDevice/GameClient/HeightMap.h"
+#undef getStaticDiffuse
 #include "W3DDevice/GameClient/W3DDynamicLight.h"
 
-// Opaque one-method class for the unclaimed callee at 0x0006B4CC (see symbols.csv).
-class Rva0006B4CC { public: Int call(Int x, Int y, Int z); };
 
 class RoadSegment
 {
@@ -43,7 +45,7 @@ void RoadSegment::updateSegLighting(void)
 		Real vy = *(Real *)((char *)m_vb + i * 0x24 + 4);
 		Int x = (Int)(vx / MAP_XY_FACTOR + 0.5) + *(Int *)(*(char **)((char *)TheTerrainRenderObject + 0x37C0) + 0x10);
 		Int y = (Int)(vy / MAP_XY_FACTOR + 0.5) + *(Int *)(*(char **)((char *)TheTerrainRenderObject + 0x37C0) + 0x10);
-		Int diffuse = (255<<24)|((Rva0006B4CC *)TheTerrainRenderObject)->call(x, y, 1);
+		Int diffuse = (255<<24)|TheTerrainRenderObject->getStaticDiffuse(x, y, true);
 		*(Int *)(((char *)m_vb) + i * 0x24 + 0x18) = diffuse;
 	}
 }
