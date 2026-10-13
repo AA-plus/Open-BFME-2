@@ -5,23 +5,12 @@
 // Legacy address-named views retain existing callers while emitting the same
 // complete four-slot table. Every added fold has whole-body/relocation proof;
 // no unique-byte credit for member aliases. See attempt_evidence/player-owners.
-// cl: /O1 /G7 /arch:SSE /EHsc /MD /Ireference/shims/moduledata
+// cl: /O1 /G7 /arch:SSE /EHsc /MD /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii
 // ??1Rva002E0F1E@@UAE@XZ @0x002E0F1E 99B Snapshot-derived dtor with five StringBase members.
 // Wide at +4 via 0x00036E70 then four narrow at +8 +0xC +0x10 +0x14 via 0x00036410 in reverse with EH states 4 to 0 then base vtable 0x00BBB554.
 // Evidence: caller 0x002E18A7 is 28B deleting dtor plus sibling ??1EventParameter@@UAE@XZ same Snapshot base plus prev 0x002E0E7C next 0x002E1001 same dir.
-template <typename T> class StringBase
-{
-public:
-	~StringBase() { releaseBuffer(); }
-private:
-	void releaseBuffer();
-	T *m_data;
-};
-
-// Retail calls the 133-byte releaseBuffer worker directly. Force the
-// narrow member teardown inline so its real callee owns the relocation.
-// This also applies inside compiler-generated EH cleanup funclets.
-template <> __forceinline StringBase<char>::~StringBase(){releaseBuffer();}
+#define BFME_STRINGBASE_PUBLIC_DTOR
+#include "string_base.h"
 
 #include "Common/Snapshot.h"
 class __declspec(novtable) Rva002E0F1E : public Snapshot
