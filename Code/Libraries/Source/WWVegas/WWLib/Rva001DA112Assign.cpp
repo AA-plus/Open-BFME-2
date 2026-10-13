@@ -1,6 +1,11 @@
-// ?rva001DA112@Rva001DA112@@QAEXHHPAD@Z
-// partial score=0.843333 date=2026-10-10
-// cl: /O1 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
+// STLport 4.5.3 range-assign body at native 0x001DA112..0x001DA19E (140B, RET 12).
+// Target evidence: three 8-byte-element vector paths (grow via _M_allocate_and_copy +
+// _M_clear, in-place copy + destroy-tail, copy-prefix + uninitialized_copy tail) over the
+// rowed providers 0x001D9C9F, 0x004C3D8B, 0x001D9BD3, 0x0032C0CA and 0x001D9B3C.
+// The class and element names stay address-derived; the operation shape is the STLport
+// _M_assign_aux reference. The named const __false_type local is load-bearing: the
+// compiler's temporary slot for the tag is what retail keeps.
+// cl: /I. /O1 /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
 
 struct Rva001DAAF2Element {char bytes[8];Rva001DAAF2Element(const Rva001DAAF2Element&);~Rva001DAAF2Element();};
@@ -23,6 +28,7 @@ class Rva001DA112 {public:void rva001DA112(int,int,char*);private:
 void Rva001DA112::rva001DA112(int firstArg,int lastArg,char*){
  Rva001DAAF2Element*first=(Rva001DAAF2Element*)firstArg;
  Rva001DAAF2Element*last=(Rva001DAAF2Element*)lastArg;
+ const _STL::__false_type falseType;
  unsigned len=last-first;
  if(len>capacity()){
   Rva001DAAF2Element*tmp=((_STL::vector<Rva001DAAF2Element>*)this)->_M_allocate_and_copy(len,first,last);
@@ -34,6 +40,6 @@ void Rva001DA112::rva001DA112(int firstArg,int lastArg,char*){
  }else{
   Rva001DAAF2Element*mid=first+size();
   _STL::copy((FXBoneInfo*)first,(FXBoneInfo*)mid,(FXBoneInfo*)_M_start);
-  _M_finish=_STL::__uninitialized_copy(mid,last,_M_finish,_STL::__false_type());
+  _M_finish=_STL::__uninitialized_copy(mid,last,_M_finish,falseType);
  }
 }
