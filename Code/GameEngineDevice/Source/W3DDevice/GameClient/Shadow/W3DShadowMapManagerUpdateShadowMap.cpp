@@ -341,6 +341,10 @@ bool WW3D::IsCurrentlyRenderingShadowMap = false;
 // Full native7DA23..7DC01 RET0; WB7EDC60 independently names
 // W3DShadowMapManager::ReAcquireResources. Keep the existing neutral
 // receiver spelling while using measured owning texture and shader handles.
+// This real parent's complete native EH graph also places the parameter-vector
+// cleanup at0075F3B7: lea ecx,[ebp-28] and tail jump through the existing
+// 0007C632 destructor thunk to0007C5D5. Its compiler-local label is only a
+// locator; no synthetic parent or independently callable cleanup is introduced.
 bool Rva0007DA23ResourceManager::ReAcquireResources()
 {
     if (!TheWritableGlobalData->m_useShadowMap)
