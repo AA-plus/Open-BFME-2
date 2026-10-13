@@ -1115,7 +1115,11 @@ extern void *DrawableListFreeNodes;
 namespace _STL {
 template<> list<Drawable*,allocator<Drawable*> >::list(const list<Drawable*,allocator<Drawable*> >&);
 template<> _List_base<Drawable*,allocator<Drawable*> >::~_List_base() throw();
-template<> __forceinline list<Drawable*,allocator<Drawable*> >::iterator list<Drawable*,allocator<Drawable*> >::erase(iterator pos) {
+// This pool belongs to the Drawable node list. Keep its recycler local so
+// it cannot compete with another unit's STLport list::erase specialization.
+static __forceinline list<Drawable*>::iterator eraseDrawableListNode(list<Drawable*>::iterator pos) {
+ typedef _List_node<Drawable*> _Node;
+ typedef list<Drawable*>::iterator iterator;
  _List_node_base *next=pos._M_node->_M_next;
  _List_node_base *prev=pos._M_node->_M_prev;
  _Node *node=(_Node*)pos._M_node;
@@ -1208,7 +1212,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
  case 0x7c:if(TheDisplay)((TranslateDisplay*)TheDisplay)->screenshot(0);disp=DESTROY_MESSAGE;break;
  case 0x3e9:case 0x3eb:case 0x3f8:case 0x3f9:case 0x3fa:case 0x3fb:case 0x3fc:case 0x3fd:case 0x3fe:case 0x3ff:case 0x400:case 0x401:case 0x461:{
   SelectedDrawableList list=*contextUI()->selected();
-  for(SelectedDrawableList::iterator it=list.begin();it!=list.end();) {Drawable*d=*it;if(d->getObject()&&d->getObject()->isLocallyControlled()){++it;continue;}else it=list.erase(it);}
+  for(SelectedDrawableList::iterator it=list.begin();it!=list.end();) {Drawable*d=*it;if(d->getObject()&&d->getObject()->isLocallyControlled()){++it;continue;}else it=_STL::eraseDrawableListNode(it);}
   if(!list.empty())pickAndPlayUnitVoiceResponse((const DrawableList*)&list,t,0);m_teamExists=true;break;
  }
  case 0x3ea:case 0x402:case 0x403:case 0x404:case 0x405:case 0x406:case 0x407:case 0x408:case 0x409:case 0x40a:case 0x40b:m_teamExists=true;break;
