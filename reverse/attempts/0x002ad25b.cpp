@@ -1,4 +1,6 @@
 // ?rva002AD25B@Player@@QAEXABVAsciiString@@@Z
+// partial score=0.945 date=2026-10-13
+// ?rva002AD25B@Player@@QAEXABVAsciiString@@@Z
 // partial score=0.9453824643375456 date=2026-10-10
 // ?rva002AD25B@Player@@QAEXABVAsciiString@@@Z
 // partial score=0.9338287601626016 date=2026-10-10
