@@ -1,6 +1,8 @@
 // ??0LargeGroupAudioUpdateModuleData@@QAE@XZ
+// partial score=0.995 date=2026-10-13
+// ??0LargeGroupAudioUpdateModuleData@@QAE@XZ
 // partial score=0.99 date=2026-10-08
-// cl: /DNDEBUG /MD /EHsc /O1 /D_STLP_USE_STATIC_LIB /Ireference/shims/moduledata
+// cl: /G7 /O1 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/moduledata
 // stlport
 #include <vector>
 #include "Common/Snapshot.h"
@@ -9,10 +11,14 @@ extern float g_parseDurationMsecScale;
 struct Rva001408C0Target;
 struct Rva00E03CE0 { void Rva004ABEAE(Rva001408C0Target *); };
 extern Rva00E03CE0 g_00E03CE0;
-class LargeGroupAudioKeyMap : public _STL::vector<unsigned> {
-public: LargeGroupAudioKeyMap(); ~LargeGroupAudioKeyMap();
+class ObjectCreationList {
+public:
+    ObjectCreationList();
+    ~ObjectCreationList();
+private:
+    void *m_words[2];
+    unsigned int m_count;
 };
-LargeGroupAudioKeyMap::LargeGroupAudioKeyMap() : _STL::vector<unsigned>() {}
 class LargeGroupAudioUpdateModuleData : public Snapshot {
 public:
     LargeGroupAudioUpdateModuleData(); virtual ~LargeGroupAudioUpdateModuleData();
@@ -20,7 +26,7 @@ protected:
     virtual void loadPostProcess(); virtual void crc(Xfer *); virtual void xfer(Xfer *);
 private:
     unsigned int m_04;
-    LargeGroupAudioKeyMap m_keys;
+    ObjectCreationList m_keys;
     int m_min; int m_variance; unsigned short m_weight;
 };
 LargeGroupAudioUpdateModuleData::LargeGroupAudioUpdateModuleData() :
