@@ -716,6 +716,7 @@ public:
 	virtual void update();
 	void push(AsciiString name, bool shutdownImmediate = false);
 	void rva0035C7CF(bool);
+	bool showShellMap(bool, bool);
 
 	// GameClient::update clears +0x6C on its first pass and still updates
 	// the shell while the GameLogic byte +0x125 is set if +0x5C is.
@@ -725,8 +726,6 @@ public:
 	bool m_byte6C;                                                      // +0x6C
 	unsigned char m_pad6D[0x78 - 0x6D];
 };
-
-class Rva0035C194 { public: bool rva0035C194(bool, bool); };
 
 class IMEManager : public SubsystemInterface { public: virtual ~IMEManager(); };
 class GameWindowManager : public SubsystemInterface { public: virtual ~GameWindowManager(); };
@@ -2282,7 +2281,7 @@ int rva00239122(void *, bool allowIntro)
 		result = 7;
 		if (((const StringBase<char> *)&TheWritableGlobalData->m_initialFile)->isEmpty())
 		{
-			((Rva0035C194 *)TheShell)->rva0035C194(true, false);
+			TheShell->showShellMap(true, false);
 			TheShell->rva0035C7CF(true);
 		}
 		TheShell->m_byte6C = 1;

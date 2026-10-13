@@ -355,10 +355,11 @@ public:
 	void rva002233A6(Int a);
 };
 extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
-class Rva0035C194
+// Retail 0x0035C194 is the verified Shell::showShellMap provider.
+class Shell
 {
 public:
-	bool rva0035C194(bool a, bool b);
+	bool showShellMap(bool a, bool b);
 };
 extern class Shell *TheShell;
 struct Rva0051483CLogic
@@ -375,8 +376,8 @@ public:
 };
 bool Rva0051483C::rva0051483C()
 {
-	if (TheGameLogic && (*(Rva0035C194 **)&TheShell) && ((Rva0051483CLogic *)TheGameLogic)->m_110 != 4
-		&& (*(Rva0035C194 **)&TheShell)->rva0035C194(true, false))
+	if (TheGameLogic && TheShell && ((Rva0051483CLogic *)TheGameLogic)->m_110 != 4
+		&& TheShell->showShellMap(true, false))
 	{
 		(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->rva002233A6(1);
 		return false;

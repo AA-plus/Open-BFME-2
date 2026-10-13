@@ -48,9 +48,8 @@ extern ScriptActions *TheScriptActions;
 class BfmeSelectionState { public: bool isSelectionLocked() const; };
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
-class Shell { public: void rva0035C7CF(bool); };
+class Shell { public: void rva0035C7CF(bool); bool showShellMap(bool,bool); };
 extern Shell *TheShell;
-class Rva0035C194 { public: bool rva0035C194(bool,bool); };
 bool rva00520F7D();
 class GameEngine {
 public:
@@ -107,7 +106,7 @@ void GameLogic::rva00376E92(bool showScoreScreen, bool arg2)
                 if (!rva00520F7D()) showScoreScreen=false;
             }
             if (!showScoreScreen) {
-                ((Rva0035C194*)TheShell)->rva0035C194(true,false);
+                TheShell->showShellMap(true,false);
                 TheShell->rva0035C7CF(true);
             }
         }
