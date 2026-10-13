@@ -118,7 +118,11 @@ struct RulesOverrideView {
     unsigned char bits;
 };
 
-void Rva00559FAC(int mode, void *store) {
+// ?GetDefaults@MpGameRules@@SAXHPAX@Z @0x00559FAC 160B: renamed from
+// placeholder Rva00559FAC — the WorldBuilder twin names MpGameRules::GetDefaults
+// at EA's own MpGameRules.cpp (callgraph 4). Static-member spelling:
+// ABI-identical to the proven cdecl free function.
+void MpGameRules::GetDefaults(int mode, void *store) {
     memset(store, 255, 40);
     if (mode == -1)
         return;
@@ -172,6 +176,7 @@ class MpGameRules
 {
 public:
 	static UnicodeString GetRuleString(int rule);
+	static void GetDefaults(int mode, void *store);
 };
 
 // ?GetRuleString@MpGameRules@@SA?AVUnicodeString@@H@Z @0x0055A04C 59B:

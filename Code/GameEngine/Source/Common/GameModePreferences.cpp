@@ -460,13 +460,13 @@ AsciiString GameModePreferences::rva0044DAA8(const AsciiString &def)
 // Evidence: makeKey 0x0044D512; map find 0x001F8437; pin 0x00559FAC;
 // parse 0x00559F11; empty 0x007BAC1C; callers 0x004468A0 0x005A232B;
 // prev 0x0044DAA8 next 0x0044DBA5.
-void __cdecl Rva00559FAC(int a, void *b);
+class MpGameRules { public: static void GetDefaults(int mode, void *store); };
 void __cdecl Rva00559F11Parse(const char *s, int *out);
 Bool GameModePreferences::rva0044DB54(int *vals)
 {
 	PreferenceMap::const_iterator it = find(makeKey("Rules"));
 	if (it == end()) {
-		Rva00559FAC(m_mode, vals);
+		MpGameRules::GetDefaults(m_mode, vals);
 		return false;
 	}
 	Rva00559F11Parse(it->second.str(), vals);

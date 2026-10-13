@@ -66,7 +66,7 @@ Rva0057EE5C::~Rva0057EE5C()
 {
 }
 
-void __cdecl Rva00559FAC(int arg, void *ctx);
+class MpGameRules { public: static void GetDefaults(int arg, void *ctx); };
 
 class AptMpGameRules
 {
@@ -80,9 +80,9 @@ void Rva0057EE5C::rva0057F002(int arg)
 		return;
 	}
 	m_60 = arg;
-	Rva00559FAC(arg, &m_8C);
+	MpGameRules::GetDefaults(arg, &m_8C);
 	vslot1(10, 0);
 	reinterpret_cast<AptMpGameRules *>(this)->rva0057EF18();
 }
 
-Rva0057EE5C::Rva0057EE5C(TargetRef00217D4C *ref):m_58(ref),m_5C(-1),m_60(-1),m_88(true),m_89(false),m_B4(10,INVALID_OBJECT_ID){Rva00559FAC(m_60,&m_8C);}
+Rva0057EE5C::Rva0057EE5C(TargetRef00217D4C *ref):m_58(ref),m_5C(-1),m_60(-1),m_88(true),m_89(false),m_B4(10,INVALID_OBJECT_ID){MpGameRules::GetDefaults(m_60,&m_8C);}
