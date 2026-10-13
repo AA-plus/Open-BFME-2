@@ -1,7 +1,8 @@
 // WB B7EE40 names LoadMyHeroList; retail21F47E..21F5E3 supplies extent and layout.
 // Complete357B instruction sequence with three unresolved calls: 408A55 data refresh;
 // 21F19B file vector construction; 4099CA file load with one-byte mode argument.
-// Existing registered 4099CA helper uses an int prototype; do not fake its pin.
+// 4099CA takes the flag as one byte (the spilled flag's dword is pushed whole);
+// its row (CreateAHeroDataDtor.cpp) and the 21F19B ctor row carry these names.
 // Qualified ::delete is required by native vslot0(flags0) then global delete.
 // cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE
 // stlport

@@ -26,7 +26,8 @@ extern GameState *TheGameState;
 class Rva002DC267 { public: UnicodeString rva002DC267() const; };
 extern "C" __declspec(dllimport) int __stdcall CreateDirectoryW(const unsigned short *, void *);
 class HeroFile { public: virtual ~HeroFile(); virtual bool open(const char *, int); virtual void close(); };
-int Rva00409892(int, int);
+class File;
+File *Rva00409892(const AsciiString &name, bool systemFile);
 class Xfer { public:
 virtual void slot00();
 virtual bool load();
@@ -856,9 +857,7 @@ bool CreateAHeroHero::rva004098BE(const AsciiString &name, bool isSystem)
 {
     m_systemHero=isSystem;
     CreateDirectoryW(((const Rva002DC267 *)TheGameState)->rva002DC267().str(),0);
-    // The existing wrapper retains its historical int signature; this view
-    // supplies the witnessed reference/bool ABI without a new symbol pin.
-    HeroFile *file=((HeroFile *(__cdecl *)(const AsciiString &, bool))Rva00409892)(name,m_systemHero);
+    HeroFile *file=(HeroFile *)Rva00409892(name,m_systemHero);
     if(!file) {
         TheInGameUI->message(AsciiString("GUI:Error"));
         return false;

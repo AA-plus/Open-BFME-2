@@ -39,13 +39,13 @@ class CreateAHeroData : public Snapshot {
     unsigned int word04; UnicodeString text08; unsigned int word0C, word10;
     IntegerMap map14, map20; unsigned int word2C, word30, word34, word38;
     RvaVecAscii strings3C; unsigned char flag48; AsciiString text4C;
-    StringPayloadMap map50; BitVector bits5C; unsigned char flag70, flag71;
+    StringPayloadMap map50; BitVector bits5C; unsigned char flag70; bool flag71;
     unsigned short pad72; IntegerVectorMap map74; BfmeHeroElement005C39DE elements80[15];
     unsigned int word134, word138, word13C;
 public:
     bool WriteNamedHeroAtRva004074CF();
     bool rva00408A55();
-    unsigned char rva004099CA(StringBase<char> *name, int flag);
+    bool rva004099CA(AsciiString *name, bool flag);
     virtual ~CreateAHeroData();
 };
 CreateAHeroData::~CreateAHeroData() { if (!text4C.isEmpty()) WriteNamedHeroAtRva004074CF(); UnregisterCreateAHeroAtRva0021A624(this); }
@@ -162,7 +162,7 @@ bool CreateAHeroData::WriteNamedHeroAtRva004074CF() {
  return false;
 }
 
-// ?rva004099CA@CreateAHeroData@@QAE_NVAsciiString@@H@Z @0x004099CA 172B: the
+// ?rva004099CA@CreateAHeroData@@QAE_NPAVAsciiString@@_N@Z @0x004099CA 172B: the
 // counterpart of WriteNamedHero4074CF. Native: an empty name fails; the rowed
 // opener 0x004098A9 (name, flag) yields the stream, failing when null; a
 // reader Xfer (0x0060C5FA) opens it (0x0060C3C3) and a version above 1 fails;
@@ -176,31 +176,32 @@ class XferLoad { public: bool Open(Rva0060C3C3Stream *stream, int *version); };
 class Rva0060C45E { public: void clear(); };
 class Rva00406EBF { public: void rva00406EBF(Xfer *x); };
 class HeroFile { public: virtual ~HeroFile(); virtual bool open(const char *name, int access); virtual void close(); };
-int Rva004098A9(int, int);
+class File;
+File *Rva004098A9(const AsciiString &name, bool systemFile);
 
-unsigned char CreateAHeroData::rva004099CA(StringBase<char> *name, int flag)
+bool CreateAHeroData::rva004099CA(AsciiString *name, bool flag)
 {
-    if (name->isEmpty())
-        return 0;
-    HeroFile *file = (HeroFile *)Rva004098A9((int)name, flag);
+    if (((StringBase<char> *)name)->isEmpty())
+        return false;
+    HeroFile *file = (HeroFile *)Rva004098A9(*name, flag);
     if (file == 0)
-        return 0;
+        return false;
     Rva0060C5FA xfer(0, 0, 0);
-    unsigned char ok;
+    bool ok;
     if (!((XferLoad *)&xfer)->Open((Rva0060C3C3Stream *)file, (int *)&name))
     {
         file->close();
-        ok = 0;
+        ok = false;
     }
     else if ((unsigned)*(int *)&name > 1)
     {
         file->close();
-        ok = 0;
+        ok = false;
     }
     else
     {
         ((Rva00406EBF *)this)->rva00406EBF(&xfer);
-        flag48 = (unsigned char)flag;
+        flag48 = flag;
         ((Rva0060C45E *)&xfer)->clear();
         file->close();
         ok = flag71;

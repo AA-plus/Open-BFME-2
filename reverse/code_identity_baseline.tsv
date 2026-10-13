@@ -699,8 +699,6 @@ Code/GameEngine/Source/Common/Rva003FA26FCopyCtor.cpp	?copyItems@Rva003FA26F@@QA
 Code/GameEngine/Source/Common/Rva003FA26FCopyCtor.cpp	?copyItems@Rva003FA26F@@QAEXABV1@@Z	?reserve@?$vector@PAVRva003FA118@@V?$allocator@PAVRva003FA118@@@_STL@@@_STL@@QAEXI@Z	0x002B712E	wrong
 Code/GameEngine/Source/Common/Rva00402D7ECopyCtor.cpp	?copyItems@Rva00402D7E@@QAEXABV1@@Z	?reserve@?$vector@PAVRva00402C0F@@V?$allocator@PAVRva00402C0F@@@_STL@@@_STL@@QAEXI@Z	0x002B712E	wrong
 Code/GameEngine/Source/Common/Rva00403055CopyCtor.cpp	?copyItems@Rva00403055@@QAEXABV1@@Z	?reserve@?$vector@PAVRva00402F28Item@@V?$allocator@PAVRva00402F28Item@@@_STL@@@_STL@@QAEXI@Z	0x002B712E	wrong
-Code/GameEngine/Source/Common/Rva004097AFWrappers.cpp	?Rva00409892@@YAHHH@Z	_Rva004097AFWorker	0x004097AF	unowned
-Code/GameEngine/Source/Common/Rva004097AFWrappers.cpp	?Rva004098A9@@YAHHH@Z	_Rva004097AFWorker	0x004097AF	unowned
 Code/GameEngine/Source/Common/Rva0040D780Parse_Rva005b7f59.cpp	?bfmeParseD780@@YAXPAVINI@@PAX1PBX@Z	?bfmeGoD540@BfmeObjD540@@QAEXVAsciiString@@@Z	0x005B7E02	unowned
 Code/GameEngine/Source/Common/Rva0040F7E5Advance.cpp	?rva0040F7E5@BfmeY1038@@QAEXXZ	?rva0040F497@@YGXHHH@Z	0x0040F497	unowned
 Code/GameEngine/Source/Common/Rva004121B2HashMapInits.cpp	??0Rva004121B2@@QAE@XZ	??0?$hashtable@U?$pair@$$CBW4NameKeyType@@VArmorTemplate@@@_STL@@W4NameKeyType@@U?$hash@W4NameKeyType@@@rts@@U?$_Select1st@U?$pair@$$CBW4NameKeyType@@VArmorTemplate@@@_STL@@@2@U?$equal_to@W4NameKeyType@@@Rva004121B2Twin@@V?$allocator@U?$pair@$$CBW4NameKeyType@@VArmorTemplate@@@_STL@@@2@@_STL@@QAE@IABU?$hash@W4NameKeyType@@@rts@@ABU?$equal_to@W4NameKeyType@@@Rva004121B2Twin@@ABV?$allocator@U?$pair@$$CBW4NameKeyType@@VArmorTemplate@@@_STL@@@1@@Z	0x00411AC7	wrong

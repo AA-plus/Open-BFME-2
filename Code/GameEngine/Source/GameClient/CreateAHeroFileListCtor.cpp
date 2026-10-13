@@ -1,7 +1,7 @@
 // cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
 //
-// ??0Rva0021F19B@@QAE@XZ
+// ??0Rva0021DB35@@QAE@XZ
 // retail 0x0021F19B..0x0021F403 (617 bytes) thiscall RET 0.
 //
 // The create-a-hero file list's constructor (callers 0x0021F4F0 and
@@ -13,7 +13,9 @@
 // 0x009FE34C is set it appends the user's heroes: L"MyHero*.cah" in
 // TheGameState's save directory (0x002DC267) through the wide listing
 // (pinned 0x006007DA, its set rowed as Rva0021C459), each name narrowed
-// through AsciiString(const UnicodeString&). The name stays address-derived.
+// through AsciiString(const UnicodeString&). The class takes the name of
+// its destructor 0x0021DB35 (CreateAHeroManager::LoadMyHeroList constructs
+// and destroys the same local); the owner identity stays address-derived.
 #include <set>
 #include <vector>
 #include <algorithm>
@@ -103,16 +105,16 @@ template <> void vector<HeroFileEntry, allocator<HeroFileEntry> >::push_back(con
 template <> void sort<Rva0021915B *, Rva0021B753>(Rva0021915B *first, Rva0021915B *last, Rva0021B753 comp);
 }
 
-class Rva0021F19B
+class Rva0021DB35
 {
 public:
-	Rva0021F19B();
+	Rva0021DB35();
 
 private:
 	_STL::vector<int> m_files;	// the (file name, system flag) pairs
 };
 
-Rva0021F19B::Rva0021F19B()
+Rva0021DB35::Rva0021DB35()
 {
 	_STL::vector<HeroFileEntry> &files = *reinterpret_cast<_STL::vector<HeroFileEntry> *>(&m_files);
 	{

@@ -7,10 +7,12 @@
 // helper owner and full semantic identity remain unresolved.
 #include "ascii_string.h"
 
-class Rva004099CAHelper
+// The helper at this+0x0C is a CreateAHeroData: 0x004099CA is its rowed
+// load-by-name member (CreateAHeroDataDtor.cpp).
+class CreateAHeroData
 {
 public:
-	bool rva004099CA(void *, int);
+	bool rva004099CA(AsciiString *name, bool flag);
 };
 
 class Rva0021A492Host
@@ -22,11 +24,11 @@ public:
 void *Rva0021A492Host::rva0021A492()
 {
 	bool found;
-	Rva004099CAHelper *sub;
+	CreateAHeroData *sub;
 	{
 		AsciiString filename("MyHero.dat");
-		sub = (Rva004099CAHelper *)((char *)this + 0x0C);
-		found = sub->rva004099CA(&filename, 0);
+		sub = (CreateAHeroData *)((char *)this + 0x0C);
+		found = sub->rva004099CA(&filename, false);
 	}
 	return found ? (void *)sub : 0;
 }
