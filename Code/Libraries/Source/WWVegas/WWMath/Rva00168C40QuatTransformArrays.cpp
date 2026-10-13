@@ -23,6 +23,7 @@ class Rva00168C40QuatTransform
 {
 public:
 	void transform_vectors(const Vector3 *in, Vector3 *out, int count) const;
+	void rotate_vectors(const Vector3 *in, Vector3 *out, int count) const;
 
 private:
 	void Transform_Vector(const Vector3 &v, Vector3 *result) const
@@ -37,6 +38,18 @@ private:
 		result->Z = Rotation.W*z - w*Rotation.Z + (Rotation.X*y - Rotation.Y*x) + Translation.Z;
 	}
 
+	void Rotate_Vector(const Vector3 &v, Vector3 *result) const
+	{
+		float x = Rotation.W*v.X + (Rotation.Y*v.Z - v.Y*Rotation.Z);
+		float y = Rotation.W*v.Y - (Rotation.X*v.Z - v.X*Rotation.Z);
+		float z = Rotation.W*v.Z + (Rotation.X*v.Y - v.X*Rotation.Y);
+		float w = -(Rotation.X*v.X + Rotation.Y*v.Y + Rotation.Z*v.Z);
+
+		result->X = Rotation.W*x - w*Rotation.X + (Rotation.Y*z - y*Rotation.Z);
+		result->Y = Rotation.W*y - w*Rotation.Y - (Rotation.X*z - x*Rotation.Z);
+		result->Z = Rotation.W*z - w*Rotation.Z + (Rotation.X*y - Rotation.Y*x);
+	}
+
 	Quaternion Rotation;
 	Vector3 Translation;
 };
@@ -46,6 +59,16 @@ void Rva00168C40QuatTransform::transform_vectors(const Vector3 *in, Vector3 *out
 	while (count--)
 	{
 		Transform_Vector(*in, out);
+		++in;
+		++out;
+	}
+}
+
+void Rva00168C40QuatTransform::rotate_vectors(const Vector3 *in, Vector3 *out, int count) const
+{
+	while (count--)
+	{
+		Rotate_Vector(*in, out);
 		++in;
 		++out;
 	}
