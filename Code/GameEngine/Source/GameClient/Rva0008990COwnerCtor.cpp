@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /MD /EHsc /DNDEBUG
 // Reference-guided: clean BFME1 6d9434269164392c5ba62aaa7c15a86b5b020d76
 // game/GameEngine/Source/GameClient/CameraPath_ctor.cpp,
