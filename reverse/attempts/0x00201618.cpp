@@ -1,4 +1,8 @@
 // ??0WeatherSetting@@QAE@XZ
+// partial score=0.99 date=2026-10-13
+// ??0WeatherSetting@@QAE@XZ
+// partial score=0.99 date=2026-10-13
+// ??0WeatherSetting@@QAE@XZ
 // partial score=0.98 date=2026-10-10
 // ??0WeatherSetting@@QAE@XZ
 // partial score=0.98 date=2026-10-09
@@ -126,8 +130,13 @@ WeatherSetting::WeatherSetting() : Rva00200D38(AsciiString("Weather")), m_58(0),
 	m_70 = 200;
 	m_74.x = 0.3f;
 	m_74.y = 0.7f;
-	setWeatherPair(m_7C, 0.0f, 100.0f);
-	setWeatherPair(m_84, 50.0f, 20.0f);
+	Coord2D *p7C = &m_7C;
+	p7C->x = 0.0f;
+	float e20 = 20.0f;
+	p7C->y = 100.0f;
+	Coord2D *p84 = &m_84;
+	p84->x = 50.0f;
+	p84->y = e20;
 	m_8C.setFromInt(0x886655);
 	m_9C.x = 300.0f;
 	m_9C.y = 1500.0f;

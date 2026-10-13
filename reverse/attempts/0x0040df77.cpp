@@ -138,3 +138,32 @@ void ArmySummary::rva0040DF77()
   flag14=false;
  }
 }
+
+// r4 update 2026-10-13 (0.95, 180B exact size in home TU ArmySummary.cpp): the
+// variant below uses first==last + while/if-else + named key (for-loop tried,
+// same single-home wall: end-wlast reloaded per outer iter, not homed).
+// Kept disabled so this file still compiles the 10-08 standalone bank above.
+#if 0
+void ArmySummary::rva0040DF77()
+{
+ if (words4C.first == words4C.last) {
+  rva0040DED9();
+  return;
+ }
+ for (Rva004F69C3 *cur = entries.begin(); cur != entries.end();) {
+  int key = cur->key;
+  int *w;
+  int *wlast;
+  for (w = words4C.first, wlast = words4C.last; w != wlast && *w != key; ++w) ;
+  if (w == wlast) {
+   Rva0040D8D6List::forEach(&Rva0040D8D6Listener::removing,this,cur->key);
+   Rva0040DD3ARef value(cur->value);
+   cur = entries.erase(cur);
+   Rva0040D8D6List::forEach(&Rva0040D8D6Listener::removed,this,(int)value.value);
+  } else {
+   ++cur;
+  }
+ }
+ flag14 = false;
+}
+#endif

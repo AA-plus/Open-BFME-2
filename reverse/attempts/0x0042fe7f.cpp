@@ -1,4 +1,6 @@
 // ?selectFriends@SelectionTranslator@@QAE_NPAVDrawable@@PAVGameMessage@@_N@Z
+// partial score=0.98 date=2026-10-13
+// ?selectFriends@SelectionTranslator@@QAE_NPAVDrawable@@PAVGameMessage@@_N@Z
 // partial score=0.98 date=2026-10-06
 // cl: /Ireference/shims/bfme2_ascii /Os /DNDEBUG /MD /EHsc
 // stlport

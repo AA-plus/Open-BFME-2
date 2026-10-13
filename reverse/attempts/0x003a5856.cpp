@@ -1,4 +1,6 @@
 // ??0Rva005FEA50Base@FXParticleSystem@@QAE@AAV?$TrackingPtr@VParticleSystem@FXParticleSystem@@@1@PBX@Z
+// partial score=0.85 date=2026-10-13
+// ??0Rva005FEA50Base@FXParticleSystem@@QAE@AAV?$TrackingPtr@VParticleSystem@FXParticleSystem@@@1@PBX@Z
 // partial score=0.8 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /GX- /DNDEBUG /MD /Ireference/shims/moduledata
 // ??0WindModuleInfo@FXParticleSystem@@QAE@XZ @0x003A53C4 186B: WindModuleInfo

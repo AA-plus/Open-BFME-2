@@ -2,6 +2,8 @@
 // partial score=0.9 date=2026-10-13
 // ?rva0043DC40@AptMpGameSetup@@QAEXH@Z
 // partial score=0.9 date=2026-10-13
+// ?rva0043DC40@AptMpGameSetup@@QAEXH@Z
+// partial score=0.9 date=2026-10-13
 // cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB
 // stlport
 // FRAGMENT for Code/GameEngine/Source/GameClient/GUI/MpGameSetupSlots.cpp (needs its AptMpGameSetup view).
