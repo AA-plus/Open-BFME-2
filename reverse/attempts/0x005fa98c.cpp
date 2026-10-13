@@ -1,4 +1,6 @@
 // ?rva005FA98CSwap@@YIXPAVRva005FA98C@@HHHHHH@Z
+// partial score=0.936 date=2026-10-13
+// ?rva005FA98CSwap@@YIXPAVRva005FA98C@@HHHHHH@Z
 // partial score=0.8 date=2026-10-06
 // cl: /O1 /EHa /DNDEBUG /MD
 // ?rva005FA98CSwap@@YIXPAVRva005FA98C@@HHHHHH@Z @0x005FA98C 84B evidence:
@@ -21,7 +23,7 @@ struct Rva00A00062Sub
 {
 	char m_pad[0x10];
 };
-void __fastcall rva00A00062(Rva00A00062Sub *sub, int fwd, int s1, int s2);
+struct Rva00600062SwapForward { void forward(int a, int b); };
 
 struct Rva005FA98CM04
 {
@@ -50,7 +52,7 @@ void __fastcall rva005FA98CSwap(Rva005FA98C *o, int fwd, int unused, int b, int 
 		return;
 	Rva005FA8F5Entry *r1 = rva005FA8F5Find(d);
 	Rva005FA8F5Entry *r2 = rva005FA8F5Find(e);
-	rva00A00062(&m->m_sub08, fwd, r1->m_04, r2->m_04);
+	((Rva00600062SwapForward *)&m->m_sub08)->forward(r1->m_04, r2->m_04);
 	int t = r1->m_04;
 	r1->m_04 = r2->m_04;
 	r2->m_04 = t;

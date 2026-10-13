@@ -1,4 +1,6 @@
 // ?rva00032050@GeneralAllocator@Allocator@EA@@QAEIPAXI@Z
+// partial score=0.8975 date=2026-10-13
+// ?rva00032050@GeneralAllocator@Allocator@EA@@QAEIPAXI@Z
 // partial score=0.81 date=2026-10-13
 // ?rva00032050@GeneralAllocator@Allocator@EA@@QAEIPAXI@Z
 // partial score=0.55 date=2026-10-03
@@ -48,13 +50,10 @@ unsigned int GeneralAllocator::rva00032050(void *block, unsigned int flags)
 	}
 
 	unsigned int size = *(unsigned int *)((char *)block + 4) & 0x7FFFFFF8;
-	int result = rva00031F90(block);
+	int result;
+	result = rva00031F90(block) + ((((unsigned char)(unsigned int)block) & 7) != 0) + ((((unsigned char)size) & 7) != 0) + (size < 8);
 	_ReadWriteBarrier();
-	result += size < 0x10;
-	result += (((unsigned char)(unsigned int)block) & 7) != 0;
-	result += (((unsigned char)size) & 7) != 0;
-	result += size < 8;
-	result += size >= flags + 0x10;
+	result = result + (size >= flags + 0x10) + (size < 0x10);
 
 	if (lock != 0) {
 		--lock->m_count;

@@ -1,4 +1,6 @@
 // ?GetBlingIndex@CreateAHeroSubClass@CreateAHeroManager@@QAEHHABVAsciiString@@@Z
+// partial score=0.84 date=2026-10-13
+// ?GetBlingIndex@CreateAHeroSubClass@CreateAHeroManager@@QAEHHABVAsciiString@@@Z
 // partial score=0.97 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /EHsc /MD
 // stlport
@@ -31,6 +33,13 @@ struct MapNodeVec
 	unsigned *m_start;
 	unsigned *m_finish;
 	unsigned *m_end;
+	_STL::vector<unsigned int> &vec() { return *(_STL::vector<unsigned int> *)&m_start; }
+};
+
+struct MapNodeVec2
+{
+	char hdr[0x14];
+	_STL::vector<unsigned int> m_vec;
 };
 
 struct CreateAHeroManager::CreateAHeroSubClass
@@ -69,14 +78,15 @@ unsigned int CreateAHeroManager::CreateAHeroSubClass::GetBlingIndex(int key, uns
 // ?GetBlingIndex@CreateAHeroSubClass@CreateAHeroManager@@QAEHHABVAsciiString@@@Z present-unmatched
 int CreateAHeroManager::CreateAHeroSubClass::GetBlingIndex(int key, const AsciiString &name)
 {
-	MapNodeVec *n = 0;
-	if (!rva0021BC0D(key, (void **)&n))
-		return -1;
-	CreateAHeroManager *mgr = TheCreateAHeroManager;
-	for (unsigned int i = 0; i < (unsigned int)(((char *)n->m_finish - (char *)n->m_start) >> 2); ++i) {
-		void *elem = mgr->GetBling(n->m_start[i]);
-		if (elem && ((const StringBase<char> *)((const char *)elem + 8))->compare(*(const StringBase<char> *)&name) == 0)
-			return (int)i;
+	void *node = 0;
+	if (rva0021BC0D(key, &node))
+	{
+		MapNodeVec2 *n = (MapNodeVec2 *)node;
+		for (unsigned int i = 0; i < n->m_vec.size(); ++i) {
+			void *elem = TheCreateAHeroManager->GetBling(n->m_vec[i]);
+			if (elem && ((const StringBase<char> *)((const char *)elem + 8))->compare(*(const StringBase<char> *)&name) == 0)
+				return (int)i;
+		}
 	}
 	return -1;
 }

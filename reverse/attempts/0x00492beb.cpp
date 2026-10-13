@@ -1,4 +1,6 @@
 // ?rva00492BEB@SpecialAbilityUpdate@@QAE?AW4UpdateSleepTime@@XZ
+// partial score=0.8 date=2026-10-13
+// ?rva00492BEB@SpecialAbilityUpdate@@QAE?AW4UpdateSleepTime@@XZ
 // partial score=0.55 date=2026-10-06
 // cl: /arch:SSE /Oy- /DNDEBUG /MD
 //
@@ -75,14 +77,15 @@ UpdateSleepTime SpecialAbilityUpdate::rva00492BEB()
 	if (m_mode == 2)
 	{
 		Object *owner = *(Object **)((char *)this - 8);
-		Object *found = TheGameLogic->findObjectByID(m_id);
-		if (found != 0 && owner->m_holder != 0 && owner->m_holder->m_inner != 0)
+		Object *found = TheGameLogic->findObjectByID(this ? m_id : m_id);
+		if (found != 0 && owner->m_holder != 0)
 		{
 			Coord3D pos;
 			pos.x = found->m_pos.x;
 			pos.y = found->m_pos.y;
 			pos.z = found->m_pos.z;
-			owner->m_holder->m_inner->rva001E702E(owner, &pos, 0);
+			if (owner->m_holder->m_inner != 0)
+				owner->m_holder->m_inner->rva001E702E(owner, &pos, 0);
 		}
 	}
 	return SpecialAbilityUpdate::update();
