@@ -1,3 +1,5 @@
+// ?checkIdleTeams@Rva0059AC4D@@QAEXXZ
+// partial score=0.9 date=2026-10-13
 // ?checkIdleTeams@AITeamBuilder@@QAEXXZ
 // partial score=0.92 date=2026-10-08
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/moduledata /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_NO_EXCEPTIONS /D_STLP_USE_MALLOC /D_STLP_USE_STATIC_LIB /ICode/GameEngine/Source/Common /ICode/Libraries/Include
@@ -174,8 +176,8 @@ void AITeamBuilder::checkIdleTeams() {
   IdleTargetList* list=g_00DFEEF8->rva002A8AB1(owner14)->targetList;
   if(!idle.empty()&&!list->points.empty()) {
    Object* obj=idle[GetGameLogicRandomValue(0,idle.size()-1,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\SkirmishAI\\AITeamBuilder\\AITeamBuilder.cpp",0x251)];
-   int last=list->points.size()-1;
-   IdleTargetPoint* point=list->points[last];
+
+   IdleTargetPoint* point=list->points[(list->points.size()-1)];
    int id=obj->objectID;
    idleIDs.insert(id);
    ((Rva00295A0FCommands*)((char*)obj->ai+0x20))->Rva00295A0FCommand(&point->position,0x7fffffff,0);

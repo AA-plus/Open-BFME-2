@@ -1,4 +1,6 @@
 // ?CreateIcon@Impl@ArmyDetailsPanel@StrategicInGameUI@@QAE?AUSBServer@@HPAVArmySummaryEntry@@@Z
+// partial score=0.86 date=2026-10-13
+// ?CreateIcon@Impl@ArmyDetailsPanel@StrategicInGameUI@@QAE?AUSBServer@@HPAVArmySummaryEntry@@@Z
 // partial score=0.75 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
@@ -19,7 +21,7 @@
 struct TargetRef00217D4C {void *vtable;int count;};
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
 struct SBServer {
- void *handle;
+ void *volatile handle;
  SBServer():handle(0){}
  inline __declspec(noinline) SBServer(const SBServer &src):handle(src.handle) {if(handle)++*(int *)((char *)handle+((int **)handle)[0][1]+4);}
  ~SBServer(){if(handle)ReleaseTreeHintRef00217D4C((TargetRef00217D4C *)((char *)handle+((int **)handle)[0][1]));}
@@ -28,6 +30,7 @@ struct SBServer {
 };
 #include <map>
 #include "ascii_string.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 // _Rb_tree_iterator comparisons otherwise instantiate the base-class
 // operator!= COMDAT (one byte shape per TU flags); exact-match free
@@ -98,7 +101,7 @@ SBServer StrategicInGameUI::ArmyDetailsPanel::Impl::CreateIcon(int entryID,ArmyS
  icon.Rva005E3E8A(reference);
  icons[entryID]=icon;
  if(((Rva005F2278 *)selected)->rva005F2278(entryID)) {
-  char *base=(char *)icon.handle+((int **)icon.handle)[0][1];
+  char *base=(char *)__vref(icon.handle)+((int **)icon.handle)[0][1];
   ((Rva005F3F41Outer *)base)->set(1);
  }
  return icon;

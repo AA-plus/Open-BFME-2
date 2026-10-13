@@ -1,4 +1,6 @@
 // ??1Rva0028418A@@UAE@XZ
+// partial score=0.93 date=2026-10-13
+// ??1Rva0028418A@@UAE@XZ
 // partial score=0.9 date=2026-10-09
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 // NEAR draft. ??1Rva0028418A@@UAE@XZ retail 0x0028418A (262 bytes), also
@@ -154,11 +156,11 @@ Rva0028418A::~Rva0028418A()
 {
 	reinterpret_cast<TerrainLogic *>(this)->TerrainLogic::reset();
 	Rva00283081 *&slot = m_584;
-	Rva00283081 *owned = slot;
-	if (owned)
+
+	if ((slot))
 	{
-		owned->Rva00283081::~Rva00283081();
-		::operator delete(owned);
+		(slot)->Rva00283081::~Rva00283081();
+		::operator delete((slot));
 		slot = 0;
 	}
 }

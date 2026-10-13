@@ -1,9 +1,12 @@
 // ?parseMultisoundDefinition@AudioEventInfo@@SAXPAVINI@@@Z
+// partial score=0.92 date=2026-10-13
+// ?parseMultisoundDefinition@AudioEventInfo@@SAXPAVINI@@@Z
 // partial score=0.94 date=2026-10-08
 // cl: /O1 /G7 /arch:SSE /Ireference/shims/bfme2_ascii /EHsc /DNDEBUG /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
 #include "ascii_string.h"
 #include <vector>
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 class INIException
 {
 public:
@@ -104,8 +107,8 @@ void AudioEventInfo::parseMultisoundDefinition(INI *ini)
  if(info->control & 1) {
   if(!(info->control & 0x80)) throw INIException(1,"Multisound control flag \"LOOP\" is supported only in conjunction with flag PLAY_ONE. See me if you need this changed.");
   for(BfmeStringTailRecord156 *i=info->subsounds.begin(),*end=info->subsounds.end();i!=end;++i) {
-   AudioEventInfo *sub=static_cast<AudioEventInfo*>(i->ref.referent);
-   if(sub && sub->type!=0) throw INIException(1,"Multisound control flag \"LOOP\" is supported only when all subsounds are MusicTracks. See me if you need this changed.");
+   AudioEventInfo * volatile sub = static_cast<AudioEventInfo*>(i->ref.referent);
+   if(sub && __vref(sub->type)!=0) throw INIException(1,"Multisound control flag \"LOOP\" is supported only when all subsounds are MusicTracks. See me if you need this changed.");
   }
  }
 }

@@ -1,6 +1,8 @@
 // ?onEnter@AIAttackPositionAimAtTargetState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.88 date=2026-10-13
 // ?onEnter@AIAttackPositionAimAtTargetState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.88 date=2026-10-13
+// ?onEnter@AIAttackPositionAimAtTargetState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.8732703916 date=2026-10-09
 // ?rva0034A570@AIAttackPositionAimAtTargetState@@QAE?AW4StateReturnType@@_N@Z
 // partial score=0.97 date=2026-10-09
@@ -95,6 +97,8 @@
 // (slot 2 isWeaponSlotOkToFire, slot 0 notifyFired); update's three early
 // failures are separate statements in retail.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 #include "Code/Libraries/Include/Lib/Coord3D.h"
 
@@ -1541,6 +1545,7 @@ StateReturnType AIAttackPositionAimAtTargetState::onEnter()
 		if (!weapon)
 			return STATE_FAILURE;
 		inFiringRange = ((ContainFirePointView *)containedBy->m_contain)->attemptBestFirePointPosition(source, weapon, targetPos);
+		_ReadWriteBarrier();
 	}
 	else
 	{

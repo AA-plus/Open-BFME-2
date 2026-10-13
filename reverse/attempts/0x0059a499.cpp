@@ -1,4 +1,6 @@
 // ?recruitPreDefined@AITeamBuilder@@QAEXPAVTeam@@PAHPAVTeamPrototype@@@Z
+// partial score=0.9 date=2026-10-13
+// ?recruitPreDefined@AITeamBuilder@@QAEXPAVTeam@@PAHPAVTeamPrototype@@@Z
 // partial score=0.91 date=2026-10-13
 // ?recruitPreDefined@AITeamBuilder@@QAEXPAVTeam@@PAHPAVTeamPrototype@@@Z
 // partial score=0.91 date=2026-10-08
@@ -71,6 +73,7 @@ Team* AITeamBuilder::getTeamForAIPrototype(TeamPrototype* prototype) {
 
 #include "GameLogicObjectLookupView.h"
 #include "Lib/Coord3D.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 // Both rowed native query providers walk seven words. The existing
 // Thing::isAnyKindOf provider retains BitFlags<69> in its ABI spelling;
 // the actual requirement storage and any() instantiation are BitFlags<218>.
@@ -187,7 +190,7 @@ void AITeamBuilder::recruitPreDefined(Team* team,int* count,TeamPrototype* remai
    Object* object=TheGameLogic->findObjectByID((ObjectID)*it);
    const Coord3D* center=(const Coord3D*)((Rva0039D7C8LeaGetter*)prototype)->get();
    Coord3D delta={center->x,center->y,center->z};
-   delta.x-=object->position.x;delta.y-=object->position.y;delta.z-=object->position.z;
+   delta.x-=__vref(object->position.x);delta.y-=object->position.y;delta.z-=object->position.z;
    TreeOpaqueMapped00372FF4 value; value.m_bits=*it;
    ((DistanceTree*)&distances)->insert_equal(DistanceValue(delta.x*delta.x+delta.y*delta.y+delta.z*delta.z,value));
   }
