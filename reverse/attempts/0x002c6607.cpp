@@ -1,4 +1,6 @@
 // ?updateInterestZones@TacticalAI@@QAEXXZ
+// partial score=0.91 date=2026-10-13
+// ?updateInterestZones@TacticalAI@@QAEXXZ
 // partial score=0.9 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /GX /MD /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /Ireference/open-bfme-1/inputs/reference/shims/objectdlink
 // stlport
@@ -9,6 +11,8 @@
 // The 32-byte zone's existing serializer retains its address-derived name.
 // Its constructor signature follows complete target 0x002C6234..0x002C6354:
 // coordinate address, float, player; member initialization proves 32 bytes.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <vector>
 #include <list>
 class AsciiString;
@@ -269,6 +273,7 @@ void TacticalAI::updateInterestZones() {
  typedef _STL::list<TeamPrototype *> PrototypeList;
  PrototypeList &prototypes=((Rva002C6607PlayerView*)player)->prototypes;
  PrototypeList::iterator p=prototypes.begin();
+ _ReadWriteBarrier();
  PrototypeList::iterator end=prototypes.end();
  for(;p!=end;++p) {
   for(DLINK_ITERATOR<Team> teams=(*p)->iterate_TeamInstanceList();!teams.done();teams.advance()) {
