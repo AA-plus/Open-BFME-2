@@ -1,4 +1,6 @@
 // ?rva00218468@FontLibrary@@QAEXPAVAsciiString@@PAMPA_N@Z
+// partial score=0.88 date=2026-10-13
+// ?rva00218468@FontLibrary@@QAEXPAVAsciiString@@PAMPA_N@Z
 // partial score=0.95 date=2026-10-13
 // ?rva00218468@FontLibrary@@QAEXPAVAsciiString@@PAMPA_N@Z
 // partial score=0.97 date=2026-10-12

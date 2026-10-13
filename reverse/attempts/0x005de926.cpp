@@ -1,4 +1,6 @@
 // ?rva005DE926@Rva005DE5B5@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva005DE926@Rva005DE5B5@@QAEXXZ
 // partial score=0.97 date=2026-10-13
 namespace _STL
 {
@@ -36,6 +38,7 @@ void Rva005DE5B5::rva005DE926()
 {
 	_STL::vector<BfmeStringRecord005DDD40, _STL::allocator<BfmeStringRecord005DDD40> > *vec = &m_04;
 	unsigned int count = vec->size();
+	_ReadWriteBarrier();
 	vec->erase(vec->begin(), vec->end());
 	((Rva005DE7D1Vector *)vec)->resize(count);
 	m_14 = 0;

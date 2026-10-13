@@ -1,4 +1,6 @@
 // ?rva002AEEA7@Player@@QAEXH@Z
+// partial score=0.7 date=2026-10-13
+// ?rva002AEEA7@Player@@QAEXH@Z
 // partial score=0.93 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /MD /EHsc /O1 /arch:SSE /G7
 // stlport

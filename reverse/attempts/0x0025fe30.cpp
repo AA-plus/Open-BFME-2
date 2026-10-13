@@ -1,4 +1,6 @@
 // ?rva0025FE30@BfmeItemKA@@AAEXMMMMHH@Z
+// partial score=0.93 date=2026-10-13
+// ?rva0025FE30@BfmeItemKA@@AAEXMMMMHH@Z
 // partial score=0.92 date=2026-10-09
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /GX /D_STLP_USE_STATIC_LIB /Ireference/open-bfme-1/inputs/vendor/stlport /Ireference/shims/bfme2_ascii /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/inputs/reference/shims/sweep
 // ?getXFromAlignment@GameSubTitle@@SAHHHHMM@Z @0x0025FF8F 175B.

@@ -1,4 +1,6 @@
 // ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
+// partial score=0.94 date=2026-10-13
+// ?winCreate@GameWindowManager@@QAEPAVGameWindow@@PAURva0047EDE0CreateInfo@@@Z
 // partial score=0.8 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /DNDEBUG /MD
 //
