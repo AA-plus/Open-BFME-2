@@ -118,10 +118,12 @@ namespace _STL { template<> void vector<Coord3D>::push_back(const Coord3D&); }
 // suppress local default copies that the census proves differ from them.
 typedef _STL::vector<const LocomotorTemplate *> BfmeRetailLocomotorVector;
 typedef _STL::map<LocomotorSetType, BfmeRetailLocomotorVector, _STL::less<LocomotorSetType>, _STL::allocator<_STL::pair<const LocomotorSetType, BfmeRetailLocomotorVector> > > BfmeRetailLocomotorMap;
+typedef _STL::pair<const LocomotorSetType, BfmeRetailLocomotorVector> BfmeRetailLocomotorPair;
 namespace _STL { template<> BfmeRetailLocomotorVector& BfmeRetailLocomotorMap::operator[](const LocomotorSetType&);
 template<> BfmeRetailLocomotorVector::iterator BfmeRetailLocomotorVector::erase(iterator, iterator);
 template<> void BfmeRetailLocomotorVector::push_back(const value_type&);
-template<> void BfmeRetailLocomotorVector::clear(); }
+template<> void BfmeRetailLocomotorVector::clear();
+template<> void _Destroy<BfmeRetailLocomotorPair>(BfmeRetailLocomotorPair*); }
 
 #define SLEEPY_AI
 
