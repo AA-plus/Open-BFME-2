@@ -452,9 +452,9 @@ class SidesList
 public:
 	void rva0032D554(void);
 	void rva0032F84F(void);
-	void rva0032C991(void);
+	void discardOverriddenScriptsAndTeams(void);
 	void rva0032FF91(void);
-	void rva0032FD8E(void);
+	void addMusicScriptReference(void);
 	TeamsInfoRec *getTeamInfo(void) { return &m_teams; }
 	int addSide(const Dict *d);
 	SidesInfo *findSideInfo(AsciiString name, int *index = 0);
@@ -3065,7 +3065,7 @@ void GameLogic::rva002469A5(bool loadingSaveGame, int *progress)
 			TheTerrainLogic->loadMap(TheWritableGlobalData->m_mapName, &stream, false, !loadingSaveGame);
 		}
 	}
-	TheSidesList->rva0032C991();
+	TheSidesList->discardOverriddenScriptsAndTeams();
 	rva0023E628(TheWritableGlobalData->m_mapName);
 	((Rva0023C7D2 *)this)->rva0023C7BB(2);
 	Rva0134FAA0->slot28();
@@ -3089,7 +3089,7 @@ void GameLogic::rva002469A5(bool loadingSaveGame, int *progress)
 
 	rva0023E0C7();
 	if (!rva001DCD1C() && TheSidesList && TheSidesList->m_f7c)
-		TheSidesList->rva0032FD8E();
+		TheSidesList->addMusicScriptReference();
 	((Rva0023C7D2 *)this)->rva0023C7BB(0xc);
 	TheTeamFactory->reset();
 	Rva0134FAA0->slot28();

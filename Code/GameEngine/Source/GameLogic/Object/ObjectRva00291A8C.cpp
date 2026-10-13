@@ -248,7 +248,7 @@ public:
 protected:
  virtual void reactToTransformChange(const Matrix3D *, const Coord3D *, float);
 public:
- void rva00291EB1();
+ void setTriggerAreaFlagsForChangeInPosition();
  void rva0028B98B();
  char rva00294815();
  bool rva00293926(KindOfType);

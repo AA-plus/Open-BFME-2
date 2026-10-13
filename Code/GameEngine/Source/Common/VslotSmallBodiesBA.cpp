@@ -36,7 +36,7 @@ public:
 class DisconnectManager
 {
 public:
-	void rva004D3DF4(Int slot, ConnectionManager *conMgr);
+	void voteForPlayerDisconnect(Int slot, ConnectionManager *conMgr);
 private:
 	char m_pad00[0x270];
 public:
@@ -118,7 +118,7 @@ private:
 void ConnectionManager::rva004CF90D(Int slot)
 {
 	if (m_12100)
-		m_12100->rva004D3DF4(slot, this);
+		m_12100->voteForPlayerDisconnect(slot, this);
 }
 
 // vtable 0x00BF6040#15

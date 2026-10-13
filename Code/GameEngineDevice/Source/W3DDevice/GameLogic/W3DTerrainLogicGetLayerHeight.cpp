@@ -30,7 +30,7 @@ public:
 class Pathfinder
 {
 public:
-	float rva002EF68C(PathfindLayerEnum layer, const Coord3D *loc, Coord3D *normal);
+	float GetWallHeight(PathfindLayerEnum layer, const Coord3D *loc, Coord3D *normal);
 };
 
 class AI
@@ -92,7 +92,7 @@ float W3DTerrainLogic::getLayerHeight(float x, float y, PathfindLayerEnum layer,
 		loc.z = 0.0f;
 		float height;
 		if (layer >= LAYER_WALL) {
-			height = TheAI->pathfinder()->rva002EF68C(layer, &loc, normal);
+			height = TheAI->pathfinder()->GetWallHeight(layer, &loc, normal);
 			return height;
 		}
 		Bridge *pBridge = findBridgeLayerAt(&loc, layer, clip);

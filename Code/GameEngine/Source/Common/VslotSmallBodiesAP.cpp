@@ -396,7 +396,7 @@ void Rva005C3586::rva005C3586()
 class Rva005C3427
 {
 public:
-	void rva005C3427();
+	void Run();
 };
 class Rva005C358E
 {
@@ -408,7 +408,7 @@ private:
 };
 void Rva005C358E::rva005C358E()
 {
-	m_08->rva005C3427();
+	m_08->Run();
 }
 
 class Rva005C3453

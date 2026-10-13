@@ -457,7 +457,7 @@ public:
 	virtual void rva0034BEF9Slot142(int value) = 0;
 	virtual CommandSourceType getLastCommandSource() const = 0;
 	virtual void notifyVictimIsDead() = 0;
-	void rva00263EA2(ObjectID id);
+	void requestSafePath(ObjectID id);
 	void setCurrentVictim(const Object *victim);
 	void ignoreObstacle(const Object *obj);
 	Object *getCurrentVictim() const;
@@ -1379,7 +1379,7 @@ StateReturnType AIMoveAwayAndCowerState::onEnter()
 	ai->rva0034BEF9Slot142(4);
 	m_bfmeValue4C = 1;
 	m_bfmeFlag50 = true;
-	ai->rva00263EA2(goal->getID());
+	ai->requestSafePath(goal->getID());
 	return AIInternalMoveToState::onEnter();
 }
 

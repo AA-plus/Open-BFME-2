@@ -220,7 +220,7 @@ public:
 protected:
     void populateStructureInventory(Object *,bool);
 public:
-    void rva0050DBE6(Object *);
+    void populateBeacon(Object *);
 protected:
     void populateUnderConstruction(Object *);
 public:
@@ -228,7 +228,7 @@ public:
 protected:
     void populateMultiSelect();
 public:
-    void rva0050E08E();
+    void populateObserverList();
 };
 // Each arm follows the independently read native call order.
 #define HIDE_PARENTS(a,b,c,d,e,f,g,h) \
@@ -288,7 +288,7 @@ void ControlBar::switchToContext(int context,void *draw)
         break;
     case 5:
         HIDE_PARENTS(true,true,true,false,true,true,true,true);
-        rva0050DBE6(((ContextDrawableView *)incomingDraw)->getObject());
+        populateBeacon(((ContextDrawableView *)incomingDraw)->getObject());
         break;
     case 6:
         HIDE_PARENTS(true,false,true,true,true,true,true,true);
@@ -304,7 +304,7 @@ void ControlBar::switchToContext(int context,void *draw)
         break;
     case 9:
         HIDE_PARENTS(true,true,true,true,true,true,true,false);
-        rva0050E08E();
+        populateObserverList();
         break;
     }
     self->context=context;

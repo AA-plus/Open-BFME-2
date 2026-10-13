@@ -1332,7 +1332,7 @@ extern InGameUI *TheInGameUI;
 class AiOrdersManager
 {
 public:
-	void rva00355183(Int a, Int b);
+	void clearOrders(Int a, Int b);
 };
 
 extern AiOrdersManager *TheAiOrdersManager;
@@ -1419,7 +1419,7 @@ StateReturnType DozerActionMoveToActionPosState::update()
 					Rva00489256Do(dozer);
 					dozerAI->makePhantomStructureReal();
 					other->rva0028AB4E();
-					TheAiOrdersManager->rva00355183(3, dozer->getID());
+					TheAiOrdersManager->clearOrders(3, dozer->getID());
 				}
 			}
 

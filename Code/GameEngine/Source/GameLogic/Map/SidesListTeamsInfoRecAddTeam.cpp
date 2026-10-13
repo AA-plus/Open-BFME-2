@@ -54,7 +54,7 @@ class TeamsInfoRec
 {
 public:
 	int addTeam(const Dict *dict);
-	void rva0032D103(int index);
+	void addToIndex(int index);
 
 private:
 	char m_map[0xc];
@@ -76,7 +76,7 @@ int TeamsInfoRec::addTeam(const Dict *dict)
 	team->m_dict.Rva00329CF0(dict);
 	try
 	{
-		rva0032D103(index);
+		addToIndex(index);
 	}
 	catch (...)
 	{

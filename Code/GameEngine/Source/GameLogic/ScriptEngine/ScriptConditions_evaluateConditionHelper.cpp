@@ -295,14 +295,14 @@ protected:
 	bool rva003E8D01(Parameter *, Parameter *, Parameter *);
 	bool rva003E3F59(Parameter *, Parameter *, Parameter *);
 	bool rva003E9062(Parameter *, Parameter *);
-	bool rva003E719C(Condition *, Parameter *, Parameter *, Parameter *, Parameter *);
+	bool evaluateSkirmishValueInArea(Condition *, Parameter *, Parameter *, Parameter *, Parameter *);
 	bool evaluateSkirmishPlayerHasUnitsInArea(Condition *, Parameter *, Parameter *);
 	bool rva003E4565(Parameter *, Parameter *);
 	bool rva003E8E23(Parameter *, Parameter *, Parameter *, Parameter *);
 	bool rva003E59B0(Parameter *, Parameter *, Parameter *, bool);
 	bool rva003EA12A(Parameter *);
 	bool rva003EA228(Parameter *, bool);
-	bool rva003E91F6(Parameter *, Parameter *, Parameter *);
+	bool evaluateSkirmishCanFireSpecialPowerOnTeam(Parameter *, Parameter *, Parameter *);
 	bool rva003E86A3(Parameter *, Parameter *, Parameter *);
 	bool rva003E8785(Parameter *, Parameter *, Parameter *);
 	bool rva003E8863(Parameter *, Parameter *, Parameter *, Parameter *);
@@ -553,7 +553,7 @@ bool ScriptConditions::evaluateConditionHelper(Condition *c)
 	case 85:
 		return this->rva003E9062(c->getParameter(0), c->getParameter(1));
 	case 171:
-		return this->rva003E91F6(c->getParameter(0), c->getParameter(1), c->getParameter(2));
+		return this->evaluateSkirmishCanFireSpecialPowerOnTeam(c->getParameter(0), c->getParameter(1), c->getParameter(2));
 	case 80:
 		return this->evaluateUnitHasObjectStatus(c->getParameter(0), c->getParameter(1));
 	case 193:
@@ -563,7 +563,7 @@ bool ScriptConditions::evaluateConditionHelper(Condition *c)
 	case 82:
 		return this->evaluateTeamHasObjectStatus(c->getParameter(0), c->getParameter(1), false);
 	case 86:
-		return this->rva003E719C(c, c->getParameter(0), c->getParameter(1), c->getParameter(2), c->getParameter(3));
+		return this->evaluateSkirmishValueInArea(c, c->getParameter(0), c->getParameter(1), c->getParameter(2), c->getParameter(3));
 	case 87:
 		return this->evaluateSkirmishPlayerIsFaction(c->getParameter(0), c->getParameter(1));
 	case 88:

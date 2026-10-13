@@ -522,7 +522,7 @@ public:
 	virtual void reset();		// slot 10 (+0x28)
 	void init();
 	GameSlot *getSlot(Int index);
-	void rva003FF268();
+	void enterGame();
 	void setSeed(Int seed);
 	void setMap(AsciiString mapName);
 	void setMapCRC(UnsignedInt mapCRC);
@@ -862,7 +862,7 @@ void GameEngine::init(Int argc, char *argv[])
 						TheSkirmishGameInfo->m_38 = first->m_38;
 						TheSkirmishGameInfo->m_3C = first->m_3C;
 						TheSkirmishGameInfo->reset();
-						TheSkirmishGameInfo->rva003FF268();
+						TheSkirmishGameInfo->enterGame();
 						TheSkirmishGameInfo->setSeed(time(0));
 						TheSkirmishGameInfo->setMap(TheGlobalData->m_initialFile);
 						TheSkirmishGameInfo->setMapCRC(md->m_CRC);

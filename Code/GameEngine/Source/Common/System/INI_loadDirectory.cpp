@@ -48,7 +48,7 @@ public:
 	bool loadDirectory(AsciiString dirName, bool subdirs, INILoadType loadType,
 		Xfer *pXfer, int fileFilter);
 
-	void rva0002C0F5(AsciiString &filename);
+	void parseLine(AsciiString &filename);
 
 protected:
 	bool prepFile(const AsciiString &filename, INILoadType loadType);

@@ -39,7 +39,7 @@ class INI
 public:
 	unsigned char loadFile(AsciiString filename, INILoadType loadType, Xfer *pXfer);
 
-	void rva0002C0F5(AsciiString &filename);
+	void parseLine(AsciiString &filename);
 
 protected:
 	bool prepFile(const AsciiString &filename, INILoadType loadType);
@@ -83,7 +83,7 @@ unsigned char INI::loadFile(AsciiString filename, INILoadType loadType, Xfer *pX
 		while (m_endOfFile == false)
 		{
 			readLine();
-			rva0002C0F5(filename);
+			parseLine(filename);
 		}
 	}
 	catch (INIException &e)

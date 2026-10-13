@@ -39,7 +39,7 @@ public:
 	bool loadBlock(AsciiString filename, AsciiString blockType, AsciiString blockName,
 		INILoadType loadType, Xfer *pXfer);
 
-	void rva0002C0F5(AsciiString &filename);
+	void parseLine(AsciiString &filename);
 
 	static bool isDeclarationOfType(AsciiString blockType, AsciiString blockName, char *bufferToCheck);
 
@@ -79,7 +79,7 @@ bool INI::loadBlock(AsciiString filename, AsciiString blockType, AsciiString blo
 
 			if (isDeclarationOfType(blockType, blockName, m_buffer))
 			{
-				rva0002C0F5(filename);
+				parseLine(filename);
 				return true;
 			}
 		}

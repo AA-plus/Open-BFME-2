@@ -66,7 +66,7 @@ public:
 class Pathfinder {
 public:
  Bool IsImpassableCell(int,int);
- Bool rva002F477E(Object *,const Coord3D *,const Coord3D *,int);
+ Bool QuickDoesPathExist(Object *,const Coord3D *,const Coord3D *,int);
 };
 class AI {
 public:
@@ -138,7 +138,7 @@ Bool Rva00284AC6TryPosition(const Coord3D *center,Real dist,Real angle,
   }
  }
  if (options->sourceToPathToDest &&
-   !TheAI->pathfinder()->rva002F477E(const_cast<Object *>(options->sourceToPathToDest),
+   !TheAI->pathfinder()->QuickDoesPathExist(const_cast<Object *>(options->sourceToPathToDest),
    options->sourceToPathToDest->getPosition(),&pos,0)) return false;
  *result=pos;
  return true;
