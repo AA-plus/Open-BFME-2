@@ -55,7 +55,8 @@ private:
 	StringDataC *m_pData;
 };
 
-extern void *g_bfmeAptDefaultValueAtE18078;	// VA 0x00E18078
+class AptValue;
+extern AptValue *gpUndefinedValue;	// 0x00E18078, the rowed AptBuiltinValues.cpp global
 
 class BfmeAptValue006DCD20
 {
@@ -88,9 +89,9 @@ AptString *rva006d7b60(BfmeAptValue006DCD20 *value, int count, int unused)
 {
 	EAStringC text;
 	int start = -1;
-	int end = 0x98967f;
+	int end = 9999999;	// 0x98967f
 	if (count == 0)
-		return (AptString *)g_bfmeAptDefaultValueAtE18078;
+		return (AptString *)gpUndefinedValue;
 	if (count >= 1)
 		start = g_aptValueStackAtE182E0.At(0)->toInteger();
 	if (count >= 2)

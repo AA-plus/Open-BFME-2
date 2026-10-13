@@ -56,7 +56,8 @@ public:
 	EAStringC m_str;
 };
 
-extern void *g_bfmeAptDefaultValueAtE18078; // 0x00E18078
+class AptValue;
+extern AptValue *gpUndefinedValue;	// 0x00E18078, the rowed AptBuiltinValues.cpp global
 
 void *rva006D7350(Rva006DCE50Opaque *source)
 {
@@ -64,11 +65,11 @@ void *rva006D7350(Rva006DCE50Opaque *source)
 	void *data = source->rva006DCE50();
 	Rva006D5E70String *str = (Rva006D5E70String *)((char *)data + 8);
 	if (index < 0) {
-		return g_bfmeAptDefaultValueAtE18078;
+		return (void *)gpUndefinedValue;
 	} else {
 		void *looked = str->rva006d5e70ptr(index);
 		if (looked == 0) {
-			return g_bfmeAptDefaultValueAtE18078;
+			return (void *)gpUndefinedValue;
 		} else {
 			EAStringC temp;
 			temp.rva006D5FE0(looked, 1);
