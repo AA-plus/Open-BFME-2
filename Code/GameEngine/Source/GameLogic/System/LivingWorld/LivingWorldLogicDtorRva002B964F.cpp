@@ -181,14 +181,23 @@ struct Rva002B964FMessageRef
 	}
 };
 
+class Rva002B74DE { public: ~Rva002B74DE(); };
+void __cdecl operator delete(void *);
+
 class Rva002B9099
 {
 public:
 	void clear();
 
-	~Rva002B9099()
+	__declspec(noinline) ~Rva002B9099()
 	{
-		clear();
+		Rva002B74DE *p = (Rva002B74DE *)m_object;
+		m_object = 0;
+		if (p)
+		{
+			p->Rva002B74DE::~Rva002B74DE();
+			::operator delete(p);
+		}
 	}
 
 	void *m_object;
