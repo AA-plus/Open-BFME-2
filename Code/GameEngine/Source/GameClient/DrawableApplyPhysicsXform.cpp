@@ -1,3 +1,5 @@
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+//
 // ?applyPhysicsXform@Drawable@@QAEXPAVMatrix3D@@@Z
 // partial score=0.9977 date=2026-10-13
 // ?applyPhysicsXform@Drawable@@QAEXPAVMatrix3D@@@Z
@@ -13,17 +15,22 @@
 // calcPhysicsXform 0x0027BA95 has no row: landing needs a pin or its row.
 // Reference WWMath Matrix3D postMul and assignment; native BED0 proves flag43F and order.
 #include <math.h>
-class Vector3{public:float X,Y,Z;__forceinline Vector3(float x,float y,float z){X=x;Y=y;Z=z;}__forceinline float&operator[](int i){return (&X)[i];}__forceinline const float&operator[](int i)const{return (&X)[i];}};
-class Vector4{public:float X,Y,Z,W;__forceinline Vector4&operator=(const Vector4&v){X=v.X;Y=v.Y;Z=v.Z;W=v.W;return *this;}
-__forceinline float&operator[](int i){return (&X)[i];}__forceinline const float&operator[](int i)const{return (&X)[i];}};
+class Vector3{public:float X,Y,Z;__declspec(dllimport) __forceinline Vector3(float x,float y,float z){X=x;Y=y;Z=z;}__forceinline float&operator[](int i){return (&X)[i];}__declspec(dllimport) __forceinline const float&operator[](int i)const{return (&X)[i];}};
+class Vector4{public:float X,Y,Z,W;__declspec(dllimport) __forceinline Vector4&operator=(const Vector4&v){X=v.X;Y=v.Y;Z=v.Z;W=v.W;return *this;}
+__declspec(dllimport) __forceinline float&operator[](int i){return (&X)[i];}__declspec(dllimport) __forceinline const float&operator[](int i)const{return (&X)[i];}};
 class Matrix3D{Vector4 Row[3];public:
-__forceinline void Translate(const Vector3 &t)
+__declspec(dllimport) __forceinline void Translate(const Vector3 &t)
 {
-	Row[0][3] += (float)(Row[0][0]*t[0] + Row[0][1]*t[1] + Row[0][2]*t[2]);
-	Row[1][3] += (Row[1][0] + Row[1][1])*t[0] + Row[1][2]*t[2];
+	// Named z local used by rows 0/1 only: retail's row-1 z load
+	// (movss xmm2,[ebp-8]) is hoisted above the row-0 W store and its X+Y
+	// sum is X-first; row 2 keeps the direct t[2] memory operand. All other
+	// orientations were measured non-exact (2-42 residual instructions).
+	const float z=t[2];
+	Row[0][3] += (float)(Row[0][0]*t[0] + Row[0][1]*t[1] + Row[0][2]*z);
+	Row[1][3] += (float)(Row[1][0]*t[0] + Row[1][1]*t[1] + Row[1][2]*z);
 	Row[2][3] += (float)(Row[2][0]*t[0] + Row[2][1]*t[1] + Row[2][2]*t[2]);
 }
-__forceinline void Rotate_X(const float&theta)
+__declspec(dllimport) __forceinline void Rotate_X(const float&theta)
 {
 	float tmp1,tmp2;
 	float s,c;
@@ -44,7 +51,7 @@ __forceinline void Rotate_X(const float&theta)
 	Row[2][2] = (float)(-s*tmp1 + c*tmp2);
 
 }
-__forceinline void Rotate_Y(const float&theta)
+__declspec(dllimport) __forceinline void Rotate_Y(const float&theta)
 {
 	float tmp1,tmp2;
 	float s,c;
@@ -64,7 +71,7 @@ __forceinline void Rotate_Y(const float&theta)
 	Row[2][0] = (float)(c*tmp1 - s*tmp2);
 	Row[2][2] = (float)(s*tmp1 + c*tmp2);
 }
-__forceinline void Rotate_Z(const float&theta)
+__declspec(dllimport) __forceinline void Rotate_Z(const float&theta)
 {
 	float tmp1,tmp2;
 	float c,s;
@@ -87,8 +94,9 @@ __forceinline void Rotate_Z(const float&theta)
 };
 enum KindOfType{NATIVE_KIND_51=0x51};
 class Object{public:bool isKindOf(KindOfType)const;char pad[0x1c8];unsigned char disabled;};
-class GlobalData{public:char pad[0x9b0];bool showPhysics;};
-extern GlobalData*TheGlobalData;
+class GlobalData;
+extern class GlobalData *TheWritableGlobalData;
+class GlobalDataView{public:char pad[0x9b0];bool showPhysics;};
 class View{public:
 virtual void slot0();
 virtual void slot1();
@@ -150,14 +158,14 @@ class ScriptEngine;extern ScriptEngine*TheScriptEngine;
 class Rva00203B08{public:bool rva0020424FF();};
 class Rva00203ACEByteField{public:unsigned char get()const;};
 class Drawable{public:
-struct PhysicsXformInfo{float m_totalPitch,m_totalRoll,m_totalYaw,m_totalZ;PhysicsXformInfo():m_totalPitch(0),m_totalRoll(0),m_totalYaw(0),m_totalZ(0){}};
+struct PhysicsXformInfo{float m_totalPitch,m_totalRoll,m_totalYaw,m_totalZ;__declspec(dllimport) PhysicsXformInfo():m_totalPitch(0),m_totalRoll(0),m_totalYaw(0),m_totalZ(0){}};
 bool calcPhysicsXform(PhysicsXformInfo&);
 void applyPhysicsXform(Matrix3D*matrix);
 char pad[0xfc];Object*object;
 };
 void Drawable::applyPhysicsXform(Matrix3D*mtx){
 const Object*obj=object;
-if(!obj||(obj->disabled&8)&&!obj->isKindOf(NATIVE_KIND_51)||!TheGlobalData->showPhysics)return;
+if(!obj||(obj->disabled&8)&&!obj->isKindOf(NATIVE_KIND_51)||!((GlobalDataView*)TheWritableGlobalData)->showPhysics)return;
 bool frozen=TheTacticalView->isTimeFrozen()&&!TheTacticalView->isCameraMovementFinished();
 frozen=frozen||((Rva00203B08*)TheScriptEngine)->rva0020424FF()||((Rva00203ACEByteField*)TheScriptEngine)->get();
 if(frozen)return;
