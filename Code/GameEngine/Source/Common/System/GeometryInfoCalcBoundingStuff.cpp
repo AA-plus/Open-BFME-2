@@ -17,6 +17,11 @@
 // when it can see the callee does not clobber EDX.  Their method names are not
 // proven, so they keep their addresses.
 
+// Keep the MSVC float overloads local; their inlined operations stay retail-exact.
+#define inline static inline
+#include <math.h>
+#undef inline
+
 #include <vector>
 #include "coord.h"
 #include "ascii_string.h"

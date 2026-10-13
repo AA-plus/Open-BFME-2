@@ -4,7 +4,10 @@
 // Same function, same address: bind the header spelling here.
 #pragma comment(linker, "/alternatename:?getCenterPosition@GeometryInfo@@QBEXABUCoord3D@@AAU2@@Z=?getCenterPosition@GeometryInfo@@ABEXABUCoord3D@@AAU2@@Z")
 
+// Keep the MSVC float overloads local; their inlined operations stay retail-exact.
+#define inline static inline
 #include <math.h>
+#undef inline
 
 typedef float Real;
 
