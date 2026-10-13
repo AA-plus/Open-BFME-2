@@ -1,5 +1,3 @@
-// ?calcPhysicsXform@Drawable@@QAE_NAAUPhysicsXformInfo@1@@Z
-// partial score=0.9279 date=2026-10-10
 // cl: /O1 /arch:SSE /G7 /DNDEBUG /MD
 //
 // ?calcPhysicsXform@Drawable@@QAE_NAAUPhysicsXformInfo@1@@Z
@@ -11,6 +9,8 @@
 // locomotor (+0x1F0) and the per-frame check against TheGameClient slot 31
 // with the entry stamp at +0xAC. Identity: WB 0x00CA7380, Drawable.cpp;
 // donor BFME1 90fffa62857c Drawable::calcPhysicsXform.
+// Codegen: the entry's stamped frame member is volatile (retail re-reads it);
+// the HugeFourLegs case callee 0x0027B47F is pinned by address (unrowed).
 struct Rva0028AC4EEntry
 {
     char unknown[0xAC];
@@ -43,7 +43,7 @@ struct DrawablePhysicsLocomotor
     char unknown00[4];
     DrawablePhysicsAppearance *overrideData;
     char unknown08[0xAC - 8];
-    unsigned int lastPhysicsFrame;
+    volatile unsigned int lastPhysicsFrame;
     int getAppearance() const { return overrideData->appearance; }
     unsigned int getLastPhysicsFrame() const { return lastPhysicsFrame; }
 };

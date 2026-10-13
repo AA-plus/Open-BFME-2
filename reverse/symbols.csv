@@ -17255,3 +17255,5 @@ _D3DXLoadSurfaceFromFileInMemory@36,0x0062AF80,Native separate-alpha loader REL3
 ?rva00358C60@@YA?AURva00358B65@@ABVAsciiString@@ABUTreeHintRef00217D4C@@@Z,0x00358C60,HotKey addHotKey 0x359302 factory returns 8B holder; twin of rowed pair factory 0x358C60 (27B); retail call site 0x35936F
 ?rva006C39F0@Rva006C39F0Owner@@QAE_NIIIPAX@Z,0x006C39F0,callee of ?rva006C3D30@GeneralAllocatorDebug@@QAE_NPAURva006C2270Record@@PAX_N@Z
 ?rva006C3AB0@GeneralAllocatorDebug@@QAEPAXPAXGPBXIH@Z,0x006C3AB0,callee of ?rva006C3D30@GeneralAllocatorDebug@@QAE_NPAURva006C2270Record@@PAX_N@Z
+?calcPhysicsXformHugeFourLegs@Drawable@@IAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z,0x0027B47F,callee of ?calcPhysicsXform@Drawable@@QAE_NAAUPhysicsXformInfo@1@@Z
+?rva00272FB6@Drawable@@IAEXPBVLocomotor@@AAUPhysicsXformInfo@1@@Z,0x00272FB6,callee of ?calcPhysicsXform@Drawable@@QAE_NAAUPhysicsXformInfo@1@@Z
