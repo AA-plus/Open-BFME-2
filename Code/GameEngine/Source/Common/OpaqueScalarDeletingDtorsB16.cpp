@@ -14,14 +14,12 @@
 //   wrapper     dtor        vtable#slot
 //   0x005D0A9F  0x005D078B  0x00C75574#0
 //   0x005D1007  0x005D0D85  0x00C75590#0
-//   0x005D10DD  0x005D10F9  0x00C755AC#0
 //   0x005D1319  0x005D12E3  0x00C755B4#0
 //   0x005D13A1  0x005D13BD  0x00C755C0#0
 //   0x005D1B85  0x005D1ADE  0x00C75694#0
 //   0x005D1DAF  0x005D1D38  0x00C75734#0
 //   0x005D204F  0x005D2015  0x00C75778#4
 //   0x005D2168  0x005D2111  0x00C75790#0
-//   0x005D2F62  0x005D2EA8  0x00C75898#3
 //   0x005D4E06  0x005D4C61  0x00C75AAC#0
 //   0x005DA7D9  0x005DA7F5  0x00C76510#1
 //   0x005DB319  0x005DB221  0x00C766B8#0
@@ -58,19 +56,6 @@ public:
 
 // ?<Rva005D0D85::Rva005D0D85> absent-from-retail
 Rva005D0D85::Rva005D0D85(EmitVtableTag *)
-{
-}
-
-class Rva005D10F9
-{
-public:
-	Rva005D10F9(EmitVtableTag *);
-public:
-	virtual ~Rva005D10F9();
-};
-
-// ?<Rva005D10F9::Rva005D10F9> absent-from-retail
-Rva005D10F9::Rva005D10F9(EmitVtableTag *)
 {
 }
 
@@ -149,19 +134,6 @@ public:
 
 // ?<Rva005D2111::Rva005D2111> absent-from-retail
 Rva005D2111::Rva005D2111(EmitVtableTag *)
-{
-}
-
-class Rva005D2EA8
-{
-public:
-	Rva005D2EA8(EmitVtableTag *);
-public:
-	virtual ~Rva005D2EA8();
-};
-
-// ?<Rva005D2EA8::Rva005D2EA8> absent-from-retail
-Rva005D2EA8::Rva005D2EA8(EmitVtableTag *)
 {
 }
 

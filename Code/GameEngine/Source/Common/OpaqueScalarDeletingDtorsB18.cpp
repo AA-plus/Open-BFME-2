@@ -16,7 +16,6 @@
 // destructor; the other owner views remain layout-free.
 //
 //   wrapper     dtor        vtable#slot
-//   0x005F6530  0x005F64F5  0x00C796D0#0
 //   0x005F8DE7  0x005F8CB0  0x00C79CF0#0
 //   0x005F8F3E  0x005F8F5A  0x00C79CF8#0
 //   0x005F8F5F  0x005F8F7B  0x00C79D0C#0
@@ -38,19 +37,6 @@
 //   0x0073EF08  0x0073EF24  0x00CF1538#2
 
 struct EmitVtableTag;
-
-class Rva005F64F5
-{
-public:
-	Rva005F64F5(EmitVtableTag *);
-public:
-	virtual ~Rva005F64F5();
-};
-
-// ?<Rva005F64F5::Rva005F64F5> absent-from-retail
-Rva005F64F5::Rva005F64F5(EmitVtableTag *)
-{
-}
 
 class Rva005F8CB0
 {

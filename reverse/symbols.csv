@@ -4594,7 +4594,6 @@ name,address,notes
 ??1Rva005D07E1@@QAE@XZ,0x005D07E1,pointee destructor called by the owning-pointer reset 0x005D0ABB (byte-exact modulo relocs in OwnedPointerResets.cpp); identity unproven; address-derived name
 ??1Rva005D0D85@@UAE@XZ,0x005D0D85,opaque dtor called by the scalar deleting dtor at 0x005D1007 (vtable 0x00C75590#0); identity unproven; address-derived name
 ??1Rva005D10D6@@QAE@XZ,0x005D10D6,destructor called by the vtable-referenced scalar deleting dtor 0x005D10BA (REL32 at +4 of its 28B delete-flag wrapper; body stores vftable 0x00C7559C); identity unproven; address-derived name
-??1Rva005D10F9@@UAE@XZ,0x005D10F9,opaque dtor called by the scalar deleting dtor at 0x005D10DD (vtable 0x00C755AC#0); identity unproven; address-derived name
 ??1Rva005D1129Pointer@@QAE@XZ,0x005EC4AF,REL32 at +0x0A in 0x005D1129 with ECX=this+8; 7B Ghidra body loads [ecx] then tail-jumps to 0x005EC46F; address-derived member-dtor view; exact wrapper identity remains unknown
 ??1Impl@TacticalBattleResolver@StrategicInGameUI@@QAE@XZ,0x005D1210,pointee destructor called by the owning-pointer reset 0x005D127C (byte-exact modulo relocs in OwnedPointerResets.cpp); WorldBuilder names it StrategicInGameUI::TacticalBattleResolver::Impl::~Impl (callgraph 1.0)
 ??1Rva005D12E3@@UAE@XZ,0x005D12E3,opaque dtor called by the scalar deleting dtor at 0x005D1319 (vtable 0x00C755B4#0); identity unproven; address-derived name
@@ -4602,7 +4601,6 @@ name,address,notes
 ??1Rva005D1D38@@UAE@XZ,0x005D1D38,opaque dtor called by the scalar deleting dtor at 0x005D1DAF (vtable 0x00C75734#0); identity unproven; address-derived name
 ??1Rva005D2015@@UAE@XZ,0x005D2015,opaque dtor called by the scalar deleting dtor at 0x005D204F (vtable 0x00C75778#4); identity unproven; address-derived name
 ??1Rva005D2111@@UAE@XZ,0x005D2111,opaque dtor called by the scalar deleting dtor at 0x005D2168 (vtable 0x00C75790#0); identity unproven; address-derived name
-??1Rva005D2EA8@@UAE@XZ,0x005D2EA8,opaque dtor called by the scalar deleting dtor at 0x005D2F62 (vtable 0x00C75898#3); identity unproven; address-derived name
 ??1Rva005D309D@@QAE@XZ,0x005D309D,pointee destructor called by the owning-pointer reset 0x005D32AA (byte-exact modulo relocs in OwnedPointerResets.cpp); identity unproven; address-derived name
 ??1Rva005D32D4@@QAE@XZ,0x005D32D4,pointee destructor called by the owning-pointer reset 0x005786CD (byte-exact modulo relocs in OwnedPointerResets.cpp); identity unproven; address-derived name
 ??1Rva005D3C2B@@QAE@XZ,0x005D3C2B,pointee destructor called by the owning-pointer reset 0x00578724 (byte-exact modulo relocs in OwnedPointerResets.cpp); identity unproven; address-derived name
@@ -4664,7 +4662,6 @@ name,address,notes
 ??1Rva005F5EA6@@UAE@XZ,0x005F5EA6,opaque dtor called by the scalar deleting dtor at 0x005F5F0F (vtable 0x00C795F0#0); identity unproven; address-derived name
 ??1Rva005F6051@@QAE@XZ,0x005F6051,pointee destructor called by the owning-pointer reset 0x005F64DB (byte-exact modulo relocs in OwnedPointerResets.cpp); identity unproven; address-derived name
 ??1Rva005F64DB@@QAE@XZ,0x005F64DB,member destructor at +0x8 called by the destructor 0x005F64F5 (byte-exact modulo relocs in MemberBaseDtorsB01.cpp); identity unproven; address-derived name
-??1Rva005F64F5@@UAE@XZ,0x005F64F5,opaque dtor called by the scalar deleting dtor at 0x005F6530 (vtable 0x00C796D0#0); identity unproven; address-derived name
 ??1Rva005F75C9@@QAE@XZ,0x005F75C9,destructor called by the unreferenced scalar deleting dtor 0x005F7654 (REL32 at +4 of its 28B delete-flag wrapper); identity unproven; address-derived name
 ??1Rva005F85E1@@QAE@XZ,0x005F85E1,member destructor at +0x20 called by the destructor 0x005F86C3 (byte-exact modulo relocs in MemberBaseDtorsB01.cpp); identity unproven; address-derived name
 ??1Rva005F8CB0@@UAE@XZ,0x005F8CB0,opaque dtor called by the scalar deleting dtor at 0x005F8DE7 (vtable 0x00C79CF0#0); identity unproven; address-derived name
