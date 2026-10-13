@@ -44,6 +44,8 @@ protected:
 	MultiListObjectClass *Internal_Remove_List_Head();
 };
 
+// RefCountClass inline copies take the size form retail links (0x005D1A7D).
+#pragma optimize("s", on)
 class RefCountClass
 {
 public:
@@ -60,6 +62,7 @@ protected:
 private:
 	mutable int NumRefs;
 };
+#pragma optimize("", on)
 
 class VertexMaterialClass : public RefCountClass
 {

@@ -1,6 +1,10 @@
 // cl: /G7 /DNDEBUG /MD /EHsc /O2 /Ob2 /Ireference/shims/sweep /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/sweep
 
+// Retail's RefCountClass inline copies (Release_Ref 0x005D1A7D, scalar deleting
+// dtor 0x00072899) are the size form: compile refcount.h for size, as hlod.cpp does.
+#pragma optimize("s", on)
 #include "refcount.h"
+#pragma optimize("", on)
 
 class TextureClassPtr
 {
