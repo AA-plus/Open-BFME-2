@@ -49,3 +49,7 @@ Rva002E0427::~Rva002E0427()
 {
 	TheLivingWorldBuildingTemplateStore = 0;
 }
+
+// Native778668: complete11B member+10 destructor unwind. Whole81B parent
+// and native EH graph prove ownership. Actual5B callee22D101 forwards to
+// owned57B hash cleanup22CF13; original wrapper identity remains uncertain.
