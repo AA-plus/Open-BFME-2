@@ -109,7 +109,7 @@ static void CreateMangledName(AsciiString &out,const char *name,float scale,cons
  ((StringBase<char> &)(out)).toLower();
 }
 class TextureClass {public:void Release_Ref();};
-class HierarchyPrototype;
+class HierarchyPrototype {public:void Release_Ref();};
 class HierarchyPrototypeRef {
 public:~HierarchyPrototypeRef(){if(pointer)reinterpret_cast<TextureClass *>(pointer)->Release_Ref();}
  HierarchyPrototype *pointer;
@@ -118,7 +118,7 @@ HierarchyPrototypeRef Rva0061F230_GetPrototype(const char *);
 class Rva00136001 {
 public:Rva00136001(const HierarchyPrototypeRef &);
  Rva00136001 &rva00135E86(const HierarchyPrototype &);
- ~Rva00136001(){if(pointer)reinterpret_cast<TextureClass *>(pointer)->Release_Ref();}
+ ~Rva00136001(){if(pointer)pointer->Release_Ref();}	// same spelling as the first copy (Rva00136032Factory.cpp)
  HierarchyPrototype *pointer;
 };
 // Borrowed vtable view: native prototype vslot15 creates an object. No
