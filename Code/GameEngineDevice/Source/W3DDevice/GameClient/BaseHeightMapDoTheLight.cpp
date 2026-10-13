@@ -40,7 +40,7 @@ public:
 		return retval;
 	}
 	static Real __fastcall Inv_Sqrt(Real a);
-	static __forceinline Real Clamp(Real val, Real lo, Real hi)
+	static __declspec(dllimport) __forceinline Real Clamp(Real val, Real lo, Real hi)
 	{
 		if (val < lo) return lo;
 		if (val > hi) return hi;
@@ -83,7 +83,7 @@ public:
 class Matrix3D
 {
 public:
-	__forceinline Vector3 Get_Z_Vector() const { return Vector3(Row[0][2], Row[1][2], Row[2][2]); }
+	__declspec(dllimport) __forceinline Vector3 Get_Z_Vector() const { return Vector3(Row[0][2], Row[1][2], Row[2][2]); }
 	Real Row[3][4];
 };
 
@@ -160,8 +160,8 @@ public:
 class GenericMultiListIterator
 {
 public:
-	__forceinline void First() { CurNode = List->Head.Next; }
-	__forceinline void Next() { CurNode = CurNode->Next; }
+	__declspec(dllimport) __forceinline void First() { CurNode = List->Head.Next; }
+	__declspec(dllimport) __forceinline void Next() { CurNode = CurNode->Next; }
 	__forceinline Bool Is_Done() { return CurNode == &(List->Head); }
 
 protected:
@@ -176,7 +176,7 @@ protected:
 template <class ObjectType> class RefMultiListIterator : public GenericMultiListIterator
 {
 public:
-	__forceinline ObjectType *Peek_Obj() { return static_cast<ObjectType *>(Generic_Peek_Obj()); }
+	__declspec(dllimport) __forceinline ObjectType *Peek_Obj() { return static_cast<ObjectType *>(Generic_Peek_Obj()); }
 };
 typedef RefMultiListIterator<RenderObjClass> RefRenderObjListIterator;
 

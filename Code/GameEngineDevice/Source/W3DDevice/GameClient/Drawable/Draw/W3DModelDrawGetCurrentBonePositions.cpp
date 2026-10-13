@@ -47,7 +47,7 @@ class Matrix3D
 {
 public:
 	__forceinline Matrix3D() {}
-	__forceinline Matrix3D(const Matrix3D &m)
+	__declspec(dllimport) __forceinline Matrix3D(const Matrix3D &m)
 	{
 		Row[0].X = m.Row[0].X; Row[0].Y = m.Row[0].Y; Row[0].Z = m.Row[0].Z; Row[0].W = m.Row[0].W;
 		Row[1].X = m.Row[1].X; Row[1].Y = m.Row[1].Y; Row[1].Z = m.Row[1].Z; Row[1].W = m.Row[1].W;

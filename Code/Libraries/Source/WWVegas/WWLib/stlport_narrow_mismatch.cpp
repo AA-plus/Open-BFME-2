@@ -40,8 +40,8 @@ template <class CharT, class Traits>
 class istreambuf_iterator
 {
 public:
-	CharT operator*() const { this->_M_getc(); return _M_c; }
-	istreambuf_iterator<CharT, Traits> &operator++()
+	__declspec(dllimport) __forceinline CharT operator*() const { this->_M_getc(); return _M_c; }
+	__declspec(dllimport) __forceinline istreambuf_iterator<CharT, Traits> &operator++()
 	{
 		this->_M_bumpc();
 		return *this;
@@ -51,7 +51,7 @@ public:
 
 private:
 	void _M_getc() const;
-	void _M_bumpc()
+	__declspec(dllimport) __forceinline void _M_bumpc()
 	{
 		_M_buf->sbumpc();
 		_M_have_c = false;
@@ -64,7 +64,7 @@ private:
 };
 
 template <class CharT, class Traits>
-inline bool operator!=(const istreambuf_iterator<CharT, Traits> &lhs,
+__declspec(dllimport) __forceinline bool operator!=(const istreambuf_iterator<CharT, Traits> &lhs,
 		const istreambuf_iterator<CharT, Traits> &rhs)
 {
 	return !lhs.equal(rhs);

@@ -12,7 +12,7 @@ typedef int Int;
 class RefCountClass
 {
 public:
-	RefCountClass(void) : NumRefs(1) {}
+	__declspec(dllimport) __forceinline RefCountClass(void) : NumRefs(1) {}
 	void Add_Ref(void) { NumRefs++; }
 	int Num_Refs(void) { return NumRefs; }
 	virtual void Delete_This(void);

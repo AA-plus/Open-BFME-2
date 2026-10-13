@@ -71,11 +71,11 @@ template <class CharT, class Traits>
 class istreambuf_iterator
 {
 public:
-	CharT operator*() const { _M_getc(); return _M_c; }
+	__declspec(dllimport) __forceinline CharT operator*() const { _M_getc(); return _M_c; }
 
-	istreambuf_iterator<CharT, Traits> &operator++() { _M_bumpc(); return *this; }
+	__declspec(dllimport) __forceinline istreambuf_iterator<CharT, Traits> &operator++() { _M_bumpc(); return *this; }
 
-	bool equal(const istreambuf_iterator<CharT, Traits> &other) const
+	__declspec(dllimport) __forceinline bool equal(const istreambuf_iterator<CharT, Traits> &other) const
 	{
 		if (_M_buf != 0)
 			_M_getc();
@@ -88,7 +88,7 @@ public:
 private:
 	void _M_getc() const;
 
-	void _M_bumpc()
+	__declspec(dllimport) __forceinline void _M_bumpc()
 	{
 		_M_buf->sbumpc();
 		_M_have_c = false;

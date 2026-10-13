@@ -64,7 +64,7 @@ class Object
 public:
 	bool testStatus(ObjectStatusTypes bit) const;
 	Player *getControllingPlayer() const;
-	Drawable *getDrawable() const { return ((const Thing *)this)->getDrawable(); }
+	__declspec(dllimport) __forceinline Drawable *getDrawable() const { return ((const Thing *)this)->getDrawable(); }
 	unsigned char m_pad000[0x04];
 	const Rva0039B57FTemplate *m_template;	// +0x04
 };

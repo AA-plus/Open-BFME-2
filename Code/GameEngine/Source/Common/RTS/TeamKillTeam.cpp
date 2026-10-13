@@ -127,7 +127,7 @@ class ThingTemplate
 {
 public:
 	bool isEquivalentTo(const ThingTemplate *tt) const;
-	__forceinline bool isKindOf(KindOfType t) const { return (m_kindof[(unsigned)t >> 3] & (1 << ((unsigned)t & 7))) != 0; }
+	__declspec(dllimport) __forceinline bool isKindOf(KindOfType t) const { return (m_kindof[(unsigned)t >> 3] & (1 << ((unsigned)t & 7))) != 0; }
 private:
 	unsigned char m_pad00[0x108];
 	unsigned char m_kindof[0x20]; // +0x108
@@ -180,7 +180,7 @@ class Object : public BfmeObjectVtbl, public BfmeObjectDlinkBase,
 {
 public:
 	const ThingTemplate *getTemplate() const { return m_template; }
-	__forceinline bool isKindOf(KindOfType t) const { return m_template->isKindOf(t); }
+	__declspec(dllimport) __forceinline bool isKindOf(KindOfType t) const { return m_template->isKindOf(t); }
 	__declspec(dllimport) __forceinline bool isDestroyed() const { return (m_flag94 & 1) != 0; }
 	bool isEffectivelyDead() const { return (m_flag438 & 1) != 0; }
 	Team *getTeam() const { return m_team; }
@@ -234,7 +234,7 @@ private:
 class Player
 {
 public:
-	const PlayerTemplate *getPlayerTemplate() const { return m_playerTemplate; }
+	__declspec(dllimport) __forceinline const PlayerTemplate *getPlayerTemplate() const { return m_playerTemplate; }
 	Team *getDefaultTeam() const { return m_defaultTeam; }
 private:
 	unsigned char m_pad00[0x34];

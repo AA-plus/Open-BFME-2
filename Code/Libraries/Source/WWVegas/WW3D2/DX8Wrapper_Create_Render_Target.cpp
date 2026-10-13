@@ -44,7 +44,7 @@ class DX8Caps
 {
 public:
 	const D3DCapsPrefix &Get_DX8_Caps() const { return Caps; }
-	bool Support_Render_To_Texture_Format(WW3DFormat format) const
+	__declspec(dllimport) __forceinline bool Support_Render_To_Texture_Format(WW3DFormat format) const
 	{
 		return format >= 0 && format < 0x76 && SupportRenderToTextureFormat[format];
 	}
@@ -72,7 +72,7 @@ template <class T> class RefCountPtr
 {
 public:
 	__declspec(dllimport) __forceinline RefCountPtr() : m_ptr(0) {}
-	__forceinline RefCountPtr(const RefCountPtr &that) : m_ptr(that.m_ptr)
+	__declspec(dllimport) __forceinline RefCountPtr(const RefCountPtr &that) : m_ptr(that.m_ptr)
 	{
 		if (m_ptr)
 			m_ptr->Add_Ref();

@@ -19,7 +19,7 @@ extern "C" void __cdecl Rva001117E3Downsample(
 class RefCountClass
 {
 public:
-	RefCountClass() : m_refs(1) {}
+	__declspec(dllimport) __forceinline RefCountClass() : m_refs(1) {}
 	virtual void Delete_This();
 protected:
 	virtual ~RefCountClass() {}

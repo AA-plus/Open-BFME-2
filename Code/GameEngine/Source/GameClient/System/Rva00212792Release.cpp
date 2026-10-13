@@ -49,12 +49,12 @@ template<class T> class allocator {};
 template<class T, class A = allocator<T> > class vector
 {
 public:
-	unsigned int size() const { return last - first; }
-	T *begin() { return first; }
-	T *end() { return last; }
-	T &operator[](unsigned int n) { return *(begin() + n); }
+	__declspec(dllimport) __forceinline unsigned int size() const { return last - first; }
+	__declspec(dllimport) __forceinline T *begin() { return first; }
+	__declspec(dllimport) __forceinline T *end() { return last; }
+	__declspec(dllimport) __forceinline T &operator[](unsigned int n) { return *(begin() + n); }
 	T *erase(T *a, T *b);
-	void clear() { erase(begin(), end()); }
+	__declspec(dllimport) __forceinline void clear() { erase(begin(), end()); }
 private:
 	T *first, *last, *limit;
 };

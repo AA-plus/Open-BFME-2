@@ -28,7 +28,7 @@ private:
 class MapObject
 {
 public:
-	const Coord3D *getLocation() const { return &m_location; }
+	__declspec(dllimport) __forceinline const Coord3D *getLocation() const { return &m_location; }
 
 	void *m_vftable;
 	MapObject *m_nextMapObject;

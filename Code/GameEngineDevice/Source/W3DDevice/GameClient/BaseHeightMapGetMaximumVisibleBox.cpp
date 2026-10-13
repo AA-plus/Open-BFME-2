@@ -46,7 +46,7 @@ inline Vector3 operator-(const Vector3 &a, const Vector3 &b)
 }
 
 #pragma optimize("ty", on)
-inline Vector3 operator*(const Vector3 &a, float k)
+__declspec(dllimport) __forceinline Vector3 operator*(const Vector3 &a, float k)
 {
 	return Vector3((a.X * k), (a.Y * k), (a.Z * k));
 }
@@ -58,7 +58,7 @@ public:
 	Vector3 N;
 	float D;
 
-	PlaneClass(const Vector3 &normal, float dist)
+	__declspec(dllimport) __forceinline PlaneClass(const Vector3 &normal, float dist)
 	{
 		N = normal;
 		D = dist;

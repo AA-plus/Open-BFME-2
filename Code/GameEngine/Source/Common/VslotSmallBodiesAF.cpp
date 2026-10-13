@@ -16,9 +16,9 @@ template <class T, class A> class vector
 {
 public:
 	T *erase(T *first, T *last);
-	T *begin() { return _M_start; }
-	T *end() { return _M_finish; }
-	void clear() { erase(begin(), end()); }
+	__declspec(dllimport) __forceinline T *begin() { return _M_start; }
+	__declspec(dllimport) __forceinline T *end() { return _M_finish; }
+	__declspec(dllimport) __forceinline void clear() { erase(begin(), end()); }
 	T *_M_start;
 	T *_M_finish;
 	T *_M_end_of_storage;

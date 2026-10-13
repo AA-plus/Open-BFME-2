@@ -42,7 +42,7 @@ class VertexMaterialClass
 {
 public:
 	virtual void Delete_This(void);
-	void Add_Ref(void) { ++RefCount; }
+	__declspec(dllimport) __forceinline void Add_Ref(void) { ++RefCount; }
 
 private:
 	int RefCount;
