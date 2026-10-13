@@ -235,6 +235,19 @@ void Rva003284B9(GameWindow *window, Int percent, Int color);
 void GadgetButtonSetDisallowed(GameWindow *, Int);
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameClient/ControlBar.h
+enum CommandAvailability
+{
+	COMMAND_RESTRICTED = 0,
+	COMMAND_AVAILABLE = 1,
+	COMMAND_ACTIVE = 2,
+	COMMAND_HIDDEN = 3,
+	COMMAND_NOT_ALLOWED = 4,
+	COMMAND_NOT_READY = 5,
+	COMMAND_CANT_AFFORD = 6,
+	COMMAND_LIMITED = 7,
+	COMMAND_DONE = 8
+};
+
 class ControlBar
 {
 protected:
@@ -247,7 +260,7 @@ protected:
     void updateContextCommand();
 public:
     void setControlCommand(GameWindow *, const CommandButton *);
-    Int rva0053BD66(const CommandButton *, GameWindow *, Object *, Real *, Bool) const;
+    CommandAvailability getCommandAvailability(const CommandButton *, GameWindow *, Object *, Real *, Bool) const;
 
 private:
 	char m_slice_pad[0x6C];					// retail this+0x00 .. +0x6B, untouched
@@ -313,7 +326,7 @@ void ControlBar::updateContextMultiSelect(void)
 				continue;
 
 			Real percent;
-			Int availability = rva0053BD66(command, win, obj, &percent, false);
+			Int availability = getCommandAvailability(command, win, obj, &percent, false);
 
 			win->winClearStatus(0x00400000);
 			win->winClearStatus(0x01000000);

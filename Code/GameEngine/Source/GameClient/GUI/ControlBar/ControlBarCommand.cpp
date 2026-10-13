@@ -216,6 +216,19 @@ void GadgetButtonSetDisallowed(GameWindow *, int);
 void GadgetCheckLikeButtonSetVisualCheck(GameWindow *, bool);
 void Rva003284ED(GameWindow *, int);
 void Rva003284B9(GameWindow *, int, int);
+enum CommandAvailability
+{
+	COMMAND_RESTRICTED = 0,
+	COMMAND_AVAILABLE = 1,
+	COMMAND_ACTIVE = 2,
+	COMMAND_HIDDEN = 3,
+	COMMAND_NOT_ALLOWED = 4,
+	COMMAND_NOT_READY = 5,
+	COMMAND_CANT_AFFORD = 6,
+	COMMAND_LIMITED = 7,
+	COMMAND_DONE = 8
+};
+
 class ControlBar {
 protected:
     void updateContextCommand();
@@ -225,7 +238,7 @@ public:
     void rva0053BB16(Object *,CommandSet *);
     void setControlCommand(GameWindow *,const CommandButton *);
     void rva0031D230();
-    int rva0053BD66(const CommandButton *, GameWindow *, Object *, float *, bool) const;
+    CommandAvailability getCommandAvailability(const CommandButton *, GameWindow *, Object *, float *, bool) const;
 private:
     char unknown00[0x50]; GameWindow *queueParent;
     char unknown54[0x6C-0x54]; CommandDrawableView *selected;
@@ -262,7 +275,7 @@ void ControlBar::updateContextCommand()
         const CommandButton *command = (const CommandButton *)GadgetButtonGetData(win);
         if (!command) continue;
         float percent = 0;
-        int availability = rva0053BD66(command, win, obj, &percent, false);
+        int availability = getCommandAvailability(command, win, obj, &percent, false);
         bool disable = false;
         bool forceVisible = false;
         bool spectator = false;

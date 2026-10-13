@@ -744,7 +744,6 @@ address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E049xx.cpp	g_Va0
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E049xx.cpp	g_Va00E049A8	4
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E049xx.cpp	g_Va00E049C8	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E05x.cpp	g_Va00E05E14	5
-address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E05x.cpp	g_Va00E05F38	6
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E05x.cpp	g_Va00E05F40	3
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E05x.cpp	g_Va00E05F50	4
 address_global	Code/GameEngine/Source/Common/GlobalFlagClearers_E05x.cpp	g_Va00E05F58	3
@@ -18595,7 +18594,11 @@ object_symbol	reverse/functions.csv	0x007979E3	1
 object_symbol	reverse/functions.csv	0x00797A2E	1
 object_symbol	reverse/functions.csv	0x00797AA6	1
 object_symbol	reverse/functions.csv	0x00797ACE	1
+object_symbol	reverse/functions.csv	0x00797AE0	1	allow=010b2ecc44cc75acd767e76edfd9c6450b96ab63
 object_symbol	reverse/functions.csv	0x00797AED	1
+object_symbol	reverse/functions.csv	0x00797AF5	1	allow=010b2ecc44cc75acd767e76edfd9c6450b96ab63
+object_symbol	reverse/functions.csv	0x00797B02	1	allow=010b2ecc44cc75acd767e76edfd9c6450b96ab63
+object_symbol	reverse/functions.csv	0x00797B0F	1	allow=010b2ecc44cc75acd767e76edfd9c6450b96ab63
 object_symbol	reverse/functions.csv	0x00797B4D	1
 object_symbol	reverse/functions.csv	0x00797B55	1
 object_symbol	reverse/functions.csv	0x00797B65	1
@@ -31412,7 +31415,6 @@ pin	reverse/symbols.csv	0x005398CD	1
 pin	reverse/symbols.csv	0x00539A2E	9
 pin	reverse/symbols.csv	0x00539A65	1
 pin	reverse/symbols.csv	0x0053BD39	5
-pin	reverse/symbols.csv	0x0053BD66	1
 pin	reverse/symbols.csv	0x0053D355	1
 pin	reverse/symbols.csv	0x0053E17E	1
 pin	reverse/symbols.csv	0x0053E6E1	1

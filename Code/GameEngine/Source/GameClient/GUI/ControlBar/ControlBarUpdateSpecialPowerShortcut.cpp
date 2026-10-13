@@ -38,6 +38,19 @@ class Rva0031AF54 { public: void rva0031AF54(bool); };
 void *GadgetButtonGetData(GameWindow *);
 void GadgetButtonSetDisallowed(GameWindow *,int);
 void Rva003284B9(GameWindow *,int,int);
+enum CommandAvailability
+{
+	COMMAND_RESTRICTED = 0,
+	COMMAND_AVAILABLE = 1,
+	COMMAND_ACTIVE = 2,
+	COMMAND_HIDDEN = 3,
+	COMMAND_NOT_ALLOWED = 4,
+	COMMAND_NOT_READY = 5,
+	COMMAND_CANT_AFFORD = 6,
+	COMMAND_LIMITED = 7,
+	COMMAND_DONE = 8
+};
+
 class ControlBar
 {
 public:
@@ -47,7 +60,7 @@ public:
     // The target call and callee's ret 0x14 prove this five-argument ABI.
     // Const qualification follows the donor; the address name does not claim
     // the original return enum, access level or complete target declaration.
-    int rva0053BD66(const CommandButton *,GameWindow *,Object *,float *,bool) const;
+    CommandAvailability getCommandAvailability(const CommandButton *,GameWindow *,Object *,float *,bool) const;
 private:
     char unknown00[0x14];
     ShortcutAnimateManagerView *animateManager;
@@ -99,7 +112,7 @@ void ControlBar::rva0031B210()
         int availability=0;
         float percent=0.0f;
         if (((ShortcutPlayerListView *)ThePlayerList)->getLocalPlayer()->findNaturalCommandCenter())
-            availability=rva0053BD66(command,win,
+            availability=getCommandAvailability(command,win,
                 ((ShortcutPlayerListView *)ThePlayerList)->getLocalPlayer()->findNaturalCommandCenter(),
                 &percent,false);
         if (availability==0 || availability==7 || availability==4)

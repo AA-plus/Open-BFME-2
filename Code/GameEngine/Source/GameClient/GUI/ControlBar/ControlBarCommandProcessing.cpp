@@ -319,11 +319,24 @@ void rva0035B5C2(Object*,bool); void rva0035B6FA(ObjectID,bool);
  char pad194[0x98];
  BfmeE8 context;
 };
+enum CommandAvailability
+{
+	COMMAND_RESTRICTED = 0,
+	COMMAND_AVAILABLE = 1,
+	COMMAND_ACTIVE = 2,
+	COMMAND_HIDDEN = 3,
+	COMMAND_NOT_ALLOWED = 4,
+	COMMAND_NOT_READY = 5,
+	COMMAND_CANT_AFFORD = 6,
+	COMMAND_LIMITED = 7,
+	COMMAND_DONE = 8
+};
+
 class ControlBar { public:
 CBCommandStatus processCommandUI(const CommandButton*,bool,bool);
 void switchToContext(int,void*);
 const CommandButton *findCommandButton(const AsciiString&);
-int rva0053BD66(const CommandButton*,GameWindow*,Object*,float*,bool) const;
+CommandAvailability getCommandAvailability(const CommandButton*,GameWindow*,Object*,float*,bool) const;
  char pad000[0x28];
  bool dirty;
  char pad029[0x43];
@@ -391,7 +404,7 @@ CBCommandStatus ControlBar::processCommandUI(const CommandButton *commandButton,
                     Object *selected=draw->getObject();
                     if (selected && !(selected->getTemplate()->kind[5]&0x80)) {
                         float percent;
-                        int state=rva0053BD66(commandButton,0,selected,&percent,false);
+                        int state=getCommandAvailability(commandButton,0,selected,&percent,false);
                         if (state==1 || state==2) { ready=true; break; }
                         if (state==7) noPoints=true;
                         else if (state==6) noMoney=true;
@@ -400,7 +413,7 @@ CBCommandStatus ControlBar::processCommandUI(const CommandButton *commandButton,
             }
         } else {
             float percent;
-            int state=rva0053BD66(commandButton,0,obj,&percent,false);
+            int state=getCommandAvailability(commandButton,0,obj,&percent,false);
             if (state==1 || state==2) ready=true;
             else if (state==6) noMoney=true;
             else if (state==7) noPoints=true;
