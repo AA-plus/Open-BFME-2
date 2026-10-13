@@ -22,5 +22,6 @@ find_declared_unmatched: all defined functions matched.
 link_check using copied 2026-10-08 census: unit not in census; not previewable.
 No LINKED or runtime claim. Callback twins add no unique bytes.
 
-Source SHA256 ed0ebe5a5641d4395806808561b3af9fd3949e36474fda9a7b66e3c1ec750278
-Object SHA256 c5fb66bf90a0612dd01f6042cc1871841974ebe41a5488c157f7d770a467aed9
+Source SHA256 4c230f6df39f2725037e49a7e4b12b8c803feec3383f9ba738388ad48db1e4be
+Object SHA256 bd13f1dc3f7ca8544917f3fcdaee8736df7cda89037de8a4aedc212781c826fd
+Follow-up: own the local DistanceEntry placement lifetime to avoid emitting the conflicting implicit pair destructor. Whole447B/EH remain exact; link_check --new-variants reports no conflicting COMDAT against the copied census. Full LINKED status still requires a current census.

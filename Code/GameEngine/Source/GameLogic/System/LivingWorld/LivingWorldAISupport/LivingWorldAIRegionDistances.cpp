@@ -160,7 +160,22 @@ struct pair<const int, Rva00500839Element>
 
 typedef _STL::pair<const int, AsciiString> GlobalValue;
 typedef _STL::_Rb_tree<int, GlobalValue, _STL::_Select1st<GlobalValue>, _STL::less<int>, _STL::allocator<GlobalValue> > GlobalTree;
-typedef _STL::pair<const int, Rva00500839Element> DistanceEntry;
+typedef _STL::pair<const int, Rva00500839Element> DistancePair;
+// The provider owns DistancePair's copy constructor. Keep ownership of this
+// local placement lifetime here so no competing implicit pair destructor is
+// emitted. Only the two-tree member has nontrivial destruction.
+struct DistanceEntry
+{
+    __declspec(align(4)) char storage[sizeof(DistancePair)];
+    __forceinline DistanceEntry(const DistancePair &source)
+    {
+        new(LocalPlacement(storage)) DistancePair(source);
+    }
+    __forceinline ~DistanceEntry()
+    {
+        reinterpret_cast<Rva002B82D5 *>(storage + 4)->~Rva002B82D5();
+    }
+};
 
 class Rva005020CCDistanceTable
 {
@@ -265,7 +280,7 @@ void Rva005020CCBuildRegionDistances()
 				}
 			}
 			_STL::pair<int, Rva0050055D> value(region->m_id, distances);
-			DistanceEntry entry(reinterpret_cast<const DistanceEntry &>(value));
+			DistanceEntry entry(reinterpret_cast<const DistancePair &>(value));
 			new(LocalPlacement(scratch.second)) GlobalTree::iterator(table->insert(table->begin(), reinterpret_cast<const GlobalValue &>(entry)));
 		}
 	}
