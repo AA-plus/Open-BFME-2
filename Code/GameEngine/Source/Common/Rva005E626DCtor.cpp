@@ -71,6 +71,7 @@ public:
 	Rva005E626D(Rva005E626DOwner *owner, Rva0057C394 *source, Rva005E626DListOwner *listOwner, void *extra);
 	virtual ~Rva005E626D();
 	virtual void rva005E586B();
+	virtual int rva005E57A2(void *);
 	virtual void notify(void *) { reinterpret_cast<Rva000AD6F4*>((char*)m_owner0C+0x40)->clear(); }
 
 private:
@@ -91,6 +92,23 @@ class Rva002B7250 {public:void rva002B7250(CreateAHeroData *);};
 Rva005E626D::~Rva005E626D() {
  reinterpret_cast<Rva002B7250*>(&m_listOwner10->m_list08)->rva002B7250(reinterpret_cast<CreateAHeroData*>(static_cast<Rva005E626DListener*>(this)));
 }
+
+// 0x005E57A2 (11 B, RET 4): primary vtable slot 2. The one-word argument is
+// unused; the +4 callback member is invoked with no argument through the
+// no-argument forwarder below, which ICF folds into Rva005E6817Mid::fwd
+// (identical 7 B: load +4 target, jump to its slot 0).
+class Rva005E57A2Callback
+{
+public:
+	__declspec(noinline) int invoke();
+private:
+	unsigned m_00;
+	struct Target { virtual int slot0(); } *m_target;
+};
+
+int Rva005E57A2Callback::invoke() { return m_target->slot0(); }
+
+int Rva005E626D::rva005E57A2(void *) { return (*(Rva005E57A2Callback **)((char *)this + 4))->invoke(); }
 
 void Rva005E626D::rva005E586B(){reinterpret_cast<Rva000AD6F4*>((char*)m_owner0C+0x40)->clear();}
 
