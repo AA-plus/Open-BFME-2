@@ -918,18 +918,6 @@ PUBLIC ?rva0079B2D8@@YAXXZ
     jmp ?apply@Rva005753E2DwordImmSetter@@QAEXXZ
 ?rva0079B2D8@@YAXXZ ENDP
 
-; Unwind@00b9b52f at RVA 0x0079B52F; 20-byte funclet adds 0Ch to [ebp-10h] (zero stays zero) and tail-jumps to apply at 0x00576456.
-PUBLIC ?rva0079B52F@@YAXXZ
-?rva0079B52F@@YAXXZ PROC
-    mov ecx, DWORD PTR [ebp-10h]
-    mov eax, DWORD PTR [ebp-10h]
-    add eax, 0Ch
-    neg ecx
-    sbb ecx, ecx
-    and ecx, eax
-    jmp ?apply@Rva00576456DwordImmSetter@@QAEXXZ
-?rva0079B52F@@YAXXZ ENDP
-
 ; Unwind@00b9b603 at RVA 0x0079B603; 20-byte funclet adds 4 to [ebp-10h] (zero stays zero) and tail-jumps to dtor at 0x005CD1A9.
 PUBLIC ?rva0079B603@@YAXXZ
 ?rva0079B603@@YAXXZ PROC
