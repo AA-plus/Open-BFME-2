@@ -1,4 +1,6 @@
 // ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
+// partial score=0.97 date=2026-10-14
+// ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
 // partial score=0.9 date=2026-10-13
 // ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z
 // partial score=0.89 date=2026-10-13
@@ -10,7 +12,7 @@
 // 804/811 in the TU. Residue: (1) newHorde pre-spill+reload around slot122 (ai takes ebx; retail keeps newHorde, homes ai); (2) size-loop iterator spilled home vs reg (and last reg vs home); (3) list-ctor alloc temp slot +0xB vs frame; (4) leader/camp homes shifted by the same global numbering. FIXED HERE vs prior bank: m_2B4 pad math (+0x2B8 -> +0x2B4, correctness, size-neutral).
 // Negatives: by-value distance params (+1B, it stays reg); ai decl split (neutral); volatile/struct home anchors reshuffle or mis-slot (see 0x27893e notes).
 // t=35 model=muse-spark (seat W7-MP6).
-// cl: /O1 /DNDEBUG /MD /EHs
+// cl: /Gy /O1 /DNDEBUG /MD /EHs
 // ?changeToFormation@HordeContain@@UAEXPBVThingTemplate@@@Z, retail 0x00472D43
 // (811B, EH, RET 4): slot 26 of the HordeContainInterface vtable (shared by
 // HorseHordeContain and AODHordeContain); WorldBuilder HordeContain.cpp
@@ -18,6 +20,8 @@
 // template, moves the horde over (leader/member lists, AI orders, lifetime),
 // then tears the old one down. /EHs for the LatchRestore guard, the static
 // LifetimeUpdate key and the nothrow list disposal.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <string.h>
 #include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
@@ -249,6 +253,19 @@ public:
 	Team *m_team;									// +0x304
 };
 
+class Object;
+class FreelistProxyHead {public:void setup(const void*,void*);};
+class FreelistPool {public:void*pop();};
+extern FreelistPool g_freelistPool00DB8FEC;
+namespace _STL {
+template<> __declspec(noinline) _List_base<Object*,Rva001EB984PoolAllocator<Object*> >::_List_base(const Rva001EB984PoolAllocator<Object*>&a)
+{
+ char dummy;
+ ((FreelistProxyHead*)this)->setup(&dummy,0);
+ void*n=g_freelistPool00DB8FEC.pop();
+ ((void**)n)[0]=n;((void**)n)[1]=n;_M_node=(_List_node_base*)n;
+}
+}
 template <class T>
 class LatchRestore
 {
@@ -333,6 +350,7 @@ void HordeContain::changeToFormation(const ThingTemplate *newTemplate)
 		return;
 	}
 	HordeContain *newHorde = contain->getHordeContain();
+	_ReadWriteBarrier();
 	slot122();
 	_STL::list<Object *> members;
 	getMembers(&members);
@@ -349,8 +367,8 @@ void HordeContain::changeToFormation(const ThingTemplate *newTemplate)
 		AIUpdateInterface *ai = getObject()->getAI();
 		if (ai)
 		{
-			ai->m_commandInterface.aiIdle(CMD_FROM_PLAYER);
 			TheAiOrdersManager->clearOrders(3, getObject()->getID());
+			ai->m_commandInterface.aiIdle(CMD_FROM_PLAYER);
 		}
 	}
 	getObject()->SwapForExchange(newObj);
@@ -372,7 +390,7 @@ void HordeContain::changeToFormation(const ThingTemplate *newTemplate)
 		if (newLeader)
 		{
 			static NameKeyType s_lifetimeKey = TheNameKeyGenerator->nameToKey("LifetimeUpdate");
-			LifetimeUpdate *newLife = (LifetimeUpdate *)newLeader->findModule(s_lifetimeKey);
+			LifetimeUpdate * volatile newLife = (LifetimeUpdate *)newLeader->findModule(s_lifetimeKey);
 			LifetimeUpdate * volatile oldLife = (LifetimeUpdate *)leader->findModule(s_lifetimeKey);
 			if (newLife != 0 && oldLife != 0)
 			{
