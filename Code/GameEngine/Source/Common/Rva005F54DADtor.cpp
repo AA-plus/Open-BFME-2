@@ -86,7 +86,7 @@ public:
 	__forceinline Rva005F50B9(Rva005F501E *value) : m_ptr(value) {}
 	Rva005F501E *m_ptr;
 	void clear();
-	~Rva005F50B9() { clear(); }
+	__declspec(noinline) ~Rva005F50B9();
 };
 
 class Rva00575674Sub
@@ -155,4 +155,15 @@ void Rva005F54DA::rva005F4EED(void *inputA, void *inputB)
 		rva005F4BB4(m_a0c.m_ptr);
 		rva005F4BB4(m_a10.m_ptr);
 	}
+}
+
+// Native ctor/destructor EH cleanups5F53E6/5F54DA reach5F50B9 directly.
+// This complete owning-pointer destructor is the verified clear worker twin:
+// detach the pointer before its destructor and scalar deallocation.
+void __cdecl operator delete(void *p);
+Rva005F50B9::~Rva005F50B9()
+{
+ Rva005F501E *p=m_ptr;
+ m_ptr=0;
+ if(p) { p->Rva005F501E::~Rva005F501E(); ::operator delete(p); }
 }
