@@ -73,31 +73,19 @@ namespace _STL
 template <> class vector<Rva00214B22Record, allocator<Rva00214B22Record> >
 {
 public:
-	~vector();
+    // The empty three-pointer header uses the existing native base constructor.
+    // This does not claim the vector's element stride or record layout.
+    __forceinline vector(const _STL::allocator<BfmeE16> &alloc = _STL::allocator<BfmeE16>())
+    {
+        __assume(this != 0);
+        typedef _STL::_Vector_base<BfmeE16, _STL::allocator<BfmeE16> > Base;
+        new(this) Base(alloc);
+    }
+    ~vector();
 private:
-	unsigned int m_words[3];
+    unsigned int m_words[3];
 };
 }
-
-class ModifierVectorHeader
-{
-public:
-	__forceinline ModifierVectorHeader(
-		const _STL::allocator<BfmeE16> &alloc = _STL::allocator<BfmeE16>())
-	{
-		// A valid constructor receiver is nonnull. Placement construction
-		// uses this existing member storage and allocates no memory.
-		__assume(this != 0);
-		typedef _STL::_Vector_base<BfmeE16, _STL::allocator<BfmeE16> > Base;
-		new(this) Base(alloc);
-	}
-	__forceinline ~ModifierVectorHeader()
-	{
-		((_STL::vector<Rva00214B22Record> *)this)->~vector();
-	}
-private:
-	unsigned int m_words[3];
-};
 
 class Rva0042526Member
 {
@@ -115,7 +103,7 @@ public:
 	void rva0040450E(int);
 	void rva00214917(AsciiString name);
 private:
-	ModifierVectorHeader m_values;
+	_STL::vector<Rva00214B22Record> m_values;
 	unsigned int m_word0C;
 	AsciiString m_name10;
 	unsigned int m_key14, m_word18;
@@ -154,7 +142,7 @@ class Rva002146F7
 public:
     ~Rva002146F7();
 private:
-    ModifierVectorHeader m_values;
+    _STL::vector<Rva00214B22Record> m_values;
     unsigned m_word0C;
     AsciiString m_name10;
     unsigned char m_unreconstructed14[0xCC - 0x14];
