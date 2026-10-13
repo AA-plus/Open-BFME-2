@@ -42,6 +42,9 @@ class StringBase
     };
 
     Header *m_data;
+public:
+    ~StringBase();
+private:
     void releaseBuffer();
     void ensureUniqueBufferOfSize(int numCharsNeeded, bool preserveData, const CharSource<T> *strToCopy,
         const CharSource<T> *strToCat);
@@ -89,6 +92,20 @@ void StringBase<wchar_t>::releaseBuffer()
 
 template <>
 void StringBase<char>::releaseBuffer()
+{
+    WideLock lock(Rva00035C90Get());
+    if (m_data)
+    {
+        if (--m_data->ref_count == 0)
+            free(m_data);
+        m_data = 0;
+    }
+}
+
+// The public destructor ??1?$StringBase@D@@QAE@XZ is the same retail body as releaseBuffer:
+// /OPT:ICF folded the two, so callers that destroy a StringBase<char> call 0x00036410.
+template <>
+StringBase<char>::~StringBase()
 {
     WideLock lock(Rva00035C90Get());
     if (m_data)

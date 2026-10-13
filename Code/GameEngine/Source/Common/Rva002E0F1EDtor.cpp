@@ -13,6 +13,9 @@
 #include "string_base.h"
 
 #include "Common/Snapshot.h"
+// bfme link decl-only begin
+template <> StringBase<char>::~StringBase();
+// bfme link decl-only end
 class __declspec(novtable) Rva002E0F1E : public Snapshot
 {
 public:

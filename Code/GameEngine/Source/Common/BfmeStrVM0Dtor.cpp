@@ -9,6 +9,9 @@
 // 0x001B4E74; deleting-dtor caller 0x0025DA57.
 #define BFME_STRINGBASE_PUBLIC_DTOR
 #include "../../../../reference/shims/bfme2_ascii/ascii_string.h"
+// bfme link decl-only begin
+template <> StringBase<char>::~StringBase();
+// bfme link decl-only end
 
 // Inline destruction uses the owned releaseBuffer worker directly.
 

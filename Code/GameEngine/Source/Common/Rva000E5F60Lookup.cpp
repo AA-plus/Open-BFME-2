@@ -26,6 +26,9 @@
 
 #define BFME_STRINGBASE_PUBLIC_DTOR
 #include "string_base.h"
+// bfme link decl-only begin
+template <> StringBase<char>::~StringBase();
+// bfme link decl-only end
 
 // Keep the known StringBase<char> cleanup inline. The owned releaseBuffer
 // call then resolves directly, without a linker alternate name.
