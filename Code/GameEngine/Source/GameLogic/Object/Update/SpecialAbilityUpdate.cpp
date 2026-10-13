@@ -42,6 +42,7 @@ enum KindOfType
 {
 	KINDOF_INVALID = -1
 };
+enum SpecialPowerType {};
 enum NameKeyType
 {
 	NAMEKEY_INVALID = 0
@@ -403,6 +404,8 @@ __forceinline void Object::clearAndSetModelConditionState(ModelConditionFlagType
 }
 class SpecialAbilityUpdate : public BehaviorModule
 {
+public:
+	SpecialPowerType getSpecialPowerType() const;
 protected:
 	bool handlePackingProcessing();
 public:
@@ -430,21 +433,6 @@ private:
 	unsigned char m_pad44[0x84 - 0x44];
 	unsigned int m_84; // +0x84
 };
-
-struct Rva0044EF2CHolder
-{
-	char m_pad[0x38];
-	Overridable *m_over38;
-};
-
-class Rva0044EF2C
-{
-public:
-	char m_pad0[4];
-	Rva0044EF2CHolder *m_holder04;
-	int rva0044EF2C();
-};
-
 
 extern GameLogic *TheGameLogic;
 
@@ -512,21 +500,17 @@ void SpecialAbilityUpdate::rva0044EE80()
 		object->setSpecialModelConditionState(mc, data->m_1C);
 }
 
-// ?rva0044EF2C@Rva0044EF2C@@QAEHXZ @0x0044EF2C 22B
-// Null-checked final-override int forward. Retail is mov eax [ecx+4]
-// mov ecx [eax+0x38] test ecx jne call rowed
-// Overridable::friend_getFinalOverride at 0x00288609 then mov eax [eax+0x1C].
-// Evidence: unlock lane; caller at 0x0028BDBA in 0x0028BD92 which cmps the
-// result; unblocks 0x0028BD92; flags copied from prev TU
-// ModuleDataBuildFieldParseChained.cpp. Owner unproven so the name stays
-// address-derived.
-int Rva0044EF2C::rva0044EF2C()
+// WorldBuilder 10E7F90 names this const getter and reads the template's
+// final-override type at1C. Native44EF2C independently proves moduleData+4,
+// template+38 and owned override walk288609. BFME1 CEE35B7D's named donor
+// supplies the same null-template behavior with different target offsets.
+SpecialPowerType SpecialAbilityUpdate::getSpecialPowerType() const
 {
-	Overridable *o = m_holder04->m_over38;
+	const SpecialAbilityUpdateModuleData *data = (const SpecialAbilityUpdateModuleData *)m_moduleData;
+	Overridable *o = data->m_specialPowerTemplate;
 	if (o == 0)
-		return 0;
-	const Overridable *f = o->friend_getFinalOverride();
-	return f->m_val1C;
+		return (SpecialPowerType)0;
+	return (SpecialPowerType)o->friend_getFinalOverride()->m_val1C;
 }
 
 // ?rva0044F633@Rva0044F633@@QAEPAXXZ, retail 0x0044F633, 70 bytes.

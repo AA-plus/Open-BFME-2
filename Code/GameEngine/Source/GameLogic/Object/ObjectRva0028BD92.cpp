@@ -1,7 +1,7 @@
 // cl: /DNDEBUG /MD
 // ?rva0028BD92@Object@@QAEPAXH@Z @0x0028BD92 69B: Object scan of +0x244
 // module array; each +0x0C sub-object slot25 (+0x64) yields B; when B non-null
-// and its slot1 (+0x04) bool true, B-0x20 is Rva0044EF2C whose rowed int
+// and its slot1 (+0x04) bool true, B-0x20 is SpecialAbilityUpdate whose rowed int
 // getter is compared to the int arg, returning adjusted B on match else null.
 // Evidence: same +0x244/+0x0C/slot25 shape as rowed rva0028BD5D at 0x0028BD5D
 // and siblings rva0028BD3A/BD17/BCF4; retail lea ecx [eax+0x0C] plus calls
@@ -39,10 +39,11 @@ class BehaviorModule : public BfmeObjectModule, public BehaviorModuleInterface
 {
 };
 
-class Rva0044EF2C
+enum SpecialPowerType {};
+class SpecialAbilityUpdate
 {
 public:
-	int rva0044EF2C();
+	SpecialPowerType getSpecialPowerType() const;
 };
 
 class Object
@@ -61,8 +62,8 @@ void *Object::rva0028BD92(int key)
 		Rva0028BD92Result *r = (*m)->slot25();
 		if (r != 0 && r->slot01())
 		{
-			Rva0044EF2C *adj = reinterpret_cast<Rva0044EF2C *>(reinterpret_cast<char *>(r) - 0x20);
-			if (adj->rva0044EF2C() == key)
+			SpecialAbilityUpdate *adj = reinterpret_cast<SpecialAbilityUpdate *>(reinterpret_cast<char *>(r) - 0x20);
+			if (adj->getSpecialPowerType() == key)
 				return adj;
 		}
 	}
