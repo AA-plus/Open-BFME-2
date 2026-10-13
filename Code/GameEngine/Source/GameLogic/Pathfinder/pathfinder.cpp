@@ -128,7 +128,7 @@ public:
 	void rva002655E3(const Coord3D *pos, PathfindLayerEnum layer, Int portal);
 	void SetLastNodePortal(Int portal);
 private:
-	void *word0;PathNode *firstNode;Int word8;char wordC;Bool blockedByAlly;char padE[0x28-0xe];
+	void *word0;PathNode *firstNode;PathNode *lastNode;char wordC;Bool blockedByAlly;char padE[0x28-0xe];
 };
 
 struct Rva002E8C23Pair { Int x,y; };
@@ -446,8 +446,6 @@ struct Rva002F35AFCell
 	Rva002F35AFZone *m_0C;
 };
 
-struct Rva002E8C23Param;
-Int Rva002E8C23Call(Int,unsigned char,Rva002E8C23Param *);
 // The 12-byte record +0x1C1CC collects per hop (zone, next cell x/y).
 struct Rva002F35AFHop
 {
@@ -588,6 +586,7 @@ public:
  Bool rva002F4AC1(const ICoord2D *,Int,Int,Object *,PathfindLayerEnum,Int,Rva002E7261Info *,void *,void *);
  PathfindCell *rva002F068F();
  Path *FindSafePath(Object *,const LocomotorSet &,const Coord3D *,const Coord3D *,const Coord3D *,float);
+ Path *PatchPath(Object *,const LocomotorSet &,Path *,Bool);
     Path *GetAircraftPath(const Object *,const Coord3D *);
     int _GetOverlapUnits(Object *,const Coord3D *,int *);
     int GetOverlapGoalUnits(Object *,const Coord3D *,int *);
@@ -2128,13 +2127,43 @@ Bool Pathfinder::AdjustDestination(Object *obj,const LocomotorSet &locomotorSet,
 	return false;
 }
 
+extern float g_00BC7838;
+struct PathfinderCellPoint : Coord3D {
+	__forceinline PathfinderCellPoint() {}
+	__forceinline PathfinderCellPoint(const PathfinderCellPoint &o) { x = o.x; y = o.y; z = o.z; }
+	__forceinline ~PathfinderCellPoint() {}
+};
+// 0x002E79A8 (186 B): the cell-to-world centre, WorldBuilder D4DC20 (Zero
+// Hour's adjustCoordToCell returning the point): the cell corner plus a half
+// cell (centred) or a small inset, scaled by the cell size; ground cells take
+// the water height when there is water, else the layer height.
+PathfinderCellPoint rva002E79A8(Bool centerInCell, Int cellX, Int cellY, PathfindLayerEnum layer)
+{
+	PathfinderCellPoint pos;
+	if (centerInCell) {
+		pos.x = ((float)cellX + 0.5f) * 10.0f;
+		pos.y = ((float)cellY + 0.5f) * 10.0f;
+	} else {
+		pos.x = ((float)cellX + g_00BC7838) * 10.0f;
+		pos.y = ((float)cellY + g_00BC7838) * 10.0f;
+	}
+	if (layer != PATHFIND_LAYER_GROUND || !((TerrainLogicWaterQuery *)TheTerrainLogic)->slot4C(pos.x, pos.y, &pos.z, 0, 0))
+		pos.z = TheTerrainLogic->getLayerHeight(pos.x, pos.y, layer, 0, true);
+	return pos;
+}
+// 0x002E8C23 (42 B): a cell's centre point, returned through the hidden pointer.
+// In-TU so PatchPath's cell centre stays unescaped and shares goalPos's slot.
+PathfinderCellPoint Rva002E8C23Call(Bool centerInCell, PathfindCell *cell)
+{
+	return rva002E79A8(centerInCell, cell->getXIndex(), cell->getYIndex(), (PathfindLayerEnum)cell->getLayer());
+}
 void Pathfinder::PrependCells(Path *path,const Coord3D *fromPos,PathfindCell *goalCell,Bool center)
 {
  Coord3D pos;
  PathfindCell *cell,*prevCell=0;
  Bool goalCellNull=(goalCell->getParentCell()==0);
  for(cell=goalCell;cell->getParentCell();cell=cell->getParentCell()) {
-  Coord3D tmp;pos=*(Coord3D *)Rva002E8C23Call((Int)&tmp,center,(Rva002E8C23Param *)cell);
+  pos=Rva002E8C23Call(center,cell);
   if(prevCell && cell->getXIndex()==prevCell->getXIndex() && cell->getYIndex()==prevCell->getYIndex()) {
    PathfindLayerEnum layer=(PathfindLayerEnum)cell->getLayer();
    if(layer==PATHFIND_LAYER_GROUND)layer=(PathfindLayerEnum)prevCell->getLayer();
@@ -2169,7 +2198,7 @@ void Pathfinder::PrependCells(Path *path,const Coord3D *fromPos,PathfindCell *go
   prevCell=cell;
  }
  if(cell && cell->m_pathInfo) {
-  if(goalCellNull) {Coord3D tmp;pos=*(Coord3D *)Rva002E8C23Call((Int)&tmp,center,(Rva002E8C23Param *)cell);path->rva00265596(&pos,(PathfindLayerEnum)cell->getLayer(),0x7fffffff);}
+  if(goalCellNull) {pos=Rva002E8C23Call(center,cell);path->rva00265596(&pos,(PathfindLayerEnum)cell->getLayer(),0x7fffffff);}
   if(fromPos->x!=path->firstNode->position.x || fromPos->y!=path->firstNode->position.y)
    path->rva00265596(fromPos,(PathfindLayerEnum)cell->getLayer(),0x7fffffff);
  }
@@ -2665,8 +2694,8 @@ private:
 class HierarchicalPath { public: Int lookUpPositionOnPath(const Coord3D *); };
 struct PathfinderCellLimitView { char pad[0x1210]; unsigned int maxCells; };
 extern Int PathfinderSearchCellsVisited;	// 0x00DFF0CC, also cleared by FindSafePath
-// The cell centre Rva002E8C23Call builds into a scratch the caller destroys.
-struct PathfinderCellCenter { Coord3D pos; __forceinline PathfinderCellCenter() {} __forceinline ~PathfinderCellCenter() {} };
+// A cell centre temporary passed on by address.
+static __forceinline Coord3D *cellPointArg(const PathfinderCellPoint &p) { return (Coord3D *)&p; }
 // A Bool argument travels as its whole stack dword (push dword ptr [bool]).
 static __forceinline void *boolArg(const Bool &value) { return *(void *const *)&value; }
 static __forceinline Bool pathfinderLogOn() { return g_00E03745 && g_00DFEFF0; }
@@ -3008,6 +3037,122 @@ static __forceinline void readMoverInfo(TCheckMovementInfo &info, Object *obj)
 	info.m_18 = ai ? (ObjectID)((const Rva0006E009DwordField *)ai)->get() : (ObjectID)0;
 }
 struct Gen_p12pod {Int a[3];};
+// 0x002E7964 (68 B), rehomed from AI/Rva002E7964BoundedWorldToCell.cpp: the
+// world-to-cell conversion bounded by the cell extent at +0x14 (x = -1 outside).
+class Rva002E7964 {
+public:
+ void rva002E7964(ICoord2D*,unsigned char,const Coord3D*);
+ char pad[0x14];IRegion2D extent;
+};
+void Rva002E7964::rva002E7964(ICoord2D *out,unsigned char center,const Coord3D *pos){
+ ICoord2D tmp;
+ typedef ICoord2D *(__cdecl *CellCall)(ICoord2D*,unsigned char,const Coord3D*);
+ reinterpret_cast<CellCall>(Rva002E7875WorldToCell)(&tmp,center,pos);
+ if(tmp.x<extent.lo.x || tmp.y<extent.lo.y || tmp.x>extent.hi.x || tmp.y>extent.hi.y)tmp.x=-1;
+ *(out?out:out)=tmp;
+}
+// 0x001E3647 (50 B), rehomed from Common/PathfinderRva001E3647.cpp: the cell
+// under a world position, NULL outside the extent. Defined ahead of PatchPath:
+// cl then sees goalPos does not escape and hoists its initial loads (y first).
+void *Pathfinder::rva001E3647Pos(int layer, const Coord3D *pos)
+{
+	ICoord2D tmp;
+	((Rva002E7964 *)this)->rva002E7964(&tmp, 1, pos);
+	void *cell = 0;
+	if (tmp.x >= 0)
+		cell = getCell((PathfindLayerEnum)layer, tmp.x, tmp.y);
+	return cell;
+}
+struct PathfinderPatchLimitView { char pad[0x120C]; unsigned int maxCells; };
+Path *Pathfinder::PatchPath(Object *obj,const LocomotorSet &locomotorSet,Path *originalPath,Bool blocked)
+{
+	if (!originalPath) return 0;
+	Bool centerInCell;
+	Int radius;
+	Rva002EBCA7Split(obj, &radius, (unsigned char *)&centerInCell);
+	Bool isHuman = true;
+	if (obj->getControllingPlayer() && obj->getControllingPlayer()->m_playerType == 1) isHuman = false;
+	_STL::vector<Gen_p12pod> *hops = (_STL::vector<Gen_p12pod> *)&m_1C1CC;
+	hops->erase(hops->begin(), hops->end());
+	m_zoneManager.rva00531300();
+	unsigned int cellCount = 0;
+	Coord3D currentPosition;
+	copyCoord3D(&currentPosition, (const Coord3D *)obj->position);
+	ICoord2D startCellNdx;
+	Rva002E7875WorldToCell(&startCellNdx, true, (const Coord3D *)obj->position);
+	PathfindCell *parentCell = rva002E8BF8((PathfindLayerEnum)obj->rva0028B511(), &currentPosition);
+	if (!parentCell) return 0;
+	if (!obj->m_258) return 0;
+	m_isTunneling = false;
+	parentCell->allocateInfo((In002E6BA1 *)&startCellNdx);
+	parentCell->StartPathfind(0);
+	AddToOpenList(parentCell);
+	PathNode *startNode;
+	PathfindCell *candidateGoal;
+	{
+	Coord3D goalPos;
+	copyCoord3D(&goalPos, &(originalPath->lastNode)->position);
+	float dx = goalPos.x - currentPosition.x;
+	float dy = goalPos.y - currentPosition.y;
+	float goalDeltaSqr = dx*dx + dy*dy;
+	ICoord2D cellCoord;
+	for (startNode = originalPath->lastNode; startNode != originalPath->firstNode; startNode = startNode->previous) {
+		Rva002E7875WorldToCell(&cellCoord, true, &startNode->position);
+		TCheckMovementInfo info;
+		((Rva002E6FDF *)&info)->rva002E6FDF();
+		info.cell = cellCoord;
+		info.layer = startNode->layer;
+		info.centerInCell = centerInCell;
+		info.radius = radius;
+		info.m_11 = blocked;
+		Int cx = cellCoord.x - startCellNdx.x;
+		Int cy = cellCoord.y - startCellNdx.y;
+		if (cx < -2 || cx > 2) info.m_11 = false;
+		if (cy < -2 || cy > 2) info.m_11 = false;
+		info.m_14 = (obj->m_template->testKindWord(90) ? 1U : 16U) | 2U;
+		readMoverInfo(info, obj);
+		if (!checkForMovement(obj, info)) break;
+		float nx = startNode->position.x - currentPosition.x;
+		float ny = startNode->position.y - currentPosition.y;
+		float dist = nx*nx + ny*ny;
+		if (dist < goalDeltaSqr) { goalPos = startNode->position; goalDeltaSqr = dist; }
+	}
+	if (startNode == originalPath->lastNode) { rva002F40E7(); return 0; }
+	candidateGoal = (PathfindCell *)rva001E3647Pos(1, &goalPos);
+	candidateGoal->allocateInfo((In002E6BA1 *)Rva002E7875WorldToCell(&cellCoord, true, &goalPos));
+	}
+	PathfinderSearchCellsVisited = 0;
+	while ((parentCell = rva002F36E5()) != 0) {
+		PathfinderCellPoint cellCenter = Rva002E8C23Call(centerInCell, parentCell);
+		PathNode *matchNode;
+		Bool found = false;
+		for (matchNode = originalPath->lastNode; matchNode != startNode; matchNode = matchNode->previous) {
+			if (cellCenter.x == matchNode->position.x && cellCenter.y == matchNode->position.y) { found = true; break; }
+		}
+		if (found) {
+			m_isTunneling = false;
+			Path *path = new Path;
+			for (PathNode *node = originalPath->lastNode; node != matchNode; node = node->previous)
+				path->rva00265596(&node->position, node->layer, 0x7FFFFFFF);
+			PrependCells(path, (const Coord3D *)obj->position, parentCell, centerInCell);
+			path->rva00364551(obj, locomotorSet.getValidSurfaces(), blocked, 0);
+			rva002F40E7();
+			parentCell->ReleaseInfo();
+			candidateGoal->ReleaseInfo();
+			return path;
+		}
+		parentCell->PutOnClosedList(&m_closedList);
+		if (cellCount < ((const PathfinderPatchLimitView *)TheWritableGlobalData)->maxCells) {
+			CheckChangeLayers(parentCell, obj);
+			cellCount += rva002F83F5(parentCell, 0, locomotorSet, isHuman, centerInCell, radius, &startCellNdx, obj, 0);
+		}
+	}
+	m_isTunneling = false;
+	rva002F40E7();
+	candidateGoal->ReleaseInfo();
+	return 0;
+}
+
 Path *Pathfinder::FindSafePath(Object *obj,const LocomotorSet &loco,const Coord3D *from,
 const Coord3D *repulsor1,const Coord3D *repulsor2,float radius)
 {
@@ -3022,7 +3167,7 @@ ICoord2D *startCell;{ICoord2D start;Rva002E7875WorldToCell(&start,true,(Coord3D 
 parent->allocateInfo((In002E6BA1 *)&start);startCell=&start;}parent->StartPathfind(0);AddToOpenList(parent);
 PathfinderSearchCellsVisited=0;float farthest=0;
 while((parent=rva002F36E5())!=0) {
-Coord3D cellCenter;Rva002E8C23Call((Int)&cellCenter,center,(Rva002E8C23Param *)parent);
+PathfinderCellPoint cellCenter=Rva002E8C23Call(center,parent);
 float dx=cellCenter.x-repulsor1->x,dy=cellCenter.y-repulsor1->y;
 float distance=dx*dx+dy*dy;
 dx=cellCenter.x-repulsor2->x;dy=cellCenter.y-repulsor2->y;
@@ -3317,7 +3462,7 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 					if (bfmeWrapE6E90(obj, (void *)parentCell->getXIndex(), (void *)parentCell->getYIndex(),
 							(void *)parentCell->getLayer(), (void *)radius, boolArg(centerInCell))
 						&& ((Rva002E6DC4 *)this)->rva002E6DC4(&moverInfo, parentCell)
-						&& rva002EDFF9(obj, (Coord3D *)Rva002E8C23Call((Int)&PathfinderCellCenter(), centerInCell, (Rva002E8C23Param *)parentCell)))
+						&& rva002EDFF9(obj, cellPointArg(Rva002E8C23Call(centerInCell, parentCell))))
 						closestCell = parentCell;
 				}
 			} else if (dist < closestDist) {
@@ -3325,7 +3470,7 @@ Path *Pathfinder::InternalFindPath(Object *obj, const LocomotorSet &locomotorSet
 				if (bfmeWrapE6E90(obj, (void *)parentCell->getXIndex(), (void *)parentCell->getYIndex(),
 						(void *)parentCell->getLayer(), (void *)radius, boolArg(centerInCell))
 					&& ((Rva002E6DC4 *)this)->rva002E6DC4(&moverInfo, parentCell)
-					&& rva002EDFF9(obj, (Coord3D *)Rva002E8C23Call((Int)&PathfinderCellCenter(), centerInCell, (Rva002E8C23Param *)parentCell)))
+					&& rva002EDFF9(obj, cellPointArg(Rva002E8C23Call(centerInCell, parentCell))))
 					closestCell = parentCell;
 			}
 		}
