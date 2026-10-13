@@ -27,6 +27,7 @@ class AITargetChooser
 {
 public:
 	AITargetChooser(void *p);
+	~AITargetChooser();
 	char m_pad[0x20];
 };
 
@@ -44,10 +45,25 @@ public:
 	char m_pad[0x10];
 };
 
+// Rowed non-virtual destructors reached through views: 0x00505BBA (the generator
+// member at +0x10) and the ICF-folded 15-byte pair destructor 0x000796BC (+0x1C).
+class Rva00506909
+{
+public:
+	~Rva00506909();
+};
+
+class Rva000C24EA
+{
+public:
+	~Rva000C24EA();
+};
+
 class Rva002C60E4 : public Rva00506B1B
 {
 public:
 	Rva002C60E4(void *arg0, bool arg1);
+	void rva002C61AF();
 	virtual ~Rva002C60E4() {}
 
 private:
@@ -67,4 +83,26 @@ Rva002C60E4::Rva002C60E4(void *arg0, bool arg1)
 		m_0C = new AITargetChooser(arg0);
 	m_10 = new AITacticsGenerator(arg0);
 	m_1C = new Rva00506A34(arg0);
+}
+
+// ?rva002C61AF@Rva002C60E4@@QAEXXZ @0x002C61AF 133B: releases the three owned
+// members (each guarded, the pointer cleared only when it was set) and then
+// the pointer vector at +0x20: delete every non-null element, erase the range.
+// Evidence: 0x002C60E4 ctor layout (+0x0C chooser, +0x10 generator, +0x1C
+// third member, vector at +0x20) and the rowed dtors 0x0050549A, 0x00505BBA,
+// 0x000796BC; the vector erase is the ICF'd void* erase 0x0031BD55.
+void Rva002C60E4::rva002C61AF()
+{
+	if (m_10) { delete (Rva00506909 *)m_10; m_10 = 0; }
+	if (m_0C) { delete m_0C; m_0C = 0; }
+	if (m_1C != 0) { delete (Rva000C24EA *)m_1C; m_1C = 0; }
+	void ***vec = (void ***)&m_vec;
+	if (vec[0] != vec[1]) {
+		void **finish = *(void ***)((char *)this + 0x24);
+		for (void **cur = *(void ***)((char *)this + 0x20); cur != finish; ++cur) {
+			if (*cur)
+				::operator delete(*cur);
+		}
+		((_STL::vector<void *, _STL::allocator<void *> > *)vec)->erase(vec[0], vec[1]);
+	}
 }
