@@ -13,6 +13,7 @@ class Rva003FAC83
 public:
 	void rva003FAC83();
 	void rva003FAD9A();
+	void rva003FAD2B();
 	void rva003FADA3();
 
 private:
@@ -55,4 +56,15 @@ void Rva003FAC83::rva003FADA3()
 {
 	m_32 = !((m_state >> 3) & 1);
 	rva003FAC83();
+}
+
+// Native 0x003FAD2B..0x003FAD4A: a byte test for bit zero is distinct
+// from the indexed word test. This is a read of the same little-endian flags.
+void Rva003FAC83::rva003FAD2B()
+{
+ if ((*(const unsigned char *)&m_state & 1) != 0 || test(2))
+  m_31 = false;
+ else
+  m_31 = true;
+ rva003FAC83();
 }
