@@ -1,4 +1,6 @@
 // ?OnActivation@EmotionNugget@@QAEXPAVObject@@H@Z
+// partial score=0.93 date=2026-10-13
+// ?OnActivation@EmotionNugget@@QAEXPAVObject@@H@Z
 // partial score=0.9272977022977023 date=2026-10-10
 // ?OnActivation@EmotionNugget@@QAEXPAVObject@@H@Z
 // partial score=0.9 date=2026-10-09
@@ -69,13 +71,13 @@ extern GameLogic *TheGameLogic;
 enum NameKeyType { INVALID_NAME_KEY = -1 };
 class NameKeyGenerator { public: NameKeyType nameToKey(const AsciiString &); };
 extern NameKeyGenerator *TheNameKeyGenerator;
-struct BfmeDelayedLuaEventList {
-    BfmeDelayedLuaEventList(); ~BfmeDelayedLuaEventList();
+struct DelayedLuaEventList {
+    DelayedLuaEventList(); virtual ~DelayedLuaEventList();
     void *vtable; char events04[0x48];
 };
 class Rva00332E60 { public: void *rva00333918(int); };
-class LuaDrawableState {
-public: void rva00334634(void *, Object *, BfmeDelayedLuaEventList *);
+class LuaScriptEngine {
+public: void DispatchEvent(int *event, Object *object, void *eventList);
 };
 class LuaScriptEngine;
 extern LuaScriptEngine *TheLuaScriptEngine;
@@ -130,8 +132,8 @@ void EmotionNugget::OnActivation(Object *target, int duration)
             void *event = ((Rva00332E60 *)TheLuaScriptEngine)->rva00333918(
                 TheNameKeyGenerator->nameToKey((entry04?entry04:entry04)->get()));
             if (event) {
-                BfmeDelayedLuaEventList list;
-                ((LuaDrawableState *)TheLuaScriptEngine)->rva00334634(event, object00, &list);
+                DelayedLuaEventList list;
+                ((LuaScriptEngine *)TheLuaScriptEngine)->DispatchEvent((int *)event, object00, &list);
             }
         }
     }

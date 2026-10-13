@@ -99,9 +99,9 @@ void Rva00467AB8::rva00467AB8(Object *rider)
     rider->clearDisabled(DISABLED_HELD);
     rider->clearCondition(89);
     const Rva00467AB8Data *module=data();
+    const AsciiString &bone=module->exitBone();
     Object *owner=object();
     Drawable *ownerDrawable=owner->getDrawable();
-    const AsciiString &bone=module->exitBone();
     if (!reinterpret_cast<const StringBase<char> &>(bone).isEmpty()) {
         Drawable *draw=object()->getDrawable();
         if (draw) {
@@ -135,7 +135,7 @@ void Rva00467AB8::rva00467AB8(Object *rider)
             reinterpret_cast<Rva00467AB8Provider *>(rider->rva0028C197())->fill(&objects);
             for (_STL::list<int>::iterator it=objects.begin();it._M_node!=objects.end()._M_node;++it) {
                 Object *o=reinterpret_cast<Object *>(*it);
-                if (o) { Drawable *draw=o->getDrawable(); if (draw) draw->fadeIn(static_cast<unsigned>(g_00DBA500*module->fadeTime())); }
+                if (o) { Drawable *draw=o->getDrawable(); if (draw) draw->fadeIn(static_cast<unsigned>(module->fadeTime()*g_00DBA500)); }
             }
         } else riderDrawable->fadeIn(static_cast<unsigned>(g_00DBA500*module->fadeTime()));
     }
