@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /DNDEBUG /MD
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -ICode/GameEngine/Include -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C4D5CDo@@YGXPBVAsciiString@@@Z @0x003C4D5C 102B (dump range 18).
+// ?Rva003C4D5CDo@ScriptActions@@QAEXPBVAsciiString@@@Z @0x003C4D5C 102B (dump range 18).
 // Terrain node float dispatch: walks the TerrainLogic slot-0x84 list via
 // +0x1C links comparing each node's +8 AsciiString through the rowed
 // compare, and on the first match copies its +0x0C Coord3D and fires the
@@ -52,7 +54,7 @@ public:
 };
 extern TacticalView *TheTacticalView;
 
-void __stdcall Rva003C4D5CDo(const AsciiString *name)
+void ScriptActions::Rva003C4D5CDo(const AsciiString *name)
 {
 	Rva003C4D5CNode *node = (Rva003C4D5CNode *)TheTerrainLogic->s33();
 	while (node != 0) {

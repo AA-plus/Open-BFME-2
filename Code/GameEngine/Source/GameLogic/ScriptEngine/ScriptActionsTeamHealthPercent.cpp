@@ -1,9 +1,11 @@
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // BFME1 f98983a7d ScriptActions_doTeamSetHealth.cpp supplies health clamp,
 // min/max reference templates and member traversal. Native 0x003C301D/188B
 // independently proves direct ScriptEngine lookup, Object body+254 and body
 // slots21/23 with float/bool1. Original free action spelling remains unknown.
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /GX /arch:SSE
-// ?Rva003C301DDo@@YGXPAVParameter@@0@Z @0x003C301D 188B: team float-clamped body module via getTeamNamed iterate. Evidence: rowed getTeamNamed 0x3584E9 iterate 0x263864 advance 0x263526 StringBase copy 0x365F0; retail100.0 literal; caller 0x003CE3E8; ret 0x8 stdcall.
+// ?Rva003C301DDo@ScriptActions@@QAEXPAVParameter@@0@Z @0x003C301D 188B: team float-clamped body module via getTeamNamed iterate. Evidence: rowed getTeamNamed 0x3584E9 iterate 0x263864 advance 0x263526 StringBase copy 0x365F0; retail100.0 literal; caller 0x003CE3E8; ret 0x8 stdcall.
 #include "ascii_string.h"
 
 
@@ -65,7 +67,7 @@ public:
 	AsciiString m_string;
 };
 
-void __stdcall Rva003C301DDo(Parameter *teamParm, Parameter *floatParm)
+void ScriptActions::Rva003C301DDo(Parameter *teamParm, Parameter *floatParm)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamParm->getString(), false);
 	if (team == 0)

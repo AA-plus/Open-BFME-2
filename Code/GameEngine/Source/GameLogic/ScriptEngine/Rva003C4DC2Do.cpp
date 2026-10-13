@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
-// ?Rva003C4DC2Do@@YGXABVAsciiString@@@Z @0x003C4DC2 102B.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C4DC2Do@ScriptActions@@QAEXABVAsciiString@@@Z @0x003C4DC2 102B.
 // Script free function walking TerrainLogic list at 0xDFEC50 comparing
 // name at +8 via rowed StringBase compare then calling holder at 0xDFEA3C
 // slot 0x98 with position at +0xC. Evidence: manual loop with next at +0x1C
@@ -99,7 +101,7 @@ public:
 };
 extern TerrainLogic *TheTerrainLogic;
 extern class View *TheTacticalView;
-void __stdcall Rva003C4DC2Do(const AsciiString &name)
+void ScriptActions::Rva003C4DC2Do(const AsciiString &name)
 {
 	TerrainLogic *logic = TheTerrainLogic;
 	Rva003C4DC2Node *cur = logic->getHead();

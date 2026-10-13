@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
-// ?Rva003C388EDo@@YGXPAVParameter@@_N@Z @0x003C388E 60B: team named then Team predicate iterate. Evidence: rowed getTeamNamed 0x3584E9 rva0039DD12 0x39DD12 StringBase copy 0x365F0 globals g_Va009FE16C; caller 0x003CE9DF; ret 0x8 stdcall.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C388EDo@ScriptActions@@QAEXPAVParameter@@_N@Z @0x003C388E 60B: team named then Team predicate iterate. Evidence: rowed getTeamNamed 0x3584E9 rva0039DD12 0x39DD12 StringBase copy 0x365F0 globals g_Va009FE16C; caller 0x003CE9DF; ret 0x8 stdcall.
 #include "ascii_string.h"
 
 class Object;
@@ -46,7 +48,7 @@ int __cdecl Rva0028870A(Object *obj, void *userData)
 	return 1;
 }
 
-void __stdcall Rva003C388EDo(Parameter *parm, bool flag)
+void ScriptActions::Rva003C388EDo(Parameter *parm, bool flag)
 {
 	Team *team = TheScriptEngine->getTeamNamed(parm->m_string, false);
 	if (team == 0)

@@ -1,10 +1,12 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
 // Landed from the banked attempt once Zero Hour's null-member skip
 // (Object *obj = iter.cur(); if (!obj) continue;) was added to the member
 // loop: it keeps the member in ecx from the loop test into the call, the
 // mov-test wall the bank recorded.
-// ?Rva003C353BDo@@YGXPAVParameter@@PAX@Z @0x003C353B 111B: team teleport-like via getTeamNamed TerrainLogic slot 0x88 iterate and Object rva0029660C. Evidence: single Rva003BD116Set same getUnitNamed slot88 rva0029660C caller 0x003CE7AC; rowed getTeamNamed 0x3584E9 iterate 0x263864 advance 0x263526 pin rva0029660C 0x29660C; caller 0x003CE7CE; ret 0x8 stdcall.
+// ?Rva003C353BDo@ScriptActions@@QAEXPAVParameter@@PAX@Z @0x003C353B 111B: team teleport-like via getTeamNamed TerrainLogic slot 0x88 iterate and Object rva0029660C. Evidence: single Rva003BD116Set same getUnitNamed slot88 rva0029660C caller 0x003CE7AC; rowed getTeamNamed 0x3584E9 iterate 0x263864 advance 0x263526 pin rva0029660C 0x29660C; caller 0x003CE7CE; ret 0x8 stdcall.
 #include "ascii_string.h"
 
 class Object;
@@ -67,7 +69,7 @@ public:
 	AsciiString m_string;
 };
 
-void __stdcall Rva003C353BDo(Parameter *teamParm, void *p2)
+void ScriptActions::Rva003C353BDo(Parameter *teamParm, void *p2)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamParm->getString(), false);
 	if (team == 0)

@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ?Rva003C45D4Apply@@YGXPAVParameter@@ABVAsciiString@@@Z @0x003C45D4 81B.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C45D4Apply@ScriptActions@@QAEXPAVParameter@@ABVAsciiString@@@Z @0x003C45D4 81B.
 // Script unit helper: getUnitNamed via g_Va009FE16C, nameToKey via
 // TheNameKeyGenerator, level lookup via TheExperienceLevelSystem and rowed 0x0028951F,
 // then rowed 0x0039B24F on the +0x264 link with (input 0 true) and clear
@@ -54,7 +56,7 @@ struct UnitLink264
 	Rva0039B24F *m_link;
 };
 
-void __stdcall Rva003C45D4Apply(Parameter *param, const AsciiString &name)
+void ScriptActions::Rva003C45D4Apply(Parameter *param, const AsciiString &name)
 {
 	Object *unit = TheScriptEngine->getUnitNamed(param);
 	if (!unit)

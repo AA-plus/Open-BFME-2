@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // Retail 0x003C4245 (RVA 0x003C4245) size 116: script apply power to named target.
 // Evidence: ScriptEngine 0xDFE16C getUnitNamed then lookupUnitByValue then SpecialPowerStore 0xE02D4C findSpecialPowerTemplate then Object::getSpecialPowerModule then vtable+0x2c with 0x40000.
 #include "ascii_string.h"
@@ -57,7 +59,7 @@ public:
 	virtual void v11(Object *target, int flags);
 };
 
-void __stdcall Rva003C4245Do(Parameter *param, const AsciiString &a, const AsciiString &b)
+void ScriptActions::Rva003C4245Do(Parameter *param, const AsciiString &a, const AsciiString &b)
 {
 	Object *src = TheScriptEngine->getUnitNamed(param);
 	Object *target = ((Rva00358752Opaque *)TheScriptEngine)->lookupUnitByValue(b);

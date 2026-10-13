@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ?Rva003C43F3Do@@YGXABVAsciiString@@0PAVObject@@@Z @0x003C43F3 86B.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C43F3Do@ScriptActions@@QAEXABVAsciiString@@0PAVObject@@@Z @0x003C43F3 86B.
 // Script free function finding Team named then Player by name key and calling
 // rowed Team map register 0x003A2D53 with player index key plus object.
 // Evidence: leaf lane plus caller 0x003CC9B9 plus prev 0x003C43A3 next 0x003C4449
@@ -43,7 +45,7 @@ class Team
 public:
 	void rva003A2D53(int key, Object *val);
 };
-void __stdcall Rva003C43F3Do(const AsciiString &teamName, const AsciiString &playerName, Object *obj)
+void ScriptActions::Rva003C43F3Do(const AsciiString &teamName, const AsciiString &playerName, Object *obj)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	NameKeyType key = TheNameKeyGenerator->nameToKey(playerName);

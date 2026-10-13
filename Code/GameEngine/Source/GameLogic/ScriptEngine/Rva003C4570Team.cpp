@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C4570Do@@YGXABVAsciiString@@0@Z @0x003C4570 100B.
+// ?Rva003C4570Do@ScriptActions@@QAEXABVAsciiString@@0@Z @0x003C4570 100B.
 // Team-plus-ExperienceLevel script helper: getTeamNamed kir teamizmi level find
 // via NameKey plus rowed rva0028951F then two Team::rva0039DD12 iterates.
 // Retail pushes level ptr plus 0x6886A7 then 0 plus 0x688726 callbacks.
@@ -96,7 +98,7 @@ int __cdecl Rva00288726(Object *obj, void *userData)
 class ExperienceLevelSystem;
 extern ExperienceLevelSystem *TheExperienceLevelSystem;
 
-void __stdcall Rva003C4570Do(const AsciiString &teamName, const AsciiString &levelName)
+void ScriptActions::Rva003C4570Do(const AsciiString &teamName, const AsciiString &levelName)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	if (!team)

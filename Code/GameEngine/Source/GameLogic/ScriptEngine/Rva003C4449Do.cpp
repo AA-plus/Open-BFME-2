@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ?Rva003C4449Do@@YGXABVAsciiString@@0@Z @0x003C4449 83B.
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C4449Do@ScriptActions@@QAEXABVAsciiString@@0@Z @0x003C4449 83B.
 // Script free function finding Team named then Player by name key and
 // calling rowed armor remove 0x003A28ED. Evidence: chain lane via 0x003A28ED
 // just landed; prev 0x003C43A3 and next 0x003C4570 share /O1 /EHsc and
@@ -43,7 +45,7 @@ public:
 extern ScriptEngine *TheScriptEngine;
 extern NameKeyGenerator *TheNameKeyGenerator;
 extern PlayerList *ThePlayerList;
-void __stdcall Rva003C4449Do(const AsciiString &teamName, const AsciiString &playerName)
+void ScriptActions::Rva003C4449Do(const AsciiString &teamName, const AsciiString &playerName)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
 	NameKeyType key = TheNameKeyGenerator->nameToKey(playerName);

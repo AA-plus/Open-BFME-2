@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003C3A3FSet@@YGXABVAsciiString@@H@Z @0x003C3A3F 58B (dump range 18).
+// ?Rva003C3A3FSet@ScriptActions@@QAEXABVAsciiString@@H@Z @0x003C3A3F 58B (dump range 18).
 // Trigger-area int setter: copies the name through the rowed StringBase
 // copy ctor, resolves the area through rowed ScriptEngine 0x0035768D
 // getQualifiedTriggerAreaByName, and applies the pinned 0x002872BA
@@ -33,7 +35,7 @@ public:
 };
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C3A3FSet(const AsciiString &name, int v)
+void ScriptActions::Rva003C3A3FSet(const AsciiString &name, int v)
 {
 	PolygonTrigger *trig = TheScriptEngine->getQualifiedTriggerAreaByName(name);
 	if (trig == 0)

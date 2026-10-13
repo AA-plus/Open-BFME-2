@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD
-// ?Rva003C2EC9Do@@YGXPBX00@Z @0x003C2EC9 211B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C2EC9Do@ScriptActions@@QAEXPBX00@Z @0x003C2EC9 211B
 // Set counter from KindOf-filtered object count for player: mask from first arg
 // via rowed rva00357475 0x00357475 with NULL, player via rowed getPlayerFromMask
 // 0x002A7B91, sum via rowed rva0039BF67 0x0039BF67 on player+0x3BC with
@@ -34,7 +36,7 @@ public:
 	int rva00357475(const AsciiString &name, bool *matchedSpecialName);
 protected:
 	ScriptCounter *bfmeCounter(AsciiString name);
-	friend void __stdcall Rva003C2EC9Do(const void *, const void *, const void *);
+	friend void ScriptActions::Rva003C2EC9Do(const void *, const void *, const void *);
 };
 
 class PlayerList
@@ -64,7 +66,7 @@ struct ScriptCounter
 extern class ScriptEngine *TheScriptEngine;
 extern PlayerList *ThePlayerList;
 
-void __stdcall Rva003C2EC9Do(const void *a1, const void *a2, const void *a3)
+void ScriptActions::Rva003C2EC9Do(const void *a1, const void *a2, const void *a3)
 {
 	const AsciiString &s1 = *(const AsciiString *)((const char *)a1 + 0x10);
 	const AsciiString &s3 = *(const AsciiString *)((const char *)a3 + 0x10);

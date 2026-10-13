@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
-// ?Rva003C5535Do@@YGXVAsciiString@@@Z @0x003C5535 113B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C5535Do@ScriptActions@@QAEXVAsciiString@@@Z @0x003C5535 113B
 // Sibling of Rva003C5405Do (ScriptActions_garrison.cpp, same evidence): the
 // timer's internal name is the script-resolved name (ScriptEngine
 // resolveName 0x002046C0) plus '/' plus the timer name; TheInGameUI's
@@ -26,7 +28,7 @@ extern InGameUI *TheInGameUI;
 class ScriptEngine;
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C5535Do(AsciiString timerName)
+void ScriptActions::Rva003C5535Do(AsciiString timerName)
 {
 	AsciiString tmp = ((Rva002046C0Owner *)TheScriptEngine)->resolveName(timerName);
 	tmp += '/';

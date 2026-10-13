@@ -1,10 +1,12 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
 // Landed from the banked attempt once Zero Hour's null-member skip
 // (Object *obj = iter.cur(); if (!obj) continue;) was added to the member
 // loop: it keeps the member in ecx from the loop test into the call, the
 // mov-test wall the bank recorded.
-// ?Rva003C36FEDo@@YGXPAVParameter@@_N@Z @0x003C36FE 92B
+// ?Rva003C36FEDo@ScriptActions@@QAEXPAVParameter@@_N@Z @0x003C36FE 92B
 // Team-member drawable flag via getTeamNamed iterate Rva-advance getDrawable.
 // Evidence: rowed getTeamNamed 0x003584E9 iterate 0x00263864 advance 0x00263526
 // Thing::getDrawable 0x005508E2 Drawable::rva00270FAC 0x00270FAC extern
@@ -67,7 +69,7 @@ public:
 	AsciiString m_string;
 };
 
-void __stdcall Rva003C36FEDo(Parameter *parm, bool flag)
+void ScriptActions::Rva003C36FEDo(Parameter *parm, bool flag)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)parm->getString(), false);
 	if (team == 0)

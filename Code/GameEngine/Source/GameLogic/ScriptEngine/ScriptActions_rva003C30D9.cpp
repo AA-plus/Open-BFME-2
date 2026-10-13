@@ -1,10 +1,12 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /GX
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -GX -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
 // Landed from the banked attempt once Zero Hour's null-member skip
 // (Object *obj = iter.cur(); if (!obj) continue;) was added to the member
 // loop: it keeps the member in ecx from the loop test into the call, the
 // mov-test wall the bank recorded.
-// ?Rva003C30D9Do@@YGXABVAsciiString@@_N@Z @0x003C30D9 156B: team DualWeaponBehavior module flag via getTeamNamed cached NameKey iterate findModule. Evidence: single Rva003C3175Do same DualWeapon static findModule set byte; rowed getTeamNamed 0x3584E9 iterate 0x263864 advance 0x263526 findModule 0x28B6D6 nameToKey PBD 0x148E1A StringBase copy 0x365F0 DualWeaponBehavior literal; caller 0x003CE542; ret 0x8 stdcall.
+// ?Rva003C30D9Do@ScriptActions@@QAEXABVAsciiString@@_N@Z @0x003C30D9 156B: team DualWeaponBehavior module flag via getTeamNamed cached NameKey iterate findModule. Evidence: single Rva003C3175Do same DualWeapon static findModule set byte; rowed getTeamNamed 0x3584E9 iterate 0x263864 advance 0x263526 findModule 0x28B6D6 nameToKey PBD 0x148E1A StringBase copy 0x365F0 DualWeaponBehavior literal; caller 0x003CE542; ret 0x8 stdcall.
 #include "ascii_string.h"
 
 enum NameKeyType { NK_NONE = 0 };
@@ -21,7 +23,7 @@ class Object
 {
 protected:
 	Module *findModule(NameKeyType key) const;
-	friend void __stdcall Rva003C30D9Do(const AsciiString &, bool);
+	friend void ScriptActions::Rva003C30D9Do(const AsciiString &, bool);
 };
 
 class Team;
@@ -58,7 +60,7 @@ public:
 };
 extern NameKeyGenerator *TheNameKeyGenerator;
 
-void __stdcall Rva003C30D9Do(const AsciiString &teamName, bool flag)
+void ScriptActions::Rva003C30D9Do(const AsciiString &teamName, bool flag)
 {
 	Team *team = TheScriptEngine->getTeamNamed((AsciiString &)teamName, false);
 	if (team == 0)
