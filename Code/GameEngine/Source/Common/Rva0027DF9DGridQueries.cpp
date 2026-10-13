@@ -673,8 +673,8 @@ struct Rva001A62D0TerrainQueryResult
 
 struct CreateMask
 {
-	CreateMask() { memset(this, 0, sizeof(*this)); }
-	unsigned int m_bits[4];
+	CreateMask() { memset(words, 0, sizeof(words)); }
+	unsigned int words[4];
 };
 
 class Object
