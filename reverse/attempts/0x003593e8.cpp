@@ -1,6 +1,6 @@
 // ?rva003593E8@Rva003593E8@@QAE_NABVAsciiString@@_N@Z
-// partial score=0.6268 date=2026-10-05
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /arch:SSE2 /MD /DNDEBUG /D_STLP_USE_STATIC_LIB
+// partial score=0.8564 date=2026-10-13
+// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /arch:SSE /G7 /MD /DNDEBUG /D_STLP_USE_STATIC_LIB
 // stlport
 // ?rva003593E8@Rva003593E8@@QAE_NABVAsciiString@@_N@Z @0x003593E8 366B evidence: chain from 0x00358ACB; TheGameLogic isGamePaused plus TheInGameUI 0x15 0x16 plus vtable 0x17c gates; lower then upper map finds at +0xc +0x18 via rowed 0x1F8437; virtuals +4 +8 +0xc plus audio 0x358A53 0x358ACB
 #include <map>
@@ -149,8 +149,7 @@ public:
 	virtual bool f3(bool v);
 };
 
-void Rva00358A53Play();
-void Rva00358ACBPlay();
+class HotKeyManager { public: void rva00358A53(); void rva00358ACB(); };
 
 class Rva003593E8
 {
@@ -162,88 +161,45 @@ private:
 	AsciiMap m_18;
 };
 
-// ?rva003593E8@Rva003593E8@@QAE_NABVAsciiString@@_N@Z present-unmatched
+static __forceinline Entry *lookupAction(AsciiMap &map, const AsciiString &key)
+{
+ AsciiMap::iterator i = map.find(key);
+ if (i == map.end()) return 0;
+ return *(Entry **)&i->second;
+}
+
+// Control flow follows WB1132020: two case-normalized lookups, then dispatch.
 bool Rva003593E8::rva003593E8(const AsciiString &key, bool val)
 {
-	if (TheGameLogic->isGamePaused() || TheInGameUI->m_15 == 0 || TheInGameUI->m_16 == 0 || TheInGameUI->s95())
-		return false;
-	AsciiString tmp(key);
-	tmp.toLower();
-	Entry *obj = 0;
-	bool needAcb = false;
-	{
-		AsciiMap::iterator it = m_0c.find(tmp);
-		Entry *e1;
-		if (it != m_0c.end()) {
-			Entry *t = *(Entry **)&it->second;
-			e1 = t;
-		}
-		else
-			e1 = 0;
-		if (e1 == 0) {
-			_ReadWriteBarrier();
-			AsciiMap::iterator it2 = m_18.find(tmp);
-			Entry *e2;
-			if (it2 == m_18.end())
-				e2 = 0;
-			else {
-				Entry *t2 = *(Entry **)&it2->second;
-				e2 = t2;
-			}
-			if (e2 == 0)
-				goto upper;
-			obj = e2;
-		}
-		else
-			obj = e1;
-	}
-	if (obj->f1(val))
-		goto upper;
-	if (obj->f2(val))
-		goto third;
-	needAcb = true;
-	goto upper;
-upper:
-	tmp.toUpper();
-	{
-		AsciiMap::iterator itu = m_0c.find(tmp);
-		Entry *e3;
-		if (itu == m_0c.end())
-			e3 = 0;
-		else {
-			Entry *t3 = *(Entry **)&itu->second;
-			e3 = t3;
-		}
-		if (e3 == 0) {
-			AsciiMap::iterator itu2 = m_18.find(tmp);
-			Entry *e4;
-			if (itu2 == m_18.end())
-				e4 = 0;
-			else {
-				Entry *t4 = *(Entry **)&itu2->second;
-				e4 = t4;
-			}
-			if (e4 == 0)
-				goto check;
-			obj = e4;
-		}
-		else
-			obj = e3;
-	}
-	if (obj->f1(val))
-		goto check;
-	if (!obj->f2(val))
-		goto playAcb;
-third:
-	if (obj->f3(val)) {
-		Rva00358A53Play();
-		return true;
-	}
-	return true;
-check:
-	if (!needAcb)
-		return false;
-playAcb:
-	Rva00358ACBPlay();
-	return false;
+ if (TheGameLogic->isGamePaused() || TheInGameUI->m_15 == 0 || TheInGameUI->m_16 == 0 || TheInGameUI->s95()) return false;
+ AsciiString tmp(key);
+ tmp.toLower();
+ bool ready = false;
+ bool disabled = false;
+ Entry *entry = 0;
+ entry = lookupAction(m_0c, tmp);
+ if (!entry) {
+  entry = lookupAction(m_18, tmp);
+ }
+ if (entry && !entry->f1(val)) {
+  if (entry->f2(val)) ready = true;
+  else disabled = true;
+ }
+ if (!ready) {
+  tmp.toUpper();
+  entry = lookupAction(m_0c, tmp);
+  if (!entry) {
+   entry = lookupAction(m_18, tmp);
+  }
+  if (entry && !entry->f1(val)) {
+   if (entry->f2(val)) ready = true;
+   else disabled = true;
+  }
+ }
+ if (ready) {
+  if (entry->f3(val)) ((HotKeyManager *)this)->rva00358A53();
+  return true;
+ }
+ if (disabled) ((HotKeyManager *)this)->rva00358ACB();
+ return false;
 }
