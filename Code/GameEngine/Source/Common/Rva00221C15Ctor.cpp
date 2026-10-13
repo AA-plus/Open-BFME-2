@@ -45,7 +45,7 @@ private:
 	AsciiString m_1C;
 };
 
-extern const void *const g_00BC6F20[];
+extern "C" const unsigned char __identifier("??_7Secondary005E7ED7@@6B@")[];
 extern const void *const g_00BE6C38[];
 
 class Rva00221C15Empty
@@ -58,7 +58,7 @@ public:
 class Rva00221C15Base : public Rva00221C15Empty
 {
 public:
-	Rva00221C15Base() : m_04(0) { *(volatile const void **)&m_vtable = g_00BC6F20; }
+	Rva00221C15Base() : m_04(0) { *(volatile const void **)&m_vtable = __identifier("??_7Secondary005E7ED7@@6B@"); }
 protected:
 	const void *m_vtable;
 	int m_04;

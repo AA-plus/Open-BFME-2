@@ -6,7 +6,7 @@
 // ICF twin ??1Rva0037DEE4 at 0x0037DEE4 (pin).
 extern const void *const g_00C3944C[];
 extern const void *const g_00C3945C[];
-extern const void *const g_00BC6F20[];
+extern "C" const unsigned char __identifier("??_7Secondary005E7ED7@@6B@")[];
 
 class CarryoverUnit
 {
@@ -25,7 +25,7 @@ struct MemberAC
 };
 
 // ??1MemberAC@@QAE@XZ present-unmatched
-__forceinline MemberAC::~MemberAC() { m_vtable = (void *)g_00BC6F20; }
+__forceinline MemberAC::~MemberAC() { m_vtable = (void *)__identifier("??_7Secondary005E7ED7@@6B@"); }
 
 class __declspec(novtable) ArmySummaryEntry : public CarryoverUnit
 {

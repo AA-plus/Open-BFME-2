@@ -3,7 +3,7 @@
 // Retail: mov eax handler / call __EH_prolog / mov edi vtable / lea ecx [esi+4] / mov [esi+0x10] edi / call ??1Rva001501CA / mov [esi] edi / EH epilog.
 // Not established: owning class identity; address-derived name.
 
-extern const void *const g_00BC6F24[];
+extern "C" const unsigned char __identifier("??_7Base@@6B@")[];
 
 class Rva00BC6F24Base
 {
@@ -14,7 +14,7 @@ public:
 // ??1Rva00BC6F24Base@@UAE@XZ present-unmatched
 inline Rva00BC6F24Base::~Rva00BC6F24Base()
 {
-	*(const void **)this = g_00BC6F24;
+	*(const void **)this = __identifier("??_7Base@@6B@");
 }
 
 class Rva0052BF33Elem;

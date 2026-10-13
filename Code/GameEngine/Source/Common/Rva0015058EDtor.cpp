@@ -3,7 +3,7 @@
 // Retail: mov eax handler / call __EH_prolog / lea ecx [esi+0x10] call ??1Rva0014F699 / lea ecx [esi+4] call ??1Rva00150209 / mov [esi] vtable / EH epilog.
 // Not established: owning class identity; address-derived name.
 
-extern const void *const g_00BC6F24[];
+extern "C" const unsigned char __identifier("??_7Base@@6B@")[];
 
 class Snapshot
 {
@@ -13,7 +13,7 @@ public:
 
 inline Snapshot::~Snapshot()
 {
-	*(const void **)this = g_00BC6F24;
+	*(const void **)this = __identifier("??_7Base@@6B@");
 }
 
 class Rva0014F3E7;

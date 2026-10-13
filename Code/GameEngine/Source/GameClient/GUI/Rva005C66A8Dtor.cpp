@@ -8,13 +8,13 @@
 #include "ascii_string.h"
 
 void __cdecl Rva003FED32DeleteButtonFlash(void **pp);
-extern const void *const g_00BC6F20[];
+extern "C" const unsigned char __identifier("??_7Secondary005E7ED7@@6B@")[];
 
 class __declspec(novtable) RvaBase
 {
 public:
 	RvaBase() : m_4(0) {}
-	virtual ~RvaBase() { *(const void **)this = g_00BC6F20; }
+	virtual ~RvaBase() { *(const void **)this = __identifier("??_7Secondary005E7ED7@@6B@"); }
 	int m_4;
 };
 

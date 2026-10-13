@@ -16,7 +16,7 @@ public:
 
 class AptStrategicMessageBox {private: static AptStrategicMessageBox *s_instance; friend class Rva004FBCBE;};
 
-extern const void *const g_00BC6F20[];
+extern "C" const unsigned char __identifier("??_7Secondary005E7ED7@@6B@")[];
 
 class __declspec(novtable) Rva004FBCBEBase
 {
@@ -29,7 +29,7 @@ public:
 // ??1Rva004FBCBEBase@@UAE@XZ present-unmatched
 inline Rva004FBCBEBase::~Rva004FBCBEBase()
 {
-	*(const void **)this = g_00BC6F20;
+	*(const void **)this = __identifier("??_7Secondary005E7ED7@@6B@");
 }
 
 // Native ctor4FBC4D..4FBCBE and WB1312F80 prove refcount4,

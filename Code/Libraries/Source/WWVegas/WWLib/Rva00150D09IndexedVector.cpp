@@ -1,15 +1,15 @@
 // cl: /O1 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
 #include <vector>
-extern const void* const g_00BC6F24[];
+extern "C" const unsigned char __identifier("??_7Base@@6B@")[];
 extern const void* const g_00BC6F2C[];
 extern const void* const g_00BD3864[];
 class __declspec(novtable) Rva00BC6F24Base {
 public:
  // ?Rva00BC6F24Base::Rva00BC6F24Base present-unmatched
- Rva00BC6F24Base() { *(const void**)this=g_00BC6F24; }
+ Rva00BC6F24Base() { *(const void**)this=__identifier("??_7Base@@6B@"); }
  // ?Rva00BC6F24Base::~Rva00BC6F24Base present-unmatched
- virtual ~Rva00BC6F24Base() { *(const void**)this=g_00BC6F24; }
+ virtual ~Rva00BC6F24Base() { *(const void**)this=__identifier("??_7Base@@6B@"); }
 };
 class __declspec(novtable) Rva00BC6F2CBase:public Rva00BC6F24Base {
 public:

@@ -26,7 +26,7 @@ private:
 	T *Referent;
 };
 
-extern const void *const g_00BC6F24[];
+extern "C" const unsigned char __identifier("??_7Base@@6B@")[];
 
 class Snapshot
 {
@@ -36,7 +36,7 @@ public:
 
 inline Snapshot::~Snapshot()
 {
-	*(const void **)this = (const void *)g_00BC6F24;
+	*(const void **)this = (const void *)__identifier("??_7Base@@6B@");
 }
 
 class Rva0014F699 : public Snapshot

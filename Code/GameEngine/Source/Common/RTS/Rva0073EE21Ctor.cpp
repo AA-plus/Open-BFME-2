@@ -17,13 +17,13 @@ public:
 	virtual ~Rva0040F9D();
 };
 
-extern const void *const g_00BC6F20[];
+extern "C" const unsigned char __identifier("??_7Secondary005E7ED7@@6B@")[];
 extern const void *const g_00CF1538[];
 extern const void *const g_00CF1534[];
 
 struct Rva0073EE21Member
 {
-	Rva0073EE21Member() : m_vtable((void *)g_00BC6F20), m_04(0) {}
+	Rva0073EE21Member() : m_vtable((void *)__identifier("??_7Secondary005E7ED7@@6B@")), m_04(0) {}
 	void *m_vtable;
 	int m_04;
 };
