@@ -1,4 +1,6 @@
-// ?rva00062FD@Region2D@@QBE_NABVCoord2D@@0@Z
+// ?rva000062FD@Region2D@@QBE_NABVCoord2D@@0@Z
+// partial score=0.75 date=2026-10-13
+// ?rva000062FD@Region2D@@QBE_NABVCoord2D@@0@Z
 // partial score=0.75 date=2026-10-13
 // cl: /O1 /arch:SSE2 /ICode/GameEngine/Source/Common
 
@@ -161,7 +163,7 @@ struct Region2D
     bool isInside(const Coord2D &point) const;
     bool IsExactlyEqualTo(const Region2D &that) const;
     void expandBy(const Coord2D &point);
-    bool rva00062FD(const Coord2D &start, const Coord2D &delta) const;
+    bool rva000062FD(const Coord2D &start, const Coord2D &delta) const;
 
     float x_min;
     float y_min;
@@ -268,7 +270,7 @@ bool Region2D::IsExactlyEqualTo(const Region2D &that) const
         that.y_max == y_max;
 }
 
-bool Region2D::rva00062FD(const Coord2D &start, const Coord2D &delta) const
+bool Region2D::rva000062FD(const Coord2D &start, const Coord2D &delta) const
 {
     if (0.0001f <= delta.x || delta.x <= -0.0001f)
     {
