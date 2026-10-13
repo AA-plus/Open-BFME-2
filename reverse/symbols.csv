@@ -13270,7 +13270,6 @@ rva009C7380WeightPairs,0x009B84E0
 ??0AIFlankAttackTactic@@QAE@XZ,0x005AA23E,FlankAttack tactic ctor (base ctor with that name); REL32 in its slot-9 create 0x005AA2A7
 ??0WeaponTemplate@@QAE@XZ,0x002CD169,constructor WeaponStore::newOverride runs on its 0x180-byte operator new block (the donor's newInstance(WeaponTemplate)); REL32 at 0x002CE09F
 ??4WeaponTemplate@@QAEAAV0@ABV0@@Z,0x002CD67C,copy assignment WeaponStore::newOverride applies from the overridden template to the new one (the donor's (*wt) = (*weaponTemplate)); REL32 at 0x002CE0B0
-?rva004DEECB@FiringTracker@@QAEXPAVWeapon@@HHH@Z,0x004DEECB,FiringTracker call on Object +0x240 after each shot in Object::fireCurrentWeapon (where Zero Hour calls FiringTracker::shotFired; WB assert names the firing tracker); args (weapon; fire argument; 0; 0); REL32 at 0x002918F1
 ??0SimpleObjectIterator@@QAE@XZ,0x0054B7B7,constructor run on the 0x3C-byte operator new block whose object then takes SimpleObjectIterator::insert (WB-named 0x0054BBB5) and the first/next virtuals in AIGroup::groupTightenToPosition (the donor's newInstance(SimpleObjectIterator)); REL32 at 0x0036F93D
 ?insert@SimpleObjectIterator@@QAEXPAVObject@@M@Z,0x0054BBB5,WB-named SimpleObjectIterator::insert (callee of WB AIGroup::groupTightenToPosition); (object; distance squared); rowed under placeholder Rva0054BBB5; REL32 at 0x0036F9A3
 ?sort@SimpleObjectIterator@@QAEXW4IterOrderType@@@Z,0x0054C64A,called with 1 after the insert loop where Zero Hour's AIGroup::groupTightenToPosition sorts ITER_SORTED_NEAR_TO_FAR; REL32 at 0x0036F9B3

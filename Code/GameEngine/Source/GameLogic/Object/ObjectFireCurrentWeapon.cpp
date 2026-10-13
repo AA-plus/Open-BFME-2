@@ -5,7 +5,8 @@
 // tracker. this is wrong.") calls, in retail's order,
 // Object::setWeaponLock, Weapon::getStatus, Object::testStatus, the two
 // Weapon fire wrappers (0x002CE74B, 0x002CE6C5), the firing tracker's
-// 0x004DEECB and Object::releaseWeaponLock.
+// 0x004DEECB (FiringTracker::shotFired, FiringTrackerXfer.cpp) and
+// Object::releaseWeaponLock.
 // Donor (Zero Hour Object::fireCurrentWeapon(Object *)): no target, no
 // shot; fire the current weapon when READY_TO_FIRE, tell the firing tracker
 // (+0x240), release the temporary lock, and clear the undetected-defector
@@ -24,6 +25,8 @@
 // tell the tracker, release the temporary lock on reload, clear the
 // defector bit. BFME 2 deltas (target): status 0x25 skips the shot, and the
 // same +0x16F temporary lock; the tracker gets (weapon, 0, pos, 0).
+// shotFired's victim ID is the int this unit names fireParam: the first
+// overload hands it on unchanged, as Zero Hour hands on the target's ID.
 // Layout (target): WeaponSet at +0x330 with its weapons at +0x338 and the
 // current slot at +0x350; Weapon::m_template +0x04.
 enum WeaponLockType
@@ -48,6 +51,11 @@ enum ObjectStatusTypes
 };
 
 struct Coord3D;
+
+enum ObjectID
+{
+	INVALID_ID = 0
+};
 
 enum ObjectPrivateStatusBits
 {
@@ -86,7 +94,7 @@ private:
 class FiringTracker
 {
 public:
-	void rva004DEECB(Weapon *weapon, int fireParam, int a, int b);
+	void shotFired(const Weapon *weaponFired, ObjectID victimID, const Coord3D *victimPosition, bool forceReset);
 };
 
 class WeaponSet
@@ -143,7 +151,7 @@ void Object::fireCurrentWeapon(Object *target, int fireParam)
 			else
 				weapon->rva002CE6C5(this, fireParam, target, 0);
 			if (m_firingTracker)
-				m_firingTracker->rva004DEECB(weapon, fireParam, 0, 0);
+				m_firingTracker->shotFired(weapon, (ObjectID)fireParam, 0, false);
 			if (weapon->getTemplate()->getValue78() == -1)
 				releaseWeaponLock(LOCKED_TEMPORARILY);
 			friend_setUndetectedDefector(false);
@@ -167,7 +175,7 @@ void Object::fireCurrentWeapon(const Coord3D *pos)
 		{
 			bool reloaded = weapon->fireWeapon(this, pos, 0);
 			if (m_firingTracker)
-				m_firingTracker->rva004DEECB(weapon, 0, (int)pos, 0);
+				m_firingTracker->shotFired(weapon, INVALID_ID, pos, false);
 			if (reloaded)
 				releaseWeaponLock(LOCKED_TEMPORARILY);
 			friend_setUndetectedDefector(false);

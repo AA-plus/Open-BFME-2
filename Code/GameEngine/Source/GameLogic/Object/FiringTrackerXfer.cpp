@@ -14,7 +14,7 @@
 // the UpdateModuleInterface (+0x10) table; it calls 0x004DEC88 with 1 when
 // the object has moved off the last shot position and with 0 when the
 // cooldown frame passes, and tail-calls 0x004DEAB0. Object::fireCurrentWeapon
-// calls 0x004DEECB on the tracker (pinned ?rva004DEECB@FiringTracker); it
+// calls 0x004DEECB on the tracker as shotFired; it
 // calls 0x004DEC88 and 0x004DEDD2 by the continuous-fire bonus bits (2 mean,
 // 3 fast, Object +0x380) and ends with setWakeFrame(calcTimeToSleep()).
 // 0x004DEAB0 tests the three wake frames (+0x3C/+0x40/+0x54) and returns
@@ -60,7 +60,7 @@ class AsciiString;
 class UnicodeString;
 class PooledString;
 struct XferUnknown11;
-class Coord3DBase;
+struct Coord3DBase;
 class ICoord3D;
 class Region3D;
 class IRegion3D;
@@ -270,11 +270,11 @@ enum
 // Logic frame rate (5), read where Zero Hour uses LOGICFRAMES_PER_SECOND.
 extern int g_00DBA4E4;
 
-// class-gate: allow Coord3D the canonical data-only header cannot declare the out-of-line exact equality (rowed 0x00003702) that update and shotFired call; same three floats
-class Coord3D : public Coord3DBase
+// class-gate: allow Coord3D the canonical header has no Coord3DBase base, which this unit's Xfer view takes; same three floats, class-key struct, and the exact equality (rowed 0x00003702) shotFired calls
+struct Coord3D : public Coord3DBase
 {
 public:
-	Bool operator==(const Coord3D &other) const;
+	Bool equals(const Coord3DBase &that) const;
 	void zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
 };
 
@@ -568,7 +568,7 @@ void FiringTracker::shotFired(const Weapon *weaponFired, ObjectID victimID, cons
 			m_victimPosition = *victimPosition;
 			m_victimID = INVALID_ID;
 		}
-		else if (m_victimPosition == *victimPosition)
+		else if (m_victimPosition.equals(*victimPosition))
 		{
 			++m_consecutiveShots;
 		}
