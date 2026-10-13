@@ -14,7 +14,7 @@
 // BFME 2 target evidence: object +8; the position and (unused) direction
 // arrays are built by the EH vector iterators with the shared out-of-line
 // Coord3D ctor/dtor (0x0047A6A9/0x000B3FD0); each 0x30-byte transform is
-// three 16-byte rows with the same out-of-line row ctor; the vector
+// three 16-byte Vector4 rows built by the shared inline row ctor; the vector
 // push_back is the ICF-shared pointer-vector body 0x004DFCB0.
 
 #define _STLP_NO_EXCEPTIONS 1
@@ -29,16 +29,17 @@ namespace _STL { static inline const unsigned &max(const unsigned&a,const unsign
 // the array callbacks are owned ctor47A6A9/dtorB3FD0, with no new alias or pin.
 struct BfmeRadarWorldPoint : Coord3D { BfmeRadarWorldPoint(); ~BfmeRadarWorldPoint(); };
 
-// One 16-byte transform row; its empty out-of-line ctor is the shared
-// 0x0047A6A9 (spelled as in SpawnPointInitializeBonePositions.cpp).
-class SpawnBoneRow
+// One 16-byte transform row (Vector4 layout); the nullary row ctor is the
+// shared inline Vector4 body, so this TU's Matrix3D default ctor matches the
+// linked copy instead of offering a SpawnBoneRow-ctor variant to the link.
+class Vector4
 {
 public:
-	SpawnBoneRow();
-	float x;
-	float y;
-	float z;
-	float w;
+	__forceinline Vector4() {}
+	float X;
+	float Y;
+	float Z;
+	float W;
 };
 
 // The bone transform: three 16-byte rows and an empty inline constructor.
@@ -46,7 +47,7 @@ class Matrix3D
 {
 public:
 	__forceinline Matrix3D() {}
-	SpawnBoneRow row[3];
+	Vector4 row[3];
 };
 
 struct Rva00459E05Position
@@ -102,7 +103,7 @@ void SiegeDockingBehavior::rva00459E05()
 		entry->m_type = 0;
 		entry->m_position = *(Rva00459E05Position *)&positions[ index ];
 		Matrix3D *transform = &transforms[ index ];
-		entry->m_direction.setNegated( transform->row[ 0 ].x, transform->row[ 1 ].x, transform->row[ 2 ].x );
+		entry->m_direction.setNegated( transform->row[ 0 ].X, transform->row[ 1 ].X, transform->row[ 2 ].X );
 		entry->m_objectID = 0;
 		m_entries.push_back( entry );
 	}
@@ -115,7 +116,7 @@ void SiegeDockingBehavior::rva00459E05()
 		entry->m_type = 1;
 		entry->m_position = *(Rva00459E05Position *)&positions[ i ];
 		Matrix3D *transform = &transforms[ i ];
-		entry->m_direction.setNegated( transform->row[ 0 ].x, transform->row[ 1 ].x, transform->row[ 2 ].x );
+		entry->m_direction.setNegated( transform->row[ 0 ].X, transform->row[ 1 ].X, transform->row[ 2 ].X );
 		entry->m_objectID = 0;
 		m_entries.push_back( entry );
 		++index;

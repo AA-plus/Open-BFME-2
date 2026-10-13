@@ -14,10 +14,13 @@ struct BfmeAsciiStringData
 
 #include "ascii_string.h"
 
-class SpawnBoneRow
+// One 16-byte transform row (Vector4 layout); the nullary row ctor is the
+// shared inline Vector4 body, so this TU's Matrix3D default ctor matches the
+// linked copy instead of offering a SpawnBoneRow-ctor variant to the link.
+class Vector4
 {
 public:
-	SpawnBoneRow();
+	__forceinline Vector4() {}
 	void Set(float x, float y, float z, float w)
 	{
 		X = x;
@@ -48,7 +51,7 @@ public:
 	float Get_Z_Translation() const { return Row[2].W; }
 	float Get_Z_Rotation() const;
 
-	SpawnBoneRow Row[3];
+	Vector4 Row[3];
 };
 
 class Drawable
