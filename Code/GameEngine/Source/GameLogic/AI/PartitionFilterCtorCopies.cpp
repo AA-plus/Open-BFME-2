@@ -66,6 +66,8 @@ class Rva0026137EFilter : public Rva000421C8
 {
 public:
 	Rva0026137EFilter(Player *player, bool match);
+	// BFAD28 slot0 is395A19: keep its call to the seven-byte base reset49C38A.
+	__declspec(noinline) virtual ~Rva0026137EFilter() {}
 	virtual bool allow(Object *obj);
 	virtual int getPlayerMask();
 	Player *m_player;
