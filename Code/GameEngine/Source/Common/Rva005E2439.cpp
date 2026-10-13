@@ -9,6 +9,8 @@ struct Rva005E2439D
 {
 	char _00[0x20];
 	void *m_20;
+	char _24[0x28 - 0x24];
+	struct Rva002DF9E9 *m_28;
 };
 
 struct Rva005E2439C
@@ -38,6 +40,7 @@ class Rva005E2439
 {
 public:
 	void rva005E2439();
+	void rva005E2460();
 	void rva005E2540();
 private:
 	char _00[0x08];
@@ -64,4 +67,33 @@ void Rva005E2439::rva005E2540()
 	if (m_20 < 0)
 		return;
 	rva005E2439();
+}
+// ?rva005E2460@Rva005E2439@@QAEXXZ @0x005E2460 (120B)
+// Chain sibling of rva005E2439 above on the same [this+0xC]->[+0x170]
+// table: label holder at entry+0x20, UnicodeString via rowed 0x002DF9E9
+// when present else rowed free 0x005C95CA, forwarded to rowed 0x005F0CC1.
+// Evidence: WB ShowSelectionName branch structure + retail 120B; the d+0x28
+// label pointer is a retail load, not donor invention.
+class Rva002DF9E9
+{
+public:
+	UnicodeString rva002DF9E9();
+};
+class Rva005F0CC1
+{
+public:
+	void rva005F0CC1(const UnicodeString &text);
+};
+class Rva005E2338Elem;
+UnicodeString Rva005C95CAGet(const Rva005E2338Elem *);
+void Rva005E2439::rva005E2460()
+{
+	Rva005E2439C *entry = m_0C->m_table[m_20];
+	Rva005E2439D *d = entry->m_20obj;
+	if (d != 0) {
+		Rva002DF9E9 *labelObj = d->m_28;
+		((Rva005F0CC1 *)this)->rva005F0CC1(labelObj->rva002DF9E9());
+	} else {
+		((Rva005F0CC1 *)this)->rva005F0CC1(Rva005C95CAGet((const Rva005E2338Elem *)entry));
+	}
 }
