@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /GX- /D_STLP_USE_MALLOC
+// cl: /Ireference/shims/bfme2_ascii /GX- /D_STLP_USE_MALLOC /DNDEBUG /D_STLP_NO_EXCEPTIONS
 // stlport
 // ?rva0059A71C@Rva0059A71C@@QAEXPAUArg@@@Z @0x0059A71C (90B)
 // Thiscall takes one pointer arg with AsciiString at +0x14. Loads chain

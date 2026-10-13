@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /Ireference/shims/moduledata
+// cl: /Ireference/shims/bfme2_ascii /EHsc /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /Ireference/shims/moduledata /D_STLP_NO_EXCEPTIONS
 // stlport
 //
 // LivingWorldRegionConnection copy ctor.

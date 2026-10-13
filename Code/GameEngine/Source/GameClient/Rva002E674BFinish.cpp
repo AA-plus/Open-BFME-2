@@ -1,4 +1,4 @@
-// cl: /DBFME_ASCII_DTOR_DECL /DNDEBUG /DWIN32 /MD /D_STLP_USE_STATIC_LIB /EHsc
+// cl: /DBFME_ASCII_DTOR_DECL /DNDEBUG /DWIN32 /MD /D_STLP_USE_STATIC_LIB /EHsc /D_STLP_NO_EXCEPTIONS
 // class-gate: allow AsciiString one-pointer codegen view whose inline str() is the retail LUT-label chase
 // stlport
 //
