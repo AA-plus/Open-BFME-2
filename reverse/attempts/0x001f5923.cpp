@@ -1,4 +1,6 @@
 // ?rva001F5923@Rva001F5923@@QAEXXZ
+// partial score=0.98998 date=2026-10-13
+// ?rva001F5923@Rva001F5923@@QAEXXZ
 // partial score=0.9899833194328607 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc /ICode/GameEngine/Source/Common
 // Native1F5923..1F5A6A (327B). Owner/original callback name unresolved,
