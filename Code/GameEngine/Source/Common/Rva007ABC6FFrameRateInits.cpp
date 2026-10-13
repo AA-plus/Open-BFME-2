@@ -16,8 +16,12 @@ extern int g_009BA4E8;
 extern int g_00DE1B50;
 int g_00DE1B50 = 0;	// owned here; retail .data starts it at 0
 extern int g_00DFEB98;
-extern int g_00DFEBB0;
-int g_00DFEBB0 = 0;	// owned here; retail .data starts it at 0
+// Native initializer7ADF60 multiplies logic FPS by3; the only retail
+// consumers are drawHealing273DCF. ZH HEALING_ICON_DISPLAY_TIME has exactly
+// that role and expression. Keep writable storage for the separately recovered
+// initializer; unsigned duration is witnessed by the consumer's JA/JBE tests.
+extern unsigned BfmeHealingIconDisplayFrames;
+unsigned BfmeHealingIconDisplayFrames = 0;	// owned here; retail .data starts it at 0
 extern int g_00DFEFCC;
 int g_00DFEFCC = 0;	// owned here; retail .data starts it at 0
 extern int g_00E01E04;
@@ -147,7 +151,7 @@ void Rva007ABC6FFrameRateInits::rva007ADEF6()
 // ?rva007ADF60@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007ADF60 (14B): global at VA 0x00DFEBB0, also read elsewhere in .text
 void Rva007ABC6FFrameRateInits::rva007ADF60()
 {
-	g_00DFEBB0 = g_Va00DBA4E4 * 3;
+	BfmeHealingIconDisplayFrames = g_Va00DBA4E4 * 3;
 }
 
 // ?rva007AE043@Rva007ABC6FFrameRateInits@@SAXXZ @ 0x007AE043 (16B): TU-local static at VA 0x00DFECD8, never read in .text

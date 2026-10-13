@@ -1,23 +1,185 @@
 // ?rva00273DCF@Drawable@@QAEXXZ
-// partial score=0.78 date=2026-10-07
-// cl: /DNDEBUG /MD /EHsc
-// ?rva00273DCF@Drawable@@QAEXXZ @0x00273DCF 421B: update a status animation
-// slot and draw its current frame; identity stays address-derived.
+// partial score=0.85 date=2026-10-13
+// cl: /DNDEBUG /MD /EHsc /I. /ICode/Libraries/Include
+#include "Lib/Coord3D.h"
+#include "Lib/Coord2D.h"
+#include "Lib/ICoord2D.h"
+#define BFME_SNAPSHOT_NAME_SLOT
+#include "reference/shims/moduledata/Common/Snapshot.h"
+// ?rva00273755@Drawable@@QAEXXZ @0x00273755 179B: Drawable anim draw with verified retail literal 0.5f via rowed getter 0x00270BA8 and Anim2D width/height plus draw 0x002D7127; tail to 0x002736A8 on stale frame.
+// Evidence: offsets +0x354/+0x2C/+0x64 match Rva00270025 layout, TheGameLogic+0x40 frame check, m_460/m_468/m_46C rect math, callers 0x00279734, neighbours Drawable_rva00273648.
+class GameLogic
+{
+public:
+	unsigned char m_pad[0x40];
+	unsigned int m_frame;
+};
+extern GameLogic *TheGameLogic;
 
+class Anim2DTemplate;
+class Anim2DCollection;
+extern Anim2DCollection *TheAnim2DCollection;
+struct Rva002D752DNode;
+class Anim2D : public Snapshot
+{
+public:
+    Anim2D(Anim2DTemplate *, Anim2DCollection *);
+	unsigned int getCurrentFrameWidth() const;
+	unsigned int getCurrentFrameHeight() const;
+protected:
+    virtual ~Anim2D();
+    virtual void loadPostProcess();
+    virtual const char *GetSnapshotName() const;
+    virtual void xfer(Xfer *);
+private:
+    char m_storage[0x30];
+};
+
+class Rva002D7127 : public Anim2D
+{
+public:
+	void rva002D7127(int x, int y, int width, int height);
+};
+
+class Rva00270025
+{
+public:
+	virtual ~Rva00270025();
+    void rva0027006C(int);
+	Rva002D7127 *m_items[14];
+	unsigned int m_vals[14];
+};
+
+class Rva00270BA8
+{
+public:
+	Rva00270025 *rva00270BA8();
+private:
+	unsigned char m_pad[0x354];
+	Rva00270025 *m_354;
+};
+
+typedef float Real;
+typedef int Int;
+typedef bool Bool;
+
+
+
+
+
+class Player;
+class Image
+{
+public:
+	Int getImageWidth() const
+	{
+		return *reinterpret_cast<const Int *>(reinterpret_cast<const char *>(this) + 0x24);
+	}
+	Int getImageHeight() const
+	{
+		return *reinterpret_cast<const Int *>(reinterpret_cast<const char *>(this) + 0x28);
+	}
+};
+
+class GlobalData
+{
+public:
+	char m_pad000[0xDC];
+	Coord3D m_ammoPipWorldOffset;
+	char m_padE8[0x0C];
+	Coord2D m_ammoPipScreenOffset;
+	char m_padFC[0x9BD - 0xFC];
+	Bool m_showObjectHealth;
+};
+extern GlobalData *TheWritableGlobalData;
+
+class PlayerList
+{
+	char m_pad000[0x10];
+	Player *m_localPlayer;
+public:
+	Player *getLocalPlayer() const { return m_localPlayer; }
+};
+extern PlayerList *ThePlayerList;
+
+class InGameUI
+{
+public:
+	virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03(); virtual void slot04(); virtual void slot05();
+	virtual void slot06(); virtual void slot07(); virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+	virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15(); virtual void slot16(); virtual void slot17();
+	virtual void slot18(); virtual void slot19(); virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23();
+	virtual void slot24(); virtual void slot25(); virtual void slot26(); virtual void slot27(); virtual void slot28(); virtual void slot29();
+	virtual void slot30(); virtual void slot31(); virtual void slot32(); virtual void slot33(); virtual void slot34(); virtual void slot35();
+	virtual void slot36(); virtual void slot37(); virtual void slot38(); virtual void slot39(); virtual void slot40(); virtual void slot41();
+	virtual void slot42(); virtual void slot43(); virtual void slot44(); virtual void slot45(); virtual void slot46(); virtual void slot47();
+	virtual void slot48(); virtual void slot49(); virtual void slot50(); virtual void slot51(); virtual void slot52(); virtual void slot53();
+	virtual void slot54(); virtual void slot55(); virtual void slot56(); virtual void slot57(); virtual void slot58(); virtual void slot59();
+	virtual void slot60(); virtual void slot61(); virtual void slot62(); virtual void slot63(); virtual void slot64(); virtual void slot65();
+	virtual void slot66(); virtual void slot67(); virtual void slot68(); virtual void slot69(); virtual void slot70(); virtual void slot71();
+	virtual void slot72(); virtual void slot73(); virtual void slot74(); virtual void slot75(); virtual void slot76(); virtual void slot77();
+	virtual void slot78(); virtual void slot79(); virtual void slot80(); virtual void slot81(); virtual void slot82(); virtual void slot83();
+	virtual void slot84(); virtual void slot85(); virtual void slot86(); virtual void slot87(); virtual void slot88(); virtual void slot89();
+	virtual void slot90(); virtual void slot91(); virtual void slot92();
+	virtual Int getMousedOverDrawableID() const;
+};
+extern InGameUI *TheInGameUI;
+class View
+{
+public:
+	virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03(); virtual void slot04(); virtual void slot05();
+	virtual void slot06(); virtual void slot07(); virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+	virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15(); virtual void slot16(); virtual void slot17();
+	virtual void slot18(); virtual void slot19(); virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23();
+	virtual void slot24(); virtual void slot25(); virtual void slot26(); virtual void slot27(); virtual void slot28(); virtual void slot29();
+	virtual void slot30(); virtual void slot31(); virtual void slot32(); virtual void slot33(); virtual void slot34(); virtual void slot35();
+	virtual void slot36(); virtual void slot37(); virtual void slot38(); virtual void slot39(); virtual void slot40(); virtual void slot41();
+	virtual void slot42(); virtual void slot43(); virtual void slot44(); virtual void slot45(); virtual void slot46(); virtual void slot47();
+	virtual void slot48(); virtual void slot49(); virtual void slot50(); virtual void slot51(); virtual void slot52(); virtual void slot53();
+	virtual void slot54(); virtual void slot55(); virtual void slot56(); virtual void slot57(); virtual void slot58(); virtual void slot59();
+	virtual void slot60(); virtual void slot61(); virtual void slot62(); virtual void slot63(); virtual void slot64(); virtual void slot65();
+	virtual void slot66(); virtual void slot67(); virtual void slot68(); virtual void slot69(); virtual void slot70(); virtual void slot71();
+	virtual void slot72(); virtual void slot73(); virtual void slot74(); virtual void slot75(); virtual void slot76(); virtual void slot77();
+	virtual void slot78(); virtual void slot79(); virtual void slot80(); virtual void slot81(); virtual void slot82(); virtual void slot83();
+	virtual void slot84(); virtual void slot85(); virtual void slot86(); virtual void slot87();
+	virtual Int worldToScreen(const Coord3D *, ICoord2D *);
+};
+extern View *TheTacticalView;
+class Display
+{
+public:
+	virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03(); virtual void slot04(); virtual void slot05();
+	virtual void slot06(); virtual void slot07(); virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+	virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15(); virtual void slot16(); virtual void slot17();
+	virtual void slot18(); virtual void slot19(); virtual void slot20(); virtual void slot21(); virtual void slot22(); virtual void slot23();
+	virtual void slot24(); virtual void slot25(); virtual void slot26(); virtual void slot27(); virtual void slot28(); virtual void slot29();
+	virtual void slot30(); virtual void slot31(); virtual void slot32(); virtual void slot33(); virtual void slot34(); virtual void slot35();
+	virtual void slot36(); virtual void slot37(); virtual void slot38(); virtual void slot39(); virtual void slot40(); virtual void slot41();
+	virtual void slot42(); virtual void slot43(); virtual void slot44(); virtual void slot45(); virtual void slot46(); virtual void slot47();
+	virtual void slot48(); virtual void slot49(); virtual void slot50(); virtual void slot51(); virtual void slot52(); virtual void slot53();
+	virtual void slot54(); virtual void slot55(); virtual void slot56(); virtual void slot57(); virtual void slot58(); virtual void slot59();
+	virtual void slot60(); virtual void slot61();
+	virtual void drawImage(const Image *, Real, Real, Real, Real, Int color = -1, Int layer = 2);
+};
+extern Display *TheDisplay;
+
+class GeometryInfo
+{
+public:
+	Real getMaxHeightAbovePosition() const;
+    char m_pad000[0x14];
+    Real m_boundingSphereRadius; // target Object+A8+14 = Object+BC
+
+};
+
+struct DrawableKindByteView {char pad[0x108];unsigned char bits;};
+struct DrawableKindWordView {char pad[0x108];unsigned bits;};
+struct DrawableBonusWordView {
+    unsigned bits;
+    __forceinline unsigned char shifted(unsigned n) const { return bits>>n; }
+};
 enum ObjectStatusTypes;
-
-struct ObjectTemplate
-{
-	unsigned char m_pad[0x10D];
-	unsigned char m_flags10D;
-};
-
-struct DrawableTemplate
-{
-	unsigned char m_pad[0x108];
-	unsigned char m_flags108;
-};
-
+extern unsigned BfmeHealingIconDisplayFrames;
 class ObjectBody254
 {
 public:
@@ -41,91 +203,126 @@ public:
 	virtual unsigned int f17();
 };
 
+
 class Object
 {
 public:
-	virtual void f0();
-	ObjectTemplate *m_template;
-	bool testStatus(ObjectStatusTypes status) const;
-private:
-	unsigned char m_pad[0x254 - 8];
-public:
-	ObjectBody254 *m_body254;
+    void *m_vtable;
+    void *m_template;
+    char m_unknown008[0x254-8];
+    ObjectBody254 *m_body254;
+    char m_unknown258[0x380-0x258];
+    DrawableBonusWordView m_bonus380;
+	Player *getControllingPlayer() const;
+    bool testStatus(ObjectStatusTypes) const;
+	Bool rva0028AEF5(void **outCapacity, unsigned *outAmmo) const;
+	const Coord3D *getPosition() const
+	{
+		return reinterpret_cast<const Coord3D *>(reinterpret_cast<const char *>(this) + 0x38);
+	}
+	const GeometryInfo &getGeometryInfo() const
+	{
+		return *reinterpret_cast<const GeometryInfo *>(reinterpret_cast<const char *>(this) + 0xA8);
+	}
 };
-
-struct Rva002D752DNode;
-class Rva002D752D;
-
-class Anim2D
-{
-public:
-	Anim2D(struct Rva002D752DNode *tmpl, class Rva002D752D *collection);
-	unsigned int getCurrentFrameWidth() const;
-	unsigned int getCurrentFrameHeight() const;
-	void draw(int x, int y, int width, int height);
-private:
-	unsigned char m_pad[0x34];
-};
-
-class Rva00270025
-{
-public:
-	virtual ~Rva00270025();
-	Anim2D *m_items[14];
-	unsigned int m_vals[14];
-	void rva0027006C(int slot);
-};
-
-class Rva00270BA8
-{
-public:
-	Rva00270025 *rva00270BA8();
-private:
-	unsigned char m_pad[0x354];
-	Rva00270025 *m_354;
-};
-
-class GameLogic
-{
-public:
-	unsigned char m_pad[0x40];
-	unsigned int m_frame;
-};
-
-struct Rva002D752DNode;
-struct Rva002D752D;
-
-extern GameLogic *TheGameLogic;
-extern int g_00DFEBB0;
-extern void *g_00DFEB78;
-extern Rva002D752D *g_00DFF068;
-extern float g_Va007C26F0;
-void *__cdecl operator new(unsigned int size) throw();
 
 class Drawable
 {
 public:
-	virtual void f0();
-	DrawableTemplate *m_template;
+    void rva00273755();
+    void rva002736A8();
+    void drawAmmo();
+    void rva00273DCF();
 private:
-	unsigned char m_pad0[0xFC - 8];
-	Object *m_object;
-	unsigned char m_pad1[0x354 - 0x100];
-	Rva00270025 *m_354;
-	unsigned char m_pad2[0x460 - 0x358];
-	int m_460;
-	int m_464;
-	int m_468;
-	int m_46C;
-public:
-	void rva00273DCF();
+    void *m_vtable;
+    void *m_template;
+    unsigned char m_pad008[0xfc-8];
+    Object *m_object;
+    int m_id;
+    unsigned char m_pad104[0x354-0x104];
+    Rva00270025 *m_354;
+    unsigned char m_pad358[0x43c-0x358];
+    bool m_selected;
+    unsigned char m_pad43d[0x460-0x43d];
+    int m_460, m_464, m_468, m_46c;
+    Rva00270025 *getIconInfo() { return ((Rva00270BA8 *)this)->rva00270BA8(); }
+    void killIcon(int n) { if(m_354) m_354->rva0027006C(n); }
+    static Rva002D752DNode **s_animationTemplates;
+    static const Image *s_fullAmmo;
+    static const Image *s_emptyAmmo;
 };
 
+void Drawable::rva00273755()
+{
+	if (m_354 == 0)
+		return;
+	if (((Rva00270BA8 *)this)->rva00270BA8()->m_items[10] == 0)
+		return;
+	unsigned int cur = TheGameLogic->m_frame;
+	unsigned int v = ((Rva00270BA8 *)this)->rva00270BA8()->m_vals[10];
+	if (v >= cur) {
+		int dw = m_468 - m_460;
+		int w = ((Rva00270BA8 *)this)->rva00270BA8()->m_items[10]->getCurrentFrameWidth();
+		int h = ((Rva00270BA8 *)this)->rva00270BA8()->m_items[10]->getCurrentFrameHeight();
+		int y = m_46c - h;
+		int x = (int)((float)dw * 0.5f + (float)m_460 - (float)w * 0.5f);
+		((Rva00270BA8 *)this)->rva00270BA8()->m_items[10]->rva002D7127(x, y, w, h);
+	} else {
+		rva002736A8();
+	}
+}
+
+// BFME1 cee35b7d8 Drawable_drawAmmo.cpp and ZH Drawable.cpp are semantic
+// guides. Target 273808..2739D1 independently shows the 43C gate, FC Object,
+// full/empty images, 28AEF5 ammo pair, 460 left edge, and UI/View/Display slots.
+// Target offsets DC/F8/9BD differ from donor GlobalData. The actual writable
+// singleton is used; the position aggregate keeps the donor scalar-copy shape.
+void Drawable::drawAmmo()
+{
+    const Object *obj = m_object;
+    if (!TheWritableGlobalData->m_showObjectHealth) return;
+    if (!m_selected) {
+        InGameUI *ui = TheInGameUI;
+        if (!ui) return;
+        Int drawableID = m_id;
+        if (ui->getMousedOverDrawableID() != drawableID) return;
+    }
+    Player *localPlayer = ThePlayerList->getLocalPlayer();
+    if (obj->getControllingPlayer() != localPlayer) return;
+    Int numTotal, numFull;
+    if (!obj->rva0028AEF5(reinterpret_cast<void **>(&numTotal), reinterpret_cast<unsigned *>(&numFull))) return;
+    if (!s_fullAmmo) return;
+    const Image *emptyAmmo = s_emptyAmmo;
+    if (!emptyAmmo) return;
+    Real scale = 1.0f;
+    Int boxWidth = (Int)((Real)emptyAmmo->getImageWidth()*scale);
+    Int boxHeight = (Int)((Real)emptyAmmo->getImageHeight()*scale);
+    ICoord2D screenCenter;
+    Coord3D pos = {obj->getPosition()->x, obj->getPosition()->y, obj->getPosition()->z};
+    pos.x += TheWritableGlobalData->m_ammoPipWorldOffset.x;
+    pos.y += TheWritableGlobalData->m_ammoPipWorldOffset.y;
+    pos.z += TheWritableGlobalData->m_ammoPipWorldOffset.z + obj->getGeometryInfo().getMaxHeightAbovePosition();
+    if (TheTacticalView->worldToScreen(&pos, &screenCenter) != 0) return;
+    Real bounding = obj->getGeometryInfo().m_boundingSphereRadius*scale;
+    Int posx = m_460;
+    Int posy = screenCenter.y + (Int)(TheWritableGlobalData->m_ammoPipScreenOffset.y*bounding);
+    for (Int i=0; i<numTotal; ++i) {
+        TheDisplay->drawImage(i<numFull ? s_fullAmmo : s_emptyAmmo, posx, posy+1,
+            posx+boxWidth, posy+1+boxHeight, -1, 2);
+        posx += boxWidth + 1;
+    }
+}
+
+
+// ZH Drawable::drawHealing guide. Native template byte10D/bit4 and status19
+// gates plus body-health callbacks and duration comparisons prove its role.
+// Independently recovered initializer7ADF60 supplies the existing single
+// duration datum. Template array and Anim2D constructor use owned providers.
 void Drawable::rva00273DCF()
 {
 	Drawable *self = this;
 	Object *object = self->m_object;
-	if ((object->m_template->m_flags10D & 4) != 0)
+	if ((((const unsigned char *)object->m_template)[0x10d] & 4) != 0)
 		return;
 	if (object->testStatus((ObjectStatusTypes)0x13))
 		return;
@@ -135,32 +332,31 @@ void Drawable::rva00273DCF()
 	float first = body->f4();
 	if (first != body->f6()) {
 		unsigned int frame = TheGameLogic->m_frame;
-		if (frame > g_00DFEBB0 && frame - body->f17() <= g_00DFEBB0)
+		if (frame > BfmeHealingIconDisplayFrames && frame - body->f17() <= BfmeHealingIconDisplayFrames)
 			update = true;
 	}
 
 	unsigned int slot;
-	if ((self->m_template->m_flags108 & 0x80) != 0)
+	if ((((const DrawableKindByteView *)self->m_template)->bits & 0x80) != 0)
 		slot = 1;
 	else
-		slot = (*((unsigned int *)((char *)self->m_template + 0x108)) >> 8) & 2;
+		slot = (((const DrawableKindWordView *)self->m_template)->bits >> 8) & 2;
 
 	if (update) {
 		Rva00270025 *items = ((Rva00270BA8 *)self)->rva00270BA8();
 		if (items->m_items[slot] == 0) {
-			Rva002D752DNode **templates = (Rva002D752DNode **)g_00DFEB78;
-			Anim2D *anim = new Anim2D(templates[slot], g_00DFF068);
+			Anim2D *anim = new Anim2D((Anim2DTemplate *)s_animationTemplates[slot], TheAnim2DCollection);
 			items = ((Rva00270BA8 *)self)->rva00270BA8();
-			items->m_items[slot] = anim;
+			items->m_items[slot] = (Rva002D7127 *)anim;
 		}
 		items = ((Rva00270BA8 *)self)->rva00270BA8();
 		if (items->m_items[slot] != 0) {
 			int dw = self->m_468 - self->m_460;
 			int width = ((Rva00270BA8 *)self)->rva00270BA8()->m_items[slot]->getCurrentFrameWidth();
 			int height = ((Rva00270BA8 *)self)->rva00270BA8()->m_items[slot]->getCurrentFrameHeight();
-			int x = (int)((float)dw * 0.75f + (float)self->m_460 - (float)width * g_Va007C26F0);
+			int x = (int)((float)dw * 0.75f + (float)self->m_460 - (float)width * 0.5f);
 			int y = self->m_464 - height;
-			((Rva00270BA8 *)self)->rva00270BA8()->m_items[slot]->draw(x, y, width, height);
+			((Rva00270BA8 *)self)->rva00270BA8()->m_items[slot]->rva002D7127(x, y, width, height);
 		}
 	} else if (self->m_354 != 0) {
 		self->m_354->rva0027006C((int)slot);
