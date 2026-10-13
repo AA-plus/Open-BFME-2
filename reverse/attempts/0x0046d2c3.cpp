@@ -1,4 +1,6 @@
 // ?rva0046D2C3@HordeContain@@UAEPAVObject@@H@Z
+// partial score=0.88 date=2026-10-13
+// ?rva0046D2C3@HordeContain@@UAEPAVObject@@H@Z
 // partial score=0.88 date=2026-10-08
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /arch:SSE /EHs /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /G7
 // stlport

@@ -1,4 +1,6 @@
 // ?rva0021F5F8@CreateAHeroManager@@QAEXXZ
+// partial score=0.9662 date=2026-10-13
+// ?rva0021F5F8@CreateAHeroManager@@QAEXXZ
 // partial score=0.97 date=2026-10-13
 // ?rva0021F5F8@CreateAHeroManager@@QAEXXZ
 // partial score=0.97 date=2026-10-13
