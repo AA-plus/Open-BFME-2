@@ -26,6 +26,17 @@ private:
 	char m_pad[0x14];
 };
 
+// Native normal teardown reaches the hash backend at22CF13, while the
+// member unwind reaches its separate5B forwarder at22D101. This empty
+// lifetime view keeps both witnessed entries: inline teardown of its base
+// and the emitted wrapper destructor. The inheritance is a structural
+// representation of the unadjusted receiver, not an original class claim.
+class Rva0022D101Member : public Rva0022CC67
+{
+public:
+	~Rva0022D101Member() {}
+};
+
 // Base ctor 0x001B4E63 / dtor 0x001B4E74 by their row names ??0/??1SubsystemInterface (SubsystemInterface.cpp).
 class SubsystemInterface
 {
@@ -41,7 +52,7 @@ public:
 	virtual ~Rva002E0427();
 private:
 	int m_0C;
-	Rva0022CC67 m_10;
+	Rva0022D101Member m_10;
 	Rva0022366C m_24;
 };
 
