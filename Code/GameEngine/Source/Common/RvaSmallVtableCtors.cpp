@@ -877,6 +877,12 @@ void bfmeEmitRva0030D346Ctor(Rva0030D346 *p)
 {
 	p->Rva0030D346::Rva0030D346();
 }
+// Retain the inline base destructor's ledger body without changing its callers.
+// ?bfmeEmitRva005B253FDtor@@YAXPAVRva005B253F@@@Z absent-from-retail
+void bfmeEmitRva005B253FDtor(Rva005B253F *p)
+{
+	p->Rva005B253F::~Rva005B253F();
+}
 #pragma inline_depth()
 
 // ??1Rva004318C6@@UAE@XZ @0x004318D8 7B: the empty dtor, restoring the vtable (the
@@ -886,8 +892,8 @@ Rva004318C6::~Rva004318C6()
 }
 
 // ??1Rva005B253F@@UAE@XZ @0x005B2551 7B: the empty dtor, restoring the vtable (the
-// deleting dtor still expands it inline).
-Rva005B253F::~Rva005B253F()
+// deleting dtor still expands it inline). Match the consumers' select-any copy.
+inline Rva005B253F::~Rva005B253F()
 {
 }
 
