@@ -1,5 +1,5 @@
 // cl: /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc
-// ?Rva00322A49Show@@YAXPAVGameWindow@@@Z @0x00322A49 476B (Ghidra boundary,
+// ?OnComboBoxClick@@YAXPAVGameWindow@@@Z @0x00322A49 476B (Ghidra boundary,
 // EH frame). The combo box drop-down toggle that GadgetComboBoxInput
 // (0x00322C25) calls on GWM_LEFT_UP; ZH/BFME1 donor GadgetComboBox.cpp keeps
 // this logic inline in the GWM_LEFT_UP case. Target facts: bails when the
@@ -181,7 +181,7 @@ public:
 
 extern AudioManager *TheAudio;
 
-void Rva00322A49Show(GameWindow *comboBox)
+void OnComboBoxClick(GameWindow *comboBox)
 {
 	if (!comboBox)
 		return;
@@ -316,7 +316,7 @@ WindowMsgHandledType GadgetComboBoxInput(GameWindow *window, UnsignedInt msg,
 			break;
 
 		case GWM_LEFT_UP:
-			Rva00322A49Show(window);
+			OnComboBoxClick(window);
 			Rva006CC9A0(0, 1, 1);
 			break;
 

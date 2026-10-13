@@ -137,7 +137,7 @@ public:
 // 0030F4EA provider. Participant count is the independently rowed 003F4DAE
 // body on the established Rva003F468D battle view. Original helper name
 // remains unknown; the neighboring private helper proves compiler settings.
-static __declspec(noinline) bool rva002B2DEE(GameMessage *message, int *out, int index, Rva003F468D *battle, int side)
+static __declspec(noinline) bool getBattlePlayerArmyIndexFromMessage(GameMessage *message, int *out, int index, Rva003F468D *battle, int side)
 {
  if (index < 0) return false;
  if (index >= ((Rva002B2DADMessageView *)message)->count) return false;
@@ -150,5 +150,5 @@ static __declspec(noinline) bool rva002B2DEE(GameMessage *message, int *out, int
 // as the neighboring helper; no retail address is asserted for this wrapper.
 bool rva002B2DEECaller(GameMessage *message, int *out, int index, Rva003F468D *battle, int side)
 {
- return rva002B2DEE(message, out, index, battle, side);
+ return getBattlePlayerArmyIndexFromMessage(message, out, index, battle, side);
 }

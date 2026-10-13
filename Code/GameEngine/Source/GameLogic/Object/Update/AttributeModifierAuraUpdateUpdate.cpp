@@ -281,7 +281,7 @@ public:
 	ExperienceTracker *getExperienceTracker() const { return m_experience; }
 
 private:
-	friend void Rva0049B98A(Object *obj, void *userData);
+	friend void objectAuraUpdate(Object *obj, void *userData);
 	AttributeModifierPoolUpdate *findAttributeModifierPoolUpdate() const;
 
 	char m_pad008[0x38 - 0x8];
@@ -377,10 +377,10 @@ private:
 	}
 };
 
-void Rva0049B98A(Object *obj, void *userData);
+void objectAuraUpdate(Object *obj, void *userData);
 
-// ?Rva0049B98A@@YAXPAVObject@@PAX@Z @0x0049B98A 537B
-void Rva0049B98A(Object *obj, void *userData)
+// ?objectAuraUpdate@@YAXPAVObject@@PAX@Z @0x0049B98A 537B
+void objectAuraUpdate(Object *obj, void *userData)
 {
 	if (obj->isAnyKindOf(Rva0006EE7A(0, 0x2F, 0x97)))
 		return;
@@ -433,7 +433,7 @@ void Rva0049B98A(Object *obj, void *userData)
 		}
 	}
 	if (info->m_contained && obj->getTemplate()->isKindOf(77))
-		obj->getContain()->iterateContained(Rva0049B98A, info, true);
+		obj->getContain()->iterateContained(objectAuraUpdate, info, true);
 	if (info->m_endFrame)
 	{
 		AttributeModifierPoolUpdate *pool = obj->findAttributeModifierPoolUpdate();
@@ -492,7 +492,7 @@ UpdateSleepTime AttributeModifierAuraUpdate::update()
 		if (contain)
 		{
 			info.m_contained = true;
-			contain->iterateContained(Rva0049B98A, &info, true);
+			contain->iterateContained(objectAuraUpdate, &info, true);
 		}
 	}
 	else
@@ -519,7 +519,7 @@ UpdateSleepTime AttributeModifierAuraUpdate::update()
 			hits.rva00626630(object, 0.0f);
 		Object *other;
 		while ((other = hits.next()) != NULL)
-			Rva0049B98A(other, &info);
+			objectAuraUpdate(other, &info);
 	}
 	return (UpdateSleepTime)(object->getID() % 5 + data->m_refreshDelay);
 }

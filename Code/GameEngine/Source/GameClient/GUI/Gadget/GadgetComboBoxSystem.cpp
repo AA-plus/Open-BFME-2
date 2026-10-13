@@ -169,7 +169,7 @@ struct ListboxData
 void *bfmeGo925A(BfmeKeyLC *k);
 GameWindow *GadgetComboBoxGetListBox(GameWindow *comboBox);
 void Rva003229C5Hide(GameWindow *window);
-void Rva00322A49Show(GameWindow *comboBox);
+void OnComboBoxClick(GameWindow *comboBox);
 
 UnicodeString GadgetTextEntryGetText(GameWindow *textEntry);
 void GadgetTextEntrySetText(GameWindow *textEntry, UnicodeString text);
@@ -533,7 +533,7 @@ WindowMsgHandledType GadgetComboBoxSystem(GameWindow *window, UnsignedInt msg,
 		{
 			// See if the drop down button was selected
 			if ((GameWindow *)mData1 == comboData->dropDownButton)
-				Rva00322A49Show(window);
+				OnComboBoxClick(window);
 			break;
 		}
 

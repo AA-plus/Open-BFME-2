@@ -4,7 +4,7 @@
 // +8 second base): zeroes +4, builds AsciiString "Button", constructs the
 // +8 base via rowed 0x005C802B with (arg1, Button-addr-as-int), copies
 // arg2+0/+4 to +0x10/+0x14 via Mid base so copies precede derived vtables,
-// installs derived vtables and stores Rva00567BFDGet(arg2+4) to +0x18.
+// installs derived vtables and stores GetSetStanceCommandButton(arg2+4) to +0x18.
 // Evidence: ret 8 two args; and [esi+4] 0; StringBase 0x37BA0 plus
 // releaseBuffer 0x36410 around the +8 base call; Get 0x567BFD.
 #include "ascii_string.h"
@@ -13,7 +13,7 @@ class CommandButton
 {
 };
 
-const CommandButton *Rva00567BFDGet(int stance);
+const CommandButton *GetSetStanceCommandButton(int stance);
 
 // Two levels at +0: the ctor installs vtable 0x00C7A630 while the dtor's final store is
 // 0x00BC6F20 (Rva00567960Dtor.cpp), so they are two classes; each inline ctor/dtor's store
@@ -67,5 +67,5 @@ private:
 Rva00567960::Rva00567960(int a1, const Rva00567CCDInfo *a2)
 	: Rva005C802B(a1, (int)&AsciiString("Button")), Rva00567CCDMid(a2)
 {
-	m_18 = Rva00567BFDGet(a2->m_04);
+	m_18 = GetSetStanceCommandButton(a2->m_04);
 }
