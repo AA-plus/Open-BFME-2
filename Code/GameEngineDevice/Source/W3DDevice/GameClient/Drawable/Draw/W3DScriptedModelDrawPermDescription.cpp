@@ -49,11 +49,11 @@ void W3DScriptedModelDraw::rva000BB4CE(AsciiString *out, int perLine)
 	{
 		const Rva000BB4CEEntry &e = m_permanents[i];
 		if (!first)
-			out->concat(", ");
+			reinterpret_cast<StringBase<char> *>(out)->concat(", ");
 		if (count >= perLine)
 		{
 			count = 0;
-			out->concat("\n");
+			reinterpret_cast<StringBase<char> *>(out)->concat("\n");
 		}
 		if (e.m_off)
 		{
@@ -74,11 +74,11 @@ void W3DScriptedModelDraw::rva000BB4CE(AsciiString *out, int perLine)
 	{
 		const Rva000BB4CEEntry &e = m_states[i];
 		if (!first)
-			out->concat(", ");
+			reinterpret_cast<StringBase<char> *>(out)->concat(", ");
 		if (count >= perLine)
 		{
 			count = 0;
-			out->concat("\n");
+			reinterpret_cast<StringBase<char> *>(out)->concat("\n");
 		}
 		if (e.m_off)
 		{

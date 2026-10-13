@@ -186,7 +186,7 @@ void ScriptActions::doDisplayCinematicText(const AsciiString &displayText, const
 	for (c = buf; c != '\0'; *c++)
 	{
 		if (*c != ' ' && *c++ != '-')
-			fontName.concat(c);
+			reinterpret_cast<StringBase<char> *>(&fontName)->concat(c);
 		else
 			break;
 	}

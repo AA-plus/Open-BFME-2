@@ -27,7 +27,7 @@ void ConvertShortMapPathToLongMapPath(StringBase<char>& mapName,StringBase<char>
     actualpath.concat(token);
     { __declspec(align(4)) char slash = '\\'; reinterpret_cast<StringBase<char> &>(actualpath).concat(&slash,1); }
     actualpath.concat(token);
-    actualpath.concat(".map");
+    reinterpret_cast<StringBase<char> *>(&actualpath)->concat(".map");
     mapName.set(reinterpret_cast<const StringBase<char> &>(actualpath));
     char timestamp[256]={0};
     time_t now;

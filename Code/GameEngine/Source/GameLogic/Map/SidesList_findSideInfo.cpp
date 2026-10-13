@@ -120,7 +120,7 @@ bool SidesList::validateAllyEnemyList(const AsciiString &tname, AsciiString &all
 		}
 
 		if (!newstr.isEmpty())
-			newstr.concat(" ");
+			reinterpret_cast<StringBase<char> *>(&newstr)->concat(" ");
 		newstr.concat(token);
 	}
 

@@ -211,7 +211,7 @@ Int W3DTreeBuffer::addTreeType(const AsciiString &modelName,
 	m_treeTypes[m_numTreeTypes].m_offset = offset;
 	m_treeTypes[m_numTreeTypes].m_doShadow = (shadowKind == 1);
 	m_treeTypes[m_numTreeTypes].m_textureName.setCopyInline(textureName);
-	m_treeTypes[m_numTreeTypes].m_textureName.concat(".tga");
+	reinterpret_cast<StringBase<char> *>(&m_treeTypes[m_numTreeTypes].m_textureName)->concat(".tga");
 	m_treeTypes[m_numTreeTypes].m_modelName.setCopyInline(modelName);
 	m_treeTypes[m_numTreeTypes].m_nameC.setCopyInline(nameC);
 	m_treeTypes[m_numTreeTypes].m_nameD.setCopyInline(nameD);

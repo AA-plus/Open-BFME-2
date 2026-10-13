@@ -52,7 +52,7 @@ class Rva000AB910 {public:
  void rva000AB956();
 };
 void Rva000AB910::rva000AA557(){
- AsciiString path(name);path.concat(".apt");
+ AsciiString path(name);reinterpret_cast<StringBase<char> *>(&path)->concat(".apt");
  File *input=openFile(&path);
  data=input?input->readEntireAndClose():0;
 }
@@ -80,7 +80,7 @@ extern "C" __declspec(dllimport) int __cdecl sscanf(const char *,const char *,..
 // same filename/texture pipeline. Original resolution-local type is unknown.
 struct Rva000AB193Resolution {int x,y;};
 void Rva000AB910::rva000AB193(){
- AsciiString path(name);path.concat(".dat");
+ AsciiString path(name);reinterpret_cast<StringBase<char> *>(&path)->concat(".dat");
  File *input=openFile(&AsciiString(path.str()));
  if(!input)return;
  char line[1024]; line[1023]=0;

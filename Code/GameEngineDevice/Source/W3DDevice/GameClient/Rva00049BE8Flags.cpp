@@ -35,11 +35,11 @@ void Rva00049BE8::buildDescription(AsciiString *str, const Rva00049BE8 &other, b
         if (oldSet != newSet || (newSet && includeSame))
         {
             if (!first)
-                str->concat(", ");
+                reinterpret_cast<StringBase<char> *>(str)->concat(", ");
             if (count >= maxPerLine)
             {
                 count = 0;
-                str->concat("\n");
+                reinterpret_cast<StringBase<char> *>(str)->concat("\n");
             }
             if (newSet && !oldSet)
             {

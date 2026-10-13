@@ -198,14 +198,14 @@ void ControlBar::rva0031BAC3(Player *player)
 	m_specialPowerLayout->hide(true);
 
 	tempName = layoutName;
-	tempName.concat(":GenPowersShortcutBarParent");
+	reinterpret_cast<StringBase<char> *>(&tempName)->concat(":GenPowersShortcutBarParent");
 	NameKeyType id = TheNameKeyGenerator->nameToKey(tempName);
 	m_specialPowerShortcutParent = TheWindowManager->winGetWindowFromId(0, id);
 
 	tempName = layoutName;
-	tempName.concat(":ButtonCommand%d");
+	reinterpret_cast<StringBase<char> *>(&tempName)->concat(":ButtonCommand%d");
 	parentName = layoutName;
-	parentName.concat(":ButtonParent%d");
+	reinterpret_cast<StringBase<char> *>(&parentName)->concat(":ButtonParent%d");
 	Int count = pt->getSpecialPowerShortcutButtonCount();
 	m_currentlyUsedSpecialPowersButtons = count < MAX_SPECIAL_POWER_SHORTCUTS ? count : MAX_SPECIAL_POWER_SHORTCUTS;
 	for (i = 0; i < m_currentlyUsedSpecialPowersButtons; i++)

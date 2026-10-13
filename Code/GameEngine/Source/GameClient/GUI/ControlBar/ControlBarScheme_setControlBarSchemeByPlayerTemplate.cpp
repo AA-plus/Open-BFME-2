@@ -134,7 +134,7 @@ void ControlBarSchemeManager::setControlBarSchemeByPlayerTemplate(const PlayerTe
 		return;
 	AsciiString side = pt->getSide();
 	if (useSmall)
-		side.concat("Small");
+		reinterpret_cast<StringBase<char> *>(&side)->concat("Small");
 	if (m_currentScheme && m_currentScheme->m_side.compare(side) == 0)
 	{
 		m_currentScheme->init();

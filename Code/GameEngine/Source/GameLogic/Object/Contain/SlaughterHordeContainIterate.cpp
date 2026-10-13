@@ -102,7 +102,7 @@ bool OpenContain::getNaturalRallyPoint(Coord3D &rallyPoint, bool offset) const
 	{
 		AsciiString endBone("ExitEnd");
 		if (numberExits > 1)
-			endBone.concat("01");
+			reinterpret_cast<StringBase<char> *>(&endBone)->concat("01");
 		getObject()->getSingleLogicalBonePosition(endBone.str(), &rallyPoint, 0);
 	}
 	else

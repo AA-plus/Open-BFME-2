@@ -57,9 +57,9 @@ void W3DAptComponentColorPicker::Init(const AsciiString&name,const char*params) 
  image=TheMappedImageCollection->findImageByName(imageName);
  if(!image)return;
  cursorX=image->width;cursorY=image->height;
- AsciiString callbackName(name);callbackName.concat("Cursor");
+ AsciiString callbackName(name);reinterpret_cast<StringBase<char> *>(&callbackName)->concat("Cursor");
  externHandlers.AddExternHandler(callbackName,0,MakeBinding(reinterpret_cast<FunctorMethod>(&W3DAptComponentColorPicker::ExternFunc),reinterpret_cast<FunctorTarget*>(this)));
- callbackName=name;callbackName.concat("Color");
+ callbackName=name;reinterpret_cast<StringBase<char> *>(&callbackName)->concat("Color");
  externHandlers.AddExternHandler(callbackName,1,MakeBinding(reinterpret_cast<FunctorMethod>(&W3DAptComponentColorPicker::ExternFunc),reinterpret_cast<FunctorTarget*>(this)));
 }
 void W3DAptComponentColorPicker::ExternFunc(int slot,char*value,bool write) {

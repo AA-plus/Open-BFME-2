@@ -161,7 +161,7 @@ void Team::updateGenericScripts()
 						((Rva0020D451Engine *)TheScriptEngine)->rva0020D451(scope, script->getAction(), script, (void *)&AsciiString("some Generic Script"), (Team *)this);
 						AsciiString msg = "Generic script '";
 						msg.concat(m_proto->getGenericScriptName(i));
-						msg.concat("' run on team ");
+						reinterpret_cast<StringBase<char> *>(&msg)->concat("' run on team ");
 						msg.concat(getName());
 						TheScriptEngine->AppendDebugMessage(msg, false);
 					}
