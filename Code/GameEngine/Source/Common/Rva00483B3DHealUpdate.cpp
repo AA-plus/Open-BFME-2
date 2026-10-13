@@ -1,7 +1,4 @@
 // ?rva00483B3D@Rva00483B3D@@QAEHXZ
-// partial score=0.98 date=2026-10-13
-// ?rva00483B3D@Rva00483B3D@@QAEHXZ
-// partial score=0.93 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD
 //
 // ?rva00483B3D@Rva00483B3D@@QAEHXZ, retail 0x00483B3D, 102 bytes (secondary-base update).
@@ -64,12 +61,11 @@ private:
 
 int Rva00483B3D::rva00483B3D()
 {
-	Rva00483B3DOuter *outer = (Rva00483B3DOuter *)((char *)this - 0x0C);
-	Rva00483B3DData *data = outer->m_data;
+	Rva00483B3DData *data = ((Rva00483B3DOuter *)((char *)this - 0x0C))->m_data;
 	unsigned int now = ((Rva00483B3DFrames *)TheGameLogic)->m_frame40;
 	m_nextFrame18 = data->m_delay0C + now;
-	outer->m_object->attemptHealing(data->m_amount10, 0);
-	Rva00483B3DBody *body = outer->m_object->m_body254;
+	((Rva00483B3DOuter *)((char *)this - 0x0C))->m_object->attemptHealing(data->m_amount10, 0);
+	Rva00483B3DBody *body = ((Rva00483B3DOuter *)((char *)this - 0x0C))->m_object->m_body254;
 	if (body->health() == body->maxHealth())
 		return 0x3FFFFFFF;
 	return m_nextFrame18 - now;
