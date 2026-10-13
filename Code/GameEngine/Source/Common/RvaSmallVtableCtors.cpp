@@ -332,11 +332,15 @@ Rva005CD9AE::Rva005CD9AE(void *p) : m_04(p)
 }
 
 // ??0Rva005CF872@@QAE@PAX@Z @0x005CF872 18B, vtable VA 0xc75290
+// Retail table C75290 has two slots: the deleting wrapper 0x005CF884 and the
+// shared empty body 0x004B3FD0 (slot 2 starts the next table at C75298); slot 1
+// keeps the spelling BattleResolverWaitForBattleUpdate.cpp gives it.
 class Rva005CF872
 {
 public:
 	Rva005CF872(void *p);
 	virtual ~Rva005CF872() {}
+	virtual void rva005D08FD() {}
 private:
 	void *m_04;
 };
