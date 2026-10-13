@@ -76,6 +76,7 @@ class Rva005D32D4
 {
 public:
 	Rva005D32D4(int level, const AsciiString &path);
+	__declspec(noinline) ~Rva005D32D4();
 
 	unsigned char m_pad[0x4];
 };
@@ -368,7 +369,7 @@ class Rva005786AAHolder : public Rva005786AA
 {
 public:
 	Rva005786AAHolder() { m_ptr = 0; }
-	~Rva005786AAHolder() { ((Rva005786CD *)this)->clear(); }
+	__declspec(noinline) ~Rva005786AAHolder();
 };
 
 class Rva00578701Holder : public Rva00578701
@@ -684,6 +685,19 @@ Rva0057866DHolder::~Rva0057866DHolder()
 	if (p)
 	{
 		p->Rva005D25F2::~Rva005D25F2();
+		::operator delete(p);
+	}
+}
+
+// Complete 26-byte and REL32 twin of clear at 0x005786CD; the native thunk
+// at 0x005D32D4 stays out of line rather than substituting its inner helper.
+Rva005786AAHolder::~Rva005786AAHolder()
+{
+	Rva005D32D4 *p = m_ptr;
+	m_ptr = 0;
+	if (p)
+	{
+		p->Rva005D32D4::~Rva005D32D4();
 		::operator delete(p);
 	}
 }
