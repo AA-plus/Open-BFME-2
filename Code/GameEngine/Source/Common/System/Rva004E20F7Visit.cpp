@@ -1,5 +1,3 @@
-// ?rva004E20F7@Rva004E2E58Value@@QAEX_N@Z
-// partial score=0.975 date=2026-10-10
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /D_CRTIMP=
 // Target-only view of the complete 110B destructor at 0x003EF14A.
 // The queue's Rva00382574 name is refuted by this body's different layout.
@@ -253,122 +251,6 @@ public:
 
 // ?slot0@Rva003EF14A@@UAEXXZ present-unmatched
 void Rva003EF14A::slot0() { }
-
-Rva003EF14A::~Rva003EF14A()
-{
-    g_registryAtE02E88.rva002B7250((CreateAHeroData *)this);
-    rva003EE9F1();
-}
-
-// Complete 41B body; cleans values in the +8 container, calls ref vslot
-// +40, drops the +4 count, calls ref vslot 0 on zero, and clears this+4.
-void Rva003EF14A::rva003EE9F1()
-{
-    container08.rva004E21D5();
-    if (ref04) {
-        ref04->slot40();
-        ref04->dropReference();
-        ref04 = 0;
-    }
-}
-
-void Rva003EF14A::rva003EF1B8()
-{
-    g_registryAtE02E88.rva002B7250((CreateAHeroData *)this);
-    link48 = &secondary4C;
-    rva003EE9F1();
-    container08.unknown08[1] = 0;
-}
-
-// Complete 60B boundary at 0x004E2199. Caller 4E21E9 supplies the node's
-// payload at +14; every record stride and called virtual slot is retail-read.
-void Rva004E2E58Value::rva004E2199()
-{
-    for (Rva004E2199Record *record = begin14; record != end18; ++record) {
-        if (record->ref04) {
-            record->ref04->slot40();
-            record->ref04->dropReference();
-            record->ref04 = 0;
-        }
-        record->container08.rva00072FE6();
-    }
-    flag20 = false;
-}
-
-// Complete 41B body at 0x004E21D5. Tree nodes survive this pass: each
-// non-null payload at node+14 is reset, then the matched iterator advances.
-void Rva004E2E58::rva004E21D5()
-{
-    for (Rva004E2E58Node *node = owner.header00->left08; node != owner.header00;
-         node = (Rva004E2E58Node *)_STL::_Rb_global<bool>::_M_increment(
-             (_STL::_Rb_tree_node_base *)node)) {
-        if (node->value14)
-            node->value14->rva004E2199();
-    }
-}
-
-// Complete 56B Ghidra boundary at 0x004E2990. Caller 4E2EA9 invokes this
-// after its payload destruction and node-clear pass.
-Rva004E2990::~Rva004E2990()
-{
-    ((Rva004E21FE *)this)->rva004E21FE();
-}
-
-// Complete 100B owned-value destructor at 0x004E2E58. Global delete is
-// deliberate: retail invokes payload vslot0 with flags0 and then scalar
-// operator delete at 2FD60. Nodes are cleared before header ownership ends.
-Rva004E2E58::~Rva004E2E58()
-{
-    for (Rva004E2E58Node *node = owner.header00->left08; node != owner.header00;
-         node = (Rva004E2E58Node *)_STL::_Rb_global<bool>::_M_increment(
-             (_STL::_Rb_tree_node_base *)node)) {
-        ::delete node->value14;
-    }
-    ((Rva004E21FE *)this)->rva004E21FE();
-}
-
-// Independent 45B boundary at 0x00072F7C, ending in ret4 at 72FA6..A8.
-// Recurses into right links, preserves each left link, and frees the node.
-// No element destructor is called; the node payload identity is unknown.
-void Rva00072FE6::rva00072F7C(Rva00072F7CNode *node)
-{
-    if (!node)
-        return;
-    do {
-        rva00072F7C(node->right0C);
-        Rva00072F7CNode *left = node->left08;
-        _STL::free(node);
-        node = left;
-    } while (node);
-}
-
-// Complete 41B boundary at 0x00072FE6. Removes the root at header+4,
-// restores left/right links to the sentinel, and clears root and count.
-void Rva00072FE6::rva00072FE6()
-{
-    if (count04) {
-        rva00072F7C(header00->parent04);
-        header00->left08 = header00;
-        header00->parent04 = 0;
-        header00->right0C = header00;
-        count04 = 0;
-    }
-}
-
-// Target identity: the five-byte boundary at 0x004E2E53 preserves this and
-// tail-jumps to the rowed no-argument destructor at 0x004E2990. Keep the
-// wrapper's method name address-derived; its enclosing target type is unknown.
-class Rva004E2E53
-{
-public:
-    void rva004E2E53();
-};
-
-void Rva004E2E53::rva004E2E53()
-{
-    ((Rva004E2990 *)this)->~Rva004E2990();
-}
-
 // Native4E20F7..4E2199, 162-byte complete method. The +14/+18 range
 // and 32-byte records are independently shared with rowed cleanup4E2199.
 // Word payload+10 is passed into record ref's virtual slot78; returned
@@ -377,7 +259,11 @@ void Rva004E2E53::rva004E2E53()
 void Rva004E2E58Value::rva004E20F7(bool force)
 {
     flag20=false;
-    if (flag21 || force) {
+    // Two redundant re-reads of flag21 against its own copy: the compare folds
+    // away (no bytes) but the extra loads change which operand cl 7.1 puts first
+    // in the [base+index] addressing of the record accesses below.
+    bool again=flag21;
+    if ((flag21 && flag21==again && flag21==again) || force) {
         for (unsigned i=0;i<(unsigned)(end18-begin14);++i) {
             Rva00072F7CNode *node=begin14[i].container08.header00->left08;
             while(node!=begin14[i].container08.header00) {
