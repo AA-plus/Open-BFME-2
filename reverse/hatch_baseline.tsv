@@ -9966,7 +9966,8 @@ object_symbol	reverse/functions.csv	0x0076DEA6	1
 object_symbol	reverse/functions.csv	0x0076DEB4	1
 object_symbol	reverse/functions.csv	0x0076DEC2	1
 object_symbol	reverse/functions.csv	0x0076DED0	1
-object_symbol	reverse/functions.csv	0x0076DEFA	1	allow=d39a427933560aa96905d5a91505d7e74dc993a8
+object_symbol	reverse/functions.csv	0x0076DEFA	1
+object_symbol	reverse/functions.csv	0x0076DF08	1	allow=90c34b56f3f8cb9e409dbea1d0cdce4f3cec3206
 object_symbol	reverse/functions.csv	0x0076DF24	1
 object_symbol	reverse/functions.csv	0x0076DF46	1
 object_symbol	reverse/functions.csv	0x0076DF58	1
