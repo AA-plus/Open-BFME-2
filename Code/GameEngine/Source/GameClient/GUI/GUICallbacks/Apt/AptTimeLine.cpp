@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /Oy- /DNDEBUG /MD /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
 // Vector2 comes from BFME1 donor9cbfb551fe20 game/WWVegas/WWMath/vector2.h.
 // This reference supplies only its established8B vector operations; native
 // timeline structure and formulas are independently established below.
@@ -191,3 +191,82 @@ void Rva0051E354::rva0051E511(TimelineSeries*series,float step,float lineWidth,u
  if(pending>0)reinterpret_cast<Rva0011A040Target*>(render)->rva0011A040();
  render->shader=previousShader;
 }
+
+struct Rva0051E96BRecord
+{
+	int m00;
+	int m04;
+	float m08;
+	short m0C;
+	short m0E;
+	char mPad10[0x14 - 0x10];
+};
+
+template <class T>
+struct Rva0051E716Range
+{
+	int size() const { return m_end - m_begin; }
+	T *m_begin;
+	T *m_end;
+};
+
+struct Rva0051E96BArray
+{
+	char pad[0x14];
+	Rva0051E716Range<Rva0051E96BRecord> m_range;
+};
+
+class Rva0051E716 : public TimelineSeries
+{
+public:
+	Rva0051E716(int selector);
+	virtual int count();
+	virtual float value(int) { return 0.0f; }
+
+protected:
+	Rva0051E96BArray *m_array;
+	int m_selector;
+};
+
+Rva0051E716::Rva0051E716(int selector)
+{
+	m_array = 0;
+	m_selector = selector;
+}
+
+int Rva0051E716::count()
+{
+	return m_array->m_range.size();
+}
+
+struct Rva0051E437
+{
+	int m00;
+	short m04;
+	short m06;
+	short m08;
+};
+
+struct Rva0051E9D2Array
+{
+	char pad[0x20];
+	Rva0051E716Range<Rva0051E437> m_range;
+};
+
+class Rva0051E73E : public Rva0051E716
+{
+public:
+	Rva0051E73E(int selector);
+	virtual int count();
+};
+
+Rva0051E73E::Rva0051E73E(int selector)
+	: Rva0051E716(selector)
+{
+}
+
+int Rva0051E73E::count()
+{
+	return reinterpret_cast<Rva0051E9D2Array *>(m_array)->m_range.size();
+}
+
