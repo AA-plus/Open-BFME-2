@@ -33,6 +33,7 @@ public:
  void rva003C42B9(Parameter *, const AsciiString &, const AsciiString &);
  void rva003C739D(Parameter *, Parameter *, Parameter *, Parameter *, Parameter *);
 protected:
+ void doTeamUseCommandButtonOnNearestObjectType(const AsciiString &, const AsciiString &, const AsciiString &);
 	void doFlashSpellStoreButton(int seconds);
 	void doPlaySoundEffect(const AsciiString &sound);
 	void doPlaySoundEffectAt(const AsciiString &sound, const AsciiString &waypoint);
@@ -449,6 +450,7 @@ public:
 	Team *dlink_next_TeamInstanceList() const;
 	DLINK_ITERATOR<Object> iterate_TeamMemberList() const;
 	void rva0039E5B9(struct Coord3D *pos);
+ Coord3D *rva0039DA2A(Coord3D *) const;
 	void getTeamAsAIGroup(class AIGroup *group);
 	class Object *rva0039E8EB();
 	void setControllingPlayer(Player *newController);
@@ -1567,3 +1569,38 @@ void ScriptActions::rva003C42B9(Parameter *param, const AsciiString &a, const As
 
 
 #undef REALLY_FAR
+
+void ScriptActions::doTeamUseCommandButtonOnNearestObjectType(const AsciiString &teamName,
+	const AsciiString &commandAbility, const AsciiString &objectType)
+{
+	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
+	if (!team)
+		return;
+	const CommandButton *commandButton = TheControlBar->findCommandButton(commandAbility);
+	if (!commandButton)
+		return;
+	const ThingTemplate *tmpl;
+	ObjectTypes *types = TheScriptEngine->getObjectTypes(objectType);
+	if (types) {
+		Coord3D pos;
+		Object *best = rva003C24F0(team->rva0039DA2A(&pos), types, 0, false);
+		if (!best)
+			return;
+		tmpl = best->m_template;
+	} else {
+		tmpl = TheThingFactory->findTemplate(objectType);
+	}
+	if (!tmpl)
+		return;
+	// Keep the member walk in a sibling scope to the centroid temporary.
+	// MSVC then shares their dead stack storage (retail 0x003C449C).
+	{
+		Object *member;
+		DLINK_ITERATOR<Object> iter;
+		for (iter = team->iterate_TeamMemberList(); !iter.done(); iter.advance()) {
+			member = iter.cur();
+			if (commandButton->isReady(member))
+				rva003BE11C(member, tmpl, commandButton);
+		}
+	}
+}
