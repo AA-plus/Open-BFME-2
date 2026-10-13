@@ -7,7 +7,7 @@
 // Recover the constructor ABI rather than the old return-this initializer
 // spelling; both emitted 28B bodies are equal with the same base relocation.
 
-extern const void *const g_00BD41B8[];
+extern "C" const void *const __identifier("??_7Rva00168040@@6B@")[];
 class Rva0016801A
 {
 public:
@@ -29,5 +29,5 @@ Rva001683A7::Rva001683A7(int n)
 {
 	((Rva0016801A *)this)->rva0016801A(n);
 	m_0C &= 0;
-	m_vtable = (const void *)g_00BD41B8;
+	m_vtable = (const void *)__identifier("??_7Rva00168040@@6B@");
 }

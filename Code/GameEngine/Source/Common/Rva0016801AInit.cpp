@@ -2,7 +2,7 @@
 // ?rva0016801A@Rva0016801A@@QAEPAXH@Z @0x0016801A 38B
 // Evidence: pin ?rva0016801A@Rva0016801A@@QAEPAXH@Z; caller 0x001683AE in Rva001683A7Init.cpp; callee Resize 0x00167F88 rowed in wwlib_pod_container_bodies.cpp; data g_00BD41AC at 0x007D41AC.
 
-extern const void *const g_00BD41AC[];
+extern "C" const void *const __identifier("??_7Rva00168040Base@@6B@")[];
 
 struct BfmePod4
 {
@@ -36,7 +36,7 @@ private:
 // ?rva0016801A@Rva0016801A@@QAEPAXH@Z
 void *Rva0016801A::rva0016801A(int n)
 {
-	m_vtable = g_00BD41AC;
+	m_vtable = __identifier("??_7Rva00168040Base@@6B@");
 	m_04 = 0;
 	m_08 = 0;
 	if (n > 0)
