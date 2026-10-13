@@ -1,4 +1,4 @@
-// cl: /EHsc /D_STLP_NO_EXCEPTIONS /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT /Ireference/shims/bfmealloc
+// cl: /Ireference/shims/bfme2_ascii /EHs /D_STLP_NO_EXCEPTIONS /MD /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /D_BFME_RETAIL_TREE_INSERT_LAYOUT /Ireference/shims/bfmealloc
 // stlport
 // Tree mapping int keys to MultiplayerColorDefinition values (the
 // multiplayer color table). The node allocator and the pair _Construct are
@@ -9,6 +9,10 @@
 // class; the three instantiation lines at the bottom exist for that reason.
 #include <map>
 
+#include "ascii_string.h"
+
+#include "../../../Include/Lib/RGBColor.h"
+
 // map/set<int> internals otherwise instantiate the less<int>::operator()
 // COMDAT (one byte shape per TU flags); an explicit dllimport+forceinline
 // specialization takes those calls inline so this TU emits no external copy.
@@ -18,14 +22,27 @@ bool less<int>::operator()(const int &a, const int &b) const
 { return a < b; }
 }
 
+// The real member layout (as in stlport_rb_tree_int_colormap_erase.cpp):
+// its AsciiString tooltip name gives the pair a destructor, so the tree
+// teardown COMDATs (_Destroy, _M_erase, ~_Rb_tree) take retail's shape;
+// /EHs keeps the EH state reset retail's 56-byte ~_Rb_tree has (0x38103F).
 class MultiplayerColorDefinition
 {
 public:
 	MultiplayerColorDefinition(const MultiplayerColorDefinition &other);
 
 private:
-	char m_pad[64];
+	AsciiString m_tooltipName; // +0x00
+	RGBColor m_rgbValue; // +0x04
+	int m_color; // +0x10
+	RGBColor m_rgbValueNight; // +0x14
+	int m_colorNight; // +0x20
+	RGBColor m_rgbExtra1; // +0x24
+	RGBColor m_rgbExtra2; // +0x30
+	bool m_extraFlag; // +0x3C
 };
+
+typedef char ColorMapValueMatchesRetail[(sizeof(MultiplayerColorDefinition) == 0x40) ? 1 : -1];
 
 typedef _STL::pair<const int, MultiplayerColorDefinition> ColorMapValue;
 typedef _STL::_Rb_tree<int, ColorMapValue, _STL::_Select1st<ColorMapValue>, _STL::less<int>, _STL::allocator<ColorMapValue> > ColorMapTree;
