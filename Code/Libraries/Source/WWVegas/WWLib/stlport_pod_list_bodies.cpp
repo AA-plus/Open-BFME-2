@@ -59,6 +59,8 @@ namespace _STL { template<> void _Construct<BfmePod196, BfmePod196>(BfmePod196 *
 // Experience payload cleanup is virtual: retail list clear 0x002887EA.
 // Keep the proven 0x108-byte node payload and existing provider spelling.
 struct BfmePod264 { BfmePod264(const BfmePod264 &); virtual ~BfmePod264(); int a[65]; };
+// bfme link decl-only BfmePod264
+namespace _STL { template <> void _Construct<BfmePod264, BfmePod264>(BfmePod264 *, BfmePod264 const &); }
 inline bool operator==(const BfmePod264 &x, const BfmePod264 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod264 &x, const BfmePod264 &y) { return x.a[0] < y.a[0]; }
 struct BfmeShortPod22 { short a[11]; };

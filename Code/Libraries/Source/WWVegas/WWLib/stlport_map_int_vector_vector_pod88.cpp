@@ -30,6 +30,8 @@ struct BfmePod88
 {
 	char m_body[88];
 };
+// bfme link decl-only BfmePod88
+namespace _STL { template <> vector<BfmePod88, allocator<BfmePod88> >::~vector(); }
 
 typedef _STL::map<int, _STL::vector<_STL::vector<BfmePod88> > > IntPod88VectorVectorMap;
 

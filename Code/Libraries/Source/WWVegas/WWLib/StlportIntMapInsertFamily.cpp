@@ -82,6 +82,8 @@ struct Rva0032EB87Mapped { int a; };
 struct Rva00439AAAMapped { unsigned char m_data[0x10]; };
 struct Rva004F90FFMapped { int a; };
 struct Rva00501776 { int a; };
+// bfme link decl-only Rva00501776
+namespace _STL { template <> pair<int const, Rva00501776>::pair(pair<int const, Rva00501776> const &); }
 struct Rva00502BCDMapped { int a; };
 struct Rva00559076Mapped { int a; };
 
@@ -149,6 +151,8 @@ template class _STL::_Rb_tree<int, _STL::pair<const int, Rva00559076Mapped>, _ST
 struct Rva002F1DA1Mapped { int a; };
 struct Rva00501E3FElement { int a; };
 struct Rva00501656 { int a; };
+// bfme link decl-only Rva00501656
+namespace _STL { template <> pair<int const, Rva00501656>::pair(pair<int const, Rva00501656> const &); }
 // Region-tree destruction is owned by the verified destructor-only unit.
 typedef _STL::pair<const int, Rva00501656> RegionRecordTreeValue;
 typedef _STL::_Rb_tree<int, RegionRecordTreeValue, _STL::_Select1st<RegionRecordTreeValue>,

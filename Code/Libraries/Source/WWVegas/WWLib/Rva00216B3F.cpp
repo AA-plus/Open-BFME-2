@@ -9,6 +9,8 @@
 #include <vector>
 
 struct BfmePod28 { int a[7]; };
+// bfme link decl-only BfmePod28
+namespace _STL { template <> BfmePod28 * vector<BfmePod28, allocator<BfmePod28> >::erase(BfmePod28 *, BfmePod28 *); }
 
 class Rva00222A8BTarget
 {

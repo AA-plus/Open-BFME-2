@@ -44,5 +44,7 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 
 
 struct BfmePod264 { int a[66]; };
+// bfme link decl-only BfmePod264
+namespace _STL { template <> void _Construct<BfmePod264, BfmePod264>(BfmePod264 *, BfmePod264 const &); }
 
 template _STL::list<BfmePod264> &_STL::hash_map<int, _STL::list<BfmePod264>, _STL::hash<int>, _STL::equal_to<int>, _STL::allocator<_STL::pair<const int, _STL::list<BfmePod264> > > >::operator[](const int &);

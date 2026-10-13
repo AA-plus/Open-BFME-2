@@ -32,15 +32,22 @@ inline bool operator<(const BfmePod20 &x, const BfmePod20 &y) { return x.a[0] < 
 inline bool operator==(const BfmePod24 &x, const BfmePod24 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod24 &x, const BfmePod24 &y) { return x.a[0] < y.a[0]; }
 struct BfmePod28 { int a[7]; };
+// bfme link decl-only BfmePod28
+namespace _STL { template <> BfmePod28 * vector<BfmePod28, allocator<BfmePod28> >::erase(BfmePod28 *, BfmePod28 *); }
+namespace _STL { template <> BfmePod28 * vector<BfmePod28, allocator<BfmePod28> >::erase(BfmePod28 *); }
 inline bool operator==(const BfmePod28 &x, const BfmePod28 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod28 &x, const BfmePod28 &y) { return x.a[0] < y.a[0]; }
 struct BfmePod32 { int a[8]; };
+// bfme link decl-only BfmePod32
+namespace _STL { template <> vector<BfmePod32, allocator<BfmePod32> >::~vector(); }
 inline bool operator==(const BfmePod32 &x, const BfmePod32 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod32 &x, const BfmePod32 &y) { return x.a[0] < y.a[0]; }
 struct BfmePod36 { int a[9]; };
 inline bool operator==(const BfmePod36 &x, const BfmePod36 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod36 &x, const BfmePod36 &y) { return x.a[0] < y.a[0]; }
 struct BfmePod40 { int a[10]; };
+// bfme link decl-only BfmePod40
+namespace _STL { template <> vector<BfmePod40, allocator<BfmePod40> >::~vector(); }
 inline bool operator==(const BfmePod40 &x, const BfmePod40 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod40 &x, const BfmePod40 &y) { return x.a[0] < y.a[0]; }
 struct BfmePod44 { int a[11]; };
@@ -65,6 +72,8 @@ struct BfmePod80 { int a[20]; };
 inline bool operator==(const BfmePod80 &x, const BfmePod80 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod80 &x, const BfmePod80 &y) { return x.a[0] < y.a[0]; }
 struct BfmePod88 { int a[22]; };
+// bfme link decl-only BfmePod88
+namespace _STL { template <> vector<BfmePod88, allocator<BfmePod88> >::~vector(); }
 inline bool operator==(const BfmePod88 &x, const BfmePod88 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod88 &x, const BfmePod88 &y) { return x.a[0] < y.a[0]; }
 struct BfmePod92 { int a[23]; };

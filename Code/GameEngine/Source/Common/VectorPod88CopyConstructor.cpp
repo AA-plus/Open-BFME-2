@@ -23,5 +23,7 @@ struct BfmePod88
 {
 	char m_body[88];
 };
+// bfme link decl-only BfmePod88
+namespace _STL { template <> vector<BfmePod88, allocator<BfmePod88> >::~vector(); }
 
 template class _STL::vector<_STL::vector<BfmePod88, _STL::allocator<BfmePod88> >, _STL::allocator<_STL::vector<BfmePod88, _STL::allocator<BfmePod88> > > >;

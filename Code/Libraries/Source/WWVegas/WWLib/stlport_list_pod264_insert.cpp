@@ -16,6 +16,8 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 }
 
 struct BfmePod264 { int a[66]; };
+// bfme link decl-only BfmePod264
+namespace _STL { template <> void _Construct<BfmePod264, BfmePod264>(BfmePod264 *, BfmePod264 const &); }
 inline bool operator==(const BfmePod264 &x, const BfmePod264 &y) { return x.a[0] == y.a[0]; }
 inline bool operator<(const BfmePod264 &x, const BfmePod264 &y) { return x.a[0] < y.a[0]; }
 template class _STL::list<BfmePod264, _STL::allocator<BfmePod264> >;

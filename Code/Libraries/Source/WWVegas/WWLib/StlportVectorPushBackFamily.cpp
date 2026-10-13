@@ -129,6 +129,8 @@ struct Rva00414258Element { int a[6]; };
 struct Rva00414BA4Element { int a[11]; };
 struct BfmeStringRecord00466E64 { int a[3]; };
 struct Rva00475F2AElement { int a[1]; };
+// bfme link decl-only Rva00475F2AElement
+namespace _STL { template <> void vector<Rva00475F2AElement, allocator<Rva00475F2AElement> >::_M_clear(); }
 struct Rva004C3F09Element { int a[2]; };
 struct Rva004E3E5AElement { int a[8]; };
 // The native24B placement copy87A5C copies the pointer and increments

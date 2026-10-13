@@ -20,5 +20,7 @@ struct BfmeObject476
     BfmeObject476();
     BfmeObject476(const BfmeObject476&);
 };
+// bfme link decl-only BfmeObject476
+namespace _STL { template <> BfmeObject476 * vector<BfmeObject476, allocator<BfmeObject476> >::erase(BfmeObject476 *, BfmeObject476 *); }
 
 template class _STL::vector<BfmeObject476, _STL::allocator<BfmeObject476> >;

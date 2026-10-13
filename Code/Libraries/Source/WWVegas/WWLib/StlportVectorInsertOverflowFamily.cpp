@@ -81,6 +81,8 @@ struct Rva00414BA4Element { char m_pad[44]; public: Rva00414BA4Element(const Rva
 struct BfmeStringRecord00466E64 { char m_pad[12]; public: BfmeStringRecord00466E64(const BfmeStringRecord00466E64 &); ~BfmeStringRecord00466E64(); };
 // 4-byte element; push_back 0x00475F2A.
 struct Rva00475F2AElement { char m_pad[4]; public: Rva00475F2AElement(const Rva00475F2AElement &); ~Rva00475F2AElement(); };
+// bfme link decl-only Rva00475F2AElement
+namespace _STL { template <> void vector<Rva00475F2AElement, allocator<Rva00475F2AElement> >::_M_clear(); }
 // 8-byte element; push_back 0x004C3F09.
 struct Rva004C3F09Element { char m_pad[8]; public: Rva004C3F09Element(const Rva004C3F09Element &); ~Rva004C3F09Element(); };
 // 4-byte element; push_back 0x004F87BC.

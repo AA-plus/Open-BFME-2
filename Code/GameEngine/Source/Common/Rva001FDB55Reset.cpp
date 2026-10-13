@@ -22,6 +22,8 @@ struct BfmeObject476
 	unsigned char m_bytes[0x1DC];
 	Overridable *asOverridable() { return (Overridable *)this; }
 };
+// bfme link decl-only BfmeObject476
+namespace _STL { template <> BfmeObject476 * vector<BfmeObject476, allocator<BfmeObject476> >::erase(BfmeObject476 *, BfmeObject476 *); }
 
 class Rva00072FE6
 {

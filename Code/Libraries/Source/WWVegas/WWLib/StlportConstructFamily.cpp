@@ -144,6 +144,8 @@ struct BfmePod248
 	BfmePod248(const BfmePod248 &that);
 };
 struct BfmePod264 { int a[66]; };
+// bfme link decl-only BfmePod264
+namespace _STL { template <> void _Construct<BfmePod264, BfmePod264>(BfmePod264 *, BfmePod264 const &); }
 // The experience-level copy now has its established Rva002894A2 owner.
 // This declaration-only view passes the existing 0x108-byte list payload
 // to that constructor; the helper retains its already rowed template name.

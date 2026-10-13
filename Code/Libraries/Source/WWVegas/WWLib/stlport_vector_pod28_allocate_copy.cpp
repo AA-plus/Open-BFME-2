@@ -22,5 +22,8 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include <vector>
 #include <algorithm>
 struct BfmePod28 { int a[7]; __forceinline bool operator<(const BfmePod28 &o) const { return a[0] < o.a[0]; } };
+// bfme link decl-only BfmePod28
+namespace _STL { template <> BfmePod28 * vector<BfmePod28, allocator<BfmePod28> >::erase(BfmePod28 *, BfmePod28 *); }
+namespace _STL { template <> BfmePod28 * vector<BfmePod28, allocator<BfmePod28> >::erase(BfmePod28 *); }
 template class _STL::vector<BfmePod28, _STL::allocator<BfmePod28> >;
 template BfmePod28 *_STL::__lower_bound<BfmePod28 *, BfmePod28, _STL::less<BfmePod28>, int>(BfmePod28 *, BfmePod28 *, const BfmePod28 &, _STL::less<BfmePod28>, int *);
