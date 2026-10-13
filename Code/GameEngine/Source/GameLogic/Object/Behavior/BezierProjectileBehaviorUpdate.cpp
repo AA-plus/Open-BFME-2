@@ -66,8 +66,9 @@ class BezierDebugDisplay { public:
  virtual void s6();virtual void s7();virtual void s8();virtual void s9();virtual void s10();virtual void s11();
  virtual void drawCircle(const Coord3D*,float,unsigned);
 };
-class Display;
-extern Display *TheDisplay;
+class View;
+// Native DIR32 at VA 0x00DFEA3C is the canonical View singleton.
+extern View *TheTacticalView;
 struct BezierGlobalData { char pad[0xE9C]; bool debug; };
 class GlobalData;
 extern GlobalData *TheWritableGlobalData;
@@ -132,7 +133,7 @@ UpdateSleepTime BezierProjectileBehavior::update()
 			{
 				BezCoord pos(end);
 				pos.z = TheTerrainLogic->getGroundHeight(pos.x, pos.y, 0);
-				((BezierDebugDisplay *)TheDisplay)->drawCircle(&pos, d->effectRadius, 0xffff00ff);
+				((BezierDebugDisplay *)TheTacticalView)->drawCircle(&pos, d->effectRadius, 0xffff00ff);
 			}
 			BfmeWideResult iter = ThePartitionManager->iterateObjectsInRange(&end, d->effectRadius, 1,
 				Rva00260EB1Filter(obj, relation, false).link(Rva0026119DFilter().link(&Rva002611BFFilter(obj))), 1);
