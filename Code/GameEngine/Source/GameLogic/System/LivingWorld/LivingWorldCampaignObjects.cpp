@@ -211,8 +211,8 @@ class Rva00566AB7 { public:void rva00566AB7(const BfmePod88&); };
 // member stays declaration-only here.
 namespace _STL { template <> void vector<BfmePod88, allocator<BfmePod88> >::push_back(const BfmePod88 &); }
 void rva004E3BD8(INI *ini,int,_STL::vector<BfmePod88> *vec) {
- Rva004E3184 record(((Rva002B3171BumpCounter*)TheLivingWorldLogic)->bump());
- ini->initFromINI(&record,Rva004E3184::m_fieldParseTable);
+ SpawnArmy record(((Rva002B3171BumpCounter*)TheLivingWorldLogic)->bump());
+ ini->initFromINI(&record,SpawnArmy::m_fieldParseTable);
  vec->push_back((const BfmePod88&)record);
 }
 void Rva004E324DParse(INI *ini,void *instance,void*,const void*) {
@@ -380,7 +380,7 @@ struct ArmyHelpBuildingView { unsigned char pad[0x24]; Rva0020E89C *region; };
 // slot with the fetch return temporary like retail.
 UnicodeString Rva00319CED::rva004E265F(int id)
 {
- Rva004E3184 *spawn=(Rva004E3184 *)this;
+ SpawnArmy *spawn=(SpawnArmy *)this;
  UnicodeString help=TheGameText->fetch(spawn->m_14);
  static AsciiString singular("CONTROLBAR:LW_Unit_BuildTimeAndCostSingular");
  static AsciiString plural("CONTROLBAR:LW_Unit_BuildTimeAndCostPlural");
