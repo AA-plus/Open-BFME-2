@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /ICode/Libraries/Include/Lib
 // Native5D2184..5D232D complete425B RET8. WB15B2C10 names
 // StrategicInGameUI::PlanRetreatChecklistItem constructor and records its
