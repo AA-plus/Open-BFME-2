@@ -1,3 +1,5 @@
+// ?bfmeHas985C@BfmeArg985@@QAEDH@Z
+// partial score=0.8676 date=2026-10-13
 // ?rva002940B9@Object@@QAE_NPBVUpgradeTemplate@@@Z
 // partial score=0.93 date=2026-10-11
 // ?bfmeHas985C@BfmeArg985@@QAEDH@Z
@@ -171,8 +173,7 @@ haveMask:
 		((unsigned int *)&mask)[bit >> 5] |= 1u << (bit & 31);
 		for (BehaviorModule **m = self->m_modules244; *m; ++m)
 		{
-			BehaviorInterface *beh = *m;
-			BehaviorUpgrade *up = beh->getUpgrade();
+			BehaviorUpgrade *up = (*m)->getUpgrade();
 			if (up == 0)
 				continue;
 			if (up->wouldUpgrade(mask))
