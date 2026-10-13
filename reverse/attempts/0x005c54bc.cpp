@@ -1,6 +1,8 @@
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z
 // partial score=0.95 date=2026-10-13
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z
+// partial score=0.95 date=2026-10-13
+// ?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z
 // partial score=0.93 date=2026-10-13
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromLeft@@UAE_NPAVAnimateWindow@@@Z
 // partial score=0.93 date=2026-10-13
