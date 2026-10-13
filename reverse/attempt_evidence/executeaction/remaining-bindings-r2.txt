@@ -1,0 +1,10 @@
+?rva003C7BBB@ScriptActions@@QAEXABVAsciiString@@0_N@Z
+?rva003C8482@ScriptActions@@QAEXABVAsciiString@@@Z
+?rva003BBB51@ScriptActions@@QAEX_N@Z
+?rva003C90DD@ScriptActions@@QAEXABVAsciiString@@0@Z
+?rva003C449C@ScriptActions@@QAEXABVAsciiString@@00@Z
+?rva0035818E@ScriptEngine@@QAEXABVAsciiString@@PAUCoord3D@@@Z
+?Rva003BCA5DSet@ScriptActions@@QAEX_N@Z
+?Rva003BD0C8Set@ScriptActions@@QAEXABVAsciiString@@_N@Z
+?rva003C32CC@ScriptActions@@QAEXABVAsciiString@@0_N@Z
+?rva003BD306@ScriptActions@@IAEXPAVParameter@@_N@Z

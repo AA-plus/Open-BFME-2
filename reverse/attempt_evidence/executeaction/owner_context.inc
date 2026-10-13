@@ -365,7 +365,7 @@ private:
 };
 
 class Team;
-extern int LogicFramesPerSecond; // target VA 0x00DBA4E4; name/layout convergence still required
+extern int BfmeLogicFramesPerSecond; // canonical signed32 timing owner at target VA 0x00DBA4E4; reconciled in round2
 double __cdecl Rva000422BBCeil(float);
 class ScriptActionViewSlots { public:
     virtual void slot0();
@@ -843,7 +843,7 @@ public:
 public:
 	void Rva003BEBD6Do(AsciiString const *);
 public:
-	void Rva003BECCDSet(AsciiString const &, int, bool);
+	void Rva003BECCDSet(AsciiString const &, AsciiString const &, bool);
 public:
 	void Rva003BF71EDo(AsciiString const &, AsciiString const &);
 public:
@@ -1341,7 +1341,9 @@ public:
 public:
 	void rva003C4625(AsciiString const &, Parameter *, AsciiString const &);
 public:
+protected:
 	void rva003C4751(Parameter *);
+public:
 protected:
 	void rva003C49AE(Parameter *, Parameter *);
 public:

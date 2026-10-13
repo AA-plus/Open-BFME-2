@@ -1,10 +1,14 @@
 // ?executeAction@ScriptActions@@UAEXPAVScriptAction@@@Z
+// partial score=0.9571488135077614 date=2026-10-14
+// ?executeAction@ScriptActions@@UAEXPAVScriptAction@@@Z
 // partial score=0.9196112177903024 date=2026-10-13
 // cl: /G7 /arch:SSE /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
 // stlport
 // Partial, not recovery credit. Native switch and donor provenance/residue:
 // reverse/attempt_evidence/executeaction/report.txt.
 #include "reverse/attempt_evidence/executeaction/owner_context.inc"
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 #define TEXT(n) (pAction->getParameter(n)->getString())
 #define INTEGER(n) (pAction->getParameter(n)->getInt())
 #define REAL(n) (pAction->getParameter(n)->getReal())
@@ -75,7 +79,7 @@ return;
 }
 case 490:
 {
-Rva003BECCDSet(INLINE_TEXT(0), (int)(&INLINE_TEXT(1)), (INLINE_INTEGER(2) != 0));
+Rva003BECCDSet(INLINE_TEXT(0), INLINE_TEXT(1), (INLINE_INTEGER(2) != 0));
 return;
 }
 case 36:
@@ -215,7 +219,7 @@ return;
 }
 case 135:
 {
-Rva003BAAD6();
+Rva003BAAD6();_ReadWriteBarrier();
 return;
 }
 case 123:
@@ -1228,7 +1232,7 @@ return;
 }
 case 164:
 {
-Rva003C5535Do(TEXT(0));
+Rva003C5535Do(TEXT(0));_ReadWriteBarrier();
 return;
 }
 case 240:
@@ -1725,7 +1729,7 @@ return;
 }
 case 551:
 {
-int framecount = (int)Rva000422BBCeil((float)LogicFramesPerSecond * REAL(1));
+int framecount = (int)Rva000422BBCeil((float)BfmeLogicFramesPerSecond * REAL(1));
 doTeamSpinForFramecount(TEXT(0), framecount);
 return;
 }
@@ -1811,7 +1815,7 @@ return;
 }
 case 294:
 {
-Rva003BCA43Do(TEXT(0));
+Rva003BCA43Do(TEXT(0));_ReadWriteBarrier();
 return;
 }
 case 554:
