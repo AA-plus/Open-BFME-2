@@ -2,7 +2,7 @@
   "rva": "0x002FC9B1",
   "native_size": 1566,
   "compiled_size": 1570,
-  "fitness": 0.9733066259845423,
+  "fitness": 0.98711,
   "bank": "reverse/attempts/0x002fc9b1.cpp",
   "status": "partial; not byte-exact",
   "native_frame": "0x98",
@@ -19,15 +19,31 @@
   "source_changes": [
     "Reuse initial parent pointer in loop to restore EDI initialization and loop value",
     "Typed record result, bool face flag, WB rotate-in-place and independent return scopes",
-    "Visible BuildAttackPath scope toggles1BEB6 and obtains valid surfaces inside call preparation; descriptive helper name is an inference"
+    "Visible BuildAttackPath scope toggles1BEB6 and obtains valid surfaces inside call preparation; descriptive helper name is an inference",
+    "Laptop: STLport swap(v.x,v.y) then x negation restores every native normalization SSE register and schedule; manual temporary and ref-accessor swaps remain different",
+    "Laptop: acceptableDistance declared before closestDistance multiply restores the threshold store order",
+    "Laptop: visible floor helper changed to clean cast for this diagnostic bank; parent bytes unchanged; this is not a verification claim for that helper"
   ],
   "remaining": [
-    "1570B versus1566: store ordering, normalization SSE registers and flag-argument scheduling",
-    "Partial2F83F5 helper still1801/1803 withA4 frame versus90; its bank remains .773791",
-    "Further dependency2EA6581001B is held by w7-mp6; no edit attempted; repeat shared investigation after provider landing"
+    "1570B versus1566B: count/global zero-store order and facing bool argument spilled via AL and a stack home instead of native CL/PUSH ECX; shifted branches and truncated diagnostic tail are consequences",
+    "Partial2F83F5 visibility remains necessary to parent98 frame; provider itself is not exact and cannot be landed as an incidental body",
+    "Movement dependency2EA658 still held by w7-mp6 during laptop pass; no provider edit attempted"
   ],
   "not_progress": [
     "No Code, functions.csv, or new symbol pins for this target",
     "Diagnostic fitness is not strict byte or relocation acceptance"
-  ]
+  ],
+  "laptop_evidence": {
+    "wb": "build/crack_m/sideways-wb.txt",
+    "raw_candidate": "build/crack_m/sideways-swap.cpp",
+    "diff": "build/crack_m/sideways-swap/diff.txt",
+    "trials": "build/crack_m/sideways-*/results.json",
+    "rejected": [
+      "real Sin/Cos body visibility and native header overloads changed stack homes without restoring target",
+      "BuildActualPath and PutOnClosedList visibility unchanged",
+      "manual vector swap, field reference accessor, scalar dot permutations weaker than STLport swap",
+      "global type/definition and zero-expression variations unchanged",
+      "direct BuildActualPath produces native CL flag but moves state-toggle stores too early and grows1570 to1580"
+    ]
+  }
 }

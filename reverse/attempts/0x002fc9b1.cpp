@@ -1,5 +1,5 @@
 // ?FindAttackPathSideways@Pathfinder@@QAEPAVPath@@PAVObject@@ABVLocomotorSet@@PBUCoord3D@@02PAVRva002C9B80Owner@@@Z
-// partial score=0.973306626 date=2026-10-13
+// partial score=0.98711 date=2026-10-13
 // ?rva002F83F5@Pathfinder@@QAEHPAVPathfindCell@@0ABVLocomotorSet@@_N2HABUICoord2D@@PAVObject@@H@Z
 // partial score=0.773791 date=2026-10-09
 // cl: /ICode/Libraries/Include /O1 /DNDEBUG /MD /arch:SSE /G7 /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
@@ -169,12 +169,7 @@ float Cos(float x);
 static __forceinline Int realToIntFloor(float f)
 {
 float floored = (float)floor((double)f);
-long i;
-__asm {
-fld [floored]
-fistp [i]
-}
-return i;
+return (Int)floored;
 }
 
 class Rva002F3738
@@ -987,8 +982,8 @@ Path *Pathfinder::FindAttackPathSideways(Object *obj, const LocomotorSet &locos,
 	Int dx = goalIndex.x - parent->getXIndex();
 	Int dy = goalIndex.y - parent->getYIndex();
 	float closestDistance = (float)(dx * dx + dy * dy);
-	closestDistance *= 0.9f;
 	Int acceptableDistance = 9999999;
+	closestDistance *= 0.9f;
 	while ((parent = rva002F36E5()) != 0)
 	{
 		PathfinderCellPoint cellCenter = Rva002E8C23Call(center, parent);
@@ -1040,10 +1035,7 @@ Path *Pathfinder::FindAttackPathSideways(Object *obj, const LocomotorSet &locos,
 					MathCoord2D v(cellWorld);
 					v -= goalWorld;
 					v.Normalize();
-					float vx = v.x;
-					v.x = v.y;
-					v.y = vx;
-					v.x = -v.x;
+					_STL::swap(v.x,v.y); v.x=-v.x;
 					if (fabs(dir.dot(v)) < 0.85f)
 						blocked = true;
 				}
