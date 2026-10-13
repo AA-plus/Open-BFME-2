@@ -56,7 +56,10 @@ public:
 	virtual void v34();
 	virtual void unregister(unsigned handle);
 };
-extern Rva00410421Manager *g_rva00410421Manager;
+// The existing global owns the retail slot at VA 0x00DFEF1C.
+// Cast only at use sites to retain this unit's evidenced slot view.
+class GameWindowManager;
+extern GameWindowManager *TheWindowManager;
 
 class Rva0045EF90Base
 {
@@ -86,12 +89,7 @@ private:
 
 Rva0045EF90Object::~Rva0045EF90Object()
 {
-	if (g_rva00410421Manager)
-		g_rva00410421Manager->unregister(m_handle);
+	if (TheWindowManager)
+		((Rva00410421Manager *)TheWindowManager)->unregister(m_handle);
 	m_handle = 0;
 }
-
-// ?g_rva00410421Manager@@3PAVRva00410421Manager@@A: the global at this VA is ?TheWindowManager@@3PAVGameWindowManager@@A; this name is an alias for it.
-#pragma comment(linker, "/alternatename:?g_rva00410421Manager@@3PAVRva00410421Manager@@A=?TheWindowManager@@3PAVGameWindowManager@@A")
-// ?g_rva00410421Manager@@3PAVRva00410421Manager@@A: the global at VA 0xdfef1c is ?TheWindowManager@@3PAVGameWindowManager@@A.
-#pragma comment(linker, "/alternatename:?g_rva00410421Manager@@3PAVRva00410421Manager@@A=?TheWindowManager@@3PAVGameWindowManager@@A")

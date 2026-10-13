@@ -414,7 +414,6 @@ Code/GameEngine/Source/Common/Rva00444525Init.cpp	wrong-name	?g_Va00A03354@@3PAU
 Code/GameEngine/Source/Common/Rva00446A77Enable.cpp	wrong-name	?g_Va009FE958@@3PAUGlobal009FE958@@A	0x009FE958
 Code/GameEngine/Source/Common/Rva00446A77Enable.cpp	wrong-name	?g_Va00A03354@@3PAUOuter00446A77@@A	0x00A03354
 Code/GameEngine/Source/Common/Rva0044C205Reset.cpp	wrong-name	?TheRva00222A8BTarget@@3PAVRva00222A8BTarget@@A	0x009FE4CC
-Code/GameEngine/Source/Common/Rva0045EF90Dtor.cpp	wrong-name	?g_rva00410421Manager@@3PAVRva00410421Manager@@A	0x009FEF1C
 Code/GameEngine/Source/Common/Rva004A9660Delay.cpp	wrong-name	?$S1@?1??rva004A9660@Rva004A9660@@QAEIPAVObject@@@Z@4IA	0x00A03CB8
 Code/GameEngine/Source/Common/Rva004ABFD9Copy.cpp	wrong-name	?g_00E03CE0@@3URva00E03CE0@@A	0x00A03CE0
 Code/GameEngine/Source/Common/Rva004ABFD9Dtor.cpp	wrong-name	?g_00E03CE0@@3VRva004ABFB2@@A	0x00A03CE0
