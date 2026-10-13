@@ -45,7 +45,7 @@ public:
 	void AppendDebugMessage(const AsciiString &, bool);
 };
 extern ScriptEngine *TheScriptEngine;
-extern bool g_00E02E34;
+bool g_00E02E34;	// retail RVA 0x00A02E34 (.data, 4 bytes), defined here: nothing else owns it
 
 class ScriptConditions
 {

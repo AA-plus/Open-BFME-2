@@ -38,7 +38,7 @@ struct Elem005DB98E
 };
 
 extern "C" __declspec(dllimport) unsigned long __stdcall timeGetTime(void);
-extern int g_00DD35C4;
+int g_00DD35C4 = 3000;	// retail RVA 0x009D35C4 (.data, 4 bytes), defined here: nothing else owns it
 
 class PortNegotiationSchema
 {

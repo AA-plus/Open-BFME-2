@@ -58,7 +58,7 @@ public:
 	GameSpyGameSlot *getGameSpySlot(int index);
 };
 
-extern GameSpyStagingRoom *g_00E02324;
+GameSpyStagingRoom * g_00E02324;	// retail RVA 0x00A02324 (.data, 4 bytes), defined here: nothing else owns it
 
 class Rva0059F950
 {

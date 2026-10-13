@@ -19,7 +19,7 @@ public:
 	const AsciiString *rva0021C9D7(int key, unsigned int index);
 };
 
-extern void *g_00DFE354;
+void * g_00DFE354;	// retail RVA 0x009FE354 (.data, 4 bytes), defined here: nothing else owns it
 
 const AsciiString *CreateAHeroManager::CreateAHeroSubClass::rva0021C970(int key, unsigned int index)
 {

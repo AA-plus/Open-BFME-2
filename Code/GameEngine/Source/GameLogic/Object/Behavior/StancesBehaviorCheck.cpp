@@ -54,7 +54,7 @@ public:
 	int *rva004260DE(int key);
 };
 
-extern Rva004260DE *g_00E031D4;
+Rva004260DE * g_00E031D4;	// retail RVA 0x00A031D4 (.data, 8 bytes), defined here: nothing else owns it
 
 class StancesBehavior
 {
