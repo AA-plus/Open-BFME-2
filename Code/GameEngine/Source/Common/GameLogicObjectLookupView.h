@@ -49,6 +49,7 @@ public:
 // GameClient::update (0x0023BEE8) reads the byte at +0x125, next to the pause
 // byte isGamePaused (0x0023CD97) returns from +0x124, and skips the drawable,
 // terrain and display updates while it is set.
+struct PlayerLeaveStatus;
 class GameLogic
 {
 	char pad[0x38];
@@ -127,4 +128,5 @@ public:
 	unsigned int getFrame() const { return m_frame; }
 	bool getDrawIconUI() const { return m_drawIconUI; }
 	Rva00439E0C *getManager178() const { return m_manager178; }
+	PlayerLeaveStatus *getPlayerLeaveStatus(int playerIndex); // 0x0023D1E3, verified eight-slot status accessor
 };

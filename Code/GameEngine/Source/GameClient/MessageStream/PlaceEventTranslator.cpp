@@ -317,9 +317,8 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 
 		if (pendingBuild && TheInGameUI->isPlacementAnchored())
 		{
-			// Keep the placement template scoped to the active placement path.
-			// This preserves retail stack slots with the canonical GameLogic API.
-			const ThingTemplate *build = pendingBuild;
+			// Reuse the pending template through the active placement path.
+			// Its native pointer spills remain exact with the shared GameLogic API.
 			GameMessage *placeMsg;
 			PlaceCoord world;
 			float angle;
@@ -330,10 +329,10 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 			TheTacticalView->screenToTerrain(&anchorStart, &world, false);
 
 			Object *builderObj = TheGameLogic->findObjectByID(TheInGameUI->getPendingPlaceSourceObjectID());
-			bool isPort = TheBuildAssistant->isBuildPort(build, builderObj);
+			bool isPort = TheBuildAssistant->isBuildPort(pendingBuild, builderObj);
 
 			// make sure we can still afford and queue it
-			int cmt = TheBuildAssistant->canMakeUnit(builderObj, build, -1);
+			int cmt = TheBuildAssistant->canMakeUnit(builderObj, pendingBuild, -1);
 			if (cmt != 0 && cmt != 1)
 			{
 				if (cmt == 2)
@@ -366,7 +365,7 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 			if (isPort)
 				lbc = 0;
 			else
-				lbc = TheBuildAssistant->isLocationLegalToBuild(&world, build, angle, 0x49F, builderObj, 0);
+				lbc = TheBuildAssistant->isLocationLegalToBuild(&world, pendingBuild, angle, 0x49F, builderObj, 0);
 
 			// the local player may not build over a ghost object it remembers
 			if (builderObj)
@@ -374,7 +373,7 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 				int localIndex = TheGhostObjectManager->m_localPlayerIndex;
 				if (localIndex == builderObj->getControllingPlayer()->getPlayerIndex())
 				{
-					if (((PlacementIntersects)Rva0030596CIntersects)((void *)build, world, angle))
+					if (((PlacementIntersects)Rva0030596CIntersects)((void *)pendingBuild, world, angle))
 						lbc = 8;
 				}
 			}
@@ -388,21 +387,21 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 
 			if (lbc == 0 && !portBlocked)
 			{
-				if (build->m_kindOfByte23 & 0x10)
+				if (pendingBuild->m_kindOfByte23 & 0x10)
 				{
 					PlaceCoord newWorld;
 					float newAngle;
-					TheBuildAssistant->getPortTransform(&world, build, angle, &newAngle, &newWorld);
+					TheBuildAssistant->getPortTransform(&world, pendingBuild, angle, &newAngle, &newWorld);
 					angle = newAngle;
 					world = newWorld;
 				}
 
-				if (TheBuildAssistant->isBuildPort(build, builderObj))
+				if (TheBuildAssistant->isBuildPort(pendingBuild, builderObj))
 				{
 					if (TheInGameUI->canPlacePort())
 					{
 						placeMsg = TheMessageStream->appendMessage(GameMessage::MSG_PORT_CONSTRUCT);
-						placeMsg->appendIntegerArgument(build->m_templateID);
+						placeMsg->appendIntegerArgument(pendingBuild->m_templateID);
 						placeMsg->appendLocationArgument(builderObj->m_position);
 						placeMsg->appendLocationArgument(world);
 						TheInGameUI->clearPlacementPort(false);
@@ -418,7 +417,7 @@ GameMessageDisposition PlaceEventTranslator::translateGameMessage(const GameMess
 				else
 				{
 					placeMsg = TheMessageStream->appendMessage(GameMessage::MSG_DOZER_CONSTRUCT);
-					placeMsg->appendIntegerArgument(build->m_templateID);
+					placeMsg->appendIntegerArgument(pendingBuild->m_templateID);
 					placeMsg->appendLocationArgument(world);
 					placeMsg->appendRealArgument(angle);
 					pickAndPlayUnitVoiceResponse(TheInGameUI->getAllSelectedDrawables(), placeMsg->getType(), 0);
