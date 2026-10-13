@@ -1,5 +1,4 @@
 // ?rva00044018@Rva00044018@@QAEXI@Z
-// partial score=0.996 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /MD
 // Rva00044018::rva00044018, retail 0x00044018 (479 B): the fade/letterbox bar
 // update on the rowed bar painter 0x0004263F (callers at 0x0004A913). While
@@ -9,7 +8,11 @@
 // the flag clear they fade back out to 0 (top bar only) and the flag-off state
 // ends there. Constants are compiler literals (1.0f, 0.001f, 255, 0.5625f,
 // 0.5f); unsigned dimensions convert through x87 as retail does. Names are
-// structural.
+// structural. Semantic donor: BFME1 cee35b7d8ca077d7255f1c39cb69e9fd9627aa85,
+// game/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplay.cpp:1794,
+// W3DDisplay::renderLetterBox. The caller, fields, branches, constants and
+// complete native 44018..441F7 body support that role; original target
+// member spelling is not independently named, so the bank's neutral name stays.
 
 class Rva0004263F
 {
@@ -32,6 +35,15 @@ public:
 	void rva00044018(unsigned int now);
 };
 
+// Retail uses the single-precision 255.0f literal at VA 0x00BC2900 in
+// an x87 multiply before _ftol2. Volatile reference reads prevent VC7.1
+// from replacing that sequence with SSE conversion or a double literal.
+static const volatile float letterboxAlphaScale = 255.0f;
+inline double scaleLetterboxAlpha(const volatile float &progress)
+{
+    return (double)progress * letterboxAlphaScale;
+}
+
 void Rva00044018::rva00044018(unsigned int now)
 {
 	if (m_fadingIn)
@@ -44,7 +56,7 @@ void Rva00044018::rva00044018(unsigned int now)
 			if (f > 1.0f)
 				m_progress = 1.0f;
 		}
-		int alpha = (int)((double)m_progress * 255.0f) << 24;
+		int alpha = (int)scaleLetterboxAlpha(m_progress) << 24;
 		rva0004263F(0.0f, 0.0f, (float)m_width, ((float)m_height - (float)m_width * 0.5625f) * 0.5f, alpha);
 		rva0004263F(0.0f, (float)m_height - ((float)m_height - (float)m_width * 0.5625f) * 0.5f, (float)m_width, (float)m_height, alpha);
 	}
@@ -55,7 +67,7 @@ void Rva00044018::rva00044018(unsigned int now)
 		m_progress = f;
 		if (f < 0.0f)
 			m_progress = 0.0f;
-		rva0004263F(0.0f, 0.0f, (float)m_width, ((float)m_height - (float)m_width * 0.5625f) * 0.5f, (int)((double)m_progress * 255.0f) << 24);
+		rva0004263F(0.0f, 0.0f, (float)m_width, ((float)m_height - (float)m_width * 0.5625f) * 0.5f, (int)scaleLetterboxAlpha(m_progress) << 24);
 	}
 	else
 	{
