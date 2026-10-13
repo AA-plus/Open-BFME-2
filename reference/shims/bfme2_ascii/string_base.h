@@ -132,14 +132,18 @@ private:
     // units' unwind code is emitted (UnicodeFromAscii.cpp), so it is not global.
 #ifdef BFME_STRINGBASE_PUBLIC_DTOR
 public:
-#endif
     ~StringBase()
     {
         validate();
         releaseBuffer();
     }
-#ifdef BFME_STRINGBASE_PUBLIC_DTOR
 private:
+#else
+    ~StringBase()
+    {
+        validate();
+        releaseBuffer();
+    }
 #endif
     void validate() const {}
     T *peek() const
@@ -159,6 +163,14 @@ private:
 
     Header *m_data;
 };
+
+#ifdef BFME_STRINGBASE_PUBLIC_DTOR
+// Retail's ~StringBase<char> is the same function as releaseBuffer (every other unit resolves
+// it by alias), so a unit that defines it out of line contributes a COMDAT copy the link
+// census proves wrong. Declare it here, defined elsewhere, for the char instantiation only.
+template <>
+StringBase<char>::~StringBase();
+#endif
 
 template <typename T>
 bool operator<(const StringBase<T> &left, const StringBase<T> &right);
