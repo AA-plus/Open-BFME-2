@@ -1,4 +1,6 @@
 // ?draw@W3DDisplay@@UAEXXZ
+// partial score=0.92 date=2026-10-13
+// ?draw@W3DDisplay@@UAEXXZ
 // partial score=0.9213 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /ICode/GameEngine/Source/Common
 // stlport
@@ -202,7 +204,7 @@ virtual void slot80();
 virtual void slot81();
 virtual void slot82();
 virtual void takeScreenShot(const char*);
-void draw();void updateAverageFPS();void rva00043FB9();void rva0004826C();void rva0004B31C();void rva00049271();void rva0004AA4A();bool rva0004A462(unsigned);
+virtual void draw();void updateAverageFPS();void rva00043FB9();void rva0004826C();void rva0004B31C();void rva00049271();void rva0004AA4A();bool rva0004A462(unsigned);
 private:
 void rva00045213(char*,unsigned);void rva00047BC0(char*,unsigned,unsigned,const char*);
 public:
