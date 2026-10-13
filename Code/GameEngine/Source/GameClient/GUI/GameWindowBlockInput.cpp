@@ -29,6 +29,11 @@ public:
 	void setLeftMouseButton( bool state );
 	void setDragSelecting( void );
 };
+class UpgradeMux
+{
+public:
+	void rva00452354( bool state );
+};
 
 class View
 {
@@ -202,7 +207,7 @@ WindowMsgHandledType GameWinBlockInput( GameWindow *window, UnsignedInt msg,
 	if (msg == GWM_LEFT_UP)
 	{
 		//stop drag selecting
-		reinterpret_cast<BfmeSelectionTranslator *>( TheSelectionTranslator )->setLeftMouseButton( false );
+		reinterpret_cast<UpgradeMux *>( TheSelectionTranslator )->rva00452354( false );
 		reinterpret_cast<BfmeSelectionTranslator *>( TheSelectionTranslator )->setDragSelecting();
 
 		TheTacticalView->setMouseLock( false );

@@ -20,11 +20,11 @@
 // constructor's BFME2 address; the owned member is modelled as one pointer
 // because that is all the body touches.
 
-class BfmeOwnedMember
+class BfmeMapPictureTexture
 {
 public:
-	BfmeOwnedMember() : m_bfmeData( 0 ) {}
-	~BfmeOwnedMember();
+	BfmeMapPictureTexture() : m_bfmeData( 0 ) {}
+	~BfmeMapPictureTexture();
 	void *m_bfmeData;
 };
 
@@ -36,7 +36,7 @@ public:
 private:
 	Gen001811E0 *bfmeInit( void *source );
 
-	BfmeOwnedMember m_bfmeOwned;
+	BfmeMapPictureTexture m_bfmeOwned;
 };
 
 // ??0Gen001811E0@@QAE@PAX@Z

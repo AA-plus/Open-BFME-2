@@ -134,6 +134,11 @@ private:
 extern GameWindowTransitionsHandler *TheTransitionHandler;
 
 // upstream layout: inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameClient/GameWindowTransitions.h
+class Rva001DBDA4
+{
+public:
+	int rva001DBDA4(void) const;
+};
 class TransitionGroup
 {
 public:
@@ -157,6 +162,6 @@ int GameWindowTransitionsHandler::bfmeGetGroupTotalFrames( AsciiString groupName
 	int totalFrames = 0;
 	TransitionGroup *group = findGroup( groupName );
 	if (group)
-		totalFrames = group->getTotalFrames();
+		totalFrames = ((Rva001DBDA4 *)group)->rva001DBDA4();
 	return totalFrames;
 }
