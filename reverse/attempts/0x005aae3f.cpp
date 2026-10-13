@@ -1,4 +1,6 @@
 // ?roam@AIRoamingDefenseTactic@@QAEXPAVObject@@@Z
+// partial score=0.9401 date=2026-10-13
+// ?roam@AIRoamingDefenseTactic@@QAEXPAVObject@@@Z
 // partial score=0.9401215346010823 date=2026-10-10
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /I. /ICode/Libraries/Include /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
