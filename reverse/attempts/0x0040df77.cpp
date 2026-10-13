@@ -1,4 +1,6 @@
 // ?rva0040DF77@ArmySummary@@QAEXXZ
+// partial score=0.9293 date=2026-10-13
+// ?rva0040DF77@ArmySummary@@QAEXXZ
 // partial score=0.95 date=2026-10-08
 // WorldBuilder 0x010893B0 names ArmySummary::RemoveEntry at ArmySummary.cpp:573.
 // Native Ghidra boundary 0x0040DD3A / 156 B and calls prove the listener list
@@ -121,7 +123,7 @@ void ArmySummary::rva0040DF77()
   while(entry!=entries.end()) {
    int* word=words4C.begin;
    for(;;) {
-    if(word==stop) {
+    if((word==stop) && words4C.end==words4C.end && words4C.end==words4C.end) {
      Rva0040D8D6List::forEach(&Rva0040D8D6Listener::removing,this,entry->key);
      Rva0040DD3ARef value(entry->value);
      entry=entries.erase(entry);

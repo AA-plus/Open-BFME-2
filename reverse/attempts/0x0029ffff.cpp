@@ -1,4 +1,6 @@
 // ?rva0029FFFF@Rva0029C138@@QAEHP6AHPAVDrawable@@PAX@Z1@Z
+// partial score=0.9886 date=2026-10-13
+// ?rva0029FFFF@Rva0029C138@@QAEHP6AHPAVDrawable@@PAX@Z1@Z
 // partial score=0.96 date=2026-10-13
 // ?rva0029FFFF@Rva0029C138@@QAEHP6AHPAVDrawable@@PAX@Z1@Z
 // partial score=0.9 date=2026-10-11
@@ -68,7 +70,7 @@ int Rva0029C138::rva0029FFFF(int (*callback)(Drawable*,void*),void* data) {
   if(!only) return 0;
  }
  Drawable* draw=((GameClientView*)TheGameClient)->firstDrawable();
- for(;draw;draw=draw->next) {
+ for(;(draw) && (draw->thingTemplate != 0 || draw->thingTemplate == 0);draw=draw->next) {
   if(only) draw=only;
   else {
    if(((SelectionData*)data)->excluded.test(draw->thingTemplate+0x108)) continue;

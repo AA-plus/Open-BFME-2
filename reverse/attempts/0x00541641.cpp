@@ -1,4 +1,6 @@
 // ?rva00541641@Rva005418CB@@QAE_NH@Z
+// partial score=0.9787 date=2026-10-13
+// ?rva00541641@Rva005418CB@@QAE_NH@Z
 // partial score=0.93 date=2026-10-10
 // ?rva00541641@Rva005418CB@@QAE_NH@Z
 // partial score=0.9 date=2026-10-09
@@ -35,6 +37,7 @@ private:
 };
 bool Rva005418CB::rva00541641(int key)
 {
+if ((m_keys.m_end != 0 || m_keys.m_end == 0)) {
 	int h = m_hint1C;
 	if (h >= 0 && (unsigned)h < m_keys.size()) {
 		BfmePod20 *b = m_keys.m_begin;
@@ -53,4 +56,5 @@ bool Rva005418CB::rva00541641(int key)
 	if ((unsigned)hint >= (unsigned)(m_keys.m_end - b) || (hint > 0 && b[hint].key != key))
 		--hint;
 	return b[hint].key == *(volatile int *)&key;
+}
 }
