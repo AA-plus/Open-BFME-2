@@ -88,6 +88,12 @@ public:
 	int m_index;
 };
 
+class Weapon
+{
+public:
+	bool rva002CCED3(const Object *victim, const Object *source);
+};
+
 class Object
 {
 	friend class Made002CC971;
@@ -98,6 +104,7 @@ public:
 	Object258Holder *m_258;
 	const Player *getControllingPlayer() const;
 	bool setWeaponLock(WeaponSlotType slot, WeaponLockType lock);
+	Weapon *getCurrentWeapon(WeaponSlotType *slot);
 	friend class Made002CC971;
 };
 
@@ -115,6 +122,7 @@ class Rva00507823
 public:
 	virtual ~Rva00507823();
 	Rva00507823();
+	unsigned char rva005075D6(const void *arg, Object *source);
 private:
 	char m_pad04[0x128 - 4];
 };
@@ -128,6 +136,7 @@ struct Rva0050ACE0Arg
 class Made002CC971 : public Rva00507823
 {
 public:
+	bool rva0050AB37(const Rva0050ACE0Arg *arg, Object *source);
 	void rva0050AC09(Rva0050ACE0Arg *arg, Object *unused);
 	void rva0050ACE0(Rva0050ACE0Arg *arg, const Coord3D *pos);
 };
@@ -185,4 +194,27 @@ void Made002CC971::rva0050AC09(Rva0050ACE0Arg *arg, Object *unused)
 		return;
 	target->setWeaponLock((WeaponSlotType)0, (WeaponLockType)1);
 	holder->m_ai.rva0026C2D9(victim, 1, (CommandSourceType)2);
+}
+
+// Native 0050AB37..0050ABF7, WB 010A7BA0: slot 1 of the same nugget.
+// The descriptor ObjectID is target-proven at +8. The module's +0x20 ID
+// uses the existing folded getter spelling; its original method name is unknown.
+// The local static owns both the name key and its compiler-generated EH guard.
+bool Made002CC971::rva0050AB37(const Rva0050ACE0Arg *arg, Object *source)
+{
+	if (!rva005075D6(arg, source))
+		return false;
+	Object *object = TheGameLogic->findObjectByID(arg->m_id);
+	if (object != 0)
+	{
+		static const NameKeyType key = TheNameKeyGenerator->nameToKey("SlaveWatcherBehavior");
+		Module *module = object->findModule(key);
+		if (module != 0)
+		{
+			Object *slave = TheGameLogic->findObjectByID((ObjectID)((NetWrapperCommandMsg *)module)->getDataLength());
+			if (slave != 0 && slave->getCurrentWeapon(0) != 0)
+				return slave->getCurrentWeapon(0)->rva002CCED3(object, source);
+		}
+	}
+	return true;
 }
