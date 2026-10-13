@@ -1,4 +1,6 @@
 // ?rva002C61AF@Rva002C61AF@@QAEXXZ
+// partial score=0.99 date=2026-10-13
+// ?rva002C61AF@Rva002C61AF@@QAEXXZ
 // partial score=0.97 date=2026-10-04
 // cl: /O1 /EHsc /MD /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
@@ -48,16 +50,13 @@ private:
 // ?rva002C61AF@Rva002C61AF@@QAEXXZ present-unmatched
 void Rva002C61AF::rva002C61AF()
 {
-	delete m_10;
-	m_10 = 0;
-	delete m_0C;
-	m_0C = 0;
-	delete m_1C;
-	m_1C = 0;
+	if (m_10) { delete m_10; m_10 = 0; }
+	if (m_0C) { delete m_0C; m_0C = 0; }
+	if (m_1C != 0) { delete m_1C; m_1C = 0; }
 	void ***vec = (void ***)&m_vecBegin;
 	if (vec[0] != vec[1]) {
 		void **finish = m_vecEnd;
-		for (void **cur = vec[0]; cur != finish; ++cur) {
+		for (void **cur = m_vecBegin; cur != finish; ++cur) {
 			if (*cur)
 				::operator delete(*cur);
 		}

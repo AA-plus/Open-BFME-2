@@ -1,11 +1,12 @@
-// cl: /O1 /DNDEBUG /MD /EHsc
-//
+// cl: /O1 /DNDEBUG /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// stlport
 // AptRadialMenu::Impl (WorldBuilder GameClient/Gui/InGame/AptRadialMenu.cpp).
 // Target facts: PositionButton 0x00577E70 (ret 0xC) and EnableButtonInput
 // 0x00577E94 (ret 8), slots 2 and 3 of the vtable at 0x0086EA28, forward to button i of the Impl's button shell array
 // (+0x44): ButtonShell::EnableInput 0x00577D93 and ButtonShell::Move
 // 0x00577CC5 (WorldBuilder names, pinned), the positions passed by value.
 #include "../../../../../Libraries/Include/Lib/Coord2D.h"
+#include <vector>
 
 // Accessed holder payload: root +4 and StringBase<char> allocation +8.
 // Only those fields are established; node and holder extents remain unknown.
@@ -28,7 +29,8 @@ public:
 	class ButtonShell
 	{
 	public:
-		void EnableInput(bool enable);
+		ButtonShell(Impl *,int);
+        void EnableInput(bool enable);
 		void Move(Coord2D position, Coord2D size);
     private:
         char m_pad00[8];
@@ -40,7 +42,7 @@ public:
 	};
 
 	virtual void vslot0();
-	virtual void vslot1();
+	virtual void Show(int count);
 	virtual void PositionButton(int button, const Coord2D &position, const Coord2D &size);
 	virtual void EnableButtonInput(int button, bool enable);
 
@@ -74,4 +76,37 @@ void AptRadialMenu::Impl::ButtonShell::EnableInput(bool enable)
             payload->root,prefix,"EnableButtonInput",&m_index,&enable);
         m_enabled=requested;
     }
+}
+void *__cdecl operator new(unsigned int) throw();
+struct TargetRef00217D4C;
+void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
+struct Rva00578425Element {
+    AptRadialMenu::Impl::ButtonShell *pointer;
+    Rva00578425Element(AptRadialMenu::Impl::ButtonShell *p) : pointer(p) {
+        if(p) ++*reinterpret_cast<int *>(reinterpret_cast<char *>(p)+4);
+    }
+    ~Rva00578425Element() {
+        if(pointer) ReleaseTreeHintRef00217D4C(reinterpret_cast<TargetRef00217D4C *>(pointer));
+    }
+};
+struct BfmeE12 { char bytes[12]; };
+namespace _STL {
+template <> void vector<BfmeE12>::swap(vector<BfmeE12> &);
+}
+struct Rva00577EB2 : _STL::_Vector_base<unsigned,_STL::allocator<unsigned> > {
+    Rva00577EB2() : _STL::_Vector_base<unsigned,_STL::allocator<unsigned> >(_STL::allocator<unsigned>()) {}
+    ~Rva00577EB2();
+};
+class Rva00577F0FVector { public: void reserve(unsigned); };
+class Rva005C6D4D { public: void secondarySetCount(int); };
+void AptRadialMenu::Impl::Show(int count)
+{
+    Rva00577EB2 temporary;
+    reinterpret_cast<Rva00577F0FVector *>(&temporary)->reserve(count);
+    for(int i=0;i<count;++i) {
+        Rva00578425Element ref(new ButtonShell(this,i));
+        reinterpret_cast<_STL::vector<Rva00578425Element> *>(&temporary)->push_back(ref);
+    }
+    reinterpret_cast<_STL::vector<BfmeE12> *>(&m_buttons)->swap(*reinterpret_cast<_STL::vector<BfmeE12> *>(&temporary));
+    reinterpret_cast<Rva005C6D4D *>(this)->secondarySetCount(count);
 }
