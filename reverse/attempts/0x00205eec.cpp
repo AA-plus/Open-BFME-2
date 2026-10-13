@@ -1,4 +1,6 @@
 // ?setPriorityThing@ScriptEngine@@IAEXPAVScriptAction@@@Z
+// partial score=0.9627680984417227 date=2026-10-13
+// ?setPriorityThing@ScriptEngine@@IAEXPAVScriptAction@@@Z
 // partial score=0.97 date=2026-10-13
 // ?setPriorityThing@ScriptEngine@@IAEXPAVScriptAction@@@Z
 // partial score=0.97 date=2026-10-09
@@ -132,10 +134,8 @@ void ScriptEngine::setPriorityThing(ScriptAction *action)
 		Overridable *thingTemplate = (Overridable *)TheThingFactory->findTemplate(typeArgument);
 		if (!thingTemplate)
 		{
-			{
-				BFMERetailAsciiString message("***Attempting to set attack priority on an invalid thing:***");
-				AppendDebugMessage(*(const AsciiString *)&message, false);
-			}
+			AsciiString message("***Attempting to set attack priority on an invalid thing:***");
+			AppendDebugMessage(message, false);
 			AppendDebugMessage(action->getParameter(0)->getString(), false);
 			return;
 		}
