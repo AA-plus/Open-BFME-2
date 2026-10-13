@@ -2564,34 +2564,7 @@ VideoBuffer* InGameUI::videoBuffer( void )
 // ------------------------------------------------------------------------------------------------
 // InGameUI::playMovie
 // ------------------------------------------------------------------------------------------------
-// ?InGameUI::playCameoMovie present-unmatched
-void InGameUI::playCameoMovie( const AsciiString& movieName )
-{
-
-	stopCameoMovie();
-
-	m_cameoVideoStream = TheVideoPlayer->open( movieName );
-
-	if ( m_cameoVideoStream == NULL )
-	{
-		return;
-	}
-
-	m_cameoVideoBuffer = TheDisplay->createVideoBuffer();
-
-	if (	m_cameoVideoBuffer == NULL || 
-				!m_cameoVideoBuffer->allocate(	m_cameoVideoStream->width(), 
-													m_cameoVideoStream->height())
-		)
-	{
-		stopCameoMovie();
-		return;
-	}
-	GameWindow *window = TheWindowManager->winGetWindowFromId(NULL,TheNameKeyGenerator->nameToKey( AsciiString("ControlBar.wnd:RightHUD") ));
-	WinInstanceData *winData = window->winGetInstanceData();
-	winData->setVideoBuffer(m_cameoVideoBuffer);
-//	window->winHide(FALSE);
-}
+// The playCameoMovie body lives under InGameUIPlayCameoMovie.cpp (retail row); deleted here so the kept copy links.
 
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
@@ -2627,52 +2600,7 @@ VideoBuffer* InGameUI::cameoVideoBuffer( void )
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-void InGameUI::displayCantBuildMessage( LegalBuildCode lbc )
-{
-
-	switch( lbc )
-	{
-
-		//---------------------------------------------------------------------------------------------
-		case LBC_RESTRICTED_TERRAIN:
-			TheInGameUI->message( "GUI:CantBuildRestrictedTerrain" );
-			break;
-
-		//---------------------------------------------------------------------------------------------
-		case LBC_NOT_FLAT_ENOUGH:
-			TheInGameUI->message( "GUI:CantBuildNotFlatEnough" );
-			break;
-
-		//---------------------------------------------------------------------------------------------
-		case LBC_OBJECTS_IN_THE_WAY:
-			TheInGameUI->message( "GUI:CantBuildObjectsInTheWay" );
-			break;
-
-		//---------------------------------------------------------------------------------------------
-		case LBC_TOO_CLOSE_TO_SUPPLIES:
-			TheInGameUI->message( "GUI:CantBuildTooCloseToSupplies" );
-			break;
-
-		//---------------------------------------------------------------------------------------------
-		case LBC_NO_CLEAR_PATH:
-		  TheInGameUI->message( "GUI:CantBuildNoClearPath" );
-			break;
-
-		//---------------------------------------------------------------------------------------------
-		case LBC_SHROUD:
-			TheInGameUI->message( "GUI:CantBuildShroud" );
-			break;
-
-		//---------------------------------------------------------------------------------------------
-		case LBC_GENERIC_FAILURE:
-		default:
-
-			TheInGameUI->message( "GUI:CantBuildThere" );
-			break;
-
-	}  // end switch
-
-}  // end displayCantBuildMessage
+// The displayCantBuildMessage body lives under InGameUIDisplayCantBuild.cpp (retail row); deleted here so the kept copy links.
 
 // ------------------------------------------------------------------------------------------------
 // InGameUI::militarySubtitle
