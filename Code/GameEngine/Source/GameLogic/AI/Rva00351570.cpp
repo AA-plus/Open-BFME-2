@@ -41,9 +41,8 @@ void Rva00351570::rva00351570(const Rva00351570Src &src)
 }
 
 class Team;
-class TeamFactory;
-class Rva0039FE6COwner {
-public: Team *rva003A3E37(const AsciiString &, const AsciiString &);
+class TeamFactory {
+public: Team *findTeam(const AsciiString &, const AsciiString &);
 };
 extern GameLogic *TheGameLogic;
 extern TeamFactory *TheTeamFactory;
@@ -57,7 +56,7 @@ void Rva00351570::rva0035164E(Rva00351570Src &dest) const
  dest.m_08=m_08;
  dest.m_14=reinterpret_cast<Rva00351570_Has74 *>(TheGameLogic->findObjectByID((ObjectID)m_14));
  dest.m_18=reinterpret_cast<Rva00351570_Has74 *>(TheGameLogic->findObjectByID((ObjectID)m_18));
- dest.m_1C=reinterpret_cast<Rva00351570_MidA *>(reinterpret_cast<Rva0039FE6COwner *>(TheTeamFactory)->rva003A3E37(m_1C,m_20));
+ dest.m_1C=reinterpret_cast<Rva00351570_MidA *>(TheTeamFactory->findTeam(m_1C,m_20));
  dest.m_20.rva0035149F(m_24);
  dest.m_2C=m_30;
  dest.m_30=m_34;

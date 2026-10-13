@@ -1,6 +1,8 @@
 // cl: /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
-// ?rva0039F72C@Rva0039FE6COwner@@QAEPAVTeamPrototype@@I@Z @0x0039F72C 53B
+// ?findTeamPrototypeByID@TeamFactory@@QAEPAVTeamPrototype@@I@Z @0x0039F72C 53B
+// Name (donor): Zero Hour TeamFactory::findTeamPrototypeByID, which
+// TeamFactory::xfer calls on load exactly where retail calls this body.
 // TeamFactory prototype map linear find by id. Walks the +0xB0 map from
 // header->left via rowed _M_increment 0x00024250; each node carries the
 // 8-byte key at +0x10 and the TeamPrototype at +0x18 whose +0x0C id is
@@ -51,16 +53,16 @@ struct Rva0039EA4EHeader
 	Rva0039EA4ENode *m_right0C;
 };
 
-class Rva0039FE6COwner
+class TeamFactory
 {
 public:
-	TeamPrototype *rva0039F72C(unsigned int id);
+	TeamPrototype *findTeamPrototypeByID(unsigned int id);
 private:
 	unsigned char m_pad00[0xB0];
 	Rva0039EA4EHeader *m_mapB0;
 };
 
-TeamPrototype *Rva0039FE6COwner::rva0039F72C(unsigned int id)
+TeamPrototype *TeamFactory::findTeamPrototypeByID(unsigned int id)
 {
 	Rva0039EA4ENode *node = (Rva0039EA4ENode *)m_mapB0->m_left08;
 	if (node != (Rva0039EA4ENode *)m_mapB0) {

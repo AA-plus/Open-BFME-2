@@ -5,8 +5,8 @@
 // 3/callgraph): build "team" + the player name, look the team up through the
 // team factory and make it the default team, activating it.
 // Retail callees in order: StringBase<char>::set (0x000055F5),
-// AsciiString::concat (0x00006987), the rowed TeamFactory findTeam shape
-// Rva0039FE6COwner::rva003A3E37 (0x003A3E37, owner name then team name) on
+// AsciiString::concat (0x00006987), the rowed two-name
+// TeamFactory::findTeam (0x003A3E37, owner name then team name) on
 // the global at VA 0x00E028BC, then the AsciiString release (0x00036410).
 // Layout (target-measured): player name +0x4C, default team +0x2EC; the team's
 // active flag +0x5D and created flag +0x5E are both set when it was inactive
@@ -31,14 +31,13 @@ private:
 	bool m_created; // +0x5E
 };
 
-// Address-named team factory receiver of the rowed findTeam shape.
-class Rva0039FE6COwner
+class TeamFactory
 {
 public:
-	Team *rva003A3E37(const AsciiString &owner, const AsciiString &name);
+	Team *findTeam(const AsciiString &owner, const AsciiString &name);
 };
 
-extern class TeamFactory *TheTeamFactory;	// Player.cpp's global, read through this view
+extern TeamFactory *TheTeamFactory;
 
 class Player
 {
@@ -57,7 +56,7 @@ void Player::setDefaultTeam()
 	AsciiString teamName;
 	teamName = "team";
 	teamName.concat(m_playerName);
-	Team *team = ((Rva0039FE6COwner *)TheTeamFactory)->rva003A3E37(m_playerName, teamName);
+	Team *team = TheTeamFactory->findTeam(m_playerName, teamName);
 	if (team)
 	{
 		m_defaultTeam = team;

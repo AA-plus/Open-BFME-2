@@ -103,10 +103,10 @@ public:
 	AsciiString resolveName(const AsciiString &name);
 };
 
-class Rva0039FE6COwner
+class TeamFactory
 {
 public:
-	TeamPrototype *findPrototype(const AsciiString &normalized, const AsciiString &name);
+	TeamPrototype *findTeamPrototype(const AsciiString &normalized, const AsciiString &name);
 };
 
 class Rva002041E1
@@ -115,7 +115,6 @@ public:
 	void rva002041FC(AsciiString s);
 };
 
-class TeamFactory;
 extern TeamFactory *TheTeamFactory;
 
 struct AsciiStringDataLayout
@@ -162,7 +161,7 @@ void ScriptEngine::checkConditionsForTeamNames(Script *pScript, const AsciiStrin
 					continue;
 				AsciiString teamName = ((ScriptAction *)pCond)->getParameter(i)->getString();
 				AsciiString canonical = ((Rva002046C0Owner *)this)->resolveName(teamName);
-				TeamPrototype *proto = ((Rva0039FE6COwner *)TheTeamFactory)->findPrototype(canonical, teamName);
+				TeamPrototype *proto = TheTeamFactory->findTeamPrototype(canonical, teamName);
 				if (proto == 0)
 					continue;
 				Bool singleton = (proto->m_flags & 1) != 0;

@@ -28704,12 +28704,9 @@ pin	reverse/symbols.csv	0x0039F597	1
 pin	reverse/symbols.csv	0x0039F5DC	3
 pin	reverse/symbols.csv	0x0039F5FE	1
 pin	reverse/symbols.csv	0x0039F692	1
-pin	reverse/symbols.csv	0x0039F72C	1
 pin	reverse/symbols.csv	0x0039F761	2
 pin	reverse/symbols.csv	0x0039FD3E	3
 pin	reverse/symbols.csv	0x0039FD75	1
-pin	reverse/symbols.csv	0x0039FE11	1
-pin	reverse/symbols.csv	0x0039FE6C	2
 pin	reverse/symbols.csv	0x003A0CD1	1
 pin	reverse/symbols.csv	0x003A0F62	1
 pin	reverse/symbols.csv	0x003A105B	1
@@ -28741,11 +28738,8 @@ pin	reverse/symbols.csv	0x003A38CD	1
 pin	reverse/symbols.csv	0x003A38E9	1
 pin	reverse/symbols.csv	0x003A398B	1
 pin	reverse/symbols.csv	0x003A39A7	1
-pin	reverse/symbols.csv	0x003A3B7E	2
 pin	reverse/symbols.csv	0x003A3CBB	1
 pin	reverse/symbols.csv	0x003A3DBE	1
-pin	reverse/symbols.csv	0x003A3E37	1
-pin	reverse/symbols.csv	0x003A40F5	1
 pin	reverse/symbols.csv	0x003A439D	1
 pin	reverse/symbols.csv	0x003A44ED	1
 pin	reverse/symbols.csv	0x003A454E	2
@@ -37615,7 +37609,6 @@ present_unmatched	Code/GameEngine/Source/Common/RTS/TeamFactoryCtorThunk_Rva003a
 present_unmatched	Code/GameEngine/Source/Common/RTS/TeamFactoryCtorThunk_Rva003a2943.cpp	1TeamFactory@@UAE@XZ	1
 present_unmatched	Code/GameEngine/Source/Common/RTS/TeamFactoryCtorThunk_Rva003a2943.cpp	addTeamPrototypeToList@TeamFactory@@QAEXPAVTeamPrototype@@@Z	1
 present_unmatched	Code/GameEngine/Source/Common/RTS/TeamFactoryCtorThunk_Rva003a2943.cpp	clear@TeamFactory@@QAEXXZ	1
-present_unmatched	Code/GameEngine/Source/Common/RTS/TeamFactoryList.cpp	TeamFactory::removeTeamPrototypeFromList	1
 present_unmatched	Code/GameEngine/Source/Common/RTS/TeamIterateTeamMemberList.cpp	0?$DLINK_ITERATOR@VObject@@@@QAE@PAVObject@@P81@BEPAV1@XZ@Z	1
 present_unmatched	Code/GameEngine/Source/Common/RTS/UnitRevivalEntryDtor.cpp	UnitRevivalEntry::~UnitRevivalEntry	1
 present_unmatched	Code/GameEngine/Source/Common/Rva00030DD0AddRef.cpp	1Rva00030DD0Lock@@QAE@XZ	1

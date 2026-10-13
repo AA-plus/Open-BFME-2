@@ -1,5 +1,8 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
-// ?findPrototype@Rva0039FE6COwner@@QAEPAVTeamPrototype@@ABVAsciiString@@0@Z @0x0039FE6C 79B
+// ?findTeamPrototype@TeamFactory@@QAEPAVTeamPrototype@@ABVAsciiString@@0@Z @0x0039FE6C 79B
+// Name (donor): BFME 1 calls this two-name TeamFactory::findTeamPrototype
+// overload at the same call sites (donor_sweep pin); owner (target): the
+// TeamFactory map at +0xB0, as in the sibling TeamFactory rows.
 // TeamFactory prototype map find by two name keys. Converts both AsciiStrings
 // via TheNameKeyGenerator then lower_bounds the +0xB0 map through rowed
 // 0x0039EA4E; null when the node is the header, else the TeamPrototype at +0x18.
@@ -45,16 +48,16 @@ public:
 	Rva0039EA4ENode *m_header00;
 };
 
-class Rva0039FE6COwner
+class TeamFactory
 {
 public:
-	TeamPrototype *findPrototype(const AsciiString &a, const AsciiString &b);
+	TeamPrototype *findTeamPrototype(const AsciiString &a, const AsciiString &b);
 private:
 	unsigned char m_pad00[0xB0];
 	Rva0039EA4E m_mapB0;
 };
 
-TeamPrototype *Rva0039FE6COwner::findPrototype(const AsciiString &a, const AsciiString &b)
+TeamPrototype *TeamFactory::findTeamPrototype(const AsciiString &a, const AsciiString &b)
 {
 	int keyB = TheNameKeyGenerator->nameToKey(b);
 	int keyA = TheNameKeyGenerator->nameToKey(a);

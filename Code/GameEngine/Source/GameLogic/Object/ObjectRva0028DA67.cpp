@@ -29,7 +29,7 @@ public:
 class TeamFactory
 {
 public:
-	Team *rva003A40F5(const AsciiString &name);
+	Team *findTeam(const AsciiString &name);
 };
 extern TeamFactory *TheTeamFactory;
 
@@ -81,7 +81,7 @@ void Object::rva0028DAB9()
 	if (testStatus(STATUS_3E))
 	{
 		const AsciiString &teamName = *(const AsciiString *)((const char *)this + 0x308);
-		Team *team = TheTeamFactory->rva003A40F5(teamName);
+		Team *team = TheTeamFactory->findTeam(teamName);
 		if (team != 0)
 			player = team->getControllingPlayer();
 	}

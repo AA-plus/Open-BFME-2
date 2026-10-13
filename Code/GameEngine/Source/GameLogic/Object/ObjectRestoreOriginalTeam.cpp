@@ -26,7 +26,7 @@ class Player
 class TeamFactory
 {
 public:
-	Team *rva003A40F5(const AsciiString &name);
+	Team *findTeam(const AsciiString &name);
 };
 extern TeamFactory *TheTeamFactory;
 
@@ -58,7 +58,7 @@ void Object::restoreOriginalTeam()
 {
 	if (m_team == 0 || m_originalTeamName.isEmpty())
 		return;
-	Team *origTeam = TheTeamFactory->rva003A40F5(m_originalTeamName);
+	Team *origTeam = TheTeamFactory->findTeam(m_originalTeamName);
 	if (origTeam == 0 || m_team == origTeam)
 		return;
 	setTeam(origTeam);

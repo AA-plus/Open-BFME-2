@@ -56,12 +56,7 @@ class TeamFactory
 {
 public:
     Team *findTeamByID(unsigned int id);
-};
-
-class Rva0039FE6COwner
-{
-public:
-    TeamPrototype *findPrototype(const AsciiString &normalized, const AsciiString &name);
+    TeamPrototype *findTeamPrototype(const AsciiString &normalized, const AsciiString &name);
 };
 
 class TeamPrototype
@@ -185,8 +180,8 @@ Team *ScriptEngine::getTeamNamed(AsciiString name, Bool createIfMissing)
             return TheTeamFactory->findTeamByID(node->value);
     }
 
-    Rva0039FE6COwner *factory = (Rva0039FE6COwner *)TheTeamFactory;
-    TeamPrototype *teamPrototype = factory->findPrototype(normalized, name);
+    TeamFactory *factory = TheTeamFactory;
+    TeamPrototype *teamPrototype = factory->findTeamPrototype(normalized, name);
     if (teamPrototype) {
         if (teamPrototype->flags & 1) {
             Team *team = teamPrototype->firstInstance;

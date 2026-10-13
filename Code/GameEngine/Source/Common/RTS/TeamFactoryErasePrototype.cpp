@@ -1,6 +1,8 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
-// ?rva0039FE11@Rva0039FE6COwner@@QAEXABURva003A0CD1@@@Z @0x0039FE11 91B
+// ?removeTeamPrototypeFromList@TeamFactory@@QAEXPAVTeamPrototype@@@Z @0x0039FE11 91B
+// Name (donor): Zero Hour TeamFactory::removeTeamPrototypeFromList; caller
+// TeamPrototype 0x003A0CD1 passes its own this (REL32 0x003A0D03).
 // TeamFactory prototype map erase by two name keys. Converts both AsciiStrings
 // via TheNameKeyGenerator then lower_bounds the +0xB0 map through rowed
 // 0x0039EA4E; erases the node via rowed STL map<int void*> erase 0x005530A8
@@ -55,17 +57,18 @@ struct Rva003A0CD1
 	AsciiString m_b14;
 };
 
-class Rva0039FE6COwner
+class TeamFactory
 {
 public:
-	void rva0039FE11(const Rva003A0CD1 &x);
+	void removeTeamPrototypeFromList(TeamPrototype *tp);
 private:
 	unsigned char m_pad00[0xB0];
 	Rva0039EA4E m_mapB0;
 };
 
-void Rva0039FE6COwner::rva0039FE11(const Rva003A0CD1 &x)
+void TeamFactory::removeTeamPrototypeFromList(TeamPrototype *tp)
 {
+	const Rva003A0CD1 &x = *(const Rva003A0CD1 *)tp;
 	int keyB = TheNameKeyGenerator->nameToKey(x.m_b14);
 	int keyA = TheNameKeyGenerator->nameToKey(x.m_a10);
 	Rva0039D8FBKey key;

@@ -9,7 +9,6 @@
 #include "ascii_string.h"
 
 class TeamPrototype;
-class TeamFactory;
 class BfmeTab1026;
 
 class Rva002046C0Owner
@@ -18,10 +17,10 @@ public:
 	AsciiString resolveName(const AsciiString &name);
 };
 
-class Rva0039FE6COwner
+class TeamFactory
 {
 public:
-	TeamPrototype *findPrototype(const AsciiString &a, const AsciiString &b);
+	TeamPrototype *findTeamPrototype(const AsciiString &a, const AsciiString &b);
 };
 
 extern TeamFactory *TheTeamFactory;
@@ -35,6 +34,6 @@ public:
 TeamPrototype *ScriptEngine::rva003570D1(AsciiString name)
 {
 	AsciiString tmp = ((Rva002046C0Owner *)this)->resolveName(name);
-	TeamPrototype *proto = ((Rva0039FE6COwner *)TheTeamFactory)->findPrototype(tmp, name);
+	TeamPrototype *proto = TheTeamFactory->findTeamPrototype(tmp, name);
 	return proto;
 }

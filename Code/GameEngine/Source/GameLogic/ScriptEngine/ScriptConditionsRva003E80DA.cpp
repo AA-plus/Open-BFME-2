@@ -32,13 +32,10 @@ public:
 };
 extern class ScriptEngine *TheScriptEngine;
 
-class Rva0039FE6COwner
+class TeamFactory
 {
 public:
-	TeamPrototype *findPrototype(const AsciiString &a, const AsciiString &b);
-};
-class TeamFactory : public Rva0039FE6COwner
-{
+	TeamPrototype *findTeamPrototype(const AsciiString &a, const AsciiString &b);
 };
 extern TeamFactory *TheTeamFactory;
 
@@ -90,7 +87,7 @@ bool ScriptConditions::rva003E80DA(Parameter *p0, Parameter *p1)
 {
 	AsciiString s1 = p1->m_string;
 	AsciiString s2 = TheScriptEngine->resolveName(s1);
-	TeamPrototype *proto = TheTeamFactory->findPrototype(s2, s1);
+	TeamPrototype *proto = TheTeamFactory->findTeamPrototype(s2, s1);
 	if (proto == 0)
 		return false;
 	int mask = TheScriptEngine->rva00357B82(p0);

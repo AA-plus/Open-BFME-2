@@ -129,7 +129,7 @@ public:
 class TeamFactory
 {
 public:
-	Team *rva003A40F5(const AsciiString &name);
+	Team *findTeam(const AsciiString &name);
 };
 
 struct AsciiStringVector
@@ -242,7 +242,7 @@ void Rva0046E740::rva0046CF21()
 	}
 	else
 	{
-		Team *team = TheTeamFactory->rva003A40F5(((const Rva0046AA11AsciiField *)obj)->get());
+		Team *team = TheTeamFactory->findTeam(((const Rva0046AA11AsciiField *)obj)->get());
 		if (!team)
 		{
 			bridge->setEnabled(wasEnabled);

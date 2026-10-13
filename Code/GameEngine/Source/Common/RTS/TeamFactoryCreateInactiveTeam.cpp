@@ -47,11 +47,6 @@ class Rva0020D451Engine
 public:
 	void rva0020D451(const AsciiString &scope, void *action, void *script, void *scriptName, Team *team);	// rowed 0x0020D451
 };
-class Rva0039FE6COwner
-{
-public:
-	TeamPrototype *findPrototype(const AsciiString &owner, const AsciiString &name);	// rowed 0x0039FE6C
-};
 class ScriptEngine
 {
 };
@@ -92,6 +87,7 @@ class TeamFactory
 {
 public:
 	Team *createInactiveTeam(const AsciiString &owner, const AsciiString &name);
+	TeamPrototype *findTeamPrototype(const AsciiString &owner, const AsciiString &name);
 
 private:
 	unsigned char m_pad00[0xC0];
@@ -100,7 +96,7 @@ private:
 
 Team *TeamFactory::createInactiveTeam(const AsciiString &owner, const AsciiString &name)
 {
-	TeamPrototype *tp = ((Rva0039FE6COwner *)this)->findPrototype(owner, name);
+	TeamPrototype *tp = findTeamPrototype(owner, name);
 	if (!tp)
 		throw ERROR_BAD_ARG;
 
