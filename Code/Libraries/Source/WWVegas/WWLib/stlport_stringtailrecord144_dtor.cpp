@@ -106,7 +106,9 @@ BfmeStringTailRecord144::~BfmeStringTailRecord144()
 {
 }
 // ??0BfmePoolRef10@@QAE@PAUBfmePoolHolder88@@@Z 0x00051931 31B raw ctor via InterlockedIncrement on holder+0x8c; 2 callers at 0x528A9/0x56A78F; same shape as AudioEventInfoRef ctor at 0x51914 with +0x8c offset
-BfmePoolRef10::BfmePoolRef10(BfmePoolHolder88 *p) : m_target(p)
+// Select-any like every other TU's copy (a strong definition would duplicate theirs at link time);
+// the anchor keeps the noinline body emitted.
+__declspec(noinline) inline BfmePoolRef10::BfmePoolRef10(BfmePoolHolder88 *p) : m_target(p)
 {
     if (m_target)
         InterlockedIncrement((Long *)((char *)m_target + 0x8c));
@@ -125,6 +127,12 @@ __declspec(noinline) inline BfmePoolRef10::BfmePoolRef10(const BfmePoolRef10 &ot
 void *bfmeAnchorBfmePoolRef10Copy(void *where, const BfmePoolRef10 *src)
 {
 	return new (where) BfmePoolRef10(*src);
+}
+
+// ?bfmeAnchorBfmePoolRef10Holder absent-from-retail
+void *bfmeAnchorBfmePoolRef10Holder(void *where, BfmePoolHolder88 *p)
+{
+	return new (where) BfmePoolRef10(p);
 }
 
 // Assignment's verified 0x00051971 provider lives in HostClass005C908B.cpp,
