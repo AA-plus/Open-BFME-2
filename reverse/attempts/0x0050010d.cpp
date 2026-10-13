@@ -1,4 +1,6 @@
 // ?rva0050010D@Rva004FF8DA@@QAE_NHH@Z
+// partial score=0.9804 date=2026-10-13
+// ?rva0050010D@Rva004FF8DA@@QAE_NHH@Z
 // partial score=0.96 date=2026-10-08
 // cl: /D_STLP_USE_MALLOC /O1 /G7 /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -10,6 +12,8 @@
 // layouts or emit competing STL helpers. Both use the rowed int-key _M_find
 // at 00388F63; the random call is the named provider at 00233FF4.
 #define free bfmeUnusedCRTFree
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <cstdlib>
 #undef free
 void free(void *);
@@ -121,12 +125,13 @@ bool Rva004FF8DA::rva0050010D(int idx,int key) {
   ModuleData const **start=v->begin();
  unsigned size=v->end()-start;
   if(size>0) {
-   int chosen=GetGameLogicRandomValue(0,size-1,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\System\\LivingWorld\\LivingWorldAISupport\\LivingWorldAIInformation.cpp",217);
+   volatile int chosen = GetGameLogicRandomValue(0,size-1,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\System\\LivingWorld\\LivingWorldAISupport\\LivingWorldAIInformation.cpp",217);
    int *selected=(int*)&start[chosen];
    idx=((IntPtrTree*)&inner)->count(*selected);
    if((unsigned)idx>0) {
     _STL::pair<_STL::_Rb_tree_iterator<IntPtrPair,_STL::_Const_traits<IntPtrPair> >,_STL::_Rb_tree_iterator<IntPtrPair,_STL::_Const_traits<IntPtrPair> > > range=((IntPtrTree*)&inner)->equal_range(*selected);
     _STL::_Rb_tree_node_base *found=range.first._M_node;
+    _ReadWriteBarrier();
     int steps=GetGameLogicRandomValue(0,idx-1,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\System\\LivingWorld\\LivingWorldAISupport\\LivingWorldAIInformation.cpp",224);
     for(int i=0;i<steps;++i) found=_STL::_Rb_global<bool>::_M_increment(found);
     return true;
