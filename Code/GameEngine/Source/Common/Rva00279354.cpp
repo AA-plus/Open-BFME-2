@@ -1,8 +1,15 @@
 // cl: /MD
+class Rva0036CA00Str
+{
+public:
+	Rva0036CA00Str();
+	~Rva0036CA00Str();
+};
 class Drawable
 {
 public:
 	void rva002743D7();
+	Rva0036CA00Str rva0027824D(int selector);
 };
 class Rva000A8C9B
 {
@@ -40,4 +47,39 @@ void Rva00279354Host::rva00279797(const OpaqueRefElement4 &v)
 	rva00279354(false);
 	*(OpaqueRefElement4 *)((char *)this + 0x10C) = v;
 	((Rva002783F6Host *)this)->rva002783F6(0);
+}
+
+class Rva0027937BInner
+{
+public:
+	virtual int v00();
+	virtual int v04();
+	virtual int v08();
+	virtual int v0C();
+	virtual int v10();
+	virtual int v14();
+	virtual int v18();
+	virtual int v1C();
+	virtual int v20();
+};
+struct Rva0027937BMid
+{
+	unsigned char m_pad[0x254];
+	Rva0027937BInner *m_254;
+};
+class Rva0027937BHost
+{
+public:
+	Rva0036CA00Str rva0027937B();
+private:
+	unsigned char m_pad[0xFC];
+	Rva0027937BMid *m_fc;
+};
+Rva0036CA00Str Rva0027937BHost::rva0027937B()
+{
+	int v = 0;
+	Rva0027937BMid *mid = m_fc;
+	if (mid != 0)
+		v = mid->m_254->v20();
+	return ((Drawable *)this)->rva0027824D(v);
 }
