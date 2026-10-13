@@ -41,6 +41,7 @@ template<> void vector<Rva003F64B2Element>::push_back(const Rva003F64B2Element&)
 // (callgraph 2); ctors renamed from placeholder Rva003F64B2Outer.
 class LivingWorldBattle { public: class BattleSide; };
 class LivingWorldBattle::BattleSide {
+public:
  int key;
  _STL::vector<Rva003F64B2Element> elements;
  _STL::vector<int> words;
