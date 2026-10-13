@@ -1,27 +1,29 @@
 // ?rva004404AC@AptMpGameSetup@@QAEX_NH@Z
-// partial score=0.8 date=2026-10-13
-// Home TU (views/flags): Code/GameEngine/Source/GameClient/GUI/MpGameSetupSlots.cpp; needs its class views + pins 2156/3879 + rowed callees. 513/526B v1, systematic reg rotation.
-// ?rva004404AC@AptMpGameSetup@@QAEX_NH@Z, retail 0x004404AC, 526 bytes.
-// Slot-widget refresh gate: clamp the slot, gate the color combo on
-// observer state, enable handicap/hero/template combos, hide lists,
-// refresh the hero display and push the map-preview flag from an AI search.
-// BFME2 facts (all retail-measured): slot index reuses edi; observer lives
-// in bl with a byte home; the color combo copies by the folded ctor;
-// hero enable uses m_rules.m_00, hide gating uses m_rules.m_04; the tail
-// AI search double-calls getConstSlot like the donor.
+// partial score=0.85 date=2026-10-13
+// ?rva004404AC@AptMpGameSetup@@QAEX_NH@Z
+// partial score=0.85 date=2026-10-13
+// cl: /DBFME_ASCII_DTOR_DECL /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB
+// stlport
+// FRAGMENT for Code/GameEngine/Source/GameClient/GUI/MpGameSetupSlots.cpp (needs its class views).
+// 513/526B. R3: holder lever puts game in EBX (was EDI); this/slot stay EDI/ESI vs retail ESI/EDI (+SIB fallout).
+// observer stays home-al vs retail bl. s-early/s-late tried (one normalizes, one keeps shape). Untried: count-ordering levers.
+
+// Retail 0x004404AC, 526 bytes: slot-widget enable cascade (see bank note).
 void AptMpGameSetup::rva004404AC(bool enable, int slot)
 {
-	GameInfo *game = (GameInfo *)m_game->rva0043DA65();
+	Rva0043DA65 *holder = m_game;
+	GameInfo *game = (GameInfo *)holder->rva0043DA65();
+	int s = slot;
 	bool observer;
 	bool foundAI;
 	if (!game)
 		return;
-	if (slot == -1 || slot >= 8)
-		slot = game->v13();
-	if (slot != -1 && slot < 8)
+	if (s == -1 || s >= 8)
+		s = game->v13();
+	if (s != -1 && s < 8)
 	{
-		observer = game->getConstSlot(slot)->isObserver();
-		MpGameSetupComboRef combo(m_colorCombo[slot]);
+		observer = game->getConstSlot(s)->isObserver();
+		MpGameSetupComboRef combo(m_colorCombo[s]);
 		if (combo.m_window != NULL)
 		{
 			if (observer)
@@ -29,9 +31,9 @@ void AptMpGameSetup::rva004404AC(bool enable, int slot)
 			combo.m_window->winEnable(enable && !observer);
 		}
 	}
-	if (m_handicap[slot] != NULL)
-		m_handicap[slot]->winEnable(enable && !observer);
-	GameWindow *hero = m_hero[slot];
+	if (m_handicap[s] != NULL)
+		m_handicap[s]->winEnable(enable && !observer);
+	GameWindow *hero = m_hero[s];
 	if (hero != NULL)
 	{
 		if (m_rules.m_00 == 1)
@@ -42,14 +44,14 @@ void AptMpGameSetup::rva004404AC(bool enable, int slot)
 			if (Rva00322910(hero) != 0)
 			{
 				GadgetComboBoxSetSelectedPos(hero, 0, 0);
-				HandleHeroSelection(slot);
+				HandleHeroSelection(s);
 			}
 		}
-		UpdateHeroDisplay(slot);
+		UpdateHeroDisplay(s);
 	}
-	if (m_playerTemplate[slot] != NULL)
-		m_playerTemplate[slot]->winEnable(enable);
-	GameWindow **teamCombo = &m_team[slot];
+	if (m_playerTemplate[s] != NULL)
+		m_playerTemplate[s]->winEnable(enable);
+	GameWindow **teamCombo = &m_team[s];
 	if (*teamCombo != NULL)
 	{
 		bool hideDone;
@@ -62,7 +64,7 @@ void AptMpGameSetup::rva004404AC(bool enable, int slot)
 		}
 		(*teamCombo)->winEnable(hideDone);
 	}
-	if (game->v13() == slot)
+	if (game->v13() == s)
 	{
 		if (enable)
 		{
