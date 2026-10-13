@@ -137,6 +137,27 @@ void Rva003BBAD3Set()
 	return ((Rva005B5440 *)g_bfmeSingletonVVD)->clearFlags();
 }
 
+class Rva003BBAD3
+{
+public:
+	void rva003BBAD3();
+};
+
+// ICF-folded twin of Rva003BBAD3Set above (same 99 bytes at 0x003BBAD3):
+// the member spelling ignores its receiver, so with the same globals-only
+// statements it compiles to the identical body, including the tail call.
+void Rva003BBAD3::rva003BBAD3()
+{
+	TheInGameUI->setInputEnabled(false);
+	TheMouse->setVisibility(false);
+	GameMessage *m = TheMessageStream->m18(0x3ec);
+	m->appendBooleanArgument(true);
+	TheInGameUI->s68();
+	((char *)TheInGameUI)[0x8b0] = 0;
+	((Rva00405AA7 *)(*(BfmeWorldRV **)&TheControlBar))->rva00405AA7();
+	return ((Rva005B5440 *)g_bfmeSingletonVVD)->clearFlags();
+}
+
 // ?Rva003BBB36Enable@@YAXXZ @0x003BBB36 27B leaf caller 0x003CBF3E globals TheInGameUI TheMouse callees setInputEnabled setVisibility
 // Evidence: mov ecx,[TheInGameUI] push 1 call setInputEnabled mov ecx,[TheMouse] push 1 call setVisibility ret.
 void Rva003BBB36Enable()
