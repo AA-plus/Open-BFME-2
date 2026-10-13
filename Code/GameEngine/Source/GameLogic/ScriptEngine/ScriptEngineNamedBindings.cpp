@@ -6,6 +6,15 @@
 // mapped dword with Object74/Team34. Their original method names remain
 // unknown; the target containers and field access establish these roles.
 #include <map>
+
+// Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
+namespace _STL {
+template <class T, class LeftTraits, class RightTraits>
+static inline bool operator!=(const _Rb_tree_iterator<T, LeftTraits>& a,
+                              const _Rb_tree_iterator<T, RightTraits>& b)
+{ return a._M_node != b._M_node; }
+}
+
 #include "ascii_string.h"
 typedef _STL::pair<AsciiString, AsciiString> NameKey;
 typedef _STL::pair<const NameKey, int> NameValue;
@@ -39,10 +48,16 @@ private:
     char m_before[0x34];
     int m_id;
 };
+// 0x002046C0 qualifies a name with ScriptEngine's scope at +0x1A10C;
+// its row keeps the owner's address-derived spelling.
+class Rva002046C0Owner
+{
+public:
+    AsciiString resolveName(const AsciiString &name);
+};
 class ScriptEngine
 {
 public:
-    AsciiString rva002046C0(const AsciiString &name);
     void rva00208968(const AsciiString &name, Object *object);
     void rva00208A09(const AsciiString &newName, AsciiString oldName);
     void rva00208B2C(const AsciiString &name, Team *team);
@@ -66,7 +81,7 @@ void ScriptEngine::rva00208A09(const AsciiString &newName, AsciiString oldName)
     if (oldName.isEmpty())
         return;
 
-    AsciiString scope = rva002046C0(oldName);
+    AsciiString scope = ((Rva002046C0Owner *)this)->resolveName(oldName);
     NameKey oldKey(scope, oldName);
     NameMap::iterator it = m_objects.find(oldKey);
     if (it != m_objects.end())
@@ -92,7 +107,7 @@ void ScriptEngine::rva00208BCD(const AsciiString &newName, AsciiString oldName)
     if (oldName.isEmpty())
         return;
 
-    AsciiString scope = rva002046C0(oldName);
+    AsciiString scope = ((Rva002046C0Owner *)this)->resolveName(oldName);
     NameKey oldKey(scope, oldName);
     NameMap::iterator it = m_teams.find(oldKey);
     if (it != m_teams.end())

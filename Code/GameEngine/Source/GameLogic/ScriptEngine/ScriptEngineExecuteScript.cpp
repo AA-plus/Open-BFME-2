@@ -65,11 +65,17 @@ public:
 	}
 };
 
+// 0x002046C0 qualifies a name with ScriptEngine's scope at +0x1A10C;
+// its row keeps the owner's address-derived spelling.
+class Rva002046C0Owner
+{
+public:
+	AsciiString resolveName(const AsciiString &name);
+};
 class ScriptEngine
 {
 public:
 	bool evaluateConditions(Script *pScript, Team *thisTeam, Player *player);
-	AsciiString rva002046C0(const AsciiString &name);	// 0x002046C0, resolveName
 	void executeScript(Script *pScript, const AsciiString &name);
 
 protected:
@@ -144,7 +150,7 @@ void ScriptEngine::executeScript(Script *pScript, const AsciiString &name)
 
 	if (!((const StringBase<char> &)pScript->getConditionTeamName()).isEmpty()) {
 		AsciiString teamName = pScript->getConditionTeamName();
-		AsciiString scopedName = rva002046C0(teamName);
+		AsciiString scopedName = ((Rva002046C0Owner *)this)->resolveName(teamName);
 		pProto = TheTeamFactory->findTeamPrototype(scopedName, teamName);
 	}
 
