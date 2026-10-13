@@ -7740,7 +7740,6 @@ name,address,notes
 ?bfmeAskRV@BfmeMemberRV@@QAE_NXZ,0x002AA231,retail callee at +0xE of the BFME1-donor BfmeThingRV::bfmePickRV (0x002A7E14); unclaimed 20B body
 ?bfmeAssign@BfmeCopySubA@@QAEXPAU1@@Z,0x0006447D,"callee of ?bfmeAssign@BfmeCopyElementA@@QAEPAU1@PAU1@@Z at retail 0x00064605 read from its REL32 displacement; retail body self-checks then counts elements by dividing the span at +0/+4 by 0x24; body unrowed"
 ?bfmeAssign@BfmeCopySubB@@QAEXPAU1@@Z,0x0006454B,"callee of ?bfmeAssign@BfmeCopyElementA@@QAEPAU1@PAU1@@Z at retail 0x00064605 read from its REL32 displacement; retail body self-checks then counts elements from the +0/+4 span and the +8 end by 0x10; body unrowed (same address retail ICF-folds onto ??4?$vector@UFileInfoStruct@MixFileCreator@@)"
-?bfmeAssign@Gen_0092D720@@QAEXPBD@Z,0x0014A230
 ?bfmeAssignESD@BfmeSubESD@@QAEXPAX0PAPAX@Z,0x000120F0
 ?bfmeAssignOT@BfmeThingOT@@QAEXPAD0@Z,0x0001B4E0
 ?bfmeAssignPL@BfmeThingPL@@QAEXPAD0@Z,0x0001B4E0

@@ -75,7 +75,3 @@ LightEnvironmentClass &LightEnvironmentClass::operator=(
 	FillIntensity = that.FillIntensity;
 	return *this;
 }
-
-// Callers elsewhere reach bodies in this unit through other spellings; retail's
-// call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?bfmeAssign@Gen_0092D720@@QAEXPBD@Z=??4LightEnvironmentClass@@QAEAAV0@ABV0@@Z")
