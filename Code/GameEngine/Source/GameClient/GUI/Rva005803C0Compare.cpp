@@ -49,12 +49,12 @@ bool Rva000795C1Record::compareRva005803C0(void *lhs,void *rhs) const {
  for(int pass=0;pass<2;++pass,mode=key->secondarySort) {
   bool descending=(mode&0x10000)==0x10000;
   switch(mode&~0x10000) {
+   case 1:if(names)return descending?names>0:names<0;break;
    case 16:for(int *it=first;it!=last;++it){int value=*it;if(value)return value>0;}break;
+   case 2:if(maps)return descending?maps>0:maps<0;break;
    case 8:if(diff21)return descending?diff21>0:diff21<0;break;
    case 4:if(diff09)return descending?diff09>0:diff09<0;
           if(diff08)return diff08<0;break;
-   case 2:if(maps)return descending?maps>0:maps<0;break;
-   case 1:if(names)return descending?names>0:names<0;break;
   }
  }
  if(names)return names<0;
