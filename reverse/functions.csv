@@ -87858,3 +87858,4 @@ $L2551,,0x0075D34A,8,Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DDispla
 ??0SlaughterHordeContainModuleData@@QAE@XZ,,0x0048104D,136,Code/GameEngine/Source/GameLogic/Object/Contain/SlaughterHordeContainModuleDataCtor.cpp,matched,
 ??0Rva0073F4F3@@QAE@PAX@Z,,0x0073F468,139,Code/GameEngine/Source/Common/Rva0073F4F3Ctor.cpp,matched,
 ?rva004D0E93@Rva004D0E93@@QAEXHHABVUnicodeString@@@Z,,0x004D0E93,148,Code/GameEngine/Source/GameNetwork/Rva004D0E93CommandBuild.cpp,matched,
+?rva002B6D18@Rva002B6D18@@QAE_NHHHH@Z,,0x002B6D18,109,Code/GameEngine/Source/Common/Rva002B6C9F.cpp,matched,

@@ -84,3 +84,38 @@ bool Rva002B6C9F::rva002B8019(int a1, int a2, int a3)
 			(LivingWorldArmy *)a1, (ArmySummaryEntry *)a2, (LivingWorldArmy *)a3, true);
 	}
 }
+
+// ?rva002B6D18@Rva002B6D18@@QAE_NHHHH@Z @0x002B6D18 109B: the army-member
+// swap predicate (WB D90640). Both armies pass the 0x2B2C40 gate; each then
+// passes the 0x2B6BCF movement gate with its arguments mirrored around the
+// other, so the second call takes the first army's cached out-arg. The final
+// room check runs on the army whose cached difference is positive and the
+// check is written as a negated early return, which is what puts the failed
+// path on the fall-through (test al,al / jne trueret / xor al,al). Duplicating
+// the room call in both arms (rather than one shared local) is what makes
+// each arm push its own positive difference, as retail does.
+class Rva002B6D18
+{
+public:
+	bool rva002B6D18(int a1, int a2, int a3, int a4);
+};
+
+bool Rva002B6D18::rva002B6D18(int a1, int a2, int a3, int a4)
+{
+	int y = a3, x = a1;
+	if (!((Rva002B2C40 *)this)->rva002B2C40((Arg54 *)x, (Arg54 *)y))
+		return false;
+	if (!((Rva002B6BCF *)this)->rva002B6BCF(x, a2, y, &a3))
+		return false;
+	if (!((Rva002B6BCF *)this)->rva002B6BCF(y, a4, x, &a1))
+		return false;
+	if (a3 > a1) {
+		if (!((Rva003193EC *)y)->rva003193EC(a3 - a1))
+			return false;
+	}
+	else {
+		if (!((Rva003193EC *)x)->rva003193EC(a1 - a3))
+			return false;
+	}
+	return true;
+}
