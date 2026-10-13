@@ -112,6 +112,9 @@ public:
 	void advance();
 	Bool done() const { return m_cur == 0; }
 	Object *cur() const { return m_cur; }
+	// Retail re-reads the iterator's current object after each callee (the loop test and the
+	// second member call do not share the first load); a volatile view reproduces that.
+	Object *vcur() const { return *(Object * volatile *)&m_cur; }
 };
 
 class MemoryPoolObject
@@ -192,6 +195,15 @@ enum ObjectStatusTypes
 };
 
 // ThingFactory's template lookup (ledger 0x002D06CA, held under this name).
+class UpgradeTemplate;
+
+class UpgradeCenter
+{
+public:
+	const UpgradeTemplate *findUpgrade(const AsciiString &name) const;
+};
+extern UpgradeCenter *TheUpgradeCenter;
+
 class ThingFactory
 {
 public:
@@ -307,6 +319,7 @@ public:
 	ContainModuleInterface *getContain() const { return m_contain; }
 	Bool testStatus(ObjectStatusTypes bit) const;
 	Bool testBit(Int bit) const { return ((const Rva0028D891Owner *)this)->testBit(bit); }
+	Bool rva00290D2B(const UpgradeTemplate *upgrade) const;
 	void *rva0028C197() const;
 	void *rva0028BD92(Int slot);
 	const ThingTemplate *getTemplate() const { return m_template; }
@@ -393,6 +406,7 @@ extern ScriptEngine *TheScriptEngine;
 class ScriptConditions
 {
 protected:
+	Bool rva003E8785(Parameter *playerParm, Parameter *countParm, Parameter *upgradeParm);
 	Bool rva003E85E0(Parameter *playerParm, Parameter *countParm, Parameter *rankParm);
 	Bool rva003E8AA9(Parameter *playerParm);
 	Bool rva003E86A3(Parameter *playerParm, Parameter *countParm, Parameter *modeParm);
@@ -832,4 +846,34 @@ Bool ScriptConditions::rva003E89A9(Parameter *playerParm, Parameter *templatePar
 		}
 	}
 	return false;
+}
+
+Bool ScriptConditions::rva003E8785(Parameter *playerParm, Parameter *countParm, Parameter *upgradeParm)
+{
+	Player *player = ThePlayerList->getPlayerFromMask(TheScriptEngine->rva00357B82(playerParm));
+	if (!player)
+		return false;
+	const UpgradeTemplate *upgrade = TheUpgradeCenter->findUpgrade(*upgradeParm->getString());
+	if (!upgrade)
+		return false;
+	Int count = 0;
+	PlayerTeamNode *head = player->getPlayerTeams();
+	for (PlayerTeamNode *it = head->m_next; it != player->getPlayerTeams(); it = it->m_next)
+	{
+		for (DLINK_ITERATOR<Team> iter = it->m_value->iterate_TeamInstanceList(); !iter.done(); iter.advance())
+		{
+			Team *team = iter.cur();
+			if (!team)
+				continue;
+			for (DLINK_ITERATOR<Object> iter2 = team->iterate_TeamMemberList(); !iter2.done(); iter2.advance())
+			{
+				Object *obj = iter2.vcur();
+				if (!obj)
+					continue;
+				if (!obj->testStatus((ObjectStatusTypes)0x26) && iter2.vcur()->rva00290D2B(upgrade))
+					count++;
+			}
+		}
+	}
+	return (count >= countParm->bfme_getInt_f996b()) ? true : false;
 }
