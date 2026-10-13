@@ -1,6 +1,6 @@
 // cl: /Ob1 /DNDEBUG /MD /EHsc
 //
-// ?BFME2LoadParticleTexture@@YA?AVBFME2ParticleTextureHandle@@PBDHH@Z
+// (renamed from placeholder BFME2LoadParticleTexture)
 // Retail 0x00132D89, 237 bytes. Target disassembly shows a name lookup at
 // 0x0061F230, typed-ref conversion at 0x00131DCB, and, on a miss, a 0x3C-byte
 // allocation/filename ctor at 0x00132D43 followed by Add_Prototype at
@@ -96,7 +96,18 @@ Rva00132D43TextureCtor::Rva00132D43TextureCtor(const char *filename)
 	*(const void **)this = g_00BD2690;
 }
 
-BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(
+// ?Get@TextureAsset@@SA?AVBFME2ParticleTextureHandle@@PBDHH@Z @0x00132D89 237B:
+// renamed from placeholder BFME2LoadParticleTexture — the WorldBuilder twin
+// names TextureAsset::Get at EA's own texture.cpp (callgraph 22); the same
+// recovery pattern as the landed AnimationAsset::Get. The handle-class return
+// spelling is kept (its original name is unproven).
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int option0, int option1);
+};
+
+BFME2ParticleTextureHandle TextureAsset::Get(
 	const char *filename, int option0, int option1)
 {
 	if (!filename)
@@ -122,7 +133,7 @@ BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
 // call sites in their matched rows land on these addresses (same ABI). Bind them.
-#pragma comment(linker, "/alternatename:?bfmeDoBNH@@YAXPAVBfmeThingBNH@@PAXHH@Z=?BFME2LoadParticleTexture@@YA?AVBFME2ParticleTextureHandle@@PBDHH@Z")
+#pragma comment(linker, "/alternatename:?bfmeDoBNH@@YAXPAVBfmeThingBNH@@PAXHH@Z=?Get@TextureAsset@@SA?AVBFME2ParticleTextureHandle@@PBDHH@Z")
 
 // 0x00131DCB..0x00131DFC: typed owning handle starts empty and delegates to
 // the established TEX-tag assignment. Its exception cleanup is the existing
@@ -147,7 +158,6 @@ public:
  bool Open_Chunk(); bool Close_Chunk(); unsigned long Cur_Chunk_ID();
  unsigned long Cur_Chunk_Length(); unsigned long Read(void *, unsigned long);
 };
-extern BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *, int, int);
 bool Render_Obj_Exists(const char *);
 enum WW3DFormat { WW3D_FORMAT_UNKNOWN=0 };
 class W3DRadarFormatCaps {
@@ -222,7 +232,7 @@ keep_name:
     else if(reinterpret_cast<W3DRadarFormatCaps *>(DX8Wrapper::CurrentCaps)->supportTextureFormat((WW3DFormat)62)) format=62;
     else if(reinterpret_cast<W3DRadarFormatCaps *>(DX8Wrapper::CurrentCaps)->supportTextureFormat((WW3DFormat)61)) format=61;
    }
-   BFME2ParticleTextureHandle tex=BFME2LoadParticleTexture(name,mipcount,format);
+   BFME2ParticleTextureHandle tex=TextureAsset::Get(name,mipcount,format);
    if(no_lod) reinterpret_cast<ShroudTexture*>(&tex)->getFilter()->SetMip(0);
    bool u=(texinfo.Attributes&8)!=0;
    ShroudFilter *ufilter=reinterpret_cast<ShroudTexture*>(&tex)->getFilter();
@@ -233,7 +243,7 @@ keep_name:
    return BFME2ParticleTextureHandle(tex.Ptr, BFME2ParticleTextureHandle::ACQUIRE_INLINE);
   } else {
    // The returned ownership is transferred directly by the shared one-pointer ABI.
-   return BFME2LoadParticleTexture(name,0,0);
+   return TextureAsset::Get(name,0,0);
   }
  }
  return BFME2ParticleTextureHandle();
