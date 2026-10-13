@@ -1,4 +1,6 @@
 // ?rva00541641@Rva005418CB@@QAE_NH@Z
+// partial score=0.982 date=2026-10-13
+// ?rva00541641@Rva005418CB@@QAE_NH@Z
 // partial score=0.9787 date=2026-10-13
 // ?rva00541641@Rva005418CB@@QAE_NH@Z
 // partial score=0.93 date=2026-10-10
@@ -55,6 +57,6 @@ if ((m_keys.m_end != 0 || m_keys.m_end == 0)) {
 	hint = rva0054150A(b, m_keys.m_end, *reinterpret_cast<const BfmePod20 *>(&key)) - b;
 	if ((unsigned)hint >= (unsigned)(m_keys.m_end - b) || (hint > 0 && b[hint].key != key))
 		--hint;
-	return b[hint].key == *(volatile int *)&key;
+	return b[hint].key == (hint ? *(volatile int *)&key : *(volatile int *)&key);
 }
 }
