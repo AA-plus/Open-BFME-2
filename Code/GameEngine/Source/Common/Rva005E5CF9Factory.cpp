@@ -1,4 +1,4 @@
-// cl: /EHsc /Oy- /Ob2
+// cl: /EHsc /Oy- /Ob2 /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // ?rva005E5CF9@Rva005E5CF9@@QAE?AURvaF1Handle@@H@Z, retail 0x005E5CF9 (84B).
 // Factory method returning RvaF1Handle by value: allocates 0x28 bytes, runs
 // rowed ??0Rva005F589E@@QAE@HPAX@Z with (int arg, this+8), null-checked AddRef
@@ -171,14 +171,12 @@ RvaF1Handle Rva005CEB03::rva005CEB03(unsigned int argument)
 // ?rva005FB243@Rva005FB243@@QAE?AURvaF1Handle@@HH@Z, retail 0x005FB243 (87B): the same factory shape with two
 // opaque int arguments and the rowed constructor Rva005FF13A (0x005FF0F6); its context argument is receiver+8.
 // Target evidence: retail body and the constructor's REL32 read byte for byte; names are address-derived.
-struct Rva005FEF11Input;
-// class-gate: allow Rva005FF13A proved codegen view: opaque 0x28-byte storage view of the shared BattlePromptArmyPanelView.h class, which needs STLport flags this unit lacks (only its constructor is called)
-class Rva005FF13A
-{
-	char m_pad[0x28];
-public:
-	Rva005FF13A(int first, int second, const Rva005FEF11Input **context);
-};
+// The canonical panel preserves the native 40-byte allocation and existing
+// three-argument constructor at 005FF0F6. Its verified base/clip/vector layout
+// replaces the private storage-only class; the factory/result names stay opaque.
+// stlport
+#include "BattlePromptArmyPanelView.h"
+typedef char FactoryPanelSizeProof[(sizeof(Rva005FF13A) == 0x28) ? 1 : -1];
 struct Rva005FB243
 {
 	char m_prefix[8];
