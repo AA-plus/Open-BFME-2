@@ -44,6 +44,7 @@ class Rva006F7C10
 {
 public:
 	void rva006F7C10();
+	void rva006E2640();
 
 private:
 	Rva006F7C10Holder *m00;
@@ -73,4 +74,31 @@ void Rva006F7C10::rva006F7C10()
 		g_pChainBlockAllocator->freeBlock(node, 0x14);
 		node = next;
 	} while (node != 0);
+}
+
+// Retail 0x006E2640 (74 B): clear the pooled list (0x006F7C10), then release
+// the head record m00 itself the same way the clear releases each node: zero
+// its fields, return its 0x1C data block and then the 0x14 record to
+// g_pChainBlockAllocator. Name address-derived.
+void Rva006F7C10::rva006E2640()
+{
+	rva006F7C10();
+	Rva006F7C10Node *node = (Rva006F7C10Node *)m00;
+	if (node != 0)
+	{
+		Rva006F7C10Data *data = node->m04;
+		_ReadWriteBarrier();
+		node->m00 = 0;
+		node->m08 = 0;
+		node->m0C = 0;
+		if (data != 0)
+		{
+			data->m00 = 0;
+			data->m04 = 0;
+			data->m08 = 0;
+			g_pChainBlockAllocator->freeBlock(data, 0x1C);
+			node->m04 = 0;
+		}
+		g_pChainBlockAllocator->freeBlock(node, 0x14);
+	}
 }
