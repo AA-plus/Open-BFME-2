@@ -1,4 +1,6 @@
 // ?register_callback@ios_base@_STL@@QAEXP6AXW4event@12@AAV12@H@ZH@Z
+// partial score=0.977 date=2026-10-13
+// ?register_callback@ios_base@_STL@@QAEXP6AXW4event@12@AAV12@H@ZH@Z
 // partial score=0.98 date=2026-10-09
 // cl: /Ob0 /MD
 // STLport 4.5.3 ios_base::register_callback (src/ios.cpp), retail 0x0001C090,
@@ -75,7 +77,7 @@ void ios_base::register_callback(event_callback fn, int index)
 {
 	GrowPair<Callback> grown;
 	grow_array(&grown, m_callbacks, m_num_callbacks, m_callback_index);
-	if (grown.first != 0)
+	if (grown.first)
 	{
 		GrowPair<Callback> tmp = grown;
 		m_num_callbacks = tmp.second;
@@ -88,7 +90,7 @@ void ios_base::register_callback(event_callback fn, int index)
 	}
 
 	m_iostate |= 1;
-	if ((m_iostate & m_exception_mask) != 0)
+	if (m_iostate & m_exception_mask)
 		fputs("ios failure", &_iob[2]);
 }
 

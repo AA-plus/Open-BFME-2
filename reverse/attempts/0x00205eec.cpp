@@ -1,4 +1,6 @@
 // ?setPriorityThing@ScriptEngine@@IAEXPAVScriptAction@@@Z
+// partial score=0.97 date=2026-10-13
+// ?setPriorityThing@ScriptEngine@@IAEXPAVScriptAction@@@Z
 // partial score=0.97 date=2026-10-09
 // cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
 //
@@ -80,13 +82,14 @@ private:
 	AsciiString *m_capacity;
 };
 
-// ThingFactory's template lookup (ledger 0x002D06CA, held under this name).
-class Rva002D06CA
+// ThingFactory's template lookup (ledger 0x002D06CA, rowed ThingFactory::findTemplate).
+class ThingTemplate;
+class ThingFactory
 {
 public:
-	void *rva002D06CA(const AsciiString *name);
+	const ThingTemplate *findTemplate(const AsciiString &name);
 };
-extern Rva002D06CA *TheThingFactory;
+extern ThingFactory *TheThingFactory;
 
 // Image/Overridable are the placeholder row's spelling of (template, priority).
 class Overridable;
@@ -126,7 +129,7 @@ void ScriptEngine::setPriorityThing(ScriptAction *action)
 	ObjectTypes *types = TheScriptEngine->getObjectTypes(typeArgument);
 	if (!types)
 	{
-		Overridable *thingTemplate = (Overridable *)TheThingFactory->rva002D06CA(&typeArgument);
+		Overridable *thingTemplate = (Overridable *)TheThingFactory->findTemplate(typeArgument);
 		if (!thingTemplate)
 		{
 			{
@@ -152,7 +155,7 @@ void ScriptEngine::setPriorityThing(ScriptAction *action)
 		for (unsigned int typeIndex = 0; typeIndex < types->getListSize(); typeIndex++)
 		{
 			AsciiString thisTypeName = ((const Rva002041AC *)types)->rva002041AC(typeIndex);
-			Overridable *thisType = (Overridable *)TheThingFactory->rva002D06CA(&thisTypeName);
+			Overridable *thisType = (Overridable *)TheThingFactory->findTemplate(thisTypeName);
 			if (!thisType)
 			{
 				{
