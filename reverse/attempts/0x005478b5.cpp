@@ -1,4 +1,6 @@
 // ?rva005478B5@MoveToGroupOrder@@UAEXW4ObjectID@@@Z
+// partial score=0.95 date=2026-10-13
+// ?rva005478B5@MoveToGroupOrder@@UAEXW4ObjectID@@@Z
 // partial score=0.9 date=2026-10-09
 // cl: /Ob2 /O1 /G7 /arch:SSE /MD /GX /DNDEBUG /DWIN32 /D_WINDOWS /ICode/Libraries/Include/Lib /I.
 //
@@ -76,6 +78,9 @@ private:
 class MoveToGroupOrder : public GroupOrder
 {
 public:
+	Coord3D *rva005476C8(ObjectID);
+
+public:
 	MoveToGroupOrder(const MoveToGroupOrder &other);
 
 	virtual void slot07Set(int unused);
@@ -85,7 +90,6 @@ public:
 	virtual GroupOrder *clone();
 	bool rva00547188(Object *obj, int dummy);
  void rva0054764C(Object*,AIUpdateInterface*,Coord3D*);
- Coord3D *rva005476C8(ObjectID);
  virtual void rva005478B5(ObjectID);
 
 private:
@@ -118,96 +122,6 @@ private:
 	ObjectCoord3DMap m_map30;            // +0x30 hash_map<ObjectID, Coord3D>
 	bool m_flag44;                     // +0x44
 };
-
-void MoveToGroupOrder::slot07Set(int)
-{
-	m_flag24 = true;
-}
-
-Coord3D *MoveToGroupOrder::getDestination(int)
-{
-	return &m_destination;
-}
-
-bool MoveToGroupOrder::isNearDestination(const Coord3D *pos)
-{
-	float dx = pos->x - m_destination.x;
-	float dy = pos->y - m_destination.y;
-	return dy * dy + dx * dx < 200.0f;
-}
-
-bool MoveToGroupOrder::slot11Command(int *outType, GroupOrderCommand *command)
-{
-	if (m_flag24)
-		*outType = 0x430;
-	else
-		*outType = m_flag25 ? 0x442 : 0x42F;
-	command->m_position = m_destination;
-	return true;
-}
-
-GroupOrder *MoveToGroupOrder::clone()
-{
-	return new MoveToGroupOrder(*this);
-}
-
-// ?rva00547188@MoveToGroupOrder@@QAE_NPAVObject@@H@Z, retail 0x00547188 21B.
-// MoveTo destination check used by 0x0054764C: passes &m_destination (+0x18)
-// to the rowed predicate at 0x0028ECDB and normalises to bool. Evidence: this+0x18
-// Coord3D plus caller 0x0054764C layout (+0x18/+0x24) matches MoveToGroupOrder.
-bool MoveToGroupOrder::rva00547188(Object *obj, int)
-{
-	unsigned char tmp = reinterpret_cast<Rva0028ECDBHost *>(obj)->rva0028ECDB(&m_destination);
-	return tmp;
-}
-
-void MoveToFormationGroupOrder::slot07Set(int)
-{
-	m_flag2C = true;
-}
-
-Coord3D *MoveToFormationGroupOrder::getDestination(int)
-{
-	return &m_destination;
-}
-
-bool MoveToFormationGroupOrder::isNearDestination(const Coord3D *pos)
-{
-	float dx = pos->x - m_destination.x;
-	float dy = pos->y - m_destination.y;
-	return dy * dy + dx * dx < 200.0f;
-}
-
-bool MoveToFormationGroupOrder::slot11Command(int *outType, GroupOrderCommand *command)
-{
-	*outType = 0x464;
-	command->m_position = m_destination;
-	return true;
-}
-
-GroupOrder *MoveToFormationGroupOrder::clone()
-{
-	return new MoveToFormationGroupOrder(*this);
-}
-
-// Native00547F37..00547F88 RET4, slot4 of MoveToFormationGroupOrder
-// vtable00C6A4CC installed by the matched constructor. The established map
-// at30 holds ObjectID/Coord3D; count40 controls lazy population307B547CB6.
-// Lookup then GameLogic49DC5 supplies the Object to219B547E5C, which reads
-// the mapped three-float position and configures the object's AI/movement.
-void MoveToFormationGroupOrder::rva00547F37(ObjectID id)
-{
-    if (m_map30.empty())
-        rva00547CB6();
-    ObjectCoord3DMap *map = &m_map30;
-    ObjectCoord3DMap::const_iterator it = map->find(id);
-    if (it != map->end()) {
-        Object *object = TheGameLogic->findObjectByID(id);
-        if (object)
-            rva00547E5C(object, &it->second);
-    }
-}
-
 enum CommandSourceType {CMD_FROM_PLAYER=0};
 class Rva00352F9D {public:void rva0035300B(const void*,const Coord3D&,CommandSourceType);};
 class AIUpdateInterface {public:char prefix[0x20];Rva00352F9D commands;};
@@ -220,12 +134,11 @@ template __declspec(noinline) _Hashtable_node<P>* hashtable<P,ObjectID,rts::hash
 }
 void MoveToGroupOrder::rva005478B5(ObjectID id)
 {
+ Coord3D local;
  ObjectCoord3DMap *map=reinterpret_cast<ObjectCoord3DMap*>(m_map28);
  ObjectCoord3DMap::const_iterator it=map->find(id);
- const Coord3D *position;
- if(it==map->end())position=rva005476C8(id);
- else position=&it->second;
- Coord3D local=*position;
+ const Coord3D *position = (it == map->end()) ? rva005476C8(id) : &it->second;
+ local=*position;
  Object *object=TheGameLogic->findObjectByID(id);
  if(object && !object->rva002931BA()) {
   AIUpdateInterface *ai=object->ai;
