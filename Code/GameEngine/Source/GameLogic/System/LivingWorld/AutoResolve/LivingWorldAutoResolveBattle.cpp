@@ -145,7 +145,10 @@ public:
  unsigned unknown30;
 };
 struct BfmePod52 {int a[13];};
-struct Rva004F6986 {char bytes[8];};
+struct Rva004F6057 {TargetRef00217D4C *m_ptr;Rva004F6057 &operator=(const Rva004F6057 &);};
+class Rva002BED91 {public:void set(TargetRef00217D4C*);};
+struct Rva004F6986 {Rva004F6057 first,second;Rva004F6986(){first.m_ptr=0;second.m_ptr=0;} ~Rva004F6986();};
+
 class ModuleData;
 typedef _STL::vector<BfmePod52> PlayerCopy;
 typedef _STL::vector<Rva004F6986> PairReserve;
@@ -242,7 +245,7 @@ class LivingWorldAutoResolveResourceBonusSchedule {public:int *getBonusForResour
 struct Rva004F68B8Entry {char pad[0x1C];int amount;};
 struct Rva004FA1F3Player {
  _STL::map<int,ArmySummary*> reinforcements;
- EntryVector entries; int unknown18[3];
+ EntryVector entries; float attack,defense,experience;
  LivingWorldAutoResolveResourceBonusSchedule *schedule;
  Rva004F5FD8 *bonusInput;
  int side,unknown30;
@@ -264,6 +267,7 @@ public:
  LivingWorldAutoResolveBattle(const PlayerStorage&);
  void rva004F9C8E(TreeHintRef00217D4C *,int);
  void rva004F68B8(unsigned,bool);
+ void rva004F99CC(bool*);
  void buildReinforcementMaps();
  void completeRound();
  void addUnitsForCurrentRound(int);
@@ -457,4 +461,104 @@ LivingWorldAutoResolveBattle::LivingWorldAutoResolveBattle(const PlayerStorage&i
  ((PairReserve*)&combined)->reserve(total);
  buildReinforcementMaps();addUnitsForCurrentRound(1);
  winner=-1;((Rva004F6187*)this)->rva004F61B1();
+}
+
+
+// Native 004F99CC..004F9C8E, 706B, RET4; WB12EDBC0 at this source home.
+// The caller4FA10F repeatedly selects targets then executes this attack pass
+// until the output ready flag stays true. Player/target ownership and all
+// accessed offsets are established by the native calls and WB graph.
+// The original method spelling remains unknown. Both raw bytes/relocations
+// and the complete EH graph are exact, including the eight-byte death pair.
+// Keep the pointer local and short-circuit condition: MSVC removes the
+// redundant pure getter test but retains the native EAX/ECX allocation and
+// attacker-stride spill order. A named bool adds SETNE/TEST (five bytes);
+// the bare pointer test swaps EAX/ECX. This is a code-generation adaptation,
+// not a claim that WorldBuilder originally declared this pointer local.
+class Rva0059AE94 {public:bool rva0059AE94();};
+class Rva0059AEFF {public:int rva0059AEFF();};
+class Rva0059ADF4 {public:void rva0059ADF4(int);};
+class Rva002B254F {public:int rva002B254F();};
+class LivingWorldLogic; extern LivingWorldLogic *TheLivingWorldLogic;
+class Rva00380200 {public:bool rva003805BB(float,bool);};
+class ThingTemplate {public:void *getCurrentLivingWorldAutoResolveWeapon(const void*) const;};
+class Rva004194D6 {public:float rva00419561(int,float,float,int);};
+class Rva00427157 {public:float rva004270FA(int);};
+class Rva0033A9A5 {public:const Rva00427157 *rva0033A9A5(const void*);};
+class Rva0033A65E {public:void *rva0033A65E();};
+class LivingWorldAutoResolveBodyTemplate {public:float getHitpointsForLevel(int);};
+int GetGameLogicRandomValue(int,int,char*,int);
+struct Rva004F99CCEntry {char opaque00[0xC];int level;int mask[4];char opaque20[0x78];int kills,combatKills;};
+struct Rva004F99CCThing {char opaque00[0x5C4];int targetType; int getTargetType() const {return targetType;} };
+struct Rva004F99CCBonus {char opaque00[0xC];float attack,experience,defense;};
+struct Rva004F99CCUnit;
+struct Rva004F99CCUnitRef {Rva004F99CCUnit *value; Rva004F99CCUnit *operator->() const {return value;} operator bool()const{return value!=0;} };
+struct Rva004F99CCUnit {
+ void *vptr;int references;Rva004F99CCEntry *entry;float health,totalHealth;int opaque14;bool acted;char opaque19[3];Rva004F99CCBonus *bonus;
+ Rva004F99CCUnitRef target;void *opaque24,*opaque28;Rva004F99CCThing *thing;unsigned player;
+ __forceinline Rva004F99CCBonus *getBonus() const {return bonus;}
+ int getLevel() const {const Rva004F99CCEntry &record=*entry;return record.level;}
+ float getTotalHealth() const {const float &health=totalHealth;return health;}
+};
+struct Rva004F99CCPlayer {char opaque00[0x18];float attack,defense,experience;char opaque24[0x10];};
+struct Rva004F99CCSideBonus {char opaque00[4];float attack,defense;};
+struct Rva004F93B0Element {int a[2];};
+namespace _STL {template<> void vector<Rva004F93B0Element>::push_back(const Rva004F93B0Element &);}
+
+void LivingWorldAutoResolveBattle::rva004F99CC(bool *allActed)
+{
+ *allActed=true;
+ Rva004F87BCElement **ends=&currentUnits[0].finish;
+ int sides=2;
+ do {
+  Rva004F87BCElement *last=*ends;
+  for(Rva004F87BCElement *position=*reinterpret_cast<Rva004F87BCElement **>(reinterpret_cast<char *>(ends)-4);position!=last;++position) {
+   Rva004F99CCUnit *unit=reinterpret_cast<Rva004F99CCUnit *>(position->m_ptr);
+   if(!reinterpret_cast<Rva0059AE94 *>(unit)->rva0059AE94() || !unit->target)continue;
+   if(unit->target->health<=0.0f){*allActed=false;continue;}
+   Rva004F99CCUnitRef *target=&unit->target;
+   Rva004194D6 *weapon=reinterpret_cast<Rva004194D6 *>(reinterpret_cast<ThingTemplate *>(unit->thing)->getCurrentLivingWorldAutoResolveWeapon(unit->entry->mask));
+   if(!static_cast<unsigned char>(reinterpret_cast<Rva002B254F *>(TheLivingWorldLogic)->rva002B254F())) {
+    int missChance=reinterpret_cast<int *>(weapon)[4];
+    if(GetGameLogicRandomValue(1,100,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\System\\LivingWorld\\AutoResolve\\LivingWorldAutoResolveBattle.cpp",817)<=missChance)goto acted;
+   }
+   {
+    const Rva00427157 *armor=reinterpret_cast<Rva0033A9A5 *>((*target)->thing)->rva0033A9A5((*target)->entry->mask);
+    float baseDamage=weapon->rva00419561(unit->getLevel(),unit->getTotalHealth(),reinterpret_cast<LivingWorldAutoResolveBodyTemplate *>(reinterpret_cast<Rva0033A65E *>(unit->thing)->rva0033A65E())->getHitpointsForLevel(unit->getLevel()),(*target)->thing->getTargetType());
+    unsigned attacker=unit->player;
+    unsigned defender=(*target)->player;
+    float attack=1.0f;
+    if(unit->bonus)attack=unit->bonus->attack;
+    float armorFactor=const_cast<Rva00427157 *>(armor)->rva004270FA(unit->thing->targetType);
+    float defense=1.0f;
+    Rva004F99CCBonus *present=(*target)->getBonus();
+    if(present && (*target)->getBonus())
+     defense=(*target)->getBonus()->defense;
+    _STL::vector<Rva004F99CCSideBonus *> &sideBonus=*reinterpret_cast<_STL::vector<Rva004F99CCSideBonus *> *>(reinterpret_cast<char*>(this)+0x54);
+    float attackerBonus=1.0f;
+    if(sideBonus[attacker])attackerBonus=sideBonus[attacker]->attack;
+    float defenderBonus=1.0f;
+    if(sideBonus[defender])defenderBonus=sideBonus[defender]->defense;
+    float damage=baseDamage*players[attacker].attack*attack*attackerBonus*players[defender].defense*armorFactor*defense*defenderBonus;
+    (*target)->health-=damage;
+    if((*target)->health<=0.0f) {
+     float experience=(float)reinterpret_cast<Rva0059AEFF *>(target->value)->rva0059AEFF();
+     experience*=players[attacker].experience;
+     _STL::vector<Rva00380200 *> &skills=*reinterpret_cast<_STL::vector<Rva00380200 *> *>(reinterpret_cast<char*>(this)+0x48);
+     if(skills[attacker])skills[attacker]->rva003805BB(experience,true);
+     if(unit->bonus)experience*=unit->bonus->experience;
+     reinterpret_cast<Rva0059ADF4 *>(unit)->rva0059ADF4(static_cast<int>(experience));
+     Rva004F6986 death;
+     reinterpret_cast<Rva002BED91 *>(&death.first)->set(reinterpret_cast<TargetRef00217D4C *>(unit));
+     death.second=*reinterpret_cast<Rva004F6057 *>(target);
+     reinterpret_cast<_STL::vector<Rva004F93B0Element> *>(reinterpret_cast<char *>(this)+0x3C)->push_back(*reinterpret_cast<const Rva004F93B0Element *>(&death));
+     Rva004F99CCEntry *entry=unit->entry;
+     ++entry->combatKills;
+     ++entry->kills;
+    }
+   }
+   acted:unit->acted=true;
+  }
+  ends=reinterpret_cast<Rva004F87BCElement **>(reinterpret_cast<char *>(ends)+12);
+ }while(--sides);
 }

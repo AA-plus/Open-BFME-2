@@ -10,6 +10,7 @@ class LivingWorldAutoResolveBattle
 {
 public:
 	void addUnitsForCurrentRound(int v);
+	void rva004F99CC(bool *out);
 };
 
 class Rva004F6187
@@ -28,12 +29,6 @@ class Rva004F971E
 {
 public:
 	void rva004F971E();
-};
-
-class Rva004F99CC
-{
-public:
-	void rva004F99CC(bool *out);
 };
 
 class Rva004F9D6A
@@ -77,7 +72,7 @@ void Rva004FA10FOwner::rva004FA10F()
 	do
 	{
 		((Rva004F971E *)this)->rva004F971E();
-		((Rva004F99CC *)this)->rva004F99CC(&ready);
+		((LivingWorldAutoResolveBattle *)this)->rva004F99CC(&ready);
 	} while (!ready);
 	((Rva004F9D6A *)this)->rva004F9D6A();
 	((Rva004F9E59 *)this)->rva004F9E59();
