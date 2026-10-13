@@ -263,13 +263,15 @@ GameSlot* GameInfo::getSlot( Int slotNum )
 	return m_slot[slotNum];
 }
 
+// Retail 0x003FF2BE reads slots at +0x18; the donor header places them at +0x14.
+// Keep this proven target view local; other donor fields are not reconciled here.
 const GameSlot* GameInfo::getConstSlot( Int slotNum ) const
 {
 	DEBUG_ASSERTCRASH( slotNum >= 0 && slotNum < MAX_SLOTS, ("GameInfo::getSlot - Invalid slot number"));
 	if (slotNum < 0 || slotNum >= MAX_SLOTS)
 		return NULL;
 
-	return m_slot[slotNum];
+	return reinterpret_cast<GameSlot *const *>(reinterpret_cast<const char *>(this) + 0x18)[slotNum];
 }
 
 // GameInfo::getLocalSlotNum is defined with its retail-matched body in Code/GameEngine/Source/GameNetwork/GameSlotApparent.cpp (0x003FF2D6).
