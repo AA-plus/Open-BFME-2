@@ -24,14 +24,19 @@ void __cdecl operator delete(void *) throw();
 void __cdecl operator delete[](void *) throw();
 
 #include "always.h"
+// Retail's RefCountClass inline copies are the size form: compile refcount.h for size.
+#pragma optimize("s", on)
 #include "refcount.h"
+#pragma optimize("", on)
 #include "wwstring.h"
 #include "vector.h"
 #include <windows.h>
 
 // Only the destructor of the +0x450 STLport tree is called here (out of line,
 // 0x0093FA90), so the tree is a shell reproducing the ledger's decorated name.
-struct Gen_t_0093fa90_p4pod
+// The element is the record StlSweepR3Rva00156FA0.cpp names for the rowed tree destructor
+// (0x00156FA0); only its name enters the decorated name.
+struct Rva00156FA0Record
 {
 	char m_body[4];
 };
@@ -53,7 +58,7 @@ private:
 };
 }
 
-typedef _STL::pair<const int, Gen_t_0093fa90_p4pod> FontCharsTree00940010Pair;
+typedef _STL::pair<const int, Rva00156FA0Record> FontCharsTree00940010Pair;
 typedef _STL::_Rb_tree<int, FontCharsTree00940010Pair, _STL::_Select1st<FontCharsTree00940010Pair>,
 	_STL::less<int>, _STL::allocator<FontCharsTree00940010Pair> > FontCharsTree00940010;
 

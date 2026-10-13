@@ -1090,18 +1090,8 @@ Vector2	Render2DSentenceClass::Build_Sentence_Not_Centered (const WCHAR *text, i
 //	~FontCharsClass
 //
 ////////////////////////////////////////////////////////////////////////////////////
-// ??1FontCharsClass@@UAE@XZ present-unmatched
-FontCharsClass::~FontCharsClass (void) 
-{
-	while ( BufferList.Count() ) {
-		delete [] BufferList[0];
-		BufferList.Delete(0);
-	}
-
-	Free_GDI_Font();
-	Free_Character_Arrays();
-	return ;
-}
+// BFME 2's body is the row 0x00157390 in FontCharsClassDestructorBFME.cpp; Zero Hour's copy here
+// duplicated it and was the definition the link kept.
 
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -1300,6 +1290,17 @@ FontCharsClass::Store_GDI_Char (WCHAR ch)
 // rowed DynamicVectorClass<FontCharsBuffer*>::Add (0x001A3A60); this anchor
 // keeps emitting it. It is not retail code.
 void bfmeEmitFontCharsBufferAdd(DynamicVectorClass<FontCharsBuffer *> *v, FontCharsBuffer *b) { v->Add(b); }
+
+// ?bfmeEmitFontCharsBufferTeardown@@YAXPAV?$DynamicVectorClass@PAVFontCharsBuffer@@@@@Z present-unmatched
+// Emit-anchor: the deleted ~FontCharsClass duplicate was the only referrer of the rowed
+// DynamicVectorClass<FontCharsBuffer*>::Delete and, through the vector destructor, the
+// VectorClass<FontCharsBuffer*> ID / operator== slots; this keeps emitting them. It is not
+// retail code.
+void bfmeEmitFontCharsBufferTeardown(DynamicVectorClass<FontCharsBuffer *> *v)
+{
+	v->Delete(0);
+	v->DynamicVectorClass<FontCharsBuffer *>::~DynamicVectorClass();
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////
