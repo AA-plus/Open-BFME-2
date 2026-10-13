@@ -1,8 +1,13 @@
-// ?rva0059DF60@Rva0059E242@@UAEXXZ
-// partial score=0.93421 date=2026-10-13
-// ?rva0059DF60@Rva0059E242@@UAEXXZ
-// partial score=0.93421 date=2026-10-12
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
+// stlport
+//
+// ?rva0059DF60@Rva0059E242@@UAEXXZ @0x0059DF60 (155B): play the stored 3D audio
+// event: when the event source (+0x14) carries a sound at +0x10, build the audio
+// event at the stored position (+0x18/+0x1C/+0x20), attach the sequence handle
+// when +0x38 is set, post it through TheAudio, then run 0x005391A9.
+// The equal-arm receiver on the event argument keeps cl from sharing the
+// &source->m_10 address with the earlier null test (retail tests [eax+0x10]
+// directly and adds 0x10 only for the push); W7-S2 r4 receiver-chain generator.
 #include "Common/BfmeAudioEventPrefix136.h"
 
 struct Rva0059DF60EventSource { char pad[0x10]; OpaqueRefElement4 m_10,m_14; };
@@ -42,7 +47,7 @@ void Rva0059E242::rva0059DF60()
         position.x = m_18;
         position.y = m_1c;
         position.z = m_20;
-        BfmeAudioEventPrefix136 event(m_14->m_10, position, 1);
+        BfmeAudioEventPrefix136 event((m_14 ? m_14 : m_14)->m_10, position, 1);
         if (m_38 != 0)
             event.m_int70 = m_38->m_1c->m_13c;
         reinterpret_cast<Rva0059DF60AudioView *>(TheAudio)->addAudioEvent(&event);
