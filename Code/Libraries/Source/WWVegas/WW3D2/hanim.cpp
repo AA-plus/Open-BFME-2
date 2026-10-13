@@ -387,19 +387,8 @@ void	HAnimComboClass::Set_Motion( int index, HAnimClass *motion )
 	data->Set_HAnim(motion);
 }
 
-// ?HAnimComboClass::Get_Motion present-unmatched
-HAnimClass *HAnimComboClass::Get_Motion( int index )
-{
-	HAnimComboDataClass *data = HAnimComboData[index];
-	WWASSERT(data);
-
-	HAnimClass *anim = data->Peek_HAnim();
-
-	if ( anim != NULL ) {
-		anim->Add_Ref();
-	}
-	return anim;
-}
+// Get_Motion is defined in HAnimComboClassGetMotion.cpp: its /G7 build
+// matches retail's ADD refcount increment; this unit needs INC for Set_HAnim.
 
 // ?HAnimComboClass::Peek_Motion present-unmatched
 HAnimClass *HAnimComboClass::Peek_Motion( int index )
@@ -456,14 +445,7 @@ void	HAnimComboClass::Set_Pivot_Weight_Map( int index, PivotMapClass *map )
 	data->Set_Pivot_Map(map);
 }
 
-// ?HAnimComboClass::Get_Pivot_Weight_Map present-unmatched
-PivotMapClass	*HAnimComboClass::Get_Pivot_Weight_Map( int index )
-{
-	HAnimComboDataClass *data = HAnimComboData[index];
-	WWASSERT(data);
-
-	return data->Get_Pivot_Map();
-}
+// Get_Pivot_Weight_Map has the same /G7 provider as Get_Motion.
 
 // ?HAnimComboClass::Peek_Pivot_Weight_Map present-unmatched
 PivotMapClass	*HAnimComboClass::Peek_Pivot_Weight_Map( int index )
@@ -483,5 +465,4 @@ void HAnimComboClass::Remove_Anim_Combo_Data(HAnimComboDataClass * Data)
 {
 	HAnimComboData.Delete(Data);
 }
-
 
