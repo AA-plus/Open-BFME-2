@@ -56,6 +56,8 @@ protected:
 		const AsciiString &scriptName, int loopVal);
 	void rva003C20CA(const AsciiString &reference, Parameter *team, bool byName);
 	void rva003C606C(Parameter *playerParam, bool flag);
+	void rva003C0D6A(const AsciiString &unitName, int which, bool on);
+	void rva003C0D90(const AsciiString &teamName, int which, bool on);
 	void rva003C0E87(const AsciiString &unitName, int value);
 	void doUnitStartSequentialScript(const AsciiString &unitName,
 		const AsciiString &scriptName, int loopVal);
@@ -301,7 +303,16 @@ public:
 	ObjectID m_objectID;
 	unsigned char m_pad78[0x88 - 0x78];
 	AsciiString m_name;
-	unsigned char m_pad8C[0x250 - 0x8C];
+	unsigned char m_pad8C[0x80];
+	class ModelConditionFlags {
+	public:
+		unsigned int test(unsigned int bit) const { return m_words[bit >> 5] & (1U << (bit & 0x1f)); }
+		void set(unsigned int bit) { m_words[bit >> 5] |= 1U << (bit & 0x1f); }
+		void clear(unsigned int bit) { m_words[bit >> 5] &= ~(1U << (bit & 0x1f)); }
+	private:
+		unsigned int m_words[19];
+	} m_modelConditionFlags;
+	unsigned char m_pad158[0x250 - 0x158];
 	class ScriptActionsContainView *m_contain;
 	unsigned char m_pad254[0x438 - 0x254];
 	unsigned char m_privateStatus;
@@ -321,6 +332,19 @@ public:
 	int getNightIndicatorColor() const;
 	void rva0028BAC0();
 	void rva0028DCC4();
+	void rva0028AE6D();
+	__forceinline void setModelConditionState(unsigned int bit) {
+		if (m_modelConditionFlags.test(bit) == 0) {
+			m_modelConditionFlags.set(bit);
+			rva0028AE6D();
+		}
+	}
+	__forceinline void clearModelConditionState(unsigned int bit) {
+		if (m_modelConditionFlags.test(bit) != 0) {
+			m_modelConditionFlags.clear(bit);
+			rva0028AE6D();
+		}
+	}
 protected:
 	friend class ScriptActions;
 	class Module *findModule(enum NameKeyType key) const;
@@ -1018,4 +1042,49 @@ extern RadarWindowOverrideSource *theRadarWindowOverrideSource;
 void ScriptActions::doEnablePlanningMode(unsigned char enable)
 {
 	((Palantir *)theRadarWindowOverrideSource)->SetPlanningModeEnabled(enable);
+}
+
+static __declspec(noinline) void rva003C0CEE(Object *obj, int which, bool on)
+{
+	unsigned int bit;
+	switch (which) {
+	case 1:
+		bit = 0xB8;
+		break;
+	case 2:
+		bit = 0xB9;
+		break;
+	case 3:
+		bit = 0xBA;
+		break;
+	case 4:
+		bit = 0xBB;
+		break;
+	default:
+		bit = 0xB8;
+		break;
+	}
+	if (on)
+		obj->setModelConditionState(bit);
+	else
+		obj->clearModelConditionState(bit);
+}
+
+void ScriptActions::rva003C0D6A(const AsciiString &unitName, int which, bool on)
+{
+	Object *obj = TheScriptEngine->getUnitNamed(unitName);
+	if (obj)
+		rva003C0CEE(obj, which, on);
+}
+
+void ScriptActions::rva003C0D90(const AsciiString &teamName, int which, bool on)
+{
+	Team *team = TheScriptEngine->getTeamNamed(teamName, false);
+	if (!team)
+		return;
+	for (DLINK_ITERATOR<Object> iter = team->iterate_TeamMemberList(); !iter.done(); iter.advance()) {
+		Object *obj = iter.cur();
+		if (obj)
+			rva003C0CEE(obj, which, on);
+	}
 }
