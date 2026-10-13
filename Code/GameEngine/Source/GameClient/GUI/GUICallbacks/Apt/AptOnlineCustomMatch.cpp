@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE
+// cl: /D_STLP_USE_STATIC_LIB /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /arch:SSE
 // stlport
 // AptOnlineCustomMatch.cpp -- AptOnlineCustomMatch members recovered from
 // WorldBuilder leads (reverse/wb_name_leads.csv): WB's debug build names the
@@ -65,21 +65,32 @@ public:
 
 extern GameSpyInfoInterface *TheGameSpyInfo;		// 0x00E02320
 
+struct CustomMatchOwner { char beforeMovie[0x274]; void *movie; };
 class AptOnlineCustomMatch
 {
 public:
+ virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
+ virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7();
+ virtual void slot8(); virtual void slot9(); virtual const char *slotAptPath();
+ void PopulateGamesListBox();
 	static void GamesListTooltipFunc(GameWindow *, WinInstanceData *, unsigned int);
 	int rva0059F496(GameSpyStagingRoom *);
 	void MpOwnerGetLocalPlayerName(UnicodeString &name);
 	GameSpyStagingRoom *GetGameToJoin();
 
 private:
-	unsigned char m_pad000[0xec];
+ unsigned char m_pad004[0x58-4];
+ CustomMatchOwner *owner58;
+ unsigned char m_pad05c[0xec-0x5c];
  int mode;
- unsigned char m_pad0f0[0x48c-0xf0];
+ unsigned char m_pad0f0[0x320-0xf0];
+ int savedGame;
+ unsigned char m_pad324[0x450-0x324];
+ unsigned char gameList[0x48c-0x450];
  GameWindow *list;
  unsigned char m_pad490[0x4b8-0x490];
 	Int m_gameToJoinID;				// +0x4B8
+ char pad4bc[4]; bool joinEnabled;
 };
 
 // AptOnlineCustomMatch::MpOwnerGetLocalPlayerName, retail 0x0059EBAF.
@@ -204,11 +215,11 @@ class GameSpyStagingRoom{public:
  virtual void v28();virtual void v2c();virtual void v30();virtual void v34();virtual void v38();virtual void v3c();virtual void v40();virtual void v44();virtual void v48();virtual void v4c();virtual void v50();
  virtual int ping();virtual UnicodeString title();
  void cleanUpSlotPointers();
- char beforeRules[0x60-4];int rules[10];char beforeVersionBlock[0x90-0x88];int versionBlock[12];int version,build;char beforeId[0xfe0-0xc8];int id;char beforeLocked[0xfec-0xfe4];bool locked;
+ char beforeType[0x5c-4];int type;int rules[10];char beforeVersionBlock[0x90-0x88];int versionBlock[12];int version,build;char beforeId[0xfe0-0xc8];int id;char beforeLocked[0xfec-0xfe4];bool locked;
 };
 class MapMetaData{public:UnicodeString bfme_getBaseDisplayName();char beforeOfficial[0x26];bool official;};
 class AptMapPreview{public:MapMetaData*rva0057D922(const AsciiString&);};
-class AptMpGameSetup{public:const Image*rva0043E512(int);};
+class AptMpGameSetup{public:const Image*rva0043E512(int);void rva0043FA68(GameInfo *);};
 class ImageCollection{public:const Image*findImageByName(const AsciiString&);};extern ImageCollection*TheMappedImageCollection;
 static __forceinline bool hasWide(const UnicodeString&name){const unsigned short*p=name.str();int n=name.getLength();for(int i=0;i<n;++i)if(p[i]>=256)return true;return false;}
 int AptOnlineCustomMatch::rva0059F496(GameSpyStagingRoom*game)
@@ -247,4 +258,105 @@ int AptOnlineCustomMatch::rva0059F496(GameSpyStagingRoom*game)
  const Image*pingImage=((AptMpGameSetup*)((char*)this+0x70))->rva0043E512(Rva005DB335Get(game->ping()));
  GadgetListBoxAddEntryImage(list,pingImage,row,6,20,20,true,-1);const int gameId=game->id;GadgetListBoxSetItemData(list,(void *)gameId,row,3);
  return row;
+}
+
+// Native 005A061B..005A0808 (493B); WorldBuilder callgraph lead names this list-rebuild method.
+// Receiver reads 320/450/48C/4C0, room type5C and IDFE0, plus virtual20/24
+// are target facts. The owner movie274 and Apt path slot28 feed the common
+// enable/disable call. Both capacity outcomes inspect the same join byte;
+// spelling the explicit full-game branch lets cl share its address before JE.
+void GadgetListBoxGetSelected(GameWindow *, int *);
+int GadgetListBoxGetTopVisibleEntry(GameWindow *);
+void GadgetListBoxReset(GameWindow *);
+void GadgetListBoxSetSelected(GameWindow *, int);
+void GadgetListBoxSetTopVisibleEntry(GameWindow *, int);
+class ModuleData;
+class Rva00601941 { public: void rva00601941(); };
+class Rva00580B40 { public: void rva00580B40(const ModuleData *); };
+class LANGameInfo;
+class Rva0058113D { public: LANGameInfo *rva0058113D(unsigned int); };
+class Rva0043DB66ByteOneSetter { public: void enable(); };
+class GameWindowManager {
+public:
+#define W(n) virtual void slot##n();
+ W(0) W(1) W(2) W(3) W(4) W(5) W(6) W(7) W(8) W(9)
+ W(10) W(11) W(12) W(13) W(14) W(15) W(16) W(17) W(18) W(19)
+ W(20) W(21) W(22) W(23) W(24) W(25) W(26) W(27) W(28) W(29)
+ W(30) W(31) W(32) W(33) W(34) W(35) W(36) W(37) W(38) W(39)
+ W(40) W(41) W(42) W(43) W(44) W(45) W(46) W(47) W(48) W(49) W(50) W(51)
+#undef W
+ virtual void slotD0(GameWindow *);
+};
+extern GameWindowManager *TheWindowManager;
+class Rva00222A8BTarget;
+extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
+int Rva00524EF4AptCall(Rva00222A8BTarget *, void *, const char *, const char *);
+void AptOnlineCustomMatch::PopulateGamesListBox()
+{
+    if (!list || savedGame)
+        return;
+    int selected = -1;
+    int newSelected = -1;
+    int gameID = 0;
+    GadgetListBoxGetSelected(list, &selected);
+    if (selected != -1)
+        gameID = (int)GadgetListBoxGetItemData(list, selected, 3);
+    int top = GadgetListBoxGetTopVisibleEntry(list);
+    GadgetListBoxReset(list);
+    ((Rva00601941 *)gameList)->rva00601941();
+    StagingRoomMap *rooms = TheGameSpyInfo->getStagingRoomList();
+    for (StagingRoomMap::iterator it = rooms->begin(); it._M_node != rooms->end()._M_node; ++it) {
+        GameSpyStagingRoom *room = it->second;
+        if (!room || mode != room->type)
+            continue;
+        ((Rva00580B40 *)gameList)->rva00580B40((const ModuleData *)room);
+    }
+    unsigned int index = 0;
+    GameSpyStagingRoom *room;
+    while ((room = (GameSpyStagingRoom *)((Rva0058113D *)gameList)->rva0058113D(index)) != 0) {
+        int row = rva0059F496(room);
+        if (room->id == gameID) {
+            newSelected = row;
+            ((AptMpGameSetup *)((char *)this + 0x70))->rva0043FA68((GameInfo *)room);
+        }
+        ++index;
+    }
+    GadgetListBoxSetSelected(list, newSelected);
+    GadgetListBoxSetTopVisibleEntry(list, top);
+    if (newSelected < 0) {
+        if (gameID != 0) TheWindowManager->slotD0(0);
+        ((AptMpGameSetup *)((char *)this + 0x70))->rva0043FA68(0);
+    } else {
+        StagingRoomMap *selectedRooms=TheGameSpyInfo->getStagingRoomList();
+        int id=(int)GadgetListBoxGetItemData(list,newSelected,3);
+        StagingRoomMap::iterator found=selectedRooms->find(id);
+        if(found._M_node!=selectedRooms->end()._M_node) {
+            GameSpyStagingRoom *game=found->second;
+            int maximum=game->maximumPlayers();
+            if(game->players()!=maximum) {
+                if(joinEnabled)goto finish;
+                joinEnabled=true;
+                {
+                void *movie=owner58->movie;
+                Rva00524EF4AptCall((Rva00222A8BTarget *)g_bfmeAptWindowManager,movie,slotAptPath(),"EnableButtonJoinGame");
+                }
+                goto finish;
+            } else {
+                if(joinEnabled) {
+                    joinEnabled=false;
+                    void *movie=owner58->movie;
+                    Rva00524EF4AptCall((Rva00222A8BTarget *)g_bfmeAptWindowManager,movie,slotAptPath(),"DisableButtonJoinGame");
+                }
+                goto finish;
+            }
+        }
+    }
+    if(!joinEnabled)goto finish;
+    joinEnabled=false;
+    {
+    void *movie=owner58->movie;
+    Rva00524EF4AptCall((Rva00222A8BTarget *)g_bfmeAptWindowManager,movie,slotAptPath(),"DisableButtonJoinGame");
+    }
+finish:
+    ((Rva0043DB66ByteOneSetter *)((char *)this + 0x70))->enable();
 }
