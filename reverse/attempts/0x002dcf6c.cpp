@@ -1,4 +1,6 @@
 // ?rva002DCF6C@GameState@@QAEXPAVSnapshot@@I@Z
+// partial score=0.985 date=2026-10-13
+// ?rva002DCF6C@GameState@@QAEXPAVSnapshot@@I@Z
 // partial score=0.995 date=2026-10-13
 // ?rva002DCF6C@GameState@@QAEXPAVSnapshot@@I@Z
 // partial score=0.983367198838897 date=2026-10-10
@@ -39,6 +41,9 @@ void GameState::rva002DCF6C(Snapshot *snapshot,unsigned sequence)
   m_post.push_back(postCopy);
  }
  BfmeSpecialPowerTimer8 record;
- record.m_templateID=(unsigned)snapshot;record.m_readyFrame=sequence;
- m_marks.push_back(record);
+ BfmeSpecialPowerTimer8 *rp = &record;
+ rp->m_templateID = (unsigned)snapshot;
+ rp->m_readyFrame = sequence;
+ _STL::list<BfmeSpecialPowerTimer8> *mp = &m_marks;
+ mp->push_back(*rp);
 }
