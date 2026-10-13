@@ -49,7 +49,7 @@
 //    the goal's AI slot 106 says 2, needs the owner's horde (contain slot
 //    31) and the goal's exit interface (contain slot 29), waits while it is
 //    busy, reserves a door and exits the owner with the +0x20 byte copied to
-//    g_00E03624 around the call; when horde slot 62 holds, a still-contained
+//    BfmeAIExitDoorFlag around the call; when horde slot 62 holds, a still-contained
 //    owner exits once more.
 //  - AIHordeEnterState::update, retail 0x003419C7 (84 bytes): slot 6 of
 //    0x00C11410. With an owner, a goal and the owner's horde interface:
@@ -377,7 +377,7 @@ protected:
 	StateMachine *m_machine; // +0x18
 };
 
-extern Bool g_00E03624;
+extern Bool BfmeAIExitDoorFlag;
 
 class AIHordeExitState : public State
 {
@@ -578,9 +578,9 @@ StateReturnType AIHordeExitState::update()
 	int exitDoor = exitInterface->reserveDoorForExit(owner->getTemplate(), owner);
 	if (exitDoor == -1)
 		return STATE_FAILURE;
-	g_00E03624 = m_20;
+	BfmeAIExitDoorFlag = m_20;
 	exitInterface->exitObjectViaDoor(owner, exitDoor);
-	g_00E03624 = false;
+	BfmeAIExitDoorFlag = false;
 	if (!horde->rva003463A0Slot62())
 	{
 		if (owner->getContainedBy())
@@ -588,9 +588,9 @@ StateReturnType AIHordeExitState::update()
 	}
 	else if (owner->getContainedBy())
 	{
-		g_00E03624 = m_20;
+		BfmeAIExitDoorFlag = m_20;
 		exitInterface->exitObjectViaDoor(owner, exitDoor);
-		g_00E03624 = false;
+		BfmeAIExitDoorFlag = false;
 	}
 	return STATE_SUCCESS;
 }

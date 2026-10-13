@@ -1043,7 +1043,7 @@ void Rva0031A9F2::rva0031A9F2(Rva0031A9F2 **head)
 // --- 0x00328A6B (10B, cdecl): sets the word at VA 0x00DBD0F0;
 // 0x0033F9AA (10B, cdecl): sets the AI flag byte at VA 0x00E03624.
 extern int g_Va00DBD0F0;
-extern bool g_00E03624;
+extern bool BfmeAIExitDoorFlag;
 
 void Rva00328A6B(int value)
 {
@@ -1052,7 +1052,7 @@ void Rva00328A6B(int value)
 
 void Rva0033F9AA(bool value)
 {
-	g_00E03624 = value;
+	BfmeAIExitDoorFlag = value;
 }
 
 // --- 0x003297B3 (17B): swaps the first word with another's;

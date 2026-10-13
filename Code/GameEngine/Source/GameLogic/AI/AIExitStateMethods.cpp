@@ -145,7 +145,10 @@ inline StateID StateMachine::getCurrentStateID() const
 {
 	return m_currentState ? m_currentState->m_ID : INVALID_STATE_ID;
 }
-extern Bool g_00E03624;
+// Shared one-byte flag at retail VA 0x00E03624. Exit states publish their
+// saved flag around exitObjectViaDoor and clear it afterwards. The retail
+// .data zero-fill and byte operands prove bool storage; original name unknown.
+Bool BfmeAIExitDoorFlag = false;
 class GameLogic
 {
 public:
@@ -227,9 +230,9 @@ StateReturnType AIExitState::update()
 		if (exitDoor == DOOR_NONE_AVAILABLE)
 			return STATE_FAILURE;
 
-		g_00E03624 = m_bfmeFlag24;
+		BfmeAIExitDoorFlag = m_bfmeFlag24;
 		goalExitInterface->exitObjectViaDoor(obj, exitDoor);
-		g_00E03624 = false;
+		BfmeAIExitDoorFlag = false;
 		if( getMachine()->getCurrentStateID() != getID() )
 			return STATE_CONTINUE;// Not sucess, because exitViaDoor has changed us to FollowPath, and if we say Success, our machine will think FollowPath succeeded
 		else
