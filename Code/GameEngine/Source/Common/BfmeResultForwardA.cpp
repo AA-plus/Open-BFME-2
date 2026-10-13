@@ -8,16 +8,16 @@ struct BfmeResultA
 	~BfmeResultA();
 };
 
-class BfmeResultSourceA
+class PartitionManagerImpl
 {
 public:
-	BfmeResultA bfmeMakeResultA(int value);
+	BfmeResultA GetAllObjects(int value);
 };
 
 class BfmeResultForwardA
 {
 	char m_pad[0x10];
-	BfmeResultSourceA *m_source;
+	PartitionManagerImpl *m_source;
 
 public:
 	BfmeResultA bfmeForwardResultA();
@@ -28,7 +28,7 @@ public:
 class BfmeResultForwardB
 {
 	char m_pad[0x10];
-	BfmeResultSourceA *m_source;
+	PartitionManagerImpl *m_source;
 
 public:
 	BfmeResultA bfmeForwardResultB(int value);
@@ -36,10 +36,10 @@ public:
 
 BfmeResultA BfmeResultForwardA::bfmeForwardResultA()
 {
-	return m_source->bfmeMakeResultA(0);
+	return m_source->GetAllObjects(0);
 }
 
 BfmeResultA BfmeResultForwardB::bfmeForwardResultB(int value)
 {
-	return m_source->bfmeMakeResultA(value);
+	return m_source->GetAllObjects(value);
 }

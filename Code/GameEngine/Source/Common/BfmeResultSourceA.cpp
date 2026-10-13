@@ -76,16 +76,21 @@ struct BfmeResultA : private Rva009F39F0Result
 	}
 };
 
-class BfmeResultSourceA
+class PartitionManagerImpl
 {
 	unsigned char m_bfmePadding[0x114];
 	BfmeResultNode *m_bfmeHead;
 
 public:
-	BfmeResultA bfmeMakeResultA(int value);
+	// ?GetAllObjects@PartitionManagerImpl@@QAE?AUBfmeResultA@@H@Z @0x00628980 209B:
+	// renamed from placeholder BfmeResultSourceA::bfmeMakeResultA — the
+	// WorldBuilder twin names PartitionManagerImpl::GetAllObjects at EA's own
+	// partitionmanager_impl.cpp (callgraph 2; the class is corroborated by the
+	// landed DoSmallFill/DoRectFill/_ClearNumObjBelow siblings).
+	BfmeResultA GetAllObjects(int value);
 };
 
-BfmeResultA BfmeResultSourceA::bfmeMakeResultA(int value)
+BfmeResultA PartitionManagerImpl::GetAllObjects(int value)
 {
 	BfmeResultA result;
 	BfmeResultNode *node = m_bfmeHead;
