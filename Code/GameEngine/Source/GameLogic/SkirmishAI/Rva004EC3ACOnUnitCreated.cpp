@@ -1,17 +1,10 @@
-// ?onUnitCreated@AIBuilder@@QAEXPAVObject@@0_N@Z
-// partial score=0.7618 date=2026-10-13
-// ?onUnitCreated@AIBuilder@@QAEXPAVObject@@0_N@Z
-// partial score=0.85 date=2026-10-08
 // cl: /G7 /O1 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /I.
 // stlport
-// WB1370CA0 names AIBuilder::DoXfer; native4EC1D9..4EC276 is157B RET4.
-// Native (rather than WB's older version) transfers Version1/5, unsigned158
-// at v2 and bool154 at v5. It serializes components140/4/B4/E4 unconditionally,
-// component38 from v3 and the pointer at12C from v4. Their established rowed
-// identities and exact call order are retained; the component38 and pointer
-// class identities are unresolved and keep honest address names.
-// All layout offsets come from this native caller; no unseen embedded sizes
-// or member semantics are inferred. The new economy/wall/string providers
+// Dedicated TU: AIBuilder.cpp already carries the matched 0x4EC1D9 DoXfer and
+// 0x4EC0C1 moneySaverUpdate rows, so this file keeps only the class views and
+// the new 0x4EC3AC onUnitCreated body (its two siblings stay declarations).
+// R1/S2 equal-arm carrier on compare()'s template-name argument moves the
+// receiver/argument order to retail's: (kindOf115 ? name64 : name64).
 // unlock these calls without speculative callee pins.
 #include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 #include "ascii_string.h"
@@ -152,48 +145,12 @@ private:
     unsigned char opaque140[0x14];
     bool flag154; unsigned char gap155[3]; unsigned int value158;
 };
-void AIBuilder::DoXfer(Xfer *xfer) {
- WallVersion version(1,5);
- xfer->xferVersion(&version);
- if(version.current>=2) xfer->xferUnsignedInt(&value158);
- if(version.current>=5) xfer->xferBool(&flag154);
- reinterpret_cast<AIDozerManager*>(reinterpret_cast<unsigned char*>(this)+0x140)->DoXfer(xfer);
- reinterpret_cast<AIBaseBuilder*>(reinterpret_cast<unsigned char*>(this)+4)->DoXfer(xfer);
- reinterpret_cast<AIEconomyBuilder*>(reinterpret_cast<unsigned char*>(this)+0xb4)->DoXfer(xfer);
- reinterpret_cast<AIWallBuilder*>(reinterpret_cast<unsigned char*>(this)+0xe4)->DoXfer(xfer);
- if(version.current>=3) reinterpret_cast<Rva00598DA2*>(reinterpret_cast<unsigned char*>(this)+0x38)->rva00598DA2(xfer);
- if(version.current>=4) component12c->rva0059761B(xfer);
-}
 
-// WB1371120 establishes the method name and savings-update purpose. Native
-// 4EC0C1..4EC166 establishes every accessed offset, unsigned money conversion,
-// and the three already-rowed calls. WB's Player money offset differs; +0x94
-// here is native evidence. The configuration's extent and identity remain open.
-void AIBuilder::moneySaverUpdate()
-{
-    unsigned int frame = TheGameLogic->getFrame();
-    if (value158 <= frame)
-    {
-        AIBuilderSavingsStore *store = static_cast<AIBuilderSavingsStore *>(g_00DFEEF8->rva002A8F24(owner00));
-        Rva00596389 *saver = store->saver0c;
-        saver->limit18 = savingsLimit80;
-        if (saver->limit18 == -1 || saver->saved14 < static_cast<unsigned int>(saver->limit18))
-        {
-            Rva002A8AB1Record *record = g_00DFEEF8->rva002A8AB1(owner00);
-            double amount = static_cast<float>(owner00->money94) *
-                *reinterpret_cast<float *>(static_cast<unsigned char *>(record->data160) + 0xac + record->difficulty16c * 4);
-            if (amount > 1.0f)
-                saver->rva005963A1(static_cast<int>(amount));
-        }
-        value158 = frame + g_Va00DBA4E4 * 2;
-    }
-}
 
 // WB1370420 names onUnitCreated and supplies the list/production-order lead.
 // Native4EC3AC..4EC430 proves the +13C sentinel, node +8 payload, payload
 // +8 ID/+C name/+10 state, template flag +115 and virtual slot +1C. Payload
 // class identity and the other virtual slots remain unresolved.
-// ?onUnitCreated@AIBuilder@@QAEXPAVObject@@0_N@Z present-unmatched
 void AIBuilder::onUnitCreated(Object *object, Object *created, bool horde)
 {
     if (object)
@@ -204,7 +161,7 @@ void AIBuilder::onUnitCreated(Object *object, Object *created, bool horde)
             if ((horde || !(created->template04->kindOf115 & 0x20)) &&
                 order->state10 == 1 && order->objectID08 == object->id74 &&
                 !created->testStatus(static_cast<ObjectStatusTypes>(0x57)) &&
-                order->name0c.compare(created->template04->name64) == 0)
+                order->name0c.compare( (created->template04->kindOf115 ? created->template04->name64 : created->template04->name64)) == 0)
             {
                 order->slot07(2);
                 break;
