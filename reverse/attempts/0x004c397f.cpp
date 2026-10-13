@@ -14,7 +14,7 @@
 // R5 TRIAL: volatile-zero stores (9x) NEUTRAL (24 diffs unchanged): MSVC hoists the
 // kind int-load+test above volatile stores freely; zeros-vol does not pin. Untried:
 // source-loop zeros (unroll scheduling), TinTin-style split of kind test.
-// cl: /O1 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
+// cl: /O1 /arch:SSE /G7 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 #include "ascii_string.h"
 
 class Thing;
@@ -149,6 +149,9 @@ Object *ElvenWoodSpecialPower::addObject(const Coord3D *position, const AsciiStr
 	if (templ) {
 		if ((templ->kinds[12] & 0x10) || (templ->kinds[11] & 0xC0)) {
 			Matrix3D matrix;
+			matrix.row[0][0] = 1.0f;
+			matrix.row[1][1] = 1.0f;
+			matrix.row[2][2] = 1.0f;
 			*(volatile float *)&matrix.row[0][1] = 0.0f;
 			*(volatile float *)&matrix.row[0][2] = 0.0f;
 			*(volatile float *)&matrix.row[0][3] = 0.0f;
@@ -159,9 +162,6 @@ Object *ElvenWoodSpecialPower::addObject(const Coord3D *position, const AsciiStr
 			*(volatile float *)&matrix.row[2][1] = 0.0f;
 			*(volatile float *)&matrix.row[2][3] = 0.0f;
 			float scale = templ->scale;
-			matrix.row[0][0] = 1.0f;
-			matrix.row[1][1] = 1.0f;
-			matrix.row[2][2] = 1.0f;
 			int kind;
 			if ((kind = *(volatile int *)(templ->kinds + 8)) & 0x40000000)
 				TheTerrainLogic->rva00283642(templ, position, &matrix, scale);

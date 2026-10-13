@@ -2,7 +2,7 @@
 // partial score=0.74 date=2026-10-13
 // ?rva000062FD@Region2D@@QBE_NABVCoord2D@@0@Z
 // partial score=0.74 date=2026-10-13 (r5b vmin+pminfirst: eager *pmin load fixes interleaving to single-esi reuse, 74 diff lines; 1.0f numbering xmm2-vs-xmm3 + band-mirror + epilogue-layout remain)
-// cl: /O1 /arch:SSE2 /ICode/GameEngine/Source/Common
+// cl: /O1 /arch:SSE2 /G7 /ICode/GameEngine/Source/Common
 
 class Debug
 {
