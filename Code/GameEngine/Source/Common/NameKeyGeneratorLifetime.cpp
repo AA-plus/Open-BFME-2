@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /Ireference/shims/subsystem_bfme2 /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_NO_EXCEPTIONS /I.
+// cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /Ireference/shims/subsystem_bfme2 /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_NO_EXCEPTIONS /I. /EHsc- /D_STLP_USE_MALLOC /Ireference/shims/bfmealloc
 // stlport
 // Target identity: constructor1491AC is called by GameEngine::init; native
 // vtableBD3568 and scalar deleting wrapper148DC3 identify destructor148BC2.
@@ -18,9 +18,19 @@ extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(CRITICAL_SE
 struct Rva0014918DElement {char bytes[8];};
 typedef _STL::hash_map<int,Rva0014918DElement> ReverseIndex;
 namespace _STL {template<> ReverseIndex::hash_map();}
+// Same-object reverse-table destructor copied from the verified native148B84
+// provider, retaining its established ArmorTable clear-worker call. The
+// existing opaque reverse value remains an inference; complete parent and
+// provider bytes plus EH are independently verified before fold admission.
+enum NameKeyType {NAMEKEY_INVALID=0,NAMEKEY_MAX=1<<23,FORCE_NAMEKEYTYPE_LONG=0x7fffffff};
+namespace rts { template<class T>struct hash {unsigned operator()(const T&v)const{return (unsigned)v;} }; }
+class ArmorTemplate {float values[38];};
+typedef _STL::pair<const NameKeyType,ArmorTemplate> ArmorPair;
+typedef _STL::hashtable<ArmorPair,NameKeyType,rts::hash<NameKeyType>,_STL::_Select1st<ArmorPair>,_STL::equal_to<NameKeyType>,_STL::allocator<ArmorPair> > ArmorTable;
+namespace _STL {template<> void ArmorTable::clear();}
 typedef _STL::pair<const int,Rva0014918DElement> ReversePair;
 typedef _STL::hashtable<ReversePair,int,_STL::hash<int>,_STL::_Select1st<ReversePair>,_STL::equal_to<int>,_STL::allocator<ReversePair> > ReverseTable;
-namespace _STL {template<> ReverseTable::~hashtable();}
+namespace _STL {template<> __declspec(noinline) inline ReverseTable::~hashtable(){reinterpret_cast<ArmorTable*>(this)->clear();}}
 struct UnlockGuard {
  Rva00041004 *ptr;
  __forceinline ~UnlockGuard() throw(){if(!ptr->m_flag)LeaveCriticalSection(&ptr->m_cs);}
