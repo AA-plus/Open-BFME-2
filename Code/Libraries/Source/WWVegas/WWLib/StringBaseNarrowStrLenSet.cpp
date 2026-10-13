@@ -62,7 +62,6 @@ public:
 };
 
 // ?getLength@NarrowStrLenSource@@UBEHXZ present-unmatched
-// ??0NarrowStrLenSource@@QAE@PBDH@Z present-unmatched
 // ??1NarrowStrLenSource@@QAE@XZ present-unmatched
 template <>
 void StringBase<char>::set(const char *str, int len)
