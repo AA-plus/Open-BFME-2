@@ -13,11 +13,7 @@
 // 0x00431362 doGuardCommand, 0x004311A7 attack-move, 0x00431241 rally, 0x004312E5 beacon emit.
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
 
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../../Libraries/Include/Lib/ICoord2D.h"
 
 struct IRegion2D
 {
@@ -445,8 +441,8 @@ GameMessageDisposition GUICommandTranslator::translateGameMessage(const GameMess
 	case 4:
 	{
 		const GameMessageArgumentType *a = msg->getArgument(0);
-		m_04.x = a->pixel.m_x;
-		m_04.y = a->pixel.m_y;
+		m_04.x = a->pixel.x;
+		m_04.y = a->pixel.y;
 		m_18 = msg->getArgument(2)->integer;
 		m_14 = false;
 		break;
@@ -454,16 +450,16 @@ GameMessageDisposition GUICommandTranslator::translateGameMessage(const GameMess
 	case 6:
 	{
 		const GameMessageArgumentType *a = msg->getArgument(0);
-		m_0c.m_x = a->pixel.m_x;
-		m_0c.m_y = a->pixel.m_y;
+		m_0c.x = a->pixel.x;
+		m_0c.y = a->pixel.y;
 		m_1c = msg->getArgument(2)->integer;
 		break;
 	}
 	case 0xE:
 	{
 		const GameMessageArgumentType *a = msg->getArgument(0);
-		m_20.x = a->pixel.m_x;
-		m_20.y = a->pixel.m_y;
+		m_20.x = a->pixel.x;
+		m_20.y = a->pixel.y;
 		m_34 = msg->getArgument(2)->integer;
 		m_30 = false;
 		break;
@@ -471,8 +467,8 @@ GameMessageDisposition GUICommandTranslator::translateGameMessage(const GameMess
 	case 0x10:
 	{
 		const GameMessageArgumentType *a = msg->getArgument(0);
-		m_28.m_x = a->pixel.m_x;
-		m_28.m_y = a->pixel.m_y;
+		m_28.x = a->pixel.x;
+		m_28.y = a->pixel.y;
 		m_38 = msg->getArgument(2)->integer;
 		break;
 	}

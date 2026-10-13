@@ -10,13 +10,7 @@
 // subtractions, the cap scale is the 10.0f literal at 0x00BC2428 applied as
 // cap *= 10.0f, and the result is an STL-style min returning the selected
 // operand by reference; d lives in its own block so dist reuses its slot.
-class Coord2D
-{
-public:
-	float m_x;
-	float m_y;
-	float length() const;
-};
+#include "../../../Libraries/Include/Lib/Coord2D.h"
 
 class Keyboard
 {
@@ -65,10 +59,10 @@ float Rva003FE13E::rva003FE13E()
 	float dist;
 	{
 		Coord2D d;
-		d.m_x = m_50;
-		d.m_y = m_54;
-		d.m_x -= m_18;
-		d.m_y -= m_1C;
+		d.x = m_50;
+		d.y = m_54;
+		d.x -= m_18;
+		d.y -= m_1C;
 		dist = d.length();
 	}
 	float cap = m_58;

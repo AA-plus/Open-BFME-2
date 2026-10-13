@@ -12,7 +12,7 @@
 // InGameUI pointer untouched in ecx, hence the offset-0 cast.
 #include <stddef.h>
 
-struct ICoord2D { int m_x; int m_y; };
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 
 union GameMessageArgumentType
@@ -283,8 +283,8 @@ int Rva004320B1::rva004320B1(GameMessage *msg)
 	{
 		const GameMessageArgumentType *a0 = msg->getArgument(0);
 		ICoord2D pixel;
-		pixel.m_x = a0->pixel.x;
-		pixel.m_y = a0->pixel.y;
+		pixel.x = a0->pixel.x;
+		pixel.y = a0->pixel.y;
 		Coord3D world;
 		TheTacticalView->screenToTerrain(&pixel, &world, false);
 		if (TheInGameUI->slot51())

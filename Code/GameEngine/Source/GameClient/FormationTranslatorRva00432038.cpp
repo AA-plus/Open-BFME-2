@@ -3,7 +3,7 @@
 // establish the FormationTranslator state-handler receiver. Their existing
 // WorldBuilder provenance supplies the class name; this dispatch method's
 // name and its message-number labels remain address-derived target facts.
-struct ICoord2D { int m_x, m_y; };
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 union GameMessageArgumentType
 {
     int integer;
@@ -53,8 +53,8 @@ int FormationTranslator::WaitForSecondButtonDownStateHandler::rva00432038(
             int x = argument->pixel.x;
             int y = argument->pixel.y;
             ICoord2D pixel;
-            pixel.m_y = y;
-            pixel.m_x = x;
+            pixel.y = y;
+            pixel.x = x;
             if (!reinterpret_cast<Rva00431978 *>(this)->rva00431978(&pixel))
                 Restart(message);
             break;

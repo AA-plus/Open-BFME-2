@@ -1,10 +1,6 @@
 // cl: /MD
 // ?rva00431AEC@Rva00431AEC@@QAEHPAVGameMessage@@@Z @0x00431AEC 138B: bool method checking GameMessage+0x10 for 4 or 0xe then building Rva00431920 via ctor 0x00431920 plus final Rva00575674 call. Evidence: chain lane calls rowed 0x00431920; rowed getArgument 0x0030F4EA new 0x0002FDA0 rva00575674 0x00575674.
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 union GameMessageArgumentType
 {
@@ -55,8 +51,8 @@ int Rva00431AEC::rva00431AEC(GameMessage *msg)
 		return 0;
 	const GameMessageArgumentType *a0 = msg->getArgument(0);
 	ICoord2D tmp;
-	tmp.m_x = a0->pixel.x;
-	tmp.m_y = a0->pixel.y;
+	tmp.x = a0->pixel.x;
+	tmp.y = a0->pixel.y;
 	ICoord2D pos = tmp;
 	const GameMessageArgumentType *a1 = msg->getArgument(1);
 	int v1 = a1->integer;

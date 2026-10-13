@@ -10,11 +10,7 @@ struct IRegion2D
 	int m_hiX;
 	int m_hiY;
 };
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 class GameMessage
 {
@@ -110,8 +106,8 @@ int Rva005D1F45::rva005D1F45(IRegion2D *region, int unused)
 		return 0;
 	ICoord2D cell;
 	Coord3D pos;
-	cell.m_x = region->m_loX;
-	cell.m_y = region->m_loY;
+	cell.x = region->m_loX;
+	cell.y = region->m_loY;
 	m_04->conv(&cell, &pos);
 	GameMessage *msg = TheMessageStream->appendType(0x6A8);
 	msg->appendIntegerArgument(m_0C->m_20);

@@ -1,10 +1,6 @@
 // cl: /MD /Oi-
 // ?rva00431978@Rva00431978@@QAEHPAUICoord2D@@@Z @0x00431978 55B: proximity check abs(dx)<5 and abs(dy)<5 via abs import thunk. Evidence: unlock lane unblocks 0x00431BDD 0x00432038; rowed abs thunk 0x00629952 pin _abs; ICoord2D at this+0xc.
-struct ICoord2D
-{
-	int m_x;
-	int m_y;
-};
+#include "../../../Libraries/Include/Lib/ICoord2D.h"
 
 extern "C" int __cdecl abs(int v, ...);
 
@@ -18,7 +14,7 @@ public:
 
 int Rva00431978::rva00431978(ICoord2D *p)
 {
-	if (abs(p->m_x - m_0C.m_x) < 5 && abs(p->m_y - m_0C.m_y) < 5)
+	if (abs(p->x - m_0C.x) < 5 && abs(p->y - m_0C.y) < 5)
 		return 1;
 	return 0;
 }

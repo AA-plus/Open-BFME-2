@@ -123,12 +123,7 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *filename, int a, int b);
 RefCountPtr<TextureClass> Rva00132E76WhiteTexture();
 
-struct RGBColor
-{
-	float r;
-	float g;
-	float b;
-};
+#include "../../../Libraries/Include/Lib/RGBColor.h"
 
 struct Vec2001F5373
 {
@@ -328,7 +323,7 @@ void Rva001F6EB7ColorKeys(ID3DXEffect *effect, D3DXHANDLE handle)
 		if (keys)
 		{
 			for (int i = 0; i < 4; i++)
-				colors[i] = D3DXVECTOR4(keys[i].color.r, keys[i].color.g, keys[i].color.b, 1.0f);
+				colors[i] = D3DXVECTOR4(keys[i].color.red, keys[i].color.green, keys[i].color.blue, 1.0f);
 		}
 		const GameClientRandomVariable *alpha = (const GameClientRandomVariable *)TheParticleSystemManager->get()->rva001F53BC();
 		if (alpha)
