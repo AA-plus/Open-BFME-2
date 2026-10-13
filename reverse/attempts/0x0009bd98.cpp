@@ -1,4 +1,6 @@
 // ?rva0009BD98@Rva0009D55BProduct@@UAEXPBVVector2@@M@Z
+// partial score=0.93 date=2026-10-13
+// ?rva0009BD98@Rva0009D55BProduct@@UAEXPBVVector2@@M@Z
 // partial score=0.93 date=2026-10-11
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // stlport
@@ -469,7 +471,7 @@ void Rva0009D55BProduct::rva0009BD98(const Vector2 *pan, float rotation)
 		float s;
 		float c;
 		Rva0009BD98SinCos(angle, s, c);
-		float dy = c * step.Y + s * step.X;
+		volatile float dy = c * step.Y + s * step.X;
 		float scale = (m_134 * 4.0f + 1.0f) * 0.25f;
 		float dx = c * step.X - s * step.Y;
 		pos.X = dx * scale + pos.X;
