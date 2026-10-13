@@ -1,12 +1,14 @@
 // ?rva0045A447@AutoAbilityBehavior@@QAEPAVObject@@PAVBfmeWideResult@@PBVCommandButton@@@Z
+// partial score=0.99 date=2026-10-13
+// ?rva0045A447@AutoAbilityBehavior@@QAEPAVObject@@PAVBfmeWideResult@@PBVCommandButton@@@Z
 // partial score=0.97 date=2026-10-09
-// cl: /Ireference/shims/bfme2_ascii /O1 /G6 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /I. /Ireference/shims/bfme2_ascii /O1 /G6 /arch:SSE /DNDEBUG /MD /EHsc
 // Reference guide: Open-BFME-1 f98983a7d AutoAbilityBehavior_bfmeCanAutoFire.cpp
 // (clean125B predicate). Target0045A57C/WB117C610 adds module-status mask,
 // target model/status gates, tri-state eligibility and button exclusion mask.
 // Fields below come from native accesses; donor semantics do not establish
 // original BFME2 method names.
-#include "../../../../../Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 #include "ascii_string.h"
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
