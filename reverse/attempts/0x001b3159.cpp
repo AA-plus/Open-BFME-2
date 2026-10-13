@@ -1,6 +1,8 @@
 // ?UnknownSlot4@BFME2Encoding0MotionChannel@@UAEXMPAVVector3@@PAPAE@Z
 // partial score=0.8 date=2026-10-13
 // ?UnknownSlot4@BFME2Encoding0MotionChannel@@UAEXMPAVVector3@@PAPAE@Z
+// partial score=0.8 date=2026-10-13
+// ?UnknownSlot4@BFME2Encoding0MotionChannel@@UAEXMPAVVector3@@PAPAE@Z
 // partial score=0.80 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD
 // Retail 0x001B3159 (442B). Port target: Code/Libraries/Source/WWVegas/WW3D2/BFME2Encoding0MotionChannelCtor.cpp
