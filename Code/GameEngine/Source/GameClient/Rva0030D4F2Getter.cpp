@@ -33,6 +33,7 @@ Rva00148F5ECache g_00DBDC74 = { NAMEKEY_INVALID, "waypointID" };
 Rva00148F5ECache g_00DBDC64 = { NAMEKEY_INVALID, "waypointName" };	// RVA 0x009BDC64
 Rva00148F5ECache g_00DBDC6C = { NAMEKEY_INVALID, "GenericAIObjectName" };	// RVA 0x009BDC6C
 Rva00148F5ECache g_objectThreatFinderRadiusKey = { NAMEKEY_INVALID, "objectThreatFinderRadius" };	// RVA 0x009BDE1C
+Rva00148F5ECache g_00DBDE44 = { NAMEKEY_INVALID, "playerFaction" };	// RVA 0x009BDE44 (TheKey_playerFaction)
 extern Rva00148F5ECache g_00DBDC6C;
 
 class Dict
