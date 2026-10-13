@@ -1,27 +1,14 @@
 // ?rva00235312@GlobalData@@QAE_NW4TimeOfDay@@0M@Z
-// partial score=0.8 date=2026-10-10
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include/Lib
-// NEAR (draft for Code/GameEngine/Source/Common/GlobalDataRva00235312BlendTimeOfDay.cpp):
-// every instruction matches except base-register choice: cl CSEs the
-// interpolate-row address (this+0x368) between the blend loop and the copy
-// loop into EBX (push ebx; blend dst base this+0x368 with -0xC displacements)
-// where retail uses ESI=this+0x35C for the blend and recomputes this+0x368
-// for the copy loop. Store pattern (blue->red slots; doubled diffuse) verified.
+// partial score=0.8 date=2026-10-13
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
-// ?rva00235312@GlobalData@@QAE_NW4TimeOfDay@@0M@Z
-// retail 0x00235312..0x00235736 (1060 bytes) thiscall RET 0x0C.
-// The body right after GlobalData::setTimeOfDay (0x002352BC; same unit).
-// Both time-of-day arguments pass setTimeOfDay's TIME_OF_DAY_FIRST..COUNT
-// guard; then each of the three lights of the three [6][3] TerrainLighting
-// tables (+0x140 terrain / +0x3C8 / +0x650) is blended into the
-// TIME_OF_DAY_INTERPOLATE (5) slot as from*(1-t) + to*t, m_timeOfDay
-// becomes 5 and the blended terrain lights are copied into the current
-// ambient/diffuse/position arrays (+0x8D8/+0x8FC/+0x920) as setTimeOfDay
-// does. Retail's field selection is kept exactly as compiled: the blue
-// channels land in the red slots of ambient and diffuse, and the second
-// table blends its diffuse twice (into its diffuse red/green) instead of
-// its ambient. No WorldBuilder twin or donor body; name unknown.
-#include "Coord3D.h"
+// GlobalData::setTimeOfDay, retail 0x002352BC (86 bytes). Zero Hour's
+// GlobalData.cpp body: select one of the five lit times of day and copy its
+// three terrain lights into the current ambient/diffuse/position arrays.
+// The GlobalData layout below carries only the members this body reaches,
+// at the offsets the retail body addresses: m_timeOfDay +0x134, the
+// [TIME_OF_DAY_COUNT][MAX_GLOBAL_LIGHTS] TerrainLighting table +0x140
+// (0x6C per time of day), and the current arrays +0x8D8/+0x8FC/+0x920.
 
 typedef int Int;
 typedef float Real;
@@ -37,10 +24,9 @@ enum TimeOfDay
 
 enum { MAX_GLOBAL_LIGHTS = 3 };
 
-struct RGBColor
-{
-	Real red, green, blue;
-};
+#include "Code/Libraries/Include/Lib/RGBColor.h"
+
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 
 struct TerrainLighting
 {
@@ -52,20 +38,41 @@ struct TerrainLighting
 class GlobalData
 {
 public:
-	Bool rva00235312(TimeOfDay from, TimeOfDay to, Real t);
+	Bool setTimeOfDay( TimeOfDay tod );
+    Bool rva00235312(TimeOfDay from,TimeOfDay to,Real t);
 
 private:
-	unsigned char m_unreconstructed_000[0x134];
-	TimeOfDay m_timeOfDay;								// +0x134
-	unsigned char m_unreconstructed_138[0x8];
-	TerrainLighting m_terrainLighting[TIME_OF_DAY_COUNT][MAX_GLOBAL_LIGHTS];	// +0x140
-	TerrainLighting m_lighting3C8[TIME_OF_DAY_COUNT][MAX_GLOBAL_LIGHTS];		// +0x3C8
-	TerrainLighting m_lighting650[TIME_OF_DAY_COUNT][MAX_GLOBAL_LIGHTS];		// +0x650
-	RGBColor m_terrainAmbient[MAX_GLOBAL_LIGHTS];					// +0x8D8
-	RGBColor m_terrainDiffuse[MAX_GLOBAL_LIGHTS];					// +0x8FC
-	Coord3D m_terrainLightPos[MAX_GLOBAL_LIGHTS];					// +0x920
+	unsigned char m_unreconstructed_000[ 0x134 ];
+	TimeOfDay m_timeOfDay;
+	unsigned char m_unreconstructed_138[ 0x8 ];
+	TerrainLighting m_terrainLighting[ TIME_OF_DAY_COUNT ][ MAX_GLOBAL_LIGHTS ];
+	TerrainLighting m_lighting3C8[TIME_OF_DAY_COUNT][MAX_GLOBAL_LIGHTS];
+    TerrainLighting m_lighting650[TIME_OF_DAY_COUNT][MAX_GLOBAL_LIGHTS];
+	RGBColor m_terrainAmbient[ MAX_GLOBAL_LIGHTS ];
+	RGBColor m_terrainDiffuse[ MAX_GLOBAL_LIGHTS ];
+	Coord3D m_terrainLightPos[ MAX_GLOBAL_LIGHTS ];
 };
 
+// ?setTimeOfDay@GlobalData@@QAE_NW4TimeOfDay@@@Z @0x2352BC
+Bool GlobalData::setTimeOfDay( TimeOfDay tod )
+{
+	if( tod >= TIME_OF_DAY_COUNT || tod < TIME_OF_DAY_FIRST )
+	{
+		return false;
+	}
+
+	m_timeOfDay = tod;
+	for (Int i=0; i<MAX_GLOBAL_LIGHTS; i++)
+	{	m_terrainAmbient[i] = m_terrainLighting[ tod ][i].ambient;
+		m_terrainDiffuse[i] = m_terrainLighting[ tod ][i].diffuse;
+		m_terrainLightPos[i] = m_terrainLighting[ tod ][i].lightPos;
+	}
+
+	return true;
+}
+
+// Target1060 blend uses native erroneous red/blue stores; the setTimeOfDay
+// donor supplies the table/copy guide only. Original method name is unknown.
 Bool GlobalData::rva00235312(TimeOfDay from, TimeOfDay to, Real t)
 {
 	if (from >= TIME_OF_DAY_COUNT || from < TIME_OF_DAY_FIRST)
