@@ -1,4 +1,6 @@
 // ?rva00373158@Rva0037381C@@QAEXPAVRva00373373Portal@@H@Z
+// partial score=0.94 date=2026-10-13
+// ?rva00373158@Rva0037381C@@QAEXPAVRva00373373Portal@@H@Z
 // partial score=0.94 date=2026-10-09
 // cl: /Oy- /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
 // stlport
