@@ -1,31 +1,29 @@
 // cl: /O1 /MD /EHs /D_CRTIMP=
-// Target 0x005F11D0 (63 bytes) destroys the first/end range via rowed
-// Rva005EF5EFClear, then frees the first pointer through 0x00030830. Scoped
-// ownership preserves the target unwind transition and exception cleanup.
-// Same observed operations as 0x005EF8BB; application/element name unknown.
+// Native5F11D0 complete63B range destructor: destroy first/end through5EF5EF,
+// then free first through30830. Its EH action7A4C3F passes the range object
+// itself to the existing14B free-first-pointer body7FAB3. A local guard's
+// address was the wrong lifetime model; real base storage gives the native
+// this-based unwind and the same automatic release after normal destruction.
+// Only first/end0/4 are accessed; the enclosing105B destructor5F1295 gives
+// this member the12B slot34..40. The trailing word and original type are unknown.
 struct Rva005F0647;
 void __cdecl Rva005EF5EFClear(Rva005F0647 *first, Rva005F0647 *last);
 namespace _STL { void __cdecl free(void *block); }
-class Rva005F11D0
+template<class T> class Rva005F11D0Storage
 {
 public:
-	void rva005F11D0();
-
-	Rva005F0647 *m_first;
-	Rva005F0647 *m_last;
+ T *m_first;
+ T *m_last;
+ unsigned char m_unmodelled08[4];
+ ~Rva005F11D0Storage() { if(m_first) _STL::free(m_first); }
 };
-// ?Rva005F11D0Guard::Rva005F11D0Guard present-unmatched
-// ?Rva005F11D0Guard::~Rva005F11D0Guard present-unmatched
-struct Rva005F11D0Guard
+class Rva005F11D0 : public Rva005F11D0Storage<Rva005F0647>
 {
-	Rva005F11D0 *m_owner;
-	Rva005F11D0Guard(Rva005F11D0 *o) : m_owner(o) {}
-	~Rva005F11D0Guard() { if (m_owner->m_first != 0) _STL::free(m_owner->m_first); }
+public:
+ ~Rva005F11D0();
 };
-void Rva005F11D0::rva005F11D0()
+typedef char RangeSlotHas12Bytes[sizeof(Rva005F11D0)==12 ? 1 : -1];
+Rva005F11D0::~Rva005F11D0()
 {
-	{
-		Rva005F11D0Guard guard(this);
-		Rva005EF5EFClear(m_first, m_last);
-	}
+ Rva005EF5EFClear(m_first,m_last);
 }

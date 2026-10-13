@@ -2,8 +2,8 @@
 // ??1Rva005F1295@@QAE@XZ retail 0x005F1295 105B
 // Non-virtual dtor with an empty body: member dtors in reverse order under EH
 // states 4..0 -- UnicodeString +0x40 (releaseBuffer 0x00036E70), the range
-// holder +0x34 whose inline dtor runs the rowed
-// ?rva005F11D0@Rva005F11D0@@QAEXXZ 0x005F11D0, three vector wrappers +0x28
+// holder +0x34 through the complete63B destructor at5F11D0; its real
+// owning storage gives retail's MOV-this cleanup to7FAB3. Three vector wrappers +0x28
 // +0x1C +0x10 (rowed 0x00524265 0x005242D7 0x0052413E), then AsciiString +8
 // (releaseBuffer 0x00036410). Same shape as Rva005E0DC0Dtor.cpp.
 // Names address-derived.
@@ -37,11 +37,7 @@ private:
 class Rva005F11D0
 {
 public:
-	~Rva005F11D0()
-	{
-		rva005F11D0();
-	}
-	void rva005F11D0();
+	~Rva005F11D0();
 private:
 	char m_pad[12];
 };
