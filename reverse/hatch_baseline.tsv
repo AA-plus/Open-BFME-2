@@ -37829,8 +37829,6 @@ present_unmatched	Code/GameEngine/Source/Common/Rva005EE30CDerived.cpp	bfmeEmitR
 present_unmatched	Code/GameEngine/Source/Common/Rva005EEDAADerived.cpp	@0x005DA0D0	1
 present_unmatched	Code/GameEngine/Source/Common/Rva005EEF2Fdtor.cpp	Rva005EEF2FBase0dtor	1
 present_unmatched	Code/GameEngine/Source/Common/Rva005EEF2Fdtor.cpp	Rva005EEF2FBase4dtor	1
-present_unmatched	Code/GameEngine/Source/Common/Rva005EF8BB.cpp	Rva005EF8BBGuard::Rva005EF8BBGuard	1
-present_unmatched	Code/GameEngine/Source/Common/Rva005EF8BB.cpp	Rva005EF8BBGuard::~Rva005EF8BBGuard	1
 present_unmatched	Code/GameEngine/Source/Common/Rva005EFB05Dtor.cpp	1Rva005EF8BB@@QAE@XZ	1
 present_unmatched	Code/GameEngine/Source/Common/Rva005F2CBAProgress.cpp	StrategicHUD::ArmyDetailsMovieClip::Impl::IconSlot::OnLoaded	1
 present_unmatched	Code/GameEngine/Source/Common/Rva005FA393Dtor.cpp	Rva005FA7EB::Rva005FA7EB	1
