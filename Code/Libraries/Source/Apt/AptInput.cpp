@@ -23,6 +23,8 @@ class AptValue;
 class BfmeAptValue006DCD20 {
 public:
     bool isString() const;
+    bool isUndefined() const;
+    void *rva006E04A0() const;
     int isScriptFunction() const;
     BfmeAptValue006DCD20 *rva006DCEE0();
     void setGCRootCount(unsigned int);
@@ -47,7 +49,7 @@ void __debugbreak();
 #pragma intrinsic(__debugbreak)
 EAStringC *__cdecl Rva0070B4F0GetString(int);
 unsigned char __cdecl rva006FEC00(int,int,EAStringC*,int*,EAStringC*);
-class Rva006FB860 {public:char pad[0x6C];AptCIH *current;bool rva006FACA0(int,int,void**);void rva006FAB40(BfmeAptValue006DCD20 *,int,int);};
+class Rva006FB860 {public:char pad[0x6C];AptCIH *current;bool rva006FACA0(int,int,void**);void rva006FAB40(BfmeAptValue006DCD20 *,int,int);void rva006FA100(AptCIH *,int);};
 bool Rva006FB860::rva006FACA0(int event,int transition,void **out)
 {
  if (!out) {
@@ -105,7 +107,7 @@ extern Rva006E0AC0Entry g_00DDC2E8[];
 class Rva006E0D40 {public:void rva006E0D40();};
 class Rva006F97B0 {public:void rva006F97B0();};
 class Rva006DBB60ShrNAndField {public:bool get() const;};
-class AptActionQueueC {public:void rva006E3740(AptValue *,AptValue *,AptValue *,int,int);};
+class AptActionQueueC {public:void rva006E3740(AptValue *,AptValue *,AptValue *,int,int);void rva006E3810(AptValue *,AptValue *,AptValue *,int,int);void rva006E4B80(void *,AptCIH *,int,int);};
 class AptInputScriptFunction {
 public:
  virtual void slot00();virtual void slot04();virtual void slot08();virtual void slot0C();
@@ -152,4 +154,83 @@ void Rva006FB860::rva006FAB40(BfmeAptValue006DCD20 *value,int mask,int arg)
    }
   }
  }
+}
+
+// ?rva006FA100@Rva006FB860@@QAEXPAVAptCIH@@H@Z, retail 0x006FA100..0x006FA340
+// (RET8; the 8-entry case table completes the 576B extent). WB 0x01797C60
+// places it in AptInput.cpp by its asserts at lines 257/258/267 (pInst,
+// pInst->isButtonInst(), pInst->pParent): button-instance event broadcast. The BFME 1 AptInput.cpp donor at 575ba2b04
+// (BfmeBroadcast1282) is the semantic guide only; its original name is unknown.
+// Retail fixes the +0x48 parent/+0x4C character, descriptor +0x34/+0x38/+0x3C,
+// the 7x12B key-route table at 0xDDC898 and the pool queue callees.
+class Rva006DBB30SarDwordField {public:int get() const;};
+class AptAnimationPoolData {public:void rva006E6540();};
+extern int g_00E17704;
+extern void (__cdecl *g_bfmeAptFreeAtE17784)(void *,int);
+struct AptButtonRoute {unsigned int mask;int stringId;int keyCode;};
+extern AptButtonRoute g_00DDC898[7];
+struct AptButtonFlags {char pad[0x10];unsigned int flags;};
+class AptButtonInstView {
+public:
+ virtual void slot00();virtual void slot04();virtual void slot08();
+ virtual AptButtonFlags *GetNativeHashVirtual();
+ char pad04[0x48-4];
+ AptCIH *pParent;
+ void *payload;
+};
+struct AptButtonRecord {int mask;void *actions;};
+struct AptButtonSound {char pad[8];void *handle;};
+struct AptButtonDescriptor {char pad[0x34];int count;AptButtonRecord *records;AptButtonSound **sounds;};
+struct AptButtonCharacter {char pad[0xc];AptButtonDescriptor *descriptor;};
+void Rva006FB860::rva006FA100(AptCIH *inst,int mode)
+{
+ AptButtonInstView *pInst=(AptButtonInstView*)inst;
+ if (!pInst) {
+  g_bfmeAptAssertAtE17734("pInst","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptInput.cpp",0x101);
+  if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+ }
+ if (!pInst) {
+  g_bfmeAptAssertAtE17734("this","c:\\projects\\bfme2patch103\\bfme2\\code\\libraries\\source\\apt\\AptCIH.h",0xB5);
+  if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+ }
+ if (((const Rva006DBB30SarDwordField*)pInst)->get()!=0xE || ((const BfmeAptValue006DCD20*)pInst)->isUndefined()) {
+  g_bfmeAptAssertAtE17734("pInst->isButtonInst()","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptInput.cpp",0x102);
+  if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+ }
+ AptButtonDescriptor *desc=((AptButtonCharacter*)pInst->payload)->descriptor;
+ for (int i=0;i<desc->count;i++) {
+  if (desc->records[i].mask&mode) {
+   if (!pInst->pParent) {
+    g_bfmeAptAssertAtE17734("pInst->pParent","C:\\projects\\bfme2patch103\\bfme2\\Code\\Libraries\\Source\\Apt\\AptInput.cpp",0x10B);
+    if (g_bfmeAptBreakOnAssertAtDDC01C) __debugbreak();
+   }
+   (*(AptActionQueueC**)((char*)this+0xA0))->rva006E4B80(&desc->records[i].actions,pInst->pParent,0x400000,g_00E17704);
+  }
+ }
+ int keyMask=0;
+ if (mode&0x08) keyMask=0x800;
+ if (mode&0x04) keyMask|=0x400;
+ if (mode&0x40) keyMask|=0x1000;
+ if (mode&0x01) keyMask|=0x2000;
+ if (mode&0x02) keyMask|=0x4000;
+ if (mode&0x20) keyMask|=0x8000;
+ if (mode&0x10) keyMask|=0x10000;
+ if (pInst->GetNativeHashVirtual()->flags&keyMask) {
+  for (int j=0;j<7;j++) {
+   if (g_00DDC898[j].mask&keyMask) {
+    AptValue *found=(AptValue*)((Rva0070B380*)((BfmeAptValue006DCD20*)pInst)->rva006E04A0())->lookup(*Rva0070B4F0GetString(g_00DDC898[j].stringId));
+    if (found)
+     (*(AptActionQueueC**)((char*)g_bfmeAptPtrAtE176D0+0xA0))->rva006E3810((AptValue*)pInst,found,0,g_00DDC2E8[j].m_mask,((g_00DDC898[j].keyCode&0x7f)<<10)|5);
+   }
+  }
+ }
+ if (desc->sounds) {
+  switch (mode) {
+  case 2: if (desc->sounds[0]) g_bfmeAptFreeAtE17784(desc->sounds[0]->handle,0); break;
+  case 1: if (desc->sounds[1]) g_bfmeAptFreeAtE17784(desc->sounds[1]->handle,0); break;
+  case 4: if (desc->sounds[2]) g_bfmeAptFreeAtE17784(desc->sounds[2]->handle,0); break;
+  case 8: if (desc->sounds[3]) g_bfmeAptFreeAtE17784(desc->sounds[3]->handle,0); break;
+  }
+ }
+ ((AptAnimationPoolData*)this)->rva006E6540();
 }
