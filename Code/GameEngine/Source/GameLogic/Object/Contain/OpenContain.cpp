@@ -760,28 +760,8 @@ void OpenContain::onCollide( Object *other, const Coord3D *loc, const Coord3D *n
 } 
 
 //-------------------------------------------------------------------------------------------------
-/** The die callback. */
-//-------------------------------------------------------------------------------------------------
-// ?OpenContain::onDie present-unmatched
-void OpenContain::onDie( const DamageInfo * damageInfo )
-{
-	if (!getOpenContainModuleData()->m_dieMuxData.isDieApplicable(getObject(), damageInfo))
-		return;
-
-	//Check to see if we are going to inflict damage on contained units.
-	if( getDamagePercentageToUnits() > 0 )
-	{
-		//Cycle through the units and apply damage to them!
-		processDamageToContained(getDamagePercentageToUnits());
-	}
-
-	killRidersWhoAreNotFreeToExit();
-
-	// Leaving this commented out to show it can't work.  We are about to die, so they will have zero 
-	// chance to hit an exitState::Update.  At least we would clean them up in onDelete.
-//	orderAllPassengersToExit( CMD_FROM_AI, FALSE );
-	removeAllContained();
-}  
+/** The die callback: retail body lives in OpenContainOnDie.cpp (rowed at
+0x004641B1); this TU keeps the class declaration only. */  
 
 // ------------------------------------------------------------------------------------------------
 /** Check to see if we are a valid container for 'obj' */
