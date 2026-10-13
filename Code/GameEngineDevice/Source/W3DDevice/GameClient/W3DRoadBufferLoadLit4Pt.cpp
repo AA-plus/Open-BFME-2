@@ -20,7 +20,11 @@
 #define Matrix4x4 Matrix4  // BFME renamed it
 
 #include "W3DDevice/GameClient/W3DRoadBuffer.h"
+// BFME 2's getStaticDiffuse (0x0006B4CC) takes a trailing flag; adapt the
+// Zero Hour declaration for this unit only.
+#define getStaticDiffuse(x, y) getStaticDiffuse(x, y, Bool skipFirstLight)
 #include "W3DDevice/GameClient/HeightMap.h"
+#undef getStaticDiffuse
 #include "W3DDevice/GameClient/W3DDynamicLight.h"
 
 //#include "Common/GameFileSystem.h"
@@ -187,15 +191,41 @@ public:
 	virtual void s145();
 	virtual Real getMaxCellHeight(Real x, Real y) const;
 };
-class Rva0006AA45 { public: void call(Int x, Int y, Vector3 *out); };
+class Rva0006653B { public: void rva0006AA45(Int x, Int y, Vector3 *out); };
 // Inline wrapper the vertex loop reads the normal through (see the basis note above).
-static __forceinline Vector3 RoadGetNormal(Rva0006AA45 *m, Int x, Int y)
+static __forceinline Vector3 RoadGetNormal(Rva0006653B *m, Int x, Int y)
 {
 	Vector3 n;
-	m->call(x, y, &n);
+	m->rva0006AA45(x, y, &n);
 	return n;
 }
-class Rva0006B4CC { public: Int call(Int x, Int y, Int z); };
+// Retail inlines WWMath::Clamp and the light iterator accessors here and keeps
+// no out-of-line copy of the latter (WWMath::Clamp's is WW3D2's /O2 body at
+// 0x0011F680). These unit-scoped views keep them inline without emitting
+// /O1 COMDAT copies that would compete with those definitions at link time.
+struct RoadMath
+{
+	__declspec(dllimport) __forceinline static Real Clamp(Real val, Real min, Real max)
+	{
+		if (val < min) return min;
+		if (val > max) return max;
+		return val;
+	}
+};
+// GenericMultiListClass layout (multilist.h): vtable, then the private Head sentry.
+struct RoadLightListView
+{
+	void *m_vtable;
+	MultiListNodeClass m_head;
+};
+class RoadLightIteratorView : public RefRenderObjListIterator
+{
+public:
+	__declspec(dllimport) __forceinline void first() { CurNode = ((RoadLightListView *)List)->m_head.Next; }
+	__declspec(dllimport) __forceinline void next() { CurNode = CurNode->Next; }
+	__declspec(dllimport) __forceinline MultiListObjectClass *current() { return CurNode->Object; }
+	__declspec(dllimport) __forceinline RenderObjClass *peek() { return (RenderObjClass *)current(); }
+};
 struct RoadLitVertex {
 	Real x, y, z;
 	Real nx, ny, nz;
@@ -228,8 +258,9 @@ void W3DRoadBuffer::loadLit4PtSection(RoadSegment *pRoad, UnsignedShort *ib, Ver
 	const Int maxLights = 8;
 	LightClass *lights[maxLights];
 
-	for (pDynamicLightsIterator->First(); !pDynamicLightsIterator->Is_Done(); pDynamicLightsIterator->Next()) {		
-			LightClass *pLight = (LightClass*)pDynamicLightsIterator->Peek_Obj();
+	RoadLightIteratorView *lightIterator = (RoadLightIteratorView *)pDynamicLightsIterator;
+	for (lightIterator->first(); !lightIterator->Is_Done(); lightIterator->next()) {		
+			LightClass *pLight = (LightClass*)lightIterator->peek();
 			SphereClass bounds = pLight->Get_Bounding_Sphere();
 			if (Spheres_Intersect(pRoad->getBounds(), bounds)) {
 				lights[numLights] = pLight;
@@ -361,7 +392,7 @@ void W3DRoadBuffer::loadLit4PtSection(RoadSegment *pRoad, UnsignedShort *ib, Ver
 				curVector.Set(curColumn.vtx[j].X - info.loc.X, curColumn.vtx[j].Y - info.loc.Y);
 				V = Vector2::Dot_Product(info.roadNormal, curVector);
 				U = Vector2::Dot_Product(info.roadVector, curVector);
-				Int diffuse = (255<<24)|((Rva0006B4CC *)TheTerrainRenderObject)->call(curColumn.vtx[j].X/MAP_XY_FACTOR+0.5, curColumn.vtx[j].Y/MAP_XY_FACTOR+0.5, 1);
+				Int diffuse = (255<<24)|TheTerrainRenderObject->getStaticDiffuse(curColumn.vtx[j].X/MAP_XY_FACTOR+0.5, curColumn.vtx[j].Y/MAP_XY_FACTOR+0.5, true);
 				Real shadeR, shadeG, shadeB;
 				shadeB = (diffuse & 0xFF)/255.0;
 				shadeG = ((diffuse>>8) & 0xFF)/255.0;
@@ -393,7 +424,7 @@ void W3DRoadBuffer::loadLit4PtSection(RoadSegment *pRoad, UnsignedShort *ib, Ver
 							factor = 1.0f/(0.1+dist/midRange + 5.0f*dist*dist/(range*range));
 						}
 	#endif
-						factor = WWMath::Clamp(factor,0.0f,1.0f);
+						factor = RoadMath::Clamp(factor,0.0f,1.0f);
 						Real shade = 0.5f; 
 						shade *= factor;
 						Vector3 diffuse;
@@ -420,7 +451,7 @@ void W3DRoadBuffer::loadLit4PtSection(RoadSegment *pRoad, UnsignedShort *ib, Ver
 				//diffuse &= 0xFFFF00FF; // strip out green.
 			#endif
 				{
-					Vector3 normal = RoadGetNormal(((Rva0006AA45 *)*(void **)((char *)TheTerrainRenderObject + 0x37C0)), curColumn.vtx[j].X/MAP_XY_FACTOR+0.5, curColumn.vtx[j].Y/MAP_XY_FACTOR+0.5);
+					Vector3 normal = RoadGetNormal(((Rva0006653B *)*(void **)((char *)TheTerrainRenderObject + 0x37C0)), curColumn.vtx[j].X/MAP_XY_FACTOR+0.5, curColumn.vtx[j].Y/MAP_XY_FACTOR+0.5);
 					RoadLitVertex *lvb = (RoadLitVertex *)vb;
 					lvb[m_curNumRoadVertices].u1 = info.uOffset+U/(info.scale*4);
 					lvb[m_curNumRoadVertices].v1 = info.vOffset-V/(info.scale*4);	// Road is 1/16 texture height.
