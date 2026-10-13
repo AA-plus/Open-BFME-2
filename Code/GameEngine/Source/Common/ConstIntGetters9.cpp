@@ -75,11 +75,3 @@ int Rva0033A43EGet(void)
 {
 	return (int)ThingTemplate::s_objectFieldParseTable;
 }
-
-// ?Rva00531295Get@@YAHXZ @ 0x00531295 (6B): returns -666 (0xfffffd66).
-// Follows and/ret; next opens a switch-dispatch function.
-// Opaque address-derived name.
-int Rva00531295Get(void)
-{
-	return -666;
-}
