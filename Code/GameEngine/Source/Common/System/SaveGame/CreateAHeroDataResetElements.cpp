@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD
+// cl: /Ireference/shims/bfme2_ascii /O1 /EHsc /MD /DBFME_ASCII_DTOR_DECL
 //
 // ?rva0040732C@CreateAHeroData@@QAE_NXZ, retail 0x0040732C..0x0040737F (83
 // bytes, EH): resets the fifteen 12-byte elements at +0x80 of CreateAHeroData
