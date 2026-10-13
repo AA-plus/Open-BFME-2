@@ -1,19 +1,23 @@
 // ?calcBlendHeight@W3DTerrainBackground@@QAEXMHPAM@Z
-// partial score=0.93 date=2026-10-09
+// partial score=0.93 date=2026-10-13
+// ?calcBlendHeight@W3DTerrainBackground@@QAEXMHPAM@Z
+// partial score=0.93 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
-// Native [00115A5B,00115DA7),844B, RET12. W3DTerrainBackground::
-// calcBlendHeight (WorldBuilder name and "Bad ndxNdx" assert in
-// W3DTerrainBackground.cpp). When the float argument is zero it rebuilds the
-// tile's 0x0C-byte height records (+0xD0, X = map height * MAP_HEIGHT_SCALE
-// copied to Z and Y) over the clamped tile, swaps in the coarse step for
-// mode 2 (+0x88/+0x8C/+0x94), refreshes the map bit plane and the in-mesh
-// flags (0x00112898), numbers the in-mesh cells and lets the recursive filler
-// 0x00113DE0 write the second height (Y); afterwards it restores the step or
-// re-tessellates (0x001159F1 with +0x94). It then blends every in-mesh
-// cell's Z from X and Y by +0xCC, pins tile edges to Y (mode 1) or X (mode 2)
-// and, for a zero argument, reports the largest |Y - X|. Offsets are target
-// evidence; the receivers of the rowed map/tile helpers keep their ledger
-// names.
+// Retail 0x00115A5B (844B). Port target: Code/GameEngineDevice/Source/W3DDevice/GameClient/Rva001159F1.cpp
+// (appends after rowed rva001159F1; reuse its Rva000AD9AB/Rva00113110Holder/Rva001159F1 views, do not redefine).
+// 844/844 size-exact in the TU (existing row re-verified). rva00113DE0 now rowed (3083B) - pin retired, same spelling.
+// RESIDUE (43 diff lines, all same-size; three independent roots + cascades):
+// (A) Limits prologue: retail ebx=mapXMax(+0x8 first) eax=mapYMax, yLimit home -0x18; ours ebx=mapYMax(+0xC first) eax=mapXMax, yLimit home -0x14.
+//     Load order is STICKY (+0xC first) across decl orders (mapYMax-first AND mapXMax-first both give +0xC first) -
+//     the compiler canonicalizes independent of source. Interleaving compute+clamp per axis reshapes the prologue (840B, worse).
+//     _ReadWriteBarrier between the loads scrambles scheduling (+10B, worse). Both reverted.
+// (B) Heights-fill: retail evaluates x-clamp (cmovge) before y-clamp (cmovl) then index; ours y-first (args evaluate right-to-left).
+//     Hoisting Int cxx=clampMin(x) backfires (extra home, index interleaves early, 72 diffs). Reverted.
+// (C) yLimit home cascade (-0x18 vs -0x14): ndx phase, blend index/yOrigin slots, edge block - all follow (A).
+// (D) fabs tail: retail fst delta; fld largest; pop; fcomip; fstp; pop - ours pops before fld (pure x87/integer scheduling trivia).
+// (E) Edge block eax<->ecx swap for (i-xOrigin)/width - likely cascade of (A) via the J-counter home.
+// Prescription: fix (A) first (load order + regs + yLimit home); (C) and (E) should follow; then (B) via forced x-first eval without extra homes; (D) last (try if/else form for the largest update).
+// t=35 model=muse-spark (seat W7-MP6).
 
 #include <string.h>
 
@@ -55,6 +59,18 @@ public:
 	void rva000AD9FE();
 };
 
+class Rva00113110Holder
+{
+public:
+	void rva00112898(int, int, void *);
+};
+
+class Rva001159F1
+{
+public:
+	void rva001159F1(void *value);
+};
+
 class WorldHeightMap
 {
 public:
@@ -74,18 +90,6 @@ class Rva0011216CSlotQuartet
 {
 public:
 	void rva00112153();
-};
-
-class Rva00113110Holder
-{
-public:
-	void rva00112898(int, int, void *);
-};
-
-class Rva001159F1
-{
-public:
-	void rva001159F1(void *value);
 };
 
 class W3DTerrainBackground
