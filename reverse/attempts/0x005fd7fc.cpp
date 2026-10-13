@@ -1,5 +1,5 @@
 // ?OnPanelLoaded@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBD@Z
-// partial score=0.993 date=2026-10-13
+// partial score=0.996 date=2026-10-13
 // cl: /Ireference/shims/bfme2_ascii /O1 /MD /EHsc
 // ?SetSlotString@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBDABVUnicodeString@@@Z retail 0x005FD788 116B
 // Evidence: format APT:_level%u.%s_%s%s via 0x00038150; bfmeSetText via pin 0x00225301; releaseBuffer 0x00036410; globals 0x009FE4CC 0x007BAC1C 0x0087A290; callers 0x005FD92E 0x005FD9A6 0x005FD9E9; sibling APT precedent Rva005FDF1C
@@ -333,13 +333,7 @@ void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnBottomPanelLoaded(const cha
 }
 
 // ?OnPanelLoaded@Impl@ArmyUnitSwapperMovieClip@StrategicHUD@@QAEXHPBD@Z,
-// RVA 0x005FD7FC, 145B. Slot panel loader: if the slot's factory handle is
-// set and no panel is built yet, derive the leaf name (SkipLevelN) and level
-// index from the Apt path, build the panel through the rowed factory
-// forwarder 0x005F4AED, then release the factory handle (rowed clear
-// 0x002BED91). Member layout from the UnitSlot view above (stride 0x18);
-// the factory handle shares slot+0's {ptr} layout with TreeHintRef, so the
-// rowed clear is reached through a TU-local view cast.
+// RVA 0x005FD7FC, 145B (trial: implicit leaf temporary).
 namespace AptUtils { const char *SkipLevelN(const char *path); int LevelIndexFromTarget(const char *path); }
 class Rva005F4AED
 {
@@ -351,17 +345,15 @@ struct Rva002BED91
 	TargetRef00217D4C *m_ptr;
 	void clear();
 };
-// ?clear@Rva002BED91@@QAEXXZ must resolve to the rowed 19B body: reuse its
-// exact class name through a TU-local redeclaration (same {ptr} layout as
-// TreeHintRef00217D4C, whose release semantics it shares).
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 void StrategicHUD::ArmyUnitSwapperMovieClip::Impl::OnPanelLoaded(int which, const char *path)
 {
 	Rva005FD5D4UnitSlot &slot = m_slots[which];
 	Rva005F4AED *factory = 0;
 	if (slot.m_ref.m_ptr && !slot.m_second.m_ptr) {
 		factory = (Rva005F4AED *)slot.m_ref.m_ptr;
-		AsciiString leaf(AptUtils::SkipLevelN(path));
-		slot.m_second = factory->rva005F4AED(AptUtils::LevelIndexFromTarget(path), leaf);
+		slot.m_second = factory->rva005F4AED(AptUtils::LevelIndexFromTarget(path), AptUtils::SkipLevelN(path));
 		((Rva002BED91 *)&slot.m_ref)->clear();
 	}
 }
