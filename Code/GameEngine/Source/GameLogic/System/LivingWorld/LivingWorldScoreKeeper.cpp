@@ -449,3 +449,7 @@ const char *LivingWorldScoreKeeper::GetSnapshotName()const{return "LivingWorldSc
 // Native ScoreKeeper observer cleanup 0x792ade is the complete 20-byte
 // action $L9771 of the exact 310-byte destructor and its exception graph.
 // Its adjusted observer lifetime is emitted by the existing real C++ bases.
+
+// Native ScoreKeeper observer cleanup 0x792af2 is the complete 20-byte
+// action $L9772 of the exact 310-byte destructor and its exception graph.
+// Its adjusted observer lifetime is emitted by the existing real C++ bases.
