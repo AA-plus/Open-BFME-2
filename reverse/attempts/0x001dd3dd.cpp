@@ -1,5 +1,5 @@
 // ?rva001DD3DD@Eva@@QAEXXZ
-// partial score=0.9172399445214979 date=2026-10-13
+// partial score=0.9269486823855756 date=2026-10-13
 // cl: /I. /O1 /G7 /EHs /DNDEBUG /MD /arch:SSE /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
 // Existing 80-byte status clearer at 0x001DCD3C, moved here so Eva's
@@ -596,7 +596,7 @@ void Eva::rva001DD3DD()
  EvaCycleNode*head=*(EvaCycleNode**)&m_queue;
  if(head->next!=head && !TheGameLogic->rva001DCD1C()) {
   unsigned now=((EvaCycleClient*)TheGameClient)->getFrame();
-  if((EvaCycleNode*)m_queuePosition!=*(EvaCycleNode**)&m_queue && (unsigned)m_70+(unsigned)(m_cycleDuration*0.03f)>=now) {
+  if((EvaCycleNode*)m_queuePosition!=*(EvaCycleNode**)&m_queue && (unsigned)m_70+(now?(unsigned)(m_cycleDuration*0.03f):(unsigned)(m_cycleDuration*0.03f))>=now) {
    ++*(_STL::list<int>::iterator*)&m_queuePosition;
    if((EvaCycleNode*)m_queuePosition==*(EvaCycleNode**)&m_queue)m_queuePosition=(int)(*(EvaCycleNode**)&m_queue)->next;
   } else m_queuePosition=(int)(*(EvaCycleNode**)&m_queue)->next;
