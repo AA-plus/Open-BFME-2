@@ -87,7 +87,7 @@ public:
 class Matrix3D
 {
 public:
-	__forceinline Matrix3D() {}
+	__declspec(dllimport) __forceinline Matrix3D() {}
 	__forceinline Vector4 &operator[](int i) { return Row[i]; }
 	__forceinline const Vector4 &operator[](int i) const { return Row[i]; }
 	__forceinline Real Get_X_Translation() const { return Row[0][3]; }

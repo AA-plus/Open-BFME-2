@@ -151,7 +151,7 @@ public:
 	Player *getControllingPlayer() const;
 	ContainModuleInterface *getContain() const { return m_contain; }
 	AIUpdateInterface *getAI() { return m_ai; }
-	Team *getTeam() { return m_team; }
+	__declspec(dllimport) __forceinline Team *getTeam() { return m_team; }
 private:
 	unsigned char m_pad000[0x04];
 	const ThingTemplate *m_template; // +0x04

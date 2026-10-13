@@ -1128,7 +1128,7 @@ struct Textures_Material_And_Shader_Booking_Struct
 	ShaderClass added_shaders[MAX_ADDED_TYPE_COUNT];
 	unsigned added_type_count;
 
-	Textures_Material_And_Shader_Booking_Struct() : added_type_count(0) {}
+	__declspec(dllimport) __forceinline Textures_Material_And_Shader_Booking_Struct() : added_type_count(0) {}
 
 	bool Add_Textures_Material_And_Shader(TextureClass** texs, VertexMaterialClass* mat, ShaderClass shd)
 	{

@@ -36,7 +36,7 @@ public:
 class Vector4
 {
 public:
-	Vector4(void) {}
+	__declspec(dllimport) __forceinline Vector4(void) {}
 	__declspec(dllimport) __forceinline Vector4(float x, float y, float z, float w) : X(x), Y(y), Z(z), W(w) {}
 	float X, Y, Z, W;
 };
