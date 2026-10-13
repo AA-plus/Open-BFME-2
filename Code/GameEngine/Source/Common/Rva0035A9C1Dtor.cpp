@@ -3,17 +3,7 @@
 // ??1Rva0035A9C1@@UAE@XZ @0x0035A9C1 125B
 // Evidence: vtable 0x00C153E0#0 via deleting dtor 0x0035ABA4; Snapshot base vtable 0x00BBB554; forEach 0x00359BE8 with callback 0x1FF3A9 (receiver virtual slot zero); list clear/dtor 0x0023DAA5/0x004EC395 at +0x14; array delete 0x0035A18D at +0x40; free 0x00030830 of +0x04 buffer.
 #include <string>
-
-namespace _STL
-{
-template <class T> class allocator;
-template <class T, class Alloc> class _List_base
-{
-public:
-	void clear();
-	~_List_base();
-};
-}
+#include <list>
 
 extern "C" void __cdecl free(void *);
 
@@ -53,20 +43,23 @@ public:
 
 #include "Common/Snapshot.h"
 
-class Rva0035A9C1 : public Snapshot
+// Native20B cleanup guards null before adjusting to the16B listener base
+// at4. Native11B cleanup at14 calls the full5B list destructor200667,
+// then the23B list-base destructor4EC395; use real STLport rather than
+// the old empty private list-base view. Full125B parent remains unchanged.
+class Rva0035A9C1 : public Snapshot, private Rva00359BE8List
 {
 public:
 	virtual ~Rva0035A9C1();
 private:
-	Rva00359BE8List m_list04;
-	_STL::_List_base<int, _STL::allocator<int> > m_list14;
+	_STL::list<int> m_list14;
 	char m_pad18[0x40 - 0x18];
 	Rva0035A18D *m_arr40;
 };
 
 Rva0035A9C1::~Rva0035A9C1()
 {
-	m_list04.forEach(&Rva00359E04Listener::notify00, (Rva00359E04Owner *)this);
+	static_cast<Rva00359BE8List *>(this)->forEach(&Rva00359E04Listener::notify00, (Rva00359E04Owner *)this);
 	(((_STL::_List_base<int, _STL::allocator<int> > *)((char *)this + 0x14)))->clear();
 	Rva0035A18D *arr = m_arr40;
 	if (arr)

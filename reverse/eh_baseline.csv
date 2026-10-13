@@ -34,7 +34,6 @@ name,target_rva,verdict
 ??0Rva002E0A0A@@QAE@ABV0@@Z,0x002E0A0A,bytes_differ
 ??0ObjectModule@@QAE@PAVThing@@PBVModuleData@@@Z,0x00306AA7,bytes_differ
 ??0DrawableModule@@QAE@PAVThing@@PBVModuleData@@@Z,0x00306B19,bytes_differ
-??1Rva0035A9C1@@UAE@XZ,0x0035A9C1,bytes_differ
 ??0Rva00382FA7@@QAE@ABU0@@Z,0x00382FA7,bytes_differ
 ??0GameInfo@@QAE@XZ,0x00400A07,bytes_differ
 ??0Rva004147CF@@QAE@ABV0@@Z,0x004147CF,bytes_differ
