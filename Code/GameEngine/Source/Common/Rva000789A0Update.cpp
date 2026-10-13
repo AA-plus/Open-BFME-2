@@ -1,9 +1,9 @@
 // cl: /DNDEBUG /MD
-// ?Rva000789A0Update@@YGXPAVRva000789A0Outer@@@Z, retail 0x000789A0, 67 bytes.
-// Free __stdcall setter: calls outer virtual at +0xC4 (slot 49), then if the
+// ?rva000789A0Update@W3DHordeModelDrawManager@@QAEXPAVRva000789A0Outer@@@Z, retail 0x000789A0, 67 bytes.
+// Manager member setter with unused this: calls outer virtual at +0xC4 (slot 49), then if the
 // holder at +0x2E8 is non-null stores nameToKey of the provider name (virtual
 // at +0x18, slot 6) or "(NULL)" into holder+4. Evidence: ret 4 single stack
-// arg used as this for both virtual calls; callee row
+// arg used as this for both virtual calls; caller7A847 supplies manager ECX; callee row
 // ?nameToKey@NameKeyGenerator@@QAE?AW4NameKeyType@@PBD@Z; string "(NULL)" at
 // VA 0x007C6868; global dword at VA 0x009F36A4 used as NameKeyGenerator this.
 
@@ -95,7 +95,16 @@ public:
 	Rva000789A0KeyHolder *m_holder;
 };
 
-void __stdcall Rva000789A0Update(Rva000789A0Outer *obj)
+// Native caller 7A847 loads manager singleton DE1FB8 into ECX, then
+// pushes its draw argument. The body does not use this, but its member ABI
+// matters to callers. WB91BCC8 and the manager7A54B establish the class.
+class W3DHordeModelDrawManager {
+public: void rva000789A0Update(Rva000789A0Outer *obj);
+};
+// The manager entry7A7DD installs its static40B instance; guarded7A75E reads
+// the same pointer. Original singleton identifier is unknown.
+W3DHordeModelDrawManager *TheW3DHordeModelDrawManager;
+void W3DHordeModelDrawManager::rva000789A0Update(Rva000789A0Outer *obj)
 {
 	Rva000789A0Named *provider = obj->getProvider();
 	if (obj->m_holder == 0)

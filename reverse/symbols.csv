@@ -8253,7 +8253,6 @@ name,address,notes
 ?bfmePushStrVHR@@YAXPAUBfmeLuaVHR@@PBD@Z,0x007475E0
 ?bfmePushUserVHR@@YAXPAUBfmeLuaVHR@@PAXH@Z,0x00747650
 ?bfmeQuery1040@@YAXHPAH@Z,0x00324773,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
-?bfmeQuery@Gen01304B64@@QAEHXZ,0x0007A54B,callee read from the retail REL32 in placed BFME1-donor body ?Rva00755C80@@YAXXZ (0x0007A75E)
 ?bfmeQueryNS@BfmeHolderNS@@QAEHXZ,0x0028B511,callee of ?bfmeFireAAE@BfmeAimAAE@@QAEXPAVWeapon@@PAVBfmeHolderNS@@@Z at retail 0x00509307 read from its REL32 displacement; ICF alias onto ?rva0028B511@Object@@QBEHXZ (matched)
 ?bfmeQueryRallyOverride@@YAPAVObject@@PAV1@PBUCoord3D@@@Z,0x004A0403,callee read from the retail REL32 in placed BFME1-donor body ?setRallyPoint@QueueProductionExitUpdate@@UAEXPBUCoord3D@@@Z (0x004A051B)
 ?bfmeRSearchV33@@YAPAPADPAPADPAD111@Z,0x00026340

@@ -14,18 +14,18 @@
 // short form, which is what a thiscall on that pointer looks like. A free
 // function under the same guard compiles to a1 and comes out one byte short.
 
-class Gen01304B64
+class W3DHordeModelDrawManager
 {
 public:
-	int bfmeQuery(void);
+	int rva0007A54B(void);
 };
 
-extern Gen01304B64 *g_Va01304B64;
+extern W3DHordeModelDrawManager *TheW3DHordeModelDrawManager;
 extern int g_Va001FDEB0;
 
 // @?Rva00755C80@@YAXXZ 0x00755C80
 void Rva00755C80(void)
 {
-	if (g_Va01304B64)
-		g_Va001FDEB0 = g_Va01304B64->bfmeQuery();
+	if (TheW3DHordeModelDrawManager)
+		g_Va001FDEB0 = TheW3DHordeModelDrawManager->rva0007A54B();
 }

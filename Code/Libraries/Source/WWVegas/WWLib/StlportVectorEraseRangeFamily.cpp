@@ -297,7 +297,7 @@ template Rva000B690BRecord *_STL::__copy_ptrs<Rva000B690BRecord *, Rva000B690BRe
 // 0x00DE1FC8 and a current-helper pointer at VA 0x00DE1FB8. Keep its storage
 // opaque; the existing destructor pin at 0x0007A4E6 handles its lifetime.
 class Gen_00755E70;
-class Gen01304B64;
+class W3DHordeModelDrawManager;
 
 class Rva007A4E6
 {
@@ -374,7 +374,7 @@ public:
 	void rva0007A7DD();
 };
 
-extern Gen01304B64 *g_Va01304B64;
+extern W3DHordeModelDrawManager *TheW3DHordeModelDrawManager;
 
 // ?rva0007A7DD@W3DHordeModelDraw@@QAEXXZ @ 0x0007A7DD (95B).
 // The function is virtual in the target vtable; this TU declares only the
@@ -383,7 +383,7 @@ void W3DHordeModelDraw::rva0007A7DD()
 {
 	static BfmeHelperYS s_bfmeHelperYS;
 	BfmeHelperYS *helper = &s_bfmeHelperYS;
-	g_Va01304B64 = reinterpret_cast<Gen01304B64 *>(helper);
+	TheW3DHordeModelDrawManager = reinterpret_cast<W3DHordeModelDrawManager *>(helper);
 	helper->bfmeAttachYS(reinterpret_cast<Gen_00755E70 *>(this));
 	reinterpret_cast<Gen_00755E70 *>(this)->bfmeFinishYS();
 }
