@@ -7,6 +7,9 @@
 // prior object's wrapper at +0x1C via rowed 0x00575674 and tail-runs its
 // slot 1. Layout: +4 previous, +8 wrapper; previous has wrapper at +0x1C.
 
+extern "C" const void *const vtbl_00C752A8[];  // folded, 3 classes; via ??_7Rva005CF925@@6B@
+#pragma comment(linker, "/alternatename:_vtbl_00C752A8=??_7Rva005CF925@@6B@")
+
 struct Rva005EB87AInner
 {
 	char m_pad[8];
@@ -80,7 +83,7 @@ void Rva005CFFE8::rva005CFFE8()
 	if (node)
 	{
 		node->m_previous = previous;
-		node->m_vtable = 0x00C752A8;
+		node->m_vtable = ((unsigned int)vtbl_00C752A8);
 	}
 	else
 	{

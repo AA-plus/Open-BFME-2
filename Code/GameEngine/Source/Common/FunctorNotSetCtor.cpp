@@ -12,6 +12,9 @@
 // TimedOperationRef TU keeps its own address-derived spelling through
 // the standing alias pin.
 
+extern "C" const void *const vtbl_00BD3B54[];  // ??_7FunctorNotSet@@6B@
+#pragma comment(linker, "/alternatename:_vtbl_00BD3B54=??_7FunctorNotSet@@6B@")
+
 inline void *operator new(unsigned int, void *p) { return p; }
 class __declspec(dllimport) exception
 {
@@ -33,7 +36,7 @@ public:
 __declspec(noinline) inline FunctorNotSet::FunctorNotSet()
 	: exception()
 {
-	*(unsigned int *)this = 0x00BD3B54;
+	*(unsigned int *)this = ((unsigned int)vtbl_00BD3B54);
 }
 
 // ?bfmeAnchorFunctorNotSetCtor absent-from-retail
