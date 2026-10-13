@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /O1 /G7 /arch:SSE /MD /EHs /EHc- /D_CRTIMP= /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_STLP_NO_EXCEPTIONS
 // stlport
 #include "../../../../Common/RegionArmyIconSlotView.h"
