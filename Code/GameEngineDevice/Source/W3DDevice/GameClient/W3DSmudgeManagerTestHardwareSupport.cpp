@@ -279,13 +279,19 @@ public:
 	void Release_Ref(void);
 };
 
-class StageTextureRef
+// Reuse the rowed four-byte RefCountPtr<TextureClass> lifetime view.
+// Native EH cleanup760A55 calls its complete12B destructor17098D, whose
+// release call61ED10 already has the TextureClass provider. The null
+// constructor and base-pointer reference conversion preserve the donor ABI;
+// this does not establish the original target wrapper spelling.
+template<class T>
+class RefCountPtr
 {
-	TextureClass *Texture;
+	T *Texture;
 
 public:
-	StageTextureRef(void) : Texture(NULL) {}
-	~StageTextureRef(void)
+	RefCountPtr(void) : Texture(NULL) {}
+	~RefCountPtr(void)
 	{
 		if (Texture)
 			Texture->Release_Ref();
@@ -446,7 +452,7 @@ bool W3DSmudgeManager::testHardwareSupport(void)
 		shader.Set_Depth_Mask(0);
 		DX8Wrapper::Set_Shader(shader);
 		{
-			StageTextureRef texture;
+			RefCountPtr<TextureClass> texture;
 			BoxSetTexture(0, texture);
 		}
 		DX8Wrapper::Apply_Render_State_Changes();
