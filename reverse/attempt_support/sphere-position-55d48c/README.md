@@ -1,3 +1,41 @@
+# Updated whole-tree trial, 2026-10-13
+
+Evidence only; no sphere row or shared-header change is landed. Base: BFME2
+61e70ccb32, verified BFME1 cee35b7d8ca077d7255f1c39cb69e9fd9627aa85.
+The primary attempt bank retains the later volatile-input 138-byte/0.93 body.
+`exact-canonical-body.cpp.txt` preserves the clean donor-guided 129-byte callback
+that passes normal add_match admission with the proposed canonical constructors.
+It needs `current-repairs-20261013.patch`; the patch is incomplete and must not
+be applied as a verified whole-tree repair. It includes the earlier repairs.
+
+The correct Pathfinder home was available in this trial. All 47 rows pass
+after default-and-assignment repairs, trivial union storage, direct-output
+adjustCellCenter and moving PrependCells pointer declarations before its
+Coord3D local. Seventeen more files needed explicit scalar initialization or
+trivial wire storage: all 35 rows pass with both original and repaired headers.
+The new callback passed its entire 129 bytes and full source literal, and the
+canonical memberwise copy independently reproduced the native 25-byte copy.
+
+Full build.sh compiled all 22,325 translation units successfully but refused
+31 of 87,326 rows across 29 other consumer files. The original header passes
+all 203 rows in the first 26 files and all rows in the remaining three; these
+are constructor regressions, not pre-existing gate debt. See the complete
+failure names in full-gate-20261013.txt. `throw()` on both constructors and
+`__forceinline` each still failed those 31 rows in the 466-row consumer check.
+String/float/DIR32 failures follow the displaced byte sequences and must not
+be baselined away. The earlier 241-source dependency pass did not cover the
+whole current tree; use the full gate for the eventual landing.
+
+BezierProjectileBehaviorUpdate.cpp was claimed by codex-a44d-root (about two
+hours left at 12:30 London). Its repair was not attempted. All pending Code,
+header, contract and ledger changes were restored, and our claims released.
+Resume only with current ownership of every required consumer. First resolve
+the common copy/initialization causes in the 31 failed rows, preserving each
+native body, then run the full gate before admission and publication. Do not
+add a private Coord3D or a second class/struct-key address pin.
+
+## Earlier evidence and provider adoption
+
 # Sphere emission position and canonical Coord3D dependency
 
 This is banked evidence, not recovered coverage. No constructor/header trial or
