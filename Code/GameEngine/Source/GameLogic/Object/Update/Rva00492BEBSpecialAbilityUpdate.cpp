@@ -8,10 +8,7 @@
 // are all live, copy the found position at +0x38 into a stack Coord3D and
 // pass it to 0x001E702E. Then tail into SpecialAbilityUpdate::update.
 
-enum ObjectID
-{
-	OBJECT_ID_NONE = 0
-};
+#include "../../../Common/GameLogicObjectLookupView.h"
 
 enum UpdateSleepTime
 {
@@ -43,13 +40,6 @@ public:
 	Coord3D m_pos;
 	char m_pad44[0x258 - 0x44];
 	Rva00492BEBHolder *m_holder;
-};
-
-// class-gate: allow GameLogic only the rowed findObjectByID (0x49DC5) is called; pointer-only view
-class GameLogic
-{
-public:
-	Object *findObjectByID(ObjectID id);
 };
 
 extern GameLogic *TheGameLogic;
