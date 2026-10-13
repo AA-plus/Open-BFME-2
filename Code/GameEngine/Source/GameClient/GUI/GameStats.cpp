@@ -204,7 +204,7 @@ struct BfmeStringRecord005DDD40 { UnicodeString text; unsigned int word; };
 class Rva005DD822:public BfmeStringRecord005DDD40 {public:Rva005DD822(unsigned int);};
 class Rva005DD8E0:public BfmeStringRecord005DDD40 {public:Rva005DD8E0(float,float);};
 class Rva005DDED5:public BfmeStringRecord005DDD40 {public:Rva005DDED5(unsigned int);};
-class Rva005DDE01 {public:void rva005DDE01(unsigned int,unsigned int,const BfmeStringRecord005DDD40&,bool);};
+class Rva005DDE01 {public:void AddStat(unsigned int,unsigned int,const BfmeStringRecord005DDD40&,bool);};
 
 // ?rva005DDC6B@Rva005DDC6B@@QAEMII@Z, RVA 0x005DDC6B, 58B. Unlock lane: float
 // range-sum method over 8-byte elements; base pointer at +4 has a 4-byte
@@ -287,7 +287,7 @@ done:
 }
 
 
-// ?rva005DDE33@Rva005DDE33@@QAEMIII@Z, RVA 0x005DDE33, 54B. Chain lane:
+// ?Sum@Rva005DDE33@@QAEMIII@Z, RVA 0x005DDE33, 54B. Chain lane:
 // bounds-checked delegate; count is the byte range at +4/+8 divided by 0x18
 // via push/pop idiv, out of range returns pooled 0.0f BfmeZeroRange, else calls
 // the rowed float range-sum 0x005DDC6B on the indexed 0x18 element head with
@@ -305,14 +305,14 @@ extern "C" void _ReadWriteBarrier(void);
 class Rva005DDE33
 {
 public:
-	__declspec(noinline) float rva005DDE33(unsigned idx, unsigned lo, unsigned hi);
+	__declspec(noinline) float Sum(unsigned idx, unsigned lo, unsigned hi);
 private:
 	int m_00;
 	char *m_04;
 	char *m_08;
 };
 
-float Rva005DDE33::rva005DDE33(unsigned idx, unsigned lo, unsigned hi)
+float Rva005DDE33::Sum(unsigned idx, unsigned lo, unsigned hi)
 {
 	int count = (m_08 - m_04) / 0x18;
 	_ReadWriteBarrier();
@@ -322,32 +322,32 @@ float Rva005DDE33::rva005DDE33(unsigned idx, unsigned lo, unsigned hi)
 }
 
 
-class Rva005DDE69 {public:float rva005DDE69(unsigned int,unsigned int,unsigned int);float rva005DDE9F(unsigned int,unsigned int,unsigned int);};
+class Rva005DDE69 {public:float Max(unsigned int,unsigned int,unsigned int);float MinGameLength(unsigned int,unsigned int,unsigned int);};
 void GameStats::Persistent::CalculateTotalColumn(float total) {
  for(int row=0;row<37;++row) {
   if(!m_rows[row].isDirty())continue;
   switch(row) {
-  case 11: ((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DDED5((unsigned int)((Rva005DDE33*)this)->rva005DDE33(row,0,m_14)),false); break;
+  case 11: ((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DDED5((unsigned int)((Rva005DDE33*)this)->Sum(row,0,m_14)),false); break;
   case 4:case 5:case 7:case 14:case 15:case 16:case 17:case 18:case 20:case 21:case 24:case 25:case 26:case 28:case 29:case 30:case 31:case 33:case 34:
-   ((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DD822((unsigned int)((Rva005DDE33*)this)->rva005DDE33(row,0,m_14)),false); break;
-  case 9: ((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DDED5((unsigned int)((Rva005DDE69*)this)->rva005DDE69(row,0,m_14)),false);break;
-  case 10: ((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DDED5((unsigned int)((Rva005DDE69*)this)->rva005DDE9F(row,0,m_14)),false);break;
+   ((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DD822((unsigned int)((Rva005DDE33*)this)->Sum(row,0,m_14)),false); break;
+  case 9: ((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DDED5((unsigned int)((Rva005DDE69*)this)->Max(row,0,m_14)),false);break;
+  case 10: ((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DDED5((unsigned int)((Rva005DDE69*)this)->MinGameLength(row,0,m_14)),false);break;
   case 6: {
-   float wins=(int)((Rva005DDE33*)this)->rva005DDE33(4,0,m_14);
-   float losses=(int)((Rva005DDE33*)this)->rva005DDE33(5,0,m_14);
-   ((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DD8E0((float)wins,(float)losses),false);break;
+   float wins=(int)((Rva005DDE33*)this)->Sum(4,0,m_14);
+   float losses=(int)((Rva005DDE33*)this)->Sum(5,0,m_14);
+   ((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DD8E0((float)wins,(float)losses),false);break;
   }
   case 8: {
-   float time=((Rva005DDE33*)this)->rva005DDE33(11,0,m_14);
-   float games=((Rva005DDE33*)this)->rva005DDE33(7,0,m_14);
-   ((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DDED5((unsigned int)(games!=0?time/games:0)),false);break;
+   float time=((Rva005DDE33*)this)->Sum(11,0,m_14);
+   float games=((Rva005DDE33*)this)->Sum(7,0,m_14);
+   ((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DDED5((unsigned int)(games!=0?time/games:0)),false);break;
   }
-  case 19: {float killed=((Rva005DDE33*)this)->rva005DDE33(20,0,m_14);float lost=((Rva005DDE33*)this)->rva005DDE33(18,0,m_14);((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DD8E0(killed,lost),false);break;}
-  case 22: {float numerator=(((Rva005DDE33*)this)->rva005DDE33(16,0,m_14)+((Rva005DDE33*)this)->rva005DDE33(20,0,m_14));((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DD8E0(numerator*100.0f,total),false);break;}
+  case 19: {float killed=((Rva005DDE33*)this)->Sum(20,0,m_14);float lost=((Rva005DDE33*)this)->Sum(18,0,m_14);((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DD8E0(killed,lost),false);break;}
+  case 22: {float numerator=(((Rva005DDE33*)this)->Sum(16,0,m_14)+((Rva005DDE33*)this)->Sum(20,0,m_14));((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DD8E0(numerator*100.0f,total),false);break;}
   case 23: {
-   float lost=((Rva005DDE33*)this)->rva005DDE33(18,0,m_14);
-   float built=((Rva005DDE33*)this)->rva005DDE33(17,0,m_14);
-   ((Rva005DDE01*)this)->rva005DDE01(row,m_14,Rva005DD8E0((float)built,(float)lost),false);break;
+   float lost=((Rva005DDE33*)this)->Sum(18,0,m_14);
+   float built=((Rva005DDE33*)this)->Sum(17,0,m_14);
+   ((Rva005DDE01*)this)->AddStat(row,m_14,Rva005DD8E0((float)built,(float)lost),false);break;
   }
   }
  }

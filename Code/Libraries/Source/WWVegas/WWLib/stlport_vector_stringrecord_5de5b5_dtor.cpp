@@ -39,7 +39,7 @@ public:
 	~Rva005DE5B5();
 	Rva005DE5B5(const Rva005DE5B5 &other);
 	Rva005DE5B5();
-	void setValueRva005DDB66(unsigned,const BfmeStringRecord005DDD40&,bool);
+	void AddStat(unsigned,const BfmeStringRecord005DDD40&,bool);
 	void *rva005DE782(unsigned int flags);
 
 private:
@@ -114,7 +114,7 @@ Rva005DE5B5::Rva005DE5B5() : m_00(AsciiString("-")),m_04(),m_10(-FLT_MAX),m_14(f
 // maximum10 update. Float loads/comparison independently type source+4
 // and owner+10; original method name remains unknown. Canonical vector
 // access preserves the target's index register and base/index LEA ordering.
-void Rva005DE5B5::setValueRva005DDB66(unsigned index,const BfmeStringRecord005DDD40&src,bool update) {
+void Rva005DE5B5::AddStat(unsigned index,const BfmeStringRecord005DDD40&src,bool update) {
  if(index>=m_04.size())return;
  m_04[index]=src;
  m_14=true;

@@ -149,45 +149,45 @@ class Rva005DD822:public BfmeStringRecord005DDD40 {public:Rva005DD822(unsigned i
 class Rva005DD8E0:public BfmeStringRecord005DDD40 {public:Rva005DD8E0(float,float);};
 class Rva005DDED5:public BfmeStringRecord005DDD40 {public:Rva005DDED5(unsigned int);};
 class Rva005DD772:public BfmeStringRecord005DDD40 {public:Rva005DD772(const UnicodeString&,float);};
-class Rva005DDE01{public:void rva005DDE01(unsigned int,unsigned int,const BfmeStringRecord005DDD40&,bool);};
+class Rva005DDE01{public:void AddStat(unsigned int,unsigned int,const BfmeStringRecord005DDD40&,bool);};
 class GameStats{public:class Persistent{public:void CalculateTotalColumn(float);};};
 static __forceinline float ScaleCounts(int a,int b){float sum=(float)a;sum+=(float)b;return sum*100.0f;}
 class Rva005C1BDEView {public:void call(Rva005DDE01*);};
 void Rva005C1BDEView::call(Rva005DDE01*table){
 float total=0;UserPreferences*prefs=(UserPreferences*)((char*)this+8);
 for(int side=0;side<6;++side){AsciiString faction(kFactions[side]);int wins=prefs->rva00535BF6(faction);int losses=prefs->rva00535CE4(faction);for(int row=0;row<37;++row){switch(row){
-case 0:{table->rva005DDE01(0,side,Rva005DD822(prefs->rva00535D75(faction)),true);break;}
-case 1:{table->rva005DDE01(1,side,Rva005DD822(prefs->rva00535E06(faction)),true);break;}
-case 2:{table->rva005DDE01(2,side,Rva005DD822(prefs->rva00535E97(faction)),true);break;}
-case 3:{table->rva005DDE01(3,side,Rva005DD822(prefs->rva00535F28(faction)),true);break;}
-case 4:{table->rva005DDE01(4,side,Rva005DD822(wins),true);break;}
-case 5:{table->rva005DDE01(5,side,Rva005DD822(losses),true);break;}
-case 6:{table->rva005DDE01(6,side,Rva005DD8E0((float)wins,(float)losses),true);break;}
-case 7:{table->rva005DDE01(7,side,Rva005DD822(wins+losses),true);break;}
-case 8:{table->rva005DDE01(8,side,Rva005DDED5((unsigned int)prefs->rva00535AE1(faction)),true);break;}
-case 9:{table->rva005DDE01(9,side,Rva005DDED5((unsigned int)prefs->rva005359A9(faction)),true);break;}
-case 10:{table->rva005DDE01(10,side,Rva005DDED5((unsigned int)prefs->rva00535A45(faction)),true);break;}
-case 11:{table->rva005DDE01(11,side,Rva005DDED5((unsigned int)prefs->rva0053590D(faction)),true);break;}
-case 12:{UnicodeString label=Rva005C1B2D(prefs->rva0053755A(faction));table->rva005DDE01(12,side,Rva005DD772(label,0),true);break;}
-case 13:{UnicodeString label=Rva005C1B2D(prefs->rva00537616(faction));table->rva005DDE01(13,side,Rva005DD772(label,0),true);break;}
-case 14:{table->rva005DDE01(14,side,Rva005DD822(prefs->rva005362B2(faction)),true);break;}
-case 15:{table->rva005DDE01(15,side,Rva005DD822(prefs->rva00536343(faction)),true);break;}
-case 16:{table->rva005DDE01(16,side,Rva005DD822(prefs->rva005363D4(faction)),true);break;}
-case 17:{table->rva005DDE01(17,side,Rva005DD822(prefs->rva00536465(faction)),true);break;}
-case 18:{table->rva005DDE01(18,side,Rva005DD822(prefs->rva005364F6(faction)),true);break;}
-case 19:{float numerator=(float)prefs->rva00536587(faction);float denominator=(float)prefs->rva005364F6(faction);table->rva005DDE01(19,side,Rva005DD8E0(numerator,denominator),true);break;}
-case 20:{table->rva005DDE01(20,side,Rva005DD822(prefs->rva00536587(faction)),true);break;}
-case 21:{table->rva005DDE01(21,side,Rva005DD822(prefs->rva00536618(faction)),true);break;}
-case 22:{float denominator=(float)prefs->rva005366A9(faction);if(denominator<0)denominator=(float)prefs->rva00536618(faction);total+=denominator;int countA=prefs->rva00536587(faction);int countB=prefs->rva005363D4(faction);table->rva005DDE01(22,side,Rva005DD8E0(ScaleCounts(countA,countB),denominator),true);break;}
-case 23:{float denominator=(float)prefs->rva005364F6(faction);float numerator=(float)prefs->rva00536465(faction);table->rva005DDE01(23,side,Rva005DD8E0(numerator,denominator),true);break;}
-case 24:{table->rva005DDE01(24,side,Rva005DD822(prefs->rva0053673A(faction)),true);break;}
-case 25:{table->rva005DDE01(25,side,Rva005DD822(prefs->rva005367CB(faction)),true);break;}
+case 0:{table->AddStat(0,side,Rva005DD822(prefs->rva00535D75(faction)),true);break;}
+case 1:{table->AddStat(1,side,Rva005DD822(prefs->rva00535E06(faction)),true);break;}
+case 2:{table->AddStat(2,side,Rva005DD822(prefs->rva00535E97(faction)),true);break;}
+case 3:{table->AddStat(3,side,Rva005DD822(prefs->rva00535F28(faction)),true);break;}
+case 4:{table->AddStat(4,side,Rva005DD822(wins),true);break;}
+case 5:{table->AddStat(5,side,Rva005DD822(losses),true);break;}
+case 6:{table->AddStat(6,side,Rva005DD8E0((float)wins,(float)losses),true);break;}
+case 7:{table->AddStat(7,side,Rva005DD822(wins+losses),true);break;}
+case 8:{table->AddStat(8,side,Rva005DDED5((unsigned int)prefs->rva00535AE1(faction)),true);break;}
+case 9:{table->AddStat(9,side,Rva005DDED5((unsigned int)prefs->rva005359A9(faction)),true);break;}
+case 10:{table->AddStat(10,side,Rva005DDED5((unsigned int)prefs->rva00535A45(faction)),true);break;}
+case 11:{table->AddStat(11,side,Rva005DDED5((unsigned int)prefs->rva0053590D(faction)),true);break;}
+case 12:{UnicodeString label=Rva005C1B2D(prefs->rva0053755A(faction));table->AddStat(12,side,Rva005DD772(label,0),true);break;}
+case 13:{UnicodeString label=Rva005C1B2D(prefs->rva00537616(faction));table->AddStat(13,side,Rva005DD772(label,0),true);break;}
+case 14:{table->AddStat(14,side,Rva005DD822(prefs->rva005362B2(faction)),true);break;}
+case 15:{table->AddStat(15,side,Rva005DD822(prefs->rva00536343(faction)),true);break;}
+case 16:{table->AddStat(16,side,Rva005DD822(prefs->rva005363D4(faction)),true);break;}
+case 17:{table->AddStat(17,side,Rva005DD822(prefs->rva00536465(faction)),true);break;}
+case 18:{table->AddStat(18,side,Rva005DD822(prefs->rva005364F6(faction)),true);break;}
+case 19:{float numerator=(float)prefs->rva00536587(faction);float denominator=(float)prefs->rva005364F6(faction);table->AddStat(19,side,Rva005DD8E0(numerator,denominator),true);break;}
+case 20:{table->AddStat(20,side,Rva005DD822(prefs->rva00536587(faction)),true);break;}
+case 21:{table->AddStat(21,side,Rva005DD822(prefs->rva00536618(faction)),true);break;}
+case 22:{float denominator=(float)prefs->rva005366A9(faction);if(denominator<0)denominator=(float)prefs->rva00536618(faction);total+=denominator;int countA=prefs->rva00536587(faction);int countB=prefs->rva005363D4(faction);table->AddStat(22,side,Rva005DD8E0(ScaleCounts(countA,countB),denominator),true);break;}
+case 23:{float denominator=(float)prefs->rva005364F6(faction);float numerator=(float)prefs->rva00536465(faction);table->AddStat(23,side,Rva005DD8E0(numerator,denominator),true);break;}
+case 24:{table->AddStat(24,side,Rva005DD822(prefs->rva0053673A(faction)),true);break;}
+case 25:{table->AddStat(25,side,Rva005DD822(prefs->rva005367CB(faction)),true);break;}
 }}}
 ((GameStats::Persistent*)table)->CalculateTotalColumn(total);
-table->rva005DDE01(12,6,Rva005DD772(Rva005C1B2D(prefs->rva005376D2()),0),true);
-table->rva005DDE01(13,6,Rva005DD772(Rva005C1B2D(prefs->rva005377B6()),0),true);
-table->rva005DDE01(1,6,Rva005DD822(prefs->rva005360DC()),true);
-table->rva005DDE01(0,6,Rva005DD822(prefs->rva00535FBA()),true);
-table->rva005DDE01(2,6,Rva005DD822(prefs->rva0053604B()),true);
-table->rva005DDE01(3,6,Rva005DD822(prefs->rva0053616D()),true);
+table->AddStat(12,6,Rva005DD772(Rva005C1B2D(prefs->rva005376D2()),0),true);
+table->AddStat(13,6,Rva005DD772(Rva005C1B2D(prefs->rva005377B6()),0),true);
+table->AddStat(1,6,Rva005DD822(prefs->rva005360DC()),true);
+table->AddStat(0,6,Rva005DD822(prefs->rva00535FBA()),true);
+table->AddStat(2,6,Rva005DD822(prefs->rva0053604B()),true);
+table->AddStat(3,6,Rva005DD822(prefs->rva0053616D()),true);
 }

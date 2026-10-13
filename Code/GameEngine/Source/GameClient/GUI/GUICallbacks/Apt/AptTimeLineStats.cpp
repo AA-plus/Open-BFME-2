@@ -157,7 +157,7 @@ struct BfmeStringRecord005DDD40 {UnicodeString text; float word;};
 class Rva005DD822:public BfmeStringRecord005DDD40 {public:Rva005DD822(unsigned);};
 class Rva005DDED5:public BfmeStringRecord005DDD40 {public:Rva005DDED5(unsigned);};
 class Rva005DD8E0:public BfmeStringRecord005DDD40 {public:Rva005DD8E0(float,float);};
-class Rva005DDE01 {public:void rva005DDE01(unsigned,unsigned,const BfmeStringRecord005DDD40&,bool);};
+class Rva005DDE01 {public:void AddStat(unsigned,unsigned,const BfmeStringRecord005DDD40&,bool);};
 class GameStats {public:class Row;class StrategicEndGame;class RealTimeEndGame;};
 class Rva005DE9E3 {
 public:Rva005DE9E3(unsigned);virtual~Rva005DE9E3();
@@ -206,33 +206,33 @@ void AptTimeLineStats::CollectPlayerData(int playerIndex,LivingWorldPlayer *play
  const Rva00045411BitSet&structureKinds=structures;
  for(int stat=0;stat<27;++stat) {
   switch(stat) {
-  case 0: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(0,playerIndex,Rva005DDED5(score->rva004EE037()),true);break;
-  case 1: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(1,playerIndex,Rva005DDED5(score->rva004EE016()),true);break;
-  case 2: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(2,playerIndex,Rva005DD822(score->rva004EE043()+1),true);break;
-  case 3: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(3,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE35D*>(score)->rva004EE35D(structureKinds,reinterpret_cast<const Rva00045411BitSet&>(KINDOFMASK_NONE))),true);break;
-  case 4: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(4,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE3AB*>(score)->rva004EE3AB(structureKinds,reinterpret_cast<const Rva00045411BitSet&>(KINDOFMASK_NONE))),true);break;
-  case 5: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(5,playerIndex,Rva005DD822(score->words[0x94/4]),true);break;
-  case 6: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(6,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE3F9*>(score)->rva004EE3F9(structureKinds,reinterpret_cast<const Rva00045411BitSet&>(KINDOFMASK_NONE))),true);break;
-  case 7: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(7,playerIndex,Rva005DD822(score->words[0x98/4]),true);break;
-  case 8: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(8,playerIndex,Rva005DD822(score->GetBuildingsOfTypeBuilt(1)),true);break;
-  case 9: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(9,playerIndex,Rva005DD822(score->GetBuildingsOfTypeBuilt(3)),true);break;
-  case 10: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(10,playerIndex,Rva005DD822(score->GetBuildingsOfTypeBuilt(2)),true);break;
-  case 11: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(11,playerIndex,Rva005DD822(score->GetBuildingsOfTypeBuilt(4)),true);break;
-  case 12: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(12,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE447*>(score)->rva004EE447()+score->rva004EE33B()),true);break;
-  case 13: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(13,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE485*>(score)->rva005BE20B()),true);break;
-  case 14: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(14,playerIndex,Rva005DD8E0(float(countStrategicKills(score)),float(reinterpret_cast<Rva004EE485*>(score)->rva005BE20B())),true);break;
-  case 15: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(15,playerIndex,Rva005DD822(score->valueA8()+score->valueAC()),true);break;
-  case 16: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(16,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE4C3*>(score)->rva004EE4C3()),true);break;
-  case 17: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(17,playerIndex,Rva005DD822(score->words[0xB0/4]),true);break;
-  case 18: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(18,playerIndex,Rva005DD822(score->words[0xD8/4]),true);break;
-  case 19: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(19,playerIndex,Rva005DD822(score->words[0xDC/4]),true);break;
-  case 20: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(20,playerIndex,Rva005DD8E0(float(score->valueD8()),float(score->valueDC())),true);break;
-  case 21: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(21,playerIndex,Rva005DD822(score->words[0xE0/4]),true);break;
-  case 22: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(22,playerIndex,Rva005DD822(score->words[0xE4/4]),true);break;
-  case 23: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(23,playerIndex,Rva005DD822(score->words[0xE8/4]),true);break;
-  case 24: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(24,playerIndex,Rva005DD822(score->words[0xEC/4]),true);break;
-  case 25: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(25,playerIndex,Rva005DD822((reinterpret_cast<int*>(score->words[0x38/4])-reinterpret_cast<int*>(score->words[0x34/4]))),true);break;
-  case 26: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(26,playerIndex,Rva005DD822(score->words[0xF0/4]),true);break;
+  case 0: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(0,playerIndex,Rva005DDED5(score->rva004EE037()),true);break;
+  case 1: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(1,playerIndex,Rva005DDED5(score->rva004EE016()),true);break;
+  case 2: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(2,playerIndex,Rva005DD822(score->rva004EE043()+1),true);break;
+  case 3: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(3,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE35D*>(score)->rva004EE35D(structureKinds,reinterpret_cast<const Rva00045411BitSet&>(KINDOFMASK_NONE))),true);break;
+  case 4: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(4,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE3AB*>(score)->rva004EE3AB(structureKinds,reinterpret_cast<const Rva00045411BitSet&>(KINDOFMASK_NONE))),true);break;
+  case 5: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(5,playerIndex,Rva005DD822(score->words[0x94/4]),true);break;
+  case 6: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(6,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE3F9*>(score)->rva004EE3F9(structureKinds,reinterpret_cast<const Rva00045411BitSet&>(KINDOFMASK_NONE))),true);break;
+  case 7: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(7,playerIndex,Rva005DD822(score->words[0x98/4]),true);break;
+  case 8: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(8,playerIndex,Rva005DD822(score->GetBuildingsOfTypeBuilt(1)),true);break;
+  case 9: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(9,playerIndex,Rva005DD822(score->GetBuildingsOfTypeBuilt(3)),true);break;
+  case 10: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(10,playerIndex,Rva005DD822(score->GetBuildingsOfTypeBuilt(2)),true);break;
+  case 11: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(11,playerIndex,Rva005DD822(score->GetBuildingsOfTypeBuilt(4)),true);break;
+  case 12: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(12,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE447*>(score)->rva004EE447()+score->rva004EE33B()),true);break;
+  case 13: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(13,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE485*>(score)->rva005BE20B()),true);break;
+  case 14: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(14,playerIndex,Rva005DD8E0(float(countStrategicKills(score)),float(reinterpret_cast<Rva004EE485*>(score)->rva005BE20B())),true);break;
+  case 15: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(15,playerIndex,Rva005DD822(score->valueA8()+score->valueAC()),true);break;
+  case 16: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(16,playerIndex,Rva005DD822(reinterpret_cast<Rva004EE4C3*>(score)->rva004EE4C3()),true);break;
+  case 17: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(17,playerIndex,Rva005DD822(score->words[0xB0/4]),true);break;
+  case 18: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(18,playerIndex,Rva005DD822(score->words[0xD8/4]),true);break;
+  case 19: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(19,playerIndex,Rva005DD822(score->words[0xDC/4]),true);break;
+  case 20: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(20,playerIndex,Rva005DD8E0(float(score->valueD8()),float(score->valueDC())),true);break;
+  case 21: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(21,playerIndex,Rva005DD822(score->words[0xE0/4]),true);break;
+  case 22: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(22,playerIndex,Rva005DD822(score->words[0xE4/4]),true);break;
+  case 23: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(23,playerIndex,Rva005DD822(score->words[0xE8/4]),true);break;
+  case 24: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(24,playerIndex,Rva005DD822(score->words[0xEC/4]),true);break;
+  case 25: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(25,playerIndex,Rva005DD822((reinterpret_cast<int*>(score->words[0x38/4])-reinterpret_cast<int*>(score->words[0x34/4]))),true);break;
+  case 26: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(26,playerIndex,Rva005DD822(score->words[0xF0/4]),true);break;
   }
  }
 }
@@ -288,54 +288,54 @@ void AptTimeLineStats::CollectPlayerData(int playerIndex,Player*player) {
  if(!score)return;
  ++numPlayers;
  for(int stat=0;stat<24;++stat) switch(stat) {
-  case 0: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(0,playerIndex,Rva005DDED5(reinterpret_cast<Rva0039B709*>(score)->rva0039B6EE()),true);break;
-  case 1: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(1,playerIndex,Rva005DD822(score->words[0xC8/4]),true);break;
-  case 2: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(2,playerIndex,Rva005DD822(score->words[0xCC/4]),true);break;
-  case 3: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(3,playerIndex,Rva005DD822(score->getTotalBuildingsDestroyed()),true);break;
-  case 4: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(4,playerIndex,Rva005DD822(score->fortresses.size()),true);break;
-  case 5: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(5,playerIndex,Rva005DD822(score->words[0x70/4]),true);break;
-  case 6: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(6,playerIndex,Rva005DD822(score->words[0x74/4]),true);break;
+  case 0: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(0,playerIndex,Rva005DDED5(reinterpret_cast<Rva0039B709*>(score)->rva0039B6EE()),true);break;
+  case 1: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(1,playerIndex,Rva005DD822(score->words[0xC8/4]),true);break;
+  case 2: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(2,playerIndex,Rva005DD822(score->words[0xCC/4]),true);break;
+  case 3: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(3,playerIndex,Rva005DD822(score->getTotalBuildingsDestroyed()),true);break;
+  case 4: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(4,playerIndex,Rva005DD822(score->fortresses.size()),true);break;
+  case 5: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(5,playerIndex,Rva005DD822(score->words[0x70/4]),true);break;
+  case 6: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(6,playerIndex,Rva005DD822(score->words[0x74/4]),true);break;
   case 7: {
    float killed=float(score->getTotalUnitsDestroyed());float lost=float(score->value74());
-   reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(7,playerIndex,Rva005DD8E0(killed,lost),true);break;
+   reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(7,playerIndex,Rva005DD8E0(killed,lost),true);break;
   }
-  case 8: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(8,playerIndex,Rva005DD822(score->getTotalUnitsDestroyed()),true);break;
+  case 8: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(8,playerIndex,Rva005DD822(score->getTotalUnitsDestroyed()),true);break;
   case 9: {
    UnicodeString favorite=TheGameText->fetch("GUI:None");
    Rva002618A2 kinds;
    reinterpret_cast<Rva0039BDB8*>(score)->rva0039BE95(reinterpret_cast<const BitFlags<69>*>(kinds.rva002618FA(0,109,90,10,11,191)),&favorite);
-   reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(9,playerIndex,Rva005DD772(favorite,0.0f),true);break;
+   reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(9,playerIndex,Rva005DD772(favorite,0.0f),true);break;
   }
   case 10: {
    float gathered=float(score->value4());float minutes=float(reinterpret_cast<Rva0039B709*>(score)->rva0039B9D1());
-   reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(10,playerIndex,Rva005DD8E0(gathered,minutes),true);break;
+   reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(10,playerIndex,Rva005DD8E0(gathered,minutes),true);break;
   }
-  case 11: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(11,playerIndex,Rva005DD822(score->words[4/4]),true);break;
-  case 12: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(12,playerIndex,Rva005DD822(score->words[16/4]),true);break;
-  case 13: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(13,playerIndex,Rva005DD822(score->words[12/4]),true);break;
+  case 11: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(11,playerIndex,Rva005DD822(score->words[4/4]),true);break;
+  case 12: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(12,playerIndex,Rva005DD822(score->words[16/4]),true);break;
+  case 13: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(13,playerIndex,Rva005DD822(score->words[12/4]),true);break;
   case 14: {
    float spent=float(score->value18());
-   reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(14,playerIndex,Rva005DD822(unsigned(spent)),true);break;
+   reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(14,playerIndex,Rva005DD822(unsigned(spent)),true);break;
   }
   case 15: {
    float spent=float(score->value14());
-   reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(15,playerIndex,Rva005DD822(unsigned(spent)),true);break;
+   reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(15,playerIndex,Rva005DD822(unsigned(spent)),true);break;
   }
   case 16: {
    float spent=float(score->value1C());
-   reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(16,playerIndex,Rva005DD822(unsigned(spent)),true);break;
+   reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(16,playerIndex,Rva005DD822(unsigned(spent)),true);break;
   }
   case 18: {
    float spent=float(score->value8());float kills=float(score->getTotalUnitsDestroyed());
    kills+=float(score->getTotalBuildingsDestroyed());
-   reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(18,playerIndex,Rva005DD8E0(kills*100.0f,spent),true);break;
+   reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(18,playerIndex,Rva005DD8E0(kills*100.0f,spent),true);break;
   }
   case 19: {
    float lost=float(score->value74());float created=float(score->value70());
-   reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(19,playerIndex,Rva005DD8E0(created,lost),true);break;
+   reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(19,playerIndex,Rva005DD8E0(created,lost),true);break;
   }
-  case 20: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(20,playerIndex,Rva005DDED5(reinterpret_cast<Rva0039B709*>(score)->rva0039B709()),true);break;
-  case 22: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(22,playerIndex,Rva005DD822(reinterpret_cast<Rva0039BF0B*>(score)->rva0039BF0B(reinterpret_cast<const Rva00045411BitSet&>(Rva00045411BitSet(0,90)),reinterpret_cast<const Rva00045411BitSet&>(Rva00045411BitSet(0,179)))),true);break;
-  case 23: reinterpret_cast<Rva005DDE01*>(receiver)->rva005DDE01(23,playerIndex,Rva005DD822(reinterpret_cast<Rva0039BF39*>(score)->rva0039BF39(reinterpret_cast<const Rva00045411BitSet&>(Rva00045411BitSet(0,90)),reinterpret_cast<const Rva00045411BitSet&>(Rva00045411BitSet(0,179)))),true);break;
+  case 20: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(20,playerIndex,Rva005DDED5(reinterpret_cast<Rva0039B709*>(score)->rva0039B709()),true);break;
+  case 22: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(22,playerIndex,Rva005DD822(reinterpret_cast<Rva0039BF0B*>(score)->rva0039BF0B(reinterpret_cast<const Rva00045411BitSet&>(Rva00045411BitSet(0,90)),reinterpret_cast<const Rva00045411BitSet&>(Rva00045411BitSet(0,179)))),true);break;
+  case 23: reinterpret_cast<Rva005DDE01*>(receiver)->AddStat(23,playerIndex,Rva005DD822(reinterpret_cast<Rva0039BF39*>(score)->rva0039BF39(reinterpret_cast<const Rva00045411BitSet&>(Rva00045411BitSet(0,90)),reinterpret_cast<const Rva00045411BitSet&>(Rva00045411BitSet(0,179)))),true);break;
  }
 }

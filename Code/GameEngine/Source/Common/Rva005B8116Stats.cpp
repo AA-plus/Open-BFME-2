@@ -49,7 +49,7 @@ static __forceinline float rva005B80F2Inline(int side, float def, Rva005B8053 *s
 struct BfmeStringRecord005DDD40 { UnicodeString text; unsigned int word; };
 class Rva005DD822 : public BfmeStringRecord005DDD40 { public: Rva005DD822(unsigned int); };
 class Rva005DD8E0 : public BfmeStringRecord005DDD40 { public: Rva005DD8E0(float, float); };
-class Rva005DDE01 { public: void rva005DDE01(unsigned int, unsigned int, const BfmeStringRecord005DDD40 &, bool); };
+class Rva005DDE01 { public: void AddStat(unsigned int, unsigned int, const BfmeStringRecord005DDD40 &, bool); };
 
 struct Rva005B8116Map { Rva005B8053 m_tree; int m_pad[2]; };
 
@@ -107,31 +107,31 @@ void Rva005B8116::rva005B8116(Rva005B8116Stats *stats, int *total)
 		{
 			switch (row)
 			{
-			case 0: m_table.rva005DDE01(0, side, Rva005DD822(rva005B808D(side, &stats->m_1C)), true); break;
-			case 1: m_table.rva005DDE01(1, side, Rva005DD822(rva005B808D(side, &stats->m_28)), true); break;
-			case 2: m_table.rva005DDE01(2, side, Rva005DD822(rva005B808D(side, &stats->m_40)), true); break;
-			case 3: m_table.rva005DDE01(3, side, Rva005DD822(rva005B808D(side, &stats->m_34)), true); break;
-			case 4: m_table.rva005DDE01(4, side, Rva005DD822(a), true); break;
-			case 5: m_table.rva005DDE01(5, side, Rva005DD822(b), true); break;
-			case 6: m_table.rva005DDE01(6, side, Rva005DD8E0((float)a, (float)b), true); break;
-			case 7: m_table.rva005DDE01(7, side, Rva005DD822(a + b), true); break;
-			case 14: m_table.rva005DDE01(14, side, Rva005DD822((unsigned int)rva005B80D0(side, &stats->m_118)), true); break;
-			case 15: m_table.rva005DDE01(15, side, Rva005DD822((unsigned int)rva005B80D0(side, &stats->m_10C)), true); break;
-			case 16: m_table.rva005DDE01(16, side, Rva005DD822(f), true); break;
-			case 17: m_table.rva005DDE01(17, side, Rva005DD822(c), true); break;
-			case 18: m_table.rva005DDE01(18, side, Rva005DD822(d), true); break;
-			case 19: m_table.rva005DDE01(19, side, Rva005DD8E0((float)e, (float)d), true); break;
-			case 20: m_table.rva005DDE01(20, side, Rva005DD822(e), true); break;
-			case 21: m_table.rva005DDE01(21, side, Rva005DD822(g), true); break;
-			case 22: m_table.rva005DDE01(22, side, Rva005DD8E0((float)((f + e) * 100), (float)h), true); break;
-			case 23: m_table.rva005DDE01(23, side, Rva005DD8E0((float)c, (float)d), true); break;
+			case 0: m_table.AddStat(0, side, Rva005DD822(rva005B808D(side, &stats->m_1C)), true); break;
+			case 1: m_table.AddStat(1, side, Rva005DD822(rva005B808D(side, &stats->m_28)), true); break;
+			case 2: m_table.AddStat(2, side, Rva005DD822(rva005B808D(side, &stats->m_40)), true); break;
+			case 3: m_table.AddStat(3, side, Rva005DD822(rva005B808D(side, &stats->m_34)), true); break;
+			case 4: m_table.AddStat(4, side, Rva005DD822(a), true); break;
+			case 5: m_table.AddStat(5, side, Rva005DD822(b), true); break;
+			case 6: m_table.AddStat(6, side, Rva005DD8E0((float)a, (float)b), true); break;
+			case 7: m_table.AddStat(7, side, Rva005DD822(a + b), true); break;
+			case 14: m_table.AddStat(14, side, Rva005DD822((unsigned int)rva005B80D0(side, &stats->m_118)), true); break;
+			case 15: m_table.AddStat(15, side, Rva005DD822((unsigned int)rva005B80D0(side, &stats->m_10C)), true); break;
+			case 16: m_table.AddStat(16, side, Rva005DD822(f), true); break;
+			case 17: m_table.AddStat(17, side, Rva005DD822(c), true); break;
+			case 18: m_table.AddStat(18, side, Rva005DD822(d), true); break;
+			case 19: m_table.AddStat(19, side, Rva005DD8E0((float)e, (float)d), true); break;
+			case 20: m_table.AddStat(20, side, Rva005DD822(e), true); break;
+			case 21: m_table.AddStat(21, side, Rva005DD822(g), true); break;
+			case 22: m_table.AddStat(22, side, Rva005DD8E0((float)((f + e) * 100), (float)h), true); break;
+			case 23: m_table.AddStat(23, side, Rva005DD8E0((float)c, (float)d), true); break;
 			}
 		}
 	}
-	m_table.rva005DDE01(0, 6, Rva005DD822(stats->m_146), false);
-	m_table.rva005DDE01(1, 6, Rva005DD822(stats->m_14A), false);
-	m_table.rva005DDE01(2, 6, Rva005DD822(stats->m_148), false);
-	m_table.rva005DDE01(3, 6, Rva005DD822(stats->m_14C), false);
+	m_table.AddStat(0, 6, Rva005DD822(stats->m_146), false);
+	m_table.AddStat(1, 6, Rva005DD822(stats->m_14A), false);
+	m_table.AddStat(2, 6, Rva005DD822(stats->m_148), false);
+	m_table.AddStat(3, 6, Rva005DD822(stats->m_14C), false);
 }
 
 // Native 005B87ED..005B899F RET8; WB1582F60 has the same six-side 37-row
@@ -162,11 +162,11 @@ void Rva005B8EBB::rva005B87ED(void *opaque,unsigned *total){
  for(int side=0;side<6;++side){
   for(int row=0;row<37;++row){
    switch(row){
-   case 11:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(11,side,Rva005DDED5(extraInt(side,(Rva005B8053*)((char*)opaque+0x154))),true);break;
-   case 9: ((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(9,side,Rva005DDED5(rva005B808D(side,(Rva005B8053*)((char*)opaque+0x160))),true);break;
-   case 10:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(10,side,Rva005DDED5(rva005B808D(side,(Rva005B8053*)((char*)opaque+0x16c))),true);break;
-   case 24:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(24,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)opaque+0x178))),true);break;
-   case 25:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(25,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)opaque+0x184))),true);break;
+   case 11:((Rva005DDE01*)((char*)this+0x60))->AddStat(11,side,Rva005DDED5(extraInt(side,(Rva005B8053*)((char*)opaque+0x154))),true);break;
+   case 9: ((Rva005DDE01*)((char*)this+0x60))->AddStat(9,side,Rva005DDED5(rva005B808D(side,(Rva005B8053*)((char*)opaque+0x160))),true);break;
+   case 10:((Rva005DDE01*)((char*)this+0x60))->AddStat(10,side,Rva005DDED5(rva005B808D(side,(Rva005B8053*)((char*)opaque+0x16c))),true);break;
+   case 24:((Rva005DDE01*)((char*)this+0x60))->AddStat(24,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)opaque+0x178))),true);break;
+   case 25:((Rva005DDE01*)((char*)this+0x60))->AddStat(25,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)opaque+0x184))),true);break;
    }
   }
  }
@@ -248,14 +248,14 @@ void Rva005B8EBB::rva005B8A40(){
  Rva0038454E stats=all.rva00389E0F();unsigned total=0;
  ((Rva005B8116*)this)->rva005B8116((Rva005B8116Stats*)&stats,(int*)&total);
  for(int side=0;side<6;++side){for(int row=0;row<37;++row){switch(row){
-case 26:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(26,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x154))),true);break;
-case 27:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(27,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x160))),true);break;
-case 28:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(28,side,Rva005DD822(rva005B808D(side,(Rva005B8053*)((char*)&stats+0x1b4))),true);break;
-case 32:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(32,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1cc))),true);break;
-case 33:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(33,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1d8))),true);break;
-case 34:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(34,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1e4))),true);break;
-case 35:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(35,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1f0))),true);break;
-case 36:((Rva005DDE01*)((char*)this+0x60))->rva005DDE01(36,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1fc))),true);break;
+case 26:((Rva005DDE01*)((char*)this+0x60))->AddStat(26,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x154))),true);break;
+case 27:((Rva005DDE01*)((char*)this+0x60))->AddStat(27,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x160))),true);break;
+case 28:((Rva005DDE01*)((char*)this+0x60))->AddStat(28,side,Rva005DD822(rva005B808D(side,(Rva005B8053*)((char*)&stats+0x1b4))),true);break;
+case 32:((Rva005DDE01*)((char*)this+0x60))->AddStat(32,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1cc))),true);break;
+case 33:((Rva005DDE01*)((char*)this+0x60))->AddStat(33,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1d8))),true);break;
+case 34:((Rva005DDE01*)((char*)this+0x60))->AddStat(34,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1e4))),true);break;
+case 35:((Rva005DDE01*)((char*)this+0x60))->AddStat(35,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1f0))),true);break;
+case 36:((Rva005DDE01*)((char*)this+0x60))->AddStat(36,side,Rva005DD822((unsigned)rva005B80D0(side,(Rva005B8053*)((char*)&stats+0x1fc))),true);break;
 }}}((GameStats::Persistent*)m_60)->CalculateTotalColumn((float)total);}
 
 class Rva00553E47StatsCore;
