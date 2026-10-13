@@ -21,6 +21,7 @@ public:
 };
 
 void __cdecl free(void *);
+void __cdecl operator delete(void *);
 
 class Rva005D4C01List
 {
@@ -56,10 +57,13 @@ class Rva005D4BE7
 public:
 	Rva005D4BE7(Rva005D4913 *p):m_ptr(p) {}
  void rva005D4BE7();
-// ??1Rva005D4BE7@@QAE@XZ present-unmatched
-	~Rva005D4BE7()
+	// Complete26B native owning-pointer destructor: clear its slot before
+    // the verified54B pointee destructor and ordinary heap delete.
+    __declspec(noinline) ~Rva005D4BE7()
 	{
-		rva005D4BE7();
+        Rva005D4913 *p = m_ptr;
+        m_ptr = 0;
+        if (p) { p->Rva005D4913::~Rva005D4913(); ::operator delete(p); }
 	}
 };
 
