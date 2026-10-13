@@ -150,10 +150,9 @@ class GeometryInfo
 {
 public:
 	Real getMaxHeightAbovePosition() const;
-	Real getBoundingSphereRadius() const
-	{
-		return *reinterpret_cast<const Real *>(reinterpret_cast<const char *>(this) + 0x14);
-	}
+    char m_pad000[0x14];
+    Real m_boundingSphereRadius; // target Object+A8+14 = Object+BC
+
 };
 
 class Object
@@ -242,7 +241,7 @@ void Drawable::drawAmmo()
     pos.y += TheWritableGlobalData->m_ammoPipWorldOffset.y;
     pos.z += TheWritableGlobalData->m_ammoPipWorldOffset.z + obj->getGeometryInfo().getMaxHeightAbovePosition();
     if (TheTacticalView->worldToScreen(&pos, &screenCenter) != 0) return;
-    Real bounding = obj->getGeometryInfo().getBoundingSphereRadius()*scale;
+    Real bounding = obj->getGeometryInfo().m_boundingSphereRadius*scale;
     Int posx = m_460;
     Int posy = screenCenter.y + (Int)(TheWritableGlobalData->m_ammoPipScreenOffset.y*bounding);
     for (Int i=0; i<numTotal; ++i) {
