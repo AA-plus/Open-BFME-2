@@ -20,14 +20,26 @@
 // class-gate: allow Rva00418A12Result proved codegen view: companion of the dtor views above (same canonical header)
 #include "ascii_string.h"
 
-struct FieldParse;
+class INI;
+typedef void (*INIFieldParseProc)(INI *ini, void *instance, void *store, const void *userData);
+struct FieldParse
+{
+	const char *token;
+	INIFieldParseProc parse;
+	const void *userData;
+	int offset;
+};
 
 class INI
 {
 public:
 	const char *getNextToken(const char *seps);
 	void initFromINI(void *what, const FieldParse *parseTable);
+	static void parseBool(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x002E850
 };
+
+void Rva004185E4HitpointsAtLevel(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x004185E4
+void Rva0041865FRegenerateAtLevel(INI *ini, void *instance, void *store, const void *userData);	// rowed 0x0041865F
 
 // Dtor-only views for the out-of-line destructors retail calls on the two
 // temporaries.
@@ -97,7 +109,16 @@ public:
 };
 
 extern Rva0041811D *g_Va00E030B0;
-extern const FieldParse Rva00418AC6FieldParseTable[];
+// Retail's body-block field table at RVA 0x0083A8B0 (.rdata, 80 bytes = four 16-byte records and the zero
+// sentinel), transcribed from retail's own bytes.
+extern const FieldParse Rva00418AC6FieldParseTable[] =
+{
+	{ "HitpointsAtLevel", Rva004185E4HitpointsAtLevel, 0, 0x00 },
+	{ "RegenerateAtLevel", Rva0041865FRegenerateAtLevel, 0, 0x0C },
+	{ "CanBeAttacked", INI::parseBool, 0, 0x1C },
+	{ "LeaveInArmySummary", INI::parseBool, 0, 0x1D },
+	{ 0, 0, 0, 0 }
+};
 
 struct INIException
 {
