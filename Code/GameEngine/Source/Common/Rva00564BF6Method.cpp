@@ -1,28 +1,26 @@
-// cl: /O1 /arch:SSE /G7 /Ob0
-// Complete18B RET4 output-buffer contract. Native56503D calls this body,
-// then565048 pushes EAX as the next callee's first argument. The callee
-// returns the supplied8B buffer after copying float10 and raw word14.
-// Original receiver and explicit-output versus hidden aggregate-return
-// spelling remain unknown; address-owned names expose physical behavior.
-struct Rva00564BF6Out
+// ?rva00564BF6@Rva00564BF6@@QAE?AUBfmePairWI@@XZ
+// cl: /O1 /arch:SSE /G7 /MD /EHsc
+// WB1439E70 constructs a returned aggregate through a hidden buffer.
+// Native caller564EC0 constructs one result directly in its outgoing arguments.
+// The empty destructor reproduces native evaluation order without extra cleanup.
+struct BfmePairWI
 {
-	float m_00;
-	int m_04;
+    BfmePairWI() {}
+    BfmePairWI(const BfmePairWI &o) : m_f(o.m_f), m_i(o.m_i) {}
+    ~BfmePairWI() {}
+    float m_f;
+    int m_i;
 };
-
 class Rva00564BF6
 {
 public:
-	Rva00564BF6Out *rva00564BF6(Rva00564BF6Out *out);
+    BfmePairWI rva00564BF6();
 private:
-	char m_pad[0x10];
-	float m_10;
-	int m_14;
+    char pad[0x10];
+    BfmePairWI pair;
 };
 
-Rva00564BF6Out *Rva00564BF6::rva00564BF6(Rva00564BF6Out *out)
+BfmePairWI Rva00564BF6::rva00564BF6()
 {
-	out->m_00 = m_10;
-	out->m_04 = m_14;
-	return out;
+    return pair;
 }

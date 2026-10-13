@@ -23,8 +23,11 @@ public:
 
 struct BfmePairWI
 {
-	int m_bfmeA;						// +0x00
-	int m_bfmeB;						// +0x04
+    BfmePairWI() {}
+    BfmePairWI(const BfmePairWI &o) : m_f(o.m_f), m_i(o.m_i) {}
+    ~BfmePairWI() {}
+    float m_f;
+    int m_i;
 };
 
 class Gen_003BEA30

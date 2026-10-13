@@ -16,8 +16,11 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 
 struct BfmePairWI
 {
-	int m_bfmeA;
-	int m_bfmeB;
+    BfmePairWI() {}
+    BfmePairWI(const BfmePairWI &o) : m_f(o.m_f), m_i(o.m_i) {}
+    ~BfmePairWI() {}
+    float m_f;
+    int m_i;
 };
 
 class AsciiStringWI
