@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// cl: /DNDEBUG /MD /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC
 // stlport
 // ?rva0043D3DA@Rva0043D3DA@@QAEXH@Z @0x0043D3DA 68B
 // Conditional clear of +0x288 sub-object and +0x27C void-ptr vector.

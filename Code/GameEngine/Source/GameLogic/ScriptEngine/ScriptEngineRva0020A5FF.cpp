@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /EHs
+// cl: /Ireference/shims/bfme2_ascii /EHs /D_STLP_USE_MALLOC
 // stlport
 //
 // ?addObjectToCache@ScriptEngine@@QAEXPAVObject@@ABVAsciiString@@@Z @0x0020A5FF 374B.

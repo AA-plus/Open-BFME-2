@@ -1,4 +1,4 @@
-// cl: /O1 /EHsc /MD /arch:SSE /DNDEBUG /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// cl: /O1 /EHsc /MD /arch:SSE /DNDEBUG /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC
 // stlport
 // class-gate: allow Snapshot Snapshot subobject view at +0x0C with virtual DoXfer slot 1 reproduces byte-exact CaveSystem::DoXfer at 0x00427738
 // CaveSystem.cpp -- CaveSystem members recovered from WorldBuilder leads

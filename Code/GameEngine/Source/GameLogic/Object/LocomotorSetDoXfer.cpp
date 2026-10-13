@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /Ireference/open-bfme-1/inputs/vendor/stlport /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP=
+// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /Ireference/open-bfme-1/inputs/vendor/stlport /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_USE_MALLOC
 //
 // ?DoXfer@LocomotorSet@@UAEXPAVXfer@@@Z, retail 0x001E8730, 413 bytes.
 // Target identity: WorldBuilder names 0x005E8730 LocomotorSet::DoXfer in

@@ -1,4 +1,4 @@
-// cl: /EHsc /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib
+// cl: /EHsc /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /D_STLP_USE_MALLOC
 // stlport
 //
 // Bodies ported from Open-BFME-1's

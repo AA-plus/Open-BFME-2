@@ -1,4 +1,4 @@
-// cl: /DNDEBUG /MD /EHsc
+// cl: /DNDEBUG /MD /EHsc /D_STLP_USE_MALLOC
 // stlport
 //
 // ??1ModelConditionSoundSelectorClientBehaviorModuleData@@UAE@XZ, retail 0x004CAFDD, 48 bytes.

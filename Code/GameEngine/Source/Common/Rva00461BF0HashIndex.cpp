@@ -1,4 +1,4 @@
-// cl: /Ireference/open-bfme-1/inputs/reference/shims/stringinline
+// cl: /Ireference/open-bfme-1/inputs/reference/shims/stringinline /D_STLP_USE_MALLOC
 //
 // Bodies ported from Open-BFME-1's
 // GameEngine/Source/Common/Rva00461BF0HashIndex.cpp (donor revision
