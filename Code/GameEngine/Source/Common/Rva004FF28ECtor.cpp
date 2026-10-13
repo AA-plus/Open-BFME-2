@@ -5,6 +5,9 @@
 // copy body via a placeholder int alias (same address, no EH).
 // Returns this as int. Identities unproven.
 
+extern "C" const void *const vtbl_00C63B34[];  // ??_7Rva004FF2C0@@6B@
+#pragma comment(linker, "/alternatename:_vtbl_00C63B34=??_7Rva004FF2C0@@6B@")
+
 class Rva004FBC4D
 {
 public:
@@ -32,7 +35,7 @@ private:
 int Rva004FF28EOwner::rva004FF28E(int a0, int a1, int a2, int a3, int a4)
 {
 	((Rva004FBC4D *)this)->rva004FBC4D(a2, a3, a4);
-	*(int *)this = 0xC63B34;
+	*(int *)this = ((unsigned int)vtbl_00C63B34);
 	m_28 = a0;
 	((Rva0020E449Caller *)m_2C)->rva0020E449Copy(a1);
 	return (int)this;

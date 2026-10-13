@@ -13,6 +13,9 @@
 // is an uninitialized temporary in retail. Coord2D uses the canonical header.
 // vector::_M_insert_overflow inlines max(size(), n). A file-static unsigned
 // overload takes the call instead, so this TU emits no external max COMDAT.
+extern "C" const void *const vtbl_00C70F88[];  // ??_7Rva0059E242@@6B@
+#pragma comment(linker, "/alternatename:_vtbl_00C70F88=??_7Rva0059E242@@6B@")
+
 namespace _STL {
 static inline const unsigned int &max(const unsigned int &a, const unsigned int &b)
 {
@@ -64,7 +67,7 @@ class LivingWorldBuildPlotIcon:public Rva00539411 {
 public:LivingWorldBuildPlotIcon(LivingWorldBuildPlotIconTemplate *,LivingWorldBuildPlot *,const Coord2D &);
 };
 LivingWorldBuildPlotIcon::LivingWorldBuildPlotIcon(LivingWorldBuildPlotIconTemplate *lookup,LivingWorldBuildPlot *owner,const Coord2D &point)
- :Rva00539411(lookup,(const int *)&Vector3()),items((m_vtable=0x00c70f88,_STL::allocator<Rva005C4230 *>())),parent(owner)
+ :Rva00539411(lookup,(const int *)&Vector3()),items((m_vtable=((unsigned int)vtbl_00C70F88),_STL::allocator<Rva005C4230 *>())),parent(owner)
 {
  if(owner) {
  const Vector3 *xy=(const Vector3 *)&point;

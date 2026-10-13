@@ -3,6 +3,9 @@
 // Its two adjacent copy constructors at 0x0020426C and 0x00204285 copy the
 // exception base in order, each installing the folded vtable at 0x00BD3B54.
 
+extern "C" const void *const vtbl_00BD3B54[];  // ??_7FunctorNotSet@@6B@
+#pragma comment(linker, "/alternatename:_vtbl_00BD3B54=??_7FunctorNotSet@@6B@")
+
 class __declspec(dllimport) exception
 {
 public:
@@ -32,13 +35,13 @@ public:
 inline DllHandle::Exception::Exception(const Exception &other)
     : exception(other)
 {
-    *(unsigned int *)this = 0x00BD3B54;
+    *(unsigned int *)this = ((unsigned int)vtbl_00BD3B54);
 }
 
 inline DllHandle::LoadFailure::LoadFailure(const LoadFailure &other)
     : Exception(other)
 {
-    *(unsigned int *)this = 0x00BD3B54;
+    *(unsigned int *)this = ((unsigned int)vtbl_00BD3B54);
 }
 
 // DllHandle exception copies are header inlines elsewhere: other units emit
