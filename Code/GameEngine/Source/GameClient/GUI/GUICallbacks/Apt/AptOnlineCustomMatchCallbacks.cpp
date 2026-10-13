@@ -267,7 +267,7 @@ extern unsigned int g_00DB91B4;
 // Unrowed 0x0044C0A8 (pinned; as AptLanLobby::MpOwnerPrintMessage uses it)
 // and the flag it is skipped under.
 void Rva0044C0A8(UnicodeString title, UnicodeString text, void *callback);
-extern int g_Va00E046B8;
+class AptMessenger { public: static AptMessenger *s_instance; };
 
 // TheWritableGlobalData's version block at +0xB08 copies itself into a
 // creation request (rowed 0x00237E28).
@@ -959,7 +959,7 @@ void AptOnlineCustomMatch::MpOwnerPrintMessage(const UnicodeString &text, int ki
 		TheGameSpyInfo->v61(text, GameSpyColor[0]);
 		break;
 	case 1:
-		if (!g_Va00E046B8)
+		if (!AptMessenger::s_instance)
 			Rva0044C0A8(UnicodeString(L""), text, 0);
 		TheGameSpyInfo->v61(text, (&g_00DB91B4)[17]);
 		break;

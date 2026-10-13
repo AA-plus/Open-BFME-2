@@ -101,7 +101,7 @@ class Rva0051211C
 public: ~Rva0051211C();
 private: unsigned char consumed[12];
 };
-extern int g_Va00E046B8;
+class AptMessenger { public: static AptMessenger *s_instance; };
 class Rva005125ED : public _bfme_AptGameWindow
 {
 public: virtual ~Rva005125ED();
@@ -113,6 +113,6 @@ private:
 };
 Rva005125ED::~Rva005125ED()
 {
- if ((int)this == g_Va00E046B8)
-  g_Va00E046B8 = 0;
+ if ((AptMessenger*)this == AptMessenger::s_instance)
+  AptMessenger::s_instance = 0;
 }

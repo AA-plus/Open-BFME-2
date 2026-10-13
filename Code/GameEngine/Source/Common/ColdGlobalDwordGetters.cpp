@@ -192,14 +192,14 @@ int Rva0038071EGet(void)
 	return g_Va00E032FC;
 }
 
-extern int g_Va00E046B8;
+class AptMessenger { public: static AptMessenger *s_instance; };
 
 // ?Rva00380724Get@@YAHXZ @ 0x00380724 (6B) over 0x00E046B8.
 // Follows a ret (prev C3), no .rdata vtable slot, no direct callers,
 // no branch sources. Opaque address-derived name.
 int Rva00380724Get(void)
 {
-	return g_Va00E046B8;
+	return (int)AptMessenger::s_instance;
 }
 
 class DisconnectMenu;
@@ -422,9 +422,8 @@ int Rva0050E9CDGet(void)
 // ?g_Va00E0ABB0@@3HA: matched references place it at VA 0xe0abb0; also referenced as ?g_bfmeThingUCHead@@3PAVBfmeNodeUC@@A.
 int g_Va00E0ABB0;
 #pragma comment(linker, "/alternatename:?g_bfmeThingUCHead@@3PAVBfmeNodeUC@@A=?g_Va00E0ABB0@@3HA")
-// ?g_Va00E046B8@@3HA: matched references place it at VA 0xe046b8; also referenced as ?g_Va00E046B8@@3PAURva00511730State@@A.
-int g_Va00E046B8;
-#pragma comment(linker, "/alternatename:?g_Va00E046B8@@3PAURva00511730State@@A=?g_Va00E046B8@@3HA")
+// AptMessenger::s_instance owns the native messenger pointer at VA 0x00E046B8.
+AptMessenger *AptMessenger::s_instance;
 // ?g_Va00E06398@@3HA: matched references place it at VA 0xe06398; also referenced as ?g_Va00A06398@@3PAVRva00583015Obj@@A.
 int g_Va00E06398;
 #pragma comment(linker, "/alternatename:?g_Va00A06398@@3PAVRva00583015Obj@@A=?g_Va00E06398@@3HA")

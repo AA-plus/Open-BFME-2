@@ -7,7 +7,7 @@ struct ListNode0029DFE9
 	void *m_prev;
 	void *m_next;
 };
-extern void *g_freeList00239380;
+extern void *DrawableListFreeNodes;
 void __stdcall removeRecycleRva0029DFE9(void *outParam, void *nodeParam)
 {
 	ListNode0029DFE9 *node = (ListNode0029DFE9 *)nodeParam;
@@ -15,7 +15,7 @@ void __stdcall removeRecycleRva0029DFE9(void *outParam, void *nodeParam)
 	ListNode0029DFE9 *prev = (ListNode0029DFE9 *)node->m_prev;
 	next->m_prev = prev;
 	prev->m_next = next;
-	node->m_prev = g_freeList00239380;
-	g_freeList00239380 = node;
+	node->m_prev = DrawableListFreeNodes;
+	DrawableListFreeNodes = node;
 	*(void **)outParam = prev;
 }

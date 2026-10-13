@@ -151,9 +151,8 @@ public:
 	virtual void rva00511620(int tab, int unused);
 };
 
-// The messenger instance (Rva00511730Save.cpp's g_Va00E046B8).
+// The messenger instance (Rva00511730Save.cpp's AptMessenger::s_instance).
 struct Rva00511730State;
-extern Rva00511730State *g_Va00E046B8;
 
 // A render callback's position and size: two floats each (the type is
 // inferred from use).
@@ -237,6 +236,8 @@ public:
 
 class AptMessenger : public GameWindow
 {
+public:
+ static AptMessenger *s_instance;
 	friend class Rva005114BD;
 
 public:
@@ -341,7 +342,7 @@ void AptMessenger::IsOpen(int query, char *result, bool skip)
 {
 	if (query == 0 && !skip)
 	{
-		AptMessenger *messenger = (AptMessenger *)g_Va00E046B8;
+		AptMessenger *messenger = (AptMessenger *)AptMessenger::s_instance;
 		if (messenger && !messenger->m_closed)
 			strcpy(result, "1");
 		else
@@ -353,7 +354,7 @@ void AptMessenger::IsOpen(int query, char *result, bool skip)
 // 0x005120A2) closes the messenger when it is up and opens it otherwise.
 void AptMessenger::OnMessengerBttn(const char *unused)
 {
-	if (g_Va00E046B8)
+	if (AptMessenger::s_instance)
 		Rva00511730(0);
 	else
 		OpenScreen();
@@ -486,7 +487,7 @@ int AptMessenger::rva00511E6D()
 	{
 	case 2:
 		m_state = 3;
-		TheRva00222A8BTarget->invoke(((AptMessenger *)g_Va00E046B8)->m_274, "CloseScreen", 0, 0, 0, 0, 0, 0);
+		TheRva00222A8BTarget->invoke(((AptMessenger *)AptMessenger::s_instance)->m_274, "CloseScreen", 0, 0, 0, 0, 0, 0);
 		break;
 	case 4:
 	{
@@ -532,7 +533,7 @@ void Rva005114BD::rva00511620(int tab, int unused)
 		sound = "GUIMessageBuddy";
 	else if (!g_Va00E06394 || !((Rva0057FD6E *)g_Va00E06394)->rva0057FDA1())
 		sound = "GUIMessageLobby";
-	AptMessenger *messenger = (AptMessenger *)g_Va00E046B8;
+	AptMessenger *messenger = (AptMessenger *)AptMessenger::s_instance;
 	if (messenger)
 	{
 		TheRva00222A8BTarget->invoke(messenger->m_274, buddy ? "FlashTab0" : "FlashTab1", 0, 0, 0, 0, 0, 0);

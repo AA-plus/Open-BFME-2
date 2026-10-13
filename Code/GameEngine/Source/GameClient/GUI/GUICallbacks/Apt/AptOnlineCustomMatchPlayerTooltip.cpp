@@ -280,7 +280,7 @@ extern unsigned int g_00DB91B4;
 // Unrowed 0x0044C0A8 (pinned; as AptLanLobby::MpOwnerPrintMessage uses it)
 // and the flag it is skipped under.
 void Rva0044C0A8(UnicodeString title, UnicodeString text, void *callback);
-extern int g_Va00E046B8;
+class AptMessenger { public: static AptMessenger *s_instance; };
 
 // The peer thread request (layout of Rva005A8666BoxNat.cpp): type +0x00,
 // nick +0x04, id +0x34, options +0x40, the staging-room flag +0x118.

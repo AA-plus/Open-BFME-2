@@ -77,12 +77,13 @@ void Rva00444040Enable();
 class AptMessenger
 {
 public:
+ static AptMessenger *s_instance;
+public:
 	static void OpenScreen();
 };
 void __cdecl Rva00511730(int unused);
 
 struct Rva00511730State;
-extern Rva00511730State *g_Va00E046B8;
 
 class GameEngine
 {
@@ -176,7 +177,7 @@ int AptLanLobby::rva0044522D(int msg, unsigned char key, int flags)
 			{
 				if (flags & 1)
 				{
-					if (!g_Va00E046B8)
+					if (!AptMessenger::s_instance)
 						AptMessenger::OpenScreen();
 					else
 						Rva00511730(0);

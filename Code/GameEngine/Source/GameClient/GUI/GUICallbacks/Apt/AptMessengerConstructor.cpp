@@ -221,10 +221,11 @@ public:
 class Coord2D;
 void Rva00511730(int);
 
-extern int g_Va00E046B8;
 
 class AptMessenger : public _bfme_AptGameWindow
 {
+public:
+ static AptMessenger *s_instance;
 public:
 	AptMessenger(void *context);
 	virtual ~AptMessenger();
@@ -314,5 +315,5 @@ AptMessenger::AptMessenger(void *context)
 		AsciiString name("AptMessenger::GameWindowSize");
 		m_customRenders.AddCustomRender(name, AptRef<AptCustomRender>(MakeBinding(method, reinterpret_cast<FunctorTarget *>(this))));
 	}
-	g_Va00E046B8 = (int)this;
+	AptMessenger::s_instance = this;
 }

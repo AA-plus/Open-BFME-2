@@ -358,7 +358,7 @@ void Rva00437E9C(int value);
 void Rva0044C0A8(UnicodeString title, UnicodeString text, void *callback);
 
 struct Rva00511730State;
-extern Rva00511730State *g_Va00E046B8;
+class AptMessenger { public: static AptMessenger *s_instance; };
 
 class Rva0043DB47DoubleSetter
 {
@@ -793,7 +793,7 @@ void AptLanLobby::rva00444DC3(bool starting)
 // counterpart; the name is unknown. Kinds 0 and 1 pass the text through
 // LANAPI vslot 64 (with 3) and post the result under L"SYSTEM" through
 // vslot 40; kind 1 first hands (L"", text) to 0x0044C0A8 while
-// g_Va00E046B8 is unset. Kind 2 goes to vslot 21 as (text, 3, 0).
+// AptMessenger::s_instance is unset. Kind 2 goes to vslot 21 as (text, 3, 0).
 void AptLanLobby::MpOwnerPrintMessage(const UnicodeString &text, int kind)
 {
 	if (!TheLAN)
@@ -805,7 +805,7 @@ void AptLanLobby::MpOwnerPrintMessage(const UnicodeString &text, int kind)
 		TheLAN->v40(UnicodeString(L"SYSTEM"), TheLAN->v64(text, 3));
 		break;
 	case 1:
-		if (!g_Va00E046B8)
+		if (!AptMessenger::s_instance)
 			Rva0044C0A8(UnicodeString(L""), text, 0);
 		TheLAN->v40(UnicodeString(L"SYSTEM"), TheLAN->v64(text, 3));
 		break;

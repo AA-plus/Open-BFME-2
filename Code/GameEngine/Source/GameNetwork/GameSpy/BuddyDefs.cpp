@@ -183,7 +183,7 @@ void HandleBuddyResponses()
 
 // Chat.cpp owns the colour array at VA 0x00DB9198; index/addend unchanged.
 extern int GameSpyColor[];
-extern int g_Va00E046B8;
+class AptMessenger { public: static AptMessenger *s_instance; };
 void Rva00381C82AddChatText(int,const UnicodeString &,int);
 // ?Rva00416589@@YAXUBfmeStringRecord00415F34@@@Z retail416589338B
 // Target-specific ZH insertChat equivalent; GameSpyColor baseDB9198 index8.
@@ -192,7 +192,7 @@ void Rva00416589(BfmeStringRecord00415F34 record)
  BuddyMessage &message=record.message;
  UnicodeString text;text.format(L"[%hs] %s",message.senderNick.str(),message.message.str());
  Rva00381C82AddChatText(0,text,GameSpyColor[8]);
- if(!g_Va00E046B8){
+ if(!AptMessenger::s_instance){
   UnicodeString snippet=message.message;
   while(snippet.getLength()>11)snippet.removeLastChar();
   UnicodeString notification;

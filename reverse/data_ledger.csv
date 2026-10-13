@@ -17076,7 +17076,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x009BA5D8,4,.data,global,?lastFrame@?CC@??update@GameClient@@UAEXXZ@4IA,Code/GameEngine/Source/GameClient/GameClientDrawableTOC.cpp,owned,,1,2
 0x009BA5DC,4,.data,global,?firstUpdate@?4??update@GameClient@@UAEXXZ@4_NA,Code/GameEngine/Source/GameClient/GameClientDrawableTOC.cpp,owned,,1,2
 0x009BA5E0,8,.data,global,?g_freelistPool00DBA5E0@@3VFreelistPool@@A,Code/GameEngine/Source/Common/Rva007AD348PoolInits.cpp,provisional,?g_freelistPool00DBA5E0@@3VFreelistPool@@A;?g_pool00239BD8@@3VFreelistPool@@A,1,48
-0x009BA5E8,364,.data,global,?g_freeList00239380@@3PAXA,Code/GameEngine/Source/Common/Rva00239380Clear.cpp,owned,,1,8
+0x009BA5E8,364,.data,global,?DrawableListFreeNodes@@3PAXA,Code/GameEngine/Source/Common/Rva00239380Clear.cpp,owned,,1,8
 0x009BA754,8,.data,global,?chatActionColor@@3HB,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/LanGameOptionsMenu.cpp,owned,,1,1
 0x009BA75C,4,.data,global,?chatLocalActionColor@@3HB,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/LanGameOptionsMenu.cpp,owned,,1,1
 0x009BA760,272,.data,global,?chatSystemColor@@3HB,Code/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/LanGameOptionsMenu.cpp,owned,,1,4
@@ -20814,7 +20814,7 @@ address,size,section,kind,name,source,status,names,defs,refs
 0x00A046AC,4,.data,global,?g_00E046AC@@3PAVGameWindow@@A,,unowned,,0,2
 0x00A046B0,4,.data,global,?g_00E046B0@@3PAVGameWindow@@A,,unowned,,0,3
 0x00A046B4,4,.data,global,?g_Va00A046B4@@3PAUGlobalA046B4@@A,Code/GameEngine/Source/Common/Rva0050E9D3Enable.cpp,provisional,?g_Va00A046B4@@3PAUGlobalA046B4@@A;?g_Va00E046B4@@3HA,1,3
-0x00A046B8,4,.data,global,?g_Va00E046B8@@3HA,Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp,provisional,?g_Va00E046B8@@3HA;?g_Va00E046B8@@3PAURva00511730State@@A,1,19
+0x00A046B8,4,.data,global,?s_instance@AptMessenger@@2PAV1@A,Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp,owned,,1,19
 0x00A046BC,4,.data,global,?g_Va00E046BC@@3HA,Code/GameEngine/Source/Common/ColdGlobalDwordGetters.cpp,owned,,1,11
 0x00A046C0,256,.data,global,?g_Va00E046C0@@3PADA,,unowned,,0,2
 0x00A047C0,256,.data,global,?g_Va00E047C0@@3PADA,,unowned,,0,2

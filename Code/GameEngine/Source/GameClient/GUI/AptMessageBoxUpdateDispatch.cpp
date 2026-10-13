@@ -10,7 +10,8 @@ class AptStrategicMessageBox { private: static AptStrategicMessageBox *s_instanc
 class Rva0038076DInterface {
 public: virtual void slot0();virtual void slot1();virtual void slot2();virtual void slot3();virtual void slot4();virtual void update();
 };
-extern int g_Va00E032FC,g_Va00E04478,g_Va00E046B8;
+class AptMessenger { public: static AptMessenger *s_instance; };
+extern int g_Va00E032FC,g_Va00E04478;
 void Rva0038076DUpdate() {
  Rva0054CBF7Target *first=(Rva0054CBF7Target *)g_Va00E032FC;
  if(first) first->method();
@@ -18,6 +19,6 @@ void Rva0038076DUpdate() {
  if(second) second->method();
  Rva0038076DInterface *third=(Rva0038076DInterface *)g_Va00E04478;
  if(third) third->update();
- Rva0038076DInterface *fourth=(Rva0038076DInterface *)g_Va00E046B8;
+ Rva0038076DInterface *fourth=(Rva0038076DInterface *)AptMessenger::s_instance;
  if(fourth) fourth->update();
 }

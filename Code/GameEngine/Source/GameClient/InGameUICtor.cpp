@@ -132,7 +132,7 @@ class Drawable;
 // existing Drawable node freelist at DBA5E8; only this element type differs
 // from generic STLport deallocation. Whole29B and all owner relocations exact.
 class Rva00239380Holder { public: void rva00239380(); };
-extern void *g_freeList00239380;
+extern void *DrawableListFreeNodes;
 namespace _STL {
 template <> __declspec(noinline)
 _List_base<Drawable *, allocator<Drawable *> >::~_List_base()
@@ -140,9 +140,9 @@ _List_base<Drawable *, allocator<Drawable *> >::~_List_base()
     ((Rva00239380Holder *)this)->rva00239380();
     _Node *head = _M_node._M_data;
     if (head != 0) {
-        void *freeHead = g_freeList00239380;
+        void *freeHead = DrawableListFreeNodes;
         head->_M_next = (_List_node_base *)freeHead;
-        g_freeList00239380 = head;
+        DrawableListFreeNodes = head;
     }
 }
 }

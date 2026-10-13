@@ -4,7 +4,7 @@
 // stores new index to g_Va00E046BC, fires ShowActiveTab via TheRva00222A8BTarget
 // invoke, clears old entry text to EmptyString and sets new entry text from
 // g_Va00E048C0, then optionally clears vector via Rva00381C2DClear.
-// Evidence: globals g_Va00E046BC g_Va00E046B8 g_Va00E048C0, string
+// Evidence: globals g_Va00E046BC AptMessenger::s_instance g_Va00E048C0, string
 // ShowActiveTab, TheEmptyString, callers 0x004464DC 0x00511B98 0x00517CAF.
 #include "unicode_string.h"
 
@@ -36,7 +36,7 @@ struct Rva00511730State
 };
 
 extern int g_Va00E046BC;
-extern Rva00511730State *g_Va00E046B8;
+class AptMessenger { public: static AptMessenger *s_instance; };
 extern UnicodeString g_Va00E048C0;
 extern class BfmeAptWindowManager *g_bfmeAptWindowManager;
 void __cdecl Rva00381C2DClear(unsigned int idx);
@@ -46,16 +46,16 @@ void __cdecl Rva005118F3Show(int index, bool clear)
 	if (g_Va00E046BC != index) {
 		int old = g_Va00E046BC;
 		g_Va00E046BC = index;
-		if (g_Va00E046B8 != 0) {
-			(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->invoke(g_Va00E046B8->m_274, "ShowActiveTab", 0, 0, 0, 0, 0, 0);
-			g_Va00E046B8->m_flag29C = 1;
-			Rva005AFD43 *oldWin = g_Va00E046B8->m_array280[old];
-			Rva005AFD43 *newWin = g_Va00E046B8->m_array280[g_Va00E046BC];
+		if (AptMessenger::s_instance != 0) {
+			(*(Rva00222A8BTarget **)&g_bfmeAptWindowManager)->invoke(((Rva00511730State*)AptMessenger::s_instance)->m_274, "ShowActiveTab", 0, 0, 0, 0, 0, 0);
+			((Rva00511730State*)AptMessenger::s_instance)->m_flag29C = 1;
+			Rva005AFD43 *oldWin = ((Rva00511730State*)AptMessenger::s_instance)->m_array280[old];
+			Rva005AFD43 *newWin = ((Rva00511730State*)AptMessenger::s_instance)->m_array280[g_Va00E046BC];
 			if (oldWin != 0) {
 				oldWin->rva005AFD43(0, UnicodeString::TheEmptyString);
 			}
 			if (newWin != 0) {
-				newWin->rva005AFD43(g_Va00E046B8->m_window298, g_Va00E048C0);
+				newWin->rva005AFD43(((Rva00511730State*)AptMessenger::s_instance)->m_window298, g_Va00E048C0);
 			}
 		}
 	}

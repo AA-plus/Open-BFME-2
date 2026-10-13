@@ -4,6 +4,8 @@
 // Copyright 2025 Electronic Arts Inc.; GPL-3.0-or-later, as in the vendored source.
 // BFME layout/call witnesses: build/gap_005ade0d/LAYOUTS.md and region_{a,b}.asm.
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 #include <list>
@@ -76,7 +78,7 @@ public:
     virtual Drawable* getDrawable() const; // vtable +0x28
 
  ForceAttackTemplate* m_template; char pad08[0x30]; Coord3D m_position; char pad44[0x30]; ObjectID m_id;
- char pad78[0x19c]; Object* m_containedBy;
+ char pad78[0x1fc]; Object* m_containedBy;
  ObjectID getID() const { return m_id; }
  const Coord3D* getPosition() const { return &m_position; }
  bool isKindOf(int k) const { return ((const Thing*)this)->isKindOf((KindOfType)k); }
@@ -97,12 +99,14 @@ class Player { public: char pad00[4]; PlayerTemplate* m_playerTemplate;
  Relationship getRelationship(const Team*) const; Object* findNaturalCommandCenter(); Object* rva002AC629();
  bool isPlayerActive() const;
  Object* rva000D4660(bool,Object**) const;
+ int rva002ABCF0(unsigned char,int*);
  int iterateObjects(int (*)(Object*,void*),void*) const;
  void countObjectsByThingTemplate(int,const ThingTemplate* const*,bool,int*,bool) const;
 };
 class PlayerList { public: char pad00[0xc]; Player* m_localPlayer; Player* getLocalPlayer() const { return m_localPlayer; } };
-class ControlBar { public: const CommandButton* findCommandButton(const AsciiString&); void togglePurchaseScience(); };
+class ControlBar { public: void rva0031AD94(); const CommandButton* findCommandButton(const AsciiString&); void togglePurchaseScience(); };
 class GameLogic { public: char pad00[0x91]; bool m_showBehindBuildingMarkers; char pad92[0x7a]; int m_mode;
+ bool rva0042219();char rva0023C6FD();
  bool isInMultiplayerGame(); bool rva000652A0() const; bool isInReplayGame() const { return m_mode==3; }
 };
 // TU-local field view of retail's GlobalData; the one writable global at
@@ -112,7 +116,8 @@ class RvaGlobalDataView { public:
  char pad61[3]; bool m_useShadowVolumes; char pad65[0xaa7]; int m_netMinPlayers; char padb10[0x7c]; int m_maxParticleCount;
  char padb90[0xc9]; bool m_TiVOFastMode;
 };
-class Mouse { public: int getCursorIndex(const AsciiString&); char pad00[0x10ec]; unsigned m_dragTolerance; char pad10f0[4]; unsigned m_clickTime;
+struct Rva001EDD80Pair;
+class Mouse { public: bool rva001EDD80(const Rva001EDD80Pair*,const Rva001EDD80Pair*); int getCursorIndex(const AsciiString&); char pad00[0x10ec]; unsigned m_dragTolerance; char pad10f0[4]; unsigned m_clickTime;
  bool rva005A49E0(const ICoord2D*,const ICoord2D*) const;
 };
 class Radar { public: bool rva00107140(Coord3D*); };
@@ -128,7 +133,7 @@ class MultiplayerSettings { public: char pad00[0x14]; int m_maxBeaconsPerPlayer;
 
 struct Rva0029AEF9Item;
 enum SpecialPowerType { CONTEXT_POWER_NONE };
-class InGameUI {
+class InGameUI {public:void resetCamera();
 public:
  bool areSelectedObjectsControllable() const;
  bool rva0029AEF9(Rva0029AEF9Item*,int,int,int,int,int) const;
@@ -631,7 +636,7 @@ extern Mouse* TheMouse;
 extern Radar* TheRadar;
 extern ControlBar* TheControlBar;
 extern Shell* TheShell;
-extern RecorderClass* TheRecorder;
+struct Bfme939Helper; extern Bfme939Helper* g_bfme939Helper;
 extern GameWindowManager* TheWindowManager;
 extern NameKeyGenerator* TheNameKeyGenerator;
 extern ThingFactory* TheThingFactory;
@@ -659,7 +664,7 @@ int rva005A9B00(Object*,void*);
 class DrawableList;
 void pickAndPlayUnitVoiceResponse(const DrawableList*,GameMessage::Type,PickAndPlayInfo* = 0);
 
-class CommandTranslator { public:
+class CommandTranslator {public:void rva0042AF97(GameMessage*); public:
  virtual GameMessageDisposition translateGameMessage(const GameMessage*);
  virtual ~CommandTranslator();
 private:
@@ -797,13 +802,15 @@ class ContextUI : public ContextSlots<47> { public:
  virtual void pad53(); virtual void pad54(); virtual void pad55(); virtual void pad56();
  virtual void pad57(); virtual void pad58(); virtual void pad59(); virtual void pad60();
  virtual void pad61(); virtual void pad62(); virtual void pad63(); virtual void pad64();
- virtual void pad65(); virtual void pad66(); virtual void pad67(); virtual void pad68();
- virtual void pad69(); virtual int selectedCount(); virtual void pad71(); virtual void pad72();
+ virtual void pad65(); virtual void selectDrawable(Drawable*); virtual void pad67(); virtual void deselect();
+ virtual void selectAll(int,Player*); virtual int selectedCount(); virtual void pad71(); virtual void pad72();
  virtual const SelectedDrawableList* selected() const; virtual void pad74(); virtual Drawable* first();
- char pad04[0x8b0-4];bool waypoint;char pad8b1[7];bool forceAttack,forceMove,preferSelection; bool getForceAttack() const {return forceAttack;}
+ virtual void slotT76(); virtual void slotT77(); virtual void slotT78(); virtual void slotT79(); virtual void slotT80(); virtual void slotT81(); virtual void slotT82(); virtual void slotT83(); virtual void slotT84(); virtual void slotT85(); virtual void slotT86(); virtual void slotT87(); virtual void slotT88(); virtual void slotT89(); virtual void slotT90(); virtual void slotT91(); virtual void slotT92(); virtual void slotT93(); virtual void slotT94(); virtual void slotT95(); virtual void slotT96();
+ virtual void selectMatching();
+ char pad04[0x8b0-4];bool waypoint;char pad8b1[7];bool forceAttack,forceMove,preferSelection; bool getForceAttack() const {return forceAttack;}bool rotateLeft,rotateRight,zoomIn,zoomOut,extra8bf,extra8c0,extra8c1,extra8c2;bool forceAttackMode()const{return forceAttack;}
 };
 static __forceinline ContextUI* contextUI() { return (ContextUI*)TheInGameUI; }
-struct ContextButton { char pad[0x14];int type;int word18;unsigned options; unsigned getOptions() const {return options;}char pad20[0x24];class Overridable* special; };
+struct ContextButton { int getType() const {return type;} char pad[0x14];int type;int word18;unsigned options; unsigned getOptions() const {return options;}char pad20[0x24];class Overridable* special; };
 static __forceinline const ContextButton* contextButton(const CommandButton*c) { return (const ContextButton*)c; }
 class Overridable { public: const Overridable* friend_getFinalOverride() const; };
 struct ContextPower { char pad[0x14];int id;int word18;int type; };
@@ -1063,4 +1070,184 @@ GameMessage::Type CommandTranslator::evaluateContextCommand(Drawable*draw,const 
   msgType=0xbf;GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)msgType);m->appendLocationArgument(*pos);
  }
  return (GameMessage::Type)msgType;
+}
+
+#include "../../../Include/Common/BfmeAudioEventPrefix136.h"
+static __forceinline int translateHeight(const IRegion2D&r){return r.hi.y-r.lo.y;}
+static __forceinline int translateWidth(const IRegion2D&r){return r.hi.x-r.lo.x;}
+struct TranslateUIInput { char pad[0x15];bool enabled,active;bool getInputEnabled() const {return enabled&&active;} };
+struct TranslateMouseFields {char pad[0x12e8];unsigned dragTolerance;int pad12ec;unsigned clickTime;};
+struct TranslateGlobalFields {char pad[0x5c];bool alternate;char pad5d[0xa44-0x5d];int netMinPlayers;char pada48[0xbbd-0xa48];bool fastMode;char padbbe[0x11c9-0xbbe];bool timeControls;};
+static __forceinline TranslateGlobalFields* translateGlobals(){return (TranslateGlobalFields*)TheWritableGlobalData;}
+struct TranslateLogicFields { char pad[0x110];int mode;bool isReplay()const{return mode==3;} };
+struct TranslateTransition {char pad[0x24];int first,second;char pad2c[0x25];bool flag;};
+class TranslateGameClient : public ContextSlots<16> { public: virtual Drawable*find(unsigned);virtual Drawable*first(); };
+class TranslateGameInfo : public ContextSlots<19> { public: virtual bool multiplayer(); };
+class TranslateWindowManager : public ContextSlots<60> {public:virtual GameWindow*window(GameWindow*,int);};
+class TranslateDisplay : public ContextSlots<83> {public:virtual void screenshot(int);};
+class TranslateAudio : public ContextSlots<25> {public: virtual unsigned add(const BfmeAudioEventPrefix136*);
+virtual void slotAudio26();virtual void slotAudio27();virtual void slotAudio28();virtual void slotAudio29();virtual void slotAudio30();virtual void slotAudio31();virtual void slotAudio32();virtual void slotAudio33();virtual void slotAudio34();virtual void slotAudio35();virtual void slotAudio36();virtual void slotAudio37();virtual void slotAudio38();virtual void slotAudio39();virtual void slotAudio40();virtual void slotAudio41();virtual void slotAudio42();virtual void slotAudio43();virtual void slotAudio44();virtual void slotAudio45();virtual void slotAudio46();virtual void slotAudio47();virtual void slotAudio48();virtual void slotAudio49();virtual void slotAudio50();virtual void slotAudio51();virtual void slotAudio52();virtual void slotAudio53();virtual void slotAudio54();virtual void slotAudio55();virtual void slotAudio56();virtual void slotAudio57();virtual void slotAudio58();virtual void slotAudio59();virtual void slotAudio60();virtual void slotAudio61();virtual void slotAudio62();virtual void slotAudio63();virtual void slotAudio64();virtual void slotAudio65();virtual void slotAudio66();virtual void slotAudio67();virtual void slotAudio68();virtual void slotAudio69();virtual void slotAudio70();virtual void slotAudio71();virtual void slotAudio72();virtual void slotAudio73();virtual void slotAudio74();virtual void slotAudio75();virtual void slotAudio76();virtual void slotAudio77();
+ virtual const char*misc() const;};
+class TranslateMessages : public ContextSlots<16> {public:virtual void __cdecl message(UnicodeString,...);};
+class TranslateGameEngine : public ContextSlots<16> {public:virtual void increase();virtual void decrease();};
+class GameEngine;extern GameEngine*TheGameEngine;
+class Eva {public:void rva001DD3DD();};extern Eva*TheEva;
+class BfmeMemberRV {public:bool bfmeAskRV();};
+struct Bfme939Helper {public:int get()const;};
+class BfmeSelectionState {public:bool isSelectionLocked() const;};
+class Rva002D3861 {public:void rva002D3861();};
+class RadarWindowOverrideSource;extern RadarWindowOverrideSource*theRadarWindowOverrideSource;
+class GameSpyBuddyMessageQueueInterface;extern GameSpyBuddyMessageQueueInterface*TheGameSpyBuddyMessageQueue;
+// WB AptMessenger.cpp:263 identifies the native E046B8 singleton.
+class AptMessenger {public:static AptMessenger *s_instance; static void OpenScreen();};class AptInGameChat {public:static void OpenScreen(int);};
+void Rva00511730(int);void Rva004E41AB();void Rva0050EC24();void Rva0051B8EA();void ToggleControlBar(bool);
+unsigned Rva0030F099(bool);
+struct Rva00429276Entry;
+struct Rva00429276Holder {Rva00429276Entry*first;Rva00429276Entry*second;};
+int Rva00429276(Rva00429276Entry*,Rva00429276Holder*);
+static __declspec(noinline) Rva00429276Entry* Rva004292A6(Rva00429276Entry*second) {
+ Player*player=((ContextPlayers*)ThePlayerList)->getLocalPlayer();if(!player)return 0;
+ Rva00429276Holder holder;holder.first=0;holder.second=second;
+ player->iterateObjects((int(*)(Object*,void*))Rva00429276,&holder);
+ if(!holder.first&&second){holder.second=0;player->iterateObjects((int(*)(Object*,void*))Rva00429276,&holder);}return holder.first;
+}
+extern void *DrawableListFreeNodes;
+namespace _STL {
+template<> list<Drawable*,allocator<Drawable*> >::list(const list<Drawable*,allocator<Drawable*> >&);
+template<> _List_base<Drawable*,allocator<Drawable*> >::~_List_base() throw();
+template<> __forceinline list<Drawable*,allocator<Drawable*> >::iterator list<Drawable*,allocator<Drawable*> >::erase(iterator pos) {
+ _List_node_base *next=pos._M_node->_M_next;
+ _List_node_base *prev=pos._M_node->_M_prev;
+ _Node *node=(_Node*)pos._M_node;
+ prev->_M_next=next;next->_M_prev=prev;
+ _Destroy(&node->_M_data);
+ node->_M_next=(_List_node_base*)DrawableListFreeNodes;
+ DrawableListFreeNodes=node;
+ return iterator((_Node*)next);
+}
+
+}
+
+// ZH/BF1 CommandXlat::translateGameMessage is the semantic guide.
+// Complete native42B0DE..42BF7F code3745B plus63 switch entries252B,
+// extent3997 through42C07B. WB E7CBE0 supplies original statement scopes.
+GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage*msg)
+{
+ InGameUI*initialUI=TheInGameUI;
+ GameMessage::Type t=msg->getType();
+ GameMessageDisposition disp=KEEP_MESSAGE;
+ if(t!=0x70&&t!=0x1d&&t!=0x6a5&&t!=0x7d9&&t!=0x7ed&&t!=0x45f&&t!=0x6a6&&t!=0x6b8&&t!=0x448&&t!=0x469&&!((TranslateUIInput*)initialUI)->getInputEnabled()) {
+  bool system=false;switch(t){case 0x3ec:case 0x447:case 0x44a:case 0x6ba:case 0x6bb:system=true;break;}if(!system)return DESTROY_MESSAGE;
+ }
+ switch(t) {
+ case 0x5c:((ContextUI*)initialUI)->selectMatching();disp=DESTROY_MESSAGE;break;
+ case 0x63: {
+  if(!((TranslateGameClient*)TheGameClient)->first())break;
+  Object*previous=0;
+  if(contextUI()->selectedCount()>0){Drawable*selected=contextUI()->first();if(selected){Object*object=selected->getObject();if(object&&contextKind(object,90))previous=object;}}
+  Object*hero=(Object*)Rva004292A6((Rva00429276Entry*)previous);if(!hero)break;
+  if(hero->m_containedBy)hero=hero->m_containedBy;
+  Drawable*heroDraw=((Thing*)hero)->getDrawable();if(!heroDraw)break;
+  contextUI()->deselect();GameMessage*team=TheMessageStream->appendMessage(GameMessage::MSG_CREATE_SELECTED_GROUP);team->appendBooleanArgument(true);team->appendObjectIDArgument(hero->getID());contextUI()->selectDrawable(heroDraw);TheTacticalView->lookAt(heroDraw->getPosition());disp=DESTROY_MESSAGE;break;
+ }
+ case 0x61:{Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();if(local){Object*o=(Object*)local->rva002ABCF0(1,0);if(o)TheTacticalView->lookAt(o->getPosition());}disp=DESTROY_MESSAGE;break;}
+ case 0x62:if(TheEva)TheEva->rva001DD3DD();disp=DESTROY_MESSAGE;break;
+ case 0x64:((ContextUI*)initialUI)->selectAll(0,((ContextPlayers*)ThePlayerList)->getLocalPlayer());disp=DESTROY_MESSAGE;break;
+ case 0x65:TheMessageStream->appendMessage((GameMessage::Type)0x436);disp=DESTROY_MESSAGE;break;
+ case 0x66:TheMessageStream->appendMessage((GameMessage::Type)0x435);disp=DESTROY_MESSAGE;break;
+ case 0x68:TheMessageStream->appendMessage((GameMessage::Type)0x449);disp=DESTROY_MESSAGE;break;
+ case 0x67:disp=DESTROY_MESSAGE;break;
+ case 0x69:disp=DESTROY_MESSAGE;break;
+ case 0x6a:disp=DESTROY_MESSAGE;break;
+ case 0x6d:{GameLogic*logic=TheGameLogic;if(logic->isInMultiplayerGame()&&!((TranslateLogicFields*)logic)->isReplay()){Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();if(local&&((BfmeMemberRV*)local)->bfmeAskRV()||!translateGlobals()->netMinPlayers)AptInGameChat::OpenScreen(0);}disp=DESTROY_MESSAGE;break;}
+ case 0x6e:{GameLogic*logic=TheGameLogic;if(logic->isInMultiplayerGame()&&!((TranslateLogicFields*)logic)->isReplay()){Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();if(local||!translateGlobals()->netMinPlayers){if(((BfmeMemberRV*)local)->bfmeAskRV())AptInGameChat::OpenScreen(1);else AptInGameChat::OpenScreen(4);}}disp=DESTROY_MESSAGE;break;}
+ case 0x6c:if(TheGameSpyBuddyMessageQueue){if(!AptMessenger::s_instance)AptMessenger::OpenScreen();else Rva00511730(0);}disp=DESTROY_MESSAGE;break;
+ case 0x6f:{GameLogic*logic=TheGameLogic;if(logic->rva0042219()&&!((TranslateTransition*)TheTransitionHandler)->first&&!((TranslateTransition*)TheTransitionHandler)->second){if(logic->rva0023C6FD())Rva0050EC24();else Rva004E41AB();}disp=DESTROY_MESSAGE;break;}
+ case 0x93:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x468);m->appendIntegerArgument(2);disp=DESTROY_MESSAGE;break;}
+ case 0x95:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x468);m->appendIntegerArgument(1);disp=DESTROY_MESSAGE;break;}
+ case 0x94:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x468);m->appendIntegerArgument(3);disp=DESTROY_MESSAGE;break;}
+ case 0x97:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x469);m->appendIntegerArgument(1);m->appendIntegerArgument(0);disp=DESTROY_MESSAGE;break;}
+ case 0x96:{GameMessage*m=TheMessageStream->appendMessage((GameMessage::Type)0x469);m->appendIntegerArgument(0);m->appendIntegerArgument(1);disp=DESTROY_MESSAGE;break;}
+ case 0x98:TheMessageStream->appendMessage((GameMessage::Type)0x470);disp=DESTROY_MESSAGE;break;
+ case 0x90:{GameLogic*logic=TheGameLogic;if(logic->isInMultiplayerGame()&&!((TranslateLogicFields*)logic)->isReplay()&&((BfmeMemberRV*)((ContextPlayers*)ThePlayerList)->getLocalPlayer())->bfmeAskRV()&&(!translateGlobals()->netMinPlayers||((TranslateGameInfo*)TheGameInfo)->multiplayer())){int count;Player*local=((ContextPlayers*)ThePlayerList)->getLocalPlayer();const ThingTemplate*thing=TheThingFactory->findTemplate(*(AsciiString*)((char*)(*(PlayerTemplate**)((char*)local+0x34))+0x17c));((ContextPlayers*)ThePlayerList)->getLocalPlayer()->countObjectsByThingTemplate(1,&thing,false,&count,true);int limit=*(int*)((char*)TheMultiplayerSettings+0x18);_ReadWriteBarrier();if(count<limit){const CommandButton*c=TheControlBar->findCommandButton(AsciiString("Command_PlaceBeacon"));contextUI()->setCommand(c);}}disp=DESTROY_MESSAGE;break;}
+ case 0x91:disp=DESTROY_MESSAGE;break;
+ case 0x70:{TranslateTransition*c=(TranslateTransition*)TheTransitionHandler;if(c&&(c->first||c->second))c->flag=true;else Rva0051B8EA();disp=DESTROY_MESSAGE;break;}
+ case 0x71: {
+  Shell*shell=TheShell;bool shellMap=*(bool*)((char*)shell+0x5c);_ReadWriteBarrier();if(shellMap){WindowLayout*w=shell->top();if(w)w->hide(!w->m_hidden);}
+  else if(!(g_bfme939Helper&&g_bfme939Helper->get()==1)) {
+   bool hide=false;if(TheWindowManager){int id=TheNameKeyGenerator->nameToKey(AsciiString("ControlBar.wnd:ControlBarParent"));GameWindow*w=((TranslateWindowManager*)TheWindowManager)->window(0,id);if(w)hide=!w->winIsHidden();}ToggleControlBar(true);
+  }disp=DESTROY_MESSAGE;break;
+ }
+ case 127:((ContextUI*)initialUI)->rotateLeft=true;break;
+ case 128:((ContextUI*)initialUI)->rotateLeft=false;break;
+ case 129:((ContextUI*)initialUI)->rotateRight=true;break;
+ case 118:((ContextUI*)initialUI)->forceMove=true;break;
+ case 119:((ContextUI*)initialUI)->forceMove=false;break;
+ case 120:((ContextUI*)initialUI)->waypoint=true;break;
+ case 122:((ContextUI*)initialUI)->preferSelection=true;break;
+ case 123:((ContextUI*)initialUI)->preferSelection=false;break;
+ case 121:((ContextUI*)initialUI)->waypoint=false;break;
+ case 130:((ContextUI*)initialUI)->rotateRight=false;break;
+ case 0x9d:if(TheWritableGlobalData&&translateGlobals()->timeControls)((TranslateGameEngine*)TheGameEngine)->increase();break;
+ case 0x9e:if(TheWritableGlobalData&&translateGlobals()->timeControls)((TranslateGameEngine*)TheGameEngine)->decrease();break;
+ case 131:((ContextUI*)initialUI)->zoomIn=true;break;
+ case 132:((ContextUI*)initialUI)->zoomIn=false;break;
+ case 133:((ContextUI*)initialUI)->zoomOut=true;break;
+ case 134:((ContextUI*)initialUI)->zoomOut=false;break;
+ case 0x87:TheInGameUI->resetCamera();break;
+ case 136:((ContextUI*)initialUI)->extra8bf=true;break;
+ case 137:((ContextUI*)initialUI)->extra8bf=false;break;
+ case 138:((ContextUI*)initialUI)->extra8c0=true;break;
+ case 139:((ContextUI*)initialUI)->extra8c0=false;break;
+ case 140:((ContextUI*)initialUI)->extra8c1=true;break;
+ case 141:((ContextUI*)initialUI)->extra8c1=false;break;
+ case 142:((ContextUI*)initialUI)->extra8c2=true;break;
+ case 143:((ContextUI*)initialUI)->extra8c2=false;break;
+ case 0x9a:TheMessageStream->appendMessage((GameMessage::Type)0x41c);break;
+ case 0x7d:if(TheGameLogic->isInMultiplayerGame()){BfmeAudioEventPrefix136 event(*(const OpaqueRefElement4*)(((TranslateAudio*)TheAudio)->misc()+0x28),0);((TranslateAudio*)TheAudio)->add(&event);disp=DESTROY_MESSAGE;TheMessageStream->appendMessage((GameMessage::Type)0x438);}break;
+ case 0x7c:if(TheDisplay)((TranslateDisplay*)TheDisplay)->screenshot(0);disp=DESTROY_MESSAGE;break;
+ case 0x3e9:case 0x3eb:case 0x3f8:case 0x3f9:case 0x3fa:case 0x3fb:case 0x3fc:case 0x3fd:case 0x3fe:case 0x3ff:case 0x400:case 0x401:case 0x461:{
+  SelectedDrawableList list=*contextUI()->selected();
+  for(SelectedDrawableList::iterator it=list.begin();it!=list.end();) {Drawable*d=*it;if(d->getObject()&&d->getObject()->isLocallyControlled()){++it;continue;}else it=list.erase(it);}
+  if(!list.empty())pickAndPlayUnitVoiceResponse((const DrawableList*)&list,t,0);m_teamExists=true;break;
+ }
+ case 0x3ea:case 0x402:case 0x403:case 0x404:case 0x405:case 0x406:case 0x407:case 0x408:case 0x409:case 0x40a:case 0x40b:m_teamExists=true;break;
+ case 0x3ec:m_teamExists=false;break;
+ case 0xa2:{bool selected=contextUI()->selectedCount()>0;if(!selected){const CommandButton*c=contextUI()->command();if(c){int commandType=contextButton(c)->type;if(commandType==32||commandType==38)selected=true;}}if(selected){Drawable*d=((TranslateGameClient*)TheGameClient)->find(msg->getArgument(0)->drawableID);if(d){if(contextUI()->forceAttackMode())evaluateForceAttack(d,d->getPosition(),DO_HINT);else evaluateContextCommand(d,d->getPosition(),CONTEXT_HINT);}}break;}
+ case 0xa3:{ContextPoint position(msg->getArgument(0)->location);if(contextUI()->forceAttackMode())evaluateForceAttack(0,&position,DO_HINT);else evaluateContextCommand(0,&position,CONTEXT_HINT);break;}
+ case 0xe:m_mouseRightDragAnchor=msg->getArgument(0)->pixel;m_mouseRightDown=msg->getArgument(2)->integer;field2c=false;break;
+ case 3:{ICoord2D current=msg->getArgument(0)->pixel;if(TheMouse->rva001EDD80((const Rva001EDD80Pair*)&m_mouseRightDragAnchor,(const Rva001EDD80Pair*)&current))field2c=true;break;}
+ case 0x10:m_mouseRightDragLift=msg->getArgument(0)->pixel;m_mouseRightUp=msg->getArgument(2)->integer;break;
+ case 6:field28=msg->getArgument(2)->integer;break;
+ case 4:field24=msg->getArgument(2)->integer;break;
+ case 0x1b:case 0x1c:{
+  bool isPoint=!field2c;if(m_mouseRightUp-m_mouseRightDown<((TranslateMouseFields*)TheMouse)->clickTime)isPoint=true;
+  const CommandButton*command=contextUI()->command();int commandType=command?contextButton(command)->getType():0;
+  if(command&&commandType!=10)break;
+  if(translateGlobals()->alternate&&isPoint){if(!TheTacticalView)break;Coord3D pos;((ContextView*)TheTacticalView)->screenToTerrain(&msg->getArgument(0)->pixel,&pos,0);bool controllable=TheInGameUI->areSelectedObjectsControllable();if(!controllable&&command&&(commandType==32||commandType==38))controllable=true;
+   if(controllable){int pickType=Rva0030F099(contextUI()->forceAttackMode());Drawable*d=TheTacticalView->pickDrawable(&msg->getArgument(0)->pixelRegion.lo,contextUI()->forceAttackMode(),pickType);if(contextUI()->forceAttackMode())evaluateForceAttack(d,&pos,DO_COMMAND);else {int result=evaluateContextCommand(d,&pos,CONTEXT_COMMAND);bool special=commandType==24;_ReadWriteBarrier();if(special&&result==0xa5)contextUI()->setCommand(0);}disp=DESTROY_MESSAGE;}
+  }break;
+ }
+ case 0x17:{
+  bool isPoint=((unsigned)translateHeight(msg->getArgument(0)->pixelRegion)<=((TranslateMouseFields*)TheMouse)->dragTolerance&&(unsigned)translateWidth(msg->getArgument(0)->pixelRegion)<=((TranslateMouseFields*)TheMouse)->dragTolerance);
+  if(field28-field24<((TranslateMouseFields*)TheMouse)->clickTime)isPoint=true;
+  if(!TheTacticalView)break;
+  const CommandButton*command=contextUI()->command();int commandType=command?contextButton(command)->getType():0;
+  if((!command||commandType==10)&&translateGlobals()->alternate)break;
+  Coord3D pos;((ContextView*)TheTacticalView)->screenToTerrain(&msg->getArgument(0)->pixel,&pos,0);
+  bool controllable=TheInGameUI->areSelectedObjectsControllable();if(!controllable&&command&&(commandType==32||commandType==38))controllable=true;
+  if(isPoint&&controllable){int pickType=Rva0030F099(contextUI()->forceAttackMode());Drawable*d=TheTacticalView->pickDrawable(&msg->getArgument(0)->pixelRegion.lo,contextUI()->forceAttackMode(),pickType);if(contextUI()->forceAttackMode())evaluateForceAttack(d,&pos,DO_COMMAND);else{int result=evaluateContextCommand(d,&pos,CONTEXT_COMMAND);if(commandType==24&&result==0xa5)contextUI()->setCommand(0);}disp=DESTROY_MESSAGE;}
+  break;
+ }
+ case 0x18:rva0042AF97((GameMessage*)msg);break;
+ case 0x9c:if(((TranslateLogicFields*)TheGameLogic)->isReplay()){
+  if(TheWritableGlobalData){translateGlobals()->fastMode=1-translateGlobals()->fastMode;((TranslateMessages*)TheInGameUI)->message(UnicodeString(L">> %s"),translateGlobals()->fastMode?L"ON":L"OFF");
+   if(translateGlobals()->fastMode){BfmeAudioEventPrefix136 event(*(const OpaqueRefElement4*)(((TranslateAudio*)TheAudio)->misc()+0xd0),0);((TranslateAudio*)TheAudio)->add(&event);}
+   else {BfmeAudioEventPrefix136 event(*(const OpaqueRefElement4*)(((TranslateAudio*)TheAudio)->misc()+0xd4),0);((TranslateAudio*)TheAudio)->add(&event);}
+  }disp=DESTROY_MESSAGE;
+ }break;
+ case 0x92:if(!TheLivingWorldLogic||!((BfmeSelectionState*)TheLivingWorldLogic)->isSelectionLocked())if(TheControlBar)TheControlBar->rva0031AD94();disp=DESTROY_MESSAGE;break;
+ case 0x99:if(theRadarWindowOverrideSource&&((BfmeMemberRV*)((ContextPlayers*)ThePlayerList)->getLocalPlayer())->bfmeAskRV())((Rva002D3861*)theRadarWindowOverrideSource)->rva002D3861();disp=DESTROY_MESSAGE;break;
+ }
+ return disp;
 }

@@ -5,7 +5,7 @@
 // 0, ignored; callee ends leave/ret with no return value, callers discard EAX).
 // Callees GadgetTextEntryGetText rowed 0x00320AAB, StringBase<G>::set pinned
 // 0x00037150, releaseBuffer rowed 0x00036E70, EH_prolog rowed 0x00629188.
-// Globals g_Va00E046B8 (state with flag +0x278, field +0x27C, window +0x298),
+// Globals AptMessenger::s_instance (state with flag +0x278, field +0x27C, window +0x298),
 // g_Va00E048C0 (target UnicodeString), empty via UnicodeString::TheEmptyString
 // data 0x00A0C898. Flag/model donor TU GadgetComboBoxAddEntry.cpp
 // (same dir, /O1 /DNDEBUG /MD /EHsc, UnicodeString/GameWindow); /O1 for the
@@ -38,7 +38,13 @@ struct Rva00511730State
 	GameWindow * volatile m_window298;
 };
 
-extern Rva00511730State *g_Va00E046B8;
+class AptMessenger
+{
+public:
+ static AptMessenger *s_instance;
+public:
+	static void OpenScreen();
+};
 
 class GameSpyInfoInterface;
 extern GameSpyInfoInterface *TheGameSpyInfo;
@@ -95,15 +101,15 @@ UnicodeString g_Va00E048C0;
 
 void __cdecl Rva00511730(int unused)
 {
-	if (!g_Va00E046B8)
+	if (!AptMessenger::s_instance)
 		return;
-	if (g_Va00E046B8->m_flag278)
+	if (((Rva00511730State*)AptMessenger::s_instance)->m_flag278)
 		return;
-	g_Va00E046B8->m_field27C = 2;
-	g_Va00E046B8->m_flag278 = 1;
-	if (g_Va00E046B8->m_window298)
+	((Rva00511730State*)AptMessenger::s_instance)->m_field27C = 2;
+	((Rva00511730State*)AptMessenger::s_instance)->m_flag278 = 1;
+	if (((Rva00511730State*)AptMessenger::s_instance)->m_window298)
 	{
-		g_Va00E048C0.set(GadgetTextEntryGetText(g_Va00E046B8->m_window298));
+		g_Va00E048C0.set(GadgetTextEntryGetText(((Rva00511730State*)AptMessenger::s_instance)->m_window298));
 	}
 	else
 	{
@@ -115,14 +121,10 @@ void __cdecl Rva00511730(int unused)
 // with the global flag at +0xA44 clear. WorldBuilder names it
 // AptMessenger::OpenScreen (AptMessenger.cpp:246/263 asserts on TheLAN,
 // TheGameSpyInfo and s_instance around the same "Messenger.apt" open).
-class AptMessenger
-{
-public:
-	static void OpenScreen();
-};
+
 void AptMessenger::OpenScreen()
 {
-	if ((TheGameSpyInfo || TheLAN) && !g_Va00E046B8)
+	if ((TheGameSpyInfo || TheLAN) && !AptMessenger::s_instance)
 	{
 		GameLogic *logic = TheGameLogic;
 		if (logic->isInMultiplayerGame()
@@ -132,5 +134,4 @@ void AptMessenger::OpenScreen()
 	}
 }
 
-// ?g_Va00E046B8@@3PAURva00511730State@@A: the global at VA 0xe046b8 is ?g_Va00E046B8@@3HA.
-#pragma comment(linker, "/alternatename:?g_Va00E046B8@@3PAURva00511730State@@A=?g_Va00E046B8@@3HA")
+// AptMessenger::s_instance owns the native messenger pointer at VA 0x00E046B8.

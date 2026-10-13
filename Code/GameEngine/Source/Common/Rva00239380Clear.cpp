@@ -12,9 +12,9 @@ public:
 	void rva00239368(void *node, int dummy);
 	void rva00239380();
 };
-extern void *g_freeList00239380;
-// g_freeList00239380: VA 0xdba5e8 (retail .data initial value 0).
-void * g_freeList00239380;
+extern void *DrawableListFreeNodes;
+// DrawableListFreeNodes: VA 0xdba5e8 (retail .data initial value 0).
+void * DrawableListFreeNodes;
 // ?rva00239AF4@Rva00239AF4@@QAEXXZ @0x00239AF4 29B: dispose of the same
 // circular-list holder cleared by 0x00239380 above (calls it on ecx, then
 // pushes the head node at this+0 onto freelist 0x009BA5E8 when non-null).
@@ -107,9 +107,9 @@ DrawableList::~DrawableList()
 	((Rva00239380Holder *)this)->rva00239380();
 	void *head = m_head;
 	if (head != 0) {
-		void *freeHead = g_freeList00239380;
+		void *freeHead = DrawableListFreeNodes;
 		((void **)head)[0] = freeHead;
-		g_freeList00239380 = head;
+		DrawableListFreeNodes = head;
 	}
 }
 void Rva00239AF4::rva00239AF4()
@@ -117,17 +117,17 @@ void Rva00239AF4::rva00239AF4()
 	((Rva00239380Holder *)this)->rva00239380();
 	void *head = m_head;
 	if (head != 0) {
-		void *freeHead = g_freeList00239380;
+		void *freeHead = DrawableListFreeNodes;
 		((void **)head)[0] = freeHead;
-		g_freeList00239380 = head;
+		DrawableListFreeNodes = head;
 	}
 }
 void Rva00239380Holder::rva00239368(void *node, int dummy)
 {
 	if (node != 0) {
-		void *freeHead = g_freeList00239380;
+		void *freeHead = DrawableListFreeNodes;
 		((void **)node)[0] = freeHead;
-		g_freeList00239380 = node;
+		DrawableListFreeNodes = node;
 	}
 }
 void Rva00239380Holder::rva00239380()
@@ -135,11 +135,11 @@ void Rva00239380Holder::rva00239380()
 	void *node = ((void **)m_head)[0];
 	if (node != m_head) {
 		do {
-			void *freeHead = g_freeList00239380;
+			void *freeHead = DrawableListFreeNodes;
 			void *current = node;
 			node = ((void **)current)[0];
 			((void **)current)[0] = freeHead;
-		g_freeList00239380 = current;
+		DrawableListFreeNodes = current;
 		} while (node != m_head);
 	}
 	((void **)m_head)[0] = m_head;
