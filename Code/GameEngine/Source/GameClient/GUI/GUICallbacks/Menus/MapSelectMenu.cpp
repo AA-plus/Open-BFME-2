@@ -57,12 +57,23 @@ extern GameLogic *TheGameLogic;
 #include "GameClient/CampaignManager.h"
 #include "GameClient/WindowLayout.h"
 #include "GameClient/Gadget.h"
-// Bind the existing target-owned Shell pop method spelling in this TU.
-#define pop rva0035BEC7
-#define hide rva0035BF4C
-#include "GameClient/Shell.h"
-#undef pop
-#undef hide
+// Only out-of-line Shell calls are used here; no Shell object is constructed
+// or accessed by this declaration. Keep the target provider ABIs rather than
+// ZH Shell.h's one-argument void showShellMap. Native MapSelectMenuInit calls
+// the rowed bool Shell::showShellMap(bool, bool) body at 0x0035C194.
+class Shell
+{
+public:
+ void shutdownComplete(WindowLayout *layout, Bool impendingPush = FALSE);
+ void reverseAnimatewindow();
+ void rva0035BEC7();
+ void rva0035BF4C(Bool hide);
+ Bool showShellMap(Bool useShellMap, Bool restartShellGame);
+ void registerWithAnimateManager(GameWindow *win, AnimTypes animType,
+                                 Bool needsToFinish, UnsignedInt delayMS = 0);
+ Bool isAnimFinished();
+};
+extern Shell *TheShell;
 #include "GameClient/GameWindowManager.h"
 #include "GameClient/GadgetListBox.h"
 #include "GameClient/GadgetComboBox.h"
@@ -460,7 +471,6 @@ WindowMsgHandledType MapSelectMenuSystem( GameWindow *window, UnsignedInt msg,
 // Native callback table VA DBCBB0 pairs MapSelectMenuInit (C024E8) with90D2EF.
 // Whole native50D2EF..50D5DF752B and WB144DB40 establish headless entries,
 // focus +1F4 clear, animations and system/user radio controls.
-class Rva0035C194 {public:bool rva0035C194(bool,bool);};
 void SetDifficultyRadioButtonMapSelectMenu();
 void MapSelectMenuInit( WindowLayout *layout, void *userData )
 {
@@ -468,7 +478,7 @@ void MapSelectMenuInit( WindowLayout *layout, void *userData )
 	buttonPushed = false;
 	mapSelectIsShuttingDown = false;
 	mapSelectStartGame = false;
-	((Rva0035C194 *)TheShell)->rva0035C194(true, false);
+	TheShell->showShellMap(true, false);
 	// show menu
 	// Open-BFME5: BFME made WindowLayout::hide virtual -- retail reaches it here
 	// through vtable slot 0x10 (`mov eax,[ecx]` / `call [eax+0x10]`) where the
