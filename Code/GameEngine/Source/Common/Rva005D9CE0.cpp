@@ -1,7 +1,8 @@
 // cl: /MD
 // ?rva005D9CE0@Rva005D9CD5@@UAE_NPAVObject@@@Z @0x005D9CE0 76B
 // Evidence: gap between Rva005D9CD5 dtor 0x005D9CD5 and deleting dtor 0x005D9D2C plus vslot 6 of 0x00876424.
-extern float g_00C76420;
+// Retail loads the float at RVA 0x00876420 (bits 0x3E99999A).
+// Use its exact literal so MSVC supplies the constant instead of an unowned global.
 class Object;
 class AIUpdateInterface { public: Object *getCurrentVictim() const; };
 class Rva005EE816 { public: unsigned rva005EE3B0(Object *obj, bool flag); };
@@ -28,7 +29,7 @@ bool Rva005D9CD5::rva005D9CE0(Object *other)
 		if (v > 20)
 			return true;
 		if (v != 0) {
-			if (g_00C76420 > other->getBody()->getFloat())
+			if (0.3f > other->getBody()->getFloat())
 				return true;
 		}
 	}
