@@ -1,18 +1,23 @@
 // ?rva0004CF9A@Rva0004CA4C@@QAEXAAVRenderInfoClass@@@Z
+// partial score=0.9535586758665127 date=2026-10-13
+// ?rva0004CF9A@Rva0004CA4C@@QAEXAAVRenderInfoClass@@@Z
 // partial score=0.875175 date=2026-10-13
 // ?rva0004CF9A@Rva0004CA4C@@QAEXAAVRenderInfoClass@@@Z
 // partial score=0.5 date=2026-10-10
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
-// W7-SOL5: WB7FA1B0 full body establishes the previously omitted null
-// asset reference (local2C); its conditional ReleaseRef goes to WB1673DF0,
-// independently mapped to the existing TextureBaseClass::Release_Ref61ED10.
-// Restore that lifetime before m_current=0. Canonical AsciiString/RGBColor.
-// Getter4CABD uses the existing int symbol through a low-AL bool call view.
-// Strongest body1250/1251/frame78. Remains: this/psize/fabs/spread/set/iterator
-// home cycle, first-walk tracking-pointer cleanup, and second-walk index
-// spill vs EDI. Barrier must follow the raw null test (before test adds cleanup).
-// Null-reference holder fixes EDI=this/EBX=0; assignment throw() fixes transient
-// EH state and camera scheduling; scalar setter method restores Z/Y/X loads.
+// stlport
+// cl: /D_OPERATOR_NEW_DEFINED_ /DWIN32 /D_WINDOWS /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/inputs/reference/shims/sweep /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/inputs/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_STLP_USE_STATIC_LIB /D_CRTIMP= /D_STLP_NO_EXCEPTIONS=1 /D_STLP_USE_MALLOC /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/Libraries/Include
+// W7-ASTRA r2: actual STLport list/vector replace the manual container views.
+// This restores this at EBP-14, all float/iterator homes and the second-loop
+// EDI scaled index; declaration-only push_back/erase retains the improvement.
+// Donor Smudge Vector3/Vector2 members and Vector2::Set restore offset-Y store
+// scheduling. Donor checkout cee35b7d8; new guard uses the already declared CRT
+// placement-new operators, as the existing W3DTaint.cpp integration does.
+// The rowed seven/eight getter returns only0/1; ordinary call plus byte
+// conversion replaces the old member-function-pointer bool ABI cast.
+// Best whole emitted1253B versus native1251B, EH exact. Remaining first-loop
+// operator-> fallback and shared handle-cleanup paths. No matched-byte credit.
+// Proposed real owner is W3DDevice/GameClient/W3DFXParticleSystem.cpp, proven
+// by the retail source literal and WB7FA1B0; picker STL neighbour is not owner.
 // retail 0x0004CF9A..0x0004D47D (1251 bytes) thiscall RET 4 with __EH_prolog.
 // Slot 36 of vftable 0x007C4C20 (Rva0004CA4C). The W3DFXParticleSystem.cpp
 // counterpart of Zero Hour's W3DParticleSystemManager::doParticles.
@@ -99,44 +104,10 @@ private:
 	int m_pad08;
 };
 
-namespace _STL
-{
-	template <class T> class allocator {};
-
-	template <class T, class A = allocator<T> >
-	class vector
-	{
-	public:
-		void push_back(const T &x);
-		T *erase(T *first, T *last);
-		T *begin() { return _M_start; }
-		T *end() { return _M_finish; }
-		UnsignedInt size() const { return _M_finish - _M_start; }
-		T &operator[](UnsignedInt i) { return _M_start[i]; }
-		void clear() { erase(begin(), end()); }
-
-	private:
-		T *_M_start;
-		T *_M_finish;
-		T *_M_end_of_storage;
-	};
-
-	template <class T>
-	struct _List_node
-	{
-		_List_node *_M_next;
-		_List_node *_M_prev;
-		T _M_data;
-	};
-
-	template <class T, class A = allocator<T> >
-	class list
-	{
-	public:
-		_List_node<T> *_M_node;
-	};
-}
-
+#include <vector>
+#include <list>
+template<> void _STL::vector<RvaSmartPtr12>::push_back(const RvaSmartPtr12 &);
+template<> RvaSmartPtr12 *_STL::vector<RvaSmartPtr12>::erase(RvaSmartPtr12 *,RvaSmartPtr12 *);
 class Rva001F4D2D { public: Real rva001F4D2D(); };		// 0x001F4D2D
 class Rva001F4E1BSlot { public: const RGBColor *get() const; };	// 0x001F4E1B
 class Rva001F4DC4 { public: Real rva001F4DC4(); };		// 0x001F4DC4
@@ -180,8 +151,7 @@ public:
 class ParticleSystem
 {
 public:
-	Bool isSevenOrEight() const { typedef bool (Rva0004CABDSevenEight::*BoolGet)() const;
-		return (reinterpret_cast<const Rva0004CABDSevenEight *>(this)->*reinterpret_cast<BoolGet>(&Rva0004CABDSevenEight::get))(); }
+	Bool isSevenOrEight() const { return (unsigned char)reinterpret_cast<const Rva0004CABDSevenEight *>(this)->get() != 0; }
 	const AsciiString &getParticleTypeName() const { return m_particleTypeName; }
 
 	unsigned char m_pad00[0x0C];
@@ -208,13 +178,15 @@ public:
 	_STL::list<RvaSmartPtr12> m_allParticleSystems;	// +0x4C
 };
 
+#include "vector2.h"
+#include "vector3.h"
 struct Smudge
 {
-	__forceinline void setPosition(float x,float y,float z) {m_pos.x=x;m_pos.y=y;m_pos.z=z;}
+	__forceinline void setPosition(float x,float y,float z) {m_pos.Set(x,y,z);}
 	unsigned char m_pad00[0x0C];
-	Coord3D m_pos;					// +0x0C
-	Real m_offsetX;					// +0x18
-	Real m_offsetY;					// +0x1C
+	Vector3 m_pos;					// +0x0C
+	Vector2 m_offset; //					// +0x18
+	// Real m_offsetY;					// +0x1C
 	Real m_size;					// +0x20
 	Real m_opacity;					// +0x24
 };
@@ -333,9 +305,9 @@ void Rva0004CA4C::rva0004CF9A(RenderInfoClass &rinfo)
 	m_current = 0;
 
 	_STL::list<RvaSmartPtr12> &particleSysList = TheParticleSystemManager->m_allParticleSystems;
-	for (_STL::_List_node<RvaSmartPtr12> *it = particleSysList._M_node->_M_next; it != particleSysList._M_node; it = it->_M_next)
+	for (_STL::list<RvaSmartPtr12>::iterator it = particleSysList.begin(); it != particleSysList.end(); ++it)
 	{
-		RvaSmartPtr12 sys(it->_M_data);
+		RvaSmartPtr12 sys(*it);
 		ParticleSystem *raw = sys.get();
 		if (!raw)
 			continue;
@@ -372,12 +344,10 @@ void Rva0004CA4C::rva0004CF9A(RenderInfoClass &rinfo)
 						}
 						Smudge *smudge = set->addSmudgeToSet();
 						Real spread = p->getSpread();
-						smudge->setPosition(p->m_pos.x,p->m_pos.y,p->m_pos.z);
-						Real offsetY = GetGameClientRandomValueReal(-spread, spread,
-							"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngineDevice\\Source\\W3DDevice\\GameClient\\W3DFXParticleSystem.cpp", 195);
-						smudge->m_offsetX = GetGameClientRandomValueReal(spread * -2.0f, spread * 2.0f,
-							"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngineDevice\\Source\\W3DDevice\\GameClient\\W3DFXParticleSystem.cpp", 195);
-						smudge->m_offsetY = offsetY;
+						smudge->m_pos.Set(p->m_pos.x,p->m_pos.y,p->m_pos.z);
+						smudge->m_offset.Set(GetGameClientRandomValueReal(spread * -2.0f, spread * 2.0f,
+							"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngineDevice\\Source\\W3DDevice\\GameClient\\W3DFXParticleSystem.cpp", 195),GetGameClientRandomValueReal(-spread, spread,
+							"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngineDevice\\Source\\W3DDevice\\GameClient\\W3DFXParticleSystem.cpp", 195));
 						smudge->m_size = psize;
 						smudge->m_opacity = p->getAlpha();
 						g_bfmeVal991++;
