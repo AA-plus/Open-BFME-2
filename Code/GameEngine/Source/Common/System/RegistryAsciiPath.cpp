@@ -16,6 +16,10 @@
 **	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // cl: /EHsc
+// October 2026 EH ownership: native parent bytes and every associative EH
+// code/data relocation verify for this whole unit. Cleanup entry identities
+// come from unwind-map references; interior return labels are excluded.
+// The naturally emitted state-bit cleanups replace manual MASM ownership.
 //
 // The narrow half of BFME 2's expression-template string concatenation, and
 // the AsciiString registry-path builder built on it. The wide half lives in
