@@ -123,7 +123,7 @@ struct Gen_00489270;
 void s4parse0059E860(INI*, Gen_00489270*);
 struct Gen_00489270;
 void s4parse0059E290(INI*, Gen_00489270*);
-class Gen_00489270;
+struct Gen_00489270;
 void rva0059EB90(INI*, Gen_00489270*);
 class Rva0059B8F0Nugget {public: static void parse(INI*,void*,void*,const void*);};
 class Rva0035D6F9Holder;

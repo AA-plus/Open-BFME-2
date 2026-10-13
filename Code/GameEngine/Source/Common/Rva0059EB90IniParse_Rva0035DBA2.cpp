@@ -20,15 +20,14 @@ public:
 	void initFromINI(void *what, const FieldParse *fieldParse);
 };
 
-class Gen_00489270
+struct Gen_00489270
 {
-public:
 	void m(int value);
 };
 
 extern const FieldParse TheRva0059EB90FieldParse[];
 
-// ?rva0059EB90@@YAXPAVINI@@PAVGen_00489270@@@Z
+// ?rva0059EB90@@YAXPAVINI@@PAUGen_00489270@@@Z
 void rva0059EB90(INI *ini, Gen_00489270 *store)
 {
 	BfmeC1137 *item = new BfmeC1137;
