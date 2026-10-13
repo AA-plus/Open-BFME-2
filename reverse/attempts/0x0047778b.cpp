@@ -1,4 +1,7 @@
 // ?rva0047778B@HordeTransportContain@@QAEXXZ
+// partial score=0.99 date=2026-10-13
+// 2026-10-13 W7-S1: single-use local `random` inlined into the float conversion (float multiplier=(float)(GetGameLogicRandomValue(...))): 622B, 4 diff lines left (force Y/X xmm scheduling), was 23.
+// ?rva0047778B@HordeTransportContain@@QAEXXZ
 // partial score=0.963 date=2026-10-10
 // BFME1 ba7ddda7 Rva0024CAE0MaintainNestedRiders.cpp supplies the nested
 // rider-maintenance algorithm. BFME2's update at477AF3 calls4779F9 first;
@@ -239,8 +242,7 @@ void HordeTransportContain::rva0047778B()
    if(physics)
    {
     Vector3 direction=((const Matrix3D *)view->transform)->Get_X_Vector();
-    int random=GetGameLogicRandomValue(5,10,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Contain\\HordeContain\\HordeTransportContain.cpp",0x234);
-    float multiplier=(float)random;
+    float multiplier=(float)(GetGameLogicRandomValue(5,10,"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Contain\\HordeContain\\HordeTransportContain.cpp",0x234));
     Vector3 force(direction.X*multiplier,direction.Y*multiplier,multiplier);
     physics->rva00390629(true);
     if(view->condition.test(127)==0) {view->condition.set(127);object->rva0028AE6D();}
