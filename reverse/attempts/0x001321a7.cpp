@@ -1,4 +1,6 @@
 // ?rva001321A7@BfmeThing937B@@QAEXPAX@Z
+// partial score=0.86 date=2026-10-13
+// ?rva001321A7@BfmeThing937B@@QAEXPAX@Z
 // partial score=0.827430394046116 date=2026-10-10
 // ?rva001321A7@BfmeThing937B@@QAEXPAX@Z
 // cl: /O1 /Ob1 /G7 /DNDEBUG /MD /EHsc
@@ -68,10 +70,9 @@ struct TextureRecolorSurfaceLock {
 void Log_DX8_ErrorCode(unsigned);
 extern "C" long __stdcall D3DXFilterTexture(void *,void *,unsigned,unsigned);
 struct TextureRecolorFlags {
- unsigned count:3;
- unsigned reserved03:27;
- unsigned dynamic:1;
- unsigned reserved31:1;
+ unsigned bits;
+ __forceinline unsigned count() const {return bits&7;}
+ __forceinline bool dynamic() const {return ((bits>>30)&1)!=0;}
 };
 class Rva000B4653 {public:
  TextureRecolorFlags flags;
@@ -116,7 +117,7 @@ void BfmeThing937B::rva001321A7(void *settings)
   else if(desc.Format==26)pixelSize=2;
   if(!pixelSize)return;
   Rva000B4653 *options=reinterpret_cast<Rva000B4653 *>(settings);
-  if(options->flags.dynamic && !dynamicSource) {
+  if(options->flags.dynamic() && !dynamicSource) {
    dynamicSource=new unsigned char[desc.Height*desc.Width*pixelSize];
    if(!dynamicSource)return;
    for(unsigned y=0;y<desc.Height;++y)
@@ -125,7 +126,7 @@ void BfmeThing937B::rva001321A7(void *settings)
   }
   unsigned char *source;
   int sourcePitch;
-  if(flags.dynamic) {
+  if(flags.dynamic()) {
    if(!dynamicSource)return;
    source=dynamicSource;
    sourcePitch=desc.Width*pixelSize;
@@ -133,7 +134,7 @@ void BfmeThing937B::rva001321A7(void *settings)
    source=reinterpret_cast<unsigned char *>(bits);
    sourcePitch=pitch;
   }
-  unsigned count=options->flags.count;
+  unsigned count=options->flags.count();
   Rva00131D7D colors[3];
   for(unsigned i=0;i<count;++i)
    colors[i].rva00131D7D(reinterpret_cast<unsigned>(options->rva000B4653(i)));
@@ -144,9 +145,8 @@ void BfmeThing937B::rva001321A7(void *settings)
    for(unsigned y=desc.Height;y;--y) {
     for(unsigned x=desc.Width;x;--x) {
      unsigned short pixel=*src++;
-     *dst++=static_cast<unsigned short>((((pixel*colors[0].green)/255)&0xF0) |
-              (((pixel*colors[0].blue)/255)&0xF) |
-              (((pixel*colors[0].red)/255)&0xF00) | (pixel&0xF000));
+     *dst++=static_cast<unsigned short>((pixel&0xF000) | (((pixel*colors[0].red)/255)&0xF00) |
+              (((pixel*colors[0].green)/255)&0xF0) | (((pixel*colors[0].blue)/255)&0xF));
     }
     dst+=pitch/2-desc.Width;
     src+=srcStride-desc.Width;
