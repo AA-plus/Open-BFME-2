@@ -33,3 +33,10 @@ they do not establish an original application identity or link-census result.
 The local `tools/link_check.py` preview reports this source absent from saved
 census `6963cc017c`; it cannot preview link placement for this unit. No linking
 runner was started and no linking gain is claimed.
+
+The normal commit hook's shadow identity check reports the existing divergent
+complete and scalar-deleting destructor copies for `Rva005F5C77Base0`
+(`??1Rva005F5C77Base0@@UAE@XZ` and `??_GRva005F5C77Base0@@UAEPAXI@Z`).
+The source declaration and definitions were not changed by these cleanup rows;
+this inheritance-model debt also appears in the earlier constructor evidence.
+The findings remain open and visible; byte equality does not resolve them.
