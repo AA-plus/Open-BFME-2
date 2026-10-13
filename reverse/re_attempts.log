@@ -49884,3 +49884,5 @@ _AnyRatioFrameScale	0x001BAF30	606	blocked	Clean-room spec001baf30 and complete 
 ?rva00078c0@Rva00029F80@@AAEXPBD0PAX@Z	0x00029F80	77	blocked	rowed twin is STL basic_string _M_range_initialize; needs fake-STL instantiation spelling plus dubious string receiver cast; t=6 model=muse-spark
 ?init@Rva00224C95Table@@QAEXXZ	0x00224C95	71	blocked	rowed hash_map-ctor twin needs full instantiation spelling; 20B POD size mismatch makes pin suspect; t=4 model=muse-spark
 ?rva00410AAB@Rva00410AABHelper@@QAEXPAX@Z	0x00410D96	73	blocked	file documents member-shape requirement (mov ecx,this present in retail); free stdcall twin drops it; t=3 model=muse-spark
+?rva0023D68E@GameLogic@@QAEXH@Z	0x003BD270	69	blocked	rowed twin takes bool; int param needs conversion vs retail plain push; t=2 model=muse-spark
+?parseScience@INI@@SAXPAV1@PAX1PBX@Z	0x002FD791	70	blocked	rowed KillerScience twin is INI static needing shared-header decl; t=3 model=muse-spark
