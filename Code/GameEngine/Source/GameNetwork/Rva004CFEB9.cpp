@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 // ?rva004CFEB9@Rva004CFEB9@@QAE?AVAsciiString@@XZ, retail 0x004CFEB9, 104 bytes.
 // Target evidence: reads signed dword +0 and dword +4, adds 0x10000 to the
