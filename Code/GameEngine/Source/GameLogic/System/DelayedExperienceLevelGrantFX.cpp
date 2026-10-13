@@ -16,7 +16,7 @@
 class Matrix3D {
 public:
     float m[12];
-    Matrix3D(bool identity) {
+    __declspec(dllimport) __forceinline Matrix3D(bool identity) {
         if (identity) {
             m[0]=1.0f; m[1]=0.0f; m[2]=0.0f; m[3]=0.0f;
             m[4]=0.0f; m[5]=1.0f; m[6]=0.0f; m[7]=0.0f;
