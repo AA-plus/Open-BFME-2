@@ -1,6 +1,10 @@
 // ?rva0028E8FD@Object@@QAEXPAUCoord3D@@@Z
+// partial score=0.8989 date=2026-10-13
+// ?rva0028E8FD@Object@@QAEXPAUCoord3D@@@Z
 // partial score=0.8989050382870799 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include /I.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "Lib/Coord3D.h"
 #include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
@@ -24,6 +28,7 @@ void Object::rva0028E8FD(Coord3D*out){
  if(flag1A6){MotionCoord delta(planned);delta.sub(position);out->y=delta.y;out->z=delta.z;out->x=delta.x;}
  else if(flag1A4 && lastFrame()<TheGameLogic->getFrame()){
   MotionCoord translation;((const Rva0028E8D4*)this)->rva0028E8D4(&translation.x);
+  _ReadWriteBarrier();
   unsigned elapsed=TheGameLogic->getFrame()-lastFrame();translation.scale(-1.0f);MotionCoord delta(translation);delta.add(position);
   *((MotionCoord*)out)=delta;((MotionCoord*)out)->divide((float)elapsed);
  }else if(flag1A5 && lastFrame()<=TheGameLogic->getFrame()){
