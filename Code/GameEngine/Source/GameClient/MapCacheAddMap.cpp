@@ -23,6 +23,7 @@ static inline bool operator!=(const _List_iterator<T, Traits>& a,
 #include "ascii_string.h"
 #include "unicode_string.h"
 #include "../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 // __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
 // COMDATs (one byte shape per TU malloc/free wiring); explicit

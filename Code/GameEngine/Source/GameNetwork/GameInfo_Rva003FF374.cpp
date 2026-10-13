@@ -62,6 +62,7 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 // directly, not the ZH UnicodeString spellings (which resolve to the NARROW
 // StringBase<char> bodies).
 #include "string_base.h"
+#include "../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 // ?set@?$StringBase@G@@QAEXABV1@@Z at 0x00888530
 // ?set@UnicodeString@@QAEXABV0@@Z present-unmatched

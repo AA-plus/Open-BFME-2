@@ -20,6 +20,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include "bezier_segment.h"
 #include "bez_fwd_iterator.h"
 #include "d3dx8math.h"
+#include "../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 // Retail's uninitialized-copy target at 0x000766F5 is rowed as the 12-byte
 // BfmeE12 specialization, although this vector body uses Coord3D (three Real

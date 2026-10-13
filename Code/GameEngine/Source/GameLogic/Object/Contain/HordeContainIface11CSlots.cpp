@@ -72,6 +72,7 @@ struct Coord3D
 	float y;
 	float z;
 };
+#include "../../../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 // The float triple whose length is the address-owned copy 0x00003571.
 class Rva0055A627Difference
 {

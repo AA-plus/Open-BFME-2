@@ -25,6 +25,7 @@ public:
 }
 
 #include "../../../Include/Lib/Coord3D.h"
+#include "../../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 typedef _STL::list<Coord3D> CoordList;
 

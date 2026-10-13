@@ -39,6 +39,7 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 
 #include "ascii_string.h"
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 struct BfmePod8
 {

@@ -24,6 +24,7 @@ struct Coord3D
 	float y;
 	float z;
 };
+#include "../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 class Rva0055A246
 {

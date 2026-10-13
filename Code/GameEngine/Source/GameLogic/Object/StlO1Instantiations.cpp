@@ -50,6 +50,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #endif
 #ifdef PM_CACHE_TERRAIN_HEIGHT
 #include "common/mapobject.h"
+#include "../../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 #endif
 #ifdef DUMP_PERF_STATS
 #endif 

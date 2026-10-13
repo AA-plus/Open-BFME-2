@@ -58,6 +58,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 #include "GameLogic/Object.h"
 #include "GameLogic/PartitionManager.h"
 #include "GameLogic/Module/DockUpdate.h"
+#include "../../../../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 void DockUpdate::getExitPosition( Object* docker, Coord3D *position )
 {

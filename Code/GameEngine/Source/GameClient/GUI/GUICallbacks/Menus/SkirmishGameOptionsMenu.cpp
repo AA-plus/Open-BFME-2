@@ -96,6 +96,7 @@ static inline bool operator!=(const _List_iterator<T, LeftTraits>& a,
 #include "GameNetwork/GUIUtil.h"
 #include "GameNetwork/IPEnumeration.h"
 #include "WWDownload/Registry.h"
+#include "../../../../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 #ifdef _INTERNAL
 // for occasional debugging...

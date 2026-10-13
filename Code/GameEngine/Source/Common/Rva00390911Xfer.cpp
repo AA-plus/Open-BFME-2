@@ -10,6 +10,7 @@ static inline const unsigned int &max(const unsigned int &a, const unsigned int 
 }
 #include <vector>
 #include "../../../Libraries/Include/Lib/Coord3D.h"
+#include "../../../../reference/shims/bfme_coord3d_construct_link/coord3d_construct_link.h"
 
 typedef unsigned char UnsignedByte;
 typedef unsigned int UnsignedInt;
