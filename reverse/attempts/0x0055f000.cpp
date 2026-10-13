@@ -1,6 +1,8 @@
 // ?rva0055F000@Rva0055F218@@QAEXXZ
+// partial score=0.993 date=2026-10-13
+// ?rva0055F000@Rva0055F218@@QAEXXZ
 // partial score=0.97 date=2026-10-11
-// cl: /DNDEBUG /MD /EHs
+// cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs
 // ??0Rva0055F218@@QAE@IAAUSrc0055F218@@@Z, retail 0x0055F218, 120 bytes.
 // UInt-plus-template ctor: forwards the dword to the rowed base
 // ??0Rva0055EFE1@@QAE@I@Z at 0x0055EFE1, subobject defaults at +0xC/+0x10/+0x14/+0x15,
@@ -32,7 +34,8 @@ private:
 	float m_high;
 };
 
-#include "../../../Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 class Rva0055EFE1
 {
@@ -167,10 +170,10 @@ void Rva0055F218::rva0055F000()
 	Coord3D *velocity = &((Rva0055F000Particle *)m_arg4)->m_velocity;
 	Coord3D *force = &((Rva0055F000Particle *)m_arg4)->m_force;
 	force->z = system->gravity();
-	velocity->x += force->x;
+	__vref(velocity->x) += force->x;
 	velocity->y += force->y;
 	velocity->z += force->z;
-	velocity->x *= m_f;
+	velocity->x *= __vref(m_f);
 	velocity->y *= m_f;
 	velocity->z *= m_f;
 	const RGBColor *drift = system->drift();
