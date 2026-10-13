@@ -1,4 +1,4 @@
-// ?refreshLanGameRva004467AC@BfmeAptScreenLanLobby@@QAE_NXZ
+// ?rva004467AC@AptLanLobby@@AAE_NXZ
 // partial score=0.98 date=2026-10-11
 // cl: /Ireference/shims/bfme2_ascii /Ireference/shims/bfmelist /O1 /DNDEBUG /MD /GX /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // stlport
@@ -6,10 +6,10 @@
 // BFME2's LAN lobby gadget initialization callback, retail 0x00445DA5
 // (153 bytes). The screen's constructor 0x00445EE3 binds it as a member
 // function pointer on the whole screen object (vftable 0x00C3E0F8; the
-// callback interface BfmeAptScreenLanLobby.cpp views sits at +0x27C).
+// callback interface AptLanLobby.cpp views sits at +0x27C).
 //
-// Donor: Open-BFME-1 GUICallbacks/Apt/BfmeAptScreenLanLobby_onInitGadget.cpp
-// (BfmeAptScreenLanLobby::_bfme_onInitGadget, BFME1 0x005187F0); the name is
+// Donor: Open-BFME-1 GUICallbacks/Apt/AptLanLobby_onInitGadget.cpp
+// (AptLanLobby::_bfme_onInitGadget, BFME1 0x005187F0); the name is
 // the donor's identity for the same role and "LanLobby::" gadget names.
 // BFME2 target evidence: only CustomGamesList (stored at +0x6A8, games
 // tooltip 0x00445BAA) and NameEntry remain; NameEntry's link helper at
@@ -459,7 +459,7 @@ public:
 extern LANAPI *g_00DFE958;
 #define TheLAN g_00DFE958
 
-class BfmeAptScreenLanLobby
+class AptLanLobby
 {
 public:
 	void _bfme_onInitGadget(const char *name, void *argument, GameWindow *window);
@@ -471,7 +471,6 @@ public:
 	bool initLanRva004452A8();
 	int rva00446443();
 	int rva00444826(int msg, unsigned int data1, unsigned int data2);
-	bool refreshLanGameRva004467AC();
 
 	GameModePreferences &modePrefs() { return *reinterpret_cast<GameModePreferences *>(&m_prefs); }
 
@@ -480,6 +479,7 @@ public:
 	void rva004457BC();
 
 private:
+	bool rva004467AC();
 	unsigned char m_pad000[0x274];
 	void *m_owner; // +0x274
 	unsigned char m_pad278[0x288 - 0x278];
@@ -503,361 +503,6 @@ private:
 	unsigned char m_6c0; // +0x6C0
 };
 
-void BfmeAptScreenLanLobby::_bfme_onInitGadget(const char *name, void *, GameWindow *window)
-{
-	if (window != 0)
-	{
-		if (strcmp(name, "LanLobby::CustomGamesList") == 0)
-		{
-			GadgetListBoxReset(window);
-			m_customGamesList = window;
-			window->winSetTooltipFunc(Rva00445BAALanLobbyTooltip);
-		}
-		else if (strcmp(name, "LanLobby::NameEntry") == 0)
-		{
-			bfmeGo924F((BfmeKeyLC *)window, 0x0c);
-			GadgetTextEntrySetText(window, UnicodeString::TheEmptyString);
-			Rva0032060D(window, 0x80);
-			m_nameEntry.attach(window);
-			m_6c0 = 0;
-		}
-	}
-}
-
-// Retail 0x00446386, 183 bytes. Name unknown. Tracks the flag at +0x6BB;
-// when it turns on (and the window at +0x6B4 exists) it replaces the window
-// manager's tab list with a one-entry list holding that window; when it
-// turns off it only clears the tab list. /GX (not /EHsc) keeps retail's
-// state reset before the list's destructor, as for registerTabList.
-void BfmeAptScreenLanLobby::rva00446386(bool enable)
-{
-	if (enable == m_6bb)
-		return;
-	GameWindow *window = m_nameEntry.m_owner;
-	if (!window)
-		return;
-	m_6bb = enable;
-	if (enable)
-	{
-		_STL::list<int> tabList;
-		tabList.push_back((int)m_nameEntry.m_owner);
-		TheWindowManager->clearTabList();
-		TheWindowManager->registerTabList(tabList);
-	}
-	else
-		TheWindowManager->clearTabList();
-}
-
-// Retail 0x00444760, 198 bytes. Donor Open-BFME-1
-// BfmeAptScreenLanLobby_submitName.cpp (submitNameRva00516C50, BFME1
-// 0x00516C50), whose address-name pattern it keeps. BFME2 keeps the last
-// user name at +0x6A0 and the preferences at +0x684; LANAPI vslot 29 is the
-// donor's RequestSetName.
-void BfmeAptScreenLanLobby::submitNameRva00444760()
-{
-	GameWindow *entry = m_nameEntry.m_owner;
-	UnicodeString text = GadgetTextEntryGetText(entry);
-	UnicodeString trimmed(text);
-	trimmed.trim();
-	if (unicodeIsEmpty(trimmed))
-		text.set(m_userName);
-	if (TheLanguageFilter)
-		TheLanguageFilter->filterLine(text);
-	TheLAN->RequestSetName(text);
-	m_prefs.setUserName(text);
-}
-
-// Retail 0x00446772, 58 bytes: slot 13 of the screen's vftable 0x00C3E0F8.
-// Name unknown. Hands the preferences to the +0x668 object, writes them,
-// clears the tab list (rva00446386), runs the screen's rowed 0x004442FD and
-// tail-calls the +0x288 panel's 0x0043DE19.
-void BfmeAptScreenLanLobby::rva00446772()
-{
-	m_668.rva00580316(&m_prefs);
-	m_prefs.write();
-	rva00446386(false);
-	reinterpret_cast<Rva004442FD *>(this)->rva004442FD();
-	m_panel.rva0043DE19();
-}
-
-// Retail 0x0044469C, 196 bytes. Name unknown. In state 1 with a non-blank
-// name entered, the join button follows whether the game from 0x00444165 has
-// a free slot and the create button is enabled; otherwise both are disabled.
-void BfmeAptScreenLanLobby::rva0044469C()
-{
-	bool hasName = false;
-	bool canJoin = false;
-	if (m_6a4 == 1)
-	{
-		bool notBlank = false;
-		if (m_nameEntry.m_owner)
-		{
-			UnicodeString name = GadgetTextEntryGetText(m_nameEntry.m_owner);
-			name.trim();
-			if (!unicodeIsEmpty(name))
-				notBlank = true;
-		}
-		if (notBlank)
-		{
-			hasName = true;
-			GameInfo *game = (GameInfo *)reinterpret_cast<Rva00444165 *>(this)->rva00444165();
-			if (game)
-			{
-				int players = game->getNumPlayers();
-				if (players < game->getNumOpenOrOccupiedSlots())
-					canJoin = true;
-			}
-		}
-	}
-	if (canJoin)
-		reinterpret_cast<Rva00444083 *>(this)->rva00444083(2);
-	else
-		reinterpret_cast<Rva00444083 *>(this)->rva004440F4(2);
-	if (hasName)
-		reinterpret_cast<Rva00444083 *>(this)->rva00444083(1);
-	else
-		reinterpret_cast<Rva00444083 *>(this)->rva004440F4(1);
-}
-
-// Retail 0x00445E3E, 77 bytes. Name unknown. Rebuilds the +0x668 object from
-// the games in TheLAN's list whose +0x5C matches the screen's +0x304, then
-// refreshes the games list box (0x004457BC) and enables the +0x288 panel.
-void BfmeAptScreenLanLobby::rva00445E3E(LANGameInfo *games)
-{
-	reinterpret_cast<Rva00601941 *>(&m_668)->rva00601941();
-	for (LANGameInfo *game = games; game; game = game->m_next)
-	{
-		if (game->m_5c == m_304)
-			reinterpret_cast<Rva00580B40 *>(&m_668)->rva00580B40((const ModuleData *)game);
-	}
-	rva004457BC();
-	reinterpret_cast<Rva0043DB66ByteOneSetter *>(&m_panel)->enable();
-}
-
-// Retail 0x004452A8, 505 bytes. Donor Open-BFME-1 GUICallbacks/Apt/
-// AptLanLobby.cpp (initLanRva00517D00, BFME1 0x00517D00, the BFME
-// counterpart of Zero Hour's LanLobbyMenuInit), whose address-name pattern it
-// keeps. BFME2 target evidence: it needs the games list and the name entry,
-// creates a 0x60-byte LANAPI, keeps GlobalData +0x26 at +0x6B9, no longer
-// hands the list windows to TheLAN, clamps the name to ten characters, stores
-// it at +0x6A0, and finishes with LANAPI vslots 15 and 58 and 0x00437421.
-bool BfmeAptScreenLanLobby::initLanRva004452A8()
-{
-	if (m_customGamesList == 0)
-		return false;
-	if (m_nameEntry.m_owner != 0)
-	{
-		m_panel.rva0043FFCF();
-		GadgetListBoxReset(m_customGamesList);
-
-		if (!TheLAN)
-		{
-			TheLAN = new LANAPI();
-			m_6b9 = ((Rva004452A8GlobalData *)TheWritableGlobalData)->m_26;
-		}
-		else
-		{
-			TheLAN->reset();
-		}
-
-		unsigned int ip = ((Rva004452A8GlobalData *)TheWritableGlobalData)->m_defaultIP;
-		IPEnumeration IPs;
-
-		if (!ip)
-		{
-			EnumeratedIP *IPlist = IPs.getAddresses();
-			if (!IPlist)
-				return false;
-			ip = IPlist->m_ip;
-		}
-
-		TheLAN->init();
-		TheLAN->m_isInLANMenu = 1;
-		if (TheLAN->SetLocalIP(ip) == false)
-			m_socketError = 1;
-
-		UnicodeString defaultName;
-		defaultName.set(reinterpret_cast<GameModePreferences *>(&m_prefs)->rva0044D330());
-		while (defaultName.getLength() > 10)
-			defaultName.removeLastChar();
-
-		UnicodeString *slot = &m_userName;
-		slot->set(defaultName);
-		if (TheLanguageFilter)
-			TheLanguageFilter->filterLine(defaultName);
-		m_prefs.setUserName(defaultName);
-
-		if (m_nameEntry.m_owner)
-			GadgetTextEntrySetText(m_nameEntry.m_owner, defaultName);
-
-		TheLAN->RequestSetName(defaultName);
-		TheLAN->RequestLocations();
-		TheLAN->v58();
-		Rva00437421();
-		return true;
-	}
-	return false;
-}
-
-// Retail 0x00446443, 815 bytes: slot 5 of the screen's vftable 0x00C3E0F8,
-// the lobby's per-frame update. Name unknown. Unless +0x6C0 holds it back it
-// updates TheLAN and steps the +0x6A4 state machine (0 start-up, 1 game
-// list, 2 leave, 5/6 panel checks, 7 join the selected game, 9 kicked, 11
-// back out), refreshes the buttons, reports a socket error once and returns
-// 1; the +0x288 panel always gets its 0x00443EA8 (retail merges both
-// returns' panel calls).
-int BfmeAptScreenLanLobby::rva00446443()
-{
-	if (m_6c0)
-	{
-		m_panel.rva00443EA8();
-		return 0;
-	}
-	{
-		if (TheLAN)
-			TheLAN->update();
-
-		switch (m_6a4)
-		{
-		case 0:
-			if (initLanRva004452A8())
-			{
-				Rva005118F3Show(0, false);
-				if (m_538)
-					m_6a4 = 2;
-				else
-				{
-					{
-					void *owner = m_owner;
-					TheRva00222A8BTarget->invoke(owner, "StartLobby", 0, 0, 0, 0, 0, 0);
-				}
-					m_6a4 = 1;
-					rva00446386(true);
-					m_6c0 = 0;
-				}
-			}
-			break;
-		case 1:
-			if (reinterpret_cast<Rva00580172 *>(&m_668)->rva00580172() && TheLAN)
-				rva00445E3E(TheLAN->v51());
-			break;
-		case 2:
-			rva00446386(false);
-			m_6a4 = 3;
-			Rva005118F3Show(1, true);
-			TheLAN->v27(UnicodeString((const unsigned short *)L""), 0);
-			break;
-		case 5:
-			if (m_panel.rva00440BDF(true))
-				m_6a4 = 6;
-			else
-			{
-				m_6a4 = 4;
-				{
-					void *owner = m_owner;
-					TheRva00222A8BTarget->invoke(owner, "EnablePlayGame", 0, 0, 0, 0, 0, 0);
-				}
-			}
-			break;
-		case 6:
-			if (!m_panel.rva0044127C())
-			{
-				m_6a4 = 4;
-				{
-					void *owner = m_owner;
-					TheRva00222A8BTarget->invoke(owner, "EnablePlayGame", 0, 0, 0, 0, 0, 0);
-				}
-			}
-			break;
-		case 7:
-		{
-			rva00446386(false);
-			int selected = -1;
-			m_6a4 = 1;
-			GadgetListBoxGetSelected(m_customGamesList, &selected);
-			LANGameInfo *game = (LANGameInfo *)reinterpret_cast<Rva00444165 *>(this)->rva00444165();
-			if (game)
-			{
-				m_6a4 = 8;
-				Rva005118F3Show(1, true);
-				TransportAddress address;
-				TheLAN->v16(game, &address);
-			}
-			break;
-		}
-		case 9:
-		{
-			LANGameInfo *game = TheLAN->GetMyGame();
-			if (!game || game->getLocalSlotNum() == -1)
-			{
-				Rva0044C0A8(TheGameText->fetch("GUI:GSErrorTitle"), TheGameText->fetch("GUI:GSKicked"), 0);
-				reinterpret_cast<GameEngine *>(this)->rva004443E7();
-				m_6a4 = 0;
-			}
-			break;
-		}
-		case 11:
-			reinterpret_cast<Rva004442FD *>(this)->rva004442FD();
-			Rva00434160Init(2, 0x10, false);
-			break;
-		}
-
-		rva0044469C();
-		Rva00446443GameLogic *logic = (Rva00446443GameLogic *)TheGameLogic;
-		if (logic->m_110 == 4 && logic->m_40 == 1)
-			Rva003B3371Call(0x1C);
-		if (m_socketError == 1)
-		{
-			m_socketError = 0;
-			Rva0044C0A8(TheGameText->fetch("GUI:NetworkError"), TheGameText->fetch("GUI:SocketError"), 0);
-			Rva00444040Enable();
-		}
-	}
-	m_panel.rva00443EA8();
-	return 1;
-}
-
-// Retail 0x00444826, 191 bytes: slot 2 of the screen's vftable 0x00C3E0F8,
-// its message handler. Name unknown. Unless held back by +0x6C0 it offers
-// the message to the base class and the +0x288 panel, then handles 1 and 2
-// (sound events 0x1A and 0x1B), the games list's 0x4014 and 0x4015 (select
-// and activate) and the name entry's 0x4032 (submitName); anything else
-// returns what the base (or else the panel) returned.
-int BfmeAptScreenLanLobby::rva00444826(int msg, unsigned int data1, unsigned int data2)
-{
-	if (m_6c0)
-		return 0;
-
-	int result = reinterpret_cast<Rva005126F5 *>(this)->rva0051274F(msg, data1, data2);
-	int panelResult = m_panel.rva00442CB3(msg, data1, data2);
-	if (!result)
-		result = panelResult;
-
-	switch (msg)
-	{
-	case 1:
-		Rva003B3371Call(0x1A);
-		break;
-	case 2:
-		Rva003B3371Call(0x1B);
-		break;
-	case 0x4014:
-		if ((GameWindow *)data1 == m_customGamesList)
-			m_panel.rva0043FA68(reinterpret_cast<Rva00444165 *>(this)->rva00444165());
-		break;
-	case 0x4015:
-		if ((GameWindow *)data1 == m_customGamesList && reinterpret_cast<Rva00444165 *>(this)->rva00444165())
-			reinterpret_cast<Rva00444362 *>(this)->rva00444362((void *)"");
-		break;
-	case 0x4032:
-		submitNameRva00444760();
-		break;
-	default:
-		return result;
-	}
-	return 1;
-}
-
 // Retail 0x004467AC, 549 bytes. Donor Open-BFME-1
 // BfmeAptScreenLanLobbyRefreshGame.cpp (refreshLanGameRva00519CB0, BFME1
 // 0x00519CB0), whose address-name pattern it keeps. BFME2 target evidence:
@@ -867,7 +512,7 @@ int BfmeAptScreenLanLobby::rva00444826(int msg, unsigned int data1, unsigned int
 // in mode 1); mode 1 always uses the Mirkwood map; it bumps the game's +0x88
 // and the panel applies the game through 0x00443C6E. GameEngineRva004443E7.cpp
 // calls this body as GameEngine::rva004467AC (bound below).
-bool BfmeAptScreenLanLobby::refreshLanGameRva004467AC()
+bool AptLanLobby::rva004467AC()
 {
 	if (((AptMpGameSetup *)&m_panel)->rva00442C9C() && TheLAN && TheLAN->GetMyGame())
 	{
@@ -907,7 +552,7 @@ bool BfmeAptScreenLanLobby::refreshLanGameRva004467AC()
 				if (!restored)
 					game->adjustSlotsForMap();
 			}
-			++game->m_88;
+			{volatile int *p88=(volatile int *)((char *)game + 0x88);int v=*p88;*p88=v+1;}
 		}
 		else
 		{
