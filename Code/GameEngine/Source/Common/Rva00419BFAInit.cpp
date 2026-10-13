@@ -10,6 +10,9 @@
 // singleton factory kept in g_00E030C4, 12-byte object with byte+4 and
 // dword+8 zeroed.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 class Debug
 {
 public:
@@ -61,7 +64,9 @@ public:
 	virtual ~Rva00419BCD_IO() {}
 	bool m_04;
 	int m_08;
-	Rva00419BCD_IO() : m_04(false), m_08(0) {}
+	// cl hoists an and-zero store to the front of an unfenced tail; retail keeps
+	// the byte store before the dword zero, which the barrier reproduces.
+	Rva00419BCD_IO() { m_04 = false; _ReadWriteBarrier(); m_08 = 0; }
 };
 
 class Rva00419BFA_Cmd
@@ -76,7 +81,6 @@ Rva00419BFA_Cmd::Rva00419BFA_Cmd()
 {
 }
 
-// ?Rva00419BCDCreate@@YAPAXXZ present-unmatched
 void *__cdecl Rva00419BCDCreate()
 {
 	if (g_00E030C4)
