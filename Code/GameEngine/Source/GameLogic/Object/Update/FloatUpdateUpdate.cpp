@@ -13,7 +13,10 @@
 //   two-argument 0x002711C6; preservePrevious is false here.
 // update is slot 0 of FloatUpdate's UpdateModuleInterface vftable; m_enabled
 // is at +0x20 (the rowed ctor 0x0048D7C4 copies it from the module data).
+// Keep MSVC's float overloads local; the matched trig operations inline.
+#define inline static inline
 #include <math.h>
+#undef inline
 #include "Lib/Coord3D.h"
 
 typedef bool Bool;

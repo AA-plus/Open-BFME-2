@@ -12,6 +12,10 @@
 // envelope +34 and color update after points, plus two-argument Set_Width.
 // Module-data offsets follow constructor 00757960 and FieldParse table 01122858.
 // Address-derived views preserve unlanded ABI spellings without semantic guesses.
+// Keep MSVC's float overloads local; the matched cosine operations inline.
+#define inline static inline
+#include <math.h>
+#undef inline
 #define Matrix4x4 Matrix4
 #define __PLACEMENT_VEC_NEW_INLINE
 #include "Lib/BaseType.h"
