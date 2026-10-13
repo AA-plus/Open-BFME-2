@@ -1,3 +1,6 @@
+// Complete exact native parent and associative EH graph establish
+// the naturally emitted return-object cleanup at 0x007A4DC2.
+// Its 25-byte unwind-map entry excludes the interior return label.
 // cl: /Ireference/shims/bfme2_ascii /EHsc
 // ?length@Rva00513E03@@QBEHXZ @0x00513E03 34B: four-part narrow concat length (Text+String+Text+String); base TextPlusString length at 0x00513B94 plus third pair len at +0x10 plus fourth string len at +0x14; chain from 0x00513B94 landing; callers 0x00513E6F 0x005E3693 0x005E36EA.
 #include "ascii_string.h"
