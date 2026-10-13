@@ -1,5 +1,7 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
-// ?Rva003C549DDo@@YGXVAsciiString@@ABV1@@Z @0x003C549D 152B
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
+// ?Rva003C549DDo@ScriptActions@@QAEXVAsciiString@@ABV2@@Z @0x003C549D 152B
 // Byte twin of Rva003C5405Do (ScriptActions_garrison.cpp, same evidence) with the
 // countdown flag set: the timer's internal name is the script-resolved name
 // (resolveName 0x002046C0) plus '/' plus the timer name, the label is fetched
@@ -45,7 +47,7 @@ extern InGameUI *TheInGameUI;
 class ScriptEngine;
 extern ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003C549DDo(AsciiString timerName, const AsciiString &label)
+void ScriptActions::Rva003C549DDo(AsciiString timerName, const AsciiString &label)
 {
 	AsciiString tmp = ((Rva002046C0Owner *)TheScriptEngine)->resolveName(timerName);
 	tmp += '/';

@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHs -D_CRTIMP= -D_STLP_USE_STATIC_LIB -Ireference/shims/bfmealloc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 // stlport
 //
 // BFME2's garrison script actions and their shared contain helpers, from
@@ -239,9 +241,9 @@ public:
 	SpecialPowerModuleInterface *findSpecialPowerModuleInterface(SpecialPowerType type) const;	// 0x00290E22
 protected:
 	// Protected as in Zero Hour's Object.h and the 0x0028B6D6 row's spelling.
-	friend void __stdcall Rva003C6A0EDo(class Parameter *, class Parameter *, class Parameter *);
-	friend void __stdcall Rva003C6B7BDo(class Parameter *, class Parameter *, class Parameter *);
-	friend void __stdcall Rva003C6D4FDo(class Parameter *, class Parameter *, class Parameter *);
+	friend void ScriptActions::Rva003C6A0EDo(class Parameter *, class Parameter *, class Parameter *);
+	friend void ScriptActions::Rva003C6B7BDo(class Parameter *, class Parameter *, class Parameter *);
+	friend void ScriptActions::Rva003C6D4FDo(class Parameter *, class Parameter *, class Parameter *);
 	Module *findModule(NameKeyType key) const;	// 0x0028B6D6
 
 private:
@@ -462,25 +464,7 @@ public:
 };
 extern InGameUI *TheInGameUI;
 
-class ScriptActions
-{
-protected:
-	void doDisplayNotificationBox(const AsciiString &name, const AsciiString &textLabel,
-		int seconds, const AsciiString &objectTypeName);
-	ContainModuleInterface *rva003C538F(ObjectID *&it, const _STL::vector<ObjectID> &ids,
-		Object *unit, bool flag);
-	void rva003C6EFC(const AsciiString &teamName, const AsciiString &containerTeamName,
-		bool instant);
-	void putUnitInContain(Object *unit, ContainModuleInterface *contain, bool flag);
-	void doTeamGarrisonSpecificBuilding(const AsciiString &teamName,
-		const AsciiString &buildingName, bool instant);
-	void doUnitGarrisonSpecificBuilding(const AsciiString &unitName,
-		const AsciiString &buildingName, bool instant);
-	void doCreateObject(const AsciiString &objectName, const AsciiString &thingName,
-		const AsciiString &teamName, Coord3D *pos, float angle);
-	void createUnitOnTeamAt(const AsciiString &unitName, const AsciiString &objType,
-		const AsciiString &teamName, const AsciiString &waypoint);
-};
+
 
 struct ContainTransfer
 {
@@ -747,8 +731,8 @@ void ScriptActions::createUnitOnTeamAt(const AsciiString &unitName, const AsciiS
 	}
 }
 
-// ?Rva003C5405Do@@YGXVAsciiString@@ABV1@@Z @0x003C5405 152B evidence: timerName via resolveName 0x002046C0 plus '/' 0x2f plus concat; label via TheGameText slot 0x38; named timer via addNamedTimer 0x002A5A50; caller 0x003CC5FF; prev 0x003C538F in this file
-void __stdcall Rva003C5405Do(AsciiString timerName, const AsciiString &label)
+// ?Rva003C5405Do@ScriptActions@@QAEXVAsciiString@@ABV2@@Z @0x003C5405 152B evidence: timerName via resolveName 0x002046C0 plus '/' 0x2f plus concat; label via TheGameText slot 0x38; named timer via addNamedTimer 0x002A5A50; caller 0x003CC5FF; prev 0x003C538F in this file
+void ScriptActions::Rva003C5405Do(AsciiString timerName, const AsciiString &label)
 {
 	AsciiString tmp = ((Rva002046C0Owner *)TheScriptEngine)->resolveName(timerName);
 	tmp += '/';
@@ -808,8 +792,8 @@ public:
 	SiegeDockInterface m_dock;
 };
 
-// ?Rva003C6A0EDo@@YGXPAVParameter@@00@Z @0x003C6A0E 365B evidence: unit by Parameter (0x003588E7) of kind 93 with a ready special power 0x2d; waypoint (TerrainLogic slot 0x88) location and the radius parameter; objects in range passing the kind-60 filter; first with a SiegeDockingBehavior whose dock interface accepts the unit gets the special power at it (slot 11, 2); caller 0x003CE4A0
-void __stdcall Rva003C6A0EDo(Parameter *unitParm, Parameter *wayParm, Parameter *radiusParm)
+// ?Rva003C6A0EDo@ScriptActions@@QAEXPAVParameter@@00@Z @0x003C6A0E 365B evidence: unit by Parameter (0x003588E7) of kind 93 with a ready special power 0x2d; waypoint (TerrainLogic slot 0x88) location and the radius parameter; objects in range passing the kind-60 filter; first with a SiegeDockingBehavior whose dock interface accepts the unit gets the special power at it (slot 11, 2); caller 0x003CE4A0
+void ScriptActions::Rva003C6A0EDo(Parameter *unitParm, Parameter *wayParm, Parameter *radiusParm)
 {
 	Object *unit = TheScriptEngine->getUnitNamed(unitParm);
 	if (!unit || !unit->isKindOf(0x5D))
@@ -845,8 +829,8 @@ public:
 	virtual bool allow(Object *obj);
 };
 
-// ?Rva003C6B7BDo@@YGXPAVParameter@@00@Z @0x003C6B7B 468B evidence: the team variant of 0x003C6A0E (WB 0x01002390, unnamed): team by Parameter name (getTeamNamed 0x003584E9, no create), its member list via iterate_TeamMemberList 0x00263864, waypoint (TerrainLogic slot 0x88) location and the radius parameter; objects in range passing the kind-60 filter and the not-dead filter 0x0026119D; for each object with a SiegeDockingBehavior the team members (kind 93, ready special power 0x2d, status 0x40 clear) are walked from the iterator's current position, the first the dock refuses ends that object; caller dispatch next to 0x003CE4A0
-void __stdcall Rva003C6B7BDo(Parameter *teamParm, Parameter *wayParm, Parameter *radiusParm)
+// ?Rva003C6B7BDo@ScriptActions@@QAEXPAVParameter@@00@Z @0x003C6B7B 468B evidence: the team variant of 0x003C6A0E (WB 0x01002390, unnamed): team by Parameter name (getTeamNamed 0x003584E9, no create), its member list via iterate_TeamMemberList 0x00263864, waypoint (TerrainLogic slot 0x88) location and the radius parameter; objects in range passing the kind-60 filter and the not-dead filter 0x0026119D; for each object with a SiegeDockingBehavior the team members (kind 93, ready special power 0x2d, status 0x40 clear) are walked from the iterator's current position, the first the dock refuses ends that object; caller dispatch next to 0x003CE4A0
+void ScriptActions::Rva003C6B7BDo(Parameter *teamParm, Parameter *wayParm, Parameter *radiusParm)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamParm->m_string, false);
 	if (!team)
@@ -884,8 +868,8 @@ void __stdcall Rva003C6B7BDo(Parameter *teamParm, Parameter *wayParm, Parameter 
 	}
 }
 
-// ?Rva003C6D4FDo@@YGXPAVParameter@@00@Z @0x003C6D4F 429B evidence: as 0x003C6B7B but the search centre is a second team's position (0x0039DA2A) and only the kind-60 filter applies (WB 0x010026F0, unnamed)
-void __stdcall Rva003C6D4FDo(Parameter *teamParm, Parameter *centerTeamParm, Parameter *radiusParm)
+// ?Rva003C6D4FDo@ScriptActions@@QAEXPAVParameter@@00@Z @0x003C6D4F 429B evidence: as 0x003C6B7B but the search centre is a second team's position (0x0039DA2A) and only the kind-60 filter applies (WB 0x010026F0, unnamed)
+void ScriptActions::Rva003C6D4FDo(Parameter *teamParm, Parameter *centerTeamParm, Parameter *radiusParm)
 {
 	Team *team = TheScriptEngine->getTeamNamed(teamParm->m_string, false);
 	if (!team)

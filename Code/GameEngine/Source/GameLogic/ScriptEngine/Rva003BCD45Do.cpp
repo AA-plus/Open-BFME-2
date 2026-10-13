@@ -1,6 +1,8 @@
-// cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
+// cl: -O1 -arch:SSE -G7 -Ireference/shims/bfme2_ascii -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
-// ?Rva003BCD45Do@@YGXPAVParameter@@@Z @0x003BCD45 146B: gate behavior triple-check.
+// ?Rva003BCD45Do@ScriptActions@@QAEXPAVParameter@@@Z @0x003BCD45 146B: gate behavior triple-check.
 // Evidence: getUnitNamed 0x003588E7 then static gateKey via TheNameKeyGenerator nameToKey GateOpenAndCloseBehavior then findModule 0x0028B6D6 then gate-4 view with slots 0x18 0x28 0x20 bool checks; globals g_Va009FE16C TheNameKeyGenerator; ret 4; caller 0x003CDDAC.
 
 #include "ascii_string.h"
@@ -16,7 +18,7 @@ class Object
 {
 protected:
 	Module *findModule(NameKeyType key) const;
-	friend void __stdcall Rva003BCD45Do(Parameter *param);
+	friend void ScriptActions::Rva003BCD45Do(Parameter *param);
 };
 class GateView
 {
@@ -41,7 +43,7 @@ public:
 };
 extern class ScriptEngine *TheScriptEngine;
 
-void __stdcall Rva003BCD45Do(Parameter *param)
+void ScriptActions::Rva003BCD45Do(Parameter *param)
 {
 	Object *obj = TheScriptEngine->getUnitNamed(param);
 	if (!obj)

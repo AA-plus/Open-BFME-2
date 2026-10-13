@@ -1,4 +1,6 @@
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc
+// cl: -Ireference/shims/bfme2_ascii -O1 -DNDEBUG -MD -EHsc -Ireference/shims/bfme2_ascii -Ireference/shims/bfmealloc -D_STLP_USE_STATIC_LIB -D_CRTIMP=
+// stlport
+#include "../../../Include/GameLogic/ScriptActionsBFME2.h"
 //
 // WB 0x0100D3E0 unnamed ScriptActions member, retail 0x003C596A (150B): find
 // the model-condition flag a script names (the 591 ModelConditionNames at
@@ -46,12 +48,7 @@ public:
 };
 extern ScriptEngine *TheScriptEngine;
 
-class ScriptActions
-{
-protected:
-	void rva003C596A(const AsciiString &unitName, const AsciiString &flagName,
-		float seconds, float value);
-};
+
 
 void ScriptActions::rva003C596A(const AsciiString &unitName, const AsciiString &flagName,
 	float seconds, float value)
@@ -79,7 +76,7 @@ void ScriptActions::rva003C596A(const AsciiString &unitName, const AsciiString &
 // name-search and member walk. Target3C5A00..3C5AB8 proves 591 names,
 // x87 frame conversion, 24-byte iterator and direct rowed Object setter.
 // Dispatcher RET10 establishes this free action ABI; original name unproven.
-void __stdcall Rva003C5A00Do(const AsciiString &teamName, const AsciiString &flagName,
+void ScriptActions::Rva003C5A00Do(const AsciiString &teamName, const AsciiString &flagName,
     float seconds, float value)
 {
     Team *team = TheScriptEngine->getTeamNamed(teamName, false);
