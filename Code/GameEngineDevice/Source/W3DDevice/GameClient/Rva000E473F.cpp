@@ -238,7 +238,7 @@ public:
     virtual Drawable *findDrawable(int id);
 };
 class Rva000E5EC1;
-class Rva000E5F60 { public: Rva000E5EC1 *rva000E5F60(int, StringBase<char>); };
+class Rva000E5F60 { public: Rva000E5EC1 *rva000E5F60(int, AsciiString); };
 class Rva000E440D { public: bool rva000E440D(); };
 class Rva000E459F { public: void rva000E46DA(Drawable *, const AsciiString &, const AsciiString &, bool, bool); };
 
@@ -322,12 +322,9 @@ Gen_uw_000e5033 *W3DFloorBuffer::addFloor(int id, AsciiString *name, AsciiString
 {
     Drawable *drawable = TheGameClient ? reinterpret_cast<FloorClientSlots *>(TheGameClient)->findDrawable(id) : 0;
     if (m_numFloors >= 450 || !drawable || !m_ready20) return 0;
-    // The existing lookup owns a four-byte by-value StringBase<char>.
-    // AsciiString owns the same storage and invokes its verified copy/cleanup;
-    // use its accessible value interface for this ABI-equivalent member call.
-    typedef Gen_uw_000e5033 *(Rva000E5F60::*AsciiLookup)(int, AsciiString);
-    AsciiLookup lookup = reinterpret_cast<AsciiLookup>(&Rva000E5F60::rva000E5F60);
-    Gen_uw_000e5033 *floor = (reinterpret_cast<Rva000E5F60 *>(this)->*lookup)(id, *name);
+    // The lookup (0x000E5F60) takes the name as AsciiString by value.
+    Gen_uw_000e5033 *floor = reinterpret_cast<Gen_uw_000e5033 *>(
+        reinterpret_cast<Rva000E5F60 *>(this)->rva000E5F60(id, *name));
     if (floor) {
         if (!reinterpret_cast<Rva000E440D *>(floor)->rva000E440D()) return 0;
         reinterpret_cast<Rva000E459F *>(floor)->rva000E46DA(drawable,*name,*second,front,flag);
