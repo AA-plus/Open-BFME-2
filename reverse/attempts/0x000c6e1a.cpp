@@ -1,4 +1,6 @@
 // ?rva000C6E1A@Rva000C6E1A@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva000C6E1A@Rva000C6E1A@@QAEXXZ
 // partial score=0.97 date=2026-10-13
 // cl: /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /D_CRTIMP= /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc /ICode/Libraries/Include/Lib
 // stlport
@@ -26,9 +28,12 @@
 // W3DModelDraw::recalcBonesForClientParticleSystems supplies the bone placement
 // shape; the owning class name is not established.
 #define _STLP_NO_EXCEPTIONS 1
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <list>
 #include "ascii_string.h"
 #include "Coord3D.h"
+template<class T> inline volatile T &__vref(T &x){return *(volatile T *)&x;}
 
 namespace _STL {
 template <class T, class LeftTraits, class RightTraits>
@@ -377,16 +382,18 @@ void Rva000C6E1A::rva000C6E1A()
 					if (m_data->m_useClientBones)
 					{
 						Matrix3D xf;
-						const char *name = rec.text.str();
+
 						Drawable *d = m_drawable;
-						if (d->getCurrentClientBonePositions(name, 0, 0, &xf, 1))
+						_ReadWriteBarrier();
+						if (d->getCurrentClientBonePositions((rec.text.str()), 0, 0, &xf, 1))
 							((Rva001F38C1Slot *)sys.operator->())->set(*(const Rva001F38C1Arg *)&xf);
+							_ReadWriteBarrier();
 					}
 					else if (rec.followBone)
 					{
 						if (boneIndex && m_renderObject)
 						{
-							Matrix3D xf = m_renderObject->Get_Bone_Transform(boneIndex);
+							Matrix3D xf = __vref(m_renderObject)->Get_Bone_Transform(boneIndex);
 							((Rva001F38C1Slot *)sys.operator->())->set(*(const Rva001F38C1Arg *)&xf);
 						}
 						else
