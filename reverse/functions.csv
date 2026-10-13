@@ -87968,3 +87968,4 @@ __ehhandler$?Rva000754DEInit@@YAXXZ,,0x0075EF58,10,Code/GameEngineDevice/Source/
 ?rva00492BEB@SpecialAbilityUpdate@@QAE?AW4UpdateSleepTime@@XZ,,0x00492BEB,110,Code/GameEngine/Source/GameLogic/Object/Update/Rva00492BEBSpecialAbilityUpdate.cpp,matched,
 ?rva00397756@Rva00397756@@QAEXPAUIdRange@@H@Z,,0x00397756,59,Code/GameEngine/Source/GameLogic/Object/Behavior/Rva00397756IdSweep.cpp,matched,
 ?rva005FA98CSwap@@YIXPAVRva005FA98C@@HHHHHH@Z,,0x005FA98C,84,Code/GameEngine/Source/Common/Rva005FA98CSwap.cpp,matched,
+?GetBlingIndex@CreateAHeroSubClass@CreateAHeroManager@@QAEHHABVAsciiString@@@Z,,0x0021BD41,106,Code/GameEngine/Source/Common/System/Rva0021BD41GetBlingIndex.cpp,matched,
