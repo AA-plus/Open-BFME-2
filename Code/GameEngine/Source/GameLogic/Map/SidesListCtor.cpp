@@ -114,3 +114,7 @@ void bfmeAnchorSidesListDtor(SidesList *p)
 // Native 0x0077B9F6 is the complete 11-byte list-member cleanup at +0x20.
 // The exact 240-byte destructor and complete EH graph bind this action to
 // the existing STLport list<AsciiString> destructor at 0x00207F08.
+
+// Native SidesList action 0x77ba01 is a complete 11-byte map-member cleanup
+// of parent 0x32ec63; the exact parent and EH graph bind its
+// standard template destructor through the independently proved wrapper fold.
