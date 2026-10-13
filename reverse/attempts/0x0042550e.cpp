@@ -1,6 +1,8 @@
 // ?optimizeUnits@Formation@@QAEXPBUCoord3D@@@Z
-// partial score=0.96 date=2026-10-08
-// cl: /O1 /G7 /arch:SSE /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
+// partial score=0.995 date=2026-10-13
+// ?optimizeUnits@Formation@@QAEXPBUCoord3D@@@Z
+// partial score=0.99 date=2026-10-13
+// cl: /I. /O1 /G7 /arch:SSE /EHs /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
 // Formation::optimizeUnits, WB 0x0113B070 FormationAssistant.cpp:431.
 // Retail 0x0042550E..0x004256D5, RET4. No BF1/ZH FormationAssistant donor
@@ -10,11 +12,16 @@
 #include <vector>
 #include <algorithm>
 
-#include "../Code/Libraries/Include/Lib/Coord3D.h"
-#include "../Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 extern GameLogic *TheGameLogic;
 
 class Rva00422CA8 { public: bool operator()(int,int) const; };
+struct Rva004235B2Element { char bytes[1]; bool operator<(const Rva004235B2Element&)const; bool operator==(const Rva004235B2Element&)const; };
+namespace _STL {
+template<> struct less<Rva004235B2Element> { bool operator()(const Rva004235B2Element &, const Rva004235B2Element &) const; };
+template<> Rva004235B2Element * lower_bound<Rva004235B2Element *, Rva004235B2Element, less<Rva004235B2Element> >(Rva004235B2Element *, Rva004235B2Element *, Rva004235B2Element const &, less<Rva004235B2Element>);
+}
 void __cdecl rva004216A2(float *out,const float *base,const float *slot);
 float __cdecl Rva004219F4DistSquared(const float *small,const float *object);
 struct BfmeFormationSlot {
@@ -36,7 +43,7 @@ void Formation::optimizeUnits(const Coord3D *base) {
  int limit=order.size()*order.size();
  long *first=order.begin();
  while(first!=order.end()) {
-  long *last=(long*)_STL::upper_bound((int*)first,(int*)order.end(),*(int*)first,Rva00422CA8());
+  long *last=(long*)_STL::lower_bound((Rva004235B2Element*)first,(Rva004235B2Element*)order.end(),*(Rva004235B2Element*)first,_STL::less<Rva004235B2Element>());
   for(long *current=first;current!=last;++current) {
    long *next=current+1;
    if(next==last)continue;
