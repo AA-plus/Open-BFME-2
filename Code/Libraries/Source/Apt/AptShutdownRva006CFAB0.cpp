@@ -30,9 +30,10 @@ void rva006CE1C0(int);
 #define POOL_DELETE static void operator delete(void *p,unsigned n){g_pChainBlockAllocator->freeBlock(p,n);}
 class Rva006CFA30 {public:class Members {public:~Members();POOL_DELETE char pad[0x18];};};
 class AptLinker;
-// LINK: defined once here, loader-zeroed. Apt.cpp assigns it on first tick
-// before any use; delete-on-nullptr is a no-op. No ledger address claimed.
-AptLinker *g_bfmeAptLinkerAtE176F8 = 0;
+// LINK: Apt.cpp holds the tentative definition (loader-zeroed; it assigns on
+// first tick before any use). Declared only here so the datum does not
+// duplicate at link time. No ledger address claimed.
+extern AptLinker *g_bfmeAptLinkerAtE176F8;
 class Rva006D1090 {public:~Rva006D1090();POOL_DELETE int head;};
 class Rva00893030Manager;
 extern Rva00893030Manager *g_rva00893030Manager;
