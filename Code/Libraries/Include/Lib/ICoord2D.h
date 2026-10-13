@@ -7,6 +7,9 @@
 struct ICoord2D {
     int x;
     int y;
+    // Native 0x00004CAD/28, owner icoord.cpp; pathfinder.cpp keeps an inline
+    // definition visible to GetHordeUnitPath (same-TU escape analysis).
+    bool operator==(const struct ICoord2DBase &that) const;
 };
 
 #endif // CANONICAL_ICOORD2D_H

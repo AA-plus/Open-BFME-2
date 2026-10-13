@@ -22,7 +22,17 @@
   "witness_offsets": [],
   "zh": {
    "header": "CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include/Lib/BaseType.h"
-  }
+  },
+  "method_declarations": [
+   {
+    "declaration": "bool operator==(const struct ICoord2DBase &that) const;",
+    "name": "??8ICoord2D@@QBE_NABUICoord2DBase@@@Z",
+    "rva": "0x00004CAD",
+    "size": 28,
+    "source": "Code/Libraries/Source/WWVegas/WWMath/icoord.cpp",
+    "decided_by": "byte-verified owner; native Pathfinder::GetHordeUnitPath 0x002F6075 calls it on two stack ICoord2D cell indices whose frame slots retail shares, so pathfinder.cpp keeps an inline definition visible"
+   }
+  ]
  },
  "fields": [
   {

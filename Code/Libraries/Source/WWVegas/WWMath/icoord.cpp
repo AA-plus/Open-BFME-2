@@ -132,7 +132,10 @@ ICoord2D &ICoord2D::MoveBy(int delta)
     return *this;
 }
 
-bool ICoord2D::operator==(const ICoord2DBase &that) const
+// A header inline elsewhere too (pathfinder.cpp emits a select-any copy: its
+// GetHordeUnitPath needs the body visible), so it is select-any here as well;
+// the anchor at the end emits it.
+inline bool ICoord2D::operator==(const ICoord2DBase &that) const
 {
     return x == that.x && y == that.y;
 }
@@ -247,5 +250,14 @@ void bfmeEmitICoord3DCtor(ICoord3D *p)
 void bfmeEmitICoord3DComponentCtor(ICoord3D *p, int x, int y, int z)
 {
     p->ICoord3D::ICoord3D(x, y, z);
+}
+#pragma inline_depth()
+// ICoord2D::operator== anchor, same recipe as the constructors above; it is not
+// retail code.
+#pragma inline_depth(0)
+// ?bfmeEmitICoord2DEquals@@YA_NPBUICoord2D@@PBUICoord2DBase@@@Z present-unmatched
+bool bfmeEmitICoord2DEquals(const ICoord2D *p, const ICoord2DBase *q)
+{
+    return *p == *q;
 }
 #pragma inline_depth()
