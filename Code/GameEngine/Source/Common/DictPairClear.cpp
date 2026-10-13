@@ -71,6 +71,7 @@ public:
  DataType getNthType(int n) const;
  UnicodeString getNthUnicodeString(int n) const;
  AsciiString getAsciiString(int key, bool *exists) const;
+ AsciiString getAsciiString(NameKeyType key, bool *exists) const;
  UnicodeString getUnicodeString(int key, bool *exists) const;
  void setBool(int key, bool value);
  void setInt(int key, int value);
@@ -425,6 +426,23 @@ void Dict::sortPairs()
 
 // ?getAsciiString@Dict@@QBE?AVAsciiString@@HPA_N@Z @0x0031359F
 AsciiString Dict::getAsciiString(int key, bool *exists) const
+{
+	DictPair *pair = findPairByKey(key);
+	if (pair && (pair->m_key & 0xFF) == DICT_ASCIISTRING)
+	{
+		if (exists)
+			*exists = true;
+		return *(AsciiString *)&pair->m_value;
+	}
+	if (exists)
+		*exists = false;
+	return AsciiString::TheEmptyString;
+}
+
+// ICF-folded twin of getAsciiString above (same 71 bytes at 0x0031359F):
+// the NameKeyType spelling passes the key opaquely like the int spelling,
+// so every load, check and copy matches exactly.
+AsciiString Dict::getAsciiString(NameKeyType key, bool *exists) const
 {
 	DictPair *pair = findPairByKey(key);
 	if (pair && (pair->m_key & 0xFF) == DICT_ASCIISTRING)
